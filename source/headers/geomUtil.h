@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/14 14:45:28  strk
+ * Fixed bogus inheritance of LinearComponentExtracter
+ *
  * Revision 1.3  2004/05/14 13:42:46  strk
  * DistanceOp bug removed, cascading errors fixed.
  *
@@ -87,7 +90,7 @@ private:
  * Extracts all the 1-dimensional ({@link LineString}) components from a {@link Geometry}.
  *
  */
-class LinearComponentExtracter: public GeometryFilter {
+class LinearComponentExtracter: public GeometryComponentFilter {
 public:
 	/**
 	* Returns the linear components from a single geometry.
