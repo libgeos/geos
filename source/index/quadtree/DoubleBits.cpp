@@ -9,7 +9,7 @@ double DoubleBits::powerOf2(int exp){
 //	long long expBias=exp+EXPONENT_BIAS;
 //	long long bits=(long long)expBias << 52;
 	long expBias=exp+EXPONENT_BIAS;
-	long bits=(long)expBias << 52;
+	int64 bits=(int64)expBias << 52;
 	return (double) bits;
 }
 
@@ -41,9 +41,7 @@ double DoubleBits::maximumCommonMantissa(double d1, double d2) {
 }
 
 DoubleBits::DoubleBits(double nx) {
-	x=nx;
-//	xBits=(long long)x;
-	xBits=(long)x;
+	xBits=(int64)nx;
 }
 
 double DoubleBits::getDouble() {
@@ -55,10 +53,10 @@ double DoubleBits::getDouble() {
 *
 * @return
 */
-int DoubleBits::biasedExponent(){
+int64 DoubleBits::biasedExponent(){
 //	long long signExp=(long long)(xBits>>52);
-	long signExp=(long)(xBits>>52);
-	int exp=signExp&0x07ff;
+	int64 signExp=(int64)(xBits>>52);
+	int64 exp=signExp&0x07ff;
 	return exp;
 }
 

@@ -42,7 +42,7 @@ public:
 	static double maximumCommonMantissa(double d1, double d2);
 	DoubleBits(double nx);
 	double getDouble();
-	int biasedExponent();
+	int64 biasedExponent();
 	int getExponent();
 	void zeroLowerBits(int nBits);
 	int getBit(int i);
@@ -51,7 +51,8 @@ public:
 private:
 	double x;
 //	long long xBits;
-	long xBits;
+//	long xBits;
+	int64 xBits;
 };
 
 /**
