@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.35  2003/10/13 12:51:28  strk
+* removed sortedClasses strings array from all geometries.
+*
+*/
 #include "../headers/geom.h"
 #include "../headers/util.h"
 #include <typeinfo>
@@ -16,50 +22,22 @@ namespace geos {
 CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();
 GeometryComponentFilter* Geometry::geometryChangedFilter=new GeometryComponentFilter();
 
-
 Geometry::Geometry() {
 	SRID=0;
 	precisionModel=new PrecisionModel();
 	envelope=new Envelope();
-	sortedClasses=new vector<string>();
-	sortedClasses->push_back(typeid(Point).name());
-	sortedClasses->push_back(typeid(MultiPoint).name());
-	sortedClasses->push_back(typeid(LineString).name());
-	sortedClasses->push_back(typeid(LinearRing).name());
-	sortedClasses->push_back(typeid(MultiLineString).name());
-	sortedClasses->push_back(typeid(Polygon).name());
-	sortedClasses->push_back(typeid(MultiPolygon).name());
-	sortedClasses->push_back(typeid(GeometryCollection).name());
 }
 
 Geometry::Geometry(const Geometry &geom) {
 	precisionModel=new PrecisionModel(*geom.precisionModel);
 	envelope=geom.envelope;
 	SRID=geom.SRID;
-	sortedClasses=new vector<string>();
-	sortedClasses->push_back(typeid(Point).name());
-	sortedClasses->push_back(typeid(MultiPoint).name());
-	sortedClasses->push_back(typeid(LineString).name());
-	sortedClasses->push_back(typeid(LinearRing).name());
-	sortedClasses->push_back(typeid(MultiLineString).name());
-	sortedClasses->push_back(typeid(Polygon).name());
-	sortedClasses->push_back(typeid(MultiPolygon).name());
-	sortedClasses->push_back(typeid(GeometryCollection).name());
 }
 
 Geometry::Geometry(const PrecisionModel *pm, int newSRID){
 	precisionModel=new PrecisionModel(*pm);
 	envelope=new Envelope();
 	SRID = newSRID;
-	sortedClasses=new vector<string>();
-	sortedClasses->push_back(typeid(Point).name());
-	sortedClasses->push_back(typeid(MultiPoint).name());
-	sortedClasses->push_back(typeid(LineString).name());
-	sortedClasses->push_back(typeid(LinearRing).name());
-	sortedClasses->push_back(typeid(MultiLineString).name());
-	sortedClasses->push_back(typeid(Polygon).name());
-	sortedClasses->push_back(typeid(MultiPolygon).name());
-	sortedClasses->push_back(typeid(GeometryCollection).name());
 }
 
 bool Geometry::hasNonEmptyElements(vector<Geometry *>* geometries) {
@@ -428,13 +406,17 @@ void Geometry::checkNotGeometryCollection(const Geometry *g) const {
 //}
 
 int Geometry::getClassSortIndex() const {
-    const type_info &t=typeid(*this);
-    string tst=t.name();
-	for (unsigned int i=0; i<sortedClasses->size(); i++) {
-		if ( (*sortedClasses)[i]==typeid(*this).name() ) {
-			return i;
-		}
-	}
+	//const type_info &t=typeid(*this);
+
+	     if ( typeid(*this) == typeid(Point)              ) return 0;
+	else if ( typeid(*this) == typeid(MultiPoint)         ) return 1;
+	else if ( typeid(*this) == typeid(LineString)         ) return 2;
+	else if ( typeid(*this) == typeid(LinearRing)         ) return 3;
+	else if ( typeid(*this) == typeid(MultiLineString)    ) return 4;
+	else if ( typeid(*this) == typeid(Polygon)            ) return 5;
+	else if ( typeid(*this) == typeid(MultiPolygon)       ) return 6;
+	else if ( typeid(*this) == typeid(GeometryCollection) ) return 7;
+
 	string str="Class not supported: ";
 	str.append(typeid(*this).name());
 	str.append("");
@@ -524,7 +506,6 @@ double Geometry::getLength() const {
 
 Geometry::~Geometry(){
 	delete precisionModel;
-	delete sortedClasses;
 	delete envelope;
 }
 

@@ -1,6 +1,10 @@
 /*
 * $Log$
+* Revision 1.33  2003/10/13 12:51:28  strk
+* removed sortedClasses strings array from all geometries.
+*
 * Revision 1.32  2003/10/11 01:56:08  strk
+*
 * Code base padded with 'const' keywords ;)
 *
 * Revision 1.31  2003/10/09 15:35:13  strk
@@ -556,7 +560,6 @@ protected:
 	int compare(vector<Geometry *> a, vector<Geometry *> b) const;
 	bool equal(const Coordinate& a, const Coordinate& b,double tolerance) const;
 private:
-	vector<string> *sortedClasses;
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter* geometryChangedFilter;
 };
