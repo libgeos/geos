@@ -114,8 +114,8 @@ CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 {
 	RobustLineIntersector lineIntersector;
 	for(int i=1;i<pt->getSize();i++) {
-		Coordinate p0=pt->getAt(i-1);
-		Coordinate p1=pt->getAt(i);	
+		const Coordinate &p0=pt->getAt(i-1);
+		const Coordinate &p1=pt->getAt(i);	
 		lineIntersector.computeIntersection(p, p0, p1);
 		if (lineIntersector.hasIntersection()) {
 			return true;
@@ -379,6 +379,9 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/03/04 07:48:09  strk
+ * Removed useless copy from ::isOnLine() - suggested by Dale Lutz
+ *
  * Revision 1.20  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
