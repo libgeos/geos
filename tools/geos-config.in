@@ -27,7 +27,7 @@ case $1 in
     echo @prefix@
      ;;
     --version)
-    echo @GEOS_VERSION@
+    echo @VERSION@
      ;;
     --cflags)
     echo @CFLAGS@ -I@prefix@/include 
