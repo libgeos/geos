@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
  * Revision 1.4  2004/04/20 13:24:15  strk
  * More leaks removed.
  *
@@ -183,7 +186,7 @@ MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 		minBaseSeg->p1=pts->getAt(1);
 	} else
 		computeConvexRingMinDiameter(pts);
-	//delete pts; // can I safely delete these ? --strk
+	delete pts; 
 }
 
 /**

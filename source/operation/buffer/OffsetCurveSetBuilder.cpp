@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
  * Revision 1.5  2004/04/20 10:58:04  strk
  * More memory leaks removed.
  *
@@ -142,9 +145,11 @@ void OffsetCurveSetBuilder::addPoint(const Point *p){
 
 void OffsetCurveSetBuilder::addLineString(const LineString *line){
 	if (distance <= 0.0) return;
-	CoordinateList *coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
+	CoordinateList *coord=CoordinateList::removeRepeatedPoints(line->getCoordinatesRO());
 	vector<CoordinateList*> *lineList=curveBuilder->getLineCurve(coord, distance);
+	delete coord;
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
+	delete lineList;
 }
 
 void
@@ -161,7 +166,10 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 	// optimization - don't bother computing buffer
 	// if the polygon would be completely eroded
 	if (distance < 0.0 && isErodedCompletely(shellCoord, distance))
+	{
+		delete shellCoord;
 		return;
+	}
 	addPolygonRing(shellCoord,offsetDistance,offsetSide,Location::EXTERIOR,Location::INTERIOR);
 	delete shellCoord;
 	for (int i=0;i<p->getNumInteriorRing(); i++) {

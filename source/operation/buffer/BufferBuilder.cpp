@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
  * Revision 1.11  2004/05/05 10:54:48  strk
  * Removed some private static heap explicit allocation, less cleanup done by
  * the unloader.
@@ -77,7 +80,7 @@ CGAlgorithms BufferBuilder::cga=RobustCGAlgorithms();
 */
 BufferBuilder::BufferBuilder() {
 	workingPrecisionModel=NULL;
-	graph=NULL;
+	graph=new PlanarGraph(new OverlayNodeFactory());
 	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
 	endCapStyle=BufferOp::CAP_ROUND;
 	edgeList=new EdgeList();
@@ -123,54 +126,39 @@ BufferBuilder::buffer(Geometry *g, double distance)
 
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
-	OffsetCurveBuilder *curveBuilder=new OffsetCurveBuilder(precisionModel, quadrantSegments);
-	curveBuilder->setEndCapStyle(endCapStyle);
-	OffsetCurveSetBuilder *curveSetBuilder=new OffsetCurveSetBuilder(g, distance, curveBuilder);
-	vector<SegmentString*> *bufferSegStrList=curveSetBuilder->getCurves();
+	OffsetCurveBuilder curveBuilder=OffsetCurveBuilder(precisionModel, quadrantSegments);
+	curveBuilder.setEndCapStyle(endCapStyle);
+	OffsetCurveSetBuilder curveSetBuilder=OffsetCurveSetBuilder(g, distance, &curveBuilder);
+	vector<SegmentString*> *bufferSegStrList=curveSetBuilder.getCurves();
 	// short-circuit test
 	if ((int)bufferSegStrList->size()<=0) {
 		Geometry *emptyGeom=geomFact->createGeometryCollection(new vector<Geometry*>());
-		delete curveBuilder;
-		delete curveSetBuilder;
 		return emptyGeom;
 	}
 
-	try {
-		computeNodedEdges(bufferSegStrList, precisionModel);
-	} catch (GEOSException *ge) {
-		delete curveSetBuilder;
-		delete curveBuilder;
-		throw;
-	} 
-	delete curveSetBuilder;
-	delete curveBuilder;
+	computeNodedEdges(bufferSegStrList, precisionModel);
 
 	Geometry* resultGeom=NULL;
-	PolygonBuilder *polyBuilder=NULL;
 	vector<Geometry*> *resultPolyList=NULL;
 	vector<BufferSubgraph*> *subgraphList=NULL;
-	OverlayNodeFactory *onf=new OverlayNodeFactory;
 	try {
-		graph=new PlanarGraph(onf);
 		graph->addEdges(edgeList->getEdges());
 		subgraphList=createSubgraphs(graph);
-		polyBuilder=new PolygonBuilder(geomFact,&cga);
-		buildSubgraphs(subgraphList, polyBuilder);
-		resultPolyList=polyBuilder->getPolygons();
+		PolygonBuilder polyBuilder=PolygonBuilder(geomFact,&cga);
+		buildSubgraphs(subgraphList, &polyBuilder);
+		resultPolyList=polyBuilder.getPolygons();
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (GEOSException *exc) {
 		for (int i=0; i<subgraphList->size(); i++)
 			delete (*subgraphList)[i];
 		delete subgraphList;
 		delete resultPolyList;
-		delete polyBuilder;
 		throw;
 	} 
 	for (int i=0; i<subgraphList->size(); i++)
 		delete (*subgraphList)[i];
 	delete subgraphList;
 	delete resultPolyList;
-	delete polyBuilder;
 	return resultGeom;
 }
 
@@ -179,12 +167,12 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 	// throw(GEOSException *)
 {
 	//BufferCurveGraphNoder noder=new BufferCurveGraphNoder(geomFact->getPrecisionModel());
-	IteratedNoder *noder=new IteratedNoder(precisionModel);
+	IteratedNoder noder=IteratedNoder(precisionModel);
 	vector<SegmentString*> *nodedSegStrings = NULL;
 	
 	try 
 	{
-		nodedSegStrings=noder->node(bufferSegStrList);
+		nodedSegStrings=noder.node(bufferSegStrList);
 
 		// DEBUGGING ONLY
 		//BufferDebug->saveEdges(nodedEdges, "run" + BufferDebug->runCount + "_nodedEdges");
@@ -197,11 +185,9 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 		//saveEdges(edgeList->getEdges(), "run" + runCount + "_collapsedEdges");
 	} catch (...) {
 		delete nodedSegStrings;
-		delete noder;
 		throw;
 	} 
 	delete nodedSegStrings;
-	delete noder;
 }
 
 
@@ -230,6 +216,7 @@ void BufferBuilder::insertEdge(Edge *e){
 		int existingDelta=existingEdge->getDepthDelta();
 		int newDelta=existingDelta + mergeDelta;
 		existingEdge->setDepthDelta(newDelta);
+		delete e;
 	} else {   // no matching existing edge was found
 		// add this new edge to the list of edges in this graph
 		//e->setName(name + edges->size());

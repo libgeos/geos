@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
  * Revision 1.6  2004/04/20 10:58:04  strk
  * More memory leaks removed.
  *
@@ -43,7 +46,8 @@ namespace geos {
 double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
 double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
 
-OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel){
+OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel)
+{
 	maxCurveSegmentError=0.0;
 	distance=0.0;
 	endCapStyle=BufferOp::CAP_ROUND;
@@ -60,10 +64,11 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel){
 	li=new RobustLineIntersector();
 	int limitedQuadSegs=DEFAULT_QUADRANT_SEGMENTS<1 ? 1 : DEFAULT_QUADRANT_SEGMENTS;
 	filletAngleQuantum=3.14159265358979 / 2.0 / limitedQuadSegs;
-	ptList=NULL;
+	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
 }
 
-OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments){
+OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments)
+{
 	maxCurveSegmentError=0.0;
 	distance=0.0;
 	endCapStyle=BufferOp::CAP_ROUND;
@@ -80,7 +85,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,i
 	li=new RobustLineIntersector();
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=3.14159265358979  / 2.0 / limitedQuadSegs;
-	ptList=NULL;
+	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
 }
 
 OffsetCurveBuilder::~OffsetCurveBuilder(){
@@ -156,7 +161,7 @@ OffsetCurveBuilder::getRingCurve(const CoordinateList *inputPts, int side, doubl
 void OffsetCurveBuilder::init(double newDistance){
 	distance=newDistance;
 	maxCurveSegmentError=distance*(1-cos(filletAngleQuantum/2.0));
-	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
+	//ptList=CoordinateListFactory::internalFactory->createCoordinateList();
 }
 
 CoordinateList* OffsetCurveBuilder::getCoordinates(){
