@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2004/05/05 10:03:49  strk
+ * Reduced dynamic allocations in bufferOriginalPrecision and bufferFixedPrecision.
+ *
  * Revision 1.27  2004/05/03 17:15:38  strk
  * leaks on exception fixed.
  *
@@ -235,50 +238,42 @@ BufferOp::computeGeometry()
 void
 BufferOp::bufferOriginalPrecision()
 {
-	BufferBuilder *bufBuilder=new BufferBuilder();
+	BufferBuilder bufBuilder=BufferBuilder();
+	bufBuilder.setQuadrantSegments(quadrantSegments);
+	bufBuilder.setEndCapStyle(endCapStyle);
+
 	//cerr<<"computing with original precision"<<endl;
 	try {
-		bufBuilder->setQuadrantSegments(quadrantSegments);
-		bufBuilder->setEndCapStyle(endCapStyle);
-		resultGeometry=bufBuilder->buffer(argGeom, distance);
+		resultGeometry=bufBuilder.buffer(argGeom, distance);
 	} catch (TopologyException *ex) {
-		// bufBuilder will be deleted below
+		//cerr<<ex->toString()<<endl;
 		delete saveException;
 		saveException=ex;
-	} catch (...) {
-		// Unexpected!
-		delete bufBuilder;
-		throw;
-	}
-	delete bufBuilder;
+		return;
+	} 
+	//cerr<<"done"<<endl;
 }
 
 void
 BufferOp::bufferFixedPrecision(int precisionDigits)
 {
 	double sizeBasedScaleFactor=precisionScaleFactor(argGeom, distance, precisionDigits);
-	PrecisionModel *fixedPM=new PrecisionModel(sizeBasedScaleFactor);
+	PrecisionModel fixedPM=PrecisionModel(sizeBasedScaleFactor);
 	// don't change the precision model of the Geometry, just reduce the precision
-	SimpleGeometryPrecisionReducer *reducer=new SimpleGeometryPrecisionReducer(fixedPM);
-	Geometry* reducedGeom=reducer->reduce(argGeom);
+	SimpleGeometryPrecisionReducer reducer=SimpleGeometryPrecisionReducer(&fixedPM);
+	Geometry* reducedGeom=reducer.reduce(argGeom);
 	//cerr<<"recomputing with precision scale factor="<<sizeBasedScaleFactor<<" (precision digits "<<precisionDigits<<")"<<endl;
-	BufferBuilder *bufBuilder=new BufferBuilder();
-	bufBuilder->setWorkingPrecisionModel(fixedPM);
-	bufBuilder->setQuadrantSegments(quadrantSegments);
+	BufferBuilder bufBuilder=BufferBuilder();
+	bufBuilder.setWorkingPrecisionModel(&fixedPM);
+	bufBuilder.setQuadrantSegments(quadrantSegments);
 
 	// this may throw an exception, if robustness errors are encountered
 	try {
-		resultGeometry=bufBuilder->buffer(reducedGeom, distance);
+		resultGeometry=bufBuilder.buffer(reducedGeom, distance);
 	} catch (...) {
-		delete bufBuilder;
-		delete reducer;
-		delete fixedPM;
 		delete reducedGeom;
 		throw;
 	}
-	delete bufBuilder;
-	delete reducer;
-	delete fixedPM;
 	delete reducedGeom;
 }
 
