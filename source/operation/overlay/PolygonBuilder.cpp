@@ -36,7 +36,7 @@ void PolygonBuilder::add(PlanarGraph *graph) {
 }
 
 void PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes) {
-//	PlanarGraph::linkResultDirectedEdgesS(nodes);
+	//	PlanarGraph::linkResultDirectedEdgesS(nodes);
 
 	for(vector<Node*>::iterator nodeit=nodes->begin();nodeit<nodes->end();nodeit++) {
 		Node *node=*nodeit;

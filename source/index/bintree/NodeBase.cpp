@@ -25,8 +25,10 @@ NodeBase::~NodeBase() {
 		delete (indexMonotoneChain*)(*items)[i];
 	}
 	delete items;
-	delete subnode[0];
-	delete subnode[1];
+//	delete subnode[0];
+//	delete subnode[1];
+//	subnode[0]=NULL;
+//	subnode[1]=NULL;
 }
 
 vector<void*>* NodeBase::getItems() {

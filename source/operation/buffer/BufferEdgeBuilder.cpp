@@ -13,6 +13,9 @@ BufferEdgeBuilder::BufferEdgeBuilder(CGAlgorithms *newCga,LineIntersector *li,do
 
 BufferEdgeBuilder::~BufferEdgeBuilder() {
 	delete lineBuilder;
+//	for (int i=0;i<(int)edgeList->size();i++) {
+//		delete (*edgeList)[i];
+//	}
 	delete edgeList;
 }
 
@@ -40,7 +43,7 @@ void BufferEdgeBuilder::addEdge(CoordinateList *coord, int leftLoc, int rightLoc
 	// don't add null buffers!
 	if (coord->getSize()<2) return;
 	// add the edge for a coordinate list which is a ring of a buffer
-	Edge *e=new Edge(coord,new Label(0,Location::BOUNDARY, leftLoc, rightLoc));
+	Edge *e=new Edge(CoordinateListFactory::internalFactory->createCoordinateList(coord),new Label(0,Location::BOUNDARY, leftLoc, rightLoc));
 	edgeList->push_back(e);
 }
 
@@ -72,6 +75,7 @@ void BufferEdgeBuilder::addPoint(Point *p) {
 	CoordinateList *coord=p->getCoordinates();
 	vector<CoordinateList*> *lineList=lineBuilder->getLineBuffer(coord,distance);
 	addEdges(lineList,Location::EXTERIOR, Location::INTERIOR);
+	delete coord;
 }
 
 

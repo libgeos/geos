@@ -30,7 +30,7 @@ void Root::insert(BinTreeInterval *itemInterval,void* item){
 	*/
 	if (node==NULL || !node->getInterval()->contains(itemInterval)) {
 		BinTreeNode* largerNode=BinTreeNode::createExpanded(node,itemInterval);
-		delete subnode[index];
+//		delete subnode[index];
 		subnode[index]=largerNode;
 	}
 	/**

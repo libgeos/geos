@@ -379,7 +379,12 @@ int main(int argC, char* argV[]) {
 					}
 				} else {
 					cout<<"Something else\n";
-				}
+					//GeometryFactory *gf=new GeometryFactory(pm,0);
+					//Geometry *g1=gf->createPoint(*(new Coordinate(10,10)));
+					//Geometry *g2=gf->createPoint(*(new Coordinate(20,20)));
+					//delete g1;
+					//cout << endl;
+  				}
 			}
 			if (out & PRED) {
 				cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;

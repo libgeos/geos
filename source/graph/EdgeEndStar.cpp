@@ -262,7 +262,8 @@ int EdgeEndStar::findIndex(EdgeEnd *eSearch){
 	getIterator();   // force edgelist to be computed
 	for (unsigned int i=0; i<edgeList->size(); i++ ) {
 		EdgeEnd *e=(*edgeList)[i];
-		if (e->compareTo(eSearch)) return i;
+//		if (e->compareTo(eSearch)) return i;
+		if (e==eSearch) return i;
 	}
 	return -1;
 }

@@ -30,7 +30,8 @@ Geometry* MultiPolygon::getBoundary() {
 	vector<Geometry *>* allRings=new vector<Geometry *>();
 	for (unsigned int i = 0; i < geometries->size(); i++) {
 		Polygon *pg=(Polygon *) (*geometries)[i];
-		GeometryCollection* rings=dynamic_cast<GeometryCollection *>(pg->getBoundary());
+		Geometry *g=pg->getBoundary();
+		GeometryCollection* rings=(GeometryCollection*)g;
 		for (int j = 0; j < rings->getNumGeometries(); j++) {
 			allRings->push_back(rings->getGeometryN(j));
 		}

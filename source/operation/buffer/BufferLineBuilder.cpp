@@ -112,6 +112,7 @@ vector<CoordinateList*>* BufferLineBuilder::getRingBuffer(CoordinateList *inputP
 
 void BufferLineBuilder::init(double newDistance) {
 	distance=newDistance;
+	delete ptList;
 	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
 }
 
@@ -157,18 +158,26 @@ void BufferLineBuilder::computeRingBuffer(CoordinateList *inputPts, int side){
 }
 
 void BufferLineBuilder::addPt(Coordinate &pt) {
-	Coordinate& bufPt=*(new Coordinate(pt));
+	Coordinate *c=new Coordinate(pt);
+	Coordinate& bufPt=*(c);
 	precisionModel->makePrecise(&bufPt);
 	// don't add duplicate points
 	Coordinate lastPt;
 	if (ptList->getSize()>=1)
 		lastPt=ptList->getAt(ptList->getSize()-1);
-	if (!(lastPt==Coordinate::getNull()) && bufPt==lastPt) return;
+	if (!(lastPt==Coordinate::getNull()) && bufPt==lastPt) {
+		delete c;
+		return;
+	}
 	// if new segment is shorter than tolerance length, skip it
 	if (useMinSegmentLength) {
-		if (!(lastPt==Coordinate::getNull()) && bufPt.distance(lastPt)<minSegmentLength) return;
+		if (!(lastPt==Coordinate::getNull()) && bufPt.distance(lastPt)<minSegmentLength) {
+			delete c;
+			return;
+		}
 	}
 	ptList->add(bufPt);
+	delete c;
 	//System.out.println(bufPt);
 }
 
@@ -356,9 +365,11 @@ void BufferLineBuilder::addFillet(Coordinate &p, double startAngle, double endAn
 */
 void BufferLineBuilder::addCircle(Coordinate &p, double distance){
 // add start point
-	Coordinate& pt=*(new Coordinate(p.x+distance,p.y));
+	Coordinate *c=new Coordinate(p.x+distance,p.y);
+	Coordinate& pt=*(c);
 	addPt(pt);
 	addFillet(p,0.0,2.0*PI,-1,distance);
+	delete c;
 }
 }
 

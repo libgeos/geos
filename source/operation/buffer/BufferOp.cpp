@@ -6,6 +6,7 @@ namespace geos {
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry *geomBuf=gBuf->getResultGeometry(distance);
+	delete gBuf;
 	return geomBuf;
 }
 
@@ -68,6 +69,14 @@ void BufferOp::computeBuffer(double distance, int quadrantSegments) {
 	vector<Polygon*> *resultPolyList=polyBuilder->getPolygons();
 	resultGeom=computeGeometry(resultPolyList);
 	//computeBufferLine(graph);
+	delete bufEdgeBuilder;
+	delete polyBuilder;
+	delete resultPolyList;
+	for(int i=0;i<(int)subgraphList->size();i++) {
+		delete (*subgraphList)[i];
+	}
+	delete subgraphList;
+	delete nodedEdges;
 }
 
 /**
@@ -90,6 +99,8 @@ vector<Edge*>* BufferOp::nodeEdges(vector<Edge*> *edges){
 	*/
 	vector<Edge*> *newEdges=new vector<Edge*>();
 	ggraph->computeSplitEdges(newEdges);
+	delete si;
+	delete ggraph;
 	return newEdges;
 }
 /**
@@ -160,6 +171,7 @@ void BufferOp::replaceCollapsedEdges() {
 		}
 	}
 	((vector<Edge*>*)edgeList)->insert(edgeList->end(),newEdges->begin(),newEdges->end());
+	delete newEdges;
 }
 
 bool bsgGreaterThan(BufferSubgraph *first,BufferSubgraph *second) {
@@ -209,7 +221,9 @@ Geometry* BufferOp::computeGeometry(vector<Polygon*> *resultPolyList){
 	for(int i=0;i<(int)resultPolyList->size();i++) {
 		geomList->push_back((*resultPolyList)[i]);
 	}
-	return geomFact->buildGeometry(geomList);
+	Geometry *g=geomFact->buildGeometry(geomList);
+	delete geomList;
+	return g;
 }
 
 /**
