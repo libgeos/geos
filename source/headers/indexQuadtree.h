@@ -50,7 +50,7 @@ public:
 	string toString();
 private:
 	double x;
-	long xBits;
+	long long xBits;
 };
 
 /**

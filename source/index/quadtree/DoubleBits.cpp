@@ -6,8 +6,8 @@ namespace geos {
 double DoubleBits::powerOf2(int exp){
 	if (exp>1023 || exp<-1022)
 		throw new IllegalArgumentException("Exponent out of bounds");
-	long expBias=exp+EXPONENT_BIAS;
-	long bits=(long)expBias << 52;
+	long long expBias=exp+EXPONENT_BIAS;
+	long long bits=(long long)expBias << 52;
 	return (double) bits;
 }
 
@@ -40,7 +40,7 @@ double DoubleBits::maximumCommonMantissa(double d1, double d2) {
 
 DoubleBits::DoubleBits(double nx) {
 	x=nx;
-	xBits=(long)x;
+	xBits=(long long)x;
 }
 
 double DoubleBits::getDouble() {
@@ -53,7 +53,7 @@ double DoubleBits::getDouble() {
 * @return
 */
 int DoubleBits::biasedExponent(){
-	int signExp=(int)(xBits>>52);
+	long long signExp=(long long)(xBits>>52);
 	int exp=signExp&0x07ff;
 	return exp;
 }
