@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -178,7 +182,7 @@ protected:
 	AbstractNode *root;
 	vector <AbstractNode *> *nodes;
 	virtual AbstractNode* createNode(int level)=0;
-	virtual vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
+	virtual vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
 	virtual AbstractNode* lastNode(vector<Boundable*> *nodes);
 	virtual AbstractNode* getRoot();
 	virtual void insert(void* bounds,void* item);
@@ -194,7 +198,7 @@ protected:
 private:
 	bool built;
 	vector<Boundable*> *itemBoundables;
-	virtual AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel,int level);
+	virtual AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level);
 	virtual vector<Boundable*> *sortBoundables(const vector<Boundable*> *input)=0;
 public:
 	IntersectsOp* intersectsOp;

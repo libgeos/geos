@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.9  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -70,7 +74,7 @@ SegmentNodeList::~SegmentNodeList() {
 	for(it=nodes->begin(); it != nodes->end(); it++) delete *it;
 	delete nodes;
 
-	int i;
+	unsigned int i;
 	for(i=0; i<splitEdges.size(); i++)
 		delete splitEdges[i];
 	for(i=0; i<splitCoordLists.size(); i++)

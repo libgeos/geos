@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.11  2004/07/12 19:16:39  strk
  * Commented out CoordinateList class definition.
  *
@@ -971,11 +975,12 @@ public:
  */
 class CoordinateFilter {
 public:
+   virtual ~CoordinateFilter() {}
    /**
-   *  Performs an operation with or on <code>coord</code>.
-   *
-   *@param  coord  a <code>Coordinate</code> to which the filter is applied.
-   */
+    *  Performs an operation with or on <code>coord</code>.
+    *
+    *@param  coord  a <code>Coordinate</code> to which the filter is applied.
+    */
    virtual void filter_rw(Coordinate* coord)=0;
    virtual void filter_ro(const Coordinate* coord)=0;
 };

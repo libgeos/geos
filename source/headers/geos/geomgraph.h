@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -238,7 +242,7 @@ class GraphComponent {
 public:
 	GraphComponent();
 	GraphComponent(Label* newLabel); // newLabel is deleted by destructor
-	~GraphComponent();
+	virtual ~GraphComponent();
 	Label* getLabel();
 	virtual void setLabel(Label* newLabel);
 	virtual void setInResult(bool isInResult);

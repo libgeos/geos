@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.13  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -85,11 +89,11 @@ DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
 }
 
 DistanceOp::~DistanceOp(){
-	int i;
+	unsigned int i;
 	for (i=0; i<newCoords.size(); i++) delete newCoords[i];
 	if ( minDistanceLocation )
 	{
-		for (int i=0; i<minDistanceLocation->size(); i++)
+		for (i=0; i<minDistanceLocation->size(); i++)
 		{
 			delete (*minDistanceLocation)[i];
 		}
@@ -174,7 +178,7 @@ void DistanceOp::computeContainmentDistance() {
 			delete polys0;
 			delete polys1;
 			delete locPtPoly;
-			for (int i=0; i<insideLocs0->size(); i++)
+			for (unsigned int i=0; i<insideLocs0->size(); i++)
 			{
 				GeometryLocation *l = (*insideLocs0)[i];
 				if ( l != (*minDistanceLocation)[0] &&
@@ -186,7 +190,7 @@ void DistanceOp::computeContainmentDistance() {
 			delete insideLocs0;
 			return;
 		}
-		for (int i=0; i<insideLocs0->size(); i++)
+		for (unsigned int i=0; i<insideLocs0->size(); i++)
 			delete (*insideLocs0)[i];
 		delete insideLocs0;
 	}
@@ -200,7 +204,7 @@ void DistanceOp::computeContainmentDistance() {
 			delete polys0;
 			delete polys1;
 			delete locPtPoly;
-			for (int i=0; i<insideLocs1->size(); i++)
+			for (unsigned int i=0; i<insideLocs1->size(); i++)
 			{
 				GeometryLocation *l = (*insideLocs1)[i];
 				if ( l != (*minDistanceLocation)[0] &&
@@ -212,7 +216,7 @@ void DistanceOp::computeContainmentDistance() {
 			delete insideLocs1;
 			return;
 		}
-		for (int i=0; i<insideLocs1->size(); i++)
+		for (unsigned int i=0; i<insideLocs1->size(); i++)
 			delete (*insideLocs1)[i];
 		delete insideLocs1;
 	}
@@ -223,9 +227,9 @@ void DistanceOp::computeContainmentDistance() {
 
 
 void DistanceOp::computeInside(vector<GeometryLocation*> *locs,vector<Geometry*> *polys,vector<GeometryLocation*> *locPtPoly){
-	for (int i=0;i<(int)locs->size();i++) {
+	for (unsigned int i=0;i<locs->size();i++) {
 		GeometryLocation *loc=(*locs)[i];
-		for (int j=0;j<(int)polys->size();j++) {
+		for (unsigned int j=0;j<polys->size();j++) {
 			Polygon *poly=(Polygon*) (*polys)[j];
 			computeInside(loc, poly, locPtPoly);
 			if (minDistance<=0.0) return;
@@ -301,9 +305,9 @@ void DistanceOp::computeLineDistance() {
 }
 
 void DistanceOp::computeMinDistanceLines(vector<Geometry*> *lines0,vector<Geometry*> *lines1,vector<GeometryLocation*> *locGeom){
-	for (int i=0;i<(int)lines0->size();i++) {
+	for (unsigned int i=0;i<lines0->size();i++) {
 		LineString *line0=(LineString*) (*lines0)[i];
-		for (int j=0;j<(int)lines1->size();j++) {
+		for (unsigned int j=0;j<lines1->size();j++) {
 			LineString *line1=(LineString*) (*lines1)[j];
 			computeMinDistance(line0,line1,locGeom);
 			if (minDistance<=0.0) return;
@@ -314,10 +318,10 @@ void DistanceOp::computeMinDistanceLines(vector<Geometry*> *lines0,vector<Geomet
 void
 DistanceOp::computeMinDistancePoints(vector<Geometry*> *points0,vector<Geometry*> *points1,vector<GeometryLocation*> *locGeom)
 {
-	for (int i=0;i<(int)points0->size();i++) {
+	for (unsigned int i=0;i<points0->size();i++) {
 		//Point *pt0=(Point*) (*points0)[i];
 		Geometry *pt0=(*points0)[i];
-		for (int j=0;j<(int)points1->size();j++) {
+		for (unsigned int j=0;j<points1->size();j++) {
 			//Point *pt1=(Point*) (*points1)[j];
 			Geometry *pt1=(*points1)[j];
 			double dist=pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
@@ -340,9 +344,9 @@ DistanceOp::computeMinDistancePoints(vector<Geometry*> *points0,vector<Geometry*
 void
 DistanceOp::computeMinDistanceLinesPoints(vector<Geometry*> *lines,vector<Geometry*> *points,vector<GeometryLocation*> *locGeom)
 {
-	for (int i=0;i<(int)lines->size();i++) {
+	for (unsigned int i=0;i<lines->size();i++) {
 		LineString *line=(LineString*) (*lines)[i];
-		for (int j=0;j<(int)points->size();j++) {
+		for (unsigned int j=0;j<points->size();j++) {
 			Point *pt=(Point*)(*points)[j];
 			computeMinDistance(line,pt,locGeom);
 			if (minDistance<=0.0) return;

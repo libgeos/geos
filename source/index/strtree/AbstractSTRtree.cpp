@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.16  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -88,10 +92,10 @@ AbstractSTRtree::AbstractSTRtree(int newNodeCapacity) {
 }
 
 AbstractSTRtree::~AbstractSTRtree() {
-	for (int i=0; i<itemBoundables->size(); i++)
+	for (unsigned int i=0; i<itemBoundables->size(); i++)
 		delete (*itemBoundables)[i];
 	delete itemBoundables;
-	for (int i=0; i<nodes->size(); i++)
+	for (unsigned int i=0; i<nodes->size(); i++)
 		delete (*nodes)[i];
 	delete nodes;
 	//delete root;
@@ -122,7 +126,7 @@ void AbstractSTRtree::build() {
 * M is the node capacity.
 */
 vector<Boundable*>*
-AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables,int newLevel)
+AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
 {
 	Assert::isTrue(!childBoundables->empty());
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
@@ -131,7 +135,7 @@ AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables,int 
 
 	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
-		if (lastNode(parentBoundables)->getChildBoundables()->size()==nodeCapacity)
+		if (lastNode(parentBoundables)->getChildBoundables()->size()==(unsigned int)nodeCapacity)
 		{
 			parentBoundables->push_back(createNode(newLevel));
 		}
@@ -160,7 +164,7 @@ bool AbstractSTRtree::compareDoubles(double a, double b) {
 *            boundables (that is, below level 0)
 * @return the root, which may be a ParentNode or a LeafNode
 */
-AbstractNode* AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundablesOfALevel,int level) {
+AbstractNode* AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level) {
 	Assert::isTrue(!boundablesOfALevel->empty());
 	vector<Boundable*> *parentBoundables=createParentBoundables(boundablesOfALevel,level+1);
 	if (parentBoundables->size()==1) {

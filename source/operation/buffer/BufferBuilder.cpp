@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.21  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -123,7 +127,7 @@ BufferBuilder::BufferBuilder() {
 
 BufferBuilder::~BufferBuilder() {
 	delete edgeList;
-	for (int i=0; i<(int)newLabels.size(); i++)
+	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
 }
 
@@ -167,7 +171,7 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	OffsetCurveSetBuilder curveSetBuilder(g, distance, &curveBuilder);
 	vector<SegmentString*> *bufferSegStrList=curveSetBuilder.getCurves();
 	// short-circuit test
-	if ((int)bufferSegStrList->size()<=0) {
+	if (bufferSegStrList->size()<=0) {
 		Geometry *emptyGeom=geomFact->createGeometryCollection(NULL);
 		return emptyGeom;
 	}
@@ -186,15 +190,15 @@ BufferBuilder::buffer(Geometry *g, double distance)
 		resultPolyList=polyBuilder.getPolygons();
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (GEOSException *exc) {
-		for (int i=0; i<subgraphList->size(); i++)
+		for (unsigned int i=0; i<subgraphList->size(); i++)
 			delete (*subgraphList)[i];
 		delete subgraphList;
-		//for (int i=0; i<resultPolyList->size(); i++)
+		//for (unsigned int i=0; i<resultPolyList->size(); i++)
 		//	delete (*resultPolyList)[i];
 		//delete resultPolyList;
 		throw;
 	} 
-	for (int i=0; i<subgraphList->size(); i++)
+	for (unsigned int i=0; i<subgraphList->size(); i++)
 		delete (*subgraphList)[i];
 	delete subgraphList;
 	//for (int i=0; i<resultPolyList->size(); i++)
@@ -217,7 +221,7 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 
 		// DEBUGGING ONLY
 		//BufferDebug->saveEdges(nodedEdges, "run" + BufferDebug->runCount + "_nodedEdges");
-		for (int i=0;i<(int)nodedSegStrings->size();i++) {
+		for (unsigned int i=0;i<nodedSegStrings->size();i++) {
 			SegmentString *segStr=(*nodedSegStrings)[i];
 			Label *oldLabel=(Label*) segStr->getContext();
 			Edge *edge=new Edge((CoordinateSequence*) segStr->getCoordinates(), new Label(oldLabel));
@@ -279,7 +283,7 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph)
 {
 	vector<BufferSubgraph*> *subgraphList=new vector<BufferSubgraph*>();
 	vector<Node*> *n=graph->getNodes();
-	for (int i=0;i<(int)n->size();i++) {
+	for (unsigned int i=0;i<n->size();i++) {
 		Node *node=(*n)[i];
 		if (!node->isVisited()) {
 			BufferSubgraph *subgraph=new BufferSubgraph(cga);
@@ -310,7 +314,7 @@ void
 BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder)
 {
 	vector<BufferSubgraph*> processedGraphs;
-	for (int i=0;i<(int)subgraphList->size();i++) {
+	for (unsigned int i=0;i<subgraphList->size();i++) {
 		BufferSubgraph *subgraph=(*subgraphList)[i];
 		Coordinate *p=subgraph->getRightmostCoordinate();
 		SubgraphDepthLocater locater=SubgraphDepthLocater(&processedGraphs);

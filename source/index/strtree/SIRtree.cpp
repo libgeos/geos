@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.10  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -65,9 +69,9 @@ vector<Boundable*>* SIRtree::createParentBoundables(vector<Boundable*> *childBou
 
 	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
 
-	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
+	for(unsigned int i=0;i<sortedChildBoundables->size();i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
-		if (lastNode(parentBoundables)->getChildBoundables()->size()==nodeCapacity) {
+		if (lastNode(parentBoundables)->getChildBoundables()->size()==(unsigned int)nodeCapacity) {
 			parentBoundables->push_back(createNode(newLevel));
 		}
 		lastNode(parentBoundables)->addChildBoundable(childBoundable);
@@ -108,7 +112,7 @@ SIRAbstractNode::~SIRAbstractNode()
 void* SIRAbstractNode::computeBounds() {
 	Interval* bounds=NULL;
 	vector<Boundable*> *b=getChildBoundables();
-	for(int i=0;i<(int)b->size();i++) {
+	for(unsigned int i=0;i<b->size();i++) {
 		Boundable* childBoundable=(*b)[i];
 		if (bounds==NULL) {
 			bounds=new Interval((Interval*)childBoundable->getBounds());

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.11  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -125,15 +129,15 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 	delete sortedChildBoundables;
 	vector<Boundable*> *ret;
 	ret = createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
-	for (int i=0; i<verticalSlicesV->size(); i++)
+	for (unsigned int i=0; i<verticalSlicesV->size(); i++)
 	{
 		vector<Boundable *>*inner = (*verticalSlicesV)[i];
-		for (int j=0; j<inner->size(); j++)
-		{
+		//for (unsigned int j=0; j<inner->size(); j++)
+		//{
 			// some of these might be provided,
 			// some of these might be created
 			//delete (*inner)[j];
-		}
+		//}
 		delete inner;
 	}
 	delete verticalSlicesV;
@@ -143,7 +147,7 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 vector<Boundable*>* STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *verticalSlices, int newLevel) {
 	Assert::isTrue(verticalSlices->size()>0);
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
-	for (int i = 0; i <(int) verticalSlices->size(); i++) {
+	for (unsigned int i = 0; i <verticalSlices->size(); i++) {
 		vector<Boundable*> *toAdd=createParentBoundablesFromVerticalSlice((*verticalSlices)[i], newLevel);
 		parentBoundables->insert(parentBoundables->end(),toAdd->begin(),toAdd->end());
 		delete toAdd;
@@ -164,11 +168,11 @@ STRtree::createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBounda
 vector<vector<Boundable*>*>* STRtree::verticalSlices(vector<Boundable*>* childBoundables, int sliceCount) {
 	int sliceCapacity = (int) ceil((double)childBoundables->size() / (double) sliceCount);
 	vector<vector<Boundable*>*>* slices = new vector<vector<Boundable*>*>(sliceCount);
-	int i=0;
+	unsigned int i=0;
 	for (int j=0; j<sliceCount; j++) {
 		(*slices)[j]=new vector<Boundable*>();
 		int boundablesAddedToSlice = 0;
-		while (i<(int)childBoundables->size() && boundablesAddedToSlice < sliceCapacity) {
+		while (i<childBoundables->size() && boundablesAddedToSlice < sliceCapacity) {
 			Boundable *childBoundable=(*childBoundables)[i];
 			i++;
 			(*slices)[j]->push_back(childBoundable);
@@ -189,7 +193,7 @@ STRAbstractNode::~STRAbstractNode() {
 void* STRAbstractNode::computeBounds() {
 	Envelope* bounds=NULL;
 	vector<Boundable*> *b=getChildBoundables();
-	for(int i=0;i<(int)b->size();i++) {
+	for(unsigned int i=0;i<b->size();i++) {
 		Boundable* childBoundable=(*b)[i];
 		if (bounds==NULL) {
 			bounds=new Envelope(*(Envelope*)childBoundable->getBounds());

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.41  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.40  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -149,7 +153,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const Geome
 			delete newHoles;
 			throw new IllegalArgumentException("holes must not contain null elements");
 		}
-		for (int i=0; i<newHoles->size(); i++)
+		for (unsigned int i=0; i<newHoles->size(); i++)
 			if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
 				throw new IllegalArgumentException("holes must be LinearRings");
 		holes=newHoles;

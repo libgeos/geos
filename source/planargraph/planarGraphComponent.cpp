@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.2  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -31,6 +35,9 @@ namespace geos {
 planarGraphComponent::planarGraphComponent() {
 	isMarkedVar=false;
 	isVisitedVar=false;
+}
+
+planarGraphComponent::~planarGraphComponent() {
 }
 
 /**

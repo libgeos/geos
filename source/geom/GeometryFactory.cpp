@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.48  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.47  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -348,7 +352,7 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	const
 {
 	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromLines.size());
-	for (int i=0; i<fromLines.size(); i++)
+	for (unsigned int i=0; i<fromLines.size(); i++)
 	{
 		(*newGeoms)[i] = fromLines[i]->clone();
 	}
@@ -356,7 +360,7 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	try {
 		g = new MultiLineString(newGeoms,this);
 	} catch (...) {
-		for (int i=0; i<newGeoms->size(); i++) {
+		for (unsigned int i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -411,14 +415,14 @@ GeometryCollection*
 GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) const
 {
 	vector<Geometry *> *newGeoms = new vector<Geometry *>(fromGeoms.size());
-	for (int i=0; i<fromGeoms.size(); i++) {
+	for (unsigned int i=0; i<fromGeoms.size(); i++) {
 		(*newGeoms)[i] = fromGeoms[i]->clone();
 	}
 	GeometryCollection *g = NULL;
 	try {
 		g = new GeometryCollection(newGeoms,this);
 	} catch (...) {
-		for (int i=0; i<newGeoms->size(); i++) {
+		for (unsigned int i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -474,7 +478,7 @@ MultiPolygon*
 GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 {
 	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromPolys.size());
-	for (int i=0; i<fromPolys.size(); i++)
+	for (unsigned int i=0; i<fromPolys.size(); i++)
 	{
 		(*newGeoms)[i] = fromPolys[i]->clone();
 	}
@@ -482,7 +486,7 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 	try {
 		g = new MultiPolygon(newGeoms,this);
 	} catch (...) {
-		for (int i=0; i<newGeoms->size(); i++) {
+		for (unsigned int i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -573,7 +577,7 @@ MultiPoint*
 GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 {
 	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromPoints.size());
-	for (int i=0; i<fromPoints.size(); i++)
+	for (unsigned int i=0; i<fromPoints.size(); i++)
 	{
 		(*newGeoms)[i] = fromPoints[i]->clone();
 	}
@@ -582,7 +586,7 @@ GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 	try {
 		g = new MultiPoint(newGeoms,this);
 	} catch (...) {
-		for (int i=0; i<newGeoms->size(); i++) {
+		for (unsigned int i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -616,7 +620,7 @@ GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 	try {
 		mp = createMultiPoint(pts);
 	} catch (...) {
-		for (int i=0; i<pts->size(); i++) delete (*pts)[i];
+		for (unsigned int i=0; i<pts->size(); i++) delete (*pts)[i];
 		delete pts;
 		throw;
 	}
@@ -679,7 +683,7 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 {
 	LinearRing *newRing = (LinearRing *)shell.clone();
 	vector<Geometry *>*newHoles = new vector<Geometry *>(holes.size());
-	for (int i=0; i<holes.size(); i++)
+	for (unsigned int i=0; i<holes.size(); i++)
 	{
 		(*newHoles)[i] = holes[i]->clone();
 	}
@@ -688,7 +692,7 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 		g = new Polygon(newRing, newHoles, this);
 	} catch (...) {
 		delete newRing;
-		for (int i=0; i<holes.size(); i++)
+		for (unsigned int i=0; i<holes.size(); i++)
 			delete (*newHoles)[i];
 		delete newHoles;
 		throw;

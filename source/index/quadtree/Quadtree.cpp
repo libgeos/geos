@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.11  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -79,7 +83,7 @@ Quadtree::Quadtree(){
 }
 
 Quadtree::~Quadtree(){
-	for (int i=0; i<newEnvelopes.size(); i++)
+	for (unsigned int i=0; i<newEnvelopes.size(); i++)
 		delete newEnvelopes[i];
 	delete root;
 }

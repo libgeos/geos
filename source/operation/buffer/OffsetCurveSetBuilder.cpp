@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.14  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -92,10 +96,10 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, doubl
 
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder(){
 	delete cga;
-	for (int i=0; i<curveList->size(); i++)
+	for (unsigned int i=0; i<curveList->size(); i++)
 		delete (*curveList)[i];
 	delete curveList;
-	for (int i=0; i<newLabels.size(); i++)
+	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
 }
 /**
@@ -113,7 +117,7 @@ vector<SegmentString*>* OffsetCurveSetBuilder::getCurves(){
 void
 OffsetCurveSetBuilder::addCurves(const vector<CoordinateSequence*> *lineList, int leftLoc, int rightLoc)
 {
-	for (int i=0;i<(int)lineList->size();i++) {
+	for (unsigned int i=0;i<lineList->size();i++) {
 		const CoordinateSequence *coords=(*lineList)[i];
 		addCurve(coords, leftLoc, rightLoc);
 	}

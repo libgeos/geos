@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -45,44 +49,58 @@ namespace geos {
  * The base class for all graph component classes.
  * Maintains flags of use in generic graph algorithms.
  * Provides two flags:
- * <ul>
- * <li><b>marked</b> - typically this is used to indicate a state that persists
- * for the course of the graph's lifetime.  For instance, it can be
- * used to indicate that a component has been logically deleted from the graph.
- * <li><b>visited</b> - this is used to indicate that a component has been processed
- * or visited by an single graph algorithm.  For instance, a breadth-first traversal of the
- * graph might use this to indicate that a node has already been traversed.
- * The visited flag may be set and cleared many times during the lifetime of a graph.
+ * 
+ *  - <b>marked</b> - typically this is used to indicate a state that
+ *    persists for the course of the graph's lifetime.  For instance,
+ *    it can be used to indicate that a component has been logically
+ *    deleted from the graph.
+ *  - <b>visited</b> - this is used to indicate that a component has been
+ *    processed or visited by an single graph algorithm.  For instance,
+ *    a breadth-first traversal of the graph might use this to indicate
+ *    that a node has already been traversed.
+ *    The visited flag may be set and cleared many times during the
+ *    lifetime of a graph.
  *
  */
 class planarGraphComponent {
+
 protected:
+
 	bool isMarkedVar;
+
 	bool isVisitedVar;
+
 public:
+
 	planarGraphComponent();
+	virtual ~planarGraphComponent();
+
 	/**
 	* Tests if a component has been visited during the course of a graph algorithm
 	* @return <code>true</code> if the component has been visited
 	*/
 	virtual bool isVisited();
+
 	/**
 	* Sets the visited flag for this component.
 	* @param isVisited the desired value of the visited flag
 	*/
 	virtual void setVisited(bool newIsVisited);
+
 	/**
 	* Tests if a component has been marked at some point during the processing
 	* involving this graph.
 	* @return <code>true</code> if the component has been marked
 	*/
 	virtual bool isMarked();
+
 	/**
 	* Sets the marked flag for this component.
 	* @param isMarked the desired value of the marked flag
 	*/
 	virtual void setMarked(bool newIsMarked);
 };
+
 class planarDirectedEdge;
 class planarEdge;
 

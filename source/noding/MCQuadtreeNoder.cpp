@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
  * Revision 1.9  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -61,7 +65,7 @@ MCQuadtreeNoder::MCQuadtreeNoder(){
 }
 
 MCQuadtreeNoder::~MCQuadtreeNoder(){
-	for (int i=0; i<chains->size(); i++)
+	for (unsigned int i=0; i<chains->size(); i++)
 	{
 		delete (*chains)[i];
 	}
