@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.5  2004/05/06 15:00:59  strk
  * Boundable destructor made virtual.
  * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
@@ -27,8 +31,8 @@
  **********************************************************************/
 
 
-#include "../../headers/indexStrtree.h"
-#include "stdio.h"
+#include <geos/indexStrtree.h>
+#include <stdio.h>
 
 namespace geos {
 

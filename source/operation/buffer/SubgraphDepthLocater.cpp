@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.3  2004/05/05 12:29:44  strk
  * memleak fixed in ::getDepth
  *
@@ -26,7 +30,7 @@
  **********************************************************************/
 
 
-#include "../../headers/opBuffer.h"
+#include <geos/opBuffer.h>
 
 namespace geos {
 

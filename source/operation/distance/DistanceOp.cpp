@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.11  2004/05/14 13:42:46  strk
  * DistanceOp bug removed, cascading errors fixed.
  *
@@ -37,8 +41,8 @@
  **********************************************************************/
 
 
-#include "../../headers/opDistance.h"
-#include "../../headers/geomUtil.h"
+#include <geos/opDistance.h>
+#include <geos/geomUtil.h>
 
 namespace geos {
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.7  2004/03/29 06:59:25  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -26,9 +30,9 @@
  **********************************************************************/
 
 
-#include "../../headers/opValid.h"
-#include "stdio.h"
-#include "../../headers/util.h"
+#include <geos/opValid.h>
+#include <stdio.h>
+#include <geos/util.h>
 
 namespace geos {
 

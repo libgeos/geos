@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.9  2004/05/19 12:50:53  strk
  * Removed all try/catch blocks transforming stack allocated-vectors to auto-heap-allocations
  *
@@ -32,7 +36,7 @@
  **********************************************************************/
 
 
-#include "../../headers/opBuffer.h"
+#include <geos/opBuffer.h>
 
 namespace geos {
 BufferSubgraph::BufferSubgraph(CGAlgorithms *cga) {

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.3  2004/05/14 13:42:46  strk
  * DistanceOp bug removed, cascading errors fixed.
  *
@@ -26,7 +30,7 @@
  **********************************************************************/
 
 
-#include "../../headers/geomUtil.h"
+#include <geos/geomUtil.h>
 #include <typeinfo>
 
 namespace geos {

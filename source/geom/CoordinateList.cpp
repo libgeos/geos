@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.18  2004/05/18 13:15:25  strk
  * made ::scroll handle already scrolled vect and more readable
  *
@@ -34,8 +38,8 @@
  **********************************************************************/
 
 
-#include "../headers/geom.h"
-#include "stdio.h"
+#include <geos/geom.h>
+#include <stdio.h>
 
 namespace geos {
 

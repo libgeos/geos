@@ -13,7 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.11  2004/07/01 14:12:44  strk
+ *
  * Geometry constructors come now in two flavors:
  * 	- deep-copy args (pass-by-reference)
  * 	- take-ownership of args (pass-by-pointer)
@@ -35,8 +40,8 @@
  **********************************************************************/
 
 
-#include "../../headers/opOverlay.h"
-#include "stdio.h"
+#include <geos/opOverlay.h>
+#include <stdio.h>
 
 namespace geos {
 

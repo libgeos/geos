@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.4  2004/05/03 17:15:38  strk
  * leaks on exception fixed.
  *
@@ -31,7 +35,7 @@
  **********************************************************************/
 
 
-#include "../headers/precision.h"
+#include <geos/precision.h>
 #include <typeinfo>
 
 namespace geos {

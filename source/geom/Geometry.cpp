@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.54  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.53  2004/07/01 17:34:07  strk
  * GeometryFactory argument in Geometry constructor reverted
  * to its copy-and-destroy semantic.
@@ -86,18 +90,18 @@
  **********************************************************************/
 
 
-#include "../headers/geom.h"
-#include "../headers/util.h"
+#include <geos/geom.h>
+#include <geos/util.h>
 #include <typeinfo>
 #include <algorithm>
-#include "../headers/geosAlgorithm.h"
-#include "../headers/operation.h"
-#include "../headers/opRelate.h"
-#include "../headers/opValid.h"
-#include "../headers/opDistance.h"
-#include "../headers/opOverlay.h"
-#include "../headers/opBuffer.h"
-#include "../headers/io.h"
+#include <geos/geosAlgorithm.h>
+#include <geos/operation.h>
+#include <geos/opRelate.h>
+#include <geos/opValid.h>
+#include <geos/opDistance.h>
+#include <geos/opOverlay.h>
+#include <geos/opBuffer.h>
+#include <geos/io.h>
 
 namespace geos {
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.10  2004/05/06 16:30:58  strk
  * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
  * deleted at destruction time. doc/example.cpp runs with no leaks.
@@ -32,8 +36,8 @@
  **********************************************************************/
 
 
-#include "../../headers/indexQuadtree.h"
-#include "../../headers/util.h"
+#include <geos/indexQuadtree.h>
+#include <geos/util.h>
 
 namespace geos {
 

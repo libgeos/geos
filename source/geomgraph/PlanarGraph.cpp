@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.4  2004/05/03 10:43:42  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -39,7 +43,7 @@
  **********************************************************************/
 
 
-#include "../headers/geomgraph.h"
+#include <geos/geomgraph.h>
 
 namespace geos {
 

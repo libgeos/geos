@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.3  2004/06/15 07:40:30  strk
  * Added missing <stdio.h> include
  *
@@ -26,9 +30,9 @@
  **********************************************************************/
 
 
-#include "../headers/planargraph.h"
-#include "../headers/geomgraph.h"
-#include "math.h"
+#include <geos/planargraph.h>
+#include <geos/geomgraph.h>
+#include <math.h>
 #include <typeinfo>
 #include <stdio.h>
 

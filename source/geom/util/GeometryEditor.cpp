@@ -13,7 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.8  2004/07/01 14:12:44  strk
+ *
  * Geometry constructors come now in two flavors:
  * 	- deep-copy args (pass-by-reference)
  * 	- take-ownership of args (pass-by-pointer)
@@ -47,8 +52,8 @@
  **********************************************************************/
 
 
-#include "../../headers/geomUtil.h"
-#include "../../headers/util.h"
+#include <geos/geomUtil.h>
+#include <geos/util.h>
 #include <typeinfo>
 
 namespace geos {

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.10  2004/05/17 12:37:50  strk
  * Added carriage returns and tabs in set of blanks chars
  *
@@ -31,7 +35,7 @@
  **********************************************************************/
 
 
-#include "../headers/io.h"
+#include <geos/io.h>
 
 namespace geos {
 

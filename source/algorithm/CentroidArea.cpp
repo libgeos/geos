@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.12  2004/05/17 07:42:54  strk
  * CentroidArea::add(const Geometry *geom) uses dynamic_cast
  *
@@ -37,8 +41,8 @@
  **********************************************************************/
 
 
-#include "../headers/geosAlgorithm.h"
-#include "../headers/platform.h"
+#include <geos/geosAlgorithm.h>
+#include <geos/platform.h>
 #include <typeinfo>
 
 namespace geos {

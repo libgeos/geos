@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.1  2004/04/08 04:53:56  ybychkov
  * "operation/polygonize" ported from JTS 1.4
  *
@@ -20,7 +24,7 @@
  **********************************************************************/
 
 
-#include "../../headers/opPolygonize.h"
+#include <geos/opPolygonize.h>
 
 namespace geos {
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.7  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -24,7 +28,7 @@
  **********************************************************************/
 
 
-#include "../../headers/opDistance.h"
+#include <geos/opDistance.h>
 #include <typeinfo>
 
 namespace geos {

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.14  2004/04/16 09:01:29  strk
  * Removed memory leak in CGAlgorithms::isOnline
  *
@@ -33,9 +37,9 @@
  **********************************************************************/
 
 
-#include "../headers/geosAlgorithm.h"
-#include "stdio.h"
-#include "math.h"
+#include <geos/geosAlgorithm.h>
+#include <stdio.h>
+#include <math.h>
 
 namespace geos {
 

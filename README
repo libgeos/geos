@@ -1,0 +1,31 @@
+CLIENT APPLICATIONS
+-------------------
+
+To compile programs against GEOS:
+
+	CFLAGS += `geos-config --cflags`
+	LDFLAGS += `geos-config --libs`
+
+Headers inclusion (quick):
+
+	// geometries, version and exceptions 
+	#include <geos.h>
+
+Headers inclusion (manual):
+
+	// geometries
+	#include <geos/geom.h>
+
+	// exceptions
+	#include <geos/util.h>
+
+	// version
+	#include <geos/version.h>
+
+	... check documentation for more tips ...
+
+Example usage:
+
+	doc/example.cpp contains basic usage
+	examples.
+

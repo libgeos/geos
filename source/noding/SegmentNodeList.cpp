@@ -13,7 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.7  2004/07/01 14:12:44  strk
+ *
  * Geometry constructors come now in two flavors:
  * 	- deep-copy args (pass-by-reference)
  * 	- take-ownership of args (pass-by-pointer)
@@ -46,7 +51,7 @@
  **********************************************************************/
 
 
-#include "../headers/noding.h"
+#include <geos/noding.h>
 
 namespace geos {
 SegmentNodeList::SegmentNodeList(const SegmentString *newEdge)

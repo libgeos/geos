@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.16  2004/06/16 13:13:25  strk
  * Changed interface of SegmentString, now copying CoordinateList argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
@@ -38,8 +42,8 @@
  **********************************************************************/
 
 
-#include "../headers/geom.h"
-#include "stdio.h"
+#include <geos/geom.h>
+#include <stdio.h>
 
 namespace geos {
 

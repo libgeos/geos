@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.5  2004/05/05 13:08:01  strk
  * Leaks fixed, explicit allocations/deallocations reduced.
  *
@@ -32,8 +36,8 @@
  **********************************************************************/
 
 
-#include "../headers/geosAlgorithm.h"
-#include "stdio.h"
+#include <geos/geosAlgorithm.h>
+#include <stdio.h>
 #include <typeinfo>
 
 namespace geos {

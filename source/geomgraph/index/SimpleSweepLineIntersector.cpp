@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.1  2004/04/14 06:04:26  ybychkov
  * "geomgraph/index" committ problem fixed.
  *
@@ -29,7 +33,7 @@
  **********************************************************************/
 
 
-#include "../../headers/geomgraphindex.h"
+#include <geos/geomgraphindex.h>
 
 namespace geos {
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.8  2004/05/17 12:36:39  strk
  * ParseException message made more readable
  *
@@ -24,8 +28,8 @@
  **********************************************************************/
 
 
-#include "../headers/io.h"
-#include "stdio.h"
+#include <geos/io.h>
+#include <stdio.h>
 
 namespace geos {
 

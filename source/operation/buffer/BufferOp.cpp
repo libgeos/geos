@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.31  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.30  2004/05/19 13:01:34  strk
  * avoided assignment operator calls for BufferBuilder
  *
@@ -66,8 +70,8 @@
  **********************************************************************/
 
 
-#include "../../headers/opBuffer.h"
-#include "../../headers/precision.h"
+#include <geos/opBuffer.h>
+#include <geos/precision.h>
 
 namespace geos {
 

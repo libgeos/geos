@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.10  2004/05/05 10:54:48  strk
  * Removed some private static heap explicit allocation, less cleanup done by
  * the unloader.
@@ -48,14 +52,14 @@
  **********************************************************************/
 
 
-#include "../headers/unload.h"
-#include "../headers/opValid.h"
-#include "../headers/geomgraph.h"
-#include "../headers/operation.h"
-#include "../headers/opRelate.h"
-#include "../headers/indexQuadtree.h"
-#include "../headers/opBuffer.h"
-#include "../headers/planargraph.h"
+#include <geos/unload.h>
+#include <geos/opValid.h>
+#include <geos/geomgraph.h>
+#include <geos/operation.h>
+#include <geos/opRelate.h>
+#include <geos/indexQuadtree.h>
+#include <geos/opBuffer.h>
+#include <geos/planargraph.h>
 
 namespace geos {
 

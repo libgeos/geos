@@ -2,14 +2,14 @@ dnl version 2.52 is required for Cygwin libtool support
 AC_PREREQ(2.52)
 
 dnl local vars to hold user's preferences --------------------------------
-AC_INIT(source/headers/geom.h)
+AC_INIT(source/headers/geos.h)
 AC_CANONICAL_SYSTEM
 VERSION_MAJOR=1
 VERSION_MINOR=4
 VERSION_PATCH=0
 AM_INIT_AUTOMAKE(geos, 1.4.0)
 AC_CONFIG_HEADERS(source/headers/config.h)
-AM_CONFIG_HEADER(source/headers/platform.h)
+AM_CONFIG_HEADER(source/headers/geos/platform.h)
 AC_PROG_CC
 
 dnl check for programs ----------------------------------------------------
@@ -57,5 +57,5 @@ AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
 
 dnl output stuff ----------------------------------------------------------
 
-AC_OUTPUT(Makefile source/Makefile source/geom/Makefile source/headers/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile source/examples/Makefile doc/Makefile source/headers/geos_version.h)
+AC_OUTPUT(Makefile source/Makefile source/geom/Makefile source/headers/Makefile source/headers/geos/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile source/examples/Makefile doc/Makefile source/headers/geos/version.h)
 

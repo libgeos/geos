@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -20,7 +24,7 @@
  **********************************************************************/
 
 
-#include "../headers/planargraph.h"
+#include <geos/planargraph.h>
 
 namespace geos {
 

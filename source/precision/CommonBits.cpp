@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.1  2004/04/10 22:41:25  ybychkov
  * "precision" upgraded to JTS 1.4
  *
@@ -20,7 +24,7 @@
  **********************************************************************/
 
 
-#include "../headers/precision.h"
+#include <geos/precision.h>
 
 namespace geos {
 /**

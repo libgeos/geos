@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.5  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -21,8 +25,8 @@
  **********************************************************************/
 
 
-#include "../../headers/indexSweepline.h"
-#include "stdio.h"
+#include <geos/indexSweepline.h>
+#include <stdio.h>
 
 namespace geos {
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.10  2004/06/30 20:59:13  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -27,8 +31,8 @@
  **********************************************************************/
 
 
-#include "../../headers/opOverlay.h"
-#include "stdio.h"
+#include <geos/opOverlay.h>
+#include <stdio.h>
 
 namespace geos {
 

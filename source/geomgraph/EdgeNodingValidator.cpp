@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.2  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -23,10 +27,10 @@
  **********************************************************************/
 
 
-#include "../headers/geomgraph.h"
-#include "../headers/geom.h"
-#include "../headers/geosAlgorithm.h"
-#include "../headers/noding.h"
+#include <geos/geomgraph.h>
+#include <geos/geom.h>
+#include <geos/geosAlgorithm.h>
+#include <geos/noding.h>
 namespace geos {
 /**
  * Validates that a collection of SegmentStrings is correctly noded.

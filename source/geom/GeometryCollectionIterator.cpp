@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -21,8 +25,8 @@
  **********************************************************************/
 
 
-#include "../headers/geom.h"
-#include "../headers/util.h"
+#include <geos/geom.h>
+#include <geos/util.h>
 #include <typeinfo>
 
 namespace geos {

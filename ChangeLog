@@ -1,3 +1,48 @@
+2004-07-01 19:34  strk
+
+	* source/geom/Geometry.cpp: GeometryFactory argument in Geometry
+	constructor reverted to its copy-and-destroy semantic.
+
+2004-07-01 19:07  strk
+
+	* doc/: .cvsignore, Makefile.am: Added doxygen_docs generation rule
+
+2004-07-01 18:49  strk
+
+	* doc/geosDoxygen.conf: re-generated with doxygen 1.2.15
+
+2004-07-01 17:47  cvs
+
+	* doc/geosDoxygen.conf: Added doxygen file for better doco
+	generation.
+
+2004-07-01 16:12  strk
+
+	* ChangeLog, NEWS, TODO, doc/example.cpp,
+	source/algorithm/ConvexHull.cpp,
+	source/algorithm/InteriorPointArea.cpp, source/geom/Geometry.cpp,
+	source/geom/GeometryCollection.cpp,
+	source/geom/GeometryFactory.cpp, source/geom/LineString.cpp,
+	source/geom/LinearRing.cpp, source/geom/MultiLineString.cpp,
+	source/geom/MultiPoint.cpp, source/geom/MultiPolygon.cpp,
+	source/geom/Point.cpp, source/geom/Polygon.cpp,
+	source/geom/util/GeometryEditor.cpp, source/geomgraph/EdgeRing.cpp,
+	source/headers/geom.h, source/headers/io.h,
+	source/headers/noding.h, source/headers/opBuffer.h,
+	source/headers/opOverlay.h, source/io/WKTReader.cpp,
+	source/noding/SegmentNodeList.cpp, source/noding/SegmentString.cpp,
+	source/operation/buffer/BufferBuilder.cpp,
+	source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	source/operation/linemerge/EdgeString.cpp,
+	source/operation/overlay/LineBuilder.cpp,
+	source/operation/overlay/OverlayOp.cpp,
+	source/operation/polygonize/polygonizeEdgeRing.cpp,
+	source/util/GeometricShapeFactory.cpp: 
+	Geometry constructors come now in two flavors:	- deep-copy args
+	(pass-by-reference)    - take-ownership of args (pass-by-pointer)
+	Same functionality is available through GeometryFactory, including
+	buildGeometry().
+
 2004-06-30 22:59  strk
 
 	* source/: geom/Geometry.cpp, geom/GeometryCollection.cpp,

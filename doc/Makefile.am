@@ -5,7 +5,7 @@ LIBS = ../source/geom/libgeos.la
 example_SOURCES = example.cpp 
 example_LDADD = $(LIBS)
 
-INCLUDES = -I../headers
+INCLUDES = -I../source/headers
 INCLUDES += -I../io/markup
 
 doxygen:

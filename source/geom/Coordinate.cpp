@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.12  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.
@@ -25,8 +29,8 @@
  **********************************************************************/
 
 
-#include "../headers/geom.h"
-#include "stdio.h"
+#include <geos/geom.h>
+#include <stdio.h>
 
 namespace geos {
 

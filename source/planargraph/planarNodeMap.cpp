@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.3  2004/05/03 12:09:22  strk
  * newline added at end of file
  *
@@ -26,7 +30,7 @@
  **********************************************************************/
 
 
-#include "../headers/planargraph.h"
+#include <geos/planargraph.h>
 
 namespace geos {
 

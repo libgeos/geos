@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.23  2004/05/28 18:16:01  ybychkov
  * Changed rounding method to make compilable with VC++
  *
@@ -51,9 +55,9 @@
  **********************************************************************/
 
 
-#include "../headers/geom.h"
-#include "../headers/util.h"
-#include "stdio.h"
+#include <geos/geom.h>
+#include <geos/util.h>
+#include <stdio.h>
 
 namespace geos {
 

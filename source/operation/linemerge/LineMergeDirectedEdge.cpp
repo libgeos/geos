@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.1  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  *
@@ -20,8 +24,8 @@
  **********************************************************************/
 
 
-#include "../../headers/opLinemerge.h"
-#include "../../headers/util.h"
+#include <geos/opLinemerge.h>
+#include <geos/util.h>
 
 namespace geos {
 

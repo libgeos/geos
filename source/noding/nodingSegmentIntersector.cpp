@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.4  2004/06/16 13:13:25  strk
  * Changed interface of SegmentString, now copying CoordinateList argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
@@ -31,7 +35,7 @@
  **********************************************************************/
 
 
-#include "../headers/noding.h"
+#include <geos/noding.h>
 
 namespace geos {
 bool nodingSegmentIntersector::isAdjacentSegments(int i1, int i2){

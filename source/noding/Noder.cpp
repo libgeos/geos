@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.3  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -26,7 +30,7 @@
  **********************************************************************/
 
 
-#include "../headers/noding.h"
+#include <geos/noding.h>
 
 namespace geos {
 

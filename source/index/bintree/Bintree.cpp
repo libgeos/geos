@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.7  2004/05/07 14:13:02  strk
  * Fixed segfault in ::insert
  *
@@ -28,7 +32,7 @@
  **********************************************************************/
 
 
-#include "../../headers/indexBintree.h"
+#include <geos/indexBintree.h>
 
 namespace geos {
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.10  2004/05/27 08:37:16  strk
  * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
  *
@@ -49,7 +53,7 @@
  **********************************************************************/
 
 
-#include "../../headers/opBuffer.h"
+#include <geos/opBuffer.h>
 
 namespace geos {
 

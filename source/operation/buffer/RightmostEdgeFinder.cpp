@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.7  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -26,8 +30,8 @@
  **********************************************************************/
 
 
-#include "../../headers/opBuffer.h"
-#include "../../headers/util.h"
+#include <geos/opBuffer.h>
+#include <geos/util.h>
 
 namespace geos {
 

@@ -7,7 +7,7 @@
 // This software is provided "as is", with no warranty.
 
 #include "MarkupSTL.h"
-#include "stdio.h"
+#include <stdio.h>
 
 using namespace std;
 

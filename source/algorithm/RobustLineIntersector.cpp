@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.16  2004/03/25 02:23:55  ybychkov
  * All "index/*" packages upgraded to JTS 1.4
  *
@@ -27,8 +31,8 @@
  **********************************************************************/
 
 
-#include "../headers/geosAlgorithm.h"
-#include "../headers/util.h"
+#include <geos/geosAlgorithm.h>
+#include <geos/util.h>
 
 namespace geos {
 

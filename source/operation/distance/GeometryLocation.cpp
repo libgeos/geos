@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.3  2004/04/13 12:29:21  strk
  * GeometryLocation const-correctness.
  *
@@ -27,7 +31,7 @@
  **********************************************************************/
 
 
-#include "../../headers/opDistance.h"
+#include <geos/opDistance.h>
 
 namespace geos {
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.43  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.42  2004/05/27 08:40:13  strk
  * Fixed a memleak in buffer test.
  *
@@ -69,12 +73,12 @@
 #include <iostream>
 #include <fstream>
 
-#include "../headers/util.h"
-#include "../headers/geomgraph.h"
-#include "../headers/io.h"
-#include "../headers/opRelate.h"
+#include <geos/util.h>
+#include <geos/geomgraph.h>
+#include <geos/io.h>
+#include <geos/opRelate.h>
 #include "../io/markup/MarkupSTL.h"
-#include "../headers/unload.h"
+#include <geos/unload.h>
 
 //#include "util.h"
 //#include "geomgraph.h"

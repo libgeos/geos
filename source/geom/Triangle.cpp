@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.2  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -26,8 +30,8 @@
  **********************************************************************/
 
 
-#include "../headers/geom.h"
-#include "stdio.h"
+#include <geos/geom.h>
+#include <stdio.h>
 
 namespace geos {
 

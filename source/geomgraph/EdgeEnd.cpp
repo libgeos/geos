@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -24,10 +28,10 @@
  **********************************************************************/
 
 
-#include "../headers/geomgraph.h"
-#include "../headers/util.h"
+#include <geos/geomgraph.h>
+#include <geos/util.h>
 #include <typeinfo>
-#include "math.h"
+#include <math.h>
 #include <stdio.h>
 
 namespace geos {

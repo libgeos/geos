@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.2  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -27,8 +31,8 @@
  **********************************************************************/
 
 
-#include "../headers/geomgraph.h"
-#include "../headers/indexQuadtree.h"
+#include <geos/geomgraph.h>
+#include <geos/indexQuadtree.h>
 
 namespace geos {
 

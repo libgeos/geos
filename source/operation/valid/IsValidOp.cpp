@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
  * Revision 1.17  2004/05/18 00:02:37  ybychkov
  * IsValidOp::checkShellNotNested() bugfix from JTS 1.4.1 (not released yet) has been added.
  *
@@ -35,11 +39,11 @@
  **********************************************************************/
 
 
-#include "../../headers/opValid.h"
-#include "stdio.h"
+#include <geos/opValid.h>
+#include <stdio.h>
 #include <typeinfo>
 #include <set>
-#include "../../headers/util.h"
+#include <geos/util.h>
 
 namespace geos {
 
