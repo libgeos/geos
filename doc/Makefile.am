@@ -1,11 +1,15 @@
+prefix=@prefix@
+top_srcdir=@top_srcdir@
+top_builddir=@top_builddir@
+
 noinst_PROGRAMS = example 
 
-LIBS = ../source/geom/libgeos.la
+LIBS = $(top_builddir)/source/geom/libgeos.la
 
 example_SOURCES = example.cpp 
 example_LDADD = $(LIBS)
 
-INCLUDES = -I../source/headers
+INCLUDES = -I$(top_srcdir)/source/headers
 
 DOXYGEN = doxygen
 

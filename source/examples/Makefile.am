@@ -10,5 +10,5 @@ CustomCoordinateSequenceExample_LDADD = $(LIBS)
 CoordinateSequencesExample_SOURCES = CoordinateSequencesExample.cpp 
 CoordinateSequencesExample_LDADD = $(LIBS)
 
-INCLUDES = -I../headers
-INCLUDES += -I../io/markup
+INCLUDES = -I$(top_srcdir)/headers
+INCLUDES += -I$(top_srcdir)/io/markup
