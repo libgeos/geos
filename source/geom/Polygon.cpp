@@ -120,6 +120,7 @@ string Polygon::getGeometryType() const {
 	return "Polygon";
 }
 
+// Returns a newly allocated Geometry object
 Geometry* Polygon::getBoundary() const {
 	if (isEmpty()) {
 		return new GeometryCollection(NULL, precisionModel, SRID);
@@ -129,7 +130,9 @@ Geometry* Polygon::getBoundary() const {
 	for (unsigned int i=0; i<holes->size(); i++) {
 		(*rings)[i + 1] =new LineString(*(LineString*)(*holes)[i]);
 	}
-	return new MultiLineString(rings, precisionModel, SRID);
+	MultiLineString *ret = new MultiLineString(rings, precisionModel, SRID);
+	delete rings;
+	return ret;
 }
 
 Envelope* Polygon::computeEnvelopeInternal() const {
@@ -213,13 +216,14 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	}
 	CoordinateList* uniqueCoordinates=ring->getCoordinates();
 	uniqueCoordinates->deleteAt(uniqueCoordinates->getSize()-1);
-	const Coordinate* minCoordinate=CoordinateList::minCoordinate(ring->getCoordinates());
+	const Coordinate* minCoordinate=CoordinateList::minCoordinate(uniqueCoordinates);
 	CoordinateList::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-	ring->setPoints(uniqueCoordinates);
-	if (cgAlgorithms->isCCW(ring->getCoordinates())==clockwise) {
-		CoordinateList::reverse(ring->getCoordinates());
+	if (cgAlgorithms->isCCW(uniqueCoordinates)==clockwise) {
+		CoordinateList::reverse(uniqueCoordinates);
 	}
+	ring->setPoints(uniqueCoordinates);
+	delete(uniqueCoordinates);
 }
 
 const Coordinate* Polygon::getCoordinate() const {
