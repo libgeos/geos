@@ -17,6 +17,6 @@ geos_HEADERS = bigtest.h \
 	util.h \
 	config.h \
 	opDistance.h \
-	SpatialIndex.h \
+	spatialIndex.h \
 	indexStrtree.h \
 	indexBintree.h
