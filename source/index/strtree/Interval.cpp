@@ -4,27 +4,27 @@
 #include <typeinfo>
 
 Interval::Interval(Interval *other) {
-	Interval(other->min,other->max);
+	Interval(other->imin,other->imax);
 }
 
 Interval::Interval(double newMin,double newMax) {
 	Assert::isTrue(newMin<=newMax);
-	min=newMin;
-	max=newMax;
+	imin=newMin;
+	imax=newMax;
 }
 
 double Interval::getCentre() {
-	return (min+max)/2;
+	return (imin+imax)/2;
 }
 
 Interval* Interval::expandToInclude(Interval *other) {
-	max=max(max,other->max);
-	min=min(min,other->min);
+	imax=max(imax,other->imax);
+	imin=min(imin,other->imin);
 	return this;
 }
 
 bool Interval::intersects(Interval *other) {
-	return !(other->min>max || other->max<min);
+	return !(other->imin>imax || other->imax<imin);
 }
 
 bool Interval::equals(void *o) {
@@ -32,5 +32,5 @@ bool Interval::equals(void *o) {
 		return false;
 	}
 	Interval *other=(Interval*) o;
-	return min==other->min && max==other->max;
+	return imin==other->imin && imax==other->imax;
 }

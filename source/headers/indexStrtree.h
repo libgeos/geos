@@ -33,8 +33,8 @@ public:
 	bool intersects(Interval *other);
 	bool equals(void *o);
 private:
-	double min;
-	double max;
+	double imin;
+	double imax;
 };
 
 /**
