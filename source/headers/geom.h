@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.64  2004/05/19 13:18:24  strk
+ * made CoordinateList::toString() a const member function
+ *
  * Revision 1.63  2004/05/17 21:14:47  ybychkov
  * JavaDoc updated
  *
@@ -487,7 +490,7 @@ public:
 	virtual	void setAt(const Coordinate& c, int pos)=0;
 	virtual	void deleteAt(int pos)=0;
 	virtual	vector<Coordinate>* toVector() const=0;
-	virtual	string toString()=0;
+	virtual	string toString() const=0;
 	virtual	void setPoints(const vector<Coordinate> &v)=0;
 	bool hasRepeatedPoints() const;
 	const Coordinate* minCoordinate() const;
@@ -549,7 +552,7 @@ public:
 	void setAt(const Coordinate& c, int pos);
 	void deleteAt(int pos);
 	vector<Coordinate>* toVector() const;
-	string toString();
+	string toString() const;
 	void setPoints(const vector<Coordinate> &v);
 private:
 	vector<Coordinate> *vect;
@@ -580,7 +583,7 @@ public:
 	void deleteAt(int pos);
 	vector<Coordinate>* toVector() const;
 	vector<point_3d>* toPointVector();
-	string toString();
+	string toString() const;
 	void setPoints(const vector<Coordinate> &v);
 	void setPoints(vector<point_3d> &v);
 private:

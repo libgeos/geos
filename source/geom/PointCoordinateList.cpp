@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/05/19 13:18:24  strk
+ * made CoordinateList::toString() a const member function
+ *
  * Revision 1.17  2004/05/17 21:09:26  ybychkov
  * toString() performance enhancement
  *
@@ -149,7 +152,7 @@ void PointCoordinateList::deleteAt(int pos){
 //		throw "PointCoordinateList exception: can't remove element\n";
 }
 
-string PointCoordinateList::toString() {
+string PointCoordinateList::toString() const {
 	string result("");
 	if (getSize()>0) {
 		char buffer[100];
