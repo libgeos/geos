@@ -1,5 +1,4 @@
 #include "graph.h"
-#include "geom.h"
 
 Label Label::toLineLabel(Label label) {
 	Label lineLabel(Location::UNDEF);

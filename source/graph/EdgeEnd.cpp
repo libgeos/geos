@@ -1,0 +1,90 @@
+#include "graph.h"
+#include "util.h"
+#include <typeinfo>
+#include "math.h"
+
+EdgeEnd::EdgeEnd(): p0(),p1(){
+	this->edge=NULL;
+	label=NULL;
+	node=NULL;
+	dx=dy=0.0;
+	quadrant=0;
+}
+
+EdgeEnd::EdgeEnd(Edge* newEdge): p0(),p1(){
+	this->edge=newEdge;
+
+	label=NULL;
+	node=NULL;
+	dx=dy=0.0;
+	quadrant=0;
+}
+
+EdgeEnd::EdgeEnd(Edge* newEdge, Coordinate p0, Coordinate p1){
+	this->edge=newEdge;
+	node=NULL;
+	dx=dy=0.0;
+	quadrant=0;
+	init(p0, p1);
+	label=NULL;
+}
+
+EdgeEnd::EdgeEnd(Edge* newEdge, Coordinate p0, Coordinate p1, Label* newLabel){
+	this->edge=newEdge;
+	node=NULL;
+	dx=dy=0.0;
+	quadrant=0;
+	init(p0, p1);
+	label=newLabel;
+}
+
+void EdgeEnd::init(Coordinate newP0, Coordinate newP1){
+	p0=newP0;
+	p1=newP1;
+	dx=p1.x-p0.x;
+	dy=p1.y-p0.y;
+	quadrant=Quadrant::quadrant(dx,dy);
+	Assert::isTrue(!(dx == 0 && dy == 0), "EdgeEnd with identical endpoints found");
+}
+
+Edge* EdgeEnd::getEdge() {return edge;}
+Label* EdgeEnd::getLabel() {return label;}
+Coordinate EdgeEnd::getCoordinate() {return p0;}
+Coordinate EdgeEnd::getDirectedCoordinate() {return p1;}
+int EdgeEnd::getQuadrant() {return quadrant;}
+double EdgeEnd::getDx() {return dx;}
+double EdgeEnd::getDy() {return dy;}
+void EdgeEnd::setNode(Node* newNode) {node=newNode;}
+Node* EdgeEnd::getNode() {return node;}
+
+int EdgeEnd::compareTo(EdgeEnd e) {
+	return compareDirection(e);
+}
+
+//!!!External dependency
+int EdgeEnd::compareDirection(EdgeEnd e) {
+	if (dx == e.dx && dy == e.dy)
+		return 0;
+	// if the rays are in different quadrants, determining the ordering is trivial
+	if (quadrant > e.quadrant) return 1;
+	if (quadrant < e.quadrant) return -1;
+	// vectors are in the same quadrant - check relative orientation of direction vectors
+	// this is > e if it is CCW of e
+//	return cga.computeOrientation(e.p0, e.p1, p1);
+	return 0;
+}
+
+void EdgeEnd::computeLabel(){
+	// subclasses should override this if they are using labels
+}
+
+string EdgeEnd::print() {
+	char buffer[255];
+	sprintf(buffer,"%i:%g",quadrant,atan2(dy,dx));
+	string angleStr(buffer);
+	string className=typeid(*this).name();
+	string out="  "+className+": "+p0.toString()+" - "+p1.toString()+" ";
+	out.append(angleStr);
+	out+="   " + label->toString();
+	return out;
+}

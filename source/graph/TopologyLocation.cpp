@@ -1,5 +1,4 @@
 #include "graph.h"
-#include "geom.h"
 
 TopologyLocation::TopologyLocation(vector<int> location){
 	init((int)location.size());
