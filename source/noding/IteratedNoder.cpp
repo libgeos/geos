@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/04/30 09:15:28  strk
+ * Enlarged exception specifications to allow for AssertionFailedException.
+ * Added missing initializers.
+ *
  * Revision 1.6  2004/04/23 00:02:18  strk
  * const-correctness changes
  *
@@ -61,7 +65,7 @@ IteratedNoder::~IteratedNoder() {
 */
 vector<SegmentString*>*
 IteratedNoder::node(vector<SegmentString*> *segStrings)
-	throw(TopologyException *)
+	throw(GEOSException *)
 {
 	int numInteriorIntersections;
 	vector<SegmentString*> *nodedEdges=segStrings;

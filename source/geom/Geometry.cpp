@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.44  2004/04/30 09:15:28  strk
+ * Enlarged exception specifications to allow for AssertionFailedException.
+ * Added missing initializers.
+ *
  * Revision 1.43  2004/04/20 10:14:20  strk
  * Memory leaks removed.
  *
@@ -419,7 +423,6 @@ Geometry* Geometry::buffer(double distance) const {
 		out = BufferOp::bufferOp(in1, distance);
 	}
 	catch(...) {
-		cerr<<"Exception thrown!"<<endl;
 		if ( in1 != this ) delete (in1);
 		throw;
 	}

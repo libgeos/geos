@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/04/30 09:15:28  strk
+ * Enlarged exception specifications to allow for AssertionFailedException.
+ * Added missing initializers.
+ *
  * Revision 1.6  2004/04/23 00:02:18  strk
  * const-correctness changes
  *
@@ -98,7 +102,7 @@ void BufferBuilder::setEndCapStyle(int nEndCapStyle){
 
 Geometry*
 BufferBuilder::buffer(Geometry *g, double distance)
-	throw(TopologyException *)
+	throw(GEOSException *)
 {
 	const PrecisionModel *precisionModel=workingPrecisionModel;
 	if (precisionModel==NULL)
@@ -120,12 +124,11 @@ BufferBuilder::buffer(Geometry *g, double distance)
 
 	try {
 		computeNodedEdges(bufferSegStrList, precisionModel);
-	} catch (...) {
-		// Unexpected exception thrown
+	} catch (GEOSException *ge) {
 		delete curveSetBuilder;
 		delete curveBuilder;
 		throw;
-	}
+	} 
 	delete curveSetBuilder;
 	delete curveBuilder;
 
@@ -142,22 +145,14 @@ BufferBuilder::buffer(Geometry *g, double distance)
 		buildSubgraphs(subgraphList, polyBuilder);
 		resultPolyList=polyBuilder->getPolygons();
 		resultGeom=geomFact->buildGeometry(resultPolyList);
-	} catch (TopologyException *exc) {
+	} catch (GEOSException *exc) {
 		for (int i=0; i<subgraphList->size(); i++)
 			delete (*subgraphList)[i];
 		delete subgraphList;
 		delete resultPolyList;
 		delete polyBuilder;
 		throw;
-	} catch (...) {
-		for (int i=0; i<subgraphList->size(); i++)
-			delete (*subgraphList)[i];
-		delete subgraphList;
-		delete resultPolyList;
-		delete polyBuilder;
-		fprintf(stderr, "Unexpected!\n");
-		throw;
-	}
+	} 
 	for (int i=0; i<subgraphList->size(); i++)
 		delete (*subgraphList)[i];
 	delete subgraphList;
@@ -168,20 +163,20 @@ BufferBuilder::buffer(Geometry *g, double distance)
 
 void
 BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel)
-	throw(TopologyException *)
+	throw(GEOSException *)
 {
 	//BufferCurveGraphNoder noder=new BufferCurveGraphNoder(geomFact->getPrecisionModel());
 	IteratedNoder *noder=new IteratedNoder(precisionModel);
-	vector<SegmentString*> *nodedSegStrings;
+	vector<SegmentString*> *nodedSegStrings = NULL;
 	
 	try 
 	{
 		nodedSegStrings=noder->node(bufferSegStrList);
-	} catch (...) {
+	} catch (GEOSException *ge) {
 		delete nodedSegStrings;
 		delete noder;
 		throw;
-	}
+	} 
 	delete noder;
 
 	
