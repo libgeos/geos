@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.14  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
 * Revision 1.13  2003/10/15 15:47:43  strk
 * Adapted to new getCoordinatesRO() interface
 *
@@ -22,6 +25,7 @@ MCPointInRing::MCPointInRing(LinearRing *newRing) {
 	ring=newRing;
 	tree=NULL;
 	crossings=0;
+	pts=NULL;
 	interval=new BinTreeInterval();
     buildIndex();
 }
@@ -29,12 +33,13 @@ MCPointInRing::MCPointInRing(LinearRing *newRing) {
 MCPointInRing::~MCPointInRing() {
 	delete tree;
 	delete interval;
+	delete pts;
 }
 
 void MCPointInRing::buildIndex() {
 //	Envelope *env=ring->getEnvelopeInternal();
 	tree=new Bintree();
-	CoordinateList *pts=CoordinateList::removeRepeatedPoints(ring->getCoordinatesRO());
+	pts=CoordinateList::removeRepeatedPoints(ring->getCoordinatesRO());
 	vector<indexMonotoneChain*> *mcList=MonotoneChainBuilder::getChains(pts);
 	for(int i=0;i<(int)mcList->size();i++) {
 		indexMonotoneChain *mc=(*mcList)[i];

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.8  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 
@@ -113,7 +119,8 @@ void LineBuilder::buildLines(int opCode) {
 		//e.print(System.out);
 		////System.out.println(label);
 		//if (OverlayGraph.isResultOfOp(label, opCode)) {
-		LineString *line=geometryFactory->createLineString(CoordinateListFactory::internalFactory->createCoordinateList(e->getCoordinates()));
+		//
+		LineString *line=geometryFactory->createLineString(e->getCoordinates());
 		resultLineList->push_back(line);
 		e->setInResult(true);
 		//}

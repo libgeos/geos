@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.16  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
 * Revision 1.15  2003/10/15 15:47:43  strk
 * Adapted to new getCoordinatesRO() interface
 *
@@ -108,18 +111,14 @@ int PointLocator::locate(const Coordinate& p, const LineString *l) {
 }
 
 int PointLocator::locate(const Coordinate& p, const LinearRing *ring) {
-	CoordinateList *cl; // will be a copy -- strk
-	cl = ring->getCoordinates();
+	const CoordinateList *cl = ring->getCoordinatesRO();
 	if (cga->isOnLine(p,cl)) {
-		delete cl;
 		return Location::BOUNDARY;
 	}
 	if (cga->isPointInRing(p,cl))
 	{
-		delete cl;
 		return Location::INTERIOR;
 	}
-	delete cl;
 	return Location::EXTERIOR;
 }
 

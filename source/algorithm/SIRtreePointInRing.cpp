@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.6  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 
@@ -13,7 +19,7 @@ SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing){
 void SIRtreePointInRing::buildIndex() {
 	Envelope *env=ring->getEnvelopeInternal();
 	sirTree=new SIRtree();
-	CoordinateList *pts=ring->getCoordinates();
+	const CoordinateList *pts=ring->getCoordinatesRO();
 	for(int i=1;i<pts->getSize();i++) {
 		if(pts->getAt(i-1)==pts->getAt(i)) {continue;} //Optimization suggested by MD. [Jon Aquino]
 		LineSegment *seg=new LineSegment(pts->getAt(i-1),pts->getAt(i));

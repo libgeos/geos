@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.23  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
 * Revision 1.22  2003/10/15 09:54:29  strk
 * Added getCoordinatesRO() public method.
 *
@@ -122,7 +125,9 @@ Geometry* LineString::getBoundary() const {
 	vector<Geometry*> *pts=new vector<Geometry*>();
 	pts->push_back(getStartPoint());
 	pts->push_back(getEndPoint());
-	return new MultiPoint(pts,precisionModel, SRID);
+	MultiPoint *mp = new MultiPoint(pts, precisionModel, SRID);
+	delete pts;
+	return mp;
 }
 
 bool LineString::isCoordinate(Coordinate& pt) const {

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.6  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../../headers/opDistance.h"
 
 namespace geos {
@@ -157,8 +163,8 @@ void DistanceOp::computeMinDistance(const LineString *line0, const LineString *l
 	}
 	delete env0;
 	delete env1;
-	CoordinateList *coord0=line0->getCoordinates();
-	CoordinateList *coord1=line1->getCoordinates();
+	const CoordinateList *coord0=line0->getCoordinatesRO();
+	const CoordinateList *coord1=line1->getCoordinatesRO();
 	// brute force approach!
 	for(int i=0;i<coord0->getSize()-1;i++) {
 		for(int j=0;j<coord1->getSize()-1;j++) {
@@ -180,7 +186,7 @@ void DistanceOp::computeMinDistance(const LineString *line, const Point *pt){
 	}
 	delete env0;
 	delete env1;
-	CoordinateList *coord0=line->getCoordinates();
+	const CoordinateList *coord0=line->getCoordinatesRO();
 	const Coordinate *coord=pt->getCoordinate();
 	// brute force approach!
 	for(int i=0;i<coord0->getSize()-1;i++) {

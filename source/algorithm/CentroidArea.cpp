@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.9  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
 * Revision 1.8  2003/10/13 15:39:03  strk
 * Fixed some leak or fault flips (forced copy of a single coordinate)
 *
@@ -38,9 +41,10 @@ CentroidArea::~CentroidArea() {
 void CentroidArea::add(const Geometry *geom) {
 	if (typeid(*geom)==typeid(Polygon)) {
 		Polygon *poly=(Polygon*) geom;
-		CoordinateList *cl=poly->getCoordinates();
+		// Was poly->getCoordinates(), changed to improve
+		// performance --strk;
+		const CoordinateList *cl=poly->getExteriorRing()->getCoordinatesRO();
 		setBasePoint(&(cl->getAt(0)));
-		delete cl;
 		add(poly);
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint)) ||
@@ -74,9 +78,9 @@ void CentroidArea::setBasePoint(const Coordinate *newbasePt)
 }
 
 void CentroidArea::add(const Polygon *poly) {
-	addShell(poly->getExteriorRing()->getCoordinates());
+	addShell(poly->getExteriorRing()->getCoordinatesRO());
 	for(int i=0;i<poly->getNumInteriorRing();i++) {
-		addHole(poly->getInteriorRingN(i)->getCoordinates());
+		addHole(poly->getInteriorRingN(i)->getCoordinatesRO());
 	}
 }
 

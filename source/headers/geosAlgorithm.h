@@ -93,7 +93,7 @@ public:
 	bool isInside(const Coordinate& pt);
 private:
 	CGAlgorithms *cga;
-	CoordinateList* pts;
+	const CoordinateList* pts;
 };
 
 class LineIntersector{
@@ -253,6 +253,7 @@ public:
 private:
 	LinearRing *ring;
 	BinTreeInterval *interval;
+	CoordinateList *pts;
 	Bintree *tree;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();

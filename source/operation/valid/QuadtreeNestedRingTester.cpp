@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.8  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../../headers/opValid.h"
 #include "stdio.h"
 #include "../../headers/util.h"
@@ -34,13 +40,13 @@ bool QuadtreeNestedRingTester::isNonNested() {
 	buildQuadtree();
 	for(int i=0;i<(int)rings->size();i++) {
 		LinearRing *innerRing=(*rings)[i];
-		CoordinateList *innerRingPts=innerRing->getCoordinates();
+		const CoordinateList *innerRingPts=innerRing->getCoordinatesRO();
 		Envelope *envi=innerRing->getEnvelopeInternal();
 		vector<void*> *results=qt->query(envi);
 		delete envi;
 		for(int j=0;j<(int)results->size();j++) {
 			LinearRing *searchRing=(LinearRing*)(*results)[j];
-			CoordinateList *searchRingPts=searchRing->getCoordinates();
+			const CoordinateList *searchRingPts=searchRing->getCoordinatesRO();
 			if (innerRing==searchRing)
 				continue;
 			Envelope *e1=innerRing->getEnvelopeInternal();

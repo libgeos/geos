@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.7  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../headers/geosAlgorithm.h"
 #include "../headers/platform.h"
 #include <typeinfo>
@@ -26,7 +32,7 @@ InteriorPointLine::~InteriorPointLine() {
 */
 void InteriorPointLine::addInterior(const Geometry *geom){
 	if (typeid(*geom)==typeid(LineString)) {
-		addInterior(geom->getCoordinates());
+		addInterior(((LineString *)geom)->getCoordinatesRO());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint)) ||
 				(typeid(*geom)==typeid(MultiPolygon)) ||
@@ -52,7 +58,7 @@ void InteriorPointLine::addInterior(const CoordinateList *pts) {
 */
 void InteriorPointLine::addEndpoints(const Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) {
-		addEndpoints(geom->getCoordinates());
+		addEndpoints(((LineString*)geom)->getCoordinatesRO());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint)) ||
 				(typeid(*geom)==typeid(MultiPolygon)) ||

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.10  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../headers/geom.h"
 
 namespace geos {
@@ -39,7 +45,7 @@ Geometry* MultiPolygon::getBoundary() const {
 	}
 //LineString[] allRingsArray = new LineString[allRings.size()];
 	Geometry *ret=new MultiLineString(allRings,precisionModel,SRID);
-//	delete allRings;
+	delete allRings;
 	return ret;
 }
 

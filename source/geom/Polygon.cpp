@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.24  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../headers/geom.h"
 #include <typeinfo>
 #include "../headers/geosAlgorithm.h"
@@ -70,12 +76,11 @@ CoordinateList* Polygon::getCoordinates() const {
 	}
 	delete shellCoordinates;
 	for (unsigned int i = 0; i < holes->size(); i++) {
-		CoordinateList* childCoordinates=((LinearRing *)(*holes)[i])->getCoordinates();
+		const CoordinateList* childCoordinates=((LinearRing *)(*holes)[i])->getCoordinatesRO();
 		for (int j = 0; j < childCoordinates->getSize(); j++) {
 			k++;
 			coordinates->setAt(childCoordinates->getAt(j),k);
 		}
-		delete childCoordinates;
 	}
 	return coordinates;
 }

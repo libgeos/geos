@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.7  2003/10/16 08:50:00  strk
+* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
+*
+*/
 #include "../headers/geosAlgorithm.h"
 #include "../headers/platform.h"
 #include <typeinfo>
@@ -105,7 +111,9 @@ LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
 	delete c1;
 	delete c2;
 	delete envelope;
-	return factory->createLineString(cl);
+	LineString *ret = factory->createLineString(cl);
+	delete cl;
+	return ret;
 }
 
 /**
