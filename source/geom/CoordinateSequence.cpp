@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/09/23 21:36:22  strk
+ * Fixed a bug in ::reverse (thanks to Elliott Edwards)
+ *
  * Revision 1.2  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -116,7 +119,7 @@ void CoordinateSequence::reverse(CoordinateSequence *cl){
 	int last=cl->getSize()-1;
 	int mid=last/2;
 	for(int i=0;i<=mid;i++) {
-		const Coordinate& tmp=cl->getAt(i);
+		const Coordinate tmp=cl->getAt(i);
 		cl->setAt(cl->getAt(last-i),i);
 		cl->setAt(tmp,last-i);
 	}
