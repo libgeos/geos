@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/06/15 20:20:45  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.6  2004/05/05 12:20:22  strk
  * Memory leak plugged in editGeometryCollection
  *
@@ -148,6 +151,8 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 		ret = factory->createGeometryCollection(geometries);
 	}
 	delete newCollection;
+	for (int i=0; i < geometries->size(); i++) 
+		delete (*geometries)[i];
 	delete geometries;
 	return ret;
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/06/15 20:16:19  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.20  2004/05/14 12:10:54  strk
  * avoided leaks on malformed LinearRing
  *
@@ -276,6 +279,8 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	MultiLineString *ret = geometryFactory->createMultiLineString(lineStrings);
+	for (int i=0; i<lineStrings->size; i++)
+		delete (*lineStrings)[i];
 	delete lineStrings;
 	return ret;
 }
@@ -295,6 +300,8 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	MultiPolygon *ret = geometryFactory->createMultiPolygon(polygons);
+	for (int i=0; i<polygons->size; i++)
+		delete (*polygons)[i];
 	delete polygons;
 	return ret;
 }
@@ -315,6 +322,8 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	GeometryCollection *ret = geometryFactory->createGeometryCollection(geoms);
+	for (int i=0; i<geoms->size; i++)
+		delete (*geoms)[i];
 	delete geoms;
 	return ret;
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/06/15 20:13:42  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.19  2004/05/17 08:34:31  strk
  * reduced stack allocations, try/catch blocks in ::overlayOp
  *
@@ -402,25 +405,21 @@ bool OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList) {
 Geometry* OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList) {
-    int i;
+	int i;
 	vector<Geometry*> *geomList=new vector<Geometry*>();
 	// element geometries of the result are always in the order P,L,A
 	for(i=0;i<(int)nResultPointList->size();i++) {
-		Point *pt=new Point(*(*nResultPointList)[i]);
+		Point *pt=(*nResultPointList)[i];
 		geomList->push_back(pt);
 	}
-//	geomList->insert(geomList->end(),nResultPointList->begin(),nResultPointList->end());
 	for(i=0;i<(int)nResultLineList->size();i++) {
-		LineString *ls=new LineString(*(*nResultLineList)[i]);
+		LineString *ls=(*nResultLineList)[i];
 		geomList->push_back(ls);
 	}
-//	geomList->insert(geomList->end(),nResultLineList->begin(),nResultLineList->end());
 	for(i=0;i<(int)nResultPolyList->size();i++) {
 		Polygon *q=(*nResultPolyList)[i];
-		Polygon *p=new Polygon(*q);
-		geomList->push_back(p);
+		geomList->push_back(q);
 	}
-//	geomList->insert(geomList->end(),nResultPolyList->begin(),nResultPolyList->end());
 	// build the most specific geometry possible
 	Geometry *g=geomFact->buildGeometry(geomList);
 	delete geomList;

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/06/15 20:10:31  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.17  2004/06/15 20:01:58  strk
  * Empty geometry creation call made using NULL instead of newly created empty vector (will be faster)
  *
@@ -167,12 +170,16 @@ BufferBuilder::buffer(Geometry *g, double distance)
 		for (int i=0; i<subgraphList->size(); i++)
 			delete (*subgraphList)[i];
 		delete subgraphList;
+		for (int i=0; i<resultPolyList->size(); i++)
+			delete (*resultPolyList)[i];
 		delete resultPolyList;
 		throw;
 	} 
 	for (int i=0; i<subgraphList->size(); i++)
 		delete (*subgraphList)[i];
 	delete subgraphList;
+	for (int i=0; i<resultPolyList->size(); i++)
+		delete (*resultPolyList)[i];
 	delete resultPolyList;
 	return resultGeom;
 }
