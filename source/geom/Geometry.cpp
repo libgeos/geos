@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.48  2004/05/14 12:14:08  strk
+ * const correctness
+ *
  * Revision 1.47  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -179,18 +182,22 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 * @param distance the distance value to compare
 * @return <code>true</code> if the geometries are less than <code>distance</code> apart.
 */
-bool Geometry::isWithinDistance(Geometry *geom,double cDistance) {
+bool Geometry::isWithinDistance(const Geometry *geom,double cDistance) {
 	Envelope *env0=getEnvelopeInternal();
 	Envelope *env1=geom->getEnvelopeInternal();
 	double envDist=env0->distance(env1);
 	delete env0;
 	delete env1;
 	if (envDist>cDistance)
+	{
 		return false;
+	}
 	// NOTE: this could be implemented more efficiently
 	double geomDist=distance(geom);
 	if (geomDist>cDistance)
+	{
 		return false;
+	}
 	return true;
 }
 

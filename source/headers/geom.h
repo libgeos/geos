@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.61  2004/05/14 12:14:08  strk
+ * const correctness
+ *
  * Revision 1.60  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -913,7 +916,7 @@ public:
 	virtual double getArea() const;
 	virtual double getLength() const;
 	virtual ~Geometry();
-	virtual bool isWithinDistance(Geometry *geom,double cDistance);
+	virtual bool isWithinDistance(const Geometry *geom,double cDistance);
 	virtual Point* getCentroid() const;
 	virtual Point* getInteriorPoint();
 	virtual void geometryChanged();
@@ -1058,8 +1061,9 @@ public:
 	* Computes the closest points on two line segments.
 	* @param p the point to find the closest point to
 	* @return a pair of Coordinates which are the closest points on the line segments
+	* The returned CoordianteList must be deleted by caller
 	*/
-	virtual CoordinateList* closestPoints(LineSegment *line);
+	virtual CoordinateList* closestPoints(const LineSegment *line);
 	/**
 	* Computes an intersection point between two segments, if there is one.
 	* There may be 0, 1 or many intersection points between two segments.
@@ -1071,7 +1075,7 @@ public:
 	* @param line
 	* @return an intersection point, or <code>null</code> if there is none
 	*/
-	Coordinate* intersection(LineSegment *line);
+	Coordinate* intersection(const LineSegment *line) const;
 	virtual string toString() const;
 private:
   static const int64 serialVersionUID=3252005833466256227LL;
