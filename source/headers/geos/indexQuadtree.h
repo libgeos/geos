@@ -22,7 +22,7 @@
 #include <geos/geom.h>
 #include <geos/spatialIndex.h>
 
-#ifdef __STDC_IEC_559__
+#if __STDC_IEC_559__
 #define ASSUME_IEEE_DOUBLE 1
 #else
 #define ASSUME_IEEE_DOUBLE 0
@@ -266,6 +266,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/11/02 16:38:45  strk
+ * Fixed ieee-754 detection switch
+ *
  * Revision 1.6  2004/11/02 16:05:49  strk
  * Autodetect availability of IEEE-754 FP
  *
