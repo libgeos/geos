@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/04/15 14:00:31  strk
+ * Added new cleanup to Unload::Release
+ *
  * Revision 1.5  2004/04/01 10:44:34  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -38,6 +41,7 @@
 #include "../headers/operation.h"
 #include "../headers/opRelate.h"
 #include "../headers/indexQuadtree.h"
+#include "../headers/opBuffer.h"
 
 namespace geos {
 
@@ -59,5 +63,12 @@ void Unload::Release()
 	delete RelateComputer::li;
 	delete RelateComputer::ptLocator;
 	delete QuadTreeRoot::origin;
+	delete PrecisionModel::FIXED;
+	delete PrecisionModel::FLOATING;
+	delete PrecisionModel::FLOATING_SINGLE;
+	delete PrecisionModel::Type::nameToTypeMap;
+	delete Geometry::geometryChangedFilter;
+	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
+	delete BufferBuilder::cga;
 }
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.55  2004/04/15 14:00:30  strk
+ * Added new cleanup to Unload::Release
+ *
  * Revision 1.54  2004/04/14 13:56:26  strk
  * All geometries returned by {from,to}InternalGeometry calls are
  * now deleted after use (unless NOT new).
@@ -134,6 +137,7 @@ class Coordinate;
  *
  */
 class PrecisionModel {
+friend class Unload;
 public:
 	/**
 	* The types of Precision Model which GEOS supports.
@@ -142,6 +146,7 @@ public:
 	* <p>
 	*/
 	class Type {
+	friend class Unload;
 	private:
 		static const int64 serialVersionUID = -5528602631731589822LL;
 		static map<string,PrecisionModel::Type*> *nameToTypeMap;

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/04/15 14:00:30  strk
+ * Added new cleanup to Unload::Release
+ *
  * Revision 1.8  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -574,6 +577,7 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
  *
  */
 class BufferBuilder {
+friend class Unload;
 public:
 	/**
 	* Creates a new BufferBuilder
