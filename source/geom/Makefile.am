@@ -29,7 +29,7 @@ DIR_SOURCES =       BasicCoordinateList.cpp \
                     PointCoordinateList.cpp \
                     Point.cpp \
                     Polygon.cpp \
-                    PrecisionModel.cpp \ 
+		    PrecisionModel.cpp \
                     TopologyException.cpp 
 
 EXTERNAL_SOURCES =  ../graph/Depth.cpp \
@@ -72,33 +72,33 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../util/IllegalArgumentException.cpp \
                     ../util/UnsupportedOperationException.cpp \
                     ../bigtest/GeometryTestFactory.cpp \
-                    ../algorithm/CGAlgorithms.cpp
-                    ../algorithm/HCoordinate.cpp
-                    ../algorithm/InteriorPointArea.cpp
-                    ../algorithm/LineIntersector.cpp
-                    ../algorithm/MCPointInRing.cpp
-                    ../algorithm/CentroidArea.cpp
-                    ../algorithm/NonRobustCGAlgorithms.cpp
-                    ../algorithm/NonRobustLineIntersector.cpp
-                    ../algorithm/NotRepresentableException.cpp
-                    ../algorithm/PointLocator.cpp
-                    ../algorithm/RobustCGAlgorithms.cpp
-                    ../algorithm/RobustDeterminant.cpp
-                    ../algorithm/RobustLineIntersector.cpp
-                    ../algorithm/SimplePointInAreaLocator.cpp
-                    ../algorithm/SimplePointInRing.cpp
-                    ../algorithm/CentroidLine.cpp
-                    ../algorithm/CentroidPoint.cpp
-                    ../algorithm/InteriorPointLine.cpp
-                    ../algorithm/InteriorPointPoint.cpp
-                    ../algorithm/SIRtreePointInRing.cpp
+                    ../algorithm/CGAlgorithms.cpp \
+                    ../algorithm/HCoordinate.cpp \
+                    ../algorithm/InteriorPointArea.cpp \
+                    ../algorithm/LineIntersector.cpp \
+                    ../algorithm/MCPointInRing.cpp \
+                    ../algorithm/CentroidArea.cpp \
+                    ../algorithm/NonRobustCGAlgorithms.cpp \
+                    ../algorithm/NonRobustLineIntersector.cpp \
+                    ../algorithm/NotRepresentableException.cpp \
+                    ../algorithm/PointLocator.cpp \
+                    ../algorithm/RobustCGAlgorithms.cpp \
+                    ../algorithm/RobustDeterminant.cpp \
+                    ../algorithm/RobustLineIntersector.cpp \
+                    ../algorithm/SimplePointInAreaLocator.cpp \
+                    ../algorithm/SimplePointInRing.cpp \
+                    ../algorithm/CentroidLine.cpp \
+                    ../algorithm/CentroidPoint.cpp \
+                    ../algorithm/InteriorPointLine.cpp \
+                    ../algorithm/InteriorPointPoint.cpp \
+                    ../algorithm/SIRtreePointInRing.cpp \
                     ../operation/GeometryGraphOperation.cpp \
                     ../operation/IsSimpleOp.cpp \
                     ../operation/distance/ConnectedElementPointFilter.cpp \
                     ../operation/distance/DistanceOp.cpp \
-                    ../operation/distance/LineExtractorFilter.cpp \
-                    ../operation/distance/PointExtractorFilter.cpp \
-                    ../operation/distance/PolygonExtractorFilter.cpp \
+                    ../operation/distance/LineExtracterFilter.cpp \
+                    ../operation/distance/PointExtracterFilter.cpp \
+                    ../operation/distance/PolygonExtracterFilter.cpp \
                     ../operation/overlay/EdgeSetNoder.cpp \
                     ../operation/overlay/LineBuilder.cpp \
                     ../operation/overlay/MaximalEdgeRing.cpp \
