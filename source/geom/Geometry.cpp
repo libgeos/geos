@@ -190,14 +190,14 @@ string Geometry::toText() {
 Geometry* Geometry::buffer(double distance) {
 //!!! External Dependency
 //	return BufferOp.bufferOp(this, distance);
-	return new Geometry();
+	return NULL;
 }
 
 //!!! External Dependency
 Geometry* Geometry::convexHull() {
 //!!! External Dependency
 //	return (new ConvexHull(cgAlgorithms)).getConvexHull(this);
-	return new Geometry();
+	return NULL;
 }
 
 Geometry* Geometry::intersection(Geometry *other) {

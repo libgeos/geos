@@ -5,7 +5,7 @@ const double maximumPreciseValue=9007199254740992.0;
 
 double PrecisionModel::makePrecise(double val){
 	//return rint(val);
-    return (val >= 0.0) ? floor(val) : - floor(-val);
+	return ((val >= 0.0) ? floor(val+0.5) : - floor(-val+0.5));
     /*
      * Other options:
      * - Math.floor(a + 0.5d);

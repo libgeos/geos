@@ -178,8 +178,8 @@ bool LineString::isEquivalentClass(Geometry *other) {
 		return false;
 }
 
-int LineString::compareToSameClass(LineString *ls) {
-	return compare(*(points->toVector()),*(ls->points->toVector()));
+int LineString::compareToSameClass(Geometry *ls) {
+	return compare(*(points->toVector()),*(((LineString*)ls)->points->toVector()));
 }
 
 Coordinate* LineString::getCoordinate() {

@@ -29,7 +29,7 @@ GeometryGraph::GeometryGraph():PlanarGraph(){
 	useBoundaryDeterminationRule=false;
 	boundaryNodes=NULL;
 
-	parentGeom=new Geometry();
+	parentGeom=NULL;
 }
 
 GeometryGraph::~GeometryGraph(){

@@ -90,7 +90,7 @@ bool GeometryCollection::isSimple() {
 Geometry* GeometryCollection::getBoundary() {
 	checkNotGeometryCollection(this);
 	Assert::shouldNeverReachHere();
-	return new Geometry();
+	return NULL;
 }
 
 bool GeometryCollection::equalsExact(Geometry *other) {
@@ -143,8 +143,8 @@ Envelope* GeometryCollection::computeEnvelopeInternal() {
 	return envelope;
 }
 
-int GeometryCollection::compareToSameClass(GeometryCollection *gc) {
-	return compare(*geometries, *(gc->geometries));
+int GeometryCollection::compareToSameClass(Geometry *gc) {
+	return compare(*geometries, *(((GeometryCollection*)gc)->geometries));
 }
 
 Coordinate* GeometryCollection::getCoordinate() {

@@ -219,7 +219,7 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 		return geometryFactory->createGeometryCollection(NULL);
 	}
 	vector<Geometry *> *geoms=new vector<Geometry *>();
-	Geometry *geom=new Geometry();
+	Geometry *geom;
 	geom=readGeometryTaggedText(tokenizer);
 	geoms->push_back(geom);
 	nextToken=getNextCloserOrComma(tokenizer);

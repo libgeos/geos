@@ -409,19 +409,19 @@ public:
 	Geometry(void);
 	Geometry(const Geometry &geom);
 	Geometry(PrecisionModel* precisionModel, int SRID);
-	virtual string getGeometryType(){return "Geometry";}; //Abstract
+	virtual string getGeometryType()=0; //Abstract
 	virtual int getSRID();
 	virtual void setSRID(int newSRID);
 	virtual PrecisionModel* getPrecisionModel();
-	virtual Coordinate* getCoordinate(){return new Coordinate();}; //Abstract
-	virtual CoordinateList* getCoordinates(){return new BasicCoordinateList();}; //Abstract
-	virtual int getNumPoints(){return 0;}; //Abstract
-	virtual bool isSimple() {return false;}; //Abstract
+	virtual Coordinate* getCoordinate()=0; //Abstract
+	virtual CoordinateList* getCoordinates()=0; //Abstract
+	virtual int getNumPoints()=0; //Abstract
+	virtual bool isSimple()=0; //Abstract
 	virtual bool isValid();
-	virtual bool isEmpty() {return false;}; //Abstract
-	virtual int getDimension(){return 0;}; //Abstract
-	virtual Geometry* getBoundary() {return new Geometry();}; //Abstract
-	virtual int getBoundaryDimension(){return 0;}; //Abstract
+	virtual bool isEmpty()=0; //Abstract
+	virtual int getDimension()=0; //Abstract
+	virtual Geometry* getBoundary()=0; //Abstract
+	virtual int getBoundaryDimension()=0; //Abstract
 	virtual Geometry* getEnvelope();
 	virtual Envelope* getEnvelopeInternal();
 	virtual bool disjoint(Geometry *g);
@@ -442,12 +442,12 @@ public:
 	virtual Geometry* Union(Geometry *other);
 	virtual Geometry* difference(Geometry *other);
 	virtual Geometry* symDifference(Geometry *other);
-	virtual bool equalsExact(Geometry *other){return false;}; //Abstract
-	virtual void apply(CoordinateFilter *filter){}; //Abstract
-	virtual void apply(GeometryFilter *filter){}; //Abstract
-	virtual void apply(GeometryComponentFilter *filter){};
+	virtual bool equalsExact(Geometry *other)=0; //Abstract
+	virtual void apply(CoordinateFilter *filter)=0; //Abstract
+	virtual void apply(GeometryFilter *filter)=0; //Abstract
+	virtual void apply(GeometryComponentFilter *filter)=0;
 	//public Object clone() // Replaced by copy constructor
-	virtual void normalize(){}; //Abstract
+	virtual void normalize()=0; //Abstract
 	virtual int compareTo(Geometry *geom);
 	virtual double distance(Geometry *g);
 	virtual double getArea();
@@ -469,8 +469,8 @@ protected:
 	virtual void checkNotGeometryCollection(Geometry *g);
 	virtual void checkEqualSRID(Geometry *other);
 	virtual void checkEqualPrecisionModel(Geometry *other);
-	virtual Envelope* computeEnvelopeInternal(){return new Envelope();}; //Abstract
-	virtual int compareToSameClass(Geometry *geom){return 0;}; //Abstract
+	virtual Envelope* computeEnvelopeInternal()=0; //Abstract
+	virtual int compareToSameClass(Geometry *geom)=0; //Abstract
 	int compare(vector<Coordinate> a, vector<Coordinate> b);
 	int compare(vector<Geometry *> a, vector<Geometry *> b);
 private:
@@ -644,7 +644,7 @@ public:
 protected:
 	vector<Geometry *>* geometries;
 	virtual Envelope* computeEnvelopeInternal();
-	virtual int compareToSameClass(GeometryCollection *gc);
+	virtual int compareToSameClass(Geometry *gc);
 };
 
 class GeometryCollectionIterator {
@@ -714,7 +714,7 @@ public:
 protected:
 	Coordinate coordinate;
 	Envelope* computeEnvelopeInternal();
-	int compareToSameClass(Point *p);
+	int compareToSameClass(Geometry *p);
 };
 
 class  SFSCurve { //: public SFSGeometry {
@@ -763,7 +763,7 @@ public:
 	virtual void apply(GeometryFilter *filter);
 	virtual void apply(GeometryComponentFilter *filter);
 	virtual void normalize();
-	virtual int compareToSameClass(LineString *ls); //was protected
+	virtual int compareToSameClass(Geometry *ls); //was protected
 	virtual int compareTo(LineString *ls);
 	virtual Coordinate* getCoordinate();
 	virtual double getLength();
@@ -818,7 +818,7 @@ public:
 	void apply(GeometryFilter *filter);
 	Geometry* convexHull();
 	void normalize();
-	int compareToSameClass(Polygon *p); //was protected
+	int compareToSameClass(Geometry *p); //was protected
 	Coordinate* getCoordinate();
 	double getArea();
 	double getLength();

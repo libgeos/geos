@@ -167,8 +167,8 @@ void Polygon::normalize() {
 	sort(holes->begin(),holes->end(),greaterThen);
 }
 
-int Polygon::compareToSameClass(Polygon *p) {
-	return shell->compareToSameClass(p->shell);
+int Polygon::compareToSameClass(Geometry *p) {
+	return shell->compareToSameClass(((Polygon*)p)->shell);
 }
 
 void Polygon::normalize(LinearRing *ring, bool clockwise) {

@@ -48,11 +48,7 @@ int main(int argC, char* argV[]) {
 	string opRes="";
 	int caseCount=0;
 	int testCount=0;
-
-	WKTReader *r=new WKTReader(new GeometryFactory(new PrecisionModel(),10));
-	WKTWriter *w=new WKTWriter();
-	Geometry *gA;
-	Geometry *gB;
+	PrecisionModel *pm;
 
 	CMarkupSTL xml;
 	bool a=xml.Load(source.c_str());
@@ -61,7 +57,27 @@ int main(int argC, char* argV[]) {
 	xml.FindElem("run");
 	xml.FindChildElem("precisionModel");
 	precisionModel=xml.GetChildAttrib("type");
-	cout << "Precision Model: " << precisionModel << endl;
+
+	if (precisionModel=="FLOATING") {
+		pm=new PrecisionModel();
+		cout << "Precision Model: " << precisionModel << endl;
+	} else {
+		char* stopstring;
+		string scaleStr=xml.GetChildAttrib("scale");
+		string offsetXStr=xml.GetChildAttrib("offsetx");
+		string offsetYStr=xml.GetChildAttrib("offsety");
+
+		double scale=strtod(scaleStr.c_str(),&stopstring);
+		double offsetX=strtod(offsetXStr.c_str(),&stopstring);
+		double offsetY=strtod(offsetYStr.c_str(),&stopstring);
+		pm=new PrecisionModel(scale,offsetX,offsetY);
+		cout << "Precision Model: FIXED" << endl;
+	}
+	WKTReader *r=new WKTReader(new GeometryFactory(pm,10));
+	WKTWriter *w=new WKTWriter();
+	Geometry *gA;
+	Geometry *gB;
+
 	while (xml.FindChildElem("case")) {
 		xml.IntoElem();
 		caseCount++;
@@ -136,8 +152,10 @@ int main(int argC, char* argV[]) {
 					}
 				} else if (opName=="intersection") {
 					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					Geometry *gRealRes=gA->intersection(gB);
+					gRealRes->normalize();
 					if (out & TEST_RESULT) {
 						if (gRes->compareTo(gRealRes)==0) {
 							cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=true"  <<endl;
@@ -149,8 +167,10 @@ int main(int argC, char* argV[]) {
 					}
 				} else if (opName=="union") {
 					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					Geometry *gRealRes=gA->Union(gB);
+					gRealRes->normalize();
 					if (out & TEST_RESULT) {
 						if (gRes->compareTo(gRealRes)==0) {
 							cout << "\t\tResult: union='" << gRealRes->toString() << "' result=true"  <<endl;
@@ -162,8 +182,10 @@ int main(int argC, char* argV[]) {
 					}
 				} else if (opName=="difference") {
 					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					Geometry *gRealRes=gA->difference(gB);
+					gRealRes->normalize();
 					if (out & TEST_RESULT) {
 						if (gRes->compareTo(gRealRes)==0) {
 							cout << "\t\tResult: difference='" << gRealRes->toString() << "' result=true"  <<endl;
@@ -175,8 +197,10 @@ int main(int argC, char* argV[]) {
 					}
 				} else if (opName=="symdifference") {
 					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					Geometry *gRealRes=gA->symDifference(gB);
+					gRealRes->normalize();
 					if (out & TEST_RESULT) {
 						if (gRes->compareTo(gRealRes)==0) {
 							cout << "\t\tResult: symdifference='" << gRealRes->toString() << "' result=true"  <<endl;
@@ -186,9 +210,25 @@ int main(int argC, char* argV[]) {
 							failed++;
 						}
 					}
+				} else if (opName=="intersects") {
+					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
+					string result;
+					if (gA->intersects(gB)) {
+						result="true";
+					} else {
+						result="false";
+					}
+					if (out & TEST_RESULT) {
+						if (result==opRes) {
+							cout << "\t\tResult: intersects='" << result << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: intersects='" << result << "' result=false"  <<endl;
+							failed++;
+						}
+					}
 				}
 			}
-
 			if (out & PRED) {
 				cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
 				cout << "\tDisjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;

@@ -127,6 +127,6 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 	else if (typeid(*geom0)==typeid(GeometryCollection))
 		return new GeometryCollection(*((GeometryCollection*) geom0));
 	else 
-		return new Geometry(*geom0);
+		return geom0;
 }
 

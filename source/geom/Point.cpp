@@ -84,8 +84,8 @@ bool Point::equalsExact(Geometry *other) {
 	return dynamic_cast<Point *>(other)->coordinate==coordinate;
 }
 
-int Point::compareToSameClass(Point *point) {
-	return coordinate==*(point->getCoordinate());
+int Point::compareToSameClass(Geometry *point) {
+	return coordinate.compareTo(*(((Point*)point)->getCoordinate()));
 }
 
 Point::~Point(){
