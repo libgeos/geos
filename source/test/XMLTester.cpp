@@ -227,6 +227,26 @@ int main(int argC, char* argV[]) {
 							failed++;
 						}
 					}
+				} else if (opName=="getboundary") {
+					cout<<"getBoundary\n";
+				//	Geometry *gRes=r->read(opRes);
+				//	gRes->normalize();
+				//	cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+				//	Geometry *gRealRes=gA->getBoundary();
+				//	gRealRes->normalize();
+				//	if (out & TEST_RESULT) {
+				//		if (gRes->compareTo(gRealRes)==0) {
+				//			cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=true"  <<endl;
+				//			succeeded++;
+				//		} else {
+				//			cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=false"  <<endl;
+				//			failed++;
+				//		}
+				//	}
+				} else if (opName=="convexhull") {
+					cout<<"ConvexHull\n";
+				} else {
+					cout<<"Something else\n";
 				}
 			}
 			if (out & PRED) {
