@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/05/26 09:49:03  strk
+ * PlanarGraph made local to ::buffer instead of Class private.
+ *
  * Revision 1.18  2004/05/07 07:57:27  strk
  * Added missing EdgeNodingValidator to build scripts.
  * Changed SegmentString constructor back to its original form
@@ -645,7 +648,6 @@ private:
 	int endCapStyle;
 	PrecisionModel *workingPrecisionModel;
 	GeometryFactory *geomFact;
-	PlanarGraph *graph;
 	EdgeList *edgeList;
 	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel); // throw(GEOSException *);
 	/**

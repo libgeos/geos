@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/05/26 09:49:03  strk
+ * PlanarGraph made local to ::buffer instead of Class private.
+ *
  * Revision 1.14  2004/05/05 16:57:48  strk
  * Rewritten static cga allocation to avoid copy constructor calls.
  *
@@ -87,7 +90,6 @@ CGAlgorithms *BufferBuilder::cga=&rCGA;
 */
 BufferBuilder::BufferBuilder() {
 	workingPrecisionModel=NULL;
-	graph=new PlanarGraph(new OverlayNodeFactory());
 	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
 	endCapStyle=BufferOp::CAP_ROUND;
 	edgeList=new EdgeList();
@@ -95,7 +97,6 @@ BufferBuilder::BufferBuilder() {
 
 BufferBuilder::~BufferBuilder() {
 	delete edgeList;
-	delete graph;
 }
 
 /**
@@ -149,8 +150,9 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	vector<Geometry*> *resultPolyList=NULL;
 	vector<BufferSubgraph*> *subgraphList=NULL;
 	try {
-		graph->addEdges(edgeList->getEdges());
-		subgraphList=createSubgraphs(graph);
+		PlanarGraph graph(new OverlayNodeFactory());
+		graph.addEdges(edgeList->getEdges());
+		subgraphList=createSubgraphs(&graph);
 		PolygonBuilder polyBuilder(geomFact,cga);
 		buildSubgraphs(subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
