@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.34  2004/04/16 08:35:52  strk
+ * Memory leaks fixed and const correctness applied for Point class.
+ *
  * Revision 1.33  2004/04/14 12:28:43  strk
  * shouldNeverReachHere exceptions made more verbose
  *
@@ -164,7 +167,9 @@ Point* GeometryFactory::createPoint(const Coordinate& coordinate){
 	} else {
 		CoordinateList *cl=coordinateListFactory->createCoordinateList();
 		cl->add(coordinate);
-		return createPoint(cl);
+		Point *ret = createPoint(cl);
+		delete cl;
+		return ret;
 	}
 }
 
@@ -172,7 +177,7 @@ Point* GeometryFactory::createPoint(const Coordinate& coordinate){
 * Creates a Point using the given CoordinateSequence; a null or empty
 * CoordinateSequence will create an empty Point.
 */
-Point* GeometryFactory::createPoint(CoordinateList *coordinates) {
+Point* GeometryFactory::createPoint(const CoordinateList *coordinates) {
 	return new Point(coordinates,this);
 }
 

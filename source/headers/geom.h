@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.57  2004/04/16 08:35:52  strk
+ * Memory leaks fixed and const correctness applied for Point class.
+ *
  * Revision 1.56  2004/04/16 07:42:06  strk
  * PrecisionModel::Type made an enum instead of a Type.
  *
@@ -1227,7 +1230,7 @@ public:
 	* @deprecated Use GeometryFactory instead
 	*/
 	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
-	Point(CoordinateList *newCoordinates, GeometryFactory *newFactory);
+	Point(const CoordinateList *newCoordinates, const GeometryFactory *newFactory);
 	Point(const Point &p); 
 	virtual ~Point();
 	Geometry *clone() const;
@@ -1664,7 +1667,7 @@ public:
 	* Creates a Point using the given CoordinateSequence; a null or empty
 	* CoordinateSequence will create an empty Point.
 	*/
-	Point* createPoint(CoordinateList *coordinates);
+	Point* createPoint(const CoordinateList *coordinates);
 	/**
 	* Creates a MultiLineString using the given LineStrings; a null or empty
 	* array will create an empty MultiLineString.

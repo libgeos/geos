@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/04/16 08:35:52  strk
+ * Memory leaks fixed and const correctness applied for Point class.
+ *
  * Revision 1.20  2004/04/13 14:45:54  strk
  * Removed faulty assert in constructor
  *
@@ -58,13 +61,13 @@ Point::Point(const Coordinate& c, const PrecisionModel* precisionModel,
 *@param  coordinates      contains the single coordinate on which to base this <code>Point</code>
 *      , or <code>null</code> to create the empty geometry.
 */  
-Point::Point(CoordinateList *newCoordinates, GeometryFactory *newFactory): Geometry(newFactory) {
+Point::Point(const CoordinateList *newCoordinates, const GeometryFactory *newFactory): Geometry(newFactory) {
 	if (newCoordinates==NULL) {
 		newCoordinates=CoordinateListFactory::internalFactory->createCoordinateList();
 	}        
 	//What's the point of this assert in the constructor ? --strk;
 	//Assert::isTrue(coordinates->getSize()<=1);
-	coordinates=newCoordinates;
+	coordinates=CoordinateListFactory::internalFactory->createCoordinateList(newCoordinates);
 }
 
 Point::Point(const Point &p): Geometry(p.getFactory()) {
@@ -168,6 +171,7 @@ int Point::compareToSameClass(const Geometry *point) const {
 }
 
 Point::~Point(){
+	delete coordinates;
 }
 }
 
