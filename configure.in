@@ -1,0 +1,52 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(source/io/markup/MarkupSTL.h)
+
+# Initialize the automake stuff
+AM_INIT_AUTOMAKE(GEOS, 0.0.1)
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_MAKE_SET
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_RANLIB
+AC_PROG_INSTALL
+AC_PROG_LN_S
+
+# Initialize libtool
+# AM_PROG_LIBTOOL
+
+# Initialize maintainer mode
+# AM_MAINTAINER_MODE
+
+# This is needed for AC_TRY_COMPILE later
+# AC_ISC_POSIX
+
+# Check to see if this `configure' is being run in the `Cygwin32' environment
+# AM_CYGWIN32
+
+# Determine version of automake ... important for now
+AUTO_MAKE_VERSION=`automake --version | head -1 | awk '{print $4}' | sed -e 's/\.//'`
+
+dnl Checks for programs.
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+dnl Checks for library functions.
+
+AC_OUTPUT( 	Makefile \
+ 	source/Makefile \
+ 	source/geom/Makefile \
+ 	source/graph/Makefile \
+ 	source/graph/index/Makefile \
+ 	source/io/Makefile \
+ 	source/io/markup/Makefile \
+ 	source/test/Makefile \
+ 	source/util/Makefile \
+
+)
