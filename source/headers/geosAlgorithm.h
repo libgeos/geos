@@ -314,7 +314,7 @@ public:
 	Coordinate* getCentroid() const;
 private:
 	CGAlgorithms *cga;
-	const Coordinate* basePt;// the point all triangles are based at
+	Coordinate* basePt;// the point all triangles are based at
 	Coordinate* triangleCent3;// temporary variable to hold centroid of triangle
 	double areasum2;        /* Partial area sum */
 	Coordinate* cg3; // partial centroid sum
@@ -336,13 +336,13 @@ class InteriorPointPoint {
 private:
 	const Coordinate* centroid;
 	double minDistance;
-	const Coordinate* interiorPoint;
+	Coordinate *interiorPoint;
 	void add(const Geometry *geom);
 	void add(const Coordinate *point);
 public:
 	InteriorPointPoint(const Geometry *g);
 	virtual	~InteriorPointPoint();
-	const Coordinate* getInteriorPoint() const;
+	Coordinate* getInteriorPoint() const;
 };
 
 /**

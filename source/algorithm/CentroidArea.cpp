@@ -1,6 +1,10 @@
 /*
 * $Log$
+* Revision 1.8  2003/10/13 15:39:03  strk
+* Fixed some leak or fault flips (forced copy of a single coordinate)
+*
 * Revision 1.7  2003/10/11 01:56:08  strk
+*
 * Code base padded with 'const' keywords ;)
 *
 */
@@ -22,6 +26,7 @@ CentroidArea::~CentroidArea() {
 	delete cga;
 	delete triangleCent3;
 	delete cg3;
+	delete basePt;
 }
 
 /**
@@ -65,7 +70,7 @@ Coordinate* CentroidArea::getCentroid() const {
 
 void CentroidArea::setBasePoint(const Coordinate *newbasePt)
 {
-	if(basePt==NULL) basePt=newbasePt;
+	if(basePt==NULL) basePt=new Coordinate(*newbasePt);
 }
 
 void CentroidArea::add(const Polygon *poly) {

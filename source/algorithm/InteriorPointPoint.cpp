@@ -37,12 +37,13 @@ void InteriorPointPoint::add(const Geometry *geom) {
 void InteriorPointPoint::add(const Coordinate *point) {
 	double dist=point->distance(*centroid);
 	if (dist<minDistance) {
-		interiorPoint=point;
+		delete interiorPoint;
+		interiorPoint=new Coordinate(*point);
 		minDistance=dist;
 	}
 }
 
-const Coordinate* InteriorPointPoint::getInteriorPoint() const {
+Coordinate* InteriorPointPoint::getInteriorPoint() const {
 	return interiorPoint;
 }
 }
