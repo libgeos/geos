@@ -9,7 +9,7 @@ dnl -- INTERFACE_CURRENT: current interface number
 dnl -- INTERFACE_REVISION: revision of CURRENT interface
 dnl -- INTERFACE_AGE: number of previous interfaces supported
 INTERFACE_CURRENT=2
-INTERFACE_REVISION=1
+INTERFACE_REVISION=2
 INTERFACE_AGE=0
 
 dnl -- JTS_PORT: the version of JTS this release is bound to
