@@ -1947,6 +1947,7 @@ public:
 	*/
 	LinearRing(CoordinateSequence* points, const GeometryFactory *newFactory);
 
+	virtual Geometry *clone() const;
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
@@ -2431,6 +2432,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2004/12/16 16:27:24  strk
+ * Fixed LinearRing::clone() to return LinearRing instead of LineString
+ *
  * Revision 1.34  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *

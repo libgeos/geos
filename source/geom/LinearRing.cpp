@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/12/16 16:27:24  strk
+ * Fixed LinearRing::clone() to return LinearRing instead of LineString
+ *
  * Revision 1.23  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *
@@ -124,6 +127,10 @@ void LinearRing::setPoints(CoordinateSequence* cl){
 	const vector<Coordinate> *v=cl->toVector();
 	points->setPoints(*(v));
 	//delete v;
+}
+
+Geometry* LinearRing::clone() const {
+	return new LinearRing(*this);
 }
 
 GeometryTypeId
