@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/05/17 21:09:26  ybychkov
+ * toString() performance enhancement
+ *
  * Revision 1.16  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -148,13 +151,15 @@ void PointCoordinateList::deleteAt(int pos){
 
 string PointCoordinateList::toString() {
 	string result("");
-	char buffer[100];
-	for (unsigned int i=0; i<vect->size(); i++) {
-		point_3d c=(*vect)[i];
-		sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
-		result.append(buffer);
+	if (getSize()>0) {
+		char buffer[100];
+		for (unsigned int i=0; i<vect->size(); i++) {
+			point_3d c=(*vect)[i];
+			sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
+			result.append(buffer);
+		}
+		result.append("");
 	}
-	result.append("");
 	return result;
 }
 
