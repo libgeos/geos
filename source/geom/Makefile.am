@@ -45,7 +45,6 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../algorithm/LineIntersector.cpp \
                         ../algorithm/NonRobustCGAlgorithms.cpp \
                         ../algorithm/NotRepresentableException.cpp \
-			../algorithm/PointInRing.cpp \
 			../algorithm/PointLocator.cpp \
 			../algorithm/RobustCGAlgorithms.cpp \
 			../algorithm/RobustDeterminant.cpp \
