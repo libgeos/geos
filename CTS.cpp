@@ -1,7 +1,7 @@
 // CTS.cpp : Testing class
 //
 
-#include "geom.h"
+#include "io.h"
 #include <iostream>
 using namespace std;
 
@@ -172,14 +172,26 @@ int main(int argc, char** argv)
 
 	p.normalize();
 */
-	Geometry g(PrecisionModel(),10);
+//	throw ParseException("Test Message","ErrorLoc");
+
+//	Geometry g(PrecisionModel(),10);
+//	GeometryFactory gf;
+//	string a(typeid(gf).name());
+//	cout << a << endl;
+
+	WKTReader wr;
+//	CoordinateList cl=wr.getCoordinates1();
+
+//	cout << cl.toString() <<endl;
+
 	GeometryFactory gf;
-	string a(typeid(gf).name());
-	cout << a << endl;
+	Polygon p(gf.createPolygon(NULL,NULL));
 
 	cout << "End" << endl;
 	} catch (char *message){
         cout << message << endl;
+	} catch (ParseException pe) {
+		cout << pe.toString() << endl;
 	}
 
 	return 0;

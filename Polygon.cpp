@@ -16,12 +16,12 @@ Polygon::Polygon(LinearRing shell, PrecisionModel precisionModel, int SRID){
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 				 PrecisionModel precisionModel, int SRID):
 				Geometry(precisionModel, SRID) {
-	if (newShell==NULL) {
-		LinearRing newShell(CoordinateList(), precisionModel, SRID);
-	}
-	if (newHoles==NULL) {
-		vector<Geometry *> *newHoles();
-	}
+	if (newShell==NULL)
+		newShell=new LinearRing(CoordinateList(), precisionModel, SRID);
+
+	if (newHoles==NULL)
+		newHoles=new vector<Geometry *>();
+
 	if (hasNullElements(*newHoles)) {
 		throw "IllegalArgumentException: holes must not contain null elements";
 	}

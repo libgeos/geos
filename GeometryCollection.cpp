@@ -10,7 +10,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel pm,int SRID):
 	Geometry(pm,SRID){
 	if (newGeometries==NULL) {
-		vector<Geometry *> *newGeometries();
+		newGeometries=new vector<Geometry *>();
 	}
 	if (hasNullElements(geometries)) {
 		throw "IllegalArgumentException: geometries must not contain null elements\n";
