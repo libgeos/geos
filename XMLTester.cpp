@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "util.h"
 
 using namespace std;
 
@@ -18,6 +19,13 @@ int main(int argC, char* argV[]) {
 	string opSig="";
 	string opRes="";
 	int testCount=0;
+
+	try {
+		Assert::equals(Coordinate(10,10),Coordinate(10,10));
+		Assert::equals(Coordinate(10,10),Coordinate(20,20));
+	} catch (AssertionFailedException afe) {
+		cout << afe.toString() << endl;
+	}
 
 	WKTReader r(GeometryFactory(PrecisionModel(),10));
 	WKTWriter *w=new WKTWriter();

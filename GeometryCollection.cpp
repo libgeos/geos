@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "util.h"
 #include <algorithm>
 #include <typeinfo>
 
@@ -76,19 +77,15 @@ string GeometryCollection::getGeometryType() {
 	return "GeometryCollection";
 }
 
-//!!! External Dependency
 bool GeometryCollection::isSimple() {
 	checkNotGeometryCollection(this);
-//!!! External Dependency
-//	Assert.shouldNeverReachHere();
+	Assert::shouldNeverReachHere();
     return false;
   }
 
-//!!! External Dependency
 Geometry GeometryCollection::getBoundary() {
 	checkNotGeometryCollection(this);
-//!!! External Dependency
-//	Assert.shouldNeverReachHere();
+	Assert::shouldNeverReachHere();
 	return Geometry();
 }
 

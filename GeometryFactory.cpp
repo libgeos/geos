@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "util.h"
 #include <typeinfo>
 
 GeometryFactory::GeometryFactory(): precisionModel(PrecisionModel()){
@@ -76,7 +77,6 @@ LineString GeometryFactory::createLineString(CoordinateList coordinates) {
 	return LineString(coordinates, precisionModel, SRID);
 }
 
-//!!! External dependency
 Geometry GeometryFactory::buildGeometry(vector<Geometry *> geoms) {
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
@@ -107,8 +107,7 @@ Geometry GeometryFactory::buildGeometry(vector<Geometry *> geoms) {
 		} else if (typeid(*geom0)==typeid(Point)) {
 			return createMultiPoint(&geoms);
 		}
-		//!!! External dependency
-		//Assert.shouldNeverReachHere();
+		Assert::shouldNeverReachHere();
 	}
 	return Geometry(*(geoms[0]));
 }

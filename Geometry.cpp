@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "util.h"
 #include <typeinfo>
 #include <algorithm>
 
@@ -79,8 +80,7 @@ Coordinate Geometry::minCoordinate(CoordinateList coordinates){
 //!!! External Dependency
 void Geometry::scroll(CoordinateList *coordinates, Coordinate firstCoordinate) {
 	int ind=indexOf(firstCoordinate,coordinates);
-//!!! External Dependency
-	//Assert.isTrue(i > -1);
+	Assert::isTrue(ind > -1);
 	int length=coordinates->getSize();
 	vector<Coordinate> v(length);
 	for (int i=ind; i<length; i++) {
@@ -289,8 +289,10 @@ int Geometry::getClassSortIndex() {
 			return i;
 		}
 	}
-//!!! External Dependency
-//Assert.shouldNeverReachHere("Class not supported: " + this.getClass());
+	string str="Class not supported: ";
+	str.append(typeid(*this).name());
+	str.append("");
+	Assert::shouldNeverReachHere(str);
 	return -1;
 }
 

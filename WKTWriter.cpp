@@ -1,4 +1,5 @@
 #include "io.h"
+#include "util.h"
 #include <typeinfo>
 
 WKTWriter::WKTWriter() {
@@ -31,13 +32,12 @@ string WKTWriter::stringOfChar(char ch, int count) {
 	return str;
 }
 
-//!!! External dependency
 string WKTWriter::write(Geometry *geometry) {
 	Writer sw;
 //	try {
 		writeFormatted(geometry,false,&sw);
 //	} catch (IOException ex) {
-//		Assert.shouldNeverReachHere();
+//		Assert::shouldNeverReachHere();
 //	}
 	return sw.toString();
 }
@@ -46,13 +46,12 @@ void WKTWriter::write(Geometry *geometry, Writer *writer) {
 	writeFormatted(geometry, false, writer);
 }
 
-//!!! External dependency
 string WKTWriter::writeFormatted(Geometry *geometry) {
 	Writer sw;
 //	try {
 		writeFormatted(geometry, true, &sw);
 //	}catch (IOException ex) {
-//		Assert.shouldNeverReachHere();
+//		Assert::shouldNeverReachHere();
 //	}
 	return sw.toString();
 }
@@ -67,7 +66,6 @@ void WKTWriter::writeFormatted(Geometry *geometry, bool isFormatted, Writer *wri
 	appendGeometryTaggedText(geometry, 0, writer);
 }
 
-//!!! External dependency
 void WKTWriter::appendGeometryTaggedText(Geometry *geometry, int level, Writer *writer) {
 	indent(level, writer);
 	if (typeid(*geometry)==typeid(Point)) {
@@ -86,8 +84,8 @@ void WKTWriter::appendGeometryTaggedText(Geometry *geometry, int level, Writer *
 	} else if (typeid(*geometry)==typeid(GeometryCollection)) {
 		appendGeometryCollectionTaggedText((GeometryCollection*)geometry, level, writer);
 	} else {
-//!!! External dependency
 //		Assert.shouldNeverReachHere("Unsupported Geometry implementation:" + geometry->getClass());
+		Assert::shouldNeverReachHere("Unsupported Geometry implementation");
 	}
 }
 

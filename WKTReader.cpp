@@ -1,4 +1,5 @@
 #include "io.h"
+#include "util.h"
 
 WKTReader::WKTReader(): geometryFactory(), precisionModel() {}
 WKTReader::WKTReader(GeometryFactory gf): geometryFactory(gf), precisionModel(gf.getPrecisionModel()){}
@@ -55,8 +56,7 @@ double WKTReader::getNextNumber(StringTokenizer *tokenizer) {
 		case ',':
 			throw ParseException("Expected number but encountered ','");
 	}
-//!!! External Dependency
-	//Assert.shouldNeverReachHere("Encountered unexpected StreamTokenizer type: " + type);
+	Assert::shouldNeverReachHere("Encountered unexpected StreamTokenizer type");
 	return 0;
 }
 
@@ -102,8 +102,7 @@ string WKTReader::getNextWord(StringTokenizer *tokenizer) {
 		case ',':
 			return ",";
 	}
-//!!! External Dependency
-	//Assert.shouldNeverReachHere("Encountered unexpected StreamTokenizer type: " + type);
+	Assert::shouldNeverReachHere("Encountered unexpected StreamTokenizer type");
 	return "";
 }
 
@@ -166,7 +165,6 @@ Polygon* WKTReader::readPolygonText(StringTokenizer *tokenizer) {
 		holes->push_back(hole);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	//Polygon p=newgeometryFactory.createPolygon(&shell,holes);
 	return new Polygon(geometryFactory.createPolygon(shell,holes));
 }
 
