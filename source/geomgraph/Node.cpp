@@ -28,16 +28,30 @@ namespace geos {
 Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Label(0,Location::UNDEF)) {
 	coord=newCoord;
 #if DEBUG
-	cerr<<"Node::Node("<<newCoord.toString()<<")"<<endl;
+	cerr<<"["<<this<<"] Node::Node("<<newCoord.toString()<<")"<<endl;
 #endif
+
 #if COMPUTE_Z
-	z=0;
-	validz=0;
-#endif
+	ztot = 0;
+	addZ(newCoord.z);
+	if ( newEdges )
+	{
+		vector<EdgeEnd*>*eev = newEdges->getEdges();
+		for (unsigned int i=0; i<eev->size(); i++)
+		{
+			EdgeEnd *ee = (*eev)[i];
+			addZ(ee->getCoordinate().z);
+		}
+	}
+#endif // COMPUTE_Z
+
 	edges=newEdges;
 }
 
 Node::~Node(){
+#if DEBUG
+	cerr<<"["<<this<<"] Node::~Node()"<<endl;
+#endif
 	delete edges;
 }
 
@@ -55,26 +69,14 @@ bool Node::isIsolated() {
 
 void Node::add(EdgeEnd *e) {
 #if DEBUG
-	cerr<<"Node::add("<<e->print()<<")"<<endl;
+	cerr<<"["<<this<<"] Node::add("<<e->print()<<")"<<endl;
 #endif
 	// Assert: start pt of e is equal to node point
-	if (edges==NULL)
-		edges=new EdgeEndStar();
+	if (edges==NULL) edges=new EdgeEndStar();
 	edges->insert(e);
 	e->setNode(this);
 #if COMPUTE_Z
-	Coordinate &ec = e->getCoordinate();
-	if ( ec.z != DoubleNotANumber )
-	{
-		z+=ec.z;
-		validz++;
-	}
-	coord.z=z/validz;
-#if DEBUG
-	cerr<<" z=="<<z<<endl;
-	cerr<<" validz=="<<validz<<endl;
-	cerr<<" coord.z=="<<coord.z<<endl;
-#endif // DEBUG
+	addZ(e->getCoordinate().z);
 #endif
 }
 
@@ -126,10 +128,47 @@ string Node::print(){
 	return out;
 }
 
+void
+Node::addZ(double z)
+{
+#if DEBUG
+	cerr<<"["<<this<<"] Node::addZ("<<z<<")";
+#endif
+	if ( z == DoubleNotANumber )
+	{
+#if DEBUG
+		cerr<<" skipped"<<endl;
+#endif
+		return;
+	}
+	for (int i=0; i<zvals.size(); i++) if ( zvals[i] == z )
+	{
+#if DEBUG
+		cerr<<" already stored"<<endl;
+#endif
+		return;
+	}
+	zvals.push_back(z);
+	ztot+=z;
+	coord.z=ztot/zvals.size();
+#if DEBUG
+	cerr<<" added ["<<ztot<<"/"<<zvals.size()<<"="<<coord.z<<"]"<<endl;
+#endif
 }
+
+const vector<double>&
+Node::getZ() const
+{
+	return zvals;
+}
+
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/11/20 15:41:18  strk
+ * Added management of vector of composing Z values.
+ *
  * Revision 1.6  2004/11/19 10:10:23  strk
  * COMPUTE_Z re-enabled by default
  *
