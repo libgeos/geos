@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.7  2003/11/06 18:00:15  strk
+* Cleanup on exception in ::bufferOp()
+*
 * Revision 1.6  2003/10/15 16:39:03  strk
 * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
 *
@@ -11,7 +14,14 @@ namespace geos {
 
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 	BufferOp *gBuf=new BufferOp(g);
-	Geometry *geomBuf=gBuf->getResultGeometry(distance);
+	Geometry *geomBuf;
+	try {
+		geomBuf=gBuf->getResultGeometry(distance);
+	}
+	catch (...) {
+		delete gBuf;
+		throw;
+	}
 	delete gBuf;
 	return geomBuf;
 }
