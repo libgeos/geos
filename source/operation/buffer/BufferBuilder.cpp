@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/05/05 16:57:48  strk
+ * Rewritten static cga allocation to avoid copy constructor calls.
+ *
  * Revision 1.13  2004/05/05 16:36:46  strk
  * Avoid use of copy c'tors on local objects initializzation
  *
@@ -76,7 +79,8 @@ int BufferBuilder::depthDelta(Label *label) {
 	return 0;
 }
 
-CGAlgorithms BufferBuilder::cga=RobustCGAlgorithms();
+static RobustCGAlgorithms rCGA;
+CGAlgorithms *BufferBuilder::cga=&rCGA;
 
 /**
 * Creates a new BufferBuilder
@@ -147,7 +151,7 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	try {
 		graph->addEdges(edgeList->getEdges());
 		subgraphList=createSubgraphs(graph);
-		PolygonBuilder polyBuilder(geomFact,&cga);
+		PolygonBuilder polyBuilder(geomFact,cga);
 		buildSubgraphs(subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
 		resultGeom=geomFact->buildGeometry(resultPolyList);
@@ -243,7 +247,7 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph)
 	for (int i=0;i<(int)n->size();i++) {
 		Node *node=(*n)[i];
 		if (!node->isVisited()) {
-			BufferSubgraph *subgraph=new BufferSubgraph(&cga);
+			BufferSubgraph *subgraph=new BufferSubgraph(cga);
 			subgraph->create(node);
 			subgraphList->push_back(subgraph);
 		}

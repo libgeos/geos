@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/05/05 16:57:48  strk
+ * Rewritten static cga allocation to avoid copy constructor calls.
+ *
  * Revision 1.16  2004/05/05 10:54:48  strk
  * Removed some private static heap explicit allocation, less cleanup done by
  * the unloader.
@@ -630,7 +633,7 @@ private:
 	* Compute the change in depth as an edge is crossed from R to L
 	*/
 	static int depthDelta(Label *label);
-	static CGAlgorithms cga;
+	static CGAlgorithms *cga;
 	int quadrantSegments;
 	int endCapStyle;
 	PrecisionModel *workingPrecisionModel;
