@@ -103,7 +103,7 @@ DoubleBits::getExponent()
 #if ASSUME_IEEE_DOUBLE
 	return biasedExponent()-EXPONENT_BIAS;
 #else
-	return (int)((log(x)/log(2.0))+(x<1?-1:0.00000000001));
+	return (int)((log(x)/log(2.0))+(x<1?-0.9:0.00000000001));
 #endif
 }
 
@@ -161,7 +161,12 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2004/11/03 08:22:25  strk
+ * Slightly modified log/log2 based algo to better handle numbers in the
+ * range 0-1.
+ *
  * Revision 1.14  2004/11/02 15:49:59  strk
+ *
  * Moved ASSUME_IEEE_DOUBLE define from DoubleBits.cpp to indexQuadtree.h.
  * Fixed a bug in powerOf2(). Made the !IEEE version less prone to
  * round-offs (still has approximation errors).
