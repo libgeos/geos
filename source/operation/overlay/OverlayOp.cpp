@@ -351,7 +351,6 @@ void OverlayOp::computeOverlay(int opCode) {
 	// add the noded edges to this result graph
 
 	insertUniqueEdges(baseSplitEdges);
-
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);

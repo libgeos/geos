@@ -9,7 +9,7 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CG
 	edges=new vector<DirectedEdge*>();
 	pts=CoordinateListFactory::internalFactory->createCoordinateList();
 	ring=NULL;
-//	shell=new EdgeRing();
+	shell=NULL;
 	holes=new vector<EdgeRing*>();
 //	Commented out to fix different polymorphism in C++ (from Java)
 //	computePoints(newStart);
