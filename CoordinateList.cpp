@@ -18,6 +18,10 @@ void CoordinateList::reset(){
 	current=NULL;
 }
 
+vector<Coordinate> CoordinateList::toVector() {
+	return vector<Coordinate>();
+}
+
 bool CoordinateList::isEmpty() {
 	if (size==0) return true;
 	else return false;

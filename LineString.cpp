@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <typeinfo>
 
+
 LineString::LineString(){
 	CoordinateList points;
 }
@@ -176,8 +177,5 @@ bool LineString::isEquivalentClass(Geometry *other) {
 }
 
 int LineString::compareToSameClass(LineString ls) {
-//    ArrayList theseElements = new ArrayList(Arrays.asList(points));
-//    ArrayList otherElements = new ArrayList(Arrays.asList(((LineString) o).points));
-//    return compare(theseElements, otherElements);
-	return 1;
+	return compare(points.toVector(),ls.points.toVector());
 }

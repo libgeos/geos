@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include "math.h"
 #include "platform.h"
 
@@ -55,6 +56,7 @@ public:
 	virtual Coordinate get()=0;
 	virtual void set(Coordinate c)=0;
 	virtual void remove()=0;
+	virtual vector<Coordinate> toVector()=0;
 };
 
 class CoordinateList : public CoordinateListInterface {
@@ -90,6 +92,7 @@ public:
 	Coordinate get();
 	void set(Coordinate c);
 	void remove();
+	vector<Coordinate> toVector();
 private:
 	void moveTo(int pos);
 	int size;
@@ -273,7 +276,7 @@ protected:
 //protected void checkEqualPrecisionModel(Geometry other)
 //protected abstract Envelope computeEnvelopeInternal()
 //protected abstract int compareToSameClass(Object o)
-//protected int compare(Collection a, Collection b)
+	int compare(vector<Coordinate> a, vector<Coordinate> b){return 0;}; //Possibly add another vector type
 };
 
 /**
