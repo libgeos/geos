@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.39  2004/05/14 07:19:59  strk
+ * Changed the algorythm for finding precisionModel type (current way did
+ * not work): now if you specify a scale precisionModel will be FIXED,
+ * otherwise it will be FLOATING.
+ *
  * Revision 1.38  2004/05/07 13:23:51  strk
  * Memory leaks fixed.
  *
@@ -127,14 +132,16 @@ try{
 	xml.ResetPos();
 	xml.FindElem("run");
 	xml.FindChildElem("precisionModel");
-	precisionModel=xml.GetChildAttrib("type");
+	/* This does not seem to work... */
+	//precisionModel=xml.GetChildAttrib("type");
+	string scaleStr=xml.GetChildAttrib("scale");
 
-	if (precisionModel=="FLOATING") {
+	if ( scaleStr == "" ) {
 		pm=new PrecisionModel();
-		cout << "Precision Model: " << precisionModel << endl;
+		cout << "Precision Model: FLOATING" << endl;
 	} else {
 		char* stopstring;
-		string scaleStr=xml.GetChildAttrib("scale");
+		//string scaleStr=xml.GetChildAttrib("scale");
 		string offsetXStr=xml.GetChildAttrib("offsetx");
 		string offsetYStr=xml.GetChildAttrib("offsety");
 
@@ -142,9 +149,9 @@ try{
 		double offsetX=strtod(offsetXStr.c_str(),&stopstring);
 		double offsetY=strtod(offsetYStr.c_str(),&stopstring);
 		pm=new PrecisionModel(scale,offsetX,offsetY);
-		cout << "Precision Model: FIXED" << endl;
+		cout << "Precision Model: FIXED (scale: "<<scale<<", offsetX: "<<offsetX<<", offsetY: "<<offsetY<<")" << endl;
 	}
-	r=new WKTReader(new GeometryFactory(pm,10));
+	r=new WKTReader(new GeometryFactory(pm));
 	w=new WKTWriter();
 	gA=NULL;
 	gB=NULL;
