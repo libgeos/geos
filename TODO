@@ -1,7 +1,6 @@
-- Remove coordinate list construction and editing functionalities
-  out of CoordinateSequence and in CoordinateList / CoordinateArrays
+- Check why library still gets called 1.0 instead of 1.4.0 !!
 
-- Add tests and examples for new functionalities
+- Add GeometricShapeFactory examples in doc/example.cpp
 
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
 
