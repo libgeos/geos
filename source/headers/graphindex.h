@@ -174,6 +174,40 @@ private:
 	void processOverlaps(int start,int end,SweepLineEvent *ev0,SegmentIntersector *si);
 };
 
+class SimpleEdgeSetIntersector: public EdgeSetIntersector {
+public:
+	SimpleEdgeSetIntersector();
+	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments);
+	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
+private:
+	int nOverlaps;
+	void computeIntersects(Edge *e0,Edge *e1,SegmentIntersector *si);
+};
+
+/**
+ * Finds all intersections in one or two sets of edges,
+ * using a simple x-axis sweepline algorithm.
+ * While still O(n^2) in the worst case, this algorithm
+ * drastically improves the average-case time.
+ */
+class SimpleSweepLineIntersector: public EdgeSetIntersector {
+public:
+	SimpleSweepLineIntersector();
+	virtual ~SimpleSweepLineIntersector();
+	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments);
+	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
+private:
+	void add(vector<Edge*> *edges);
+	vector<SweepLineEvent*>* events;
+	// statistics information
+	int nOverlaps;
+	void add(vector<Edge*> *edges,void* edgeSet);
+	void add(Edge *edge,void* edgeSet);
+	void prepareEvents();
+	void computeIntersections(SegmentIntersector *si);
+	void processOverlaps(int start,int end,SweepLineEvent *ev0,SegmentIntersector *si);
+};
+
 bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second);
 
 #endif

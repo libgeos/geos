@@ -1,0 +1,110 @@
+#include "../../headers/indexBintree.h"
+#include "../../headers/util.h"
+
+BinTreeNode* BinTreeNode::createNode(BinTreeInterval *itemInterval){
+	Key *key=new Key(itemInterval);
+	//System.out.println("input: " + env + "  binaryEnv: " + key.getEnvelope());
+	BinTreeNode* node=new BinTreeNode(key->getInterval(),key->getLevel());
+	return node;
+}
+
+BinTreeNode* BinTreeNode::createExpanded(BinTreeNode *node,BinTreeInterval *addInterval){
+	BinTreeInterval *expandInt=new BinTreeInterval(*addInterval);
+	if (node!=NULL) expandInt->expandToInclude(node->interval);
+	BinTreeNode *largerNode=createNode(expandInt);
+	if (node!=NULL) largerNode->insert(node);
+	return largerNode;
+}
+
+BinTreeNode::BinTreeNode(BinTreeInterval *newInterval,int newLevel){
+	interval=newInterval;
+	level=newLevel;
+	centre=(interval->getMin()+interval->getMax())/2;
+}
+
+BinTreeInterval* BinTreeNode::getInterval() {
+	return interval;
+}
+
+bool BinTreeNode::isSearchMatch(BinTreeInterval *itemInterval){
+	return itemInterval->overlaps(interval);
+}
+
+/**
+* Returns the subnode containing the envelope.
+* Creates the node if
+* it does not already exist.
+*/
+BinTreeNode* BinTreeNode::getNode(BinTreeInterval *searchInterval){
+	int subnodeIndex=getSubnodeIndex(searchInterval,centre);
+	// if index is -1 searchEnv is not contained in a subnode
+	if (subnodeIndex!=-1) {
+		// create the node if it does not exist
+		BinTreeNode* node=getSubnode(subnodeIndex);
+		// recursively search the found/created node
+		return node->getNode(searchInterval);
+	} else {
+		return this;
+	}
+}
+
+/**
+* Returns the smallest <i>existing</i>
+* node containing the envelope.
+*/
+NodeBase* BinTreeNode::find(BinTreeInterval *searchInterval){
+	int subnodeIndex=getSubnodeIndex(searchInterval,centre);
+	if (subnodeIndex==-1)
+		return this;
+	if (subnode[subnodeIndex]!=NULL) {
+		// query lies in subnode, so search it
+		BinTreeNode *node=subnode[subnodeIndex];
+		return node->find(searchInterval);
+	}
+	// no existing subnode, so return this one anyway
+	return this;
+}
+
+void BinTreeNode::insert(BinTreeNode *node) {
+	Assert::isTrue(interval==NULL || interval->contains(node->interval));
+	int index=getSubnodeIndex(node->interval,centre);
+	if (node->level==level-1) {
+		subnode[index]=node;
+	} else {
+		// the node is not a direct child, so make a new child node to contain it
+		// and recursively insert the node
+		BinTreeNode* childNode=createSubnode(index);
+		childNode->insert(node);
+		subnode[index]=childNode;
+	}
+}
+
+/**
+* get the subnode for the index.
+* If it doesn't exist, create it
+*/
+BinTreeNode* BinTreeNode::getSubnode(int index){
+	if (subnode[index]==NULL) {
+		subnode[index]=createSubnode(index);
+	}
+	return subnode[index];
+}
+
+BinTreeNode* BinTreeNode::createSubnode(int index) {
+	// create a new subnode in the appropriate interval
+	double min=0.0;
+	double max=0.0;
+	switch (index) {
+		case 0:
+			min=interval->getMin();
+			max=centre;
+			break;
+		case 1:
+			min=centre;
+			max=interval->getMax();
+			break;
+	}
+	BinTreeInterval* subInt=new BinTreeInterval(min,max);
+	BinTreeNode *node=new BinTreeNode(subInt,level-1);
+	return node;
+}

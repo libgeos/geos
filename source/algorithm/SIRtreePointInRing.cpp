@@ -1,24 +1,25 @@
 #include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 
-IntTreePointInRing::IntTreePointInRing(LinearRing *newRing){
+SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing){
 	ring=newRing;
-	intTree=NULL;
+	sirTree=NULL;
 	crossings=0;
 	buildIndex();
 }
 
-void IntTreePointInRing::buildIndex() {
+void SIRtreePointInRing::buildIndex() {
 	Envelope *env=ring->getEnvelopeInternal();
-	intTree=new IntervalTree(env->getMinY(),env->getMaxY());
+	sirTree=new SIRtree();
 	CoordinateList *pts=ring->getCoordinates();
 	for(int i=1;i<pts->getSize();i++) {
+		if(pts->getAt(i-1)==pts->getAt(i)) {continue;} //Optimization suggested by MD. [Jon Aquino]
 		LineSegment *seg=new LineSegment(pts->getAt(i-1),pts->getAt(i));
-		intTree->insert(seg->p0.y,seg->p1.y,seg);
+		sirTree->insert(seg->p0.y,seg->p1.y,seg);
 	}
 }
 
-bool IntTreePointInRing::isInside(Coordinate& pt) {
+bool SIRtreePointInRing::isInside(Coordinate& pt) {
 	crossings=0;
 	// test all segments intersected by vertical ray at pt
 	vector<void*> *segs=intTree->query(pt.y);
@@ -37,7 +38,7 @@ bool IntTreePointInRing::isInside(Coordinate& pt) {
 	return false;
 }
 
-void IntTreePointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
+void SIRtreePointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
 	double xInt;  // x intersection of segment with ray
 	double x1;    // translated coordinates
 	double y1;

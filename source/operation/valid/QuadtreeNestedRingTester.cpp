@@ -7,14 +7,13 @@ QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph) {
 	graph=newGraph;
 	rings=new vector<LinearRing*>();
 	totalEnv=new Envelope();
-	qt=new Quadtree(totalEnv);
+	qt=NULL;
 	cga=new RobustCGAlgorithms();
 }
 
 QuadtreeNestedRingTester::~QuadtreeNestedRingTester() {
 	delete rings;
 	delete totalEnv;
-	delete qt;
 	delete cga;
 }
 

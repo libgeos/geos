@@ -3,7 +3,9 @@
 
 #include "geom.h"
 #include "platform.h"
-#include "indexIntervaltree.h"
+#include "indexBintree.h"
+#include "indexStrtree.h"
+#include "indexStrtree.h"
 #include "indexChain.h"
 
 class Coordinate;
@@ -246,21 +248,22 @@ public:
 	};
 private:
 	LinearRing *ring;
-	IntervalTree *intTree;
+	BinTreeInterval *interval;
+	Bintree *tree;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
 	void testMonotoneChain(Envelope *rayEnv,MCSelecter *mcSelecter,indexMonotoneChain *mc);
 };
 
-class IntTreePointInRing: public PointInRing {
+class SIRtreePointInRing: public PointInRing {
 private:
 	LinearRing *ring;
-	IntervalTree *intTree;
+	SIRtree *sirTree;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
 	void testLineSegment(Coordinate& p,LineSegment *seg);
 public:
-	IntTreePointInRing(LinearRing *newRing);
+	SIRtreePointInRing(LinearRing *newRing);
 	bool isInside(Coordinate& pt);
 };
 
@@ -286,6 +289,119 @@ public:
 	void add(Geometry *geom);
 	void add(CoordinateList *pts);
 	Coordinate& getCentroid();
+};
+
+/**
+ * Computes the centroid of an area geometry.
+ * <h2>Algorithm</h2>
+ * Based on the usual algorithm for calculating
+ * the centroid as a weighted sum of the centroids
+ * of a decomposition of the area into (possibly overlapping) triangles.
+ * The algorithm has been extended to handle holes and multi-polygons.
+ * See <code>http://www.faqs.org/faqs/graphics/algorithms-faq/</code>
+ * for further details of the basic approach.
+ */
+class CentroidArea {
+public:
+	CentroidArea();
+	virtual ~CentroidArea();
+	void add(Geometry *geom);
+	void add(CoordinateList *ring);
+	Coordinate& getCentroid();
+private:
+	CGAlgorithms *cga;
+	Coordinate* basePt;// the point all triangles are based at
+	Coordinate* triangleCent3;// temporary variable to hold centroid of triangle
+	double areasum2;        /* Partial area sum */
+	Coordinate* cg3; // partial centroid sum
+	void setBasePoint(Coordinate *newbasePt);
+	void add(Polygon *poly);
+	void addShell(CoordinateList *pts);
+	void addHole(CoordinateList *pts);
+	void addTriangle(Coordinate &p0,Coordinate &p1,Coordinate &p2,bool isPositiveArea);
+	static void centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordinate *c);
+	static double area2(Coordinate &p1,Coordinate &p2,Coordinate &p3);
+};
+
+/**
+ * Computes a point in the interior of an point geometry.
+ * <h2>Algorithm</h2>
+ * Find a point which is closest to the centroid of the geometry.
+ */
+class InteriorPointPoint {
+private:
+	Coordinate* centroid;
+	double minDistance;
+	Coordinate* interiorPoint;
+	void add(Geometry *geom);
+	void add(Coordinate *point);
+public:
+	InteriorPointPoint(Geometry *g);
+	virtual	~InteriorPointPoint();
+	Coordinate& getInteriorPoint();
+};
+
+/**
+ * Computes a point in the interior of an linear geometry.
+ * <h2>Algorithm</h2>
+ * <ul>
+ * <li>Find an interior vertex which is closest to
+ * the centroid of the linestring.
+ * <li>If there is no interior vertex, find the endpoint which is
+ * closest to the centroid.
+ * </ul>
+ */
+class InteriorPointLine {
+public:
+	InteriorPointLine(Geometry *g);
+	virtual ~InteriorPointLine();
+	Coordinate& getInteriorPoint();
+private:
+	Coordinate *centroid;
+	double minDistance;
+	Coordinate *interiorPoint;
+	void addInterior(Geometry *geom);
+	void addInterior(CoordinateList *pts);
+	void addEndpoints(Geometry *geom);
+	void addEndpoints(CoordinateList *pts);
+	void add(Coordinate *point);
+};
+
+/**
+ * Computes a point in the interior of an area geometry.
+ *
+ * <h2>Algorithm</h2>
+ * <ul>
+ *   <li>Find the intersections between the geometry
+ *       and the horizontal bisector of the area's envelope
+ *   <li>Pick the midpoint of the largest intersection (the intersections
+ *       will be lines and points)
+ * </ul>
+ *
+ * <b>
+ * Note: If a fixed precision model is used,
+ * in some cases this method may return a point
+ * which does not lie in the interior.
+ * </b>
+ */
+class InteriorPointArea {
+private:
+	static double avg(double a, double b);
+	GeometryFactory *factory;
+	Coordinate *interiorPoint;
+	double maxWidth;
+	void add(Geometry *geom);
+public:
+	InteriorPointArea(Geometry *g);
+	virtual ~InteriorPointArea();
+	Coordinate& getInteriorPoint();
+	void addPolygon(Geometry *geometry);
+	Coordinate* centre(Envelope *envelope);
+protected:
+	Geometry *widestGeometry(Geometry *geometry);
+	Geometry *widestGeometry(GeometryCollection *gc);
+	LineString *horizontalBisector(Geometry *geometry);
+
 };
 
 #endif

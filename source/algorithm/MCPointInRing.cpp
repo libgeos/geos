@@ -15,17 +15,20 @@ MCPointInRing::MCPointInRing(LinearRing *newRing) {
 	intTree=NULL;
 	crossings=0;
     buildIndex();
+	interval=new BinTreeInterval();
 }
 
 void MCPointInRing::buildIndex() {
 	Envelope *env=ring->getEnvelopeInternal();
-	intTree=new IntervalTree(env->getMinY(),env->getMaxY());
-	CoordinateList *pts=ring->getCoordinates();
+	tree=new Bintree();
+	CoordinateList *pts=CoordinateList::removeRepeatedPoints(ring->getCoordinates());
 	vector<indexMonotoneChain*> *mcList=MonotoneChainBuilder::getChains(pts);
 	for(int i=0;i<(int)mcList->size();i++) {
 		indexMonotoneChain *mc=(*mcList)[i];
 		Envelope *mcEnv=mc->getEnvelope();
-		intTree->insert(mcEnv->getMinY(),mcEnv->getMaxY(),mc);
+		interval->min=mcEnv->getMinY();
+		interval->max=mcEnv->getMaxY();
+		tree->insert(interval,mc);
 	}
 }
 
@@ -33,7 +36,9 @@ bool MCPointInRing::isInside(Coordinate& pt) {
 	crossings=0;
 	// test all segments intersected by ray from pt in positive x direction
 	Envelope *rayEnv=new Envelope(DoubleNegInfinity,DoubleInfinity,pt.y,pt.y);
-	vector<void*> *segs=intTree->query(pt.y);
+	interval->min=pt.y;
+	interval->max=pt.y;
+	vector<void*> *segs=tree->query(interval);
 	//System.out.println("query size=" + segs.size());
 	MCSelecter *mcSelecter=new MCSelecter(pt,this);
 	for(int i=0;i<(int)segs->size();i++) {

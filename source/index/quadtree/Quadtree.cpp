@@ -1,74 +1,84 @@
 #include "../../headers/indexQuadtree.h"
-#include "stdio.h"
-
+#include "../../headers/util.h"
 /**
-* return a square envelope containing the argument envelope
+* Ensure that the envelope for the inserted item has non-zero extents.
+* Use the current minExtent to pad the envelope, if necessary
 */
-Envelope* Quadtree::computeInitialExtent(Envelope *env) {
-	double dx=env->getWidth();
-	double dy=env->getHeight();
-	double size=dx>dy?dx:dy;
-	double x=env->getMinX();
-	double y=env->getMinY();
-	return new Envelope(x,x+size,y,y+size);
+Envelope* Quadtree::ensureExtent(Envelope *itemEnv,double minExtent) {
+	//The names "ensureExtent" and "minExtent" are misleading -- sounds like
+	//this method ensures that the extents are greater than minExtent.
+	//Perhaps we should rename them to "ensurePositiveExtent" and "defaultExtent".
+	//[Jon Aquino]
+	double minx=itemEnv->getMinX();
+	double maxx=itemEnv->getMaxX();
+	double miny=itemEnv->getMinY();
+	double maxy=itemEnv->getMaxY();
+	// has a non-zero extent
+	if (minx!=maxx && miny!=maxy) return itemEnv;
+	// pad one or both extents
+	if (minx==maxx) {
+		minx=minx-minExtent/2.0;
+		maxx=minx+minExtent/2.0;
+	}
+	if (miny==maxy) {
+		miny=miny-minExtent/2.0;
+		maxy=miny+minExtent/2.0;
+	}
+	return new Envelope(minx, maxx, miny, maxy);
 }
 
-Quadtree::Quadtree(Envelope *env) {
-	Envelope *quadEnv=computeInitialExtent(env);
-	root=new Quad(NULL,quadEnv);
+Quadtree::Quadtree(){
+	minExtent=1.0;
+	root=new QuadTreeRoot();
 }
 
-Quadtree::~Quadtree() {
+Quadtree::~Quadtree(){
 	delete root;
 }
 
-Quad* Quadtree::getRoot() {
-	return root;
+int Quadtree::depth() {
+	//I don't think it's possible for root to be null. Perhaps we should
+	//remove the check. [Jon Aquino]
+	if (root!=NULL) return root->depth();
+	return 0;
 }
 
-void Quadtree::insert(Envelope *itemEnv,void *item) {
-	/**
-	* Do NOT create a new quad for zero-area envelopes - this would lead
-	* to infinite recursion. Instead, use a heuristic of simply returning
-	* the smallest existing quad containing the query
-	*/
-	bool isValid=itemEnv->getHeight()>0 && itemEnv->getWidth()>0;
-	Quad* quad;
-	if (isValid)
-		quad=root->getQuad(itemEnv);
-	else
-		quad=root->find(itemEnv);
-	quad->add(item);
+int Quadtree::size() {
+	if (root!=NULL) return root->size();
+	return 0;
 }
+
+void Quadtree::insert(Envelope *itemEnv,void* item){
+	collectStats(itemEnv);
+	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
+	root->insert(insertEnv,item);
+}
+
 
 vector<void*>* Quadtree::query(Envelope *searchEnv){
 	/**
 	* the items that are matched are the items in quads which
 	* overlap the search envelope
 	*/
-	vector<void*>* foundItems=new vector<void*>();
+	vector<void*> *foundItems=new vector<void*>();
 	root->addAllItemsFromOverlapping(searchEnv,foundItems);
 	return foundItems;
 }
 
-
 /**
-* Internal iterator for queries
+* Return a list of all items in the Quadtree
 */
-void Quadtree::query(Envelope *searchEnv,QuadtreeSelectAction *action){
-	/**
-	* the items that are selected are the items in quads which
-	* overlap the search envelope
-	*/
-	root->selectAllItemsFromOverlapping(searchEnv,action);
-}
-
 vector<void*>* Quadtree::queryAll() {
-	/**
-	* the items that are matched are the items in quads which
-	* overlap the search envelope
-	*/
-	vector<void*>* foundItems=new vector<void*>();
+	vector<void*> *foundItems=new vector<void*>();
 	root->addAllItems(foundItems);
 	return foundItems;
+}
+
+void Quadtree::collectStats(Envelope *itemEnv){
+	double delX=itemEnv->getWidth();
+	if (delX<minExtent && delX>0.0)
+		minExtent=delX;
+	double delY=itemEnv->getWidth();
+	if (delY<minExtent && delY>0.0)
+		minExtent=delY;
 }
