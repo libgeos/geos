@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/05 19:40:48  strk
+ * Added GeometryFactory::destroyGeometry(Geometry *)
+ *
  * Revision 1.6  2004/07/05 15:20:18  strk
  * Documentation again.
  *
@@ -950,7 +953,8 @@ class GeometryFactory;
 /**
  * \class Geometry geom.h geos.h
  *
- * \brief Basic implementation of Geometry, constructed by GeometryFactory.
+ * \brief Basic implementation of Geometry, constructed and
+ * destructed by GeometryFactory.
  *
  *  <code>clone</code> returns a deep copy of the object.
  *
@@ -2239,6 +2243,9 @@ public:
 
 	/// Returns a clone of given Geometry.
 	Geometry* createGeometry(const Geometry *g) const;
+
+	/// Destroy a Geometry, or release it
+	void destroyGeometry(Geometry *g) const;
 
 private:
 	const PrecisionModel* precisionModel;

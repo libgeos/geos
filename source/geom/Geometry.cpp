@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.58  2004/07/05 19:40:48  strk
+ * Added GeometryFactory::destroyGeometry(Geometry *)
+ *
  * Revision 1.57  2004/07/05 15:20:18  strk
  * Documentation again.
  *
@@ -132,7 +135,8 @@ namespace geos {
  * Main class is geos::Geometry, from which all geometry types
  * derive.
  *
- * Construction of Geometries is done using a geos::GeometryFactory.
+ * Construction and destruction of Geometries is done
+ * using a geos::GeometryFactory.
  *
  * Internal exceptions are thrown as pointers to geos::GEOSException.
  *

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.46  2004/07/05 19:40:48  strk
+ * Added GeometryFactory::destroyGeometry(Geometry *)
+ *
  * Revision 1.45  2004/07/05 14:23:03  strk
  * More documentation cleanups.
  *
@@ -879,10 +882,10 @@ gfCoordinateOperation::edit(const CoordinateList *coordinates, const Geometry *g
 }
 //Remember to add this.
 
-  /**
-   * @return a clone of g based on a CoordinateList created by this
-   * GeometryFactory's CoordinateListFactory
-   */
+/**
+ * @return a clone of g based on a CoordinateList created by this
+ * GeometryFactory's CoordinateListFactory
+ */
 Geometry*
 GeometryFactory::createGeometry(const Geometry *g) const
 {
@@ -893,6 +896,15 @@ GeometryFactory::createGeometry(const Geometry *g) const
 	delete coordOp;
 	delete editor;
 	return ret;
+}
+
+/**
+ * Destroy a Geometry, or release it.
+ */
+void
+GeometryFactory::destroyGeometry(Geometry *g) const
+{
+	delete g;
 }
 
 }
