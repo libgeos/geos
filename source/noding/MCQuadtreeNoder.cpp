@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/05/05 16:39:50  strk
+ * reduced explicit local objects allocation
+ *
  * Revision 1.5  2004/05/05 15:51:29  strk
  * Fixed big leak in intersectChains()
  *
@@ -63,8 +66,11 @@ MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
 	return nodedSegStrings;
 }
 
-void MCQuadtreeNoder::intersectChains() {
-	MonotoneChainOverlapAction *overlapAction = new SegmentOverlapAction(segInt);
+void
+MCQuadtreeNoder::intersectChains()
+{
+	SegmentOverlapAction soa(segInt);
+	MonotoneChainOverlapAction *overlapAction = &soa;
 	for (int i=0; i<(int)chains->size();i++) {
 		indexMonotoneChain *queryChain=(*chains)[i];
 		vector<void*> *overlapChains =index->query(queryChain->getEnvelope());
@@ -81,8 +87,6 @@ void MCQuadtreeNoder::intersectChains() {
 		}
 		delete overlapChains;
 	}
-
-	delete overlapAction;
 }
 
 void MCQuadtreeNoder::add(SegmentString *segStr) {
