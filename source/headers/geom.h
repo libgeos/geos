@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.52  2004/04/13 08:15:51  strk
+ * Changed all 'long long' with int64.
+ * Changed all 'long long' constants to end with two Ls.
+ *
  * Revision 1.51  2004/04/10 22:41:24  ybychkov
  * "precision" upgraded to JTS 1.4
  *
@@ -129,9 +133,9 @@ public:
 	* This class is only for use to support the "enums" for the types of precision model.
 	* <p>
 	*/
-	static class Type {
+	class Type {
 	private:
-		static const long long serialVersionUID = -5528602631731589822L;
+		static const int64 serialVersionUID = -5528602631731589822LL;
 		static map<string,PrecisionModel::Type*> *nameToTypeMap;
 		string name;
 		void* readResolve();
@@ -139,6 +143,7 @@ public:
 		string toString();
 		Type(string newName);
 	};
+
 	/**
 	* Fixed Precision indicates that coordinates have a fixed number of decimal places.
 	* The number of decimal places is determined by the log10 of the scale factor.
@@ -281,7 +286,7 @@ private:
 	void setScale(double newScale);
 	Type* modelType;
 	double scale;
-	static const long long serialVersionUID = 7777263578777803835L;    
+	static const int64 serialVersionUID = 7777263578777803835LL;
 };
 
 /**
@@ -410,7 +415,7 @@ public:
      * Joshua Bloch's book <i>Effective Java"</i>
      */
     static int Coordinate::hashCode(double x) {
-        long long f = (long long)(x);
+        int64 f = (int64)(x);
         return (int)(f^(f>>32));
     }
 
@@ -419,7 +424,7 @@ public:
 	double y;	/// y-coordinate
 	double z;	/// z-coordinate
 private:
-	static const long long serialVersionUID=6683108902428366910L;
+	static const int64 serialVersionUID=6683108902428366910LL;
 
 
 };
@@ -689,7 +694,7 @@ private:
 	double maxx;	/// the maximum x-coordinate
 	double miny;	/// the minimum y-coordinate
 	double maxy;	/// the maximum y-coordinate
-	static const long long serialVersionUID=5873921885273102420L;    
+	static const int64 serialVersionUID=5873921885273102420LL;
 };
 
 class Geometry;
@@ -924,7 +929,7 @@ protected:
 private:
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter* geometryChangedFilter;
-    static const long long serialVersionUID = 8763622679187376702L;
+    static const int64 serialVersionUID = 8763622679187376702LL;
 	GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 	void* userData;
@@ -1047,7 +1052,7 @@ public:
 	Coordinate* intersection(LineSegment *line);
 	virtual string toString() const;
 private:
-  static const long long serialVersionUID=3252005833466256227L;
+  static const int64 serialVersionUID=3252005833466256227LL;
 
 };
 
@@ -1178,7 +1183,7 @@ protected:
 	virtual Envelope* computeEnvelopeInternal() const;
 	virtual int compareToSameClass(const Geometry *gc) const;
 private:
-	static const long long serialVersionUID = -5694727726395021467L;
+	static const int64 serialVersionUID = -5694727726395021467LL;
 };
 
 class GeometryCollectionIterator {
@@ -1251,7 +1256,7 @@ private:
 	*  The <code>Coordinate</code> wrapped by this <code>Point</code>.
 	*/
 	CoordinateList *coordinates;
-	static const long long serialVersionUID = 4902022702746614570L;
+	static const int64 serialVersionUID = 4902022702746614570LL;
 };
 
 /**
@@ -1319,7 +1324,7 @@ protected:
 	virtual bool isEquivalentClass(const Geometry *other) const;
 	CoordinateList* points;
 private:
-	static const long long serialVersionUID = 3110669828065365560L;
+	static const int64 serialVersionUID = 3110669828065365560LL;
 };
 
 /**
@@ -1362,7 +1367,7 @@ public:
 	bool isClosed() const;
 	void setPoints(CoordinateList* cl);
 private:
-	static const long long serialVersionUID = -4261142084085851829L;
+	static const int64 serialVersionUID = -4261142084085851829LL;
 	void validateConstruction();
 };
 
@@ -1459,7 +1464,7 @@ protected:
 	Envelope* computeEnvelopeInternal() const;
 private:
 	void normalize(LinearRing *ring, bool clockwise);
-	static const long long serialVersionUID = -3494792200821764533L;  
+	static const int64 serialVersionUID = -3494792200821764533LL;
 };
 
 /**
@@ -1503,7 +1508,7 @@ public:
 protected:
 	const Coordinate* getCoordinate(int n) const;
 private:
-	static const long long serialVersionUID = -8048474874175355449L;  
+	static const int64 serialVersionUID = -8048474874175355449LL;
 };
 
 /**
@@ -1540,7 +1545,7 @@ public:
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 private:
-	static const long long serialVersionUID = 8166665132445433741L;
+	static const int64 serialVersionUID = 8166665132445433741LL;
 };
 
 /**
@@ -1588,7 +1593,7 @@ public:
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 private:
-	static const long long serialVersionUID = -551033529766975875L;
+	static const int64 serialVersionUID = -551033529766975875LL;
 };
 
 /**
@@ -1748,7 +1753,7 @@ public:
 private:
 	const PrecisionModel* precisionModel;
 	int SRID;
-	static const long long serialVersionUID = -6820524753094095635L;
+	static const int64 serialVersionUID = -6820524753094095635LL;
 	CoordinateListFactory *coordinateListFactory;
 
 };
