@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/14 11:05:07  strk
+ * Added support for LinearRing in GeometryEditor
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -71,7 +74,7 @@ Geometry* GeometryEditor::edit(Geometry *geometry, GeometryEditorOperation *oper
 		return operation->edit(geometry, factory);
 	}
 
-	if (typeid(*geometry)==typeid(LineString)) {
+	if (typeid(*geometry)==typeid(LineString) || typeid(*geometry)==typeid(LinearRing)) {
 		return operation->edit(geometry, factory);
 	}
 
