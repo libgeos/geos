@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/04/23 00:02:18  strk
+ * const-correctness changes
+ *
  * Revision 1.5  2004/04/19 16:14:52  strk
  * Some memory leaks plugged in noding algorithms.
  *
@@ -37,7 +40,7 @@
 
 namespace geos {
 
-IteratedNoder::IteratedNoder(PrecisionModel *newPm) {
+IteratedNoder::IteratedNoder(const PrecisionModel *newPm) {
 	li = new RobustLineIntersector();
 	pm=newPm;
     li->setPrecisionModel(pm);

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/04/23 00:02:18  strk
+ * const-correctness changes
+ *
  * Revision 1.5  2004/04/20 10:58:04  strk
  * More memory leaks removed.
  *
@@ -97,9 +100,9 @@ Geometry*
 BufferBuilder::buffer(Geometry *g, double distance)
 	throw(TopologyException *)
 {
-	PrecisionModel *precisionModel=workingPrecisionModel;
+	const PrecisionModel *precisionModel=workingPrecisionModel;
 	if (precisionModel==NULL)
-		precisionModel=(PrecisionModel*) g->getPrecisionModel();
+		precisionModel=g->getPrecisionModel();
 
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
@@ -117,10 +120,6 @@ BufferBuilder::buffer(Geometry *g, double distance)
 
 	try {
 		computeNodedEdges(bufferSegStrList, precisionModel);
-	} catch (TopologyException *) {
-		delete curveSetBuilder;
-		delete curveBuilder;
-		throw;
 	} catch (...) {
 		// Unexpected exception thrown
 		delete curveSetBuilder;
@@ -167,8 +166,8 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	return resultGeom;
 }
 
-void BufferBuilder::computeNodedEdges(vector<SegmentString*> *
-bufferSegStrList, PrecisionModel *precisionModel)
+void
+BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel)
 	throw(TopologyException *)
 {
 	//BufferCurveGraphNoder noder=new BufferCurveGraphNoder(geomFact->getPrecisionModel());

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/04/23 00:02:18  strk
+ * const-correctness changes
+ *
  * Revision 1.5  2004/04/19 16:14:52  strk
  * Some memory leaks plugged in noding algorithms.
  *
@@ -343,10 +346,10 @@ private:
 	* and create the split edges between the nodes
 	*/
 	vector<SegmentString*>* node(vector<SegmentString*> *segStrings, int *numInteriorIntersections);
-	PrecisionModel *pm;
+	const PrecisionModel *pm;
 	LineIntersector *li;
 public:
-	IteratedNoder(PrecisionModel *newPm);
+	IteratedNoder(const PrecisionModel *newPm);
 	virtual ~IteratedNoder();
 	/**
 	* Fully nodes a list of {@link SegmentStrings}, i.e. peforms noding iteratively

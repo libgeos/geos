@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/04/23 00:02:18  strk
+ * const-correctness changes
+ *
  * Revision 1.12  2004/04/20 10:58:04  strk
  * More memory leaks removed.
  *
@@ -623,7 +626,7 @@ private:
 	GeometryFactory *geomFact;
 	PlanarGraph *graph;
 	EdgeList *edgeList;
-	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, PrecisionModel *precisionModel) throw(TopologyException *);
+	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel) throw(TopologyException *);
 	/**
 	* Inserted edges are checked to see if an identical edge already exists.
 	* If so, the edge is not inserted, but its label is merged

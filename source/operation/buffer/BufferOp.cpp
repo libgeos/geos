@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2004/04/23 00:02:18  strk
+ * const-correctness changes
+ *
  * Revision 1.25  2004/04/20 13:24:15  strk
  * More leaks removed.
  *
@@ -228,6 +231,7 @@ void
 BufferOp::bufferOriginalPrecision()
 {
 	BufferBuilder *bufBuilder=new BufferBuilder();
+	//cerr<<"computing with original precision"<<endl;
 	try {
 		bufBuilder->setQuadrantSegments(quadrantSegments);
 		bufBuilder->setEndCapStyle(endCapStyle);
@@ -252,7 +256,7 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 	// don't change the precision model of the Geometry, just reduce the precision
 	SimpleGeometryPrecisionReducer *reducer=new SimpleGeometryPrecisionReducer(fixedPM);
 	Geometry* reducedGeom=reducer->reduce(argGeom);
-	//System->out->println("recomputing with precision scale factor=" + sizeBasedScaleFactor);
+	//cerr<<"recomputing with precision scale factor="<<sizeBasedScaleFactor<<" (precision digits "<<precisionDigits<<")"<<endl;
 	BufferBuilder *bufBuilder=new BufferBuilder();
 	bufBuilder->setWorkingPrecisionModel(fixedPM);
 	bufBuilder->setQuadrantSegments(quadrantSegments);
