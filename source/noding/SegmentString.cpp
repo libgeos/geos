@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/06 15:54:15  strk
+ * SegmentNodeList keeps track of created splitEdges for later destruction.
+ * SegmentString constructor copies given Label.
+ * Buffer operation does no more leaks for doc/example.cpp
+ *
  * Revision 1.2  2004/04/19 16:14:52  strk
  * Some memory leaks plugged in noding algorithms.
  *
@@ -27,11 +32,12 @@
 
 namespace geos {
 
-SegmentString::SegmentString(const CoordinateList *newPts, Label* newContext) {
+SegmentString::SegmentString(const CoordinateList *newPts, const Label* newContext)
+{
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
 	pts=newPts;
-	context=newContext;
+	context=new Label(newContext);
 }
 
 SegmentString::~SegmentString() {
@@ -39,23 +45,33 @@ SegmentString::~SegmentString() {
 	delete context;
 }
 
-Label* SegmentString::getContext() {
+const Label*
+SegmentString::getContext() const
+{
 	return context;
 }
 
-SegmentNodeList* SegmentString::getIntersectionList() {
+SegmentNodeList*
+SegmentString::getIntersectionList() const
+{
 	return eiList;
 }
 
-int SegmentString::size() {
+int
+SegmentString::size() const 
+{
 	return pts->getSize();
 }
 
-const Coordinate& SegmentString::getCoordinate(int i) {
+const Coordinate&
+SegmentString::getCoordinate(int i) const
+{
 	return pts->getAt(i);
 }
 
-const CoordinateList* SegmentString::getCoordinates(){
+const CoordinateList*
+SegmentString::getCoordinates() const
+{
 	return pts;
 }
 
@@ -63,12 +79,16 @@ void SegmentString::setIsolated(bool isIsolated)  {
 	isIsolatedVar=isIsolated;
 }
 
-bool SegmentString::isIsolated()  {
+bool
+SegmentString::isIsolated() const
+{
 	return isIsolatedVar;
 }
 
 
-bool SegmentString::isClosed() {
+bool
+SegmentString::isClosed() const
+{
 	return pts->getAt(0)==pts->getAt(pts->getSize()-1);
 }
 
@@ -76,7 +96,9 @@ bool SegmentString::isClosed() {
 * Adds EdgeIntersections for one or both
 * intersections found for a segment of an edge to the edge intersection list.
 */
-void SegmentString::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex){
+void
+SegmentString::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
+{
 	for (int i=0; i<li->getIntersectionNum(); i++) {
 		addIntersection(li,segmentIndex, geomIndex, i);
 	}
@@ -88,7 +110,9 @@ void SegmentString::addIntersections(LineIntersector *li, int segmentIndex, int 
 * of the SegmentString is normalized
 * to use the higher of the two possible segmentIndexes
 */
-void SegmentString::addIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex){
+void
+SegmentString::addIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex)
+{
 	Coordinate* intPt=new Coordinate(li->getIntersection(intIndex));
 	double dist=li->getEdgeDistance(geomIndex, intIndex);
 	addIntersection(*intPt, segmentIndex, dist);
@@ -123,12 +147,16 @@ void SegmentString::OLDaddIntersection(LineIntersector *li, int segmentIndex, in
 * An intersection that falls exactly on a vertex of the edge is normalized
 * to use the higher of the two possible segmentIndexes
 */
-void SegmentString::addIntersection(Coordinate& intPt, int segmentIndex){
+void
+SegmentString::addIntersection(Coordinate& intPt, int segmentIndex)
+{
 	double dist=LineIntersector::computeEdgeDistance(intPt,pts->getAt(segmentIndex),pts->getAt(segmentIndex + 1));
 	addIntersection(intPt, segmentIndex, dist);
 }
 
-void SegmentString::addIntersection(Coordinate& intPt, int segmentIndex, double dist){
+void
+SegmentString::addIntersection(Coordinate& intPt, int segmentIndex, double dist)
+{
 	int normalizedSegmentIndex = segmentIndex;
 	//Debug.println("edge intpt: " + intPt + " dist: " + dist);
 	// normalize the intersection point location

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/05/06 15:54:15  strk
+ * SegmentNodeList keeps track of created splitEdges for later destruction.
+ * SegmentString constructor copies given Label.
+ * Buffer operation does no more leaks for doc/example.cpp
+ *
  * Revision 1.6  2004/05/05 13:08:01  strk
  * Leaks fixed, explicit allocations/deallocations reduced.
  *
@@ -95,6 +100,7 @@ OffsetCurveSetBuilder::addCurve(const CoordinateList *coord, int leftLoc, int ri
 	// add the edge for a coordinate list which is a raw offset curve
 	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
 	SegmentString *e=new SegmentString(coord,newlabel);
+	delete newlabel;
 	curveList->push_back(e);
 }
 

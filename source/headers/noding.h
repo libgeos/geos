@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/05/06 15:54:15  strk
+ * SegmentNodeList keeps track of created splitEdges for later destruction.
+ * SegmentString constructor copies given Label.
+ * Buffer operation does no more leaks for doc/example.cpp
+ *
  * Revision 1.8  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -91,8 +96,13 @@ class SegmentString;
 class SegmentNodeList {
 private:
 	set<SegmentNode*,SegmentNodeLT> *nodes;
-	SegmentString *edge;  // the parent edge
+	const SegmentString *edge;  // the parent edge
 	vector<SegmentNode*> *sortedNodes;
+
+	/*
+	 * This vector is here to keep track of created splitEdges
+	 */
+	vector<SegmentString*> splitEdges;
 	void checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges);
 	/**
 	* Create a new "split edge" with the section of points between
@@ -101,7 +111,7 @@ private:
 	*/
 	SegmentString* createSplitEdge(SegmentNode *ei0, SegmentNode *ei1);
 public:
-	SegmentNodeList(SegmentString *newEdge);
+	SegmentNodeList(const SegmentString *newEdge);
 	virtual ~SegmentNodeList();
 	/**
 	* Adds an intersection into the list, if it isn't already there.
@@ -139,19 +149,19 @@ class SegmentString {
 private:
 	SegmentNodeList *eiList;
 	const CoordinateList *pts;
-	Label* context;
+	const Label* context;
 	bool isIsolatedVar;
 public:
-	SegmentString(const CoordinateList *newPts, Label* newContext);
+	SegmentString(const CoordinateList *newPts, const Label* newContext);
 	virtual ~SegmentString();
-	Label* getContext();
-	SegmentNodeList* getIntersectionList();
-	int size();
-	const Coordinate& getCoordinate(int i);
-	const CoordinateList* getCoordinates();
+	const Label* getContext() const;
+	SegmentNodeList* getIntersectionList() const;
+	int size() const;
+	const Coordinate& getCoordinate(int i) const;
+	const CoordinateList* getCoordinates() const;
 	void setIsolated(bool isIsolated);
-	bool isIsolated();
-	bool isClosed();
+	bool isIsolated() const;
+	bool isClosed() const;
 	/**
 	* Adds EdgeIntersections for one or both
 	* intersections found for a segment of an edge to the edge intersection list.

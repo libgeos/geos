@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/06 15:54:15  strk
+ * SegmentNodeList keeps track of created splitEdges for later destruction.
+ * SegmentString constructor copies given Label.
+ * Buffer operation does no more leaks for doc/example.cpp
+ *
  * Revision 1.3  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -29,7 +34,8 @@
 #include "../headers/noding.h"
 
 namespace geos {
-SegmentNodeList::SegmentNodeList(SegmentString *newEdge) {
+SegmentNodeList::SegmentNodeList(const SegmentString *newEdge)
+{
 	nodes=new set<SegmentNode*,SegmentNodeLT>();
 	edge=newEdge;
 }
@@ -38,6 +44,9 @@ SegmentNodeList::~SegmentNodeList() {
 	set<SegmentNode *, SegmentNodeLT>::iterator i;
 	for(i=nodes->begin(); i != nodes->end(); i++) delete *i;
 	delete nodes;
+
+	for(int i=0; i<splitEdges.size(); i++)
+		delete splitEdges[i];
 }
 
 /**
@@ -130,6 +139,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 	if (useIntPt1) 	pts->setAt(*(ei1->coord),ipt++);
 	SegmentString *ret = new SegmentString(pts,edge->getContext());
+	splitEdges.push_back(ret);
 	//delete pts;
 	return ret;
 }
