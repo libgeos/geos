@@ -11,217 +11,6 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.28  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.27  2004/09/16 09:48:06  strk
- * Added Envelope::equals
- *
- * Revision 1.26  2004/09/13 12:39:14  strk
- * Made Point and MultiPoint subject to Validity tests.
- *
- * Revision 1.25  2004/09/07 08:29:57  strk
- * Fixed doxygen malformed comment for Coordinate class
- *
- * Revision 1.24  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.23  2004/07/26 16:35:19  strk
- * Removed dangling MultiPoint::isClosed() method definition.
- *
- * Revision 1.22  2004/07/22 16:58:01  strk
- * runtime version extractor functions split. geos::version() is now
- * geos::geosversion() and geos::jtsport()
- *
- * Revision 1.21  2004/07/22 08:45:50  strk
- * Documentation updates, memory leaks fixed.
- *
- * Revision 1.20  2004/07/22 07:19:21  strk
- * Changed getCoordinatesRO description.
- *
- * Revision 1.19  2004/07/22 07:04:49  strk
- * Documented missing geometry functions.
- *
- * Revision 1.18  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.17  2004/07/20 08:34:18  strk
- * Fixed a bug in opDistance.h.
- * Removed doxygen tags from obsoleted CoordinateList.cpp.
- * Got doxygen to run with no warnings.
- *
- * Revision 1.16  2004/07/19 13:19:30  strk
- * Documentation fixes
- *
- * Revision 1.15  2004/07/19 10:34:06  strk
- * removed doxygen documentation of removed feature
- *
- * Revision 1.14  2004/07/17 09:18:54  strk
- * Added geos::version()
- *
- * Revision 1.13  2004/07/14 21:17:10  strk
- * added inequality operator for Coordinate
- *
- * Revision 1.12  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.11  2004/07/12 19:16:39  strk
- * Commented out CoordinateList class definition.
- *
- * Revision 1.10  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.9  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.8  2004/07/06 17:58:22  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.7  2004/07/05 19:40:48  strk
- * Added GeometryFactory::destroyGeometry(Geometry *)
- *
- * Revision 1.6  2004/07/05 15:20:18  strk
- * Documentation again.
- *
- * Revision 1.5  2004/07/05 14:23:03  strk
- * More documentation cleanups.
- *
- * Revision 1.4  2004/07/05 10:50:21  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.3  2004/07/03 12:51:37  strk
- * Documentation cleanups for DoxyGen.
- *
- * Revision 1.2  2004/07/02 14:27:32  strk
- * Added deep-copy / take-ownerhship for Point type.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.68  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.67  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.66  2004/06/28 21:11:43  strk
- * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
- * Added holes argument check in Polygon.cpp.
- *
- * Revision 1.65  2004/06/15 20:07:51  strk
- * GeometryCollections constructors make a deep copy of Geometry vector argument.
- *
- * Revision 1.64  2004/05/19 13:18:24  strk
- * made CoordinateSequence::toString() a const member function
- *
- * Revision 1.63  2004/05/17 21:14:47  ybychkov
- * JavaDoc updated
- *
- * Revision 1.62  2004/05/17 21:03:56  ybychkov
- * JavaDoc updated
- *
- * Revision 1.61  2004/05/14 12:14:08  strk
- * const correctness
- *
- * Revision 1.60  2004/05/07 09:05:13  strk
- * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateSequence.
- *
- * Revision 1.59  2004/05/05 10:54:48  strk
- * Removed some private static heap explicit allocation, less cleanup done by
- * the unloader.
- *
- * Revision 1.58  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.57  2004/04/16 08:35:52  strk
- * Memory leaks fixed and const correctness applied for Point class.
- *
- * Revision 1.56  2004/04/16 07:42:06  strk
- * PrecisionModel::Type made an enum instead of a Type.
- *
- * Revision 1.55  2004/04/15 14:00:30  strk
- * Added new cleanup to Unload::Release
- *
- * Revision 1.54  2004/04/14 13:56:26  strk
- * All geometries returned by {from,to}InternalGeometry calls are
- * now deleted after use (unless NOT new).
- * Some 'commented' throw specifications in geom.h
- *
- * Revision 1.53  2004/04/14 07:29:43  strk
- * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
- *
- * Revision 1.52  2004/04/13 08:15:51  strk
- * Changed all 'long long' with int64.
- * Changed all 'long long' constants to end with two Ls.
- *
- * Revision 1.51  2004/04/10 22:41:24  ybychkov
- * "precision" upgraded to JTS 1.4
- *
- * Revision 1.50  2004/04/07 06:55:50  ybychkov
- * "operation/linemerge" ported from JTS 1.4
- *
- * Revision 1.49  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- * Revision 1.48  2004/04/01 10:44:34  ybychkov
- * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
- *
- * Revision 1.47  2004/03/31 07:50:37  ybychkov
- * "geom" partially upgraded to JTS 1.4
- *
- * Revision 1.46  2004/03/29 06:59:24  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.45  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.44  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.43  2004/03/01 22:04:59  strk
- * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
- *
- * Revision 1.42  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_H
@@ -1178,7 +967,8 @@ public:
 	bool equals(const Envelope* other) const;
 	string toString(void) const;
 	double distance(const Envelope* env) const;
-    int hashCode() const;
+	int hashCode() const;
+
 private:
 	static double distance(double x0,double y0,double x1,double y1);
 	double minx;	/// the minimum x-coordinate
@@ -2582,5 +2372,40 @@ public:
 	*/
 	Coordinate* inCentre();
 };
-}
+
+} // namespace geos
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.29  2004/11/08 10:57:42  strk
+ * Moved Log lines at the bottom, and cut oldest
+ *
+ * Revision 1.28  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.27  2004/09/16 09:48:06  strk
+ * Added Envelope::equals
+ *
+ * Revision 1.26  2004/09/13 12:39:14  strk
+ * Made Point and MultiPoint subject to Validity tests.
+ *
+ * Revision 1.25  2004/09/07 08:29:57  strk
+ * Fixed doxygen malformed comment for Coordinate class
+ *
+ * Revision 1.24  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.23  2004/07/26 16:35:19  strk
+ * Removed dangling MultiPoint::isClosed() method definition.
+ *
+ * Revision 1.22  2004/07/22 16:58:01  strk
+ * runtime version extractor functions split. geos::version() is now
+ * geos::geosversion() and geos::jtsport()
+ *
+ **********************************************************************/
