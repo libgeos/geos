@@ -1,3 +1,5 @@
+- polygonizer still failing (Envelope comparison again ?)
+
 - Add distinct binary predicates test support in XMLTester
 
 - IsValidTest.cpp in source/test ?
