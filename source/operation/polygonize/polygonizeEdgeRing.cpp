@@ -152,11 +152,11 @@ polygonizeEdgeRing::add(const planarDirectedEdge *de){
 }
 
 /**
-* Tests whether this ring is a hole.
-* Due to the way the edges in the polyongization graph are linked,
-* a ring is a hole if it is oriented counter-clockwise.
-* @return <code>true</code> if this ring is a hole
-*/
+ * Tests whether this ring is a hole.
+ * Due to the way the edges in the polyongization graph are linked,
+ * a ring is a hole if it is oriented counter-clockwise.
+ * @return <code>true</code> if this ring is a hole
+ */
 bool
 polygonizeEdgeRing::isHole(){
 	getRingInternal();
@@ -294,6 +294,9 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/10/27 13:57:07  strk
+ * Added some debugging lines (disabled by default)
+ *
  * Revision 1.7  2004/10/26 16:09:21  strk
  * Some more intentation and envelope equality check fix.
  *

@@ -16,6 +16,8 @@
 #include <geos/opPolygonize.h>
 #include <typeinfo>
 
+//#define DEBUG 1
+
 namespace geos {
 
 Polygonizer::LineStringAdder::LineStringAdder(Polygonizer *p) {
@@ -169,12 +171,23 @@ Polygonizer::polygonize()
 	dangles=graph->deleteDangles();
 	cutEdges=graph->deleteCutEdges();
 	vector<polygonizeEdgeRing*> *edgeRingList=graph->getEdgeRings();
+#if DEBUG
+	cerr<<"Polygonizer::polygonize(): "<<edgeRingList->size()<<" edgeRings in graph"<<endl;
+#endif
 	vector<polygonizeEdgeRing*> *validEdgeRingList=new vector<polygonizeEdgeRing*>();
 	invalidRingLines=new vector<LineString*>();
 	findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
+#if DEBUG
+	cerr<<"                           "<<validEdgeRingList->size()<<" valid"<<endl;
+	cerr<<"                           "<<invalidRingLines->size()<<" invalid"<<endl;
+#endif
 	delete edgeRingList;
 
 	findShellsAndHoles(validEdgeRingList);
+#if DEBUG
+	cerr<<"                           "<<holeList->size()<<" holes"<<endl;
+	cerr<<"                           "<<shellList->size()<<" shells"<<endl;
+#endif
 
 	assignHolesToShells(holeList, shellList);
 
@@ -199,7 +212,9 @@ Polygonizer::findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<po
 	}
 }
 
-void Polygonizer::findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList) {
+void
+Polygonizer::findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList)
+{
 	holeList=new vector<polygonizeEdgeRing*>();
 	shellList=new vector<polygonizeEdgeRing*>();
 	for (int i=0;i<(int)edgeRingList->size();i++) {
@@ -234,6 +249,9 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER, vector<polygonizeEdge
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/27 13:57:07  strk
+ * Added some debugging lines (disabled by default)
+ *
  * Revision 1.4  2004/10/26 16:09:21  strk
  * Some more intentation and envelope equality check fix.
  *
