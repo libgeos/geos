@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.46  2004/12/30 10:14:51  strk
+ * never return LinearRing or MultiLinearRing from getBoundary
+ *
  * Revision 1.45  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
@@ -251,15 +254,15 @@ Geometry* Polygon::getBoundary() const {
 	}
 	if ( ! holes->size() )
 	{
-		return shell->clone();
+		return new LineString(*shell);
 	}
 
-	vector<Geometry *> rings(holes->size()+1);
-	rings[0]=shell;
+	vector<Geometry *> *rings = new vector<Geometry *>(holes->size()+1);
+	(*rings)[0]=new LineString(*shell);
 	for (unsigned int i=0; i<holes->size(); i++) {
-		rings[i + 1] = (*holes)[i];
+		(*rings)[i + 1] = new LineString((const LineString &)*(*holes)[i]);
 	}
-	MultiLineString *ret =getFactory()->createMultiLineString(rings);
+	MultiLineString *ret = getFactory()->createMultiLineString(rings);
 	return ret;
 }
 
