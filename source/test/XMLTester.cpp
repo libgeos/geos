@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.41  2004/05/18 13:49:18  strk
+ * Output made more neat (geometry B is not printed if not existent).
+ * Added support for buffer tests.
+ *
  * Revision 1.40  2004/05/17 12:53:52  strk
  * Expected result string trimmed for blanks
  *
@@ -168,6 +172,7 @@ try{
 			cout << "Case #" << caseCount << endl;
 			cout << "\t" << desc << endl;
 		}
+
 		xml.FindChildElem("a");
 		geomAin=xml.GetChildData();
 		gA=r->read(geomAin);
@@ -180,16 +185,18 @@ try{
 				cout << "\t\tOut:" << geomAout << endl;
 		}
 
-		xml.FindChildElem("b");
-		geomBin=xml.GetChildData();
-		gB=r->read(geomBin);
-		geomBout=w->write(gB);
-		if (out &(GEOM_B_IN | GEOM_B_OUT)) {
-			cout << "\tGeometry B" << endl;
-			if (out & GEOM_B_IN)
-				cout << "\t\tIn:" << geomBin << endl;
-			if (out & GEOM_B_OUT)
-				cout << "\t\tOut:" << geomBout << endl;
+		if ( xml.FindChildElem("b") )
+		{
+			geomBin=xml.GetChildData();
+			gB=r->read(geomBin);
+			geomBout=w->write(gB);
+			if (out &(GEOM_B_IN | GEOM_B_OUT)) {
+				cout << "\tGeometry B" << endl;
+				if (out & GEOM_B_IN)
+					cout << "\t\tIn:" << geomBin << endl;
+				if (out & GEOM_B_OUT)
+					cout << "\t\tOut:" << geomBout << endl;
+			}
 		}
 
 		testCount=0;
@@ -400,11 +407,19 @@ try{
 					delete gRes;
 					delete gRealRes;
 				} else if (opName=="buffer") {
-					cout << "\t\tOperation '" << opName << "(10.0)'" << endl;
-					Geometry *gRealRes=gA->buffer(10.0);
+					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->buffer(atof(opSig.c_str()));
 					gRealRes->normalize();
 					if (out & TEST_RESULT) {
-						cout << "\t\tResult: buffer='" << gRealRes->toString() << "'"  <<endl;
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: buffer='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: buffer='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
 					}
 					delete gRealRes;
 				} else if (opName=="getInteriorPoint") {
