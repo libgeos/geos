@@ -1,5 +1,8 @@
 # $Id$
 # $Log$
+# Revision 1.2  2004/12/04 01:20:20  frank
+# removed dll delete
+#
 # Revision 1.1  2004/12/03 16:25:47  frank
 # New
 #
@@ -225,7 +228,6 @@ headers/geos/platform.h: headers/geos/platform.h.vc
 clean:
 	del $(OBJ)
 	del $(LIBNAME)
-	del *.dll
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \
 		bigtest\GeometryTestFactory.obj \
