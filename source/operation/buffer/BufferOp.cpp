@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/04/16 10:00:08  strk
+ * Memory leak fixed.
+ *
  * Revision 1.18  2004/04/14 09:11:57  strk
  * endCapStyle was never set in BufferOp contructor
  *
@@ -69,6 +72,7 @@ double BufferOp::precisionScaleFactor(Geometry *g,double distance,int maxPrecisi
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry* geomBuf=gBuf->getResultGeometry(distance);
+	delete gBuf;
 	return geomBuf;
 }
 
@@ -174,8 +178,8 @@ void BufferOp::computeGeometry(){
 }
 
 void BufferOp::bufferOriginalPrecision() {
+	BufferBuilder *bufBuilder=new BufferBuilder();
 	try {
-		BufferBuilder *bufBuilder=new BufferBuilder();
 		bufBuilder->setQuadrantSegments(quadrantSegments);
 		bufBuilder->setEndCapStyle(endCapStyle);
 		resultGeometry=bufBuilder->buffer(argGeom, distance);
@@ -183,6 +187,9 @@ void BufferOp::bufferOriginalPrecision() {
 		saveException=ex;
 		// don't propagate the exception - it will be detected by fact that resultGeometry is null
 	}
+	// Deleting the BufferBuilder gives a segfault
+	// at edgeList deletion time... must check why
+	//delete bufBuilder;
 }
 
 void BufferOp::bufferFixedPrecision(int precisionDigits) {
