@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/05/18 00:02:37  ybychkov
+ * IsValidOp::checkShellNotNested() bugfix from JTS 1.4.1 (not released yet) has been added.
+ *
  * Revision 1.14  2004/03/29 06:59:24  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -355,7 +358,7 @@ private:
 	/**
 	* This routine checks to see if a shell is properly contained in a hole.
 	*/
-	void checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph);
+	const Coordinate& checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph);
 	void checkConnectedInteriors(GeometryGraph *graph);
 };
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/05/18 00:02:37  ybychkov
+ * IsValidOp::checkShellNotNested() bugfix from JTS 1.4.1 (not released yet) has been added.
+ *
  * Revision 1.16  2004/03/29 06:59:25  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -431,17 +434,32 @@ void IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,Ge
 			shellPt);
 		return;
 	}
+	
+    /**
+     * Check if the shell is inside one of the holes.
+     * This is the case if one of the calls to checkShellInsideHole
+     * returns a null coordinate.
+     * Otherwise, the shell is not properly contained in a hole, which is an error.
+     */
+	Coordinate& badNestedPt=Coordinate::getNull();
 	for(int i=0;i<p->getNumInteriorRing();i++) {
 		LinearRing *hole=(LinearRing*) p->getInteriorRingN(i);
-		checkShellInsideHole(shell,hole,graph);
-		if (validErr!=NULL) return;
+		badNestedPt=checkShellInsideHole(shell,hole,graph);
+		if (badNestedPt==Coordinate::getNull()) return;
 	}
+	validErr=new TopologyValidationError(TopologyValidationError::NESTED_SHELLS,badNestedPt);
 }
 
 /**
 * This routine checks to see if a shell is properly contained in a hole.
+* It assumes that the edges of the shell and hole do not
+* properly intersect.
+*
+* @return <code>null</code> if the shell is properly contained, or
+*   a Coordinate which is not inside the hole if it is not
+*
 */
-void IsValidOp::checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph) {
+const Coordinate& IsValidOp::checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph) {
 	const CoordinateList *shellPts=shell->getCoordinatesRO();
 	const CoordinateList *holePts=hole->getCoordinatesRO();
 	// TODO: improve performance of this - by sorting pointlists for instance?
@@ -450,23 +468,19 @@ void IsValidOp::checkShellInsideHole(const LinearRing *shell,const LinearRing *h
 	if (!(shellPt==Coordinate::getNull())) {
 		bool insideHole=CGAlgorithms::isPointInRing(shellPt,holePts);
 		if (!insideHole)
-			validErr=new TopologyValidationError(
-				TopologyValidationError::NESTED_SHELLS,
-				shellPt);
-		return;
+			return shellPt;
 	}
 	const Coordinate& holePt=findPtNotNode(holePts,shell,graph);
 	// if point is on hole but not shell, check that the hole is outside the shell
 	if(!(holePt==Coordinate::getNull())) {
 		bool insideShell=CGAlgorithms::isPointInRing(holePt,shellPts);
 		if (insideShell) {
-			validErr=new TopologyValidationError(
-				TopologyValidationError::NESTED_SHELLS,
-				holePt);
+			return holePt;
 		}
-		return;
+		return Coordinate::getNull();
 	}
 	Assert::shouldNeverReachHere("points in shell and hole appear to be equal");
+	return Coordinate::getNull();
 }
 
 void IsValidOp::checkConnectedInteriors(GeometryGraph *graph) {
