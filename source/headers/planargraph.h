@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/16 08:52:52  strk
+ * Unload::Release final delete (static heap allocations should be gone now)
+ *
  * Revision 1.2  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  *
@@ -253,6 +256,7 @@ public:
  *
  */
 class planarDirectedEdge: public planarGraphComponent {
+friend class Unload;
 protected:
 	static const CGAlgorithms* cga;
 	planarEdge* parentEdge;

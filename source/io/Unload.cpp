@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/04/16 08:52:52  strk
+ * Unload::Release final delete (static heap allocations should be gone now)
+ *
  * Revision 1.8  2004/04/16 07:42:06  strk
  * PrecisionModel::Type made an enum instead of a Type.
  *
@@ -48,6 +51,7 @@
 #include "../headers/opRelate.h"
 #include "../headers/indexQuadtree.h"
 #include "../headers/opBuffer.h"
+#include "../headers/planargraph.h"
 
 namespace geos {
 
@@ -64,6 +68,7 @@ void Unload::Release()
 	delete CoordinateListFactory::internalFactory;
 	delete Geometry::geometryChangedFilter;
 	delete PlanarGraph::cga;
+	delete planarDirectedEdge::cga;
 	delete GeometryGraphOperation::cga;
 	delete GeometryGraphOperation::li;
 	delete RelateComputer::li;
