@@ -232,7 +232,7 @@ struct EdgeEndLT {
 	}
 };
 
-class GeometryGraph{};
+class GeometryGraph;
 class EdgeEndStar {
 public:
 	EdgeEndStar();
@@ -495,7 +495,6 @@ public:
 	//Not used 
 	//string debugPrint();
 	//string debugPrintln();
-
 protected:
 	vector<Edge*> edges;
 	NodeMap *nodes;
@@ -505,5 +504,66 @@ private:
 	bool matchInSameDirection(Coordinate p0,Coordinate p1,Coordinate ep0,Coordinate ep1);
 };
 
+struct LineStringLT {
+	bool operator()(LineString *ls1, LineString *ls2) const {
+		return ls1->compareTo(ls2)<0;
+	}
+};
+
+class GeometryGraph: public PlanarGraph {
+public:
+	static bool isInBoundary(int boundaryCount);
+	static int determineBoundary(int boundaryCount);
+	GeometryGraph();
+	GeometryGraph(int newArgIndex, Geometry *newParentGeom);
+	GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel, int newSRID);
+	PrecisionModel* getPrecisionModel();
+	int getSRID();
+	Geometry* getGeometry();
+	vector<Node*>* getBoundaryNodes();
+	CoordinateList getBoundaryPoints();
+	Edge* findEdge(LineString *line);
+	void computeSplitEdges(vector<Edge*> *edgelist);
+	void addEdge(Edge *e);
+	void addPoint(Coordinate pt);
+	SegmentIntersector* computeSelfNodes(LineIntersector *li);
+	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,LineIntersector *li,bool includeProper);
+private:
+	Geometry *parentGeom;
+	// the precision model of the Geometry represented by this graph
+	PrecisionModel *precisionModel;
+	int SRID;
+	/**
+	* The lineEdgeMap is a map of the linestring components of the
+	* parentGeometry to the edges which are derived from them.
+	* This is used to efficiently perform findEdge queries
+	*/
+	map<LineString*,Edge*,LineStringLT> lineEdgeMap;
+	PrecisionModel *newPM;
+	/**
+	* If this flag is true, the Boundary Determination Rule will used when deciding
+	* whether nodes are in the boundary or not
+	*/
+	bool useBoundaryDeterminationRule;
+	int argIndex;  // the index of this geometry as an argument to a spatial function (used for labelling)
+	vector<Node*> *boundaryNodes;
+	// various options for computing intersections, from slowest to fastest
+	//private EdgeSetIntersector esi = new SimpleEdgeSetIntersector();
+	//private EdgeSetIntersector esi = new MonotoneChainIntersector();
+	//private EdgeSetIntersector esi = new NonReversingChainIntersector();
+	//private EdgeSetIntersector esi = new SimpleSweepLineIntersector();
+	//private EdgeSetIntersector esi = new MCSweepLineIntersector();
+	EdgeSetIntersector *esi;
+	void add(Geometry *g);
+	void addCollection(GeometryCollection *gc);
+	void addPoint(Point *p);
+	void addPolygonRing(LinearRing *lr,int cwLeft,int cwRight);
+	void addPolygon(Polygon *p);
+	void addLineString(LineString *line);
+	void insertPoint(int argIndex,Coordinate coord,int onLocation);
+	void insertBoundaryPoint(int argIndex,Coordinate coord);
+	void addSelfIntersectionNodes(int argIndex);
+	void addSelfIntersectionNode(int argIndex,Coordinate coord,int loc);
+};
 //Operators
 bool operator==(Edge a, Edge b);
