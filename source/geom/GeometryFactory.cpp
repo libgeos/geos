@@ -1,6 +1,10 @@
 /*
 * $Log$
+* Revision 1.27  2003/10/14 15:58:51  strk
+* Useless vector<Geometry *> leaking allocations removed
+*
 * Revision 1.26  2003/10/11 01:56:08  strk
+*
 * Code base padded with 'const' keywords ;)
 *
 * Revision 1.25  2003/10/09 15:35:13  strk
@@ -103,7 +107,9 @@ MultiPoint* GeometryFactory::createMultiPoint(CoordinateList* coordinates) {
 		pts->push_back(pt);
 	}
 	delete coordinates;
-	return createMultiPoint(pts);
+	MultiPoint *mp = createMultiPoint(pts);
+	delete pts;
+	return mp;
 }
 
 Polygon* GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes) {
@@ -134,16 +140,16 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 		return createGeometryCollection(NULL);
 	}
 	if (isHeterogeneous) {
-		return createGeometryCollection(new vector<Geometry*>(*geoms));
+		return createGeometryCollection(geoms);
 	}
 	Geometry *geom0=(*geoms)[0];
 	if (isCollection) {
 		if (typeid(*geom0)==typeid(Polygon)) {
-			return createMultiPolygon(new vector<Geometry*>(*geoms));
+			return createMultiPolygon(geoms);
 		} else if (typeid(*geom0)==typeid(LineString)) {
-			return createMultiLineString(new vector<Geometry*>(*geoms));
+			return createMultiLineString(geoms);
 		} else if (typeid(*geom0)==typeid(Point)) {
-			return createMultiPoint(new vector<Geometry*>(*geoms));
+			return createMultiPoint(geoms);
 		}
 		Assert::shouldNeverReachHere();
 	}
