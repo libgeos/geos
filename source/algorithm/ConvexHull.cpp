@@ -81,6 +81,7 @@ CoordinateList* ConvexHull::reduce(CoordinateList *pts) {
 //!!!Note to self: this might not work properly because of sorting.
 
 	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList(bigPoly);
+	delete bigPoly;
 	for(int i=0;i<pts->getSize();i++) {
 		if (pointLocator->locate(pts->getAt(i),bQ)==Location::EXTERIOR) {
 			cl->add(pts->getAt(i));
@@ -108,6 +109,7 @@ CoordinateList* ConvexHull::preSort(CoordinateList *pts) {
 	return pts;
 }
 
+// returns a newly allocated CoordinateList object
 CoordinateList* ConvexHull::grahamScan(CoordinateList *c) {
 	Coordinate p;
 	Coordinate p1;
@@ -240,14 +242,17 @@ BigQuad* ConvexHull::makeBigQuad(CoordinateList *pts) {
 */
 Geometry* ConvexHull::lineOrPolygon(CoordinateList *newCoordinates) {
 	CoordinateList *coordinates=cleanRing(newCoordinates);
-	if (coordinates->getSize()==3) {
+	if (coordinates->getSize()==3) { // shouldn't this be 2 ??
 		CoordinateList *cl1=CoordinateListFactory::internalFactory->createCoordinateList();
 		cl1->add(coordinates->getAt(0));
 		cl1->add(coordinates->getAt(1));
 		delete coordinates;
-		return new LineString(cl1,geometry->getPrecisionModel(),geometry->getSRID());
+		LineString *ret = new LineString(cl1,geometry->getPrecisionModel(),geometry->getSRID());
+		delete cl1;
+		return ret;
 	}
 	LinearRing *linearRing=new LinearRing(coordinates,geometry->getPrecisionModel(),geometry->getSRID());
+	delete coordinates;
 	return new Polygon(linearRing,geometry->getPrecisionModel(),geometry->getSRID());
 }
 

@@ -23,6 +23,19 @@ using namespace geos;
 // cached inside a GeometryFactory object.
 GeometryFactory *global_factory;
 
+// This function will print given geometries in WKT
+// format to stdout.
+void
+wkt_print_geoms(int numgeoms, Geometry **geoms)
+{
+	// WKT-print created geometries
+	WKTWriter *wkt = new WKTWriter();
+	for (int i=0; i<numgeoms; i++) {
+		cout<<wkt->write(geoms[i])<<endl;
+	}
+	delete wkt;
+}
+
 // This function will create a LinearRing
 // geometry rapresenting a square with the given origin 
 // and side 
@@ -139,6 +152,10 @@ void do_all()
 	// and SRID.
 	global_factory = new GeometryFactory();
 
+	/////////////////////////////////////////////
+	// BASIC GEOMETRY CREATION
+	/////////////////////////////////////////////
+
 	// Read function bodies to see the magic behind them
 	geoms[0] = create_square_linearring(0,0,100);
 	geoms[1] = create_square_polygon(0,200,300);
@@ -151,16 +168,26 @@ void do_all()
 			new LinearRing(*((LinearRing *)geoms[0])),
 			new Polygon(*((Polygon *)geoms[1])));
 
-	// WKT-print created geometries
-	WKTWriter *wkt = new WKTWriter();
-	for (int i=0; i<numgeoms; i++) {
-		cout<<wkt->write(geoms[i])<<endl;
-	}
-	delete wkt;
+	// Print all geoms.
+	wkt_print_geoms(numgeoms, geoms);
 
-	// Delete created geometries
+	/////////////////////////////////////////////
+	// CONVEX HULL
+	/////////////////////////////////////////////
+	
+	// Make convex hulls of geometries
+	Geometry *hulls[numgeoms];
+	for (int i=0; i<numgeoms; i++) {
+		hulls[i] = geoms[i]->convexHull();
+	}
+
+	// Print all convex hulls
+	wkt_print_geoms(numgeoms, geoms);
+
+	// Delete created geometries and hulls
 	for (int i=0; i<numgeoms; i++) {
 		delete geoms[i];
+		delete hulls[i];
 	}
 
 	delete global_factory;
