@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/05 10:50:21  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.3  2004/07/03 12:51:37  strk
  * Documentation cleanups for DoxyGen.
  *
@@ -563,7 +573,7 @@ private:
  * this GeometryFactory to create new Geometries. All of these new Geometries
  * will use your CoordinateList implementation.
  * <p>
- * This class is equivalent to JTS CoordinateList.
+ * This class is equivalent to JTS CoordinateSequence.
  */
 class CoordinateList {
 public:
@@ -576,6 +586,8 @@ public:
 	virtual	vector<Coordinate>* toVector() const=0;
 	virtual	string toString() const=0;
 	virtual	void setPoints(const vector<Coordinate> &v)=0;
+	/// substitutes copy constructor
+	virtual CoordinateList *clone() const=0;
 	bool hasRepeatedPoints() const;
 	const Coordinate* minCoordinate() const;
 	/**
@@ -634,6 +646,7 @@ public:
 	BasicCoordinateList(const BasicCoordinateList &cl);
 	BasicCoordinateList(const CoordinateList *c);
 	virtual ~BasicCoordinateList();
+	CoordinateList *clone() const;
 	bool isEmpty() const;
 	void add(const Coordinate& c);
 	int getSize() const;
@@ -661,6 +674,7 @@ public:
 	PointCoordinateList(const PointCoordinateList &cl);
 	PointCoordinateList(const CoordinateList *c);
 	virtual ~PointCoordinateList();
+	CoordinateList *clone() const;
 	bool isEmpty() const;
 	void add(const Coordinate& c);
 	void add(point_3d p);
@@ -737,6 +751,8 @@ public:
    virtual void filter_ro(const Coordinate* coord)=0;
 };
 
+class Geometry;
+
 /**
  *  <code>Geometry</code> classes support the concept of applying
  *  a <code>GeometryComponentFilter</code>
@@ -750,7 +766,6 @@ public:
  *  is an example of the Gang-of-Four Visitor pattern.
  *
  */
-class Geometry;
 class GeometryComponentFilter {
 public:
 	/**
@@ -859,8 +874,9 @@ class Point;
 class GeometryFactory;
 
 /**
- * \class Geometry geom.h geos/geom.h
- * Basic implementation of <code>Geometry</code>. <P>
+ * \class Geometry geom.h geos.h
+ * Basic implementation of Geometry,
+ * constructed by GeometryFactory.
  *
  *  <code>clone</code> returns a deep copy of the object.
  *
@@ -941,18 +957,18 @@ class GeometryFactory;
 class Geometry{
 friend class Unload;
 public:
-	/** Default constructor, will create a default GeometryFactory */
+	/* Default constructor, will create a default GeometryFactory */
 	Geometry();
 
 	Geometry(const Geometry &geom);
 
-	/** Will copy passed GeometryFactory */
+	/* Will copy passed GeometryFactory */
 	Geometry(const GeometryFactory *newFactory);
 
 	/** Destroy Geometry and all components */
 	virtual ~Geometry();
 
-	/** Replaces copy constructor. Abstract method. */
+	/** Replaces copy constructor, abstract method. */
 	virtual Geometry* clone() const=0;
 
 	/**
@@ -1035,11 +1051,13 @@ public:
 	virtual Geometry* getBoundary() const=0; //Abstract
 	virtual int getBoundaryDimension() const=0; //Abstract
 
+	/// Returns the Envelope of this geometry
 	virtual Geometry* getEnvelope() const;
-	virtual Envelope* getEnvelopeInternal() const;
-	virtual bool disjoint(const Geometry *g) const;
 
-	virtual bool touches(const Geometry *g) const;
+	virtual Envelope* getEnvelopeInternal() const;
+
+	virtual bool disjoint(const Geometry *other) const;
+	virtual bool touches(const Geometry *other) const;
 	virtual bool intersects(const Geometry *g) const;
 	virtual bool crosses(const Geometry *g) const;
 	virtual bool within(const Geometry *g) const;
@@ -1454,15 +1472,6 @@ public:
 	*/  
 	Point(CoordinateList *newCoords, const GeometryFactory *factory);
 
-	/**
-	* Creates a Point using the given CoordinateList (must have 1 element)
-	*
-	* @param  fromCoords
-	*	contains the single coordinate on which to base this
-	*	<code>Point</code>. 
-	*/  
-	Point(const CoordinateList &fromCoords, const GeometryFactory *factory);
-
 	Point(const Point &p); 
 	virtual ~Point();
 	Geometry *clone() const;
@@ -1499,7 +1508,7 @@ private:
 };
 
 /**
- * \class LineString geom.h geos/geom.h
+ * \class LineString geom.h geos.h
  * Basic implementation of <code>LineString</code>.
  *
  */
@@ -1514,8 +1523,6 @@ public:
 	/// Constructs a LineString taking ownership the given CoordinateList.
 	LineString(CoordinateList *pts, const GeometryFactory *newFactory);
 
-	/// Constructs a LineString copying the given CoordinateList.
-	LineString(const CoordinateList &pts, const GeometryFactory *newFactory);
 	virtual ~LineString();
 	virtual Geometry *clone() const;
 	virtual CoordinateList* getCoordinates() const;
@@ -1582,24 +1589,16 @@ public:
 	*/
 	LinearRing(const CoordinateList* points, const PrecisionModel* pm, int SRID);
 	/**
-	*  Constructs a <code>LinearRing</code> with the given points.
+	* Constructs a <code>LinearRing</code> with the given points.
 	*
-	*@param  points          points forming a closed and simple linestring, or
+	* @param  points  points forming a closed and simple linestring, or
 	*      <code>null</code> or an empty array to create the empty geometry.
 	*      This array must not contain <code>null</code> elements.
 	*	If not null LinearRing will take ownership of points.
 	*
 	*/
 	LinearRing(CoordinateList* points, const GeometryFactory *newFactory);
-	/**
-	*  Constructs a <code>LinearRing</code> with the given points.
-	*
-	*@param  points          points forming a closed and simple linestring, or
-	*      or an empty array to create the empty geometry.
-	*      This array must not contain <code>null</code> elements.
-	*
-	*/
-	LinearRing(const CoordinateList& points, const GeometryFactory *newFactory);
+
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
@@ -1641,6 +1640,7 @@ public:
 	* @deprecated Use GeometryFactory instead
 	*/
 	Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID);
+
 	/**
 	*  Constructs a <code>Polygon</code> with the given exterior boundary and
 	*  interior boundaries.
@@ -1676,18 +1676,6 @@ public:
 	* Polygon will take ownership of Shell and Holes LinearRings 
 	*/
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const GeometryFactory *newFactory);
-
-	/**
-	* Constructs a <code>Polygon</code> with the given exterior 
-	* and interior boundaries.
-	*
-	* @param  shell     the outer boundary of the new <code>Polygon</code>.
-	*
-	* @param  holes     the <code>LinearRings</code> defining the inner
-	*                   boundaries of the new <code>Polygon</code>
-	*
-	*/
-	Polygon(const LinearRing &newShell, const vector<Geometry *> &newHoles, const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const;
 	CoordinateList* getCoordinates() const;
@@ -1750,20 +1738,6 @@ public:
 	*/
 	MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
 
-	/**
-	* Constructs a <code>MultiPoint</code>.
-	*
-	* @param  fromPoints
-	*	the <code>Point</code>s for this <code>MultiPoint</code>,
-	*	or an empty array to create the empty geometry.
-	*	Elements may be empty <code>Point</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will copy 
-	*	the vector and its elements.
-	*/
-	MultiPoint(const vector<Geometry *> &fromPoints, const GeometryFactory *newFactory);
-
 	virtual ~MultiPoint();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1806,21 +1780,6 @@ public:
 	*/
 	MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *newFactory);
 
-	/**
-	* Constructs a <code>MultiLineString</code>.
-	*
-	* @param  fromLines
-	*	the <code>LineStrings</code>s for this
-	*	<code>MultiLineString</code>, or an empty array
-	*	to create the empty geometry.
-	*	Elements may be empty <code>LineString</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will copy 
-	*	the vector and its elements.
-	*/
-	MultiLineString(const vector<Geometry *> &fromLines, const GeometryFactory *newFactory);
-
 	virtual ~MultiLineString();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1861,22 +1820,6 @@ public:
 	*/
 	MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
-	/**
-	* @param fromPolys
-	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-	*	or an empty array to create the empty geometry.
-	*	Elements may be empty <code>Polygon</code>s, but
-	*	not <code>null</code>s.
-	*	The polygons must conform to the assertions specified in the
-	*	<A HREF="http://www.opengis.org/techno/specs.htm">
-	*	OpenGIS Simple Features Specification for SQL
-	*	</A>.
-	*
-	*	Constructed object will copy 
-	*	the vector and its elements.
-	*/
-	MultiPolygon(const vector<Geometry *> &polygons, const GeometryFactory *newFactory);
-
 	virtual ~MultiPolygon();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1890,7 +1833,7 @@ private:
 };
 
 /**
- * \class GeometryFactory geom.h geos/geom.h
+ * \class GeometryFactory geom.h geos.h
  * Supplies a set of utility methods for building Geometry objects from lists
  * of Coordinates or other Geometry objects.
  *
@@ -1963,261 +1906,75 @@ public:
 	Point* createPoint(const Coordinate& coordinate) const;
 
 	/**
-	* Creates a Point using the given CoordinateList; a null or empty
-	* CoordinateList will create an empty Point. Created Point will
-	* take ownership of coordinates.
+	* Creates a Point taking ownership of the given CoordinateList;
+	* a null or empty CoordinateList will create an empty Point.
 	*/
 	Point* createPoint(CoordinateList *coordinates) const;
 
 	/**
-	* Creates a Point using the given CoordinateList; a null or empty
-	* CoordinateList will create an empty Point. 
+	* Creates a Point with a deep-copy of the given CoordinateList.
 	*/
 	Point* createPoint(const CoordinateList &coordinates) const;
 
-	/**
-	* @param newGeoms
-	*	The <code>Geometry</code>s for this
-	*	<code>GeometryCollection</code>,
-	*	or <code>null</code> or an empty array to
-	*	create the empty geometry.
-	*	Elements may be empty <code>Geometry</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	If construction succeed the created object will take
-	*	ownership of newGeoms vector and elements.
-	*
-	*	If construction	fails "IllegalArgumentException *"
-	*	is thrown and it is your responsibility to delete newGeoms
-	*	vector and content.
-	*/
+	/// Construct a GeometryCollection taking ownership of given arguments
 	GeometryCollection* createGeometryCollection(vector<Geometry *> *newGeoms) const;
 
-	/**
-	* @param fromGeoms
-	*            the <code>Geometry</code>s for this
-	*	     <code>GeometryCollection</code>,
-	*	     Elements may be empty <code>Geometry</code>s,
-	*            but not <code>null</code>s.
-	*	     
-	*            fromGeoms vector and elements will be copied. 
-	*/
-	GeometryCollection* createGeometryCollection(const vector<Geometry *> &fromGeoms) const;
+	/// Constructs a GeometryCollection with a deep-copy of args
+	GeometryCollection* createGeometryCollection(const vector<Geometry *> &newGeoms) const;
 
-	/**
-	* Constructs a <code>MultiLineString</code>.
-	*
-	* @param  newLines
-	*	the <code>LineStrings</code>s for this
-	*	<code>MultiLineString</code>, or <code>null</code>
-	*	or an empty array to create the empty geometry.
-	*	Elements may be empty <code>LineString</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will take ownership of
-	*	the vector and its elements.
-	*/
+	/// Construct a MultiLineString taking ownership of given arguments
 	MultiLineString* createMultiLineString(vector<Geometry *> *newLines) const;
 
-	/**
-	* Constructs a <code>MultiLineString</code>.
-	*
-	* @param  fromLines
-	*	the <code>LineStrings</code>s for this
-	*	<code>MultiLineString</code>, or an empty array
-	*	to create the empty geometry.
-	*	Elements may be empty <code>LineString</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will copy 
-	*	the vector and its elements.
-	*/
+	/// Construct a MultiLineString with a deep-copy of given arguments
 	MultiLineString* createMultiLineString(const vector<Geometry *> &fromLines) const;
 
-	/**
-	* @param newPolys
-	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-	*	or <code>null</code> or an empty array to create the empty
-	*	geometry. Elements may be empty <code>Polygon</code>s, but
-	*	not <code>null</code>s.
-	*	The polygons must conform to the assertions specified in the
-	*	<A HREF="http://www.opengis.org/techno/specs.htm">
-	*	OpenGIS Simple Features Specification for SQL
-	*	</A>.
-	*
-	*	Constructed object will take ownership of
-	*	the vector and its elements.
-	*/
+	/// Construct a MultiPolygon taking ownership of given arguments
 	MultiPolygon* createMultiPolygon(vector<Geometry *> *newPolys) const;
 
-	/**
-	* @param fromPolys
-	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-	*	or an empty array to create the empty geometry.
-	*	Elements may be empty <code>Polygon</code>s, but
-	*	not <code>null</code>s.
-	*	The polygons must conform to the assertions specified in the
-	*	<A HREF="http://www.opengis.org/techno/specs.htm">
-	*	OpenGIS Simple Features Specification for SQL
-	*	</A>.
-	*
-	*	Constructed object will copy 
-	*	the vector and its elements.
-	*/
+	/// Construct a MultiPolygon with a deep-copy of given arguments
 	MultiPolygon* createMultiPolygon(const vector<Geometry *> &fromPolys) const;
 
-	/**
-	* Creates a LinearRing using the given CoordinateList.
-	* a null or empty CoordinateList will
-	* create an empty LinearRing. The points must form a closed and simple
-	* linestring. Consecutive points must not be equal.
-	* @param coordinates a CoordinateList possibly empty, or null
-	*  LinearRing will take ownership of coordinates.
-	*/
+	/// Construct a LinearRing taking ownership of given arguments
 	LinearRing* createLinearRing(CoordinateList* coordinates) const;
 
-	/**
-	* Creates a LinearRing using the given CoordinateList.
-	* an empty CoordinateList will create an empty LinearRing.
-	* The points must form a closed and simple linestring.
-	* Consecutive points must not be equal.
-	* @param coordinates a CoordinateList possibly empty.
-	*
-	* LinearRing will *copy* coordinates.
-	*/
+	/// Construct a LinearRing with a deep-copy of given arguments
 	LinearRing* createLinearRing(const CoordinateList& coordinates) const;
 
-	/**
-	* Constructs an EMPTY <code>MultiPoint</code>.
-	*/
+	/// Constructs an EMPTY <code>MultiPoint</code>.
 	MultiPoint* createMultiPoint() const;
 
-	/**
-	* Constructs a <code>MultiPoint</code>.
-	*
-	* @param  newPoints
-	*	the <code>Point</code>s for this <code>MultiPoint</code>,
-	*	or <code>null</code> or an empty array to create the empty
-	* 	geometry.
-	*	Elements may be empty <code>Point</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will take ownership of
-	*	the vector and its elements.
-	*/
+	/// Construct a MultiPoint taking ownership of given arguments
 	MultiPoint* createMultiPoint(vector<Geometry *> *newPoints) const;
 
-	/**
-	* Constructs a <code>MultiPoint</code>.
-	*
-	* @param  fromPoints
-	*	the <code>Point</code>s for this <code>MultiPoint</code>,
-	*	or an empty array to create the empty geometry.
-	*	Elements may be empty <code>Point</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will copy 
-	*	the vector and its elements.
-	*/
+	/// Construct a MultiPoint with a deep-copy of given arguments
 	MultiPoint* createMultiPoint(const vector<Geometry *> &fromPoints) const;
 
-	/**
-	* Creates a MultiPoint using the given CoordinateList; a null or empty CoordinateList will
-	* create an empty MultiPoint.
-	* @param coordinates a CoordinateList possibly empty, or null
-	* Created ojbect will copy given coordinates
-	*/
-	MultiPoint* createMultiPoint(const CoordinateList* coordinates) const;
+	/// Construct a MultiPoint containing a Point geometry for each Coordinate in the given list.
+	MultiPoint* createMultiPoint(const CoordinateList &fromCoords) const;
 
-	/**
-	* Constructs a <code>Polygon</code> with the given exterior
-	* boundary and interior boundaries.
-	*
-	* @param shell
-	*            the outer boundary of the new <code>Polygon</code>, or
-	*            <code>null</code> or an empty <code>LinearRing</code> if
-	*            the empty geometry is to be created.
-	* @param holes
-	*            the inner boundaries of the new <code>Polygon</code>, or
-	*            <code>null</code> or empty <code>LinearRing</code> s if
-	*            the empty geometry is to be created.
-	*
-	* Polygon will take ownership of shell and holes.
-	*/
+	/// Construct a Polygon taking ownership of given arguments
 	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes) const;
-	/**
-	* Constructs a <code>Polygon</code> with the given exterior boundary and
-	* interior boundaries.
-	*
-	* @param shell
-	*            the outer boundary of the new <code>Polygon</code>
-	* @param holes
-	*            the inner boundaries of the new <code>Polygon</code>
-	*/
+
+	/// Construct a Polygon with a deep-copy of given arguments
 	Polygon* createPolygon(const LinearRing &shell, const vector<Geometry *> &holes) const;
 
-	/**
-	* Creates a LineString using the given Coordinates;
-	* a null or empty array will
-	* create an empty LineString. Consecutive points must not be equal.
-	* @param coordinates an array without null elements,
-	* or an empty array, or null.
-	* If not null LineString will take ownership of it.
-	*/
+	/// Construct a LineString taking ownership of given argument
 	LineString* createLineString(CoordinateList* coordinates) const;
 
-	/**
-	* Creates a LineString using the given Coordinates; a null or empty array will
-	* create an empty LineString. Consecutive points must not be equal.
-	* @param coordinates an array without null elements, or an empty array
-	*/
+	/// Construct a LineString with a deep-copy of given argument
 	LineString* createLineString(const CoordinateList& coordinates) const;
 
-	/**
-	*  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
-	*  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
-	*  it.
-	* For example:<br>
-	*
-	*  <ul>
-	*    <li> If <code>geomList</code> contains a single <code>Polygon</code>,
-	*    the <code>Polygon</code> is returned.
-	*    <li> If <code>geomList</code> contains several <code>Polygon</code>s, a
-	*    <code>MultiPolygon</code> is returned.
-	*    <li> If <code>geomList</code> contains some <code>Polygon</code>s and
-	*    some <code>LineString</code>s, a <code>GeometryCollection</code> is
-	*    returned.
-	*    <li> If <code>geomList</code> is empty, an empty <code>GeometryCollection</code>
-	*    is returned
-	*  </ul>
-	*
-	* Note that this method does not "flatten" Geometries in the input, and hence if
-	* any MultiGeometries are contained in the input a GeometryCollection containing
-	* them will be returned.
-	*
-	*@param  geomList  the <code>Geometry</code>s to combine
-	*@return           a <code>Geometry</code> of the "smallest", "most
-	*      type-specific" class that can contain the elements of <code>geomList</code>
-	*      .
-	*
-	* NOTE: the returned Geometry will take ownership of the
-	* 	given vector AND its elements 
-	*/
+	/// Construct the most suitable Geometry using the given Geometries; will take ownership of arguments.
 	Geometry* buildGeometry(vector<Geometry *> *geoms) const;
 
-	/**
-	 * deep-copy version of buildGeometry
-	 */
+	/// Construct the most suitable Geometry using the given Geometries; will use a deep-copy of arguments.
 	Geometry* buildGeometry(const vector<Geometry *> &geoms) const;
 	
 	int getSRID() const {return SRID;};
 
 	CoordinateListFactory* getCoordinateListFactory() const {return coordinateListFactory;};
 
-	/**
-	* @return a clone of g based on a CoordinateList created by this
-	* GeometryFactory's CoordinateListFactory
-	*/
+	/// Returns a clone of given Geometry.
 	Geometry* createGeometry(const Geometry *g) const;
 
 private:

@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/05 10:50:21  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -33,6 +43,16 @@
 
 /*
 * $Log$
+* Revision 1.2  2004/07/05 10:50:21  strk
+* deep-dopy construction taken out of Geometry and implemented only
+* in GeometryFactory.
+* Deep-copy geometry construction takes care of cleaning up copies
+* on exception.
+* Implemented clone() method for CoordinateList
+* Changed createMultiPoint(CoordinateList) signature to reflect
+* copy semantic (by-ref instead of by-pointer).
+* Cleaned up documentation.
+*
 * Revision 1.1  2004/07/02 13:20:42  strk
 * Header files moved under geos/ dir.
 *
@@ -66,6 +86,12 @@ using namespace std;
 
 namespace geos {
 
+/**
+ * \class GEOSException util.h geos.h
+ * Base class for all GEOS exceptions.
+ * Exceptions are thrown as pointers to this type.
+ * Use toString() to get a readable message.
+ */
 class GEOSException {
 public:
 	GEOSException();

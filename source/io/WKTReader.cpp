@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2004/07/05 10:50:21  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.24  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -250,7 +260,7 @@ LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
 
 MultiPoint* WKTReader::readMultiPointText(StringTokenizer *tokenizer) {
 	CoordinateList *coords = getCoordinates(tokenizer);
-	MultiPoint *ret = geometryFactory->createMultiPoint(coords);
+	MultiPoint *ret = geometryFactory->createMultiPoint(*coords);
 	delete coords;
 	return ret;
 }

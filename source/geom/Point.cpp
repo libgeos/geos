@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.26  2004/07/02 14:27:32  strk
  * Added deep-copy / take-ownerhship for Point type.
  *
@@ -99,21 +109,6 @@ Point::Point(CoordinateList *newCoords, const GeometryFactory *factory): Geometr
 		throw new IllegalArgumentException("Point coordinate list must contain a single element");
 	}
 	coordinates=newCoords;
-}
-
-/**
-* Creates a Point using the given CoordinateList (must have 1 element)
-*
-* @param  fromCoords
-*	contains the single coordinate on which to base this
-*	<code>Point</code>. 
-*/  
-Point::Point(const CoordinateList &fromCoords, const GeometryFactory *factory): Geometry(factory) {
-	if (fromCoords.getSize() != 1)
-	{
-		throw new IllegalArgumentException("Point coordinate list must contain a single element");
-	}
-	coordinates = CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
 }
 
 Point::Point(const Point &p): Geometry(p.getFactory()) {

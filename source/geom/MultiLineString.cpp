@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.18  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -77,21 +87,6 @@ MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel
 */
 MultiLineString::MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *factory): GeometryCollection(newLines,factory){}
 
-/**
-* Constructs a <code>MultiLineString</code>.
-*
-* @param  fromLines
-*	the <code>LineStrings</code>s for this
-*	<code>MultiLineString</code>, or an empty array
-*	to create the empty geometry.
-*	Elements may be empty <code>LineString</code>s,
-*	but not <code>null</code>s.
-*
-*	Constructed object will copy 
-*	the vector and its elements.
-*/
-MultiLineString::MultiLineString(const vector<Geometry *> &fromLines, const GeometryFactory *factory): GeometryCollection(fromLines,factory){}
-
 MultiLineString::~MultiLineString(){}
 
 int MultiLineString::getDimension() const {
@@ -134,7 +129,7 @@ Geometry* MultiLineString::getBoundary() const {
 	//GeometryGraph *g=new GeometryGraph(0,toInternalGeometry(this));
 	CoordinateList *pts=gg.getBoundaryPoints();
 	//delete g;
-	Geometry *ret = (Geometry *)getFactory()->createMultiPoint(pts);
+	Geometry *ret = getFactory()->createMultiPoint(*pts);
 	delete pts;
 	return ret;
 }

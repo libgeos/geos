@@ -4,8 +4,11 @@
 
 	- Added geos_version.h with version numbers and string defines
 
-	- All geometry constructors have now deep-copy version
-	  (pass-by-pointer) and a take-ownership version (pass-by-ref).
-	  This interface is available for GeometryFactory as well
-	  including buildGeometry.
+	- All geometry constructors take ownership of given arguments.
+	  GeometryFactory provides pass-by-reference geometry creators
+	  to take care of a deep-copy.
 
+	- GeometryFactory::createMultiPoint(const CoordinateList *)
+	  has been renamed to
+	  GeometryFactory::createMultiPoint(const CoordinateList &)
+	  to reflect copy semantic

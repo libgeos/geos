@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.56  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.55  2004/07/03 12:51:37  strk
  * Documentation cleanups for DoxyGen.
  *
@@ -116,12 +126,12 @@ namespace geos {
  *
  * \section getstart_sec Getting Started
  *
- * Main class is {@link Geometry}, from which all geometry types
+ * Main class is geos::Geometry, from which all geometry types
  * derive.
  *
- * Construction of Geometries is done using a {@link GeometryFactory}.
+ * Construction of Geometries is done using a geos::GeometryFactory.
  *
- * Exceptions come as a {@link GEOSException} class.
+ * Internal exceptions are thrown as pointers to geos::GEOSException.
  *
  */ 
 

@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.38  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.37  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -131,29 +141,6 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const Geome
 	}
 	geometries=newGeoms;
 }
-
-/**
-* @param fromGeoms
-*	the <code>Geometry</code>s for this
-*	<code>GeometryCollection</code>,
-*	or an empty array to create the empty geometry.
-*	Elements may be empty <code>Geometry</code>s,
-*	but not <code>null</code>s.
-*
-*	fromGeoms vector and elements will be copied. 
-*/
-GeometryCollection::GeometryCollection(const vector<Geometry *> &fromGeoms, const GeometryFactory *factory): Geometry(factory)
-{
-	if (hasNullElements(&fromGeoms)) {
-		throw new IllegalArgumentException("geometries must not contain null elements\n");
-		return;
-	}
-	geometries=new vector<Geometry *>(fromGeoms.size());
-	for (int i=0; i<fromGeoms.size(); i++) {
-		(*geometries)[i] = fromGeoms[i]->clone();
-	}
-}
-
 
 Geometry* GeometryCollection::clone() const {
 	return new GeometryCollection(*this);

@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.19  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -84,22 +94,6 @@ MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisi
 *	the vector and its elements.
 */
 MultiPolygon::MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *factory): GeometryCollection(newPolys,factory){}
-
-/**
-* @param fromPolys
-*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-*	or an empty array to create the empty geometry.
-*	Elements may be empty <code>Polygon</code>s, but
-*	not <code>null</code>s.
-*	The polygons must conform to the assertions specified in the
-*	<A HREF="http://www.opengis.org/techno/specs.htm">
-*	OpenGIS Simple Features Specification for SQL
-*	</A>.
-*
-*	Constructed object will copy 
-*	the vector and its elements.
-*/
-MultiPolygon::MultiPolygon(const vector<Geometry *> &fromPolys, const GeometryFactory *factory): GeometryCollection(fromPolys,factory){}
 
 MultiPolygon::~MultiPolygon(){}
 

@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.17  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -71,6 +81,11 @@ BasicCoordinateList::BasicCoordinateList(const Coordinate& c) {
 
 BasicCoordinateList::BasicCoordinateList(const BasicCoordinateList &c) {
 	vect=new vector<Coordinate>(*(c.vect));
+}
+
+CoordinateList *
+BasicCoordinateList::clone() const {
+	return new BasicCoordinateList(*this);
 }
 
 void BasicCoordinateList::setPoints(const vector<Coordinate> &v) {

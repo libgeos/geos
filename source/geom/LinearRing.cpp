@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.19  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -85,19 +95,7 @@ LinearRing::LinearRing(const CoordinateList* pts, const PrecisionModel* pm,
 *	The created LinearRing will take ownership of points.
 *
 */
-LinearRing::LinearRing(CoordinateList* points, const GeometryFactory *newFactory): LineString(points,newFactory) {
-	validateConstruction();	
-}
-
-/**
-*  Constructs a <code>LinearRing</code> with the given points.
-*
-*@param  points          points forming a closed and simple linestring, 
-*      or an empty array to create the empty geometry.
-*      This array must not contain <code>null</code> elements.
-*
-*/
-LinearRing::LinearRing(const CoordinateList& points, const GeometryFactory *newFactory): LineString(points,newFactory) {
+LinearRing::LinearRing(CoordinateList* newCoords, const GeometryFactory *newFactory): LineString(newCoords,newFactory) {
 	validateConstruction();	
 }
 

@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.37  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.36  2004/07/03 12:51:37  strk
  * Documentation cleanups for DoxyGen.
  *
@@ -129,22 +139,6 @@ LineString::LineString(CoordinateList *newCoords, const GeometryFactory *factory
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
 	points=newCoords;
-}
-
-/**
- * Constructs a <code>LineString</code> copying the
- * given CoordinateList.
- *
- * @param fromCoords the list of coordinates making up the linestring.
- *	Consecutive points may not be equal.
- *
- */  
-LineString::LineString(const CoordinateList &fromCoords, const GeometryFactory *newFactory): Geometry(newFactory)
-{
-	if (fromCoords.getSize()==1) {
-		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
-	}
-	points=CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
 }
 
 

@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.44  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.43  2004/07/03 12:51:37  strk
  * Documentation cleanups for DoxyGen.
  *
@@ -256,7 +266,17 @@ GeometryFactory::createPoint(CoordinateList *coordinates) const
 Point*
 GeometryFactory::createPoint(const CoordinateList &fromCoords) const
 {
-	return new Point(fromCoords,this);
+	//CoordinateList *newCoords = CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
+	CoordinateList *newCoords = fromCoords.clone();
+	Point *g = NULL;
+	try {
+		g = new Point(newCoords,this); 
+	} catch (...) {
+		delete newCoords;
+		throw;
+	}
+	return g;
+
 }
 
 /**
@@ -296,7 +316,22 @@ MultiLineString*
 GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	const
 {
-	return new MultiLineString(fromLines,this);
+	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromLines.size());
+	for (int i=0; i<fromLines.size(); i++)
+	{
+		(*newGeoms)[i] = fromLines[i]->clone();
+	}
+	MultiLineString *g = NULL;
+	try {
+		g = new MultiLineString(newGeoms,this);
+	} catch (...) {
+		for (int i=0; i<newGeoms->size(); i++) {
+			delete (*newGeoms)[i];
+		}
+		delete newGeoms;
+		throw;
+	}
+	return g;
 }
 
 /**
@@ -335,7 +370,21 @@ GeometryFactory::createGeometryCollection(vector<Geometry *> *newGeoms) const
 GeometryCollection*
 GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) const
 {
-	return new GeometryCollection(fromGeoms,this);
+	vector<Geometry *> *newGeoms = new vector<Geometry *>(fromGeoms.size());
+	for (int i=0; i<fromGeoms.size(); i++) {
+		(*newGeoms)[i] = fromGeoms[i]->clone();
+	}
+	GeometryCollection *g = NULL;
+	try {
+		g = new GeometryCollection(newGeoms,this);
+	} catch (...) {
+		for (int i=0; i<newGeoms->size(); i++) {
+			delete (*newGeoms)[i];
+		}
+		delete newGeoms;
+		throw;
+	}
+	return g;
 }
 
 /**
@@ -375,33 +424,60 @@ GeometryFactory::createMultiPolygon(vector<Geometry *> *newPolys) const
 MultiPolygon*
 GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 {
-	return new MultiPolygon(fromPolys,this);
-}
-
-/**
-* Creates a LinearRing using the given CoordinateList; a null or empty CoordinateList will
-* create an empty LinearRing. The points must form a closed and simple
-* linestring. Consecutive points must not be equal.
-* @param coordinates a CoordinateList possibly empty, or null
-* LinearRing will take ownership of coordinates.
-*/
-LinearRing*
-GeometryFactory::createLinearRing(CoordinateList* coordinates) const
-{
-	return new LinearRing(coordinates,this);
+	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromPolys.size());
+	for (int i=0; i<fromPolys.size(); i++)
+	{
+		(*newGeoms)[i] = fromPolys[i]->clone();
+	}
+	MultiPolygon *g = NULL;
+	try {
+		g = new MultiPolygon(newGeoms,this);
+	} catch (...) {
+		for (int i=0; i<newGeoms->size(); i++) {
+			delete (*newGeoms)[i];
+		}
+		delete newGeoms;
+		throw;
+	}
+	return g;
 }
 
 /**
 * Creates a LinearRing using the given CoordinateList;
-* an empty CoordinateList will
+* a null or empty CoordinateList will
 * create an empty LinearRing. The points must form a closed and simple
 * linestring. Consecutive points must not be equal.
-* @param coordinates a CoordinateList possibly empty.
+*
+* @param coordinates a CoordinateList possibly empty, or null
+*
+* LinearRing will take ownership of coordinates.
+* 
 */
 LinearRing*
-GeometryFactory::createLinearRing(const CoordinateList& coordinates) const
+GeometryFactory::createLinearRing(CoordinateList* newCoords) const
 {
-	return new LinearRing(coordinates,this);
+	return new LinearRing(newCoords,this);
+}
+
+/**
+* Creates a LinearRing using a copy of the given CoordinateList.
+* An empty CoordinateList will create an empty LinearRing.
+* The points must form a closed and simple
+* linestring. Consecutive points must not be equal.
+* @param fromCoords a CoordinateList possibly empty.
+*/
+LinearRing*
+GeometryFactory::createLinearRing(const CoordinateList& fromCoords) const
+{
+	CoordinateList *newCoords = fromCoords.clone();
+	LinearRing *g = NULL;
+	try {
+		g = new LinearRing(newCoords, this);
+	} catch (...) {
+		delete newCoords;
+		throw;
+	}
+	return g;
 }
 
 /**
@@ -438,7 +514,23 @@ GeometryFactory::createMultiPoint(vector<Geometry *> *newPoints) const
 MultiPoint*
 GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 {
-	return new MultiPoint(fromPoints,this);
+	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromPoints.size());
+	for (int i=0; i<fromPoints.size(); i++)
+	{
+		(*newGeoms)[i] = fromPoints[i]->clone();
+	}
+
+	MultiPoint *g = NULL;
+	try {
+		g = new MultiPoint(newGeoms,this);
+	} catch (...) {
+		for (int i=0; i<newGeoms->size(); i++) {
+			delete (*newGeoms)[i];
+		}
+		delete newGeoms;
+		throw;
+	}
+	return g;
 }
 
 /**
@@ -451,24 +543,25 @@ GeometryFactory::createMultiPoint() const
 }
 
 /**
-* Creates a MultiPoint using the given CoordinateList; a null or empty CoordinateList will
-* create an empty MultiPoint.
-* @param coordinates a CoordinateList possibly empty, or null
+* Creates a MultiPoint using the given CoordinateList.
+* @param fromCoords a CoordinateList used for Points construction.
 */
 MultiPoint*
-GeometryFactory::createMultiPoint(const CoordinateList* coordinates) const
+GeometryFactory::createMultiPoint(const CoordinateList &fromCoords) const
 {
-	if ( ! coordinates ) return new MultiPoint(NULL, this);
-
 	vector<Geometry *> *pts=new vector<Geometry *>();
-	for (int i=0; i<coordinates->getSize(); i++) {
-		Point *pt=createPoint(coordinates->getAt(i));
+	for (int i=0; i<fromCoords.getSize(); i++) {
+		Point *pt=createPoint(fromCoords.getAt(i));
 		pts->push_back(pt);
 	}
-	//delete coordinates;
-	MultiPoint *mp = createMultiPoint(pts);
-	//for (int i=0; i<pts->size(); i++) delete (*pts)[i];
-	//delete pts;
+	MultiPoint *mp = NULL;
+	try {
+		mp = createMultiPoint(pts);
+	} catch (...) {
+		for (int i=0; i<pts->size(); i++) delete (*pts)[i];
+		delete pts;
+		throw;
+	}
 	return mp;
 }
 
@@ -502,19 +595,49 @@ GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes)
 *            the inner boundaries of the new <code>Polygon</code>
 *            Note that these must be LinearRings
 */
+/**
+* Constructs a <code>Polygon</code> with the given exterior
+* and interior boundaries.
+*
+* @param  shell     the outer boundary of the new <code>Polygon</code>.
+*
+* @param  holes     the <code>LinearRings</code> defining the inner
+*                   boundaries of the new <code>Polygon</code>
+*
+*/
+
 Polygon*
 GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *> &holes)
 	const
 {
-	return new Polygon(shell, holes, this);
+	LinearRing *newRing = (LinearRing *)shell.clone();
+	vector<Geometry *>*newHoles = new vector<Geometry *>(holes.size());
+	for (int i=0; i<holes.size(); i++)
+	{
+		(*newHoles)[i] = holes[i]->clone();
+	}
+	Polygon *g = NULL;
+	try {
+		g = new Polygon(newRing, newHoles, this);
+	} catch (...) {
+		delete newRing;
+		for (int i=0; i<holes.size(); i++)
+			delete (*newHoles)[i];
+		delete newHoles;
+		throw;
+	}
+	return g;
 }
 
 /**
-* Creates a LineString using the given Coordinates; a null or empty array will
-* create an empty LineString. Consecutive points must not be equal.
-* @param coordinates an array without null elements, or an empty array, or null
-*  If not null LineString will take ownership of coordinates.
-*/
+ * Constructs a <code>LineString</code> taking ownership of the
+ * given CoordinateList.
+ *
+ * @param newCoords the list of coordinates making up the linestring,
+ *	or <code>null</code> to create the empty geometry.
+ *	Consecutive points may not be equal.
+ *
+ */  
 LineString*
 GeometryFactory::createLineString(CoordinateList* coordinates)
 	const
@@ -523,15 +646,26 @@ GeometryFactory::createLineString(CoordinateList* coordinates)
 }
 
 /**
-* Creates a LineString using the given Coordinates; a null or empty array will
-* create an empty LineString. Consecutive points must not be equal.
-* @param coordinates an array without null elements, or an empty array
-*/
+ * Constructs a <code>LineString</code> copying the
+ * given CoordinateList.
+ *
+ * @param fromCoords the list of coordinates making up the linestring.
+ *	Consecutive points may not be equal.
+ */  
 LineString*
-GeometryFactory::createLineString(const CoordinateList& coordinates)
+GeometryFactory::createLineString(const CoordinateList &fromCoords)
 	const
 {
-	return new LineString(coordinates, this);
+	//CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
+	CoordinateList *newCoords = fromCoords.clone();
+	LineString *g = NULL;
+	try {
+		g = new LineString(newCoords, this);
+	} catch (...) {
+		delete newCoords;
+		throw;
+	}
+	return g;
 }
 
 /**

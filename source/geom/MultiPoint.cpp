@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.19  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -77,19 +87,6 @@ MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
 */
 MultiPoint::MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *factory): GeometryCollection(newPoints,factory){}
 
-/**
-* Constructs a <code>MultiPoint</code>.
-*
-* @param  fromPoints
-*	the <code>Point</code>s for this <code>MultiPoint</code>,
-*	or an empty array to create the empty geometry.
-*	Elements may be empty <code>Point</code>s,
-*	but not <code>null</code>s.
-*
-*	Constructed object will copy 
-*	the vector and its elements.
-*/
-MultiPoint::MultiPoint(const vector<Geometry *> &fromPoints, const GeometryFactory *factory): GeometryCollection(fromPoints,factory){}
 
 MultiPoint::~MultiPoint(){}
 

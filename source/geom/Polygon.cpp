@@ -13,6 +13,16 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.38  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateList
+ * Changed createMultiPoint(CoordinateList) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
  * Revision 1.37  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -137,36 +147,6 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const Geome
 			if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
 				throw new IllegalArgumentException("holes must be LinearRings");
 		holes=newHoles;
-	}
-}
-
-/**
-* Constructs a <code>Polygon</code> with the given exterior
-* and interior boundaries.
-*
-* @param  shell     the outer boundary of the new <code>Polygon</code>.
-*
-* @param  holes     the <code>LinearRings</code> defining the inner
-*                   boundaries of the new <code>Polygon</code>
-*
-*/
-Polygon::Polygon(const LinearRing &newShell, const vector<Geometry *> &newHoles, const GeometryFactory *newFactory): Geometry(newFactory)
-{
-	if (newShell.isEmpty() && hasNonEmptyElements(&newHoles)) {
-		throw new IllegalArgumentException("shell is empty but holes are not");
-	} 
-	shell = new LinearRing(newShell);
-
-	if (hasNullElements(&newHoles)) {
-		throw new IllegalArgumentException("holes must not contain null elements");
-	}
-
-	holes = new vector<Geometry *>(newHoles.size());
-	for (int i=0; i<newHoles.size(); i++)
-	{
-		if ( newHoles[i]->getGeometryTypeId() != GEOS_LINEARRING)
-			throw new IllegalArgumentException("holes must be LinearRings");
-		(*holes)[i] = newHoles[i]->clone();
 	}
 }
 
