@@ -11,8 +11,48 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/unload.h>
+#include <geos/opValid.h>
+#include <geos/geomgraph.h>
+#include <geos/operation.h>
+#include <geos/opRelate.h>
+#include <geos/indexQuadtree.h>
+#include <geos/opBuffer.h>
+#include <geos/planargraph.h>
+#include <geos/profiler.h>
+
+namespace geos {
+
+Unload::Unload(void)
+{
+}
+
+Unload::~Unload(void)
+{
+}
+
+void Unload::Release()
+{
+	delete PlanarGraph::cga;
+	//delete planarDirectedEdge::cga;
+	delete GeometryGraphOperation::cga;
+	delete GeometryGraphOperation::li;
+	delete RelateComputer::li;
+	delete RelateComputer::ptLocator;
+	delete QuadTreeRoot::origin;
+	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
+	delete Profiler::instance();
+}
+
+} //namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.14  2004/12/08 14:30:53  strk
+ * Added default profiler instance cleanup
+ *
  * Revision 1.13  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -62,35 +102,3 @@
  *
  **********************************************************************/
 
-
-#include <geos/unload.h>
-#include <geos/opValid.h>
-#include <geos/geomgraph.h>
-#include <geos/operation.h>
-#include <geos/opRelate.h>
-#include <geos/indexQuadtree.h>
-#include <geos/opBuffer.h>
-#include <geos/planargraph.h>
-
-namespace geos {
-
-Unload::Unload(void)
-{
-}
-
-Unload::~Unload(void)
-{
-}
-
-void Unload::Release()
-{
-	delete PlanarGraph::cga;
-	//delete planarDirectedEdge::cga;
-	delete GeometryGraphOperation::cga;
-	delete GeometryGraphOperation::li;
-	delete RelateComputer::li;
-	delete RelateComputer::ptLocator;
-	delete QuadTreeRoot::origin;
-	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
-}
-}
