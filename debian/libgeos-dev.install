@@ -1,0 +1,7 @@
+usr/bin/*
+usr/include/*
+usr/include/geos/*
+usr/lib/lib*.a
+usr/lib/lib*.so
+usr/lib/*.la
+usr/share/man/man1/*
