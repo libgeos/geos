@@ -1,3 +1,10 @@
+- PrecisionModel nearbyint() check
+
+- doc/example.cpp: check side location conflict on intersection
+  GEOS Exception (intersecting 0 and 3: TopologyException: side location conflict (0,250)
+
+- Add class for use in Geometry::userData setting.
+
 - make GeometryFactory->createMULTI*() consistent in taking
 
   either:
