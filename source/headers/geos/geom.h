@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/07/22 07:19:21  strk
+ * Changed getCoordinatesRO description.
+ *
  * Revision 1.19  2004/07/22 07:04:49  strk
  * Documented missing geometry functions.
  *
@@ -1982,7 +1985,7 @@ public:
 	virtual Geometry *clone() const;
 	virtual CoordinateSequence* getCoordinates() const;
 
-	/// Returns a pointer to the CoordinateSequence making up this Geometry.
+	/// Returns a read-only pointer to internal CoordinateSequence
 	const CoordinateSequence* getCoordinatesRO() const;
 
 	virtual const Coordinate& getCoordinateN(int n) const;
