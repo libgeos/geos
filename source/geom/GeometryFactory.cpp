@@ -1,5 +1,5 @@
-#include "geom.h"
-#include "util.h"
+#include "../headers/geom.h"
+#include "../headers/util.h"
 #include <typeinfo>
 
 GeometryFactory::GeometryFactory() {
@@ -14,6 +14,12 @@ GeometryFactory::GeometryFactory(PrecisionModel* newPrecisionModel, int newSRID)
 GeometryFactory::~GeometryFactory(){
 	delete precisionModel;
 }
+  
+Point* GeometryFactory::createPointFromInternalCoord(Coordinate& coord, Geometry *exemplar) {
+	exemplar->getPrecisionModel()->makePrecise(coord);
+	return new Point(coord,exemplar->getPrecisionModel(),exemplar->getSRID());
+}
+
 
 Geometry* GeometryFactory::toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID) {
 	if (envelope->isNull()) {

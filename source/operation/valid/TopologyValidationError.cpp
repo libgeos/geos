@@ -1,4 +1,4 @@
-#include "opValid.h"
+#include "../../headers/opValid.h"
 #include "stdio.h"
 
 string TopologyValidationError::errMsg[]={
@@ -10,7 +10,8 @@ string TopologyValidationError::errMsg[]={
     "Self-intersection",
     "Ring Self-intersection",
     "Nested shells",
-    "Duplicate Rings"
+    "Duplicate Rings",
+    "Too few points in geometry component"
 };
 
 TopologyValidationError::TopologyValidationError(int newErrorType,Coordinate newPt) {
@@ -20,6 +21,10 @@ TopologyValidationError::TopologyValidationError(int newErrorType,Coordinate new
 
 TopologyValidationError::TopologyValidationError(int newErrorType) {
 	TopologyValidationError(errorType,Coordinate::getNull());
+}
+
+int TopologyValidationError::getErrorType() {
+	return errorType;
 }
 
 Coordinate& TopologyValidationError::getCoordinate(){

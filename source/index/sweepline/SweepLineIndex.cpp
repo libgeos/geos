@@ -1,4 +1,4 @@
-#include "indexSweepline.h"
+#include "../../headers/indexSweepline.h"
 #include "stdio.h"
 #include <algorithm>
 
@@ -46,9 +46,8 @@ void SweepLineIndex::computeOverlaps(SweepLineOverlapAction *action) {
 	buildIndex();
 	for(int i=0;i<(int)events->size();i++) {
 		indexSweepLineEvent *ev=(indexSweepLineEvent*)(*events)[i];
-		SweepLineInterval *sweepInt=ev->getInterval();
 		if (ev->isInsert()) {
-			processOverlaps(i,ev->getDeleteEventIndex(),sweepInt,action);
+			processOverlaps(i,ev->getDeleteEventIndex(),ev->getInterval(),action);
 		}
 	}
 }

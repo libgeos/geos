@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 #include <stdio.h>
 #define DEPTHNULL -1
 

@@ -1,4 +1,4 @@
-#include "util.h"
+#include "../headers/util.h"
 
 AssertionFailedException::AssertionFailedException(): txt("AssertionFaied: unknown"){}
 AssertionFailedException::AssertionFailedException(string msg): txt(""){

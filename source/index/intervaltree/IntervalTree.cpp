@@ -1,4 +1,4 @@
-#include "indexIntervaltree.h"
+#include "../../headers/indexIntervaltree.h"
 #include "stdio.h"
 
 IntervalTree::IntervalTree(double min,double max) {

@@ -1,4 +1,4 @@
-#include "graphindex.h"
+#include "../../headers/graphindex.h"
 #include "math.h"
 
 bool SegmentIntersector::isAdjacentSegments(int i1,int i2){

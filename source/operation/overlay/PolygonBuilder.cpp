@@ -1,6 +1,6 @@
-#include "opOverlay.h"
+#include "../../headers/opOverlay.h"
 #include "stdio.h"
-#include "util.h"
+#include "../../headers/util.h"
 
 PolygonBuilder::PolygonBuilder(GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
 	geometryFactory=newGeometryFactory;

@@ -1,4 +1,4 @@
-#include "operation.h"
+#include "../headers/operation.h"
 #include "stdio.h"
 
 CGAlgorithms* GeometryGraphOperation::cga=new RobustCGAlgorithms();
@@ -24,6 +24,6 @@ Geometry* GeometryGraphOperation::getArgGeometry(int i) {
 
 void GeometryGraphOperation::setComputationPrecision(PrecisionModel* pm) {
 	makePrecise=!pm->isFloating();
-	li->setMakePrecise(makePrecise);
+	li->setMakePrecise(pm);
 }
 

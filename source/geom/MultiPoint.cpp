@@ -1,5 +1,5 @@
-#include "geom.h"
-#include "operation.h"
+#include "../headers/geom.h"
+#include "../headers/operation.h"
 
 MultiPoint::MultiPoint(){}
 MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
@@ -30,11 +30,11 @@ bool MultiPoint::isValid() {
 	return true;
 }
 
-bool MultiPoint::equalsExact(Geometry *other) {
+bool MultiPoint::equalsExact(Geometry *other, double tolerance) {
     if (!isEquivalentClass(other)) {
       return false;
     }
-	return GeometryCollection::equalsExact(other);
+	return GeometryCollection::equalsExact(other,tolerance);
   }
 
 Coordinate* MultiPoint::getCoordinate(int n) {

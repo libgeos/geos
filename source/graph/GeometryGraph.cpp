@@ -1,6 +1,6 @@
-#include "graph.h"
+#include "../headers/graph.h"
 #include <typeinfo>
-#include "util.h"
+#include "../headers/util.h"
 
 /**
 * This method implements the Boundary Determination Rule
@@ -28,8 +28,8 @@ GeometryGraph::GeometryGraph():PlanarGraph(){
 	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
 	useBoundaryDeterminationRule=false;
 	boundaryNodes=NULL;
-
 	parentGeom=NULL;
+	hasTooFewPointsVar=false;
 }
 
 GeometryGraph::~GeometryGraph(){
@@ -48,6 +48,7 @@ GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGra
 		SRID=parentGeom->getSRID();
 		add(parentGeom);
 	}
+	hasTooFewPointsVar=false;
 }
 
 EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {
@@ -72,6 +73,7 @@ GeometryGraph::GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel,
 	GeometryGraph(newArgIndex,NULL);
 	precisionModel=newPrecisionModel;
 	SRID=newSRID;
+	hasTooFewPointsVar=false;
 }
 
 PrecisionModel* GeometryGraph::getPrecisionModel(){
@@ -166,7 +168,12 @@ void GeometryGraph::addPoint(Point *p){
 * the left and right locations must be interchanged.
 */
 void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
-	CoordinateList* coord=lr->getCoordinates();
+	CoordinateList* coord=CoordinateList::removeRepeatedPoints(lr->getCoordinates());
+	if (coord->getSize()<4) {
+		hasTooFewPointsVar=true;
+		invalidPoint=coord->getAt(0);
+		return;
+	}
 	int left=cwLeft;
 	int right=cwRight;
 	if (cga->isCCW(coord)) {
@@ -191,7 +198,12 @@ void GeometryGraph::addPolygon(Polygon *p){
 }
 
 void GeometryGraph::addLineString(LineString *line){
-	CoordinateList* coord=line->getCoordinates();
+	CoordinateList* coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
+	if(coord->getSize()<2) {
+		hasTooFewPointsVar=true;
+		invalidPoint=coord->getAt(0);
+		return;
+	}
 	// add the edge for the LineString
 	// line edges do not have locations for their left and right sides
 	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
@@ -227,11 +239,27 @@ void GeometryGraph::addPoint(Coordinate& pt) {
 	insertPoint(argIndex,pt,Location::INTERIOR);
 }
 
-SegmentIntersector* GeometryGraph::computeSelfNodes(LineIntersector *li){
+/**
+* Compute self-nodes, taking advantage of the Geometry type to
+* minimize the number of intersection tests.  (E.g. rings are
+* not tested for self-intersection, since they are assumed to be valid).
+* @param li the LineIntersector to use
+* @param computeRingSelfNodes if <false>, intersection checks are optimized to not test rings for self-intersection
+* @return the SegmentIntersector used, containing information about the intersections found
+*/
+SegmentIntersector* GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes){
 	SegmentIntersector *si=new SegmentIntersector(li,true,false);
 	//EdgeSetIntersector esi = new MCQuadIntersector();
     EdgeSetIntersector *esi=createEdgeSetIntersector();
-	esi->computeIntersections(edges,si);
+	// optimized test for Polygons and Rings
+	if (!computeRingSelfNodes & 
+		(typeid(*parentGeom)==typeid(LinearRing)||
+		 typeid(*parentGeom)==typeid(Polygon)||
+		 typeid(*parentGeom)==typeid(MultiPolygon))) {
+			esi->computeIntersections(edges, si, false);
+	} else {
+		esi->computeIntersections(edges,si,true);
+	}
 	//System.out.println("SegmentIntersector # tests = " + si.numTests);
 	addSelfIntersectionNodes(argIndex);
 	return si;
@@ -305,5 +333,13 @@ void GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate& coord,int l
 
 vector<Edge*> *GeometryGraph::getEdges() {
 	return edges;
+}
+
+bool GeometryGraph::hasTooFewPoints() {
+	return hasTooFewPointsVar;
+}
+
+Coordinate* GeometryGraph::getInvalidPoint() {
+	return invalidPoint;
 }
 

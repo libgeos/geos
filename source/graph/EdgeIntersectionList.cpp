@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 
 EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge) {
 	list=new vector<EdgeIntersection*>();
@@ -85,7 +85,8 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	// if the last intersection point is not equal to the its segment start pt,
 	// add it to the points list as well.
 	// (This check is needed because the distance metric is not totally reliable!)
-	bool useIntPt1=ei1->dist>0.0 || !(ei1->coord==lastSegStartPt);
+    // The check for point equality is 2D only - Z values are ignored
+    bool useIntPt1=ei1->dist>0.0 || !ei1->coord.equals2D(lastSegStartPt);
 	if (!useIntPt1) {
 		npts--;
 	}

@@ -1,6 +1,6 @@
-#include "geosAlgorithm.h"
-#include "util.h"
-#include "geom.h"
+#include "../headers/geosAlgorithm.h"
+#include "../headers/util.h"
+#include "../headers/geom.h"
 #include "math.h"
 
 /**
@@ -54,7 +54,7 @@ double LineIntersector::nonRobustComputeEdgeDistance(Coordinate& p,Coordinate& p
 }
 
 LineIntersector::LineIntersector() {
-	makePrecise=false;
+	precisionModel=NULL;
 	intPt[0].setCoordinate(*(new Coordinate()));
 	intPt[1].setCoordinate(*(new Coordinate()));
 	// alias the intersection points for ease of reference
@@ -63,8 +63,8 @@ LineIntersector::LineIntersector() {
 	result=0;
 }
 
-void LineIntersector::setMakePrecise(bool newMakePrecise){
-	makePrecise=newMakePrecise;
+void LineIntersector::setMakePrecise(PrecisionModel *newPM){
+	precisionModel=newPM;
 }
 
 bool LineIntersector::isCollinear() {

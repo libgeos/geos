@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "util.h"
+#include "../headers/graph.h"
+#include "../headers/util.h"
 
 DirectedEdgeStar::DirectedEdgeStar(){
 //	resultAreaEdgeList=new vector<DirectedEdge*>();
@@ -173,7 +173,9 @@ void DirectedEdgeStar::linkResultDirectedEdges(){
 		}
 	}
 	if (state==LINKING_TO_OUTGOING) {
-		Assert::isTrue(firstOut!=NULL, "no outgoing dirEdge found");
+		if (firstOut==NULL)
+			throw new TopologyException("no outgoing dirEdge found",&(getCoordinate()));
+//		Assert::isTrue(firstOut!=NULL, "no outgoing dirEdge found");
 		Assert::isTrue(firstOut->isInResult(), "unable to link last incoming dirEdge");
 		incoming->setNext(firstOut);
 	}

@@ -1,9 +1,13 @@
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 
-CGAlgorithms* SimplePointInRing::cga=new RobustCGAlgorithms();
 
 SimplePointInRing::SimplePointInRing(LinearRing *ring){
 	pts=ring->getCoordinates();
+	cga=new RobustCGAlgorithms();
+}
+
+SimplePointInRing::~SimplePointInRing(){
+	delete cga;
 }
 
 bool SimplePointInRing::isInside(Coordinate& pt){

@@ -1,6 +1,6 @@
-#include "opRelate.h"
+#include "../../headers/opRelate.h"
 #include "stdio.h"
-#include "util.h"
+#include "../../headers/util.h"
 
 const LineIntersector* RelateComputer::li=new RobustLineIntersector();
 const PointLocator* RelateComputer::ptLocator=new PointLocator();
@@ -34,7 +34,7 @@ Coordinate& RelateComputer::getInvalidPoint() {
 }
 
 bool RelateComputer::isNodeConsistentArea() {
-	SegmentIntersector *intersector=(*arg)[0]->computeSelfNodes((LineIntersector*)li);
+	SegmentIntersector *intersector=(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
 	if (intersector->hasProperIntersection()) {
 		invalidPoint.setCoordinate(intersector->getProperIntersectionPoint());
 		return false;
@@ -99,8 +99,8 @@ IntersectionMatrix* RelateComputer::computeIM() {
 		computeDisjointIM(im);
 		return im;
 	}
-	(*arg)[0]->computeSelfNodes((LineIntersector*)li);
-	(*arg)[1]->computeSelfNodes((LineIntersector*)li);
+	(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
+	(*arg)[1]->computeSelfNodes((LineIntersector*)li,false);
 	// compute intersections between edges of the two input geometries
 	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1],(LineIntersector*)li,false);
 cout << "# segment intersection tests: " << intersector->numTests << endl;

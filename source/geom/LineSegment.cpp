@@ -1,5 +1,5 @@
-#include "geom.h"
-#include "geosAlgorithm.h"
+#include "../headers/geom.h"
+#include "../headers/geosAlgorithm.h"
 
 /**
  *  Constructs an empty <code>LineSegment</code>.
@@ -44,12 +44,28 @@ void LineSegment::setCoordinates(LineSegment ls) {
 	setCoordinates(ls.p0,ls.p1);
 }
 
+/**
+* Computes the length of the line segment.
+* @return the length of the line segment
+*/
+double LineSegment::getLength() {
+	return p0.distance(p1);
+}
+
+/**
+* Reverses the direction of the line segment.
+*/
 void LineSegment::reverse() {
 	Coordinate& temp=p0;
 	p0.setCoordinate(p1);
 	p1.setCoordinate(temp);
 }
 
+/**
+* Puts the line segment into a normalized form.
+* This is useful for using line segments in maps and indexes when
+* topological equality rather than exact equality is desired.
+*/
 void LineSegment::normalize(){
 	if (p1.compareTo(p0)<0) reverse();
 }
@@ -102,10 +118,62 @@ double LineSegment::projectionFactor(Coordinate& p) {
 	return r;
 }
 
+/**
+* Compute the projection of a point onto the line determined
+* by this line segment.
+* <p>
+* Note that the projected point
+* may lie outside the line segment.  If this is the case,
+* the projection factor will lie outside the range [0.0, 1.0].
+*/
 Coordinate& LineSegment::project(Coordinate& p) {
 	if (p==p0 || p==p1) return *(new Coordinate(p));
 	double r=projectionFactor(p);
 	return *(new Coordinate(p0.x+r*(p1.x-p0.x),p0.y+r*(p1.y-p0.y)));
+}
+
+/**
+* Project a line segment onto this line segment and return the resulting
+* line segment.  The returned line segment will be a subset of
+* the target line line segment.  This subset may be null, if
+* the segments are oriented in such a way that there is no projection.
+* <p>
+* Note that the returned line may have zero length (i.e. the same endpoints).
+* This can happen for instance if the lines are perpendicular to one another.
+*
+* @param seg the line segment to project
+* @return the projected line segment, or <code>null</code> if there is no overlap
+*/
+LineSegment* LineSegment::project(LineSegment *seg) {
+	double pf0=projectionFactor(seg->p0);
+	double pf1=projectionFactor(seg->p1);
+	// check if segment projects at all
+	if (pf0>=1.0 && pf1>=1.0) return NULL;
+	if (pf0<=0.0 && pf1<=0.0) return NULL;
+	Coordinate& newp0=project(seg->p0);
+	if (pf0<0.0) newp0=p0;
+	if (pf0>1.0) newp0=p1;
+	Coordinate& newp1=project(seg->p1);
+	if (pf1<0.0) newp1=p0;
+	if (pf1>1.0) newp1=p1;
+	return new LineSegment(newp0,newp1);
+}
+
+/**
+* Computes the closest point on this line segment to another point.
+* @param p the point to find the closest point to
+* @return a Coordinate which is the closest point on the line segment to the point p
+*/
+Coordinate& LineSegment::closestPoint(Coordinate& p) {
+	double factor=projectionFactor(p);
+	if (factor>0 && factor<1) {
+		return project(p);
+	}
+	double dist0=p0.distance(p);
+	double dist1=p1.distance(p);
+	if (dist0<dist1)
+		return p0;
+	return p1;
 }
 
 /**

@@ -1,7 +1,5 @@
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 #include <typeinfo>
-
-CGAlgorithms* SimplePointInAreaLocator::cga=new RobustCGAlgorithms();
 
 /**
 * locate is the main location function.  It handles both single-element
@@ -34,6 +32,7 @@ bool SimplePointInAreaLocator::containsPoint(Coordinate& p,Geometry *geom){
 }
 
 bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate& p,Polygon *poly) {
+	CGAlgorithms* cga=new RobustCGAlgorithms();
 	if (poly->isEmpty()) return false;
 	LineString *shell=poly->getExteriorRing();
 	if (!cga->isPointInRing(p,shell->getCoordinates())) {

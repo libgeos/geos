@@ -1,16 +1,16 @@
-#include "opValid.h"
-#include "opRelate.h"
+#include "../../headers/opValid.h"
+#include "../../headers/opRelate.h"
 #include "stdio.h"
-
-LineIntersector* ConsistentAreaTester::li=new RobustLineIntersector();
 
 ConsistentAreaTester::ConsistentAreaTester(GeometryGraph *newGeomGraph){
 	geomGraph=newGeomGraph;
 	nodeGraph=new RelateNodeGraph();
+	li=new RobustLineIntersector();
 }
 
 ConsistentAreaTester::~ConsistentAreaTester(){
 	delete nodeGraph;
+	delete li;
 }
 
 Coordinate& ConsistentAreaTester::getInvalidPoint(){
@@ -18,7 +18,11 @@ Coordinate& ConsistentAreaTester::getInvalidPoint(){
 }
 
 bool ConsistentAreaTester::isNodeConsistentArea() {
-	SegmentIntersector *intersector=geomGraph->computeSelfNodes(li);
+    /**
+     * To fully check validity, it is necessary to
+     * compute ALL intersections, including self-intersections within a single edge.
+     */
+	SegmentIntersector *intersector=geomGraph->computeSelfNodes(li,true);
 	if (intersector->hasProperIntersection()) {
 		invalidPoint=intersector->getProperIntersectionPoint();
 		return false;

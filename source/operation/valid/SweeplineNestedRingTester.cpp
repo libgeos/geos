@@ -1,20 +1,20 @@
-#include "opValid.h"
+#include "../../headers/opValid.h"
 #include "stdio.h"
-#include "util.h"
-
-CGAlgorithms* SweeplineNestedRingTester::cga=new RobustCGAlgorithms();
+#include "../../headers/util.h"
 
 SweeplineNestedRingTester::SweeplineNestedRingTester(GeometryGraph *newGraph) {
 	graph=newGraph;
 	rings=new vector<LinearRing*>();
 	totalEnv=new Envelope();
 	sweepLine=new SweepLineIndex();
+	cga=new RobustCGAlgorithms();
 }
 
 SweeplineNestedRingTester::~SweeplineNestedRingTester() {
 	delete rings;
 	delete totalEnv;
 	delete sweepLine;
+	delete cga;
 }
 
 SweeplineNestedRingTester::OverlapAction::OverlapAction(SweeplineNestedRingTester *p) {
@@ -59,7 +59,7 @@ bool SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searc
 	CoordinateList *innerRingPts=innerRing->getCoordinates();
 	CoordinateList *searchRingPts=searchRing->getCoordinates();
 
-	if (!innerRing->getEnvelopeInternal()->overlaps(searchRing->getEnvelopeInternal()))
+	if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
 		return false;
 	Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 	Assert::isTrue(!(innerRingPt==Coordinate::getNull()), "Unable to find a ring point not a node of the search ring");

@@ -1,8 +1,8 @@
-#include "geom.h"
+#include "../headers/geom.h"
 #include <algorithm>
 #include <typeinfo>
-#include "geosAlgorithm.h"
-#include "operation.h"
+#include "../headers/geosAlgorithm.h"
+#include "../headers/operation.h"
 
 
 LineString::LineString(){}
@@ -133,7 +133,7 @@ Envelope* LineString::computeEnvelopeInternal() {
 	return new Envelope(minx, maxx, miny, maxy);
 }
 
-bool LineString::equalsExact(Geometry *other) {
+bool LineString::equalsExact(Geometry *other, double tolerance) {
 	if (!isEquivalentClass(other)) {
 		return false;
 	}
@@ -142,7 +142,7 @@ bool LineString::equalsExact(Geometry *other) {
 		return false;
 	}
 	for (int i = 0; i < points->getSize(); i++) {
-		if (!(points->getAt(i)==otherLineString->points->getAt(i))) {
+		if (!equal(points->getAt(i),otherLineString->points->getAt(i),tolerance)) {
 			return false;
 		}
 	}
@@ -159,12 +159,17 @@ void LineString::apply(GeometryFilter *filter) {
 	filter->filter(this);
 }
 
+/**
+* Normalizes a LineString.  A normalized linestring
+* has the first point which is not equal to it's reflected point
+* less than the reflected point.
+*/
 void LineString::normalize() {
-	for (int i = 0; i < points->getSize(); i++) {
+	for (int i = 0; i < points->getSize()/2; i++) {
 		int j = points->getSize() - 1 - i;
 		if (!(points->getAt(i)==points->getAt(j))) {
 			if (points->getAt(i).compareTo(points->getAt(j)) > 0) {
-				reversePointOrder(points);
+				CoordinateList::reverse(points);
 			}
 			return;
 		}
@@ -179,7 +184,26 @@ bool LineString::isEquivalentClass(Geometry *other) {
 }
 
 int LineString::compareToSameClass(Geometry *ls) {
-	return compare(*(points->toVector()),*(((LineString*)ls)->points->toVector()));
+	LineString *line=(LineString*)ls;
+	// MD - optimized implementation
+	int i=0;
+	int j=0;
+	while(i<points->getSize() && j<line->points->getSize()) {
+		int comparison=points->getAt(i).compareTo(line->points->getAt(j));
+		if(comparison!=0) {
+			return comparison;
+		}
+		i++;
+		j++;
+	}
+	if (i<points->getSize()) {
+		return 1;
+	}
+	if (j<line->points->getSize()) {
+		return -1;
+	}
+	return 0;
+//	return compare(*(points->toVector()),*(((LineString*)ls)->points->toVector()));
 }
 
 Coordinate* LineString::getCoordinate() {

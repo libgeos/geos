@@ -1,7 +1,7 @@
-#include "opValid.h"
-#include "opOverlay.h"
+#include "../../headers/opValid.h"
+#include "../../headers/opOverlay.h"
 #include "stdio.h"
-#include "util.h"
+#include "../../headers/util.h"
 #include <typeinfo>
 
 ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph *newGeomGraph) {
@@ -17,6 +17,14 @@ ConnectedInteriorTester::~ConnectedInteriorTester() {
 
 Coordinate& ConnectedInteriorTester::getCoordinate() {
 	return disconnectedRingcoord;
+}
+
+Coordinate& ConnectedInteriorTester::findDifferentPoint(CoordinateList *coord,Coordinate& pt){
+	for(int i=0;i<coord->getSize();i++) {
+		if(!(coord->getAt(i)==pt))
+			return coord->getAt(i);
+	}
+	return Coordinate::getNull();
 }
 
 bool ConnectedInteriorTester::isInteriorsConnected() {
@@ -88,7 +96,13 @@ void ConnectedInteriorTester::visitShellInteriors(Geometry *g, PlanarGraph *grap
 
 void ConnectedInteriorTester::visitInteriorRing(LineString *ring, PlanarGraph *graph) {
 	CoordinateList *pts=ring->getCoordinates();
-	Edge *e=graph->findEdgeInSameDirection(pts->getAt(0),pts->getAt(1));
+	Coordinate& pt0=pts->getAt(0);
+    /**
+     * Find first point in coord list different to initial point.
+     * Need special check since the first point may be repeated.
+     */
+    Coordinate& pt1=findDifferentPoint(pts,pt0);
+	Edge *e=graph->findEdgeInSameDirection(pt0,pt1);
 	DirectedEdge *de=(DirectedEdge*) graph->findEdgeEnd(e);
 	DirectedEdge *intDe=NULL;
 	if (de->getLabel()->getLocation(0,Position::RIGHT)==Location::INTERIOR) {

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "graphindex.h"
+#include "../../headers/graphindex.h"
 
 SweepLineEvent::SweepLineEvent(int newGeomIndex,double x,SweepLineEvent *newInsertEvent,void *newObj){
 	geomIndex=newGeomIndex;

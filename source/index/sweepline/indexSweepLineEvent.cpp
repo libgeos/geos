@@ -1,4 +1,4 @@
-#include "indexSweepline.h"
+#include "../../headers/indexSweepline.h"
 #include "stdio.h"
 
 indexSweepLineEvent::indexSweepLineEvent(double x,indexSweepLineEvent *newInsertEvent,SweepLineInterval *newSweepInt) {

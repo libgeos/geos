@@ -1,4 +1,4 @@
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 
 int RobustCGAlgorithms::orientationIndex(Coordinate& p1,Coordinate& p2,Coordinate& q) {
 	// travelling along p1->p2, turn counter clockwise to get to q return 1,

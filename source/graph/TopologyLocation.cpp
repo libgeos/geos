@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 
 TopologyLocation::TopologyLocation(vector<int>* newLocation){
 	location=new vector<int>();

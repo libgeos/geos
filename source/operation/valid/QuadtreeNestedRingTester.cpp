@@ -1,20 +1,21 @@
-#include "opValid.h"
+#include "../../headers/opValid.h"
 #include "stdio.h"
-#include "util.h"
+#include "../../headers/util.h"
 
-CGAlgorithms* QuadtreeNestedRingTester::cga=new RobustCGAlgorithms();
 
 QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph) {
 	graph=newGraph;
 	rings=new vector<LinearRing*>();
 	totalEnv=new Envelope();
 	qt=new Quadtree(totalEnv);
+	cga=new RobustCGAlgorithms();
 }
 
 QuadtreeNestedRingTester::~QuadtreeNestedRingTester() {
 	delete rings;
 	delete totalEnv;
 	delete qt;
+	delete cga;
 }
 
 Coordinate& QuadtreeNestedRingTester::getNestedPoint() {
@@ -37,7 +38,7 @@ bool QuadtreeNestedRingTester::isNonNested() {
 			CoordinateList *searchRingPts=searchRing->getCoordinates();
 			if (innerRing==searchRing)
 				continue;
-			if (!innerRing->getEnvelopeInternal()->overlaps(searchRing->getEnvelopeInternal()))
+			if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
 				continue;
 			Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(!(innerRingPt==Coordinate::getNull()),"Unable to find a ring point not a node of the search ring");
@@ -53,7 +54,7 @@ bool QuadtreeNestedRingTester::isNonNested() {
 }
 
 void QuadtreeNestedRingTester::buildQuadtree() {
-	qt=new Quadtree(totalEnv);
+	qt=new Quadtree();
 	for(int i=0;i<(int)rings->size();i++) {
 		LinearRing *ring=(*rings)[i];
 		Envelope *env=ring->getEnvelopeInternal();

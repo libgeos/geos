@@ -1,10 +1,9 @@
-#include "graphindex.h"
+#include "../../headers/graphindex.h"
 
-SweepLineSegment::SweepLineSegment(Edge *newEdge,int newPtIndex,int newGeomIndex){
+SweepLineSegment::SweepLineSegment(Edge *newEdge,int newPtIndex){
 	pts=newEdge->getCoordinates();
 	edge=newEdge;
 	ptIndex=newPtIndex;
-	geomIndex=newGeomIndex;
 }
 
 double SweepLineSegment::getMinX(){

@@ -1,4 +1,4 @@
-#include "geom.h"
+#include "../headers/geom.h"
 
 Point::Point(){
 	coordinate.setNull();
@@ -63,6 +63,7 @@ Envelope* Point::computeEnvelopeInternal() {
 }
 
 void Point::apply(CoordinateFilter *filter) {
+    if (isEmpty()) {return;}
 	filter->filter(coordinate);
 }
 
@@ -74,14 +75,14 @@ void Point::apply(GeometryComponentFilter *filter) {
 	filter->filter(this);
 }
 
-bool Point::equalsExact(Geometry *other) {
+bool Point::equalsExact(Geometry *other, double tolerance) {
 	if (!isEquivalentClass(other)) {
 		return false;
 	}
 	if (isEmpty() && other->isEmpty()) {
 		return true;
 	}
-	return dynamic_cast<Point *>(other)->coordinate==coordinate;
+    return equal(((Point*) other)->coordinate, coordinate, tolerance);
 }
 
 int Point::compareToSameClass(Geometry *point) {

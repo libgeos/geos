@@ -1,5 +1,5 @@
-#include "io.h"
-#include "util.h"
+#include "../headers/io.h"
+#include "../headers/util.h"
 
 WKTReader::WKTReader(){
 	geometryFactory=new GeometryFactory();

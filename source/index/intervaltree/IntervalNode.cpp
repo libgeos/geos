@@ -1,4 +1,4 @@
-#include "indexIntervaltree.h"
+#include "../../headers/indexIntervaltree.h"
 #include "stdio.h"
 
 IntervalNode::IntervalNode(IntervalNode* newParent,double newMin,double newMax){

@@ -534,9 +534,11 @@ public:
 	void computeSplitEdges(vector<Edge*> *edgelist);
 	void addEdge(Edge *e);
 	void addPoint(Coordinate& pt);
-	SegmentIntersector* computeSelfNodes(LineIntersector *li);
+	SegmentIntersector* computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes);
 	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,LineIntersector *li,bool includeProper);
 	vector<Edge*> *getEdges();
+	bool hasTooFewPoints();
+	Coordinate* getInvalidPoints();
 private:
 	Geometry *parentGeom;
 	// the precision model of the Geometry represented by this graph
@@ -555,6 +557,8 @@ private:
 	bool useBoundaryDeterminationRule;
 	int argIndex;  // the index of this geometry as an argument to a spatial function (used for labelling)
 	vector<Node*>* boundaryNodes;
+	bool hasTooFewPointsVar;
+	Coordinate& invalidPoint;
 	EdgeSetIntersector* createEdgeSetIntersector();
 	void add(Geometry *g);
 	void addCollection(GeometryCollection *gc);

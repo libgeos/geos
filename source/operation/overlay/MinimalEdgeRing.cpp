@@ -1,4 +1,4 @@
-#include "opOverlay.h"
+#include "../../headers/opOverlay.h"
 #include "stdio.h"
 
 MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFactory,CGAlgorithms *cga):

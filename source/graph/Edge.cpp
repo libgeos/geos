@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 
 /**
  * Updates an IM from the label for an edge.
@@ -152,7 +152,9 @@ void Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,in
 	int nextSegIndex=normalizedSegmentIndex+1;
 	if (nextSegIndex<pts->getSize()) {
 		Coordinate& nextPt=pts->getAt(nextSegIndex);
-		if (intPt==nextPt) {
+        // Normalize segment index if intPt falls on vertex
+        // The check for point equality is 2D only - Z values are ignored
+		if (intPt.equals2D(nextPt)) {
 			normalizedSegmentIndex=nextSegIndex;
 			dist=0.0;
 		}

@@ -1,5 +1,5 @@
-#include "graph.h"
-//#include "util.h"
+#include "../headers/graph.h"
+//#include "../headers/util.h"
 
 Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Label(0,Location::UNDEF)) {
 	coord=newCoord;

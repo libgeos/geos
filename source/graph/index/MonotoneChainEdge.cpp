@@ -1,4 +1,4 @@
-#include "graphindex.h"
+#include "../../headers/graphindex.h"
 
 /**
  * MonotoneChains are a way of partitioning the segments of an edge to

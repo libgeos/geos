@@ -1,4 +1,4 @@
-#include "graphindex.h"
+#include "../../headers/graphindex.h"
 
 vector<int>* MonotoneChainIndexer::getChainStartIndices(CoordinateList* pts){
 	// find the startpoint (and endpoints) of all monotone chains in this edge

@@ -1,5 +1,5 @@
-#include "geosAlgorithm.h"
-#include "util.h"
+#include "../headers/geosAlgorithm.h"
+#include "../headers/util.h"
 
 RobustLineIntersector::RobustLineIntersector(){}
 
@@ -190,8 +190,8 @@ Coordinate& RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Co
     }
 	intPt.x+=normPt->x;
 	intPt.y+=normPt->y;
-	if (makePrecise) {
-		intPt.makePrecise();
+	if (precisionModel!=NULL) {
+		precisionModel->makePrecise(intPt.x);
 	}
 	delete n1;
 	delete n2;

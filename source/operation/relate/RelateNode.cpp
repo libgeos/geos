@@ -1,4 +1,4 @@
-#include "opRelate.h"
+#include "../../headers/opRelate.h"
 #include "stdio.h"
 
 RelateNode::RelateNode(Coordinate& coord,EdgeEndStar *edges): Node(coord,edges) {}

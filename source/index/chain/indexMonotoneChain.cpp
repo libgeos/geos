@@ -1,6 +1,6 @@
-#include "indexChain.h"
+#include "../../headers/indexChain.h"
 #include "stdio.h"
-#include "util.h"
+#include "../../headers/util.h"
 
 indexMonotoneChain::indexMonotoneChain(CoordinateList *newPts,int nstart,int nend) {
 	env=NULL;
@@ -69,7 +69,7 @@ void indexMonotoneChain::computeSelect(Envelope *searchEnv,int start0,int end0,M
 		return;
 	}
 	// nothing to do if the envelopes don't overlap
-	if (!searchEnv->overlaps(env1))
+	if (!searchEnv->intersects(env1))
 		return;
 	// the chains overlap,so split each in half and iterate (binary search)
 	int mid=(start0+end0)/2;
@@ -101,7 +101,7 @@ void indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain 
 	// nothing to do if the envelopes of these chains don't overlap
 	env1->init(p00,p01);
 	env2->init(p10,p11);
-	if (!env1->overlaps(env2)) return;
+	if (!env1->intersects(env2)) return;
 	// the chains overlap,so split each in half and iterate (binary search)
 	int mid0=(start0+end0)/2;
 	int mid1=(start1+end1)/2;

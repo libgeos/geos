@@ -1,4 +1,4 @@
-#include "opRelate.h"
+#include "../../headers/opRelate.h"
 #include "stdio.h"
 
 EdgeEndBundle::EdgeEndBundle(EdgeEnd *e): EdgeEnd(e->getEdge(),e->getCoordinate(),

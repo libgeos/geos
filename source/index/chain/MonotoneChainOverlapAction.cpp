@@ -1,4 +1,4 @@
-#include "indexChain.h"
+#include "../../headers/indexChain.h"
 #include "stdio.h"
 
 MonotoneChainOverlapAction::MonotoneChainOverlapAction() {

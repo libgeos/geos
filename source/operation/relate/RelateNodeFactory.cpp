@@ -1,4 +1,4 @@
-#include "opRelate.h"
+#include "../../headers/opRelate.h"
 #include "stdio.h"
 
 Node* RelateNodeFactory::createNode(Coordinate coord) {

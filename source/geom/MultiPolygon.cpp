@@ -1,4 +1,4 @@
-#include "geom.h"
+#include "../headers/geom.h"
 
 MultiPolygon::MultiPolygon(){}
 MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID):
@@ -37,9 +37,9 @@ Geometry* MultiPolygon::getBoundary() {
 	return new MultiLineString(allRings,precisionModel,SRID);
 }
 
-bool MultiPolygon::equalsExact(Geometry *other) {
+bool MultiPolygon::equalsExact(Geometry *other, double tolerance) {
     if (!isEquivalentClass(other)) {
       return false;
     }
-	return GeometryCollection::equalsExact(other);
+	return GeometryCollection::equalsExact(other, tolerance);
 }

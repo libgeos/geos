@@ -63,7 +63,7 @@ protected:
 
 class SweepLineSegment{
 public:
-	SweepLineSegment(Edge *newEdge,int newPtIndex,int newGeomIndex);
+	SweepLineSegment(Edge *newEdge,int newPtIndex);
 	double getMinX();
 	double getMaxX();
 	void computeIntersections(SweepLineSegment *ss,SegmentIntersector *si);
@@ -71,7 +71,6 @@ protected:
 	Edge *edge;
 	CoordinateList* pts;
 	int ptIndex;
-	int geomIndex;
 };
 
 class SweepLineEvent{

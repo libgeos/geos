@@ -1,4 +1,4 @@
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 
 MCPointInRing::MCSelecter::MCSelecter(Coordinate& newP,MCPointInRing *prt) {

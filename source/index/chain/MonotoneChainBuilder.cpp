@@ -1,5 +1,5 @@
-#include "indexChain.h"
-#include "graph.h"
+#include "../../headers/indexChain.h"
+#include "../../headers/graph.h"
 #include "stdio.h"
 
 /**

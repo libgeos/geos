@@ -1,5 +1,5 @@
-#include "geom.h"
-#include "operation.h"
+#include "../headers/geom.h"
+#include "../headers/operation.h"
 
 MultiLineString::MultiLineString(){}
 MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID):
@@ -47,9 +47,9 @@ Geometry* MultiLineString::getBoundary() {
 	return fact.createMultiPoint(pts);
 }
 
-bool MultiLineString::equalsExact(Geometry *other) {
+bool MultiLineString::equalsExact(Geometry *other, double tolerance) {
     if (!isEquivalentClass(other)) {
       return false;
     }
-	return GeometryCollection::equalsExact(other);
+	return GeometryCollection::equalsExact(other, tolerance);
 }

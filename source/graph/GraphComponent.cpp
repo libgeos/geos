@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "util.h"
+#include "../headers/graph.h"
+#include "../headers/util.h"
 
 GraphComponent::GraphComponent() {
 	isInResultVar = false;

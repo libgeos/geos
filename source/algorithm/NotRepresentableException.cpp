@@ -1,4 +1,4 @@
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 
 NotRepresentableException::NotRepresentableException(): txt("Projective point not representable on the Cartesian plane."){}
 NotRepresentableException::NotRepresentableException(string msg): txt(""){

@@ -1,5 +1,48 @@
-#include "geom.h"
+#include "../headers/geom.h"
 #include "stdio.h"
+
+/**
+* Test the point q to see whether it intersects the Envelope defined by p1-p2
+* @param p1 one extremal point of the envelope
+* @param p2 another extremal point of the envelope
+* @param q the point to test for intersection
+* @return <code>true</code> if q intersects the envelope p1-p2
+*/
+bool Envelope::intersects(Coordinate& p1,Coordinate& p2,Coordinate& q) {
+	if (((q.x>=min(p1.x,p2.x))&&(q.x<=max(p1.x,p2.x))) &&
+		((q.y>=min(p1.y,p2.y))&&(q.y<=max(p1.y,p2.y)))) {
+			return true;
+	}
+	return false;
+}
+/**
+* Test the envelope defined by p1-p2 for intersection
+* with the envelope defined by q1-q2
+* @param p1 one extremal point of the envelope P
+* @param p2 another extremal point of the envelope P
+* @param q1 one extremal point of the envelope Q
+* @param q2 another extremal point of the envelope Q
+* @return <code>true</code> if Q intersects P
+*/
+bool Envelope::intersects(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2){
+	double minq=min(q1.x,q2.x);
+	double maxq=max(q1.x,q2.x);
+	double minp=min(p1.x,p2.x);
+	double maxp=max(p1.x,p2.x);
+	if(minp>maxq)
+		return false;
+	if(maxp<minq)
+		return false;
+	minq=min(q1.y,q2.y);
+	maxq=max(q1.y,q2.y);
+	minp=min(p1.y,p2.y);
+	maxp=max(p1.y,p2.y);
+	if(minp>maxq)
+		return false;
+	if(maxp<minq)
+		return false;
+	return true;
+}
 
 /**
 * Compute the distance between two points specified by their ordinate values
@@ -329,8 +372,15 @@ bool Envelope::contains(Envelope* other) {
  *@param  other  the <code>Coordinate</code> to be tested
  *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
  */
+bool Envelope::intersects(Coordinate& p) {
+	return intersects(p.x, p.y);
+}
+
+/**
+* @deprecated Use #intersects instead.
+*/
 bool Envelope::overlaps(Coordinate& p) {
-	return overlaps(p.x, p.y);
+	return intersects(p);
 }
 
 /**
@@ -341,12 +391,20 @@ bool Envelope::overlaps(Coordinate& p) {
  *@param  y  the y-ordinate of the point
  *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
  */
-bool Envelope::overlaps(double x, double y) {
+bool Envelope::intersects(double x, double y) {
 	return !(x > maxx ||
 			 x < minx ||
 			 y > maxy ||
 			 y < miny);
 }
+
+/**
+* @deprecated Use #intersects instead.
+*/
+bool Envelope::overlaps(double x, double y) {
+	return intersects(x,y);
+}
+
 
 /**
  *  Check if the region defined by <code>other</code>
@@ -356,11 +414,20 @@ bool Envelope::overlaps(double x, double y) {
  *          being checked for overlapping
  *@return        <code>true</code> if the <code>Envelope</code>s overlap
  */
-bool Envelope::overlaps(Envelope* other) {
+bool Envelope::intersects(Envelope* other) {
 	return !(other->getMinX() > maxx ||
 			 other->getMaxX() < minx ||
 			 other->getMinY() > maxy ||
 			 other->getMaxY() < miny);
+}
+
+/**
+* @deprecated Use #intersects instead. In the future, #overlaps may be
+* changed to be a true overlap check; that is, whether the intersection is
+* two-dimensional.
+*/
+bool Envelope::overlaps(Envelope *other) {
+	return intersects(other);
 }
 
 /**
@@ -384,32 +451,17 @@ string Envelope::toString() {
 * distance is the Euclidean distance between the closest points.
 */
 double Envelope::distance(Envelope* env) {
-	if (overlaps(env)) return 0;
-	if (maxx<env->minx) {
-		// this is left of env
-		if (maxy<env->miny) {
-			// this is below left of env
-			return distance(maxx,maxy,env->minx,env->miny);
-		} else if (miny>env->maxy) {
-			// this is above left of env
-			return distance(maxx,miny,env->minx,env->maxy);
-		} else {
-			// this is directly left of env
-			return env->minx-maxx;
-		}
-	} else {
-		// this is right of env
-		if (maxy<env->miny) {
-			// this is below right of env
-			return distance(minx,maxy,env->maxx,env->miny);
-		} else if (miny>env->maxy) {
-			// this is above right of env
-			return distance(minx,miny,env->maxx,env->maxy);
-		} else {
-			// this is directly right of env
-			return minx-env->maxx;
-		}
-	}
+	if (intersects(env)) return 0;
+	double dx=0.0;
+	if(maxx<env->minx) dx=env->minx-maxx;
+	if(minx>env->maxx) dx=minx-env->maxx;
+	double dy=0.0;
+	if(maxy<env->miny) dy=env->miny-maxy;
+	if(miny>env->maxy) dy=miny-env->maxy;
+	// if either is zero, the envelopes overlap either vertically or horizontally
+	if (dx==0.0) return dy;
+	if (dy==0.0) return dx;
+	return sqrt(dx*dx+dy*dy);
 }
 
 /// Checks if two Envelopes are equal

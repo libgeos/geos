@@ -1,4 +1,4 @@
-#include "indexSweepline.h"
+#include "../../headers/indexSweepline.h"
 #include "stdio.h"
 
 SweepLineInterval::SweepLineInterval(double newMin, double newMax) {

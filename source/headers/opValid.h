@@ -17,7 +17,7 @@ public:
 	Coordinate& getNestedPoint();
 	bool isNonNested();
 private:
-	static CGAlgorithms *cga;
+	CGAlgorithms *cga;
 	GeometryGraph *graph;  // used to find non-node vertices
 	vector<LinearRing*> *rings;
 	Coordinate nestedPt;
@@ -34,13 +34,15 @@ public:
 		SELF_INTERSECTION,
 		RING_SELF_INTERSECTION,
 		NESTED_SHELLS,
-		DUPLICATE_RINGS
+		DUPLICATE_RINGS,
+		TOO_FEW_POINTS
 	};
 
 TopologyValidationError(int newErrorType,Coordinate newPt);
 TopologyValidationError(int newErrorType);
 Coordinate& getCoordinate();
 string getMessage();
+int getErrorType();
 string toString();
 private:
 	static string errMsg[];
@@ -48,6 +50,11 @@ private:
 	Coordinate pt;
 };
 
+/**
+ * Implements the appropriate checks for repeated points
+ * (consecutive identical coordinates) as defined in the
+ * JTS spec.
+ */
 class RepeatedPointTester {
 public:
 	RepeatedPointTester() {};
@@ -62,9 +69,16 @@ private:
 	bool hasRepeatedPoint(MultiLineString *gc);
 };
 
+/**
+ * Checks that a GeometryGraph representing an area (a Polygon or
+ * MultiPolygon) is consistent with the SFS semantics for area geometries.
+ * Checks include testing for rings which self-intersect (both properly
+ * and at nodes),
+ * and checking for duplicate rings.
+ */
 class ConsistentAreaTester {
 private:
-	static LineIntersector *li;
+	LineIntersector *li;
 	GeometryGraph *geomGraph;
 	RelateNodeGraph *nodeGraph;
 	// the intersection point found (if any)
@@ -118,7 +132,7 @@ public:
 		SweeplineNestedRingTester *parent;
 	};
 private:
-	static CGAlgorithms *cga;
+	CGAlgorithms *cga;
 	GeometryGraph *graph;  // used to find non-node vertices
 	vector<LinearRing*> *rings;
 	Envelope *totalEnv;
@@ -135,7 +149,7 @@ public:
 	void add(LinearRing *ring);
 	bool isNonNested();
 private:
-	static CGAlgorithms *cga;
+	CGAlgorithms *cga;
 	GeometryGraph *graph;  // used to find non-node vertices
 	vector<LinearRing*> *rings;
 	Envelope *totalEnv;
@@ -156,6 +170,7 @@ public:
 	~ConnectedInteriorTester();
 	Coordinate& getCoordinate();
 	bool isInteriorsConnected();
+	static Coordinate& findDifferentPoint(CoordinateList *coord,Coordinate& pt);
 private:
 	GeometryFactory *geometryFactory;
 	CGAlgorithms *cga;

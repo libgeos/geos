@@ -1,4 +1,4 @@
-#include "opOverlay.h"
+#include "../../headers/opOverlay.h"
 #include "stdio.h"
 
 EdgeSetNoder::EdgeSetNoder(LineIntersector *newLi) {
@@ -17,7 +17,7 @@ void EdgeSetNoder::addEdges(vector<Edge*> *edges){
 vector<Edge*>* EdgeSetNoder::getNodedEdges() {
 	EdgeSetIntersector *esi=new SimpleMCSweepLineIntersector();
 	SegmentIntersector *si=new SegmentIntersector(li,true,false);
-	esi->computeIntersections(inputEdges,si);
+	esi->computeIntersections(inputEdges,si,true);
 	//Debug.println("has proper int = " + si.hasProperIntersection());
 	vector<Edge*> *splitEdges=new vector<Edge*>();
 	for(int i=0;i<(int)inputEdges->size();i++) {

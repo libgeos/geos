@@ -1,8 +1,8 @@
 #ifndef GEOS_EX2_H
 #define GEOS_EX2_H
 
-#include "platform.h"
-#include "geom.h"
+#include "../headers/platform.h"
+#include "../headers/geom.h"
 
 using namespace std;
 

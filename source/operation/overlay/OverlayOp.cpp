@@ -1,8 +1,6 @@
-#include "opOverlay.h"
+#include "../../headers/opOverlay.h"
 #include "stdio.h"
-#include "util.h"
-
-PointLocator* OverlayOp::ptLocator=new PointLocator();
+#include "../../headers/util.h"
 
 Geometry* OverlayOp::overlayOp(Geometry *geom0,Geometry *geom1,int opCode) {
 	OverlayOp *gov=new OverlayOp(geom0,geom1);
@@ -47,6 +45,7 @@ OverlayOp::OverlayOp(Geometry *g0,Geometry *g1): GeometryGraphOperation(g0,g1) {
 	resultPolyList=new vector<Polygon*>();
 	resultLineList=new vector<LineString*>();
 	resultPointList=new vector<Point*>();
+	ptLocator=new PointLocator();
 }
 
 OverlayOp::~OverlayOp() {
@@ -56,6 +55,7 @@ OverlayOp::~OverlayOp() {
 	delete resultPolyList;
 	delete resultLineList;
 	delete resultPointList;
+	delete ptLocator;
 }
 
 Geometry* OverlayOp::getResultGeometry(int funcCode) {
@@ -331,8 +331,8 @@ void OverlayOp::computeOverlay(int opCode) {
 	copyPoints(0);
 	copyPoints(1);
 	// node the input Geometries
-	(*arg)[0]->computeSelfNodes(li);
-	(*arg)[1]->computeSelfNodes(li);
+	(*arg)[0]->computeSelfNodes(li,false);
+	(*arg)[1]->computeSelfNodes(li,false);
 	// compute intersections between edges of the two input geometries
 	(*arg)[0]->computeEdgeIntersections((*arg)[1],li,true);
 	

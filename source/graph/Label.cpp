@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 
 Label* Label::toLineLabel(Label* label) {
 	Label *lineLabel=new Label(Location::UNDEF);

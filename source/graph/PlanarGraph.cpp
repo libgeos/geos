@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 
 CGAlgorithms* PlanarGraph::cga=new RobustCGAlgorithms();
 LineIntersector* PlanarGraph::li=new RobustLineIntersector();

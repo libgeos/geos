@@ -1,16 +1,17 @@
-#include "opValid.h"
-#include "util.h"
+#include "../../headers/opValid.h"
+#include "../../headers/util.h"
 #include "stdio.h"
 
-CGAlgorithms* SimpleNestedRingTester::cga=new RobustCGAlgorithms();
 
 SimpleNestedRingTester::SimpleNestedRingTester(GeometryGraph *newGraph){
 	graph=newGraph;
 	rings=new vector<LinearRing*>();
+	cga=new RobustCGAlgorithms();
 }
 
 SimpleNestedRingTester::~SimpleNestedRingTester(){
 	delete rings;
+	delete cga;
 }
 
 
@@ -31,7 +32,7 @@ bool SimpleNestedRingTester::isNonNested(){
 			CoordinateList *searchRingPts=searchRing->getCoordinates();
 			if (innerRing==searchRing)
 				continue;
-			if (!innerRing->getEnvelopeInternal()->overlaps(searchRing->getEnvelopeInternal()))
+			if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
 				continue;
 			Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(innerRingPt==Coordinate::getNull(), "Unable to find a ring point not a node of the search ring");

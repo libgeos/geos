@@ -1,4 +1,4 @@
-#include "opRelate.h"
+#include "../../headers/opRelate.h"
 #include "stdio.h"
 
 IntersectionMatrix* RelateOp::relate(Geometry *a,Geometry *b) {

@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 
 int Position::opposite(int position){
 	if (position==LEFT) return RIGHT;

@@ -1,4 +1,4 @@
-#include "geom.h"
+#include "../headers/geom.h"
 
 LinearRing::LinearRing(): LineString() {}
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr.points, lr.precisionModel, lr.SRID) {}
@@ -7,8 +7,8 @@ LinearRing::LinearRing(CoordinateList* points,PrecisionModel* precisionModel,int
 	if (!LineString::isEmpty() && !LineString::isClosed()) {
 		throw "IllegalArgumentException: points must form a closed linestring";
     }
-	if (!points->isEmpty() && (points->getSize() == 1 || points->getSize() == 2)) {
-		throw "IllegalArgumentException:points must contain 0 or >2 elements";
+	if (!points->isEmpty() && (points->getSize()>=1 && points->getSize()<=3)) {
+		throw "IllegalArgumentException: Number of points must be 0 or >3";
 	}
 }
 LinearRing::~LinearRing(){}

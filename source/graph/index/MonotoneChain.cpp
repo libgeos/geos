@@ -1,4 +1,4 @@
-#include "graphindex.h"
+#include "../../headers/graphindex.h"
 
 MonotoneChain::MonotoneChain(MonotoneChainEdge *newMce,int newChainIndex,int newGeomIndex) {
 	mce=newMce;

@@ -1,4 +1,4 @@
-#include "operation.h"
+#include "../headers/operation.h"
 #include "stdio.h"
 #include <set>
 
@@ -34,7 +34,8 @@ bool IsSimpleOp::isSimple(MultiPoint *mp) {
 bool IsSimpleOp::isSimpleLinearGeometry(Geometry *geom){
 	if (geom->isEmpty()) return true;
 	GeometryGraph *graph=new GeometryGraph(0,geom);
-	SegmentIntersector *si=graph->computeSelfNodes(graph->li);
+	LineIntersector *li=new RobustLineIntersector();
+	SegmentIntersector *si=graph->computeSelfNodes(li,true);
 	// if no self-intersection, must be simple
 	if (!si->hasIntersection()) return true;
 	if (si->hasProperIntersection()) return false;

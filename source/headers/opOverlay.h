@@ -61,7 +61,7 @@ protected:
 	*/
 	void insertUniqueEdge(Edge *e);
 private:
-	static PointLocator *ptLocator;
+	PointLocator *ptLocator;
 	GeometryFactory *geomFact;
 	Geometry *resultGeom;
 	PlanarGraph *graph;

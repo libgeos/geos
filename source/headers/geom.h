@@ -143,9 +143,9 @@ public:
 		return (x == other.x) && ( y == other.y) && (( z == other.z)||(z==DoubleNotANumber && other.z==DoubleNotANumber));
 	}
 
-	void Coordinate::makePrecise() {
-		x = PrecisionModel::makePrecise(x);
-		y = PrecisionModel::makePrecise(y);
+	void Coordinate::makePrecise(PrecisionModel *precisionModel) {
+		x = precisionModel->makePrecise(x);
+		y = precisionModel->makePrecise(y);
 	}
 
 	double Coordinate::distance(Coordinate& p) {
@@ -172,6 +172,13 @@ public:
 	virtual	void setPoints(const vector<Coordinate> &v)=0;
 	bool hasRepeatedPoints();
 	Coordinate* minCoordinate();
+	static bool hasRepeatedPoints(CoordinateList *cl);
+	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
+	static void reverse(CoordinateList *cl);
+	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
+	static Coordinate* minCoordinate(CoordinateList *cl);
+	static void scroll(CoordinateList *cl, Coordinate *firstCoordinate);
+	static int indexOf(Coordinate *coordinate, CoordinateList *cl);
 };
 
 class BasicCoordinateList : public CoordinateList {
@@ -337,6 +344,8 @@ public:
 	Envelope(Coordinate& p);
 	Envelope(const Envelope &env);
 	virtual ~Envelope(void);
+	static bool intersects(Coordinate& p1,Coordinate& p2,Coordinate& q);
+	static bool intersects(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
 	void init(void);
 	void init(double x1, double x2, double y1, double y2);
 	void init(Coordinate& p1, Coordinate& p2);
@@ -359,6 +368,9 @@ public:
 	bool overlaps(Coordinate& p);
 	bool overlaps(double x, double y);
 	bool overlaps(Envelope* other);
+	bool intersects(Coordinate& p);
+	bool intersects(double x, double y);
+	bool intersects(Envelope* other);
 	string toString(void);
 	double distance(Envelope* env);
 private:
@@ -442,7 +454,7 @@ public:
 	virtual Geometry* Union(Geometry *other);
 	virtual Geometry* difference(Geometry *other);
 	virtual Geometry* symDifference(Geometry *other);
-	virtual bool equalsExact(Geometry *other)=0; //Abstract
+	virtual bool equalsExact(Geometry *other, double tolerance)=0; //Abstract
 	virtual void apply(CoordinateFilter *filter)=0; //Abstract
 	virtual void apply(GeometryFilter *filter)=0; //Abstract
 	virtual void apply(GeometryComponentFilter *filter)=0;
@@ -473,6 +485,7 @@ protected:
 	virtual int compareToSameClass(Geometry *geom)=0; //Abstract
 	int compare(vector<Coordinate> a, vector<Coordinate> b);
 	int compare(vector<Geometry *> a, vector<Geometry *> b);
+	bool equal(Coordinate& a,Coordinate& b,double tolerance);
 private:
 	vector<string> sortedClasses;
 	virtual int getClassSortIndex();
@@ -514,6 +527,7 @@ public:
 	virtual void setCoordinates(Coordinate& c0, Coordinate& c1);
 	virtual Coordinate& getCoordinate(int i);
 	virtual void setCoordinates(LineSegment ls);
+	virtual double getLength();
 	virtual void reverse();
 	virtual void normalize();
 	virtual double angle();
@@ -521,6 +535,8 @@ public:
 	virtual double distance(Coordinate& p);
 	virtual double projectionFactor(Coordinate& p);
 	virtual Coordinate& project(Coordinate& p);
+	virtual LineSegment* project(LineSegment *seg);
+	virtual Coordinate& closestPoint(Coordinate& p);
 	virtual int compareTo(LineSegment other);
 	virtual bool equalsTopo(LineSegment other);
 	virtual string toString();
@@ -534,6 +550,7 @@ public:
 	virtual ~IntersectionMatrix();
 	static bool matches(int actualDimensionValue, char requiredDimensionSymbol);
 	static bool matches(string actualDimensionSymbols, string requiredDimensionSymbols);
+	void add(IntersectionMatrix *im);
 	void set(int row, int column, int dimensionValue);
 	void set(string dimensionSymbols);
 	void setAtLeast(int row, int column, int minimumDimensionValue);
@@ -597,9 +614,17 @@ public:
 	static char toLocationSymbol(int locationValue);
 };
 
+/**
+ * Indicates an invalid or inconsistent topological situation encountered during processing
+ */
 class TopologyException {
+private:
+	static string msgWithCoord(string msg,Coordinate *newPt);
+	Coordinate *pt;
 public:
-
+	TopologyException(string msg);
+	TopologyException(string msg,Coordinate *newPt);
+	Coordinate* getCoordinate();
 };
 
 //Operators
@@ -633,7 +658,7 @@ public:
 	virtual string getGeometryType();
 	virtual bool isSimple();
 	virtual Geometry* getBoundary();
-	virtual bool equalsExact(Geometry *other);
+	virtual bool equalsExact(Geometry *other, double tolerance);
 	virtual void apply(CoordinateFilter *filter);
 	virtual void apply(GeometryFilter *filter);
 	virtual void apply(GeometryComponentFilter *filter);
@@ -709,7 +734,7 @@ public:
 	void apply(CoordinateFilter *filter);
 	void apply(GeometryFilter *filter);
 	void apply(GeometryComponentFilter *filter);
-	bool equalsExact(Geometry *other);
+	bool equalsExact(Geometry *other, double tolerance);
 	void normalize(void) { };
 protected:
 	Coordinate coordinate;
@@ -758,7 +783,7 @@ public:
 	virtual bool isSimple();
 	virtual Geometry* getBoundary();
 	virtual bool isCoordinate(Coordinate& pt);
-	virtual bool equalsExact(Geometry *other);
+	virtual bool equalsExact(Geometry *other, double tolerance);
 	virtual void apply(CoordinateFilter *filter);
 	virtual void apply(GeometryFilter *filter);
 	virtual void apply(GeometryComponentFilter *filter);
@@ -813,7 +838,7 @@ public:
 	LineString* getInteriorRingN(int n);
 	string getGeometryType();
 	Geometry* getBoundary();
-	bool equalsExact(Geometry *other);
+	bool equalsExact(Geometry *other, double tolerance);
 	void apply(CoordinateFilter *filter);
 	void apply(GeometryFilter *filter);
 	Geometry* convexHull();
@@ -843,7 +868,7 @@ public:
 	bool isClosed();
 	bool isSimple();
 	Geometry* getBoundary();
-	bool equalsExact(Geometry *other);
+	bool equalsExact(Geometry *other, double tolerance);
 protected:
 	Coordinate* getCoordinate(int n);
 };
@@ -859,7 +884,7 @@ public:
 	bool isClosed();
 	bool isSimple();
 	Geometry* getBoundary();
-	bool equalsExact(Geometry *other);
+	bool equalsExact(Geometry *other, double tolerance);
 };
 
 class MultiPolygon: public GeometryCollection, public SFSMultiPolygon   {
@@ -872,7 +897,7 @@ public:
 	string getGeometryType();
 	bool isSimple();
 	Geometry* getBoundary();
-	bool equalsExact(Geometry *other);
+	bool equalsExact(Geometry *other, double tolerance);
 };
 
 class GeometryFactory {
@@ -883,6 +908,7 @@ public:
 
 //Skipped a lot of list to array convertors
 
+	static Point* createPointFromInternalCoord(Coordinate& coord,Geometry *exemplar);
 	static Geometry* toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID);
 	PrecisionModel* getPrecisionModel();
 	Point* createPoint(Coordinate& coordinate);

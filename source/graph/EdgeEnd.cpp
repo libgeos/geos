@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "util.h"
+#include "../headers/graph.h"
+#include "../headers/util.h"
 #include <typeinfo>
 #include "math.h"
 #include <stdio.h>

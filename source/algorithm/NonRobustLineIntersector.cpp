@@ -1,5 +1,5 @@
-#include "geosAlgorithm.h"
-#include "util.h"
+#include "../headers/geosAlgorithm.h"
+#include "../headers/util.h"
 #include "stdio.h"
 #include "math.h"
 
@@ -149,8 +149,8 @@ int NonRobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coo
 
 	// truncate computed point to precision grid
 	// TESTING-don't force coord to be precise
-	if (makePrecise) {
-		pa.makePrecise();
+	if (precisionModel!=NULL) {
+		precisionModel->makePrecise(pa);
 	}
 	return DO_INTERSECT;
 }

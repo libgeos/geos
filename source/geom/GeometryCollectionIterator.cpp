@@ -1,4 +1,4 @@
-#include "geom.h"
+#include "../headers/geom.h"
 #include <typeinfo>
 
 GeometryCollectionIterator::GeometryCollectionIterator(){

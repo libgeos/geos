@@ -1,6 +1,6 @@
-#include "geom.h"
+#include "../headers/geom.h"
 #include <typeinfo>
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 
 Polygon::Polygon(){
 	shell=new LinearRing();
@@ -111,7 +111,7 @@ Envelope* Polygon::computeEnvelopeInternal() {
 	return shell->getEnvelopeInternal();
 }
 
-bool Polygon::equalsExact(Geometry *other) {
+bool Polygon::equalsExact(Geometry *other, double tolerance) {
 	if (!isEquivalentClass(other)) {
 		return false;
 	}
@@ -124,7 +124,7 @@ bool Polygon::equalsExact(Geometry *other) {
 		return false;
 	}
 	Geometry* otherPolygonShell=dynamic_cast<Geometry *>(otherPolygon->shell);
-	if (!shell->equalsExact(otherPolygonShell)) {
+	if (!shell->equalsExact(otherPolygonShell, tolerance)) {
 		return false;
 	}
 	if (holes->size()!=otherPolygon->holes->size()) {
@@ -137,7 +137,7 @@ bool Polygon::equalsExact(Geometry *other) {
 		if (typeid(*((*(otherPolygon->holes))[i]))!=typeid(Geometry)) {
 			return false;
 		}
-		if (!((LinearRing *)(*holes)[i])->equalsExact((*(otherPolygon->holes))[i])) {
+		if (!((LinearRing *)(*holes)[i])->equalsExact((*(otherPolygon->holes))[i],tolerance)) {
 			return false;
 		}
 	}
@@ -177,12 +177,12 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	}
 	CoordinateList* uniqueCoordinates=ring->getCoordinates();
 	uniqueCoordinates->deleteAt(uniqueCoordinates->getSize()-1);
-	Coordinate* minCoordinate=ring->getCoordinates()->minCoordinate();
-	Geometry::scroll(uniqueCoordinates, minCoordinate);
+	Coordinate* minCoordinate=CoordinateList::minCoordinate(ring->getCoordinates());
+	CoordinateList::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
 	ring->setPoints(uniqueCoordinates);
 	if (cgAlgorithms->isCCW(ring->getCoordinates())==clockwise) {
-		reversePointOrder(ring->getCoordinates());
+		CoordinateList::reverse(ring->getCoordinates());
 	}
 }
 
@@ -219,6 +219,7 @@ double Polygon::getLength() {
 }
 
 void Polygon::apply(GeometryComponentFilter *filter) {
+	filter->filter(this);
 	shell->apply(filter);
 	for(unsigned int i=0;i<holes->size();i++) {
         (*holes)[i]->apply(filter);

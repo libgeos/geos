@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "util.h"
+#include "../headers/graph.h"
+#include "../headers/util.h"
 
 EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
 	label=new Label(Location::UNDEF);

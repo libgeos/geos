@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 #include <stdio.h>
 
 int Quadrant::quadrant(double dx, double dy) {

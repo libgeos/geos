@@ -1,5 +1,5 @@
-#include "geom.h"
-#include "util.h"
+#include "../headers/geom.h"
+#include "../headers/util.h"
 #include <algorithm>
 #include <typeinfo>
 
@@ -93,7 +93,7 @@ Geometry* GeometryCollection::getBoundary() {
 	return NULL;
 }
 
-bool GeometryCollection::equalsExact(Geometry *other) {
+bool GeometryCollection::equalsExact(Geometry *other, double tolerance) {
 	if (!isEquivalentClass(other)) {
 		return false;
 	}

@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "util.h"
+#include "../headers/graph.h"
+#include "../headers/util.h"
 
 EdgeEndStar::EdgeEndStar(){
 	ptInAreaLocation[0]=Location::UNDEF;
@@ -223,10 +223,11 @@ void EdgeEndStar::propagateSideLabels(int geomIndex){
 			int rightLoc=label->getLocation(geomIndex,Position::RIGHT);
 			// if there is a right location, that is the next location to propagate
 			if (rightLoc!=Location::UNDEF) {
-				string locStr="(at " + (e->getCoordinate()).toString() + ")";
-				//Debug.print(rightLoc != currLoc, this);
-				Assert::isTrue(rightLoc==currLoc, "side location conflict " + locStr);
-				Assert::isTrue(leftLoc!=Location::UNDEF, "found single null side " + locStr);
+				if (rightLoc!=currLoc)
+					throw new TopologyException("side location conflict",&(e->getCoordinate()));
+				if (leftLoc==Location::UNDEF) {
+					Assert::shouldNeverReachHere("found single null side (at " + (e->getCoordinate()).toString() + ")");
+				}
 				currLoc=leftLoc;
 			} else {
 				/** RHS is null - LHS must be null too.

@@ -1,5 +1,5 @@
-#include "geosAlgorithm.h"
-#include "platform.h"
+#include "../headers/geosAlgorithm.h"
+#include "../headers/platform.h"
 
 /**
 * Computes the (approximate) intersection point between two line segments

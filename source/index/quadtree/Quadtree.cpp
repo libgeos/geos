@@ -1,4 +1,4 @@
-#include "indexQuadtree.h"
+#include "../../headers/indexQuadtree.h"
 #include "stdio.h"
 
 /**

@@ -1,4 +1,4 @@
-#include "opRelate.h"
+#include "../../headers/opRelate.h"
 #include "stdio.h"
 
 EdgeEndBuilder::EdgeEndBuilder() {}
@@ -20,7 +20,7 @@ void EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l) {
 	EdgeIntersectionList *eiList=edge->getEdgeIntersectionList();
 	//Debug.print(eiList);
 	// ensure that the list has entries for the first and last point of the edge
-	if (!edge->isClosed()) eiList->addEndpoints();
+	eiList->addEndpoints();
 	vector<EdgeIntersection*>::iterator it=eiList->list->begin();
 	EdgeIntersection *eiPrev=NULL;
 	EdgeIntersection *eiCurr=NULL;

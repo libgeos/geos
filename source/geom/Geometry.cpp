@@ -1,13 +1,13 @@
-#include "geom.h"
-#include "util.h"
+#include "../headers/geom.h"
+#include "../headers/util.h"
 #include <typeinfo>
 #include <algorithm>
-#include "geosAlgorithm.h"
-#include "operation.h"
-#include "opRelate.h"
-#include "opValid.h"
-#include "opOverlay.h"
-#include "io.h"
+#include "../headers/geosAlgorithm.h"
+#include "../headers/operation.h"
+#include "../headers/opRelate.h"
+#include "../headers/opValid.h"
+#include "../headers/opOverlay.h"
+#include "../headers/io.h"
 
 
 CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();

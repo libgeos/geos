@@ -1,5 +1,5 @@
-#include "util.h"
-#include "geom.h"
+#include "../headers/util.h"
+#include "../headers/geom.h"
 
 void Assert::isTrue(bool assertion) {
 	isTrue(assertion, string());

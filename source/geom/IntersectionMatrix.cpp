@@ -1,4 +1,4 @@
-#include "geom.h"
+#include "../headers/geom.h"
 #include "stdio.h"
 
 IntersectionMatrix::IntersectionMatrix(){
@@ -29,6 +29,22 @@ IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix &im){
 IntersectionMatrix::~IntersectionMatrix(){
 	//delete[] matrix;
 }
+
+/**
+* Adds one matrix to another.
+* Addition is defined by taking the maximum dimension value of each position
+* in the summand matrices.
+*
+* @param im the matrix to add
+*/
+void IntersectionMatrix::add(IntersectionMatrix *im) {
+	for(int i=0;i<3;i++) {
+		for(int j=0;j<3;j++) {
+			setAtLeast(i,j,im->get(i,j));
+		}
+	}
+}
+
 
 bool IntersectionMatrix::matches(int actualDimensionValue, char requiredDimensionSymbol) {
 	if (requiredDimensionSymbol=='*') {

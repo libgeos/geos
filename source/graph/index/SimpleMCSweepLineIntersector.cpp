@@ -1,4 +1,4 @@
-#include "graphindex.h"
+#include "../../headers/graphindex.h"
 #include <algorithm>
 
 SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector(){

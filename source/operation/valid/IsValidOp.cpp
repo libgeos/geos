@@ -1,8 +1,8 @@
-#include "opValid.h"
+#include "../../headers/opValid.h"
 #include "stdio.h"
 #include <typeinfo>
 #include <set>
-#include "util.h"
+#include "../../headers/util.h"
 
 Coordinate& IsValidOp::findPtNotNode(CoordinateList *testCoords,LinearRing *searchRing, GeometryGraph *graph) {
 	// find edge corresponding to searchRing.

@@ -1,4 +1,4 @@
-#include "io.h"
+#include "../headers/io.h"
 
 StringTokenizer::StringTokenizer(){
 	str="";

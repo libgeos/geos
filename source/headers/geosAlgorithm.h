@@ -86,9 +86,10 @@ public:
 class SimplePointInRing: public PointInRing {
 public:
 	SimplePointInRing(LinearRing *ring);
+	virtual ~SimplePointInRing();
 	bool isInside(Coordinate& pt);
 private:
-	static CGAlgorithms *cga;
+	CGAlgorithms *cga;
 	CoordinateList* pts;
 };
 
@@ -97,7 +98,7 @@ public:
 	static double computeEdgeDistance(Coordinate& p,Coordinate& p0,Coordinate& p1);
 	static double nonRobustComputeEdgeDistance(Coordinate& p,Coordinate& p1,Coordinate& p2);
 	LineIntersector();
-	virtual void setMakePrecise(bool newMakePrecise);
+	virtual void setMakePrecise(PrecisionModel *newPM);
 	/**
 	* Compute the intersection of a point p and the line p1-p2
 	*/
@@ -123,7 +124,7 @@ protected:
 	* If makePrecise is true, computed intersection coordinates will be made precise
 	* using Coordinate#makePrecise
 	*/
-	bool makePrecise;
+	PrecisionModel *precisionModel;
 	int result;
 	Coordinate inputLines[2][2];
 	Coordinate intPt[2];
@@ -200,10 +201,9 @@ protected:
 class SimplePointInAreaLocator {
 public:
 	static int locate(Coordinate& p,Geometry *geom);
-private:
-	static CGAlgorithms *cga;
-	static bool containsPoint(Coordinate& p,Geometry *geom);
 	static bool containsPointInPolygon(Coordinate& p,Polygon *poly);
+private:
+	static bool containsPoint(Coordinate& p,Geometry *geom);
 };
 
 class PointLocator {

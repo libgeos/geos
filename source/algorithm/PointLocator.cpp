@@ -1,6 +1,6 @@
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 #include <typeinfo>
-#include "graph.h"
+#include "../headers/graph.h"
 
 PointLocator::PointLocator() {
 	cga=new RobustCGAlgorithms();

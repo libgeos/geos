@@ -1,4 +1,4 @@
-#include "geosAlgorithm.h"
+#include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 #include "math.h"
 
@@ -9,7 +9,7 @@
 */
 double CGAlgorithms::distancePointLine(Coordinate& p,Coordinate& A,Coordinate& B){
 	//if start==end, then use pt distance
-	if (A==B) return A.distance(B);
+	if (A==B) return p.distance(A);
 
     // otherwise use comp.graphics.algorithms Frequently Asked Questions method
     /*(1)     	      AC dot AB
@@ -24,8 +24,8 @@ double CGAlgorithms::distancePointLine(Coordinate& p,Coordinate& A,Coordinate& B
 	*/
 	double r=((p.x-A.x)*(B.x-A.x)+(p.y-A.y)*(B.y-A.y))/
 			 ((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y));
-	if (r<0) return p.distance(A);
-	if (r>1) return p.distance(B);
+	if (r<=0.0) return p.distance(A);
+	if (r>=1.0) return p.distance(B);
     /*(2)
 		     (Ay-Cy)(Bx-Ax)-(Ax-Cx)(By-Ay)
 		s = -----------------------------
@@ -94,14 +94,12 @@ limiting conditions:
 double CGAlgorithms::signedArea(CoordinateList* ring) {
 	if (ring->getSize()<3) return 0.0;
 	double sum=0.0;
-	double ax=ring->getAt(0).x;
-	double ay=ring->getAt(0).y;
-	for (int i=1;i<ring->getSize()-1;i++) {
+	for (int i=0;i<ring->getSize()-1;i++) {
 		double bx=ring->getAt(i).x;
 		double by=ring->getAt(i).y;
 		double cx=ring->getAt(i+1).x;
 		double cy=ring->getAt(i+1).y;
-		sum+=ax*by-ay*bx+ay*cx-ax*cy+bx*cy-cx*by;
+		sum+=(bx+cx)*(cy-by);
 	}
 	return -sum/2.0;
 }

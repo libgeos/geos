@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../headers/graph.h"
 #include "math.h"
 
 /**
