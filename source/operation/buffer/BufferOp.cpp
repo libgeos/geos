@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/04/14 08:38:31  strk
+ * BufferOp constructor missed to set argGeom
+ *
  * Revision 1.16  2004/04/10 22:41:25  ybychkov
  * "precision" upgraded to JTS 1.4
  *
@@ -92,6 +95,7 @@ int BufferOp::MAX_PRECISION_DIGITS=12;
 BufferOp::BufferOp(Geometry *g) {
 	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
 	int endCapStyle=BufferOp::CAP_ROUND;
+	argGeom = g;
 	resultGeometry=NULL;
 }
 
