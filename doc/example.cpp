@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/16 10:00:45  strk
+ * Bug fixed in GeometricShapeFactory examples.
+ * Added example of GeometricShapeFactory::createArc.
+ *
  * Revision 1.21  2004/07/15 13:41:54  strk
  * Added createRectangle example.
  *
@@ -253,10 +257,28 @@ create_rectangle(double llX, double llY, double width, double height)
 {
 	GeometricShapeFactory shapefactory(global_factory);
 	shapefactory.setBase(Coordinate(llX, llY));
-	shapefactory.setHeight(width);
-	shapefactory.setWidth(height);
+	shapefactory.setHeight(height);
+	shapefactory.setWidth(width);
+	shapefactory.setNumPoints(4); // we don't need more then 4 points for a rectangle...
 	// can use setSize for a square
 	return shapefactory.createRectangle();
+};
+
+//
+// This function uses GeometricShapeFactory to render
+// an arc having lower-left corner at given coordinates,
+// given sizes and given angles. 
+//
+LineString *
+create_arc(double llX, double llY, double width, double height, double startang, double endang)
+{
+	GeometricShapeFactory shapefactory(global_factory);
+	shapefactory.setBase(Coordinate(llX, llY));
+	shapefactory.setHeight(height);
+	shapefactory.setWidth(width);
+	// shapefactory.setNumPoints(100); // the default (100 pts)
+	// can use setSize for a square
+	return shapefactory.createArc(startang, endang);
 };
 
 // Start reading here
@@ -283,17 +305,20 @@ void do_all()
 ////////////////////////////////////////////////////////////////////////
 
 	// Read function bodies to see the magic behind them
-	//geoms->push_back(create_point(150, 350));
-	//geoms->push_back(create_ushaped_linestring(60,60,100));
-	//geoms->push_back(create_square_linearring(0,0,100));
-	//geoms->push_back(create_square_polygon(0,200,300));
-	//geoms->push_back(create_square_polygon(0,250,300));
-	//geoms->push_back(create_simple_collection(geoms));
+	geoms->push_back(create_point(150, 350));
+	geoms->push_back(create_ushaped_linestring(60,60,100));
+	geoms->push_back(create_square_linearring(0,0,100));
+	geoms->push_back(create_square_polygon(0,200,300));
+	geoms->push_back(create_square_polygon(0,250,300));
+	geoms->push_back(create_simple_collection(geoms));
 
 	// These ones use a GeometricShapeFactory
 	geoms->push_back(create_circle(0, 0, 10));
-	//geoms->push_back(create_ellipse(0, 0, 8, 12));
-	//geoms->push_back(create_rectangle(-5, -5, 10, 10));
+	geoms->push_back(create_ellipse(0, 0, 8, 12));
+	geoms->push_back(create_rectangle(-5, -5, 10, 10)); // a square
+	geoms->push_back(create_rectangle(-5, -5, 10, 20)); // a rectangle
+	// The upper-right quarter of a vertical ellipse
+	geoms->push_back(create_arc(0, 0, 10, 20, 0, M_PI/2));
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
