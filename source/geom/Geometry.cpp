@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.39  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.38  2004/03/01 22:04:59  strk
  * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
  *
@@ -357,8 +360,8 @@ Geometry* Geometry::buffer(double distance,int quadrantSegments) const {
 }
 
 Geometry* Geometry::convexHull() const {
-	ConvexHull *ch=new ConvexHull(cgAlgorithms);
-	Geometry *g=ch->getConvexHull(this);
+	ConvexHull *ch=new ConvexHull(this);
+	Geometry *g=ch->getConvexHull();
 	delete ch;
 	return g;
 }

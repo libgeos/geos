@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.11  2004/02/27 17:42:15  strk
  * made CGAlgorithms::signedArea() and CGAlgorithms::length() arguments const-correct
  *
@@ -31,9 +34,192 @@
 namespace geos {
 
 /**
+* Returns the index of the direction of the point <code>q</code>
+* relative to a
+* vector specified by <code>p1-p2</code>.
+*
+* @param p1 the origin point of the vector
+* @param p2 the final point of the vector
+* @param q the point to compute the direction to
+*
+* @return 1 if q is counter-clockwise (left) from p1-p2
+* @return -1 if q is clockwise (right) from p1-p2
+* @return 0 if q is collinear with p1-p2
+*/
+int CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q) {
+	// travelling along p1->p2, turn counter clockwise to get to q return 1,
+	// travelling along p1->p2, turn clockwise to get to q return -1,
+	// p1, p2 and q are colinear return 0.
+	double dx1=p2.x-p1.x;
+	double dy1=p2.y-p1.y;
+	double dx2=q.x-p2.x;
+	double dy2=q.y-p2.y;
+	return RobustDeterminant::signOfDet2x2(dx1,dy1,dx2,dy2);
+}
+
+/**
+* Test whether a point lies inside a ring.
+* The ring may be oriented in either direction.
+* If the point lies on the ring boundary the result of this method is unspecified.
+* <p>
+* This algorithm does not attempt to first check the point against the envelope
+* of the ring.
+*
+* @param p point to check for ring inclusion
+* @param ring assumed to have first point identical to last point
+* @return <code>true</code> if p is inside ring
+*/
+bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateList* ring) {
+	int i;
+	int i1;       // point index; i1 = i-1
+	double xInt;  // x intersection of segment with ray
+	int crossings = 0;  // number of segment/ray crossings
+	double x1;    // translated coordinates
+	double y1;
+	double x2;
+	double y2;
+	int nPts=ring->getSize();
+	/*
+	*  For each segment l = (i-1, i), see if it crosses ray from test point in positive x direction.
+	*/
+	for(i=1;i<nPts;i++) {
+		i1 = i - 1;
+		Coordinate p1=ring->getAt(i);
+		Coordinate p2=ring->getAt(i1);
+		x1 = p1.x - p.x;
+		y1 = p1.y - p.y;
+		x2 = p2.x - p.x;
+		y2 = p2.y - p.y;
+
+		if (((y1 > 0) && (y2 <= 0)) ||
+			((y2 > 0) && (y1 <= 0))) {
+			/*
+			*  segment straddles x axis, so compute intersection.
+			*/
+			xInt = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2) / (y2 - y1);
+			//xsave = xInt;
+			/*
+			*  crosses ray if strictly positive intersection.
+			*/
+			if (0.0 < xInt) {
+				crossings++;
+			}
+		}
+	}
+	/*
+	*  p is inside if number of crossings is odd.
+	*/
+	if ((crossings % 2) == 1) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+* Test whether a point lies on a linestring.
+*
+* @return true true if
+* the point is a vertex of the line or lies in the interior of a line
+* segment in the linestring
+*/
+bool CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateList* pt) {
+	LineIntersector *lineIntersector=new RobustLineIntersector();
+	for(int i=1;i<pt->getSize();i++) {
+		Coordinate p0=pt->getAt(i-1);
+		Coordinate p1=pt->getAt(i);	
+		lineIntersector->computeIntersection(p, p0, p1);
+		if (lineIntersector->hasIntersection()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+* Computes whether a ring defined by an array of {@link Coordinate} is
+* oriented counter-clockwise.
+* <p>
+* This will handle coordinate lists which contain repeated points.
+*
+* @param ring an array of coordinates forming a ring
+* @return <code>true</code> if the ring is oriented counter-clockwise.
+* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 distinct points)
+*/
+bool CGAlgorithms::isCCW(const CoordinateList* ring) {
+	// # of points without closing endpoint
+	int nPts=ring->getSize()-1;
+	// find highest point
+	Coordinate hip=ring->getAt(0);
+	int hii=0;
+	for (int i=1;i<=nPts;i++) {
+		Coordinate p=ring->getAt(i);
+		if (p.y > hip.y) {
+			hip = p;
+			hii = i;
+		}
+	}
+	// find distinct point before highest point
+	int iPrev = hii;
+	do {
+		iPrev = iPrev - 1;
+		if (iPrev < 0) iPrev = nPts;
+	} while (ring->getAt(iPrev)==hip && iPrev!=hii);
+	// find distinct point after highest point
+	int iNext = hii;
+	do {
+		iNext = (iNext + 1) % nPts;
+	} while (ring->getAt(iNext)==hip && iNext != hii);
+	Coordinate prev=ring->getAt(iPrev);
+	Coordinate next=ring->getAt(iNext);
+	// this will catch all cases where there are not 3 distinct points,
+	// including the case where the input array has fewer than 4 elements
+	if (prev==hip || next==hip || prev==next)
+		throw new IllegalArgumentException("degenerate ring (does not contain 3 distinct points)");
+	int disc = computeOrientation(prev, hip, next);
+
+	/**
+	*  If disc is exactly 0, lines are collinear.  There are two possible cases:
+	*  (1) the lines lie along the x axis in opposite directions
+	*  (2) the lines lie on top of one another
+	*
+	*  (1) is handled by checking if next is left of prev ==> CCW
+	*  (2) should never happen, so we're going to ignore it!
+	*  (Might want to assert this)
+	*/
+	bool isCCW=false;
+	if (disc == 0) {
+		// poly is CCW if prev x is right of next x
+		isCCW = (prev.x > next.x);
+	} else {
+		// if area is positive, points are ordered CCW
+		isCCW = (disc > 0);
+	}
+	return isCCW;
+}
+
+/**
+* Computes the orientation of a point q to the directed line segment p1-p2.
+* The orientation of a point relative to a directed line segment indicates
+* which way you turn to get to q after travelling from p1 to p2.
+*
+* @return 1 if q is counter-clockwise from p1-p2
+* @return -1 if q is clockwise from p1-p2
+* @return 0 if q is collinear with p1-p2
+*/
+int CGAlgorithms::computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q) {
+	return orientationIndex(p1,p2,q);
+}
+
+/**
 * Computes the distance from a point p to a line segment AB
 *
 * Note: NON-ROBUST!
+*
+* @param p the point to compute the distance for
+* @param A one point of the line
+* @param B another point of the line (must be different to A)
+* @return the distance from p to line segment AB
 */
 double
 CGAlgorithms::distancePointLine(const Coordinate& p, const Coordinate& A,
@@ -70,9 +256,39 @@ CGAlgorithms::distancePointLine(const Coordinate& p, const Coordinate& A,
 }
 
 /**
+* Computes the perpendicular distance from a point p
+* to the (infinite) line containing the points AB
+*
+* @param p the point to compute the distance for
+* @param A one point of the line
+* @param B another point of the line (must be different to A)
+* @return the distance from p to line AB
+*/
+double distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B) {
+    // use comp.graphics.algorithms Frequently Asked Questions method
+    /*(2)
+                     (Ay-Cy)(Bx-Ax)-(Ax-Cx)(By-Ay)
+                s = -----------------------------
+                                     L^2
+
+                Then the distance from C to P = |s|*L.
+        */
+
+	double s = ((A.y - p.y) *(B.x - A.x) - (A.x - p.x)*(B.y - A.y) )
+              /
+            ((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y) );
+    return fabs(s)*sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
+}
+
+/**
 * Computes the distance from a line segment AB to a line segment CD
 *
 * Note: NON-ROBUST!
+*
+* @param A a point of one line
+* @param B the second point of  (must be different to A)
+* @param C one point of the line
+* @param D another point of the line (must be different to A)
 */
 double
 CGAlgorithms::distanceLineLine(const Coordinate& A, const Coordinate& B,
@@ -149,5 +365,9 @@ double CGAlgorithms::length(const CoordinateList* pts) {
 	}
 	return sum;
 }
+
+
+
+
 }
 

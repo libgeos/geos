@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.10  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -61,10 +64,7 @@ CentroidArea::~CentroidArea() {
 void CentroidArea::add(const Geometry *geom) {
 	if (typeid(*geom)==typeid(Polygon)) {
 		Polygon *poly=(Polygon*) geom;
-		// Was poly->getCoordinates(), changed to improve
-		// performance --strk;
-		const CoordinateList *cl=poly->getExteriorRing()->getCoordinatesRO();
-		setBasePoint(&(cl->getAt(0)));
+		setBasePoint(&(poly->getExteriorRing()->getCoordinateN(0)));
 		add(poly);
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint)) ||
@@ -105,14 +105,14 @@ void CentroidArea::add(const Polygon *poly) {
 }
 
 void CentroidArea::addShell(const CoordinateList *pts) {
-	bool isPositiveArea=!cga->isCCW(pts);
+	bool isPositiveArea=!CGAlgorithms::isCCW(pts);
 	for(int i=0;i<pts->getSize()-1;i++) {
 		addTriangle(*basePt,pts->getAt(i),pts->getAt(i+1),isPositiveArea);
 	}
 }
 
 void CentroidArea::addHole(const CoordinateList *pts){
-	bool isPositiveArea=cga->isCCW(pts);
+	bool isPositiveArea=CGAlgorithms::isCCW(pts);
 	for(int i=0;i<pts->getSize()-1;i++) {
 		addTriangle(*basePt,pts->getAt(i),pts->getAt(i+1),isPositiveArea);
 	}

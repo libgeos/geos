@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "windows-1251"?>
+<?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="GEOS"
 	ProjectGUID="{1B9196BF-C194-47BC-846A-D9BBB134F2B3}"
 	Keyword="Win32Proj">
@@ -23,10 +23,12 @@
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				DebugInformationFormat="4"
+				DisableSpecificWarnings="4290"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -53,7 +55,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -99,9 +107,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -140,22 +156,30 @@
 			</File>
 			<File
 				RelativePath="..\source\test\Stackwalker.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\source\test\Stackwalker.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\source\test\XMLTester.cpp">
 				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="FALSE">
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories="&quot;H:\Tools &amp; Projects\Projects\GEOS\lib\xerces&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="FALSE">
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="0"/>
@@ -237,10 +261,7 @@
 					RelativePath="..\source\geom\IntersectionMatrix.cpp">
 				</File>
 				<File
-					RelativePath="..\source\geom\LineSegment.cpp">
-				</File>
-				<File
-					RelativePath="..\source\geom\LineString.cpp">
+					RelativePath="..\source\geom\LinearRing.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
@@ -255,7 +276,10 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\geom\LinearRing.cpp">
+					RelativePath="..\source\geom\LineSegment.cpp">
+				</File>
+				<File
+					RelativePath="..\source\geom\LineString.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
@@ -514,13 +538,13 @@
 				Name="io"
 				Filter="">
 				<File
-					RelativePath="..\source\io\Unload.cpp">
-				</File>
-				<File
 					RelativePath="..\source\io\ParseException.cpp">
 				</File>
 				<File
 					RelativePath="..\source\io\StringTokenizer.cpp">
+				</File>
+				<File
+					RelativePath="..\source\io\Unload.cpp">
 				</File>
 				<File
 					RelativePath="..\source\io\WKTReader.cpp">
@@ -684,9 +708,6 @@
 				Name="algorithm"
 				Filter="">
 				<File
-					RelativePath="..\source\algorithm\CGAlgorithms.cpp">
-				</File>
-				<File
 					RelativePath="..\source\algorithm\CentroidArea.cpp">
 				</File>
 				<File
@@ -694,6 +715,9 @@
 				</File>
 				<File
 					RelativePath="..\source\algorithm\CentroidPoint.cpp">
+				</File>
+				<File
+					RelativePath="..\source\algorithm\CGAlgorithms.cpp">
 				</File>
 				<File
 					RelativePath="..\source\algorithm\ConvexHull.cpp">
@@ -715,6 +739,9 @@
 				</File>
 				<File
 					RelativePath="..\source\algorithm\MCPointInRing.cpp">
+				</File>
+				<File
+					RelativePath="..\source\algorithm\MinimumDiameter.cpp">
 				</File>
 				<File
 					RelativePath="..\source\algorithm\NonRobustCGAlgorithms.cpp">
@@ -744,9 +771,6 @@
 					RelativePath="..\source\algorithm\RobustLineIntersector.cpp">
 				</File>
 				<File
-					RelativePath="..\source\algorithm\SIRtreePointInRing.cpp">
-				</File>
-				<File
 					RelativePath="..\source\algorithm\SimplePointInAreaLocator.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
@@ -763,6 +787,9 @@
 				</File>
 				<File
 					RelativePath="..\source\algorithm\SimplePointInRing.cpp">
+				</File>
+				<File
+					RelativePath="..\source\algorithm\SIRtreePointInRing.cpp">
 				</File>
 			</Filter>
 			<Filter
@@ -793,9 +820,6 @@
 				Name="examples"
 				Filter="">
 				<File
-					RelativePath="..\source\examples\CPCLException.cpp">
-				</File>
-				<File
 					RelativePath="..\source\examples\CoordinateListsExample.cpp">
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -809,6 +833,9 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\source\examples\CPCLException.cpp">
 				</File>
 				<File
 					RelativePath="..\source\examples\CustomCoordinateListExample.cpp">
@@ -839,13 +866,13 @@
 					Name="sweepline"
 					Filter="">
 					<File
+						RelativePath="..\source\index\sweepline\indexSweepLineEvent.cpp">
+					</File>
+					<File
 						RelativePath="..\source\index\sweepline\SweepLineIndex.cpp">
 					</File>
 					<File
 						RelativePath="..\source\index\sweepline\SweepLineInterval.cpp">
-					</File>
-					<File
-						RelativePath="..\source\index\sweepline\indexSweepLineEvent.cpp">
 					</File>
 				</Filter>
 				<Filter
@@ -856,6 +883,9 @@
 					</File>
 					<File
 						RelativePath="..\source\index\quadtree\IntervalSize.cpp">
+					</File>
+					<File
+						RelativePath="..\source\index\quadtree\Quadtree.cpp">
 					</File>
 					<File
 						RelativePath="..\source\index\quadtree\QuadTreeKey.cpp">
@@ -869,13 +899,13 @@
 					<File
 						RelativePath="..\source\index\quadtree\QuadTreeRoot.cpp">
 					</File>
-					<File
-						RelativePath="..\source\index\quadtree\Quadtree.cpp">
-					</File>
 				</Filter>
 				<Filter
 					Name="bintree"
 					Filter="">
+					<File
+						RelativePath="..\source\index\bintree\Bintree.cpp">
+					</File>
 					<File
 						RelativePath="..\source\index\bintree\BinTreeInterval.cpp">
 						<FileConfiguration
@@ -907,9 +937,6 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\source\index\bintree\Bintree.cpp">
-					</File>
-					<File
 						RelativePath="..\source\index\bintree\Key.cpp">
 					</File>
 					<File
@@ -923,6 +950,9 @@
 					Name="chain"
 					Filter="">
 					<File
+						RelativePath="..\source\index\chain\indexMonotoneChain.cpp">
+					</File>
+					<File
 						RelativePath="..\source\index\chain\MonotoneChainBuilder.cpp">
 					</File>
 					<File
@@ -930,9 +960,6 @@
 					</File>
 					<File
 						RelativePath="..\source\index\chain\MonotoneChainSelectAction.cpp">
-					</File>
-					<File
-						RelativePath="..\source\index\chain\indexMonotoneChain.cpp">
 					</File>
 				</Filter>
 				<Filter
@@ -961,6 +988,12 @@
 					</File>
 					<File
 						RelativePath="..\source\index\strtree\ItemBoundable.cpp">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								RuntimeTypeInfo="TRUE"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\source\index\strtree\SIRtree.cpp">
@@ -975,7 +1008,7 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
-				RelativePath="..\source\headers\SpatialIndex.h">
+				RelativePath="..\source\headers\acconfig.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\bigtest.h">
@@ -1017,6 +1050,9 @@
 				RelativePath="..\source\headers\opDistance.h">
 			</File>
 			<File
+				RelativePath="..\source\headers\operation.h">
+			</File>
+			<File
 				RelativePath="..\source\headers\opOverlay.h">
 			</File>
 			<File
@@ -1026,10 +1062,13 @@
 				RelativePath="..\source\headers\opValid.h">
 			</File>
 			<File
-				RelativePath="..\source\headers\operation.h">
+				RelativePath="..\source\headers\platform.h">
 			</File>
 			<File
-				RelativePath="..\source\headers\platform.h">
+				RelativePath="..\source\headers\SpatialIndex.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\unload.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\util.h">

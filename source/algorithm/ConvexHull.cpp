@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -31,8 +34,11 @@
 
 namespace geos {
 
-ConvexHull::ConvexHull(CGAlgorithms *newCgAlgorithms) {
-	cgAlgorithms=newCgAlgorithms;
+ /**
+  * Create a new convex hull construction for the input {@link Geometry}.
+  */
+ConvexHull::ConvexHull(const Geometry *newGeometry) {
+	geometry=newGeometry;
 	pointLocator=new PointLocator();
 }
 
@@ -40,11 +46,21 @@ ConvexHull::~ConvexHull() {
 	delete pointLocator;
 }
 
-/*
-* Fixed to leave argument alone.
+
+/**
+* Returns a {@link Geometry} that represents the convex hull of the input
+* geometry.
+* The geometry will contain the minimal number of points needed to
+* represent the convex hull.  In particular, no more than two consecutive
+* points will be collinear.
+*
+* @return if the convex hull contains 3 or more points, a {@link Polygon};
+* 2 points, a {@link LineString};
+* 1 point, a {@link Point};
+* 0 points, an empty {@link GeometryCollection}.
 */
-Geometry* ConvexHull::getConvexHull(const Geometry *newGeometry) {
-	geometry=newGeometry;
+Geometry* ConvexHull::getConvexHull() {
+	factory=geometry->getFactory();
 	UniqueCoordinateArrayFilter *filter=new UniqueCoordinateArrayFilter();
 	geometry->apply_ro(filter);
 
@@ -54,19 +70,19 @@ Geometry* ConvexHull::getConvexHull(const Geometry *newGeometry) {
 				filter->getCoordinates());
 
 	if (pts->getSize()==0) {
-		Geometry *g=new GeometryCollection(new vector<Geometry*>(),geometry->getPrecisionModel(),geometry->getSRID());
+		Geometry *g=factory->createGeometryCollection(NULL);
 		delete pts;
 		delete filter;
 		return g;
 	}
 	if (pts->getSize()==1) {
-		Geometry *g=new Point(pts->getAt(0),geometry->getPrecisionModel(),geometry->getSRID());
+		Geometry *g=factory->createPoint(pts->getAt(0));
 		delete pts;
 		delete filter;
 		return g;
 	}
 	if (pts->getSize()==2) {
-		Geometry *g=new LineString(pts,geometry->getPrecisionModel(),geometry->getSRID());
+		Geometry *g=factory->createLineString(pts);
 		delete pts;
 		delete filter;
 		return g;
@@ -112,7 +128,7 @@ CoordinateList* ConvexHull::reduce(const CoordinateList *pts) {
 		return CoordinateListFactory::internalFactory->createCoordinateList(pts);
 	}
 	bigPoly->add(bigQuad->westmost);
-	LinearRing *bQ=new LinearRing(bigPoly,geometry->getPrecisionModel(),geometry->getSRID());
+	LinearRing *bQ=factory->createLinearRing(bigPoly);
 	// load an array with all points not in the big poly
 	// and the defining points.
 
@@ -160,7 +176,7 @@ CoordinateList* ConvexHull::grahamScan(const CoordinateList *c) {
 	for(int i=3;i<c->getSize();i++) {
 		p=ps->back();
 		ps->pop_back();
-		while (cgAlgorithms->computeOrientation(ps->back(),p,c->getAt(i))>0) {
+		while (CGAlgorithms::computeOrientation(ps->back(),p,c->getAt(i))>0) {
 			p=ps->back();
 			ps->pop_back();
 		}
@@ -226,7 +242,7 @@ int ConvexHull::polarCompare(Coordinate o, Coordinate p, Coordinate q) {
 *      c1 and c3 inclusive
 */
 bool ConvexHull::isBetween(Coordinate c1, Coordinate c2, Coordinate c3) {
-	if (cgAlgorithms->computeOrientation(c1, c2, c3)!=0) {
+	if (CGAlgorithms::computeOrientation(c1, c2, c3)!=0) {
 		return false;
 	}
 	if (c1.x!=c3.x) {
@@ -285,13 +301,13 @@ Geometry* ConvexHull::lineOrPolygon(CoordinateList *newCoordinates) {
 		cl1->add(coordinates->getAt(0));
 		cl1->add(coordinates->getAt(1));
 		delete coordinates;
-		LineString *ret = new LineString(cl1,geometry->getPrecisionModel(),geometry->getSRID());
+		LineString *ret =factory->createLineString(cl1);
 		delete cl1;
 		return ret;
 	}
 	LinearRing *linearRing=new LinearRing(coordinates,geometry->getPrecisionModel(),geometry->getSRID());
 	delete coordinates;
-	return new Polygon(linearRing,geometry->getPrecisionModel(),geometry->getSRID());
+	return factory->createPolygon(linearRing,NULL);
 }
 
 /**

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.14  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -34,8 +37,8 @@ void RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordi
 
 	// do between check first, since it is faster than the orientation test
 	if(Envelope::intersects(p1,p2,p)) {
-		if ((RobustCGAlgorithms::orientationIndex(p1,p2,p)==0)&&
-			(RobustCGAlgorithms::orientationIndex(p2,p1,p)==0)) {
+		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
+			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
 			isProperVar=true;
 			if ((p==p1) || (p==p2)) {
 				isProperVar=false;
@@ -57,15 +60,15 @@ int RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinat
     // for each endpoint, compute which side of the other segment it lies
     // if both endpoints lie on the same side of the other segment,
     // the segments do not intersect
-	int Pq1=RobustCGAlgorithms::orientationIndex(p1,p2,q1);
-	int Pq2=RobustCGAlgorithms::orientationIndex(p1,p2,q2);
+	int Pq1=CGAlgorithms::orientationIndex(p1,p2,q1);
+	int Pq2=CGAlgorithms::orientationIndex(p1,p2,q2);
 
     if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0)) {
       return DONT_INTERSECT;
     }
 
-	int Qp1=RobustCGAlgorithms::orientationIndex(q1,q2,p1);
-	int Qp2=RobustCGAlgorithms::orientationIndex(q1,q2,p2);
+	int Qp1=CGAlgorithms::orientationIndex(q1,q2,p1);
+	int Qp2=CGAlgorithms::orientationIndex(q1,q2,p2);
 
 	if ((Qp1>0 && Qp2>0)||(Qp1<0 && Qp2<0)) {
 		return DONT_INTERSECT;
@@ -194,6 +197,13 @@ Coordinate* RobustLineIntersector::intersection(const Coordinate& p1,const Coord
 	delete n3;
 	delete n4;
 	delete normPt;
+    /**
+     * MD - after fairly extensive testing
+     * it appears that the computed intPt always lies in the segment envelopes
+     */
+    //if (! isInSegmentEnvelopes(intPt))
+    //    System.out.println("outside segment envelopes: " + intPt);
+
 	return new Coordinate(intPt);
 }
 
@@ -227,5 +237,21 @@ double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,d
 	}
 	return x;
 }
+
+/**
+* Test whether a point lies in the envelopes of both input segments.
+* A correctly computed intersection point should return <code>true</code>
+* for this test.
+* Since this test is for debugging purposes only, no attempt is
+* made to optimize the envelope test.
+*
+* @return <code>true</code> if the input point lies within both input segment envelopes
+*/
+bool RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt) {
+	Envelope *env0=new Envelope(inputLines[0][0], inputLines[0][1]);
+	Envelope *env1=new Envelope(inputLines[1][0], inputLines[1][1]);
+	return env0->contains(intPt) && env1->contains(intPt);
+}
+
 }
 

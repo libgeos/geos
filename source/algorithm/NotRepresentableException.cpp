@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -20,6 +23,13 @@
  *
  **********************************************************************/
 
+/**
+ * Indicates that a {@link HCoordinate} has been computed which is
+ * not representable on the Cartesian plane.
+ *
+ * @version 1.4
+ * @see HCoordinate
+ */
 
 #include "../headers/geosAlgorithm.h"
 

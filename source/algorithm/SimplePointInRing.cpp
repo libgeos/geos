@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -29,15 +32,13 @@ namespace geos {
 
 SimplePointInRing::SimplePointInRing(LinearRing *ring){
 	pts=ring->getCoordinatesRO();
-	cga=new RobustCGAlgorithms();
 }
 
 SimplePointInRing::~SimplePointInRing(){
-	delete cga;
 }
 
 bool SimplePointInRing::isInside(const Coordinate& pt){
-	return cga->isPointInRing(pt,pts);
+	return CGAlgorithms::isPointInRing(pt,pts);
 }
 
 }

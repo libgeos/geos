@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.8  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -38,7 +41,7 @@ double InteriorPointArea::avg(double a, double b){
 InteriorPointArea::InteriorPointArea(const Geometry *g) {
 	interiorPoint=NULL;
 	maxWidth=0.0;
-	factory=new GeometryFactory(g->getPrecisionModel(),g->getSRID());
+	factory=g->getFactory();
 	add(g);
 }
 

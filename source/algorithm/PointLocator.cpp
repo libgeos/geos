@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.17  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -34,11 +37,9 @@
 namespace geos {
 
 PointLocator::PointLocator() {
-	cga=new RobustCGAlgorithms();
 }
 
 PointLocator::~PointLocator() {
-	delete cga;
 }
 
 /**
@@ -125,17 +126,17 @@ int PointLocator::locate(const Coordinate& p, const LineString *l) {
 			return Location::BOUNDARY;
 		}
 	}
-	if (cga->isOnLine(p,pt))
+	if (CGAlgorithms::isOnLine(p,pt))
 		return Location::INTERIOR;
 	return Location::EXTERIOR;
 }
 
 int PointLocator::locate(const Coordinate& p, const LinearRing *ring) {
 	const CoordinateList *cl = ring->getCoordinatesRO();
-	if (cga->isOnLine(p,cl)) {
+	if (CGAlgorithms::isOnLine(p,cl)) {
 		return Location::BOUNDARY;
 	}
-	if (cga->isPointInRing(p,cl))
+	if (CGAlgorithms::isPointInRing(p,cl))
 	{
 		return Location::INTERIOR;
 	}

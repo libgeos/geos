@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.44  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.43  2004/03/01 22:04:59  strk
  * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
  *
@@ -26,6 +29,9 @@
 
 /*
 * $Log$
+* Revision 1.44  2004/03/17 02:00:33  ybychkov
+* "Algorithm" upgraded to JTS 1.4
+*
 * Revision 1.43  2004/03/01 22:04:59  strk
 * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
 *
@@ -545,6 +551,7 @@ public:
 
 class CGAlgorithms;
 class Point;
+class GeometryFactory;
 class Geometry: public SFSGeometry {
 friend class Unload;
 public:
@@ -552,6 +559,7 @@ public:
 	Geometry(void);
 	Geometry(const Geometry &geom);
 	Geometry(const PrecisionModel* pm, int SRID);
+	GeometryFactory* getFactory() const {return NULL;};
 	virtual string getGeometryType() const=0; //Abstract
 	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
 	virtual int getSRID() const;

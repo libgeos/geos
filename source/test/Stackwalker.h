@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.2  2003/11/07 01:23:43  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -50,7 +53,7 @@
 
 // Only MS VC++ 5 to 7
 #if (_MSC_VER < 1100) || (_MSC_VER > 1300)
-#error Only MS VC++ 5/6/7 supported. Check if the '_CrtMemBlockHeader' has not changed with this compiler!
+//#warning Only MS VC++ 5/6/7 supported. Check if the '_CrtMemBlockHeader' has not changed with this compiler!
 #endif
 
 typedef enum eAllocCheckOutput

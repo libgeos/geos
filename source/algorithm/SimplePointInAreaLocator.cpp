@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -57,12 +60,11 @@ bool SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry 
 }
 
 bool SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p,const Polygon *poly) {
-	auto_ptr<CGAlgorithms> cga(new RobustCGAlgorithms());
 	if (poly->isEmpty()) return false;
 	const LineString *shell=poly->getExteriorRing();
 	const CoordinateList *cl;
 	cl = shell->getCoordinatesRO();
-	if (!cga->isPointInRing(p,cl)) {
+	if (!CGAlgorithms::isPointInRing(p,cl)) {
 		return false;
 	}
 
@@ -70,7 +72,7 @@ bool SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p,const 
 	for(int i=0;i<poly->getNumInteriorRing();i++) {
 		LinearRing *hole=(LinearRing*)poly->getInteriorRingN(i);
 		cl = hole->getCoordinatesRO();
-		if (cga->isPointInRing(p,cl)) {
+		if (CGAlgorithms::isPointInRing(p,cl)) {
 			return false;
 		}
 	}

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -57,12 +60,19 @@ double LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate
 		else
 			dist=dy;
 	} else {
-		if (dx>dy)
-			dist=fabs(p.x-p0.x);
+		double pdx=fabs(p.x - p0.x);
+		double pdy=fabs(p.y - p0.y);
+		if (dx > dy)
+			dist = pdx;
 		else
-			dist=fabs(p.y-p0.y);
+			dist = pdy;
+		// <FIX>
+		// hack to ensure that non-endpoints always have a non-zero distance
+		if (dist == 0.0 && !(p==p0)) {
+			dist=max(pdx,pdy);
+		}
 	}
-//	Assert::isTrue(!(dist==0.0 && !p.equals2D(p1)), "Invalid distance calculation");
+	Assert::isTrue(!(dist == 0.0 && !(p==p0)), "Bad distance calculation");
 	return dist;
 }
 
@@ -95,7 +105,21 @@ LineIntersector::LineIntersector() {
 LineIntersector::~LineIntersector() {
 }
 
+/**
+* Force computed intersection to be rounded to a given precision model
+* @param newPM
+* @deprecated use <code>setPrecisionModel</code> instead
+*/
 void LineIntersector::setMakePrecise(const PrecisionModel *newPM){
+	precisionModel=newPM;
+}
+
+/**
+* Force computed intersection to be rounded to a given precision model.
+* No getter is provided, because the precision model is not required to be specified.
+* @param precisionModel
+*/
+void LineIntersector::setPrecisionModel(const PrecisionModel *newPM){
 	precisionModel=newPM;
 }
 
@@ -116,9 +140,9 @@ void LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate&
 }
 
 string LineIntersector::toString() const {
-	string str=inputLines[0][0].toString()+" "
+	string str=inputLines[0][0].toString()+"_"
 			  +inputLines[0][1].toString()+" "
-			  +inputLines[1][0].toString()+" "
+			  +inputLines[1][0].toString()+"_"
 			  +inputLines[1][1].toString()+" : ";
 	if (isEndPoint()) {
 		str+=" endpoint";
@@ -270,6 +294,32 @@ void LineIntersector::computeIntLineIndex(int segmentIndex) {
 double LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const {
 	double dist=computeEdgeDistance(intPt[intIndex],inputLines[segmentIndex][0],inputLines[segmentIndex][1]);
 	return dist;
+}
+
+/**
+* Tests whether either intersection point is an interior point of one of the input segments.
+*
+* @return <code>true</code> if either intersection point is in the interior of one of the input segments
+*/
+bool LineIntersector::isInteriorIntersection() {
+	if (isInteriorIntersection(0)) return true;
+	if (isInteriorIntersection(1)) return true;
+	return false;
+}
+
+/**
+* Tests whether either intersection point is an interior point of the specified input segment.
+*
+* @return <code>true</code> if either intersection point is in the interior of the input segment
+*/
+bool LineIntersector::isInteriorIntersection(int inputLineIndex){
+	for (int i = 0; i < result; i++) {
+		if (!(intPt[i].equals2D(inputLines[inputLineIndex][0])
+            || intPt[i].equals2D(inputLines[inputLineIndex][1]) )) {
+				return true;
+			}
+	}
+	return false;
 }
 
 }

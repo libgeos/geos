@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -27,11 +30,9 @@
 namespace geos {
 
 NonRobustCGAlgorithms::NonRobustCGAlgorithms(){
-	li=new RobustLineIntersector();
 }
 
 NonRobustCGAlgorithms::~NonRobustCGAlgorithms(){
-	delete li;
 }
 
 /**
@@ -40,7 +41,7 @@ NonRobustCGAlgorithms::~NonRobustCGAlgorithms(){
 */
 bool
 NonRobustCGAlgorithms::isPointInRing(const Coordinate& p,
-		const CoordinateList* ring) const {
+		const CoordinateList* ring){
 	int i,i1;		// point index;i1=i-1 mod n
 	double xInt;		// x intersection of e with ray
 	int	crossings=0;	// number of edge/ray crossings
@@ -73,44 +74,61 @@ NonRobustCGAlgorithms::isPointInRing(const Coordinate& p,
 }
 
 
+//bool NonRobustCGAlgorithms::isOnLine(const Coordinate& p,const CoordinateList* pt) const {
+//	for(int i=1;i<pt->getSize();i++){
+//		const Coordinate& p0=pt->getAt(i-1);
+//		const Coordinate& p1=pt->getAt(i);
+//		li->computeIntersection(p,p0,p1);
+//		if(li->hasIntersection())
+//			return true;
+//	}
+//	return false;
+//}
 
-bool NonRobustCGAlgorithms::isOnLine(const Coordinate& p,const CoordinateList* pt) const {
-	for(int i=1;i<pt->getSize();i++){
-		const Coordinate& p0=pt->getAt(i-1);
-		const Coordinate& p1=pt->getAt(i);
-		li->computeIntersection(p,p0,p1);
-		if(li->hasIntersection())
-			return true;
-	}
-	return false;
-}
-
-bool NonRobustCGAlgorithms::isCCW(const CoordinateList* ring) const {
-	Coordinate hip,p,prev,next;
-	int hii,i;
-	int nPts=ring->getSize();
-
+/**
+* Computes whether a ring defined by an array of {@link Coordinate} is
+* oriented counter-clockwise.
+* <p>
+* This will handle coordinate lists which contain repeated points.
+*
+* @param ring an array of coordinates forming a ring
+* @return <code>true</code> if the ring is oriented counter-clockwise.
+* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 different points)
+*/
+bool NonRobustCGAlgorithms::isCCW(const CoordinateList* ring){
+    // # of points without closing endpoint
+	int nPts=ring->getSize()-1;
     // check that this is a valid ring - if not, simply return a dummy value
     if (nPts<4) return false;
 
 	// algorithm to check if a Ring is stored in CCW order
 	// find highest point
-	hip.setCoordinate(ring->getAt(0));
-	hii=0;
-	for(i=1;i<nPts;i++)	{
-		p.setCoordinate(ring->getAt(i));
+	Coordinate hip=ring->getAt(0);
+	int hii=0;
+	for(int i=1;i<=nPts;i++)	{
+		Coordinate p=ring->getAt(i);
 		if(p.y>hip.y){
 			hip.setCoordinate(p);
 			hii=i;
 		}
 	}
-	// find points on either side of highest
-	int iPrev=hii-1;
-	if(iPrev<0) iPrev=nPts-2;
-	int iNext=hii+1;
-	if(iNext>=nPts) iNext=1;
-	prev.setCoordinate(ring->getAt(iPrev));
-	next.setCoordinate(ring->getAt(iNext));
+
+	// find different point before highest point
+	int iPrev=hii;
+	do {
+		iPrev = (iPrev - 1) % nPts;
+	} while (ring->getAt(iPrev)==hip && iPrev != hii);
+	// find different point after highest point
+	int iNext = hii;
+	do {
+		iNext = (iNext + 1) % nPts;
+	} while (ring->getAt(iNext)==hip && iNext != hii);
+	
+	Coordinate prev=ring->getAt(iPrev);
+	Coordinate next=ring->getAt(iNext);
+	if (prev==hip || next==hip || prev==next)
+		throw new IllegalArgumentException("degenerate ring (does not contain 3 different points)");
+
 	// translate so that hip is at the origin.
 	// This will not affect the area calculation,and will avoid
 	// finite-accuracy errors(i.e very small vectors with very large coordinates)
@@ -140,7 +158,7 @@ bool NonRobustCGAlgorithms::isCCW(const CoordinateList* ring) const {
 
 int
 NonRobustCGAlgorithms::computeOrientation(const Coordinate& p1,
-		const Coordinate& p2,const Coordinate& q) const {
+		const Coordinate& p2,const Coordinate& q){
 	double dx1=p2.x-p1.x;
 	double dy1=p2.y-p1.y;
 	double dx2=q.x-p2.x;

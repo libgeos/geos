@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
  * Revision 1.29  2004/02/27 17:42:15  strk
  * made CGAlgorithms::signedArea() and CGAlgorithms::length() arguments const-correct
  *
@@ -40,6 +43,13 @@ namespace geos {
 
 class Coordinate;
 
+/**
+ * Indicates that a {@link HCoordinate} has been computed which is
+ * not representable on the Cartesian plane.
+ *
+ * @version 1.4
+ * @see HCoordinate
+ */
 class NotRepresentableException: public GEOSException {
 public:
 	NotRepresentableException();
@@ -60,15 +70,25 @@ public:
 		COLLINEAR,
 		COUNTERCLOCKWISE
 	};
+	enum {
+		RIGHT=-1,
+		LEFT,
+		STRAIGHT
+	};
 	CGAlgorithms(){};
-	/**
-	* Test whether a point lies inside a simple polygon (ring).
-	* The ring may be oriented in either direction.
-	* If the point lies on the ring boundary the result of this method is unspecified.
-	*
-	* @return true if the point lies in the interior of the ring
-	*/
-	virtual bool isPointInRing(const Coordinate& p, const CoordinateList* ring) const=0;
+  /**
+   * Test whether a point lies inside a ring.
+   * The ring may be oriented in either direction.
+   * If the point lies on the ring boundary the result of this method is unspecified.
+   * <p>
+   * This algorithm does not attempt to first check the point against the envelope
+   * of the ring.
+   *
+   * @param p point to check for ring inclusion
+   * @param ring assumed to have first point identical to last point
+   * @return <code>true</code> if p is inside ring
+   */
+	static bool isPointInRing(const Coordinate& p, const CoordinateList* ring);
 	/**
 	* Test whether a point lies on a linestring.
 	*
@@ -76,13 +96,18 @@ public:
 	* the point is a vertex of the line or lies in the interior of a line
 	* segment in the linestring
 	*/
-	virtual bool isOnLine(const Coordinate& p, const CoordinateList* linestring) const=0;
+	static bool isOnLine(const Coordinate& p, const CoordinateList* pt);
 	/**
-	* Test whether a ring (simple polygon) is oriented counter-clockwise.
+	* Computes whether a ring defined by an array of {@link Coordinate} is
+	* oriented counter-clockwise.
+	* <p>
+	* This will handle coordinate lists which contain repeated points.
 	*
-	* @return true if the ring is oriented counter-clockwise
+	* @param ring an array of coordinates forming a ring
+	* @return <code>true</code> if the ring is oriented counter-clockwise.
+	* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 distinct points)
 	*/
-	virtual bool isCCW(const CoordinateList* ring) const=0;
+	static bool isCCW(const CoordinateList* ring);
 	/**
 	* Computes the orientation of a point q to the directed line segment p1-p2.
 	* The orientation of a point relative to a directed line segment indicates
@@ -92,11 +117,42 @@ public:
 	* @return -1 if q is clockwise from p1-p2
 	* @return 0 if q is collinear with p1-p2
 	*/
-	virtual int computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q) const=0;
+	static int computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q);
 	static double distancePointLine(const Coordinate& p,const Coordinate& A,const Coordinate& B);
+	/**
+	* Computes the perpendicular distance from a point p
+	* to the (infinite) line containing the points AB
+	*
+	* @param p the point to compute the distance for
+	* @param A one point of the line
+	* @param B another point of the line (must be different to A)
+	* @return the distance from p to line AB
+	*/
+	static double distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B);
 	static double distanceLineLine(const Coordinate& A, const Coordinate& B, const Coordinate& C, const Coordinate& D);
 	static double signedArea(const CoordinateList* ring);
+	/**
+	* Computes the length of a linestring specified by a sequence of points.
+	*
+	* @param pts the points specifying the linestring
+	* @return the length of the linestring
+	*/
 	static double length(const CoordinateList* pts);
+	/**
+	* Returns the index of the direction of the point <code>q</code>
+	* relative to a
+	* vector specified by <code>p1-p2</code>.
+	*
+	* @param p1 the origin point of the vector
+	* @param p2 the final point of the vector
+	* @param q the point to compute the direction to
+	*
+	* @return 1 if q is counter-clockwise (left) from p1-p2
+	* @return -1 if q is clockwise (right) from p1-p2
+	* @return 0 if q is collinear with p1-p2
+	*/
+	static int orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
+
 };
 
 class HCoordinate {
@@ -118,7 +174,6 @@ public:
 	virtual ~SimplePointInRing();
 	bool isInside(const Coordinate& pt);
 private:
-	CGAlgorithms *cga;
 	const CoordinateList* pts;
 };
 
@@ -128,9 +183,25 @@ public:
 	static double nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
 	LineIntersector();
 	virtual ~LineIntersector();
-	virtual void setMakePrecise(const PrecisionModel *newPM);
 	/**
-	* Compute the intersection of a point p and the line p1-p2
+	* Tests whether either intersection point is an interior point of one of the input segments.
+	*
+	* @return <code>true</code> if either intersection point is in the interior of one of the input segments
+	*/
+	virtual bool isInteriorIntersection();
+	/**
+	* Tests whether either intersection point is an interior point of the specified input segment.
+	*
+	* @return <code>true</code> if either intersection point is in the interior of the input segment
+	*/
+	virtual bool isInteriorIntersection(int inputLineIndex);
+	virtual void setMakePrecise(const PrecisionModel *newPM);
+	virtual void setPrecisionModel(const PrecisionModel *newPM);
+	/**
+	* Compute the intersection of a point p and the line p1-p2.
+	* This function computes the boolean value of the hasIntersection test.
+	* The actual value of the intersection (if there is one)
+	* is equal to the value of <code>p</code>.
 	*/
 	virtual void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) =0;
 	enum {
@@ -190,6 +261,16 @@ private:
 	Coordinate* intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const;
 	void normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt) const;
 	double smallestInAbsValue(double x1,double x2,double x3,double x4) const;
+	/**
+	* Test whether a point lies in the envelopes of both input segments.
+	* A correctly computed intersection point should return <code>true</code>
+	* for this test.
+	* Since this test is for debugging purposes only, no attempt is
+	* made to optimize the envelope test.
+	*
+	* @return <code>true</code> if the input point lies within both input segment envelopes
+	*/
+	bool isInSegmentEnvelopes(const Coordinate& intPt);
 };
 
 class NonRobustLineIntersector: public LineIntersector {
@@ -203,29 +284,41 @@ private:
 	double rParameter(const Coordinate& p1,const Coordinate& p2,const Coordinate& p) const;
 };
 
+/**
+ * Stub version of RobustCGAlgorithms for backwards compatibility.
+ * Will be deprecated in next release - use CGAlgorithms instead.
+ *
+ */
 class RobustCGAlgorithms: public CGAlgorithms {
-public:
-	static int orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
-	RobustCGAlgorithms();
-	~RobustCGAlgorithms();
-	bool isCCW(const CoordinateList* ring) const;
-	bool isPointInRing(const Coordinate& p, const CoordinateList* ring) const;
-	bool isOnLine(const Coordinate& p,const CoordinateList* pt) const;
-	int computeOrientation(const Coordinate& p1,const Coordinate& p2, const Coordinate& q) const;
-private:
-	bool isInEnvelope(const Coordinate& p, const CoordinateList* ring) const;
 };
 
 class NonRobustCGAlgorithms: public CGAlgorithms {
 public:
 	NonRobustCGAlgorithms();
 	~NonRobustCGAlgorithms();
-	bool isPointInRing(const Coordinate& p, const CoordinateList* ring) const;
-	bool isOnLine(const Coordinate& p, const CoordinateList* pt) const;
-	bool isCCW(const CoordinateList* ring) const;
-	int computeOrientation(const Coordinate& p1,const Coordinate& p2,const Coordinate& q) const;
-protected:
-	LineIntersector *li;
+	/**
+	* Computes whether a ring defined by an array of {@link Coordinate} is
+	* oriented counter-clockwise.
+	* <p>
+	* This will handle coordinate lists which contain repeated points.
+	*
+	* @param ring an array of coordinates forming a ring
+	* @return <code>true</code> if the ring is oriented counter-clockwise.
+	*/
+	static bool isPointInRing(const Coordinate& p, const CoordinateList* ring);
+//	static bool isOnLine(const Coordinate& p, const CoordinateList* pt) const;
+	/**
+	* Computes whether a ring defined by an array of {@link Coordinate} is
+	* oriented counter-clockwise.
+	* <p>
+	* This will handle coordinate lists which contain repeated points.
+	*
+	* @param ring an array of coordinates forming a ring
+	* @return <code>true</code> if the ring is oriented counter-clockwise.
+	* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 different points)
+	*/
+	static bool isCCW(const CoordinateList* ring);
+	static int computeOrientation(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
 };
 
 class SimplePointInAreaLocator {
@@ -254,7 +347,6 @@ public:
 	int locate(const Coordinate& p,const LinearRing *ring);
 	int locate(const Coordinate& p,const Polygon *poly);
 private:
-	CGAlgorithms *cga;
 	bool isIn;         // true if the point lies in or on any Geometry element
 	int numBoundaries;    // the number of sub-elements whose boundaries the point lies in
 	void computeLocation(const Coordinate& p,const Geometry *geom);
@@ -446,8 +538,9 @@ public:
 class ConvexHull {
 private:
 	PointLocator *pointLocator;
-	CGAlgorithms *cgAlgorithms;
+	//CGAlgorithms *cgAlgorithms;
 	const Geometry *geometry;
+	GeometryFactory *factory;
 	CoordinateList* reduce(const CoordinateList *pts);
 	CoordinateList* preSort(CoordinateList *pts);
 	CoordinateList* grahamScan(const CoordinateList *c);
@@ -458,9 +551,93 @@ private:
 	Geometry* lineOrPolygon(CoordinateList *newCoordinates);
 	CoordinateList* cleanRing(CoordinateList *original);
 public:
-	ConvexHull(CGAlgorithms *newCgAlgorithms);
+	ConvexHull(const Geometry *newGeometry);
 	~ConvexHull();
-	Geometry* getConvexHull(const Geometry *newGeometry);
+	Geometry* getConvexHull();
 };
+
+
+/**
+ * Computes the minimum diameter of a {@link Geometry}.
+ * The minimum diameter is defined to be the
+ * width of the smallest band that
+ * contains the geometry,
+ * where a band is a strip of the plane defined
+ * by two parallel lines.
+ * This can be thought of as the smallest hole that the geometry can be
+ * moved through, with a single rotation.
+ * <p>
+ * The first step in the algorithm is computing the convex hull of the Geometry.
+ * If the input Geometry is known to be convex, a hint can be supplied to
+ * avoid this computation.
+ *
+ * @see ConvexHull
+ *
+ */
+class MinimumDiameter {
+private:
+	const Geometry* inputGeom;
+	bool isConvex;
+	LineSegment* minBaseSeg;;
+	Coordinate* minWidthPt;
+	int minPtIndex;
+	double minWidth;
+	void computeMinimumDiameter();
+	void computeWidthConvex(const Geometry* geom);
+	/**
+	* Compute the width information for a ring of {@link Coordinate}s.
+	* Leaves the width information in the instance variables.
+	*
+	* @param pts
+	* @return
+	*/
+	void computeConvexRingMinDiameter(const CoordinateList *pts);
+	int findMaxPerpDistance(const CoordinateList* pts, LineSegment* seg, int startIndex);
+	static int getNextIndex(const CoordinateList* pts, int index);
+public:
+	~MinimumDiameter();
+	/**
+	* Compute a minimum diameter for a giver {@link Geometry}.
+	*
+	* @param geom a Geometry
+	*/
+	MinimumDiameter(const Geometry* newInputGeom);
+	/**
+	* Compute a minimum diameter for a giver {@link Geometry},
+	* with a hint if
+	* the Geometry is convex
+	* (e.g. a convex Polygon or LinearRing,
+	* or a two-point LineString, or a Point).
+	*
+	* @param geom a Geometry which is convex
+	* @param isConvex <code>true</code> if the input geometry is convex
+	*/
+	MinimumDiameter(const Geometry* newInputGeom,const bool newIsConvex);
+	/**
+	* Gets the length of the minimum diameter of the input Geometry
+	*
+	* @return the length of the minimum diameter
+	*/
+	double getLength();
+	/**
+	* Gets the {@link Coordinate} forming one end of the minimum diameter
+	*
+	* @return a coordinate forming one end of the minimum diameter
+	*/
+	Coordinate* getWidthCoordinate();
+	/**
+	* Gets the segment forming the base of the minimum diameter
+	*
+	* @return the segment forming the base of the minimum diameter
+	*/
+	LineString* getSupportingSegment();
+	/**
+	* Gets a {@link LineString} which is a minimum diameter
+	*
+	* @return a {@link LineString} which is a minimum diameter
+	*/
+	LineString* getDiameter();
+};
+
 }
 #endif
