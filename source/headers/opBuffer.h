@@ -1,3 +1,9 @@
+/*
+ * $Log$
+ * Revision 1.5  2003/11/06 18:46:34  strk
+ * Added throw specification for BufferOp's ::buildSubgraphs() and ::computeBuffer()
+ *
+ */
 #ifndef GEOS_OPBUFFER_H
 #define GEOS_OPBUFFER_H
 
@@ -170,12 +176,14 @@ private:
 	Geometry *resultGeom;
 	PlanarGraph *graph;
 	EdgeList *edgeList;
-	void computeBuffer(double distance, int quadrantSegments);
+	void computeBuffer(double distance, int quadrantSegments)
+		throw(TopologyException *);
 	vector<Edge*>* nodeEdges(vector<Edge*> *edges);
 	void checkDimensionalCollapse(Label *labelToMerge,Label *existingLabel);
 	void replaceCollapsedEdges();
 	vector<BufferSubgraph*>* createSubgraphs();
-	void buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder);
+	void buildSubgraphs(vector<BufferSubgraph*> *subgraphList,
+		PolygonBuilder *polyBuilder) throw(TopologyException *);
 	Geometry* computeGeometry(vector<Polygon*> *resultPolyList);
 	Geometry* toLineStrings(EdgeList *edges);
 protected:
