@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2003/12/11 16:01:12  strk
+ * made buffer operation return a cloned input geom when called with 0 as distance
+ *
  * Revision 1.10  2003/11/07 17:51:02  strk
  * Memory leak fix in insertEdge()
  *
@@ -39,6 +42,9 @@
 namespace geos {
 
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
+
+	if ( ! distance ) return g->clone();
+
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry *geomBuf;
 	try {
@@ -53,8 +59,18 @@ Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 }
 
 Geometry* BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments){
+	if ( ! distance ) return g->clone(); 
+	
 	BufferOp *gBuf=new BufferOp(g);
-	Geometry *geomBuf=gBuf->getResultGeometry(distance, quadrantSegments);
+	Geometry *geomBuf;
+	try {
+		geomBuf=gBuf->getResultGeometry(distance, quadrantSegments);
+	}
+	catch (...) {
+		delete gBuf;
+		throw;
+	}
+	delete gBuf;
 	return geomBuf;
 }
 
