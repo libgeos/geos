@@ -30,4 +30,5 @@ geos_HEADERS = \
 	spatialIndex.h \
 	unload.h \
 	util.h \
-	geos_version.h
+	geos_version.h \
+	geos.h
