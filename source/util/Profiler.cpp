@@ -139,7 +139,7 @@ Profiler::instance()
 ostream&
 operator<< (ostream &os, const Profile &prof)
 {
-	os << " min:"<<
+	os << " num:"<<prof.getNumTimings()<<" min:"<<
 		prof.getMin()<<" max:"<<prof.getMax()<<
 		" avg:"<<prof.getAvg()<<" tot:"<<prof.getTot()<<
 		" ["<<prof.name<<"]";
@@ -162,6 +162,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2004/11/08 12:15:35  strk
+ * Added number of gathered timings in output.
+ *
  * Revision 1.2  2004/11/08 11:19:39  strk
  * Profiler::get() always return a Profile (new if not existant).
  *
