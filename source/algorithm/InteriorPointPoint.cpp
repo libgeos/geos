@@ -39,6 +39,6 @@ void InteriorPointPoint::add(Coordinate *point) {
 	}
 }
 
-Coordinate& InteriorPointPoint::getInteriorPoint() {
-	return *(interiorPoint);
+Coordinate* InteriorPointPoint::getInteriorPoint() {
+	return interiorPoint;
 }

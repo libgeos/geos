@@ -22,7 +22,7 @@ void SIRtreePointInRing::buildIndex() {
 bool SIRtreePointInRing::isInside(Coordinate& pt) {
 	crossings=0;
 	// test all segments intersected by vertical ray at pt
-	vector<void*> *segs=intTree->query(pt.y);
+	vector<void*> *segs=sirTree->query(pt.y);
 	//System.out.println("query size=" + segs.size());
 	for(int i=0;i<(int)segs->size();i++) {
 		LineSegment *seg=(LineSegment*) (*segs)[i];

@@ -41,6 +41,6 @@ void CentroidPoint::add(Coordinate *pt) {
 	centSum->y+=pt->y;
 }
 
-Coordinate& CentroidPoint::getCentroid() {
-	return *(new Coordinate(centSum->x/ptCount,centSum->y/ptCount));
+Coordinate* CentroidPoint::getCentroid() {
+	return new Coordinate(centSum->x/ptCount,centSum->y/ptCount);
 }

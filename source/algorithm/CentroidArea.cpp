@@ -48,8 +48,8 @@ void CentroidArea::add(CoordinateList *ring) {
 	addShell(ring);
 }
 
-Coordinate& CentroidArea::getCentroid() {
-	return *(new Coordinate(cg3->x/3/areasum2,cg3->y/3/areasum2));
+Coordinate* CentroidArea::getCentroid() {
+	return new Coordinate(cg3->x/3/areasum2,cg3->y/3/areasum2);
 }
 
 void CentroidArea::setBasePoint(Coordinate *newBasePt) {

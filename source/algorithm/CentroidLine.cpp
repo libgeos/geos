@@ -46,6 +46,6 @@ void CentroidLine::add(CoordinateList *pts) {
 	}
 }
 
-Coordinate& CentroidLine::getCentroid() {
-	return *(new Coordinate(centSum->x/totalLength,centSum->y/totalLength));
+Coordinate* CentroidLine::getCentroid() {
+	return new Coordinate(centSum->x/totalLength,centSum->y/totalLength);
 }

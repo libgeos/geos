@@ -17,8 +17,8 @@ InteriorPointArea::~InteriorPointArea() {
 	delete factory;
 }
 
-Coordinate& InteriorPointArea::getInteriorPoint(){
-	return *interiorPoint;
+Coordinate* InteriorPointArea::getInteriorPoint(){
+	return interiorPoint;
 }
 
 /**

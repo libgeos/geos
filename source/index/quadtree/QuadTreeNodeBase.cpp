@@ -25,6 +25,8 @@ QuadTreeNodeBase::QuadTreeNodeBase() {
 	subnode[3]=NULL;
 }
 
+QuadTreeNodeBase::~QuadTreeNodeBase() {}
+
 vector<void*>* QuadTreeNodeBase::getItems() {
 	return items;
 }

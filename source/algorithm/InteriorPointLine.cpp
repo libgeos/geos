@@ -73,6 +73,6 @@ void InteriorPointLine::add(Coordinate *point) {
 	}
 }
 
-Coordinate& InteriorPointLine::getInteriorPoint() {
-	return *(interiorPoint);
+Coordinate* InteriorPointLine::getInteriorPoint() {
+	return interiorPoint;
 }
