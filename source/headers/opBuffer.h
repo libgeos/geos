@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/04/19 15:14:45  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.10  2004/04/19 12:51:01  strk
  * Memory leaks fixes. Throw specifications added.
  *
@@ -300,9 +304,9 @@ public:
 	* For a max error of < 1%, use QS = 12
 	*/
 	static const int DEFAULT_QUADRANT_SEGMENTS=8;
-	OffsetCurveBuilder(PrecisionModel *newPrecisionModel);
+	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel);
 	~OffsetCurveBuilder();
-	OffsetCurveBuilder(PrecisionModel *newPrecisionModel,int quadrantSegments);
+	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments);
 	void setEndCapStyle(int newEndCapStyle);
 	/**
 	* This method handles single points as well as lines.
@@ -311,14 +315,14 @@ public:
 	*
 	* @return a List of Coordinate[]
 	*/
-	vector<CoordinateList*>* getLineCurve(CoordinateList *inputPts, double distance);
+	vector<CoordinateList*>* getLineCurve(const CoordinateList *inputPts, double distance);
 	/**
 	* This method handles the degenerate cases of single points and lines,
 	* as well as rings.
 	*
 	* @return a List of Coordinate[]
 	*/
-	vector<CoordinateList*>* getRingCurve(CoordinateList *inputPts, int side, double distance);
+	vector<CoordinateList*>* getRingCurve(const CoordinateList *inputPts, int side, double distance);
 private:
 	static double PI_OVER_2;
 	static double MAX_CLOSING_SEG_LEN;
@@ -336,7 +340,7 @@ private:
 	double maxCurveSegmentError;
 	CoordinateList *ptList;
 	double distance;
-	PrecisionModel *precisionModel;
+	const PrecisionModel *precisionModel;
 	int endCapStyle;
 	int joinStyle;
 	Coordinate s0, s1, s2;
@@ -348,8 +352,8 @@ private:
 //	static CoordinateList* copyCoordinates(CoordinateList *pts);
 	void init(double newDistance);
 	CoordinateList* getCoordinates();
-	void computeLineBufferCurve(CoordinateList *inputPts);
-	void computeRingBufferCurve(CoordinateList *inputPts, int side);
+	void computeLineBufferCurve(const CoordinateList *inputPts);
+	void computeRingBufferCurve(const CoordinateList *inputPts, int side);
 	void addPt(const Coordinate &pt);
 	void closePts();
 	void initSideSegments(const Coordinate &nS1, const Coordinate &nS2, int nSide);
@@ -403,7 +407,7 @@ private:
  */
 class OffsetCurveSetBuilder {
 public:
-	OffsetCurveSetBuilder(Geometry *newInputGeom,double newDistance,OffsetCurveBuilder *newCurveBuilder);
+	OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder);
 	~OffsetCurveSetBuilder();
 	/**
 	* Computes the set of raw offset curves for the buffer.
@@ -416,7 +420,7 @@ public:
 	void addCurves(vector<CoordinateList*> *lineList, int leftLoc, int rightLoc);
 private:
 	CGAlgorithms *cga;
-	Geometry *inputGeom;
+	const Geometry *inputGeom;
 	double distance;
 	OffsetCurveBuilder *curveBuilder;
 	vector<SegmentString*> *curveList;
@@ -429,15 +433,15 @@ private:
 	* <br>Left: Location.EXTERIOR
 	* <br>Right: Location.INTERIOR
 	*/
-	void addCurve(CoordinateList *coord, int leftLoc, int rightLoc);
-	void add(Geometry *g);
-	void addCollection(GeometryCollection *gc);
+	void addCurve(const CoordinateList *coord, int leftLoc, int rightLoc);
+	void add(const Geometry *g);
+	void addCollection(const GeometryCollection *gc);
 	/**
 	* Add a Point to the graph.
 	*/
-	void addPoint(Point *p);
-	void addLineString(LineString *line);
-	void addPolygon(Polygon *p);
+	void addPoint(const Point *p);
+	void addLineString(const LineString *line);
+	void addPolygon(const Polygon *p);
 	/**
 	* Add an offset curve for a ring.
 	* The side and left and right topological location arguments
@@ -451,7 +455,7 @@ private:
 	* @param cwLeftLoc the location on the L side of the ring (if it is CW)
 	* @param cwRightLoc the location on the R side of the ring (if it is CW)
 	*/
-	void addPolygonRing(CoordinateList *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc);
+	void addPolygonRing(const CoordinateList *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc);
 	/**
 	* The ringCoord is assumed to contain no repeated points.
 	* It may be degenerate (i.e. contain only 1, 2, or 3 points).

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/19 15:14:46  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.1  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -25,7 +29,7 @@
 
 namespace geos {
 
-OffsetCurveSetBuilder::OffsetCurveSetBuilder(Geometry *newInputGeom,double newDistance,OffsetCurveBuilder *newCurveBuilder){
+OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder){
 	cga=new RobustCGAlgorithms();
 	curveList=new vector<SegmentString*>();
 	inputGeom=newInputGeom;
@@ -65,7 +69,7 @@ void OffsetCurveSetBuilder::addCurves(vector<CoordinateList*> *lineList, int lef
 * <br>Left: Location.EXTERIOR
 * <br>Right: Location.INTERIOR
 */
-void OffsetCurveSetBuilder::addCurve(CoordinateList *coord, int leftLoc, int rightLoc){
+void OffsetCurveSetBuilder::addCurve(const CoordinateList *coord, int leftLoc, int rightLoc){
 	// don't add null curves!
 	if (coord->getSize() < 2) return;
 	// add the edge for a coordinate list which is a raw offset curve
@@ -74,7 +78,9 @@ void OffsetCurveSetBuilder::addCurve(CoordinateList *coord, int leftLoc, int rig
 }
 
 
-void OffsetCurveSetBuilder::add(Geometry *g){
+void
+OffsetCurveSetBuilder::add(const Geometry *g)
+{
 	if (g->isEmpty()) return;
 	if (typeid(*g)==typeid(Polygon))
 		addPolygon((Polygon*) g);
@@ -98,29 +104,32 @@ void OffsetCurveSetBuilder::add(Geometry *g){
 	}
 }
 
-void OffsetCurveSetBuilder::addCollection(GeometryCollection *gc){
+void OffsetCurveSetBuilder::addCollection(const GeometryCollection *gc){
 	for (int i=0;i<gc->getNumGeometries(); i++) {
-		Geometry *g=(Geometry*)gc->getGeometryN(i);
+		const Geometry *g=gc->getGeometryN(i);
 		add(g);
 	}
 }
 /**
 * Add a Point to the graph->
 */
-void OffsetCurveSetBuilder::addPoint(Point *p){
+void OffsetCurveSetBuilder::addPoint(const Point *p){
 	if (distance <= 0.0) return;
 	CoordinateList *coord=p->getCoordinates();
 	vector<CoordinateList*> *lineList=curveBuilder->getLineCurve(coord, distance);
+	delete coord;
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
+	delete lineList;
 }
-void OffsetCurveSetBuilder::addLineString(LineString *line){
+
+void OffsetCurveSetBuilder::addLineString(const LineString *line){
 	if (distance <= 0.0) return;
 	CoordinateList *coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
 	vector<CoordinateList*> *lineList=curveBuilder->getLineCurve(coord, distance);
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
 }
 
-void OffsetCurveSetBuilder::addPolygon(Polygon *p) {
+void OffsetCurveSetBuilder::addPolygon(const Polygon *p) {
 	double offsetDistance=distance;
 	int offsetSide=Position::LEFT;
 	if (distance < 0.0) {
@@ -161,7 +170,7 @@ void OffsetCurveSetBuilder::addPolygon(Polygon *p) {
 * @param cwLeftLoc the location on the L side of the ring (if it is CW)
 * @param cwRightLoc the location on the R side of the ring (if it is CW)
 */
-void OffsetCurveSetBuilder::addPolygonRing(CoordinateList *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc){
+void OffsetCurveSetBuilder::addPolygonRing(const CoordinateList *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc){
 	//Coordinate[] coord=CoordinateArrays->removeRepeatedPoints(lr->getCoordinates());
 	int leftLoc =cwLeftLoc;
 	int rightLoc=cwRightLoc;

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/04/19 15:14:46  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.3  2004/04/16 13:03:17  strk
  * More leaks fixed
  *
@@ -33,7 +37,7 @@ namespace geos {
 double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
 double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
 
-OffsetCurveBuilder::OffsetCurveBuilder(PrecisionModel *newPrecisionModel){
+OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel){
 	maxCurveSegmentError=0.0;
 	distance=0.0;
 	endCapStyle=BufferOp::CAP_ROUND;
@@ -50,9 +54,10 @@ OffsetCurveBuilder::OffsetCurveBuilder(PrecisionModel *newPrecisionModel){
 	li=new RobustLineIntersector();
 	int limitedQuadSegs=DEFAULT_QUADRANT_SEGMENTS<1 ? 1 : DEFAULT_QUADRANT_SEGMENTS;
 	filletAngleQuantum=3.14159265358979 / 2.0 / limitedQuadSegs;
+	ptList=NULL;
 }
 
-OffsetCurveBuilder::OffsetCurveBuilder(PrecisionModel *newPrecisionModel,int quadrantSegments){
+OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments){
 	maxCurveSegmentError=0.0;
 	distance=0.0;
 	endCapStyle=BufferOp::CAP_ROUND;
@@ -69,6 +74,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(PrecisionModel *newPrecisionModel,int qua
 	li=new RobustLineIntersector();
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=3.14159265358979  / 2.0 / limitedQuadSegs;
+	ptList=NULL;
 }
 
 OffsetCurveBuilder::~OffsetCurveBuilder(){
@@ -78,6 +84,7 @@ OffsetCurveBuilder::~OffsetCurveBuilder(){
 	delete seg1;
 	delete offset0;
 	delete offset1;
+	delete ptList;
 }
 
 void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
@@ -90,7 +97,7 @@ void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
 *
 * @return a List of Coordinate[]
 */
-vector<CoordinateList*>* OffsetCurveBuilder::getLineCurve(CoordinateList *inputPts, double distance){
+vector<CoordinateList*>* OffsetCurveBuilder::getLineCurve(const CoordinateList *inputPts, double distance){
 	vector<CoordinateList*> *lineList=new vector<CoordinateList*>();
 	// a zero or negative width buffer of a line/point is empty
 	if (distance<= 0.0) return lineList;
@@ -118,7 +125,9 @@ vector<CoordinateList*>* OffsetCurveBuilder::getLineCurve(CoordinateList *inputP
 *
 * @return a List of Coordinate[]
 */
-vector<CoordinateList*>* OffsetCurveBuilder::getRingCurve(CoordinateList *inputPts, int side, double distance){
+vector<CoordinateList*>*
+OffsetCurveBuilder::getRingCurve(const CoordinateList *inputPts, int side, double distance)
+{
 	vector<CoordinateList*>* lineList=new vector<CoordinateList*>();
 	init(distance);
 	if (inputPts->getSize()<= 2)
@@ -149,7 +158,7 @@ CoordinateList* OffsetCurveBuilder::getCoordinates(){
 	return CoordinateListFactory::internalFactory->createCoordinateList(ptList);;
 }
 
-void OffsetCurveBuilder::computeLineBufferCurve(CoordinateList *inputPts){
+void OffsetCurveBuilder::computeLineBufferCurve(const CoordinateList *inputPts){
 	int n=inputPts->getSize()-1;
 	// compute points for left side of line
 	initSideSegments(inputPts->getAt(0),inputPts->getAt(1), Position::LEFT);
@@ -170,7 +179,7 @@ void OffsetCurveBuilder::computeLineBufferCurve(CoordinateList *inputPts){
 	closePts();
 }
 
-void OffsetCurveBuilder::computeRingBufferCurve(CoordinateList *inputPts, int side){
+void OffsetCurveBuilder::computeRingBufferCurve(const CoordinateList *inputPts, int side){
 	int n=inputPts->getSize()-1;
 	initSideSegments(inputPts->getAt(n-1),inputPts->getAt(0), side);
 	for (int i=1;i<= n;i++) {
@@ -419,8 +428,7 @@ void OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle, doubl
 */
 void OffsetCurveBuilder::addCircle(const Coordinate &p, double distance){
 	// add start point
-	Coordinate *pt=new Coordinate(p.x+distance, p.y);
-	addPt(*pt);
+	addPt(p);
 	addFillet(p, 0.0, 2.0*3.1415926535, -1, distance);
 }
 

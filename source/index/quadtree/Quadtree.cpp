@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/04/19 15:14:45  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.8  2004/03/25 02:23:55  ybychkov
  * All "index/*" packages upgraded to JTS 1.4
  *
@@ -87,7 +91,7 @@ int Quadtree::size() {
 	return 0;
 }
 
-void Quadtree::insert(Envelope *itemEnv,void* item){
+void Quadtree::insert(Envelope *itemEnv, void* item){
 	collectStats(itemEnv);
 	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
 	root->insert(insertEnv,item);

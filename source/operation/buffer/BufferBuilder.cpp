@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/04/19 15:14:46  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.3  2004/04/19 12:51:01  strk
  * Memory leaks fixes. Throw specifications added.
  *
@@ -104,28 +108,32 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	if ((int)bufferSegStrList->size()<=0) {
 		Geometry *emptyGeom=geomFact->createGeometryCollection(new vector<Geometry*>());
 		delete curveBuilder;
-		delete bufferSegStrList;
+		delete curveSetBuilder;
 		return emptyGeom;
 	}
-	delete curveBuilder;
 
 	try {
 		computeNodedEdges(bufferSegStrList, precisionModel);
 	} catch (TopologyException *) {
 		delete curveSetBuilder;
+		delete curveBuilder;
 		throw;
 	} catch (...) {
 		// Unexpected exception thrown
 		delete curveSetBuilder;
+		delete curveBuilder;
 		throw;
 	}
+	delete curveSetBuilder;
+	delete curveBuilder;
 
 	Geometry* resultGeom=NULL;
 	PolygonBuilder *polyBuilder=NULL;
 	vector<Geometry*> *resultPolyList=NULL;
 	vector<BufferSubgraph*> *subgraphList=NULL;
+	OverlayNodeFactory *onf=new OverlayNodeFactory;
 	try {
-		graph=new PlanarGraph(new OverlayNodeFactory());
+		graph=new PlanarGraph(onf);
 		graph->addEdges(edgeList->getEdges());
 		subgraphList=createSubgraphs(graph);
 		polyBuilder=new PolygonBuilder(geomFact,cga);
@@ -163,8 +171,10 @@ bufferSegStrList, PrecisionModel *precisionModel)
 		nodedSegStrings=noder->node(bufferSegStrList);
 	} catch (...) {
 		delete nodedSegStrings;
+		delete noder;
 		throw;
 	}
+	delete noder;
 
 	
 	// DEBUGGING ONLY

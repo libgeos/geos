@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/04/19 15:14:45  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.14  2004/03/25 02:23:55  ybychkov
  * All "index/*" packages upgraded to JTS 1.4
  *
@@ -217,7 +221,7 @@ public:
 	* Returns the number of items in the tree.
 	*/
 	int size();
-	void insert(Envelope *itemEnv,void* item);
+	void insert(Envelope *itemEnv, void *item);
 	vector<void*>* query(Envelope *searchEnv);
 	vector<void*>* queryAll();
 private:

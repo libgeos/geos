@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/19 15:14:45  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.2  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -72,7 +76,7 @@ PlanarGraph::PlanarGraph(){
 
 PlanarGraph::~PlanarGraph(){
 	delete nodes;
-    int i;
+	int i;
 	for(i=0;i<(int)edges->size();i++) {
 		delete (*edges)[i];
 	}

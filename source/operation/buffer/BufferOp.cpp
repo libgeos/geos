@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/04/19 15:14:46  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.22  2004/04/19 12:51:01  strk
  * Memory leaks fixes. Throw specifications added.
  *
@@ -180,13 +184,13 @@ BufferOp::computeGeometry()
 		try {
 			bufferFixedPrecision(precDigits);
 		} catch (TopologyException *ex) {
-			if ( saveException ) delete saveException;
+			delete saveException;
 			saveException=ex;
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
 		}
 		if (resultGeometry!=NULL)
 		{
-			if ( saveException ) delete saveException;
+			delete saveException;
 			return;
 		}
 	}
@@ -205,7 +209,7 @@ BufferOp::bufferOriginalPrecision()
 		resultGeometry=bufBuilder->buffer(argGeom, distance);
 	} catch (TopologyException *ex) {
 		// bufBuilder will be deleted below
-		if ( saveException ) delete saveException;
+		delete saveException;
 		saveException=ex;
 	} catch (...) {
 		// Unexpected!

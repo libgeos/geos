@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/04/19 15:14:45  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
  * Revision 1.5  2004/03/25 02:23:55  ybychkov
  * All "index/*" packages upgraded to JTS 1.4
  *
@@ -47,10 +51,11 @@ namespace geos {
  */
 class SpatialIndex {
 public:
+	virtual ~SpatialIndex() {};
 	/**
 	* Adds a spatial item with an extent specified by the given {@link Envelope} to the index
 	*/
-	virtual void insert(Envelope *itemEnv,void *item)=0;
+	virtual void insert(Envelope *itemEnv, void *item)=0;
 	/**
 	* Queries the index for all items whose extents intersect the given search {@link Envelope}
 	* Note that some kinds of indexes may also return objects which do not in fact
@@ -60,6 +65,7 @@ public:
 	* @return a list of the items found by the query
 	*/
 	virtual vector<void*>* query(Envelope *searchEnv)=0;
+
 };
 }
 
