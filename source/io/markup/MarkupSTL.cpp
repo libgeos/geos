@@ -1179,7 +1179,7 @@ bool CMarkupSTL::x_AddElem( const char* szName, const char* szValue, bool bInser
 		// <NAME/> empty element
 		strInsert = "<";
 		strInsert += szName;
-		strInsert += "/>\r\n";
+		strInsert += "/>\r\n\t";
 		m_aPos[iPos].nStartR = m_aPos[iPos].nStartL + nLenName + 2;
 		m_aPos[iPos].nEndL = m_aPos[iPos].nStartR - 1;
 		m_aPos[iPos].nEndR = m_aPos[iPos].nEndL + 1;
@@ -1195,7 +1195,7 @@ bool CMarkupSTL::x_AddElem( const char* szName, const char* szValue, bool bInser
 		strInsert += strValue;
 		strInsert += "</";
 		strInsert += szName;
-		strInsert += ">\r\n";
+		strInsert += ">\r\n\t";
 		m_aPos[iPos].nStartR = m_aPos[iPos].nStartL + nLenName + 1;
 		m_aPos[iPos].nEndL = m_aPos[iPos].nStartR + nLenValue + 1;
 		m_aPos[iPos].nEndR = m_aPos[iPos].nEndL + nLenName + 2;
@@ -1207,7 +1207,7 @@ bool CMarkupSTL::x_AddElem( const char* szName, const char* szValue, bool bInser
 	{
 		string strParentTagName = x_GetTagName(iPosParent);
 		string strFormat;
-		strFormat = ">\r\n";
+		strFormat = ">\r\n\t";
 		strFormat += strInsert;
 		strFormat += "</";
 		strFormat += strParentTagName;
@@ -1282,7 +1282,7 @@ bool CMarkupSTL::x_AddSubDoc( const char* szSubDoc, bool bInsert, bool bAddChild
 	{
 		strParentTagName = x_GetTagName(iPosParent);
 		string strFormat;
-		strFormat = ">\r\n";
+		strFormat = ">\r\n\t";
 		strFormat += strInsert;
 		strFormat += "</";
 		strFormat += strParentTagName;
