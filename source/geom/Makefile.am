@@ -31,9 +31,14 @@ DIR_SOURCES = \
 	PointCoordinateList.cpp \
 	Polygon.cpp \
 	PrecisionModel.cpp \
-	TopologyException.cpp
+	TopologyException.cpp \
+	Triangle.cpp
 
 EXTERNAL_SOURCES =  \
+	util/GeometryEditor.cpp \
+	util/LinearComponentExtracter.cpp \
+	util/PointExtracter.cpp \
+	util/PolygonExtracter.cpp \
 	../algorithm/CentroidArea.cpp \
 	../algorithm/CentroidLine.cpp \
 	../algorithm/CentroidPoint.cpp \
@@ -55,35 +60,26 @@ EXTERNAL_SOURCES =  \
 	../algorithm/SimplePointInAreaLocator.cpp \
 	../algorithm/SimplePointInRing.cpp \
 	../algorithm/SIRtreePointInRing.cpp \
-	../graph/Depth.cpp \
-	../graph/DirectedEdge.cpp \
-	../graph/DirectedEdgeStar.cpp \
-	../graph/Edge.cpp \
-	../graph/EdgeEnd.cpp \
-	../graph/EdgeEndStar.cpp \
-	../graph/EdgeIntersection.cpp \
-	../graph/EdgeIntersectionList.cpp \
-	../graph/EdgeList.cpp \
-	../graph/EdgeRing.cpp \
-	../graph/GeometryGraph.cpp \
-	../graph/GraphComponent.cpp \
-	../graph/Label.cpp \
-	../graph/Node.cpp \
-	../graph/NodeFactory.cpp \
-	../graph/NodeMap.cpp \
-	../graph/PlanarGraph.cpp \
-	../graph/Position.cpp \
-	../graph/Quadrant.cpp \
-	../graph/TopologyLocation.cpp \
-	../graph/index/MonotoneChain.cpp \
-	../graph/index/MonotoneChainEdge.cpp \
-	../graph/index/MonotoneChainIndexer.cpp \
-	../graph/index/SegmentIntersector.cpp \
-	../graph/index/SimpleEdgeSetIntersector.cpp \
-	../graph/index/SimpleMCSweepLineIntersector.cpp \
-	../graph/index/SimpleSweepLineIntersector.cpp \
-	../graph/index/SweepLineEvent.cpp \
-	../graph/index/SweepLineSegment.cpp \
+	../geomgraph/Depth.cpp \
+	../geomgraph/DirectedEdge.cpp \
+	../geomgraph/DirectedEdgeStar.cpp \
+	../geomgraph/Edge.cpp \
+	../geomgraph/EdgeEnd.cpp \
+	../geomgraph/EdgeEndStar.cpp \
+	../geomgraph/EdgeIntersection.cpp \
+	../geomgraph/EdgeIntersectionList.cpp \
+	../geomgraph/EdgeList.cpp \
+	../geomgraph/EdgeRing.cpp \
+	../geomgraph/GeometryGraph.cpp \
+	../geomgraph/GraphComponent.cpp \
+	../geomgraph/Label.cpp \
+	../geomgraph/Node.cpp \
+	../geomgraph/NodeFactory.cpp \
+	../geomgraph/NodeMap.cpp \
+	../geomgraph/PlanarGraph.cpp \
+	../geomgraph/Position.cpp \
+	../geomgraph/Quadrant.cpp \
+	../geomgraph/TopologyLocation.cpp \
 	../index/bintree/Bintree.cpp \
 	../index/bintree/BinTreeInterval.cpp \
 	../index/bintree/BinTreeNode.cpp \
@@ -118,17 +114,17 @@ EXTERNAL_SOURCES =  \
 	../io/Unload.cpp \
 	../operation/GeometryGraphOperation.cpp \
 	../operation/IsSimpleOp.cpp \
-	../operation/buffer/BufferEdgeBuilder.cpp \
-	../operation/buffer/BufferLineBuilder.cpp \
+	../operation/buffer/BufferBuilder.cpp \
 	../operation/buffer/BufferOp.cpp \
 	../operation/buffer/BufferSubgraph.cpp \
-	../operation/buffer/LoopFilter.cpp \
+	../operation/buffer/OffsetCurveBuilder.cpp \
+	../operation/buffer/OffsetCurveSetBuilder.cpp \
 	../operation/buffer/RightmostEdgeFinder.cpp \
+	../operation/buffer/SubgraphDepthLocater.cpp \
+	../operation/distance/ConnectedElementLocationFilter.cpp \
 	../operation/distance/ConnectedElementPointFilter.cpp \
 	../operation/distance/DistanceOp.cpp \
-	../operation/distance/LineExtracterFilter.cpp \
-	../operation/distance/PointExtracterFilter.cpp \
-	../operation/distance/PolygonExtracterFilter.cpp \
+	../operation/distance/GeometryLocation.cpp \
 	../operation/overlay/EdgeSetNoder.cpp \
 	../operation/overlay/LineBuilder.cpp \
 	../operation/overlay/MaximalEdgeRing.cpp \
@@ -153,6 +149,25 @@ EXTERNAL_SOURCES =  \
 	../operation/valid/SimpleNestedRingTester.cpp \
 	../operation/valid/SweeplineNestedRingTester.cpp \
 	../operation/valid/TopologyValidationError.cpp \
+	../planargraph/planarDirectedEdge.cpp \
+	../planargraph/planarDirectedEdgeStar.cpp \
+	../planargraph/planarEdge.cpp \
+	../planargraph/planarGraphComponent.cpp \
+	../planargraph/planarNode.cpp \
+	../planargraph/planarNodeMap.cpp \
+	../planargraph/planarPlanarGraph.cpp \
+	../noding/IteratedNoder.cpp \
+	../noding/MCQuadtreeNoder.cpp \
+	../noding/Noder.cpp \
+	../noding/NodingValidator.cpp \
+	../noding/SegmentNode.cpp \
+	../noding/SegmentNodeList.cpp \
+	../noding/SegmentString.cpp \
+	../noding/SimpleNoder.cpp \
+	../noding/nodingSegmentIntersector.cpp \
+	../noding/snapround/SegmentSnapper.cpp \
+	../noding/snapround/SimpleSegmentStringsSnapper.cpp \
+	../noding/snapround/SnapRounder.cpp \
 	../util/Assert.cpp \
 	../util/AssertionFailedException.cpp \
 	../util/CoordinateArrayFiter.cpp \
