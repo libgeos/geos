@@ -15,9 +15,11 @@
  * ========================================================================= */
  
 %module geos
+%include "std_string.i"
 
 %{ 
 #include "../../source/headers/geos/geom.h"
+#include "../../source/headers/geos/io.h"
 %}
 
 // Following methods are prototypes but unimplemented and are to be ignored
@@ -26,6 +28,7 @@
 // Required renaming
 %rename(Coordinate_Coordinate) Coordinate::Coordinate;
 
-// Now include the header to be wrapped
+// Now include the headers to be wrapped
 %include "../../source/headers/geos/geom.h"
+%include "../../source/headers/geos/io.h"
 

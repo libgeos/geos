@@ -28,7 +28,8 @@ from distutils.core import setup, Extension
 # Note that until geos is ready to be installed, we're linking against
 # the pre-installed library in source/geom/.libs.
 extmod = Extension("_geos", ["geos_wrap.cxx"],
-                   include_dirs = ["../../source/headers/geos"],
+                   include_dirs = ["../../source/headers",
+                                   "../../source/headers/geos"],
                    libraries = ["stdc++"],
                    extra_objects = ["../../source/geom/.libs/libgeos.a"])
 
