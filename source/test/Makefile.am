@@ -20,10 +20,6 @@ XMLTester_LDADD = $(LIBS)
 INCLUDES = -I$(top_srcdir)/source/headers
 INCLUDES += -I$(top_srcdir)/source/io/markup
 
-
-
-
-
-
-
+static:
+	$(CXX) $(CXXFLAGS) -I../headers -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../source/geom/.libs/libgeos.a
 
