@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/05/05 16:36:46  strk
+ * Avoid use of copy c'tors on local objects initializzation
+ *
  * Revision 1.12  2004/05/05 13:08:01  strk
  * Leaks fixed, explicit allocations/deallocations reduced.
  *
@@ -126,9 +129,9 @@ BufferBuilder::buffer(Geometry *g, double distance)
 
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
-	OffsetCurveBuilder curveBuilder=OffsetCurveBuilder(precisionModel, quadrantSegments);
+	OffsetCurveBuilder curveBuilder(precisionModel, quadrantSegments);
 	curveBuilder.setEndCapStyle(endCapStyle);
-	OffsetCurveSetBuilder curveSetBuilder=OffsetCurveSetBuilder(g, distance, &curveBuilder);
+	OffsetCurveSetBuilder curveSetBuilder(g, distance, &curveBuilder);
 	vector<SegmentString*> *bufferSegStrList=curveSetBuilder.getCurves();
 	// short-circuit test
 	if ((int)bufferSegStrList->size()<=0) {
@@ -144,7 +147,7 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	try {
 		graph->addEdges(edgeList->getEdges());
 		subgraphList=createSubgraphs(graph);
-		PolygonBuilder polyBuilder=PolygonBuilder(geomFact,&cga);
+		PolygonBuilder polyBuilder(geomFact,&cga);
 		buildSubgraphs(subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
 		resultGeom=geomFact->buildGeometry(resultPolyList);
@@ -167,7 +170,7 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 	// throw(GEOSException *)
 {
 	//BufferCurveGraphNoder noder=new BufferCurveGraphNoder(geomFact->getPrecisionModel());
-	IteratedNoder noder=IteratedNoder(precisionModel);
+	IteratedNoder noder(precisionModel);
 	vector<SegmentString*> *nodedSegStrings = NULL;
 	
 	try 
