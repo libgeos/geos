@@ -13,315 +13,179 @@
  *
  **********************************************************************
  * $Log$
- * Revision 1.14  2004/03/19 09:48:46  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ * Revision 1.15  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
  *
- * Revision 1.13  2004/03/01 22:04:59  strk
- * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
- *
- * Revision 1.12  2003/12/11 17:01:35  strk
- * made buffer(0) back to its *correct* semantic (empy collection)
- *
- * Revision 1.11  2003/12/11 16:01:12  strk
- * made buffer operation return a cloned input geom when called with 0 as distance
- *
- * Revision 1.10  2003/11/07 17:51:02  strk
- * Memory leak fix in insertEdge()
- *
- * Revision 1.9  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.8  2003/11/06 18:47:55  strk
- * Added throw specification for BufferOp's ::buildSubgraphs() 
- * and ::computeBuffer(). Cleanup on exception in computeBuffer().
- *
- * Revision 1.7  2003/11/06 18:00:15  strk
- * Cleanup on exception in ::bufferOp()
- *
- * Revision 1.6  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  *
  **********************************************************************/
 
 
 #include "../../headers/opBuffer.h"
-#include <algorithm>
 
 namespace geos {
 
-Geometry* BufferOp::bufferOp(const Geometry *g, double distance){
+/**
+* Compute a reasonable scale factor to limit the precision of
+* a given combination of Geometry and buffer distance->
+* The scale factor is based on a heuristic->
+*
+* @param g the Geometry being buffered
+* @param distance the buffer distance
+* @param maxPrecisionDigits the mzx # of digits that should be allowed by
+*          the precision determined by the computed scale factor
+*
+* @return a scale factor that allows a reasonable amount of precision for the buffer computation
+*/
+double BufferOp::precisionScaleFactor(Geometry *g,double distance,int maxPrecisionDigits){
+	Envelope *env=g->getEnvelopeInternal();
+	double envSize=max(env->getHeight(), env->getWidth());
+	double expandByDistance=distance > 0.0 ? distance : 0.0;
+	double bufEnvSize=envSize + 2 * expandByDistance;
+	// the smallest power of 10 greater than the buffer envelope
+	int bufEnvLog10=(int) (log(bufEnvSize) / log(10.0) + 1.0);
+	int minUnitLog10=bufEnvLog10 - maxPrecisionDigits;
+	// scale factor is inverse of min Unit size, so flip sign of exponent
+	double scaleFactor=pow(10.0,-minUnitLog10);
+	return scaleFactor;
+}
 
+/**
+* Computes the buffer of a geometry for a given buffer distance->
+*
+* @param g the geometry to buffer
+* @param distance the buffer distance
+* @return the buffer of the input geometry
+*/
+Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 	BufferOp *gBuf=new BufferOp(g);
-	Geometry *geomBuf;
-	try {
-		geomBuf=gBuf->getResultGeometry(distance);
-	}
-	catch (...) {
-		delete gBuf;
-		throw;
-	}
-	delete gBuf;
+	Geometry* geomBuf=gBuf->getResultGeometry(distance);
 	return geomBuf;
 }
 
-Geometry* BufferOp::bufferOp(const Geometry *g, double distance, int quadrantSegments){
-	BufferOp *gBuf=new BufferOp(g);
-	Geometry *geomBuf;
-	try {
-		geomBuf=gBuf->getResultGeometry(distance, quadrantSegments);
-	}
-	catch (...) {
-		delete gBuf;
-		throw;
-	}
-	delete gBuf;
+/**
+* Comutes the buffer for a geometry for a given buffer distance
+* and accuracy of approximation->
+*
+* @param g the geometry to buffer
+* @param distance the buffer distance
+* @param quadrantSegments the number of segments used to approximate a quarter circle
+* @return the buffer of the input geometry
+*
+*/
+Geometry* BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments){
+	BufferOp *bufOp=new BufferOp(g);
+	bufOp->setQuadrantSegments(quadrantSegments);
+	Geometry *geomBuf=bufOp->getResultGeometry(distance);
 	return geomBuf;
 }
 
 /**
-*Compute the change in depth as an edge is crossed from R to L
+* Initializes a buffer computation for the given geometry
+*
+* @param g the geometry to buffer
 */
-int BufferOp::depthDelta(Label *label){
-	int lLoc=label->getLocation(0,Position::LEFT);
-	int rLoc=label->getLocation(0,Position::RIGHT);
-	if (lLoc==Location::INTERIOR && rLoc==Location::EXTERIOR)
-		return 1;
-	else if (lLoc==Location::EXTERIOR && rLoc==Location::INTERIOR)
-		return -1;
-	return 0;
+BufferOp::BufferOp(Geometry *g) {
+	MAX_PRECISION_DIGITS=12;
+	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
+	int endCapStyle=BufferOp::CAP_ROUND;
+	resultGeometry=NULL;
 }
 
-BufferOp::BufferOp(const Geometry *g0): GeometryGraphOperation(g0) {
-	resultGeom=NULL;
-	edgeList=new EdgeList();
-	graph=new PlanarGraph(new OverlayNodeFactory());
-	geomFact=new GeometryFactory(g0->getPrecisionModel(),g0->getSRID());
+/**
+* Specifies the end cap style of the generated buffer->
+* The styles supported are {@link CAP_ROUND}, {@link CAP_BUTT}, and {@link CAP_SQUARE}->
+* The default is CAP_ROUND->
+*
+* @param endCapStyle the end cap style to specify
+*/
+void BufferOp::setEndCapStyle(int nEndCapStyle){
+	endCapStyle=nEndCapStyle;
 }
 
-BufferOp::~BufferOp(){
-	delete edgeList;
-	delete graph;
-	delete geomFact;
+/**
+* Specifies the end cap style of the generated buffer->
+* The styles supported are {@link CAP_ROUND}, {@link CAP_BUTT}, and {@link CAP_SQUARE}->
+* The default is CAP_ROUND->
+*
+* @param endCapStyle the end cap style to specify
+*/
+void BufferOp::setQuadrantSegments(int nQuadrantSegments){
+	quadrantSegments=nQuadrantSegments;
 }
 
-Geometry* BufferOp::getResultGeometry(double distance) {
-	computeBuffer(distance,BufferLineBuilder::DEFAULT_QUADRANT_SEGMENTS);
-	return resultGeom;
+/**
+* Returns the buffer computed for a geometry for a given buffer distance->
+*
+* @param g the geometry to buffer
+* @param distance the buffer distance
+* @return the buffer of the input geometry
+*/
+Geometry* BufferOp::getResultGeometry(double nDistance){
+	distance=nDistance;
+	computeGeometry();
+	return resultGeometry;
 }
 
-Geometry* BufferOp::getResultGeometry(double distance, int quadrantSegments) {
-	computeBuffer(distance, quadrantSegments);
-	return resultGeom;
+/**
+* Comutes the buffer for a geometry for a given buffer distance
+* and accuracy of approximation->
+*
+* @param g the geometry to buffer
+* @param distance the buffer distance
+* @param quadrantSegments the number of segments used to approximate a quarter circle
+* @return the buffer of the input geometry
+*
+* @deprecated use setQuadrantSegments instead
+*/
+Geometry* BufferOp::getResultGeometry(double nDistance, int nQuadrantSegments){
+	distance=nDistance;
+	setQuadrantSegments(nQuadrantSegments);
+	computeGeometry();
+	return resultGeometry;
 }
 
-void BufferOp::computeBuffer(double distance, int quadrantSegments) throw(TopologyException *) {
-	BufferEdgeBuilder *bufEdgeBuilder=new BufferEdgeBuilder(cga,li,distance,resultPrecisionModel,quadrantSegments);
-	vector<Edge*> *bufferEdgeList=bufEdgeBuilder->getEdges(getArgGeometry(0));
-	vector<Edge*> *nodedEdges=nodeEdges(bufferEdgeList);
-	for(int i=0;i<(int)nodedEdges->size();i++) {
-		Edge *e=(*nodedEdges)[i];
-		insertEdge(e);
-	}
-	replaceCollapsedEdges();
-	graph->addEdges(edgeList->getEdges());
-
-	vector<BufferSubgraph*> *subgraphList=createSubgraphs();
-	PolygonBuilder *polyBuilder=new PolygonBuilder(geomFact,cga);
-
+void BufferOp::computeGeometry(){
+	bufferOriginalPrecision();
+	if (resultGeometry!=NULL) return;
+	// try and compute with decreasing precision
+	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--) {
 	try {
-		buildSubgraphs(subgraphList,polyBuilder);
+		bufferFixedPrecision(precDigits);
+	} catch (TopologyException *ex) {
+		saveException=ex;
+		// don't propagate the exception - it will be detected by fact that resultGeometry is null
 	}
-	// *Should* throw a TopologyException only
-	catch (...)
-	{
-		delete polyBuilder;
-		delete nodedEdges;
-		delete bufEdgeBuilder;
-		for(int i=0;i<(int)subgraphList->size();i++) {
-			delete (*subgraphList)[i];
-		}
-		delete subgraphList;
-		throw;
+	if (resultGeometry!=NULL) return;
 	}
-	vector<Polygon*> *resultPolyList=polyBuilder->getPolygons();
-	resultGeom=computeGeometry(resultPolyList);
-	//computeBufferLine(graph);
-	delete bufEdgeBuilder;
-	delete polyBuilder;
-	delete resultPolyList;
-	for(int i=0;i<(int)subgraphList->size();i++) {
-		delete (*subgraphList)[i];
-	}
-	delete subgraphList;
-	delete nodedEdges;
+	// tried everything - have to bail
+	throw saveException;
+	//return resultGeometry;
 }
 
-/**
-*Use a GeometryGraph to node the created edges,
-*and create split edges between the nodes
-*/
-vector<Edge*>* BufferOp::nodeEdges(vector<Edge*> *edges){
-	// intersect edges again to ensure they are noded correctly
-	GeometryGraph *ggraph=new GeometryGraph();
-	for (int i=0;i<(int)edges->size();i++) {
-		Edge *e=(*edges)[i];
-		ggraph->addEdge(e);
-	}
-	SegmentIntersector *si=ggraph->computeSelfNodes(li, false);
-	/*
-	if (si.hasProperIntersection())
-	Debug.println("proper intersection found");
-	else
-	Debug.println("no proper intersection found");
-	*/
-	vector<Edge*> *newEdges=new vector<Edge*>();
-	ggraph->computeSplitEdges(newEdges);
-	delete si;
-	delete ggraph;
-	return newEdges;
-}
-/**
-*Inserted edges are checked identical edge already exists.
-*If so, the edge is not inserted, but its label is merged
-*with the existing edge.
-* NOTE: the edge is deleted if already found !
-*/
-void BufferOp::insertEdge(Edge *e){
-	//Debug.println(e);
-	int foundIndex=edgeList->findEdgeIndex(e);
-	// If an identical edge already exists, simply update its label
-	if (foundIndex>=0) {
-		Edge *existingEdge=edgeList->get(foundIndex);
-		Label *existingLabel=existingEdge->getLabel();
-		Label *labelToMerge=e->getLabel();
-		// check if new edge is in reverse direction to existing edge
-		// if so, must flip the label before merging it
-		if (!existingEdge->isPointwiseEqual(e)) {
-			labelToMerge=new Label(e->getLabel());
-			labelToMerge->flip();
-		}
-		existingLabel->merge(labelToMerge);
-		// compute new depth delta of sum of edges
-		int mergeDelta=depthDelta(labelToMerge);
-		int existingDelta=existingEdge->getDepthDelta();
-		int newDelta=existingDelta+mergeDelta;
-		existingEdge->setDepthDelta(newDelta);
-		checkDimensionalCollapse(labelToMerge,existingLabel);
-		//Debug.print("new edge "); Debug.println(e);
-		//Debug.print("existing "); Debug.println(existingEdge);
-		delete e;
-	} else {   // no matching existing edge was found
-		// add this new edge to the list of edges in this graph
-		//e.setName(name+edges.size());
-		edgeList->add(e);
-		e->setDepthDelta(depthDelta(e->getLabel()));
+void BufferOp::bufferOriginalPrecision() {
+	try {
+		BufferBuilder *bufBuilder=new BufferBuilder();
+		bufBuilder->setQuadrantSegments(quadrantSegments);
+		bufBuilder->setEndCapStyle(endCapStyle);
+		resultGeometry=bufBuilder->buffer(argGeom, distance);
+	} catch (TopologyException *ex) {
+		saveException=ex;
+		// don't propagate the exception - it will be detected by fact that resultGeometry is null
 	}
 }
 
-/**
-*If either of the GeometryLocations for the existing label is
-*exactly opposite to the one in the labelToMerge,
-*this indicates a dimensional collapse has happened.
-*In this case, convert the label for that Geometry to a Line label
-*/
-void BufferOp::checkDimensionalCollapse(Label *labelToMerge,Label *existingLabel){
-	if (existingLabel->isArea() && labelToMerge->isArea()) {
-		for (int i=0;i<2;i++) {
-			if (!labelToMerge->isNull(i)
-				&&  labelToMerge->getLocation(i,Position::LEFT)==existingLabel->getLocation(i,Position::RIGHT)
-				&&  labelToMerge->getLocation(i,Position::RIGHT)==existingLabel->getLocation(i,Position::LEFT)) {
-					existingLabel->toLine(i);
-			}
-		}
-	}
+void BufferOp::bufferFixedPrecision(int precisionDigits) {
+	double sizeBasedScaleFactor=precisionScaleFactor(argGeom, distance, precisionDigits);
+	PrecisionModel *fixedPM=new PrecisionModel(sizeBasedScaleFactor);
+	// don't change the precision model of the Geometry, just reduce the precision
+	SimpleGeometryPrecisionReducer *reducer=new SimpleGeometryPrecisionReducer(fixedPM);
+	Geometry* reducedGeom=reducer->reduce(argGeom);
+	//System->out->println("recomputing with precision scale factor=" + sizeBasedScaleFactor);
+	BufferBuilder *bufBuilder=new BufferBuilder();
+	bufBuilder->setWorkingPrecisionModel(fixedPM);
+	bufBuilder->setQuadrantSegments(quadrantSegments);
+	// this may throw an exception, if robustness errors are encountered
+	resultGeometry=bufBuilder->buffer(reducedGeom, distance);
 }
 
-/**
-*If collapsed edges are found, replace them with a new edge which is a L edge
-*/
-void BufferOp::replaceCollapsedEdges() {
-	vector<Edge*> *newEdges=new vector<Edge*>();
-	vector<Edge*> *eL=edgeList->getEdges();
-	for(int i=0;i<(int)eL->size();i++) {
-		Edge *e=edgeList->get(i);
-		if (e->isCollapsed()) {
-			//Debug.print(e);
-			eL->erase(eL->begin()+i);
-			newEdges->push_back(e->getCollapsedEdge());
-		}
-	}
-	eL->insert(eL->end(),newEdges->begin(),newEdges->end());
-	delete newEdges;
 }
-
-bool bsgGreaterThan(BufferSubgraph *first,BufferSubgraph *second) {
-	if (first->compareTo(second)>0)
-		return true;
-	else
-		return false;
-}
-
-vector<BufferSubgraph*>* BufferOp::createSubgraphs(){
-	vector<BufferSubgraph*> *subgraphList=new vector<BufferSubgraph*>();
-	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
-		Node *node=it->second;
-		if (!node->isVisited()) {
-			BufferSubgraph *subgraph=new BufferSubgraph(cga);
-			subgraph->create(node);
-			subgraphList->push_back(subgraph);
-		}
-	}
-	/**
-	*Sort the subgraphs in descending order of their rightmost coordinate.
-	*This ensures that when the Polygons for the subgraphs are built,
-	*subgraphs for shells will have been built before the subgraphs for
-	*any holes they contain.
-	*/
-	sort(subgraphList->begin(),subgraphList->end(),bsgGreaterThan);
-	return subgraphList;
-}
-
-void BufferOp::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder) throw (TopologyException *) {
-	for(int i=0;i<(int)subgraphList->size();i++) {
-		BufferSubgraph *subgraph=(*subgraphList)[i];
-		Coordinate& p=subgraph->getRightmostCoordinate();
-		int outsideDepth=0;
-		if (polyBuilder->containsPoint(p))
-			outsideDepth=1;
-		subgraph->computeDepth(outsideDepth);
-		subgraph->findResultEdges();
-		// This might throw a TopologyException
-		polyBuilder->add(subgraph->getDirectedEdges(),subgraph->getNodes());
-	}
-}
-
-Geometry* BufferOp::computeGeometry(vector<Polygon*> *resultPolyList){
-	vector<Geometry*> *geomList=new vector<Geometry*>();
-	for(int i=0;i<(int)resultPolyList->size();i++) {
-		geomList->push_back((*resultPolyList)[i]);
-	}
-	Geometry *g=geomFact->buildGeometry(geomList);
-	delete geomList;
-	return g;
-}
-
-/**
-*toLineStrings converts a list of Edges to LineStrings.
-*/
-Geometry* BufferOp::toLineStrings(EdgeList *edges){
-	vector<Geometry*> *geomList=new vector<Geometry*>();
-	vector<Edge*> *eL=edges->getEdges();
-	for(int i=0;i<(int)eL->size();i++) {
-		Edge *e=edges->get(i);
-		const CoordinateList *pts=e->getCoordinates();
-		LineString *line=geomFact->createLineString(pts);
-		geomList->push_back(line);
-	}
-	Geometry *geom=geomFact->buildGeometry(geomList);
-	return geom;
-}
-}
-

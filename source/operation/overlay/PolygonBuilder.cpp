@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
  * Revision 1.12  2003/11/12 18:02:57  strk
  * Added throw specification. Fixed leaks on exceptions.
  *
@@ -98,8 +101,8 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes)
 	//Assert: every hole on freeHoleList has a shell assigned to it
 }
 
-vector<Polygon*>* PolygonBuilder::getPolygons() {
-	vector<Polygon*> *resultPolyList=computePolygons(shellList);
+vector<Geometry*>* PolygonBuilder::getPolygons() {
+	vector<Geometry*> *resultPolyList=computePolygons(shellList);
 	return resultPolyList;
 }
 
@@ -294,8 +297,8 @@ EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRin
 	delete testEnv;
 	return minShell;
 }
-vector<Polygon*>* PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList) {
-	vector<Polygon*> *resultPolyList=new vector<Polygon*>();
+vector<Geometry*>* PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList) {
+	vector<Geometry*> *resultPolyList=new vector<Geometry*>();
 	// add Polygons for all shells
 	for(int i=0;i<(int)newShellList->size();i++) {
 		EdgeRing *er=(*newShellList)[i];

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
  * Revision 1.6  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -59,7 +62,7 @@ void RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList){
 	* If the rightmost point is a node, we need to identify which of
 	* the incident edges is rightmost.
 	*/
-	Assert::isTrue(minCoord==minDe->getCoordinate() || minIndex!=0, "inconsistency in rightmost processing");
+	Assert::isTrue(minIndex!=0 || minCoord==minDe->getCoordinate(), "inconsistency in rightmost processing");
 	if (minIndex==0 ) {
 		findRightmostEdgeAtNode();
 	} else {
@@ -120,12 +123,12 @@ void RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de) {
 	const CoordinateList *coord=de->getEdge()->getCoordinates();
 	// only check vertices which are the starting point of a non-horizontal segment
 	for(int i=0;i<coord->getSize()-1;i++) {
-		if (coord->getAt(i).y!=coord->getAt(i+1).y)  { // non-horizontal
-			if (minCoord==Coordinate::getNull() || coord->getAt(i).x>minCoord.x ) {
-				minDe=de;
-				minIndex=i;
-				minCoord=coord->getAt(i);
-			}
+     // only check vertices which are the start or end point of a non-horizontal segment
+     // <FIX> MD 19 Sep 03 - NO!  we can test all vertices, since the rightmost must have a non-horiz segment adjacent to it
+		if (minCoord==Coordinate::getNull() || coord->getAt(i).x>minCoord.x ) {
+			minDe=de;
+			minIndex=i;
+			minCoord=coord->getAt(i);
 		}
 	}
 }
@@ -136,7 +139,9 @@ int RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index){
 		side=getRightmostSideOfSegment(de,index-1);
 	if (side<0)
 		// reaching here can indicate that segment is horizontal
-		Assert::shouldNeverReachHere("problem with finding rightmost side of segment");
+		// Assert::shouldNeverReachHere("problem with finding rightmost side of segment");
+		minCoord=Coordinate::nullCoord;
+	checkForRightmostCoordinate(de);
 	return side;
 }
 

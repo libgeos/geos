@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -107,8 +110,16 @@ void PlanarGraph::add(EdgeEnd *e){
 map<Coordinate,Node*,CoordLT>::iterator PlanarGraph::getNodeIterator() {
 	return nodes->iterator();
 }
-//Wouldn't work. Use iterator
-//Collection PlanarGraph::getNodes() { return nodes.values(); }
+
+vector<Node*>* PlanarGraph::getNodes(){
+	vector<Node*> *values=new vector<Node*>();
+	map<Coordinate,Node*,CoordLT>::iterator it=nodes->nodeMap->begin();
+	while(it!=nodes->nodeMap->end()) {
+		values->push_back(it->second);
+		it++;
+	}
+	return values;
+}
 
 // arg cannot be const, NodeMap::addNode will
 // occasionally label-merge first arg.

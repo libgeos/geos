@@ -13,9 +13,8 @@
  *
  **********************************************************************
  * $Log$
- * Revision 1.4  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
+ * Revision 1.5  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
  *
  *
  **********************************************************************/
@@ -24,60 +23,86 @@
 #include "../../headers/opBuffer.h"
 
 namespace geos {
-
-BufferSubgraph::BufferSubgraph(CGAlgorithms *newCga) {
-	finder=new RightmostEdgeFinder(newCga);
+BufferSubgraph::BufferSubgraph(CGAlgorithms *cga) {
 	dirEdgeList=new vector<DirectedEdge*>();
 	nodes=new vector<Node*>();
-	rightMostCoord.setNull();
+	rightMostCoord=NULL;
+	finder=new RightmostEdgeFinder(cga);
 }
 
 BufferSubgraph::~BufferSubgraph() {
-	delete finder;
 	delete dirEdgeList;
 	delete nodes;
+	delete finder;
 }
 
-vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
+vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() { 
 	return dirEdgeList;
 }
-
-vector<Node*>* BufferSubgraph::getNodes() {
+vector<Node*>* BufferSubgraph::getNodes() { 
 	return nodes;
 }
+
 /**
-*Get the rightMost coordinate in the edges of the subgraph
+* Gets the rightmost coordinate in the edges of the subgraph
 */
-Coordinate& BufferSubgraph::getRightmostCoordinate() {
+Coordinate* BufferSubgraph::getRightmostCoordinate() {
 	return rightMostCoord;
 }
 
-void BufferSubgraph::create(Node *node){
-	add(node);
+/**
+* Creates the subgraph consisting of all edges reachable from this node.
+* Finds the edges in the graph and the rightmost coordinate.
+*
+* @param node a node to start the graph traversal from
+*/
+void BufferSubgraph::create(Node *node) {
+	addReachable(node);
 	finder->findEdge(dirEdgeList);
-	rightMostCoord=finder->getCoordinate();
+	rightMostCoord=&(finder->getCoordinate());
 }
 
-void BufferSubgraph::add(Node *node) {
+/**
+* Adds all nodes and edges reachable from this node to the subgraph.
+* Uses an explicit stack to avoid a large depth of recursion.
+*
+* @param node a node known to be in the subgraph
+*/
+void BufferSubgraph::addReachable(Node *startNode) {
+	vector<Node*> *nodeStack=new vector<Node*>();
+	nodeStack->push_back(startNode);
+	while (!nodeStack->empty()) {
+		Node *node=*(nodeStack->end()-1);
+		nodeStack->pop_back();
+		add(node, nodeStack);
+	}
+}
+
+/**
+* Adds the argument node and all its out edges to the subgraph
+* @param node the node to add
+* @param nodeStack the current set of nodes being traversed
+*/
+void BufferSubgraph::add(Node *node, vector<Node*> *nodeStack){
 	node->setVisited(true);
 	nodes->push_back(node);
-	vector<EdgeEnd*> *ee=node->getEdges()->getEdges();
-	for(int i=0; i<(int)ee->size();i++) {
-		DirectedEdge *de=(DirectedEdge*)(*ee)[i];
+	vector<EdgeEnd*> *ees=node->getEdges()->getEdges();
+	for(int i=0;i<(int)ees->size();i++) {
+		DirectedEdge *de=(DirectedEdge*) (*ees)[i];
 		dirEdgeList->push_back(de);
 		DirectedEdge *sym=de->getSym();
 		Node *symNode=sym->getNode();
 		/**
-		*NOTE: this is a depth-first traversal of the graph.
-		*This will cause a large depth of recursion.
-		*It might be better to do a breadth-first traversal.
+		* NOTE: this is a depth-first traversal of the graph.
+		* This will cause a large depth of recursion.
+		* It might be better to do a breadth-first traversal.
 		*/
-		if (!symNode->isVisited()) add(symNode);
+		if (! symNode->isVisited()) nodeStack->push_back(symNode);
 	}
 }
 
 void BufferSubgraph::clearVisitedEdges() {
-	for(int i=0; i<(int)dirEdgeList->size();i++) {
+	for(int i=0;i<(int)dirEdgeList->size();i++) {
 		DirectedEdge *de=(*dirEdgeList)[i];
 		de->setVisited(false);
 	}
@@ -90,86 +115,137 @@ void BufferSubgraph::computeDepth(int outsideDepth) {
 	Node *n=de->getNode();
 	Label *label=de->getLabel();
 	// right side of line returned by finder is on the outside
-	de->setEdgeDepths(Position::RIGHT,outsideDepth);
-	computeNodeDepth(n,de);
+	de->setEdgeDepths(Position::RIGHT, outsideDepth);
+	copySymDepths(de);
+	//computeNodeDepth(n, de);
+	computeDepths(de);
 }
 
-void BufferSubgraph::computeNodeDepth(Node *n,DirectedEdge *startEdge) {
-	if (startEdge->isVisited()) return;
-	((DirectedEdgeStar*)n->getEdges())->computeDepths(startEdge);
+void BufferSubgraph::computeNodeDepth(Node *n) {
+	// find a visited dirEdge to start at
+	DirectedEdge *startEdge=NULL;
+	vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
+	for(int i=0;i<(int)ees->size();i++) {
+		DirectedEdge *de=(DirectedEdge*) (*ees)[i];
+		if (de->isVisited() || de->getSym()->isVisited()) {
+			startEdge=de;
+			break;
+		}
+	}
+	// MD - testing  Result: breaks algorithm
+	//if (startEdge==null) return;
+	Assert::isTrue(startEdge!=NULL, "unable to find edge to compute depths at " + n->getCoordinate().toString());
+	((DirectedEdgeStar*) n->getEdges())->computeDepths(startEdge);
 	// copy depths to sym edges
-	vector<EdgeEnd*> *ee=n->getEdges()->getEdges();
-	for(int i=0; i<(int)ee->size();i++) {
-		DirectedEdge *de=(DirectedEdge*)(*ee)[i];
+	vector<EdgeEnd*> *ees1=n->getEdges()->getEdges();
+	for(int j=0;j<(int)ees1->size();j++) {
+		DirectedEdge *de=(DirectedEdge*) (*ees)[j];
 		de->setVisited(true);
-		DirectedEdge *sym=de->getSym();
-		sym->setDepth(Position::LEFT,de->getDepth(Position::RIGHT));
-		sym->setDepth(Position::RIGHT,de->getDepth(Position::LEFT));
+		copySymDepths(de);
 	}
-	// propagate depth to all linked nodes via the sym edges
-	// If a sym edge has been visited already, there is no need to process it further
-	ee=n->getEdges()->getEdges();
-	for(int i=0; i<(int)ee->size();i++) {
-		DirectedEdge *de=(DirectedEdge*)(*ee)[i];
-		DirectedEdge *sym=de->getSym();
-		Node *symNode=sym->getNode();
-		/**
-		*NOTE: this is a depth-first traversal of the graph.
-		*This will cause a large depth of recursion.
-		*It might be better to do a breadth-first traversal.
-		*/
-		computeNodeDepth(symNode, sym);
-	}
+}
+
+void BufferSubgraph::copySymDepths(DirectedEdge *de){
+	DirectedEdge *sym=de->getSym();
+	sym->setDepth(Position::LEFT, de->getDepth(Position::RIGHT));
+	sym->setDepth(Position::RIGHT, de->getDepth(Position::LEFT));
 }
 
 /**
-*Find all edges whose depths indicates that they are in the result area(s).
-*Since we want polygon shells to be
-*oriented CW, choose dirEdges with the interior of the result on the RHS.
-*Mark them as being in the result.
-*Interior Area edges are the result of dimensional collapses.
-*They do not form part of the result area boundary.
+* Find all edges whose depths indicates that they are in the result area(s).
+* Since we want polygon shells to be
+* oriented CW, choose dirEdges with the interior of the result on the RHS.
+* Mark them as being in the result.
+* Interior Area edges are the result of dimensional collapses.
+* They do not form part of the result area boundary.
 */
 void BufferSubgraph::findResultEdges() {
-	for(int i=0; i<(int)dirEdgeList->size();i++) {
+	for(int i=0;i<(int)dirEdgeList->size();i++) {
 		DirectedEdge *de=(*dirEdgeList)[i];
 		/**
-		*Select edges which have the EXTERIOR on the L and INTERIOR
-		*on the right.  It doesn't matter how deep the interior is.
+		* Select edges which have an interior depth on the RHS
+		* and an exterior depth on the LHS.
+		* Note that because of weird rounding effects there may be
+		* edges which have negative depths!  Negative depths
+		* count as "outside".
 		*/
-		if (de->getDepth(Position::RIGHT)>=1
-			&& de->getDepth(Position::LEFT)==0
+		// <FIX> - handle negative depths
+		if (	de->getDepth(Position::RIGHT)>=1
+			&&  de->getDepth(Position::LEFT)<=0
 			&& !de->isInteriorAreaEdge()) {
-				de->setInResult(true);
-				//Debug.print("in result "); Debug.println(de);
+					de->setInResult(true);
+					//Debug.print("in result "); Debug.println(de);
 		}
 	}
 }
 
 /**
-*BufferSubgraphs are compared on the x-value of their rightmost Coordinate.
-*This defines a partial ordering on the graphs such that:
-*<p>
-*g1>=g2 <==> Ring(g2) does not contain Ring(g1)
-*<p>
-*where Polygon(g) is the buffer polygon that is built from g.
-*<p>
-*This relationship is used to sort the BufferSubgraphs so that shells are guaranteed to
-*be built before holes.
+* BufferSubgraphs are compared on the x-value of their rightmost Coordinate.
+* This defines a partial ordering on the graphs such that:
+* <p>
+* g1 >= g2 <==> Ring(g2) does not contain Ring(g1)
+* <p>
+* where Polygon(g) is the buffer polygon that is built from g.
+* <p>
+* This relationship is used to sort the BufferSubgraphs so that shells are guaranteed to
+* be built before holes.
 */
 int BufferSubgraph::compareTo(void* o) {
-	BufferSubgraph *bsgraph=(BufferSubgraph*) o;
-	return compareTo(bsgraph);
-}
-
-int BufferSubgraph::compareTo(BufferSubgraph *bsg) {
-	if (rightMostCoord.x<bsg->rightMostCoord.x) {
+	BufferSubgraph *graph=(BufferSubgraph*) o;
+	if (rightMostCoord->x<graph->rightMostCoord->x) {
 		return -1;
 	}
-	if (rightMostCoord.x>bsg->rightMostCoord.x) {
+	if (rightMostCoord->x>graph->rightMostCoord->x) {
 		return 1;
 	}
 	return 0;
 }
+
+/**
+* Compute depths for all dirEdges via breadth-first traversal of nodes in graph
+* @param startEdge edge to start processing with
+*/
+// <FIX> MD - use iteration & queue rather than recursion, for speed and robustness
+void BufferSubgraph::computeDepths(DirectedEdge *startEdge){
+	vector<Node*> *nodesVisited=new vector<Node*>(); //Used to be a HashSet
+	vector<Node*> *nodeQueue=new vector<Node*>();
+	Node *startNode=startEdge->getNode();
+	nodeQueue->push_back(startNode);
+	nodesVisited->push_back(startNode);
+	startEdge->setVisited(true);
+	while (! nodeQueue->empty()) {
+		//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
+		Node *n=(*nodeQueue)[0];
+		nodeQueue->erase(nodeQueue->begin());
+		nodesVisited->push_back(n);
+		// compute depths around node, starting at this edge since it has depths assigned
+		computeNodeDepth(n);
+		// add all adjacent nodes to process queue,
+		// unless the node has been visited already
+		vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
+		for(int i=0;i<(int)ees->size();i++) {
+			DirectedEdge *de=(DirectedEdge*) (*ees)[i];
+			DirectedEdge *sym=de->getSym();
+			if (sym->isVisited()) continue;
+			Node *adjNode=sym->getNode();
+
+			if (! contains(nodesVisited,adjNode)) {
+				nodeQueue->push_back(adjNode);
+				nodesVisited->push_back(adjNode);
+			}
+		}
+	}
 }
 
+bool BufferSubgraph::contains(vector<Node*> *nodes,Node *node) {
+	bool result=false;
+	for(int i=0;i<(int)nodes->size();i++) {
+		if (node==(*nodes)[i]) {
+			result=true;
+			break;
+		}
+	}
+	return result;
+}
+
+}

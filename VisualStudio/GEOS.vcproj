@@ -514,10 +514,7 @@
 					Name="buffer"
 					Filter="">
 					<File
-						RelativePath="..\source\operation\buffer\BufferEdgeBuilder.cpp">
-					</File>
-					<File
-						RelativePath="..\source\operation\buffer\BufferLineBuilder.cpp">
+						RelativePath="..\source\operation\buffer\BufferBuilder.cpp">
 					</File>
 					<File
 						RelativePath="..\source\operation\buffer\BufferOp.cpp">
@@ -526,10 +523,16 @@
 						RelativePath="..\source\operation\buffer\BufferSubgraph.cpp">
 					</File>
 					<File
-						RelativePath="..\source\operation\buffer\LoopFilter.cpp">
+						RelativePath="..\source\operation\buffer\OffsetCurveBuilder.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\buffer\OffsetCurveSetBuilder.cpp">
 					</File>
 					<File
 						RelativePath="..\source\operation\buffer\RightmostEdgeFinder.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\buffer\SubgraphDepthLocater.cpp">
 					</File>
 				</Filter>
 				<Filter

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
  * Revision 1.14  2004/03/29 06:59:24  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -347,7 +350,7 @@ public:
 	*/
 	void add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes)
 		throw(TopologyException *);
-  	vector<Polygon*>* getPolygons();
+  	vector<Geometry*>* getPolygons();
 	bool containsPoint(Coordinate& p);
 private:
 	GeometryFactory *geometryFactory;
@@ -422,7 +425,7 @@ private:
 	* @return NULL if no containing EdgeRing is found
 	*/
 	EdgeRing* findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRing*> *newShellList);
-	vector<Polygon*>* computePolygons(vector<EdgeRing*> *newShellList);
+	vector<Geometry*>* computePolygons(vector<EdgeRing*> *newShellList);
 	/**
 	* Checks the current set of shells (with their associated holes) to
 	* see if any of them contain the point.

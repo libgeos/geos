@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
  * Revision 1.2  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -603,8 +606,7 @@ public:
 	virtual bool isBoundaryNode(int geomIndex,Coordinate& coord);
 	virtual void add(EdgeEnd *e);
 	virtual map<Coordinate,Node*,CoordLT>::iterator getNodeIterator();
-//	Wouldn't work. Use iterator
-//	Collection getNodes() { return nodes.values(); }
+	virtual vector<Node*>* getNodes();
 	virtual Node* addNode(Node *node);
 	virtual Node* addNode(const Coordinate& coord);
 	virtual Node* find(Coordinate& coord);

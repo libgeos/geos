@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
  * Revision 1.14  2004/03/29 06:59:25  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -487,7 +490,11 @@ void OverlayOp::computeOverlay(int opCode)
 		// might throw a TopologyException *
 		polyBuilder->add(graph);
 
-		resultPolyList=polyBuilder->getPolygons();
+		vector<Geometry*> *gv=polyBuilder->getPolygons();
+		resultPolyList=new vector<Polygon*>();
+		for(int i=0;i<(int)gv->size();i++) {
+			resultPolyList->push_back((Polygon*)(*gv)[i]);
+		}
 		lineBuilder=new LineBuilder(this,geomFact,ptLocator);
 		resultLineList=lineBuilder->build(opCode);
 		pointBuilder=new PointBuilder(this,geomFact,ptLocator);
