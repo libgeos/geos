@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/05/06 13:58:30  strk
+ * leak removed from createParentBoundablesFromVerticalSlices
+ *
  * Revision 1.8  2004/05/05 17:42:06  strk
  * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
  * SIRAbstractNode and STRAbstractNode destructors added to get rid of
@@ -133,6 +136,7 @@ vector<Boundable*>* STRtree::createParentBoundablesFromVerticalSlices(vector<vec
 	for (int i = 0; i <(int) verticalSlices->size(); i++) {
 		vector<Boundable*> *toAdd=createParentBoundablesFromVerticalSlice((*verticalSlices)[i], newLevel);
 		parentBoundables->insert(parentBoundables->end(),toAdd->begin(),toAdd->end());
+		delete toAdd;
 	}
 	return parentBoundables;
 }
