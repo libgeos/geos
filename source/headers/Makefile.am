@@ -1,7 +1,8 @@
 SUBDIRS = \
 	geos
 
-geosdir = $(prefix)/include
+#geosdir = $(prefix)/include
 
-geos_HEADERS = \
+#geos_HEADERS = \
+include_HEADERS = \
 	geos.h

@@ -2,8 +2,9 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 GEOS_VERSION=@VERSION@
 
-pkglibdir=$(prefix)/lib
-pkglib_LTLIBRARIES = libgeos.la
+#pkglibdir=$(prefix)/lib
+#pkglib_LTLIBRARIES = libgeos.la
+lib_LTLIBRARIES = libgeos.la
 
 INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=""$(GEOS_VERSION)""
 

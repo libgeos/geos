@@ -1,4 +1,5 @@
-geosdir = $(prefix)/include/geos
+#geosdir = $(prefix)/include/geos
+geosdir = $(includedir)/geos
 
 EXTRA_DIST = platform.h.vc
 
