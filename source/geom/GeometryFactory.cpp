@@ -82,8 +82,9 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
 	bool isCollection=geoms->size()>1;
+	unsigned int i;
     
-	for (unsigned int i=0; i<geoms->size(); i++) {
+	for (i=0; i<geoms->size(); i++) {
 		string partClass(typeid(*(*geoms)[i]).name());
 		if (geomClass=="NULL") {
 			geomClass=partClass;
