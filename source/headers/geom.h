@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.60  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.59  2004/05/05 10:54:48  strk
  * Removed some private static heap explicit allocation, less cleanup done by
  * the unloader.
@@ -916,9 +920,9 @@ public:
 	void geometryChangedAction();
 protected:
 	Envelope* envelope;
-	static bool hasNonEmptyElements(vector<Geometry *>* geometries);
+	static bool hasNonEmptyElements(const vector<Geometry *>* geometries);
 	static bool hasNullElements(const CoordinateList* list);
-	static bool hasNullElements(vector<Geometry *>* lrs);
+	static bool hasNullElements(const vector<Geometry *>* lrs);
 //	static void reversePointOrder(CoordinateList* coordinates);
 //	static Coordinate& minCoordinate(CoordinateList* coordinates);
 //	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
@@ -1160,7 +1164,7 @@ class GeometryCollection : public Geometry{
 public:
 //	GeometryCollection(void);
 	GeometryCollection(const GeometryCollection &gc);
-	GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
+	GeometryCollection(const vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
 	/**
 	* @param geometries
 	*            the <code>Geometry</code>s for this <code>GeometryCollection</code>,
@@ -1168,7 +1172,7 @@ public:
 	*            geometry. Elements may be empty <code>Geometry</code>s,
 	*            but not <code>null</code>s.
 	*/
-	GeometryCollection(vector<Geometry *> *newGeometries, const GeometryFactory *newFactory);
+	GeometryCollection(const vector<Geometry *> *newGeometries, const GeometryFactory *newFactory);
 	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
 	virtual CoordinateList* getCoordinates() const;
@@ -1504,13 +1508,13 @@ public:
 	*      <code>MultiPoint</code>
 	* @deprecated Use GeometryFactory instead
 	*/
-	MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID);
+	MultiPoint(const vector<Geometry *> *points,PrecisionModel* pm, int SRID);
 	/**
 	*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
 	*      , or <code>null</code> or an empty array to create the empty geometry.
 	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
 	*/
-	MultiPoint(vector<Geometry *> *points, const GeometryFactory *newFactory);
+	MultiPoint(const vector<Geometry *> *points, const GeometryFactory *newFactory);
 	virtual ~MultiPoint();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1549,8 +1553,8 @@ public:
 	*      <code>MultiLineString</code>
 	* @deprecated Use GeometryFactory instead
 	*/
-	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
-	MultiLineString(vector<Geometry *> *lineStrings, const GeometryFactory *newFactory);
+	MultiLineString(const vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
+	MultiLineString(const vector<Geometry *> *lineStrings, const GeometryFactory *newFactory);
 	virtual ~MultiLineString();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1588,7 +1592,7 @@ public:
 	*      <code>MultiPolygon</code>
 	* @deprecated Use GeometryFactory instead
 	*/
-	MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
+	MultiPolygon(const vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
 	/**
 	* @param polygons
 	*            the <code>Polygon</code>s for this <code>MultiPolygon</code>,
@@ -1599,7 +1603,7 @@ public:
 	*            HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple
 	*            Features Specification for SQL</A>.
 	*/
-	MultiPolygon(vector<Geometry *> *polygons, const GeometryFactory *newFactory);
+	MultiPolygon(const vector<Geometry *> *polygons, const GeometryFactory *newFactory);
 	virtual ~MultiPolygon();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1718,7 +1722,7 @@ public:
 	* create an empty MultiPoint.
 	* @param coordinates a CoordinateSequence possibly empty, or null
 	*/
-	MultiPoint* createMultiPoint(CoordinateList* coordinates) const;
+	MultiPoint* createMultiPoint(const CoordinateList* coordinates) const;
 	/**
 	* Constructs a <code>Polygon</code> with the given exterior boundary and
 	* interior boundaries.

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.15  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -50,7 +54,7 @@ namespace geos {
 *      <code>MultiPoint</code>
 * @deprecated Use GeometryFactory instead
 */
-MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
+MultiPoint::MultiPoint(const vector<Geometry *> *points,PrecisionModel* pm, int SRID):
 	GeometryCollection(points, new GeometryFactory(pm, SRID,CoordinateListFactory::internalFactory)){}
 
 /**
@@ -58,7 +62,7 @@ MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
 *      , or <code>null</code> or an empty array to create the empty geometry.
 *      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
 */
-MultiPoint::MultiPoint(vector<Geometry *> *points, const GeometryFactory *newFactory): GeometryCollection(points,newFactory){}
+MultiPoint::MultiPoint(const vector<Geometry *> *points, const GeometryFactory *newFactory): GeometryCollection(points,newFactory){}
 
 MultiPoint::~MultiPoint(){}
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.13  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -37,10 +41,9 @@
 namespace geos {
 
 //MultiPolygon::MultiPolygon(){}
-MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID):
-	GeometryCollection(polygons, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
+MultiPolygon::MultiPolygon(const vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID): GeometryCollection(polygons, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
 
-MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, const GeometryFactory *newFactory): GeometryCollection(polygons,newFactory){}
+MultiPolygon::MultiPolygon(const vector<Geometry *> *polygons, const GeometryFactory *newFactory): GeometryCollection(polygons,newFactory){}
 
 MultiPolygon::~MultiPolygon(){}
 

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.36  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.35  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -283,14 +287,16 @@ GeometryFactory::createMultiPoint(vector<Geometry *> *point) const
 * @param coordinates a CoordinateSequence possibly empty, or null
 */
 MultiPoint*
-GeometryFactory::createMultiPoint(CoordinateList* coordinates) const
+GeometryFactory::createMultiPoint(const CoordinateList* coordinates) const
 {
+	if ( ! coordinates ) return new MultiPoint(NULL, this);
+
 	vector<Geometry *> *pts=new vector<Geometry *>();
 	for (int i=0; i<coordinates->getSize(); i++) {
 		Point *pt=createPoint(coordinates->getAt(i));
 		pts->push_back(pt);
 	}
-	delete coordinates;
+	//delete coordinates;
 	MultiPoint *mp = createMultiPoint(pts);
 	delete pts;
 	return mp;

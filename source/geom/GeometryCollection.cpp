@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.31  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.30  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -57,8 +61,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 }
 
 /** @deprecated Use GeometryFactory instead */
-GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm,int SRID):
-	Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
+GeometryCollection::GeometryCollection(const vector<Geometry *> *newGeometries,PrecisionModel* pm,int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
 	if (newGeometries==NULL) {
 		geometries=new vector<Geometry *>();
 		return;
@@ -77,7 +80,7 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,Precisi
 *            geometry. Elements may be empty <code>Geometry</code>s,
 *            but not <code>null</code>s.
 */
-GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries, const GeometryFactory *newFactory): Geometry(newFactory)
+GeometryCollection::GeometryCollection(const vector<Geometry *> *newGeometries, const GeometryFactory *newFactory): Geometry(newFactory)
 {
 	if (newGeometries==NULL) {
 		geometries=new vector<Geometry *>();

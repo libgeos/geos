@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.31  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.30  2004/04/20 13:24:15  strk
  * More leaks removed.
  *
@@ -187,7 +191,7 @@ Geometry* LineString::getBoundary() const {
 		return getFactory()->createGeometryCollection(NULL);
 	}
 	if (isClosed()) {
-		return getFactory()->createMultiPoint((CoordinateList*)NULL);
+		return getFactory()->createMultiPoint((CoordinateList *)NULL);
 	}
 	vector<Geometry*> *pts=new vector<Geometry*>();
 	pts->push_back(getStartPoint());

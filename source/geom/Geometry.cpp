@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.47  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.46  2004/05/05 16:51:29  strk
  * avoided copy constructor in Geometry::geometryChangedFilter initializzazion
  *
@@ -96,7 +100,9 @@ Geometry::Geometry(const Geometry &geom) {
 	userData=NULL;
 }
 
-bool Geometry::hasNonEmptyElements(vector<Geometry *>* geometries) {
+bool
+Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries) 
+{
 	for (unsigned int i=0; i<geometries->size(); i++) {
 		if (!(*geometries)[i]->isEmpty()) {
 			return true;
@@ -105,7 +111,9 @@ bool Geometry::hasNonEmptyElements(vector<Geometry *>* geometries) {
 	return false;
 }
 
-bool Geometry::hasNullElements(const CoordinateList* list){
+bool
+Geometry::hasNullElements(const CoordinateList* list) 
+{
 	for (int i = 0; i<list->getSize(); i++) {
 		if (list->getAt(i)==Coordinate::getNull()) {
 			return true;
@@ -114,7 +122,9 @@ bool Geometry::hasNullElements(const CoordinateList* list){
 	return false;
 }
 
-bool Geometry::hasNullElements(vector<Geometry *>* lrs) {
+bool
+Geometry::hasNullElements(const vector<Geometry *>* lrs) 
+{
 	for (unsigned int i = 0; i<lrs->size(); i++) {
 		if ((*lrs)[i]==NULL) {
 			return true;

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateList.
+ *
  * Revision 1.13  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -48,7 +52,7 @@ namespace geos {
 *      <code>MultiLineString</code>
 * @deprecated Use GeometryFactory instead
 */
-MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID):
+MultiLineString::MultiLineString(const vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID):
 	GeometryCollection(lineStrings, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
 
 /**
@@ -58,7 +62,7 @@ MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel
 *            geometry. Elements may be empty <code>LineString</code>s,
 *            but not <code>null</code>s.
 */
-MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, const GeometryFactory *newFactory): 
+MultiLineString::MultiLineString(const vector<Geometry *> *lineStrings, const GeometryFactory *newFactory): 
 	GeometryCollection(lineStrings,newFactory){}
 
 MultiLineString::~MultiLineString(){}
