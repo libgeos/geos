@@ -8,7 +8,8 @@ pkglib_LTLIBRARIES = libgeos.la
 INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=\""$(GEOS_VERSION)"\"
 
 DIR_SOURCES =		Coordinate.cpp GeometryFactory.cpp MultiPoint.cpp \
-			CoordinateList.cpp IntersectionMatrix.cpp  \
+			CoordinateList.cpp BasicCoordinateList.cpp IntersectionMatrix.cpp  \
+			CoordinateListFactory.cpp PointCoordinateList.cpp \
 			MultiPolygon.cpp Dimension.cpp LinearRing.cpp \
 			Point.cpp Envelope.cpp LineSegment.cpp Polygon.cpp \
 			GeometryCollection.cpp LineString.cpp \
