@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/09/21 09:47:01  strk
+ * Removed useless auto_ptr usage in ::exponent
+ *
  * Revision 1.10  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -41,8 +44,8 @@ double DoubleBits::powerOf2(int exp){
 }
 
 int DoubleBits::exponent(double d) {
-	auto_ptr<DoubleBits> db(new DoubleBits(d));
-	return db->getExponent();
+	DoubleBits db(d);
+	return db.getExponent();
 }
 
 double DoubleBits::truncateToPowerOfTwo(double d){
@@ -87,11 +90,11 @@ int64 DoubleBits::biasedExponent(){
 	return exp;
 }
 
-/**
-* Determines the exponent for the number
-*
-* @return
-*/
+/*
+ * Determines the exponent for the number
+ *
+ * @return
+ */
 int DoubleBits::getExponent(){
 	return biasedExponent()-EXPONENT_BIAS;
 }
