@@ -1,7 +1,2328 @@
-2002-09-04  Ferdinando Villa  <villa@cbl.umces.edu>
+2003-11-07 06:21  strk
 
-	* configure.in: version number is hard-coded in AC_INIT_AUTOMAKE
-	macro. It's in source/headers/config.h AND passed as GEOS_VERSION
-	define on compiler command line. Currently set at 0.0.1, should be
-	changed whenever release number is bumped up.
+	* Makefile.am, configure.in, doc/.cvsignore, doc/Makefile,
+	doc/Makefile.am: Made doc/ directory part of distribution.
+	Uniformed doc build script to autotools.
+
+2003-11-07 06:19  strk
+
+	* source/headers/.cvsignore: added config.h.in (missed before)
+
+2003-11-07 06:18  strk
+
+	* source/headers/.cvsignore: added config.h.in
+
+2003-11-06 17:58  pramsey
+
+	* AUTHORS: Added people!
+
+2003-11-06 17:23  pramsey
+
+	* doc/example.cpp, source/algorithm/CGAlgorithms.cpp,
+	source/algorithm/CentroidArea.cpp,
+	source/algorithm/CentroidLine.cpp,
+	source/algorithm/CentroidPoint.cpp,
+	source/algorithm/ConvexHull.cpp, source/algorithm/HCoordinate.cpp,
+	source/algorithm/InteriorPointArea.cpp,
+	source/algorithm/InteriorPointLine.cpp,
+	source/algorithm/InteriorPointPoint.cpp,
+	source/algorithm/LineIntersector.cpp,
+	source/algorithm/MCPointInRing.cpp,
+	source/algorithm/NonRobustCGAlgorithms.cpp,
+	source/algorithm/NonRobustLineIntersector.cpp,
+	source/algorithm/NotRepresentableException.cpp,
+	source/algorithm/PointLocator.cpp,
+	source/algorithm/RobustCGAlgorithms.cpp,
+	source/algorithm/RobustDeterminant.cpp,
+	source/algorithm/RobustLineIntersector.cpp,
+	source/algorithm/SIRtreePointInRing.cpp,
+	source/algorithm/SimplePointInAreaLocator.cpp,
+	source/algorithm/SimplePointInRing.cpp,
+	source/bigtest/GeometryTestFactory.cpp,
+	source/bigtest/TestSweepLineSpeed.cpp,
+	source/examples/CPCLException.cpp,
+	source/examples/CoordinateListsExample.cpp,
+	source/examples/CustomCoordinateListExample.cpp,
+	source/examples/CustomCoordinateListExample.h,
+	source/examples/CustomPointCoordinateList.cpp,
+	source/geom/BasicCoordinateList.cpp, source/geom/Coordinate.cpp,
+	source/geom/CoordinateList.cpp,
+	source/geom/CoordinateListFactory.cpp, source/geom/Dimension.cpp,
+	source/geom/Envelope.cpp, source/geom/Geometry.cpp,
+	source/geom/GeometryCollection.cpp,
+	source/geom/GeometryCollectionIterator.cpp,
+	source/geom/GeometryComponentFilter.cpp,
+	source/geom/GeometryFactory.cpp,
+	source/geom/IntersectionMatrix.cpp, source/geom/LineSegment.cpp,
+	source/geom/LineString.cpp, source/geom/LinearRing.cpp,
+	source/geom/Location.cpp, source/geom/MultiLineString.cpp,
+	source/geom/MultiPoint.cpp, source/geom/MultiPolygon.cpp,
+	source/geom/Point.cpp, source/geom/PointCoordinateList.cpp,
+	source/geom/Polygon.cpp, source/geom/PrecisionModel.cpp,
+	source/geom/TopologyException.cpp, source/graph/Depth.cpp,
+	source/graph/DirectedEdge.cpp, source/graph/DirectedEdgeStar.cpp,
+	source/graph/Edge.cpp, source/graph/EdgeEnd.cpp,
+	source/graph/EdgeEndStar.cpp, source/graph/EdgeIntersection.cpp,
+	source/graph/EdgeIntersectionList.cpp, source/graph/EdgeList.cpp,
+	source/graph/EdgeRing.cpp, source/graph/GeometryGraph.cpp,
+	source/graph/GraphComponent.cpp, source/graph/Label.cpp,
+	source/graph/Node.cpp, source/graph/NodeFactory.cpp,
+	source/graph/NodeMap.cpp, source/graph/PlanarGraph.cpp,
+	source/graph/Position.cpp, source/graph/Quadrant.cpp,
+	source/graph/TopologyLocation.cpp,
+	source/graph/index/MonotoneChain.cpp,
+	source/graph/index/MonotoneChainEdge.cpp,
+	source/graph/index/MonotoneChainIndexer.cpp,
+	source/graph/index/SegmentIntersector.cpp,
+	source/graph/index/SimpleEdgeSetIntersector.cpp,
+	source/graph/index/SimpleMCSweepLineIntersector.cpp,
+	source/graph/index/SimpleSweepLineIntersector.cpp,
+	source/graph/index/SweepLineEvent.cpp,
+	source/graph/index/SweepLineSegment.cpp, source/headers/acconfig.h,
+	source/headers/bigtest.h, source/headers/config.h.in,
+	source/headers/geom.h, source/headers/geosAlgorithm.h,
+	source/headers/graph.h, source/headers/graphindex.h,
+	source/headers/indexBintree.h, source/headers/indexChain.h,
+	source/headers/indexQuadtree.h, source/headers/indexStrtree.h,
+	source/headers/indexSweepline.h, source/headers/io.h,
+	source/headers/opBuffer.h, source/headers/opDistance.h,
+	source/headers/opOverlay.h, source/headers/opRelate.h,
+	source/headers/opValid.h, source/headers/operation.h,
+	source/headers/spatialIndex.h, source/headers/unload.h,
+	source/headers/util.h, source/index/bintree/BinTreeInterval.cpp,
+	source/index/bintree/BinTreeNode.cpp,
+	source/index/bintree/Bintree.cpp, source/index/bintree/Key.cpp,
+	source/index/bintree/NodeBase.cpp, source/index/bintree/Root.cpp,
+	source/index/chain/MonotoneChainBuilder.cpp,
+	source/index/chain/MonotoneChainOverlapAction.cpp,
+	source/index/chain/MonotoneChainSelectAction.cpp,
+	source/index/chain/indexMonotoneChain.cpp,
+	source/index/quadtree/DoubleBits.cpp,
+	source/index/quadtree/IntervalSize.cpp,
+	source/index/quadtree/QuadTreeKey.cpp,
+	source/index/quadtree/QuadTreeNode.cpp,
+	source/index/quadtree/QuadTreeNodeBase.cpp,
+	source/index/quadtree/QuadTreeRoot.cpp,
+	source/index/quadtree/Quadtree.cpp,
+	source/index/strtree/AbstractNode.cpp,
+	source/index/strtree/AbstractSTRtree.cpp,
+	source/index/strtree/Interval.cpp,
+	source/index/strtree/ItemBoundable.cpp,
+	source/index/strtree/SIRtree.cpp, source/index/strtree/STRtree.cpp,
+	source/index/sweepline/SweepLineIndex.cpp,
+	source/index/sweepline/SweepLineInterval.cpp,
+	source/index/sweepline/indexSweepLineEvent.cpp,
+	source/io/ParseException.cpp, source/io/StringTokenizer.cpp,
+	source/io/Unload.cpp, source/io/WKTReader.cpp,
+	source/io/WKTWriter.cpp, source/io/Writer.cpp,
+	source/io/markup/MarkupSTL.h,
+	source/operation/GeometryGraphOperation.cpp,
+	source/operation/IsSimpleOp.cpp,
+	source/operation/buffer/BufferEdgeBuilder.cpp,
+	source/operation/buffer/BufferLineBuilder.cpp,
+	source/operation/buffer/BufferOp.cpp,
+	source/operation/buffer/BufferSubgraph.cpp,
+	source/operation/buffer/LoopFilter.cpp,
+	source/operation/buffer/RightmostEdgeFinder.cpp,
+	source/operation/distance/ConnectedElementPointFilter.cpp,
+	source/operation/distance/DistanceOp.cpp,
+	source/operation/distance/LineExtracterFilter.cpp,
+	source/operation/distance/PointExtracterFilter.cpp,
+	source/operation/distance/PolygonExtracterFilter.cpp,
+	source/operation/overlay/EdgeSetNoder.cpp,
+	source/operation/overlay/LineBuilder.cpp,
+	source/operation/overlay/MaximalEdgeRing.cpp,
+	source/operation/overlay/MinimalEdgeRing.cpp,
+	source/operation/overlay/OverlayNodeFactory.cpp,
+	source/operation/overlay/OverlayOp.cpp,
+	source/operation/overlay/PointBuilder.cpp,
+	source/operation/overlay/PolygonBuilder.cpp,
+	source/operation/relate/EdgeEndBuilder.cpp,
+	source/operation/relate/EdgeEndBundle.cpp,
+	source/operation/relate/EdgeEndBundleStar.cpp,
+	source/operation/relate/RelateComputer.cpp,
+	source/operation/relate/RelateNode.cpp,
+	source/operation/relate/RelateNodeFactory.cpp,
+	source/operation/relate/RelateNodeGraph.cpp,
+	source/operation/relate/RelateOp.cpp,
+	source/operation/valid/ConnectedInteriorTester.cpp,
+	source/operation/valid/ConsistentAreaTester.cpp,
+	source/operation/valid/IsValidOp.cpp,
+	source/operation/valid/QuadtreeNestedRingTester.cpp,
+	source/operation/valid/RepeatedPointTester.cpp,
+	source/operation/valid/SimpleNestedRingTester.cpp,
+	source/operation/valid/SweeplineNestedRingTester.cpp,
+	source/operation/valid/TopologyValidationError.cpp,
+	source/test/CTS.cpp, source/test/SimpleWKTTester.cpp,
+	source/test/Stackwalker.h, source/test/XMLTester.cpp,
+	source/util/Assert.cpp, source/util/AssertionFailedException.cpp,
+	source/util/CoordinateArrayFiter.cpp,
+	source/util/GEOSException.cpp,
+	source/util/IllegalArgumentException.cpp,
+	source/util/UniqueCoordinateArrayFilter.cpp,
+	source/util/UnsupportedOperationException.cpp: Add standard CVS
+	headers licence notices and copyrights to all cpp and h files.
+
+2003-11-06 11:04  strk
+
+	* source/graph/EdgeIntersectionList.cpp: removed useless Coordinate
+	copy in ::createSplitEdge()
+
+2003-11-06 10:50  strk
+
+	* doc/.cvsignore: first import
+
+2003-11-06 10:48  strk
+
+	* TODO: updated
+
+2003-11-06 10:48  strk
+
+	* source/operation/overlay/PolygonBuilder.cpp: added throw
+	information comment in PolygonBuilder
+
+2003-11-06 10:47  strk
+
+	* source/operation/buffer/BufferOp.cpp: Added throw specification
+	for BufferOp's ::buildSubgraphs() and ::computeBuffer(). Cleanup on
+	exception in computeBuffer().
+
+2003-11-06 10:46  strk
+
+	* source/headers/opBuffer.h: Added throw specification for
+	BufferOp's ::buildSubgraphs() and ::computeBuffer()
+
+2003-11-06 10:45  strk
+
+	* source/: graph/DirectedEdgeStar.cpp, headers/graph.h: Added throw
+	specification for DirectEdgeStar::linkResultDirectedEdges()
+
+2003-11-06 10:00  strk
+
+	* source/operation/buffer/BufferOp.cpp: Cleanup on exception in
+	::bufferOp()
+
+2003-11-06 09:59  strk
+
+	* source/graph/EdgeRing.cpp: Memory leaks fixed in
+	::containsPoint()
+
+2003-11-06 09:48  strk
+
+	* source/operation/buffer/BufferLineBuilder.cpp: Fixed memory leaks
+	in ::closePt() and ::addLineEndCap()
+
+2003-11-06 09:47  strk
+
+	* source/operation/buffer/BufferEdgeBuilder.cpp: Added support for
+	LinearRing, removed memory leaks in ::addLineString
+
+2003-11-06 09:41  strk
+
+	* doc/example.cpp: Added Buffer,Intersection,Difference and
+	Symdifference. Exception cleanup
+
+2003-11-06 09:33  pramsey
+
+	* INSTALL: Small addition of into about LD_LIBRARY_PATH
+
+2003-11-05 13:52  strk
+
+	* doc/: Makefile, example.cpp: Modified example.cpp to make use of
+	vectors instead of Geometry * / int couples. Added LineString
+	creation example. Added Makefile to compile it.
+
+2003-11-03 08:09  strk
+
+	* doc/example.cpp: Removed comments about segfaults, made the
+	simple collection creation call cleaner by use of the clone()
+	method.
+
+2003-10-31 08:36  strk
+
+	* source/: geom/GeometryCollection.cpp, geom/LineString.cpp,
+	geom/Point.cpp, geom/Polygon.cpp, headers/geom.h: Re-introduced
+	clone() method. Copy constructor could not really replace it.
+
+2003-10-29 02:38  strk
+
+	* doc/example.cpp: Added centroid computation example
+
+2003-10-29 02:38  strk
+
+	* source/algorithm/CentroidLine.cpp: Added support for LinearRing
+	types (treated as LineString)
+
+2003-10-24 14:27  strk
+
+	* source/headers/geom.h: Added GeometryTypeId enum and
+	getGeometryTypeId abstract Geometry method.
+
+2003-10-23 02:17  strk
+
+	* source/headers/.cvsignore: Added stamp-h2 and platform.h
+
+2003-10-23 02:12  strk
+
+	* source/headers/util.h: Made CoordinateArrayFilter destructor
+	virtual.
+
+2003-10-22 16:58  strk
+
+	* configure.in, source/headers/platform.h,
+	source/headers/platform.h.in: Made platform.h be created by
+	configure. In this way we will not have problems of installed
+	headers trying to include phantom config.h.
+
+2003-10-21 17:44  strk
+
+	* source/: headers/indexQuadtree.h, headers/platform.h,
+	index/quadtree/DoubleBits.cpp: Quadtree bitfield operations made
+	using type int64. Type int64 typedef'ed based on autoconf detected
+	int type (long or long long). If long is not 64bits int64 will be
+	really 32 bits and INT64_IS_REALLY32 will be defined.
+
+2003-10-21 16:51  strk
+
+	* acsite.m4, configure.in, source/headers/acconfig.h,
+	source/headers/config.h.in: Added macros to find 64bit integer.
+
+2003-10-21 09:16  strk
+
+	* doc/example.cpp: Uncommented point creation lines. Updated
+	comments about segfaults.
+
+2003-10-20 22:35  pramsey
+
+	* source/test/Makefile.am: Added test.xml so it gets picked up by
+	'make dist'
+
+2003-10-20 22:09  pramsey
+
+	* INSTALL: Added simple installation directions.
+
+2003-10-20 21:55  pramsey
+
+	* source/: examples/Makefile.am, geom/Makefile.am,
+	test/Makefile.am: Fix up references to header files to 'make dist'
+	works.
+
+2003-10-20 10:50  strk
+
+	* doc/example.cpp: added Union example
+
+2003-10-20 08:41  strk
+
+	* source/: geom/Geometry.cpp, headers/geom.h:
+	Geometry::checkNotGeometryCollection made static and
+	non-distructive.
+
+2003-10-20 07:02  strk
+
+	* source/: graph/EdgeRing.cpp,
+	operation/valid/ConnectedInteriorTester.cpp: more explicit
+	exception thrown on null Directed Edge detection
+
+2003-10-20 06:56  strk
+
+	* source/util/AssertionFailedException.cpp: fixed typo
+
+2003-10-20 06:53  strk
+
+	* source/graph/GeometryGraph.cpp: LinearRing handled as a
+	LineString in GeometryGraph::add(const Geometry *) - more explicit
+	exception thrown for unknown geometries
+
+2003-10-16 22:51  ybychkov
+
+	* VisualStudio/GEOS.vcproj, source/geom/Polygon.cpp,
+	source/headers/indexQuadtree.h,
+	source/index/quadtree/DoubleBits.cpp, source/test/XMLTester.cpp:
+	Fixed a small memory leak.
+
+2003-10-16 10:41  strk
+
+	* source/util/: GEOSException.cpp,
+	UnsupportedOperationException.cpp: Fixed a bug in GEOSException
+	that prevented print of the type of exception thrown.
+
+2003-10-16 10:33  strk
+
+	* source/operation/valid/RepeatedPointTester.cpp: dropped useless
+	string() cast
+
+2003-10-16 10:05  strk
+
+	* source/: geom/TopologyException.cpp, headers/geom.h,
+	headers/util.h, util/IllegalArgumentException.cpp: Made
+	TopologyException inherit from GEOSException. Adjusted
+	IllegalArgumentException subclassing.
+
+2003-10-16 06:01  strk
+
+	* source/test/XMLTester.cpp: Added call to Unload::Release()
+
+2003-10-16 05:09  strk
+
+	* source/test/XMLTester.cpp: bug fixed in exception handling
+
+2003-10-16 01:50  strk
+
+	* source/: algorithm/CentroidArea.cpp, algorithm/CentroidLine.cpp,
+	algorithm/InteriorPointArea.cpp, algorithm/InteriorPointLine.cpp,
+	algorithm/MCPointInRing.cpp, algorithm/PointLocator.cpp,
+	algorithm/SIRtreePointInRing.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, geom/LineString.cpp,
+	geom/MultiPolygon.cpp, geom/Polygon.cpp, headers/geosAlgorithm.h,
+	operation/distance/DistanceOp.cpp,
+	operation/overlay/LineBuilder.cpp,
+	operation/valid/QuadtreeNestedRingTester.cpp: Memory leak fixes.
+	Improved performance by mean of more calls to new
+	getCoordinatesRO() when applicable.
+
+2003-10-16 01:48  strk
+
+	* source/test/XMLTester.cpp: Exceptions handled
+
+2003-10-15 09:39  strk
+
+	* source/: geom/GeometryFactory.cpp, graph/Edge.cpp,
+	graph/EdgeList.cpp, graph/EdgeRing.cpp, graph/GeometryGraph.cpp,
+	graph/PlanarGraph.cpp, graph/index/MonotoneChainEdge.cpp,
+	graph/index/MonotoneChainIndexer.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SimpleEdgeSetIntersector.cpp,
+	graph/index/SimpleSweepLineIntersector.cpp, headers/geom.h,
+	headers/graph.h, headers/graphindex.h,
+	operation/buffer/BufferOp.cpp,
+	operation/buffer/RightmostEdgeFinder.cpp,
+	operation/overlay/LineBuilder.cpp: Made Edge::getCoordinates()
+	return a 'const' value. Adapted code set.
+
+2003-10-15 08:47  strk
+
+	* source/algorithm/: MCPointInRing.cpp, PointLocator.cpp: Adapted
+	to new getCoordinatesRO() interface
+
+2003-10-15 08:30  strk
+
+	* source/: graph/index/MonotoneChain.cpp,
+	graph/index/SweepLineEvent.cpp, graph/index/SweepLineSegment.cpp,
+	headers/graphindex.h: Declared a SweepLineEventOBJ from which
+	MonotoneChain and SweepLineSegment derive to abstract
+	SweepLineEvent object previously done on void * pointers.  No more
+	compiler warnings...
+
+2003-10-15 04:24  strk
+
+	* source/: graph/GeometryGraph.cpp,
+	operation/valid/ConnectedInteriorTester.cpp,
+	operation/valid/IsValidOp.cpp: Use getCoordinatesRO() introduced.
+
+2003-10-15 04:23  strk
+
+	* source/: geom/BasicCoordinateList.cpp, geom/CoordinateList.cpp,
+	geom/PointCoordinateList.cpp, headers/geom.h: Formalized const
+	nature of toVector() method and of first argument to static
+	removeRepeatedPoints().
+
+2003-10-15 03:17  strk
+
+	* source/: geom/BasicCoordinateList.cpp,
+	geom/PointCoordinateList.cpp, headers/geom.h: Made setPoints() get
+	a const vector<Coordinate>.
+
+2003-10-15 02:54  strk
+
+	* source/: geom/LineString.cpp, headers/geom.h: Added
+	getCoordinatesRO() public method.
+
+2003-10-15 01:52  strk
+
+	* source/io/WKTReader.cpp: Memory leaks fixed.
+
+2003-10-15 01:51  strk
+
+	* TODO: Initial import
+
+2003-10-15 01:08  strk
+
+	* source/geom/Polygon.cpp: Memory leaks fixed. Partially due to
+	getCoordinates() and GeometryCollection() changes, partially old
+	dated.
+
+2003-10-14 08:58  strk
+
+	* source/geom/GeometryFactory.cpp: Useless vector<Geometry *>
+	leaking allocations removed
+
+2003-10-13 14:26  strk
+
+	* .cvsignore, macros/.cvsignore, source/bigtest/.cvsignore,
+	source/examples/.cvsignore, source/geom/.cvsignore,
+	source/headers/.cvsignore, source/test/.cvsignore: Added build time
+	created files to cvsignore lists
+
+2003-10-13 10:54  strk
+
+	* source/: headers/opValid.h, operation/valid/IsValidOp.cpp:
+	IsValidOp constructor used same name for the arg and a private
+	element. Fixed.
+
+2003-10-13 10:47  strk
+
+	* source/operation/overlay/: MaximalEdgeRing.cpp,
+	PolygonBuilder.cpp: delete statement removed
+
+2003-10-13 08:39  strk
+
+	* source/: algorithm/CentroidArea.cpp,
+	algorithm/InteriorPointPoint.cpp, headers/geosAlgorithm.h: Fixed
+	some leak or fault flips (forced copy of a single coordinate)
+
+2003-10-13 08:02  strk
+
+	* source/test/XMLTester.cpp: accept input file as first argument on
+	cmdline
+
+2003-10-13 05:51  strk
+
+	* source/: geom/Geometry.cpp, headers/geom.h: removed sortedClasses
+	strings array from all geometries.
+
+2003-10-13 02:24  strk
+
+	* source/: headers/indexQuadtree.h, index/quadtree/DoubleBits.cpp:
+	long -> long long enlargement of types to allow for left/rigth
+	shift of 53 bits
+
+2003-10-10 20:23  strk
+
+	* source/geom/: LineString.cpp, LinearRing.cpp: fixed spurious
+	typos
+
+2003-10-10 18:56  strk
+
+	* source/: algorithm/CGAlgorithms.cpp, algorithm/CentroidArea.cpp,
+	algorithm/CentroidLine.cpp, algorithm/CentroidPoint.cpp,
+	algorithm/ConvexHull.cpp, algorithm/InteriorPointArea.cpp,
+	algorithm/InteriorPointLine.cpp, algorithm/InteriorPointPoint.cpp,
+	algorithm/LineIntersector.cpp, algorithm/MCPointInRing.cpp,
+	algorithm/NonRobustCGAlgorithms.cpp,
+	algorithm/NonRobustLineIntersector.cpp, algorithm/PointLocator.cpp,
+	algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustLineIntersector.cpp,
+	algorithm/SIRtreePointInRing.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, geom/BasicCoordinateList.cpp,
+	geom/Coordinate.cpp, geom/CoordinateList.cpp, geom/Envelope.cpp,
+	geom/Geometry.cpp, geom/GeometryCollection.cpp,
+	geom/GeometryCollectionIterator.cpp,
+	geom/GeometryComponentFilter.cpp, geom/GeometryFactory.cpp,
+	geom/LineSegment.cpp, geom/LineString.cpp, geom/LinearRing.cpp,
+	geom/MultiLineString.cpp, geom/MultiPoint.cpp,
+	geom/MultiPolygon.cpp, geom/Point.cpp,
+	geom/PointCoordinateList.cpp, geom/Polygon.cpp,
+	geom/PrecisionModel.cpp, graph/Edge.cpp, graph/EdgeEnd.cpp,
+	graph/EdgeIntersection.cpp, graph/EdgeIntersectionList.cpp,
+	graph/EdgeRing.cpp, graph/GeometryGraph.cpp,
+	graph/GraphComponent.cpp, graph/Label.cpp, graph/Node.cpp,
+	graph/NodeMap.cpp, graph/PlanarGraph.cpp, graph/Quadrant.cpp,
+	graph/TopologyLocation.cpp, graph/index/MonotoneChainEdge.cpp,
+	graph/index/SegmentIntersector.cpp, graph/index/SweepLineEvent.cpp,
+	headers/geom.h, headers/geosAlgorithm.h, headers/graph.h,
+	headers/io.h, headers/opBuffer.h, headers/opDistance.h,
+	headers/opOverlay.h, headers/opRelate.h, headers/opValid.h,
+	headers/operation.h, headers/util.h,
+	index/chain/indexMonotoneChain.cpp, io/WKTWriter.cpp,
+	operation/GeometryGraphOperation.cpp, operation/IsSimpleOp.cpp,
+	operation/buffer/BufferEdgeBuilder.cpp,
+	operation/buffer/BufferLineBuilder.cpp,
+	operation/buffer/LoopFilter.cpp,
+	operation/buffer/RightmostEdgeFinder.cpp,
+	operation/distance/ConnectedElementPointFilter.cpp,
+	operation/distance/DistanceOp.cpp,
+	operation/distance/LineExtracterFilter.cpp,
+	operation/distance/PointExtracterFilter.cpp,
+	operation/distance/PolygonExtracterFilter.cpp,
+	operation/overlay/OverlayOp.cpp,
+	operation/overlay/PointBuilder.cpp,
+	operation/overlay/PolygonBuilder.cpp,
+	operation/relate/RelateComputer.cpp, operation/relate/RelateOp.cpp,
+	operation/valid/ConnectedInteriorTester.cpp,
+	operation/valid/IsValidOp.cpp,
+	operation/valid/QuadtreeNestedRingTester.cpp,
+	operation/valid/RepeatedPointTester.cpp,
+	operation/valid/SimpleNestedRingTester.cpp,
+	operation/valid/SweeplineNestedRingTester.cpp, util/Assert.cpp,
+	util/CoordinateArrayFiter.cpp,
+	util/UniqueCoordinateArrayFilter.cpp: 
+	Code base padded with 'const' keywords ;)
+
+2003-10-09 08:35  strk
+
+	* source/: geom/GeometryFactory.cpp, headers/geom.h: added 'const'
+	keyword to GeometryFactory constructor, Log on top of geom.h
+
+2003-10-09 04:20  strk
+
+	* doc/example.cpp: moved Log to a better place
+
+2003-10-09 04:19  strk
+
+	* doc/example.cpp: added convexHull and PrecisionModel
+
+2003-10-09 03:14  strk
+
+	* source/geom/GeometryFactory.cpp: just a style change in top Log
+	comment.
+
+2003-10-09 03:10  strk
+
+	* source/geom/PrecisionModel.cpp: Throw an exception if scale is 0.
+	Added Log entry.
+
+2003-10-09 02:42  strk
+
+	* source/geom/GeometryFactory.cpp: 
+	Tried to "formalize" constant nature of the first argument given to
+	constructor by PrecisionModel and SRID specification. Added CVS Log
+	on top.
+
+2003-10-09 01:58  strk
+
+	* doc/example.cpp, source/algorithm/ConvexHull.cpp: 
+	Added convexHull() call to example, fixed leaks in ConvexHull
+
+2003-10-08 17:11  strk
+
+	* doc/example.cpp: 
+	First reference-by-example file.
+
+2003-10-08 09:51  strk
+
+	* source/: geom/Makefile.am, headers/Makefile.am, headers/geom.h,
+	headers/graph.h, headers/indexQuadtree.h, headers/opRelate.h,
+	headers/opValid.h, headers/operation.h, headers/unload.h,
+	io/Unload.cpp: 
+	Added xie's Unload class with some fixes.
+
+2003-10-08 06:18  strk
+
+	* source/: headers/io.h, io/WKTWriter.cpp: 
+	added missing LinearRing writing capabilities.
+
+2003-10-08 03:36  strk
+
+	* source/geom/GeometryCollection.cpp: 
+	Constructor by	vector<Geometry *> * now makes a copy of the vector
+	so that call ers can safely delete it when done.
+
+2003-10-07 14:47  strk
+
+	* source/: algorithm/SimplePointInAreaLocator.cpp,
+	geom/Polygon.cpp, graph/EdgeRing.cpp, graph/GeometryGraph.cpp,
+	operation/overlay/PolygonBuilder.cpp: 
+	had all getCoordinates() callers free returned value.
+
+2003-10-07 11:58  strk
+
+	* source/: algorithm/PointLocator.cpp, geom/CoordinateList.cpp,
+	geom/GeometryCollection.cpp, geom/LineString.cpp,
+	graph/GeometryGraph.cpp, headers/config.h.in: 
+	
+	LineString constructor now creates its own copy of given
+	CoordinateList object, and returns a new copy with
+	getCoordinates().  will be easier to remove by anyone else.
+
+2003-10-02 18:20  ybychkov
+
+	* source/: geom/MultiPolygon.cpp, test/XMLTester.cpp: Memory leak
+	in Overlay fixed.
+
+2003-09-29 09:25  strk
+
+	* macros/.cvsignore, source/bigtest/.cvsignore,
+	source/examples/.cvsignore, source/headers/.cvsignore: 
+	Some more cvsignore files. Some entries should probably not be in
+	the local copy
+
+2003-09-29 08:07  strk
+
+	* .cvsignore: 
+	Added config.sub, config.guess and autom4te.cache
+
+2003-09-29 06:15  strk
+
+	* tools/.cvsignore: 
+	Don't wonder about Makefile.in, Makefile, gdal-config
+
+2003-09-26 10:31  strk
+
+	* source/algorithm/ConvexHull.cpp: 
+	
+	getConvexHull() made check value returned by reduce() before
+	deleting it (might be the untouched input).
+
+2003-09-26 02:17  ybychkov
+
+	* source/: index/bintree/NodeBase.cpp,
+	index/quadtree/QuadTreeNodeBase.cpp,
+	index/quadtree/QuadTreeRoot.cpp, test/XMLTester.cpp: isValid
+	segfault fixed. Overlay still leaks a bit.
+
+2003-09-23 19:16  ybychkov
+
+	* source/: geom/MultiPolygon.cpp, graph/EdgeEndStar.cpp,
+	index/bintree/NodeBase.cpp, index/bintree/Root.cpp,
+	operation/buffer/BufferEdgeBuilder.cpp,
+	operation/buffer/BufferLineBuilder.cpp,
+	operation/buffer/BufferOp.cpp,
+	operation/overlay/PolygonBuilder.cpp, test/XMLTester.cpp: All
+	reported bugs fiexd. Small leak in Overlay remains.
+
+2003-09-06 01:24  ybychkov
+
+	* source/: geom/Geometry.cpp, headers/opDistance.h,
+	operation/distance/ConnectedElementPointFilter.cpp,
+	operation/distance/DistanceOp.cpp,
+	operation/distance/LineExtracterFilter.cpp,
+	operation/distance/PointExtracterFilter.cpp,
+	operation/distance/PolygonExtracterFilter.cpp, test/XMLTester.cpp:
+	isWithinDistance fixed and tested.
+
+2003-09-05 17:01  ybychkov
+
+	* source/: algorithm/InteriorPointArea.cpp,
+	algorithm/InteriorPointLine.cpp, algorithm/InteriorPointPoint.cpp,
+	geom/Geometry.cpp, graph/DirectedEdge.cpp,
+	graph/DirectedEdgeStar.cpp, graph/GeometryGraph.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp,
+	operation/overlay/OverlayOp.cpp, test/XMLTester.cpp:
+	getInteriorPoint bugs fixed.
+
+2003-08-31 23:32  ybychkov
+
+	* source/: algorithm/ConvexHull.cpp, geom/Geometry.cpp,
+	geom/Polygon.cpp, test/XMLTester.cpp: Some ConvexHull bugs fixed.
+
+2003-08-30 00:55  ybychkov
+
+	* source/: algorithm/CentroidArea.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/Polygon.cpp,
+	graph/GeometryGraph.cpp, operation/IsSimpleOp.cpp,
+	test/XMLTester.cpp: Some bugfixes. XMLTester expanded to accomodate
+	getBoundary, getCentroid, isSimple.
+
+2003-08-18 16:40  pramsey
+
+	* source/algorithm/ConvexHull.java: Removed java source file from
+	archive.
+
+2003-08-18 15:34  pramsey
+
+	* configure.in: Change it back :/
+
+2003-08-18 15:33  pramsey
+
+	* configure.in: Change version number.
+
+2003-08-18 13:42  pramsey
+
+	* ltmain.sh: Return ltmain to distro (oops)
+
+2003-08-18 13:36  pramsey
+
+	* mkinstalldirs: Remove more autoconf files
+
+2003-08-18 13:34  pramsey
+
+	* acinclude.m4, config.guess, config.sub, install-sh, ltmain.sh:
+	Removed more autoconf files...
+
+2003-08-18 13:27  pramsey
+
+	* missing: Removed 'missing' script.
+
+2003-08-18 09:38  pramsey
+
+	* source/headers/Makefile.am: Fixed up to treat headers as headers.
+
+2003-08-17 11:40  pramsey
+
+	* Makefile.am, source/Makefile.am,
+	source/algorithm/CGAlgorithms.cpp,
+	source/algorithm/CentroidArea.cpp,
+	source/algorithm/CentroidLine.cpp,
+	source/algorithm/CentroidPoint.cpp,
+	source/algorithm/ConvexHull.cpp, source/algorithm/HCoordinate.cpp,
+	source/algorithm/InteriorPointArea.cpp,
+	source/algorithm/InteriorPointLine.cpp,
+	source/algorithm/InteriorPointPoint.cpp,
+	source/algorithm/LineIntersector.cpp,
+	source/algorithm/MCPointInRing.cpp,
+	source/algorithm/NonRobustCGAlgorithms.cpp,
+	source/algorithm/NonRobustLineIntersector.cpp,
+	source/algorithm/NotRepresentableException.cpp,
+	source/algorithm/PointLocator.cpp,
+	source/algorithm/RobustCGAlgorithms.cpp,
+	source/algorithm/RobustDeterminant.cpp,
+	source/algorithm/RobustLineIntersector.cpp,
+	source/algorithm/SIRtreePointInRing.cpp,
+	source/algorithm/SimplePointInAreaLocator.cpp,
+	source/algorithm/SimplePointInRing.cpp, source/bigtest/Makefile.am,
+	source/examples/CustomCoordinateListExample.h,
+	source/examples/Makefile.am, source/geom/BasicCoordinateList.cpp,
+	source/geom/Coordinate.cpp, source/geom/CoordinateList.cpp,
+	source/geom/CoordinateListFactory.cpp, source/geom/Dimension.cpp,
+	source/geom/Envelope.cpp, source/geom/Geometry.cpp,
+	source/geom/GeometryCollection.cpp,
+	source/geom/GeometryCollectionIterator.cpp,
+	source/geom/GeometryComponentFilter.cpp,
+	source/geom/GeometryFactory.cpp,
+	source/geom/IntersectionMatrix.cpp, source/geom/LineSegment.cpp,
+	source/geom/LineString.cpp, source/geom/LinearRing.cpp,
+	source/geom/Location.cpp, source/geom/Makefile.am,
+	source/geom/MultiLineString.cpp, source/geom/MultiPoint.cpp,
+	source/geom/MultiPolygon.cpp, source/geom/Point.cpp,
+	source/geom/PointCoordinateList.cpp, source/geom/Polygon.cpp,
+	source/geom/PrecisionModel.cpp, source/geom/TopologyException.cpp,
+	source/graph/Depth.cpp, source/graph/DirectedEdge.cpp,
+	source/graph/DirectedEdgeStar.cpp, source/graph/Edge.cpp,
+	source/graph/EdgeEnd.cpp, source/graph/EdgeEndStar.cpp,
+	source/graph/EdgeIntersection.cpp,
+	source/graph/EdgeIntersectionList.cpp, source/graph/EdgeList.cpp,
+	source/graph/EdgeRing.cpp, source/graph/GeometryGraph.cpp,
+	source/graph/GraphComponent.cpp, source/graph/Label.cpp,
+	source/graph/Node.cpp, source/graph/NodeFactory.cpp,
+	source/graph/NodeMap.cpp, source/graph/PlanarGraph.cpp,
+	source/graph/Position.cpp, source/graph/Quadrant.cpp,
+	source/graph/TopologyLocation.cpp,
+	source/graph/index/MonotoneChain.cpp,
+	source/graph/index/MonotoneChainEdge.cpp,
+	source/graph/index/MonotoneChainIndexer.cpp,
+	source/graph/index/SegmentIntersector.cpp,
+	source/graph/index/SimpleEdgeSetIntersector.cpp,
+	source/graph/index/SimpleMCSweepLineIntersector.cpp,
+	source/graph/index/SimpleSweepLineIntersector.cpp,
+	source/graph/index/SweepLineEvent.cpp,
+	source/graph/index/SweepLineSegment.cpp,
+	source/headers/Makefile.am, source/headers/geom.h,
+	source/headers/geosAlgorithm.h,
+	source/index/bintree/BinTreeInterval.cpp,
+	source/index/bintree/BinTreeNode.cpp,
+	source/index/bintree/Bintree.cpp, source/index/bintree/Key.cpp,
+	source/index/bintree/NodeBase.cpp, source/index/bintree/Root.cpp,
+	source/index/chain/MonotoneChainBuilder.cpp,
+	source/index/chain/MonotoneChainOverlapAction.cpp,
+	source/index/chain/MonotoneChainSelectAction.cpp,
+	source/index/chain/indexMonotoneChain.cpp,
+	source/index/quadtree/DoubleBits.cpp,
+	source/index/quadtree/IntervalSize.cpp,
+	source/index/quadtree/QuadTreeKey.cpp,
+	source/index/quadtree/QuadTreeNode.cpp,
+	source/index/quadtree/QuadTreeNodeBase.cpp,
+	source/index/quadtree/QuadTreeRoot.cpp,
+	source/index/quadtree/Quadtree.cpp,
+	source/index/strtree/AbstractNode.cpp,
+	source/index/strtree/AbstractSTRtree.cpp,
+	source/index/strtree/Interval.cpp,
+	source/index/strtree/ItemBoundable.cpp,
+	source/index/strtree/SIRtree.cpp,
+	source/index/sweepline/SweepLineIndex.cpp,
+	source/index/sweepline/SweepLineInterval.cpp,
+	source/index/sweepline/indexSweepLineEvent.cpp,
+	source/io/ParseException.cpp, source/io/StringTokenizer.cpp,
+	source/io/WKTReader.cpp, source/io/WKTWriter.cpp,
+	source/io/Writer.cpp, source/operation/GeometryGraphOperation.cpp,
+	source/operation/IsSimpleOp.cpp,
+	source/operation/buffer/BufferEdgeBuilder.cpp,
+	source/operation/buffer/BufferLineBuilder.cpp,
+	source/operation/buffer/BufferOp.cpp,
+	source/operation/buffer/BufferSubgraph.cpp,
+	source/operation/buffer/LoopFilter.cpp,
+	source/operation/buffer/RightmostEdgeFinder.cpp,
+	source/operation/distance/ConnectedElementPointFilter.cpp,
+	source/operation/distance/DistanceOp.cpp,
+	source/operation/distance/LineExtracterFilter.cpp,
+	source/operation/distance/PointExtracterFilter.cpp,
+	source/operation/distance/PolygonExtracterFilter.cpp,
+	source/operation/overlay/EdgeSetNoder.cpp,
+	source/operation/overlay/LineBuilder.cpp,
+	source/operation/overlay/MaximalEdgeRing.cpp,
+	source/operation/overlay/MinimalEdgeRing.cpp,
+	source/operation/overlay/OverlayNodeFactory.cpp,
+	source/operation/overlay/OverlayOp.cpp,
+	source/operation/overlay/PointBuilder.cpp,
+	source/operation/overlay/PolygonBuilder.cpp,
+	source/operation/relate/EdgeEndBuilder.cpp,
+	source/operation/relate/EdgeEndBundle.cpp,
+	source/operation/relate/EdgeEndBundleStar.cpp,
+	source/operation/relate/RelateComputer.cpp,
+	source/operation/relate/RelateNode.cpp,
+	source/operation/relate/RelateNodeFactory.cpp,
+	source/operation/relate/RelateNodeGraph.cpp,
+	source/operation/relate/RelateOp.cpp,
+	source/operation/valid/ConnectedInteriorTester.cpp,
+	source/operation/valid/ConsistentAreaTester.cpp,
+	source/operation/valid/IsValidOp.cpp,
+	source/operation/valid/QuadtreeNestedRingTester.cpp,
+	source/operation/valid/RepeatedPointTester.cpp,
+	source/operation/valid/SimpleNestedRingTester.cpp,
+	source/operation/valid/SweeplineNestedRingTester.cpp,
+	source/operation/valid/TopologyValidationError.cpp,
+	source/test/Makefile.am, source/test/XMLTester.cpp,
+	source/util/Assert.cpp, source/util/AssertionFailedException.cpp,
+	source/util/CoordinateArrayFiter.cpp,
+	source/util/GEOSException.cpp,
+	source/util/IllegalArgumentException.cpp,
+	source/util/UniqueCoordinateArrayFilter.cpp,
+	source/util/UnsupportedOperationException.cpp: Norman's patch +
+	global removal of "no newline" + small changes to make Norman's
+	patch work in the linux build environment.
+
+2003-08-17 11:01  pramsey
+
+	* libtool: Removed more configuration files per Norman's request.
+
+2003-08-17 10:56  pramsey
+
+	* aclocal.m4, configure: Removed more configure files per Norman's
+	request.
+
+2003-08-17 10:55  pramsey
+
+	* Makefile.in, macros/Makefile.in, source/Makefile.in,
+	source/bigtest/Makefile.in, source/geom/Coordinate.cpp,
+	source/geom/Makefile.in, source/headers/Makefile.in,
+	source/test/Makefile.in, tools/Makefile.in: Removed Makefile.in
+	files, per Norman's request.
+
+2003-08-15 23:33  ybychkov
+
+	* VisualStudio/GEOS.vcproj, source/algorithm/ConvexHull.cpp,
+	source/algorithm/HCoordinate.cpp,
+	source/algorithm/LineIntersector.cpp,
+	source/algorithm/MCPointInRing.cpp,
+	source/algorithm/RobustCGAlgorithms.cpp,
+	source/algorithm/RobustLineIntersector.cpp,
+	source/algorithm/SimplePointInAreaLocator.cpp,
+	source/bigtest/TestSweepLineSpeed.cpp,
+	source/geom/BasicCoordinateList.cpp, source/geom/Coordinate.cpp,
+	source/geom/CoordinateList.cpp, source/geom/Dimension.cpp,
+	source/geom/Geometry.cpp, source/geom/GeometryCollection.cpp,
+	source/geom/GeometryCollectionIterator.cpp,
+	source/geom/GeometryFactory.cpp,
+	source/geom/IntersectionMatrix.cpp, source/geom/LineString.cpp,
+	source/geom/LinearRing.cpp, source/geom/Location.cpp,
+	source/geom/MultiLineString.cpp, source/geom/MultiPoint.cpp,
+	source/geom/Point.cpp, source/geom/PointCoordinateList.cpp,
+	source/geom/Polygon.cpp, source/geom/TopologyException.cpp,
+	source/graph/Depth.cpp, source/graph/DirectedEdge.cpp,
+	source/graph/DirectedEdgeStar.cpp, source/graph/Edge.cpp,
+	source/graph/EdgeEnd.cpp, source/graph/EdgeEndStar.cpp,
+	source/graph/EdgeIntersection.cpp,
+	source/graph/EdgeIntersectionList.cpp, source/graph/EdgeList.cpp,
+	source/graph/EdgeRing.cpp, source/graph/GeometryGraph.cpp,
+	source/graph/GraphComponent.cpp, source/graph/Label.cpp,
+	source/graph/Node.cpp, source/graph/NodeMap.cpp,
+	source/graph/PlanarGraph.cpp, source/graph/TopologyLocation.cpp,
+	source/graph/index/MonotoneChainEdge.cpp,
+	source/graph/index/SegmentIntersector.cpp,
+	source/graph/index/SimpleMCSweepLineIntersector.cpp,
+	source/graph/index/SimpleSweepLineIntersector.cpp,
+	source/graph/index/SweepLineEvent.cpp, source/headers/bigtest.h,
+	source/headers/geom.h, source/headers/geosAlgorithm.h,
+	source/headers/graph.h, source/headers/graphindex.h,
+	source/headers/indexBintree.h, source/headers/indexChain.h,
+	source/headers/indexQuadtree.h, source/headers/indexStrtree.h,
+	source/headers/indexSweepline.h, source/headers/io.h,
+	source/headers/opBuffer.h, source/headers/opDistance.h,
+	source/headers/opOverlay.h, source/headers/opRelate.h,
+	source/headers/opValid.h, source/headers/operation.h,
+	source/headers/spatialIndex.h, source/headers/util.h,
+	source/index/bintree/BinTreeInterval.cpp,
+	source/index/bintree/BinTreeNode.cpp,
+	source/index/bintree/Bintree.cpp, source/index/bintree/Key.cpp,
+	source/index/bintree/NodeBase.cpp, source/index/bintree/Root.cpp,
+	source/index/chain/MonotoneChainBuilder.cpp,
+	source/index/chain/indexMonotoneChain.cpp,
+	source/index/quadtree/DoubleBits.cpp,
+	source/index/quadtree/QuadTreeKey.cpp,
+	source/index/quadtree/QuadTreeNode.cpp,
+	source/index/quadtree/QuadTreeNodeBase.cpp,
+	source/index/quadtree/QuadTreeRoot.cpp, source/io/WKTReader.cpp,
+	source/io/WKTWriter.cpp,
+	source/operation/GeometryGraphOperation.cpp,
+	source/operation/buffer/BufferOp.cpp,
+	source/operation/overlay/LineBuilder.cpp,
+	source/operation/overlay/MaximalEdgeRing.cpp,
+	source/operation/overlay/MinimalEdgeRing.cpp,
+	source/operation/overlay/OverlayOp.cpp,
+	source/operation/overlay/PointBuilder.cpp,
+	source/operation/overlay/PolygonBuilder.cpp,
+	source/operation/relate/EdgeEndBuilder.cpp,
+	source/operation/relate/EdgeEndBundle.cpp,
+	source/operation/relate/EdgeEndBundleStar.cpp,
+	source/operation/relate/RelateComputer.cpp,
+	source/operation/relate/RelateNode.cpp,
+	source/operation/relate/RelateNodeGraph.cpp,
+	source/operation/relate/RelateOp.cpp,
+	source/operation/valid/ConnectedInteriorTester.cpp,
+	source/operation/valid/ConsistentAreaTester.cpp,
+	source/operation/valid/IsValidOp.cpp,
+	source/operation/valid/QuadtreeNestedRingTester.cpp,
+	source/test/Stackwalker.cpp, source/test/Stackwalker.h,
+	source/test/XMLTester.cpp, source/util/CoordinateArrayFiter.cpp,
+	source/util/UniqueCoordinateArrayFilter.cpp: Memory leak fixes.
+
+2003-06-21 15:17  pramsey
+
+	* source/geom/Makefile.am: GNU compile fixes from nvine.
+
+2003-06-19 13:54  ybychkov
+
+	* source/: algorithm/CGAlgorithms.cpp, algorithm/CentroidArea.cpp,
+	algorithm/CentroidLine.cpp, algorithm/CentroidPoint.cpp,
+	algorithm/HCoordinate.cpp, algorithm/InteriorPointArea.cpp,
+	algorithm/InteriorPointLine.cpp, algorithm/InteriorPointPoint.cpp,
+	algorithm/LineIntersector.cpp, algorithm/MCPointInRing.cpp,
+	algorithm/NonRobustCGAlgorithms.cpp,
+	algorithm/NonRobustLineIntersector.cpp,
+	algorithm/NotRepresentableException.cpp,
+	algorithm/PointLocator.cpp, algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustDeterminant.cpp,
+	algorithm/RobustLineIntersector.cpp,
+	algorithm/SIRtreePointInRing.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, bigtest/GeometryTestFactory.cpp,
+	bigtest/TestSweepLineSpeed.cpp, examples/CPCLException.cpp,
+	examples/CoordinateListsExample.cpp,
+	examples/CustomCoordinateListExample.cpp,
+	examples/CustomCoordinateListExample.h,
+	examples/CustomPointCoordinateList.cpp,
+	geom/BasicCoordinateList.cpp, geom/Coordinate.cpp,
+	geom/CoordinateList.cpp, geom/CoordinateListFactory.cpp,
+	geom/Dimension.cpp, geom/Envelope.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryCollectionIterator.cpp,
+	geom/GeometryComponentFilter.cpp, geom/GeometryFactory.cpp,
+	geom/IntersectionMatrix.cpp, geom/LineSegment.cpp,
+	geom/LineString.cpp, geom/LinearRing.cpp, geom/Location.cpp,
+	geom/MultiLineString.cpp, geom/MultiPoint.cpp,
+	geom/MultiPolygon.cpp, geom/Point.cpp,
+	geom/PointCoordinateList.cpp, geom/Polygon.cpp,
+	geom/PrecisionModel.cpp, geom/TopologyException.cpp,
+	graph/Depth.cpp, graph/DirectedEdge.cpp,
+	graph/DirectedEdgeStar.cpp, graph/Edge.cpp, graph/EdgeEnd.cpp,
+	graph/EdgeEndStar.cpp, graph/EdgeIntersection.cpp,
+	graph/EdgeIntersectionList.cpp, graph/EdgeList.cpp,
+	graph/EdgeRing.cpp, graph/GeometryGraph.cpp,
+	graph/GraphComponent.cpp, graph/Label.cpp, graph/Node.cpp,
+	graph/NodeFactory.cpp, graph/NodeMap.cpp, graph/PlanarGraph.cpp,
+	graph/Position.cpp, graph/Quadrant.cpp, graph/TopologyLocation.cpp,
+	graph/index/MonotoneChain.cpp, graph/index/MonotoneChainEdge.cpp,
+	graph/index/MonotoneChainIndexer.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SimpleEdgeSetIntersector.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp,
+	graph/index/SimpleSweepLineIntersector.cpp,
+	graph/index/SweepLineEvent.cpp, graph/index/SweepLineSegment.cpp,
+	headers/bigtest.h, headers/geom.h, headers/geosAlgorithm.h,
+	headers/graph.h, headers/graphindex.h, headers/indexBintree.h,
+	headers/indexChain.h, headers/indexQuadtree.h,
+	headers/indexStrtree.h, headers/indexSweepline.h, headers/io.h,
+	headers/opBuffer.h, headers/opDistance.h, headers/opOverlay.h,
+	headers/opRelate.h, headers/opValid.h, headers/operation.h,
+	headers/spatialIndex.h, headers/util.h,
+	index/bintree/BinTreeInterval.cpp, index/bintree/BinTreeNode.cpp,
+	index/bintree/Bintree.cpp, index/bintree/Key.cpp,
+	index/bintree/NodeBase.cpp, index/bintree/Root.cpp,
+	index/chain/MonotoneChainBuilder.cpp,
+	index/chain/MonotoneChainOverlapAction.cpp,
+	index/chain/MonotoneChainSelectAction.cpp,
+	index/chain/indexMonotoneChain.cpp, index/quadtree/DoubleBits.cpp,
+	index/quadtree/IntervalSize.cpp, index/quadtree/QuadTreeKey.cpp,
+	index/quadtree/QuadTreeNode.cpp,
+	index/quadtree/QuadTreeNodeBase.cpp,
+	index/quadtree/QuadTreeRoot.cpp, index/quadtree/Quadtree.cpp,
+	index/strtree/AbstractNode.cpp, index/strtree/AbstractSTRtree.cpp,
+	index/strtree/Interval.cpp, index/strtree/ItemBoundable.cpp,
+	index/strtree/SIRtree.cpp, index/sweepline/SweepLineIndex.cpp,
+	index/sweepline/SweepLineInterval.cpp,
+	index/sweepline/indexSweepLineEvent.cpp, io/ParseException.cpp,
+	io/StringTokenizer.cpp, io/WKTReader.cpp, io/WKTWriter.cpp,
+	io/Writer.cpp, operation/GeometryGraphOperation.cpp,
+	operation/IsSimpleOp.cpp, operation/buffer/BufferEdgeBuilder.cpp,
+	operation/buffer/BufferLineBuilder.cpp,
+	operation/buffer/BufferOp.cpp, operation/buffer/BufferSubgraph.cpp,
+	operation/buffer/LoopFilter.cpp,
+	operation/buffer/RightmostEdgeFinder.cpp,
+	operation/distance/ConnectedElementPointFilter.cpp,
+	operation/distance/DistanceOp.cpp,
+	operation/distance/LineExtracterFilter.cpp,
+	operation/distance/PointExtracterFilter.cpp,
+	operation/distance/PolygonExtracterFilter.cpp,
+	operation/overlay/EdgeSetNoder.cpp,
+	operation/overlay/LineBuilder.cpp,
+	operation/overlay/MaximalEdgeRing.cpp,
+	operation/overlay/MinimalEdgeRing.cpp,
+	operation/overlay/OverlayNodeFactory.cpp,
+	operation/overlay/OverlayOp.cpp,
+	operation/overlay/PointBuilder.cpp,
+	operation/overlay/PolygonBuilder.cpp,
+	operation/relate/EdgeEndBuilder.cpp,
+	operation/relate/EdgeEndBundle.cpp,
+	operation/relate/EdgeEndBundleStar.cpp,
+	operation/relate/RelateComputer.cpp,
+	operation/relate/RelateNode.cpp,
+	operation/relate/RelateNodeFactory.cpp,
+	operation/relate/RelateNodeGraph.cpp,
+	operation/relate/RelateOp.cpp,
+	operation/valid/ConnectedInteriorTester.cpp,
+	operation/valid/ConsistentAreaTester.cpp,
+	operation/valid/IsValidOp.cpp,
+	operation/valid/QuadtreeNestedRingTester.cpp,
+	operation/valid/RepeatedPointTester.cpp,
+	operation/valid/SimpleNestedRingTester.cpp,
+	operation/valid/SweeplineNestedRingTester.cpp,
+	operation/valid/TopologyValidationError.cpp, test/CTS.cpp,
+	test/SimpleWKTTester.cpp, test/XMLTester.cpp, util/Assert.cpp,
+	util/AssertionFailedException.cpp, util/GEOSException.cpp,
+	util/IllegalArgumentException.cpp,
+	util/UnsupportedOperationException.cpp: 'geos' namespace added.
+
+2003-06-18 13:08  ybychkov
+
+	* source/: headers/opBuffer.h,
+	operation/buffer/BufferEdgeBuilder.cpp,
+	operation/buffer/BufferLineBuilder.cpp,
+	operation/buffer/BufferOp.cpp, operation/buffer/BufferSubgraph.cpp,
+	operation/buffer/LoopFilter.cpp,
+	operation/buffer/RightmostEdgeFinder.cpp: Buffer is almost fully
+	debugged.
+
+2003-05-28 17:05  pramsey
+
+	* source/: bigtest/Makefile.am, geom/Makefile.am: Final GNU build
+	adjustments.
+
+2003-05-28 16:55  pramsey
+
+	* source/examples/Makefile.am: Added new exception class.
+
+2003-05-28 16:39  pramsey
+
+	* source/headers/Makefile.am: Change reference to spatialIndex.h
+
+2003-05-28 16:22  pramsey
+
+	* source/geom/Makefile.am: Removed obsolete build entries for
+	removed classes.
+
+2003-05-28 15:22  ybychkov
+
+	* source/: headers/indexStrtree.h, index/strtree/Interval.cpp: Some
+	bugfixes.
+
+2003-05-28 15:11  ybychkov
+
+	* source/: index/bintree/Interval.cpp, index/bintree/Node.cpp,
+	test/XMLTester.cpp: no message
+
+2003-05-27 22:02  pramsey
+
+	* source/index/strtree/: Interval.cpp, SIRtree.cpp: Changed
+	__max/__min to max/min
+
+2003-05-27 22:01  pramsey
+
+	* source/index/quadtree/IntervalSize.cpp: Change __max to max
+
+2003-05-27 16:56  pramsey
+
+	* source/geom/Makefile.am: Changed from mistaken cpp file names.
+
+2003-05-27 16:54  pramsey
+
+	* source/algorithm/CentroidArea.cpp: Added include for <typeinfo>
+
+2003-05-27 16:45  pramsey
+
+	* source/headers/indexStrtree.h: GNU build support
+
+2003-05-27 16:42  pramsey
+
+	* source/headers/indexQuadtree.h: Fix reference to spatialIndex
+	header
+
+2003-05-27 16:41  pramsey
+
+	* source/headers/: Makefile.in, SpatialIndex.h, geom.h,
+	indexStrtree.h, spatialIndex.h: Build updates.
+
+2003-05-27 16:33  pramsey
+
+	* source/geom/Makefile.am: Add new files into build support
+
+2003-05-27 16:17  pramsey
+
+	* source/headers/Makefile.am: Add all new headers into the build
+	process.
+
+2003-05-27 16:11  pramsey
+
+	* source/: geom/Makefile.am, headers/Makefile.am: Some updates to
+	synch build with devel.
+
+2003-05-21 16:28  ybychkov
+
+	* source/: algorithm/MCPointInRing.cpp, geom/PrecisionModel.cpp,
+	graph/GeometryGraph.cpp, index/bintree/Key.cpp,
+	operation/relate/RelateOp.cpp: Several bugs fixed.
+
+2003-05-18 23:18  ybychkov
+
+	* source/: algorithm/HCoordinate.cpp,
+	algorithm/NotRepresentableException.cpp,
+	algorithm/RobustLineIntersector.cpp, examples/CPCLException.cpp,
+	examples/CoordinateListsExample.cpp,
+	examples/CustomCoordinateListExample.cpp,
+	examples/CustomCoordinateListExample.h,
+	examples/CustomPointCoordinateList.cpp, geom/CoordinateList.cpp,
+	geom/Dimension.cpp, geom/Geometry.cpp, geom/GeometryCollection.cpp,
+	geom/GeometryCollectionIterator.cpp, geom/GeometryFactory.cpp,
+	geom/IntersectionMatrix.cpp, geom/LineString.cpp,
+	geom/LinearRing.cpp, geom/Location.cpp, geom/Point.cpp,
+	geom/Polygon.cpp, geom/TopologyException.cpp,
+	graph/GeometryGraph.cpp, graph/Quadrant.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp, headers/geom.h,
+	headers/geosAlgorithm.h, headers/io.h, headers/util.h,
+	index/quadtree/DoubleBits.cpp, io/ParseException.cpp,
+	io/WKTReader.cpp, operation/valid/IsValidOp.cpp,
+	operation/valid/RepeatedPointTester.cpp, test/CTS.cpp,
+	test/SimpleWKTTester.cpp, util/Assert.cpp,
+	util/AssertionFailedException.cpp, util/GEOSException.cpp,
+	util/IllegalArgumentException.cpp,
+	util/UnsupportedOperationException.cpp: All exceptions are now
+	classes.
+
+2003-05-17 00:47  ybychkov
+
+	* source/: algorithm/CentroidArea.cpp, algorithm/CentroidLine.cpp,
+	algorithm/CentroidPoint.cpp, algorithm/InteriorPointArea.cpp,
+	algorithm/InteriorPointLine.cpp, algorithm/InteriorPointPoint.cpp,
+	algorithm/SIRtreePointInRing.cpp,
+	index/quadtree/QuadTreeNodeBase.cpp: Last fix for CVS.
+
+2003-05-16 23:08  ybychkov
+
+	* source/: algorithm/MCPointInRing.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryFactory.cpp,
+	graph/GeometryGraph.cpp, headers/geom.h, headers/geosAlgorithm.h,
+	headers/graph.h, headers/graphindex.h, headers/indexQuadtree.h,
+	headers/indexStrtree.h, index/quadtree/Quadtree.cpp,
+	index/strtree/AbstractSTRtree.cpp, operation/valid/IsValidOp.cpp:
+	Fixing CVS error.
+
+2003-05-16 17:27  ybychkov
+
+	* source/: geom/GeometryCollection.cpp, headers/geosAlgorithm.h:
+	Fixing a commit problem.
+
+2003-05-16 17:07  ybychkov
+
+	* source/: algorithm/MCPointInRing.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryFactory.cpp,
+	graph/GeometryGraph.cpp, headers/geom.h, headers/geosAlgorithm.h,
+	headers/graph.h, headers/opDistance.h, index/strtree/SIRtree.cpp,
+	index/strtree/STRtree.cpp,
+	operation/distance/ConnectedElementPointFilter.cpp,
+	operation/distance/DistanceOp.cpp,
+	operation/distance/LineExtracterFilter.cpp,
+	operation/distance/PointExtracterFilter.cpp,
+	operation/distance/PolygonExtracterFilter.cpp: SIRtree is done.
+	Distance is done.
+
+2003-05-07 02:06  ybychkov
+
+	* source/: algorithm/CentroidArea.cpp, algorithm/CentroidLine.cpp,
+	algorithm/CentroidPoint.cpp, algorithm/ConvexHull.java,
+	algorithm/IntTreePointInRing.cpp, algorithm/InteriorPointArea.cpp,
+	algorithm/InteriorPointLine.cpp, algorithm/InteriorPointPoint.cpp,
+	algorithm/MCPointInRing.cpp, algorithm/SIRtreePointInRing.cpp,
+	geom/GeometryComponentFilter.cpp, geom/TopologyException.cpp,
+	graph/index/SimpleEdgeSetIntersector.cpp,
+	graph/index/SimpleSweepLineIntersector.cpp, headers/SpatialIndex.h,
+	headers/geosAlgorithm.h, headers/graphindex.h,
+	headers/indexBintree.h, headers/indexIntervaltree.h,
+	headers/indexQuadtree.h, headers/indexStrtree.h,
+	index/bintree/BinTreeInterval.cpp, index/bintree/BinTreeNode.cpp,
+	index/bintree/Bintree.cpp, index/bintree/Interval.cpp,
+	index/bintree/Key.cpp, index/bintree/Node.cpp,
+	index/bintree/NodeBase.cpp, index/bintree/Root.cpp,
+	index/quadtree/DoubleBits.cpp, index/quadtree/IntervalSize.cpp,
+	index/quadtree/Quad.cpp, index/quadtree/QuadTreeKey.cpp,
+	index/quadtree/QuadTreeNode.cpp,
+	index/quadtree/QuadTreeNodeBase.cpp,
+	index/quadtree/QuadTreeRoot.cpp, index/quadtree/Quadtree.cpp,
+	index/strtree/AbstractNode.cpp, index/strtree/AbstractSTRtree.cpp,
+	index/strtree/Interval.cpp, index/strtree/ItemBoundable.cpp,
+	operation/valid/QuadtreeNestedRingTester.cpp: Closer to 1.3
+
+2003-05-04 15:34  ybychkov
+
+	* source/: algorithm/NonRobustCGAlgorithms.cpp,
+	algorithm/NonRobustLineIntersector.cpp, algorithm/PointLocator.cpp,
+	algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustLineIntersector.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/PrecisionModel.cpp,
+	graph/EdgeList.cpp, graph/index/MonotoneChain.cpp,
+	graph/index/MonotoneChainEdge.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp,
+	graph/index/SweepLineEvent.cpp, headers/geom.h,
+	headers/geosAlgorithm.h, headers/graph.h, headers/graphindex.h,
+	headers/opRelate.h, headers/opValid.h, headers/operation.h,
+	operation/GeometryGraphOperation.cpp,
+	operation/relate/RelateComputer.cpp, operation/relate/RelateOp.cpp,
+	operation/valid/IsValidOp.cpp: Closer to JTS 1.3
+
+2003-04-27 23:01  ybychkov
+
+	* source/: algorithm/CGAlgorithms.cpp, algorithm/HCoordinate.cpp,
+	algorithm/IntTreePointInRing.cpp, algorithm/LineIntersector.cpp,
+	algorithm/MCPointInRing.cpp, algorithm/NonRobustCGAlgorithms.cpp,
+	algorithm/NonRobustLineIntersector.cpp,
+	algorithm/NotRepresentableException.cpp,
+	algorithm/PointLocator.cpp, algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustDeterminant.cpp,
+	algorithm/RobustLineIntersector.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, bigtest/GeometryTestFactory.cpp,
+	examples/CustomCoordinateListExample.h,
+	geom/BasicCoordinateList.cpp, geom/Coordinate.cpp,
+	geom/CoordinateList.cpp, geom/CoordinateListFactory.cpp,
+	geom/Dimension.cpp, geom/Envelope.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryCollectionIterator.cpp,
+	geom/GeometryFactory.cpp, geom/IntersectionMatrix.cpp,
+	geom/LineSegment.cpp, geom/LineString.cpp, geom/LinearRing.cpp,
+	geom/Location.cpp, geom/MultiLineString.cpp, geom/MultiPoint.cpp,
+	geom/MultiPolygon.cpp, geom/Point.cpp,
+	geom/PointCoordinateList.cpp, geom/Polygon.cpp,
+	geom/PrecisionModel.cpp, graph/Depth.cpp, graph/DirectedEdge.cpp,
+	graph/DirectedEdgeStar.cpp, graph/Edge.cpp, graph/EdgeEnd.cpp,
+	graph/EdgeEndStar.cpp, graph/EdgeIntersection.cpp,
+	graph/EdgeIntersectionList.cpp, graph/EdgeList.cpp,
+	graph/EdgeRing.cpp, graph/GeometryGraph.cpp,
+	graph/GraphComponent.cpp, graph/Label.cpp, graph/Node.cpp,
+	graph/NodeFactory.cpp, graph/NodeMap.cpp, graph/PlanarGraph.cpp,
+	graph/Position.cpp, graph/Quadrant.cpp, graph/TopologyLocation.cpp,
+	graph/index/MonotoneChain.cpp, graph/index/MonotoneChainEdge.cpp,
+	graph/index/MonotoneChainIndexer.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp,
+	graph/index/SweepLineEvent.cpp, graph/index/SweepLineSegment.cpp,
+	headers/geom.h, headers/geosAlgorithm.h, headers/graph.h,
+	headers/graphindex.h, headers/opOverlay.h, headers/opValid.h,
+	index/chain/MonotoneChainBuilder.cpp,
+	index/chain/MonotoneChainOverlapAction.cpp,
+	index/chain/MonotoneChainSelectAction.cpp,
+	index/chain/indexMonotoneChain.cpp, index/quadtree/Quad.cpp,
+	index/quadtree/Quadtree.cpp, index/sweepline/SweepLineIndex.cpp,
+	index/sweepline/SweepLineInterval.cpp,
+	index/sweepline/indexSweepLineEvent.cpp, io/ParseException.cpp,
+	io/StringTokenizer.cpp, io/WKTReader.cpp, io/WKTWriter.cpp,
+	io/Writer.cpp, operation/GeometryGraphOperation.cpp,
+	operation/IsSimpleOp.cpp, operation/overlay/EdgeSetNoder.cpp,
+	operation/overlay/LineBuilder.cpp,
+	operation/overlay/MaximalEdgeRing.cpp,
+	operation/overlay/MinimalEdgeRing.cpp,
+	operation/overlay/OverlayNodeFactory.cpp,
+	operation/overlay/OverlayOp.cpp,
+	operation/overlay/PointBuilder.cpp,
+	operation/overlay/PolygonBuilder.cpp,
+	operation/relate/EdgeEndBuilder.cpp,
+	operation/relate/EdgeEndBundle.cpp,
+	operation/relate/EdgeEndBundleStar.cpp,
+	operation/relate/RelateComputer.cpp,
+	operation/relate/RelateNode.cpp,
+	operation/relate/RelateNodeFactory.cpp,
+	operation/relate/RelateNodeGraph.cpp,
+	operation/relate/RelateOp.cpp,
+	operation/valid/ConnectedInteriorTester.cpp,
+	operation/valid/ConsistentAreaTester.cpp,
+	operation/valid/IsValidOp.cpp,
+	operation/valid/QuadtreeNestedRingTester.cpp,
+	operation/valid/RepeatedPointTester.cpp,
+	operation/valid/SimpleNestedRingTester.cpp,
+	operation/valid/SweeplineNestedRingTester.cpp,
+	operation/valid/TopologyValidationError.cpp, util/Assert.cpp,
+	util/AssertionFailedException.cpp: Partially upgraded to JTS 1.3
+
+2003-04-21 15:16  ybychkov
+
+	* VisualStudio/: GEOS.sln, GEOS.vcproj: VisualStudio project added.
+
+2003-04-16 17:37  ybychkov
+
+	* source/: geom/BasicCoordinateList.cpp, geom/Geometry.cpp,
+	geom/GeometryFactory.cpp, geom/PointCoordinateList.cpp,
+	graph/GeometryGraph.cpp, io/WKTReader.cpp: Changed PrecisionModel
+	to Value type. Removed bounds checking from *At methods in
+	CoordinateLists.
+
+2003-04-11 21:31  ybychkov
+
+	* source/: graph/EdgeRing.cpp, operation/overlay/OverlayOp.cpp:
+	Overlay passes all tests (both precise and normal)
+
+2003-04-11 16:16  ybychkov
+
+	* source/: geom/Geometry.cpp, geom/GeometryCollection.cpp,
+	geom/GeometryFactory.cpp, geom/LineString.cpp, geom/Point.cpp,
+	geom/Polygon.cpp, geom/PrecisionModel.cpp, graph/GeometryGraph.cpp,
+	headers/geom.h, io/WKTReader.cpp, test/XMLTester.cpp: Overlay
+	almost works. Fails 2 tests.
+
+2003-04-09 21:34  ybychkov
+
+	* source/: geom/Geometry.cpp, geom/GeometryFactory.cpp,
+	graph/Depth.cpp, graph/DirectedEdgeStar.cpp,
+	graph/EdgeIntersectionList.cpp, operation/overlay/OverlayOp.cpp,
+	test/XMLTester.cpp: Overlay passes all normal tests. Still fails on
+	Precision tests.
+
+2003-04-09 14:52  pramsey
+
+	* source/headers/geom.h: Changed destructors to virtual to quiet
+	GNU warnings
+
+2003-04-04 15:49  pramsey
+
+	* source/headers/Makefile.am: Install all headers at install time.
+
+2003-04-04 14:04  pramsey
+
+	* source/examples/: CustomCoordinateListExample.cpp,
+	CustomCoordinateListExample.h, CustomPointCoordinateList.cpp:
+	Newlines added to quiet gcc.
+
+2003-04-03 19:44  pramsey
+
+	* source/geom/Makefile.am: Build support
+
+2003-04-03 19:43  pramsey
+
+	* source/examples/Makefile.am: Build support.
+
+2003-04-03 19:28  pramsey
+
+	* source/geom/Makefile.am: Build support updates.
+
+2003-04-03 19:11  pramsey
+
+	* source/examples/Makefile.am: Build support for new example
+	programs.
+
+2003-04-03 16:18  dblasby
+
+	* INSTALL: added comment about running ./autogen.sh
+
+2003-04-02 13:55  ybychkov
+
+	* source/examples/: CustomCoordinateListExample.cpp,
+	CustomCoordinateListExample.h, CustomPointCoordinateList.cpp: Added
+	example on how to wrap internal storage format with
+	CoordinateLists.
+
+2003-04-02 00:02  ybychkov
+
+	* source/: algorithm/MCPointInRing.cpp,
+	geom/BasicCoordinateList.cpp, geom/LineString.cpp,
+	geom/PointCoordinateList.cpp, graph/DirectedEdge.cpp,
+	graph/EdgeEnd.cpp, graph/EdgeEndStar.cpp,
+	graph/EdgeIntersectionList.cpp, graph/EdgeRing.cpp, graph/Node.cpp,
+	headers/geom.h, headers/indexChain.h, headers/opOverlay.h,
+	operation/overlay/MaximalEdgeRing.cpp,
+	operation/overlay/MinimalEdgeRing.cpp,
+	operation/overlay/OverlayNodeFactory.cpp,
+	operation/valid/ConnectedInteriorTester.cpp,
+	operation/valid/IsValidOp.cpp: isValid is debugged (passes all 805
+	tests).
+
+2003-03-24 11:23  pramsey
+
+	* source/headers/: indexQuadtree.h, indexSweepline.h: Added
+	newlines to end to quiet gcc
+
+2003-03-24 11:21  pramsey
+
+	* Makefile.in, aclocal.m4, configure, configure.in, libtool,
+	macros/Makefile.in, source/Makefile.am, source/Makefile.in,
+	source/algorithm/Makefile.am, source/algorithm/Makefile.in,
+	source/bigtest/Makefile.in, source/geom/Makefile.in,
+	source/graph/Makefile.am, source/graph/Makefile.in,
+	source/graph/index/Makefile.am, source/graph/index/Makefile.in,
+	source/headers/Makefile.in, source/headers/config.h.in,
+	source/headers/indexChain.h, source/headers/indexIntervaltree.h,
+	source/io/Makefile.am, source/io/Makefile.in,
+	source/io/markup/Makefile.am, source/io/markup/Makefile.in,
+	source/operation/Makefile.am, source/operation/Makefile.in,
+	source/operation/relate/Makefile.am,
+	source/operation/relate/Makefile.in,
+	source/operation/valid/Makefile.am, source/test/Makefile.in,
+	source/util/Makefile.am, source/util/Makefile.in,
+	tools/Makefile.in: Yet more GNU build fiddling. Removed extraneous
+	build support from all non-geom library directories.
+
+2003-03-23 19:45  pramsey
+
+	* source/geom/Makefile.am: More GNU build support
+
+2003-03-23 19:07  pramsey
+
+	* Makefile.in, aclocal.m4, configure, configure.in, libtool,
+	macros/Makefile.in, source/Makefile.in,
+	source/algorithm/Makefile.in, source/bigtest/Makefile.in,
+	source/geom/Makefile.am, source/geom/Makefile.in,
+	source/graph/Makefile.in, source/graph/index/Makefile.in,
+	source/headers/Makefile.in, source/headers/config.h.in,
+	source/headers/geosAlgorithm.h, source/headers/opValid.h,
+	source/io/Makefile.in, source/io/markup/Makefile.in,
+	source/operation/Makefile.am, source/operation/Makefile.in,
+	source/operation/relate/Makefile.in, source/test/Makefile.in,
+	source/test/XMLTester.cpp, source/util/Makefile.in,
+	tools/Makefile.in: GNU build support on latest changes.
+
+2003-03-18 16:34  ybychkov
+
+	* source/: algorithm/IntTreePointInRing.cpp, geom/Geometry.cpp,
+	headers/geosAlgorithm.h, headers/opOverlay.h,
+	operation/overlay/LineBuilder.cpp, operation/overlay/OverlayOp.cpp,
+	operation/overlay/OverlayOp.java: All Overlay classes are ported.
+	Overlay and isValid have not been tested yet.
+
+2003-03-17 17:42  ybychkov
+
+	* source/: geom/Geometry.cpp, graph/PlanarGraph.cpp,
+	headers/opOverlay.h, headers/opValid.h, index/quadtree/Quad.cpp,
+	operation/overlay/EdgeSetNoder.cpp,
+	operation/overlay/LineBuilder.cpp,
+	operation/overlay/MaximalEdgeRing.cpp,
+	operation/overlay/OverlayNodeFactory.cpp,
+	operation/overlay/OverlayOp.java,
+	operation/overlay/PointBuilder.cpp,
+	operation/overlay/PolygonBuilder.cpp,
+	operation/valid/IsValidOp.cpp,
+	operation/valid/RepeatedPointTester.cpp, test/XMLTester.cpp: 90% of
+	Overlay classes ported.
+
+2003-03-17 10:04  ybychkov
+
+	* source/: algorithm/MCPointInRing.cpp, headers/geosAlgorithm.h,
+	headers/indexChain.h, headers/indexIntervaltree.h,
+	index/chain/MonotoneChainBuilder.cpp,
+	index/chain/MonotoneChainOverlapAction.cpp,
+	index/chain/MonotoneChainSelectAction.cpp,
+	index/chain/indexMonotoneChain.cpp: All 'index' packages and part
+	of 'overlay' are done.
+
+2003-03-16 18:49  ybychkov
+
+	* source/: algorithm/MCPointInRing.cpp, headers/geosAlgorithm.h,
+	headers/opOverlay.h, headers/opValid.h,
+	operation/overlay/MaximalEdgeRing.cpp,
+	operation/overlay/MinimalEdgeRing.cpp,
+	operation/valid/IsValidOp.cpp: IsValid and supporting packages are
+	ported (but NOT tested).
+
+2003-03-12 15:45  pramsey
+
+	* source/: geom/Makefile.am, operation/Makefile.am,
+	operation/valid/Makefile.am: Build support for valid.
+
+2003-03-10 02:18  ybychkov
+
+	* source/: headers/indexQuadtree.h, headers/opOverlay.h,
+	headers/opValid.h, operation/valid/ConnectedInteriorTester.cpp,
+	operation/valid/QuadtreeNestedRingTester.cpp: IsValid() and
+	supporting index classes are ported, but don't work yet (external
+	dependencies)
+
+2003-03-09 17:17  ybychkov
+
+	* source/: headers/indexQuadtree.h, headers/indexSweepline.h,
+	headers/opValid.h, index/quadtree/Quad.cpp,
+	index/quadtree/Quadtree.cpp, index/sweepline/SweepLineIndex.cpp,
+	index/sweepline/SweepLineInterval.cpp,
+	index/sweepline/indexSweepLineEvent.cpp,
+	operation/valid/ConsistentAreaTester.cpp,
+	operation/valid/IsValidOp.cpp,
+	operation/valid/RepeatedPointTester.cpp,
+	operation/valid/SimpleNestedRingTester.cpp,
+	operation/valid/SweeplineNestedRingTester.cpp,
+	operation/valid/TopologyValidationError.cpp, test/XMLTester.cpp:
+	IsValid and supporting index classes are almost done.
+
+2003-03-05 09:04  pramsey
+
+	* configure.in, source/Makefile.am, source/examples/Makefile.am:
+	Build support for new coordinateline examples.
+
+2003-03-05 00:02  ybychkov
+
+	* source/: examples/CoordinateListsExample.cpp,
+	geom/PointCoordinateList.cpp, headers/geom.h: CoordinateList
+	interface example.
+
+2003-03-02 19:56  pramsey
+
+	* source/geom/Makefile.am: Remove PointInRing
+
+2003-03-02 19:35  pramsey
+
+	* source/algorithm/PointInRing.cpp: Removed unused file.
+
+2003-03-02 18:41  ybychkov
+
+	* source/: algorithm/LineIntersector.cpp,
+	bigtest/GeometryTestFactory.cpp, geom/GeometryFactory.cpp,
+	geom/PointCoordinateList.cpp, graph/EdgeIntersectionList.cpp,
+	io/WKTReader.cpp: Some Coordinate& related bugs fixed.
+
+2003-03-02 18:26  ybychkov
+
+	* source/geom/GeometryFactory.cpp: GeometryFactory bug fix.
+
+2003-03-02 16:46  ybychkov
+
+	* source/: algorithm/CGAlgorithms.cpp, algorithm/HCoordinate.cpp,
+	algorithm/LineIntersector.cpp, algorithm/NonRobustCGAlgorithms.cpp,
+	algorithm/NonRobustLineIntersector.cpp, algorithm/PointLocator.cpp,
+	algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustLineIntersector.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, geom/BasicCoordinateList.cpp,
+	geom/Coordinate.cpp, geom/Geometry.cpp, geom/GeometryFactory.cpp,
+	geom/LineSegment.cpp, geom/LineString.cpp, geom/Point.cpp,
+	geom/PointCoordinateList.cpp, geom/PrecisionModel.cpp,
+	graph/EdgeEndStar.cpp, graph/EdgeIntersection.cpp,
+	graph/EdgeIntersectionList.cpp, graph/EdgeRing.cpp,
+	graph/GeometryGraph.cpp, graph/Node.cpp, graph/NodeMap.cpp,
+	graph/PlanarGraph.cpp, graph/Quadrant.cpp,
+	graph/index/SegmentIntersector.cpp, headers/geom.h,
+	headers/geosAlgorithm.h, headers/graph.h, headers/graphindex.h,
+	headers/opRelate.h, headers/operation.h, headers/util.h,
+	io/WKTReader.cpp, operation/IsSimpleOp.cpp,
+	operation/relate/RelateComputer.cpp,
+	operation/relate/RelateNode.cpp, test/CTS.cpp, util/Assert.cpp:
+	Second pass of code cleanup. Coordinate references and inlining.
+
+2003-03-01 19:47  ybychkov
+
+	* source/: graph/Depth.cpp, graph/DirectedEdge.cpp,
+	graph/DirectedEdgeStar.cpp, graph/Edge.cpp, graph/EdgeEnd.cpp,
+	graph/EdgeEndStar.cpp, graph/EdgeIntersectionList.cpp,
+	graph/EdgeRing.cpp, graph/GeometryGraph.cpp,
+	graph/GraphComponent.cpp, graph/Label.cpp, graph/Node.cpp,
+	graph/NodeMap.cpp, graph/PlanarGraph.cpp,
+	graph/TopologyLocation.cpp, graph/index/MonotoneChainEdge.cpp,
+	graph/index/MonotoneChainIndexer.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp, headers/graph.h,
+	headers/graphindex.h, operation/IsSimpleOp.cpp,
+	operation/relate/EdgeEndBuilder.cpp,
+	operation/relate/RelateComputer.cpp,
+	operation/relate/RelateNodeGraph.cpp: First pass of code cleanup
+	completed over all packages.
+
+2003-02-28 22:10  pramsey
+
+	* source/headers/geosAlgorithm.h: Uncommented default constructor
+	for PointInRing
+
+2003-02-28 22:08  pramsey
+
+	* source/test/SimpleWKTTester.cpp: Fixed call to geometry factory.
+
+2003-02-26 15:16  ybychkov
+
+	* source/: algorithm/LineIntersector.cpp,
+	algorithm/NonRobustCGAlgorithms.cpp, algorithm/PointLocator.cpp,
+	algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustLineIntersector.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, headers/geosAlgorithm.h,
+	headers/io.h, headers/util.h, io/StringTokenizer.cpp,
+	io/WKTReader.cpp, io/WKTWriter.cpp, io/Writer.cpp,
+	test/XMLTester.cpp: All packages except 'graph' has been
+	refactored.
+
+2003-02-19 19:32  pramsey
+
+	* source/test/SimpleWKTTester.cpp: Fixed small bug in call to
+	GeometryFactory (instantiate PrecisionModel with new)
+
+2003-02-19 19:30  pramsey
+
+	* source/geom/: CoordinateListFactory.cpp, GeometryFactory.cpp:
+	GFactory: Move i outside of for loop. Needed to compile GNU
+	CListFactory: Add newline to end of file.
+
+2003-02-19 16:10  ybychkov
+
+	* source/: geom/GeometryFactory.cpp, headers/opRelate.h,
+	operation/IsSimpleOp.cpp, operation/relate/EdgeEndBundle.cpp,
+	operation/relate/RelateComputer.cpp,
+	operation/relate/RelateNodeGraph.cpp,
+	operation/relate/RelateOp.cpp: Geom and Operation (including
+	Relate) packages are updated.
+
+2003-02-17 01:38  ybychkov
+
+	* source/: geom/Envelope.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/IntersectionMatrix.cpp,
+	geom/LineString.cpp, geom/Polygon.cpp,
+	graph/index/MonotoneChainEdge.cpp, headers/geom.h, headers/io.h,
+	headers/opRelate.h, headers/operation.h, io/WKTWriter.cpp,
+	operation/GeometryGraphOperation.cpp,
+	operation/relate/RelateComputer.cpp, operation/relate/RelateOp.cpp,
+	test/XMLTester.cpp: GEOM package fully updated & bugs fixed.
+
+2003-02-16 16:40  ybychkov
+
+	* source/: geom/Geometry.cpp, geom/MultiLineString.cpp,
+	geom/MultiPoint.cpp, geom/MultiPolygon.cpp, geom/Point.cpp,
+	geom/Polygon.cpp, graph/EdgeRing.cpp, graph/GeometryGraph.cpp,
+	headers/geom.h, headers/io.h, io/WKTReader.cpp: GEOM package fully
+	updated.
+
+2003-02-16 14:52  ybychkov
+
+	* source/: bigtest/GeometryTestFactory.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryCollectionIterator.cpp,
+	geom/GeometryFactory.cpp, geom/IntersectionMatrix.cpp,
+	geom/LineString.cpp, geom/LinearRing.cpp, geom/MultiLineString.cpp,
+	geom/MultiPoint.cpp, geom/MultiPolygon.cpp, geom/Point.cpp,
+	geom/Polygon.cpp, graph/EdgeRing.cpp, headers/geom.h,
+	io/WKTReader.cpp: GEOM package partially updated.
+
+2003-02-12 13:09  pramsey
+
+	* INSTALL, missing: Added two files required by autoconf build
+	process.
+
+2003-02-12 12:51  pramsey
+
+	* configure, libtool, source/geom/Makefile.in,
+	source/headers/Makefile.in, source/test/Makefile.in: Commit build
+	support files.
+
+2003-02-12 11:11  pramsey
+
+	* source/headers/Makefile.am: Change header installation path to
+	$(prefix)/include/geos.
+
+2003-02-11 22:49  pramsey
+
+	* source/: algorithm/LineIntersector.cpp,
+	algorithm/SimplePointInRing.cpp,
+	operation/relate/EdgeEndBundle.cpp,
+	operation/GeometryGraphOperation.cpp: Added newlines to quiet g++
+	warnings.
+
+2003-02-11 22:48  pramsey
+
+	* source/graph/: Depth.cpp, DirectedEdge.cpp, DirectedEdgeStar.cpp,
+	EdgeEnd.cpp, EdgeIntersectionList.cpp, EdgeList.cpp, Label.cpp,
+	NodeFactory.cpp, index/MonotoneChain.cpp,
+	index/SimpleMCSweepLineIntersector.cpp, index/SweepLineEvent.cpp:
+	Added newlines to ends of files to quiet g++ warnings.
+
+2003-02-11 22:27  pramsey
+
+	* source/test/XMLTester.cpp: Fix headers.
+
+2003-02-11 22:24  pramsey
+
+	* source/bigtest/TestSweepLineSpeed.cpp: Added return value.
+
+2003-02-11 22:24  pramsey
+
+	* source/: bigtest/TestSweepLineSpeed.cpp,
+	test/SimpleWKTTester.cpp: Changed headers.
+
+2003-02-11 22:20  pramsey
+
+	* source/test/: CTS.cpp, XMLTester.cpp: Changed headers.
+
+2003-02-11 22:19  pramsey
+
+	* source/test/XMLTester.cpp: Make path to test file relative.
+
+2003-02-11 22:18  pramsey
+
+	* source/bigtest/GeometryTestFactory.cpp: Change include reference
+	syntax.
+
+2003-02-11 22:07  pramsey
+
+	* source/graph/EdgeEndStar.cpp: Remove NULL test.
+
+2003-02-11 22:07  pramsey
+
+	* source/io/WKTWriter.cpp: Pass double to log().
+
+2003-02-11 22:07  pramsey
+
+	* source/bigtest/TestSweepLineSpeed.cpp: Fixed main() return type.
+
+2003-02-11 22:04  pramsey
+
+	* source/test/Makefile.am: Remove old library references.
+
+2003-02-11 21:58  pramsey
+
+	* source/bigtest/TestSweepLineSpeed.cpp: Added stdio reference and
+	newline at end.
+
+2003-02-11 16:58  pramsey
+
+	* source/test/test.xml: Added all JTS test cases to the file.
+
+2003-02-11 15:54  pramsey
+
+	* source/geom/Makefile.am: Added support for new cpp files.
+
+2003-02-11 15:33  ybychkov
+
+	* source/: geom/CoordinateList.cpp, geom/Geometry.cpp,
+	geom/PointCoordinateList.cpp, geom/Polygon.cpp, headers/geom.h:
+	Some bugs fixed.
+
+2003-02-11 12:24  ybychkov
+
+	* source/: geom/PointCoordinateList.cpp, graph/EdgeEndStar.cpp,
+	headers/graph.h: Small changes in PointCoordinateList and
+	EdgeEndStar.
+
+2003-02-11 11:01  mbdavis
+
+	* source/geom/Geometry.cpp: fixed duplicate for loop index
+
+2003-02-05 00:14  ybychkov
+
+	* source/: bigtest/GeometryTestFactory.cpp,
+	geom/BasicCoordinateList.cpp, geom/CoordinateList.cpp,
+	geom/CoordinateListFactory.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryFactory.cpp,
+	geom/LineString.cpp, geom/LinearRing.cpp, geom/MultiPoint.cpp,
+	geom/Point.cpp, geom/PointCoordinateList.cpp, geom/Polygon.cpp,
+	geom/PrecisionModel.cpp, graph/Edge.cpp,
+	graph/EdgeIntersectionList.cpp, graph/GeometryGraph.cpp,
+	graph/index/MonotoneChainEdge.cpp, headers/geom.h,
+	io/WKTReader.cpp, io/WKTWriter.cpp, operation/IsSimpleOp.cpp,
+	test/XMLTester.cpp: Second pass of CoordinateList interface
+	migration.
+
+2003-01-27 00:04  ybychkov
+
+	* source/: algorithm/NonRobustCGAlgorithms.cpp,
+	algorithm/PointLocator.cpp, algorithm/RobustCGAlgorithms.cpp,
+	algorithm/SimplePointInRing.cpp, geom/BasicCoordinateList.cpp,
+	geom/Envelope.cpp, geom/Geometry.cpp, geom/GeometryCollection.cpp,
+	geom/GeometryFactory.cpp, geom/LineSegment.cpp,
+	geom/LineString.cpp, geom/LinearRing.cpp, geom/MultiLineString.cpp,
+	geom/Point.cpp, geom/Polygon.cpp, geom/PrecisionModel.cpp,
+	graph/Edge.cpp, graph/EdgeIntersectionList.cpp, graph/EdgeList.cpp,
+	graph/EdgeRing.cpp, graph/GeometryGraph.cpp, graph/PlanarGraph.cpp,
+	graph/index/MonotoneChainEdge.cpp,
+	graph/index/MonotoneChainIndexer.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SweepLineSegment.cpp, headers/geom.h,
+	headers/geosAlgorithm.h, headers/graph.h, headers/graphindex.h,
+	headers/io.h, io/WKTReader.cpp: First pass of CoordinateList
+	interface replacement.
+
+2003-01-26 23:56  ybychkov
+
+	* source/algorithm/CGAlgorithms.cpp: First pass of CoordinateList
+	interface replacement.
+
+2003-01-26 23:26  ybychkov
+
+	* source/algorithm/CGAlgorithms.cpp: First pass of CoordinateList
+	interface replacement.
+
+2002-12-02 01:48  ybychkov
+
+	* source/: algorithm/CGAlgorithms.cpp,
+	algorithm/NonRobustCGAlgorithms.cpp, algorithm/PointLocator.cpp,
+	algorithm/RobustCGAlgorithms.cpp, algorithm/SimplePointInRing.cpp,
+	bigtest/TestSweepLineSpeed.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryFactory.cpp,
+	geom/LineString.cpp, geom/LinearRing.cpp, geom/Point.cpp,
+	geom/Polygon.cpp, graph/Edge.cpp, graph/EdgeList.cpp,
+	graph/EdgeRing.cpp, graph/GeometryGraph.cpp, graph/PlanarGraph.cpp,
+	graph/index/MonotoneChainEdge.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SweepLineSegment.cpp, headers/geom.h,
+	headers/geosAlgorithm.h, headers/graph.h: More performance updates.
+
+2002-11-24 02:48  ybychkov
+
+	* source/: algorithm/RobustLineIntersector.cpp,
+	bigtest/TestSweepLineSpeed.cpp, geom/CoordinateList.cpp,
+	graph/index/MonotoneChainIndexer.cpp, headers/geom.h,
+	headers/graphindex.h: Some performance improvements.
+
+2002-11-14 15:43  pramsey
+
+	* configure.in, source/Makefile.am, source/Makefile.in,
+	source/bigtest/Makefile.am, source/bigtest/Makefile.in,
+	source/geom/Makefile.am, source/geom/Makefile.in: Build support for
+	the bigtest programs.
+
+2002-11-08 11:49  ybychkov
+
+	* source/: bigtest/TestSweepLineSpeed.cpp, geom/Coordinate.cpp,
+	graph/Edge.cpp, graph/EdgeList.cpp, graph/EdgeRing.cpp,
+	graph/GeometryGraph.cpp, graph/PlanarGraph.cpp,
+	graph/index/MonotoneChainEdge.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SweepLineSegment.cpp, headers/geom.h, headers/graph.h,
+	headers/graphindex.h: Preformance is drastically improved
+
+2002-11-05 15:13  ybychkov
+
+	* source/: bigtest/GeometryTestFactory.cpp,
+	bigtest/TestSweepLineSpeed.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp, headers/bigtest.h,
+	operation/relate/RelateComputer.cpp: Code for generating large
+	tests added.
+
+2002-10-30 23:37  ybychkov
+
+	* source/: graph/index/SimpleMCSweepLineIntersector.cpp,
+	io/StringTokenizer.cpp, test/XMLTester.cpp: XML tester is less
+	fragile now.
+
+2002-10-30 13:59  pramsey
+
+	* config.guess, config.sub: Added configure support files for
+	building w/o automake/autoconf
+
+2002-10-30 13:58  pramsey
+
+	* configure.in: Small changes to make autoconf happy.
+
+2002-10-30 12:04  pramsey
+
+	* source/test/test.xml: Edited test file to not crash XMLTester
+
+2002-10-30 11:54  pramsey
+
+	* Makefile.in, aclocal.m4, configure, configure.in, libtool,
+	macros/Makefile.in, source/Makefile.in,
+	source/algorithm/Makefile.in, source/geom/Makefile.am,
+	source/geom/Makefile.in, source/graph/Makefile.in,
+	source/graph/index/Makefile.in, source/headers/Makefile.in,
+	source/headers/config.h.in, source/headers/opRelate.h,
+	source/io/Makefile.in, source/io/markup/Makefile.in,
+	source/operation/Makefile.in, source/operation/relate/Makefile.in,
+	source/test/Makefile.am, source/test/Makefile.in,
+	source/util/Makefile.in, tools/Makefile.in: New build changes
+	necessary to build under Linux GNU.
+
+2002-10-22 19:21  nvine
+
+	* configure.in, source/Makefile.am, source/geom/Geometry.cpp,
+	source/geom/GeometryCollection.cpp, source/geom/Makefile.am,
+	source/geom/Polygon.cpp, source/graph/Depth.cpp,
+	source/graph/DirectedEdgeStar.cpp, source/graph/EdgeEnd.cpp,
+	source/graph/EdgeEndStar.cpp, source/graph/EdgeIntersection.cpp,
+	source/graph/EdgeList.cpp, source/graph/EdgeRing.cpp,
+	source/graph/PlanarGraph.cpp, source/graph/Quadrant.cpp,
+	source/graph/index/MonotoneChainEdge.cpp,
+	source/graph/index/SegmentIntersector.cpp,
+	source/graph/index/SimpleMCSweepLineIntersector.cpp,
+	source/graph/index/SweepLineEvent.cpp,
+	source/operation/GeometryGraphOperation.cpp,
+	source/operation/relate/RelateComputer.cpp, source/test/CTS.cpp,
+	source/test/SimpleWKTTester.cpp, source/test/XMLTester.cpp: GNU
+	portability changes
+
+2002-10-17 00:12  ybychkov
+
+	* source/: algorithm/SimplePointInAreaLocator.cpp,
+	geom/Geometry.cpp, geom/GeometryCollectionIterator.cpp,
+	graph/GeometryGraph.cpp, graph/index/SegmentIntersector.cpp,
+	headers/graphindex.h, test/XMLTester.cpp: All test cases now work.
+	Some are still too slow.
+
+2002-10-06 02:56  ybychkov
+
+	* source/: algorithm/PointLocator.cpp, graph/DirectedEdgeStar.cpp,
+	graph/EdgeEndStar.cpp, graph/GeometryGraph.cpp, graph/Label.cpp,
+	graph/PlanarGraph.cpp, graph/index/SegmentIntersector.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp,
+	graph/index/SweepLineEvent.cpp, headers/graph.h,
+	headers/graphindex.h, headers/opRelate.h, operation/IsSimpleOp.cpp,
+	operation/relate/EdgeEndBuilder.cpp,
+	operation/relate/EdgeEndBundle.cpp,
+	operation/relate/EdgeEndBundleStar.cpp,
+	operation/relate/RelateComputer.cpp,
+	operation/relate/RelateNodeGraph.cpp, test/XMLTester.cpp: Relate()
+	is almost debugged.
+
+2002-09-12 07:08  fvilla
+
+	* Makefile.in, configure, configure.in, libtool,
+	source/geom/Makefile.am, source/geom/Makefile.in,
+	source/headers/Makefile.am, source/headers/Makefile.in,
+	source/operation/Makefile.am, source/operation/Makefile.in,
+	source/operation/relate/Makefile.am,
+	source/operation/relate/Makefile.in: Add makefile support for new
+	files and dir
+
+2002-09-11 18:27  ybychkov
+
+	* source/: geom/Geometry.cpp, geom/LineString.cpp,
+	geom/MultiLineString.cpp, geom/MultiPoint.cpp, geom/Polygon.cpp,
+	graph/DirectedEdgeStar.cpp, graph/Edge.cpp, graph/EdgeEnd.cpp,
+	graph/EdgeEndStar.cpp, graph/EdgeIntersectionList.cpp,
+	graph/EdgeList.cpp, graph/GeometryGraph.cpp,
+	graph/GraphComponent.cpp, graph/Node.cpp, graph/NodeFactory.cpp,
+	graph/NodeMap.cpp, graph/PlanarGraph.cpp, graph/Quadrant.cpp,
+	graph/index/SegmentIntersector.cpp, headers/geom.h,
+	headers/graph.h, headers/opRelate.h, headers/operation.h,
+	operation/GeometryGraphOperation.cpp,
+	operation/relate/EdgeEndBuilder.cpp,
+	operation/relate/EdgeEndBundle.cpp,
+	operation/relate/EdgeEndBundleStar.cpp,
+	operation/relate/RelateComputer.cpp,
+	operation/relate/RelateNode.cpp,
+	operation/relate/RelateNodeFactory.cpp,
+	operation/relate/RelateNodeGraph.cpp,
+	operation/relate/RelateOp.cpp, test/XMLTester.cpp: Relate is
+	finished,but doesn't work yet.
+
+2002-09-10 06:46  fvilla
+
+	* configure, configure.in, libtool, source/Makefile.am,
+	source/Makefile.in, source/geom/Makefile.am,
+	source/geom/Makefile.in, source/operation/Makefile.am,
+	source/operation/Makefile.in: Added operation/Makefiles
+
+2002-09-06 13:18  ybychkov
+
+	* source/: algorithm/CGAlgorithms.cpp,
+	algorithm/NonRobustCGAlgorithms.cpp,
+	algorithm/NonRobustLineIntersector.cpp,
+	operation/GeometryGraphOperation.cpp, operation/IsSimpleOp.cpp,
+	algorithm/HCoordinate.cpp, algorithm/PointLocator.cpp,
+	algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustLineIntersector.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, geom/Envelope.cpp,
+	geom/Geometry.cpp, geom/GeometryCollection.cpp,
+	geom/LineSegment.cpp, geom/LineString.cpp, geom/Point.cpp,
+	geom/Polygon.cpp, geom/PrecisionModel.cpp,
+	graph/DirectedEdgeStar.cpp, graph/EdgeEndStar.cpp,
+	graph/EdgeIntersectionList.cpp, graph/EdgeRing.cpp,
+	graph/GeometryGraph.cpp, graph/NodeMap.cpp, graph/PlanarGraph.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp, headers/geom.h,
+	headers/geosAlgorithm.h, headers/graph.h, headers/operation.h: A
+	lot of changes: Code is brought to version 1.2 of JTS. Compilable
+	part of Operation added.
+
+2002-09-05 11:32  fvilla
+
+	* ChangeLog, Makefile.in, configure, configure.in, libtool,
+	source/Makefile.in, source/geom/Makefile.am,
+	source/geom/Makefile.in, source/graph/Makefile.in,
+	source/graph/index/Makefile.in, source/headers/Makefile.am,
+	source/headers/Makefile.in, source/io/Makefile.in,
+	source/io/markup/Makefile.in, source/test/Makefile.in,
+	source/util/Makefile.in, tools/Makefile.in: Fixed version
+	numbering. Whenever version numbers are bumped up the change should
+	be reflected in the AC_INIT_AUTOMAKE macro in configure.in.  I've
+	put it at 0.0.1 - should be changed as appropriate. The version is
+	#define'd for code being compiled as GEOS_VERSION.
+
+2002-09-03 09:04  pramsey
+
+	* source/test/Makefile.am: Changed reference to 'libgeom' to
+	'libgeos'
+
+2002-09-03 06:53  fvilla
+
+	* Makefile.am, Makefile.in, acinclude.m4, aclocal.m4, configure,
+	configure.in, install-sh, libtool, ltmain.sh, mkinstalldirs,
+	macros/Makefile.am, macros/Makefile.in, macros/geos.m4,
+	source/Makefile.am, source/Makefile.in,
+	source/algorithm/Makefile.am, source/algorithm/Makefile.in,
+	source/geom/Makefile.am, source/geom/Makefile.in,
+	source/graph/Makefile.am, source/graph/Makefile.in,
+	source/graph/index/Makefile.am, source/graph/index/Makefile.in,
+	source/headers/Makefile.am, source/headers/Makefile.in,
+	source/headers/config.h.in, source/io/Makefile.am,
+	source/io/Makefile.in, source/io/markup/Makefile.am,
+	source/io/markup/Makefile.in, source/test/Makefile.am,
+	source/test/Makefile.in, source/util/Makefile.am,
+	source/util/Makefile.in, tools/Makefile.am, tools/Makefile.in,
+	tools/geos-config.in: * Add automake/autoconf support for one-lib
+	compilation
+	
+	* add libtool support for shared libraries.
+	--enable-shared={yes|no} and   --enable-static={yes|no} control
+	static and shared lib generation.
+	
+	* Makefile.in and configure files added to cvs (for users without
+	automake)
+	
+	* add dir macros/ with a GEOS_INIT macro to be used in configure.in
+	  of other packages using geos (not used by geos itself)
+	
+	* add dir tools/ with geos-config script
+	
+	* the makefile in source/geom is the only one that generates a	
+	library - all others have the source files in EXTRA_DIST only
+	
+	* small glitch: 'make dist' will give errors trying to add the	
+	source files non local to source/geom to the archive using relative
+	  paths. Does not have consequences other than the error messages -
+	will   see if I can fix this. In general the one-lib, complex-tree
+	solution is not   easy to work with in automake.
+
+2002-09-01 11:05  pramsey
+
+	* source/: algorithm/NotRepresentableException.cpp,
+	algorithm/PointInRing.cpp, algorithm/PointLocator.cpp,
+	algorithm/RobustLineIntersector.cpp, io/ParseException.cpp,
+	io/WKTWriter.cpp, io/Writer.cpp, io/markup/MarkupSTL.cpp: Minor
+	portability changes.
+
+2002-09-01 10:53  pramsey
+
+	* configure.in, source/Makefile.am, source/algorithm/Makefile.am:
+	Changes to support algorithm directory in build structure.
+
+2002-09-01 10:51  pramsey
+
+	* source/geom/: Coordinate.cpp, CoordinateList.cpp, Dimension.cpp,
+	Envelope.cpp, Geometry.cpp, GeometryCollection.cpp,
+	GeometryFactory.cpp, IntersectionMatrix.cpp, LineSegment.cpp,
+	LineString.cpp, Location.cpp, MultiPoint.cpp, PrecisionModel.cpp:
+	GNU compatibility fixes, changing __min/__max to min/max, adding
+	stdio.h where needed, small syntax adjustments, newlines at end of
+	files.
+
+2002-08-30 11:33  pramsey
+
+	* COPYING: Added LGPL licence text.
+
+2002-08-30 11:30  pramsey
+
+	* AUTHORS, Authors: Changed name of authors file as requested by
+	autoconf.
+
+2002-08-30 11:28  pramsey
+
+	* autogen.sh: Removed --force-missing which did not work for my
+	version of autoconf
+
+2002-08-30 11:16  pramsey
+
+	* .cvsignore, source/.cvsignore, source/geom/.cvsignore,
+	source/graph/.cvsignore, source/graph/index/.cvsignore,
+	source/io/.cvsignore, source/io/markup/.cvsignore,
+	source/test/.cvsignore, source/util/.cvsignore: Added cvs ignore
+	files.
+
+2002-08-30 11:15  pramsey
+
+	* source/test/: CTS.cpp, SimpleWKTTester.cpp, WKTIn, WKTOut,
+	XMLTester.cpp, test.xml: Added the testing files back into their
+	new subdirectory.
+
+2002-08-30 11:15  pramsey
+
+	* Authors, ChangeLog, Makefile.am, NEWS, README, autogen.sh,
+	configure.in, source/CTS.cpp, source/Makefile.am,
+	source/SimpleWKTTester.cpp, source/WKTIn, source/WKTOut,
+	source/XMLTester.cpp, source/test.xml, source/geom/Makefile.am,
+	source/graph/Makefile.am, source/graph/index/Makefile.am,
+	source/io/Makefile.am, source/io/markup/Makefile.am,
+	source/test/Makefile.am, source/util/Makefile.am: Added GNU
+	autoconf support files submitted by Norman Vine. Moved test files
+	to a new subdirectory.
+
+2002-08-30 08:52  ybychkov
+
+	* source/: algorithm/HCoordinate.cpp,
+	algorithm/LineIntersector.cpp,
+	algorithm/NotRepresentableException.cpp, algorithm/PointInRing.cpp,
+	algorithm/PointLocator.cpp, algorithm/RobustCGAlgorithms.cpp,
+	algorithm/RobustDeterminant.cpp,
+	algorithm/RobustLineIntersector.cpp,
+	algorithm/SimplePointInAreaLocator.cpp,
+	algorithm/SimplePointInRing.cpp, geom/Geometry.cpp,
+	geom/GeometryCollection.cpp, geom/GeometryCollectionIterator.cpp,
+	geom/GeometryFactory.cpp, geom/LineString.cpp, geom/Polygon.cpp,
+	graph/DirectedEdgeStar.cpp, graph/EdgeEndStar.cpp,
+	graph/GeometryGraph.cpp, headers/geom.h, headers/geosAlgorithm.h,
+	headers/graph.h, headers/graphindex.h, headers/operation.h,
+	headers/platform.h, headers/util.h, io/WKTWriter.cpp: 'algorithm'
+	is almost complete
+
+2002-08-22 02:23  ybychkov
+
+	* source/: graph/index/MonotoneChain.cpp,
+	graph/index/MonotoneChainEdge.cpp,
+	graph/index/MonotoneChainIndexer.cpp,
+	graph/index/SegmentIntersector.cpp,
+	graph/index/SimpleMCSweepLineIntersector.cpp,
+	graph/index/SweepLineEvent.cpp, graph/index/SweepLineSegment.cpp,
+	headers/geom.h, headers/geosAlgorithm.h, headers/graph.h,
+	headers/graphindex.h, headers/io.h, headers/operation.h,
+	headers/platform.h, headers/util.h: 'graph/index' finished. Some .h
+	changes.
+
+2002-08-20 22:49  ybychkov
+
+	* source/: graph/GeometryGraph.cpp, headers/graph.h,
+	headers/graphindex.h: Some changes in 'graph'
+
+2002-08-20 14:08  ybychkov
+
+	* source/: XMLTester.cpp, graph/Node.cpp, graph/NodeMap.cpp,
+	graph/PlanarGraph.cpp, headers/geom.h, headers/geosAlgorithm.h,
+	headers/graph.h, headers/io.h: Changed consts to enums
+
+2002-08-14 00:00  ybychkov
+
+	* Assert.cpp, AssertionFailedException.cpp, CTS.cpp,
+	Coordinate.cpp, CoordinateList.cpp, Depth.cpp, Dimension.cpp,
+	Envelope.cpp, Geometry.cpp, GeometryCollection.cpp,
+	GeometryCollectionIterator.cpp, GeometryFactory.cpp,
+	IntersectionMatrix.cpp, Label.cpp, LineSegment.cpp, LineString.cpp,
+	LinearRing.cpp, Location.cpp, MarkupSTL.cpp, MarkupSTL.h,
+	MultiLineString.cpp, MultiPoint.cpp, MultiPolygon.cpp,
+	ParseException.cpp, Point.cpp, Polygon.cpp, Position.cpp,
+	PrecisionModel.cpp, SimpleWKTTester.cpp, StringTokenizer.cpp,
+	TopologyLocation.cpp, WKTIn, WKTOut, WKTReader.cpp, WKTWriter.cpp,
+	Writer.cpp, XMLTester.cpp, geom.h, graph.h, io.h, operation.h,
+	platform.h, test.xml, util.h, source/CTS.cpp,
+	source/SimpleWKTTester.cpp, source/WKTIn, source/WKTOut,
+	source/XMLTester.cpp, source/test.xml, source/geom/Coordinate.cpp,
+	source/geom/CoordinateList.cpp, source/geom/Dimension.cpp,
+	source/geom/Envelope.cpp, source/geom/Geometry.cpp,
+	source/geom/GeometryCollection.cpp,
+	source/geom/GeometryCollectionIterator.cpp,
+	source/geom/GeometryFactory.cpp,
+	source/geom/IntersectionMatrix.cpp, source/geom/LineSegment.cpp,
+	source/geom/LineString.cpp, source/geom/LinearRing.cpp,
+	source/geom/Location.cpp, source/geom/MultiLineString.cpp,
+	source/geom/MultiPoint.cpp, source/geom/MultiPolygon.cpp,
+	source/geom/Point.cpp, source/geom/Polygon.cpp,
+	source/geom/PrecisionModel.cpp, source/graph/Depth.cpp,
+	source/graph/DirectedEdge.cpp, source/graph/DirectedEdgeStar.cpp,
+	source/graph/Edge.cpp, source/graph/EdgeEnd.cpp,
+	source/graph/EdgeEndStar.cpp, source/graph/EdgeIntersection.cpp,
+	source/graph/EdgeIntersectionList.cpp, source/graph/EdgeList.cpp,
+	source/graph/EdgeRing.cpp, source/graph/GraphComponent.cpp,
+	source/graph/Label.cpp, source/graph/Node.cpp,
+	source/graph/NodeFactory.cpp, source/graph/NodeMap.cpp,
+	source/graph/Position.cpp, source/graph/Quadrant.cpp,
+	source/graph/TopologyLocation.cpp, source/headers/geom.h,
+	source/headers/geosAlgorithm.h, source/headers/graph.h,
+	source/headers/graphindex.h, source/headers/io.h,
+	source/headers/operation.h, source/headers/platform.h,
+	source/headers/util.h, source/io/ParseException.cpp,
+	source/io/StringTokenizer.cpp, source/io/WKTReader.cpp,
+	source/io/WKTWriter.cpp, source/io/Writer.cpp,
+	source/io/markup/MarkupSTL.cpp, source/io/markup/MarkupSTL.h,
+	source/util/Assert.cpp, source/util/AssertionFailedException.cpp:
+	New structure of source.
+
+2002-07-11 00:57  ybychkov
+
+	* Assert.cpp, AssertionFailedException.cpp, Depth.cpp,
+	Geometry.cpp, GeometryCollection.cpp, GeometryFactory.cpp,
+	Label.cpp, Position.cpp, TopologyLocation.cpp, WKTReader.cpp,
+	WKTWriter.cpp, XMLTester.cpp, graph.h, operation.h, test.xml,
+	util.h: Assert and some graph classes
+
+2002-07-02 22:24  ybychkov
+
+	* MarkupSTL.cpp, MarkupSTL.h, XMLTester.cpp: started XML tester
+
+2002-07-01 23:41  ybychkov
+
+	* CTS.cpp, GeometryCollection.cpp, GeometryCollectionIterator.cpp,
+	GeometryFactory.cpp, MultiPolygon.cpp, Polygon.cpp,
+	SimpleWKTTester.cpp, WKTIn, WKTOut, WKTReader.cpp, WKTWriter.cpp,
+	geom.h, io.h: 'io' and SimpleTester done
+
+2002-06-26 19:50  ybychkov
+
+	* CTS.cpp, StringTokenizer.cpp, WKTWriter.cpp, Writer.cpp, io.h:
+	'io' is almost done
+
+2002-06-26 02:10  ybychkov
+
+	* CTS.cpp, GeometryCollection.cpp, ParseException.cpp, Polygon.cpp,
+	StringTokenizer.cpp, WKTReader.cpp, io.h: Some 'io' classes done.
+
+2002-06-21 00:13  ybychkov
+
+	* CTS.cpp, CoordinateList.cpp, Geometry.cpp,
+	GeometryCollection.cpp, LineString.cpp, Point.cpp, Polygon.cpp,
+	geom.h: 'geos': first pass done. Some external dependencies and
+	polishing left.
+
+2002-06-20 01:57  ybychkov
+
+	* geom.h, CTS.cpp, Geometry.cpp, GeometryCollection.cpp,
+	GeometryCollectionIterator.cpp, GeometryFactory.cpp: Only
+	Geometry.java left
+
+2002-06-18 23:29  ybychkov
+
+	* CTS.cpp, CoordinateList.cpp, Geometry.cpp,
+	GeometryCollection.cpp, LineString.cpp, LinearRing.cpp,
+	MultiLineString.cpp, MultiPoint.cpp, MultiPolygon.cpp, Point.cpp,
+	Polygon.cpp, geom.h: 'geom' mostly done.
+
+2002-06-14 00:46  ybychkov
+
+	* CTS.cpp, GeometryCollection.cpp, geom.h, GeometryFactory.cpp,
+	MultiLineString.cpp, MultiPoint.cpp, MultiPolygon.cpp, Polygon.cpp:
+	'geom' almost done
+
+2002-06-11 18:47  ybychkov
+
+	* CoordinateList.cpp, LineString.cpp, geom.h: LineString is 99%
+	finished
+
+2002-06-11 16:43  ybychkov
+
+	* CTS.cpp, Coordinate.cpp, CoordinateList.cpp, Dimension.cpp,
+	Envelope.cpp, Geometry.cpp, GeometryCollection.cpp,
+	IntersectionMatrix.cpp, LineSegment.cpp, LineString.cpp,
+	LinearRing.cpp, Location.cpp, Point.cpp, PrecisionModel.cpp,
+	geom.h, operation.h, platform.h: 'geom' package 70% done
+
+2002-06-07 10:47  pramsey
+
+	* CTS.cpp, Coordinate.cpp, CoordinateList.cpp, Dimension.cpp,
+	Envelope.cpp, LineSegment.cpp, Location.cpp, geom.h, platform.h:
+	Initial revision
+
+2002-06-07 10:47  pramsey
+
+	* CTS.cpp, Coordinate.cpp, CoordinateList.cpp, Dimension.cpp,
+	Envelope.cpp, LineSegment.cpp, Location.cpp, geom.h, platform.h:
+	Imported Sources
 
