@@ -1,3 +1,6 @@
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+#include <crtdbg.h>
 
 #include <string>
 #include <iostream>
@@ -15,6 +18,9 @@
 //#include "opRelate.h"
 //#include "MarkupSTL.h"
 
+#include <windows.h>
+#include "Stackwalker.h"
+
 using namespace std;
 using namespace geos;
 
@@ -28,8 +34,12 @@ using namespace geos;
 #define PRED 128
 
 int main(int argC, char* argV[]) {
-//	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
-	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
+
+	InitAllocCheck();
+	{
+//	_CrtSetBreakAlloc(137304);
+	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
+//	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
 //	int out=GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT+PRED;
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
 //	int out=TEST_DESCR+TEST_RESULT;
@@ -51,6 +61,20 @@ int main(int argC, char* argV[]) {
 	int testCount=0;
 	PrecisionModel *pm;
 
+
+//	pm = new PrecisionModel(1, 0, 0);
+//	GeometryFactory *fact = new GeometryFactory(pm, 0);
+//	WKTReader *wktRdr = new WKTReader(fact);
+//	WKTWriter *wktWriter = new WKTWriter();
+////    string wktA = "POLYGON((50 50, 200 50, 200 200, 50 200, 50 50))";
+//    string wktA = "POINT(50 50)";
+////    string wktB = " MULTIPOLYGON(((100 20, 180 20, 180 100, 100 100, 100 20)),((20 100, 100 100, 100 180, 20 180, 20 100)),((100 180, 180 180, 180 260, 100 260, 100 180)),((180 100, 260 100, 260 180, 180 180, 180 100)))";
+//    Geometry *ax=wktRdr->read(wktA);
+////    Geometry b = wktRdr.read(wktB);
+//    
+//	Geometry *b=ax->buffer(5);
+//	cout << b->toString() << endl; 
+//	_CrtSetBreakAlloc(18);
 	CMarkupSTL xml;
 	bool a=xml.Load(source.c_str());
 
@@ -76,8 +100,8 @@ int main(int argC, char* argV[]) {
 	}
 	WKTReader *r=new WKTReader(new GeometryFactory(pm,10));
 	WKTWriter *w=new WKTWriter();
-	Geometry *gA;
-	Geometry *gB;
+	Geometry *gA=NULL;
+	Geometry *gB=NULL;
 
 	while (xml.FindChildElem("case")) {
 		xml.IntoElem();
@@ -134,6 +158,7 @@ int main(int argC, char* argV[]) {
 					} else {
 						succeeded++;
 					}
+					delete im;
 				} else if (opName=="isValid") {
 					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
 					string result;
@@ -166,6 +191,8 @@ int main(int argC, char* argV[]) {
 							failed++;
 						}
 					}
+					delete gRes;
+					delete gRealRes;
 				} else if (opName=="union") {
 					Geometry *gRes=r->read(opRes);
 					gRes->normalize();
@@ -181,6 +208,8 @@ int main(int argC, char* argV[]) {
 							failed++;
 						}
 					}
+					delete gRes;
+					delete gRealRes;
 				} else if (opName=="difference") {
 					Geometry *gRes=r->read(opRes);
 					gRes->normalize();
@@ -196,6 +225,8 @@ int main(int argC, char* argV[]) {
 							failed++;
 						}
 					}
+					delete gRes;
+					delete gRealRes;
 				} else if (opName=="symdifference") {
 					Geometry *gRes=r->read(opRes);
 					gRes->normalize();
@@ -211,6 +242,8 @@ int main(int argC, char* argV[]) {
 							failed++;
 						}
 					}
+					delete gRes;
+					delete gRealRes;
 				} else if (opName=="intersects") {
 					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
 					string result;
@@ -265,10 +298,21 @@ int main(int argC, char* argV[]) {
 		}
 			
 		xml.OutOfElem();
+		delete gA;
+		delete gB;
 	}
 	cout << "Failed: ";
 	cout << failed << endl;
 	cout << "Succeeded: ";
 	cout << succeeded << endl;
+
+//	_CrtDumpMemoryLeaks();
+
 	cout << "End Test";
+	delete pm;
+	delete r;
+	delete w;
+
+	}
+	DeInitAllocCheck();
 }

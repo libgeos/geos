@@ -106,7 +106,14 @@ void CoordinateList::add(Coordinate& c,bool allowRepeated) {
 
 CoordinateList* CoordinateList::removeRepeatedPoints(CoordinateList *cl){
 	CoordinateList* ret=CoordinateListFactory::internalFactory->createCoordinateList();
-	ret->add(cl->toVector(),false);
-	return ret;
+	vector<Coordinate> *v=cl->toVector();
+	ret->add(v,false);
+	delete v;
+	v=ret->toVector();
+	cl->setPoints(*(v));
+	delete v;
+	delete ret;
+//	return ret;
+	return cl;
 }
 }

@@ -13,8 +13,8 @@ namespace geos {
 * to increase the precision of the calculation input points should be normalized
 * before passing them to this routine.
 */
-Coordinate& HCoordinate::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
-	HCoordinate *intHCoord=new HCoordinate(HCoordinate(HCoordinate(p1),HCoordinate(p2)),HCoordinate(HCoordinate(q1),HCoordinate(q2)));
+Coordinate* HCoordinate::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
+	auto_ptr<HCoordinate> intHCoord(new HCoordinate(HCoordinate(HCoordinate(p1),HCoordinate(p2)),HCoordinate(HCoordinate(q1),HCoordinate(q2))));
 	return intHCoord->getCoordinate();
 }
 
@@ -58,7 +58,7 @@ double HCoordinate::getY() {
 	return a;
 }
 
-Coordinate& HCoordinate::getCoordinate() {
-	return *(new Coordinate(getX(),getY()));
+Coordinate* HCoordinate::getCoordinate() {
+	return new Coordinate(getX(),getY());
 }
 }

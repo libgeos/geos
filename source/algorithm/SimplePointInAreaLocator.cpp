@@ -34,7 +34,7 @@ bool SimplePointInAreaLocator::containsPoint(Coordinate& p,Geometry *geom){
 }
 
 bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate& p,Polygon *poly) {
-	CGAlgorithms* cga=new RobustCGAlgorithms();
+	auto_ptr<CGAlgorithms> cga(new RobustCGAlgorithms());
 	if (poly->isEmpty()) return false;
 	LineString *shell=poly->getExteriorRing();
 	if (!cga->isPointInRing(p,shell->getCoordinates())) {

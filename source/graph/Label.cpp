@@ -43,9 +43,9 @@ Label::Label() {
 	elt[1]=new TopologyLocation(Location::UNDEF);
 }
 
-Label::Label(const Label &l) {
-	elt[0]=new TopologyLocation(*(l.elt[0]));
-	elt[1]=new TopologyLocation(*(l.elt[1]));
+Label::Label(Label *l) {
+	elt[0]=new TopologyLocation(l->elt[0]);
+	elt[1]=new TopologyLocation(l->elt[1]);
 }
 
 Label::~Label() {
@@ -114,7 +114,7 @@ void Label::setAllLocationsIfNull(int location){
 void Label::merge(Label* lbl) {
 	for (int i=0; i<2; i++) {
 		if (elt[i]==NULL && lbl->elt[i]!=NULL) {
-			elt[i]=new TopologyLocation(*(lbl->elt[i]));
+			elt[i]=new TopologyLocation(lbl->elt[i]);
 		} else {
 			elt[i]->merge(lbl->elt[i]);
 		}
@@ -167,8 +167,11 @@ bool Label::allPositionsEqual(int geomIndex, int loc){
  * Converts one GeometryLocation to a Line location
  */
 void Label::toLine(int geomIndex){
-	if (elt[geomIndex]->isArea())
+	if (elt[geomIndex]->isArea()) {
+		TopologyLocation *tl=elt[geomIndex];
 		elt[geomIndex]=new TopologyLocation((*(elt[geomIndex]->getLocations()))[0]);
+		delete tl;
+	}
 }
 
 string Label::toString(){

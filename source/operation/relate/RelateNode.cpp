@@ -4,6 +4,9 @@
 namespace geos {
 
 RelateNode::RelateNode(Coordinate& coord,EdgeEndStar *edges): Node(coord,edges) {}
+RelateNode::~RelateNode() {
+//	delete edges;
+}
 
 /**
 * Update the IM with the contribution for this component.

@@ -1,6 +1,7 @@
 #ifndef GEOS_IO_H
 #define GEOS_IO_H
 
+#include <memory>
 #include <iostream>
 #include <string>
 //#include <vector>

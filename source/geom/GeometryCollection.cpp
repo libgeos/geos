@@ -21,6 +21,7 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,Precisi
 		newGeometries=new vector<Geometry *>();
 	}
 	if (hasNullElements(newGeometries)) {
+		delete newGeometries;
 		throw new IllegalArgumentException("geometries must not contain null elements\n");
 	}
 	geometries=newGeometries;
@@ -141,7 +142,9 @@ void GeometryCollection::normalize() {
 Envelope* GeometryCollection::computeEnvelopeInternal() {
 	Envelope* envelope=new Envelope();
 	for (unsigned int i=0; i<geometries->size(); i++) {
-		envelope->expandToInclude((*geometries)[i]->getEnvelopeInternal());
+		Envelope *env=(*geometries)[i]->getEnvelopeInternal();
+		envelope->expandToInclude(env);
+		delete env;
 	}
 	return envelope;
 }
@@ -189,7 +192,10 @@ void GeometryCollection::apply(GeometryComponentFilter *filter) {
 	}
 }
 
-GeometryCollection::~GeometryCollection(void){
+GeometryCollection::~GeometryCollection(){
+	for(int i=0;i<(int)geometries->size();i++) {
+		delete (*geometries)[i];
+	}
 	delete geometries;
 }
 
@@ -208,14 +214,17 @@ Point* GeometryCollection::getCentroid() {
 		CentroidPoint *cent=new CentroidPoint();
 		cent->add(this);
 		centPt=cent->getCentroid();
+		delete cent;
 	} else if (dim==1) {
 		CentroidLine *cent=new CentroidLine();
 		cent->add(this);
 		centPt=cent->getCentroid();
+		delete cent;
 	} else {
 		CentroidArea *cent=new CentroidArea();
 		cent->add(this);
 		centPt=cent->getCentroid();
+		delete cent;
 	}
 	return GeometryFactory::createPointFromInternalCoord(centPt,this);
 }

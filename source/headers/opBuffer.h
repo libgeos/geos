@@ -1,6 +1,7 @@
 #ifndef GEOS_OPBUFFER_H
 #define GEOS_OPBUFFER_H
 
+#include <memory>
 #include "platform.h"
 #include "operation.h"
 #include "opOverlay.h"

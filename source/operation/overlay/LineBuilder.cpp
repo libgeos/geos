@@ -13,7 +13,6 @@ LineBuilder::LineBuilder(OverlayOp *newOp,GeometryFactory *newGeometryFactory,Po
 
 LineBuilder::~LineBuilder() {
 	delete lineEdgesList;
-	delete resultLineList;
 }
 
 /**
@@ -114,7 +113,7 @@ void LineBuilder::buildLines(int opCode) {
 		//e.print(System.out);
 		////System.out.println(label);
 		//if (OverlayGraph.isResultOfOp(label, opCode)) {
-			LineString *line=geometryFactory->createLineString(e->getCoordinates());
+		LineString *line=geometryFactory->createLineString(CoordinateListFactory::internalFactory->createCoordinateList(e->getCoordinates()));
 			resultLineList->push_back(line);
 			e->setInResult(true);
 		//}

@@ -51,7 +51,14 @@ bool ConnectedInteriorTester::isInteriorsConnected() {
 	* this means that one or more holes must have split the interior of the
 	* polygon into at least two pieces.  The polygon is thus invalid.
 	*/
-	return !hasUnvisitedShellEdge(edgeRings);
+	bool res=!hasUnvisitedShellEdge(edgeRings);
+	delete graph;
+	delete splitEdges;
+	for(int i=0;i<(int)edgeRings->size();i++) {
+		delete (*edgeRings)[i];
+	}
+	delete edgeRings;
+	return res;
 }
 
 void ConnectedInteriorTester::setAllEdgesInResult(PlanarGraph *graph) {

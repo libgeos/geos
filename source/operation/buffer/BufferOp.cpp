@@ -108,7 +108,7 @@ void BufferOp::insertEdge(Edge *e){
 		// check if new edge is in reverse direction to existing edge
 		// if so, must flip the label before merging it
 		if (!existingEdge->isPointwiseEqual(e)) {
-			labelToMerge=new Label(*(e->getLabel()));
+			labelToMerge=new Label(e->getLabel());
 			labelToMerge->flip();
 		}
 		existingLabel->merge(labelToMerge);

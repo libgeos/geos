@@ -6,15 +6,17 @@ namespace geos {
 BinTreeNode* BinTreeNode::createNode(BinTreeInterval *itemInterval){
 	Key *key=new Key(itemInterval);
 	//System.out.println("input: " + env + "  binaryEnv: " + key.getEnvelope());
-	BinTreeNode* node=new BinTreeNode(key->getInterval(),key->getLevel());
+	BinTreeNode* node=new BinTreeNode(new BinTreeInterval(key->getInterval()),key->getLevel());
+	delete key;
 	return node;
 }
 
 BinTreeNode* BinTreeNode::createExpanded(BinTreeNode *node,BinTreeInterval *addInterval){
-	BinTreeInterval *expandInt=new BinTreeInterval(*addInterval);
+	BinTreeInterval *expandInt=new BinTreeInterval(addInterval);
 	if (node!=NULL) expandInt->expandToInclude(node->interval);
 	BinTreeNode *largerNode=createNode(expandInt);
 	if (node!=NULL) largerNode->insert(node);
+	delete expandInt;
 	return largerNode;
 }
 
@@ -22,6 +24,10 @@ BinTreeNode::BinTreeNode(BinTreeInterval *newInterval,int newLevel){
 	interval=newInterval;
 	level=newLevel;
 	centre=(interval->getMin()+interval->getMax())/2;
+}
+
+BinTreeNode::~BinTreeNode(){
+	delete interval;
 }
 
 BinTreeInterval* BinTreeNode::getInterval() {

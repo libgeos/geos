@@ -1,6 +1,7 @@
 #ifndef GEOS_INDEXSWEEPLINE_H
 #define GEOS_INDEXSWEEPLINE_H
 
+#include <memory>
 #include <vector>
 #include "platform.h"
 

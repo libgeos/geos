@@ -4,6 +4,14 @@
 namespace geos {
 
 EdgeEndBundleStar::EdgeEndBundleStar(){}
+EdgeEndBundleStar::~EdgeEndBundleStar(){
+	map<EdgeEnd*,void*,EdgeEndLT>::iterator	it=edgeMap->begin();
+	for (;it!=edgeMap->end();it++) {
+		EdgeEndBundle *eeb=(EdgeEndBundle*) it->second;
+//		void *ee= it->second;
+		delete eeb;
+	}
+}
 
 /**
 * Insert a EdgeEnd in order in the list.

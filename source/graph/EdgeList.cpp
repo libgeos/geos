@@ -4,6 +4,11 @@ namespace geos {
 
 EdgeList::EdgeList(){}
 
+EdgeList::~EdgeList(){
+//	for (int i=0; i<(int)this->size();i++) {
+//		pop_back();
+//	}
+}
 /**
  * Insert an edge unless it is already in the list
  */
@@ -27,7 +32,6 @@ int EdgeList::findEdgeIndex(Edge *e) {
 string EdgeList::print() {
 	string out="MULTILINESTRING ( ";
 	for(unsigned int j=0; j<this->size();j++) {
-//		Edge *e=at(j);
         Edge *e=(*this)[j];
 		if (j>0) out+=",";
 		out+="(";

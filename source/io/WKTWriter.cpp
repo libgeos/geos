@@ -42,7 +42,9 @@ string WKTWriter::write(Geometry *geometry) {
 //	} catch (IOException ex) {
 //		Assert::shouldNeverReachHere();
 //	}
-	return sw->toString();
+	string res=sw->toString();
+	delete sw;
+	return res;
 }
 
 void WKTWriter::write(Geometry *geometry, Writer *writer) {
@@ -146,6 +148,7 @@ void WKTWriter::appendCoordinate(Coordinate* coordinate, Writer *writer, Precisi
 	out+=" ";
 	out+=writeNumber(externalCoordinate->y);
 	writer->write(out);
+	delete externalCoordinate;
 }
 
 string WKTWriter::writeNumber(double d) {

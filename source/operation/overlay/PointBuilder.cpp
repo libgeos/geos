@@ -15,6 +15,7 @@ PointBuilder::PointBuilder(OverlayOp *newOp,GeometryFactory *newGeometryFactory,
 vector<Point*>* PointBuilder::build(int opCode){
 	vector<Node*>* nodeList=collectNodes(opCode);
 	vector<Point*>* resultPointList=simplifyPoints(nodeList);
+	delete nodeList;
 	return resultPointList;
 }
 

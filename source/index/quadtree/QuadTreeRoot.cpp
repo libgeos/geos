@@ -7,6 +7,7 @@ namespace geos {
 Coordinate* QuadTreeRoot::origin=new Coordinate(0.0, 0.0);
 
 QuadTreeRoot::QuadTreeRoot(){}
+QuadTreeRoot::~QuadTreeRoot(){}
 
 /**
 * Insert an item into the quadtree this is the root of.
@@ -29,6 +30,7 @@ void QuadTreeRoot::insert(Envelope *itemEnv,void* item){
 	*/
 	if (node==NULL || !node->getEnvelope()->contains(itemEnv)) {
 		QuadTreeNode *largerNode=QuadTreeNode::createExpanded(node,itemEnv);
+		delete subnode[index];
 		subnode[index]=largerNode;
 	}
 	/**

@@ -12,13 +12,17 @@ WKTReader::WKTReader(GeometryFactory *gf){
 	precisionModel=new PrecisionModel(*(gf->getPrecisionModel()));
 }
 WKTReader::~WKTReader(){
+	delete geometryFactory;
 	delete precisionModel;
 }
 
 Geometry* WKTReader::read(string wellKnownText){
-	StringTokenizer *tokenizer=new StringTokenizer(wellKnownText);
+	auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
 	try {
-		return readGeometryTaggedText(tokenizer);
+		StringTokenizer *st=tokenizer.release();
+		Geometry *g=readGeometryTaggedText(st);
+		delete st;
+		return g;
 	}
 	catch (ParseException *e) {
 		throw new ParseException(e->toString());
@@ -33,16 +37,21 @@ CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
 	Coordinate* externalCoordinate=new Coordinate();
 	Coordinate* internalCoordinate=new Coordinate();
+	Coordinate *c;
 	externalCoordinate->x=getNextNumber(tokenizer);
 	externalCoordinate->y=getNextNumber(tokenizer);
 	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
-	coordinates->add(*(new Coordinate(*internalCoordinate)));
+	c=new Coordinate(*internalCoordinate);
+	coordinates->add(*c);
+	delete c;
 	nextToken=getNextCloserOrComma(tokenizer);
 	while (nextToken==",") {
 		externalCoordinate->x=getNextNumber(tokenizer);
 		externalCoordinate->y=getNextNumber(tokenizer);
 		precisionModel->toInternal(*externalCoordinate,internalCoordinate);
-		coordinates->add(*(new Coordinate(*internalCoordinate)));
+		c=new Coordinate(*internalCoordinate);
+		coordinates->add(*c);
+		delete c;
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	delete externalCoordinate;
@@ -149,7 +158,10 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 	Coordinate* internalCoordinate=new Coordinate();
 	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
 	getNextCloser(tokenizer);
-	return geometryFactory->createPoint(*internalCoordinate);
+	Point *pt=geometryFactory->createPoint(*internalCoordinate);
+	delete externalCoordinate;
+	delete internalCoordinate;
+	return pt;
 }
 
 LineString* WKTReader::readLineStringText(StringTokenizer *tokenizer) {
@@ -170,10 +182,10 @@ Polygon* WKTReader::readPolygonText(StringTokenizer *tokenizer) {
 		return geometryFactory->createPolygon(NULL,NULL);
 	}
 	vector<Geometry *> *holes=new vector<Geometry *>();
-	LinearRing *shell=new LinearRing(*readLinearRingText(tokenizer));
+	LinearRing *shell=readLinearRingText(tokenizer);
 	nextToken=getNextCloserOrComma(tokenizer);
 	while(nextToken==",") {
-		LinearRing *hole=new LinearRing(*readLinearRingText(tokenizer));
+		LinearRing *hole=readLinearRingText(tokenizer);
 		holes->push_back(hole);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
@@ -186,11 +198,11 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 		return geometryFactory->createMultiLineString(NULL);
 	}
 	vector<Geometry *> *lineStrings=new vector<Geometry *>();
-	LineString *lineString=new LineString(*readLineStringText(tokenizer));
+	LineString *lineString=readLineStringText(tokenizer);
 	lineStrings->push_back(lineString);
 	nextToken=getNextCloserOrComma(tokenizer);
 	while(nextToken==",") {
-		LineString *lineString=new LineString(*readLineStringText(tokenizer));
+		LineString *lineString=readLineStringText(tokenizer);
 		lineStrings->push_back(lineString);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
@@ -203,11 +215,11 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 		return geometryFactory->createMultiPolygon(NULL);
 	}
 	vector<Geometry *> *polygons=new vector<Geometry *>();
-	Polygon *polygon=new Polygon(*readPolygonText(tokenizer));
+	Polygon *polygon=readPolygonText(tokenizer);
 	polygons->push_back(polygon);
 	nextToken=getNextCloserOrComma(tokenizer);
 	while(nextToken==",") {
-		Polygon *polygon=new Polygon(*readPolygonText(tokenizer));
+		Polygon *polygon=readPolygonText(tokenizer);
 		polygons->push_back(polygon);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}

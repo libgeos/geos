@@ -19,6 +19,7 @@ QuadTreeKey::QuadTreeKey(Envelope *itemEnv){
 
 QuadTreeKey::~QuadTreeKey(){
 	delete pt;
+	delete env;
 }
 
 Coordinate* QuadTreeKey::getPoint() {

@@ -20,10 +20,13 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CG
 
 EdgeRing::~EdgeRing(){
 	delete edges;
-	delete pts;
+//	delete pts;
 	delete label;
 	delete ring;
-	delete shell;
+//	delete shell;
+	for(int i=0;i<(int)holes->size();i++) {
+		delete (*holes)[i];
+	}
 	delete holes;
 }
 
@@ -40,7 +43,8 @@ Coordinate& EdgeRing::getCoordinate(int i) {
 }
 
 LinearRing* EdgeRing::getLinearRing() {
-	return ring;
+	return new LinearRing(*ring);
+//	return ring;
 }
 
 Label* EdgeRing::getLabel() {
@@ -68,6 +72,7 @@ Polygon* EdgeRing::toPolygon(GeometryFactory* geometryFactory){
 	vector<Geometry *> *holeLR=new vector<Geometry *>();
 	for (unsigned int i=0;i<holes->size();i++) {
         holeLR->push_back((*holes)[i]->getLinearRing());
+//        holeLR->push_back((*holes)[i]->ring);
 	}
 	return geometryFactory->createPolygon(getLinearRing(),holeLR);
 }

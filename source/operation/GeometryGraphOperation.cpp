@@ -32,4 +32,14 @@ void GeometryGraphOperation::setComputationPrecision(PrecisionModel* pm) {
     resultPrecisionModel=pm;
     li->setMakePrecise(resultPrecisionModel);
 }
+
+GeometryGraphOperation::~GeometryGraphOperation() {
+	//delete resultPrecisionModel;
+	//delete arg;
+	for(int i=0;i<(int)arg->size();i++) {
+		delete (*arg)[i];
+	}
+	delete arg;
+}
+
 }

@@ -1,4 +1,5 @@
 #include "../../headers/indexBintree.h"
+#include "../../headers/indexChain.h"
 
 namespace geos {
 
@@ -20,7 +21,12 @@ NodeBase::NodeBase() {
 }
 
 NodeBase::~NodeBase() {
+	for(int i=0;i<(int)items->size();i++) {
+		delete (indexMonotoneChain*)(*items)[i];
+	}
 	delete items;
+	delete subnode[0];
+	delete subnode[1];
 }
 
 vector<void*>* NodeBase::getItems() {

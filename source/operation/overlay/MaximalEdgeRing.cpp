@@ -9,6 +9,9 @@ EdgeRing(start,geometryFactory,cga){
 	computeRing();
 }
 
+MaximalEdgeRing::~MaximalEdgeRing(){
+}
+
 DirectedEdge* MaximalEdgeRing::getNext(DirectedEdge *de) {
 	return de->getNext();
 }

@@ -1,3 +1,7 @@
+//#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+//#include <crtdbg.h>
+
 #include <stdio.h>
 #include <time.h>
 
@@ -43,6 +47,8 @@ int main(int argC, char* argV[]) {
 	run(256000,fact);
 	run(512000,fact);
 	run(1024000,fact);
+
+//	_CrtDumpMemoryLeaks();
 
 	cout << "Done" << endl;
 

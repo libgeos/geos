@@ -15,12 +15,12 @@ void Edge::updateIM(Label *lbl,IntersectionMatrix *im){
 }
 
 Edge::Edge(){
-	eiList=new EdgeIntersectionList(this);
+	eiList=NULL;
 	isIsolatedVar=true;
-	depth=new Depth();
+	depth=NULL;
 	depthDelta=0;
 	mce=NULL;
-	pts=CoordinateListFactory::internalFactory->createCoordinateList();
+	pts=NULL;
 }
 
 Edge::~Edge(){
@@ -28,15 +28,14 @@ Edge::~Edge(){
 	delete depth;
 	delete mce;
 	delete pts;
-
 }
 
-Edge::Edge(CoordinateList* newPts, Label *newLabel){
+Edge::Edge(CoordinateList* newPts, Label *newLabel):GraphComponent(newLabel){
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
 	depthDelta=0;
-	label=newLabel;
+//	label=newLabel;
 	mce=NULL;
 	pts=newPts;
 }

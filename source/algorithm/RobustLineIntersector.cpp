@@ -4,6 +4,7 @@
 namespace geos {
 
 RobustLineIntersector::RobustLineIntersector(){}
+RobustLineIntersector::~RobustLineIntersector(){}
 
 void RobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2) {
 	isProperVar=false;
@@ -75,7 +76,9 @@ int RobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordi
 		}
 	} else {
 		isProperVar=true;
-		intPt[0].setCoordinate(intersection(p1, p2, q1, q2));
+		Coordinate *c=intersection(p1, p2, q1, q2);
+		intPt[0].setCoordinate(*c);
+		delete c;
 	}
 	return DO_INTERSECT;
 }
@@ -128,7 +131,7 @@ int RobustLineIntersector::computeCollinearIntersection(Coordinate& p1,Coordinat
 	return DONT_INTERSECT;
 }
 
-Coordinate& RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
+Coordinate* RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
 	//HCoordinate *l1=new HCoordinate(HCoordinate(p1),HCoordinate(p2));
 	//HCoordinate *l2=new HCoordinate(HCoordinate(q1),HCoordinate(q2));
 	//HCoordinate intHCoord(*l1,*l2);
@@ -152,7 +155,9 @@ Coordinate& RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Co
 	normalize(n1, n2, n3, n4, normPt);
 	Coordinate intPt;
 	try {
-		intPt.setCoordinate(HCoordinate::intersection(*n1,*n2,*n3,*n4));
+		Coordinate *h=HCoordinate::intersection(*n1,*n2,*n3,*n4);
+		intPt.setCoordinate(*h);
+		delete h;
 	} catch (NotRepresentableException *e) {
 		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
     }
@@ -165,7 +170,8 @@ Coordinate& RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Co
 	delete n2;
 	delete n3;
 	delete n4;
-	return *(new Coordinate(intPt));
+	delete normPt;
+	return new Coordinate(intPt);
 }
 
 void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt){

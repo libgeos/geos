@@ -134,7 +134,7 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring) {
 }
 
 bool RobustCGAlgorithms::isOnLine(Coordinate& p,CoordinateList* pt) {
-	LineIntersector* lineIntersector=new RobustLineIntersector();
+	auto_ptr<LineIntersector> lineIntersector(new RobustLineIntersector());
 	for(int i=1;i<pt->getSize();i++) {
 		Coordinate& p0=pt->getAt(i-1);
 		Coordinate& p1=pt->getAt(i);

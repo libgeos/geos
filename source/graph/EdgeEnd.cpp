@@ -17,9 +17,9 @@ EdgeEnd::EdgeEnd() {
 }
 
 EdgeEnd::~EdgeEnd() {
-	delete edge;
+//	delete edge;
 	delete label;
-	delete node;  
+//	delete node;  
 }
 
 EdgeEnd::EdgeEnd(Edge* newEdge){

@@ -21,34 +21,45 @@ Geometry::Geometry() {
 	SRID=0;
 	precisionModel=new PrecisionModel();
 	envelope=new Envelope();
-	sortedClasses.push_back(typeid(Point).name());
-	sortedClasses.push_back(typeid(MultiPoint).name());
-	sortedClasses.push_back(typeid(LineString).name());
-	sortedClasses.push_back(typeid(LinearRing).name());
-	sortedClasses.push_back(typeid(MultiLineString).name());
-	sortedClasses.push_back(typeid(Polygon).name());
-	sortedClasses.push_back(typeid(MultiPolygon).name());
-	sortedClasses.push_back(typeid(GeometryCollection).name());
+	sortedClasses=new vector<string>();
+	sortedClasses->push_back(typeid(Point).name());
+	sortedClasses->push_back(typeid(MultiPoint).name());
+	sortedClasses->push_back(typeid(LineString).name());
+	sortedClasses->push_back(typeid(LinearRing).name());
+	sortedClasses->push_back(typeid(MultiLineString).name());
+	sortedClasses->push_back(typeid(Polygon).name());
+	sortedClasses->push_back(typeid(MultiPolygon).name());
+	sortedClasses->push_back(typeid(GeometryCollection).name());
 }
 
-Geometry::Geometry(const Geometry &geom): sortedClasses(geom.sortedClasses) {
+Geometry::Geometry(const Geometry &geom) {
 	precisionModel=new PrecisionModel(*geom.precisionModel);
 	envelope=geom.envelope;
 	SRID=geom.SRID;
+	sortedClasses=new vector<string>();
+	sortedClasses->push_back(typeid(Point).name());
+	sortedClasses->push_back(typeid(MultiPoint).name());
+	sortedClasses->push_back(typeid(LineString).name());
+	sortedClasses->push_back(typeid(LinearRing).name());
+	sortedClasses->push_back(typeid(MultiLineString).name());
+	sortedClasses->push_back(typeid(Polygon).name());
+	sortedClasses->push_back(typeid(MultiPolygon).name());
+	sortedClasses->push_back(typeid(GeometryCollection).name());
 }
 
 Geometry::Geometry(PrecisionModel* newPrecisionModel, int newSRID){
 	precisionModel=new PrecisionModel(*newPrecisionModel);
 	envelope=new Envelope();
 	SRID = newSRID;
-	sortedClasses.push_back(typeid(Point).name());
-	sortedClasses.push_back(typeid(MultiPoint).name());
-	sortedClasses.push_back(typeid(LineString).name());
-	sortedClasses.push_back(typeid(LinearRing).name());
-	sortedClasses.push_back(typeid(MultiLineString).name());
-	sortedClasses.push_back(typeid(Polygon).name());
-	sortedClasses.push_back(typeid(MultiPolygon).name());
-	sortedClasses.push_back(typeid(GeometryCollection).name());
+	sortedClasses=new vector<string>();
+	sortedClasses->push_back(typeid(Point).name());
+	sortedClasses->push_back(typeid(MultiPoint).name());
+	sortedClasses->push_back(typeid(LineString).name());
+	sortedClasses->push_back(typeid(LinearRing).name());
+	sortedClasses->push_back(typeid(MultiLineString).name());
+	sortedClasses->push_back(typeid(Polygon).name());
+	sortedClasses->push_back(typeid(MultiPolygon).name());
+	sortedClasses->push_back(typeid(GeometryCollection).name());
 }
 
 bool Geometry::hasNonEmptyElements(vector<Geometry *>* geometries) {
@@ -151,14 +162,17 @@ Point* Geometry::getCentroid() {
 		CentroidPoint *cent=new CentroidPoint();
 		cent->add(this);
 		centPt=cent->getCentroid();
+		delete cent;
 	} else if (dim==1) {
 		CentroidLine *cent=new CentroidLine();
 		cent->add(this);
 		centPt=cent->getCentroid();
+		delete cent;
 	} else {
 		CentroidArea *cent=new CentroidArea();
 		cent->add(this);
 		centPt=cent->getCentroid();
+		delete cent;
 	}
 	return GeometryFactory::createPointFromInternalCoord(centPt,this);
 }
@@ -177,12 +191,15 @@ Point* Geometry::getInteriorPoint() {
 	if (dim==0) {
 		InteriorPointPoint* intPt=new InteriorPointPoint(this);
 		interiorPt=intPt->getInteriorPoint();
+		delete intPt;
 	} else if (dim==1) {
 		InteriorPointLine* intPt=new InteriorPointLine(this);
 		interiorPt=intPt->getInteriorPoint();
+		delete intPt;
 	} else {
 		InteriorPointArea* intPt=new InteriorPointArea(this);
 		interiorPt=intPt->getInteriorPoint();
+		delete intPt;
 	}
 	return GeometryFactory::createPointFromInternalCoord(interiorPt,this);
 }
@@ -225,43 +242,70 @@ Envelope* Geometry::getEnvelopeInternal() {
 	if (envelope->isNull()) {
 		return computeEnvelopeInternal();
 	} else 
-		return envelope;
+		return new Envelope(*envelope);
 }
 
 bool Geometry::disjoint(Geometry *g){
-	return relate(g)->isDisjoint();
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isDisjoint();
+	delete im;
+	return res;
 }
 
 bool Geometry::touches(Geometry *g){
-	return relate(g)->isTouches(getDimension(), g->getDimension());
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isTouches(getDimension(), g->getDimension());
+	delete im;
+	return res;
 }
 
 bool Geometry::intersects(Geometry *g){
-	return relate(g)->isIntersects();
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isIntersects();
+	delete im;
+	return res;
 }
 
 bool Geometry::crosses(Geometry *g){
-	return relate(g)->isCrosses(getDimension(), g->getDimension());
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isCrosses(getDimension(), g->getDimension());
+	delete im;
+	return res;
 }
 
 bool Geometry::within(Geometry *g){
-	return relate(g)->isWithin();
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isWithin();
+	delete im;
+	return res;
 }
 
 bool Geometry::contains(Geometry *g){
-	return relate(g)->isContains();
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isContains();
+	delete im;
+	return res;
 }
 
 bool Geometry::overlaps(Geometry *g){
-	return relate(g)->isOverlaps(getDimension(), g->getDimension());
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isOverlaps(getDimension(), g->getDimension());
+	delete im;
+	return res;
 }
 
 bool Geometry::relate(Geometry *g, string intersectionPattern) {
-	return relate(g)->matches(intersectionPattern);
+	IntersectionMatrix *im=relate(g);
+	bool res=im->matches(intersectionPattern);
+	delete im;
+	return res;
 }
 
 bool Geometry::equals(Geometry *g){
-	return relate(g)->isEquals(getDimension(), g->getDimension());
+	IntersectionMatrix *im=relate(g);
+	bool res=im->isEquals(getDimension(), g->getDimension());
+	delete im;
+	return res;
 }
 
 IntersectionMatrix* Geometry::relate(Geometry *g) {
@@ -359,8 +403,11 @@ bool Geometry::isEquivalentClass(Geometry *other){
 }
 
 void Geometry::checkNotGeometryCollection(Geometry *g){
-	if ((typeid(*g)==typeid(GeometryCollection)))
+	if ((typeid(*g)==typeid(GeometryCollection))) {
+		delete precisionModel;
+		delete envelope;
 		throw new IllegalArgumentException("This method does not support GeometryCollection arguments\n");
+	}
 }
 
 //void Geometry::checkEqualSRID(Geometry *other) {
@@ -378,8 +425,8 @@ void Geometry::checkNotGeometryCollection(Geometry *g){
 int Geometry::getClassSortIndex() {
     const type_info &t=typeid(*this);
     string tst=t.name();
-	for (unsigned int i=0; i<sortedClasses.size(); i++) {
-		if ( sortedClasses[i]==typeid(*this).name() ) {
+	for (unsigned int i=0; i<sortedClasses->size(); i++) {
+		if ( (*sortedClasses)[i]==typeid(*this).name() ) {
 			return i;
 		}
 	}
@@ -472,6 +519,7 @@ double Geometry::getLength() {
 
 Geometry::~Geometry(){
 	delete precisionModel;
+	delete sortedClasses;
 	delete envelope;
 }
 

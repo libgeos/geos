@@ -3,17 +3,22 @@
 
 namespace geos {
 
-int Key::computeLevel(BinTreeInterval *interval) {
-	double dx=interval->getWidth();
+int Key::computeLevel(BinTreeInterval *newInterval) {
+	double dx=newInterval->getWidth();
 	//int level = BinaryPower.exponent(dx) + 1;
 	int level=DoubleBits::exponent(dx)+1;
 	return level;
 }
 
-Key::Key(BinTreeInterval *interval){
+Key::Key(BinTreeInterval *newInterval){
+	interval=NULL;
 	pt=0.0;
 	level=0;
-	computeKey(interval);
+	computeKey(newInterval);
+}
+
+Key::~Key(){
+	delete interval;
 }
 
 double Key::getPoint() {
@@ -34,6 +39,7 @@ BinTreeInterval* Key::getInterval() {
 */
 void Key::computeKey(BinTreeInterval *itemInterval) {
 	level=computeLevel(itemInterval);
+	delete interval;
 	interval=new BinTreeInterval();
 	computeInterval(level,itemInterval);
 	// MD - would be nice to have a non-iterative form of this algorithm

@@ -5,7 +5,8 @@ namespace geos {
 
 QuadTreeNode* QuadTreeNode::createNode(Envelope *env) {
 	QuadTreeKey* key=new QuadTreeKey(env);
-	QuadTreeNode *node=new QuadTreeNode(key->getEnvelope(),key->getLevel());
+	QuadTreeNode *node=new QuadTreeNode(new Envelope(*(key->getEnvelope())),key->getLevel());
+	delete key;
 	return node;
 }
 
@@ -14,6 +15,7 @@ QuadTreeNode* QuadTreeNode::createExpanded(QuadTreeNode *node,Envelope *addEnv){
 	if (node!=NULL) expandEnv->expandToInclude(node->env);
 	QuadTreeNode *largerNode=createNode(expandEnv);
 	if (node!=NULL) largerNode->insertNode(node);
+	delete expandEnv;
 	return largerNode;
 }
 
@@ -23,6 +25,11 @@ QuadTreeNode::QuadTreeNode(Envelope *nenv,int nlevel){
 	centre=new Coordinate();
 	centre->x=(env->getMinX()+env->getMaxX())/2;
 	centre->y=(env->getMinY()+env->getMaxY())/2;
+}
+
+QuadTreeNode::~QuadTreeNode(){
+	delete env;
+	delete centre;
 }
 
 Envelope* QuadTreeNode::getEnvelope() {

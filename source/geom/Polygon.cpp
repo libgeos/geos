@@ -9,8 +9,12 @@ Polygon::Polygon(){
 	holes=new vector<Geometry *>();
 }
 Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID){
-	shell=p.shell;
-	holes=p.holes;
+	shell=new LinearRing(*p.shell);
+	holes=new vector<Geometry *>();
+	for(int i=0;i<(int)p.holes->size();i++) {
+		LinearRing *h=new LinearRing(* (LinearRing*)(*p.holes)[i]);
+		holes->push_back(h);
+	}
 }
 
 Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID){
@@ -27,9 +31,13 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		newHoles=new vector<Geometry *>();
 
 	if (hasNullElements(newHoles)) {
+		delete newShell;
+		delete newHoles;
 		throw new IllegalArgumentException("holes must not contain null elements");
 	}
 	if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
+		delete newShell;
+		delete newHoles;
 		throw new IllegalArgumentException("shell is empty but holes are not");
 	}
 	shell=newShell;
@@ -230,6 +238,9 @@ void Polygon::apply(GeometryComponentFilter *filter) {
 
 Polygon::~Polygon(){
 	delete shell;
+	for(int i=0;i<(int)holes->size();i++) {
+		delete (*holes)[i];
+	}
 	delete holes;
 }
 }

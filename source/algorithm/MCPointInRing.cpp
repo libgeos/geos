@@ -20,8 +20,13 @@ MCPointInRing::MCPointInRing(LinearRing *newRing) {
     buildIndex();
 }
 
+MCPointInRing::~MCPointInRing() {
+	delete tree;
+	delete interval;
+}
+
 void MCPointInRing::buildIndex() {
-	Envelope *env=ring->getEnvelopeInternal();
+//	Envelope *env=ring->getEnvelopeInternal();
 	tree=new Bintree();
 	CoordinateList *pts=CoordinateList::removeRepeatedPoints(ring->getCoordinates());
 	vector<indexMonotoneChain*> *mcList=MonotoneChainBuilder::getChains(pts);
@@ -32,6 +37,7 @@ void MCPointInRing::buildIndex() {
 		interval->max=mcEnv->getMaxY();
 		tree->insert(interval,mc);
 	}
+	delete mcList;
 }
 
 bool MCPointInRing::isInside(Coordinate& pt) {
@@ -50,6 +56,12 @@ bool MCPointInRing::isInside(Coordinate& pt) {
 	/*
 	*  p is inside if number of crossings is odd.
 	*/
+//	for(int i=0;i<(int)segs->size();i++) {
+//		delete (indexMonotoneChain*) (*segs)[i];
+//	}
+	delete segs;
+	delete rayEnv;
+	delete mcSelecter;
 	if((crossings%2)==1) {
 		return true;
 	}

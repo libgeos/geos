@@ -14,6 +14,13 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInse
 	deleteEventIndex=0;
 }
 
+SweepLineEvent::~SweepLineEvent(){
+	if (eventType==DELETE) {
+		delete insertEvent;
+		delete obj;
+	}
+}
+
 bool SweepLineEvent::isInsert() {
 	return insertEvent==NULL;
 }

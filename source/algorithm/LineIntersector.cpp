@@ -57,12 +57,19 @@ double LineIntersector::nonRobustComputeEdgeDistance(Coordinate& p,Coordinate& p
 
 LineIntersector::LineIntersector() {
 	precisionModel=NULL;
-	intPt[0].setCoordinate(*(new Coordinate()));
-	intPt[1].setCoordinate(*(new Coordinate()));
+	Coordinate *c=new Coordinate();
+	intPt[0].setCoordinate(*c);
+	delete c;
+	c=new Coordinate();
+	intPt[1].setCoordinate(*c);
+	delete c;
 	// alias the intersection points for ease of reference
 	pa.setCoordinate(intPt[0]);
 	pb.setCoordinate(intPt[1]);
 	result=0;
+}
+
+LineIntersector::~LineIntersector() {
 }
 
 void LineIntersector::setMakePrecise(PrecisionModel *newPM){

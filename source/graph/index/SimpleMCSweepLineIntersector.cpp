@@ -8,6 +8,10 @@ SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector(){
 }
 
 SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector(){
+	for(int i=0;i<(int)events->size();i++) {
+		SweepLineEvent *sle=(*events)[i];
+		if (sle->isDelete()) delete sle;
+	}
 	delete events;
 }
 

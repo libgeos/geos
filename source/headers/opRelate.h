@@ -1,6 +1,7 @@
 #ifndef GEOS_OPRELATE_H
 #define GEOS_OPRELATE_H
 
+#include <memory>
 #include <string>
 #include <vector>
 #include "platform.h"
@@ -13,6 +14,7 @@ namespace geos {
 class RelateNode: public Node {
 public:
 	RelateNode(Coordinate& coord,EdgeEndStar *edges);
+	virtual ~RelateNode();
 	void updateIMFromEdges(IntersectionMatrix *im);
 protected:
 	void computeIM(IntersectionMatrix *im);
@@ -31,7 +33,7 @@ protected:
 class EdgeEndBundle: public EdgeEnd {
 public:
 	EdgeEndBundle(EdgeEnd *e);
-	~EdgeEndBundle();
+	virtual ~EdgeEndBundle();
 	Label *getLabel();
 //Iterator iterator() //Not needed
 	vector<EdgeEnd*>* getEdgeEnds();
@@ -49,6 +51,7 @@ protected:
 class EdgeEndBundleStar: public EdgeEndStar {
 public:
 	EdgeEndBundleStar();
+	virtual ~EdgeEndBundleStar();
 	void insert(EdgeEnd *e);
 	void updateIM(IntersectionMatrix *im);
 };
@@ -61,6 +64,7 @@ public:
 class RelateNodeGraph {
 public:
 	RelateNodeGraph();
+	virtual ~RelateNodeGraph();
 //	Iterator getNodeIterator();
 	map<Coordinate,Node*,CoordLT>* getNodeMap();
 	void build(GeometryGraph *geomGraph);
@@ -85,7 +89,7 @@ private:
 class RelateComputer {
 public:
 	RelateComputer();
-	~RelateComputer();
+	virtual ~RelateComputer();
 	RelateComputer(vector<GeometryGraph*> *newArg);
 	IntersectionMatrix* computeIM();
 private:
@@ -127,7 +131,7 @@ class RelateOp: public GeometryGraphOperation {
 public:
 	static IntersectionMatrix* relate(Geometry *a,Geometry *b);
 	RelateOp(Geometry *g0,Geometry *g1);
-	~RelateOp();
+	virtual ~RelateOp();
 	IntersectionMatrix* getIntersectionMatrix();
 private:
 	RelateComputer *relateComp;

@@ -12,7 +12,10 @@ LineString::LineString(){}
 LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRID) {
 //	CoordinateList pts(ls.points);
 //	points=pts;
-	points=ls.points;
+//	for(int i=0;i<ls.points->getSize();i++) {
+//		points->add(ls.points->getAt(i));
+//	}
+	points=CoordinateListFactory::internalFactory->createCoordinateList(ls.points);
 }
 
 LineString::LineString(CoordinateList *newPoints, PrecisionModel* precisionModel, int SRID):
@@ -21,15 +24,19 @@ LineString::LineString(CoordinateList *newPoints, PrecisionModel* precisionModel
 		newPoints=CoordinateListFactory::internalFactory->createCoordinateList();
 	}
 	if (hasNullElements(newPoints)) {
+		delete newPoints;
 		throw new IllegalArgumentException("point array must not contain null elements\n");
 	}
 	if (newPoints->getSize()==1) {
+		delete newPoints;
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
 	points=newPoints;
 }
 
-LineString::~LineString(){}
+LineString::~LineString(){
+	delete points;
+}
 
 CoordinateList* LineString::getCoordinates() {
 	return points;
@@ -92,7 +99,8 @@ string LineString::getGeometryType() {
 }
 
 bool LineString::isSimple(){
-	return (new IsSimpleOp())->isSimple(this);
+	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
+	return iso->isSimple(this);
 }
 
 Geometry* LineString::getBoundary() {

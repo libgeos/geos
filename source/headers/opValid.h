@@ -1,6 +1,7 @@
 #ifndef GEOS_OPVALID_H
 #define GEOS_OPVALID_H
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <map>
@@ -146,7 +147,7 @@ private:
 class QuadtreeNestedRingTester {
 public:
 	QuadtreeNestedRingTester(GeometryGraph *newGraph);
-	~QuadtreeNestedRingTester();
+	virtual ~QuadtreeNestedRingTester();
 	Coordinate& getNestedPoint();
 	void add(LinearRing *ring);
 	bool isNonNested();
@@ -214,6 +215,7 @@ public:
 	static Coordinate& 
 		findPtNotNode(CoordinateList *testCoords,LinearRing *searchRing, GeometryGraph *graph);
 	IsValidOp(Geometry *newParentGeometry);
+	virtual ~IsValidOp();
 	bool isValid();
 	TopologyValidationError* getValidationError();
 private:

@@ -35,6 +35,11 @@ GeometryGraph::GeometryGraph():PlanarGraph(){
 }
 
 GeometryGraph::~GeometryGraph(){
+//	map<LineString*,Edge*,LineStringLT>::iterator it=lineEdgeMap->begin();
+//	for (;it!=lineEdgeMap->end();it++) {
+//		Edge *e=it->second;
+//		delete e;
+//	}
 	delete lineEdgeMap;
 }
 
@@ -181,7 +186,12 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 		left=cwRight;
 		right=cwLeft;
 	}
-	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
+	CoordinateList *ncr=CoordinateListFactory::internalFactory->createCoordinateList();
+	for(int i=0;i<coord->getSize();i++) {
+		ncr->add(coord->getAt(i));
+	}
+	Edge *e=new Edge(ncr,new Label(argIndex,Location::BOUNDARY,left,right));
+//	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
 	(*lineEdgeMap)[lr]=e;
 	insertEdge(e);
 	// insert the endpoint as a node, to mark that it is on the boundary
@@ -207,7 +217,12 @@ void GeometryGraph::addLineString(LineString *line){
 	}
 	// add the edge for the LineString
 	// line edges do not have locations for their left and right sides
-	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
+	CoordinateList *ncr=CoordinateListFactory::internalFactory->createCoordinateList();
+	for(int i=0;i<coord->getSize();i++) {
+		ncr->add(coord->getAt(i));
+	}
+	Edge *e=new Edge(ncr,new Label(argIndex,Location::INTERIOR));
+//	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
 	(*lineEdgeMap)[line]=e;
 	insertEdge(e);
 	/**
@@ -251,7 +266,7 @@ void GeometryGraph::addPoint(Coordinate& pt) {
 SegmentIntersector* GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes){
 	SegmentIntersector *si=new SegmentIntersector(li,true,false);
 	//EdgeSetIntersector esi = new MCQuadIntersector();
-    EdgeSetIntersector *esi=createEdgeSetIntersector();
+    auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 	// optimized test for Polygons and Rings
 	if (!computeRingSelfNodes & 
 		(typeid(*parentGeom)==typeid(LinearRing)||
@@ -271,7 +286,7 @@ SegmentIntersector* GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 													bool includeProper){
 	SegmentIntersector *si=new SegmentIntersector(li,includeProper,true);
 	si->setBoundaryNodes(getBoundaryNodes(),g->getBoundaryNodes());
-	EdgeSetIntersector *esi=createEdgeSetIntersector();
+	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 	esi->computeIntersections(edges,g->edges,si);
 	return si;
 }

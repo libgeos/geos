@@ -11,6 +11,9 @@ PolygonBuilder::PolygonBuilder(GeometryFactory *newGeometryFactory,CGAlgorithms 
 }
 
 PolygonBuilder::~PolygonBuilder() {
+	for(int i=0;i<(int)shellList->size();i++) {
+		delete (*shellList)[i];
+	}
 	delete shellList;
 }
 
@@ -28,6 +31,8 @@ void PolygonBuilder::add(PlanarGraph *graph) {
 		nodes->push_back(node);
 	}
 	add(dirEdges,nodes);
+	delete dirEdges;
+	delete nodes;
 }
 
 void PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes) {
@@ -43,6 +48,9 @@ void PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes) {
 	vector<MaximalEdgeRing*> *edgeRings=buildMinimalEdgeRings(maxEdgeRings,shellList,freeHoleList);
 	sortShellsAndHoles(edgeRings,shellList,freeHoleList);
 	placeFreeHoles(shellList, freeHoleList);
+	delete freeHoleList;
+	delete maxEdgeRings;
+	delete edgeRings;
 	//Assert: every hole on freeHoleList has a shell assigned to it
 }
 
@@ -89,6 +97,11 @@ vector<MaximalEdgeRing*> *PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEd
 			} else {
 				freeHoleList->insert(freeHoleList->end(),minEdgeRings->begin(),minEdgeRings->end());
 			}
+			delete er;
+			for(int i=0;i<(int)minEdgeRings->size();i++) {
+				delete (*minEdgeRings)[i];
+			}
+			delete minEdgeRings;
 		} else {
 			edgeRings->push_back(er);
 		}
@@ -114,6 +127,8 @@ EdgeRing* PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings) {
 		if (!er->isHole()) {
 			shell=er;
 			shellCount++;
+			minEdgeRings->erase(minEdgeRings->begin()+i);
+			i--;
 		}
 	}
 	Assert::isTrue(shellCount <= 1, "found two shells in MinimalEdgeRing list");
@@ -136,6 +151,8 @@ void PolygonBuilder::placePolygonHoles(EdgeRing *shell,vector<MinimalEdgeRing*> 
 		MinimalEdgeRing *er=(*minEdgeRings)[i];
 		if (er->isHole()) {
 			er->setShell(shell);
+			minEdgeRings->erase(minEdgeRings->begin()+i);
+			i--;
 		}
 	}
 }
@@ -208,7 +225,12 @@ EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRin
 		EdgeRing *tryShell=(*newShellList)[i];
 		LinearRing *tryRing=tryShell->getLinearRing();
 		Envelope *tryEnv=tryRing->getEnvelopeInternal();
-		if (minShell!=NULL) minEnv=minShell->getLinearRing()->getEnvelopeInternal();
+		if (minShell!=NULL) {
+			LinearRing *lr=minShell->getLinearRing();
+			delete minEnv;
+			minEnv=lr->getEnvelopeInternal();
+			delete lr;
+		}
 		bool isContained=false;
 		if (tryEnv->contains(testEnv)
 			&& cga->isPointInRing(testPt,tryRing->getCoordinates()))
@@ -220,7 +242,12 @@ EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRin
 					minShell=tryShell;
 			}
 		}
+		delete tryRing;
+		delete tryEnv;
 	}
+	delete minEnv;
+	delete testRing;
+	delete testEnv;
 	return minShell;
 }
 vector<Polygon*>* PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList) {

@@ -9,6 +9,10 @@ EdgeIntersection::EdgeIntersection(Coordinate& newCoord, int newSegmentIndex, do
 	dist=newDist;
 }
 
+EdgeIntersection::~EdgeIntersection() {
+	//aaa
+}
+
 int EdgeIntersection::compare(int newSegmentIndex, double newDist) {
 	if (segmentIndex<newSegmentIndex) return -1;
 	if (segmentIndex>newSegmentIndex) return 1;

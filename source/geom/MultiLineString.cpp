@@ -36,7 +36,8 @@ bool MultiLineString::isClosed() {
 }
 
 bool MultiLineString::isSimple(){
-	return (new IsSimpleOp())->isSimple(this);
+	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
+	return iso->isSimple(this);
 }
 
 Geometry* MultiLineString::getBoundary() {
@@ -46,6 +47,7 @@ Geometry* MultiLineString::getBoundary() {
 	GeometryGraph *g=new GeometryGraph(0,this);
 	CoordinateList *pts=g->getBoundaryPoints();
 	GeometryFactory fact(precisionModel, SRID);
+	delete g;
 	return fact.createMultiPoint(pts);
 }
 

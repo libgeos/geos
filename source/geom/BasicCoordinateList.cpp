@@ -3,6 +3,14 @@
 
 namespace geos {
 
+BasicCoordinateList::BasicCoordinateList(CoordinateList *c){
+	vect=new vector<Coordinate>();
+	int size=c->getSize();
+	for(int i=0; i<size; i++) {
+		vect->push_back(c->getAt(i));
+	}
+}
+
 BasicCoordinateList::BasicCoordinateList() {
 	vect=new vector<Coordinate>();
 }
@@ -21,8 +29,9 @@ BasicCoordinateList::BasicCoordinateList(const BasicCoordinateList &c) {
 	vect=new vector<Coordinate>(*(c.vect));
 }
 
-void BasicCoordinateList::setPoints(const vector<Coordinate> &v) {
-	vect=new vector<Coordinate>(v);
+void BasicCoordinateList::setPoints(vector<Coordinate> &v) {
+//	vect=new vector<Coordinate>(v);
+	vect->swap(v);
 }
 
 vector<Coordinate>* BasicCoordinateList::toVector() {

@@ -3,6 +3,7 @@
 
 namespace geos {
 
+	Coordinate& Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
 //void Coordinate::setNull() {
 //	x=DoubleNotANumber;
 //	y=DoubleNotANumber;

@@ -7,6 +7,10 @@ RelateNodeGraph::RelateNodeGraph() {
 	nodes=new NodeMap(new RelateNodeFactory());
 }
 
+RelateNodeGraph::~RelateNodeGraph() {
+	delete nodes;
+}
+
 map<Coordinate,Node*,CoordLT>* RelateNodeGraph::getNodeMap() {
 	return nodes->nodeMap;
 }
@@ -26,6 +30,7 @@ void RelateNodeGraph::build(GeometryGraph *geomGraph) {
 	vector<EdgeEnd*> *eeList=eeBuilder->computeEdgeEnds(geomGraph->getEdges());
 	insertEdgeEnds(eeList);
 	delete eeBuilder;
+	delete eeList;
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
 }

@@ -9,7 +9,7 @@ Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Labe
 }
 
 Node::~Node(){
-//	delete edges;
+	delete edges;
 }
 
 Coordinate& Node::getCoordinate() {

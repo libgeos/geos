@@ -3,6 +3,18 @@
 
 namespace geos {
 
+PointCoordinateList::PointCoordinateList(CoordinateList *c){
+	vect=new vector<point_3d>();
+	point_3d pt;
+	int size=c->getSize();
+	for(int i=0; i<size; i++) {
+		pt.x=c->getAt(i).x;
+		pt.y=c->getAt(i).y;
+		pt.z=c->getAt(i).z;
+		vect->push_back(pt);
+	}
+}
+
 PointCoordinateList::PointCoordinateList() {
 	vect=new vector<point_3d>();
 }
@@ -22,7 +34,7 @@ PointCoordinateList::PointCoordinateList(const PointCoordinateList &c) {
 	vect=new vector<point_3d>(*(c.vect));
 }
 
-void PointCoordinateList::setPoints(const vector<Coordinate> &v) {
+void PointCoordinateList::setPoints(vector<Coordinate> &v) {
 	vect=new vector<point_3d>();
 	point_3d pt;
 	for(unsigned int i=0; i<v.size(); i++) {
@@ -33,7 +45,7 @@ void PointCoordinateList::setPoints(const vector<Coordinate> &v) {
 	}
 }
 
-void PointCoordinateList::setPoints(const vector<point_3d> &v) {
+void PointCoordinateList::setPoints(vector<point_3d> &v) {
 	vect=new vector<point_3d>(v);
 }
 

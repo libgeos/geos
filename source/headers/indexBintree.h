@@ -1,6 +1,7 @@
 #ifndef GEOS_INDEXBINTREE_H
 #define GEOS_INDEXBINTREE_H
 
+#include <memory>
 #include <vector>
 #include "platform.h"
 #include "geom.h"
@@ -13,8 +14,9 @@ class BinTreeInterval {
 public:
 	double min, max;
 	BinTreeInterval();
+	virtual ~BinTreeInterval();
 	BinTreeInterval(double nmin, double nmax);
-	BinTreeInterval(const BinTreeInterval& interval);
+	BinTreeInterval(BinTreeInterval *interval);
 	void init(double nmin, double nmax);
 	double getMin();
 	double getMax();
@@ -34,8 +36,9 @@ public:
  */
 class Key {
 public:
-	static int computeLevel(BinTreeInterval *interval);
-	Key(BinTreeInterval *interval);
+	static int computeLevel(BinTreeInterval *newInterval);
+	Key(BinTreeInterval *newInterval);
+	virtual ~Key();
 	double getPoint();
 	int getLevel();
 	BinTreeInterval* getInterval();
@@ -54,7 +57,7 @@ class NodeBase {
 public:
 	static int getSubnodeIndex(BinTreeInterval *interval, double centre);
 	NodeBase();
-	~NodeBase();
+	virtual ~NodeBase();
 	virtual vector<void*> *getItems();
 	virtual void add(void* item);
 	virtual vector<void*>* addAllItems(vector<void*> *newItems);
@@ -78,6 +81,7 @@ public:
 	static BinTreeNode* createNode(BinTreeInterval *itemInterval);
 	static BinTreeNode* createExpanded(BinTreeNode *node,BinTreeInterval *addInterval);
 	BinTreeNode(BinTreeInterval *newInterval,int newLevel);
+	virtual ~BinTreeNode();
 	BinTreeInterval* getInterval();
 	BinTreeNode* getNode(BinTreeInterval *searchInterval);
 	NodeBase* find(BinTreeInterval *searchInterval);
@@ -103,6 +107,7 @@ private:
 	void insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item);
 public:
 	Root();
+	virtual ~Root();
 	void insert(BinTreeInterval *itemInterval,void* item);
 protected:
 	bool isSearchMatch(BinTreeInterval *interval);
@@ -127,6 +132,7 @@ class Bintree {
 public:
 	static BinTreeInterval* ensureExtent(BinTreeInterval *itemInterval, double minExtent);
 	Bintree();
+	virtual ~Bintree();
 	int depth();
 	int size();
 	int nodeSize();

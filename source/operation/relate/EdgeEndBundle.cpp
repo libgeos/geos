@@ -4,12 +4,15 @@
 namespace geos {
 
 EdgeEndBundle::EdgeEndBundle(EdgeEnd *e): EdgeEnd(e->getEdge(),e->getCoordinate(),
-										  e->getDirectedCoordinate(),new Label(*(e->getLabel()))) {
+										  e->getDirectedCoordinate(),new Label(e->getLabel())) {
 	edgeEnds=new vector<EdgeEnd*>();
 	insert(e);
 }
 
 EdgeEndBundle::~EdgeEndBundle(){
+	for(int i=0;i<(int)edgeEnds->size();i++) {
+		delete (*edgeEnds)[i];
+	}
 	delete edgeEnds;
 }
 
@@ -44,10 +47,13 @@ void EdgeEndBundle::computeLabel() {
 		EdgeEnd *e=*it;
 		if (e->getLabel()->isArea()) isArea=true;
 	}
-	if (isArea)
+	if (isArea) {
+		delete label;
 		label=new Label(Location::UNDEF,Location::UNDEF,Location::UNDEF);
-	else
+	} else {
+		delete label;
 		label=new Label(Location::UNDEF);
+	}
 	// compute the On label, and the side labels if present
 	for(int i=0;i<2;i++) {
 		computeLabelOn(i);

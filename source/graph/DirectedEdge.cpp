@@ -31,6 +31,7 @@ DirectedEdge::DirectedEdge() {
 }
 
 DirectedEdge::~DirectedEdge() {
+//aaaa
 }
 
 DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward): EdgeEnd(newEdge){
@@ -183,7 +184,8 @@ bool DirectedEdge::isInteriorAreaEdge(){
  * Compute the label in the appropriate orientation for this DirEdge
  */
 void DirectedEdge::computeDirectedLabel(){
-	label=new Label(*(edge->getLabel()));
+	delete label;
+	label=new Label(edge->getLabel());
 	if (!isForwardVar)
 		label->flip();
 }

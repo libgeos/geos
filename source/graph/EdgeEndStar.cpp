@@ -11,7 +11,18 @@ EdgeEndStar::EdgeEndStar(){
 }
 
 EdgeEndStar::~EdgeEndStar(){
+//	map<EdgeEnd*,void*,EdgeEndLT>::iterator	it=edgeMap->begin();
+//	for (;it!=edgeMap->end();it++) {
+//		EdgeEnd *ee=(EdgeEnd*) it->second;
+////		void *ee= it->second;
+//		delete ee;
+//	}
 	delete edgeMap;
+	delete edgeList;
+}
+
+void EdgeEndStar::insert(EdgeEnd *e){
+	delete e;
 }
 
 /**
@@ -21,6 +32,7 @@ EdgeEndStar::~EdgeEndStar(){
 void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
 	edgeMap->insert(pair<EdgeEnd*,void*>(e,obj));
 //	(*edgeMap)[e]=obj;
+	delete edgeList;
 	edgeList=NULL;  // edge list has changed - clear the cache
 }
 

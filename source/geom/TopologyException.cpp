@@ -18,9 +18,19 @@ TopologyException::TopologyException(string msg,Coordinate *newPt) {
 	setName("TopologyException");
 	pt=new Coordinate(*newPt);
 	setMessage(msgWithCoord(msg,pt));
+	delete pt;
 }
 
 Coordinate* TopologyException::getCoordinate() {
 	return pt;
 }
+
+void TopologyException::setName(string nname){
+	name=nname;
+}
+
+void TopologyException::setMessage(string msg){
+	txt=msg;
+}
+
 }

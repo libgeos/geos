@@ -1,6 +1,7 @@
 #ifndef GEOS_INDEXCHAIN_H
 #define GEOS_INDEXCHAIN_H
 
+#include <memory>
 #include <vector>
 #include "platform.h"
 #include "geom.h"

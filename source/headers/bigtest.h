@@ -1,6 +1,7 @@
 #ifndef GEOS_BIGTEST_H
 #define GEOS_BIGTEST_H
 
+#include <memory>
 #include "geom.h"
 
 using namespace std;

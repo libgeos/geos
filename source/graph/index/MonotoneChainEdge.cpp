@@ -23,14 +23,14 @@ namespace geos {
 MonotoneChainEdge::MonotoneChainEdge() {
 	env1=new Envelope();
 	env2=new Envelope();
-	pts=CoordinateListFactory::internalFactory->createCoordinateList();
+	pts=NULL;
 	startIndex=new vector<int>();
 }
 
 MonotoneChainEdge::~MonotoneChainEdge() {
 	delete env1;
 	delete env2;
-	delete pts;
+//	delete pts;
 	delete startIndex;
 }
 
@@ -41,6 +41,7 @@ MonotoneChainEdge::MonotoneChainEdge(Edge *newE) {
 	e=newE;
 	MonotoneChainIndexer *mcb=new MonotoneChainIndexer();
 	startIndex=mcb->getChainStartIndices(pts);
+	delete mcb;
 }
 
 CoordinateList* MonotoneChainEdge::getCoordinates() {

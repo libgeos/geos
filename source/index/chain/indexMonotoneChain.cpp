@@ -15,6 +15,7 @@ indexMonotoneChain::indexMonotoneChain(CoordinateList *newPts,int nstart,int nen
 }
 
 indexMonotoneChain::~indexMonotoneChain() {
+	delete env;
 	delete env1;
 	delete env2;
 }

@@ -1,4 +1,5 @@
 #include "../headers/geom.h"
+#include "../headers/util.h"
 
 namespace geos {
 

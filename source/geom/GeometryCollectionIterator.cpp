@@ -1,4 +1,5 @@
 #include "../headers/geom.h"
+#include "../headers/util.h"
 #include <typeinfo>
 
 namespace geos {
@@ -55,6 +56,7 @@ Geometry* GeometryCollectionIterator::next() {
 		}
 	}
 	if (index>=max) {
+		delete subcollectionIterator;
 		throw new UnsupportedOperationException("No more elements");
 	}
 	Geometry *obj=parent->getGeometryN(index++);
@@ -75,6 +77,7 @@ Geometry* GeometryCollectionIterator::next() {
  *@throws  UnsupportedOperationException  This method is not implemented.
  */
 void GeometryCollectionIterator::remove() {
+	delete subcollectionIterator;
 	throw new UnsupportedOperationException();
 }
 

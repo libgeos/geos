@@ -1,7 +1,7 @@
 #ifndef GEOS_GRAPH_H
 #define GEOS_GRAPH_H
 
-
+#include <memory>
 #include <string>
 #include <vector>
 #include <map>
@@ -32,11 +32,11 @@ public:
 class TopologyLocation {
 public:
 	TopologyLocation();
-	~TopologyLocation();
+	virtual ~TopologyLocation();
 	TopologyLocation(vector<int>* newLocation);
 	TopologyLocation(int on, int left, int right);
 	TopologyLocation(int on);
-	TopologyLocation(const TopologyLocation &gl);
+	TopologyLocation(TopologyLocation *gl);
 	int get(int posIndex);
 	bool isNull();
 	bool isAnyNull();
@@ -66,9 +66,9 @@ public:
 	Label(int onLoc);
 	Label(int geomIndex, int onLoc);
 	Label(int onLoc, int leftLoc, int rightLoc);
-	Label(const Label &l);
+	Label(Label *l);
 	Label();
-	~Label();
+	virtual ~Label();
 	Label(int geomIndex,int onLoc,int leftLoc,int rightLoc);
 	Label(int geomIndex,TopologyLocation* gl);
 	void flip();
@@ -100,6 +100,7 @@ class Depth {
 public:
 	static int depthAtLocation(int location);
 	Depth();
+	virtual ~Depth();
 	int getDepth(int geomIndex,int posIndex);
 	void setDepth(int geomIndex,int posIndex,int depthValue);
 	int getLocation(int geomIndex,int posIndex);
@@ -168,7 +169,7 @@ public:
 	Edge();
 	Edge(CoordinateList* newPts, Label *newLabel);
 	Edge(CoordinateList* newPts);
-	~Edge();
+	virtual ~Edge();
 	virtual int getNumPoints();
 	virtual void setName(string newName);
 	virtual CoordinateList* getCoordinates();
@@ -203,7 +204,7 @@ private:
 class EdgeEnd {
 public:
 	EdgeEnd();
-	~EdgeEnd();
+	virtual ~EdgeEnd();
 	EdgeEnd(Edge* newEdge, Coordinate& newP0, Coordinate& newP1);
 	EdgeEnd(Edge* newEdge, Coordinate& newP0, Coordinate& newP1, Label* newLabel);
 	virtual Edge* getEdge();
@@ -242,8 +243,8 @@ class GeometryGraph;
 class EdgeEndStar {
 public:
 	EdgeEndStar();
-	~EdgeEndStar();
-	virtual void insert(EdgeEnd *e){};
+	virtual ~EdgeEndStar();
+	virtual void insert(EdgeEnd *e);
 	virtual Coordinate& getCoordinate();
 	virtual int getDegree();
 	virtual vector<EdgeEnd*>::iterator getIterator();
@@ -304,7 +305,7 @@ private:
 class Node: public GraphComponent {
 public:
 	Node(Coordinate& newCoord, EdgeEndStar* newEdges);
-	~Node();
+	virtual ~Node();
 	virtual Coordinate& getCoordinate();
 	virtual EdgeEndStar* getEdges();
 	virtual bool isIsolated();
@@ -332,6 +333,7 @@ public:
 	int segmentIndex;
 	double dist;
 	EdgeIntersection(Coordinate& newCoord, int newSegmentIndex, double newDist);
+	virtual ~EdgeIntersection();
 	int compare(int newSegmentIndex, double newDist);
 	bool isEndPoint(int maxSegmentIndex);
 	string print();
@@ -357,6 +359,7 @@ public:
 class EdgeList: public vector<Edge*> {
 public:
 	EdgeList();
+	virtual ~EdgeList();
 	void insert(Edge *e);
 	int findEdgeIndex(Edge *e);
 	string print();
@@ -373,7 +376,7 @@ public:
 	map<Coordinate,Node*,CoordLT>* nodeMap;
 	NodeFactory *nodeFact;
 	NodeMap(NodeFactory *newNodeFact);
-	~NodeMap();
+	virtual ~NodeMap();
 	Node* addNode(Coordinate& coord);
 	Node* addNode(Node *n);
 	void add(EdgeEnd *e);
@@ -391,7 +394,7 @@ class DirectedEdge: public EdgeEnd{
 public:
 	static int depthFactor(int currLocation, int nextLocation);
 	DirectedEdge();	
-	~DirectedEdge();	
+	virtual ~DirectedEdge();	
 	DirectedEdge(Edge *newEdge, bool newIsForward);
 	Edge* getEdge();
 	void setInResult(bool newIsInResult);
@@ -438,7 +441,7 @@ private:
 class EdgeRing{
 public:
 	EdgeRing(DirectedEdge *newStart, GeometryFactory *newGeometryFactory, CGAlgorithms *newCga);
-	~EdgeRing();
+	virtual ~EdgeRing();
 	bool isIsolated();
 	bool isHole();
 	Coordinate& getCoordinate(int i);
@@ -464,6 +467,7 @@ protected:
 	void mergeLabel(Label *deLabel);
 	void mergeLabel(Label *deLabel, int geomIndex);
 	void addPoints(Edge *edge, bool isForward, bool isFirstEdge);
+	vector<EdgeRing*>* holes; // a list of EdgeRings which are holes in this EdgeRing
 private:
 	int maxNodeDegree;
 	vector<DirectedEdge*>* edges; // the DirectedEdges making up this EdgeRing
@@ -472,7 +476,6 @@ private:
 	LinearRing *ring;  // the ring created for this EdgeRing
 	bool isHoleVar;
 	EdgeRing *shell;   // if non-null, the ring is a hole and this EdgeRing is its containing shell
-	vector<EdgeRing*>* holes; // a list of EdgeRings which are holes in this EdgeRing
 	void computeMaxNodeDegree();
 };
 
@@ -483,7 +486,7 @@ public:
 	static void linkResultDirectedEdges(vector<Node*>* allNodes);
 	PlanarGraph(NodeFactory *nodeFact);
 	PlanarGraph();
-	~PlanarGraph();
+	virtual ~PlanarGraph();
 	virtual vector<Edge*>::iterator getEdgeIterator();
 	virtual vector<EdgeEnd*>* getEdgeEnds();
 	virtual bool isBoundaryNode(int geomIndex,Coordinate& coord);
@@ -525,7 +528,7 @@ public:
 	static bool isInBoundary(int boundaryCount);
 	static int determineBoundary(int boundaryCount);
 	GeometryGraph();
-	~GeometryGraph();
+	virtual ~GeometryGraph();
 	GeometryGraph(int newArgIndex, Geometry *newParentGeom);
 	GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel, int newSRID);
 	PrecisionModel* getPrecisionModel();

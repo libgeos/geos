@@ -16,6 +16,7 @@ QuadtreeNestedRingTester::~QuadtreeNestedRingTester() {
 	delete rings;
 	delete totalEnv;
 	delete cga;
+	delete qt;
 }
 
 Coordinate& QuadtreeNestedRingTester::getNestedPoint() {
@@ -24,7 +25,9 @@ Coordinate& QuadtreeNestedRingTester::getNestedPoint() {
 
 void QuadtreeNestedRingTester::add(LinearRing *ring) {
 	rings->push_back(ring);
-	totalEnv->expandToInclude(ring->getEnvelopeInternal());
+	Envelope *envi=ring->getEnvelopeInternal();
+	totalEnv->expandToInclude(envi);
+	delete envi;
 }
 
 bool QuadtreeNestedRingTester::isNonNested() {
@@ -32,23 +35,34 @@ bool QuadtreeNestedRingTester::isNonNested() {
 	for(int i=0;i<(int)rings->size();i++) {
 		LinearRing *innerRing=(*rings)[i];
 		CoordinateList *innerRingPts=innerRing->getCoordinates();
-		vector<void*> *results=qt->query(innerRing->getEnvelopeInternal());
+		Envelope *envi=innerRing->getEnvelopeInternal();
+		vector<void*> *results=qt->query(envi);
+		delete envi;
 		for(int j=0;j<(int)results->size();j++) {
 			LinearRing *searchRing=(LinearRing*)(*results)[j];
 			CoordinateList *searchRingPts=searchRing->getCoordinates();
 			if (innerRing==searchRing)
 				continue;
-			if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
+			Envelope *e1=innerRing->getEnvelopeInternal();
+			Envelope *e2=searchRing->getEnvelopeInternal();
+			if (!e1->intersects(e2)) {
+				delete e1;
+				delete e2;
 				continue;
+			}
+			delete e1;
+			delete e2;
 			Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(!(innerRingPt==Coordinate::getNull()),"Unable to find a ring point not a node of the search ring");
 			//Coordinate innerRingPt = innerRingPts[0];
 			bool isInside=cga->isPointInRing(innerRingPt,searchRingPts);
 			if (isInside) {
 				nestedPt=innerRingPt;
+				delete results;
 				return false;
 			}
 		}
+		delete results;
 	}
 	return true;
 }
@@ -59,6 +73,7 @@ void QuadtreeNestedRingTester::buildQuadtree() {
 		LinearRing *ring=(*rings)[i];
 		Envelope *env=ring->getEnvelopeInternal();
 		qt->insert(env,ring);
+		delete env;
 	}
 }
 }

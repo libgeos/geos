@@ -11,8 +11,11 @@ BinTreeInterval::BinTreeInterval(double nmin, double nmax){
 	init(nmin, nmax);
 }
 
-BinTreeInterval::BinTreeInterval(const BinTreeInterval& interval){
-	init(interval.min, interval.max);
+BinTreeInterval::~BinTreeInterval(){
+}
+
+BinTreeInterval::BinTreeInterval(BinTreeInterval* interval){
+	init(interval->min, interval->max);
 }
 
 void BinTreeInterval::init(double nmin, double nmax) {

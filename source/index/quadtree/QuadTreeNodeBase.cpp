@@ -27,7 +27,13 @@ QuadTreeNodeBase::QuadTreeNodeBase() {
 	subnode[3]=NULL;
 }
 
-QuadTreeNodeBase::~QuadTreeNodeBase() {}
+QuadTreeNodeBase::~QuadTreeNodeBase() {
+	delete subnode[0];
+	delete subnode[1];
+	delete subnode[2];
+	delete subnode[3];
+	delete items;
+}
 
 vector<void*>* QuadTreeNodeBase::getItems() {
 	return items;

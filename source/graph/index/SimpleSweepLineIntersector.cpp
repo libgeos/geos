@@ -8,6 +8,9 @@ SimpleSweepLineIntersector::SimpleSweepLineIntersector(){
 }
 
 SimpleSweepLineIntersector::~SimpleSweepLineIntersector(){
+	for(int i=0;i<(int)events->size();i++) {
+		delete (*events)[i];
+	}
 	delete events;
 }
 
@@ -23,7 +26,6 @@ void SimpleSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,vect
 	add(edges0,edges0);
 	add(edges1,edges1);
 	computeIntersections(si);
-cout << "# overlapping MCs: " << nOverlaps << endl;
 }
 
 void SimpleSweepLineIntersector::add(vector<Edge*> *edges) {

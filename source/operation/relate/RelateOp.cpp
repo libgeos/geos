@@ -8,8 +8,10 @@ IntersectionMatrix* RelateOp::relate(Geometry *a,Geometry *b) {
 	if (isBaseGeometryCollection(a) || isBaseGeometryCollection(b)) {
 		return relateGC(toList(a),toList(b));
 	}else {
-		RelateOp relOp(a,b);
-		return relOp.getIntersectionMatrix();
+		RelateOp *relOp=new RelateOp(a,b);
+		IntersectionMatrix *im=relOp->getIntersectionMatrix();
+		delete relOp;
+		return im;
 	}
 }
 

@@ -1,6 +1,7 @@
 #ifndef GEOS_OPERATION_H
 #define GEOS_OPERATION_H
 
+#include <memory>
 //#include <iostream>
 //#include <string>
 #include <vector>
@@ -20,6 +21,7 @@ class GeometryGraphOperation {
 public:
 	GeometryGraphOperation(Geometry *g0,Geometry *g1);
 	GeometryGraphOperation(Geometry *g0);
+	virtual ~GeometryGraphOperation();
 	Geometry* getArgGeometry(int i);
 protected:
 	static CGAlgorithms *cga;

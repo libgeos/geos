@@ -10,12 +10,13 @@ BinTreeInterval* Bintree::ensureExtent(BinTreeInterval *itemInterval,double minE
 	double min=itemInterval->getMin();
 	double max=itemInterval->getMax();
 	// has a non-zero extent
-	if (min!=max) return itemInterval;
+	if (min!=max) return new BinTreeInterval(itemInterval);
 	// pad extent
 	if (min==max) {
 		min=min-minExtent/2.0;
 		max=min+minExtent/2.0;
 	}
+//	delete itemInterval;
 	return new BinTreeInterval(min, max);
 }
 
@@ -24,6 +25,10 @@ BinTreeInterval* Bintree::ensureExtent(BinTreeInterval *itemInterval,double minE
 Bintree::Bintree() {
 	minExtent=1.0;
 	root=new Root();
+}
+
+Bintree::~Bintree() {
+	delete root;
 }
 
 int Bintree::depth(){
@@ -60,6 +65,7 @@ void Bintree::insert(BinTreeInterval *itemInterval,void* item){
 	System.out.println("reinsertion size="+size());
 	}
 	*/
+	delete insertInterval;
 }
 
 vector<void*>* Bintree::iterator() {

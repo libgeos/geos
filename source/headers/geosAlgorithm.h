@@ -1,7 +1,7 @@
 #ifndef GEOS_ALGORITHM_H
 #define GEOS_ALGORITHM_H
 
-
+#include <memory>
 #include "geom.h"
 #include "util.h"
 #include "platform.h"
@@ -23,7 +23,7 @@ public:
 
 class PointInRing{
 public:
-//	PointInRing();
+	virtual ~PointInRing(){};
 	virtual bool isInside(Coordinate& pt)=0;
 };
 
@@ -75,7 +75,7 @@ public:
 
 class HCoordinate {
 public:
-	static Coordinate& intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
+	static Coordinate* intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
 	double x,y,w;
 	HCoordinate();
 	HCoordinate(double _x, double _y, double _w);
@@ -83,7 +83,7 @@ public:
 	HCoordinate(HCoordinate p1, HCoordinate p2);
 	double getX();
 	double getY();
-	Coordinate& getCoordinate();
+	Coordinate* getCoordinate();
 };
 
 class SimplePointInRing: public PointInRing {
@@ -101,6 +101,7 @@ public:
 	static double computeEdgeDistance(Coordinate& p,Coordinate& p0,Coordinate& p1);
 	static double nonRobustComputeEdgeDistance(Coordinate& p,Coordinate& p1,Coordinate& p2);
 	LineIntersector();
+	virtual ~LineIntersector();
 	virtual void setMakePrecise(PrecisionModel *newPM);
 	/**
 	* Compute the intersection of a point p and the line p1-p2
@@ -154,12 +155,13 @@ public:
 class RobustLineIntersector: public LineIntersector {
 public:
 	RobustLineIntersector();
+	virtual ~RobustLineIntersector();
 	void computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2);
 	int computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
 private:
 //	bool between(Coordinate& p1,Coordinate& p2,Coordinate& q);
 	int computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
-	Coordinate& intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
+	Coordinate* intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
 	void normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt);
 	double smallestInAbsValue(double x1,double x2,double x3,double x4);
 };
@@ -237,6 +239,7 @@ private:
 class MCPointInRing: public PointInRing {
 public:
 	MCPointInRing(LinearRing *newRing);
+	virtual ~MCPointInRing();
 	bool isInside(Coordinate& pt);
 	void testLineSegment(Coordinate& p,LineSegment *seg);
 	class MCSelecter: public MonotoneChainSelectAction {
@@ -403,6 +406,34 @@ protected:
 	Geometry *widestGeometry(GeometryCollection *gc);
 	LineString *horizontalBisector(Geometry *geometry);
 
+};
+
+class BigQuad {
+public:
+	Coordinate northmost;
+	Coordinate southmost;
+	Coordinate westmost;
+	Coordinate eastmost;
+};
+
+class ConvexHull {
+private:
+	PointLocator *pointLocator;
+	CGAlgorithms *cgAlgorithms;
+	Geometry *geometry;
+	CoordinateList* reduce(CoordinateList *pts);
+	CoordinateList* preSort(CoordinateList *pts);
+	CoordinateList* grahamScan(CoordinateList *c);
+	void radialSort(CoordinateList *p);
+	int polarCompare(Coordinate o, Coordinate p, Coordinate q);
+	bool isBetween(Coordinate c1, Coordinate c2, Coordinate c3);
+    BigQuad* makeBigQuad(CoordinateList *pts);
+	Geometry* lineOrPolygon(CoordinateList *newCoordinates);
+	CoordinateList* cleanRing(CoordinateList *original);
+public:
+	ConvexHull(CGAlgorithms *newCgAlgorithms);
+	~ConvexHull();
+	Geometry* getConvexHull(Geometry *newGeometry);
 };
 }
 #endif

@@ -16,6 +16,15 @@ SegmentIntersector::SegmentIntersector(){
 	bdyNodes=NULL;
 }
 
+SegmentIntersector::~SegmentIntersector(){
+	if (bdyNodes!=NULL) {
+		for(int i=0;i<(int)bdyNodes->size();i++) {
+			delete (*bdyNodes)[i];
+		}
+		delete bdyNodes;
+	}
+}
+
 SegmentIntersector::SegmentIntersector(LineIntersector *newLi,bool newIncludeProper,bool newRecordIsolated){
 	hasIntersectionVar=false;
 	hasProper=false;

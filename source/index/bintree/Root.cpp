@@ -7,6 +7,7 @@ namespace geos {
 double Root::origin=0.0;
 
 Root::Root(){}
+Root::~Root(){}
 
 /**
 * Insert an item into the tree this is the root of.
@@ -29,6 +30,7 @@ void Root::insert(BinTreeInterval *itemInterval,void* item){
 	*/
 	if (node==NULL || !node->getInterval()->contains(itemInterval)) {
 		BinTreeNode* largerNode=BinTreeNode::createExpanded(node,itemInterval);
+		delete subnode[index];
 		subnode[index]=largerNode;
 	}
 	/**

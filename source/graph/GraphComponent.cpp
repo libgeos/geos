@@ -20,7 +20,7 @@ GraphComponent::GraphComponent(Label* newLabel){
 }
 
 GraphComponent::~GraphComponent() {
-//	delete label;
+	delete label;
 }
 
 Label* GraphComponent::getLabel() {

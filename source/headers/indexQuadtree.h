@@ -1,7 +1,7 @@
 #ifndef GEOS_INDEXQUADTREE_H
 #define GEOS_INDEXQUADTREE_H
 
-
+#include <memory>
 #include <vector>
 #include "platform.h"
 #include "geom.h"
@@ -62,7 +62,7 @@ class QuadTreeKey {
 public:
 	static int computeQuadLevel(Envelope *env);
 	QuadTreeKey(Envelope *itemEnv);
-	~QuadTreeKey();
+	virtual ~QuadTreeKey();
 	Coordinate* getPoint();
 	int getLevel();
 	Envelope* getEnvelope();
@@ -107,6 +107,7 @@ public:
 	static QuadTreeNode* createNode(Envelope *env);
 	static QuadTreeNode* createExpanded(QuadTreeNode *node,Envelope *addEnv);
 	QuadTreeNode(Envelope *nenv,int nlevel);
+	virtual ~QuadTreeNode();
 	Envelope* getEnvelope();
 	QuadTreeNode* getNode(Envelope *searchEnv);
 	QuadTreeNodeBase* find(Envelope *searchEnv);
@@ -131,6 +132,7 @@ private:
 	void insertContained(QuadTreeNode *tree,Envelope *itemEnv,void* item);
 public:
 	QuadTreeRoot();
+	virtual ~QuadTreeRoot();
 	void insert(Envelope *itemEnv,void* item);
 protected:
 	bool isSearchMatch(Envelope *searchEnv);
@@ -162,7 +164,7 @@ class Quadtree: public SpatialIndex {
 public:
 	static Envelope* ensureExtent(Envelope *itemEnv,double minExtent);
 	Quadtree();
-	~Quadtree();
+	virtual ~Quadtree();
 	int depth();
 	int size();
 	void insert(Envelope *itemEnv,void* item);

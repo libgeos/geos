@@ -29,6 +29,10 @@ IsValidOp::IsValidOp(Geometry *newParentGeometry){
 	parentGeometry=newParentGeometry;
 }
 
+IsValidOp::~IsValidOp(){
+	delete validErr;
+}
+
 bool IsValidOp::isValid() {
 	checkValid(parentGeometry);
 	return validErr==NULL;
@@ -60,6 +64,7 @@ void IsValidOp::checkValid(Geometry *g) {
 void IsValidOp::checkValid(LineString *g){
 	GeometryGraph *graph=new GeometryGraph(0,g);
 	checkTooFewPoints(graph);
+	delete graph;
 }
 
 /**
@@ -70,43 +75,78 @@ void IsValidOp::checkValid(Polygon *g){
 	GeometryGraph *graph=new GeometryGraph(0,g);
 
 	checkTooFewPoints(graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	checkConsistentArea(graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	checkNoSelfIntersectingRings(graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	checkHolesInShell(g,graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	//SLOWcheckHolesNotNested(g);
 	checkHolesNotNested(g,graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	checkConnectedInteriors(graph);
+	delete graph;
 }
 
 void IsValidOp::checkValid(MultiPolygon *g){
 	GeometryGraph *graph=new GeometryGraph(0,g);
 
 	checkTooFewPoints(graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	checkConsistentArea(graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	checkNoSelfIntersectingRings(graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 
 	for(int i=0;i<g->getNumGeometries();i++) {
 		Polygon *p=(Polygon*)g->getGeometryN(i);
 		checkHolesInShell(p,graph);
-		if (validErr!=NULL) return;
+		if (validErr!=NULL) {
+			delete graph;
+			return;
+		}
 	}
 	for(int i=0;i<g->getNumGeometries();i++) {
 		Polygon *p=(Polygon*)g->getGeometryN(i);
 		//checkDisjointHolesNotNested(p);
 		checkHolesNotNested(p,graph);
-		if (validErr!=NULL) return;
+		if (validErr!=NULL) {
+			delete graph;
+			return;
+		}
 	}
 	checkShellsNotNested(g,graph);
-	if (validErr!=NULL) return;
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
 	checkConnectedInteriors(graph);
+	delete graph;
 }
 
 void IsValidOp::checkValid(GeometryCollection *gc) {
@@ -127,7 +167,7 @@ void IsValidOp::checkTooFewPoints(GeometryGraph *graph) {
 }
 
 void IsValidOp::checkConsistentArea(GeometryGraph *graph) {
-	ConsistentAreaTester *cat=new ConsistentAreaTester(graph);
+	auto_ptr<ConsistentAreaTester> cat(new ConsistentAreaTester(graph));
 	bool isValidArea=cat->isNodeConsistentArea();
 	if (!isValidArea) {
 		validErr=new TopologyValidationError(
@@ -170,11 +210,13 @@ void IsValidOp::checkSelfIntersectingRing(EdgeIntersectionList *eiList) {
 			validErr=new TopologyValidationError(
 				TopologyValidationError::RING_SELF_INTERSECTION,
 				ei->coord);
+			delete nodeSet;
 			return;
 		} else {
 			nodeSet->insert(ei->coord);
 		}
 	}
+	delete nodeSet;
 }
 
 /* NO LONGER NEEDED AS OF JTS Ver 1.2
@@ -203,7 +245,8 @@ void IsValidOp::checkHolesInShell(Polygon *p,GeometryGraph *graph) {
 	CoordinateList *shellPts=shell->getCoordinates();
 	//PointInRing pir=new SimplePointInRing(shell);
 	//PointInRing pir=new SIRtreePointInRing(shell);
-	PointInRing *pir=new MCPointInRing(shell);
+//	auto_ptr<PointInRing> pir(new MCPointInRing(shell));
+	auto_ptr<PointInRing> pir(new MCPointInRing(shell));
 	for(int i=0;i<p->getNumInteriorRing();i++) {
 		LinearRing *hole=(LinearRing*) p->getInteriorRingN(i);
 		Coordinate& holePt=findPtNotNode(hole->getCoordinates(),shell,graph);
@@ -248,7 +291,7 @@ void IsValidOp::checkHolesInShell(Polygon *p,GeometryGraph *graph) {
 * </ul>
 */
 void IsValidOp::checkHolesNotNested(Polygon *p,GeometryGraph *graph) {
-	QuadtreeNestedRingTester *nestedTester=new QuadtreeNestedRingTester(graph);
+	auto_ptr<QuadtreeNestedRingTester> nestedTester(new QuadtreeNestedRingTester(graph));
 	//SimpleNestedRingTester nestedTester=new SimpleNestedRingTester(arg[0]);
 	//SweeplineNestedRingTester nestedTester=new SweeplineNestedRingTester(arg[0]);
 	for(int i=0;i<p->getNumInteriorRing();i++) {
@@ -378,7 +421,7 @@ void IsValidOp::checkShellInsideHole(LinearRing *shell,LinearRing *hole,Geometry
 }
 
 void IsValidOp::checkConnectedInteriors(GeometryGraph *graph) {
-	ConnectedInteriorTester *cit=new ConnectedInteriorTester(graph);
+	auto_ptr<ConnectedInteriorTester> cit(new ConnectedInteriorTester(graph));
 	if (!cit->isInteriorsConnected())
 		validErr=new TopologyValidationError(
 		TopologyValidationError::DISCONNECTED_INTERIOR,

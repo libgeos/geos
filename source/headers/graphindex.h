@@ -1,6 +1,7 @@
 #ifndef GEOS_GRAPH_INDEX_H
 #define GEOS_GRAPH_INDEX_H
 
+#include <memory>
 #include "graph.h"
 #include "geom.h"
 #include <vector>
@@ -19,6 +20,7 @@ public:
 	// testing only
 	int numTests;
 	SegmentIntersector();
+	virtual ~SegmentIntersector();
 	SegmentIntersector(LineIntersector *newLi,bool newIncludeProper,bool newRecordIsolated);
 	void setBoundaryNodes(vector<Node*> *bdyNodes0,vector<Node*> *bdyNodes1);
 	Coordinate& getProperIntersectionPoint();
@@ -63,6 +65,7 @@ public:
 	* Computes all mutual intersections between two sets of edges
 	*/
 	virtual void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si)=0;
+	virtual ~EdgeSetIntersector(){};
 protected:
 //	vector<Edge*>* edgesZero;
 //	vector<Edge*>* edgesOne;
@@ -87,6 +90,7 @@ public:
 		DELETE
 	};
 	SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,void *newObj);
+	virtual ~SweepLineEvent();
 	bool isInsert();
 	bool isDelete();
 	SweepLineEvent* getInsertEvent();
@@ -160,7 +164,7 @@ protected:
 class SimpleMCSweepLineIntersector: public EdgeSetIntersector {
 public:
 	SimpleMCSweepLineIntersector();
-	~SimpleMCSweepLineIntersector();
+	virtual ~SimpleMCSweepLineIntersector();
 	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments);
 	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 protected:

@@ -7,6 +7,7 @@ namespace geos {
 Geometry* OverlayOp::overlayOp(Geometry *geom0,Geometry *geom1,int opCode) {
 	OverlayOp *gov=new OverlayOp(geom0,geom1);
 	Geometry* geomOv=gov->getResultGeometry(opCode);
+	delete gov;
 	return geomOv;
 }
 
@@ -44,9 +45,9 @@ OverlayOp::OverlayOp(Geometry *g0,Geometry *g1): GeometryGraphOperation(g0,g1) {
 	geomFact=new GeometryFactory(g0->getPrecisionModel(),g0->getSRID());
 	resultGeom=NULL;
 	edgeList=new EdgeList();
-	resultPolyList=new vector<Polygon*>();
-	resultLineList=new vector<LineString*>();
-	resultPointList=new vector<Point*>();
+	resultPolyList=NULL;
+	resultLineList=NULL;
+	resultPointList=NULL;
 	ptLocator=new PointLocator();
 }
 
@@ -54,8 +55,17 @@ OverlayOp::~OverlayOp() {
 	delete graph;
 	delete geomFact;
 	delete edgeList;
+	for(int i=0;i<(int)resultPolyList->size();i++) {
+		delete (*resultPolyList)[i];
+	}
 	delete resultPolyList;
+	for(i=0;i<(int)resultLineList->size();i++) {
+		delete (*resultLineList)[i];
+	}
 	delete resultLineList;
+	for(int i=0;i<(int)resultPointList->size();i++) {
+		delete (*resultPointList)[i];
+	}
 	delete resultPointList;
 	delete ptLocator;
 }
@@ -92,6 +102,7 @@ void OverlayOp::replaceCollapsedEdges() {
 		if (e->isCollapsed()) {
 			//Debug.print(e);
 			newEdges->push_back(e->getCollapsedEdge());
+			delete e;
 		} else {
 			//instead of removing from edgeList
 			oldEdges->push_back(e);
@@ -99,6 +110,8 @@ void OverlayOp::replaceCollapsedEdges() {
 	}
 	oldEdges->insert(oldEdges->end(),newEdges->begin(),newEdges->end());
 	edgeList->assign(oldEdges->begin(),oldEdges->end());
+	delete oldEdges;
+	delete newEdges;
 }
 
 /**
@@ -318,11 +331,26 @@ Geometry* OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<Polygon*> *nResultPolyList) {
 	vector<Geometry*> *geomList=new vector<Geometry*>();
 	// element geometries of the result are always in the order P,L,A
-	geomList->insert(geomList->end(),nResultPointList->begin(),nResultPointList->end());
-	geomList->insert(geomList->end(),nResultLineList->begin(),nResultLineList->end());
-	geomList->insert(geomList->end(),nResultPolyList->begin(),nResultPolyList->end());
+	for(int i=0;i<(int)nResultPointList->size();i++) {
+		Point *pt=new Point(*(*nResultPointList)[i]);
+		geomList->push_back(pt);
+	}
+//	geomList->insert(geomList->end(),nResultPointList->begin(),nResultPointList->end());
+	for(i=0;i<(int)nResultLineList->size();i++) {
+		LineString *ls=new LineString(*(*nResultLineList)[i]);
+		geomList->push_back(ls);
+	}
+//	geomList->insert(geomList->end(),nResultLineList->begin(),nResultLineList->end());
+	for(i=0;i<(int)nResultPolyList->size();i++) {
+		Polygon *q=(*nResultPolyList)[i];
+		Polygon *p=new Polygon(*q);
+		geomList->push_back(p);
+	}
+//	geomList->insert(geomList->end(),nResultPolyList->begin(),nResultPolyList->end());
 	// build the most specific geometry possible
-	return geomFact->buildGeometry(geomList);
+	Geometry *g=geomFact->buildGeometry(geomList);
+	delete geomList;
+	return g;
 }
 
 void OverlayOp::computeOverlay(int opCode) {
@@ -333,16 +361,19 @@ void OverlayOp::computeOverlay(int opCode) {
 	copyPoints(0);
 	copyPoints(1);
 	// node the input Geometries
-	(*arg)[0]->computeSelfNodes(li,false);
-	(*arg)[1]->computeSelfNodes(li,false);
+	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes(li,false);
+	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes(li,false);
+	delete si1;
+	delete si2;
 	// compute intersections between edges of the two input geometries
-	(*arg)[0]->computeEdgeIntersections((*arg)[1],li,true);
-	
+	SegmentIntersector *si3=(*arg)[0]->computeEdgeIntersections((*arg)[1],li,true);
+	delete si3;
+
 	vector<Edge*> *baseSplitEdges=new vector<Edge*>();
 	(*arg)[0]->computeSplitEdges(baseSplitEdges);
 	(*arg)[1]->computeSplitEdges(baseSplitEdges);
 
-	vector<Edge*> *splitEdges=baseSplitEdges;
+//	vector<Edge*> *splitEdges=baseSplitEdges;
 	/* NO LONGER USED
 	// if we are working in fixed precision, we must renode to ensure noding is complete
 	if (makePrecise) {
@@ -380,6 +411,10 @@ void OverlayOp::computeOverlay(int opCode) {
 	resultPointList=pointBuilder->build(opCode);
 	// gather the results from all calculations into a single Geometry for the result set
 	resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
+	delete polyBuilder;
+	delete lineBuilder;
+	delete pointBuilder;
+	delete baseSplitEdges;
 }
 
 /**
@@ -401,7 +436,7 @@ void OverlayOp::insertUniqueEdge(Edge *e) {
 		// check if new edge is in reverse direction to existing edge
 		// if so, must flip the label before merging it
 		if (!existingEdge->isPointwiseEqual(e)) {
-			labelToMerge=new Label(*(e->getLabel()));
+//			labelToMerge=new Label(e->getLabel());
 			labelToMerge->flip();
 		}
 		Depth *depth=existingEdge->getDepth();
@@ -416,6 +451,7 @@ void OverlayOp::insertUniqueEdge(Edge *e) {
 		existingLabel->merge(labelToMerge);
 		//Debug.print("inserted edge: "); Debug.println(e);
 		//Debug.print("existing edge: "); Debug.println(existingEdge);
+		delete e;
 	} else {  // no matching existing edge was found
 		// add this new edge to the list of edges in this graph
 		//e.setName(name+edges.size());

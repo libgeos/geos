@@ -1,6 +1,7 @@
 #ifndef GEOS_OPOVERLAY_H
 #define GEOS_OPOVERLAY_H
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <map>
@@ -34,7 +35,7 @@ public:
 	*/
 	static bool isResultOfOp(int loc0,int loc1,int opCode);
 	OverlayOp(Geometry *g0,Geometry *g1);
-	~OverlayOp();
+	virtual ~OverlayOp();
 	Geometry* getResultGeometry(int funcCode);
 	PlanarGraph* getGraph();
 	/**
@@ -176,6 +177,7 @@ private:
 class MinimalEdgeRing: public EdgeRing {
 public:
 	MinimalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFactory,CGAlgorithms *cga);
+	virtual ~MinimalEdgeRing();
 	DirectedEdge* getNext(DirectedEdge *de);
 	void setEdgeRing(DirectedEdge *de,EdgeRing *er);
 };
@@ -201,6 +203,7 @@ public:
 class MaximalEdgeRing: public EdgeRing {
 public:
 	MaximalEdgeRing(DirectedEdge *start, GeometryFactory *geometryFactory, CGAlgorithms *cga);
+	virtual ~MaximalEdgeRing();
 	DirectedEdge* getNext(DirectedEdge *de);
 	void setEdgeRing(DirectedEdge* de,EdgeRing* er);
 	vector<MinimalEdgeRing*>* buildMinimalRings();

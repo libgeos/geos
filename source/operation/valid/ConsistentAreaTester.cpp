@@ -24,7 +24,7 @@ bool ConsistentAreaTester::isNodeConsistentArea() {
      * To fully check validity, it is necessary to
      * compute ALL intersections, including self-intersections within a single edge.
      */
-	SegmentIntersector *intersector=geomGraph->computeSelfNodes(li,true);
+	auto_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(li,true));
 	if (intersector->hasProperIntersection()) {
 		invalidPoint=intersector->getProperIntersectionPoint();
 		return false;
@@ -43,7 +43,9 @@ bool ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent() {
 	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		if (!node->getEdges()->isAreaLabelsConsistent()) {
-			invalidPoint=*(new Coordinate(node->getCoordinate()));
+			Coordinate *c=new Coordinate(node->getCoordinate());
+			invalidPoint=*c;
+			delete c;
 			return false;
 		}
 	}

@@ -15,6 +15,7 @@ vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateList *pts
 		indexMonotoneChain *mc=new indexMonotoneChain(pts,(*startIndex)[i],(*startIndex)[i + 1]);
 		mcList->push_back(mc);
 	}
+	delete startIndex;
 	return mcList;
 }
 

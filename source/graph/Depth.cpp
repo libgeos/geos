@@ -19,6 +19,10 @@ Depth::Depth() {
 	}
 }
 
+Depth::~Depth() {
+//	delete[] &depth;
+}
+
 int Depth::getDepth(int geomIndex,int posIndex){
 	return depth[geomIndex][posIndex];
 }

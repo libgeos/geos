@@ -62,6 +62,7 @@ MultiPolygon* GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons){
 LinearRing* GeometryFactory::createLinearRing(CoordinateList* coordinates) {
 	if (coordinates->getSize()>0 && 
 		!coordinates->getAt(0).equals2D(coordinates->getAt(coordinates->getSize() - 1))) {
+			delete precisionModel;
 			throw new IllegalArgumentException("LinearRing not closed");
 	}
 	return new LinearRing(coordinates, precisionModel, SRID);
@@ -72,11 +73,12 @@ MultiPoint* GeometryFactory::createMultiPoint(vector<Geometry *> *point) {
 }
 
 MultiPoint* GeometryFactory::createMultiPoint(CoordinateList* coordinates) {
-	vector<Geometry *> *pts=new vector<Geometry *>;
+	vector<Geometry *> *pts=new vector<Geometry *>();
 	for (int i=0; i<coordinates->getSize(); i++) {
 		Point *pt=createPoint(coordinates->getAt(i));
 		pts->push_back(pt);
 	}
+	delete coordinates;
 	return createMultiPoint(pts);
 }
 
@@ -108,34 +110,34 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 		return createGeometryCollection(NULL);
 	}
 	if (isHeterogeneous) {
-		return createGeometryCollection(geoms);
+		return createGeometryCollection(new vector<Geometry*>(*geoms));
 	}
 	Geometry *geom0=(*geoms)[0];
 	if (isCollection) {
 		if (typeid(*geom0)==typeid(Polygon)) {
-			return createMultiPolygon(geoms);
+			return createMultiPolygon(new vector<Geometry*>(*geoms));
 		} else if (typeid(*geom0)==typeid(LineString)) {
-			return createMultiLineString(geoms);
+			return createMultiLineString(new vector<Geometry*>(*geoms));
 		} else if (typeid(*geom0)==typeid(Point)) {
-			return createMultiPoint(geoms);
+			return createMultiPoint(new vector<Geometry*>(*geoms));
 		}
 		Assert::shouldNeverReachHere();
 	}
 	if (typeid(*geom0)==typeid(Polygon))
-		return new Polygon(*((Polygon*) geom0));
+		return (Polygon*) geom0;
 	// LineString also handles LinearRings
 	else if (typeid(*geom0)==typeid(LineString))
-		return new LineString(*((LineString*) geom0));
+		return (LineString*) geom0;
 	else if (typeid(*geom0)==typeid(Point))
-		return new Point(*((Point*) geom0));
+		return (Point*) geom0;
 	else if (typeid(*geom0)==typeid(MultiPoint))
-		return new MultiPoint(*((MultiPoint*) geom0));
+		return (MultiPoint*) geom0;
 	else if (typeid(*geom0)==typeid(MultiLineString))
-		return new MultiLineString(*((MultiLineString*) geom0));
+		return (MultiLineString*) geom0;
 	else if (typeid(*geom0)==typeid(MultiPolygon))
-		return new MultiPolygon(*((MultiPolygon*) geom0));
+		return (MultiPolygon*) geom0;
 	else if (typeid(*geom0)==typeid(GeometryCollection))
-		return new GeometryCollection(*((GeometryCollection*) geom0));
+		return (GeometryCollection*) geom0;
 	else 
 		return geom0;
 }

@@ -9,6 +9,9 @@ EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge) {
 
 EdgeIntersectionList::~EdgeIntersectionList() {
 //	delete edge;
+	for(int i=0;i<(int)list->size();i++) {
+		delete (*list)[i];
+	}
 	delete list;
 }
 
@@ -94,12 +97,14 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	}
 	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(npts);
 	int ipt=0;
-	pts->setAt(*(new Coordinate(ei0->coord)),ipt++);
+	Coordinate *c=new Coordinate(ei0->coord);
+	pts->setAt(*c,ipt++);
+	delete c;
 	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++) {
 		pts->setAt(edge->pts->getAt(i),ipt++);
 	}
 	if (useIntPt1) pts->setAt(ei1->coord,ipt);
-	return new Edge(pts,new Label(*(edge->getLabel())));
+	return new Edge(pts,new Label(edge->getLabel()));
 }
 
 string EdgeIntersectionList::print(){

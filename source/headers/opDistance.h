@@ -1,6 +1,7 @@
 #ifndef GEOS_OPDISTANCE_H
 #define GEOS_OPDISTANCE_H
 
+#include <memory>
 #include "platform.h"
 #include "operation.h"
 #include "geom.h"

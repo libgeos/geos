@@ -8,7 +8,13 @@ NodeMap::NodeMap(NodeFactory *newNodeFact) {
 }
 
 NodeMap::~NodeMap() {
+	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
+	for (;it!=nodeMap->end();it++) {
+		Node *node=it->second;
+		delete node;
+	}
 	delete nodeMap;
+	delete nodeFact;
 }
 
 Node* NodeMap::addNode(Coordinate& coord){

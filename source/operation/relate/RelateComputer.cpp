@@ -24,7 +24,7 @@ RelateComputer::RelateComputer(vector<GeometryGraph*> *newArg) {
 RelateComputer::~RelateComputer() {
 	delete nodes;
 //	delete im;
-	delete arg;
+//	delete arg;
 	delete isolatedEdges;
 }
 
@@ -32,16 +32,18 @@ IntersectionMatrix* RelateComputer::computeIM() {
 	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
 	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
 	// if the Geometries don't overlap there is nothing to do
-	if (! (*arg)[0]->getGeometry()->getEnvelopeInternal()->intersects(
-							(*arg)[1]->getGeometry()->getEnvelopeInternal())) {
+	Envelope *e1=(*arg)[0]->getGeometry()->getEnvelopeInternal();
+	Envelope *e2=(*arg)[1]->getGeometry()->getEnvelopeInternal();
+	if (!e1->intersects(e2)) {
 		computeDisjointIM(im);
+		delete e1;
+		delete e2;
 		return im;
 	}
-	(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
-	(*arg)[1]->computeSelfNodes((LineIntersector*)li,false);
+	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
+	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes((LineIntersector*)li,false);
 	// compute intersections between edges of the two input geometries
 	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1],(LineIntersector*)li,false);
-cout << "# segment intersection tests: " << intersector->numTests << endl;
 	computeIntersectionNodes(0);
 	computeIntersectionNodes(1);
 	/**
@@ -68,7 +70,6 @@ cout << "# segment intersection tests: " << intersector->numTests << endl;
 	insertEdgeEnds(ee0);
 	vector<EdgeEnd*> *ee1=eeBuilder->computeEdgeEnds((*arg)[1]->getEdges());
 	insertEdgeEnds(ee1);
-	delete eeBuilder;
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
 	labelNodeEdges();
@@ -87,6 +88,14 @@ cout << "# segment intersection tests: " << intersector->numTests << endl;
 	labelIsolatedEdges(1,0);
 	// update the IM from all components
 	updateIM(im);
+	delete e1;
+	delete e2;
+	delete si1;
+	delete si2;
+	delete intersector;
+	delete ee0;
+	delete ee1;
+	delete eeBuilder;
 	return im;
 }
 

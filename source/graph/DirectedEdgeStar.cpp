@@ -79,6 +79,7 @@ void DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom){
 	EdgeEndStar::computeLabelling(geom);
 	// determine the overall labelling for this DirectedEdgeStar
 	// (i.e. for the node it is based at)
+	delete label;
 	label=new Label(Location::UNDEF);
 	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *ee=*it;

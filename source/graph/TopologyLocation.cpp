@@ -8,10 +8,11 @@ TopologyLocation::TopologyLocation(vector<int>* newLocation){
 }
 
 TopologyLocation::TopologyLocation(){
-	location=new vector<int>();
+	location=NULL;
 }
 
 TopologyLocation::~TopologyLocation(){
+	location->clear();
 	delete location;
 }
 
@@ -29,8 +30,8 @@ TopologyLocation::TopologyLocation(int on) {
 	(*location)[Position::ON]=on;
 }
 
-TopologyLocation::TopologyLocation(const TopologyLocation &gl) {
-	location=new vector<int>(gl.location->begin(),gl.location->end());
+TopologyLocation::TopologyLocation(TopologyLocation *gl) {
+	location=new vector<int>(gl->location->begin(),gl->location->end());
 }
 
 void TopologyLocation::init(int size){

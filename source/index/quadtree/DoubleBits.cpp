@@ -1,4 +1,5 @@
 #include "../../headers/indexQuadtree.h"
+#include "../../headers/util.h"
 
 namespace geos {
 
@@ -11,27 +12,28 @@ double DoubleBits::powerOf2(int exp){
 }
 
 int DoubleBits::exponent(double d) {
-	DoubleBits *db=new DoubleBits(d);
+	auto_ptr<DoubleBits> db(new DoubleBits(d));
 	return db->getExponent();
 }
 
 double DoubleBits::truncateToPowerOfTwo(double d){
-	DoubleBits *db=new DoubleBits(d);
+	auto_ptr<DoubleBits> db(new DoubleBits(d));
 	db->zeroLowerBits(52);
 	return db->getDouble();
 }
 
 string DoubleBits::toBinaryString(double d) {
-	DoubleBits *db=new DoubleBits(d);
+	auto_ptr<DoubleBits> db(new DoubleBits(d));
 	return db->toString();
 }
 
 double DoubleBits::maximumCommonMantissa(double d1, double d2) {
 	if (d1==0.0 || d2==0.0) return 0.0;
-	DoubleBits *db1=new DoubleBits(d1);
+	auto_ptr<DoubleBits> db1(new DoubleBits(d1));
 	DoubleBits *db2=new DoubleBits(d2);
 	if (db1->getExponent()!=db2->getExponent()) return 0.0;
 	int maxCommon=db1->numCommonMantissaBits(db2);
+	delete db2;
 	db1->zeroLowerBits(64-(12+maxCommon));
 	return db1->getDouble();
 }

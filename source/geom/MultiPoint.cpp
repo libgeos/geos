@@ -25,7 +25,8 @@ Geometry* MultiPoint::getBoundary() {
 }
 
 bool MultiPoint::isSimple(){
-	return (new IsSimpleOp())->isSimple(this);
+	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
+	return iso->isSimple(this);
 }
 
 bool MultiPoint::isValid() {

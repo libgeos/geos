@@ -1,13 +1,13 @@
 #ifndef GEOS_GEOM_H
 #define GEOS_GEOM_H
 
-
+#include <memory>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include "math.h"
-#include "util.h"
+//#include "util.h"
 #include "platform.h"
 
 using namespace std;
@@ -96,7 +96,7 @@ class Coordinate {
 public:
 	//void setNull(void);
 	//static Coordinate& getNull(void);
-	//Coordinate();
+	virtual ~Coordinate(){};
 	//Coordinate(double xNew, double yNew, double zNew);
 	//Coordinate(const Coordinate& c);
 	//Coordinate(double xNew, double yNew);
@@ -107,6 +107,7 @@ public:
 	string toString();
 	//void makePrecise();
 	//double distance(Coordinate& p);
+	static Coordinate& nullCoord;
 
 	void Coordinate::setNull() {
 		x=DoubleNotANumber;
@@ -115,7 +116,7 @@ public:
 	}
 
 	static Coordinate& Coordinate::getNull() {
-		return *(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
+		return nullCoord;
 	}
 
 	Coordinate::Coordinate() {
@@ -192,6 +193,7 @@ public:
 	double x;	/// x-coordinate
 	double y;	/// y-coordinate
 	double z;	/// z-coordinate
+
 };
 
 class CoordinateList {
@@ -204,7 +206,7 @@ public:
 	virtual	void deleteAt(int pos)=0;
 	virtual	vector<Coordinate>* toVector()=0;
 	virtual	string toString()=0;
-	virtual	void setPoints(const vector<Coordinate> &v)=0;
+	virtual	void setPoints(vector<Coordinate> &v)=0;
 	bool hasRepeatedPoints();
 	Coordinate* minCoordinate();
 	static bool hasRepeatedPoints(CoordinateList *cl);
@@ -216,6 +218,7 @@ public:
 	void add(vector<Coordinate>* vc,bool allowRepeated);
 	void add(Coordinate& c,bool allowRepeated);
 	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
+	virtual ~CoordinateList(){};
 };
 
 class BasicCoordinateList : public CoordinateList {
@@ -224,6 +227,7 @@ public:
 	BasicCoordinateList(int n);
 	BasicCoordinateList(Coordinate& c);
 	BasicCoordinateList(const BasicCoordinateList &cl);
+	BasicCoordinateList(CoordinateList *c);
 	virtual ~BasicCoordinateList();
 	bool isEmpty();
 	void add(Coordinate& c);
@@ -233,7 +237,7 @@ public:
 	void deleteAt(int pos);
 	vector<Coordinate>* toVector();
 	string toString();
-	void setPoints(const vector<Coordinate> &v);
+	void setPoints(vector<Coordinate> &v);
 private:
 	vector<Coordinate> *vect;
 };
@@ -250,6 +254,7 @@ public:
 	PointCoordinateList(int n);
 	PointCoordinateList(Coordinate& c);
 	PointCoordinateList(const PointCoordinateList &cl);
+	PointCoordinateList(CoordinateList *c);
 	virtual ~PointCoordinateList();
 	bool isEmpty();
 	void add(Coordinate& c);
@@ -263,8 +268,8 @@ public:
 	vector<Coordinate>* toVector();
 	vector<point_3d>* toPointVector();
 	string toString();
-	void setPoints(const vector<Coordinate> &v);
-	void setPoints(const vector<point_3d> &v);
+	void setPoints(vector<Coordinate> &v);
+	void setPoints(vector<point_3d> &v);
 private:
 	vector<point_3d> *vect;
 };
@@ -274,6 +279,7 @@ public:
 	virtual CoordinateList* createCoordinateList()=0;
 	virtual CoordinateList* createCoordinateList(int size)=0;
 	virtual CoordinateList* createCoordinateList(Coordinate& c)=0;
+	virtual CoordinateList* createCoordinateList(CoordinateList *c)=0;
 	static CoordinateListFactory* internalFactory;
 };
 
@@ -281,12 +287,14 @@ class BasicCoordinateListFactory: public CoordinateListFactory {
 	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
 	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
 	CoordinateList* createCoordinateList(Coordinate& c) {return new BasicCoordinateList(c);};
+	CoordinateList* createCoordinateList(CoordinateList *c) {return new BasicCoordinateList(c);};
 };
 
 class PointCoordinateListFactory: public CoordinateListFactory {
 	CoordinateList* createCoordinateList() {return new PointCoordinateList();};
 	CoordinateList* createCoordinateList(int size) {return new PointCoordinateList(size);};
 	CoordinateList* createCoordinateList(Coordinate& c) {return new PointCoordinateList(c);};
+	CoordinateList* createCoordinateList(CoordinateList *c) {return new PointCoordinateList(c);};
 };
 
 /**
@@ -505,7 +513,7 @@ public:
 	virtual double distance(Geometry *g);
 	virtual double getArea();
 	virtual double getLength();
-	virtual ~Geometry(void);
+	virtual ~Geometry();
 	virtual bool isWithinDistance(Geometry *geom,double cDistance);
 	virtual Point* getCentroid();
 	virtual Point* getInteriorPoint();
@@ -533,7 +541,7 @@ protected:
 	int compare(vector<Geometry *> a, vector<Geometry *> b);
 	bool equal(Coordinate& a,Coordinate& b,double tolerance);
 private:
-	vector<string> sortedClasses;
+	vector<string> *sortedClasses;
 	virtual int getClassSortIndex();
 	static GeometryComponentFilter* geometryChangedFilter;
 };
@@ -663,7 +671,7 @@ public:
 /**
  * Indicates an invalid or inconsistent topological situation encountered during processing
  */
-class TopologyException: public GEOSException {
+class TopologyException {
 private:
 	static string msgWithCoord(string msg,Coordinate *newPt);
 	Coordinate *pt;
@@ -671,6 +679,11 @@ public:
 	TopologyException(string msg);
 	TopologyException(string msg,Coordinate *newPt);
 	Coordinate* getCoordinate();
+	void setName(string nname);
+	void setMessage(string msg);
+protected:
+	string txt;
+	string name;
 };
 
 //Operators
@@ -693,7 +706,7 @@ public:
 	GeometryCollection(void);
 	GeometryCollection(const GeometryCollection &gc);
 	GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
-	virtual ~GeometryCollection(void);
+	virtual ~GeometryCollection();
 	virtual CoordinateList* getCoordinates();
 	virtual bool isEmpty();
 	virtual int getDimension();
@@ -765,7 +778,7 @@ public:
 	Point(void);
 	Point(Coordinate& c, PrecisionModel* precisionModel, int SRID);
 	Point(const Point &p); //replaces clone()
-	virtual ~Point(void);
+	virtual ~Point();
 	CoordinateList* getCoordinates(void);
 	int getNumPoints();
 	bool isEmpty();

@@ -9,6 +9,9 @@ MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFa
 	computeRing();
 }
 
+MinimalEdgeRing::~MinimalEdgeRing(){
+}
+
 DirectedEdge* MinimalEdgeRing::getNext(DirectedEdge *de) {
 	return de->getNextMin();
 }
