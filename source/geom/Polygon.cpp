@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2004/02/27 17:43:45  strk
+ * memory leak fix in Polygon::getArea() - reported by 'Manuel  Prieto Villegas' <mprieto@dap.es>
+ *
  * Revision 1.27  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -279,9 +282,11 @@ const Coordinate* Polygon::getCoordinate() const {
 */
 double Polygon::getArea() const {
 	double area=0.0;
-	area+=fabs(CGAlgorithms::signedArea(shell->getCoordinates()));
+	area+=fabs(CGAlgorithms::signedArea(shell->getCoordinatesRO()));
 	for(unsigned int i=0;i<holes->size();i++) {
-        area-=fabs(CGAlgorithms::signedArea((*holes)[i]->getCoordinates()));
+		CoordinateList *h=(*holes)[i]->getCoordinates();
+        	area-=fabs(CGAlgorithms::signedArea(h));
+		delete h;
 	}
 	return area;
 }
