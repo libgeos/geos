@@ -15,7 +15,7 @@
 
 #include <geos/geomgraph.h>
 
-//#define DEBUG_INTERSECT
+//#define DEBUG_INTERSECT 0
 #ifndef DEBUG
 #define DEBUG 0
 #endif
@@ -197,6 +197,9 @@ Edge::isIsolated()
 void
 Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
 {
+#if DEBUG
+	cerr<<"["<<this<<"] Edge::addIntersections("<<li->toString()<<", "<<segmentIndex<<", "<<geomIndex<<") called"<<endl;
+#endif
 	for (int i=0; i<li->getIntersectionNum();i++) {
 		addIntersection(li,segmentIndex,geomIndex,i);
 	}
@@ -210,6 +213,9 @@ Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
 void
 Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex)
 {
+#if DEBUG
+	cerr<<"["<<this<<"] Edge::addIntersection("<<li->toString()<<", "<<segmentIndex<<", "<<geomIndex<<", "<<intIndex<<") called"<<endl;
+#endif
 	const Coordinate& intPt=li->getIntersection(intIndex);
 	int normalizedSegmentIndex=segmentIndex;
 	double dist=li->getEdgeDistance(geomIndex,intIndex);
@@ -352,6 +358,9 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/11/22 12:59:25  strk
+ * Added debugging lines
+ *
  * Revision 1.7  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
