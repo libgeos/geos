@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/05/07 14:13:02  strk
+ * Fixed segfault in ::insert
+ *
  * Revision 1.6  2004/05/06 16:30:58  strk
  * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
  * deleted at destruction time. doc/example.cpp runs with no leaks.
@@ -96,7 +99,6 @@ void Bintree::insert(BinTreeInterval *itemInterval,void* item){
 	System.out.println("reinsertion size="+size());
 	}
 	*/
-	delete insertInterval;
 }
 
 vector<void*>* Bintree::iterator() {
