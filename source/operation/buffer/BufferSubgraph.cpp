@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/07 07:52:13  strk
+ * Removed note about required speedup in BufferSubgraph.
+ * I've made tests with 'sets' and there is actually a big slow down..
+ *
  * Revision 1.10  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -252,9 +256,8 @@ void BufferSubgraph::computeDepths(DirectedEdge *startEdge){
 			if (sym->isVisited()) continue;
 			Node *adjNode=sym->getNode();
 
-			// this has poor performances I guess
-			// should use a map instead.. --strk;
-			if (! contains(&nodesVisited,adjNode)) {
+			if (! contains(&nodesVisited,adjNode))
+			{
 				nodeQueue.push_back(adjNode);
 				nodesVisited.push_back(adjNode);
 			}

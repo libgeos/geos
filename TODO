@@ -4,8 +4,6 @@
 
 - Check header files layout
 
-- speedup in BufferSubgraph::computeDepths (read comment there)
-
 - Add class for use in Geometry::userData setting.
 
 - Remove all explicit heap allocations for private static members.
