@@ -16,6 +16,7 @@ DIR_SOURCES =       BasicCoordinateList.cpp \
                     Geometry.cpp \
                     GeometryCollection.cpp \
                     GeometryCollectionIterator.cpp \
+                    GeometryComponentFilter.cpp \
                     GeometryFactory.cpp \
                     IntersectionMatrix.cpp  \
                     LinearRing.cpp \
@@ -25,10 +26,11 @@ DIR_SOURCES =       BasicCoordinateList.cpp \
                     MultiLineString.cpp \
                     MultiPoint.cpp \
                     MultiPolygon.cpp \
-                    Point.cpp \
                     PointCoordinateList.cpp \
+                    Point.cpp \
                     Polygon.cpp \
-                    PrecisionModel.cpp 
+                    PrecisionModel.cpp \ 
+                    TopologyException.cpp 
 
 EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../graph/DirectedEdge.cpp \
@@ -54,6 +56,7 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../graph/index/MonotoneChainEdge.cpp \
                     ../graph/index/MonotoneChainIndexer.cpp \
                     ../graph/index/SegmentIntersector.cpp \
+                    ../graph/index/SimpleEdgeSetIntersector.cpp \
                     ../graph/index/SimpleMCSweepLineIntersector.cpp \
                     ../graph/index/SweepLineEvent.cpp \
                     ../graph/index/SweepLineSegment.cpp \
@@ -65,22 +68,37 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../io/markup/MarkupSTL.cpp \
                     ../util/Assert.cpp  \
                     ../util/AssertionFailedException.cpp \
+                    ../util/GEOSException.cpp \
+                    ../util/IllegalArgumentException.cpp \
+                    ../util/UnsupportedOperationException.cpp \
                     ../bigtest/GeometryTestFactory.cpp \
-                    ../algorithm/CGAlgorithms.cpp \
-                    ../algorithm/HCoordinate.cpp \
-                    ../algorithm/LineIntersector.cpp \
-                    ../algorithm/MCPointInRing.cpp \
-                    ../algorithm/NonRobustCGAlgorithms.cpp \
-                    ../algorithm/NonRobustLineIntersector.cpp \
-                    ../algorithm/NotRepresentableException.cpp \
-                    ../algorithm/PointLocator.cpp \
-                    ../algorithm/RobustCGAlgorithms.cpp \
-                    ../algorithm/RobustDeterminant.cpp \
-                    ../algorithm/RobustLineIntersector.cpp \
-                    ../algorithm/SimplePointInAreaLocator.cpp \
-                    ../algorithm/SimplePointInRing.cpp \
+                    ../algorithm/CGAlgorithms.cpp
+                    ../algorithm/HCoordinate.cpp
+                    ../algorithm/InteriorPointArea.cpp
+                    ../algorithm/LineIntersector.cpp
+                    ../algorithm/MCPointInRing.cpp
+                    ../algorithm/CentroidArea.cpp
+                    ../algorithm/NonRobustCGAlgorithms.cpp
+                    ../algorithm/NonRobustLineIntersector.cpp
+                    ../algorithm/NotRepresentableException.cpp
+                    ../algorithm/PointLocator.cpp
+                    ../algorithm/RobustCGAlgorithms.cpp
+                    ../algorithm/RobustDeterminant.cpp
+                    ../algorithm/RobustLineIntersector.cpp
+                    ../algorithm/SimplePointInAreaLocator.cpp
+                    ../algorithm/SimplePointInRing.cpp
+                    ../algorithm/CentroidLine.cpp
+                    ../algorithm/CentroidPoint.cpp
+                    ../algorithm/InteriorPointLine.cpp
+                    ../algorithm/InteriorPointPoint.cpp
+                    ../algorithm/SIRtreePointInRing.cpp
                     ../operation/GeometryGraphOperation.cpp \
                     ../operation/IsSimpleOp.cpp \
+                    ../operation/distance/ConnectedElementPointFilter.cpp \
+                    ../operation/distance/DistanceOp.cpp \
+                    ../operation/distance/LineExtractorFilter.cpp \
+                    ../operation/distance/PointExtractorFilter.cpp \
+                    ../operation/distance/PolygonExtractorFilter.cpp \
                     ../operation/overlay/EdgeSetNoder.cpp \
                     ../operation/overlay/LineBuilder.cpp \
                     ../operation/overlay/MaximalEdgeRing.cpp \
@@ -105,11 +123,31 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../operation/valid/SimpleNestedRingTester.cpp \
                     ../operation/valid/SweeplineNestedRingTester.cpp \
                     ../operation/valid/TopologyValidationError.cpp \
+                    ../index/bintree/Bintree.cpp \
+                    ../index/bintree/BinTreeInterval.cpp \
+                    ../index/bintree/BinTreeNode.cpp \
+                    ../index/bintree/Interval.cpp \
+                    ../index/bintree/Key.cpp \
+                    ../index/bintree/NodeBase.cpp \
+                    ../index/bintree/Node.cpp \
+                    ../index/bintree/Root.cpp \
                     ../index/chain/indexMonotoneChain.cpp \
                     ../index/chain/MonotoneChainBuilder.cpp \
                     ../index/chain/MonotoneChainOverlapAction.cpp \
                     ../index/chain/MonotoneChainSelectAction.cpp \
+                    ../index/quadtree/DoubleBits.cpp \
+                    ../index/quadtree/IntervalSize.cpp \
                     ../index/quadtree/Quadtree.cpp \
+                    ../index/quadtree/QuadTreeKey.cpp \
+                    ../index/quadtree/QuadTreeNodeBase.cpp \
+                    ../index/quadtree/QuadTreeNode.cpp \
+                    ../index/quadtree/QuadTreeRoot.cpp \
+                    ../index/strtree/AbstractNode.cpp \
+                    ../index/strtree/AbstractSTRtree.cpp \
+                    ../index/strtree/Interval.cpp \
+                    ../index/strtree/ItemBoundable.cpp \
+                    ../index/strtree/SIRtree.cpp \
+                    ../index/strtree/STRtree.cpp \
                     ../index/sweepline/indexSweepLineEvent.cpp \
                     ../index/sweepline/SweepLineIndex.cpp \
                     ../index/sweepline/SweepLineInterval.cpp 
