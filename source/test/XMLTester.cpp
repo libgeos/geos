@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.35  2003/11/12 15:02:12  strk
+ * more cleanup on exception
+ *
  * Revision 1.34  2003/11/07 01:23:43  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -73,6 +76,11 @@ using namespace geos;
 #define PRED 128
 
 int main(int argC, char* argV[]) {
+	PrecisionModel *pm;
+	WKTReader *r;
+	WKTWriter *w;
+	Geometry *gA;
+	Geometry *gB;
 
 try{
 
@@ -103,7 +111,6 @@ try{
 	string opRes="";
 	int caseCount=0;
 	int testCount=0;
-	PrecisionModel *pm;
 	//	_CrtSetBreakAlloc(18);
 	CMarkupSTL xml;
 	bool a=xml.Load(source.c_str());
@@ -128,10 +135,10 @@ try{
 		pm=new PrecisionModel(scale,offsetX,offsetY);
 		cout << "Precision Model: FIXED" << endl;
 	}
-	WKTReader *r=new WKTReader(new GeometryFactory(pm,10));
-	WKTWriter *w=new WKTWriter();
-	Geometry *gA=NULL;
-	Geometry *gB=NULL;
+	r=new WKTReader(new GeometryFactory(pm,10));
+	w=new WKTWriter();
+	gA=NULL;
+	gB=NULL;
 
 	while (xml.FindChildElem("case")) {
 		xml.IntoElem();
@@ -207,11 +214,19 @@ try{
 						}
 					}
 				} else if (opName=="intersection") {
-					Geometry *gRes=r->read(opRes);
+					Geometry *gRes=NULL;
+					Geometry *gRealRes=NULL;
+					gRes=r->read(opRes);
 					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->intersection(gB);
-					gRealRes->normalize();
+					try {
+						gRealRes=gA->intersection(gB);
+						gRealRes->normalize();
+					} catch ( ... ) {
+						delete gRealRes;
+						delete gRes;
+						throw;
+					}
 					if (out & TEST_RESULT) {
 						if (gRes->compareTo(gRealRes)==0) {
 							cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=true"  <<endl;
@@ -447,6 +462,12 @@ try{
 
 } catch (GEOSException *exc) {
 	cerr<<"Exception: "<<exc->toString()<<endl;
+	delete pm;
+	delete r;
+	delete w;
+	delete gA;
+	delete gB;
+	delete exc;
 }
 
 	Unload::Release();
