@@ -11,31 +11,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.18  2003/11/12 15:43:38  strk
- * Added some more throw specifications
- *
- * Revision 1.17  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geomgraph.h>
 #include <geos/util.h>
+
+#define DEBUG 1
 
 namespace geos {
 
@@ -87,7 +68,9 @@ int EdgeEndStar::getDegree(){
 	return (int)edgeMap->size();
 }
 
-vector<EdgeEnd*>* EdgeEndStar::getEdges() {
+vector<EdgeEnd*>*
+EdgeEndStar::getEdges()
+{
 	map<EdgeEnd*,void*,EdgeEndLT>::iterator mapIter;
 	if (edgeList==NULL) {
 		edgeList=new vector<EdgeEnd*>();
@@ -104,17 +87,22 @@ vector<EdgeEnd*>* EdgeEndStar::getEdges() {
 	return edgeList;
 }
 
-vector<EdgeEnd*>::iterator EdgeEndStar::getIterator(){
+vector<EdgeEnd*>::iterator
+EdgeEndStar::getIterator()
+{
 	return getEdges()->begin();
 }
 
-EdgeEnd* EdgeEndStar::getNextCW(EdgeEnd *ee){
+EdgeEnd*
+EdgeEndStar::getNextCW(EdgeEnd *ee)
+{
 	getEdges();
 	int i;
 	for(unsigned int j=0;j<edgeList->size();j++)
     {
-//        if (ee->compareTo( *(edgeList->at(j)))==0) {
-        if (ee->compareTo((*edgeList)[j])==0) {
+//        if (ee->compareTo( *(edgeList->at(j)))==0) 
+        if (ee->compareTo((*edgeList)[j])==0)
+	{
 			i=j;
 			break;
 		}
@@ -276,8 +264,9 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 		if (label->getLocation(geomIndex,Position::ON)==Location::UNDEF)
 			label->setLocation(geomIndex,Position::ON,currLoc);
 		// set side labels (if any)
-		// if (label.isArea()) {   //ORIGINAL
-		if (label->isArea(geomIndex)) {
+		// if (label.isArea())  //ORIGINAL
+		if (label->isArea(geomIndex))
+		{
 			int leftLoc=label->getLocation(geomIndex,Position::LEFT);
 			int rightLoc=label->getLocation(geomIndex,Position::RIGHT);
 			// if there is a right location, that is the next location to propagate
@@ -321,5 +310,31 @@ string EdgeEndStar::print(){
 	}
 	return out;
 }
+
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
+ * Revision 1.3  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.2  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.18  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
+ * Revision 1.17  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

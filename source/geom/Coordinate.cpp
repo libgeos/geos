@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.16  2004/07/22 07:04:49  strk
  * Documented missing geometry functions.
  *
@@ -217,14 +220,14 @@ bool operator==(const Coordinate& a, const Coordinate& b) {
 	//return (a.x == b.x) && ( a.y == b.y) && (( a.z == b.z)||(a.z==DoubleNotANumber && b.z==DoubleNotANumber));
 	if ( a.x != b.x ) return false;
 	if ( a.y != b.y ) return false;
-	//if ( a.z != b.z ) return false;
+	if ( a.z != b.z ) return false;
 	return true;
 }
 
 bool operator!=(const Coordinate& a, const Coordinate& b) {
 	if ( a.x != b.x ) return true;
 	if ( a.y != b.y ) return true;
-	//if ( a.z != b.z ) return true;
+	if ( a.z != b.z ) return true;
 	return false;
 }
 }

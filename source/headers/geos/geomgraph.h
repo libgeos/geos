@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.4  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -419,6 +422,7 @@ private:
 };
 
 class Node: public GraphComponent {
+
 public:
 	Node(Coordinate& newCoord, EdgeEndStar* newEdges);
 	virtual ~Node();
@@ -432,10 +436,16 @@ public:
 	virtual void setLabelBoundary(int argIndex);
 	virtual int computeMergedLocation(const Label* label2, int eltIndex);
 	virtual string print();
+
 protected:
 	Coordinate coord;
 	EdgeEndStar* edges;
 	virtual void computeIM(IntersectionMatrix *im) {};
+
+private:
+	double z;
+	unsigned int validz;
+
 };
 
 class NodeFactory {
@@ -681,35 +691,48 @@ public:
 	vector<Edge*> *getEdges();
 	bool hasTooFewPoints();
 	const Coordinate& getInvalidPoint(); 
+
 private:
+
 	const Geometry *parentGeom;
-	// the precision model of the Geometry represented by this graph
-//	const PrecisionModel *precisionModel;
-//	int SRID;
-	/**
-	* The lineEdgeMap is a map of the linestring components of the
-	* parentGeometry to the edges which are derived from them.
-	* This is used to efficiently perform findEdge queries
-	*/
+
+	/*
+	 * The lineEdgeMap is a map of the linestring components of the
+	 * parentGeometry to the edges which are derived from them.
+	 * This is used to efficiently perform findEdge queries
+	 */
 	map<const LineString*,Edge*,LineStringLT>* lineEdgeMap;
-	/**
-	* If this flag is true, the Boundary Determination Rule will used when deciding
-	* whether nodes are in the boundary or not
-	*/
+
+	/*
+	 * If this flag is true, the Boundary Determination Rule will
+	 * used when deciding whether nodes are in the boundary or not
+	 */
 	bool useBoundaryDeterminationRule;
-	int argIndex;  // the index of this geometry as an argument to a spatial function (used for labelling)
+
+	/*
+	 * the index of this geometry as an argument to a spatial function
+	 * (used for labelling)
+	 */
+	int argIndex;
+
 	vector<Node*>* boundaryNodes;
+
 	bool hasTooFewPointsVar;
+
 	Coordinate invalidPoint; 
+
 	EdgeSetIntersector* createEdgeSetIntersector();
+
 	void add(const Geometry *g); // throw(UnsupportedOperationException *);
 	void addCollection(const GeometryCollection *gc);
 	void addPoint(const Point *p);
 	void addPolygonRing(const LinearRing *lr,int cwLeft,int cwRight);
 	void addPolygon(const Polygon *p);
 	void addLineString(const LineString *line);
+
 	void insertPoint(int argIndex, const Coordinate& coord,int onLocation);
 	void insertBoundaryPoint(int argIndex, const Coordinate& coord);
+
 	void addSelfIntersectionNodes(int argIndex);
 	void addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc);
 };

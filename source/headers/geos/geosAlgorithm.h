@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.6  2004/09/13 10:12:49  strk
  * Added invalid coordinates checks in IsValidOp.
  * Cleanups.
@@ -219,38 +222,55 @@ public:
 	static double nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
 	LineIntersector();
 	virtual ~LineIntersector();
-	/**
-	* Tests whether either intersection point is an interior point of one of the input segments.
-	*
-	* @return <code>true</code> if either intersection point is in the interior of one of the input segments
-	*/
+
+	/*
+	 * Tests whether either intersection point is an interior point of
+	 * one of the input segments.
+	 *
+	 * @return <code>true</code> if either intersection point is in
+	 * the interior of one of the input segments
+	 */
 	virtual bool isInteriorIntersection();
-	/**
-	* Tests whether either intersection point is an interior point of the specified input segment.
-	*
-	* @return <code>true</code> if either intersection point is in the interior of the input segment
-	*/
+
+	/*
+	 * Tests whether either intersection point is an interior point
+	 * of the specified input segment.
+	 *
+	 * @return <code>true</code> if either intersection point is in
+	 * the interior of the input segment
+	 */
 	virtual bool isInteriorIntersection(int inputLineIndex);
+
 	virtual void setMakePrecise(const PrecisionModel *newPM);
+
 	virtual void setPrecisionModel(const PrecisionModel *newPM);
-	/**
-	* Compute the intersection of a point p and the line p1-p2.
-	* This function computes the boolean value of the hasIntersection test.
-	* The actual value of the intersection (if there is one)
-	* is equal to the value of <code>p</code>.
-	*/
-	virtual void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) =0;
+
+	/*
+	 * Compute the intersection of a point p and the line p1-p2.
+	 * This function computes the boolean value of the hasIntersection test.
+	 * The actual value of the intersection (if there is one)
+	 * is equal to the value of <code>p</code>.
+	 */
+	virtual void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2)=0;
+
 	enum {
 		DONT_INTERSECT,
 		DO_INTERSECT,
 		COLLINEAR
 	};
+
 	virtual void computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3, const Coordinate& p4);
+
 	virtual string toString() const;
+
 	virtual bool hasIntersection() const;
+
 	virtual int getIntersectionNum() const;
+
 	virtual const Coordinate& getIntersection(int intIndex) const;
+
 	static bool isSameSignAndNonZero(double a,double b);
+
 	virtual bool isIntersection(const Coordinate& pt) const;
 	virtual bool isProper() const;
 	virtual const Coordinate& getIntersectionAlongSegment(int segmentIndex,int intIndex);

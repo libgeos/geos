@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.2  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -80,54 +83,74 @@ namespace geos {
  * can be used to determine any boolean combination of the geometries.
  */
 class OverlayOp: public GeometryGraphOperation {
+
 public:
-	/**
-	* The spatial functions supported by this class.
-	* These operations implement various boolean combinations of the resultants of the overlay.
-	*/
+
+	/*
+	 * The spatial functions supported by this class.
+	 * These operations implement various boolean combinations of
+	 * the resultants of the overlay.
+	 */
 	enum {
 		INTERSECTION=1,
 		UNION,
 		DIFFERENCE,
 		SYMDIFFERENCE
 	};
+
 	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode); //throw(TopologyException *);
+
 	static bool isResultOfOp(Label *label,int opCode);
-	/**
-	* This method will handle arguments of Location.NULL correctly
-	*
-	* @return true if the locations correspond to the opCode
-	*/
+
+	/*
+	 * This method will handle arguments of Location.NULL correctly
+	 *
+	 * @return true if the locations correspond to the opCode
+	 */
 	static bool isResultOfOp(int loc0,int loc1,int opCode);
+
 	OverlayOp(const Geometry *g0, const Geometry *g1);
+
 	virtual ~OverlayOp();
-	Geometry* getResultGeometry(int funcCode); // throw(TopologyException *);
+
+	Geometry* getResultGeometry(int funcCode);
+		// throw(TopologyException *);
+
 	PlanarGraph* getGraph();
-	/**
-	* This method is used to decide if a point node should be included in the result or not.
-	*
-	* @return true if the coord point is covered by a result Line or Area geometry
-	*/
+
+	/*
+	 * This method is used to decide if a point node should be included
+	 * in the result or not.
+	 *
+	 * @return true if the coord point is covered by a result Line
+	 * or Area geometry
+	 */
 	bool isCoveredByLA(const Coordinate& coord);
-	/**
-	* This method is used to decide if an L edge should be included in the result or not.
-	*
-	* @return true if the coord point is covered by a result Area geometry
-	*/
+
+	/*
+	 * This method is used to decide if an L edge should be included
+	 * in the result or not.
+	 *
+	 * @return true if the coord point is covered by a result Area geometry
+	 */
 	bool isCoveredByA(const Coordinate& coord);
-	/**
-	* @return true if the coord is located in the interior or boundary of
-	* a geometry in the list.
-	*/
+
+	/*
+	 * @return true if the coord is located in the interior or boundary of
+	 * a geometry in the list.
+	 */
+
 protected:
-	/**
-	* Insert an edge from one of the noded input graphs.
-	* Checks edges that are inserted to see if an
-	* identical edge already exists.
-	* If so, the edge is not inserted, but its label is merged
-	* with the existing edge.
-	*/
+
+	/*
+	 * Insert an edge from one of the noded input graphs.
+	 * Checks edges that are inserted to see if an
+	 * identical edge already exists.
+	 * If so, the edge is not inserted, but its label is merged
+	 * with the existing edge.
+	 */
 	void insertUniqueEdge(Edge *e);
+
 private:
 	PointLocator *ptLocator;
 	const GeometryFactory *geomFact;
@@ -139,101 +162,120 @@ private:
 	vector<Point*> *resultPointList;
 	void computeOverlay(int opCode); // throw(TopologyException *);
 	void insertUniqueEdges(vector<Edge*> *edges);
-	/**
-	* If either of the GeometryLocations for the existing label is
-	* exactly opposite to the one in the labelToMerge,
-	* this indicates a dimensional collapse has happened.
-	* In this case, convert the label for that Geometry to a Line label
-	*/
+
+	/*
+	 * If either of the GeometryLocations for the existing label is
+	 * exactly opposite to the one in the labelToMerge,
+	 * this indicates a dimensional collapse has happened.
+	 * In this case, convert the label for that Geometry to a Line label
+	 */
 	//Not needed
 	//void checkDimensionalCollapse(Label labelToMerge, Label existingLabel);
-	/**
-	* Update the labels for edges according to their depths.
-	* For each edge, the depths are first normalized.
-	* Then, if the depths for the edge are equal,
-	* this edge must have collapsed into a line edge.
-	* If the depths are not equal, update the label
-	* with the locations corresponding to the depths
-	* (i.e. a depth of 0 corresponds to a Location of EXTERIOR,
-	* a depth of 1 corresponds to INTERIOR)
-	*/
+	/*
+	 * Update the labels for edges according to their depths.
+	 * For each edge, the depths are first normalized.
+	 * Then, if the depths for the edge are equal,
+	 * this edge must have collapsed into a line edge.
+	 * If the depths are not equal, update the label
+	 * with the locations corresponding to the depths
+	 * (i.e. a depth of 0 corresponds to a Location of EXTERIOR,
+	 * a depth of 1 corresponds to INTERIOR)
+	 */
 	void computeLabelsFromDepths();
-	/**
-	* If edges which have undergone dimensional collapse are found,
-	* replace them with a new edge which is a L edge
-	*/
+
+	/*
+	 * If edges which have undergone dimensional collapse are found,
+	 * replace them with a new edge which is a L edge
+	 */
 	void replaceCollapsedEdges();
-	/**
-	* Copy all nodes from an arg geometry into this graph.
-	* The node label in the arg geometry overrides any previously computed
-	* label for that argIndex.
-	* (E.g. a node may be an intersection node with
-	* a previously computed label of BOUNDARY,
-	* but in the original arg Geometry it is actually
-	* in the interior due to the Boundary Determination Rule)
-	*/
+
+	/*
+	 * Copy all nodes from an arg geometry into this graph.
+	 * The node label in the arg geometry overrides any previously
+	 * computed label for that argIndex.
+	 * (E.g. a node may be an intersection node with
+	 * a previously computed label of BOUNDARY,
+	 * but in the original arg Geometry it is actually
+	 * in the interior due to the Boundary Determination Rule)
+	 */
 	void copyPoints(int argIndex);
-	/**
-	* Compute initial labelling for all DirectedEdges at each node.
-	* In this step, DirectedEdges will acquire a complete labelling
-	* (i.e. one with labels for both Geometries)
-	* only if they
-	* are incident on a node which has edges for both Geometries
-	*/
+
+	/*
+	 * Compute initial labelling for all DirectedEdges at each node.
+	 * In this step, DirectedEdges will acquire a complete labelling
+	 * (i.e. one with labels for both Geometries)
+	 * only if they
+	 * are incident on a node which has edges for both Geometries
+	 */
 	void computeLabelling(); // throw(TopologyException *);
-	/**
-	* For nodes which have edges from only one Geometry incident on them,
-	* the previous step will have left their dirEdges with no labelling for the other
-	* Geometry.  However, the sym dirEdge may have a labelling for the other
-	* Geometry, so merge the two labels.
-	*/
+
+	/*
+	 * For nodes which have edges from only one Geometry incident on them,
+	 * the previous step will have left their dirEdges with no
+	 * labelling for the other Geometry. 
+	 * However, the sym dirEdge may have a labelling for the other
+	 * Geometry, so merge the two labels.
+	 */
 	void mergeSymLabels();
+
 	void updateNodeLabelling();
-	/**
-	* Incomplete nodes are nodes whose labels are incomplete.
-	* (e.g. the location for one Geometry is NULL).
-	* These are either isolated nodes,
-	* or nodes which have edges from only a single Geometry incident on them.
-	*
-	* Isolated nodes are found because nodes in one graph which don't intersect
-	* nodes in the other are not completely labelled by the initial process
-	* of adding nodes to the nodeList.
-	* To complete the labelling we need to check for nodes that lie in the
-	* interior of edges, and in the interior of areas.
-	* <p>
-	* When each node labelling is completed, the labelling of the incident
-	* edges is updated, to complete their labelling as well.
-	*/
+
+	/*
+	 * Incomplete nodes are nodes whose labels are incomplete.
+	 * (e.g. the location for one Geometry is NULL).
+	 * These are either isolated nodes,
+	 * or nodes which have edges from only a single Geometry incident
+	 * on them.
+	 *
+	 * Isolated nodes are found because nodes in one graph which
+	 * don't intersect nodes in the other are not completely
+	 * labelled by the initial process of adding nodes to the nodeList.
+	 * To complete the labelling we need to check for nodes that
+	 * lie in the interior of edges, and in the interior of areas.
+	 * 
+	 * When each node labelling is completed, the labelling of the
+	 * incident edges is updated, to complete their labelling as well.
+	 */
 	void labelIncompleteNodes();
-	/**
-	* Label an isolated node with its relationship to the target geometry.
-	*/
+
+	/*
+	 * Label an isolated node with its relationship to the target geometry.
+	 */
 	void labelIncompleteNode(Node *n,int targetIndex);
-	/**
-	* Find all edges whose label indicates that they are in the result area(s),
-	* according to the operation being performed.  Since we want polygon shells to be
-	* oriented CW, choose dirEdges with the interior of the result on the RHS.
-	* Mark them as being in the result.
-	* Interior Area edges are the result of dimensional collapses.
-	* They do not form part of the result area boundary.
-	*/
+
+	/*
+	 * Find all edges whose label indicates that they are in the result
+	 * area(s), according to the operation being performed. 
+	 * Since we want polygon shells to be
+	 * oriented CW, choose dirEdges with the interior of the result
+	 * on the RHS.
+	 * Mark them as being in the result.
+	 * Interior Area edges are the result of dimensional collapses.
+	 * They do not form part of the result area boundary.
+	 */
 	void findResultAreaEdges(int opCode);
-	/**
-	* If both a dirEdge and its sym are marked as being in the result, cancel
-	* them out.
-	*/
+
+	/*
+	 * If both a dirEdge and its sym are marked as being in the result,
+	 * cancel them out.
+	 */
 	void cancelDuplicateResultEdges();
+
 	bool isCovered(const Coordinate& coord,vector<Geometry*> *geomList);
 	bool isCovered(const Coordinate& coord,vector<Polygon*> *geomList);
 	bool isCovered(const Coordinate& coord,vector<LineString*> *geomList);
 
-	/**
+	/*
 	 * Build a Geometry containing all Geometries in the given vectors.
 	 * Takes element's ownership, vector control is left to caller. 
 	 */
 	Geometry* computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList);
+
+	/* Caches for memory management */
+	vector<Edge *>dupEdges;
+
 };
 
 /*

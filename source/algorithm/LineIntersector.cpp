@@ -18,26 +18,33 @@
 #include <geos/geom.h>
 #include <math.h>
 
+#ifndef DEBUG_INTERSECT
+#define DEBUG_INTERSECT 0
+#endif
+
 namespace geos {
 
 /**
-* Computes the "edge distance" of an intersection point p in an edge.
-* The edge distance is a metric of the point along the edge.
-* The metric used is a robust and easy to compute metric function.
-* It is <b>not</b> equivalent to the usual Euclidean metric.
-* It relies on the fact that either the x or the y ordinates of the
-* points in the edge are unique, depending on whether the edge is longer in
-* the horizontal or vertical direction.
-* <p>
-* NOTE: This function may produce incorrect distances
-*  for inputs where p is not precisely on p1-p2
-* (E.g. p = (139,9) p1 = (139,10), p2 = (280,1) produces distanct 0.0, which is incorrect.
-* <p>
-* My hypothesis is that the function is safe to use for points which are the
-* result of <b>rounding</b> points which lie on the line,
-* but not safe to use for <b>truncated</b> points.
-*/
-double LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,const Coordinate& p1) {
+ * Computes the "edge distance" of an intersection point p in an edge.
+ * The edge distance is a metric of the point along the edge.
+ * The metric used is a robust and easy to compute metric function.
+ * It is <b>not</b> equivalent to the usual Euclidean metric.
+ * It relies on the fact that either the x or the y ordinates of the
+ * points in the edge are unique, depending on whether the edge is longer in
+ * the horizontal or vertical direction.
+ * 
+ * NOTE: This function may produce incorrect distances
+ *  for inputs where p is not precisely on p1-p2
+ * (E.g. p = (139,9) p1 = (139,10), p2 = (280,1) produces distanct
+ * 0.0, which is incorrect.
+ * 
+ * My hypothesis is that the function is safe to use for points which are the
+ * result of <b>rounding</b> points which lie on the line,
+ * but not safe to use for <b>truncated</b> points.
+ */
+double
+LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,const Coordinate& p1)
+{
 	double dx=fabs(p1.x-p0.x);
 	double dy=fabs(p1.y-p0.y);
 	double dist=-1.0;	// sentinel value
@@ -65,11 +72,14 @@ double LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate
 	return dist;
 }
 
-/**
-* This function is non-robust, since it may compute the square of large numbers.
-* Currently not sure how to improve this.
-*/
-double LineIntersector::nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) {
+/*
+ * This function is non-robust, since it may compute the square
+ * of large numbers.
+ * Currently not sure how to improve this.
+ */
+double
+LineIntersector::nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2)
+{
 	double dx=p.x-p1.x;
 	double dy=p.y-p1.y;
 	double dist=sqrt(dx*dx+dy*dy);   // dummy value
@@ -77,7 +87,8 @@ double LineIntersector::nonRobustComputeEdgeDistance(const Coordinate& p,const C
 	return dist;
 }
 
-LineIntersector::LineIntersector() {
+LineIntersector::LineIntersector()
+{
 	precisionModel=NULL;
 	Coordinate *c=new Coordinate();
 	intPt[0].setCoordinate(*c);
@@ -174,7 +185,12 @@ int LineIntersector::getIntersectionNum() const {
 *
 * @return the intIndex'th intersection point
 */
-const Coordinate& LineIntersector::getIntersection(int intIndex) const {
+const Coordinate&
+LineIntersector::getIntersection(int intIndex) const
+{
+#if DEBUG_INTERSECT
+	cerr<<"LineIntersector::getIntersection("<<intIndex<<"): "<<intPt[intIndex].toString()<<endl;
+#endif
 	return intPt[intIndex];
 }
 
@@ -317,6 +333,9 @@ bool LineIntersector::isInteriorIntersection(int inputLineIndex){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.14  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

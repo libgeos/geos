@@ -18,7 +18,7 @@
 #include <typeinfo>
 #include <stdio.h>
 
-//#define PRINT_Z 1
+#define PRINT_Z 0
 
 namespace geos {
 
@@ -178,7 +178,7 @@ void WKTWriter::appendCoordinate(const Coordinate* coordinate, Writer *writer, c
 	out+=writeNumber(coordinate->x);
 	out+=" ";
 	out+=writeNumber(coordinate->y);
-#ifdef PRINT_Z
+#if PRINT_Z
 	out+=" ";
 	out+=writeNumber(coordinate->z);
 #endif
@@ -311,6 +311,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.19  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

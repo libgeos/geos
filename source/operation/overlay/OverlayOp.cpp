@@ -17,6 +17,10 @@
 #include <stdio.h>
 #include <geos/util.h>
 
+#ifndef DEBUG_INTERSECT
+#define DEBUG_INTERSECT 0
+#endif
+
 namespace geos {
 
 Geometry*
@@ -85,6 +89,8 @@ OverlayOp::~OverlayOp()
 	delete resultLineList;
 	delete resultPointList;
 	delete ptLocator;
+	for (int i=0; i<dupEdges.size(); i++)
+		delete dupEdges[i];
 }
 
 Geometry*
@@ -108,10 +114,16 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 		Edge *e=(*edges)[i];
 		insertUniqueEdge(e);
 	}
-//for(int i=0;i<(int)edgeList->size();i++) {
-//	Edge *e=(*edgeList)[i];
-//	cout << endl << e->print() << endl;
-//}
+
+#if DEBUG_INTERSECT
+	cerr<<"OverlayOp::insertUniqueEdges("<<edges->size()<<"): "<<endl;
+	for(int i=0;i<(int)edges->size();i++) {
+		Edge *e=(*edges)[i];
+		if ( ! e ) cerr <<" NULL"<<endl;
+		cerr <<" "<< e->print() << endl;
+	}
+#endif // DEBUG_INTERSECT
+
 }
 
 /*
@@ -431,29 +443,36 @@ OverlayOp::computeOverlay(int opCode)
 
 
 	// node the input Geometries
-	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes(li,false);
-	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes(li,false);
-	delete si1;
-	delete si2;
-	// compute intersections between edges of the two input geometries
-	SegmentIntersector *si3=(*arg)[0]->computeEdgeIntersections((*arg)[1],li,true);
-	delete si3;
+	delete (*arg)[0]->computeSelfNodes(li,false);
+	delete (*arg)[1]->computeSelfNodes(li,false);
 
-	//cerr<<"Intersections have been found"<<endl;
+#if DEBUG_INTERSECT
+	cerr<<"OverlayOp::computeOverlay: computed SelfNodes"<<endl;
+#endif
+
+	// compute intersections between edges of the two input geometries
+	delete (*arg)[0]->computeEdgeIntersections((*arg)[1],li,true);
+
+#if DEBUG_INTERSECT
+	cerr<<"OverlayOp::computeOverlay: computed EdgeIntersections"<<endl;
+	cerr<<"OverlayOp::computeOverlay: li: "<<li->toString()<<endl;
+#endif
+
 
 	baseSplitEdges = new vector<Edge*>();
 	(*arg)[0]->computeSplitEdges(baseSplitEdges);
 	(*arg)[1]->computeSplitEdges(baseSplitEdges);
 
 	// add the noded edges to this result graph
-
 	insertUniqueEdges(baseSplitEdges);
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
-    // debugging only
-    //NodingValidator nv = new NodingValidator(edgeList.getEdges());
-    //nv.checkValid();
+
+    	// debugging only
+    	//NodingValidator nv = new NodingValidator(edgeList.getEdges());
+    	//nv.checkValid();
+
 	graph->addEdges(edgeList->getEdges());
 
 	try {
@@ -547,7 +566,7 @@ OverlayOp::insertUniqueEdge(Edge *e)
 		existingLabel->merge(labelToMerge);
 		//Debug.print("inserted edge: "); Debug.println(e);
 		//Debug.print("existing edge: "); Debug.println(existingEdge);
-		delete e;
+		dupEdges.push_back(e);
 	} else {  // no matching existing edge was found
 		// add this new edge to the list of edges in this graph
 		//e.setName(name+edges.size());
@@ -612,6 +631,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.23  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

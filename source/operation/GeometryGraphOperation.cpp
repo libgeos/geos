@@ -11,24 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.14  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.13  2004/03/29 06:59:25  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.12  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/operation.h>
 #include <stdio.h>
@@ -75,4 +58,25 @@ GeometryGraphOperation::~GeometryGraphOperation() {
 }
 
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.15  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
+ * Revision 1.14  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.13  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
+ * Revision 1.12  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

@@ -15,6 +15,10 @@
 
 #include <geos/geomgraph.h>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 namespace geos {
 
 CGAlgorithms* PlanarGraph::cga=new CGAlgorithms();
@@ -125,6 +129,9 @@ PlanarGraph::getNodes()
 Node*
 PlanarGraph::addNode(Node *node)
 {
+#ifdef DEBUG
+	cerr<<"PlanarGraph::addNode("<<node->print()<<")"<<endl;
+#endif
 	return nodes->addNode(node);
 }
 
@@ -171,6 +178,9 @@ PlanarGraph::addEdges(vector<Edge*>* edgesToAdd)
 void
 PlanarGraph::linkResultDirectedEdges()
 {
+#if DEBUG
+	cerr<<"PlanarGraph::linkResultDirectedEdges called"<<endl;
+#endif
 	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap->end();nodeit++) {
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkResultDirectedEdges();
@@ -185,6 +195,9 @@ PlanarGraph::linkResultDirectedEdges()
 void
 PlanarGraph::linkAllDirectedEdges()
 {
+#if DEBUG
+	cerr<<"PlanarGraph::linkAllDirectedEdges called"<<endl;
+#endif
 	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap->end();nodeit++) {
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkAllDirectedEdges();
@@ -294,6 +307,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.8  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

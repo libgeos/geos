@@ -15,6 +15,10 @@
 
 #include <geos/geomgraph.h>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 namespace geos {
 
 EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge)
@@ -35,6 +39,9 @@ EdgeIntersectionList::~EdgeIntersectionList()
 EdgeIntersection*
 EdgeIntersectionList::add(const Coordinate& coord, int segmentIndex, double dist)
 {
+#if DEBUG
+	cerr<<"EdgeIntersectionLiest::add("<<coord.toString()<<","<<segmentIndex<<","<<dist<<")"<<endl;
+#endif // DEBUG
 	vector<EdgeIntersection *>::iterator insertIt=list->begin();
 	bool isInList=findInsertionPoint(segmentIndex,dist,&insertIt);
 	EdgeIntersection *ei;
@@ -157,6 +164,9 @@ EdgeIntersectionList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.4  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

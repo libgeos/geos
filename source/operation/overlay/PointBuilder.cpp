@@ -17,6 +17,13 @@
 #include <geos/io.h>
 #include <stdio.h>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+#ifndef COMPUTE_Z
+#define COMPUTE_Z 0
+#endif
+
 namespace geos {
 
 PointBuilder::PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory,PointLocator *newPtLocator)
@@ -69,9 +76,25 @@ vector<Point*>*
 PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 {
 	vector<Point*>* nonCoveredPointList=new vector<Point*>();
-	for(int i=0;i<(int)resultNodeList->size();i++) {
+	for(int i=0;i<(int)resultNodeList->size();i++)
+	{
 		Node *n=(*resultNodeList)[i];
 		const Coordinate& coord=n->getCoordinate();
+#if COMPUTE_Z
+#if DEBUG
+		cerr<<"PointBuilder::simplifyPoints: "<<n->print()<<endl;
+#endif // DEBUG
+		EdgeEndStar *ees = n->getEdges();
+		vector<EdgeEnd*>*eev = ees->getEdges();
+		cerr<<"PointBuilder::simplifyPoints: eev:"<<endl;
+		for (int i=0; i<eev->size(); i++)
+		{
+			EdgeEnd *ee=(*eev)[i];
+#if DEBUG
+			cerr<<" "<<ee->getCoordinate().toString()<<endl;
+#endif // DEBUG
+		}
+#endif // COMPUTE_Z
 		if(!op->isCoveredByLA(coord)) {
 			Point *pt=geometryFactory->createPoint(coord);
 			nonCoveredPointList->push_back(pt);
@@ -84,6 +107,9 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
  * Revision 1.10  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

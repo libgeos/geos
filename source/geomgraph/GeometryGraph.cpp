@@ -11,54 +11,15 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.5  2004/10/19 19:51:14  strk
- * Fixed many leaks and bugs in Polygonizer.
- * Output still bogus.
- *
- * Revision 1.4  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.33  2003/11/12 15:43:38  strk
- * Added some more throw specifications
- *
- * Revision 1.32  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.31  2003/10/20 13:53:03  strk
- * LinearRing handled as a LineString in 
- * GeometryGraph::add(const Geometry *) - more explicit exception 
- * thrown for unknown geometries
- *
- * Revision 1.30  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- *
- * Revision 1.29  2003/10/15 11:24:28  strk
- * Use getCoordinatesRO() introduced.
- *
  **********************************************************************/
-
 
 #include <geos/geomgraph.h>
 #include <typeinfo>
 #include <geos/util.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 namespace geos {
 
@@ -67,9 +28,9 @@ namespace geos {
  * for determining whether
  * a component (node or edge) that appears multiple times in elements
  * of a MultiGeometry is in the boundary or the interior of the Geometry
- * <br>
+ * 
  * The SFS uses the "Mod-2 Rule", which this function implements
- * <br>
+ * 
  * An alternative (and possibly more intuitive) rule would be
  * the "At Most One Rule":
  *    isInBoundary = (componentCount == 1)
@@ -105,7 +66,7 @@ GeometryGraph::~GeometryGraph(){
 	delete lineEdgeMap;
 }
 
-GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom):PlanarGraph()
+GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom): PlanarGraph()
 {
 	hasTooFewPointsVar=false;
 	boundaryNodes=NULL;
@@ -245,9 +206,9 @@ GeometryGraph::addCollection(const GeometryCollection *gc)
 	}
 }
 
-/**
-* Add a Point to the graph.
-*/
+/*
+ * Add a Point to the graph.
+ */
 void
 GeometryGraph::addPoint(const Point *p)
 {
@@ -255,11 +216,12 @@ GeometryGraph::addPoint(const Point *p)
 	insertPoint(argIndex,coord,Location::INTERIOR);
 }
 
-/**
-* The left and right topological location arguments assume that the ring is oriented CW.
-* If the ring is in the opposite orientation,
-* the left and right locations must be interchanged.
-*/
+/*
+ * The left and right topological location arguments assume that the ring
+ * is oriented CW.
+ * If the ring is in the opposite orientation,
+ * the left and right locations must be interchanged.
+ */
 void
 GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 {
@@ -321,21 +283,24 @@ GeometryGraph::addLineString(const LineString *line)
 //	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
 	(*lineEdgeMap)[line]=e;
 	insertEdge(e);
-	/**
-	* Add the boundary points of the LineString, if any.
-	* Even if the LineString is closed, add both points as if they were endpoints.
-	* This allows for the case that the node already exists and is a boundary point.
-	*/
+
+	/*
+	 * Add the boundary points of the LineString, if any.
+	 * Even if the LineString is closed, add both points as if they
+	 * were endpoints.
+	 * This allows for the case that the node already exists and is
+	 * a boundary point.
+	 */
 	Assert::isTrue(coord->getSize()>= 2,"found LineString with single point");
 	insertBoundaryPoint(argIndex,coord->getAt(0));
 	insertBoundaryPoint(argIndex,coord->getAt(coord->getSize()-1));
 	delete coord;
 }
 
-/**
-* Add an Edge computed externally.  The label on the Edge is assumed
-* to be correct.
-*/
+/*
+ * Add an Edge computed externally.  The label on the Edge is assumed
+ * to be correct.
+ */
 void
 GeometryGraph::addEdge(Edge *e)
 {
@@ -393,10 +358,16 @@ SegmentIntersector*
 GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	LineIntersector *li, bool includeProper)
 {
-	SegmentIntersector *si=new SegmentIntersector(li,includeProper,true);
-	si->setBoundaryNodes(getBoundaryNodes(),g->getBoundaryNodes());
+#if DEBUG
+	cerr<<"GeometryGraph::computeEdgeIntersections call"<<endl;
+#endif
+	SegmentIntersector *si=new SegmentIntersector(li, includeProper, true);
+	si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
 	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
-	esi->computeIntersections(edges,g->edges,si);
+	esi->computeIntersections(edges, g->edges, si);
+#if DEBUG
+	cerr<<"GeometryGraph::computeEdgeIntersections returns"<<endl;
+#endif
 	return si;
 }
 
@@ -411,12 +382,12 @@ GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLocation)
 		lbl->setLocation(argIndex,onLocation);
 }
 
-/**
-* Adds points using the mod-2 rule of SFS.  This is used to add the boundary
-* points of dim-1 geometries (Curves/MultiCurves).  According to the SFS,
-* an endpoint of a Curve is on the boundary
-* iff if it is in the boundaries of an odd number of Geometries
-*/
+/*
+ * Adds points using the mod-2 rule of SFS.  This is used to add the boundary
+ * points of dim-1 geometries (Curves/MultiCurves).  According to the SFS,
+ * an endpoint of a Curve is on the boundary
+ * iff if it is in the boundaries of an odd number of Geometries
+ */
 void
 GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
 {
@@ -483,4 +454,52 @@ GeometryGraph::getInvalidPoint()
 }
 
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
+ * Revision 1.6  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.5  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.3  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.2  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.33  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
+ * Revision 1.32  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.31  2003/10/20 13:53:03  strk
+ * LinearRing handled as a LineString in 
+ * GeometryGraph::add(const Geometry *) - more explicit exception 
+ * thrown for unknown geometries
+ *
+ * Revision 1.30  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ *
+ * Revision 1.29  2003/10/15 11:24:28  strk
+ * Use getCoordinatesRO() introduced.
+ *
+ **********************************************************************/
+
 
