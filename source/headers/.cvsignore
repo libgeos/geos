@@ -1,5 +1,7 @@
 Makefile.in
 Makefile
 config.h
+platform.h
 stamp-h.in
 stamp-h1
+stamp-h2
