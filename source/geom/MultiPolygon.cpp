@@ -33,11 +33,14 @@ Geometry* MultiPolygon::getBoundary() {
 		Geometry *g=pg->getBoundary();
 		GeometryCollection* rings=(GeometryCollection*)g;
 		for (int j = 0; j < rings->getNumGeometries(); j++) {
-			allRings->push_back(rings->getGeometryN(j));
+			allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
 		}
+		delete g;
 	}
 //LineString[] allRingsArray = new LineString[allRings.size()];
-	return new MultiLineString(allRings,precisionModel,SRID);
+	Geometry *ret=new MultiLineString(allRings,precisionModel,SRID);
+//	delete allRings;
+	return ret;
 }
 
 bool MultiPolygon::equalsExact(Geometry *other, double tolerance) {

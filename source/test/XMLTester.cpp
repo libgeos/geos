@@ -39,8 +39,6 @@ using namespace geos;
 
 int main(int argC, char* argV[]) {
 
-
-
 #ifdef _MSC_VER
 	InitAllocCheck();
 	{
@@ -68,8 +66,7 @@ int main(int argC, char* argV[]) {
 	int caseCount=0;
 	int testCount=0;
 	PrecisionModel *pm;
-
-//	_CrtSetBreakAlloc(18);
+	//	_CrtSetBreakAlloc(18);
 	CMarkupSTL xml;
 	bool a=xml.Load(source.c_str());
 
