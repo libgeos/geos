@@ -327,3 +327,4 @@ string DirectedEdgeStar::print() {
 	}
 	return out;
 }
+

@@ -105,3 +105,4 @@ string EdgeIntersectionList::print(){
 	}
 	return out;
 }
+

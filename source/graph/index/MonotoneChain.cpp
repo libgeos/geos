@@ -13,3 +13,4 @@ void MonotoneChain::computeIntersections(MonotoneChain *mc,SegmentIntersector *s
 int MonotoneChain::getGeomIndex(){
 	return geomIndex;
 }
+

@@ -89,3 +89,4 @@ string EdgeEnd::print() {
 	out+="   " + label->toString();
 	return out;
 }
+

@@ -71,3 +71,4 @@ string SweepLineEvent::print() {
 		out+="\n\tinsertEvent=NULL";
 	return out;
 }
+

@@ -203,3 +203,4 @@ string DirectedEdge::printEdge(){
 		out+=edge->printReverse();
 	return out;
 }
+

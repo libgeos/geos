@@ -93,3 +93,4 @@ void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,MonotoneCha
 		}
 	}
 }
+
