@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.40  2004/05/17 12:53:52  strk
+ * Expected result string trimmed for blanks
+ *
  * Revision 1.39  2004/05/14 07:19:59  strk
  * Changed the algorythm for finding precisionModel type (current way did
  * not work): now if you specify a scale precisionModel will be FIXED,
@@ -200,6 +203,12 @@ try{
 			opName=xml.GetChildAttrib("name");
 			opSig=xml.GetChildAttrib("arg3");
 			opRes=xml.GetChildData();
+		// trim blanks
+		string::size_type pos = opRes.find_first_not_of(" \t\n\r");
+		if (pos!=string::npos) opRes=opRes.substr(pos);
+		pos = opRes.find_last_not_of(" \t\n\r");
+		if (pos!=string::npos) opRes=opRes.substr(0, pos+1);
+
 			if (out & TEST_OP) {
 				if (opName=="relate") {
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
