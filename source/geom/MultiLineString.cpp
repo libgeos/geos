@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/05/07 13:04:57  strk
+ * leak removed in MultiLineString::getBoundary()
+ *
  * Revision 1.14  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -106,7 +109,9 @@ Geometry* MultiLineString::getBoundary() const {
 	GeometryGraph *g=new GeometryGraph(0,toInternalGeometry(this));
 	CoordinateList *pts=g->getBoundaryPoints();
 	delete g;
-	return getFactory()->createMultiPoint(pts);
+	Geometry *ret = (Geometry *)getFactory()->createMultiPoint(pts);
+	delete pts;
+	return ret;
 }
 
 bool
