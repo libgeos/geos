@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/09/13 10:14:47  strk
+ * Added INVALID_COORDINATE code num and error message.
+ *
  * Revision 1.6  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -40,7 +43,8 @@ string TopologyValidationError::errMsg[]={
     "Ring Self-intersection",
     "Nested shells",
     "Duplicate Rings",
-    "Too few points in geometry component"
+    "Too few points in geometry component",
+    "Invalid Coordinate"
 };
 
 TopologyValidationError::TopologyValidationError(int newErrorType,Coordinate newPt) {
