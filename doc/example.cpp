@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2003/11/13 11:57:23  strk
+ * bug fixed in relate call
+ *
  * Revision 1.13  2003/11/12 22:03:54  strk
  * added relational operators
  *
@@ -589,9 +592,15 @@ cout<<"-------------------------------------------------------------------------
 		cout<<"      ["<<i<<"]\t";
 		for (int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
+			IntersectionMatrix *im=NULL;
 			try {
-				if ( g1->relate(g2) ) cout<<" 1\t";
+				// second argument is intersectionPattern
+				if ( g1->relate(g2, "212101212") ) cout<<" 1\t";
 				else cout<<" 0\t";
+				
+				// get the intersectionMatrix itself
+				im=g1->relate(g2);
+				delete im; // delete afterwards
 			}
 			// Geometry Collection is not a valid argument
 			catch (IllegalArgumentException *exc) {
