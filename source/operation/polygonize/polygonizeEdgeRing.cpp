@@ -51,7 +51,8 @@ polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRing *testEr,
 		bool isContained=false;
 
 		// the hole envelope cannot equal the shell envelope
-		if (tryEnv==testEnv) continue;
+
+		if (tryEnv->equals(testEnv)) continue;
 
 		const CoordinateSequence *tryCoords =
 			tryRing->getCoordinatesRO();
@@ -134,8 +135,6 @@ polygonizeEdgeRing::~polygonizeEdgeRing()
 	delete deList;
 	if ( holes )
 	{
-		cerr<<"polygonizeEdgeRings still has holes at distruction time"
-			<<endl;
 		for (int i=0; i<(int)holes->size(); i++) delete (*holes)[i];
 		delete holes;
 	}
@@ -295,6 +294,9 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/10/26 16:09:21  strk
+ * Some more intentation and envelope equality check fix.
+ *
  * Revision 1.6  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.

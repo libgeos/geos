@@ -40,9 +40,11 @@ int PolygonizeGraph::getDegree(planarNode *node, long label){
 }
 
 /**
-* Deletes all edges at a node
-*/
-void PolygonizeGraph::deleteAllEdges(planarNode *node){
+ * Deletes all edges at a node
+ */
+void
+PolygonizeGraph::deleteAllEdges(planarNode *node)
+{
 	vector<planarDirectedEdge*> *edges=node->getOutEdges()->getEdges();
 	for(int i=0;i<(int)edges->size();i++) {
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*) (*edges)[i];
@@ -53,10 +55,11 @@ void PolygonizeGraph::deleteAllEdges(planarNode *node){
 	}
 }
 
-/**
-* Create a new polygonization graph.
-*/
-PolygonizeGraph::PolygonizeGraph(const GeometryFactory *newFactory){
+/*
+ * Create a new polygonization graph.
+ */
+PolygonizeGraph::PolygonizeGraph(const GeometryFactory *newFactory)
+{
 	factory=newFactory;
 }
 
@@ -75,7 +78,7 @@ PolygonizeGraph::~PolygonizeGraph()
 		delete newEdgeRings[i];
 }
 
-/**
+/*
  * Add a LineString forming an edge of the polygon graph.
  * @param line the line to add
  */
@@ -127,12 +130,12 @@ PolygonizeGraph::computeNextCWEdges()
 	delete pns;
 }
 
-/**
-* Convert the maximal edge rings found by the initial graph traversal
-* into the minimal edge rings required by JTS polygon topology rules.
-*
-* @param ringEdges the list of start edges for the edgeRings to convert.
-*/
+/*
+ * Convert the maximal edge rings found by the initial graph traversal
+ * into the minimal edge rings required by JTS polygon topology rules.
+ *
+ * @param ringEdges the list of start edges for the edgeRings to convert.
+ */
 void
 PolygonizeGraph::convertMaximalToMinimalEdgeRings(vector<PolygonizeDirectedEdge*> *ringEdges)
 {
@@ -424,6 +427,9 @@ PolygonizeGraph::deleteDangles()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/10/26 16:09:21  strk
+ * Some more intentation and envelope equality check fix.
+ *
  * Revision 1.5  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.

@@ -28,9 +28,9 @@ void Polygonizer::LineStringAdder::filter_rw(Geometry *g) {
 }
 
 
-/**
- * Create a polygonizer with the same {@link GeometryFactory}
- * as the input {@link Geometry}s
+/*
+ * Create a polygonizer with the same GeometryFactory
+ * as the input Geometry
  */
 Polygonizer::Polygonizer() {
 	lineStringAdder=new Polygonizer::LineStringAdder(this);
@@ -43,7 +43,8 @@ Polygonizer::Polygonizer() {
 	polyList=NULL;
 }
 
-Polygonizer::~Polygonizer() {
+Polygonizer::~Polygonizer()
+{
 	delete lineStringAdder;
 	delete dangles;
 	delete cutEdges;
@@ -64,14 +65,14 @@ Polygonizer::~Polygonizer() {
 	}
 }
 
-/**
-* Add a collection of geometries to be polygonized.
-* May be called multiple times.
-* Any dimension of Geometry may be added;
-* the constituent linework will be extracted and used
-*
-* @param geomList a list of {@link Geometry}s with linework to be polygonized
-*/
+/*
+ * Add a collection of geometries to be polygonized.
+ * May be called multiple times.
+ * Any dimension of Geometry may be added;
+ * the constituent linework will be extracted and used
+ *
+ * @param geomList a list of {@link Geometry}s with linework to be polygonized
+ */
 void Polygonizer::add(vector<Geometry*> *geomList){
 	for(int i=0;i<(int)geomList->size();i++) {
 		Geometry *geometry=(*geomList)[i];
@@ -79,7 +80,7 @@ void Polygonizer::add(vector<Geometry*> *geomList){
 	}
 }
 
-/**
+/*
  * Add a geometry to the linework to be polygonized.
  * May be called multiple times.
  * Any dimension of Geometry may be added;
@@ -94,7 +95,7 @@ void Polygonizer::add(Geometry *g) {
 /*
  * Add a linestring to the graph of polygon edges.
  *
- * @param line the {@link LineString} to add
+ * @param line the LineString to add
  */
 void Polygonizer::add(LineString *line){
 	// create a new graph using the factory from the input Geometry
@@ -103,10 +104,10 @@ void Polygonizer::add(LineString *line){
 	graph->addEdge(line);
 }
 
-/**
-* Gets the list of polygons formed by the polygonization.
-* @return a collection of {@link Polygons}
-*/
+/*
+ * Gets the list of polygons formed by the polygonization.
+ * @return a collection of Polygons
+ */
 vector<Polygon*>*
 Polygonizer::getPolygons()
 {
@@ -126,10 +127,10 @@ Polygonizer::getDangles(){
 	return dangles;
 }
 
-/**
-* Get the list of cut edges found during polygonization.
-* @return a collection of the input {@LineStrings} which are cut edges
-*/
+/*
+ * Get the list of cut edges found during polygonization.
+ * @return a collection of the input {@LineStrings} which are cut edges
+ */
 vector<const LineString*>*
 Polygonizer::getCutEdges() {
 	polygonize();
@@ -149,7 +150,7 @@ Polygonizer::getInvalidRingLines()
 	return ret;
 }
 
-/**
+/*
  * Perform the polygonization, if it has not already been carried out.
  */
 void
@@ -172,7 +173,9 @@ Polygonizer::polygonize()
 	invalidRingLines=new vector<LineString*>();
 	findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
 	delete edgeRingList;
+
 	findShellsAndHoles(validEdgeRingList);
+
 	assignHolesToShells(holeList, shellList);
 
 	for (int i=0;i<(int)shellList->size();i++) {
@@ -208,7 +211,9 @@ void Polygonizer::findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList) 
 	}
 }
 
-void Polygonizer::assignHolesToShells(vector<polygonizeEdgeRing*> *holeList,vector<polygonizeEdgeRing*> *shellList) {
+void
+Polygonizer::assignHolesToShells(vector<polygonizeEdgeRing*> *holeList,vector<polygonizeEdgeRing*> *shellList)
+{
 	for (int i=0;i<(int)holeList->size();i++) {
 		polygonizeEdgeRing *holeER=(*holeList)[i];
 		assignHoleToShell(holeER,shellList);
@@ -219,6 +224,7 @@ void
 Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER, vector<polygonizeEdgeRing*> *shellList)
 {
 	polygonizeEdgeRing *shell=polygonizeEdgeRing::findEdgeRingContaining(holeER, shellList);
+
 	if (shell!=NULL)
 		shell->addHole(holeER->getRingOwnership());
 }
@@ -228,6 +234,9 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER, vector<polygonizeEdge
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2004/10/26 16:09:21  strk
+ * Some more intentation and envelope equality check fix.
+ *
  * Revision 1.3  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.
