@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.12  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -93,16 +96,20 @@ SIRtree::SIRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 /**
 * Constructs an SIRtree with the default node capacity.
 */
-SIRtree::SIRtree(): AbstractSTRtree(10){
-	intersectsOp=new SIRIntersectsOp();
+SIRtree::SIRtree():
+	AbstractSTRtree(10),
+	intersectsOp(new SIRIntersectsOp())
+{
 }
 
 /**
 * Constructs an SIRtree with the given maximum number of child nodes that
 * a node may have
 */
-SIRtree::SIRtree(int nodeCapacity): AbstractSTRtree(nodeCapacity){
-	intersectsOp=new SIRIntersectsOp();
+SIRtree::SIRtree(int nodeCapacity):
+	AbstractSTRtree(nodeCapacity),
+	intersectsOp(new SIRIntersectsOp())
+{
 }
 
 SIRtree::~SIRtree() {

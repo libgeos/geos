@@ -132,13 +132,7 @@ void BufferOp::setQuadrantSegments(int nQuadrantSegments){
 */
 Geometry* BufferOp::getResultGeometry(double nDistance){
 	distance=nDistance;
-#if PROFILE
-	profiler->start("BufferOp::computeGeometry()");
-#endif
 	computeGeometry();
-#if PROFILE
-	profiler->stop("BufferOp::computeGeometry()");
-#endif
 	return resultGeometry;
 }
 
@@ -248,6 +242,9 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.33  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

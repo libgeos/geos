@@ -11,87 +11,20 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.15  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.14  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.13  2004/07/06 17:58:22  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.12  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.11  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.10  2004/05/26 19:48:19  strk
- * Changed abs() to fabs() when working with doubles.
- * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
- *
- * Revision 1.9  2004/05/19 09:57:54  ybychkov
- * Bugfix in OffsetCurveSetBuilder::addPolygon (JTS 1.4.1)
- *
- * Revision 1.8  2004/05/07 07:57:27  strk
- * Added missing EdgeNodingValidator to build scripts.
- * Changed SegmentString constructor back to its original form
- * (takes const void *), implemented local tracking of "contexts"
- * in caller objects for proper destruction.
- *
- * Revision 1.7  2004/05/06 15:54:15  strk
- * SegmentNodeList keeps track of created splitEdges for later destruction.
- * SegmentString constructor copies given Label.
- * Buffer operation does no more leaks for doc/example.cpp
- *
- * Revision 1.6  2004/05/05 13:08:01  strk
- * Leaks fixed, explicit allocations/deallocations reduced.
- *
- * Revision 1.5  2004/04/20 10:58:04  strk
- * More memory leaks removed.
- *
- * Revision 1.4  2004/04/20 10:14:20  strk
- * Memory leaks removed.
- *
- * Revision 1.3  2004/04/19 16:14:52  strk
- * Some memory leaks plugged in noding algorithms.
- *
- * Revision 1.2  2004/04/19 15:14:46  strk
- * Added missing virtual destructor in SpatialIndex class.
- * Memory leaks fixes. Const and throw specifications added.
- *
- * Revision 1.1  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/opBuffer.h>
 #include <typeinfo>
 
 namespace geos {
 
-OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder){
-	cga=new RobustCGAlgorithms();
-	curveList=new vector<SegmentString*>();
-	inputGeom=newInputGeom;
-	distance=newDistance;
-	curveBuilder=newCurveBuilder;
+OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder):
+	cga(new RobustCGAlgorithms()),
+	curveList(new vector<SegmentString*>()),
+	inputGeom(newInputGeom),
+	distance(newDistance),
+	curveBuilder(newCurveBuilder)
+{
 }
 
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder(){
@@ -102,14 +35,16 @@ OffsetCurveSetBuilder::~OffsetCurveSetBuilder(){
 	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
 }
+
 /**
-* Computes the set of raw offset curves for the buffer.
-* Each offset curve has an attached {@link Label} indicating
-* its left and right location.
-*
-* @return a Collection of SegmentStrings representing the raw buffer curves
-*/
-vector<SegmentString*>* OffsetCurveSetBuilder::getCurves(){
+ * Computes the set of raw offset curves for the buffer.
+ * Each offset curve has an attached {@link Label} indicating
+ * its left and right location.
+ *
+ * @return a Collection of SegmentStrings representing the raw buffer curves
+ */
+vector<SegmentString*>* OffsetCurveSetBuilder::getCurves()
+{
 	add(inputGeom);
 	return curveList;
 }
@@ -196,7 +131,9 @@ void OffsetCurveSetBuilder::addPoint(const Point *p){
 	delete lineList;
 }
 
-void OffsetCurveSetBuilder::addLineString(const LineString *line){
+void
+OffsetCurveSetBuilder::addLineString(const LineString *line)
+{
 	if (distance <= 0.0) return;
 	CoordinateSequence *coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
 	vector<CoordinateSequence*> *lineList=curveBuilder->getLineCurve(coord, distance);
@@ -215,7 +152,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 		offsetSide=Position::RIGHT;
 	}
 	const LinearRing *shell=(const LinearRing *)p->getExteriorRing();
-	CoordinateSequence *shellCoord=CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
+	CoordinateSequence *shellCoord = CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
 	// optimization - don't bother computing buffer
 	// if the polygon would be completely eroded
 	if (distance < 0.0 && isErodedCompletely(shellCoord, distance))
@@ -228,11 +165,12 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 	for (int i=0;i<p->getNumInteriorRing(); i++) {
 		const LinearRing *hole=(const LinearRing *)p->getInteriorRingN(i);
 		CoordinateSequence *holeCoord=CoordinateSequence::removeRepeatedPoints(hole->getCoordinatesRO());
+
 		// optimization - don't bother computing buffer for this hole
 		// if the hole would be completely covered
 		if (distance > 0.0 && isErodedCompletely(holeCoord, -distance))
 		{
-//			delete holeCoord;
+			delete holeCoord;
 			continue;
 		}
 		// Holes are topologically labelled opposite to the shell, since
@@ -257,7 +195,6 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 * @param cwRightLoc the location on the R side of the ring (if it is CW)
 */
 void OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc){
-	//Coordinate[] coord=CoordinateArrays->removeRepeatedPoints(lr->getCoordinates());
 	int leftLoc =cwLeftLoc;
 	int rightLoc=cwRightLoc;
 	if (cga->isCCW(coord)) {
@@ -271,15 +208,17 @@ void OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord, doub
 }
 
 /**
-* The ringCoord is assumed to contain no repeated points->
-* It may be degenerate (i->e-> contain only 1, 2, or 3 points)->
-* In this case it has no area, and hence has a minimum diameter of 0->
-*
-* @param ringCoord
-* @param offsetDistance
-* @return
-*/
-bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance){
+ * The ringCoord is assumed to contain no repeated points->
+ * It may be degenerate (i->e-> contain only 1, 2, or 3 points)->
+ * In this case it has no area, and hence has a minimum diameter of 0->
+ *
+ * @param ringCoord
+ * @param offsetDistance
+ * @return
+ */
+bool
+OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance)
+{
 	double minDiam=0.0;
 	// degenerate ring has no area
 	if (ringCoord->getSize() < 4)
@@ -288,24 +227,27 @@ bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord, do
 	// also optimizes erosion test for triangles
 	if (ringCoord->getSize() == 4)
 		return isTriangleErodedCompletely(ringCoord, bufferDistance);
+
 	/**
-	* The following is a heuristic test to determine whether an
-	* inside buffer will be eroded completely->
-	* It is based on the fact that the minimum diameter of the ring pointset
-	* provides an upper bound on the buffer distance which would erode the
-	* ring->
-	* If the buffer distance is less than the minimum diameter, the ring
-	* may still be eroded, but this will be determined by
-	* a full topological computation->
-	*
-	*/
+	 * The following is a heuristic test to determine whether an
+	 * inside buffer will be eroded completely->
+	 * It is based on the fact that the minimum diameter of the ring
+	 * pointset
+	 * provides an upper bound on the buffer distance which would erode the
+	 * ring->
+	 * If the buffer distance is less than the minimum diameter, the ring
+	 * may still be eroded, but this will be determined by
+	 * a full topological computation->
+	 *
+	 */
 	LinearRing *ring=inputGeom->getFactory()->createLinearRing(*ringCoord);
 	MinimumDiameter md(ring); //=new MinimumDiameter(ring);
 	minDiam=md.getLength();
 	delete ring;
+
 	//delete md;
 	//System->out->println(md->getDiameter());
-	return minDiam < 2 * fabs(bufferDistance);
+	return minDiam < (2 * fabs(bufferDistance));
 }
 
 /**
@@ -325,13 +267,89 @@ bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord, do
 * @param bufferDistance
 * @return
 */
-bool OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateSequence *triangleCoord,double bufferDistance){
+bool
+OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateSequence *triangleCoord, double bufferDistance)
+{
 	Triangle *tri=new Triangle(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
 	Coordinate *inCentre=tri->inCentre();
 	double distToCentre=cga->distancePointLine(*inCentre, tri->p0, tri->p1);
-	return distToCentre < fabs(bufferDistance);
+	bool ret = distToCentre < fabs(bufferDistance);
+	delete tri;
+	return ret;
 }
 
 
+} // namespace geos
 
-}
+/**********************************************************************
+ * $Log$
+ * Revision 1.16  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.15  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.14  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.13  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
+ * Revision 1.12  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.11  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.10  2004/05/26 19:48:19  strk
+ * Changed abs() to fabs() when working with doubles.
+ * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
+ *
+ * Revision 1.9  2004/05/19 09:57:54  ybychkov
+ * Bugfix in OffsetCurveSetBuilder::addPolygon (JTS 1.4.1)
+ *
+ * Revision 1.8  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
+ * Revision 1.7  2004/05/06 15:54:15  strk
+ * SegmentNodeList keeps track of created splitEdges for later destruction.
+ * SegmentString constructor copies given Label.
+ * Buffer operation does no more leaks for doc/example.cpp
+ *
+ * Revision 1.6  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
+ * Revision 1.5  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
+ * Revision 1.4  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
+ * Revision 1.3  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
+ * Revision 1.2  2004/04/19 15:14:46  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
+ * Revision 1.1  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

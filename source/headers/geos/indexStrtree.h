@@ -11,59 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.5  2004/10/26 17:46:18  strk
- * Removed slash-stars in comments to remove annoying compiler warnings.
- *
- * Revision 1.4  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.3  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.2  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.14  2004/05/06 15:00:59  strk
- * Boundable destructor made virtual.
- * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
- * used to keep track of created node to cleanly delete them at
- * destruction time.
- *
- * Revision 1.13  2004/05/05 17:42:06  strk
- * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
- * SIRAbstractNode and STRAbstractNode destructors added to get rid of
- * AbstractNode::bounds in the right way (is a void * casted to appropriate
- * Class in the subClasses).
- *
- * Revision 1.12  2004/05/03 16:29:21  strk
- * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
- * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
- * and SIRtree.cpp.
- *
- * Revision 1.11  2004/05/03 13:17:55  strk
- * Fixed comparator function to express StrictWeakOrdering.
- *
- * Revision 1.10  2004/04/05 06:35:14  ybychkov
- * "operation/distance" upgraded to JTS 1.4
- *
- * Revision 1.9  2004/03/25 02:23:55  ybychkov
- * All "index/" packages upgraded to JTS 1.4
- *
- * Revision 1.8  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_INDEXSTRTREE_H
 #define GEOS_INDEXSTRTREE_H
@@ -225,21 +173,23 @@ protected:
 	virtual AbstractNode* getRoot();
 	virtual void insert(const void* bounds,void* item);
 	virtual vector<void*>* query(const void* searchBounds);
-	/**
-	* @return a test for intersection between two bounds, necessary because subclasses
-	* of AbstractSTRtree have different implementations of bounds. 
-	* @see IntersectsOp
-	*/
-//	virtual IntersectsOp* getIntersectsOp()=0;
 	virtual vector<Boundable*>* boundablesAtLevel(int level);
 	int nodeCapacity;
+
+	/**
+	 * @return a test for intersection between two bounds,
+	 * necessary because subclasses
+	 * of AbstractSTRtree have different implementations of bounds.
+	 * @see IntersectsOp
+	 */
+	virtual IntersectsOp *getIntersectsOp()=0;
+ 
 private:
 	bool built;
 	vector<Boundable*> *itemBoundables;
 	virtual AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level);
 	virtual vector<Boundable*> *sortBoundables(const vector<Boundable*> *input)=0;
 public:
-	IntersectsOp *intersectsOp;
 	AbstractSTRtree(int newNodeCapacity);
 	static bool compareDoubles(double a, double b);
 	virtual ~AbstractSTRtree();
@@ -271,6 +221,7 @@ protected:
  * @see STRtree
  */
 class SIRtree: public AbstractSTRtree {
+
 public:
 	SIRtree();
 	SIRtree(int nodeCapacity);
@@ -278,6 +229,7 @@ public:
 	void insert(double x1,double x2,void* item);
 	vector<void*>* query(double x);
 	vector<void*>* query(double x1, double x2);
+
 protected:
 	class SIRIntersectsOp:public AbstractSTRtree::IntersectsOp {
 		public:
@@ -285,8 +237,11 @@ protected:
 	};
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
 	AbstractNode* createNode(int level);
-//	IntersectsOp* getIntersectsOp(){return NULL;};
+	IntersectsOp* getIntersectsOp() {return intersectsOp;};
 	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
+
+private:
+	IntersectsOp* intersectsOp;
 };
 	
 class STRAbstractNode: public AbstractNode{
@@ -315,23 +270,23 @@ protected:
  *
  */
 class STRtree: public AbstractSTRtree,public SpatialIndex {
-private:
-//	Comparator* xComparator;
-//	Comparator* yComparator;
-//	IntersectsOp* intersectsOp;
 
+private:
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
 	vector<Boundable*>* createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*>* verticalSlices, int newLevel);
+	IntersectsOp* intersectsOp;
+
 protected:
 	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
 	vector<Boundable*>* createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel);
 	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
 	AbstractNode* createNode(int level);
-//	IntersectsOp* getIntersectsOp();
 	class STRIntersectsOp:public AbstractSTRtree::IntersectsOp {
 		public:
 			bool intersects(const void* aBounds, const void* bBounds);
 	};
+	IntersectsOp* getIntersectsOp() {return intersectsOp;};
+
 public:
 	STRtree();
 	~STRtree();
@@ -342,6 +297,64 @@ public:
 	static double avg(double a, double b);
 	static double centreY(Envelope *e);
 };
-}
+
+} // namespace geos
+
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.6  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.5  2004/10/26 17:46:18  strk
+ * Removed slash-stars in comments to remove annoying compiler warnings.
+ *
+ * Revision 1.4  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.2  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.14  2004/05/06 15:00:59  strk
+ * Boundable destructor made virtual.
+ * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
+ * used to keep track of created node to cleanly delete them at
+ * destruction time.
+ *
+ * Revision 1.13  2004/05/05 17:42:06  strk
+ * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
+ * SIRAbstractNode and STRAbstractNode destructors added to get rid of
+ * AbstractNode::bounds in the right way (is a void * casted to appropriate
+ * Class in the subClasses).
+ *
+ * Revision 1.12  2004/05/03 16:29:21  strk
+ * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
+ * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
+ * and SIRtree.cpp.
+ *
+ * Revision 1.11  2004/05/03 13:17:55  strk
+ * Fixed comparator function to express StrictWeakOrdering.
+ *
+ * Revision 1.10  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
+ * Revision 1.9  2004/03/25 02:23:55  ybychkov
+ * All "index/" packages upgraded to JTS 1.4
+ *
+ * Revision 1.8  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

@@ -29,7 +29,9 @@ static Profiler *profiler = Profiler::instance();
 /**
 * Compute the change in depth as an edge is crossed from R to L
 */
-int BufferBuilder::depthDelta(Label *label) {
+int
+BufferBuilder::depthDelta(Label *label)
+{
 	int lLoc=label->getLocation(0, Position::LEFT);
 	int rLoc=label->getLocation(0, Position::RIGHT);
 	if (lLoc== Location::INTERIOR && rLoc== Location::EXTERIOR)
@@ -43,43 +45,52 @@ static RobustCGAlgorithms rCGA;
 CGAlgorithms *BufferBuilder::cga=&rCGA;
 
 /**
-* Creates a new BufferBuilder
-*/
-BufferBuilder::BufferBuilder() {
-	workingPrecisionModel=NULL;
-	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
-	endCapStyle=BufferOp::CAP_ROUND;
-	edgeList=new EdgeList();
+ * Creates a new BufferBuilder
+ */
+BufferBuilder::BufferBuilder():
+	workingPrecisionModel(NULL),
+	quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
+	endCapStyle(BufferOp::CAP_ROUND),
+	edgeList(new EdgeList())
+{
 }
 
-BufferBuilder::~BufferBuilder() {
+BufferBuilder::~BufferBuilder()
+{
 	delete edgeList;
 	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
 }
 
 /**
-* Sets the number of segments used to approximate a angle fillet
-*
-* @param quadrantSegments the number of segments in a fillet for a quadrant
-*/
-void BufferBuilder::setQuadrantSegments(int nQuadrantSegments){
+ * Sets the number of segments used to approximate a angle fillet
+ *
+ * @param quadrantSegments the number of segments in a fillet for a quadrant
+ */
+void
+BufferBuilder::setQuadrantSegments(int nQuadrantSegments)
+{
 	quadrantSegments=nQuadrantSegments;
 }
 
 /**
-* Sets the precision model to use during the curve computation and noding,
-* if it is different to the precision model of the Geometry->
-* If the precision model is less than the precision of the Geometry precision model,
-* the Geometry must have previously been rounded to that precision->
-*
-* @param pm the precision model to use
-*/
-void BufferBuilder::setWorkingPrecisionModel(PrecisionModel *pm){
+ * Sets the precision model to use during the curve computation and noding,
+ * if it is different to the precision model of the Geometry->
+ * If the precision model is less than the precision of the Geometry
+ * precision model,
+ * the Geometry must have previously been rounded to that precision->
+ *
+ * @param pm the precision model to use
+ */
+void
+BufferBuilder::setWorkingPrecisionModel(PrecisionModel *pm)
+{
 	workingPrecisionModel=pm;
 }
 
-void BufferBuilder::setEndCapStyle(int nEndCapStyle){
+void
+BufferBuilder::setEndCapStyle(int nEndCapStyle)
+{
 	endCapStyle=nEndCapStyle;
 }
 
@@ -140,9 +151,6 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	for (unsigned int i=0; i<subgraphList->size(); i++)
 		delete (*subgraphList)[i];
 	delete subgraphList;
-	//for (int i=0; i<resultPolyList->size(); i++)
-	//	delete (*resultPolyList)[i];
-	//delete resultPolyList;
 	return resultGeom;
 }
 
@@ -159,13 +167,7 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 #if DEBUG
 		cerr<<"BufferBuilder::computeNodedEdges: getting nodedSegString"<<endl;
 #endif
-#if PROFILE
-	profiler->start("IteratedNoder::node()");
-#endif
 		nodedSegStrings=noder.node(bufferSegStrList);
-#if PROFILE
-	profiler->stop("IteratedNoder::node()");
-#endif
 #if DEBUG
 		cerr<<"BufferBuilder::computeNodedEdges: done getting nodedSegString"<<endl;
 #endif
@@ -302,6 +304,9 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.23  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

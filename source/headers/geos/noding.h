@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.4  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
@@ -385,6 +388,7 @@ public:
 			SegmentOverlapAction(nodingSegmentIntersector *newSi);
 			void overlap(indexMonotoneChain *mc1, int start1, indexMonotoneChain *mc2, int start2);
 	};
+
 private:
 	vector<indexMonotoneChain*> *chains;
 	SpatialIndex *index;

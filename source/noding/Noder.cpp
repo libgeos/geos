@@ -26,7 +26,7 @@ Noder::getNodedEdges(vector<SegmentString*>* segStrings)
 }
 
 void
-Noder::getNodedEdges(vector<SegmentString*>* segStrings,vector<SegmentString*>* resultEdgelist)
+Noder::getNodedEdges(vector<SegmentString*>* segStrings, vector<SegmentString*>* resultEdgelist)
 {
 	for (int i=0; i<(int)segStrings->size();i++) {
 		SegmentString *ss=(*segStrings)[i];
@@ -44,6 +44,9 @@ Noder::setSegmentIntersector(nodingSegmentIntersector *newSegInt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.5  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

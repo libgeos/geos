@@ -24,12 +24,12 @@ namespace geos {
 static Profiler *profiler = Profiler::instance();
 #endif
 
-MCQuadtreeNoder::MCQuadtreeNoder(){
-	chains=new vector<indexMonotoneChain*>();
-	index=new STRtree();
-	//index=new Quadtree(); // it works, but it's slower
-	idCounter = 0;
-	nOverlaps = 0;
+MCQuadtreeNoder::MCQuadtreeNoder():
+	chains(new vector<indexMonotoneChain*>),
+	index(new STRtree()),
+	idCounter(0),
+	nOverlaps(0)
+{
 }
 
 MCQuadtreeNoder::~MCQuadtreeNoder(){
@@ -112,6 +112,8 @@ MCQuadtreeNoder::intersectChains()
 		}
 		delete overlapChains;
 	}
+
+	delete overlapAction;
 }
 
 void
@@ -146,6 +148,9 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.12  2004/11/02 14:11:28  strk
  * Added more profiling.
  *

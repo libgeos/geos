@@ -385,7 +385,7 @@ try{
 							cout << "false";
 							failed++;
 						}
-						cout << "Test time:" << profile->getTot()<<endl;
+						cout << " Test time:" << profile->getTot()<<endl;
 					}
 					delete gRealRes;
 					delete gRes;
@@ -431,6 +431,7 @@ try{
 					//delete g1;
 					//cout << endl;
   				}
+				delete profile;
 			}
 			if (out & PRED) {
 				cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
@@ -500,6 +501,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.47  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.46  2004/11/02 09:38:33  strk
  * Added timer for buffer test.
  *

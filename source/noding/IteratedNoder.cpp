@@ -52,7 +52,9 @@ IteratedNoder::node(vector<SegmentString*> *segStrings)
 	// throw(GEOSException *)
 {
 	int numInteriorIntersections;
+
 	vector<SegmentString*> *nodedEdges=new vector<SegmentString *>(*segStrings);
+
 	int nodingIterationCount = 0;
 	int lastNodesCreated = -1;
 	do {
@@ -88,7 +90,13 @@ IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersec
 	MCQuadtreeNoder *noder = new MCQuadtreeNoder();
 	noder->setSegmentIntersector(si);
 	// perform the noding
+#if PROFILE
+	profiler->start("MCQuadtreeNoder::node");
+#endif
 	vector<SegmentString*> *nodedSegStrings=noder->node(segStrings);
+#if PROFILE
+	profiler->stop("MCQuadtreeNoder::node");
+#endif
 	*numInteriorIntersections=si->numInteriorIntersections;
 	//System.out.println("# intersection tests: " + si.numTests);
 
@@ -101,6 +109,9 @@ IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersec
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.10  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

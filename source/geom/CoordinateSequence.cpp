@@ -11,33 +11,16 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.4  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.3  2004/09/23 21:36:22  strk
- * Fixed a bug in ::reverse (thanks to Elliott Edwards)
- *
- * Revision 1.2  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.1  2004/07/08 19:38:56  strk
- * renamed from *List* equivalents
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <stdio.h>
 
 namespace geos {
 
-bool CoordinateSequence::hasRepeatedPoints() const {
+bool
+CoordinateSequence::hasRepeatedPoints() const
+{
 	int size=getSize();
 	for(int i=1; i<size; i++) {
 		if (getAt(i-1)==getAt(i)) {
@@ -197,24 +180,42 @@ CoordinateSequence::add(const CoordinateSequence *cl,bool allowRepeated,bool dir
 
 
 /**
-* This function allocates space for a CoordinateSequence object
-* being a copy of the input once with consecutive equal points
-* removed.
-**/
-CoordinateSequence* CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl){
+ * This function allocates space for a CoordinateSequence object
+ * being a copy of the input once with consecutive equal points
+ * removed.
+ */
+CoordinateSequence*
+CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
+{
 	CoordinateSequence* ret=DefaultCoordinateSequenceFactory::instance()->create(NULL);
 	const vector<Coordinate> *v=cl->toVector();
 	ret->add(v,false);
 	delete v;
 	return ret;
-#if 0 // what is all this ?? --strk;
-	v=ret->toVector();
-	cl->setPoints(*(v));
-	delete v;
-	delete ret;
-//	return ret;
-	return cl;
-#endif
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.5  2004/11/04 19:08:06  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.4  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.3  2004/09/23 21:36:22  strk
+ * Fixed a bug in ::reverse (thanks to Elliott Edwards)
+ *
+ * Revision 1.2  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
+ * Revision 1.1  2004/07/08 19:38:56  strk
+ * renamed from *List* equivalents
+ *
+ **********************************************************************/
 

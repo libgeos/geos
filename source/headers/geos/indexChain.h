@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/04 19:08:06  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.5  2004/10/26 17:46:18  strk
  * Removed slash-stars in comments to remove annoying compiler warnings.
  *
@@ -174,8 +177,11 @@ public:
 	*/
 	void select(Envelope *searchEnv,MonotoneChainSelectAction *mcs);
 	void computeOverlaps(indexMonotoneChain *mc,MonotoneChainOverlapAction *mco);
+
 	void setId(int nId);
+
 	int getId();
+
 	void* getContext();
 
 private:

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.13  2004/07/13 08:33:53  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -69,46 +72,39 @@ namespace geos {
 double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
 double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
 
-OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel)
+OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
+	maxCurveSegmentError(0.0),
+	distance(0.0),
+	endCapStyle(BufferOp::CAP_ROUND),
+	cga(new RobustCGAlgorithms()),
+	seg0(new LineSegment()),
+	seg1(new LineSegment()),
+	offset0(new LineSegment()),
+	offset1(new LineSegment()),
+	precisionModel(newPrecisionModel),
+	li(new RobustLineIntersector()),
+	ptList(new DefaultCoordinateSequence())
 {
-	maxCurveSegmentError=0.0;
-	distance=0.0;
-	endCapStyle=BufferOp::CAP_ROUND;
-	cga=new RobustCGAlgorithms();
-
-	seg0=new LineSegment();
-	seg1=new LineSegment();
-	offset0=new LineSegment();
-	offset1=new LineSegment();
-
-	precisionModel=newPrecisionModel;
-	// compute intersections in full precision, to provide accuracy
-	// the points are rounded as they are inserted into the curve line
-	li=new RobustLineIntersector();
 	int limitedQuadSegs=DEFAULT_QUADRANT_SEGMENTS<1 ? 1 : DEFAULT_QUADRANT_SEGMENTS;
 	filletAngleQuantum=3.14159265358979 / 2.0 / limitedQuadSegs;
-	ptList=new DefaultCoordinateSequence();
 }
 
-OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments)
+OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
+	int quadrantSegments):
+	maxCurveSegmentError(0.0),
+	distance(0.0),
+	endCapStyle(BufferOp::CAP_ROUND),
+	cga(new RobustCGAlgorithms()),
+	seg0(new LineSegment()),
+	seg1(new LineSegment()),
+	offset0(new LineSegment()),
+	offset1(new LineSegment()),
+	precisionModel(newPrecisionModel),
+	li(new RobustLineIntersector()),
+	ptList(new DefaultCoordinateSequence())
 {
-	maxCurveSegmentError=0.0;
-	distance=0.0;
-	endCapStyle=BufferOp::CAP_ROUND;
-	cga=new RobustCGAlgorithms();
-
-	seg0=new LineSegment();
-	seg1=new LineSegment();
-	offset0=new LineSegment();
-	offset1=new LineSegment();
-
-	precisionModel=newPrecisionModel;
-	// compute intersections in full precision, to provide accuracy
-	// the points are rounded as they are inserted into the curve line
-	li=new RobustLineIntersector();
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=3.14159265358979  / 2.0 / limitedQuadSegs;
-	ptList=new DefaultCoordinateSequence();
 }
 
 OffsetCurveBuilder::~OffsetCurveBuilder(){

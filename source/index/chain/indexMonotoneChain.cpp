@@ -19,20 +19,21 @@
 
 namespace geos {
 
-indexMonotoneChain::indexMonotoneChain(CoordinateSequence *newPts,int nstart,int nend, void* nContext) {
-	env=NULL;
-	// these envelopes are created once and reused
-	pts=newPts;
-	start=nstart;
-	end=nend;
-	context=nContext;
+indexMonotoneChain::indexMonotoneChain(CoordinateSequence *newPts,int nstart,int nend, void* nContext):
+	env(NULL),
+	pts(newPts),
+	start(nstart),
+	end(nend),
+	context(nContext)
+{
 }
 
 void indexMonotoneChain::setId(int nId) {
 	id=nId;
 }
 
-int indexMonotoneChain::getId() {
+int
+indexMonotoneChain::getId() {
 	return id;
 }
 
@@ -152,6 +153,9 @@ indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,i
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.11  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

@@ -11,8 +11,226 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/indexStrtree.h>
+#include <geos/util.h>
+#include <stdio.h>
+#include <algorithm>
+#include <typeinfo>
+
+namespace geos {
+
+/**
+ * Constructs an AbstractSTRtree with the specified maximum number of child
+ * nodes that a node may have
+ */
+AbstractSTRtree::AbstractSTRtree(int newNodeCapacity):
+	built(false),
+	itemBoundables(new vector<Boundable*>()),
+	nodes(new vector<AbstractNode *>()),
+	nodeCapacity(newNodeCapacity)
+{
+	Assert::isTrue(newNodeCapacity>1, "Node capacity must be greater than 1");
+}
+
+AbstractSTRtree::~AbstractSTRtree() {
+	for (unsigned int i=0; i<itemBoundables->size(); i++)
+		delete (*itemBoundables)[i];
+	delete itemBoundables;
+	for (unsigned int i=0; i<nodes->size(); i++)
+		delete (*nodes)[i];
+	delete nodes;
+	//delete root;
+}
+
+/**
+ * Creates parent nodes, grandparent nodes, and so forth up to the root
+ * node, for the data that has been inserted into the tree. Can only be
+ * called once, and thus can be called only after all of the data has been
+ * inserted into the tree.
+ */
+void
+AbstractSTRtree::build()
+{
+	Assert::isTrue(!built);
+	root=(itemBoundables->empty()?createNode(0):createHigherLevels(itemBoundables,-1));
+	built=true;
+}
+
+//void AbstractSTRtree::checkConsistency() {
+//	if (!built) {
+//		build();
+//	}
+//	vector<Boundable*>* itemBoundablesInTree=boundablesAtLevel(-1);
+//	Assert::isTrue(itemBoundables->size()==itemBoundablesInTree->size());
+//}
+
+/**
+ * Sorts the childBoundables then divides them into groups of size M, where
+ * M is the node capacity.
+ */
+vector<Boundable*>*
+AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
+{
+	Assert::isTrue(!childBoundables->empty());
+	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
+	parentBoundables->push_back(createNode(newLevel));
+	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
+
+	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
+		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
+		if (lastNode(parentBoundables)->getChildBoundables()->size()==(unsigned int)nodeCapacity)
+		{
+			parentBoundables->push_back(createNode(newLevel));
+		}
+		lastNode(parentBoundables)->addChildBoundable(childBoundable);
+	}
+	delete sortedChildBoundables;
+	return parentBoundables;
+}
+
+AbstractNode* AbstractSTRtree::lastNode(vector<Boundable*> *nodes) {
+	return (AbstractNode*)(*nodes)[nodes->size()-1];
+}
+
+bool AbstractSTRtree::compareDoubles(double a, double b) {
+	//return a>b?1:(a<b?-1:0);
+	return a < b;
+}
+
+/**
+* Creates the levels higher than the given level
+* 
+* @param boundablesOfALevel
+*            the level to build on
+* @param level
+*            the level of the Boundables, or -1 if the boundables are item
+*            boundables (that is, below level 0)
+* @return the root, which may be a ParentNode or a LeafNode
+*/
+AbstractNode*
+AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level)
+{
+	Assert::isTrue(!boundablesOfALevel->empty());
+	vector<Boundable*> *parentBoundables=createParentBoundables(boundablesOfALevel,level+1);
+	if (parentBoundables->size()==1) {
+		AbstractNode *ret = (AbstractNode*)(*parentBoundables)[0];
+		delete parentBoundables;
+		return ret;
+	}
+	AbstractNode *ret = createHigherLevels(parentBoundables,level+1);
+	delete parentBoundables;
+	return ret;
+}
+
+AbstractNode* AbstractSTRtree::getRoot() {
+	return root;
+}
+
+/**
+* Returns the maximum number of child nodes that a node may have
+*/
+int AbstractSTRtree::getNodeCapacity() {
+	return nodeCapacity;
+}
+
+void
+AbstractSTRtree::insert(const void* bounds,void* item)
+{
+	Assert::isTrue(!built,"Cannot insert items into an STR packed R-tree after it has been built.");
+	itemBoundables->push_back(new ItemBoundable(bounds,item));
+}
+
+/**
+ *  Also builds the tree, if necessary.
+ */
+vector<void*>*
+AbstractSTRtree::query(const void* searchBounds)
+{
+	if (!built) {
+		build();
+	}
+	vector<void*> *matches=new vector<void*>();
+	if (itemBoundables->empty()) {
+		Assert::isTrue(root->getBounds()==NULL);
+		return matches;
+	}
+	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds))
+	{
+		query(searchBounds,root,matches);
+	}
+	return matches;
+}
+
+void
+AbstractSTRtree::query(const void* searchBounds,
+	AbstractNode* node, vector<void*> *matches)
+{
+	vector<Boundable*> *vb=node->getChildBoundables();
+	for(int i=0;i<(int)vb->size();i++) {
+		Boundable *childBoundable=(*vb)[i];
+		if (!getIntersectsOp()->intersects(childBoundable->getBounds(),searchBounds))
+		{
+			continue;
+		}
+
+		if(AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
+		{
+			query(searchBounds,an,matches);
+		}
+		else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
+		{
+			matches->push_back(ib->getItem());
+		}
+		else
+		{
+			Assert::shouldNeverReachHere("AbstractSTRtree::query encountered an unsupported childBoundable type");
+		}
+	}
+}
+
+vector<Boundable*>*
+AbstractSTRtree::boundablesAtLevel(int level)
+{
+	vector<Boundable*> *boundables=new vector<Boundable*>();
+	boundablesAtLevel(level,root,boundables);
+	return boundables;
+}
+
+/**
+ * @param level -1 to get items
+ */
+void
+AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables)
+{
+	Assert::isTrue(level>-2);
+	if (top->getLevel()==level) {
+		boundables->push_back(top);
+		return;
+	}
+	vector<Boundable*> *vb=top->getChildBoundables();
+	for(int i=0;i<(int)vb->size();i++) {
+		Boundable *boundable=(*vb)[i];
+		if (typeid(*boundable)==typeid(AbstractNode)) {
+			boundablesAtLevel(level,(AbstractNode*) boundable,boundables);
+		} else {
+			Assert::isTrue(typeid(*boundable)==typeid(ItemBoundable));
+			if (level==-1) {
+				boundables->push_back(boundable);
+			}
+		}
+	}
+	return;
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.20  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.19  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
@@ -79,207 +297,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/indexStrtree.h>
-#include <geos/util.h>
-#include <stdio.h>
-#include <algorithm>
-#include <typeinfo>
-
-namespace geos {
-
-/**
-* Constructs an AbstractSTRtree with the specified maximum number of child
-* nodes that a node may have
-*/
-AbstractSTRtree::AbstractSTRtree(int newNodeCapacity) {
-	built=false;
-	itemBoundables=new vector<Boundable*>();
-	nodes=new vector<AbstractNode *>();
-	Assert::isTrue(newNodeCapacity>1, "Node capacity must be greater than 1");
-	nodeCapacity=newNodeCapacity;
-}
-
-AbstractSTRtree::~AbstractSTRtree() {
-	for (unsigned int i=0; i<itemBoundables->size(); i++)
-		delete (*itemBoundables)[i];
-	delete itemBoundables;
-	for (unsigned int i=0; i<nodes->size(); i++)
-		delete (*nodes)[i];
-	delete nodes;
-	//delete root;
-}
-
-/**
-* Creates parent nodes, grandparent nodes, and so forth up to the root
-* node, for the data that has been inserted into the tree. Can only be
-* called once, and thus can be called only after all of the data has been
-* inserted into the tree.
-*/
-void AbstractSTRtree::build() {
-	Assert::isTrue(!built);
-	root=(itemBoundables->empty()?createNode(0):createHigherLevels(itemBoundables,-1));
-	built=true;
-}
-
-//void AbstractSTRtree::checkConsistency() {
-//	if (!built) {
-//		build();
-//	}
-//	vector<Boundable*>* itemBoundablesInTree=boundablesAtLevel(-1);
-//	Assert::isTrue(itemBoundables->size()==itemBoundablesInTree->size());
-//}
-
-/**
-* Sorts the childBoundables then divides them into groups of size M, where
-* M is the node capacity.
-*/
-vector<Boundable*>*
-AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
-{
-	Assert::isTrue(!childBoundables->empty());
-	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
-	parentBoundables->push_back(createNode(newLevel));
-	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
-
-	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
-		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
-		if (lastNode(parentBoundables)->getChildBoundables()->size()==(unsigned int)nodeCapacity)
-		{
-			parentBoundables->push_back(createNode(newLevel));
-		}
-		lastNode(parentBoundables)->addChildBoundable(childBoundable);
-	}
-	delete sortedChildBoundables;
-	return parentBoundables;
-}
-
-AbstractNode* AbstractSTRtree::lastNode(vector<Boundable*> *nodes) {
-	return (AbstractNode*)(*nodes)[nodes->size()-1];
-}
-
-bool AbstractSTRtree::compareDoubles(double a, double b) {
-	//return a>b?1:(a<b?-1:0);
-	return a < b;
-}
-
-/**
-* Creates the levels higher than the given level
-* 
-* @param boundablesOfALevel
-*            the level to build on
-* @param level
-*            the level of the Boundables, or -1 if the boundables are item
-*            boundables (that is, below level 0)
-* @return the root, which may be a ParentNode or a LeafNode
-*/
-AbstractNode* AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level) {
-	Assert::isTrue(!boundablesOfALevel->empty());
-	vector<Boundable*> *parentBoundables=createParentBoundables(boundablesOfALevel,level+1);
-	if (parentBoundables->size()==1) {
-		AbstractNode *ret = (AbstractNode*)(*parentBoundables)[0];
-		delete parentBoundables;
-		return ret;
-	}
-	AbstractNode *ret = createHigherLevels(parentBoundables,level+1);
-	delete parentBoundables;
-	return ret;
-}
-
-AbstractNode* AbstractSTRtree::getRoot() {
-	return root;
-}
-
-/**
-* Returns the maximum number of child nodes that a node may have
-*/
-int AbstractSTRtree::getNodeCapacity() {
-	return nodeCapacity;
-}
-
-void AbstractSTRtree::insert(const void* bounds,void* item) {
-	Assert::isTrue(!built,"Cannot insert items into an STR packed R-tree after it has been built.");
-	itemBoundables->push_back(new ItemBoundable(bounds,item));
-}
-
-/**
- *  Also builds the tree, if necessary.
- */
-vector<void*>*
-AbstractSTRtree::query(const void* searchBounds)
-{
-	if (!built) {
-		build();
-	}
-	vector<void*> *matches=new vector<void*>();
-	if (itemBoundables->empty()) {
-		Assert::isTrue(root->getBounds()==NULL);
-		return matches;
-	}
-	if (intersectsOp->intersects(root->getBounds(),searchBounds))
-	{
-		query(searchBounds,root,matches);
-	}
-	return matches;
-}
-
-void
-AbstractSTRtree::query(const void* searchBounds,
-	AbstractNode* node, vector<void*> *matches)
-{
-	vector<Boundable*> *vb=node->getChildBoundables();
-	for(int i=0;i<(int)vb->size();i++) {
-		Boundable *childBoundable=(*vb)[i];
-		if (!intersectsOp->intersects(childBoundable->getBounds(),searchBounds))
-		{
-			continue;
-		}
-
-		if(AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
-		{
-			query(searchBounds,an,matches);
-		}
-		else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
-		{
-			matches->push_back(ib->getItem());
-		}
-		else
-		{
-			Assert::shouldNeverReachHere("AbstractSTRtree::query encountered an unsupported childBoundable type");
-		}
-	}
-}
-
-vector<Boundable*>* AbstractSTRtree::boundablesAtLevel(int level) {
-	vector<Boundable*> *boundables=new vector<Boundable*>();
-	boundablesAtLevel(level,root,boundables);
-	return boundables;
-}
-
-/**
-* @param level -1 to get items
-*/
-void AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables) {
-	Assert::isTrue(level>-2);
-	if (top->getLevel()==level) {
-		boundables->push_back(top);
-		return;
-	}
-	vector<Boundable*> *vb=top->getChildBoundables();
-	for(int i=0;i<(int)vb->size();i++) {
-		Boundable *boundable=(*vb)[i];
-		if (typeid(*boundable)==typeid(AbstractNode)) {
-			boundablesAtLevel(level,(AbstractNode*) boundable,boundables);
-		} else {
-			Assert::isTrue(typeid(*boundable)==typeid(ItemBoundable));
-			if (level==-1) {
-				boundables->push_back(boundable);
-			}
-		}
-	}
-	return;
-}
-
-}
 

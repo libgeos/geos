@@ -34,20 +34,25 @@ static bool yComparator(Boundable *a, Boundable *b){
 /**
  * Constructs an STRtree with the default node capacity.
  */
-STRtree::STRtree():AbstractSTRtree(10) { 
-	intersectsOp=new STRIntersectsOp();
-}
-
-STRtree::~STRtree() { 
-	delete intersectsOp;
+STRtree::STRtree():
+	AbstractSTRtree(10),
+	intersectsOp(new STRIntersectsOp())
+{ 
 }
 
 /**
  * Constructs an STRtree with the given maximum number of child nodes that
  * a node may have
  */
-STRtree::STRtree(int nodeCapacity):AbstractSTRtree(nodeCapacity) { 
-	intersectsOp=new STRIntersectsOp();
+STRtree::STRtree(int nodeCapacity):
+	AbstractSTRtree(nodeCapacity),
+	intersectsOp(new STRIntersectsOp())
+{ 
+}
+
+STRtree::~STRtree()
+{ 
+	delete intersectsOp;
 }
 
 double STRtree::centreX(Envelope *e) {
@@ -211,6 +216,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.14  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

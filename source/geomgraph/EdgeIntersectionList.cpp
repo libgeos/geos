@@ -107,7 +107,8 @@ EdgeIntersectionList::addEndpoints()
 void
 EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList)
 {
-	// ensure that the list has entries for the first and last point of the edge
+	// ensure that the list has entries for the first and last point
+	// of the edge
 	addEndpoints();
 	vector<EdgeIntersection *>::iterator it=list->begin();
 	// there should always be at least two entries in the list
@@ -164,6 +165,9 @@ EdgeIntersectionList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/04 19:08:06  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.5  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

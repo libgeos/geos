@@ -11,65 +11,40 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.6  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2004/05/05 13:08:01  strk
- * Leaks fixed, explicit allocations/deallocations reduced.
- *
- * Revision 1.4  2004/04/20 13:24:15  strk
- * More leaks removed.
- *
- * Revision 1.3  2004/04/20 12:47:57  strk
- * MinimumDiameter leaks plugged.
- *
- * Revision 1.2  2004/04/20 10:14:20  strk
- * Memory leaks removed.
- *
- * Revision 1.1  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/geosAlgorithm.h>
 #include <stdio.h>
 #include <typeinfo>
 
 namespace geos {
+
 /**
-* Computes the minimum diameter of a {@link Geometry}.
-* The minimum diameter is defined to be the
-* width of the smallest band that
-* contains the geometry,
-* where a band is a strip of the plane defined
-* by two parallel lines.
-* This can be thought of as the smallest hole that the geometry can be
-* moved through, with a single rotation.
-* <p>
-* The first step in the algorithm is computing the convex hull of the Geometry.
-* If the input Geometry is known to be convex, a hint can be supplied to
-* avoid this computation.
-*
-* @see ConvexHull
-*
-* @version 1.4
-*/
+ * Computes the minimum diameter of a Geometry.
+ * The minimum diameter is defined to be the
+ * width of the smallest band that
+ * contains the geometry,
+ * where a band is a strip of the plane defined
+ * by two parallel lines.
+ * This can be thought of as the smallest hole that the geometry can be
+ * moved through, with a single rotation.
+ * 
+ * The first step in the algorithm is computing the convex hull of the Geometry.
+ * If the input Geometry is known to be convex, a hint can be supplied to
+ * avoid this computation.
+ *
+ * @see ConvexHull
+ *
+ * @version 1.4
+ */
+
 /**
-* Compute a minimum diameter for a giver {@link Geometry}.
-*
-* @param geom a Geometry
-*/
-MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom){
+ * Compute a minimum diameter for a giver {@link Geometry}.
+ *
+ * @param geom a Geometry
+ */
+MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
+{
 	minBaseSeg=new LineSegment();
 	minWidthPt=NULL;
 	minWidth=0.0;
@@ -78,16 +53,17 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom){
 }
 
 /**
-* Compute a minimum diameter for a giver {@link Geometry},
-* with a hint if
-* the Geometry is convex
-* (e.g. a convex Polygon or LinearRing,
-* or a two-point LineString, or a Point).
-*
-* @param geom a Geometry which is convex
-* @param isConvex <code>true</code> if the input geometry is convex
-*/
-MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom, const bool newIsConvex) {
+ * Compute a minimum diameter for a giver Geometry,
+ * with a hint if
+ * the Geometry is convex
+ * (e.g. a convex Polygon or LinearRing,
+ * or a two-point LineString, or a Point).
+ *
+ * @param geom a Geometry which is convex
+ * @param isConvex <code>true</code> if the input geometry is convex
+ */
+MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom, const bool newIsConvex)
+{
 	minBaseSeg=new LineSegment();
 	minWidthPt=NULL;
 	minWidth=0.0;
@@ -95,37 +71,43 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom, const bool newIsC
 	isConvex=newIsConvex;
 }
 
-MinimumDiameter::~MinimumDiameter() {
+MinimumDiameter::~MinimumDiameter()
+{
 	delete minBaseSeg;
 	delete minWidthPt;
 }
 
 /**
-* Gets the length of the minimum diameter of the input Geometry
-*
-* @return the length of the minimum diameter
-*/
-double MinimumDiameter::getLength(){
+ * Gets the length of the minimum diameter of the input Geometry
+ *
+ * @return the length of the minimum diameter
+ */
+double
+MinimumDiameter::getLength()
+{
 	computeMinimumDiameter();
 	return minWidth;
 }
 
 /**
-* Gets the {@link Coordinate} forming one end of the minimum diameter
-*
-* @return a coordinate forming one end of the minimum diameter
-*/
-Coordinate* MinimumDiameter::getWidthCoordinate() {
+ * Gets the {@link Coordinate} forming one end of the minimum diameter
+ *
+ * @return a coordinate forming one end of the minimum diameter
+ */
+Coordinate*
+MinimumDiameter::getWidthCoordinate()
+{
 	computeMinimumDiameter();
 	return minWidthPt;
 }
 
 /**
-* Gets the segment forming the base of the minimum diameter
-*
-* @return the segment forming the base of the minimum diameter
-*/
-LineString* MinimumDiameter::getSupportingSegment() {
+ * Gets the segment forming the base of the minimum diameter
+ *
+ * @return the segment forming the base of the minimum diameter
+ */
+LineString*
+MinimumDiameter::getSupportingSegment() {
 	computeMinimumDiameter();
 	const GeometryFactory *fact = inputGeom->getFactory();
 	CoordinateSequence* cl=fact->getCoordinateSequenceFactory()->create(NULL);
@@ -135,11 +117,13 @@ LineString* MinimumDiameter::getSupportingSegment() {
 }
 
 /**
-* Gets a {@link LineString} which is a minimum diameter
-*
-* @return a {@link LineString} which is a minimum diameter
-*/
-LineString* MinimumDiameter::getDiameter(){
+ * Gets a LineString which is a minimum diameter
+ *
+ * @return a LineString which is a minimum diameter
+ */
+LineString*
+MinimumDiameter::getDiameter()
+{
 	computeMinimumDiameter();
 	// return empty linestring if no minimum width calculated
 	if (minWidthPt==NULL)
@@ -154,24 +138,25 @@ LineString* MinimumDiameter::getDiameter(){
 
 /* private */
 void
-MinimumDiameter::computeMinimumDiameter(){
+MinimumDiameter::computeMinimumDiameter()
+{
 	// check if computation is cached
 	if (minWidthPt!=NULL)
 		return;
 	if (isConvex)
 		computeWidthConvex(inputGeom);
 	else {
-		ConvexHull *ch = new ConvexHull(inputGeom);
-		Geometry* convexGeom=ch->getConvexHull();
+		ConvexHull ch(inputGeom);
+		Geometry* convexGeom=ch.getConvexHull();
 		computeWidthConvex(convexGeom);
 		delete convexGeom;
-		delete ch;
 	}
 }
 
 /* private */
 void
-MinimumDiameter::computeWidthConvex(const Geometry *geom) {
+MinimumDiameter::computeWidthConvex(const Geometry *geom)
+{
 	//System.out.println("Input = " + geom);
 	CoordinateSequence* pts=NULL;
 	if (typeid(*geom)==typeid(Polygon))
@@ -200,13 +185,15 @@ MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 }
 
 /**
-* Compute the width information for a ring of {@link Coordinate}s.
-* Leaves the width information in the instance variables.
-*
-* @param pts
-* @return
-*/
-void MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts){
+ * Compute the width information for a ring of {@link Coordinate}s.
+ * Leaves the width information in the instance variables.
+ *
+ * @param pts
+ * @return
+ */
+void
+MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
+{
 	minWidth=DoubleInfinity;
 	int currMaxIndex=1;
 	LineSegment* seg=new LineSegment();
@@ -246,9 +233,45 @@ MinimumDiameter::findMaxPerpDistance(const CoordinateSequence *pts, LineSegment*
 	return maxIndex;
 }
 
-int MinimumDiameter::getNextIndex(const CoordinateSequence *pts, int index) {
+int
+MinimumDiameter::getNextIndex(const CoordinateSequence *pts, int index)
+{
 	index++;
 	if (index >= pts->getSize()) index = 0;
 	return index;
 }
-}
+
+} //namespace
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2004/11/04 19:08:06  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.7  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.6  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.5  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
+ * Revision 1.4  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
+ * Revision 1.3  2004/04/20 12:47:57  strk
+ * MinimumDiameter leaks plugged.
+ *
+ * Revision 1.2  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
+ * Revision 1.1  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

@@ -47,11 +47,14 @@ private:
 	void checkForRightmostCoordinate(DirectedEdge *de);
 	int getRightmostSide(DirectedEdge *de, int index);
 	int getRightmostSideOfSegment(DirectedEdge *de, int i);
-	/*
-	* A RightmostEdgeFinder finds the DirectedEdge with the rightmost coordinate.
-	* The DirectedEdge returned is guranteed to have the R of the world on its RHS.
-	*/
+
 public:
+	/*
+	 * A RightmostEdgeFinder finds the DirectedEdge with the
+	 * rightmost coordinate.
+	 * The DirectedEdge returned is guranteed to have the R of
+	 * the world on its RHS.
+	 */
 	RightmostEdgeFinder(CGAlgorithms *newCga);
 	DirectedEdge* getEdge();
 	Coordinate& getCoordinate();
@@ -70,69 +73,88 @@ public:
 class BufferSubgraph {
 private:
 	RightmostEdgeFinder *finder;
+
 	vector<DirectedEdge*> *dirEdgeList;
+
 	vector<Node*> *nodes;
+
 	Coordinate *rightMostCoord;
+
 	/*
-	* Adds all nodes and edges reachable from this node to the subgraph.
-	* Uses an explicit stack to avoid a large depth of recursion.
-	*
-	* @param node a node known to be in the subgraph
-	*/
+	 * Adds all nodes and edges reachable from this node to the subgraph.
+	 * Uses an explicit stack to avoid a large depth of recursion.
+	 *
+	 * @param node a node known to be in the subgraph
+	 */
 	void addReachable(Node *startNode);
+
 	/*
-	* Adds the argument node and all its out edges to the subgraph
-	* @param node the node to add
-	* @param nodeStack the current set of nodes being traversed
-	*/
+	 * Adds the argument node and all its out edges to the subgraph
+	 * @param node the node to add
+	 * @param nodeStack the current set of nodes being traversed
+	 */
 	void add(Node *node,vector<Node*> *nodeStack);
+
 	void clearVisitedEdges();
+
 	/*
-	* Compute depths for all dirEdges via breadth-first traversal of nodes in graph
-	* @param startEdge edge to start processing with
-	*/
+	 * Compute depths for all dirEdges via breadth-first traversal
+	 * of nodes in graph
+	 * @param startEdge edge to start processing with
+	 */
 	// <FIX> MD - use iteration & queue rather than recursion, for speed and robustness
 	void computeDepths(DirectedEdge *startEdge);
+
 	void computeNodeDepth(Node *n);
 	void copySymDepths(DirectedEdge *de);
 	bool contains(vector<Node*> *nodes,Node *node);
+
 public:
 	BufferSubgraph(CGAlgorithms *cga);
 	~BufferSubgraph();
 	vector<DirectedEdge*>* getDirectedEdges();
 	vector<Node*>* getNodes();
+
 	/*
-	* Gets the rightmost coordinate in the edges of the subgraph
-	*/
+	 * Gets the rightmost coordinate in the edges of the subgraph
+	 */
 	Coordinate* getRightmostCoordinate();
+
 	/*
-	* Creates the subgraph consisting of all edges reachable from this node.
-	* Finds the edges in the graph and the rightmost coordinate.
-	*
-	* @param node a node to start the graph traversal from
-	*/
+	 * Creates the subgraph consisting of all edges reachable from
+	 * this node.
+	 * Finds the edges in the graph and the rightmost coordinate.
+	 *
+	 * @param node a node to start the graph traversal from
+	 */
 	void create(Node *node);
+
 	void computeDepth(int outsideDepth);
 	/*
-	* Find all edges whose depths indicates that they are in the result area(s).
-	* Since we want polygon shells to be
-	* oriented CW, choose dirEdges with the interior of the result on the RHS.
-	* Mark them as being in the result.
-	* Interior Area edges are the result of dimensional collapses.
-	* They do not form part of the result area boundary.
-	*/
+	 * Find all edges whose depths indicates that they are in the
+	 * result area(s).
+	 * Since we want polygon shells to be
+	 * oriented CW, choose dirEdges with the interior of the result
+	 * on the RHS.
+	 * Mark them as being in the result.
+	 * Interior Area edges are the result of dimensional collapses.
+	 * They do not form part of the result area boundary.
+	 */
 	void findResultEdges();
+
 	/*
-	* BufferSubgraphs are compared on the x-value of their rightmost Coordinate.
-	* This defines a partial ordering on the graphs such that:
-	* <p>
-	* g1 >= g2 <==> Ring(g2) does not contain Ring(g1)
-	* <p>
-	* where Polygon(g) is the buffer polygon that is built from g.
-	* <p>
-	* This relationship is used to sort the BufferSubgraphs so that shells are guaranteed to
-	* be built before holes.
-	*/
+	 * BufferSubgraphs are compared on the x-value of their rightmost
+	 * Coordinate.
+	 * This defines a partial ordering on the graphs such that:
+	 * 
+	 * g1 >= g2 <==> Ring(g2) does not contain Ring(g1)
+	 *
+	 * where Polygon(g) is the buffer polygon that is built from g.
+	 *
+	 * This relationship is used to sort the BufferSubgraphs so
+	 * that shells are guaranteed to
+	 * be built before holes.
+	 */
 	int compareTo(void* o);
 };
 
@@ -479,15 +501,17 @@ private:
 	*/
 	void addPolygonRing(const CoordinateSequence *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc);
 	/**
-	* The ringCoord is assumed to contain no repeated points.
-	* It may be degenerate (i.e. contain only 1, 2, or 3 points).
-	* In this case it has no area, and hence has a minimum diameter of 0.
-	*
-	* @param ringCoord
-	* @param offsetDistance
-	* @return
-	*/
+	 * The ringCoord is assumed to contain no repeated points.
+	 * It may be degenerate (i.e. contain only 1, 2, or 3 points).
+	 * In this case it has no area, and hence has a minimum diameter of 0.
+	 *
+	 * @param ringCoord
+	 * @param offsetDistance
+	 * @return
+	 */
 	bool isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance);
+	//bool isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance) { return isErodedCompletely((const CoordinateSequence)ringCoord, bufferDistance) }
+
 	/**
 	* Tests whether a triangular ring would be eroded completely by the given
 	* buffer distance.
@@ -505,7 +529,7 @@ private:
 	* @param bufferDistance
 	* @return
 	*/
-	bool isTriangleErodedCompletely(CoordinateSequence *triangleCoord,double bufferDistance);
+	bool isTriangleErodedCompletely(CoordinateSequence *triangleCoord, double bufferDistance);
 };
 
 /*
@@ -645,8 +669,8 @@ public:
 	Geometry* buffer(Geometry *g, double distance); // throw (GEOSException *);
 private:
 	/**
-	* Compute the change in depth as an edge is crossed from R to L
-	*/
+	 * Compute the change in depth as an edge is crossed from R to L
+	 */
 	static int depthDelta(Label *label);
 	static CGAlgorithms *cga;
 	int quadrantSegments;
@@ -656,30 +680,38 @@ private:
 	EdgeList *edgeList;
 	vector<Label *>newLabels;
 	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel); // throw(GEOSException *);
+
 	/**
-	* Inserted edges are checked to see if an identical edge already exists.
-	* If so, the edge is not inserted, but its label is merged
-	* with the existing edge.
-	*/
+	 * Inserted edges are checked to see if an identical edge already
+	 * exists.
+	 * If so, the edge is not inserted, but its label is merged
+	 * with the existing edge.
+	 */
 	void insertEdge(Edge *e);
 	vector<BufferSubgraph*>* createSubgraphs(PlanarGraph *graph);
+
 	/**
-	* Completes the building of the input subgraphs by depth-labelling them,
-	* and adds them to the PolygonBuilder.
-	* The subgraph list must be sorted in rightmost-coordinate order.
-	*
-	* @param subgraphList the subgraphs to build
-	* @param polyBuilder the PolygonBuilder which will build the final polygons
-	*/
+	 * Completes the building of the input subgraphs by
+	 * depth-labelling them,
+	 * and adds them to the PolygonBuilder.
+	 * The subgraph list must be sorted in rightmost-coordinate order.
+	 *
+	 * @param subgraphList the subgraphs to build
+	 * @param polyBuilder the PolygonBuilder which will build
+	 *        the final polygons
+	 */
 	void buildSubgraphs(vector<BufferSubgraph*> *subgraphList, PolygonBuilder *polyBuilder);
 };
 
-}
+} // namespace geos
 
 #endif // ndef GEOS_OPBUFFER_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
  * Revision 1.4  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
