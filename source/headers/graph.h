@@ -1,3 +1,10 @@
+/*
+ * $Log$
+ * Revision 1.24  2003/11/06 18:45:05  strk
+ * Added throw specification for DirectEdgeStar::linkResultDirectedEdges()
+ *
+ */
+
 #ifndef GEOS_GRAPH_H
 #define GEOS_GRAPH_H
 
@@ -281,7 +288,7 @@ public:
 	void computeLabelling(vector<GeometryGraph*> *geom);
 	void mergeSymLabels();
 	void updateLabelling(Label *nodeLabel);
-	void linkResultDirectedEdges();
+	void linkResultDirectedEdges() throw(TopologyException *);
 	void linkMinimalDirectedEdges(EdgeRing *er);
 	void linkAllDirectedEdges();
 	void findCoveredLineEdges();

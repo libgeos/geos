@@ -146,7 +146,7 @@ vector<DirectedEdge*>* DirectedEdgeStar::getResultAreaEdges() {
  * <p>
  * PRECONDITION: No pair of dirEdges are both marked as being in the result
  */
-void DirectedEdgeStar::linkResultDirectedEdges(){
+void DirectedEdgeStar::linkResultDirectedEdges() throw(TopologyException *) {
 	// make sure edges are copied to resultAreaEdges list
 	getResultAreaEdges();
 	// find first area edge (if any) to start linking at
