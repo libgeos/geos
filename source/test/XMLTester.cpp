@@ -89,6 +89,9 @@ try{
 	string geomBout="";
 	string opName="";
 	string opSig="";
+	string opArg1="";
+	string opArg2="";
+	string opArg3="";
 	string opRes="";
 	int caseCount=0;
 	int testCount=0;
@@ -170,6 +173,9 @@ try{
 			xml.IntoElem();
 			xml.FindChildElem("op");
 			opName=xml.GetChildAttrib("name");
+			opArg1=xml.GetChildAttrib("arg1");
+			opArg2=xml.GetChildAttrib("arg2");
+			opArg3=xml.GetChildAttrib("arg3");
 			opSig=xml.GetChildAttrib("arg3");
 			opRes=xml.GetChildData();
 		// trim blanks
@@ -378,7 +384,12 @@ try{
 					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					profile->start();
-					Geometry *gRealRes=gA->buffer(atof(opSig.c_str()));
+					Geometry *gRealRes;
+					if ( opArg2 != "" ) {
+						gRealRes=gA->buffer(atof(opSig.c_str()), atoi(opArg2.c_str()));
+					} else {
+						gRealRes=gA->buffer(atof(opSig.c_str()));
+					}
 					profile->stop();
 					gRealRes->normalize();
 					if (out & TEST_RESULT) {
@@ -542,6 +553,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2005/02/18 08:20:24  strk
+ * Added support for point-per-quadrant argument in buffer tests (using arg2).
+ *
  * Revision 1.52  2005/01/03 16:06:27  strk
  * Changed polygonize op to return a GeometryCollection
  *
