@@ -31,6 +31,12 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Set to 1 if `long int' is 64 bits */
+#undef HAVE_LONG_INT_64
+
+/* Set to 1 if `long long int' is 64 bits */
+#undef HAVE_LONG_LONG_INT_64
+
 /* Define to 1 if you have the `memcpy' function. */
 #undef HAVE_MEMCPY
 

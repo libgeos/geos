@@ -17,6 +17,14 @@ AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
+dnl types checks ------------------------------------------------------
+
+dnl Find a working 64bit integer
+PGAC_TYPE_64BIT_INT([long int])
+if test x"$HAVE_LONG_INT_64" = x"no" ; then
+  PGAC_TYPE_64BIT_INT([long long int])
+fi
+
 dnl function checks ------------------------------------------------------
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MEMCMP
