@@ -1,5 +1,7 @@
 geosdir = $(prefix)/include/geos
 
+EXTRA_DIST = platform.h.vc
+
 geos_HEADERS = \
 	geom.h \
 	geomUtil.h \
@@ -29,3 +31,4 @@ geos_HEADERS = \
 	unload.h \
 	util.h \
 	profiler.h 
+
