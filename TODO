@@ -1,3 +1,5 @@
+- speedup in BufferSubgraph::computeDepths (read comment there)
+
 - PrecisionModel nearbyint() check
 
 - doc/example.cpp: check side location conflict on intersection
