@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/14 08:38:52  strk
+ * BufferBuilder constructor missed to initialize workingPrecisionModel
+ *
  * Revision 1.1  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -43,6 +46,7 @@ CGAlgorithms* BufferBuilder::cga=new RobustCGAlgorithms();
 * Creates a new BufferBuilder
 */
 BufferBuilder::BufferBuilder() {
+	workingPrecisionModel=NULL;
 	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
 	endCapStyle=BufferOp::CAP_ROUND;
 	edgeList=new EdgeList();
