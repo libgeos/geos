@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/19 10:34:06  strk
+ * removed doxygen documentation of removed feature
+ *
  * Revision 1.14  2004/07/17 09:18:54  strk
  * Added geos::version()
  *
@@ -616,7 +619,7 @@ private:
 //	/// constructor an empty CoordinateList
 //	CoordinateList();
 //
-//	/** \brief
+//	/*
 //	 * Constructs a new list from a vector of Coordinates.
 //	 * Caller can specify if repeated points are to be removed.
 //	 * Default is allowing repeated points.
