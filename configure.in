@@ -53,5 +53,5 @@ AC_SUBST(VERSION)
 
 dnl output stuff ----------------------------------------------------------
 
-AC_OUTPUT(Makefile source/Makefile source/geom/Makefile source/headers/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile source/examples/Makefile )
+AC_OUTPUT(Makefile source/Makefile source/geom/Makefile source/headers/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile source/examples/Makefile doc/Makefile)
 

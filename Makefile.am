@@ -1,4 +1,5 @@
 SUBDIRS = \
 	source \
 	macros \
-	tools
+	tools \
+	doc

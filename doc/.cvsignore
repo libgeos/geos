@@ -1,2 +1,6 @@
 .cvsignore
+.deps
+.libs
 example
+Makefile
+Makefile.in
