@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/07/15 13:41:54  strk
+ * Added createRectangle example.
+ *
  * Revision 1.20  2004/07/14 21:15:49  strk
  * Added GeometricShapeFactory example: createCircle.
  * Added simple filter to send example output to a postgis table.
@@ -240,6 +243,21 @@ create_ellipse(double centerX, double centerY, double width, double height)
 	return shapefactory.createCircle();
 };
 
+//
+// This function uses GeometricShapeFactory to render
+// a rectangle having lower-left corner at given coordinates
+// and given sizes.
+//
+Polygon *
+create_rectangle(double llX, double llY, double width, double height)
+{
+	GeometricShapeFactory shapefactory(global_factory);
+	shapefactory.setBase(Coordinate(llX, llY));
+	shapefactory.setHeight(width);
+	shapefactory.setWidth(height);
+	// can use setSize for a square
+	return shapefactory.createRectangle();
+};
 
 // Start reading here
 void do_all()
@@ -274,7 +292,8 @@ void do_all()
 
 	// These ones use a GeometricShapeFactory
 	geoms->push_back(create_circle(0, 0, 10));
-	geoms->push_back(create_ellipse(0, 0, 8, 12));
+	//geoms->push_back(create_ellipse(0, 0, 8, 12));
+	//geoms->push_back(create_rectangle(-5, -5, 10, 10));
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
