@@ -16,10 +16,8 @@
  *
  **********************************************************************
  * $Log$
- * Revision 1.6  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
+ * Revision 1.1  2004/07/08 19:41:27  strk
+ * renamed to reflect JTS API.
  *
  * Revision 1.5  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
@@ -48,14 +46,10 @@ int main(int argc, char** argv)
 	try {
 	cout << "Start:" << endl << endl;
 
-	//Creating first CoordinateList
-	//By default CoordinateListFactory will create a BasicCoordinateList
-	CoordinateList *cl1=CoordinateListFactory::internalFactory->createCoordinateList();
-	//It is also possible to explicitly create BasicCoordinateLists
-	//CoordinateList *cl1=new BasicCoordinateList();
+	CoordinateSequence *cl1=new DefaultCoordinateSequence();
 
-	//CoordinateList cl1 is empty
-	cout << endl << "CoordinateList cl1: " << cl1->toString() << endl;
+	//CoordinateSequence cl1 is empty
+	cout << endl << "CoordinateSequence cl1: " << cl1->toString() << endl;
 	//Adding points
 	cl1->add(*(new Coordinate(140,120)));
 	cl1->add(*(new Coordinate(160,20)));
@@ -63,48 +57,48 @@ int main(int argc, char** argv)
 	cl1->add(*(new Coordinate(20,20)));
 	cl1->add(*(new Coordinate(11,11)));
 	cl1->add(*(new Coordinate(140,120)));
-	cout << "CoordinateList cl1: " << cl1->toString() << endl;
+	cout << "CoordinateSequence cl1: " << cl1->toString() << endl;
 	//Changing point
 	cl1->setAt(*(new Coordinate(20,120)),4);
-	cout << "CoordinateList cl1: " << cl1->toString() << endl;
+	cout << "CoordinateSequence cl1: " << cl1->toString() << endl;
 	//Deleting point
 	cl1->deleteAt(2);
-	cout << "CoordinateList cl1: " << cl1->toString() << endl;
+	cout << "CoordinateSequence cl1: " << cl1->toString() << endl;
 
-	//Switching CoordinateListFactory to create PointCoordinateLists
-	//PointCoordinateList is a sample implementation of a user-defined
-	//CoordinateList based on a vector of struct {3 x double}
-	CoordinateListFactory::internalFactory=new PointCoordinateListFactory();
-	//Now calls to CoordinateListFactory would create PointCoordinateLists
-	CoordinateList *cl2=CoordinateListFactory::internalFactory->createCoordinateList();
-	//It is also possible to explicitly create PointCoordinateLists
-	//CoordinateList *cl2=new PointCoordinateList();
+	//Switching CoordinateSequenceFactory to create PointCoordinateSequences
+	//PointCoordinateSequence is a sample implementation of a user-defined
+	//CoordinateSequence based on a vector of struct {3 x double}
+	CoordinateSequenceFactory::internalFactory=new PointCoordinateSequenceFactory();
+	//Now calls to CoordinateSequenceFactory would create PointCoordinateSequences
+	CoordinateSequence *cl2=CoordinateSequenceFactory::internalFactory->createCoordinateSequence();
+	//It is also possible to explicitly create PointCoordinateSequences
+	//CoordinateSequence *cl2=new PointCoordinateSequence();
 
-	//CoordinateList cl2 is empty
-	cout << endl << "CoordinateList cl2: " << cl2->toString() << endl;
+	//CoordinateSequence cl2 is empty
+	cout << endl << "CoordinateSequence cl2: " << cl2->toString() << endl;
 	//Adding points
 	//Points could be added as Coordinates
 	cl2->add(*(new Coordinate(11,11)));
 	cl2->add(*(new Coordinate(140,200)));
 	cl2->add(*(new Coordinate(33,33)));
-	//or using native PointCoordinateList format
+	//or using native PointCoordinateSequence format
 	point_3d p1={240,200,DoubleNotANumber};
 	point_3d p2={55,55,DoubleNotANumber};
 	point_3d p3={140,120,DoubleNotANumber};
-	((PointCoordinateList*) cl2)->add(p1);
-	((PointCoordinateList*) cl2)->add(p2);
-	((PointCoordinateList*) cl2)->add(p3);
-	cout << "CoordinateList cl2: " << cl2->toString() << endl;
+	((PointCoordinateSequence*) cl2)->add(p1);
+	((PointCoordinateSequence*) cl2)->add(p2);
+	((PointCoordinateSequence*) cl2)->add(p3);
+	cout << "CoordinateSequence cl2: " << cl2->toString() << endl;
 	//Changing point
 	//Points can be set using Coordinates
 	cl2->setAt(*(new Coordinate(240,120)),4);
-	//or using native PointCoordinateList format
+	//or using native PointCoordinateSequence format
 	point_3d pn={140,120,DoubleNotANumber};
-	((PointCoordinateList*) cl2)->setAt(pn,0);
-	cout << "CoordinateList cl2: " << cl2->toString() << endl;
+	((PointCoordinateSequence*) cl2)->setAt(pn,0);
+	cout << "CoordinateSequence cl2: " << cl2->toString() << endl;
 	//Deleting point
 	cl2->deleteAt(2);
-	cout << "CoordinateList cl2: " << cl2->toString() << endl;
+	cout << "CoordinateSequence cl2: " << cl2->toString() << endl;
 
 	//To do the operations:
 	//First we need to create a GeometryFactory

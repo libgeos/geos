@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/08 19:41:27  strk
+ * renamed to reflect JTS API.
+ *
  * Revision 1.6  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -27,7 +30,7 @@
 
 #include <iostream>
 
-#include "CustomCoordinateListExample.h"
+#include "CustomCoordinateSequenceExample.h"
 #include <geos/io.h>
 #include <geos/util.h>
 #include <geos/geom.h>
@@ -40,7 +43,7 @@ int main(int argc, char** argv) {
 	try {
 	cout << "Start:" << endl << endl;
 
-	//CustomPointCoordinateList is a sample implementation of a user-defined
+	//CustomPointCoordinateSequence is a sample implementation of a user-defined
 	//wrapper around their internal storage format (array of point_3d struct {3 x double})
 
 	point_3d p1={11,11,DoubleNotANumber};
@@ -57,17 +60,17 @@ int main(int argc, char** argv) {
 	points[3]=p4;
 	points[4]=p5;
 
-	//Creating CoordinateList
-	CoordinateList *cl=new CustomPointCoordinateList(points,5);
+	//Creating CoordinateSequence
+	CoordinateSequence *cl=new CustomPointCoordinateSequence(points,5);
 
-	cout << endl << "CoordinateList cl: " << cl->toString() << endl;
+	cout << endl << "CoordinateSequence cl: " << cl->toString() << endl;
 	//Changing point
 	//Points can be set using Coordinates
 	cl->setAt(*(new Coordinate(240,120)),3);
-	//or using native CustomPointCoordinateList format
+	//or using native CustomPointCoordinateSequence format
 	point_3d pn={140,120,DoubleNotANumber};
-	((CustomPointCoordinateList*) cl)->setAt(pn,0);
-	cout << "CoordinateList cl: " << cl->toString() << endl;
+	((CustomPointCoordinateSequence*) cl)->setAt(pn,0);
+	cout << "CoordinateSequence cl: " << cl->toString() << endl;
 
 	//Since the underlying storage format is a fixed size array
 	//points can't be added or deleted

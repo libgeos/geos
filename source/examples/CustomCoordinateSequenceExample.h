@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/08 19:41:27  strk
+ * renamed to reflect JTS API.
+ *
  * Revision 1.8  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -36,17 +39,17 @@ using namespace std;
 using namespace geos;
 
 /*
- * This is an example of how you can create a custom CoordinateList class that wraps
+ * This is an example of how you can create a custom CoordinateSequence class that wraps
  * your own way of storing lists of coordinates. Depending on your internal storage
  * format some methods in the wrapper class might not work properly (but have to be
- * preserved for the interface compatibility. In this example CustomPointCoordinateList
+ * preserved for the interface compatibility. In this example CustomPointCoordinateSequence
  * wraps an array of point_3d. Since the array is fixed length, methods like 'add' or
  * 'deleteAt' will not work.
  */
-class CustomPointCoordinateList : public BasicCoordinateList {
+class CustomPointCoordinateSequence : public BasicCoordinateSequence {
 public:
-	CustomPointCoordinateList(point_3d *newPts,int newSize);
-	CustomPointCoordinateList(const CustomPointCoordinateList &cl);
+	CustomPointCoordinateSequence(point_3d *newPts,int newSize);
+	CustomPointCoordinateSequence(const CustomPointCoordinateSequence &cl);
 	bool isEmpty();
 	void add(Coordinate& c); //NoOp (exception)
 	void add(point_3d p); //NoOp (exception)
