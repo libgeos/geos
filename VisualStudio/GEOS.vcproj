@@ -514,6 +514,9 @@
 				Name="io"
 				Filter="">
 				<File
+					RelativePath="..\source\io\Unload.cpp">
+				</File>
+				<File
 					RelativePath="..\source\io\ParseException.cpp">
 				</File>
 				<File

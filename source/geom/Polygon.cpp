@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.25  2003/10/17 05:51:21  ybychkov
+* Fixed a small memory leak.
+*
 * Revision 1.24  2003/10/16 08:50:00  strk
 * Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
 *
@@ -24,8 +27,11 @@ Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID){
 }
 
 Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID): Geometry(precisionModel, SRID) {
-	if (newShell==NULL)
-		newShell=new LinearRing(CoordinateListFactory::internalFactory->createCoordinateList(), precisionModel, SRID);
+	if (newShell==NULL) {
+		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
+		newShell=new LinearRing(p,precisionModel, SRID);
+		delete p;
+	}
 	holes=new vector<Geometry *>();
 	if (hasNullElements(holes)) {
 		delete newShell;
@@ -43,8 +49,11 @@ Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID)
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 				 PrecisionModel* precisionModel, int SRID):
 				Geometry(precisionModel, SRID) {
-	if (newShell==NULL)
-		newShell=new LinearRing(CoordinateListFactory::internalFactory->createCoordinateList(), precisionModel, SRID);
+	if (newShell==NULL) {
+		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
+		newShell=new LinearRing(p,precisionModel, SRID);
+		delete p;
+	}
 
 	if (newHoles==NULL)
 		newHoles=new vector<Geometry *>();

@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.33  2003/10/17 05:51:21  ybychkov
+* Fixed a small memory leak.
+*
 * Revision 1.32  2003/10/16 13:01:31  strk
 * Added call to Unload::Release()
 *
@@ -58,7 +61,7 @@ try{
 	InitAllocCheck();
 	{
 #endif
-//	_CrtSetBreakAlloc(1157);
+//	_CrtSetBreakAlloc(837964);
 	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
 //	int out=GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT+PRED;
@@ -68,6 +71,7 @@ try{
 	int failed=0;
 	int succeeded=0;
 	string source="./test.xml";
+//	string source="d:\\test.xml";
 	if ( argC > 1 ) source = argV[1];
 	string precisionModel="";
 	string desc="";
