@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.4  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -27,6 +30,11 @@
 
 namespace geos {
 
+/**
+* Constructs an AbstractNode at the given level in the tree
+* @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on; the
+* root node will have the highest level
+*/
 AbstractNode::AbstractNode(int newLevel) {
 	childBoundables=new vector<Boundable*>();
 	bounds=NULL;
@@ -37,6 +45,10 @@ AbstractNode::~AbstractNode() {
 	delete childBoundables;
 }
 
+/**
+* Returns either child AbstractNodes, or if this is a leaf node, real data (wrapped
+* in ItemBoundables).
+*/
 vector<Boundable*>* AbstractNode::getChildBoundables() {
 	return childBoundables;
 }
@@ -48,12 +60,17 @@ void* AbstractNode::getBounds() {
 	return bounds;
 }
 
+/**
+* Returns 0 if this node is a leaf, 1 if a parent of a leaf, and so on; the
+* root node will have the highest level
+*/
 int AbstractNode::getLevel() {
 	return level;
 }
 
 /**
-*@param  childBoundable  either a Node or an ItemBoundable
+* Adds either an AbstractNode, or if this is a leaf node, a data object
+* (wrapped in an ItemBoundable)
 */
 void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 	Assert::isTrue(bounds==NULL);

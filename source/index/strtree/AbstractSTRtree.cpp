@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.5  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -29,6 +32,10 @@
 
 namespace geos {
 
+/**
+* Constructs an AbstractSTRtree with the specified maximum number of child
+* nodes that a node may have
+*/
 AbstractSTRtree::AbstractSTRtree(int newNodeCapacity) {
 	built=false;
 	itemBoundables=new vector<Boundable*>();
@@ -40,19 +47,25 @@ AbstractSTRtree::~AbstractSTRtree() {
 	delete itemBoundables;
 }
 
+/**
+* Creates parent nodes, grandparent nodes, and so forth up to the root
+* node, for the data that has been inserted into the tree. Can only be
+* called once, and thus can be called only after all of the data has been
+* inserted into the tree.
+*/
 void AbstractSTRtree::build() {
 	Assert::isTrue(!built);
 	root=(itemBoundables->empty()?createNode(0):createHigherLevels(itemBoundables,-1));
 	built=true;
 }
 
-void AbstractSTRtree::checkConsistency() {
-	if (!built) {
-		build();
-	}
-	vector<Boundable*>* itemBoundablesInTree=boundablesAtLevel(-1);
-	Assert::isTrue(itemBoundables->size()==itemBoundablesInTree->size());
-}
+//void AbstractSTRtree::checkConsistency() {
+//	if (!built) {
+//		build();
+//	}
+//	vector<Boundable*>* itemBoundablesInTree=boundablesAtLevel(-1);
+//	Assert::isTrue(itemBoundables->size()==itemBoundablesInTree->size());
+//}
 
 bool compareAbsBoundables(Boundable *a, Boundable *b){
 	return false;
@@ -87,13 +100,14 @@ int AbstractSTRtree::compareDoubles(double a, double b) {
 }
 
 /**
-*  Creates the levels higher than the given level
-*
-*@param  boundablesOfALevel  the level to build on
-*@param  level               the level of the Boundables, or -1 if the
-*      boundables are item boundables (that is, below level 0)
-*@return                     the root, which may be a ParentNode or a
-*      LeafNode
+* Creates the levels higher than the given level
+* 
+* @param boundablesOfALevel
+*            the level to build on
+* @param level
+*            the level of the Boundables, or -1 if the boundables are item
+*            boundables (that is, below level 0)
+* @return the root, which may be a ParentNode or a LeafNode
 */
 AbstractNode* AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundablesOfALevel,int level) {
 	Assert::isTrue(!boundablesOfALevel->empty());
@@ -108,6 +122,9 @@ AbstractNode* AbstractSTRtree::getRoot() {
 	return root;
 }
 
+/**
+* Returns the maximum number of child nodes that a node may have
+*/
 int AbstractSTRtree::getNodeCapacity() {
 	return nodeCapacity;
 }

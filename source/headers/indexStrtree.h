@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.8  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -34,11 +37,29 @@ using namespace std;
 
 namespace geos {
 
+/**
+ * A spatial object in an AbstractSTRtree.
+ *
+ */
 class Boundable {
 public:
+  /**
+   * Returns a representation of space that encloses this Boundable, preferably
+   * not much bigger than this Boundable's boundary yet fast to test for intersection
+   * with the bounds of other Boundables. The class of object returned depends
+   * on the subclass of AbstractSTRtree.
+   * @return an Envelope (for STRtrees), an Interval (for SIRtrees), or other object
+   * (for other subclasses of AbstractSTRtree)
+   * @see AbstractSTRtree.IntersectsOp
+   */
 	virtual void* getBounds()=0;
 };
 
+/**
+ * Boundable wrapper for a non-Boundable spatial object. Used internally by
+ * AbstractSTRtree.
+ *
+ */
 class ItemBoundable: public Boundable {
 private:
 	void* bounds;
@@ -49,6 +70,11 @@ public:
 	void* getItem();
 };
 
+/**
+ * A contiguous portion of 1D-space. Used internally by SIRtree.
+ * @see SIRtree
+ *
+ */
 class Interval {
 public:
 	Interval(Interval *other);
@@ -63,8 +89,10 @@ private:
 };
 
 /**
- * A node of the STR tree. A leaf node may not have child nodes, but may have
- * child boundables: ItemBoundables.
+ * A node of the STR tree. The children of this node are either more nodes
+ * (AbstractNodes) or real data (ItemBoundables). If this node contains real data
+ * (rather than nodes), then we say that this node is a "leaf node".  
+ *
  */
 class AbstractNode: public Boundable {
 private:
@@ -75,6 +103,16 @@ public:
 	AbstractNode(int newLevel);
 	virtual	~AbstractNode();
 	vector<Boundable*>* getChildBoundables();
+	/**
+	 * Returns a representation of space that encloses this Boundable,
+	 * preferably not much bigger than this Boundable's boundary yet fast to
+	 * test for intersection with the bounds of other Boundables. The class of
+	 * object returned depends on the subclass of AbstractSTRtree.
+	 * 
+	 * @return an Envelope (for STRtrees), an Interval (for SIRtrees), or other
+	 *         object (for other subclasses of AbstractSTRtree)
+	 * @see AbstractSTRtree.IntersectsOp
+	 */  
 	void* getBounds();
 	int getLevel();
 	void addChildBoundable(Boundable *childBoundable);
@@ -86,12 +124,27 @@ protected:
  * Base class for STRtree and SIRtree. STR-packed R-trees are described in:
  * P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
  * Application To GIS. Morgan Kaufmann, San Francisco, 2002.
- * @see STRtree
+ * <p>
+ * This implementation is based on Boundables rather than just AbstractNodes, 
+ * because the STR algorithm operates on both nodes and 
+ * data, both of which are treated here as Boundables.
+ * 
  */
 class AbstractSTRtree {
 protected:
+	/**
+	* A test for intersection between two bounds, necessary because subclasses
+	* of AbstractSTRtree have different implementations of bounds. 
+	*/
 	class IntersectsOp {
 		public:
+			/**
+			* For STRtrees, the bounds will be Envelopes; for SIRtrees, Intervals;
+			* for other subclasses of AbstractSTRtree, some other class.
+			* @param aBounds the bounds of one spatial object
+			* @param bBounds the bounds of another spatial object
+			* @return whether the two bounds intersect
+			*/
 			virtual bool intersects(void* aBounds,void* bBounds)=0;
 	};
 	AbstractNode *root;
@@ -101,6 +154,11 @@ protected:
 	virtual AbstractNode* getRoot();
 	virtual void insert(void* bounds,void* item);
 	virtual vector<void*>* query(void* searchBounds);
+	/**
+	* @return a test for intersection between two bounds, necessary because subclasses
+	* of AbstractSTRtree have different implementations of bounds. 
+	* @see IntersectsOp
+	*/
 //	virtual IntersectsOp* getIntersectsOp()=0;
 	virtual vector<Boundable*>* boundablesAtLevel(int level);
 	int nodeCapacity;
@@ -114,7 +172,7 @@ public:
 	static int compareDoubles(double a, double b);
 	virtual ~AbstractSTRtree();
 	virtual void build();
-	virtual void checkConsistency();
+//	virtual void checkConsistency();
 	virtual int getNodeCapacity();
 	virtual void query(void* searchBounds,AbstractNode* node,vector<void*>* matches);
 	virtual void boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables);
@@ -155,19 +213,19 @@ protected:
 //Not used yet, thus not ported.
 
 /**
- *  An R-tree created using the Sort-Tile-Recursive (STR) algorithm, described
- *  in: P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
- *  Application To GIS. Morgan Kaufmann, San Francisco, 2002. <P>
+ *  A query-only R-tree created using the Sort-Tile-Recursive (STR) algorithm. 
+ *  For two-dimensional spatial data. <P>
+
  *
  *  The STR packed R-tree is simple to implement and maximizes space
  *  utilization; that is, as many leaves as possible are filled to capacity.
  *  Overlap between nodes is far less than in a basic R-tree. However, once the
  *  tree has been built (explicitly or on the first call to #query), items may
  *  not be added or removed. <P>
+ * 
+ * Described in: P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
+ *  Application To GIS. Morgan Kaufmann, San Francisco, 2002. 
  *
- *  This implementation is based on Rectangles rather than Nodes, because the
- *  STR algorithm operates on both nodes and items, both of which are treated
- *  here as Rectangles (using the Composite design pattern). [Jon Aquino]
  */
 class STRtree: public AbstractSTRtree,public SpatialIndex {
 //private:

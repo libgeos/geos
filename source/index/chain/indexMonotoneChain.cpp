@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -27,20 +30,29 @@
 
 namespace geos {
 
-indexMonotoneChain::indexMonotoneChain(CoordinateList *newPts,int nstart,int nend) {
+indexMonotoneChain::indexMonotoneChain(CoordinateList *newPts,int nstart,int nend, void* nContext) {
 	env=NULL;
 	// these envelopes are created once and reused
-	env1=new Envelope();
-	env2=new Envelope();
 	pts=newPts;
 	start=nstart;
 	end=nend;
+	context=nContext;
+}
+
+void indexMonotoneChain::setId(int nId) {
+	id=nId;
+}
+
+int indexMonotoneChain::getId() {
+	return id;
+}
+
+void* indexMonotoneChain::getContext() {
+	return context;
 }
 
 indexMonotoneChain::~indexMonotoneChain() {
 	delete env;
-	delete env1;
-	delete env2;
 }
 
 Envelope* indexMonotoneChain::getEnvelope() {
@@ -86,7 +98,7 @@ void indexMonotoneChain::select(Envelope *searchEnv,MonotoneChainSelectAction *m
 void indexMonotoneChain::computeSelect(Envelope *searchEnv,int start0,int end0,MonotoneChainSelectAction *mcs ) {
 	const Coordinate& p0=pts->getAt(start0);
 	const Coordinate& p1=pts->getAt(end0);
-	env1->init(p0,p1);
+	mcs->tempEnv1->init(p0,p1);
 	//Debug.println("trying:"+p0+p1+" [ "+start0+","+end0+" ]");
 	// terminating condition for the recursion
 	if(end0-start0==1) {
@@ -95,7 +107,7 @@ void indexMonotoneChain::computeSelect(Envelope *searchEnv,int start0,int end0,M
 		return;
 	}
 	// nothing to do if the envelopes don't overlap
-	if (!searchEnv->intersects(env1))
+	if (!searchEnv->intersects(mcs->tempEnv1))
 		return;
 	// the chains overlap,so split each in half and iterate (binary search)
 	int mid=(start0+end0)/2;
@@ -125,9 +137,9 @@ void indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain 
 		return;
 	}
 	// nothing to do if the envelopes of these chains don't overlap
-	env1->init(p00,p01);
-	env2->init(p10,p11);
-	if (!env1->intersects(env2)) return;
+	mco->tempEnv1->init(p00,p01);
+	mco->tempEnv2->init(p10,p11);
+	if (!mco->tempEnv1->intersects(mco->tempEnv2)) return;
 	// the chains overlap,so split each in half and iterate (binary search)
 	int mid0=(start0+end0)/2;
 	int mid1=(start1+end1)/2;

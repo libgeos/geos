@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.5  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -27,13 +30,18 @@
 namespace geos {
 
 MonotoneChainOverlapAction::MonotoneChainOverlapAction() {
-	seg1=new LineSegment();
-	seg2=new LineSegment();
+	overlapSeg1=new LineSegment();
+	overlapSeg2=new LineSegment();
+	tempEnv1=new Envelope();
+	tempEnv2=new Envelope();
+
 }
 
 MonotoneChainOverlapAction::~MonotoneChainOverlapAction() {
-	delete seg1;
-	delete seg2;
+	delete overlapSeg1;
+	delete overlapSeg2;
+	delete tempEnv1;
+	delete tempEnv2;
 }
 
 
@@ -41,9 +49,9 @@ MonotoneChainOverlapAction::~MonotoneChainOverlapAction() {
  * This function can be overridden if the original chains are needed
  */
 void MonotoneChainOverlapAction::overlap(indexMonotoneChain *mc1,int start1,indexMonotoneChain *mc2,int start2) {
-	mc1->getLineSegment(start1,seg1);
-	mc2->getLineSegment(start2,seg2);
-	overlap(seg1,seg2);
+	mc1->getLineSegment(start1,overlapSeg1);
+	mc2->getLineSegment(start2,overlapSeg2);
+	overlap(overlapSeg1,overlapSeg2);
 }
 }
 

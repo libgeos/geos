@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.15  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -185,7 +188,7 @@ Coordinate* RobustLineIntersector::intersection(const Coordinate& p1,const Coord
 		intPt.setCoordinate(*h);
 		delete h;
 	} catch (NotRepresentableException *e) {
-		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
+		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
     }
 	intPt.x+=normPt->x;
 	intPt.y+=normPt->y;

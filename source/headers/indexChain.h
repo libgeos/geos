@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.6  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -40,12 +43,22 @@ class indexMonotoneChain;
  */
 class MonotoneChainSelectAction {
 protected:
-	LineSegment *seg;
+	LineSegment *selectedSegment;
 public:
 	MonotoneChainSelectAction();
 	virtual ~MonotoneChainSelectAction();
+	/**
+	* This function can be overridden if the original chain is needed
+	*/
 	virtual void select(indexMonotoneChain *mc,int start);
+	/**
+	* This is a convenience function which can be overridden to obtain the actual
+	* line segment which is selected
+	* @param seg
+	*/
 	virtual void select(LineSegment *newSeg){}
+	// these envelopes are used during the MonotoneChain search process
+	Envelope *tempEnv1;
 };
 
 /**
@@ -54,21 +67,33 @@ public:
  */
 class MonotoneChainOverlapAction {
 protected:
-	LineSegment *seg1;
-	LineSegment *seg2;
+	LineSegment *overlapSeg1;
+	LineSegment *overlapSeg2;
 public:
 	MonotoneChainOverlapAction();
 	~MonotoneChainOverlapAction();
 	/**
 	* This function can be overridden if the original chains are needed
+	*
+	* @param start1 the index of the start of the overlapping segment from mc1
+	* @param start2 the index of the start of the overlapping segment from mc2
 	*/
 	void overlap(indexMonotoneChain *mc1,int start1,indexMonotoneChain *mc2,int start2);
+	/**
+	* This is a convenience function which can be overridden to obtain the actual
+	* line segments which overlap
+	* @param seg1
+	* @param seg2
+	*/
 	void overlap(LineSegment *newSeg1,LineSegment *newSeg2){}
+	// these envelopes are used during the MonotoneChain search process
+	Envelope *tempEnv1;
+	Envelope *tempEnv2;
 };
 
 
 /**
- * MonotoneChains are a way of partitioning the segments of an edge to
+ * MonotoneChains are a way of partitioning the segments of a linestring to
  * allow for fast searching of intersections.
  * They have the following properties:
  * <ol>
@@ -105,11 +130,11 @@ public:
  * returned by the query.
  * However, it does mean that the queries are not thread-safe.
  *
- * @version 1.2
+ * @version 1.4
  */
 class indexMonotoneChain {
 public:
-	indexMonotoneChain(CoordinateList *newPts,int nstart,int nend);
+	indexMonotoneChain(CoordinateList *newPts,int nstart,int nend, void* nContext);
 	~indexMonotoneChain();
 	Envelope* getEnvelope();
 	int getStartIndex();
@@ -126,15 +151,18 @@ public:
 	*/
 	void select(Envelope *searchEnv,MonotoneChainSelectAction *mcs);
 	void computeOverlaps(indexMonotoneChain *mc,MonotoneChainOverlapAction *mco);
+	void setId(int nId);
+	int getId();
+	void* getContext();
+
 private:
 	void computeSelect(Envelope *searchEnv,int start0,int end0,MonotoneChainSelectAction *mcs);
 	void computeOverlaps(int start0,int end0,indexMonotoneChain *mc,int start1,int end1,MonotoneChainOverlapAction *mco);
 	CoordinateList *pts;
 	int start, end;
 	Envelope *env;
-	// these envelopes are created once and reused
-	Envelope *env1;
-	Envelope *env2;
+	void *context;// user-defined information
+	int id; // useful for optimizing chain comparisons
 };
 
 /**
@@ -145,11 +173,12 @@ class MonotoneChainBuilder {
 public:
 //	static int[] toIntArray(List list); //Not needed
 	MonotoneChainBuilder(){}
+	static vector<indexMonotoneChain*>* getChains(CoordinateList *pts);
 	/**
-	* Return a list of the monotone chains
+	* Return a list of the {@link MonotoneChain}s
 	* for the given list of coordinates.
 	*/
-	static vector<indexMonotoneChain*>* getChains(CoordinateList *pts);
+	static vector<indexMonotoneChain*>* getChains(CoordinateList *pts,void* context);
 	/**
 	* Return an array containing lists of start/end indexes of the monotone chains
 	* for the given list of coordinates.

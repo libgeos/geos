@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -103,6 +106,10 @@ private:
 };
 
 class QuadTreeNode;
+/**
+ * The base class for nodes in a {@link Quadtree}.
+ *
+ */
 class QuadTreeNodeBase {
 public:
 	static int getSubnodeIndex(Envelope *env,Coordinate *centre);
@@ -119,14 +126,22 @@ protected:
 	vector<void*> *items;
 	/**
 	* subquads are numbered as follows:
+	* <pre>
 	*  2 | 3
 	*  --+--
 	*  0 | 1
+	* </pre>
 	*/
 	QuadTreeNode* subnode[4];
 	virtual bool isSearchMatch(Envelope *searchEnv)=0;
 };
 
+/**
+ * Represents a node of a {@link Quadtree}.  Nodes contain
+ * items which have a spatial extent corresponding to the node's position
+ * in the quadtree.
+ *
+ */
 class QuadTreeNode: public QuadTreeNodeBase {
 public:
 	static QuadTreeNode* createNode(Envelope *env);
@@ -189,9 +204,18 @@ protected:
 class Quadtree: public SpatialIndex {
 public:
 	static Envelope* ensureExtent(Envelope *itemEnv,double minExtent);
+	/**
+	* Constructs a Quadtree with zero items.
+	*/
 	Quadtree();
 	virtual ~Quadtree();
+	/**
+	* Returns the number of levels in the tree.
+	*/
 	int depth();
+	/**
+	* Returns the number of items in the tree.
+	*/
 	int size();
 	void insert(Envelope *itemEnv,void* item);
 	vector<void*>* query(Envelope *searchEnv);

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.2  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -128,9 +131,15 @@
 //    }
 //    return slices;
 //  }
-//
+  /**
+   * Constructs an STRtree with the default node capacity.
+   */
 //  public STRtree() { this(10); }
 //
+  /**
+   * Constructs an STRtree with the given maximum number of child nodes that
+   * a node may have
+   */
 //  public STRtree(int nodeCapacity) {
 //    super(nodeCapacity);
 //  }

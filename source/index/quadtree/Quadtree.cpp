@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -53,6 +56,9 @@ Envelope* Quadtree::ensureExtent(Envelope *itemEnv,double minExtent) {
 	return new Envelope(minx, maxx, miny, maxy);
 }
 
+/**
+* Constructs a Quadtree with zero items.
+*/
 Quadtree::Quadtree(){
 	minExtent=1.0;
 	root=new QuadTreeRoot();
@@ -62,13 +68,20 @@ Quadtree::~Quadtree(){
 	delete root;
 }
 
+/**
+* Returns the number of levels in the tree.
+*/
 int Quadtree::depth() {
 	//I don't think it's possible for root to be null. Perhaps we should
 	//remove the check. [Jon Aquino]
+    //Or make an assertion [Jon Aquino 10/29/2003] 
 	if (root!=NULL) return root->depth();
 	return 0;
 }
 
+/**
+* Returns the number of items in the tree.
+*/
 int Quadtree::size() {
 	if (root!=NULL) return root->size();
 	return 0;

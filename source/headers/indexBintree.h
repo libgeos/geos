@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.4  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -33,6 +36,10 @@ using namespace std;
 
 namespace geos {
 
+/**
+ * Represents an (1-dimensional) closed interval on the Real number line.
+ *
+ */
 class BinTreeInterval {
 public:
 	double min, max;
@@ -76,6 +83,10 @@ private:
 };
 
 class BinTreeNode;
+/**
+ * The base class for nodes in a {@link Bintree}.
+ *
+ */
 class NodeBase {
 public:
 	static int getSubnodeIndex(BinTreeInterval *interval, double centre);
@@ -99,6 +110,10 @@ protected:
 	virtual bool isSearchMatch(BinTreeInterval *interval)=0;
 };
 
+/**
+ * A node of a {@link Bintree}.
+ *
+ */
 class BinTreeNode: public NodeBase {
 public:
 	static BinTreeNode* createNode(BinTreeInterval *itemInterval);
@@ -120,8 +135,10 @@ protected:
 };
 
 /**
- * Root is the root of a single Bintree.  It is centred at the origin,
+ * The root node of a single {@link Bintree}.
+ * It is centred at the origin,
  * and does not have a defined extent.
+ *
  */
 class Root: public NodeBase {
 private:

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
  * Revision 1.7  2004/03/19 09:48:46  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -30,15 +33,18 @@
 
 namespace geos {
 
-/**
-* Return a list of the monotone chains
-* for the given list of coordinates.
-*/
 vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateList *pts) {
+	return getChains(pts,NULL);
+}
+/**
+ * Return a list of the {@link MonotoneChain}s
+ * for the given list of coordinates.
+ */
+vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateList *pts, void* context) {
 	vector<indexMonotoneChain*> *mcList=new vector<indexMonotoneChain*>();
 	vector<int> *startIndex=getChainStartIndices(pts);
 	for(int i=0;i<(int)startIndex->size()-1;i++) {
-		indexMonotoneChain *mc=new indexMonotoneChain(pts,(*startIndex)[i],(*startIndex)[i + 1]);
+		indexMonotoneChain *mc=new indexMonotoneChain(pts,(*startIndex)[i],(*startIndex)[i + 1],context);
 		mcList->push_back(mc);
 	}
 	delete startIndex;
