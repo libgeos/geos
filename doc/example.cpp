@@ -10,6 +10,10 @@
 //  obscure reports from memory checkers like valgrind.
 //
 // $Log$
+// Revision 1.9  2003/11/05 21:52:57  strk
+// Modified example.cpp to make use of vectors instead of Geometry * / int
+// couples. Added LineString creation example. Added Makefile to compile it.
+//
 // Revision 1.8  2003/11/03 16:09:44  strk
 // Removed comments about segfaults, made the simple collection creation call
 // cleaner by use of the clone() method.
@@ -47,15 +51,14 @@ GeometryFactory *global_factory;
 // This function will print given geometries in WKT
 // format to stdout.
 void
-wkt_print_geoms(int numgeoms, Geometry **geoms)
+wkt_print_geoms(vector<Geometry *> *geoms)
 {
 	// WKT-print given geometries
 	WKTWriter *wkt = new WKTWriter();
-	for (int i=0; i<numgeoms; i++) {
-		//string tmp="test";
-		string tmp=wkt->write(geoms[i]);
+	for (int i=0; i<geoms->size(); i++) {
+		const Geometry *g = (*geoms)[i];
+		string tmp=wkt->write(g);
 		cout<<"["<<i<<"] "<<tmp<<endl;
-		//cout<<wkt->write(geoms[i])<<endl;
 	}
 	delete wkt;
 }
@@ -71,6 +74,49 @@ create_point(double x, double y)
 	// the geometry factory will copy coordinate
 	Point *p = global_factory->createPoint(c);
 	return p;
+}
+
+// This function will create a LinearString
+// geometry with the shape of the letter U
+// having top-left corner at given coordinates
+// and 'side' height and width 
+LineString *
+create_ushaped_linestring(double xoffset, double yoffset, double side)
+{
+	// We will use a coordinate list to build the linestring
+	CoordinateList *cl = new BasicCoordinateList(4);
+
+	// Each coordinate in the list must be created,
+	// passed to coordinate list setAt and then deleted.
+	// Pretty boring uh ?
+
+	Coordinate *c;
+
+	c = new Coordinate(xoffset, yoffset);
+	cl->setAt(*c ,0);
+	delete c;
+
+	c = new Coordinate(xoffset, yoffset+side);
+	cl->setAt(*c ,1);
+	delete c;
+
+	c = new Coordinate(xoffset+side, yoffset+side);
+	cl->setAt(*c ,2);
+	delete c;
+
+	c = new Coordinate(xoffset+side, yoffset);
+	cl->setAt(*c ,3);
+	delete c;
+
+	// Now that we have a CoordinateList we can create 
+	// the linestring.
+	LineString *ls = global_factory->createLineString(cl);
+	
+	// We don't need our CoordinateList anymore, it has been 
+	// copied inside the LineString object
+	delete cl;
+
+	return ls; // our LineString
 }
 
 // This function will create a LinearRing
@@ -104,7 +150,7 @@ create_square_linearring(double xoffset, double yoffset, double side)
 
 	// Now that we have a CoordinateList we can create 
 	// the linearring.
-	LinearRing *lr = (LinearRing*) global_factory->createLinearRing(cl);
+	LinearRing *lr = global_factory->createLinearRing(cl);
 	
 	// We don't need our CoordinateList anymore, it has been 
 	// copied inside the LinearRing object
@@ -150,29 +196,32 @@ create_square_polygon(double xoffset, double yoffset, double side)
 
 //
 // This function will create a GeoemtryCollection
-// containing the two given Geometries.
-// Note that given Geometries will be referenced
-// by returned object, thus deleted at its destruction
-// time.
+// containing copies of all Geometries in given vector.
+// NOTE that this functionality is not available in GEOS
+// where every GeometryCollection constructor will
+// take ownership of Geometries passed as arguments.
 //
 GeometryCollection *
-create_simple_collection(Geometry *g1, Geometry *g2)
+create_simple_collection(vector<Geometry *> *geoms)
 {
 	// We need to construct a <Geometry *> vector
 	// to use as argument to the factory function
+	//
+	// This vector will have to contain COPIES of
+	// passed objects since GeometryCollection
+	// constructors will take ownership of them.
+	//
 	vector<Geometry *> *collection = new vector<Geometry *>;
-
-	// We fill the vector with given geometries
-	collection->push_back(g1);
-	collection->push_back(g2);
+	for (int i=0; i<geoms->size(); i++) {
+		const Geometry *g = (*geoms)[i];
+		collection->push_back(g->clone());
+	}
 
 	GeometryCollection *ret =
 		global_factory->createGeometryCollection(collection);
 
-
-	// We HAVE to delete the vectors used to store
-	// geometry pointers, but created object will
-	// delete pointed geometries, weird uh?
+	// We can delete vector used to store geometries
+	// ( I don't like it but this is what you should do )
 	delete collection;
 
 	return ret;
@@ -182,8 +231,8 @@ create_simple_collection(Geometry *g1, Geometry *g2)
 // Start reading here
 void do_all()
 {
-	int numgeoms = 5;
-	Geometry *geoms[numgeoms];
+	vector<Geometry *> *geoms = new vector<Geometry *>;
+	Geometry *geom;
 
 	// Define a precision model using 0,0 as the reference origin
 	// and 2.0 as coordinates scale.
@@ -202,73 +251,73 @@ void do_all()
 	/////////////////////////////////////////////
 
 	// Read function bodies to see the magic behind them
-	geoms[0] = create_point(150, 350);
-	geoms[1] = create_square_linearring(0,0,100);
-	geoms[2] = create_square_polygon(0,200,300);
-	geoms[3] = create_square_polygon(0,250,300);
-
-	// We clone geometries before passing them to the
-	// geometry collection function.
-	geoms[4] = create_simple_collection(
-			geoms[0]->clone(), geoms[1]->clone() );
+	geoms->push_back(create_point(150, 350));
+	geoms->push_back(create_ushaped_linestring(0,0,100));
+	geoms->push_back(create_square_linearring(0,0,100));
+	geoms->push_back(create_square_polygon(0,200,300));
+	geoms->push_back(create_square_polygon(0,250,300));
+	geoms->push_back(create_simple_collection(geoms));
 
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
-	wkt_print_geoms(numgeoms, geoms);
+	wkt_print_geoms(geoms);
 
 	/////////////////////////////////////////////
 	// CENTROID
 	/////////////////////////////////////////////
 	
 	// Find centroid of each base geometry
-	Geometry *centroid[numgeoms];
-	for (int i=0; i<numgeoms; i++) {
-		centroid[i] = geoms[i]->getCentroid();
+	vector<Geometry *> *centroid = new vector<Geometry *>;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g = (*geoms)[i];
+		centroid->push_back( g->getCentroid() );
 	}
 
 	// Print all convex hulls
 	cout<<"------- AND HERE ARE THEIR CENTROIDS -----"<<endl;
-	wkt_print_geoms(numgeoms, centroid);
+	wkt_print_geoms(centroid);
 
-	// Delete the hulls
-	for (int i=0; i<numgeoms; i++) {
-		delete centroid[i];
+	// Delete the centroids
+	for (int i=0; i<centroid->size(); i++) {
+		delete (*centroid)[i];
 	}
+	delete centroid;
 	
 	/////////////////////////////////////////////
 	// CONVEX HULL
 	/////////////////////////////////////////////
 	
 	// Make convex hulls of geometries
-	Geometry *hulls[numgeoms];
-	for (int i=0; i<numgeoms; i++) {
-		hulls[i] = geoms[i]->convexHull();
+	vector<Geometry *> *hulls = new vector<Geometry *>;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g = (*geoms)[i];
+		hulls->push_back( g->convexHull() );
 	}
 
 	// Print all convex hulls
 	cout<<"--------HERE COMES THE HULLS----------"<<endl;
-	wkt_print_geoms(numgeoms, hulls);
+	wkt_print_geoms(hulls);
 
 	// Delete the hulls
-	for (int i=0; i<numgeoms; i++) {
-		delete hulls[i];
+	for (int i=0; i<geoms->size(); i++) {
+		delete (*hulls)[i];
 	}
+	delete hulls;
 	
 	/////////////////////////////////////////////
 	// UNION
 	/////////////////////////////////////////////
 	
 	// Make unions of all geoms
-	Geometry *unions[numgeoms*numgeoms];
-	int numunions=0;
-	for (int i=0; i<numgeoms-1; i++) {
-		Geometry *g1 = geoms[i];
-		for (int j=i+1; j<numgeoms; j++) {
-			Geometry *g2 = geoms[j];
+	vector<Geometry *> *unions = new vector<Geometry *>;
+	for (int i=0; i<geoms->size()-1; i++) {
+		Geometry *g1 = (*geoms)[i];
+		for (int j=i+1; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
 			try {
-				unions[numunions] = g1->Union(g2);
-				numunions++;
+				Geometry *g3 = g1->Union(g2);
+				unions->push_back(g3);
 			}
 			// It's illegal to union a collection ...
 			catch (IllegalArgumentException *ill) {
@@ -283,21 +332,23 @@ void do_all()
 
 	// Print all unions
 	cout<<"----- AND HERE ARE SOME UNION COMBINATIONS ------"<<endl;
-	wkt_print_geoms(numunions, unions);
+	wkt_print_geoms(unions);
 
 	// Delete the resulting geoms
-	for (int i=0; i<numunions; i++) {
-		delete unions[i];
+	for (int i=0; i<unions->size(); i++) {
+		delete (*unions)[i];
 	}
+	delete unions;
 	
 	/////////////////////////////////////////////
 	// CLEANUP
 	/////////////////////////////////////////////
 
 	// Delete base geometries 
-	for (int i=0; i<numgeoms; i++) {
-		delete geoms[i];
+	for (int i=0; i<geoms->size(); i++) {
+		delete (*geoms)[i];
 	}
+	delete geoms;
 
 	delete global_factory;
 }
