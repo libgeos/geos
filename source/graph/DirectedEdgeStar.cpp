@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
  * Revision 1.16  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -98,8 +101,14 @@ DirectedEdge* DirectedEdgeStar::getRightmostEdge() {
  * Compute the labelling for all dirEdges in this star, as well
  * as the overall labelling
  */
-void DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom){
+void
+DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
+	throw(TopologyException *)
+{
+	// this call can throw a TopologyException 
+	// we don't have any cleanup to do...
 	EdgeEndStar::computeLabelling(geom);
+
 	// determine the overall labelling for this DirectedEdgeStar
 	// (i.e. for the node it is based at)
 	delete label;

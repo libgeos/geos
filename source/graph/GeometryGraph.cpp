@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.33  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
  * Revision 1.32  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -160,7 +163,10 @@ void GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist) {
 	}
 }
 
-void GeometryGraph::add(const Geometry *g) {
+void
+GeometryGraph::add(const Geometry *g)
+	throw (UnsupportedOperationException *)
+{
 	if (g->isEmpty()) return;
 	// check if this Geometry should obey the Boundary Determination Rule
 	// all collections except MultiPolygons obey the rule

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
  * Revision 1.17  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -112,10 +115,16 @@ EdgeEnd* EdgeEndStar::getNextCW(EdgeEnd *ee){
 	return (*edgeList)[iNextCW];
 }
 
-void EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom){
+void
+EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom)
+	throw(TopologyException *)
+{
 	computeEdgeEndLabels();
+
 	// Propagate side labels  around the edges in the star
 	// for each parent Geometry
+	//
+	// these calls can throw a TopologyException
 	propagateSideLabels(0);
 	propagateSideLabels(1);
 
@@ -232,7 +241,10 @@ bool EdgeEndStar::checkAreaLabelsConsistent(int geomIndex){
 	return true;
 }
 
-void EdgeEndStar::propagateSideLabels(int geomIndex){
+void
+EdgeEndStar::propagateSideLabels(int geomIndex)
+	throw(TopologyException *)
+{
 	// Since edges are stored in CCW order around the node,
 	// As we move around the ring we move from the right to the left side of the edge
 	int startLoc=Location::UNDEF ;

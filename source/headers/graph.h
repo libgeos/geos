@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
  * Revision 1.25  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -277,10 +280,12 @@ public:
 	virtual vector<EdgeEnd*>::iterator getIterator();
 	virtual vector<EdgeEnd*>* getEdges();
 	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
-	virtual void computeLabelling(vector<GeometryGraph*> *geom);
+	virtual void computeLabelling(vector<GeometryGraph*> *geom)
+		throw(TopologyException *);
 	virtual int getLocation(int geomIndex,Coordinate& p,vector<GeometryGraph*> *geom);
 	virtual bool isAreaLabelsConsistent();
-	virtual void propagateSideLabels(int geomIndex);
+	virtual void propagateSideLabels(int geomIndex)
+		throw(TopologyException *);
 	virtual int findIndex(EdgeEnd *eSearch);
 	virtual string print();
 protected:
@@ -304,7 +309,8 @@ public:
 	int getOutgoingDegree();
 	int getOutgoingDegree(EdgeRing *er);
 	DirectedEdge* getRightmostEdge();
-	void computeLabelling(vector<GeometryGraph*> *geom);
+	void computeLabelling(vector<GeometryGraph*> *geom)
+		throw(TopologyException *);
 	void mergeSymLabels();
 	void updateLabelling(Label *nodeLabel);
 	void linkResultDirectedEdges() throw(TopologyException *);
@@ -593,7 +599,7 @@ private:
 	bool hasTooFewPointsVar;
 	Coordinate invalidPoint; 
 	EdgeSetIntersector* createEdgeSetIntersector();
-	void add(const Geometry *g);
+	void add(const Geometry *g) throw(UnsupportedOperationException *);
 	void addCollection(const GeometryCollection *gc);
 	void addPoint(const Point *p);
 	void addPolygonRing(const LinearRing *lr,int cwLeft,int cwRight);
