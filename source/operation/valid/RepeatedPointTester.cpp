@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.8  2003/10/16 17:33:20  strk
+* dropped useless string() cast
+*
+*/
 #include "../../headers/opValid.h"
 #include "stdio.h"
 #include <typeinfo>
@@ -18,7 +24,7 @@ bool RepeatedPointTester::hasRepeatedPoint(const Geometry *g){
 	else if (typeid(*g)==typeid(MultiPolygon)) return hasRepeatedPoint((MultiPolygon*)g);
 	else if (typeid(*g)==typeid(MultiLineString)) return hasRepeatedPoint((MultiLineString*)g);
 	else if (typeid(*g)==typeid(GeometryCollection)) return hasRepeatedPoint((GeometryCollection*)g);
-	else  throw new UnsupportedOperationException(string(typeid(*g).name()));
+	else  throw new UnsupportedOperationException(typeid(*g).name());
 }
 
 bool RepeatedPointTester::hasRepeatedPoint(const CoordinateList *coord){
