@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.41  2003/10/31 16:36:04  strk
+* Re-introduced clone() method. Copy constructor could not really replace it.
+*
 * Revision 1.40  2003/10/24 21:27:31  strk
 * Added GeometryTypeId enum and getGeometryTypeId abstract Geometry method.
 *
@@ -558,7 +561,7 @@ public:
 	virtual void apply_ro(GeometryFilter *filter) const;
 	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
-	//public Object clone() // Replaced by copy constructor
+	virtual Geometry* clone() const=0;
 	virtual void normalize()=0; //Abstract
 	virtual int compareTo(const Geometry *geom) const;
 	virtual double distance(const Geometry *g) const;
@@ -740,6 +743,7 @@ public:
 	GeometryCollection(void);
 	GeometryCollection(const GeometryCollection &gc);
 	GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
+	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
 	virtual CoordinateList* getCoordinates() const;
 	virtual bool isEmpty() const;
@@ -817,8 +821,9 @@ class Point : public Geometry, public SFSPoint {
 public:
 	Point(void);
 	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
-	Point(const Point &p); //replaces clone()
+	Point(const Point &p); 
 	virtual ~Point();
+	Geometry *clone() const;
 	CoordinateList* getCoordinates(void) const;
 	int getNumPoints() const;
 	bool isEmpty() const;
@@ -874,6 +879,7 @@ public:
 	LineString(const LineString &ls);
 	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
 	virtual ~LineString();
+	virtual Geometry *clone() const;
 	virtual CoordinateList* getCoordinates() const;
 	const CoordinateList* getCoordinatesRO() const;
 	virtual const Coordinate& getCoordinateN(int n) const;
@@ -941,6 +947,7 @@ public:
 	virtual ~Polygon();
 	Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID);
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel* precisionModel, int SRID);
+	virtual Geometry *clone() const;
 	CoordinateList* getCoordinates() const;
 	int getNumPoints() const;
 	int getDimension() const;

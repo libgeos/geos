@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.24  2003/10/31 16:36:04  strk
+* Re-introduced clone() method. Copy constructor could not really replace it.
+*
 * Revision 1.23  2003/10/16 08:50:00  strk
 * Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
 *
@@ -43,6 +46,10 @@ LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm,
 
 LineString::~LineString(){
 	delete points;
+}
+
+Geometry* LineString::clone() const {
+	return new LineString(*this);
 }
 
 CoordinateList* LineString::getCoordinates() const {

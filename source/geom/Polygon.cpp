@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.26  2003/10/31 16:36:04  strk
+* Re-introduced clone() method. Copy constructor could not really replace it.
+*
 * Revision 1.25  2003/10/17 05:51:21  ybychkov
 * Fixed a small memory leak.
 *
@@ -70,6 +73,10 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 	}
 	shell=newShell;
 	holes=newHoles;
+}
+
+Geometry *Polygon::clone() const {
+	return new Polygon(*this);
 }
 
 CoordinateList* Polygon::getCoordinates() const {

@@ -37,6 +37,10 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,
 	geometries=new vector<Geometry *>(*newGeometries);
 }
 
+Geometry* GeometryCollection::clone() const {
+	return new GeometryCollection(*this);
+}
+
 CoordinateList* GeometryCollection::getCoordinates() const {
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList(getNumPoints());
 	int k = -1;

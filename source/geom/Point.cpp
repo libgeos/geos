@@ -15,6 +15,10 @@ Point::Point(const Point &p): Geometry(p.precisionModel,p.SRID) {
 	coordinate=p.coordinate;
 }
 
+Geometry* Point::clone() const {
+	return new Point(*this);
+}
+
 CoordinateList* Point::getCoordinates() const {
 	if (isEmpty()) {
 		return CoordinateListFactory::internalFactory->createCoordinateList();
