@@ -14,4 +14,6 @@ INSTALL
 install-sh
 missing
 mkinstalldirs
-
+config.sub
+config.guess
+autom4te.cache
