@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/05/06 08:59:19  strk
+ * memory leak fixed
+ *
  * Revision 1.13  2004/05/05 17:42:06  strk
  * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
  * SIRAbstractNode and STRAbstractNode destructors added to get rid of
@@ -148,9 +151,13 @@ AbstractNode* AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundables
 	Assert::isTrue(!boundablesOfALevel->empty());
 	vector<Boundable*> *parentBoundables=createParentBoundables(boundablesOfALevel,level+1);
 	if (parentBoundables->size()==1) {
-		return (AbstractNode*)(*parentBoundables)[0];
+		AbstractNode *ret = (AbstractNode*)(*parentBoundables)[0];
+		delete parentBoundables;
+		return ret;
 	}
-	return createHigherLevels(parentBoundables,level+1);
+	AbstractNode *ret = createHigherLevels(parentBoundables,level+1);
+	delete parentBoundables;
+	return ret;
 }
 
 AbstractNode* AbstractSTRtree::getRoot() {
