@@ -2,16 +2,17 @@
 #include <typeinfo>
 #include "geosAlgorithm.h"
 
-Polygon::Polygon(){}
-Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID), holes(p.holes) {
-//	LinearRing s(p.shell);
-//	vector<Geometry *> h(p.holes.begin(),p.holes.end());
+Polygon::Polygon(){
+	shell=new LinearRing();
+	holes=new vector<Geometry *>()
+}
+Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID){
 	shell=p.shell;
-//	holes=p.holes;
+	holes=p.holes;
 }
 
 Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID){
-	Polygon(newShell, &vector<Geometry *>(), precisionModel, SRID);
+	Polygon (newShell, new vector<Geometry *>(), precisionModel, SRID);
 }
 
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
@@ -23,14 +24,14 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 	if (newHoles==NULL)
 		newHoles=new vector<Geometry *>();
 
-	if (hasNullElements(*newHoles)) {
+	if (hasNullElements(newHoles)) {
 		throw "IllegalArgumentException: holes must not contain null elements";
 	}
 	if (newShell->isEmpty() && hasNonEmptyElements(*newHoles)) {
 		throw "IllegalArgumentException: shell is empty but holes are not";
 	}
 	shell=newShell;
-	holes=*newHoles;
+	holes=newHoles;
 }
 
 CoordinateList* Polygon::getCoordinates() {
@@ -45,7 +46,7 @@ CoordinateList* Polygon::getCoordinates() {
 		coordinates->setAt(shellCoordinates->getAt(x),k);
 	}
 	for (unsigned int i = 0; i < holes.size(); i++) {
-		CoordinateList* childCoordinates=((LinearRing *)holes[i])->getCoordinates();
+		CoordinateList* childCoordinates=((LinearRing *)(*holes)[i])->getCoordinates();
 		for (int j = 0; j < childCoordinates->getSize(); j++) {
 			k++;
 			coordinates->setAt(childCoordinates->getAt(j),k);
@@ -56,8 +57,8 @@ CoordinateList* Polygon::getCoordinates() {
 
 int Polygon::getNumPoints() {
 	int numPoints = shell->getNumPoints();
-	for (unsigned int i = 0; i < holes.size(); i++) {
-		numPoints += ((LinearRing *)holes[i])->getNumPoints();
+	for (unsigned int i = 0; i < holes->size(); i++) {
+		numPoints += ((LinearRing *)(*holes)[i])->getNumPoints();
 	}
 	return numPoints;
 }
@@ -83,11 +84,11 @@ LineString* Polygon::getExteriorRing() {
 }
 
 int Polygon::getNumInteriorRing() {
-	return (int)holes.size();
+	return (int)holes->size();
 }
 
 LineString* Polygon::getInteriorRingN(int n) {
-	return (LineString *)holes[n];
+	return (LineString *) (*holes)[n];
 }
 
 string Polygon::getGeometryType() {
@@ -98,45 +99,45 @@ Geometry* Polygon::getBoundary() {
 	if (isEmpty()) {
 		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
-	vector<Geometry *> rings(holes.size() + 1);
-	rings[0]=dynamic_cast<LineString *>(shell);
-	for (unsigned int i=0; i<holes.size(); i++) {
-		rings[i + 1] = ((LineString *)holes[i]);
+	vector<Geometry *> *rings=new vector<Geometry *>(holes->size() + 1);
+	(*rings)[0]=dynamic_cast<LineString *>(shell);
+	for (unsigned int i=0; i<holes->size(); i++) {
+		(*rings)[i + 1] = ((LineString *)(*holes)[i]);
 	}
-	return new MultiLineString(&rings, precisionModel, SRID);
+	return new MultiLineString(rings, precisionModel, SRID);
 }
 
 Envelope* Polygon::computeEnvelopeInternal() {
-	return &(shell->getEnvelopeInternal());
+	return shell->getEnvelopeInternal();
 }
 
 bool Polygon::equalsExact(Geometry *other) {
 	if (!isEquivalentClass(other)) {
 		return false;
 	}
-	Polygon otherPolygon(*dynamic_cast<Polygon*>(other));
+	Polygon* otherPolygon=dynamic_cast<Polygon*>(other);
 	if (typeid(*shell)!=typeid(Geometry)) {
 		return false;
 	}
-	Geometry thisShell(*dynamic_cast<Geometry *>(shell));
-	if (typeid(*(otherPolygon.shell))!=typeid(Geometry)) {
+	Geometry* thisShell=dynamic_cast<Geometry *>(shell);
+	if (typeid(*(otherPolygon->shell))!=typeid(Geometry)) {
 		return false;
 	}
-	Geometry otherPolygonShell(*dynamic_cast<Geometry *>(otherPolygon.shell));
-	if (!shell->equalsExact(&otherPolygonShell)) {
+	Geometry* otherPolygonShell=dynamic_cast<Geometry *>(otherPolygon.shell);
+	if (!shell->equalsExact(otherPolygonShell)) {
 		return false;
 	}
-	if (holes.size()!=otherPolygon.holes.size()) {
+	if (holes->size()!=otherPolygon->holes->size()) {
 		return false;
 	}
-	for (unsigned int i = 0; i < holes.size(); i++) {
-		if (typeid(*holes[i])!=typeid(Geometry)) {
+	for (unsigned int i = 0; i < holes->size(); i++) {
+		if (typeid(*(*holes)[i])!=typeid(Geometry)) {
 			return false;
 		}
-		if (typeid(*(otherPolygon.holes[i]))!=typeid(Geometry)) {
+		if (typeid(*((*(otherPolygon->holes))[i]))!=typeid(Geometry)) {
 			return false;
 		}
-		if (!((LinearRing *)holes[i])->equalsExact(otherPolygon.holes[i])) {
+		if (!((LinearRing *)(*holes)[i])->equalsExact((*(otherPolygon->holes))[i])) {
 			return false;
 		}
 	}
@@ -145,8 +146,8 @@ bool Polygon::equalsExact(Geometry *other) {
 
 void Polygon::apply(CoordinateFilter *filter) {
 	shell->apply(filter);
-	for (unsigned int i = 0; i < holes.size(); i++) {
-		((LinearRing *)holes[i])->apply(filter);
+	for (unsigned int i = 0; i < holes->size(); i++) {
+		((LinearRing *)(*holes)[i])->apply(filter);
 	}
 }
 
@@ -154,16 +155,16 @@ void Polygon::apply(GeometryFilter *filter) {
 	filter->filter(this);
 }
 
-Geometry Polygon::convexHull() {
+Geometry* Polygon::convexHull() {
 	return getExteriorRing()->convexHull();
 }
 
 void Polygon::normalize() {
 	normalize(shell, true);
-	for (unsigned int i = 0; i < holes.size(); i++) {
-		normalize((LinearRing *)holes[i], false);
+	for (unsigned int i = 0; i < holes->size(); i++) {
+		normalize((LinearRing *)(*holes)[i], false);
 	}
-	sort(holes.begin(),holes.end(),greaterThen);
+	sort(holes->begin(),holes->end(),greaterThen);
 }
 
 int Polygon::compareToSameClass(Polygon *p) {
@@ -197,9 +198,8 @@ Coordinate* Polygon::getCoordinate() {
 double Polygon::getArea() {
 	double area=0.0;
 	area+=fabs(CGAlgorithms::signedArea(shell->getCoordinates()));
-	for(unsigned int i=0;i<holes.size();i++) {
-//		area-=fabs(CGAlgorithms::signedArea(holes.at(i)->getCoordinates()));
-        area-=fabs(CGAlgorithms::signedArea(holes[i]->getCoordinates()));
+	for(unsigned int i=0;i<holes->size();i++) {
+        area-=fabs(CGAlgorithms::signedArea((*holes)[i]->getCoordinates()));
 	}
 	return area;
 }
@@ -212,19 +212,20 @@ double Polygon::getArea() {
 double Polygon::getLength() {
 	double len=0.0;
 	len+=shell->getLength();
-	for(unsigned int i=0;i<holes.size();i++) {
-//		len+=holes.at(i)->getLength();
-        len+=holes[i]->getLength();
+	for(unsigned int i=0;i<holes->size();i++) {
+        len+=(*holes)[i]->getLength();
 	}
 	return len;
 }
 
 void Polygon::apply(GeometryComponentFilter *filter) {
 	shell->apply(filter);
-	for(unsigned int i=0;i<holes.size();i++) {
-//		holes.at(i)->apply(filter);
-        holes[i]->apply(filter);
+	for(unsigned int i=0;i<holes->size();i++) {
+        (*holes)[i]->apply(filter);
 	}
 }
 
-Polygon::~Polygon(){}
+Polygon::~Polygon(){
+	delete shell;
+	delete holes;
+}

@@ -1,8 +1,12 @@
 #include "io.h"
 #include "util.h"
 
-WKTReader::WKTReader(): geometryFactory(), precisionModel() {}
-WKTReader::WKTReader(GeometryFactory gf): geometryFactory(gf), precisionModel(gf.getPrecisionModel()){}
+WKTReader::WKTReader(): geometryFactory() {
+	precisionModel=new PrecisionModel();
+}
+WKTReader::WKTReader(GeometryFactory gf): geometryFactory(gf){
+	precisionModel=gf.getPrecisionModel();
+}
 WKTReader::~WKTReader(){}
 
 Geometry* WKTReader::read(string wellKnownText){
@@ -25,13 +29,13 @@ CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 	Coordinate internalCoordinate;
 	externalCoordinate.x=getNextNumber(tokenizer);
 	externalCoordinate.y=getNextNumber(tokenizer);
-	precisionModel.toInternal(externalCoordinate,&internalCoordinate);
+	precisionModel->toInternal(externalCoordinate,&internalCoordinate);
 	coordinates->add(internalCoordinate);
 	nextToken=getNextCloserOrComma(tokenizer);
 	while (nextToken==",") {
 		externalCoordinate.x=getNextNumber(tokenizer);
 		externalCoordinate.y=getNextNumber(tokenizer);
-		precisionModel.toInternal(externalCoordinate,&internalCoordinate);
+		precisionModel->toInternal(externalCoordinate,&internalCoordinate);
 		coordinates->add(internalCoordinate);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
@@ -135,7 +139,7 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 	double y=getNextNumber(tokenizer);
 	Coordinate externalCoordinate(x, y);
 	Coordinate internalCoordinate;
-	precisionModel.toInternal(externalCoordinate, &internalCoordinate);
+	precisionModel->toInternal(externalCoordinate, &internalCoordinate);
 	getNextCloser(tokenizer);
 	return geometryFactory.createPoint(internalCoordinate);
 }

@@ -51,7 +51,7 @@ Polygon EdgeRing::toPolygon(GeometryFactory geometryFactory){
 	for (unsigned int i=0;i<holes.size();i++) {
         holeLR->push_back(holes[i]->getLinearRing());
 	}
-	return geometryFactory.createPolygon(getLinearRing(), holeLR);
+	return *(geometryFactory.createPolygon(getLinearRing(), holeLR));
 }
 
 //!!!External Dependency
@@ -156,8 +156,8 @@ void EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge){
  */
 bool EdgeRing::containsPoint(Coordinate p){
 	LinearRing *lrShell=getLinearRing();
-	Envelope env(lrShell->getEnvelopeInternal());
-	if (!env.contains(p)) return false;
+	Envelope* env=lrShell->getEnvelopeInternal();
+	if (!env->contains(p)) return false;
 //External Dependency
 //	if (!cga.isPointInPolygon(p, shell.getCoordinates()) ) return false;
 	for (vector<EdgeRing*>::iterator i=holes.begin();i<holes.end();i++) {

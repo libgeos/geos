@@ -39,7 +39,7 @@ GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGra
 	argIndex=newArgIndex;
 	parentGeom=newParentGeom;
 	if (parentGeom!=NULL) {
-		precisionModel=&(parentGeom->getPrecisionModel());
+		precisionModel=parentGeom->getPrecisionModel();
 		SRID=parentGeom->getSRID();
 		add(parentGeom);
 	}

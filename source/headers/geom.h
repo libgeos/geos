@@ -291,9 +291,9 @@ class SFSGeometry {
 public:
 	virtual int getSRID()=0;
 	virtual string getGeometryType()=0;
-	virtual PrecisionModel getPrecisionModel()=0;
-	virtual Envelope getEnvelopeInternal()=0;
-	virtual Geometry getEnvelope()=0;
+	virtual PrecisionModel* getPrecisionModel()=0;
+	virtual Envelope* getEnvelopeInternal()=0;
+	virtual Geometry* getEnvelope()=0;
 	virtual bool isEmpty()=0;
 	virtual bool isSimple()=0;
 	virtual Geometry* getBoundary()=0;
@@ -307,13 +307,13 @@ public:
 	virtual bool contains(Geometry *other)=0;
 	virtual bool overlaps(Geometry *other)=0;
 	virtual bool relate(Geometry *other, string intersectionPattern)=0;
-	virtual IntersectionMatrix relate(Geometry *other)=0;
-	virtual Geometry buffer(double distance)=0;
-	virtual Geometry convexHull()=0;
-	virtual Geometry intersection(Geometry *other)=0;
-	virtual Geometry Union(Geometry *other)=0;
-	virtual Geometry difference(Geometry *other)=0;
-	virtual Geometry symDifference(Geometry *other)=0;
+	virtual IntersectionMatrix* relate(Geometry *other)=0;
+	virtual Geometry* buffer(double distance)=0;
+	virtual Geometry* convexHull()=0;
+	virtual Geometry* intersection(Geometry *other)=0;
+	virtual Geometry* Union(Geometry *other)=0;
+	virtual Geometry* difference(Geometry *other)=0;
+	virtual Geometry* symDifference(Geometry *other)=0;
 	virtual string toText()=0;
 };
 
@@ -322,11 +322,11 @@ class Geometry: public SFSGeometry {
 public:
 	Geometry(void);
 	Geometry(const Geometry &geom);
-	Geometry(PrecisionModel precisionModel, int SRID);
+	Geometry(PrecisionModel* precisionModel, int SRID);
 	virtual string getGeometryType(){return "Geometry";}; //Abstract
 	virtual int getSRID();
 	virtual void setSRID(int newSRID);
-	virtual PrecisionModel getPrecisionModel();
+	virtual PrecisionModel* getPrecisionModel();
 	virtual Coordinate* getCoordinate(){return new Coordinate();}; //Abstract
 	virtual CoordinateList* getCoordinates(){return new BasicCoordinateList();}; //Abstract
 	virtual int getNumPoints(){return 0;}; //Abstract
@@ -336,8 +336,8 @@ public:
 	virtual int getDimension(){return 0;}; //Abstract
 	virtual Geometry* getBoundary() {return new Geometry();}; //Abstract
 	virtual int getBoundaryDimension(){return 0;}; //Abstract
-	virtual Geometry getEnvelope();
-	virtual Envelope getEnvelopeInternal();
+	virtual Geometry* getEnvelope();
+	virtual Envelope* getEnvelopeInternal();
 	virtual bool disjoint(Geometry *g);
 	virtual bool touches(Geometry *g);
 	virtual bool intersects(Geometry *g);
@@ -346,16 +346,16 @@ public:
 	virtual bool contains(Geometry *g);
 	virtual bool overlaps(Geometry *g);
 	virtual bool relate(Geometry *g, string intersectionPattern);
-	virtual IntersectionMatrix relate(Geometry *g);
+	virtual IntersectionMatrix* relate(Geometry *g);
 	virtual bool equals(Geometry *g);
 	virtual string toString();
 	virtual string toText();
-	virtual Geometry buffer(double distance);
-	virtual Geometry convexHull();
-	virtual Geometry intersection(Geometry *other);
-	virtual Geometry Union(Geometry *other);
-	virtual Geometry difference(Geometry *other);
-	virtual Geometry symDifference(Geometry *other);
+	virtual Geometry* buffer(double distance);
+	virtual Geometry* convexHull();
+	virtual Geometry* intersection(Geometry *other);
+	virtual Geometry* Union(Geometry *other);
+	virtual Geometry* difference(Geometry *other);
+	virtual Geometry* symDifference(Geometry *other);
 	virtual bool equalsExact(Geometry *other){return false;}; //Abstract
 	virtual void apply(CoordinateFilter *filter){}; //Abstract
 	virtual void apply(GeometryFilter *filter){}; //Abstract
@@ -368,13 +368,13 @@ public:
 	virtual double getLength();
 	virtual ~Geometry(void);
 protected:
-	PrecisionModel precisionModel;
+	PrecisionModel* precisionModel;
 	int SRID;
-	Envelope envelope;
+	Envelope* envelope;
 	static CGAlgorithms *cgAlgorithms;
-	static bool hasNonEmptyElements(vector<Geometry *> geometries);
+	static bool hasNonEmptyElements(vector<Geometry *>* geometries);
 	static bool hasNullElements(CoordinateList* list);
-	static bool hasNullElements(vector<Geometry *> lrs);
+	static bool hasNullElements(vector<Geometry *>* lrs);
 	static void reversePointOrder(CoordinateList* coordinates);
 //	static Coordinate& minCoordinate(CoordinateList* coordinates);
 	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
@@ -605,7 +605,7 @@ public:
 class Point : public Geometry, public SFSPoint {
 public:
 	Point(void);
-	Point(Coordinate c, PrecisionModel precisionModel, int SRID);
+	Point(Coordinate c, PrecisionModel* precisionModel, int SRID);
 	Point(const Point &p); //replaces clone()
 	virtual ~Point(void);
 	CoordinateList* getCoordinates(void);
@@ -703,9 +703,9 @@ class SFSSurface { //: public SFSGeometry {
 
 class SFSPolygon : public SFSSurface {
 public:
-	virtual LineString *getExteriorRing()=0;
+	virtual LineString* getExteriorRing()=0;
 	virtual int getNumInteriorRing()=0;
-	virtual LineString *getInteriorRingN(int n)=0;
+	virtual LineString* getInteriorRingN(int n)=0;
 };
 
 class Polygon: public Geometry, public SFSPolygon  {
@@ -721,15 +721,15 @@ public:
 	int getBoundaryDimension();
 	bool isEmpty();
 	bool isSimple();
-	LineString *getExteriorRing();
+	LineString* getExteriorRing();
 	int getNumInteriorRing();
-	LineString *getInteriorRingN(int n);
+	LineString* getInteriorRingN(int n);
 	string getGeometryType();
 	Geometry* getBoundary();
 	bool equalsExact(Geometry *other);
 	void apply(CoordinateFilter *filter);
 	void apply(GeometryFilter *filter);
-	Geometry convexHull();
+	Geometry* convexHull();
 	void normalize();
 	int compareToSameClass(Polygon *p); //was protected
 	Coordinate* getCoordinate();
@@ -738,7 +738,7 @@ public:
 	void apply(GeometryComponentFilter *filter);
 protected:
 	LinearRing *shell;
-	vector<Geometry *> holes; //Actually vector<LinearRing *>
+	vector<Geometry *> *holes; //Actually vector<LinearRing *>
 	Envelope* computeEnvelopeInternal();
 private:
 	void normalize(LinearRing *ring, bool clockwise);
@@ -747,7 +747,7 @@ private:
 class MultiPoint: public GeometryCollection, public SFSMultiPoint {
 public:
 	MultiPoint();
-	MultiPoint(vector<Geometry *> *points,PrecisionModel pm, int SRID);
+	MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID);
 	virtual ~MultiPoint();
 	int getDimension();
 	int getBoundaryDimension();
@@ -764,7 +764,7 @@ protected:
 class MultiLineString: public GeometryCollection, public SFSMultiLineString  {
 public:
 	MultiLineString();
-	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel precisionModel, int SRID);
+	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
 	virtual ~MultiLineString();
 	int getDimension();
 	int getBoundaryDimension();
@@ -778,7 +778,7 @@ public:
 class MultiPolygon: public GeometryCollection, public SFSMultiPolygon   {
 public:
 	MultiPolygon();
-	MultiPolygon(vector<Geometry *> *polygons, PrecisionModel precisionModel, int SRID);
+	MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
 	virtual ~MultiPolygon();
 	int getDimension();
 	int getBoundaryDimension();

@@ -3,7 +3,7 @@
 Point::Point(){
 	coordinate.setNull();
 }
-Point::Point(Coordinate c, PrecisionModel precisionModel, int SRID): Geometry(precisionModel,SRID) {
+Point::Point(Coordinate c, PrecisionModel* precisionModel, int SRID): Geometry(precisionModel,SRID) {
 	coordinate=c;
 }
 

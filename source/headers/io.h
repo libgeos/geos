@@ -74,7 +74,7 @@ protected:
 	GeometryCollection* readGeometryCollectionText(StringTokenizer *tokenizer);
 private:
 	GeometryFactory geometryFactory;
-	PrecisionModel precisionModel;
+	PrecisionModel* precisionModel;
 };
 
 class Writer {

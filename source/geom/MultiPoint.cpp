@@ -2,7 +2,7 @@
 #include "operation.h"
 
 MultiPoint::MultiPoint(){}
-MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel pm, int SRID):
+MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
 GeometryCollection(points, pm, SRID){}
 MultiPoint::~MultiPoint(){}
 
@@ -38,6 +38,6 @@ bool MultiPoint::equalsExact(Geometry *other) {
   }
 
 Coordinate* MultiPoint::getCoordinate(int n) {
-	return ((Point *)geometries[n])->getCoordinate();
+	return ((Point *)(*geometries)[n])->getCoordinate();
 }
 

@@ -2,7 +2,7 @@
 #include "operation.h"
 
 MultiLineString::MultiLineString(){}
-MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel precisionModel, int SRID):
+MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID):
 GeometryCollection(lineStrings, precisionModel,SRID){}
 MultiLineString::~MultiLineString(){}
 
@@ -25,8 +25,8 @@ bool MultiLineString::isClosed() {
 	if (isEmpty()) {
 		return false;
 	}
-	for (unsigned int i = 0; i < geometries.size(); i++) {
-		if (!((LineString *)geometries[i])->isClosed()) {
+	for (unsigned int i = 0; i < geometries->size(); i++) {
+		if (!((LineString *)(*geometries)[i])->isClosed()) {
 			return false;
 		}
 	}
@@ -39,7 +39,7 @@ bool MultiLineString::isSimple(){
 
 Geometry* MultiLineString::getBoundary() {
 	if (isEmpty()) {
-		return GeometryCollection(NULL, precisionModel, SRID);
+		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
 	GeometryGraph *g=new GeometryGraph(0,this);
 	CoordinateList *pts=g->getBoundaryPoints();

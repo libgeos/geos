@@ -9,8 +9,11 @@
 
 
 CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();
-Geometry::Geometry(): precisionModel(PrecisionModel()), envelope(Envelope()){
+
+Geometry::Geometry() {
 	SRID=0;
+	precisionModel=new PrecisionModel();
+	envelope=new Envelope();
 	sortedClasses.push_back(typeid(Point).name());
 	sortedClasses.push_back(typeid(MultiPoint).name());
 	sortedClasses.push_back(typeid(LineString).name());
@@ -21,13 +24,15 @@ Geometry::Geometry(): precisionModel(PrecisionModel()), envelope(Envelope()){
 	sortedClasses.push_back(typeid(GeometryCollection).name());
 }
 
-Geometry::Geometry(const Geometry &geom): precisionModel(geom.precisionModel), envelope(geom.envelope),
-sortedClasses(geom.sortedClasses) {
+Geometry::Geometry(const Geometry &geom): sortedClasses(geom.sortedClasses) {
+	precisionModel=geom.precisionModel;
+	envelope=geom.envelope;
 	SRID=geom.SRID;
 }
 
-Geometry::Geometry(PrecisionModel newPrecisionModel, int newSRID):
-	precisionModel(newPrecisionModel), envelope(Envelope()) {
+Geometry::Geometry(PrecisionModel newPrecisionModel, int newSRID){
+	precisionModel=newPrecisionModel;
+	envelope=new Envelope();
 	SRID = newSRID;
 	sortedClasses.push_back(typeid(Point).name());
 	sortedClasses.push_back(typeid(MultiPoint).name());
@@ -39,9 +44,9 @@ Geometry::Geometry(PrecisionModel newPrecisionModel, int newSRID):
 	sortedClasses.push_back(typeid(GeometryCollection).name());
 }
 
-bool Geometry::hasNonEmptyElements(vector<Geometry *> geometries) {
-	for (unsigned int i=0; i<geometries.size(); i++) {
-		if (!geometries[i]->isEmpty()) {
+bool Geometry::hasNonEmptyElements(vector<Geometry *>* geometries) {
+	for (unsigned int i=0; i<geometries->size(); i++) {
+		if (!(*geometries)[i]->isEmpty()) {
 			return true;
 		}
 	}
@@ -57,9 +62,9 @@ bool Geometry::hasNullElements(CoordinateList* list){
 	return false;
 }
 
-bool Geometry::hasNullElements(vector<Geometry *> lrs) {
-	for (unsigned int i = 0; i<lrs.size(); i++) {
-		if (lrs[i]==NULL) {
+bool Geometry::hasNullElements(vector<Geometry *>* lrs) {
+	for (unsigned int i = 0; i<lrs->size(); i++) {
+		if ((*lrs)[i]==NULL) {
 			return true;
 		}
 	}
@@ -108,7 +113,7 @@ int Geometry::getSRID() {return SRID;}
 
 void Geometry::setSRID(int newSRID) {SRID=newSRID;}
 
-PrecisionModel Geometry::getPrecisionModel() {return precisionModel;}
+PrecisionModel* Geometry::getPrecisionModel() {return precisionModel;}
 
 //!!! External Dependency
 bool Geometry::isValid() {
@@ -117,59 +122,59 @@ bool Geometry::isValid() {
 	return false;
 }
 
-Geometry Geometry::getEnvelope() {
+Geometry* Geometry::getEnvelope() {
 	return GeometryFactory::toGeometry(getEnvelopeInternal(),precisionModel,SRID);
 }
 
-Envelope Geometry::getEnvelopeInternal() {
-	if (envelope.isNull()) {
-		return *computeEnvelopeInternal();
+Envelope* Geometry::getEnvelopeInternal() {
+	if (envelope->isNull()) {
+		return computeEnvelopeInternal();
 	} else 
 		return envelope;
 }
 
 bool Geometry::disjoint(Geometry *g){
-	return relate(g).isDisjoint();
+	return relate(g)->isDisjoint();
 }
 
 bool Geometry::touches(Geometry *g){
-	return relate(g).isTouches(getDimension(), g->getDimension());
+	return relate(g)->isTouches(getDimension(), g->getDimension());
 }
 
 bool Geometry::intersects(Geometry *g){
-	return relate(g).isIntersects();
+	return relate(g)->isIntersects();
 }
 
 bool Geometry::crosses(Geometry *g){
-	return relate(g).isCrosses(getDimension(), g->getDimension());
+	return relate(g)->isCrosses(getDimension(), g->getDimension());
 }
 
 bool Geometry::within(Geometry *g){
-	return relate(g).isWithin();
+	return relate(g)->isWithin();
 }
 
 bool Geometry::contains(Geometry *g){
-	return relate(g).isContains();
+	return relate(g)->isContains();
 }
 
 bool Geometry::overlaps(Geometry *g){
-	return relate(g).isOverlaps(getDimension(), g->getDimension());
+	return relate(g)->isOverlaps(getDimension(), g->getDimension());
 }
 
 bool Geometry::relate(Geometry *g, string intersectionPattern) {
-	return relate(g).matches(intersectionPattern);
+	return relate(g)->matches(intersectionPattern);
 }
 
 bool Geometry::equals(Geometry *g){
-	return relate(g).isEquals(getDimension(), g->getDimension());
+	return relate(g)->isEquals(getDimension(), g->getDimension());
 }
 
-IntersectionMatrix Geometry::relate(Geometry *g) {
+IntersectionMatrix* Geometry::relate(Geometry *g) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(g);
 	checkEqualSRID(g);
 	checkEqualPrecisionModel(g);
-	return RelateOp::relate(this,g);
+	return *(RelateOp::relate(this,g));
 }
 
 string Geometry::toString() {
@@ -182,61 +187,61 @@ string Geometry::toText() {
 }
 
 //!!! External Dependency
-Geometry Geometry::buffer(double distance) {
+Geometry* Geometry::buffer(double distance) {
 //!!! External Dependency
 //	return BufferOp.bufferOp(this, distance);
-	return Geometry();
+	return new Geometry();
 }
 
 //!!! External Dependency
-Geometry Geometry::convexHull() {
+Geometry* Geometry::convexHull() {
 //!!! External Dependency
 //	return (new ConvexHull(cgAlgorithms)).getConvexHull(this);
-	return Geometry();
+	return new Geometry();
 }
 
 //!!! External Dependency
-Geometry Geometry::intersection(Geometry *other) {
+Geometry* Geometry::intersection(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 //!!! External Dependency
 	//return OverlayOp.overlayOp(this, other, OverlayOp::INTERSECTION);
-	return Geometry();
+	return new Geometry();
 }
 
 //!!! External Dependency
-Geometry Geometry::Union(Geometry *other) {
+Geometry* Geometry::Union(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 //!!! External Dependency
 	//return OverlayOp.overlayOp(this, other, OverlayOp::UNION);
-	return Geometry();
+	return new Geometry();
 }
 
 //!!! External Dependency
-Geometry Geometry::difference(Geometry *other) {
+Geometry* Geometry::difference(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 //!!! External Dependency
 	//return OverlayOp.overlayOp(this, other, OverlayOp::DIFFERENCE);
-	return Geometry();
+	return new Geometry();
 }
 
 //!!! External Dependency
-Geometry Geometry::symDifference(Geometry *other) {
+Geometry* Geometry::symDifference(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 //!!! External Dependency
 	//return OverlayOp.overlayOp(this, other, OverlayOp::SYMDIFFERENCE);
-	return Geometry();
+	return new Geometry();
 }
 
 int Geometry::compareTo(Geometry *geom){
@@ -283,7 +288,6 @@ int Geometry::getClassSortIndex() {
     const type_info &t=typeid(*this);
     string tst=t.name();
 	for (unsigned int i=0; i<sortedClasses.size(); i++) {
-//		string tst2=sortedClasses[i];
 		if ( sortedClasses[i]==typeid(*this).name() ) {
 			return i;
 		}
@@ -377,7 +381,10 @@ double Geometry::getLength() {
 }
 
 
-Geometry::~Geometry(){}
+Geometry::~Geometry(){
+	delete precisionModel;
+	delete envelope;
+}
 
 bool lessThen(Coordinate& a, Coordinate& b) {
 	if (a.compareTo(b)<=0)

@@ -1,7 +1,7 @@
 #include "geom.h"
 
 MultiPolygon::MultiPolygon(){}
-MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel precisionModel, int SRID):
+MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID):
 GeometryCollection(polygons, precisionModel, SRID){}
 MultiPolygon::~MultiPolygon(){}
 
@@ -25,16 +25,16 @@ Geometry* MultiPolygon::getBoundary() {
 	if (isEmpty()) {
 		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
-	vector<Geometry *> allRings;
-	for (unsigned int i = 0; i < geometries.size(); i++) {
-		Polygon pg(*((Polygon *)geometries[i]));
-		GeometryCollection rings(*dynamic_cast<GeometryCollection *>(pg.getBoundary()));
-		for (int j = 0; j < rings.getNumGeometries(); j++) {
-			allRings.push_back(rings.getGeometryN(j));
+	vector<Geometry *>* allRings=new vector<Geometry *>();
+	for (unsigned int i = 0; i < geometries->size(); i++) {
+		Polygon *pg=(Polygon *) (*geometries)[i];
+		GeometryCollection* rings=dynamic_cast<GeometryCollection *>(pg->getBoundary());
+		for (int j = 0; j < rings->getNumGeometries(); j++) {
+			allRings->push_back(rings->getGeometryN(j));
 		}
 	}
 //LineString[] allRingsArray = new LineString[allRings.size()];
-	return new MultiLineString(&allRings,precisionModel,SRID);
+	return new MultiLineString(allRings,precisionModel,SRID);
 }
 
 bool MultiPolygon::equalsExact(Geometry *other) {
