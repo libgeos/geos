@@ -462,6 +462,8 @@ try{
 						}
 						cout <<endl;
 					}
+					delete gRealRes;
+					delete gRes;
 				} else {
 					cout<<"Something else\n";
 					//GeometryFactory *gf=new GeometryFactory(pm,0);
@@ -540,6 +542,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.51  2005/01/03 15:56:21  strk
+ * Fixed memory leaks just introduced for Polygonizer test case.
+ *
  * Revision 1.50  2005/01/03 15:49:30  strk
  * Added Polygonize test handling
  *
