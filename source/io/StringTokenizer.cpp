@@ -14,8 +14,10 @@ int StringTokenizer::nextToken(){
 		return StringTokenizer::TT_EOF;
 	switch(str[0]) {
 		case '\n':
+		case '\r':
 			str=str.substr(1);
-			return StringTokenizer::TT_EOL;
+//			return StringTokenizer::TT_EOL;
+			return nextToken();
 		case '(':
 			str=str.substr(1);
 			return '(';

@@ -33,7 +33,7 @@ void SimpleMCSweepLineIntersector::add(Edge *edge,int geomIndex){
 	}
 }
 
-bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second) {
+bool sleLessThan(SweepLineEvent *first,SweepLineEvent *second) {
 	if (first->compareTo(second)<0)
 		return true;
 	else
@@ -46,26 +46,32 @@ bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second) {
 * compared to a given Insert event object.
 */
 void SimpleMCSweepLineIntersector::prepareEvents(){
-	sort(events.begin(),events.end(),sleLessThen);
+	sort(events.begin(),events.end(),sleLessThan);
+int numdel=0;
 	for(int i=0;i<(int)events.size();i++ ){
 		SweepLineEvent *ev=events[i];
 		if (ev->isDelete()){
+			numdel++;
 			SweepLineEvent *iev=ev->getInsertEvent();
 			iev->setDeleteEventIndex(i);
 		}
 	}
+	numdel++;
 }
 
 void SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si,bool doMutualOnly){
 	nOverlaps=0;
 	prepareEvents();
+	int numov=0;
 	for(int i=0;i<(int)events.size();i++) {
 		SweepLineEvent *ev=events[i];
 		MonotoneChain *mc=(MonotoneChain*)ev->getObject();
 		if (ev->isInsert()) {
+			numov++;
 			processOverlaps(i,ev->getDeleteEventIndex(),mc,si,doMutualOnly);
 		}
 	}
+	numov++;
 }
 
 void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,MonotoneChain *mc0,
