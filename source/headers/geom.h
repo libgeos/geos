@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.65  2004/06/15 20:07:51  strk
+ * GeometryCollections constructors make a deep copy of Geometry vector argument.
+ *
  * Revision 1.64  2004/05/19 13:18:24  strk
  * made CoordinateList::toString() a const member function
  *
@@ -1200,6 +1203,7 @@ public:
 	*            or <code>null</code> or an empty array to create the empty
 	*            geometry. Elements may be empty <code>Geometry</code>s,
 	*            but not <code>null</code>s.
+	*            Geometry elements AND vector will be copied.
 	*/
 	GeometryCollection(const vector<Geometry *> *newGeometries, const GeometryFactory *newFactory);
 	virtual Geometry *clone() const;
@@ -1541,6 +1545,7 @@ public:
 	*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
 	*      , or <code>null</code> or an empty array to create the empty geometry.
 	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
+	*      Geometry elements AND vector will be copied.
 	*@param  precisionModel  the specification of the grid of allowable points
 	*      for this <code>MultiPoint</code>
 	*@param  SRID            the ID of the Spatial Reference System used by this
@@ -1552,6 +1557,7 @@ public:
 	*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
 	*      , or <code>null</code> or an empty array to create the empty geometry.
 	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
+	*      Geometry elements AND vector will be copied.
 	*/
 	MultiPoint(const vector<Geometry *> *points, const GeometryFactory *newFactory);
 	virtual ~MultiPoint();
@@ -1586,6 +1592,7 @@ public:
 	*      , or <code>null</code> or an empty array to create the empty geometry.
 	*      Elements may be empty <code>LineString</code>s, but not <code>null</code>
 	*      s.
+	*      Geometry elements AND vector will be copied.
 	*@param  precisionModel  the specification of the grid of allowable points
 	*      for this <code>MultiLineString</code>
 	*@param  SRID            the ID of the Spatial Reference System used by this
@@ -1625,6 +1632,7 @@ public:
 	*      s. The polygons must conform to the assertions specified in the <A
 	*      HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
 	*      Specification for SQL</A> .
+	*      Geometry elements AND vector will be copied.
 	*@param  precisionModel  the specification of the grid of allowable points
 	*      for this <code>MultiPolygon</code>
 	*@param  SRID            the ID of the Spatial Reference System used by this
@@ -1724,12 +1732,14 @@ public:
 	* Creates a MultiLineString using the given LineStrings; a null or empty
 	* array will create an empty MultiLineString.
 	* @param lineStrings LineStrings, each of which may be empty but not null
+	*        Geometries AND vector will be copied.
 	*/
 	MultiLineString* createMultiLineString(vector<Geometry *> *lineStrings) const;
 	/**
 	* Creates a GeometryCollection using the given Geometries; a null or empty
 	* array will create an empty GeometryCollection.
 	* @param geometries Geometries, each of which may be empty but not null
+	*        Geometries AND vector will be copied.
 	*/
 	GeometryCollection* createGeometryCollection(vector<Geometry *> *geometries) const;
 	/**
@@ -1741,6 +1751,7 @@ public:
 	*
 	* @param polygons
 	*            Polygons, each of which may be empty but not null
+	*        Geometries AND vector will be copied.
 	*/
 	MultiPolygon* createMultiPolygon(vector<Geometry *> *polygons) const;
 	/**
@@ -1753,9 +1764,10 @@ public:
 	/**
 	* Creates a MultiPoint using the given Points; a null or empty array will
 	* create an empty MultiPoint.
-	* @param coordinates an array without null elements, or an empty array, or null
+	* @param points an array without null elements, or an empty array, or null
+	*        Geometries AND vector will be copied.
 	*/
-	MultiPoint* createMultiPoint(vector<Geometry *> *point) const;
+	MultiPoint* createMultiPoint(vector<Geometry *> *points) const;
 	/**
 	* Creates a MultiPoint using the given CoordinateSequence; a null or empty CoordinateSequence will
 	* create an empty MultiPoint.

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.33  2004/06/15 20:07:51  strk
+ * GeometryCollections constructors make a deep copy of Geometry vector argument.
+ *
  * Revision 1.32  2004/05/17 21:14:47  ybychkov
  * JavaDoc updated
  *
@@ -64,16 +67,19 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 }
 
 /** @deprecated Use GeometryFactory instead */
-GeometryCollection::GeometryCollection(const vector<Geometry *> *newGeometries,PrecisionModel* pm,int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
-	if (newGeometries==NULL) {
+GeometryCollection::GeometryCollection(const vector<Geometry *> *geoms,PrecisionModel* pm,int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
+	if (geoms==NULL) {
 		geometries=new vector<Geometry *>();
 		return;
 	}
-	if (hasNullElements(newGeometries)) {
+	if (hasNullElements(geoms)) {
 		throw new IllegalArgumentException("geometries must not contain null elements\n");
 		return;
 	}
-	geometries=new vector<Geometry *>(*newGeometries);
+	geometries=new vector<Geometry *>(geoms->size());
+	for (int i=0; i<geoms->size(); i++) {
+		(*geometries)[i] = (*geoms)[i]->clone();
+	}
 }
 
 /**
@@ -82,18 +88,22 @@ GeometryCollection::GeometryCollection(const vector<Geometry *> *newGeometries,P
 *            or <code>null</code> or an empty array to create the empty
 *            geometry. Elements may be empty <code>Geometry</code>s,
 *            but not <code>null</code>s.
+*            Geometry elements AND vector will be copied.
 */
-GeometryCollection::GeometryCollection(const vector<Geometry *> *newGeometries, const GeometryFactory *newFactory): Geometry(newFactory)
+GeometryCollection::GeometryCollection(const vector<Geometry *> *geoms, const GeometryFactory *newFactory): Geometry(newFactory)
 {
-	if (newGeometries==NULL) {
+	if (geoms==NULL) {
 		geometries=new vector<Geometry *>();
 		return;
 	}
-	if (hasNullElements(newGeometries)) {
+	if (hasNullElements(geoms)) {
 		throw new IllegalArgumentException("geometries must not contain null elements\n");
 		return;
 	}
-	geometries=new vector<Geometry *>(*newGeometries);
+	geometries=new vector<Geometry *>(geoms->size());
+	for (int i=0; i<geoms->size(); i++) {
+		(*geometries)[i] = (*geoms)[i]->clone();
+	}
 }
 
 Geometry* GeometryCollection::clone() const {

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.37  2004/06/15 20:07:51  strk
+ * GeometryCollections constructors make a deep copy of Geometry vector argument.
+ *
  * Revision 1.36  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -217,7 +220,8 @@ GeometryFactory::createPoint(const CoordinateList *coordinates) const
 /**
 * Creates a MultiLineString using the given LineStrings; a null or empty
 * array will create an empty MultiLineString.
-* @param lineStrings LineStrings, each of which may be empty but not null
+* @param lineStrings LineStrings, each of which may be empty but not null.
+*        Geometries AND vector will be copied.
 */
 MultiLineString*
 GeometryFactory::createMultiLineString(vector<Geometry *> *lineStrings)
@@ -230,6 +234,7 @@ GeometryFactory::createMultiLineString(vector<Geometry *> *lineStrings)
 * Creates a GeometryCollection using the given Geometries; a null or empty
 * array will create an empty GeometryCollection.
 * @param geometries Geometries, each of which may be empty but not null
+*       Geometries AND vector will be copied.
 */
 GeometryCollection*
 GeometryFactory::createGeometryCollection(vector<Geometry *> *geometries) const
@@ -245,7 +250,8 @@ GeometryFactory::createGeometryCollection(vector<Geometry *> *geometries) const
 * Specification for SQL</A>.
 *
 * @param polygons
-*            Polygons, each of which may be empty but not null
+*            Polygons, each of which may be empty but not null.
+*            Geometries AND vector will be copied.
 */
 MultiPolygon*
 GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons) const
@@ -273,12 +279,13 @@ GeometryFactory::createLinearRing(CoordinateList* coordinates) const
 /**
 * Creates a MultiPoint using the given Points; a null or empty array will
 * create an empty MultiPoint.
-* @param coordinates an array without null elements, or an empty array, or null
+* @param points an array without null elements, or an empty array, or null
+*            Geometries AND vector will be copied.
 */
 MultiPoint*
-GeometryFactory::createMultiPoint(vector<Geometry *> *point) const
+GeometryFactory::createMultiPoint(vector<Geometry *> *points) const
 {
-	return new MultiPoint(point,this);
+	return new MultiPoint(points,this);
 }
 
 /**
@@ -385,7 +392,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *geoms) const
 	if (isHeterogeneous) {
 		return createGeometryCollection(geoms);
 	}
-    // at this point we know the collection is hetereogenous.
+    // at this point we know the collection is not hetereogenous.
     // Determine the type of the result from the first Geometry in the list
     // this should always return a geometry, since otherwise an empty collection would have already been returned
 	Geometry *geom0=(*geoms)[0];
