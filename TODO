@@ -1,7 +1,5 @@
 - speedup in BufferSubgraph::computeDepths (read comment there)
 
-- PrecisionModel nearbyint() check
-
 - Add class for use in Geometry::userData setting.
 
 - make GeometryFactory->createMULTI*() consistent in taking
