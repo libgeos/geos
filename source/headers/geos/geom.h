@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/12 19:16:39  strk
+ * Commented out CoordinateList class definition.
+ *
  * Revision 1.10  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -586,71 +589,70 @@ private:
 };
 
 
-/** \class CoordinateList geom.h geos.h
+/* \class CoordinateList geom.h geos.h
  *
  * \brief A list of Coordinates, which may be set to prevent
  * repeated coordinates from occuring in the list.
  */
-class CoordinateList {
-public:
-	~CoordinateList(){};
-
-	/// copy constructor
-	CoordinateList(const CoordinateList &cl);
-
-	/// constructor an empty CoordinateList
-	CoordinateList();
-
-	/** \brief
-	 * Constructs a new list from a vector of Coordinates.
-	 * Caller can specify if repeated points are to be removed.
-	 * Default is allowing repeated points.
-	 * Will take ownership of coords.
-	 */
-	CoordinateList(vector<Coordinate> *coords, bool allowRepeted=false);
-
-	/**
-	 * \brief Add an array of coordinates 
-	 * @param vc The coordinates
-	 * @param allowRepeated if set to false, repeated coordinates
-	 * 	are collapsed
-	 * @return true (as by general collection contract)
-	 */
-	void add(vector<Coordinate>* vc, bool allowRepeated);
-
-	/**
-	 * \brief Add an array of coordinates 
-	 * @param cl The coordinates
-	 * @param allowRepeated if set to false, repeated coordinates
-	 * are collapsed
-	 * @param direction if false, the array is added in reverse order
-	 * @return true (as by general collection contract)
-	 */
-	void add(CoordinateList *cl,bool allowRepeated,bool direction);
-
-	/**
-	 * \brief Add a coordinate
-	 * @param c The coordinate to add
-	 * @param allowRepeated if set to false, repeated coordinates
-	 * are collapsed
-	 * @return true (as by general collection contract)
-	 */
-	void add(const Coordinate& c,bool allowRepeated);
-
-	/// Add a Coordinate to the list
-	void add(const Coordinate& c);
-
-	/// Get a reference to the nth Coordinate 
-	//const Coordinate& getCoordinate(int n) const;
-	const Coordinate& getAt(int n) const;
-
-	/// Get vector
-	const vector<Coordinate>* toCoordinateArray() const;
-
-private:
-
-	vector<Coordinate> *vect;
-};
+//class CoordinateList {
+//public:
+//	~CoordinateList(){};
+//
+//	/// copy constructor
+//	CoordinateList(const CoordinateList &cl);
+//
+//	/// constructor an empty CoordinateList
+//	CoordinateList();
+//
+//	/** \brief
+//	 * Constructs a new list from a vector of Coordinates.
+//	 * Caller can specify if repeated points are to be removed.
+//	 * Default is allowing repeated points.
+//	 * Will take ownership of coords.
+//	 */
+//	CoordinateList(vector<Coordinate> *coords, bool allowRepeted=false);
+//
+//	/// Get a reference to the nth Coordinate 
+//	const Coordinate& getCoordinate(int n) const;
+//
+//	/**
+//	 * \brief Add an array of coordinates 
+//	 * @param vc The coordinates
+//	 * @param allowRepeated if set to false, repeated coordinates
+//	 * 	are collapsed
+//	 * @return true (as by general collection contract)
+//	 */
+//	void add(vector<Coordinate>* vc, bool allowRepeated);
+//
+//	/**
+//	 * \brief Add an array of coordinates 
+//	 * @param cl The coordinates
+//	 * @param allowRepeated if set to false, repeated coordinates
+//	 * are collapsed
+//	 * @param direction if false, the array is added in reverse order
+//	 * @return true (as by general collection contract)
+//	 */
+//	void add(CoordinateList *cl,bool allowRepeated,bool direction);
+//
+//	/**
+//	 * \brief Add a coordinate
+//	 * @param c The coordinate to add
+//	 * @param allowRepeated if set to false, repeated coordinates
+//	 * are collapsed
+//	 * @return true (as by general collection contract)
+//	 */
+//	void add(const Coordinate& c,bool allowRepeated);
+//
+//	/// Add a Coordinate to the list
+//	void add(const Coordinate& c);
+//
+//	/// Get vector
+//	const vector<Coordinate>* toCoordinateArray() const;
+//
+//private:
+//
+//	vector<Coordinate> *vect;
+//};
 
 /**
  * \class CoordinateSequence geom.h geos.h
