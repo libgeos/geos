@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.62  2004/07/14 21:20:58  strk
+ * Added GeometricShapeFactory note on doxygen mainpage
+ *
  * Revision 1.61  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -153,8 +156,13 @@ namespace geos {
  * derive.
  *
  * Construction and destruction of Geometries is done
- * using a geos::GeometryFactory. You'll feed it geos::CoordinateSequence
+ * using geos::GeometryFactory.
+ *
+ * You'll feed it geos::CoordinateSequence
  * for base geometries or vectors of geometries for collections.
+ *
+ * If you need to construct geometric shaped geometries, you
+ * can use geos::GeometricShapeFactory.
  *
  * \section io_sect Input / Output
  *
