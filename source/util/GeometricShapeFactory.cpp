@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/14 21:19:35  strk
+ * GeometricShapeFactory first pass of bug fixes
+ *
  * Revision 1.4  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -44,17 +47,22 @@
 
 namespace geos {
 
-/**
-* Create a shape factory which will create shapes using the given
-* {@link GeometryFactory}.
-*
-* @param geomFact the factory to use
-*/
-GeometricShapeFactory::GeometricShapeFactory(GeometryFactory* newGeomFact){
+/*
+ * Create a shape factory which will create shapes using the given
+ * GeometryFactory. The given GeometryFactory will need to stay
+ * alive for the whole instance lifetime (the object will keep
+ * an external reference to it)
+ */
+GeometricShapeFactory::GeometricShapeFactory(const GeometryFactory* factory){
 	dim=new Dimensions();
 	nPts=100;
-	geomFact=newGeomFact;
+	geomFact=factory;
 }
+
+GeometricShapeFactory::~GeometricShapeFactory() {
+	delete dim;
+}
+
 
 /**
 * Sets the location of the shape by specifying the base coordinate
@@ -174,17 +182,20 @@ Polygon* GeometricShapeFactory::createCircle() {
 	double centreX = env->getMinX() + xRadius;
 	double centreY = env->getMinY() + yRadius;
 
-	CoordinateSequence* pts=CoordinateSequenceFactory::internalFactory->createCoordinateSequence(nPts + 1);
+	vector<Coordinate>*pts=new vector<Coordinate>(nPts+1);
 	int iPt = 0;
-		for (int i = 0; i < nPts; i++) {
+	Coordinate pt;
+	for (int i = 0; i < nPts; i++) {
 		double ang = i * (2 * 3.14159265358979 / nPts);
 		double x = xRadius * cos(ang) + centreX;
 		double y = yRadius * sin(ang) + centreY;
-		Coordinate* pt=new Coordinate(x, y);
-		pts->setAt(*pt,iPt++);
+		pt.x = x;
+		pt.y = y;
+		(*pts)[iPt++] = pt;
 	}
-	pts->setAt(pts->getAt(0),iPt++);
-	LinearRing* ring = geomFact->createLinearRing(pts);
+	(*pts)[iPt++] = (*pts)[0];
+	CoordinateSequence *cs=geomFact->getCoordinateSequenceFactory()->create(pts);
+	LinearRing* ring = geomFact->createLinearRing(cs);
 	Polygon* poly=geomFact->createPolygon(ring,NULL);
 	return poly;
 }
@@ -203,22 +214,30 @@ LineString* GeometricShapeFactory::createArc(double startAng,double endAng){
 	double centreY = env->getMinY() + yRadius;
 
 	double angSize = (endAng - startAng);
-	if (angSize <= 0.0 || angSize > 2 * 3.14159265358979)
-	angSize = 2 * 3.14159265358979;
+	if (angSize <= 0.0 || angSize > 2 * M_PI) //3.14159265358979
+		angSize = 2 * M_PI; //3.14159265358979;
 	double angInc = angSize / nPts;
 
-	CoordinateSequence* pts=CoordinateSequenceFactory::internalFactory->createCoordinateSequence(nPts);
+	vector<Coordinate> *pts = new vector<Coordinate>(nPts);
 	int iPt = 0;
+	Coordinate pt;
 	for (int i = 0; i < nPts; i++) {
 		double ang = startAng + i * angInc;
 		double x = xRadius * cos(ang) + centreX;
 		double y = yRadius * sin(ang) + centreY;
-		Coordinate* pt = new Coordinate(x, y);
-		geomFact->getPrecisionModel()->makePrecise(pt);
-		pts->setAt(*pt,iPt++);
+		pt.x = x;
+		pt.y = y;
+		geomFact->getPrecisionModel()->makePrecise(&pt);
+		(*pts)[iPt++] = pt;
 	}
-	LineString* line = geomFact->createLineString(pts);
+	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(pts);
+	LineString* line = geomFact->createLineString(cs);
 	return line;
+}
+
+GeometricShapeFactory::Dimensions::Dimensions()  {
+	base=Coordinate::nullCoord;
+	centre=Coordinate::nullCoord;
 }
 
 void GeometricShapeFactory::Dimensions::setBase(const Coordinate& newBase)  {
@@ -242,10 +261,10 @@ void GeometricShapeFactory::Dimensions::setHeight(double nHeight) {
 }
 
 Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
-	if (!(base==Coordinate::nullCoord)) {
+	if (base!=Coordinate::nullCoord) {
 		return new Envelope(base.x, base.x + width, base.y, base.y + height);
 	}
-	if (!(centre==Coordinate::nullCoord)) {
+	if (centre!=Coordinate::nullCoord) {
 		return new Envelope(centre.x - width/2, centre.x + width/2,centre.y - height/2, centre.y + height/2);
 	}
 	return new Envelope(0, width, 0, height);

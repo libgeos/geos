@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/14 21:19:35  strk
+ * GeometricShapeFactory first pass of bug fixes
+ *
  * Revision 1.5  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -54,6 +57,9 @@
 
 /*
 * $Log$
+* Revision 1.6  2004/07/14 21:19:35  strk
+* GeometricShapeFactory first pass of bug fixes
+*
 * Revision 1.5  2004/07/08 19:34:49  strk
 * Mirrored JTS interface of CoordinateSequence, factory and
 * default implementations.
@@ -229,6 +235,9 @@ public:
 
 
 /**
+ * \class GeometricShapeFactory util.h geos.h
+ *
+ * \brief
  * Computes various kinds of common geometric shapes.
  * Allows various ways of specifying the location and extent of the shapes,
  * as well as number of line segments used to form them.
@@ -238,6 +247,7 @@ class GeometricShapeFactory {
 private:
 	class Dimensions {
 	public:
+		Dimensions();
 		Coordinate base;
 		Coordinate centre;
 		double width;
@@ -249,74 +259,91 @@ private:
 		void setHeight(double nHeight);
 		Envelope* getEnvelope();
 	};
-	GeometryFactory* geomFact;
+	const GeometryFactory* geomFact;
 	Dimensions* dim;
 	int nPts;
 public:
 	/**
+	* \brief
 	* Create a shape factory which will create shapes using the given
-	* {@link GeometryFactory}.
+	* GeometryFactory.
 	*
-	* @param newGeomFact the factory to use
+	* @param factory the factory to use. You need to keep the
+	*	factory alive for the whole GeometricShapeFactory
+	*	life time.
+	* 
 	*/
-	GeometricShapeFactory(GeometryFactory *newGeomFact);
+	GeometricShapeFactory(const GeometryFactory *factory);
+
 	~GeometricShapeFactory();
+
 	/**
+	* \brief Creates a elliptical arc, as a LineString.
+	*
+	* @return an elliptical arc
+	*/
+	LineString* createArc(double startAng,double endAng);
+
+	/**
+	* \brief Creates a circular Polygon.
+	*
+	* @return a circle
+	*/
+	Polygon* createCircle();
+
+	/**
+	* \brief Creates a rectangular Polygon.
+	*
+	* @return a rectangular Polygon
+	*/
+	Polygon* createRectangle();
+
+	/**
+	* \brief
 	* Sets the location of the shape by specifying the base coordinate
-	* (which in most cases is the
-	* lower left point of the envelope containing the shape).
+	* (which in most cases is the * lower left point of the envelope
+	* containing the shape).
 	*
 	* @param base the base coordinate of the shape
 	*/
 	void setBase(const Coordinate& base);
+
 	/**
+	* \brief
 	* Sets the location of the shape by specifying the centre of
 	* the shape's bounding box
 	*
 	* @param centre the centre coordinate of the shape
 	*/
 	void setCentre(const Coordinate& centre);
+
 	/**
-	* Sets the total number of points in the created Geometry
+	* \brief Sets the height of the shape.
+	*
+	* @param height the height of the shape
+	*/
+	void setHeight(double height);
+
+	/**
+	* \brief Sets the total number of points in the created Geometry
 	*/
 	void setNumPoints(int nNPts);
+
 	/**
+	* \brief
 	* Sets the size of the extent of the shape in both x and y directions.
 	*
 	* @param size the size of the shape's extent
 	*/
 	void setSize(double size);
+
 	/**
-	* Sets the width of the shape.
+	* \brief Sets the width of the shape.
 	*
 	* @param width the width of the shape
 	*/
 	void setWidth(double width);
-	/**
-	* Sets the height of the shape.
-	*
-	* @param height the height of the shape
-	*/
-	void setHeight(double height);
-	/**
-	* Creates a rectangular {@link Polygon}.
-	*
-	* @return a rectangular Polygon
-	*
-	*/
-	Polygon* createRectangle();
-	/**
-	* Creates a circular {@link Polygon}.
-	*
-	* @return a circle
-	*/
-	Polygon* createCircle();
-	/**
-	* Creates a elliptical arc, as a LineString.
-	*
-	* @return an elliptical arc
-	*/
-	LineString* createArc(double startAng,double endAng);
+
 };
 
 }
