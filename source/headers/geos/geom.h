@@ -941,7 +941,7 @@ public:
 	Envelope(const Coordinate& p1, const Coordinate& p2);
 	Envelope(const Coordinate& p);
 	Envelope(const Envelope &env);
-	virtual ~Envelope(void);
+	~Envelope(void);
 	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
 	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
 	void init(void);
@@ -2432,6 +2432,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2005/02/04 23:55:23  strk
+ * Envelope destructor made non-virtual to give compiler more static
+ * binding options.
+ *
  * Revision 1.35  2004/12/16 16:27:24  strk
  * Fixed LinearRing::clone() to return LinearRing instead of LineString
  *
