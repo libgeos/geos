@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/20 08:34:18  strk
+ * Fixed a bug in opDistance.h.
+ * Removed doxygen tags from obsoleted CoordinateList.cpp.
+ * Got doxygen to run with no warnings.
+ *
  * Revision 1.21  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -62,7 +67,7 @@ bool CoordinateList::hasRepeatedPoints() const {
 	return false;
 }
 
-/**
+/*
 * Returns either the given coordinate array if its length is greater than the
 * given amount, or an empty coordinate array.
 */
@@ -153,22 +158,23 @@ bool CoordinateList::equals(CoordinateList *cl1,CoordinateList *cl2){
 	return true;
 }
 
-/** Add an array of coordinates
-* @param vc The coordinates
-* @param allowRepeated if set to false, repeated coordinates are collapsed
-* @return true (as by general collection contract)
-*/
+/*
+ * Add an array of coordinates
+ * @param vc The coordinates
+ * @param allowRepeated if set to false, repeated coordinates are collapsed
+ * @return true (as by general collection contract)
+ */
 void CoordinateList::add(vector<Coordinate>* vc,bool allowRepeated) {
 	for(int i=0;i<(int)vc->size();i++) {
 		add((*vc)[i],allowRepeated);
 	}
 }
 
-/** Add a coordinate
-* @param c The coordinate to add
-* @param allowRepeated if set to false, repeated coordinates are collapsed
-* @return true (as by general collection contract)
-*/
+/* Add a coordinate
+ * @param c The coordinate to add
+ * @param allowRepeated if set to false, repeated coordinates are collapsed
+ * @return true (as by general collection contract)
+ */
 void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	if (!allowRepeated) {
 		if (size()>=1) {
@@ -179,12 +185,12 @@ void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	add(c);
 }
 
-/** Add an array of coordinates
-* @param cl The coordinates
-* @param allowRepeated if set to false, repeated coordinates are collapsed
-* @param direction if false, the array is added in reverse order
-* @return true (as by general collection contract)
-*/
+/* Add an array of coordinates
+ * @param cl The coordinates
+ * @param allowRepeated if set to false, repeated coordinates are collapsed
+ * @param direction if false, the array is added in reverse order
+ * @return true (as by general collection contract)
+ */
 void CoordinateList::add(CoordinateList *cl,bool allowRepeated,bool direction){
 	if (direction) {
 		for (int i = 0; i < cl->size(); i++) {
@@ -198,11 +204,11 @@ void CoordinateList::add(CoordinateList *cl,bool allowRepeated,bool direction){
 }
 
 
-/**
-* This function allocates space for a CoordinateList object
-* being a copy of the input once with consecutive equal points
-* removed.
-**/
+/*
+ * This function allocates space for a CoordinateList object
+ * being a copy of the input once with consecutive equal points
+ * removed.
+ */
 CoordinateList* CoordinateList::removeRepeatedPoints(const CoordinateList *cl){
 	CoordinateList* ret=CoordinateListFactory::internalFactory->createCoordinateList();
 	vector<Coordinate> *v=cl->toVector();

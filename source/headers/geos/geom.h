@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/20 08:34:18  strk
+ * Fixed a bug in opDistance.h.
+ * Removed doxygen tags from obsoleted CoordinateList.cpp.
+ * Got doxygen to run with no warnings.
+ *
  * Revision 1.16  2004/07/19 13:19:30  strk
  * Documentation fixes
  *
@@ -606,19 +611,19 @@ private:
 };
 
 
-/* \class CoordinateList geom.h geos.h
- *
- * \brief A list of Coordinates, which may be set to prevent
- * repeated coordinates from occuring in the list.
- */
+//* class CoordinateList geom.h geos.h
+//*
+//* brief A list of Coordinates, which may be set to prevent
+//* repeated coordinates from occuring in the list.
+//
 //class CoordinateList {
 //public:
 //	~CoordinateList(){};
 //
-//	/// copy constructor
+//	// copy constructor
 //	CoordinateList(const CoordinateList &cl);
 //
-//	/// constructor an empty CoordinateList
+//	// constructor an empty CoordinateList
 //	CoordinateList();
 //
 //	/*
@@ -629,10 +634,10 @@ private:
 //	 */
 //	CoordinateList(vector<Coordinate> *coords, bool allowRepeted=false);
 //
-//	/// Get a reference to the nth Coordinate 
+//	// Get a reference to the nth Coordinate 
 //	const Coordinate& getCoordinate(int n) const;
 //
-//	/**
+//	/*
 //	 * \brief Add an array of coordinates 
 //	 * @param vc The coordinates
 //	 * @param allowRepeated if set to false, repeated coordinates
@@ -641,7 +646,7 @@ private:
 //	 */
 //	void add(vector<Coordinate>* vc, bool allowRepeated);
 //
-//	/**
+//	/*
 //	 * \brief Add an array of coordinates 
 //	 * @param cl The coordinates
 //	 * @param allowRepeated if set to false, repeated coordinates
@@ -651,7 +656,7 @@ private:
 //	 */
 //	void add(CoordinateList *cl,bool allowRepeated,bool direction);
 //
-//	/**
+//	/*
 //	 * \brief Add a coordinate
 //	 * @param c The coordinate to add
 //	 * @param allowRepeated if set to false, repeated coordinates
@@ -660,10 +665,10 @@ private:
 //	 */
 //	void add(const Coordinate& c,bool allowRepeated);
 //
-//	/// Add a Coordinate to the list
+//	// Add a Coordinate to the list
 //	void add(const Coordinate& c);
 //
-//	/// Get vector
+//	// Get vector
 //	const vector<Coordinate>* toCoordinateArray() const;
 //
 //private:

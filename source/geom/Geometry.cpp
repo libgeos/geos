@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.66  2004/07/20 08:34:18  strk
+ * Fixed a bug in opDistance.h.
+ * Removed doxygen tags from obsoleted CoordinateList.cpp.
+ * Got doxygen to run with no warnings.
+ *
  * Revision 1.65  2004/07/19 13:19:30  strk
  * Documentation fixes
  *
@@ -188,6 +193,11 @@ namespace geos {
  *
  */ 
 
+
+/**
+ * \brief Return a string containing GEOS library version
+ * and functionally equivalent JTS version.
+ */
 string
 version()
 {

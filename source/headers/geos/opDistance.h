@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/20 08:34:18  strk
+ * Fixed a bug in opDistance.h.
+ * Removed doxygen tags from obsoleted CoordinateList.cpp.
+ * Got doxygen to run with no warnings.
+ *
  * Revision 1.3  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -221,7 +226,7 @@ private:
 	void updateMinDistance(double dist);
 	void updateMinDistance(vector<GeometryLocation*> *locGeom, bool flip);
 	void computeMinDistance();
-	void DistanceOp::computeContainmentDistance();
+	void computeContainmentDistance();
 	void computeInside(vector<GeometryLocation*> *locs,vector<Geometry*> *polys,vector<GeometryLocation*> *locPtPoly);
 	void computeInside(GeometryLocation *ptLoc,Polygon *poly,vector<GeometryLocation*> *locPtPoly);
 	void computeLineDistance();
