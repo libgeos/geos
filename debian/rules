@@ -25,6 +25,8 @@ else
 endif
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
+	MAKESTRIP=$(MAKE) install-strip DESTDIR=$(CURDIR)/debian/tmp #woody
+#else
 endif
 
 # shared library versions
@@ -75,6 +77,7 @@ install: build
 	# Add here commands to install the package into debian/tmp
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 	$(MAKE) installcheck DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKESTRIP)
 	$(CURDIR)/debian/makedoc
 
 
@@ -89,7 +92,8 @@ binary-arch: build install
 	dh_installchangelogs ChangeLog
 	dh_installdocs
 	dh_installexamples doc/example.cpp
-	dh_install --sourcedir=debian/tmp
+	dh_movefiles --sourcedir=debian/tmp #woody
+	dh_install --sourcedir=$(CURDIR)debian/tmp
 #	dh_installmenu
 #	dh_installdebconf	
 #	dh_installlogrotate

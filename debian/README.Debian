@@ -1,0 +1,19 @@
+
+hello all,
+
+this debian package has been made under sarge, and then backported to Woody.
+to avoid duplication, woody shortcomings have been bypassed only:
+dh_install was not working for woody, so i have added dh_movefiles.
+dh_strip was not working on woody, so i had to invoke the make install-strip 
+target in the upstream package. the woody binaries are bigger then those on 
+sarge, due to lesser stripping lever.
+
+please enjoy,
+
+alex
+
+Package creation:
+
+root# debian/rules binary 
+(or, better)
+user$ fakeroot debian/rules binary 

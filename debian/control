@@ -39,7 +39,7 @@ Package: libgeos-doc
 Section: science
 Priority: optional
 Architecture: any
-Recommends: www-browser libgeos (= ${Source-Version})
+Recommends: libgeos (= ${Source-Version})
 Description: GEOS (Geometry Engine - Open Source) documentation
  GEOS (Geometry Engine - Open Source) is a C++ port of the 
  Java Topology Suite (JTS). As such, it aims to contain the 
