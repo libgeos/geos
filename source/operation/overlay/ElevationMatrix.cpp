@@ -24,9 +24,11 @@ namespace geos
 {
 
 ElevationMatrix::ElevationMatrix(const Envelope &newEnv,
-	int newRows, int newCols): env(newEnv), rows(newRows),
-	cols(newCols), cells(newRows*newCols),
-	avgElevationComputed(false), avgElevation(DoubleNotANumber)
+		unsigned int newRows, unsigned int newCols):
+	env(newEnv), cols(newCols), rows(newRows),
+	avgElevationComputed(false),
+	avgElevation(DoubleNotANumber),
+ 	cells(newRows*newCols)
 {
 	cellwidth=env.getWidth()/cols;
 	cellheight=env.getHeight()/rows;
@@ -90,18 +92,18 @@ ElevationMatrix::getCell(const Coordinate &c)
 	{
 		double xoffset = c.x - env.getMinX();
 		col = (int)(xoffset/cellwidth);
-		if ( col == cols ) col = cols-1;
+		if ( col == (int)cols ) col = cols-1;
 	}
 	if ( ! cellheight ) row=0;
 	else
 	{
 		double yoffset = c.y - env.getMinY();
 		row = (int)(yoffset/cellheight);
-		if ( row == rows ) row = rows-1;
+		if ( row == (int)rows ) row = rows-1;
 	}
 	int celloffset = (cols*row)+col;
 
-	if  (celloffset<0 || celloffset >= cols*rows)
+	if  (celloffset<0 || celloffset >= (int)(cols*rows))
 	{
 		ostringstream s;
 		s<<"ElevationMatrix::getCell got a Coordinate out of grid extent ("<<env.toString()<<") - cols:"<<cols<<" rows:"<<rows;
@@ -168,6 +170,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.4  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

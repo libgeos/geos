@@ -305,7 +305,7 @@ void IsValidOp::checkNoRepeatedPoint(Geometry *g) {
 */
 void IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph) {
 	LinearRing *shell=(LinearRing*) p->getExteriorRing();
-	const CoordinateSequence *shellPts=shell->getCoordinatesRO();
+	//const CoordinateSequence *shellPts=shell->getCoordinatesRO();
 	//PointInRing pir=new SimplePointInRing(shell);
 	//PointInRing pir=new SIRtreePointInRing(shell);
 //	auto_ptr<PointInRing> pir(new MCPointInRing(shell));
@@ -504,6 +504,9 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.26  2004/11/06 08:16:46  strk
  * Fixed CGAlgorithms::isCCW from JTS port.
  * Code cleanup in IsValidOp.

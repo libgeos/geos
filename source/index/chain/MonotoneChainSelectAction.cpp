@@ -11,22 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.6  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexChain.h>
 #include <stdio.h>
@@ -50,5 +35,24 @@ void MonotoneChainSelectAction::select(indexMonotoneChain *mc,int start) {
 	mc->getLineSegment(start,selectedSegment);
 	select(selectedSegment);
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.7  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.6  2004/03/25 02:23:55  ybychkov
+ * All "index/" packages upgraded to JTS 1.4
+ *
+ * Revision 1.5  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ **********************************************************************/
 

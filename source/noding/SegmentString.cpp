@@ -149,7 +149,8 @@ SegmentString::addIntersection(Coordinate& intPt,
 	/**
 	 * Add the intersection point to edge intersection list.
 	 */
-	SegmentNode *ei=eiList->add(&intPt, normalizedSegmentIndex, dist);
+	//SegmentNode *ei=
+	eiList->add(&intPt, normalizedSegmentIndex, dist);
 	//ei.print(System.out);
 
 }
@@ -158,6 +159,9 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.10  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

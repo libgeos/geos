@@ -11,51 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.13  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.12  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.11  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.10  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2004/05/06 15:00:59  strk
- * Boundable destructor made virtual.
- * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
- * used to keep track of created node to cleanly delete them at
- * destruction time.
- *
- * Revision 1.8  2004/05/05 17:42:06  strk
- * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
- * SIRAbstractNode and STRAbstractNode destructors added to get rid of
- * AbstractNode::bounds in the right way (is a void * casted to appropriate
- * Class in the subClasses).
- *
- * Revision 1.7  2004/05/03 16:29:21  strk
- * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
- * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
- * and SIRtree.cpp.
- *
- * Revision 1.6  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
@@ -172,5 +128,35 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 	sort(output->begin(), output->end(), compareSIRBoundables);
 	return output;
 }
-}
+
+} //namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.14  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.13  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.12  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.11  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.10  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.9  2004/05/06 15:00:59  strk
+ * Boundable destructor made virtual.
+ * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
+ * used to keep track of created node to cleanly delete them at
+ * destruction time.
+ *
+ **********************************************************************/
 

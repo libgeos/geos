@@ -68,13 +68,14 @@ PolygonizeGraph::PolygonizeGraph(const GeometryFactory *newFactory)
  */
 PolygonizeGraph::~PolygonizeGraph()
 {
-	for (int i=0; i<newEdges.size(); i++)
+	unsigned int i;
+	for (i=0; i<newEdges.size(); i++)
 		delete newEdges[i];
-	for (int i=0; i<newDirEdges.size(); i++)
+	for (i=0; i<newDirEdges.size(); i++)
 		delete newDirEdges[i];
-	for (int i=0; i<newNodes.size(); i++)
+	for (i=0; i<newNodes.size(); i++)
 		delete newNodes[i];
-	for (int i=0; i<newEdgeRings.size(); i++)
+	for (i=0; i<newEdgeRings.size(); i++)
 		delete newEdgeRings[i];
 }
 
@@ -427,6 +428,9 @@ PolygonizeGraph::deleteDangles()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.6  2004/10/26 16:09:21  strk
  * Some more intentation and envelope equality check fix.
  *

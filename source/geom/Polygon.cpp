@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.45  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.44  2004/11/12 18:12:05  strk
  * Changed ::getBoundary() to return LineString if polygon has no holes.
  * (has required to pass OGC conformance test T20)
@@ -269,7 +272,6 @@ bool Polygon::equalsExact(const Geometry *other, double tolerance) const {
 		return false;
 	}
 	const Polygon* otherPolygon=dynamic_cast<const Polygon*>(other);
-	Geometry* thisShell=dynamic_cast<Geometry *>(shell);
 	if (typeid(*(otherPolygon->shell))!=typeid(Geometry)) {
 		return false;
 	}

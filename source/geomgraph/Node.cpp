@@ -141,7 +141,7 @@ Node::addZ(double z)
 #endif
 		return;
 	}
-	for (int i=0; i<zvals.size(); i++) if ( zvals[i] == z )
+	for (unsigned int i=0; i<zvals.size(); i++) if ( zvals[i] == z )
 	{
 #if DEBUG
 		cerr<<" already stored"<<endl;
@@ -166,6 +166,9 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.9  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

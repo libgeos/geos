@@ -11,69 +11,6 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.25  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.24  2004/07/22 16:58:01  strk
- * runtime version extractor functions split. geos::version() is now
- * geos::geosversion() and geos::jtsport()
- *
- * Revision 1.23  2004/07/17 09:19:32  strk
- * added GEOS version report
- *
- * Revision 1.22  2004/07/16 10:00:45  strk
- * Bug fixed in GeometricShapeFactory examples.
- * Added example of GeometricShapeFactory::createArc.
- *
- * Revision 1.21  2004/07/15 13:41:54  strk
- * Added createRectangle example.
- *
- * Revision 1.20  2004/07/14 21:15:49  strk
- * Added GeometricShapeFactory example: createCircle.
- * Added simple filter to send example output to a postgis table.
- *
- * Revision 1.19  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.18  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.17  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.16  2004/06/15 20:42:43  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.15  2004/04/13 14:28:37  strk
- * Removed spurious line
- *
- * Revision 1.14  2003/11/13 11:57:23  strk
- * bug fixed in relate call
- *
- * Revision 1.13  2003/11/12 22:03:54  strk
- * added relational operators
- *
- * Revision 1.12  2003/11/12 11:08:39  strk
- * removed old changelog, moved comments in the nice standard frame
- *
- * Revision 1.11  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  *********************************************************************
  *
  * This file should document by example usage of the GEOS library.
@@ -111,7 +48,7 @@ wkt_print_geoms(vector<Geometry *> *geoms)
 {
 	// WKT-print given geometries
 	WKTWriter *wkt = new WKTWriter();
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		const Geometry *g = (*geoms)[i];
 		string tmp=wkt->write(g);
 		cout<<"["<<i<<"] "<<tmp<<endl;
@@ -301,7 +238,7 @@ void do_all()
 {
 	vector<Geometry *> *geoms = new vector<Geometry *>;
 	vector<Geometry *> *newgeoms;
-	Geometry *geom;
+	//Geometry *geom;
 
 	// Define a precision model using 0,0 as the reference origin
 	// and 2.0 as coordinates scale.
@@ -350,7 +287,7 @@ void do_all()
 	
 	// Find centroid of each base geometry
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g = (*geoms)[i];
 		newgeoms->push_back( g->getCentroid() );
 	}
@@ -360,7 +297,7 @@ void do_all()
 	wkt_print_geoms(newgeoms);
 
 	// Delete the centroids
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -370,7 +307,7 @@ void do_all()
 	/////////////////////////////////////////////
 	
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g = (*geoms)[i];
 		try {
 			Geometry *g2 = g->buffer(10);
@@ -385,7 +322,7 @@ void do_all()
 	cout<<endl<<"--------HERE COMES THE BUFFERED GEOMS ----------"<<endl;
 	wkt_print_geoms(newgeoms);
 
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -396,7 +333,7 @@ void do_all()
 	
 	// Make convex hulls of geometries
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g = (*geoms)[i];
 		newgeoms->push_back( g->convexHull() );
 	}
@@ -406,7 +343,7 @@ void do_all()
 	wkt_print_geoms(newgeoms);
 
 	// Delete the hulls
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -425,14 +362,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"   DISJOINT   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->disjoint(g2) ) cout<<" 1\t";
@@ -457,14 +394,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"    TOUCHES   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->touches(g2) ) cout<<" 1\t";
@@ -489,14 +426,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<" INTERSECTS   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->intersects(g2) ) cout<<" 1\t";
@@ -521,14 +458,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"    CROSSES   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->crosses(g2) ) cout<<" 1\t";
@@ -553,14 +490,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"     WITHIN   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->within(g2) ) cout<<" 1\t";
@@ -585,14 +522,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"   CONTAINS   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->contains(g2) ) cout<<" 1\t";
@@ -617,14 +554,14 @@ cout<<"-------------------------------------------------------------------------
 	
 	cout<<endl;
 	cout<<"   OVERLAPS   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->overlaps(g2) ) cout<<" 1\t";
@@ -649,14 +586,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"     RELATE   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			IntersectionMatrix *im=NULL;
 			try {
@@ -687,14 +624,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"     EQUALS   ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				if ( g1->equals(g2) ) cout<<" 1\t";
@@ -719,14 +656,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"EQUALS_EXACT  ";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				// second argument is a tolerance
@@ -752,14 +689,14 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl;
 	cout<<"IS_WITHIN_DIST";
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		cout<<"\t["<<i<<"]";
 	}
 	cout<<endl;
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g1 = (*geoms)[i];
 		cout<<"      ["<<i<<"]\t";
-		for (int j=0; j<geoms->size(); j++) {
+		for (unsigned int j=0; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				// second argument is the distance
@@ -794,9 +731,9 @@ cout<<"-------------------------------------------------------------------------
 
 	// Make unions of all geoms
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<geoms->size()-1; i++) {
+	for (unsigned int i=0; i<geoms->size()-1; i++) {
 		Geometry *g1 = (*geoms)[i];
-		for (int j=i+1; j<geoms->size(); j++) {
+		for (unsigned int j=i+1; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				Geometry *g3 = g1->Union(g2);
@@ -819,7 +756,7 @@ cout<<"-------------------------------------------------------------------------
 	wkt_print_geoms(newgeoms);
 
 	// Delete the resulting geoms
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -831,9 +768,9 @@ cout<<"-------------------------------------------------------------------------
 	
 	// Compute intersection of adhiacent geometries
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<geoms->size()-1; i++) {
+	for (unsigned int i=0; i<geoms->size()-1; i++) {
 		Geometry *g1 = (*geoms)[i];
-		for (int j=i+1; j<geoms->size(); j++) {
+		for (unsigned int j=i+1; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				Geometry *g3 = g1->intersection(g2);
@@ -855,7 +792,7 @@ cout<<"-------------------------------------------------------------------------
 	wkt_print_geoms(newgeoms);
 
 	// Delete the resulting geoms
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -866,9 +803,9 @@ cout<<"-------------------------------------------------------------------------
 	
 	// Compute difference of adhiacent geometries
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<geoms->size()-1; i++) {
+	for (unsigned int i=0; i<geoms->size()-1; i++) {
 		Geometry *g1 = (*geoms)[i];
-		for (int j=i+1; j<geoms->size(); j++) {
+		for (unsigned int j=i+1; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				Geometry *g3 = g1->difference(g2);
@@ -890,7 +827,7 @@ cout<<"-------------------------------------------------------------------------
 	wkt_print_geoms(newgeoms);
 
 	// Delete the resulting geoms
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -901,9 +838,9 @@ cout<<"-------------------------------------------------------------------------
 	
 	// Compute symmetric difference of adhiacent geometries
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<geoms->size()-1; i++) {
+	for (unsigned int i=0; i<geoms->size()-1; i++) {
 		Geometry *g1 = (*geoms)[i];
-		for (int j=i+1; j<geoms->size(); j++) {
+		for (unsigned int j=i+1; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				Geometry *g3 = g1->symDifference(g2);
@@ -925,7 +862,7 @@ cout<<"-------------------------------------------------------------------------
 	wkt_print_geoms(newgeoms);
 
 	// Delete the resulting geoms
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -937,14 +874,15 @@ cout<<"-------------------------------------------------------------------------
 	lm.add(geoms);
 	vector<LineString *> *mls = lm.getMergedLineStrings();
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<mls->size(); i++) newgeoms->push_back((*mls)[i]);
+	for (unsigned int i=0; i<mls->size(); i++)
+		newgeoms->push_back((*mls)[i]);
 	delete mls;
 
 	cout<<endl<<"----- HERE IS THE LINEMERGE OUTPUT ------"<<endl;
 	wkt_print_geoms(newgeoms);
 	
 	// Delete the resulting geoms
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -956,14 +894,15 @@ cout<<"-------------------------------------------------------------------------
 	plgnzr.add(geoms);
 	vector<Polygon *> *polys = plgnzr.getPolygons();
 	newgeoms = new vector<Geometry *>;
-	for (int i=0; i<polys->size(); i++) newgeoms->push_back((*polys)[i]);
+	for (unsigned int i=0; i<polys->size(); i++)
+		newgeoms->push_back((*polys)[i]);
 	delete polys;
 
 	cout<<endl<<"----- HERE IS POLYGONIZE OUTPUT ------"<<endl;
 	wkt_print_geoms(newgeoms);
 	
 	// Delete the resulting geoms
-	for (int i=0; i<newgeoms->size(); i++) {
+	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
@@ -973,7 +912,7 @@ cout<<"-------------------------------------------------------------------------
 	/////////////////////////////////////////////
 
 	// Delete base geometries 
-	for (int i=0; i<geoms->size(); i++) {
+	for (unsigned int i=0; i<geoms->size(); i++) {
 		delete (*geoms)[i];
 	}
 	delete geoms;
@@ -981,6 +920,7 @@ cout<<"-------------------------------------------------------------------------
 	delete global_factory;
 }
 
+int
 main()
 {
 	cout<<"GEOS "<<geosversion()<<" ported from JTS "<<jtsport()<<endl;
@@ -1007,4 +947,26 @@ main()
 	// memory checker like valgrind quiet
 	// about static heap-allocated data.
 	Unload::Release();
+
+	exit(0);
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.26  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.25  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.24  2004/07/22 16:58:01  strk
+ * runtime version extractor functions split. geos::version() is now
+ * geos::geosversion() and geos::jtsport()
+ *
+ * Revision 1.23  2004/07/17 09:19:32  strk
+ * added GEOS version report
+ *
+ *********************************************************************/

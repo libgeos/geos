@@ -200,7 +200,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 	}
 
 	// interpolate inbetweens
-	int prev=v3d[0];
+	unsigned int prev=v3d[0];
 	for (i=1; i<v3d.size(); i++)
 	{
 		int curr=v3d[i];
@@ -227,7 +227,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 	if ( prev < cssize-1 )
 	{
 		double z = cs->getAt(prev).z;
-		for (int j=prev+1; j<cssize; j++)
+		for (unsigned int j=prev+1; j<cssize; j++)
 		{
 			buf = cs->getAt(j);
 			buf.z = z;
@@ -269,6 +269,9 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.17  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

@@ -11,27 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
- *
- * Revision 1.4  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
@@ -39,11 +19,11 @@
 
 namespace geos {
 
-/**
-* Constructs an AbstractNode at the given level in the tree
-* @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on; the
-* root node will have the highest level
-*/
+/*
+ * Constructs an AbstractNode at the given level in the tree
+ * @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on;
+ * the root node will have the highest level
+ */
 AbstractNode::AbstractNode(int newLevel) {
 	childBoundables=new vector<Boundable*>();
 	bounds=NULL;
@@ -87,5 +67,30 @@ void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 	Assert::isTrue(bounds==NULL);
 	childBoundables->push_back(childBoundable);
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.7  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.6  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.5  2004/03/25 02:23:55  ybychkov
+ * All "index/" packages upgraded to JTS 1.4
+ *
+ * Revision 1.4  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

@@ -93,7 +93,8 @@ try{
 	int testCount=0;
 	//	_CrtSetBreakAlloc(18);
 	CMarkupSTL xml;
-	bool a=xml.Load(source.c_str());
+	//bool a=
+	xml.Load(source.c_str());
 
 	xml.ResetPos();
 	xml.FindElem("run");
@@ -501,6 +502,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.47  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

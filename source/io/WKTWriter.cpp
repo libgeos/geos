@@ -222,7 +222,7 @@ void WKTWriter::appendPolygonText(const Polygon *polygon, int level, bool indent
 		for (int i=0; i<polygon->getNumInteriorRing(); i++) {
 			writer->write(", ");
 			const LineString *ls=polygon->getInteriorRingN(i);
-			appendLineStringText(polygon->getInteriorRingN(i), level + 1, true, writer);
+			appendLineStringText(ls, level + 1, true, writer);
 		}
 		writer->write(")");
 	}
@@ -311,6 +311,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.20  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

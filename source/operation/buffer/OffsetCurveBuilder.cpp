@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.14  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *
@@ -73,35 +76,35 @@ double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
 double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
-	maxCurveSegmentError(0.0),
-	distance(0.0),
-	endCapStyle(BufferOp::CAP_ROUND),
 	cga(new RobustCGAlgorithms()),
+	li(new RobustLineIntersector()),
+	maxCurveSegmentError(0.0),
+	ptList(new DefaultCoordinateSequence()),
+	distance(0.0),
+	precisionModel(newPrecisionModel),
+	endCapStyle(BufferOp::CAP_ROUND),
 	seg0(new LineSegment()),
 	seg1(new LineSegment()),
 	offset0(new LineSegment()),
-	offset1(new LineSegment()),
-	precisionModel(newPrecisionModel),
-	li(new RobustLineIntersector()),
-	ptList(new DefaultCoordinateSequence())
+	offset1(new LineSegment())
 {
 	int limitedQuadSegs=DEFAULT_QUADRANT_SEGMENTS<1 ? 1 : DEFAULT_QUADRANT_SEGMENTS;
 	filletAngleQuantum=3.14159265358979 / 2.0 / limitedQuadSegs;
 }
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
-	int quadrantSegments):
-	maxCurveSegmentError(0.0),
-	distance(0.0),
-	endCapStyle(BufferOp::CAP_ROUND),
+		int quadrantSegments):
 	cga(new RobustCGAlgorithms()),
+	li(new RobustLineIntersector()),
+	maxCurveSegmentError(0.0),
+	ptList(new DefaultCoordinateSequence()),
+	distance(0.0),
+	precisionModel(newPrecisionModel),
+	endCapStyle(BufferOp::CAP_ROUND),
 	seg0(new LineSegment()),
 	seg1(new LineSegment()),
 	offset0(new LineSegment()),
-	offset1(new LineSegment()),
-	precisionModel(newPrecisionModel),
-	li(new RobustLineIntersector()),
-	ptList(new DefaultCoordinateSequence())
+	offset1(new LineSegment())
 {
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=3.14159265358979  / 2.0 / limitedQuadSegs;

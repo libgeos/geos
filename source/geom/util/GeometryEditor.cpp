@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.10  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -145,7 +148,6 @@ Polygon* GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperat
 GeometryCollection*
 GeometryEditor::editGeometryCollection(const GeometryCollection *collection, GeometryEditorOperation *operation)
 {
-	GeometryCollection *ret;
 	GeometryCollection *newCollection = (GeometryCollection*) operation->edit(collection,factory);
 	vector<Geometry*> *geometries = new vector<Geometry*>();
 	for (int i = 0; i < newCollection->getNumGeometries(); i++) {

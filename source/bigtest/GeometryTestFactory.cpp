@@ -11,27 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.11  2004/07/19 10:35:23  strk
- * bigtest.h moved to local dir
- *
- * Revision 1.10  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.9  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <math.h>
 
@@ -120,7 +100,7 @@ CoordinateSequence* GeometryTestFactory::createSineStar(double basex,double base
 	int nArmPt=nPts/nArms;
 	if (nArmPt<5) nArmPt=5;
 
-	int nPts2=nArmPt*nArms;
+	//int nPts2=nArmPt*nArms;
 	CoordinateSequence *pts=new DefaultCoordinateSequence(); 
 
 	double starAng=0.0;
@@ -143,3 +123,28 @@ Polygon* GeometryTestFactory::createSineStar(GeometryFactory *fact,double basex,
 	CoordinateSequence *pts=createSineStar(basex, basey, size, armLen, nArms, nPts);
 	return fact->createPolygon(fact->createLinearRing(pts),NULL);
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.12  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.11  2004/07/19 10:35:23  strk
+ * bigtest.h moved to local dir
+ *
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.9  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.8  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+

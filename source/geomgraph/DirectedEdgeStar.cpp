@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.4  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -100,7 +103,7 @@ DirectedEdge* DirectedEdgeStar::getRightmostEdge() {
 		return deLast;
 	else {
 		// edges are in different hemispheres - make sure we return one that is non-horizontal
-		DirectedEdge *nonHorizontalEdge=NULL;
+		//DirectedEdge *nonHorizontalEdge=NULL;
 		if (de0->getDy()!=0)
 			return de0;
 		else if (deLast->getDy()!=0)
@@ -336,7 +339,7 @@ void DirectedEdgeStar::findCoveredLineEdges(){
 
 void DirectedEdgeStar::computeDepths(DirectedEdge *de){
 	int edgeIndex=findIndex(de);
-	Label *deLabel=de->getLabel();
+	//Label *deLabel=de->getLabel();
 	int startDepth=de->getDepth(Position::LEFT);
 	int targetLastDepth=de->getDepth(Position::RIGHT);
 
@@ -358,7 +361,7 @@ int DirectedEdgeStar::computeDepths(int startIndex,int endIndex,int startDepth){
 	int currDepth=startDepth;
 	for (int i=startIndex;i<endIndex;i++) {
         DirectedEdge *nextDe=(DirectedEdge*)(*edgeList)[i];
-		Label *deLabel=nextDe->getLabel();
+		//Label *deLabel=nextDe->getLabel();
 		nextDe->setEdgeDepths(Position::RIGHT, currDepth);
 		currDepth=nextDe->getDepth(Position::LEFT);
 	}

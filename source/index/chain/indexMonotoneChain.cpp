@@ -20,10 +20,10 @@
 namespace geos {
 
 indexMonotoneChain::indexMonotoneChain(CoordinateSequence *newPts,int nstart,int nend, void* nContext):
-	env(NULL),
 	pts(newPts),
 	start(nstart),
 	end(nend),
+	env(NULL),
 	context(nContext)
 {
 }
@@ -153,6 +153,9 @@ indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,i
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.12  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *
@@ -171,7 +174,7 @@ indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,i
  * Added client application build tips in README.
  *
  * Revision 1.8  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
+ * All "index/" packages upgraded to JTS 1.4
  *
  * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h

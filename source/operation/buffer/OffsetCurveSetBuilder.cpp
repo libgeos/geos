@@ -20,10 +20,10 @@ namespace geos {
 
 OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder):
 	cga(new RobustCGAlgorithms()),
-	curveList(new vector<SegmentString*>()),
 	inputGeom(newInputGeom),
 	distance(newDistance),
-	curveBuilder(newCurveBuilder)
+	curveBuilder(newCurveBuilder),
+	curveList(new vector<SegmentString*>())
 {
 }
 
@@ -283,6 +283,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateSequence *triangleCo
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.16  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

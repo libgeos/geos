@@ -133,7 +133,7 @@ DoubleBits::getBit(int i)
  */
 int DoubleBits::numCommonMantissaBits(DoubleBits *db) {
 	for (int i=0;i<52;i++) {
-		int bitIndex=i+12;
+		//int bitIndex=i+12;
 		if (getBit(i)!=db->getBit(i))
 			return i;
 	}
@@ -162,6 +162,9 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.16  2004/11/04 08:49:13  strk
  * Unlinked new documentation.
  *

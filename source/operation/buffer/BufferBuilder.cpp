@@ -48,9 +48,9 @@ CGAlgorithms *BufferBuilder::cga=&rCGA;
  * Creates a new BufferBuilder
  */
 BufferBuilder::BufferBuilder():
-	workingPrecisionModel(NULL),
 	quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(BufferOp::CAP_ROUND),
+	workingPrecisionModel(NULL),
 	edgeList(new EdgeList())
 {
 }
@@ -304,6 +304,9 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.24  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

@@ -328,12 +328,12 @@ public:
 class OffsetCurveBuilder {
 public:
 	/** \brief
-	* The default number of facets into which to divide a fillet
-	* of 90 degrees.
-	*
-	* A value of 8 gives less than 2% max error in the buffer distance.
-	* For a max error of < 1%, use QS = 12
-	*/
+	 * The default number of facets into which to divide a fillet
+	 * of 90 degrees.
+	 *
+	 * A value of 8 gives less than 2% max error in the buffer distance.
+	 * For a max error of < 1%, use QS = 12
+	 */
 	static const int DEFAULT_QUADRANT_SEGMENTS=8;
 
 	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel);
@@ -342,20 +342,20 @@ public:
 	void setEndCapStyle(int newEndCapStyle);
 
 	/**
-	* This method handles single points as well as lines.
-	* Lines are assumed to <b>not</b> be closed (the function will not
-	* fail for closed lines, but will generate superfluous line caps).
-	*
-	* @return a List of Coordinate[]
-	*/
+	 * This method handles single points as well as lines.
+	 * Lines are assumed to <b>not</b> be closed (the function will not
+	 * fail for closed lines, but will generate superfluous line caps).
+	 *
+	 * @return a List of Coordinate[]
+	 */
 	vector<CoordinateSequence*>* getLineCurve(const CoordinateSequence *inputPts, double distance);
 
 	/**
-	* This method handles the degenerate cases of single points and lines,
-	* as well as rings.
-	*
-	* @return a List of Coordinate[]
-	*/
+	 * This method handles the degenerate cases of single points and lines,
+	 * as well as rings.
+	 *
+	 * @return a List of Coordinate[]
+	 */
 	vector<CoordinateSequence*>* getRingCurve(const CoordinateSequence *inputPts, int side, double distance);
 
 private:
@@ -365,16 +365,21 @@ private:
 //	static final Coordinate[] arrayTypeCoordinate = new Coordinate[0];
 	CGAlgorithms *cga;
 	LineIntersector *li;
+
 	/**
-	* The angle quantum with which to approximate a fillet curve
-	* (based on the input # of quadrant segments)
-	*/
+	 * The angle quantum with which to approximate a fillet curve
+	 * (based on the input # of quadrant segments)
+	 */
 	double filletAngleQuantum;
+
 	/**
-	* the max error of approximation between a quad segment and the true fillet curve
-	*/
+	 * the max error of approximation between a quad segment and
+	 * the true fillet curve
+	 */
 	double maxCurveSegmentError;
+
 	CoordinateSequence *ptList;
+
 	double distance;
 	const PrecisionModel *precisionModel;
 	int endCapStyle;
@@ -646,27 +651,36 @@ class BufferBuilder {
 friend class Unload;
 public:
 	/**
-	* Creates a new BufferBuilder
-	*/
+	 * Creates a new BufferBuilder
+	 */
 	BufferBuilder();
 	~BufferBuilder();
+
 	/**
-	* Sets the number of segments used to approximate a angle fillet
-	*
-	* @param quadrantSegments the number of segments in a fillet for a quadrant
-	*/
+	 * Sets the number of segments used to approximate a angle fillet
+	 *
+	 * @param quadrantSegments the number of segments in a fillet for
+	 *  a quadrant
+	 */
 	void setQuadrantSegments(int nQuadrantSegments);
+
 	/**
-	* Sets the precision model to use during the curve computation and noding,
-	* if it is different to the precision model of the Geometry.
-	* If the precision model is less than the precision of the Geometry precision model,
-	* the Geometry must have previously been rounded to that precision.
-	*
-	* @param pm the precision model to use
-	*/
+	 * Sets the precision model to use during the curve computation
+	 * and noding,
+	 * if it is different to the precision model of the Geometry.
+	 * If the precision model is less than the precision of the
+	 * Geometry precision model,
+	 * the Geometry must have previously been rounded to that precision.
+	 *
+	 * @param pm the precision model to use
+	 */
 	void setWorkingPrecisionModel(PrecisionModel *pm);
+
 	void setEndCapStyle(int nEndCapStyle);
-	Geometry* buffer(Geometry *g, double distance); // throw (GEOSException *);
+
+	Geometry* buffer(Geometry *g, double distance);
+		// throw (GEOSException *);
+
 private:
 	/**
 	 * Compute the change in depth as an edge is crossed from R to L
@@ -709,6 +723,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.5  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

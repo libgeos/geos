@@ -62,15 +62,22 @@ LineMergeGraph::getNode(const Coordinate &coordinate)
 
 LineMergeGraph::~LineMergeGraph()
 {
-	for (int i=0; i<newNodes.size(); i++) delete newNodes[i];
-	for (int i=0; i<newEdges.size(); i++) delete newEdges[i];
-	for (int i=0; i<newDirEdges.size(); i++) delete newDirEdges[i];
+	unsigned int i;
+	for (i=0; i<newNodes.size(); i++)
+		delete newNodes[i];
+	for (i=0; i<newEdges.size(); i++)
+		delete newEdges[i];
+	for (i=0; i<newDirEdges.size(); i++)
+		delete newDirEdges[i];
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.4  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and

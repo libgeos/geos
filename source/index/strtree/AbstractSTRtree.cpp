@@ -29,10 +29,10 @@ namespace geos {
  * nodes that a node may have
  */
 AbstractSTRtree::AbstractSTRtree(int newNodeCapacity):
-	built(false),
-	itemBoundables(new vector<Boundable*>()),
 	nodes(new vector<AbstractNode *>()),
-	nodeCapacity(newNodeCapacity)
+	nodeCapacity(newNodeCapacity),
+	built(false),
+	itemBoundables(new vector<Boundable*>())
 {
 	Assert::isTrue(newNodeCapacity>1, "Node capacity must be greater than 1");
 }
@@ -201,8 +201,7 @@ AbstractSTRtree::query(const void* searchBounds,
 
 		if(AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
 		{
-			query(searchBounds, (AbstractNode *)childBoundable,
-				matches);
+			query(searchBounds, an, matches);
 		}
 		else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
 		{
@@ -254,6 +253,9 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.21  2004/11/08 15:58:13  strk
  * More performance tuning.
  *
@@ -318,7 +320,7 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
  * shouldNeverReachHere exceptions made more verbose
  *
  * Revision 1.6  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
+ * All "index/" packages upgraded to JTS 1.4
  *
  * Revision 1.5  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h

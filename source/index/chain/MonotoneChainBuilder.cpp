@@ -97,6 +97,9 @@ MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.11  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
@@ -112,7 +115,7 @@ MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
  * Added client application build tips in README.
  *
  * Revision 1.8  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
+ * All "index/" packages upgraded to JTS 1.4
  *
  * Revision 1.7  2004/03/19 09:48:46  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4

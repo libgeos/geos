@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.11  2004/07/07 07:52:13  strk
  * Removed note about required speedup in BufferSubgraph.
  * I've made tests with 'sets' and there is actually a big slow down..
@@ -134,7 +137,7 @@ void BufferSubgraph::computeDepth(int outsideDepth) {
 	// find an outside edge to assign depth to
 	DirectedEdge *de=finder->getEdge();
 	//Node *n=de->getNode();
-	Label *label=de->getLabel();
+	//Label *label=de->getLabel();
 	// right side of line returned by finder is on the outside
 	de->setEdgeDepths(Position::RIGHT, outsideDepth);
 	copySymDepths(de);

@@ -110,7 +110,7 @@ OverlayOp::~OverlayOp()
 	delete resultLineList;
 	delete resultPointList;
 	delete ptLocator;
-	for (int i=0; i<dupEdges.size(); i++)
+	for (unsigned int i=0; i<dupEdges.size(); i++)
 		delete dupEdges[i];
 }
 
@@ -376,7 +376,7 @@ OverlayOp::getAverageZ(const Polygon *poly)
 
 	const CoordinateSequence *pts =
 		poly->getExteriorRing()->getCoordinatesRO();
-	for (unsigned int i=0; i<pts->getSize(); i++)
+	for (int i=0; i<pts->getSize(); i++)
 	{
 		const Coordinate &c = pts->getAt(i);
 		if ( !ISNAN(c.z) )
@@ -399,8 +399,6 @@ OverlayOp::getAverageZ(int targetIndex)
 	if ( avgzcomputed[targetIndex] ) return avgz[targetIndex];
 
 	const Geometry *targetGeom = (*arg)[targetIndex]->getGeometry();
-	double totz = 0.0;
-	int zcount = 0;
 
 	Assert::isTrue(targetGeom->getGeometryTypeId() == GEOS_POLYGON, 
 		"OverlayOp::getAverageZ(int) called with a ! polygon");
@@ -422,7 +420,7 @@ OverlayOp::mergeZ(Node *n, const Polygon *poly) const
 	ls = (const LineString *)poly->getExteriorRing();
 	found = mergeZ(n, ls);
 	if ( found ) return 1;
-	for (unsigned int i=0; i<poly->getNumInteriorRing(); i++)
+	for (int i=0; i<poly->getNumInteriorRing(); i++)
 	{
 		ls = (const LineString *)poly->getInteriorRingN(i);
 		found = mergeZ(n, ls);
@@ -474,7 +472,7 @@ void
 OverlayOp::findResultAreaEdges(int opCode)
 {
 	vector<EdgeEnd*> *ee=graph->getEdgeEnds();
-	for(int i=0;i<(int)ee->size();i++) {
+	for(unsigned int i=0;i<ee->size();i++) {
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		// mark all dirEdges with the appropriate label
 		Label *label=de->getLabel();
@@ -832,6 +830,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.35  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

@@ -238,7 +238,8 @@ Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int int
 #if DEBUG
 	cerr<<"Edge::addIntersection adding to edge intersection list point "<<intPt.toString()<<endl;
 #endif
-	EdgeIntersection *ei=eiList->add(intPt,normalizedSegmentIndex,dist);
+	//EdgeIntersection *ei=eiList->add(intPt,normalizedSegmentIndex,dist);
+	eiList->add(intPt,normalizedSegmentIndex,dist);
 }
 
 /*
@@ -358,6 +359,9 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.9  2004/11/23 19:53:06  strk
  * Had LineIntersector compute Z by interpolation.
  *

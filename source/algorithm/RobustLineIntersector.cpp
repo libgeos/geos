@@ -494,6 +494,9 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.28  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.
@@ -537,7 +540,7 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
  * Added client application build tips in README.
  *
  * Revision 1.16  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
+ * All "index/" packages upgraded to JTS 1.4
  *
  * Revision 1.15  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4

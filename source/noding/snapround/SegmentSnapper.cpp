@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.2  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -56,20 +59,14 @@ bool SegmentSnapper::isWithinTolerance(const Coordinate& p,const Coordinate& p0,
 	double px = p.x - p0.x;
 	double py = p.y - p0.y;
 
-	double dely = px * dy / dx - py;
-	double delx = py * dx / dy - px;
+	//double dely = px * dy / dx - py;
+	//double delx = py * dx / dy - px;
 	double discy = px * dy - py * dx;
 
 	if (fabs(discy) < fabs(0.5 * dx) ) return true;
 	double discx = py * dx - px * dy;
 	if (fabs(discx) < fabs(0.5 * dy) ) return true;
-	/*
-	double dely = px * dy / dx - py;
-	if (dely > 0.5 || dely < -0.5) return false;
 
-	double delx = py * dx / dy - px;
-	if (delx > 0.5 || delx < -0.5) return false;
-	*/
 	return false;
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.13  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -127,7 +130,7 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 	vector<Edge*> *edges=graph->getEdges();
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
-		int maxSegmentIndex=e->getMaximumSegmentIndex();
+		//int maxSegmentIndex=e->getMaximumSegmentIndex();
 		bool isClosed=e->isClosed();
 		const Coordinate& p0=e->getCoordinate(0);
 		addEndpoint(endPoints,p0,isClosed);

@@ -56,13 +56,14 @@ Polygonizer::~Polygonizer()
 	delete shellList;
 	if ( invalidRingLines )
 	{
-		for (int i=0; i<invalidRingLines->size(); i++)
+		for (unsigned int i=0; i<invalidRingLines->size(); i++)
 			delete (*invalidRingLines)[i];
 		delete invalidRingLines;
 	}
 	if ( polyList )
 	{
-		for (int i=0; i<polyList->size(); i++) delete (*polyList)[i];
+		for (unsigned int i=0; i<polyList->size(); i++)
+			delete (*polyList)[i];
 		delete polyList;
 	}
 }
@@ -249,6 +250,9 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER, vector<polygonizeEdge
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.5  2004/10/27 13:57:07  strk
  * Added some debugging lines (disabled by default)
  *

@@ -49,7 +49,8 @@ private:
  */
 class ElevationMatrix {
 public:
-	ElevationMatrix(const Envelope &extent, int rows, int cols);
+	ElevationMatrix(const Envelope &extent, unsigned int rows,
+		unsigned int cols);
 	~ElevationMatrix();
 	void add(const Geometry *geom);
 	void elevate(Geometry *geom) const;
@@ -62,8 +63,8 @@ private:
 	void add(const CoordinateSequence *cs);
 	void add(const Coordinate &c);
 	Envelope env;
-	int cols;
-	int rows;
+	unsigned int cols;
+	unsigned int rows;
 	double cellwidth;
 	double cellheight;
 	mutable bool avgElevationComputed;
@@ -572,6 +573,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.7  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *

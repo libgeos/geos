@@ -241,7 +241,8 @@ WKTReader::readPolygonText(StringTokenizer *tokenizer)
 		}
 		poly = geometryFactory->createPolygon(shell,holes);
 	} catch (...) {
-		for (int i=0; i<holes->size(); i++) delete (*holes)[i];
+		for (unsigned int i=0; i<holes->size(); i++)
+			delete (*holes)[i];
 		delete holes;
 		delete shell;
 		throw;
@@ -313,6 +314,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
  * Revision 1.29  2004/10/21 17:13:59  strk
  * Fixed bug introduced by previous patch.
  *

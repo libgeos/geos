@@ -11,41 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/16 10:28:41  strk
- * Dimesions object allocated on the heap
- *
- * Revision 1.6  2004/07/15 13:40:44  strk
- * Memory leaks fixed, CoordinateSequence use made JTS - compatible.
- *
- * Revision 1.5  2004/07/14 21:19:35  strk
- * GeometricShapeFactory first pass of bug fixes
- *
- * Revision 1.4  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.1  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <geos/util.h>
@@ -139,8 +105,8 @@ Polygon* GeometricShapeFactory::createRectangle(){
 	vector<Coordinate> *vc = new vector<Coordinate>(4*nSide+1);
 	//CoordinateSequence* pts=new DefaultCoordinateSequence(4*nSide+1);
 
-	double maxx = env->getMinX() + nSide * XsegLen;
-	double maxy = env->getMinY() + nSide * XsegLen;
+	//double maxx = env->getMinX() + nSide * XsegLen;
+	//double maxy = env->getMinY() + nSide * XsegLen;
 
 	Coordinate c;
 	for (i = 0; i < nSide; i++) {
@@ -284,4 +250,44 @@ Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
 	}
 	return new Envelope(0, width, 0, height);
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.7  2004/07/16 10:28:41  strk
+ * Dimesions object allocated on the heap
+ *
+ * Revision 1.6  2004/07/15 13:40:44  strk
+ * Memory leaks fixed, CoordinateSequence use made JTS - compatible.
+ *
+ * Revision 1.5  2004/07/14 21:19:35  strk
+ * GeometricShapeFactory first pass of bug fixes
+ *
+ * Revision 1.4  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.3  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.2  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.1  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
+ *
+ **********************************************************************/
+
