@@ -209,13 +209,18 @@ public:
 	~PointCoordinateList();
 	bool isEmpty();
 	void add(Coordinate& c);
+	void add(point_3d p);
 	int getSize();
 	Coordinate& getAt(int pos);
+	point_3d getPointAt(int pos);
 	void setAt(Coordinate& c, int pos);
+	void setAt(point_3d p, int pos);
 	void deleteAt(int pos);
 	vector<Coordinate>* toVector();
+	vector<point_3d>* toPointVector();
 	string toString();
 	void setPoints(const vector<Coordinate> &v);
+	void setPoints(const vector<point_3d> &v);
 private:
 	vector<point_3d> *vect;
 };
