@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2004/07/12 15:42:03  strk
+ * Fixed maximumPreciseValue scope
+ *
  * Revision 1.26  2004/07/05 14:23:03  strk
  * More documentation cleanups.
  *
@@ -67,7 +70,7 @@
 
 namespace geos {
 
-const double maximumPreciseValue=9007199254740992.0;
+const double PrecisionModel::maximumPreciseValue=9007199254740992.0;
 
 /**
 * Implementation of rint() for Visual C++
