@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.22  2004/06/15 20:30:00  strk
  * fixed a typo
  *
@@ -46,15 +53,14 @@ namespace geos {
 
 WKTReader::WKTReader(){
 	geometryFactory=new GeometryFactory();
-	precisionModel=new PrecisionModel();
+	precisionModel=geometryFactory->getPrecisionModel();
 }
 WKTReader::WKTReader(GeometryFactory *gf){
 	geometryFactory=gf;
-	precisionModel=new PrecisionModel(*(gf->getPrecisionModel()));
+	precisionModel=gf->getPrecisionModel();
 }
 WKTReader::~WKTReader(){
 	delete geometryFactory;
-	delete precisionModel;
 }
 
 Geometry* WKTReader::read(string wellKnownText){
@@ -227,20 +233,13 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 LineString* WKTReader::readLineStringText(StringTokenizer *tokenizer) {
 	CoordinateList *coords = getCoordinates(tokenizer);
 	LineString *ret = geometryFactory->createLineString(coords);
-	delete coords;
 	return ret;
 }
 
 LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
 	CoordinateList *coords = getCoordinates(tokenizer);
 	LinearRing *ret;
-	try {
-		ret = geometryFactory->createLinearRing(coords);
-	} catch (...) {
-		delete coords;
-		throw;
-	}
-	delete coords;
+	ret = geometryFactory->createLinearRing(coords);
 	return ret;
 }
 
@@ -282,9 +281,8 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	MultiLineString *ret = geometryFactory->createMultiLineString(lineStrings);
-	for (int i=0; i<lineStrings->size(); i++)
-		delete (*lineStrings)[i];
-	delete lineStrings;
+	//for (int i=0; i<lineStrings->size(); i++) delete (*lineStrings)[i];
+	//delete lineStrings;
 	return ret;
 }
 
@@ -303,9 +301,8 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	MultiPolygon *ret = geometryFactory->createMultiPolygon(polygons);
-	for (int i=0; i<polygons->size(); i++)
-		delete (*polygons)[i];
-	delete polygons;
+	//for (int i=0; i<polygons->size(); i++) delete (*polygons)[i];
+	//delete polygons;
 	return ret;
 }
 
@@ -325,9 +322,8 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	GeometryCollection *ret = geometryFactory->createGeometryCollection(geoms);
-	for (int i=0; i<geoms->size(); i++)
-		delete (*geoms)[i];
-	delete geoms;
+	//for (int i=0; i<geoms->size(); i++) delete (*geoms)[i];
+	//delete geoms;
 	return ret;
 }
 }

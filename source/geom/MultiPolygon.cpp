@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.17  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -53,9 +60,41 @@
 namespace geos {
 
 //MultiPolygon::MultiPolygon(){}
-MultiPolygon::MultiPolygon(const vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID): GeometryCollection(polygons, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
 
-MultiPolygon::MultiPolygon(const vector<Geometry *> *polygons, const GeometryFactory *newFactory): GeometryCollection(polygons,newFactory){}
+// @deprecated Use GeometryFactory instead
+MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID): GeometryCollection(polygons, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
+
+/**
+* @param newPolys
+*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+*	or <code>null</code> or an empty array to create the empty
+*	geometry. Elements may be empty <code>Polygon</code>s, but
+*	not <code>null</code>s.
+*	The polygons must conform to the assertions specified in the
+*	<A HREF="http://www.opengis.org/techno/specs.htm">
+*	OpenGIS Simple Features Specification for SQL
+*	</A>.
+*
+*	Constructed object will take ownership of
+*	the vector and its elements.
+*/
+MultiPolygon::MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *factory): GeometryCollection(newPolys,factory){}
+
+/**
+* @param fromPolys
+*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>Polygon</code>s, but
+*	not <code>null</code>s.
+*	The polygons must conform to the assertions specified in the
+*	<A HREF="http://www.opengis.org/techno/specs.htm">
+*	OpenGIS Simple Features Specification for SQL
+*	</A>.
+*
+*	Constructed object will copy 
+*	the vector and its elements.
+*/
+MultiPolygon::MultiPolygon(const vector<Geometry *> &fromPolys, const GeometryFactory *factory): GeometryCollection(fromPolys,factory){}
 
 MultiPolygon::~MultiPolygon(){}
 
@@ -89,11 +128,10 @@ Geometry* MultiPolygon::getBoundary() const {
 		}
 		delete g;
 	}
-//LineString[] allRingsArray = new LineString[allRings.size()];
+
 	Geometry *ret=getFactory()->createMultiLineString(allRings);
-	for (int i=0; i<allRings->size(); i++)
-		delete (*allRings)[i];
-	delete allRings;
+	//for (int i=0; i<allRings->size(); i++) delete (*allRings)[i];
+	//delete allRings;
 	return ret;
 }
 

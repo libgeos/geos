@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.20  2004/06/15 20:13:42  strk
  * updated to respect deep-copy GeometryCollection interface
  *
@@ -114,30 +121,10 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOpera
 
 OverlayOp::~OverlayOp() {
 	delete graph;
-	//delete geomFact;
 	delete edgeList;
-	int i;
-	if ( resultPolyList )
-	{
-		for( i=0;i<(int)resultPolyList->size();i++) {
-			delete (*resultPolyList)[i];
-		}
-		delete resultPolyList;
-	}
-	if ( resultLineList )
-	{
-		for(i=0;i<(int)resultLineList->size();i++) {
-			delete (*resultLineList)[i];
-		}
-		delete resultLineList;
-	}
-	if ( resultPointList )
-	{
-		for(int i=0;i<(int)resultPointList->size();i++) {
-			delete (*resultPointList)[i];
-		}
-		delete resultPointList;
-	}
+	delete resultPolyList;
+	delete resultLineList;
+	delete resultPointList;
 	delete ptLocator;
 }
 
@@ -402,6 +389,10 @@ bool OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList) {
 	return false;
 }
 
+/**
+ * Build a Geometry containing given elements
+ * This function will take ownership of vectors elements.
+ */
 Geometry* OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList) {
@@ -422,7 +413,6 @@ Geometry* OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 	}
 	// build the most specific geometry possible
 	Geometry *g=geomFact->buildGeometry(geomList);
-	delete geomList;
 	return g;
 }
 

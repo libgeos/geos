@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.9  2004/04/20 13:24:15  strk
  * More leaks removed.
  *
@@ -79,14 +86,14 @@ Geometry* ConvexHull::getConvexHull() {
 		return g;
 	}
 	if (pts->getSize()==1) {
-		Geometry *g=factory->createPoint(pts->getAt(0));
-		delete pts;
+		Geometry *g=factory->createPoint(pts);
+		//delete pts;
 		delete filter;
 		return g;
 	}
 	if (pts->getSize()==2) {
 		Geometry *g=factory->createLineString(pts);
-		delete pts;
+		//delete pts;
 		delete filter;
 		return g;
 	}
@@ -131,14 +138,13 @@ CoordinateList* ConvexHull::reduce(const CoordinateList *pts) {
 		return CoordinateListFactory::internalFactory->createCoordinateList(pts);
 	}
 	bigPoly->add(bigQuad->westmost);
-	LinearRing *bQ=factory->createLinearRing(bigPoly);
+	LinearRing *bQ=factory->createLinearRing(*bigPoly);
 	// load an array with all points not in the big poly
 	// and the defining points.
 
 //!!!Note to self: this might not work properly because of sorting.
 
-	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList(bigPoly);
-	delete bigPoly;
+	CoordinateList *cl=bigPoly;
 	for(int i=0;i<pts->getSize();i++) {
 		if (pointLocator->locate(pts->getAt(i),bQ)==Location::EXTERIOR) {
 			cl->add(pts->getAt(i));
@@ -305,11 +311,11 @@ Geometry* ConvexHull::lineOrPolygon(CoordinateList *newCoordinates) {
 		cl1->add(coordinates->getAt(1));
 		delete coordinates;
 		LineString *ret =factory->createLineString(cl1);
-		delete cl1;
+		//delete cl1;
 		return ret;
 	}
-	LinearRing *linearRing=new LinearRing(coordinates, geometry->getFactory());
-	delete coordinates;
+	LinearRing *linearRing=geometry->getFactory()->createLinearRing(coordinates);
+	//delete coordinates;
 	return factory->createPolygon(linearRing,NULL);
 }
 

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.10  2004/05/26 19:48:19  strk
  * Changed abs() to fabs() when working with doubles.
  * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
@@ -272,7 +279,7 @@ bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateList *ringCoord, double
 	* a full topological computation->
 	*
 	*/
-	LinearRing *ring=inputGeom->getFactory()->createLinearRing(ringCoord);
+	LinearRing *ring=inputGeom->getFactory()->createLinearRing(*ringCoord);
 	MinimumDiameter *md=new MinimumDiameter(ring);
 	minDiam=md->getLength();
 	delete ring;

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.21  2004/06/30 20:59:13  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -658,6 +665,7 @@ private:
 	PrecisionModel *workingPrecisionModel;
 	const GeometryFactory *geomFact;
 	EdgeList *edgeList;
+	vector<Label *>newLabels;
 	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel); // throw(GEOSException *);
 	/**
 	* Inserted edges are checked to see if an identical edge already exists.

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.6  2004/06/16 13:13:25  strk
  * Changed interface of SegmentString, now copying CoordinateList argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
@@ -53,14 +60,14 @@ SegmentString::SegmentString(const CoordinateList *newPts, const void* newContex
 {
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
-	//pts=newPts;
-	pts = CoordinateListFactory::internalFactory->createCoordinateList(newPts);
+	pts=newPts;
+	//pts = CoordinateListFactory::internalFactory->createCoordinateList(newPts);
 	context=newContext;
 }
 
 SegmentString::~SegmentString() {
 	delete eiList;
-	delete pts;
+	//delete pts;
 }
 
 const void*

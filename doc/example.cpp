@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.16  2004/06/15 20:42:43  strk
  * updated to respect deep-copy GeometryCollection interface
  *
@@ -82,10 +89,7 @@ wkt_print_geoms(vector<Geometry *> *geoms)
 Point *
 create_point(double x, double y)
 {
-	Coordinate c;
-       	c.x = x;
-	c.y = y;
-	// the geometry factory will copy coordinate
+	Coordinate c(x, y);
 	Point *p = global_factory->createPoint(c);
 	return p;
 }
@@ -98,38 +102,23 @@ LineString *
 create_ushaped_linestring(double xoffset, double yoffset, double side)
 {
 	// We will use a coordinate list to build the linestring
-	CoordinateList *cl = new BasicCoordinateList(4);
+	CoordinateList *cl = new BasicCoordinateList();
 
-	// Each coordinate in the list must be created,
-	// passed to coordinate list setAt and then deleted.
-	// Pretty boring uh ?
-
-	Coordinate *c;
-
-	c = new Coordinate(xoffset, yoffset);
-	cl->setAt(*c ,0);
-	delete c;
-
-	c = new Coordinate(xoffset, yoffset+side);
-	cl->setAt(*c ,1);
-	delete c;
-
-	c = new Coordinate(xoffset+side, yoffset+side);
-	cl->setAt(*c ,2);
-	delete c;
-
-	c = new Coordinate(xoffset+side, yoffset);
-	cl->setAt(*c ,3);
-	delete c;
+	cl->add(Coordinate(xoffset, yoffset));
+	cl->add(Coordinate(xoffset, yoffset+side));
+	cl->add(Coordinate(xoffset+side, yoffset+side));
+	cl->add(Coordinate(xoffset+side, yoffset));
 
 	// Now that we have a CoordinateList we can create 
 	// the linestring.
+	// The newly created LineString will take ownership
+	// of the CoordinateList.
 	LineString *ls = global_factory->createLineString(cl);
-	
-	// We don't need our CoordinateList anymore, it has been 
-	// copied inside the LineString object
-	delete cl;
 
+	// This is what you do if you want the new LineString
+	// to make a copy of your CoordinateList:
+	// LineString *ls = global_factory->createLineString(*cl);
+	
 	return ls; // our LineString
 }
 
@@ -140,36 +129,24 @@ LinearRing *
 create_square_linearring(double xoffset, double yoffset, double side)
 {
 	// We will use a coordinate list to build the linearring
-	CoordinateList *cl = new BasicCoordinateList(5);
+	CoordinateList *cl = new BasicCoordinateList();
 
-	// Each coordinate in the list must be created,
-	// passed to coordinate list setAt and then deleted.
-	// Pretty boring uh ?
-	Coordinate *c;
-	c = new Coordinate(xoffset, yoffset);
-	cl->setAt(*c ,0);
-	delete c;
-	c = new Coordinate(xoffset+side, yoffset);
-	cl->setAt(*c ,1);
-	delete c;
-	c = new Coordinate(xoffset+side, yoffset+side);
-	cl->setAt(*c ,2);
-	delete c;
-	c = new Coordinate(xoffset, yoffset+side);
-	cl->setAt(*c ,3);
-	delete c;
-	c = new Coordinate(xoffset, yoffset);
-	cl->setAt(*c ,4);
-	delete c;
+	cl->add(Coordinate(xoffset, yoffset));
+	cl->add(Coordinate(xoffset, yoffset+side));
+	cl->add(Coordinate(xoffset+side, yoffset+side));
+	cl->add(Coordinate(xoffset+side, yoffset));
+	cl->add(Coordinate(xoffset, yoffset));
 
 	// Now that we have a CoordinateList we can create 
 	// the linearring.
+	// The newly created LinearRing will take ownership
+	// of the CoordinateList.
 	LinearRing *lr = global_factory->createLinearRing(cl);
-	
-	// We don't need our CoordinateList anymore, it has been 
-	// copied inside the LinearRing object
-	delete cl;
 
+	// This is what you do if you want the new LinearRing
+	// to make a copy of your CoordinateList:
+	// LinearRing *lr = global_factory->createLinearRing(*cl);
+	
 	return lr; // our LinearRing
 }
 
@@ -209,37 +186,16 @@ create_square_polygon(double xoffset, double yoffset, double side)
 }
 
 //
-// This function will create a GeoemtryCollection
+// This function will create a GeometryCollection
 // containing copies of all Geometries in given vector.
 //
 GeometryCollection *
 create_simple_collection(vector<Geometry *> *geoms)
 {
-	//
-	// Prior to GEOS 1.4 we needed to construct a
-	// <Geometry *> vector to use as argument to the
-	// factory function.
-	//
-	// This vector did have to contain COPIES of
-	// passed objects since GeometryCollection
-	// constructors did take ownership of them.
-	//
-	//vector<Geometry *> *collection = new vector<Geometry *>;
-	//for (int i=0; i<geoms->size(); i++) {
-	//	const Geometry *g = (*geoms)[i];
-	//	collection->push_back(g->clone());
-	//}
-
-	GeometryCollection *ret =
-		global_factory->createGeometryCollection(geoms);
-
-	//
-	// We could delete vector used to store geometries
-	// (see above)
-	//
-	//delete collection;
-
-	return ret;
+	return global_factory->createGeometryCollection(*geoms);
+	// if you wanted to transfer ownership of vector end
+	// its elements you should have call:
+	// return global_factory->createGeometryCollection(geoms);
 }
 
 

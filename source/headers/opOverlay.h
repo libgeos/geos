@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.17  2004/06/30 20:59:13  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -213,6 +220,11 @@ private:
 	bool isCovered(const Coordinate& coord,vector<Geometry*> *geomList);
 	bool isCovered(const Coordinate& coord,vector<Polygon*> *geomList);
 	bool isCovered(const Coordinate& coord,vector<LineString*> *geomList);
+
+	/**
+	 * Build a Geometry containing all Geometries in the given vectors.
+	 * Takes element's ownership, vector control is left to caller. 
+	 */
 	Geometry* computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList);

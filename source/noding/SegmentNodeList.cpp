@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.6  2004/06/16 13:13:25  strk
  * Changed interface of SegmentString, now copying CoordinateList argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
@@ -49,12 +56,15 @@ SegmentNodeList::SegmentNodeList(const SegmentString *newEdge)
 }
 
 SegmentNodeList::~SegmentNodeList() {
-	set<SegmentNode *, SegmentNodeLT>::iterator i;
-	for(i=nodes->begin(); i != nodes->end(); i++) delete *i;
+	set<SegmentNode *, SegmentNodeLT>::iterator it;
+	for(it=nodes->begin(); it != nodes->end(); it++) delete *it;
 	delete nodes;
 
-	for(int i=0; i<splitEdges.size(); i++)
+	int i;
+	for(i=0; i<splitEdges.size(); i++)
 		delete splitEdges[i];
+	for(i=0; i<splitCoordLists.size(); i++)
+		delete splitCoordLists[i];
 }
 
 /**
@@ -150,7 +160,8 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	if (useIntPt1) 	pts->setAt(*(ei1->coord),ipt++);
 	SegmentString *ret = new SegmentString(pts,edge->getContext());
 	splitEdges.push_back(ret);
-	delete pts;
+	splitCoordLists.push_back(pts);
+	//delete pts;
 	return ret;
 }
 

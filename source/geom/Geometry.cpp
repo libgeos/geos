@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.52  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.51  2004/06/30 20:59:12  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -93,7 +100,6 @@ GeometryComponentFilter Geometry::geometryChangedFilter;
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
 Geometry::Geometry(const GeometryFactory *newFactory) {
-	//factory=new GeometryFactory(*newFactory);
 	factory=newFactory;
 	SRID=factory->getSRID();
 	envelope=new Envelope();
@@ -101,14 +107,14 @@ Geometry::Geometry(const GeometryFactory *newFactory) {
 }
 
 Geometry::Geometry() {
-	factory=INTERNAL_GEOMETRY_FACTORY; //new GeometryFactory();
+	factory=INTERNAL_GEOMETRY_FACTORY; 
 	SRID=0;
 	envelope=new Envelope();
 	userData=NULL;
 }
 
 Geometry::Geometry(const Geometry &geom) {
-	//factory=new GeometryFactory(*(geom.factory));
+	factory=geom.factory;
 	envelope=new Envelope(*(geom.envelope));
 	SRID=geom.getSRID();
 	userData=NULL;

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.68  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.67  2004/06/30 20:59:12  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -225,19 +232,23 @@ public:
 	*/
 	PrecisionModel(void);
 	PrecisionModel(Type nModelType);
+
 	/**
-	*  Creates a <code>PrecisionModel</code> that specifies Fixed precision.
-	*  Fixed-precision coordinates are represented as precise internal coordinates,
-	*  which are rounded to the grid defined by the scale factor.
+	* Creates a <code>PrecisionModel</code> that specifies Fixed precision.
+	* Fixed-precision coordinates are represented as precise internal
+	* coordinates, which are rounded to the grid defined by the
+	* scale factor.
 	*
-	*@param  scale    amount by which to multiply a coordinate after subtracting
-	*      the offset, to obtain a precise coordinate
-	*@param  offsetX  not used.
-	*@param  offsetY  not used.
+	* @param  scale
+	*	amount by which to multiply a coordinate after subtracting
+	*	the offset, to obtain a precise coordinate
+	* @param  offsetX  not used.
+	* @param  offsetY  not used.
 	*
 	* @deprecated offsets are no longer supported, since internal representation is rounded floating point
 	*/
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
+
 	PrecisionModel(double newScale);
 	PrecisionModel(const PrecisionModel &pm);
 	virtual ~PrecisionModel(void);
@@ -260,6 +271,7 @@ public:
 	*/
 	Type getType();
 	double getScale() const;
+
 	/**
 	* Returns the x-offset used to obtain a precise coordinate.
 	*
@@ -268,6 +280,7 @@ public:
 	* @deprecated Offsets are no longer used
 	*/
 	double getOffsetX() const;
+
 	/**
 	* Returns the y-offset used to obtain a precise coordinate.
 	*
@@ -276,6 +289,7 @@ public:
 	* @deprecated Offsets are no longer used
 	*/
 	double getOffsetY() const;
+
 	/**
 	*  Sets <code>internal</code> to the precise representation of <code>external</code>.
 	*
@@ -285,15 +299,18 @@ public:
 	* @deprecated use makePrecise instead
 	*/
 	void toInternal(const Coordinate& external, Coordinate* internal) const;
+
 	/**
 	*  Returns the precise representation of <code>external</code>.
 	*
 	*@param  external  the original coordinate
-	*@return           the coordinate whose values will be changed to the precise
-	*      representation of <code>external</code>
+	*@return
+	*	the coordinate whose values will be changed to the precise
+	*	representation of <code>external</code>
 	* @deprecated use makePrecise instead
 	*/
 	Coordinate* toInternal(const Coordinate& external) const;
+
 	/**
 	*  Returns the external representation of <code>internal</code>.
 	*
@@ -303,13 +320,15 @@ public:
 	* @deprecated no longer needed, since internal representation is same as external representation
 	*/
 	Coordinate* toExternal(const Coordinate& internal) const;
+
 	/**
-	*  Sets <code>external</code> to the external representation of <code>internal</code>
-	*  .
+	*  Sets <code>external</code> to the external representation of
+	*  <code>internal</code>.
 	*
-	*@param  internal  the original coordinate
-	*@param  external  the coordinate whose values will be changed to the
-	*      external representation of <code>internal</code>
+	* @param  internal  the original coordinate
+	* @param  external
+	*	the coordinate whose values will be changed to the
+	*	external representation of <code>internal</code>
 	* @deprecated no longer needed, since internal representation is same as external representation
 	*/
 	void toExternal(const Coordinate& internal, Coordinate* external) const;
@@ -615,7 +634,7 @@ class BasicCoordinateListFactory: public CoordinateListFactory {
 	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
 	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
 	CoordinateList* createCoordinateList(const Coordinate& c) {return new BasicCoordinateList(c);};
-	CoordinateList* createCoordinateList(const CoordinateList *c) {return new BasicCoordinateList(c);};
+	CoordinateList* createCoordinateList(const CoordinateList *cl) {return new BasicCoordinateList(cl);};
 };
 
 class PointCoordinateListFactory: public CoordinateListFactory {
@@ -1208,15 +1227,33 @@ public:
 	GeometryCollection(const vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
 
 	/**
-	* @param geometries
-	*            the <code>Geometry</code>s for this <code>GeometryCollection</code>,
-	*            or <code>null</code> or an empty array to create the empty
-	*            geometry. Elements may be empty <code>Geometry</code>s,
-	*            but not <code>null</code>s.
+	* @param newGeoms
+	*	The <code>Geometry</code>s for this
+	*	<code>GeometryCollection</code>,
+	*	or <code>null</code> or an empty array to
+	*	create the empty geometry.
+	*	Elements may be empty <code>Geometry</code>s,
+	*	but not <code>null</code>s.
 	*
-	*            Geometry elements AND vector will be copied.
+	*	If construction succeed the created object will take
+	*	ownership of newGeoms vector and elements.
+	*
+	*	If construction	fails "IllegalArgumentException *"
+	*	is thrown and it is your responsibility to delete newGeoms
+	*	vector and content.
 	*/
-	GeometryCollection(const vector<Geometry *> *newGeometries, const GeometryFactory *newFactory);
+	GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
+
+	/**
+	* @param fromGeoms
+	*            the <code>Geometry</code>s for this
+	*	     <code>GeometryCollection</code>,
+	*	     Elements may be empty <code>Geometry</code>s,
+	*            but not <code>null</code>s.
+	*	     
+	*            fromGeoms vector and elements will be copied. 
+	*/
+	GeometryCollection(const vector<Geometry *> &fromGeoms, const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
@@ -1296,7 +1333,7 @@ public:
 	* @deprecated Use GeometryFactory instead
 	*/
 	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
-	Point(const CoordinateList *newCoordinates, const GeometryFactory *newFactory);
+	Point(CoordinateList *newCoordinates, const GeometryFactory *newFactory);
 	Point(const Point &p); 
 	virtual ~Point();
 	Geometry *clone() const;
@@ -1355,9 +1392,15 @@ public:
 	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
 	/**
 	*@param  points          the points of the linestring, or <code>null</code>
-	*      to create the empty geometry. Consecutive points may not be equal.
+	*      to create the empty geometry. Consecutive points may not be equal. LineString will take ownership of CoordinateList.
 	*/  
-	LineString(const CoordinateList *pts, const GeometryFactory *newFactory);
+	LineString(CoordinateList *pts, const GeometryFactory *newFactory);
+
+	/**
+	*@param  points          the points of the linestring, or <code>null</code>
+	*      to create the empty geometry. Consecutive points may not be equal. 
+	*/  
+	LineString(const CoordinateList &pts, const GeometryFactory *newFactory);
 	virtual ~LineString();
 	virtual Geometry *clone() const;
 	virtual CoordinateList* getCoordinates() const;
@@ -1429,9 +1472,19 @@ public:
 	*@param  points          points forming a closed and simple linestring, or
 	*      <code>null</code> or an empty array to create the empty geometry.
 	*      This array must not contain <code>null</code> elements.
+	*	If not null LinearRing will take ownership of points.
 	*
 	*/
-	LinearRing(const CoordinateList* points, const GeometryFactory *newFactory);
+	LinearRing(CoordinateList* points, const GeometryFactory *newFactory);
+	/**
+	*  Constructs a <code>LinearRing</code> with the given points.
+	*
+	*@param  points          points forming a closed and simple linestring, or
+	*      or an empty array to create the empty geometry.
+	*      This array must not contain <code>null</code> elements.
+	*
+	*/
+	LinearRing(const CoordinateList& points, const GeometryFactory *newFactory);
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
@@ -1490,18 +1543,37 @@ public:
 	* @deprecated Use GeometryFactory instead
 	*/
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel* precisionModel, int SRID);
+
 	/**
-	*  Constructs a <code>Polygon</code> with the given exterior boundary and
-	*  interior boundaries.
+	* Constructs a <code>Polygon</code> with the given exterior 
+	* and interior boundaries.
 	*
-	*@param  shell           the outer boundary of the new <code>Polygon</code>,
-	*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
-	*      geometry is to be created.
-	*@param  holes           the inner boundaries of the new <code>Polygon</code>
-	*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
-	*      geometry is to be created.
+	* @param  shell     the outer boundary of the new <code>Polygon</code>,
+	*                   or <code>null</code> or an empty
+	*		    <code>LinearRing</code> if the empty geometry
+	*                   is to be created.
+	*
+	* @param  holes     the <code>LinearRings</code> defining the inner
+	*                   boundaries of the new <code>Polygon</code>, or
+	*                   <code>null</code> or empty <code>LinearRing</code>s 
+	*                   if the empty  geometry is to be created.
+	*
+	* Polygon will take ownership of Shell and Holes LinearRings 
 	*/
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const GeometryFactory *newFactory);
+
+	/**
+	* Constructs a <code>Polygon</code> with the given exterior 
+	* and interior boundaries.
+	*
+	* @param  shell     the outer boundary of the new <code>Polygon</code>.
+	*
+	* @param  holes     the <code>LinearRings</code> defining the inner
+	*                   boundaries of the new <code>Polygon</code>
+	*
+	*/
+	Polygon(const LinearRing &newShell, const vector<Geometry *> &newHoles, const GeometryFactory *newFactory);
+
 	virtual Geometry *clone() const;
 	CoordinateList* getCoordinates() const;
 	int getNumPoints() const;
@@ -1544,27 +1616,39 @@ private:
 class MultiPoint: public GeometryCollection{
 public:
 //	MultiPoint();
+
+	// @deprecated Use GeometryFactory instead
+	MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID);
+
 	/**
-	*  Constructs a <code>MultiPoint</code>.
+	* Constructs a <code>MultiPoint</code>.
 	*
-	*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
-	*      , or <code>null</code> or an empty array to create the empty geometry.
-	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
-	*      Geometry elements AND vector will be copied.
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>MultiPoint</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>MultiPoint</code>
-	* @deprecated Use GeometryFactory instead
+	* @param  newPoints
+	*	the <code>Point</code>s for this <code>MultiPoint</code>,
+	*	or <code>null</code> or an empty array to create the empty
+	* 	geometry.
+	*	Elements may be empty <code>Point</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will take ownership of
+	*	the vector and its elements.
 	*/
-	MultiPoint(const vector<Geometry *> *points,PrecisionModel* pm, int SRID);
+	MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
+
 	/**
-	*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
-	*      , or <code>null</code> or an empty array to create the empty geometry.
-	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
-	*      Geometry elements AND vector will be copied.
+	* Constructs a <code>MultiPoint</code>.
+	*
+	* @param  fromPoints
+	*	the <code>Point</code>s for this <code>MultiPoint</code>,
+	*	or an empty array to create the empty geometry.
+	*	Elements may be empty <code>Point</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will copy 
+	*	the vector and its elements.
 	*/
-	MultiPoint(const vector<Geometry *> *points, const GeometryFactory *newFactory);
+	MultiPoint(const vector<Geometry *> &fromPoints, const GeometryFactory *newFactory);
+
 	virtual ~MultiPoint();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1588,22 +1672,40 @@ private:
 class MultiLineString: public GeometryCollection{
 public:
 //	MultiLineString();
+
+	// @deprecated Use GeometryFactory instead
+	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
+
 	/**
-	*  Constructs a <code>MultiLineString</code>.
+	* Constructs a <code>MultiLineString</code>.
 	*
-	*@param  lineStrings     the <code>LineString</code>s for this <code>MultiLineString</code>
-	*      , or <code>null</code> or an empty array to create the empty geometry.
-	*      Elements may be empty <code>LineString</code>s, but not <code>null</code>
-	*      s.
-	*      Geometry elements AND vector will be copied.
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>MultiLineString</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>MultiLineString</code>
-	* @deprecated Use GeometryFactory instead
+	* @param  newLines
+	*	the <code>LineStrings</code>s for this
+	*	<code>MultiLineString</code>, or <code>null</code>
+	*	or an empty array to create the empty geometry.
+	*	Elements may be empty <code>LineString</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will take ownership of
+	*	the vector and its elements.
 	*/
-	MultiLineString(const vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
-	MultiLineString(const vector<Geometry *> *lineStrings, const GeometryFactory *newFactory);
+	MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *newFactory);
+
+	/**
+	* Constructs a <code>MultiLineString</code>.
+	*
+	* @param  fromLines
+	*	the <code>LineStrings</code>s for this
+	*	<code>MultiLineString</code>, or an empty array
+	*	to create the empty geometry.
+	*	Elements may be empty <code>LineString</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will copy 
+	*	the vector and its elements.
+	*/
+	MultiLineString(const vector<Geometry *> &fromLines, const GeometryFactory *newFactory);
+
 	virtual ~MultiLineString();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1624,34 +1726,42 @@ private:
 class MultiPolygon: public GeometryCollection {
 public:
 	//MultiPolygon();
+
+	// @deprecated Use GeometryFactory instead
+	MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
+
 	/**
-	*  Constructs a <code>MultiPolygon</code>.
+	* @param newPolys
+	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+	*	or <code>null</code> or an empty array to create the empty
+	*	geometry. Elements may be empty <code>Polygon</code>s, but
+	*	not <code>null</code>s.
+	*	The polygons must conform to the assertions specified in the
+	*	<A HREF="http://www.opengis.org/techno/specs.htm">
+	*	OpenGIS Simple Features Specification for SQL
+	*	</A>.
 	*
-	*@param  polygons        the <code>Polygon</code>s for this <code>MultiPolygon</code>
-	*      , or <code>null</code> or an empty array to create the empty geometry.
-	*      Elements may be empty <code>Polygon</code>s, but not <code>null</code>
-	*      s. The polygons must conform to the assertions specified in the <A
-	*      HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
-	*      Specification for SQL</A> .
-	*      Geometry elements AND vector will be copied.
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>MultiPolygon</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>MultiPolygon</code>
-	* @deprecated Use GeometryFactory instead
+	*	Constructed object will take ownership of
+	*	the vector and its elements.
 	*/
-	MultiPolygon(const vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
+	MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
+
 	/**
-	* @param polygons
-	*            the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-	*            or <code>null</code> or an empty array to create the empty
-	*            geometry. Elements may be empty <code>Polygon</code>s, but
-	*            not <code>null</code>s. The polygons must conform to the
-	*            assertions specified in the <A
-	*            HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple
-	*            Features Specification for SQL</A>.
+	* @param fromPolys
+	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+	*	or an empty array to create the empty geometry.
+	*	Elements may be empty <code>Polygon</code>s, but
+	*	not <code>null</code>s.
+	*	The polygons must conform to the assertions specified in the
+	*	<A HREF="http://www.opengis.org/techno/specs.htm">
+	*	OpenGIS Simple Features Specification for SQL
+	*	</A>.
+	*
+	*	Constructed object will copy 
+	*	the vector and its elements.
 	*/
-	MultiPolygon(const vector<Geometry *> *polygons, const GeometryFactory *newFactory);
+	MultiPolygon(const vector<Geometry *> &polygons, const GeometryFactory *newFactory);
+
 	virtual ~MultiPolygon();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1672,110 +1782,239 @@ private:
 class GeometryFactory {
 public:
 	/**
-	* Constructs a GeometryFactory that generates Geometries having a floating
-	* PrecisionModel and a spatial-reference ID of 0.
+	* Constructs a GeometryFactory that generates Geometries having a
+	* floating PrecisionModel and a spatial-reference ID of 0.
 	*/
 	GeometryFactory();
+
 	/**
-	* Constructs a GeometryFactory that generates Geometries having the given
-	* PrecisionModel, spatial-reference ID, and CoordinateSequence implementation.
+	* Constructs a GeometryFactory that generates Geometries having
+	* the given PrecisionModel, spatial-reference ID, and
+	* CoordinateList implementation.
 	*/
 	GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateListFactory *nCoordinateListFactory);
+
 	/**
-	* Constructs a GeometryFactory that generates Geometries having the given
-	* CoordinateList implementation, a double-precision floating PrecisionModel and a
-	* spatial-reference ID of 0.
+	* Constructs a GeometryFactory that generates Geometries having the
+	* given CoordinateList implementation, a double-precision floating
+	* PrecisionModel and a spatial-reference ID of 0.
 	*/
 	GeometryFactory(CoordinateListFactory *nCoordinateListFactory);
+
 	/**
-	* Constructs a GeometryFactory that generates Geometries having the given
-	* {@link PrecisionModel} and the default CoordinateSequence
+	* Constructs a GeometryFactory that generates Geometries having
+	* the given {@link PrecisionModel} and the default CoordinateList
 	* implementation.
 	*
 	* @param precisionModel the PrecisionModel to use
 	*/
 	GeometryFactory(const PrecisionModel *pm);
+
 	/**
-	* Constructs a GeometryFactory that generates Geometries having the given
-	* {@link PrecisionModel} and spatial-reference ID, and the default CoordinateSequence
-	* implementation.
+	* Constructs a GeometryFactory that generates Geometries having
+	* the given {@link PrecisionModel} and spatial-reference ID,
+	* and the default CoordinateList implementation.
 	*
 	* @param precisionModel the PrecisionModel to use
 	* @param SRID the SRID to use
 	*/
 	GeometryFactory(const PrecisionModel* pm, int newSRID);
+
 	/**
 	* Copy constructor
 	*
 	* @param gf the GeometryFactory to clone from
 	*/
 	GeometryFactory(const GeometryFactory &gf);
+
 	virtual ~GeometryFactory();
 
 //Skipped a lot of list to array convertors
 
 	Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar) const;
+
 	Geometry* toGeometry(Envelope* envelope) const;
+
 	/**
 	* Returns the PrecisionModel that Geometries created by this factory
 	* will be associated with.
 	*/
 	const PrecisionModel* getPrecisionModel() const;
+
+	/**
+	* Creates a Point using the given Coordinate
+	*/
 	Point* createPoint(const Coordinate& coordinate) const;
+
 	/**
-	* Creates a Point using the given CoordinateSequence; a null or empty
-	* CoordinateSequence will create an empty Point.
+	* Creates a Point using the given CoordinateList; a null or empty
+	* CoordinateSequence will create an empty Point. Created Point will
+	* take ownership of coordinates.
 	*/
-	Point* createPoint(const CoordinateList *coordinates) const;
+	Point* createPoint(CoordinateList *coordinates) const;
+
 	/**
-	* Creates a MultiLineString using the given LineStrings; a null or empty
-	* array will create an empty MultiLineString.
-	* @param lineStrings LineStrings, each of which may be empty but not null
-	*        Geometries AND vector will be copied.
+	* Creates a Point using the given CoordinateList; a null or empty
+	* CoordinateSequence will create an empty Point. 
 	*/
-	MultiLineString* createMultiLineString(vector<Geometry *> *lineStrings) const;
+	Point* createPoint(const CoordinateList &coordinates) const;
+
 	/**
-	* Creates a GeometryCollection using the given Geometries; a null or empty
-	* array will create an empty GeometryCollection.
-	* @param geometries Geometries, each of which may be empty but not null
-	*        Geometries AND vector will be copied.
-	*/
-	GeometryCollection* createGeometryCollection(vector<Geometry *> *geometries) const;
-	/**
-	* Creates a MultiPolygon using the given Polygons; a null or empty array
-	* will create an empty Polygon. The polygons must conform to the
-	* assertions specified in the <A
-	* HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
-	* Specification for SQL</A>.
+	* @param newGeoms
+	*	The <code>Geometry</code>s for this
+	*	<code>GeometryCollection</code>,
+	*	or <code>null</code> or an empty array to
+	*	create the empty geometry.
+	*	Elements may be empty <code>Geometry</code>s,
+	*	but not <code>null</code>s.
 	*
-	* @param polygons
-	*            Polygons, each of which may be empty but not null
-	*        Geometries AND vector will be copied.
+	*	If construction succeed the created object will take
+	*	ownership of newGeoms vector and elements.
+	*
+	*	If construction	fails "IllegalArgumentException *"
+	*	is thrown and it is your responsibility to delete newGeoms
+	*	vector and content.
 	*/
-	MultiPolygon* createMultiPolygon(vector<Geometry *> *polygons) const;
+	GeometryCollection* createGeometryCollection(vector<Geometry *> *newGeoms) const;
+
+	/**
+	* @param fromGeoms
+	*            the <code>Geometry</code>s for this
+	*	     <code>GeometryCollection</code>,
+	*	     Elements may be empty <code>Geometry</code>s,
+	*            but not <code>null</code>s.
+	*	     
+	*            fromGeoms vector and elements will be copied. 
+	*/
+	GeometryCollection* createGeometryCollection(const vector<Geometry *> &fromGeoms) const;
+
+	/**
+	* Constructs a <code>MultiLineString</code>.
+	*
+	* @param  newLines
+	*	the <code>LineStrings</code>s for this
+	*	<code>MultiLineString</code>, or <code>null</code>
+	*	or an empty array to create the empty geometry.
+	*	Elements may be empty <code>LineString</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will take ownership of
+	*	the vector and its elements.
+	*/
+	MultiLineString* createMultiLineString(vector<Geometry *> *newLines) const;
+
+	/**
+	* Constructs a <code>MultiLineString</code>.
+	*
+	* @param  fromLines
+	*	the <code>LineStrings</code>s for this
+	*	<code>MultiLineString</code>, or an empty array
+	*	to create the empty geometry.
+	*	Elements may be empty <code>LineString</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will copy 
+	*	the vector and its elements.
+	*/
+	MultiLineString* createMultiLineString(const vector<Geometry *> &fromLines) const;
+
+	/**
+	* @param newPolys
+	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+	*	or <code>null</code> or an empty array to create the empty
+	*	geometry. Elements may be empty <code>Polygon</code>s, but
+	*	not <code>null</code>s.
+	*	The polygons must conform to the assertions specified in the
+	*	<A HREF="http://www.opengis.org/techno/specs.htm">
+	*	OpenGIS Simple Features Specification for SQL
+	*	</A>.
+	*
+	*	Constructed object will take ownership of
+	*	the vector and its elements.
+	*/
+	MultiPolygon* createMultiPolygon(vector<Geometry *> *newPolys) const;
+
+	/**
+	* @param fromPolys
+	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+	*	or an empty array to create the empty geometry.
+	*	Elements may be empty <code>Polygon</code>s, but
+	*	not <code>null</code>s.
+	*	The polygons must conform to the assertions specified in the
+	*	<A HREF="http://www.opengis.org/techno/specs.htm">
+	*	OpenGIS Simple Features Specification for SQL
+	*	</A>.
+	*
+	*	Constructed object will copy 
+	*	the vector and its elements.
+	*/
+	MultiPolygon* createMultiPolygon(const vector<Geometry *> &fromPolys) const;
+
 	/**
 	* Creates a LinearRing using the given CoordinateSequence; a null or empty CoordinateSequence will
 	* create an empty LinearRing. The points must form a closed and simple
 	* linestring. Consecutive points must not be equal.
 	* @param coordinates a CoordinateSequence possibly empty, or null
+	*  LinearRing will take ownership of coordinates.
 	*/
 	LinearRing* createLinearRing(CoordinateList* coordinates) const;
+
 	/**
-	* Creates a MultiPoint using the given Points; a null or empty array will
-	* create an empty MultiPoint.
-	* @param points an array without null elements, or an empty array, or null
-	*        Geometries AND vector will be copied.
+	* Creates a LinearRing using the given CoordinateSequence;
+	* an empty CoordinateSequence will create an empty LinearRing.
+	* The points must form a closed and simple linestring.
+	* Consecutive points must not be equal.
+	* @param coordinates a CoordinateSequence possibly empty.
+	*
+	* LinearRing will *copy* coordinates.
 	*/
-	MultiPoint* createMultiPoint(vector<Geometry *> *points) const;
+	LinearRing* createLinearRing(const CoordinateList& coordinates) const;
+
+	/**
+	* Constructs an EMPTY <code>MultiPoint</code>.
+	*/
+	MultiPoint* createMultiPoint() const;
+
+	/**
+	* Constructs a <code>MultiPoint</code>.
+	*
+	* @param  newPoints
+	*	the <code>Point</code>s for this <code>MultiPoint</code>,
+	*	or <code>null</code> or an empty array to create the empty
+	* 	geometry.
+	*	Elements may be empty <code>Point</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will take ownership of
+	*	the vector and its elements.
+	*/
+	MultiPoint* createMultiPoint(vector<Geometry *> *newPoints) const;
+
+	/**
+	* Constructs a <code>MultiPoint</code>.
+	*
+	* @param  fromPoints
+	*	the <code>Point</code>s for this <code>MultiPoint</code>,
+	*	or an empty array to create the empty geometry.
+	*	Elements may be empty <code>Point</code>s,
+	*	but not <code>null</code>s.
+	*
+	*	Constructed object will copy 
+	*	the vector and its elements.
+	*/
+	MultiPoint* createMultiPoint(const vector<Geometry *> &fromPoints) const;
+
 	/**
 	* Creates a MultiPoint using the given CoordinateSequence; a null or empty CoordinateSequence will
 	* create an empty MultiPoint.
 	* @param coordinates a CoordinateSequence possibly empty, or null
+	* Created ojbect will copy given coordinates
 	*/
 	MultiPoint* createMultiPoint(const CoordinateList* coordinates) const;
+
 	/**
-	* Constructs a <code>Polygon</code> with the given exterior boundary and
-	* interior boundaries.
+	* Constructs a <code>Polygon</code> with the given exterior
+	* boundary and interior boundaries.
 	*
 	* @param shell
 	*            the outer boundary of the new <code>Polygon</code>, or
@@ -1785,14 +2024,38 @@ public:
 	*            the inner boundaries of the new <code>Polygon</code>, or
 	*            <code>null</code> or empty <code>LinearRing</code> s if
 	*            the empty geometry is to be created.
+	*
+	* Polygon will take ownership of shell and holes.
 	*/
 	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes) const;
 	/**
+	* Constructs a <code>Polygon</code> with the given exterior boundary and
+	* interior boundaries.
+	*
+	* @param shell
+	*            the outer boundary of the new <code>Polygon</code>
+	* @param holes
+	*            the inner boundaries of the new <code>Polygon</code>
+	*/
+	Polygon* createPolygon(const LinearRing &shell, const vector<Geometry *> &holes) const;
+
+	/**
+	* Creates a LineString using the given Coordinates;
+	* a null or empty array will
+	* create an empty LineString. Consecutive points must not be equal.
+	* @param coordinates an array without null elements,
+	* or an empty array, or null.
+	* If not null LineString will take ownership of it.
+	*/
+	LineString* createLineString(CoordinateList* coordinates) const;
+
+	/**
 	* Creates a LineString using the given Coordinates; a null or empty array will
 	* create an empty LineString. Consecutive points must not be equal.
-	* @param coordinates an array without null elements, or an empty array, or null
+	* @param coordinates an array without null elements, or an empty array
 	*/
-	LineString* createLineString(const CoordinateList* coordinates) const;
+	LineString* createLineString(const CoordinateList& coordinates) const;
+
 	/**
 	*  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
 	*  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
@@ -1819,21 +2082,32 @@ public:
 	*@return           a <code>Geometry</code> of the "smallest", "most
 	*      type-specific" class that can contain the elements of <code>geomList</code>
 	*      .
+	*
+	* NOTE: the returned Geometry will take ownership of the
+	* 	given vector AND its elements 
 	*/
 	Geometry* buildGeometry(vector<Geometry *> *geoms) const;
+
+	/**
+	 * deep-copy version of buildGeometry
+	 */
+	Geometry* buildGeometry(const vector<Geometry *> &geoms) const;
+	
 	int getSRID() const {return SRID;};
+
 	CoordinateListFactory* getCoordinateListFactory() const {return coordinateListFactory;};
+
 	/**
 	* @return a clone of g based on a CoordinateSequence created by this
 	* GeometryFactory's CoordinateSequenceFactory
 	*/
 	Geometry* createGeometry(const Geometry *g) const;
+
 private:
 	const PrecisionModel* precisionModel;
 	int SRID;
 	static const int64 serialVersionUID = -6820524753094095635LL;
 	CoordinateListFactory *coordinateListFactory;
-
 };
 
 /**

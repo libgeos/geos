@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.14  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.
@@ -96,8 +103,8 @@ protected:
 	MultiPolygon* readMultiPolygonText(StringTokenizer *tokenizer);
 	GeometryCollection* readGeometryCollectionText(StringTokenizer *tokenizer);
 private:
-	GeometryFactory *geometryFactory;
-	PrecisionModel *precisionModel;
+	const GeometryFactory *geometryFactory;
+	const PrecisionModel *precisionModel;
 	Coordinate* getPreciseCoordinate(StringTokenizer *tokenizer);
 	bool isNumberNext(StringTokenizer *tokenizer);
 };

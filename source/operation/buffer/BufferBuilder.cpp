@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.18  2004/06/15 20:10:31  strk
  * updated to respect deep-copy GeometryCollection interface
  *
@@ -106,6 +113,8 @@ BufferBuilder::BufferBuilder() {
 
 BufferBuilder::~BufferBuilder() {
 	delete edgeList;
+	for (int i=0; i<(int)newLabels.size(); i++)
+		delete newLabels[i];
 }
 
 /**
@@ -170,17 +179,17 @@ BufferBuilder::buffer(Geometry *g, double distance)
 		for (int i=0; i<subgraphList->size(); i++)
 			delete (*subgraphList)[i];
 		delete subgraphList;
-		for (int i=0; i<resultPolyList->size(); i++)
-			delete (*resultPolyList)[i];
-		delete resultPolyList;
+		//for (int i=0; i<resultPolyList->size(); i++)
+		//	delete (*resultPolyList)[i];
+		//delete resultPolyList;
 		throw;
 	} 
 	for (int i=0; i<subgraphList->size(); i++)
 		delete (*subgraphList)[i];
 	delete subgraphList;
-	for (int i=0; i<resultPolyList->size(); i++)
-		delete (*resultPolyList)[i];
-	delete resultPolyList;
+	//for (int i=0; i<resultPolyList->size(); i++)
+	//	delete (*resultPolyList)[i];
+	//delete resultPolyList;
 	return resultGeom;
 }
 
@@ -231,6 +240,7 @@ void BufferBuilder::insertEdge(Edge *e){
 		if (! existingEdge->isPointwiseEqual(e)) {
 			labelToMerge=new Label(e->getLabel());
 			labelToMerge->flip();
+			newLabels.push_back(labelToMerge);
 		}
 		existingLabel->merge(labelToMerge);
 		// compute new depth delta of sum of edges

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.36  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.35  2004/06/28 21:58:24  strk
  * Constructors speedup.
  *
@@ -79,21 +86,26 @@ Polygon::Polygon(const Polygon &p): Geometry(p.getFactory()){
 }
 
 /**
-*  Constructs a <code>Polygon</code> with the given exterior boundary and
-*  interior boundaries.
+* Constructs a <code>Polygon</code> with the given exterior
+* and interior boundaries.
 *
-*@param  shell           the outer boundary of the new <code>Polygon</code>,
-*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
-*      geometry is to be created.
-*@param  holes           the inner boundaries of the new <code>Polygon</code>
-*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
-*      geometry is to be created.
+* @param  shell     the outer boundary of the new <code>Polygon</code>,
+*                   or <code>null</code> or an empty
+*                   <code>LinearRing</code> if the empty geometry
+*                   is to be created.
+*
+* @param  holes     the <code>LinearRings</code> defining the inner
+*                   boundaries of the new <code>Polygon</code>, or
+*                   <code>null</code> or empty <code>LinearRing</code>s
+*                   if the empty  geometry is to be created.
+*
+* Polygon will take ownership of Shell and Holes LinearRings
+*
 */
-Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const GeometryFactory *newFactory): Geometry(newFactory) {
+Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const GeometryFactory *newFactory): Geometry(newFactory)
+{
 	if (newShell==NULL) {
-		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		shell=getFactory()->createLinearRing(p);
-		delete p;
+		shell=getFactory()->createLinearRing(NULL);
 	}
 	else
 	{
@@ -123,24 +135,42 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const Geome
 	}
 }
 
- /**
-*  Constructs a <code>Polygon</code> with the given exterior boundary.
+/**
+* Constructs a <code>Polygon</code> with the given exterior
+* and interior boundaries.
 *
-*@param  shell           the outer boundary of the new <code>Polygon</code>,
-*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
-*      geometry is to be created.
-*@param  precisionModel  the specification of the grid of allowable points
-*      for this <code>Polygon</code>
-*@param  SRID            the ID of the Spatial Reference System used by this
-*      <code>Polygon</code>
-* @deprecated Use GeometryFactory instead
+* @param  shell     the outer boundary of the new <code>Polygon</code>.
+*
+* @param  holes     the <code>LinearRings</code> defining the inner
+*                   boundaries of the new <code>Polygon</code>
+*
 */
-Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID):
-	Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
+Polygon::Polygon(const LinearRing &newShell, const vector<Geometry *> &newHoles, const GeometryFactory *newFactory): Geometry(newFactory)
+{
+	if (newShell.isEmpty() && hasNonEmptyElements(&newHoles)) {
+		throw new IllegalArgumentException("shell is empty but holes are not");
+	} 
+	shell = new LinearRing(newShell);
+
+	if (hasNullElements(&newHoles)) {
+		throw new IllegalArgumentException("holes must not contain null elements");
+	}
+
+	holes = new vector<Geometry *>(newHoles.size());
+	for (int i=0; i<newHoles.size(); i++)
+	{
+		if ( newHoles[i]->getGeometryTypeId() != GEOS_LINEARRING)
+			throw new IllegalArgumentException("holes must be LinearRings");
+		(*holes)[i] = newHoles[i]->clone();
+	}
+}
+
+
+
+// @deprecated Use GeometryFactory instead
+Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID): Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
 	if (newShell==NULL) {
-		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		shell=getFactory()->createLinearRing(p);
-		delete p;
+		shell=getFactory()->createLinearRing(NULL);
 	}
 	else
 	{
@@ -154,29 +184,10 @@ Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID)
 	holes=new vector<Geometry *>();
 }
 
-/**
-*  Constructs a <code>Polygon</code> with the given exterior boundary and
-*  interior boundaries.
-*
-*@param  shell           the outer boundary of the new <code>Polygon</code>,
-*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
-*      geometry is to be created.
-*@param  holes           the inner boundaries of the new <code>Polygon</code>
-*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
-*      geometry is to be created.
-*@param  precisionModel  the specification of the grid of allowable points
-*      for this <code>Polygon</code>
-*@param  SRID            the ID of the Spatial Reference System used by this
-*      <code>Polygon</code>
-* @deprecated Use GeometryFactory instead
-*/
-Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
-				 PrecisionModel* precisionModel, int SRID):
-				Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
+// @deprecated Use GeometryFactory instead
+Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel* precisionModel, int SRID): Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
 	if (newShell==NULL) {
-		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		shell=getFactory()->createLinearRing(p);
-		delete p;
+		shell=getFactory()->createLinearRing(NULL);
 	}
 	else
 	{
@@ -274,14 +285,12 @@ Geometry* Polygon::getBoundary() const {
 	if (isEmpty()) {
 		return getFactory()->createGeometryCollection(NULL);
 	}
-	vector<Geometry *> *rings=new vector<Geometry *>(holes->size() + 1);
-	(*rings)[0]=shell;
+	vector<Geometry *> rings(holes->size()+1);
+	rings[0]=shell;
 	for (unsigned int i=0; i<holes->size(); i++) {
-		//(*rings)[i + 1] =(LineString*)(*holes)[i];
-		(*rings)[i + 1] = (*holes)[i];
+		rings[i + 1] = (*holes)[i];
 	}
 	MultiLineString *ret =getFactory()->createMultiLineString(rings);
-	delete rings;
 	return ret;
 }
 

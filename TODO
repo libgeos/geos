@@ -1,8 +1,12 @@
+- Check GeometryFactory *Geometry::factory semantics:
+	- owned by Geometry ? 
+	- owned by someone else ? 
+
+- Check GeometryEditor behaviour (modify passed geom or create a new one ?)
+
 - Check header files layout
 
 - Check GEOS_VERSION defines and functions
-
-- Add geometry constructors taking ownership of passed arguments.
 
 - speedup in BufferSubgraph::computeDepths (read comment there)
 

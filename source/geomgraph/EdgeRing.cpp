@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.2  2004/06/30 20:59:12  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -33,6 +40,13 @@
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.3  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.2  2004/06/30 20:59:12  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -129,10 +143,9 @@ Polygon* EdgeRing::toPolygon(const GeometryFactory* geometryFactory){
 
 void EdgeRing::computeRing() {
 	if (ring!=NULL) return;   // don't compute more than once
-	ring=geometryFactory->createLinearRing(pts);
-	CoordinateList *cl = ring->getCoordinates();
+	ring=geometryFactory->createLinearRing(*pts);
+	const CoordinateList *cl = ring->getCoordinatesRO();
 	isHoleVar=cga->isCCW(cl);
-	delete cl;
 }
 
   /**

@@ -2,8 +2,10 @@
 
 	- Added geos.h for quick inclusion
 
-	- Multi geometry classes costructors copy given arguments
-
-	- SegmentString constructor now copies given CoordinateList
-
 	- Added geos_version.h with version numbers and string defines
+
+	- All geometry constructors have now deep-copy version
+	  (pass-by-pointer) and a take-ownership version (pass-by-ref).
+	  This interface is available for GeometryFactory as well
+	  including buildGeometry.
+

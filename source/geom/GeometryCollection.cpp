@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.36  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.35  2004/06/30 20:59:12  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -74,7 +81,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 	//geometries=gc.geometries;	
 }
 
-/** @deprecated Use GeometryFactory instead */
+// @deprecated Use GeometryFactory instead
 GeometryCollection::GeometryCollection(const vector<Geometry *> *geoms,PrecisionModel* pm,int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
 	if (geoms==NULL) {
 		geometries=new vector<Geometry *>();
@@ -91,26 +98,54 @@ GeometryCollection::GeometryCollection(const vector<Geometry *> *geoms,Precision
 }
 
 /**
-* @param geometries
-*            the <code>Geometry</code>s for this <code>GeometryCollection</code>,
-*            or <code>null</code> or an empty array to create the empty
-*            geometry. Elements may be empty <code>Geometry</code>s,
-*            but not <code>null</code>s.
-*            Geometry elements AND vector will be copied.
+* @param newGeoms
+*	the <code>Geometry</code>s for this
+*	<code>GeometryCollection</code>,
+*	or <code>null</code> or an empty array to
+*	create the empty geometry.
+*	Elements may be empty <code>Geometry</code>s,
+*	but not <code>null</code>s.
+*
+*	If construction succeed the created object will take
+*	ownership of newGeoms vector and elements.
+*
+*	If construction	fails "IllegalArgumentException *"
+*	is thrown and it is your responsibility to delete newGeoms
+*	vector and content.
+*
 */
-GeometryCollection::GeometryCollection(const vector<Geometry *> *geoms, const GeometryFactory *newFactory): Geometry(newFactory)
+GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *factory): Geometry(factory)
 {
-	if (geoms==NULL) {
+	if (newGeoms==NULL) {
 		geometries=new vector<Geometry *>();
 		return;
 	}
-	if (hasNullElements(geoms)) {
+	if (hasNullElements(newGeoms)) {
 		throw new IllegalArgumentException("geometries must not contain null elements\n");
 		return;
 	}
-	geometries=new vector<Geometry *>(geoms->size());
-	for (int i=0; i<geoms->size(); i++) {
-		(*geometries)[i] = (*geoms)[i]->clone();
+	geometries=newGeoms;
+}
+
+/**
+* @param fromGeoms
+*	the <code>Geometry</code>s for this
+*	<code>GeometryCollection</code>,
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>Geometry</code>s,
+*	but not <code>null</code>s.
+*
+*	fromGeoms vector and elements will be copied. 
+*/
+GeometryCollection::GeometryCollection(const vector<Geometry *> &fromGeoms, const GeometryFactory *factory): Geometry(factory)
+{
+	if (hasNullElements(&fromGeoms)) {
+		throw new IllegalArgumentException("geometries must not contain null elements\n");
+		return;
+	}
+	geometries=new vector<Geometry *>(fromGeoms.size());
+	for (int i=0; i<fromGeoms.size(); i++) {
+		(*geometries)[i] = fromGeoms[i]->clone();
 	}
 }
 

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.23  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -67,14 +74,18 @@ Point::Point(const Coordinate& c, const PrecisionModel* precisionModel,
 /**
 *@param  coordinates      contains the single coordinate on which to base this <code>Point</code>
 *      , or <code>null</code> to create the empty geometry.
+*	If not null the created Point will take ownership of it.
 */  
-Point::Point(const CoordinateList *newCoordinates, const GeometryFactory *newFactory): Geometry(newFactory) {
+Point::Point(CoordinateList *newCoordinates, const GeometryFactory *newFactory): Geometry(newFactory) {
 	if (newCoordinates==NULL) {
-		newCoordinates=CoordinateListFactory::internalFactory->createCoordinateList();
+		coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
+		return;
 	}        
-	//What's the point of this assert in the constructor ? --strk;
-	//Assert::isTrue(coordinates->getSize()<=1);
-	coordinates=CoordinateListFactory::internalFactory->createCoordinateList(newCoordinates);
+	if (newCoordinates->getSize() != 1)
+	{
+		throw new IllegalArgumentException("Point coordinate list must contain a single element");
+	}
+	coordinates=newCoordinates;
 }
 
 Point::Point(const Point &p): Geometry(p.getFactory()) {

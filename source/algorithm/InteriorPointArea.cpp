@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.10  2004/05/07 14:12:23  strk
  * Fixed segfault in destructor
  *
@@ -139,7 +146,7 @@ LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
 	delete c2;
 	delete envelope;
 	LineString *ret = factory->createLineString(cl);
-	delete cl;
+	//delete cl;
 	return ret;
 }
 

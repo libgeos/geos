@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.10  2004/06/30 20:59:13  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -144,7 +151,7 @@ void LineBuilder::buildLines(int opCode) {
 		////System.out.println(label);
 		//if (OverlayGraph.isResultOfOp(label, opCode)) {
 		//
-		LineString *line=geometryFactory->createLineString(e->getCoordinates());
+		LineString *line=geometryFactory->createLineString(*(e->getCoordinates()));
 		resultLineList->push_back(line);
 		e->setInResult(true);
 		//}

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.1  2004/04/08 04:53:56  ybychkov
  * "operation/polygonize" ported from JTS 1.4
  *
@@ -201,7 +208,7 @@ CoordinateList* polygonizeEdgeRing::getCoordinates() {
 */
 LineString* polygonizeEdgeRing::getLineString(){
 	getCoordinates();
-	return factory->createLineString(ringPts);
+	return factory->createLineString(*ringPts);
 }
 
 /**
@@ -214,7 +221,7 @@ LinearRing* polygonizeEdgeRing::getRing(){
 	getCoordinates();
 	if (ringPts->getSize() < 3) cout<<ringPts->toString();
 	try {
-		ring=factory->createLinearRing(ringPts);
+		ring=factory->createLinearRing(*ringPts);
 	} catch (void* x) {
 		cout << ringPts->toString();
 	}

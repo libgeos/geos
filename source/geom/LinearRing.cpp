@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.17  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -70,9 +77,22 @@ LinearRing::LinearRing(const CoordinateList* pts, const PrecisionModel* pm,
 *@param  points          points forming a closed and simple linestring, or
 *      <code>null</code> or an empty array to create the empty geometry.
 *      This array must not contain <code>null</code> elements.
+*	The created LinearRing will take ownership of points.
 *
 */
-LinearRing::LinearRing(const CoordinateList* points, const GeometryFactory *newFactory): LineString(points,newFactory) {
+LinearRing::LinearRing(CoordinateList* points, const GeometryFactory *newFactory): LineString(points,newFactory) {
+	validateConstruction();	
+}
+
+/**
+*  Constructs a <code>LinearRing</code> with the given points.
+*
+*@param  points          points forming a closed and simple linestring, 
+*      or an empty array to create the empty geometry.
+*      This array must not contain <code>null</code> elements.
+*
+*/
+LinearRing::LinearRing(const CoordinateList& points, const GeometryFactory *newFactory): LineString(points,newFactory) {
 	validateConstruction();	
 }
 

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.1  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  *
@@ -69,6 +76,6 @@ const CoordinateList* EdgeString::getCoordinates() {
 * Converts this EdgeString into a LineString.
 */
 LineString* EdgeString::toLineString() {
-	return factory->createLineString(getCoordinates());
+	return factory->createLineString(*(getCoordinates()));
 }
 }

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.11  2004/06/16 13:13:25  strk
  * Changed interface of SegmentString, now copying CoordinateList argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
@@ -101,7 +108,8 @@ struct SegmentNodeLT {
 
 class SegmentString;
 /**
- * A list of the {@link SegmentNode}s present along a noded {@link SegmentString}.
+ * A list of the {@link SegmentNode}s present along a
+ * noded {@link SegmentString}.
  *
  */
 class SegmentNodeList {
@@ -110,10 +118,12 @@ private:
 	const SegmentString *edge;  // the parent edge
 	vector<SegmentNode*> *sortedNodes;
 
-	/*
-	 * This vector is here to keep track of created splitEdges
-	 */
+	// This vector is here to keep track of created splitEdges
 	vector<SegmentString*> splitEdges;
+
+	// This vector is here to keep track of created Coordinates
+	vector<CoordinateList*> splitCoordLists;
+
 	void checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges);
 	/**
 	* Create a new "split edge" with the section of points between
@@ -121,24 +131,31 @@ private:
 	* The label for the new edge is the same as the label for the parent edge.
 	*/
 	SegmentString* createSplitEdge(SegmentNode *ei0, SegmentNode *ei1);
+
 public:
+
 	SegmentNodeList(const SegmentString *newEdge);
+
 	virtual ~SegmentNodeList();
+
 	/**
 	* Adds an intersection into the list, if it isn't already there.
 	* The input segmentIndex and dist are expected to be normalized.
 	* @return the SegmentIntersection found or added
 	*/
 	SegmentNode* add(Coordinate *intPt, int segmentIndex, double dist);
+
 	/**
 	* returns the set of SegmentNodes
 	*/
 	//replaces iterator()
 	set<SegmentNode*,SegmentNodeLT>* getNodes() { return nodes; }
+
 	/**
 	* Adds entries for the first and last points of the edge to the list
 	*/
 	void addEndpoints();
+
 	/**
 	* Creates new edges for all the edges that the intersections in this
 	* list split the parent edge into.
@@ -146,6 +163,7 @@ public:
 	* can be used to accumulate all split edges for a Geometry).
 	*/
 	void addSplitEdges(vector<SegmentString*> *edgeList);
+
 	string print();
 };
 

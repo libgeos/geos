@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.40  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.39  2004/06/16 13:13:25  strk
  * Changed interface of SegmentString, now copying CoordinateList argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
@@ -160,7 +167,7 @@ GeometryFactory::toGeometry(Envelope* envelope) const
 	Coordinate coord;
 
 	if (envelope->isNull()) {
-		return createPoint(coord);
+		return createPoint(NULL);
 	}
 	if (envelope->getMinX()==envelope->getMaxX() && envelope->getMinY()==envelope->getMaxY()) {
 		coord.x = envelope->getMinX();
@@ -205,66 +212,152 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const {
 	if (coordinate==Coordinate::nullCoord) {
 		return createPoint(NULL);
 	} else {
-		CoordinateList *cl=coordinateListFactory->createCoordinateList();
-		cl->add(coordinate);
+		CoordinateList *cl=coordinateListFactory->createCoordinateList(1);
+		cl->setAt(coordinate, 0);
 		Point *ret = createPoint(cl);
-		delete cl;
 		return ret;
 	}
 }
 
 /**
 * Creates a Point using the given CoordinateSequence; a null or empty
-* CoordinateSequence will create an empty Point.
+* CoordinateSequence will create an empty Point. Created Point will 
+* take ownership of coordinates.
 */
 Point*
-GeometryFactory::createPoint(const CoordinateList *coordinates) const
+GeometryFactory::createPoint(CoordinateList *coordinates) const
 {
 	return new Point(coordinates,this);
 }
 
-
+/**
+* Creates a Point using the given CoordinateSequence; a null or empty
+* CoordinateSequence will create an empty Point. 
+*/
+Point*
+GeometryFactory::createPoint(const CoordinateList &coordinates) const
+{
+	CoordinateList *newCoords = CoordinateListFactory::internalFactory->createCoordinateList(&coordinates);
+	return new Point(newCoords,this);
+}
 
 /**
-* Creates a MultiLineString using the given LineStrings; a null or empty
-* array will create an empty MultiLineString.
-* @param lineStrings LineStrings, each of which may be empty but not null.
-*        Geometries AND vector will be copied.
+* Constructs a <code>MultiLineString</code>.
+*
+* @param  newLines
+*	the <code>LineStrings</code>s for this
+*	<code>MultiLineString</code>, or <code>null</code>
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>LineString</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will take ownership of
+*	the vector and its elements.
 */
 MultiLineString*
-GeometryFactory::createMultiLineString(vector<Geometry *> *lineStrings)
+GeometryFactory::createMultiLineString(vector<Geometry *> *newLines)
 	const
 {
-	return new MultiLineString(lineStrings,this);
+	return new MultiLineString(newLines,this);
 }
 
 /**
-* Creates a GeometryCollection using the given Geometries; a null or empty
-* array will create an empty GeometryCollection.
-* @param geometries Geometries, each of which may be empty but not null
-*       Geometries AND vector will be copied.
+* Constructs a <code>MultiLineString</code>.
+*
+* @param  fromLines
+*	the <code>LineStrings</code>s for this
+*	<code>MultiLineString</code>, or an empty array
+*	to create the empty geometry.
+*	Elements may be empty <code>LineString</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will copy 
+*	the vector and its elements.
+*/
+MultiLineString*
+GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
+	const
+{
+	return new MultiLineString(fromLines,this);
+}
+
+/**
+* Constructs a <code>GeometryCollection</code>.
+*
+* @param newGeoms
+*	The <code>Geometry</code>s for this
+*	<code>GeometryCollection</code>,
+*	or <code>null</code> or an empty array to
+*	create the empty geometry.
+*	Elements may be empty <code>Geometry</code>s,
+*	but not <code>null</code>s.
+*
+*	If construction succeed the created object will take
+*	ownership of newGeoms vector and elements.
+*
+*	If construction	fails "IllegalArgumentException *"
+*	is thrown and it is your responsibility to delete newGeoms
+*	vector and content.
 */
 GeometryCollection*
-GeometryFactory::createGeometryCollection(vector<Geometry *> *geometries) const
+GeometryFactory::createGeometryCollection(vector<Geometry *> *newGeoms) const
 {
-	return new GeometryCollection(geometries,this);
+	return new GeometryCollection(newGeoms,this);
 }
 
 /**
-* Creates a MultiPolygon using the given Polygons; a null or empty array
-* will create an empty Polygon. The polygons must conform to the
-* assertions specified in the <A
-* HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
-* Specification for SQL</A>.
+* @param fromGeoms
+*            the <code>Geometry</code>s for this
+*	     <code>GeometryCollection</code>,
+*	     Elements may be empty <code>Geometry</code>s,
+*            but not <code>null</code>s.
+*	     
+*            fromGeoms vector and elements will be copied. 
+*/
+GeometryCollection*
+GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) const
+{
+	return new GeometryCollection(fromGeoms,this);
+}
+
+/**
+* @param newPolys
+*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+*	or <code>null</code> or an empty array to create the empty
+*	geometry. Elements may be empty <code>Polygon</code>s, but
+*	not <code>null</code>s.
+*	The polygons must conform to the assertions specified in the
+*	<A HREF="http://www.opengis.org/techno/specs.htm">
+*	OpenGIS Simple Features Specification for SQL
+*	</A>.
 *
-* @param polygons
-*            Polygons, each of which may be empty but not null.
-*            Geometries AND vector will be copied.
+*	Constructed object will take ownership of
+*	the vector and its elements.
 */
 MultiPolygon*
-GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons) const
+GeometryFactory::createMultiPolygon(vector<Geometry *> *newPolys) const
 {
-	return new MultiPolygon(polygons,this);
+	return new MultiPolygon(newPolys,this);
+}
+
+/**
+* @param fromPolys
+*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>Polygon</code>s, but
+*	not <code>null</code>s.
+*	The polygons must conform to the assertions specified in the
+*	<A HREF="http://www.opengis.org/techno/specs.htm">
+*	OpenGIS Simple Features Specification for SQL
+*	</A>.
+*
+*	Constructed object will copy 
+*	the vector and its elements.
+*/
+MultiPolygon*
+GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
+{
+	return new MultiPolygon(fromPolys,this);
 }
 
 /**
@@ -272,28 +365,71 @@ GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons) const
 * create an empty LinearRing. The points must form a closed and simple
 * linestring. Consecutive points must not be equal.
 * @param coordinates a CoordinateSequence possibly empty, or null
+* LinearRing will take ownership of coordinates.
 */
 LinearRing*
 GeometryFactory::createLinearRing(CoordinateList* coordinates) const
 {
-	//if (coordinates->getSize()>0 && 
-	//	!coordinates->getAt(0).equals2D(coordinates->getAt(coordinates->getSize() - 1))) {
-	//		delete precisionModel;
-	//		throw new IllegalArgumentException("LinearRing not closed");
-	//}
 	return new LinearRing(coordinates,this);
 }
 
 /**
-* Creates a MultiPoint using the given Points; a null or empty array will
-* create an empty MultiPoint.
-* @param points an array without null elements, or an empty array, or null
-*            Geometries AND vector will be copied.
+* Creates a LinearRing using the given CoordinateSequence;
+* an empty CoordinateSequence will
+* create an empty LinearRing. The points must form a closed and simple
+* linestring. Consecutive points must not be equal.
+* @param coordinates a CoordinateSequence possibly empty.
+*/
+LinearRing*
+GeometryFactory::createLinearRing(const CoordinateList& coordinates) const
+{
+	return new LinearRing(coordinates,this);
+}
+
+/**
+* Constructs a <code>MultiPoint</code>.
+*
+* @param  newPoints
+*	the <code>Point</code>s for this <code>MultiPoint</code>,
+*	or <code>null</code> or an empty array to create the empty
+* 	geometry.
+*	Elements may be empty <code>Point</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will take ownership of
+*	the vector and its elements.
 */
 MultiPoint*
-GeometryFactory::createMultiPoint(vector<Geometry *> *points) const
+GeometryFactory::createMultiPoint(vector<Geometry *> *newPoints) const
 {
-	return new MultiPoint(points,this);
+	return new MultiPoint(newPoints,this);
+}
+
+/**
+* Constructs a <code>MultiPoint</code>.
+*
+* @param  fromPoints
+*	the <code>Point</code>s for this <code>MultiPoint</code>,
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>Point</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will copy 
+*	the vector and its elements.
+*/
+MultiPoint*
+GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
+{
+	return new MultiPoint(fromPoints,this);
+}
+
+/**
+* Creates an EMPTY MultiPoint 
+*/
+MultiPoint*
+GeometryFactory::createMultiPoint() const
+{
+	return new MultiPoint(NULL, this);
 }
 
 /**
@@ -313,9 +449,8 @@ GeometryFactory::createMultiPoint(const CoordinateList* coordinates) const
 	}
 	//delete coordinates;
 	MultiPoint *mp = createMultiPoint(pts);
-	for (int i=0; i<pts->size(); i++)
-		delete (*pts)[i];
-	delete pts;
+	//for (int i=0; i<pts->size(); i++) delete (*pts)[i];
+	//delete pts;
 	return mp;
 }
 
@@ -340,12 +475,42 @@ GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes)
 }
 
 /**
+* Constructs a <code>Polygon</code> with the given exterior boundary and
+* interior boundaries.
+*
+* @param shell
+*            the outer boundary of the new <code>Polygon</code>
+* @param holes
+*            the inner boundaries of the new <code>Polygon</code>
+*            Note that these must be LinearRings
+*/
+Polygon*
+GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *> &holes)
+	const
+{
+	return new Polygon(shell, holes, this);
+}
+
+/**
 * Creates a LineString using the given Coordinates; a null or empty array will
 * create an empty LineString. Consecutive points must not be equal.
 * @param coordinates an array without null elements, or an empty array, or null
+*  If not null LineString will take ownership of coordinates.
 */
 LineString*
-GeometryFactory::createLineString(const CoordinateList* coordinates)
+GeometryFactory::createLineString(CoordinateList* coordinates)
+	const
+{
+	return new LineString(coordinates, this);
+}
+
+/**
+* Creates a LineString using the given Coordinates; a null or empty array will
+* create an empty LineString. Consecutive points must not be equal.
+* @param coordinates an array without null elements, or an empty array
+*/
+LineString*
+GeometryFactory::createLineString(const CoordinateList& coordinates)
 	const
 {
 	return new LineString(coordinates, this);
@@ -355,69 +520,133 @@ GeometryFactory::createLineString(const CoordinateList* coordinates)
 *  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
 *  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
 *  it.
-* For example:<br>
 *
-*  <ul>
-*    <li> If <code>geomList</code> contains a single <code>Polygon</code>,
-*    the <code>Polygon</code> is returned.
-*    <li> If <code>geomList</code> contains several <code>Polygon</code>s, a
-*    <code>MultiPolygon</code> is returned.
-*    <li> If <code>geomList</code> contains some <code>Polygon</code>s and
-*    some <code>LineString</code>s, a <code>GeometryCollection</code> is
-*    returned.
-*    <li> If <code>geomList</code> is empty, an empty <code>GeometryCollection</code>
-*    is returned
-*  </ul>
+*  For example:
 *
-* Note that this method does not "flatten" Geometries in the input, and hence if
-* any MultiGeometries are contained in the input a GeometryCollection containing
-* them will be returned.
+*    - If <code>geomList</code> contains a single <code>Polygon</code>,
+*      the <code>Polygon</code> is returned.
+*    - If <code>geomList</code> contains several <code>Polygon</code>s, a
+*      <code>MultiPolygon</code> is returned.
+*    - If <code>geomList</code> contains some <code>Polygon</code>s and
+*      some <code>LineString</code>s, a <code>GeometryCollection</code> is
+*      returned.
+*    - If <code>geomList</code> is empty, an empty
+*      <code>GeometryCollection</code> is returned
+*    .
 *
-*@param  geomList  the <code>Geometry</code>s to combine
-*@return           a <code>Geometry</code> of the "smallest", "most
-*      type-specific" class that can contain the elements of <code>geomList</code>
-*      .
+* Note that this method does not "flatten" Geometries in the input,
+* and hence if any MultiGeometries are contained in the input a
+* GeometryCollection containing them will be returned.
+*
+* @param  newGeoms  the <code>Geometry</code>s to combine
+*
+* @return
+*	A <code>Geometry</code> of the "smallest", "most type-specific"
+*	class that can contain the elements of <code>geomList</code>
+*	.
+*
+* NOTE: the returned Geometry will take ownership of the
+* 	given vector AND its elements 
 */
 Geometry*
-GeometryFactory::buildGeometry(vector<Geometry *> *geoms) const
+GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 {
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
-	bool isCollection=geoms->size()>1;
+	bool isCollection=newGeoms->size()>1;
 	unsigned int i;
     
-	for (i=0; i<geoms->size(); i++) {
-		string partClass(typeid(*(*geoms)[i]).name());
+	for (i=0; i<newGeoms->size(); i++) {
+		string partClass(typeid(*(*newGeoms)[i]).name());
 		if (geomClass=="NULL") {
 			geomClass=partClass;
-		}
-		if (partClass!=geomClass) {
+		} else if (geomClass!=partClass) {
 			isHeterogeneous = true;
 		}
 	}
-    // for the empty geometry, return an empty GeometryCollection
+
+	// for the empty geometry, return an empty GeometryCollection
+	if (geomClass=="NULL") {
+		// we do not need the vector anymore
+		delete newGeoms;
+		return createGeometryCollection(NULL);
+	}
+	if (isHeterogeneous) {
+		return createGeometryCollection(newGeoms);
+	}
+
+	// At this point we know the collection is not hetereogenous.
+	// Determine the type of the result from the first Geometry in the
+	// list. This should always return a geometry, since otherwise
+	// an empty collection would have already been returned
+	Geometry *geom0=(*newGeoms)[0];
+	if (isCollection) {
+		if (typeid(*geom0)==typeid(Polygon)) {
+			return createMultiPolygon(newGeoms);
+		} else if (typeid(*geom0)==typeid(LineString)) {
+			return createMultiLineString(newGeoms);
+		} else if (typeid(*geom0)==typeid(LinearRing)) {
+			return createMultiLineString(newGeoms);
+		} else if (typeid(*geom0)==typeid(Point)) {
+			return createMultiPoint(newGeoms);
+		}
+		Assert::shouldNeverReachHere("buildGeomtry encountered an unkwnon geometry type");
+	}
+
+	// since this is not a collection we can delete vector
+	delete newGeoms;
+	return geom0;
+}
+
+/**
+ * This function does the same thing of the omonimouse function
+ * taking vector pointer instead of reference. 
+ * The difference is that this version will copy needed data
+ * leaving ownership to the caller.
+ */
+Geometry*
+GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
+{
+	string geomClass("NULL");
+	bool isHeterogeneous=false;
+	bool isCollection=fromGeoms.size()>1;
+	unsigned int i;
+    
+	for (i=0; i<fromGeoms.size(); i++) {
+		string partClass(typeid(*fromGeoms[i]).name());
+		if (geomClass=="NULL") {
+			geomClass=partClass;
+		} else if (geomClass!=partClass) {
+			isHeterogeneous = true;
+		}
+	}
+
+	// for the empty geometry, return an empty GeometryCollection
 	if (geomClass=="NULL") {
 		return createGeometryCollection(NULL);
 	}
 	if (isHeterogeneous) {
-		return createGeometryCollection(geoms);
+		return createGeometryCollection(fromGeoms);
 	}
-    // at this point we know the collection is not hetereogenous.
-    // Determine the type of the result from the first Geometry in the list
-    // this should always return a geometry, since otherwise an empty collection would have already been returned
-	Geometry *geom0=(*geoms)[0];
+
+	// At this point we know the collection is not hetereogenous.
+	// Determine the type of the result from the first Geometry in the
+	// list. This should always return a geometry, since otherwise
+	// an empty collection would have already been returned
+	Geometry *geom0=fromGeoms[0];
 	if (isCollection) {
 		if (typeid(*geom0)==typeid(Polygon)) {
-			return createMultiPolygon(geoms);
+			return createMultiPolygon(fromGeoms);
 		} else if (typeid(*geom0)==typeid(LineString)) {
-			return createMultiLineString(geoms);
+			return createMultiLineString(fromGeoms);
 		} else if (typeid(*geom0)==typeid(LinearRing)) {
-			return createMultiLineString(geoms);
+			return createMultiLineString(fromGeoms);
 		} else if (typeid(*geom0)==typeid(Point)) {
-			return createMultiPoint(geoms);
+			return createMultiPoint(fromGeoms);
 		}
 		Assert::shouldNeverReachHere("buildGeomtry encountered an unkwnon geometry type");
 	}
+
 	return geom0->clone();
 }
 

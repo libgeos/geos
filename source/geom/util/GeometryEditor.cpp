@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.7  2004/06/15 20:20:45  strk
  * updated to respect deep-copy GeometryCollection interface
  *
@@ -132,29 +139,28 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 	GeometryCollection *newCollection = (GeometryCollection*) operation->edit(collection,factory);
 	vector<Geometry*> *geometries = new vector<Geometry*>();
 	for (int i = 0; i < newCollection->getNumGeometries(); i++) {
-		Geometry *geometry = edit((Geometry*)newCollection->getGeometryN(i), operation);
+		Geometry *geometry = edit(newCollection->getGeometryN(i),
+			operation);
 		if (geometry->isEmpty()) {
+			delete geometry;
 			continue;
 		}
 		geometries->push_back(geometry);
 	}
+	delete newCollection;
+
 	if (typeid(*newCollection)==typeid(MultiPoint)) {
-		ret = factory->createMultiPoint(geometries);
+		return factory->createMultiPoint(geometries);
 	}
 	else if (typeid(*newCollection)==typeid(MultiLineString)) {
-		ret = factory->createMultiLineString(geometries);
+		return factory->createMultiLineString(geometries);
 	}
 	else if (typeid(*newCollection)==typeid(MultiPolygon)) {
-		ret = factory->createMultiPolygon(geometries);
+		return factory->createMultiPolygon(geometries);
 	}
 	else {
-		ret = factory->createGeometryCollection(geometries);
+		return factory->createGeometryCollection(geometries);
 	}
-	delete newCollection;
-	for (int i=0; i < geometries->size(); i++) 
-		delete (*geometries)[i];
-	delete geometries;
-	return ret;
 }
 
 /**
@@ -163,25 +169,27 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 Geometry*
 CoordinateOperation::edit(const Geometry *geometry, const GeometryFactory *factory)
 {
-	CoordinateList *coords = geometry->getCoordinates();
-	CoordinateList *newCoords = edit(coords,geometry);
-	Geometry *newgeom;
 
 	if (typeid(*geometry)==typeid(LinearRing)) {
-		newgeom = factory->createLinearRing(newCoords);
+		CoordinateList *coords = geometry->getCoordinates();
+		CoordinateList *newCoords = edit(coords,geometry);
+		delete coords;
+		return factory->createLinearRing(newCoords);
 	}
 	else if (typeid(*geometry)==typeid(LineString)) {
-		newgeom = factory->createLineString(newCoords);
+		CoordinateList *coords = geometry->getCoordinates();
+		CoordinateList *newCoords = edit(coords,geometry);
+		delete coords;
+		return factory->createLineString(newCoords);
 	}
 	else if (typeid(*geometry)==typeid(Point)) {
-		newgeom = factory->createPoint((newCoords->getSize()>0)? newCoords->getAt(0) : Coordinate::nullCoord);
+		CoordinateList *coords = geometry->getCoordinates();
+		CoordinateList *newCoords = edit(coords,geometry);
+		delete coords;
+		return factory->createPoint(newCoords);
 	}
-	else {
-		newgeom = geometry->clone();
-	}
-	delete newCoords;
-	delete coords;
-	return newgeom;
+
+	return geometry->clone();
 }
 
 }

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.16  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -46,31 +53,39 @@
 namespace geos {
 
 //MultiLineString::MultiLineString(){}
-/**
-*  Constructs a <code>MultiLineString</code>.
-*
-*@param  lineStrings     the <code>LineString</code>s for this <code>MultiLineString</code>
-*      , or <code>null</code> or an empty array to create the empty geometry.
-*      Elements may be empty <code>LineString</code>s, but not <code>null</code>
-*      s.
-*@param  precisionModel  the specification of the grid of allowable points
-*      for this <code>MultiLineString</code>
-*@param  SRID            the ID of the Spatial Reference System used by this
-*      <code>MultiLineString</code>
-* @deprecated Use GeometryFactory instead
-*/
-MultiLineString::MultiLineString(const vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID):
-	GeometryCollection(lineStrings, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
+
+// @deprecated Use GeometryFactory instead
+MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID): GeometryCollection(lineStrings, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)) { }
 
 /**
-* @param lineStrings
-*            the <code>LineString</code>s for this <code>MultiLineString</code>,
-*            or <code>null</code> or an empty array to create the empty
-*            geometry. Elements may be empty <code>LineString</code>s,
-*            but not <code>null</code>s.
+* Constructs a <code>MultiLineString</code>.
+*
+* @param  newLines
+*	the <code>LineStrings</code>s for this
+*	<code>MultiLineString</code>, or <code>null</code>
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>LineString</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will take ownership of
+*	the vector and its elements.
 */
-MultiLineString::MultiLineString(const vector<Geometry *> *lineStrings, const GeometryFactory *newFactory): 
-	GeometryCollection(lineStrings,newFactory){}
+MultiLineString::MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *factory): GeometryCollection(newLines,factory){}
+
+/**
+* Constructs a <code>MultiLineString</code>.
+*
+* @param  fromLines
+*	the <code>LineStrings</code>s for this
+*	<code>MultiLineString</code>, or an empty array
+*	to create the empty geometry.
+*	Elements may be empty <code>LineString</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will copy 
+*	the vector and its elements.
+*/
+MultiLineString::MultiLineString(const vector<Geometry *> &fromLines, const GeometryFactory *factory): GeometryCollection(fromLines,factory){}
 
 MultiLineString::~MultiLineString(){}
 
@@ -110,9 +125,10 @@ Geometry* MultiLineString::getBoundary() const {
 	if (isEmpty()) {
 		return getFactory()->createGeometryCollection(NULL);
 	}
-	GeometryGraph *g=new GeometryGraph(0,toInternalGeometry(this));
-	CoordinateList *pts=g->getBoundaryPoints();
-	delete g;
+	GeometryGraph gg(0, toInternalGeometry(this));
+	//GeometryGraph *g=new GeometryGraph(0,toInternalGeometry(this));
+	CoordinateList *pts=gg.getBoundaryPoints();
+	//delete g;
 	Geometry *ret = (Geometry *)getFactory()->createMultiPoint(pts);
 	delete pts;
 	return ret;

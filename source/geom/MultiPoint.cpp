@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.17  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -46,27 +53,38 @@
 namespace geos {
 
 //MultiPoint::MultiPoint(){}
-/**
-*  Constructs a <code>MultiPoint</code>.
-*
-*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
-*      , or <code>null</code> or an empty array to create the empty geometry.
-*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
-*@param  precisionModel  the specification of the grid of allowable points
-*      for this <code>MultiPoint</code>
-*@param  SRID            the ID of the Spatial Reference System used by this
-*      <code>MultiPoint</code>
-* @deprecated Use GeometryFactory instead
-*/
-MultiPoint::MultiPoint(const vector<Geometry *> *points,PrecisionModel* pm, int SRID):
-	GeometryCollection(points, new GeometryFactory(pm, SRID,CoordinateListFactory::internalFactory)){}
+
+// @deprecated Use GeometryFactory instead
+MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID): GeometryCollection(points, new GeometryFactory(pm, SRID,CoordinateListFactory::internalFactory)){}
 
 /**
-*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
-*      , or <code>null</code> or an empty array to create the empty geometry.
-*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
+* Constructs a <code>MultiPoint</code>.
+*
+* @param  newPoints
+*	the <code>Point</code>s for this <code>MultiPoint</code>,
+*	or <code>null</code> or an empty array to create the empty
+* 	geometry.
+*	Elements may be empty <code>Point</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will take ownership of
+*	the vector and its elements.
 */
-MultiPoint::MultiPoint(const vector<Geometry *> *points, const GeometryFactory *newFactory): GeometryCollection(points,newFactory){}
+MultiPoint::MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *factory): GeometryCollection(newPoints,factory){}
+
+/**
+* Constructs a <code>MultiPoint</code>.
+*
+* @param  fromPoints
+*	the <code>Point</code>s for this <code>MultiPoint</code>,
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>Point</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will copy 
+*	the vector and its elements.
+*/
+MultiPoint::MultiPoint(const vector<Geometry *> &fromPoints, const GeometryFactory *factory): GeometryCollection(fromPoints,factory){}
 
 MultiPoint::~MultiPoint(){}
 

@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.34  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.33  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -68,7 +75,6 @@ namespace geos {
 
 //LineString::LineString(){}
 
-//Replaces clone()
 LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 	points=CoordinateListFactory::internalFactory->createCoordinateList(ls.points);
 }
@@ -90,9 +96,10 @@ LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 // WARNING! This constructor is deprecated (and bogus) USE 
 // LineString(const CoordinateList *, const GeometryFactory *)
 ////////////////////////////////////////////////////////////////////
-LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm, int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
+LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm, int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){ 
 	if (pts==NULL) {
-		pts=CoordinateListFactory::internalFactory->createCoordinateList();
+		points=CoordinateListFactory::internalFactory->createCoordinateList();
+		return;
 	}
 	if (pts->getSize()==1) {
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
@@ -103,15 +110,31 @@ LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm, int 
 /**
 *@param  points          the points of the linestring, or <code>null</code>
 *      to create the empty geometry. Consecutive points may not be equal.
+*      LineString will take ownership of CoordinateList.
 */  
-LineString::LineString(const CoordinateList *pts, const GeometryFactory *newFactory):Geometry(newFactory){
+LineString::LineString(CoordinateList *pts, const GeometryFactory *newFactory): Geometry(newFactory)
+{
 	if (pts==NULL) {
-		pts=CoordinateListFactory::internalFactory->createCoordinateList();
+		points=CoordinateListFactory::internalFactory->createCoordinateList();
+		return;
 	}
 	if (pts->getSize()==1) {
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
-	points=CoordinateListFactory::internalFactory->createCoordinateList(pts); // xie 
+	points=pts;
+	//points=CoordinateListFactory::internalFactory->createCoordinateList(pts); 
+}
+
+/**
+*@param  points          the points of the linestring, or <code>null</code>
+*      to create the empty geometry. Consecutive points may not be equal.
+*/  
+LineString::LineString(const CoordinateList &pts, const GeometryFactory *newFactory): Geometry(newFactory)
+{
+	if (pts.getSize()==1) {
+		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
+	}
+	points=CoordinateListFactory::internalFactory->createCoordinateList(&pts); 
 }
 
 
@@ -198,15 +221,15 @@ Geometry* LineString::getBoundary() const {
 		return getFactory()->createGeometryCollection(NULL);
 	}
 	if (isClosed()) {
-		return getFactory()->createMultiPoint((CoordinateList *)NULL);
+		return getFactory()->createMultiPoint();
 	}
 	vector<Geometry*> *pts=new vector<Geometry*>();
 	pts->push_back(getStartPoint());
 	pts->push_back(getEndPoint());
 	MultiPoint *mp = getFactory()->createMultiPoint(pts);
-	delete (*pts)[0];
-	delete (*pts)[1];
-	delete pts;
+	//delete (*pts)[0];
+	//delete (*pts)[1];
+	//delete pts;
 	return mp;
 }
 

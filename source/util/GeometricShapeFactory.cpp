@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/01 14:12:44  strk
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
  * Revision 1.1  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.
@@ -116,24 +123,29 @@ Polygon* GeometricShapeFactory::createRectangle(){
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX() + i * XsegLen;
 		double y = env->getMinY();
-		pts->setAt(*(new Coordinate(x, y)),ipt++);
+		//pts->setAt(*(new Coordinate(x, y)),ipt++);
+		pts->setAt(Coordinate(x, y),ipt++);
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX();
 		double y = env->getMinY() + i * YsegLen;
-		pts->setAt(*(new Coordinate(x, y)),ipt++);
+		//pts->setAt(*(new Coordinate(x, y)),ipt++);
+		pts->setAt(Coordinate(x, y),ipt++);
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX() - i * XsegLen;
 		double y = env->getMaxY();
-		pts->setAt(*(new Coordinate(x, y)),ipt++);
+		//pts->setAt(*(new Coordinate(x, y)),ipt++);
+		pts->setAt(Coordinate(x, y),ipt++);
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX();
 		double y = env->getMaxY() - i * YsegLen;
-		pts->setAt(*(new Coordinate(x, y)),ipt++);
+		//pts->setAt(*(new Coordinate(x, y)),ipt++);
+		pts->setAt(Coordinate(x, y),ipt++);
 	}
-	pts->setAt(*(new Coordinate(pts->getAt(0))),ipt++);
+	//pts->setAt(*(new Coordinate(pts->getAt(0))),ipt++);
+	pts->setAt(Coordinate(pts->getAt(0)),ipt++);
 	LinearRing* ring=geomFact->createLinearRing(pts);
 	Polygon* poly=geomFact->createPolygon(ring, NULL);
 	return poly;
