@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/17 12:37:50  strk
+ * Added carriage returns and tabs in set of blanks chars
+ *
  * Revision 1.9  2004/05/07 14:15:08  strk
  * fixed peekNextToken to avoid incrementing string pointer
  *
@@ -49,10 +52,6 @@ int StringTokenizer::nextToken(){
 	if (str.size()==0)
 		return StringTokenizer::TT_EOF;
 	switch(str[0]) {
-		case '\n':
-		case '\r':
-			str=str.substr(1);
-			return nextToken();
 		case '(':
 			str=str.substr(1);
 			return '(';
@@ -62,8 +61,11 @@ int StringTokenizer::nextToken(){
 		case ',':
 			str=str.substr(1);
 			return ',';
+		case '\n':
+		case '\r':
+		case '\t':
 		case ' ':
-			string::size_type pos=str.find_first_not_of(" ");
+			string::size_type pos=str.find_first_not_of(" \n\r\t");
 			if (pos==string::npos) {
 				return StringTokenizer::TT_EOF;
 			} else {
@@ -71,7 +73,7 @@ int StringTokenizer::nextToken(){
 				return nextToken();
 			}
 		}
-	string::size_type pos=str.find_first_of("\n() ,");
+	string::size_type pos=str.find_first_of("\n\r\t() ,");
 	if (pos==string::npos) {
 		if (str.size()>0) {
 			tok=str.substr(0);
@@ -102,7 +104,7 @@ int StringTokenizer::peekNextToken(){
 	if (str.size()==0)
 		return StringTokenizer::TT_EOF;
 
-	pos=str.find_first_not_of(" \r\n");
+	pos=str.find_first_not_of(" \r\n\t");
 	if (pos==string::npos) return StringTokenizer::TT_EOF;
 	switch(str[pos]) {
 		case '(':
@@ -112,7 +114,7 @@ int StringTokenizer::peekNextToken(){
 		case ',':
 			return ',';
 	}
-	pos=str.find_first_of("\n() ,");
+	pos=str.find_first_of("\n\r\t() ,");
 	if (pos==string::npos) {
 		if (str.size()>0) {
 			tok=str.substr(0);
