@@ -6883,7 +6883,7 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "Makefile source/Makefile source/geom/Makefile source/algorithm/Makefile source/graph/Makefile source/graph/index/Makefile source/headers/Makefile source/io/Makefile source/io/markup/Makefile source/util/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/operation/Makefile source/headers/config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "Makefile source/Makefile source/geom/Makefile source/algorithm/Makefile source/graph/Makefile source/graph/index/Makefile source/headers/Makefile source/io/Makefile source/io/markup/Makefile source/util/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/operation/Makefile source/operation/relate/Makefile source/headers/config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -6994,7 +6994,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile source/Makefile source/geom/Makefile source/algorithm/Makefile source/graph/Makefile source/graph/index/Makefile source/headers/Makefile source/io/Makefile source/io/markup/Makefile source/util/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/operation/Makefile"}
+CONFIG_FILES=\${CONFIG_FILES-"Makefile source/Makefile source/geom/Makefile source/algorithm/Makefile source/graph/Makefile source/graph/index/Makefile source/headers/Makefile source/io/Makefile source/io/markup/Makefile source/util/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/operation/Makefile source/operation/relate/Makefile"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then

@@ -48,7 +48,14 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../algorithm/RobustLineIntersector.cpp \
 			../algorithm/SimplePointInAreaLocator.cpp \
 			../algorithm/SimplePointInRing.cpp \
-			../operation/GeometryGraphOperation.cpp \
+			../operation/relate/EdgeEndBuilder.cpp \
+			../operation/relate/EdgeEndBundle.cpp \
+			../operation/relate/EdgeEndBundleStar.cpp \
+			../operation/relate/RelateComputer.cpp \
+			../operation/relate/RelateNode.cpp \
+			../operation/relate/RelateNodeFactory.cpp \
+			../operation/relate/RelateNodeGraph.cpp \
+			../operation/relate/RelateOp.cpp \
 			../operation/IsSimpleOp.cpp
 
 libgeos_la_SOURCES =	$(DIR_SOURCES) $(EXTERNAL_SOURCES)

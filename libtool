@@ -113,7 +113,7 @@ libext="a"
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag="         -fPIC"
+pic_flag="          -fPIC"
 pic_mode=default
 
 # Does compiler simultaneously support -c and -o options?
