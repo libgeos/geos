@@ -17,6 +17,9 @@
 #include <geos/io.h>
 #include <stdio.h>
 
+#define DEBUG 0
+#define COMPUTE_Z 1
+
 namespace geos {
 
 LineBuilder::LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator)
@@ -138,17 +141,103 @@ LineBuilder::buildLines(int opCode)
 	// need to simplify lines?
 	for(int i=0;i<(int)lineEdgesList->size();i++) {
 		Edge *e=(*lineEdgesList)[i];
-		Label *label=e->getLabel();
-		//e.print(System.out);
-		////System.out.println(label);
-		//if (OverlayGraph.isResultOfOp(label, opCode)) {
-		//
-		LineString *line=geometryFactory->createLineString(*(e->getCoordinates()));
+		//Label *label=e->getLabel();
+		CoordinateSequence *cs = e->getCoordinates()->clone();
+#if COMPUTE_Z
+		propagateZ(cs);
+#endif
+		LineString *line=geometryFactory->createLineString(cs);
 		resultLineList->push_back(line);
 		e->setInResult(true);
-		//}
 	}
 }
+
+/*
+ * If the given CoordinateSequence has mixed 3d/2d vertexes
+ * set Z for all vertexes missing it.
+ * The Z value is interpolated between 3d vertexes and copied
+ * from a 3d vertex to the end.
+ */
+void
+LineBuilder::propagateZ(CoordinateSequence *cs)
+{
+	unsigned int i;
+#if DEBUG
+	cerr<<"LineBuilder::propagateZ() called"<<endl;
+#endif
+
+	vector<int>v3d; // vertex 3d
+	unsigned int cssize = cs->getSize();
+	for (i=0; i<cssize; i++)
+	{
+		if ( cs->getAt(i).z != DoubleNotANumber ) v3d.push_back(i);
+	}
+
+#if DEBUG
+	cerr<<"  found "<<v3d.size()<<" 3d vertexes"<<endl;
+#endif
+	
+	if ( v3d.size() == 0 )
+	{
+#if DEBUG
+		cerr<<"  nothing to do"<<endl;
+#endif
+		return;
+	}
+
+	Coordinate buf;
+
+	// fill initial part
+	if ( v3d[0] != 0 )
+	{
+		double z = cs->getAt(v3d[0]).z;
+		for (int j=0; j<v3d[0]; j++)
+		{
+			buf = cs->getAt(j);
+			buf.z = z;
+			cs->setAt(buf, j);
+		}
+	}
+
+	// interpolate inbetweens
+	int prev=v3d[0];
+	for (i=1; i<v3d.size(); i++)
+	{
+		int curr=v3d[i];
+		int dist = curr-prev;
+		if (dist > 1)
+		{
+			const Coordinate &cto = cs->getAt(curr);
+			const Coordinate &cfrom = cs->getAt(prev);
+			double gap = cto.z-cfrom.z;
+			double zstep = gap/dist;
+			double z = cfrom.z;
+			for (int j=prev+1; j<curr; j++)
+			{
+				buf = cs->getAt(j);
+				z+=zstep;
+				buf.z = z;
+				cs->setAt(buf, j);
+			}
+		}
+		prev = curr;
+	}
+
+	// fill final part
+	if ( prev < cssize-1 )
+	{
+		double z = cs->getAt(prev).z;
+		for (int j=prev+1; j<cssize; j++)
+		{
+			buf = cs->getAt(j);
+			buf.z = z;
+			cs->setAt(buf, j);
+		}
+	}
+
+}
+
+
 
 void
 LineBuilder::labelIsolatedLines(vector<Edge*> *edgesList)
@@ -180,6 +269,9 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2004/11/20 18:17:26  strk
+ * Added Z propagation for overlay lines output.
+ *
  * Revision 1.13  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

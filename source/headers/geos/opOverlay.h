@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/11/20 18:17:26  strk
+ * Added Z propagation for overlay lines output.
+ *
  * Revision 1.4  2004/11/20 17:16:10  strk
  * Handled Z merging for point on polygon boundary case.
  *
@@ -405,9 +408,17 @@ private:
 	void buildLines(int opCode);
 	void labelIsolatedLines(vector<Edge*> *edgesList);
 	/**
-	* Label an isolated node with its relationship to the target geometry.
-	*/
+	 * Label an isolated node with its relationship to the target geometry.
+	 */
 	void labelIsolatedLine(Edge *e,int targetIndex);
+
+	/*
+	 * If the given CoordinateSequence has mixed 3d/2d vertexes
+	 * set Z for all vertexes missing it.
+	 * The Z value is interpolated between 3d vertexes and copied
+	 * from a 3d vertex to the end.
+	 */
+	void LineBuilder::propagateZ(CoordinateSequence *cs);
 };
 
 /*
