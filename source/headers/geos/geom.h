@@ -310,7 +310,11 @@ private:
 	void setScale(double newScale);
 	Type modelType;
 	double scale;
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = 7777263578777803835I64;
+#else        
 	static const int64 serialVersionUID = 7777263578777803835LL;
+#endif        
 };
 
 /**
@@ -457,8 +461,11 @@ public:
 	double z;
 
 private:
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID=6683108902428366910I64;
+#else
 	static const int64 serialVersionUID=6683108902428366910LL;
-
+#endif
 
 };
 
@@ -581,7 +588,7 @@ public:
 	 * array of Coordinates, this method will incur a performance penalty
 	 * because the array needs to be built from scratch.
 	 */
-	virtual	const vector<Coordinate>* toVector() const=0;
+	virtual	vector<Coordinate>* toVector() const=0;
 
 	/**
 	 * \brief Add an array of coordinates 
@@ -972,7 +979,11 @@ private:
 	double maxx;	/// the maximum x-coordinate
 	double miny;	/// the minimum y-coordinate
 	double maxy;	/// the maximum y-coordinate
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID=5873921885273102420I64;
+#else        
 	static const int64 serialVersionUID=5873921885273102420LL;
+#endif        
 };
 
 class Geometry;
@@ -1417,7 +1428,11 @@ protected:
 private:
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter geometryChangedFilter;
+#ifdef INT64_CONST_IS_I64
+    static const int64 serialVersionUID = 8763622679187376702I64;
+#else
     static const int64 serialVersionUID = 8763622679187376702LL;
+#endif
 	const GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 	void* userData;
@@ -1543,7 +1558,11 @@ public:
 	Coordinate* intersection(const LineSegment *line) const;
 	virtual string toString() const;
 private:
+#ifdef INT64_CONST_IS_I64
+  static const int64 serialVersionUID=3252005833466256227I64;
+#else
   static const int64 serialVersionUID=3252005833466256227LL;
+#endif
 
 };
 
@@ -1732,7 +1751,11 @@ protected:
 	virtual Envelope* computeEnvelopeInternal() const;
 	virtual int compareToSameClass(const Geometry *gc) const;
 private:
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = -5694727726395021467I64;
+#else
 	static const int64 serialVersionUID = -5694727726395021467LL;
+#endif        
 };
 
 class GeometryCollectionIterator {
@@ -1812,7 +1835,11 @@ private:
 	*  The <code>Coordinate</code> wrapped by this <code>Point</code>.
 	*/
 	CoordinateSequence *coordinates;
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = 4902022702746614570I64;
+#else        
 	static const int64 serialVersionUID = 4902022702746614570LL;
+#endif        
 };
 
 /**
@@ -1883,7 +1910,11 @@ protected:
 	virtual Envelope* computeEnvelopeInternal() const;
 	CoordinateSequence* points;
 private:
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = 3110669828065365560I64;
+#else
 	static const int64 serialVersionUID = 3110669828065365560LL;
+#endif        
 };
 
 /**
@@ -1922,7 +1953,11 @@ public:
 	bool isClosed() const;
 	void setPoints(CoordinateSequence* cl);
 private:
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = -4261142084085851829I64;
+#else
 	static const int64 serialVersionUID = -4261142084085851829LL;
+#endif        
 	void validateConstruction();
 };
 
@@ -2022,7 +2057,11 @@ protected:
 	Envelope* computeEnvelopeInternal() const;
 private:
 	void normalize(LinearRing *ring, bool clockwise);
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = -3494792200821764533I64;
+#else
 	static const int64 serialVersionUID = -3494792200821764533LL;
+#endif        
 };
 
 /**
@@ -2071,7 +2110,11 @@ public:
 protected:
 	const Coordinate* getCoordinate(int n) const;
 private:
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = -8048474874175355449I64;
+#else
 	static const int64 serialVersionUID = -8048474874175355449LL;
+#endif        
 };
 
 /**
@@ -2123,7 +2166,11 @@ public:
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 private:
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = 8166665132445433741I64;
+#else
 	static const int64 serialVersionUID = 8166665132445433741LL;
+#endif        
 };
 
 /**
@@ -2177,7 +2224,11 @@ public:
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 private:
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = -551033529766975875I64;
+#else
 	static const int64 serialVersionUID = -551033529766975875LL;
+#endif        
 };
 
 /**
@@ -2348,7 +2399,11 @@ public:
 private:
 	const PrecisionModel* precisionModel;
 	int SRID;
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = -6820524753094095635I64;
+#else
 	static const int64 serialVersionUID = -6820524753094095635LL;
+#endif        
 	const CoordinateSequenceFactory *coordinateListFactory;
 };
 
@@ -2375,6 +2430,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2004/12/03 16:22:36  frank
+ * update to use I64 on MSVC for 64 bit integer constants, also toVector chg.
+ *
  * Revision 1.32  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.
