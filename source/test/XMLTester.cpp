@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.30  2003/10/16 08:48:06  strk
+* Exceptions handled
+*
+*/
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
 #ifdef _MSC_VER
@@ -38,6 +44,8 @@ using namespace geos;
 #define PRED 128
 
 int main(int argC, char* argV[]) {
+
+try{
 
 #ifdef _MSC_VER
 	InitAllocCheck();
@@ -406,4 +414,8 @@ int main(int argC, char* argV[]) {
 	}
 	DeInitAllocCheck();
 #endif
+
+} catch (GEOSException *exc) {
+	cerr<<"Exception: "<<exc<<endl;
+}
 }
