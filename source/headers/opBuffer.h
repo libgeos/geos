@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.14  2004/04/30 09:15:28  strk
  * Enlarged exception specifications to allow for AssertionFailedException.
  * Added missing initializers.
@@ -617,7 +620,7 @@ public:
 	*/
 	void setWorkingPrecisionModel(PrecisionModel *pm);
 	void setEndCapStyle(int nEndCapStyle);
-	Geometry* buffer(Geometry *g, double distance) throw (GEOSException *);
+	Geometry* buffer(Geometry *g, double distance); // throw (GEOSException *);
 private:
 	/**
 	* Compute the change in depth as an edge is crossed from R to L
@@ -630,7 +633,7 @@ private:
 	GeometryFactory *geomFact;
 	PlanarGraph *graph;
 	EdgeList *edgeList;
-	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel) throw(GEOSException *);
+	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel); // throw(GEOSException *);
 	/**
 	* Inserted edges are checked to see if an identical edge already exists.
 	* If so, the edge is not inserted, but its label is merged

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/03 10:43:43  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *

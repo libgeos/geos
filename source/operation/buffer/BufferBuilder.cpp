@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/03 10:43:43  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.7  2004/04/30 09:15:28  strk
  * Enlarged exception specifications to allow for AssertionFailedException.
  * Added missing initializers.
@@ -102,7 +105,7 @@ void BufferBuilder::setEndCapStyle(int nEndCapStyle){
 
 Geometry*
 BufferBuilder::buffer(Geometry *g, double distance)
-	throw(GEOSException *)
+	// throw(GEOSException *)
 {
 	const PrecisionModel *precisionModel=workingPrecisionModel;
 	if (precisionModel==NULL)
@@ -163,7 +166,7 @@ BufferBuilder::buffer(Geometry *g, double distance)
 
 void
 BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel)
-	throw(GEOSException *)
+	// throw(GEOSException *)
 {
 	//BufferCurveGraphNoder noder=new BufferCurveGraphNoder(geomFact->getPrecisionModel());
 	IteratedNoder *noder=new IteratedNoder(precisionModel);

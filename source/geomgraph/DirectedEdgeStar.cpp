@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.2  2004/04/21 14:14:28  strk
  * Fixed bug in computeDepths
  *
@@ -109,7 +112,7 @@ DirectedEdge* DirectedEdgeStar::getRightmostEdge() {
  */
 void
 DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
-	throw(TopologyException *)
+	//throw(TopologyException *)
 {
 	// this call can throw a TopologyException 
 	// we don't have any cleanup to do...
@@ -184,7 +187,10 @@ vector<DirectedEdge*>* DirectedEdgeStar::getResultAreaEdges() {
  * <p>
  * PRECONDITION: No pair of dirEdges are both marked as being in the result
  */
-void DirectedEdgeStar::linkResultDirectedEdges() throw(TopologyException *) {
+void
+DirectedEdgeStar::linkResultDirectedEdges() 
+	// throw(TopologyException *)
+{
 	// make sure edges are copied to resultAreaEdges list
 	getResultAreaEdges();
 	// find first area edge (if any) to start linking at

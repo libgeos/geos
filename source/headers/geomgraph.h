@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.3  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -341,12 +344,10 @@ public:
 	virtual vector<EdgeEnd*>::iterator getIterator();
 	virtual vector<EdgeEnd*>* getEdges();
 	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
-	virtual void computeLabelling(vector<GeometryGraph*> *geom)
-		throw(TopologyException *);
+	virtual void computeLabelling(vector<GeometryGraph*> *geom); // throw(TopologyException *);
 	virtual int getLocation(int geomIndex,Coordinate& p,vector<GeometryGraph*> *geom);
 	virtual bool isAreaLabelsConsistent();
-	virtual void propagateSideLabels(int geomIndex)
-		throw(TopologyException *);
+	virtual void propagateSideLabels(int geomIndex); // throw(TopologyException *);
 	virtual int findIndex(EdgeEnd *eSearch);
 	virtual string print();
 protected:
@@ -370,11 +371,10 @@ public:
 	int getOutgoingDegree();
 	int getOutgoingDegree(EdgeRing *er);
 	DirectedEdge* getRightmostEdge();
-	void computeLabelling(vector<GeometryGraph*> *geom)
-		throw(TopologyException *);
+	void computeLabelling(vector<GeometryGraph*> *geom); // throw(TopologyException *);
 	void mergeSymLabels();
 	void updateLabelling(Label *nodeLabel);
-	void linkResultDirectedEdges() throw(TopologyException *);
+	void linkResultDirectedEdges(); // throw(TopologyException *);
 	void linkMinimalDirectedEdges(EdgeRing *er);
 	void linkAllDirectedEdges();
 	void findCoveredLineEdges();
@@ -596,8 +596,7 @@ class PlanarGraph {
 public:
 	static CGAlgorithms *cga;
 //	static LineIntersector *li;
-	static void linkResultDirectedEdges(vector<Node*>* allNodes)
-		throw(TopologyException *);
+	static void linkResultDirectedEdges(vector<Node*>* allNodes); // throw(TopologyException *);
 	PlanarGraph(NodeFactory *nodeFact);
 	PlanarGraph();
 	virtual ~PlanarGraph();
@@ -679,7 +678,7 @@ private:
 	bool hasTooFewPointsVar;
 	Coordinate invalidPoint; 
 	EdgeSetIntersector* createEdgeSetIntersector();
-	void add(const Geometry *g) throw(UnsupportedOperationException *);
+	void add(const Geometry *g); // throw(UnsupportedOperationException *);
 	void addCollection(const GeometryCollection *gc);
 	void addPoint(const Point *p);
 	void addPolygonRing(const LinearRing *lr,int cwLeft,int cwRight);

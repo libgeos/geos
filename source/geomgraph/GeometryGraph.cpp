@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -167,7 +170,7 @@ void GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist) {
 
 void
 GeometryGraph::add(const Geometry *g)
-	throw (UnsupportedOperationException *)
+	//throw (UnsupportedOperationException *)
 {
 	if (g->isEmpty()) return;
 	// check if this Geometry should obey the Boundary Determination Rule

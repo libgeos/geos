@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.3  2004/04/19 15:14:45  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -50,7 +53,7 @@ CGAlgorithms* PlanarGraph::cga=new CGAlgorithms();
  */
 void
 PlanarGraph::linkResultDirectedEdges(vector<Node*> *allNodes)
-	throw(TopologyException *)
+	//throw(TopologyException *)
 {
 	vector<Node*>::iterator nodeit;
 	for(nodeit=allNodes->begin(); nodeit<allNodes->end(); nodeit++)

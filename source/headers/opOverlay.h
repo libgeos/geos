@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.15  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -71,7 +74,7 @@ public:
 		DIFFERENCE,
 		SYMDIFFERENCE
 	};
-	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode) throw(TopologyException *);
+	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode); //throw(TopologyException *);
 	static bool isResultOfOp(Label *label,int opCode);
 	/**
 	* This method will handle arguments of Location.NULL correctly
@@ -81,7 +84,7 @@ public:
 	static bool isResultOfOp(int loc0,int loc1,int opCode);
 	OverlayOp(const Geometry *g0, const Geometry *g1);
 	virtual ~OverlayOp();
-	Geometry* getResultGeometry(int funcCode) throw(TopologyException *);
+	Geometry* getResultGeometry(int funcCode); // throw(TopologyException *);
 	PlanarGraph* getGraph();
 	/**
 	* This method is used to decide if a point node should be included in the result or not.
@@ -117,7 +120,7 @@ private:
 	vector<Polygon*> *resultPolyList;
 	vector<LineString*> *resultLineList;
 	vector<Point*> *resultPointList;
-	void computeOverlay(int opCode) throw(TopologyException *);
+	void computeOverlay(int opCode); // throw(TopologyException *);
 	void insertUniqueEdges(vector<Edge*> *edges);
 	/**
 	* If either of the GeometryLocations for the existing label is
@@ -160,7 +163,7 @@ private:
 	* only if they
 	* are incident on a node which has edges for both Geometries
 	*/
-	void computeLabelling() throw(TopologyException *);
+	void computeLabelling(); // throw(TopologyException *);
 	/**
 	* For nodes which have edges from only one Geometry incident on them,
 	* the previous step will have left their dirEdges with no labelling for the other
@@ -342,14 +345,13 @@ public:
 	* The graph is assumed to contain one or more polygons,
 	* possibly with holes.
 	*/
-	void add(PlanarGraph *graph) throw(TopologyException *);
+	void add(PlanarGraph *graph); // throw(TopologyException *);
 	/**
 	* Add a set of edges and nodes, which form a graph.
 	* The graph is assumed to contain one or more polygons,
 	* possibly with holes.
 	*/
-	void add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes)
-		throw(TopologyException *);
+	void add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes); // throw(TopologyException *);
   	vector<Geometry*>* getPolygons();
 	bool containsPoint(Coordinate& p);
 private:

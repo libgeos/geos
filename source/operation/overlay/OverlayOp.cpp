@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/05/03 10:43:43  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.17  2004/04/20 13:24:15  strk
  * More leaks removed.
  *
@@ -52,7 +55,7 @@ namespace geos {
 
 Geometry*
 OverlayOp::overlayOp(const Geometry *geom0,const Geometry *geom1,int opCode)
-	throw(TopologyException *)
+	// throw(TopologyException *)
 {
 	OverlayOp *gov;
 	Geometry* geomOv;
@@ -145,7 +148,7 @@ OverlayOp::~OverlayOp() {
 
 Geometry*
 OverlayOp::getResultGeometry(int funcCode)
-	throw(TopologyException *)
+	//throw(TopologyException *)
 {
 	computeOverlay(funcCode); // this can throw TopologyException *
 	return resultGeom;
@@ -217,7 +220,7 @@ void OverlayOp::copyPoints(int argIndex) {
 * are incident on a node which has edges for both Geometries
 */
 void OverlayOp::computeLabelling()
-	throw(TopologyException *) // and what else ?
+	//throw(TopologyException *) // and what else ?
 {
 	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
@@ -433,7 +436,7 @@ Geometry* OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 }
 
 void OverlayOp::computeOverlay(int opCode)
-	throw(TopologyException *)
+	//throw(TopologyException *)
 {
 	vector<Edge*> *baseSplitEdges=NULL;
 	PolygonBuilder *polyBuilder=NULL;

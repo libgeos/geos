@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/05/03 10:43:43  strk
+ * Exception specification considered harmful - left as comment.
+ *
  * Revision 1.13  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -53,7 +56,7 @@ PolygonBuilder::~PolygonBuilder() {
 
 void
 PolygonBuilder::add(PlanarGraph *graph)
-	throw(TopologyException *)
+	//throw(TopologyException *)
 {
 	vector<DirectedEdge*> *dirEdges=new vector<DirectedEdge*>();
 	vector<Node*> *nodes=new vector<Node*>();
@@ -80,7 +83,7 @@ PolygonBuilder::add(PlanarGraph *graph)
 
 void
 PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes)
-	throw(TopologyException *)
+	//throw(TopologyException *)
 {
 	//	PlanarGraph::linkResultDirectedEdgesS(nodes);
 
