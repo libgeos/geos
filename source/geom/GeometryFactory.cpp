@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.42  2004/07/02 14:27:32  strk
+ * Added deep-copy / take-ownerhship for Point type.
+ *
  * Revision 1.41  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -225,10 +228,15 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const {
 }
 
 /**
-* Creates a Point using the given CoordinateSequence; a null or empty
-* CoordinateSequence will create an empty Point. Created Point will 
-* take ownership of coordinates.
-*/
+* Creates a Point using the given CoordinateList (must have 1 element)
+*
+* @param  newCoords
+*	contains the single coordinate on which to base this
+*	<code>Point</code> or <code>null</code> to create
+*	the empty geometry.
+*
+*	If not null the created Point will take ownership of newCoords.
+*/  
 Point*
 GeometryFactory::createPoint(CoordinateList *coordinates) const
 {
@@ -236,14 +244,16 @@ GeometryFactory::createPoint(CoordinateList *coordinates) const
 }
 
 /**
-* Creates a Point using the given CoordinateSequence; a null or empty
-* CoordinateSequence will create an empty Point. 
+* Creates a Point using the given CoordinateList (must have 1 element)
+*
+* @param  fromCoords
+*	contains the single coordinate on which to base this
+*	<code>Point</code>. 
 */
 Point*
-GeometryFactory::createPoint(const CoordinateList &coordinates) const
+GeometryFactory::createPoint(const CoordinateList &fromCoords) const
 {
-	CoordinateList *newCoords = CoordinateListFactory::internalFactory->createCoordinateList(&coordinates);
-	return new Point(newCoords,this);
+	return new Point(fromCoords,this);
 }
 
 /**

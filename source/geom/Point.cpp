@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2004/07/02 14:27:32  strk
+ * Added deep-copy / take-ownerhship for Point type.
+ *
  * Revision 1.25  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -77,20 +80,40 @@ Point::Point(const Coordinate& c, const PrecisionModel* precisionModel,
 }
 
 /**
-*@param  coordinates      contains the single coordinate on which to base this <code>Point</code>
-*      , or <code>null</code> to create the empty geometry.
-*	If not null the created Point will take ownership of it.
+* Creates a Point using the given CoordinateList (must have 1 element)
+*
+* @param  newCoords
+*	contains the single coordinate on which to base this
+*	<code>Point</code> or <code>null</code> to create
+*	the empty geometry.
+*
+*	If not null the created Point will take ownership of newCoords.
 */  
-Point::Point(CoordinateList *newCoordinates, const GeometryFactory *newFactory): Geometry(newFactory) {
-	if (newCoordinates==NULL) {
+Point::Point(CoordinateList *newCoords, const GeometryFactory *factory): Geometry(factory) {
+	if (newCoords==NULL) {
 		coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
 		return;
 	}        
-	if (newCoordinates->getSize() != 1)
+	if (newCoords->getSize() != 1)
 	{
 		throw new IllegalArgumentException("Point coordinate list must contain a single element");
 	}
-	coordinates=newCoordinates;
+	coordinates=newCoords;
+}
+
+/**
+* Creates a Point using the given CoordinateList (must have 1 element)
+*
+* @param  fromCoords
+*	contains the single coordinate on which to base this
+*	<code>Point</code>. 
+*/  
+Point::Point(const CoordinateList &fromCoords, const GeometryFactory *factory): Geometry(factory) {
+	if (fromCoords.getSize() != 1)
+	{
+		throw new IllegalArgumentException("Point coordinate list must contain a single element");
+	}
+	coordinates = CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
 }
 
 Point::Point(const Point &p): Geometry(p.getFactory()) {

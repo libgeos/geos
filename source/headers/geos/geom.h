@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/02 14:27:32  strk
+ * Added deep-copy / take-ownerhship for Point type.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -1337,7 +1340,28 @@ public:
 	* @deprecated Use GeometryFactory instead
 	*/
 	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
-	Point(CoordinateList *newCoordinates, const GeometryFactory *newFactory);
+
+	/**
+	* Creates a Point using the given CoordinateList (must have 1 element)
+	*
+	* @param  newCoords
+	*	contains the single coordinate on which to base this
+	*	<code>Point</code> or <code>null</code> to create
+	*	the empty geometry.
+	*
+	*	If not null the created Point will take ownership of newCoords.
+	*/  
+	Point(CoordinateList *newCoords, const GeometryFactory *factory);
+
+	/**
+	* Creates a Point using the given CoordinateList (must have 1 element)
+	*
+	* @param  fromCoords
+	*	contains the single coordinate on which to base this
+	*	<code>Point</code>. 
+	*/  
+	Point(const CoordinateList &fromCoords, const GeometryFactory *factory);
+
 	Point(const Point &p); 
 	virtual ~Point();
 	Geometry *clone() const;
