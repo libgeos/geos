@@ -38,7 +38,7 @@ Description: GEOS (Geometry Engine - Open Source) library
 Package: libgeos-doc
 Section: science
 Priority: optional
-Architecture: any
+Architecture: all
 Recommends: libgeos (= ${Source-Version})
 Description: GEOS (Geometry Engine - Open Source) documentation
  GEOS (Geometry Engine - Open Source) is a C++ port of the 

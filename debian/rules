@@ -25,7 +25,7 @@ else
 endif
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
-	MAKESTRIP=$(MAKE) install-strip DESTDIR=$(CURDIR)/debian/tmp #woody
+#	MAKESTRIP=$(MAKE) install-strip DESTDIR=$(CURDIR)/debian/tmp #woody
 #else
 endif
 
@@ -55,6 +55,7 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp 
+	rm -f debian/shlibs.local
 
 	# Add here commands to clean up after the build process.
 	-$(MAKE) distclean
@@ -90,10 +91,11 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs ChangeLog
+	dh_installchangelogs debian/changelog
 	dh_installdocs
 	dh_installexamples doc/example.cpp
-	dh_movefiles --sourcedir=debian/tmp #woody
-	dh_install --sourcedir=$(CURDIR)debian/tmp
+	dh_movefiles --sourcedir=debian/tmp #woody uses wildcards in pkg.files
+#	dh_install --sourcedir=$(CURDIR)debian/tmp #woody doesn't use wildcards
 #	dh_installmenu
 #	dh_installdebconf	
 #	dh_installlogrotate
