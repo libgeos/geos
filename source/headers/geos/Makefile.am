@@ -1,7 +1,6 @@
 geosdir = $(prefix)/include/geos
 
 geos_HEADERS = \
-	bigtest.h \
 	geom.h \
 	geomUtil.h \
 	geosAlgorithm.h \
