@@ -34,6 +34,7 @@ SegmentString::SegmentString(const CoordinateSequence *newPts, const void* newCo
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
 	pts=newPts;
+	npts=pts->getSize();
 	context=newContext;
 #if PROFILE
 	prof->stop();
@@ -59,7 +60,7 @@ SegmentString::getIntersectionList() const
 int
 SegmentString::size() const 
 {
-	return pts->getSize();
+	return npts;
 }
 
 const Coordinate&
@@ -94,7 +95,7 @@ SegmentString::isIsolated() const
 bool
 SegmentString::isClosed() const
 {
-	return pts->getAt(0)==pts->getAt(pts->getSize()-1);
+	return pts->getAt(0)==pts->getAt(npts-1);
 }
 
 /**
@@ -143,7 +144,6 @@ SegmentString::addIntersection(Coordinate& intPt,
 	//Debug.println("edge intpt: " + intPt + " dist: " + dist);
 	// normalize the intersection point location
 	int nextSegIndex = normalizedSegmentIndex + 1;
-	int npts=pts->getSize();
 	if (nextSegIndex < npts)
 	{
 		const Coordinate &nextPt = pts->getAt(nextSegIndex);
@@ -171,6 +171,9 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/02/22 16:23:28  strk
+ * Cached number of points in CoordinateSequence.
+ *
  * Revision 1.14  2005/02/22 15:49:20  strk
  * Reduced calls to DefaultCoordinateSequence->getSize().
  *

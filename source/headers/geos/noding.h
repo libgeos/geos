@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2005/02/22 16:23:28  strk
+ * Cached number of points in CoordinateSequence.
+ *
  * Revision 1.5  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *
@@ -198,6 +201,7 @@ class SegmentString {
 private:
 	SegmentNodeList *eiList;
 	const CoordinateSequence *pts;
+	int npts;
 	const void* context;
 	bool isIsolatedVar;
 public:
