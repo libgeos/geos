@@ -168,3 +168,4 @@ class STRtree: public AbstractSTRtree,public SpatialIndex {
 };
 
 #endif
+

@@ -455,6 +455,7 @@ class CGAlgorithms;
 class Point;
 class Geometry: public SFSGeometry {
 public:
+	void throw_exception ();
 	Geometry(void);
 	Geometry(const Geometry &geom);
 	Geometry(PrecisionModel* precisionModel, int SRID);
