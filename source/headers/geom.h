@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.40  2003/10/24 21:27:31  strk
+* Added GeometryTypeId enum and getGeometryTypeId abstract Geometry method.
+*
 * Revision 1.39  2003/10/20 15:41:34  strk
 * Geometry::checkNotGeometryCollection made static and non-distructive.
 *
@@ -44,6 +47,16 @@
 using namespace std;
 
 namespace geos {
+
+enum GeometryTypeId {
+	GEOS_POINT,
+	GEOS_LINESTRING,
+	GEOS_POLYGON,
+	GEOS_MULTIPOINT,
+	GEOS_MULTILINESTRING,
+	GEOS_MULTIPOLYGON,
+	GEOS_GEOMETRYCOLLECTION
+};
 
 class Coordinate;
 
@@ -504,6 +517,7 @@ public:
 	Geometry(const Geometry &geom);
 	Geometry(const PrecisionModel* pm, int SRID);
 	virtual string getGeometryType() const=0; //Abstract
+	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
 	virtual int getSRID() const;
 	virtual void setSRID(int newSRID);
 	virtual PrecisionModel* getPrecisionModel() const;
@@ -735,6 +749,9 @@ public:
 	virtual const Geometry* getGeometryN(int n) const;
 	virtual int getNumPoints() const;
 	virtual string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const {
+		return GEOS_GEOMETRYCOLLECTION;
+	}
 	virtual bool isSimple() const;
 	virtual Geometry* getBoundary() const;
 	virtual bool equalsExact(const Geometry *other, double tolerance) const;
@@ -813,6 +830,9 @@ public:
 	double getY() const;
 	const Coordinate* getCoordinate() const;
 	string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const {
+		return GEOS_POINT;
+	}
 	Geometry* getBoundary() const;
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(CoordinateFilter *filter);
@@ -867,6 +887,9 @@ public:
 	virtual bool isClosed() const;
 	virtual bool isRing() const;
 	virtual string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const {
+		return GEOS_LINESTRING;
+	}
 	virtual bool isSimple() const;
 	virtual Geometry* getBoundary() const;
 	virtual bool isCoordinate(Coordinate& pt) const;
@@ -928,6 +951,9 @@ public:
 	int getNumInteriorRing() const;
 	const LineString* getInteriorRingN(int n) const;
 	string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const {
+		return GEOS_POLYGON;
+	}
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 	void apply_rw(CoordinateFilter *filter);
@@ -958,6 +984,9 @@ public:
 	int getDimension() const;
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const {
+		return GEOS_MULTIPOINT;
+	}
 	bool isValid() const;
 	bool isClosed() const;
 	bool isSimple() const;
@@ -975,6 +1004,9 @@ public:
 	int getDimension() const;
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const {
+		return GEOS_MULTILINESTRING;
+	}
 	bool isClosed() const;
 	bool isSimple() const;
 	Geometry* getBoundary() const;
@@ -989,6 +1021,9 @@ public:
 	int getDimension() const;
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const {
+		return GEOS_MULTIPOLYGON;
+	}
 	bool isSimple() const;
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
