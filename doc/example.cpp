@@ -10,6 +10,9 @@
 //  obscure reports from memory checkers like valgrind.
 //
 // $Log$
+// Revision 1.7  2003/10/29 10:38:43  strk
+// Added centroid computation example
+//
 // Revision 1.6  2003/10/21 16:16:46  strk
 // Uncommented point creation lines. Updated comments about segfaults.
 //
@@ -47,7 +50,7 @@ wkt_print_geoms(int numgeoms, Geometry **geoms)
 	for (int i=0; i<numgeoms; i++) {
 		//string tmp="test";
 		string tmp=wkt->write(geoms[i]);
-		cout<<tmp<<endl;
+		cout<<"["<<i<<"] "<<tmp<<endl;
 		//cout<<wkt->write(geoms[i])<<endl;
 	}
 	delete wkt;
@@ -217,6 +220,25 @@ void do_all()
 	wkt_print_geoms(numgeoms, geoms);
 
 	/////////////////////////////////////////////
+	// CENTROID
+	/////////////////////////////////////////////
+	
+	// Find centroid of each base geometry
+	Geometry *centroid[numgeoms];
+	for (int i=0; i<numgeoms; i++) {
+		centroid[i] = geoms[i]->getCentroid();
+	}
+
+	// Print all convex hulls
+	cout<<"------- AND HERE ARE THEIR CENTROIDS -----"<<endl;
+	wkt_print_geoms(numgeoms, centroid);
+
+	// Delete the hulls
+	for (int i=0; i<numgeoms; i++) {
+		delete centroid[i];
+	}
+	
+	/////////////////////////////////////////////
 	// CONVEX HULL
 	/////////////////////////////////////////////
 	
@@ -262,7 +284,7 @@ void do_all()
 	}
 
 	// Print all unions
-	cout<<"--------HERE COMES THE UNIONS----------"<<endl;
+	cout<<"----- AND HERE ARE SOME UNION COMBINATIONS ------"<<endl;
 	wkt_print_geoms(numunions, unions);
 
 	// Delete the resulting geoms
