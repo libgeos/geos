@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
  * Revision 1.4  2004/04/20 10:14:20  strk
  * Memory leaks removed.
  *
@@ -63,9 +66,11 @@ vector<SegmentString*>* OffsetCurveSetBuilder::getCurves(){
 	return curveList;
 }
 
-void OffsetCurveSetBuilder::addCurves(vector<CoordinateList*> *lineList, int leftLoc, int rightLoc){
+void
+OffsetCurveSetBuilder::addCurves(const vector<CoordinateList*> *lineList, int leftLoc, int rightLoc)
+{
 	for (int i=0;i<(int)lineList->size();i++) {
-		CoordinateList *coords=(*lineList)[i];
+		const CoordinateList *coords=(*lineList)[i];
 		addCurve(coords, leftLoc, rightLoc);
 	}
 }
@@ -79,7 +84,9 @@ void OffsetCurveSetBuilder::addCurves(vector<CoordinateList*> *lineList, int lef
 * <br>Left: Location.EXTERIOR
 * <br>Right: Location.INTERIOR
 */
-void OffsetCurveSetBuilder::addCurve(const CoordinateList *coord, int leftLoc, int rightLoc){
+void
+OffsetCurveSetBuilder::addCurve(const CoordinateList *coord, int leftLoc, int rightLoc)
+{
 	// don't add null curves!
 	if (coord->getSize() < 2) return;
 	// add the edge for a coordinate list which is a raw offset curve
@@ -163,11 +170,15 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 		// optimization - don't bother computing buffer for this hole
 		// if the hole would be completely covered
 		if (distance > 0.0 && isErodedCompletely(holeCoord, -distance))
+		{
+			delete holeCoord;
 			return;
+		}
 		// Holes are topologically labelled opposite to the shell, since
 		// the interior of the polygon lies on their opposite side
 		// (on the left, if the hole is oriented CCW)
 		addPolygonRing(holeCoord,offsetDistance,Position::opposite(offsetSide),Location::INTERIOR,Location::EXTERIOR);
+		delete holeCoord;
 	}
 }
 
@@ -195,6 +206,7 @@ void OffsetCurveSetBuilder::addPolygonRing(const CoordinateList *coord, double o
 	}
 	vector<CoordinateList*> *lineList=curveBuilder->getRingCurve(coord, side, offsetDistance);
 	addCurves(lineList, leftLoc, rightLoc);
+	delete lineList;
 }
 
 /**

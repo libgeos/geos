@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
  * Revision 1.4  2004/04/19 15:14:46  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -141,17 +144,23 @@ BufferBuilder::buffer(Geometry *g, double distance)
 		resultPolyList=polyBuilder->getPolygons();
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (TopologyException *exc) {
+		for (int i=0; i<subgraphList->size(); i++)
+			delete (*subgraphList)[i];
 		delete subgraphList;
 		delete resultPolyList;
 		delete polyBuilder;
 		throw;
 	} catch (...) {
+		for (int i=0; i<subgraphList->size(); i++)
+			delete (*subgraphList)[i];
 		delete subgraphList;
 		delete resultPolyList;
 		delete polyBuilder;
 		fprintf(stderr, "Unexpected!\n");
 		throw;
 	}
+	for (int i=0; i<subgraphList->size(); i++)
+		delete (*subgraphList)[i];
 	delete subgraphList;
 	delete resultPolyList;
 	delete polyBuilder;
@@ -229,7 +238,9 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second) {
 		return false;
 }
 
-vector<BufferSubgraph*>* BufferBuilder::createSubgraphs(PlanarGraph *graph){
+vector<BufferSubgraph*>*
+BufferBuilder::createSubgraphs(PlanarGraph *graph)
+{
 	vector<BufferSubgraph*> *subgraphList=new vector<BufferSubgraph*>();
 	vector<Node*> *n=graph->getNodes();
 	for (int i=0;i<(int)n->size();i++) {
@@ -258,8 +269,8 @@ vector<BufferSubgraph*>* BufferBuilder::createSubgraphs(PlanarGraph *graph){
 * @param subgraphList the subgraphs to build
 * @param polyBuilder the PolygonBuilder which will build the final polygons
 */
-void BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *
-subgraphList,PolygonBuilder *polyBuilder)
+void
+BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder)
 {
 	vector<BufferSubgraph*> *processedGraphs=new vector<BufferSubgraph*>();
 	for (int i=0;i<(int)subgraphList->size();i++) {
@@ -272,5 +283,6 @@ subgraphList,PolygonBuilder *polyBuilder)
 		processedGraphs->push_back(subgraph);
 		polyBuilder->add(subgraph->getDirectedEdges(), subgraph->getNodes());
 	}
+	delete processedGraphs;
 }
 }

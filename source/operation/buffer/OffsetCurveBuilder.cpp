@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
  * Revision 1.5  2004/04/19 16:14:52  strk
  * Some memory leaks plugged in noding algorithms.
  *
@@ -100,7 +103,9 @@ void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
 *
 * @return a List of Coordinate[]
 */
-vector<CoordinateList*>* OffsetCurveBuilder::getLineCurve(const CoordinateList *inputPts, double distance){
+vector<CoordinateList*>*
+OffsetCurveBuilder::getLineCurve(const CoordinateList *inputPts, double distance)
+{
 	vector<CoordinateList*> *lineList=new vector<CoordinateList*>();
 	// a zero or negative width buffer of a line/point is empty
 	if (distance<= 0.0) return lineList;
@@ -134,7 +139,10 @@ OffsetCurveBuilder::getRingCurve(const CoordinateList *inputPts, int side, doubl
 	vector<CoordinateList*>* lineList=new vector<CoordinateList*>();
 	init(distance);
 	if (inputPts->getSize()<= 2)
+	{
+		delete lineList;
 		return getLineCurve(inputPts, distance);
+	}
 	// optimize creating ring for for zero distance
 	if (distance==0.0) {
 		lineList->push_back(CoordinateListFactory::internalFactory->createCoordinateList(inputPts));
@@ -209,18 +217,26 @@ void OffsetCurveBuilder::addPt(const Coordinate &pt){
 	delete bufPt;
 	//System.out.println(bufPt);
 }
+
 void OffsetCurveBuilder::closePts(){
 	if (ptList->getSize()<1) return;
-	Coordinate *startPt=new Coordinate(ptList->getAt(0));
-	Coordinate *lastPt=(Coordinate*)&(ptList->getAt(ptList->getSize()-1));
-	Coordinate *last2Pt=NULL;
+	Coordinate startPt=ptList->getAt(0);
+	Coordinate lastPt=ptList->getAt(ptList->getSize()-1);
+	Coordinate last2Pt;
+
+	//Coordinate *startPt=new Coordinate(ptList->getAt(0));
+	//Coordinate *lastPt=(Coordinate*)&(ptList->getAt(ptList->getSize()-1));
 	if (ptList->getSize()>= 2)
-		last2Pt=(Coordinate*)&(ptList->getAt(ptList->getSize()-2));
-	if ((*startPt)==(*lastPt)) return;
-	ptList->add(*startPt);
+	{
+		last2Pt=ptList->getAt(ptList->getSize()-2);
+	}
+	if ((startPt)==(lastPt)) return;
+	ptList->add(startPt);
 }
 
-void OffsetCurveBuilder::initSideSegments(const Coordinate &nS1, const Coordinate &nS2, int nSide){
+void
+OffsetCurveBuilder::initSideSegments(const Coordinate &nS1, const Coordinate &nS2, int nSide)
+{
 	s1=nS1;
 	s2=nS2;
 	side=nSide;

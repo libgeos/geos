@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
  * Revision 1.11  2004/04/19 15:14:45  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -417,7 +420,7 @@ public:
 	* @return a Collection of SegmentStrings representing the raw buffer curves
 	*/
 	vector<SegmentString*>* getCurves();
-	void addCurves(vector<CoordinateList*> *lineList, int leftLoc, int rightLoc);
+	void addCurves(const vector<CoordinateList*> *lineList, int leftLoc, int rightLoc);
 private:
 	CGAlgorithms *cga;
 	const Geometry *inputGeom;
