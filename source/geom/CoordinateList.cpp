@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/05/18 13:15:25  strk
+ * made ::scroll handle already scrolled vect and more readable
+ *
  * Revision 1.17  2004/05/17 21:03:56  ybychkov
  * JavaDoc updated
  *
@@ -103,15 +106,16 @@ CoordinateList::indexOf(const Coordinate *coordinate, const CoordinateList *cl)
 void
 CoordinateList::scroll(CoordinateList* cl,const Coordinate* firstCoordinate)
 {
+	int i, j=0;
 	int ind=indexOf(firstCoordinate,cl);
-	if (ind<0) return;
+	if (ind<1) return; // not found or already first
 	int length=cl->getSize();
 	vector<Coordinate> v(length);
-	for (int i=ind; i<length; i++) {
-		v[i-ind]=cl->getAt(i);
+	for (i=ind; i<length; i++) {
+		v[j++]=cl->getAt(i);
 	}
-	for (int j=0; j<ind; j++) {
-		v[length-ind+j]=cl->getAt(j);
+	for (i=0; i<ind; i++) {
+		v[j++]=cl->getAt(i);
 	}
 	cl->setPoints(v);
 }
