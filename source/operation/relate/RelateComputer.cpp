@@ -94,6 +94,7 @@ IntersectionMatrix RelateComputer::computeIM() {
 	(*arg)[1]->computeSelfNodes((LineIntersector*)li);
 	// compute intersections between edges of the two input geometries
 	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1],(LineIntersector*)li,false);
+cout << "# segment intersection tests: " << intersector->numTests << endl;
 	computeIntersectionNodes(0);
 	computeIntersectionNodes(1);
 	/**
