@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
  * Revision 1.5  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -121,7 +124,10 @@ void BufferSubgraph::computeDepth(int outsideDepth) {
 	computeDepths(de);
 }
 
-void BufferSubgraph::computeNodeDepth(Node *n) {
+void
+BufferSubgraph::computeNodeDepth(Node *n)
+	// throw(TopologyException *)
+{
 	// find a visited dirEdge to start at
 	DirectedEdge *startEdge=NULL;
 	vector<EdgeEnd*> *ees=n->getEdges()->getEdges();

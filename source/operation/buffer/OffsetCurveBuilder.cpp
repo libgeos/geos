@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
  * Revision 1.1  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -181,8 +184,13 @@ void OffsetCurveBuilder::addPt(const Coordinate &pt){
 	Coordinate *lastPt=NULL;
 	if (ptList->getSize()>= 1)
 		lastPt=(Coordinate*)&(ptList->getAt(ptList->getSize()-1));
-	if (lastPt!=NULL && (*bufPt)==(*lastPt)) return;
+	if (lastPt!=NULL && (*bufPt)==(*lastPt))
+	{
+		delete bufPt;
+		return;
+	}
 	ptList->add(*bufPt);
+	delete bufPt;
 	//System.out.println(bufPt);
 }
 void OffsetCurveBuilder::closePts(){

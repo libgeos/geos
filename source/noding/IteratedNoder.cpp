@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
  * Revision 1.2  2004/04/14 09:30:48  strk
  * Private iterated noding funx now use int* instead of vector to know
  * when it's time to stop.
@@ -80,6 +83,7 @@ vector<SegmentString*>* IteratedNoder::node(vector<SegmentString*> *segStrings, 
 	vector<SegmentString*> *nodedSegStrings=noder->node(segStrings);
 	*numInteriorIntersections=si->numInteriorIntersections;
 	//System.out.println("# intersection tests: " + si.numTests);
+	delete(noder);
 	return nodedSegStrings;
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
  * Revision 1.1  2004/03/26 07:48:30  ybychkov
  * "noding" package ported (JTS 1.4)
  *
@@ -33,7 +36,9 @@ MCQuadtreeNoder::MCQuadtreeNoder(){
 
 MCQuadtreeNoder::~MCQuadtreeNoder(){
 	delete chains;
-	delete index;
+	//Deleting this makes the code segfault, might be due to 
+	//wild pointers, though... more later --strk;
+	//delete index;
 }
 vector<SegmentString*> *MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings){
 	for(int i=0; i<(int)inputSegStrings->size();i++) {
