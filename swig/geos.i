@@ -16,6 +16,7 @@
  
 %module geos
 %include "std_string.i"
+%include "std_vector.i"
 %include "exception.i"
 
 %{ 
@@ -24,6 +25,18 @@
 
 // Following methods are prototypes but unimplemented and are to be ignored
 %ignore geos::MultiPoint::isClosed;
+
+// no transfer of ownership
+%ignore geos::GeometryFactory::createPoint(CoordinateSequence *) const;
+%ignore geos::GeometryFactory::createLineString(CoordinateSequence *) const;
+%ignore geos::GeometryFactory::createLinearRing(CoordinateSequence *) const;
+//~ %ignore geos::GeometryFactory::createPolygon(LinearRing *,vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createGeometryCollection(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::buildGeometry(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createMultiPoint(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createMultiLineString(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createMultiLinearRing(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createMultiPolygon(vector<Geometry * > *) const;
 
 // Required renaming
 %rename(Coordinate_Coordinate) Coordinate::Coordinate;
@@ -43,3 +56,12 @@
 %include "../../source/headers/geos/util.h"
 %include "../../source/headers/geos/io.h"
 
+//~ template<class T> 
+//~ class vector {
+//~ public:
+    //~ vector();
+    //~ ~vector();
+    //~ void push_back(const T obj);
+    //~ void reserve(size_t n);
+//~ };
+%template(vector_GeometryP) vector<geos::Geometry *>;
