@@ -63,7 +63,7 @@ AbstractNode* SIRtree::createNode(int level) {
 }
 
 void SIRtree::insert(double x1, double x2,void* item) {
-	AbstractSTRtree::insert(new Interval(__min(x1,x2),__max(x1, x2)),item);
+	AbstractSTRtree::insert(new Interval(min(x1,x2),max(x1, x2)),item);
 }
 
 vector<void*>* SIRtree::query(double x) {
@@ -74,5 +74,5 @@ vector<void*>* SIRtree::query(double x) {
 * min and max may be the same value
 */
 vector<void*>* SIRtree::query(double x1, double x2) {
-	return AbstractSTRtree::query(new Interval(__min(x1, x2),__max(x1, x2)));
+	return AbstractSTRtree::query(new Interval(min(x1, x2),max(x1, x2)));
 }

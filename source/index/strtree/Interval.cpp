@@ -18,8 +18,8 @@ double Interval::getCentre() {
 }
 
 Interval* Interval::expandToInclude(Interval *other) {
-	max=__max(max,other->max);
-	min=__min(min,other->min);
+	max=max(max,other->max);
+	min=min(min,other->min);
 	return this;
 }
 
