@@ -48,7 +48,7 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(int n, CoordinateSequence *c)
 
 bool
 CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl) {
-	int size=(int) cl->getSize();
+	int size=cl->getSize();
 	for(int i=1;i<size; i++) {
 		if (cl->getAt(i-1)==cl->getAt(i)) {
 			return true;
@@ -59,7 +59,7 @@ CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl) {
 
 const Coordinate* CoordinateSequence::minCoordinate() const {
 	const Coordinate* minCoord=NULL;
-	int size=(int) getSize();
+	int size=getSize();
 	for(int i=0; i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(getAt(i))>0) {
 			minCoord=&getAt(i);
@@ -72,7 +72,7 @@ const Coordinate*
 CoordinateSequence::minCoordinate(CoordinateSequence *cl)
 {
 	const Coordinate* minCoord=NULL;
-	int size=(int) cl->getSize();
+	int size=cl->getSize();
 	for(int i=0;i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(cl->getAt(i))>0) {
 			minCoord=&(cl->getAt(i));
@@ -84,7 +84,8 @@ CoordinateSequence::minCoordinate(CoordinateSequence *cl)
 int
 CoordinateSequence::indexOf(const Coordinate *coordinate, const CoordinateSequence *cl)
 {
-	for (int i=0; i<cl->getSize(); i++) {
+	int size=cl->getSize();
+	for (int i=0; i<size; i++) {
 		if ((*coordinate)==cl->getAt(i)) {
 			return i;
 		}
@@ -122,8 +123,9 @@ void CoordinateSequence::reverse(CoordinateSequence *cl){
 bool CoordinateSequence::equals(CoordinateSequence *cl1,CoordinateSequence *cl2){
 	if (cl1==cl2) return true;
 	if (cl1==NULL||cl2==NULL) return false;
-	if (cl1->getSize()!=cl2->getSize()) return false;
-	for (int i = 0; i<cl1->getSize(); i++) {
+	int npts1=cl1->getSize();
+	if (npts1!=cl2->getSize()) return false;
+	for (int i=0; i<npts1; i++) {
 		if (!(cl1->getAt(i)==cl2->getAt(i))) return false;
 	}
 	return true;
@@ -147,8 +149,9 @@ void CoordinateSequence::add(const vector<Coordinate>* vc,bool allowRepeated) {
 */
 void CoordinateSequence::add(const Coordinate& c,bool allowRepeated) {
 	if (!allowRepeated) {
-		if (getSize()>=1) {
-			const Coordinate& last=getAt(getSize()-1);
+		int npts=getSize();
+		if (npts>=1) {
+			const Coordinate& last=getAt(npts-1);
 			if (last.equals2D(c)) return;
 		}
 	}
@@ -172,12 +175,13 @@ CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction
 void
 CoordinateSequence::add(const CoordinateSequence *cl,bool allowRepeated,bool direction)
 {
+	int npts=cl->getSize();
 	if (direction) {
-		for (int i = 0; i < cl->getSize(); i++) {
+		for (int i=0; i<npts; i++) {
 			add(cl->getAt(i), allowRepeated);
 		}
 	} else {
-		for (int j =cl->getSize()-1;j>=0;j--) {
+		for (int j=npts-1; j>=0; j--) {
 			add(cl->getAt(j), allowRepeated);
 		}
 	}
@@ -210,6 +214,9 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/02/22 17:10:47  strk
+ * Reduced CoordinateSequence::getSize() calls.
+ *
  * Revision 1.7  2005/02/03 09:17:07  strk
  * more profiling label
  *

@@ -125,7 +125,7 @@ MCQuadtreeNoder::add(SegmentString *segStr)
 	cerr<<"MCQuadtreeNoder: adding "<<segChains->size()<<" items in STRtree index"<<endl;
 #endif
 	unsigned int size=segChains->size();
-	for (unsigned int i=0; i<size;i++) {
+	for (unsigned int i=0; i<size; i++) {
 		indexMonotoneChain *mc=(*segChains)[i];
 		mc->setId(idCounter++);
 		index->insert(mc->getEnvelope(), mc);
@@ -154,6 +154,9 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/02/22 17:10:47  strk
+ * Reduced CoordinateSequence::getSize() calls.
+ *
  * Revision 1.18  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/02/22 17:10:47  strk
+ * Reduced CoordinateSequence::getSize() calls.
+ *
  * Revision 1.9  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -128,13 +131,19 @@ void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
 	}
 }
 
-void RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de) {
+void
+RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de)
+{
 	const CoordinateSequence *coord=de->getEdge()->getCoordinates();
 	// only check vertices which are the starting point of a non-horizontal segment
-	for(int i=0;i<coord->getSize()-1;i++) {
+	int n=coord->getSize()-1;
+	for(int i=0; i<n; i++)
+	{
      // only check vertices which are the start or end point of a non-horizontal segment
      // <FIX> MD 19 Sep 03 - NO!  we can test all vertices, since the rightmost must have a non-horiz segment adjacent to it
-		if (minCoord==Coordinate::getNull() || coord->getAt(i).x>minCoord.x ) {
+		if (minCoord==Coordinate::getNull() ||
+			coord->getAt(i).x>minCoord.x )
+		{
 			minDe=de;
 			minIndex=i;
 			minCoord=coord->getAt(i);

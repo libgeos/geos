@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.47  2005/02/22 17:10:47  strk
+ * Reduced CoordinateSequence::getSize() calls.
+ *
  * Revision 1.46  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *
@@ -252,7 +255,8 @@ Geometry* LineString::getBoundary() const {
 }
 
 bool LineString::isCoordinate(Coordinate& pt) const {
-	for (int i = 0; i < points->getSize(); i++) {
+	int npts=points->getSize();
+	for (int i = 0; i<npts; i++) {
 		if (points->getAt(i)==pt) {
 			return true;
 		}
@@ -268,7 +272,8 @@ Envelope* LineString::computeEnvelopeInternal() const {
 	double miny = points->getAt(0).y;
 	double maxx = points->getAt(0).x;
 	double maxy = points->getAt(0).y;
-	for (int i = 1; i < points->getSize(); i++) {
+	int npts=points->getSize();
+	for (int i=1; i<npts; i++) {
 		minx = minx < points->getAt(i).x ? minx : points->getAt(i).x;
 		maxx = maxx > points->getAt(i).x ? maxx : points->getAt(i).x;
 		miny = miny < points->getAt(i).y ? miny : points->getAt(i).y;
@@ -282,10 +287,11 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 		return false;
 	}
 	const LineString *otherLineString=dynamic_cast<const LineString*>(other);
-	if (points->getSize()!=otherLineString->points->getSize()) {
+	int npts=points->getSize();
+	if (npts!=otherLineString->points->getSize()) {
 		return false;
 	}
-	for (int i = 0; i < points->getSize(); i++) {
+	for (int i=0; i<npts; i++) {
 		if (!equal(points->getAt(i),otherLineString->points->getAt(i),tolerance)) {
 			return false;
 		}
@@ -295,7 +301,8 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 
 void LineString::apply_rw(CoordinateFilter *filter)
 {
-	for (int i = 0; i < points->getSize(); i++) {
+	int npts=points->getSize();
+	for (int i=0; i<npts; i++) {
 		Coordinate newcoord = points->getAt(i);
 		filter->filter_rw(&newcoord);
 		points->setAt(newcoord, i);
@@ -303,7 +310,8 @@ void LineString::apply_rw(CoordinateFilter *filter)
 }
 
 void LineString::apply_ro(CoordinateFilter *filter) const {
-	for (int i = 0; i < points->getSize(); i++) {
+	int npts=points->getSize();
+	for (int i=0; i<npts; i++) {
 		// getAt returns a 'const' coordinate
 		filter->filter_ro(&(points->getAt(i)));
 	}
@@ -323,8 +331,10 @@ void LineString::apply_ro(GeometryFilter *filter) const {
 * less than the reflected point.
 */
 void LineString::normalize() {
-	for (int i = 0; i < points->getSize()/2; i++) {
-		int j = points->getSize() - 1 - i;
+	int npts=points->getSize();
+	int n=npts/2;
+	for (int i=0; i<n; i++) {
+		int j = npts - 1 - i;
 		if (!(points->getAt(i)==points->getAt(j))) {
 			if (points->getAt(i).compareTo(points->getAt(j)) > 0) {
 				CoordinateSequence::reverse(points);
@@ -339,7 +349,9 @@ int LineString::compareToSameClass(const Geometry *ls) const {
 	// MD - optimized implementation
 	int i=0;
 	int j=0;
-	while(i<points->getSize() && j<line->points->getSize()) {
+	int mynpts=points->getSize();
+	int othnpts=line->points->getSize();
+	while(i<mynpts && j<othnpts) {
 		int comparison=points->getAt(i).compareTo(line->points->getAt(j));
 		if(comparison!=0) {
 			return comparison;
@@ -347,10 +359,10 @@ int LineString::compareToSameClass(const Geometry *ls) const {
 		i++;
 		j++;
 	}
-	if (i<points->getSize()) {
+	if (i<mynpts) {
 		return 1;
 	}
-	if (j<line->points->getSize()) {
+	if (j<othnpts) {
 		return -1;
 	}
 	return 0;
