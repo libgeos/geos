@@ -16,6 +16,10 @@
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
 
+// Threating FP number as IEEE formatted will make the code
+// loose portability w/out really speed things up
+#define IEEE_DOUBLE 0
+
 namespace geos {
 
 double
@@ -23,7 +27,7 @@ DoubleBits::powerOf2(int exp)
 {
 	if (exp>1023 || exp<-1022)
 		throw new IllegalArgumentException("Exponent out of bounds");
-#if 0
+#ifdef IEEE_DOUBLE
 	long expBias=exp+EXPONENT_BIAS;
 	int64 bits=(int64)expBias << 52;
 	return (double) bits;
@@ -35,9 +39,12 @@ DoubleBits::powerOf2(int exp)
 int
 DoubleBits::exponent(double d)
 {
-	//DoubleBits db(d);
-	//return db.getExponent();
-	return (int)log(d)/log(2.0);
+#ifdef IEEE_DOUBLE
+	DoubleBits db(d);
+	return db.getExponent();
+#else
+	return (int)(log(d)/log(2.0));
+#endif
 }
 
 double
@@ -68,7 +75,7 @@ DoubleBits::maximumCommonMantissa(double d1, double d2)
 
 DoubleBits::DoubleBits(double nx)
 {
-	xBits=(int64)nx;
+	memcpy(&xBits,&nx,sizeof(double));
 }
 
 double DoubleBits::getDouble()
@@ -84,8 +91,9 @@ double DoubleBits::getDouble()
 int64
 DoubleBits::biasedExponent()
 {
-	int64 signExp=(int64)(xBits>>52);
+	int64 signExp=xBits>>52;
 	int64 exp=signExp&0x07ff;
+	//cerr<<"xBits:"<<xBits<<" signExp:"<<signExp<<" exp:"<<exp<<endl;
 	return exp;
 }
 
@@ -154,6 +162,10 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2004/11/02 14:13:38  strk
+ * Fixed bug in IEEE-based exponent and PowerOf2 computation, but disabled
+ * at compile time.
+ *
  * Revision 1.12  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
