@@ -35,7 +35,8 @@ public:
 	string getSVal();
 private:
 	string str;
-	int currPos;
+	string stok;
+	double ntok;
 };
 
 class WKTReader {
@@ -65,4 +66,51 @@ protected:
 private:
 	GeometryFactory geometryFactory;
 	PrecisionModel precisionModel;
+};
+
+class Writer {
+public:
+	Writer();
+	~Writer();
+	void write(string txt);
+	string toString();
+private:
+	string str;
+};
+
+class WKTWriter {
+public:
+	WKTWriter();
+	~WKTWriter();
+	static string stringOfChar(char ch, int count);
+	string write(Geometry *geometry);
+	void write(Geometry *geometry, Writer *writer);
+	string writeFormatted(Geometry *geometry);
+	void writeFormatted(Geometry *geometry, Writer *writer);
+protected:
+	string formatter;
+	void appendGeometryTaggedText(Geometry *geometry, int level, Writer *writer);
+	void appendPointTaggedText(Coordinate coordinate, int level, Writer *writer,PrecisionModel precisionModel);
+	void appendLineStringTaggedText(LineString *lineString, int level, Writer *writer);
+	void appendPolygonTaggedText(Polygon *polygon, int level, Writer *writer);
+	void appendMultiPointTaggedText(MultiPoint *multipoint, int level, Writer *writer);
+	void appendMultiLineStringTaggedText(MultiLineString *multiLineString, int level,Writer *writer);
+	void appendMultiPolygonTaggedText(MultiPolygon *multiPolygon, int level, Writer *writer);
+	void appendGeometryCollectionTaggedText(GeometryCollection *geometryCollection, int level,Writer *writer);
+	void appendPointText(Coordinate coordinate, int level, Writer *writer,PrecisionModel precisionModel);
+	void appendCoordinate(Coordinate coordinate, Writer *writer, PrecisionModel precisionModel);
+	string writeNumber(double d);
+	void appendLineStringText(LineString *lineString, int level, bool doIndent, Writer *writer);
+	void appendPolygonText(Polygon *polygon, int level, bool indentFirst, Writer *writer);
+	void appendMultiPointText(MultiPoint *multiPoint, int level, Writer *writer);
+	void appendMultiLineStringText(MultiLineString *multiLineString, int level, bool indentFirst,Writer *writer);
+	void appendMultiPolygonText(MultiPolygon *multiPolygon, int level, Writer *writer);
+	void appendGeometryCollectionText(GeometryCollection *geometryCollection, int level,Writer *writer);
+private:
+	static const int INDENT = 2;
+	static string createFormatter(PrecisionModel precisionModel);
+	bool isFormatted;
+	int level;
+	void writeFormatted(Geometry *geometry, bool isFormatted, Writer *writer);
+	void indent(int level, Writer *writer);
 };

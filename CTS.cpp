@@ -179,13 +179,24 @@ int main(int argc, char** argv)
 //	string a(typeid(gf).name());
 //	cout << a << endl;
 
-	WKTReader wr;
+//	WKTReader wr;
 //	CoordinateList cl=wr.getCoordinates1();
 
 //	cout << cl.toString() <<endl;
 
-	GeometryFactory gf;
-	Polygon p(gf.createPolygon(NULL,NULL));
+//	GeometryFactory gf;
+//	Polygon p(gf.createPolygon(NULL,NULL));
+
+//	StringTokenizer st("\ntest of,(str");
+//	StringTokenizer st("123 123aaa aaa 1.7e+30");
+
+//	int a=st.nextToken();
+//	if (a==StringTokenizer::TT_NUMBER)
+//		cout << "Number: " << st.getNVal() <<endl;
+//	else if (a==StringTokenizer::TT_WORD)
+//		cout << "Word: " << st.getSVal() <<endl;
+//	else 
+//		cout << "Something else" <<endl;
 
 	cout << "End" << endl;
 	} catch (char *message){
