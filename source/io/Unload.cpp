@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/04/15 15:11:38  strk
+ * Commented out deletion that seems to cause segfaults
+ *
  * Revision 1.6  2004/04/15 14:00:31  strk
  * Added new cleanup to Unload::Release
  *
@@ -63,11 +66,11 @@ void Unload::Release()
 	delete RelateComputer::li;
 	delete RelateComputer::ptLocator;
 	delete QuadTreeRoot::origin;
-	delete PrecisionModel::FIXED;
-	delete PrecisionModel::FLOATING;
-	delete PrecisionModel::FLOATING_SINGLE;
+	//delete PrecisionModel::FIXED;
+	//delete PrecisionModel::FLOATING;
+	//delete PrecisionModel::FLOATING_SINGLE;
 	delete PrecisionModel::Type::nameToTypeMap;
-	delete Geometry::geometryChangedFilter;
+	//delete Geometry::geometryChangedFilter;
 	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
 	delete BufferBuilder::cga;
 }
