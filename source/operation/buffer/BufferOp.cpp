@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2004/05/19 13:01:34  strk
+ * avoided assignment operator calls for BufferBuilder
+ *
  * Revision 1.29  2004/05/05 10:22:49  strk
  * Removed dynamic allocations.
  *
@@ -221,7 +224,7 @@ BufferOp::computeGeometry()
 void
 BufferOp::bufferOriginalPrecision()
 {
-	BufferBuilder bufBuilder=BufferBuilder();
+	BufferBuilder bufBuilder;
 	bufBuilder.setQuadrantSegments(quadrantSegments);
 	bufBuilder.setEndCapStyle(endCapStyle);
 
@@ -246,7 +249,8 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 	SimpleGeometryPrecisionReducer reducer=SimpleGeometryPrecisionReducer(&fixedPM);
 	Geometry* reducedGeom=reducer.reduce(argGeom);
 	//cerr<<"recomputing with precision scale factor="<<sizeBasedScaleFactor<<" (precision digits "<<precisionDigits<<")"<<endl;
-	BufferBuilder bufBuilder=BufferBuilder();
+
+	BufferBuilder bufBuilder;
 	bufBuilder.setWorkingPrecisionModel(&fixedPM);
 	bufBuilder.setQuadrantSegments(quadrantSegments);
 
