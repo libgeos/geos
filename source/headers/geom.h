@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.50  2004/04/07 06:55:50  ybychkov
+ * "operation/linemerge" ported from JTS 1.4
+ *
  * Revision 1.49  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -469,6 +472,7 @@ public:
 	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
 	static void scroll(CoordinateList *cl, const Coordinate *firstCoordinate);
 	static void reverse(CoordinateList *cl);
+	void add(CoordinateList *cl,bool allowRepeated,bool direction);
 	void add(vector<Coordinate>* vc,bool allowRepeated);
 	void add(const Coordinate& c,bool allowRepeated);
 	static CoordinateList* removeRepeatedPoints(const CoordinateList *cl);

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/04/07 06:55:50  ybychkov
+ * "operation/linemerge" ported from JTS 1.4
+ *
  * Revision 1.15  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.
@@ -145,6 +148,19 @@ void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	}
 	add(c);
 }
+
+void CoordinateList::add(CoordinateList *cl,bool allowRepeated,bool direction){
+	if (direction) {
+		for (int i = 0; i < cl->getSize(); i++) {
+			add(cl->getAt(i), allowRepeated);
+		}
+	} else {
+		for (int j =cl->getSize()-1;j>=0;j--) {
+			add(cl->getAt(j), allowRepeated);
+		}
+	}
+}
+
 
 /**
 * This function allocates space for a CoordinateList object

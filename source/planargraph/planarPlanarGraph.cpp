@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/04/07 06:55:50  ybychkov
+ * "operation/linemerge" ported from JTS 1.4
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -78,6 +81,9 @@ map<Coordinate,planarNode*,planarCoordLT>::iterator planarPlanarGraph::nodeItera
 	return nodeMap->iterator();
 }
 
+vector<planarNode*>* planarPlanarGraph::getNodes() {
+	return nodeMap->getNodes();
+}
 /**
 * Returns an Iterator over the DirectedEdges in this PlanarGraph, in the order in which they
 * were added.

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/07 06:55:50  ybychkov
+ * "operation/linemerge" ported from JTS 1.4
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -411,11 +414,7 @@ public:
 	* Returns the Nodes in this NodeMap, sorted in ascending order
 	* by angle with the positive x-axis.
 	*/
-	//Doesn't work yet. Use iterator();
-	//public Collection values()
-	//{
-	//	return nodeMap.values();
-	//}
+	vector<planarNode*>* getNodes();
 };
 
 /**
@@ -470,9 +469,7 @@ public:
 	/**
 	* Returns the Nodes in this PlanarGraph.
 	*/  
-	//Doesn't work. Use iterator();
-	//	public Collection getNodes()  {    return nodeMap.values();  }
-
+	vector<planarNode*>* getNodes();
 	/**
 	* Returns an Iterator over the DirectedEdges in this PlanarGraph, in the order in which they
 	* were added.

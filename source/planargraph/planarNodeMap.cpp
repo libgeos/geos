@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/07 06:55:50  ybychkov
+ * "operation/linemerge" ported from JTS 1.4
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -55,6 +58,16 @@ planarNode* planarNodeMap::remove(Coordinate& pt){
 	planarNode *n=find(pt);
 	nodeMap->erase(pt);
 	return n;
+}
+
+vector<planarNode*>* planarNodeMap::getNodes(){
+	vector<planarNode*> *values=new vector<planarNode*>();
+	map<Coordinate,planarNode*,planarCoordLT>::iterator it=nodeMap->begin();
+	while(it!=nodeMap->end()) {
+		values->push_back(it->second);
+		it++;
+	}
+	return values;
 }
 
 /**

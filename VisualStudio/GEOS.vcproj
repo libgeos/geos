@@ -532,6 +532,25 @@
 						RelativePath="..\source\operation\buffer\RightmostEdgeFinder.cpp">
 					</File>
 				</Filter>
+				<Filter
+					Name="linemerge"
+					Filter="">
+					<File
+						RelativePath="..\source\operation\linemerge\EdgeString.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\linemerge\LineMergeDirectedEdge.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\linemerge\LineMergeEdge.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\linemerge\LineMergeGraph.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\linemerge\LineMerger.cpp">
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="io"
@@ -1077,21 +1096,6 @@
 					RelativePath="..\source\planargraph\planarEdge.cpp">
 				</File>
 				<File
-					RelativePath="..\source\planargraph\PlanarGraph.cpp">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\source\planargraph\planarGraphComponent.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
@@ -1111,6 +1115,21 @@
 				</File>
 				<File
 					RelativePath="..\source\planargraph\planarNodeMap.cpp">
+				</File>
+				<File
+					RelativePath="..\source\planargraph\planarPlanarGraph.cpp">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName).obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
@@ -1170,6 +1189,9 @@
 			</File>
 			<File
 				RelativePath="..\source\headers\operation.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\opLinemerge.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\opOverlay.h">
