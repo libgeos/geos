@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.14  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -35,6 +39,15 @@ bool CoordinateList::hasRepeatedPoints() const {
 	}
 	return false;
 }
+
+/**
+* Returns either the given coordinate array if its length is greater than the
+* given amount, or an empty coordinate array.
+*/
+CoordinateList* atLeastNCoordinatesOrNothing(int n,CoordinateList *c) {
+	return c->getSize()>=n?c:CoordinateListFactory::internalFactory->createCoordinateList();
+}      
+
 
 bool CoordinateList::hasRepeatedPoints(const CoordinateList *cl) {
 	int size=(int) cl->getSize();
@@ -127,7 +140,7 @@ void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	if (!allowRepeated) {
 		if (getSize()>=1) {
 			const Coordinate& last=getAt(getSize()-1);
-			if (last==c) return;
+			if (last.equals2D(c)) return;
 		}
 	}
 	add(c);

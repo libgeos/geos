@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.14  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -39,10 +43,7 @@ WKTWriter::~WKTWriter() {}
 string WKTWriter::createFormatter(const PrecisionModel* precisionModel) {
 	// the default number of decimal places is 16, which is sufficient
 	// to accomodate the maximum precision of a double.
-	int decimalPlaces = 16;
-	if (!precisionModel->isFloating()) {
-		decimalPlaces = 1 + (int) ceil(log(precisionModel->getScale())/log(10.0));
-	}
+    int decimalPlaces = precisionModel->getMaximumSignificantDigits();
 	string fmt="%.";
 	char buffer[255];
 	sprintf(buffer,"%i",decimalPlaces);
@@ -99,6 +100,8 @@ void WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level, Wr
 	if (typeid(*geometry)==typeid(Point)) {
 		Point* point=(Point*)geometry;
 		appendPointTaggedText(point->getCoordinate(),level,writer,point->getPrecisionModel());
+	} else if (typeid(*geometry)==typeid(LinearRing)) {
+		appendLinearRingTaggedText((LinearRing*) geometry, level, writer);
 	} else if (typeid(*geometry)==typeid(LineString)) {
 		appendLineStringTaggedText((LineString*)geometry, level, writer);
 	} else if (typeid(*geometry)==typeid(LinearRing)) {
@@ -131,9 +134,16 @@ void WKTWriter::appendLineStringTaggedText(const LineString *lineString, int lev
 	appendLineStringText(lineString, level, false, writer);
 }
 
-void WKTWriter::appendLinearRingTaggedText(const LinearRing *lineString, int level, Writer *writer) {
+/**
+*  Converts a <code>LinearRing</code> to &lt;LinearRing Tagged Text&gt;
+*  format, then appends it to the writer.
+*
+*@param  linearRing  the <code>LinearRing</code> to process
+*@param  writer      the output writer to append to
+*/
+void WKTWriter::appendLinearRingTaggedText(const LinearRing* linearRing, int level, Writer *writer) {
 	writer->write("LINEARRING ");
-	appendLineStringText((LineString *)lineString, level, false, writer);
+	appendLineStringText((LineString*)linearRing, level, false, writer);
 }
 
 void WKTWriter::appendPolygonTaggedText(const Polygon *polygon, int level, Writer *writer) {
@@ -174,14 +184,14 @@ WKTWriter::appendPointText(const Coordinate* coordinate, int level,
 }
 
 void WKTWriter::appendCoordinate(const Coordinate* coordinate, Writer *writer, const PrecisionModel* precisionModel) {
-	Coordinate* externalCoordinate=new Coordinate();
-	precisionModel->toExternal(*coordinate, externalCoordinate);
+//	Coordinate* externalCoordinate=new Coordinate();
+//	precisionModel->toExternal(*coordinate, externalCoordinate);
 	string out="";
-	out+=writeNumber(externalCoordinate->x);
+	out+=writeNumber(coordinate->x);
 	out+=" ";
-	out+=writeNumber(externalCoordinate->y);
+	out+=writeNumber(coordinate->y);
 	writer->write(out);
-	delete externalCoordinate;
+//	delete externalCoordinate;
 }
 
 string WKTWriter::writeNumber(double d) {

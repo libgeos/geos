@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -75,6 +79,51 @@ int StringTokenizer::nextToken(){
 	} else {
 		tok=str.substr(0,pos);
 		str=str.substr(pos);
+	}
+	char *stopstring;
+	double dbl=strtod(tok.c_str(),&stopstring);
+	if (strcmp(stopstring,"")==0) {
+		ntok=dbl;
+		stok="";
+		return StringTokenizer::TT_NUMBER;
+	} else {
+		ntok=0.0;
+		stok=tok;
+		return StringTokenizer::TT_WORD;
+	}
+}
+
+int StringTokenizer::peekNextToken(){
+	string tok="";
+	if (str.size()==0)
+		return StringTokenizer::TT_EOF;
+	switch(str[0]) {
+		case '\n':
+		case '\r':
+			return nextToken();
+		case '(':
+			return '(';
+		case ')':
+			return ')';
+		case ',':
+			return ',';
+		case ' ':
+			string::size_type pos=str.find_first_not_of(" ");
+			if (pos==string::npos) {
+				return StringTokenizer::TT_EOF;
+			} else {
+				return nextToken();
+			}
+		}
+	string::size_type pos=str.find_first_of("\n() ,");
+	if (pos==string::npos) {
+		if (str.size()>0) {
+			tok=str.substr(0);
+		} else {
+			return StringTokenizer::TT_EOF;
+		}
+	} else {
+		tok=str.substr(0,pos);
 	}
 	char *stopstring;
 	double dbl=strtod(tok.c_str(),&stopstring);

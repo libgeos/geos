@@ -156,11 +156,6 @@
 			</File>
 			<File
 				RelativePath="..\source\test\Stackwalker.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\source\test\Stackwalker.h">
@@ -380,6 +375,9 @@
 				<File
 					RelativePath="..\source\geom\TopologyException.cpp">
 				</File>
+				<File
+					RelativePath="..\source\geom\Triangle.cpp">
+				</File>
 			</Filter>
 			<Filter
 				Name="operation"
@@ -583,6 +581,9 @@
 				</File>
 				<File
 					RelativePath="..\source\util\CoordinateArrayFiter.cpp">
+				</File>
+				<File
+					RelativePath="..\source\util\GeometricShapeFactory.cpp">
 				</File>
 				<File
 					RelativePath="..\source\util\GEOSException.cpp">

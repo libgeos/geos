@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.12  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -23,6 +27,10 @@
 
 /*
 * $Log$
+* Revision 1.13  2004/03/18 10:42:44  ybychkov
+* "IO" and "Util" upgraded to JTS 1.4
+* "Geometry" partially upgraded.
+*
 * Revision 1.12  2003/11/07 01:23:42  pramsey
 * Add standard CVS headers licence notices and copyrights to all cpp and h
 * files.
@@ -126,6 +134,98 @@ public:
 	virtual const CoordinateList* getCoordinates() const;
 	virtual void filter_ro(const Coordinate &coord);
 	virtual void filter_rw(Coordinate &coord); // Unsupported
+};
+
+
+/**
+ * Computes various kinds of common geometric shapes.
+ * Allows various ways of specifying the location and extent of the shapes,
+ * as well as number of line segments used to form them.
+ *
+ */
+class GeometricShapeFactory {
+private:
+	class Dimensions {
+	public:
+		Coordinate base;
+		Coordinate centre;
+		double width;
+		double height;
+		void setBase(const Coordinate& newBase);
+		void setCentre(const Coordinate& newCentre);
+		void setSize(double size);
+		void setWidth(double nWidth);
+		void setHeight(double nHeight);
+		Envelope* getEnvelope();
+	};
+	GeometryFactory* geomFact;
+	Dimensions* dim;
+	int nPts;
+public:
+	/**
+	* Create a shape factory which will create shapes using the given
+	* {@link GeometryFactory}.
+	*
+	* @param geomFact the factory to use
+	*/
+	GeometricShapeFactory(GeometryFactory *newGeomFact);
+	~GeometricShapeFactory();
+	/**
+	* Sets the location of the shape by specifying the base coordinate
+	* (which in most cases is the
+	* lower left point of the envelope containing the shape).
+	*
+	* @param base the base coordinate of the shape
+	*/
+	void setBase(const Coordinate& base);
+	/**
+	* Sets the location of the shape by specifying the centre of
+	* the shape's bounding box
+	*
+	* @param centre the centre coordinate of the shape
+	*/
+	void setCentre(const Coordinate& centre);
+	/**
+	* Sets the total number of points in the created Geometry
+	*/
+	void setNumPoints(int nNPts);
+	/**
+	* Sets the size of the extent of the shape in both x and y directions.
+	*
+	* @param size the size of the shape's extent
+	*/
+	void setSize(double size);
+	/**
+	* Sets the width of the shape.
+	*
+	* @param width the width of the shape
+	*/
+	void setWidth(double width);
+	/**
+	* Sets the height of the shape.
+	*
+	* @param height the height of the shape
+	*/
+	void setHeight(double height);
+	/**
+	* Creates a rectangular {@link Polygon}.
+	*
+	* @return a rectangular Polygon
+	*
+	*/
+	Polygon* createRectangle();
+	/**
+	* Creates a circular {@link Polygon}.
+	*
+	* @return a circle
+	*/
+	Polygon* createCircle();
+	/**
+	* Creates a elliptical arc, as a LineString.
+	*
+	* @return an elliptical arc
+	*/
+	LineString* createArc(double startAng,double endAng);
 };
 
 }

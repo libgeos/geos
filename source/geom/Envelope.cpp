@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.10  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -37,8 +41,10 @@ bool
 Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
 		const Coordinate& q)
 {
-	if (((q.x>=min(p1.x,p2.x))&&(q.x<=max(p1.x,p2.x))) &&
-		((q.y>=min(p1.y,p2.y))&&(q.y<=max(p1.y,p2.y)))) {
+	//OptimizeIt shows that Math#min and Math#max here are a bottleneck.
+    //Replace with direct comparisons. [Jon Aquino]
+    if (((q.x >= (p1.x < p2.x ? p1.x : p2.x)) && (q.x <= (p1.x > p2.x ? p1.x : p2.x))) &&
+        ((q.y >= (p1.y < p2.y ? p1.y : p2.y)) && (q.y <= (p1.y > p2.y ? p1.y : p2.y)))) {
 			return true;
 	}
 	return false;
@@ -387,6 +393,7 @@ bool Envelope::contains(double x, double y) const {
  *              is contained in this <code>Envelope</code>
  */
 bool Envelope::contains(const Envelope* other) const {
+	if (isNull() || other->isNull()) { return false; }
 	return  other->getMinX() >= minx &&
 			other->getMaxX() <= maxx &&
 			other->getMinY() >= miny &&
@@ -443,6 +450,7 @@ bool Envelope::overlaps(double x, double y) const {
  *@return        <code>true</code> if the <code>Envelope</code>s overlap
  */
 bool Envelope::intersects(const Envelope* other) const {
+	if (isNull() || other->isNull()) { return false; }
 	return !(other->getMinX() > maxx ||
 			 other->getMaxX() < minx ||
 			 other->getMinY() > maxy ||
@@ -505,5 +513,16 @@ bool operator==(const Envelope a, const Envelope b) {
 		   a.getMinX() == b.getMinX() &&
 		   a.getMinY() == b.getMinY();
 }
+
+int Envelope::hashCode() const{
+	//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
+	int result = 17;
+	result = 37 * result + Coordinate::hashCode(minx);
+	result = 37 * result + Coordinate::hashCode(maxx);
+	result = 37 * result + Coordinate::hashCode(miny);
+	result = 37 * result + Coordinate::hashCode(maxy);
+	return result;
+}
+
 }
 

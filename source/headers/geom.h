@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.45  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.44  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -29,6 +33,10 @@
 
 /*
 * $Log$
+* Revision 1.45  2004/03/18 10:42:44  ybychkov
+* "IO" and "Util" upgraded to JTS 1.4
+* "Geometry" partially upgraded.
+*
 * Revision 1.44  2004/03/17 02:00:33  ybychkov
 * "Algorithm" upgraded to JTS 1.4
 *
@@ -103,34 +111,41 @@ enum GeometryTypeId {
 class Coordinate;
 
 /**
-*  Converts a coordinate to and from a "precise" coordinate; that is, one whose
-*  precision is known exactly. In other words, specifies the grid of allowable
-*  points for all <code>Geometry</code>s. <P>
-*
-*  Vertices are assumed to be precise in JTS. That is, the coordinates of
-*  vertices are assumed to be rounded to the defined precision model. Input
-*  routines will be responsible for rounding coordinates to the precision model
-*  before creating JTS structures. Non-constructive internal operations will
-*  assume that coordinates are rounded to the precision model. <P>
-*
-*  JTS methods do not handle inputs with different precision models. <P>
-*
-*  The Precision Model is be specified by a scale factor.
-*  The scale factor specifies the grid which numbers are rounded to.
-*  World coordinates are mapped to JTS coordinates according to the following
-*  equations:
-*  <UL>
-*    <LI> jtsPt.x = round( (inputPt.x * scale ) / scale
-*    <LI> jtsPt.y = round( (inputPt.y * scale ) / scale
-*  </UL>
-*  Coordinates are be represented as double-precision values.
-* Since Java uses the IEEE-394 floating point standard, this
+ * Specifies the precision model of the {@link Coordinate}s in a {@link Geometry}.
+ * In other words, specifies the grid of allowable
+ *  points for all <code>Geometry</code>s.
+ * <p>
+ * The {@link makePrecise} method allows rounding a coordinate to
+ * a "precise" value; that is, one whose
+ *  precision is known exactly.
+ *<p>
+ * Coordinates are assumed to be precise in geometries.
+ * That is, the coordinates are assumed to be rounded to the
+ * precision model given for the geometry.
+ * GEOS input routines automatically round coordinates to the precision model
+ * before creating Geometries.
+ * All internal operations
+ * assume that coordinates are rounded to the precision model.
+ * Constructive methods (such as boolean operations) always round computed
+ * coordinates to the appropriate precision model.
+ * <p>
+ * Currently three types of precision model are supported:
+ * <ul>
+ * <li>FLOATING - represents full double precision floating point.
+ * This is the default precision model used in JTS
+ * <li>FLOATING_SINGLE - represents single precision floating point.
+ * <li>FIXED - represents a model with a fixed number of decimal places.
+ *  A Fixed Precision Model is specified by a scale factor.
+ *  The scale factor specifies the grid which numbers are rounded to.
+ *  Input coordinates are mapped to fixed coordinates according to the following
+ *  equations:
+ *    <UL>
+ *      <LI> jtsPt.x = round( (inputPt.x * scale ) / scale
+ *      <LI> jtsPt.y = round( (inputPt.y * scale ) / scale
+ *    </UL>
+ * </ul>
+ */
 
-*  provides 53 bits of precision. (Thus the maximum precisely representable
-*  integer is 9,007,199,254,740,992).
-*
-*@version 1.3
-*/
 class PrecisionModel {
 public:
 	enum {
@@ -276,12 +291,51 @@ public:
 		return sqrt(dx * dx + dy * dy);
 	}
 
+	int Coordinate::hashCode() {
+        //Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
+        int result = 17;
+        result = 37 * result + hashCode(x);
+        result = 37 * result + hashCode(y);
+        return result;
+    }
+
+    /**
+     * Returns a hash code for a double value, using the algorithm from
+     * Joshua Bloch's book <i>Effective Java"</i>
+     */
+    static int Coordinate::hashCode(double x) {
+        long long f = (long long)(x);
+        return (int)(f^(f>>32));
+    }
+
+
 	double x;	/// x-coordinate
 	double y;	/// y-coordinate
 	double z;	/// z-coordinate
+private:
+	static const long long serialVersionUID=6683108902428366910L;
+
 
 };
 
+
+/**
+ * The internal representation of a list of coordinates inside a Geometry.
+ * <p>
+ * There are some cases in which you might want Geometries to store their
+ * points using something other than the GEOS Coordinate class. For example, you
+ * may want to experiment with another implementation, such as an array of x’s
+ * and an array of y’s. or you might want to use your own coordinate class, one
+ * that supports extra attributes like M-values.
+ * <p>
+ * You can do this by implementing the CoordinateList and
+ * CoordinateListFactory interfaces. You would then create a
+ * GeometryFactory parameterized by your CoordinateListFactory, and use
+ * this GeometryFactory to create new Geometries. All of these new Geometries
+ * will use your CoordinateList implementation.
+ * <p>
+ * This class is equivalent to JTS CoordinateSequence.
+ */
 class CoordinateList {
 public:
 	virtual	bool isEmpty() const=0;
@@ -295,9 +349,23 @@ public:
 	virtual	void setPoints(const vector<Coordinate> &v)=0;
 	bool hasRepeatedPoints() const;
 	const Coordinate* minCoordinate() const;
+	/**
+	* Returns whether #equals returns true for any two consecutive Coordinates 
+	* in the given array.
+	*/
 	static bool hasRepeatedPoints(const CoordinateList *cl);
+	/**
+	* Returns either the given coordinate array if its length is greater than the
+	* given amount, or an empty coordinate array.
+	*/
+	static CoordinateList* atLeastNCoordinatesOrNothing(int n,CoordinateList *c);
 	static const Coordinate* minCoordinate(CoordinateList *cl);
 	static int indexOf(const Coordinate *coordinate, const CoordinateList *cl);
+	/**
+	* Returns true if the two arrays are identical, both null, or pointwise
+	* equal (as compared using Coordinate#equals)
+	* @see Coordinate#equals(Object)
+	*/
 	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
 	static void scroll(CoordinateList *cl, const Coordinate *firstCoordinate);
 	static void reverse(CoordinateList *cl);
@@ -433,10 +501,10 @@ public:
 
 
 /**
- *  Constants representing the dimensions of a point, a curve and a surface.
- *  Also, constants representing the empty geometry, non-empty geometries and
- *  any geometry.
- *
+ * Constants representing the dimensions of a point, a curve and a surface.
+ * Also, constants representing the dimensions of the empty geometry and
+ * non-empty geometries, and a wildcard dimension meaning "any dimension".
+ * 
  */
 class Dimension {
 public:
@@ -507,12 +575,14 @@ public:
 	bool intersects(const Envelope* other) const;
 	string toString(void) const;
 	double distance(const Envelope* env) const;
+    int hashCode() const;
 private:
 	static double distance(double x0,double y0,double x1,double y1);
 	double minx;	/// the minimum x-coordinate
 	double maxx;	/// the maximum x-coordinate
 	double miny;	/// the minimum y-coordinate
 	double maxy;	/// the maximum y-coordinate
+	static const long long serialVersionUID=5873921885273102420L;    
 };
 
 class Geometry;
@@ -1101,6 +1171,25 @@ public:
 private:
 	PrecisionModel* precisionModel;
 	int SRID;
+};
+
+/**
+ * Represents a planar triangle, and provides methods for calculating various
+ * properties of triangles.
+ *
+ */
+class Triangle {
+public:
+	Coordinate p0,p1,p2;
+	Triangle(const Coordinate& nP0,const Coordinate& nP1,const Coordinate& nP2);
+	/**
+	* The inCentre of a triangle is the point which is equidistant
+	* from the sides of the triangle.  This is also the point at which the bisectors
+	* of the angles meet.
+	*
+	* @return the point which is the inCentre of the triangle
+	*/
+	Coordinate* inCentre();
 };
 }
 #endif

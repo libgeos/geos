@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -59,6 +63,7 @@ public:
 	StringTokenizer(string txt);
 	~StringTokenizer();
 	int nextToken();
+	int peekNextToken();
 	double getNVal();
 	string getSVal();
 private:
@@ -93,6 +98,8 @@ protected:
 private:
 	GeometryFactory *geometryFactory;
 	PrecisionModel *precisionModel;
+	Coordinate* getPreciseCoordinate(StringTokenizer *tokenizer);
+	bool isNumberNext(StringTokenizer *tokenizer);
 };
 
 class Writer {
@@ -105,6 +112,22 @@ private:
 	string str;
 };
 
+/**
+ * Outputs the textual representation of a {@link Geometry}.
+ * <p>
+ * The <code>WKTWriter</code> outputs coordinates rounded to the precision
+ * model. No more than the maximum number of necessary decimal places will be
+ * output.
+ * <p>
+ * The Well-known Text format is defined in the <A
+ * HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
+ * Specification for SQL</A>.
+ * <p>
+ * A non-standard "LINEARRING" tag is used for LinearRings. The WKT spec does
+ * not define a special tag for LinearRings. The standard tag to use is
+ * "LINESTRING".
+ *
+ */
 class WKTWriter {
 public:
 	WKTWriter();

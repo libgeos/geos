@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
  * Revision 1.17  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -60,28 +64,28 @@ CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 		return CoordinateListFactory::internalFactory->createCoordinateList();
 	}
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
-	Coordinate* externalCoordinate=new Coordinate();
-	Coordinate* internalCoordinate=new Coordinate();
-	Coordinate *c;
-	externalCoordinate->x=getNextNumber(tokenizer);
-	externalCoordinate->y=getNextNumber(tokenizer);
-	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
-	c=new Coordinate(*internalCoordinate);
-	coordinates->add(*c);
-	delete c;
+	coordinates->add(*getPreciseCoordinate(tokenizer));
 	nextToken=getNextCloserOrComma(tokenizer);
 	while (nextToken==",") {
-		externalCoordinate->x=getNextNumber(tokenizer);
-		externalCoordinate->y=getNextNumber(tokenizer);
-		precisionModel->toInternal(*externalCoordinate,internalCoordinate);
-		c=new Coordinate(*internalCoordinate);
-		coordinates->add(*c);
-		delete c;
+		coordinates->add(*getPreciseCoordinate(tokenizer));
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	delete externalCoordinate;
-	delete internalCoordinate;
 	return coordinates;
+}
+
+Coordinate* WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer) {
+	Coordinate *coord=new Coordinate();
+	coord->x=getNextNumber(tokenizer);
+	coord->y=getNextNumber(tokenizer);
+	if (isNumberNext(tokenizer)) {
+		coord->z=getNextNumber(tokenizer);
+	}
+	precisionModel->makePrecise(coord);
+	return coord;
+}
+
+bool WKTReader::isNumberNext(StringTokenizer *tokenizer) {
+	return tokenizer->peekNextToken()==StringTokenizer::TT_NUMBER;
 }
 
 double WKTReader::getNextNumber(StringTokenizer *tokenizer) {
@@ -158,6 +162,8 @@ Geometry* WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer) {
 		return readPointText(tokenizer);
 	} else if (type=="LINESTRING") {
 		return readLineStringText(tokenizer);
+	} else if (type=="LINEARRING") {
+		return readLinearRingText(tokenizer);
 	} else if (type=="POLYGON") {
 		return readPolygonText(tokenizer);
 	} else if (type=="MULTIPOINT") {
@@ -177,15 +183,8 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createPoint(Coordinate::getNull());
 	}
-	double x=getNextNumber(tokenizer);
-	double y=getNextNumber(tokenizer);
-	Coordinate* externalCoordinate=new Coordinate(x, y);
-	Coordinate* internalCoordinate=new Coordinate();
-	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
+	Point *pt=geometryFactory->createPoint(*getPreciseCoordinate(tokenizer));
 	getNextCloser(tokenizer);
-	Point *pt=geometryFactory->createPoint(*internalCoordinate);
-	delete externalCoordinate;
-	delete internalCoordinate;
 	return pt;
 }
 
