@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.12  2003/10/11 03:23:22  strk
+* fixed spurious typos
+*
+*/
 #include "../headers/geom.h"
 #include "../headers/util.h"
 
@@ -8,7 +14,7 @@ LinearRing::LinearRing(): LineString() {}
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
 
 LinearRing::LinearRing(const CoordinateList* points, const PrecisionModel* pm,
-		int SRID): LineString(points, precisionModel, SRID) {
+		int SRID): LineString(points, pm, SRID) {
 	if (!LineString::isEmpty() && !LineString::isClosed()) {
 		throw new IllegalArgumentException("points must form a closed linestring");
     }

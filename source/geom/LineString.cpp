@@ -19,7 +19,7 @@ LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRI
 }
 
 LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm,
-		int SRID): Geometry(precisionModel, SRID){
+		int SRID): Geometry(pm, SRID){
 	if (pts==NULL) {
 		pts=CoordinateListFactory::internalFactory->createCoordinateList();
 	}
