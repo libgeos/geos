@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.4  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -37,6 +43,7 @@
 #include <stdio.h>
 
 namespace geos {
+//namespace planargraph {
 
 /**
 * Returns a List containing the parent planarEdge (possibly null) for each of the given
@@ -50,7 +57,7 @@ vector<planarEdge*>* planarDirectedEdge::toEdges(vector<planarDirectedEdge*> *di
 	return edges;
 }
 
-const CGAlgorithms* planarDirectedEdge::cga=new CGAlgorithms();
+//const CGAlgorithms* planarDirectedEdge::cga=new CGAlgorithms();
 
 /**
 * Constructs a planarDirectedEdge connecting the <code>from</code> node to the
@@ -63,7 +70,9 @@ const CGAlgorithms* planarDirectedEdge::cga=new CGAlgorithms();
 *                  whether this planarDirectedEdge's direction is the same as or
 *                  opposite to that of the parent planarEdge (if any)
 */
-planarDirectedEdge::planarDirectedEdge(planarNode* newFrom,planarNode* newTo,Coordinate &directionPt, bool newEdgeDirection){
+planarDirectedEdge::planarDirectedEdge(planarNode* newFrom, planarNode* newTo,
+	const Coordinate &directionPt, bool newEdgeDirection)
+{
 	from=newFrom;
 	to=newTo;
 	edgeDirection=newEdgeDirection;
@@ -190,7 +199,7 @@ int planarDirectedEdge::compareDirection(planarDirectedEdge *e){
 	if (quadrant < e->quadrant) return -1;
 	// vectors are in the same quadrant - check relative orientation of direction vectors
 	// this is > e if it is CCW of e
-	return cga->computeOrientation(e->p0,e->p1,p1);
+	return cga.computeOrientation(e->p0,e->p1,p1);
 }
 
 /**
@@ -210,4 +219,5 @@ string planarDirectedEdge::print() {
 }
 
 
-}
+//} // namespace planargraph
+} // namespace geos

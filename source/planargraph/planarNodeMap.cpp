@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.4  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -33,6 +39,7 @@
 #include <geos/planargraph.h>
 
 namespace geos {
+//namespace planargraph {
 
 /**
 * Constructs a NodeMap without any Nodes.
@@ -80,7 +87,7 @@ vector<planarNode*>* planarNodeMap::getNodes(){
 /**
 * Returns the Node at the given location, or null if no Node was there.
 */
-planarNode* planarNodeMap::find(Coordinate& coord)  {
+planarNode* planarNodeMap::find(const Coordinate& coord)  {
 	map<Coordinate,planarNode*,planarCoordLT>::iterator found=nodeMap->find(coord);
 	if (found==nodeMap->end())
 		return NULL;
@@ -96,4 +103,5 @@ map<Coordinate,planarNode*,planarCoordLT>::iterator planarNodeMap::iterator(){
 	return nodeMap->begin();
 }
 
-}
+//} //namespace planargraph 
+} //namespace geos 

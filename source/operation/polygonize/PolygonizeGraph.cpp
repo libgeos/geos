@@ -11,21 +11,6 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/08 04:53:56  ybychkov
- * "operation/polygonize" ported from JTS 1.4
- *
- *
  **********************************************************************/
 
 
@@ -71,7 +56,7 @@ void PolygonizeGraph::deleteAllEdges(planarNode *node){
 /**
 * Create a new polygonization graph.
 */
-PolygonizeGraph::PolygonizeGraph(GeometryFactory *newFactory){
+PolygonizeGraph::PolygonizeGraph(const GeometryFactory *newFactory){
 	factory=newFactory;
 }
 
@@ -82,18 +67,20 @@ PolygonizeGraph::PolygonizeGraph(GeometryFactory *newFactory){
 void PolygonizeGraph::addEdge(LineString *line){
 	if (line->isEmpty()) { return;}
 	CoordinateSequence *linePts=CoordinateSequence::removeRepeatedPoints(line->getCoordinates());
-	Coordinate& startPt=(Coordinate)linePts->getAt(0);
-	Coordinate& endPt=(Coordinate)linePts->getAt(linePts->getSize()-1);
+	const Coordinate& startPt=linePts->getAt(0);
+	const Coordinate& endPt=linePts->getAt(linePts->getSize()-1);
 	planarNode *nStart=getNode(startPt);
 	planarNode *nEnd=getNode(endPt);
-	planarDirectedEdge *de0=new PolygonizeDirectedEdge(nStart, nEnd, (Coordinate)linePts->getAt(1), true);
-	planarDirectedEdge *de1=new PolygonizeDirectedEdge(nEnd, nStart, (Coordinate)linePts->getAt(linePts->getSize()-2), false);
+	planarDirectedEdge *de0=new PolygonizeDirectedEdge(nStart, nEnd, linePts->getAt(1), true);
+	planarDirectedEdge *de1=new PolygonizeDirectedEdge(nEnd, nStart, linePts->getAt(linePts->getSize()-2), false);
 	planarEdge *edge=new PolygonizeEdge(line);
 	edge->setDirectedEdges(de0, de1);
 	add(edge);
 }
 
-planarNode* PolygonizeGraph::getNode(Coordinate& pt){
+planarNode *
+PolygonizeGraph::getNode(const Coordinate& pt)
+{
 	planarNode *node=findNode(pt);
 	if (node==NULL) {
 		node=new planarNode(pt);
@@ -373,3 +360,26 @@ vector<LineString*>* PolygonizeGraph::deleteDangles() {
 	return dangleLines;
 }
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.3  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/04/08 04:53:56  ybychkov
+ * "operation/polygonize" ported from JTS 1.4
+ *
+ *
+ **********************************************************************/

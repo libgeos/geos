@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.2  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -29,19 +35,7 @@
 
 namespace geos {
 
-/**
-* Constructs a LineMergeDirectedEdge connecting the <code>from</code> node to the
-* <code>to</code> node.
-*
-* @param directionPt
-*                  specifies this DirectedEdge's direction (given by an imaginary
-*                  line from the <code>from</code> node to <code>directionPt</code>)
-* @param edgeDirection
-*                  whether this DirectedEdge's direction is the same as or
-*                  opposite to that of the parent Edge (if any)
-*/  
-LineMergeDirectedEdge::LineMergeDirectedEdge(planarNode *newFrom,planarNode *newTo,Coordinate& newDirectionPt,bool nEdgeDirection):
-	planarDirectedEdge(newFrom,newTo,newDirectionPt,nEdgeDirection) {}
+LineMergeDirectedEdge::LineMergeDirectedEdge(planarNode *newFrom, planarNode *newTo, const Coordinate& newDirectionPt,bool nEdgeDirection): planarDirectedEdge(newFrom,newTo,newDirectionPt,nEdgeDirection) {}
 
 /**
 * Returns the directed edge that starts at this directed edge's end point, or null

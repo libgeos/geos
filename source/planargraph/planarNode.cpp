@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.2  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -27,6 +33,7 @@
 #include <geos/planargraph.h>
 
 namespace geos {
+//namespace planargraph {
 
 /**
 * Returns all Edges that connect the two nodes (which are assumed to be different).
@@ -43,14 +50,15 @@ vector<planarEdge*>* planarNode::getEdgesBetween(planarNode *node0, planarNode *
 /**
 * Constructs a Node with the given location.
 */
-planarNode::planarNode(Coordinate& newPt){
+planarNode::planarNode(const Coordinate& newPt){
 	pt=newPt;
 	deStar=new planarDirectedEdgeStar();
 }
 
-/**
-* Constructs a Node with the given location and collection of outgoing DirectedEdges.
-*/
+/*
+ * Constructs a Node with the given location and collection of
+ * outgoing DirectedEdges.
+ */
 planarNode::planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar){
 	pt=newPt;
 	deStar=newDeStar;
@@ -63,9 +71,9 @@ Coordinate& planarNode::getCoordinate() {
 	return pt;
 }
 
-/**
-* Adds an outgoing DirectedEdge to this Node.
-*/
+/*
+ * Adds an outgoing DirectedEdge to this Node.
+ */
 void planarNode::addOutEdge(planarDirectedEdge *de){
 	deStar->add(de);
 }
@@ -90,4 +98,10 @@ int planarNode::getIndex(planarEdge *edge){
 	return deStar->getIndex(edge);
 }
 
+planarNode::~planarNode()
+{
+	delete deStar;
 }
+
+//} // namespace planargraph 
+} // namespace geos 

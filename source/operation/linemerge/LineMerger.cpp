@@ -13,6 +13,12 @@
 *
 **********************************************************************
 * $Log$
+* Revision 1.3  2004/10/13 10:03:02  strk
+* Added missing linemerge and polygonize operation.
+* Bug fixes and leaks removal from the newly added modules and
+* planargraph (used by them).
+* Some comments and indentation changes.
+*
 * Revision 1.2  2004/07/02 13:28:28  strk
 * Fixed all #include lines to reflect headers layout change.
 * Added client application build tips in README.
@@ -47,7 +53,12 @@ LineMerger::LineMerger() {
 LineMerger::~LineMerger() {
 	delete graph;
 //	delete mergedLineStrings;
-//	delete edgeStrings;
+	if ( edgeStrings )
+	{
+		for (int i=0; i<edgeStrings->size(); i++)
+			delete (*edgeStrings)[i];
+		delete edgeStrings;
+	}
 }
 
 
@@ -65,7 +76,8 @@ void LMGeometryComponentFilter::filter_rw(Geometry *geom) {
 * extracted.
 */  
 void LineMerger::add(Geometry *geometry) {
-	geometry->apply_rw(new LMGeometryComponentFilter(this));
+	LMGeometryComponentFilter lmgcf(this);
+	geometry->apply_rw(&lmgcf);
 }
 
 void LineMerger::add(LineString *lineString) {
@@ -107,9 +119,12 @@ void LineMerger::buildEdgeStringsForUnprocessedNodes() {
 			node->setMarked(true);
 		}
 	}
+	delete nodes;
 }
 
-void LineMerger::buildEdgeStringsForNonDegree2Nodes() {
+void
+LineMerger::buildEdgeStringsForNonDegree2Nodes()
+{
 	vector<planarNode*> *nodes=graph->getNodes();
 	for (int i=0;i<(int)nodes->size();i++) {
 		planarNode *node=(*nodes)[i];
@@ -118,11 +133,15 @@ void LineMerger::buildEdgeStringsForNonDegree2Nodes() {
 			node->setMarked(true);
 		}
 	}
+	delete nodes;
 }
 
-void LineMerger::buildEdgeStringsStartingAt(planarNode *node) {
+void
+LineMerger::buildEdgeStringsStartingAt(planarNode *node)
+{
 	vector<planarDirectedEdge*> *edges=node->getOutEdges()->getEdges();
-	for (int i=0;i<(int)edges->size();i++) {
+	for (int i=0;i<(int)edges->size();i++)
+	{
 		LineMergeDirectedEdge *directedEdge=(LineMergeDirectedEdge*) (*edges)[i];
 		if (directedEdge->getEdge()->isMarked()) {
 			continue;

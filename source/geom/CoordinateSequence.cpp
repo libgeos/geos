@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.3  2004/09/23 21:36:22  strk
  * Fixed a bug in ::reverse (thanks to Elliott Edwards)
  *
@@ -161,13 +167,23 @@ void CoordinateSequence::add(const Coordinate& c,bool allowRepeated) {
 	add(c);
 }
 
-/** Add an array of coordinates
-* @param cl The coordinates
-* @param allowRepeated if set to false, repeated coordinates are collapsed
-* @param direction if false, the array is added in reverse order
-* @return true (as by general collection contract)
-*/
-void CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction){
+/* Here for backward compatibility */
+void
+CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction)
+{
+	add((const CoordinateSequence *)cl,allowRepeated,direction);
+}
+
+/**
+ * Add an array of coordinates
+ * @param cl The coordinates
+ * @param allowRepeated if set to false, repeated coordinates are collapsed
+ * @param direction if false, the array is added in reverse order
+ * @return true (as by general collection contract)
+ */
+void
+CoordinateSequence::add(const CoordinateSequence *cl,bool allowRepeated,bool direction)
+{
 	if (direction) {
 		for (int i = 0; i < cl->getSize(); i++) {
 			add(cl->getAt(i), allowRepeated);

@@ -167,6 +167,16 @@ EXTERNAL_SOURCES =  \
 	../operation/valid/SimpleNestedRingTester.cpp \
 	../operation/valid/SweeplineNestedRingTester.cpp \
 	../operation/valid/TopologyValidationError.cpp \
+	../operation/linemerge/EdgeString.cpp \
+	../operation/linemerge/LineMergeDirectedEdge.cpp \
+	../operation/linemerge/LineMergeEdge.cpp \
+	../operation/linemerge/LineMergeGraph.cpp \
+	../operation/linemerge/LineMerger.cpp \
+	../operation/polygonize/PolygonizeDirectedEdge.cpp \
+	../operation/polygonize/PolygonizeEdge.cpp \
+	../operation/polygonize/PolygonizeGraph.cpp \
+	../operation/polygonize/Polygonizer.cpp \
+	../operation/polygonize/polygonizeEdgeRing.cpp \
 	../planargraph/planarDirectedEdge.cpp \
 	../planargraph/planarDirectedEdgeStar.cpp \
 	../planargraph/planarEdge.cpp \

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.2  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -39,8 +45,7 @@ namespace geos {
 *                  whether this DirectedEdge's direction is the same as or
 *                  opposite to that of the parent Edge (if any)
 */
-PolygonizeDirectedEdge::PolygonizeDirectedEdge(planarNode *newFrom,planarNode *newTo,Coordinate& newDirectionPt,bool nEdgeDirection):
-	planarDirectedEdge(newFrom,newTo,newDirectionPt,nEdgeDirection) {
+PolygonizeDirectedEdge::PolygonizeDirectedEdge(planarNode *newFrom,planarNode *newTo,const Coordinate& newDirectionPt,bool nEdgeDirection): planarDirectedEdge(newFrom,newTo,newDirectionPt,nEdgeDirection) {
 		edgeRing=NULL;
 		next=NULL;
 		label=-1;

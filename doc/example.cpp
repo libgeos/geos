@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.24  2004/07/22 16:58:01  strk
  * runtime version extractor functions split. geos::version() is now
  * geos::geosversion() and geos::jtsport()
@@ -86,6 +92,8 @@
 
 #include <stdio.h>
 #include <geos.h>
+#include <geos/opLinemerge.h>
+#include <geos/opPolygonize.h>
 
 using namespace geos;
 
@@ -916,6 +924,44 @@ cout<<"-------------------------------------------------------------------------
 	cout<<endl<<"----- HERE ARE SYMMETRIC DIFFERENCES ------"<<endl;
 	wkt_print_geoms(newgeoms);
 
+	// Delete the resulting geoms
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
+	}
+	delete newgeoms;
+	
+	/////////////////////////////////////////////
+	// LINEMERGE
+	/////////////////////////////////////////////
+	LineMerger lm;
+	lm.add(geoms);
+	vector<LineString *> *mls = lm.getMergedLineStrings();
+	newgeoms = new vector<Geometry *>;
+	for (int i=0; i<mls->size(); i++) newgeoms->push_back((*mls)[i]);
+	delete mls;
+
+	cout<<endl<<"----- HERE IS THE LINEMERGE OUTPUT ------"<<endl;
+	wkt_print_geoms(newgeoms);
+	
+	// Delete the resulting geoms
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
+	}
+	delete newgeoms;
+
+	/////////////////////////////////////////////
+	// POLYGONIZE
+	/////////////////////////////////////////////
+	Polygonizer plgnzr;
+	plgnzr.add(geoms);
+	vector<Polygon *> *polys = plgnzr.getPolygons();
+	newgeoms = new vector<Geometry *>;
+	for (int i=0; i<polys->size(); i++) newgeoms->push_back((*polys)[i]);
+	delete polys;
+
+	cout<<endl<<"----- HERE IS POLYGONIZE OUTPUT ------"<<endl;
+	wkt_print_geoms(newgeoms);
+	
 	// Delete the resulting geoms
 	for (int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];

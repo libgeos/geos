@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.4  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -44,7 +50,7 @@ namespace geos {
 * Constructs an EdgeString with the given factory used to convert this EdgeString
 * to a LineString
 */
-EdgeString::EdgeString(GeometryFactory *newFactory) {
+EdgeString::EdgeString(const GeometryFactory *newFactory) {
 	directedEdges=new vector<LineMergeDirectedEdge*>();
 	coordinates=NULL;
 	factory=newFactory;
@@ -61,7 +67,9 @@ void EdgeString::add(LineMergeDirectedEdge *directedEdge) {
 	directedEdges->push_back(directedEdge);
 }
 
-const CoordinateSequence* EdgeString::getCoordinates() {
+CoordinateSequence *
+EdgeString::getCoordinates()
+{
 	if (coordinates==NULL) {
 		int forwardDirectedEdges = 0;
 		int reverseDirectedEdges = 0;
@@ -73,7 +81,7 @@ const CoordinateSequence* EdgeString::getCoordinates() {
 			} else {
 				reverseDirectedEdges++;
 			}
-			coordinates->add(((LineMergeEdge*)directedEdge->getEdge())->getLine()->getCoordinates(),false,directedEdge->getEdgeDirection());
+			coordinates->add((CoordinateSequence *)((LineMergeEdge*)directedEdge->getEdge())->getLine()->getCoordinatesRO(),false,directedEdge->getEdgeDirection());
 		}
 		if (reverseDirectedEdges > forwardDirectedEdges) {
 			CoordinateSequence::reverse(coordinates);
@@ -82,10 +90,13 @@ const CoordinateSequence* EdgeString::getCoordinates() {
 	return coordinates;
 }
 
-/**
-* Converts this EdgeString into a LineString.
-*/
-LineString* EdgeString::toLineString() {
-	return factory->createLineString(*(getCoordinates()));
+/*
+ * Converts this EdgeString into a new LineString.
+ */
+LineString*
+EdgeString::toLineString()
+{
+	//return factory->createLineString(*(getCoordinates()));
+	return factory->createLineString(getCoordinates());
 }
 }

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.3  2004/07/13 08:33:53  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -31,6 +37,7 @@
 #include <geos/planargraph.h>
 
 namespace geos {
+//namespace planargraph {
 
 planarGraphComponent::planarGraphComponent() {
 	isMarkedVar=false;
@@ -72,4 +79,5 @@ bool planarGraphComponent::isMarked() {
 void planarGraphComponent::setMarked(bool newIsMarked) { 
 	isMarkedVar=newIsMarked; }
 
-}
+//} // namespace planargraph
+} // namespace geos

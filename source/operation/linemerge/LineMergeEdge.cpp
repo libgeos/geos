@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.2  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -34,9 +40,10 @@ namespace geos {
 LineMergeEdge::LineMergeEdge(LineString *newLine) {
 	line=newLine;
 }
+
 /**
-* Returns the LineString specifying the vertices of this edge.
-*/
+ * Returns the LineString specifying the vertices of this edge.
+ */
 LineString* LineMergeEdge::getLine() {
 	return line;
 }

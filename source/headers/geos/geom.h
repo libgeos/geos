@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.27  2004/09/16 09:48:06  strk
  * Added Envelope::equals
  *
@@ -797,6 +803,9 @@ public:
 	 */
 	void add(const vector<Coordinate>* vc, bool allowRepeated);
 
+	/* This is here for backward compatibility.. */
+	void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
+
 	/**
 	 * \brief Add an array of coordinates 
 	 * @param cl The coordinates
@@ -805,7 +814,7 @@ public:
 	 * @param direction if false, the array is added in reverse order
 	 * @return true (as by general collection contract)
 	 */
-	void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
+	void add(const CoordinateSequence *cl,bool allowRepeated,bool direction);
 
 	/**
 	 * \brief Add a coordinate

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.4  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -57,14 +63,14 @@ namespace geos {
 */
 polygonizeEdgeRing* polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRing *testEr,vector<polygonizeEdgeRing*> *shellList){
 	LinearRing *testRing=testEr->getRing();
-	Envelope *testEnv=testRing->getEnvelopeInternal();
-	Coordinate& testPt=(Coordinate)testRing->getCoordinateN(0);
+	const Envelope *testEnv=testRing->getEnvelopeInternal();
+	Coordinate testPt=testRing->getCoordinateN(0);
 	polygonizeEdgeRing *minShell=NULL;
-	Envelope *minEnv=NULL;
+	const Envelope *minEnv=NULL;
 	for(int i=0;i<(int)shellList->size();i++) {
 		polygonizeEdgeRing *tryShell=(*shellList)[i];
 		LinearRing *tryRing=tryShell->getRing();
-		Envelope *tryEnv=tryRing->getEnvelopeInternal();
+		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
 		if (minShell!=NULL) minEnv=minShell->getRing()->getEnvelopeInternal();
 		bool isContained=false;
 		// the hole envelope cannot equal the shell envelope
@@ -72,7 +78,7 @@ polygonizeEdgeRing* polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRin
 			continue;
 		testPt=ptNotInList(testRing->getCoordinates(),tryRing->getCoordinates());
 		if (tryEnv->contains(testEnv)
-			&& cga->isPointInRing(testPt,tryRing->getCoordinates()))
+			&& cga.isPointInRing(testPt,tryRing->getCoordinates()))
 				isContained=true;
 		// check if this new containing ring is smaller than the current minimum ring
 		if (isContained) {
@@ -91,9 +97,11 @@ polygonizeEdgeRing* polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRin
 * @return a {@link Coordinate} from <code>testPts</code> which is not in <code>pts</code>, '
 * or <code>null</code>
 */
-Coordinate& polygonizeEdgeRing::ptNotInList(CoordinateSequence *testPts,CoordinateSequence *pts){
+const Coordinate&
+polygonizeEdgeRing::ptNotInList(CoordinateSequence *testPts,CoordinateSequence *pts)
+{
 	for (int i=0; i<testPts->getSize(); i++) {
-		Coordinate& testPt=(Coordinate)testPts->getAt(i);
+		const Coordinate& testPt=testPts->getAt(i);
 		if (isInList(testPt,pts))
 			return testPt;
 	}
@@ -108,7 +116,7 @@ Coordinate& polygonizeEdgeRing::ptNotInList(CoordinateSequence *testPts,Coordina
 * @param pts an array of {@link Coordinate}s to test
 * @return <code>true</code> if the point is in the array
 */
-bool polygonizeEdgeRing::isInList(Coordinate& pt, CoordinateSequence *pts){
+bool polygonizeEdgeRing::isInList(const Coordinate& pt, const CoordinateSequence *pts){
 	for (int i=0; i < pts->getSize(); i++) {
 		if (pt==pts->getAt(i))
 			return false;
@@ -116,9 +124,9 @@ bool polygonizeEdgeRing::isInList(Coordinate& pt, CoordinateSequence *pts){
 	return true;
 }
 
-CGAlgorithms* polygonizeEdgeRing::cga=new CGAlgorithms();
+//CGAlgorithms* polygonizeEdgeRing::cga=new CGAlgorithms();
 
-polygonizeEdgeRing::polygonizeEdgeRing(GeometryFactory *newFactory) {
+polygonizeEdgeRing::polygonizeEdgeRing(const GeometryFactory *newFactory) {
 	deList=new vector<planarDirectedEdge*>();
 	// cache the following data for efficiency
 	ring=NULL;
@@ -150,7 +158,7 @@ void polygonizeEdgeRing::add(planarDirectedEdge *de){
 */
 bool polygonizeEdgeRing::isHole(){
 	LinearRing *ring=getRing();
-	return cga->isCCW(ring->getCoordinates());
+	return cga.isCCW(ring->getCoordinates());
 }
 
 /**

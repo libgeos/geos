@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
  * Revision 1.6  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -99,10 +105,15 @@ PlanarGraph::~PlanarGraph(){
 	delete edgeEndList;
 }
 
-vector<Edge*>::iterator PlanarGraph::getEdgeIterator() {
+vector<Edge*>::iterator
+PlanarGraph::getEdgeIterator()
+{
 	return edges->begin();
 }
-vector<EdgeEnd*> *PlanarGraph::getEdgeEnds(){
+
+vector<EdgeEnd*> *
+PlanarGraph::getEdgeEnds()
+{
 	return edgeEndList;
 }
 
