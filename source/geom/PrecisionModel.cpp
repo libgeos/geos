@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2003/11/12 17:15:05  strk
+ * made sure PrecisionModel scale is never 0
+ *
  * Revision 1.15  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -70,7 +73,7 @@ void PrecisionModel::makePrecise(Coordinate *coord) const {
 
 PrecisionModel::PrecisionModel(){
 	modelType=FLOATING;
-	scale=0.0;
+	scale=1.0;
 	offsetX=0.0;
 	offsetY=0.0;
 }
@@ -87,8 +90,9 @@ PrecisionModel::PrecisionModel(){
 *
 * @deprecated
 */
-PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY) {
-	if ( newScale == 0 ) throw new IllegalArgumentException("PrecisionModel scale cannot be 0"); 
+PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY)
+	//throw(IllegalArgumentException *)
+{
 	modelType = FIXED;
 	setScale(newScale);
 	offsetX = newOffsetX;
@@ -103,7 +107,9 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
 *@param  scale    amount by which to multiply a coordinate after subtracting
 *      the offset, to obtain a precise coordinate
 */
-PrecisionModel::PrecisionModel(double newScale) {
+PrecisionModel::PrecisionModel(double newScale)
+	//throw (IllegalArgumentException *)
+{
 	modelType=FIXED;
 	setScale(scale);
 	offsetX=0;
@@ -111,7 +117,8 @@ PrecisionModel::PrecisionModel(double newScale) {
 }
 
 
-PrecisionModel::PrecisionModel(const PrecisionModel &pm) {
+PrecisionModel::PrecisionModel(const PrecisionModel &pm)
+{
 	modelType = pm.modelType;
 	scale = pm.scale;
 	offsetX = pm.offsetX;
@@ -141,6 +148,7 @@ double PrecisionModel::getScale() const {
 *
 */
 void PrecisionModel::setScale(double newScale) {
+	if ( newScale == 0 ) throw new IllegalArgumentException("PrecisionModel scale cannot be 0"); 
 	scale=fabs(newScale);
 }
 
