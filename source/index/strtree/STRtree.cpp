@@ -19,9 +19,6 @@
 
 namespace geos {
 
-#if PROFILE
-static Profiler *profiler = Profiler::instance();
-#endif
 
 static bool xComparator(Boundable *a, Boundable *b){
 	return AbstractSTRtree::compareDoubles(STRtree::centreX((Envelope*)a->getBounds()), STRtree::centreX((Envelope*)b->getBounds()));
@@ -35,9 +32,9 @@ static bool yComparator(Boundable *a, Boundable *b){
  * Constructs an STRtree with the default node capacity.
  */
 STRtree::STRtree():
-	AbstractSTRtree(10),
-	intersectsOp(new STRIntersectsOp())
+	AbstractSTRtree(10)
 { 
+	//intersectsOp(new STRIntersectsOp())
 }
 
 /**
@@ -45,14 +42,14 @@ STRtree::STRtree():
  * a node may have
  */
 STRtree::STRtree(int nodeCapacity):
-	AbstractSTRtree(nodeCapacity),
-	intersectsOp(new STRIntersectsOp())
+	AbstractSTRtree(nodeCapacity)
 { 
+	//intersectsOp(new STRIntersectsOp())
 }
 
 STRtree::~STRtree()
 { 
-	delete intersectsOp;
+	//delete intersectsOp;
 }
 
 double STRtree::centreX(Envelope *e) {
@@ -194,13 +191,7 @@ STRtree::insert(const Envelope *itemEnv, void* item)
 vector<void*>*
 STRtree::query(const Envelope *searchEnv)
 {
-#if PROFILE
-	profiler->start("STRtree::query");
-#endif
 	vector<void *> *ret = AbstractSTRtree::query(searchEnv);
-#if PROFILE
-	profiler->stop("STRtree::query");
-#endif
 	return ret;
 }
 
@@ -216,6 +207,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2004/11/08 15:58:13  strk
+ * More performance tuning.
+ *
  * Revision 1.15  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

@@ -274,7 +274,6 @@ class STRtree: public AbstractSTRtree,public SpatialIndex {
 private:
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
 	vector<Boundable*>* createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*>* verticalSlices, int newLevel);
-	IntersectsOp* intersectsOp;
 
 protected:
 	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
@@ -285,7 +284,12 @@ protected:
 		public:
 			bool intersects(const void* aBounds, const void* bBounds);
 	};
-	IntersectsOp* getIntersectsOp() {return intersectsOp;};
+
+private:
+	STRIntersectsOp intersectsOp;
+
+protected:
+	IntersectsOp* getIntersectsOp() {return (IntersectsOp *)&intersectsOp;};
 
 public:
 	STRtree();
@@ -304,6 +308,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/11/08 15:58:13  strk
+ * More performance tuning.
+ *
  * Revision 1.6  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

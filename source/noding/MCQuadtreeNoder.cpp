@@ -17,6 +17,7 @@
 #include <geos/profiler.h>
 
 #define DEBUG 0
+//#define PROFILE 1
 
 namespace geos {
 
@@ -44,32 +45,14 @@ MCQuadtreeNoder::~MCQuadtreeNoder(){
 vector<SegmentString*> *
 MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
 {
-#if PROFILE
-	profiler->start("MCQuadtreeNoder::node adding");
-#endif
 	for(int i=0; i<(int)inputSegStrings->size();i++) {
 		add((*inputSegStrings)[i]);
 	}
-#if PROFILE
-	profiler->stop("MCQuadtreeNoder::node adding");
-#endif
 
-#if PROFILE
-	profiler->start("MCQuadtreeNoder::intersectChains");
-#endif
 	intersectChains();
-#if PROFILE
-	profiler->stop("MCQuadtreeNoder::intersectChains");
-#endif
 	//System.out.println("MCQuadtreeNoder: # chain overlaps = " + nOverlaps);
 
-#if PROFILE
-	profiler->start("MCQuadtreeNoder::node getting Noded edges");
-#endif
 	vector<SegmentString*> *nodedSegStrings=getNodedEdges(inputSegStrings);
-#if PROFILE
-	profiler->stop("MCQuadtreeNoder::node getting Noded edges");
-#endif
 
 	return nodedSegStrings;
 }
@@ -77,20 +60,21 @@ MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
 void
 MCQuadtreeNoder::intersectChains()
 {
-	MonotoneChainOverlapAction *overlapAction = new SegmentOverlapAction(segInt);
+#if PROFILE
+	static Profile *queryprof = Profiler::instance()->get("MCQuadtreeNoder::intersectChains query");
+	static Profile *overlprof = Profiler::instance()->get("MCQuadtreeNoder::intersectChains computeOverlap");
+#endif
+	//MonotoneChainOverlapAction *overlapAction = new SegmentOverlapAction(segInt);
+	SegmentOverlapAction overlapAction(segInt);
 
 	for (int i=0; i<(int)chains->size();i++) {
 		indexMonotoneChain *queryChain=(*chains)[i];
 #if PROFILE
-	profiler->start("::intersectChains: index->query");
+		queryprof->start();
 #endif
 		vector<void*> *overlapChains = index->query(queryChain->getEnvelope());
 #if PROFILE
-	profiler->stop("::intersectChains: index->query");
-#endif
-
-#if DEBUG
-	cerr<<"MCQuadtreeNoder::intersectChains: query returned "<<overlapChains->size()<<" items from STRtree index"<<endl;
+		queryprof->stop();
 #endif
 		for (int j=0; j<(int)overlapChains->size();j++) {
 			indexMonotoneChain *testChain=(indexMonotoneChain*)(*overlapChains)[j];
@@ -101,11 +85,11 @@ MCQuadtreeNoder::intersectChains()
 			 */
 			if (testChain->getId()>queryChain->getId()) {
 #if PROFILE
-	profiler->start("MCQuadtreeNoder::intersectChains queryChain->computeOverlap");
+	overlprof->start();
 #endif
-				queryChain->computeOverlaps(testChain, overlapAction);
+				queryChain->computeOverlaps(testChain, &overlapAction);
 #if PROFILE
-	profiler->stop("MCQuadtreeNoder::intersectChains queryChain->computeOverlap");
+	overlprof->stop();
 #endif
 				nOverlaps++;
 			}
@@ -113,7 +97,7 @@ MCQuadtreeNoder::intersectChains()
 		delete overlapChains;
 	}
 
-	delete overlapAction;
+	//delete overlapAction;
 }
 
 void
@@ -148,6 +132,9 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2004/11/08 15:58:13  strk
+ * More performance tuning.
+ *
  * Revision 1.13  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

@@ -15,9 +15,12 @@
 
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
+#include <geos/profiler.h>
 #include <stdio.h>
 #include <algorithm>
 #include <typeinfo>
+
+//#define PROFILE 1
 
 namespace geos {
 
@@ -35,10 +38,12 @@ AbstractSTRtree::AbstractSTRtree(int newNodeCapacity):
 }
 
 AbstractSTRtree::~AbstractSTRtree() {
-	for (unsigned int i=0; i<itemBoundables->size(); i++)
+	unsigned int ibsize = itemBoundables->size();
+	for (unsigned int i=0; i<ibsize; i++)
 		delete (*itemBoundables)[i];
 	delete itemBoundables;
-	for (unsigned int i=0; i<nodes->size(); i++)
+	unsigned int nsize = nodes->size();
+	for (unsigned int i=0; i<nsize; i++)
 		delete (*nodes)[i];
 	delete nodes;
 	//delete root;
@@ -53,9 +58,16 @@ AbstractSTRtree::~AbstractSTRtree() {
 void
 AbstractSTRtree::build()
 {
+#if PROFILE
+	static Profile *prof = Profiler::instance()->get("AbstractSTRtree::build");
+	prof->start();
+#endif
 	Assert::isTrue(!built);
 	root=(itemBoundables->empty()?createNode(0):createHigherLevels(itemBoundables,-1));
 	built=true;
+#if PROFILE
+	prof->stop();
+#endif
 }
 
 //void AbstractSTRtree::checkConsistency() {
@@ -78,8 +90,10 @@ AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables, int
 	parentBoundables->push_back(createNode(newLevel));
 	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
 
-	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
+	unsigned int scbsize = sortedChildBoundables->size();
+	for(unsigned int i=0; i<scbsize; i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
+
 		if (lastNode(parentBoundables)->getChildBoundables()->size()==(unsigned int)nodeCapacity)
 		{
 			parentBoundables->push_back(createNode(newLevel));
@@ -151,6 +165,10 @@ AbstractSTRtree::query(const void* searchBounds)
 	if (!built) {
 		build();
 	}
+#if PROFILE
+	static Profile *prof = Profiler::instance()->get("AbstractSTRtree::query(searchBounds)");
+	prof->start();
+#endif
 	vector<void*> *matches=new vector<void*>();
 	if (itemBoundables->empty()) {
 		Assert::isTrue(root->getBounds()==NULL);
@@ -160,6 +178,9 @@ AbstractSTRtree::query(const void* searchBounds)
 	{
 		query(searchBounds,root,matches);
 	}
+#if PROFILE
+	prof->stop();
+#endif
 	return matches;
 }
 
@@ -168,7 +189,10 @@ AbstractSTRtree::query(const void* searchBounds,
 	AbstractNode* node, vector<void*> *matches)
 {
 	vector<Boundable*> *vb=node->getChildBoundables();
-	for(int i=0;i<(int)vb->size();i++) {
+
+	unsigned int vbsize=vb->size();
+	for(unsigned int i=0;i<vbsize;i++)
+	{
 		Boundable *childBoundable=(*vb)[i];
 		if (!getIntersectsOp()->intersects(childBoundable->getBounds(),searchBounds))
 		{
@@ -177,7 +201,8 @@ AbstractSTRtree::query(const void* searchBounds,
 
 		if(AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
 		{
-			query(searchBounds,an,matches);
+			query(searchBounds, (AbstractNode *)childBoundable,
+				matches);
 		}
 		else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
 		{
@@ -210,7 +235,8 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 		return;
 	}
 	vector<Boundable*> *vb=top->getChildBoundables();
-	for(int i=0;i<(int)vb->size();i++) {
+	unsigned int vbsize = vb->size();
+	for(unsigned int i=0; i<vbsize; i++) {
 		Boundable *boundable=(*vb)[i];
 		if (typeid(*boundable)==typeid(AbstractNode)) {
 			boundablesAtLevel(level,(AbstractNode*) boundable,boundables);
@@ -228,6 +254,9 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2004/11/08 15:58:13  strk
+ * More performance tuning.
+ *
  * Revision 1.20  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *

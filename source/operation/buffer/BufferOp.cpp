@@ -21,6 +21,8 @@
 #define DEBUG 0
 #endif
 
+//#define PROFILE 1
+
 namespace geos {
 
 #if PROFILE
@@ -242,6 +244,9 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2004/11/08 15:58:13  strk
+ * More performance tuning.
+ *
  * Revision 1.34  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *
