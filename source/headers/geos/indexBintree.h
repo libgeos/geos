@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/26 17:46:18  strk
+ * Removed slash-stars in comments to remove annoying compiler warnings.
+ *
  * Revision 1.2  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -24,7 +27,7 @@
  * deleted at destruction time. doc/example.cpp runs with no leaks.
  *
  * Revision 1.5  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
+ * All "index/" packages upgraded to JTS 1.4
  *
  * Revision 1.4  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
