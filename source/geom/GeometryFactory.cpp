@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.29  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -42,43 +45,81 @@
 
 namespace geos {
 
+/**
+* Constructs a GeometryFactory that generates Geometries having a floating
+* PrecisionModel and a spatial-reference ID of 0.
+*/
 GeometryFactory::GeometryFactory() {
 	precisionModel=new PrecisionModel();
 	SRID=0;
+	coordinateListFactory=CoordinateListFactory::internalFactory;
 }
 
 /**
-* Create a geometry factory using given precision model and srid.
-* Will make a copy of given PrecisionModel object, so callers
-* can safely delete it afterwards.
+* Constructs a GeometryFactory that generates Geometries having the given
+* PrecisionModel, spatial-reference ID, and CoordinateSequence implementation.
+*/
+GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateListFactory *nCoordinateListFactory) {
+	precisionModel=pm;
+	coordinateListFactory=nCoordinateListFactory;
+	SRID=newSRID;
+}
+
+/**
+* Constructs a GeometryFactory that generates Geometries having the given
+* CoordinateList implementation, a double-precision floating PrecisionModel and a
+* spatial-reference ID of 0.
+*/
+GeometryFactory::GeometryFactory(CoordinateListFactory *nCoordinateListFactory) {
+	precisionModel=new PrecisionModel();
+	SRID=0;
+	coordinateListFactory=nCoordinateListFactory;
+}
+
+/**
+* Constructs a GeometryFactory that generates Geometries having the given
+* {@link PrecisionModel} and the default CoordinateSequence
+* implementation.
+*
+* @param precisionModel the PrecisionModel to use
+*/
+GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
+	precisionModel=pm;
+	SRID=0;
+	coordinateListFactory=CoordinateListFactory::internalFactory;
+}
+
+/**
+* Constructs a GeometryFactory that generates Geometries having the given
+* {@link PrecisionModel} and spatial-reference ID, and the default CoordinateSequence
+* implementation.
+*
+* @param precisionModel the PrecisionModel to use
+* @param SRID the SRID to use
 */
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID){
-    precisionModel=new PrecisionModel(*pm);
+    precisionModel=pm;
     SRID=newSRID;
+	coordinateListFactory=CoordinateListFactory::internalFactory;
 }
 GeometryFactory::~GeometryFactory(){
 	delete precisionModel;
 }
   
-Point*
-GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
-		const Geometry *exemplar)
-{
-	Point *ret;
-	const PrecisionModel *pm = exemplar->getPrecisionModel();
+Point* GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
+		const Geometry *exemplar) {
 	Coordinate newcoord = *coord;
-	pm->makePrecise(&newcoord);
-	ret = new Point(newcoord,pm, exemplar->getSRID());
-	return ret;
+	exemplar->getPrecisionModel()->makePrecise(&newcoord);
+	return exemplar->getFactory()->createPoint(newcoord);
 }
 
 
-Geometry* GeometryFactory::toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID) {
+Geometry* GeometryFactory::toGeometry(Envelope* envelope) {
 	if (envelope->isNull()) {
-		return new Point(*(new Coordinate()),precisionModel,SRID);
+		return createPoint(*(new Coordinate()));
 	}
 	if (envelope->getMinX()==envelope->getMaxX() && envelope->getMinY()==envelope->getMaxY()) {
-		return new Point(*(new Coordinate(envelope->getMinX(),envelope->getMinY())),precisionModel,SRID);
+		return createPoint(*(new Coordinate(envelope->getMinX(),envelope->getMinY())));
 	}
 	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
 	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMinY())));
@@ -86,42 +127,102 @@ Geometry* GeometryFactory::toGeometry(Envelope* envelope,PrecisionModel* precisi
 	cl->add(*(new Coordinate(envelope->getMaxX(), envelope->getMaxY())));
 	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMaxY())));
 	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMinY())));
-	return new Polygon(new LinearRing(cl,precisionModel,SRID),precisionModel,SRID);
+	return createPolygon(createLinearRing(cl),NULL);
 }
 
-PrecisionModel* GeometryFactory::getPrecisionModel() const {
+/**
+* Returns the PrecisionModel that Geometries created by this factory
+* will be associated with.
+*/
+const PrecisionModel* GeometryFactory::getPrecisionModel() const {
 	return precisionModel;
 }
 
+/**
+* Creates a Point using the given Coordinate; a null Coordinate will create
+* an empty Geometry.
+*/
 Point* GeometryFactory::createPoint(const Coordinate& coordinate){
-	return new Point(coordinate,precisionModel,SRID);
-}
-
-MultiLineString* GeometryFactory::createMultiLineString(vector<Geometry *> *lineStrings){
-	return new MultiLineString(lineStrings,precisionModel,SRID);
-}
-
-GeometryCollection* GeometryFactory::createGeometryCollection(vector<Geometry *> *geometries){
-	return new GeometryCollection(geometries,precisionModel,SRID);
-}
-
-MultiPolygon* GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons){
-	return new MultiPolygon(polygons,precisionModel,SRID);
-}
-
-LinearRing* GeometryFactory::createLinearRing(CoordinateList* coordinates) {
-	if (coordinates->getSize()>0 && 
-		!coordinates->getAt(0).equals2D(coordinates->getAt(coordinates->getSize() - 1))) {
-			delete precisionModel;
-			throw new IllegalArgumentException("LinearRing not closed");
+	if (coordinate==Coordinate::nullCoord) {
+		return createPoint(NULL);
+	} else {
+		CoordinateList *cl=coordinateListFactory->createCoordinateList();
+		cl->add(coordinate);
+		return createPoint(cl);
 	}
-	return new LinearRing(coordinates, precisionModel, SRID);
 }
 
+/**
+* Creates a Point using the given CoordinateSequence; a null or empty
+* CoordinateSequence will create an empty Point.
+*/
+Point* GeometryFactory::createPoint(CoordinateList *coordinates) {
+	return new Point(coordinates,this);
+}
+
+
+
+/**
+* Creates a MultiLineString using the given LineStrings; a null or empty
+* array will create an empty MultiLineString.
+* @param lineStrings LineStrings, each of which may be empty but not null
+*/
+MultiLineString* GeometryFactory::createMultiLineString(vector<Geometry *> *lineStrings){
+	return new MultiLineString(lineStrings,this);
+}
+
+/**
+* Creates a GeometryCollection using the given Geometries; a null or empty
+* array will create an empty GeometryCollection.
+* @param geometries Geometries, each of which may be empty but not null
+*/
+GeometryCollection* GeometryFactory::createGeometryCollection(vector<Geometry *> *geometries){
+	return new GeometryCollection(geometries,this);
+}
+
+/**
+* Creates a MultiPolygon using the given Polygons; a null or empty array
+* will create an empty Polygon. The polygons must conform to the
+* assertions specified in the <A
+* HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
+* Specification for SQL</A>.
+*
+* @param polygons
+*            Polygons, each of which may be empty but not null
+*/
+MultiPolygon* GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons){
+	return new MultiPolygon(polygons,this);
+}
+
+/**
+* Creates a LinearRing using the given CoordinateSequence; a null or empty CoordinateSequence will
+* create an empty LinearRing. The points must form a closed and simple
+* linestring. Consecutive points must not be equal.
+* @param coordinates a CoordinateSequence possibly empty, or null
+*/
+LinearRing* GeometryFactory::createLinearRing(CoordinateList* coordinates) {
+	//if (coordinates->getSize()>0 && 
+	//	!coordinates->getAt(0).equals2D(coordinates->getAt(coordinates->getSize() - 1))) {
+	//		delete precisionModel;
+	//		throw new IllegalArgumentException("LinearRing not closed");
+	//}
+	return new LinearRing(coordinates,this);
+}
+
+/**
+* Creates a MultiPoint using the given Points; a null or empty array will
+* create an empty MultiPoint.
+* @param coordinates an array without null elements, or an empty array, or null
+*/
 MultiPoint* GeometryFactory::createMultiPoint(vector<Geometry *> *point) {
-	return new MultiPoint(point,precisionModel,SRID);
+	return new MultiPoint(point,this);
 }
 
+/**
+* Creates a MultiPoint using the given CoordinateSequence; a null or empty CoordinateSequence will
+* create an empty MultiPoint.
+* @param coordinates a CoordinateSequence possibly empty, or null
+*/
 MultiPoint* GeometryFactory::createMultiPoint(CoordinateList* coordinates) {
 	vector<Geometry *> *pts=new vector<Geometry *>();
 	for (int i=0; i<coordinates->getSize(); i++) {
@@ -134,14 +235,59 @@ MultiPoint* GeometryFactory::createMultiPoint(CoordinateList* coordinates) {
 	return mp;
 }
 
+/**
+* Constructs a <code>Polygon</code> with the given exterior boundary and
+* interior boundaries.
+*
+* @param shell
+*            the outer boundary of the new <code>Polygon</code>, or
+*            <code>null</code> or an empty <code>LinearRing</code> if
+*            the empty geometry is to be created.
+* @param holes
+*            the inner boundaries of the new <code>Polygon</code>, or
+*            <code>null</code> or empty <code>LinearRing</code> s if
+*            the empty geometry is to be created.
+*/
 Polygon* GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes) {
-	return new Polygon(shell, holes, precisionModel, SRID);
+	return new Polygon(shell, holes, this);
 }
 
+/**
+* Creates a LineString using the given Coordinates; a null or empty array will
+* create an empty LineString. Consecutive points must not be equal.
+* @param coordinates an array without null elements, or an empty array, or null
+*/
 LineString* GeometryFactory::createLineString(const CoordinateList* coordinates) {
-	return new LineString(coordinates, precisionModel, SRID);
+	return new LineString(coordinates, this);
 }
 
+/**
+*  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
+*  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
+*  it.
+* For example:<br>
+*
+*  <ul>
+*    <li> If <code>geomList</code> contains a single <code>Polygon</code>,
+*    the <code>Polygon</code> is returned.
+*    <li> If <code>geomList</code> contains several <code>Polygon</code>s, a
+*    <code>MultiPolygon</code> is returned.
+*    <li> If <code>geomList</code> contains some <code>Polygon</code>s and
+*    some <code>LineString</code>s, a <code>GeometryCollection</code> is
+*    returned.
+*    <li> If <code>geomList</code> is empty, an empty <code>GeometryCollection</code>
+*    is returned
+*  </ul>
+*
+* Note that this method does not "flatten" Geometries in the input, and hence if
+* any MultiGeometries are contained in the input a GeometryCollection containing
+* them will be returned.
+*
+*@param  geomList  the <code>Geometry</code>s to combine
+*@return           a <code>Geometry</code> of the "smallest", "most
+*      type-specific" class that can contain the elements of <code>geomList</code>
+*      .
+*/
 Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
@@ -164,6 +310,9 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 	if (isHeterogeneous) {
 		return createGeometryCollection(geoms);
 	}
+    // at this point we know the collection is hetereogenous.
+    // Determine the type of the result from the first Geometry in the list
+    // this should always return a geometry, since otherwise an empty collection would have already been returned
 	Geometry *geom0=(*geoms)[0];
 	if (isCollection) {
 		if (typeid(*geom0)==typeid(Polygon)) {
@@ -192,6 +341,23 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 		return (GeometryCollection*) geom0;
 	else 
 		return geom0;
+}
+
+  
+//Remember to add this.
+  /**
+   * @return a clone of g based on a CoordinateSequence created by this
+   * GeometryFactory's CoordinateSequenceFactory
+   */
+Geometry* GeometryFactory::createGeometry(const Geometry *g) const {
+  //  // could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
+  //  GeometryEditor editor = new GeometryEditor(this);
+  //  return editor.edit(g, new GeometryEditor.CoordinateOperation() {
+  //    public Coordinate[] edit(Coordinate[] coordinates, Geometry geometry) {
+  //                return coordinates;
+  //        }
+  //  });
+	return NULL;
 }
 
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.40  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.39  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -47,25 +50,28 @@
 
 namespace geos {
 
-CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();
 GeometryComponentFilter* Geometry::geometryChangedFilter=new GeometryComponentFilter();
+const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
+
+Geometry::Geometry(GeometryFactory *newFactory) {
+	factory=newFactory;
+	SRID=factory->getSRID();
+	envelope=new Envelope();
+	userData=NULL;
+}
 
 Geometry::Geometry() {
+	factory=new GeometryFactory();
 	SRID=0;
-	precisionModel=new PrecisionModel();
 	envelope=new Envelope();
+	userData=NULL;
 }
 
 Geometry::Geometry(const Geometry &geom) {
-	precisionModel=new PrecisionModel(*geom.precisionModel);
+	factory=geom.getFactory();
 	envelope=new Envelope(*(geom.envelope));
-	SRID=geom.SRID;
-}
-
-Geometry::Geometry(const PrecisionModel *pm, int newSRID){
-	precisionModel=new PrecisionModel(*pm);
-	envelope=new Envelope();
-	SRID = newSRID;
+	SRID=geom.getSRID();
+	userData=NULL;
 }
 
 bool Geometry::hasNonEmptyElements(vector<Geometry *>* geometries) {
@@ -166,25 +172,25 @@ bool Geometry::isWithinDistance(Geometry *geom,double cDistance) {
 * @return a {@link Point} which is the centroid of this Geometry
 */
 Point* Geometry::getCentroid() const {
-	Coordinate* centPt;
+	const Coordinate* centPt;
 	int dim=getDimension();
 	if(dim==0) {
 		CentroidPoint *cent=new CentroidPoint();
-		cent->add(this);
+		cent->add(toInternalGeometry(this));
 		centPt=cent->getCentroid();
 		delete cent;
 	} else if (dim==1) {
 		CentroidLine *cent=new CentroidLine();
-		cent->add(this);
+		cent->add(toInternalGeometry(this));
 		centPt=cent->getCentroid();
 		delete cent;
 	} else {
 		CentroidArea *cent=new CentroidArea();
-		cent->add(this);
+		cent->add(toInternalGeometry(this));
 		centPt=cent->getCentroid();
 		delete cent;
 	}
-	Point *pt=GeometryFactory::createPointFromInternalCoord(centPt,this);
+	Point *pt=createPointFromInternalCoord(centPt,this);
 	delete centPt;
 	return pt;
 }
@@ -201,19 +207,19 @@ Point* Geometry::getInteriorPoint() {
 	const Coordinate* interiorPt;
 	int dim=getDimension();
 	if (dim==0) {
-		InteriorPointPoint* intPt=new InteriorPointPoint(this);
+		InteriorPointPoint* intPt=new InteriorPointPoint(toInternalGeometry(this));
 		interiorPt=intPt->getInteriorPoint();
 		delete intPt;
 	} else if (dim==1) {
-		InteriorPointLine* intPt=new InteriorPointLine(this);
+		InteriorPointLine* intPt=new InteriorPointLine(toInternalGeometry(this));
 		interiorPt=intPt->getInteriorPoint();
 		delete intPt;
 	} else {
-		InteriorPointArea* intPt=new InteriorPointArea(this);
+		InteriorPointArea* intPt=new InteriorPointArea(toInternalGeometry(this));
 		interiorPt=intPt->getInteriorPoint();
 		delete intPt;
 	}
-	Point *p=GeometryFactory::createPointFromInternalCoord(interiorPt,this);;
+	Point *p=createPointFromInternalCoord(interiorPt,this);
 	delete interiorPt;
 	return p;
 }
@@ -241,15 +247,50 @@ int Geometry::getSRID() const {return SRID;}
 
 void Geometry::setSRID(int newSRID) {SRID=newSRID;}
 
-PrecisionModel* Geometry::getPrecisionModel() const {return precisionModel;}
+
+/**
+* Gets the factory which contains the context in which this geometry was created.
+*
+* @return the factory for this geometry
+*/
+GeometryFactory* Geometry::getFactory() const{
+	return factory;
+}
+
+/**
+* Gets the user data object for this geometry, if any.
+*
+* @return the user data object, or <code>null</code> if none set
+*/
+void* Geometry::getUserData() {
+	return userData;
+}
+
+/**
+* A simple scheme for applications to add their own custom data to a Geometry.
+* An example use might be to add an object representing a Coordinate Reference System.
+* <p>
+* Note that user data objects are not present in geometries created by
+* construction methods.
+*
+* @param userData an object, the semantics for which are defined by the
+* application using this Geometry
+*/
+void Geometry::setUserData(void* newUserData) {
+	userData=newUserData;
+}
+
+const PrecisionModel* Geometry::getPrecisionModel() const {
+	return factory->getPrecisionModel();
+}
 
 bool Geometry::isValid() const {
-	IsValidOp isValidOp(this);
+	IsValidOp isValidOp(toInternalGeometry(this));
 	return isValidOp.isValid();
 }
 
 Geometry* Geometry::getEnvelope() const {
-	return GeometryFactory::toGeometry(getEnvelopeInternal(),precisionModel,SRID);
+	return getFactory()->toGeometry(getEnvelopeInternal());
 }
 
 Envelope* Geometry::getEnvelopeInternal() const {
@@ -325,7 +366,7 @@ bool Geometry::equals(const Geometry *g) const {
 IntersectionMatrix* Geometry::relate(const Geometry *g) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(g);
-	return RelateOp::relate(this,g);
+	return RelateOp::relate(toInternalGeometry(this),toInternalGeometry(g));
 }
 
 string Geometry::toString() const {
@@ -338,7 +379,31 @@ string Geometry::toText() const {
 }
 
 Geometry* Geometry::buffer(double distance) const {
-	return BufferOp::bufferOp(this, distance);
+	return fromInternalGeometry(BufferOp::bufferOp(toInternalGeometry(this), distance));
+}
+
+
+/**
+* The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
+* are fast, which may not be the case if the CoordinateSequence is not a
+* BasicCoordinateSequence (e.g. if it were implemented using separate arrays
+* for the x- and y-values), in which case frequent construction of Coordinates
+* takes up much space and time. To solve this performance problem,
+* #toInternalGeometry converts the Geometry to a BasicCoordinateSequence
+* implementation before sending it to the JTS algorithms.
+*/
+Geometry* Geometry::toInternalGeometry(const Geometry *g) const {
+	if (BasicCoordinateListFactory::internalFactory==factory->getCoordinateListFactory()) {
+		return (Geometry*)g;
+	}
+	return INTERNAL_GEOMETRY_FACTORY->createGeometry(g);
+}
+
+Geometry* Geometry::fromInternalGeometry(const Geometry* g) const {
+	if (BasicCoordinateListFactory::internalFactory==factory->getCoordinateListFactory()) {
+		return (Geometry*)g;
+	}
+	return getFactory()->createGeometry(g);
 }
 
 /**
@@ -356,11 +421,11 @@ Geometry* Geometry::buffer(double distance) const {
 *      are less than or equal to <code>distance</code>
 */
 Geometry* Geometry::buffer(double distance,int quadrantSegments) const {
-	return BufferOp::bufferOp(this, distance, quadrantSegments);
+	return fromInternalGeometry(BufferOp::bufferOp(toInternalGeometry(this), distance, quadrantSegments));
 }
 
 Geometry* Geometry::convexHull() const {
-	ConvexHull *ch=new ConvexHull(this);
+	ConvexHull *ch=(ConvexHull*)fromInternalGeometry((const Geometry*)new ConvexHull(toInternalGeometry(this)));
 	Geometry *g=ch->getConvexHull();
 	delete ch;
 	return g;
@@ -369,25 +434,25 @@ Geometry* Geometry::convexHull() const {
 Geometry* Geometry::intersection(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return OverlayOp::overlayOp(this,other,OverlayOp::INTERSECTION);
+	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::INTERSECTION));
 }
 
 Geometry* Geometry::Union(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return OverlayOp::overlayOp(this,other,OverlayOp::UNION);
+	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::UNION));
 }
 
 Geometry* Geometry::difference(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return OverlayOp::overlayOp(this,other,OverlayOp::DIFFERENCE);
+	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::DIFFERENCE));
 }
 
 Geometry* Geometry::symDifference(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return OverlayOp::overlayOp(this,other,OverlayOp::SYMDIFFERENCE);
+	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::SYMDIFFERENCE));
 }
 
 int Geometry::compareTo(const Geometry *geom) const {
@@ -501,7 +566,7 @@ int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const {
 *@param  g  the <code>Geometry</code> from which to compute the distance
 */
 double Geometry::distance(const Geometry *g) const {
-	return DistanceOp::distance(this,g);
+	return DistanceOp::distance(toInternalGeometry(this),toInternalGeometry(g));
 }
 
 /**
@@ -530,9 +595,11 @@ double Geometry::getLength() const {
 }
 
 
+
 Geometry::~Geometry(){
-	delete precisionModel;
+	delete factory;
 	delete envelope;
+	delete userData;
 }
 
 bool lessThen(Coordinate& a, Coordinate& b) {
@@ -570,6 +637,11 @@ void Geometry::apply_ro(GeometryComponentFilter *filter) const {
 
 void Geometry::apply_rw(GeometryComponentFilter *filter) {
 	filter->filter_rw(this);
+}
+Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const{
+	Coordinate newcoord = *coord;
+	exemplar->getPrecisionModel()->makePrecise(&newcoord);
+	return exemplar->getFactory()->createPoint(newcoord);
 }
 
 }

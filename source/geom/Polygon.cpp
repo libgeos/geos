@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.29  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -44,10 +47,10 @@
 namespace geos {
 
 Polygon::Polygon(){
-	shell=new LinearRing();
+	shell=new LinearRing(NULL,NULL);
 	holes=new vector<Geometry *>();
 }
-Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID){
+Polygon::Polygon(const Polygon &p): Geometry(p.getFactory()){
 	shell=new LinearRing(*p.shell);
 	holes=new vector<Geometry *>();
 	for(int i=0;i<(int)p.holes->size();i++) {
@@ -321,7 +324,7 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	const Coordinate* minCoordinate=CoordinateList::minCoordinate(uniqueCoordinates);
 	CoordinateList::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-	if (cgAlgorithms->isCCW(uniqueCoordinates)==clockwise) {
+	if (CGAlgorithms::isCCW(uniqueCoordinates)==clockwise) {
 		CoordinateList::reverse(uniqueCoordinates);
 	}
 	ring->setPoints(uniqueCoordinates);

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/01 10:44:34  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.4  2004/03/29 06:59:25  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -49,7 +52,6 @@ Unload::~Unload(void)
 void Unload::Release()
 {
 	delete CoordinateListFactory::internalFactory;
-	delete Geometry::cgAlgorithms;
 	delete Geometry::geometryChangedFilter;
 	delete PlanarGraph::cga;
 	delete GeometryGraphOperation::cga;

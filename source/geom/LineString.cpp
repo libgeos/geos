@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.26  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -41,31 +44,50 @@
 
 namespace geos {
 
-LineString::LineString(){}
+//LineString::LineString(){}
 
 //Replaces clone()
-LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRID) {
-//	CoordinateList pts(ls.points);
-//	points=pts;
-//	for(int i=0;i<ls.points->getSize();i++) {
-//		points->add(ls.points->getAt(i));
-//	}
+LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 	points=CoordinateListFactory::internalFactory->createCoordinateList(ls.points);
 }
 
+/**
+*  Constructs a <code>LineString</code> with the given points.
+*
+*@param  points          the points of the linestring, or <code>null</code>
+*      to create the empty geometry. This array must not contain <code>null</code>
+*      elements. Consecutive points may not be equal.
+*@param  precisionModel  the specification of the grid of allowable points
+*      for this <code>LineString</code>
+*@param  SRID            the ID of the Spatial Reference System used by this
+*      <code>LineString</code>
+* @deprecated Use GeometryFactory instead 
+*/  
 LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm,
-		int SRID): Geometry(pm, SRID){
+					   int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
 	if (pts==NULL) {
 		pts=CoordinateListFactory::internalFactory->createCoordinateList();
-	}
-	if (hasNullElements(pts)) {
-		throw new IllegalArgumentException("point array must not contain null elements\n");
 	}
 	if (pts->getSize()==1) {
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
 	points=CoordinateListFactory::internalFactory->createCoordinateList(pts); // xie 
 }
+
+/**
+*@param  points          the points of the linestring, or <code>null</code>
+*      to create the empty geometry. Consecutive points may not be equal.
+*/  
+LineString::LineString(const CoordinateList *pts,GeometryFactory *newFactory):Geometry(newFactory){
+	if (pts==NULL) {
+		pts=CoordinateListFactory::internalFactory->createCoordinateList();
+	}
+	if (pts->getSize()==1) {
+		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
+	}
+	points=CoordinateListFactory::internalFactory->createCoordinateList(pts); // xie 
+}
+
 
 LineString::~LineString(){
 	delete points;
@@ -108,7 +130,7 @@ int LineString::getNumPoints() const {
 }
 
 Point* LineString::getPointN(int n) const {
-	return new Point(points->getAt(n), getPrecisionModel(), SRID);
+	return getFactory()->createPoint(points->getAt(n));
 }
 
 Point* LineString::getStartPoint() const {
@@ -142,20 +164,20 @@ string LineString::getGeometryType() const {
 
 bool LineString::isSimple() const {
 	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
-	return iso->isSimple(this);
+	return iso->isSimple((LineString*) toInternalGeometry(this));
 }
 
 Geometry* LineString::getBoundary() const {
 	if (isEmpty()) {
-		return new GeometryCollection(NULL, precisionModel, SRID);
+		return getFactory()->createGeometryCollection(NULL);
 	}
 	if (isClosed()) {
-		return new MultiPoint(NULL, precisionModel, SRID);
+		return getFactory()->createMultiPoint((CoordinateList*)NULL);
 	}
 	vector<Geometry*> *pts=new vector<Geometry*>();
 	pts->push_back(getStartPoint());
 	pts->push_back(getEndPoint());
-	MultiPoint *mp = new MultiPoint(pts, precisionModel, SRID);
+	MultiPoint *mp = getFactory()->createMultiPoint(pts);
 	delete pts;
 	return mp;
 }
@@ -178,10 +200,10 @@ Envelope* LineString::computeEnvelopeInternal() const {
 	double maxx = points->getAt(0).x;
 	double maxy = points->getAt(0).y;
 	for (int i = 1; i < points->getSize(); i++) {
-		minx = min(minx, points->getAt(i).x); //min
-		maxx = max(maxx, points->getAt(i).x);
-		miny = min(miny, points->getAt(i).y);
-		maxy = max(maxy, points->getAt(i).y);
+		minx = minx < points->getAt(i).x ? minx : points->getAt(i).x;
+		maxx = maxx > points->getAt(i).x ? maxx : points->getAt(i).x;
+		miny = miny < points->getAt(i).y ? miny : points->getAt(i).y;
+		maxy = maxy > points->getAt(i).y ? maxy : points->getAt(i).y;
 	}
 	return new Envelope(minx, maxx, miny, maxy);
 }

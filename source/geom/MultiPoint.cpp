@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.13  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -43,7 +46,7 @@ namespace geos {
 * @deprecated Use GeometryFactory instead
 */
 MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
-	GeometryCollection(points, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
+	GeometryCollection(points, new GeometryFactory(pm, SRID,CoordinateListFactory::internalFactory)){}
 
 /**
 *@param  points          the <code>Point</code>s for this <code>MultiPoint</code>

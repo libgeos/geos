@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.48  2004/04/01 10:44:34  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.47  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -41,6 +44,9 @@
 
 /*
 * $Log$
+* Revision 1.48  2004/04/01 10:44:34  ybychkov
+* All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+*
 * Revision 1.47  2004/03/31 07:50:37  ybychkov
 * "geom" partially upgraded to JTS 1.4
 *
@@ -743,56 +749,156 @@ class Geometry;
 class GeometryFilter;
 class IntersectionMatrix;
 
-class SFSGeometry {
-public:
-	virtual int getSRID() const=0;
-	virtual string getGeometryType() const=0;
-	virtual PrecisionModel* getPrecisionModel() const=0;
-	virtual Envelope* getEnvelopeInternal() const=0;
-	virtual Geometry* getEnvelope() const=0;
-	virtual bool isEmpty() const=0;
-	virtual bool isSimple() const=0;
-	virtual Geometry* getBoundary() const=0;
-	virtual int getDimension() const=0;
-	virtual bool equals(const Geometry *other) const=0;
-	virtual bool disjoint(const Geometry *other) const=0;
-	virtual bool intersects(const Geometry *other) const=0;
-	virtual bool touches(const Geometry *other) const=0;
-	virtual bool crosses(const Geometry *other) const=0;
-	virtual bool within(const Geometry *other) const=0;
-	virtual bool contains(const Geometry *other) const=0;
-	virtual bool overlaps(const Geometry *other) const=0;
-	virtual bool relate(const Geometry *other, string intersectionPattern) const=0;
-	virtual IntersectionMatrix* relate(const Geometry *other) const=0;
-	virtual Geometry* buffer(double distance) const=0;
-	virtual Geometry* convexHull() const=0;
-	virtual Geometry* intersection(const Geometry *other) const=0;
-	virtual Geometry* Union(const Geometry *other) const=0;
-	virtual Geometry* difference(const Geometry *other) const=0;
-	virtual Geometry* symDifference(const Geometry *other) const=0;
-	virtual string toText() const=0;
-};
 
 class CGAlgorithms;
 class Point;
 class GeometryFactory;
-class Geometry: public SFSGeometry {
+
+/**
+ *  Basic implementation of <code>Geometry</code>. <P>
+ *
+ *  <code>clone</code> returns a deep copy of the object.
+ *
+ *  <H3>Binary Predicates</H3>
+ * Because it is not clear at this time
+ * what semantics for spatial
+ *  analysis methods involving <code>GeometryCollection</code>s would be useful,
+ *  <code>GeometryCollection</code>s are not supported as arguments to binary
+ *  predicates (other than <code>convexHull</code>) or the <code>relate</code>
+ *  method.
+ *
+ *  <H3>Set-Theoretic Methods</H3>
+ *
+ *  The spatial analysis methods will
+ *  return the most specific class possible to represent the result. If the
+ *  result is homogeneous, a <code>Point</code>, <code>LineString</code>, or
+ *  <code>Polygon</code> will be returned if the result contains a single
+ *  element; otherwise, a <code>MultiPoint</code>, <code>MultiLineString</code>,
+ *  or <code>MultiPolygon</code> will be returned. If the result is
+ *  heterogeneous a <code>GeometryCollection</code> will be returned. <P>
+ *
+ *  Because it is not clear at this time what semantics for set-theoretic
+ *  methods involving <code>GeometryCollection</code>s would be useful,
+ * <code>GeometryCollections</code>
+ *  are not supported as arguments to the set-theoretic methods.
+ *
+ *  <H4>Representation of Computed Geometries </H4>
+ *
+ *  The SFS states that the result
+ *  of a set-theoretic method is the "point-set" result of the usual
+ *  set-theoretic definition of the operation (SFS 3.2.21.1). However, there are
+ *  sometimes many ways of representing a point set as a <code>Geometry</code>.
+ *  <P>
+ *
+ *  The SFS does not specify an unambiguous representation of a given point set
+ *  returned from a spatial analysis method. One goal of JTS is to make this
+ *  specification precise and unambiguous. JTS will use a canonical form for
+ *  <code>Geometry</code>s returned from spatial analysis methods. The canonical
+ *  form is a <code>Geometry</code> which is simple and noded:
+ *  <UL>
+ *    <LI> Simple means that the Geometry returned will be simple according to
+ *    the JTS definition of <code>isSimple</code>.
+ *    <LI> Noded applies only to overlays involving <code>LineString</code>s. It
+ *    means that all intersection points on <code>LineString</code>s will be
+ *    present as endpoints of <code>LineString</code>s in the result.
+ *  </UL>
+ *  This definition implies that non-simple geometries which are arguments to
+ *  spatial analysis methods must be subjected to a line-dissolve process to
+ *  ensure that the results are simple.
+ *
+ *  <H4> Constructed Points And The Precision Model </H4>
+ *
+ *  The results computed by the set-theoretic methods may
+ *  contain constructed points which are not present in the input <code>Geometry</code>
+ *  s. These new points arise from intersections between line segments in the
+ *  edges of the input <code>Geometry</code>s. In the general case it is not
+ *  possible to represent constructed points exactly. This is due to the fact
+ *  that the coordinates of an intersection point may contain twice as many bits
+ *  of precision as the coordinates of the input line segments. In order to
+ *  represent these constructed points explicitly, JTS must truncate them to fit
+ *  the <code>PrecisionModel</code>. <P>
+ *
+ *  Unfortunately, truncating coordinates moves them slightly. Line segments
+ *  which would not be coincident in the exact result may become coincident in
+ *  the truncated representation. This in turn leads to "topology collapses" --
+ *  situations where a computed element has a lower dimension than it would in
+ *  the exact result. <P>
+ *
+ *  When JTS detects topology collapses during the computation of spatial
+ *  analysis methods, it will throw an exception. If possible the exception will
+ *  report the location of the collapse. <P>
+ *
+ *  #equals(Object) and #hashCode are not overridden, so that when two
+ *  topologically equal Geometries are added to HashMaps and HashSets, they
+ *  remain distinct. This behaviour is desired in many cases.
+ *
+ */
+class Geometry{
 friend class Unload;
 public:
 	void throw_exception ();
 	Geometry(void);
 	Geometry(const Geometry &geom);
-	Geometry(const PrecisionModel* pm, int SRID);
-	GeometryFactory* getFactory() const {return NULL;};
+	Geometry(GeometryFactory *newFactory);
+	/**
+	* Gets the factory which contains the context in which this geometry was created.
+	*
+	* @return the factory for this geometry
+	*/
+	GeometryFactory* getFactory() const;
+	/**
+	* Gets the user data object for this geometry, if any.
+	*
+	* @return the user data object, or <code>null</code> if none set
+	*/
+	void* getUserData();
+	/**
+	* A simple scheme for applications to add their own custom data to a Geometry.
+	* An example use might be to add an object representing a Coordinate Reference System.
+	* <p>
+	* Note that user data objects are not present in geometries created by
+	* construction methods.
+	*
+	* @param userData an object, the semantics for which are defined by the
+	* application using this Geometry
+	*/
+	void setUserData(void* newUserData);
 	virtual string getGeometryType() const=0; //Abstract
 	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
+	/**
+	*  Returns the ID of the Spatial Reference System used by the <code>Geometry</code>.
+	*  <P>
+	*
+	*  JTS supports Spatial Reference System information in the simple way
+	*  defined in the SFS. A Spatial Reference System ID (SRID) is present in
+	*  each <code>Geometry</code> object. <code>Geometry</code> provides basic
+	*  accessor operations for this field, but no others. The SRID is represented
+	*  as an integer.
+	*
+	*@return    the ID of the coordinate space in which the <code>Geometry</code>
+	*      is defined.
+	*
+	*  @deprecated use {@link getUserData} instead
+	*/
 	virtual int getSRID() const;
+		/**
+	*  Sets the ID of the Spatial Reference System used by the <code>Geometry</code>.
+	*  @deprecated use {@link setUserData} instead
+	*/
 	virtual void setSRID(int newSRID);
-	virtual PrecisionModel* getPrecisionModel() const;
+	virtual const PrecisionModel* getPrecisionModel() const;
 	virtual const Coordinate* getCoordinate() const=0; //Abstract
 	virtual CoordinateList* getCoordinates() const=0; //Abstract
 	virtual int getNumPoints() const=0; //Abstract
 	virtual bool isSimple() const=0; //Abstract
+	/**
+	*  Tests the validity of this <code>Geometry</code>.
+	*  Subclasses provide their own definition of "valid".
+	*
+	*@return    <code>true</code> if this <code>Geometry</code> is valid
+	*
+	* @see IsValidOp
+	*/
 	virtual bool isValid() const;
 	virtual bool isEmpty() const=0; //Abstract
 	virtual int getDimension() const=0; //Abstract
@@ -839,10 +945,7 @@ public:
 	virtual void geometryChanged();
 	void geometryChangedAction();
 protected:
-	PrecisionModel* precisionModel;
-	int SRID;
 	Envelope* envelope;
-	static CGAlgorithms *cgAlgorithms;
 	static bool hasNonEmptyElements(vector<Geometry *>* geometries);
 	static bool hasNullElements(const CoordinateList* list);
 	static bool hasNullElements(vector<Geometry *>* lrs);
@@ -859,9 +962,26 @@ protected:
 	int compare(vector<Coordinate> a, vector<Coordinate> b) const;
 	int compare(vector<Geometry *> a, vector<Geometry *> b) const;
 	bool equal(const Coordinate& a, const Coordinate& b,double tolerance) const;
+	int SRID;
+	/**
+	* The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
+	* are fast, which may not be the case if the CoordinateSequence is not a
+	* BasicCoordinateSequence (e.g. if it were implemented using separate arrays
+	* for the x- and y-values), in which case frequent construction of Coordinates
+	* takes up much space and time. To solve this performance problem,
+	* #toInternalGeometry converts the Geometry to a BasicCoordinateSequence
+	* implementation before sending it to the JTS algorithms.
+	*/
+	Geometry* toInternalGeometry(const Geometry *g) const;
+	Geometry* fromInternalGeometry(const Geometry *g) const;
 private:
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter* geometryChangedFilter;
+    static const long long serialVersionUID = 8763622679187376702L;
+	GeometryFactory *factory;
+	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
+	void* userData;
+	Point* createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const;
 };
 
 /**
@@ -1066,17 +1186,19 @@ bool operator==(const LineSegment a, const LineSegment b);
 bool lessThen(Coordinate& a,Coordinate& b);
 bool greaterThen(Geometry *first, Geometry *second);
 
-class SFSGeometryCollection { //: public SFSGeometry {
+class GeometryCollection : public Geometry{
 public:
-	virtual int getNumGeometries() const=0;
-	virtual const Geometry* getGeometryN(int n) const=0;
-};
-
-class GeometryCollection : public Geometry, public SFSGeometryCollection {
-public:
-	GeometryCollection(void);
+//	GeometryCollection(void);
 	GeometryCollection(const GeometryCollection &gc);
 	GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
+	/**
+	* @param geometries
+	*            the <code>Geometry</code>s for this <code>GeometryCollection</code>,
+	*            or <code>null</code> or an empty array to create the empty
+	*            geometry. Elements may be empty <code>Geometry</code>s,
+	*            but not <code>null</code>s.
+	*/
+	GeometryCollection(vector<Geometry *> *newGeometries,GeometryFactory *newFactory);
 	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
 	virtual CoordinateList* getCoordinates() const;
@@ -1103,11 +1225,13 @@ public:
 	virtual const Coordinate* getCoordinate() const;
 	virtual double getArea() const;
 	virtual double getLength() const;
-	virtual Point* getCentroid() const;
+//	virtual Point* getCentroid() const;
 protected:
 	vector<Geometry *>* geometries;
 	virtual Envelope* computeEnvelopeInternal() const;
 	virtual int compareToSameClass(const Geometry *gc) const;
+private:
+	static const long long serialVersionUID = -5694727726395021467L;
 };
 
 class GeometryCollectionIterator {
@@ -1125,17 +1249,6 @@ private:
 	int max;
 	int index;
 	GeometryCollectionIterator* subcollectionIterator;
-};
-
-class SFSMultiCurve { //: public SFSGeometryCollection {
-public:
-	virtual bool isClosed() const=0;
-};
-
-class SFSMultiLineString : public SFSMultiCurve {
-};
-
-class SFSMultiSurface { //: public SFSGeometryCollection {
 };
 
 /**
@@ -1194,31 +1307,32 @@ private:
 	static const long long serialVersionUID = 4902022702746614570L;
 };
 
-class  SFSCurve { //: public SFSGeometry {
+/**
+ *  Basic implementation of <code>LineString</code>.
+ *
+ */
+class LineString: public Geometry {
 public:
-	virtual Point* getStartPoint() const=0;
-	virtual Point* getEndPoint() const=0;
-	virtual bool isClosed() const=0;
-	virtual bool isRing() const=0;
-	virtual bool isSimple() const=0;
-};
-
-class SFSLineString : public SFSCurve  {
-public:
-	virtual int getNumPoints() const=0;
-	virtual Point* getPointN(int n) const=0;
-	virtual const Coordinate& getCoordinateN(int n) const=0;
-
-};
-
-class SFSLinearRing { // : public SFSLineString { //For some reason generates 'virtual function not impl.'
-};
-
-class LineString: public Geometry, public SFSLineString {
-public:
-	LineString();
+//	LineString();
 	LineString(const LineString &ls);
+	/**
+	*  Constructs a <code>LineString</code> with the given points.
+	*
+	*@param  points          the points of the linestring, or <code>null</code>
+	*      to create the empty geometry. This array must not contain <code>null</code>
+	*      elements. Consecutive points may not be equal.
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>LineString</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>LineString</code>
+	* @deprecated Use GeometryFactory instead 
+	*/  
 	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
+	/**
+	*@param  points          the points of the linestring, or <code>null</code>
+	*      to create the empty geometry. Consecutive points may not be equal.
+	*/  
+	LineString(const CoordinateList *pts,GeometryFactory *newFactory);
 	virtual ~LineString();
 	virtual Geometry *clone() const;
 	virtual CoordinateList* getCoordinates() const;
@@ -1254,24 +1368,55 @@ public:
 	virtual const Coordinate* getCoordinate() const;
 	virtual double getLength() const;
 protected:
-	CoordinateList* points;
 	virtual Envelope* computeEnvelopeInternal() const;
 	virtual bool isEquivalentClass(const Geometry *other) const;
+	CoordinateList* points;
+private:
+	static const long long serialVersionUID = 3110669828065365560L;
 };
 
-class LinearRing : public LineString, public SFSLinearRing {
+/**
+ *  Basic implementation of <code>LinearRing</code>.
+ * The first and last point in the coordinate sequence must be equal.
+ * Either orientation of the ring is allowed.
+ * A valid ring must not self-intersect.
+ *
+ */
+class LinearRing : public LineString{
 public:
-	LinearRing();
+//	LinearRing();
 	LinearRing(const LinearRing &lr);
+	/**
+	*  Constructs a <code>LinearRing</code> with the given points.
+	*
+	*@param  points          points forming a closed and simple linestring, or
+	*      <code>null</code> or an empty array to create the empty geometry.
+	*      This array must not contain <code>null</code> elements.
+	*
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>LinearRing</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>LinearRing</code>
+	* @deprecated Use GeometryFactory instead
+	*/
 	LinearRing(const CoordinateList* points, const PrecisionModel* pm, int SRID);
+	/**
+	*  Constructs a <code>LinearRing</code> with the given points.
+	*
+	*@param  points          points forming a closed and simple linestring, or
+	*      <code>null</code> or an empty array to create the empty geometry.
+	*      This array must not contain <code>null</code> elements.
+	*
+	*/
+	LinearRing(const CoordinateList* points, GeometryFactory *newFactory);
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
 	bool isClosed() const;
 	void setPoints(CoordinateList* cl);
-};
-
-class SFSSurface { //: public SFSGeometry {
+private:
+	static const long long serialVersionUID = -4261142084085851829L;
+	void validateConstruction();
 };
 
 /**
@@ -1414,10 +1559,28 @@ private:
 	static const long long serialVersionUID = -8048474874175355449L;  
 };
 
-class MultiLineString: public GeometryCollection, public SFSMultiLineString  {
+/**
+ *  Basic implementation of <code>MultiLineString</code>.
+ *
+ */
+class MultiLineString: public GeometryCollection{
 public:
-	MultiLineString();
+//	MultiLineString();
+	/**
+	*  Constructs a <code>MultiLineString</code>.
+	*
+	*@param  lineStrings     the <code>LineString</code>s for this <code>MultiLineString</code>
+	*      , or <code>null</code> or an empty array to create the empty geometry.
+	*      Elements may be empty <code>LineString</code>s, but not <code>null</code>
+	*      s.
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>MultiLineString</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>MultiLineString</code>
+	* @deprecated Use GeometryFactory instead
+	*/
 	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
+	MultiLineString(vector<Geometry *> *lineStrings, GeometryFactory *newFactory);
 	virtual ~MultiLineString();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1429,6 +1592,8 @@ public:
 	bool isSimple() const;
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
+private:
+	static const long long serialVersionUID = 8166665132445433741L;
 };
 
 /**
@@ -1479,30 +1644,166 @@ private:
 	static const long long serialVersionUID = -551033529766975875L;
 };
 
+/**
+ * Supplies a set of utility methods for building Geometry objects from lists
+ * of Coordinates.
+ *
+ */
 class GeometryFactory {
 public:
+	/**
+	* Constructs a GeometryFactory that generates Geometries having a floating
+	* PrecisionModel and a spatial-reference ID of 0.
+	*/
 	GeometryFactory();
+	/**
+	* Constructs a GeometryFactory that generates Geometries having the given
+	* PrecisionModel, spatial-reference ID, and CoordinateSequence implementation.
+	*/
+	GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateListFactory *nCoordinateListFactory);
+	/**
+	* Constructs a GeometryFactory that generates Geometries having the given
+	* CoordinateList implementation, a double-precision floating PrecisionModel and a
+	* spatial-reference ID of 0.
+	*/
+	GeometryFactory(CoordinateListFactory *nCoordinateListFactory);
+	/**
+	* Constructs a GeometryFactory that generates Geometries having the given
+	* {@link PrecisionModel} and the default CoordinateSequence
+	* implementation.
+	*
+	* @param precisionModel the PrecisionModel to use
+	*/
+	GeometryFactory(const PrecisionModel *pm);
+	/**
+	* Constructs a GeometryFactory that generates Geometries having the given
+	* {@link PrecisionModel} and spatial-reference ID, and the default CoordinateSequence
+	* implementation.
+	*
+	* @param precisionModel the PrecisionModel to use
+	* @param SRID the SRID to use
+	*/
 	GeometryFactory(const PrecisionModel* pm, int newSRID);
 	virtual ~GeometryFactory();
 
 //Skipped a lot of list to array convertors
 
 	static Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar);
-	static Geometry* toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID);
-	PrecisionModel* getPrecisionModel() const;
+	Geometry* toGeometry(Envelope* envelope);
+	/**
+	* Returns the PrecisionModel that Geometries created by this factory
+	* will be associated with.
+	*/
+	const PrecisionModel* getPrecisionModel() const;
 	Point* createPoint(const Coordinate& coordinate);
+	/**
+	* Creates a Point using the given CoordinateSequence; a null or empty
+	* CoordinateSequence will create an empty Point.
+	*/
+	Point* createPoint(CoordinateList *coordinates);
+	/**
+	* Creates a MultiLineString using the given LineStrings; a null or empty
+	* array will create an empty MultiLineString.
+	* @param lineStrings LineStrings, each of which may be empty but not null
+	*/
 	MultiLineString* createMultiLineString(vector<Geometry *> *lineStrings);
+	/**
+	* Creates a GeometryCollection using the given Geometries; a null or empty
+	* array will create an empty GeometryCollection.
+	* @param geometries Geometries, each of which may be empty but not null
+	*/
 	GeometryCollection* createGeometryCollection(vector<Geometry *> *geometries);
+	/**
+	* Creates a MultiPolygon using the given Polygons; a null or empty array
+	* will create an empty Polygon. The polygons must conform to the
+	* assertions specified in the <A
+	* HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
+	* Specification for SQL</A>.
+	*
+	* @param polygons
+	*            Polygons, each of which may be empty but not null
+	*/
 	MultiPolygon* createMultiPolygon(vector<Geometry *> *polygons);
+	/**
+	* Creates a LinearRing using the given CoordinateSequence; a null or empty CoordinateSequence will
+	* create an empty LinearRing. The points must form a closed and simple
+	* linestring. Consecutive points must not be equal.
+	* @param coordinates a CoordinateSequence possibly empty, or null
+	*/
 	LinearRing* createLinearRing(CoordinateList* coordinates);
+	/**
+	* Creates a MultiPoint using the given Points; a null or empty array will
+	* create an empty MultiPoint.
+	* @param coordinates an array without null elements, or an empty array, or null
+	*/
 	MultiPoint* createMultiPoint(vector<Geometry *> *point);
+	/**
+	* Creates a MultiPoint using the given CoordinateSequence; a null or empty CoordinateSequence will
+	* create an empty MultiPoint.
+	* @param coordinates a CoordinateSequence possibly empty, or null
+	*/
 	MultiPoint* createMultiPoint(CoordinateList* coordinates);
+	/**
+	* Constructs a <code>Polygon</code> with the given exterior boundary and
+	* interior boundaries.
+	*
+	* @param shell
+	*            the outer boundary of the new <code>Polygon</code>, or
+	*            <code>null</code> or an empty <code>LinearRing</code> if
+	*            the empty geometry is to be created.
+	* @param holes
+	*            the inner boundaries of the new <code>Polygon</code>, or
+	*            <code>null</code> or empty <code>LinearRing</code> s if
+	*            the empty geometry is to be created.
+	*/
 	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes);
+	/**
+	* Creates a LineString using the given Coordinates; a null or empty array will
+	* create an empty LineString. Consecutive points must not be equal.
+	* @param coordinates an array without null elements, or an empty array, or null
+	*/
 	LineString* createLineString(const CoordinateList* coordinates);
+	/**
+	*  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
+	*  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
+	*  it.
+	* For example:<br>
+	*
+	*  <ul>
+	*    <li> If <code>geomList</code> contains a single <code>Polygon</code>,
+	*    the <code>Polygon</code> is returned.
+	*    <li> If <code>geomList</code> contains several <code>Polygon</code>s, a
+	*    <code>MultiPolygon</code> is returned.
+	*    <li> If <code>geomList</code> contains some <code>Polygon</code>s and
+	*    some <code>LineString</code>s, a <code>GeometryCollection</code> is
+	*    returned.
+	*    <li> If <code>geomList</code> is empty, an empty <code>GeometryCollection</code>
+	*    is returned
+	*  </ul>
+	*
+	* Note that this method does not "flatten" Geometries in the input, and hence if
+	* any MultiGeometries are contained in the input a GeometryCollection containing
+	* them will be returned.
+	*
+	*@param  geomList  the <code>Geometry</code>s to combine
+	*@return           a <code>Geometry</code> of the "smallest", "most
+	*      type-specific" class that can contain the elements of <code>geomList</code>
+	*      .
+	*/
 	Geometry* buildGeometry(vector<Geometry *> *geoms);
+	int getSRID() {return SRID;};
+	CoordinateListFactory* getCoordinateListFactory() {return coordinateListFactory;};
+	/**
+	* @return a clone of g based on a CoordinateSequence created by this
+	* GeometryFactory's CoordinateSequenceFactory
+	*/
+	Geometry* createGeometry(const Geometry *g) const;
 private:
-	PrecisionModel* precisionModel;
+	const PrecisionModel* precisionModel;
 	int SRID;
+	static const long long serialVersionUID = -6820524753094095635L;
+	CoordinateListFactory *coordinateListFactory;
+
 };
 
 /**

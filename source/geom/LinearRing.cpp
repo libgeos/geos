@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -28,12 +31,40 @@
 
 namespace geos {
 
-LinearRing::LinearRing(): LineString() {}
-//LinearRing::LinearRing(const LinearRing &lr): LineString(lr.points, lr.precisionModel, lr.SRID) {}
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
 
+/**
+*  Constructs a <code>LinearRing</code> with the given points.
+*
+*@param  points          points forming a closed and simple linestring, or
+*      <code>null</code> or an empty array to create the empty geometry.
+*      This array must not contain <code>null</code> elements.
+*
+*@param  precisionModel  the specification of the grid of allowable points
+*      for this <code>LinearRing</code>
+*@param  SRID            the ID of the Spatial Reference System used by this
+*      <code>LinearRing</code>
+* @deprecated Use GeometryFactory instead
+*/
 LinearRing::LinearRing(const CoordinateList* points, const PrecisionModel* pm,
-		int SRID): LineString(points, pm, SRID) {
+	int SRID): LineString(points, new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)) {
+	validateConstruction();	
+}
+
+/**
+*  Constructs a <code>LinearRing</code> with the given points.
+*
+*@param  points          points forming a closed and simple linestring, or
+*      <code>null</code> or an empty array to create the empty geometry.
+*      This array must not contain <code>null</code> elements.
+*
+*/
+LinearRing::LinearRing(const CoordinateList* points, GeometryFactory *newFactory): LineString(points,newFactory) {
+	validateConstruction();	
+}
+
+
+void LinearRing::validateConstruction() {
 	if (!LineString::isEmpty() && !LineString::isClosed()) {
 		throw new IllegalArgumentException("points must form a closed linestring");
     }
@@ -42,6 +73,8 @@ LinearRing::LinearRing(const CoordinateList* points, const PrecisionModel* pm,
 	}
 }
 
+
+		
 // superclass LineString will delete internal CoordinateList
 LinearRing::~LinearRing(){
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -26,9 +29,33 @@
 
 namespace geos {
 
-MultiLineString::MultiLineString(){}
+//MultiLineString::MultiLineString(){}
+/**
+*  Constructs a <code>MultiLineString</code>.
+*
+*@param  lineStrings     the <code>LineString</code>s for this <code>MultiLineString</code>
+*      , or <code>null</code> or an empty array to create the empty geometry.
+*      Elements may be empty <code>LineString</code>s, but not <code>null</code>
+*      s.
+*@param  precisionModel  the specification of the grid of allowable points
+*      for this <code>MultiLineString</code>
+*@param  SRID            the ID of the Spatial Reference System used by this
+*      <code>MultiLineString</code>
+* @deprecated Use GeometryFactory instead
+*/
 MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID):
-GeometryCollection(lineStrings, precisionModel,SRID){}
+	GeometryCollection(lineStrings, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
+
+/**
+* @param lineStrings
+*            the <code>LineString</code>s for this <code>MultiLineString</code>,
+*            or <code>null</code> or an empty array to create the empty
+*            geometry. Elements may be empty <code>LineString</code>s,
+*            but not <code>null</code>s.
+*/
+MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, GeometryFactory *newFactory): 
+	GeometryCollection(lineStrings,newFactory){}
+
 MultiLineString::~MultiLineString(){}
 
 int MultiLineString::getDimension() const {
@@ -60,18 +87,17 @@ bool MultiLineString::isClosed() const {
 
 bool MultiLineString::isSimple() const {
 	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
-	return iso->isSimple(this);
+	return iso->isSimple((MultiLineString*) toInternalGeometry(this));
 }
 
 Geometry* MultiLineString::getBoundary() const {
 	if (isEmpty()) {
-		return new GeometryCollection(NULL, precisionModel, SRID);
+		return getFactory()->createGeometryCollection(NULL);
 	}
-	GeometryGraph *g=new GeometryGraph(0,this);
+	GeometryGraph *g=new GeometryGraph(0,toInternalGeometry(this));
 	CoordinateList *pts=g->getBoundaryPoints();
-	GeometryFactory fact(precisionModel, SRID);
 	delete g;
-	return fact.createMultiPoint(pts);
+	return getFactory()->createMultiPoint(pts);
 }
 
 bool

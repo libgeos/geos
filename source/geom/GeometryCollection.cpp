@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
  * Revision 1.27  2003/12/11 15:53:40  strk
  * Fixed bogus copy constructor (making clone bogus)
  *
@@ -32,12 +35,12 @@
 
 namespace geos {
 
-GeometryCollection::GeometryCollection(){
-	geometries=new vector<Geometry *>();
-}
+//GeometryCollection::GeometryCollection(){
+//	geometries=new vector<Geometry *>();
+//}
 
 GeometryCollection::GeometryCollection(const GeometryCollection &gc):
-	Geometry(gc.precisionModel,gc.SRID){
+	Geometry(gc.getFactory()){
 	geometries=new vector<Geometry *>();
 	for(int i=0;i<(int)gc.geometries->size();i++) {
 		geometries->push_back((*gc.geometries)[i]->clone());
@@ -45,17 +48,29 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 	//geometries=gc.geometries;	
 }
 
-/*
-* Copies given vector<Geometry *> to private area.
-* WARNING: Geometries pointed to by vector elements will
-* be deleted by GeometryCollection destructor, so callers
-* should not touch them anymore (althought they can safely
-* delete vector used to store them).
-* vector<Geometry *> const *newGeometries
-* should be the correct form, but I'm coding too much ;0 --strk;
+/** @deprecated Use GeometryFactory instead */
+GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm,int SRID):
+	Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
+	if (newGeometries==NULL) {
+		geometries=new vector<Geometry *>();
+		return;
+	}
+	if (hasNullElements(newGeometries)) {
+		throw new IllegalArgumentException("geometries must not contain null elements\n");
+		return;
+	}
+	geometries=new vector<Geometry *>(*newGeometries);
+}
+
+/**
+* @param geometries
+*            the <code>Geometry</code>s for this <code>GeometryCollection</code>,
+*            or <code>null</code> or an empty array to create the empty
+*            geometry. Elements may be empty <code>Geometry</code>s,
+*            but not <code>null</code>s.
 */
-GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,
-		PrecisionModel* pm,int SRID): Geometry(pm,SRID){
+GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,GeometryFactory *newFactory):
+	Geometry(newFactory){
 	if (newGeometries==NULL) {
 		geometries=new vector<Geometry *>();
 		return;
@@ -153,12 +168,12 @@ GeometryCollection::equalsExact(const Geometry *other, double tolerance) const
 		return false;
 	}
 	for (unsigned int i=0; i<geometries->size(); i++) {
-		if (typeid(*((*geometries)[i]))!=typeid(Geometry)) {
-			return false;
-		}
-		if (typeid(*((*(otherCollection->geometries))[i]))!=typeid(Geometry)) {
-			return false;
-		}
+		//if (typeid(*((*geometries)[i]))!=typeid(Geometry)) {
+		//	return false;
+		//}
+		//if (typeid(*((*(otherCollection->geometries))[i]))!=typeid(Geometry)) {
+		//	return false;
+		//}
 		if (!((*geometries)[i]->equalsExact((*(otherCollection->geometries))[i],tolerance))) {
 			return false;
 		}
@@ -277,28 +292,28 @@ GeometryCollection::~GeometryCollection(){
 * "weight" to the centroid)
 * @return
 */
-Point* GeometryCollection::getCentroid() const {
-	Coordinate* centPt;
-	int dim=getDimension();
-	if(dim==0) {
-		CentroidPoint *cent=new CentroidPoint();
-		cent->add(this);
-		centPt=cent->getCentroid();
-		delete cent;
-	} else if (dim==1) {
-		CentroidLine *cent=new CentroidLine();
-		cent->add(this);
-		centPt=cent->getCentroid();
-		delete cent;
-	} else {
-		CentroidArea *cent=new CentroidArea();
-		cent->add(this);
-		centPt=cent->getCentroid();
-		delete cent;
-	}
-	Point *pt=GeometryFactory::createPointFromInternalCoord(centPt,this);
-	delete centPt;
-	return pt;
-}
+//Point* GeometryCollection::getCentroid() const {
+//	Coordinate* centPt;
+//	int dim=getDimension();
+//	if(dim==0) {
+//		CentroidPoint *cent=new CentroidPoint();
+//		cent->add(this);
+//		centPt=cent->getCentroid();
+//		delete cent;
+//	} else if (dim==1) {
+//		CentroidLine *cent=new CentroidLine();
+//		cent->add(this);
+//		centPt=cent->getCentroid();
+//		delete cent;
+//	} else {
+//		CentroidArea *cent=new CentroidArea();
+//		cent->add(this);
+//		centPt=cent->getCentroid();
+//		delete cent;
+//	}
+//	Point *pt=GeometryFactory::createPointFromInternalCoord(centPt,this);
+//	delete centPt;
+//	return pt;
+//}
 }
 
