@@ -32,7 +32,7 @@ using namespace std;
 namespace geos {
 
 
-/**
+/*
  * \class Profile utils.h geos.h
  *
  * \brief Profile statistics
@@ -92,7 +92,7 @@ private:
 
 };
 
-/**
+/*
  * \class Profiler utils.h geos.h
  *
  * \brief Profiling class
@@ -144,6 +144,9 @@ ostream& operator<< (ostream& os, const Profiler&);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2004/11/04 08:49:13  strk
+ * Unlinked new documentation.
+ *
  * Revision 1.1  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

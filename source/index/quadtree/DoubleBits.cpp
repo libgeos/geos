@@ -44,38 +44,39 @@ DoubleBits::exponent(double d)
 double
 DoubleBits::truncateToPowerOfTwo(double d)
 {
-	auto_ptr<DoubleBits> db(new DoubleBits(d));
-	db->zeroLowerBits(52);
-	return db->getDouble();
+	DoubleBits db(d);
+	db.zeroLowerBits(52);
+	return db.getDouble();
 }
 
 string DoubleBits::toBinaryString(double d) {
-	auto_ptr<DoubleBits> db(new DoubleBits(d));
-	return db->toString();
+	DoubleBits db(d);
+	return db.toString();
 }
 
 double
 DoubleBits::maximumCommonMantissa(double d1, double d2)
 {
 	if (d1==0.0 || d2==0.0) return 0.0;
-	auto_ptr<DoubleBits> db1(new DoubleBits(d1));
-	DoubleBits *db2=new DoubleBits(d2);
-	if (db1->getExponent()!=db2->getExponent()) return 0.0;
-	int maxCommon=db1->numCommonMantissaBits(db2);
-	delete db2;
-	db1->zeroLowerBits(64-(12+maxCommon));
-	return db1->getDouble();
+	DoubleBits db1(d1);
+	DoubleBits db2(d2);
+	if (db1.getExponent() != db2.getExponent()) return 0.0;
+	int maxCommon=db1.numCommonMantissaBits(&db2);
+	db1.zeroLowerBits(64-(12+maxCommon));
+	return db1.getDouble();
 }
 
 DoubleBits::DoubleBits(double nx)
 {
+#if ASSUME_IEEE_DOUBLE
 	memcpy(&xBits,&nx,sizeof(double));
+#endif
 	x = nx;
 }
 
 double DoubleBits::getDouble()
 {
-	return (double)xBits;
+	return x;
 }
 
 /**
@@ -161,6 +162,9 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2004/11/04 08:49:13  strk
+ * Unlinked new documentation.
+ *
  * Revision 1.15  2004/11/03 08:22:25  strk
  * Slightly modified log/log2 based algo to better handle numbers in the
  * range 0-1.

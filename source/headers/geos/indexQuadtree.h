@@ -49,11 +49,12 @@ namespace geos {
 class IntervalSize {
 public:
 	/**
-	* This value is chosen to be a few powers of 2 less than the
-	* number of bits available in the double representation (i.e. 53).
-	* This should allow enough extra precision for simple computations to be correct,
-	* at least for comparison purposes.
-	*/
+	 * This value is chosen to be a few powers of 2 less than the
+	 * number of bits available in the double representation (i.e. 53).
+	 * This should allow enough extra precision for simple computations
+	 * to be correct,
+	 * at least for comparison purposes.
+	 */
 	static const int MIN_BINARY_EXPONENT=-50;
 	static bool isZeroWidth(double min, double max);
 };
@@ -81,7 +82,7 @@ private:
 	int64 xBits;
 };
 
-/** 
+/*
  * \class QuadTreeKey indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -111,7 +112,7 @@ private:
 
 class QuadTreeNode;
 
-/**
+/*
  * \class QuadTreeNodeBase indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -146,7 +147,7 @@ protected:
 	virtual bool isSearchMatch(const Envelope *searchEnv)=0;
 };
 
-/**
+/*
  * \class QuadTreeNode indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -179,6 +180,9 @@ protected:
 };
 
 /*
+ * \class QuadTreeRoot indexQuadtree.h geos/indexQuadtree.h
+ *
+ * \brief
  * QuadRoot is the root of a single Quadtree.  It is centred at the origin,
  * and does not have a defined extent.
  */
@@ -196,6 +200,9 @@ protected:
 };
 
 /*
+ * \class Quadtree indexQuadtree.h geos/indexQuadtree.h
+ *
+ * \brief
  * A Quadtree is a spatial index structure for efficient querying
  * of 2D rectangles.  If other kinds of spatial objects
  * need to be indexed they can be represented by their
@@ -218,24 +225,31 @@ protected:
  */
 class Quadtree: public SpatialIndex {
 public:
-	/*
+	/**
+	 * \brief
 	 * Ensure that the envelope for the inserted item has non-zero extents.
 	 * Use the current minExtent to pad the envelope, if necessary.
 	 * Can return a new Envelope or the given one (casted to non-const).
 	 */
 	static Envelope* ensureExtent(const Envelope *itemEnv, double minExtent);
 	/**
-	* Constructs a Quadtree with zero items.
-	*/
+	 * \brief
+	 * Constructs a Quadtree with zero items.
+	 */
 	Quadtree();
+
 	virtual ~Quadtree();
+
 	/**
-	* Returns the number of levels in the tree.
-	*/
+	 * \brief
+	 * Returns the number of levels in the tree.
+	 */
 	int depth();
+
 	/**
-	* Returns the number of items in the tree.
-	*/
+	 * \brief
+	 * Returns the number of items in the tree.
+	 */
 	int size();
 	
 	void insert(const Envelope *itemEnv, void *item);
@@ -244,20 +258,22 @@ public:
 	vector<void*>* queryAll();
 
 	string toString() const;
+
 private:
 	vector<Envelope *>newEnvelopes;
 	void collectStats(const Envelope *itemEnv);
 	QuadTreeRoot *root;
 	/**
-	*  Statistics
-	*
-	* minExtent is the minimum envelope extent of all items
-	* inserted into the tree so far. It is used as a heuristic value
-	* to construct non-zero envelopes for features with zero X and/or Y extent.
-	* Start with a non-zero extent, in case the first feature inserted has
-	* a zero extent in both directions.  This value may be non-optimal, but
-	* only one feature will be inserted with this value.
-	**/
+	 *  Statistics
+	 *
+	 * minExtent is the minimum envelope extent of all items
+	 * inserted into the tree so far. It is used as a heuristic value
+	 * to construct non-zero envelopes for features with zero X and/or
+	 * Y extent.
+	 * Start with a non-zero extent, in case the first feature inserted has
+	 * a zero extent in both directions.  This value may be non-optimal, but
+	 * only one feature will be inserted with this value.
+	 **/
 	double minExtent;
 };
 
@@ -266,6 +282,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/11/04 08:49:13  strk
+ * Unlinked new documentation.
+ *
  * Revision 1.7  2004/11/02 16:38:45  strk
  * Fixed ieee-754 detection switch
  *
