@@ -1,5 +1,9 @@
 - DoubleBits misregards BYTE_ENDIAN, must check it.
 
+- Have IsValidOp handle all possible exceptions thrown by
+  GeometryGraph constructor (currently only with Polygon this
+  is true).
+
 - polygonizer still failing (Envelope comparison again ?)
 
 - Add distinct binary predicates test support in XMLTester
