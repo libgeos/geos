@@ -4,16 +4,23 @@ AC_PREREQ(2.52)
 dnl local vars to hold user's preferences --------------------------------
 AC_INIT(source/headers/geos.h)
 AC_CANONICAL_SYSTEM
-VERSION_MAJOR=1
-VERSION_MINOR=4
-VERSION_PATCH=0
-dnl -- CURRENT: current interface number
-dnl -- REVISION: revision of CURRENT interface
-dnl -- AGE: number of previous interfaces supported
+
+dnl -- INTERFACE_CURRENT: current interface number
+dnl -- INTERFACE_REVISION: revision of CURRENT interface
+dnl -- INTERFACE_AGE: number of previous interfaces supported
 INTERFACE_CURRENT=2
 INTERFACE_REVISION=0
 INTERFACE_AGE=0
-AM_INIT_AUTOMAKE(geos, 1.4.0)
+
+dnl -- JTS_PORT: the version of JTS this release is bound to
+JTS_PORT=1.4
+
+VERSION_MAJOR=$(($INTERFACE_CURRENT-$INTERFACE_AGE))
+VERSION_MINOR=$INTERFACE_AGE
+VERSION_PATCH=$INTERFACE_REVISION
+VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
+
+AM_INIT_AUTOMAKE(geos, $VERSION, no-define)
 AC_CONFIG_HEADERS(source/headers/config.h)
 AM_CONFIG_HEADER(source/headers/geos/platform.h)
 AC_PROG_CC
@@ -59,7 +66,7 @@ dnl process with switches -------------------------------------------------
 dnl check for libraries ---------------------------------------------------
 
 dnl things to substitute in output ----------------------------------------
-AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE)
+AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE JTS_PORT)
 
 dnl output stuff ----------------------------------------------------------
 
