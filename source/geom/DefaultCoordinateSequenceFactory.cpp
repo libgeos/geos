@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 10:37:03  strk
+ * defaultCoordinateSequenceFactory made module-static (use DefaultCoordinateSequenceFactory::instance() instead)
+ *
  * Revision 1.1  2004/07/08 19:38:56  strk
  * renamed from *List* equivalents
  *
@@ -24,7 +27,7 @@
 
 namespace geos {
 
-DefaultCoordinateSequenceFactory defaultCoordinateSequenceFactory;
+static DefaultCoordinateSequenceFactory defaultCoordinateSequenceFactory;
 
 CoordinateSequence *
 DefaultCoordinateSequenceFactory::create(vector<Coordinate> *coords) const
