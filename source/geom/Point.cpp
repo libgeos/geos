@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/04/13 14:45:54  strk
+ * Removed faulty assert in constructor
+ *
  * Revision 1.19  2004/04/10 22:41:24  ybychkov
  * "precision" upgraded to JTS 1.4
  *
@@ -59,7 +62,8 @@ Point::Point(CoordinateList *newCoordinates, GeometryFactory *newFactory): Geome
 	if (newCoordinates==NULL) {
 		newCoordinates=CoordinateListFactory::internalFactory->createCoordinateList();
 	}        
-	Assert::isTrue(coordinates->getSize()<=1);
+	//What's the point of this assert in the constructor ? --strk;
+	//Assert::isTrue(coordinates->getSize()<=1);
 	coordinates=newCoordinates;
 }
 
