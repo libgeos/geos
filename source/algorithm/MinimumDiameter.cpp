@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
  * Revision 1.1  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -126,6 +129,7 @@ LineString* MinimumDiameter::getDiameter(){
 	CoordinateList* cl=CoordinateListFactory::internalFactory->createCoordinateList();
 	cl->add(*basePt);
 	cl->add(*minWidthPt);
+	delete basePt;
 	return inputGeom->getFactory()->createLineString(cl);
 }
 
@@ -156,12 +160,12 @@ void MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 		minBaseSeg=NULL;
 	} else if (pts->getSize()==1) {
 		minWidth = 0.0;
-		minWidthPt=(Coordinate*)&(pts->getAt(0));
+		minWidthPt=new Coordinate(pts->getAt(0));
 		minBaseSeg->p0=pts->getAt(0);
 		minBaseSeg->p1=pts->getAt(0);
 	} else if (pts->getSize()==2 || pts->getSize()==3) {
 		minWidth = 0.0;
-		minWidthPt=(Coordinate*)&(pts->getAt(0));
+		minWidthPt=new Coordinate(pts->getAt(0));
 		minBaseSeg->p0=pts->getAt(0);
 		minBaseSeg->p1=pts->getAt(1);
 	} else
@@ -204,7 +208,7 @@ int MinimumDiameter::findMaxPerpDistance(const CoordinateList *pts,LineSegment* 
 	if (maxPerpDistance < minWidth) {
 		minPtIndex = maxIndex;
 		minWidth = maxPerpDistance;
-		minWidthPt =(Coordinate*) &(pts->getAt(minPtIndex));
+		minWidthPt = new Coordinate(pts->getAt(minPtIndex));
 		minBaseSeg = new LineSegment(*seg);
 //      System.out.println(minBaseSeg);
 //      System.out.println(minWidth);

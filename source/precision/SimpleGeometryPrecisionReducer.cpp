@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
  * Revision 1.2  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -76,8 +79,10 @@ Geometry* SimpleGeometryPrecisionReducer::reduce(Geometry *geom){
 		// don't change geometry factory
 		geomEdit = new GeometryEditor();
 	}
-	Geometry *g=geomEdit->edit(geom, new PrecisionReducerCoordinateOperation(this));
+	PrecisionReducerCoordinateOperation *prco=new PrecisionReducerCoordinateOperation(this);
+	Geometry *g=geomEdit->edit(geom, prco);
 	delete geomEdit;
+	delete prco;
 	return g;
 }
 
@@ -95,6 +100,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateList *coordinates, con
 		Coordinate *coord=new Coordinate(coordinates->getAt(i));
 		sgpr->getPrecisionModel()->makePrecise(coord);
 		reducedCoords->setAt(*coord,i);
+		delete coord;
 	}
 	// remove repeated points, to simplify returned geometry as much as possible
 	CoordinateList *noRepeatedCoords=CoordinateList::removeRepeatedPoints(reducedCoords);

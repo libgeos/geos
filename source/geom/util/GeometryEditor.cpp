@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
  * Revision 1.3  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -93,20 +96,23 @@ Polygon* GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperat
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
 		return newPolygon;
 	}
-	LinearRing* shell = (LinearRing*) edit((Geometry*)newPolygon->getExteriorRing(),operation);
+	LinearRing* shell = (LinearRing*) edit(newPolygon->getExteriorRing(),operation);
 	if (shell->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
+		delete shell;
+		delete newPolygon;
 		return factory->createPolygon(NULL,NULL);
 	}
 
 	vector<Geometry*> *holes=new vector<Geometry*>;
 	for (int i=0;i<newPolygon->getNumInteriorRing(); i++) {
-		LinearRing *hole =(LinearRing*) edit((Geometry*)newPolygon->getInteriorRingN(i),operation);
+		LinearRing *hole =(LinearRing*) edit(newPolygon->getInteriorRingN(i),operation);
 		if (hole->isEmpty()) {
 			continue;
 		}
 		holes->push_back(hole);
 	}
+	delete newPolygon;
 	return factory->createPolygon(shell,holes);
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
  * Revision 1.3  2004/04/19 16:14:52  strk
  * Some memory leaks plugged in noding algorithms.
  *
@@ -137,23 +140,26 @@ void OffsetCurveSetBuilder::addLineString(const LineString *line){
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
 }
 
-void OffsetCurveSetBuilder::addPolygon(const Polygon *p) {
+void
+OffsetCurveSetBuilder::addPolygon(const Polygon *p)
+{
 	double offsetDistance=distance;
 	int offsetSide=Position::LEFT;
 	if (distance < 0.0) {
 		offsetDistance=-distance;
 		offsetSide=Position::RIGHT;
 	}
-	LinearRing *shell=(LinearRing*) p->getExteriorRing();
-	CoordinateList *shellCoord=CoordinateList::removeRepeatedPoints(shell->getCoordinates());
+	const LinearRing *shell=(const LinearRing *)p->getExteriorRing();
+	CoordinateList *shellCoord=CoordinateList::removeRepeatedPoints(shell->getCoordinatesRO());
 	// optimization - don't bother computing buffer
 	// if the polygon would be completely eroded
 	if (distance < 0.0 && isErodedCompletely(shellCoord, distance))
 		return;
 	addPolygonRing(shellCoord,offsetDistance,offsetSide,Location::EXTERIOR,Location::INTERIOR);
+	delete shellCoord;
 	for (int i=0;i<p->getNumInteriorRing(); i++) {
-		LinearRing *hole=(LinearRing*) p->getInteriorRingN(i);
-		CoordinateList *holeCoord=CoordinateList::removeRepeatedPoints(hole->getCoordinates());
+		const LinearRing *hole=(const LinearRing *)p->getInteriorRingN(i);
+		CoordinateList *holeCoord=CoordinateList::removeRepeatedPoints(hole->getCoordinatesRO());
 		// optimization - don't bother computing buffer for this hole
 		// if the hole would be completely covered
 		if (distance > 0.0 && isErodedCompletely(holeCoord, -distance))
@@ -223,6 +229,8 @@ bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateList *ringCoord, double
 	LinearRing *ring=inputGeom->getFactory()->createLinearRing(ringCoord);
 	MinimumDiameter *md=new MinimumDiameter(ring);
 	minDiam=md->getLength();
+	delete ring;
+	delete md;
 	//System->out->println(md->getDiameter());
 	return minDiam < 2 * abs(bufferDistance);
 }

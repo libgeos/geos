@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.43  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
  * Revision 1.42  2004/04/14 13:56:26  strk
  * All geometries returned by {from,to}InternalGeometry calls are
  * now deleted after use (unless NOT new).
@@ -416,6 +419,7 @@ Geometry* Geometry::buffer(double distance) const {
 		out = BufferOp::bufferOp(in1, distance);
 	}
 	catch(...) {
+		cerr<<"Exception thrown!"<<endl;
 		if ( in1 != this ) delete (in1);
 		throw;
 	}

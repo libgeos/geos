@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
  * Revision 1.23  2004/04/19 15:14:46  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -85,7 +88,13 @@ double BufferOp::precisionScaleFactor(Geometry *g,double distance,int maxPrecisi
 */
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 	BufferOp *gBuf=new BufferOp(g);
-	Geometry* geomBuf=gBuf->getResultGeometry(distance);
+	Geometry* geomBuf;
+	try {
+		geomBuf=gBuf->getResultGeometry(distance);
+	} catch (...) {
+		delete gBuf;
+		throw;
+	}
 	delete gBuf;
 	return geomBuf;
 }
@@ -100,10 +109,19 @@ Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 * @return the buffer of the input geometry
 *
 */
-Geometry* BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments){
+Geometry*
+BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments)
+{
 	BufferOp *bufOp=new BufferOp(g);
+	Geometry *geomBuf;
 	bufOp->setQuadrantSegments(quadrantSegments);
-	Geometry *geomBuf=bufOp->getResultGeometry(distance);
+	try {
+		geomBuf=bufOp->getResultGeometry(distance);
+	} catch (...) {
+		delete bufOp;
+		throw;
+	}
+	delete bufOp;
 	return geomBuf;
 }
 
@@ -187,7 +205,11 @@ BufferOp::computeGeometry()
 			delete saveException;
 			saveException=ex;
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
+		} catch (...) {
+			throw;
 		}
+
+
 		if (resultGeometry!=NULL)
 		{
 			delete saveException;
@@ -229,8 +251,19 @@ void BufferOp::bufferFixedPrecision(int precisionDigits) {
 	BufferBuilder *bufBuilder=new BufferBuilder();
 	bufBuilder->setWorkingPrecisionModel(fixedPM);
 	bufBuilder->setQuadrantSegments(quadrantSegments);
+
 	// this may throw an exception, if robustness errors are encountered
-	resultGeometry=bufBuilder->buffer(reducedGeom, distance);
+	try {
+		resultGeometry=bufBuilder->buffer(reducedGeom, distance);
+	} catch (...) {
+		delete bufBuilder;
+		delete reducer;
+		delete reducedGeom;
+		throw;
+	}
+	delete bufBuilder;
+	delete reducer;
+	delete reducedGeom;
 }
 
 }
