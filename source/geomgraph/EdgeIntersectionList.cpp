@@ -40,16 +40,26 @@ EdgeIntersection*
 EdgeIntersectionList::add(const Coordinate& coord, int segmentIndex, double dist)
 {
 #if DEBUG
-	cerr<<"EdgeIntersectionList::add("<<coord.toString()<<","<<segmentIndex<<","<<dist<<")"<<endl;
+	cerr<<"["<<this<<"] EdgeIntersectionList::add("<<coord.toString()<<","<<segmentIndex<<","<<dist<<")"<<endl;
 #endif // DEBUG
 	vector<EdgeIntersection *>::iterator insertIt=list->begin();
 	bool isInList=findInsertionPoint(segmentIndex,dist,&insertIt);
 	EdgeIntersection *ei;
-	if (!isInList) {
+	if (!isInList)
+	{
+#if DEBUG
+		cerr<<"  intersection not in list"<<endl;
+#endif // DEBUG
 		ei=new EdgeIntersection(coord,segmentIndex,dist);
 		list->insert(insertIt,ei);
-	} else
+	}
+	else
+	{
+#if DEBUG
+		cerr<<"  intersection already in list (should merge z)"<<endl;
+#endif // DEBUG
 		ei=*insertIt;
+	}
 	return ei;
 }
 
@@ -126,8 +136,16 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList)
 Edge*
 EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1)
 {
+#if DEBUG
+	cerr<<"["<<this<<"] EdgeIntersectionList::createSplitEdge()"<<endl;
+#endif // DEBUG
 	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
+#if DEBUG
+	cerr<<"    npts:"<<npts<<endl;
+#endif // DEBUG
+
 	const Coordinate& lastSegStartPt=edge->pts->getAt(ei1->segmentIndex);
+
 	// if the last intersection point is not equal to the its segment
 	// start pt, add it to the points list as well.
 	// (This check is needed because the distance metric is not totally
@@ -136,6 +154,9 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *e
 	bool useIntPt1=ei1->dist>0.0 || !ei1->coord.equals2D(lastSegStartPt);
 	if (!useIntPt1) {
 		npts--;
+#if DEBUG
+		cerr<<"    !useIntPt1 (npts:"<<npts<<")"<<endl;
+#endif // DEBUG
 	}
 	CoordinateSequence* pts=new DefaultCoordinateSequence(npts);
 	int ipt=0;
@@ -143,10 +164,30 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *e
 	//pts->setAt(*c,ipt++);
 	//delete c;
 	pts->setAt(ei0->coord,ipt++);
-	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++) {
-		pts->setAt(edge->pts->getAt(i),ipt++);
+#if DEBUG
+	cerr<<"    pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
+#endif // DEBUG
+	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++)
+	{
+		if ( ! useIntPt1 && ei1->segmentIndex == i )
+		{
+			pts->setAt(ei1->coord, ipt++);
+		}
+		else
+		{
+			pts->setAt(edge->pts->getAt(i),ipt++);
+		}
+#if DEBUG
+		cerr<<"    pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
+#endif // DEBUG
 	}
-	if (useIntPt1) pts->setAt(ei1->coord,ipt);
+	if (useIntPt1)
+	{
+		pts->setAt(ei1->coord,ipt);
+#if DEBUG
+		cerr<<"    ustIntPt1: pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
+#endif // DEBUG
+	}
 	return new Edge(pts, new Label(edge->getLabel()));
 }
 
@@ -166,6 +207,9 @@ EdgeIntersectionList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/11/22 13:02:12  strk
+ * Forced use if computed intersection point in ::createSplitEdge (for Z computation)
+ *
  * Revision 1.7  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.
