@@ -33,25 +33,26 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 	holes=*newHoles;
 }
 
-CoordinateList Polygon::getCoordinates() {
+CoordinateList& Polygon::getCoordinates() {
 	if (isEmpty()) {
-		return CoordinateList();
+		CoordinateList *l=new CoordinateList();
+		return *l;
 	}
-	CoordinateList coordinates(getNumPoints());
+	CoordinateList *coordinates=new CoordinateList(getNumPoints());
 	int k = -1;
-	CoordinateList shellCoordinates(shell->getCoordinates());
+	CoordinateList& shellCoordinates=shell->getCoordinates();
 	for (int x = 0; x < shellCoordinates.getSize(); x++) {
 		k++;
-		coordinates.setAt(shellCoordinates.getAt(x),k);
+		coordinates->setAt(shellCoordinates.getAt(x),k);
 	}
 	for (unsigned int i = 0; i < holes.size(); i++) {
-		CoordinateList childCoordinates(((LinearRing *)holes[i])->getCoordinates());
+		CoordinateList& childCoordinates=((LinearRing *)holes[i])->getCoordinates();
 		for (int j = 0; j < childCoordinates.getSize(); j++) {
 			k++;
-			coordinates.setAt(childCoordinates.getAt(j),k);
+			coordinates->setAt(childCoordinates.getAt(j),k);
 		}
 	}
-	return coordinates;
+	return *coordinates;
 }
 
 int Polygon::getNumPoints() {
@@ -174,14 +175,14 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	if (ring->isEmpty()) {
 		return;
 	}
-	CoordinateList uniqueCoordinates(ring->getCoordinates());
+	CoordinateList& uniqueCoordinates=ring->getCoordinates();
 	uniqueCoordinates.deleteAt(uniqueCoordinates.getSize()-1);
 	Coordinate minCoordinate=Geometry::minCoordinate(ring->getCoordinates());
-	Geometry::scroll(&uniqueCoordinates, minCoordinate);
+	Geometry::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates.add(uniqueCoordinates.getAt(0));
 	ring->setPoints(uniqueCoordinates);
 	if (cgAlgorithms->isCCW(ring->getCoordinates())==clockwise) {
-		reversePointOrder(&(ring->getCoordinates()));
+		reversePointOrder(ring->getCoordinates());
 	}
 }
 

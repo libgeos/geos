@@ -91,7 +91,7 @@ limiting conditions:
 * Returns the signed area for a ring.  The area is positive if
 * the ring is oriented CW.
 */
-double CGAlgorithms::signedArea(CoordinateList ring) {
+double CGAlgorithms::signedArea(CoordinateList& ring) {
 	if (ring.getSize()<3) return 0.0;
 	double sum=0.0;
 	double ax=ring.getAt(0).x;
@@ -109,7 +109,7 @@ double CGAlgorithms::signedArea(CoordinateList ring) {
 /**
 * Returns the length of a list of line segments.
 */
-double CGAlgorithms::length(CoordinateList pts) {
+double CGAlgorithms::length(CoordinateList& pts) {
 	if (pts.getSize()<1) return 0.0;
 	double sum=0.0;
 	for(int i=1;i<pts.getSize();i++) {

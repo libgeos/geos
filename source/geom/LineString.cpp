@@ -16,7 +16,7 @@ LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRI
 //	points=ls.points;
 }
 
-LineString::LineString(CoordinateList newPoints, PrecisionModel precisionModel, int SRID):
+LineString::LineString(CoordinateList& newPoints, PrecisionModel precisionModel, int SRID):
 						Geometry(precisionModel, SRID), points(newPoints) {
 	// Can't be null
 	//if (points == null) {
@@ -36,7 +36,7 @@ LineString::LineString(CoordinateList newPoints, PrecisionModel precisionModel, 
 
 LineString::~LineString(){}
 
-CoordinateList LineString::getCoordinates() {
+CoordinateList& LineString::getCoordinates() {
 	return points;
 }
 
@@ -170,7 +170,7 @@ void LineString::normalize() {
 		int j = points.getSize() - 1 - i;
 		if (!(points.getAt(i)==points.getAt(j))) {
 			if (points.getAt(i).compareTo(points.getAt(j)) > 0) {
-				reversePointOrder(&points);
+				reversePointOrder(points);
 			}
 			return;
 		}

@@ -39,7 +39,7 @@ public:
 	*
 	* @return true if the point lies in the interior of the ring
 	*/
-	virtual bool isPointInRing(Coordinate p,CoordinateList ring)=0;
+	virtual bool isPointInRing(Coordinate p,CoordinateList& ring)=0;
 	/**
 	* Test whether a point lies on a linestring.
 	*
@@ -47,13 +47,13 @@ public:
 	* the point is a vertex of the line or lies in the interior of a line
 	* segment in the linestring
 	*/
-	virtual bool isOnLine(Coordinate p,CoordinateList linestring)=0;
+	virtual bool isOnLine(Coordinate p,CoordinateList& linestring)=0;
 	/**
 	* Test whether a ring (simple polygon) is oriented counter-clockwise.
 	*
 	* @return true if the ring is oriented counter-clockwise
 	*/
-	virtual bool isCCW(CoordinateList ring)=0;
+	virtual bool isCCW(CoordinateList& ring)=0;
 	/**
 	* Computes the orientation of a point q to the directed line segment p1-p2.
 	* The orientation of a point relative to a directed line segment indicates
@@ -66,8 +66,8 @@ public:
 	virtual int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q)=0;
 	static double distancePointLine(Coordinate p,Coordinate A,Coordinate B);
 	static double distanceLineLine(Coordinate A,Coordinate B,Coordinate C,Coordinate D);
-	static double signedArea(CoordinateList ring);
-	static double length(CoordinateList pts);
+	static double signedArea(CoordinateList& ring);
+	static double length(CoordinateList& pts);
 };
 
 class HCoordinate {
@@ -175,9 +175,9 @@ class RobustCGAlgorithms: public CGAlgorithms {
 public:
 	static int orientationIndex(Coordinate p1,Coordinate p2,Coordinate q);
 	RobustCGAlgorithms();
-	bool isCCW(CoordinateList ring);
-	bool isPointInRing(Coordinate p,CoordinateList ring);
-	bool isOnLine(Coordinate p,CoordinateList pt);
+	bool isCCW(CoordinateList& ring);
+	bool isPointInRing(Coordinate p,CoordinateList& ring);
+	bool isOnLine(Coordinate p,CoordinateList& pt);
 	int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q);
 private:
 	RobustLineIntersector* lineIntersector;
@@ -187,9 +187,9 @@ private:
 class NonRobustCGAlgorithms: public CGAlgorithms {
 public:
 	NonRobustCGAlgorithms();
-	bool isPointInRing(Coordinate p,CoordinateList ring);
-	bool isOnLine(Coordinate p,CoordinateList pt);
-	bool isCCW(CoordinateList ring);
+	bool isPointInRing(Coordinate p,CoordinateList& ring);
+	bool isOnLine(Coordinate p,CoordinateList& pt);
+	bool isCCW(CoordinateList& ring);
 	int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q);
 protected:
 	LineIntersector *li;

@@ -15,7 +15,7 @@ RobustCGAlgorithms::RobustCGAlgorithms() {
 	lineIntersector=new RobustLineIntersector();
 }
 
-bool RobustCGAlgorithms::isCCW(CoordinateList ring) {
+bool RobustCGAlgorithms::isCCW(CoordinateList& ring) {
 	Coordinate hip;
 	Coordinate p;
 	Coordinate prev;
@@ -69,7 +69,7 @@ bool RobustCGAlgorithms::isCCW(CoordinateList ring) {
 *
 * @param ring assumed to have first point identical to last point
 */
-bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList ring) {
+bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList& ring) {
 	int i;
 	int i1;       // point index; i1 = i-1
 	double xInt;  // x intersection of segment with ray
@@ -115,7 +115,7 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList ring) {
 	}
 }
 
-bool RobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList pt) {
+bool RobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList& pt) {
 	for(int i=1;i<pt.getSize();i++) {
 		Coordinate p0(pt.getAt(i-1));
 		Coordinate p1(pt.getAt(i));

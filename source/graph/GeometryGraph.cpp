@@ -87,7 +87,7 @@ vector<Node*>* GeometryGraph::getBoundaryNodes() {
 	return boundaryNodes;
 }
 
-CoordinateList GeometryGraph::getBoundaryPoints() {
+CoordinateList& GeometryGraph::getBoundaryPoints() {
 	vector<Node*> coll(*getBoundaryNodes());
 	CoordinateList pts((int)coll.size());
 	int i=0;
@@ -161,7 +161,7 @@ void GeometryGraph::addPoint(Point *p){
 * the left and right locations must be interchanged.
 */
 void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
-	CoordinateList coord(lr->getCoordinates());
+	CoordinateList& coord=lr->getCoordinates();
 	int left=cwLeft;
 	int right=cwRight;
 	if (cga->isCCW(coord)) {
@@ -186,7 +186,7 @@ void GeometryGraph::addPolygon(Polygon *p){
 }
 
 void GeometryGraph::addLineString(LineString *line){
-	CoordinateList coord(line->getCoordinates());
+	CoordinateList& coord=line->getCoordinates();
 	// add the edge for the LineString
 	// line edges do not have locations for their left and right sides
 	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
@@ -208,10 +208,10 @@ void GeometryGraph::addLineString(LineString *line){
 */
 void GeometryGraph::addEdge(Edge *e) {
 	insertEdge(e);
-	CoordinateList *coord=e->getCoordinates();
+	CoordinateList& coord=e->getCoordinates();
 	// insert the endpoint as a node, to mark that it is on the boundary
-	insertPoint(argIndex,coord->getAt(0),Location::BOUNDARY);
-	insertPoint(argIndex,coord->getAt(coord->getSize()-1),Location::BOUNDARY);
+	insertPoint(argIndex,coord.getAt(0),Location::BOUNDARY);
+	insertPoint(argIndex,coord.getAt(coord.getSize()-1),Location::BOUNDARY);
 }
 
 /**

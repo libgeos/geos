@@ -142,8 +142,8 @@ Edge* PlanarGraph::findEdge(Coordinate p0, Coordinate p1) {
 	for(i=0; i<edges->size();i++) {
 //        Edge *e=edges->at(i);
         Edge *e=(*edges)[i];
-		CoordinateList *eCoord=e->getCoordinates();
-		if (p0==eCoord->getAt(0) && p1==eCoord->getAt(1))
+		CoordinateList& eCoord=e->getCoordinates();
+		if (p0==eCoord.getAt(0) && p1==eCoord.getAt(1))
 			return e;
 	}
 	return NULL;
@@ -160,10 +160,10 @@ Edge* PlanarGraph::findEdgeInSameDirection(Coordinate p0,Coordinate p1) {
 	for(unsigned int i=0; i<edges->size();i++) {
 		Edge *e=(*edges)[i];
 //		Edge *e=edges->at(i);
-		CoordinateList *eCoord=e->getCoordinates();
-		if (matchInSameDirection(p0,p1,eCoord->getAt(0),eCoord->getAt(1)))
+		CoordinateList& eCoord=e->getCoordinates();
+		if (matchInSameDirection(p0,p1,eCoord.getAt(0),eCoord.getAt(1)))
 			return e;
-		if (matchInSameDirection(p0,p1,eCoord->getAt(eCoord->getSize()-1),eCoord->getAt(eCoord->getSize()-2)))
+		if (matchInSameDirection(p0,p1,eCoord.getAt(eCoord.getSize()-1),eCoord.getAt(eCoord.getSize()-2)))
 			return e;
 	}
 	return NULL;

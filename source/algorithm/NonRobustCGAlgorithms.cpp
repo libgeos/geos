@@ -10,7 +10,7 @@ NonRobustCGAlgorithms::NonRobustCGAlgorithms(){
 * ring is expected to contain a closing point;
 * i.e. ring[0]=ring[length-1]
 */
-bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList ring){
+bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList& ring){
 	int i,i1;		// point index;i1=i-1 mod n
 	double xInt;		// x intersection of e with ray
 	int	crossings=0;	// number of edge/ray crossings
@@ -44,7 +44,7 @@ bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList ring){
 
 
 
-bool NonRobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList pt) {
+bool NonRobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList& pt) {
 	for(int i=1;i<pt.getSize();i++){
 		Coordinate p0(pt.getAt(i-1));
 		Coordinate p1(pt.getAt(i));
@@ -55,7 +55,7 @@ bool NonRobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList pt) {
 	return false;
 }
 
-bool NonRobustCGAlgorithms::isCCW(CoordinateList ring) {
+bool NonRobustCGAlgorithms::isCCW(CoordinateList& ring) {
 	Coordinate hip,p,prev,next;
 	int hii,i;
 	int nPts=ring.getSize();

@@ -48,7 +48,7 @@ MultiPolygon GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons){
 	return MultiPolygon(polygons,precisionModel,SRID);
 }
 
-LinearRing GeometryFactory::createLinearRing(CoordinateList coordinates) {
+LinearRing GeometryFactory::createLinearRing(CoordinateList& coordinates) {
 	if (coordinates.getSize()>0 && 
 		!coordinates.getAt(0).equals2D(coordinates.getAt(coordinates.getSize() - 1))) {
 			throw "IllegalArgumentException: LinearRing not closed";
@@ -60,7 +60,7 @@ MultiPoint GeometryFactory::createMultiPoint(vector<Geometry *> *point) {
 	return MultiPoint(point,precisionModel,SRID);
 }
 
-MultiPoint GeometryFactory::createMultiPoint(CoordinateList coordinates) {
+MultiPoint GeometryFactory::createMultiPoint(CoordinateList& coordinates) {
 	vector<Geometry *> *pts=new vector<Geometry *>;
 	for (int i=0; i<coordinates.getSize(); i++) {
 		Point *pt=new Point(createPoint(coordinates.getAt(i)));
@@ -73,7 +73,7 @@ Polygon GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *ho
 	return Polygon(shell, holes, precisionModel, SRID);
 }
 
-LineString GeometryFactory::createLineString(CoordinateList coordinates) {
+LineString GeometryFactory::createLineString(CoordinateList& coordinates) {
 	return LineString(coordinates, precisionModel, SRID);
 }
 

@@ -168,13 +168,13 @@ public:
 	CoordinateList pts;
 	EdgeIntersectionList *eiList;
 	Edge();
-	Edge(CoordinateList newPts, Label *newLabel);
-	Edge(CoordinateList newPts);
+	Edge(CoordinateList& newPts, Label *newLabel);
+	Edge(CoordinateList& newPts);
 	~Edge();
 	virtual int getNumPoints();
 	virtual void setName(string newName);
 //	virtual CoordinateList getCoordinates();
-	virtual CoordinateList* getCoordinates();
+	virtual CoordinateList& getCoordinates();
 	virtual Coordinate getCoordinate(int i);
 	virtual Coordinate getCoordinate();
 	virtual Depth *getDepth();
@@ -530,7 +530,7 @@ public:
 	int getSRID();
 	Geometry* getGeometry();
 	vector<Node*>* getBoundaryNodes();
-	CoordinateList getBoundaryPoints();
+	CoordinateList& getBoundaryPoints();
 	Edge* findEdge(LineString *line);
 	void computeSplitEdges(vector<Edge*> *edgelist);
 	void addEdge(Edge *e);

@@ -293,7 +293,7 @@ public:
 	virtual void setSRID(int newSRID);
 	virtual PrecisionModel getPrecisionModel();
 	virtual Coordinate getCoordinate(){return Coordinate();}; //Abstract
-	virtual CoordinateList getCoordinates(){return CoordinateList();}; //Abstract
+	virtual CoordinateList& getCoordinates(){return *(new CoordinateList());}; //Abstract
 	virtual int getNumPoints(){return 0;}; //Abstract
 	virtual bool isSimple() {return false;}; //Abstract
 	virtual bool isValid();
@@ -338,12 +338,12 @@ protected:
 	Envelope envelope;
 	static CGAlgorithms *cgAlgorithms;
 	static bool hasNonEmptyElements(vector<Geometry *> geometries);
-	static bool hasNullElements(CoordinateList list);
+	static bool hasNullElements(CoordinateList& list);
 	static bool hasNullElements(vector<Geometry *> lrs);
-	static void reversePointOrder(CoordinateList *coordinates);
-	static Coordinate minCoordinate(CoordinateList coordinates);
-	static void scroll(CoordinateList *coordinates, Coordinate firstCoordinate);
-	static int indexOf(Coordinate coordinate, CoordinateList *coordinates);
+	static void reversePointOrder(CoordinateList& coordinates);
+	static Coordinate minCoordinate(CoordinateList& coordinates);
+	static void scroll(CoordinateList& coordinates,Coordinate& firstCoordinate);
+	static int indexOf(Coordinate& coordinate,CoordinateList& coordinates);
 	virtual bool isEquivalentClass(Geometry *other);
 	virtual void checkNotGeometryCollection(Geometry *g);
 	virtual void checkEqualSRID(Geometry *other);
@@ -502,7 +502,7 @@ public:
 	GeometryCollection(const GeometryCollection &gc);
 	GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel pm, int SRID);
 	virtual ~GeometryCollection(void);
-	virtual CoordinateList getCoordinates();
+	virtual CoordinateList& getCoordinates();
 	virtual bool isEmpty();
 	virtual int getDimension();
 	virtual int getBoundaryDimension();
@@ -573,7 +573,7 @@ public:
 	Point(Coordinate c, PrecisionModel precisionModel, int SRID);
 	Point(const Point &p); //replaces clone()
 	virtual ~Point(void);
-	CoordinateList getCoordinates(void);
+	CoordinateList& getCoordinates(void);
 	int getNumPoints();
 	bool isEmpty();
 	bool isSimple();
@@ -620,9 +620,9 @@ class LineString: public Geometry, public SFSLineString {
 public:
 	LineString();
 	LineString(const LineString &ls);
-	LineString(CoordinateList newPoints, PrecisionModel precisionModel, int SRID);
+	LineString(CoordinateList& newPoints, PrecisionModel precisionModel, int SRID);
 	virtual ~LineString();
-	virtual CoordinateList getCoordinates();
+	virtual CoordinateList& getCoordinates();
 	virtual Coordinate getCoordinateN(int n);
 	virtual int getDimension();
 	virtual int getBoundaryDimension();
@@ -655,12 +655,12 @@ class LinearRing : public LineString, public SFSLinearRing {
 public:
 	LinearRing();
 	LinearRing(const LinearRing &lr);
-	LinearRing(CoordinateList points,PrecisionModel precisionModel,int SRID);
+	LinearRing(CoordinateList& points,PrecisionModel precisionModel,int SRID);
 	virtual ~LinearRing();
 	bool isSimple();
 	string getGeometryType();
 	bool isClosed();
-	void setPoints(CoordinateList cl);
+	void setPoints(CoordinateList& cl);
 };
 
 class SFSSurface { //: public SFSGeometry {
@@ -680,7 +680,7 @@ public:
 	virtual ~Polygon();
 	Polygon(LinearRing *newShell, PrecisionModel precisionModel, int SRID);
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel precisionModel, int SRID);
-	CoordinateList getCoordinates();
+	CoordinateList& getCoordinates();
 	int getNumPoints();
 	int getDimension();
 	int getBoundaryDimension();
@@ -767,11 +767,11 @@ public:
 	MultiLineString createMultiLineString(vector<Geometry *> *lineStrings);
 	GeometryCollection createGeometryCollection(vector<Geometry *> *geometries);
 	MultiPolygon createMultiPolygon(vector<Geometry *> *polygons);
-	LinearRing createLinearRing(CoordinateList coordinates);
+	LinearRing createLinearRing(CoordinateList& coordinates);
 	MultiPoint createMultiPoint(vector<Geometry *> *point);
-	MultiPoint createMultiPoint(CoordinateList coordinates);
+	MultiPoint createMultiPoint(CoordinateList& coordinates);
 	Polygon createPolygon(LinearRing *shell, vector<Geometry *> *holes);
-	LineString createLineString(CoordinateList coordinates);
+	LineString createLineString(CoordinateList& coordinates);
 	Geometry buildGeometry(vector<Geometry *> geoms);
 private:
 	PrecisionModel precisionModel;

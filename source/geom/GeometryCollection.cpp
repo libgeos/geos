@@ -19,17 +19,17 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,Precisi
 	geometries=*newGeometries;
 }
 
-CoordinateList GeometryCollection::getCoordinates() {
-	CoordinateList coordinates(getNumPoints());
+CoordinateList& GeometryCollection::getCoordinates() {
+	CoordinateList *coordinates=new CoordinateList(getNumPoints());
 	int k = -1;
 	for (unsigned int i=0; i<geometries.size(); i++) {
-	CoordinateList childCoordinates(geometries[i]->getCoordinates());
+	CoordinateList& childCoordinates=geometries[i]->getCoordinates();
 		for (int j=0; j<childCoordinates.getSize(); j++) {
 			k++;
-			coordinates.setAt(childCoordinates.getAt(j),k);
+			coordinates->setAt(childCoordinates.getAt(j),k);
 		}
 	}
-	return coordinates;
+	return *coordinates;
 }
 
 bool GeometryCollection::isEmpty() {

@@ -11,7 +11,7 @@ Point::Point(const Point &p): Geometry(p.precisionModel,p.SRID) {
 	coordinate=p.coordinate;
 }
 
-CoordinateList Point::getCoordinates() {
+CoordinateList& Point::getCoordinates() {
 	if (isEmpty()) {
 		return CoordinateList();
 	} else {

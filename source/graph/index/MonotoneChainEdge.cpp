@@ -25,7 +25,7 @@ MonotoneChainEdge::MonotoneChainEdge() {
 }
 
 MonotoneChainEdge::MonotoneChainEdge(Edge *newE) {
-	pts=newE->getCoordinates();
+	pts=&(newE->getCoordinates());
 	env1=new Envelope();
 	env2=new Envelope();
 	e=newE;
@@ -68,10 +68,10 @@ void MonotoneChainEdge::computeIntersectsForChain(int chainIndex0,MonotoneChainE
 
 void MonotoneChainEdge::computeIntersectsForChain(int start0,int end0,MonotoneChainEdge *mce,
 													int start1,int end1,SegmentIntersector *ei){
-	Coordinate p00(pts->getAt(start0));
-	Coordinate p01(pts->getAt(end0));
-	Coordinate p10((mce->pts)->getAt(start1));
-	Coordinate p11((mce->pts)->getAt(end1));
+	Coordinate& p00=pts->getAt(start0);
+	Coordinate& p01=pts->getAt(end0);
+	Coordinate& p10=(mce->pts)->getAt(start1);
+	Coordinate& p11=(mce->pts)->getAt(end1);
 	// terminating condition for the recursion
 	if (end0-start0==1 && end1-start1==1) {
 		ei->addIntersections(e,start0,mce->e,start1);

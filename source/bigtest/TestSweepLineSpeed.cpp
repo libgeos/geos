@@ -26,6 +26,7 @@ void run(int nPts, GeometryFactory *fact) {
 }
 
 void main(int argC, char* argV[]) {
+
 	GeometryFactory *fact=new GeometryFactory();
 
 	run(1000,fact);

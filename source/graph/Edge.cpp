@@ -26,7 +26,7 @@ Edge::~Edge(){
 	delete mce;
 }
 
-Edge::Edge(CoordinateList newPts, Label *newLabel):pts(newPts){
+Edge::Edge(CoordinateList& newPts, Label *newLabel):pts(newPts){
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
@@ -35,7 +35,7 @@ Edge::Edge(CoordinateList newPts, Label *newLabel):pts(newPts){
 	mce=NULL;
 }
 
-Edge::Edge(CoordinateList newPts): pts(newPts){
+Edge::Edge(CoordinateList& newPts): pts(newPts){
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
@@ -56,8 +56,8 @@ void Edge::setName(string newName) {
 //	return pts;
 //}
 
-CoordinateList* Edge::getCoordinates(){
-	return &pts;
+CoordinateList& Edge::getCoordinates(){
+	return pts;
 }
 
 Coordinate Edge::getCoordinate(int i){

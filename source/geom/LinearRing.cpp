@@ -1,8 +1,8 @@
 #include "geom.h"
 
 LinearRing::LinearRing(): LineString() {}
-LinearRing::LinearRing(const LinearRing &lr): LineString(lr.points, lr.precisionModel, lr.SRID) {}
-LinearRing::LinearRing(CoordinateList points,PrecisionModel precisionModel,int SRID): 
+LinearRing::LinearRing(const LinearRing &lr): LineString((CoordinateList&) lr.points, lr.precisionModel, lr.SRID) {}
+LinearRing::LinearRing(CoordinateList& points,PrecisionModel precisionModel,int SRID): 
     LineString(points, precisionModel, SRID) {
 	if (!LineString::isEmpty() && ! LineString::isClosed()) {
 		throw "IllegalArgumentException: points must form a closed linestring";
@@ -22,6 +22,6 @@ bool LinearRing::isClosed() {
 	return true;
 }
 
-void LinearRing::setPoints(CoordinateList cl){
+void LinearRing::setPoints(CoordinateList& cl){
 	points.setPoints(cl.toVector());
 }
