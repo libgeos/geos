@@ -78,3 +78,4 @@ private:
 
 bool isleLessThen(indexSweepLineEvent *first,indexSweepLineEvent *second);
 #endif
+
