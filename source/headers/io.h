@@ -8,20 +8,18 @@
 //#include "math.h"
 #include "platform.h"
 #include "geom.h"
+#include "util.h"
 
 using namespace std;
 
 
-class ParseException {
+class ParseException: public GEOSException {
 public:
 	ParseException();
 	ParseException(string msg);
 	ParseException(string msg, string var);
 	ParseException(string msg, double num);
 	~ParseException();
-	string toString();
-private:
-	string txt;
 };
 
 class StringTokenizer {

@@ -2,7 +2,7 @@
 
 double DoubleBits::powerOf2(int exp){
 	if (exp>1023 || exp<-1022)
-		throw "IllegalArgumentException('Exponent out of bounds')";
+		throw new IllegalArgumentException("Exponent out of bounds");
 	long expBias=exp+EXPONENT_BIAS;
 	long bits=(long)expBias << 52;
 	return (double) bits;

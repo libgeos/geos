@@ -8,9 +8,9 @@ void Assert::isTrue(bool assertion) {
 void Assert::isTrue(bool assertion, string message) {
 	if (!assertion) {
 		if (message.empty()) {
-			throw AssertionFailedException();
+			throw new AssertionFailedException();
 		} else {
-			throw AssertionFailedException(message);
+			throw new AssertionFailedException(message);
 		}
 	}
 }
@@ -21,7 +21,7 @@ void Assert::equals(Coordinate& expectedValue, Coordinate& actualValue){
 
 void Assert::equals(Coordinate& expectedValue, Coordinate& actualValue, string message){
 	if (!(actualValue==expectedValue)) {
-		throw AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
+		throw new AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
 			+ actualValue.toString() + (!message.empty() ? ": " + message : ""));
 	}
 }
@@ -32,7 +32,7 @@ void Assert::shouldNeverReachHere() {
 }
 
 void Assert::shouldNeverReachHere(string message) {
-	throw AssertionFailedException("Should never reach here"
+	throw new AssertionFailedException("Should never reach here"
 		+ (!message.empty() ? ": " + message : ""));
 }
 

@@ -17,7 +17,7 @@ bool RepeatedPointTester::hasRepeatedPoint(Geometry *g){
 	else if (typeid(*g)==typeid(MultiPolygon)) return hasRepeatedPoint((MultiPolygon*)g);
 	else if (typeid(*g)==typeid(MultiLineString)) return hasRepeatedPoint((MultiLineString*)g);
 	else if (typeid(*g)==typeid(GeometryCollection)) return hasRepeatedPoint((GeometryCollection*)g);
-	else  throw "UnsupportedOperationException"+string(typeid(*g).name());
+	else  throw new UnsupportedOperationException(string(typeid(*g).name()));
 }
 
 bool RepeatedPointTester::hasRepeatedPoint(CoordinateList *coord){

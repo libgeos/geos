@@ -20,6 +20,6 @@ char Location::toLocationSymbol(int locationValue) {
 		default:
 			char buffer[255];
 			sprintf(buffer,"Unknown location value: %i\n",locationValue);
-			throw buffer;
+			throw new IllegalArgumentException(buffer);
 	}
 }

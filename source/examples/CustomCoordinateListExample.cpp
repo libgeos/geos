@@ -56,14 +56,9 @@ int main(int argc, char** argv) {
 	cout << "Geometry is valid? " << (geom->isValid()?"true":"false") << endl;
 
 	cout << "End" << endl;
-	} catch (char *message){
-        cout << message << endl;
-	} catch (ParseException pe) {
-		cout << pe.toString() << endl;
-	} catch (AssertionFailedException afe) {
-		cout << afe.toString() << endl;
-	} catch (NotRepresentableException nre) {
-		cout << nre.toString() << endl;
+	} catch (GEOSException *ge) {
+		cout << ge->toString() << endl;
+
 	}
 
 	return 0;

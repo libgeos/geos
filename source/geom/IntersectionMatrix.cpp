@@ -218,7 +218,7 @@ bool IntersectionMatrix::matches(string requiredDimensionSymbols) {
 	if (requiredDimensionSymbols.length() != 9) {
 		char buffer[255];
 		sprintf(buffer,"IllegalArgumentException: Should be length 9: %s\n",requiredDimensionSymbols.c_str());
-		throw buffer;
+		throw new IllegalArgumentException(buffer);
 	}
 	for (int ai = 0; ai < 3; ai++) {
 		for (int bi = 0; bi < 3; bi++) {

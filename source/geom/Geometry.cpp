@@ -360,7 +360,7 @@ bool Geometry::isEquivalentClass(Geometry *other){
 
 void Geometry::checkNotGeometryCollection(Geometry *g){
 	if ((typeid(*g)==typeid(GeometryCollection)))
-		throw "IllegalArgumentException: This method does not support GeometryCollection arguments\n";
+		throw new IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 }
 
 //void Geometry::checkEqualSRID(Geometry *other) {

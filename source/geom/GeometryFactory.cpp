@@ -61,7 +61,7 @@ MultiPolygon* GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons){
 LinearRing* GeometryFactory::createLinearRing(CoordinateList* coordinates) {
 	if (coordinates->getSize()>0 && 
 		!coordinates->getAt(0).equals2D(coordinates->getAt(coordinates->getSize() - 1))) {
-			throw "IllegalArgumentException: LinearRing not closed";
+			throw new IllegalArgumentException("LinearRing not closed");
 	}
 	return new LinearRing(coordinates, precisionModel, SRID);
 }

@@ -20,7 +20,7 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,Precisi
 		newGeometries=new vector<Geometry *>();
 	}
 	if (hasNullElements(newGeometries)) {
-		throw "IllegalArgumentException: geometries must not contain null elements\n";
+		throw new IllegalArgumentException("geometries must not contain null elements\n");
 	}
 	geometries=newGeometries;
 }

@@ -151,7 +151,7 @@ Coordinate& RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Co
 	Coordinate intPt;
 	try {
 		intPt.setCoordinate(HCoordinate::intersection(*n1,*n2,*n3,*n4));
-	} catch (NotRepresentableException e) {
+	} catch (NotRepresentableException *e) {
 		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
     }
 	intPt.x+=normPt->x;

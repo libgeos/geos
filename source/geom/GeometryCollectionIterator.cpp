@@ -53,7 +53,7 @@ Geometry* GeometryCollectionIterator::next() {
 		}
 	}
 	if (index>=max) {
-		throw "NoSuchElementException";
+		throw new UnsupportedOperationException("No more elements");
 	}
 	Geometry *obj=parent->getGeometryN(index++);
 	if ((typeid(*obj)==typeid(GeometryCollection)) ||
@@ -73,7 +73,7 @@ Geometry* GeometryCollectionIterator::next() {
  *@throws  UnsupportedOperationException  This method is not implemented.
  */
 void GeometryCollectionIterator::remove() {
-	throw "UnsupportedOperationException\n";
+	throw new UnsupportedOperationException();
 }
 
 GeometryCollectionIterator::~GeometryCollectionIterator(){

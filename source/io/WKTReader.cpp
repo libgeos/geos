@@ -18,8 +18,8 @@ Geometry* WKTReader::read(string wellKnownText){
 	try {
 		return readGeometryTaggedText(tokenizer);
 	}
-	catch (ParseException e) {
-		throw new ParseException(e.toString());
+	catch (ParseException *e) {
+		throw new ParseException(e->toString());
 	}
 }
 
@@ -52,19 +52,19 @@ double WKTReader::getNextNumber(StringTokenizer *tokenizer) {
 	int type=tokenizer->nextToken();
 	switch(type){
 		case StringTokenizer::TT_EOF:
-			throw ParseException("Expected number but encountered end of stream");
+			throw new ParseException("Expected number but encountered end of stream");
 		case StringTokenizer::TT_EOL:
-			throw ParseException("Expected number but encountered end of line");
+			throw new ParseException("Expected number but encountered end of line");
 		case StringTokenizer::TT_NUMBER:
 			return tokenizer->getNVal();
 		case StringTokenizer::TT_WORD:
-			throw ParseException("Expected number but encountered word",tokenizer->getSVal());
+			throw new ParseException("Expected number but encountered word",tokenizer->getSVal());
 		case '(':
-			throw ParseException("Expected number but encountered '('");
+			throw new ParseException("Expected number but encountered '('");
 		case ')':
-			throw ParseException("Expected number but encountered ')'");
+			throw new ParseException("Expected number but encountered ')'");
 		case ',':
-			throw ParseException("Expected number but encountered ','");
+			throw new ParseException("Expected number but encountered ','");
 	}
 	Assert::shouldNeverReachHere("Encountered unexpected StreamTokenizer type");
 	return 0;
@@ -75,7 +75,7 @@ string WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer) {
 	if (nextWord=="EMPTY" || nextWord=="(") {
 		return nextWord;
 	}
-	throw ParseException("Expected 'EMPTY' or '(' but encountered ",nextWord);
+	throw new ParseException("Expected 'EMPTY' or '(' but encountered ",nextWord);
 }
 
 string WKTReader::getNextCloserOrComma(StringTokenizer *tokenizer) {
@@ -83,7 +83,7 @@ string WKTReader::getNextCloserOrComma(StringTokenizer *tokenizer) {
 	if (nextWord=="," || nextWord==")") {
 		return nextWord;
 	}
-	throw ParseException("Expected ')' or ',' but encountered",nextWord);
+	throw new ParseException("Expected ')' or ',' but encountered",nextWord);
 }
 
 string WKTReader::getNextCloser(StringTokenizer *tokenizer) {
@@ -91,18 +91,18 @@ string WKTReader::getNextCloser(StringTokenizer *tokenizer) {
 	if (nextWord==")") {
 		return nextWord;
 	}
-	throw ParseException("Expected ')' but encountered",nextWord);
+	throw new ParseException("Expected ')' but encountered",nextWord);
 }
 
 string WKTReader::getNextWord(StringTokenizer *tokenizer) {
 	int type=tokenizer->nextToken();
 	switch(type){
 		case StringTokenizer::TT_EOF:
-			throw ParseException("Expected word but encountered end of stream");
+			throw new ParseException("Expected word but encountered end of stream");
 		case StringTokenizer::TT_EOL:
-			throw ParseException("Expected word but encountered end of line");
+			throw new ParseException("Expected word but encountered end of line");
 		case StringTokenizer::TT_NUMBER:
-			throw ParseException("Expected word but encountered number", tokenizer->getNVal());
+			throw new ParseException("Expected word but encountered number", tokenizer->getNVal());
 		case StringTokenizer::TT_WORD:
 			return tokenizer->getSVal();
 		case '(':
@@ -133,7 +133,7 @@ Geometry* WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer) {
 	} else if (type=="GEOMETRYCOLLECTION") {
 		return readGeometryCollectionText(tokenizer);
 	}
-	throw ParseException("Unknown type",type);
+	throw new ParseException("Unknown type",type);
 }
 
 Point* WKTReader::readPointText(StringTokenizer *tokenizer) {

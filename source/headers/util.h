@@ -6,14 +6,39 @@
 
 using namespace std;
 
-class AssertionFailedException {
+class GEOSException {
+public:
+	GEOSException();
+	GEOSException(string msg);
+	GEOSException(string nname,string msg);
+	virtual ~GEOSException();
+	virtual string toString();
+	virtual void setName(string nname);
+	virtual void setMessage(string msg);
+protected:
+	string txt;
+	string name;
+};
+
+class AssertionFailedException: public GEOSException {
 public:
 	AssertionFailedException();
 	AssertionFailedException(string msg);
 	~AssertionFailedException();
-	string toString();
-private:
-	string txt;
+};
+
+class IllegalArgumentException: public GEOSException {
+public:
+	IllegalArgumentException();
+	IllegalArgumentException(string msg);
+	~IllegalArgumentException();
+};
+
+class UnsupportedOperationException: public GEOSException {
+public:
+	UnsupportedOperationException();
+	UnsupportedOperationException(string msg);
+	~UnsupportedOperationException();
 };
 
 class Coordinate;

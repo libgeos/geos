@@ -142,9 +142,8 @@ void GeometryGraph::add(Geometry *g) {
 	else if (typeid(*g)==typeid(GeometryCollection))
 		addCollection((GeometryCollection*) g);
 	else {
-		string out="UnsupportedOperationException: ";
-		out+=typeid(*g).name();
-		throw out;
+		string out=typeid(*g).name();
+		throw new UnsupportedOperationException(out);
 	}
 }
 

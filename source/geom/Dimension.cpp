@@ -26,7 +26,7 @@ char Dimension::toDimensionSymbol(int dimensionValue) {
 		default:
 			char buffer[255];
 			sprintf(buffer,"Unknown dimension value: %i\n",dimensionValue);
-			throw buffer;
+			throw new IllegalArgumentException(buffer);
 	}
 }
 
@@ -57,6 +57,6 @@ int Dimension::toDimensionValue(char dimensionSymbol) {
 		default:
 			char buffer[255];
 			sprintf(buffer,"Unknown dimension symbol: %c\n",dimensionSymbol);
-			throw buffer;
+			throw new IllegalArgumentException(buffer);
 	}
 }

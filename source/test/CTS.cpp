@@ -16,10 +16,8 @@ int main(int argc, char** argv)
 	
 
 	cout << "End" << endl;
-	} catch (char *message){
-        cout << message << endl;
-	} catch (ParseException pe) {
-		cout << pe.toString() << endl;
+	} catch (GEOSException *ge) {
+		cout << ge->toString() << endl;
 	}
 
 	return 0;

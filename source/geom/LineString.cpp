@@ -20,10 +20,10 @@ LineString::LineString(CoordinateList *newPoints, PrecisionModel* precisionModel
 		newPoints=CoordinateListFactory::internalFactory->createCoordinateList();
 	}
 	if (hasNullElements(newPoints)) {
-		throw "IllegalArgumentException: point array must not contain null elements\n";
+		throw new IllegalArgumentException("point array must not contain null elements\n");
 	}
 	if (newPoints->getSize()==1) {
-		throw "IllegalArgumentException: point array must contain 0 or >1 elements\n";
+		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
 	points=newPoints;
 }

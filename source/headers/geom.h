@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include "math.h"
+#include "util.h"
 #include "platform.h"
 
 using namespace std;
@@ -205,13 +206,14 @@ public:
 	bool hasRepeatedPoints();
 	Coordinate* minCoordinate();
 	static bool hasRepeatedPoints(CoordinateList *cl);
-	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
-	static int indexOf(Coordinate *coordinate, CoordinateList *cl);
-
 	static Coordinate* minCoordinate(CoordinateList *cl);
+	static int indexOf(Coordinate *coordinate, CoordinateList *cl);
+	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
 	static void scroll(CoordinateList *cl, Coordinate *firstCoordinate);
-	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
 	static void reverse(CoordinateList *cl);
+	void add(vector<Coordinate>* vc,bool allowRepeated);
+	void add(Coordinate& c,bool allowRepeated);
+	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
 };
 
 class BasicCoordinateList : public CoordinateList {
@@ -658,7 +660,7 @@ public:
 /**
  * Indicates an invalid or inconsistent topological situation encountered during processing
  */
-class TopologyException {
+class TopologyException: public GEOSException {
 private:
 	static string msgWithCoord(string msg,Coordinate *newPt);
 	Coordinate *pt;

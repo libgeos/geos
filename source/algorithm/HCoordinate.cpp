@@ -43,7 +43,7 @@ HCoordinate::HCoordinate(HCoordinate p1, HCoordinate p2) {
 double HCoordinate::getX() {
 	double a = x/w;
 	if ((a==DoubleNotANumber)||(a==DoubleInfinity)||(a==DoubleNegInfinity)) {
-		throw NotRepresentableException();
+		throw new NotRepresentableException();
 	}
 	return a;
 }
@@ -51,7 +51,7 @@ double HCoordinate::getX() {
 double HCoordinate::getY() {
 	double a = y/w;
 	if ((a==DoubleNotANumber)||(a==DoubleInfinity)||(a==DoubleNegInfinity)) {
-		throw NotRepresentableException();
+		throw new NotRepresentableException();
 	}
 	return a;
 }

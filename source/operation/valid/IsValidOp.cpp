@@ -50,7 +50,7 @@ void IsValidOp::checkValid(Geometry *g) {
     else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
     else if (typeid(*g)==typeid(MultiLineString)) checkValid((MultiLineString*)g);
     else if (typeid(*g)==typeid(GeometryCollection)) checkValid((GeometryCollection*)g);
-	else throw "UnsupportedOperationException";
+	else throw new UnsupportedOperationException();
 }
 
 /**

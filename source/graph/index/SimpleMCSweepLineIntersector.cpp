@@ -50,7 +50,7 @@ void SimpleMCSweepLineIntersector::add(Edge *edge,void* edgeSet){
 	}
 }
 
-bool sleLessThan(SweepLineEvent *first,SweepLineEvent *second) {
+bool MCsleLessThan(SweepLineEvent *first,SweepLineEvent *second) {
 	if (first->compareTo(second)<0)
 		return true;
 	else
@@ -63,7 +63,7 @@ bool sleLessThan(SweepLineEvent *first,SweepLineEvent *second) {
 * compared to a given Insert event object.
 */
 void SimpleMCSweepLineIntersector::prepareEvents(){
-	sort(events->begin(),events->end(),sleLessThan);
+	sort(events->begin(),events->end(),MCsleLessThan);
 	for(int i=0;i<(int)events->size();i++ ){
 		SweepLineEvent *ev=(*events)[i];
 		if (ev->isDelete()){

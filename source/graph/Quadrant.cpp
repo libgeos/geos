@@ -4,8 +4,8 @@
 int Quadrant::quadrant(double dx, double dy) {
 	char buffer[255];
 	if (dx == 0.0 && dy == 0.0) {
-		sprintf(buffer,"IllegalArgumentException: Cannot compute the quadrant for point (%g, %g)\n",dx,dy);
-		throw buffer;
+		sprintf(buffer,"Cannot compute the quadrant for point (%g, %g)\n",dx,dy);
+		throw new IllegalArgumentException(buffer);
 	}
 	if (dx >= 0) {
 		if (dy >= 0)
@@ -24,7 +24,7 @@ int Quadrant::quadrant(Coordinate& p0, Coordinate& p1) {
 	double dx=p1.x-p0.x;
 	double dy=p1.y-p0.y;
 	if (dx==0.0 && dy==0.0)
-		throw "IllegalArgumentException: Cannot compute the quadrant for two identical points " + p0.toString();
+		throw new IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
 	return quadrant(dx, dy);
 }
 

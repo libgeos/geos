@@ -36,10 +36,8 @@ int main(int argc, char** argv)
 		out.close();
 		cout << "End of Testing" << endl;
 
-	} catch (char *message){
-        cout << message << endl;
-	} catch (ParseException pe) {
-		cout << pe.toString() << endl;
+	} catch (GEOSException *ge) {
+		cout << ge->toString() << endl;
 	}
 
 	return 0;

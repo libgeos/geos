@@ -25,10 +25,10 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		newHoles=new vector<Geometry *>();
 
 	if (hasNullElements(newHoles)) {
-		throw "IllegalArgumentException: holes must not contain null elements";
+		throw new IllegalArgumentException("holes must not contain null elements");
 	}
 	if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
-		throw "IllegalArgumentException: shell is empty but holes are not";
+		throw new IllegalArgumentException("shell is empty but holes are not");
 	}
 	shell=newShell;
 	holes=newHoles;

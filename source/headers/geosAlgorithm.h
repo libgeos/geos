@@ -3,6 +3,7 @@
 
 
 #include "geom.h"
+#include "util.h"
 #include "platform.h"
 #include "indexBintree.h"
 #include "indexStrtree.h"
@@ -11,14 +12,11 @@
 
 class Coordinate;
 
-class NotRepresentableException {
+class NotRepresentableException: public GEOSException {
 public:
 	NotRepresentableException();
 	NotRepresentableException(string msg);
 	~NotRepresentableException();
-	string toString();
-private:
-	string txt;
 };
 
 class PointInRing{

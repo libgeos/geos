@@ -8,12 +8,14 @@ string TopologyException::msgWithCoord(string msg,Coordinate *newPt){
 }
 
 TopologyException::TopologyException(string msg){
-//	super(msg);
+	setName("TopologyException");
+	setMessage(msg);
 }
 
 TopologyException::TopologyException(string msg,Coordinate *newPt) {
-//	super(msgWithCoord(msg, pt));
+	setName("TopologyException");
 	pt=new Coordinate(*newPt);
+	setMessage(msgWithCoord(msg,pt));
 }
 
 Coordinate* TopologyException::getCoordinate() {

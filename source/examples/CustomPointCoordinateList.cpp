@@ -21,7 +21,7 @@ void CustomPointCoordinateList::setPoints(const vector<Coordinate> &v) {
 			pts[i]=pt;
 		}
 	} else {
-		throw "CustomPointCoordinateList exception: size mismatch\n";
+		throw new CPCLException("size mismatch\n");
 	}
 }
 
@@ -31,7 +31,7 @@ void CustomPointCoordinateList::setPoints(const vector<point_3d> &v) {
 			pts[i]=v[i];
 		}
 	} else {
-		throw "CustomPointCoordinateList exception: size mismatch\n";
+		throw new CPCLException("size mismatch\n");
 	}
 }
 
@@ -56,11 +56,11 @@ bool CustomPointCoordinateList::isEmpty() {
 }
 
 void CustomPointCoordinateList::add(Coordinate& c){
-	throw "CustomPointCoordinateList exception: list's size can't be modified\n";
+	throw new CPCLException("list's size can't be modified\n");
 }
 
 void CustomPointCoordinateList::add(point_3d p){
-	throw "CustomPointCoordinateList exception: list's size can't be modified\n";
+	throw new CPCLException("list's size can't be modified\n");
 }
 
 int CustomPointCoordinateList::getSize(){
@@ -73,14 +73,14 @@ Coordinate& CustomPointCoordinateList::getAt(int pos){
 		pt=pts[pos];
 		return *(new Coordinate(pt.x,pt.y,pt.z));
 	} else
-		throw "CustomPointCoordinateList exception: can't retrieve element\n";
+		throw new CPCLException("can't retrieve element\n");
 }
 
 point_3d CustomPointCoordinateList::getPointAt(int pos){
 	if (pos>=0 && pos<size) {
 		return pts[pos];
 	} else
-		throw "CustomPointCoordinateList exception: can't retrieve element\n";
+		throw new CPCLException("can't retrieve element\n");
 }
 
 void CustomPointCoordinateList::setAt(Coordinate& c, int pos){
@@ -88,18 +88,18 @@ void CustomPointCoordinateList::setAt(Coordinate& c, int pos){
 	if (pos>=0 && pos<size) 
 		pts[pos]=pt;
 	else
-		throw "CustomPointCoordinateList exception: can't change element\n";
+		throw new CPCLException("can't change element\n");
 }
 
 void CustomPointCoordinateList::setAt(point_3d p, int pos){
 	if (pos>=0 && pos<size) 
 		pts[pos]=p;
 	else
-		throw "CustomPointCoordinateList exception: can't change element\n";
+		throw new CPCLException("can't change element\n");
 }
 
 void CustomPointCoordinateList::deleteAt(int pos){
-	throw "CustomPointCoordinateList exception: list's size can't be modified\n";
+	throw new CPCLException("list's size can't be modified\n");
 }
 
 string CustomPointCoordinateList::toString() {

@@ -33,14 +33,14 @@ int Point::getBoundaryDimension() {return Dimension::False;}
 
 double Point::getX() {
 	if (isEmpty()) {
-		throw "IllegalStateException: getX called on empty Point\n";
+		throw new UnsupportedOperationException("getX called on empty Point\n");
 	}
 	return coordinate.x;
 }
 
 double Point::getY() {
 	if (isEmpty()) {
-		throw "IllegalStateException: getY called on empty Point\n";
+		throw new UnsupportedOperationException("getY called on empty Point\n");
 	}
 	return coordinate.y;
 }

@@ -3,6 +3,7 @@
 
 #include "../headers/platform.h"
 #include "../headers/geom.h"
+#include "../headers/util.h"
 
 using namespace std;
 
@@ -37,6 +38,12 @@ private:
 	int size;
 };
 
+class CPCLException: public GEOSException {
+public:
+	CPCLException();
+	CPCLException(string msg);
+	~CPCLException();
+};
 
 #endif
 
