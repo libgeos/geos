@@ -7,6 +7,7 @@
 #include "platform.h"
 #include "opRelate.h"
 #include "indexSweepline.h"
+#include "indexQuadtree.h"
 
 class SimpleNestedRingTester {
 public:
@@ -124,121 +125,69 @@ private:
 	bool isInside(LinearRing *innerRing,LinearRing *searchRing);
 };
 
+class QuadtreeNestedRingTester {
+public:
+	QuadtreeNestedRingTester(GeometryGraph *newGraph);
+	~QuadtreeNestedRingTester();
+	Coordinate& getNestedPoint();
+	void add(LinearRing *ring);
+	bool isNonNested();
+private:
+	static CGAlgorithms *cga;
+	GeometryGraph *graph;  // used to find non-node vertices
+	vector<LinearRing*> *rings;
+	Envelope *totalEnv;
+	Quadtree *qt;
+	Coordinate nestedPt;
+	void buildQuadtree();
+};
+
+/**
+ * This class tests that the interior of an area Geometry (Polygon or MultiPolygon)
+ * is connected.  The Geometry is invalid if the interior is disconnected (as can happen
+ * if one or more holes either form a chain touching the shell at two places,
+ * or if one or more holes form a ring around a portion of the interior)
+ */
+class ConnectedInteriorTester {
+public:
+	ConnectedInteriorTester(GeometryGraph *newGeomGraph);
+	~ConnectedInteriorTester();
+	Coordinate& getCoordinate();
+	bool isInteriorsConnected();
+private:
+	GeometryFactory *geometryFactory;
+	CGAlgorithms *cga;
+	GeometryGraph *geomGraph;
+	// save a coordinate for any disconnected interior found
+	// the coordinate will be somewhere on the ring surrounding the disconnected interior
+	Coordinate disconnectedRingcoord;
+	void setAllEdgesInResult(PlanarGraph *graph);
+	vector<EdgeRing*>* buildEdgeRings(vector<EdgeEnd*> *dirEdges);
+	/**
+	* Mark all the edges for the edgeRings corresponding to the shells
+	* of the input polygons.  Note only ONE ring gets marked for each shell.
+	*/
+	void visitShellInteriors(Geometry *g, PlanarGraph *graph);
+	void visitInteriorRing(LineString *ring, PlanarGraph *graph);
+	/**
+	* Check if any shell ring has an unvisited edge.
+	* A shell ring is a ring which is not a hole and which has the interior
+	* of the parent area on the RHS.
+	* (Note that there may be non-hole rings with the interior on the LHS,
+	* since the interior of holes will also be polygonized into CW rings
+	* by the linkAllDirectedEdges() step)
+	*
+	* @return true if there is an unvisited edge in a non-hole ring
+	*/
+	bool hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings);
+protected:
+	void visitLinkedDirectedEdges(DirectedEdge *start);
+};
 
 class IsValidOp {
 public:
 	static Coordinate& 
 		findPtNotNode(CoordinateList *innerRingPts,LinearRing *searchRing, GeometryGraph *graph);
 };
-//class RelateNode: public Node {
-//public:
-//	RelateNode(Coordinate& coord,EdgeEndStar *edges);
-//	void updateIMFromEdges(IntersectionMatrix *im);
-//protected:
-//	void computeIM(IntersectionMatrix *im);
-//};
-//
-//class EdgeEndBuilder {
-//public:
-//	EdgeEndBuilder();
-//	vector<EdgeEnd*> *computeEdgeEnds(vector<Edge*> *edges);
-//	void computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l);
-//protected:
-//	void createEdgeEndForPrev(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiPrev);
-//	void createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiNext);
-//};
-//
-//class EdgeEndBundle: public EdgeEnd {
-//public:
-//	EdgeEndBundle(EdgeEnd *e);
-//	~EdgeEndBundle();
-//	Label *getLabel();
-////Iterator iterator() //Not needed
-//	vector<EdgeEnd*>* getEdgeEnds();
-//	void insert(EdgeEnd *e);
-//	void computeLabel() ; 
-//	void updateIM(IntersectionMatrix *im);
-//	string print();
-//protected:
-//	vector<EdgeEnd*> *edgeEnds;
-//	void computeLabelOn(int geomIndex);
-//	void computeLabelSides(int geomIndex);
-//	void computeLabelSide(int geomIndex,int side);
-//};
-//
-//class EdgeEndBundleStar: public EdgeEndStar {
-//public:
-//	EdgeEndBundleStar();
-//	void insert(EdgeEnd *e);
-//	void updateIM(IntersectionMatrix *im);
-//};
-//
-//class RelateNodeFactory: public NodeFactory {
-//public:
-//	Node* createNode(Coordinate coord);
-//};
-//
-//class RelateNodeGraph {
-//public:
-//	RelateNodeGraph();
-////	Iterator getNodeIterator();
-//	map<Coordinate,Node*,CoordLT>* getNodeMap();
-//	void build(GeometryGraph *geomGraph);
-//	void computeIntersectionNodes(GeometryGraph *geomGraph,int argIndex);
-//	void copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex);
-//	void insertEdgeEnds(vector<EdgeEnd*> *ee);
-//private:
-//	NodeMap *nodes;
-//};
-//
-//class RelateComputer {
-//public:
-//	static const LineIntersector* li;
-//	RelateComputer();
-//	~RelateComputer();
-//	RelateComputer(vector<GeometryGraph*> *newArg);
-//	Coordinate& getInvalidPoint();
-//	bool isNodeConsistentArea();
-//	bool hasDuplicateRings();
-//	IntersectionMatrix* computeIM();
-//private:
-//	static const PointLocator* ptLocator;
-//	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
-//	NodeMap *nodes;
-//	// this intersection matrix will hold the results compute for the relate
-//	IntersectionMatrix *im;
-//	vector<Edge*> *isolatedEdges;
-//	// the intersection point found (if any)
-//	Coordinate invalidPoint;
-//	void insertEdgeEnds(vector<EdgeEnd*> *ee);
-//	void computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *imX);
-//	void copyNodesAndLabels(int argIndex);
-//	void computeIntersectionNodes(int argIndex);
-//	void labelIntersectionNodes(int argIndex);
-//	void computeDisjointIM(IntersectionMatrix *imX);
-//	bool isNodeEdgeAreaLabelsConsistent();
-//	void labelNodeEdges();
-//	void updateIM(IntersectionMatrix *imX);
-//	void labelIsolatedEdges(int thisIndex,int targetIndex);
-//	void labelIsolatedEdge(Edge *e,int targetIndex,Geometry *target);
-//	void labelIsolatedNodes();
-//	void labelIsolatedNode(Node *n,int targetIndex);
-//};
-//
-///**
-// * Note that RelateOp does not need to build a complete graph structure to compute
-// * the IntersectionMatrix.  The relationship between the geometries can
-// * be computed by simply examining the labelling of edges incident on each node.
-// */
-//class RelateOp: public GeometryGraphOperation {
-//public:
-//	static IntersectionMatrix* relate(Geometry *a,Geometry *b);
-//	RelateOp(Geometry *g0,Geometry *g1);
-//	~RelateOp();
-//	IntersectionMatrix* getIntersectionMatrix();
-//private:
-//	RelateComputer *relateComp;
-//};
-//
 
 #endif

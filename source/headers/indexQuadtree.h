@@ -1,5 +1,5 @@
-#ifndef GEOS_INDEXSWEEPLINE_H
-#define GEOS_INDEXSWEEPLINE_H
+#ifndef GEOS_INDEXQUADTREE_H
+#define GEOS_INDEXQUADTREE_H
 
 #include <vector>
 #include "platform.h"
