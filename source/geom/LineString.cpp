@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.44  2004/09/13 09:07:28  strk
+ * Ported fix in LineString::isCoordinate
+ *
  * Revision 1.43  2004/09/12 03:51:27  pramsey
  * Casting changes to allow OS/X compilation.
  *
@@ -243,7 +246,7 @@ Geometry* LineString::getBoundary() const {
 }
 
 bool LineString::isCoordinate(Coordinate& pt) const {
-	for (int i = 1; i < points->getSize(); i++) {
+	for (int i = 0; i < points->getSize(); i++) {
 		if (points->getAt(i)==pt) {
 			return true;
 		}
