@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
  * Revision 1.9  2004/04/13 12:29:21  strk
  * GeometryLocation const-correctness.
  *
@@ -164,7 +167,7 @@ public:
 	* @param g1 another {@link Geometry}
 	* @return the distance between the geometries
 	*/
-	static double distance(Geometry *g0, Geometry *g1);
+	static double distance(const Geometry *g0, const Geometry *g1);
 	/**
 	* Compute the the closest points of two geometries.
 	* The points are presented in the same order as the input Geometries.
@@ -178,8 +181,8 @@ public:
 	* Constructs a DistanceOp that computes the distance and closest points between
 	* the two specified geometries.
 	*/
-	DistanceOp(Geometry *g0, Geometry *g1);
-	virtual ~DistanceOp();
+	DistanceOp(const Geometry *g0, const Geometry *g1);
+	~DistanceOp();
 	/**
 	* Report the distance between the closest points on the input geometries.
 	*
@@ -201,8 +204,9 @@ public:
 	*/
 	vector<GeometryLocation*>* closestLocations();
 private:
-	PointLocator *ptLocator;
-	vector<Geometry*> *geom;
+	PointLocator ptLocator;
+	vector<Geometry const*> geom;
+	vector<Coordinate *> newCoords;
 	vector<GeometryLocation*> *minDistanceLocation;
 	double minDistance;
 	void updateMinDistance(double dist);
@@ -215,8 +219,8 @@ private:
 	void computeMinDistanceLines(vector<Geometry*> *lines0,vector<Geometry*> *lines1,vector<GeometryLocation*> *locGeom);
 	void computeMinDistancePoints(vector<Geometry*> *points0,vector<Geometry*> *points1,vector<GeometryLocation*> *locGeom);
 	void computeMinDistanceLinesPoints(vector<Geometry*> *lines,vector<Geometry*> *points,vector<GeometryLocation*> *locGeom);
-	void computeMinDistance(LineString *line0, LineString *line1,vector<GeometryLocation*> *locGeom);
-	void computeMinDistance(LineString *line, Point *pt,vector<GeometryLocation*> *locGeom);
+	void computeMinDistance(const LineString *line0, const LineString *line1,vector<GeometryLocation*> *locGeom);
+	void computeMinDistance(const LineString *line, const Point *pt,vector<GeometryLocation*> *locGeom);
 };
 }
 #endif

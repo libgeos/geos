@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
  * Revision 1.2  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -46,7 +49,7 @@ public:
 	* efficient to create a single {@link PolygonExtracterFilter} instance
 	* and pass it to multiple geometries.
 	*/
-	static vector<Geometry*>* getPolygons(Geometry *geom);
+	static vector<Geometry*>* getPolygons(const Geometry *geom);
 	/**
 	* Constructs a PolygonExtracterFilter with a list in which to store Polygons found.
 	*/
@@ -69,7 +72,7 @@ public:
 	* efficient to create a single {@link PointExtracterFilter} instance
 	* and pass it to multiple geometries.
 	*/
-	static vector<Geometry*>* getPoints(Geometry *geom);
+	static vector<Geometry*>* getPoints(const Geometry *geom);
 	/**
 	* Constructs a PointExtracterFilter with a list in which to store Points found.
 	*/
@@ -92,7 +95,7 @@ public:
 	* efficient to create a single {@link LinearComponentExtracterFilter} instance
 	* and pass it to multiple geometries.
 	*/
-	static vector<Geometry*>* getLines(Geometry *geom);
+	static vector<Geometry*>* getLines(const Geometry *geom);
 	/**
 	* Constructs a LinearComponentExtracterFilter with a list in which to store LineStrings found.
 	*/

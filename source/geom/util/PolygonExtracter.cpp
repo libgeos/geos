@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
  * Revision 1.2  2004/05/14 09:20:47  strk
  * Mem leaks fixed
  *
@@ -33,10 +36,10 @@ namespace geos {
 * efficient to create a single {@link PolygonExtracterFilter} instance
 * and pass it to multiple geometries.
 */
-vector<Geometry*>* PolygonExtracter::getPolygons(Geometry *geom){
+vector<Geometry*>* PolygonExtracter::getPolygons(const Geometry *geom){
 	vector<Geometry*> *ret=new vector<Geometry*>();
 	PolygonExtracter pe(ret);
-	geom->apply_rw(&pe);
+	geom->apply_ro(&pe);
 	return ret;
 }
 

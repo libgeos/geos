@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
  * Revision 1.1  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -32,28 +35,30 @@ namespace geos {
 */  
 vector<GeometryLocation*>* ConnectedElementLocationFilter::getLocations(const Geometry *geom) {
 	vector<GeometryLocation*> *loc=new vector<GeometryLocation*>();
-	ConnectedElementLocationFilter *c=new ConnectedElementLocationFilter(loc);
+	ConnectedElementLocationFilter *c = new ConnectedElementLocationFilter(loc);
 	geom->apply_ro(c);
 	delete c;
 	return loc;
 }
 
-ConnectedElementLocationFilter::ConnectedElementLocationFilter(vector<GeometryLocation*> *newLocations){
-	locations=newLocations;
+ConnectedElementLocationFilter::ConnectedElementLocationFilter(vector<GeometryLocation*> *newLocations): locations(newLocations) {
+	//locations=newLocations;
 }
 
 void ConnectedElementLocationFilter::filter_ro(const Geometry *geom){
 	if ((typeid(*geom)==typeid(Point)) ||
 		(typeid(*geom)==typeid(LineString)) ||
 		(typeid(*geom)==typeid(Polygon)))
-			locations->push_back(new GeometryLocation((Geometry*)geom, 0, (Coordinate)*(geom->getCoordinate())));
+	{
+		locations->push_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
+	}
 }
 
 void ConnectedElementLocationFilter::filter_rw(Geometry *geom){
 	if ((typeid(*geom)==typeid(Point)) ||
 		(typeid(*geom)==typeid(LineString)) ||
 		(typeid(*geom)==typeid(Polygon)))
-			locations->push_back(new GeometryLocation(geom, 0, (Coordinate)*(geom->getCoordinate())));
+			locations->push_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
 }
 
 }

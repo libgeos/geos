@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
  * Revision 1.3  2004/05/14 09:20:47  strk
  * Mem leaks fixed
  *
@@ -36,10 +39,10 @@ namespace geos {
 * efficient to create a single {@link LinearComponentExtracterFilter} instance
 * and pass it to multiple geometries.
 */
-vector<Geometry*>* LinearComponentExtracter::getLines(Geometry *geom){
+vector<Geometry*>* LinearComponentExtracter::getLines(const Geometry *geom){
 	vector<Geometry*> *ret=new vector<Geometry*>();
 	LinearComponentExtracter lce(ret);
-	geom->apply_rw(&lce);
+	geom->apply_ro(&lce);
 	return ret;
 }
 
@@ -51,11 +54,11 @@ LinearComponentExtracter::LinearComponentExtracter(vector<Geometry*> *newComps){
 }
 
 void LinearComponentExtracter::filter_rw(Geometry *geom) {
-	if (typeid(*geom)==typeid(LineString)) comps->push_back(geom);
+	if (typeid(*geom)==typeid(LineString) || typeid(*geom)==typeid(LinearRing)) comps->push_back(geom);
 }
 
 void LinearComponentExtracter::filter_ro(const Geometry *geom) {
-	if (typeid(*geom)==typeid(LineString)) comps->push_back((Geometry*)geom);
+	if (typeid(*geom)==typeid(LineString) || typeid(*geom)==typeid(LinearRing)) comps->push_back((Geometry *)geom);
 }
 }
 

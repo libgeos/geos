@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
  * Revision 1.12  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -199,6 +202,7 @@ LineSegment* LineSegment::project(const LineSegment *seg) const {
 * Computes the closest point on this line segment to another point.
 * @param p the point to find the closest point to
 * @return a Coordinate which is the closest point on the line segment to the point p
+* The returned coordinate is a new one, you must delete it afterwards.
 */
 Coordinate* LineSegment::closestPoint(const Coordinate& p) const {
 	double factor=projectionFactor(p);
@@ -312,14 +316,16 @@ double LineSegment::distancePerpendicular(const Coordinate& p) const {
 * Computes the closest points on two line segments.
 * @param p the point to find the closest point to
 * @return a pair of Coordinates which are the closest points on the line segments
+* The returned CoordinateList must be delete by the caller
 */
-CoordinateList* LineSegment::closestPoints(LineSegment *line){
+CoordinateList* LineSegment::closestPoints(const LineSegment *line){
 	// test for intersection
 	Coordinate *intPt = intersection(line);
 	if (intPt!=NULL) {
 		CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
 		cl->add(*intPt);
 		cl->add(*intPt);
+		delete intPt;
 		return cl;
 	}
 
@@ -333,6 +339,8 @@ CoordinateList* LineSegment::closestPoints(LineSegment *line){
 	Coordinate *close00 = closestPoint(line->p0);
 	minDistance = close00->distance(line->p0);
 	closestPt->setAt(*close00,0);
+	delete close00;
+
 	closestPt->setAt(line->p0,1);
 	Coordinate *close01 = closestPoint(line->p1);
 	dist = close01->distance(line->p1);
@@ -341,6 +349,8 @@ CoordinateList* LineSegment::closestPoints(LineSegment *line){
 		closestPt->setAt(*close01,0);
 		closestPt->setAt(line->p1,1);
 	}
+	delete close01;
+
 	Coordinate *close10 = line->closestPoint(p0);
 	dist = close10->distance(p0);
 		if (dist < minDistance) {
@@ -348,6 +358,8 @@ CoordinateList* LineSegment::closestPoints(LineSegment *line){
 		closestPt->setAt(p0,0);
 		closestPt->setAt(*close10,1);
 	}
+	delete close10;
+
 	Coordinate *close11 = line->closestPoint(p1);
 	dist = close11->distance(p1);
 	if (dist < minDistance) {
@@ -355,6 +367,7 @@ CoordinateList* LineSegment::closestPoints(LineSegment *line){
 		closestPt->setAt(p1,0);
 		closestPt->setAt(*close11,1);
 	}
+	delete close11;
 
 	return closestPt;
 }
@@ -370,13 +383,15 @@ CoordinateList* LineSegment::closestPoints(LineSegment *line){
 * @param line
 * @return an intersection point, or <code>null</code> if there is none
 */
-Coordinate* LineSegment::intersection(LineSegment *line){
+Coordinate *
+LineSegment::intersection(const LineSegment *line) const
+{
 	LineIntersector *li = new RobustLineIntersector();
 	li->computeIntersection(p0, p1, line->p0, line->p1);
 	if (li->hasIntersection()) {
-		const Coordinate &c=li->getIntersection(0);
+		Coordinate *c=new Coordinate(li->getIntersection(0));
 		delete li;
-		return (Coordinate*)&c;
+		return c;
 	}
 	delete li;
 	return NULL;
