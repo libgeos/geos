@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.51  2004/12/30 10:14:09  strk
+ * input checking and class promoting in createMultiLineString()
+ *
  * Revision 1.50  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -362,7 +365,9 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromLines.size());
 	for (unsigned int i=0; i<fromLines.size(); i++)
 	{
-		(*newGeoms)[i] = fromLines[i]->clone();
+		const LineString *line = dynamic_cast<const LineString *>(fromLines[i]);
+		if ( ! line ) throw new IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
+		(*newGeoms)[i] = new LineString(*line);
 	}
 	MultiLineString *g = NULL;
 	try {
