@@ -38,6 +38,7 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../io/WKTWriter.cpp ../io/markup/MarkupSTL.cpp \
 			../util/Assert.cpp  \
 			../util/AssertionFailedException.cpp \
+			../bigtest/GeometryTestFactory.cpp \
                         ../algorithm/CGAlgorithms.cpp \
 			../algorithm/HCoordinate.cpp \
 			../algorithm/LineIntersector.cpp \

@@ -126,6 +126,7 @@ EXTERNAL_SOURCES = ../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../io/WKTWriter.cpp ../io/markup/MarkupSTL.cpp \
 			../util/Assert.cpp  \
 			../util/AssertionFailedException.cpp \
+			../bigtest/GeometryTestFactory.cpp \
                         ../algorithm/CGAlgorithms.cpp \
 			../algorithm/HCoordinate.cpp \
 			../algorithm/LineIntersector.cpp \
@@ -176,15 +177,16 @@ am__objects_2 = Depth.lo GeometryGraph.lo DirectedEdge.lo \
 	SimpleMCSweepLineIntersector.lo SweepLineEvent.lo \
 	SweepLineSegment.lo ParseException.lo WKTReader.lo Writer.lo \
 	StringTokenizer.lo WKTWriter.lo MarkupSTL.lo Assert.lo \
-	AssertionFailedException.lo CGAlgorithms.lo HCoordinate.lo \
-	LineIntersector.lo NonRobustCGAlgorithms.lo \
-	NotRepresentableException.lo PointInRing.lo PointLocator.lo \
-	RobustCGAlgorithms.lo RobustDeterminant.lo \
-	RobustLineIntersector.lo SimplePointInAreaLocator.lo \
-	SimplePointInRing.lo EdgeEndBuilder.lo EdgeEndBundle.lo \
-	EdgeEndBundleStar.lo RelateComputer.lo RelateNode.lo \
-	RelateNodeFactory.lo RelateNodeGraph.lo RelateOp.lo \
-	GeometryGraphOperation.lo IsSimpleOp.lo
+	AssertionFailedException.lo GeometryTestFactory.lo \
+	CGAlgorithms.lo HCoordinate.lo LineIntersector.lo \
+	NonRobustCGAlgorithms.lo NotRepresentableException.lo \
+	PointInRing.lo PointLocator.lo RobustCGAlgorithms.lo \
+	RobustDeterminant.lo RobustLineIntersector.lo \
+	SimplePointInAreaLocator.lo SimplePointInRing.lo \
+	EdgeEndBuilder.lo EdgeEndBundle.lo EdgeEndBundleStar.lo \
+	RelateComputer.lo RelateNode.lo RelateNodeFactory.lo \
+	RelateNodeGraph.lo RelateOp.lo GeometryGraphOperation.lo \
+	IsSimpleOp.lo
 am_libgeos_la_OBJECTS = $(am__objects_1) $(am__objects_2)
 libgeos_la_OBJECTS = $(am_libgeos_la_OBJECTS)
 
@@ -217,6 +219,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/GeometryFactory.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GeometryGraph.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GeometryGraphOperation.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/GeometryTestFactory.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/GraphComponent.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/HCoordinate.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/IntersectionMatrix.Plo \
@@ -346,6 +349,7 @@ WKTWriter.lo: ../io/WKTWriter.cpp
 MarkupSTL.lo: ../io/markup/MarkupSTL.cpp
 Assert.lo: ../util/Assert.cpp
 AssertionFailedException.lo: ../util/AssertionFailedException.cpp
+GeometryTestFactory.lo: ../bigtest/GeometryTestFactory.cpp
 CGAlgorithms.lo: ../algorithm/CGAlgorithms.cpp
 HCoordinate.lo: ../algorithm/HCoordinate.cpp
 LineIntersector.lo: ../algorithm/LineIntersector.cpp
@@ -403,6 +407,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeometryFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeometryGraph.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeometryGraphOperation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GeometryTestFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GraphComponent.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HCoordinate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IntersectionMatrix.Plo@am__quote@
@@ -1104,6 +1109,24 @@ AssertionFailedException.lo: ../util/AssertionFailedException.cpp
 @AMDEP_TRUE@	depfile='$(DEPDIR)/AssertionFailedException.Plo' tmpdepfile='$(DEPDIR)/AssertionFailedException.TPlo' @AMDEPBACKSLASH@
 @AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o AssertionFailedException.lo `test -f '../util/AssertionFailedException.cpp' || echo '$(srcdir)/'`../util/AssertionFailedException.cpp
+
+GeometryTestFactory.o: ../bigtest/GeometryTestFactory.cpp
+@AMDEP_TRUE@	source='../bigtest/GeometryTestFactory.cpp' object='GeometryTestFactory.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/GeometryTestFactory.Po' tmpdepfile='$(DEPDIR)/GeometryTestFactory.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o GeometryTestFactory.o `test -f '../bigtest/GeometryTestFactory.cpp' || echo '$(srcdir)/'`../bigtest/GeometryTestFactory.cpp
+
+GeometryTestFactory.obj: ../bigtest/GeometryTestFactory.cpp
+@AMDEP_TRUE@	source='../bigtest/GeometryTestFactory.cpp' object='GeometryTestFactory.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/GeometryTestFactory.Po' tmpdepfile='$(DEPDIR)/GeometryTestFactory.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o GeometryTestFactory.obj `cygpath -w ../bigtest/GeometryTestFactory.cpp`
+
+GeometryTestFactory.lo: ../bigtest/GeometryTestFactory.cpp
+@AMDEP_TRUE@	source='../bigtest/GeometryTestFactory.cpp' object='GeometryTestFactory.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/GeometryTestFactory.Plo' tmpdepfile='$(DEPDIR)/GeometryTestFactory.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o GeometryTestFactory.lo `test -f '../bigtest/GeometryTestFactory.cpp' || echo '$(srcdir)/'`../bigtest/GeometryTestFactory.cpp
 
 CGAlgorithms.o: ../algorithm/CGAlgorithms.cpp
 @AMDEP_TRUE@	source='../algorithm/CGAlgorithms.cpp' object='CGAlgorithms.o' libtool=no @AMDEPBACKSLASH@
