@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/08/04 08:26:02  strk
+ * comments lift, stack allocation reduced
+ *
  * Revision 1.18  2004/07/27 16:35:47  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -77,62 +80,77 @@ IntersectionMatrix* RelateComputer::computeIM() {
 		//delete e2;
 		return im;
 	}
+
 	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
 	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes((LineIntersector*)li,false);
+
 	// compute intersections between edges of the two input geometries
 	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1],(LineIntersector*)li,false);
 	computeIntersectionNodes(0);
 	computeIntersectionNodes(1);
-	/**
-	* Copy the labelling for the nodes in the parent Geometries.  These override
-	* any labels determined by intersections between the geometries.
-	*/
+
+	/*
+	 * Copy the labelling for the nodes in the parent Geometries.
+	 * These override any labels determined by intersections
+	 * between the geometries.
+	 */
 	copyNodesAndLabels(0);
 	copyNodesAndLabels(1);
-	// complete the labelling for any nodes which only have a label for a single geometry
+
+	/*
+	 * complete the labelling for any nodes which only have a
+	 * label for a single geometry
+	 */
 	//Debug.addWatch(nodes.find(new Coordinate(110, 200)));
 	//Debug.printWatch();
 	labelIsolatedNodes();
 	//Debug.printWatch();
-	// If a proper intersection was found, we can set a lower bound on the IM.
+
+	/*
+	 * If a proper intersection was found, we can set a lower bound
+	 * on the IM.
+	 */
 	computeProperIntersectionIM(intersector,im);
-	/**
-	* Now process improper intersections
-	* (eg where one or other of the geometrys has a vertex at the intersection point)
-	* We need to compute the edge graph at all nodes to determine the IM.
-	*/
+
+	/*
+	 * Now process improper intersections
+	 * (eg where one or other of the geometrys has a vertex at the
+	 * intersection point)
+	 * We need to compute the edge graph at all nodes to determine
+	 * the IM.
+	 */
 	// build EdgeEnds for all intersections
-	EdgeEndBuilder *eeBuilder=new EdgeEndBuilder();
-	vector<EdgeEnd*> *ee0=eeBuilder->computeEdgeEnds((*arg)[0]->getEdges());
+	EdgeEndBuilder eeBuilder;
+	vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds((*arg)[0]->getEdges());
 	insertEdgeEnds(ee0);
-	vector<EdgeEnd*> *ee1=eeBuilder->computeEdgeEnds((*arg)[1]->getEdges());
+	vector<EdgeEnd*> *ee1=eeBuilder.computeEdgeEnds((*arg)[1]->getEdges());
 	insertEdgeEnds(ee1);
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
 	labelNodeEdges();
+
 	/**
-	* Compute the labeling for isolated components
-	* <br>
-	* Isolated components are components that do not touch any other components in the graph.
-	* They can be identified by the fact that they will
-	* contain labels containing ONLY a single element, the one for their parent geometry.
-	* We only need to check components contained in the input graphs, since
-	* isolated components will not have been replaced by new components formed by intersections.
-	*/
+	 * Compute the labeling for isolated components.
+	 * Isolated components are components that do not touch any
+	 * other components in the graph.
+	 * They can be identified by the fact that they will
+	 * contain labels containing ONLY a single element, the one for
+	 * their parent geometry.
+	 * We only need to check components contained in the input graphs,
+	 * since isolated components will not have been replaced by new
+	 * components formed by intersections.
+	 */
 	//debugPrintln("Graph A isolated edges - ");
 	labelIsolatedEdges(0,1);
 	//debugPrintln("Graph B isolated edges - ");
 	labelIsolatedEdges(1,0);
 	// update the IM from all components
 	updateIM(im);
-	//delete e1;
-	//delete e2;
 	delete si1;
 	delete si2;
 	delete intersector;
 	delete ee0;
 	delete ee1;
-	delete eeBuilder;
 	return im;
 }
 
