@@ -7,6 +7,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+	try {
+	cout << "Start:" << endl;
+	
 /*	Coordinate c1(10.531,20.5e-5,30);
 	Coordinate c2(c1);
 	Coordinate c3;
@@ -68,12 +71,58 @@ int main(int argc, char** argv)
 	Point p(c1,pm,10);
 */
 
-	Coordinate c1(10,20,30);
+/*	Coordinate c1(10,20,30);
 	Coordinate c2(1,2,3);
 	CoordinateList cl1;
 	CoordinateList cl2(c1);
 	cl1.add(c1);
 	c1.setCoordinate(c2);
+*/
+
+/*	Point p;
+	cout << p.getNumPoints() << endl;
+	cout << p.isEmpty() << endl;
+
+*/
+/*	Coordinate c2(1,2,3);
+	PrecisionModel pm;
+	Point p1(c2,pm,2);
+	cout << p1.getNumPoints() << endl;
+	cout << p1.isEmpty() << endl;
+	CoordinateList cl=p1.getCoordinates();
+
+	Point p2(p1);
+*/
+
+/*	Coordinate c1(10,20,30);
+	PrecisionModel pm(10,5,1);
+	cout << pm.toString() << endl;
+	Coordinate c2=pm.toInternal(c1);
+	cout << c1.toString() << endl;
+	cout << c2.toString() << endl;
+*/
+/*	IntersectionMatrix im("TF*012TF*aaa");
+	cout << im.matches("TF*012TF*") << endl;
+	cout << im.matches("TF*012TFT") << endl;
+//	cout << im.matches("TF*012TF*aaa") << endl;
+	cout << im.toString() << endl;
+	im.transpose();
+	cout << im.toString() << endl;
+*/
+	
+/*	LineString ls;
+	Point p;
+	cout << ls.isEquivalentClass(&ls) << endl;
+	cout << ls.isEquivalentClass(&p) << endl;
+*/
+
+
+
+
+	cout << "End" << endl;
+	} catch (char *message){
+        cout << message << endl;
+	}
 
 	return 0;
 }

@@ -1,6 +1,4 @@
 #include "geom.h"
-#define FALSE 0
-#define TRUE 1
 
 CoordinateList::CoordinateList() {
 	head=new List();
@@ -20,6 +18,11 @@ void CoordinateList::reset(){
 	current=NULL;
 }
 
+bool CoordinateList::isEmpty() {
+	if (size==0) return true;
+	else return false;
+}
+
 Coordinate CoordinateList::getNext(){
 	if (current==NULL) {
 		current=head;
@@ -32,9 +35,9 @@ Coordinate CoordinateList::getNext(){
 
 bool CoordinateList::hasNext(){
 	if (current==tail) {
-		return FALSE;
+		return false;
 	} else {
-		return TRUE;
+		return true;
 	}
 }
 
@@ -111,6 +114,7 @@ void CoordinateList::remove(){
 			ListPtr tmp=current->next;
 			current=tmp;
 		}
+	size--;
 	}
 }
 

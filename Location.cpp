@@ -17,8 +17,8 @@ char Location::toLocationSymbol(int locationValue) {
 		case UNDEF: //NULL
 			return '-';
 		default:
-			//Temporary replacement for exception
-			printf("Unknown location value: %i\n",locationValue);
-			exit(1);
+			char buffer[255];
+			sprintf(buffer,"Unknown location value: %i\n",locationValue);
+			throw buffer;
 	}
 }

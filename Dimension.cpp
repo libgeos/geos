@@ -10,9 +10,9 @@
  */
 char Dimension::toDimensionSymbol(int dimensionValue) {
 	switch (dimensionValue) {
-		case FALSE:
+		case False:
 			return 'F';
-		case TRUE:
+		case True:
 			return 'T';
 		case DONTCARE:
 			return '*';
@@ -23,9 +23,9 @@ char Dimension::toDimensionSymbol(int dimensionValue) {
 		case A:
 			return '2';
 		default:
-			//temporary replacement for the exception 
-			printf("Unknown dimension value: %i\n",dimensionValue);
-			exit(1);
+			char buffer[255];
+			sprintf(buffer,"Unknown dimension value: %i\n",dimensionValue);
+			throw buffer;
 	}
 }
 
@@ -40,13 +40,11 @@ char Dimension::toDimensionSymbol(int dimensionValue) {
 int Dimension::toDimensionValue(char dimensionSymbol) {
 	switch (dimensionSymbol) {
 		case 'F':
-			return FALSE;
 		case 'f':
-			return FALSE;
+			return False;
 		case 'T':
-			return TRUE;
 		case 't':
-			return TRUE;
+			return True;
 		case '*':
 			return DONTCARE;
 		case '0':
@@ -56,8 +54,8 @@ int Dimension::toDimensionValue(char dimensionSymbol) {
 		case '2':
 			return A;
 		default:
-			//temporary replacement for the exception 
-			printf("Unknown dimension symbol: %c\n",dimensionSymbol);
-			exit(1);
+			char buffer[255];
+			sprintf(buffer,"Unknown dimension symbol: %c\n",dimensionSymbol);
+			throw buffer;
 	}
 }

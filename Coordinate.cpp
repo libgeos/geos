@@ -1,5 +1,15 @@
 #include "geom.h"
 
+void Coordinate::setNull() {
+	x=DoubleNotANumber;
+	y=DoubleNotANumber;
+	z=DoubleNotANumber;
+}
+
+Coordinate Coordinate::getNull() {
+	return Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
+}
+
 /**
  *  Default <code>Coordinate</code> constructor.
  *  Constructs a <code>Coordinate</code> at (0,0,NaN).
@@ -154,8 +164,8 @@ string Coordinate::toString() {
  * "Fixes" this Coordinate to the PrecisionModel grid.
  */
 void Coordinate::makePrecise() {
-//    x = PrecisionModel.makePrecise(x);
-//    y = PrecisionModel.makePrecise(y);
+	x = PrecisionModel::makePrecise(x);
+	y = PrecisionModel::makePrecise(y);
 }
 
 /**
