@@ -15,10 +15,10 @@ GeometryFactory::~GeometryFactory(){}
 
 Geometry* GeometryFactory::toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID) {
 	if (envelope->isNull()) {
-		return new Point(Coordinate(),precisionModel,SRID);
+		return new Point(*(new Coordinate()),precisionModel,SRID);
 	}
 	if (envelope->getMinX()==envelope->getMaxX() && envelope->getMinY()==envelope->getMaxY()) {
-		return new Point(Coordinate(envelope->getMinX(),envelope->getMinY()),precisionModel,SRID);
+		return new Point(*(new Coordinate(envelope->getMinX(),envelope->getMinY())),precisionModel,SRID);
 	}
 	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
 	cl->add(Coordinate(envelope->getMinX(), envelope->getMinY()));
