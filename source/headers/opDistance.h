@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/04/13 12:29:21  strk
+ * GeometryLocation const-correctness.
+ *
  * Revision 1.8  2004/04/13 10:05:51  strk
  * GeometryLocation constructor made const-correct.
  * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
@@ -51,7 +54,7 @@ namespace geos {
  */
 class GeometryLocation {
 private:
-	Geometry *component;
+	const Geometry *component;
 	int segIndex;
 	Coordinate pt;
 public:  
@@ -68,11 +71,11 @@ public:
 	/**
 	* Constructs a GeometryLocation specifying a point inside an area geometry.
 	*/  
-	GeometryLocation(Geometry *newComponent,Coordinate &newPt);
+	GeometryLocation(const Geometry *newComponent, const Coordinate &newPt);
 	/**
 	* Returns the geometry associated with this location.
 	*/
-	Geometry* getGeometryComponent();
+	const Geometry* getGeometryComponent();
 	/**
 	* Returns the segment index for this location. If the location is inside an
 	* area, the index will have the value INSIDE_AREA;

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/13 12:29:21  strk
+ * GeometryLocation const-correctness.
+ *
  * Revision 1.2  2004/04/13 10:05:51  strk
  * GeometryLocation constructor made const-correct.
  * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
@@ -41,7 +44,7 @@ GeometryLocation::GeometryLocation(const Geometry *newComponent, int newSegIndex
 /**
 * Constructs a GeometryLocation specifying a point inside an area geometry.
 */  
-GeometryLocation::GeometryLocation(Geometry *newComponent, const Coordinate &newPt){
+GeometryLocation::GeometryLocation(const Geometry *newComponent, const Coordinate &newPt){
 	component = newComponent;
 	segIndex = INSIDE_AREA;
 	pt = newPt;
@@ -50,7 +53,7 @@ GeometryLocation::GeometryLocation(Geometry *newComponent, const Coordinate &new
 /**
 * Returns the geometry associated with this location.
 */
-Geometry* GeometryLocation::getGeometryComponent() { 
+const Geometry* GeometryLocation::getGeometryComponent() { 
 	return component;
 }
 /**
