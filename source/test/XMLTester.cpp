@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.36  2003/11/12 17:10:01  strk
+ * added missing initialization
+ *
  * Revision 1.35  2003/11/12 15:02:12  strk
  * more cleanup on exception
  *
@@ -76,11 +79,11 @@ using namespace geos;
 #define PRED 128
 
 int main(int argC, char* argV[]) {
-	PrecisionModel *pm;
-	WKTReader *r;
-	WKTWriter *w;
-	Geometry *gA;
-	Geometry *gB;
+	PrecisionModel *pm=NULL;
+	WKTReader *r=NULL;
+	WKTWriter *w=NULL;
+	Geometry *gA=NULL;
+	Geometry *gB=NULL;
 
 try{
 
