@@ -23,8 +23,8 @@ int main(int argC, char* argV[]) {
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
 //	int out=GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT+PRED;
-	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
-//	int out=TEST_DESCR+TEST_RESULT;
+//	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
+	int out=TEST_DESCR+TEST_RESULT;
 	int failed=0;
 	string source="d://test.xml";
 	string precisionModel="";

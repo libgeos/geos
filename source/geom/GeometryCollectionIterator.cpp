@@ -56,7 +56,10 @@ Geometry *GeometryCollectionIterator::next() {
 		throw "NoSuchElementException";
 	}
 	Geometry *obj=parent->getGeometryN(index++);
-	if (typeid(*obj)==typeid(GeometryCollection)) {
+	if ((typeid(*obj)==typeid(GeometryCollection)) ||
+			   (typeid(*obj)==typeid(MultiPoint)) ||
+			   (typeid(*obj)==typeid(MultiLineString)) ||
+			   (typeid(*obj)==typeid(MultiPolygon))) {
 		subcollectionIterator=new GeometryCollectionIterator((GeometryCollection *)obj);
 		// there will always be at least one element in the sub-collection
 		return subcollectionIterator->next();

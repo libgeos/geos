@@ -40,7 +40,7 @@ private:
 	bool isSelfIntersection;
 	//bool intersectionFound;
 	int numIntersections;
-	vector<vector<Node*>*> bdyNodes;
+	vector<vector<Node*>*> *bdyNodes;
 	bool isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1, int segIndex1);
 	bool isBoundaryPoint(LineIntersector *li,vector<vector<Node*>*> *tstBdyNodes);
 	bool isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNodes);

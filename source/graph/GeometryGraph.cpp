@@ -113,8 +113,10 @@ void GeometryGraph::add(Geometry *g) {
 	if (g->isEmpty()) return;
 	// check if this Geometry should obey the Boundary Determination Rule
 	// all collections except MultiPolygons obey the rule
-	if (typeid(*g)==typeid(GeometryCollection)
-		&& !(typeid(*g)==typeid(MultiPolygon)))
+	if ((typeid(*g)==typeid(GeometryCollection)) ||
+			   (typeid(*g)==typeid(MultiPoint)) ||
+			   (typeid(*g)==typeid(MultiLineString)) &&
+			   !(typeid(*g)==typeid(MultiPolygon)))
 			useBoundaryDeterminationRule=true;
 	if (typeid(*g)==typeid(Polygon))
 		addPolygon((Polygon*) g);

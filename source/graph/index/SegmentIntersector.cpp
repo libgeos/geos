@@ -11,6 +11,7 @@ SegmentIntersector::SegmentIntersector(){
 	hasProperInterior=false;
 	numIntersections=0;
 	numTests=0;
+	bdyNodes=NULL;
 }
 
 SegmentIntersector::SegmentIntersector(LineIntersector *newLi,bool newIncludeProper,bool newRecordIsolated){
@@ -23,12 +24,15 @@ SegmentIntersector::SegmentIntersector(LineIntersector *newLi,bool newIncludePro
 	li=newLi;
 	includeProper=newIncludeProper;
 	recordIsolated=newRecordIsolated;
+	bdyNodes=NULL;
 }
 
 void SegmentIntersector::setBoundaryNodes(vector<Node*> *bdyNodes0,vector<Node*> *bdyNodes1){
-	bdyNodes.resize(2);
-	bdyNodes[0]=bdyNodes0;
-	bdyNodes[1]=bdyNodes1;
+	if (bdyNodes==NULL)
+		bdyNodes=new vector<vector<Node*>*>();
+	bdyNodes->resize(2);
+	bdyNodes->at(0)=bdyNodes0;
+	bdyNodes->at(1)=bdyNodes1;
 }
 
 /**
@@ -124,7 +128,7 @@ void SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int se
 			if (li->isProper()) {
 				properIntersectionPoint.setCoordinate(li->getIntersection(0));
 				hasProper=true;
-				if (!isBoundaryPoint(li,&bdyNodes))
+				if (!isBoundaryPoint(li,bdyNodes))
 					hasProperInterior=true;
 			}
 			//if (li.isCollinear())

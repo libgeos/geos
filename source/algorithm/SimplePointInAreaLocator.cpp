@@ -18,7 +18,10 @@ int SimplePointInAreaLocator::locate(Coordinate p,Geometry *geom){
 bool SimplePointInAreaLocator::containsPoint(Coordinate p,Geometry *geom){
 	if (typeid(*geom)==typeid(Polygon)) {
 		return containsPointInPolygon(p,(Polygon*)geom);
-	} else if (typeid(*geom)==typeid(GeometryCollection)) {
+	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
+			   (typeid(*geom)==typeid(MultiPoint)) ||
+			   (typeid(*geom)==typeid(MultiLineString)) ||
+			   (typeid(*geom)==typeid(MultiPolygon))) {
 		GeometryCollectionIterator geomi((GeometryCollection*)geom);
 		while (geomi.hasNext()) {
 			Geometry *g2=geomi.next();

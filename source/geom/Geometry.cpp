@@ -263,7 +263,7 @@ bool Geometry::isEquivalentClass(Geometry *other){
 }
 
 void Geometry::checkNotGeometryCollection(Geometry *g){
-	if (typeid(*g)==typeid(GeometryCollection))
+	if ((typeid(*g)==typeid(GeometryCollection)))
 		throw "IllegalArgumentException: This method does not support GeometryCollection arguments\n";
 }
 
