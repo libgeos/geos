@@ -162,13 +162,11 @@ STRAbstractNode::computeBounds()
 {
 	Envelope* bounds=NULL;
 	vector<Boundable*> *b=getChildBoundables();
-	for(unsigned int i=0;i<b->size();i++) {
+	unsigned int bsize=b->size();
+	if ( bsize ) bounds=new Envelope(*(Envelope*)(*b)[0]->getBounds());
+	for(unsigned int i=1; i<bsize; i++) {
 		Boundable* childBoundable=(*b)[i];
-		if (bounds==NULL) {
-			bounds=new Envelope(*(Envelope*)childBoundable->getBounds());
-		} else {
-			bounds->expandToInclude((Envelope*)childBoundable->getBounds());
-		}
+		bounds->expandToInclude((Envelope*)childBoundable->getBounds());
 	}
 	return bounds;
 }
@@ -207,6 +205,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2004/11/08 18:33:47  strk
+ * Just another small improvement.
+ *
  * Revision 1.16  2004/11/08 15:58:13  strk
  * More performance tuning.
  *
