@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2005/02/17 09:56:31  strk
+ * Commented out unused variable.
+ *
  * Revision 1.16  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
@@ -244,7 +247,7 @@ OffsetCurveBuilder::addPt(const Coordinate &pt)
 	precisionModel->makePrecise(&bufPt);
 
 	// don't add duplicate points
-	const Coordinate *lastPt=NULL;
+	//const Coordinate *lastPt=NULL;
 	int last=ptList->getSize()-1;
 	if ( last>=0 && bufPt==ptList->getAt(last) ) return;
 
