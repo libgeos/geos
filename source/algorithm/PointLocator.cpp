@@ -85,7 +85,7 @@ int PointLocator::locate(Coordinate p,LinearRing *ring) {
 	if (cga->isOnLine(p,ring->getCoordinates())) {
 		return Location::BOUNDARY;
 	}
-	if (cga->isPointInPolygon(p,ring->getCoordinates()))
+	if (cga->isPointInRing(p,ring->getCoordinates()))
 		return Location::INTERIOR;
 	return Location::EXTERIOR;
 }

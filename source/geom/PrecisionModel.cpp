@@ -98,6 +98,20 @@ string PrecisionModel::toString() {
 	return result;
 }
 
+/**
+*  Sets <code>p1</code> to the value of external point p0
+*  rounded to this precision model.
+*
+*@param  p0  the original coordinate
+*@param  p1  the coordinate whose values will be changed to the
+*      external representation of <code>internal</code>
+*/
+void PrecisionModel::round(Coordinate p0,Coordinate p1) {
+	toInternal(p0,&p1);
+	toExternal(p1,&p1);
+}
+
+
 PrecisionModel::~PrecisionModel(){}
 
 bool operator==(PrecisionModel a, PrecisionModel b) {

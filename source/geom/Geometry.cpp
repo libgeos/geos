@@ -340,6 +340,42 @@ int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) {
 	return 0;
 }
 
+/**
+*  Returns the minimum distance between this <code>Geometry</code>
+*  and the <code>Geometry</code> g
+*
+*@param  g  the <code>Geometry</code> from which to compute the distance
+*/
+double Geometry::distance(Geometry *g) {
+//!!! External Dependency
+//	return DistanceOp::distance(this,g);
+	return 0.0;
+}
+
+/**
+*  Returns the area of this <code>Geometry</code>.
+*  Areal Geometries have a non-zero area.
+*  They override this function to compute the area.
+*  Others return 0.0
+*
+*@return the area of the Geometry
+*/
+double Geometry::getArea() {
+	return 0.0;
+}
+
+/**
+*  Returns the length of this <code>Geometry</code>.
+*  Linear geometries return their length.
+*  Areal geometries return their perimeter.
+*  They override this function to compute the area.
+*  Others return 0.0
+*
+*@return the length of the Geometry
+*/
+double Geometry::getLength() {
+	return 0.0;
+}
 
 
 Geometry::~Geometry(){}

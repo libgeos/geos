@@ -163,7 +163,7 @@ bool EdgeRing::containsPoint(Coordinate p){
 	if (!env.contains(p)) return false;
 //External Dependency
 //	if (!cga.isPointInPolygon(p, shell.getCoordinates()) ) return false;
-	for (vector<EdgeRing*>::iterator i=holes.begin();i<=holes.end();i++) {
+	for (vector<EdgeRing*>::iterator i=holes.begin();i<holes.end();i++) {
 		EdgeRing *hole=*i;
 		if (hole->containsPoint(p))
 			return false;

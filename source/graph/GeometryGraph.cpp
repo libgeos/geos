@@ -28,14 +28,12 @@ GeometryGraph::GeometryGraph(){
 //	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
 	newPM=NULL;
 	useBoundaryDeterminationRule=false;
-	esi=new SimpleMCSweepLineIntersector();
 }
 
 GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom) {
 	precisionModel=NULL;
 	newPM=NULL;
 	useBoundaryDeterminationRule=false;
-	esi=new SimpleMCSweepLineIntersector();
 	argIndex=newArgIndex;
 	parentGeom=newParentGeom;
 	if (parentGeom!=NULL) {
@@ -43,6 +41,19 @@ GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom) {
 		SRID=parentGeom->getSRID();
 		add(parentGeom);
 	}
+}
+
+EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {
+	// various options for computing intersections, from slowest to fastest
+
+	//private EdgeSetIntersector esi = new SimpleEdgeSetIntersector();
+	//private EdgeSetIntersector esi = new MonotoneChainIntersector();
+	//private EdgeSetIntersector esi = new NonReversingChainIntersector();
+	//private EdgeSetIntersector esi = new SimpleSweepLineIntersector();
+	//private EdgeSetIntersector esi = new MCSweepLineIntersector();
+
+	//return new SimpleEdgeSetIntersector();
+	return new SimpleMCSweepLineIntersector();
 }
 
 /**
@@ -77,7 +88,7 @@ CoordinateList GeometryGraph::getBoundaryPoints() {
 	vector<Node*> coll(*getBoundaryNodes());
 	CoordinateList pts((int)coll.size());
 	int i=0;
-	for (vector<Node*>::iterator it=coll.begin();it<=coll.end();it++) {
+	for (vector<Node*>::iterator it=coll.begin();it<coll.end();it++) {
 		Node *node=*it;
 		pts.setAt(node->getCoordinate(),i++);
 	}
@@ -89,7 +100,7 @@ Edge* GeometryGraph::findEdge(LineString *line){
 }
 
 void GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist) {
-	for (vector<Edge*>::iterator i=edges.begin();i<=edges.end();i++) {
+	for (vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
 		Edge *e=*i;
 		e->eiList->addSplitEdges(edgelist);
 	}
@@ -207,27 +218,24 @@ void GeometryGraph::addPoint(Coordinate pt) {
 	insertPoint(argIndex,pt,Location::INTERIOR);
 }
 
-//!!!External Dependency
 SegmentIntersector* GeometryGraph::computeSelfNodes(LineIntersector *li){
-//	SegmentIntersector si=new SegmentIntersector(li, true, false);
-//	//EdgeSetIntersector esi = new MCQuadIntersector();
-//	esi.computeIntersections(edges, si);
-//	//System.out.println("SegmentIntersector # tests = " + si.numTests);
+	SegmentIntersector *si=new SegmentIntersector(li,true,false);
+	//EdgeSetIntersector esi = new MCQuadIntersector();
+    EdgeSetIntersector *esi=createEdgeSetIntersector();
+	esi->computeIntersections(edges,si);
+	//System.out.println("SegmentIntersector # tests = " + si.numTests);
 	addSelfIntersectionNodes(argIndex);
-//	return si;
-	return NULL;
+	return si;
 }
 
-//!!!External Dependency
 SegmentIntersector* GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 													LineIntersector *li,
 													bool includeProper){
-//	SegmentIntersector si = new SegmentIntersector(li, includeProper, true);
-//	si.setBoundaryNodes(this.getBoundaryNodes(), g.getBoundaryNodes());
-//	EdgeSetIntersector esi = new SimpleMCSweepLineIntersector();
-//	esi.computeIntersections(edges, g.edges, si);
-//	return si;
-	return NULL;
+	SegmentIntersector *si=new SegmentIntersector(li,includeProper,true);
+	si->setBoundaryNodes(getBoundaryNodes(),g->getBoundaryNodes());
+	EdgeSetIntersector *esi=createEdgeSetIntersector();
+	esi->computeIntersections(edges,g->edges,si);
+	return si;
 }
 
 void GeometryGraph::insertPoint(int argIndex, Coordinate coord, int onLocation){
@@ -260,7 +268,7 @@ void GeometryGraph::insertBoundaryPoint(int argIndex,Coordinate coord){
 }
 
 void GeometryGraph::addSelfIntersectionNodes(int argIndex){
-	for (vector<Edge*>::iterator i=edges.begin();i<=edges.end();i++) {
+	for (vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		vector<EdgeIntersection*> eil=e->eiList->list;
@@ -284,5 +292,9 @@ void GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate coord,int lo
 		insertBoundaryPoint(argIndex,coord);
 	else
 		insertPoint(argIndex,coord,loc);
+}
+
+vector<Edge*> GeometryGraph::getEdges() {
+	return edges;
 }
 

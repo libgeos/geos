@@ -26,7 +26,7 @@ Label* DirectedEdgeStar::getLabel() {
 
 int DirectedEdgeStar::getOutgoingDegree(){
 	int degree = 0;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		if (de->isInResult()) degree++;
 	}
@@ -35,7 +35,7 @@ int DirectedEdgeStar::getOutgoingDegree(){
 
 int DirectedEdgeStar::getOutgoingDegree(EdgeRing *er){
 	int degree = 0;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		if (de->getEdgeRing()==er) degree++;
 	}
@@ -76,7 +76,7 @@ void DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> geom){
 	// determine the overall labelling for this DirectedEdgeStar
 	// (i.e. for the node it is based at)
 	label=new Label(Location::UNDEF);
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *ee=*it;
 		Edge *e=ee->getEdge();
 		Label *eLabel=e->getLabel();
@@ -93,7 +93,7 @@ void DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> geom){
  * merge the label from the sym dirEdge into the label
  */
 void DirectedEdgeStar::mergeSymLabels(){
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
 		deLabel->merge(*(de->getSym()->getLabel()));
@@ -104,7 +104,7 @@ void DirectedEdgeStar::mergeSymLabels(){
  * Update incomplete dirEdge labels from the labelling for the node
  */
 void DirectedEdgeStar::updateLabelling(Label *nodeLabel){
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
 		deLabel->setAllLocationsIfNull(0,nodeLabel->getLocation(0));
@@ -115,7 +115,7 @@ void DirectedEdgeStar::updateLabelling(Label *nodeLabel){
 vector<DirectedEdge*>* DirectedEdgeStar::getResultAreaEdges() {
 	if (resultAreaEdgeList!=NULL) return resultAreaEdgeList;
 	resultAreaEdgeList=new vector<DirectedEdge*>();
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		if (de->isInResult() || de->getSym()->isInResult())
 		resultAreaEdgeList->push_back(de);
@@ -242,7 +242,7 @@ void DirectedEdgeStar::findCoveredLineEdges(){
 	 * - EXTERIOR if the edge is incoming
 	 */
 	int startLoc=Location::UNDEF;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *nextOut=(DirectedEdge*) *it;
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (!nextOut->isLineEdge()) {
@@ -264,7 +264,7 @@ void DirectedEdgeStar::findCoveredLineEdges(){
 	 * If L edges are found, mark them as covered if they are in the interior
 	 */
 	int currLoc=startLoc;
-	for (it=getIterator();it<=edgeList->end();it++) {
+	for (it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *nextOut=(DirectedEdge*) *it;
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (nextOut->isLineEdge()) {
@@ -307,7 +307,7 @@ int DirectedEdgeStar::computeDepths(int startIndex,int endIndex,int startDepth){
 
 string DirectedEdgeStar::print() {
 	string out="DirectedEdgeStar: " + getCoordinate().toString();
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		out+="out ";
 		out+=de->print();

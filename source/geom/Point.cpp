@@ -70,6 +70,10 @@ void Point::apply(GeometryFilter *filter) {
 	filter->filter(this);
 }
 
+void Point::apply(GeometryComponentFilter *filter) {
+	filter->filter(this);
+}
+
 bool Point::equalsExact(Geometry *other) {
 	if (!isEquivalentClass(other)) {
 		return false;

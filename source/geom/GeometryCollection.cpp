@@ -143,4 +143,42 @@ int GeometryCollection::compareToSameClass(GeometryCollection *gc) {
 	return compare(geometries, gc->geometries);
 }
 
+Coordinate GeometryCollection::getCoordinate() {
+	if (isEmpty()) return Coordinate();
+	return geometries.at(0)->getCoordinate();
+}
+
+/**
+*  Returns the area of this <code>GeometryCollection</code>
+*
+*@return the area of the polygon
+*/
+double GeometryCollection::getArea() {
+	double area=0.0;
+	for(unsigned int i=0;i<geometries.size();i++) {
+		area+=geometries.at(i)->getArea();
+	}
+	return area;
+}
+
+/**
+*  Returns the area of this <code>MultiLineString</code>
+*
+*@return the area of the polygon
+*/
+double GeometryCollection::getLength() {
+	double sum=0.0;
+	for(unsigned int i=0;i<geometries.size();i++) {
+		sum+=((LineString*)geometries.at(i))->getLength();
+	}
+	return sum;
+}
+
+void GeometryCollection::apply(GeometryComponentFilter *filter) {
+	filter->filter(this);
+	for(unsigned int i=0;i<geometries.size();i++) {
+		geometries.at(i)->apply(filter);
+	}
+}
+
 GeometryCollection::~GeometryCollection(void){}

@@ -1,6 +1,7 @@
 #include "geom.h"
 #include <algorithm>
 #include <typeinfo>
+#include "geosAlgorithm.h"
 
 
 LineString::LineString(){
@@ -186,5 +187,23 @@ bool LineString::isEquivalentClass(Geometry *other) {
 
 int LineString::compareToSameClass(LineString *ls) {
 	return compare(points.toVector(),ls->points.toVector());
+}
+
+Coordinate LineString::getCoordinate() {
+	if (isEmpty()) return Coordinate();
+	return points.getAt(0);
+}
+
+/**
+*  Returns the length of this <code>LineString</code>
+*
+*@return the area of the polygon
+*/
+double LineString::getLength() {
+	return CGAlgorithms::length(points);
+}
+
+void LineString::apply(GeometryComponentFilter *filter) {
+	filter->filter(this);
 }
 

@@ -15,7 +15,7 @@ void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> edges0,vec
 }
 
 void SimpleMCSweepLineIntersector::add(vector<Edge*> edges,int geomIndex){
-	for(vector<Edge*>::iterator i=edges.begin();i<=edges.end();i++) {
+	for(vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
 		Edge *edge=*i;
 		add(edge,geomIndex);
 	}

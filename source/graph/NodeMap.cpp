@@ -54,9 +54,6 @@ vector<Node*> NodeMap::getBoundaryNodes(int geomIndex){
 		if (node->getLabel()->getLocation(geomIndex)==Location::BOUNDARY)
 			bdyNodes.push_back(node);
 	}
-		Node *node=nodeMap.end()->second;
-		if (node->getLabel()->getLocation(geomIndex)==Location::BOUNDARY)
-			bdyNodes.push_back(node);
 	return vector<Node*>(bdyNodes.begin(),bdyNodes.end());
 }
 
@@ -67,7 +64,5 @@ string NodeMap::print(){
 		Node *node=it->second;
 		out+=node->print();
 	}
-		Node *node=nodeMap.end()->second;
-		out+=node->print();
 	return out;
 }

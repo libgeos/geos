@@ -1,6 +1,21 @@
 #include "geosAlgorithm.h"
 #include "platform.h"
 
+/**
+* Computes the (approximate) intersection point between two line segments
+* using homogeneous coordinates.
+* <p>
+* Note that this algorithm is
+* not numerically stable; i.e. it can produce intersection points which
+* lie outside the envelope of the line segments themselves.  In order
+* to increase the precision of the calculation input points should be normalized
+* before passing them to this routine.
+*/
+Coordinate HCoordinate::intersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2) {
+	HCoordinate *intHCoord=new HCoordinate(HCoordinate(HCoordinate(p1),HCoordinate(p2)),HCoordinate(HCoordinate(q1),HCoordinate(q2)));
+	return intHCoord->getCoordinate();
+}
+
 HCoordinate::HCoordinate(){
 	x = 0.0;
 	y = 0.0;

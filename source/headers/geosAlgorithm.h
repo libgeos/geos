@@ -39,7 +39,7 @@ public:
 	*
 	* @return true if the point lies in the interior of the ring
 	*/
-	virtual bool isPointInPolygon(Coordinate p,CoordinateList ring)=0;
+	virtual bool isPointInRing(Coordinate p,CoordinateList ring)=0;
 	/**
 	* Test whether a point lies on a linestring.
 	*
@@ -64,11 +64,15 @@ public:
 	* @return 0 if q is collinear with p1-p2
 	*/
 	virtual int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q)=0;
-
+	static double distancePointLine(Coordinate p,Coordinate A,Coordinate B);
+	static double distanceLineLine(Coordinate A,Coordinate B,Coordinate C,Coordinate D);
+	static double signedArea(CoordinateList ring);
+	static double length(CoordinateList pts);
 };
 
 class HCoordinate {
 public:
+	static Coordinate intersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2);
 	double x,y,w;
 	HCoordinate();
 	HCoordinate(double _x, double _y, double _w);
@@ -152,6 +156,19 @@ private:
 	bool between(Coordinate p1,Coordinate p2,Coordinate q);
 	int computeCollinearIntersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2);
 	Coordinate intersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2);
+	void normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt);
+	double smallestInAbsValue(double x1,double x2,double x3,double x4);
+};
+
+class NonRobustLineIntersector: public LineIntersector {
+public:
+	NonRobustLineIntersector();
+	void computeIntersection(Coordinate p,Coordinate p1,Coordinate p2);
+protected:
+	int computeIntersect(Coordinate p1,Coordinate p2,Coordinate p3,Coordinate p4);
+private:
+	int computeCollinearIntersection(Coordinate p1,Coordinate p2,Coordinate p3,Coordinate p4);
+	double rParameter(Coordinate p1,Coordinate p2,Coordinate p);
 };
 
 class RobustCGAlgorithms: public CGAlgorithms {
@@ -159,12 +176,23 @@ public:
 	static int orientationIndex(Coordinate p1,Coordinate p2,Coordinate q);
 	RobustCGAlgorithms();
 	bool isCCW(CoordinateList ring);
-	bool isPointInPolygon(Coordinate p,CoordinateList ring);
+	bool isPointInRing(Coordinate p,CoordinateList ring);
 	bool isOnLine(Coordinate p,CoordinateList pt);
 	int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q);
 private:
 	RobustLineIntersector* lineIntersector;
 	bool isInEnvelope(Coordinate p,CoordinateList ring);
+};
+
+class NonRobustCGAlgorithms: public CGAlgorithms {
+public:
+	NonRobustCGAlgorithms();
+	bool isPointInRing(Coordinate p,CoordinateList ring);
+	bool isOnLine(Coordinate p,CoordinateList pt);
+	bool isCCW(CoordinateList ring);
+	int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q);
+protected:
+	LineIntersector *li;
 };
 
 class SimplePointInAreaLocator {

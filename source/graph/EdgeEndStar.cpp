@@ -105,7 +105,7 @@ void EdgeEndStar::computeLabelling(vector<GeometryGraph*> geom){
 	* area label propagation, symLabel merging, then finally null label resolution.
 	*/
 	bool hasDimensionalCollapseEdge[2]={false,false};
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		for(int geomi=0; geomi<2; geomi++) {
@@ -113,7 +113,7 @@ void EdgeEndStar::computeLabelling(vector<GeometryGraph*> geom){
 				hasDimensionalCollapseEdge[geomi]=true;
 		}
 	}
-	for (it=getIterator();it<=edgeList->end();it++) {
+	for (it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		for(int geomi=0;geomi<2;geomi++){
@@ -133,7 +133,7 @@ void EdgeEndStar::computeLabelling(vector<GeometryGraph*> geom){
 
 void EdgeEndStar::computeEdgeEndLabels(){
 	// Compute edge label for each EdgeEnd
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		e->computeLabel();
 	}
@@ -166,7 +166,7 @@ bool EdgeEndStar::checkAreaLabelsConsistent(int geomIndex){
 	int startLoc=startLabel->getLocation(geomIndex,Position::LEFT);
 	Assert::isTrue(startLoc!=Location::UNDEF, "Found unlabelled area edge");
 	int currLoc=startLoc;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *eLabel=e->getLabel();
 		// we assume that we are only checking a area
@@ -192,7 +192,7 @@ void EdgeEndStar::propagateSideLabels(int geomIndex){
 	// As we move around the ring we move from the right to the left side of the edge
 	int startLoc=Location::UNDEF ;
 	// initialize loc to location of last L side (if any)
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		if (label->isArea(geomIndex) && label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
@@ -201,7 +201,7 @@ void EdgeEndStar::propagateSideLabels(int geomIndex){
 		// no labelled sides found, so no labels to propagate
 	if (startLoc==Location::UNDEF) return;
 	int currLoc=startLoc;
-	for (it=getIterator();it<=edgeList->end();it++) {
+	for (it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		// set null ON values to be in current location
@@ -245,7 +245,7 @@ int EdgeEndStar::findIndex(EdgeEnd *eSearch){
 
 string EdgeEndStar::print(){
 	string out="EdgeEndStar:   " + getCoordinate().toString();
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		out+=e->print();
 	}

@@ -125,18 +125,67 @@ int RobustLineIntersector::computeCollinearIntersection(Coordinate p1,Coordinate
 }
 
 Coordinate RobustLineIntersector::intersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2) {
-	HCoordinate *l1=new HCoordinate(HCoordinate(p1),HCoordinate(p2));
-	HCoordinate *l2=new HCoordinate(HCoordinate(q1),HCoordinate(q2));
-	HCoordinate intHCoord(*l1,*l2);
+	//HCoordinate *l1=new HCoordinate(HCoordinate(p1),HCoordinate(p2));
+	//HCoordinate *l2=new HCoordinate(HCoordinate(q1),HCoordinate(q2));
+	//HCoordinate intHCoord(*l1,*l2);
+	//Coordinate intPt;
+	//intPt.setNull();
+	//try {
+	//	intPt.setCoordinate(intHCoord.getCoordinate());
+	//} catch (NotRepresentableException e) {
+	//	Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
+	//}
+	//if (makePrecise) {
+	//	intPt.makePrecise();
+	//}
+	//return Coordinate(intPt);
+
+	Coordinate *n1=new Coordinate(p1);
+	Coordinate *n2=new Coordinate(p2);
+	Coordinate *n3=new Coordinate(q1);
+	Coordinate *n4=new Coordinate(q2);
+	Coordinate *normPt=new Coordinate();
+	normalize(n1, n2, n3, n4, normPt);
 	Coordinate intPt;
-	intPt.setNull();
 	try {
-		intPt.setCoordinate(intHCoord.getCoordinate());
+		intPt.setCoordinate(HCoordinate::intersection(*n1,*n2,*n3,*n4));
 	} catch (NotRepresentableException e) {
 		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
-	}
+    }
+	intPt.x+=normPt->x;
+	intPt.y+=normPt->y;
 	if (makePrecise) {
 		intPt.makePrecise();
 	}
 	return Coordinate(intPt);
+}
+
+void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt){
+	normPt->x=smallestInAbsValue(n1->x,n2->x,n3->x,n4->x);
+	normPt->y=smallestInAbsValue(n1->y,n2->y,n3->y,n4->y);
+	n1->x-=normPt->x;
+	n1->y-=normPt->y;
+	n2->x-=normPt->x;
+	n2->y-=normPt->y;
+	n3->x-=normPt->x;
+	n3->y-=normPt->y;
+	n4->x-=normPt->x;
+	n4->y-=normPt->y;
+}
+
+double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4){
+	double x=x1;
+	double xabs=fabs(x);
+	if(fabs(x2)<xabs) {
+		x=x2;
+		xabs=fabs(x2);
+	}
+	if(fabs(x3)<xabs) {
+		x=x3;
+		xabs=fabs(x3);
+	}
+	if(fabs(x4)<xabs) {
+		x=x4;
+	}
+	return x;
 }

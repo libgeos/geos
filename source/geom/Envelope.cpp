@@ -2,6 +2,15 @@
 #include "stdio.h"
 
 /**
+* Compute the distance between two points specified by their ordinate values
+*/
+double Envelope::distance(double x0,double y0,double x1,double y1) {
+	double dx=x1-x0;
+	double dy=y1-y0;
+	return sqrt(dx*dx+dy*dy);
+}
+
+ /**
  *  Creates a null <code>Envelope</code>.
  */
 Envelope::Envelope(void) {
@@ -366,6 +375,41 @@ string Envelope::toString() {
 	result.append(buffer);
 	result.append("");
 	return result;
+}
+
+/**
+* Computes the distance between this and another
+* <code>Envelope</code>.
+* The distance between overlapping Envelopes is 0.  Otherwise, the
+* distance is the Euclidean distance between the closest points.
+*/
+double Envelope::distance(Envelope env) {
+	if (overlaps(env)) return 0;
+	if (maxx<env.minx) {
+		// this is left of env
+		if (maxy<env.miny) {
+			// this is below left of env
+			return distance(maxx,maxy,env.minx,env.miny);
+		} else if (miny>env.maxy) {
+			// this is above left of env
+			return distance(maxx,miny,env.minx,env.maxy);
+		} else {
+			// this is directly left of env
+			return env.minx-maxx;
+		}
+	} else {
+		// this is right of env
+		if (maxy<env.miny) {
+			// this is below right of env
+			return distance(minx,maxy,env.maxx,env.miny);
+		} else if (miny>env.maxy) {
+			// this is above right of env
+			return distance(minx,miny,env.maxx,env.maxy);
+		} else {
+			// this is directly right of env
+			return minx-env.maxx;
+		}
+	}
 }
 
 /// Checks if two Envelopes are equal

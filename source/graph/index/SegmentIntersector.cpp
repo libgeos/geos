@@ -139,7 +139,7 @@ bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<vector<Node*
 }
 
 bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNodes){
-	for(vector<Node*>::iterator i=tstBdyNodes->begin();i<=tstBdyNodes->end();i++) {
+	for(vector<Node*>::iterator i=tstBdyNodes->begin();i<tstBdyNodes->end();i++) {
 		Node *node=*i;
 		Coordinate pt(node->getCoordinate());
 		if (li->isIntersection(pt)) return true;

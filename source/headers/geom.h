@@ -116,6 +116,7 @@ public:
 	Coordinate toExternal(Coordinate internal);
 	void toExternal(Coordinate internal, Coordinate *external);
 	string toString();
+	void round(Coordinate p0,Coordinate p1);
 private:
 	int modelType;
 	double scale;
@@ -143,6 +144,31 @@ public:
    */
    virtual void filter(Coordinate coord)=0;
 };
+
+/**
+ *  <code>Geometry</code> classes support the concept of applying
+ *  a <code>GeometryComponentFilter</code>
+ *  filter to the <code>Geometry</code>.
+ *  The filter is applied to every component of the <code>Geometry</code>
+ *  which is itself a <code>Geometry</code>.
+ *  A <code>GeometryComponentFilter</code> filter can either
+ *  record information about the <code>Geometry</code>
+ *  or change the <code>Geometry</code> in some way.
+ *  <code>GeometryComponentFilter</code>
+ *  is an example of the Gang-of-Four Visitor pattern.
+ *
+ */
+class Geometry;
+class GeometryComponentFilter {
+public:
+	/**
+	*  Performs an operation with or on <code>geom</code>.
+	*
+	*@param  geom  a <code>Geometry</code> to which the filter is applied.
+	*/
+	virtual void filter(Geometry *geom)=0;
+};
+
 
 /**
  *  Constants representing the dimensions of a point, a curve and a surface.
@@ -213,8 +239,9 @@ public:
 	bool overlaps(double x, double y);
 	bool overlaps(Envelope other);
 	string toString(void);
-
+	double distance(Envelope env);
 private:
+	static double distance(double x0,double y0,double x1,double y1);
 	double minx;	/// the minimum x-coordinate
 	double maxx;	/// the maximum x-coordinate
 	double miny;	/// the minimum y-coordinate
@@ -264,6 +291,7 @@ public:
 	virtual int getSRID();
 	virtual void setSRID(int newSRID);
 	virtual PrecisionModel getPrecisionModel();
+	virtual Coordinate getCoordinate(){return Coordinate();}; //Abstract
 	virtual CoordinateList getCoordinates(){return CoordinateList();}; //Abstract
 	virtual int getNumPoints(){return 0;}; //Abstract
 	virtual bool isSimple() {return false;}; //Abstract
@@ -295,10 +323,13 @@ public:
 	virtual bool equalsExact(Geometry *other){return false;}; //Abstract
 	virtual void apply(CoordinateFilter *filter){}; //Abstract
 	virtual void apply(GeometryFilter *filter){}; //Abstract
+	virtual void apply(GeometryComponentFilter *filter){};
 	//public Object clone() // Replaced by copy constructor
 	virtual void normalize(){}; //Abstract
 	virtual int compareTo(Geometry *geom);
-
+	virtual double distance(Geometry *g);
+	virtual double getArea();
+	virtual double getLength();
 	virtual ~Geometry(void);
 protected:
 	PrecisionModel precisionModel;
@@ -356,9 +387,22 @@ public:
 	Coordinate p0; /// Segment start
 	Coordinate p1; /// Segemnt end
 	LineSegment(void);
+	LineSegment(const LineSegment &ls);
 	LineSegment(Coordinate c0, Coordinate c1);
 	virtual ~LineSegment(void);
 	virtual void setCoordinates(Coordinate c0, Coordinate c1);
+	virtual Coordinate getCoordinate(int i);
+	virtual void setCoordinates(LineSegment ls);
+	virtual void reverse();
+	virtual void normalize();
+	virtual double angle();
+	virtual double distance(LineSegment ls);
+	virtual double distance(Coordinate p);
+	virtual double projectionFactor(Coordinate p);
+	virtual Coordinate project(Coordinate p);
+	virtual int compareTo(LineSegment other);
+	virtual bool equalsTopo(LineSegment other);
+	virtual string toString();
 };
 
 class IntersectionMatrix {
@@ -441,6 +485,7 @@ public:
 bool operator==(Coordinate a, Coordinate b);
 bool operator==(Envelope a, Envelope b);
 bool operator==(PrecisionModel a, PrecisionModel b);
+bool operator==(LineSegment a, LineSegment b);
 
 bool lessThen(Coordinate a,Coordinate b);
 bool greaterThen(Geometry *first, Geometry *second);
@@ -470,7 +515,11 @@ public:
 	virtual bool equalsExact(Geometry *other);
 	virtual void apply(CoordinateFilter *filter);
 	virtual void apply(GeometryFilter *filter);
+	virtual void apply(GeometryComponentFilter *filter);
 	virtual void normalize();
+	virtual Coordinate getCoordinate();
+	virtual double getArea();
+	virtual double getLength();
 protected:
 	vector<Geometry *> geometries;
 	virtual Envelope computeEnvelopeInternal();
@@ -538,6 +587,7 @@ public:
 	Geometry getBoundary();
 	void apply(CoordinateFilter *filter);
 	void apply(GeometryFilter *filter);
+	void apply(GeometryComponentFilter *filter);
 	bool equalsExact(Geometry *other);
 	void normalize(void) { };
 protected:
@@ -590,8 +640,11 @@ public:
 	virtual bool equalsExact(Geometry *other);
 	virtual void apply(CoordinateFilter *filter);
 	virtual void apply(GeometryFilter *filter);
+	virtual void apply(GeometryComponentFilter *filter);
 	virtual void normalize();
 	virtual int compareToSameClass(LineString *ls); //was protected
+	virtual Coordinate getCoordinate();
+	virtual double getLength();
 protected:
 	CoordinateList points;
 	virtual Envelope computeEnvelopeInternal();
@@ -644,6 +697,10 @@ public:
 	Geometry convexHull();
 	void normalize();
 	int compareToSameClass(Polygon *p); //was protected
+	Coordinate getCoordinate();
+	double getArea();
+	double getLength();
+	void apply(GeometryComponentFilter *filter);
 protected:
 	LinearRing *shell;
 	vector<Geometry *> holes; //Actually vector<LinearRing *>

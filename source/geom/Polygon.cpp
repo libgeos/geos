@@ -1,5 +1,6 @@
 #include "geom.h"
 #include <typeinfo>
+#include "geosAlgorithm.h"
 
 Polygon::Polygon(){}
 Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID), holes(p.holes) {
@@ -186,6 +187,43 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 //	}
 }
 
+Coordinate Polygon::getCoordinate() {
+	return shell->getCoordinate();
+}
 
+/**
+*  Returns the area of this <code>Polygon</code>
+*
+*@return the area of the polygon
+*/
+double Polygon::getArea() {
+	double area=0.0;
+	area+=fabs(CGAlgorithms::signedArea(shell->getCoordinates()));
+	for(unsigned int i=0;i<holes.size();i++) {
+		area-=fabs(CGAlgorithms::signedArea(holes.at(i)->getCoordinates()));
+	}
+	return area;
+}
+
+/**
+*  Returns the perimeter of this <code>Polygon</code>
+*
+*@return the perimeter of the polygon
+*/
+double Polygon::getLength() {
+	double len=0.0;
+	len+=shell->getLength();
+	for(unsigned int i=0;i<holes.size();i++) {
+		len+=holes.at(i)->getLength();
+	}
+	return len;
+}
+
+void Polygon::apply(GeometryComponentFilter *filter) {
+	shell->apply(filter);
+	for(unsigned int i=0;i<holes.size();i++) {
+		holes.at(i)->apply(filter);
+	}
+}
 
 Polygon::~Polygon(){}

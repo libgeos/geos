@@ -1,12 +1,15 @@
 #include "graph.h"
 
-/**
+CGAlgorithms* PlanarGraph::cga=new RobustCGAlgorithms();
+LineIntersector* PlanarGraph::li=new RobustLineIntersector();
+
+ /**
  * For nodes in the vector, link the DirectedEdges at the node that are in the result.
  * This allows clients to link only a subset of nodes in the graph, for
  * efficiency (because they know that only a subset is of interest).
  */
 void linkResultDirectedEdges(vector<Node*> allNodes){
-	for(vector<Node*>::iterator nodeit=allNodes.begin();nodeit<=allNodes.end();nodeit++) {
+	for(vector<Node*>::iterator nodeit=allNodes.begin();nodeit<allNodes.end();nodeit++) {
 		Node *node=*nodeit;
 		((DirectedEdgeStar*) node->getEdges())->linkResultDirectedEdges();
 	}
@@ -71,7 +74,7 @@ Node* PlanarGraph::find(Coordinate coord) {
 */
 void PlanarGraph::addEdges(vector<Edge*> edgesToAdd){
 	// create all the nodes for the edges
-	for (vector<Edge*>::iterator it=edgesToAdd.begin();it<=edgesToAdd.end();it++) {
+	for (vector<Edge*>::iterator it=edgesToAdd.begin();it<edgesToAdd.end();it++) {
 		Edge *e=*it;
 		edges.push_back(e);
 		DirectedEdge *de1=new DirectedEdge(e, true);
@@ -93,8 +96,6 @@ void PlanarGraph::linkResultDirectedEdges(){
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkResultDirectedEdges();
 	}
-	Node *node=(nodes->nodeMap.end())->second;
-	((DirectedEdgeStar*)node->getEdges())->linkResultDirectedEdges();
 }
 
 /**
@@ -107,8 +108,6 @@ void PlanarGraph::linkAllDirectedEdges(){
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkAllDirectedEdges();
 	}
-	Node *node=(nodes->nodeMap.end())->second;
-	((DirectedEdgeStar*)node->getEdges())->linkAllDirectedEdges();
 }
 
 /**
@@ -119,7 +118,7 @@ void PlanarGraph::linkAllDirectedEdges(){
 *    <code>null</code> if the edge was not found
 */
 EdgeEnd* PlanarGraph::findEdgeEnd(Edge *e) {
-	for (vector<EdgeEnd*>::iterator i=getEdgeEnds().begin();i<=getEdgeEnds().end();i++) {
+	for (vector<EdgeEnd*>::iterator i=getEdgeEnds().begin();i<getEdgeEnds().end();i++) {
 		EdgeEnd *ee=*i;
 		if (ee->getEdge()==e)
 			return ee;

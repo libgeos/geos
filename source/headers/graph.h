@@ -478,8 +478,8 @@ private:
 
 class PlanarGraph {
 public:
-	static const CGAlgorithms *cga;
-	static const LineIntersector *li;
+	static CGAlgorithms *cga;
+	static LineIntersector *li;
 	static void linkResultDirectedEdges(vector<Node*> allNodes);
 	PlanarGraph(NodeFactory *nodeFact);
 	PlanarGraph();
@@ -536,6 +536,7 @@ public:
 	void addPoint(Coordinate pt);
 	SegmentIntersector* computeSelfNodes(LineIntersector *li);
 	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,LineIntersector *li,bool includeProper);
+	vector<Edge*> getEdges();
 private:
 	Geometry *parentGeom;
 	// the precision model of the Geometry represented by this graph
@@ -555,13 +556,7 @@ private:
 	bool useBoundaryDeterminationRule;
 	int argIndex;  // the index of this geometry as an argument to a spatial function (used for labelling)
 	vector<Node*> *boundaryNodes;
-	// various options for computing intersections, from slowest to fastest
-	//private EdgeSetIntersector esi = new SimpleEdgeSetIntersector();
-	//private EdgeSetIntersector esi = new MonotoneChainIntersector();
-	//private EdgeSetIntersector esi = new NonReversingChainIntersector();
-	//private EdgeSetIntersector esi = new SimpleSweepLineIntersector();
-	//private EdgeSetIntersector esi = new MCSweepLineIntersector();
-	EdgeSetIntersector *esi;
+	EdgeSetIntersector* createEdgeSetIntersector();
 	void add(Geometry *g);
 	void addCollection(GeometryCollection *gc);
 	void addPoint(Point *p);
