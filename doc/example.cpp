@@ -1,3 +1,8 @@
+// $Log$
+// Revision 1.3  2003/10/09 11:19:20  strk
+// added convexHull and PrecisionModel
+//
+//
 // This file should document by example usage of the GEOS library.
 // It could actually be a live discuss-by-example board for
 // architectural design choices.
@@ -148,9 +153,18 @@ void do_all()
 	int numgeoms = 3;
 	Geometry *geoms[numgeoms];
 
-	// Initialize global factory with default PrecisionModel
-	// and SRID.
-	global_factory = new GeometryFactory();
+	// Define a precision model using 0,0 as the reference origin
+	// and 2.0 as coordinates scale.
+	// Using 1.0 as scale will segfault, dunno why --strk;
+	PrecisionModel *pm = new PrecisionModel(2.0, 0, 0);
+
+	// Initialize global factory with defined PrecisionModel
+	// and a SRID of -1 (undefined).
+	global_factory = new GeometryFactory(pm, -1);
+
+	// We do not need PrecisionMode object anymore, it has
+	// been copied to global_factory private storage
+	delete pm;
 
 	/////////////////////////////////////////////
 	// BASIC GEOMETRY CREATION
@@ -169,6 +183,7 @@ void do_all()
 			new Polygon(*((Polygon *)geoms[1])));
 
 	// Print all geoms.
+	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
 	wkt_print_geoms(numgeoms, geoms);
 
 	/////////////////////////////////////////////
@@ -182,7 +197,8 @@ void do_all()
 	}
 
 	// Print all convex hulls
-	wkt_print_geoms(numgeoms, geoms);
+	cout<<"--------HERE COMES THE HULLS----------"<<endl;
+	wkt_print_geoms(numgeoms, hulls);
 
 	// Delete created geometries and hulls
 	for (int i=0; i<numgeoms; i++) {
