@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/26 12:37:19  strk
+ * Some leaks fixed.
+ *
  * Revision 1.4  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -80,13 +83,30 @@ bool STRtree::STRIntersectsOp::intersects(void* aBounds,void* bBounds) {
 * group them into runs of size M (the node capacity). For each run, creates
 * a new (parent) node.
 */
-vector<Boundable*>* STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel) {
+vector<Boundable*>*
+STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
+{
 	Assert::isTrue(!childBoundables->empty());
 	int minLeafCount=(int) ceil((double)childBoundables->size()/(double)getNodeCapacity());
 	vector<Boundable*> *sortedChildBoundables=new vector<Boundable*>(childBoundables->begin(),childBoundables->end());
 	sort(sortedChildBoundables->begin(),sortedChildBoundables->end(),xComparator);
 	vector<vector<Boundable*>*>* verticalSlicesV = verticalSlices(sortedChildBoundables,(int)ceil(sqrt((double)minLeafCount)));
-	return createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
+	delete sortedChildBoundables;
+	vector<Boundable*> *ret;
+	ret = createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
+	for (int i=0; i<verticalSlicesV->size(); i++)
+	{
+		vector<Boundable *>*inner = (*verticalSlicesV)[i];
+		for (int j=0; j<inner->size(); j++)
+		{
+			// some of these might be provided,
+			// some of these might be created
+			//delete (*inner)[j];
+		}
+		delete inner;
+	}
+	delete verticalSlicesV;
+	return ret;
 }
 
 vector<Boundable*>* STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *verticalSlices, int newLevel) {

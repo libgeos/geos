@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/04/26 12:37:19  strk
+ * Some leaks fixed.
+ *
  * Revision 1.7  2004/04/14 12:28:43  strk
  * shouldNeverReachHere exceptions made more verbose
  *
@@ -47,6 +50,10 @@ AbstractSTRtree::AbstractSTRtree(int newNodeCapacity) {
 }
 
 AbstractSTRtree::~AbstractSTRtree() {
+	for (int i=0; i<itemBoundables->size(); i++)
+	{
+		delete (*itemBoundables)[i];
+	}
 	delete itemBoundables;
 }
 
@@ -78,7 +85,9 @@ bool compareAbsBoundables(Boundable *a, Boundable *b){
 * Sorts the childBoundables then divides them into groups of size M, where
 * M is the node capacity.
 */
-vector<Boundable*>* AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables,int newLevel) {
+vector<Boundable*>*
+AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables,int newLevel)
+{
 	Assert::isTrue(!childBoundables->empty());
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 	parentBoundables->push_back(createNode(newLevel));
