@@ -1,3 +1,6 @@
+2.1.0
+	- Added Polygonizer and LineMerger classes.
+
 2.0.0
 
 	- CoordinateList renamed to CoordinateSequence, BasicCoordinateList
