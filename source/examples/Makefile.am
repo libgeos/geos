@@ -1,14 +1,10 @@
 noinst_PROGRAMS = CoordinateListsExample \
-                  CustomCoordinateListExample \
-                  CustomPointCoordinateListExample
+                  CustomCoordinateListExample 
 
 LIBS = ../geom/libgeos.la
 
-CustomCoordinateListExample_SOURCES = CustomCoordinateListExample.cpp
+CustomCoordinateListExample_SOURCES = CustomPointCoordinateList.cpp CustomCoordinateListExample.cpp
 CustomCoordinateListExample_LDADD = $(LIBS)
-
-CustomPointCoordinateListExample_SOURCES = CustomPointCoordinateListExample.cpp
-CustomPointCoordinateListExample_LDADD = $(LIBS)
 
 CoordinateListsExample_SOURCES = CoordinateListsExample.cpp
 CoordinateListsExample_LDADD = $(LIBS)
