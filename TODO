@@ -1,3 +1,6 @@
+- Make CoordinateList, CoordinateSequence and CoordinateSequenceFactory
+  reflect JTS semantics (really?)
+
 - Add tests and examples for new functionalities
 
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
