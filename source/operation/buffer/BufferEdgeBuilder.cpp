@@ -1,3 +1,10 @@
+/*
+ * $Log$
+ * Revision 1.6  2003/11/06 17:47:33  strk
+ * Added support for LinearRing, removed memory leaks in ::addLineString
+ *
+ */
+
 #include "../../headers/opBuffer.h"
 #include <typeinfo>
 
@@ -50,8 +57,7 @@ void BufferEdgeBuilder::addEdge(const CoordinateList *coord, int leftLoc, int ri
 void BufferEdgeBuilder::add(const Geometry *g){
 	if (g->isEmpty()) return;
 	if (typeid(*g)==typeid(Polygon)) addPolygon((Polygon*) g);
-	// LineString also handles LinearRings
-	else if (typeid(*g)==typeid(LineString)) addLineString((LineString*) g);
+	else if (typeid(*g)==typeid(LineString) || typeid(*g)==typeid(LinearRing)) addLineString((LineString*) g);
 	else if (typeid(*g)==typeid(Point)) addPoint((Point*) g);
 	else if (typeid(*g)==typeid(MultiPoint)) addCollection((MultiPoint*) g);
 	else if (typeid(*g)==typeid(MultiLineString)) addCollection((MultiLineString*) g);
@@ -81,9 +87,10 @@ void BufferEdgeBuilder::addPoint(const Point *p) {
 
 void BufferEdgeBuilder::addLineString(const LineString *line) {
 	if (distance<=0.0) return;
-	CoordinateList *coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
+	CoordinateList *coord=CoordinateList::removeRepeatedPoints(line->getCoordinatesRO());
 	vector<CoordinateList*> *lineList=lineBuilder->getLineBuffer(coord,distance);
 	addEdges(lineList,Location::EXTERIOR, Location::INTERIOR);
+	delete coord;
 }
 
 void BufferEdgeBuilder::addPolygon(const Polygon *p) {
@@ -115,7 +122,7 @@ void BufferEdgeBuilder::addPolygon(const Polygon *p) {
 *@param cwRightLoc the location on the R side of the ring (if it is CW)
 */
 void BufferEdgeBuilder::addPolygonRing(const LinearRing *lr, double distance, int side, int cwLeftLoc, int cwRightLoc){
-	CoordinateList *coord=CoordinateList::removeRepeatedPoints(lr->getCoordinates());
+	CoordinateList *coord=CoordinateList::removeRepeatedPoints(lr->getCoordinatesRO());
 	int leftLoc=cwLeftLoc;
 	int rightLoc=cwRightLoc;
 	if (cga->isCCW(coord)) {
@@ -132,6 +139,8 @@ void BufferEdgeBuilder::addPolygonRing(const LinearRing *lr, double distance, in
 	// insert the endpoint as a node, to mark that it is on the boundary
 	insertPoint(argIndex, coord[0], Location.BOUNDARY);
 	*/
+
+	delete coord;
 }
 }
 
