@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/07 10:29:54  strk
+ * Adjusted exceptions documentation.
+ *
  * Revision 1.2  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).
  * Dropped WKTWriter default constructor (internally created GeometryFactory).
@@ -59,6 +62,10 @@ using namespace std;
 
 namespace geos {
 
+/**
+ * \class ParseException io.h geos/io.h
+ * \brief Notifies a parsing error
+ */
 class ParseException: public GEOSException {
 public:
 	ParseException();

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/07 10:29:54  strk
+ * Adjusted exceptions documentation.
+ *
  * Revision 1.3  2004/07/05 14:23:03  strk
  * More documentation cleanups.
  *
@@ -46,6 +49,9 @@
 
 /*
 * $Log$
+* Revision 1.4  2004/07/07 10:29:54  strk
+* Adjusted exceptions documentation.
+*
 * Revision 1.3  2004/07/05 14:23:03  strk
 * More documentation cleanups.
 *
@@ -94,17 +100,26 @@ namespace geos {
 
 /**
  * \class GEOSException util.h geos.h
- * Base class for all GEOS exceptions.
+ *
+ * \brief Base class for all GEOS exceptions.
+ *
  * Exceptions are thrown as pointers to this type.
  * Use toString() to get a readable message.
  */
 class GEOSException {
 public:
 	GEOSException();
+
 	GEOSException(string msg);
+
+	/// Create an exception of given type containing given message 
 	GEOSException(string nname,string msg);
+
 	virtual ~GEOSException();
+
+	/// Returns exception message
 	virtual string toString();
+
 	virtual void setName(string nname);
 	virtual void setMessage(string msg);
 protected:
@@ -112,6 +127,9 @@ protected:
 	string name;
 };
 
+/** \class AssertionFailedException util.h geos.h
+ * \brief Indicates a bug in GEOS code.
+ */
 class AssertionFailedException: public GEOSException {
 public:
 	AssertionFailedException();
@@ -119,6 +137,13 @@ public:
 	~AssertionFailedException();
 };
 
+/** \class IllegalArgumentException util.h geos.h
+ * \brief Indicates one or more legal arguments.
+ *
+ * This exception is thrown - for example - when
+ * trying to apply set-theoretic methods to a
+ * GeometryCollection object.
+ */
 class IllegalArgumentException: public GEOSException {
 public:
 	IllegalArgumentException();
@@ -127,7 +152,11 @@ public:
 };
 
 /**
- * Indicates an invalid or inconsistent topological situation encountered during processing
+ * \class TopologyException util.h geos.h
+ *
+ * \brief
+ * Indicates an invalid or inconsistent topological situation encountered
+ * during processing
  */
 class TopologyException: public GEOSException {
 public:
@@ -139,6 +168,14 @@ private:
 	Coordinate *pt;
 };
 
+/**
+ * \class UnsupportedOperationException util.h geos.h
+ *
+ * \brief Indicates that the requested operation is unsopported.
+ *
+ * This exception is thrown - for example - when requesting the
+ * X or Y member of an empty Point
+ */
 class UnsupportedOperationException: public GEOSException {
 public:
 	UnsupportedOperationException();

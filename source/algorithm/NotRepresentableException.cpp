@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/07 10:29:54  strk
+ * Adjusted exceptions documentation.
+ *
  * Revision 1.10  2004/07/03 12:51:37  strk
  * Documentation cleanups for DoxyGen.
  *
@@ -35,13 +38,6 @@
 
 namespace geos {
 
-/**
- * Indicates that a {@link HCoordinate} has been computed which is
- * not representable on the Cartesian plane.
- *
- * @version 1.4
- * @see HCoordinate
- */
 NotRepresentableException::NotRepresentableException(){
 	setName("NotRepresentableException");
 	setMessage("Projective point not representable on the Cartesian plane.");

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/07 10:29:54  strk
+ * Adjusted exceptions documentation.
+ *
  * Revision 1.2  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).
  * Dropped WKTWriter default constructor (internally created GeometryFactory).
@@ -60,7 +63,9 @@ namespace geos {
 class Coordinate;
 
 /**
- * Indicates that a {@link HCoordinate} has been computed which is
+ * \class NotRepresentableException geosAlgorithm.h geos/geosAlgorithm.h
+ * \brief
+ * Indicates that a HCoordinate has been computed which is
  * not representable on the Cartesian plane.
  *
  * @version 1.4
