@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.49  2004/05/17 07:23:05  strk
+ * ::getCeontroid(): reduced dynamic allocations, added missing check for isEmpty
+ *
  * Revision 1.48  2004/05/14 12:14:08  strk
  * const correctness
  *
@@ -211,24 +214,22 @@ bool Geometry::isWithinDistance(const Geometry *geom,double cDistance) {
 * @return a {@link Point} which is the centroid of this Geometry
 */
 Point* Geometry::getCentroid() const {
-	const Coordinate* centPt;
+	if ( isEmpty() ) { return NULL; }
+	Coordinate* centPt;
 	int dim=getDimension();
 	Geometry *in = toInternalGeometry(this);
 	if(dim==0) {
-		CentroidPoint *cent=new CentroidPoint();
-		cent->add(in);
-		centPt=cent->getCentroid();
-		delete cent;
+		CentroidPoint cent; 
+		cent.add(in);
+		centPt=cent.getCentroid();
 	} else if (dim==1) {
-		CentroidLine *cent=new CentroidLine();
-		cent->add(in);
-		centPt=cent->getCentroid();
-		delete cent;
+		CentroidLine cent;
+		cent.add(in);
+		centPt=cent.getCentroid();
 	} else {
-		CentroidArea *cent=new CentroidArea();
-		cent->add(in);
-		centPt=cent->getCentroid();
-		delete cent;
+		CentroidArea cent;
+		cent.add(in);
+		centPt=cent.getCentroid();
 	}
 	Point *pt=createPointFromInternalCoord(centPt,this);
 	delete centPt;
