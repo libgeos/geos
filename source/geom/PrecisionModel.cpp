@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/05/21 13:39:31  strk
+ * ::makePrecise make use of nearbyint() now, to be compatible with JTS
+ *
  * Revision 1.21  2004/05/19 19:39:05  ybychkov
  * Changed rounding method to make compilable with VC++
  *
@@ -73,9 +76,10 @@ double PrecisionModel::makePrecise(double val) const {
 		return (double) floatSingleVal;
 	}
 	if (modelType == FIXED) {
-		double d=val*scale;
-		return ((d >= 0.0) ? floor(d+0.5)/scale : - floor(-d+0.5)/scale);
-//		return rint(val*scale)/scale;
+		//double d=val*scale;
+		//double me=((d >= 0.0) ? floor(d+0.5)/scale : - floor(-d+0.5)/scale);
+		double ret = nearbyint(val*scale)/scale;
+		return ret;
 	}
 	// modelType == FLOATING - no rounding necessary
 	return val;
