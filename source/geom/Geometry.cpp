@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.57  2004/07/05 15:20:18  strk
+ * Documentation again.
+ *
  * Revision 1.56  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -789,7 +792,7 @@ double Geometry::distance(const Geometry *other) const {
 *  They override this function to compute the area.
 *  Others return 0.0
 *
-*@return the area of the Geometry
+* @return the area of the Geometry
 */
 double Geometry::getArea() const {
 	return 0.0;

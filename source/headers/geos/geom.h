@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/05 15:20:18  strk
+ * Documentation again.
+ *
  * Revision 1.5  2004/07/05 14:23:03  strk
  * More documentation cleanups.
  *
@@ -154,6 +157,7 @@ using namespace std;
 
 namespace geos {
 
+/// Geometry types
 enum GeometryTypeId {
 	GEOS_POINT,
 	GEOS_LINESTRING,
@@ -1751,7 +1755,7 @@ public:
 //	LineString();
 	LineString(const LineString &ls);
 
-	/// DEPRECATED Use GeometryFactory instead 
+	// DEPRECATED Use GeometryFactory instead 
 	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
 
 	/// Constructs a LineString taking ownership the given CoordinateList.
@@ -1760,7 +1764,10 @@ public:
 	virtual ~LineString();
 	virtual Geometry *clone() const;
 	virtual CoordinateList* getCoordinates() const;
+
+	/// Returns a pointer to the CoordinateList making up this Geometry.
 	const CoordinateList* getCoordinatesRO() const;
+
 	virtual const Coordinate& getCoordinateN(int n) const;
 	virtual int getDimension() const;
 	virtual int getBoundaryDimension() const;
@@ -1810,7 +1817,7 @@ class LinearRing : public LineString{
 public:
 //	LinearRing();
 	LinearRing(const LinearRing &lr);
-	/**
+	/*
 	*  Constructs a <code>LinearRing</code> with the given points.
 	*
 	*@param  points          points forming a closed and simple linestring, or
@@ -1825,7 +1832,7 @@ public:
 	*/
 	LinearRing(const CoordinateList* points, const PrecisionModel* pm, int SRID);
 	/**
-	* Constructs a <code>LinearRing</code> with the given points.
+	* \brief Constructs a <code>LinearRing</code> with the given points.
 	*
 	* @param  points  points forming a closed and simple linestring, or
 	*      <code>null</code> or an empty array to create the empty geometry.
@@ -1866,7 +1873,7 @@ public:
 	Polygon();
 	Polygon(const Polygon &p);
 	virtual ~Polygon();
-	/**
+	/*
 	*  Constructs a <code>Polygon</code> with the given exterior boundary.
 	*
 	*@param  shell           the outer boundary of the new <code>Polygon</code>,
@@ -1880,7 +1887,7 @@ public:
 	*/
 	Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID);
 
-	/**
+	/*
 	*  Constructs a <code>Polygon</code> with the given exterior boundary and
 	*  interior boundaries.
 	*
