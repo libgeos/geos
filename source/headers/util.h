@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.11  2003/10/23 09:12:49  strk
+* Made CoordinateArrayFilter destructor virtual.
+*
 * Revision 1.10  2003/10/16 17:05:07  strk
 * Made TopologyException inherit from GEOSException. Adjusted IllegalArgumentException subclassing.
 *
@@ -82,7 +85,7 @@ public:
 	CoordinateList* pts;
 	int n;
 	CoordinateArrayFilter(int size);
-	~CoordinateArrayFilter();
+	virtual ~CoordinateArrayFilter();
 	virtual const CoordinateList* getCoordinates() const;
 	virtual void filter_ro(const Coordinate &coord);
 	virtual void filter_rw(Coordinate &coord); // Unsopported
