@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2003/12/11 15:53:40  strk
+ * Fixed bogus copy constructor (making clone bogus)
+ *
  * Revision 1.26  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -35,7 +38,11 @@ GeometryCollection::GeometryCollection(){
 
 GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 	Geometry(gc.precisionModel,gc.SRID){
-	geometries=gc.geometries;	
+	geometries=new vector<Geometry *>();
+	for(int i=0;i<(int)gc.geometries->size();i++) {
+		geometries->push_back((*gc.geometries)[i]->clone());
+	}
+	//geometries=gc.geometries;	
 }
 
 /*
