@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/04/14 09:38:10  strk
+ * PrecisionModel(double newScale) missed to set the scale
+ *
  * Revision 1.17  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -155,7 +158,7 @@ PrecisionModel::PrecisionModel(double newScale)
 	//throw (IllegalArgumentException *)
 {
 	modelType=FIXED;
-	setScale(scale);
+	setScale(newScale);
 }
 
 
