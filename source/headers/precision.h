@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/13 13:31:11  strk
+ * prototype mismatch fixed
+ *
  * Revision 1.1  2004/04/10 22:41:25  ybychkov
  * "precision" upgraded to JTS 1.4
  *
@@ -70,7 +73,7 @@ public:
 	* @param i the number of bits to zero
 	* @return the zeroed bitstring
 	*/
-	static long zeroLowerBits(int64 bits, int nBits);
+	static int64 zeroLowerBits(int64 bits, int nBits);
 	/**
 	* Extracts the i'th bit of a bitstring.
 	* @param bits the bitstring to extract from
