@@ -60,7 +60,15 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../operation/relate/RelateNodeGraph.cpp \
 			../operation/relate/RelateOp.cpp \
                         ../operation/GeometryGraphOperation.cpp \
-			../operation/IsSimpleOp.cpp
+			../operation/IsSimpleOp.cpp \
+			../operation/valid/ConnectedInteriorTester.cpp \
+			../operation/valid/ConsistentAreaTester.cpp \
+			../operation/valid/IsValidOp.cpp \
+			../operation/valid/QuadtreeNestedRingTester.cpp \
+			../operation/valid/RepeatedPointTester.cpp \
+			../operation/valid/SimpleNestedRingTester.cpp \
+			../operation/valid/SweeplineNestedRingTester.cpp \
+			../operation/valid/TopologyValidationError.cpp
 
 libgeos_la_SOURCES =	$(DIR_SOURCES) $(EXTERNAL_SOURCES)
 
