@@ -228,6 +228,7 @@ class MCPointInRing: public PointInRing {
 public:
 	MCPointInRing(LinearRing *newRing);
 	bool isInside(Coordinate& pt);
+	void testLineSegment(Coordinate& p,LineSegment *seg);
 	class MCSelecter: public MonotoneChainSelectAction {
 	private:
 		Coordinate p;
@@ -242,7 +243,6 @@ private:
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
 	void testMonotoneChain(Envelope *rayEnv,MCSelecter *mcSelecter,indexMonotoneChain *mc);
-	void testLineSegment(Coordinate& p,LineSegment *seg);
 };
 
 class IntTreePointInRing: public PointInRing {

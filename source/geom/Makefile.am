@@ -8,7 +8,8 @@ pkglib_LTLIBRARIES = libgeos.la
 INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=\""$(GEOS_VERSION)"\"
 
 DIR_SOURCES =		Coordinate.cpp GeometryFactory.cpp MultiPoint.cpp \
-			CoordinateList.cpp BasicCoordinateList.cpp IntersectionMatrix.cpp  \
+			CoordinateList.cpp BasicCoordinateList.cpp \
+			IntersectionMatrix.cpp  \
 			CoordinateListFactory.cpp PointCoordinateList.cpp \
 			MultiPolygon.cpp Dimension.cpp LinearRing.cpp \
 			Point.cpp Envelope.cpp LineSegment.cpp Polygon.cpp \
@@ -42,8 +43,11 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../bigtest/GeometryTestFactory.cpp \
                         ../algorithm/CGAlgorithms.cpp \
 			../algorithm/HCoordinate.cpp \
+			../algorithm/IntTreePointInRing.cpp \
 			../algorithm/LineIntersector.cpp \
+			../algorithm/MCPointInRing.cpp \
                         ../algorithm/NonRobustCGAlgorithms.cpp \
+			../algorithm/NonRobustLineIntersector.cpp \
                         ../algorithm/NotRepresentableException.cpp \
 			../algorithm/PointLocator.cpp \
 			../algorithm/RobustCGAlgorithms.cpp \
@@ -61,6 +65,14 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../operation/relate/RelateOp.cpp \
                         ../operation/GeometryGraphOperation.cpp \
 			../operation/IsSimpleOp.cpp \
+			../operation/overlay/EdgeSetNoder.cpp \
+			../operation/overlay/LineBuilder.cpp \
+			../operation/overlay/MaximalEdgeRing.cpp \
+			../operation/overlay/MinimalEdgeRing.cpp \
+			../operation/overlay/OverlayNodeFactory.cpp \
+			../operation/overlay/OverlayOp.cpp \
+			../operation/overlay/PointBuilder.cpp \
+			../operation/overlay/PolygonBuilder.cpp \
 			../operation/valid/ConnectedInteriorTester.cpp \
 			../operation/valid/ConsistentAreaTester.cpp \
 			../operation/valid/IsValidOp.cpp \

@@ -108,6 +108,7 @@ public:
 	Coordinate& getNestedPoint();
 	void add(LinearRing* ring);
 	bool isNonNested();
+	bool isInside(LinearRing *innerRing,LinearRing *searchRing);
 	class OverlapAction: public SweepLineOverlapAction {
 	public:
 		bool isNonNested;
@@ -124,7 +125,6 @@ private:
 	SweepLineIndex *sweepLine;
 	Coordinate nestedPt;
 	void buildIndex();
-	bool isInside(LinearRing *innerRing,LinearRing *searchRing);
 };
 
 class QuadtreeNestedRingTester {
