@@ -11,3 +11,4 @@
   	const vector<Geometry *>
 	(copy vector, get Geometry ownership)
   
+- Remove all explicit heap allocations for private static members.
