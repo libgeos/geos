@@ -1,3 +1,5 @@
+- IsValidTest.cpp in source/test ?
+
 - Make CGAlgorithms Robust. Keep RobustCGAlgorithms as a staub
   for backward compatibility. (check if this is already the case)
 
