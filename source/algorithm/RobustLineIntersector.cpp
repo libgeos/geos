@@ -122,29 +122,41 @@ RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p
 		if (Pq1==0) {
 			intPt[0].setCoordinate(q1);
 #if COMPUTE_Z
-			z += q1.z;
-			hits++;
+			if ( q1.z != DoubleNotANumber )
+			{
+				z += q1.z;
+				hits++;
+			}
 #endif
 		}
 		if (Pq2==0) {
 			intPt[0].setCoordinate(q2);
 #if COMPUTE_Z
-			z += q2.z;
-			hits++;
+			if ( q2.z != DoubleNotANumber )
+			{
+				z += q2.z;
+				hits++;
+			}
 #endif
 		}
 		if (Qp1==0) {
 			intPt[0].setCoordinate(p1);
 #if COMPUTE_Z
-			z += p1.z;
-			hits++;
+			if ( p1.z != DoubleNotANumber )
+			{
+				z += p1.z;
+				hits++;
+			}
 #endif
 		}
 		if (Qp2==0) {
 			intPt[0].setCoordinate(p2);
 #if COMPUTE_Z
-			z += p2.z;
-			hits++;
+			if ( p2.z != DoubleNotANumber )
+			{
+				z += p2.z;
+				hits++;
+			}
 #endif
 		}
 #if COMPUTE_Z
@@ -362,6 +374,9 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2004/11/17 08:41:42  strk
+ * Fixed a bug in Z computation and removed debugging output by default.
+ *
  * Revision 1.20  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

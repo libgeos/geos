@@ -17,7 +17,7 @@
 #include <geos/geomgraphindex.h>
 #include <math.h>
 
-#define DEBUG_INTERSECT 1
+#define DEBUG_INTERSECT 0
 
 namespace geos {
 
@@ -175,7 +175,7 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 		// only intersection.
 		if (!isTrivialIntersection(e0,segIndex0,e1,segIndex1))
 		{
-#ifdef DEBUG_INTERSECT
+#if DEBUG_INTERSECT
 			cerr<<"SegmentIntersector::addIntersections(): has !TrivialIntersection"<<endl;
 #endif // DEBUG_INTERSECT
 			hasIntersectionVar=true;
@@ -183,11 +183,14 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 				//Debug.println(li);
 				e0->addIntersections(li,segIndex0,0);
 				e1->addIntersections(li,segIndex1,1);
+#if DEBUG_INTERSECT
+			cerr<<"SegmentIntersector::addIntersections(): includeProper || !li->isProper()"<<endl;
+#endif // DEBUG_INTERSECT
 			}
 			if (li->isProper())
 			{
 				properIntersectionPoint.setCoordinate(li->getIntersection(0));
-#ifdef DEBUG_INTERSECT
+#if DEBUG_INTERSECT
 				cerr<<"SegmentIntersector::addIntersections(): properIntersectionPoint: "<<properIntersectionPoint.toString()<<endl;
 #endif // DEBUG_INTERSECT
 				hasProper=true;
@@ -223,6 +226,9 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/17 08:41:42  strk
+ * Fixed a bug in Z computation and removed debugging output by default.
+ *
  * Revision 1.5  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.
