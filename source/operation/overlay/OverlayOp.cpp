@@ -112,6 +112,9 @@ OverlayOp::~OverlayOp()
 	delete ptLocator;
 	for (unsigned int i=0; i<dupEdges.size(); i++)
 		delete dupEdges[i];
+#if USE_ELEVATION_MATRIX
+	delete elevationMatrix;
+#endif
 }
 
 Geometry*
@@ -830,6 +833,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2004/12/08 14:31:17  strk
+ * elevationMatrix deleted by destructor
+ *
  * Revision 1.36  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *
