@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.13  2003/10/15 15:47:43  strk
+* Adapted to new getCoordinatesRO() interface
+*
+*/
 #include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 
@@ -28,7 +34,7 @@ MCPointInRing::~MCPointInRing() {
 void MCPointInRing::buildIndex() {
 //	Envelope *env=ring->getEnvelopeInternal();
 	tree=new Bintree();
-	CoordinateList *pts=CoordinateList::removeRepeatedPoints(ring->getCoordinates());
+	CoordinateList *pts=CoordinateList::removeRepeatedPoints(ring->getCoordinatesRO());
 	vector<indexMonotoneChain*> *mcList=MonotoneChainBuilder::getChains(pts);
 	for(int i=0;i<(int)mcList->size();i++) {
 		indexMonotoneChain *mc=(*mcList)[i];

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.15  2003/10/15 15:47:43  strk
+* Adapted to new getCoordinatesRO() interface
+*
+*/
 #include "../headers/geosAlgorithm.h"
 #include <typeinfo>
 #include "../headers/graph.h"
@@ -90,7 +96,7 @@ void PointLocator::updateLocationInfo(int loc) {
 }
 
 int PointLocator::locate(const Coordinate& p, const LineString *l) {
-	const CoordinateList* pt=l->getCoordinates();
+	const CoordinateList* pt=l->getCoordinatesRO();
 	if (! l->isClosed()) {
 		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
 			return Location::BOUNDARY;
