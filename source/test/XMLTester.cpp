@@ -27,6 +27,7 @@
 #include <geos/geomgraph.h>
 #include <geos/io.h>
 #include <geos/opRelate.h>
+#include <geos/opPolygonize.h>
 #include <geos/profiler.h>
 #include "../io/markup/MarkupSTL.h"
 #include <geos/unload.h>
@@ -428,6 +429,39 @@ try{
 							failed++;
 						}
 					}
+				} else if (opName=="Polygonize") {
+					Geometry *gRes=NULL;
+					Geometry *gRealRes=NULL;
+					gRes=r->read(opRes);
+					gRes->normalize();
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
+					try {
+						Polygonizer plgnzr;
+						plgnzr.add(gA);
+						vector<Polygon *>*polys = plgnzr.getPolygons();
+						vector<Geometry *>*newgeoms = new vector<Geometry *>;
+						for (unsigned int i=0; i<polys->size(); i++)
+							newgeoms->push_back((*polys)[i]);
+						delete polys;
+						gRealRes=factory->createMultiPolygon(newgeoms);
+						gRealRes->normalize();
+					} catch ( ... ) {
+						delete gRealRes;
+						delete gRes;
+						throw;
+					}
+					if (out & TEST_RESULT) {
+						cout << "\t\tResult: Polygonize='" << gRealRes->toString() <<"'"<<endl;
+						cout << "Test result=";
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "true";
+							succeeded++;
+						} else {
+							cout << "false";
+							failed++;
+						}
+						cout <<endl;
+					}
 				} else {
 					cout<<"Something else\n";
 					//GeometryFactory *gf=new GeometryFactory(pm,0);
@@ -506,6 +540,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.50  2005/01/03 15:49:30  strk
+ * Added Polygonize test handling
+ *
  * Revision 1.49  2004/12/30 13:32:30  strk
  * Handled NULL result from getCentroid()
  *
