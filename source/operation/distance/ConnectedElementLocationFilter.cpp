@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/14 14:47:39  strk
+ * Added LinearRing support
+ *
  * Revision 1.2  2004/05/14 13:42:46  strk
  * DistanceOp bug removed, cascading errors fixed.
  *
@@ -48,6 +51,7 @@ ConnectedElementLocationFilter::ConnectedElementLocationFilter(vector<GeometryLo
 void ConnectedElementLocationFilter::filter_ro(const Geometry *geom){
 	if ((typeid(*geom)==typeid(Point)) ||
 		(typeid(*geom)==typeid(LineString)) ||
+		(typeid(*geom)==typeid(LinearRing)) ||
 		(typeid(*geom)==typeid(Polygon)))
 	{
 		locations->push_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
@@ -57,6 +61,7 @@ void ConnectedElementLocationFilter::filter_ro(const Geometry *geom){
 void ConnectedElementLocationFilter::filter_rw(Geometry *geom){
 	if ((typeid(*geom)==typeid(Point)) ||
 		(typeid(*geom)==typeid(LineString)) ||
+		(typeid(*geom)==typeid(LinearRing)) ||
 		(typeid(*geom)==typeid(Polygon)))
 			locations->push_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
 }
