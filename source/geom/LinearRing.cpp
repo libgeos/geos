@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.16  2004/04/20 13:24:15  strk
  * More leaks removed.
  *
@@ -102,6 +106,11 @@ void LinearRing::setPoints(CoordinateList* cl){
 	vector<Coordinate> *v=cl->toVector();
 	points->setPoints(*(v));
 	delete v;
+}
+
+GeometryTypeId
+LinearRing::getGeometryTypeId() const {
+	return GEOS_LINEARRING;
 }
 }
 

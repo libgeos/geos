@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.15  2004/05/07 13:04:57  strk
  * leak removed in MultiLineString::getBoundary()
  *
@@ -121,6 +125,10 @@ MultiLineString::equalsExact(const Geometry *other, double tolerance) const
       return false;
     }
 	return GeometryCollection::equalsExact(other, tolerance);
+}
+GeometryTypeId
+MultiLineString::getGeometryTypeId() const {
+	return GEOS_MULTILINESTRING;
 }
 }
 

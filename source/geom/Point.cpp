@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.22  2004/04/16 14:12:52  strk
  * Memory leak fix in copy constructor
  *
@@ -175,6 +179,10 @@ int Point::compareToSameClass(const Geometry *point) const {
 
 Point::~Point(){
 	delete coordinates;
+}
+GeometryTypeId
+Point::getGeometryTypeId() const {
+	return GEOS_POINT;
 }
 }
 

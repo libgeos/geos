@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.16  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -102,6 +106,10 @@ MultiPoint::equalsExact(const Geometry *other, double tolerance) const
 
 const Coordinate* MultiPoint::getCoordinate(int n) const {
 	return ((Point *)(*geometries)[n])->getCoordinate();
+}
+GeometryTypeId
+MultiPoint::getGeometryTypeId() const {
+	return GEOS_MULTIPOINT;
 }
 }
 

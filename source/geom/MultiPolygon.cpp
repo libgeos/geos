@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.16  2004/06/16 13:13:25  strk
  * Changed interface of SegmentString, now copying CoordinateList argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
@@ -100,6 +104,10 @@ MultiPolygon::equalsExact(const Geometry *other, double tolerance) const
       return false;
     }
 	return GeometryCollection::equalsExact(other, tolerance);
+}
+GeometryTypeId
+MultiPolygon::getGeometryTypeId() const {
+	return GEOS_MULTIPOLYGON;
 }
 }
 

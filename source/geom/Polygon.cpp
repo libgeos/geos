@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.34  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.33  2004/06/15 20:30:47  strk
  * updated to respect deep-copy GeometryCollection interface
  *
@@ -102,6 +106,11 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const Geome
 		throw new IllegalArgumentException("shell is empty but holes are not");
 	}
 	shell=newShell;
+	for (int i=0; i<newHoles->size(); i++)
+		if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
+		{
+			throw new IllegalArgumentException("holes must be LinearRings");
+		}
 	holes=newHoles;
 }
 
@@ -400,6 +409,10 @@ Polygon::~Polygon(){
 		delete (*holes)[i];
 	}
 	delete holes;
+}
+GeometryTypeId
+Polygon::getGeometryTypeId() const {
+	return GEOS_POLYGON;
 }
 }
 

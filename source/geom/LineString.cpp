@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.33  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.32  2004/06/15 20:38:44  strk
  * updated to respect deep-copy GeometryCollection interface
  *
@@ -354,6 +358,11 @@ int LineString::compareTo(const LineString *ls) const {
 		return 1;
 	}
 	return compareToSameClass(ls);
+}
+
+GeometryTypeId
+LineString::getGeometryTypeId() const {
+	return GEOS_LINESTRING;
 }
 
 }

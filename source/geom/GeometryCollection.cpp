@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.34  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.33  2004/06/15 20:07:51  strk
  * GeometryCollections constructors make a deep copy of Geometry vector argument.
  *
@@ -349,5 +353,10 @@ GeometryCollection::~GeometryCollection(){
 //	delete centPt;
 //	return pt;
 //}
+
+GeometryTypeId
+GeometryCollection::getGeometryTypeId() const {
+	return GEOS_GEOMETRYCOLLECTION;
+}
 }
 

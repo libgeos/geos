@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.66  2004/06/28 21:11:43  strk
+ * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
+ * Added holes argument check in Polygon.cpp.
+ *
  * Revision 1.65  2004/06/15 20:07:51  strk
  * GeometryCollections constructors make a deep copy of Geometry vector argument.
  *
@@ -119,6 +123,7 @@ namespace geos {
 enum GeometryTypeId {
 	GEOS_POINT,
 	GEOS_LINESTRING,
+	GEOS_LINEARRING,
 	GEOS_POLYGON,
 	GEOS_MULTIPOINT,
 	GEOS_MULTILINESTRING,
@@ -1226,9 +1231,7 @@ public:
 	virtual const Geometry* getGeometryN(int n) const;
 	virtual int getNumPoints() const;
 	virtual string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const {
-		return GEOS_GEOMETRYCOLLECTION;
-	}
+	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
 	virtual Geometry* getBoundary() const;
 	virtual bool equalsExact(const Geometry *other, double tolerance) const;
@@ -1301,9 +1304,7 @@ public:
 	double getY() const;
 	const Coordinate* getCoordinate() const;
 	string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const {
-		return GEOS_POINT;
-	}
+	virtual GeometryTypeId getGeometryTypeId() const;
 	Geometry* getBoundary() const;
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(CoordinateFilter *filter);
@@ -1365,9 +1366,7 @@ public:
 	virtual bool isClosed() const;
 	virtual bool isRing() const;
 	virtual string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const {
-		return GEOS_LINESTRING;
-	}
+	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
 	virtual Geometry* getBoundary() const;
 	virtual bool isCoordinate(Coordinate& pt) const;
@@ -1429,6 +1428,7 @@ public:
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
 	void setPoints(CoordinateList* cl);
 private:
@@ -1506,9 +1506,7 @@ public:
 	int getNumInteriorRing() const;
 	const LineString* getInteriorRingN(int n) const;
 	string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const {
-		return GEOS_POLYGON;
-	}
+	virtual GeometryTypeId getGeometryTypeId() const;
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 	void apply_rw(CoordinateFilter *filter);
@@ -1564,9 +1562,7 @@ public:
 	int getDimension() const;
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const {
-		return GEOS_MULTIPOINT;
-	}
+	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isValid() const;
 	bool isClosed() const;
 	bool isSimple() const;
@@ -1605,9 +1601,7 @@ public:
 	int getDimension() const;
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const {
-		return GEOS_MULTILINESTRING;
-	}
+	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
 	bool isSimple() const;
 	Geometry* getBoundary() const;
@@ -1655,9 +1649,7 @@ public:
 	int getDimension() const;
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const {
-		return GEOS_MULTIPOLYGON;
-	}
+	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isSimple() const;
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
