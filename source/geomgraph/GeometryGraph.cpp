@@ -163,8 +163,14 @@ GeometryGraph::findEdge(const LineString *line)
 void
 GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist)
 {
+#if DEBUG
+	cerr<<"["<<this<<"] GeometryGraph::computeSplitEdges() scanning "<<edges->size()<<" local and "<<edgelist->size()<<" provided edges"<<endl;
+#endif
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
+#if DEBUG
+		cerr<<"   "<<e->print()<<" adding split edges from arg"<<endl;
+#endif
 		e->eiList->addSplitEdges(edgelist);
 	}
 }
@@ -480,6 +486,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2004/11/22 11:34:49  strk
+ * More debugging lines and comments/indentation cleanups
+ *
  * Revision 1.9  2004/11/19 09:33:55  strk
  * removed useless CoordinateSequence copy in ::addLineString
  *

@@ -107,17 +107,12 @@ int EdgeList::findEdgeIndex(Edge *e) {
 }
 
 string EdgeList::print() {
-	string out="MULTILINESTRING ( ";
-	for(unsigned int j=0; j<edges->size();j++) {
-        Edge *e=(*edges)[j];
-		if (j>0) out+=",";
-		out+="(";
-		const CoordinateSequence* pts=e->getCoordinates();
-		for(int i=0; i<pts->getSize();i++) {
-			if (i>0) out+=",";
-			out+=pts->getAt(i).toString();
-		}
-		out+=")";
+	string out="EdgeList( ";
+	for(unsigned int j=0; j<edges->size();j++)
+	{
+       		Edge *e=(*edges)[j];
+		if (j) out+=",";
+		out += e->print();
 	}
 	out+=")  ";
 	return out;
@@ -127,6 +122,9 @@ string EdgeList::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/22 11:34:49  strk
+ * More debugging lines and comments/indentation cleanups
+ *
  * Revision 1.5  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

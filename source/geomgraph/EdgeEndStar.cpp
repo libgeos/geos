@@ -16,7 +16,7 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
-#define DEBUG 0
+#define DEBUG 1
 
 namespace geos {
 
@@ -129,40 +129,50 @@ EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom)
 	propagateSideLabels(1);
 
 	/**
-	* If there are edges that still have null labels for a geometry
-	* this must be because there are no area edges for that geometry incident on this node.
-	* In this case, to label the edge for that geometry we must test whether the
-	* edge is in the interior of the geometry.
-	* To do this it suffices to determine whether the node for the edge is in the interior of an area.
-	* If so, the edge has location INTERIOR for the geometry.
-	* In all other cases (e.g. the node is on a line, on a point, or not on the geometry at all) the edge
-	* has the location EXTERIOR for the geometry.
-	* <p>
-	* Note that the edge cannot be on the BOUNDARY of the geometry, since then
-	* there would have been a parallel edge from the Geometry at this node also labelled BOUNDARY
-	* and this edge would have been labelled in the previous step.
-	* <p>
-	* This code causes a problem when dimensional collapses are present, since it may try and
-	* determine the location of a node where a dimensional collapse has occurred.
-	* The point should be considered to be on the EXTERIOR
-	* of the polygon, but locate() will return INTERIOR, since it is passed
-	* the original Geometry, not the collapsed version.
-	*
-	* If there are incident edges which are Line edges labelled BOUNDARY,
-	* then they must be edges resulting from dimensional collapses.
-	* In this case the other edges can be labelled EXTERIOR for this Geometry.
-	*
-	* MD 8/11/01 - NOT TRUE!  The collapsed edges may in fact be in the interior of the Geometry,
-	* which means the other edges should be labelled INTERIOR for this Geometry.
-	* Not sure how solve this...  Possibly labelling needs to be split into several phases:
-	* area label propagation, symLabel merging, then finally null label resolution.
-	*/
+	 * If there are edges that still have null labels for a geometry
+	 * this must be because there are no area edges for that geometry
+	 * incident on this node.
+	 * In this case, to label the edge for that geometry we must test
+	 * whether the edge is in the interior of the geometry.
+	 * To do this it suffices to determine whether the node for the
+	 * edge is in the interior of an area.
+	 * If so, the edge has location INTERIOR for the geometry.
+	 * In all other cases (e.g. the node is on a line, on a point, or
+	 * not on the geometry at all) the edge
+	 * has the location EXTERIOR for the geometry.
+	 * 
+	 * Note that the edge cannot be on the BOUNDARY of the geometry,
+	 * since then there would have been a parallel edge from the
+	 * Geometry at this node also labelled BOUNDARY
+	 * and this edge would have been labelled in the previous step.
+	 *
+	 * This code causes a problem when dimensional collapses are present,
+	 * since it may try and determine the location of a node where a
+	 * dimensional collapse has occurred.
+	 * The point should be considered to be on the EXTERIOR
+	 * of the polygon, but locate() will return INTERIOR, since it is
+	 * passed the original Geometry, not the collapsed version.
+	 *
+	 * If there are incident edges which are Line edges labelled BOUNDARY,
+	 * then they must be edges resulting from dimensional collapses.
+	 * In this case the other edges can be labelled EXTERIOR for this
+	 * Geometry.
+	 *
+	 * MD 8/11/01 - NOT TRUE!  The collapsed edges may in fact be in the
+	 * interior of the Geometry, which means the other edges should be
+	 * labelled INTERIOR for this Geometry.
+	 * Not sure how solve this...  Possibly labelling needs to be split
+	 * into several phases:
+	 * area label propagation, symLabel merging, then finally null label
+	 * resolution.
+	 */
 	bool hasDimensionalCollapseEdge[2]={false,false};
-    vector<EdgeEnd*>::iterator it;
+	vector<EdgeEnd*>::iterator it;
 	for (it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
-		for(int geomi=0; geomi<2; geomi++) {
+		for(int geomi=0; geomi<2; geomi++)
+		{
 			if (label->isLine(geomi) && label->getLocation(geomi)==Location::BOUNDARY)
 				hasDimensionalCollapseEdge[geomi]=true;
 		}
@@ -185,19 +195,25 @@ EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom)
 	}
 }
 
-void EdgeEndStar::computeEdgeEndLabels(){
+void
+EdgeEndStar::computeEdgeEndLabels()
+{
 	// Compute edge label for each EdgeEnd
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+	vector<EdgeEnd*>::iterator it;
+	for (it=getIterator(); it<edgeList->end(); it++)
+	{
 		EdgeEnd *e=*it;
 		e->computeLabel();
 	}
 }
 
-int EdgeEndStar::getLocation(int geomIndex,Coordinate& p,vector<GeometryGraph*> *geom){
+int
+EdgeEndStar::getLocation(int geomIndex,Coordinate& p,vector<GeometryGraph*> *geom)
+{
 	// compute location only on demand
-	if (ptInAreaLocation[geomIndex]==Location::UNDEF) {
-//		ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(geom->at(geomIndex))->getGeometry());
-        ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(*geom)[geomIndex]->getGeometry());
+	if (ptInAreaLocation[geomIndex]==Location::UNDEF)
+	{
+        	ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(*geom)[geomIndex]->getGeometry());
 	}
 	return ptInAreaLocation[geomIndex];
 }
@@ -246,17 +262,21 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	//throw(TopologyException *)
 {
 	// Since edges are stored in CCW order around the node,
-	// As we move around the ring we move from the right to the left side of the edge
+	// As we move around the ring we move from the right to the
+	// left side of the edge
 	int startLoc=Location::UNDEF ;
+
 	// initialize loc to location of last L side (if any)
-    vector<EdgeEnd*>::iterator it;
-	for (it=getIterator();it<edgeList->end();it++) {
+	vector<EdgeEnd*>::iterator it;
+	for (it=getIterator();it<edgeList->end();it++)
+	{
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
-		if (label->isArea(geomIndex) && label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
+		if (label->isArea(geomIndex) &&
+			label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
 			startLoc=label->getLocation(geomIndex,Position::LEFT);
 	}
-		// no labelled sides found, so no labels to propagate
+	// no labelled sides found, so no labels to propagate
 	if (startLoc==Location::UNDEF) return;
 	int currLoc=startLoc;
 	for (it=getIterator();it<edgeList->end();it++) {
@@ -280,15 +300,24 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 				}
 				currLoc=leftLoc;
 			} else {
-				/** RHS is null - LHS must be null too.
-				 *  This must be an edge from the other geometry, which has no location
-				 *  labelling for this geometry.  This edge must lie wholly inside or outside
-				 *  the other geometry (which is determined by the current location).
-				 *  Assign both sides to be the current location.
+				/**
+				 * RHS is null - LHS must be null too.
+				 * This must be an edge from the other
+				 * geometry, which has no location
+				 * labelling for this geometry.
+				 * This edge must lie wholly inside or
+				 * outside the other geometry (which is
+				 * determined by the current location).
+				 * Assign both sides to be the current
+				 * location.
 				 */
-				Assert::isTrue(label->getLocation(geomIndex,Position::LEFT)==Location::UNDEF, "found single null side");
-				label->setLocation(geomIndex,Position::RIGHT, currLoc);
-				label->setLocation(geomIndex,Position::LEFT, currLoc);
+				Assert::isTrue(label->getLocation(geomIndex,
+					Position::LEFT)==Location::UNDEF,
+					"found single null side");
+				label->setLocation(geomIndex,Position::RIGHT,
+					currLoc);
+				label->setLocation(geomIndex,Position::LEFT,
+					currLoc);
 			}
 		}
 	}
@@ -320,6 +349,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/11/22 11:34:49  strk
+ * More debugging lines and comments/indentation cleanups
+ *
  * Revision 1.6  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

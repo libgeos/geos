@@ -187,6 +187,10 @@ OverlayOp::computeLabelling()
 	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
 
 #if DEBUG
+	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList->print()<<endl;
+#endif
+
+#if DEBUG
 	cerr<<"OverlayOp::computeLabelling() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
 #endif
 
@@ -198,8 +202,17 @@ OverlayOp::computeLabelling()
 #endif
 		node->getEdges()->computeLabelling(arg);
 	}
+#if DEBUG
+	cerr<<"OverlayOp::computeLabelling(): after edge labelling: "<<edgeList->print()<<endl;
+#endif
 	mergeSymLabels();
+#if DEBUG
+	cerr<<"OverlayOp::computeLabelling(): after labels sym merging: "<<edgeList->print()<<endl;
+#endif
 	updateNodeLabelling();
+#if DEBUG
+	cerr<<"OverlayOp::computeLabelling(): after node labeling update: "<<edgeList->print()<<endl;
+#endif
 }
 
 /*
@@ -213,10 +226,18 @@ void
 OverlayOp::mergeSymLabels()
 {
 	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+
+#if DEBUG
+	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+#endif
+
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
 		Node *node=it->second;
 		((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
+#if DEBUG
+		cerr<<"     "<<node->print()<<endl;
+#endif
 		//node.print(System.out);
 	}
 }
@@ -229,11 +250,17 @@ OverlayOp::updateNodeLabelling()
 	// (Note that a node may have already been labelled
 	// because it is a point in one of the input geometries)
 	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+#if DEBUG
+	cerr<<"OverlayOp::updateNodeLabelling() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+#endif
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
 		Node *node=it->second;
 		Label *lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
 		node->getLabel()->merge(lbl);
+#if DEBUG
+		cerr<<"     "<<node->print()<<endl;
+#endif
 	}
 }
 
@@ -630,10 +657,16 @@ void
 OverlayOp::insertUniqueEdge(Edge *e)
 {
 	//Debug.println(e);
+#if DEBUG
+	cerr<<"OverlayOp::insertUniqueEdge("<<e->print()<<")"<<endl;
+#endif
 
 	int foundIndex=edgeList->findEdgeIndex(e);
 	// If an identical edge already exists, simply update its label
 	if (foundIndex>=0) {
+#if DEBUG
+		cerr<<"  found identical edge, should merge Z"<<endl;
+#endif
 		Edge *existingEdge=edgeList->get(foundIndex);
 		Label *existingLabel=existingEdge->getLabel();
 		Label *labelToMerge=e->getLabel();
@@ -658,6 +691,9 @@ OverlayOp::insertUniqueEdge(Edge *e)
 		//Debug.print("existing edge: "); Debug.println(existingEdge);
 		dupEdges.push_back(e);
 	} else {  // no matching existing edge was found
+#if DEBUG
+		cerr<<"  no matching existing edge"<<endl;
+#endif
 		// add this new edge to the list of edges in this graph
 		//e.setName(name+edges.size());
 		//e.getDepth().add(e.getLabel());
@@ -721,6 +757,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2004/11/22 11:34:49  strk
+ * More debugging lines and comments/indentation cleanups
+ *
  * Revision 1.28  2004/11/20 17:16:10  strk
  * Handled Z merging for point on polygon boundary case.
  *
