@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/07/22 16:58:01  strk
+ * runtime version extractor functions split. geos::version() is now
+ * geos::geosversion() and geos::jtsport()
+ *
  * Revision 1.23  2004/07/17 09:19:32  strk
  * added GEOS version report
  *
@@ -933,7 +937,7 @@ cout<<"-------------------------------------------------------------------------
 
 main()
 {
-	cout<<geos::version()<<endl;
+	cout<<"GEOS "<<geosversion()<<" ported from JTS "<<jtsport()<<endl;
 	try
 	{
 		do_all();

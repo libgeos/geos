@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.68  2004/07/22 16:58:01  strk
+ * runtime version extractor functions split. geos::version() is now
+ * geos::geosversion() and geos::jtsport()
+ *
  * Revision 1.67  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -184,7 +188,8 @@ namespace geos {
  * can use geos::GeometricShapeFactory.
  *
  * GEOS version info (as a string) can be obtained using
- * geos::version().
+ * geos::geosversion(). The JTS version this release has been
+ * ported from is available throu geos::jtsport().
  *
  * \section io_sect Input / Output
  *
@@ -202,13 +207,22 @@ namespace geos {
 
 
 /*
- * Return a string containing GEOS library version
- * and functionally equivalent JTS version.
+ * Return current GEOS version 
  */
 string
-version()
+geosversion()
 {
-	return "GEOS "GEOS_VERSION" ported from JTS "GEOS_JTS_PORT;
+	return GEOS_VERSION;
+}
+
+/*
+ * Return the version of JTS this GEOS
+ * release has been ported from.
+ */
+string
+jtsport()
+{
+	return GEOS_JTS_PORT;
 }
 
 GeometryComponentFilter Geometry::geometryChangedFilter;

@@ -1,5 +1,3 @@
-- toInternalGeometry is sometimes called sometimes not by Geometry
-  implementation (check if this is correct)
 
 - Check how to disable GEOS_VERSION define on command line
   (or make GEOS_VERSION define in version.h optional)

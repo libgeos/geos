@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/22 16:58:01  strk
+ * runtime version extractor functions split. geos::version() is now
+ * geos::geosversion() and geos::jtsport()
+ *
  * Revision 1.21  2004/07/22 08:45:50  strk
  * Documentation updates, memory leaks fixed.
  *
@@ -216,11 +220,15 @@ using namespace std;
  */
 namespace geos {
 
+/// Return current GEOS version
+string geosversion();
+
 /**
- * \brief Return a string containing GEOS library version
- * and functionally equivalent JTS version.
+ * \brief
+ * Return the version of JTS this GEOS
+ * release has been ported from.
  */
-string version();
+string jtsport();
 
 /// Geometry types
 enum GeometryTypeId {
