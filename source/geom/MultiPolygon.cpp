@@ -11,75 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.22  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.21  2004/07/06 17:58:22  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.20  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.19  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.18  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.17  2004/06/28 21:11:43  strk
- * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
- * Added holes argument check in Polygon.cpp.
- *
- * Revision 1.16  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateSequence argument.
- * Fixed memory leaks associated with this and MultiGeometry constructors.
- * Other associated fixes.
- *
- * Revision 1.15  2004/06/15 20:34:52  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.14  2004/05/07 09:05:13  strk
- * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateSequence.
- *
- * Revision 1.13  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.12  2004/03/31 07:50:37  ybychkov
- * "geom" partially upgraded to JTS 1.4
- *
- * Revision 1.11  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.10  2003/10/16 08:50:00  strk
- * Memory leak fixes. Improved performance by mean of more i
- * calls to new getCoordinatesRO() when applicable.
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 
@@ -127,11 +59,20 @@ Geometry* MultiPolygon::getBoundary() const {
 	for (unsigned int i = 0; i < geometries->size(); i++) {
 		Polygon *pg=(Polygon *) (*geometries)[i];
 		Geometry *g=pg->getBoundary();
-		GeometryCollection* rings=(GeometryCollection*)g;
-		for (int j = 0; j < rings->getNumGeometries(); j++) {
-			allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
+		LineString *ls=dynamic_cast<LineString *>(g);
+		if ( ls )
+		{
+			allRings->push_back(ls);
 		}
-		delete g;
+		else
+		{
+			GeometryCollection* rings=(GeometryCollection*)g;
+			for (int j = 0; j < rings->getNumGeometries(); j++)
+			{
+				allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
+			}
+			delete g;
+		}
 	}
 
 	Geometry *ret=getFactory()->createMultiLineString(allRings);
@@ -152,5 +93,38 @@ GeometryTypeId
 MultiPolygon::getGeometryTypeId() const {
 	return GEOS_MULTIPOLYGON;
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.23  2004/12/08 14:33:20  strk
+ * Checked inner polys getBoundary return for the single LineString case.
+ *
+ * Revision 1.22  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.21  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
+ * Revision 1.20  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
+ * Revision 1.19  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ **********************************************************************/
 
