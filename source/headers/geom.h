@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.67  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.66  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -855,7 +859,7 @@ public:
 	*
 	* @return the factory for this geometry
 	*/
-	GeometryFactory* getFactory() const;
+	const GeometryFactory* getFactory() const;
 	/**
 	* Gets the user data object for this geometry, if any.
 	*
@@ -988,7 +992,7 @@ private:
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter geometryChangedFilter;
     static const int64 serialVersionUID = 8763622679187376702LL;
-	GeometryFactory *factory;
+	const GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 	void* userData;
 	Point* createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const;
@@ -1202,15 +1206,18 @@ public:
 //	GeometryCollection(void);
 	GeometryCollection(const GeometryCollection &gc);
 	GeometryCollection(const vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
+
 	/**
 	* @param geometries
 	*            the <code>Geometry</code>s for this <code>GeometryCollection</code>,
 	*            or <code>null</code> or an empty array to create the empty
 	*            geometry. Elements may be empty <code>Geometry</code>s,
 	*            but not <code>null</code>s.
+	*
 	*            Geometry elements AND vector will be copied.
 	*/
 	GeometryCollection(const vector<Geometry *> *newGeometries, const GeometryFactory *newFactory);
+
 	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
 	/**

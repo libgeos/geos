@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/06/30 20:59:13  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.20  2004/05/27 08:37:16  strk
  * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
  *
@@ -652,7 +656,7 @@ private:
 	int quadrantSegments;
 	int endCapStyle;
 	PrecisionModel *workingPrecisionModel;
-	GeometryFactory *geomFact;
+	const GeometryFactory *geomFact;
 	EdgeList *edgeList;
 	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel); // throw(GEOSException *);
 	/**

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/06/30 20:59:13  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.14  2004/05/03 10:43:43  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -41,7 +45,7 @@
 
 namespace geos {
 
-PolygonBuilder::PolygonBuilder(GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
+PolygonBuilder::PolygonBuilder(const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga) {
 	geometryFactory=newGeometryFactory;
 	cga=newCga;
 	shellList=new vector<EdgeRing*>();

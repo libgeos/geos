@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/06/30 20:59:13  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.9  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -28,7 +32,7 @@
 
 namespace geos {
 
-MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFactory, CGAlgorithms *cga):
+MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,const GeometryFactory *geometryFactory, CGAlgorithms *cga):
 EdgeRing(start,geometryFactory,cga){
 	computePoints(start);
 	computeRing();

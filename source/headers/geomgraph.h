@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.5  2004/05/26 09:50:05  strk
  * Added comments about OverlayNodeFactory() ownership in NodeMap and PlanarGraph constuctors
  *
@@ -557,7 +561,7 @@ private:
 
 class EdgeRing{
 public:
-	EdgeRing(DirectedEdge *newStart, GeometryFactory *newGeometryFactory, CGAlgorithms *newCga);
+	EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga);
 	virtual ~EdgeRing();
 	bool isIsolated();
 	bool isHole();
@@ -568,7 +572,7 @@ public:
 	EdgeRing *getShell();
 	void setShell(EdgeRing *newShell);
 	void addHole(EdgeRing *edgeRing);
-	Polygon* toPolygon(GeometryFactory* geometryFactory);
+	Polygon* toPolygon(const GeometryFactory* geometryFactory);
 	void computeRing();
 	virtual DirectedEdge* getNext(DirectedEdge *de)=0;
 	virtual void setEdgeRing(DirectedEdge *de, EdgeRing *er)=0;
@@ -578,7 +582,7 @@ public:
 	bool containsPoint(Coordinate& p);
 protected:
 	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
-	GeometryFactory *geometryFactory;
+	const GeometryFactory *geometryFactory;
 	CGAlgorithms *cga;
 	void computePoints(DirectedEdge *newStart);
 	void mergeLabel(Label *deLabel);

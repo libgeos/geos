@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.35  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.34  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -109,6 +113,7 @@ GeometryCollection::GeometryCollection(const vector<Geometry *> *geoms, const Ge
 		(*geometries)[i] = (*geoms)[i]->clone();
 	}
 }
+
 
 Geometry* GeometryCollection::clone() const {
 	return new GeometryCollection(*this);

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.51  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.50  2004/05/21 13:58:47  strk
  * ::intersection missed to invalidate geometryCollection inputs
  *
@@ -89,21 +93,22 @@ GeometryComponentFilter Geometry::geometryChangedFilter;
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
 Geometry::Geometry(const GeometryFactory *newFactory) {
-	factory=new GeometryFactory(*newFactory);
+	//factory=new GeometryFactory(*newFactory);
+	factory=newFactory;
 	SRID=factory->getSRID();
 	envelope=new Envelope();
 	userData=NULL;
 }
 
 Geometry::Geometry() {
-	factory=new GeometryFactory();
+	factory=INTERNAL_GEOMETRY_FACTORY; //new GeometryFactory();
 	SRID=0;
 	envelope=new Envelope();
 	userData=NULL;
 }
 
 Geometry::Geometry(const Geometry &geom) {
-	factory=new GeometryFactory(*(geom.factory));
+	//factory=new GeometryFactory(*(geom.factory));
 	envelope=new Envelope(*(geom.envelope));
 	SRID=geom.getSRID();
 	userData=NULL;
@@ -300,7 +305,8 @@ void Geometry::setSRID(int newSRID) {SRID=newSRID;}
 *
 * @return the factory for this geometry
 */
-GeometryFactory* Geometry::getFactory() const{
+const GeometryFactory*
+Geometry::getFactory() const{
 	return factory;
 }
 
@@ -768,7 +774,7 @@ double Geometry::getLength() const {
 
 
 Geometry::~Geometry(){
-	delete factory;
+	//delete factory;
 	delete envelope;
 	//delete userData; /* TODO: make this a Template type (not void*) */
 }

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.32  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.31  2004/04/20 12:47:57  strk
  * MinimumDiameter leaks plugged.
  *
@@ -513,7 +517,7 @@ private:
 class InteriorPointArea {
 private:
 	static double avg(double a, double b);
-	GeometryFactory *factory;
+	const GeometryFactory *factory;
 	Coordinate *interiorPoint;
 	double maxWidth;
 	void add(const Geometry *geom);
@@ -543,7 +547,7 @@ private:
 	PointLocator *pointLocator;
 	//CGAlgorithms *cgAlgorithms;
 	const Geometry *geometry;
-	GeometryFactory *factory;
+	const GeometryFactory *factory;
 	CoordinateList* reduce(const CoordinateList *pts);
 	CoordinateList* preSort(CoordinateList *pts);
 	CoordinateList* grahamScan(const CoordinateList *c);

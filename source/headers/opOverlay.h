@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/06/30 20:59:13  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.16  2004/05/03 10:43:42  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -113,7 +117,7 @@ protected:
 	void insertUniqueEdge(Edge *e);
 private:
 	PointLocator *ptLocator;
-	GeometryFactory *geomFact;
+	const GeometryFactory *geomFact;
 	Geometry *resultGeom;
 	PlanarGraph *graph;
 	EdgeList *edgeList;
@@ -223,7 +227,7 @@ private:
  */
 class MinimalEdgeRing: public EdgeRing {
 public:
-	MinimalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFactory,CGAlgorithms *cga);
+	MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory,CGAlgorithms *cga);
 	virtual ~MinimalEdgeRing();
 	DirectedEdge* getNext(DirectedEdge *de);
 	void setEdgeRing(DirectedEdge *de,EdgeRing *er);
@@ -249,7 +253,7 @@ public:
 
 class MaximalEdgeRing: public EdgeRing {
 public:
-	MaximalEdgeRing(DirectedEdge *start, GeometryFactory *geometryFactory, CGAlgorithms *cga);
+	MaximalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory, CGAlgorithms *cga);
 	virtual ~MaximalEdgeRing();
 	DirectedEdge* getNext(DirectedEdge *de);
 	void setEdgeRing(DirectedEdge* de,EdgeRing* er);
@@ -263,7 +267,7 @@ public:
 class PointBuilder {
 private:
 	OverlayOp *op;
-	GeometryFactory *geometryFactory;
+	const GeometryFactory *geometryFactory;
 	PointLocator *ptLocator;
 	vector<Node*>* collectNodes(int opCode);
 	/**
@@ -275,7 +279,7 @@ private:
 	*/
 	vector<Point*>* simplifyPoints(vector<Node*>* resultNodeList);
 public:
-	PointBuilder(OverlayOp *newOp,GeometryFactory *newGeometryFactory,PointLocator *newPtLocator);
+	PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator);
 	/**
 	* @return a list of the Points in the result of the specified overlay operation
 	*/
@@ -289,7 +293,7 @@ public:
  */
 class LineBuilder {
 public:
-	LineBuilder(OverlayOp *newOp,GeometryFactory *newGeometryFactory,PointLocator *newPtLocator);
+	LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator);
 	~LineBuilder();
 	/**
 	* @return a list of the LineStrings in the result of the specified overlay operation
@@ -316,7 +320,7 @@ public:
 	void collectBoundaryTouchEdge(DirectedEdge *de,int opCode,vector<Edge*>* edges);
 private:
 	OverlayOp *op;
-	GeometryFactory *geometryFactory;
+	const GeometryFactory *geometryFactory;
 	PointLocator *ptLocator;
 	vector<Edge*>* lineEdgesList;
 	vector<LineString*>* resultLineList;
@@ -338,7 +342,7 @@ private:
  */
 class PolygonBuilder {
 public:
-	PolygonBuilder(GeometryFactory *newGeometryFactory,CGAlgorithms *newCga);
+	PolygonBuilder(const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga);
 	~PolygonBuilder();
 	/**
 	* Add a complete graph.
@@ -355,7 +359,7 @@ public:
   	vector<Geometry*>* getPolygons();
 	bool containsPoint(Coordinate& p);
 private:
-	GeometryFactory *geometryFactory;
+	const GeometryFactory *geometryFactory;
 	CGAlgorithms *cga;
 //	List dirEdgeList; //Doesn't seem to be used at all
 //	NodeMap *nodes;

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -29,6 +33,10 @@
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.2  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -45,7 +53,7 @@
 
 namespace geos {
 
-EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
+EdgeRing::EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
 	label=new Label(Location::UNDEF);
 	maxNodeDegree=-1;
 	geometryFactory=newGeometryFactory;
@@ -110,7 +118,7 @@ void EdgeRing::addHole(EdgeRing *edgeRing) {
 	holes->push_back(edgeRing);
 }
 
-Polygon* EdgeRing::toPolygon(GeometryFactory* geometryFactory){
+Polygon* EdgeRing::toPolygon(const GeometryFactory* geometryFactory){
 	vector<Geometry *> *holeLR=new vector<Geometry *>();
 	for (unsigned int i=0;i<holes->size();i++) {
         holeLR->push_back((*holes)[i]->getLinearRing());
