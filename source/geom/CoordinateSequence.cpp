@@ -14,9 +14,14 @@
  **********************************************************************/
 
 #include <geos/geom.h>
+#include <geos/profiler.h>
 #include <stdio.h>
 
 namespace geos {
+
+#if PROFILE
+static Profiler *profiler = Profiler::instance();
+#endif
 
 bool
 CoordinateSequence::hasRepeatedPoints() const
@@ -187,10 +192,17 @@ CoordinateSequence::add(const CoordinateSequence *cl,bool allowRepeated,bool dir
 CoordinateSequence*
 CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 {
+#if PROFILE
+	static Profile *prof= profiler->get("CoordinateSequence::removeRepeatedPoints()");
+	prof->start();
+#endif
 	CoordinateSequence* ret=DefaultCoordinateSequenceFactory::instance()->create(NULL);
 	const vector<Coordinate> *v=cl->toVector();
 	ret->add(v,false);
 	//delete v;
+#if PROFILE
+	prof->stop();
+#endif
 	return ret;
 }
 
@@ -198,6 +210,9 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/02/03 09:17:07  strk
+ * more profiling label
+ *
  * Revision 1.6  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *
