@@ -89,8 +89,8 @@ void Geometry::scroll(CoordinateList* coordinates,Coordinate& firstCoordinate) {
 	for (int i=ind; i<length; i++) {
 		v[i-ind]=coordinates->getAt(i);
 	}
-	for (int i=0; i<ind; i++) {
-		v[length-ind+i]=coordinates->getAt(i);
+	for (int j=0; j<ind; j++) {
+		v[length-ind+j]=coordinates->getAt(j);
 	}
 	coordinates->setPoints(v);
 }
