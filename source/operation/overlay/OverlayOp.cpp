@@ -304,25 +304,63 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	const LineString *line = dynamic_cast<const LineString *>(targetGeom);
 	if ( loc == Location::INTERIOR && line )
 	{
-		const CoordinateSequence *pts = line->getCoordinatesRO();
-		const Coordinate &p = n->getCoordinate();
-		RobustLineIntersector li;
-		for(int i=1;i<pts->getSize();i++) {
-			Coordinate p0=pts->getAt(i-1);
-			Coordinate p1=pts->getAt(i);	
-			li.computeIntersection(p, p0, p1);
-			if (li.hasIntersection()) {
-				if ( p == p0 ) n->addZ(p0.z);
-				else if ( p == p1 ) n->addZ(p1.z);
-				else {
-					n->addZ(p0.z);
-					n->addZ(p1.z);
-				}
-				break;
-			}
-		}
+		mergeZ(n, line);
+	}
+	const Polygon *poly = dynamic_cast<const Polygon *>(targetGeom);
+	if ( loc == Location::BOUNDARY && poly )
+	{
+		mergeZ(n, poly);
 	}
 #endif // COMPUTE_Z
+}
+
+/*
+ * Merge Z values of node with those of the segment or vertex in
+ * the given Polygon it is on.
+ */
+int
+OverlayOp::mergeZ(Node *n, const Polygon *poly) const
+{
+	const LineString *ls;
+	int found = 0;
+	ls = (const LineString *)poly->getExteriorRing();
+	found = mergeZ(n, ls);
+	if ( found ) return 1;
+	for (unsigned int i=0; i<poly->getNumInteriorRing(); i++)
+	{
+		ls = (const LineString *)poly->getInteriorRingN(i);
+		found = mergeZ(n, ls);
+		if ( found ) return 1;
+	}
+	return 0;
+}
+
+/*
+ * Merge Z values of node with those of the segment or vertex in
+ * the given LineString it is on.
+ * @returns 1 if an intersection is found, 0 otherwise.
+ */
+int
+OverlayOp::mergeZ(Node *n, const LineString *line) const
+{
+	const CoordinateSequence *pts = line->getCoordinatesRO();
+	const Coordinate &p = n->getCoordinate();
+	RobustLineIntersector li;
+	for(int i=1;i<pts->getSize();i++) {
+		Coordinate p0=pts->getAt(i-1);
+		Coordinate p1=pts->getAt(i);	
+		li.computeIntersection(p, p0, p1);
+		if (li.hasIntersection()) {
+			if ( p == p0 ) n->addZ(p0.z);
+			else if ( p == p1 ) n->addZ(p1.z);
+			else {
+				n->addZ(p0.z);
+				n->addZ(p1.z);
+			}
+			return 1;
+		}
+	}
+	return 0;
 }
 
 /*
@@ -683,6 +721,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2004/11/20 17:16:10  strk
+ * Handled Z merging for point on polygon boundary case.
+ *
  * Revision 1.27  2004/11/20 16:25:17  strk
  * Added Z computation for point on line case.
  *

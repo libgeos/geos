@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/11/20 17:16:10  strk
+ * Handled Z merging for point on polygon boundary case.
+ *
  * Revision 1.3  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *
@@ -275,6 +278,19 @@ private:
 
 	/* Caches for memory management */
 	vector<Edge *>dupEdges;
+
+	/*
+	 * Merge Z values of node with those of the segment or vertex in
+	 * the given Polygon it is on.
+	 */
+	int OverlayOp::mergeZ(Node *n, const Polygon *poly) const;
+
+	/*
+	 * Merge Z values of node with those of the segment or vertex in
+	 * the given LineString it is on.
+	 * @returns 1 if an intersection is found, 0 otherwise.
+	 */
+	int OverlayOp::mergeZ(Node *n, const LineString *line) const;
 
 };
 
