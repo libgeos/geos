@@ -11,64 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.5  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.4  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.3  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.2  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.6  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.5  2004/05/26 09:50:05  strk
- * Added comments about OverlayNodeFactory() ownership in NodeMap and PlanarGraph constuctors
- *
- * Revision 1.4  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.3  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- * Revision 1.2  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.27  2003/11/12 18:02:56  strk
- * Added throw specification. Fixed leaks on exceptions.
- *
- * Revision 1.26  2003/11/12 15:43:38  strk
- * Added some more throw specifications
- *
- * Revision 1.25  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.24  2003/11/06 18:45:05  strk
- * Added throw specification for DirectEdgeStar::linkResultDirectedEdges()
- *
  **********************************************************************/
-
 
 
 #ifndef GEOS_GEOMGRAPH_H
@@ -440,6 +383,8 @@ public:
 	virtual void setLabelBoundary(int argIndex);
 	virtual int computeMergedLocation(const Label* label2, int eltIndex);
 	virtual string print();
+	virtual const vector<double> &getZ() const;
+	virtual void addZ(double);
 
 protected:
 	Coordinate coord;
@@ -447,8 +392,8 @@ protected:
 	virtual void computeIM(IntersectionMatrix *im) {};
 
 private:
-	double z;
-	unsigned int validz;
+	vector<double>zvals;
+	double ztot;
 
 };
 
@@ -761,5 +706,69 @@ public:
 
 //Operators
 bool operator==(Edge a,Edge b);
-}
-#endif
+
+} // namespace geos
+
+#endif // ifndef GEOS_GEOMGRAPH_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2004/11/20 15:46:45  strk
+ * Added composing Z management functions and elements for class Node
+ *
+ * Revision 1.6  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
+ * Revision 1.5  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
+ * Revision 1.4  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.3  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.6  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.5  2004/05/26 09:50:05  strk
+ * Added comments about OverlayNodeFactory() ownership in NodeMap and PlanarGraph constuctors
+ *
+ * Revision 1.4  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
+ * Revision 1.3  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ * Revision 1.2  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.27  2003/11/12 18:02:56  strk
+ * Added throw specification. Fixed leaks on exceptions.
+ *
+ * Revision 1.26  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
+ * Revision 1.25  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.24  2003/11/06 18:45:05  strk
+ * Added throw specification for DirectEdgeStar::linkResultDirectedEdges()
+ *
+ **********************************************************************/
+
