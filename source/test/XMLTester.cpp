@@ -28,8 +28,8 @@ int main(int argC, char* argV[]) {
 //	int out=0;
 	int failed=0;
 	int succeeded=0;
-	string source="d://test.xml";
-//	string source="./test.xml";
+//	string source="d://test.xml";
+	string source="./test.xml";
 	string precisionModel="";
 	string desc="";
 	string geomAin="";
