@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.25  2003/10/09 15:35:13  strk
+* added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
+*
 * Revision 1.24  2003/10/09 10:14:06  strk
 * just a style change in top Log comment.
 *
@@ -19,10 +22,8 @@ GeometryFactory::GeometryFactory() {
 * Create a geometry factory using given precision model and srid.
 * Will make a copy of given PrecisionModel object, so callers
 * can safely delete it afterwards.
-* We should use the 'const' modifier, but that made my compiler
-* crazy !! --strk;
 */
-GeometryFactory::GeometryFactory(PrecisionModel* pm, int newSRID){
+GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID){
     precisionModel=new PrecisionModel(*pm);
     SRID=newSRID;
 }

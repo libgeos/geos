@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.31  2003/10/09 15:35:13  strk
+* added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
+*
+*/
 #ifndef GEOS_GEOM_H
 #define GEOS_GEOM_H
 
@@ -964,7 +970,7 @@ public:
 class GeometryFactory {
 public:
 	GeometryFactory();
-	GeometryFactory(PrecisionModel* newPrecisionModel, int newSRID);
+	GeometryFactory(const PrecisionModel* pm, int newSRID);
 	virtual ~GeometryFactory();
 
 //Skipped a lot of list to array convertors
