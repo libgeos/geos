@@ -13,58 +13,30 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2003/11/12 11:08:39  strk
+ * removed old changelog, moved comments in the nice standard frame
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
  *
  *
+ *********************************************************************
+ *
+ * This file should document by example usage of the GEOS library.
+ * It could actually be a live discuss-by-example board for
+ * architectural design choices.
+ *
+ * 			--strk;
+ * 
+ * DEBUGGING TIPS:
+ *  use -D__USE_MALLOC at compile time for gcc 2.91, 2.95, 3.0 and 3.1
+ *  and GLIBCXX_FORCE_NEW or GLIBCPP_FORCE_NEW at run time with gcc 3.2.2+
+ *  to force libstdc++ avoid caching memory. This should remove some
+ *  obscure reports from memory checkers like valgrind.
+ *
  **********************************************************************/
 
-
-// This file should document by example usage of the GEOS library.
-// It could actually be a live discuss-by-example board for
-// architectural design choices.
-//
-// 			--strk;
-// 
-// DEBUGGING TIPS:
-//  use -D__USE_MALLOC at compile time for gcc 2.91, 2.95, 3.0 and 3.1
-//  and GLIBCXX_FORCE_NEW or GLIBCPP_FORCE_NEW at run time with gcc 3.2.2+
-//  to force libstdc++ avoid caching memory. This should remove some
-//  obscure reports from memory checkers like valgrind.
-//
-// $Log$
-// Revision 1.11  2003/11/07 01:23:42  pramsey
-// Add standard CVS headers licence notices and copyrights to all cpp and h
-// files.
-//
-// Revision 1.10  2003/11/06 17:41:41  strk
-// Added Buffer,Intersection,Difference and Symdifference. Exception cleanup
-//
-// Revision 1.9  2003/11/05 21:52:57  strk
-// Modified example.cpp to make use of vectors instead of Geometry * / int
-// couples. Added LineString creation example. Added Makefile to compile it.
-//
-// Revision 1.8  2003/11/03 16:09:44  strk
-// Removed comments about segfaults, made the simple collection creation call
-// cleaner by use of the clone() method.
-//
-// Revision 1.7  2003/10/29 10:38:43  strk
-// Added centroid computation example
-//
-// Revision 1.6  2003/10/21 16:16:46  strk
-// Uncommented point creation lines. Updated comments about segfaults.
-//
-// Revision 1.5  2003/10/20 17:50:30  strk
-// added Union example
-//
-// Revision 1.4  2003/10/09 11:20:12  strk
-// moved Log to a better place
-//
-// Revision 1.3  2003/10/09 11:19:20  strk
-// added convexHull and PrecisionModel
-//
-// 
 #include <stdio.h>
 #include <io.h>
 #include <geom.h>
@@ -322,7 +294,6 @@ void do_all()
 	
 	newgeoms = new vector<Geometry *>;
 	for (int i=0; i<geoms->size(); i++) {
-	//for (int i=1; i<2; i++) {
 		Geometry *g = (*geoms)[i];
 		try {
 			Geometry *g2 = g->buffer(10);
