@@ -1,4 +1,6 @@
-EXTRA_DIST =  \
+geosdir = $(prefix)/include/geos
+
+geos_HEADERS = \
 	bigtest.h \
 	geom.h \
 	geosAlgorithm.h \
