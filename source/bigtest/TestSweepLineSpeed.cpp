@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "geom.h"
 #include "time.h"
 #include "bigtest.h"
