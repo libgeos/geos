@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/05/06 15:00:59  strk
+ * Boundable destructor made virtual.
+ * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
+ * used to keep track of created node to cleanly delete them at
+ * destruction time.
+ *
  * Revision 1.14  2004/05/06 08:59:19  strk
  * memory leak fixed
  *
@@ -72,17 +78,19 @@ namespace geos {
 AbstractSTRtree::AbstractSTRtree(int newNodeCapacity) {
 	built=false;
 	itemBoundables=new vector<Boundable*>();
+	nodes=new vector<AbstractNode *>();
 	Assert::isTrue(newNodeCapacity>1, "Node capacity must be greater than 1");
 	nodeCapacity=newNodeCapacity;
 }
 
 AbstractSTRtree::~AbstractSTRtree() {
 	for (int i=0; i<itemBoundables->size(); i++)
-	{
 		delete (*itemBoundables)[i];
-	}
 	delete itemBoundables;
-	delete root;
+	for (int i=0; i<nodes->size(); i++)
+		delete (*nodes)[i];
+	delete nodes;
+	//delete root;
 }
 
 /**
@@ -119,7 +127,8 @@ AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables,int 
 
 	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
-		if (lastNode(parentBoundables)->getChildBoundables()->size()==nodeCapacity) {
+		if (lastNode(parentBoundables)->getChildBoundables()->size()==nodeCapacity)
+		{
 			parentBoundables->push_back(createNode(newLevel));
 		}
 		lastNode(parentBoundables)->addChildBoundable(childBoundable);

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/05/06 15:00:59  strk
+ * Boundable destructor made virtual.
+ * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
+ * used to keep track of created node to cleanly delete them at
+ * destruction time.
+ *
  * Revision 1.8  2004/05/05 17:42:06  strk
  * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
  * SIRAbstractNode and STRAbstractNode destructors added to get rid of
@@ -110,7 +116,9 @@ void* SIRAbstractNode::computeBounds() {
 }
 
 AbstractNode* SIRtree::createNode(int level) {
-	return new SIRAbstractNode(level);
+	AbstractNode *an = new SIRAbstractNode(level);
+	nodes->push_back(an);
+	return an;
 }
 
 /**

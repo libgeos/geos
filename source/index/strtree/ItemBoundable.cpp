@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/05/06 15:00:59  strk
+ * Boundable destructor made virtual.
+ * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
+ * used to keep track of created node to cleanly delete them at
+ * destruction time.
+ *
  * Revision 1.4  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -29,6 +35,9 @@ namespace geos {
 ItemBoundable::ItemBoundable(void* newBounds,void* newItem){
 	bounds=newBounds;
 	item=newItem;
+}
+
+ItemBoundable::~ItemBoundable() {
 }
 
 void* ItemBoundable::getBounds() {

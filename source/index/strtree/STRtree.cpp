@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/06 15:00:59  strk
+ * Boundable destructor made virtual.
+ * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
+ * used to keep track of created node to cleanly delete them at
+ * destruction time.
+ *
  * Revision 1.9  2004/05/06 13:58:30  strk
  * leak removed from createParentBoundablesFromVerticalSlices
  *
@@ -168,7 +174,9 @@ vector<vector<Boundable*>*>* STRtree::verticalSlices(vector<Boundable*>* childBo
 	return slices;
 }
 
-STRAbstractNode::STRAbstractNode(int level):AbstractNode(level) {}
+STRAbstractNode::STRAbstractNode(int level):AbstractNode(level)
+{
+}
 
 STRAbstractNode::~STRAbstractNode() {
 	delete (Envelope *)bounds;
@@ -189,7 +197,9 @@ void* STRAbstractNode::computeBounds() {
 }
 
 AbstractNode* STRtree::createNode(int level) {
-	return new STRAbstractNode(level);
+	AbstractNode *an = new STRAbstractNode(level);
+	nodes->push_back(an);
+	return an;
 }
 
 void STRtree::insert(Envelope *itemEnv, void* item) {

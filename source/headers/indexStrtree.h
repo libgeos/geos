@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/05/06 15:00:59  strk
+ * Boundable destructor made virtual.
+ * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
+ * used to keep track of created node to cleanly delete them at
+ * destruction time.
+ *
  * Revision 1.13  2004/05/05 17:42:06  strk
  * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
  * SIRAbstractNode and STRAbstractNode destructors added to get rid of
@@ -70,6 +76,7 @@ public:
    * @see AbstractSTRtree.IntersectsOp
    */
 	virtual void* getBounds()=0;
+	virtual ~Boundable() {};
 };
 
 /**
@@ -83,6 +90,7 @@ private:
 	void* item;
 public:
 	ItemBoundable(void* newBounds,void* newItem);
+	virtual ~ItemBoundable();
 	void* getBounds();
 	void* getItem();
 };
@@ -165,6 +173,7 @@ protected:
 			virtual bool intersects(void* aBounds,void* bBounds)=0;
 	};
 	AbstractNode *root;
+	vector <AbstractNode *> *nodes;
 	virtual AbstractNode* createNode(int level)=0;
 	virtual vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
 	virtual AbstractNode* lastNode(vector<Boundable*> *nodes);
@@ -225,7 +234,7 @@ protected:
 	};
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
 	AbstractNode* createNode(int level);
-//	IntersectsOp* getIntersectsOp(){return NULL;);
+//	IntersectsOp* getIntersectsOp(){return NULL;};
 	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
 };
 	
