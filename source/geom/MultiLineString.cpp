@@ -37,7 +37,7 @@ bool MultiLineString::isSimple(){
 	return (new IsSimpleOp())->isSimple(this);
 }
 
-Geometry MultiLineString::getBoundary() {
+Geometry* MultiLineString::getBoundary() {
 	if (isEmpty()) {
 		return GeometryCollection(NULL, precisionModel, SRID);
 	}

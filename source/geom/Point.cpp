@@ -51,15 +51,15 @@ string Point::getGeometryType() {
 	return "Point";
 }
 
-Geometry Point::getBoundary() {
-	return GeometryCollection(NULL, precisionModel, SRID);
+Geometry* Point::getBoundary() {
+	return new GeometryCollection(NULL, precisionModel, SRID);
 }
 
-Envelope Point::computeEnvelopeInternal() {
+Envelope* Point::computeEnvelopeInternal() {
 	if (isEmpty()) {
-		return Envelope();
+		return new Envelope();
 	}
-	return Envelope(coordinate.x, coordinate.x, coordinate.y, coordinate.y);
+	return new Envelope(coordinate.x, coordinate.x, coordinate.y, coordinate.y);
 }
 
 void Point::apply(CoordinateFilter *filter) {

@@ -18,8 +18,8 @@ string MultiPoint::getGeometryType() {
 	return "MultiPoint";
 }
 
-Geometry MultiPoint::getBoundary() {
-	return GeometryCollection(NULL, precisionModel, SRID);
+Geometry* MultiPoint::getBoundary() {
+	return new GeometryCollection(NULL, precisionModel, SRID);
 }
 
 bool MultiPoint::isSimple(){

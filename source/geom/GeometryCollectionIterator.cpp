@@ -39,7 +39,7 @@ bool GeometryCollectionIterator::hasNext() {
 	return true;
 }
 
-Geometry *GeometryCollectionIterator::next() {
+Geometry* GeometryCollectionIterator::next() {
 	// the parent GeometryCollection is the first object returned
 	if (atStart) {
 		atStart=false;

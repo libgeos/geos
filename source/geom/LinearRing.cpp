@@ -2,9 +2,9 @@
 
 LinearRing::LinearRing(): LineString() {}
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr.points, lr.precisionModel, lr.SRID) {}
-LinearRing::LinearRing(CoordinateList* points,PrecisionModel precisionModel,int SRID): 
+LinearRing::LinearRing(CoordinateList* points,PrecisionModel* precisionModel,int SRID): 
     LineString(points, precisionModel, SRID) {
-	if (!LineString::isEmpty() && ! LineString::isClosed()) {
+	if (!LineString::isEmpty() && !LineString::isClosed()) {
 		throw "IllegalArgumentException: points must form a closed linestring";
     }
 	if (!points->isEmpty() && (points->getSize() == 1 || points->getSize() == 2)) {

@@ -49,7 +49,6 @@ void EdgeRing::addHole(EdgeRing *edgeRing) {
 Polygon EdgeRing::toPolygon(GeometryFactory geometryFactory){
 	vector<Geometry *> *holeLR=new vector<Geometry *>();
 	for (unsigned int i=0;i<holes.size();i++) {
-//		holeLR->push_back(holes.at(i)->getLinearRing());
         holeLR->push_back(holes[i]->getLinearRing());
 	}
 	return geometryFactory.createPolygon(getLinearRing(), holeLR);
@@ -58,11 +57,8 @@ Polygon EdgeRing::toPolygon(GeometryFactory geometryFactory){
 //!!!External Dependency
 void EdgeRing::computeRing() {
 	if (ring!=NULL) return;   // don't compute more than once
-//	CoordinateList coord(pts);
-	ring=new LinearRing(geometryFactory->createLinearRing(pts));
-//!!!External Dependency
-//	isHoleVar=cga.isCCW(ring.getCoordinates());
-	isHoleVar=true;
+	ring=geometryFactory->createLinearRing(pts);
+	isHoleVar=cga->isCCW(ring->getCoordinates());
 }
 
   /**

@@ -54,8 +54,10 @@ bool IntersectionMatrix::matches(int actualDimensionValue, char requiredDimensio
 }
 
 bool IntersectionMatrix::matches(string actualDimensionSymbols, string requiredDimensionSymbols) {
-	IntersectionMatrix m(actualDimensionSymbols);
-	return m.matches(requiredDimensionSymbols);
+	IntersectionMatrix* m=new IntersectionMatrix(actualDimensionSymbols);
+	bool result=m->matches(requiredDimensionSymbols);
+	delete m;
+	return result;
 }
 
 void IntersectionMatrix::set(int row, int column, int dimensionValue){

@@ -10,12 +10,12 @@ Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID), holes(p.
 //	holes=p.holes;
 }
 
-Polygon::Polygon(LinearRing *newShell, PrecisionModel precisionModel, int SRID){
+Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID){
 	Polygon(newShell, &vector<Geometry *>(), precisionModel, SRID);
 }
 
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
-				 PrecisionModel precisionModel, int SRID):
+				 PrecisionModel* precisionModel, int SRID):
 				Geometry(precisionModel, SRID) {
 	if (newShell==NULL)
 		newShell=new LinearRing(CoordinateListFactory::internalFactory->createCoordinateList(), precisionModel, SRID);
@@ -94,20 +94,20 @@ string Polygon::getGeometryType() {
 	return "Polygon";
 }
 
-Geometry Polygon::getBoundary() {
+Geometry* Polygon::getBoundary() {
 	if (isEmpty()) {
-		return GeometryCollection(NULL, precisionModel, SRID);
+		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
 	vector<Geometry *> rings(holes.size() + 1);
 	rings[0]=dynamic_cast<LineString *>(shell);
 	for (unsigned int i=0; i<holes.size(); i++) {
 		rings[i + 1] = ((LineString *)holes[i]);
 	}
-	return MultiLineString(&rings, precisionModel, SRID);
+	return new MultiLineString(&rings, precisionModel, SRID);
 }
 
-Envelope Polygon::computeEnvelopeInternal() {
-	return shell->getEnvelopeInternal();
+Envelope* Polygon::computeEnvelopeInternal() {
+	return &(shell->getEnvelopeInternal());
 }
 
 bool Polygon::equalsExact(Geometry *other) {

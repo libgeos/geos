@@ -7,7 +7,7 @@
 
 Polygon* GeometryTestFactory::createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen) {
 	CoordinateList *pts=createBox(minx, miny, nSide, segLen);
-    return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(pts)),NULL));
+    return fact->createPolygon(fact->createLinearRing(pts),NULL);
 }
 
 CoordinateList* GeometryTestFactory::createBox(double minx, double miny,int nSide,double segLen) {
@@ -63,7 +63,7 @@ CoordinateList* GeometryTestFactory::createCircle(double basex,double basey,doub
 
 Polygon* GeometryTestFactory::createCircle(GeometryFactory *fact,double basex,double basey,double size,int nPts) {
 	CoordinateList *pts=createCircle(basex, basey, size, nPts);
-    return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(pts)),NULL));
+    return fact->createPolygon(fact->createLinearRing(pts),NULL);
 }
 
 	/**
@@ -104,5 +104,5 @@ CoordinateList* GeometryTestFactory::createSineStar(double basex,double basey,do
 
 Polygon* GeometryTestFactory::createSineStar(GeometryFactory *fact,double basex,double basey,double size,double armLen,int nArms,int nPts){
 	CoordinateList *pts=createSineStar(basex, basey, size, armLen, nArms, nPts);
-	return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(pts)),NULL));
+	return fact->createPolygon(fact->createLinearRing(pts),NULL);
 }

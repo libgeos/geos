@@ -14,7 +14,7 @@ LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRI
 	points=ls.points;
 }
 
-LineString::LineString(CoordinateList *newPoints, PrecisionModel precisionModel, int SRID):
+LineString::LineString(CoordinateList *newPoints, PrecisionModel* precisionModel, int SRID):
 						Geometry(precisionModel, SRID){
 	if (newPoints==NULL) {
 		newPoints=CoordinateListFactory::internalFactory->createCoordinateList();
@@ -25,9 +25,6 @@ LineString::LineString(CoordinateList *newPoints, PrecisionModel precisionModel,
 	if (newPoints->getSize()==1) {
 		throw "IllegalArgumentException: point array must contain 0 or >1 elements\n";
 	}
-//	CoordinateList pts(newPoints);
-//	points=pts;
-//	points=CoordinateList(newPoints);
 	points=newPoints;
 }
 
@@ -60,20 +57,20 @@ int LineString::getNumPoints() {
 	return points->getSize();
 }
 
-Point LineString::getPointN(int n) {
-	return Point(points->getAt(n), getPrecisionModel(), SRID);
+Point* LineString::getPointN(int n) {
+	return new Point(points->getAt(n), getPrecisionModel(), SRID);
 }
 
-Point LineString::getStartPoint() {
+Point* LineString::getStartPoint() {
 	if (isEmpty()) {
-		return Point();
+		return new Point();
 	}
 	return getPointN(0);
 }
 
-Point LineString::getEndPoint() {
+Point* LineString::getEndPoint() {
 	if (isEmpty()) {
-		return Point();
+		return new Point();
 	}
 	return getPointN(getNumPoints() - 1);
 }
@@ -97,17 +94,17 @@ bool LineString::isSimple(){
 	return (new IsSimpleOp())->isSimple(this);
 }
 
-Geometry LineString::getBoundary() {
+Geometry* LineString::getBoundary() {
 	if (isEmpty()) {
-		return GeometryCollection(NULL, precisionModel, SRID);
+		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
 	if (isClosed()) {
-		return MultiPoint(NULL, precisionModel, SRID);
+		return new MultiPoint(NULL, precisionModel, SRID);
 	}
 	vector<Geometry*> *pts=new vector<Geometry*>();
 	pts->push_back(&getStartPoint());
 	pts->push_back(&getEndPoint());
-	return MultiPoint(pts,precisionModel, SRID);
+	return new MultiPoint(pts,precisionModel, SRID);
 }
 
 bool LineString::isCoordinate(Coordinate& pt) {
@@ -119,9 +116,9 @@ bool LineString::isCoordinate(Coordinate& pt) {
 	return false;
 }
 
-Envelope LineString::computeEnvelopeInternal() {
+Envelope* LineString::computeEnvelopeInternal() {
 	if (isEmpty()) {
-		return Envelope();
+		return new Envelope();
 	}
 	double minx = points->getAt(0).x;
 	double miny = points->getAt(0).y;
@@ -133,7 +130,7 @@ Envelope LineString::computeEnvelopeInternal() {
 		miny = min(miny, points->getAt(i).y);
 		maxy = max(maxy, points->getAt(i).y);
 	}
-	return Envelope(minx, maxx, miny, maxy);
+	return new Envelope(minx, maxx, miny, maxy);
 }
 
 bool LineString::equalsExact(Geometry *other) {

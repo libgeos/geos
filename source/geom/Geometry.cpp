@@ -123,7 +123,7 @@ Geometry Geometry::getEnvelope() {
 
 Envelope Geometry::getEnvelopeInternal() {
 	if (envelope.isNull()) {
-		return computeEnvelopeInternal();
+		return *computeEnvelopeInternal();
 	} else 
 		return envelope;
 }
