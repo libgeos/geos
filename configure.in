@@ -4,7 +4,7 @@ AC_PREREQ(2.52)
 dnl local vars to hold user's preferences --------------------------------
 AC_INIT(source/headers/geom.h)
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(geos, 0.9)
+AM_INIT_AUTOMAKE(geos, 1.0)
 AM_CONFIG_HEADER(source/headers/config.h)
 AC_PROG_CC
 
