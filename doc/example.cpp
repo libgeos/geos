@@ -10,6 +10,10 @@
 //  obscure reports from memory checkers like valgrind.
 //
 // $Log$
+// Revision 1.8  2003/11/03 16:09:44  strk
+// Removed comments about segfaults, made the simple collection creation call
+// cleaner by use of the clone() method.
+//
 // Revision 1.7  2003/10/29 10:38:43  strk
 // Added centroid computation example
 //
@@ -144,6 +148,7 @@ create_square_polygon(double xoffset, double yoffset, double side)
 	return poly;
 }
 
+//
 // This function will create a GeoemtryCollection
 // containing the two given Geometries.
 // Note that given Geometries will be referenced
@@ -157,8 +162,7 @@ create_simple_collection(Geometry *g1, Geometry *g2)
 	// to use as argument to the factory function
 	vector<Geometry *> *collection = new vector<Geometry *>;
 
-	// Now, we need to make copies of the given args
-	// we do it using copy constructor.
+	// We fill the vector with given geometries
 	collection->push_back(g1);
 	collection->push_back(g2);
 
@@ -169,8 +173,6 @@ create_simple_collection(Geometry *g1, Geometry *g2)
 	// We HAVE to delete the vectors used to store
 	// geometry pointers, but created object will
 	// delete pointed geometries, weird uh?
-	// It seems that somebody else will delete this...
-	// must inspect --strk;
 	delete collection;
 
 	return ret;
@@ -200,20 +202,16 @@ void do_all()
 	/////////////////////////////////////////////
 
 	// Read function bodies to see the magic behind them
-	geoms[0] = create_square_linearring(0,0,100);
-	geoms[1] = create_square_polygon(0,200,300);
-	geoms[2] = create_square_polygon(0,250,300);
+	geoms[0] = create_point(150, 350);
+	geoms[1] = create_square_linearring(0,0,100);
+	geoms[2] = create_square_polygon(0,200,300);
+	geoms[3] = create_square_polygon(0,250,300);
 
-	// here we write this bad-looking code to copy
-	// geometries before putting them in a collection
-	// object, since it will take responsability about
-	// passed arguments life.
-	geoms[3] = create_simple_collection(
-			new LinearRing(*((LinearRing *)geoms[0])),
-			new Polygon(*((Polygon *)geoms[1])));
+	// We clone geometries before passing them to the
+	// geometry collection function.
+	geoms[4] = create_simple_collection(
+			geoms[0]->clone(), geoms[1]->clone() );
 
-	// The simplest geometry: a point !
-	geoms[4] = create_point(150, 350);
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
