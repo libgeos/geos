@@ -113,3 +113,4 @@ string CustomPointCoordinateList::toString() {
 	result.append("");
 	return result;
 }
+
