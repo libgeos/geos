@@ -183,7 +183,7 @@ void BufferLineBuilder::addPt(const Coordinate &pt) {
 
 void BufferLineBuilder::closePts(){
 	if (ptList->getSize()<1) return;
-	Coordinate& startPt=*(new Coordinate(ptList->getAt(0)));
+	const Coordinate& startPt=ptList->getAt(0);
 	const Coordinate& lastPt=ptList->getAt(ptList->getSize()-1);
 	Coordinate last2Pt;
 	if (ptList->getSize()>=2)
@@ -307,6 +307,9 @@ void BufferLineBuilder::addLineEndCap(const Coordinate &p0, const Coordinate &p1
 	addPt(offsetL->p1);
 	addFillet(p1,angle+PI/2,angle-PI/2,CGAlgorithms::CLOCKWISE, distance);
 	addPt(offsetR->p1);
+	delete seg;
+	delete offsetL;
+	delete offsetR;
 }
 /**
 *@param p is base point of curve
