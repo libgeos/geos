@@ -1,0 +1,19 @@
+- make GeometryFactory->createMULTI*() consistent in taking
+  const vector<const Geometry *>. All constructors should
+  make copies of given args instead of keeping the real thing.
+  It will take longer to copy entire objects than simple pointers 
+  but callers will be able to use goemetries as arguments to 
+  multiple constructors and won't be left with pointers to
+  private areas.
+  GeometryCollection does not take a 'const vector<Geometry *>'
+  In order to allow for a 'const vector<const Geometry *>' we need
+  to be able to easly copy a Geometry object. Right now copy
+  constructor will not do since the compiler will not let us
+  allocate space for a Geometry (contains abstract methods).
+  Inspect possible resolutions. --strk;
+
+- Inspect on the opportunity of giving LineString->points public
+  access for performance speedup. The only way you can change it
+  right now is by getting a copy, modify it and copying it back
+  with setPoints().
+
