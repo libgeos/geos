@@ -110,9 +110,9 @@ Geometry* Polygon::getBoundary() {
 		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
 	vector<Geometry *> *rings=new vector<Geometry *>(holes->size() + 1);
-	(*rings)[0]=dynamic_cast<LineString *>(shell);
+	(*rings)[0]=new LineString(*shell);
 	for (unsigned int i=0; i<holes->size(); i++) {
-		(*rings)[i + 1] = ((LineString *)(*holes)[i]);
+		(*rings)[i + 1] =new LineString(*(LineString*)(*holes)[i]);
 	}
 	return new MultiLineString(rings, precisionModel, SRID);
 }

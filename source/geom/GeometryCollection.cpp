@@ -226,7 +226,9 @@ Point* GeometryCollection::getCentroid() {
 		centPt=cent->getCentroid();
 		delete cent;
 	}
-	return GeometryFactory::createPointFromInternalCoord(centPt,this);
+	Point *pt=GeometryFactory::createPointFromInternalCoord(centPt,this);
+	delete centPt;
+	return pt;
 }
 }
 

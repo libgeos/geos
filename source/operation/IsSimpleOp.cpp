@@ -39,10 +39,33 @@ bool IsSimpleOp::isSimpleLinearGeometry(Geometry *geom){
 	LineIntersector *li=new RobustLineIntersector();
 	SegmentIntersector *si=graph->computeSelfNodes(li,true);
 	// if no self-intersection, must be simple
-	if (!si->hasIntersection()) return true;
-	if (si->hasProperIntersection()) return false;
-	if (hasNonEndpointIntersection(graph)) return false;
-	if (hasClosedEndpointIntersection(graph)) return false;
+	if (!si->hasIntersection()) {
+		delete graph;
+		delete li;
+		delete si;
+		return true;
+	}
+	if (si->hasProperIntersection()) {
+		delete graph;
+		delete li;
+		delete si;
+		return false;
+	}
+	if (hasNonEndpointIntersection(graph)) {
+		delete graph;
+		delete li;
+		delete si;
+		return false;
+	}
+	if (hasClosedEndpointIntersection(graph)) {
+		delete graph;
+		delete li;
+		delete si;
+		return false;
+	}
+	delete graph;
+	delete li;
+	delete si;
 	return true;
 }
 
@@ -88,9 +111,19 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 	for (;it!=endPoints->end();it++) {
 		EndpointInfo *eiInfo=it->second;
 		if (eiInfo->isClosed && eiInfo->degree!=2) {
+			map<Coordinate,EndpointInfo*,CoordLT>::iterator dit=endPoints->begin();
+			for (;dit!=endPoints->end();dit++) {
+				EndpointInfo *ep=dit->second;
+				delete ep;
+			}
 			delete endPoints;
             return true;
 		}
+	}
+	map<Coordinate,EndpointInfo*,CoordLT>::iterator dit=endPoints->begin();
+	for (;dit!=endPoints->end();dit++) {
+		EndpointInfo *ep=dit->second;
+		delete ep;
 	}
 	delete endPoints;
 	return false;
@@ -100,7 +133,13 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 * Add an endpoint to the map, creating an entry for it if none exists
 */
 void IsSimpleOp::addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate& p,bool isClosed) {
-	EndpointInfo *eiInfo=endPoints->find(p)->second;
+	map<Coordinate,EndpointInfo*,CoordLT>::iterator it=endPoints->find(p);
+	EndpointInfo *eiInfo;
+	if (it==endPoints->end()) {
+		eiInfo=NULL;
+	} else {
+		eiInfo=it->second;
+	}
 	if (eiInfo==NULL) {
 		eiInfo=new EndpointInfo(p);
 		(*endPoints)[p]=eiInfo;

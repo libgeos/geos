@@ -109,6 +109,7 @@ CoordinateList* GeometryGraph::getBoundaryPoints() {
 		Node *node=*it;
 		pts->setAt(node->getCoordinate(),i++);
 	}
+	delete coll;
 	return pts;
 }
 

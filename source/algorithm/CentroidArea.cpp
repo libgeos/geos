@@ -16,6 +16,7 @@ CentroidArea::~CentroidArea() {
 	delete cga;
 	delete triangleCent3;
 	delete cg3;
+	delete basePt;
 }
 
 /**
@@ -27,7 +28,9 @@ CentroidArea::~CentroidArea() {
 void CentroidArea::add(Geometry *geom) {
 	if (typeid(*geom)==typeid(Polygon)) {
 		Polygon *poly=(Polygon*) geom;
-		setBasePoint(&(poly->getCoordinates()->getAt(0)));
+		CoordinateList *cl=poly->getCoordinates();
+		setBasePoint(new Coordinate(cl->getAt(0)));
+		delete cl;
 		add(poly);
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint)) ||
@@ -58,6 +61,8 @@ Coordinate* CentroidArea::getCentroid() {
 void CentroidArea::setBasePoint(Coordinate *newBasePt) {
 	if(basePt==NULL)
 		basePt=newBasePt;
+	else
+		delete newBasePt;
 }
 
 void CentroidArea::add(Polygon *poly) {

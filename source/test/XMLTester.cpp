@@ -43,7 +43,7 @@ int main(int argC, char* argV[]) {
 	InitAllocCheck();
 	{
 #endif
-//	_CrtSetBreakAlloc(137304);
+//	_CrtSetBreakAlloc(8702);
 	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
 //	int out=GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT+PRED;
@@ -268,21 +268,56 @@ int main(int argC, char* argV[]) {
 						}
 					}
 				} else if (opName=="getboundary") {
-					cout<<"getBoundary\n";
-				//	Geometry *gRes=r->read(opRes);
-				//	gRes->normalize();
-				//	cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-				//	Geometry *gRealRes=gA->getBoundary();
-				//	gRealRes->normalize();
-				//	if (out & TEST_RESULT) {
-				//		if (gRes->compareTo(gRealRes)==0) {
-				//			cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=true"  <<endl;
-				//			succeeded++;
-				//		} else {
-				//			cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=false"  <<endl;
-				//			failed++;
-				//		}
-				//	}
+					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->getBoundary();
+					gRealRes->normalize();
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+					delete gRes;
+					delete gRealRes;
+				} else if (opName=="getCentroid") {
+					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->getCentroid();
+					gRealRes->normalize();
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+					delete gRes;
+					delete gRealRes;
+				} else if (opName=="isSimple") {
+					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
+					string result;
+					if (gA->isSimple()) {
+						result="true";
+					} else {
+						result="false";
+					}
+					if (out & TEST_RESULT) {
+						if (result==opRes) {
+							cout << "\t\tResult: isSimple='" << result << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: isSimple='" << result << "' result=false"  <<endl;
+							failed++;
+						}
+					}
 				} else if (opName=="convexhull") {
 					cout<<"ConvexHull\n";
 				} else {
