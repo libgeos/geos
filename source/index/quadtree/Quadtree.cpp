@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.12  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -45,12 +50,12 @@
 
 namespace geos {
 
-/**
-* Ensure that the envelope for the inserted item has non-zero extents.
-* Use the current minExtent to pad the envelope, if necessary
-* Can return a new Envelope or the given one.
-*/
-Envelope* Quadtree::ensureExtent(Envelope *itemEnv,double minExtent) {
+/*
+ * Ensure that the envelope for the inserted item has non-zero extents.
+ * Use the current minExtent to pad the envelope, if necessary.
+ * Can return a new Envelope or the given one.
+ */
+Envelope* Quadtree::ensureExtent(const Envelope *itemEnv,double minExtent) {
 	//The names "ensureExtent" and "minExtent" are misleading -- sounds like
 	//this method ensures that the extents are greater than minExtent.
 	//Perhaps we should rename them to "ensurePositiveExtent" and "defaultExtent".
@@ -60,7 +65,7 @@ Envelope* Quadtree::ensureExtent(Envelope *itemEnv,double minExtent) {
 	double miny=itemEnv->getMinY();
 	double maxy=itemEnv->getMaxY();
 	// has a non-zero extent
-	if (minx!=maxx && miny!=maxy) return itemEnv;
+	if (minx!=maxx && miny!=maxy) return (Envelope *)itemEnv;
 	// pad one or both extents
 	if (minx==maxx) {
 		minx=minx-minExtent/2.0;
@@ -107,7 +112,7 @@ int Quadtree::size() {
 	return 0;
 }
 
-void Quadtree::insert(Envelope *itemEnv, void* item){
+void Quadtree::insert(const Envelope *itemEnv, void* item){
 	collectStats(itemEnv);
 	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
 	if ( insertEnv != itemEnv ) newEnvelopes.push_back(insertEnv);
@@ -115,7 +120,7 @@ void Quadtree::insert(Envelope *itemEnv, void* item){
 }
 
 
-vector<void*>* Quadtree::query(Envelope *searchEnv){
+vector<void*>* Quadtree::query(const Envelope *searchEnv){
 	/**
 	* the items that are matched are the items in quads which
 	* overlap the search envelope
@@ -134,7 +139,7 @@ vector<void*>* Quadtree::queryAll() {
 	return foundItems;
 }
 
-void Quadtree::collectStats(Envelope *itemEnv){
+void Quadtree::collectStats(const Envelope *itemEnv){
 	double delX=itemEnv->getWidth();
 	if (delX<minExtent && delX>0.0)
 		minExtent=delX;

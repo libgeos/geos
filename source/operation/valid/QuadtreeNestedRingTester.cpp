@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.12  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -63,9 +68,9 @@ Coordinate& QuadtreeNestedRingTester::getNestedPoint() {
 
 void QuadtreeNestedRingTester::add(LinearRing *ring) {
 	rings->push_back(ring);
-	Envelope *envi=ring->getEnvelopeInternal();
+	const Envelope *envi=ring->getEnvelopeInternal();
 	totalEnv->expandToInclude(envi);
-	delete envi;
+	//delete envi;
 }
 
 bool QuadtreeNestedRingTester::isNonNested() {
@@ -73,23 +78,23 @@ bool QuadtreeNestedRingTester::isNonNested() {
 	for(int i=0;i<(int)rings->size();i++) {
 		LinearRing *innerRing=(*rings)[i];
 		const CoordinateSequence *innerRingPts=innerRing->getCoordinatesRO();
-		Envelope *envi=innerRing->getEnvelopeInternal();
+		const Envelope *envi=innerRing->getEnvelopeInternal();
 		vector<void*> *results=qt->query(envi);
-		delete envi;
+		//delete envi;
 		for(int j=0;j<(int)results->size();j++) {
 			LinearRing *searchRing=(LinearRing*)(*results)[j];
 			const CoordinateSequence *searchRingPts=searchRing->getCoordinatesRO();
 			if (innerRing==searchRing)
 				continue;
-			Envelope *e1=innerRing->getEnvelopeInternal();
-			Envelope *e2=searchRing->getEnvelopeInternal();
+			const Envelope *e1=innerRing->getEnvelopeInternal();
+			const Envelope *e2=searchRing->getEnvelopeInternal();
 			if (!e1->intersects(e2)) {
-				delete e1;
-				delete e2;
+				//delete e1;
+				//delete e2;
 				continue;
 			}
-			delete e1;
-			delete e2;
+			//delete e1;
+			//delete e2;
 			const Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(!(innerRingPt==Coordinate::getNull()),"Unable to find a ring point not a node of the search ring");
 			//Coordinate innerRingPt = innerRingPts[0];
@@ -109,9 +114,9 @@ void QuadtreeNestedRingTester::buildQuadtree() {
 	qt=new Quadtree();
 	for(int i=0;i<(int)rings->size();i++) {
 		LinearRing *ring=(*rings)[i];
-		Envelope *env=ring->getEnvelopeInternal();
+		const Envelope *env=ring->getEnvelopeInternal();
 		qt->insert(env,ring);
-		delete env;
+		//delete env;
 	}
 }
 }

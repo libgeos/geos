@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.14  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -40,14 +45,8 @@
 namespace geos {
 
 IntersectionMatrix* RelateOp::relate(const Geometry *a, const Geometry *b) {
-//	if (isBaseGeometryCollection(a) || isBaseGeometryCollection(b)) {
-//		return relateGC(toList(a),toList(b));
-//	}else {
-		RelateOp *relOp=new RelateOp(a,b);
-		IntersectionMatrix *im=relOp->getIntersectionMatrix();
-		delete relOp;
-		return im;
-//	}
+	RelateOp relOp(a,b);
+	return relOp.getIntersectionMatrix();
 }
 
 ///**
@@ -73,16 +72,16 @@ IntersectionMatrix* RelateOp::relate(const Geometry *a, const Geometry *b) {
 //	return finalIM;
 //}
 
-RelateOp::RelateOp(const Geometry *g0, const Geometry *g1):GeometryGraphOperation(g0,g1) {
-	relateComp=new RelateComputer(arg);
+RelateOp::RelateOp(const Geometry *g0, const Geometry *g1):GeometryGraphOperation(g0,g1), relateComp(arg) {
+	//relateComp=new RelateComputer(arg);
 }
 
 RelateOp::~RelateOp() {
-	delete relateComp;
+	//delete relateComp;
 }
 
 IntersectionMatrix* RelateOp::getIntersectionMatrix() {
-	return relateComp->computeIM();
+	return relateComp.computeIM();
 }
 
 //vector<const Geometry*>* RelateOp::toList(const Geometry *geom) {

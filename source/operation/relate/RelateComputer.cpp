@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.17  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -64,12 +69,12 @@ IntersectionMatrix* RelateComputer::computeIM() {
 	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
 	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
 	// if the Geometries don't overlap there is nothing to do
-	Envelope *e1=(*arg)[0]->getGeometry()->getEnvelopeInternal();
-	Envelope *e2=(*arg)[1]->getGeometry()->getEnvelopeInternal();
+	const Envelope *e1=(*arg)[0]->getGeometry()->getEnvelopeInternal();
+	const Envelope *e2=(*arg)[1]->getGeometry()->getEnvelopeInternal();
 	if (!e1->intersects(e2)) {
 		computeDisjointIM(im);
-		delete e1;
-		delete e2;
+		//delete e1;
+		//delete e2;
 		return im;
 	}
 	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
@@ -120,8 +125,8 @@ IntersectionMatrix* RelateComputer::computeIM() {
 	labelIsolatedEdges(1,0);
 	// update the IM from all components
 	updateIM(im);
-	delete e1;
-	delete e2;
+	//delete e1;
+	//delete e2;
 	delete si1;
 	delete si2;
 	delete intersector;

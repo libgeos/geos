@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.43  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.42  2004/07/22 07:04:49  strk
  * Documented missing geometry functions.
  *
@@ -247,7 +252,7 @@ Geometry* Polygon::getBoundary() const {
 }
 
 Envelope* Polygon::computeEnvelopeInternal() const {
-	return shell->getEnvelopeInternal();
+	return new Envelope(*(shell->getEnvelopeInternal()));
 }
 
 bool Polygon::equalsExact(const Geometry *other, double tolerance) const {

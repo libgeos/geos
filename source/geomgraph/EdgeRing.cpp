@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.5  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -50,6 +55,11 @@
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.6  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.5  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -264,15 +274,14 @@ void EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge){
  * It will also check any holes, if they have been assigned.
  */
 bool EdgeRing::containsPoint(Coordinate& p){
-	//LinearRing *lrShell=getLinearRing();
-	//Envelope* env=lrShell->getEnvelopeInternal();
-	Envelope* env=ring->getEnvelopeInternal();
-	if (!env->contains(p))
-	{
-		delete env;
-		return false;
-	}
-	delete env;
+	const Envelope* env=ring->getEnvelopeInternal();
+	return env->contains(p);
+	//if (!env->contains(p))
+	//{
+	//	delete env;
+	//	return false;
+	//}
+	//delete env;
 
 //External Dependency
 //	if (!cga.isPointInPolygon(p, shell.getCoordinates()) ) return false;

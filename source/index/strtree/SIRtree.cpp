@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.11  2004/07/13 08:33:53  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -79,7 +84,9 @@ vector<Boundable*>* SIRtree::createParentBoundables(vector<Boundable*> *childBou
 	return parentBoundables;
 }
 
-bool SIRtree::SIRIntersectsOp::intersects(void* aBounds,void* bBounds) {
+bool
+SIRtree::SIRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
+{
 	return ((Interval*)aBounds)->intersects((Interval*)bBounds);
 }
 

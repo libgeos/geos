@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.23  2004/07/26 16:35:19  strk
  * Removed dangling MultiPoint::isClosed() method definition.
  *
@@ -1391,7 +1396,7 @@ public:
 	 * Returns the minimum and maximum x and y values in this Geometry,
 	 * or a null Envelope if this Geometry is empty.
 	 */
-	virtual Envelope* getEnvelopeInternal() const;
+	virtual const Envelope* getEnvelopeInternal() const;
 
 	/**
 	 * \brief
@@ -1553,7 +1558,7 @@ public:
 	void geometryChangedAction();
 
 protected:
-	Envelope* envelope;
+	mutable Envelope* envelope;
 	
 	/// Returns true if the array contains any non-empty Geometrys.
 	static bool hasNonEmptyElements(const vector<Geometry *>* geometries);
@@ -2431,7 +2436,7 @@ public:
 	Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar) const;
 
 	/// Envelope to Geometry converter
-	Geometry* toGeometry(Envelope* envelope) const;
+	Geometry* toGeometry(const Envelope* envelope) const;
 
 	/// Returns the PrecisionModel that Geometries created by this factory will be associated with.
 	const PrecisionModel* getPrecisionModel() const;

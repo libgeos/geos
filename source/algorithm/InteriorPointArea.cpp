@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.13  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -103,13 +108,13 @@ void InteriorPointArea::addPolygon(const Geometry *geometry) {
 	LineString *bisector=horizontalBisector(geometry);
 	Geometry *intersections=bisector->intersection(geometry);
 	const Geometry *widestIntersection=widestGeometry(intersections);
-	Envelope *env=widestIntersection->getEnvelopeInternal();
+	const Envelope *env=widestIntersection->getEnvelopeInternal();
 	double width=env->getWidth();
 	if (interiorPoint==NULL || width>maxWidth) {
 		interiorPoint=centre(env);
 		maxWidth = width;
 	}
-	delete env;
+	//delete env;
 	delete bisector;
 	delete intersections;
 }
@@ -134,8 +139,8 @@ InteriorPointArea::widestGeometry(const GeometryCollection* gc) {
 	}
 	const Geometry* widestGeometry=gc->getGeometryN(0);
 	for(int i=1;i<gc->getNumGeometries();i++) { //Start at 1
-		auto_ptr<Envelope> env1(gc->getGeometryN(i)->getEnvelopeInternal());
-		auto_ptr<Envelope> env2(widestGeometry->getEnvelopeInternal());
+		const Envelope *env1(gc->getGeometryN(i)->getEnvelopeInternal());
+		const Envelope *env2(widestGeometry->getEnvelopeInternal());
 		if (env1->getWidth()>env2->getWidth()) {
 				widestGeometry=gc->getGeometryN(i);
 		}
@@ -144,7 +149,7 @@ InteriorPointArea::widestGeometry(const GeometryCollection* gc) {
 }
 
 LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
-	Envelope *envelope=geometry->getEnvelopeInternal();
+	const Envelope *envelope=geometry->getEnvelopeInternal();
 	// Assert: for areas, minx <> maxx
 	double avgY=avg(envelope->getMinY(),envelope->getMaxY());
 
@@ -154,15 +159,7 @@ LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
 	(*cv)[1].x = envelope->getMaxX();
 	(*cv)[1].y = avgY;
 
-	//CoordinateSequence *cl=CoordinateSequenceFactory::internalFactory->createCoordinateSequence();
-	//Coordinate *c1=new Coordinate(envelope->getMinX(),avgY);
-	//Coordinate *c2=new Coordinate(envelope->getMaxX(),avgY);
-	//cl->add(*c1);
-	//cl->add(*c2);
-	//delete c1;
-	//delete c2;
-
-	delete envelope;
+	//delete envelope;
 
 	CoordinateSequence *cl = factory->getCoordinateSequenceFactory()->create(cv);
 

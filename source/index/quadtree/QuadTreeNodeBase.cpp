@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.8  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -33,7 +38,9 @@ namespace geos {
 * Returns the index of the subquad that wholly contains the given envelope.
 * If none does, returns -1.
 */
-int QuadTreeNodeBase::getSubnodeIndex(Envelope *env,Coordinate *centre){
+int
+QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate *centre)
+{
 	int subnodeIndex=-1;
 	if (env->getMinX()>=centre->x) {
 		if (env->getMinY()>=centre->y) subnodeIndex=3;
@@ -88,7 +95,7 @@ vector<void*>* QuadTreeNodeBase::addAllItems(vector<void*> *resultItems) {
 	return resultItems;
 }
 
-void QuadTreeNodeBase::addAllItemsFromOverlapping(Envelope *searchEnv,vector<void*> *resultItems){
+void QuadTreeNodeBase::addAllItemsFromOverlapping(const Envelope *searchEnv,vector<void*> *resultItems){
 	if (!isSearchMatch(searchEnv))
 		return;
 

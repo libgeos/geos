@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.9  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -88,7 +93,7 @@ void SweeplineNestedRingTester::buildIndex() {
 	sweepLine=new SweepLineIndex();
 	for(int i=0;i<(int)rings->size();i++) {
 		LinearRing *ring=(*rings)[i];
-		Envelope *env=ring->getEnvelopeInternal();
+		const Envelope *env=ring->getEnvelopeInternal();
 		SweepLineInterval *sweepInt=new SweepLineInterval(env->getMinX(),env->getMaxX(),ring);
 		sweepLine->add(sweepInt);
 	}

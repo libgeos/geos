@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.69  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.68  2004/07/22 16:58:01  strk
  * runtime version extractor functions split. geos::version() is now
  * geos::geosversion() and geos::jtsport()
@@ -232,7 +237,8 @@ const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory()
 Geometry::Geometry(const GeometryFactory *newFactory) {
 	factory=newFactory; //new GeometryFactory(*fromFactory);
 	SRID=factory->getSRID();
-	envelope=new Envelope();
+	//envelope=new Envelope();
+	envelope=NULL;
 	userData=NULL;
 }
 
@@ -324,11 +330,11 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
  *  <code>distance</code> apart.
  */
 bool Geometry::isWithinDistance(const Geometry *geom,double cDistance) {
-	Envelope *env0=getEnvelopeInternal();
-	Envelope *env1=geom->getEnvelopeInternal();
+	const Envelope *env0=getEnvelopeInternal();
+	const Envelope *env1=geom->getEnvelopeInternal();
 	double envDist=env0->distance(env1);
-	delete env0;
-	delete env1;
+	//delete env0;
+	//delete env1;
 	if (envDist>cDistance)
 	{
 		return false;
@@ -422,6 +428,7 @@ void Geometry::geometryChanged() {
 * @see #apply(GeometryComponentFilter)
 */
 void Geometry::geometryChangedAction() {
+	delete envelope;
 	envelope=NULL;
 }
 
@@ -477,11 +484,12 @@ Geometry* Geometry::getEnvelope() const {
 	return getFactory()->toGeometry(getEnvelopeInternal());
 }
 
-Envelope* Geometry::getEnvelopeInternal() const {
-	if (envelope->isNull()) {
-		return computeEnvelopeInternal();
-	} else 
-		return new Envelope(*envelope);
+const Envelope *
+Geometry::getEnvelopeInternal() const {
+	if (!envelope) {
+		envelope = computeEnvelopeInternal();
+	}
+	return envelope;
 }
 
 bool Geometry::disjoint(const Geometry *g) const{

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.2  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -127,13 +132,13 @@ class QuadTreeNode;
  */
 class QuadTreeNodeBase {
 public:
-	static int getSubnodeIndex(Envelope *env,Coordinate *centre);
+	static int getSubnodeIndex(const Envelope *env, const Coordinate *centre);
 	QuadTreeNodeBase();
 	virtual ~QuadTreeNodeBase();
 	virtual vector<void*>* getItems();
 	virtual void add(void* item);
 	virtual vector<void*>* addAllItems(vector<void*> *resultItems);
-	virtual void addAllItemsFromOverlapping(Envelope *searchEnv,vector<void*> *resultItems);
+	virtual void addAllItemsFromOverlapping(const Envelope *searchEnv,vector<void*> *resultItems);
 	virtual int depth();
 	virtual int size();
 	virtual int nodeCount();
@@ -148,7 +153,7 @@ protected:
 	* </pre>
 	*/
 	QuadTreeNode* subnode[4];
-	virtual bool isSearchMatch(Envelope *searchEnv)=0;
+	virtual bool isSearchMatch(const Envelope *searchEnv)=0;
 };
 
 /*
@@ -160,12 +165,12 @@ protected:
 class QuadTreeNode: public QuadTreeNodeBase {
 public:
 	static QuadTreeNode* createNode(Envelope *env);
-	static QuadTreeNode* createExpanded(QuadTreeNode *node,Envelope *addEnv);
+	static QuadTreeNode* createExpanded(QuadTreeNode *node, const Envelope *addEnv);
 	QuadTreeNode(Envelope *nenv,int nlevel);
 	virtual ~QuadTreeNode();
 	Envelope* getEnvelope();
-	QuadTreeNode* getNode(Envelope *searchEnv);
-	QuadTreeNodeBase* find(Envelope *searchEnv);
+	QuadTreeNode* getNode(const Envelope *searchEnv);
+	QuadTreeNodeBase* find(const Envelope *searchEnv);
 	void insertNode(QuadTreeNode *node);
 private:
 	Envelope *env;
@@ -174,7 +179,7 @@ private:
 	QuadTreeNode* getSubnode(int index);
 	QuadTreeNode* createSubnode(int index);
 protected:
-	bool isSearchMatch(Envelope *searchEnv);
+	bool isSearchMatch(const Envelope *searchEnv);
 };
 
 /*
@@ -185,13 +190,13 @@ class QuadTreeRoot: public QuadTreeNodeBase {
 friend class Unload;
 private:
 	static Coordinate *origin;
-	void insertContained(QuadTreeNode *tree,Envelope *itemEnv,void* item);
+	void insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void* item);
 public:
 	QuadTreeRoot();
 	virtual ~QuadTreeRoot();
-	void insert(Envelope *itemEnv,void* item);
+	void insert(const Envelope *itemEnv,void* item);
 protected:
-	bool isSearchMatch(Envelope *searchEnv);
+	bool isSearchMatch(const Envelope *searchEnv);
 };
 
 /*
@@ -199,7 +204,7 @@ protected:
  * of 2D rectangles.  If other kinds of spatial objects
  * need to be indexed they can be represented by their
  * envelopes
- * <p>
+ * 
  * The quadtree structure is used to provide a primary filter
  * for range rectangle queries.  The query() method returns a list of
  * all objects which <i>may</i> intersect the query rectangle.  Note that
@@ -208,17 +213,21 @@ protected:
  * Of course, this secondary filter may consist of other tests besides
  * intersection, such as testing other kinds of spatial relationships.
  *
- * <p>
  * This implementation does not require specifying the extent of the inserted
  * items beforehand.  It will automatically expand to accomodate any extent
  * of dataset.
- * <p>
+ * 
  * This data structure is also known as an <i>MX-CIF quadtree</i>
  * following the usage of Samet and others.
  */
 class Quadtree: public SpatialIndex {
 public:
-	static Envelope* ensureExtent(Envelope *itemEnv,double minExtent);
+	/*
+	 * Ensure that the envelope for the inserted item has non-zero extents.
+	 * Use the current minExtent to pad the envelope, if necessary.
+	 * Can return a new Envelope or the given one (casted to non-const).
+	 */
+	static Envelope* ensureExtent(const Envelope *itemEnv, double minExtent);
 	/**
 	* Constructs a Quadtree with zero items.
 	*/
@@ -232,12 +241,14 @@ public:
 	* Returns the number of items in the tree.
 	*/
 	int size();
-	void insert(Envelope *itemEnv, void *item);
-	vector<void*>* query(Envelope *searchEnv);
+	
+	void insert(const Envelope *itemEnv, void *item);
+
+	vector<void*>* query(const Envelope *searchEnv);
 	vector<void*>* queryAll();
 private:
 	vector<Envelope *>newEnvelopes;
-	void collectStats(Envelope *itemEnv);
+	void collectStats(const Envelope *itemEnv);
 	QuadTreeRoot *root;
 	/**
 	*  Statistics

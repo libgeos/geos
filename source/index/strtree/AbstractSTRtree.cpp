@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.17  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -188,7 +193,7 @@ int AbstractSTRtree::getNodeCapacity() {
 	return nodeCapacity;
 }
 
-void AbstractSTRtree::insert(void* bounds,void* item) {
+void AbstractSTRtree::insert(const void* bounds,void* item) {
 	Assert::isTrue(!built,"Cannot insert items into an STR packed R-tree after it has been built.");
 	itemBoundables->push_back(new ItemBoundable(bounds,item));
 }
@@ -196,7 +201,7 @@ void AbstractSTRtree::insert(void* bounds,void* item) {
 /**
 *  Also builds the tree, if necessary.
 */
-vector<void*>* AbstractSTRtree::query(void* searchBounds) {
+vector<void*>* AbstractSTRtree::query(const void* searchBounds) {
 	if (!built) {
 		build();
 	}
@@ -211,7 +216,9 @@ vector<void*>* AbstractSTRtree::query(void* searchBounds) {
 	return matches;
 }
 
-void AbstractSTRtree::query(void* searchBounds,AbstractNode* node,vector<void*> *matches) {
+void
+AbstractSTRtree::query(const void* searchBounds, AbstractNode* node, vector<void*> *matches)
+{
 	vector<Boundable*> *vb=node->getChildBoundables();
 	for(int i=0;i<(int)vb->size();i++) {
 		Boundable *childBoundable=(*vb)[i];

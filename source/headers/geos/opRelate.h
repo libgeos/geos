@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.2  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -215,7 +220,7 @@ public:
 	virtual ~RelateOp();
 	IntersectionMatrix* getIntersectionMatrix();
 private:
-	RelateComputer *relateComp;
+	RelateComputer relateComp;
 };
 }
 

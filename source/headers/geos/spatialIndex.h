@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.2  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -58,10 +63,13 @@ namespace geos {
 class SpatialIndex {
 public:
 	virtual ~SpatialIndex() {};
+
 	/*
-	* Adds a spatial item with an extent specified by the given {@link Envelope} to the index
-	*/
-	virtual void insert(Envelope *itemEnv, void *item)=0;
+	 * Adds a spatial item with an extent specified by the given Envelope
+	 * to the index
+	 */
+	virtual void insert(const Envelope *itemEnv, void *item)=0;
+
 	/*
 	* Queries the index for all items whose extents intersect the given search {@link Envelope}
 	* Note that some kinds of indexes may also return objects which do not in fact
@@ -70,7 +78,7 @@ public:
 	* @param searchEnv the envelope to query for
 	* @return a list of the items found by the query
 	*/
-	virtual vector<void*>* query(Envelope *searchEnv)=0;
+	virtual vector<void*>* query(const Envelope *searchEnv)=0;
 
 };
 }

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.9  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -46,7 +51,7 @@ SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing){
 }
 
 void SIRtreePointInRing::buildIndex() {
-	Envelope *env=ring->getEnvelopeInternal();
+	//Envelope *env=ring->getEnvelopeInternal();
 	sirTree=new SIRtree();
 	const CoordinateSequence *pts=ring->getCoordinatesRO();
 	for(int i=1;i<pts->getSize();i++) {

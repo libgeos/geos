@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.14  2004/07/13 08:33:53  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -360,15 +365,15 @@ DistanceOp::computeMinDistanceLinesPoints(vector<Geometry*> *lines,vector<Geomet
 }
 
 void DistanceOp::computeMinDistance(const LineString *line0, const LineString *line1,vector<GeometryLocation*> *locGeom) {
-	Envelope *env0=line0->getEnvelopeInternal();
-	Envelope *env1=line1->getEnvelopeInternal();
+	const Envelope *env0=line0->getEnvelopeInternal();
+	const Envelope *env1=line1->getEnvelopeInternal();
 	if (env0->distance(env1)>minDistance) {
-		delete env0;
-		delete env1;
+		//delete env0;
+		//delete env1;
 		return;
 	}
-	delete env0;
-	delete env1;
+	//delete env0;
+	//delete env1;
 	const CoordinateSequence *coord0=line0->getCoordinatesRO();
 	const CoordinateSequence *coord1=line1->getCoordinatesRO();
 	// brute force approach!
@@ -404,15 +409,15 @@ void DistanceOp::computeMinDistance(const LineString *line0, const LineString *l
 void
 DistanceOp::computeMinDistance(const LineString *line, const Point *pt,vector<GeometryLocation*> *locGeom)
 {
-	Envelope *env0=line->getEnvelopeInternal();
-	Envelope *env1=pt->getEnvelopeInternal();
+	const Envelope *env0=line->getEnvelopeInternal();
+	const Envelope *env1=pt->getEnvelopeInternal();
 	if (env0->distance(env1)>minDistance) {
-		delete env0;
-		delete env1;
+		//delete env0;
+		//delete env1;
 		return;
 	}
-	delete env0;
-	delete env1;
+	//delete env0;
+	//delete env1;
 	const CoordinateSequence *coord0=line->getCoordinatesRO();
 	Coordinate *coord=new Coordinate(*(pt->getCoordinate()));
 	newCoords.push_back(coord);

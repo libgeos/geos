@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.43  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.42  2004/07/22 08:45:50  strk
  * Documentation updates, memory leaks fixed.
  *
@@ -281,9 +286,9 @@ void GeometryCollection::normalize() {
 Envelope* GeometryCollection::computeEnvelopeInternal() const {
 	Envelope* envelope=new Envelope();
 	for (unsigned int i=0; i<geometries->size(); i++) {
-		Envelope *env=(*geometries)[i]->getEnvelopeInternal();
+		//Envelope *env=new Envelope(*((*geometries)[i]->getEnvelopeInternal()));
+		const Envelope *env=(*geometries)[i]->getEnvelopeInternal();
 		envelope->expandToInclude(env);
-		delete env;
 	}
 	return envelope;
 }

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.32  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.31  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -88,9 +93,9 @@ namespace geos {
 * @return a scale factor that allows a reasonable amount of precision for the buffer computation
 */
 double BufferOp::precisionScaleFactor(Geometry *g,double distance,int maxPrecisionDigits){
-	Envelope *env=g->getEnvelopeInternal();
+	const Envelope *env=g->getEnvelopeInternal();
 	double envSize=max(env->getHeight(), env->getWidth());
-	delete env;
+	//delete env;
 	double expandByDistance=distance > 0.0 ? distance : 0.0;
 	double bufEnvSize=envSize + 2 * expandByDistance;
 	// the smallest power of 10 greater than the buffer envelope

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.17  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -278,19 +283,18 @@ void PolygonBuilder::placeFreeHoles(vector<EdgeRing*>* newShellList, vector<Edge
 */
 EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRing*> *newShellList) {
 	LinearRing *testRing=testEr->getLinearRing();
-	Envelope *testEnv=testRing->getEnvelopeInternal();
+	const Envelope *testEnv=testRing->getEnvelopeInternal();
 	const Coordinate& testPt=testRing->getCoordinateN(0);
 	EdgeRing *minShell=NULL;
-	Envelope *minEnv=NULL;
+	const Envelope *minEnv=NULL;
 	for(int i=0;i<(int)newShellList->size();i++) {
+		LinearRing *lr=NULL;
 		EdgeRing *tryShell=(*newShellList)[i];
 		LinearRing *tryRing=tryShell->getLinearRing();
-		Envelope *tryEnv=tryRing->getEnvelopeInternal();
+		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
 		if (minShell!=NULL) {
-			LinearRing *lr=minShell->getLinearRing();
-			delete minEnv;
+			lr=minShell->getLinearRing();
 			minEnv=lr->getEnvelopeInternal();
-			delete lr;
 		}
 		bool isContained=false;
 		CoordinateSequence *rcl = tryRing->getCoordinates();
@@ -306,11 +310,12 @@ EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRin
 			}
 		}
 		delete tryRing;
-		delete tryEnv;
+		delete lr;
+		//delete tryEnv;
 	}
-	delete minEnv;
+	//delete minEnv;
 	delete testRing;
-	delete testEnv;
+	//delete testEnv;
 	return minShell;
 }
 vector<Geometry*>* PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList) {

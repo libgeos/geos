@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.6  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -37,7 +42,9 @@ QuadTreeNode* QuadTreeNode::createNode(Envelope *env) {
 	return node;
 }
 
-QuadTreeNode* QuadTreeNode::createExpanded(QuadTreeNode *node,Envelope *addEnv){
+QuadTreeNode*
+QuadTreeNode::createExpanded(QuadTreeNode *node, const Envelope *addEnv)
+{
 	Envelope *expandEnv=new Envelope(*addEnv);
 	if (node!=NULL) expandEnv->expandToInclude(node->env);
 	QuadTreeNode *largerNode=createNode(expandEnv);
@@ -63,7 +70,7 @@ Envelope* QuadTreeNode::getEnvelope() {
 	return env;
 }
 
-bool QuadTreeNode::isSearchMatch(Envelope *searchEnv){
+bool QuadTreeNode::isSearchMatch(const Envelope *searchEnv){
 	return env->intersects(searchEnv);
 }
 
@@ -72,7 +79,7 @@ bool QuadTreeNode::isSearchMatch(Envelope *searchEnv){
 * Creates the subquad if
 * it does not already exist.
 */
-QuadTreeNode* QuadTreeNode::getNode(Envelope *searchEnv){
+QuadTreeNode* QuadTreeNode::getNode(const Envelope *searchEnv){
 	int subnodeIndex=getSubnodeIndex(searchEnv,centre);
 	// if subquadIndex is -1 searchEnv is not contained in a subquad
 	if (subnodeIndex!=-1) {
@@ -89,7 +96,7 @@ QuadTreeNode* QuadTreeNode::getNode(Envelope *searchEnv){
 * Returns the smallest <i>existing</i>
 * node containing the envelope.
 */
-QuadTreeNodeBase* QuadTreeNode::find(Envelope *searchEnv) {
+QuadTreeNodeBase* QuadTreeNode::find(const Envelope *searchEnv) {
 	int subnodeIndex=getSubnodeIndex(searchEnv,centre);
 	if (subnodeIndex==-1)
 		return this;

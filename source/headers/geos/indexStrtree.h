@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.3  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -89,7 +94,7 @@ public:
 	 *
 	 * @see AbstractSTRtree::IntersectsOp
 	 */
-	virtual void* getBounds()=0;
+	virtual const void* getBounds()=0;
 	virtual ~Boundable() {};
 };
 
@@ -103,12 +108,12 @@ public:
  */
 class ItemBoundable: public Boundable {
 private:
-	void* bounds;
+	const void* bounds;
 	void* item;
 public:
-	ItemBoundable(void* newBounds,void* newItem);
+	ItemBoundable(const void* newBounds,void* newItem);
 	virtual ~ItemBoundable();
-	void* getBounds();
+	const void* getBounds();
 	void* getItem();
 };
 
@@ -152,22 +157,25 @@ public:
 	AbstractNode(int newLevel);
 	virtual	~AbstractNode();
 	vector<Boundable*>* getChildBoundables();
+
 	/**
 	 * Returns a representation of space that encloses this Boundable,
 	 * preferably not much bigger than this Boundable's boundary yet fast to
-	 * test for intersection with the bounds of other Boundables. The class of
-	 * object returned depends on the subclass of AbstractSTRtree.
+	 * test for intersection with the bounds of other Boundables.
+	 * The class of object returned depends on the subclass of
+	 * AbstractSTRtree.
 	 * 
-	 * @return an Envelope (for STRtrees), an Interval (for SIRtrees), or other
-	 *         object (for other subclasses of AbstractSTRtree)
+	 * @return an Envelope (for STRtrees), an Interval (for SIRtrees),
+	 *	or other object (for other subclasses of AbstractSTRtree)
+	 *
 	 * @see AbstractSTRtree::IntersectsOp
 	 */  
-	void* getBounds();
+	const void* getBounds();
 	int getLevel();
 	void addChildBoundable(Boundable *childBoundable);
 protected:
 	virtual void* computeBounds()=0;
-	void* bounds;
+	const void* bounds;
 };
 
 /*
@@ -204,7 +212,7 @@ protected:
 			* @param bBounds the bounds of another spatial object
 			* @return whether the two bounds intersect
 			*/
-			virtual bool intersects(void* aBounds,void* bBounds)=0;
+			virtual bool intersects(const void* aBounds, const void* bBounds)=0;
 	};
 	AbstractNode *root;
 	vector <AbstractNode *> *nodes;
@@ -212,8 +220,8 @@ protected:
 	virtual vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
 	virtual AbstractNode* lastNode(vector<Boundable*> *nodes);
 	virtual AbstractNode* getRoot();
-	virtual void insert(void* bounds,void* item);
-	virtual vector<void*>* query(void* searchBounds);
+	virtual void insert(const void* bounds,void* item);
+	virtual vector<void*>* query(const void* searchBounds);
 	/**
 	* @return a test for intersection between two bounds, necessary because subclasses
 	* of AbstractSTRtree have different implementations of bounds. 
@@ -228,14 +236,14 @@ private:
 	virtual AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level);
 	virtual vector<Boundable*> *sortBoundables(const vector<Boundable*> *input)=0;
 public:
-	IntersectsOp* intersectsOp;
+	IntersectsOp *intersectsOp;
 	AbstractSTRtree(int newNodeCapacity);
 	static bool compareDoubles(double a, double b);
 	virtual ~AbstractSTRtree();
 	virtual void build();
 //	virtual void checkConsistency();
 	virtual int getNodeCapacity();
-	virtual void query(void* searchBounds,AbstractNode* node,vector<void*>* matches);
+	virtual void query(const void* searchBounds, AbstractNode* node, vector<void*>* matches);
 	virtual void boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables);
 };
 
@@ -270,7 +278,7 @@ public:
 protected:
 	class SIRIntersectsOp:public AbstractSTRtree::IntersectsOp {
 		public:
-			bool intersects(void* aBounds,void* bBounds);
+			bool intersects(const void* aBounds, const void* bBounds);
 	};
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
 	AbstractNode* createNode(int level);
@@ -319,14 +327,14 @@ protected:
 //	IntersectsOp* getIntersectsOp();
 	class STRIntersectsOp:public AbstractSTRtree::IntersectsOp {
 		public:
-			bool intersects(void* aBounds,void* bBounds);
+			bool intersects(const void* aBounds, const void* bBounds);
 	};
 public:
 	STRtree();
 	~STRtree();
 	STRtree(int nodeCapacity);
-	void insert(Envelope *itemEnv,void* item);
-	vector<void*>* query(Envelope *searchEnv);
+	void insert(const Envelope *itemEnv,void* item);
+	vector<void*>* query(const Envelope *searchEnv);
 	static double centreX(Envelope *e);
 	static double avg(double a, double b);
 	static double centreY(Envelope *e);

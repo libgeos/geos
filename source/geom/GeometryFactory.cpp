@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.50  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.49  2004/07/19 13:19:30  strk
  * Documentation fixes
  *
@@ -205,7 +210,7 @@ GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
  * Returned Geometry can be a Point, a Polygon or an EMPTY geom.
  */
 Geometry*
-GeometryFactory::toGeometry(Envelope* envelope) const
+GeometryFactory::toGeometry(const Envelope* envelope) const
 {
 	Coordinate coord;
 

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
  * Revision 1.6  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -36,7 +41,7 @@
 
 namespace geos {
 
-ItemBoundable::ItemBoundable(void* newBounds,void* newItem){
+ItemBoundable::ItemBoundable(const void* newBounds,void* newItem){
 	bounds=newBounds;
 	item=newItem;
 }
@@ -44,7 +49,8 @@ ItemBoundable::ItemBoundable(void* newBounds,void* newItem){
 ItemBoundable::~ItemBoundable() {
 }
 
-void* ItemBoundable::getBounds() {
+const void*
+ItemBoundable::getBounds() {
 	return bounds;
 }
 
