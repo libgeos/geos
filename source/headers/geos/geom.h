@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2004/09/16 09:48:06  strk
+ * Added Envelope::equals
+ *
  * Revision 1.26  2004/09/13 12:39:14  strk
  * Made Point and MultiPoint subject to Validity tests.
  *
@@ -1163,6 +1166,7 @@ public:
 	bool intersects(const Coordinate& p) const;
 	bool intersects(double x, double y) const;
 	bool intersects(const Envelope* other) const;
+	bool equals(const Envelope* other) const;
 	string toString(void) const;
 	double distance(const Envelope* env) const;
     int hashCode() const;

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/09/16 09:48:06  strk
+ * Added Envelope::equals
+ *
  * Revision 1.14  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -409,6 +412,23 @@ bool Envelope::contains(const Envelope* other) const {
 			other->getMaxX() <= maxx &&
 			other->getMinY() >= miny &&
 			other->getMaxY() <= maxy;
+}
+
+/*
+ * Returns <code>true</code> if the <code>Envelope other</code>
+ * spatially equals this <code>Envelope</code>.
+ *
+ * @param  other the <code>Envelope</code> which this <code>Envelope</code>
+ *	  is being checked for equality
+ * @return <code>true</code> if this and <code>other</code>
+ *         Envelope objs are spatially equal
+ */
+bool Envelope::equals(const Envelope* other) const {
+	if (isNull() || other->isNull()) { return false; }
+	return  other->getMinX() == minx &&
+			other->getMaxX() == maxx &&
+			other->getMinY() == miny &&
+			other->getMaxY() == maxy;
 }
 
 /**
