@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.37  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.36  2003/11/12 17:10:01  strk
  * added missing initialization
  *
@@ -49,14 +52,14 @@
 #include <fstream>
 
 #include "../headers/util.h"
-#include "../headers/graph.h"
+#include "../headers/geomgraph.h"
 #include "../headers/io.h"
 #include "../headers/opRelate.h"
 #include "../io/markup/MarkupSTL.h"
 #include "../headers/unload.h"
 
 //#include "util.h"
-//#include "graph.h"
+//#include "geomgraph.h"
 //#include "io.h"
 //#include "opRelate.h"
 //#include "MarkupSTL.h"

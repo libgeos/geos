@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.12  2003/11/12 18:02:56  strk
  * Added throw specification. Fixed leaks on exceptions.
  *
@@ -151,8 +154,8 @@ void OverlayOp::insertUniqueEdges(vector<Edge*> *edges) {
 void OverlayOp::replaceCollapsedEdges() {
 	vector<Edge*> *newEdges=new vector<Edge*>();
 	vector<Edge*> *oldEdges=new vector<Edge*>();
-	for(int i=0;i<(int)edgeList->size();i++) {
-		Edge *e=(*edgeList)[i];
+	for(int i=0;i<(int)edgeList->getEdges()->size();i++) {
+		Edge *e=edgeList->get(i);
 		if (e->isCollapsed()) {
 			//Debug.print(e);
 			newEdges->push_back(e->getCollapsedEdge());
@@ -163,7 +166,7 @@ void OverlayOp::replaceCollapsedEdges() {
 		}
 	}
 	oldEdges->insert(oldEdges->end(),newEdges->begin(),newEdges->end());
-	edgeList->assign(oldEdges->begin(),oldEdges->end());
+	edgeList->getEdges()->assign(oldEdges->begin(),oldEdges->end());
 	delete oldEdges;
 	delete newEdges;
 }
@@ -453,7 +456,7 @@ void OverlayOp::computeOverlay(int opCode)
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
-	graph->addEdges(edgeList);
+	graph->addEdges(edgeList->getEdges());
 
 	try {
 		// this can throw TopologyException *
@@ -515,7 +518,7 @@ void OverlayOp::insertUniqueEdge(Edge *e) {
 	int foundIndex=edgeList->findEdgeIndex(e);
 	// If an identical edge already exists, simply update its label
 	if (foundIndex>=0) {
-		Edge *existingEdge=(*edgeList)[foundIndex];
+		Edge *existingEdge=edgeList->get(foundIndex);
 		Label *existingLabel=existingEdge->getLabel();
 		Label *labelToMerge=e->getLabel();
 
@@ -542,7 +545,7 @@ void OverlayOp::insertUniqueEdge(Edge *e) {
 		// add this new edge to the list of edges in this graph
 		//e.setName(name+edges.size());
 		//e.getDepth().add(e.getLabel());
-		edgeList->push_back(e);
+		edgeList->add(e);
 	}
 }
 
@@ -557,8 +560,8 @@ void OverlayOp::insertUniqueEdge(Edge *e) {
 * a depth of 1 corresponds to INTERIOR)
 */
 void OverlayOp::computeLabelsFromDepths() {
-	for(int j=0;j<(int)edgeList->size();j++) {
-		Edge *e=(*edgeList)[j];
+	for(int j=0;j<(int)edgeList->getEdges()->size();j++) {
+		Edge *e=edgeList->get(j);
 		Label *lbl=e->getLabel();
 		Depth *depth=e->getDepth();
 		/**

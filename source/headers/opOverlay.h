@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.12  2003/11/12 18:02:56  strk
  * Added throw specification. Fixed leaks on exceptions.
  *
@@ -36,7 +39,7 @@
 #include <map>
 #include "platform.h"
 #include "operation.h"
-#include "graph.h"
+#include "geomgraph.h"
 #include "geosAlgorithm.h"
 
 using namespace std;

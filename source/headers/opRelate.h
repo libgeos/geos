@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.13  2004/03/01 22:04:59  strk
  * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
  *
@@ -32,7 +35,7 @@
 #include <vector>
 #include "platform.h"
 #include "operation.h"
-#include "graph.h"
+#include "geomgraph.h"
 #include "geosAlgorithm.h"
 
 namespace geos {

@@ -13,10 +13,10 @@
  *
  **********************************************************************
  * $Log$
- * Revision 1.3  2004/03/19 09:48:46  ybychkov
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
- * Revision 1.2  2003/11/07 01:23:42  pramsey
+ * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
  *
@@ -24,34 +24,13 @@
  **********************************************************************/
 
 
-#include "../headers/unload.h"
-#include "../headers/opValid.h"
 #include "../headers/geomgraph.h"
-#include "../headers/operation.h"
-#include "../headers/opRelate.h"
-#include "../headers/indexQuadtree.h"
 
 namespace geos {
 
-Unload::Unload(void)
-{
+Node* NodeFactory::createNode(Coordinate coord) {
+	return new Node(coord,NULL);
 }
 
-Unload::~Unload(void)
-{
 }
 
-void Unload::Release()
-{
-	delete CoordinateListFactory::internalFactory;
-	delete Geometry::cgAlgorithms;
-	delete Geometry::geometryChangedFilter;
-	delete IsValidOp::cga;
-	delete PlanarGraph::cga;
-	delete GeometryGraphOperation::cga;
-	delete GeometryGraphOperation::li;
-	delete RelateComputer::li;
-	delete RelateComputer::ptLocator;
-	delete QuadTreeRoot::origin;
-}
-}

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.27  2003/11/12 18:02:56  strk
  * Added throw specification. Fixed leaks on exceptions.
  *
@@ -38,7 +41,7 @@
 #include <vector>
 #include <map>
 #include "geom.h"
-#include "graphindex.h"
+#include "geomgraphindex.h"
 #include "geosAlgorithm.h"
 #include "platform.h"
 
@@ -54,10 +57,17 @@ class MonotoneChainEdge;
 class Position {
 public:
 	enum {
+		/** An indicator that a Location is <i>on</i> a GraphComponent */
 		ON,
+		/** An indicator that a Location is to the <i>left</i> of a GraphComponent */  
 		LEFT,
+		/** An indicator that a Location is to the <i>right</i> of a GraphComponent */  
 		RIGHT
 	};
+	/**
+	* Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
+	* otherwise.
+	*/
 	static int opposite(int position);
 };
 
@@ -66,6 +76,13 @@ public:
 	TopologyLocation();
 	virtual ~TopologyLocation();
 	TopologyLocation(const vector<int>* newLocation);
+	/**
+	* Constructs a TopologyLocation specifying how points on, to the left of, and to the
+	* right of some GraphComponent relate to some Geometry. Possible values for the
+	* parameters are Location.NULL, Location.EXTERIOR, Location.BOUNDARY, 
+	* and Location.INTERIOR.
+	* @see Location
+	*/
 	TopologyLocation(int on, int left, int right);
 	TopologyLocation(int on);
 	TopologyLocation(const TopologyLocation *gl);
@@ -152,14 +169,43 @@ private:
 	int depth[2][3];
 };
 
-//class Coordinate;
+/**
+ * Utility functions for working with quadrants, which are numbered as follows:
+ * <pre>
+ * 1 | 0
+ * --+--
+ * 2 | 3
+ * <pre>
+ *
+ */
 class Quadrant {
 public:
+	/**
+	* Returns the quadrant of a directed line segment (specified as x and y
+	* displacements, which cannot both be 0).
+	*/
 	static int quadrant(double dx, double dy);
+	/**
+	* Returns the quadrant of a directed line segment from p0 to p1.
+	*/
 	static int quadrant(const Coordinate& p0, const Coordinate& p1);
+	/**
+	* Returns true if the quadrants are 1 and 3, or 2 and 4
+	*/
 	static bool isOpposite(int quad1, int quad2);
+	/** 
+	* Returns the right-hand quadrant of the halfplane defined by the two quadrants,
+	* or -1 if the quadrants are opposite, or the quadrant if they are identical.
+	*/
 	static int commonHalfPlane(int quad1, int quad2);
+	/**
+	* Returns whether the given quadrant lies within the given halfplane (specified
+	* by its right-hand quadrant).
+	*/
 	static bool isInHalfPlane(int quad, int halfPlane);
+	/**
+	* Returns true if the given quadrant is 0 or 1.
+	*/
 	static bool isNorthern(int quad);
 };
 
@@ -208,6 +254,10 @@ public:
 	virtual const Coordinate& getCoordinate(int i);
 	virtual const Coordinate& getCoordinate(); 
 	virtual Depth *getDepth();
+	/**
+	* The depthDelta is the change in depth as an edge is crossed from R to L
+	* @return the change in depth as the edge is crossed from R to L
+	*/
 	virtual int getDepthDelta();
 	virtual void setDepthDelta(int newDepthDelta);
 	virtual int getMaximumSegmentIndex();
@@ -225,9 +275,11 @@ public:
 	virtual string print();
 	virtual string printReverse();
 	virtual bool equals(Edge* e);
+	virtual Envelope* getEnvelope();
 private:
 	string name;
 	MonotoneChainEdge *mce;
+	Envelope *env;
 	bool isIsolatedVar;
 	Depth *depth;
 	int depthDelta;   // the change in area depth from the R to L side of this edge
@@ -254,7 +306,7 @@ public:
 	virtual void computeLabel();
 	virtual string print();
 protected:
-	static CGAlgorithms *cga;
+//	static CGAlgorithms *cga;
 	Edge* edge;// the parent edge of this edge end
 	Label* label;
 	EdgeEnd(Edge* newEdge);
@@ -373,6 +425,7 @@ public:
 	int compare(int newSegmentIndex, double newDist);
 	bool isEndPoint(int maxSegmentIndex);
 	string print();
+	int compareTo(void* obj);
 };
 
 class EdgeIntersectionList{
@@ -392,13 +445,29 @@ public:
 	string print();
 };
 
-class EdgeList: public vector<Edge*> {
+class EdgeList {
 public:
 	EdgeList();
 	virtual ~EdgeList();
-	void insert(Edge *e);
+	void add(Edge *e);
+	void addAll(vector<Edge*> *edgeColl);
+	vector<Edge*>* getEdges();
+	Edge* findEqualEdge(Edge* e);
+	Edge* get(int i);
 	int findEdgeIndex(Edge *e);
 	string print();
+private:
+	vector<Edge*> *edges;
+	/**
+	* An index of the edges, for fast lookup.
+	*
+	* a Quadtree is used, because this index needs to be dynamic
+	* (e.g. allow insertions after queries).
+	* An alternative would be to use an ordered set based on the values
+	* of the edge coordinates
+	*
+	*/
+	SpatialIndex* index;
 };
 
 struct CoordLT {
@@ -443,6 +512,7 @@ public:
 	EdgeRing* getMinEdgeRing();
 	int getDepth(int position);
 	void setDepth(int position, int newDepth);
+	int getDepthDelta();
 	void setVisitedEdge(bool newIsVisited);
 	DirectedEdge* getSym();
 	bool isForward();
@@ -454,6 +524,7 @@ public:
 	bool isLineEdge();
 	bool isInteriorAreaEdge();
 	void setEdgeDepths(int position, int newDepth);
+	void OLDsetEdgeDepths(int position, int newDepth);
 	string print();
 	string printEdge();
 protected:
@@ -518,7 +589,7 @@ private:
 class PlanarGraph {
 public:
 	static CGAlgorithms *cga;
-	static LineIntersector *li;
+//	static LineIntersector *li;
 	static void linkResultDirectedEdges(vector<Node*>* allNodes)
 		throw(TopologyException *);
 	PlanarGraph(NodeFactory *nodeFact);
@@ -567,9 +638,9 @@ public:
 	GeometryGraph();
 	virtual ~GeometryGraph();
 	GeometryGraph(int newArgIndex, const Geometry *newParentGeom);
-	GeometryGraph(int newArgIndex, const PrecisionModel *newPrecisionModel, int newSRID);
-	const PrecisionModel* getPrecisionModel();
-	int getSRID();
+//	GeometryGraph(int newArgIndex, const PrecisionModel *newPrecisionModel, int newSRID);
+//	const PrecisionModel* getPrecisionModel();
+//	int getSRID();
 	const Geometry* getGeometry();
 	vector<Node*>* getBoundaryNodes();
 	CoordinateList* getBoundaryPoints();
@@ -585,8 +656,8 @@ public:
 private:
 	const Geometry *parentGeom;
 	// the precision model of the Geometry represented by this graph
-	const PrecisionModel *precisionModel;
-	int SRID;
+//	const PrecisionModel *precisionModel;
+//	int SRID;
 	/**
 	* The lineEdgeMap is a map of the linestring components of the
 	* parentGeometry to the edges which are derived from them.
@@ -614,6 +685,25 @@ private:
 	void addSelfIntersectionNodes(int argIndex);
 	void addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc);
 };
+
+/**
+ * Validates that a collection of SegmentStrings is correctly noded.
+ * Throws an appropriate exception if an noding error is found.
+ *
+ * @version 1.4
+ */
+class SegmentString;
+class NodingValidator;
+class EdgeNodingValidator {
+private:
+	static vector<SegmentString*>* toSegmentStrings(vector<Edge*> *edges);
+	NodingValidator *nv;
+public:
+	EdgeNodingValidator(vector<Edge*> *edges);
+	virtual ~EdgeNodingValidator();
+	void checkValid();
+};
+
 //Operators
 bool operator==(Edge a,Edge b);
 }

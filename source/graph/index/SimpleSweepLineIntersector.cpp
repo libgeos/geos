@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/03/19 09:49:29  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.6  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -23,7 +26,7 @@
  **********************************************************************/
 
 
-#include "../../headers/graphindex.h"
+#include "../../headers/geomgraphindex.h"
 
 namespace geos {
 

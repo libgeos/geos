@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.18  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -32,7 +35,7 @@
 
 #include "../headers/geosAlgorithm.h"
 #include <typeinfo>
-#include "../headers/graph.h"
+#include "../headers/geomgraph.h"
 
 namespace geos {
 

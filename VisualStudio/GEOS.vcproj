@@ -599,22 +599,22 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="graph"
+				Name="geomgraph"
 				Filter="">
 				<File
-					RelativePath="..\source\graph\Depth.cpp">
+					RelativePath="..\source\geomgraph\Depth.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\DirectedEdge.cpp">
+					RelativePath="..\source\geomgraph\DirectedEdge.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\DirectedEdgeStar.cpp">
+					RelativePath="..\source\geomgraph\DirectedEdgeStar.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\Edge.cpp">
+					RelativePath="..\source\geomgraph\Edge.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\EdgeEnd.cpp">
+					RelativePath="..\source\geomgraph\EdgeEnd.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
@@ -623,22 +623,25 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\EdgeEndStar.cpp">
+					RelativePath="..\source\geomgraph\EdgeEndStar.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\EdgeIntersection.cpp">
+					RelativePath="..\source\geomgraph\EdgeIntersection.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\EdgeIntersectionList.cpp">
+					RelativePath="..\source\geomgraph\EdgeIntersectionList.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\EdgeList.cpp">
+					RelativePath="..\source\geomgraph\EdgeList.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\EdgeRing.cpp">
+					RelativePath="..\source\geomgraph\EdgeNodingValidator.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\GeometryGraph.cpp">
+					RelativePath="..\source\geomgraph\EdgeRing.cpp">
+				</File>
+				<File
+					RelativePath="..\source\geomgraph\GeometryGraph.cpp">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
@@ -647,61 +650,61 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\graph\GraphComponent.cpp">
+					RelativePath="..\source\geomgraph\GraphComponent.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\Label.cpp">
+					RelativePath="..\source\geomgraph\Label.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\Node.cpp">
+					RelativePath="..\source\geomgraph\Node.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\NodeFactory.cpp">
+					RelativePath="..\source\geomgraph\NodeFactory.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\NodeMap.cpp">
+					RelativePath="..\source\geomgraph\NodeMap.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\PlanarGraph.cpp">
+					RelativePath="..\source\geomgraph\PlanarGraph.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\Position.cpp">
+					RelativePath="..\source\geomgraph\Position.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\Quadrant.cpp">
+					RelativePath="..\source\geomgraph\Quadrant.cpp">
 				</File>
 				<File
-					RelativePath="..\source\graph\TopologyLocation.cpp">
+					RelativePath="..\source\geomgraph\TopologyLocation.cpp">
 				</File>
 				<Filter
 					Name="index"
 					Filter="">
 					<File
-						RelativePath="..\source\graph\index\MonotoneChain.cpp">
+						RelativePath="..\source\geomgraph\index\MonotoneChain.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\MonotoneChainEdge.cpp">
+						RelativePath="..\source\geomgraph\index\MonotoneChainEdge.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\MonotoneChainIndexer.cpp">
+						RelativePath="..\source\geomgraph\index\MonotoneChainIndexer.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\SegmentIntersector.cpp">
+						RelativePath="..\source\geomgraph\index\SegmentIntersector.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\SimpleEdgeSetIntersector.cpp">
+						RelativePath="..\source\geomgraph\index\SimpleEdgeSetIntersector.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\SimpleMCSweepLineIntersector.cpp">
+						RelativePath="..\source\geomgraph\index\SimpleMCSweepLineIntersector.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\SimpleSweepLineIntersector.cpp">
+						RelativePath="..\source\geomgraph\index\SimpleSweepLineIntersector.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\SweepLineEvent.cpp">
+						RelativePath="..\source\geomgraph\index\SweepLineEvent.cpp">
 					</File>
 					<File
-						RelativePath="..\source\graph\index\SweepLineSegment.cpp">
+						RelativePath="..\source\geomgraph\index\SweepLineSegment.cpp">
 					</File>
 				</Filter>
 			</Filter>
@@ -1004,6 +1007,10 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="noding"
+				Filter="">
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1018,13 +1025,13 @@
 				RelativePath="..\source\headers\geom.h">
 			</File>
 			<File
+				RelativePath="..\source\headers\geomgraph.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\geomgraphindex.h">
+			</File>
+			<File
 				RelativePath="..\source\headers\geosAlgorithm.h">
-			</File>
-			<File
-				RelativePath="..\source\headers\graph.h">
-			</File>
-			<File
-				RelativePath="..\source\headers\graphindex.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\indexBintree.h">
@@ -1043,6 +1050,9 @@
 			</File>
 			<File
 				RelativePath="..\source\headers\io.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\noding.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\opBuffer.h">

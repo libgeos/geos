@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.13  2004/03/01 22:04:59  strk
  * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
  *
@@ -121,7 +124,7 @@ void BufferOp::computeBuffer(double distance, int quadrantSegments) throw(Topolo
 		insertEdge(e);
 	}
 	replaceCollapsedEdges();
-	graph->addEdges(edgeList);
+	graph->addEdges(edgeList->getEdges());
 
 	vector<BufferSubgraph*> *subgraphList=createSubgraphs();
 	PolygonBuilder *polyBuilder=new PolygonBuilder(geomFact,cga);
@@ -160,7 +163,7 @@ void BufferOp::computeBuffer(double distance, int quadrantSegments) throw(Topolo
 */
 vector<Edge*>* BufferOp::nodeEdges(vector<Edge*> *edges){
 	// intersect edges again to ensure they are noded correctly
-	GeometryGraph *ggraph=new GeometryGraph(0,geomFact->getPrecisionModel(),0);
+	GeometryGraph *ggraph=new GeometryGraph();
 	for (int i=0;i<(int)edges->size();i++) {
 		Edge *e=(*edges)[i];
 		ggraph->addEdge(e);
@@ -189,7 +192,7 @@ void BufferOp::insertEdge(Edge *e){
 	int foundIndex=edgeList->findEdgeIndex(e);
 	// If an identical edge already exists, simply update its label
 	if (foundIndex>=0) {
-		Edge *existingEdge=(*edgeList)[foundIndex];
+		Edge *existingEdge=edgeList->get(foundIndex);
 		Label *existingLabel=existingEdge->getLabel();
 		Label *labelToMerge=e->getLabel();
 		// check if new edge is in reverse direction to existing edge
@@ -211,7 +214,7 @@ void BufferOp::insertEdge(Edge *e){
 	} else {   // no matching existing edge was found
 		// add this new edge to the list of edges in this graph
 		//e.setName(name+edges.size());
-		edgeList->push_back(e);
+		edgeList->add(e);
 		e->setDepthDelta(depthDelta(e->getLabel()));
 	}
 }
@@ -239,15 +242,16 @@ void BufferOp::checkDimensionalCollapse(Label *labelToMerge,Label *existingLabel
 */
 void BufferOp::replaceCollapsedEdges() {
 	vector<Edge*> *newEdges=new vector<Edge*>();
-	for(int i=0;i<(int)edgeList->size();i++) {
-		Edge *e=(*edgeList)[i];
+	vector<Edge*> *eL=edgeList->getEdges();
+	for(int i=0;i<(int)eL->size();i++) {
+		Edge *e=edgeList->get(i);
 		if (e->isCollapsed()) {
 			//Debug.print(e);
-			edgeList->erase(edgeList->begin()+i);
+			eL->erase(eL->begin()+i);
 			newEdges->push_back(e->getCollapsedEdge());
 		}
 	}
-	((vector<Edge*>*)edgeList)->insert(edgeList->end(),newEdges->begin(),newEdges->end());
+	eL->insert(eL->end(),newEdges->begin(),newEdges->end());
 	delete newEdges;
 }
 
@@ -309,8 +313,9 @@ Geometry* BufferOp::computeGeometry(vector<Polygon*> *resultPolyList){
 */
 Geometry* BufferOp::toLineStrings(EdgeList *edges){
 	vector<Geometry*> *geomList=new vector<Geometry*>();
-	for(int i=0;i<(int)edges->size();i++) {
-		Edge *e=(*edges)[i];
+	vector<Edge*> *eL=edges->getEdges();
+	for(int i=0;i<(int)eL->size();i++) {
+		Edge *e=edges->get(i);
 		const CoordinateList *pts=e->getCoordinates();
 		LineString *line=geomFact->createLineString(pts);
 		geomList->push_back(line);

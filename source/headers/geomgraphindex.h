@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.20  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -23,6 +26,9 @@
 
 /*
 * $Log$
+* Revision 1.1  2004/03/19 09:48:45  ybychkov
+* "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+*
 * Revision 1.20  2003/11/07 01:23:42  pramsey
 * Add standard CVS headers licence notices and copyrights to all cpp and h
 * files.
@@ -40,7 +46,7 @@
 #define GEOS_GRAPH_INDEX_H
 
 #include <memory>
-#include "graph.h"
+#include "geomgraph.h"
 #include "geom.h"
 #include <vector>
 #include "geosAlgorithm.h"

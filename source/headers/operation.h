@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -32,7 +35,7 @@
 //#include <algorithm>
 //#include "math.h"
 #include "platform.h"
-#include "graph.h"
+#include "geomgraph.h"
 #include "geom.h"
 #include "geosAlgorithm.h"
 

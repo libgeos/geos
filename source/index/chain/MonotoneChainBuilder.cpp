@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
  * Revision 1.6  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -22,7 +25,7 @@
 
 
 #include "../../headers/indexChain.h"
-#include "../../headers/graph.h"
+#include "../../headers/geomgraph.h"
 #include "stdio.h"
 
 namespace geos {
