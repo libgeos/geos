@@ -22,6 +22,7 @@
 #include <iostream>
 #include <string>
 #include <sys/time.h>
+#include <geos/timeval.h>
 
 #ifndef PROFILE
 #define PROFILE 0
@@ -144,6 +145,9 @@ ostream& operator<< (ostream& os, const Profiler&);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2004/11/30 16:44:16  strk
+ * Added gettimeofday implementation for win32, curtesy of Wu Yongwei.
+ *
  * Revision 1.2  2004/11/04 08:49:13  strk
  * Unlinked new documentation.
  *
