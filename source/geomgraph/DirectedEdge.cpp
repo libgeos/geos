@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -29,7 +32,7 @@
 
 
 #include <geos/geomgraph.h>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 

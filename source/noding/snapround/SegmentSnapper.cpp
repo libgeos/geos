@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
  * Revision 1.3  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
@@ -30,7 +33,7 @@
 
 
 #include <geos/nodingSnapround.h>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 

@@ -16,7 +16,7 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 #include <geos/geom.h>
-#include <math.h>
+#include <cmath>
 
 #ifndef DEBUG_INTERSECT
 #define DEBUG_INTERSECT 0
@@ -441,6 +441,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
  * Revision 1.22  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

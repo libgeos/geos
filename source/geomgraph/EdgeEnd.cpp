@@ -18,7 +18,7 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 #include <typeinfo>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 
@@ -121,6 +121,9 @@ string EdgeEnd::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
  * Revision 1.4  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *

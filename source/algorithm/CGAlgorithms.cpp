@@ -15,7 +15,7 @@
 
 #include <geos/geosAlgorithm.h>
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 
@@ -379,6 +379,9 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
  * Revision 1.21  2005/03/04 07:48:09  strk
  * Removed useless copy from ::isOnLine() - suggested by Dale Lutz
  *

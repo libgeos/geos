@@ -15,7 +15,7 @@
 
 #include <geos/planargraph.h>
 #include <geos/geomgraph.h>
-#include <math.h>
+#include <cmath>
 #include <typeinfo>
 #include <sstream>
 
@@ -227,6 +227,9 @@ planarDirectedEdge::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
  * Revision 1.8  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *

@@ -13,7 +13,7 @@
  *
  **********************************************************************/
 
-#include <math.h>
+#include <cmath>
 
 #include <geos/geom.h>
 #include "bigtest.h"
@@ -126,6 +126,9 @@ Polygon* GeometryTestFactory::createSineStar(GeometryFactory *fact,double basex,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
  * Revision 1.12  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
