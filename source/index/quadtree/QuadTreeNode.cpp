@@ -15,6 +15,7 @@
 
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
+#include <stdio.h>
 
 #ifndef DEBUG
 #define DEBUG 0
@@ -184,6 +185,9 @@ QuadTreeNode::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2004/11/19 16:09:53  strk
+ * Added <stdio.h> include for sprintf recognition.
+ *
  * Revision 1.8  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
