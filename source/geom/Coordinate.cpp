@@ -14,7 +14,8 @@
  **********************************************************************/
 
 #include <geos/geom.h>
-#include <stdio.h>
+#include <sstream>
+//#include <stdio.h>
 
 namespace geos {
 
@@ -26,18 +27,22 @@ namespace geos {
  *@return    a <code>string</code> of the form <I>(x,y,z)</I>
  */
 string Coordinate::toString() const {
-	string result("");
-	char buffer[255];
+	ostringstream s;
+	//string result("");
+	//char buffer[255];
 	if (ISNAN(z)) {
-		sprintf(buffer,"(%g,%g)",x,y);
-		result.append(buffer);
-		result.append("");
+		s<<"("<<x<<","<<y<<")";
+		//sprintf(buffer,"(%g,%g)",x,y);
+		//result.append(buffer);
+		//result.append("");
 	} else {
-		sprintf(buffer,"(%g,%g,%g)",x,y,z);
-		result.append(buffer);
-		result.append("");
+		s<<"("<<x<<","<<y<<","<<z<<")";
+		//sprintf(buffer,"(%g,%g,%g)",x,y,z);
+		//result.append(buffer);
+		//result.append("");
 	}
-	return result;
+	//return result;
+	return s.str();
 }
 
 /*
@@ -66,6 +71,9 @@ bool operator!=(const Coordinate& a, const Coordinate& b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/01/28 08:47:06  strk
+ * Removed sprintf usage, replaced with sstream
+ *
  * Revision 1.19  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.
