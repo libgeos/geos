@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/05/06 16:30:58  strk
+ * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
+ * deleted at destruction time. doc/example.cpp runs with no leaks.
+ *
  * Revision 1.5  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -51,6 +55,8 @@ Bintree::Bintree() {
 }
 
 Bintree::~Bintree() {
+	for (int i=0; i<newIntervals.size(); i++)
+		delete newIntervals[i];
 	delete root;
 }
 
@@ -77,6 +83,8 @@ int Bintree::nodeSize(){
 void Bintree::insert(BinTreeInterval *itemInterval,void* item){
 	collectStats(itemInterval);
 	BinTreeInterval *insertInterval=ensureExtent(itemInterval,minExtent);
+	if ( insertInterval != itemInterval )
+		newIntervals.push_back(insertInterval);
 	//int oldSize=size();
 	root->insert(insertInterval,item);
 	/* DEBUG

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/05/06 16:30:58  strk
+ * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
+ * deleted at destruction time. doc/example.cpp runs with no leaks.
+ *
  * Revision 1.15  2004/04/19 15:14:45  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -225,6 +229,7 @@ public:
 	vector<void*>* query(Envelope *searchEnv);
 	vector<void*>* queryAll();
 private:
+	vector<Envelope *>newEnvelopes;
 	void collectStats(Envelope *itemEnv);
 	QuadTreeRoot *root;
 	/**

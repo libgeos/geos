@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/06 16:30:58  strk
+ * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
+ * deleted at destruction time. doc/example.cpp runs with no leaks.
+ *
  * Revision 1.9  2004/04/19 15:14:45  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -36,6 +40,7 @@ namespace geos {
 /**
 * Ensure that the envelope for the inserted item has non-zero extents.
 * Use the current minExtent to pad the envelope, if necessary
+* Can return a new Envelope or the given one.
 */
 Envelope* Quadtree::ensureExtent(Envelope *itemEnv,double minExtent) {
 	//The names "ensureExtent" and "minExtent" are misleading -- sounds like
@@ -57,7 +62,8 @@ Envelope* Quadtree::ensureExtent(Envelope *itemEnv,double minExtent) {
 		miny=miny-minExtent/2.0;
 		maxy=miny+minExtent/2.0;
 	}
-	return new Envelope(minx, maxx, miny, maxy);
+	Envelope *newEnv = new Envelope(minx, maxx, miny, maxy);
+	return newEnv;
 }
 
 /**
@@ -69,6 +75,8 @@ Quadtree::Quadtree(){
 }
 
 Quadtree::~Quadtree(){
+	for (int i=0; i<newEnvelopes.size(); i++)
+		delete newEnvelopes[i];
 	delete root;
 }
 
@@ -94,6 +102,7 @@ int Quadtree::size() {
 void Quadtree::insert(Envelope *itemEnv, void* item){
 	collectStats(itemEnv);
 	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
+	if ( insertEnv != itemEnv ) newEnvelopes.push_back(insertEnv);
 	root->insert(insertEnv,item);
 }
 
