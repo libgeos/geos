@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
  * Revision 1.25  2004/07/03 12:51:37  strk
  * Documentation cleanups for DoxyGen.
  *
@@ -112,7 +115,7 @@ double PrecisionModel::makePrecise(double val) const {
 }
 
 /**
-* Rounds a Coordinate to the PrecisionModel grid.
+* Rounds given Coordinate to the PrecisionModel grid.
 */
 void PrecisionModel::makePrecise(Coordinate *coord) const {
     // optimization for full precision
@@ -219,7 +222,7 @@ int PrecisionModel::getMaximumSignificantDigits() const {
 * Gets the type of this PrecisionModel
 * @return the type of this PrecisionModel
 */
-PrecisionModel::Type PrecisionModel::getType(){
+PrecisionModel::Type PrecisionModel::getType() const {
 	return modelType;
 }
 
@@ -287,7 +290,7 @@ void PrecisionModel::toInternal (const Coordinate& external, Coordinate* interna
 	internal->z = external.z;
 }
 
-/**
+/*
  *  Returns the precise representation of <code>external</code>.
  *
  *@param  external  the original coordinate

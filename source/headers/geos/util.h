@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
  * Revision 1.2  2004/07/05 10:50:21  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -43,6 +46,9 @@
 
 /*
 * $Log$
+* Revision 1.3  2004/07/05 14:23:03  strk
+* More documentation cleanups.
+*
 * Revision 1.2  2004/07/05 10:50:21  strk
 * deep-dopy construction taken out of Geometry and implemented only
 * in GeometryFactory.
@@ -204,7 +210,7 @@ public:
 	* Create a shape factory which will create shapes using the given
 	* {@link GeometryFactory}.
 	*
-	* @param geomFact the factory to use
+	* @param newGeomFact the factory to use
 	*/
 	GeometricShapeFactory(GeometryFactory *newGeomFact);
 	~GeometricShapeFactory();

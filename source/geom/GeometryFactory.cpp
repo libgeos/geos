@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.45  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
  * Revision 1.44  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -182,13 +185,17 @@ GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
 }
 
 
+/**
+ * Converts an Envelope to a Geometry.
+ * Returned Geometry can be a Point, a Polygon or an EMPTY geom.
+ */
 Geometry*
 GeometryFactory::toGeometry(Envelope* envelope) const
 {
 	Coordinate coord;
 
 	if (envelope->isNull()) {
-		return createPoint(NULL);
+		return createPoint();
 	}
 	if (envelope->getMinX()==envelope->getMaxX() && envelope->getMinY()==envelope->getMaxY()) {
 		coord.x = envelope->getMinX();
@@ -225,13 +232,21 @@ const PrecisionModel* GeometryFactory::getPrecisionModel() const {
 }
 
 /**
+* Creates the EMPTY Point
+*/
+Point*
+GeometryFactory::createPoint() const {
+	return new Point(NULL, this);
+}
+
+/**
 * Creates a Point using the given Coordinate; a null Coordinate will create
 * an empty Geometry.
 */
 Point*
 GeometryFactory::createPoint(const Coordinate& coordinate) const {
 	if (coordinate==Coordinate::nullCoord) {
-		return createPoint(NULL);
+		return createPoint();
 	} else {
 		CoordinateList *cl=coordinateListFactory->createCoordinateList(1);
 		cl->setAt(coordinate, 0);
@@ -277,6 +292,15 @@ GeometryFactory::createPoint(const CoordinateList &fromCoords) const
 	}
 	return g;
 
+}
+
+/**
+ * Construct an EMPTY MultiLineString
+ */
+MultiLineString*
+GeometryFactory::createMultiLineString() const
+{
+	return new MultiLineString(NULL,this);
 }
 
 /**
@@ -335,6 +359,15 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 }
 
 /**
+* Constructs an EMPTY <code>GeometryCollection</code>.
+*/
+GeometryCollection*
+GeometryFactory::createGeometryCollection() const
+{
+	return new GeometryCollection(NULL,this);
+}
+
+/**
 * Constructs a <code>GeometryCollection</code>.
 *
 * @param newGeoms
@@ -385,6 +418,15 @@ GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) c
 		throw;
 	}
 	return g;
+}
+
+/**
+* Create an EMPTY MultiPolygon
+*/
+MultiPolygon*
+GeometryFactory::createMultiPolygon() const
+{
+	return new MultiPolygon(NULL,this);
 }
 
 /**
@@ -440,6 +482,15 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 		throw;
 	}
 	return g;
+}
+
+/**
+* Creates an EMPTY LinearRing 
+*/
+LinearRing*
+GeometryFactory::createLinearRing() const
+{
+	return new LinearRing(NULL,this);
 }
 
 /**
@@ -566,6 +617,15 @@ GeometryFactory::createMultiPoint(const CoordinateList &fromCoords) const
 }
 
 /**
+* Constructs an EMPTY Polygon
+*/
+Polygon*
+GeometryFactory::createPolygon() const
+{
+	return new Polygon(NULL, NULL, this);
+}
+
+/**
 * Constructs a <code>Polygon</code> with the given exterior boundary and
 * interior boundaries.
 *
@@ -627,6 +687,15 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 		throw;
 	}
 	return g;
+}
+
+/**
+ * Constructs an EMPTY LineString
+ */
+LineString *
+GeometryFactory::createLineString() const
+{
+	return new LineString(NULL, this);
 }
 
 /**
@@ -721,7 +790,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 	if (geomClass=="NULL") {
 		// we do not need the vector anymore
 		delete newGeoms;
-		return createGeometryCollection(NULL);
+		return createGeometryCollection();
 	}
 	if (isHeterogeneous) {
 		return createGeometryCollection(newGeoms);
@@ -775,7 +844,7 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 
 	// for the empty geometry, return an empty GeometryCollection
 	if (geomClass=="NULL") {
-		return createGeometryCollection(NULL);
+		return createGeometryCollection();
 	}
 	if (isHeterogeneous) {
 		return createGeometryCollection(fromGeoms);

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
  * Revision 1.4  2004/07/05 10:50:21  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -165,7 +168,7 @@ enum GeometryTypeId {
 class Coordinate;
 
 /**
- * \class PrecisionModel geom.h geos/geom.h
+ * \class PrecisionModel geom.h geos.h
  *
  * Specifies the precision model of the {@link Coordinate}s in a {@link Geometry}.
  * In other words, specifies the grid of allowable
@@ -211,8 +214,8 @@ class Coordinate;
 class PrecisionModel {
 friend class Unload;
 public:
-	/**
-	* The types of Precision Model which GEOS supports.
+	/// The types of Precision Model which GEOS supports.
+	/*
 	* This class is only for use to support the "enums"
 	* for the types of precision model.
 	*/
@@ -241,34 +244,12 @@ public:
 		FLOATING_SINGLE
 
 	} Type;
-
-	/**
-	 * The maximum precise value representable in a double.
-	 * Since IEE754 double-precision numbers allow 53 bits of mantissa,
-	 * the value is equal to 2^53 - 1.
-	 * This provides <i>almost</i> 16 decimal digits of precision.
-	 */
-	static const double maximumPreciseValue;
-
-	/**
-	* Rounds a numeric value to the PrecisionModel grid.
-	*/
-	double makePrecise(double val) const;
-
-	/**
-	 * Rounds a Coordinate to the PrecisionModel grid.
-	 */
-	void makePrecise(Coordinate *coord) const;
-
-	/**
-	* Creates a <code>PrecisionModel</code> with a default precision
-	* of FLOATING.
-	*/
+	
+	/// Creates a PrecisionModel with a default precision of FLOATING.
 	PrecisionModel(void);
 
+	/// Creates a PrecisionModel specifying an explicit precision model type.
 	/**
-	* Creates a <code>PrecisionModel</code> that specifies
-	* an explicit precision model type.
 	* If the model type is FIXED the scale factor will default to 1.
 	*
 	* @param modelType the type of the precision model
@@ -276,7 +257,8 @@ public:
 	PrecisionModel(Type nModelType);
 
 	/*
-	 * Creates a <code>PrecisionModel</code> that specifies Fixed precision.
+	 * Creates a <code>PrecisionModel</code> with Fixed precision.
+	 *
 	 * Fixed-precision coordinates are represented as precise internal
 	 * coordinates, which are rounded to the grid defined by the
 	 * scale factor.
@@ -292,9 +274,8 @@ public:
 	 */
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
 
+	/// Creates a PrecisionModel with Fixed precision.
 	/**
-	 * Creates a <code>PrecisionModel</code> that specifies
-	 * Fixed precision.
 	 * Fixed-precision coordinates are represented as precise
 	 * internal coordinates which are rounded to the grid defined
 	 * by the scale factor.
@@ -307,30 +288,49 @@ public:
 	// copy constructor
 	PrecisionModel(const PrecisionModel &pm);
 
-	// dtor
+	/// destructor
 	virtual ~PrecisionModel(void);
 
+
+	/// The maximum precise value representable in a double.
 	/**
-	* Tests whether the precision model supports floating point
-	* @return <code>true</code> if the precision model supports floating point
+	 * Since IEE754 double-precision numbers allow 53 bits of mantissa,
+	 * the value is equal to 2^53 - 1.
+	 * This provides <i>almost</i> 16 decimal digits of precision.
+	 */
+	static const double maximumPreciseValue;
+
+	/// Rounds a numeric value to the PrecisionModel grid.
+	double makePrecise(double val) const;
+
+	/// Rounds the given Coordinate to the PrecisionModel grid.
+	void makePrecise(Coordinate *coord) const;
+
+	/// Tests whether the precision model supports floating point
+	/**
+	* @return <code>true</code> if the precision model supports
+	* floating point
 	*/
 	bool isFloating() const;
+
+	/// Returns the maximum number of significant digits provided by this precision model.
 	/**
-	* Returns the maximum number of significant digits provided by this
-	* precision model.
 	* Intended for use by routines which need to print out precise values.
 	*
 	* @return the maximum number of decimal places provided by this precision model
 	*/
 	int getMaximumSignificantDigits() const;
+
+	/// Gets the type of this PrecisionModel
 	/**
-	* Gets the type of this PrecisionModel
 	* @return the type of this PrecisionModel
 	*/
-	Type getType();
+	Type getType() const;
+
+	/// Returns the multiplying factor used to obtain a precise coordinate.
 	double getScale() const;
 
-	/**
+	/*
 	* Returns the x-offset used to obtain a precise coordinate.
 	*
 	* @return the amount by which to subtract the x-coordinate before
@@ -339,7 +339,7 @@ public:
 	*/
 	double getOffsetX() const;
 
-	/**
+	/*
 	* Returns the y-offset used to obtain a precise coordinate.
 	*
 	* @return the amount by which to subtract the y-coordinate before
@@ -349,13 +349,13 @@ public:
 	double getOffsetY() const;
 
 	/*
-	*  Sets <code>internal</code> to the precise representation of <code>external</code>.
-	*
-	* @param external the original coordinate
-	* @param internal the coordinate whose values will be changed to the
-	*                 precise representation of <code>external</code>
-	* @deprecated use makePrecise instead
-	*/
+	 *  Sets <code>internal</code> to the precise representation of <code>external</code>.
+	 *
+	 * @param external the original coordinate
+	 * @param internal the coordinate whose values will be changed to the
+	 *                 precise representation of <code>external</code>
+	 * @deprecated use makePrecise instead
+	 */
 	void toInternal(const Coordinate& external, Coordinate* internal) const;
 
 	/*
@@ -393,18 +393,20 @@ public:
 
 	string toString() const;
 
+	/// Compares this PrecisionModel object with the specified object for order.
 	/**
-	*  Compares this {@link PrecisionModel} object with the specified object for order.
 	* A PrecisionModel is greater than another if it provides greater precision.
 	* The comparison is based on the value returned by the
-	* {@link getMaximumSignificantDigits) method.
-	* This comparison is not strictly accurate when comparing floating precision models
-	* to fixed models; however, it is correct when both models are either floating or fixed.
+	* getMaximumSignificantDigits method.
+	* This comparison is not strictly accurate when comparing floating
+	* precision models to fixed models;
+	* however, it is correct when both models are either floating or fixed.
 	*
-	*@param  o  the <code>PrecisionModel</code> with which this <code>PrecisionModel</code>
+	* @param other the PrecisionModel with which this PrecisionModel
 	*      is being compared
-	*@return    a negative integer, zero, or a positive integer as this <code>PrecisionModel</code>
-	*      is less than, equal to, or greater than the specified <code>PrecisionModel</code>
+	* @return a negative integer, zero, or a positive integer as this
+	*      PrecisionModel is less than, equal to, or greater than the
+	*      specified PrecisionModel.
 	*/
 	int compareTo(const PrecisionModel* other) const;
 
@@ -416,18 +418,23 @@ private:
 };
 
 /**
- *  <code>Coordinate</code> is the lightweight class used to store coordinates.
- *  It is distinct from <code>Point</code>, which is a subclass of <code>Geometry</code>
- *  . Unlike objects of type <code>Point</code> (which contain additional
- *  information such as an envelope, a precision model, and spatial reference
- *  system information), a <code>Coordinate</code> only contains ordinate values
- *  and accessor methods. <P>
+ * \class Coordinate geom.h geos.h
  *
- *  <code>Coordinate</code>s are two-dimensional points, with an additional
- *  z-ordinate. JTS does not support any operations on the z-ordinate except
- *  the basic accessor functions. Constructed coordinates will have a
- *  z-ordinate of <code>DoubleNotANumber</code>.  The standard comparison functions will ignore
- *  the z-ordinate.
+ * \brief
+ * Coordinate is the lightweight class used to store coordinates.
+ *
+ * It is distinct from Point, which is a subclass of Geometry.
+ * Unlike objects of type Point (which contain additional
+ * information such as an envelope, a precision model, and spatial
+ * reference system information), a Coordinate only contains
+ * ordinate values and accessor methods. 
+ *
+ * Coordinate objects are two-dimensional points, with an additional
+ * z-ordinate. JTS does not support any operations on the z-ordinate except
+ * the basic accessor functions.
+ *
+ * Constructed coordinates will have a z-ordinate of DoubleNotANumber.
+ * The standard comparison functions will ignore the z-ordinate.
  *
  */
 class Coordinate {
@@ -559,84 +566,134 @@ private:
 /**
  * \class CoordinateList geom.h geos/geom.h
  *
+ * \brief
  * The internal representation of a list of coordinates inside a Geometry.
- * <p>
+ *
  * There are some cases in which you might want Geometries to store their
  * points using something other than the GEOS Coordinate class. For example, you
- * may want to experiment with another implementation, such as an array of x’s
- * and an array of y’s. or you might want to use your own coordinate class, one
+ * may want to experiment with another implementation, such as an array of Xs
+ * and an array of Ys. or you might want to use your own coordinate class, one
  * that supports extra attributes like M-values.
- * <p>
+ * 
  * You can do this by implementing the CoordinateList and
  * CoordinateListFactory interfaces. You would then create a
  * GeometryFactory parameterized by your CoordinateListFactory, and use
  * this GeometryFactory to create new Geometries. All of these new Geometries
  * will use your CoordinateList implementation.
- * <p>
+ * 
  * This class is equivalent to JTS CoordinateSequence.
  */
 class CoordinateList {
 public:
-	virtual	bool isEmpty() const=0;
-	virtual	void add(const Coordinate& c)=0;
-	virtual	int getSize() const=0;
-	virtual	const Coordinate& getAt(int pos) const=0;
-	virtual	void setAt(const Coordinate& c, int pos)=0;
-	virtual	void deleteAt(int pos)=0;
-	virtual	vector<Coordinate>* toVector() const=0;
-	virtual	string toString() const=0;
-	virtual	void setPoints(const vector<Coordinate> &v)=0;
+	virtual ~CoordinateList(){};
+
 	/// substitutes copy constructor
 	virtual CoordinateList *clone() const=0;
-	bool hasRepeatedPoints() const;
-	const Coordinate* minCoordinate() const;
+
+	/// Returns a new CoordinateList being a copy of the input with any consecutive equal Coordinate removed.
+	static CoordinateList* removeRepeatedPoints(const CoordinateList *cl);
+
 	/**
-	* Returns whether #equals returns true for any two consecutive Coordinates 
-	* in the given array.
+	* \brief Returns true if given CoordinateList contains
+	* any two consecutive Coordinate 
 	*/
 	static bool hasRepeatedPoints(const CoordinateList *cl);
+
 	/**
-	* Returns either the given coordinate array if its length is greater than the
-	* given amount, or an empty coordinate array.
+	* \brief Returns either the given coordinate array if its length
+	* is greater than the given amount, or an empty coordinate array.
 	*/
-	static CoordinateList* atLeastNCoordinatesOrNothing(int n,CoordinateList *c);
+	static CoordinateList* atLeastNCoordinatesOrNothing(int n, CoordinateList *c);
+
+	/**
+	 * \brief Returns lower-left Coordinate in given CoordinateList.
+	 * This is actually the Coordinate with lower X (and Y if needed)
+	 * ordinate.
+	 */
 	static const Coordinate* minCoordinate(CoordinateList *cl);
+
+	/// Return position of a Coordinate, or -1 if not found
 	static int indexOf(const Coordinate *coordinate, const CoordinateList *cl);
 	/**
-	* Returns true if the two arrays are identical, both null, or pointwise
-	* equal (as compared using Coordinate#equals)
-	* @see Coordinate#equals(Object)
+	* \brief
+	* Returns true if the two arrays are identical, both null,
+	* or pointwise equal 
 	*/
 	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
+
+	/// Scroll given CoordinateList so to start with given Coordinate.
 	static void scroll(CoordinateList *cl, const Coordinate *firstCoordinate);
+
+	/// Reverse Coordinate order in given CoordinateList
 	static void reverse(CoordinateList *cl);
-	/** Add an array of coordinates
-	* @param cl The coordinates
-	* @param allowRepeated if set to false, repeated coordinates are collapsed
-	* @param direction if false, the array is added in reverse order
-	* @return true (as by general collection contract)
-	*/
+
+	/**
+	 * \brief Add an array of coordinates
+	 * @param cl The coordinates
+	 * @param allowRepeated if set to false, repeated coordinates
+	 * are collapsed
+	 * @param direction if false, the array is added in reverse order
+	 * @return true (as by general collection contract)
+	 */
 	void add(CoordinateList *cl,bool allowRepeated,bool direction);
-	/** Add an array of coordinates
-	* @param vc The coordinates
-	* @param allowRepeated if set to false, repeated coordinates are collapsed
-	* @return true (as by general collection contract)
-	*/
-	void add(vector<Coordinate>* vc,bool allowRepeated);
-	/** Add a coordinate
-	* @param c The coordinate to add
-	* @param allowRepeated if set to false, repeated coordinates are collapsed
-	* @return true (as by general collection contract)
-	*/
+
+	/**
+	 * \brief Add an array of coordinates
+	 * @param vc The coordinates
+	 * @param allowRepeated if set to false, repeated coordinates
+	 * 	are collapsed
+	 * @return true (as by general collection contract)
+	 */
+	void add(vector<Coordinate>* vc, bool allowRepeated);
+
+	/**
+	 * \brief Add a coordinate
+	 * @param c The coordinate to add
+	 * @param allowRepeated if set to false, repeated coordinates
+	 * are collapsed
+	 * @return true (as by general collection contract)
+	 */
 	void add(const Coordinate& c,bool allowRepeated);
-	static CoordinateList* removeRepeatedPoints(const CoordinateList *cl);
-	virtual ~CoordinateList(){};
+
+	/// Returns <code>true</code> it list contains no coordinates.
+	virtual	bool isEmpty() const=0;
+
+	/// Add a Coordinate to the list
+	virtual	void add(const Coordinate& c)=0;
+
+	/// Get number of coordinates
+	virtual	int getSize() const=0;
+
+	/// Get a reference to Coordinate at position pos
+	virtual	const Coordinate& getAt(int pos) const=0;
+
+	/// Copy Coordinate c to position pos
+	virtual	void setAt(const Coordinate& c, int pos)=0;
+
+	/// Delete Coordinate at position pos (list will shrink).
+	virtual	void deleteAt(int pos)=0;
+
+	/// CoordinateList to vector<Coordinate> converter
+	virtual	vector<Coordinate>* toVector() const=0;
+
+	/// Get a string rapresentation of CoordinateList
+	virtual	string toString() const=0;
+
+	/// Substitute Coordinate list with a copy of the given vector
+	virtual	void setPoints(const vector<Coordinate> &v)=0;
+	
+	/// Returns true if contains any two consecutive points 
+	bool hasRepeatedPoints() const;
+
+	/// Returns lower-left Coordinate in list
+	const Coordinate* minCoordinate() const;
+
 };
 
 /**
  * \class BasicCoordinateList geom.h geos/geom.h
  *
- * The default implementation of CoordinateList
+ * \brief The default implementation of CoordinateList
  */
 class BasicCoordinateList : public CoordinateList {
 public:
@@ -694,8 +751,9 @@ private:
 };
 
 /**
- * \class CoordinateListFactory geom.h geos/geom.h
+ * \class CoordinateListFactory geom.h geos.h
  *
+ * \brief
  * An object that knows how to build a particular implementation of
  * CoordinateList from an array of Coordinates.
  */
@@ -712,6 +770,12 @@ public:
 	static CoordinateListFactory* internalFactory;
 };
 
+/**
+ * \class BasicCoordinateListFactory geom.h geos.h
+ *
+ * \brief
+ * Factory for BasicCoordinateList objects.
+ */
 class BasicCoordinateListFactory: public CoordinateListFactory {
 	/// create an empty BasicCoordinateList
 	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
@@ -722,6 +786,12 @@ class BasicCoordinateListFactory: public CoordinateListFactory {
 	CoordinateList* createCoordinateList(const CoordinateList *cl) {return new BasicCoordinateList(cl);};
 };
 
+/*
+ * \class PointCoordinateListFactory geom.h geos.h
+ *
+ * \brief
+ * Factory for PointCoordinateList objects.
+ */
 class PointCoordinateListFactory: public CoordinateListFactory {
 	CoordinateList* createCoordinateList() {return new PointCoordinateList();};
 	CoordinateList* createCoordinateList(int size) {return new PointCoordinateList(size);};
@@ -875,8 +945,8 @@ class GeometryFactory;
 
 /**
  * \class Geometry geom.h geos.h
- * Basic implementation of Geometry,
- * constructed by GeometryFactory.
+ *
+ * \brief Basic implementation of Geometry, constructed by GeometryFactory.
  *
  *  <code>clone</code> returns a deep copy of the object.
  *
@@ -968,10 +1038,11 @@ public:
 	/** Destroy Geometry and all components */
 	virtual ~Geometry();
 
-	/** Replaces copy constructor, abstract method. */
+	/// Make a deep-copy of this Geometry
 	virtual Geometry* clone() const=0;
 
 	/**
+	 * \brief
 	 * Gets the factory which contains the context in which this
 	 * geometry was created.
 	 *
@@ -980,13 +1051,7 @@ public:
 	const GeometryFactory* getFactory() const;
 
 	/**
-	* Gets the user data object for this geometry, if any.
-	*
-	* @return the user data object, or <code>null</code> if none set
-	*/
-	void* getUserData();
-
-	/**
+	* \brief
 	* A simple scheme for applications to add their own custom data to
 	* a Geometry.
 	* An example use might be to add an object representing a
@@ -1001,43 +1066,65 @@ public:
 	void setUserData(void* newUserData);
 
 	/**
-	* Returns the ID of the Spatial Reference System used by the
-	* <code>Geometry</code>.
+	* \brief
+	* Gets the user data object for this geometry, if any.
 	*
-	* GEOS supports Spatial Reference System information in the simple way
-	* defined in the SFS. A Spatial Reference System ID (SRID) is present
-	* in each <code>Geometry</code> object. <code>Geometry</code>
-	* provides basic accessor operations for this field, but no others.
-	* The SRID is represented as an integer.
-	*
-	* @return the ID of the coordinate space in which the
-	* <code>Geometry</code> is defined.
-	*
-	* @deprecated use {@link getUserData} instead
+	* @return the user data object, or <code>null</code> if none set
 	*/
+	void* getUserData();
+
+	/*
+	 * \brief
+	 * Returns the ID of the Spatial Reference System used by the
+	 * <code>Geometry</code>.
+	 *
+	 * GEOS supports Spatial Reference System information in the simple way
+	 * defined in the SFS. A Spatial Reference System ID (SRID) is present
+	 * in each <code>Geometry</code> object. <code>Geometry</code>
+	 * provides basic accessor operations for this field, but no others.
+	 * The SRID is represented as an integer.
+	 *
+	 * @return the ID of the coordinate space in which the
+	 * <code>Geometry</code> is defined.
+	 *
+	 * @deprecated use getUserData instead
+	 */
 	virtual int getSRID() const;
 
-	/**
-	* Sets the ID of the Spatial Reference System used by the
-	* <code>Geometry</code>.
-	* @deprecated use {@link setUserData} instead
-	*/
+	/*
+	 * Sets the ID of the Spatial Reference System used by the
+	 * <code>Geometry</code>.
+	 * @deprecated use {@link setUserData} instead
+	 */
 	virtual void setSRID(int newSRID);
 
 	/**
+	 * \brief
 	 * Get the PrecisionModel used to create this Geometry.
 	 */
 	virtual const PrecisionModel* getPrecisionModel() const;
 
+	/// Returns a vertex of this Geometry.
 	virtual const Coordinate* getCoordinate() const=0; //Abstract
+
+	/// Returns this Geometry vertices.
 	virtual CoordinateList* getCoordinates() const=0; //Abstract
+
+	/// Returns the count of this Geometrys vertices.
 	virtual int getNumPoints() const=0; //Abstract
+
+	/// Returns false if the Geometry not simple.
 	virtual bool isSimple() const=0; //Abstract
+
+	/// Return a string representation of this Geometry type
 	virtual string getGeometryType() const=0; //Abstract
+
+	/// Return an integer representation of this Geometry type
 	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
 
 	/**
-	* Tests the validity of this <code>Geometry</code>.
+	* \brief Tests the validity of this <code>Geometry</code>.
+	*
 	* Subclasses provide their own definition of "valid".
 	*
 	* @return <code>true</code> if this <code>Geometry</code> is valid
@@ -1046,64 +1133,206 @@ public:
 	*/
 	virtual bool isValid() const;
 
+	/// Returns whether or not the set of points in this Geometry is empty.
 	virtual bool isEmpty() const=0; //Abstract
+
+	/// Returns the dimension of this Geometry.
 	virtual int getDimension() const=0; //Abstract
+
+	/** \brief
+	 * Returns the boundary, or the empty geometry if this Geometry
+	 * is empty.
+	 */
 	virtual Geometry* getBoundary() const=0; //Abstract
+
+	/// Returns the dimension of this Geometrys inherent boundary.
 	virtual int getBoundaryDimension() const=0; //Abstract
 
-	/// Returns the Envelope of this geometry
+	/// Returns this Geometrys bounding box.
 	virtual Geometry* getEnvelope() const;
 
+	/** \brief
+	 * Returns the minimum and maximum x and y values in this Geometry,
+	 * or a null Envelope if this Geometry is empty.
+	 */
 	virtual Envelope* getEnvelopeInternal() const;
 
+	/**
+	 * \brief
+	 * Returns true if the DE-9IM intersection matrix for the
+	 * two Geometrys is FF*FF****.
+	 */
 	virtual bool disjoint(const Geometry *other) const;
+
+	/** \brief
+	 * Returns true if the DE-9IM intersection matrix for the two
+	 * Geometrys is FT*******, F**T***** or F***T****.
+	 */
 	virtual bool touches(const Geometry *other) const;
+
+	/// Returns true if disjoint returns false.
 	virtual bool intersects(const Geometry *g) const;
+
+	/**
+	 * \brief
+	 * Returns true if the DE-9IM intersection matrix for the two
+	 * Geometrys is T*T****** (for a point and a curve, a point and
+	 * an area or a line and an area) 0******** (for two curves).
+	 */
 	virtual bool crosses(const Geometry *g) const;
+
+	/** \brief
+	 * Returns true if the DE-9IM intersection matrix for the two
+	 * Geometrys is T*F**F***.
+	 */
 	virtual bool within(const Geometry *g) const;
+
+	/// Returns true if other.within(this) returns true.
 	virtual bool contains(const Geometry *g) const;
+
+	/** \brief
+	 * Returns true if the DE-9IM intersection matrix for the two
+	 * Geometrys is T*T***T** (for two points or two surfaces)
+	 * 1*T***T** (for two curves).
+	 */
 	virtual bool overlaps(const Geometry *g) const;
+
+	/** \brief
+	 * Returns true if the elements in the DE-9IM intersection matrix
+	 * for the two Geometrys match the elements in intersectionPattern,
+	 * which may be: 0 1 2 T ( = 0, 1 or 2) F ( = -1) * ( = -1, 0, 1 or 2)
+	 * For more information on the DE-9IM, see the OpenGIS Simple
+	 * Features Specification.
+	 */
 	virtual bool relate(const Geometry *g, string intersectionPattern) const;
+	/// Returns the DE-9IM intersection matrix for the two Geometrys.
 	virtual IntersectionMatrix* relate(const Geometry *g) const;
+
+	/**
+	 * \brief
+	 * Returns true if the DE-9IM intersection matrix for the two
+	 * Geometrys is T*F**FFF*.
+	 */
 	virtual bool equals(const Geometry *g) const;
+
+	/// Returns the Well-known Text representation of this Geometry.
 	virtual string toString() const;
+
 	virtual string toText() const;
+	
+	/// Returns a buffer region around this Geometry having the given width.
 	virtual Geometry* buffer(double distance) const;
+
+	/// Returns a buffer region around this Geometry having the given width and with a specified number of segments used to approximate curves.
 	virtual Geometry* buffer(double distance,int quadrantSegments) const;
+
+	/// Returns the smallest convex Polygon that contains all the points in the Geometry.
 	virtual Geometry* convexHull() const;
+
+	/** \brief
+	 * Returns a Geometry representing the points shared by
+	 * this Geometry and other.
+	 */
 	virtual Geometry* intersection(const Geometry *other) const;
+
+	/** \brief
+	 * Returns a Geometry representing all the points in this Geometry
+	 * and other.
+	 */
 	virtual Geometry* Union(const Geometry *other) const;
 		// throw(IllegalArgumentException *, TopologyException *);
+
+	/**
+	 * \brief
+	 * Returns a Geometry representing the points making up this
+	 * Geometry that do not make up other.
+	 */
 	virtual Geometry* difference(const Geometry *other) const;
+
+	/** \brief
+	 * Returns a set combining the points in this Geometry not in other,
+	 * and the points in other not in this Geometry.
+	 */
 	virtual Geometry* symDifference(const Geometry *other) const;
+
+	/** \brief
+	 * Returns true if the two Geometrys are exactly equal,
+	 * up to a specified tolerance.
+	 */
 	virtual bool equalsExact(const Geometry *other, double tolerance)
 		const=0; //Abstract
+
 	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
 	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
 	virtual void apply_rw(GeometryFilter *filter);
 	virtual void apply_ro(GeometryFilter *filter) const;
 	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
+
+	/// Converts this Geometry to normal form (or  canonical form).
 	virtual void normalize()=0; //Abstract
+
 	virtual int compareTo(const Geometry *geom) const;
+
+	/** \brief
+	 * Returns the minimum distance between this Geometry
+	 * and the Geometry g
+	 */
 	virtual double distance(const Geometry *g) const;
+
+	/// Returns the area of this Geometry.
 	virtual double getArea() const;
+
+	/// Returns the length of this Geometry.
 	virtual double getLength() const;
+
+	/** \brief
+	 * Tests whether the distance from this Geometry  to another
+	 * is less than or equal to a specified value.
+	 */
 	virtual bool isWithinDistance(const Geometry *geom,double cDistance);
+
+	/// Computes the centroid of this Geometry.
 	virtual Point* getCentroid() const;
+
+	/// Computes an interior point of this Geometry.
 	virtual Point* getInteriorPoint();
+
+	/** \brief
+	 * Notifies this Geometry that its Coordinates have been changed
+	 * by an external party (using a CoordinateFilter, for example).
+	 */
 	virtual void geometryChanged();
+
+	/** \brief
+	 * Notifies this Geometry that its Coordinates have been changed
+	 * by an external party.
+	 */
 	void geometryChangedAction();
+
 protected:
 	Envelope* envelope;
+	
+	/// Returns true if the array contains any non-empty Geometrys.
 	static bool hasNonEmptyElements(const vector<Geometry *>* geometries);
+
+	/// Returns true if the CoordinateList contains any null elements.
 	static bool hasNullElements(const CoordinateList* list);
+
+	/// Returns true if the vector contains any null elements.
 	static bool hasNullElements(const vector<Geometry *>* lrs);
+
 //	static void reversePointOrder(CoordinateList* coordinates);
 //	static Coordinate& minCoordinate(CoordinateList* coordinates);
 //	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
 //	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
+//
+	/** \brief
+	 * Returns whether the two Geometrys are equal, from the point
+	 * of view of the equalsExact method.
+	 */
 	virtual bool isEquivalentClass(const Geometry *other) const;
+
 	static void checkNotGeometryCollection(const Geometry *g); // throw(IllegalArgumentException *);
 	//virtual void checkEqualSRID(Geometry *other);
 	//virtual void checkEqualPrecisionModel(Geometry *other);
@@ -1341,8 +1570,11 @@ bool lessThen(Coordinate& a,Coordinate& b);
 bool greaterThen(Geometry *first, Geometry *second);
 
 /**
- * Represents a collection of heterogeneous {@link Geometry}s.
- * Collections of {@link Geometry}s of the same type are 
+ * \class GeometryCollection geom.h geos.h
+ *
+ * \brief Represents a collection of heterogeneous Geometry objects.
+ *
+ * Collections of Geometry of the same type are 
  * represented by GeometryCollection subclasses MultiPoint,
  * MultiLineString, MultiPolygon.
  */
@@ -1396,6 +1628,7 @@ public:
 	virtual CoordinateList* getCoordinates() const;
 	virtual bool isEmpty() const;
 	virtual int getDimension() const;
+	virtual Geometry* getBoundary() const;
 	virtual int getBoundaryDimension() const;
 	virtual int getNumGeometries() const;
 	virtual const Geometry* getGeometryN(int n) const;
@@ -1403,8 +1636,8 @@ public:
 	virtual string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
-	virtual Geometry* getBoundary() const;
 	virtual bool equalsExact(const Geometry *other, double tolerance) const;
+
 	virtual void apply_ro(CoordinateFilter *filter) const;
 	virtual void apply_rw(CoordinateFilter *filter);
 	virtual void apply_ro(GeometryFilter *filter) const;
@@ -1442,34 +1675,36 @@ private:
 };
 
 /**
- *  Basic implementation of <code>Point</code>.
- *
+ * \class Point geom.h geos.h
+ * \brief Basic implementation of Point.
  */
 class Point : public Geometry{
 public:
-	/**
-	*  Constructs a <code>Point</code> with the given coordinate.
-	*
-	*@param  coordinate      the coordinate on which to base this <code>Point</code>
-	*      , or <code>null</code> to create the empty geometry.
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>Point</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>Point</code>
-	* @deprecated Use GeometryFactory instead
-	*/
+	/*
+	 * \brief Constructs a <code>Point</code> with the given coordinate.
+	 *
+	 * @param coordinate the coordinate on which to base this Point,
+	 *      , or <code>null</code> to create the empty geometry.
+	 * @param precisionModel the specification of the grid of
+	 *     allowable points
+	 *      for this <code>Point</code>
+	 * @param SRID the ID of the Spatial Reference System used by this
+	 *      <code>Point</code>
+	 * @deprecated Use GeometryFactory instead
+	 */
 	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
 
 	/**
-	* Creates a Point using the given CoordinateList (must have 1 element)
-	*
-	* @param  newCoords
-	*	contains the single coordinate on which to base this
-	*	<code>Point</code> or <code>null</code> to create
-	*	the empty geometry.
-	*
-	*	If not null the created Point will take ownership of newCoords.
-	*/  
+	 * \brief
+	 * Creates a Point taking ownership of the given CoordinateList
+	 * (must have 1 element)
+	 *
+	 * @param  newCoords
+	 *	contains the single coordinate on which to base this
+	 *	<code>Point</code> or <code>null</code> to create
+	 *	the empty geometry.
+	 *
+	 */  
 	Point(CoordinateList *newCoords, const GeometryFactory *factory);
 
 	Point(const Point &p); 
@@ -1509,8 +1744,7 @@ private:
 
 /**
  * \class LineString geom.h geos.h
- * Basic implementation of <code>LineString</code>.
- *
+ * \brief Basic implementation of LineString.
  */
 class LineString: public Geometry {
 public:
@@ -1557,14 +1791,16 @@ public:
 	virtual double getLength() const;
 protected:
 	virtual Envelope* computeEnvelopeInternal() const;
-	virtual bool isEquivalentClass(const Geometry *other) const;
 	CoordinateList* points;
 private:
 	static const int64 serialVersionUID = 3110669828065365560LL;
 };
 
 /**
- *  Basic implementation of <code>LinearRing</code>.
+ * \class LinearRing geom.h geos.h
+ *
+ * \brief Basic implementation of <code>LinearRing</code>.
+ *
  * The first and last point in the coordinate sequence must be equal.
  * Either orientation of the ring is allowed.
  * A valid ring must not self-intersect.
@@ -1611,7 +1847,10 @@ private:
 };
 
 /**
- * Represents a linear polygon, which may include holes.
+ * \class Polygon geom.h geos.h
+ *
+ * \brief Represents a linear polygon, which may include holes.
+ *
  * The shell and holes of the polygon are represented by {@link LinearRing}s.
  * In a valid polygon, holes may touch the shell or other holes at a single point.
  * However, no sequence of touching holes may split the polygon into two pieces.
@@ -1713,8 +1952,8 @@ private:
 };
 
 /**
- *  Models a collection of <code>Point</code>s.
- *
+ * \class MultiPoint geom.h geos.h
+ * \brief  Models a collection of Point objects.
  */
 class MultiPoint: public GeometryCollection{
 public:
@@ -1755,8 +1994,8 @@ private:
 };
 
 /**
- *  Basic implementation of <code>MultiLineString</code>.
- *
+ * \class MultiLineString geom.h geos.h
+ * \brief Basic implementation of MultiLineString objects.
  */
 class MultiLineString: public GeometryCollection{
 public:
@@ -1794,8 +2033,8 @@ private:
 };
 
 /**
- *  Basic implementation of <code>MultiPolygon</code>.
- *
+ * \class MultiPolygon  geom.h geos.h
+ * \brief Basic implementation of <code>MultiPolygon</code>.
  */
 class MultiPolygon: public GeometryCollection {
 public:
@@ -1834,19 +2073,20 @@ private:
 
 /**
  * \class GeometryFactory geom.h geos.h
- * Supplies a set of utility methods for building Geometry objects from lists
- * of Coordinates or other Geometry objects.
- *
+ * \brief Supplies a set of utility methods for building Geometry objects
+ * from CoordinateList or other Geometry objects.
  */
 class GeometryFactory {
 public:
 	/**
+	* \brief 
 	* Constructs a GeometryFactory that generates Geometries having a
 	* floating PrecisionModel and a spatial-reference ID of 0.
 	*/
 	GeometryFactory();
 
 	/**
+	* \brief
 	* Constructs a GeometryFactory that generates Geometries having
 	* the given PrecisionModel, spatial-reference ID, and
 	* CoordinateList implementation.
@@ -1854,6 +2094,7 @@ public:
 	GeometryFactory(const PrecisionModel *pm, int newSRID, CoordinateListFactory *nCoordinateListFactory);
 
 	/**
+	* \brief
 	* Constructs a GeometryFactory that generates Geometries having the
 	* given CoordinateList implementation, a double-precision floating
 	* PrecisionModel and a spatial-reference ID of 0.
@@ -1861,8 +2102,9 @@ public:
 	GeometryFactory(CoordinateListFactory *nCoordinateListFactory);
 
 	/**
+	* \brief
 	* Constructs a GeometryFactory that generates Geometries having
-	* the given {@link PrecisionModel} and the default CoordinateList
+	* the given PrecisionModel and the default CoordinateList
 	* implementation.
 	*
 	* @param precisionModel the PrecisionModel to use
@@ -1870,6 +2112,7 @@ public:
 	GeometryFactory(const PrecisionModel *pm);
 
 	/**
+	* \brief
 	* Constructs a GeometryFactory that generates Geometries having
 	* the given {@link PrecisionModel} and spatial-reference ID,
 	* and the default CoordinateList implementation.
@@ -1880,41 +2123,39 @@ public:
 	GeometryFactory(const PrecisionModel* pm, int newSRID);
 
 	/**
-	* Copy constructor
+	* \brief Copy constructor
 	*
 	* @param gf the GeometryFactory to clone from
 	*/
 	GeometryFactory(const GeometryFactory &gf);
 
+	/// Destructor
 	virtual ~GeometryFactory();
 
 //Skipped a lot of list to array convertors
 
 	Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar) const;
 
+	/// Envelope to Geometry converter
 	Geometry* toGeometry(Envelope* envelope) const;
 
-	/**
-	* Returns the PrecisionModel that Geometries created by this factory
-	* will be associated with.
-	*/
+	/// Returns the PrecisionModel that Geometries created by this factory will be associated with.
 	const PrecisionModel* getPrecisionModel() const;
 
-	/**
-	* Creates a Point using the given Coordinate
-	*/
+	/// Creates an EMPTY Point
+	Point* createPoint() const;
+
+	/// Creates a Point using the given Coordinate
 	Point* createPoint(const Coordinate& coordinate) const;
 
-	/**
-	* Creates a Point taking ownership of the given CoordinateList;
-	* a null or empty CoordinateList will create an empty Point.
-	*/
+	/// Creates a Point taking ownership of the given CoordinateList
 	Point* createPoint(CoordinateList *coordinates) const;
 
-	/**
-	* Creates a Point with a deep-copy of the given CoordinateList.
-	*/
+	/// Creates a Point with a deep-copy of the given CoordinateList.
 	Point* createPoint(const CoordinateList &coordinates) const;
+
+	/// Construct an EMPTY GeometryCollection
+	GeometryCollection* createGeometryCollection() const;
 
 	/// Construct a GeometryCollection taking ownership of given arguments
 	GeometryCollection* createGeometryCollection(vector<Geometry *> *newGeoms) const;
@@ -1922,17 +2163,26 @@ public:
 	/// Constructs a GeometryCollection with a deep-copy of args
 	GeometryCollection* createGeometryCollection(const vector<Geometry *> &newGeoms) const;
 
+	/// Construct an EMPTY MultiLineString 
+	MultiLineString* createMultiLineString() const;
+
 	/// Construct a MultiLineString taking ownership of given arguments
 	MultiLineString* createMultiLineString(vector<Geometry *> *newLines) const;
 
 	/// Construct a MultiLineString with a deep-copy of given arguments
 	MultiLineString* createMultiLineString(const vector<Geometry *> &fromLines) const;
 
+	/// Construct an EMPTY MultiPolygon 
+	MultiPolygon* createMultiPolygon() const;
+
 	/// Construct a MultiPolygon taking ownership of given arguments
 	MultiPolygon* createMultiPolygon(vector<Geometry *> *newPolys) const;
 
 	/// Construct a MultiPolygon with a deep-copy of given arguments
 	MultiPolygon* createMultiPolygon(const vector<Geometry *> &fromPolys) const;
+
+	/// Construct an EMPTY LinearRing 
+	LinearRing* createLinearRing() const;
 
 	/// Construct a LinearRing taking ownership of given arguments
 	LinearRing* createLinearRing(CoordinateList* coordinates) const;
@@ -1952,11 +2202,17 @@ public:
 	/// Construct a MultiPoint containing a Point geometry for each Coordinate in the given list.
 	MultiPoint* createMultiPoint(const CoordinateList &fromCoords) const;
 
+	/// Construct an EMPTY Polygon 
+	Polygon* createPolygon() const;
+
 	/// Construct a Polygon taking ownership of given arguments
 	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes) const;
 
 	/// Construct a Polygon with a deep-copy of given arguments
 	Polygon* createPolygon(const LinearRing &shell, const vector<Geometry *> &holes) const;
+
+	/// Construct an EMPTY LineString 
+	LineString* createLineString() const;
 
 	/// Construct a LineString taking ownership of given argument
 	LineString* createLineString(CoordinateList* coordinates) const;

@@ -12,3 +12,6 @@
 	  has been renamed to
 	  GeometryFactory::createMultiPoint(const CoordinateList &)
 	  to reflect copy semantic
+
+	- GeometryFactory: EMPTY geometry creation do now have their
+	  own constructors taking no arguments.

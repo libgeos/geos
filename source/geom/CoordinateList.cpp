@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
  * Revision 1.19  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -57,7 +60,7 @@ bool CoordinateList::hasRepeatedPoints() const {
 * Returns either the given coordinate array if its length is greater than the
 * given amount, or an empty coordinate array.
 */
-CoordinateList* atLeastNCoordinatesOrNothing(int n,CoordinateList *c) {
+CoordinateList* atLeastNCoordinatesOrNothing(int n, CoordinateList *c) {
 	return c->getSize()>=n?c:CoordinateListFactory::internalFactory->createCoordinateList();
 }      
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.38  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
  * Revision 1.37  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -317,13 +320,6 @@ void LineString::normalize() {
 			return;
 		}
 	}
-}
-
-bool LineString::isEquivalentClass(const Geometry *other) const {
-	if (typeid(*other)==typeid(LineString))
-		return true;
-	else 
-		return false;
 }
 
 int LineString::compareToSameClass(const Geometry *ls) const {
