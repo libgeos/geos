@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/05/17 07:42:54  strk
+ * CentroidArea::add(const Geometry *geom) uses dynamic_cast
+ *
  * Revision 1.11  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -62,15 +65,12 @@ CentroidArea::~CentroidArea() {
 * @param geom the geometry to add
 */
 void CentroidArea::add(const Geometry *geom) {
-	if (typeid(*geom)==typeid(Polygon)) {
-		Polygon *poly=(Polygon*) geom;
+	if(const Polygon *poly=dynamic_cast<const Polygon*>(geom)) {
 		setBasePoint(&(poly->getExteriorRing()->getCoordinateN(0)));
 		add(poly);
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
+	}
+	else if(const GeometryCollection *gc=dynamic_cast<const GeometryCollection*>(geom)) 
+	{
 		for(int i=0;i<gc->getNumGeometries();i++) {
 			add(gc->getGeometryN(i));
 		}
@@ -89,7 +89,10 @@ void CentroidArea::add(const CoordinateList *ring) {
 }
 
 Coordinate* CentroidArea::getCentroid() const {
-	return new Coordinate(cg3->x/3/areasum2,cg3->y/3/areasum2);
+	Coordinate *cent = new Coordinate();
+	cent->x = cg3->x/3.0/areasum2;
+	cent->y = cg3->y/3.0/areasum2;
+	return cent;
 }
 
 void CentroidArea::setBasePoint(const Coordinate *newbasePt)
