@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.35  2004/06/28 21:58:24  strk
+ * Constructors speedup.
+ *
  * Revision 1.34  2004/06/28 21:11:43  strk
  * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
  * Added holes argument check in Polygon.cpp.
@@ -89,29 +92,35 @@ Polygon::Polygon(const Polygon &p): Geometry(p.getFactory()){
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const GeometryFactory *newFactory): Geometry(newFactory) {
 	if (newShell==NULL) {
 		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		newShell=getFactory()->createLinearRing(p);
+		shell=getFactory()->createLinearRing(p);
 		delete p;
 	}
-	if (newHoles==NULL)
-		newHoles=new vector<Geometry *>();
-
-	if (hasNullElements(newHoles)) {
-		delete newShell;
-		delete newHoles;
-		throw new IllegalArgumentException("holes must not contain null elements");
-	}
-	if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
-		delete newShell;
-		delete newHoles;
-		throw new IllegalArgumentException("shell is empty but holes are not");
-	}
-	shell=newShell;
-	for (int i=0; i<newHoles->size(); i++)
-		if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
-		{
-			throw new IllegalArgumentException("holes must be LinearRings");
+	else
+	{
+		if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
+			delete newShell;
+			delete newHoles;
+			throw new IllegalArgumentException("shell is empty but holes are not");
 		}
-	holes=newHoles;
+		shell=newShell;
+	}
+
+	if (newHoles==NULL)
+	{
+		holes=new vector<Geometry *>();
+	}
+	else
+	{
+		if (hasNullElements(newHoles)) {
+			delete newShell;
+			delete newHoles;
+			throw new IllegalArgumentException("holes must not contain null elements");
+		}
+		for (int i=0; i<newHoles->size(); i++)
+			if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
+				throw new IllegalArgumentException("holes must be LinearRings");
+		holes=newHoles;
+	}
 }
 
  /**
@@ -130,21 +139,19 @@ Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID)
 	Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
 	if (newShell==NULL) {
 		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		newShell=getFactory()->createLinearRing(p);
+		shell=getFactory()->createLinearRing(p);
 		delete p;
 	}
+	else
+	{
+		if (newShell->isEmpty() && hasNonEmptyElements(holes)) {
+			delete newShell;
+			delete holes;
+			throw new IllegalArgumentException("shell is empty but holes are not");
+		}
+		shell=newShell;
+	}
 	holes=new vector<Geometry *>();
-	if (hasNullElements(holes)) {
-		delete newShell;
-		delete holes;
-		throw new IllegalArgumentException("holes must not contain null elements");
-	}
-	if (newShell->isEmpty() && hasNonEmptyElements(holes)) {
-		delete newShell;
-		delete holes;
-		throw new IllegalArgumentException("shell is empty but holes are not");
-	}
-	shell=newShell;
 }
 
 /**
@@ -168,25 +175,32 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 				Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
 	if (newShell==NULL) {
 		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		newShell=getFactory()->createLinearRing(p);
+		shell=getFactory()->createLinearRing(p);
 		delete p;
+	}
+	else
+	{
+		if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
+			delete newShell;
+			delete newHoles;
+			throw new IllegalArgumentException("shell is empty but holes are not");
+		}
+		shell=newShell;
 	}
 
 	if (newHoles==NULL)
-		newHoles=new vector<Geometry *>();
-
-	if (hasNullElements(newHoles)) {
-		delete newShell;
-		delete newHoles;
-		throw new IllegalArgumentException("holes must not contain null elements");
+	{
+		holes=new vector<Geometry *>();
 	}
-	if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
-		delete newShell;
-		delete newHoles;
-		throw new IllegalArgumentException("shell is empty but holes are not");
+	else
+	{
+		if (hasNullElements(newHoles)) {
+			delete newShell;
+			delete newHoles;
+			throw new IllegalArgumentException("holes must not contain null elements");
+		}
+		holes=newHoles;
 	}
-	shell=newShell;
-	holes=newHoles;
 }
 
 Geometry *Polygon::clone() const {
