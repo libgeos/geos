@@ -40,23 +40,23 @@ int BasicCoordinateList::getSize(){
 }
 
 Coordinate& BasicCoordinateList::getAt(int pos){
-	if (pos>=0 && pos<=vect->size()-1) 
+//	if (pos>=0 && pos<=vect->size()-1) 
 		return (*vect)[pos];
-	else
-		throw "BasicCoordinateList exception: can't retrieve element\n";
+//	else
+//		throw "BasicCoordinateList exception: can't retrieve element\n";
 }
 
 void BasicCoordinateList::setAt(Coordinate& c, int pos){
-	if (pos>=0 && pos<=vect->size()-1) 
+//	if (pos>=0 && pos<=vect->size()-1) 
 		(*vect)[pos]=c;
-	else
-		throw "BasicCoordinateList exception: can't change element\n";
+//	else
+//		throw "BasicCoordinateList exception: can't change element\n";
 }
 void BasicCoordinateList::deleteAt(int pos){
-	if (pos>=0 && pos<=vect->size()-1) 
+//	if (pos>=0 && pos<=vect->size()-1) 
 		vect->erase(vect->begin()+pos);
-	else
-		throw "BasicCoordinateList exception: can't remove element\n";
+//	else
+//		throw "BasicCoordinateList exception: can't remove element\n";
 }
 
 string BasicCoordinateList::toString() {

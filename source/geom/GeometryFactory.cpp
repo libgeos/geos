@@ -8,10 +8,12 @@ GeometryFactory::GeometryFactory() {
 }
 
 GeometryFactory::GeometryFactory(PrecisionModel* newPrecisionModel, int newSRID){
-    precisionModel=newPrecisionModel;
+    precisionModel=new PrecisionModel(*newPrecisionModel);
     SRID=newSRID;
 }
-GeometryFactory::~GeometryFactory(){}
+GeometryFactory::~GeometryFactory(){
+	delete precisionModel;
+}
 
 Geometry* GeometryFactory::toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID) {
 	if (envelope->isNull()) {

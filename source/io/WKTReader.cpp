@@ -7,10 +7,9 @@ WKTReader::WKTReader(){
 }
 WKTReader::WKTReader(GeometryFactory *gf){
 	geometryFactory=gf;
-	precisionModel=gf->getPrecisionModel();
+	precisionModel=new PrecisionModel(*(gf->getPrecisionModel()));
 }
 WKTReader::~WKTReader(){
-	delete geometryFactory;
 	delete precisionModel;
 }
 

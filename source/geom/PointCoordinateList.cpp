@@ -66,40 +66,40 @@ int PointCoordinateList::getSize(){
 
 Coordinate& PointCoordinateList::getAt(int pos){
 	point_3d pt;
-	if (pos>=0 && pos<=vect->size()-1) {
+//	if (pos>=0 && pos<=vect->size()-1) {
 		pt=(*vect)[pos];
 		return *(new Coordinate(pt.x,pt.y,pt.z));
-	} else
-		throw "PointCoordinateList exception: can't retrieve element\n";
+//	} else
+//		throw "PointCoordinateList exception: can't retrieve element\n";
 }
 
 point_3d PointCoordinateList::getPointAt(int pos){
-	if (pos>=0 && pos<=vect->size()-1) {
+//	if (pos>=0 && pos<=vect->size()-1) {
 		return (*vect)[pos];
-	} else
-		throw "PointCoordinateList exception: can't retrieve element\n";
+//	} else
+//		throw "PointCoordinateList exception: can't retrieve element\n";
 }
 
 void PointCoordinateList::setAt(Coordinate& c, int pos){
 	point_3d pt={c.x,c.y,c.z};
-	if (pos>=0 && pos<=vect->size()-1) 
+//	if (pos>=0 && pos<=vect->size()-1) 
 		(*vect)[pos]=pt;
-	else
-		throw "PointCoordinateList exception: can't change element\n";
+//	else
+//		throw "PointCoordinateList exception: can't change element\n";
 }
 
 void PointCoordinateList::setAt(point_3d p, int pos){
-	if (pos>=0 && pos<=vect->size()-1) 
+//	if (pos>=0 && pos<=vect->size()-1) 
 		(*vect)[pos]=p;
-	else
-		throw "PointCoordinateList exception: can't change element\n";
+//	else
+//		throw "PointCoordinateList exception: can't change element\n";
 }
 
 void PointCoordinateList::deleteAt(int pos){
-	if (pos>=0 && pos<=vect->size()-1) 
+//	if (pos>=0 && pos<=vect->size()-1) 
 		vect->erase(vect->begin()+pos);
-	else
-		throw "PointCoordinateList exception: can't remove element\n";
+//	else
+//		throw "PointCoordinateList exception: can't remove element\n";
 }
 
 string PointCoordinateList::toString() {

@@ -27,13 +27,13 @@ Geometry::Geometry() {
 }
 
 Geometry::Geometry(const Geometry &geom): sortedClasses(geom.sortedClasses) {
-	precisionModel=geom.precisionModel;
+	precisionModel=new PrecisionModel(*geom.precisionModel);
 	envelope=geom.envelope;
 	SRID=geom.SRID;
 }
 
 Geometry::Geometry(PrecisionModel* newPrecisionModel, int newSRID){
-	precisionModel=newPrecisionModel;
+	precisionModel=new PrecisionModel(*newPrecisionModel);
 	envelope=new Envelope();
 	SRID = newSRID;
 	sortedClasses.push_back(typeid(Point).name());
@@ -267,7 +267,7 @@ void Geometry::checkEqualSRID(Geometry *other) {
 }
 
 void Geometry::checkEqualPrecisionModel(Geometry *other) {
-	if (!(precisionModel==other->getPrecisionModel())) {
+	if (!((*precisionModel)==(*(other->getPrecisionModel())))) {
 		throw "IllegalArgumentException: Expected precision models to be equal, but they were not\n";
 	}
 }

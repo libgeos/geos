@@ -33,10 +33,7 @@ GeometryGraph::GeometryGraph():PlanarGraph(){
 }
 
 GeometryGraph::~GeometryGraph(){
-	delete parentGeom;
-	delete precisionModel;
 	delete lineEdgeMap;
-	delete boundaryNodes;
 }
 
 GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGraph() {
