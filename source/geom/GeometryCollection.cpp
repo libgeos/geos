@@ -31,11 +31,12 @@ CoordinateList* GeometryCollection::getCoordinates() {
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList(getNumPoints());
 	int k = -1;
 	for (unsigned int i=0; i<geometries->size(); i++) {
-	CoordinateList* childCoordinates=(*geometries)[i]->getCoordinates();
+		CoordinateList* childCoordinates=(*geometries)[i]->getCoordinates();
 		for (int j=0; j<childCoordinates->getSize(); j++) {
 			k++;
 			coordinates->setAt(childCoordinates->getAt(j),k);
 		}
+		delete childCoordinates; // xie
 	}
 	return coordinates;
 }

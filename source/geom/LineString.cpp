@@ -31,7 +31,8 @@ LineString::LineString(CoordinateList *newPoints, PrecisionModel* precisionModel
 		delete newPoints;
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
-	points=newPoints;
+	//points=newPoints;
+	points=CoordinateListFactory::internalFactory->createCoordinateList(newPoints); // xie 
 }
 
 LineString::~LineString(){
@@ -39,7 +40,8 @@ LineString::~LineString(){
 }
 
 CoordinateList* LineString::getCoordinates() {
-	return points;
+	return CoordinateListFactory::internalFactory->createCoordinateList(points); // callers must be free to delete returned value ! - strk
+	//return points;
 }
 
 Coordinate& LineString::getCoordinateN(int n) {

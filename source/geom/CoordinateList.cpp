@@ -104,17 +104,25 @@ void CoordinateList::add(Coordinate& c,bool allowRepeated) {
 	add(c);
 }
 
+/**
+* This function allocates space for a CoordinateList object
+* being a copy of the input once with consecutive equal points
+* removed.
+**/
 CoordinateList* CoordinateList::removeRepeatedPoints(CoordinateList *cl){
 	CoordinateList* ret=CoordinateListFactory::internalFactory->createCoordinateList();
 	vector<Coordinate> *v=cl->toVector();
 	ret->add(v,false);
 	delete v;
+	return ret;
+#if 0 // what is all this ?? --strk;
 	v=ret->toVector();
 	cl->setPoints(*(v));
 	delete v;
 	delete ret;
 //	return ret;
 	return cl;
+#endif
 }
 }
 

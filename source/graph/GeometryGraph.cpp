@@ -178,9 +178,13 @@ void GeometryGraph::addPoint(Point *p){
 * the left and right locations must be interchanged.
 */
 void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
-	CoordinateList* coord=CoordinateList::removeRepeatedPoints(lr->getCoordinates());
+	CoordinateList *lrcl;
+	lrcl = lr->getCoordinates();
+	CoordinateList* coord=CoordinateList::removeRepeatedPoints(lrcl);
+	delete lrcl; // strk 2003-10-07
 	if (coord->getSize()<4) {
 		hasTooFewPointsVar=true;
+		// should make a copy of this, and drop coord -- strk;
 		invalidPoint=&(coord->getAt(0));
 		return;
 	}

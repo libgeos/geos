@@ -102,11 +102,18 @@ int PointLocator::locate(Coordinate& p,LineString *l) {
 }
 
 int PointLocator::locate(Coordinate& p,LinearRing *ring) {
-	if (cga->isOnLine(p,ring->getCoordinates())) {
+	CoordinateList *cl; // will be a copy -- strk
+	cl = ring->getCoordinates();
+	if (cga->isOnLine(p,cl)) {
+		delete cl;
 		return Location::BOUNDARY;
 	}
-	if (cga->isPointInRing(p,ring->getCoordinates()))
+	if (cga->isPointInRing(p,cl))
+	{
+		delete cl;
 		return Location::INTERIOR;
+	}
+	delete cl;
 	return Location::EXTERIOR;
 }
 
