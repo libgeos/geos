@@ -1,3 +1,11 @@
+/*
+* $Log$
+* Revision 1.8  2003/10/15 15:30:32  strk
+* Declared a SweepLineEventOBJ from which MonotoneChain and SweepLineSegment
+* derive to abstract SweepLineEvent object previously done on void * pointers.
+* No more compiler warnings...
+*
+*/
 #include "../../headers/graphindex.h"
 
 namespace geos {
@@ -6,6 +14,9 @@ SweepLineSegment::SweepLineSegment(Edge *newEdge,int newPtIndex){
 	pts=newEdge->getCoordinates();
 	edge=newEdge;
 	ptIndex=newPtIndex;
+}
+
+SweepLineSegment::~SweepLineSegment() {
 }
 
 double SweepLineSegment::getMinX(){

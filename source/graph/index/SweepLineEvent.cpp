@@ -1,9 +1,17 @@
+/*
+* $Log$
+* Revision 1.11  2003/10/15 15:30:32  strk
+* Declared a SweepLineEventOBJ from which MonotoneChain and SweepLineSegment
+* derive to abstract SweepLineEvent object previously done on void * pointers.
+* No more compiler warnings...
+*
+*/
 #include <stdio.h>
 #include "../../headers/graphindex.h"
 
 namespace geos {
 
-SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,void *newObj){
+SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,SweepLineEventOBJ *newObj){
 	edgeSet=newEdgeSet;
 	xValue=x;
 	insertEvent=newInsertEvent;
@@ -17,7 +25,7 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInse
 SweepLineEvent::~SweepLineEvent(){
 	if (eventType==DELETE) {
 		delete insertEvent;
-		//delete obj; -- delete void * ?
+		delete obj; 
 	}
 }
 
@@ -41,7 +49,7 @@ void SweepLineEvent::setDeleteEventIndex(int newDeleteEventIndex) {
 	deleteEventIndex=newDeleteEventIndex;
 }
 
-void* SweepLineEvent::getObject() {
+SweepLineEventOBJ* SweepLineEvent::getObject() const {
 	return obj;
 }
 
@@ -51,15 +59,6 @@ void* SweepLineEvent::getObject() {
 * items whose Insert and Delete events occur at the same x-value will be
 * correctly handled.
 */
-int SweepLineEvent::compareTo(void *o) {
-	SweepLineEvent *sle=(SweepLineEvent*) o;
-	if (xValue<sle->xValue) return -1;
-	if (xValue>sle->xValue) return 1;
-	if (eventType<sle->eventType) return -1;
-	if (eventType>sle->eventType) return 1;
-	return 0;
-}
-
 int SweepLineEvent::compareTo(SweepLineEvent *sle) {
 	if (xValue<sle->xValue) return -1;
 	if (xValue>sle->xValue) return 1;

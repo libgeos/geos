@@ -1,3 +1,11 @@
+/*
+* $Log$
+* Revision 1.18  2003/10/15 15:30:32  strk
+* Declared a SweepLineEventOBJ from which MonotoneChain and SweepLineSegment
+* derive to abstract SweepLineEvent object previously done on void * pointers.
+* No more compiler warnings...
+*
+*/
 #ifndef GEOS_GRAPH_INDEX_H
 #define GEOS_GRAPH_INDEX_H
 
@@ -70,10 +78,21 @@ protected:
 //	vector<Edge*>* edgesZero;
 //	vector<Edge*>* edgesOne;
 };
+//
+// This is here so that SweepLineEvent constructor
+// can use it as argument type. 
+// Both  SweepLineSegment and MonotoneChain will
+// inherit from it.
+class SweepLineEventOBJ {
+public:
+	virtual ~SweepLineEventOBJ(){};
+};
 
-class SweepLineSegment{
+
+class SweepLineSegment: public SweepLineEventOBJ {
 public:
 	SweepLineSegment(Edge *newEdge,int newPtIndex);
+	~SweepLineSegment();
 	double getMinX();
 	double getMaxX();
 	void computeIntersections(SweepLineSegment *ss,SegmentIntersector *si);
@@ -89,20 +108,19 @@ public:
 		INSERT=1,
 		DELETE
 	};
-	SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,void *newObj);
+	SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,SweepLineEventOBJ *newObj);
 	virtual ~SweepLineEvent();
 	bool isInsert();
 	bool isDelete();
 	SweepLineEvent* getInsertEvent();
 	int getDeleteEventIndex();
 	void setDeleteEventIndex(int newDeleteEventIndex);
-	void* getObject();
-	int compareTo(void *o);
+	SweepLineEventOBJ* getObject() const;
 	int compareTo(SweepLineEvent *sle);
 	string print();
 	void* edgeSet;    // used for red-blue intersection detection
 protected:
-	void* obj;
+	SweepLineEventOBJ* obj;
 private:
 	double xValue;
 	int eventType;
@@ -144,9 +162,10 @@ private:
 									int start1,int end1,SegmentIntersector *ei);
 };
 
-class MonotoneChain{
+class MonotoneChain: public SweepLineEventOBJ {
 public:
 	MonotoneChain(MonotoneChainEdge *newMce,int newChainIndex);
+	~MonotoneChain();
 	void computeIntersections(MonotoneChain *mc,SegmentIntersector *si);
 protected:
 	MonotoneChainEdge *mce;
