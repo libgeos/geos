@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.62  2004/05/17 21:03:56  ybychkov
+ * JavaDoc updated
+ *
  * Revision 1.61  2004/05/14 12:14:08  strk
  * const correctness
  *
@@ -505,8 +508,24 @@ public:
 	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
 	static void scroll(CoordinateList *cl, const Coordinate *firstCoordinate);
 	static void reverse(CoordinateList *cl);
+	/** Add an array of coordinates
+	* @param cl The coordinates
+	* @param allowRepeated if set to false, repeated coordinates are collapsed
+	* @param direction if false, the array is added in reverse order
+	* @return true (as by general collection contract)
+	*/
 	void add(CoordinateList *cl,bool allowRepeated,bool direction);
+	/** Add an array of coordinates
+	* @param vc The coordinates
+	* @param allowRepeated if set to false, repeated coordinates are collapsed
+	* @return true (as by general collection contract)
+	*/
 	void add(vector<Coordinate>* vc,bool allowRepeated);
+	/** Add a coordinate
+	* @param c The coordinate to add
+	* @param allowRepeated if set to false, repeated coordinates are collapsed
+	* @return true (as by general collection contract)
+	*/
 	void add(const Coordinate& c,bool allowRepeated);
 	static CoordinateList* removeRepeatedPoints(const CoordinateList *cl);
 	virtual ~CoordinateList(){};

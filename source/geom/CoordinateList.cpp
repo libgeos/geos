@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/05/17 21:03:56  ybychkov
+ * JavaDoc updated
+ *
  * Revision 1.16  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  *
@@ -133,12 +136,22 @@ bool CoordinateList::equals(CoordinateList *cl1,CoordinateList *cl2){
 	return true;
 }
 
+/** Add an array of coordinates
+* @param vc The coordinates
+* @param allowRepeated if set to false, repeated coordinates are collapsed
+* @return true (as by general collection contract)
+*/
 void CoordinateList::add(vector<Coordinate>* vc,bool allowRepeated) {
 	for(int i=0;i<(int)vc->size();i++) {
 		add((*vc)[i],allowRepeated);
 	}
 }
 
+/** Add a coordinate
+* @param c The coordinate to add
+* @param allowRepeated if set to false, repeated coordinates are collapsed
+* @return true (as by general collection contract)
+*/
 void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	if (!allowRepeated) {
 		if (getSize()>=1) {
@@ -149,6 +162,12 @@ void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	add(c);
 }
 
+/** Add an array of coordinates
+* @param cl The coordinates
+* @param allowRepeated if set to false, repeated coordinates are collapsed
+* @param direction if false, the array is added in reverse order
+* @return true (as by general collection contract)
+*/
 void CoordinateList::add(CoordinateList *cl,bool allowRepeated,bool direction){
 	if (direction) {
 		for (int i = 0; i < cl->getSize(); i++) {
