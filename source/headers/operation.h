@@ -18,6 +18,7 @@ using namespace std;
 namespace geos {
 
 class GeometryGraphOperation {
+friend class Unload;
 public:
 	GeometryGraphOperation(Geometry *g0,Geometry *g1);
 	GeometryGraphOperation(Geometry *g0);

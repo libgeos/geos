@@ -202,6 +202,7 @@ private:
 };
 
 class EdgeEnd {
+friend class Unload;
 public:
 	EdgeEnd();
 	virtual ~EdgeEnd();

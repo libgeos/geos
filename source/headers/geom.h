@@ -464,6 +464,7 @@ public:
 class CGAlgorithms;
 class Point;
 class Geometry: public SFSGeometry {
+friend class Unload;
 public:
 	void throw_exception ();
 	Geometry(void);

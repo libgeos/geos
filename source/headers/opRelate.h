@@ -87,6 +87,7 @@ private:
  * implicitly).
  */
 class RelateComputer {
+friend class Unload;
 public:
 	RelateComputer();
 	virtual ~RelateComputer();

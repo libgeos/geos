@@ -127,6 +127,7 @@ protected:
  * and does not have a defined extent.
  */
 class QuadTreeRoot: public QuadTreeNodeBase {
+friend class Unload;
 private:
 	static Coordinate *origin;
 	void insertContained(QuadTreeNode *tree,Envelope *itemEnv,void* item);

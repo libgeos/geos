@@ -20,4 +20,5 @@ geos_HEADERS = \
 	opValid.h \
 	platform.h \
 	spatialIndex.h \
+	unload.h \
 	util.h

@@ -205,6 +205,7 @@ protected:
 };
 
 class IsValidOp {
+friend class Unload;
 public:
 	/**
 	* Find a point from the list of testCoords

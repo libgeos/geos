@@ -116,6 +116,7 @@ EXTERNAL_SOURCES =  \
 	../io/WKTWriter.cpp \
 	../io/Writer.cpp \
 	../io/markup/MarkupSTL.cpp \
+	../io/Unload.cpp \
 	../operation/GeometryGraphOperation.cpp \
 	../operation/IsSimpleOp.cpp \
 	../operation/buffer/BufferEdgeBuilder.cpp \
