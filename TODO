@@ -1,3 +1,5 @@
+- Add distinct binary predicates test suppor in XMLTester
+
 - IsValidTest.cpp in source/test ?
 
 - Check how to disable GEOS_VERSION define on command line
