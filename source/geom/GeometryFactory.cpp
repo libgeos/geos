@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.43  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
  * Revision 1.42  2004/07/02 14:27:32  strk
  * Added deep-copy / take-ownerhship for Point type.
  *
@@ -105,7 +108,7 @@ GeometryFactory::GeometryFactory() {
 
 /**
 * Constructs a GeometryFactory that generates Geometries having the given
-* PrecisionModel, spatial-reference ID, and CoordinateSequence implementation.
+* PrecisionModel, spatial-reference ID, and CoordinateList implementation.
 */
 GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateListFactory *nCoordinateListFactory) {
 	precisionModel=new PrecisionModel(*pm);
@@ -126,7 +129,7 @@ GeometryFactory::GeometryFactory(CoordinateListFactory *nCoordinateListFactory) 
 
 /**
 * Constructs a GeometryFactory that generates Geometries having the given
-* {@link PrecisionModel} and the default CoordinateSequence
+* {@link PrecisionModel} and the default CoordinateList
 * implementation.
 *
 * @param precisionModel the PrecisionModel to use
@@ -139,7 +142,7 @@ GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
 
 /**
 * Constructs a GeometryFactory that generates Geometries having the given
-* {@link PrecisionModel} and spatial-reference ID, and the default CoordinateSequence
+* {@link PrecisionModel} and spatial-reference ID, and the default CoordinateList
 * implementation.
 *
 * @param precisionModel the PrecisionModel to use
@@ -376,10 +379,10 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 }
 
 /**
-* Creates a LinearRing using the given CoordinateSequence; a null or empty CoordinateSequence will
+* Creates a LinearRing using the given CoordinateList; a null or empty CoordinateList will
 * create an empty LinearRing. The points must form a closed and simple
 * linestring. Consecutive points must not be equal.
-* @param coordinates a CoordinateSequence possibly empty, or null
+* @param coordinates a CoordinateList possibly empty, or null
 * LinearRing will take ownership of coordinates.
 */
 LinearRing*
@@ -389,11 +392,11 @@ GeometryFactory::createLinearRing(CoordinateList* coordinates) const
 }
 
 /**
-* Creates a LinearRing using the given CoordinateSequence;
-* an empty CoordinateSequence will
+* Creates a LinearRing using the given CoordinateList;
+* an empty CoordinateList will
 * create an empty LinearRing. The points must form a closed and simple
 * linestring. Consecutive points must not be equal.
-* @param coordinates a CoordinateSequence possibly empty.
+* @param coordinates a CoordinateList possibly empty.
 */
 LinearRing*
 GeometryFactory::createLinearRing(const CoordinateList& coordinates) const
@@ -448,9 +451,9 @@ GeometryFactory::createMultiPoint() const
 }
 
 /**
-* Creates a MultiPoint using the given CoordinateSequence; a null or empty CoordinateSequence will
+* Creates a MultiPoint using the given CoordinateList; a null or empty CoordinateList will
 * create an empty MultiPoint.
-* @param coordinates a CoordinateSequence possibly empty, or null
+* @param coordinates a CoordinateList possibly empty, or null
 */
 MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateList* coordinates) const
@@ -674,8 +677,8 @@ gfCoordinateOperation::edit(const CoordinateList *coordinates, const Geometry *g
 //Remember to add this.
 
   /**
-   * @return a clone of g based on a CoordinateSequence created by this
-   * GeometryFactory's CoordinateSequenceFactory
+   * @return a clone of g based on a CoordinateList created by this
+   * GeometryFactory's CoordinateListFactory
    */
 Geometry*
 GeometryFactory::createGeometry(const Geometry *g) const

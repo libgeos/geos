@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -27,6 +30,11 @@
  *
  **********************************************************************/
 
+
+#include <geos/geosAlgorithm.h>
+
+namespace geos {
+
 /**
  * Indicates that a {@link HCoordinate} has been computed which is
  * not representable on the Cartesian plane.
@@ -34,11 +42,6 @@
  * @version 1.4
  * @see HCoordinate
  */
-
-#include <geos/geosAlgorithm.h>
-
-namespace geos {
-
 NotRepresentableException::NotRepresentableException(){
 	setName("NotRepresentableException");
 	setMessage("Projective point not representable on the Cartesian plane.");

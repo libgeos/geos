@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.36  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
  * Revision 1.35  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -84,8 +87,8 @@ LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 	points=CoordinateListFactory::internalFactory->createCoordinateList(ls.points);
 }
 
-/**
-*  Constructs a <code>LineString</code> with the given points.
+/*
+* Constructs a <code>LineString</code> with the given points.
 *
 *@param  points          the points of the linestring, or <code>null</code>
 *      to create the empty geometry. This array must not contain <code>null</code>
@@ -96,11 +99,6 @@ LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 *      <code>LineString</code>
 * @deprecated Use GeometryFactory instead 
 */  
-
-////////////////////////////////////////////////////////////////////
-// WARNING! This constructor is deprecated (and bogus) USE 
-// LineString(const CoordinateList *, const GeometryFactory *)
-////////////////////////////////////////////////////////////////////
 LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm, int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){ 
 	if (pts==NULL) {
 		points=CoordinateListFactory::internalFactory->createCoordinateList();
@@ -113,33 +111,40 @@ LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm, int 
 }
 
 /**
-*@param  points          the points of the linestring, or <code>null</code>
-*      to create the empty geometry. Consecutive points may not be equal.
-*      LineString will take ownership of CoordinateList.
-*/  
-LineString::LineString(CoordinateList *pts, const GeometryFactory *newFactory): Geometry(newFactory)
+ * Constructs a <code>LineString</code> taking ownership of the
+ * given CoordinateList.
+ *
+ * @param newCoords the list of coordinates making up the linestring,
+ *	or <code>null</code> to create the empty geometry.
+ *	Consecutive points may not be equal.
+ *
+ */  
+LineString::LineString(CoordinateList *newCoords, const GeometryFactory *factory): Geometry(factory)
 {
-	if (pts==NULL) {
+	if (newCoords==NULL) {
 		points=CoordinateListFactory::internalFactory->createCoordinateList();
 		return;
 	}
-	if (pts->getSize()==1) {
+	if (newCoords->getSize()==1) {
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
-	points=pts;
-	//points=CoordinateListFactory::internalFactory->createCoordinateList(pts); 
+	points=newCoords;
 }
 
 /**
-*@param  points          the points of the linestring, or <code>null</code>
-*      to create the empty geometry. Consecutive points may not be equal.
-*/  
-LineString::LineString(const CoordinateList &pts, const GeometryFactory *newFactory): Geometry(newFactory)
+ * Constructs a <code>LineString</code> copying the
+ * given CoordinateList.
+ *
+ * @param fromCoords the list of coordinates making up the linestring.
+ *	Consecutive points may not be equal.
+ *
+ */  
+LineString::LineString(const CoordinateList &fromCoords, const GeometryFactory *newFactory): Geometry(newFactory)
 {
-	if (pts.getSize()==1) {
+	if (fromCoords.getSize()==1) {
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
-	points=CoordinateListFactory::internalFactory->createCoordinateList(&pts); 
+	points=CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
 }
 
 
@@ -152,7 +157,7 @@ Geometry* LineString::clone() const {
 }
 
 CoordinateList* LineString::getCoordinates() const {
-	return CoordinateListFactory::internalFactory->createCoordinateList(points); // callers must be free to delete returned value ! - strk
+	return CoordinateListFactory::internalFactory->createCoordinateList(points);
 	//return points;
 }
 

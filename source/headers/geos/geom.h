@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
  * Revision 1.2  2004/07/02 14:27:32  strk
  * Added deep-copy / take-ownerhship for Point type.
  *
@@ -152,6 +155,8 @@ enum GeometryTypeId {
 class Coordinate;
 
 /**
+ * \class PrecisionModel geom.h geos/geom.h
+ *
  * Specifies the precision model of the {@link Coordinate}s in a {@link Geometry}.
  * In other words, specifies the grid of allowable
  *  points for all <code>Geometry</code>s.
@@ -198,67 +203,103 @@ friend class Unload;
 public:
 	/**
 	* The types of Precision Model which GEOS supports.
-	* <p>
-	* This class is only for use to support the "enums" for the types of precision model.
-	* <p>
+	* This class is only for use to support the "enums"
+	* for the types of precision model.
 	*/
 	typedef enum {
+
 		/**
-		* Fixed Precision indicates that coordinates have a fixed number of decimal places.
-		* The number of decimal places is determined by the log10 of the scale factor.
+		* Fixed Precision indicates that coordinates have a fixed
+		* number of decimal places.
+		* The number of decimal places is determined by the log10
+		* of the scale factor.
 		*/
 		FIXED,
+
 		/**
 		* Floating precision corresponds to the standard Java
 		* double-precision floating-point representation, which is
 		* based on the IEEE-754 standard
 		*/
 		FLOATING,
+
 		/**
 		* Floating single precision corresponds to the standard Java
 		* single-precision floating-point representation, which is
 		* based on the IEEE-754 standard
 		*/
 		FLOATING_SINGLE
+
 	} Type;
 
-  /**
-	*  The maximum precise value representable in a double. Since IEE754
-	*  double-precision numbers allow 53 bits of mantissa, the value is equal to
-	*  2^53 - 1.  This provides <i>almost</i> 16 decimal digits of precision.
-	*/
+	/**
+	 * The maximum precise value representable in a double.
+	 * Since IEE754 double-precision numbers allow 53 bits of mantissa,
+	 * the value is equal to 2^53 - 1.
+	 * This provides <i>almost</i> 16 decimal digits of precision.
+	 */
 	static const double maximumPreciseValue;
+
 	/**
 	* Rounds a numeric value to the PrecisionModel grid.
 	*/
 	double makePrecise(double val) const;
+
+	/**
+	 * Rounds a Coordinate to the PrecisionModel grid.
+	 */
 	void makePrecise(Coordinate *coord) const;
+
 	/**
 	* Creates a <code>PrecisionModel</code> with a default precision
 	* of FLOATING.
 	*/
 	PrecisionModel(void);
-	PrecisionModel(Type nModelType);
 
 	/**
-	* Creates a <code>PrecisionModel</code> that specifies Fixed precision.
-	* Fixed-precision coordinates are represented as precise internal
-	* coordinates, which are rounded to the grid defined by the
-	* scale factor.
+	* Creates a <code>PrecisionModel</code> that specifies
+	* an explicit precision model type.
+	* If the model type is FIXED the scale factor will default to 1.
 	*
-	* @param  scale
-	*	amount by which to multiply a coordinate after subtracting
-	*	the offset, to obtain a precise coordinate
-	* @param  offsetX  not used.
-	* @param  offsetY  not used.
-	*
-	* @deprecated offsets are no longer supported, since internal representation is rounded floating point
+	* @param modelType the type of the precision model
 	*/
+	PrecisionModel(Type nModelType);
+
+	/*
+	 * Creates a <code>PrecisionModel</code> that specifies Fixed precision.
+	 * Fixed-precision coordinates are represented as precise internal
+	 * coordinates, which are rounded to the grid defined by the
+	 * scale factor.
+	 *
+	 * @param  scale
+	 *	amount by which to multiply a coordinate after subtracting
+	 *	the offset, to obtain a precise coordinate
+	 * @param  offsetX  not used.
+	 * @param  offsetY  not used.
+	 *
+	 * @deprecated offsets are no longer supported, since internal
+	 * representation is rounded floating point
+	 */
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
 
+	/**
+	 * Creates a <code>PrecisionModel</code> that specifies
+	 * Fixed precision.
+	 * Fixed-precision coordinates are represented as precise
+	 * internal coordinates which are rounded to the grid defined
+	 * by the scale factor.
+	 *
+	 * @param  scale amount by which to multiply a coordinate
+	 * after subtracting the offset, to obtain a precise coordinate
+	 */
 	PrecisionModel(double newScale);
+
+	// copy constructor
 	PrecisionModel(const PrecisionModel &pm);
+
+	// dtor
 	virtual ~PrecisionModel(void);
+
 	/**
 	* Tests whether the precision model supports floating point
 	* @return <code>true</code> if the precision model supports floating point
@@ -297,7 +338,7 @@ public:
 	*/
 	double getOffsetY() const;
 
-	/**
+	/*
 	*  Sets <code>internal</code> to the precise representation of <code>external</code>.
 	*
 	* @param external the original coordinate
@@ -307,7 +348,7 @@ public:
 	*/
 	void toInternal(const Coordinate& external, Coordinate* internal) const;
 
-	/**
+	/*
 	*  Returns the precise representation of <code>external</code>.
 	*
 	*@param  external  the original coordinate
@@ -318,7 +359,7 @@ public:
 	*/
 	Coordinate* toInternal(const Coordinate& external) const;
 
-	/**
+	/*
 	*  Returns the external representation of <code>internal</code>.
 	*
 	*@param  internal  the original coordinate
@@ -328,7 +369,7 @@ public:
 	*/
 	Coordinate* toExternal(const Coordinate& internal) const;
 
-	/**
+	/*
 	*  Sets <code>external</code> to the external representation of
 	*  <code>internal</code>.
 	*
@@ -339,7 +380,9 @@ public:
 	* @deprecated no longer needed, since internal representation is same as external representation
 	*/
 	void toExternal(const Coordinate& internal, Coordinate* external) const;
+
 	string toString() const;
+
 	/**
 	*  Compares this {@link PrecisionModel} object with the specified object for order.
 	* A PrecisionModel is greater than another if it provides greater precision.
@@ -354,6 +397,7 @@ public:
 	*      is less than, equal to, or greater than the specified <code>PrecisionModel</code>
 	*/
 	int compareTo(const PrecisionModel* other) const;
+
 private:
 	void setScale(double newScale);
 	Type modelType;
@@ -503,6 +547,8 @@ private:
 
 
 /**
+ * \class CoordinateList geom.h geos/geom.h
+ *
  * The internal representation of a list of coordinates inside a Geometry.
  * <p>
  * There are some cases in which you might want Geometries to store their
@@ -517,7 +563,7 @@ private:
  * this GeometryFactory to create new Geometries. All of these new Geometries
  * will use your CoordinateList implementation.
  * <p>
- * This class is equivalent to JTS CoordinateSequence.
+ * This class is equivalent to JTS CoordinateList.
  */
 class CoordinateList {
 public:
@@ -575,6 +621,11 @@ public:
 	virtual ~CoordinateList(){};
 };
 
+/**
+ * \class BasicCoordinateList geom.h geos/geom.h
+ *
+ * The default implementation of CoordinateList
+ */
 class BasicCoordinateList : public CoordinateList {
 public:
 	BasicCoordinateList();
@@ -628,19 +679,32 @@ private:
 	vector<point_3d> *vect;
 };
 
+/**
+ * \class CoordinateListFactory geom.h geos/geom.h
+ *
+ * An object that knows how to build a particular implementation of
+ * CoordinateList from an array of Coordinates.
+ */
 class CoordinateListFactory {
 public:
+	/// create an empty CoordinateList
 	virtual CoordinateList* createCoordinateList()=0;
+	/// create an empty CoordinateList with 'size' Coordinate slots
 	virtual CoordinateList* createCoordinateList(int size)=0;
 	virtual CoordinateList* createCoordinateList(const Coordinate& c)=0;
+	/// create an CoordinateList containing the given Coordinate 
 	virtual CoordinateList* createCoordinateList(const CoordinateList *c)=0;
+	/// the default publically available CoordinateListFactory (BasicCoordinateListFactory)
 	static CoordinateListFactory* internalFactory;
 };
 
 class BasicCoordinateListFactory: public CoordinateListFactory {
+	/// create an empty BasicCoordinateList
 	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
+	/// create an empty BasicCoordinateList with 'size' Coordinate slots
 	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
 	CoordinateList* createCoordinateList(const Coordinate& c) {return new BasicCoordinateList(c);};
+	/// create an BasicCoordinateList containing the given Coordinate 
 	CoordinateList* createCoordinateList(const CoordinateList *cl) {return new BasicCoordinateList(cl);};
 };
 
@@ -795,7 +859,8 @@ class Point;
 class GeometryFactory;
 
 /**
- *  Basic implementation of <code>Geometry</code>. <P>
+ * \class Geometry geom.h geos/geom.h
+ * Basic implementation of <code>Geometry</code>. <P>
  *
  *  <code>clone</code> returns a deep copy of the object.
  *
@@ -876,77 +941,104 @@ class GeometryFactory;
 class Geometry{
 friend class Unload;
 public:
-	void throw_exception ();
-	Geometry(void);
+	/** Default constructor, will create a default GeometryFactory */
+	Geometry();
+
 	Geometry(const Geometry &geom);
+
+	/** Will copy passed GeometryFactory */
 	Geometry(const GeometryFactory *newFactory);
+
+	/** Destroy Geometry and all components */
+	virtual ~Geometry();
+
+	/** Replaces copy constructor. Abstract method. */
+	virtual Geometry* clone() const=0;
+
 	/**
-	* Gets the factory which contains the context in which this geometry was created.
-	*
-	* @return the factory for this geometry
-	*/
+	 * Gets the factory which contains the context in which this
+	 * geometry was created.
+	 *
+	 * @return the factory for this geometry
+	 */
 	const GeometryFactory* getFactory() const;
+
 	/**
 	* Gets the user data object for this geometry, if any.
 	*
 	* @return the user data object, or <code>null</code> if none set
 	*/
 	void* getUserData();
+
 	/**
-	* A simple scheme for applications to add their own custom data to a Geometry.
-	* An example use might be to add an object representing a Coordinate Reference System.
-	* <p>
-	* Note that user data objects are not present in geometries created by
-	* construction methods.
+	* A simple scheme for applications to add their own custom data to
+	* a Geometry.
+	* An example use might be to add an object representing a
+	* Coordinate Reference System.
+	* 
+	* Note that user data objects are not present in geometries created
+	* by construction methods.
 	*
-	* @param userData an object, the semantics for which are defined by the
-	* application using this Geometry
+	* @param userData an object, the semantics for which are defined by
+	* the application using this Geometry
 	*/
 	void setUserData(void* newUserData);
-	virtual string getGeometryType() const=0; //Abstract
-	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
+
 	/**
-	*  Returns the ID of the Spatial Reference System used by the <code>Geometry</code>.
-	*  <P>
+	* Returns the ID of the Spatial Reference System used by the
+	* <code>Geometry</code>.
 	*
-	*  JTS supports Spatial Reference System information in the simple way
-	*  defined in the SFS. A Spatial Reference System ID (SRID) is present in
-	*  each <code>Geometry</code> object. <code>Geometry</code> provides basic
-	*  accessor operations for this field, but no others. The SRID is represented
-	*  as an integer.
+	* GEOS supports Spatial Reference System information in the simple way
+	* defined in the SFS. A Spatial Reference System ID (SRID) is present
+	* in each <code>Geometry</code> object. <code>Geometry</code>
+	* provides basic accessor operations for this field, but no others.
+	* The SRID is represented as an integer.
 	*
-	*@return    the ID of the coordinate space in which the <code>Geometry</code>
-	*      is defined.
+	* @return the ID of the coordinate space in which the
+	* <code>Geometry</code> is defined.
 	*
-	*  @deprecated use {@link getUserData} instead
+	* @deprecated use {@link getUserData} instead
 	*/
 	virtual int getSRID() const;
-		/**
-	*  Sets the ID of the Spatial Reference System used by the <code>Geometry</code>.
-	*  @deprecated use {@link setUserData} instead
+
+	/**
+	* Sets the ID of the Spatial Reference System used by the
+	* <code>Geometry</code>.
+	* @deprecated use {@link setUserData} instead
 	*/
 	virtual void setSRID(int newSRID);
+
+	/**
+	 * Get the PrecisionModel used to create this Geometry.
+	 */
 	virtual const PrecisionModel* getPrecisionModel() const;
+
 	virtual const Coordinate* getCoordinate() const=0; //Abstract
 	virtual CoordinateList* getCoordinates() const=0; //Abstract
 	virtual int getNumPoints() const=0; //Abstract
 	virtual bool isSimple() const=0; //Abstract
+	virtual string getGeometryType() const=0; //Abstract
+	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
+
 	/**
-	*  Tests the validity of this <code>Geometry</code>.
-	*  Subclasses provide their own definition of "valid".
+	* Tests the validity of this <code>Geometry</code>.
+	* Subclasses provide their own definition of "valid".
 	*
-	*@return    <code>true</code> if this <code>Geometry</code> is valid
+	* @return <code>true</code> if this <code>Geometry</code> is valid
 	*
 	* @see IsValidOp
 	*/
 	virtual bool isValid() const;
+
 	virtual bool isEmpty() const=0; //Abstract
 	virtual int getDimension() const=0; //Abstract
 	virtual Geometry* getBoundary() const=0; //Abstract
 	virtual int getBoundaryDimension() const=0; //Abstract
+
 	virtual Geometry* getEnvelope() const;
 	virtual Envelope* getEnvelopeInternal() const;
 	virtual bool disjoint(const Geometry *g) const;
+
 	virtual bool touches(const Geometry *g) const;
 	virtual bool intersects(const Geometry *g) const;
 	virtual bool crosses(const Geometry *g) const;
@@ -962,23 +1054,23 @@ public:
 	virtual Geometry* buffer(double distance,int quadrantSegments) const;
 	virtual Geometry* convexHull() const;
 	virtual Geometry* intersection(const Geometry *other) const;
-	virtual Geometry* Union(const Geometry *other) const; // throw(IllegalArgumentException *, TopologyException *);
+	virtual Geometry* Union(const Geometry *other) const;
+		// throw(IllegalArgumentException *, TopologyException *);
 	virtual Geometry* difference(const Geometry *other) const;
 	virtual Geometry* symDifference(const Geometry *other) const;
-	virtual bool equalsExact(const Geometry *other, double tolerance) const=0; //Abstract
+	virtual bool equalsExact(const Geometry *other, double tolerance)
+		const=0; //Abstract
 	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
 	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
 	virtual void apply_rw(GeometryFilter *filter);
 	virtual void apply_ro(GeometryFilter *filter) const;
 	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
-	virtual Geometry* clone() const=0;
 	virtual void normalize()=0; //Abstract
 	virtual int compareTo(const Geometry *geom) const;
 	virtual double distance(const Geometry *g) const;
 	virtual double getArea() const;
 	virtual double getLength() const;
-	virtual ~Geometry();
 	virtual bool isWithinDistance(const Geometry *geom,double cDistance);
 	virtual Point* getCentroid() const;
 	virtual Point* getInteriorPoint();
@@ -1003,14 +1095,17 @@ protected:
 	int compare(vector<Geometry *> a, vector<Geometry *> b) const;
 	bool equal(const Coordinate& a, const Coordinate& b,double tolerance) const;
 	int SRID;
+
 	/**
-	* The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
-	* are fast, which may not be the case if the CoordinateSequence is not a
-	* BasicCoordinateSequence (e.g. if it were implemented using separate arrays
-	* for the x- and y-values), in which case frequent construction of Coordinates
-	* takes up much space and time. To solve this performance problem,
-	* #toInternalGeometry converts the Geometry to a BasicCoordinateSequence
-	* implementation before sending it to the JTS algorithms.
+	* The GEOS algorithms assume that Geometry::getCoordinate() and
+	* #getCoordinates
+	* are fast, which may not be the case if the CoordinateList is not a
+	* BasicCoordinateList (e.g. if it were implemented using separate
+	* arrays for the x- and y-values), in which case frequent
+	* construction of Coordinates takes up much space and time.
+	* To solve this performance problem, toInternalGeometry converts the
+	* Geometry to a BasicCoordinateList implementation before sending it
+	* to the JTS algorithms.
 	*/
 	Geometry* toInternalGeometry(const Geometry *g) const;
 	Geometry* fromInternalGeometry(const Geometry *g) const;
@@ -1227,6 +1322,12 @@ bool operator==(const LineSegment a, const LineSegment b);
 bool lessThen(Coordinate& a,Coordinate& b);
 bool greaterThen(Geometry *first, Geometry *second);
 
+/**
+ * Represents a collection of heterogeneous {@link Geometry}s.
+ * Collections of {@link Geometry}s of the same type are 
+ * represented by GeometryCollection subclasses MultiPoint,
+ * MultiLineString, MultiPolygon.
+ */
 class GeometryCollection : public Geometry{
 public:
 //	GeometryCollection(void);
@@ -1398,36 +1499,22 @@ private:
 };
 
 /**
- *  Basic implementation of <code>LineString</code>.
+ * \class LineString geom.h geos/geom.h
+ * Basic implementation of <code>LineString</code>.
  *
  */
 class LineString: public Geometry {
 public:
 //	LineString();
 	LineString(const LineString &ls);
-	/**
-	*  Constructs a <code>LineString</code> with the given points.
-	*
-	*@param  points          the points of the linestring, or <code>null</code>
-	*      to create the empty geometry. This array must not contain <code>null</code>
-	*      elements. Consecutive points may not be equal.
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>LineString</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>LineString</code>
-	* @deprecated Use GeometryFactory instead 
-	*/  
+
+	/// DEPRECATED Use GeometryFactory instead 
 	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
-	/**
-	*@param  points          the points of the linestring, or <code>null</code>
-	*      to create the empty geometry. Consecutive points may not be equal. LineString will take ownership of CoordinateList.
-	*/  
+
+	/// Constructs a LineString taking ownership the given CoordinateList.
 	LineString(CoordinateList *pts, const GeometryFactory *newFactory);
 
-	/**
-	*@param  points          the points of the linestring, or <code>null</code>
-	*      to create the empty geometry. Consecutive points may not be equal. 
-	*/  
+	/// Constructs a LineString copying the given CoordinateList.
 	LineString(const CoordinateList &pts, const GeometryFactory *newFactory);
 	virtual ~LineString();
 	virtual Geometry *clone() const;
@@ -1803,8 +1890,9 @@ private:
 };
 
 /**
+ * \class GeometryFactory geom.h geos/geom.h
  * Supplies a set of utility methods for building Geometry objects from lists
- * of Coordinates.
+ * of Coordinates or other Geometry objects.
  *
  */
 class GeometryFactory {
@@ -1820,7 +1908,7 @@ public:
 	* the given PrecisionModel, spatial-reference ID, and
 	* CoordinateList implementation.
 	*/
-	GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateListFactory *nCoordinateListFactory);
+	GeometryFactory(const PrecisionModel *pm, int newSRID, CoordinateListFactory *nCoordinateListFactory);
 
 	/**
 	* Constructs a GeometryFactory that generates Geometries having the
@@ -1876,14 +1964,14 @@ public:
 
 	/**
 	* Creates a Point using the given CoordinateList; a null or empty
-	* CoordinateSequence will create an empty Point. Created Point will
+	* CoordinateList will create an empty Point. Created Point will
 	* take ownership of coordinates.
 	*/
 	Point* createPoint(CoordinateList *coordinates) const;
 
 	/**
 	* Creates a Point using the given CoordinateList; a null or empty
-	* CoordinateSequence will create an empty Point. 
+	* CoordinateList will create an empty Point. 
 	*/
 	Point* createPoint(const CoordinateList &coordinates) const;
 
@@ -1979,20 +2067,21 @@ public:
 	MultiPolygon* createMultiPolygon(const vector<Geometry *> &fromPolys) const;
 
 	/**
-	* Creates a LinearRing using the given CoordinateSequence; a null or empty CoordinateSequence will
+	* Creates a LinearRing using the given CoordinateList.
+	* a null or empty CoordinateList will
 	* create an empty LinearRing. The points must form a closed and simple
 	* linestring. Consecutive points must not be equal.
-	* @param coordinates a CoordinateSequence possibly empty, or null
+	* @param coordinates a CoordinateList possibly empty, or null
 	*  LinearRing will take ownership of coordinates.
 	*/
 	LinearRing* createLinearRing(CoordinateList* coordinates) const;
 
 	/**
-	* Creates a LinearRing using the given CoordinateSequence;
-	* an empty CoordinateSequence will create an empty LinearRing.
+	* Creates a LinearRing using the given CoordinateList.
+	* an empty CoordinateList will create an empty LinearRing.
 	* The points must form a closed and simple linestring.
 	* Consecutive points must not be equal.
-	* @param coordinates a CoordinateSequence possibly empty.
+	* @param coordinates a CoordinateList possibly empty.
 	*
 	* LinearRing will *copy* coordinates.
 	*/
@@ -2033,9 +2122,9 @@ public:
 	MultiPoint* createMultiPoint(const vector<Geometry *> &fromPoints) const;
 
 	/**
-	* Creates a MultiPoint using the given CoordinateSequence; a null or empty CoordinateSequence will
+	* Creates a MultiPoint using the given CoordinateList; a null or empty CoordinateList will
 	* create an empty MultiPoint.
-	* @param coordinates a CoordinateSequence possibly empty, or null
+	* @param coordinates a CoordinateList possibly empty, or null
 	* Created ojbect will copy given coordinates
 	*/
 	MultiPoint* createMultiPoint(const CoordinateList* coordinates) const;
@@ -2126,8 +2215,8 @@ public:
 	CoordinateListFactory* getCoordinateListFactory() const {return coordinateListFactory;};
 
 	/**
-	* @return a clone of g based on a CoordinateSequence created by this
-	* GeometryFactory's CoordinateSequenceFactory
+	* @return a clone of g based on a CoordinateList created by this
+	* GeometryFactory's CoordinateListFactory
 	*/
 	Geometry* createGeometry(const Geometry *g) const;
 

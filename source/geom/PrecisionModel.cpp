@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
  * Revision 1.24  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -62,18 +65,6 @@
 namespace geos {
 
 const double maximumPreciseValue=9007199254740992.0;
-
-//double PrecisionModel::makePrecise(double val){
-//	//return rint(val);
-//	return ((val >= 0.0) ? floor(val+0.5) : - floor(-val+0.5));
-//    /*
-//     * Other options:
-//     * - Math.floor(a + 0.5d);
-//     * - Math.floor(a);
-//     * -  (val >= 0.0) ? Math.floor(val) : - Math.floor(-val);
-//     */
-//}
-
 
 /**
 * Implementation of rint() for Visual C++
@@ -131,10 +122,10 @@ void PrecisionModel::makePrecise(Coordinate *coord) const {
 }
 
 
-	/**
-	* Creates a <code>PrecisionModel</code> with a default precision
-	* of FLOATING.
-	*/
+/**
+* Creates a <code>PrecisionModel</code> with a default precision
+* of FLOATING.
+*/
 PrecisionModel::PrecisionModel(){
 	modelType=FLOATING;
 	scale=1.0;
@@ -155,18 +146,19 @@ PrecisionModel::PrecisionModel(Type nModelType){
 }
 
 
-/**
-*  Creates a <code>PrecisionModel</code> that specifies Fixed precision.
-*  Fixed-precision coordinates are represented as precise internal coordinates,
-*  which are rounded to the grid defined by the scale factor.
-*
-*@param  scale    amount by which to multiply a coordinate after subtracting
-*      the offset, to obtain a precise coordinate
-*@param  offsetX  not used.
-*@param  offsetY  not used.
-*
-* @deprecated offsets are no longer supported, since internal representation is rounded floating point
-*/
+/*
+ * Creates a <code>PrecisionModel</code> that specifies Fixed precision.
+ * Fixed-precision coordinates are represented as precise internal coordinates,
+ * which are rounded to the grid defined by the scale factor.
+ *
+ * @param  scale    amount by which to multiply a coordinate after subtracting
+ *      the offset, to obtain a precise coordinate
+ * @param  offsetX  not used.
+ * @param  offsetY  not used.
+ *
+ * @deprecated offsets are no longer supported,
+ * since internal representation is rounded floating point
+ */
 PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY)
 	//throw(IllegalArgumentException *)
 {
@@ -174,14 +166,14 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
 	setScale(newScale);
 }
 
-/**
-*  Creates a <code>PrecisionModel</code> that specifies Fixed precision.
-*  Fixed-precision coordinates are represented as precise internal coordinates,
-*  which are rounded to the grid defined by the scale factor.
-*
-*@param  scale    amount by which to multiply a coordinate after subtracting
-*      the offset, to obtain a precise coordinate
-*/
+/*
+ *  Creates a <code>PrecisionModel</code> that specifies Fixed precision.
+ *  Fixed-precision coordinates are represented as precise internal coordinates,
+ *  which are rounded to the grid defined by the scale factor.
+ *
+ *@param  scale    amount by which to multiply a coordinate after subtracting
+ *      the offset, to obtain a precise coordinate
+ */
 PrecisionModel::PrecisionModel(double newScale)
 	//throw (IllegalArgumentException *)
 {
@@ -254,36 +246,36 @@ void PrecisionModel::setScale(double newScale) {
 	scale=fabs(newScale);
 }
 
-/**
-* Returns the x-offset used to obtain a precise coordinate.
-*
-* @return the amount by which to subtract the x-coordinate before
-*         multiplying by the scale
-* @deprecated Offsets are no longer used
-*/
+/*
+ * Returns the x-offset used to obtain a precise coordinate.
+ *
+ * @return the amount by which to subtract the x-coordinate before
+ *         multiplying by the scale
+ * @deprecated Offsets are no longer used
+ */
 double PrecisionModel::getOffsetX() const {
 	return 0;
 }
 
-/**
-* Returns the y-offset used to obtain a precise coordinate.
-*
-* @return the amount by which to subtract the y-coordinate before
-*         multiplying by the scale
-* @deprecated Offsets are no longer used
-*/
+/*
+ * Returns the y-offset used to obtain a precise coordinate.
+ *
+ * @return the amount by which to subtract the y-coordinate before
+ *         multiplying by the scale
+ * @deprecated Offsets are no longer used
+ */
 double PrecisionModel::getOffsetY() const {
 	return 0;
 }
 
-/**
-*  Sets <code>internal</code> to the precise representation of <code>external</code>.
-*
-* @param external the original coordinate
-* @param internal the coordinate whose values will be changed to the
-*                 precise representation of <code>external</code>
-* @deprecated use makePrecise instead
-*/
+/*
+ *  Sets <code>internal</code> to the precise representation of <code>external</code>.
+ *
+ * @param external the original coordinate
+ * @param internal the coordinate whose values will be changed to the
+ *                 precise representation of <code>external</code>
+ * @deprecated use makePrecise instead
+ */
 void PrecisionModel::toInternal (const Coordinate& external, Coordinate* internal) const {
 	if (isFloating()) {
 		internal->x = external.x;
@@ -296,41 +288,42 @@ void PrecisionModel::toInternal (const Coordinate& external, Coordinate* interna
 }
 
 /**
-*  Returns the precise representation of <code>external</code>.
-*
-*@param  external  the original coordinate
-*@return           the coordinate whose values will be changed to the precise
-*      representation of <code>external</code>
-* @deprecated use makePrecise instead
-*/
+ *  Returns the precise representation of <code>external</code>.
+ *
+ *@param  external  the original coordinate
+ *@return           the coordinate whose values will be changed to the precise
+ *      representation of <code>external</code>
+ * @deprecated use makePrecise instead
+ */
 Coordinate* PrecisionModel::toInternal(const Coordinate& external) const {
 	Coordinate* internal=new Coordinate(external);
 	makePrecise(internal);
 	return internal;
 }
 
-/**
-*  Returns the external representation of <code>internal</code>.
-*
-*@param  internal  the original coordinate
-*@return           the coordinate whose values will be changed to the
-*      external representation of <code>internal</code>
-* @deprecated no longer needed, since internal representation is same as external representation
-*/
+/*
+ *  Returns the external representation of <code>internal</code>.
+ *
+ *@param  internal  the original coordinate
+ *@return           the coordinate whose values will be changed to the
+ *      external representation of <code>internal</code>
+ * @deprecated no longer needed, since internal representation is same as external representation
+ */
 Coordinate* PrecisionModel::toExternal(const Coordinate& internal) const {
 	Coordinate* external=new Coordinate(internal);
 	return external;
 }
 
-/**
-*  Sets <code>external</code> to the external representation of <code>internal</code>
-*  .
-*
-*@param  internal  the original coordinate
-*@param  external  the coordinate whose values will be changed to the
-*      external representation of <code>internal</code>
-* @deprecated no longer needed, since internal representation is same as external representation
-*/
+/*
+ * Sets <code>external</code> to the external representation of
+ * <code>internal</code>.
+ *
+ *@param  internal  the original coordinate
+ *@param  external  the coordinate whose values will be changed to the
+ *      external representation of <code>internal</code>
+ * @deprecated no longer needed, since internal representation is same
+ * as external representation
+ */
 void PrecisionModel::toExternal(const Coordinate& internal, Coordinate* external) const {
 	external->x = internal.x;
 	external->y = internal.y;

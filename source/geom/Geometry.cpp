@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.55  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
  * Revision 1.54  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -105,7 +108,26 @@
 
 namespace geos {
 
+/** \mainpage 
+ *
+ * \section intro_sec Introduction
+ *
+ * Geometry Engine Open Source is a C++ port of the Java Topology Suite.
+ *
+ * \section getstart_sec Getting Started
+ *
+ * Main class is {@link Geometry}, from which all geometry types
+ * derive.
+ *
+ * Construction of Geometries is done using a {@link GeometryFactory}.
+ *
+ * Exceptions come as a {@link GEOSException} class.
+ *
+ */ 
+
+
 GeometryComponentFilter Geometry::geometryChangedFilter;
+
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
 Geometry::Geometry(const GeometryFactory *fromFactory) {
@@ -125,7 +147,7 @@ Geometry::Geometry() {
 Geometry::Geometry(const Geometry &geom) {
 	factory=new GeometryFactory(*(geom.factory));
 	envelope=new Envelope(*(geom.envelope));
-	SRID=geom.getSRID();
+	SRID=factory->getSRID();
 	userData=NULL;
 }
 
@@ -311,9 +333,7 @@ void Geometry::geometryChangedAction() {
 }
 
 int Geometry::getSRID() const {return SRID;}
-
 void Geometry::setSRID(int newSRID) {SRID=newSRID;}
-
 
 /**
 * Gets the factory which contains the context in which this geometry was created.
@@ -484,12 +504,16 @@ Geometry* Geometry::buffer(double distance) const {
 
 /**
 * The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
-* are fast, which may not be the case if the CoordinateSequence is not a
-* BasicCoordinateSequence (e.g. if it were implemented using separate arrays
+* are fast, which may not be the case if the CoordinateList is not a
+* BasicCoordinateList (e.g. if it were implemented using separate arrays
 * for the x- and y-values), in which case frequent construction of Coordinates
 * takes up much space and time. To solve this performance problem,
-* #toInternalGeometry converts the Geometry to a BasicCoordinateSequence
+* #toInternalGeometry converts the Geometry to a BasicCoordinateList
 * implementation before sending it to the JTS algorithms.
+*
+* Note: if the Geometry is already implemented with BasicCoordinateList
+* it is returned untouched, so you should check returned value before
+* releasing memory associated with the one used as argument.
 */
 Geometry* Geometry::toInternalGeometry(const Geometry *g) const {
 	if (BasicCoordinateListFactory::internalFactory==factory->getCoordinateListFactory()) {
@@ -662,18 +686,6 @@ Geometry::checkNotGeometryCollection(const Geometry *g)
 		throw new IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 	}
 }
-
-//void Geometry::checkEqualSRID(Geometry *other) {
-//	if (SRID!=other->getSRID()) {
-//		throw "IllegalArgumentException: Expected SRIDs to be equal, but they were not\n";
-//	}
-//}
-//
-//void Geometry::checkEqualPrecisionModel(Geometry *other) {
-//	if (!((*precisionModel)==(*(other->getPrecisionModel())))) {
-//		throw "IllegalArgumentException: Expected precision models to be equal, but they were not\n";
-//	}
-//}
 
 int Geometry::getClassSortIndex() const {
 	//const type_info &t=typeid(*this);
