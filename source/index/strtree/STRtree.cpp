@@ -46,13 +46,13 @@ double STRtree::centreX(Envelope *e) {
 	return STRtree::avg(e->getMinX(),e->getMaxX());
 }
 
-double STRtree::avg(double a, double b) { 
-	return (a + b) / 2.0;
-}
+//double STRtree::avg(double a, double b) { 
+//	return (a + b) / 2.0;
+//}
 
-double STRtree::centreY(Envelope *e) {
-	return STRtree::avg(e->getMinY(), e->getMaxY());
-}
+//double STRtree::centreY(Envelope *e) {
+	//return STRtree::avg(e->getMinY(), e->getMaxY());
+//}
 
 
 bool
@@ -198,6 +198,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/02/22 15:16:30  strk
+ * STRtree::avg() and STRtree::centreY() inlined.
+ *
  * Revision 1.20  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.

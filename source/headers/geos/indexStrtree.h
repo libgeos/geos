@@ -304,9 +304,15 @@ public:
 	void insert(const Envelope *itemEnv,void* item);
 	vector<void*>* query(const Envelope *searchEnv);
 	static double centreX(Envelope *e);
-	static double avg(double a, double b);
-	static double centreY(Envelope *e);
+	inline static double avg(double a, double b);
+	inline static double centreY(Envelope *e);
 };
+inline double STRtree::avg(double a, double b) { 
+	return (a + b) / 2.0;
+}
+inline double STRtree::centreY(Envelope *e) {
+	return STRtree::avg(e->getMinY(), e->getMaxY());
+}
 
 
 } // namespace geos
@@ -315,6 +321,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/02/22 15:16:30  strk
+ * STRtree::avg() and STRtree::centreY() inlined.
+ *
  * Revision 1.8  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.
