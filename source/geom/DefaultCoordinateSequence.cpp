@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/11/23 16:22:49  strk
+ * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
+ *
  * Revision 1.1  2004/07/08 19:38:56  strk
  * renamed from *List* equivalents
  *
@@ -85,7 +88,7 @@ const Coordinate& DefaultCoordinateSequence::getAt(int pos) const {
 //	if (pos>=0 && pos<=vect->size()-1) 
 		return (*vect)[pos];
 //	else
-//		throw "DefaultCoordinateSequence exception: can't retrieve element\n";
+//		cerr<<"DefaultCoordinateSequence exception: can't retrieve element\n";
 }
 
 void DefaultCoordinateSequence::setAt(const Coordinate& c, int pos){

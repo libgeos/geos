@@ -151,6 +151,9 @@ EXTERNAL_SOURCES =  \
 	../operation/overlay/OverlayOp.cpp \
 	../operation/overlay/PointBuilder.cpp \
 	../operation/overlay/PolygonBuilder.cpp \
+	../operation/overlay/ElevationMatrix.cpp \
+	../operation/overlay/ElevationMatrixCell.cpp \
+	../operation/overlay/ElevationMatrixFilter.cpp \
 	../operation/relate/EdgeEndBuilder.cpp \
 	../operation/relate/EdgeEndBundle.cpp \
 	../operation/relate/EdgeEndBundleStar.cpp \

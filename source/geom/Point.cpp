@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.31  2004/11/23 16:22:49  strk
+ * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
+ *
  * Revision 1.30  2004/09/13 12:39:14  strk
  * Made Point and MultiPoint subject to Validity tests.
  *
@@ -165,12 +168,18 @@ Envelope* Point::computeEnvelopeInternal() const {
 	return new Envelope(getCoordinate()->x, getCoordinate()->x, getCoordinate()->y, getCoordinate()->y);
 }
 
-void Point::apply_ro(CoordinateFilter *filter) const {
-    if (isEmpty()) {return;}
+void Point::apply_ro(CoordinateFilter *filter) const
+{
+	if (isEmpty()) {return;}
 	filter->filter_ro(getCoordinate());
 }
 
-void Point::apply_rw(CoordinateFilter *filter) {
+void Point::apply_rw(CoordinateFilter *filter)
+{
+	if (isEmpty()) {return;}
+	Coordinate newcoord = coordinates->getAt(0);
+	filter->filter_rw(&newcoord);
+	coordinates->setAt(newcoord, 0);
 }
 
 void Point::apply_rw(GeometryFilter *filter) {

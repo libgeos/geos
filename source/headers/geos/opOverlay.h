@@ -11,63 +11,6 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2004/11/22 15:51:52  strk
- * Added interpolation of containing geometry's average Z for point_in_poly case.
- *
- * Revision 1.5  2004/11/20 18:17:26  strk
- * Added Z propagation for overlay lines output.
- *
- * Revision 1.4  2004/11/20 17:16:10  strk
- * Handled Z merging for point on polygon boundary case.
- *
- * Revision 1.3  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.2  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.18  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.17  2004/06/30 20:59:13  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.16  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.15  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- * Revision 1.14  2004/03/29 06:59:24  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.13  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.12  2003/11/12 18:02:56  strk
- * Added throw specification. Fixed leaks on exceptions.
- *
- * Revision 1.11  2003/11/12 16:14:56  strk
- * Added some more throw specifications and cleanup on exception (leaks removed).
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
 
@@ -77,6 +20,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <set>
 #include <map>
 #include <geos/platform.h>
 #include <geos/operation.h>
@@ -86,6 +30,58 @@
 using namespace std;
 
 namespace geos {
+
+class ElevationMatrixCell {
+public:
+	ElevationMatrixCell();
+	~ElevationMatrixCell();
+	void add(const Coordinate &c);
+	void add(double z);
+	double getAvg(void) const;
+	double getTotal(void) const;
+	string print() const;
+private:
+	set<double>zvals;
+	double ztot;
+};
+
+/*
+ */
+class ElevationMatrix {
+public:
+	ElevationMatrix(const Envelope &extent, int rows, int cols);
+	~ElevationMatrix();
+	void add(const Geometry *geom);
+	void elevate(Geometry *geom) const;
+	// set Z value for each cell w/out one
+	double getAvgElevation() const;
+	ElevationMatrixCell &getCell(const Coordinate &c);
+	const ElevationMatrixCell &getCell(const Coordinate &c) const;
+	string print() const;
+private:
+	void add(const CoordinateSequence *cs);
+	void add(const Coordinate &c);
+	Envelope env;
+	int cols;
+	int rows;
+	double cellwidth;
+	double cellheight;
+	mutable bool avgElevationComputed;
+	mutable double avgElevation;
+	vector<ElevationMatrixCell>cells;
+};
+
+class ElevationMatrixFilter: public CoordinateFilter
+{
+public:
+	ElevationMatrixFilter(const ElevationMatrix *em);
+	~ElevationMatrixFilter();
+	void filter_rw(Coordinate *c);
+	void filter_ro(const Coordinate *c) {};
+private:
+	const ElevationMatrix *em;
+	double avgElevation;
+};
 
 /*
  * Computes the overlay of two {@link Geometry}s.  The overlay
@@ -306,6 +302,8 @@ private:
 
 	double getAverageZ(int targetIndex);
 	static double getAverageZ(const Polygon *poly);
+
+	ElevationMatrix *elevationMatrix;
 
 };
 
@@ -566,5 +564,70 @@ public:
 	void addEdges(vector<Edge*> *edges);
 	vector<Edge*>* getNodedEdges();
 };
-}
+
+
+} // namespace geos
+
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2004/11/23 16:22:49  strk
+ * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
+ *
+ * Revision 1.6  2004/11/22 15:51:52  strk
+ * Added interpolation of containing geometry's average Z for point_in_poly case.
+ *
+ * Revision 1.5  2004/11/20 18:17:26  strk
+ * Added Z propagation for overlay lines output.
+ *
+ * Revision 1.4  2004/11/20 17:16:10  strk
+ * Handled Z merging for point on polygon boundary case.
+ *
+ * Revision 1.3  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.18  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.17  2004/06/30 20:59:13  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.16  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
+ * Revision 1.15  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ * Revision 1.14  2004/03/29 06:59:24  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
+ * Revision 1.13  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.12  2003/11/12 18:02:56  strk
+ * Added throw specification. Fixed leaks on exceptions.
+ *
+ * Revision 1.11  2003/11/12 16:14:56  strk
+ * Added some more throw specifications and cleanup on exception (leaks removed).
+ *
+ * Revision 1.10  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/

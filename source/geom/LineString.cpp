@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.45  2004/11/23 16:22:49  strk
+ * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
+ *
  * Revision 1.44  2004/09/13 09:07:28  strk
  * Ported fix in LineString::isCoordinate
  *
@@ -287,7 +290,8 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 	return true;
 }
 
-void LineString::apply_rw(CoordinateFilter *filter) {
+void LineString::apply_rw(CoordinateFilter *filter)
+{
 	for (int i = 0; i < points->getSize(); i++) {
 		Coordinate newcoord = points->getAt(i);
 		filter->filter_rw(&newcoord);

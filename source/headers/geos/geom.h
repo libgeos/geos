@@ -691,9 +691,6 @@ public:
  */
 class DefaultCoordinateSequence : public CoordinateSequence {
 public:
-	//DefaultCoordinateSequence(int n);
-	//DefaultCoordinateSequence(const Coordinate& c);
-	//DefaultCoordinateSequence(const CoordinateSequence *c);
 
 	DefaultCoordinateSequence(const DefaultCoordinateSequence &cl);
 
@@ -836,14 +833,14 @@ public:
 };
 
 /*
- *  <code>Geometry</code> classes support the concept of applying a
- *  coordinate filter to every coordinate in the <code>Geometry</code>. A
- *  coordinate filter can either record information about each coordinate or
- *  change the coordinate in some way. Coordinate filters implement the
- *  interface <code>CoordinateFilter</code>. (<code>CoordinateFilter</code> is
- *  an example of the Gang-of-Four Visitor pattern). Coordinate filters can be
- *  used to implement such things as coordinate transformations, centroid and
- *  envelope computation, and many other functions.
+ * <code>Geometry</code> classes support the concept of applying a
+ * coordinate filter to every coordinate in the <code>Geometry</code>. A
+ * coordinate filter can either record information about each coordinate or
+ * change the coordinate in some way. Coordinate filters implement the
+ * interface <code>CoordinateFilter</code>. (<code>CoordinateFilter</code> is
+ * an example of the Gang-of-Four Visitor pattern). Coordinate filters can be
+ * used to implement such things as coordinate transformations, centroid and
+ * envelope computation, and many other functions.
  *
  */
 class CoordinateFilter {
@@ -1428,22 +1425,22 @@ private:
 };
 
 /*
- * <code>Geometry</code> classes support the concept of applying a <code>Geometry</code>
- *  filter to the <code>Geometry</code>. In the case of <code>GeometryCollection</code>
- *  subclasses, the filter is applied to every element <code>Geometry</code>. A
- *  <code>Geometry</code> filter can either record information about the <code>Geometry</code>
- *  or change the <code>Geometry</code> in some way. <code>Geometry</code>
- *  filters implement the interface <code>GeometryFilter</code>. (<code>GeometryFilter</code>
- *  is an example of the Gang-of-Four Visitor pattern).
- *
+ * Geometry classes support the concept of applying a Geometry
+ * filter to the Geometry. In the case of GeometryCollection
+ * subclasses, the filter is applied to every element Geometry.
+ * A Geometry filter can either record information about the Geometry
+ * or change the Geometry in some way.
+ * Geometry filters implement the interface GeometryFilter.
+ * (GeometryFilter is an example of the Gang-of-Four Visitor pattern).
  */
 class GeometryFilter {
 public:
-  /**
-   *  Performs an operation with or on <code>geom</code>.
-   *
-   *@param  geom  a <code>Geometry</code> to which the filter is applied.
-   */
+	/*
+	 * Performs an operation with or on <code>geom</code>.
+	 *
+	 * @param  geom  a <code>Geometry</code> to which the filter
+	 *         is applied.
+	 */
 	virtual void filter_ro(const Geometry *geom)=0;
 	virtual void filter_rw(Geometry *geom)=0;
 };
@@ -2378,6 +2375,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2004/11/23 16:22:49  strk
+ * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
+ *
  * Revision 1.30  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

@@ -84,6 +84,12 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOpera
 	avgz[1] = DoubleNotANumber;
 	avgzcomputed[0] = false;
 	avgzcomputed[1] = false;
+
+	Envelope env(*(g0->getEnvelopeInternal()));
+	env.expandToInclude(g1->getEnvelopeInternal());
+	elevationMatrix = new ElevationMatrix(env, 3, 3);
+	elevationMatrix->add(g0);
+	elevationMatrix->add(g1);
 #endif
 }
 
@@ -681,6 +687,10 @@ OverlayOp::computeOverlay(int opCode)
 		// gather the results from all calculations into a single
 		// Geometry for the result set
 		resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
+#if COMPUTE_Z
+		elevationMatrix->elevate(resultGeom);
+#endif // COMPUTE_Z
+		
 
 
 	} catch (...) {
@@ -809,6 +819,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2004/11/23 16:22:49  strk
+ * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
+ *
  * Revision 1.30  2004/11/22 15:51:52  strk
  * Added interpolation of containing geometry's average Z for point_in_poly case.
  *
