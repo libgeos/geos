@@ -44,4 +44,6 @@ int main(int argC, char* argV[]) {
 	run(1024000,fact);
 
 	cout << "Done" << endl;
+
+	return 0;
 }
