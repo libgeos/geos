@@ -43,7 +43,7 @@ Geometry* ConvexHull::getConvexHull(Geometry *newGeometry) {
 		// Use Graham scan to find convex hull.
 		cH=grahamScan(preSort(rpts));
 		delete filter;
-		delete rpts;
+		if ( rpts != pts ) delete rpts; // sometimes reduce returns untouched input
 	} else {
 		// Use Graham scan to find convex hull.
 		cH=grahamScan(preSort(pts));
