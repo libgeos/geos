@@ -26,75 +26,11 @@ RelateComputer::~RelateComputer() {
 	delete isolatedEdges;
 }
 
-/**
-* @return the intersection point, or <code>null</code> if none was found
-*/
-Coordinate& RelateComputer::getInvalidPoint() {
-	return invalidPoint;
-}
-
-bool RelateComputer::isNodeConsistentArea() {
-	SegmentIntersector *intersector=(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
-	if (intersector->hasProperIntersection()) {
-		invalidPoint.setCoordinate(intersector->getProperIntersectionPoint());
-		return false;
-	}
-	// compute intersections between edges
-	computeIntersectionNodes(0);
-	/**
-	* Copy the labelling for the nodes in the parent Geometry.  These override
-	* any labels determined by intersections.
-	*/
-	copyNodesAndLabels(0);
-	/**
-	* Build EdgeEnds for all intersections.
-	*/
-	EdgeEndBuilder *eeBuilder=new EdgeEndBuilder();
-	vector<EdgeEnd*> *ee0=eeBuilder->computeEdgeEnds((*arg)[0]->getEdges());
-	delete eeBuilder;
-	insertEdgeEnds(ee0);
-	//Debug.println("==== NodeList ===");
-	//Debug.print(nodes);
-	return isNodeEdgeAreaLabelsConsistent();
-}
-
-/**
-* Checks for two duplicate rings in an area.
-* Duplicate rings are rings that are topologically equal
-* (that is, which have the same sequence of points up to point order).
-* If the area is topologically consistent (determined by calling the
-* <code>isNodeConsistentArea</code>,
-* duplicate rings can be found by checking for EdgeBundles which contain
-* more than one EdgeEnd.
-* (This is because topologically consistent areas cannot have two rings sharing
-* the same line segment, unless the rings are equal).
-* The start point of one of the equal rings will be placed in
-* invalidPoint.
-*
-* @return true if this area Geometry is topologically consistent but has two duplicate rings
-*/
-bool RelateComputer::hasDuplicateRings() {
-	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
-		RelateNode *node=(RelateNode*) nodeIt->second;
-		vector<EdgeEnd*> *edges=node->getEdges()->getEdges();
-		for(vector<EdgeEnd*>::iterator i=edges->begin();i<edges->end();i++) {
-			EdgeEndBundle *eeb=(EdgeEndBundle*) *i;
-			if (eeb->getEdgeEnds()->size()>1) {
-				invalidPoint.setCoordinate(eeb->getEdge()->getCoordinate(0));
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 IntersectionMatrix* RelateComputer::computeIM() {
 	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
 	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
 	// if the Geometries don't overlap there is nothing to do
-	if (! (*arg)[0]->getGeometry()->getEnvelopeInternal()->overlaps(
+	if (! (*arg)[0]->getGeometry()->getEnvelopeInternal()->intersects(
 							(*arg)[1]->getGeometry()->getEnvelopeInternal())) {
 		computeDisjointIM(im);
 		return im;
@@ -165,7 +101,7 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 	int dimB=(*arg)[1]->getGeometry()->getDimension();
 	bool hasProper=intersector->hasProperIntersection();
 	bool hasProperInterior=intersector->hasProperInteriorIntersection();
-	// For Geometrys of dim 0 there can never be proper intersections.
+	// For Geometry's of dim 0 there can never be proper intersections.
 	/**
 	* If edge segments of Areas properly intersect, the areas must properly overlap.
 	*/

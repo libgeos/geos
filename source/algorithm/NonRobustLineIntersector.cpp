@@ -150,7 +150,7 @@ int NonRobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coo
 	// truncate computed point to precision grid
 	// TESTING-don't force coord to be precise
 	if (precisionModel!=NULL) {
-		precisionModel->makePrecise(pa);
+		precisionModel->makePrecise(&pa);
 	}
 	return DO_INTERSECT;
 }

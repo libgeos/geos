@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "../../headers/graphindex.h"
 
-SweepLineEvent::SweepLineEvent(int newGeomIndex,double x,SweepLineEvent *newInsertEvent,void *newObj){
-	geomIndex=newGeomIndex;
+SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,void *newObj){
+	edgeSet=newEdgeSet;
 	xValue=x;
 	insertEvent=newInsertEvent;
 	eventType=INSERT;
@@ -62,7 +62,7 @@ int SweepLineEvent::compareTo(SweepLineEvent *sle) {
 string SweepLineEvent::print() {
 	char buffer[255];
 	string out="SweepLineEvent:";
-	sprintf(buffer," geomIndex: %i xValue=%g deleteEventIndex=%i",geomIndex,xValue,deleteEventIndex);
+	sprintf(buffer," xValue=%g deleteEventIndex=%i",xValue,deleteEventIndex);
 	out.append(buffer);
 	out+=((eventType==INSERT)? " INSERT" : " DELETE");
 	if (insertEvent!=NULL)

@@ -69,17 +69,25 @@ private:
 	NodeMap *nodes;
 };
 
+/**
+ * Note that RelateComputer does not need to build a complete graph structure to compute
+ * the IntersectionMatrix.  The relationship between the geometries can
+ * be computed by simply examining the labelling of edges incident on each node.
+ * <p>
+ * RelateComputer does not currently support arbitrary GeometryCollections.
+ * This is because GeometryCollections can contain overlapping Polygons.
+ * In order to correct compute relate on overlapping Polygons, they
+ * would first need to be noded and merged (if not explicitly, at least
+ * implicitly).
+ */
 class RelateComputer {
 public:
-	static const LineIntersector* li;
 	RelateComputer();
 	~RelateComputer();
 	RelateComputer(vector<GeometryGraph*> *newArg);
-	Coordinate& getInvalidPoint();
-	bool isNodeConsistentArea();
-	bool hasDuplicateRings();
 	IntersectionMatrix* computeIM();
 private:
+	static const LineIntersector* li;
 	static const PointLocator* ptLocator;
 	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
 	NodeMap *nodes;
@@ -104,10 +112,15 @@ private:
 };
 
 /**
- * Note that RelateOp does not need to build a complete graph structure to compute
- * the IntersectionMatrix.  The relationship between the geometries can
- * be computed by simply examining the labelling of edges incident on each node.
- */
+* Implements the relate() operation on {@link Geometry}s.
+* <p>
+* </b>
+* WARNING: The current implementation of this class will compute a result for
+* GeometryCollections.  However, the semantics of this operation are
+* not well-defined and the value returned may not represent
+* an appropriate notion of relate.
+* </b>
+*/
 class RelateOp: public GeometryGraphOperation {
 public:
 	static IntersectionMatrix* relate(Geometry *a,Geometry *b);
@@ -116,6 +129,10 @@ public:
 	IntersectionMatrix* getIntersectionMatrix();
 private:
 	RelateComputer *relateComp;
+	static vector<Geometry*>* toList(Geometry *geom);
+	static vector<Geometry*>* addToList(Geometry *geom, vector<Geometry*>* geomList);
+	static bool isBaseGeometryCollection(Geometry* geom);
+	static IntersectionMatrix* relateGC(vector<Geometry*> *a,vector<Geometry*> *b);
 };
 
 

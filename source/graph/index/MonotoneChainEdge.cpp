@@ -88,7 +88,7 @@ void MonotoneChainEdge::computeIntersectsForChain(int start0,int end0,MonotoneCh
 	// nothing to do if the envelopes of these chains don't overlap
 	env1->init(p00,p01);
 	env2->init(p10,p11);
-	if (!env1->overlaps(env2)) return;
+	if (!env1->intersects(env2)) return;
 	// the chains overlap, so split each in half and iterate  (binary search)
 	int mid0=(start0+end0)/2;
 	int mid1=(start1+end1)/2;

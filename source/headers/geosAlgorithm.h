@@ -154,7 +154,7 @@ public:
 	void computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2);
 	int computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
 private:
-	bool between(Coordinate& p1,Coordinate& p2,Coordinate& q);
+//	bool between(Coordinate& p1,Coordinate& p2,Coordinate& q);
 	int computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
 	Coordinate& intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
 	void normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt);
@@ -182,7 +182,6 @@ public:
 	bool isOnLine(Coordinate& p,CoordinateList* pt);
 	int computeOrientation(Coordinate& p1,Coordinate& p2,Coordinate& q);
 private:
-	RobustLineIntersector* lineIntersector;
 	bool isInEnvelope(Coordinate& p,CoordinateList* ring);
 };
 
@@ -206,16 +205,24 @@ private:
 	static bool containsPoint(Coordinate& p,Geometry *geom);
 };
 
+/**
+ * Computes the topological relationship ({@link Location})
+ * of a single point to a Geometry.
+ * The algorithm obeys the SFS boundaryDetermination rule to correctly determine
+ * whether the point lies on the boundary or not.
+ * Note that instances of this class are not reentrant.
+ * @version 1.3
+ */
 class PointLocator {
 public:
 	PointLocator();
 	~PointLocator();
 	int locate(Coordinate& p,Geometry *geom);
-protected:
+	bool intersects(Coordinate& p,Geometry *geom);
+private:
 	CGAlgorithms *cga;
 	bool isIn;         // true if the point lies in or on any Geometry element
 	int numBoundaries;    // the number of sub-elements whose boundaries the point lies in
-private:
 	void computeLocation(Coordinate& p,Geometry *geom);
 	void updateLocationInfo(int loc);
 	int locate(Coordinate& p,LineString *l);
@@ -255,6 +262,30 @@ private:
 public:
 	IntTreePointInRing(LinearRing *newRing);
 	bool isInside(Coordinate& pt);
+};
+
+class CentroidPoint {
+private:
+	int ptCount;
+	Coordinate* centSum;
+public:
+	CentroidPoint();
+	virtual ~CentroidPoint();
+	void add(Geometry *geom);
+	void add(Coordinate *pt);
+	Coordinate& getCentroid();
+};
+
+class CentroidLine {
+private:
+	Coordinate* centSum;
+	double totalLength;
+public:
+	CentroidLine();
+	virtual ~CentroidLine();
+	void add(Geometry *geom);
+	void add(CoordinateList *pts);
+	Coordinate& getCentroid();
 };
 
 #endif

@@ -9,34 +9,44 @@ SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector(){
 	delete events;
 }
 
-void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,SegmentIntersector *si){
-	add(edges,0);
-	computeIntersections(si,false);
+void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments){
+	if (testAllSegments)
+		add(edges,NULL);
+	else
+		add(edges);
+	computeIntersections(si);
 }
 
 void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si){
-	add(edges0,0);
-	add(edges1,1);
-	computeIntersections(si,true);
+	add(edges0,edges0);
+	add(edges1,edges1);
+	computeIntersections(si);
 cout << "# overlapping MCs: " << nOverlaps << endl;
 }
 
-void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges,int geomIndex){
+void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges) {
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *edge=*i;
-		add(edge,geomIndex);
+		// edge is its own group
+		add(edge,edge);
 	}
 }
 
-void SimpleMCSweepLineIntersector::add(Edge *edge,int geomIndex){
+void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges,void* edgeSet){
+	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
+		Edge *edge=*i;
+		add(edge,edgeSet);
+	}
+}
+
+void SimpleMCSweepLineIntersector::add(Edge *edge,void* edgeSet){
 	MonotoneChainEdge *mce=edge->getMonotoneChainEdge();
 	vector<int>* startIndex=mce->getStartIndexes();
 	for(int i=0;i<(int)startIndex->size()-1;i++) {
-		MonotoneChain *mc=new MonotoneChain(mce,i,geomIndex);
-		SweepLineEvent *insertEvent=new SweepLineEvent(geomIndex,mce->getMinX(i),NULL,mc);
+		MonotoneChain *mc=new MonotoneChain(mce,i);
+		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),NULL,mc);
 		events->push_back(insertEvent);
-		SweepLineEvent *deleteEvent=new SweepLineEvent(geomIndex,mce->getMaxX(i),insertEvent,mc);
-		events->push_back(deleteEvent);
+		events->push_back(new SweepLineEvent(edgeSet,mce->getMaxX(i),insertEvent,mc));
 	}
 }
 
@@ -54,45 +64,40 @@ bool sleLessThan(SweepLineEvent *first,SweepLineEvent *second) {
 */
 void SimpleMCSweepLineIntersector::prepareEvents(){
 	sort(events->begin(),events->end(),sleLessThan);
-	int numdel=0;
 	for(int i=0;i<(int)events->size();i++ ){
 		SweepLineEvent *ev=(*events)[i];
 		if (ev->isDelete()){
-			numdel++;
-			SweepLineEvent *iev=ev->getInsertEvent();
-			iev->setDeleteEventIndex(i);
+			ev->getInsertEvent()->setDeleteEventIndex(i);
 		}
 	}
-	numdel++;
 }
 
-void SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si,bool doMutualOnly){
+void SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si){
 	nOverlaps=0;
 	prepareEvents();
-	int numov=0;
 	for(int i=0;i<(int)events->size();i++) {
 		SweepLineEvent *ev=(*events)[i];
-		MonotoneChain *mc=(MonotoneChain*)ev->getObject();
 		if (ev->isInsert()) {
-			numov++;
-			processOverlaps(i,ev->getDeleteEventIndex(),mc,si,doMutualOnly);
+			processOverlaps(i,ev->getDeleteEventIndex(),ev,si);
 		}
 	}
-	numov++;
 }
 
-void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,MonotoneChain *mc0,
-													SegmentIntersector *si,bool doMutualOnly){
+void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev0,
+													SegmentIntersector *si){
+	MonotoneChain *mc0=(MonotoneChain*) ev0->getObject();
 	/**
 	* Since we might need to test for self-intersections,
 	* include current insert event object in list of event objects to test.
 	* Last index can be skipped, because it must be a Delete event.
 	*/
 	for(int i=start;i<end;i++) {
-		SweepLineEvent *ev=(*events)[i];
-		if (ev->isInsert()) {
-			MonotoneChain *mc1=(MonotoneChain*) ev->getObject();
-			if (!doMutualOnly || (mc0->getGeomIndex()!=mc1->getGeomIndex())) {
+		SweepLineEvent *ev1=(*events)[i];
+		if (ev1->isInsert()) {
+			MonotoneChain *mc1=(MonotoneChain*) ev1->getObject();
+			// don't compare edges in same group
+			// null group indicates that edges should be compared
+			if (ev0->edgeSet==NULL || (ev0->edgeSet!=ev1->edgeSet)) {
 				mc0->computeIntersections(mc1,si);
 				nOverlaps++;
 			}

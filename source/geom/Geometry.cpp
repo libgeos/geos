@@ -11,6 +11,8 @@
 
 
 CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();
+GeometryComponentFilter* Geometry::geometryChangedFilter=new GeometryComponentFilter();
+
 
 Geometry::Geometry() {
 	SRID=0;
@@ -73,14 +75,14 @@ bool Geometry::hasNullElements(vector<Geometry *>* lrs) {
 	return false;
 }
 	
-void Geometry::reversePointOrder(CoordinateList* coordinates) {
-	int length=coordinates->getSize();
-	vector<Coordinate> v(length);
-	for (int i=0; i<length; i++) {
-		v[i]=coordinates->getAt(length - 1 - i);
-	}
-	coordinates->setPoints(v);
-}
+//void Geometry::reversePointOrder(CoordinateList* coordinates) {
+//	int length=coordinates->getSize();
+//	vector<Coordinate> v(length);
+//	for (int i=0; i<length; i++) {
+//		v[i]=coordinates->getAt(length - 1 - i);
+//	}
+//	coordinates->setPoints(v);
+//}
 	
 //Coordinate& Geometry::minCoordinate(CoordinateList* coordinates){
 //	vector<Coordinate> v(*(coordinates->toVector()));
@@ -88,27 +90,117 @@ void Geometry::reversePointOrder(CoordinateList* coordinates) {
 //	return v.front();
 //}
 
-void Geometry::scroll(CoordinateList* coordinates,Coordinate* firstCoordinate) {
-	int ind=indexOf(firstCoordinate,coordinates);
-	Assert::isTrue(ind > -1);
-	int length=coordinates->getSize();
-	vector<Coordinate> v(length);
-	for (int i=ind; i<length; i++) {
-		v[i-ind]=coordinates->getAt(i);
-	}
-	for (int j=0; j<ind; j++) {
-		v[length-ind+j]=coordinates->getAt(j);
-	}
-	coordinates->setPoints(v);
+//void Geometry::scroll(CoordinateList* coordinates,Coordinate* firstCoordinate) {
+//	int ind=indexOf(firstCoordinate,coordinates);
+//	Assert::isTrue(ind > -1);
+//	int length=coordinates->getSize();
+//	vector<Coordinate> v(length);
+//	for (int i=ind; i<length; i++) {
+//		v[i-ind]=coordinates->getAt(i);
+//	}
+//	for (int j=0; j<ind; j++) {
+//		v[length-ind+j]=coordinates->getAt(j);
+//	}
+//	coordinates->setPoints(v);
+//}
+//
+//int Geometry::indexOf(Coordinate* coordinate,CoordinateList* coordinates) {
+//	for (int i=0; i<coordinates->getSize(); i++) {
+//		if ((*coordinate)==coordinates->getAt(i)) {
+//			return i;
+//		}
+//	}
+//	return -1;
+//}
+
+/**
+* Tests whether the distance from this <code>Geometry</code>
+* to another is less than or equal to a specified value.
+*
+* @param geom the Geometry to check the distance to
+* @param distance the distance value to compare
+* @return <code>true</code> if the geometries are less than <code>distance</code> apart.
+*/
+bool Geometry::isWithinDistance(Geometry *geom,double cDistance) {
+	double envDist=getEnvelopeInternal()->distance(geom->getEnvelopeInternal());
+	if (envDist>cDistance)
+		return false;
+	// NOTE: this could be implemented more efficiently
+	double geomDist=distance(geom);
+	if (geomDist>cDistance)
+		return false;
+	return true;
 }
 
-int Geometry::indexOf(Coordinate* coordinate,CoordinateList* coordinates) {
-	for (int i=0; i<coordinates->getSize(); i++) {
-		if ((*coordinate)==coordinates->getAt(i)) {
-			return i;
-		}
+/**
+* Computes the centroid of this <code>Geometry</code>.
+* The centroid
+* is equal to the centroid of the set of component Geometrys of highest
+* dimension (since the lower-dimension geometries contribute zero
+* "weight" to the centroid)
+*
+* @return a {@link Point} which is the centroid of this Geometry
+*/
+Point* Geometry::getCentroid() {
+	Coordinate& centPt;
+	int dim=getDimension();
+	if(dim==0) {
+		CentroidPoint *cent=new CentroidPoint();
+		cent->add(this);
+		centPt=cent->getCentroid();
+	} else if (dim==1) {
+		CentroidLine *cent=new CentroidLine();
+		cent->add(this);
+		centPt=cent->getCentroid();
+	} else {
+		CentroidArea *cent=new CentroidArea();
+		cent->add(this);
+		centPt=cent->getCentroid();
 	}
-	return -1;
+	return GeometryFactory::createPointFromInternalCoord(centPt,this);
+}
+
+/**
+* Computes an interior point of this <code>Geometry</code>.
+* An interior point is guaranteed to lie in the interior of the Geometry,
+* if it possible to calculate such a point exactly. Otherwise,
+* the point may lie on the boundary of the geometry.
+*
+* @return a {@link Point} which is in the interior of this Geometry
+*/
+Point* Geometry::getInteriorPoint() {
+	Coordinate& interiorPt;
+	int dim=getDimension();
+	if (dim==0) {
+		InteriorPointPoint* intPt=new InteriorPointPoint(this);
+		interiorPt=intPt->getInteriorPoint();
+	} else if (dim==1) {
+		InteriorPointLine* intPt=new InteriorPointLine(this);
+		interiorPt=intPt->getInteriorPoint();
+	} else {
+		InteriorPointArea* intPt=new InteriorPointArea(this);
+		interiorPt=intPt->getInteriorPoint();
+	}
+	return GeometryFactory::createPointFromInternalCoord(interiorPt,this);
+}
+
+/**
+* Notifies this Geometry that its Coordinates have been changed by an external
+* party (using a CoordinateFilter, for example). The Geometry will flush
+* and/or update any information it has cached (such as its {@link Envelope} ).
+*/
+void Geometry::geometryChanged() {
+	apply(geometryChangedFilter);
+}
+
+/**
+* Notifies this Geometry that its Coordinates have been changed by an external
+* party. When #geometryChanged is called, this method will be called for
+* this Geometry and its component Geometries.
+* @see #apply(GeometryComponentFilter)
+*/
+void Geometry::geometryChangedAction() {
+	envelope=NULL;
 }
 
 int Geometry::getSRID() {return SRID;}
@@ -172,8 +264,6 @@ bool Geometry::equals(Geometry *g){
 IntersectionMatrix* Geometry::relate(Geometry *g) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(g);
-	checkEqualSRID(g);
-	checkEqualPrecisionModel(g);
 	return RelateOp::relate(this,g);
 }
 
@@ -193,6 +283,27 @@ Geometry* Geometry::buffer(double distance) {
 	return NULL;
 }
 
+/**
+*  Returns a buffer region around this <code>Geometry</code> having the given
+*  width and with a specified number of segments used to approximate curves.
+* The buffer of a Geometry is the Minkowski sum of the Geometry with
+* a disc of radius <code>distance</code>.  Curves in the buffer polygon are
+* approximated with line segments.  This method allows specifying the
+* accuracy of that approximation.
+*
+*@param  distance  the width of the buffer, interpreted according to the
+*      <code>PrecisionModel</code> of the <code>Geometry</code>
+*@param quadrantSegments the number of segments to use to approximate a quadrant of a circle
+*@return           all points whose distance from this <code>Geometry</code>
+*      are less than or equal to <code>distance</code>
+*/
+//!!! External Dependency
+Geometry* Geometry::buffer(double distance,int quadrantSegments) {
+	//!!! External Dependency
+	return BufferOp.bufferOp(this, distance, quadrantSegments);
+	return NULL;
+}
+
 //!!! External Dependency
 Geometry* Geometry::convexHull() {
 //!!! External Dependency
@@ -203,32 +314,24 @@ Geometry* Geometry::convexHull() {
 Geometry* Geometry::intersection(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	checkEqualSRID(other);
-	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::INTERSECTION);
 }
 
 Geometry* Geometry::Union(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	checkEqualSRID(other);
-	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::UNION);
 }
 
 Geometry* Geometry::difference(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	checkEqualSRID(other);
-	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::DIFFERENCE);
 }
 
 Geometry* Geometry::symDifference(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	checkEqualSRID(other);
-	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::SYMDIFFERENCE);
 }
 
@@ -260,17 +363,17 @@ void Geometry::checkNotGeometryCollection(Geometry *g){
 		throw "IllegalArgumentException: This method does not support GeometryCollection arguments\n";
 }
 
-void Geometry::checkEqualSRID(Geometry *other) {
-	if (SRID!=other->getSRID()) {
-		throw "IllegalArgumentException: Expected SRIDs to be equal, but they were not\n";
-	}
-}
-
-void Geometry::checkEqualPrecisionModel(Geometry *other) {
-	if (!((*precisionModel)==(*(other->getPrecisionModel())))) {
-		throw "IllegalArgumentException: Expected precision models to be equal, but they were not\n";
-	}
-}
+//void Geometry::checkEqualSRID(Geometry *other) {
+//	if (SRID!=other->getSRID()) {
+//		throw "IllegalArgumentException: Expected SRIDs to be equal, but they were not\n";
+//	}
+//}
+//
+//void Geometry::checkEqualPrecisionModel(Geometry *other) {
+//	if (!((*precisionModel)==(*(other->getPrecisionModel())))) {
+//		throw "IllegalArgumentException: Expected precision models to be equal, but they were not\n";
+//	}
+//}
 
 int Geometry::getClassSortIndex() {
     const type_info &t=typeid(*this);
@@ -386,4 +489,9 @@ bool greaterThen(Geometry *first, Geometry *second) {
 		return true;
 	else
 		return false;
+}
+
+bool Geometry::equal(Coordinate& a,Coordinate& b,double tolerance) {
+	if (tolerance==0) {return a==b;}
+	return a.distance(b)<=tolerance;
 }

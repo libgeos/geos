@@ -9,14 +9,28 @@ PointLocator::PointLocator() {
 PointLocator::~PointLocator() {
 	delete cga;
 }
+
 /**
-* locate determines the topological relationship (location) of a single point
+* Convenience method to test a point for intersection with
+* a Geometry
+* @param p the coordinate to test
+* @param geom the Geometry to test
+* @return <code>true</code> if the point is in the interior or boundary of the Geometry
+*/
+bool PointLocator::intersects(Coordinate& p,Geometry *geom) {
+	return locate(p,geom)!=Location::EXTERIOR;
+}
+
+
+/**
+* Computes the topological relationship ({@link Location}) of a single point
 * to a Geometry.
 * It handles both single-element
-* and multi-element Geometries.  The algorithm for multi-part Geometries
-* is more complex, since it has to take into account the boundaryDetermination rule.
+* and multi-element Geometries.
+* The algorithm for multi-part Geometries
+* takes into account the boundaryDetermination rule.
 *
-* @return the location of the point relative to the input Geometry
+* @return the {@link Location} of the point relative to the input Geometry
 */
 int PointLocator::locate(Coordinate& p,Geometry *geom) {
 	if (geom->isEmpty()) return Location::EXTERIOR;

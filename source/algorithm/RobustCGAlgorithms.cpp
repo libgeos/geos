@@ -12,13 +12,23 @@ int RobustCGAlgorithms::orientationIndex(Coordinate& p1,Coordinate& p2,Coordinat
 }
 
 RobustCGAlgorithms::RobustCGAlgorithms() {
-	lineIntersector=new RobustLineIntersector();
+//	lineIntersector=new RobustLineIntersector();
 }
 
 RobustCGAlgorithms::~RobustCGAlgorithms() {
-	delete lineIntersector;
+//	delete lineIntersector;
 }
 
+/**
+* Computes whether a ring defined by an array of {@link Coordinates} is
+* oriented counter-clockwise.
+* <p>
+* This algorithm is valid only for coordinate lists which do not contain
+* repeated points.
+*
+* @param ring an array of coordinates forming a ring
+* @return <code>true</code> if the ring is oriented counter-clockwise.
+*/
 bool RobustCGAlgorithms::isCCW(CoordinateList* ring) {
 	Coordinate hip;
 	Coordinate p;
@@ -27,6 +37,8 @@ bool RobustCGAlgorithms::isCCW(CoordinateList* ring) {
 	int hii;
 	int i;
 	int nPts=ring->getSize();
+    // check that this is a valid ring - if not, simply return a dummy value
+    if (nPts<4) return false;
 	// algorithm to check if a Ring is stored in CCW order
 	// find highest point
 	hip=ring->getAt(0);
@@ -120,6 +132,7 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring) {
 }
 
 bool RobustCGAlgorithms::isOnLine(Coordinate& p,CoordinateList* pt) {
+	LineIntersector* lineIntersector=new RobustLineIntersector();
 	for(int i=1;i<pt->getSize();i++) {
 		Coordinate& p0=pt->getAt(i-1);
 		Coordinate& p1=pt->getAt(i);

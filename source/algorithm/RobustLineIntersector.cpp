@@ -5,57 +5,38 @@ RobustLineIntersector::RobustLineIntersector(){}
 
 void RobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2) {
 	isProperVar=false;
-	if ((RobustCGAlgorithms::orientationIndex(p1,p2,p)==0)
-		&& (RobustCGAlgorithms::orientationIndex(p2,p1,p)==0)) {
-		if (between(p1,p2,p)) {
+
+	// do between check first, since it is faster than the orientation test
+	if(Envelope::intersects(p1,p2,p)) {
+		if ((RobustCGAlgorithms::orientationIndex(p1,p2,p)==0)&&
+			(RobustCGAlgorithms::orientationIndex(p2,p1,p)==0)) {
 			isProperVar=true;
 			if ((p==p1) || (p==p2)) {
 				isProperVar=false;
 			}
 			result=DO_INTERSECT;
 			return;
-		} else {
-			result=DONT_INTERSECT;
-			return;
 		}
-	} else {
-		result=DONT_INTERSECT;
 	}
+	result = DONT_INTERSECT;
 }
 
 int RobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2){
 	isProperVar=false;
 
-	// first try a fast test to see if the envelopes of the lines overlap
-	double minq=min(q1.x,q2.x);
-	double maxq=max(q1.x,q2.x);
-	double minp=min(p1.x,p2.x);
-	double maxp=max(p1.x,p2.x);
-
-	if(minp>maxq)
-		return DONT_INTERSECT;
-	if(maxp<minq)
+    // first try a fast test to see if the envelopes of the lines intersect
+	if (!Envelope::intersects(p1,p2,q1,q2))
 		return DONT_INTERSECT;
 
-	minq=min(q1.y,q2.y);
-	maxq=max(q1.y,q2.y);
-	minp=min(p1.y,p2.y);
-	maxp=max(p1.y,p2.y);
-
-	if(minp>maxq)
-		return DONT_INTERSECT;
-	if(maxp<minq)
-		return DONT_INTERSECT;
-
-	// for each endpoint, compute which side of the other segment it lies
-	// if both endpoints lie on the same side of the other segment,
-	// the segments do not intersect
+    // for each endpoint, compute which side of the other segment it lies
+    // if both endpoints lie on the same side of the other segment,
+    // the segments do not intersect
 	int Pq1=RobustCGAlgorithms::orientationIndex(p1,p2,q1);
 	int Pq2=RobustCGAlgorithms::orientationIndex(p1,p2,q2);
 
-	if ((Pq1>0 && Pq2>0)||(Pq1<0 && Pq2<0)) {
-		return DONT_INTERSECT;
-	}
+    if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0)) {
+      return DONT_INTERSECT;
+    }
 
 	int Qp1=RobustCGAlgorithms::orientationIndex(q1,q2,p1);
 	int Qp2=RobustCGAlgorithms::orientationIndex(q1,q2,p2);
@@ -63,21 +44,6 @@ int RobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordi
 	if ((Qp1>0 && Qp2>0)||(Qp1<0 && Qp2<0)) {
 		return DONT_INTERSECT;
 	}
-
-	/* OLD
-	if (Pq1 > 0 && Pq2 > 0) {
-	return DONT_INTERSECT;
-	}
-	if (Qp1 > 0 && Qp2 > 0) {
-	return DONT_INTERSECT;
-	}
-	if (Pq1 < 0 && Pq2 < 0) {
-	return DONT_INTERSECT;
-	}
-	if (Qp1 < 0 && Qp2 < 0) {
-	return DONT_INTERSECT;
-	}
-	//*/
 
 	bool collinear=Pq1==0 && Pq2==0 && Qp1==0 && Qp2==0;
 	if (collinear) {
@@ -112,20 +78,20 @@ int RobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordi
 	return DO_INTERSECT;
 }
 
-bool RobustLineIntersector::between(Coordinate& p1,Coordinate& p2,Coordinate& q) {
-	if (((q.x>=min(p1.x,p2.x)) && (q.x<=max(p1.x,p2.x))) &&
-		((q.y>=min(p1.y,p2.y)) && (q.y<=max(p1.y,p2.y)))) {
-			return true;
-	} else {
-		return false;
-	}
-}
+//bool RobustLineIntersector::intersectsEnvelope(Coordinate& p1,Coordinate& p2,Coordinate& q) {
+//	if (((q.x>=min(p1.x,p2.x)) && (q.x<=max(p1.x,p2.x))) &&
+//		((q.y>=min(p1.y,p2.y)) && (q.y<=max(p1.y,p2.y)))) {
+//			return true;
+//	} else {
+//		return false;
+//	}
+//}
 
 int RobustLineIntersector::computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
-	bool p1q1p2=between(p1,p2,q1);
-	bool p1q2p2=between(p1,p2,q2);
-	bool q1p1q2=between(q1,q2,p1);
-	bool q1p2q2=between(q1,q2,p2);
+	bool p1q1p2=Envelope::intersects(p1,p2,q1);
+	bool p1q2p2=Envelope::intersects(p1,p2,q2);
+	bool q1p1q2=Envelope::intersects(q1,q2,p1);
+	bool q1p2q2=Envelope::intersects(q1,q2,p2);
 
 	if (p1q1p2 && p1q2p2) {
 		intPt[0].setCoordinate(q1);
@@ -191,7 +157,7 @@ Coordinate& RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Co
 	intPt.x+=normPt->x;
 	intPt.y+=normPt->y;
 	if (precisionModel!=NULL) {
-		precisionModel->makePrecise(intPt.x);
+		precisionModel->makePrecise(&intPt);
 	}
 	delete n1;
 	delete n2;

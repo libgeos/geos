@@ -15,7 +15,7 @@ void EdgeList::insert(Edge *e) {
  *          -1 otherwise
  */
 int EdgeList::findEdgeIndex(Edge *e) {
-	for (int i=0; i<this->size();i++) {
+	for (int i=0; i<(int)this->size();i++) {
 		if ( (*this)[i]->equals(e) )
             return i;
 	}

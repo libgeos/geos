@@ -538,7 +538,7 @@ public:
 	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,LineIntersector *li,bool includeProper);
 	vector<Edge*> *getEdges();
 	bool hasTooFewPoints();
-	Coordinate* getInvalidPoints();
+	Coordinate* getInvalidPoint();
 private:
 	Geometry *parentGeom;
 	// the precision model of the Geometry represented by this graph

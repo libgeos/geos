@@ -108,7 +108,7 @@ bool GeometryCollection::equalsExact(Geometry *other, double tolerance) {
 		if (typeid(*((*(otherCollection->geometries))[i]))!=typeid(Geometry)) {
 			return false;
 		}
-		if (!((*geometries)[i]->equalsExact((*(otherCollection->geometries))[i]))) {
+		if (!((*geometries)[i]->equalsExact((*(otherCollection->geometries))[i],tolerance))) {
 			return false;
 		}
 	}
@@ -174,7 +174,7 @@ double GeometryCollection::getArea() {
 double GeometryCollection::getLength() {
 	double sum=0.0;
 	for(unsigned int i=0;i<geometries->size();i++) {
-        sum+=((LineString*)(*geometries)[i])->getLength();
+        sum+=(*geometries)[i]->getLength();
 	}
 	return sum;
 }
@@ -188,4 +188,31 @@ void GeometryCollection::apply(GeometryComponentFilter *filter) {
 
 GeometryCollection::~GeometryCollection(void){
 	delete geometries;
+}
+
+/**
+* Computes the centroid of a heterogenous GeometryCollection.
+* The centroid
+* is equal to the centroid of the set of component Geometrys of highest
+* dimension (since the lower-dimension geometries contribute zero
+* "weight" to the centroid)
+* @return
+*/
+Point* GeometryCollection::getCentroid() {
+	Coordinate& centPt;
+	int dim=getDimension();
+	if(dim==0) {
+		CentroidPoint *cent=new CentroidPoint();
+		cent->add(this);
+		centPt=cent->getCentroid();
+	} else if (dim==1) {
+		CentroidLine *cent=new CentroidLine();
+		cent->add(this);
+		centPt=cent->getCentroid();
+	} else {
+		CentroidArea *cent=new CentroidArea();
+		cent->add(this);
+		centPt=cent->getCentroid();
+	}
+	return GeometryFactory::createPointFromInternalCoord(centPt,this);
 }

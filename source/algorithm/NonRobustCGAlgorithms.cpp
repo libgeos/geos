@@ -63,6 +63,10 @@ bool NonRobustCGAlgorithms::isCCW(CoordinateList* ring) {
 	Coordinate hip,p,prev,next;
 	int hii,i;
 	int nPts=ring->getSize();
+
+    // check that this is a valid ring - if not, simply return a dummy value
+    if (nPts<4) return false;
+
 	// algorithm to check if a Ring is stored in CCW order
 	// find highest point
 	hip.setCoordinate(ring->getAt(0));

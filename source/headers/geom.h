@@ -11,18 +11,48 @@
 using namespace std;
 
 class Coordinate;
+
+/**
+*  Converts a coordinate to and from a "precise" coordinate; that is, one whose
+*  precision is known exactly. In other words, specifies the grid of allowable
+*  points for all <code>Geometry</code>s. <P>
+*
+*  Vertices are assumed to be precise in JTS. That is, the coordinates of
+*  vertices are assumed to be rounded to the defined precision model. Input
+*  routines will be responsible for rounding coordinates to the precision model
+*  before creating JTS structures. Non-constructive internal operations will
+*  assume that coordinates are rounded to the precision model. <P>
+*
+*  JTS methods do not handle inputs with different precision models. <P>
+*
+*  The Precision Model is be specified by a scale factor.
+*  The scale factor specifies the grid which numbers are rounded to.
+*  World coordinates are mapped to JTS coordinates according to the following
+*  equations:
+*  <UL>
+*    <LI> jtsPt.x = round( (inputPt.x * scale ) / scale
+*    <LI> jtsPt.y = round( (inputPt.y * scale ) / scale
+*  </UL>
+*  Coordinates are be represented as double-precision values.
+* Since Java uses the IEEE-394 floating point standard, this
+
+*  provides 53 bits of precision. (Thus the maximum precisely representable
+*  integer is 9,007,199,254,740,992).
+*
+*@version 1.3
+*/
 class PrecisionModel {
 public:
 	enum {
 		FIXED=1,
 		FLOATING
 	};
-//	static const int FIXED=1;
-//	static const int FLOATING=2;
 	static const double maximumPreciseValue;
-	static double makePrecise(double val);
+	double makePrecise(double val);
+	void makePrecise(Coordinate *coord);
 	PrecisionModel(void);
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
+	PrecisionModel(double newScale);
 	PrecisionModel(const PrecisionModel &pm);
 	virtual ~PrecisionModel(void);
 	bool isFloating();
@@ -34,8 +64,9 @@ public:
 	Coordinate* toExternal(Coordinate& internal);
 	void toExternal(Coordinate& internal, Coordinate* external);
 	string toString();
-	void round(Coordinate& p0,Coordinate& p1);
+	int compareTo(void* o);
 private:
+	void setScale(double newScale);
 	int modelType;
 	double scale;
 	double offsetX;
@@ -294,7 +325,8 @@ public:
 	*
 	*@param  geom  a <code>Geometry</code> to which the filter is applied.
 	*/
-	virtual void filter(Geometry *geom)=0;
+//	virtual void filter(Geometry *geom)=0;
+	virtual void filter(Geometry *geom);
 };
 
 
@@ -416,6 +448,7 @@ public:
 };
 
 class CGAlgorithms;
+class Point;
 class Geometry: public SFSGeometry {
 public:
 	Geometry(void);
@@ -449,6 +482,7 @@ public:
 	virtual string toString();
 	virtual string toText();
 	virtual Geometry* buffer(double distance);
+	virtual Geometry* buffer(double distance,int quadrantSegments);
 	virtual Geometry* convexHull();
 	virtual Geometry* intersection(Geometry *other);
 	virtual Geometry* Union(Geometry *other);
@@ -465,6 +499,11 @@ public:
 	virtual double getArea();
 	virtual double getLength();
 	virtual ~Geometry(void);
+	virtual bool isWithinDistance(Geometry *geom,double cDistance);
+	virtual Point* getCentroid();
+	virtual Point* getInteriorPoint();
+	virtual void geometryChanged();
+	void geometryChangedAction();
 protected:
 	PrecisionModel* precisionModel;
 	int SRID;
@@ -473,14 +512,14 @@ protected:
 	static bool hasNonEmptyElements(vector<Geometry *>* geometries);
 	static bool hasNullElements(CoordinateList* list);
 	static bool hasNullElements(vector<Geometry *>* lrs);
-	static void reversePointOrder(CoordinateList* coordinates);
+//	static void reversePointOrder(CoordinateList* coordinates);
 //	static Coordinate& minCoordinate(CoordinateList* coordinates);
-	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
-	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
+//	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
+//	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
 	virtual bool isEquivalentClass(Geometry *other);
 	virtual void checkNotGeometryCollection(Geometry *g);
-	virtual void checkEqualSRID(Geometry *other);
-	virtual void checkEqualPrecisionModel(Geometry *other);
+	//virtual void checkEqualSRID(Geometry *other);
+	//virtual void checkEqualPrecisionModel(Geometry *other);
 	virtual Envelope* computeEnvelopeInternal()=0; //Abstract
 	virtual int compareToSameClass(Geometry *geom)=0; //Abstract
 	int compare(vector<Coordinate> a, vector<Coordinate> b);
@@ -489,7 +528,7 @@ protected:
 private:
 	vector<string> sortedClasses;
 	virtual int getClassSortIndex();
-
+	static GeometryComponentFilter* geometryChangedFilter;
 };
 
 /**
@@ -666,6 +705,7 @@ public:
 	virtual Coordinate* getCoordinate();
 	virtual double getArea();
 	virtual double getLength();
+	virtual Point* getCentroid();
 protected:
 	vector<Geometry *>* geometries;
 	virtual Envelope* computeEnvelopeInternal();

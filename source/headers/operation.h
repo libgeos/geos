@@ -16,17 +16,17 @@ using namespace std;
 
 class GeometryGraphOperation {
 public:
-	static CGAlgorithms *cga;
-	static LineIntersector *li;
 	GeometryGraphOperation(Geometry *g0,Geometry *g1);
 	GeometryGraphOperation(Geometry *g0);
 	Geometry* getArgGeometry(int i);
 protected:
+	static CGAlgorithms *cga;
+	static LineIntersector *li;
+	PrecisionModel* resultPrecisionModel;
 	/**
 	* The operation args into an array so they can be accessed by index
 	*/
 	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
-	bool makePrecise;
 	void setComputationPrecision(PrecisionModel* pm);
 };
 

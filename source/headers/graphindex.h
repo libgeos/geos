@@ -49,9 +49,14 @@ private:
 class EdgeSetIntersector{
 public:
 	/**
-	* Computes all self-intersections between edges in a set of edges
+	* Computes all self-intersections between edges in a set of edges,
+	* allowing client to choose whether self-intersections are computed.
+	*
+	* @param edges a list of edges to test for intersections
+	* @param si the SegmentIntersector to use
+	* @param testAllSegments true if self-intersections are to be tested as well
 	*/
-	virtual void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si)=0;
+	virtual void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments)=0;
 	/**
 	* Computes all mutual intersections between two sets of edges
 	*/
@@ -79,7 +84,7 @@ public:
 		INSERT=1,
 		DELETE
 	};
-	SweepLineEvent(int newGeomIndex,double x,SweepLineEvent *newInsertEvent,void *newObj);
+	SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,void *newObj);
 	bool isInsert();
 	bool isDelete();
 	SweepLineEvent* getInsertEvent();
@@ -89,10 +94,10 @@ public:
 	int compareTo(void *o);
 	int compareTo(SweepLineEvent *sle);
 	string print();
+	void* edgeSet;    // used for red-blue intersection detection
 protected:
 	void* obj;
 private:
-	int geomIndex;    // used for red-blue intersection detection
 	double xValue;
 	int eventType;
 	SweepLineEvent *insertEvent; // null if this is an INSERT event
@@ -135,31 +140,38 @@ private:
 
 class MonotoneChain{
 public:
-	MonotoneChain(MonotoneChainEdge *newMce,int newChainIndex,int newGeomIndex);
+	MonotoneChain(MonotoneChainEdge *newMce,int newChainIndex);
 	void computeIntersections(MonotoneChain *mc,SegmentIntersector *si);
-	int getGeomIndex();
 protected:
 	MonotoneChainEdge *mce;
 	int chainIndex;
-	int geomIndex;
 };
 
+/**
+ * Finds all intersections in one or two sets of edges,
+ * using an x-axis sweepline algorithm in conjunction with Monotone Chains.
+ * While still O(n^2) in the worst case, this algorithm
+ * drastically improves the average-case time.
+ * The use of MonotoneChains as the items in the index
+ * seems to offer an improvement in performance over a sweep-line alone.
+ */
 class SimpleMCSweepLineIntersector: public EdgeSetIntersector {
 public:
 	SimpleMCSweepLineIntersector();
 	~SimpleMCSweepLineIntersector();
-	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si);
+	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments);
 	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 protected:
 	vector<SweepLineEvent*>* events;
 	// statistics information
 	int nOverlaps;
 private:
-	void add(vector<Edge*> *edges,int geomIndex);
-	void add(Edge *edge,int geomIndex);
+	void add(vector<Edge*> *edges);
+	void add(vector<Edge*> *edges,void* edgeSet);
+	void add(Edge *edge,void* edgeSet);
 	void prepareEvents();
-	void computeIntersections(SegmentIntersector *si,bool doMutualOnly);
-	void processOverlaps(int start,int end,MonotoneChain *mc0,SegmentIntersector *si,bool doMutualOnly);
+	void computeIntersections(SegmentIntersector *si);
+	void processOverlaps(int start,int end,SweepLineEvent *ev0,SegmentIntersector *si);
 };
 
 bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second);
