@@ -411,6 +411,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 		return p2.z;
 	}
 
+	//double zgap = fabs(p2.z - p1.z);
 	double zgap = p2.z - p1.z;
 	if ( ! zgap )
 	{
@@ -427,7 +428,8 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	double pdist = (xoff*xoff+yoff*yoff);
 	double fract = sqrt(pdist/seglen);
 	double zoff = zgap*fract;
-	double interpolated = p1.z < p2.z ? p1.z+zoff : p1.z-zoff;
+	//double interpolated = p1.z < p2.z ? p1.z+zoff : p1.z-zoff;
+	double interpolated = p1.z+zoff;
 #if DEBUG
 	cerr<<" zgap:"<<zgap<<" seglen:"<<seglen<<" pdist:"<<pdist
 		<<" fract:"<<fract<<" z:"<<interpolated<<endl;
@@ -441,6 +443,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/01/18 17:22:03  strk
+ * reverted previous change, sign was actually stored in zgap
+ *
  * Revision 1.20  2005/01/14 08:04:38  strk
  * Fixed Z interpolation to use the correct sign
  *
