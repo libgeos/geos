@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/03 20:49:20  strk
+ * Some more leaks fixed
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -51,3 +54,4 @@ void LinearComponentExtracter::filter_ro(const Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) comps->push_back((Geometry*)geom);
 }
 }
+

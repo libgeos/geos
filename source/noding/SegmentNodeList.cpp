@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/03 20:49:20  strk
+ * Some more leaks fixed
+ *
  * Revision 1.1  2004/03/26 07:48:30  ybychkov
  * "noding" package ported (JTS 1.4)
  *
@@ -29,6 +32,8 @@ SegmentNodeList::SegmentNodeList(SegmentString *newEdge) {
 }
 
 SegmentNodeList::~SegmentNodeList() {
+	set<SegmentNode *, SegmentNodeLT>::iterator i;
+	for(i=nodes->begin(); i != nodes->end(); i++) delete *i;
 	delete nodes;
 }
 
@@ -94,12 +99,15 @@ void SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*> *splitEd
 	if (!(ptn==edgePts->getAt(edgePts->getSize()-1)))
 		throw new GEOSException("bad split edge end point at " + ptn.toString());
 }
+
 /**
 * Create a new "split edge" with the section of points between
 * (and including) the two intersections.
 * The label for the new edge is the same as the label for the parent edge.
 */
-SegmentString* SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1){
+SegmentString*
+SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
+{
 	//Debug.print("\ncreateSplitEdge"); Debug.print(ei0); Debug.print(ei1);
 	int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
 	Coordinate lastSegStartPt=edge->getCoordinate(ei1->segmentIndex);
@@ -111,15 +119,18 @@ SegmentString* SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *e
 	if (! useIntPt1) {
 		npts--;
 	}
-	CoordinateList *pts =CoordinateListFactory::internalFactory->createCoordinateList(npts);
+	CoordinateList *pts = CoordinateListFactory::internalFactory->createCoordinateList(npts);
 	int ipt = 0;
-	pts->setAt(*(new Coordinate(*(ei0->coord))),ipt++);
+	pts->setAt(Coordinate(*(ei0->coord)),ipt++);
 	for (int i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
-		pts->setAt((Coordinate&)edge->getCoordinate(i),ipt++);
+		pts->setAt(edge->getCoordinate(i),ipt++);
 	}
 	if (useIntPt1) 	pts->setAt(*(ei1->coord),ipt++);
-	return new SegmentString(pts,edge->getContext());
+	SegmentString *ret = new SegmentString(pts,edge->getContext());
+	//delete pts;
+	return ret;
 }
+
 string SegmentNodeList::print(){
 	string out="Intersections:";
 	set<SegmentNode*,SegmentNodeLT>::iterator it=nodes->begin();
