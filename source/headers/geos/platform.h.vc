@@ -1,4 +1,24 @@
-/* Manually created platform.h for use with x86 Microsoft Visual C++ */
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2004 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * Manually created platform.h for use with x86 Microsoft Visual C++
+ * 
+ * $Log$
+ * Revision 1.2  2004/12/03 16:26:19  frank
+ * added headers
+ *
+ */
 
 #ifndef GEOS_PLATFORM_H
 #define GEOS_PLATFORM_H
