@@ -18,7 +18,7 @@ private:
 
 class PointInRing{
 public:
-//	PointInRing();
+	PointInRing();
 	virtual bool isInside(Coordinate pt)=0;
 };
 
