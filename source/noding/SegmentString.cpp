@@ -143,7 +143,9 @@ SegmentString::addIntersection(Coordinate& intPt,
 	//Debug.println("edge intpt: " + intPt + " dist: " + dist);
 	// normalize the intersection point location
 	int nextSegIndex = normalizedSegmentIndex + 1;
-	if (nextSegIndex < pts->getSize()) {
+	int npts=pts->getSize();
+	if (nextSegIndex < npts)
+	{
 		const Coordinate &nextPt = pts->getAt(nextSegIndex);
 		//Debug.println("next pt: " + nextPt);
 
@@ -169,6 +171,9 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/02/22 15:49:20  strk
+ * Reduced calls to DefaultCoordinateSequence->getSize().
+ *
  * Revision 1.13  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
