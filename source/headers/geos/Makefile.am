@@ -30,5 +30,6 @@ geos_HEADERS = \
 	spatialIndex.h \
 	unload.h \
 	util.h \
-	profiler.h 
+	profiler.h \
+	timeval.h
 
