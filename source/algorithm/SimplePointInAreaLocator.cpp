@@ -37,15 +37,23 @@ bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate& p,Polygon *pol
 	auto_ptr<CGAlgorithms> cga(new RobustCGAlgorithms());
 	if (poly->isEmpty()) return false;
 	LineString *shell=poly->getExteriorRing();
-	if (!cga->isPointInRing(p,shell->getCoordinates())) {
+	CoordinateList *cl;
+	cl = shell->getCoordinates();
+	if (!cga->isPointInRing(p,cl)) {
+		delete cl;
 		return false;
 	}
+	delete cl;
+
 	// now test if the point lies in or on the holes
 	for(int i=0;i<poly->getNumInteriorRing();i++) {
 		LinearRing *hole=(LinearRing*)poly->getInteriorRingN(i);
-		if (cga->isPointInRing(p,hole->getCoordinates())) {
+		cl = hole->getCoordinates();
+		if (cga->isPointInRing(p,cl)) {
+			delete cl;
 			return false;
 		}
+		delete cl;
 	}
 	return true;
 }

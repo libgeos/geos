@@ -20,7 +20,7 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CG
 
 EdgeRing::~EdgeRing(){
 	delete edges;
-//	delete pts;
+	delete pts;
 	delete label;
 	delete ring;
 //	delete shell;
@@ -80,7 +80,9 @@ Polygon* EdgeRing::toPolygon(GeometryFactory* geometryFactory){
 void EdgeRing::computeRing() {
 	if (ring!=NULL) return;   // don't compute more than once
 	ring=geometryFactory->createLinearRing(pts);
-	isHoleVar=cga->isCCW(ring->getCoordinates());
+	CoordinateList *cl = ring->getCoordinates();
+	isHoleVar=cga->isCCW(cl);
+	delete cl;
 }
 
   /**

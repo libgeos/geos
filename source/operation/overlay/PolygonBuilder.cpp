@@ -232,9 +232,11 @@ EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRin
 			delete lr;
 		}
 		bool isContained=false;
+		CoordinateList *rcl = tryRing->getCoordinates();
 		if (tryEnv->contains(testEnv)
-			&& cga->isPointInRing(testPt,tryRing->getCoordinates()))
+			&& cga->isPointInRing(testPt,rcl))
 				isContained=true;
+		delete rcl;
 		// check if this new containing ring is smaller than the current minimum ring
 		if (isContained) {
 			if (minShell==NULL

@@ -68,12 +68,14 @@ CoordinateList* Polygon::getCoordinates() {
 		k++;
 		coordinates->setAt(shellCoordinates->getAt(x),k);
 	}
+	delete shellCoordinates;
 	for (unsigned int i = 0; i < holes->size(); i++) {
 		CoordinateList* childCoordinates=((LinearRing *)(*holes)[i])->getCoordinates();
 		for (int j = 0; j < childCoordinates->getSize(); j++) {
 			k++;
 			coordinates->setAt(childCoordinates->getAt(j),k);
 		}
+		delete childCoordinates;
 	}
 	return coordinates;
 }

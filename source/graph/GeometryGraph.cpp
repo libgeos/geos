@@ -185,7 +185,8 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 	if (coord->getSize()<4) {
 		hasTooFewPointsVar=true;
 		// should make a copy of this, and drop coord -- strk;
-		invalidPoint=&(coord->getAt(0));
+		invalidPoint=new Coordinate(coord->getAt(0));
+		delete coord;
 		return;
 	}
 	int left=cwLeft;
@@ -194,6 +195,12 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 		left=cwRight;
 		right=cwLeft;
 	}
+
+	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
+	(*lineEdgeMap)[lr]=e;
+	insertEdge(e);
+	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
+#if 0
 	CoordinateList *ncr=CoordinateListFactory::internalFactory->createCoordinateList();
 	for(int i=0;i<coord->getSize();i++) {
 		ncr->add(coord->getAt(i));
@@ -204,6 +211,7 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 	insertEdge(e);
 	// insert the endpoint as a node, to mark that it is on the boundary
 	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
+#endif
 }
 
 void GeometryGraph::addPolygon(Polygon *p){
