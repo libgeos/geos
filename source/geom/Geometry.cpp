@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.50  2004/05/21 13:58:47  strk
+ * ::intersection missed to invalidate geometryCollection inputs
+ *
  * Revision 1.49  2004/05/17 07:23:05  strk
  * ::getCeontroid(): reduced dynamic allocations, added missing check for isEmpty
  *
@@ -518,6 +521,8 @@ Geometry::convexHull() const
 }
 
 Geometry* Geometry::intersection(const Geometry *other) const {
+	checkNotGeometryCollection(this);
+	checkNotGeometryCollection(other);
 	Geometry *in1 = toInternalGeometry(this);
 	Geometry *in2 = toInternalGeometry(other);
 	Geometry *out = NULL;
