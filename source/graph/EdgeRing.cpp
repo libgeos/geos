@@ -138,18 +138,18 @@ void EdgeRing::mergeLabel(Label *deLabel, int geomIndex){
 }
 
 void EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge){
-	CoordinateList edgePts(edge->getCoordinates());
+	CoordinateList *edgePts=edge->getCoordinates();
 	if (isForward) {
 		int startIndex=1;
 		if (isFirstEdge) startIndex=0;
-		for (int i=startIndex; i<edgePts.getSize(); i++) {
-			pts.add(edgePts.getAt(i));
+		for (int i=startIndex; i<edgePts->getSize(); i++) {
+			pts.add(edgePts->getAt(i));
 		}
 	} else { // is backward
-		int startIndex=edgePts.getSize()-2;
-		if (isFirstEdge) startIndex=edgePts.getSize()-1;
+		int startIndex=edgePts->getSize()-2;
+		if (isFirstEdge) startIndex=edgePts->getSize()-1;
 		for (int i=startIndex;i>=0;i--) {
-			pts.add(edgePts.getAt(i));
+			pts.add(edgePts->getAt(i));
 		}
 	}
 }

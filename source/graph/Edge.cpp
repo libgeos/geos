@@ -52,8 +52,12 @@ void Edge::setName(string newName) {
 	name=newName;
 }
 
-CoordinateList Edge::getCoordinates(){
-	return pts;
+//CoordinateList Edge::getCoordinates(){
+//	return pts;
+//}
+
+CoordinateList* Edge::getCoordinates(){
+	return &pts;
 }
 
 Coordinate Edge::getCoordinate(int i){

@@ -21,17 +21,19 @@
 MonotoneChainEdge::MonotoneChainEdge() {
 	env1=new Envelope();
 	env2=new Envelope();
+	pts=new CoordinateList();
 }
 
-MonotoneChainEdge::MonotoneChainEdge(Edge *newE):pts(newE->getCoordinates()) {
+MonotoneChainEdge::MonotoneChainEdge(Edge *newE) {
+	pts=newE->getCoordinates();
 	env1=new Envelope();
 	env2=new Envelope();
 	e=newE;
 	MonotoneChainIndexer *mcb=new MonotoneChainIndexer();
-	startIndex=mcb->getChainStartIndices(pts);
+	startIndex=mcb->getChainStartIndices(*pts);
 }
 
-CoordinateList MonotoneChainEdge::getCoordinates() {
+CoordinateList* MonotoneChainEdge::getCoordinates() {
 	return pts;
 }
 
@@ -40,14 +42,14 @@ vector<int> MonotoneChainEdge::getStartIndexes() {
 }
 
 double MonotoneChainEdge::getMinX(int chainIndex){
-	double x1=pts.getAt(startIndex[chainIndex]).x;
-	double x2=pts.getAt(startIndex[chainIndex+1]).x;
+	double x1=pts->getAt(startIndex[chainIndex]).x;
+	double x2=pts->getAt(startIndex[chainIndex+1]).x;
 	return x1<x2?x1:x2;
 }
 
 double MonotoneChainEdge::getMaxX(int chainIndex) {
-	double x1=pts.getAt(startIndex[chainIndex]).x;
-	double x2=pts.getAt(startIndex[chainIndex+1]).x;
+	double x1=pts->getAt(startIndex[chainIndex]).x;
+	double x2=pts->getAt(startIndex[chainIndex+1]).x;
 	return x1>x2?x1:x2;
 }
 
@@ -66,10 +68,10 @@ void MonotoneChainEdge::computeIntersectsForChain(int chainIndex0,MonotoneChainE
 
 void MonotoneChainEdge::computeIntersectsForChain(int start0,int end0,MonotoneChainEdge *mce,
 													int start1,int end1,SegmentIntersector *ei){
-	Coordinate p00(pts.getAt(start0));
-	Coordinate p01(pts.getAt(end0));
-	Coordinate p10(mce->pts.getAt(start1));
-	Coordinate p11(mce->pts.getAt(end1));
+	Coordinate p00(pts->getAt(start0));
+	Coordinate p01(pts->getAt(end0));
+	Coordinate p10((mce->pts)->getAt(start1));
+	Coordinate p11((mce->pts)->getAt(end1));
 	// terminating condition for the recursion
 	if (end0-start0==1 && end1-start1==1) {
 		ei->addIntersections(e,start0,mce->e,start1);

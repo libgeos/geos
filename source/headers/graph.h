@@ -173,7 +173,8 @@ public:
 	~Edge();
 	virtual int getNumPoints();
 	virtual void setName(string newName);
-	virtual CoordinateList getCoordinates();
+//	virtual CoordinateList getCoordinates();
+	virtual CoordinateList* getCoordinates();
 	virtual Coordinate getCoordinate(int i);
 	virtual Coordinate getCoordinate();
 	virtual Depth *getDepth();

@@ -61,7 +61,7 @@ Coordinate::Coordinate(double xNew, double yNew){
 /**
  *  Default <code>Coordinate</code> destructor.
  */
-Coordinate::~Coordinate(){}
+//Coordinate::~Coordinate(){}
 
 /**
  *  Sets this <code>Coordinate</code>s (x,y,z) values to that of <code>other</code>.

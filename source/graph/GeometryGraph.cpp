@@ -208,10 +208,10 @@ void GeometryGraph::addLineString(LineString *line){
 */
 void GeometryGraph::addEdge(Edge *e) {
 	insertEdge(e);
-	CoordinateList coord(e->getCoordinates());
+	CoordinateList *coord=e->getCoordinates();
 	// insert the endpoint as a node, to mark that it is on the boundary
-	insertPoint(argIndex,coord.getAt(0),Location::BOUNDARY);
-	insertPoint(argIndex,coord.getAt(coord.getSize()-1),Location::BOUNDARY);
+	insertPoint(argIndex,coord->getAt(0),Location::BOUNDARY);
+	insertPoint(argIndex,coord->getAt(coord->getSize()-1),Location::BOUNDARY);
 }
 
 /**

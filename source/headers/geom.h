@@ -33,7 +33,7 @@ public:
 	Coordinate(double xNew, double yNew, double zNew);
 	Coordinate(const Coordinate &c);
 	Coordinate(double xNew, double yNew);
-	virtual ~Coordinate();
+//	virtual ~Coordinate();
 	void setCoordinate(Coordinate other);
 	bool equals2D(Coordinate other);
 	int compareTo(Coordinate other);

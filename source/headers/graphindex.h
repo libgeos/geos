@@ -70,7 +70,8 @@ public:
 	void computeIntersections(SweepLineSegment *ss,SegmentIntersector *si);
 protected:
 	Edge *edge;
-	CoordinateList pts;
+//	CoordinateList pts;
+	CoordinateList* pts;
 	int ptIndex;
 	int geomIndex;
 };
@@ -114,7 +115,7 @@ class MonotoneChainEdge{
 public:
 	MonotoneChainEdge();
 	MonotoneChainEdge(Edge *newE);
-	CoordinateList getCoordinates();
+	CoordinateList* getCoordinates();
 	vector<int> getStartIndexes();
 	double getMinX(int chainIndex);
 	double getMaxX(int chainIndex);
@@ -122,7 +123,8 @@ public:
 	void computeIntersectsForChain(int chainIndex0,MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si);
 protected:
 	Edge *e;
-	CoordinateList pts; // cache a reference to the coord array, for efficiency
+//	CoordinateList pts; // cache a reference to the coord array, for efficiency
+	CoordinateList* pts; // cache a reference to the coord array, for efficiency
 	// the lists of start/end indexes of the monotone chains.
 	// Includes the end point of the edge as a sentinel
 	vector<int> startIndex;

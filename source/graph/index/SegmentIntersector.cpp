@@ -99,10 +99,12 @@ void SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int se
 //	if (e0->equals(e1) && segIndex0==segIndex1) return;
 	if (e0==e1 && segIndex0==segIndex1) return;
 	numTests++;
-	Coordinate p00(e0->getCoordinates().getAt(segIndex0));
-	Coordinate p01(e0->getCoordinates().getAt(segIndex0+1));
-	Coordinate p10(e1->getCoordinates().getAt(segIndex1));
-	Coordinate p11(e1->getCoordinates().getAt(segIndex1+1));
+	CoordinateList *cl=e0->getCoordinates();
+	Coordinate p00(cl->getAt(segIndex0));
+	Coordinate p01(cl->getAt(segIndex0+1));
+	cl=e1->getCoordinates();
+	Coordinate p10(cl->getAt(segIndex1));
+	Coordinate p11(cl->getAt(segIndex1+1));
 	li->computeIntersection(p00,p01,p10,p11);
 	/**
 	*  Always record any non-proper intersections.
