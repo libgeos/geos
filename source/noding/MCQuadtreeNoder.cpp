@@ -27,6 +27,7 @@ static Profiler *profiler = Profiler::instance();
 MCQuadtreeNoder::MCQuadtreeNoder(){
 	chains=new vector<indexMonotoneChain*>();
 	index=new STRtree();
+	//index=new Quadtree(); // it works, but it's slower
 	idCounter = 0;
 	nOverlaps = 0;
 }
@@ -80,7 +81,14 @@ MCQuadtreeNoder::intersectChains()
 
 	for (int i=0; i<(int)chains->size();i++) {
 		indexMonotoneChain *queryChain=(*chains)[i];
+#if PROFILE
+	profiler->start("::intersectChains: index->query");
+#endif
 		vector<void*> *overlapChains = index->query(queryChain->getEnvelope());
+#if PROFILE
+	profiler->stop("::intersectChains: index->query");
+#endif
+
 #if DEBUG
 	cerr<<"MCQuadtreeNoder::intersectChains: query returned "<<overlapChains->size()<<" items from STRtree index"<<endl;
 #endif
@@ -138,6 +146,9 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2004/11/02 14:11:28  strk
+ * Added more profiling.
+ *
  * Revision 1.11  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
