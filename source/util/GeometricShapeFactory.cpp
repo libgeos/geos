@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/15 13:40:44  strk
+ * Memory leaks fixed, CoordinateSequence use made JTS - compatible.
+ *
  * Revision 1.5  2004/07/14 21:19:35  strk
  * GeometricShapeFactory first pass of bug fixes
  *
@@ -129,42 +132,54 @@ Polygon* GeometricShapeFactory::createRectangle(){
 	int ipt = 0;
 	int nSide = nPts / 4;
 	if (nSide < 1) nSide = 1;
-	double XsegLen = dim->getEnvelope()->getWidth() / nSide;
-	double YsegLen = dim->getEnvelope()->getHeight() / nSide;
+	Envelope *env = dim->getEnvelope();
+	double XsegLen = env->getWidth() / nSide;
+	double YsegLen = env->getHeight() / nSide;
 
-	CoordinateSequence* pts=new DefaultCoordinateSequence(4*nSide+1);
-	Envelope* env=dim->getEnvelope();
+	vector<Coordinate> *vc = new vector<Coordinate>(4*nSide+1);
+	//CoordinateSequence* pts=new DefaultCoordinateSequence(4*nSide+1);
 
 	double maxx = env->getMinX() + nSide * XsegLen;
 	double maxy = env->getMinY() + nSide * XsegLen;
 
+	Coordinate c;
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX() + i * XsegLen;
 		double y = env->getMinY();
-		//pts->setAt(*(new Coordinate(x, y)),ipt++);
-		pts->setAt(Coordinate(x, y),ipt++);
+		//pts->setAt(Coordinate(x, y),ipt++);
+		c.x = x; c.y = y;
+		(*vc)[ipt++] = c;
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX();
 		double y = env->getMinY() + i * YsegLen;
 		//pts->setAt(*(new Coordinate(x, y)),ipt++);
-		pts->setAt(Coordinate(x, y),ipt++);
+		//pts->setAt(Coordinate(x, y),ipt++);
+		c.x = x; c.y = y;
+		(*vc)[ipt++] = c;
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX() - i * XsegLen;
 		double y = env->getMaxY();
 		//pts->setAt(*(new Coordinate(x, y)),ipt++);
-		pts->setAt(Coordinate(x, y),ipt++);
+		//pts->setAt(Coordinate(x, y),ipt++);
+		c.x = x; c.y = y;
+		(*vc)[ipt++] = c;
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX();
 		double y = env->getMaxY() - i * YsegLen;
 		//pts->setAt(*(new Coordinate(x, y)),ipt++);
-		pts->setAt(Coordinate(x, y),ipt++);
+		//pts->setAt(Coordinate(x, y),ipt++);
+		c.x = x; c.y = y;
+		(*vc)[ipt++] = c;
 	}
+	delete env;
 	//pts->setAt(*(new Coordinate(pts->getAt(0))),ipt++);
-	pts->setAt(Coordinate(pts->getAt(0)),ipt++);
-	LinearRing* ring=geomFact->createLinearRing(pts);
+	//pts->setAt(Coordinate(pts->getAt(0)),ipt++);
+	(*vc)[ipt++] = (*vc)[0];
+	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(vc);
+	LinearRing* ring=geomFact->createLinearRing(cs);
 	Polygon* poly=geomFact->createPolygon(ring, NULL);
 	return poly;
 }
@@ -181,6 +196,7 @@ Polygon* GeometricShapeFactory::createCircle() {
 
 	double centreX = env->getMinX() + xRadius;
 	double centreY = env->getMinY() + yRadius;
+	delete env;
 
 	vector<Coordinate>*pts=new vector<Coordinate>(nPts+1);
 	int iPt = 0;
@@ -212,6 +228,7 @@ LineString* GeometricShapeFactory::createArc(double startAng,double endAng){
 
 	double centreX = env->getMinX() + xRadius;
 	double centreY = env->getMinY() + yRadius;
+	delete env;
 
 	double angSize = (endAng - startAng);
 	if (angSize <= 0.0 || angSize > 2 * M_PI) //3.14159265358979
