@@ -1,0 +1,9 @@
+.deps
+Makefile
+Makefile.in
+CTS
+CTS.exe
+SimpleWKTTester
+SimpleWKTTester.exe
+XMLTester
+XMLTester.exe
