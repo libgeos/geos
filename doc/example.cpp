@@ -1,6 +1,7 @@
 // This file should document by example usage of the GEOS library.
 // It could actually be a live discuss-by-example board for
 // architectural design choices.
+//
 // 			--strk;
 // 
 // DEBUGGING TIPS:
@@ -10,6 +11,9 @@
 //  obscure reports from memory checkers like valgrind.
 //
 // $Log$
+// Revision 1.10  2003/11/06 17:41:41  strk
+// Added Buffer,Intersection,Difference and Symdifference. Exception cleanup
+//
 // Revision 1.9  2003/11/05 21:52:57  strk
 // Modified example.cpp to make use of vectors instead of Geometry * / int
 // couples. Added LineString creation example. Added Makefile to compile it.
@@ -232,6 +236,7 @@ create_simple_collection(vector<Geometry *> *geoms)
 void do_all()
 {
 	vector<Geometry *> *geoms = new vector<Geometry *>;
+	vector<Geometry *> *newgeoms;
 	Geometry *geom;
 
 	// Define a precision model using 0,0 as the reference origin
@@ -252,7 +257,7 @@ void do_all()
 
 	// Read function bodies to see the magic behind them
 	geoms->push_back(create_point(150, 350));
-	geoms->push_back(create_ushaped_linestring(0,0,100));
+	geoms->push_back(create_ushaped_linestring(60,60,100));
 	geoms->push_back(create_square_linearring(0,0,100));
 	geoms->push_back(create_square_polygon(0,200,300));
 	geoms->push_back(create_square_polygon(0,250,300));
@@ -268,56 +273,82 @@ void do_all()
 	/////////////////////////////////////////////
 	
 	// Find centroid of each base geometry
-	vector<Geometry *> *centroid = new vector<Geometry *>;
+	newgeoms = new vector<Geometry *>;
 	for (int i=0; i<geoms->size(); i++) {
 		Geometry *g = (*geoms)[i];
-		centroid->push_back( g->getCentroid() );
+		newgeoms->push_back( g->getCentroid() );
 	}
 
 	// Print all convex hulls
-	cout<<"------- AND HERE ARE THEIR CENTROIDS -----"<<endl;
-	wkt_print_geoms(centroid);
+	cout<<endl<<"------- AND HERE ARE THEIR CENTROIDS -----"<<endl;
+	wkt_print_geoms(newgeoms);
 
 	// Delete the centroids
-	for (int i=0; i<centroid->size(); i++) {
-		delete (*centroid)[i];
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
 	}
-	delete centroid;
+	delete newgeoms;
+	
+	/////////////////////////////////////////////
+	// BUFFER
+	/////////////////////////////////////////////
+	
+	newgeoms = new vector<Geometry *>;
+	for (int i=0; i<geoms->size(); i++) {
+	//for (int i=1; i<2; i++) {
+		Geometry *g = (*geoms)[i];
+		try {
+			Geometry *g2 = g->buffer(10);
+			newgeoms->push_back(g2);
+		}
+		catch (GEOSException *exc) {
+			cerr <<"GEOS Exception: geometry "<<i<<"->buffer(10): "<<exc->toString()<<"\n";
+			delete exc;
+		}
+	}
+
+	cout<<endl<<"--------HERE COMES THE BUFFERED GEOMS ----------"<<endl;
+	wkt_print_geoms(newgeoms);
+
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
+	}
+	delete newgeoms;
 	
 	/////////////////////////////////////////////
 	// CONVEX HULL
 	/////////////////////////////////////////////
 	
 	// Make convex hulls of geometries
-	vector<Geometry *> *hulls = new vector<Geometry *>;
+	newgeoms = new vector<Geometry *>;
 	for (int i=0; i<geoms->size(); i++) {
 		Geometry *g = (*geoms)[i];
-		hulls->push_back( g->convexHull() );
+		newgeoms->push_back( g->convexHull() );
 	}
 
 	// Print all convex hulls
-	cout<<"--------HERE COMES THE HULLS----------"<<endl;
-	wkt_print_geoms(hulls);
+	cout<<endl<<"--------HERE COMES THE HULLS----------"<<endl;
+	wkt_print_geoms(newgeoms);
 
 	// Delete the hulls
-	for (int i=0; i<geoms->size(); i++) {
-		delete (*hulls)[i];
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
 	}
-	delete hulls;
+	delete newgeoms;
 	
 	/////////////////////////////////////////////
 	// UNION
 	/////////////////////////////////////////////
 	
 	// Make unions of all geoms
-	vector<Geometry *> *unions = new vector<Geometry *>;
+	newgeoms = new vector<Geometry *>;
 	for (int i=0; i<geoms->size()-1; i++) {
 		Geometry *g1 = (*geoms)[i];
 		for (int j=i+1; j<geoms->size(); j++) {
 			Geometry *g2 = (*geoms)[j];
 			try {
 				Geometry *g3 = g1->Union(g2);
-				unions->push_back(g3);
+				newgeoms->push_back(g3);
 			}
 			// It's illegal to union a collection ...
 			catch (IllegalArgumentException *ill) {
@@ -326,20 +357,127 @@ void do_all()
 			}
 			catch (GEOSException *exc) {
 				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
+				delete exc;
 			}
 		}
 	}
 
 	// Print all unions
-	cout<<"----- AND HERE ARE SOME UNION COMBINATIONS ------"<<endl;
-	wkt_print_geoms(unions);
+	cout<<endl<<"----- AND HERE ARE SOME UNION COMBINATIONS ------"<<endl;
+	wkt_print_geoms(newgeoms);
 
 	// Delete the resulting geoms
-	for (int i=0; i<unions->size(); i++) {
-		delete (*unions)[i];
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
 	}
-	delete unions;
+	delete newgeoms;
 	
+
+	/////////////////////////////////////////////
+	// INTERSECTION
+	/////////////////////////////////////////////
+	
+	// Compute intersection of adhiacent geometries
+	newgeoms = new vector<Geometry *>;
+	for (int i=0; i<geoms->size()-1; i++) {
+		Geometry *g1 = (*geoms)[i];
+		for (int j=i+1; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				Geometry *g3 = g1->intersection(g2);
+				newgeoms->push_back(g3);
+			}
+			// Collection are illegal as intersection argument
+			catch (IllegalArgumentException *ill) {
+				//cerr <<ill->toString()<<"\n";
+				delete ill;
+			}
+			catch (GEOSException *exc) {
+				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
+				delete exc;
+			}
+		}
+	}
+
+	cout<<endl<<"----- HERE ARE SOME INTERSECTIONS COMBINATIONS ------"<<endl;
+	wkt_print_geoms(newgeoms);
+
+	// Delete the resulting geoms
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
+	}
+	delete newgeoms;
+
+	/////////////////////////////////////////////
+	// DIFFERENCE
+	/////////////////////////////////////////////
+	
+	// Compute difference of adhiacent geometries
+	newgeoms = new vector<Geometry *>;
+	for (int i=0; i<geoms->size()-1; i++) {
+		Geometry *g1 = (*geoms)[i];
+		for (int j=i+1; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				Geometry *g3 = g1->difference(g2);
+				newgeoms->push_back(g3);
+			}
+			// Collection are illegal as difference argument
+			catch (IllegalArgumentException *ill) {
+				//cerr <<ill->toString()<<"\n";
+				delete ill;
+			}
+			catch (GEOSException *exc) {
+				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
+				delete exc;
+			}
+		}
+	}
+
+	cout<<endl<<"----- HERE ARE SOME DIFFERENCE COMBINATIONS ------"<<endl;
+	wkt_print_geoms(newgeoms);
+
+	// Delete the resulting geoms
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
+	}
+	delete newgeoms;
+	
+	/////////////////////////////////////////////
+	// SYMMETRIC DIFFERENCE
+	/////////////////////////////////////////////
+	
+	// Compute symmetric difference of adhiacent geometries
+	newgeoms = new vector<Geometry *>;
+	for (int i=0; i<geoms->size()-1; i++) {
+		Geometry *g1 = (*geoms)[i];
+		for (int j=i+1; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				Geometry *g3 = g1->symDifference(g2);
+				newgeoms->push_back(g3);
+			}
+			// Collection are illegal as symdifference argument
+			catch (IllegalArgumentException *ill) {
+				//cerr <<ill->toString()<<"\n";
+				delete ill;
+			}
+			catch (GEOSException *exc) {
+				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
+				delete exc;
+			}
+		}
+	}
+
+	cout<<endl<<"----- HERE ARE SYMMETRIC DIFFERENCES ------"<<endl;
+	wkt_print_geoms(newgeoms);
+
+	// Delete the resulting geoms
+	for (int i=0; i<newgeoms->size(); i++) {
+		delete (*newgeoms)[i];
+	}
+	delete newgeoms;
+
 	/////////////////////////////////////////////
 	// CLEANUP
 	/////////////////////////////////////////////
@@ -364,6 +502,7 @@ main()
 	catch (GEOSException *exc)
 	{
 		cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
+		delete exc;
 		exit(1);
 	}
 	// and this is a catch-all non standard ;)
