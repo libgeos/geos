@@ -96,6 +96,7 @@ protected:
 	void appendGeometryTaggedText(Geometry *geometry, int level, Writer *writer);
 	void appendPointTaggedText(Coordinate* coordinate, int level, Writer *writer,PrecisionModel* precisionModel);
 	void appendLineStringTaggedText(LineString *lineString, int level, Writer *writer);
+	void appendLinearRingTaggedText(LinearRing *lineString, int level, Writer *writer);
 	void appendPolygonTaggedText(Polygon *polygon, int level, Writer *writer);
 	void appendMultiPointTaggedText(MultiPoint *multipoint, int level, Writer *writer);
 	void appendMultiLineStringTaggedText(MultiLineString *multiLineString, int level,Writer *writer);

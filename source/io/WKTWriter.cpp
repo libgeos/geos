@@ -78,6 +78,8 @@ void WKTWriter::appendGeometryTaggedText(Geometry *geometry, int level, Writer *
 		appendPointTaggedText(point->getCoordinate(),level,writer,point->getPrecisionModel());
 	} else if (typeid(*geometry)==typeid(LineString)) {
 		appendLineStringTaggedText((LineString*)geometry, level, writer);
+	} else if (typeid(*geometry)==typeid(LinearRing)) {
+		appendLinearRingTaggedText((LinearRing*)geometry, level, writer);
 	} else if (typeid(*geometry)==typeid(Polygon)) {
 		appendPolygonTaggedText((Polygon*)geometry, level, writer);
 	} else if (typeid(*geometry)==typeid(MultiPoint)) {
@@ -103,6 +105,11 @@ void WKTWriter::appendPointTaggedText(Coordinate* coordinate, int level, Writer 
 void WKTWriter::appendLineStringTaggedText(LineString *lineString, int level, Writer *writer) {
 	writer->write("LINESTRING ");
 	appendLineStringText(lineString, level, false, writer);
+}
+
+void WKTWriter::appendLinearRingTaggedText(LinearRing *lineString, int level, Writer *writer) {
+	writer->write("LINEARRING ");
+	appendLineStringText((LineString *)lineString, level, false, writer);
 }
 
 void WKTWriter::appendPolygonTaggedText(Polygon *polygon, int level, Writer *writer) {
