@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/16 10:28:41  strk
+ * Dimesions object allocated on the heap
+ *
  * Revision 1.6  2004/07/15 13:40:44  strk
  * Memory leaks fixed, CoordinateSequence use made JTS - compatible.
  *
@@ -57,13 +60,13 @@ namespace geos {
  * an external reference to it)
  */
 GeometricShapeFactory::GeometricShapeFactory(const GeometryFactory* factory){
-	dim=new Dimensions();
+	//dim=new Dimensions();
 	nPts=100;
 	geomFact=factory;
 }
 
 GeometricShapeFactory::~GeometricShapeFactory() {
-	delete dim;
+	//delete dim;
 }
 
 
@@ -75,7 +78,7 @@ GeometricShapeFactory::~GeometricShapeFactory() {
 * @param base the base coordinate of the shape
 */
 void GeometricShapeFactory::setBase(const Coordinate& base)  {
-	dim->setBase(base);
+	dim.setBase(base);
 }
 /**
 * Sets the location of the shape by specifying the centre of
@@ -84,7 +87,7 @@ void GeometricShapeFactory::setBase(const Coordinate& base)  {
 * @param centre the centre coordinate of the shape
 */
 void GeometricShapeFactory::setCentre(const Coordinate& centre)  {
-	dim->setCentre(centre);
+	dim.setCentre(centre);
 }
 
 /**
@@ -100,7 +103,7 @@ void GeometricShapeFactory::setNumPoints(int nNPts) {
 * @param size the size of the shape's extent
 */
 void GeometricShapeFactory::setSize(double size) { 
-	dim->setSize(size);
+	dim.setSize(size);
 }
 
 /**
@@ -109,7 +112,7 @@ void GeometricShapeFactory::setSize(double size) {
 * @param width the width of the shape
 */
 void GeometricShapeFactory::setWidth(double width) {
-	dim->setWidth(width);
+	dim.setWidth(width);
 }
 
 /**
@@ -118,21 +121,18 @@ void GeometricShapeFactory::setWidth(double width) {
 * @param height the height of the shape
 */
 void GeometricShapeFactory::setHeight(double height) { 
-	dim->setHeight(height);
+	dim.setHeight(height);
 }
 
-/**
-* Creates a rectangular {@link Polygon}.
-*
-* @return a rectangular Polygon
-*
-*/
+/*
+ * Creates a rectangular Polygon.
+ */
 Polygon* GeometricShapeFactory::createRectangle(){
 	int i;
 	int ipt = 0;
 	int nSide = nPts / 4;
 	if (nSide < 1) nSide = 1;
-	Envelope *env = dim->getEnvelope();
+	Envelope *env = dim.getEnvelope();
 	double XsegLen = env->getWidth() / nSide;
 	double YsegLen = env->getHeight() / nSide;
 
@@ -184,13 +184,11 @@ Polygon* GeometricShapeFactory::createRectangle(){
 	return poly;
 }
 
-/**
-* Creates a circular {@link Polygon}.
-*
-* @return a circle
-*/
+/*
+ * Creates a circular Polygon.
+ */
 Polygon* GeometricShapeFactory::createCircle() {
-	Envelope* env = dim->getEnvelope();
+	Envelope* env = dim.getEnvelope();
 	double xRadius = env->getWidth() / 2.0;
 	double yRadius = env->getHeight() / 2.0;
 
@@ -222,7 +220,7 @@ Polygon* GeometricShapeFactory::createCircle() {
 * @return an elliptical arc
 */
 LineString* GeometricShapeFactory::createArc(double startAng,double endAng){
-	Envelope* env = dim->getEnvelope();
+	Envelope* env = dim.getEnvelope();
 	double xRadius = env->getWidth() / 2.0;
 	double yRadius = env->getHeight() / 2.0;
 

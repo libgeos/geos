@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/16 10:28:41  strk
+ * Dimesions object allocated on the heap
+ *
  * Revision 1.6  2004/07/14 21:19:35  strk
  * GeometricShapeFactory first pass of bug fixes
  *
@@ -57,6 +60,9 @@
 
 /*
 * $Log$
+* Revision 1.7  2004/07/16 10:28:41  strk
+* Dimesions object allocated on the heap
+*
 * Revision 1.6  2004/07/14 21:19:35  strk
 * GeometricShapeFactory first pass of bug fixes
 *
@@ -260,7 +266,7 @@ private:
 		Envelope* getEnvelope();
 	};
 	const GeometryFactory* geomFact;
-	Dimensions* dim;
+	Dimensions dim;
 	int nPts;
 public:
 	/**
