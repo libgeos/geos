@@ -264,6 +264,7 @@ private:
 	bool isIsolatedVar;
 	Depth *depth;
 	int depthDelta;   // the change in area depth from the R to L side of this edge
+	int npts;
 };
 
 class EdgeEnd {
@@ -709,7 +710,7 @@ public:
 };
 
 //Operators
-bool operator==(Edge a,Edge b);
+bool operator==(const Edge &a, const Edge &b);
 
 } // namespace geos
 
@@ -717,6 +718,9 @@ bool operator==(Edge a,Edge b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/02/22 16:24:18  strk
+ * cached number of points in Edge
+ *
  * Revision 1.8  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

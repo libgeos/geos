@@ -63,6 +63,7 @@ Edge::Edge(CoordinateSequence* newPts, Label *newLabel):GraphComponent(newLabel)
 //	label=newLabel;
 	mce=NULL;
 	pts=newPts;
+	npts=pts->getSize();
 	env=NULL;
 }
 
@@ -75,11 +76,12 @@ Edge::Edge(CoordinateSequence* newPts){
 	label=NULL;
 	mce=NULL;
 	pts=newPts;
+	npts=pts->getSize();
 	env=NULL;
 }
 
 int Edge::getNumPoints() {
-	return pts->getSize();
+	return npts;
 }
 
 void Edge::setName(string newName) {
@@ -104,7 +106,7 @@ Coordinate& Edge::getCoordinate(int i)
 const
 Coordinate& Edge::getCoordinate()
 {
-	if (pts->getSize()>0) return pts->getAt(0);
+	if (npts>0) return pts->getAt(0);
 	auto_ptr<const Coordinate> ret(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
 	return *ret;
 }
@@ -134,7 +136,7 @@ Edge::setDepthDelta(int newDepthDelta)
 int
 Edge::getMaximumSegmentIndex()
 {
-	return pts->getSize()-1;
+	return npts-1;
 }
 
 EdgeIntersectionList*
@@ -153,7 +155,7 @@ Edge::getMonotoneChainEdge()
 bool
 Edge::isClosed()
 {
-	return pts->getAt(0)==pts->getAt(pts->getSize()-1);
+	return pts->getAt(0)==pts->getAt(npts-1);
 }
 
 /*
@@ -164,7 +166,7 @@ bool
 Edge::isCollapsed()
 {
 	if (!label->isArea()) return false;
-	if (pts->getSize()!= 3) return false;
+	if (npts!= 3) return false;
 	if (pts->getAt(0)==pts->getAt(2) ) return true;
 	return false;
 }
@@ -222,7 +224,7 @@ Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int int
 
 	// normalize the intersection point location
 	int nextSegIndex=normalizedSegmentIndex+1;
-	if (nextSegIndex<pts->getSize()) {
+	if (nextSegIndex<npts) {
 		const Coordinate& nextPt=pts->getAt(nextSegIndex);
         // Normalize segment index if intPt falls on vertex
         // The check for point equality is 2D only - Z values are ignored
@@ -259,13 +261,13 @@ Edge::computeIM(IntersectionMatrix *im)
  * <b>iff</b>
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
-bool operator==(Edge e1, Edge e2)
+bool operator==(const Edge &e1, const Edge &e2)
 {
 	if (e1.pts->getSize()!=e2.pts->getSize()) return false;
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
 	int iRev=e1.pts->getSize();
-	for (int i=0; i<e1.pts->getSize();i++) {
+	for (int i=0; i<e1.pts->getSize(); i++) {
 		if (!e1.pts->getAt(i).equals2D(e2.pts->getAt(i))) {
 			isEqualForward=false;
 		}
@@ -285,8 +287,7 @@ bool operator==(Edge e1, Edge e2)
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
 bool Edge::equals(Edge *e){
-	unsigned int npts=pts->getSize();
-	if (npts!=(unsigned int)e->pts->getSize()) return false;
+	if (npts!=(unsigned int)e->npts) return false;
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
 	unsigned int iRev=npts;
@@ -316,11 +317,11 @@ Edge::isPointwiseEqual(Edge *e)
 #if DEBUG > 2
 	cerr<<"Edge::isPointwiseEqual call"<<endl;
 #endif
-	if (pts->getSize()!=e->pts->getSize()) return false;
+	if (npts!=e->npts) return false;
 #if DEBUG
-	cerr<<"Edge::isPointwiseEqual scanning "<<e->pts->getSize()<<"x"<<pts->getSize()<<" points"<<endl;
+	cerr<<"Edge::isPointwiseEqual scanning "<<e->npts()<<"x"<<npts<<" points"<<endl;
 #endif
-	for (int i=0;i<pts->getSize();i++) {
+	for (int i=0;i<npts;i++) {
 		if (!pts->getAt(i).equals2D(e->pts->getAt(i))) {
 			return false;
 		}
@@ -331,7 +332,7 @@ Edge::isPointwiseEqual(Edge *e)
 string Edge::print(){
 	string out="edge " + name + ": ";
 	out+="LINESTRING (";
-	for(int i=0; i<pts->getSize();i++) {
+	for(int i=0; i<npts; i++) {
 		if (i>0) out+=",";
 		out+=pts->getAt(i).toString();
 	}
@@ -344,7 +345,7 @@ string Edge::print(){
   
 string Edge::printReverse(){
 	string out="edge " + name + ": ";
-	for(int i=pts->getSize()-1;i>=0;i--) {
+	for(int i=npts-1; i>=0; i--) {
 		out+=pts->getAt(i).toString() + " ";
 	}
 	out+="\n";
@@ -355,7 +356,7 @@ Envelope* Edge::getEnvelope(){
 	// compute envelope lazily
 	if (env==NULL) {
 		env=new Envelope();
-		for (int i = 0; i<pts->getSize(); i++) {
+		for (int i = 0; i<npts; i++) {
 			env->expandToInclude(pts->getAt(i));
 	}
 	}
@@ -365,6 +366,9 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/02/22 16:24:17  strk
+ * cached number of points in Edge
+ *
  * Revision 1.11  2005/02/22 10:55:41  strk
  * Optimized Edge::equals(Edge *e)
  *
