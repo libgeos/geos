@@ -11,8 +11,30 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+
+#include <geos/opPolygonize.h>
+
+namespace geos {
+
+PolygonizeEdge::PolygonizeEdge(const LineString *newLine) {
+	line=newLine;
+}
+
+const LineString *
+PolygonizeEdge::getLine() {
+	return line;
+}
+
+}
+
+/**********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
  * Revision 1.2  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -22,18 +44,3 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/opPolygonize.h>
-
-namespace geos {
-
-PolygonizeEdge::PolygonizeEdge(LineString *newLine) {
-	line=newLine;
-}
-
-LineString* PolygonizeEdge::getLine() {
-	return line;
-}
-
-}

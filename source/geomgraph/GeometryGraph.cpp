@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
  * Revision 1.4  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -325,16 +329,22 @@ void GeometryGraph::addPoint(Coordinate& pt) {
 * @param computeRingSelfNodes if <false>, intersection checks are optimized to not test rings for self-intersection
 * @return the SegmentIntersector used, containing information about the intersections found
 */
-SegmentIntersector* GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes){
+SegmentIntersector*
+GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
+{
 	SegmentIntersector *si=new SegmentIntersector(li,true,false);
-	//EdgeSetIntersector esi = new MCQuadIntersector();
-    auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+    	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 	// optimized test for Polygons and Rings
-	if (parentGeom==NULL) {
+	if (parentGeom==NULL)
+	{
 		esi->computeIntersections(edges,si,true);
-	} else if (!computeRingSelfNodes & (typeid(*parentGeom)==typeid(LinearRing)||typeid(*parentGeom)==typeid(Polygon)||typeid(*parentGeom)==typeid(MultiPolygon))) {
-			esi->computeIntersections(edges, si, false);
-	} else {
+	}
+	else if (!computeRingSelfNodes & (typeid(*parentGeom)==typeid(LinearRing)||typeid(*parentGeom)==typeid(Polygon)||typeid(*parentGeom)==typeid(MultiPolygon)))
+	{
+		esi->computeIntersections(edges, si, false);
+	}
+	else
+	{
 		esi->computeIntersections(edges,si,true);
 	}
 	//System.out.println("SegmentIntersector # tests = " + si.numTests);
@@ -342,9 +352,10 @@ SegmentIntersector* GeometryGraph::computeSelfNodes(LineIntersector *li, bool co
 	return si;
 }
 
-SegmentIntersector* GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
-													LineIntersector *li,
-													bool includeProper){
+SegmentIntersector*
+GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
+	LineIntersector *li, bool includeProper)
+{
 	SegmentIntersector *si=new SegmentIntersector(li,includeProper,true);
 	si->setBoundaryNodes(getBoundaryNodes(),g->getBoundaryNodes());
 	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());

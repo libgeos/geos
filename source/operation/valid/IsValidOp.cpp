@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
  * Revision 1.23  2004/09/13 12:50:11  strk
  * comments cleanup
  *
@@ -164,7 +168,7 @@ void IsValidOp::checkValid(const LinearRing *g){
 		return;
 	}
 	LineIntersector *li = new RobustLineIntersector();
-	graph->computeSelfNodes(li, true);
+	delete graph->computeSelfNodes(li, true);
 	checkNoSelfIntersectingRings(graph);
 	delete li;
 	delete graph;

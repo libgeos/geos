@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
  * Revision 1.5  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -74,7 +78,9 @@ planarNode* planarNodeMap::remove(Coordinate& pt){
 	return n;
 }
 
-vector<planarNode*>* planarNodeMap::getNodes(){
+vector<planarNode*>*
+planarNodeMap::getNodes()
+{
 	vector<planarNode*> *values=new vector<planarNode*>();
 	map<Coordinate,planarNode*,planarCoordLT>::iterator it=nodeMap->begin();
 	while(it!=nodeMap->end()) {

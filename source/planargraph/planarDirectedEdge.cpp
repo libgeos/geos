@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
  * Revision 1.5  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -45,11 +49,13 @@
 namespace geos {
 //namespace planargraph {
 
-/**
-* Returns a List containing the parent planarEdge (possibly null) for each of the given
-* planarDirectedEdges.
-*/
-vector<planarEdge*>* planarDirectedEdge::toEdges(vector<planarDirectedEdge*> *dirEdges) {
+/*
+ * Returns a List containing the parent planarEdge (possibly null)
+ * for each of the given planarDirectedEdges.
+ */
+vector<planarEdge*>*
+planarDirectedEdge::toEdges(vector<planarDirectedEdge*> *dirEdges) 
+{
 	vector<planarEdge*> *edges=new vector<planarEdge*>();
 	for (int i=0;i<(int)dirEdges->size();i++) {
 		edges->push_back((*dirEdges)[i]->parentEdge);
@@ -85,76 +91,100 @@ planarDirectedEdge::planarDirectedEdge(planarNode* newFrom, planarNode* newTo,
 	//Assert.isTrue(! (dx == 0 && dy == 0), "EdgeEnd with identical endpoints found");
 }
 
-/**
-* Returns this planarDirectedEdge's parent planarEdge, or null if it has none.
-*/
-planarEdge* planarDirectedEdge::getEdge() {
+/*
+ * Returns this planarDirectedEdge's parent planarEdge,
+ * or null if it has none.
+ */
+planarEdge*
+planarDirectedEdge::getEdge() const
+{
 	return parentEdge;
 }
-/**
-* Associates this planarDirectedEdge with an planarEdge (possibly null, indicating no associated
-* planarEdge).
-*/
-void planarDirectedEdge::setEdge(planarEdge* newParentEdge) { 
-	parentEdge=newParentEdge; }
+/*
+ * Associates this planarDirectedEdge with an planarEdge
+ * (possibly null, indicating no associated planarEdge).
+ */
+void
+planarDirectedEdge::setEdge(planarEdge* newParentEdge)
+{ 
+	parentEdge=newParentEdge;
+}
+
 /**
 * Returns 0, 1, 2, or 3, indicating the quadrant in which this planarDirectedEdge's
 * orientation lies.
 */
-int planarDirectedEdge::getQuadrant() {
+int
+planarDirectedEdge::getQuadrant() const
+{
 	return quadrant;
 }
 /**
 * Returns a point to which an imaginary line is drawn from the from-node to
 * specify this planarDirectedEdge's orientation.
 */
-Coordinate& planarDirectedEdge::getDirectionPt() {
+const Coordinate&
+planarDirectedEdge::getDirectionPt() const
+{
 	return p1;
 }
 /**
 * Returns whether the direction of the parent planarEdge (if any) is the same as that
 * of this Directed planarEdge.
 */
-bool planarDirectedEdge::getEdgeDirection() { 
+bool planarDirectedEdge::getEdgeDirection() const { 
 	return edgeDirection;
 }
 /**
 * Returns the node from which this planarDirectedEdge leaves.
 */
-planarNode* planarDirectedEdge::getFromNode() {
+planarNode*
+planarDirectedEdge::getFromNode() const
+{
 	return from;
 }
 /**
 * Returns the node to which this planarDirectedEdge goes.
 */
-planarNode* planarDirectedEdge::getToNode() { 
+planarNode*
+planarDirectedEdge::getToNode() const
+{ 
 	return to;
 }
 /**
 * Returns the coordinate of the from-node.
 */
-Coordinate& planarDirectedEdge::getCoordinate() { 
+Coordinate&
+planarDirectedEdge::getCoordinate() const
+{ 
 	return from->getCoordinate();
 }
 /**
 * Returns the angle that the start of this planarDirectedEdge makes with the
 * positive x-axis, in radians.
 */
-double planarDirectedEdge::getAngle() { 
+double
+planarDirectedEdge::getAngle() const
+{ 
 	return angle;
 }
 /**
 * Returns the symmetric planarDirectedEdge -- the other planarDirectedEdge associated with
 * this planarDirectedEdge's parent planarEdge.
 */
-planarDirectedEdge* planarDirectedEdge::getSym() { 
+planarDirectedEdge*
+planarDirectedEdge::getSym() const
+{ 
 	return sym;
 }
-/**
-* Sets this planarDirectedEdge's symmetric planarDirectedEdge, which runs in the opposite
-* direction.
-*/
-void planarDirectedEdge::setSym(planarDirectedEdge *newSym) { 
+
+/*
+ * Sets this planarDirectedEdge's symmetric planarDirectedEdge,
+ * which runs in the opposite direction.
+ */
+void
+planarDirectedEdge::setSym(planarDirectedEdge *newSym)
+{ 
 	sym = newSym;
 }
 
@@ -173,7 +203,9 @@ void planarDirectedEdge::setSym(planarDirectedEdge *newSym) {
 * function can be used to decide the relative orientation of the vectors.
 * </ul>
 */
-int planarDirectedEdge::compareTo(void* obj){
+int
+planarDirectedEdge::compareTo(void* obj) const
+{
 	planarDirectedEdge* de = (planarDirectedEdge*) obj;
 	return compareDirection(de);
 }
@@ -193,7 +225,9 @@ int planarDirectedEdge::compareTo(void* obj){
 * function can be used to decide the relative orientation of the vectors.
 * </ul>
 */
-int planarDirectedEdge::compareDirection(planarDirectedEdge *e){
+int
+planarDirectedEdge::compareDirection(planarDirectedEdge *e) const
+{
 // if the rays are in different quadrants, determining the ordering is trivial
 	if (quadrant > e->quadrant) return 1;
 	if (quadrant < e->quadrant) return -1;
@@ -205,7 +239,9 @@ int planarDirectedEdge::compareDirection(planarDirectedEdge *e){
 /**
 * Prints a detailed string representation of this planarDirectedEdge to the given PrintStream.
 */
-string planarDirectedEdge::print() {
+string
+planarDirectedEdge::print() const
+{
 	string out=typeid(*this).name();
 	out+=" : ";
 	out+=p0.toString();

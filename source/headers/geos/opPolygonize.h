@@ -28,57 +28,61 @@ namespace geos {
 //using namespace planargraph;
 
 /*
-* An edge of a polygonization graph.
-*
-* @version 1.4
-*/
+ * An edge of a polygonization graph.
+ *
+ * @version 1.4
+ */
 class PolygonizeEdge: public planarEdge {
 private:
-	LineString *line;
+	const LineString *line;
 public:
-	PolygonizeEdge(LineString *newLine);
-	LineString* getLine();
+	PolygonizeEdge(const LineString *newLine);
+	const LineString* getLine();
 };
 
 
 /*
  * Represents a ring of PolygonizeDirectedEdge which form
  * a ring of a polygon.  The ring may be either an outer shell or a hole.
- *
  */
 class polygonizeEdgeRing {
 private:
 	const GeometryFactory *factory;
 	static CGAlgorithms cga;
-	vector<planarDirectedEdge*> *deList;
+	vector<const planarDirectedEdge*> *deList;
+
 	// cache the following data for efficiency
 	LinearRing *ring;
 	CoordinateSequence *ringPts;
-	vector<LinearRing*> *holes;
-	/**
-	* Computes the list of coordinates which are contained in this ring.
-	* The coordinatea are computed once only and cached.
-	*
-	* @return an array of the Coordinate in this ring
-	*/
+	vector<Geometry*> *holes;
+
+	/*
+	 * Computes the list of coordinates which are contained in this ring.
+	 * The coordinatea are computed once only and cached.
+	 *
+	 * @return an array of the Coordinate in this ring
+	 */
 	CoordinateSequence* getCoordinates();
-	static void addEdge(CoordinateSequence *coords, bool isForward, CoordinateSequence *coordList);
+
+	static void addEdge(const CoordinateSequence *coords, bool isForward, CoordinateSequence *coordList);
 
 public:
 	/**
-	* Find the innermost enclosing shell polygonizeEdgeRing containing the argument polygonizeEdgeRing, if any.
-	* The innermost enclosing ring is the <i>smallest</i> enclosing ring.
-	* The algorithm used depends on the fact that:
-	* <br>
-	*  ring A contains ring B iff envelope(ring A) contains envelope(ring B)
-	* <br>
-	* This routine is only safe to use if the chosen point of the hole
-	* is known to be properly contained in a shell
-	* (which is guaranteed to be the case if the hole does not touch its shell)
-	*
-	* @return containing polygonizeEdgeRing, if there is one
-	* @return null if no containing polygonizeEdgeRing is found
-	*/
+	 * Find the innermost enclosing shell polygonizeEdgeRing
+	 * containing the argument polygonizeEdgeRing, if any.
+	 * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
+	 * The algorithm used depends on the fact that:
+	 * 
+	 * ring A contains ring B iff envelope(ring A) contains envelope(ring B)
+	 *
+	 * This routine is only safe to use if the chosen point of the hole
+	 * is known to be properly contained in a shell
+	 * (which is guaranteed to be the case if the hole does not touch
+	 * its shell)
+	 *
+	 * @return containing polygonizeEdgeRing, if there is one
+	 * @return null if no containing polygonizeEdgeRing is found
+	 */
 	static polygonizeEdgeRing* findEdgeRingContaining(polygonizeEdgeRing *testEr, vector<polygonizeEdgeRing*> *shellList);
 
 	/*
@@ -91,61 +95,75 @@ public:
 	 * @return a Coordinate reference from <code>testPts</code> which is
 	 * not in <code>pts</code>, or <code>Coordinate::nullCoord</code>
 	 */
-	static const Coordinate& ptNotInList(CoordinateSequence *testPts, CoordinateSequence *pts);
+	static const Coordinate& ptNotInList(const CoordinateSequence *testPts, const CoordinateSequence *pts);
 
-	/**
-	* Tests whether a given point is in an array of points.
-	* Uses a value-based test.
-	*
-	* @param pt a Coordinate for the test point
-	* @param pts an array of Coordinate to test
-	* @return <code>true</code> if the point is in the array
-	*/
+	/*
+	 * Tests whether a given point is in an array of points.
+	 * Uses a value-based test.
+	 *
+	 * @param pt a Coordinate for the test point
+	 * @param pts an array of Coordinate to test
+	 * @return <code>true</code> if the point is in the array
+	 */
 	static bool isInList(const Coordinate &pt, const CoordinateSequence *pts);
 	polygonizeEdgeRing(const GeometryFactory *newFactory);
 	~polygonizeEdgeRing();
-	/**
-	* Adds a DirectedEdge which is known to form part of this ring.
-	* @param de the DirectedEdge to add.
-	*/
-	void add(planarDirectedEdge *de);
-	/**
-	* Tests whether this ring is a hole.
-	* Due to the way the edges in the polyongization graph are linked,
-	* a ring is a hole if it is oriented counter-clockwise.
-	* @return <code>true</code> if this ring is a hole
-	*/
+
+	/*
+	 * Adds a DirectedEdge which is known to form part of this ring.
+	 * @param de the DirectedEdge to add. Ownership to the caller.
+	 */
+	void add(const planarDirectedEdge *de);
+
+	/*
+	 * Tests whether this ring is a hole.
+	 * Due to the way the edges in the polyongization graph are linked,
+	 * a ring is a hole if it is oriented counter-clockwise.
+	 * @return <code>true</code> if this ring is a hole
+	 */
 	bool isHole();
-	/**
-	* Adds a hole to the polygon formed by this ring.
-	* @param hole the LinearRing forming the hole.
-	*/
+
+	/*
+	 * Adds a hole to the polygon formed by this ring.
+	 * @param hole the LinearRing forming the hole.
+	 */
 	void addHole(LinearRing *hole);
-	/**
-	* Computes the Polygon formed by this ring and any contained holes.
-	*
-	* @return the Polygon formed by this ring and its holes.
-	*/
+
+	/*
+	 * Computes the Polygon formed by this ring and any contained holes.
+	 *
+	 * @return the Polygon formed by this ring and its holes.
+	 */
 	Polygon* getPolygon();
-	/**
-	* Tests if the LinearRing ring formed by this edge ring is topologically valid.
-	* @return
-	*/
+
+	/*
+	 * Tests if the LinearRing ring formed by this edge ring
+	 * is topologically valid.
+	 */
 	bool isValid();
-	/**
-	* Gets the coordinates for this ring as a LineString.
-	* Used to return the coordinates in this ring
-	* as a valid geometry, when it has been detected that the ring is topologically
-	* invalid.
-	* @return a LineString containing the coordinates in this ring
-	*/
+
+	/*
+	 * Gets the coordinates for this ring as a LineString.
+	 * Used to return the coordinates in this ring
+	 * as a valid geometry, when it has been detected that the ring
+	 * is topologically invalid.
+	 * @return a LineString containing the coordinates in this ring
+	 */
 	LineString* getLineString();
-	/**
-	* Returns this ring as a LinearRing, or null if an Exception occurs while
-	* creating it (such as a topology problem). Details of problems are written to
-	* standard output.
-	*/
-	LinearRing* getRing();
+
+	/*
+	 * Returns this ring as a LinearRing, or null if an Exception
+	 * occurs while creating it (such as a topology problem).
+	 * Ownership of ring is retained by the object.
+	 * Details of problems are written to standard output.
+	 */
+	LinearRing* getRingInternal();
+
+	/*
+	 * Returns this ring as a LinearRing taking ownership
+	 * of it. 
+	 */
+	LinearRing* getRingOwnership();
 };
 
 
@@ -175,34 +193,40 @@ public:
 	 *    opposite to that of the parent Edge (if any)
 	 */
 	PolygonizeDirectedEdge(planarNode *newFrom,planarNode *newTo, const Coordinate& newDirectionPt,bool nEdgeDirection);
-	/**
-	* Returns the identifier attached to this directed edge.
-	*/
-	long getLabel();
-	/**
-	* Attaches an identifier to this directed edge.
-	*/
+
+	/*
+	 * Returns the identifier attached to this directed edge.
+	 */
+	long getLabel() const;
+
+	/*
+	 * Attaches an identifier to this directed edge.
+	 */
 	void setLabel(long newLabel);
-	/**
-	* Returns the next directed edge in the EdgeRing that this directed edge is a member
-	* of.
-	*/
-	PolygonizeDirectedEdge* getNext();
-	/**
-	* Sets the next directed edge in the EdgeRing that this directed edge is a member
-	* of.
-	*/
+
+	/*
+	 * Returns the next directed edge in the EdgeRing that this
+	 * directed edge is a member of.
+	 */
+	PolygonizeDirectedEdge* getNext() const;
+
+	/*
+	 * Sets the next directed edge in the EdgeRing that this
+	 * directed edge is a member of.
+	 */
 	void setNext(PolygonizeDirectedEdge *newNext);
-	/**
-	* Returns the ring of directed edges that this directed edge is
-	* a member of, or null if the ring has not been set.
-	* @see #setRing(EdgeRing)
-	*/
-	bool isInRing();
-	/**
-	* Sets the ring of directed edges that this directed edge is
-	* a member of.
-	*/
+
+	/*
+	 * Returns the ring of directed edges that this directed edge is
+	 * a member of, or null if the ring has not been set.
+	 * @see #setRing(EdgeRing)
+	 */
+	bool isInRing() const;
+
+	/*
+	 * Sets the ring of directed edges that this directed edge is
+	 * a member of.
+	 */
 	void setRing(polygonizeEdgeRing *newEdgeRing);
 };
 
@@ -232,10 +256,16 @@ public:
 
 	/*
 	 * \brief
+	 * Destroy a polygonization graph.
+	 */
+	~PolygonizeGraph();
+
+	/*
+	 * \brief
 	 * Add a LineString forming an edge of the polygon graph.
 	 * @param line the line to add
 	 */
-	void addEdge(LineString *line);
+	void addEdge(const LineString *line);
 
 	/*
 	 * \brief
@@ -252,7 +282,7 @@ public:
 	 *
 	 * @return a list of the LineString forming the removed cut edges
 	 */
-	vector<LineString*>* deleteCutEdges();
+	vector<const LineString*>* deleteCutEdges();
 
 	/*
 	 * Marks all edges from the graph which are "dangles".
@@ -264,7 +294,7 @@ public:
 	 *
 	 * @return a List containing the LineStrings that formed dangles
 	 */
-	vector<LineString*>* deleteDangles();
+	vector<const LineString*>* deleteDangles();
 
 private:
 	static int getDegreeNonDeleted(planarNode *node);
@@ -291,7 +321,8 @@ private:
 	 * @param startDE
 	 * @param label
 	 * @return the list of intersection nodes found,
-	 * or <code>null</code> if no intersection nodes were found
+	 * or <code>null</code> if no intersection nodes were found.
+	 * Ownership of returned vector goes to caller.
 	 */
 	static vector<planarNode*>* findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label);
 
@@ -326,6 +357,12 @@ private:
 	static vector<planarDirectedEdge*>* findDirEdgesInRing(PolygonizeDirectedEdge *startDE);
 
 	polygonizeEdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
+
+	/* Tese are for memory management */
+	vector<planarEdge *>newEdges;
+	vector<planarDirectedEdge *>newDirEdges;
+	vector<planarNode *>newNodes;
+	vector<polygonizeEdgeRing *>newEdgeRings;
 };
 
 /*
@@ -361,6 +398,7 @@ private:
 
 	// default factory
 	LineStringAdder *lineStringAdder;
+
 	/**
 	* Add a linestring to the graph of polygon edges.
 	*
@@ -371,64 +409,81 @@ private:
 	* Perform the polygonization, if it has not already been carried out.
 	*/
 	void polygonize();
-	void findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<polygonizeEdgeRing*> *validEdgeRingList,vector<LineString*> *invalidRingList);
+	void findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<polygonizeEdgeRing*> *validEdgeRingList, vector<LineString*> *invalidRingList);
 	void findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList);
 	static void assignHolesToShells(vector<polygonizeEdgeRing*> *holeList,vector<polygonizeEdgeRing*> *shellList);
 	static void assignHoleToShell(polygonizeEdgeRing *holeER,vector<polygonizeEdgeRing*> *shellList);
 protected:
 	PolygonizeGraph *graph;
+
 	// initialize with empty collections, in case nothing is computed
-	vector<LineString*> *dangles;
-	vector<LineString*> *cutEdges;
+	vector<const LineString*> *dangles;
+	vector<const LineString*> *cutEdges;
 	vector<LineString*> *invalidRingLines;
 
 	vector<polygonizeEdgeRing*> *holeList;
 	vector<polygonizeEdgeRing*> *shellList;
 	vector<Polygon*> *polyList;
+
 public:
-	/**
-	* Create a polygonizer with the same {@link GeometryFactory}
-	* as the input {@link Geometry}s
-	*/
+
+	/*
+	 * Create a polygonizer with the same GeometryFactory
+	 * as the input Geometry
+	 */
 	Polygonizer();
+
 	~Polygonizer();
-	/**
-	* Add a collection of geometries to be polygonized.
-	* May be called multiple times.
-	* Any dimension of Geometry may be added;
-	* the constituent linework will be extracted and used
-	*
-	* @param geomList a list of {@link Geometry}s with linework to be polygonized
-	*/
+
+	/*
+	 * Add a collection of geometries to be polygonized.
+	 * May be called multiple times.
+	 * Any dimension of Geometry may be added;
+	 * the constituent linework will be extracted and used
+	 *
+	 * @param geomList a list of Geometry with linework to be polygonized
+	 */
 	void add(vector<Geometry*> *geomList);
+
 	/**
-	* Add a geometry to the linework to be polygonized.
-	* May be called multiple times.
-	* Any dimension of Geometry may be added;
-	* the constituent linework will be extracted and used
-	*
-	* @param g a {@link Geometry} with linework to be polygonized
-	*/
+	 * Add a geometry to the linework to be polygonized.
+	 * May be called multiple times.
+	 * Any dimension of Geometry may be added;
+	 * the constituent linework will be extracted and used
+	 *
+	 * @param g a Geometry with linework to be polygonized
+	 */
 	void add(Geometry *g);
+
 	/**
-	* Gets the list of polygons formed by the polygonization.
-	* @return a collection of {@link Polygons}
-	*/
+	 * Gets the list of polygons formed by the polygonization.
+	 * Ownership of vector is transferred to caller, subsequent
+	 * calls will return NULL.
+	 * @return a collection of Polygons
+	 */
 	vector<Polygon*>* getPolygons();
+
 	/**
-	* Get the list of dangling lines found during polygonization.
-	* @return a collection of the input {@LineStrings} which are dangles
-	*/
-	vector<LineString*>* getDangles();
+	 * Get the list of dangling lines found during polygonization.
+	 * @return a collection of the input LineStrings which are dangles
+	 */
+	vector<const LineString*>* getDangles();
+
+
 	/**
-	* Get the list of cut edges found during polygonization.
-	* @return a collection of the input {@LineStrings} which are cut edges
-	*/
-	vector<LineString*>* getCutEdges();
-	/**
-	* Get the list of lines forming invalid rings found during polygonization.
-	* @return a collection of the input {@LineStrings} which form invalid rings
-	*/
+	 * Get the list of cut edges found during polygonization.
+	 * @return a collection of the input LineStrings which are cut edges
+	 */
+	vector<const LineString*>* getCutEdges();
+
+	/*
+	 * Get the list of lines forming invalid rings found during
+	 * polygonization.
+	 * Ownership is tranferred to caller, second call will return
+	 * NULL (unless polygonize is called again).
+	 * @return a collection of LineStrings which form
+	 * invalid rings
+	 */
 	vector<LineString*>* getInvalidRingLines();
 };
 
@@ -437,6 +492,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
  * Revision 1.4  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and

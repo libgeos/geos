@@ -11,22 +11,6 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
 
 
@@ -50,7 +34,11 @@ vector<planarEdge*>* planarNode::getEdgesBetween(planarNode *node0, planarNode *
 /**
 * Constructs a Node with the given location.
 */
-planarNode::planarNode(const Coordinate& newPt){
+planarNode::planarNode(const Coordinate& newPt)
+{
+#ifdef DEBUG_ALLOC
+	cerr<<"["<<this<<"] planarNode(const Coordinate&)"<<endl;
+#endif
 	pt=newPt;
 	deStar=new planarDirectedEdgeStar();
 }
@@ -59,7 +47,11 @@ planarNode::planarNode(const Coordinate& newPt){
  * Constructs a Node with the given location and collection of
  * outgoing DirectedEdges.
  */
-planarNode::planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar){
+planarNode::planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar)
+{
+#ifdef DEBUG_ALLOC
+	cerr<<"["<<this<<"] planarNode(const Coordinate&, planarDirectedEdgeStar *)"<<endl;
+#endif // DEBUG_ALLOC
 	pt=newPt;
 	deStar=newDeStar;
 }
@@ -74,14 +66,18 @@ Coordinate& planarNode::getCoordinate() {
 /*
  * Adds an outgoing DirectedEdge to this Node.
  */
-void planarNode::addOutEdge(planarDirectedEdge *de){
+void
+planarNode::addOutEdge(planarDirectedEdge *de)
+{
 	deStar->add(de);
 }
 
 /**
 * Returns the collection of DirectedEdges that leave this Node.
 */
-planarDirectedEdgeStar* planarNode::getOutEdges() {
+planarDirectedEdgeStar*
+planarNode::getOutEdges()
+{
 	return deStar;
 }
 /**
@@ -100,8 +96,33 @@ int planarNode::getIndex(planarEdge *edge){
 
 planarNode::~planarNode()
 {
+#ifdef DEBUG_ALLOC
+	cerr<<"["<<this<<"] ~planarNode()"<<endl;
+#endif // DEBUG_ALLOC
 	delete deStar;
 }
 
 //} // namespace planargraph 
 } // namespace geos 
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
+ * Revision 1.3  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/

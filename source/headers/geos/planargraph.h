@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
  * Revision 1.4  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -376,6 +380,7 @@ public:
 	 * for each of the given DirectedEdges.
 	 */
 	static vector<planarEdge*>* toEdges(vector<planarDirectedEdge*> *dirEdges);
+
 	/*
 	 * \brief Constructs a DirectedEdge connecting the <code>from</code>
 	 * node to the <code>to</code> node.
@@ -394,7 +399,7 @@ public:
 	 * \brief Returns this DirectedEdge's parent Edge,
 	 * or null if it has none.
 	 */
-	planarEdge* getEdge();
+	planarEdge* getEdge() const;
 
 	/*
 	 * \brief Associates this DirectedEdge with an Edge
@@ -406,49 +411,49 @@ public:
 	 * \brief Returns 0, 1, 2, or 3, indicating the quadrant in which
 	 * this DirectedEdge's orientation lies.
 	 */
-	int getQuadrant();
+	int getQuadrant() const;
 
 	/*
 	 * \brief Returns a point to which an imaginary line is drawn
 	 * from the from-node to specify this DirectedEdge's orientation.
 	 */
-	Coordinate& getDirectionPt();
+	const Coordinate& getDirectionPt() const;
 
 	/*
 	 * \brief Returns whether the direction of the parent Edge (if any)
 	 * is the same as that of this Directed Edge.
 	 */
-	bool getEdgeDirection();
+	bool getEdgeDirection() const;
 
 	/*
 	 * \brief Returns the node from which this DirectedEdge leaves.
 	 */
-	planarNode* getFromNode();
+	planarNode* getFromNode() const;
 
 	/*
 	 * \brief Returns the node to which this DirectedEdge goes.
 	 */
-	planarNode* getToNode();
+	planarNode* getToNode() const;
 
 	/*
 	 * \brief
 	 * Returns the coordinate of the from-node.
 	 */
-	Coordinate& getCoordinate();
+	Coordinate& getCoordinate() const;
 
 	/*
 	 * \brief
 	 * Returns the angle that the start of this DirectedEdge makes
 	 * with the positive x-axis, in radians.
 	 */
-	double getAngle();
+	double getAngle() const;
 
 	/*
 	 * \brief
 	 * Returns the symmetric DirectedEdge -- the other DirectedEdge
 	 * associated with this DirectedEdge's parent Edge.
 	 */
-	planarDirectedEdge* getSym();
+	planarDirectedEdge* getSym() const;
 
 	/*
 	 * \brief
@@ -476,7 +481,7 @@ public:
 	 *   the vectors.
 	 * 
 	 */
-	int compareTo(void* obj);
+	int compareTo(void* obj) const;
 
 	/*
 	 * \brief
@@ -497,14 +502,14 @@ public:
 	 *   the vectors.
 	 *
 	 */
-	int compareDirection(planarDirectedEdge *e);
+	int compareDirection(planarDirectedEdge *e) const;
 
 	/*
 	 * \brief
 	 * Prints a detailed string representation of this DirectedEdge
 	 * to the given PrintStream.
 	 */
-	string print();
+	string print() const;
 
 };
 
