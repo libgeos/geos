@@ -27,7 +27,6 @@ void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,ve
 	add(edges0,edges0);
 	add(edges1,edges1);
 	computeIntersections(si);
-cout << "# overlapping MCs: " << nOverlaps << endl;
 }
 
 void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges) {

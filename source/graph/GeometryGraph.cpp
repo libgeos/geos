@@ -77,7 +77,10 @@ EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {
 */
 GeometryGraph::GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel, int newSRID):PlanarGraph(){
 	boundaryNodes=NULL;
-	GeometryGraph(newArgIndex,NULL);
+	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
+	useBoundaryDeterminationRule=false;
+	argIndex=newArgIndex;
+	parentGeom=NULL;
 	precisionModel=newPrecisionModel;
 	SRID=newSRID;
 	hasTooFewPointsVar=false;
@@ -269,10 +272,9 @@ SegmentIntersector* GeometryGraph::computeSelfNodes(LineIntersector *li, bool co
 	//EdgeSetIntersector esi = new MCQuadIntersector();
     auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 	// optimized test for Polygons and Rings
-	if (!computeRingSelfNodes & 
-		(typeid(*parentGeom)==typeid(LinearRing)||
-		 typeid(*parentGeom)==typeid(Polygon)||
-		 typeid(*parentGeom)==typeid(MultiPolygon))) {
+	if (parentGeom==NULL) {
+		esi->computeIntersections(edges,si,true);
+	} else if (!computeRingSelfNodes & (typeid(*parentGeom)==typeid(LinearRing)||typeid(*parentGeom)==typeid(Polygon)||typeid(*parentGeom)==typeid(MultiPolygon))) {
 			esi->computeIntersections(edges, si, false);
 	} else {
 		esi->computeIntersections(edges,si,true);

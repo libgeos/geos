@@ -7,10 +7,12 @@ namespace geos {
 InteriorPointLine::InteriorPointLine(Geometry *g) {
 	interiorPoint=NULL;
 	minDistance=DoubleInfinity;
-	centroid=g->getCentroid()->getCoordinate();
+	Point *p=g->getCentroid();
+	centroid=p->getCoordinate();
 	addInterior(g);
 	if (interiorPoint==NULL)
 		addEndpoints(g);
+	delete p;
 }
 
 InteriorPointLine::~InteriorPointLine() {
@@ -70,6 +72,7 @@ void InteriorPointLine::addEndpoints(CoordinateList *pts){
 void InteriorPointLine::add(Coordinate *point) {
 	double dist=point->distance(*centroid);
 	if (dist<minDistance) {
+		delete interiorPoint;
 		interiorPoint=new Coordinate(*point);
 		minDistance=dist;
 	}

@@ -7,7 +7,8 @@ namespace geos {
 InteriorPointPoint::InteriorPointPoint(Geometry *g) {
 	interiorPoint=NULL;
 	minDistance=DoubleInfinity;
-	centroid=g->getCentroid()->getCoordinate();
+	auto_ptr<Point> p(g->getCentroid());
+	centroid=p->getCoordinate();
 	add(g);
 }
 
@@ -36,6 +37,7 @@ void InteriorPointPoint::add(Geometry *geom) {
 void InteriorPointPoint::add(Coordinate *point) {
 	double dist=point->distance(*centroid);
 	if (dist<minDistance) {
+		delete interiorPoint;
 		interiorPoint=new Coordinate(*point);
 		minDistance=dist;
 	}

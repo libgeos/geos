@@ -67,8 +67,6 @@ OverlayOp::~OverlayOp() {
 	for(int i=0;i<(int)resultPointList->size();i++) {
 		delete (*resultPointList)[i];
 	}
-    delete resultLineList;
-    delete resultPolyList;
 	delete resultPointList;
 	delete ptLocator;
 }

@@ -49,8 +49,8 @@ DirectedEdge* DirectedEdgeStar::getRightmostEdge() {
 	vector<EdgeEnd*> *edges=getEdges();
 	int size=(int)edges->size();
 	if (size<1) return NULL;
-    EdgeEnd* e0=(EdgeEnd*) edges;
-    DirectedEdge *de0=(DirectedEdge*) edges;
+//    EdgeEnd* e0=(EdgeEnd*) edges;
+    DirectedEdge *de0=(DirectedEdge*) (*edges)[0];
 	if (size==1) return de0;
     DirectedEdge *deLast=(DirectedEdge*)(*edges)[size-1];
 	int quad0=de0->getQuadrant();

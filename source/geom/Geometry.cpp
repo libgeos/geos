@@ -203,7 +203,9 @@ Point* Geometry::getInteriorPoint() {
 		interiorPt=intPt->getInteriorPoint();
 		delete intPt;
 	}
-	return GeometryFactory::createPointFromInternalCoord(interiorPt,this);
+	Point *p=GeometryFactory::createPointFromInternalCoord(interiorPt,this);;
+	delete interiorPt;
+	return p;
 }
 
 /**

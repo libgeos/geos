@@ -335,6 +335,31 @@ int main(int argC, char* argV[]) {
 					}
 					delete gRes;
 					delete gRealRes;
+				} else if (opName=="buffer") {
+					cout << "\t\tOperation '" << opName << "(10.0)'" << endl;
+					Geometry *gRealRes=gA->buffer(10.0);
+					gRealRes->normalize();
+					if (out & TEST_RESULT) {
+						cout << "\t\tResult: buffer='" << gRealRes->toString() << "'"  <<endl;
+					}
+					delete gRealRes;
+				} else if (opName=="getInteriorPoint") {
+					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->getInteriorPoint();
+					gRealRes->normalize();
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: getInteriorPoint='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: getInteriorPoint='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+					delete gRes;
+					delete gRealRes;
 				} else {
 					cout<<"Something else\n";
 				}

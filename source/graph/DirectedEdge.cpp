@@ -15,7 +15,7 @@ int DirectedEdge::depthFactor(int currLocation, int nextLocation){
 	return 0;
 }
 
-DirectedEdge::DirectedEdge() {
+DirectedEdge::DirectedEdge(): EdgeEnd() {
 	isInResultVar=false;
 	isVisitedVar=false;
 	depth[0]=0;

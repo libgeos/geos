@@ -53,11 +53,15 @@ void InteriorPointArea::addPolygon(Geometry *geometry) {
 	LineString *bisector=horizontalBisector(geometry);
 	Geometry *intersections=bisector->intersection(geometry);
 	Geometry *widestIntersection=widestGeometry(intersections);
-	double width=widestIntersection->getEnvelopeInternal()->getWidth();
+	Envelope *env=widestIntersection->getEnvelopeInternal();
+	double width=env->getWidth();
 	if (interiorPoint==NULL || width>maxWidth) {
-		interiorPoint=centre(widestIntersection->getEnvelopeInternal());
+		interiorPoint=centre(env);
 		maxWidth = width;
 	}
+	delete env;
+	delete bisector;
+	delete intersections;
 }
 
 //@return if geometry is a collection, the widest sub-geometry; otherwise,
@@ -79,8 +83,9 @@ Geometry* InteriorPointArea::widestGeometry(GeometryCollection* gc) {
 	}
 	Geometry* widestGeometry=gc->getGeometryN(0);
 	for(int i=1;i<gc->getNumGeometries();i++) { //Start at 1
-		if (gc->getGeometryN(i)->getEnvelopeInternal()->getWidth() >
-			widestGeometry->getEnvelopeInternal()->getWidth()) {
+		auto_ptr<Envelope> env1(gc->getGeometryN(i)->getEnvelopeInternal());
+		auto_ptr<Envelope> env2(widestGeometry->getEnvelopeInternal());
+		if (env1->getWidth()>env2->getWidth()) {
 				widestGeometry=gc->getGeometryN(i);
 		}
 	}
@@ -92,8 +97,13 @@ LineString* InteriorPointArea::horizontalBisector(Geometry *geometry) {
 	// Assert: for areas, minx <> maxx
 	double avgY=avg(envelope->getMinY(),envelope->getMaxY());
 	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
-	cl->add(*(new Coordinate(envelope->getMinX(),avgY)));
-	cl->add(*(new Coordinate(envelope->getMaxX(),avgY)));
+	Coordinate *c1=new Coordinate(envelope->getMinX(),avgY);
+	Coordinate *c2=new Coordinate(envelope->getMaxX(),avgY);
+	cl->add(*c1);
+	cl->add(*c2);
+	delete c1;
+	delete c2;
+	delete envelope;
 	return factory->createLineString(cl);
 }
 
