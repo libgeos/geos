@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/05/03 16:29:21  strk
+ * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
+ * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
+ * and SIRtree.cpp.
+ *
  * Revision 1.10  2004/05/03 13:17:55  strk
  * Fixed comparator function to express StrictWeakOrdering.
  *
@@ -87,10 +92,6 @@ void AbstractSTRtree::build() {
 //	Assert::isTrue(itemBoundables->size()==itemBoundablesInTree->size());
 //}
 
-bool compareAbsBoundables(Boundable *a, Boundable *b){
-	return false;
-}
-
 /**
 * Sorts the childBoundables then divides them into groups of size M, where
 * M is the node capacity.
@@ -101,8 +102,8 @@ AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables,int 
 	Assert::isTrue(!childBoundables->empty());
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 	parentBoundables->push_back(createNode(newLevel));
-	vector<Boundable*> *sortedChildBoundables=new vector<Boundable*>(childBoundables->begin(),childBoundables->end());
-	sort(sortedChildBoundables->begin(),sortedChildBoundables->end(),compareAbsBoundables);
+	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
+
 	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
 		if (lastNode(parentBoundables)->getChildBoundables()->size()==nodeCapacity) {
@@ -224,5 +225,6 @@ void AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Bound
 	}
 	return;
 }
+
 }
 

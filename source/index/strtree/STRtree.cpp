@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/05/03 16:29:21  strk
+ * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
+ * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
+ * and SIRtree.cpp.
+ *
  * Revision 1.5  2004/04/26 12:37:19  strk
  * Some leaks fixed.
  *
@@ -36,10 +41,14 @@
 
 namespace geos {
 
-bool xComparator(Boundable *a, Boundable *b){
-	return AbstractSTRtree::compareDoubles(STRtree::centreX((Envelope*)a->getBounds()),
-										   STRtree::centreX((Envelope*)b->getBounds()));
+static bool xComparator(Boundable *a, Boundable *b){
+	return AbstractSTRtree::compareDoubles(STRtree::centreX((Envelope*)a->getBounds()), STRtree::centreX((Envelope*)b->getBounds()));
 }
+
+static bool yComparator(Boundable *a, Boundable *b){
+	return AbstractSTRtree::compareDoubles(STRtree::centreY((Envelope*)a->getBounds()), STRtree::centreY((Envelope*)b->getBounds()));
+}
+
 /**
 * Constructs an STRtree with the default node capacity.
 */
@@ -88,8 +97,8 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 {
 	Assert::isTrue(!childBoundables->empty());
 	int minLeafCount=(int) ceil((double)childBoundables->size()/(double)getNodeCapacity());
-	vector<Boundable*> *sortedChildBoundables=new vector<Boundable*>(childBoundables->begin(),childBoundables->end());
-	sort(sortedChildBoundables->begin(),sortedChildBoundables->end(),xComparator);
+
+	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
 	vector<vector<Boundable*>*>* verticalSlicesV = verticalSlices(sortedChildBoundables,(int)ceil(sqrt((double)minLeafCount)));
 	delete sortedChildBoundables;
 	vector<Boundable*> *ret;
@@ -171,6 +180,14 @@ void STRtree::insert(Envelope *itemEnv, void* item) {
 
 vector<void*>* STRtree::query(Envelope *searchEnv) {
 	return AbstractSTRtree::query(searchEnv);
+}
+
+vector<Boundable*> *
+STRtree::sortBoundables(const vector<Boundable*> *input)
+{
+	vector<Boundable*> *output=new vector<Boundable*>(*input);
+	sort(output->begin(),output->end(),yComparator);
+	return output;
 }
 
 }

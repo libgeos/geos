@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/05/03 16:29:21  strk
+ * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
+ * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
+ * and SIRtree.cpp.
+ *
  * Revision 1.6  2004/03/25 02:23:55  ybychkov
  * All "index/*" packages upgraded to JTS 1.4
  *
@@ -29,7 +34,7 @@
 
 namespace geos {
 
-bool compareSIRBoundables(Boundable *a, Boundable *b){
+static bool compareSIRBoundables(Boundable *a, Boundable *b){
 	return AbstractSTRtree::compareDoubles(((Interval*)a->getBounds())->getCentre(),((Interval*)b->getBounds())->getCentre());
 }
 
@@ -41,8 +46,9 @@ vector<Boundable*>* SIRtree::createParentBoundables(vector<Boundable*> *childBou
 	Assert::isTrue(!childBoundables->empty());
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 	parentBoundables->push_back(createNode(newLevel));
-	vector<Boundable*> *sortedChildBoundables=new vector<Boundable*>(childBoundables->begin(),childBoundables->end());
-	sort(sortedChildBoundables->begin(),sortedChildBoundables->end(),compareSIRBoundables);
+
+	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
+
 	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
 		if (lastNode(parentBoundables)->getChildBoundables()->size()==nodeCapacity) {
@@ -116,6 +122,14 @@ vector<void*>* SIRtree::query(double x) {
 */
 vector<void*>* SIRtree::query(double x1, double x2) {
 	return AbstractSTRtree::query(new Interval(min(x1, x2),max(x1, x2)));
+}
+
+vector<Boundable*> *
+SIRtree::sortBoundables(const vector<Boundable*> *input)
+{
+	vector<Boundable*> *output=new vector<Boundable*>(*input);
+	sort(output->begin(), output->end(), compareSIRBoundables);
+	return output;
 }
 }
 

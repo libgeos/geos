@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/05/03 16:29:21  strk
+ * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
+ * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
+ * and SIRtree.cpp.
+ *
  * Revision 1.11  2004/05/03 13:17:55  strk
  * Fixed comparator function to express StrictWeakOrdering.
  *
@@ -172,6 +177,7 @@ private:
 	bool built;
 	vector<Boundable*> *itemBoundables;
 	virtual AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel,int level);
+	virtual vector<Boundable*> *sortBoundables(const vector<Boundable*> *input)=0;
 public:
 	IntersectsOp* intersectsOp;
 	AbstractSTRtree(int newNodeCapacity);
@@ -182,7 +188,6 @@ public:
 	virtual int getNodeCapacity();
 	virtual void query(void* searchBounds,AbstractNode* node,vector<void*>* matches);
 	virtual void boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables);
-//	virtual bool getComparator(Boundable *a, Boundable *b);
 };
 
 class SIRAbstractNode: public AbstractNode{
@@ -214,6 +219,7 @@ protected:
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
 	AbstractNode* createNode(int level);
 //	IntersectsOp* getIntersectsOp(){return NULL;);
+	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
 };
 	
 class STRAbstractNode: public AbstractNode{
@@ -242,10 +248,11 @@ private:
 //	Comparator* xComparator;
 //	Comparator* yComparator;
 //	IntersectsOp* intersectsOp;
+
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
 	vector<Boundable*>* createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*>* verticalSlices, int newLevel);
 protected:
-//	Comparator* getComparator();
+	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
 	vector<Boundable*>* createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel);
 	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
 	AbstractNode* createNode(int level);
