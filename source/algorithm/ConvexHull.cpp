@@ -20,31 +20,43 @@ Geometry* ConvexHull::getConvexHull(Geometry *newGeometry) {
 	geometry->apply(filter);
 	CoordinateList *pts=filter->getCoordinates();
 	if (pts->getSize()==0) {
-		return new GeometryCollection(new vector<Geometry*>(),geometry->getPrecisionModel(),geometry->getSRID());
+		Geometry *g=new GeometryCollection(new vector<Geometry*>(),geometry->getPrecisionModel(),geometry->getSRID());
+		delete filter;
+		return g;
 	}
 	if (pts->getSize()==1) {
-		return new Point(pts->getAt(0),geometry->getPrecisionModel(),geometry->getSRID());
+		Geometry *g=new Point(pts->getAt(0),geometry->getPrecisionModel(),geometry->getSRID());
+		delete filter;
+		return g;
 	}
 	if (pts->getSize()==2) {
-		return new LineString(pts,geometry->getPrecisionModel(),geometry->getSRID());
+		pts=CoordinateListFactory::internalFactory->createCoordinateList(pts);
+		Geometry *g=new LineString(pts,geometry->getPrecisionModel(),geometry->getSRID());
+		delete filter;
+		return g;
 	}
 	// sort points for Graham scan.
-	CoordinateList *pspts;
+	CoordinateList *cH;
 	if (pts->getSize()>10) {
 		//Probably should be somewhere between 50 and 100?
 		CoordinateList *rpts=reduce(pts);
-		pspts=preSort(rpts);
+		// Use Graham scan to find convex hull.
+		cH=grahamScan(preSort(rpts));
+		delete filter;
+		delete rpts;
 	} else {
-		pspts=preSort(pts);
+		// Use Graham scan to find convex hull.
+		cH=grahamScan(preSort(pts));
+		delete filter;
 	}
-	// Use Graham scan to find convex hull.
-	CoordinateList *cH=grahamScan(pspts);
 	// Convert array to linear ring.
-	return lineOrPolygon(cH);
+	Geometry *g=lineOrPolygon(cH);
+	delete cH;
+	return g;
 }
 
 CoordinateList* ConvexHull::reduce(CoordinateList *pts) {
-	BigQuad *bigQuad=makeBigQuad(pts);
+	auto_ptr<BigQuad> bigQuad(makeBigQuad(pts));
 	// Build a linear ring defining a big poly.
 	CoordinateList *bigPoly=CoordinateListFactory::internalFactory->createCoordinateList();
 	bigPoly->add(bigQuad->westmost);
@@ -58,6 +70,7 @@ CoordinateList* ConvexHull::reduce(CoordinateList *pts) {
 		bigPoly->add(bigQuad->southmost);
 	}
 	if (bigPoly->getSize()<3) {
+		delete bigPoly;
 		return pts;
 	}
 	bigPoly->add(bigQuad->westmost);
@@ -74,6 +87,7 @@ CoordinateList* ConvexHull::reduce(CoordinateList *pts) {
 		}
 	}
 	// Return this array as the reduced problem.
+	delete bQ;
 	return cl;
 }
 
@@ -118,6 +132,7 @@ CoordinateList* ConvexHull::grahamScan(CoordinateList *c) {
 	p=c->getAt(0);
 	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
 	cl->setPoints(*ps);
+	delete ps;
 	return cl;
 }
 
@@ -229,6 +244,7 @@ Geometry* ConvexHull::lineOrPolygon(CoordinateList *newCoordinates) {
 		CoordinateList *cl1=CoordinateListFactory::internalFactory->createCoordinateList();
 		cl1->add(coordinates->getAt(0));
 		cl1->add(coordinates->getAt(1));
+		delete coordinates;
 		return new LineString(cl1,geometry->getPrecisionModel(),geometry->getSRID());
 	}
 	LinearRing *linearRing=new LinearRing(coordinates,geometry->getPrecisionModel(),geometry->getSRID());

@@ -343,18 +343,15 @@ Geometry* Geometry::buffer(double distance) {
 *@return           all points whose distance from this <code>Geometry</code>
 *      are less than or equal to <code>distance</code>
 */
-//!!! External Dependency
 Geometry* Geometry::buffer(double distance,int quadrantSegments) {
-	//!!! External Dependency
-//	return BufferOp.bufferOp(this, distance, quadrantSegments);
-	return NULL;
+	return BufferOp::bufferOp(this, distance, quadrantSegments);
 }
 
-//!!! External Dependency
 Geometry* Geometry::convexHull() {
-//!!! External Dependency
-//	return (new ConvexHull(cgAlgorithms)).getConvexHull(this);
-	return NULL;
+	ConvexHull *ch=new ConvexHull(cgAlgorithms);
+	Geometry *g=ch->getConvexHull(this);
+	delete ch;
+	return g;
 }
 
 Geometry* Geometry::intersection(Geometry *other) {

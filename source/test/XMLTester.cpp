@@ -43,7 +43,7 @@ int main(int argC, char* argV[]) {
 	InitAllocCheck();
 	{
 #endif
-//	_CrtSetBreakAlloc(8702);
+//	_CrtSetBreakAlloc(1157);
 	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
 //	int out=GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT+PRED;
@@ -319,7 +319,22 @@ int main(int argC, char* argV[]) {
 						}
 					}
 				} else if (opName=="convexhull") {
-					cout<<"ConvexHull\n";
+					Geometry *gRes=r->read(opRes);
+					gRes->normalize();
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->convexHull();
+					gRealRes->normalize();
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: convexHull='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: convexHull='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+					delete gRes;
+					delete gRealRes;
 				} else {
 					cout<<"Something else\n";
 				}

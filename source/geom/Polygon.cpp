@@ -17,8 +17,21 @@ Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID){
 	}
 }
 
-Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID){
-	Polygon (newShell, new vector<Geometry *>(), precisionModel, SRID);
+Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID): Geometry(precisionModel, SRID) {
+	if (newShell==NULL)
+		newShell=new LinearRing(CoordinateListFactory::internalFactory->createCoordinateList(), precisionModel, SRID);
+	holes=new vector<Geometry *>();
+	if (hasNullElements(holes)) {
+		delete newShell;
+		delete holes;
+		throw new IllegalArgumentException("holes must not contain null elements");
+	}
+	if (newShell->isEmpty() && hasNonEmptyElements(holes)) {
+		delete newShell;
+		delete holes;
+		throw new IllegalArgumentException("shell is empty but holes are not");
+	}
+	shell=newShell;
 }
 
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
