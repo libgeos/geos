@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/19 10:33:12  strk
+ * Class documentation changed to report geos.h as WKT writer/parser header file
+ *
  * Revision 1.4  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -68,7 +71,7 @@ using namespace std;
 namespace geos {
 
 /**
- * \class ParseException io.h geos/io.h
+ * \class ParseException io.h geos.h
  * \brief Notifies a parsing error
  */
 class ParseException: public GEOSException {
@@ -102,7 +105,7 @@ private:
 };
 
 /**
- * \class WKTReader io.h geos/io.h
+ * \class WKTReader io.h geos.h
  * \brief WKT parser class; see also WKTWriter.
  */
 class WKTReader {
@@ -160,9 +163,10 @@ private:
 };
 
 /**
- * \class WKTWriter io.h geos/io.h
+ * \class WKTWriter io.h geos.h
  *
  * \brief Outputs the textual representation of a Geometry.
+ * See also WKTReader.
  * 
  * The WKTWriter outputs coordinates rounded to the precision
  * model. No more than the maximum number of necessary decimal places will be
