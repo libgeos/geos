@@ -118,11 +118,12 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	cerr<<"BufferBuilder::buffer computing NodedEdges"<<endl;
 #endif
 #if PROFILE
-	profiler->start("BufferBuilder::computeNodedEdges()");
+	static Profile *prof=profiler->get("BufferBuilder::computeNodedEdges()");
+	prof->start();
 #endif
 	computeNodedEdges(bufferSegStrList, precisionModel);
 #if PROFILE
-	profiler->stop("BufferBuilder::computeNodedEdges()");
+	prof->stop();
 #endif
 #if DEBUG
 	cerr<<"BufferBuilder::buffer finished computing NodedEdges"<<endl;
@@ -177,8 +178,10 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 #if DEBUG
 		cerr<<"BufferBuilder::computeNodedEdges: setting label for "<<nodedSegStrings->size()<<" nodedSegStrings"<<endl;
 #endif
+
 #if PROFILE
-	profiler->start("BufferBuilder::computeNodedEdges: labeling");
+		static Profile *prof = profiler->get("BufferBuilder::computeNodedEdges: labeling");
+		prof->start();
 #endif
 		for (unsigned int i=0;i<nodedSegStrings->size();i++) {
 			SegmentString *segStr=(*nodedSegStrings)[i];
@@ -187,8 +190,9 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 			insertEdge(edge);
 		}
 #if PROFILE
-	profiler->stop("BufferBuilder::computeNodedEdges: labeling");
+		prof->stop();
 #endif
+
 #if DEBUG
 		cerr<<"BufferBuilder::computeNodedEdges: labeling for "<<nodedSegStrings->size()<<" nodedSegStrings done"<<endl;
 #endif
@@ -304,6 +308,9 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2005/02/01 13:44:59  strk
+ * More profiling labels.
+ *
  * Revision 1.25  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

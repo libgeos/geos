@@ -11,56 +11,29 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.17  2005/01/28 09:47:51  strk
- * Replaced sprintf uses with ostringstream.
- *
- * Revision 1.16  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.15  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.14  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.13  2004/05/14 13:42:46  strk
- * DistanceOp bug removed, cascading errors fixed.
- *
- * Revision 1.12  2004/04/05 06:35:14  ybychkov
- * "operation/distance" upgraded to JTS 1.4
- *
- * Revision 1.11  2004/03/29 06:59:24  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.9  2003/10/11 01:56:08  strk
- * Code base padded with 'const' keywords ;)
- *
  **********************************************************************/
-
 
 
 #include <sstream>
 #include <geos/geom.h>
 #include <geos/geosAlgorithm.h>
+#include <geos/profiler.h>
+
+#define PROFILE 1
 
 namespace geos {
 
 /**
  *  Constructs an empty <code>LineSegment</code>.
  */
-LineSegment::LineSegment(void){}
+LineSegment::LineSegment(void)
+{
+#if PROFILE
+	static Profile *prof = Profiler::instance()->get("LineSegment::LineSegment(void)");
+	prof->start();
+	prof->stop();
+#endif
+}
 
 /**
  *  Constructs a <code>LineSegment</code> with the given start and end coordinates.
@@ -69,14 +42,28 @@ LineSegment::LineSegment(void){}
  *@param  c1      end of the <code>LineSegment</code>.
  */
 LineSegment::LineSegment(const Coordinate& c0, const Coordinate& c1){
+#if PROFILE
+	static Profile *prof = Profiler::instance()->get("LineSegment::LineSegment(const Coordinate&, const Coordinate &)");
+	prof->start();
+#endif
 	p0=c0;
 	p1=c1;
+#if PROFILE
+	prof->stop();
+#endif
 }
 
 /// Default destructor
 LineSegment::~LineSegment(void){}
 
-LineSegment::LineSegment(const LineSegment &ls):p0(ls.p0),p1(ls.p1) {}
+LineSegment::LineSegment(const LineSegment &ls):p0(ls.p0),p1(ls.p1)
+{
+#if PROFILE
+	static Profile *prof = Profiler::instance()->get("LineSegment::LineSegment(const LineSegment&)");
+	prof->start();
+	prof->stop();
+#endif
+}
 
 /**
  *  Sets the parameters of the <code>LineSegment</code> to the given start and end coordinates.
@@ -85,10 +72,17 @@ LineSegment::LineSegment(const LineSegment &ls):p0(ls.p0),p1(ls.p1) {}
  *@param  c1      new end of the <code>LineSegment</code>.
  */
 void LineSegment::setCoordinates(const Coordinate& c0, const Coordinate& c1) {
+#if PROFILE
+	static Profile *prof = Profiler::instance()->get("LineSegment::setCoordinates(const Coordinate&, const Coordinate &)");
+	prof->start();
+#endif
 	p0.x = c0.x;
 	p0.y = c0.y;
 	p1.x = c1.x;
 	p1.y = c1.y;
+#if PROFILE
+	prof->stop();
+#endif
 }
 
 const Coordinate& LineSegment::getCoordinate(int i) const {
@@ -435,5 +429,47 @@ LineSegment::intersection(const LineSegment *line) const
 bool operator==(const LineSegment a, const LineSegment b) {
 	return a.p0==b.p0 && a.p1==b.p1;
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.18  2005/02/01 13:44:59  strk
+ * More profiling labels.
+ *
+ * Revision 1.17  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
+ * Revision 1.16  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
+ * Revision 1.15  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.14  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.13  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
+ * Revision 1.12  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
+ * Revision 1.11  2004/03/29 06:59:24  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
+ * Revision 1.10  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.9  2003/10/11 01:56:08  strk
+ * Code base padded with 'const' keywords ;)
+ *
+ **********************************************************************/
 

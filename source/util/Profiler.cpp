@@ -100,14 +100,7 @@ Profiler::~Profiler()
 void
 Profiler::start(string name)
 {
-	Profile *prof;
-	map<string, Profile *>::iterator iter = profs.find(name);
-	if ( iter == profs.end() ) {
-		prof = new Profile(name);
-		profs.insert(pair<string, Profile *>(name, prof));
-	} else {
-		prof = iter->second;
-	}
+	Profile *prof = get(name);
 	prof->start();
 }
 
@@ -167,6 +160,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/02/01 13:44:59  strk
+ * More profiling labels.
+ *
  * Revision 1.4  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *

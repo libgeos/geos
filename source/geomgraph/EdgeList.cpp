@@ -66,11 +66,12 @@ Edge *
 EdgeList::findEqualEdge(Edge *e)
 {
 #if PROFILE
-	profiler->start("Quadtree::query()");
+	static Profile *prof = profiler->get("EdgeList::findEqualEdge(Edge *e)");
+	prof->start();
 #endif
 	vector<void*> *testEdges=index->query(e->getEnvelope());
 #if PROFILE
-	profiler->stop("Quadtree::query()");
+	prof->stop();
 #endif
 
 #if DEBUG
@@ -122,6 +123,9 @@ string EdgeList::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/02/01 13:44:59  strk
+ * More profiling labels.
+ *
  * Revision 1.6  2004/11/22 11:34:49  strk
  * More debugging lines and comments/indentation cleanups
  *

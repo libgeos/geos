@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include <geos/indexChain.h>
+#include <geos/profiler.h>
 #include <stdio.h>
 
 namespace geos {
@@ -47,6 +48,9 @@ void MonotoneChainOverlapAction::overlap(indexMonotoneChain *mc1,int start1,inde
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/02/01 13:44:59  strk
+ * More profiling labels.
+ *
  * Revision 1.8  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -54,7 +54,8 @@ SegmentNode*
 SegmentNodeList::add(Coordinate *intPt, int segmentIndex, double dist)
 {
 #if PROFILE
-	profiler->start("SegmentNodeList::add");
+	static Profile *prof = profiler->get("SegmentNodeList::add(Coordinate *, int, double)");
+	prof->start();
 #endif
 	SegmentNode *eiNew=new SegmentNode(intPt, segmentIndex, dist);
 
@@ -63,14 +64,14 @@ SegmentNodeList::add(Coordinate *intPt, int segmentIndex, double dist)
 	{
 		delete eiNew;
 #if PROFILE
-	profiler->stop("SegmentNodeList::add");
+	prof->stop();
 #endif
 		return *it;
 	}
 
 	nodes->insert(eiNew);
 #if PROFILE
-	profiler->stop("SegmentNodeList::add");
+	prof->stop();
 #endif
 	return eiNew;
 }
@@ -176,6 +177,9 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/02/01 13:44:59  strk
+ * More profiling labels.
+ *
  * Revision 1.11  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

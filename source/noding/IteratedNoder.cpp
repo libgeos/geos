@@ -86,22 +86,24 @@ IteratedNoder::node(vector<SegmentString*> *segStrings)
 vector<SegmentString*>*
 IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersections)
 {
-	nodingSegmentIntersector *si = new nodingSegmentIntersector(li);
-	MCQuadtreeNoder *noder = new MCQuadtreeNoder();
-	noder->setSegmentIntersector(si);
+	//nodingSegmentIntersector *si = new nodingSegmentIntersector(li);
+	nodingSegmentIntersector si(li);
+	MCQuadtreeNoder noder;
+	noder.setSegmentIntersector(&si);
 	// perform the noding
 #if PROFILE
-	profiler->start("MCQuadtreeNoder::node");
+	static Profile *prof = profiler->get("IteratedNoder::node");
+	prof->start();
 #endif
-	vector<SegmentString*> *nodedSegStrings=noder->node(segStrings);
+	vector<SegmentString*> *nodedSegStrings=noder.node(segStrings);
 #if PROFILE
-	profiler->stop("MCQuadtreeNoder::node");
+	prof->stop();
 #endif
-	*numInteriorIntersections=si->numInteriorIntersections;
+	*numInteriorIntersections=si.numInteriorIntersections;
 	//System.out.println("# intersection tests: " + si.numTests);
 
-	delete noder;
-	delete si;
+	//delete noder;
+	//delete si;
 	return nodedSegStrings;
 }
 
@@ -109,6 +111,9 @@ IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersec
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/02/01 13:44:59  strk
+ * More profiling labels.
+ *
  * Revision 1.11  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *
