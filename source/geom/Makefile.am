@@ -115,7 +115,6 @@ EXTERNAL_SOURCES =  \
 	../io/WKTReader.cpp \
 	../io/WKTWriter.cpp \
 	../io/Writer.cpp \
-	../io/markup/MarkupSTL.cpp \
 	../io/Unload.cpp \
 	../operation/GeometryGraphOperation.cpp \
 	../operation/IsSimpleOp.cpp \
