@@ -9,7 +9,7 @@ INCLUDES = -I../source/headers
 INCLUDES += -I../io/markup
 
 doxygen:
-	doxygen geosDoxygen.conf
+	doxygen Doxyfile
 
 clean-generic:
 	rm -Rf doxygen_docs
