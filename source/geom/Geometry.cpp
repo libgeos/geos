@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.46  2004/05/05 16:51:29  strk
+ * avoided copy constructor in Geometry::geometryChangedFilter initializzazion
+ *
  * Revision 1.45  2004/05/05 10:54:48  strk
  * Removed some private static heap explicit allocation, less cleanup done by
  * the unloader.
@@ -69,7 +72,7 @@
 
 namespace geos {
 
-GeometryComponentFilter Geometry::geometryChangedFilter=GeometryComponentFilter();
+GeometryComponentFilter Geometry::geometryChangedFilter;
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
 Geometry::Geometry(const GeometryFactory *newFactory) {
