@@ -1,4 +1,4 @@
-- Check Makefile.am -release use instead of -version-info
+- geos::version() function and GEOS_JTSPORT define.
 
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
 
