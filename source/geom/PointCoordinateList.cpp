@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.14  2003/10/15 10:17:36  strk
+* Made setPoints() get a const vector<Coordinate>.
+*
+*/
 #include "../headers/geom.h"
 #include "stdio.h"
 
@@ -34,7 +40,8 @@ PointCoordinateList::PointCoordinateList(const PointCoordinateList &c) {
 	vect=new vector<point_3d>(*(c.vect));
 }
 
-void PointCoordinateList::setPoints(vector<Coordinate> &v) {
+void PointCoordinateList::setPoints(const vector<Coordinate> &v) {
+	delete vect;
 	vect=new vector<point_3d>();
 	point_3d pt;
 	for(unsigned int i=0; i<v.size(); i++) {

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.11  2003/10/15 10:17:36  strk
+* Made setPoints() get a const vector<Coordinate>.
+*
+*/
 #include "../headers/geom.h"
 #include "stdio.h"
 
@@ -29,9 +35,10 @@ BasicCoordinateList::BasicCoordinateList(const BasicCoordinateList &c) {
 	vect=new vector<Coordinate>(*(c.vect));
 }
 
-void BasicCoordinateList::setPoints(vector<Coordinate> &v) {
-//	vect=new vector<Coordinate>(v);
-	vect->swap(v);
+void BasicCoordinateList::setPoints(const vector<Coordinate> &v) {
+	//vect->swap(v);
+	delete vect;
+	vect=new vector<Coordinate>(v);
 }
 
 vector<Coordinate>* BasicCoordinateList::toVector() {

@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.35  2003/10/15 10:17:36  strk
+* Made setPoints() get a const vector<Coordinate>.
+*
 * Revision 1.34  2003/10/15 09:54:29  strk
 * Added getCoordinatesRO() public method.
 *
@@ -222,7 +225,7 @@ public:
 	virtual	void deleteAt(int pos)=0;
 	virtual	vector<Coordinate>* toVector()=0;
 	virtual	string toString()=0;
-	virtual	void setPoints(vector<Coordinate> &v)=0;
+	virtual	void setPoints(const vector<Coordinate> &v)=0;
 	bool hasRepeatedPoints() const;
 	const Coordinate* minCoordinate() const;
 	static bool hasRepeatedPoints(const CoordinateList *cl);
@@ -253,7 +256,7 @@ public:
 	void deleteAt(int pos);
 	vector<Coordinate>* toVector();
 	string toString();
-	void setPoints(vector<Coordinate> &v);
+	void setPoints(const vector<Coordinate> &v);
 private:
 	vector<Coordinate> *vect;
 };
@@ -284,7 +287,7 @@ public:
 	vector<Coordinate>* toVector();
 	vector<point_3d>* toPointVector();
 	string toString();
-	void setPoints(vector<Coordinate> &v);
+	void setPoints(const vector<Coordinate> &v);
 	void setPoints(vector<point_3d> &v);
 private:
 	vector<point_3d> *vect;
