@@ -11,38 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.16  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.15  2004/09/16 09:48:06  strk
- * Added Envelope::equals
- *
- * Revision 1.14  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.13  2004/07/19 13:19:30  strk
- * Documentation fixes
- *
- * Revision 1.12  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.11  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <stdio.h>
@@ -98,15 +67,15 @@ bool Envelope::intersects(const Coordinate& p1,const Coordinate& p2,const Coordi
 }
 
 /**
-* Compute the distance between two points specified by their ordinate values
-*/
+ * Compute the distance between two points specified by their ordinate values
+ */
 double Envelope::distance(double x0,double y0,double x1,double y1) {
 	double dx=x1-x0;
 	double dy=y1-y0;
 	return sqrt(dx*dx+dy*dy);
 }
 
- /**
+/**
  *  Creates a null <code>Envelope</code>.
  */
 Envelope::Envelope(void) {
@@ -448,8 +417,8 @@ bool Envelope::intersects(const Coordinate& other) const {
 }
 
 /**
-* @deprecated Use #intersects instead.
-*/
+ * @deprecated Use #intersects instead.
+ */
 bool Envelope::overlaps(const Coordinate& p) const {
 	return intersects(p);
 }
@@ -462,11 +431,10 @@ bool Envelope::overlaps(const Coordinate& p) const {
  *@param  y  the y-ordinate of the point
  *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
  */
-bool Envelope::intersects(double x, double y) const {
-	return !(x > maxx ||
-			 x < minx ||
-			 y > maxy ||
-			 y < miny);
+bool
+Envelope::intersects(double x, double y) const
+{
+	return (x <= maxx && x >= minx && y <= maxy && y >= miny);
 }
 
 /**
@@ -488,12 +456,12 @@ bool Envelope::overlaps(double x, double y) const {
 bool
 Envelope::intersects(const Envelope* other) const
 {
-	if (isNull() || other->isNull()) { return false; }
-
-	return !(other->getMinX() > maxx ||
-			 other->getMaxX() < minx ||
-			 other->getMinY() > maxy ||
-			 other->getMaxY() < miny);
+	// Optimized to reduce function calls
+	if ( maxx<minx || other->maxx<other->minx ) return false;
+	return !(other->minx > maxx ||
+			 other->maxx < minx ||
+			 other->miny > maxy ||
+			 other->maxy < miny);
 }
 
 /**
@@ -520,11 +488,11 @@ string Envelope::toString() const {
 }
 
 /**
-* Computes the distance between this and another
-* <code>Envelope</code>.
-* The distance between overlapping Envelopes is 0.  Otherwise, the
-* distance is the Euclidean distance between the closest points.
-*/
+ * Computes the distance between this and another
+ * <code>Envelope</code>.
+ * The distance between overlapping Envelopes is 0.  Otherwise, the
+ * distance is the Euclidean distance between the closest points.
+ */
 double Envelope::distance(const Envelope* env) const {
 	if (intersects(env)) return 0;
 	double dx=0.0;
@@ -563,5 +531,40 @@ int Envelope::hashCode() const{
 	return result;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.17  2004/11/08 10:58:08  strk
+ * Optimized the ::intersect function to avoid nested function calls.
+ *
+ * Revision 1.16  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.15  2004/09/16 09:48:06  strk
+ * Added Envelope::equals
+ *
+ * Revision 1.14  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
+ * Revision 1.13  2004/07/19 13:19:30  strk
+ * Documentation fixes
+ *
+ * Revision 1.12  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.11  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
+ * Revision 1.10  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 
