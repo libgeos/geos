@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
  * Revision 1.2  2004/04/19 15:14:46  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -39,6 +42,10 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, doubl
 
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder(){
 	delete cga;
+	for (int i=0; i<curveList->size(); i++)
+	{
+		delete (*curveList)[i];
+	}
 	delete curveList;
 }
 /**
@@ -73,7 +80,8 @@ void OffsetCurveSetBuilder::addCurve(const CoordinateList *coord, int leftLoc, i
 	// don't add null curves!
 	if (coord->getSize() < 2) return;
 	// add the edge for a coordinate list which is a raw offset curve
-	SegmentString *e=new SegmentString(coord,new Label(0,Location::BOUNDARY, leftLoc, rightLoc));
+	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
+	SegmentString *e=new SegmentString(coord,newlabel);
 	curveList->push_back(e);
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
  * Revision 1.4  2004/04/19 12:51:01  strk
  * Memory leaks fixes. Throw specifications added.
  *
@@ -30,12 +33,13 @@
 #ifndef GEOS_NODING_H
 #define GEOS_NODING_H
 
-#include "platform.h"
-#include "geom.h"
-#include "geosAlgorithm.h"
 #include <string>
 #include <vector>
 #include <set>
+#include "platform.h"
+#include "geom.h"
+#include "geomgraph.h"
+#include "geosAlgorithm.h"
 
 using namespace std;
 
@@ -125,12 +129,12 @@ class SegmentString {
 private:
 	SegmentNodeList *eiList;
 	const CoordinateList *pts;
-	void* context;
+	Label* context;
 	bool isIsolatedVar;
 public:
-	SegmentString(const CoordinateList *newPts,void* newContext);
+	SegmentString(const CoordinateList *newPts, Label* newContext);
 	virtual ~SegmentString();
-	void* getContext();
+	Label* getContext();
 	SegmentNodeList* getIntersectionList();
 	int size();
 	const Coordinate& getCoordinate(int i);

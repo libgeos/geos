@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
  * Revision 1.4  2004/04/19 12:51:01  strk
  * Memory leaks fixes. Throw specifications added.
  *
@@ -89,7 +92,9 @@ vector<SegmentString*>* IteratedNoder::node(vector<SegmentString*> *segStrings, 
 	vector<SegmentString*> *nodedSegStrings=noder->node(segStrings);
 	*numInteriorIntersections=si->numInteriorIntersections;
 	//System.out.println("# intersection tests: " + si.numTests);
-	delete(noder);
+
+	delete noder;
+	delete si;
 	return nodedSegStrings;
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
  * Revision 1.2  2004/04/16 12:48:07  strk
  * Leak fixes.
  *
@@ -35,10 +38,12 @@ MCQuadtreeNoder::MCQuadtreeNoder(){
 }
 
 MCQuadtreeNoder::~MCQuadtreeNoder(){
+	for (int i=0; i<chains->size(); i++)
+	{
+		delete (*chains)[i];
+	}
 	delete chains;
-	//Deleting this makes the code segfault, might be due to 
-	//wild pointers, though... more later --strk;
-	//delete index;
+	delete index;
 }
 vector<SegmentString*> *MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings){
 	for(int i=0; i<(int)inputSegStrings->size();i++) {
@@ -67,6 +72,8 @@ void MCQuadtreeNoder::intersectChains() {
 			}
 		}
 	}
+
+	delete overlapAction;
 }
 
 void MCQuadtreeNoder::add(SegmentString *segStr) {
@@ -77,6 +84,7 @@ void MCQuadtreeNoder::add(SegmentString *segStr) {
 		index->insert(mc->getEnvelope(), mc);
 		chains->push_back(mc);
 	}
+	delete segChains;
 }
 
 MCQuadtreeNoder::SegmentOverlapAction::SegmentOverlapAction(nodingSegmentIntersector *newSi){

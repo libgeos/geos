@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
  * Revision 1.4  2004/04/19 15:14:46  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -155,7 +158,8 @@ CoordinateList* OffsetCurveBuilder::getCoordinates(){
 		const Coordinate &end=ptList->getAt(1);
 		if (!(start==end)) addPt(start);
 	}
-	return CoordinateListFactory::internalFactory->createCoordinateList(ptList);;
+	//return CoordinateListFactory::internalFactory->createCoordinateList(ptList);;
+	return ptList;
 }
 
 void OffsetCurveBuilder::computeLineBufferCurve(const CoordinateList *inputPts){

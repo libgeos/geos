@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
  * Revision 1.1  2004/03/26 07:48:30  ybychkov
  * "noding" package ported (JTS 1.4)
  *
@@ -24,7 +27,7 @@
 
 namespace geos {
 
-SegmentString::SegmentString(const CoordinateList *newPts, void* newContext) {
+SegmentString::SegmentString(const CoordinateList *newPts, Label* newContext) {
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
 	pts=newPts;
@@ -33,9 +36,10 @@ SegmentString::SegmentString(const CoordinateList *newPts, void* newContext) {
 
 SegmentString::~SegmentString() {
 	delete eiList;
+	delete context;
 }
 
-void* SegmentString::getContext() {
+Label* SegmentString::getContext() {
 	return context;
 }
 
