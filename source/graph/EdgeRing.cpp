@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.20  2003/10/20 14:02:14  strk
+* more explicit exception thrown on null Directed Edge detection
+*
 * Revision 1.19  2003/10/15 16:39:03  strk
 * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
 *
@@ -103,7 +106,7 @@ void EdgeRing::computePoints(DirectedEdge *newStart){
 	DirectedEdge *de=newStart;
 	bool isFirstEdge=true;
 	do {
-		Assert::isTrue(de!=NULL,"found null Directed Edge");
+		Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
 		edges->push_back(de);
 		Label *deLabel=de->getLabel();
 		Assert::isTrue(deLabel->isArea());

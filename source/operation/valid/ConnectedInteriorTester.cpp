@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.9  2003/10/20 14:02:14  strk
+* more explicit exception thrown on null Directed Edge detection
+*
 * Revision 1.8  2003/10/15 11:24:28  strk
 * Use getCoordinatesRO() introduced.
 *
@@ -135,7 +138,7 @@ void ConnectedInteriorTester::visitLinkedDirectedEdges(DirectedEdge *start){
 	DirectedEdge *de=start;
 	//Debug.println(de);
 	do {
-		Assert::isTrue(de!=NULL, "found null Directed Edge");
+		Assert::isTrue(de!=NULL, "ConnectedInteriorTester::visitLinkedDirectedEdges() found null Directed Edge");
 		de->setVisited(true);
 		de=de->getNext();
 		//Debug.println(de);
