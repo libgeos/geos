@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/05/19 12:50:53  strk
+ * Removed all try/catch blocks transforming stack allocated-vectors to auto-heap-allocations
+ *
  * Revision 1.8  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -122,7 +125,7 @@ void BufferSubgraph::computeDepth(int outsideDepth) {
 	clearVisitedEdges();
 	// find an outside edge to assign depth to
 	DirectedEdge *de=finder->getEdge();
-	Node *n=de->getNode();
+	//Node *n=de->getNode();
 	Label *label=de->getLabel();
 	// right side of line returned by finder is on the outside
 	de->setEdgeDepths(Position::RIGHT, outsideDepth);
@@ -220,43 +223,39 @@ int BufferSubgraph::compareTo(void* o) {
 */
 // <FIX> MD - use iteration & queue rather than recursion, for speed and robustness
 void BufferSubgraph::computeDepths(DirectedEdge *startEdge){
-	vector<Node*> *nodesVisited=new vector<Node*>(); //Used to be a HashSet
-	vector<Node*> *nodeQueue=new vector<Node*>();
+	vector<Node*> nodesVisited; //Used to be a HashSet
+	vector<Node*> nodeQueue;
 	Node *startNode=startEdge->getNode();
-	nodeQueue->push_back(startNode);
-	nodesVisited->push_back(startNode);
+	nodeQueue.push_back(startNode);
+	nodesVisited.push_back(startNode);
 	startEdge->setVisited(true);
-	try 
-	{
-		while (! nodeQueue->empty()) {
-			//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
-			Node *n=(*nodeQueue)[0];
-			nodeQueue->erase(nodeQueue->begin());
-			nodesVisited->push_back(n);
-			// compute depths around node, starting at this edge since it has depths assigned
-			computeNodeDepth(n);
-			// add all adjacent nodes to process queue,
-			// unless the node has been visited already
-			vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
-			for(int i=0;i<(int)ees->size();i++) {
-				DirectedEdge *de=(DirectedEdge*) (*ees)[i];
-				DirectedEdge *sym=de->getSym();
-				if (sym->isVisited()) continue;
-				Node *adjNode=sym->getNode();
 
-				if (! contains(nodesVisited,adjNode)) {
-					nodeQueue->push_back(adjNode);
-					nodesVisited->push_back(adjNode);
-				}
+	while (! nodeQueue.empty()) {
+		//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
+		Node *n=nodeQueue[0];
+		nodeQueue.erase(nodeQueue.begin());
+		nodesVisited.push_back(n);
+
+		// compute depths around node, starting at this edge since it has depths assigned
+		computeNodeDepth(n);
+
+		// add all adjacent nodes to process queue,
+		// unless the node has been visited already
+		vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
+		for(int i=0;i<(int)ees->size();i++) {
+			DirectedEdge *de=(DirectedEdge*) (*ees)[i];
+			DirectedEdge *sym=de->getSym();
+			if (sym->isVisited()) continue;
+			Node *adjNode=sym->getNode();
+
+			// this has poor performances I guess
+			// should use a map instead.. --strk;
+			if (! contains(&nodesVisited,adjNode)) {
+				nodeQueue.push_back(adjNode);
+				nodesVisited.push_back(adjNode);
 			}
 		}
-	} catch (...) {
-		delete nodesVisited;
-		delete nodeQueue;
-		throw;
 	}
-	delete nodesVisited;
-	delete nodeQueue;
 }
 
 bool BufferSubgraph::contains(vector<Node*> *nodes,Node *node) {
