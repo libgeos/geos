@@ -297,10 +297,10 @@ GeometryGraph::addLineString(const LineString *line)
 	//for(int i=0;i<coord->getSize();i++) {
 		//ncr->add(coord->getAt(i));
 	//}
-	CoordinateSequence *ncr = coord->clone();
+	//CoordinateSequence *ncr = coord->clone();
 
-	Edge *e=new Edge(ncr,new Label(argIndex,Location::INTERIOR));
-//	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
+//	Edge *e=new Edge(ncr,new Label(argIndex,Location::INTERIOR));
+	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
 	(*lineEdgeMap)[line]=e;
 	insertEdge(e);
 
@@ -312,9 +312,9 @@ GeometryGraph::addLineString(const LineString *line)
 	 * a boundary point.
 	 */
 	Assert::isTrue(coord->getSize()>= 2,"found LineString with single point");
-	insertBoundaryPoint(argIndex,coord->getAt(0));
-	insertBoundaryPoint(argIndex,coord->getAt(coord->getSize()-1));
-	delete coord;
+	insertBoundaryPoint(argIndex, coord->getAt(0));
+	insertBoundaryPoint(argIndex, coord->getAt(coord->getSize()-1));
+//	delete coord;
 }
 
 /*
@@ -394,6 +394,9 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 void
 GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLocation)
 {
+#if DEBUG
+	cerr<<"GeometryGraph::insertPoint("<<coord.toString()<<" called"<<endl;
+#endif
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	if (lbl==NULL) {
@@ -477,6 +480,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2004/11/19 09:33:55  strk
+ * removed useless CoordinateSequence copy in ::addLineString
+ *
  * Revision 1.8  2004/11/05 11:41:57  strk
  * Made IsValidOp handle IllegalArgumentException throw from GeometryGraph
  * as a sign of invalidity (just for Polygon geometries).
