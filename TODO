@@ -1,6 +1,5 @@
-- Rename BasicCoordinateSequence to Default ...
-
-- Make postgis use new CoordinateSequence
+- Remove coordinate list construction and editing functionalities
+  out of CoordinateSequence and in CoordinateList / CoordinateArrays
 
 - Add tests and examples for new functionalities
 
