@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.31  2003/10/20 13:53:03  strk
+* LinearRing handled as a LineString in GeometryGraph::add(const Geometry *) - more explicit exception thrown for unknown geometries
+*
 * Revision 1.30  2003/10/15 16:39:03  strk
 * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
 *
@@ -147,8 +150,9 @@ void GeometryGraph::add(const Geometry *g) {
 			useBoundaryDeterminationRule=true;
 	if (typeid(*g)==typeid(Polygon))
 		addPolygon((Polygon*) g);
-	// LineString also handles LinearRings
 	else if (typeid(*g)==typeid(LineString))
+		addLineString((LineString*) g);
+	else if (typeid(*g)==typeid(LinearRing))
 		addLineString((LineString*) g);
 	else if (typeid(*g)==typeid(Point))
 		addPoint((Point*) g);
@@ -162,7 +166,7 @@ void GeometryGraph::add(const Geometry *g) {
 		addCollection((GeometryCollection*) g);
 	else {
 		string out=typeid(*g).name();
-		throw new UnsupportedOperationException(out);
+		throw new UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
 	}
 }
 
