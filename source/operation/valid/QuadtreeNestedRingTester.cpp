@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.9  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -35,13 +40,11 @@ QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph) {
 	rings=new vector<LinearRing*>();
 	totalEnv=new Envelope();
 	qt=NULL;
-	cga=new RobustCGAlgorithms();
 }
 
 QuadtreeNestedRingTester::~QuadtreeNestedRingTester() {
 	delete rings;
 	delete totalEnv;
-	delete cga;
 	delete qt;
 }
 
@@ -81,7 +84,7 @@ bool QuadtreeNestedRingTester::isNonNested() {
 			const Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(!(innerRingPt==Coordinate::getNull()),"Unable to find a ring point not a node of the search ring");
 			//Coordinate innerRingPt = innerRingPts[0];
-			bool isInside=cga->isPointInRing(innerRingPt,searchRingPts);
+			bool isInside=CGAlgorithms::isPointInRing(innerRingPt,searchRingPts);
 			if (isInside) {
 				nestedPt=innerRingPt;
 				delete results;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.10  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -37,7 +42,7 @@ namespace geos {
 ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph *newGeomGraph) {
 	geomGraph=newGeomGraph;
 	geometryFactory=new GeometryFactory();
-	cga=new RobustCGAlgorithms();
+	cga=new CGAlgorithms();
 }
 
 ConnectedInteriorTester::~ConnectedInteriorTester() {

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.12  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -26,7 +31,7 @@
 
 namespace geos {
 
-CGAlgorithms* GeometryGraphOperation::cga=new RobustCGAlgorithms();
+CGAlgorithms* GeometryGraphOperation::cga=new CGAlgorithms();
 LineIntersector* GeometryGraphOperation::li=new RobustLineIntersector();
 
 GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0, const Geometry *g1) {
@@ -53,7 +58,7 @@ const Geometry* GeometryGraphOperation::getArgGeometry(int i) const {
 
 void GeometryGraphOperation::setComputationPrecision(const PrecisionModel* pm) {
     resultPrecisionModel=pm;
-    li->setMakePrecise(resultPrecisionModel);
+    li->setPrecisionModel(resultPrecisionModel);
 }
 
 GeometryGraphOperation::~GeometryGraphOperation() {

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/03/29 06:59:24  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.10  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -240,6 +245,140 @@ string LineSegment::toString() const {
 	out+=")";
 	return out;
 }
+
+
+/**
+* Tests whether the segment is horizontal.
+*
+* @return <code>true</code> if the segment is horizontal
+*/
+bool LineSegment::isHorizontal() const { 
+	return p0.y == p1.y;
+}
+
+/**
+* Tests whether the segment is vertical.
+*
+* @return <code>true</code> if the segment is vertical
+*/
+bool LineSegment::isVertical() const { 
+	return p0.x == p1.x;
+}
+
+/**
+* Determines the orientation of a LineSegment relative to this segment.
+* The concept of orientation is specified as follows:
+* Given two line segments A and L,
+* <ul
+* <li>A is to the left of a segment L if A lies wholly in the
+* closed half-plane lying to the left of L
+* <li>A is to the right of a segment L if A lies wholly in the
+* closed half-plane lying to the right of L
+* <li>otherwise, A has indeterminate orientation relative to L. This
+* happens if A is collinear with L or if A crosses the line determined by L.
+* </ul>
+*
+* @param seg the LineSegment to compare
+*
+* @return 1 if <code>seg</code> is to the left of this segment
+* @return -1 if <code>seg</code> is to the right of this segment
+* @return 0 if <code>seg</code> has indeterminate orientation relative to this segment
+*/
+int LineSegment::orientationIndex(LineSegment *seg) const {
+	int orient0 = CGAlgorithms::orientationIndex(p0, p1, seg->p0);
+	int orient1 = CGAlgorithms::orientationIndex(p0, p1, seg->p1);
+	// this handles the case where the points are L or collinear
+	if (orient0 >= 0 && orient1 >= 0)
+		return max(orient0, orient1);
+	// this handles the case where the points are R or collinear
+	if (orient0 <= 0 && orient1 <= 0)
+		return max(orient0, orient1);
+	// points lie on opposite sides ==> indeterminate orientation
+	return 0;
+}
+
+/**
+* Computes the perpendicular distance between the (infinite) line defined
+* by this line segment and a point.
+*/
+double LineSegment::distancePerpendicular(const Coordinate& p) const {
+	return CGAlgorithms::distancePointLinePerpendicular(p, p0, p1);
+}
+
+/**
+* Computes the closest points on two line segments.
+* @param p the point to find the closest point to
+* @return a pair of Coordinates which are the closest points on the line segments
+*/
+CoordinateList* LineSegment::closestPoints(LineSegment *line){
+	// test for intersection
+	Coordinate *intPt = intersection(line);
+	if (intPt!=NULL) {
+		CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
+		cl->add(*intPt);
+		cl->add(*intPt);
+		return cl;
+	}
+
+	/**
+	*  if no intersection closest pair contains at least one endpoint.
+	* Test each endpoint in turn.
+	*/
+	CoordinateList *closestPt=CoordinateListFactory::internalFactory->createCoordinateList(2);
+	double minDistance=DoubleInfinity;
+	double dist;
+	Coordinate *close00 = closestPoint(line->p0);
+	minDistance = close00->distance(line->p0);
+	closestPt->setAt(*close00,0);
+	closestPt->setAt(line->p0,1);
+	Coordinate *close01 = closestPoint(line->p1);
+	dist = close01->distance(line->p1);
+	if (dist < minDistance) {
+		minDistance = dist;
+		closestPt->setAt(*close01,0);
+		closestPt->setAt(line->p1,1);
+	}
+	Coordinate *close10 = line->closestPoint(p0);
+	dist = close10->distance(p0);
+		if (dist < minDistance) {
+		minDistance = dist;
+		closestPt->setAt(p0,0);
+		closestPt->setAt(*close10,1);
+	}
+	Coordinate *close11 = line->closestPoint(p1);
+	dist = close11->distance(p1);
+	if (dist < minDistance) {
+		minDistance = dist;
+		closestPt->setAt(p1,0);
+		closestPt->setAt(*close11,1);
+	}
+
+	return closestPt;
+}
+
+/**
+* Computes an intersection point between two segments, if there is one.
+* There may be 0, 1 or many intersection points between two segments.
+* If there are 0, null is returned. If there is 1 or more, a single one
+* is returned (chosen at the discretion of the algorithm).  If
+* more information is required about the details of the intersection,
+* the {@link RobustLineIntersector} class should be used.
+*
+* @param line
+* @return an intersection point, or <code>null</code> if there is none
+*/
+Coordinate* LineSegment::intersection(LineSegment *line){
+	LineIntersector *li = new RobustLineIntersector();
+	li->computeIntersection(p0, p1, line->p0, line->p1);
+	if (li->hasIntersection()) {
+		const Coordinate &c=li->getIntersection(0);
+		delete li;
+		return (Coordinate*)&c;
+	}
+	delete li;
+	return NULL;
+}
+
 
 /**
 *  Returns <code>true</code> if <code>other</code> has the same values for

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.46  2004/03/29 06:59:24  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.45  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.
@@ -33,6 +38,11 @@
 
 /*
 * $Log$
+* Revision 1.46  2004/03/29 06:59:24  ybychkov
+* "noding/snapround" package ported (JTS 1.4);
+* "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+* "geom" partially upgraded.
+*
 * Revision 1.45  2004/03/18 10:42:44  ybychkov
 * "IO" and "Util" upgraded to JTS 1.4
 * "Geometry" partially upgraded.
@@ -732,7 +742,15 @@ public:
 };
 
 /**
- *  Basic implementation of <code>LineSegment</code>.
+ * Represents a line segment defined by two {@link Coordinate}s.
+ * Provides methods to compute various geometric properties
+ * and relationships of line segments.
+ * <p>
+ * This class is designed to be easily mutable (to the extent of
+ * having its contained points public).
+ * This supports a common pattern of reusing a single LineSegment
+ * object as a way of computing segment properties on the
+ * segments defined by arrays or lists of {@link Coordinate}s.
  *
  */
 class LineSegment {
@@ -747,18 +765,79 @@ public:
 	virtual const Coordinate& getCoordinate(int i) const;
 	virtual void setCoordinates(const LineSegment ls);
 	virtual double getLength() const;
+	/**
+	* Tests whether the segment is horizontal.
+	*
+	* @return <code>true</code> if the segment is horizontal
+	*/
+	virtual bool isHorizontal() const;
+	/**
+	* Tests whether the segment is vertical.
+	*
+	* @return <code>true</code> if the segment is vertical
+	*/
+	virtual bool isVertical() const;
+	/**
+	* Determines the orientation of a LineSegment relative to this segment.
+	* The concept of orientation is specified as follows:
+	* Given two line segments A and L,
+	* <ul
+	* <li>A is to the left of a segment L if A lies wholly in the
+	* closed half-plane lying to the left of L
+	* <li>A is to the right of a segment L if A lies wholly in the
+	* closed half-plane lying to the right of L
+	* <li>otherwise, A has indeterminate orientation relative to L. This
+	* happens if A is collinear with L or if A crosses the line determined by L.
+	* </ul>
+	*
+	* @param seg the LineSegment to compare
+	*
+	* @return 1 if <code>seg</code> is to the left of this segment
+	* @return -1 if <code>seg</code> is to the right of this segment
+	* @return 0 if <code>seg</code> has indeterminate orientation relative to this segment
+	*/
+	virtual int orientationIndex(LineSegment *seg) const;
 	virtual void reverse();
 	virtual void normalize();
 	virtual double angle() const;
 	virtual double distance(const LineSegment ls) const;
+	/**
+	* Computes the distance between this line segment and a point.
+	*/
 	virtual double distance(const Coordinate& p) const;
+	/**
+	* Computes the perpendicular distance between the (infinite) line defined
+	* by this line segment and a point.
+	*/
+	virtual double distancePerpendicular(const Coordinate& p) const;
 	virtual double projectionFactor(const Coordinate& p) const;
 	virtual Coordinate* project(const Coordinate& p) const;
 	virtual LineSegment* project(const LineSegment *seg) const;
 	virtual Coordinate* closestPoint(const Coordinate& p) const;
 	virtual int compareTo(const LineSegment other) const;
 	virtual bool equalsTopo(const LineSegment other) const;
+	/**
+	* Computes the closest points on two line segments.
+	* @param p the point to find the closest point to
+	* @return a pair of Coordinates which are the closest points on the line segments
+	*/
+	virtual CoordinateList* closestPoints(LineSegment *line);
+	/**
+	* Computes an intersection point between two segments, if there is one.
+	* There may be 0, 1 or many intersection points between two segments.
+	* If there are 0, null is returned. If there is 1 or more, a single one
+	* is returned (chosen at the discretion of the algorithm).  If
+	* more information is required about the details of the intersection,
+	* the {@link RobustLineIntersector} class should be used.
+	*
+	* @param line
+	* @return an intersection point, or <code>null</code> if there is none
+	*/
+	Coordinate* intersection(LineSegment *line);
 	virtual string toString() const;
+private:
+  static const long long serialVersionUID=3252005833466256227L;
+
 };
 
 class IntersectionMatrix {

@@ -1037,6 +1037,19 @@
 				<File
 					RelativePath="..\source\noding\SimpleNoder.cpp">
 				</File>
+				<Filter
+					Name="snapround"
+					Filter="">
+					<File
+						RelativePath="..\source\noding\snapround\SegmentSnapper.cpp">
+					</File>
+					<File
+						RelativePath="..\source\noding\snapround\SimpleSegmentStringsSnapper.cpp">
+					</File>
+					<File
+						RelativePath="..\source\noding\snapround\SnapRounder.cpp">
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1080,6 +1093,9 @@
 			</File>
 			<File
 				RelativePath="..\source\headers\noding.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\nodingSnapround.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\opBuffer.h">

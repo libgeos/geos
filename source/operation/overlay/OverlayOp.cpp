@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.13  2004/03/19 09:48:46  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -86,7 +91,12 @@ bool OverlayOp::isResultOfOp(int loc0,int loc1,int opCode) {
 
 OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOperation(g0,g1) {
 	graph=new PlanarGraph(new OverlayNodeFactory());
-	geomFact=new GeometryFactory(g0->getPrecisionModel(),g0->getSRID());
+    /**
+     * Use factory of primary geometry.
+     * Note that this does NOT handle mixed-precision arguments
+     * where the second arg has greater precision than the first.
+     */
+	geomFact=g0->getFactory();
 	resultGeom=NULL;
 	edgeList=new EdgeList();
 	resultPolyList=NULL;
@@ -442,20 +452,15 @@ void OverlayOp::computeOverlay(int opCode)
 	(*arg)[0]->computeSplitEdges(baseSplitEdges);
 	(*arg)[1]->computeSplitEdges(baseSplitEdges);
 
-//	vector<Edge*> *splitEdges=baseSplitEdges;
-	/* NO LONGER USED
-	// if we are working in fixed precision, we must renode to ensure noding is complete
-	if (makePrecise) {
-	List splitEdges1=completeEdgeNoding(baseSplitEdges);
-	splitEdges=completeEdgeNoding(splitEdges1);
-	}
-	*/
 	// add the noded edges to this result graph
 
 	insertUniqueEdges(baseSplitEdges);
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
+    // debugging only
+    //NodingValidator nv = new NodingValidator(edgeList.getEdges());
+    //nv.checkValid();
 	graph->addEdges(edgeList->getEdges());
 
 	try {

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/29 06:59:24  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -35,6 +40,12 @@
 
 namespace geos {
 
+/**
+ * Tests whether any of a set of {@link LinearRing}s are
+ * nested inside another ring in the set, using a simple O(n^2)
+ * comparison.
+ *
+ */
 class SimpleNestedRingTester {
 public:
 	SimpleNestedRingTester(GeometryGraph *newGraph);
@@ -49,6 +60,11 @@ private:
 	Coordinate nestedPt;
 };
 
+/**
+ * Contains information about the nature and location of a {@link Geometry}
+ * validation error
+ *
+ */
 class TopologyValidationError {
 public:
 	enum {
@@ -96,11 +112,17 @@ private:
 };
 
 /**
- * Checks that a GeometryGraph representing an area (a Polygon or
- * MultiPolygon) is consistent with the SFS semantics for area geometries.
- * Checks include testing for rings which self-intersect (both properly
- * and at nodes),
- * and checking for duplicate rings.
+ * Checks that a {@link GeometryGraph} representing an area
+ * (a {@link Polygon} or {@link MultiPolygon} )
+ * is consistent with the SFS semantics for area geometries.
+ * Checks include:
+ * <ul>
+ * <li>testing for rings which self-intersect (both properly
+ * and at nodes)
+ * <li>testing for duplicate rings
+ * </ul>
+ * If an inconsistency if found the location of the problem
+ * is recorded.
  */
 class ConsistentAreaTester {
 private:
@@ -141,6 +163,12 @@ public:
 };
 
 
+/**
+ * Tests whether any of a set of {@link LinearRing}s are
+ * nested inside another ring in the set, using a {@link SweepLineIndex}
+ * index to speed up the comparisons.
+ *
+ */
 class SweeplineNestedRingTester {
 public:
 	SweeplineNestedRingTester(GeometryGraph *newGraph);
@@ -167,6 +195,12 @@ private:
 	void buildIndex();
 };
 
+/**
+ * Tests whether any of a set of {@link LinearRing}s are
+ * nested inside another ring in the set, using a {@link Quadtree}
+ * index to speed up the comparisons.
+ *
+ */
 class QuadtreeNestedRingTester {
 public:
 	QuadtreeNestedRingTester(GeometryGraph *newGraph);
@@ -175,7 +209,6 @@ public:
 	void add(LinearRing *ring);
 	bool isNonNested();
 private:
-	CGAlgorithms *cga;
 	GeometryGraph *graph;  // used to find non-node vertices
 	vector<LinearRing*> *rings;
 	Envelope *totalEnv;
@@ -185,10 +218,16 @@ private:
 };
 
 /**
- * This class tests that the interior of an area Geometry (Polygon or MultiPolygon)
- * is connected.  The Geometry is invalid if the interior is disconnected (as can happen
- * if one or more holes either form a chain touching the shell at two places,
- * or if one or more holes form a ring around a portion of the interior)
+ * This class tests that the interior of an area {@link Geometry}
+ *  ({@link Polygon}  or {@link MultiPolygon} )
+ * is connected.  An area Geometry is invalid if the interior is disconnected.
+ * This can happen if:
+ * <ul>
+ * <li>one or more holes either form a chain touching the shell at two places
+ * <li>one or more holes form a ring around a portion of the interior
+ * </ul>
+ * If an inconsistency if found the location of the problem
+ * is recorded.
  */
 class ConnectedInteriorTester {
 public:
@@ -227,6 +266,11 @@ protected:
 	void visitLinkedDirectedEdges(DirectedEdge *start);
 };
 
+/**
+ * Implements the algorithsm required to compute the <code>isValid()</code> method
+ * for {@link Geometry}s.
+ *
+ */
 class IsValidOp {
 friend class Unload;
 public:
@@ -242,11 +286,11 @@ public:
 	bool isValid();
 	TopologyValidationError* getValidationError();
 private:
-	static CGAlgorithms *cga;
 	const Geometry *parentGeometry;  // the base Geometry to be validated
 	bool isChecked;
 	TopologyValidationError* validErr;
 	void checkValid(const Geometry *g);
+	void checkValid(const LinearRing *g);
 	void checkValid(const LineString *g);
 	void checkValid(const Polygon *g);
 	void checkValid(const MultiPolygon *g);

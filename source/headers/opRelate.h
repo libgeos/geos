@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/03/29 06:59:24  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.14  2004/03/19 09:48:46  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -40,6 +45,10 @@
 
 namespace geos {
 
+/**
+ * Represents a node in the topological graph used to compute spatial relationships.
+ *
+ */
 class RelateNode: public Node {
 public:
 	RelateNode(Coordinate& coord,EdgeEndStar *edges);
@@ -49,6 +58,10 @@ protected:
 	void computeIM(IntersectionMatrix *im);
 };
 
+/**
+ * Computes the {@link EdgeEnd}s which arise from a noded {@link Edge}.
+ *
+ */
 class EdgeEndBuilder {
 public:
 	EdgeEndBuilder();
@@ -59,6 +72,10 @@ protected:
 	void createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiNext);
 };
 
+/**
+ * Contains all {@link EdgeEnd}s which start at the same point and are parallel.
+ *
+ */
 class EdgeEndBundle: public EdgeEnd {
 public:
 	EdgeEndBundle(EdgeEnd *e);
@@ -77,6 +94,11 @@ protected:
 	void computeLabelSide(int geomIndex,int side);
 };
 
+/**
+ * An ordered list of {@link EdgeEndBundle}s around a {@link RelateNode}.
+ * They are maintained in CCW order (starting with the positive x-axis) around the node
+ * for efficient lookup and topology building.
+ */
 class EdgeEndBundleStar: public EdgeEndStar {
 public:
 	EdgeEndBundleStar();
@@ -85,11 +107,34 @@ public:
 	void updateIM(IntersectionMatrix *im);
 };
 
+/**
+ * Used by the {@link NodeMap} in a {@link RelateNodeGraph} to create {@link RelateNode}s.
+ *
+ */
 class RelateNodeFactory: public NodeFactory {
 public:
 	Node* createNode(Coordinate coord);
 };
 
+/**
+ * Implements the simple graph of Nodes and EdgeEnd which is all that is
+ * required to determine topological relationships between Geometries.
+ * Also supports building a topological graph of a single Geometry, to
+ * allow verification of valid topology.
+ * <p>
+ * It is <b>not</b> necessary to create a fully linked
+ * PlanarGraph to determine relationships, since it is sufficient
+ * to know how the Geometries interact locally around the nodes.
+ * In fact, this is not even feasible, since it is not possible to compute
+ * exact intersection points, and hence the topology around those nodes
+ * cannot be computed robustly.
+ * The only Nodes that are created are for improper intersections;
+ * that is, nodes which occur at existing vertices of the Geometries.
+ * Proper intersections (e.g. ones which occur between the interior of line segments)
+ * have their topology determined implicitly, without creating a Node object
+ * to represent them.
+ *
+ */
 class RelateNodeGraph {
 public:
 	RelateNodeGraph();
@@ -105,7 +150,11 @@ private:
 };
 
 /**
- * Note that RelateComputer does not need to build a complete graph structure to compute
+ * Computes the topological relationship between two Geometries.
+
+
+ * <p>
+ * RelateComputer does not need to build a complete graph structure to compute
  * the IntersectionMatrix.  The relationship between the geometries can
  * be computed by simply examining the labelling of edges incident on each node.
  * <p>
@@ -114,6 +163,7 @@ private:
  * In order to correct compute relate on overlapping Polygons, they
  * would first need to be noded and merged (if not explicitly, at least
  * implicitly).
+ *
  */
 class RelateComputer {
 friend class Unload;
@@ -138,7 +188,6 @@ private:
 	void computeIntersectionNodes(int argIndex);
 	void labelIntersectionNodes(int argIndex);
 	void computeDisjointIM(IntersectionMatrix *imX);
-	bool isNodeEdgeAreaLabelsConsistent();
 	void labelNodeEdges();
 	void updateIM(IntersectionMatrix *imX);
 	void labelIsolatedEdges(int thisIndex,int targetIndex);
@@ -165,10 +214,6 @@ public:
 	IntersectionMatrix* getIntersectionMatrix();
 private:
 	RelateComputer *relateComp;
-	static vector<const Geometry*>* toList(const Geometry *geom);
-	static vector<const Geometry*>* addToList(const Geometry *geom, vector<const Geometry*>* geomList);
-	static bool isBaseGeometryCollection(const Geometry* geom);
-	static IntersectionMatrix* relateGC(vector<const Geometry*> *a,vector<const Geometry*> *b);
 };
 }
 

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/03/29 06:59:24  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.13  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -46,6 +51,11 @@ using namespace std;
 
 namespace geos {
 
+/**
+ * Computes the overlay of two {@link Geometry}s.  The overlay
+ * can be used to determine any boolean combination of the geometries.
+ *
+ */
 class OverlayOp: public GeometryGraphOperation {
 public:
 	/**
@@ -199,11 +209,10 @@ private:
 };
 
 /**
- * A MinimalEdgeRing is a ring of edges with the property that no node
+ * A ring of {@link Edge}s with the property that no node
  * has degree greater than 2.  These are the form of rings required
  * to represent polygons under the OGC SFS spatial data model.
  *
- * @version 1.2
  * @see com.vividsolutions.jts.operation.overlay.MaximalEdgeRing
  */
 class MinimalEdgeRing: public EdgeRing {
@@ -215,7 +224,7 @@ public:
 };
 
 /**
- * A MaximalEdgeRing is a ring of edges which may contain nodes of degree>2.
+ * A ring of {@link edges} which may contain nodes of degree > 2.
  * A MaximalEdgeRing may represent two different spatial entities:
  * <ul>
  * <li>a single polygon possibly containing inversions (if the ring is oriented CW)
@@ -229,9 +238,9 @@ public:
  * A MaximalEdgeRing can be converted to a list of MinimalEdgeRings using the
  * {@link #buildMinimalRings() } method.
  *
- * @version 1.2
  * @see com.vividsolutions.jts.operation.overlay.MinimalEdgeRing
  */
+
 class MaximalEdgeRing: public EdgeRing {
 public:
 	MaximalEdgeRing(DirectedEdge *start, GeometryFactory *geometryFactory, CGAlgorithms *cga);
@@ -242,6 +251,9 @@ public:
 	void linkDirectedEdgesForMinimalEdgeRings();
 };
 
+/**
+ * Constructs {@link Point}s from the nodes of an overlay graph.
+ */
 class PointBuilder {
 private:
 	OverlayOp *op;
@@ -265,12 +277,9 @@ public:
 };
 
 /**
- * LineBuilder forms JTS LineStrings out of a the graph of directed edges
- * created by an OverlayGraph.
- * <p>
- * LineBuilder is a friend class of OverlayGraph.
+ * Forms JTS LineStrings out of a the graph of {@link DirectedEdge}s
+ * created by an {@link OverlayOp}.
  *
- * @version 1.2
  */
 class LineBuilder {
 public:
@@ -316,12 +325,10 @@ private:
 };
 
 /**
- * PolygonBuilder forms Polygons out of a graph of {@link DirectedEdge}s.
+ * Forms {@link Polygon}s out of a graph of {@link DirectedEdge}s.
  * The edges to use are marked as being in the result Area.
  * <p>
- * PolygonBuilder is a friend class of OverlayGraph.
  *
- * @version 1.2
  */
 class PolygonBuilder {
 public:
@@ -424,12 +431,23 @@ private:
 };
 
 
+/**
+ * Creates nodes for use in the {@link PlanarGraph}s constructed during
+ * overlay operations.
+ *
+ */
 class OverlayNodeFactory: public NodeFactory {
 public:
 //	OverlayNodeFactory() {};
 	Node* createNode(Coordinate coord);
 };
 
+/**
+ * Nodes a set of edges.
+ * Takes one or more sets of edges and constructs a
+ * new set of edges consisting of all the split edges created by
+ * noding the input edges together
+ */
 class EdgeSetNoder {
 private:
 	LineIntersector *li;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.15  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -266,22 +271,6 @@ void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
 	}
 }
 
-/**
-* Check all nodes to see if their labels are consistent.
-* If any are not, return false
-*/
-bool RelateComputer::isNodeEdgeAreaLabelsConsistent() {
-	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
-		RelateNode *node=(RelateNode*) nodeIt->second;
-		if (!node->getEdges()->isAreaLabelsConsistent()) {
-			invalidPoint.setCoordinate(node->getCoordinate());
-			return false;
-		}
-	}
-	return true;
-}
 
 void RelateComputer::labelNodeEdges() {
 	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;

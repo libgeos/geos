@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.15  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -34,8 +39,6 @@
 #include "../../headers/util.h"
 
 namespace geos {
-
-CGAlgorithms* IsValidOp::cga=new RobustCGAlgorithms();
 
 const Coordinate& IsValidOp::findPtNotNode(const CoordinateList *testCoords,const LinearRing *searchRing, GeometryGraph *graph) {
 	// find edge corresponding to searchRing.
@@ -78,7 +81,7 @@ void IsValidOp::checkValid(const Geometry *g) {
     if (g->isEmpty()) return;
     if (typeid(*g)==typeid(Point)) return;
     else if (typeid(*g)==typeid(MultiPoint)) return;
-	// LineString also handles LinearRings
+    else if (typeid(*g)==typeid(LinearRing)) checkValid((LinearRing*)g);
     else if (typeid(*g)==typeid(LineString)) checkValid((LineString*)g);
     else if (typeid(*g)==typeid(Polygon)) checkValid((Polygon*)g);
     else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
@@ -88,11 +91,28 @@ void IsValidOp::checkValid(const Geometry *g) {
 }
 
 /**
-* Checks validity of a LineString.  Anything goes for linestrings!
+* Checks validity of a LineString.  Almost anything goes for linestrings!
 */
 void IsValidOp::checkValid(const LineString *g){
 	GeometryGraph *graph=new GeometryGraph(0,g);
 	checkTooFewPoints(graph);
+	delete graph;
+}
+
+/**
+* Checks validity of a LinearRing.
+*/
+void IsValidOp::checkValid(const LinearRing *g){
+	GeometryGraph *graph = new GeometryGraph(0, g);
+	checkTooFewPoints(graph);
+	if (validErr!=NULL) {
+		delete graph;
+		return;
+	}
+	LineIntersector *li = new RobustLineIntersector();
+	graph->computeSelfNodes(li, true);
+	checkNoSelfIntersectingRings(graph);
+	delete li;
 	delete graph;
 }
 
@@ -402,7 +422,7 @@ void IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,Ge
 	// if no point could be found, we can assume that the shell is outside the polygon
 	if (shellPt==Coordinate::getNull())
 		return;
-	bool insidePolyShell=cga->isPointInRing(shellPt,polyPts);
+	bool insidePolyShell=CGAlgorithms::isPointInRing(shellPt,polyPts);
 	if (!insidePolyShell) return;
 	// if no holes, this is an error!
 	if (p->getNumInteriorRing()<=0) {
@@ -428,7 +448,7 @@ void IsValidOp::checkShellInsideHole(const LinearRing *shell,const LinearRing *h
 	const Coordinate& shellPt=findPtNotNode(shellPts,hole,graph);
 	// if point is on shell but not hole, check that the shell is inside the hole
 	if (!(shellPt==Coordinate::getNull())) {
-		bool insideHole=cga->isPointInRing(shellPt,holePts);
+		bool insideHole=CGAlgorithms::isPointInRing(shellPt,holePts);
 		if (!insideHole)
 			validErr=new TopologyValidationError(
 				TopologyValidationError::NESTED_SHELLS,
@@ -438,7 +458,7 @@ void IsValidOp::checkShellInsideHole(const LinearRing *shell,const LinearRing *h
 	const Coordinate& holePt=findPtNotNode(holePts,shell,graph);
 	// if point is on hole but not shell, check that the hole is outside the shell
 	if(!(holePt==Coordinate::getNull())) {
-		bool insideShell=cga->isPointInRing(holePt,shellPts);
+		bool insideShell=CGAlgorithms::isPointInRing(holePt,shellPts);
 		if (insideShell) {
 			validErr=new TopologyValidationError(
 				TopologyValidationError::NESTED_SHELLS,

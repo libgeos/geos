@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
  * Revision 1.14  2004/03/19 09:48:46  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -43,6 +48,10 @@ using namespace std;
 
 namespace geos {
 
+/**
+ * The base class for operations that require {@link GeometryGraph)s.
+ *
+ */
 class GeometryGraphOperation {
 friend class Unload;
 public:
@@ -70,11 +79,12 @@ public:
 	void addEndpoint(bool newIsClosed);
 };
 /**
- * This class tests whether some kinds of Geometry are simple.
- * Note that only Geometry's for which their definition allows them
+ * Tests whether a {@link Geometry} is simple.
+ * Only {@link Geometry}s whose definition allows them
  * to be simple or non-simple are tested.  (E.g. Polygons must be simple
  * by definition, so no test is provided.  To test whether a given Polygon is valid,
  * use <code>Geometry#isValid</code>)
+ *
  */
 class IsSimpleOp {
 public:
