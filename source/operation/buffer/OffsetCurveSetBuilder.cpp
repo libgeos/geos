@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/05/19 09:57:54  ybychkov
+ * Bugfix in OffsetCurveSetBuilder::addPolygon (JTS 1.4.1)
+ *
  * Revision 1.8  2004/05/07 07:57:27  strk
  * Added missing EdgeNodingValidator to build scripts.
  * Changed SegmentString constructor back to its original form
@@ -191,8 +194,8 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 		// if the hole would be completely covered
 		if (distance > 0.0 && isErodedCompletely(holeCoord, -distance))
 		{
-			delete holeCoord;
-			return;
+//			delete holeCoord;
+			continue;
 		}
 		// Holes are topologically labelled opposite to the shell, since
 		// the interior of the polygon lies on their opposite side
