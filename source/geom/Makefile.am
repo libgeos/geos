@@ -197,7 +197,7 @@ EXTERNAL_SOURCES =  \
 
 libgeos_la_SOURCES = $(DIR_SOURCES) $(EXTERNAL_SOURCES)
 
-libgeos_la_LDFLAGS = -version-info 1
+libgeos_la_LDFLAGS = -release @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@ 
 
 dist-local:
 	cp -p $(DIR_SOURCES) Makefile.am Makefile.in $(distdir)
