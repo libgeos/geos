@@ -90,7 +90,7 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	}
 	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(npts);
 	int ipt=0;
-	pts->setAt(Coordinate(ei0->coord),ipt++);
+	pts->setAt(*(new Coordinate(ei0->coord)),ipt++);
 	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++) {
 		pts->setAt(edge->pts->getAt(i),ipt++);
 	}

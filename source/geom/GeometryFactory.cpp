@@ -21,11 +21,11 @@ Geometry* GeometryFactory::toGeometry(Envelope* envelope,PrecisionModel* precisi
 		return new Point(*(new Coordinate(envelope->getMinX(),envelope->getMinY())),precisionModel,SRID);
 	}
 	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
-	cl->add(Coordinate(envelope->getMinX(), envelope->getMinY()));
-	cl->add(Coordinate(envelope->getMaxX(), envelope->getMinY()));
-	cl->add(Coordinate(envelope->getMaxX(), envelope->getMaxY()));
-	cl->add(Coordinate(envelope->getMinX(), envelope->getMaxY()));
-	cl->add(Coordinate(envelope->getMinX(), envelope->getMinY()));
+	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMinY())));
+	cl->add(*(new Coordinate(envelope->getMaxX(), envelope->getMinY())));
+	cl->add(*(new Coordinate(envelope->getMaxX(), envelope->getMaxY())));
+	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMaxY())));
+	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMinY())));
 	return new Polygon(new LinearRing(cl,precisionModel,SRID),precisionModel,SRID);
 }
 

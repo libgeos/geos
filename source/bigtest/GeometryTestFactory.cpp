@@ -19,24 +19,24 @@ CoordinateList* GeometryTestFactory::createBox(double minx, double miny,int nSid
 	for(i=0;i<nSide;i++) {
 		double x=minx+i*segLen;
 		double y=miny;
-		pts->add(Coordinate(x,y));
+		pts->add(*(new Coordinate(x,y)));
 	}
 	for(i=0;i<nSide;i++) {
 		double x=maxx;
 		double y=miny+i*segLen;
-		pts->add(Coordinate(x,y));
+		pts->add(*(new Coordinate(x,y)));
 	}
 	for(i=0;i<nSide;i++) {
 		double x=maxx-i*segLen;
 		double y=maxy;
-		pts->add(Coordinate(x,y));
+		pts->add(*(new Coordinate(x,y)));
 	}
 	for(i=0;i<nSide;i++) {
 		double x=minx;
 		double y=maxy-i*segLen;
-		pts->add(Coordinate(x,y));
+		pts->add(*(new Coordinate(x,y)));
 	}
-	pts->add(Coordinate(pts->getAt(0)));
+	pts->add(*(new Coordinate(pts->getAt(0))));
 	return pts;
 }
 
@@ -55,9 +55,9 @@ CoordinateList* GeometryTestFactory::createCircle(double basex,double basey,doub
 		double ang=i*(2*PI/nPts);
 		double x=len*cos(ang)+basex;
 		double y=len*sin(ang)+basey;
-		pts->add(Coordinate(x,y));
+		pts->add(*(new Coordinate(x,y)));
 	}
-	pts->add(Coordinate(pts->getAt(0)));
+	pts->add(*(new Coordinate(pts->getAt(0))));
 	return pts;
 }
 
@@ -94,11 +94,11 @@ CoordinateList* GeometryTestFactory::createSineStar(double basex,double basey,do
 			double len=armLen*(1-cos(ang)/2)+armBaseLen;
 			double x=len*cos(starAng+iArmPt*angInc/nArmPt)+basex;
 			double y=len*sin(starAng+iArmPt*angInc/nArmPt)+basey;
-			pts->add(Coordinate(x,y));
+			pts->add(*(new Coordinate(x,y)));
 		}
 		starAng+=angInc;
 	}
-	pts->add(Coordinate(pts->getAt(0)));
+	pts->add(*(new Coordinate(pts->getAt(0))));
 	return pts;
 }
 

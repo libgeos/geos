@@ -35,13 +35,13 @@ CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 	externalCoordinate->x=getNextNumber(tokenizer);
 	externalCoordinate->y=getNextNumber(tokenizer);
 	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
-	coordinates->add(Coordinate(*internalCoordinate));
+	coordinates->add(*(new Coordinate(*internalCoordinate)));
 	nextToken=getNextCloserOrComma(tokenizer);
 	while (nextToken==",") {
 		externalCoordinate->x=getNextNumber(tokenizer);
 		externalCoordinate->y=getNextNumber(tokenizer);
 		precisionModel->toInternal(*externalCoordinate,internalCoordinate);
-		coordinates->add(Coordinate(*internalCoordinate));
+		coordinates->add(*(new Coordinate(*internalCoordinate)));
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	delete externalCoordinate;

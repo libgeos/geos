@@ -33,7 +33,7 @@ void PointCoordinateList::setPoints(const vector<Coordinate> &v) {
 vector<Coordinate>* PointCoordinateList::toVector() {
 	vector<Coordinate>* v=new vector<Coordinate>();
 	for(unsigned int i=0; i<vect->size(); i++) {
-		v->push_back(Coordinate((*vect)[i].x,(*vect)[i].y,(*vect)[i].z));
+		v->push_back(*(new Coordinate((*vect)[i].x,(*vect)[i].y,(*vect)[i].z)));
 	}
 	return v;
 }
