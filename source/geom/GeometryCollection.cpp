@@ -11,91 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.43  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.42  2004/07/22 08:45:50  strk
- * Documentation updates, memory leaks fixed.
- *
- * Revision 1.41  2004/07/22 07:04:49  strk
- * Documented missing geometry functions.
- *
- * Revision 1.40  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.39  2004/07/06 17:58:22  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.38  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.37  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.36  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.35  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.34  2004/06/28 21:11:43  strk
- * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
- * Added holes argument check in Polygon.cpp.
- *
- * Revision 1.33  2004/06/15 20:07:51  strk
- * GeometryCollections constructors make a deep copy of Geometry vector argument.
- *
- * Revision 1.32  2004/05/17 21:14:47  ybychkov
- * JavaDoc updated
- *
- * Revision 1.31  2004/05/07 09:05:13  strk
- * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateSequence.
- *
- * Revision 1.30  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.29  2004/04/14 12:28:43  strk
- * shouldNeverReachHere exceptions made more verbose
- *
- * Revision 1.28  2004/04/01 10:44:33  ybychkov
- * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
- *
- * Revision 1.27  2003/12/11 15:53:40  strk
- * Fixed bogus copy constructor (making clone bogus)
- *
- * Revision 1.26  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <geos/util.h>
@@ -354,5 +270,28 @@ GeometryCollection::getGeometryTypeId() const {
 	return GEOS_GEOMETRYCOLLECTION;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.44  2004/12/08 14:32:54  strk
+ * cleanups
+ *
+ * Revision 1.43  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.42  2004/07/22 08:45:50  strk
+ * Documentation updates, memory leaks fixed.
+ *
+ * Revision 1.41  2004/07/22 07:04:49  strk
+ * Documented missing geometry functions.
+ *
+ * Revision 1.40  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ **********************************************************************/
 
