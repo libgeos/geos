@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.16  2003/10/15 08:52:55  strk
+* Memory leaks fixed.
+*
+*/
 #include "../headers/io.h"
 #include "../headers/util.h"
 
@@ -165,15 +171,28 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 }
 
 LineString* WKTReader::readLineStringText(StringTokenizer *tokenizer) {
-	return geometryFactory->createLineString(getCoordinates(tokenizer));
+	CoordinateList *coords = getCoordinates(tokenizer);
+	LineString *ret = geometryFactory->createLineString(coords);
+	delete coords;
+	return ret;
 }
 
 LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
-	return geometryFactory->createLinearRing(getCoordinates(tokenizer));
+	CoordinateList *coords = getCoordinates(tokenizer);
+	LinearRing *ret = geometryFactory->createLinearRing(coords);
+	delete coords;
+	return ret;
 }
 
 MultiPoint* WKTReader::readMultiPointText(StringTokenizer *tokenizer) {
-	return geometryFactory->createMultiPoint(getCoordinates(tokenizer));
+	CoordinateList *coords = getCoordinates(tokenizer);
+	MultiPoint *ret = geometryFactory->createMultiPoint(coords);
+	// This is INCONSISTENT. for every other calls to 
+	// geometryFactory->createSOMTING(ARG) you can delete
+	// ARG afterwards, for this single call you can not. --strk;
+	// TODO: make createMultiPoint() copy given arg.
+	//delete coords;
+	return ret;
 }
 
 Polygon* WKTReader::readPolygonText(StringTokenizer *tokenizer) {
@@ -206,7 +225,9 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 		lineStrings->push_back(lineString);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	return geometryFactory->createMultiLineString(lineStrings);
+	MultiLineString *ret = geometryFactory->createMultiLineString(lineStrings);
+	delete lineStrings;
+	return ret;
 }
 
 MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
@@ -223,7 +244,9 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 		polygons->push_back(polygon);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	return geometryFactory->createMultiPolygon(polygons);
+	MultiPolygon *ret = geometryFactory->createMultiPolygon(polygons);
+	delete polygons;
+	return ret;
 }
 
 GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *tokenizer) {
@@ -241,7 +264,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 		geoms->push_back(geom);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	return geometryFactory->createGeometryCollection(geoms);
+	GeometryCollection *ret = geometryFactory->createGeometryCollection(geoms);
+	delete geoms;
+	return ret;
 }
 }
 
