@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/04/16 11:04:24  strk
+ * Memory leaks plugged on exception thrown
+ *
  * Revision 1.19  2004/04/16 10:00:08  strk
  * Memory leak fixed.
  *
@@ -163,14 +166,19 @@ void BufferOp::computeGeometry(){
 	bufferOriginalPrecision();
 	if (resultGeometry!=NULL) return;
 	// try and compute with decreasing precision
-	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--) {
-	try {
-		bufferFixedPrecision(precDigits);
-	} catch (TopologyException *ex) {
-		saveException=ex;
-		// don't propagate the exception - it will be detected by fact that resultGeometry is null
-	}
-	if (resultGeometry!=NULL) return;
+	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--) 	{
+		try {
+			bufferFixedPrecision(precDigits);
+		} catch (TopologyException *ex) {
+			if ( saveException ) delete saveException;
+			saveException=ex;
+			// don't propagate the exception - it will be detected by fact that resultGeometry is null
+		}
+		if (resultGeometry!=NULL)
+		{
+			if ( saveException ) delete saveException;
+			return;
+		}
 	}
 	// tried everything - have to bail
 	throw saveException;
