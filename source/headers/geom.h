@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.56  2004/04/16 07:42:06  strk
+ * PrecisionModel::Type made an enum instead of a Type.
+ *
  * Revision 1.55  2004/04/15 14:00:30  strk
  * Added new cleanup to Unload::Release
  *
@@ -145,35 +148,25 @@ public:
 	* This class is only for use to support the "enums" for the types of precision model.
 	* <p>
 	*/
-	class Type {
-	friend class Unload;
-	private:
-		static const int64 serialVersionUID = -5528602631731589822LL;
-		static map<string,PrecisionModel::Type*> *nameToTypeMap;
-		string name;
-		void* readResolve();
-	public:
-		string toString();
-		Type(string newName);
-	};
-
-	/**
-	* Fixed Precision indicates that coordinates have a fixed number of decimal places.
-	* The number of decimal places is determined by the log10 of the scale factor.
-	*/
-	static Type* FIXED;
-	/**
-	* Floating precision corresponds to the standard Java
-	* double-precision floating-point representation, which is
-	* based on the IEEE-754 standard
-	*/
-	static Type* FLOATING;
-	/**
-	* Floating single precision corresponds to the standard Java
-	* single-precision floating-point representation, which is
-	* based on the IEEE-754 standard
-	*/
-	static Type* FLOATING_SINGLE;
+	typedef enum {
+		/**
+		* Fixed Precision indicates that coordinates have a fixed number of decimal places.
+		* The number of decimal places is determined by the log10 of the scale factor.
+		*/
+		FIXED,
+		/**
+		* Floating precision corresponds to the standard Java
+		* double-precision floating-point representation, which is
+		* based on the IEEE-754 standard
+		*/
+		FLOATING,
+		/**
+		* Floating single precision corresponds to the standard Java
+		* single-precision floating-point representation, which is
+		* based on the IEEE-754 standard
+		*/
+		FLOATING_SINGLE
+	} Type;
 
   /**
 	*  The maximum precise value representable in a double. Since IEE754
@@ -191,7 +184,7 @@ public:
 	* of FLOATING.
 	*/
 	PrecisionModel(void);
-	PrecisionModel(Type* nModelType);
+	PrecisionModel(Type nModelType);
 	/**
 	*  Creates a <code>PrecisionModel</code> that specifies Fixed precision.
 	*  Fixed-precision coordinates are represented as precise internal coordinates,
@@ -225,7 +218,7 @@ public:
 	* Gets the type of this PrecisionModel
 	* @return the type of this PrecisionModel
 	*/
-	Type* getType();
+	Type getType();
 	double getScale() const;
 	/**
 	* Returns the x-offset used to obtain a precise coordinate.
@@ -297,7 +290,7 @@ public:
 	int compareTo(const PrecisionModel* other) const;
 private:
 	void setScale(double newScale);
-	Type* modelType;
+	Type modelType;
 	double scale;
 	static const int64 serialVersionUID = 7777263578777803835LL;
 };

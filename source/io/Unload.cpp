@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/04/16 07:42:06  strk
+ * PrecisionModel::Type made an enum instead of a Type.
+ *
  * Revision 1.7  2004/04/15 15:11:38  strk
  * Commented out deletion that seems to cause segfaults
  *
@@ -66,11 +69,6 @@ void Unload::Release()
 	delete RelateComputer::li;
 	delete RelateComputer::ptLocator;
 	delete QuadTreeRoot::origin;
-	//delete PrecisionModel::FIXED;
-	//delete PrecisionModel::FLOATING;
-	//delete PrecisionModel::FLOATING_SINGLE;
-	delete PrecisionModel::Type::nameToTypeMap;
-	//delete Geometry::geometryChangedFilter;
 	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
 	delete BufferBuilder::cga;
 }

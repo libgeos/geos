@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/04/16 07:42:06  strk
+ * PrecisionModel::Type made an enum instead of a Type.
+ *
  * Revision 1.18  2004/04/14 09:38:10  strk
  * PrecisionModel(double newScale) missed to set the scale
  *
@@ -43,23 +46,6 @@
 namespace geos {
 
 const double maximumPreciseValue=9007199254740992.0;
-
-map<string,PrecisionModel::Type*>* PrecisionModel::Type::nameToTypeMap=new map<string,PrecisionModel::Type*>();
-PrecisionModel::Type* PrecisionModel::FIXED=new PrecisionModel::Type("FIXED");
-PrecisionModel::Type* PrecisionModel::FLOATING=new PrecisionModel::Type("FLOATING");
-PrecisionModel::Type* PrecisionModel::FLOATING_SINGLE=new PrecisionModel::Type("FLOATING SINGLE");
-PrecisionModel::Type::Type(string newName) { 
-	name=newName;
-	nameToTypeMap->insert(pair<string,PrecisionModel::Type*>(name, this));
-}
-
-void* PrecisionModel::Type::readResolve() {
-	return nameToTypeMap->find(name)->second;
-}    
-
-string PrecisionModel::Type::toString() {
-	return name;
-}
 
 //double PrecisionModel::makePrecise(double val){
 //	//return rint(val);
@@ -119,7 +105,7 @@ PrecisionModel::PrecisionModel(){
 *
 * @param modelType the type of the precision model
 */
-PrecisionModel::PrecisionModel(Type* nModelType){
+PrecisionModel::PrecisionModel(Type nModelType){
 	modelType=nModelType;
 	if (modelType==FIXED){
 		setScale(1.0);
@@ -199,7 +185,7 @@ int PrecisionModel::getMaximumSignificantDigits() const {
 * Gets the type of this PrecisionModel
 * @return the type of this PrecisionModel
 */
-PrecisionModel::Type* PrecisionModel::getType(){
+PrecisionModel::Type PrecisionModel::getType(){
 	return modelType;
 }
 
