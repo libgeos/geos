@@ -1,3 +1,5 @@
+- DoubleBits misregards BYTE_ENDIAN, must check it.
+
 - polygonizer still failing (Envelope comparison again ?)
 
 - Add distinct binary predicates test support in XMLTester
