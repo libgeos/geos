@@ -1,9 +1,13 @@
 #include "io.h"
 
-StringTokenizer::StringTokenizer(): str(""),stok(""){
+StringTokenizer::StringTokenizer(){
+	str="";
+	stok="";
 	ntok=0.0;
 }
-StringTokenizer::StringTokenizer(string txt): str(txt),stok("") {
+StringTokenizer::StringTokenizer(string txt) {
+	str=txt;
+	stok="";
 	ntok=0.0;
 }
 StringTokenizer::~StringTokenizer(){}
@@ -16,7 +20,6 @@ int StringTokenizer::nextToken(){
 		case '\n':
 		case '\r':
 			str=str.substr(1);
-//			return StringTokenizer::TT_EOL;
 			return nextToken();
 		case '(':
 			str=str.substr(1);

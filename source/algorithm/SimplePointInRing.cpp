@@ -2,8 +2,8 @@
 
 CGAlgorithms* SimplePointInRing::cga=new RobustCGAlgorithms();
 
-SimplePointInRing::SimplePointInRing(LinearRing ring){
-	pts=ring.getCoordinates();
+SimplePointInRing::SimplePointInRing(LinearRing *ring){
+	pts=ring->getCoordinates();
 }
 
 bool SimplePointInRing::isInside(Coordinate pt){

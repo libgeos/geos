@@ -6,6 +6,9 @@ PointLocator::PointLocator() {
 	cga=new RobustCGAlgorithms();
 }
 
+PointLocator::~PointLocator() {
+	delete cga;
+}
 /**
 * locate determines the topological relationship (location) of a single point
 * to a Geometry.

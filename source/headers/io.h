@@ -32,10 +32,6 @@ public:
 		TT_NUMBER,
 		TT_WORD
 	};
-//	static const int TT_EOF=0;
-//	static const int TT_EOL=1;
-//	static const int TT_NUMBER=2;
-//	static const int TT_WORD=3;
 	StringTokenizer();
 	StringTokenizer(string txt);
 	~StringTokenizer();
@@ -51,7 +47,7 @@ private:
 class WKTReader {
 public:
 	WKTReader();
-	WKTReader(GeometryFactory gf);
+	WKTReader(GeometryFactory *gf);
 	~WKTReader();
 	Geometry* read(string wellKnownText);
 //	Geometry* read(Reader reader);	//Not implemented yet
@@ -67,14 +63,13 @@ protected:
 	LineString* readLineStringText(StringTokenizer *tokenizer);
 	LinearRing* readLinearRingText(StringTokenizer *tokenizer);
 	MultiPoint* readMultiPointText(StringTokenizer *tokenizer);
-//  protected Point[] toPoints(Coordinate[] coordinates); //Not needed
 	Polygon* readPolygonText(StringTokenizer *tokenizer);
 	MultiLineString* readMultiLineStringText(StringTokenizer *tokenizer);
 	MultiPolygon* readMultiPolygonText(StringTokenizer *tokenizer);
 	GeometryCollection* readGeometryCollectionText(StringTokenizer *tokenizer);
 private:
-	GeometryFactory geometryFactory;
-	PrecisionModel* precisionModel;
+	GeometryFactory *geometryFactory;
+	PrecisionModel *precisionModel;
 };
 
 class Writer {

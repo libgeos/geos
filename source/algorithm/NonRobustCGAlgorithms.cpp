@@ -6,6 +6,10 @@ NonRobustCGAlgorithms::NonRobustCGAlgorithms(){
 	li=new RobustLineIntersector();
 }
 
+NonRobustCGAlgorithms::~NonRobustCGAlgorithms(){
+	delete li;
+}
+
 /**
 * ring is expected to contain a closing point;
 * i.e. ring[0]=ring[length-1]
@@ -20,8 +24,8 @@ bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring){
 	/* For each line edge l=(i-1,i),see if it crosses ray from test point in positive x direction. */
 	for(i=1;i<nPts;i++){
 		i1=i-1;
-		Coordinate p1(ring->getAt(i));
-		Coordinate p2(ring->getAt(i1));
+		Coordinate& p1=ring->getAt(i);
+		Coordinate& p2=ring->getAt(i1);
 		x1=p1.x-p.x;
 		y1=p1.y-p.y;
 		x2=p2.x-p.x;
@@ -46,8 +50,8 @@ bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring){
 
 bool NonRobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList* pt) {
 	for(int i=1;i<pt->getSize();i++){
-		Coordinate p0(pt->getAt(i-1));
-		Coordinate p1(pt->getAt(i));
+		Coordinate& p0=pt->getAt(i-1);
+		Coordinate& p1=pt->getAt(i);
 		li->computeIntersection(p,p0,p1);
 		if(li->hasIntersection())
 			return true;

@@ -37,7 +37,7 @@ double LineIntersector::computeEdgeDistance(Coordinate p,Coordinate p0,Coordinat
 		else
 			dist=fabs(p.y-p0.y);
 	}
-	//Assert::isTrue(! (dist == 0.0 && ! p.equals(p1)), "Invalid distance calculation");
+//	Assert::isTrue(!(dist==0.0 && !p.equals2D(p1)), "Invalid distance calculation");
 	return dist;
 }
 

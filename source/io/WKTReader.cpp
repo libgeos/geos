@@ -1,22 +1,27 @@
 #include "io.h"
 #include "util.h"
 
-WKTReader::WKTReader(): geometryFactory() {
+WKTReader::WKTReader(){
+	geometryFactory=new GeometryFactory();
 	precisionModel=new PrecisionModel();
 }
-WKTReader::WKTReader(GeometryFactory gf): geometryFactory(gf){
-	precisionModel=gf.getPrecisionModel();
+WKTReader::WKTReader(GeometryFactory *gf){
+	geometryFactory=gf;
+	precisionModel=gf->getPrecisionModel();
 }
-WKTReader::~WKTReader(){}
+WKTReader::~WKTReader(){
+	delete geometryFactory;
+	delete precisionModel;
+}
 
 Geometry* WKTReader::read(string wellKnownText){
 	StringTokenizer *tokenizer=new StringTokenizer(wellKnownText);
-//	try {
+	try {
 		return readGeometryTaggedText(tokenizer);
-//	}
-//	catch (IOException e) {
-//		throw new ParseException(e.toString());
-//	}
+	}
+	catch (ParseException e) {
+		throw new ParseException(e.toString());
+	}
 }
 
 CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
@@ -25,20 +30,22 @@ CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 		return CoordinateListFactory::internalFactory->createCoordinateList();
 	}
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
-	Coordinate externalCoordinate;
-	Coordinate internalCoordinate;
-	externalCoordinate.x=getNextNumber(tokenizer);
-	externalCoordinate.y=getNextNumber(tokenizer);
-	precisionModel->toInternal(externalCoordinate,&internalCoordinate);
-	coordinates->add(internalCoordinate);
+	Coordinate *externalCoordinate=new Coordinate();
+	Coordinate *internalCoordinate=new Coordinate();
+	externalCoordinate->x=getNextNumber(tokenizer);
+	externalCoordinate->y=getNextNumber(tokenizer);
+	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
+	coordinates->add(Coordinate(*internalCoordinate));
 	nextToken=getNextCloserOrComma(tokenizer);
 	while (nextToken==",") {
-		externalCoordinate.x=getNextNumber(tokenizer);
-		externalCoordinate.y=getNextNumber(tokenizer);
-		precisionModel->toInternal(externalCoordinate,&internalCoordinate);
-		coordinates->add(internalCoordinate);
+		externalCoordinate->x=getNextNumber(tokenizer);
+		externalCoordinate->y=getNextNumber(tokenizer);
+		precisionModel->toInternal(*externalCoordinate,internalCoordinate);
+		coordinates->add(Coordinate(*internalCoordinate));
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
+	delete externalCoordinate;
+	delete internalCoordinate;
 	return coordinates;
 }
 
@@ -133,33 +140,33 @@ Geometry* WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer) {
 Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return geometryFactory.createPoint(Coordinate::getNull());
+		return geometryFactory->createPoint(Coordinate::getNull());
 	}
 	double x=getNextNumber(tokenizer);
 	double y=getNextNumber(tokenizer);
-	Coordinate externalCoordinate(x, y);
-	Coordinate internalCoordinate;
-	precisionModel->toInternal(externalCoordinate, &internalCoordinate);
+	Coordinate *externalCoordinate=new Coordinate(x, y);
+	Coordinate *internalCoordinate=new Coordinate();
+	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
 	getNextCloser(tokenizer);
-	return geometryFactory.createPoint(internalCoordinate);
+	return geometryFactory->createPoint(*internalCoordinate);
 }
 
 LineString* WKTReader::readLineStringText(StringTokenizer *tokenizer) {
-	return geometryFactory.createLineString(getCoordinates(tokenizer));
+	return geometryFactory->createLineString(getCoordinates(tokenizer));
 }
 
 LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
-	return geometryFactory.createLinearRing(getCoordinates(tokenizer));
+	return geometryFactory->createLinearRing(getCoordinates(tokenizer));
 }
 
 MultiPoint* WKTReader::readMultiPointText(StringTokenizer *tokenizer) {
-	return geometryFactory.createMultiPoint(getCoordinates(tokenizer));
+	return geometryFactory->createMultiPoint(getCoordinates(tokenizer));
 }
 
 Polygon* WKTReader::readPolygonText(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return geometryFactory.createPolygon(NULL,NULL);
+		return geometryFactory->createPolygon(NULL,NULL);
 	}
 	vector<Geometry *> *holes=new vector<Geometry *>();
 	LinearRing *shell=new LinearRing(*readLinearRingText(tokenizer));
@@ -169,13 +176,13 @@ Polygon* WKTReader::readPolygonText(StringTokenizer *tokenizer) {
 		holes->push_back(hole);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	return geometryFactory.createPolygon(shell,holes);
+	return geometryFactory->createPolygon(shell,holes);
 }
 
 MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return geometryFactory.createMultiLineString(NULL);
+		return geometryFactory->createMultiLineString(NULL);
 	}
 	vector<Geometry *> *lineStrings=new vector<Geometry *>();
 	LineString *lineString=new LineString(*readLineStringText(tokenizer));
@@ -186,13 +193,13 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 		lineStrings->push_back(lineString);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	return geometryFactory.createMultiLineString(lineStrings);
+	return geometryFactory->createMultiLineString(lineStrings);
 }
 
 MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return geometryFactory.createMultiPolygon(NULL);
+		return geometryFactory->createMultiPolygon(NULL);
 	}
 	vector<Geometry *> *polygons=new vector<Geometry *>();
 	Polygon *polygon=new Polygon(*readPolygonText(tokenizer));
@@ -203,13 +210,13 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 		polygons->push_back(polygon);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	return geometryFactory.createMultiPolygon(polygons);
+	return geometryFactory->createMultiPolygon(polygons);
 }
 
 GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return geometryFactory.createGeometryCollection(NULL);
+		return geometryFactory->createGeometryCollection(NULL);
 	}
 	vector<Geometry *> *geoms=new vector<Geometry *>();
 	Geometry *geom=new Geometry();
@@ -221,5 +228,5 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 		geoms->push_back(geom);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
-	return geometryFactory.createGeometryCollection(geoms);
+	return geometryFactory->createGeometryCollection(geoms);
 }

@@ -1,15 +1,10 @@
 #ifndef GEOS_UTIL_H
 #define GEOS_UTIL_H
 
-//#include <iostream>
 #include <string>
-//#include <vector>
-//#include <algorithm>
-//#include "math.h"
 #include "platform.h"
 
 using namespace std;
-
 
 class AssertionFailedException {
 public:
@@ -26,9 +21,6 @@ class Assert {
 public:
 	static void isTrue(bool assertion);
 	static void isTrue(bool assertion, string message);
-// Don't seem to be used
-//	static void equals(Object expectedValue, Object actualValue);
-//	static void equals(Object expectedValue, Object actualValue, String message);
 
 	static void equals(Coordinate expectedValue, Coordinate actualValue);
 	static void equals(Coordinate expectedValue, Coordinate actualValue, string message);

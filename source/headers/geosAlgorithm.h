@@ -18,8 +18,8 @@ private:
 
 class PointInRing{
 public:
-	PointInRing();
-	virtual bool isInside(Coordinate pt);
+//	PointInRing();
+	virtual bool isInside(Coordinate pt)=0;
 };
 
 class CGAlgorithms {
@@ -29,9 +29,7 @@ public:
 		COLLINEAR,
 		COUNTERCLOCKWISE
 	};
-
 	CGAlgorithms(){};
-
 	/**
 	* Test whether a point lies inside a simple polygon (ring).
 	* The ring may be oriented in either direction.
@@ -85,7 +83,7 @@ public:
 
 class SimplePointInRing: public PointInRing {
 public:
-	SimplePointInRing(LinearRing ring);
+	SimplePointInRing(LinearRing *ring);
 	bool isInside(Coordinate pt);
 private:
 	static CGAlgorithms *cga;
@@ -175,6 +173,7 @@ class RobustCGAlgorithms: public CGAlgorithms {
 public:
 	static int orientationIndex(Coordinate p1,Coordinate p2,Coordinate q);
 	RobustCGAlgorithms();
+	~RobustCGAlgorithms();
 	bool isCCW(CoordinateList* ring);
 	bool isPointInRing(Coordinate p,CoordinateList* ring);
 	bool isOnLine(Coordinate p,CoordinateList* pt);
@@ -187,6 +186,7 @@ private:
 class NonRobustCGAlgorithms: public CGAlgorithms {
 public:
 	NonRobustCGAlgorithms();
+	~NonRobustCGAlgorithms();
 	bool isPointInRing(Coordinate p,CoordinateList* ring);
 	bool isOnLine(Coordinate p,CoordinateList* pt);
 	bool isCCW(CoordinateList* ring);
@@ -207,6 +207,7 @@ private:
 class PointLocator {
 public:
 	PointLocator();
+	~PointLocator();
 	int locate(Coordinate p,Geometry *geom);
 protected:
 	CGAlgorithms *cga;

@@ -48,7 +48,7 @@ int main(int argC, char* argV[]) {
 	string opRes="";
 	int testCount=0;
 
-	WKTReader *r=new WKTReader(GeometryFactory(new PrecisionModel(),10));
+	WKTReader *r=new WKTReader(new GeometryFactory(new PrecisionModel(),10));
 	WKTWriter *w=new WKTWriter();
 	Geometry *gA;
 	Geometry *gB;

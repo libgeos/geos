@@ -34,13 +34,13 @@ string WKTWriter::stringOfChar(char ch, int count) {
 }
 
 string WKTWriter::write(Geometry *geometry) {
-	Writer sw;
+	Writer *sw=new Writer();
 //	try {
-		writeFormatted(geometry,false,&sw);
+		writeFormatted(geometry,false,sw);
 //	} catch (IOException ex) {
 //		Assert::shouldNeverReachHere();
 //	}
-	return sw.toString();
+	return sw->toString();
 }
 
 void WKTWriter::write(Geometry *geometry, Writer *writer) {
@@ -48,13 +48,13 @@ void WKTWriter::write(Geometry *geometry, Writer *writer) {
 }
 
 string WKTWriter::writeFormatted(Geometry *geometry) {
-	Writer sw;
+	Writer *sw=new Writer();
 //	try {
-		writeFormatted(geometry, true, &sw);
+		writeFormatted(geometry, true, sw);
 //	}catch (IOException ex) {
 //		Assert::shouldNeverReachHere();
 //	}
-	return sw.toString();
+	return sw->toString();
 }
 
 void WKTWriter::writeFormatted(Geometry *geometry, Writer *writer) {

@@ -15,6 +15,10 @@ RobustCGAlgorithms::RobustCGAlgorithms() {
 	lineIntersector=new RobustLineIntersector();
 }
 
+RobustCGAlgorithms::~RobustCGAlgorithms() {
+	delete lineIntersector;
+}
+
 bool RobustCGAlgorithms::isCCW(CoordinateList* ring) {
 	Coordinate hip;
 	Coordinate p;
@@ -85,8 +89,8 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring) {
 	*/
 	for (i=1;i<nPts;i++) {
 		i1=i-1;
-		Coordinate p1(ring->getAt(i));
-		Coordinate p2(ring->getAt(i1));
+		Coordinate& p1=ring->getAt(i);
+		Coordinate& p2=ring->getAt(i1);
 		x1=p1.x-p.x;
 		y1=p1.y-p.y;
 		x2=p2.x-p.x;
@@ -117,8 +121,8 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring) {
 
 bool RobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList* pt) {
 	for(int i=1;i<pt->getSize();i++) {
-		Coordinate p0(pt->getAt(i-1));
-		Coordinate p1(pt->getAt(i));
+		Coordinate& p0=pt->getAt(i-1);
+		Coordinate& p1=pt->getAt(i);
 		lineIntersector->computeIntersection(p,p0,p1);
 		if (lineIntersector->hasIntersection()) {
 			return true;

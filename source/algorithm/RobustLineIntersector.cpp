@@ -193,6 +193,10 @@ Coordinate RobustLineIntersector::intersection(Coordinate p1,Coordinate p2,Coord
 	if (makePrecise) {
 		intPt.makePrecise();
 	}
+	delete n1;
+	delete n2;
+	delete n3;
+	delete n4;
 	return Coordinate(intPt);
 }
 
