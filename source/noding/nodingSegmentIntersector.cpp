@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.3  2004/05/27 10:26:50  strk
  * set (useless?) recordIsolated member in constructor
  *
@@ -122,10 +127,10 @@ bool nodingSegmentIntersector::isTrivialIntersection(SegmentString *e0, int segI
 void nodingSegmentIntersector::processIntersections(SegmentString *e0, int segIndex0,SegmentString *e1, int segIndex1){
 	if (e0==e1 && segIndex0==segIndex1) return;
 	numTests++;
-	Coordinate p00=e0->getCoordinates()->getAt(segIndex0);
-	Coordinate p01=e0->getCoordinates()->getAt(segIndex0+1);
-	Coordinate p10=e1->getCoordinates()->getAt(segIndex1);
-	Coordinate p11=e1->getCoordinates()->getAt(segIndex1+1);
+	Coordinate p00=e0->getCoordinate(segIndex0);
+	Coordinate p01=e0->getCoordinate(segIndex0+1);
+	Coordinate p10=e1->getCoordinate(segIndex1);
+	Coordinate p11=e1->getCoordinate(segIndex1+1);
 	li->computeIntersection(p00, p01, p10, p11);
 	//if (li.hasIntersection() && li.isProper()) Debug.println(li);
 	if (li->hasIntersection()) {

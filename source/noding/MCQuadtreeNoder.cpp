@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.6  2004/05/05 16:39:50  strk
  * reduced explicit local objects allocation
  *
@@ -90,7 +95,7 @@ MCQuadtreeNoder::intersectChains()
 }
 
 void MCQuadtreeNoder::add(SegmentString *segStr) {
-	vector<indexMonotoneChain*> *segChains=MonotoneChainBuilder::getChains((CoordinateList*)segStr->getCoordinates(),segStr);
+	vector<indexMonotoneChain*> *segChains=MonotoneChainBuilder::getChains((CoordinateList*)segStr->getCoordinatesRO(),segStr);
 	for (int i=0; i<(int)segChains->size();i++) {
 		indexMonotoneChain *mc=(*segChains)[i];
 		mc->setId(idCounter++);

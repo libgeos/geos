@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.15  2004/05/19 13:18:24  strk
  * made CoordinateList::toString() a const member function
  *
@@ -51,9 +56,9 @@ BasicCoordinateList::BasicCoordinateList() {
 }
 
 BasicCoordinateList::BasicCoordinateList(int n) {
-	vect=new vector<Coordinate>();
+	vect=new vector<Coordinate>(n);
 //	vect->reserve(n);
-	vect->resize(n);
+//	vect->resize(n);
 }
 
 BasicCoordinateList::BasicCoordinateList(const Coordinate& c) {

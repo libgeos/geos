@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -43,6 +48,7 @@ void Edge::updateIM(Label *lbl,IntersectionMatrix *im){
 }
 
 Edge::Edge(){
+	//cerr<<"["<<this<<"] Edge()"<<endl;
 	eiList=NULL;
 	isIsolatedVar=true;
 	depth=NULL;
@@ -53,6 +59,7 @@ Edge::Edge(){
 }
 
 Edge::~Edge(){
+	//cerr<<"["<<this<<"] ~Edge()"<<endl;
 	delete eiList;
 	delete depth;
 	delete mce;
@@ -61,6 +68,7 @@ Edge::~Edge(){
 }
 
 Edge::Edge(CoordinateList* newPts, Label *newLabel):GraphComponent(newLabel){
+	//cerr<<"["<<this<<"] Edge(CoordinateList *, Label *)"<<endl;
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
@@ -72,6 +80,7 @@ Edge::Edge(CoordinateList* newPts, Label *newLabel):GraphComponent(newLabel){
 }
 
 Edge::Edge(CoordinateList* newPts){
+	//cerr<<"["<<this<<"] Edge(CoordinateList *)"<<endl;
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.39  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.38  2004/06/15 21:35:32  strk
  * fixed buildGeometry to always return a newly allocated geometry
  *
@@ -308,6 +313,8 @@ GeometryFactory::createMultiPoint(const CoordinateList* coordinates) const
 	}
 	//delete coordinates;
 	MultiPoint *mp = createMultiPoint(pts);
+	for (int i=0; i<pts->size(); i++)
+		delete (*pts)[i];
 	delete pts;
 	return mp;
 }

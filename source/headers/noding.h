@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.10  2004/05/07 07:57:27  strk
  * Added missing EdgeNodingValidator to build scripts.
  * Changed SegmentString constructor back to its original form
@@ -158,13 +163,17 @@ private:
 	const void* context;
 	bool isIsolatedVar;
 public:
+	/**
+	 * This function copies given CoordinateList
+	 */
 	SegmentString(const CoordinateList *newPts, const void* newContext);
 	virtual ~SegmentString();
 	const void* getContext() const;
 	SegmentNodeList* getIntersectionList() const;
 	int size() const;
 	const Coordinate& getCoordinate(int i) const;
-	const CoordinateList* getCoordinates() const;
+	CoordinateList* getCoordinates() const;
+	const CoordinateList* getCoordinatesRO() const;
 	void setIsolated(bool isIsolated);
 	bool isIsolated() const;
 	bool isClosed() const;

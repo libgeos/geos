@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.5  2004/05/27 10:27:03  strk
  * Memory leaks fixed.
  *
@@ -145,7 +150,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	if (useIntPt1) 	pts->setAt(*(ei1->coord),ipt++);
 	SegmentString *ret = new SegmentString(pts,edge->getContext());
 	splitEdges.push_back(ret);
-	//delete pts;
+	delete pts;
 	return ret;
 }
 

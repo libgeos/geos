@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
  * Revision 1.5  2004/05/27 10:27:03  strk
  * Memory leaks fixed.
  *
@@ -41,16 +46,21 @@
 
 namespace geos {
 
+/**
+ * This function copies given CoordinateList
+ */
 SegmentString::SegmentString(const CoordinateList *newPts, const void* newContext)
 {
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
-	pts=newPts;
+	//pts=newPts;
+	pts = CoordinateListFactory::internalFactory->createCoordinateList(newPts);
 	context=newContext;
 }
 
 SegmentString::~SegmentString() {
 	delete eiList;
+	delete pts;
 }
 
 const void*
@@ -77,8 +87,15 @@ SegmentString::getCoordinate(int i) const
 	return pts->getAt(i);
 }
 
-const CoordinateList*
+CoordinateList*
 SegmentString::getCoordinates() const
+{
+	//return pts;
+	return CoordinateListFactory::internalFactory->createCoordinateList(pts);
+}
+
+const CoordinateList*
+SegmentString::getCoordinatesRO() const
 {
 	return pts;
 }

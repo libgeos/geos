@@ -2,17 +2,7 @@
 
 - Add class for use in Geometry::userData setting.
 
-- make GeometryFactory->createMULTI*() consistent in taking
+- Add geometry constructors taking ownership of passed arguments.
 
-  either:
-  	const vector<const Geometry *>
-	(copy all)
-  or:
-  	vector<Geometry *>
-	(copy none)
-
-  right now they take:
-  	const vector<Geometry *>
-	(copy vector, get Geometry ownership)
-  
 - Remove all explicit heap allocations for private static members.
+
