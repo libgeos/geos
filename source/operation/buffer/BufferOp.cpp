@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2003/11/07 17:51:02  strk
+ * Memory leak fix in insertEdge()
+ *
  * Revision 1.9  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -161,6 +164,7 @@ vector<Edge*>* BufferOp::nodeEdges(vector<Edge*> *edges){
 *Inserted edges are checked identical edge already exists.
 *If so, the edge is not inserted, but its label is merged
 *with the existing edge.
+* NOTE: the edge is deleted if already found !
 */
 void BufferOp::insertEdge(Edge *e){
 	//Debug.println(e);
@@ -185,6 +189,7 @@ void BufferOp::insertEdge(Edge *e){
 		checkDimensionalCollapse(labelToMerge,existingLabel);
 		//Debug.print("new edge "); Debug.println(e);
 		//Debug.print("existing "); Debug.println(existingEdge);
+		delete e;
 	} else {   // no matching existing edge was found
 		// add this new edge to the list of edges in this graph
 		//e.setName(name+edges.size());
