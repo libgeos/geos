@@ -107,7 +107,7 @@ private:
 
 	void computeNodeDepth(Node *n);
 	void copySymDepths(DirectedEdge *de);
-	bool contains(vector<Node*> *nodes,Node *node);
+	bool contains(set<Node*>&nodes,Node *node);
 
 public:
 	BufferSubgraph(CGAlgorithms *cga);
@@ -723,6 +723,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/02/04 18:49:48  strk
+ * Changed ::computeDepths to use a set instead of a vector for checking
+ * visited Edges.
+ *
  * Revision 1.6  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2005/02/04 18:49:48  strk
+ * Changed ::computeDepths to use a set instead of a vector for checking
+ * visited Edges.
+ *
  * Revision 1.12  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
@@ -234,18 +238,20 @@ int BufferSubgraph::compareTo(void* o) {
 */
 // <FIX> MD - use iteration & queue rather than recursion, for speed and robustness
 void BufferSubgraph::computeDepths(DirectedEdge *startEdge){
-	vector<Node*> nodesVisited; //Used to be a HashSet
+	//vector<Node*> nodesVisited; //Used to be a HashSet
+	set<Node *>nodesVisited;
 	vector<Node*> nodeQueue;
 	Node *startNode=startEdge->getNode();
 	nodeQueue.push_back(startNode);
-	nodesVisited.push_back(startNode);
+	//nodesVisited.push_back(startNode);
+	nodesVisited.insert(startNode);
 	startEdge->setVisited(true);
 
 	while (! nodeQueue.empty()) {
 		//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
 		Node *n=nodeQueue[0];
 		nodeQueue.erase(nodeQueue.begin());
-		nodesVisited.push_back(n);
+		nodesVisited.insert(n);
 
 		// compute depths around node, starting at this edge since it has depths assigned
 		computeNodeDepth(n);
@@ -253,30 +259,37 @@ void BufferSubgraph::computeDepths(DirectedEdge *startEdge){
 		// add all adjacent nodes to process queue,
 		// unless the node has been visited already
 		vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
-		for(int i=0;i<(int)ees->size();i++) {
+		unsigned int eessize=ees->size();
+		for(unsigned int i=0; i<eessize; i++) {
 			DirectedEdge *de=(DirectedEdge*) (*ees)[i];
 			DirectedEdge *sym=de->getSym();
 			if (sym->isVisited()) continue;
 			Node *adjNode=sym->getNode();
 
-			if (! contains(&nodesVisited,adjNode))
+			//if (! contains(nodesVisited,adjNode))
+			if(nodesVisited.insert(adjNode).second)
 			{
 				nodeQueue.push_back(adjNode);
-				nodesVisited.push_back(adjNode);
+				//nodesVisited.insert(adjNode);
 			}
 		}
 	}
 }
 
-bool BufferSubgraph::contains(vector<Node*> *nodes,Node *node) {
-	bool result=false;
-	for(int i=0;i<(int)nodes->size();i++) {
-		if (node==(*nodes)[i]) {
-			result=true;
-			break;
-		}
-	}
-	return result;
+bool
+BufferSubgraph::contains(set<Node*>&nodes,Node *node)
+{
+	//bool result=false;
+	if ( nodes.find(node) != nodes.end() ) return true;
+	return false;
+	//unsigned int nnodes=nodes->size();
+	//for(unsigned int i=0; i<nnodes; i++) {
+		//if (node==(*nodes)[i]) {
+			//result=true;
+			//break;
+		//}
+	//}
+	//return result;
 }
 
 }
