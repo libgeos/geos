@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/14 09:30:48  strk
+ * Private iterated noding funx now use int* instead of vector to know
+ * when it's time to stop.
+ *
  * Revision 1.2  2004/03/26 07:48:30  ybychkov
  * "noding" package ported (JTS 1.4)
  *
@@ -331,7 +335,7 @@ private:
 	* Node the input segment strings once
 	* and create the split edges between the nodes
 	*/
-	vector<SegmentString*>* node(vector<SegmentString*> *segStrings, vector<int> *numInteriorIntersections);
+	vector<SegmentString*>* node(vector<SegmentString*> *segStrings, int *numInteriorIntersections);
 	PrecisionModel *pm;
 	LineIntersector *li;
 public:
