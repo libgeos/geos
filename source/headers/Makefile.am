@@ -29,4 +29,5 @@ geos_HEADERS = \
 	operation.h \
 	spatialIndex.h \
 	unload.h \
-	util.h
+	util.h \
+	geos_version.h
