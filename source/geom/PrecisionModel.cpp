@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/05/17 10:45:58  strk
+ * Fixed bogus FIXED coordinate rounding
+ *
  * Revision 1.19  2004/04/16 07:42:06  strk
  * PrecisionModel::Type made an enum instead of a Type.
  *
@@ -67,12 +70,7 @@ double PrecisionModel::makePrecise(double val) const {
 		return (double) floatSingleVal;
 	}
 	if (modelType == FIXED) {
-		double v=val*scale;
-		if (val>=0.0) 
-			v=floor(v+0.5);
-		else 
-			v=-floor(-v+0.5);
-		return v/scale;
+		return rint(val*scale)/scale;
 	}
 	// modelType == FLOATING - no rounding necessary
 	return val;
