@@ -161,7 +161,7 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 }
 
 void GeometryGraph::addPolygon(Polygon *p){
-	addPolygonRing((LinearRing*) &(p->getExteriorRing()),Location::EXTERIOR,Location::INTERIOR);
+	addPolygonRing((LinearRing*) p->getExteriorRing(),Location::EXTERIOR,Location::INTERIOR);
 	for (int i=0;i<p->getNumInteriorRing();i++) {
 		// Holes are topologically labelled opposite to the shell, since
 		// the interior of the polygon lies on their opposite side

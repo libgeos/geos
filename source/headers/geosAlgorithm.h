@@ -1,22 +1,194 @@
 #ifndef GEOS_ALGORITHM_H
 #define GEOS_ALGORITHM_H
 
-class CGAlgorithms{
-};
+#include "geom.h"
+#include "platform.h"
 
 class Coordinate;
+
+class NotRepresentableException {
+public:
+	NotRepresentableException();
+	NotRepresentableException(string msg);
+	~NotRepresentableException();
+	string toString();
+private:
+	string txt;
+};
+
+class PointInRing{
+public:
+	PointInRing();
+	virtual bool isInside(Coordinate pt);
+};
+
+class CGAlgorithms {
+public:
+	enum {
+		CLOCKWISE=-1,
+		COLLINEAR,
+		COUNTERCLOCKWISE
+	};
+
+	CGAlgorithms(){};
+
+	/**
+	* Test whether a point lies inside a simple polygon (ring).
+	* The ring may be oriented in either direction.
+	* If the point lies on the ring boundary the result of this method is unspecified.
+	*
+	* @return true if the point lies in the interior of the ring
+	*/
+	virtual bool isPointInPolygon(Coordinate p,CoordinateList ring)=0;
+	/**
+	* Test whether a point lies on a linestring.
+	*
+	* @return true true if
+	* the point is a vertex of the line or lies in the interior of a line
+	* segment in the linestring
+	*/
+	virtual bool isOnLine(Coordinate p,CoordinateList linestring)=0;
+	/**
+	* Test whether a ring (simple polygon) is oriented counter-clockwise.
+	*
+	* @return true if the ring is oriented counter-clockwise
+	*/
+	virtual bool isCCW(CoordinateList ring)=0;
+	/**
+	* Computes the orientation of a point q to the directed line segment p1-p2.
+	* The orientation of a point relative to a directed line segment indicates
+	* which way you turn to get to q after travelling from p1 to p2.
+	*
+	* @return 1 if q is counter-clockwise from p1-p2
+	* @return -1 if q is clockwise from p1-p2
+	* @return 0 if q is collinear with p1-p2
+	*/
+	virtual int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q)=0;
+
+};
+
+class HCoordinate {
+public:
+	double x,y,w;
+	HCoordinate();
+	HCoordinate(double _x, double _y, double _w);
+	HCoordinate(Coordinate p);
+	HCoordinate(HCoordinate p1, HCoordinate p2);
+	double getX();
+	double getY();
+	Coordinate getCoordinate();
+};
+
+class SimplePointInRing: public PointInRing {
+public:
+	SimplePointInRing(LinearRing ring);
+	bool isInside(Coordinate pt);
+private:
+	static CGAlgorithms *cga;
+	CoordinateList pts;
+};
+
 class LineIntersector{
 public:	
-	int getIntersectionNum(){return 0;};
-	Coordinate getIntersection(int num){return Coordinate::getNull();};
-	double getEdgeDistance(int geomIndex,int intIndex){return 0.0;};
-
+	static double computeEdgeDistance(Coordinate p,Coordinate p0,Coordinate p1);
+	static double nonRobustComputeEdgeDistance(Coordinate p,Coordinate p1,Coordinate p2);
+	LineIntersector();
+	virtual void setMakePrecise(bool newMakePrecise);
+	/**
+	* Compute the intersection of a point p and the line p1-p2
+	*/
+	virtual void computeIntersection(Coordinate p,Coordinate p1,Coordinate p2)=0;
+	enum {
+		DONT_INTERSECT,
+		DO_INTERSECT,
+		COLLINEAR
+	};
+	virtual void computeIntersection(Coordinate p1,Coordinate p2,Coordinate p3, Coordinate p4);
+	virtual string toString();
+	virtual bool hasIntersection();
+	virtual int getIntersectionNum();
+	virtual Coordinate getIntersection(int intIndex);
+	virtual bool isSameSignAndNonZero(double a,double b);
+	virtual bool isIntersection(Coordinate pt);
+	virtual bool isProper();
+	virtual Coordinate getIntersectionAlongSegment(int segmentIndex,int intIndex);
+	virtual int getIndexAlongSegment(int segmentIndex,int intIndex);
+	virtual double getEdgeDistance(int geomIndex,int intIndex);
+protected:
+	/**
+	* If makePrecise is true, computed intersection coordinates will be made precise
+	* using Coordinate#makePrecise
+	*/
+	bool makePrecise;
+	int result;
+	Coordinate inputLines[2][2];
+	Coordinate intPt[2];
+	/**
+	* The indexes of the endpoints of the intersection lines, in order along
+	* the corresponding line
+	*/
+	int intLineIndex[2][2];
+	bool isProperVar;
+	Coordinate pa;
+	Coordinate pb;
+	virtual bool isCollinear();
+	virtual int computeIntersect(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2)=0;
+	virtual bool isEndPoint();
+	virtual void computeIntLineIndex();
+	virtual void computeIntLineIndex(int segmentIndex);
 };
 
-class RobustCGAlgorithms:public CGAlgorithms{
+class RobustDeterminant {
+public:
+	static int signOfDet2x2(double x1,double y1,double x2,double y2);
 };
 
-class RobustLineIntersector: public LineIntersector{
+class RobustLineIntersector: public LineIntersector {
+public:
+	RobustLineIntersector();
+	void computeIntersection(Coordinate p,Coordinate p1,Coordinate p2);
+	int computeIntersect(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2);
+private:
+	bool between(Coordinate p1,Coordinate p2,Coordinate q);
+	int computeCollinearIntersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2);
+	Coordinate intersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2);
 };
 
+class RobustCGAlgorithms: public CGAlgorithms {
+public:
+	static int orientationIndex(Coordinate p1,Coordinate p2,Coordinate q);
+	RobustCGAlgorithms();
+	bool isCCW(CoordinateList ring);
+	bool isPointInPolygon(Coordinate p,CoordinateList ring);
+	bool isOnLine(Coordinate p,CoordinateList pt);
+	int computeOrientation(Coordinate p1,Coordinate p2,Coordinate q);
+private:
+	RobustLineIntersector* lineIntersector;
+	bool isInEnvelope(Coordinate p,CoordinateList ring);
+};
+
+class SimplePointInAreaLocator {
+public:
+	static int locate(Coordinate p,Geometry *geom);
+private:
+	static CGAlgorithms *cga;
+	static bool containsPoint(Coordinate p,Geometry *geom);
+	static bool containsPointInPolygon(Coordinate p,Polygon *poly);
+};
+
+class PointLocator {
+public:
+	PointLocator();
+	int locate(Coordinate p,Geometry *geom);
+protected:
+	CGAlgorithms *cga;
+	bool isIn;         // true if the point lies in or on any Geometry element
+	int numBoundaries;    // the number of sub-elements whose boundaries the point lies in
+private:
+	void computeLocation(Coordinate p,Geometry *geom);
+	void updateLocationInfo(int loc);
+	int locate(Coordinate p,LineString *l);
+	int locate(Coordinate p,LinearRing *ring);
+	int locate(Coordinate p,Polygon *poly);
+};
 #endif

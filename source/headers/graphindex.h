@@ -5,6 +5,7 @@
 #include "geom.h"
 #include <vector>
 #include "geosAlgorithm.h"
+#include "platform.h"
 
 class Edge;
 class Node;

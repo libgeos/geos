@@ -113,7 +113,7 @@ void EdgeEndStar::computeLabelling(vector<GeometryGraph*> geom){
 				hasDimensionalCollapseEdge[geomi]=true;
 		}
 	}
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (it=getIterator();it<=edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		for(int geomi=0;geomi<2;geomi++){
@@ -201,7 +201,7 @@ void EdgeEndStar::propagateSideLabels(int geomIndex){
 		// no labelled sides found, so no labels to propagate
 	if (startLoc==Location::UNDEF) return;
 	int currLoc=startLoc;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (it=getIterator();it<=edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		// set null ON values to be in current location

@@ -86,7 +86,7 @@ void Geometry::scroll(CoordinateList *coordinates, Coordinate firstCoordinate) {
 	for (int i=ind; i<length; i++) {
 		v[i-ind]=coordinates->getAt(i);
 	}
-	for (int i=0; i<ind; i++) {
+	for (i=0; i<ind; i++) {
 		v[length-ind+i]=coordinates->getAt(i);
 	}
 	coordinates->swap(v);

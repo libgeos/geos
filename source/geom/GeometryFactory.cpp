@@ -25,7 +25,7 @@ Geometry GeometryFactory::toGeometry(Envelope envelope, PrecisionModel precision
 	cl.add(Coordinate(envelope.getMaxX(), envelope.getMaxY()));
 	cl.add(Coordinate(envelope.getMinX(), envelope.getMaxY()));
 	cl.add(Coordinate(envelope.getMinX(), envelope.getMinY()));
-	return Polygon(LinearRing(cl,precisionModel,SRID),precisionModel,SRID);
+	return Polygon(new LinearRing(cl,precisionModel,SRID),precisionModel,SRID);
 }
 
 PrecisionModel GeometryFactory::getPrecisionModel(){

@@ -177,7 +177,7 @@ void WKTWriter::appendPolygonText(Polygon *polygon, int level, bool indentFirst,
 	} else {
 		if (indentFirst) indent(level, writer);
 		writer->write("(");
-		appendLineStringText(&(polygon->getExteriorRing()), level, false, writer);
+		appendLineStringText(polygon->getExteriorRing(), level, false, writer);
 		for (int i=0; i<polygon->getNumInteriorRing(); i++) {
 			writer->write(", ");
 			LineString *ls=polygon->getInteriorRingN(i);

@@ -2,15 +2,15 @@
 #include <typeinfo>
 
 Polygon::Polygon(){}
-Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID), shell(p.shell), holes(p.holes) {
+Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID), holes(p.holes) {
 //	LinearRing s(p.shell);
 //	vector<Geometry *> h(p.holes.begin(),p.holes.end());
-//	shell=p.shell;
+	shell=p.shell;
 //	holes=p.holes;
 }
 
-Polygon::Polygon(LinearRing shell, PrecisionModel precisionModel, int SRID){
-	Polygon(&shell, &vector<Geometry *>(), precisionModel, SRID);
+Polygon::Polygon(LinearRing *newShell, PrecisionModel precisionModel, int SRID){
+	Polygon(newShell, &vector<Geometry *>(), precisionModel, SRID);
 }
 
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
@@ -28,7 +28,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 	if (newShell->isEmpty() && hasNonEmptyElements(*newHoles)) {
 		throw "IllegalArgumentException: shell is empty but holes are not";
 	}
-	shell=*newShell;
+	shell=newShell;
 	holes=*newHoles;
 }
 
@@ -38,7 +38,7 @@ CoordinateList Polygon::getCoordinates() {
 	}
 	CoordinateList coordinates(getNumPoints());
 	int k = -1;
-	CoordinateList shellCoordinates(shell.getCoordinates());
+	CoordinateList shellCoordinates(shell->getCoordinates());
 	for (int x = 0; x < shellCoordinates.getSize(); x++) {
 		k++;
 		coordinates.setAt(shellCoordinates.getAt(x),k);
@@ -54,7 +54,7 @@ CoordinateList Polygon::getCoordinates() {
 }
 
 int Polygon::getNumPoints() {
-	int numPoints = shell.getNumPoints();
+	int numPoints = shell->getNumPoints();
 	for (unsigned int i = 0; i < holes.size(); i++) {
 		numPoints += ((LinearRing *)holes[i])->getNumPoints();
 	}
@@ -70,14 +70,14 @@ int Polygon::getBoundaryDimension() {
 }
 
 bool Polygon::isEmpty() {
-	return shell.isEmpty();
+	return shell->isEmpty();
 }
 
 bool Polygon::isSimple() {
 	return true;
 }
 
-LineString Polygon::getExteriorRing() {
+LineString* Polygon::getExteriorRing() {
 	return shell;
 }
 
@@ -98,7 +98,7 @@ Geometry Polygon::getBoundary() {
 		return GeometryCollection(NULL, precisionModel, SRID);
 	}
 	vector<Geometry *> rings(holes.size() + 1);
-	rings[0]=dynamic_cast<LineString *>(&shell);
+	rings[0]=dynamic_cast<LineString *>(shell);
 	for (unsigned int i=0; i<holes.size(); i++) {
 		rings[i + 1] = ((LineString *)holes[i]);
 	}
@@ -106,7 +106,7 @@ Geometry Polygon::getBoundary() {
 }
 
 Envelope Polygon::computeEnvelopeInternal() {
-	return shell.getEnvelopeInternal();
+	return shell->getEnvelopeInternal();
 }
 
 bool Polygon::equalsExact(Geometry *other) {
@@ -114,15 +114,15 @@ bool Polygon::equalsExact(Geometry *other) {
 		return false;
 	}
 	Polygon otherPolygon(*dynamic_cast<Polygon*>(other));
-	if (typeid(shell)!=typeid(Geometry)) {
+	if (typeid(*shell)!=typeid(Geometry)) {
 		return false;
 	}
-	Geometry thisShell(*dynamic_cast<Geometry *>(&shell));
-	if (typeid(otherPolygon.shell)!=typeid(Geometry)) {
+	Geometry thisShell(*dynamic_cast<Geometry *>(shell));
+	if (typeid(*(otherPolygon.shell))!=typeid(Geometry)) {
 		return false;
 	}
-	Geometry otherPolygonShell(*dynamic_cast<Geometry *>(&(otherPolygon.shell)));
-	if (!shell.equalsExact(&otherPolygonShell)) {
+	Geometry otherPolygonShell(*dynamic_cast<Geometry *>(otherPolygon.shell));
+	if (!shell->equalsExact(&otherPolygonShell)) {
 		return false;
 	}
 	if (holes.size()!=otherPolygon.holes.size()) {
@@ -143,7 +143,7 @@ bool Polygon::equalsExact(Geometry *other) {
 }
 
 void Polygon::apply(CoordinateFilter *filter) {
-	shell.apply(filter);
+	shell->apply(filter);
 	for (unsigned int i = 0; i < holes.size(); i++) {
 		((LinearRing *)holes[i])->apply(filter);
 	}
@@ -154,11 +154,11 @@ void Polygon::apply(GeometryFilter *filter) {
 }
 
 Geometry Polygon::convexHull() {
-	return getExteriorRing().convexHull();
+	return getExteriorRing()->convexHull();
 }
 
 void Polygon::normalize() {
-	normalize(&shell, true);
+	normalize(shell, true);
 	for (unsigned int i = 0; i < holes.size(); i++) {
 		normalize((LinearRing *)holes[i], false);
 	}
@@ -166,7 +166,7 @@ void Polygon::normalize() {
 }
 
 int Polygon::compareToSameClass(Polygon *p) {
-	return shell.compareToSameClass(&(p->shell));
+	return shell->compareToSameClass(p->shell);
 }
 
 //!!! External dependency

@@ -481,13 +481,13 @@ class GeometryCollectionIterator {
 public:
 	GeometryCollectionIterator();
 	GeometryCollectionIterator(const GeometryCollectionIterator &gci);
-	GeometryCollectionIterator(GeometryCollection newParent);
+	GeometryCollectionIterator(GeometryCollection *newParent);
 	virtual ~GeometryCollectionIterator();
 	bool hasNext();
 	Geometry *next();
 	void remove(); //Not implemented
 private:
-	GeometryCollection parent;
+	GeometryCollection *parent;
 	bool atStart;
 	int max;
 	int index;
@@ -615,7 +615,7 @@ class SFSSurface { //: public SFSGeometry {
 
 class SFSPolygon : public SFSSurface {
 public:
-	virtual LineString getExteriorRing()=0;
+	virtual LineString *getExteriorRing()=0;
 	virtual int getNumInteriorRing()=0;
 	virtual LineString *getInteriorRingN(int n)=0;
 };
@@ -625,7 +625,7 @@ public:
 	Polygon();
 	Polygon(const Polygon &p);
 	virtual ~Polygon();
-	Polygon(LinearRing shell, PrecisionModel precisionModel, int SRID);
+	Polygon(LinearRing *newShell, PrecisionModel precisionModel, int SRID);
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel precisionModel, int SRID);
 	CoordinateList getCoordinates();
 	int getNumPoints();
@@ -633,7 +633,7 @@ public:
 	int getBoundaryDimension();
 	bool isEmpty();
 	bool isSimple();
-	LineString getExteriorRing();
+	LineString *getExteriorRing();
 	int getNumInteriorRing();
 	LineString *getInteriorRingN(int n);
 	string getGeometryType();
@@ -645,7 +645,7 @@ public:
 	void normalize();
 	int compareToSameClass(Polygon *p); //was protected
 protected:
-	LinearRing shell;
+	LinearRing *shell;
 	vector<Geometry *> holes; //Actually vector<LinearRing *>
 	Envelope computeEnvelopeInternal();
 private:

@@ -10,7 +10,7 @@
 #include "graphindex.h"
 #include "geosAlgorithm.h"
 //#include "math.h"
-//#include "platform.h"
+#include "platform.h"
 
 using namespace std;
 

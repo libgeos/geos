@@ -264,7 +264,7 @@ void DirectedEdgeStar::findCoveredLineEdges(){
 	 * If L edges are found, mark them as covered if they are in the interior
 	 */
 	int currLoc=startLoc;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<=edgeList->end();it++) {
+	for (it=getIterator();it<=edgeList->end();it++) {
 		DirectedEdge *nextOut=(DirectedEdge*) *it;
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (nextOut->isLineEdge()) {
