@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
  * Revision 1.25  2004/07/05 10:50:21  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -66,16 +72,18 @@
 
 namespace geos {
 
-WKTReader::WKTReader(){
-	geometryFactory=new GeometryFactory();
-	precisionModel=geometryFactory->getPrecisionModel();
-}
-WKTReader::WKTReader(GeometryFactory *gf){
+//WKTReader::WKTReader(){
+//	geometryFactory=new GeometryFactory();
+//	precisionModel=geometryFactory->getPrecisionModel();
+//}
+
+WKTReader::WKTReader(const GeometryFactory *gf){
 	geometryFactory=gf;
 	precisionModel=gf->getPrecisionModel();
 }
+
 WKTReader::~WKTReader(){
-	delete geometryFactory;
+	//delete geometryFactory;
 }
 
 Geometry* WKTReader::read(string wellKnownText){

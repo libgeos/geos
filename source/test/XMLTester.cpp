@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.44  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
  * Revision 1.43  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -105,6 +111,7 @@ using namespace geos;
 
 int main(int argC, char* argV[]) {
 	PrecisionModel *pm=NULL;
+	GeometryFactory *factory=NULL;
 	WKTReader *r=NULL;
 	WKTWriter *w=NULL;
 	Geometry *gA=NULL;
@@ -165,7 +172,8 @@ try{
 		pm=new PrecisionModel(scale,offsetX,offsetY);
 		cout << "Precision Model: FIXED (scale: "<<scale<<", offsetX: "<<offsetX<<", offsetY: "<<offsetY<<")" << endl;
 	}
-	r=new WKTReader(new GeometryFactory(pm));
+	factory = new GeometryFactory(pm);
+	r=new WKTReader(factory);
 	w=new WKTWriter();
 	gA=NULL;
 	gB=NULL;
@@ -500,6 +508,7 @@ try{
 
 	cout << "End Test";
 	delete pm;
+	delete factory;
 	delete r; r=NULL;
 	delete w; w=NULL;
 
@@ -511,6 +520,7 @@ try{
 } catch (GEOSException *exc) {
 	cerr<<"Exception: "<<exc->toString()<<endl;
 	delete pm;
+	delete factory;
 	delete r;
 	delete w;
 	delete gA;
@@ -519,6 +529,7 @@ try{
 } catch (exception e) {
 	cerr<<"Exception: "<<e.what()<<endl;
 	delete pm;
+	delete factory;
 	delete r;
 	delete w;
 	delete gA;
@@ -526,6 +537,7 @@ try{
 } catch (...) {
 	cerr<<"unexpected exception: "<<endl;
 	delete pm;
+	delete factory;
 	delete r;
 	delete w;
 	delete gA;

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
  * Revision 1.8  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -576,7 +582,7 @@ private:
 
 
 /**
- * \class CoordinateList geom.h geos/geom.h
+ * \class CoordinateList geom.h geos.h
  *
  * \brief
  * The internal representation of a list of coordinates inside a Geometry.
@@ -593,7 +599,6 @@ private:
  * this GeometryFactory to create new Geometries. All of these new Geometries
  * will use your CoordinateList implementation.
  * 
- * This class is equivalent to JTS CoordinateSequence.
  */
 class CoordinateList {
 public:
@@ -703,7 +708,7 @@ public:
 };
 
 /**
- * \class BasicCoordinateList geom.h geos/geom.h
+ * \class BasicCoordinateList geom.h geos.h
  *
  * \brief The default implementation of CoordinateList
  */

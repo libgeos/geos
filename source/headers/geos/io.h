@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -83,13 +89,31 @@ private:
 	double ntok;
 };
 
+/**
+ * \class WKTReader io.h geos/io.h
+ * \brief WKT parser class; see also WKTWriter.
+ */
 class WKTReader {
 public:
-	WKTReader();
-	WKTReader(GeometryFactory *gf);
+	//WKTReader();
+
+	/**
+	 * \brief Inizialize parser with given GeometryFactory.
+	 *
+	 * Note that all Geometry objects created by the
+	 * parser will contain a pointer to the given factory
+	 * so be sure you'll keep the factory alive for the
+	 * whole WKTReader and created Geometry life.
+	 */
+	WKTReader(const GeometryFactory *gf);
+
 	~WKTReader();
+
+	/// Parse a WKT string returning a Geometry
 	Geometry* read(string wellKnownText);
+
 //	Geometry* read(Reader reader);	//Not implemented yet
+
 protected:
 	CoordinateList* getCoordinates(StringTokenizer *tokenizer);
 	double getNextNumber(StringTokenizer *tokenizer);
@@ -124,30 +148,43 @@ private:
 };
 
 /**
- * Outputs the textual representation of a {@link Geometry}.
- * <p>
- * The <code>WKTWriter</code> outputs coordinates rounded to the precision
+ * \class WKTWriter io.h geos/io.h
+ *
+ * \brief Outputs the textual representation of a Geometry.
+ * 
+ * The WKTWriter outputs coordinates rounded to the precision
  * model. No more than the maximum number of necessary decimal places will be
  * output.
- * <p>
+ * 
  * The Well-known Text format is defined in the <A
  * HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
  * Specification for SQL</A>.
- * <p>
+ * 
  * A non-standard "LINEARRING" tag is used for LinearRings. The WKT spec does
  * not define a special tag for LinearRings. The standard tag to use is
  * "LINESTRING".
+ *
+ * See WKTReader for parsing.
  *
  */
 class WKTWriter {
 public:
 	WKTWriter();
 	~WKTWriter();
-	static string stringOfChar(char ch, int count);
+
+	//string(count, ch) can be used for this
+	//static string stringOfChar(char ch, int count);
+
+	/// Returns WKT string for the given Geometry
 	string write(const Geometry *geometry);
+
+	// Send Geometry's WKT to the given Writer
 	void write(const Geometry *geometry, Writer *writer);
+
 	string writeFormatted(const Geometry *geometry);
+
 	void writeFormatted(const Geometry *geometry, Writer *writer);
+
 protected:
 	string formatter;
 	void appendGeometryTaggedText(const Geometry *geometry, int level, Writer *writer);

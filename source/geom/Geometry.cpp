@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.60  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
  * Revision 1.59  2004/07/06 17:58:21  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -142,12 +148,22 @@ namespace geos {
  * derive.
  *
  * Construction and destruction of Geometries is done
- * using a geos::GeometryFactory.
+ * using a geos::GeometryFactory. You'll feed it geos::CoordinateList
+ * for base geometries or vectors of geometries for collections.
+ *
+ * \section io_sect Input / Output
+ *
+ * For WKT input/output you can use geos::WKTReader and geos::WKTWriter
+ *
+ * \section exc_sect Exceptions
  *
  * Internal exceptions are thrown as pointers to geos::GEOSException.
  *
+ * Other standard exceptions are not mapped to this handled, nor
+ * does GEOSException inerit from standard exception, so you'll need
+ * to catch both if you care (this might change in the future)
+ *
  */ 
-
 
 GeometryComponentFilter Geometry::geometryChangedFilter;
 

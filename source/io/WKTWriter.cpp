@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
  * Revision 1.16  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -56,22 +62,20 @@ string WKTWriter::createFormatter(const PrecisionModel* precisionModel) {
 	return fmt;
 }
 
-string WKTWriter::stringOfChar(char ch, int count) {
-	string str="";
-	for (int i=0;i<count;i++)
-		str+=ch;
-	return str;
-}
+//string WKTWriter::stringOfChar(char ch, int count) {
+	//string str="";
+	//for (int i=0;i<count;i++) str+=ch;
+	//return string(count, ch);
+//}
 
 string WKTWriter::write(const Geometry *geometry) {
-	Writer *sw=new Writer();
+	Writer sw;
 //	try {
-		writeFormatted(geometry,false,sw);
+		writeFormatted(geometry,false,&sw);
 //	} catch (IOException ex) {
 //		Assert::shouldNeverReachHere();
 //	}
-	string res=sw->toString();
-	delete sw;
+	string res=sw.toString();
 	return res;
 }
 
@@ -315,7 +319,8 @@ void WKTWriter::appendGeometryCollectionText(const GeometryCollection *geometryC
 void WKTWriter::indent(int level, Writer *writer) {
 	if (!isFormatted || level<=0) return;
 	writer->write("\n");
-	writer->write(stringOfChar(' ', INDENT * level));
+	//writer->write(stringOfChar(' ', INDENT * level));
+	writer->write(string(INDENT * level, ' '));
 }
 }
 
