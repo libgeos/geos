@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.38  2004/05/07 13:23:51  strk
+ * Memory leaks fixed.
+ *
  * Revision 1.37  2004/03/19 09:48:46  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -446,8 +449,8 @@ try{
 		}
 			
 		xml.OutOfElem();
-		delete gA;
-		delete gB;
+		delete gA; gA=NULL;
+		delete gB; gB=NULL;
 	}
 	cout << "Failed: ";
 	cout << failed << endl;
@@ -458,8 +461,8 @@ try{
 
 	cout << "End Test";
 	delete pm;
-	delete r;
-	delete w;
+	delete r; r=NULL;
+	delete w; w=NULL;
 
 #ifdef _MSC_VER
 	}
@@ -474,6 +477,20 @@ try{
 	delete gA;
 	delete gB;
 	delete exc;
+} catch (exception e) {
+	cerr<<"Exception: "<<e.what()<<endl;
+	delete pm;
+	delete r;
+	delete w;
+	delete gA;
+	delete gB;
+} catch (...) {
+	cerr<<"unexpected exception: "<<endl;
+	delete pm;
+	delete r;
+	delete w;
+	delete gA;
+	delete gB;
 }
 
 	Unload::Release();

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/05/07 13:23:51  strk
+ * Memory leaks fixed.
+ *
  * Revision 1.18  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.
@@ -47,15 +50,17 @@ WKTReader::~WKTReader(){
 
 Geometry* WKTReader::read(string wellKnownText){
 	auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
+	StringTokenizer *st=tokenizer.release();
+	Geometry *g=NULL;
 	try {
-		StringTokenizer *st=tokenizer.release();
-		Geometry *g=readGeometryTaggedText(st);
+		g=readGeometryTaggedText(st);
+	}
+	catch (...) {
 		delete st;
-		return g;
+		throw;
 	}
-	catch (ParseException *e) {
-		throw new ParseException(e->toString());
-	}
+	delete st;
+	return g;
 }
 
 CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
@@ -64,23 +69,38 @@ CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 		return CoordinateListFactory::internalFactory->createCoordinateList();
 	}
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
-	coordinates->add(*getPreciseCoordinate(tokenizer));
-	nextToken=getNextCloserOrComma(tokenizer);
-	while (nextToken==",") {
-		coordinates->add(*getPreciseCoordinate(tokenizer));
+	Coordinate *coord = getPreciseCoordinate(tokenizer);
+	coordinates->add(*coord);
+	delete coord; coord=NULL;
+	try {
 		nextToken=getNextCloserOrComma(tokenizer);
+		while (nextToken==",") {
+			coord = getPreciseCoordinate(tokenizer);
+			coordinates->add(*coord);
+			delete coord; coord=NULL;
+			nextToken=getNextCloserOrComma(tokenizer);
+		}
+	} catch (...) {
+		delete coord;
+		delete coordinates;
+		throw;
 	}
 	return coordinates;
 }
 
 Coordinate* WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer) {
 	Coordinate *coord=new Coordinate();
-	coord->x=getNextNumber(tokenizer);
-	coord->y=getNextNumber(tokenizer);
-	if (isNumberNext(tokenizer)) {
-		coord->z=getNextNumber(tokenizer);
+	try {
+		coord->x=getNextNumber(tokenizer);
+		coord->y=getNextNumber(tokenizer);
+		if (isNumberNext(tokenizer)) {
+			coord->z=getNextNumber(tokenizer);
+		}
+		precisionModel->makePrecise(coord);
+	} catch (...) {
+		delete coord;
+		throw;
 	}
-	precisionModel->makePrecise(coord);
 	return coord;
 }
 
@@ -183,8 +203,15 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createPoint(Coordinate::getNull());
 	}
-	Point *pt=geometryFactory->createPoint(*getPreciseCoordinate(tokenizer));
-	getNextCloser(tokenizer);
+	Coordinate *coord = getPreciseCoordinate(tokenizer);
+	Point *pt=geometryFactory->createPoint(*coord);
+	delete coord;
+	try {
+		getNextCloser(tokenizer);
+	} catch (...) {
+		delete pt;
+		throw;
+	}
 	return pt;
 }
 
@@ -205,11 +232,7 @@ LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
 MultiPoint* WKTReader::readMultiPointText(StringTokenizer *tokenizer) {
 	CoordinateList *coords = getCoordinates(tokenizer);
 	MultiPoint *ret = geometryFactory->createMultiPoint(coords);
-	// This is INCONSISTENT. for every other calls to 
-	// geometryFactory->createSOMTING(ARG) you can delete
-	// ARG afterwards, for this single call you can not. --strk;
-	// TODO: make createMultiPoint() copy given arg.
-	//delete coords;
+	delete coords;
 	return ret;
 }
 
