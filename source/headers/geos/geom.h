@@ -22,7 +22,8 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-#include <math.h>
+//#include <math.h>
+#include <cmath>
 #include <geos/platform.h>
 
 using namespace std;
@@ -2486,6 +2487,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2005/02/17 09:56:03  strk
+ * Applied patch from Jon Schlueter using <cmath> instead of <math.h>
+ *
  * Revision 1.38  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.
