@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.37  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
 * Revision 1.36  2003/10/15 11:23:00  strk
 * Formalized const nature of toVector() method and of first argument to static removeRepeatedPoints().
 *
@@ -1021,7 +1024,7 @@ public:
 	MultiPoint* createMultiPoint(vector<Geometry *> *point);
 	MultiPoint* createMultiPoint(CoordinateList* coordinates);
 	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes);
-	LineString* createLineString(CoordinateList* coordinates);
+	LineString* createLineString(const CoordinateList* coordinates);
 	Geometry* buildGeometry(vector<Geometry *> *geoms);
 private:
 	PrecisionModel* precisionModel;

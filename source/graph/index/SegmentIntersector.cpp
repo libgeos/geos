@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.16  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../../headers/graphindex.h"
 #include "math.h"
 
@@ -110,10 +116,10 @@ void SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int se
 //	if (e0->equals(e1) && segIndex0==segIndex1) return;
 	if (e0==e1 && segIndex0==segIndex1) return;
 	numTests++;
-	CoordinateList* cl0=e0->getCoordinates();
+	const CoordinateList* cl0=e0->getCoordinates();
 	const Coordinate& p00=cl0->getAt(segIndex0);
 	const Coordinate& p01=cl0->getAt(segIndex0+1);
-	CoordinateList* cl1=e1->getCoordinates();
+	const CoordinateList* cl1=e1->getCoordinates();
 	const Coordinate& p10=cl1->getAt(segIndex1);
 	const Coordinate& p11=cl1->getAt(segIndex1+1);
 	li->computeIntersection(p00,p01,p10,p11);

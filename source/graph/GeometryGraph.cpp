@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.30  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
 * Revision 1.29  2003/10/15 11:24:28  strk
 * Use getCoordinatesRO() introduced.
 *
@@ -264,7 +267,7 @@ void GeometryGraph::addLineString(const LineString *line){
 */
 void GeometryGraph::addEdge(Edge *e) {
 	insertEdge(e);
-	CoordinateList* coord=e->getCoordinates();
+	const CoordinateList* coord=e->getCoordinates();
 	// insert the endpoint as a node, to mark that it is on the boundary
 	insertPoint(argIndex,coord->getAt(0),Location::BOUNDARY);
 	insertPoint(argIndex,coord->getAt(coord->getSize()-1),Location::BOUNDARY);

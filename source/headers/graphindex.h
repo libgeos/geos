@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.19  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
 * Revision 1.18  2003/10/15 15:30:32  strk
 * Declared a SweepLineEventOBJ from which MonotoneChain and SweepLineSegment
 * derive to abstract SweepLineEvent object previously done on void * pointers.
@@ -98,7 +101,7 @@ public:
 	void computeIntersections(SweepLineSegment *ss,SegmentIntersector *si);
 protected:
 	Edge *edge;
-	CoordinateList* pts;
+	const CoordinateList* pts;
 	int ptIndex;
 };
 
@@ -132,9 +135,9 @@ class MonotoneChainIndexer{
 public:
 //	public static int[] toIntArray(List list); //Not needed
 	MonotoneChainIndexer(){};
-	vector<int>* getChainStartIndices(CoordinateList* pts);
+	vector<int>* getChainStartIndices(const CoordinateList* pts);
 private:
-	int findChainEnd(CoordinateList* pts,int start);
+	int findChainEnd(const CoordinateList* pts,int start);
 };
 
 class MonotoneChainEdge{
@@ -142,7 +145,7 @@ public:
 	MonotoneChainEdge();
 	~MonotoneChainEdge();
 	MonotoneChainEdge(Edge *newE);
-	CoordinateList* getCoordinates();
+	const CoordinateList* getCoordinates();
 	vector<int>* getStartIndexes();
 	double getMinX(int chainIndex);
 	double getMaxX(int chainIndex);
@@ -150,7 +153,7 @@ public:
 	void computeIntersectsForChain(int chainIndex0,MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si);
 protected:
 	Edge *e;
-	CoordinateList* pts; // cache a reference to the coord array, for efficiency
+	const CoordinateList* pts; // cache a reference to the coord array, for efficiency
 	// the lists of start/end indexes of the monotone chains.
 	// Includes the end point of the edge as a sentinel
 	vector<int>* startIndex;

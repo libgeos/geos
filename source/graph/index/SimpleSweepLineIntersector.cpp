@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.5  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../../headers/graphindex.h"
 
 namespace geos {
@@ -44,7 +50,7 @@ void SimpleSweepLineIntersector::add(vector<Edge*> *edges,void* edgeSet){
 }
 
 void SimpleSweepLineIntersector::add(Edge *edge,void* edgeSet){
-	CoordinateList *pts=edge->getCoordinates();
+	const CoordinateList *pts=edge->getCoordinates();
 	for(int i=0;i<pts->getSize()-1; i++) {
 		SweepLineSegment *ss=new SweepLineSegment(edge,i);
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,ss->getMinX(),NULL,ss);

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.6  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../../headers/opBuffer.h"
 #include <algorithm>
 
@@ -233,7 +239,7 @@ Geometry* BufferOp::toLineStrings(EdgeList *edges){
 	vector<Geometry*> *geomList=new vector<Geometry*>();
 	for(int i=0;i<(int)edges->size();i++) {
 		Edge *e=(*edges)[i];
-		CoordinateList *pts=e->getCoordinates();
+		const CoordinateList *pts=e->getCoordinates();
 		LineString *line=geomFact->createLineString(pts);
 		geomList->push_back(line);
 	}

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.15  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../../headers/graphindex.h"
 
 namespace geos {
@@ -44,7 +50,7 @@ MonotoneChainEdge::MonotoneChainEdge(Edge *newE) {
 	delete mcb;
 }
 
-CoordinateList* MonotoneChainEdge::getCoordinates() {
+const CoordinateList* MonotoneChainEdge::getCoordinates() {
 	return pts;
 }
 

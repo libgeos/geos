@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.5  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../../headers/opBuffer.h"
 #include "../../headers/util.h"
 
@@ -70,7 +76,7 @@ void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
 	* determine their relative orientation to decide which is rightmost.
 	*/
 
-	CoordinateList *pts=minDe->getEdge()->getCoordinates();
+	const CoordinateList *pts=minDe->getEdge()->getCoordinates();
 	Assert::isTrue(minIndex>0 && minIndex<pts->getSize(), "rightmost point expected to be interior vertex of edge");
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
@@ -92,7 +98,7 @@ void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
 }
 
 void RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de) {
-	CoordinateList *coord=de->getEdge()->getCoordinates();
+	const CoordinateList *coord=de->getEdge()->getCoordinates();
 	// only check vertices which are the starting point of a non-horizontal segment
 	for(int i=0;i<coord->getSize()-1;i++) {
 		if (coord->getAt(i).y!=coord->getAt(i+1).y)  { // non-horizontal
@@ -117,7 +123,7 @@ int RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index){
 
 int RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i){
 	Edge *e=de->getEdge();
-	CoordinateList *coord=e->getCoordinates();
+	const CoordinateList *coord=e->getCoordinates();
 	if (i<0 || i+1>=coord->getSize()) return -1;
 	if (coord->getAt(i).y==coord->getAt(i+1).y) return -1;    // indicates edge is parallel to x-axis
 	int pos=Position::LEFT;

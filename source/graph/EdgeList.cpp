@@ -35,7 +35,7 @@ string EdgeList::print() {
         Edge *e=(*this)[j];
 		if (j>0) out+=",";
 		out+="(";
-		CoordinateList* pts=e->getCoordinates();
+		const CoordinateList* pts=e->getCoordinates();
 		for(int i=0; i<pts->getSize();i++) {
 			if (i>0) out+=",";
 			out+=pts->getAt(i).toString();

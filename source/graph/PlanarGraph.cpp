@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.17  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../headers/graph.h"
 
 namespace geos {
@@ -159,7 +165,7 @@ Edge* PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1) {
 	for(i=0; i<edges->size();i++) {
 //        Edge *e=edges->at(i);
         Edge *e=(*edges)[i];
-		CoordinateList* eCoord=e->getCoordinates();
+		const CoordinateList* eCoord=e->getCoordinates();
 		if (p0==eCoord->getAt(0) && p1==eCoord->getAt(1))
 			return e;
 	}
@@ -177,7 +183,7 @@ Edge* PlanarGraph::findEdgeInSameDirection(const Coordinate& p0, const Coordinat
 	for(unsigned int i=0; i<edges->size();i++) {
 		Edge *e=(*edges)[i];
 //		Edge *e=edges->at(i);
-		CoordinateList* eCoord=e->getCoordinates();
+		const CoordinateList* eCoord=e->getCoordinates();
 		if (matchInSameDirection(p0,p1,eCoord->getAt(0),eCoord->getAt(1)))
 			return e;
 		if (matchInSameDirection(p0,p1,eCoord->getAt(eCoord->getSize()-1),eCoord->getAt(eCoord->getSize()-2)))

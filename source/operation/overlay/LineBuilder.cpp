@@ -114,8 +114,8 @@ void LineBuilder::buildLines(int opCode) {
 		////System.out.println(label);
 		//if (OverlayGraph.isResultOfOp(label, opCode)) {
 		LineString *line=geometryFactory->createLineString(CoordinateListFactory::internalFactory->createCoordinateList(e->getCoordinates()));
-			resultLineList->push_back(line);
-			e->setInResult(true);
+		resultLineList->push_back(line);
+		e->setInResult(true);
 		//}
 	}
 }

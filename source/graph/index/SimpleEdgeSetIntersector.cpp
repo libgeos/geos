@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.4  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../../headers/graphindex.h"
 
 namespace geos {
@@ -36,8 +42,8 @@ void SimpleEdgeSetIntersector::computeIntersections(vector<Edge*> *edges0,vector
 * monotone chains.
 */
 void SimpleEdgeSetIntersector::computeIntersects(Edge *e0,Edge *e1,SegmentIntersector *si){
-	CoordinateList *pts0=e0->getCoordinates();
-	CoordinateList *pts1=e1->getCoordinates();
+	const CoordinateList *pts0=e0->getCoordinates();
+	const CoordinateList *pts1=e1->getCoordinates();
 	for(int i0=0;i0<pts0->getSize()-1;i0++) {
 		for(int i1=0;i1<pts1->getSize()-1;i1++) {
 			si->addIntersections(e0,i0,e1,i1);

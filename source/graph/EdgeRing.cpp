@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.19  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../headers/graph.h"
 #include "../headers/util.h"
 
@@ -158,7 +164,7 @@ void EdgeRing::mergeLabel(Label *deLabel, int geomIndex){
 }
 
 void EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge){
-	CoordinateList* edgePts=edge->getCoordinates();
+	const CoordinateList* edgePts=edge->getCoordinates();
 	if (isForward) {
 		int startIndex=1;
 		if (isFirstEdge) startIndex=0;

@@ -1,8 +1,16 @@
+/*
+* $Log$
+* Revision 1.8  2003/10/15 16:39:03  strk
+* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+*
+*/
 #include "../../headers/graphindex.h"
 
 namespace geos {
 
-vector<int>* MonotoneChainIndexer::getChainStartIndices(CoordinateList* pts){
+vector<int>*
+MonotoneChainIndexer::getChainStartIndices(const CoordinateList* pts)
+{
 	// find the startpoint (and endpoints) of all monotone chains in this edge
 	int start=0;
 	vector<int>* startIndexList=new vector<int>();
@@ -19,7 +27,7 @@ vector<int>* MonotoneChainIndexer::getChainStartIndices(CoordinateList* pts){
 /**
 * @return the index of the last point in the monotone chain
 */
-int MonotoneChainIndexer::findChainEnd(CoordinateList* pts,int start){
+int MonotoneChainIndexer::findChainEnd(const CoordinateList* pts,int start){
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
 	int last=start+1;
