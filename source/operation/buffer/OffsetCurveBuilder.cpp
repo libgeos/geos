@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/19 13:40:49  strk
+ * Fixed bug in ::addCircle
+ *
  * Revision 1.7  2004/05/05 13:08:01  strk
  * Leaks fixed, explicit allocations/deallocations reduced.
  *
@@ -453,7 +456,9 @@ void OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle, doubl
 */
 void OffsetCurveBuilder::addCircle(const Coordinate &p, double distance){
 	// add start point
-	addPt(p);
+	Coordinate pt(p);
+	pt.x+=distance;
+	addPt(pt);
 	addFillet(p, 0.0, 2.0*3.1415926535, -1, distance);
 }
 
