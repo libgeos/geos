@@ -65,7 +65,7 @@ protected:
  */
 class AbstractSTRtree {
 protected:
-	static class IntersectsOp {
+	class IntersectsOp {
 		public:
 			virtual bool intersects(void* aBounds,void* bBounds)=0;
 	};
@@ -118,7 +118,7 @@ public:
 	vector<void*>* query(double x);
 	vector<void*>* query(double x1, double x2);
 protected:
-	static class SIRIntersectsOp:public AbstractSTRtree::IntersectsOp {
+	class SIRIntersectsOp:public AbstractSTRtree::IntersectsOp {
 		public:
 			bool intersects(void* aBounds,void* bBounds);
 	};
@@ -160,8 +160,8 @@ class STRtree: public AbstractSTRtree,public SpatialIndex {
 //	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
 //	AbstractNode* createNode(int level)
 //	IntersectsOp* getIntersectsOp();
-//public:
-//	STRtree();
+public:
+	STRtree();
 //	STRtree(int nodeCapacity);
 //	void insert(Envelope *itemEnv,void* item);
 //	vector<void*>* query(Envelope *searchEnv);
