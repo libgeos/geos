@@ -118,9 +118,15 @@ Profiler::stop(string name)
 Profile *
 Profiler::get(string name)
 {
+	Profile *prof;
 	map<string, Profile *>::iterator iter = profs.find(name);
-	if ( iter == profs.end() ) return NULL;
-	return iter->second;
+	if ( iter == profs.end() ) {
+		prof = new Profile(name);
+		profs.insert(pair<string, Profile *>(name, prof));
+	} else {
+		prof = iter->second;
+	}
+	return prof;
 }
 
 Profiler *
@@ -156,6 +162,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2004/11/08 11:19:39  strk
+ * Profiler::get() always return a Profile (new if not existant).
+ *
  * Revision 1.1  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).
