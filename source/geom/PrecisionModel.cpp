@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.13  2003/10/09 10:10:05  strk
+* Throw an exception if scale is 0. Added Log entry.
+*
+*/
 #include "../headers/geom.h"
 #include "../headers/util.h"
 #include "stdio.h"
@@ -59,6 +65,7 @@ PrecisionModel::PrecisionModel(){
 * @deprecated
 */
 PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY) {
+	if ( newScale == 0 ) throw new IllegalArgumentException("PrecisionModel scale cannot be 0"); 
 	modelType = FIXED;
 	setScale(newScale);
 	offsetX = newOffsetX;
