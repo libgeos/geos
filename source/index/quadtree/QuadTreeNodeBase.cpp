@@ -32,6 +32,10 @@ QuadTreeNodeBase::~QuadTreeNodeBase() {
 	delete subnode[1];
 	delete subnode[2];
 	delete subnode[3];
+	subnode[0]=NULL;
+	subnode[1]=NULL;
+	subnode[2]=NULL;
+	subnode[3]=NULL;
 	delete items;
 }
 

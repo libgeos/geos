@@ -39,6 +39,8 @@ using namespace geos;
 
 int main(int argC, char* argV[]) {
 
+
+
 #ifdef _MSC_VER
 	InitAllocCheck();
 	{
@@ -67,19 +69,6 @@ int main(int argC, char* argV[]) {
 	int testCount=0;
 	PrecisionModel *pm;
 
-
-//	pm = new PrecisionModel(1, 0, 0);
-//	GeometryFactory *fact = new GeometryFactory(pm, 0);
-//	WKTReader *wktRdr = new WKTReader(fact);
-//	WKTWriter *wktWriter = new WKTWriter();
-////    string wktA = "POLYGON((50 50, 200 50, 200 200, 50 200, 50 50))";
-//    string wktA = "POINT(50 50)";
-////    string wktB = " MULTIPOLYGON(((100 20, 180 20, 180 100, 100 100, 100 20)),((20 100, 100 100, 100 180, 20 180, 20 100)),((100 180, 180 180, 180 260, 100 260, 100 180)),((180 100, 260 100, 260 180, 180 180, 180 100)))";
-//    Geometry *ax=wktRdr->read(wktA);
-////    Geometry b = wktRdr.read(wktB);
-//    
-//	Geometry *b=ax->buffer(5);
-//	cout << b->toString() << endl; 
 //	_CrtSetBreakAlloc(18);
 	CMarkupSTL xml;
 	bool a=xml.Load(source.c_str());

@@ -30,7 +30,7 @@ void QuadTreeRoot::insert(Envelope *itemEnv,void* item){
 	*/
 	if (node==NULL || !node->getEnvelope()->contains(itemEnv)) {
 		QuadTreeNode *largerNode=QuadTreeNode::createExpanded(node,itemEnv);
-		delete subnode[index];
+		//delete subnode[index];
 		subnode[index]=largerNode;
 	}
 	/**
