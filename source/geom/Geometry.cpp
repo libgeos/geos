@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.36  2003/10/20 15:41:34  strk
+* Geometry::checkNotGeometryCollection made static and non-distructive.
+*
 * Revision 1.35  2003/10/13 12:51:28  strk
 * removed sortedClasses strings array from all geometries.
 *
@@ -30,7 +33,7 @@ Geometry::Geometry() {
 
 Geometry::Geometry(const Geometry &geom) {
 	precisionModel=new PrecisionModel(*geom.precisionModel);
-	envelope=geom.envelope;
+	envelope=new Envelope(*(geom.envelope));
 	SRID=geom.SRID;
 }
 
@@ -385,10 +388,8 @@ bool Geometry::isEquivalentClass(const Geometry *other) const {
 		return false;
 }
 
-void Geometry::checkNotGeometryCollection(const Geometry *g) const {
+void Geometry::checkNotGeometryCollection(const Geometry *g) {
 	if ((typeid(*g)==typeid(GeometryCollection))) {
-		delete precisionModel;
-		delete envelope;
 		throw new IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 	}
 }

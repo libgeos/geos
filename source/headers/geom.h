@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.39  2003/10/20 15:41:34  strk
+* Geometry::checkNotGeometryCollection made static and non-distructive.
+*
 * Revision 1.38  2003/10/16 17:05:07  strk
 * Made TopologyException inherit from GEOSException. Adjusted IllegalArgumentException subclassing.
 *
@@ -566,7 +569,7 @@ protected:
 //	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
 //	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
 	virtual bool isEquivalentClass(const Geometry *other) const;
-	virtual void checkNotGeometryCollection(const Geometry *g) const;
+	static void checkNotGeometryCollection(const Geometry *g);
 	//virtual void checkEqualSRID(Geometry *other);
 	//virtual void checkEqualPrecisionModel(Geometry *other);
 	virtual Envelope* computeEnvelopeInternal() const=0; //Abstract
