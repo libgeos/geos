@@ -211,6 +211,10 @@ RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p
 int
 RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)
 {
+#if COMPUTE_Z
+	double ztot=0;
+	int hits=0;
+#endif
 
 #if DEBUG_INTERSECT
 	cerr<<"RobustLineIntersector::computeCollinearIntersection called"<<endl;
@@ -226,16 +230,48 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 #if DEBUG_INTERSECT
 		cerr<<" p1q1p2 && p1q2p2"<<endl;
 #endif
+#if COMPUTE_Z
+		if (p1.z != DoubleNotANumber) { ztot+=p1.z; hits++; }
+		if (p2.z != DoubleNotANumber) { ztot+=p2.z; hits++; }
+		if (hits) { ztot = ztot/hits; hits=1; }
+#endif
 		intPt[0].setCoordinate(q1);
 		intPt[1].setCoordinate(q2);
+#if COMPUTE_Z
+		if ( hits )
+		{
+			if (intPt[0].z == DoubleNotANumber) intPt[0].z = ztot;
+			else { intPt[0].z = (intPt[0].z+ztot)/2; }
+			if (intPt[1].z == DoubleNotANumber) intPt[1].z = ztot;
+			else { intPt[1].z = (intPt[1].z+ztot)/2; }
+		}
+#endif
+#if DEBUG_INTERSECT
+		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
+		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
+#endif
 		return COLLINEAR;
 	}
 	if (q1p1q2 && q1p2q2) {
 #if DEBUG_INTERSECT
 		cerr<<" q1p1q2 && q1p2q2"<<endl;
 #endif
+#if COMPUTE_Z
+		if (q1.z != DoubleNotANumber) { ztot+=q1.z; hits++; }
+		if (q2.z != DoubleNotANumber) { ztot+=q2.z; hits++; }
+		if (hits) { ztot = ztot/hits; hits=1; }
+#endif
 		intPt[0].setCoordinate(p1);
 		intPt[1].setCoordinate(p2);
+#if COMPUTE_Z
+		if ( hits )
+		{
+			if (intPt[0].z == DoubleNotANumber) intPt[0].z = ztot;
+			else { intPt[0].z = (intPt[0].z+ztot)/2; }
+			if (intPt[1].z == DoubleNotANumber) intPt[1].z = ztot;
+			else { intPt[1].z = (intPt[1].z+ztot)/2; }
+		}
+#endif
 		return COLLINEAR;
 	}
 	if (p1q1p2 && q1p1q2) {
@@ -243,7 +279,27 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		cerr<<" p1q1p2 && q1p1q2"<<endl;
 #endif
 		intPt[0].setCoordinate(q1);
+#if COMPUTE_Z
+		if (p1.z != DoubleNotANumber) { ztot+=p1.z; hits++; }
+		if (p2.z != DoubleNotANumber) { ztot+=p2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[0].z == DoubleNotANumber) intPt[0].z = ztot;
+			else { intPt[0].z = (intPt[0].z+ztot)/2; }
+		}
+#endif
 		intPt[1].setCoordinate(p1);
+#if COMPUTE_Z
+		if (q1.z != DoubleNotANumber) { ztot+=q1.z; hits++; }
+		if (q2.z != DoubleNotANumber) { ztot+=q2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[1].z == DoubleNotANumber) intPt[1].z = ztot;
+			else { intPt[1].z = (intPt[1].z+ztot)/2; }
+		}
+#endif
 		return (q1==p1) && !p1q2p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q1p2 && q1p2q2) {
@@ -251,7 +307,27 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		cerr<<" p1q1p2 && q1p2q2"<<endl;
 #endif
 		intPt[0].setCoordinate(q1);
+#if COMPUTE_Z
+		if (p1.z != DoubleNotANumber) { ztot+=p1.z; hits++; }
+		if (p2.z != DoubleNotANumber) { ztot+=p2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[0].z == DoubleNotANumber) intPt[0].z = ztot;
+			else { intPt[0].z = (intPt[0].z+ztot)/2; }
+		}
+#endif
 		intPt[1].setCoordinate(p2);
+#if COMPUTE_Z
+		if (q1.z != DoubleNotANumber) { ztot+=q1.z; hits++; }
+		if (q2.z != DoubleNotANumber) { ztot+=q2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[1].z == DoubleNotANumber) intPt[1].z = ztot;
+			else { intPt[1].z = (intPt[1].z+ztot)/2; }
+		}
+#endif
 		return (q1==p2) && !p1q2p2 && !q1p1q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q2p2 && q1p1q2) {
@@ -259,7 +335,27 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		cerr<<" p1q2p2 && q1p1q2"<<endl;
 #endif
 		intPt[0].setCoordinate(q2);
+#if COMPUTE_Z
+		if (p1.z != DoubleNotANumber) { ztot+=p1.z; hits++; }
+		if (p2.z != DoubleNotANumber) { ztot+=p2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[0].z == DoubleNotANumber) intPt[0].z = ztot;
+			else { intPt[0].z = (intPt[0].z+ztot)/2; }
+		}
+#endif
 		intPt[1].setCoordinate(p1);
+#if COMPUTE_Z
+		if (q1.z != DoubleNotANumber) { ztot+=q1.z; hits++; }
+		if (q2.z != DoubleNotANumber) { ztot+=q2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[1].z == DoubleNotANumber) intPt[1].z = ztot;
+			else { intPt[1].z = (intPt[1].z+ztot)/2; }
+		}
+#endif
 		return (q2==p1) && !p1q1p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q2p2 && q1p2q2) {
@@ -267,7 +363,27 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		cerr<<" p1q2p2 && q1p2q2"<<endl;
 #endif
 		intPt[0].setCoordinate(q2);
+#if COMPUTE_Z
+		if (p1.z != DoubleNotANumber) { ztot+=p1.z; hits++; }
+		if (p2.z != DoubleNotANumber) { ztot+=p2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[0].z == DoubleNotANumber) intPt[0].z = ztot;
+			else { intPt[0].z = (intPt[0].z+ztot)/2; }
+		}
+#endif
 		intPt[1].setCoordinate(p2);
+#if COMPUTE_Z
+		if (q1.z != DoubleNotANumber) { ztot+=q1.z; hits++; }
+		if (q2.z != DoubleNotANumber) { ztot+=q2.z; hits++; }
+		if ( hits )
+		{
+			ztot = ztot/hits; hits=1;
+			if (intPt[1].z == DoubleNotANumber) intPt[1].z = ztot;
+			else { intPt[1].z = (intPt[1].z+ztot)/2; }
+		}
+#endif
 		return (q2==p2) && !p1q1p2 && !q1p1q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	return DONT_INTERSECT;
@@ -396,6 +512,9 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2004/11/22 11:34:16  strk
+ * Added Z computation for CollinearIntersections
+ *
  * Revision 1.23  2004/11/20 15:40:49  strk
  * Added Z computation in point-segment intersection.
  *
