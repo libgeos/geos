@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/19 10:35:23  strk
+ * bigtest.h moved to local dir
+ *
  * Revision 1.10  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -32,8 +35,8 @@
 
 #include <math.h>
 
-#include <geos/bigtest.h>
 #include <geos/geom.h>
+#include "bigtest.h"
 
 #define PI 3.14159265358979
 

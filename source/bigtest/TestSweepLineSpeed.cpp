@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/19 10:35:23  strk
+ * bigtest.h moved to local dir
+ *
  * Revision 1.12  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -33,8 +36,8 @@
 #include <time.h>
 
 #include <geos/geom.h>
-#include <geos/bigtest.h>
 #include <geos/io.h>
+#include "bigtest.h"
 
 using namespace geos;
 /**
