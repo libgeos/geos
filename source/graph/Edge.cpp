@@ -112,7 +112,7 @@ bool Edge::isCollapsed(){
 }
 
 Edge Edge::getCollapsedEdge() {
-	CoordinateList *newPts=new BasicCoordinateList(2);
+	CoordinateList *newPts=CoordinateListFactory::internalFactory->createCoordinateList(2);
 	newPts->setAt(pts->getAt(0),0);
 	newPts->setAt(pts->getAt(1),1);
 	return Edge(newPts,&(Label::toLineLabel(*label)));

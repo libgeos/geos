@@ -19,7 +19,7 @@ Geometry GeometryFactory::toGeometry(Envelope envelope, PrecisionModel precision
 	if (envelope.getMinX()==envelope.getMaxX() && envelope.getMinY()==envelope.getMaxY()) {
 		return Point(Coordinate(envelope.getMinX(),envelope.getMinY()),precisionModel,SRID);
 	}
-	CoordinateList *cl=new BasicCoordinateList();
+	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
 	cl->add(Coordinate(envelope.getMinX(), envelope.getMinY()));
 	cl->add(Coordinate(envelope.getMaxX(), envelope.getMinY()));
 	cl->add(Coordinate(envelope.getMaxX(), envelope.getMaxY()));

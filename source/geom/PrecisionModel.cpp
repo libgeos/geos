@@ -61,15 +61,15 @@ void PrecisionModel::toInternal (Coordinate& external, Coordinate *internal) {
 	internal->z = external.z;
 }
 
-Coordinate& PrecisionModel::toInternal(Coordinate& external) {
-	Coordinate internal;
-	toInternal(external, &internal);
+Coordinate* PrecisionModel::toInternal(Coordinate& external) {
+	Coordinate* internal=new Coordinate();
+	toInternal(external, internal);
 	return internal;
 }
 
-Coordinate& PrecisionModel::toExternal(Coordinate& internal) {
-	Coordinate external;
-	toExternal(internal, &external);
+Coordinate* PrecisionModel::toExternal(Coordinate& internal) {
+	Coordinate* external=new Coordinate();
+	toExternal(internal, external);
 	return external;
 }
 

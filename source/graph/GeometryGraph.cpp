@@ -89,7 +89,7 @@ vector<Node*>* GeometryGraph::getBoundaryNodes() {
 
 CoordinateList* GeometryGraph::getBoundaryPoints() {
 	vector<Node*> coll(*getBoundaryNodes());
-	CoordinateList *pts=new BasicCoordinateList((int)coll.size());
+	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList((int)coll.size());
 	int i=0;
 	for (vector<Node*>::iterator it=coll.begin();it<coll.end();it++) {
 		Node *node=*it;
@@ -151,7 +151,7 @@ void GeometryGraph::addCollection(GeometryCollection *gc) {
 * Add a Point to the graph.
 */
 void GeometryGraph::addPoint(Point *p){
-	Coordinate coord(p->getCoordinate());
+	Coordinate coord(*p->getCoordinate());
 	insertPoint(argIndex,coord,Location::INTERIOR);
 }
 

@@ -23,5 +23,5 @@ bool LinearRing::isClosed() {
 }
 
 void LinearRing::setPoints(CoordinateList* cl){
-	points->setPoints(cl->toVector());
+	points->setPoints(*(cl->toVector()));
 }

@@ -13,9 +13,9 @@ Point::Point(const Point &p): Geometry(p.precisionModel,p.SRID) {
 
 CoordinateList* Point::getCoordinates() {
 	if (isEmpty()) {
-		return new BasicCoordinateList();
+		return CoordinateListFactory::internalFactory->createCoordinateList();
 	} else {
-		return new BasicCoordinateList(coordinate);
+		return CoordinateListFactory::internalFactory->createCoordinateList(coordinate);
 	}
 }
 int Point::getNumPoints() {
@@ -45,7 +45,7 @@ double Point::getY() {
 	return coordinate.y;
 }
 
-Coordinate& Point::getCoordinate() {return coordinate;}
+Coordinate* Point::getCoordinate() {return &coordinate;}
 
 string Point::getGeometryType() {
 	return "Point";
@@ -85,7 +85,7 @@ bool Point::equalsExact(Geometry *other) {
 }
 
 int Point::compareToSameClass(Point *point) {
-	return coordinate==point->getCoordinate();
+	return coordinate==*(point->getCoordinate());
 }
 
 Point::~Point(){

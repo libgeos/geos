@@ -6,12 +6,12 @@
 
 Polygon* GeometryTestFactory::createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen) {
 	CoordinateList *pts=createBox(minx, miny, nSide, segLen);
-    return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(*pts)),NULL));
+    return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(pts)),NULL));
 }
 
 CoordinateList* GeometryTestFactory::createBox(double minx, double miny,int nSide,double segLen) {
 	int i;
-	CoordinateList *pts=new CoordinateList();
+	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList();
 	double maxx=minx+nSide*segLen;
 	double maxy=miny+nSide*segLen;
 
@@ -47,7 +47,7 @@ CoordinateList* GeometryTestFactory::createBox(double minx, double miny,int nSid
 	* @param nPts the number of points in the star
 	*/
 CoordinateList* GeometryTestFactory::createCircle(double basex,double basey,double size,int nPts) {
-	CoordinateList *pts=new CoordinateList(nPts+1);
+	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList(nPts+1);
 	double len=size/2.0;
 
 	for(int i=0;i<nPts;i++) {
@@ -62,7 +62,7 @@ CoordinateList* GeometryTestFactory::createCircle(double basex,double basey,doub
 
 Polygon* GeometryTestFactory::createCircle(GeometryFactory *fact,double basex,double basey,double size,int nPts) {
 	CoordinateList *pts=createCircle(basex, basey, size, nPts);
-    return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(*pts)),NULL));
+    return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(pts)),NULL));
 }
 
 	/**
@@ -83,7 +83,7 @@ CoordinateList* GeometryTestFactory::createSineStar(double basex,double basey,do
 	if (nArmPt<5) nArmPt=5;
 
 	int nPts2=nArmPt*nArms;
-	CoordinateList *pts=new CoordinateList();
+	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList();
 
 	double starAng=0.0;
 
@@ -103,5 +103,5 @@ CoordinateList* GeometryTestFactory::createSineStar(double basex,double basey,do
 
 Polygon* GeometryTestFactory::createSineStar(GeometryFactory *fact,double basex,double basey,double size,double armLen,int nArms,int nPts){
 	CoordinateList *pts=createSineStar(basex, basey, size, armLen, nArms, nPts);
-	return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(*pts)),NULL));
+	return new Polygon(fact->createPolygon(new LinearRing(fact->createLinearRing(pts)),NULL));
 }

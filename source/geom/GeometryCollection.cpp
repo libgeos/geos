@@ -20,7 +20,7 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,Precisi
 }
 
 CoordinateList* GeometryCollection::getCoordinates() {
-	CoordinateList *coordinates=new BasicCoordinateList(getNumPoints());
+	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList(getNumPoints());
 	int k = -1;
 	for (unsigned int i=0; i<geometries.size(); i++) {
 	CoordinateList* childCoordinates=geometries[i]->getCoordinates();
@@ -143,8 +143,8 @@ int GeometryCollection::compareToSameClass(GeometryCollection *gc) {
 	return compare(geometries, gc->geometries);
 }
 
-Coordinate& GeometryCollection::getCoordinate() {
-	if (isEmpty()) return Coordinate();
+Coordinate* GeometryCollection::getCoordinate() {
+	if (isEmpty()) return new Coordinate();
 //	return geometries.at(0)->getCoordinate();
     return geometries[0]->getCoordinate();
 }

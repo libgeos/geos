@@ -86,7 +86,7 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	if (!useIntPt1) {
 		npts--;
 	}
-	CoordinateList* pts=new BasicCoordinateList(npts);
+	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(npts);
 	int ipt=0;
 	pts->setAt(Coordinate(ei0->coord),ipt++);
 	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++) {

@@ -17,7 +17,7 @@ LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRI
 LineString::LineString(CoordinateList *newPoints, PrecisionModel precisionModel, int SRID):
 						Geometry(precisionModel, SRID){
 	if (newPoints==NULL) {
-		newPoints=new BasicCoordinateList();
+		newPoints=CoordinateListFactory::internalFactory->createCoordinateList();
 	}
 	if (hasNullElements(newPoints)) {
 		throw "IllegalArgumentException: point array must not contain null elements\n";
@@ -182,12 +182,12 @@ bool LineString::isEquivalentClass(Geometry *other) {
 }
 
 int LineString::compareToSameClass(LineString *ls) {
-	return compare(points->toVector(),ls->points->toVector());
+	return compare(*(points->toVector()),*(ls->points->toVector()));
 }
 
-Coordinate& LineString::getCoordinate() {
-	if (isEmpty()) return Coordinate();
-	return points->getAt(0);
+Coordinate* LineString::getCoordinate() {
+	if (isEmpty()) return(new Coordinate());
+	return &(points->getAt(0));
 }
 
 /**

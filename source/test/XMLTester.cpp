@@ -27,6 +27,7 @@ int main(int argC, char* argV[]) {
 //	int out=TEST_DESCR+TEST_RESULT;
 //	int out=0;
 	int failed=0;
+	int succeeded=0;
 	string source="d://test.xml";
 //	string source="./test.xml";
 	string precisionModel="";
@@ -98,7 +99,7 @@ int main(int argC, char* argV[]) {
 			IntersectionMatrix im(gA->relate(gB));
 			if (out & TEST_RESULT)
 				cout << "\tResult: matrix='" << im.toString() << "' result=" << (im.matches(opSig)?"true":"false") <<endl;
-			if (!im.matches(opSig)) failed++;
+			if (!im.matches(opSig)) failed++; else succeeded++;
 		}
 		if (out & PRED) {
 			cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
@@ -116,5 +117,7 @@ int main(int argC, char* argV[]) {
 	}
 	cout << "Failed: ";
 	cout << failed << endl;
+	cout << "Succeeded: ";
+	cout << succeeded << endl;
 	cout << "End Test";
 }

@@ -49,27 +49,15 @@ public:
 
 class CoordinateList {
 public:
-//	virtual CoordinateList()=0;
-//	virtual	CoordinateList(int n)=0;
-//	virtual	CoordinateList(Coordinate c)=0;
-//	virtual	CoordinateList(const CoordinateList &cl)=0;
-//	virtual	~CoordinateList()=0;
-	virtual	void reset()=0;
-	virtual	Coordinate& getNext()=0;
-	virtual	bool hasNext()=0;
 	virtual	bool isEmpty()=0;
 	virtual	void add(Coordinate c)=0;
 	virtual	int getSize()=0;
 	virtual	Coordinate& getAt(int pos)=0;
 	virtual	void setAt(Coordinate c, int pos)=0;
 	virtual	void deleteAt(int pos)=0;
-	virtual	Coordinate& get()=0;
-	virtual	void set(Coordinate c)=0;
-	virtual	void remove()=0;
-	virtual	vector<Coordinate> toVector()=0;
+	virtual	vector<Coordinate>* toVector()=0;
 	virtual	string toString()=0;
 	virtual	void setPoints(const vector<Coordinate> &v)=0;
-	virtual	void swap(vector<Coordinate> v)=0;
 };
 
 class BasicCoordinateList : public CoordinateList {
@@ -79,26 +67,63 @@ public:
 	BasicCoordinateList(Coordinate c);
 	BasicCoordinateList(const BasicCoordinateList &cl);
 	~BasicCoordinateList();
-	void reset();
-	Coordinate& getNext();
-	bool hasNext();
 	bool isEmpty();
 	void add(Coordinate c);
 	int getSize();
 	Coordinate& getAt(int pos);
 	void setAt(Coordinate c, int pos);
 	void deleteAt(int pos);
-	Coordinate& get();
-	void set(Coordinate c);
-	void remove();
-	vector<Coordinate> toVector();
+	vector<Coordinate>* toVector();
 	string toString();
 	void setPoints(const vector<Coordinate> &v);
-	void swap(vector<Coordinate> v);
 private:
-	void moveTo(int pos);
-	int current;
 	vector<Coordinate> *vect;
+};
+
+struct point_3d {
+	double x;
+	double y;
+	double z;
+};
+
+class PointCoordinateList : public CoordinateList {
+public:
+	PointCoordinateList();
+	PointCoordinateList(int n);
+	PointCoordinateList(Coordinate c);
+	PointCoordinateList(const PointCoordinateList &cl);
+	~PointCoordinateList();
+	bool isEmpty();
+	void add(Coordinate c);
+	int getSize();
+	Coordinate& getAt(int pos);
+	void setAt(Coordinate c, int pos);
+	void deleteAt(int pos);
+	vector<Coordinate>* toVector();
+	string toString();
+	void setPoints(const vector<Coordinate> &v);
+private:
+	vector<point_3d> *vect;
+};
+
+class CoordinateListFactory {
+public:
+	virtual CoordinateList* createCoordinateList()=0;
+	virtual CoordinateList* createCoordinateList(int size)=0;
+	virtual CoordinateList* createCoordinateList(Coordinate c)=0;
+	static CoordinateListFactory* internalFactory;
+};
+
+class BasicCoordinateListFactory: public CoordinateListFactory {
+	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
+	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
+	CoordinateList* createCoordinateList(Coordinate c) {return new BasicCoordinateList(c);};
+};
+
+class PointCoordinateListFactory: public CoordinateListFactory {
+	CoordinateList* createCoordinateList() {return new PointCoordinateList();};
+	CoordinateList* createCoordinateList(int size) {return new PointCoordinateList(size);};
+	CoordinateList* createCoordinateList(Coordinate c) {return new PointCoordinateList(c);};
 };
 
 class PrecisionModel {
@@ -120,8 +145,8 @@ public:
 	double getOffsetX();
 	double getOffsetY();
 	void toInternal(Coordinate& external, Coordinate *internal);
-	Coordinate& toInternal(Coordinate& external);
-	Coordinate& toExternal(Coordinate& internal);
+	Coordinate* toInternal(Coordinate& external);
+	Coordinate* toExternal(Coordinate& internal);
 	void toExternal(Coordinate& internal, Coordinate *external);
 	string toString();
 	void round(Coordinate& p0,Coordinate& p1);
@@ -300,7 +325,7 @@ public:
 	virtual int getSRID();
 	virtual void setSRID(int newSRID);
 	virtual PrecisionModel getPrecisionModel();
-	virtual Coordinate& getCoordinate(){return *(new Coordinate());}; //Abstract
+	virtual Coordinate* getCoordinate(){return new Coordinate();}; //Abstract
 	virtual CoordinateList* getCoordinates(){return new BasicCoordinateList();}; //Abstract
 	virtual int getNumPoints(){return 0;}; //Abstract
 	virtual bool isSimple() {return false;}; //Abstract
@@ -525,7 +550,7 @@ public:
 	virtual void apply(GeometryFilter *filter);
 	virtual void apply(GeometryComponentFilter *filter);
 	virtual void normalize();
-	virtual Coordinate& getCoordinate();
+	virtual Coordinate* getCoordinate();
 	virtual double getArea();
 	virtual double getLength();
 protected:
@@ -572,7 +597,7 @@ class SFSPoint {// : public SFSGeometry {
 public:
 	virtual double getX()=0;
 	virtual double getY()=0;
-	virtual Coordinate& getCoordinate()=0;
+	virtual Coordinate* getCoordinate()=0;
 };
 
 class Point : public Geometry, public SFSPoint {
@@ -590,7 +615,7 @@ public:
 	int getBoundaryDimension();
 	double getX();
 	double getY();
-	Coordinate& getCoordinate();
+	Coordinate* getCoordinate();
 	string getGeometryType();
 	Geometry getBoundary();
 	void apply(CoordinateFilter *filter);
@@ -651,7 +676,7 @@ public:
 	virtual void apply(GeometryComponentFilter *filter);
 	virtual void normalize();
 	virtual int compareToSameClass(LineString *ls); //was protected
-	virtual Coordinate& getCoordinate();
+	virtual Coordinate* getCoordinate();
 	virtual double getLength();
 protected:
 	CoordinateList* points;
@@ -705,7 +730,7 @@ public:
 	Geometry convexHull();
 	void normalize();
 	int compareToSameClass(Polygon *p); //was protected
-	Coordinate& getCoordinate();
+	Coordinate* getCoordinate();
 	double getArea();
 	double getLength();
 	void apply(GeometryComponentFilter *filter);
@@ -731,7 +756,7 @@ public:
 	Geometry getBoundary();
 	bool equalsExact(Geometry *other);
 protected:
-	Coordinate getCoordinate(int n);
+	Coordinate* getCoordinate(int n);
 };
 
 class MultiLineString: public GeometryCollection, public SFSMultiLineString  {

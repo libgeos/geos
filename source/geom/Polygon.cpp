@@ -18,7 +18,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 				 PrecisionModel precisionModel, int SRID):
 				Geometry(precisionModel, SRID) {
 	if (newShell==NULL)
-		newShell=new LinearRing(new BasicCoordinateList(), precisionModel, SRID);
+		newShell=new LinearRing(CoordinateListFactory::internalFactory->createCoordinateList(), precisionModel, SRID);
 
 	if (newHoles==NULL)
 		newHoles=new vector<Geometry *>();
@@ -35,9 +35,9 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 
 CoordinateList* Polygon::getCoordinates() {
 	if (isEmpty()) {
-		return new BasicCoordinateList();
+		return CoordinateListFactory::internalFactory->createCoordinateList();
 	}
-	CoordinateList *coordinates=new BasicCoordinateList(getNumPoints());
+	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList(getNumPoints());
 	int k = -1;
 	CoordinateList* shellCoordinates=shell->getCoordinates();
 	for (int x = 0; x < shellCoordinates->getSize(); x++) {
@@ -185,7 +185,7 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	}
 }
 
-Coordinate& Polygon::getCoordinate() {
+Coordinate* Polygon::getCoordinate() {
 	return shell->getCoordinate();
 }
 

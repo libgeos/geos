@@ -72,11 +72,11 @@ void Geometry::reversePointOrder(CoordinateList* coordinates) {
 	for (int i=0; i<length; i++) {
 		v[i]=coordinates->getAt(length - 1 - i);
 	}
-	coordinates->swap(v);
+	coordinates->setPoints(v);
 }
 	
 Coordinate& Geometry::minCoordinate(CoordinateList* coordinates){
-	vector<Coordinate> v(coordinates->toVector());
+	vector<Coordinate> v(*(coordinates->toVector()));
 	sort(v.begin(),v.end(),lessThen);
 	return v.front();
 }
@@ -92,7 +92,7 @@ void Geometry::scroll(CoordinateList* coordinates,Coordinate& firstCoordinate) {
 	for (int i=0; i<ind; i++) {
 		v[length-ind+i]=coordinates->getAt(i);
 	}
-	coordinates->swap(v);
+	coordinates->setPoints(v);
 }
 
 int Geometry::indexOf(Coordinate& coordinate,CoordinateList* coordinates) {

@@ -71,7 +71,7 @@ void WKTWriter::appendGeometryTaggedText(Geometry *geometry, int level, Writer *
 	indent(level, writer);
 	if (typeid(*geometry)==typeid(Point)) {
 		Point point(*(Point*)geometry);
-		appendPointTaggedText(point.getCoordinate(),level,writer, point.getPrecisionModel());
+		appendPointTaggedText(*point.getCoordinate(),level,writer, point.getPrecisionModel());
 	} else if (typeid(*geometry)==typeid(LineString)) {
 		appendLineStringTaggedText((LineString*)geometry, level, writer);
 	} else if (typeid(*geometry)==typeid(Polygon)) {
@@ -197,7 +197,7 @@ void WKTWriter::appendMultiPointText(MultiPoint *multiPoint, int level, Writer *
 			if (i > 0) {
 				writer->write(", ");
 			}
-			appendCoordinate(((Point* )multiPoint->getGeometryN(i))->getCoordinate(), writer,
+			appendCoordinate(*(((Point* )multiPoint->getGeometryN(i))->getCoordinate()), writer,
 							  multiPoint->getPrecisionModel());
 		}
 		writer->write(")");

@@ -18,9 +18,9 @@ Geometry* WKTReader::read(string wellKnownText){
 CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return new BasicCoordinateList();
+		return CoordinateListFactory::internalFactory->createCoordinateList();
 	}
-	BasicCoordinateList *coordinates=new BasicCoordinateList();
+	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
 	Coordinate externalCoordinate;
 	Coordinate internalCoordinate;
 	externalCoordinate.x=getNextNumber(tokenizer);

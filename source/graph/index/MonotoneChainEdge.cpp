@@ -21,7 +21,7 @@
 MonotoneChainEdge::MonotoneChainEdge() {
 	env1=new Envelope();
 	env2=new Envelope();
-	pts=new BasicCoordinateList();
+	pts=CoordinateListFactory::internalFactory->createCoordinateList();
 }
 
 MonotoneChainEdge::MonotoneChainEdge(Edge *newE) {

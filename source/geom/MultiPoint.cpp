@@ -37,7 +37,7 @@ bool MultiPoint::equalsExact(Geometry *other) {
 	return GeometryCollection::equalsExact(other);
   }
 
-Coordinate MultiPoint::getCoordinate(int n) {
+Coordinate* MultiPoint::getCoordinate(int n) {
 	return ((Point *)geometries[n])->getCoordinate();
 }
 
