@@ -246,6 +246,7 @@ WKTReader::readPolygonText(StringTokenizer *tokenizer)
 		delete shell;
 		throw;
 	}
+	return poly;
 }
 
 MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) {
@@ -312,6 +313,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2004/10/21 17:13:59  strk
+ * Fixed bug introduced by previous patch.
+ *
  * Revision 1.28  2004/10/21 07:03:31  strk
  * Removed leak in ::readPolygonText reported by Carlos A. Rueda
  *
