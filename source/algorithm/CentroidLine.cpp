@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.7  2003/10/29 10:38:26  strk
+* Added support for LinearRing types (treated as LineString)
+*
 * Revision 1.6  2003/10/16 08:50:00  strk
 * Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
 *
@@ -25,7 +28,7 @@ CentroidLine::~CentroidLine() {
 * @param geom the geometry to add
 */
 void CentroidLine::add(const Geometry *geom) {
-	if (typeid(*geom)==typeid(LineString)) {
+	if (typeid(*geom)==typeid(LineString) || typeid(*geom)==typeid(LinearRing)) {
 		add(((LineString*)geom)->getCoordinatesRO());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint)) ||
