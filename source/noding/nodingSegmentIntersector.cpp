@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/03 12:09:22  strk
+ * newline added at end of file
+ *
  * Revision 1.1  2004/03/26 07:48:30  ybychkov
  * "noding" package ported (JTS 1.4)
  *

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/03 12:09:22  strk
+ * newline added at end of file
+ *
  * Revision 1.2  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  *
