@@ -32,10 +32,10 @@ void indexMonotoneChain::setId(int nId) {
 	id=nId;
 }
 
-int
-indexMonotoneChain::getId() {
-	return id;
-}
+//int
+//indexMonotoneChain::getId() {
+	//return id;
+//}
 
 void* indexMonotoneChain::getContext() {
 	return context;
@@ -158,6 +158,10 @@ indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,i
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.14  2005/02/01 16:06:53  strk
  * Small optimizations.
  *

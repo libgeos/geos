@@ -66,7 +66,7 @@ MonotoneChainBuilder::getChainStartIndices(CoordinateSequence *pts)
 		int last=findChainEnd(pts, start);
 		startIndexList->push_back(last);
 		start=last;
-	} while(start<n);
+	} while((unsigned int)start<n);
 
 	// copy list to an array of ints, for efficiency
 	//int[] startIndex = toIntArray(startIndexList);
@@ -84,7 +84,7 @@ MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
 	int last=start+1;
 	unsigned int npts=pts->getSize();
-	while (last<npts)
+	while ((unsigned int)last<npts)
 	{
 		// compute quadrant for next possible segment in chain
 		int quad=Quadrant::quadrant(pts->getAt(last-1),pts->getAt(last));
@@ -101,6 +101,10 @@ MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.13  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

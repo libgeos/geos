@@ -72,7 +72,9 @@ SIRtree::~SIRtree() {
 	delete intersectsOp;
 }
 
-SIRAbstractNode::SIRAbstractNode(int level):AbstractNode(level) {}
+SIRAbstractNode::SIRAbstractNode(int level, int capacity):
+	AbstractNode(level, capacity)
+{}
 
 SIRAbstractNode::~SIRAbstractNode()
 {
@@ -94,7 +96,7 @@ void* SIRAbstractNode::computeBounds() {
 }
 
 AbstractNode* SIRtree::createNode(int level) {
-	AbstractNode *an = new SIRAbstractNode(level);
+	AbstractNode *an = new SIRAbstractNode(level, nodeCapacity);
 	nodes->push_back(an);
 	return an;
 }
@@ -133,6 +135,10 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.14  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -394,7 +394,7 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 	Coordinate n4=q2;
 	Coordinate normPt;
 	normalize(&n1, &n2, &n3, &n4, &normPt);
-	Coordinate *intPt;
+	Coordinate *intPt=NULL;
 
 #if DEBUG
 	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2) called:"<<endl;
@@ -512,6 +512,10 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.31  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

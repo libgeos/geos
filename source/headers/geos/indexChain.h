@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.6  2004/11/04 19:08:06  strk
  * Cleanups, initializers list, profiling.
  *
@@ -180,7 +184,7 @@ public:
 
 	void setId(int nId);
 
-	int getId();
+	inline int getId();
 
 	void* getContext();
 
@@ -193,6 +197,11 @@ private:
 	void *context;// user-defined information
 	int id; // useful for optimizing chain comparisons
 };
+
+// INLINE FUNCTIONS
+inline int
+indexMonotoneChain::getId() { return id; }
+
 
 /*
  * A MonotoneChainBuilder implements functions to determine the monotone chains

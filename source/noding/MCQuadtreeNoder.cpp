@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include <geos/noding.h>
+//#include <geos/indexQuadtree.h>
 #include <geos/profiler.h>
 
 #define DEBUG 0
@@ -74,7 +75,7 @@ MCQuadtreeNoder::intersectChains()
 	static Profile *queryprof = Profiler::instance()->get("MCQuadtreeNoder::intersectChains query");
 	static Profile *overlprof = Profiler::instance()->get("MCQuadtreeNoder::intersectChains computeOverlap");
 #endif
-	//MonotoneChainOverlapAction *overlapAction = new SegmentOverlapAction(segInt);
+
 	SegmentOverlapAction overlapAction(segInt);
 
 	unsigned int chainsize=chains->size();
@@ -153,6 +154,10 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.17  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

@@ -105,9 +105,9 @@ private:
 	vector<Boundable*> *childBoundables;
 	int level;
 public:
-	AbstractNode(int newLevel);
+	AbstractNode(int newLevel, int capacity=10);
 	virtual	~AbstractNode();
-	vector<Boundable*>* getChildBoundables();
+	inline vector<Boundable*>* getChildBoundables();
 
 	/**
 	 * Returns a representation of space that encloses this Boundable,
@@ -128,6 +128,13 @@ protected:
 	virtual void* computeBounds()=0;
 	const void* bounds;
 };
+
+// INLINE funx 
+
+inline vector<Boundable*>*
+AbstractNode::getChildBoundables() {
+	return childBoundables;
+}
 
 /*
  * \class AbstractSTRtree indexStrtree.h geos/indexStrtree.h
@@ -202,7 +209,7 @@ public:
 
 class SIRAbstractNode: public AbstractNode{
 public:
-	SIRAbstractNode(int level);
+	SIRAbstractNode(int level, int capacity);
 	~SIRAbstractNode();
 protected:
 	void* computeBounds();
@@ -246,7 +253,7 @@ private:
 	
 class STRAbstractNode: public AbstractNode{
 public:
-	STRAbstractNode(int level);
+	STRAbstractNode(int level, int capacity);
 	~STRAbstractNode();
 protected:
 	void* computeBounds();
@@ -280,7 +287,7 @@ protected:
 	vector<Boundable*>* createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel);
 	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
 	AbstractNode* createNode(int level);
-	class STRIntersectsOp:public AbstractSTRtree::IntersectsOp {
+	class STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
 		public:
 			bool intersects(const void* aBounds, const void* bBounds);
 	};
@@ -292,9 +299,8 @@ protected:
 	IntersectsOp* getIntersectsOp() {return (IntersectsOp *)&intersectsOp;};
 
 public:
-	STRtree();
 	~STRtree();
-	STRtree(int nodeCapacity);
+	STRtree(int nodeCapacity=10);
 	void insert(const Envelope *itemEnv,void* item);
 	vector<void*>* query(const Envelope *searchEnv);
 	static double centreX(Envelope *e);
@@ -302,12 +308,17 @@ public:
 	static double centreY(Envelope *e);
 };
 
+
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.7  2004/11/08 15:58:13  strk
  * More performance tuning.
  *

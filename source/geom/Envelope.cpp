@@ -203,9 +203,9 @@ void Envelope::setToNull() {
  *@return    <code>true</code> if this <code>Envelope</code> is uninitialized
  *      or is the envelope of the empty geometry.
  */
-bool Envelope::isNull() const {
-	return maxx < minx;
-}
+//bool Envelope::isNull() const {
+	//return maxx < minx;
+//}
 
 /**
  *  Returns the difference between the maximum and minimum x values.
@@ -237,9 +237,9 @@ double Envelope::getHeight() const {
  *
  *@return    the maximum y-coordinate
  */
-double Envelope::getMaxY() const {
-	return maxy;
-}
+//double Envelope::getMaxY() const {
+	//return maxy;
+//}
 
 /**
  *  Returns the <code>Envelope</code>s maximum x-value. min x > max x
@@ -247,9 +247,9 @@ double Envelope::getMaxY() const {
  *
  *@return    the maximum x-coordinate
  */
-double Envelope::getMaxX() const {
-	return maxx;
-}
+//double Envelope::getMaxX() const {
+	//return maxx;
+//}
 
 /**
  *  Returns the <code>Envelope</code>s minimum y-value. min y > max y
@@ -257,9 +257,9 @@ double Envelope::getMaxX() const {
  *
  *@return    the minimum y-coordinate
  */
-double Envelope::getMinY() const {
-	return miny;
-}
+//double Envelope::getMinY() const {
+	//return miny;
+//}
 
 /**
  *  Returns the <code>Envelope</code>s minimum x-value. min x > max x
@@ -267,9 +267,9 @@ double Envelope::getMinY() const {
  *
  *@return    the minimum x-coordinate
  */
-double Envelope::getMinX() const {
-	return minx;
-}
+//double Envelope::getMinX() const {
+	//return minx;
+//}
 
 /**
  *  Enlarges the boundary of the <code>Envelope</code> so that it contains
@@ -454,16 +454,16 @@ bool Envelope::overlaps(double x, double y) const {
  *          being checked for overlapping
  *@return        <code>true</code> if the <code>Envelope</code>s overlap
  */
-bool
-Envelope::intersects(const Envelope* other) const
-{
-	// Optimized to reduce function calls
-	if ( maxx<minx || other->maxx<other->minx ) return false;
-	return !(other->minx > maxx ||
-			 other->maxx < minx ||
-			 other->miny > maxy ||
-			 other->maxy < miny);
-}
+//bool
+//Envelope::intersects(const Envelope* other) const
+//{
+//	// Optimized to reduce function calls
+//	if ( maxx<minx || other->maxx<other->minx ) return false;
+//	return !(other->minx > maxx ||
+//			 other->maxx < minx ||
+//			 other->miny > maxy ||
+//			 other->maxy < miny);
+//}
 
 /**
 * @deprecated Use #intersects instead. In the future, #overlaps may be
@@ -533,6 +533,10 @@ int Envelope::hashCode() const{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.19  2005/02/01 16:06:53  strk
  * Small optimizations.
  *

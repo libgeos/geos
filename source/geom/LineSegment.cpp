@@ -19,8 +19,6 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/profiler.h>
 
-#define PROFILE 1
-
 namespace geos {
 
 /**
@@ -434,6 +432,10 @@ bool operator==(const LineSegment a, const LineSegment b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.18  2005/02/01 13:44:59  strk
  * More profiling labels.
  *

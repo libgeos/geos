@@ -24,8 +24,9 @@ namespace geos {
  * @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on;
  * the root node will have the highest level
  */
-AbstractNode::AbstractNode(int newLevel) {
+AbstractNode::AbstractNode(int newLevel, int capacity) {
 	childBoundables=new vector<Boundable*>();
+	childBoundables->reserve(capacity);
 	bounds=NULL;
 	level=newLevel;
 }
@@ -38,9 +39,9 @@ AbstractNode::~AbstractNode() {
 * Returns either child AbstractNodes, or if this is a leaf node, real data (wrapped
 * in ItemBoundables).
 */
-vector<Boundable*>* AbstractNode::getChildBoundables() {
-	return childBoundables;
-}
+//vector<Boundable*>* AbstractNode::getChildBoundables() {
+	//return childBoundables;
+//}
 
 const void *
 AbstractNode::getBounds()
@@ -60,9 +61,9 @@ int AbstractNode::getLevel() {
 }
 
 /**
-* Adds either an AbstractNode, or if this is a leaf node, a data object
-* (wrapped in an ItemBoundable)
-*/
+ * Adds either an AbstractNode, or if this is a leaf node, a data object
+ * (wrapped in an ItemBoundable)
+ */
 void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 	Assert::isTrue(bounds==NULL);
 	childBoundables->push_back(childBoundable);
@@ -72,6 +73,10 @@ void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.8  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

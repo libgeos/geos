@@ -29,20 +29,10 @@ static bool yComparator(Boundable *a, Boundable *b){
 }
 
 /**
- * Constructs an STRtree with the default node capacity.
- */
-STRtree::STRtree():
-	AbstractSTRtree(10)
-{ 
-	//intersectsOp(new STRIntersectsOp())
-}
-
-/**
  * Constructs an STRtree with the given maximum number of child nodes that
  * a node may have
  */
-STRtree::STRtree(int nodeCapacity):
-	AbstractSTRtree(nodeCapacity)
+STRtree::STRtree(int nodeCapacity): AbstractSTRtree(nodeCapacity)
 { 
 	//intersectsOp(new STRIntersectsOp())
 }
@@ -130,11 +120,16 @@ STRtree::verticalSlices(vector<Boundable*>* childBoundables, int sliceCount)
 {
 	int sliceCapacity = (int) ceil((double)childBoundables->size() / (double) sliceCount);
 	vector<vector<Boundable*>*>* slices = new vector<vector<Boundable*>*>(sliceCount);
+
 	unsigned int i=0;
+	unsigned int nchilds=childBoundables->size();
+
+
 	for (int j=0; j<sliceCount; j++) {
 		(*slices)[j]=new vector<Boundable*>();
+		(*slices)[j]->reserve(sliceCapacity);
 		int boundablesAddedToSlice = 0;
-		while (i<childBoundables->size() && boundablesAddedToSlice < sliceCapacity)
+		while (i<nchilds && boundablesAddedToSlice<sliceCapacity)
 		{
 			Boundable *childBoundable=(*childBoundables)[i];
 			i++;
@@ -145,7 +140,8 @@ STRtree::verticalSlices(vector<Boundable*>* childBoundables, int sliceCount)
 	return slices;
 }
 
-STRAbstractNode::STRAbstractNode(int level):AbstractNode(level)
+STRAbstractNode::STRAbstractNode(int level, int cpcty):
+	AbstractNode(level, cpcty)
 {
 }
 
@@ -160,6 +156,7 @@ STRAbstractNode::computeBounds()
 	Envelope* bounds=NULL;
 	vector<Boundable*> *b=getChildBoundables();
 	unsigned int bsize=b->size();
+
 	if ( bsize ) bounds=new Envelope(*(Envelope*)(*b)[0]->getBounds());
 	for(unsigned int i=1; i<bsize; i++) {
 		Boundable* childBoundable=(*b)[i];
@@ -171,7 +168,7 @@ STRAbstractNode::computeBounds()
 AbstractNode*
 STRtree::createNode(int level)
 {
-	AbstractNode *an = new STRAbstractNode(level);
+	AbstractNode *an = new STRAbstractNode(level, nodeCapacity);
 	nodes->push_back(an);
 	return an;
 }
@@ -186,8 +183,7 @@ STRtree::insert(const Envelope *itemEnv, void* item)
 vector<void*>*
 STRtree::query(const Envelope *searchEnv)
 {
-	vector<void *> *ret = AbstractSTRtree::query(searchEnv);
-	return ret;
+	return AbstractSTRtree::query(searchEnv);
 }
 
 vector<Boundable*> *
@@ -202,6 +198,10 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.19  2005/01/31 15:41:03  strk
  * Small optimizations.
  *

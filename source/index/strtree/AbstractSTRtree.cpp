@@ -192,11 +192,13 @@ AbstractSTRtree::query(const void* searchBounds,
 {
 	vector<Boundable*> *vb=node->getChildBoundables();
 
+	IntersectsOp *io=getIntersectsOp();
 	unsigned int vbsize=vb->size();
+	//cerr<<"AbstractSTRtree::query: childBoundables: "<<vbsize<<endl;
 	for(unsigned int i=0;i<vbsize;i++)
 	{
 		Boundable *childBoundable=(*vb)[i];
-		if (!getIntersectsOp()->intersects(childBoundable->getBounds(),searchBounds))
+		if (!io->intersects(childBoundable->getBounds(),searchBounds))
 		{
 			continue;
 		}
@@ -255,6 +257,10 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.23  2005/01/31 15:41:03  strk
  * Small optimizations.
  *

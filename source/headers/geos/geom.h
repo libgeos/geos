@@ -339,110 +339,24 @@ private:
  */
 class Coordinate {
 public:
-	//void setNull(void);
-	//static Coordinate& getNull(void);
-	virtual ~Coordinate(){};
-	//Coordinate(double xNew, double yNew, double zNew);
-	//Coordinate(const Coordinate& c);
-	//Coordinate(double xNew, double yNew);
-	//void setCoordinate(Coordinate& other);
-	//bool equals2D(Coordinate& other);
-	//int compareTo(Coordinate& other);
-	//bool equals3D(Coordinate& other);
+	inline void setNull(void);
+	inline static Coordinate& getNull(void);
+	//virtual ~Coordinate(){};
+	inline Coordinate();
+	inline Coordinate(double xNew, double yNew, double zNew);
+	inline Coordinate(const Coordinate& c);
+	inline Coordinate(double xNew, double yNew);
+	inline void setCoordinate(const Coordinate& other);
+	inline bool equals2D(const Coordinate& other) const;
+	inline int compareTo(const Coordinate& other) const;
+	inline bool equals3D(const Coordinate& other) const;
 	string toString() const;
-	//void makePrecise();
-	//double distance(Coordinate& p);
+	inline void makePrecise(const PrecisionModel *pm);
+	inline double distance(const Coordinate& p) const;
 	static Coordinate nullCoord;
 
-	void Coordinate::setNull() {
-		x=DoubleNotANumber;
-		y=DoubleNotANumber;
-		z=DoubleNotANumber;
-	}
-
-	static Coordinate& Coordinate::getNull() {
-		return nullCoord;
-	}
-
-	Coordinate::Coordinate() {
-		x=0.0;
-		y=0.0;
-		z=DoubleNotANumber;
-	}
-
-	Coordinate::Coordinate(double xNew, double yNew, double zNew) {
-		x=xNew;
-		y=yNew;
-		z=zNew;
-	}
-
-	Coordinate::Coordinate(const Coordinate& c){
-		x=c.x;
-		y=c.y;
-		z=c.z;
-	}
-
-	Coordinate::Coordinate(double xNew, double yNew){
-		x=xNew;
-		y=yNew;
-		z=DoubleNotANumber;
-	}
-
-	void Coordinate::setCoordinate(const Coordinate& other) {
-		x = other.x;
-		y = other.y;
-		z = other.z;
-	}
-
-	bool Coordinate::equals2D(const Coordinate& other) const {
-		if (x != other.x) {
-		return false;
-		}
-		if (y != other.y) {
-		return false;
-		}
-		return true;
-	}
-
-	int Coordinate::compareTo(const Coordinate& other) const {
-		if (x < other.x) return -1;
-		if (x > other.x) return 1;
-		if (y < other.y) return -1;
-		if (y > other.y) return 1;
-		return 0;
-	}
-
-	bool Coordinate::equals3D(const Coordinate& other) const {
-		return (x == other.x) && ( y == other.y) && ((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
-	}
-
-	void Coordinate::makePrecise(const PrecisionModel *precisionModel) {
-		x = precisionModel->makePrecise(x);
-		y = precisionModel->makePrecise(y);
-	}
-
-	double Coordinate::distance(const Coordinate& p) const {
-		double dx = x - p.x;
-		double dy = y - p.y;
-		return sqrt(dx * dx + dy * dy);
-	}
-
-	int Coordinate::hashCode() {
-		//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
-		int result = 17;
-		result = 37 * result + hashCode(x);
-		result = 37 * result + hashCode(y);
-		return result;
-	}
-
-	/**
-	* Returns a hash code for a double value, using the algorithm from
-	* Joshua Bloch's book <i>Effective Java</i>
-	*/
-	static int Coordinate::hashCode(double x) {
-		int64 f = (int64)(x);
-		return (int)(f^(f>>32));
-	}
+	inline int hashCode() const;
+	inline static int hashCode(double);
 
 
 	/// x-coordinate
@@ -460,6 +374,128 @@ private:
 #endif
 
 };
+
+// INLINE FUNCTION FOR Coordinate CLASS
+
+inline void
+Coordinate::setNull()
+{
+		x=DoubleNotANumber;
+		y=DoubleNotANumber;
+		z=DoubleNotANumber;
+}
+
+inline Coordinate&
+Coordinate::getNull()
+{
+	return nullCoord;
+}
+
+inline
+Coordinate::Coordinate()
+{
+	x=0.0;
+	y=0.0;
+	z=DoubleNotANumber;
+}
+
+inline
+Coordinate::Coordinate(double xNew, double yNew, double zNew)
+{
+	x=xNew;
+	y=yNew;
+	z=zNew;
+}
+
+inline
+Coordinate::Coordinate(const Coordinate& c)
+{
+	x=c.x;
+	y=c.y;
+	z=c.z;
+}
+
+inline
+Coordinate::Coordinate(double xNew, double yNew)
+{
+	x=xNew;
+	y=yNew;
+	z=DoubleNotANumber;
+}
+
+inline void
+Coordinate::setCoordinate(const Coordinate& other)
+{
+	x = other.x;
+	y = other.y;
+	z = other.z;
+}
+
+inline bool
+Coordinate::equals2D(const Coordinate& other) const
+{
+	if (x != other.x) {
+		return false;
+	}
+	if (y != other.y) {
+		return false;
+	}
+	return true;
+}
+
+inline int
+Coordinate::compareTo(const Coordinate& other) const
+{
+	if (x < other.x) return -1;
+	if (x > other.x) return 1;
+	if (y < other.y) return -1;
+	if (y > other.y) return 1;
+	return 0;
+}
+
+inline bool
+Coordinate::equals3D(const Coordinate& other) const
+{
+	return (x == other.x) && ( y == other.y) && 
+		((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
+}
+
+inline void
+Coordinate::makePrecise(const PrecisionModel *precisionModel)
+{
+	x = precisionModel->makePrecise(x);
+	y = precisionModel->makePrecise(y);
+}
+
+inline double
+Coordinate::distance(const Coordinate& p) const
+{
+	double dx = x - p.x;
+	double dy = y - p.y;
+	return sqrt(dx * dx + dy * dy);
+}
+
+inline int
+Coordinate::hashCode() const
+{
+	//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
+	int result = 17;
+	result = 37 * result + hashCode(x);
+	result = 37 * result + hashCode(y);
+	return result;
+}
+
+/**
+ * Returns a hash code for a double value, using the algorithm from
+ * Joshua Bloch's book <i>Effective Java</i>
+ */
+inline int
+Coordinate::hashCode(double x)
+{
+	int64 f = (int64)(x);
+	return (int)(f^(f>>32));
+}
+
 
 
 //* class CoordinateList geom.h geos.h
@@ -942,13 +978,15 @@ public:
 	void init(const Coordinate& p);
 	void init(Envelope env);
 	void setToNull(void);
-	bool isNull(void) const;
+
+	inline bool isNull(void) const;
+
 	double getWidth(void) const;
 	double getHeight(void) const;
-	double getMaxY() const;
-	double getMaxX() const;
-	double getMinY() const;
-	double getMinX() const;
+	inline double getMaxY() const;
+	inline double getMaxX() const;
+	inline double getMinY() const;
+	inline double getMinX() const;
 	void expandToInclude(const Coordinate& p);
 	void expandToInclude(double x, double y);
 	void expandToInclude(const Envelope* other);
@@ -960,7 +998,9 @@ public:
 	bool overlaps(const Envelope* other) const;
 	bool intersects(const Coordinate& p) const;
 	bool intersects(double x, double y) const;
-	bool intersects(const Envelope* other) const;
+
+	inline bool intersects(const Envelope* other) const;
+
 	bool equals(const Envelope* other) const;
 	string toString(void) const;
 	double distance(const Envelope* env) const;
@@ -978,6 +1018,28 @@ private:
 	static const int64 serialVersionUID=5873921885273102420LL;
 #endif        
 };
+
+inline double Envelope::getMaxY() const { return maxy; }
+inline double Envelope::getMaxX() const { return maxx; }
+inline double Envelope::getMinY() const { return miny; }
+inline double Envelope::getMinX() const { return minx; }
+
+inline bool
+Envelope::isNull(void) const
+{
+	return maxx < minx;
+}
+
+inline bool
+Envelope::intersects(const Envelope* other) const
+{
+	// Optimized to reduce function calls
+	if ( isNull() || other->isNull() ) return false;
+	return !(other->minx > maxx ||
+			 other->maxx < minx ||
+			 other->miny > maxy ||
+			 other->maxy < miny);
+}
 
 class Geometry;
 class GeometryFilter;
@@ -2424,6 +2486,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2005/02/15 17:15:13  strk
+ * Inlined most Envelope methods, reserved() memory for some vectors when
+ * the usage was known a priori.
+ *
  * Revision 1.37  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
