@@ -95,7 +95,8 @@ pkglib_LTLIBRARIES = libgeos.la
 INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=\""$(GEOS_VERSION)"\"
 
 DIR_SOURCES = Coordinate.cpp GeometryFactory.cpp MultiPoint.cpp \
-			CoordinateList.cpp IntersectionMatrix.cpp  \
+			CoordinateList.cpp BasicCoordinateList.cpp IntersectionMatrix.cpp  \
+			CoordinateListFactory.cpp PointCoordinateList.cpp \
 			MultiPolygon.cpp Dimension.cpp LinearRing.cpp \
 			Point.cpp Envelope.cpp LineSegment.cpp Polygon.cpp \
 			GeometryCollection.cpp LineString.cpp \
@@ -162,7 +163,8 @@ LTLIBRARIES = $(pkglib_LTLIBRARIES)
 
 libgeos_la_LIBADD =
 am__objects_1 = Coordinate.lo GeometryFactory.lo MultiPoint.lo \
-	CoordinateList.lo IntersectionMatrix.lo MultiPolygon.lo \
+	CoordinateList.lo BasicCoordinateList.lo IntersectionMatrix.lo \
+	CoordinateListFactory.lo PointCoordinateList.lo MultiPolygon.lo \
 	Dimension.lo LinearRing.lo Point.lo Envelope.lo LineSegment.lo \
 	Polygon.lo GeometryCollection.lo LineString.lo \
 	PrecisionModel.lo GeometryCollectionIterator.lo Location.lo \
@@ -199,9 +201,11 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/Assert.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/AssertionFailedException.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/BasicCoordinateList.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/CGAlgorithms.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/Coordinate.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/CoordinateList.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/CoordinateListFactory.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/Depth.Plo ./$(DEPDIR)/Dimension.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/DirectedEdge.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/DirectedEdgeStar.Plo \
@@ -240,6 +244,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/NotRepresentableException.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/ParseException.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/PlanarGraph.Plo ./$(DEPDIR)/Point.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/PointCoordinateList.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/PointInRing.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/PointLocator.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/Polygon.Plo ./$(DEPDIR)/Position.Plo \
@@ -383,9 +388,11 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Assert.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AssertionFailedException.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BasicCoordinateList.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CGAlgorithms.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Coordinate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoordinateList.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoordinateListFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Depth.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Dimension.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DirectedEdge.Plo@am__quote@
@@ -433,6 +440,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParseException.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PlanarGraph.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Point.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PointCoordinateList.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PointInRing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PointLocator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Polygon.Plo@am__quote@
