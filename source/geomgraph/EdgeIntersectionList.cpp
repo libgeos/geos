@@ -55,10 +55,12 @@ EdgeIntersectionList::add(const Coordinate& coord, int segmentIndex, double dist
 	}
 	else
 	{
+		ei=*insertIt;
 #if DEBUG
 		cerr<<"  intersection already in list (should merge z)"<<endl;
+		cerr<<"  current: "<<ei->coord.toString()<<endl;
+		cerr<<"  intersection: "<<coord.toString()<<endl;
 #endif // DEBUG
-		ei=*insertIt;
 	}
 	return ei;
 }
@@ -207,6 +209,9 @@ EdgeIntersectionList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2004/11/23 19:53:06  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.8  2004/11/22 13:02:12  strk
  * Forced use if computed intersection point in ::createSplitEdge (for Z computation)
  *

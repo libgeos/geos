@@ -235,7 +235,7 @@ Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int int
 	/*
 	 * Add the intersection point to edge intersection list.
 	 */
-#ifdef DEBUG_INTERSECT
+#if DEBUG
 	cerr<<"Edge::addIntersection adding to edge intersection list point "<<intPt.toString()<<endl;
 #endif
 	EdgeIntersection *ei=eiList->add(intPt,normalizedSegmentIndex,dist);
@@ -358,6 +358,9 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2004/11/23 19:53:06  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.8  2004/11/22 12:59:25  strk
  * Added debugging lines
  *

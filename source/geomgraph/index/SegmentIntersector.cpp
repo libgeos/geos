@@ -18,6 +18,7 @@
 #include <math.h>
 
 #define DEBUG_INTERSECT 0
+#define DEBUG 0
 
 namespace geos {
 
@@ -137,14 +138,18 @@ SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,int se
 }
 
 /**
-* This method is called by clients of the EdgeIntersector class to test for and add
-* intersections for two segments of the edges being intersected.
-* Note that clients (such as MonotoneChainEdges) may choose not to intersect
-* certain pairs of segments for efficiency reasons.
-*/
+ * This method is called by clients of the EdgeIntersector class to test
+ * for and add intersections for two segments of the edges being intersected.
+ * Note that clients (such as MonotoneChainEdges) may choose not to intersect
+ * certain pairs of segments for efficiency reasons.
+ */
 void
 SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segIndex1)
 {
+
+#if DEBUG
+	cerr<<"SegmentIntersector::addIntersections() called"<<endl;
+#endif
 
 //	if (e0->equals(e1) && segIndex0==segIndex1) return;
 	if (e0==e1 && segIndex0==segIndex1) return;
@@ -175,7 +180,7 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 		// only intersection.
 		if (!isTrivialIntersection(e0,segIndex0,e1,segIndex1))
 		{
-#if DEBUG_INTERSECT
+#if DEBUG
 			cerr<<"SegmentIntersector::addIntersections(): has !TrivialIntersection"<<endl;
 #endif // DEBUG_INTERSECT
 			hasIntersectionVar=true;
@@ -183,14 +188,14 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 				//Debug.println(li);
 				e0->addIntersections(li,segIndex0,0);
 				e1->addIntersections(li,segIndex1,1);
-#if DEBUG_INTERSECT
-			cerr<<"SegmentIntersector::addIntersections(): includeProper || !li->isProper()"<<endl;
+#if DEBUG
+				cerr<<"SegmentIntersector::addIntersections(): includeProper || !li->isProper()"<<endl;
 #endif // DEBUG_INTERSECT
 			}
 			if (li->isProper())
 			{
 				properIntersectionPoint.setCoordinate(li->getIntersection(0));
-#if DEBUG_INTERSECT
+#if DEBUG
 				cerr<<"SegmentIntersector::addIntersections(): properIntersectionPoint: "<<properIntersectionPoint.toString()<<endl;
 #endif // DEBUG_INTERSECT
 				hasProper=true;
@@ -226,6 +231,9 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/11/23 19:53:06  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.6  2004/11/17 08:41:42  strk
  * Fixed a bug in Z computation and removed debugging output by default.
  *

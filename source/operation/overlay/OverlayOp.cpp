@@ -19,6 +19,7 @@
 
 #define DEBUG 0
 #define COMPUTE_Z 1
+#define USE_ELEVATION_MATRIX 1
 
 namespace geos {
 
@@ -439,8 +440,10 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 			if ( p == p0 ) n->addZ(p0.z);
 			else if ( p == p1 ) n->addZ(p1.z);
 			else {
-				n->addZ(p0.z);
-				n->addZ(p1.z);
+				//n->addZ(p0.z);
+				//n->addZ(p1.z);
+				n->addZ(LineIntersector::interpolateZ(p,
+					p0, p1));
 			}
 			return 1;
 		}
@@ -687,9 +690,9 @@ OverlayOp::computeOverlay(int opCode)
 		// gather the results from all calculations into a single
 		// Geometry for the result set
 		resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
-#if COMPUTE_Z
+#if USE_ELEVATION_MATRIX
 		elevationMatrix->elevate(resultGeom);
-#endif // COMPUTE_Z
+#endif // USE_ELEVATION_MATRIX
 		
 
 
@@ -819,6 +822,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2004/11/23 19:53:07  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.31  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *

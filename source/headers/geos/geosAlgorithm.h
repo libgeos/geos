@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/11/23 19:53:07  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.8  2004/11/06 08:16:46  strk
  * Fixed CGAlgorithms::isCCW from JTS port.
  * Code cleanup in IsValidOp.
@@ -227,6 +230,9 @@ private:
 
 class LineIntersector{
 public:	
+	// Return a Z value being the interpolation of Z from p0 and p1 at
+	// the given point p
+	static double interpolateZ(const Coordinate &p, const Coordinate &p0, const Coordinate &p1);
 	static double computeEdgeDistance(const Coordinate& p, const Coordinate& p0, const Coordinate& p1);
 	static double nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
 	LineIntersector();

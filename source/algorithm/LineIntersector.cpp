@@ -21,6 +21,7 @@
 #ifndef DEBUG_INTERSECT
 #define DEBUG_INTERSECT 0
 #endif
+#define DEBUG 0
 
 namespace geos {
 
@@ -102,28 +103,36 @@ LineIntersector::LineIntersector()
 	result=0;
 }
 
-LineIntersector::~LineIntersector() {
+LineIntersector::~LineIntersector()
+{
 }
 
 /**
-* Force computed intersection to be rounded to a given precision model
-* @param newPM
-* @deprecated use <code>setPrecisionModel</code> instead
-*/
-void LineIntersector::setMakePrecise(const PrecisionModel *newPM){
+ * Force computed intersection to be rounded to a given precision model
+ * @param newPM
+ * @deprecated use <code>setPrecisionModel</code> instead
+ */
+void
+LineIntersector::setMakePrecise(const PrecisionModel *newPM)
+{
 	precisionModel=newPM;
 }
 
 /**
-* Force computed intersection to be rounded to a given precision model.
-* No getter is provided, because the precision model is not required to be specified.
-* @param precisionModel
-*/
-void LineIntersector::setPrecisionModel(const PrecisionModel *newPM){
+ * Force computed intersection to be rounded to a given precision model.
+ * No getter is provided, because the precision model is not required
+ * to be specified.
+ * @param precisionModel
+ */
+void
+LineIntersector::setPrecisionModel(const PrecisionModel *newPM)
+{
 	precisionModel=newPM;
 }
 
-bool LineIntersector::isCollinear() const {
+bool
+LineIntersector::isCollinear() const
+{
 	return result==COLLINEAR;
 }
 
@@ -141,7 +150,9 @@ LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,c
 	//numIntersects++;
 }
 
-string LineIntersector::toString() const {
+string
+LineIntersector::toString() const
+{
 	string str=inputLines[0][0].toString()+"_"
 			  +inputLines[0][1].toString()+" "
 			  +inputLines[1][0].toString()+"_"
@@ -158,33 +169,40 @@ string LineIntersector::toString() const {
 	return str;
 }
 
-bool LineIntersector::isEndPoint() const {
+bool
+LineIntersector::isEndPoint() const
+{
 	return hasIntersection()&&!isProperVar;
 }
 
 /**
-* Tests whether the input geometries intersect.
-*
-* @return true if the input geometries intersect
-*/
-bool LineIntersector::hasIntersection() const {
+ * Tests whether the input geometries intersect.
+ *
+ * @return true if the input geometries intersect
+ */
+bool
+LineIntersector::hasIntersection() const
+{
 	return result!=DONT_INTERSECT;
 }
 
 /**
-* Returns the number of intersection points found.  This will be either 0, 1 or 2.
-*/
-int LineIntersector::getIntersectionNum() const {
+ * Returns the number of intersection points found.
+ * This will be either 0, 1 or 2.
+ */
+int
+LineIntersector::getIntersectionNum() const
+{
 	return result;
 }
 
 /**
-* Returns the intIndex'th intersection point
-*
-* @param intIndex is 0 or 1
-*
-* @return the intIndex'th intersection point
-*/
+ * Returns the intIndex'th intersection point
+ *
+ * @param intIndex is 0 or 1
+ *
+ * @return the intIndex'th intersection point
+ */
 const Coordinate&
 LineIntersector::getIntersection(int intIndex) const
 {
@@ -195,17 +213,20 @@ LineIntersector::getIntersection(int intIndex) const
 }
 
 /**
-* @return true if both numbers are positive or if both numbers are negative.
-* Returns false if both numbers are zero.
-*/
-bool LineIntersector::isSameSignAndNonZero(double a,double b) {
+ * @return true if both numbers are positive or if both numbers are negative.
+ * Returns false if both numbers are zero.
+ */
+bool
+LineIntersector::isSameSignAndNonZero(double a,double b)
+{
 	if (a==0 || b==0) {
 		return false;
 	}
 	return (a<0 && b<0) || (a>0 && b>0);
 }
 
-void LineIntersector::computeIntLineIndex() {
+void
+LineIntersector::computeIntLineIndex() {
 //	if (intLineIndex==null) {
 //	intLineIndex=new int[2][2];
 	computeIntLineIndex(0);
@@ -214,15 +235,17 @@ void LineIntersector::computeIntLineIndex() {
 }
 
 /**
-* Test whether a point is a intersection point of two line segments.
-* Note that if the intersection is a line segment, this method only tests for
-* equality with the endpoints of the intersection segment.
-* It does <b>not</b> return true if
-* the input point is internal to the intersection segment.
-*
-* @return true if the input point is one of the intersection points.
-*/
-bool LineIntersector::isIntersection(const Coordinate& pt) const {
+ * Test whether a point is a intersection point of two line segments.
+ * Note that if the intersection is a line segment, this method only tests for
+ * equality with the endpoints of the intersection segment.
+ * It does <b>not</b> return true if
+ * the input point is internal to the intersection segment.
+ *
+ * @return true if the input point is one of the intersection points.
+ */
+bool
+LineIntersector::isIntersection(const Coordinate& pt) const
+{
 	for (int i=0;i<result;i++) {
 		if (intPt[i].equals2D(pt)) {
 			return true;
@@ -232,53 +255,62 @@ bool LineIntersector::isIntersection(const Coordinate& pt) const {
 }
 
 /**
-* Tests whether an intersection is proper.
-* <br>
-* The intersection between two line segments is considered proper if
-* they intersect in a single point in the interior of both segments
-* (e.g. the intersection is a single point and is not equal to any of the
-* endpoints).
-* <p>
-* The intersection between a point and a line segment is considered proper
-* if the point lies in the interior of the segment (e.g. is not equal to
-* either of the endpoints).
-*
-* @return true if the intersection is proper
-*/
-bool LineIntersector::isProper() const {
+ * Tests whether an intersection is proper.
+ * 
+ * The intersection between two line segments is considered proper if
+ * they intersect in a single point in the interior of both segments
+ * (e.g. the intersection is a single point and is not equal to any of the
+ * endpoints).
+ * 
+ * The intersection between a point and a line segment is considered proper
+ * if the point lies in the interior of the segment (e.g. is not equal to
+ * either of the endpoints).
+ *
+ * @return true if the intersection is proper
+ */
+bool
+LineIntersector::isProper() const
+{
 	return hasIntersection()&&isProperVar;
 }
 
 /**
-* Computes the intIndex'th intersection point in the direction of
-* a specified input line segment
-*
-* @param segmentIndex is 0 or 1
-* @param intIndex is 0 or 1
-*
-* @return the intIndex'th intersection point in the direction of the specified input line segment
-*/
-const Coordinate& LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex) {
+ * Computes the intIndex'th intersection point in the direction of
+ * a specified input line segment
+ *
+ * @param segmentIndex is 0 or 1
+ * @param intIndex is 0 or 1
+ *
+ * @return the intIndex'th intersection point in the direction of the
+ *         specified input line segment
+ */
+const Coordinate&
+LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex)
+{
 	// lazily compute int line array
 	computeIntLineIndex();
 	return intPt[intLineIndex[segmentIndex][intIndex]];
 }
 
 /**
-* Computes the index of the intIndex'th intersection point in the direction of
-* a specified input line segment
-*
-* @param segmentIndex is 0 or 1
-* @param intIndex is 0 or 1
-*
-* @return the index of the intersection point along the segment (0 or 1)
-*/
-int LineIntersector::getIndexAlongSegment(int segmentIndex,int intIndex) {
+ * Computes the index of the intIndex'th intersection point in the direction of
+ * a specified input line segment
+ *
+ * @param segmentIndex is 0 or 1
+ * @param intIndex is 0 or 1
+ *
+ * @return the index of the intersection point along the segment (0 or 1)
+ */
+int
+LineIntersector::getIndexAlongSegment(int segmentIndex,int intIndex)
+{
 	computeIntLineIndex();
 	return intLineIndex[segmentIndex][intIndex];
 }
 
-void LineIntersector::computeIntLineIndex(int segmentIndex) {
+void
+LineIntersector::computeIntLineIndex(int segmentIndex)
+{
 	double dist0=getEdgeDistance(segmentIndex,0);
 	double dist1=getEdgeDistance(segmentIndex,1);
 	if (dist0>dist1) {
@@ -291,35 +323,46 @@ void LineIntersector::computeIntLineIndex(int segmentIndex) {
 }
 
 /**
-* Computes the "edge distance" of an intersection point along the specified input line segment.
-*
-* @param segmentIndex is 0 or 1
-* @param intIndex is 0 or 1
-*
-* @return the edge distance of the intersection point
-*/
-double LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const {
+ * Computes the "edge distance" of an intersection point along the specified
+ * input line segment.
+ *
+ * @param segmentIndex is 0 or 1
+ * @param intIndex is 0 or 1
+ *
+ * @return the edge distance of the intersection point
+ */
+double
+LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const
+{
 	double dist=computeEdgeDistance(intPt[intIndex],inputLines[segmentIndex][0],inputLines[segmentIndex][1]);
 	return dist;
 }
 
 /**
-* Tests whether either intersection point is an interior point of one of the input segments.
-*
-* @return <code>true</code> if either intersection point is in the interior of one of the input segments
-*/
-bool LineIntersector::isInteriorIntersection() {
+ * Tests whether either intersection point is an interior point of one of
+ * the input segments.
+ *
+ * @return <code>true</code> if either intersection point is in the interior
+ * of one of the input segments
+ */
+bool
+LineIntersector::isInteriorIntersection()
+{
 	if (isInteriorIntersection(0)) return true;
 	if (isInteriorIntersection(1)) return true;
 	return false;
 }
 
 /**
-* Tests whether either intersection point is an interior point of the specified input segment.
-*
-* @return <code>true</code> if either intersection point is in the interior of the input segment
-*/
-bool LineIntersector::isInteriorIntersection(int inputLineIndex){
+ * Tests whether either intersection point is an interior point of the
+ * specified input segment.
+ *
+ * @return <code>true</code> if either intersection point is in the interior
+ * of the input segment
+ */
+bool
+LineIntersector::isInteriorIntersection(int inputLineIndex)
+{
 	for (int i = 0; i < result; i++) {
 		if (!(intPt[i].equals2D(inputLines[inputLineIndex][0])
             || intPt[i].equals2D(inputLines[inputLineIndex][1]) )) {
@@ -329,10 +372,75 @@ bool LineIntersector::isInteriorIntersection(int inputLineIndex){
 	return false;
 }
 
+double
+LineIntersector::interpolateZ(const Coordinate &p,
+	const Coordinate &p1, const Coordinate &p2)
+{
+#if DEBUG
+	cerr<<"LineIntersector::interpolateZ("<<p.toString()<<", "<<p1.toString()<<", "<<p2.toString()<<")"<<endl;
+#endif
+
+	if ( p1.z == DoubleNotANumber || p2.z == DoubleNotANumber )
+	{
+#if DEBUG
+		cerr<<" p1 or p2 do not have a Z"<<endl;
+#endif
+		return DoubleNotANumber;
+	}
+
+	if (p==p1)
+	{
+#if DEBUG
+		cerr<<" p==p1, returning "<<p1.z<<endl;
+#endif
+		return p1.z;
+	}
+	if (p==p2)
+	{
+#if DEBUG
+		cerr<<" p==p2, returning "<<p2.z<<endl;
+#endif
+		return p2.z;
+	}
+
+	double zgap = p2.z - p1.z;
+	double seglen = sqrt(fabs(p2.x-p1.x)*fabs(p2.y-p1.y));
+	double pdist = sqrt(fabs(p.x-p1.x)*fabs(p.y-p1.y));
+	double fract = pdist/seglen;
+	double interpolated = p1.z+(zgap*fract);
+#if DEBUG
+	cerr<<" zgap:"<<zgap<<" seglen:"<<seglen<<" pdist:"<<pdist
+		<<" fract:"<<fract<<" z:"<<interpolated<<endl;
+#endif
+	return interpolated;
+
+
+	double z=0;
+	int hits=0;
+	if (p.z != DoubleNotANumber) {
+		z += p.z;
+		hits++;
+	}
+	if (p1.z != DoubleNotANumber) {
+		z += p1.z;
+		hits++;
+	}
+	if (p2.z != DoubleNotANumber) {
+		z += p1.z;
+		hits++;
+	}
+	if ( hits ) return z/hits;
+	else return DoubleNotANumber;
 }
+
+
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2004/11/23 19:53:06  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.15  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

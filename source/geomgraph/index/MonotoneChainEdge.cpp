@@ -11,35 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.4  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.3  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/14 06:04:26  ybychkov
- * "geomgraph/index" committ problem fixed.
- *
- * Revision 1.17  2004/03/19 09:49:29  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.16  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.15  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- *
  **********************************************************************/
-
 
 #include <geos/geomgraphindex.h>
 
@@ -153,5 +125,38 @@ MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
 		if (mid1<end1) computeIntersectsForChain(mid0,end0,mce,mid1,end1,ei);
 	}
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.5  2004/11/23 19:53:06  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
+ * Revision 1.4  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.2  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/04/14 06:04:26  ybychkov
+ * "geomgraph/index" committ problem fixed.
+ *
+ * Revision 1.17  2004/03/19 09:49:29  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.16  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.15  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ *
+ **********************************************************************/
 

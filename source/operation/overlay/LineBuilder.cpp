@@ -18,7 +18,7 @@
 #include <stdio.h>
 
 #define DEBUG 0
-#define COMPUTE_Z 1
+#define COMPUTE_Z 0
 
 namespace geos {
 
@@ -269,6 +269,9 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2004/11/23 19:53:07  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.14  2004/11/20 18:17:26  strk
  * Added Z propagation for overlay lines output.
  *

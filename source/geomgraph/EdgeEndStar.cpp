@@ -16,7 +16,7 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 namespace geos {
 
@@ -349,6 +349,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/11/23 19:53:06  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
  * Revision 1.7  2004/11/22 11:34:49  strk
  * More debugging lines and comments/indentation cleanups
  *
