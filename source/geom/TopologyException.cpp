@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/12/13 13:53:03  strk
+ * Fixed uninitialized Coordinate.
+ *
  * Revision 1.8  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -32,10 +35,12 @@
 namespace geos {
 
 TopologyException::TopologyException(string msg): GEOSException("TopologyException", msg) {
+	pt=NULL;
 }
 
 TopologyException::TopologyException(string msg,const Coordinate *newPt): GEOSException("TopologyException", msg+" "+newPt->toString()) {
-	pt=new Coordinate(*newPt);
+	if ( newPt ) pt=new Coordinate(*newPt);
+	else pt=NULL;
 }
 
 TopologyException::~TopologyException() {
