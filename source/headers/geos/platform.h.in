@@ -9,11 +9,12 @@
 
 //Defines NaN for intel platforms
 #define DoubleNotANumber 1.7e-308
-#define FINITE(x) ( finite((x)) && (x) != DoubleNotANumber )
 
 //Don't forget to define infinities
 #define DoubleInfinity 1.7e+308
 #define DoubleNegInfinity -1.7e+308
+
+#define FINITE(x) ( finite((x)) && (x) != DoubleNotANumber && (x) != DoubleInfinity && (x) != DoubleNegInfinity )
 
 #ifdef HAVE_LONG_LONG_INT_64
  typedef long long int int64;

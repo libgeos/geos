@@ -380,7 +380,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	cerr<<"LineIntersector::interpolateZ("<<p.toString()<<", "<<p1.toString()<<", "<<p2.toString()<<")"<<endl;
 #endif
 
-	if ( p1.z == DoubleNotANumber )
+	if ( !FINITE(p1.z) )
 	{
 #if DEBUG
 		cerr<<" p1 do not have a Z"<<endl;
@@ -388,7 +388,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 		return p2.z; // might be DoubleNotANumber again
 	}
 
-	if ( p2.z == DoubleNotANumber )
+	if ( !FINITE(p2.z) )
 	{
 #if DEBUG
 		cerr<<" p2 do not have a Z"<<endl;
@@ -430,6 +430,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2004/11/26 09:53:48  strk
+ * Added more FINITE calls, and added inf and -inf to FINITE checks
+ *
  * Revision 1.17  2004/11/24 18:10:23  strk
  * Cleanup of interpolateZ
  *

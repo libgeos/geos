@@ -134,7 +134,7 @@ Node::addZ(double z)
 #if DEBUG
 	cerr<<"["<<this<<"] Node::addZ("<<z<<")";
 #endif
-	if ( z == DoubleNotANumber )
+	if ( !FINITE(z) )
 	{
 #if DEBUG
 		cerr<<" skipped"<<endl;
@@ -166,6 +166,9 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/11/26 09:53:48  strk
+ * Added more FINITE calls, and added inf and -inf to FINITE checks
+ *
  * Revision 1.7  2004/11/20 15:41:18  strk
  * Added management of vector of composing Z values.
  *
