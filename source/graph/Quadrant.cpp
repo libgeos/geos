@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 #include <stdio.h>
 
+namespace geos {
+
 int Quadrant::quadrant(double dx, double dy) {
 	char buffer[255];
 	if (dx == 0.0 && dy == 0.0) {
@@ -65,4 +67,5 @@ bool Quadrant::isInHalfPlane(int quad, int halfPlane){
 
 bool Quadrant::isNorthern(int quad) {
 	return quad==0 || quad==1;
+}
 }

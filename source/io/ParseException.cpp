@@ -1,6 +1,8 @@
 #include "../headers/io.h"
 #include "stdio.h"
 
+namespace geos {
+
 ParseException::ParseException(){
 	GEOSException();
 	setName("ParseException");
@@ -26,3 +28,4 @@ ParseException::ParseException(string msg, double num){
 }
 
 ParseException::~ParseException(){}
+}

@@ -1,6 +1,8 @@
 #include "../../headers/indexBintree.h"
 #include "../../headers/indexQuadtree.h"
 
+namespace geos {
+
 int Key::computeLevel(BinTreeInterval *interval) {
 	double dx=interval->getWidth();
 	//int level = BinaryPower.exponent(dx) + 1;
@@ -46,4 +48,5 @@ void Key::computeInterval(int level,BinTreeInterval *itemInterval){
 	//double size = pow2.power(level);
 	pt=floor(itemInterval->getMin()/size)*size;
 	interval->init(pt,pt+size);
+}
 }

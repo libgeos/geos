@@ -1,6 +1,8 @@
 #include "../headers/geosAlgorithm.h"
 #include "../headers/util.h"
 
+namespace geos {
+
 RobustLineIntersector::RobustLineIntersector(){}
 
 void RobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2) {
@@ -194,4 +196,5 @@ double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,d
 		x=x4;
 	}
 	return x;
+}
 }

@@ -12,6 +12,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class Coordinate;
 
 /**
@@ -970,5 +972,5 @@ private:
 	PrecisionModel* precisionModel;
 	int SRID;
 };
-
+}
 #endif

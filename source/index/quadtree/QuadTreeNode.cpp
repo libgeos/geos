@@ -1,6 +1,8 @@
 #include "../../headers/indexQuadtree.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 QuadTreeNode* QuadTreeNode::createNode(Envelope *env) {
 	QuadTreeKey* key=new QuadTreeKey(env);
 	QuadTreeNode *node=new QuadTreeNode(key->getEnvelope(),key->getLevel());
@@ -131,4 +133,5 @@ QuadTreeNode* QuadTreeNode::createSubnode(int index) {
 	Envelope *sqEnv=new Envelope(minx,maxx,miny,maxy);
 	QuadTreeNode *node=new QuadTreeNode(sqEnv,level-1);
 	return node;
+}
 }

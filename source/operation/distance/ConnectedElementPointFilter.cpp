@@ -1,6 +1,8 @@
 #include "../../headers/opDistance.h"
 #include <typeinfo>
 
+namespace geos {
+
 vector<Coordinate*>* ConnectedElementPointFilter::getCoordinates(Geometry *geom) {
 	vector<Coordinate*> *points=new vector<Coordinate*>();
 	geom->apply(new ConnectedElementPointFilter(points));
@@ -16,4 +18,5 @@ void ConnectedElementPointFilter::filter(Geometry *geom) {
 		(typeid(*geom)==typeid(LineString)) ||
 		(typeid(*geom)==typeid(Polygon)))
 			pts->push_back(geom->getCoordinate());
+}
 }

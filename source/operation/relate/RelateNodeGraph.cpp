@@ -1,6 +1,8 @@
 #include "../../headers/opRelate.h"
 #include "stdio.h"
 
+namespace geos {
+
 RelateNodeGraph::RelateNodeGraph() {
 	nodes=new NodeMap(new RelateNodeFactory());
 }
@@ -82,4 +84,5 @@ void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){
 		EdgeEnd *e=*i;
 		nodes->add(e);
 	}
+}
 }

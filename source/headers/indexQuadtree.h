@@ -9,6 +9,8 @@
 
 using namespace std;
 
+namespace geos {
+
 /**
 * Provides a test for whether an interval is
 * so small it should be considered as zero for the purposes of
@@ -181,6 +183,6 @@ private:
 	**/
 	double minExtent;
 };
-
+}
 #endif
 

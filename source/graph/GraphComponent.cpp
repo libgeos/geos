@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 #include "../headers/util.h"
 
+namespace geos {
+
 GraphComponent::GraphComponent() {
 	isInResultVar = false;
 	isCoveredVar = false;
@@ -61,4 +63,5 @@ void GraphComponent::setVisited(bool isVisited) {
 void GraphComponent::updateIM(IntersectionMatrix *im){
 	Assert::isTrue(label->getGeometryCount() >= 2, "found partial label");
 	computeIM(im);
+}
 }

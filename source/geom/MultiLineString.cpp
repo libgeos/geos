@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "../headers/operation.h"
 
+namespace geos {
+
 MultiLineString::MultiLineString(){}
 MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID):
 GeometryCollection(lineStrings, precisionModel,SRID){}
@@ -52,4 +54,5 @@ bool MultiLineString::equalsExact(Geometry *other, double tolerance) {
       return false;
     }
 	return GeometryCollection::equalsExact(other, tolerance);
+}
 }

@@ -2,6 +2,8 @@
 #include "../headers/platform.h"
 #include <typeinfo>
 
+namespace geos {
+
 double InteriorPointArea::avg(double a, double b){
 	return (a+b)/2.0;
 }
@@ -105,4 +107,5 @@ Coordinate* InteriorPointArea::centre(Envelope *envelope) {
 							  envelope->getMaxX()),
 						  avg(envelope->getMinY(),
 						      envelope->getMaxY()));
+}
 }

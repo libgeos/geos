@@ -7,6 +7,7 @@
 #include "geom.h"
 #include <vector>
 
+namespace geos {
 /**
  * LineFilter implements a filter that removes small loops from the line created
  * by BufferLineBuilder
@@ -179,4 +180,5 @@ private:
 protected:
 	void insertEdge(Edge *e);
 };
+}
 #endif

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <typeinfo>
 
+namespace geos {
 
 AbstractSTRtree::AbstractSTRtree(int newNodeCapacity) {
 	built=false;
@@ -156,4 +157,5 @@ void AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Bound
 		}
 	}
 	return;
+}
 }

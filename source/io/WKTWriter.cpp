@@ -3,6 +3,8 @@
 #include <typeinfo>
 #include "stdio.h"
 
+namespace geos {
+
 WKTWriter::WKTWriter() {
 	isFormatted=false;
 	level=0;
@@ -264,4 +266,5 @@ void WKTWriter::indent(int level, Writer *writer) {
 	if (!isFormatted || level<=0) return;
 	writer->write("\n");
 	writer->write(stringOfChar(' ', INDENT * level));
+}
 }

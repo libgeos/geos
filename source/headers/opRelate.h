@@ -8,6 +8,8 @@
 #include "graph.h"
 #include "geosAlgorithm.h"
 
+namespace geos {
+
 class RelateNode: public Node {
 public:
 	RelateNode(Coordinate& coord,EdgeEndStar *edges);
@@ -134,7 +136,7 @@ private:
 	static bool isBaseGeometryCollection(Geometry* geom);
 	static IntersectionMatrix* relateGC(vector<Geometry*> *a,vector<Geometry*> *b);
 };
-
+}
 
 #endif
 

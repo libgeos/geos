@@ -1,6 +1,8 @@
 #include "../../headers/opBuffer.h"
 #include <algorithm>
 
+namespace geos {
+
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry *geomBuf=gBuf->getResultGeometry(distance);
@@ -223,4 +225,5 @@ Geometry* BufferOp::toLineStrings(EdgeList *edges){
 	}
 	Geometry *geom=geomFact->buildGeometry(geomList);
 	return geom;
+}
 }

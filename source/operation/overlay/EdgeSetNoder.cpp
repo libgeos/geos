@@ -1,6 +1,8 @@
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 
+namespace geos {
+
 EdgeSetNoder::EdgeSetNoder(LineIntersector *newLi) {
 	li=newLi;
 	inputEdges=new vector<Edge*>();
@@ -25,4 +27,5 @@ vector<Edge*>* EdgeSetNoder::getNodedEdges() {
 		e->getEdgeIntersectionList()->addSplitEdges(splitEdges);
 	}
 	return splitEdges;
+}
 }

@@ -1,6 +1,8 @@
 #include "../headers/util.h"
 #include "../headers/geom.h"
 
+namespace geos {
+
 void Assert::isTrue(bool assertion) {
 	isTrue(assertion, string());
 }
@@ -36,3 +38,4 @@ void Assert::shouldNeverReachHere(string message) {
 		+ (!message.empty() ? ": " + message : ""));
 }
 
+}

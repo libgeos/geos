@@ -1,6 +1,8 @@
 #include "../headers/geosAlgorithm.h"
 #include <typeinfo>
 
+namespace geos {
+
 /**
 * locate is the main location function.  It handles both single-element
 * and multi-element Geometries.  The algorithm for multi-element Geometries
@@ -46,4 +48,5 @@ bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate& p,Polygon *pol
 		}
 	}
 	return true;
+}
 }

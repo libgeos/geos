@@ -2,6 +2,7 @@
 #include "../../headers/util.h"
 #include "stdio.h"
 
+namespace geos {
 
 SimpleNestedRingTester::SimpleNestedRingTester(GeometryGraph *newGraph){
 	graph=newGraph;
@@ -45,4 +46,5 @@ bool SimpleNestedRingTester::isNonNested(){
 		}
 	}
 	return true;
+}
 }

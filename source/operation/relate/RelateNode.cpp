@@ -1,6 +1,8 @@
 #include "../../headers/opRelate.h"
 #include "stdio.h"
 
+namespace geos {
+
 RelateNode::RelateNode(Coordinate& coord,EdgeEndStar *edges): Node(coord,edges) {}
 
 /**
@@ -16,4 +18,5 @@ void RelateNode::computeIM(IntersectionMatrix *im) {
 */
 void RelateNode::updateIMFromEdges(IntersectionMatrix *im) {
 	((EdgeEndBundleStar*) edges)->updateIM(im);
+}
 }

@@ -11,6 +11,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class OverlayOp: public GeometryGraphOperation {
 public:
 	/**
@@ -402,5 +404,5 @@ public:
 	void addEdges(vector<Edge*> *edges);
 	vector<Edge*>* getNodedEdges();
 };
-
+}
 #endif

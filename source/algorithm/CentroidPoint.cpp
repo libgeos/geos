@@ -2,6 +2,7 @@
 #include "../headers/platform.h"
 #include <typeinfo>
 
+namespace geos {
 
 CentroidPoint::CentroidPoint() {
 	ptCount=0;
@@ -43,4 +44,5 @@ void CentroidPoint::add(Coordinate *pt) {
 
 Coordinate* CentroidPoint::getCentroid() {
 	return new Coordinate(centSum->x/ptCount,centSum->y/ptCount);
+}
 }

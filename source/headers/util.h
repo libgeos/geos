@@ -6,6 +6,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class GEOSException {
 public:
 	GEOSException();
@@ -53,5 +55,5 @@ public:
 	static void shouldNeverReachHere();
 	static void shouldNeverReachHere(string message);
 };
-
+}
 #endif

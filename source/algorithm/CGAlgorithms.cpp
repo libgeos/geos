@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include "math.h"
 
+namespace geos {
+
 /**
 * Computes the distance from a point p to a line segment AB
 *
@@ -114,4 +116,5 @@ double CGAlgorithms::length(CoordinateList* pts) {
 		sum+=pts->getAt(i).distance(pts->getAt(i - 1));
 	}
 	return sum;
+}
 }

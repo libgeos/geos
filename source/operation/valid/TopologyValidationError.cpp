@@ -1,6 +1,8 @@
 #include "../../headers/opValid.h"
 #include "stdio.h"
 
+namespace geos {
+
 string TopologyValidationError::errMsg[]={
     "Topology Validation Error",
     "Repeated Point",
@@ -37,4 +39,5 @@ string TopologyValidationError::getMessage(){
 
 string TopologyValidationError::toString() {
 	return (getMessage().append(" at or near point")).append(pt.toString());
+}
 }

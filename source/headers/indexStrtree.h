@@ -6,8 +6,9 @@
 #include "spatialIndex.h"
 #include "geom.h"
 
-
 using namespace std;
+
+namespace geos {
 
 class Boundable {
 public:
@@ -166,6 +167,6 @@ public:
 //	void insert(Envelope *itemEnv,void* item);
 //	vector<void*>* query(Envelope *searchEnv);
 };
-
+}
 #endif
 

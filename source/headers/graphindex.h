@@ -1,12 +1,13 @@
 #ifndef GEOS_GRAPH_INDEX_H
 #define GEOS_GRAPH_INDEX_H
 
-
 #include "graph.h"
 #include "geom.h"
 #include <vector>
 #include "geosAlgorithm.h"
 #include "platform.h"
+
+namespace geos {
 
 class Edge;
 class Node;
@@ -210,5 +211,5 @@ private:
 };
 
 bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second);
-
+}
 #endif

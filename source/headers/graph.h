@@ -12,6 +12,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class EdgeSetIntersector;
 class SegmentIntersector;
 class MonotoneChainEdge;
@@ -574,5 +576,5 @@ private:
 };
 //Operators
 bool operator==(Edge a,Edge b);
-
+}
 #endif

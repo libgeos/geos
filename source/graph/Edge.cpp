@@ -1,5 +1,7 @@
 #include "../headers/graph.h"
 
+namespace geos {
+
 /**
  * Updates an IM from the label for an edge.
  * Handles edges from both L and A geometrys.
@@ -255,4 +257,5 @@ string Edge::printReverse(){
 	}
 	out+="\n";
 	return out;
+}
 }

@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "../headers/operation.h"
 
+namespace geos {
+
 MultiPoint::MultiPoint(){}
 MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
 GeometryCollection(points, pm, SRID){}
@@ -40,4 +42,4 @@ bool MultiPoint::equalsExact(Geometry *other, double tolerance) {
 Coordinate* MultiPoint::getCoordinate(int n) {
 	return ((Point *)(*geometries)[n])->getCoordinate();
 }
-
+}

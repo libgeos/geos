@@ -1,5 +1,7 @@
 #include "../../headers/indexQuadtree.h"
 
+namespace geos {
+
 double DoubleBits::powerOf2(int exp){
 	if (exp>1023 || exp<-1022)
 		throw new IllegalArgumentException("Exponent out of bounds");
@@ -107,4 +109,5 @@ string DoubleBits::toString() {
 //+ " [ " + x + " ]";
 //return str;
 	return "";
+}
 }

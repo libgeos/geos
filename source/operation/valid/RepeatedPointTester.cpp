@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include <typeinfo>
 
+namespace geos {
 
 Coordinate& RepeatedPointTester::getCoordinate(){
 	return repeatedCoord;
@@ -60,4 +61,5 @@ bool RepeatedPointTester::hasRepeatedPoint(MultiLineString *gc){
 		if (hasRepeatedPoint(g)) return true;
 	}
 	return false;
+}
 }

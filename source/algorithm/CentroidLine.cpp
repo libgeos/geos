@@ -2,6 +2,7 @@
 #include "../headers/platform.h"
 #include <typeinfo>
 
+namespace geos {
 
 CentroidLine::CentroidLine() {
 	totalLength=0.0;
@@ -48,4 +49,5 @@ void CentroidLine::add(CoordinateList *pts) {
 
 Coordinate* CentroidLine::getCentroid() {
 	return new Coordinate(centSum->x/totalLength,centSum->y/totalLength);
+}
 }

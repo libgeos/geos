@@ -1,6 +1,8 @@
 #include "../../headers/indexBintree.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 BinTreeNode* BinTreeNode::createNode(BinTreeInterval *itemInterval){
 	Key *key=new Key(itemInterval);
 	//System.out.println("input: " + env + "  binaryEnv: " + key.getEnvelope());
@@ -107,4 +109,5 @@ BinTreeNode* BinTreeNode::createSubnode(int index) {
 	BinTreeInterval* subInt=new BinTreeInterval(min,max);
 	BinTreeNode *node=new BinTreeNode(subInt,level-1);
 	return node;
+}
 }

@@ -1,5 +1,7 @@
 #include "../../headers/opBuffer.h"
 
+namespace geos {
+
 BufferSubgraph::BufferSubgraph(CGAlgorithms *newCga) {
 	finder=new RightmostEdgeFinder(newCga);
 	dirEdgeList=new vector<DirectedEdge*>();
@@ -145,4 +147,5 @@ int BufferSubgraph::compareTo(BufferSubgraph *bsg) {
 		return 1;
 	}
 	return 0;
+}
 }

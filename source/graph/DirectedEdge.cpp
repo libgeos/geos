@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 #include "math.h"
 
+namespace geos {
+
 /**
  * Computes the factor for the change in depth when moving from one location to another.
  * E.g. if crossing from the INTERIOR to the EXTERIOR the depth decreases, so the factor is -1
@@ -221,3 +223,4 @@ string DirectedEdge::printEdge(){
 	return out;
 }
 
+}

@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 /**
  *  Converts the dimension value to a dimension symbol, for example, <code>TRUE => 'T'</code>.
  *
@@ -59,4 +61,5 @@ int Dimension::toDimensionValue(char dimensionSymbol) {
 			sprintf(buffer,"Unknown dimension symbol: %c\n",dimensionSymbol);
 			throw new IllegalArgumentException(buffer);
 	}
+}
 }

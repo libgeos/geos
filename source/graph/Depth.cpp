@@ -2,6 +2,8 @@
 #include <stdio.h>
 #define DEPTHNULL -1
 
+namespace geos {
+
 int Depth::depthAtLocation(int location) {
 	if (location == Location::EXTERIOR) return 0;
 	if (location == Location::INTERIOR) return 1;
@@ -110,3 +112,4 @@ string Depth::toString() {
 }
 
 
+}

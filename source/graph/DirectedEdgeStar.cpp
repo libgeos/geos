@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 #include "../headers/util.h"
 
+namespace geos {
+
 DirectedEdgeStar::DirectedEdgeStar(){
 //	resultAreaEdgeList=new vector<DirectedEdge*>();
 	resultAreaEdgeList=NULL;
@@ -324,3 +326,4 @@ string DirectedEdgeStar::print() {
 	return out;
 }
 
+}

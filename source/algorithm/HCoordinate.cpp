@@ -1,6 +1,8 @@
 #include "../headers/geosAlgorithm.h"
 #include "../headers/platform.h"
 
+namespace geos {
+
 /**
 * Computes the (approximate) intersection point between two line segments
 * using homogeneous coordinates.
@@ -58,4 +60,5 @@ double HCoordinate::getY() {
 
 Coordinate& HCoordinate::getCoordinate() {
 	return *(new Coordinate(getX(),getY()));
+}
 }

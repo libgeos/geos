@@ -1,5 +1,7 @@
 #include "../headers/io.h"
 
+namespace geos {
+
 StringTokenizer::StringTokenizer(){
 	str="";
 	stok="";
@@ -70,4 +72,5 @@ double StringTokenizer::getNVal(){
 
 string StringTokenizer::getSVal(){
 	return stok;
+}
 }

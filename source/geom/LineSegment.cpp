@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "../headers/geosAlgorithm.h"
 
+namespace geos {
+
 /**
  *  Constructs an empty <code>LineSegment</code>.
  */
@@ -227,4 +229,5 @@ string LineSegment::toString() {
 */
 bool operator==(LineSegment a,LineSegment b) {
 	return a.p0==b.p0 && a.p1==b.p1;
+}
 }

@@ -1,5 +1,7 @@
 #include "../headers/geom.h"
 
+namespace geos {
+
 MultiPolygon::MultiPolygon(){}
 MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID):
 GeometryCollection(polygons, precisionModel, SRID){}
@@ -42,4 +44,5 @@ bool MultiPolygon::equalsExact(Geometry *other, double tolerance) {
       return false;
     }
 	return GeometryCollection::equalsExact(other, tolerance);
+}
 }

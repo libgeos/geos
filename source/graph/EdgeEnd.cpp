@@ -4,6 +4,8 @@
 #include "math.h"
 #include <stdio.h>
 
+namespace geos {
+
 CGAlgorithms* EdgeEnd::cga=new RobustCGAlgorithms();
 
 EdgeEnd::EdgeEnd() {
@@ -96,3 +98,4 @@ string EdgeEnd::print() {
 	return out;
 }
 
+}

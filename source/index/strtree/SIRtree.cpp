@@ -1,6 +1,7 @@
 #include "../../headers/indexStrtree.h"
 #include "../../headers/util.h"
 
+namespace geos {
 
 bool compareSIRBoundables(Boundable *a, Boundable *b){
 	return AbstractSTRtree::compareDoubles(((Interval*)a->getBounds())->getCentre(),((Interval*)b->getBounds())->getCentre());
@@ -75,4 +76,5 @@ vector<void*>* SIRtree::query(double x) {
 */
 vector<void*>* SIRtree::query(double x1, double x2) {
 	return AbstractSTRtree::query(new Interval(min(x1, x2),max(x1, x2)));
+}
 }

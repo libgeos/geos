@@ -1,5 +1,7 @@
 #include "../headers/geosAlgorithm.h"
 
+namespace geos {
+
 int RobustCGAlgorithms::orientationIndex(Coordinate& p1,Coordinate& p2,Coordinate& q) {
 	// travelling along p1->p2, turn counter clockwise to get to q return 1,
 	// travelling along p1->p2, turn clockwise to get to q return -1,
@@ -154,4 +156,5 @@ bool RobustCGAlgorithms::isInEnvelope(Coordinate& p,CoordinateList* ring) {
 		envelope.expandToInclude(ring->getAt(i));
 	}
 	return envelope.contains(p);
+}
 }

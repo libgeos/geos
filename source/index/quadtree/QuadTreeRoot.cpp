@@ -1,6 +1,8 @@
 #include "../../headers/indexQuadtree.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 // the singleton root quad is centred at the origin.
 Coordinate* QuadTreeRoot::origin=new Coordinate(0.0, 0.0);
 
@@ -62,4 +64,5 @@ void QuadTreeRoot::insertContained(QuadTreeNode *tree,Envelope *itemEnv,void* it
 
 bool QuadTreeRoot::isSearchMatch(Envelope *searchEnv){
 	return true;
+}
 }

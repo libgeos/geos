@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 string TopologyException::msgWithCoord(string msg,Coordinate *newPt){
 	if (newPt!=NULL)
 		return msg+newPt->toString();
@@ -20,4 +22,5 @@ TopologyException::TopologyException(string msg,Coordinate *newPt) {
 
 Coordinate* TopologyException::getCoordinate() {
 	return pt;
+}
 }

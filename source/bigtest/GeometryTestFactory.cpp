@@ -5,6 +5,8 @@
 
 #define PI 3.14159265358979
 
+using namespace geos;
+
 Polygon* GeometryTestFactory::createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen) {
 	CoordinateList *pts=createBox(minx, miny, nSide, segLen);
     return fact->createPolygon(fact->createLinearRing(pts),NULL);

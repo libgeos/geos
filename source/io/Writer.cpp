@@ -1,5 +1,7 @@
 #include "../headers/io.h"
 
+namespace geos {
+
 Writer::Writer(){
 	str="";
 }
@@ -14,3 +16,4 @@ string Writer::toString() {
 	return str;
 }
 
+}

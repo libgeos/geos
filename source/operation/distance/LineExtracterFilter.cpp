@@ -1,6 +1,8 @@
 #include "../../headers/opDistance.h"
 #include <typeinfo>
 
+namespace geos {
+
 vector<Geometry*>* LineExtracterFilter::getLines(Geometry *geom) {
 	vector<Geometry*> *lns=new vector<Geometry*>();
 	geom->apply(new LineExtracterFilter(lns));
@@ -13,4 +15,5 @@ LineExtracterFilter::LineExtracterFilter(vector<Geometry*> *newLines){
 
 void LineExtracterFilter::filter(Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) lines->push_back(geom);
+}
 }

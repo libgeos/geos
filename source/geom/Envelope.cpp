@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 /**
 * Test the point q to see whether it intersects the Envelope defined by p1-p2
 * @param p1 one extremal point of the envelope
@@ -476,4 +478,5 @@ bool operator==(Envelope a, Envelope b) {
 		   a.getMaxY() == b.getMaxY() &&
 		   a.getMinX() == b.getMinX() &&
 		   a.getMinY() == b.getMinY();
+}
 }

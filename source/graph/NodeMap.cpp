@@ -1,5 +1,7 @@
 #include "../headers/graph.h"
 
+namespace geos {
+
 NodeMap::NodeMap(NodeFactory *newNodeFact) {
 	nodeFact=newNodeFact;
 	nodeMap=new map<Coordinate,Node*,CoordLT>();
@@ -73,4 +75,5 @@ string NodeMap::print(){
 		out+=node->print();
 	}
 	return out;
+}
 }

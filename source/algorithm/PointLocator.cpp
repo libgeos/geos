@@ -2,6 +2,8 @@
 #include <typeinfo>
 #include "../headers/graph.h"
 
+namespace geos {
+
 PointLocator::PointLocator() {
 	cga=new RobustCGAlgorithms();
 }
@@ -126,3 +128,4 @@ int PointLocator::locate(Coordinate& p,Polygon *poly) {
 	return Location::INTERIOR;
 }
 
+}

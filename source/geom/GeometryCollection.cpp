@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <typeinfo>
 
+namespace geos {
 
 GeometryCollection::GeometryCollection(){
 	geometries=new vector<Geometry *>();
@@ -217,4 +218,5 @@ Point* GeometryCollection::getCentroid() {
 		centPt=cent->getCentroid();
 	}
 	return GeometryFactory::createPointFromInternalCoord(centPt,this);
+}
 }

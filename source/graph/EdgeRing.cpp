@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 #include "../headers/util.h"
 
+namespace geos {
+
 EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
 	label=new Label(Location::UNDEF);
 	maxNodeDegree=-1;
@@ -181,4 +183,5 @@ bool EdgeRing::containsPoint(Coordinate& p){
 			return false;
 	}
 	return true;
+}
 }

@@ -1,5 +1,7 @@
 #include "../headers/graph.h"
 
+namespace geos {
+
 EdgeList::EdgeList(){}
 
 /**
@@ -40,3 +42,4 @@ string EdgeList::print() {
 	return out;
 }
 
+}

@@ -7,6 +7,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class BinTreeInterval {
 public:
 	double min, max;
@@ -148,5 +150,6 @@ private:
 	double minExtent;
 	void collectStats(BinTreeInterval *interval);
 };
+}
 #endif
 

@@ -1,5 +1,7 @@
 #include "../headers/util.h"
 
+namespace geos {
+
 AssertionFailedException::AssertionFailedException(){
 	GEOSException();
 	setName("AssertionFaiedException");
@@ -10,3 +12,4 @@ AssertionFailedException::AssertionFailedException(string msg){
 }
 
 AssertionFailedException::~AssertionFailedException(){}
+}

@@ -1,5 +1,7 @@
 #include "../../headers/indexQuadtree.h"
 
+namespace geos {
+
 /**
 * Returns the index of the subquad that wholly contains the given envelope.
 * If none does, returns -1.
@@ -100,4 +102,5 @@ int QuadTreeNodeBase::nodeCount() {
 		}
 	}
 	return subSize+1;
+}
 }

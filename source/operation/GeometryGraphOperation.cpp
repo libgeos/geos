@@ -1,6 +1,8 @@
 #include "../headers/operation.h"
 #include "stdio.h"
 
+namespace geos {
+
 CGAlgorithms* GeometryGraphOperation::cga=new RobustCGAlgorithms();
 LineIntersector* GeometryGraphOperation::li=new RobustLineIntersector();
 
@@ -30,4 +32,4 @@ void GeometryGraphOperation::setComputationPrecision(PrecisionModel* pm) {
     resultPrecisionModel=pm;
     li->setMakePrecise(resultPrecisionModel);
 }
-
+}

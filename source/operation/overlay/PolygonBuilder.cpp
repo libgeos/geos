@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 PolygonBuilder::PolygonBuilder(GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
 	geometryFactory=newGeometryFactory;
 	cga=newCga;
@@ -243,4 +245,5 @@ bool PolygonBuilder::containsPoint(Coordinate& p) {
 			return true;
 	}
 	return false;
+}
 }

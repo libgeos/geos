@@ -7,6 +7,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class indexMonotoneChain;
 /**
  * The action for the internal iterator for performing
@@ -136,6 +138,6 @@ public:
 	*/
 	static int findChainEnd(CoordinateList *pts,int start);
 };
-
+}
 #endif
 

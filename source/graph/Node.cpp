@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 //#include "../headers/util.h"
 
+namespace geos {
+
 Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Label(0,Location::UNDEF)) {
 	coord=newCoord;
 	edges=newEdges;
@@ -76,4 +78,5 @@ int Node::computeMergedLocation(Label* label2, int eltIndex){
 string Node::print(){
 	string out="node "+coord.toString()+" lbl: "+label->toString();
 	return out;
+}
 }

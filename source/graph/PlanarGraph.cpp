@@ -1,5 +1,7 @@
 #include "../headers/graph.h"
 
+namespace geos {
+
 CGAlgorithms* PlanarGraph::cga=new RobustCGAlgorithms();
 LineIntersector* PlanarGraph::li=new RobustLineIntersector();
 
@@ -205,4 +207,5 @@ string PlanarGraph::printEdges(){
 
 NodeMap* PlanarGraph::getNodeMap(){
 	return nodes;
+}
 }

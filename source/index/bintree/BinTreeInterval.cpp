@@ -1,5 +1,7 @@
 #include "../../headers/indexBintree.h"
 
+namespace geos {
+
 BinTreeInterval::BinTreeInterval(){
 	min=0.0;
 	max=0.0;
@@ -58,4 +60,5 @@ bool BinTreeInterval::contains(double nmin, double nmax){
 
 bool BinTreeInterval::contains(double p) {
 	return (p>=min && p<=max);
+}
 }

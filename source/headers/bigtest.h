@@ -4,6 +4,7 @@
 #include "geom.h"
 
 using namespace std;
+using namespace geos;
 
 class GeometryTestFactory {
 public:

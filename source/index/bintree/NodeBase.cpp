@@ -1,5 +1,7 @@
 #include "../../headers/indexBintree.h"
 
+namespace geos {
+
 /**
 * Returns the index of the subnode that wholely contains the given interval.
 * If none does, returns -1.
@@ -81,4 +83,5 @@ int NodeBase::nodeSize() {
 		}
 	}
 	return subSize+1;
+}
 }

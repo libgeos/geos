@@ -1,6 +1,8 @@
 #include "../../headers/indexSweepline.h"
 #include "stdio.h"
 
+namespace geos {
+
 indexSweepLineEvent::indexSweepLineEvent(double x,indexSweepLineEvent *newInsertEvent,SweepLineInterval *newSweepInt) {
 	xValue = x;
 	insertEvent=newInsertEvent;
@@ -49,4 +51,5 @@ int indexSweepLineEvent::compareTo(void *o) {
 	if (eventType<pe->eventType) return -1;
 	if (eventType>pe->eventType) return 1;
 	return 0;
+}
 }

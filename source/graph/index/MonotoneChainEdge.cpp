@@ -1,5 +1,7 @@
 #include "../../headers/graphindex.h"
 
+namespace geos {
+
 /**
  * MonotoneChains are a way of partitioning the segments of an edge to
  * allow for fast searching of intersections.
@@ -102,4 +104,5 @@ void MonotoneChainEdge::computeIntersectsForChain(int start0,int end0,MonotoneCh
 		if (start1<mid1) computeIntersectsForChain(mid0,end0,mce,start1,mid1,ei);
 		if (mid1<end1) computeIntersectsForChain(mid0,end0,mce,mid1,end1,ei);
 	}
+}
 }

@@ -1,5 +1,7 @@
 #include "../../headers/opDistance.h"
 
+namespace geos {
+
 double DistanceOp::distance(Geometry *g0,Geometry *g1) {
 	DistanceOp *distOp=new DistanceOp(g0,g1);
 	return distOp->distance();
@@ -132,4 +134,5 @@ void DistanceOp::computeMinDistance(LineString *line,Point *pt){
 		updateMinDistance(dist);
 		if (minDistance<=0.0) return;
 	}
+}
 }

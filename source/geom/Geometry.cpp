@@ -8,7 +8,10 @@
 #include "../headers/opValid.h"
 #include "../headers/opDistance.h"
 #include "../headers/opOverlay.h"
+#include "../headers/opBuffer.h"
 #include "../headers/io.h"
+
+namespace geos {
 
 CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();
 GeometryComponentFilter* Geometry::geometryChangedFilter=new GeometryComponentFilter();
@@ -276,11 +279,8 @@ string Geometry::toText() {
 	return writer.write(this);
 }
 
-//!!! External Dependency
 Geometry* Geometry::buffer(double distance) {
-//!!! External Dependency
-//	return BufferOp.bufferOp(this, distance);
-	return NULL;
+	return BufferOp::bufferOp(this, distance);
 }
 
 /**
@@ -492,4 +492,5 @@ bool greaterThen(Geometry *first, Geometry *second) {
 bool Geometry::equal(Coordinate& a,Coordinate& b,double tolerance) {
 	if (tolerance==0) {return a==b;}
 	return a.distance(b)<=tolerance;
+}
 }

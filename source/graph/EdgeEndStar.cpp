@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 #include "../headers/util.h"
 
+namespace geos {
+
 EdgeEndStar::EdgeEndStar(){
 	ptInAreaLocation[0]=Location::UNDEF;
 	ptInAreaLocation[1]=Location::UNDEF;
@@ -260,4 +262,5 @@ string EdgeEndStar::print(){
 		out+=e->print();
 	}
 	return out;
+}
 }

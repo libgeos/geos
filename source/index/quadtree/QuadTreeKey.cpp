@@ -1,5 +1,7 @@
 #include "../../headers/indexQuadtree.h"
 
+namespace geos {
+
 int QuadTreeKey::computeQuadLevel(Envelope *env){
 	double dx=env->getWidth();
 	double dy=env->getHeight();
@@ -58,4 +60,5 @@ void QuadTreeKey::computeKey(int level,Envelope *itemEnv){
 	pt->x=floor(itemEnv->getMinX()/quadSize)*quadSize;
 	pt->y=floor(itemEnv->getMinY()/quadSize)*quadSize;
 	env->init(pt->x,pt->x+quadSize,pt->y,pt->y+quadSize);
+}
 }

@@ -14,6 +14,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class GeometryGraphOperation {
 public:
 	GeometryGraphOperation(Geometry *g0,Geometry *g1);
@@ -57,5 +59,5 @@ private:
 	bool hasClosedEndpointIntersection(GeometryGraph *graph);
 	void addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate& p,bool isClosed);
 };
-
+}
 #endif

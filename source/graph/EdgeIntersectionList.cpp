@@ -1,5 +1,7 @@
 #include "../headers/graph.h"
 
+namespace geos {
+
 EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge) {
 	list=new vector<EdgeIntersection*>();
 	edge=newEdge;
@@ -110,3 +112,4 @@ string EdgeIntersectionList::print(){
 	return out;
 }
 
+}

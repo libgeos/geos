@@ -2,6 +2,8 @@
 #include "../../headers/util.h"
 #include "stdio.h"
 
+namespace geos {
+
 AbstractNode::AbstractNode(int newLevel) {
 	childBoundables=new vector<Boundable*>();
 	bounds=NULL;
@@ -33,4 +35,5 @@ int AbstractNode::getLevel() {
 void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 	Assert::isTrue(bounds==NULL);
 	childBoundables->push_back(childBoundable);
+}
 }

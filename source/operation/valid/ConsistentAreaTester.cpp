@@ -2,6 +2,8 @@
 #include "../../headers/opRelate.h"
 #include "stdio.h"
 
+namespace geos {
+
 ConsistentAreaTester::ConsistentAreaTester(GeometryGraph *newGeomGraph){
 	geomGraph=newGeomGraph;
 	nodeGraph=new RelateNodeGraph();
@@ -78,4 +80,5 @@ bool ConsistentAreaTester::hasDuplicateRings() {
 		}
 	}
 	return false;
+}
 }

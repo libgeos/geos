@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 BasicCoordinateList::BasicCoordinateList() {
 	vect=new vector<Coordinate>();
 }
@@ -73,4 +75,5 @@ string BasicCoordinateList::toString() {
 
 BasicCoordinateList::~BasicCoordinateList() {
 	delete vect;
+}
 }

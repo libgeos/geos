@@ -1,6 +1,7 @@
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 
+namespace geos {
 
 PointBuilder::PointBuilder(OverlayOp *newOp,GeometryFactory *newGeometryFactory,PointLocator *newPtLocator) {
 	op=newOp;
@@ -51,4 +52,5 @@ vector<Point*>* PointBuilder::simplifyPoints(vector<Node*> *resultNodeList) {
 		}
 	}
 	return nonCoveredPointList;
+}
 }

@@ -6,6 +6,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class SpatialIndex {
 public:
 	/**
@@ -20,6 +22,7 @@ public:
 	*/
 	virtual vector<void*>* query(Envelope *searchEnv)=0;
 };
+}
 
 #endif
 

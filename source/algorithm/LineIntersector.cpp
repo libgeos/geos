@@ -3,6 +3,8 @@
 #include "../headers/geom.h"
 #include "math.h"
 
+namespace geos {
+
 /**
 * Computes the "edge distance" of an intersection point p in an edge.
 * The edge distance is a metric of the point along the edge.
@@ -240,3 +242,4 @@ double LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) {
 	return dist;
 }
 
+}

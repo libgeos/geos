@@ -2,6 +2,8 @@
 #include "../../headers/indexQuadtree.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 double Root::origin=0.0;
 
 Root::Root(){}
@@ -63,4 +65,5 @@ void Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void*
 */
 bool Root::isSearchMatch(BinTreeInterval *interval){
 	return true;
+}
 }

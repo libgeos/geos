@@ -1,6 +1,8 @@
 #include "../headers/geosAlgorithm.h"
 #include "math.h"
 
+namespace geos {
+
 /**
 * <code>RobustDeterminant</code> implements an algorithm to compute the
 * sign of a 2x2 determinant for double precision values robustly.
@@ -251,4 +253,5 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 			return -sign;
 		}
 	}
+}
 }

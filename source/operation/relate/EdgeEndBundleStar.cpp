@@ -1,6 +1,8 @@
 #include "../../headers/opRelate.h"
 #include "stdio.h"
 
+namespace geos {
+
 EdgeEndBundleStar::EdgeEndBundleStar(){}
 
 /**
@@ -34,4 +36,5 @@ void EdgeEndBundleStar::updateIM(IntersectionMatrix *im) {
 		EdgeEndBundle *esb=(EdgeEndBundle*) *it;
 		esb->updateIM(im);
 	}
+}
 }

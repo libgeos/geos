@@ -1,5 +1,7 @@
 #include "../../headers/graphindex.h"
 
+namespace geos {
+
 SimpleEdgeSetIntersector::SimpleEdgeSetIntersector() {
 	nOverlaps=0;
 }
@@ -41,4 +43,5 @@ void SimpleEdgeSetIntersector::computeIntersects(Edge *e0,Edge *e1,SegmentInters
 			si->addIntersections(e0,i0,e1,i1);
 		}
 	}
+}
 }

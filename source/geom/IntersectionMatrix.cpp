@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 IntersectionMatrix::IntersectionMatrix(){
 	//matrix = new int[3][3];
 	setAll(Dimension::False);
@@ -252,4 +254,5 @@ string IntersectionMatrix::toString() {
 		}
 	}
 	return result;
+}
 }

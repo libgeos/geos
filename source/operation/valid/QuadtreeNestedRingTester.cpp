@@ -2,6 +2,7 @@
 #include "stdio.h"
 #include "../../headers/util.h"
 
+namespace geos {
 
 QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph) {
 	graph=newGraph;
@@ -59,4 +60,5 @@ void QuadtreeNestedRingTester::buildQuadtree() {
 		Envelope *env=ring->getEnvelopeInternal();
 		qt->insert(env,ring);
 	}
+}
 }

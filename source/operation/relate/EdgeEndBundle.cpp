@@ -1,6 +1,8 @@
 #include "../../headers/opRelate.h"
 #include "stdio.h"
 
+namespace geos {
+
 EdgeEndBundle::EdgeEndBundle(EdgeEnd *e): EdgeEnd(e->getEdge(),e->getCoordinate(),
 										  e->getDirectedCoordinate(),new Label(*(e->getLabel()))) {
 	edgeEnds=new vector<EdgeEnd*>();
@@ -149,3 +151,4 @@ string EdgeEndBundle::print() {
 	return out;
 }
 
+}

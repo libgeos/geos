@@ -1,6 +1,9 @@
 #include "../../headers/opBuffer.h"
 #include "math.h"
 #define PI 3.14159265358979
+
+namespace geos {
+
 /**
 *The minimum segment length allowed to occur in the buffer line.  This is
 *required to avoid problems with dimensional collapse when the buffer line
@@ -356,4 +359,5 @@ void BufferLineBuilder::addCircle(Coordinate &p, double distance){
 	Coordinate& pt=*(new Coordinate(p.x+distance,p.y));
 	addPt(pt);
 	addFillet(p,0.0,2.0*PI,-1,distance);
+}
 }

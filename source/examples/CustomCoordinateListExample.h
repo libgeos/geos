@@ -6,6 +6,7 @@
 #include "../headers/util.h"
 
 using namespace std;
+using namespace geos;
 
 /*
  * This is an example of how you can create a custom CoordinateList class that wraps

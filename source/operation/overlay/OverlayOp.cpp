@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 Geometry* OverlayOp::overlayOp(Geometry *geom0,Geometry *geom1,int opCode) {
 	OverlayOp *gov=new OverlayOp(geom0,geom1);
 	Geometry* geomOv=gov->getResultGeometry(opCode);
@@ -470,4 +472,5 @@ void OverlayOp::computeLabelsFromDepths() {
 			}
 		}
 	}
+}
 }

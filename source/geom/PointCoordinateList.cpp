@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 PointCoordinateList::PointCoordinateList() {
 	vect=new vector<point_3d>();
 }
@@ -116,4 +118,5 @@ string PointCoordinateList::toString() {
 
 PointCoordinateList::~PointCoordinateList() {
 	delete vect;
+}
 }

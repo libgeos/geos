@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 /**
  *  Converts the location value to a location symbol, for example, <code>EXTERIOR => 'e'</code>.
  *
@@ -22,4 +24,5 @@ char Location::toLocationSymbol(int locationValue) {
 			sprintf(buffer,"Unknown location value: %i\n",locationValue);
 			throw new IllegalArgumentException(buffer);
 	}
+}
 }

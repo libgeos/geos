@@ -5,6 +5,7 @@
 #include "../headers/bigtest.h"
 #include "../headers/io.h"
 
+using namespace geos;
 /**
  * Run relate between two large geometries to test the performance
  * of the sweepline intersection detection algorithm

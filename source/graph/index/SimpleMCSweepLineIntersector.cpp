@@ -1,6 +1,8 @@
 #include "../../headers/graphindex.h"
 #include <algorithm>
 
+namespace geos {
+
 SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector(){
 	events=new vector<SweepLineEvent*>();
 }
@@ -105,3 +107,4 @@ void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,SweepLineEv
 	}
 }
 
+}

@@ -1,6 +1,8 @@
 #include "../../headers/opRelate.h"
 #include "stdio.h"
 
+namespace geos {
+
 EdgeEndBuilder::EdgeEndBuilder() {}
 
 vector<EdgeEnd*> *EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges) {
@@ -89,4 +91,5 @@ void EdgeEndBuilder::createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeInt
 	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pNext,new Label(*(edge->getLabel())));
 	//Debug.println(e);
 	l->push_back(e);
+}
 }

@@ -2,6 +2,7 @@
 #include <typeinfo>
 #include "../headers/util.h"
 
+namespace geos {
 
 /**
 * This method implements the Boundary Determination Rule
@@ -343,3 +344,4 @@ Coordinate* GeometryGraph::getInvalidPoint() {
 	return invalidPoint;
 }
 
+}

@@ -1,6 +1,8 @@
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 
+namespace geos {
+
 MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFactory, CGAlgorithms *cga):
 EdgeRing(start,geometryFactory,cga){
 	computePoints(start);
@@ -41,3 +43,4 @@ vector<MinimalEdgeRing*>* MaximalEdgeRing::buildMinimalRings() {
 	return minEdgeRings;
 }
 
+}

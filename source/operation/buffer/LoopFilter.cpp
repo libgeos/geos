@@ -1,6 +1,8 @@
 #include "../../headers/opBuffer.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 LoopFilter::LoopFilter() {
 	newPts=CoordinateListFactory::internalFactory->createCoordinateList();
 	maxPointsInLoop=10;           // maximum number of points in a loop
@@ -56,4 +58,5 @@ int LoopFilter::checkForLoop(CoordinateList *pts,int startIndex){
 		}
 	}
 	return 0;
+}
 }

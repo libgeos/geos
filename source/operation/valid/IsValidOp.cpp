@@ -4,6 +4,7 @@
 #include <set>
 #include "../../headers/util.h"
 
+namespace geos {
 
 CGAlgorithms* IsValidOp::cga=new RobustCGAlgorithms();
 
@@ -382,4 +383,5 @@ void IsValidOp::checkConnectedInteriors(GeometryGraph *graph) {
 		validErr=new TopologyValidationError(
 		TopologyValidationError::DISCONNECTED_INTERIOR,
 		cit->getCoordinate());
+}
 }

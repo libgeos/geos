@@ -1,6 +1,8 @@
 #include "../headers/graph.h"
 #include <stdio.h>
 
+namespace geos {
+
 EdgeIntersection::EdgeIntersection(Coordinate& newCoord, int newSegmentIndex, double newDist) {
 	coord=newCoord;
 	segmentIndex=newSegmentIndex;
@@ -29,4 +31,5 @@ string EdgeIntersection::print(){
 	string out2(buffer);
 	out.append(out2);
 	return out;
+}
 }

@@ -1,6 +1,7 @@
 #include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 
+namespace geos {
 
 MCPointInRing::MCSelecter::MCSelecter(Coordinate& newP,MCPointInRing *prt) {
 	p=newP;
@@ -89,4 +90,5 @@ void MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
 			crossings++;
 		}
 	}
+}
 }

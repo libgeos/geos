@@ -1,6 +1,7 @@
 #include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 
+namespace geos {
 
 NonRobustCGAlgorithms::NonRobustCGAlgorithms(){
 	li=new RobustLineIntersector();
@@ -121,4 +122,5 @@ int NonRobustCGAlgorithms::computeOrientation(Coordinate& p1,Coordinate& p2,Coor
 	if(det>0.0)return 1;
 	if(det<0.0)return-1;
 	return 0;
+}
 }

@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include <typeinfo>
 
+namespace geos {
+
 IntersectionMatrix* RelateOp::relate(Geometry *a,Geometry *b) {
 	if (isBaseGeometryCollection(a) || isBaseGeometryCollection(b)) {
 		return relateGC(toList(a),toList(b));
@@ -77,4 +79,5 @@ bool RelateOp::isBaseGeometryCollection(Geometry* geom) {
 		return false;
 	}
 
+}
 }

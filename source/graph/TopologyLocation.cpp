@@ -1,5 +1,7 @@
 #include "../headers/graph.h"
 
+namespace geos {
+
 TopologyLocation::TopologyLocation(vector<int>* newLocation){
 	location=new vector<int>();
 	init((int)newLocation->size());
@@ -148,4 +150,5 @@ string TopologyLocation::toString(){
 	buf+=Location::toLocationSymbol((*location)[Position::ON]);
 	if (location->size()>1) buf+=Location::toLocationSymbol((*location)[Position::RIGHT]);
 	return buf;
+}
 }

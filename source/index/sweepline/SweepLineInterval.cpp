@@ -1,6 +1,8 @@
 #include "../../headers/indexSweepline.h"
 #include "stdio.h"
 
+namespace geos {
+
 SweepLineInterval::SweepLineInterval(double newMin, double newMax) {
 	SweepLineInterval(newMin,newMax,NULL);
 }
@@ -19,4 +21,5 @@ double SweepLineInterval::getMax() {
 }
 void* SweepLineInterval::getItem() {
 	return item;
+}
 }

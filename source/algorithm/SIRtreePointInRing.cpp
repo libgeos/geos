@@ -1,6 +1,8 @@
 #include "../headers/geosAlgorithm.h"
 #include "stdio.h"
 
+namespace geos {
+
 SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing){
 	ring=newRing;
 	sirTree=NULL;
@@ -69,4 +71,5 @@ void SIRtreePointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
 			crossings++;
 		}
 	}
+}
 }

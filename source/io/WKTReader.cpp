@@ -1,6 +1,8 @@
 #include "../headers/io.h"
 #include "../headers/util.h"
 
+namespace geos {
+
 WKTReader::WKTReader(){
 	geometryFactory=new GeometryFactory();
 	precisionModel=new PrecisionModel();
@@ -228,4 +230,5 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	return geometryFactory->createGeometryCollection(geoms);
+}
 }

@@ -2,6 +2,7 @@
 #include "../headers/util.h"
 #include <typeinfo>
 
+namespace geos {
 
 GeometryFactory::GeometryFactory() {
 	precisionModel=new PrecisionModel();
@@ -139,3 +140,4 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 		return geom0;
 }
 
+}

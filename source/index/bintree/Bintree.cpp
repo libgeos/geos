@@ -1,5 +1,7 @@
 #include "../../headers/indexBintree.h"
 
+namespace geos {
+
 /**
 * Ensure that the BinTreeInterval for the inserted item has non-zero extents.
 * Use the current minExtent to pad it, if necessary
@@ -91,4 +93,5 @@ void Bintree::collectStats(BinTreeInterval *interval) {
 	double del=interval->getWidth();
 	if (del<minExtent && del>0.0)
 		minExtent=del;
+}
 }

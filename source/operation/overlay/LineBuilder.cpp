@@ -1,6 +1,8 @@
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 
+namespace geos {
+
 LineBuilder::LineBuilder(OverlayOp *newOp,GeometryFactory *newGeometryFactory,PointLocator *newPtLocator) {
 	op=newOp;
 	geometryFactory=newGeometryFactory;
@@ -139,4 +141,5 @@ void LineBuilder::labelIsolatedLines(vector<Edge*> *edgesList){
 void LineBuilder::labelIsolatedLine(Edge *e,int targetIndex) {
 	int loc=ptLocator->locate(e->getCoordinate(),op->getArgGeometry(targetIndex));
 	e->getLabel()->setLocation(targetIndex,loc);
+}
 }

@@ -2,6 +2,8 @@
 #include "../headers/platform.h"
 #include <typeinfo>
 
+namespace geos {
+
 InteriorPointLine::InteriorPointLine(Geometry *g) {
 	interiorPoint=NULL;
 	minDistance=DoubleInfinity;
@@ -75,4 +77,5 @@ void InteriorPointLine::add(Coordinate *point) {
 
 Coordinate* InteriorPointLine::getInteriorPoint() {
 	return interiorPoint;
+}
 }

@@ -1,6 +1,8 @@
 #include "../../headers/indexQuadtree.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 /**
 * Ensure that the envelope for the inserted item has non-zero extents.
 * Use the current minExtent to pad the envelope, if necessary
@@ -82,4 +84,5 @@ void Quadtree::collectStats(Envelope *itemEnv){
 	double delY=itemEnv->getWidth();
 	if (delY<minExtent && delY>0.0)
 		minExtent=delY;
+}
 }

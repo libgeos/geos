@@ -16,6 +16,7 @@
 //#include "MarkupSTL.h"
 
 using namespace std;
+using namespace geos;
 
 #define TEST_DESCR 1
 #define GEOM_A_IN 2

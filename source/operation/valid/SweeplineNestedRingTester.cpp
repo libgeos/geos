@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 SweeplineNestedRingTester::SweeplineNestedRingTester(GeometryGraph *newGraph) {
 	graph=newGraph;
 	rings=new vector<LinearRing*>();
@@ -70,4 +72,5 @@ bool SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searc
 		return true;
 	}
 	return false;
+}
 }

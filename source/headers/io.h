@@ -12,6 +12,7 @@
 
 using namespace std;
 
+namespace geos {
 
 class ParseException: public GEOSException {
 public:
@@ -119,5 +120,5 @@ private:
 	void writeFormatted(Geometry *geometry, bool isFormatted, Writer *writer);
 	void indent(int level, Writer *writer);
 };
-
+}
 #endif

@@ -1,6 +1,8 @@
 #include "CustomCoordinateListExample.h"
 #include "stdio.h"
 
+using namespace geos;
+
 CustomPointCoordinateList::CustomPointCoordinateList(point_3d *newPts,int newSize) {
 	pts=newPts;
 	size=newSize;

@@ -7,7 +7,7 @@
 #include "../headers/geom.h"
 
 using namespace std;
-
+using namespace geos;
 
 int main(int argc, char** argv)
 {

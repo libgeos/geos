@@ -2,6 +2,8 @@
 #include "../../headers/graph.h"
 #include "stdio.h"
 
+namespace geos {
+
 /**
 * Return a list of the monotone chains
 * for the given list of coordinates.
@@ -51,4 +53,5 @@ int MonotoneChainBuilder::findChainEnd(CoordinateList *pts,int start) {
 		last++;
 	}
 	return last-1;
+}
 }

@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include <set>
 
+namespace geos {
+
 IsSimpleOp::IsSimpleOp(){}
 
 bool IsSimpleOp::isSimple(LineString *geom){
@@ -115,4 +117,5 @@ EndpointInfo::EndpointInfo(Coordinate& newPt) {
 void EndpointInfo::addEndpoint(bool newIsClosed) {
 	degree++;
 	isClosed|=newIsClosed;
+}
 }

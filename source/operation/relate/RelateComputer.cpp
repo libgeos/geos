@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 const LineIntersector* RelateComputer::li=new RobustLineIntersector();
 const PointLocator* RelateComputer::ptLocator=new PointLocator();
 
@@ -355,3 +357,4 @@ void RelateComputer::labelIsolatedNode(Node *n,int targetIndex) {
 	//debugPrintln(n.getLabel());
 }
 
+}

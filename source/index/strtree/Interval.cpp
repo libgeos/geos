@@ -3,6 +3,8 @@
 #include "stdio.h"
 #include <typeinfo>
 
+namespace geos {
+
 Interval::Interval(Interval *other) {
 	Interval(other->imin,other->imax);
 }
@@ -33,4 +35,5 @@ bool Interval::equals(void *o) {
 	}
 	Interval *other=(Interval*) o;
 	return imin==other->imin && imax==other->imax;
+}
 }

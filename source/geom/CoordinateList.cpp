@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 bool CoordinateList::hasRepeatedPoints(){
 	int size=(int) getSize();
 	for(int i=1; i<size; i++) {
@@ -106,4 +108,5 @@ CoordinateList* CoordinateList::removeRepeatedPoints(CoordinateList *cl){
 	CoordinateList* ret=CoordinateListFactory::internalFactory->createCoordinateList();
 	ret->add(cl->toVector(),false);
 	return ret;
+}
 }

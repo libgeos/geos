@@ -10,6 +10,8 @@
 #include "indexStrtree.h"
 #include "indexChain.h"
 
+namespace geos {
+
 class Coordinate;
 
 class NotRepresentableException: public GEOSException {
@@ -402,5 +404,5 @@ protected:
 	LineString *horizontalBisector(Geometry *geometry);
 
 };
-
+}
 #endif

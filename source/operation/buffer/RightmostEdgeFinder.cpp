@@ -1,6 +1,8 @@
 #include "../../headers/opBuffer.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 RightmostEdgeFinder::RightmostEdgeFinder(CGAlgorithms *newCga){
 	cga=newCga;
 	minIndex=-1;
@@ -121,4 +123,5 @@ int RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i){
 	int pos=Position::LEFT;
 	if (coord->getAt(i).y<coord->getAt(i+1).y) pos=Position::RIGHT;
 	return pos;
+}
 }

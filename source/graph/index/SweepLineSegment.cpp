@@ -1,5 +1,7 @@
 #include "../../headers/graphindex.h"
 
+namespace geos {
+
 SweepLineSegment::SweepLineSegment(Edge *newEdge,int newPtIndex){
 	pts=newEdge->getCoordinates();
 	edge=newEdge;
@@ -20,4 +22,5 @@ double SweepLineSegment::getMaxX() {
 
 void SweepLineSegment::computeIntersections(SweepLineSegment *ss,SegmentIntersector *si) {
 	si->addIntersections(edge,ptIndex,ss->edge,ss->ptIndex);
+}
 }

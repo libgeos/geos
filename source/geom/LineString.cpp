@@ -4,6 +4,7 @@
 #include "../headers/geosAlgorithm.h"
 #include "../headers/operation.h"
 
+namespace geos {
 
 LineString::LineString(){}
 
@@ -237,3 +238,4 @@ int LineString::compareTo(LineString *ls){
 	return compareToSameClass(ls);
 }
 
+}

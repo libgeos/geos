@@ -2,6 +2,8 @@
 #include "../headers/platform.h"
 #include <typeinfo>
 
+namespace geos {
+
 CentroidArea::CentroidArea() {
 	basePt=NULL;
 	cga=new RobustCGAlgorithms();
@@ -103,4 +105,5 @@ void CentroidArea::centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordi
 */
 double CentroidArea::area2(Coordinate &p1,Coordinate &p2,Coordinate &p3){
 	return (p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y);
+}
 }

@@ -1,6 +1,8 @@
 #include "../../headers/opBuffer.h"
 #include <typeinfo>
 
+namespace geos {
+
 BufferEdgeBuilder::BufferEdgeBuilder(CGAlgorithms *newCga,LineIntersector *li,double newDistance,PrecisionModel *precisionModel,int quadrantSegments) {
 	cga=newCga;
 	distance=newDistance;
@@ -126,4 +128,5 @@ void BufferEdgeBuilder::addPolygonRing(LinearRing *lr, double distance, int side
 	// insert the endpoint as a node, to mark that it is on the boundary
 	insertPoint(argIndex, coord[0], Location.BOUNDARY);
 	*/
+}
 }

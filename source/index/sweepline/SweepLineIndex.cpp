@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include <algorithm>
 
+namespace geos {
+
 SweepLineIndex::SweepLineIndex() {
 	events=new vector<indexSweepLineEvent*>();
 	int nOverlaps=0;
@@ -66,4 +68,5 @@ void SweepLineIndex::processOverlaps(int start,int end,SweepLineInterval *s0,Swe
 			nOverlaps++;
 		}
 	}
+}
 }

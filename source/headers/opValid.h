@@ -9,6 +9,8 @@
 #include "indexSweepline.h"
 #include "indexQuadtree.h"
 
+namespace geos {
+
 class SimpleNestedRingTester {
 public:
 	SimpleNestedRingTester(GeometryGraph *newGraph);
@@ -287,5 +289,5 @@ private:
 	void checkShellInsideHole(LinearRing *shell,LinearRing *hole,GeometryGraph *graph);
 	void checkConnectedInteriors(GeometryGraph *graph);
 };
-
+}
 #endif

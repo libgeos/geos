@@ -1,5 +1,7 @@
 #include "../headers/geom.h"
 
+namespace geos {
+
 LinearRing::LinearRing(): LineString() {}
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr.points, lr.precisionModel, lr.SRID) {}
 LinearRing::LinearRing(CoordinateList* points,PrecisionModel* precisionModel,int SRID): 
@@ -24,4 +26,5 @@ bool LinearRing::isClosed() {
 
 void LinearRing::setPoints(CoordinateList* cl){
 	points->setPoints(*(cl->toVector()));
+}
 }

@@ -1,5 +1,7 @@
 #include "../../headers/graphindex.h"
 
+namespace geos {
+
 vector<int>* MonotoneChainIndexer::getChainStartIndices(CoordinateList* pts){
 	// find the startpoint (and endpoints) of all monotone chains in this edge
 	int start=0;
@@ -28,4 +30,5 @@ int MonotoneChainIndexer::findChainEnd(CoordinateList* pts,int start){
 		last++;
 	}
 	return last-1;
+}
 }

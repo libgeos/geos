@@ -1,6 +1,8 @@
 #include "../../headers/indexChain.h"
 #include "stdio.h"
 
+namespace geos {
+
 MonotoneChainOverlapAction::MonotoneChainOverlapAction() {
 	seg1=new LineSegment();
 	seg2=new LineSegment();
@@ -19,4 +21,5 @@ void MonotoneChainOverlapAction::overlap(indexMonotoneChain *mc1,int start1,inde
 	mc1->getLineSegment(start1,seg1);
 	mc2->getLineSegment(start2,seg2);
 	overlap(seg1,seg2);
+}
 }

@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include <typeinfo>
 
+namespace geos {
+
 GeometryCollectionIterator::GeometryCollectionIterator(){
 	parent=NULL;
 	subcollectionIterator=NULL;
@@ -78,4 +80,5 @@ void GeometryCollectionIterator::remove() {
 
 GeometryCollectionIterator::~GeometryCollectionIterator(){
 	delete subcollectionIterator;
+}
 }

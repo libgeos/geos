@@ -3,6 +3,8 @@
 #include "stdio.h"
 #include "math.h"
 
+namespace geos {
+
 NonRobustLineIntersector::NonRobustLineIntersector(){}
 
 void NonRobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2) {
@@ -235,4 +237,5 @@ double NonRobustLineIntersector::rParameter(Coordinate& p1,Coordinate& p2,Coordi
 		r=(p.y-p1.y)/(p2.y-p1.y);
 	}
 	return r;
+}
 }

@@ -1,5 +1,7 @@
 #include "../headers/geom.h"
 
+namespace geos {
+
 Point::Point(){
 	coordinate.setNull();
 }
@@ -90,4 +92,5 @@ int Point::compareToSameClass(Geometry *point) {
 }
 
 Point::~Point(){
+}
 }

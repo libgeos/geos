@@ -2,6 +2,8 @@
 #include "../headers/util.h"
 #include "stdio.h"
 
+namespace geos {
+
 const double maximumPreciseValue=9007199254740992.0;
 
 //double PrecisionModel::makePrecise(double val){
@@ -195,4 +197,5 @@ int PrecisionModel::compareTo(void* o) {
 	}
 	Assert::shouldNeverReachHere("Unknown Precision Model type encountered");
 	return 0;
+}
 }

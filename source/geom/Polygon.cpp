@@ -2,6 +2,8 @@
 #include <typeinfo>
 #include "../headers/geosAlgorithm.h"
 
+namespace geos {
+
 Polygon::Polygon(){
 	shell=new LinearRing();
 	holes=new vector<Geometry *>();
@@ -229,4 +231,5 @@ void Polygon::apply(GeometryComponentFilter *filter) {
 Polygon::~Polygon(){
 	delete shell;
 	delete holes;
+}
 }

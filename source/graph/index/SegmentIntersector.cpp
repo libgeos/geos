@@ -1,6 +1,8 @@
 #include "../../headers/graphindex.h"
 #include "math.h"
 
+namespace geos {
+
 bool SegmentIntersector::isAdjacentSegments(int i1,int i2){
 	return abs(i1-i2)==1;
 }
@@ -153,4 +155,5 @@ bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstB
 		if (li->isIntersection(pt)) return true;
 	}
 	return false;
+}
 }

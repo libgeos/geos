@@ -2,6 +2,8 @@
 #include "stdio.h"
 #include "../../headers/util.h"
 
+namespace geos {
+
 indexMonotoneChain::indexMonotoneChain(CoordinateList *newPts,int nstart,int nend) {
 	env=NULL;
 	// these envelopes are created once and reused
@@ -119,4 +121,5 @@ void indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain 
 		if (mid1<end1)
 			computeOverlaps(mid0,end0,mc,mid1,end1,mco);
 	}
+}
 }

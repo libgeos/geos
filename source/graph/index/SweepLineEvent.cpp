@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "../../headers/graphindex.h"
 
+namespace geos {
+
 SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,void *newObj){
 	edgeSet=newEdgeSet;
 	xValue=x;
@@ -72,3 +74,4 @@ string SweepLineEvent::print() {
 	return out;
 }
 
+}

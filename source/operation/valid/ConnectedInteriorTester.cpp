@@ -4,6 +4,8 @@
 #include "../../headers/util.h"
 #include <typeinfo>
 
+namespace geos {
+
 ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph *newGeomGraph) {
 	geomGraph=newGeomGraph;
 	geometryFactory=new GeometryFactory();
@@ -158,4 +160,5 @@ bool ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings
 		}
 	}
 	return false;
+}
 }

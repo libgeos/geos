@@ -1,6 +1,8 @@
 #include "../headers/geom.h"
 #include "stdio.h"
 
+namespace geos {
+
 //void Coordinate::setNull() {
 //	x=DoubleNotANumber;
 //	y=DoubleNotANumber;
@@ -192,4 +194,5 @@ string Coordinate::toString() {
  */
 bool operator==(Coordinate& a, Coordinate& b) {
     return (a.x == b.x) && ( a.y == b.y) && (( a.z == b.z)||(a.z==DoubleNotANumber && b.z==DoubleNotANumber));
+}
 }

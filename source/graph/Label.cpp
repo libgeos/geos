@@ -1,5 +1,7 @@
 #include "../headers/graph.h"
 
+namespace geos {
+
 Label* Label::toLineLabel(Label* label) {
 	Label *lineLabel=new Label(Location::UNDEF);
 	for (int i=0; i<2; i++) {
@@ -182,3 +184,4 @@ string Label::toString(){
 	return buf;
 }
 
+}

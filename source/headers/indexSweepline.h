@@ -6,6 +6,8 @@
 
 using namespace std;
 
+namespace geos {
+
 class SweepLineInterval {
 public:
 	SweepLineInterval(double newMin, double newMax);
@@ -77,5 +79,7 @@ private:
 };
 
 bool isleLessThen(indexSweepLineEvent *first,indexSweepLineEvent *second);
+}
+
 #endif
 

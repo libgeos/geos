@@ -1,5 +1,7 @@
 #include "../headers/util.h"
 
+namespace geos {
+
 GEOSException::GEOSException(){
 	setName("GEOSException");
 	setMessage("unknown error");
@@ -26,4 +28,5 @@ void GEOSException::setName(string nname){
 
 void GEOSException::setMessage(string msg){
 	txt=msg;
+}
 }

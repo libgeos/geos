@@ -6,6 +6,8 @@
 #include "geom.h"
 #include <vector>
 
+namespace geos {
+
 /**
  * A PointExtracterFilter extracts all the component Points from a Geometry
  * and returns them in a list
@@ -85,4 +87,5 @@ private:
 	void computeMinDistance(LineString *line0,LineString *line1);
 	void computeMinDistance(LineString *line,Point *pt);
 };
+}
 #endif

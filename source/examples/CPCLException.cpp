@@ -1,6 +1,8 @@
 #include "CustomCoordinateListExample.h"
 #include "../headers/util.h"
 
+using namespace geos;
+
 CPCLException::CPCLException(){
 	GEOSException();
 	setName("CPCLException");
