@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/09/13 12:39:14  strk
+ * Made Point and MultiPoint subject to Validity tests.
+ *
  * Revision 1.5  2004/09/13 10:12:49  strk
  * Added invalid coordinates checks in IsValidOp.
  * Cleanups.
@@ -323,6 +326,7 @@ private:
 	bool isChecked;
 	TopologyValidationError* validErr;
 	void checkValid(const Geometry *g);
+	void checkValid(const Point *g);
 	void checkValid(const LinearRing *g);
 	void checkValid(const LineString *g);
 	void checkValid(const Polygon *g);

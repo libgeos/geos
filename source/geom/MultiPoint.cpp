@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2004/09/13 12:39:14  strk
+ * Made Point and MultiPoint subject to Validity tests.
+ *
  * Revision 1.24  2004/09/12 03:51:27  pramsey
  * Casting changes to allow OS/X compilation.
  *
@@ -126,9 +129,7 @@ bool MultiPoint::isSimple() const {
 	return issimple;
 }
 
-bool MultiPoint::isValid() const {
-	return true;
-}
+//bool MultiPoint::isValid() const { return true; }
 
 bool
 MultiPoint::equalsExact(const Geometry *other, double tolerance) const

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2004/09/13 12:39:14  strk
+ * Made Point and MultiPoint subject to Validity tests.
+ *
  * Revision 1.25  2004/09/07 08:29:57  strk
  * Fixed doxygen malformed comment for Coordinate class
  *
@@ -1977,7 +1980,7 @@ public:
 	int getNumPoints() const;
 	bool isEmpty() const;
 	bool isSimple() const;
-	bool isValid() const;
+	//bool isValid() const;
 
 	/// Returns point dimension (0)
 	int getDimension() const;
@@ -2262,7 +2265,7 @@ public:
 
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
-	bool isValid() const;
+	//bool isValid() const;
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 protected:

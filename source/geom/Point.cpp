@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2004/09/13 12:39:14  strk
+ * Made Point and MultiPoint subject to Validity tests.
+ *
  * Revision 1.29  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -125,7 +128,7 @@ bool Point::isEmpty() const {
 }
 
 bool Point::isSimple() const {return true;}
-bool Point::isValid() const {return true;}
+//bool Point::isValid() const {return true;}
 int Point::getDimension() const {return 0;}
 int Point::getBoundaryDimension() const {return Dimension::False;}
 

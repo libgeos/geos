@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/09/13 12:39:14  strk
+ * Made Point and MultiPoint subject to Validity tests.
+ *
  * Revision 1.21  2004/09/13 10:12:49  strk
  * Added invalid coordinates checks in IsValidOp.
  * Cleanups.
@@ -108,24 +111,35 @@ TopologyValidationError* IsValidOp::getValidationError() {
 	return validErr;
 }
 
-void IsValidOp::checkValid(const Geometry *g) {
-    if (isChecked) return;
-    validErr=NULL;
-    if (g->isEmpty()) return;
-    if (typeid(*g)==typeid(Point)) return;
-    else if (typeid(*g)==typeid(MultiPoint)) return;
-    else if (typeid(*g)==typeid(LinearRing)) checkValid((LinearRing*)g);
-    else if (typeid(*g)==typeid(LineString)) checkValid((LineString*)g);
-    else if (typeid(*g)==typeid(Polygon)) checkValid((Polygon*)g);
-    else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
-    else if (typeid(*g)==typeid(MultiLineString)) checkValid((MultiLineString*)g);
-    else if (typeid(*g)==typeid(GeometryCollection)) checkValid((GeometryCollection*)g);
+void
+IsValidOp::checkValid(const Geometry *g)
+{
+	const GeometryCollection *gc;
+	if (isChecked) return;
+	validErr=NULL;
+	if (g->isEmpty()) return;
+	if (typeid(*g)==typeid(Point)) checkValid((Point *)g);
+	else if (typeid(*g)==typeid(LinearRing)) checkValid((LinearRing*)g);
+	else if (typeid(*g)==typeid(LineString)) checkValid((LineString*)g);
+	else if (typeid(*g)==typeid(Polygon)) checkValid((Polygon*)g);
+	else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
+	else if ((gc=dynamic_cast<const GeometryCollection *>(g)))
+		checkValid(gc);
 	else throw new UnsupportedOperationException();
 }
 
-/**
-* Checks validity of a LineString.  Almost anything goes for linestrings!
-*/
+/*
+ * Checks validity of a Point.
+ */
+void IsValidOp::checkValid(const Point *g){
+	CoordinateSequence *cs = g->getCoordinates();
+	checkInvalidCoordinates(cs);
+	delete cs;
+}
+
+/*
+ * Checks validity of a LineString.  Almost anything goes for linestrings!
+ */
 void IsValidOp::checkValid(const LineString *g){
 	checkInvalidCoordinates(g->getCoordinatesRO());
 	if (validErr != NULL) return;
