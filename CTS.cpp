@@ -116,7 +116,7 @@ int main(int argc, char** argv)
 	cout << ls.isEquivalentClass(&p) << endl;
 */
 
-
+//	Polygon p;
 
 
 	cout << "End" << endl;

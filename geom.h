@@ -265,8 +265,9 @@ protected:
 	int SRID;
 	Envelope envelope;
 	bool isEquivalentClass(Geometry *other);
-//static bool hasNonEmptyElements(Geometry[] geometries);
+//	static bool hasNonEmptyElements(Geometry[] geometries) {return true;};
 	static bool hasNullElements(CoordinateList list) {return true;};
+//	static bool hasNullElements(vector<LinearRing> lrs) {return true;};
 	static void reversePointOrder(CoordinateList coordinates){};
 //static Coordinate minCoordinate(Coordinate[] coordinates);
 //static void scroll(Coordinate[] coordinates, Coordinate firstCoordinate);
@@ -314,10 +315,6 @@ public:
 };
 
 class GeometryCollectionIterator {
-public:
-
-};
-class GeometryFactory {
 public:
 
 };
@@ -387,20 +384,6 @@ public:
 	static char toLocationSymbol(int locationValue);
 };
 
-class MultiLineString {
-public:
-
-};
-class MultiPolygon {
-public:
-
-};
-
-class Polygon {
-public:
-
-};
-
 class TopologyException {
 public:
 
@@ -450,8 +433,13 @@ public:
 class GeometryCollection : public Geometry, public SFSGeometryCollection {
 public:
 	GeometryCollection(void);
+	GeometryCollection(const GeometryCollection &gc);
 	GeometryCollection(Geometry *geometry,PrecisionModel pm, int b);
 	virtual ~GeometryCollection(void);
+	virtual bool equalsExact(Geometry *other);
+	int getNumGeometries();
+protected:
+	vector<Geometry *> geometries;
 };
 
 class SFSMultiCurve : public SFSGeometryCollection {
@@ -463,12 +451,6 @@ class SFSMultiLineString : public SFSMultiCurve {
 };
 
 class SFSMultiPoint : public SFSGeometryCollection {
-};
-
-class MultiPoint: public GeometryCollection, public SFSMultiPoint {
-public:
-	MultiPoint(){};
-	MultiPoint(Geometry *geometry,PrecisionModel pm, int b){};
 };
 
 class SFSMultiSurface : public SFSGeometryCollection {
@@ -529,7 +511,7 @@ public:
 
 };
 
-class SFSLinearRing : public SFSLineString {
+class SFSLinearRing { // : public SFSLineString { //For some reason generates 'virtual function not impl.'
 };
 
 class LineString: public Geometry, public SFSLineString {
@@ -583,4 +565,72 @@ public:
 	virtual LineString getExteriorRing()=0;
 	virtual int getNumInteriorRing()=0;
 	virtual LineString getInteriorRingN(int n)=0;
+};
+
+class Polygon: public Geometry, public SFSPolygon  {
+public:
+	Polygon();
+	Polygon(const Polygon &p);
+	virtual ~Polygon();
+	Polygon(LinearRing shell, PrecisionModel precisionModel, int SRID);
+	Polygon(LinearRing *newShell, vector<LinearRing> newHoles, PrecisionModel precisionModel, int SRID);
+	Geometry getBoundary();
+protected:
+	LinearRing shell;
+	vector<LinearRing> holes;
+};
+
+class MultiPoint: public GeometryCollection, public SFSMultiPoint {
+public:
+	MultiPoint();
+	MultiPoint(vector<Geometry> *geometry,PrecisionModel pm, int b);
+	virtual ~MultiPoint();
+	int getDimension();
+	int getBoundaryDimension();
+	string getGeometryType();
+	bool isValid();
+	bool isClosed();
+	bool isSimple();
+	Geometry getBoundary();
+	bool equalsExact(Geometry *other);
+protected:
+	Coordinate getCoordinate(int n);
+};
+
+class GeometryFactory {
+public:
+	GeometryFactory();
+	GeometryFactory(PrecisionModel newPrecisionModel, int newSRID);
+	MultiPoint createMultiPoint(CoordinateList coordinates);
+	virtual ~GeometryFactory();
+private:
+	PrecisionModel precisionModel;
+	int SRID;
+};
+
+class MultiLineString: public GeometryCollection, public SFSMultiLineString  {
+public:
+	MultiLineString();
+//	MultiLineString(LineString[] lineStrings, PrecisionModel precisionModel, int SRID);
+	virtual ~MultiLineString();
+	int getDimension();
+	int getBoundaryDimension();
+	string getGeometryType();
+	bool isClosed();
+	bool isSimple();
+	Geometry getBoundary();
+	bool equalsExact(Geometry *other);
+};
+
+class MultiPolygon: public GeometryCollection, public SFSMultiPolygon   {
+public:
+	MultiPolygon();
+//	MultiPolygon(Polygon[] polygons, PrecisionModel precisionModel, int SRID);
+	virtual ~MultiPolygon();
+	int getDimension();
+	int getBoundaryDimension();
+	string getGeometryType();
+	bool isSimple();
+	Geometry getBoundary();
+	bool equalsExact(Geometry *other);
 };
