@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/17 12:36:39  strk
+ * ParseException message made more readable
+ *
  * Revision 1.7  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -37,7 +40,7 @@ ParseException::ParseException(string msg){
 }
 ParseException::ParseException(string msg, string var){
 	setName("ParseException");
-	setMessage(msg+": "+var);
+	setMessage(msg+": '"+var+"'");
 }
 ParseException::ParseException(string msg, double num){
 	setName("ParseException");
