@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/04/13 14:28:37  strk
+ * Removed spurious line
+ *
  * Revision 1.14  2003/11/13 11:57:23  strk
  * bug fixed in relate call
  *
@@ -76,7 +79,6 @@ wkt_print_geoms(vector<Geometry *> *geoms)
 Point *
 create_point(double x, double y)
 {
-	Point p0;
 	Coordinate c;
        	c.x = x;
 	c.y = y;
