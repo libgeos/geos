@@ -214,13 +214,13 @@ public:
 	* @return the point found, or <code>null</code> if none found
 	*/
 	static const Coordinate& findPtNotNode(const CoordinateList *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
-	IsValidOp(const Geometry *parentGeometry);
+	IsValidOp(const Geometry *geom);
 	virtual ~IsValidOp();
 	bool isValid();
 	TopologyValidationError* getValidationError();
 private:
 	static CGAlgorithms *cga;
-	Geometry *parentGeometry;  // the base Geometry to be validated
+	const Geometry *parentGeometry;  // the base Geometry to be validated
 	bool isChecked;
 	TopologyValidationError* validErr;
 	void checkValid(const Geometry *g);

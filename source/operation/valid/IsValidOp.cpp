@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.13  2003/10/13 17:54:40  strk
+* IsValidOp constructor used same name for the arg and a private element. Fixed.
+*
+*/
 #include "../../headers/opValid.h"
 #include "stdio.h"
 #include <typeinfo>
@@ -23,10 +29,10 @@ const Coordinate& IsValidOp::findPtNotNode(const CoordinateList *testCoords,cons
 	return Coordinate::getNull();
 }
 
-IsValidOp::IsValidOp(const Geometry *parentGeometry){
+IsValidOp::IsValidOp(const Geometry *geom){
 	isChecked=false;
 	validErr=NULL;
-	parentGeometry=parentGeometry;
+	parentGeometry=geom;
 }
 
 IsValidOp::~IsValidOp(){
