@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.41  2004/07/19 13:19:30  strk
+ * Documentation fixes
+ *
  * Revision 1.40  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -118,6 +121,8 @@ LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
  * @param newCoords the list of coordinates making up the linestring,
  *	or <code>null</code> to create the empty geometry.
  *	Consecutive points may not be equal.
+ *
+ * @param factory the GeometryFactory used to create this Geometry.
  *
  */  
 LineString::LineString(CoordinateSequence *newCoords, const GeometryFactory *factory): Geometry(factory)

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -67,28 +70,35 @@ using namespace std;
 
 namespace geos {
 
-/**
- * A spatial object in an AbstractSTRtree.
- *
+/*
+ * \class Boundable indexStrtree.h geos/indexStrtree.h
+ * \brief  A spatial object in an AbstractSTRtree.
  */
 class Boundable {
 public:
-  /**
-   * Returns a representation of space that encloses this Boundable, preferably
-   * not much bigger than this Boundable's boundary yet fast to test for intersection
-   * with the bounds of other Boundables. The class of object returned depends
-   * on the subclass of AbstractSTRtree.
-   * @return an Envelope (for STRtrees), an Interval (for SIRtrees), or other object
-   * (for other subclasses of AbstractSTRtree)
-   * @see AbstractSTRtree.IntersectsOp
-   */
+	/**
+	 * Returns a representation of space that encloses this Boundable,
+	 * preferably not much bigger than this Boundable's boundary yet
+	 * fast to test for intersection with the bounds of other Boundables.
+	 *
+	 * The class of object returned depends
+	 * on the subclass of AbstractSTRtree.
+	 *
+	 * @return an Envelope (for STRtrees), an Interval (for SIRtrees),
+	 * or other object (for other subclasses of AbstractSTRtree)
+	 *
+	 * @see AbstractSTRtree::IntersectsOp
+	 */
 	virtual void* getBounds()=0;
 	virtual ~Boundable() {};
 };
 
-/**
- * Boundable wrapper for a non-Boundable spatial object. Used internally by
- * AbstractSTRtree.
+/*
+ * \class ItemBoundable indexStrtree.h geos/indexStrtree.h
+ *
+ * \brief
+ * Boundable wrapper for a non-Boundable spatial object.
+ * Used internally by AbstractSTRtree.
  *
  */
 class ItemBoundable: public Boundable {
@@ -102,10 +112,12 @@ public:
 	void* getItem();
 };
 
-/**
+/*
+ * \class Interval indexStrtree.h geos/indexStrtree.h
+ * \brief
  * A contiguous portion of 1D-space. Used internally by SIRtree.
- * @see SIRtree
  *
+ * @see SIRtree
  */
 class Interval {
 public:
@@ -120,10 +132,16 @@ private:
 	double imax;
 };
 
-/**
- * A node of the STR tree. The children of this node are either more nodes
- * (AbstractNodes) or real data (ItemBoundables). If this node contains real data
- * (rather than nodes), then we say that this node is a "leaf node".  
+/*
+ * \class AbstractNode indexStrtree.h geos/indexStrtree.h
+ * \brief
+ * A node of the STR tree.
+ * 
+ * The children of this node are either more nodes
+ * (AbstractNodes) or real data (ItemBoundables).
+ *
+ * If this node contains real data (rather than nodes),
+ * then we say that this node is a "leaf node".  
  *
  */
 class AbstractNode: public Boundable {
@@ -142,7 +160,7 @@ public:
 	 * 
 	 * @return an Envelope (for STRtrees), an Interval (for SIRtrees), or other
 	 *         object (for other subclasses of AbstractSTRtree)
-	 * @see AbstractSTRtree.IntersectsOp
+	 * @see AbstractSTRtree::IntersectsOp
 	 */  
 	void* getBounds();
 	int getLevel();
@@ -152,11 +170,16 @@ protected:
 	void* bounds;
 };
 
-/**
- * Base class for STRtree and SIRtree. STR-packed R-trees are described in:
+/*
+ * \class AbstractSTRtree indexStrtree.h geos/indexStrtree.h
+ *
+ * \brief
+ * Base class for STRtree and SIRtree.
+ *
+ * STR-packed R-trees are described in:
  * P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
  * Application To GIS. Morgan Kaufmann, San Francisco, 2002.
- * <p>
+ * 
  * This implementation is based on Boundables rather than just AbstractNodes, 
  * because the STR algorithm operates on both nodes and 
  * data, both of which are treated here as Boundables.
@@ -164,10 +187,14 @@ protected:
  */
 class AbstractSTRtree {
 protected:
-	/**
-	* A test for intersection between two bounds, necessary because subclasses
-	* of AbstractSTRtree have different implementations of bounds. 
-	*/
+	/*
+	 * \class IntersectsOp indexStrtree.h geos/indexStrtree.h
+	 *
+	 * \brief
+	 * A test for intersection between two bounds, necessary because
+	 * subclasses of AbstractSTRtree have different implementations of
+	 * bounds. 
+	 */
 	class IntersectsOp {
 		public:
 			/**
@@ -219,11 +246,17 @@ public:
 protected:
 	void* computeBounds();
 };
-/**
- * One-dimensional version of an STR-packed R-tree. SIR stands for
- * "Sort-Interval-Recursive". STR-packed R-trees are described in:
+
+/*
+ * \class SIRtree indexStrtree.h geos/indexStrtree.h
+ * \brief One-dimensional version of an STR-packed R-tree.
+ *
+ * SIR stands for "Sort-Interval-Recursive".
+ *
+ * STR-packed R-trees are described in:
  * P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
  * Application To GIS. Morgan Kaufmann, San Francisco, 2002.
+ *
  * @see STRtree
  */
 class SIRtree: public AbstractSTRtree {
@@ -253,18 +286,21 @@ protected:
 	void* computeBounds();
 };
 
-/**
- *  A query-only R-tree created using the Sort-Tile-Recursive (STR) algorithm. 
- *  For two-dimensional spatial data. <P>
+/*
+ * \class STRtree indexStrtree.h geos/indexStrtree.h
  *
- *  The STR packed R-tree is simple to implement and maximizes space
- *  utilization; that is, as many leaves as possible are filled to capacity.
- *  Overlap between nodes is far less than in a basic R-tree. However, once the
- *  tree has been built (explicitly or on the first call to #query), items may
- *  not be added or removed. <P>
+ * \brief
+ * A query-only R-tree created using the Sort-Tile-Recursive (STR) algorithm. 
+ * For two-dimensional spatial data. 
+ *
+ * The STR packed R-tree is simple to implement and maximizes space
+ * utilization; that is, as many leaves as possible are filled to capacity.
+ * Overlap between nodes is far less than in a basic R-tree. However, once the
+ * tree has been built (explicitly or on the first call to #query), items may
+ * not be added or removed. 
  * 
- * Described in: P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
- *  Application To GIS. Morgan Kaufmann, San Francisco, 2002. 
+ * Described in: P. Rigaux, Michel Scholl and Agnes Voisard. Spatial
+ * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002. 
  *
  */
 class STRtree: public AbstractSTRtree,public SpatialIndex {

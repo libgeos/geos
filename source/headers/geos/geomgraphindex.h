@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -201,7 +204,7 @@ protected:
 	int chainIndex;
 };
 
-/**
+/*
  * Finds all intersections in one or two sets of edges,
  * using an x-axis sweepline algorithm in conjunction with Monotone Chains.
  * While still O(n^2) in the worst case, this algorithm
@@ -238,7 +241,7 @@ private:
 	void computeIntersects(Edge *e0,Edge *e1,SegmentIntersector *si);
 };
 
-/**
+/*
  * Finds all intersections in one or two sets of edges,
  * using a simple x-axis sweepline algorithm.
  * While still O(n^2) in the worst case, this algorithm

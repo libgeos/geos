@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -54,14 +57,14 @@
 namespace geos {
 
 
-/**
+/*
  * Represents the location of a point on a Geometry.
  * Maintains both the actual point location (which of course
  * may not be exact) as well as information about the component
  * and segment index where the point occurs.
  * Locations inside area Geometrys will not have an associated segment index,
- * so in this case the segment index will have the sentinel value of INSIDE_AREA.
- *
+ * so in this case the segment index will have the sentinel value of
+ * INSIDE_AREA.
  */
 class GeometryLocation {
 private:
@@ -105,12 +108,11 @@ public:
 };
 
 
- /**
+/*
  * Extracts a single point
  * from each connected element in a Geometry
  * (e.g. a polygon, linestring or point)
  * and returns them in a list
- *
  */
 class ConnectedElementPointFilter: public GeometryFilter {
 public:
@@ -127,13 +129,12 @@ private:
 	vector<const Coordinate*> *pts;
 };
 
-/**
+/*
  * A ConnectedElementPointFilter extracts a single point
  * from each connected element in a Geometry
  * (e.g. a polygon, linestring or point)
  * and returns them in a list. The elements of the list are 
- * {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
- *
+ * DistanceOp::GeometryLocation.
  */
 class ConnectedElementLocationFilter: public GeometryFilter {
 private:
@@ -152,7 +153,7 @@ public:
 };
 
 
-/**
+/*
  * Computes the distance and
  * closest points between two {@link Geometry}s.
  * <p>

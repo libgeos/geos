@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -48,9 +51,8 @@ using namespace std;
 
 namespace geos {
 
-/**
- * Extracts all the 2-dimensional ({@link Polygon}) components from a {@link Geometry}.
- *
+/*
+ * Extracts all the 2-dimensional (Polygon) components from a Geometry.
  */
 class PolygonExtracter: public GeometryFilter {
 public:
@@ -71,9 +73,8 @@ private:
 	vector<Geometry*>* comps;
 };
 
-/**
- * Extracts all the 0-dimensional ({@link Point}) components from a {@link Geometry}.
- *
+/*
+ * Extracts all the 0-dimensional (Point) components from a Geometry.
  */
 class PointExtracter: public GeometryFilter {
 public:
@@ -94,9 +95,8 @@ private:
 	vector<Geometry*>* comps;
 };
 
-/**
- * Extracts all the 1-dimensional ({@link LineString}) components from a {@link Geometry}.
- *
+/*
+ * Extracts all the 1-dimensional (LineString) components from a Geometry.
  */
 class LinearComponentExtracter: public GeometryComponentFilter {
 public:
@@ -117,10 +117,9 @@ private:
 	vector<Geometry*>* comps;
 };
 
-/**
-* A interface which specifies an edit operation for Geometries.
-*
-*/
+/*
+ * A interface which specifies an edit operation for Geometries.
+ */
 class GeometryEditorOperation {
 public:
 	/**
@@ -135,10 +134,11 @@ public:
 	virtual Geometry* edit(const Geometry *geometry, const GeometryFactory *factory)=0;
 };
 
-/**
-* A {@link GeometryEditorOperation} which modifies the coordinate list of a {@link Geometry}.
-* Operates on Geometry subclasses which contains a single coordinate list.
-*/
+/*
+ * A GeometryEditorOperation which modifies the coordinate list of a
+ * Geometry.
+ * Operates on Geometry subclasses which contains a single coordinate list.
+ */
 class CoordinateOperation: public GeometryEditorOperation {
 public:
 	virtual Geometry* edit(const Geometry *geometry, const GeometryFactory *factory);
@@ -158,19 +158,20 @@ public:
 };
 
 
-/**
- * Supports creating a new {@link Geometry} which is a modification of an existing one.
+/*
+ * Supports creating a new Geometry which is a modification of an existing one.
  * Geometry objects are intended to be treated as immutable.
  * This class allows you to "modify" a Geometry
- * by traversing it and creating a new Geometry with the same overall structure but
- * possibly modified components.
+ * by traversing it and creating a new Geometry with the same overall
+ * structure but possibly modified components.
+ *
  * The following kinds of modifications can be made:
- * <ul>
- * <li>the values of the coordinates may be changed.
- * Changing coordinate values may make the result Geometry invalid;
- * this is not checked by the GeometryEditor
- * <li>the coordinate lists may be changed
- * (e.g. by adding or deleting coordinates).
+ *
+ * - the values of the coordinates may be changed.
+ *   Changing coordinate values may make the result Geometry invalid;
+ *   this is not checked by the GeometryEditor
+ * - the coordinate lists may be changed
+ *   (e.g. by adding or deleting coordinates).
  * The modifed coordinate lists must be consistent with their original parent component
  * (e.g. a LinearRing must always have at least 4 coordinates, and the first and last
  * coordinate must be equal)

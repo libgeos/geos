@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -48,7 +51,7 @@ using namespace std;
 
 namespace geos {
 
-/**
+/*
 * Provides a test for whether an interval is
 * so small it should be considered as zero for the purposes of
 * inserting it into a binary tree.
@@ -92,7 +95,7 @@ private:
 	int64 xBits;
 };
 
-/**
+/*
  * A QuadTreeKey is a unique identifier for a node in a quadtree.
  * It contains a lower-left point and a level number. The level number
  * is the power of two for the size of the node envelope
@@ -117,7 +120,8 @@ private:
 };
 
 class QuadTreeNode;
-/**
+
+/*
  * The base class for nodes in a {@link Quadtree}.
  *
  */
@@ -147,7 +151,7 @@ protected:
 	virtual bool isSearchMatch(Envelope *searchEnv)=0;
 };
 
-/**
+/*
  * Represents a node of a {@link Quadtree}.  Nodes contain
  * items which have a spatial extent corresponding to the node's position
  * in the quadtree.
@@ -173,7 +177,7 @@ protected:
 	bool isSearchMatch(Envelope *searchEnv);
 };
 
-/**
+/*
  * QuadRoot is the root of a single Quadtree.  It is centred at the origin,
  * and does not have a defined extent.
  */
@@ -190,7 +194,7 @@ protected:
 	bool isSearchMatch(Envelope *searchEnv);
 };
 
-/**
+/*
  * A Quadtree is a spatial index structure for efficient querying
  * of 2D rectangles.  If other kinds of spatial objects
  * need to be indexed they can be represented by their

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -45,7 +48,8 @@
 using namespace std;
 
 namespace geos {
-/**
+
+/*
  * The base class for all graph component classes.
  * Maintains flags of use in generic graph algorithms.
  * Provides two flags:
@@ -105,7 +109,8 @@ class planarDirectedEdge;
 class planarEdge;
 
 bool pdeLessThan(planarDirectedEdge *first,planarDirectedEdge * second);
-/**
+
+/*
  * A sorted collection of {@link DirectedEdge}s which leave a {@link Node}
  * in a {@link PlanarGraph}.
  *
@@ -171,7 +176,7 @@ public:
 	planarDirectedEdge* getNextEdge(planarDirectedEdge *dirEdge);
 };
 
-/**
+/*
  * A node in a {@link PlanarGraph}is a location where 0 or more {@link Edge}s
  * meet. A node is connected to each of its incident Edges via an outgoing
  * DirectedEdge. Some clients using a <code>PlanarGraph</code> may want to
@@ -220,7 +225,8 @@ public:
 	*/
 	int getIndex(planarEdge *edge);
 };
-/**
+
+/*
  * Represents an undirected edge of a {@link PlanarGraph}. An undirected edge
  * in fact simply acts as a central point of reference for two opposite
  * {@link DirectedEdge}s.
@@ -268,7 +274,7 @@ public:
 };
 
 
-/**
+/*
  * Represents a directed edge in a {@link PlanarGraph}. A DirectedEdge may or
  * may not have a reference to a parent {@link Edge} (some applications of
  * planar graphs may not require explicit Edge objects to be created). Usually
@@ -403,8 +409,8 @@ struct planarCoordLT {
 	}
 };
 
-/**
- * A map of {@link Node}s, indexed by the coordinate of the node.
+/*
+ * A map of Node, indexed by the coordinate of the node.
  *
  */
 class planarNodeMap {
@@ -442,7 +448,7 @@ public:
 	vector<planarNode*>* getNodes();
 };
 
-/**
+/*
  * Represents a directed graph which is embeddable in a planar surface.
  * <p>
  * This class and the other classes in this package serve as a framework for

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -42,7 +45,7 @@ using namespace std;
 
 namespace geos {
 
-/**
+/*
  * The basic insertion and query operations supported by classes
  * implementing spatial index algorithms.
  * <p>
@@ -55,11 +58,11 @@ namespace geos {
 class SpatialIndex {
 public:
 	virtual ~SpatialIndex() {};
-	/**
+	/*
 	* Adds a spatial item with an extent specified by the given {@link Envelope} to the index
 	*/
 	virtual void insert(Envelope *itemEnv, void *item)=0;
-	/**
+	/*
 	* Queries the index for all items whose extents intersect the given search {@link Envelope}
 	* Note that some kinds of indexes may also return objects which do not in fact
 	* intersect the query envelope.

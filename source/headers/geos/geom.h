@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/07/19 13:19:30  strk
+ * Documentation fixes
+ *
  * Revision 1.15  2004/07/19 10:34:06  strk
  * removed doxygen documentation of removed feature
  *
@@ -211,14 +214,15 @@ class Coordinate;
 /**
  * \class PrecisionModel geom.h geos.h
  *
- * Specifies the precision model of the {@link Coordinate}s in a {@link Geometry}.
+ * \brief Specifies the precision model of the Coordinate in a Geometry.
+ *
  * In other words, specifies the grid of allowable
- *  points for all <code>Geometry</code>s.
- * <p>
- * The {@link makePrecise} method allows rounding a coordinate to
+ * points for all <code>Geometry</code>s.
+ * 
+ * The makePrecise method allows rounding a coordinate to
  * a "precise" value; that is, one whose
- *  precision is known exactly.
- *<p>
+ * precision is known exactly.
+ *
  * Coordinates are assumed to be precise in geometries.
  * That is, the coordinates are assumed to be rounded to the
  * precision model given for the geometry.
@@ -228,29 +232,25 @@ class Coordinate;
  * assume that coordinates are rounded to the precision model.
  * Constructive methods (such as boolean operations) always round computed
  * coordinates to the appropriate precision model.
- * <p>
- * Currently three types of precision model are supported:
- * <ul>
- * <li>FLOATING - represents full double precision floating point.
- * This is the default precision model used in JTS
- * <li>FLOATING_SINGLE - represents single precision floating point.
- * <li>FIXED - represents a model with a fixed number of decimal places.
- *  A Fixed Precision Model is specified by a scale factor.
- *  The scale factor specifies the grid which numbers are rounded to.
- *  Input coordinates are mapped to fixed coordinates according to the following
- *  equations:
- *    <UL>
- *      <LI> jtsPt.x = round( (inputPt.x * scale ) / scale
- *      <LI> jtsPt.y = round( (inputPt.y * scale ) / scale
- *    </UL>
- * </ul>
- *  Coordinates are represented internally as Java double-precision values.
- * Since Java uses the IEEE-394 floating point standard, this
- *  provides 53 bits of precision. (Thus the maximum precisely representable
- *  integer is 9,007,199,254,740,992).
- *<p>
- *  JTS methods currently do not handle inputs with different precision models.
  *
+ * Currently three types of precision model are supported:
+ * - FLOATING - represents full double precision floating point.
+ *   This is the default precision model used in JTS
+ * - FLOATING_SINGLE - represents single precision floating point.
+ * - FIXED - represents a model with a fixed number of decimal places.
+ *   A Fixed Precision Model is specified by a scale factor.
+ *   The scale factor specifies the grid which numbers are rounded to.
+ *   Input coordinates are mapped to fixed coordinates according to the
+ *   following equations:
+ *   - jtsPt.x = round( (inputPt.x * scale ) / scale
+ *   - jtsPt.y = round( (inputPt.y * scale ) / scale
+ *
+ * Coordinates are represented internally as Java double-precision values.
+ * Since Java uses the IEEE-394 floating point standard, this
+ * provides 53 bits of precision. (Thus the maximum precisely representable
+ * integer is 9,007,199,254,740,992).
+ *
+ * JTS methods currently do not handle inputs with different precision models.
  */
 class PrecisionModel {
 friend class Unload;
@@ -293,7 +293,7 @@ public:
 	/**
 	* If the model type is FIXED the scale factor will default to 1.
 	*
-	* @param modelType the type of the precision model
+	* @param nModelType the type of the precision model
 	*/
 	PrecisionModel(Type nModelType);
 
@@ -315,13 +315,15 @@ public:
 	 */
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
 
-	/// Creates a PrecisionModel with Fixed precision.
 	/**
+	 * \brief 
+	 * Creates a PrecisionModel with Fixed precision.
+	 *
 	 * Fixed-precision coordinates are represented as precise
 	 * internal coordinates which are rounded to the grid defined
 	 * by the scale factor.
 	 *
-	 * @param  scale amount by which to multiply a coordinate
+	 * @param newScale amount by which to multiply a coordinate
 	 * after subtracting the offset, to obtain a precise coordinate
 	 */
 	PrecisionModel(double newScale);
@@ -973,7 +975,7 @@ public:
 	CoordinateSequence *create(vector<Coordinate> *coords) const;
 };
 
-/**
+/*
  *  <code>Geometry</code> classes support the concept of applying a
  *  coordinate filter to every coordinate in the <code>Geometry</code>. A
  *  coordinate filter can either record information about each coordinate or
@@ -998,7 +1000,7 @@ public:
 
 class Geometry;
 
-/**
+/*
  *  <code>Geometry</code> classes support the concept of applying
  *  a <code>GeometryComponentFilter</code>
  *  filter to the <code>Geometry</code>.
@@ -1024,7 +1026,7 @@ public:
 };
 
 
-/**
+/*
  * Constants representing the dimensions of a point, a curve and a surface.
  * Also, constants representing the dimensions of the empty geometry and
  * non-empty geometries, and a wildcard dimension meaning "any dimension".
@@ -1051,15 +1053,20 @@ public:
 };
 
 /**
- *  An Envelope defines a rectangulare region of the 2D coordinate plane.
- *  It is often used to represent the bounding box of a Geometry,
- *  e.g. the minimum and maximum x and y values of the Coordinates.
- *  <p>
- *  Note that Envelopes support infinite or half-infinite regions, by using the values of
- *  <code>Double_POSITIVE_INFINITY</code> and <code>Double_NEGATIVE_INFINITY</code>.
- *  <p>
- *  When Envelope objects are created or initialized,
- *  the supplies extent values are automatically sorted into the correct order.
+ * \class Envelope geom.h geos.h
+ *
+ * \brief
+ * An Envelope defines a rectangulare region of the 2D coordinate plane.
+ *
+ * It is often used to represent the bounding box of a Geometry,
+ * e.g. the minimum and maximum x and y values of the Coordinates.
+ *  
+ * Note that Envelopes support infinite or half-infinite regions, by using
+ * the values of <code>Double_POSITIVE_INFINITY</code> and
+ * <code>Double_NEGATIVE_INFINITY</code>.
+ *
+ * When Envelope objects are created or initialized,
+ * the supplies extent values are automatically sorted into the correct order.
  *
  */
 class Envelope {
@@ -1240,8 +1247,8 @@ public:
 	* Note that user data objects are not present in geometries created
 	* by construction methods.
 	*
-	* @param userData an object, the semantics for which are defined by
-	* the application using this Geometry
+	* @param newUserData an object, the semantics for which are
+	* defined by the application using this Geometry
 	*/
 	void setUserData(void* newUserData);
 
@@ -1377,10 +1384,14 @@ public:
 	 */
 	virtual bool overlaps(const Geometry *g) const;
 
-	/** \brief
+	/**
+	 * \brief
 	 * Returns true if the elements in the DE-9IM intersection matrix
-	 * for the two Geometrys match the elements in intersectionPattern,
-	 * which may be: 0 1 2 T ( = 0, 1 or 2) F ( = -1) * ( = -1, 0, 1 or 2)
+	 * for the two Geometrys match the elements in intersectionPattern.
+	 *
+	 * IntersectionPattern elements may be: 0 1 2 T ( = 0, 1 or 2)
+	 * F ( = -1) * ( = -1, 0, 1 or 2).
+	 *
 	 * For more information on the DE-9IM, see the OpenGIS Simple
 	 * Features Specification.
 	 */
@@ -1478,13 +1489,15 @@ public:
 	/// Computes an interior point of this Geometry.
 	virtual Point* getInteriorPoint();
 
-	/** \brief
+	/*
+	 * \brief
 	 * Notifies this Geometry that its Coordinates have been changed
 	 * by an external party (using a CoordinateFilter, for example).
 	 */
 	virtual void geometryChanged();
 
-	/** \brief
+	/*
+	 * \brief
 	 * Notifies this Geometry that its Coordinates have been changed
 	 * by an external party.
 	 */
@@ -1547,8 +1560,8 @@ private:
 	Point* createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const;
 };
 
-/**
- *  <code>Geometry</code> classes support the concept of applying a <code>Geometry</code>
+/*
+ * <code>Geometry</code> classes support the concept of applying a <code>Geometry</code>
  *  filter to the <code>Geometry</code>. In the case of <code>GeometryCollection</code>
  *  subclasses, the filter is applied to every element <code>Geometry</code>. A
  *  <code>Geometry</code> filter can either record information about the <code>Geometry</code>
@@ -1568,11 +1581,11 @@ public:
 	virtual void filter_rw(Geometry *geom)=0;
 };
 
-/**
+/*
  * Represents a line segment defined by two {@link Coordinate}s.
  * Provides methods to compute various geometric properties
  * and relationships of line segments.
- * <p>
+ * 
  * This class is designed to be easily mutable (to the extent of
  * having its contained points public).
  * This supports a common pattern of reusing a single LineSegment
@@ -1701,13 +1714,12 @@ private:
 	int matrix[3][3];
 };
 
-/**
+/*
  *  Constants representing the location of a point relative to a geometry. They
  *  can also be thought of as the row or column index of a DE-9IM matrix. For a
  *  description of the DE-9IM, see the <A
  *  HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
  *  Specification for SQL</A> .
- *
  */
 class Location {
 public:
@@ -1782,6 +1794,8 @@ public:
 	*	If construction	fails "IllegalArgumentException *"
 	*	is thrown and it is your responsibility to delete newGeoms
 	*	vector and content.
+	*
+	* @param newFactory the GeometryFactory used to create this geometry
 	*/
 	GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
 
@@ -1793,6 +1807,8 @@ public:
 	*            but not <code>null</code>s.
 	*	     
 	*            fromGeoms vector and elements will be copied. 
+	*
+	* @param newFactory the GeometryFactory used to create this geometry
 	*/
 	GeometryCollection(const vector<Geometry *> &fromGeoms, const GeometryFactory *newFactory);
 
@@ -1874,8 +1890,9 @@ public:
 	 *	<code>Point</code> or <code>null</code> to create
 	 *	the empty geometry.
 	 *
+	 * @param newFactory the GeometryFactory used to create this geometry
 	 */  
-	Point(CoordinateSequence *newCoords, const GeometryFactory *factory);
+	Point(CoordinateSequence *newCoords, const GeometryFactory *newFactory);
 
 	Point(const Point &p); 
 	virtual ~Point();
@@ -1989,6 +2006,8 @@ public:
 	*      This array must not contain <code>null</code> elements.
 	*	If not null LinearRing will take ownership of points.
 	*
+	* @param newFactory the GeometryFactory used to create this geometry
+	*
 	*/
 	LinearRing(CoordinateSequence* points, const GeometryFactory *newFactory);
 
@@ -2027,15 +2046,17 @@ public:
 	 * Constructs a <code>Polygon</code> with the given exterior 
 	 * and interior boundaries.
 	 *
-	 * @param  shell     the outer boundary of the new Polygon,
+	 * @param  newShell  the outer boundary of the new Polygon,
 	 *                   or <code>null</code> or an empty
 	 *		     LinearRing if the empty geometry
 	 *                   is to be created.
 	 *
-	 * @param  holes     the LinearRings defining the inner
+	 * @param  newHoles  the LinearRings defining the inner
 	 *                   boundaries of the new Polygon, or
 	 *                   null or empty LinearRing 
 	 *                   if the empty  geometry is to be created.
+	 *
+	 * @param newFactory the GeometryFactory used to create this geometry
 	 *
 	 * Polygon will take ownership of Shell and Holes LinearRings 
 	 */
@@ -2096,6 +2117,8 @@ public:
 	*
 	*	Constructed object will take ownership of
 	*	the vector and its elements.
+	*
+	* @param newFactory the GeometryFactory used to create this geometry
 	*/
 	MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
 
@@ -2134,6 +2157,8 @@ public:
 	*
 	*	Constructed object will take ownership of
 	*	the vector and its elements.
+	*
+	* @param newFactory the GeometryFactory used to create this geometry
 	*/
 	MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *newFactory);
 
@@ -2171,6 +2196,8 @@ public:
 	*
 	*	Constructed object will take ownership of
 	*	the vector and its elements.
+	*
+	* @param newFactory the GeometryFactory used to create this geometry
 	*/
 	MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
@@ -2222,7 +2249,7 @@ public:
 	* the given PrecisionModel and the default CoordinateSequence
 	* implementation.
 	*
-	* @param precisionModel the PrecisionModel to use
+	* @param pm the PrecisionModel to use
 	*/
 	GeometryFactory(const PrecisionModel *pm);
 
@@ -2232,8 +2259,8 @@ public:
 	* the given {@link PrecisionModel} and spatial-reference ID,
 	* and the default CoordinateSequence implementation.
 	*
-	* @param precisionModel the PrecisionModel to use
-	* @param SRID the SRID to use
+	* @param pm the PrecisionModel to use
+	* @param newSRID the SRID to use
 	*/
 	GeometryFactory(const PrecisionModel* pm, int newSRID);
 
@@ -2300,7 +2327,7 @@ public:
 	LinearRing* createLinearRing() const;
 
 	/// Construct a LinearRing taking ownership of given arguments
-	LinearRing* createLinearRing(CoordinateSequence* coordinates) const;
+	LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
 
 	/// Construct a LinearRing with a deep-copy of given arguments
 	LinearRing* createLinearRing(const CoordinateSequence& coordinates) const;
@@ -2358,10 +2385,9 @@ private:
 	const CoordinateSequenceFactory *coordinateListFactory;
 };
 
-/**
+/*
  * Represents a planar triangle, and provides methods for calculating various
  * properties of triangles.
- *
  */
 class Triangle {
 public:

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -39,7 +42,7 @@
 
 namespace geos {
 
-/**
+/*
 * An edge of a polygonization graph.
 *
 * @version 1.4
@@ -53,7 +56,7 @@ public:
 };
 
 
-/**
+/*
  * Represents a ring of {@link PolygonizeDirectedEdge}s which form
  * a ring of a polygon.  The ring may be either an outer shell or a hole.
  *
@@ -157,7 +160,7 @@ public:
 };
 
 
-/**
+/*
  * A {@link DirectedEdge} of a {@link PolygonizeGraph}, which represents
  * an edge of a polygon formed by the graph.
  * May be logically deleted from the graph by setting the <code>marked</code> flag.
@@ -213,7 +216,7 @@ public:
 };
 
 
-/**
+/*
  * Represents a planar graph of edges that can be used to compute a
  * polygonization, and implements the algorithms to compute the
  * {@link EdgeRings} formed by the graph.
@@ -305,7 +308,7 @@ private:
 	polygonizeEdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 };
 
-/**
+/*
  * Polygonizes a set of Geometrys which contain linework that
  * represents the edges of a planar graph.
  * Any dimension of Geometry is handled - the constituent linework is extracted

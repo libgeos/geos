@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -81,7 +84,7 @@ private:
 	SweepLineInterval *sweepInt;
 };
 
-/**
+/*
  * A sweepline implements a sorted index on a set of intervals.
  * It is used to compute all overlaps between the interval in the index.
  */

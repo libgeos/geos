@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.3  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -53,7 +56,7 @@ using namespace std;
 namespace geos {
 
 class indexMonotoneChain;
-/**
+/*
  * The action for the internal iterator for performing
  * envelope select queries on a MonotoneChain
  */
@@ -77,7 +80,7 @@ public:
 	Envelope *tempEnv1;
 };
 
-/**
+/*
  * The action for the internal iterator for performing
  * overlap queries on a MonotoneChain
  */
@@ -109,7 +112,7 @@ public:
 };
 
 
-/**
+/*
  * MonotoneChains are a way of partitioning the segments of a linestring to
  * allow for fast searching of intersections.
  * They have the following properties:
@@ -182,7 +185,7 @@ private:
 	int id; // useful for optimizing chain comparisons
 };
 
-/**
+/*
  * A MonotoneChainBuilder implements functions to determine the monotone chains
  * in a sequence of points.
  */

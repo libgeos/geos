@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/19 13:19:30  strk
+ * Documentation fixes
+ *
  * Revision 1.12  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -121,9 +124,9 @@ Envelope::Envelope(const Coordinate& p1, const Coordinate& p2){
 }
 
 /**
- *  Creates an <code>Envelope</code> for a region defined by a single Coordinate.
+ *  Creates an Envelope for a region defined by a single Coordinate.
  *
- *@param  p1  the Coordinate
+ * @param  p  the Coordinate
  */
 Envelope::Envelope(const Coordinate& p){
 	init(p);
@@ -405,14 +408,14 @@ bool Envelope::contains(const Envelope* other) const {
 }
 
 /**
- *  Check if the point <code>p</code>
- *  overlaps (lies inside) the region of this <code>Envelope</code>.
+ * Check if the point <code>other</code>
+ * overlaps (lies inside) the region of this <code>Envelope</code>.
  *
- *@param  other  the <code>Coordinate</code> to be tested
- *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
+ * @param  other  the Coordinate to be tested
+ * @return  <code>true</code> if the point overlaps this Envelope
  */
-bool Envelope::intersects(const Coordinate& p) const {
-	return intersects(p.x, p.y);
+bool Envelope::intersects(const Coordinate& other) const {
+	return intersects(other.x, other.y);
 }
 
 /**

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -48,9 +51,9 @@
 
 namespace geos {
 
-/**
- * Represents a node in the topological graph used to compute spatial relationships.
- *
+/*
+ * Represents a node in the topological graph used to compute spatial
+ * relationships.
  */
 class RelateNode: public Node {
 public:
@@ -61,9 +64,8 @@ protected:
 	void computeIM(IntersectionMatrix *im);
 };
 
-/**
- * Computes the {@link EdgeEnd}s which arise from a noded {@link Edge}.
- *
+/*
+ * Computes the EdgeEnd objects which arise from a noded Edge.
  */
 class EdgeEndBuilder {
 public:
@@ -75,9 +77,9 @@ protected:
 	void createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiNext);
 };
 
-/**
- * Contains all {@link EdgeEnd}s which start at the same point and are parallel.
- *
+/*
+ * Contains all EdgeEnd objectss which start at the same point
+ * and are parallel.
  */
 class EdgeEndBundle: public EdgeEnd {
 public:
@@ -97,9 +99,10 @@ protected:
 	void computeLabelSide(int geomIndex,int side);
 };
 
-/**
- * An ordered list of {@link EdgeEndBundle}s around a {@link RelateNode}.
- * They are maintained in CCW order (starting with the positive x-axis) around the node
+/*
+ * An ordered list of EdgeEndBundle objects around a RelateNode.
+ * They are maintained in CCW order (starting with the positive x-axis)
+ * around the node
  * for efficient lookup and topology building.
  */
 class EdgeEndBundleStar: public EdgeEndStar {
@@ -110,21 +113,20 @@ public:
 	void updateIM(IntersectionMatrix *im);
 };
 
-/**
- * Used by the {@link NodeMap} in a {@link RelateNodeGraph} to create {@link RelateNode}s.
- *
+/*
+ * Used by the NodeMap in a RelateNodeGraph to create RelateNode objects.
  */
 class RelateNodeFactory: public NodeFactory {
 public:
 	Node* createNode(Coordinate coord);
 };
 
-/**
+/*
  * Implements the simple graph of Nodes and EdgeEnd which is all that is
  * required to determine topological relationships between Geometries.
  * Also supports building a topological graph of a single Geometry, to
  * allow verification of valid topology.
- * <p>
+ * 
  * It is <b>not</b> necessary to create a fully linked
  * PlanarGraph to determine relationships, since it is sufficient
  * to know how the Geometries interact locally around the nodes.
@@ -133,7 +135,8 @@ public:
  * cannot be computed robustly.
  * The only Nodes that are created are for improper intersections;
  * that is, nodes which occur at existing vertices of the Geometries.
- * Proper intersections (e.g. ones which occur between the interior of line segments)
+ * Proper intersections (e.g. ones which occur between the interior of
+ * line segments)
  * have their topology determined implicitly, without creating a Node object
  * to represent them.
  *
@@ -152,15 +155,13 @@ private:
 	NodeMap *nodes;
 };
 
-/**
+/*
  * Computes the topological relationship between two Geometries.
-
-
- * <p>
+ *
  * RelateComputer does not need to build a complete graph structure to compute
  * the IntersectionMatrix.  The relationship between the geometries can
  * be computed by simply examining the labelling of edges incident on each node.
- * <p>
+ * 
  * RelateComputer does not currently support arbitrary GeometryCollections.
  * This is because GeometryCollections can contain overlapping Polygons.
  * In order to correct compute relate on overlapping Polygons, they
@@ -199,16 +200,14 @@ private:
 	void labelIsolatedNode(Node *n,int targetIndex);
 };
 
-/**
-* Implements the relate() operation on {@link Geometry}s.
-* <p>
-* </b>
-* WARNING: The current implementation of this class will compute a result for
-* GeometryCollections.  However, the semantics of this operation are
-* not well-defined and the value returned may not represent
-* an appropriate notion of relate.
-* </b>
-*/
+/*
+ * Implements the relate() operation on Geometry.
+ * 
+ * WARNING: The current implementation of this class will compute a result for
+ * GeometryCollections.  However, the semantics of this operation are
+ * not well-defined and the value returned may not represent
+ * an appropriate notion of relate.
+ */
 class RelateOp: public GeometryGraphOperation {
 public:
 	static IntersectionMatrix* relate(const Geometry *a,const Geometry *b);

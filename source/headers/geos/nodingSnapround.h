@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -72,10 +75,9 @@ public:
 	void computeNodes(vector<SegmentString*>* edges, SegmentSnapper *ss, bool testAllSegments);
 };
 
-/**
+/*
  * Uses snap rounding to compute a rounded, noded arrangement from a
  * set of linestrings.
- *
  */
 class SnapRounder {
 protected:

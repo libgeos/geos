@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -38,8 +41,8 @@
 
 namespace geos {
 
-/**
- * An edge of a {@link LineMergeGraph}. The <code>marked</code> field indicates
+/*
+ * An edge of a LineMergeGraph. The <code>marked</code> field indicates
  * whether this Edge has been logically deleted from the graph.
  *
  */
@@ -58,7 +61,7 @@ public:
 };
 
 
-/**
+/*
  * A {@link com.vividsolutions.jts.planargraph.DirectedEdge} of a 
  * {@link LineMergeGraph}. 
  *
@@ -85,7 +88,7 @@ public:
 	LineMergeDirectedEdge* getNext();
 };
 
-/**
+/*
  * \brief
  * A sequence of LineMergeDirectedEdge forming one of the lines that will
  * be output by the line-merging process.
@@ -116,7 +119,7 @@ public:
 	LineString* toLineString();
 };
 
-/**
+/*
  * A planar graph of edges that is analyzed to sew the edges together. The 
  * <code>marked</code> flag on @{link com.vividsolutions.planargraph.Edge}s 
  * and @{link com.vividsolutions.planargraph.Node}s indicates whether they have been
@@ -134,7 +137,7 @@ private:
 	planarNode* getNode(Coordinate &coordinate);
 };
 
-/**
+/*
  * Sews together a set of fully noded LineStrings. Sewing stops at nodes of degree 1
  * or 3 or more -- the exception is an isolated loop, which only has degree-2 nodes,
  * in which case a node is simply chosen as a starting point. The direction of each

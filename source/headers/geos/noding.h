@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -87,7 +90,7 @@ using namespace std;
 
 namespace geos {
 
-/**
+/*
  * Represents an intersection point between two {@link SegmentString}s.
  *
  */
@@ -116,7 +119,7 @@ struct SegmentNodeLT {
 };
 
 class SegmentString;
-/**
+/*
  * A list of the {@link SegmentNode}s present along a
  * noded {@link SegmentString}.
  *
@@ -178,7 +181,7 @@ public:
 
 
 
-/**
+/*
  * Contains a list of consecutive line segments which can be used to node the segments.
  * The line segments are represented by an array of {@link Coordinate}s.
  *
@@ -226,7 +229,7 @@ public:
 	void addIntersection(Coordinate& intPt, int segmentIndex, double dist);
 };
 
-/**
+/*
  * Computes the intersections between two line segments in {@link SegmentString}s
  * and adds them to each string.
  * The {@link nodingSegmentIntersector} is passed to a {@link Noder}.
@@ -300,7 +303,7 @@ public:
 	void processIntersections(SegmentString *e0, int segIndex0,SegmentString *e1, int segIndex1);
 };
 
-/**
+/*
  * Computes all intersections between segments in a set of {@link SegmentString}s.
  * Intersections found are represented as {@link SegmentNode}s and add to the
  * {@link SegmentString}s in which they occur.
@@ -317,7 +320,7 @@ public:
 	virtual vector<SegmentString*>* node(vector<SegmentString*>* segStrings)=0;
 };
 
-/**
+/*
  * Nodes a set of {@link SegmentString}s by
  * performing a brute-force comparison of every segment to every other one.
  * This has n^2 performance, so is too slow for use on large numbers
@@ -332,7 +335,7 @@ private:
 	virtual void computeIntersects(SegmentString *e0, SegmentString *e1);
 };
 
-/**
+/*
  * Validates that a collection of {@link SegmentString}s is correctly noded.
  * Throws an appropriate exception if an noding error is found.
  *
@@ -357,7 +360,7 @@ private:
 };
 
 
-/**
+/*
  * Nodes a set of {@link SegmentStrings} using a index based
  * on {@link indexMonotoneChain}s and a {@link SpatialIndex}.
  * The {@link SpatialIndex} used should be something that supports
@@ -387,7 +390,7 @@ private:
 	void add(SegmentString *segStr);
 };
 
-/**
+/*
  * Nodes a set of SegmentStrings completely.
  * The set of segmentStrings is fully noded;
  * i.e. noding is repeated until no further

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.17  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).
  * Dropped WKTWriter default constructor (internally created GeometryFactory).
@@ -142,13 +145,13 @@ void WKTWriter::appendLineStringTaggedText(const LineString *lineString, int lev
 	appendLineStringText(lineString, level, false, writer);
 }
 
-/**
-*  Converts a <code>LinearRing</code> to &lt;LinearRing Tagged Text&gt;
-*  format, then appends it to the writer.
-*
-*@param  linearRing  the <code>LinearRing</code> to process
-*@param  writer      the output writer to append to
-*/
+/*
+ * Converts a <code>LinearRing</code> to &lt;LinearRing Tagged Text&gt;
+ * format, then appends it to the writer.
+ *
+ * @param  linearRing  the <code>LinearRing</code> to process
+ * @param  writer      the output writer to append to
+ */
 void WKTWriter::appendLinearRingTaggedText(const LinearRing* linearRing, int level, Writer *writer) {
 	writer->write("LINEARRING ");
 	appendLineStringText((LineString*)linearRing, level, false, writer);

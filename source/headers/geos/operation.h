@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -51,7 +54,7 @@ using namespace std;
 
 namespace geos {
 
-/**
+/*
  * The base class for operations that require {@link GeometryGraph)s.
  *
  */
@@ -81,7 +84,8 @@ public:
     	EndpointInfo(const Coordinate& newPt);
 	void addEndpoint(bool newIsClosed);
 };
-/**
+
+/*
  * Tests whether a {@link Geometry} is simple.
  * Only {@link Geometry}s whose definition allows them
  * to be simple or non-simple are tested.  (E.g. Polygons must be simple

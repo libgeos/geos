@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.4  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -67,7 +70,7 @@ namespace geos {
 
 class Coordinate;
 
-/**
+/*
  * \class NotRepresentableException geosAlgorithm.h geos/geosAlgorithm.h
  * \brief
  * Indicates that a HCoordinate has been computed which is
@@ -311,10 +314,9 @@ private:
 	double rParameter(const Coordinate& p1,const Coordinate& p2,const Coordinate& p) const;
 };
 
-/**
+/*
  * Stub version of RobustCGAlgorithms for backwards compatibility.
  * Will be deprecated in next release - use CGAlgorithms instead.
- *
  */
 class RobustCGAlgorithms: public CGAlgorithms {
 };
@@ -356,9 +358,13 @@ private:
 	static bool containsPoint(const Coordinate& p,const Geometry *geom);
 };
 
-/**
- * Computes the topological relationship ({@link Location})
+/*
+ * \class PointLocator geosAlgorithm.h geos/geosAlgorithm.h
+ *
+ * \brief
+ * Computes the topological relationship (Location)
  * of a single point to a Geometry.
+ *
  * The algorithm obeys the SFS boundaryDetermination rule to correctly determine
  * whether the point lies on the boundary or not.
  * Note that instances of this class are not reentrant.
@@ -441,9 +447,13 @@ public:
 	Coordinate* getCentroid() const;
 };
 
-/**
- * Computes the centroid of an area geometry.
- * <h2>Algorithm</h2>
+/*
+ * \class CentroidArea geosAlgorithm.h geos/geosAlgorithm.h
+ *
+ * \brief Computes the centroid of an area geometry.
+ *
+ * Algorithm:
+ *
  * Based on the usual algorithm for calculating
  * the centroid as a weighted sum of the centroids
  * of a decomposition of the area into (possibly overlapping) triangles.
@@ -473,9 +483,13 @@ private:
 	static inline double area2(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3);
 };
 
-/**
+/*
+ * \class InteriorPointPoint geosAlgorithm.h geos/geosAlgorithm.h
+ * \brief
  * Computes a point in the interior of an point geometry.
- * <h2>Algorithm</h2>
+ *
+ * Algorithm:
+ *
  * Find a point which is closest to the centroid of the geometry.
  */
 class InteriorPointPoint {
@@ -491,7 +505,7 @@ public:
 	Coordinate* getInteriorPoint() const;
 };
 
-/**
+/*
  * Computes a point in the interior of an linear geometry.
  * <h2>Algorithm</h2>
  * <ul>
@@ -517,7 +531,7 @@ private:
 	void add(const Coordinate *point);
 };
 
-/**
+/*
  * Computes a point in the interior of an area geometry.
  *
  * <h2>Algorithm</h2>
@@ -584,7 +598,7 @@ public:
 };
 
 
-/**
+/*
  * Computes the minimum diameter of a {@link Geometry}.
  * The minimum diameter is defined to be the
  * width of the smallest band that

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -105,9 +108,14 @@
 #include <vector>
 
 namespace geos {
-/**
- * A RightmostEdgeFinder find the DirectedEdge in a list which has the highest coordinate,
- * and which is oriented L to R at that point. (I.e. the right side is on the RHS of the edge.)
+
+/*
+ * \class RightmostEdgeFinder opBuffer.h geos/opBuffer.h
+ *
+ * \brief
+ * A RightmostEdgeFinder find the DirectedEdge in a list which has
+ * the highest coordinate, and which is oriented L to R at that point.
+ * (I.e. the right side is on the RHS of the edge.)
  */
 class RightmostEdgeFinder {
 private:
@@ -121,7 +129,7 @@ private:
 	void checkForRightmostCoordinate(DirectedEdge *de);
 	int getRightmostSide(DirectedEdge *de, int index);
 	int getRightmostSideOfSegment(DirectedEdge *de, int i);
-	/**
+	/*
 	* A RightmostEdgeFinder finds the DirectedEdge with the rightmost coordinate.
 	* The DirectedEdge returned is guranteed to have the R of the world on its RHS.
 	*/
@@ -132,15 +140,14 @@ public:
 	void findEdge(vector<DirectedEdge*>* dirEdgeList);
 };
 
-/**
- * A connected subset of the graph of
- * {@link DirectedEdges} and {@link Node}s.
- * Its edges will generate either
- * <ul>
- * <li> a single polygon in the complete buffer, with zero or more holes, or
- * <li> one or more connected holes
- * </ul>
+/*
+ * \class BufferSubgraph opBuffer.h geos/opBuffer.h
  *
+ * \brief A connected subset of the graph of DirectedEdges and Node.
+ * 
+ * Its edges will generate either
+ * - a single polygon in the complete buffer, with zero or more holes, or
+ * -  ne or more connected holes
  */
 class BufferSubgraph {
 private:
@@ -148,21 +155,21 @@ private:
 	vector<DirectedEdge*> *dirEdgeList;
 	vector<Node*> *nodes;
 	Coordinate *rightMostCoord;
-	/**
+	/*
 	* Adds all nodes and edges reachable from this node to the subgraph.
 	* Uses an explicit stack to avoid a large depth of recursion.
 	*
 	* @param node a node known to be in the subgraph
 	*/
 	void addReachable(Node *startNode);
-	/**
+	/*
 	* Adds the argument node and all its out edges to the subgraph
 	* @param node the node to add
 	* @param nodeStack the current set of nodes being traversed
 	*/
 	void add(Node *node,vector<Node*> *nodeStack);
 	void clearVisitedEdges();
-	/**
+	/*
 	* Compute depths for all dirEdges via breadth-first traversal of nodes in graph
 	* @param startEdge edge to start processing with
 	*/
@@ -176,11 +183,11 @@ public:
 	~BufferSubgraph();
 	vector<DirectedEdge*>* getDirectedEdges();
 	vector<Node*>* getNodes();
-	/**
+	/*
 	* Gets the rightmost coordinate in the edges of the subgraph
 	*/
 	Coordinate* getRightmostCoordinate();
-	/**
+	/*
 	* Creates the subgraph consisting of all edges reachable from this node.
 	* Finds the edges in the graph and the rightmost coordinate.
 	*
@@ -188,7 +195,7 @@ public:
 	*/
 	void create(Node *node);
 	void computeDepth(int outsideDepth);
-	/**
+	/*
 	* Find all edges whose depths indicates that they are in the result area(s).
 	* Since we want polygon shells to be
 	* oriented CW, choose dirEdges with the interior of the result on the RHS.
@@ -197,7 +204,7 @@ public:
 	* They do not form part of the result area boundary.
 	*/
 	void findResultEdges();
-	/**
+	/*
 	* BufferSubgraphs are compared on the x-value of their rightmost Coordinate.
 	* This defines a partial ordering on the graphs such that:
 	* <p>
@@ -211,134 +218,162 @@ public:
 	int compareTo(void* o);
 };
 
-/**
- * Computes the buffer of a geometry, for both positive and negative buffer distances.
- * <p>
+/*
+ * \class BufferOp opBuffer.h geos/opBuffer.h
+ *
+ * \brief
+ * Computes the buffer of a geometry, for both positive and negative
+ * buffer distances.
+ *
  * In GIS, the buffer of a geometry is defined as
  * the Minkowski sum or difference of the geometry
- * with a circle with radius equal to the absolute value of the buffer distance.
+ * with a circle with radius equal to the absolute value of the buffer
+ * distance.
  * In the CAD/CAM world buffers are known as </b>offset curves</b>.
- * <p>
+ * 
  * Since true buffer curves may contain circular arcs,
  * computed buffer polygons can only be approximations to the true geometry.
  * The user can control the accuracy of the curve approximation by specifying
  * the number of linear segments with which to approximate a curve.
- * <p>
- * The <b>end cap style</b> of a linear buffer may be specified. The
- * following end cap styles are supported:
- * <ul
- * <li>{@link CAP_ROUND} - the usual round end caps
- * <li>{@link CAP_BUTT} - end caps are truncated flat at the line ends
- * <li>{@link CAP_SQUARE} - end caps are squared off at the buffer distance beyond the line ends
- * </ul>
- * <p>
- * The computation uses an algorithm involving iterated noding and precision reduction
- * to provide a high degree of robustness.
+ * 
+ * The end cap style of a linear buffer may be specified.
+ * The following end cap styles are supported:
+ * - CAP_ROUND - the usual round end caps
+ * - CAP_BUTT - end caps are truncated flat at the line ends
+ * - CAP_SQUARE - end caps are squared off at the buffer distance
+ *   beyond the line ends
+ * 
+ * The computation uses an algorithm involving iterated noding and
+ * precision reduction to provide a high degree of robustness.
  */
 class BufferOp {
+
 private:
+
 	static int MAX_PRECISION_DIGITS;
-	/**
-	* Compute a reasonable scale factor to limit the precision of
-	* a given combination of Geometry and buffer distance.
-	* The scale factor is based on a heuristic.
-	*
-	* @param g the Geometry being buffered
-	* @param distance the buffer distance
-	* @param maxPrecisionDigits the mzx # of digits that should be allowed by
-	*          the precision determined by the computed scale factor
-	*
-	* @return a scale factor that allows a reasonable amount of precision for the buffer computation
-	*/
+
+	/*
+	 * Compute a reasonable scale factor to limit the precision of
+	 * a given combination of Geometry and buffer distance.
+	 * The scale factor is based on a heuristic.
+	 *
+	 * @param g the Geometry being buffered
+	 *
+	 * @param distance the buffer distance
+	 *
+	 * @param maxPrecisionDigits the mzx # of digits that should be
+	 *        allowed by the precision determined by the
+	 *        computed scale factor
+	 *
+	 * @return a scale factor that allows a reasonable amount of
+	 *         precision for the buffer computation
+	 */
 	static double precisionScaleFactor(Geometry *g,	double distance,int maxPrecisionDigits);
+
 	Geometry *argGeom;
+
 	TopologyException *saveException;
+
 	double distance;
+
 	int quadrantSegments;
+
 	int endCapStyle;
+
 	Geometry* resultGeometry;
+
 	void computeGeometry();
+
 	void bufferOriginalPrecision();
+
 	void bufferFixedPrecision(int precisionDigits);
+
 public:
+
 	enum {
-		/**
-		* Specifies a round line buffer end cap style.
-		*/
+		/// Specifies a round line buffer end cap style.
 		CAP_ROUND,
-		/**
-		* Specifies a butt (or flat) line buffer end cap style.
-		*/
+		/// Specifies a butt (or flat) line buffer end cap style.
 		CAP_BUTT,
-		/**
-		* Specifies a square line buffer end cap style.
-		*/
+		/// Specifies a square line buffer end cap style.
 		CAP_SQUARE
 	};
+
 	/**
-	* Computes the buffer of a geometry for a given buffer distance.
-	*
-	* @param g the geometry to buffer
-	* @param distance the buffer distance
-	* @return the buffer of the input geometry
-	*/
+	 * Computes the buffer of a geometry for a given buffer distance.
+	 *
+	 * @param g the geometry to buffer
+	 * @param distance the buffer distance
+	 * @return the buffer of the input geometry
+	 */
 	static Geometry* bufferOp(Geometry *g, double distance);
+
 	/**
-	* Comutes the buffer for a geometry for a given buffer distance
-	* and accuracy of approximation.
-	*
-	* @param g the geometry to buffer
-	* @param distance the buffer distance
-	* @param quadrantSegments the number of segments used to approximate a quarter circle
-	* @return the buffer of the input geometry
-	*
-	*/
+	 * Comutes the buffer for a geometry for a given buffer distance
+	 * and accuracy of approximation.
+	 *
+	 * @param g the geometry to buffer
+	 * @param distance the buffer distance
+	 * @param quadrantSegments the number of segments used to
+	 *        approximate a quarter circle
+	 * @return the buffer of the input geometry
+	 *
+	 */
 	static Geometry* bufferOp(Geometry *g, double distance, int quadrantSegments);
+
 	/**
-	* Initializes a buffer computation for the given geometry
-	*
-	* @param g the geometry to buffer
-	*/
+	 * Initializes a buffer computation for the given geometry
+	 *
+	 * @param g the geometry to buffer
+	 */
 	BufferOp(Geometry *g);
+
 	/**
-	* Specifies the end cap style of the generated buffer.
-	* The styles supported are {@link CAP_ROUND}, {@link CAP_BUTT}, and {@link CAP_SQUARE}.
-	* The default is CAP_ROUND.
-	*
-	* @param endCapStyle the end cap style to specify
-	*/
+	 * Specifies the end cap style of the generated buffer.
+	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
+	 * The default is CAP_ROUND.
+	 *
+	 * @param endCapStyle the end cap style to specify
+	 */
 	void setEndCapStyle(int nEndCapStyle);
+
 	/**
-	* Specifies the end cap style of the generated buffer.
-	* The styles supported are {@link CAP_ROUND}, {@link CAP_BUTT}, and {@link CAP_SQUARE}.
-	* The default is CAP_ROUND.
-	*
-	* @param endCapStyle the end cap style to specify
-	*/
+	 * Specifies the end cap style of the generated buffer.
+	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
+	 * The default is CAP_ROUND.
+	 *
+	 * @param endCapStyle the end cap style to specify
+	 */
 	void setQuadrantSegments(int nQuadrantSegments);
+
 	/**
-	* Returns the buffer computed for a geometry for a given buffer distance.
-	*
-	* @param g the geometry to buffer
-	* @param distance the buffer distance
-	* @return the buffer of the input geometry
-	*/
+	 * Returns the buffer computed for a geometry for a given buffer
+	 * distance.
+	 *
+	 * @param g the geometry to buffer
+	 * @param distance the buffer distance
+	 * @return the buffer of the input geometry
+	 */
 	Geometry* getResultGeometry(double nDistance);
+
 	/**
-	* Comutes the buffer for a geometry for a given buffer distance
-	* and accuracy of approximation.
-	*
-	* @param g the geometry to buffer
-	* @param distance the buffer distance
-	* @param quadrantSegments the number of segments used to approximate a quarter circle
-	* @return the buffer of the input geometry
-	*
-	* @deprecated use setQuadrantSegments instead
-	*/
+	 * Comutes the buffer for a geometry for a given buffer distance
+	 * and accuracy of approximation.
+	 *
+	 * @param g the geometry to buffer
+	 * @param distance the buffer distance
+	 * @param quadrantSegments the number of segments used to
+	 * approximate a quarter circle
+	 * @return the buffer of the input geometry
+	 *
+	 * @deprecated use setQuadrantSegments instead
+	 */
 	Geometry* getResultGeometry(double nDistance, int nQuadrantSegments);
 };
 
-/**
+/*
+ * \class OffsetCurveBuilder opBuffer.h geos/opBuffer.h
+ *
  * \brief
  * Computes the raw offset curve for a
  * single Geometry component (ring, line or point).
@@ -463,9 +498,14 @@ private:
 };
 
 
-/**
- * Creates all the raw offset curves for a buffer of a {@link Geometry}.
- * Raw curves need to be noded together and polygonized to form the final buffer area.
+/*
+ * \class OffsetCurveSetBuilder opBuffer.h geos/opBuffer.h
+ *
+ * \brief
+ * Creates all the raw offset curves for a buffer of a Geometry.
+ *
+ * Raw curves need to be noded together and polygonized to form the
+ * final buffer area.
  *
  */
 class OffsetCurveSetBuilder {
@@ -550,10 +590,13 @@ private:
 	bool isTriangleErodedCompletely(CoordinateSequence *triangleCoord,double bufferDistance);
 };
 
-/**
-* A segment from a directed edge which has been assigned a depth value
-* for its sides.
-*/
+/*
+ * \class DepthSegment opBuffer.h geos/opBuffer.h
+ *
+ * \brief
+ * A segment from a directed edge which has been assigned a depth value
+ * for its sides.
+ */
 class DepthSegment {
 private:
 	LineSegment *upwardSeg;
@@ -590,8 +633,11 @@ public:
 
 bool DepthSegmentLT(DepthSegment *first, DepthSegment *second);
 
-/**
- * Locates a subgraph inside a set of subgraphs,
+/*
+ * \class SubgraphDepthLocater opBuffer.h geos/opBuffer.h
+ *
+ * \brief Locates a subgraph inside a set of subgraphs,
+ *
  * in order to determine the outside depth of the subgraph.
  * The input subgraphs are assumed to have had depths
  * already calculated for their edges.
@@ -635,13 +681,20 @@ private:
 };
 
 bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
-/**
+
+/*
+ * \class BufferBuilder opBuffer.h geos/opBuffer.h
+ *
+ * \brief
  * Builds the buffer geometry for a given input geometry and precision model.
+ *
  * Allows setting the level of approximation for circular arcs,
  * and the precision model in which to carry out the computation.
- * <p>
+ * 
  * When computing buffers in floating point double-precision
- * it can happen that the process of iterated noding can fail to converge (terminate).
+ * it can happen that the process of iterated noding can fail to converge
+ * (terminate).
+ *
  * In this case a TopologyException will be thrown.
  * Retrying the computation in a fixed precision
  * can produce more robust results.

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -72,10 +75,9 @@ using namespace std;
 
 namespace geos {
 
-/**
+/*
  * Computes the overlay of two {@link Geometry}s.  The overlay
  * can be used to determine any boolean combination of the geometries.
- *
  */
 class OverlayOp: public GeometryGraphOperation {
 public:
@@ -234,7 +236,7 @@ private:
                               vector<Polygon*> *nResultPolyList);
 };
 
-/**
+/*
  * A ring of {@link Edge}s with the property that no node
  * has degree greater than 2.  These are the form of rings required
  * to represent polygons under the OGC SFS spatial data model.
@@ -249,7 +251,7 @@ public:
 	void setEdgeRing(DirectedEdge *de,EdgeRing *er);
 };
 
-/**
+/*
  * A ring of {@link edges} which may contain nodes of degree > 2.
  * A MaximalEdgeRing may represent two different spatial entities:
  * <ul>
@@ -277,7 +279,7 @@ public:
 	void linkDirectedEdgesForMinimalEdgeRings();
 };
 
-/**
+/*
  * Constructs {@link Point}s from the nodes of an overlay graph.
  */
 class PointBuilder {
@@ -302,7 +304,7 @@ public:
 	vector<Point*>* build(int opCode);
 };
 
-/**
+/*
  * Forms JTS LineStrings out of a the graph of {@link DirectedEdge}s
  * created by an {@link OverlayOp}.
  *
@@ -350,7 +352,7 @@ private:
 	void labelIsolatedLine(Edge *e,int targetIndex);
 };
 
-/**
+/*
  * Forms {@link Polygon}s out of a graph of {@link DirectedEdge}s.
  * The edges to use are marked as being in the result Area.
  * <p>
@@ -456,7 +458,7 @@ private:
 };
 
 
-/**
+/*
  * Creates nodes for use in the {@link PlanarGraph}s constructed during
  * overlay operations.
  *
@@ -467,7 +469,7 @@ public:
 	Node* createNode(Coordinate coord);
 };
 
-/**
+/*
  * Nodes a set of edges.
  * Takes one or more sets of edges and constructs a
  * new set of edges consisting of all the split edges created by

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.65  2004/07/19 13:19:30  strk
+ * Documentation fixes
+ *
  * Revision 1.64  2004/07/17 10:48:04  strk
  * fixed typo in documentation
  *
@@ -281,13 +284,14 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 //}
 
 /**
-* Tests whether the distance from this <code>Geometry</code>
-* to another is less than or equal to a specified value.
-*
-* @param geom the Geometry to check the distance to
-* @param distance the distance value to compare
-* @return <code>true</code> if the geometries are less than <code>distance</code> apart.
-*/
+ * Tests whether the distance from this <code>Geometry</code>
+ * to another is less than or equal to a specified value.
+ *
+ * @param geom the Geometry to check the distance to
+ * @param cDistance the distance value to compare
+ * @return <code>true</code> if the geometries are less than
+ *  <code>distance</code> apart.
+ */
 bool Geometry::isWithinDistance(const Geometry *geom,double cDistance) {
 	Envelope *env0=getEnvelopeInternal();
 	Envelope *env1=geom->getEnvelopeInternal();
@@ -809,11 +813,11 @@ int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const {
 }
 
 /**
-*  Returns the minimum distance between this <code>Geometry</code>
-*  and the <code>Geometry</code> g
-*
-*@param  g  the <code>Geometry</code> from which to compute the distance
-*/
+ *  Returns the minimum distance between this Geometry
+ *  and the other Geometry 
+ *
+ * @param  other  the Geometry from which to compute the distance
+ */
 double Geometry::distance(const Geometry *other) const {
 	Geometry *in1 = toInternalGeometry(this);
 	Geometry *in2 = toInternalGeometry(other);

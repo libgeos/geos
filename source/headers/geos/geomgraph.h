@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.3  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -85,11 +88,11 @@ class MonotoneChainEdge;
 class Position {
 public:
 	enum {
-		/** An indicator that a Location is <i>on</i> a GraphComponent */
+		/* An indicator that a Location is <i>on</i> a GraphComponent */
 		ON,
-		/** An indicator that a Location is to the <i>left</i> of a GraphComponent */  
+		/* An indicator that a Location is to the <i>left</i> of a GraphComponent */  
 		LEFT,
-		/** An indicator that a Location is to the <i>right</i> of a GraphComponent */  
+		/* An indicator that a Location is to the <i>right</i> of a GraphComponent */  
 		RIGHT
 	};
 	/**
@@ -197,7 +200,7 @@ private:
 	int depth[2][3];
 };
 
-/**
+/*
  * Utility functions for working with quadrants, which are numbered as follows:
  * <pre>
  * 1 | 0
@@ -221,7 +224,7 @@ public:
 	* Returns true if the quadrants are 1 and 3, or 2 and 4
 	*/
 	static bool isOpposite(int quad1, int quad2);
-	/** 
+	/* 
 	* Returns the right-hand quadrant of the halfplane defined by the two quadrants,
 	* or -1 if the quadrants are opposite, or the quadrant if they are identical.
 	*/
@@ -711,14 +714,15 @@ private:
 	void addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc);
 };
 
-/**
+class SegmentString;
+class NodingValidator;
+
+/*
  * Validates that a collection of SegmentStrings is correctly noded.
  * Throws an appropriate exception if an noding error is found.
  *
  * @version 1.4
  */
-class SegmentString;
-class NodingValidator;
 class EdgeNodingValidator {
 private:
 	static vector<SegmentString*>* toSegmentStrings(vector<Edge*> *edges);

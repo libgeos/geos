@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -43,9 +46,10 @@ using namespace std;
 
 namespace geos {
 
-/**
+/*
+ * \class BinTreeInterval indexBintree.h geos/indexBintree.h
+ * \brief
  * Represents an (1-dimensional) closed interval on the Real number line.
- *
  */
 class BinTreeInterval {
 public:
@@ -66,10 +70,13 @@ public:
 	bool contains(double p);
 };
 
-/**
+/*
+ * \class Key indexBintree.h geos/indexBintree.h
+ * \brief
  * A Key is a unique identifier for a node in a tree.
- * It contains a lower-left point and a level number. The level number
- * is the power of two for the size of the node envelope
+ *
+ * It contains a lower-left point and a level number.
+ * The level number is the power of two for the size of the node envelope
  */
 class Key {
 public:
@@ -90,9 +97,10 @@ private:
 };
 
 class BinTreeNode;
-/**
- * The base class for nodes in a {@link Bintree}.
- *
+
+/*
+ * \class NodeBase indexBintree.h geos/indexBintree.h
+ * \brief The base class for nodes in a Bintree.
  */
 class NodeBase {
 public:
@@ -117,9 +125,9 @@ protected:
 	virtual bool isSearchMatch(BinTreeInterval *interval)=0;
 };
 
-/**
- * A node of a {@link Bintree}.
- *
+/*
+ * \class BinTreeNode indexBintree.h geos/indexBintree.h
+ * \brief A node of a Bintree.
  */
 class BinTreeNode: public NodeBase {
 public:
@@ -141,11 +149,12 @@ protected:
 	bool isSearchMatch(BinTreeInterval *itemInterval);
 };
 
-/**
- * The root node of a single {@link Bintree}.
+/*
+ * \class Root indexBintree.h geos/indexBintree.h
+ * \brief The root node of a single Bintree.
+ *
  * It is centred at the origin,
  * and does not have a defined extent.
- *
  */
 class Root: public NodeBase {
 private:
@@ -160,18 +169,21 @@ protected:
 	bool isSearchMatch(BinTreeInterval *interval);
 };
 
-/**
- * An <code>BinTree</code> (or "Binary BinTreeInterval Tree")
+/*
+ * \class Bintree indexBintree.h geos/indexBintree.h
+ *
+ * \brief An BinTree (or "Binary BinTreeInterval Tree")
  * is a 1-dimensional version of a quadtree.
+ *
  * It indexes 1-dimensional intervals (which of course may
  * be the projection of 2-D objects on an axis).
  * It supports range searching
  * (where the range may be a single point).
- * <p>
+ *
  * This implementation does not require specifying the extent of the inserted
  * items beforehand.  It will automatically expand to accomodate any extent
  * of dataset.
- * <p>
+ * 
  * This index is different to the BinTreeInterval Tree of Edelsbrunner
  * or the Segment Tree of Bentley.
  */

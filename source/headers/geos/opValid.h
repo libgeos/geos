@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.2  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -51,7 +54,7 @@
 
 namespace geos {
 
-/**
+/*
  * Tests whether any of a set of {@link LinearRing}s are
  * nested inside another ring in the set, using a simple O(n^2)
  * comparison.
@@ -71,7 +74,7 @@ private:
 	Coordinate nestedPt;
 };
 
-/**
+/*
  * Contains information about the nature and location of a {@link Geometry}
  * validation error
  *
@@ -103,7 +106,7 @@ private:
 	Coordinate pt;
 };
 
-/**
+/*
  * Implements the appropriate checks for repeated points
  * (consecutive identical coordinates) as defined in the
  * JTS spec.
@@ -122,7 +125,7 @@ private:
 	bool hasRepeatedPoint(const MultiLineString *gc);
 };
 
-/**
+/*
  * Checks that a {@link GeometryGraph} representing an area
  * (a {@link Polygon} or {@link MultiPolygon} )
  * is consistent with the SFS semantics for area geometries.
@@ -174,7 +177,7 @@ public:
 };
 
 
-/**
+/*
  * Tests whether any of a set of {@link LinearRing}s are
  * nested inside another ring in the set, using a {@link SweepLineIndex}
  * index to speed up the comparisons.
@@ -206,7 +209,7 @@ private:
 	void buildIndex();
 };
 
-/**
+/*
  * Tests whether any of a set of {@link LinearRing}s are
  * nested inside another ring in the set, using a {@link Quadtree}
  * index to speed up the comparisons.
@@ -228,7 +231,7 @@ private:
 	void buildQuadtree();
 };
 
-/**
+/*
  * This class tests that the interior of an area {@link Geometry}
  *  ({@link Polygon}  or {@link MultiPolygon} )
  * is connected.  An area Geometry is invalid if the interior is disconnected.
@@ -277,7 +280,7 @@ protected:
 	void visitLinkedDirectedEdges(DirectedEdge *start);
 };
 
-/**
+/*
  * Implements the algorithsm required to compute the <code>isValid()</code> method
  * for {@link Geometry}s.
  *

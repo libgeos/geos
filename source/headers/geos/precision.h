@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
  * Revision 1.3  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -57,7 +60,7 @@ using namespace std;
 
 namespace geos {
 
-/**
+/*
  * Determines the maximum number of common most-significant
  * bits in the mantissa of one or numbers.
  * Can be used to compute the double-precision number which
@@ -133,8 +136,9 @@ public:
 	void filter_ro(const Coordinate *coord){}; //Not used
 };
 
-/**
- * Allow computing and removing common mantissa bits from one or more Geometries.
+/*
+ * Allow computing and removing common mantissa bits from one or
+ * more Geometries.
  *
  */
 class CommonBitsRemover {
@@ -175,7 +179,7 @@ public:
 	void addCommonBits(Geometry *geom);
 };
 
-/**
+/*
  * Provides versions of Geometry spatial functions which use
  * common bit removal to reduce the likelihood of robustness problems.
  * <p>
@@ -183,7 +187,6 @@ public:
  * reshifted result geometry, which means that it is possible
  * that the returned Geometry is invalid.
  * Client classes should check the validity of the returned result themselves.
- *
  */
 class CommonBitsOp {
 private:
@@ -268,10 +271,10 @@ public:
 };
 
 
-/**
+/*
  * Provides versions of Geometry spatial functions which use
- * enhanced precision techniques to reduce the likelihood of robustness problems.
- *
+ * enhanced precision techniques to reduce the likelihood of robustness
+ * problems.
  */
 class EnhancedPrecisionOp {
 public:
@@ -325,7 +328,7 @@ public:
 	CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *geom);
 };
 
-/**
+/*
  * Reduces the precision of a {@link Geometry}
  * according to the supplied {@link PrecisionModel}, without
  * attempting to preserve valid topology.
