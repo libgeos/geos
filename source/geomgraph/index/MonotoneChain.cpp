@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -47,7 +50,9 @@ MonotoneChain::MonotoneChain(MonotoneChainEdge *newMce,int newChainIndex) {
 MonotoneChain::~MonotoneChain() {
 }
 
-void MonotoneChain::computeIntersections(MonotoneChain *mc,SegmentIntersector *si){
+void
+MonotoneChain::computeIntersections(MonotoneChain *mc, SegmentIntersector *si)
+{
 	mce->computeIntersectsForChain(chainIndex,mc->mce,mc->chainIndex,si);
 }
 

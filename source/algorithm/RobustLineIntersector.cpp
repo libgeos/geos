@@ -11,35 +11,22 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.17  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.16  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
- *
- * Revision 1.15  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.14  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
+
+//#define DEBUG_INTERSECT 1
+//#define COMPUTE_Z 1
 
 namespace geos {
 
 RobustLineIntersector::RobustLineIntersector(){}
 RobustLineIntersector::~RobustLineIntersector(){}
 
-void RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) {
+void
+RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2)
+{
 	isProperVar=false;
 
 	// do between check first, since it is faster than the orientation test
@@ -57,22 +44,27 @@ void RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordi
 	result = DONT_INTERSECT;
 }
 
-int RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2){
+int
+RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)
+{
+#ifdef DEBUG_INTERSECT
+	cerr<<"RobustLineIntersector::computeIntersect called"<<endl;
+#endif // DEBUG_INTERSECT
+
 	isProperVar=false;
 
-    // first try a fast test to see if the envelopes of the lines intersect
+	// first try a fast test to see if the envelopes of the lines intersect
 	if (!Envelope::intersects(p1,p2,q1,q2))
 		return DONT_INTERSECT;
 
-    // for each endpoint, compute which side of the other segment it lies
-    // if both endpoints lie on the same side of the other segment,
-    // the segments do not intersect
+	// for each endpoint, compute which side of the other segment it lies
+	// if both endpoints lie on the same side of the other segment,
+	// the segments do not intersect
 	int Pq1=CGAlgorithms::orientationIndex(p1,p2,q1);
 	int Pq2=CGAlgorithms::orientationIndex(p1,p2,q2);
 
-    if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0)) {
-      return DONT_INTERSECT;
-    }
+	if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0)) 
+		return DONT_INTERSECT;
 
 	int Qp1=CGAlgorithms::orientationIndex(q1,q2,p1);
 	int Qp2=CGAlgorithms::orientationIndex(q1,q2,p2);
@@ -85,34 +77,66 @@ int RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinat
 	if (collinear) {
 		return computeCollinearIntersection(p1,p2,q1,q2);
 	}
-	/**
-	*  Check if the intersection is an endpoint. If it is, copy the endpoint as
-	*  the intersection point. Copying the point rather than computing it
-	*  ensures the point has the exact value, which is important for
-	*  robustness. It is sufficient to simply check for an endpoint which is on
-	*  the other line, since at this point we know that the inputLines must
-	*  intersect.
-	*/
+
+	/*
+	 * Check if the intersection is an endpoint.
+	 * If it is, copy the endpoint as
+	 * the intersection point. Copying the point rather than
+	 * computing it ensures the point has the exact value,
+	 * which is important for robustness. It is sufficient to
+	 * simply check for an endpoint which is on the other line,
+	 * since at this point we know that the inputLines must
+	 *  intersect.
+	 */
 	if (Pq1==0 || Pq2==0 || Qp1==0 || Qp2==0) {
+#ifdef COMPUTE_Z
+		int hits=0;
+		double z=0.0;
+#endif
 		isProperVar=false;
+#ifdef DEBUG_INTERSECT
+		cerr<<"p1:"<<p1.toString()<<" p2:"<<p2.toString()<<" q1:"<<q1.toString()<<" q2:"<<q2.toString()<<endl;
+#endif // DEBUG_INTERSECT
 		if (Pq1==0) {
 			intPt[0].setCoordinate(q1);
+#ifdef COMPUTE_Z
+			z += q1.z;
+			hits++;
+#endif
 		}
 		if (Pq2==0) {
 			intPt[0].setCoordinate(q2);
+#ifdef COMPUTE_Z
+			z += q2.z;
+			hits++;
+#endif
 		}
 		if (Qp1==0) {
 			intPt[0].setCoordinate(p1);
+#ifdef COMPUTE_Z
+			z += p1.z;
+			hits++;
+#endif
 		}
 		if (Qp2==0) {
 			intPt[0].setCoordinate(p2);
+#ifdef COMPUTE_Z
+			z += p2.z;
+			hits++;
+#endif
 		}
+#ifdef COMPUTE_Z
+		if ( hits ) intPt[0].z = z/hits;
+#endif
 	} else {
 		isProperVar=true;
 		Coordinate *c=intersection(p1, p2, q1, q2);
 		intPt[0].setCoordinate(*c);
 		delete c;
 	}
+#ifdef DEBUG_INTERSECT
+	cerr<<" intPt[0].z:"<<intPt[0].z<<endl;
+#endif // DEBUG_INTERSECT
 	return DO_INTERSECT;
 }
 
@@ -125,38 +149,64 @@ int RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinat
 //	}
 //}
 
-int RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) {
+int
+RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)
+{
+
+#ifdef DEBUG_INTERSECT
+	cerr<<"RobustLineIntersector::computeCollinearIntersection called"<<endl;
+	cerr<<" p1:"<<p1.toString()<<" p2:"<<p2.toString()<<" q1:"<<q1.toString()<<" q2:"<<q2.toString()<<endl;
+#endif // DEBUG_INTERSECT
+
 	bool p1q1p2=Envelope::intersects(p1,p2,q1);
 	bool p1q2p2=Envelope::intersects(p1,p2,q2);
 	bool q1p1q2=Envelope::intersects(q1,q2,p1);
 	bool q1p2q2=Envelope::intersects(q1,q2,p2);
 
 	if (p1q1p2 && p1q2p2) {
+#ifdef DEBUG_INTERSECT
+		cerr<<" p1q1p2 && p1q2p2"<<endl;
+#endif
 		intPt[0].setCoordinate(q1);
 		intPt[1].setCoordinate(q2);
 		return COLLINEAR;
 	}
 	if (q1p1q2 && q1p2q2) {
+#ifdef DEBUG_INTERSECT
+		cerr<<" q1p1q2 && q1p2q2"<<endl;
+#endif
 		intPt[0].setCoordinate(p1);
 		intPt[1].setCoordinate(p2);
 		return COLLINEAR;
 	}
 	if (p1q1p2 && q1p1q2) {
+#ifdef DEBUG_INTERSECT
+		cerr<<" p1q1p2 && q1p1q2"<<endl;
+#endif
 		intPt[0].setCoordinate(q1);
 		intPt[1].setCoordinate(p1);
 		return (q1==p1) && !p1q2p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q1p2 && q1p2q2) {
+#ifdef DEBUG_INTERSECT
+		cerr<<" p1q1p2 && q1p2q2"<<endl;
+#endif
 		intPt[0].setCoordinate(q1);
 		intPt[1].setCoordinate(p2);
 		return (q1==p2) && !p1q2p2 && !q1p1q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q2p2 && q1p1q2) {
+#ifdef DEBUG_INTERSECT
+		cerr<<" p1q2p2 && q1p1q2"<<endl;
+#endif
 		intPt[0].setCoordinate(q2);
 		intPt[1].setCoordinate(p1);
 		return (q2==p1) && !p1q1p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q2p2 && q1p2q2) {
+#ifdef DEBUG_INTERSECT
+		cerr<<" p1q2p2 && q1p2q2"<<endl;
+#endif
 		intPt[0].setCoordinate(q2);
 		intPt[1].setCoordinate(p2);
 		return (q2==p2) && !p1q1p2 && !q1p1q2 ? DO_INTERSECT : COLLINEAR;
@@ -164,22 +214,9 @@ int RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,con
 	return DONT_INTERSECT;
 }
 
-Coordinate* RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const {
-	//HCoordinate *l1=new HCoordinate(HCoordinate(p1),HCoordinate(p2));
-	//HCoordinate *l2=new HCoordinate(HCoordinate(q1),HCoordinate(q2));
-	//HCoordinate intHCoord(*l1,*l2);
-	//Coordinate intPt;
-	//intPt.setNull();
-	//try {
-	//	intPt.setCoordinate(intHCoord.getCoordinate());
-	//} catch (NotRepresentableException e) {
-	//	Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
-	//}
-	//if (makePrecise) {
-	//	intPt.makePrecise();
-	//}
-	//return Coordinate(intPt);
-
+Coordinate*
+RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const
+{
 	Coordinate *n1=new Coordinate(p1);
 	Coordinate *n2=new Coordinate(p2);
 	Coordinate *n3=new Coordinate(q1);
@@ -215,7 +252,9 @@ Coordinate* RobustLineIntersector::intersection(const Coordinate& p1,const Coord
 }
 
 
-void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt) const {
+void
+RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt) const
+{
 	normPt->x=smallestInAbsValue(n1->x,n2->x,n3->x,n4->x);
 	normPt->y=smallestInAbsValue(n1->y,n2->y,n3->y,n4->y);
 	n1->x-=normPt->x;
@@ -226,9 +265,19 @@ void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *
 	n3->y-=normPt->y;
 	n4->x-=normPt->x;
 	n4->y-=normPt->y;
+
+#ifdef COMPUTE_Z
+	normPt->z=smallestInAbsValue(n1->z,n2->z,n3->z,n4->z);
+	n1->z-=normPt->z;
+	n2->z-=normPt->z;
+	n3->z-=normPt->z;
+	n4->z-=normPt->z;
+#endif
 }
 
-double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) const {
+double
+RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) const
+{
 	double x=x1;
 	double xabs=fabs(x);
 	if(fabs(x2)<xabs) {
@@ -245,16 +294,19 @@ double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,d
 	return x;
 }
 
-/**
-* Test whether a point lies in the envelopes of both input segments.
-* A correctly computed intersection point should return <code>true</code>
-* for this test.
-* Since this test is for debugging purposes only, no attempt is
-* made to optimize the envelope test.
-*
-* @return <code>true</code> if the input point lies within both input segment envelopes
-*/
-bool RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt) {
+/*
+ * Test whether a point lies in the envelopes of both input segments.
+ * A correctly computed intersection point should return <code>true</code>
+ * for this test.
+ * Since this test is for debugging purposes only, no attempt is
+ * made to optimize the envelope test.
+ *
+ * @return <code>true</code> if the input point lies within both input
+ *	segment envelopes
+ */
+bool
+RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
+{
 	Envelope *env0=new Envelope(inputLines[0][0], inputLines[0][1]);
 	Envelope *env1=new Envelope(inputLines[1][0], inputLines[1][1]);
 	return env0->contains(intPt) && env1->contains(intPt);
@@ -262,3 +314,24 @@ bool RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt) {
 
 }
 
+/**********************************************************************
+ * $Log$
+ * Revision 1.18  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.17  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.16  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
+ * Revision 1.15  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
+ * Revision 1.14  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/

@@ -11,37 +11,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.18  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.17  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.16  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.15  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.14  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/io.h>
 #include <geos/util.h>
 #include <typeinfo>
 #include <stdio.h>
+
+//#define PRINT_Z 1
 
 namespace geos {
 
@@ -201,6 +178,10 @@ void WKTWriter::appendCoordinate(const Coordinate* coordinate, Writer *writer, c
 	out+=writeNumber(coordinate->x);
 	out+=" ";
 	out+=writeNumber(coordinate->y);
+#ifdef PRINT_Z
+	out+=" ";
+	out+=writeNumber(coordinate->z);
+#endif
 	writer->write(out);
 //	delete externalCoordinate;
 }
@@ -325,5 +306,36 @@ void WKTWriter::indent(int level, Writer *writer) {
 	//writer->write(stringOfChar(' ', INDENT * level));
 	writer->write(string(INDENT * level, ' '));
 }
+
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.19  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.18  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.17  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
+ * Revision 1.16  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.15  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
+ * Revision 1.14  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+
 

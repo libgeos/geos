@@ -11,22 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.13  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.12  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.11  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
@@ -131,10 +116,12 @@ bool LineIntersector::isCollinear() const {
 	return result==COLLINEAR;
 }
 
-/**
-* Computes the intersection of the lines p1-p2 and p3-p4
-*/
-void LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4) {
+/*
+ * Computes the intersection of the lines p1-p2 and p3-p4
+ */
+void
+LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4)
+{
 	inputLines[0][0]=p1;
 	inputLines[0][1]=p2;
 	inputLines[1][0]=p3;
@@ -327,4 +314,23 @@ bool LineIntersector::isInteriorIntersection(int inputLineIndex){
 }
 
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.14  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.13  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.12  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
+ * Revision 1.11  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

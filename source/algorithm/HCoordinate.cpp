@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
  * Revision 1.10  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -30,17 +33,19 @@
 
 namespace geos {
 
-/**
-* Computes the (approximate) intersection point between two line segments
-* using homogeneous coordinates.
-* <p>
-* Note that this algorithm is
-* not numerically stable; i.e. it can produce intersection points which
-* lie outside the envelope of the line segments themselves.  In order
-* to increase the precision of the calculation input points should be normalized
-* before passing them to this routine.
-*/
-Coordinate* HCoordinate::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
+/*
+ * Computes the (approximate) intersection point between two line segments
+ * using homogeneous coordinates.
+ * 
+ * Note that this algorithm is
+ * not numerically stable; i.e. it can produce intersection points which
+ * lie outside the envelope of the line segments themselves.  In order
+ * to increase the precision of the calculation input points should be
+ * normalized before passing them to this routine.
+ */
+Coordinate*
+HCoordinate::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2)
+{
 	auto_ptr<HCoordinate> intHCoord(new HCoordinate(HCoordinate(HCoordinate(p1),HCoordinate(p2)),HCoordinate(HCoordinate(q1),HCoordinate(q2))));
 	return intHCoord->getCoordinate();
 }

@@ -11,40 +11,20 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.18  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.17  2003/11/06 19:04:28  strk
- * removed useless Coordinate copy in ::createSplitEdge()
- *
  **********************************************************************/
-
 
 #include <geos/geomgraph.h>
 
 namespace geos {
 
-EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge) {
+EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge)
+{
 	list=new vector<EdgeIntersection*>();
 	edge=newEdge;
 }
 
-EdgeIntersectionList::~EdgeIntersectionList() {
+EdgeIntersectionList::~EdgeIntersectionList()
+{
 //	delete edge;
 	for(int i=0;i<(int)list->size();i++) {
 		delete (*list)[i];
@@ -52,7 +32,9 @@ EdgeIntersectionList::~EdgeIntersectionList() {
 	delete list;
 }
 
-EdgeIntersection* EdgeIntersectionList::add(const Coordinate& coord, int segmentIndex, double dist){
+EdgeIntersection*
+EdgeIntersectionList::add(const Coordinate& coord, int segmentIndex, double dist)
+{
 	vector<EdgeIntersection *>::iterator insertIt=list->begin();
 	bool isInList=findInsertionPoint(segmentIndex,dist,&insertIt);
 	EdgeIntersection *ei;
@@ -64,15 +46,21 @@ EdgeIntersection* EdgeIntersectionList::add(const Coordinate& coord, int segment
 	return ei;
 }
 
-vector<EdgeIntersection*>::iterator EdgeIntersectionList::iterator(){
+vector<EdgeIntersection*>::iterator
+EdgeIntersectionList::iterator()
+{
 	return list->begin();
 }
 
-bool EdgeIntersectionList::isEmpty() {
+bool
+EdgeIntersectionList::isEmpty()
+{
 	return list->empty();
 }
 
-bool EdgeIntersectionList::findInsertionPoint(int segmentIndex, double dist,vector<EdgeIntersection*>::iterator *insertIt){
+bool
+EdgeIntersectionList::findInsertionPoint(int segmentIndex, double dist,vector<EdgeIntersection*>::iterator *insertIt)
+{
 	vector<EdgeIntersection *>::iterator findIt=list->begin();
 	bool found=false;
 	while(findIt<list->end()) {
@@ -89,7 +77,9 @@ bool EdgeIntersectionList::findInsertionPoint(int segmentIndex, double dist,vect
 	return false;
 }
 
-bool EdgeIntersectionList::isIntersection(const Coordinate& pt){
+bool
+EdgeIntersectionList::isIntersection(const Coordinate& pt)
+{
 	vector<EdgeIntersection *>::iterator it;
 	for (it=list->begin();it<list->end();it++) {
 		EdgeIntersection *ei=*it;
@@ -99,13 +89,17 @@ bool EdgeIntersectionList::isIntersection(const Coordinate& pt){
 	return false;
 }
 
-void EdgeIntersectionList::addEndpoints(){
+void
+EdgeIntersectionList::addEndpoints()
+{
 	int maxSegIndex=edge->pts->getSize()-1;
 	add(edge->pts->getAt(0), 0, 0.0);
 	add(edge->pts->getAt(maxSegIndex), maxSegIndex, 0.0);
 }
 
-void EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList) {
+void
+EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList)
+{
 	// ensure that the list has entries for the first and last point of the edge
 	addEndpoints();
 	vector<EdgeIntersection *>::iterator it=list->begin();
@@ -121,7 +115,9 @@ void EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList) {
 	}
 }
 
-Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1) {
+Edge*
+EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1)
+{
 	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
 	const Coordinate& lastSegStartPt=edge->pts->getAt(ei1->segmentIndex);
 	// if the last intersection point is not equal to the its segment start pt,
@@ -145,7 +141,9 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	return new Edge(pts,new Label(edge->getLabel()));
 }
 
-string EdgeIntersectionList::print(){
+string
+EdgeIntersectionList::print()
+{
 	string out="Intersections: ";
 	vector<EdgeIntersection *>::iterator it;
 	for (it=list->begin();it<list->end();it++) {
@@ -156,4 +154,30 @@ string EdgeIntersectionList::print(){
 }
 
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.2  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.18  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.17  2003/11/06 19:04:28  strk
+ * removed useless Coordinate copy in ::createSplitEdge()
+ *
+ **********************************************************************/
 

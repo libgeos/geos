@@ -11,46 +11,37 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.9  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2004/06/30 20:59:13  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
-
 #include <geos/opOverlay.h>
+#include <geos/io.h>
 #include <stdio.h>
 
 namespace geos {
 
-PointBuilder::PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory,PointLocator *newPtLocator) {
+PointBuilder::PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory,PointLocator *newPtLocator)
+{
 	op=newOp;
 	geometryFactory=newGeometryFactory;
 	ptLocator=newPtLocator;
 }
 
-/**
-* @return a list of the Points in the result of the specified overlay operation
-*/
-vector<Point*>* PointBuilder::build(int opCode){
+/*
+ * @return a list of the Points in the result of the specified
+ * overlay operation
+ */
+vector<Point*>*
+PointBuilder::build(int opCode)
+{
 	vector<Node*>* nodeList=collectNodes(opCode);
 	vector<Point*>* resultPointList=simplifyPoints(nodeList);
 	delete nodeList;
 	return resultPointList;
 }
 
-vector<Node*>* PointBuilder::collectNodes(int opCode){
+vector<Node*>*
+PointBuilder::collectNodes(int opCode)
+{
 	vector<Node*>* resultNodeList=new vector<Node*>();
 	// add nodes from edge intersections which have not already been included in the result
 	map<Coordinate,Node*,CoordLT> *nodeMap=op->getGraph()->getNodeMap()->nodeMap;
@@ -66,14 +57,17 @@ vector<Node*>* PointBuilder::collectNodes(int opCode){
 	}
 	return resultNodeList;
 }
-/**
-* This method simplifies the resultant Geometry by finding and eliminating
-* "covered" points.
-* A point is covered if it is contained in another element Geometry
-* with higher dimension (e.g. a point might be contained in a polygon,
-* in which case the point can be eliminated from the resultant).
-*/
-vector<Point*>* PointBuilder::simplifyPoints(vector<Node*> *resultNodeList) {
+
+/*
+ * This method simplifies the resultant Geometry by finding and eliminating
+ * "covered" points.
+ * A point is covered if it is contained in another element Geometry
+ * with higher dimension (e.g. a point might be contained in a polygon,
+ * in which case the point can be eliminated from the resultant).
+ */
+vector<Point*>*
+PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
+{
 	vector<Point*>* nonCoveredPointList=new vector<Point*>();
 	for(int i=0;i<(int)resultNodeList->size();i++) {
 		Node *n=(*resultNodeList)[i];
@@ -85,5 +79,26 @@ vector<Point*>* PointBuilder::simplifyPoints(vector<Node*> *resultNodeList) {
 	}
 	return nonCoveredPointList;
 }
+
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.10  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.9  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.8  2004/06/30 20:59:13  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.7  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

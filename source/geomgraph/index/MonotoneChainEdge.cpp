@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
  * Revision 1.3  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -112,20 +115,24 @@ void MonotoneChainEdge::computeIntersects(MonotoneChainEdge *mce,SegmentIntersec
 	}
 }
 
-void MonotoneChainEdge::computeIntersectsForChain(int chainIndex0,MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si){
-	computeIntersectsForChain((*startIndex)[chainIndex0],(*startIndex)[chainIndex0+1],mce,
-							  (*(mce->startIndex))[chainIndex1],(*(mce->startIndex))[chainIndex1+1],si);
+void
+MonotoneChainEdge::computeIntersectsForChain(int chainIndex0,
+	MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si)
+{
+	computeIntersectsForChain((*startIndex)[chainIndex0],(*startIndex)[chainIndex0+1],mce, (*(mce->startIndex))[chainIndex1],(*(mce->startIndex))[chainIndex1+1],si);
 }
 
-void MonotoneChainEdge::computeIntersectsForChain(int start0,int end0,MonotoneChainEdge *mce,
-													int start1,int end1,SegmentIntersector *ei){
+void
+MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
+	MonotoneChainEdge *mce, int start1, int end1, SegmentIntersector *ei)
+{
 	const Coordinate& p00=pts->getAt(start0);
 	const Coordinate& p01=pts->getAt(end0);
 	const Coordinate& p10=(mce->pts)->getAt(start1);
 	const Coordinate& p11=(mce->pts)->getAt(end1);
 	// terminating condition for the recursion
 	if (end0-start0==1 && end1-start1==1) {
-		ei->addIntersections(e,start0,mce->e,start1);
+		ei->addIntersections(e, start0, mce->e, start1);
 		return;
 	}
 	// nothing to do if the envelopes of these chains don't overlap

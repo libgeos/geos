@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
  * Revision 1.2  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -48,7 +51,9 @@ SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector(){
 	delete events;
 }
 
-void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments){
+void
+SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges, SegmentIntersector *si, bool testAllSegments)
+{
 	if (testAllSegments)
 		add(edges,NULL);
 	else
@@ -56,7 +61,9 @@ void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,Seg
 	computeIntersections(si);
 }
 
-void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si){
+void
+SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0, vector<Edge*> *edges1, SegmentIntersector *si)
+{
 	add(edges0,edges0);
 	add(edges1,edges1);
 	computeIntersections(si);
@@ -110,7 +117,9 @@ void SimpleMCSweepLineIntersector::prepareEvents(){
 	}
 }
 
-void SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si){
+void
+SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si)
+{
 	nOverlaps=0;
 	prepareEvents();
 	for(int i=0;i<(int)events->size();i++) {
@@ -121,21 +130,24 @@ void SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si){
 	}
 }
 
-void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev0,
-													SegmentIntersector *si){
+void
+SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
+	SweepLineEvent *ev0, SegmentIntersector *si)
+{
 	MonotoneChain *mc0=(MonotoneChain*) ev0->getObject();
-	/**
-	* Since we might need to test for self-intersections,
-	* include current insert event object in list of event objects to test.
-	* Last index can be skipped, because it must be a Delete event.
-	*/
-	for(int i=start;i<end;i++) {
+	/*
+	 * Since we might need to test for self-intersections,
+	 * include current insert event object in list of event objects to test.
+	 * Last index can be skipped, because it must be a Delete event.
+	 */
+	for(int i=start; i<end; i++) {
 		SweepLineEvent *ev1=(*events)[i];
 		if (ev1->isInsert()) {
 			MonotoneChain *mc1=(MonotoneChain*) ev1->getObject();
 			// don't compare edges in same group
 			// null group indicates that edges should be compared
-			if (ev0->edgeSet==NULL || (ev0->edgeSet!=ev1->edgeSet)) {
+			if (ev0->edgeSet==NULL || (ev0->edgeSet!=ev1->edgeSet))
+			{
 				mc0->computeIntersections(mc1,si);
 				nOverlaps++;
 			}

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
  * Revision 1.5  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.
@@ -59,28 +62,33 @@
 
 namespace geos {
 
-/**
-* This method implements the Boundary Determination Rule
-* for determining whether
-* a component (node or edge) that appears multiple times in elements
-* of a MultiGeometry is in the boundary or the interior of the Geometry
-* <br>
-* The SFS uses the "Mod-2 Rule", which this function implements
-* <br>
-* An alternative (and possibly more intuitive) rule would be
-* the "At Most One Rule":
-*    isInBoundary = (componentCount == 1)
-*/
-bool GeometryGraph::isInBoundary(int boundaryCount){
+/*
+ * This method implements the Boundary Determination Rule
+ * for determining whether
+ * a component (node or edge) that appears multiple times in elements
+ * of a MultiGeometry is in the boundary or the interior of the Geometry
+ * <br>
+ * The SFS uses the "Mod-2 Rule", which this function implements
+ * <br>
+ * An alternative (and possibly more intuitive) rule would be
+ * the "At Most One Rule":
+ *    isInBoundary = (componentCount == 1)
+ */
+bool
+GeometryGraph::isInBoundary(int boundaryCount)
+{
 	// the "Mod-2 Rule"
 	return boundaryCount%2==1;
 }
 
-int GeometryGraph::determineBoundary(int boundaryCount){
+int
+GeometryGraph::determineBoundary(int boundaryCount)
+{
 	return isInBoundary(boundaryCount)?Location::BOUNDARY : Location::INTERIOR;
 }
 
-GeometryGraph::GeometryGraph():PlanarGraph(){
+GeometryGraph::GeometryGraph():PlanarGraph()
+{
 	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
 	useBoundaryDeterminationRule=false;
 	boundaryNodes=NULL;
@@ -97,7 +105,8 @@ GeometryGraph::~GeometryGraph(){
 	delete lineEdgeMap;
 }
 
-GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom):PlanarGraph() {
+GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom):PlanarGraph()
+{
 	hasTooFewPointsVar=false;
 	boundaryNodes=NULL;
 	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
@@ -111,7 +120,9 @@ GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom):Pla
 	}
 }
 
-EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {
+EdgeSetIntersector*
+GeometryGraph::createEdgeSetIntersector()
+{
 	// various options for computing intersections, from slowest to fastest
 
 	//private EdgeSetIntersector esi = new SimpleEdgeSetIntersector();
@@ -148,17 +159,23 @@ EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {
 //	return SRID;
 //}
 
-const Geometry* GeometryGraph::getGeometry() {
+const
+Geometry* GeometryGraph::getGeometry()
+{
 	return parentGeom;
 }
 
-vector<Node*>* GeometryGraph::getBoundaryNodes() {
+vector<Node*>*
+GeometryGraph::getBoundaryNodes()
+{
 	if (boundaryNodes==NULL)
 		boundaryNodes=nodes->getBoundaryNodes(argIndex);
 	return boundaryNodes;
 }
 
-CoordinateSequence* GeometryGraph::getBoundaryPoints() {
+CoordinateSequence*
+GeometryGraph::getBoundaryPoints()
+{
 	vector<Node*> *coll=getBoundaryNodes();
 	CoordinateSequence *pts=new DefaultCoordinateSequence((int)coll->size());
 	int i=0;
@@ -170,11 +187,15 @@ CoordinateSequence* GeometryGraph::getBoundaryPoints() {
 	return pts;
 }
 
-Edge* GeometryGraph::findEdge(const LineString *line){
+Edge*
+GeometryGraph::findEdge(const LineString *line)
+{
 	return lineEdgeMap->find(line)->second;
 }
 
-void GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist) {
+void
+GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist)
+{
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		e->eiList->addSplitEdges(edgelist);
@@ -215,7 +236,9 @@ GeometryGraph::add(const Geometry *g)
 	}
 }
 
-void GeometryGraph::addCollection(const GeometryCollection *gc) {
+void
+GeometryGraph::addCollection(const GeometryCollection *gc)
+{
 	for (int i=0;i<gc->getNumGeometries();i++) {
 		const Geometry *g=gc->getGeometryN(i);
 		add(g);
@@ -225,7 +248,9 @@ void GeometryGraph::addCollection(const GeometryCollection *gc) {
 /**
 * Add a Point to the graph.
 */
-void GeometryGraph::addPoint(const Point *p){
+void
+GeometryGraph::addPoint(const Point *p)
+{
 	const Coordinate& coord=*(p->getCoordinate());
 	insertPoint(argIndex,coord,Location::INTERIOR);
 }
@@ -235,7 +260,9 @@ void GeometryGraph::addPoint(const Point *p){
 * If the ring is in the opposite orientation,
 * the left and right locations must be interchanged.
 */
-void GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight) {
+void
+GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
+{
 	CoordinateSequence *lrcl;
 	lrcl = lr->getCoordinates();
 	CoordinateSequence* coord=CoordinateSequence::removeRepeatedPoints(lrcl);
@@ -259,7 +286,9 @@ void GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight
 	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
 }
 
-void GeometryGraph::addPolygon(const Polygon *p){
+void
+GeometryGraph::addPolygon(const Polygon *p)
+{
 	addPolygonRing((LinearRing*) p->getExteriorRing(),Location::EXTERIOR,Location::INTERIOR);
 	for (int i=0;i<p->getNumInteriorRing();i++) {
 		// Holes are topologically labelled opposite to the shell, since
@@ -269,7 +298,9 @@ void GeometryGraph::addPolygon(const Polygon *p){
 	}
 }
 
-void GeometryGraph::addLineString(const LineString *line){
+void
+GeometryGraph::addLineString(const LineString *line)
+{
 	CoordinateSequence* coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
 	if(coord->getSize()<2) {
 		hasTooFewPointsVar=true;
@@ -305,7 +336,9 @@ void GeometryGraph::addLineString(const LineString *line){
 * Add an Edge computed externally.  The label on the Edge is assumed
 * to be correct.
 */
-void GeometryGraph::addEdge(Edge *e) {
+void
+GeometryGraph::addEdge(Edge *e)
+{
 	insertEdge(e);
 	const CoordinateSequence* coord=e->getCoordinates();
 	// insert the endpoint as a node, to mark that it is on the boundary
@@ -313,22 +346,26 @@ void GeometryGraph::addEdge(Edge *e) {
 	insertPoint(argIndex,coord->getAt(coord->getSize()-1),Location::BOUNDARY);
 }
 
-/**
-* Add a point computed externally.  The point is assumed to be a
-* Point Geometry part, which has a location of INTERIOR.
-*/
-void GeometryGraph::addPoint(Coordinate& pt) {
+/*
+ * Add a point computed externally.  The point is assumed to be a
+ * Point Geometry part, which has a location of INTERIOR.
+ */
+void
+GeometryGraph::addPoint(Coordinate& pt)
+{
 	insertPoint(argIndex,pt,Location::INTERIOR);
 }
 
-/**
-* Compute self-nodes, taking advantage of the Geometry type to
-* minimize the number of intersection tests.  (E.g. rings are
-* not tested for self-intersection, since they are assumed to be valid).
-* @param li the LineIntersector to use
-* @param computeRingSelfNodes if <false>, intersection checks are optimized to not test rings for self-intersection
-* @return the SegmentIntersector used, containing information about the intersections found
-*/
+/*
+ * Compute self-nodes, taking advantage of the Geometry type to
+ * minimize the number of intersection tests.  (E.g. rings are
+ * not tested for self-intersection, since they are assumed to be valid).
+ * @param li the LineIntersector to use
+ * @param computeRingSelfNodes if <false>, intersection checks are
+ *	optimized to not test rings for self-intersection
+ * @return the SegmentIntersector used, containing information about
+ *	the intersections found
+ */
 SegmentIntersector*
 GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 {
@@ -345,7 +382,7 @@ GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 	}
 	else
 	{
-		esi->computeIntersections(edges,si,true);
+		esi->computeIntersections(edges, si, true);
 	}
 	//System.out.println("SegmentIntersector # tests = " + si.numTests);
 	addSelfIntersectionNodes(argIndex);
@@ -363,7 +400,9 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	return si;
 }
 
-void GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLocation){
+void
+GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLocation)
+{
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	if (lbl==NULL) {
@@ -378,7 +417,9 @@ void GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLoca
 * an endpoint of a Curve is on the boundary
 * iff if it is in the boundaries of an odd number of Geometries
 */
-void GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord){
+void
+GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
+{
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	// the new point to insert is on a boundary
@@ -392,7 +433,9 @@ void GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord){
 	lbl->setLocation(argIndex,newLoc);
 }
 
-void GeometryGraph::addSelfIntersectionNodes(int argIndex){
+void
+GeometryGraph::addSelfIntersectionNodes(int argIndex)
+{
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
@@ -404,13 +447,15 @@ void GeometryGraph::addSelfIntersectionNodes(int argIndex){
 	}
 }
 
-/**
-* Add a node for a self-intersection.
-* If the node is a potential boundary node (e.g. came from an edge which
-* is a boundary) then insert it as a potential boundary node.
-* Otherwise, just add it as a regular node.
-*/
-void GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc){
+/*
+ * Add a node for a self-intersection.
+ * If the node is a potential boundary node (e.g. came from an edge which
+ * is a boundary) then insert it as a potential boundary node.
+ * Otherwise, just add it as a regular node.
+ */
+void
+GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc)
+{
 	// if this node is already a boundary node, don't change it
 	if (isBoundaryNode(argIndex,coord)) return;
 	if (loc==Location::BOUNDARY && useBoundaryDeterminationRule)
@@ -419,15 +464,21 @@ void GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate& coord,int l
 		insertPoint(argIndex,coord,loc);
 }
 
-vector<Edge*> *GeometryGraph::getEdges() {
+vector<Edge*> *
+GeometryGraph::getEdges()
+{
 	return edges;
 }
 
-bool GeometryGraph::hasTooFewPoints() {
+bool
+GeometryGraph::hasTooFewPoints()
+{
 	return hasTooFewPointsVar;
 }
 
-const Coordinate& GeometryGraph::getInvalidPoint() {
+const Coordinate&
+GeometryGraph::getInvalidPoint()
+{
 	return invalidPoint;
 }
 
