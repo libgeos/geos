@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.31  2003/10/16 12:09:48  strk
+* bug fixed in exception handling
+*
 * Revision 1.30  2003/10/16 08:48:06  strk
 * Exceptions handled
 *
@@ -416,6 +419,6 @@ try{
 #endif
 
 } catch (GEOSException *exc) {
-	cerr<<"Exception: "<<exc<<endl;
+	cerr<<"Exception: "<<exc->toString()<<endl;
 }
 }
