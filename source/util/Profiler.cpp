@@ -90,6 +90,11 @@ Profiler::Profiler()
 
 Profiler::~Profiler()
 {
+	map<string, Profile *>::const_iterator it;
+	for ( it=profs.begin(); it != profs.end(); ++it )
+	{
+		delete it->second;
+	}
 }
 
 void
@@ -149,7 +154,7 @@ operator<< (ostream &os, const Profile &prof)
 ostream&
 operator<< (ostream &os, const Profiler &prof)
 {
-	map<string, Profile *>::const_iterator it = prof.profs.begin();
+	map<string, Profile *>::const_iterator it;
 	for ( it=prof.profs.begin(); it != prof.profs.end(); ++it )
 	{
 		os<<*(it->second)<<endl;
@@ -162,6 +167,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2004/12/03 22:52:56  strk
+ * enforced const return of CoordinateSequence::toVector() method to derivate classes.
+ *
  * Revision 1.3  2004/11/08 12:15:35  strk
  * Added number of gathered timings in output.
  *

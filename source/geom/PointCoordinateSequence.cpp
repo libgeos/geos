@@ -11,20 +11,16 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.1  2004/07/08 19:38:56  strk
- * renamed from *List* equivalents
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <stdio.h>
 
 namespace geos {
 
-PointCoordinateSequence::PointCoordinateSequence(const CoordinateSequence *c){
+PointCoordinateSequence::PointCoordinateSequence(const CoordinateSequence *c)
+{
+	cached_vector = NULL;
 	vect=new vector<point_3d>();
 	point_3d pt;
 	int size=c->getSize();
@@ -38,9 +34,11 @@ PointCoordinateSequence::PointCoordinateSequence(const CoordinateSequence *c){
 
 PointCoordinateSequence::PointCoordinateSequence() {
 	vect=new vector<point_3d>();
+	cached_vector = NULL;
 }
 
 PointCoordinateSequence::PointCoordinateSequence(int n) {
+	cached_vector = NULL;
 	vect=new vector<point_3d>();
 //	vect->reserve(n);
 	vect->resize(n);
@@ -49,10 +47,12 @@ PointCoordinateSequence::PointCoordinateSequence(int n) {
 PointCoordinateSequence::PointCoordinateSequence(const Coordinate& c) {
 	point_3d pt={c.x,c.y,c.z};
 	vect=new vector<point_3d>(1,pt);
+	cached_vector = NULL;
 }
 
 PointCoordinateSequence::PointCoordinateSequence(const PointCoordinateSequence &c) {
 	vect=new vector<point_3d>(*(c.vect));
+	cached_vector = NULL;
 }
 
 CoordinateSequence *
@@ -77,11 +77,17 @@ void PointCoordinateSequence::setPoints(vector<point_3d> &v) {
 	vect=new vector<point_3d>(v);
 }
 
-vector<Coordinate>* PointCoordinateSequence::toVector() const {
+const vector<Coordinate>*
+PointCoordinateSequence::toVector() const
+{
+	if ( cached_vector ) return cached_vector;
 	vector<Coordinate>* v=new vector<Coordinate>();
-	for(unsigned int i=0; i<vect->size(); i++) {
-		v->push_back(*(new Coordinate((*vect)[i].x,(*vect)[i].y,(*vect)[i].z)));
+	for(unsigned int i=0; i<vect->size(); i++)
+	{
+		Coordinate c((*vect)[i].x, (*vect)[i].y, (*vect)[i].z);
+		v->push_back(c);
 	}
+	cached_vector = v;
 	return v;
 }
 
@@ -94,11 +100,13 @@ bool PointCoordinateSequence::isEmpty() const {
 }
 
 void PointCoordinateSequence::add(const Coordinate& c){
+	delete cached_vector; cached_vector = NULL;
 	point_3d pt={c.x,c.y,c.z};
 	vect->push_back(pt);
 }
 
 void PointCoordinateSequence::add(point_3d p){
+	delete cached_vector; cached_vector = NULL;
 	vect->push_back(p);
 }
 
@@ -124,24 +132,19 @@ point_3d PointCoordinateSequence::getPointAt(int pos){
 
 void PointCoordinateSequence::setAt(const Coordinate& c, int pos){
 	point_3d pt={c.x,c.y,c.z};
-//	if (pos>=0 && pos<=vect->size()-1) 
-		(*vect)[pos]=pt;
-//	else
-//		throw "PointCoordinateSequence exception: can't change element\n";
+	(*vect)[pos]=pt;
+	if ( cached_vector ) (*cached_vector)[pos] = c;
 }
 
 void PointCoordinateSequence::setAt(point_3d p, int pos){
-//	if (pos>=0 && pos<=vect->size()-1) 
-		(*vect)[pos]=p;
-//	else
-//		throw "PointCoordinateSequence exception: can't change element\n";
+	(*vect)[pos]=p;
+	Coordinate c(p.x, p.y, p.z);
+	if ( cached_vector ) (*cached_vector)[pos] = c;
 }
 
 void PointCoordinateSequence::deleteAt(int pos){
-//	if (pos>=0 && pos<=vect->size()-1) 
-		vect->erase(vect->begin()+pos);
-//	else
-//		throw "PointCoordinateSequence exception: can't remove element\n";
+	vect->erase(vect->begin()+pos);
+	if ( cached_vector ) cached_vector->erase(cached_vector->begin()+pos);
 }
 
 string PointCoordinateSequence::toString() const {
@@ -160,6 +163,18 @@ string PointCoordinateSequence::toString() const {
 
 PointCoordinateSequence::~PointCoordinateSequence() {
 	delete vect;
+	delete cached_vector;
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.2  2004/12/03 22:52:56  strk
+ * enforced const return of CoordinateSequence::toVector() method to derivate classes.
+ *
+ * Revision 1.1  2004/07/08 19:38:56  strk
+ * renamed from *List* equivalents
+ *
+ **********************************************************************/
 

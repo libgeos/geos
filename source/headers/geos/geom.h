@@ -588,7 +588,7 @@ public:
 	 * array of Coordinates, this method will incur a performance penalty
 	 * because the array needs to be built from scratch.
 	 */
-	virtual	vector<Coordinate>* toVector() const=0;
+	virtual	const vector<Coordinate>* toVector() const=0;
 
 	/**
 	 * \brief Add an array of coordinates 
@@ -708,7 +708,7 @@ public:
 
 	//int size() const;
 	int getSize() const;
-	vector<Coordinate>* toVector() const;
+	const vector<Coordinate>* toVector() const;
 
 	/// Construct an empty sequence
 	DefaultCoordinateSequence();
@@ -755,13 +755,14 @@ public:
 	void setAt(const Coordinate& c, int pos);
 	void setAt(point_3d p, int pos);
 	void deleteAt(int pos);
-	vector<Coordinate>* toVector() const;
+	const vector<Coordinate>* toVector() const;
 	vector<point_3d>* toPointVector();
 	string toString() const;
 	void setPoints(const vector<Coordinate> &v);
 	void setPoints(vector<point_3d> &v);
 private:
 	vector<point_3d> *vect;
+	mutable vector<Coordinate>*cached_vector;
 };
 
 /**
@@ -2430,6 +2431,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2004/12/03 22:52:56  strk
+ * enforced const return of CoordinateSequence::toVector() method to derivate classes.
+ *
  * Revision 1.33  2004/12/03 16:22:36  frank
  * update to use I64 on MSVC for 64 bit integer constants, also toVector chg.
  *

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/12/03 22:52:56  strk
+ * enforced const return of CoordinateSequence::toVector() method to derivate classes.
+ *
  * Revision 1.22  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -120,7 +123,7 @@ bool LinearRing::isClosed() const {
 void LinearRing::setPoints(CoordinateSequence* cl){
 	const vector<Coordinate> *v=cl->toVector();
 	points->setPoints(*(v));
-	delete v;
+	//delete v;
 }
 
 GeometryTypeId

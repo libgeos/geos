@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.46  2004/12/03 22:52:56  strk
+ * enforced const return of CoordinateSequence::toVector() method to derivate classes.
+ *
  * Revision 1.45  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *
@@ -351,7 +354,6 @@ int LineString::compareToSameClass(const Geometry *ls) const {
 		return -1;
 	}
 	return 0;
-//	return compare(*(points->toVector()),*(((LineString*)ls)->points->toVector()));
 }
 
 const Coordinate* LineString::getCoordinate() const

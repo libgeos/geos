@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/12/03 22:52:56  strk
+ * enforced const return of CoordinateSequence::toVector() method to derivate classes.
+ *
  * Revision 1.2  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *
@@ -68,8 +71,10 @@ void DefaultCoordinateSequence::setPoints(const vector<Coordinate> &v) {
 	vect=new vector<Coordinate>(v);
 }
 
-vector<Coordinate>* DefaultCoordinateSequence::toVector() const {
-	return new vector<Coordinate>(vect->begin(),vect->end());
+const vector<Coordinate>*
+DefaultCoordinateSequence::toVector() const
+{
+	return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
 bool DefaultCoordinateSequence::isEmpty() const {

@@ -190,7 +190,7 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 	CoordinateSequence* ret=DefaultCoordinateSequenceFactory::instance()->create(NULL);
 	const vector<Coordinate> *v=cl->toVector();
 	ret->add(v,false);
-	delete v;
+	//delete v;
 	return ret;
 }
 
@@ -198,6 +198,9 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/12/03 22:52:56  strk
+ * enforced const return of CoordinateSequence::toVector() method to derivate classes.
+ *
  * Revision 1.5  2004/11/04 19:08:06  strk
  * Cleanups, initializers list, profiling.
  *
