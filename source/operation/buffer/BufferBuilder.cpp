@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/06/15 20:01:58  strk
+ * Empty geometry creation call made using NULL instead of newly created empty vector (will be faster)
+ *
  * Revision 1.16  2004/05/26 13:12:58  strk
  * Removed try/catch block from ::buildSubgraphs
  *
@@ -143,7 +146,7 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	vector<SegmentString*> *bufferSegStrList=curveSetBuilder.getCurves();
 	// short-circuit test
 	if ((int)bufferSegStrList->size()<=0) {
-		Geometry *emptyGeom=geomFact->createGeometryCollection(new vector<Geometry*>());
+		Geometry *emptyGeom=geomFact->createGeometryCollection(NULL);
 		return emptyGeom;
 	}
 
