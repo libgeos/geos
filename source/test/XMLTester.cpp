@@ -11,66 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.45  2004/09/13 12:39:49  strk
- * Added missing newline at end of output
- *
- * Revision 1.44  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.43  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.42  2004/05/27 08:40:13  strk
- * Fixed a memleak in buffer test.
- *
- * Revision 1.41  2004/05/18 13:49:18  strk
- * Output made more neat (geometry B is not printed if not existent).
- * Added support for buffer tests.
- *
- * Revision 1.40  2004/05/17 12:53:52  strk
- * Expected result string trimmed for blanks
- *
- * Revision 1.39  2004/05/14 07:19:59  strk
- * Changed the algorythm for finding precisionModel type (current way did
- * not work): now if you specify a scale precisionModel will be FIXED,
- * otherwise it will be FLOATING.
- *
- * Revision 1.38  2004/05/07 13:23:51  strk
- * Memory leaks fixed.
- *
- * Revision 1.37  2004/03/19 09:48:46  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.36  2003/11/12 17:10:01  strk
- * added missing initialization
- *
- * Revision 1.35  2003/11/12 15:02:12  strk
- * more cleanup on exception
- *
- * Revision 1.34  2003/11/07 01:23:43  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.33  2003/10/17 05:51:21  ybychkov
- * Fixed a small memory leak.
- *
- * Revision 1.32  2003/10/16 13:01:31  strk
- * Added call to Unload::Release()
- *
- * Revision 1.31  2003/10/16 12:09:48  strk
- * bug fixed in exception handling
- *
- * Revision 1.30  2003/10/16 08:48:06  strk
- * Exceptions handled
- *
  **********************************************************************/
-
 
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
@@ -86,6 +27,7 @@
 #include <geos/geomgraph.h>
 #include <geos/io.h>
 #include <geos/opRelate.h>
+#include <geos/profiler.h>
 #include "../io/markup/MarkupSTL.h"
 #include <geos/unload.h>
 
@@ -235,6 +177,7 @@ try{
 		if (pos!=string::npos) opRes=opRes.substr(0, pos+1);
 
 			if (out & TEST_OP) {
+				Profile *profile = new Profile("op");
 				if (opName=="relate") {
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
 					IntersectionMatrix *im=gA->relate(gB);
@@ -428,16 +371,21 @@ try{
 					Geometry *gRes=r->read(opRes);
 					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					profile->start();
 					Geometry *gRealRes=gA->buffer(atof(opSig.c_str()));
+					profile->stop();
 					gRealRes->normalize();
 					if (out & TEST_RESULT) {
+						cout << "\t\tResult: buffer='" << gRealRes->toString() <<"'"<<endl;
+						cout << "Test result=";
 						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: buffer='" << gRealRes->toString() << "' result=true"  <<endl;
+							cout << "true";
 							succeeded++;
 						} else {
-							cout << "\t\tResult: buffer='" << gRealRes->toString() << "' result=false"  <<endl;
+							cout << "false";
 							failed++;
 						}
+						cout << "Test time:" << profile->getTot()<<endl;
 					}
 					delete gRealRes;
 					delete gRes;
@@ -549,3 +497,67 @@ try{
 
 	Unload::Release();
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.46  2004/11/02 09:38:33  strk
+ * Added timer for buffer test.
+ *
+ * Revision 1.45  2004/09/13 12:39:49  strk
+ * Added missing newline at end of output
+ *
+ * Revision 1.44  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
+ * Revision 1.43  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.42  2004/05/27 08:40:13  strk
+ * Fixed a memleak in buffer test.
+ *
+ * Revision 1.41  2004/05/18 13:49:18  strk
+ * Output made more neat (geometry B is not printed if not existent).
+ * Added support for buffer tests.
+ *
+ * Revision 1.40  2004/05/17 12:53:52  strk
+ * Expected result string trimmed for blanks
+ *
+ * Revision 1.39  2004/05/14 07:19:59  strk
+ * Changed the algorythm for finding precisionModel type (current way did
+ * not work): now if you specify a scale precisionModel will be FIXED,
+ * otherwise it will be FLOATING.
+ *
+ * Revision 1.38  2004/05/07 13:23:51  strk
+ * Memory leaks fixed.
+ *
+ * Revision 1.37  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.36  2003/11/12 17:10:01  strk
+ * added missing initialization
+ *
+ * Revision 1.35  2003/11/12 15:02:12  strk
+ * more cleanup on exception
+ *
+ * Revision 1.34  2003/11/07 01:23:43  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.33  2003/10/17 05:51:21  ybychkov
+ * Fixed a small memory leak.
+ *
+ * Revision 1.32  2003/10/16 13:01:31  strk
+ * Added call to Unload::Release()
+ *
+ * Revision 1.31  2003/10/16 12:09:48  strk
+ * bug fixed in exception handling
+ *
+ * Revision 1.30  2003/10/16 08:48:06  strk
+ * Exceptions handled
+ *
+ **********************************************************************/
+
