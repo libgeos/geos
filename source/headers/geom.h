@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.58  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.57  2004/04/16 08:35:52  strk
  * Memory leaks fixed and const correctness applied for Point class.
  *
@@ -1159,7 +1164,7 @@ public:
 	*            geometry. Elements may be empty <code>Geometry</code>s,
 	*            but not <code>null</code>s.
 	*/
-	GeometryCollection(vector<Geometry *> *newGeometries,GeometryFactory *newFactory);
+	GeometryCollection(vector<Geometry *> *newGeometries, const GeometryFactory *newFactory);
 	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
 	virtual CoordinateList* getCoordinates() const;
@@ -1293,7 +1298,7 @@ public:
 	*@param  points          the points of the linestring, or <code>null</code>
 	*      to create the empty geometry. Consecutive points may not be equal.
 	*/  
-	LineString(const CoordinateList *pts,GeometryFactory *newFactory);
+	LineString(const CoordinateList *pts, const GeometryFactory *newFactory);
 	virtual ~LineString();
 	virtual Geometry *clone() const;
 	virtual CoordinateList* getCoordinates() const;
@@ -1369,7 +1374,7 @@ public:
 	*      This array must not contain <code>null</code> elements.
 	*
 	*/
-	LinearRing(const CoordinateList* points, GeometryFactory *newFactory);
+	LinearRing(const CoordinateList* points, const GeometryFactory *newFactory);
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
@@ -1438,7 +1443,7 @@ public:
 	*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
 	*      geometry is to be created.
 	*/
-	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,GeometryFactory *newFactory);
+	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const GeometryFactory *newFactory);
 	virtual Geometry *clone() const;
 	CoordinateList* getCoordinates() const;
 	int getNumPoints() const;
@@ -1501,7 +1506,7 @@ public:
 	*      , or <code>null</code> or an empty array to create the empty geometry.
 	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
 	*/
-	MultiPoint(vector<Geometry *> *points, GeometryFactory *newFactory);
+	MultiPoint(vector<Geometry *> *points, const GeometryFactory *newFactory);
 	virtual ~MultiPoint();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1541,7 +1546,7 @@ public:
 	* @deprecated Use GeometryFactory instead
 	*/
 	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
-	MultiLineString(vector<Geometry *> *lineStrings, GeometryFactory *newFactory);
+	MultiLineString(vector<Geometry *> *lineStrings, const GeometryFactory *newFactory);
 	virtual ~MultiLineString();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1590,7 +1595,7 @@ public:
 	*            HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple
 	*            Features Specification for SQL</A>.
 	*/
-	MultiPolygon(vector<Geometry *> *polygons, GeometryFactory *newFactory);
+	MultiPolygon(vector<Geometry *> *polygons, const GeometryFactory *newFactory);
 	virtual ~MultiPolygon();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1655,31 +1660,31 @@ public:
 
 //Skipped a lot of list to array convertors
 
-	static Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar);
-	Geometry* toGeometry(Envelope* envelope);
+	Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar) const;
+	Geometry* toGeometry(Envelope* envelope) const;
 	/**
 	* Returns the PrecisionModel that Geometries created by this factory
 	* will be associated with.
 	*/
 	const PrecisionModel* getPrecisionModel() const;
-	Point* createPoint(const Coordinate& coordinate);
+	Point* createPoint(const Coordinate& coordinate) const;
 	/**
 	* Creates a Point using the given CoordinateSequence; a null or empty
 	* CoordinateSequence will create an empty Point.
 	*/
-	Point* createPoint(const CoordinateList *coordinates);
+	Point* createPoint(const CoordinateList *coordinates) const;
 	/**
 	* Creates a MultiLineString using the given LineStrings; a null or empty
 	* array will create an empty MultiLineString.
 	* @param lineStrings LineStrings, each of which may be empty but not null
 	*/
-	MultiLineString* createMultiLineString(vector<Geometry *> *lineStrings);
+	MultiLineString* createMultiLineString(vector<Geometry *> *lineStrings) const;
 	/**
 	* Creates a GeometryCollection using the given Geometries; a null or empty
 	* array will create an empty GeometryCollection.
 	* @param geometries Geometries, each of which may be empty but not null
 	*/
-	GeometryCollection* createGeometryCollection(vector<Geometry *> *geometries);
+	GeometryCollection* createGeometryCollection(vector<Geometry *> *geometries) const;
 	/**
 	* Creates a MultiPolygon using the given Polygons; a null or empty array
 	* will create an empty Polygon. The polygons must conform to the
@@ -1690,26 +1695,26 @@ public:
 	* @param polygons
 	*            Polygons, each of which may be empty but not null
 	*/
-	MultiPolygon* createMultiPolygon(vector<Geometry *> *polygons);
+	MultiPolygon* createMultiPolygon(vector<Geometry *> *polygons) const;
 	/**
 	* Creates a LinearRing using the given CoordinateSequence; a null or empty CoordinateSequence will
 	* create an empty LinearRing. The points must form a closed and simple
 	* linestring. Consecutive points must not be equal.
 	* @param coordinates a CoordinateSequence possibly empty, or null
 	*/
-	LinearRing* createLinearRing(CoordinateList* coordinates);
+	LinearRing* createLinearRing(CoordinateList* coordinates) const;
 	/**
 	* Creates a MultiPoint using the given Points; a null or empty array will
 	* create an empty MultiPoint.
 	* @param coordinates an array without null elements, or an empty array, or null
 	*/
-	MultiPoint* createMultiPoint(vector<Geometry *> *point);
+	MultiPoint* createMultiPoint(vector<Geometry *> *point) const;
 	/**
 	* Creates a MultiPoint using the given CoordinateSequence; a null or empty CoordinateSequence will
 	* create an empty MultiPoint.
 	* @param coordinates a CoordinateSequence possibly empty, or null
 	*/
-	MultiPoint* createMultiPoint(CoordinateList* coordinates);
+	MultiPoint* createMultiPoint(CoordinateList* coordinates) const;
 	/**
 	* Constructs a <code>Polygon</code> with the given exterior boundary and
 	* interior boundaries.
@@ -1723,13 +1728,13 @@ public:
 	*            <code>null</code> or empty <code>LinearRing</code> s if
 	*            the empty geometry is to be created.
 	*/
-	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes);
+	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes) const;
 	/**
 	* Creates a LineString using the given Coordinates; a null or empty array will
 	* create an empty LineString. Consecutive points must not be equal.
 	* @param coordinates an array without null elements, or an empty array, or null
 	*/
-	LineString* createLineString(const CoordinateList* coordinates);
+	LineString* createLineString(const CoordinateList* coordinates) const;
 	/**
 	*  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
 	*  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
@@ -1757,9 +1762,9 @@ public:
 	*      type-specific" class that can contain the elements of <code>geomList</code>
 	*      .
 	*/
-	Geometry* buildGeometry(vector<Geometry *> *geoms);
-	int getSRID() {return SRID;};
-	CoordinateListFactory* getCoordinateListFactory() {return coordinateListFactory;};
+	Geometry* buildGeometry(vector<Geometry *> *geoms) const;
+	int getSRID() const {return SRID;};
+	CoordinateListFactory* getCoordinateListFactory() const {return coordinateListFactory;};
 	/**
 	* @return a clone of g based on a CoordinateSequence created by this
 	* GeometryFactory's CoordinateSequenceFactory

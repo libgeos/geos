@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.14  2004/04/01 10:44:33  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -59,7 +64,7 @@ LinearRing::LinearRing(const CoordinateList* points, const PrecisionModel* pm,
 *      This array must not contain <code>null</code> elements.
 *
 */
-LinearRing::LinearRing(const CoordinateList* points, GeometryFactory *newFactory): LineString(points,newFactory) {
+LinearRing::LinearRing(const CoordinateList* points, const GeometryFactory *newFactory): LineString(points,newFactory) {
 	validateConstruction();	
 }
 

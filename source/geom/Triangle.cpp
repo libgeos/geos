@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.1  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.

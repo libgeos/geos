@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.29  2004/04/14 12:28:43  strk
  * shouldNeverReachHere exceptions made more verbose
  *
@@ -72,8 +77,8 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,Precisi
 *            geometry. Elements may be empty <code>Geometry</code>s,
 *            but not <code>null</code>s.
 */
-GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,GeometryFactory *newFactory):
-	Geometry(newFactory){
+GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries, const GeometryFactory *newFactory): Geometry(newFactory)
+{
 	if (newGeometries==NULL) {
 		geometries=new vector<Geometry *>();
 		return;

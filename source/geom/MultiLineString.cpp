@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.12  2004/04/01 10:44:33  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -53,7 +58,7 @@ MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel
 *            geometry. Elements may be empty <code>LineString</code>s,
 *            but not <code>null</code>s.
 */
-MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, GeometryFactory *newFactory): 
+MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, const GeometryFactory *newFactory): 
 	GeometryCollection(lineStrings,newFactory){}
 
 MultiLineString::~MultiLineString(){}

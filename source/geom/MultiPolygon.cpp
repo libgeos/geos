@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.12  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -35,8 +40,7 @@ namespace geos {
 MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID):
 	GeometryCollection(polygons, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
 
-MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, GeometryFactory *newFactory): 
-	GeometryCollection(polygons,newFactory){}
+MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, const GeometryFactory *newFactory): GeometryCollection(polygons,newFactory){}
 
 MultiPolygon::~MultiPolygon(){}
 

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.2  2004/04/14 11:05:07  strk
  * Added support for LinearRing in GeometryEditor
  *
@@ -42,7 +47,7 @@ GeometryEditor::GeometryEditor(){
 *
 * @param factory the GeometryFactory to create the edited Geometry with
 */
-GeometryEditor::GeometryEditor(GeometryFactory *newFactory){
+GeometryEditor::GeometryEditor(const GeometryFactory *newFactory){
 	factory=newFactory;
 }
 
@@ -55,7 +60,7 @@ GeometryEditor::GeometryEditor(GeometryFactory *newFactory){
 * @param operation the edit operation to carry out
 * @return a new {@link Geometry} which is the result of the editing
 */
-Geometry* GeometryEditor::edit(Geometry *geometry, GeometryEditorOperation *operation){
+Geometry* GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operation){
 	// if client did not supply a GeometryFactory, use the one from the input Geometry
 	if (factory == NULL)
 		factory=geometry->getFactory();
@@ -82,7 +87,7 @@ Geometry* GeometryEditor::edit(Geometry *geometry, GeometryEditorOperation *oper
 	return NULL;
 }
 
-Polygon* GeometryEditor::editPolygon(Polygon *polygon,GeometryEditorOperation *operation) {
+Polygon* GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *operation) {
 	Polygon* newPolygon=(Polygon*) operation->edit(polygon, factory);
 	if (newPolygon->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
@@ -105,7 +110,7 @@ Polygon* GeometryEditor::editPolygon(Polygon *polygon,GeometryEditorOperation *o
 	return factory->createPolygon(shell,holes);
 }
 
-GeometryCollection* GeometryEditor::editGeometryCollection(GeometryCollection *collection, GeometryEditorOperation *operation) {
+GeometryCollection* GeometryEditor::editGeometryCollection(const GeometryCollection *collection, GeometryEditorOperation *operation) {
 	GeometryCollection *newCollection = (GeometryCollection*) operation->edit(collection,factory);
 	vector<Geometry*> *geometries = new vector<Geometry*>();
 	for (int i = 0; i < newCollection->getNumGeometries(); i++) {
@@ -127,18 +132,31 @@ GeometryCollection* GeometryEditor::editGeometryCollection(GeometryCollection *c
 	return factory->createGeometryCollection(geometries);
 }
 
-Geometry* CoordinateOperation::edit(Geometry *geometry, GeometryFactory *factory) {
+/**
+ * Return a newly created geometry 
+ */
+Geometry*
+CoordinateOperation::edit(const Geometry *geometry, const GeometryFactory *factory)
+{
+	CoordinateList *coords = geometry->getCoordinates();
+	CoordinateList *newCoords = edit(coords,geometry);
+	Geometry *newgeom;
+
 	if (typeid(*geometry)==typeid(LinearRing)) {
-		return factory->createLinearRing(edit(geometry->getCoordinates(),geometry));
+		newgeom = factory->createLinearRing(newCoords);
 	}
-	if (typeid(*geometry)==typeid(LineString)) {
-		return factory->createLineString(edit(geometry->getCoordinates(),geometry));
+	else if (typeid(*geometry)==typeid(LineString)) {
+		newgeom = factory->createLineString(newCoords);
 	}
-	if (typeid(*geometry)==typeid(Point)) {
-		CoordinateList *newCoordinates = edit(geometry->getCoordinates(),geometry);
-		return factory->createPoint((newCoordinates->getSize()>0)? newCoordinates->getAt(0) : Coordinate::nullCoord);
+	else if (typeid(*geometry)==typeid(Point)) {
+		newgeom = factory->createPoint((newCoords->getSize()>0)? newCoords->getAt(0) : Coordinate::nullCoord);
 	}
-	return geometry;
+	else {
+		newgeom = geometry->clone();
+	}
+	delete newCoords;
+	delete coords;
+	return newgeom;
 }
 
 }

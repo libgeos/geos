@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.29  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.28  2004/04/10 22:41:24  ybychkov
  * "precision" upgraded to JTS 1.4
  *
@@ -81,7 +86,7 @@ LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm,
 *@param  points          the points of the linestring, or <code>null</code>
 *      to create the empty geometry. Consecutive points may not be equal.
 */  
-LineString::LineString(const CoordinateList *pts,GeometryFactory *newFactory):Geometry(newFactory){
+LineString::LineString(const CoordinateList *pts, const GeometryFactory *newFactory):Geometry(newFactory){
 	if (pts==NULL) {
 		pts=CoordinateListFactory::internalFactory->createCoordinateList();
 	}

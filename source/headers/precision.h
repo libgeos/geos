@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.2  2004/04/13 13:31:11  strk
  * prototype mismatch fixed
  *
@@ -300,7 +305,7 @@ private:
 	SimpleGeometryPrecisionReducer *sgpr;
 public:
 	PrecisionReducerCoordinateOperation(SimpleGeometryPrecisionReducer *newSgpr);
-	CoordinateList* edit(CoordinateList *coordinates, Geometry *geom);
+	CoordinateList* edit(const CoordinateList *coordinates, const Geometry *geom);
 };
 
 /**

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.35  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.34  2004/04/16 08:35:52  strk
  * Memory leaks fixed and const correctness applied for Point class.
  *
@@ -125,28 +130,47 @@ GeometryFactory::~GeometryFactory(){
 	delete precisionModel;
 }
   
-Point* GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
-		const Geometry *exemplar) {
+Point*
+GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
+		const Geometry *exemplar) const {
 	Coordinate newcoord = *coord;
 	exemplar->getPrecisionModel()->makePrecise(&newcoord);
 	return exemplar->getFactory()->createPoint(newcoord);
 }
 
 
-Geometry* GeometryFactory::toGeometry(Envelope* envelope) {
+Geometry*
+GeometryFactory::toGeometry(Envelope* envelope) const
+{
+	Coordinate coord;
+
 	if (envelope->isNull()) {
-		return createPoint(*(new Coordinate()));
+		return createPoint(coord);
 	}
 	if (envelope->getMinX()==envelope->getMaxX() && envelope->getMinY()==envelope->getMaxY()) {
-		return createPoint(*(new Coordinate(envelope->getMinX(),envelope->getMinY())));
+		coord.x = envelope->getMinX();
+		coord.y = envelope->getMinY();
+		return createPoint(coord);
 	}
 	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
-	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMinY())));
-	cl->add(*(new Coordinate(envelope->getMaxX(), envelope->getMinY())));
-	cl->add(*(new Coordinate(envelope->getMaxX(), envelope->getMaxY())));
-	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMaxY())));
-	cl->add(*(new Coordinate(envelope->getMinX(), envelope->getMinY())));
-	return createPolygon(createLinearRing(cl),NULL);
+	coord.x = envelope->getMinX();
+	coord.y = envelope->getMinY();
+	cl->add(coord);
+	coord.x = envelope->getMaxX();
+	coord.y = envelope->getMinY();
+	cl->add(coord);
+	coord.x = envelope->getMaxX();
+	coord.y = envelope->getMaxY();
+	cl->add(coord);
+	coord.x = envelope->getMinX();
+	coord.y = envelope->getMaxY();
+	cl->add(coord);
+	coord.x = envelope->getMinX();
+	coord.y = envelope->getMinY();
+	cl->add(coord);
+
+	Polygon *p = createPolygon(createLinearRing(cl), NULL);
+	return p;
 }
 
 /**
@@ -161,7 +185,8 @@ const PrecisionModel* GeometryFactory::getPrecisionModel() const {
 * Creates a Point using the given Coordinate; a null Coordinate will create
 * an empty Geometry.
 */
-Point* GeometryFactory::createPoint(const Coordinate& coordinate){
+Point*
+GeometryFactory::createPoint(const Coordinate& coordinate) const {
 	if (coordinate==Coordinate::nullCoord) {
 		return createPoint(NULL);
 	} else {
@@ -177,7 +202,9 @@ Point* GeometryFactory::createPoint(const Coordinate& coordinate){
 * Creates a Point using the given CoordinateSequence; a null or empty
 * CoordinateSequence will create an empty Point.
 */
-Point* GeometryFactory::createPoint(const CoordinateList *coordinates) {
+Point*
+GeometryFactory::createPoint(const CoordinateList *coordinates) const
+{
 	return new Point(coordinates,this);
 }
 
@@ -188,7 +215,10 @@ Point* GeometryFactory::createPoint(const CoordinateList *coordinates) {
 * array will create an empty MultiLineString.
 * @param lineStrings LineStrings, each of which may be empty but not null
 */
-MultiLineString* GeometryFactory::createMultiLineString(vector<Geometry *> *lineStrings){
+MultiLineString*
+GeometryFactory::createMultiLineString(vector<Geometry *> *lineStrings)
+	const
+{
 	return new MultiLineString(lineStrings,this);
 }
 
@@ -197,7 +227,9 @@ MultiLineString* GeometryFactory::createMultiLineString(vector<Geometry *> *line
 * array will create an empty GeometryCollection.
 * @param geometries Geometries, each of which may be empty but not null
 */
-GeometryCollection* GeometryFactory::createGeometryCollection(vector<Geometry *> *geometries){
+GeometryCollection*
+GeometryFactory::createGeometryCollection(vector<Geometry *> *geometries) const
+{
 	return new GeometryCollection(geometries,this);
 }
 
@@ -211,7 +243,9 @@ GeometryCollection* GeometryFactory::createGeometryCollection(vector<Geometry *>
 * @param polygons
 *            Polygons, each of which may be empty but not null
 */
-MultiPolygon* GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons){
+MultiPolygon*
+GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons) const
+{
 	return new MultiPolygon(polygons,this);
 }
 
@@ -221,7 +255,9 @@ MultiPolygon* GeometryFactory::createMultiPolygon(vector<Geometry *> *polygons){
 * linestring. Consecutive points must not be equal.
 * @param coordinates a CoordinateSequence possibly empty, or null
 */
-LinearRing* GeometryFactory::createLinearRing(CoordinateList* coordinates) {
+LinearRing*
+GeometryFactory::createLinearRing(CoordinateList* coordinates) const
+{
 	//if (coordinates->getSize()>0 && 
 	//	!coordinates->getAt(0).equals2D(coordinates->getAt(coordinates->getSize() - 1))) {
 	//		delete precisionModel;
@@ -235,7 +271,9 @@ LinearRing* GeometryFactory::createLinearRing(CoordinateList* coordinates) {
 * create an empty MultiPoint.
 * @param coordinates an array without null elements, or an empty array, or null
 */
-MultiPoint* GeometryFactory::createMultiPoint(vector<Geometry *> *point) {
+MultiPoint*
+GeometryFactory::createMultiPoint(vector<Geometry *> *point) const
+{
 	return new MultiPoint(point,this);
 }
 
@@ -244,7 +282,9 @@ MultiPoint* GeometryFactory::createMultiPoint(vector<Geometry *> *point) {
 * create an empty MultiPoint.
 * @param coordinates a CoordinateSequence possibly empty, or null
 */
-MultiPoint* GeometryFactory::createMultiPoint(CoordinateList* coordinates) {
+MultiPoint*
+GeometryFactory::createMultiPoint(CoordinateList* coordinates) const
+{
 	vector<Geometry *> *pts=new vector<Geometry *>();
 	for (int i=0; i<coordinates->getSize(); i++) {
 		Point *pt=createPoint(coordinates->getAt(i));
@@ -269,7 +309,10 @@ MultiPoint* GeometryFactory::createMultiPoint(CoordinateList* coordinates) {
 *            <code>null</code> or empty <code>LinearRing</code> s if
 *            the empty geometry is to be created.
 */
-Polygon* GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes) {
+Polygon*
+GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes)
+	const
+{
 	return new Polygon(shell, holes, this);
 }
 
@@ -278,7 +321,10 @@ Polygon* GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *h
 * create an empty LineString. Consecutive points must not be equal.
 * @param coordinates an array without null elements, or an empty array, or null
 */
-LineString* GeometryFactory::createLineString(const CoordinateList* coordinates) {
+LineString*
+GeometryFactory::createLineString(const CoordinateList* coordinates)
+	const
+{
 	return new LineString(coordinates, this);
 }
 
@@ -309,7 +355,9 @@ LineString* GeometryFactory::createLineString(const CoordinateList* coordinates)
 *      type-specific" class that can contain the elements of <code>geomList</code>
 *      .
 */
-Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
+Geometry*
+GeometryFactory::buildGeometry(vector<Geometry *> *geoms) const
+{
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
 	bool isCollection=geoms->size()>1;
@@ -367,18 +415,27 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 }
 
 
-CoordinateList* gfCoordinateOperation::edit(CoordinateList *coordinates, Geometry *geometry) {
-	return coordinates;
+CoordinateList*
+gfCoordinateOperation::edit(const CoordinateList *coordinates, const Geometry *geometry)
+{
+	return CoordinateListFactory::internalFactory->createCoordinateList(coordinates);
 }
 //Remember to add this.
+
   /**
    * @return a clone of g based on a CoordinateSequence created by this
    * GeometryFactory's CoordinateSequenceFactory
    */
-Geometry* GeometryFactory::createGeometry(const Geometry *g) const {
+Geometry*
+GeometryFactory::createGeometry(const Geometry *g) const
+{
 	// could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
-	GeometryEditor *editor=new GeometryEditor((GeometryFactory*)this);
-	return editor->edit((Geometry*)g,new gfCoordinateOperation());
+	GeometryEditor *editor=new GeometryEditor(this);
+	gfCoordinateOperation *coordOp = new gfCoordinateOperation();
+	Geometry *ret=editor->edit(g, coordOp);
+	delete coordOp;
+	delete editor;
+	return ret;
 }
 
 }

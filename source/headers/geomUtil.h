@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -113,7 +118,7 @@ public:
 	* (may be different to the factory of the input geometry)
 	* @return a new Geometry which is a modification of the input Geometry
 	*/
-	virtual Geometry* edit(Geometry *geometry, GeometryFactory *factory)=0;
+	virtual Geometry* edit(const Geometry *geometry, const GeometryFactory *factory)=0;
 };
 
 /**
@@ -122,7 +127,7 @@ public:
 */
 class CoordinateOperation: public GeometryEditorOperation {
 public:
-	virtual Geometry* edit(Geometry *geometry, GeometryFactory *factory);
+	virtual Geometry* edit(const Geometry *geometry, const GeometryFactory *factory);
 	/**
 	* Edits the array of {@link Coordinate}s from a {@link Geometry}.
 	*
@@ -130,12 +135,12 @@ public:
 	* @param geometry the geometry containing the coordinate list
 	* @return an edited coordinate array (which may be the same as the input)
 	*/
-	virtual CoordinateList* edit(CoordinateList* coordinates,Geometry *geometry)=0;
+	virtual CoordinateList* edit(const CoordinateList* coordinates, const Geometry *geometry)=0;
 };
 
 class gfCoordinateOperation: public CoordinateOperation {
 public:
-	virtual CoordinateList* edit(CoordinateList *coordinates, Geometry *geometry);
+	virtual CoordinateList* edit(const CoordinateList *coordinates, const Geometry *geometry);
 };
 
 
@@ -173,9 +178,9 @@ private:
 	/**
 	* The factory used to create the modified Geometry
 	*/
-	GeometryFactory* factory;
-	Polygon* editPolygon(Polygon *polygon, GeometryEditorOperation *operation);
-	GeometryCollection* editGeometryCollection(GeometryCollection *collection,GeometryEditorOperation *operation);
+	const GeometryFactory* factory;
+	Polygon* editPolygon(const Polygon *polygon, GeometryEditorOperation *operation);
+	GeometryCollection* editGeometryCollection(const GeometryCollection *collection,GeometryEditorOperation *operation);
 public:
 	/**
 	* Creates a new GeometryEditor object which will create
@@ -188,7 +193,7 @@ public:
 	*
 	* @param factory the GeometryFactory to create the edited Geometry with
 	*/
-	GeometryEditor(GeometryFactory *newFactory);
+	GeometryEditor(const GeometryFactory *newFactory);
 	/**
 	* Edit the input {@link Geometry} with the given edit operation.
 	* Clients will create subclasses of {@link GeometryEditorOperation} or
@@ -198,7 +203,7 @@ public:
 	* @param operation the edit operation to carry out
 	* @return a new {@link Geometry} which is the result of the editing
 	*/
-	Geometry* edit(Geometry *geometry, GeometryEditorOperation *operation);
+	Geometry* edit(const Geometry *geometry, GeometryEditorOperation *operation);
 };
 
 

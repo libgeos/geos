@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
  * Revision 1.14  2004/04/01 10:44:33  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -53,8 +58,8 @@ MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
 *      , or <code>null</code> or an empty array to create the empty geometry.
 *      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
 */
-MultiPoint::MultiPoint(vector<Geometry *> *points, GeometryFactory *newFactory): 
-	GeometryCollection(points,newFactory){}
+MultiPoint::MultiPoint(vector<Geometry *> *points, const GeometryFactory *newFactory): GeometryCollection(points,newFactory){}
+
 MultiPoint::~MultiPoint(){}
 
 int MultiPoint::getDimension() const {
