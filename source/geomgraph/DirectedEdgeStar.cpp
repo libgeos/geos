@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/21 14:14:28  strk
+ * Fixed bug in computeDepths
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -328,7 +331,7 @@ void DirectedEdgeStar::computeDepths(DirectedEdge *de){
 	int targetLastDepth=de->getDepth(Position::RIGHT);
 
 	// compute the depths from this edge up to the end of the edge array
-	int nextDepth=computeDepths(edgeIndex+1, (int)edgeList->size()-1, startDepth);
+	int nextDepth=computeDepths(edgeIndex+1, edgeList->size(), startDepth);
 	// compute the depths for the initial part of the array
 	int lastDepth=computeDepths(0,edgeIndex,nextDepth);
 	if (lastDepth!=targetLastDepth)
