@@ -250,7 +250,7 @@ SegmentIntersector* GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	return si;
 }
 
-void GeometryGraph::insertPoint(int argIndex, Coordinate coord, int onLocation){
+void GeometryGraph::insertPoint(int argIndex,Coordinate& coord, int onLocation){
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	if (lbl==NULL) {
@@ -265,7 +265,7 @@ void GeometryGraph::insertPoint(int argIndex, Coordinate coord, int onLocation){
 * an endpoint of a Curve is on the boundary
 * iff if it is in the boundaries of an odd number of Geometries
 */
-void GeometryGraph::insertBoundaryPoint(int argIndex,Coordinate coord){
+void GeometryGraph::insertBoundaryPoint(int argIndex,Coordinate& coord){
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	// the new point to insert is on a boundary
@@ -297,7 +297,7 @@ void GeometryGraph::addSelfIntersectionNodes(int argIndex){
 * is a boundary) then insert it as a potential boundary node.
 * Otherwise, just add it as a regular node.
 */
-void GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate coord,int loc){
+void GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc){
 	// if this node is already a boundary node, don't change it
 	if (isBoundaryNode(argIndex,coord)) return;
 	if (loc==Location::BOUNDARY && useBoundaryDeterminationRule)

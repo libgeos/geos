@@ -34,7 +34,7 @@ CoordinateList* LineString::getCoordinates() {
 	return points;
 }
 
-Coordinate LineString::getCoordinateN(int n) {
+Coordinate& LineString::getCoordinateN(int n) {
 	return points->getAt(n);
 }
 

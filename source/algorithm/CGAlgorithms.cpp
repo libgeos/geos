@@ -7,7 +7,7 @@
 *
 * Note: NON-ROBUST!
 */
-double CGAlgorithms::distancePointLine(Coordinate p,Coordinate A,Coordinate B){
+double CGAlgorithms::distancePointLine(Coordinate& p,Coordinate& A,Coordinate& B){
 	//if start==end, then use pt distance
 	if (A==B) return A.distance(B);
 
@@ -43,7 +43,7 @@ double CGAlgorithms::distancePointLine(Coordinate p,Coordinate A,Coordinate B){
 *
 * Note: NON-ROBUST!
 */
-double CGAlgorithms::distanceLineLine(Coordinate A,Coordinate B,Coordinate C,Coordinate D){
+double CGAlgorithms::distanceLineLine(Coordinate& A,Coordinate& B,Coordinate& C,Coordinate& D){
 	// check for zero-length segments
 	if (A==B) return distancePointLine(A,C,D);
 	if (C==D) return distancePointLine(D,A,B);

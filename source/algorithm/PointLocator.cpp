@@ -18,7 +18,7 @@ PointLocator::~PointLocator() {
 *
 * @return the location of the point relative to the input Geometry
 */
-int PointLocator::locate(Coordinate p,Geometry *geom) {
+int PointLocator::locate(Coordinate& p,Geometry *geom) {
 	if (geom->isEmpty()) return Location::EXTERIOR;
 	if (typeid(*geom)==typeid(LineString)) {
 		return locate(p,(LineString*) geom);
@@ -37,7 +37,7 @@ int PointLocator::locate(Coordinate p,Geometry *geom) {
 	return Location::EXTERIOR;
 }
 
-void PointLocator::computeLocation(Coordinate p,Geometry *geom) {
+void PointLocator::computeLocation(Coordinate& p,Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) {
 		updateLocationInfo(locate(p,(LineString*) geom));
 	}
@@ -73,7 +73,7 @@ void PointLocator::updateLocationInfo(int loc) {
 	if (loc==Location::BOUNDARY) numBoundaries++;
 }
 
-int PointLocator::locate(Coordinate p,LineString *l) {
+int PointLocator::locate(Coordinate& p,LineString *l) {
 	CoordinateList* pt=l->getCoordinates();
 	if (! l->isClosed()) {
 		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
@@ -85,7 +85,7 @@ int PointLocator::locate(Coordinate p,LineString *l) {
 	return Location::EXTERIOR;
 }
 
-int PointLocator::locate(Coordinate p,LinearRing *ring) {
+int PointLocator::locate(Coordinate& p,LinearRing *ring) {
 	if (cga->isOnLine(p,ring->getCoordinates())) {
 		return Location::BOUNDARY;
 	}
@@ -94,7 +94,7 @@ int PointLocator::locate(Coordinate p,LinearRing *ring) {
 	return Location::EXTERIOR;
 }
 
-int PointLocator::locate(Coordinate p,Polygon *poly) {
+int PointLocator::locate(Coordinate& p,Polygon *poly) {
 	if (poly->isEmpty()) return Location::EXTERIOR;
 
 	LinearRing *shell=(LinearRing*) poly->getExteriorRing();

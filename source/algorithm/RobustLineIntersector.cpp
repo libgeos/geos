@@ -3,7 +3,7 @@
 
 RobustLineIntersector::RobustLineIntersector(){}
 
-void RobustLineIntersector::computeIntersection(Coordinate p,Coordinate p1,Coordinate p2) {
+void RobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2) {
 	isProperVar=false;
 	if ((RobustCGAlgorithms::orientationIndex(p1,p2,p)==0)
 		&& (RobustCGAlgorithms::orientationIndex(p2,p1,p)==0)) {
@@ -23,7 +23,7 @@ void RobustLineIntersector::computeIntersection(Coordinate p,Coordinate p1,Coord
 	}
 }
 
-int RobustLineIntersector::computeIntersect(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2){
+int RobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2){
 	isProperVar=false;
 
 	// first try a fast test to see if the envelopes of the lines overlap
@@ -112,7 +112,7 @@ int RobustLineIntersector::computeIntersect(Coordinate p1,Coordinate p2,Coordina
 	return DO_INTERSECT;
 }
 
-bool RobustLineIntersector::between(Coordinate p1,Coordinate p2,Coordinate q) {
+bool RobustLineIntersector::between(Coordinate& p1,Coordinate& p2,Coordinate& q) {
 	if (((q.x>=min(p1.x,p2.x)) && (q.x<=max(p1.x,p2.x))) &&
 		((q.y>=min(p1.y,p2.y)) && (q.y<=max(p1.y,p2.y)))) {
 			return true;
@@ -121,7 +121,7 @@ bool RobustLineIntersector::between(Coordinate p1,Coordinate p2,Coordinate q) {
 	}
 }
 
-int RobustLineIntersector::computeCollinearIntersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2) {
+int RobustLineIntersector::computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
 	bool p1q1p2=between(p1,p2,q1);
 	bool p1q2p2=between(p1,p2,q2);
 	bool q1p1q2=between(q1,q2,p1);
@@ -160,7 +160,7 @@ int RobustLineIntersector::computeCollinearIntersection(Coordinate p1,Coordinate
 	return DONT_INTERSECT;
 }
 
-Coordinate RobustLineIntersector::intersection(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2) {
+Coordinate& RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
 	//HCoordinate *l1=new HCoordinate(HCoordinate(p1),HCoordinate(p2));
 	//HCoordinate *l2=new HCoordinate(HCoordinate(q1),HCoordinate(q2));
 	//HCoordinate intHCoord(*l1,*l2);
@@ -197,7 +197,7 @@ Coordinate RobustLineIntersector::intersection(Coordinate p1,Coordinate p2,Coord
 	delete n2;
 	delete n3;
 	delete n4;
-	return Coordinate(intPt);
+	return *(new Coordinate(intPt));
 }
 
 void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt){

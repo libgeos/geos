@@ -38,7 +38,7 @@ void SegmentIntersector::setBoundaryNodes(vector<Node*> *bdyNodes0,vector<Node*>
 /**
 * @return the proper intersection point, or <code>null</code> if none was found
 */
-Coordinate SegmentIntersector::getProperIntersectionPoint(){
+Coordinate& SegmentIntersector::getProperIntersectionPoint(){
 	return properIntersectionPoint;
 }
 
@@ -149,7 +149,7 @@ bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<vector<Node*
 bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNodes){
 	for(vector<Node*>::iterator i=tstBdyNodes->begin();i<tstBdyNodes->end();i++) {
 		Node *node=*i;
-		Coordinate pt(node->getCoordinate());
+		Coordinate& pt=node->getCoordinate();
 		if (li->isIntersection(pt)) return true;
 	}
 	return false;

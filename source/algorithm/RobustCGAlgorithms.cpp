@@ -1,6 +1,6 @@
 #include "geosAlgorithm.h"
 
-int RobustCGAlgorithms::orientationIndex(Coordinate p1,Coordinate p2,Coordinate q) {
+int RobustCGAlgorithms::orientationIndex(Coordinate& p1,Coordinate& p2,Coordinate& q) {
 	// travelling along p1->p2, turn counter clockwise to get to q return 1,
 	// travelling along p1->p2, turn clockwise to get to q return -1,
 	// p1, p2 and q are colinear return 0.
@@ -73,7 +73,7 @@ bool RobustCGAlgorithms::isCCW(CoordinateList* ring) {
 *
 * @param ring assumed to have first point identical to last point
 */
-bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring) {
+bool RobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring) {
 	int i;
 	int i1;       // point index; i1 = i-1
 	double xInt;  // x intersection of segment with ray
@@ -119,7 +119,7 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring) {
 	}
 }
 
-bool RobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList* pt) {
+bool RobustCGAlgorithms::isOnLine(Coordinate& p,CoordinateList* pt) {
 	for(int i=1;i<pt->getSize();i++) {
 		Coordinate& p0=pt->getAt(i-1);
 		Coordinate& p1=pt->getAt(i);
@@ -131,11 +131,11 @@ bool RobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList* pt) {
 	return false;
 }
 
-int RobustCGAlgorithms::computeOrientation(Coordinate p1,Coordinate p2,Coordinate q) {
+int RobustCGAlgorithms::computeOrientation(Coordinate& p1,Coordinate& p2,Coordinate& q) {
 	return orientationIndex(p1,p2,q);
 }
 
-bool RobustCGAlgorithms::isInEnvelope(Coordinate p,CoordinateList* ring) {
+bool RobustCGAlgorithms::isInEnvelope(Coordinate& p,CoordinateList* ring) {
 	Envelope envelope;
 	for(int i=0;i<ring->getSize();i++) {
 		envelope.expandToInclude(ring->getAt(i));

@@ -12,7 +12,10 @@ LineSegment::LineSegment(void){}
  *@param  c0      start of the <code>LineSegment</code>.
  *@param  c1      end of the <code>LineSegment</code>.
  */
-LineSegment::LineSegment(Coordinate c0, Coordinate c1):p0(c0),p1(c1){}
+LineSegment::LineSegment(Coordinate& c0, Coordinate& c1){
+	p0=c0;
+	p1=c1;
+}
 
 /// Default destructor
 LineSegment::~LineSegment(void){}
@@ -25,7 +28,7 @@ LineSegment::LineSegment(const LineSegment &ls):p0(ls.p0),p1(ls.p1) {}
  *@param  c0      new start of the <code>LineSegment</code>.
  *@param  c1      new end of the <code>LineSegment</code>.
  */
-void LineSegment::setCoordinates(Coordinate c0, Coordinate c1) {
+void LineSegment::setCoordinates(Coordinate& c0, Coordinate& c1) {
 	p0.x = c0.x;
 	p0.y = c0.y;
 	p1.x = c1.x;
@@ -42,7 +45,7 @@ void LineSegment::setCoordinates(LineSegment ls) {
 }
 
 void LineSegment::reverse() {
-	Coordinate temp(p0);
+	Coordinate& temp=p0;
 	p0.setCoordinate(p1);
 	p1.setCoordinate(temp);
 }
@@ -99,10 +102,10 @@ double LineSegment::projectionFactor(Coordinate& p) {
 	return r;
 }
 
-Coordinate LineSegment::project(Coordinate& p) {
-	if (p==p0 || p==p1) return Coordinate(p);
+Coordinate& LineSegment::project(Coordinate& p) {
+	if (p==p0 || p==p1) return *(new Coordinate(p));
 	double r=projectionFactor(p);
-	return Coordinate(p0.x+r*(p1.x-p0.x),p0.y+r*(p1.y-p0.y));
+	return *(new Coordinate(p0.x+r*(p1.x-p0.x),p0.y+r*(p1.y-p0.y)));
 }
 
 /**

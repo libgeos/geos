@@ -10,7 +10,7 @@ BasicCoordinateList::BasicCoordinateList(int n) {
 	vect->reserve(n);
 }
 
-BasicCoordinateList::BasicCoordinateList(Coordinate c) {
+BasicCoordinateList::BasicCoordinateList(Coordinate& c) {
 	vect=new vector<Coordinate>(1,c);
 }
 
@@ -30,7 +30,7 @@ bool BasicCoordinateList::isEmpty() {
 	return vect->empty();
 }
 
-void BasicCoordinateList::add(Coordinate c){
+void BasicCoordinateList::add(Coordinate& c){
 	vect->push_back(c);
 }
 
@@ -45,7 +45,7 @@ Coordinate& BasicCoordinateList::getAt(int pos){
 		throw "BasicCoordinateList exception: can't retrieve element\n";
 }
 
-void BasicCoordinateList::setAt(Coordinate c, int pos){
+void BasicCoordinateList::setAt(Coordinate& c, int pos){
 	if (pos>=0 && pos<=vect->size()-1) 
 		(*vect)[pos]=c;
 	else
@@ -62,7 +62,7 @@ string BasicCoordinateList::toString() {
 	string result("");
 	char buffer[100];
 	for (unsigned int i=0; i<vect->size(); i++) {
-		Coordinate c=(*vect)[i];
+		Coordinate& c=(*vect)[i];
 		sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
 		result.append(buffer);
 	}

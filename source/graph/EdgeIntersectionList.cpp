@@ -10,7 +10,7 @@ EdgeIntersectionList::~EdgeIntersectionList() {
 	delete list;
 }
 
-EdgeIntersection* EdgeIntersectionList::add(Coordinate coord, int segmentIndex, double dist){
+EdgeIntersection* EdgeIntersectionList::add(Coordinate& coord, int segmentIndex, double dist){
 	vector<EdgeIntersection *>::iterator insertIt=list->begin();
 	bool isInList=findInsertionPoint(segmentIndex,dist,&insertIt);
 	EdgeIntersection *ei;
@@ -47,7 +47,7 @@ bool EdgeIntersectionList::findInsertionPoint(int segmentIndex, double dist,vect
 	return false;
 }
 
-bool EdgeIntersectionList::isIntersection(Coordinate pt){
+bool EdgeIntersectionList::isIntersection(Coordinate& pt){
 	vector<EdgeIntersection *>::iterator it;
 	for (it=list->begin();it<list->end();it++) {
 		EdgeIntersection *ei=*it;
@@ -80,7 +80,7 @@ void EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList) {
 
 Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1) {
 	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
-	Coordinate lastSegStartPt(edge->pts->getAt(ei1->segmentIndex));
+	Coordinate& lastSegStartPt=edge->pts->getAt(ei1->segmentIndex);
 	// if the last intersection point is not equal to the its segment start pt,
 	// add it to the points list as well.
 	// (This check is needed because the distance metric is not totally reliable!)

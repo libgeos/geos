@@ -22,8 +22,8 @@ public:
 	static void isTrue(bool assertion);
 	static void isTrue(bool assertion, string message);
 
-	static void equals(Coordinate expectedValue, Coordinate actualValue);
-	static void equals(Coordinate expectedValue, Coordinate actualValue, string message);
+	static void equals(Coordinate& expectedValue, Coordinate& actualValue);
+	static void equals(Coordinate& expectedValue, Coordinate& actualValue, string message);
 
 	static void shouldNeverReachHere();
 	static void shouldNeverReachHere(string message);

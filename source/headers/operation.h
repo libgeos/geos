@@ -35,7 +35,7 @@ public:
 	Coordinate pt;
 	bool isClosed;
 	int degree;
-    EndpointInfo(Coordinate newPt);
+    EndpointInfo(Coordinate& newPt);
 	void addEndpoint(bool newIsClosed);
 };
 /**
@@ -55,7 +55,7 @@ public:
 private:
 	bool hasNonEndpointIntersection(GeometryGraph *graph);
 	bool hasClosedEndpointIntersection(GeometryGraph *graph);
-	void addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate p,bool isClosed);
+	void addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate& p,bool isClosed);
 };
 
 #endif

@@ -120,7 +120,7 @@ private:
 class Quadrant {
 public:
 	static int quadrant(double dx, double dy);
-	static int quadrant(Coordinate p0, Coordinate p1);
+	static int quadrant(Coordinate& p0, Coordinate& p1);
 	static bool isOpposite(int quad1, int quad2);
 	static int commonHalfPlane(int quad1, int quad2);
 	static bool isInHalfPlane(int quad, int halfPlane);
@@ -300,7 +300,7 @@ private:
 
 class Node: public GraphComponent {
 public:
-	Node(Coordinate newCoord, EdgeEndStar* newEdges);
+	Node(Coordinate& newCoord, EdgeEndStar* newEdges);
 	~Node();
 	virtual Coordinate& getCoordinate();
 	virtual EdgeEndStar* getEdges();
@@ -328,7 +328,7 @@ public:
 	Coordinate coord;
 	int segmentIndex;
 	double dist;
-	EdgeIntersection(Coordinate newCoord, int newSegmentIndex, double newDist);
+	EdgeIntersection(Coordinate& newCoord, int newSegmentIndex, double newDist);
 	int compare(int newSegmentIndex, double newDist);
 	bool isEndPoint(int maxSegmentIndex);
 	string print();
@@ -340,11 +340,11 @@ public:
 	Edge *edge;
 	EdgeIntersectionList(Edge *edge);
 	~EdgeIntersectionList();
-	EdgeIntersection* add(Coordinate coord, int segmentIndex, double dist);
+	EdgeIntersection* add(Coordinate& coord, int segmentIndex, double dist);
 	vector<EdgeIntersection*>::iterator iterator();
 	bool isEmpty();
 	bool findInsertionPoint(int segmentIndex,double dist,vector<EdgeIntersection*>::iterator *insertIt);
-	bool isIntersection(Coordinate pt);
+	bool isIntersection(Coordinate& pt);
 	void addEndpoints();
 	void addSplitEdges(vector<Edge*> *edgeList);
 	Edge *createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1);
@@ -371,10 +371,10 @@ public:
 	NodeFactory *nodeFact;
 	NodeMap(NodeFactory *newNodeFact);
 	~NodeMap();
-	Node* addNode(Coordinate coord);
+	Node* addNode(Coordinate& coord);
 	Node* addNode(Node *n);
 	void add(EdgeEnd *e);
-	Node *find(Coordinate coord);
+	Node *find(Coordinate& coord);
 	map<Coordinate,Node*,CoordLT>::iterator iterator();
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
@@ -438,7 +438,7 @@ public:
 	~EdgeRing();
 	bool isIsolated();
 	bool isHole();
-	Coordinate getCoordinate(int i);
+	Coordinate& getCoordinate(int i);
 	LinearRing* getLinearRing();
 	Label* getLabel();
 	bool isShell();
@@ -452,7 +452,7 @@ public:
 	vector<DirectedEdge*>* getEdges();
 	int getMaxNodeDegree();
 	void setInResult();
-	bool containsPoint(Coordinate p);
+	bool containsPoint(Coordinate& p);
 protected:
 	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
 	GeometryFactory *geometryFactory;
@@ -483,20 +483,20 @@ public:
 	~PlanarGraph();
 	virtual vector<Edge*>::iterator getEdgeIterator();
 	virtual vector<EdgeEnd*>* getEdgeEnds();
-	virtual bool isBoundaryNode(int geomIndex,Coordinate coord);
+	virtual bool isBoundaryNode(int geomIndex,Coordinate& coord);
 	virtual void add(EdgeEnd *e);
 	virtual map<Coordinate,Node*,CoordLT>::iterator getNodeIterator();
 //	Wouldn't work. Use iterator
 //	Collection getNodes() { return nodes.values(); }
 	virtual Node* addNode(Node *node);
-	virtual Node* addNode(Coordinate coord);
-	virtual Node* find(Coordinate coord);
+	virtual Node* addNode(Coordinate& coord);
+	virtual Node* find(Coordinate& coord);
 	virtual void addEdges(vector<Edge*>* edgesToAdd);
 	virtual void linkResultDirectedEdges();
 	virtual void linkAllDirectedEdges();
 	virtual EdgeEnd* findEdgeEnd(Edge *e);
-	virtual Edge* findEdge(Coordinate p0,Coordinate p1);
-	virtual Edge* findEdgeInSameDirection(Coordinate p0,Coordinate p1);
+	virtual Edge* findEdge(Coordinate& p0,Coordinate& p1);
+	virtual Edge* findEdgeInSameDirection(Coordinate& p0,Coordinate& p1);
 	virtual string printEdges();
 	virtual NodeMap* getNodeMap();
 	//Not used 
@@ -508,7 +508,7 @@ protected:
 	vector<EdgeEnd*> *edgeEndList;
 	virtual void insertEdge(Edge *e);
 private:
-	bool matchInSameDirection(Coordinate p0,Coordinate p1,Coordinate ep0,Coordinate ep1);
+	bool matchInSameDirection(Coordinate& p0,Coordinate& p1,Coordinate& ep0,Coordinate& ep1);
 };
 
 struct LineStringLT {
@@ -562,10 +562,10 @@ private:
 	void addPolygonRing(LinearRing *lr,int cwLeft,int cwRight);
 	void addPolygon(Polygon *p);
 	void addLineString(LineString *line);
-	void insertPoint(int argIndex,Coordinate coord,int onLocation);
-	void insertBoundaryPoint(int argIndex,Coordinate coord);
+	void insertPoint(int argIndex,Coordinate& coord,int onLocation);
+	void insertBoundaryPoint(int argIndex,Coordinate& coord);
 	void addSelfIntersectionNodes(int argIndex);
-	void addSelfIntersectionNode(int argIndex,Coordinate coord,int loc);
+	void addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc);
 };
 //Operators
 bool operator==(Edge a,Edge b);

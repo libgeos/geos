@@ -1,8 +1,8 @@
 #include "graph.h"
 //#include "util.h"
 
-Node::Node(Coordinate newCoord, EdgeEndStar* newEdges):
-	coord(newCoord),GraphComponent(new Label(0,Location::UNDEF)) {
+Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Label(0,Location::UNDEF)) {
+	coord=newCoord;
 	edges=newEdges;
 }
 

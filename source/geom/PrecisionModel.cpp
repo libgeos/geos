@@ -50,7 +50,7 @@ double PrecisionModel::getOffsetY() {
 	return offsetY;
 }
 
-void PrecisionModel::toInternal (Coordinate& external, Coordinate *internal) {
+void PrecisionModel::toInternal (Coordinate& external, Coordinate* internal) {
 	if (isFloating()) {
 		internal->x = external.x;
 		internal->y = external.y;
@@ -73,7 +73,7 @@ Coordinate* PrecisionModel::toExternal(Coordinate& internal) {
 	return external;
 }
 
-void PrecisionModel::toExternal(Coordinate& internal, Coordinate *external) {
+void PrecisionModel::toExternal(Coordinate& internal, Coordinate* external) {
 	if (isFloating()) {
 		external->x = internal.x;
 		external->y = internal.y;

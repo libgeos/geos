@@ -10,7 +10,7 @@
 
 class RelateNode: public Node {
 public:
-	RelateNode(Coordinate coord,EdgeEndStar *edges);
+	RelateNode(Coordinate& coord,EdgeEndStar *edges);
 	void updateIMFromEdges(IntersectionMatrix *im);
 protected:
 	void computeIM(IntersectionMatrix *im);
@@ -75,7 +75,7 @@ public:
 	RelateComputer();
 	~RelateComputer();
 	RelateComputer(vector<GeometryGraph*> *newArg);
-	Coordinate getInvalidPoint();
+	Coordinate& getInvalidPoint();
 	bool isNodeConsistentArea();
 	bool hasDuplicateRings();
 	IntersectionMatrix* computeIM();

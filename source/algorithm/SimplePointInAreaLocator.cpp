@@ -8,14 +8,14 @@ CGAlgorithms* SimplePointInAreaLocator::cga=new RobustCGAlgorithms();
 * and multi-element Geometries.  The algorithm for multi-element Geometries
 * is more complex, since it has to take into account the boundaryDetermination rule
 */
-int SimplePointInAreaLocator::locate(Coordinate p,Geometry *geom){
+int SimplePointInAreaLocator::locate(Coordinate& p,Geometry *geom){
 	if (geom->isEmpty()) return Location::EXTERIOR;
 	if (containsPoint(p,geom))
 		return Location::INTERIOR;
 	return Location::EXTERIOR;
 }
 
-bool SimplePointInAreaLocator::containsPoint(Coordinate p,Geometry *geom){
+bool SimplePointInAreaLocator::containsPoint(Coordinate& p,Geometry *geom){
 	if (typeid(*geom)==typeid(Polygon)) {
 		return containsPointInPolygon(p,(Polygon*)geom);
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -33,7 +33,7 @@ bool SimplePointInAreaLocator::containsPoint(Coordinate p,Geometry *geom){
 	return false;
 }
 
-bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate p,Polygon *poly) {
+bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate& p,Polygon *poly) {
 	if (poly->isEmpty()) return false;
 	LineString *shell=poly->getExteriorRing();
 	if (!cga->isPointInRing(p,shell->getCoordinates())) {

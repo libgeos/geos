@@ -303,8 +303,8 @@ int Geometry::compare(vector<Coordinate> a, vector<Coordinate> b){
 	unsigned int i=0;
 	unsigned int j=0;
 	while (i<a.size() && j<b.size()) {
-		Coordinate aCoord=a[i];
-		Coordinate bCoord=b[j];
+		Coordinate& aCoord=a[i];
+		Coordinate& bCoord=b[j];
 		int comparison=aCoord.compareTo(bCoord);
 		if (comparison!=0) {
 			return comparison;

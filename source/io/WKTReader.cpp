@@ -30,8 +30,8 @@ CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 		return CoordinateListFactory::internalFactory->createCoordinateList();
 	}
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
-	Coordinate *externalCoordinate=new Coordinate();
-	Coordinate *internalCoordinate=new Coordinate();
+	Coordinate* externalCoordinate=new Coordinate();
+	Coordinate* internalCoordinate=new Coordinate();
 	externalCoordinate->x=getNextNumber(tokenizer);
 	externalCoordinate->y=getNextNumber(tokenizer);
 	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
@@ -144,8 +144,8 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 	}
 	double x=getNextNumber(tokenizer);
 	double y=getNextNumber(tokenizer);
-	Coordinate *externalCoordinate=new Coordinate(x, y);
-	Coordinate *internalCoordinate=new Coordinate();
+	Coordinate* externalCoordinate=new Coordinate(x, y);
+	Coordinate* internalCoordinate=new Coordinate();
 	precisionModel->toInternal(*externalCoordinate,internalCoordinate);
 	getNextCloser(tokenizer);
 	return geometryFactory->createPoint(*internalCoordinate);

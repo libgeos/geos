@@ -1,7 +1,7 @@
 #include "opRelate.h"
 #include "stdio.h"
 
-RelateNode::RelateNode(Coordinate coord,EdgeEndStar *edges): Node(coord,edges) {}
+RelateNode::RelateNode(Coordinate& coord,EdgeEndStar *edges): Node(coord,edges) {}
 
 /**
 * Update the IM with the contribution for this component.

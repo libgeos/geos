@@ -29,7 +29,7 @@ RelateComputer::~RelateComputer() {
 /**
 * @return the intersection point, or <code>null</code> if none was found
 */
-Coordinate RelateComputer::getInvalidPoint() {
+Coordinate& RelateComputer::getInvalidPoint() {
 	return invalidPoint;
 }
 

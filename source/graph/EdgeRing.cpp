@@ -32,7 +32,7 @@ bool EdgeRing::isHole(){
 	return isHoleVar;
 }
 
-Coordinate EdgeRing::getCoordinate(int i) {
+Coordinate& EdgeRing::getCoordinate(int i) {
 	return pts->getAt(i);
 }
 
@@ -169,7 +169,7 @@ void EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge){
  * This method will cause the ring to be computed.
  * It will also check any holes, if they have been assigned.
  */
-bool EdgeRing::containsPoint(Coordinate p){
+bool EdgeRing::containsPoint(Coordinate& p){
 	LinearRing *lrShell=getLinearRing();
 	Envelope* env=lrShell->getEnvelopeInternal();
 	if (!env->contains(p)) return false;

@@ -20,7 +20,7 @@
 * result of <b>rounding</b> points which lie on the line,
 * but not safe to use for <b>truncated</b> points.
 */
-double LineIntersector::computeEdgeDistance(Coordinate p,Coordinate p0,Coordinate p1) {
+double LineIntersector::computeEdgeDistance(Coordinate& p,Coordinate& p0,Coordinate& p1) {
 	double dx=fabs(p1.x-p0.x);
 	double dy=fabs(p1.y-p0.y);
 	double dist=-1.0;	// sentinel value
@@ -45,7 +45,7 @@ double LineIntersector::computeEdgeDistance(Coordinate p,Coordinate p0,Coordinat
 * This function is non-robust, since it may compute the square of large numbers.
 * Currently not sure how to improve this.
 */
-double LineIntersector::nonRobustComputeEdgeDistance(Coordinate p,Coordinate p1,Coordinate p2) {
+double LineIntersector::nonRobustComputeEdgeDistance(Coordinate& p,Coordinate& p1,Coordinate& p2) {
 	double dx=p.x-p1.x;
 	double dy=p.y-p1.y;
 	double dist=sqrt(dx*dx+dy*dy);   // dummy value
@@ -74,7 +74,7 @@ bool LineIntersector::isCollinear() {
 /**
 * Computes the intersection of the lines p1-p2 and p3-p4
 */
-void LineIntersector::computeIntersection(Coordinate p1,Coordinate p2,Coordinate p3,Coordinate p4) {
+void LineIntersector::computeIntersection(Coordinate& p1,Coordinate& p2,Coordinate& p3,Coordinate& p4) {
 	inputLines[0][0]=p1;
 	inputLines[0][1]=p2;
 	inputLines[1][0]=p3;
@@ -127,7 +127,7 @@ int LineIntersector::getIntersectionNum() {
 *
 * @return the intIndex'th intersection point
 */
-Coordinate LineIntersector::getIntersection(int intIndex){
+Coordinate& LineIntersector::getIntersection(int intIndex){
 	return intPt[intIndex];
 }
 
@@ -159,7 +159,7 @@ void LineIntersector::computeIntLineIndex() {
 *
 * @return true if the input point is one of the intersection points.
 */
-bool LineIntersector::isIntersection(Coordinate pt) {
+bool LineIntersector::isIntersection(Coordinate& pt) {
 	for (int i=0;i<result;i++) {
 		if (intPt[i].equals2D(pt)) {
 			return true;
@@ -195,7 +195,7 @@ bool LineIntersector::isProper() {
 *
 * @return the intIndex'th intersection point in the direction of the specified input line segment
 */
-Coordinate LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex) {
+Coordinate& LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex) {
 	// lazily compute int line array
 	computeIntLineIndex();
 	return intPt[intLineIndex[segmentIndex][intIndex]];

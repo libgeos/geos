@@ -20,7 +20,7 @@ bool IsSimpleOp::isSimple(MultiPoint *mp) {
 	set<Coordinate,CoordLT> *points=new set<Coordinate,CoordLT>();
 	for(int i=0;i<mp->getNumGeometries();i++) {
 		Point *pt=(Point*) mp->getGeometryN(i);
-		Coordinate *p=pt->getCoordinate();
+		Coordinate* p=pt->getCoordinate();
 		if (points->find(*p)!=points->end()) {
 			delete points;
 			return false;
@@ -76,9 +76,9 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
 		bool isClosed=e->isClosed();
-		Coordinate p0(e->getCoordinate(0));
+		Coordinate& p0=e->getCoordinate(0);
 		addEndpoint(endPoints,p0,isClosed);
-		Coordinate p1(e->getCoordinate(e->getNumPoints()-1));
+		Coordinate& p1=e->getCoordinate(e->getNumPoints()-1);
 		addEndpoint(endPoints,p1,isClosed);
 	}
 	map<Coordinate,EndpointInfo*,CoordLT>::iterator it=endPoints->begin();
@@ -96,7 +96,7 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 /**
 * Add an endpoint to the map, creating an entry for it if none exists
 */
-void IsSimpleOp::addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate p,bool isClosed) {
+void IsSimpleOp::addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate& p,bool isClosed) {
 	EndpointInfo *eiInfo=endPoints->find(p)->second;
 	if (eiInfo==NULL) {
 		eiInfo=new EndpointInfo(p);
@@ -105,7 +105,7 @@ void IsSimpleOp::addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Co
 	eiInfo->addEndpoint(isClosed);
 }
 
-EndpointInfo::EndpointInfo(Coordinate newPt) {
+EndpointInfo::EndpointInfo(Coordinate& newPt) {
 	pt.setCoordinate(newPt);
 	isClosed=false;
 	degree=0;

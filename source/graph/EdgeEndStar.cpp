@@ -127,7 +127,7 @@ void EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom){
 				if (hasDimensionalCollapseEdge[geomi]){
 					loc=Location::EXTERIOR;
 				}else {
-					Coordinate p(e->getCoordinate());
+					Coordinate& p=e->getCoordinate();
 					loc=getLocation(geomi,p,geom);
 				}
 				label->setAllLocationsIfNull(geomi,loc);

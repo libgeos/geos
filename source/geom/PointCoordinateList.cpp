@@ -10,7 +10,7 @@ PointCoordinateList::PointCoordinateList(int n) {
 	vect->reserve(n);
 }
 
-PointCoordinateList::PointCoordinateList(Coordinate c) {
+PointCoordinateList::PointCoordinateList(Coordinate& c) {
 	point_3d pt={c.x,c.y,c.z};
 	vect=new vector<point_3d>(1,pt);
 }
@@ -42,7 +42,7 @@ bool PointCoordinateList::isEmpty() {
 	return vect->empty();
 }
 
-void PointCoordinateList::add(Coordinate c){
+void PointCoordinateList::add(Coordinate& c){
 	point_3d pt={c.x,c.y,c.z};
 	vect->push_back(pt);
 }
@@ -60,7 +60,7 @@ Coordinate& PointCoordinateList::getAt(int pos){
 		throw "PointCoordinateList exception: can't retrieve element\n";
 }
 
-void PointCoordinateList::setAt(Coordinate c, int pos){
+void PointCoordinateList::setAt(Coordinate& c, int pos){
 	point_3d pt={c.x,c.y,c.z};
 	if (pos>=0 && pos<=vect->size()-1) 
 		(*vect)[pos]=pt;

@@ -10,124 +10,7 @@
 
 using namespace std;
 
-/**
- *  <code>Coordinate</code> is the lightweight class used to store coordinates.
- *  It is distinct from <code>Point</code>, which is a subclass of <code>Geometry</code>
- *  . Unlike objects of type <code>Point</code> (which contain additional
- *  information such as an envelope, a precision model, and spatial reference
- *  system information), a <code>Coordinate</code> only contains ordinate values
- *  and accessor methods. <P>
- *
- *  <code>Coordinate</code>s are two-dimensional points, with an additional
- *  z-ordinate. JTS does not support any operations on the z-ordinate except
- *  the basic accessor functions. Constructed coordinates will have a
- *  z-ordinate of <code>DoubleNotANumber</code>.  The standard comparison functions will ignore
- *  the z-ordinate.
- *
- */
-class Coordinate {
-public:
-	void setNull(void);
-	static Coordinate getNull(void);
-	Coordinate();
-	Coordinate(double xNew, double yNew, double zNew);
-	Coordinate(const Coordinate &c);
-	Coordinate(double xNew, double yNew);
-//	virtual ~Coordinate();
-	void setCoordinate(Coordinate other);
-	bool equals2D(Coordinate other);
-	int compareTo(Coordinate other);
-	bool equals3D(Coordinate other);
-	string toString();
-	void makePrecise();
-	double distance(Coordinate p);
-
-	double x;	/// x-coordinate
-	double y;	/// y-coordinate
-	double z;	/// z-coordinate
-};
-
-class CoordinateList {
-public:
-	virtual	bool isEmpty()=0;
-	virtual	void add(Coordinate c)=0;
-	virtual	int getSize()=0;
-	virtual	Coordinate& getAt(int pos)=0;
-	virtual	void setAt(Coordinate c, int pos)=0;
-	virtual	void deleteAt(int pos)=0;
-	virtual	vector<Coordinate>* toVector()=0;
-	virtual	string toString()=0;
-	virtual	void setPoints(const vector<Coordinate> &v)=0;
-	bool hasRepeatedPoints();
-	Coordinate* minCoordinate();
-};
-
-class BasicCoordinateList : public CoordinateList {
-public:
-	BasicCoordinateList();
-	BasicCoordinateList(int n);
-	BasicCoordinateList(Coordinate c);
-	BasicCoordinateList(const BasicCoordinateList &cl);
-	~BasicCoordinateList();
-	bool isEmpty();
-	void add(Coordinate c);
-	int getSize();
-	Coordinate& getAt(int pos);
-	void setAt(Coordinate c, int pos);
-	void deleteAt(int pos);
-	vector<Coordinate>* toVector();
-	string toString();
-	void setPoints(const vector<Coordinate> &v);
-private:
-	vector<Coordinate> *vect;
-};
-
-struct point_3d {
-	double x;
-	double y;
-	double z;
-};
-
-class PointCoordinateList : public CoordinateList {
-public:
-	PointCoordinateList();
-	PointCoordinateList(int n);
-	PointCoordinateList(Coordinate c);
-	PointCoordinateList(const PointCoordinateList &cl);
-	~PointCoordinateList();
-	bool isEmpty();
-	void add(Coordinate c);
-	int getSize();
-	Coordinate& getAt(int pos);
-	void setAt(Coordinate c, int pos);
-	void deleteAt(int pos);
-	vector<Coordinate>* toVector();
-	string toString();
-	void setPoints(const vector<Coordinate> &v);
-private:
-	vector<point_3d> *vect;
-};
-
-class CoordinateListFactory {
-public:
-	virtual CoordinateList* createCoordinateList()=0;
-	virtual CoordinateList* createCoordinateList(int size)=0;
-	virtual CoordinateList* createCoordinateList(Coordinate c)=0;
-	static CoordinateListFactory* internalFactory;
-};
-
-class BasicCoordinateListFactory: public CoordinateListFactory {
-	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
-	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
-	CoordinateList* createCoordinateList(Coordinate c) {return new BasicCoordinateList(c);};
-};
-
-class PointCoordinateListFactory: public CoordinateListFactory {
-	CoordinateList* createCoordinateList() {return new PointCoordinateList();};
-	CoordinateList* createCoordinateList(int size) {return new PointCoordinateList(size);};
-	CoordinateList* createCoordinateList(Coordinate c) {return new PointCoordinateList(c);};
-};
-
+class Coordinate;
 class PrecisionModel {
 public:
 	enum {
@@ -146,10 +29,10 @@ public:
 	double getScale();
 	double getOffsetX();
 	double getOffsetY();
-	void toInternal(Coordinate& external, Coordinate *internal);
+	void toInternal(Coordinate& external, Coordinate* internal);
 	Coordinate* toInternal(Coordinate& external);
 	Coordinate* toExternal(Coordinate& internal);
-	void toExternal(Coordinate& internal, Coordinate *external);
+	void toExternal(Coordinate& internal, Coordinate* external);
 	string toString();
 	void round(Coordinate& p0,Coordinate& p1);
 private:
@@ -157,6 +40,204 @@ private:
 	double scale;
 	double offsetX;
 	double offsetY;
+};
+
+/**
+ *  <code>Coordinate</code> is the lightweight class used to store coordinates.
+ *  It is distinct from <code>Point</code>, which is a subclass of <code>Geometry</code>
+ *  . Unlike objects of type <code>Point</code> (which contain additional
+ *  information such as an envelope, a precision model, and spatial reference
+ *  system information), a <code>Coordinate</code> only contains ordinate values
+ *  and accessor methods. <P>
+ *
+ *  <code>Coordinate</code>s are two-dimensional points, with an additional
+ *  z-ordinate. JTS does not support any operations on the z-ordinate except
+ *  the basic accessor functions. Constructed coordinates will have a
+ *  z-ordinate of <code>DoubleNotANumber</code>.  The standard comparison functions will ignore
+ *  the z-ordinate.
+ *
+ */
+class Coordinate {
+public:
+	//void setNull(void);
+	//static Coordinate& getNull(void);
+	//Coordinate();
+	//Coordinate(double xNew, double yNew, double zNew);
+	//Coordinate(const Coordinate& c);
+	//Coordinate(double xNew, double yNew);
+	//void setCoordinate(Coordinate& other);
+	//bool equals2D(Coordinate& other);
+	//int compareTo(Coordinate& other);
+	//bool equals3D(Coordinate& other);
+	string toString();
+	//void makePrecise();
+	//double distance(Coordinate& p);
+
+	void Coordinate::setNull() {
+		x=DoubleNotANumber;
+		y=DoubleNotANumber;
+		z=DoubleNotANumber;
+	}
+
+	static Coordinate& Coordinate::getNull() {
+		return *(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
+	}
+
+	Coordinate::Coordinate() {
+		x=0.0;
+		y=0.0;
+		z=DoubleNotANumber;
+	}
+
+	Coordinate::Coordinate(double xNew, double yNew, double zNew) {
+		x=xNew;
+		y=yNew;
+		z=zNew;
+	}
+
+	Coordinate::Coordinate(const Coordinate& c){
+		x=c.x;
+		y=c.y;
+		z=c.z;
+	}
+
+	Coordinate::Coordinate(double xNew, double yNew){
+		x=xNew;
+		y=yNew;
+		z=DoubleNotANumber;
+	}
+
+	void Coordinate::setCoordinate(Coordinate& other) {
+		x = other.x;
+		y = other.y;
+		z = other.z;
+	}
+
+	bool Coordinate::equals2D(Coordinate& other) {
+		if (x != other.x) {
+		return false;
+		}
+		if (y != other.y) {
+		return false;
+		}
+		return true;
+	}
+
+	int Coordinate::compareTo(Coordinate& other) {
+		if (x < other.x) {
+		return -1;
+		}
+		if (x > other.x) {
+		return 1;
+		}
+		if (y < other.y) {
+		return -1;
+		}
+		if (y > other.y) {
+		return 1;
+		}
+		return 0;
+	}
+
+	bool Coordinate::equals3D(Coordinate& other) {
+		return (x == other.x) && ( y == other.y) && (( z == other.z)||(z==DoubleNotANumber && other.z==DoubleNotANumber));
+	}
+
+	void Coordinate::makePrecise() {
+		x = PrecisionModel::makePrecise(x);
+		y = PrecisionModel::makePrecise(y);
+	}
+
+	double Coordinate::distance(Coordinate& p) {
+		double dx = x - p.x;
+		double dy = y - p.y;
+		return sqrt(dx * dx + dy * dy);
+	}
+
+	double x;	/// x-coordinate
+	double y;	/// y-coordinate
+	double z;	/// z-coordinate
+};
+
+class CoordinateList {
+public:
+	virtual	bool isEmpty()=0;
+	virtual	void add(Coordinate& c)=0;
+	virtual	int getSize()=0;
+	virtual	Coordinate& getAt(int pos)=0;
+	virtual	void setAt(Coordinate& c, int pos)=0;
+	virtual	void deleteAt(int pos)=0;
+	virtual	vector<Coordinate>* toVector()=0;
+	virtual	string toString()=0;
+	virtual	void setPoints(const vector<Coordinate> &v)=0;
+	bool hasRepeatedPoints();
+	Coordinate* minCoordinate();
+};
+
+class BasicCoordinateList : public CoordinateList {
+public:
+	BasicCoordinateList();
+	BasicCoordinateList(int n);
+	BasicCoordinateList(Coordinate& c);
+	BasicCoordinateList(const BasicCoordinateList &cl);
+	~BasicCoordinateList();
+	bool isEmpty();
+	void add(Coordinate& c);
+	int getSize();
+	Coordinate& getAt(int pos);
+	void setAt(Coordinate& c, int pos);
+	void deleteAt(int pos);
+	vector<Coordinate>* toVector();
+	string toString();
+	void setPoints(const vector<Coordinate> &v);
+private:
+	vector<Coordinate> *vect;
+};
+
+struct point_3d {
+	double x;
+	double y;
+	double z;
+};
+
+class PointCoordinateList : public CoordinateList {
+public:
+	PointCoordinateList();
+	PointCoordinateList(int n);
+	PointCoordinateList(Coordinate& c);
+	PointCoordinateList(const PointCoordinateList &cl);
+	~PointCoordinateList();
+	bool isEmpty();
+	void add(Coordinate& c);
+	int getSize();
+	Coordinate& getAt(int pos);
+	void setAt(Coordinate& c, int pos);
+	void deleteAt(int pos);
+	vector<Coordinate>* toVector();
+	string toString();
+	void setPoints(const vector<Coordinate> &v);
+private:
+	vector<point_3d> *vect;
+};
+
+class CoordinateListFactory {
+public:
+	virtual CoordinateList* createCoordinateList()=0;
+	virtual CoordinateList* createCoordinateList(int size)=0;
+	virtual CoordinateList* createCoordinateList(Coordinate& c)=0;
+	static CoordinateListFactory* internalFactory;
+};
+
+class BasicCoordinateListFactory: public CoordinateListFactory {
+	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
+	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
+	CoordinateList* createCoordinateList(Coordinate& c) {return new BasicCoordinateList(c);};
+};
+
+class PointCoordinateListFactory: public CoordinateListFactory {
+	CoordinateList* createCoordinateList() {return new PointCoordinateList();};
+	CoordinateList* createCoordinateList(int size) {return new PointCoordinateList(size);};
+	CoordinateList* createCoordinateList(Coordinate& c) {return new PointCoordinateList(c);};
 };
 
 /**
@@ -177,7 +258,7 @@ public:
    *
    *@param  coord  a <code>Coordinate</code> to which the filter is applied.
    */
-   virtual void filter(Coordinate coord)=0;
+   virtual void filter(Coordinate& coord)=0;
 };
 
 /**
@@ -423,9 +504,9 @@ public:
 	Coordinate p1; /// Segemnt end
 	LineSegment(void);
 	LineSegment(const LineSegment &ls);
-	LineSegment(Coordinate c0, Coordinate c1);
+	LineSegment(Coordinate& c0, Coordinate& c1);
 	virtual ~LineSegment(void);
-	virtual void setCoordinates(Coordinate c0, Coordinate c1);
+	virtual void setCoordinates(Coordinate& c0, Coordinate& c1);
 	virtual Coordinate& getCoordinate(int i);
 	virtual void setCoordinates(LineSegment ls);
 	virtual void reverse();
@@ -434,7 +515,7 @@ public:
 	virtual double distance(LineSegment ls);
 	virtual double distance(Coordinate& p);
 	virtual double projectionFactor(Coordinate& p);
-	virtual Coordinate project(Coordinate& p);
+	virtual Coordinate& project(Coordinate& p);
 	virtual int compareTo(LineSegment other);
 	virtual bool equalsTopo(LineSegment other);
 	virtual string toString();
@@ -517,7 +598,7 @@ public:
 };
 
 //Operators
-bool operator==(Coordinate a, Coordinate b);
+bool operator==(Coordinate& a, Coordinate& b);
 bool operator==(Envelope a, Envelope b);
 bool operator==(PrecisionModel a, PrecisionModel b);
 bool operator==(LineSegment a, LineSegment b);
@@ -605,7 +686,7 @@ public:
 class Point : public Geometry, public SFSPoint {
 public:
 	Point(void);
-	Point(Coordinate c, PrecisionModel* precisionModel, int SRID);
+	Point(Coordinate& c, PrecisionModel* precisionModel, int SRID);
 	Point(const Point &p); //replaces clone()
 	virtual ~Point(void);
 	CoordinateList* getCoordinates(void);
@@ -644,7 +725,7 @@ class SFSLineString : public SFSCurve  {
 public:
 	virtual int getNumPoints()=0;
 	virtual Point* getPointN(int n)=0;
-	virtual Coordinate getCoordinateN(int n)=0;
+	virtual Coordinate& getCoordinateN(int n)=0;
 
 };
 
@@ -658,7 +739,7 @@ public:
 	LineString(CoordinateList* newPoints, PrecisionModel* precisionModel, int SRID);
 	virtual ~LineString();
 	virtual CoordinateList* getCoordinates();
-	virtual Coordinate getCoordinateN(int n);
+	virtual Coordinate& getCoordinateN(int n);
 	virtual int getDimension();
 	virtual int getBoundaryDimension();
 	virtual bool isEmpty();
@@ -798,7 +879,7 @@ public:
 
 	static Geometry* toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID);
 	PrecisionModel* getPrecisionModel();
-	Point* createPoint(Coordinate coordinate);
+	Point* createPoint(Coordinate& coordinate);
 	MultiLineString* createMultiLineString(vector<Geometry *> *lineStrings);
 	GeometryCollection* createGeometryCollection(vector<Geometry *> *geometries);
 	MultiPolygon* createMultiPolygon(vector<Geometry *> *polygons);

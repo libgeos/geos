@@ -9,7 +9,7 @@ NodeMap::~NodeMap() {
 	delete nodeMap;
 }
 
-Node* NodeMap::addNode(Coordinate coord){
+Node* NodeMap::addNode(Coordinate& coord){
 	Node *node=find(coord);
 	if (node==NULL) {
 		node=nodeFact->createNode(coord);
@@ -37,7 +37,7 @@ void NodeMap::add(EdgeEnd *e) {
 /**
  * @return the node if found; null otherwise
  */
-Node* NodeMap::find(Coordinate coord){
+Node* NodeMap::find(Coordinate& coord){
 	map<Coordinate,Node*,CoordLT>::iterator found=nodeMap->find(coord);
 	if (found==nodeMap->end())
 		return NULL;

@@ -19,7 +19,7 @@ public:
 	SegmentIntersector();
 	SegmentIntersector(LineIntersector *newLi,bool newIncludeProper,bool newRecordIsolated);
 	void setBoundaryNodes(vector<Node*> *bdyNodes0,vector<Node*> *bdyNodes1);
-	Coordinate getProperIntersectionPoint();
+	Coordinate& getProperIntersectionPoint();
 	bool hasIntersection();
 	bool hasProperIntersection();
 	bool hasProperInteriorIntersection();

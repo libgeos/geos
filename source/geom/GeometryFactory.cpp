@@ -33,7 +33,7 @@ PrecisionModel* GeometryFactory::getPrecisionModel(){
 	return precisionModel;
 }
 
-Point* GeometryFactory::createPoint(Coordinate coordinate){
+Point* GeometryFactory::createPoint(Coordinate& coordinate){
 	return new Point(coordinate,precisionModel,SRID);
 }
 

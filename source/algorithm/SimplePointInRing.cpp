@@ -6,7 +6,7 @@ SimplePointInRing::SimplePointInRing(LinearRing *ring){
 	pts=ring->getCoordinates();
 }
 
-bool SimplePointInRing::isInside(Coordinate pt){
+bool SimplePointInRing::isInside(Coordinate& pt){
 	return cga->isPointInRing(pt,pts);
 }
 
