@@ -11,27 +11,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 namespace geos {
 
@@ -47,13 +34,18 @@ QuadTreeNode::createExpanded(QuadTreeNode *node, const Envelope *addEnv)
 {
 	Envelope *expandEnv=new Envelope(*addEnv);
 	if (node!=NULL) expandEnv->expandToInclude(node->env);
+#if DEBUG
+	cerr<<"QuadTreeNode::createExpanded computed "<<expandEnv->toString()<<endl;
+#endif
 	QuadTreeNode *largerNode=createNode(expandEnv);
 	if (node!=NULL) largerNode->insertNode(node);
 	delete expandEnv;
 	return largerNode;
 }
 
-QuadTreeNode::QuadTreeNode(Envelope *nenv,int nlevel){
+// Takes ownership of envelope
+QuadTreeNode::QuadTreeNode(Envelope *nenv, int nlevel)
+{
 	env=nenv;
 	level=nlevel;
 	centre=new Coordinate();
@@ -175,5 +167,40 @@ QuadTreeNode* QuadTreeNode::createSubnode(int index) {
 	QuadTreeNode *node=new QuadTreeNode(sqEnv,level-1);
 	return node;
 }
+
+string
+QuadTreeNode::toString() const
+{
+	char buf[10];
+	sprintf(buf, "%d", level);
+	string tmp = buf;
+
+	string ret = "L"+tmp+" "+env->toString()+" Ctr["+centre->toString()+"]";
+	ret += " "+QuadTreeNodeBase::toString();
+	return ret;
 }
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.7  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.6  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.5  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ **********************************************************************/
 

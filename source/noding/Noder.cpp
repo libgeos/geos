@@ -11,8 +11,44 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/noding.h>
+
+namespace geos {
+
+vector<SegmentString*>*
+Noder::getNodedEdges(vector<SegmentString*>* segStrings)
+{
+	vector<SegmentString*>* resultEdgelist=new vector<SegmentString*>();
+	getNodedEdges(segStrings, resultEdgelist);
+	return resultEdgelist;
+}
+
+void
+Noder::getNodedEdges(vector<SegmentString*>* segStrings,vector<SegmentString*>* resultEdgelist)
+{
+	for (int i=0; i<(int)segStrings->size();i++) {
+		SegmentString *ss=(*segStrings)[i];
+		ss->getIntersectionList()->addSplitEdges(resultEdgelist);
+	}
+}
+
+void
+Noder::setSegmentIntersector(nodingSegmentIntersector *newSegInt)
+{
+	segInt=newSegInt;
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.5  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.4  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -29,27 +65,3 @@
  *
  **********************************************************************/
 
-
-#include <geos/noding.h>
-
-namespace geos {
-
-vector<SegmentString*>*
-Noder::getNodedEdges(vector<SegmentString*>* segStrings)
-{
-	vector<SegmentString*>* resultEdgelist=new vector<SegmentString*>();
-	getNodedEdges(segStrings, resultEdgelist);
-	return resultEdgelist;
-}
-
-void Noder::getNodedEdges(vector<SegmentString*>* segStrings,vector<SegmentString*>* resultEdgelist){
-	for (int i=0; i<(int)segStrings->size();i++) {
-		SegmentString *ss=(*segStrings)[i];
-		ss->getIntersectionList()->addSplitEdges(resultEdgelist);
-	}
-}
-
-void Noder::setSegmentIntersector(nodingSegmentIntersector *newSegInt){
-	segInt=newSegInt;
-}
-}

@@ -11,37 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.2  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.16  2004/05/06 16:30:58  strk
- * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
- * deleted at destruction time. doc/example.cpp runs with no leaks.
- *
- * Revision 1.15  2004/04/19 15:14:45  strk
- * Added missing virtual destructor in SpatialIndex class.
- * Memory leaks fixes. Const and throw specifications added.
- *
- * Revision 1.14  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
- *
- * Revision 1.13  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_INDEXQUADTREE_H
 #define GEOS_INDEXQUADTREE_H
@@ -57,14 +27,18 @@ using namespace std;
 namespace geos {
 
 /*
-* Provides a test for whether an interval is
-* so small it should be considered as zero for the purposes of
-* inserting it into a binary tree.
-* The reason this check is necessary is that round-off error can
-* cause the algorithm used to subdivide an interval to fail, by
-* computing a midpoint value which does not lie strictly between the
-* endpoints.
-*/
+ * \class IntervalSize indexQuadtree.h geos/indexQuadtree.h
+ *
+ * \brief
+ * Provides a test for whether an interval is
+ * so small it should be considered as zero for the purposes of
+ * inserting it into a binary tree.
+ *
+ * The reason this check is necessary is that round-off error can
+ * cause the algorithm used to subdivide an interval to fail, by
+ * computing a midpoint value which does not lie strictly between the
+ * endpoints.
+ */
 class IntervalSize {
 public:
 	/**
@@ -100,8 +74,12 @@ private:
 	int64 xBits;
 };
 
-/*
+/** 
+ * \class QuadTreeKey indexQuadtree.h geos/indexQuadtree.h
+ *
+ * \brief
  * A QuadTreeKey is a unique identifier for a node in a quadtree.
+ *
  * It contains a lower-left point and a level number. The level number
  * is the power of two for the size of the node envelope
  */
@@ -126,8 +104,11 @@ private:
 
 class QuadTreeNode;
 
-/*
- * The base class for nodes in a {@link Quadtree}.
+/**
+ * \class QuadTreeNodeBase indexQuadtree.h geos/indexQuadtree.h
+ *
+ * \brief
+ * The base class for nodes in a Quadtree.
  *
  */
 class QuadTreeNodeBase {
@@ -142,24 +123,30 @@ public:
 	virtual int depth();
 	virtual int size();
 	virtual int nodeCount();
+	virtual string toString() const;
 protected:
 	vector<void*> *items;
+
 	/**
-	* subquads are numbered as follows:
-	* <pre>
-	*  2 | 3
-	*  --+--
-	*  0 | 1
-	* </pre>
-	*/
+	 * subquads are numbered as follows:
+	 * <pre>
+	 *  2 | 3
+	 *  --+--
+	 *  0 | 1
+	 * </pre>
+	 */
 	QuadTreeNode* subnode[4];
 	virtual bool isSearchMatch(const Envelope *searchEnv)=0;
 };
 
-/*
- * Represents a node of a {@link Quadtree}.  Nodes contain
- * items which have a spatial extent corresponding to the node's position
- * in the quadtree.
+/**
+ * \class QuadTreeNode indexQuadtree.h geos/indexQuadtree.h
+ *
+ * \brief
+ * Represents a node of a Quadtree.
+ *
+ * Nodes contain items which have a spatial extent corresponding to
+ * the node's position in the quadtree.
  *
  */
 class QuadTreeNode: public QuadTreeNodeBase {
@@ -172,12 +159,14 @@ public:
 	QuadTreeNode* getNode(const Envelope *searchEnv);
 	QuadTreeNodeBase* find(const Envelope *searchEnv);
 	void insertNode(QuadTreeNode *node);
+	string toString() const;
 private:
 	Envelope *env;
 	Coordinate *centre;
 	int level;
 	QuadTreeNode* getSubnode(int index);
 	QuadTreeNode* createSubnode(int index);
+
 protected:
 	bool isSearchMatch(const Envelope *searchEnv);
 };
@@ -246,6 +235,8 @@ public:
 
 	vector<void*>* query(const Envelope *searchEnv);
 	vector<void*>* queryAll();
+
+	string toString() const;
 private:
 	vector<Envelope *>newEnvelopes;
 	void collectStats(const Envelope *itemEnv);
@@ -262,6 +253,43 @@ private:
 	**/
 	double minExtent;
 };
-}
+
+} // namespace geos
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.3  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.16  2004/05/06 16:30:58  strk
+ * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
+ * deleted at destruction time. doc/example.cpp runs with no leaks.
+ *
+ * Revision 1.15  2004/04/19 15:14:45  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
+ * Revision 1.14  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
+ * Revision 1.13  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

@@ -16,6 +16,9 @@
 #include <geos/geomgraph.h>
 
 //#define DEBUG_INTERSECT
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 namespace geos {
 
@@ -297,7 +300,13 @@ bool Edge::equals(Edge *e){
 bool
 Edge::isPointwiseEqual(Edge *e)
 {
+#if DEBUG > 2
+	cerr<<"Edge::isPointwiseEqual call"<<endl;
+#endif
 	if (pts->getSize()!=e->pts->getSize()) return false;
+#if DEBUG
+	cerr<<"Edge::isPointwiseEqual scanning "<<e->pts->getSize()<<"x"<<pts->getSize()<<" points"<<endl;
+#endif
 	for (int i=0;i<pts->getSize();i++) {
 		if (!pts->getAt(i).equals2D(e->pts->getAt(i))) {
 			return false;
@@ -343,6 +352,11 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.6  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

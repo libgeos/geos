@@ -11,8 +11,138 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/noding.h>
+#include <geos/profiler.h>
+
+#define DEBUG 0
+
+namespace geos {
+
+#if PROFILE
+static Profiler *profiler = Profiler::instance();
+#endif
+
+MCQuadtreeNoder::MCQuadtreeNoder(){
+	chains=new vector<indexMonotoneChain*>();
+	index=new STRtree();
+	idCounter = 0;
+	nOverlaps = 0;
+}
+
+MCQuadtreeNoder::~MCQuadtreeNoder(){
+	for (unsigned int i=0; i<chains->size(); i++)
+	{
+		delete (*chains)[i];
+	}
+	delete chains;
+	delete index;
+}
+
+vector<SegmentString*> *
+MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
+{
+#if PROFILE
+	profiler->start("MCQuadtreeNoder::node adding");
+#endif
+	for(int i=0; i<(int)inputSegStrings->size();i++) {
+		add((*inputSegStrings)[i]);
+	}
+#if PROFILE
+	profiler->stop("MCQuadtreeNoder::node adding");
+#endif
+
+#if PROFILE
+	profiler->start("MCQuadtreeNoder::intersectChains");
+#endif
+	intersectChains();
+#if PROFILE
+	profiler->stop("MCQuadtreeNoder::intersectChains");
+#endif
+	//System.out.println("MCQuadtreeNoder: # chain overlaps = " + nOverlaps);
+
+#if PROFILE
+	profiler->start("MCQuadtreeNoder::node getting Noded edges");
+#endif
+	vector<SegmentString*> *nodedSegStrings=getNodedEdges(inputSegStrings);
+#if PROFILE
+	profiler->stop("MCQuadtreeNoder::node getting Noded edges");
+#endif
+
+	return nodedSegStrings;
+}
+
+void
+MCQuadtreeNoder::intersectChains()
+{
+	MonotoneChainOverlapAction *overlapAction = new SegmentOverlapAction(segInt);
+
+	for (int i=0; i<(int)chains->size();i++) {
+		indexMonotoneChain *queryChain=(*chains)[i];
+		vector<void*> *overlapChains = index->query(queryChain->getEnvelope());
+#if DEBUG
+	cerr<<"MCQuadtreeNoder::intersectChains: query returned "<<overlapChains->size()<<" items from STRtree index"<<endl;
+#endif
+		for (int j=0; j<(int)overlapChains->size();j++) {
+			indexMonotoneChain *testChain=(indexMonotoneChain*)(*overlapChains)[j];
+			/**
+			 * following test makes sure we only compare each
+			 * pair of chains once
+			 * and that we don't compare a chain to itself
+			 */
+			if (testChain->getId()>queryChain->getId()) {
+#if PROFILE
+	profiler->start("MCQuadtreeNoder::intersectChains queryChain->computeOverlap");
+#endif
+				queryChain->computeOverlaps(testChain, overlapAction);
+#if PROFILE
+	profiler->stop("MCQuadtreeNoder::intersectChains queryChain->computeOverlap");
+#endif
+				nOverlaps++;
+			}
+		}
+		delete overlapChains;
+	}
+}
+
+void
+MCQuadtreeNoder::add(SegmentString *segStr)
+{
+	vector<indexMonotoneChain*> *segChains=MonotoneChainBuilder::getChains((CoordinateSequence*)segStr->getCoordinatesRO(),segStr);
+#if DEBUG
+	cerr<<"MCQuadtreeNoder: adding "<<segChains->size()<<" items in STRtree index"<<endl;
+#endif
+	for (int i=0; i<(int)segChains->size();i++) {
+		indexMonotoneChain *mc=(*segChains)[i];
+		mc->setId(idCounter++);
+		index->insert(mc->getEnvelope(), mc);
+		chains->push_back(mc);
+	}
+	delete segChains;
+}
+
+MCQuadtreeNoder::SegmentOverlapAction::SegmentOverlapAction(nodingSegmentIntersector *newSi){
+	si=newSi;
+}
+
+void
+MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int start1, indexMonotoneChain *mc2, int start2)
+{
+	SegmentString *ss1=(SegmentString*) mc1->getContext();
+	SegmentString *ss2=(SegmentString*) mc2->getContext();
+	si->processIntersections(ss1, start1, ss2, start2);
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.11  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.10  2004/07/13 08:33:53  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -51,82 +181,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/noding.h>
-
-namespace geos {
-
-MCQuadtreeNoder::MCQuadtreeNoder(){
-	chains=new vector<indexMonotoneChain*>();
-	index=new STRtree();
-	idCounter = 0;
-	nOverlaps = 0;
-}
-
-MCQuadtreeNoder::~MCQuadtreeNoder(){
-	for (unsigned int i=0; i<chains->size(); i++)
-	{
-		delete (*chains)[i];
-	}
-	delete chains;
-	delete index;
-}
-vector<SegmentString*> *
-MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
-{
-	for(int i=0; i<(int)inputSegStrings->size();i++) {
-		add((*inputSegStrings)[i]);
-	}
-	intersectChains();
-	//System.out.println("MCQuadtreeNoder: # chain overlaps = " + nOverlaps);
-	vector<SegmentString*> *nodedSegStrings=getNodedEdges(inputSegStrings);
-	return nodedSegStrings;
-}
-
-void
-MCQuadtreeNoder::intersectChains()
-{
-	SegmentOverlapAction soa(segInt);
-	MonotoneChainOverlapAction *overlapAction = &soa;
-	for (int i=0; i<(int)chains->size();i++) {
-		indexMonotoneChain *queryChain=(*chains)[i];
-		vector<void*> *overlapChains =index->query(queryChain->getEnvelope());
-		for (int j=0; j<(int)overlapChains->size();j++) {
-			indexMonotoneChain *testChain=(indexMonotoneChain*)(*overlapChains)[j];
-			/**
-			* following test makes sure we only compare each pair of chains once
-			* and that we don't compare a chain to itself
-			*/
-			if (testChain->getId()>queryChain->getId()) {
-				queryChain->computeOverlaps(testChain, overlapAction);
-				nOverlaps++;
-			}
-		}
-		delete overlapChains;
-	}
-}
-
-void MCQuadtreeNoder::add(SegmentString *segStr) {
-	vector<indexMonotoneChain*> *segChains=MonotoneChainBuilder::getChains((CoordinateSequence*)segStr->getCoordinatesRO(),segStr);
-	for (int i=0; i<(int)segChains->size();i++) {
-		indexMonotoneChain *mc=(*segChains)[i];
-		mc->setId(idCounter++);
-		index->insert(mc->getEnvelope(), mc);
-		chains->push_back(mc);
-	}
-	delete segChains;
-}
-
-MCQuadtreeNoder::SegmentOverlapAction::SegmentOverlapAction(nodingSegmentIntersector *newSi){
-	si=newSi;
-}
-
-void MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int start1, indexMonotoneChain *mc2, int start2) {
-	SegmentString *ss1=(SegmentString*) mc1->getContext();
-	SegmentString *ss2=(SegmentString*) mc2->getContext();
-	si->processIntersections(ss1, start1, ss2, start2);
-}
-
-}
 

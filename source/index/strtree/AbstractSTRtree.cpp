@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.18  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -199,9 +204,11 @@ void AbstractSTRtree::insert(const void* bounds,void* item) {
 }
 
 /**
-*  Also builds the tree, if necessary.
-*/
-vector<void*>* AbstractSTRtree::query(const void* searchBounds) {
+ *  Also builds the tree, if necessary.
+ */
+vector<void*>*
+AbstractSTRtree::query(const void* searchBounds)
+{
 	if (!built) {
 		build();
 	}
@@ -210,29 +217,35 @@ vector<void*>* AbstractSTRtree::query(const void* searchBounds) {
 		Assert::isTrue(root->getBounds()==NULL);
 		return matches;
 	}
-	if (intersectsOp->intersects(root->getBounds(),searchBounds)) {
+	if (intersectsOp->intersects(root->getBounds(),searchBounds))
+	{
 		query(searchBounds,root,matches);
 	}
 	return matches;
 }
 
 void
-AbstractSTRtree::query(const void* searchBounds, AbstractNode* node, vector<void*> *matches)
+AbstractSTRtree::query(const void* searchBounds,
+	AbstractNode* node, vector<void*> *matches)
 {
 	vector<Boundable*> *vb=node->getChildBoundables();
 	for(int i=0;i<(int)vb->size();i++) {
 		Boundable *childBoundable=(*vb)[i];
-		if (!intersectsOp->intersects(childBoundable->getBounds(),searchBounds)) {
+		if (!intersectsOp->intersects(childBoundable->getBounds(),searchBounds))
+		{
 			continue;
 		}
 
 		if(AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
 		{
 			query(searchBounds,an,matches);
-		} else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
+		}
+		else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
 		{
 			matches->push_back(ib->getItem());
-		} else {
+		}
+		else
+		{
 			Assert::shouldNeverReachHere("AbstractSTRtree::query encountered an unsupported childBoundable type");
 		}
 	}

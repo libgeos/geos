@@ -11,27 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.10  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.9  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexChain.h>
 #include <stdio.h>
@@ -126,11 +106,15 @@ void indexMonotoneChain::computeSelect(Envelope *searchEnv,int start0,int end0,M
 	}
 }
 
-void indexMonotoneChain::computeOverlaps(indexMonotoneChain *mc,MonotoneChainOverlapAction *mco) {
+void
+indexMonotoneChain::computeOverlaps(indexMonotoneChain *mc, MonotoneChainOverlapAction *mco)
+{
 	computeOverlaps(start,end,mc,mc->start,mc->end,mco);
 }
 
-void indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,int start1,int end1,MonotoneChainOverlapAction *mco){
+void
+indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,int start1,int end1,MonotoneChainOverlapAction *mco)
+{
 	const Coordinate& p00=pts->getAt(start0);
 	const Coordinate& p01=pts->getAt(end0);
 	const Coordinate& p10=mc->pts->getAt(start1);
@@ -163,5 +147,32 @@ void indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain 
 			computeOverlaps(mid0,end0,mc,mid1,end1,mco);
 	}
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.11  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.9  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.8  2004/03/25 02:23:55  ybychkov
+ * All "index/*" packages upgraded to JTS 1.4
+ *
+ * Revision 1.7  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

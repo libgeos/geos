@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.3  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -219,7 +224,7 @@ public:
 	* to use the higher of the two possible segmentIndexes
 	*/
 	void addIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex);
-	void OLDaddIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex);
+
 	/**
 	* Add an EdgeIntersection for intersection intIndex.
 	* An intersection that falls exactly on a vertex of the edge is normalized
@@ -361,11 +366,11 @@ private:
 
 
 /*
- * Nodes a set of {@link SegmentStrings} using a index based
- * on {@link indexMonotoneChain}s and a {@link SpatialIndex}.
- * The {@link SpatialIndex} used should be something that supports
- * envelope (range) queries efficiently (such as a {@link Quadtree}
- * or {@link STRtree}.
+ * Nodes a set of SegmentStrings using a index based
+ * on indexMonotoneChain and a SpatialIndex.
+ * The SpatialIndex used should be something that supports
+ * envelope (range) queries efficiently (such as a Quadtree
+ * or STRtree.
  *
  */
 class MCQuadtreeNoder: public Noder {

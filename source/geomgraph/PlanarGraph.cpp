@@ -275,6 +275,7 @@ PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1, co
 {
 	if (!(p0==ep0))
 		return false;
+
 	if (CGAlgorithms::computeOrientation(p0,p1,ep1)==CGAlgorithms::COLLINEAR
 		&& Quadrant::quadrant(p0,p1)==Quadrant::quadrant(ep0,ep1))
 			return true;
@@ -307,6 +308,11 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.9  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

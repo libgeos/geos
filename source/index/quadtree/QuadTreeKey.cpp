@@ -11,21 +11,13 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
-
 #include <geos/indexQuadtree.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 namespace geos {
 
@@ -34,6 +26,9 @@ int QuadTreeKey::computeQuadLevel(Envelope *env){
 	double dy=env->getHeight();
 	double dMax=dx>dy?dx:dy;
 	int level=DoubleBits::exponent(dMax)+1;
+#if DEBUG
+	cerr<<"Maxdelta:"<<dMax<<" exponent:"<<(level-1)<<endl;
+#endif
 	return level;
 }
 
@@ -68,9 +63,9 @@ Coordinate* QuadTreeKey::getCentre() {
 }
 
 /**
-* return a square envelope containing the argument envelope,
-* whose extent is a power of two and which is based at a power of 2
-*/
+ * return a square envelope containing the argument envelope,
+ * whose extent is a power of two and which is based at a power of 2
+ */
 void QuadTreeKey::computeKey(Envelope *itemEnv) {
 	level=computeQuadLevel(itemEnv);
 	env=new Envelope();
@@ -80,14 +75,41 @@ void QuadTreeKey::computeKey(Envelope *itemEnv) {
 		level+=1;
 		computeKey(level,itemEnv);
 	}
+#if DEBUG
+	cerr<<"QuadTreeKey::computeKey:"<<endl;
+	cerr<<" itemEnv: "<<itemEnv->toString()<<endl;
+	cerr<<"  keyEnv: "<<env->toString()<<endl;
+	cerr<<"  keyLvl: "<<level<<endl;
+
+#endif
 }
 
-void QuadTreeKey::computeKey(int level,Envelope *itemEnv){
+void
+QuadTreeKey::computeKey(int level,Envelope *itemEnv)
+{
 	double quadSize=DoubleBits::powerOf2(level);
 	//double quadSize=pow2.power(level);
 	pt->x=floor(itemEnv->getMinX()/quadSize)*quadSize;
 	pt->y=floor(itemEnv->getMinY()/quadSize)*quadSize;
 	env->init(pt->x,pt->x+quadSize,pt->y,pt->y+quadSize);
 }
-}
 
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.6  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.5  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/

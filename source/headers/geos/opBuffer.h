@@ -11,89 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.2  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.22  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.21  2004/06/30 20:59:13  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.20  2004/05/27 08:37:16  strk
- * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
- *
- * Revision 1.19  2004/05/26 09:49:03  strk
- * PlanarGraph made local to ::buffer instead of Class private.
- *
- * Revision 1.18  2004/05/07 07:57:27  strk
- * Added missing EdgeNodingValidator to build scripts.
- * Changed SegmentString constructor back to its original form
- * (takes const void *), implemented local tracking of "contexts"
- * in caller objects for proper destruction.
- *
- * Revision 1.17  2004/05/05 16:57:48  strk
- * Rewritten static cga allocation to avoid copy constructor calls.
- *
- * Revision 1.16  2004/05/05 10:54:48  strk
- * Removed some private static heap explicit allocation, less cleanup done by
- * the unloader.
- *
- * Revision 1.15  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.14  2004/04/30 09:15:28  strk
- * Enlarged exception specifications to allow for AssertionFailedException.
- * Added missing initializers.
- *
- * Revision 1.13  2004/04/23 00:02:18  strk
- * const-correctness changes
- *
- * Revision 1.12  2004/04/20 10:58:04  strk
- * More memory leaks removed.
- *
- * Revision 1.11  2004/04/19 15:14:45  strk
- * Added missing virtual destructor in SpatialIndex class.
- * Memory leaks fixes. Const and throw specifications added.
- *
- * Revision 1.10  2004/04/19 12:51:01  strk
- * Memory leaks fixes. Throw specifications added.
- *
- * Revision 1.9  2004/04/15 14:00:30  strk
- * Added new cleanup to Unload::Release
- *
- * Revision 1.8  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- * Revision 1.7  2004/03/01 22:04:59  strk
- * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
- *
- * Revision 1.6  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.5  2003/11/06 18:46:34  strk
- * Added throw specification for BufferOp's ::buildSubgraphs() 
- * and ::computeBuffer()
- *
  **********************************************************************/
-
 
 #ifndef GEOS_OPBUFFER_H
 #define GEOS_OPBUFFER_H
@@ -757,4 +675,94 @@ private:
 };
 
 }
-#endif
+
+#endif // ndef GEOS_OPBUFFER_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.22  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.21  2004/06/30 20:59:13  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.20  2004/05/27 08:37:16  strk
+ * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
+ *
+ * Revision 1.19  2004/05/26 09:49:03  strk
+ * PlanarGraph made local to ::buffer instead of Class private.
+ *
+ * Revision 1.18  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
+ * Revision 1.17  2004/05/05 16:57:48  strk
+ * Rewritten static cga allocation to avoid copy constructor calls.
+ *
+ * Revision 1.16  2004/05/05 10:54:48  strk
+ * Removed some private static heap explicit allocation, less cleanup done by
+ * the unloader.
+ *
+ * Revision 1.15  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
+ * Revision 1.14  2004/04/30 09:15:28  strk
+ * Enlarged exception specifications to allow for AssertionFailedException.
+ * Added missing initializers.
+ *
+ * Revision 1.13  2004/04/23 00:02:18  strk
+ * const-correctness changes
+ *
+ * Revision 1.12  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
+ * Revision 1.11  2004/04/19 15:14:45  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
+ * Revision 1.10  2004/04/19 12:51:01  strk
+ * Memory leaks fixes. Throw specifications added.
+ *
+ * Revision 1.9  2004/04/15 14:00:30  strk
+ * Added new cleanup to Unload::Release
+ *
+ * Revision 1.8  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ * Revision 1.7  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
+ * Revision 1.6  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.5  2003/11/06 18:46:34  strk
+ * Added throw specification for BufferOp's ::buildSubgraphs() 
+ * and ::computeBuffer()
+ *
+ **********************************************************************/
+

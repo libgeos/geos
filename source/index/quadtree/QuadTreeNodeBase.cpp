@@ -11,26 +11,13 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.9  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
-
 #include <geos/indexQuadtree.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 namespace geos {
 
@@ -50,6 +37,9 @@ QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate *centre)
 		if (env->getMinY()>=centre->y) subnodeIndex=2;
 		if (env->getMaxY()<=centre->y) subnodeIndex=0;
 	}
+#if DEBUG
+	cerr<<"getSubNodeIndex("<<env->toString()<<", "<<centre->toString()<<") returning "<<subnodeIndex<<endl;
+#endif
 	return subnodeIndex;
 }
 
@@ -83,7 +73,9 @@ void QuadTreeNodeBase::add(void* item) {
 	//DEBUG System.out.print(itemCount);
 }
 
-vector<void*>* QuadTreeNodeBase::addAllItems(vector<void*> *resultItems) {
+vector<void*>*
+QuadTreeNodeBase::addAllItems(vector<void*> *resultItems)
+{
 	//<<TODO:ASSERT?>> Can we assert that this node cannot have both items
 	//and subnodes? [Jon Aquino]
 	resultItems->insert(resultItems->end(),items->begin(),items->end());
@@ -95,7 +87,9 @@ vector<void*>* QuadTreeNodeBase::addAllItems(vector<void*> *resultItems) {
 	return resultItems;
 }
 
-void QuadTreeNodeBase::addAllItemsFromOverlapping(const Envelope *searchEnv,vector<void*> *resultItems){
+void
+QuadTreeNodeBase::addAllItemsFromOverlapping(const Envelope *searchEnv, vector<void*> *resultItems)
+{
 	if (!isSearchMatch(searchEnv))
 		return;
 
@@ -147,5 +141,48 @@ int QuadTreeNodeBase::nodeCount() {
 	}
 	return subSize+1;
 }
+
+string
+QuadTreeNodeBase::toString() const
+{
+	char buf[10];
+	sprintf(buf, "%d", items->size());
+	string tmp = buf;
+	string ret = "ITEMS:"+tmp+"\n";
+	for (int i=0; i<4; i++)
+	{
+		sprintf(buf, "%d", i);
+		tmp = buf;
+		ret += "subnode["+tmp+"]";
+		if ( subnode[i] == NULL ) ret += "NULL";
+		else ret += subnode[i]->toString();
+		ret += "\n";
+	}
+	return ret;
 }
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.10  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.9  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.8  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.7  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

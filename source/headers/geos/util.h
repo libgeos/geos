@@ -11,103 +11,8 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/16 10:28:41  strk
- * Dimesions object allocated on the heap
- *
- * Revision 1.6  2004/07/14 21:19:35  strk
- * GeometricShapeFactory first pass of bug fixes
- *
- * Revision 1.5  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.4  2004/07/07 10:29:54  strk
- * Adjusted exceptions documentation.
- *
- * Revision 1.3  2004/07/05 14:23:03  strk
- * More documentation cleanups.
- *
- * Revision 1.2  2004/07/05 10:50:21  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.14  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
- * Revision 1.13  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.12  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
-
-/*
-* $Log$
-* Revision 1.7  2004/07/16 10:28:41  strk
-* Dimesions object allocated on the heap
-*
-* Revision 1.6  2004/07/14 21:19:35  strk
-* GeometricShapeFactory first pass of bug fixes
-*
-* Revision 1.5  2004/07/08 19:34:49  strk
-* Mirrored JTS interface of CoordinateSequence, factory and
-* default implementations.
-* Added DefaultCoordinateSequenceFactory::instance() function.
-*
-* Revision 1.4  2004/07/07 10:29:54  strk
-* Adjusted exceptions documentation.
-*
-* Revision 1.3  2004/07/05 14:23:03  strk
-* More documentation cleanups.
-*
-* Revision 1.2  2004/07/05 10:50:21  strk
-* deep-dopy construction taken out of Geometry and implemented only
-* in GeometryFactory.
-* Deep-copy geometry construction takes care of cleaning up copies
-* on exception.
-* Implemented clone() method for CoordinateSequence
-* Changed createMultiPoint(CoordinateSequence) signature to reflect
-* copy semantic (by-ref instead of by-pointer).
-* Cleaned up documentation.
-*
-* Revision 1.1  2004/07/02 13:20:42  strk
-* Header files moved under geos/ dir.
-*
-* Revision 1.14  2004/04/10 22:41:25  ybychkov
-* "precision" upgraded to JTS 1.4
-*
-* Revision 1.13  2004/03/18 10:42:44  ybychkov
-* "IO" and "Util" upgraded to JTS 1.4
-* "Geometry" partially upgraded.
-*
-* Revision 1.12  2003/11/07 01:23:42  pramsey
-* Add standard CVS headers licence notices and copyrights to all cpp and h
-* files.
-*
-* Revision 1.11  2003/10/23 09:12:49  strk
-* Made CoordinateArrayFilter destructor virtual.
-*
-* Revision 1.10  2003/10/16 17:05:07  strk
-* Made TopologyException inherit from GEOSException. Adjusted IllegalArgumentException subclassing.
-*
-*/
 #ifndef GEOS_UTIL_H
 #define GEOS_UTIL_H
 
@@ -354,3 +259,55 @@ public:
 
 }
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.7  2004/07/16 10:28:41  strk
+ * Dimesions object allocated on the heap
+ *
+ * Revision 1.6  2004/07/14 21:19:35  strk
+ * GeometricShapeFactory first pass of bug fixes
+ *
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.4  2004/07/07 10:29:54  strk
+ * Adjusted exceptions documentation.
+ *
+ * Revision 1.3  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
+ * Revision 1.2  2004/07/05 10:50:21  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.14  2004/04/10 22:41:25  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
+ * Revision 1.13  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
+ * Revision 1.12  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+

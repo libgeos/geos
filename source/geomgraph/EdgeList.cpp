@@ -11,35 +11,22 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.4  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.14  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
 
 #include <geos/geomgraph.h>
 #include <geos/indexQuadtree.h>
+#include <geos/profiler.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 namespace geos {
+
+#if PROFILE
+static Profiler *profiler = Profiler::instance();
+#endif
 
 EdgeList::EdgeList(){
 	edges=new vector<Edge*>();
@@ -70,13 +57,26 @@ vector<Edge*>* EdgeList::getEdges() {
 
 // <FIX> fast lookup for edges
 /**
-* If there is an edge equal to e already in the list, return it.
-* Otherwise return null.
-* @return  equal edge, if there is one already in the list
-*          null otherwise
-*/
-Edge* EdgeList::findEqualEdge(Edge *e) {
+ * If there is an edge equal to e already in the list, return it.
+ * Otherwise return null.
+ * @return  equal edge, if there is one already in the list
+ *          null otherwise
+ */
+Edge *
+EdgeList::findEqualEdge(Edge *e)
+{
+#if PROFILE
+	profiler->start("Quadtree::query()");
+#endif
 	vector<void*> *testEdges=index->query(e->getEnvelope());
+#if PROFILE
+	profiler->stop("Quadtree::query()");
+#endif
+
+#if DEBUG
+	cerr<<"EdgeList::findEqualEdge found "<<testEdges->size()<<" overlapping edges"<<endl;
+#endif
+
 	for (int i=0; i<(int)testEdges->size();i++) {
 		Edge* testEdge=(Edge*) (*testEdges)[i];
 		if (testEdge->equals(e))
@@ -123,5 +123,33 @@ string EdgeList::print() {
 	return out;
 }
 
-}
+} // namespace geos
 
+/**********************************************************************
+ * $Log$
+ * Revision 1.5  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.3  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.2  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.14  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/

@@ -16,7 +16,7 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 namespace geos {
 
@@ -315,6 +315,11 @@ string EdgeEndStar::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.4  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

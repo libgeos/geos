@@ -11,44 +11,34 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.2  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/26 07:48:30  ybychkov
- * "noding" package ported (JTS 1.4)
- *
- *
  **********************************************************************/
-
 
 #include <geos/noding.h>
 
 namespace geos {
 
-NodingValidator::NodingValidator(vector<SegmentString*> *newSegStrings){
+NodingValidator::NodingValidator(vector<SegmentString*> *newSegStrings)
+{
 	segStrings=newSegStrings;
 	li=new RobustLineIntersector();
 }
 
-NodingValidator::~NodingValidator(){
+NodingValidator::~NodingValidator()
+{
 	delete li;
 }
 
-void NodingValidator::checkValid(){
+void
+NodingValidator::checkValid()
+{
 	checkNoInteriorPointsSame();
 	checkProperIntersections();
 }
 
 
-void NodingValidator::checkProperIntersections() {
+void
+NodingValidator::checkProperIntersections()
+{
 	for (int i=0; i<(int)segStrings->size();i++) {
 		SegmentString *ss0=(*segStrings)[i];
 		for (int j=0; j<(int)segStrings->size();j++) {
@@ -58,7 +48,9 @@ void NodingValidator::checkProperIntersections() {
 	}
 }
 
-void NodingValidator::checkProperIntersections(SegmentString *ss0, SegmentString *ss1){
+void
+NodingValidator::checkProperIntersections(SegmentString *ss0, SegmentString *ss1)
+{
 	const CoordinateSequence *pts0=ss0->getCoordinates();
 	const CoordinateSequence *pts1=ss1->getCoordinates();
 	for (int i0=0;i0<pts0->getSize()-1; i0++) {
@@ -68,8 +60,11 @@ void NodingValidator::checkProperIntersections(SegmentString *ss0, SegmentString
 	}
 }
 
-void NodingValidator::checkProperIntersections(SegmentString *e0, int segIndex0, SegmentString *e1, int segIndex1){
+void
+NodingValidator::checkProperIntersections(SegmentString *e0, int segIndex0, SegmentString *e1, int segIndex1)
+{
 	if (e0 == e1 && segIndex0 == segIndex1) return;
+
 	//numTests++;
 	Coordinate p00=e0->getCoordinates()->getAt(segIndex0);
 	Coordinate p01=e0->getCoordinates()->getAt(segIndex0+1);
@@ -86,18 +81,24 @@ void NodingValidator::checkProperIntersections(SegmentString *e0, int segIndex0,
 }
 
 /**
-*@return true if there is an intersection point which is not an endpoint of the segment p0-p1
-*/
-bool NodingValidator::hasInteriorIntersection(LineIntersector *aLi, Coordinate& p0, Coordinate& p1){
-	for (int i = 0; i < aLi->getIntersectionNum(); i++) {
-		Coordinate intPt=aLi->getIntersection(i);
+ * @return true if there is an intersection point which is not an
+ * endpoint of the segment p0-p1
+ */
+bool
+NodingValidator::hasInteriorIntersection(LineIntersector *aLi, Coordinate& p0, Coordinate& p1)
+{
+	for (int i = 0; i < aLi->getIntersectionNum(); i++)
+	{
+		const Coordinate &intPt=aLi->getIntersection(i);
 		if (!(intPt==p0 || intPt==p1))
 			return true;
 	}
 	return false;
 }
 
-void NodingValidator::checkNoInteriorPointsSame() {
+void
+NodingValidator::checkNoInteriorPointsSame()
+{
 	for (int i=0; i<(int)segStrings->size();i++) {
 		SegmentString *ss0=(*segStrings)[i];
 		const CoordinateSequence *pts=ss0->getCoordinates();
@@ -106,7 +107,9 @@ void NodingValidator::checkNoInteriorPointsSame() {
 	}
 }
 
-void NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<SegmentString*> *aSegStrings) {
+void
+NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<SegmentString*> *aSegStrings)
+{
 	for (int i=0; i<(int)segStrings->size();i++) {
 			SegmentString *ss0=(*segStrings)[i];
 			const CoordinateSequence *pts=ss0->getCoordinates();
@@ -117,4 +120,27 @@ void NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<
 	}
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.2  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/03/26 07:48:30  ybychkov
+ * "noding" package ported (JTS 1.4)
+ *
+ *
+ **********************************************************************/
+

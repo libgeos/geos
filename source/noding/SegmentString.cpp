@@ -11,53 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.9  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.6  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateSequence argument.
- * Fixed memory leaks associated with this and MultiGeometry constructors.
- * Other associated fixes.
- *
- * Revision 1.5  2004/05/27 10:27:03  strk
- * Memory leaks fixed.
- *
- * Revision 1.4  2004/05/07 07:57:27  strk
- * Added missing EdgeNodingValidator to build scripts.
- * Changed SegmentString constructor back to its original form
- * (takes const void *), implemented local tracking of "contexts"
- * in caller objects for proper destruction.
- *
- * Revision 1.3  2004/05/06 15:54:15  strk
- * SegmentNodeList keeps track of created splitEdges for later destruction.
- * SegmentString constructor copies given Label.
- * Buffer operation does no more leaks for doc/example.cpp
- *
- * Revision 1.2  2004/04/19 16:14:52  strk
- * Some memory leaks plugged in noding algorithms.
- *
- * Revision 1.1  2004/03/26 07:48:30  ybychkov
- * "noding" package ported (JTS 1.4)
- *
- *
  **********************************************************************/
-
 
 #include <geos/noding.h>
 
@@ -145,49 +99,25 @@ SegmentString::addIntersections(LineIntersector *li, int segmentIndex, int geomI
 }
 
 /**
-* Add an SegmentNode for intersection intIndex.
-* An intersection that falls exactly on a vertex
-* of the SegmentString is normalized
-* to use the higher of the two possible segmentIndexes
-*/
+ * Add an SegmentNode for intersection intIndex.
+ * An intersection that falls exactly on a vertex
+ * of the SegmentString is normalized
+ * to use the higher of the two possible segmentIndexes
+ */
 void
 SegmentString::addIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex)
 {
-	Coordinate* intPt=new Coordinate(li->getIntersection(intIndex));
+	const Coordinate &intPt=li->getIntersection(intIndex);
 	double dist=li->getEdgeDistance(geomIndex, intIndex);
-	addIntersection(*intPt, segmentIndex, dist);
-	delete intPt;
+	addIntersection((Coordinate&)intPt, segmentIndex, dist);
+	//delete intPt;
 }
 
-void SegmentString::OLDaddIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex){
-	Coordinate *intPt=new Coordinate(li->getIntersection(intIndex));
-	int normalizedSegmentIndex = segmentIndex;
-	double dist=li->getEdgeDistance(geomIndex, intIndex);
-	//Debug.println("edge intpt: " + intPt + " dist: " + dist);
-	// normalize the intersection point location
-	int nextSegIndex = normalizedSegmentIndex + 1;
-	if (nextSegIndex < pts->getSize()) {
-		Coordinate nextPt=pts->getAt(nextSegIndex);
-		//Debug.println("next pt: " + nextPt);
-		// Normalize segment index if intPt falls on vertex
-		// The check for point equality is 2D only - Z values are ignored
-		if (intPt->equals2D(nextPt)) {
-			//Debug.println("normalized distance");
-			normalizedSegmentIndex = nextSegIndex;
-			dist = 0.0;
-		}
-	}
-	/**
-	* Add the intersection point to edge intersection list.
-	*/
-	SegmentNode *ei=eiList->add(intPt,normalizedSegmentIndex,dist);
-	//ei.print(System.out);
-}
 /**
-* Add an EdgeIntersection for intersection intIndex.
-* An intersection that falls exactly on a vertex of the edge is normalized
-* to use the higher of the two possible segmentIndexes
-*/
+ * Add an EdgeIntersection for intersection intIndex.
+ * An intersection that falls exactly on a vertex of the edge is normalized
+ * to use the higher of the two possible segmentIndexes
+ */
 void
 SegmentString::addIntersection(Coordinate& intPt, int segmentIndex)
 {
@@ -196,14 +126,15 @@ SegmentString::addIntersection(Coordinate& intPt, int segmentIndex)
 }
 
 void
-SegmentString::addIntersection(Coordinate& intPt, int segmentIndex, double dist)
+SegmentString::addIntersection(Coordinate& intPt,
+	int segmentIndex, double dist)
 {
 	int normalizedSegmentIndex = segmentIndex;
 	//Debug.println("edge intpt: " + intPt + " dist: " + dist);
 	// normalize the intersection point location
 	int nextSegIndex = normalizedSegmentIndex + 1;
 	if (nextSegIndex < pts->getSize()) {
-		Coordinate nextPt = pts->getAt(nextSegIndex);
+		const Coordinate &nextPt = pts->getAt(nextSegIndex);
 		//Debug.println("next pt: " + nextPt);
 
 		// Normalize segment index if intPt falls on vertex
@@ -214,13 +145,66 @@ SegmentString::addIntersection(Coordinate& intPt, int segmentIndex, double dist)
 			dist = 0.0;
 		}
 	}
+
 	/**
-	* Add the intersection point to edge intersection list.
-	*/
+	 * Add the intersection point to edge intersection list.
+	 */
 	SegmentNode *ei=eiList->add(&intPt, normalizedSegmentIndex, dist);
 	//ei.print(System.out);
 
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.10  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.8  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.7  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.6  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
+ * Revision 1.5  2004/05/27 10:27:03  strk
+ * Memory leaks fixed.
+ *
+ * Revision 1.4  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
+ * Revision 1.3  2004/05/06 15:54:15  strk
+ * SegmentNodeList keeps track of created splitEdges for later destruction.
+ * SegmentString constructor copies given Label.
+ * Buffer operation does no more leaks for doc/example.cpp
+ *
+ * Revision 1.2  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
+ * Revision 1.1  2004/03/26 07:48:30  ybychkov
+ * "noding" package ported (JTS 1.4)
+ *
+ *
+ **********************************************************************/
 

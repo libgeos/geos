@@ -11,8 +11,101 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/noding.h>
+#include <geos/profiler.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
+namespace geos {
+
+#if PROFILE
+static Profiler *profiler = Profiler::instance();
+#endif
+
+
+IteratedNoder::IteratedNoder(const PrecisionModel *newPm) {
+	li = new RobustLineIntersector();
+	pm=newPm;
+	li->setPrecisionModel(pm);
+}
+
+IteratedNoder::~IteratedNoder() {
+	delete li;
+}
+
+/*
+ * Fully nodes a list of SegmentStrings, i.e. peforms noding iteratively
+ * until no intersections are found between segments.
+ * Maintains labelling of edges correctly through
+ * the noding.
+ *
+ * @param segStrings a collection of SegmentStrings to be noded
+ * @return a collection of the noded SegmentStrings
+ * @throws TopologyException if the iterated noding fails to converge.
+ */
+vector<SegmentString*>*
+IteratedNoder::node(vector<SegmentString*> *segStrings)
+	// throw(GEOSException *)
+{
+	int numInteriorIntersections;
+	vector<SegmentString*> *nodedEdges=new vector<SegmentString *>(*segStrings);
+	int nodingIterationCount = 0;
+	int lastNodesCreated = -1;
+	do {
+		vector<SegmentString*> *oString = nodedEdges;
+		nodedEdges=node(nodedEdges,&numInteriorIntersections);
+		delete oString;
+		nodingIterationCount++;
+		int nodesCreated=numInteriorIntersections;
+		//System.out.println("# nodes created: " + nodesCreated);
+		if (lastNodesCreated > 0 && nodesCreated > lastNodesCreated) {
+			delete nodedEdges;
+			throw new TopologyException("Iterated noding failed to converge");
+		}
+		lastNodesCreated = nodesCreated;
+		//saveEdges(nodedEdges, "run" + runCount + "_nodedEdges");
+	} while (lastNodesCreated > 0);
+	//System.out.println("# nodings = " + nodingIterationCount);
+#if DEBUG
+	cerr<<"IteratedNoder::node iterated "<<nodingIterationCount<<" times"<<endl;
+#endif
+	return nodedEdges;
+}
+
+
+/*
+ * Node the input segment strings once
+ * and create the split edges between the nodes
+ */
+vector<SegmentString*>*
+IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersections)
+{
+	nodingSegmentIntersector *si = new nodingSegmentIntersector(li);
+	MCQuadtreeNoder *noder = new MCQuadtreeNoder();
+	noder->setSegmentIntersector(si);
+	// perform the noding
+	vector<SegmentString*> *nodedSegStrings=noder->node(segStrings);
+	*numInteriorIntersections=si->numInteriorIntersections;
+	//System.out.println("# intersection tests: " + si.numTests);
+
+	delete noder;
+	delete si;
+	return nodedSegStrings;
+}
+
+}
+
+/**********************************************************************
  * $Log$
+ * Revision 1.10  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.9  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -46,75 +139,3 @@
  *
  **********************************************************************/
 
-
-#include <geos/noding.h>
-
-namespace geos {
-
-IteratedNoder::IteratedNoder(const PrecisionModel *newPm) {
-	li = new RobustLineIntersector();
-	pm=newPm;
-    li->setPrecisionModel(pm);
-}
-
-IteratedNoder::~IteratedNoder() {
-	delete li;
-}
-/**
-* Fully nodes a list of {@link SegmentStrings}, i.e. peforms noding iteratively
-* until no intersections are found between segments.
-* Maintains labelling of edges correctly through
-* the noding.
-*
-* @param segStrings a collection of SegmentStrings to be noded
-* @return a collection of the noded SegmentStrings
-* @throws TopologyException if the iterated noding fails to converge.
-*/
-vector<SegmentString*>*
-IteratedNoder::node(vector<SegmentString*> *segStrings)
-	// throw(GEOSException *)
-{
-	int numInteriorIntersections;
-	vector<SegmentString*> *nodedEdges=new vector<SegmentString *>(*segStrings);
-	int nodingIterationCount = 0;
-	int lastNodesCreated = -1;
-	do {
-		vector<SegmentString*> *oString = nodedEdges;
-		nodedEdges=node(nodedEdges,&numInteriorIntersections);
-		delete oString;
-		nodingIterationCount++;
-		int nodesCreated=numInteriorIntersections;
-		//System.out.println("# nodes created: " + nodesCreated);
-		if (lastNodesCreated > 0 && nodesCreated > lastNodesCreated) {
-			delete nodedEdges;
-			throw new TopologyException("Iterated noding failed to converge");
-		}
-		lastNodesCreated = nodesCreated;
-		//saveEdges(nodedEdges, "run" + runCount + "_nodedEdges");
-	} while (lastNodesCreated > 0);
-	//System.out.println("# nodings = " + nodingIterationCount);
-	return nodedEdges;
-}
-
-
-/**
-* Node the input segment strings once
-* and create the split edges between the nodes
-*/
-vector<SegmentString*>*
-IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersections)
-{
-	nodingSegmentIntersector *si=new nodingSegmentIntersector(li);
-	MCQuadtreeNoder *noder = new MCQuadtreeNoder();
-	noder->setSegmentIntersector(si);
-	// perform the noding
-	vector<SegmentString*> *nodedSegStrings=noder->node(segStrings);
-	*numInteriorIntersections=si->numInteriorIntersections;
-	//System.out.println("# intersection tests: " + si.numTests);
-
-	delete noder;
-	delete si;
-	return nodedSegStrings;
-}
-
-}

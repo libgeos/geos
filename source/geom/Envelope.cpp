@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.15  2004/09/16 09:48:06  strk
  * Added Envelope::equals
  *
@@ -480,8 +485,11 @@ bool Envelope::overlaps(double x, double y) const {
  *          being checked for overlapping
  *@return        <code>true</code> if the <code>Envelope</code>s overlap
  */
-bool Envelope::intersects(const Envelope* other) const {
+bool
+Envelope::intersects(const Envelope* other) const
+{
 	if (isNull() || other->isNull()) { return false; }
+
 	return !(other->getMinX() > maxx ||
 			 other->getMaxX() < minx ||
 			 other->getMinY() > maxy ||

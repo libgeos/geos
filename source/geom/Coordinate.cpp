@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
  * Revision 1.17  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *
@@ -216,12 +221,12 @@ string Coordinate::toString() const {
  *      have the same values for x, y and z.
  */
 bool operator==(const Coordinate& a, const Coordinate& b) {
-	//return a.equals2D(b);
+	return a.equals2D(b);
 	//return (a.x == b.x) && ( a.y == b.y) && (( a.z == b.z)||(a.z==DoubleNotANumber && b.z==DoubleNotANumber));
-	if ( a.x != b.x ) return false;
-	if ( a.y != b.y ) return false;
-	if ( a.z != b.z ) return false;
-	return true;
+	//if ( a.x != b.x ) return false;
+	//if ( a.y != b.y ) return false;
+	//if ( a.z != b.z ) return false;
+	//return true;
 }
 
 bool operator!=(const Coordinate& a, const Coordinate& b) {
