@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.1  2004/07/08 19:41:27  strk
  * renamed to reflect JTS API.
  *
@@ -29,7 +32,8 @@
 
 
 #include "CustomCoordinateSequenceExample.h"
-#include <stdio.h>
+#include <sstream>
+//#include <stdio.h>
 
 using namespace geos;
 
@@ -135,14 +139,17 @@ void CustomPointCoordinateSequence::deleteAt(int pos){
 }
 
 string CustomPointCoordinateSequence::toString() {
-	string result("");
-	char buffer[100];
+	ostringstream s;
+	//string result("");
+	//char buffer[100];
 	for (int i=0;i<size;i++) {
 		point_3d c=pts[i];
-		sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
-		result.append(buffer);
+		//sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
+		s<<"("<<c.x<<","<<c.y<<","<<c.z<<") ";
+		//result.append(buffer);
 	}
-	result.append("");
-	return result;
+	//result.append("");
+	//return result;
+	return s.str();
 }
 

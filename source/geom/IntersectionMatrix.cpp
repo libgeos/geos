@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.11  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -25,9 +28,9 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -246,9 +249,10 @@ bool IntersectionMatrix::isOverlaps(int dimensionOfGeometryA, int dimensionOfGeo
 
 bool IntersectionMatrix::matches(string requiredDimensionSymbols) {
 	if (requiredDimensionSymbols.length() != 9) {
-		char buffer[255];
-		sprintf(buffer,"IllegalArgumentException: Should be length 9: %s\n",requiredDimensionSymbols.c_str());
-		throw new IllegalArgumentException(buffer);
+		ostringstream s;
+		s<<"IllegalArgumentException: Should be length 9: "<<
+			requiredDimensionSymbols<<endl;
+		throw new IllegalArgumentException(s.str());
 	}
 	for (int ai = 0; ai < 3; ai++) {
 		for (int bi = 0; bi < 3; bi++) {

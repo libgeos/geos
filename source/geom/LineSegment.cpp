@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.16  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -48,7 +51,7 @@
 
 
 
-#include <stdio.h>
+#include <sstream>
 #include <geos/geom.h>
 #include <geos/geosAlgorithm.h>
 
@@ -258,12 +261,9 @@ bool LineSegment::equalsTopo(const LineSegment other) const {
 }
 
 string LineSegment::toString() const {
-	string out="LINESTRING( ";
-	char buf[256];
-	sprintf(buf, "%f %f, %f %f", p0.x, p0.y, p1.x, p1.y);
-	out += buf;
-	out+=")";
-	return out;
+	ostringstream s;
+	s<<"LINESTRING("<<p0.x<<" "<<p0.y<<","<<p1.x<<" "<<p1.y<<")";
+	return s.str();
 }
 
 

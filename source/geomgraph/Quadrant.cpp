@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -28,8 +31,8 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geomgraph.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -38,10 +41,11 @@ namespace geos {
 * displacements, which cannot both be 0).
 */
 int Quadrant::quadrant(double dx, double dy) {
-	char buffer[255];
 	if (dx == 0.0 && dy == 0.0) {
-		sprintf(buffer,"Cannot compute the quadrant for point (%g, %g)\n",dx,dy);
-		throw new IllegalArgumentException(buffer);
+		ostringstream s;
+		s<<"Cannot compute the quadrant for point ";
+		s<<"("<<dx<<","<<dy<<")"<<endl;
+		throw new IllegalArgumentException(s.str());
 	}
 	if (dx >= 0) {
 		if (dy >= 0)

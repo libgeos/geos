@@ -17,7 +17,7 @@
 #include <geos/geomgraph.h>
 #include <math.h>
 #include <typeinfo>
-#include <stdio.h>
+#include <sstream>
 
 namespace geos {
 //namespace planargraph {
@@ -214,16 +214,10 @@ planarDirectedEdge::compareDirection(const planarDirectedEdge *e) const
 string
 planarDirectedEdge::print() const
 {
-	string out=typeid(*this).name();
-	out+=" : ";
-	out+=p0.toString();
-	out+=" - ";
-	out+=p1.toString();
-	char buffer[255];
-	sprintf(buffer," %i:%g) ",quadrant,angle);
-	out.append(buffer);
-	out.append("");
-	return out;
+	ostringstream s;
+	s<<typeid(*this).name()<<": "<<p0.toString()<<" - "<<p1.toString();
+	s<<" "<<quadrant<<":"<<angle;
+	return s.str();
 }
 
 
@@ -233,6 +227,9 @@ planarDirectedEdge::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.7  2004/12/14 10:35:44  strk
  * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
  * for delayed destruction.

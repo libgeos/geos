@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -25,9 +28,9 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -48,9 +51,9 @@ char Location::toLocationSymbol(int locationValue) {
 		case UNDEF: //NULL
 			return '-';
 		default:
-			char buffer[255];
-			sprintf(buffer,"Unknown location value: %i\n",locationValue);
-			throw new IllegalArgumentException(buffer);
+			ostringstream s;
+			s<<"Unknown location value: "<<locationValue;
+			throw new IllegalArgumentException(s.str());
 	}
 }
 }

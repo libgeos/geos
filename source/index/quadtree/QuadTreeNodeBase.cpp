@@ -13,6 +13,7 @@
  *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/indexQuadtree.h>
 
 #ifndef DEBUG
@@ -145,26 +146,25 @@ int QuadTreeNodeBase::nodeCount() {
 string
 QuadTreeNodeBase::toString() const
 {
-	char buf[10];
-	sprintf(buf, "%d", items->size());
-	string tmp = buf;
-	string ret = "ITEMS:"+tmp+"\n";
+	ostringstream s;
+	s<<"ITEMS:"<<items->size()<<endl;
 	for (int i=0; i<4; i++)
 	{
-		sprintf(buf, "%d", i);
-		tmp = buf;
-		ret += "subnode["+tmp+"]";
-		if ( subnode[i] == NULL ) ret += "NULL";
-		else ret += subnode[i]->toString();
-		ret += "\n";
+		s<<"subnode["<<i<<"] ";
+		if ( subnode[i] == NULL ) s<<"NULL";
+		else s<<subnode[i]->toString();
+		s<<endl;
 	}
-	return ret;
+	return s.str();
 }
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.10  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

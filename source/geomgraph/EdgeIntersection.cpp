@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -28,8 +31,8 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geomgraph.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -58,13 +61,10 @@ bool EdgeIntersection::isEndPoint(int maxSegmentIndex) {
 }
 
 string EdgeIntersection::print(){
-	string out="";
-	out+=coord.toString();
-	char buffer[255];
-	sprintf(buffer," seg # = %i dist= %g",segmentIndex,dist);
-	string out2(buffer);
-	out.append(out2);
-	return out;
+	ostringstream s;
+	s<<coord.toString()<<" seg#="<<segmentIndex<<" dist="<<dist;
+	return s.str();
+
 }
 
 int EdgeIntersection::compareTo(void* obj) {
@@ -72,6 +72,6 @@ int EdgeIntersection::compareTo(void* obj) {
 	return compare(other->segmentIndex,other->dist);
 }
 
-}
+} // namespace geos
 
 

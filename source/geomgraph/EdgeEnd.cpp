@@ -14,11 +14,11 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 #include <typeinfo>
 #include <math.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -103,21 +103,27 @@ void EdgeEnd::computeLabel(){
 }
 
 string EdgeEnd::print() {
-	char buffer[255];
-	sprintf(buffer,"%i:%g",quadrant,atan2(dy,dx));
-	string angleStr(buffer);
-//	string className=typeid(*this).name();
-	string className="EdgeEnd";
-	string out="  "+className+": "+p0.toString()+" - "+p1.toString()+" ";
-	out.append(angleStr);
-	out+="   " + label->toString();
-	return out;
+	ostringstream s;
+
+	s<<"EdgeEnd: ";
+	s<<p0.toString();
+	s<<" - ";
+	s<<p1.toString();
+	s<<" ";
+	s<<quadrant<<":"<<atan2(dy,dx);
+	s<<"  ";
+	s<<label->toString();
+
+	return s.str();
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.3  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/geom.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -148,17 +148,14 @@ void PointCoordinateSequence::deleteAt(int pos){
 }
 
 string PointCoordinateSequence::toString() const {
-	string result("");
+	ostringstream s;
 	if (getSize()>0) {
-		char buffer[100];
 		for (unsigned int i=0; i<vect->size(); i++) {
 			point_3d c=(*vect)[i];
-			sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
-			result.append(buffer);
+			s<<"("<<c.x<<","<<c.y<<","<<c.z<<") ";
 		}
-		result.append("");
 	}
-	return result;
+	return s.str();
 }
 
 PointCoordinateSequence::~PointCoordinateSequence() {
@@ -170,6 +167,9 @@ PointCoordinateSequence::~PointCoordinateSequence() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.2  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *

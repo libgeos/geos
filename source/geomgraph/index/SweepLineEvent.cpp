@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.2  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -36,7 +39,7 @@
  **********************************************************************/
 
 
-#include <stdio.h>
+#include <sstream>
 #include <geos/geomgraphindex.h>
 
 namespace geos {
@@ -98,17 +101,16 @@ int SweepLineEvent::compareTo(SweepLineEvent *sle) {
 }
 
 string SweepLineEvent::print() {
-	char buffer[255];
-	string out="SweepLineEvent:";
-	sprintf(buffer," xValue=%g deleteEventIndex=%i",xValue,deleteEventIndex);
-	out.append(buffer);
-	out+=((eventType==INSERT)? " INSERT" : " DELETE");
-	if (insertEvent!=NULL)
-		out+="\n\tinsertEvent="+insertEvent->print();
-	else 
-		out+="\n\tinsertEvent=NULL";
-	return out;
+	ostringstream s;
+
+	s<<"SweepLineEvent:";
+	s<<" xValue="<<xValue<<" deleteEventIndex="<<deleteEventIndex;
+	s<<( (eventType==INSERT) ? " INSERT" : " DELETE" );
+	s<<endl<<"\tinsertEvent=";
+	if (insertEvent) s<<insertEvent->print();
+	else s<<"NULL";
+	return s.str();
 }
 
-}
+} // namespace geos
 

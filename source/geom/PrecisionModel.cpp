@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.29  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.28  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -68,9 +71,9 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -342,20 +345,17 @@ void PrecisionModel::toExternal(const Coordinate& internal, Coordinate* external
 }
   
 string PrecisionModel::toString() const {
-	string result("");
-	char buffer[255];
-	result="UNKNOWN";
+	ostringstream s;
   	if (modelType == FLOATING) {
-  		result = "Floating";
+  		s<<"Floating";
   	} else if (modelType == FLOATING_SINGLE) {
-  		result = "Floating-Single";
+  		s<<"Floating-Single";
   	} else if (modelType == FIXED) {
-		sprintf(buffer,"Fixed (Scale=%g)",getScale());
-		result="";
-		result.append(buffer);
-		result.append("");
-    }
-	return result;
+		s<<"Fixed (Scale="<<getScale()<<")";
+	} else {
+		s<<"UNKNOWN";
+	}
+	return s.str();
 }
 
 PrecisionModel::~PrecisionModel(){}

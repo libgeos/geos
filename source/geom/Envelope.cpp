@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/geom.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -479,12 +479,9 @@ bool Envelope::overlaps(const Envelope *other) const {
  *@return    a <code>string</code> of the form <I>Env[minx:maxx,miny:maxy]</I>
  */
 string Envelope::toString() const {
-	string result("");
-	char buffer[255];
-	sprintf(buffer,"Env[%g:%g,%g:%g]",minx,maxx,miny,maxy);
-	result.append(buffer);
-	result.append("");
-	return result;
+	ostringstream s;
+	s<<"Env["<<minx<<":"<<maxx<<","<<miny<<":"<<maxy<<"]";
+	return s.str();
 }
 
 /**
@@ -535,6 +532,9 @@ int Envelope::hashCode() const{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.17  2004/11/08 10:58:08  strk
  * Optimized the ::intersect function to avoid nested function calls.
  *

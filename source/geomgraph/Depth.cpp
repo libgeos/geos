@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -28,8 +31,8 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geomgraph.h>
-#include <stdio.h>
 #define DEPTHNULL -1
 
 namespace geos {
@@ -137,12 +140,10 @@ void Depth::add(Label* lbl){
 }
 
 string Depth::toString() {
-	string result("");
-	char buffer[255];
-	sprintf(buffer,"A: %i,%i B:%i,%i]",depth[0][1],depth[0][2],depth[1][1],depth[1][2]);
-	result.append(buffer);
-	result.append("");
-	return result;
+	ostringstream s;
+	s<<"A:"<<depth[0][1]<<","<<depth[0][2]<<" ";
+	s<<"B:"<<depth[1][1]<<","<<depth[1][2]<<"]";
+	return s.str();
 }
 
 

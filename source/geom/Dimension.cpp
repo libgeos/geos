@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -25,9 +28,9 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -54,9 +57,9 @@ char Dimension::toDimensionSymbol(int dimensionValue) {
 		case A:
 			return '2';
 		default:
-			char buffer[255];
-			sprintf(buffer,"Unknown dimension value: %i\n",dimensionValue);
-			throw new IllegalArgumentException(buffer);
+			ostringstream s;
+			s<<"Unknown dimension value: "<<dimensionValue<<endl;
+			throw new IllegalArgumentException(s.str());
 	}
 }
 
@@ -85,9 +88,9 @@ int Dimension::toDimensionValue(char dimensionSymbol) {
 		case '2':
 			return A;
 		default:
-			char buffer[255];
-			sprintf(buffer,"Unknown dimension symbol: %c\n",dimensionSymbol);
-			throw new IllegalArgumentException(buffer);
+			ostringstream s;
+			s<<"Unknown dimension symbol: "<<dimensionSymbol<<endl;
+			throw new IllegalArgumentException(s.str());
 	}
 }
 }
