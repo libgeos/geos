@@ -1,5 +1,6 @@
 #include "../../headers/indexQuadtree.h"
 #include "../../headers/util.h"
+
 /**
 * Ensure that the envelope for the inserted item has non-zero extents.
 * Use the current minExtent to pad the envelope, if necessary

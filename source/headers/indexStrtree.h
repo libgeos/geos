@@ -3,7 +3,9 @@
 
 #include <vector>
 #include "platform.h"
+#include "spatialIndex.h"
 #include "geom.h"
+
 
 using namespace std;
 
@@ -69,41 +71,100 @@ protected:
 	};
 	AbstractNode *root;
 	virtual AbstractNode* createNode(int level)=0;
-	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
-	AbstractNode* lastNode(vector<Boundable*> *nodes);
-	int compareDoubles(double a, double b);
-	AbstractNode* getRoot();
-	void insert(void* bounds,void* item);
-	vector<void*>* query(void* searchBounds);
-	virtual IntersectsOp* getIntersectsOp()=0;
-	vector<Boundable*>* boundablesAtLevel(int level);
+	virtual vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
+	virtual AbstractNode* lastNode(vector<Boundable*> *nodes);
+	virtual AbstractNode* getRoot();
+	virtual void insert(void* bounds,void* item);
+	virtual vector<void*>* query(void* searchBounds);
+//	virtual IntersectsOp* getIntersectsOp()=0;
+	virtual vector<Boundable*>* boundablesAtLevel(int level);
+	int nodeCapacity;
 private:
 	bool built;
 	vector<Boundable*> *itemBoundables;
-	int nodeCapacity;
-	AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel,int level);
+	virtual AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel,int level);
 public:
+	IntersectsOp* intersectsOp;
 	AbstractSTRtree(int newNodeCapacity);
+	static int compareDoubles(double a, double b);
 	virtual ~AbstractSTRtree();
-	void build();
-	void checkConsistency();
-	int getNodeCapacity();
-	void query(void* searchBounds,AbstractNode* node,vector<void*>* matches);
-	void boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables);
+	virtual void build();
+	virtual void checkConsistency();
+	virtual int getNodeCapacity();
+	virtual void query(void* searchBounds,AbstractNode* node,vector<void*>* matches);
+	virtual void boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables);
 //	virtual bool getComparator(Boundable *a, Boundable *b);
 };
 
-class SIRtree {
+class SIRAbstractNode: public AbstractNode{
+public:
+	SIRAbstractNode(int level);
+protected:
+	void* computeBounds();
+};
+/**
+ * One-dimensional version of an STR-packed R-tree. SIR stands for
+ * "Sort-Interval-Recursive". STR-packed R-trees are described in:
+ * P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
+ * Application To GIS. Morgan Kaufmann, San Francisco, 2002.
+ * @see STRtree
+ */
+class SIRtree: public AbstractSTRtree {
 public:
 	SIRtree();
-	void insert(double a,double b,LineSegment *ls);
+	SIRtree(int nodeCapacity);
+	virtual ~SIRtree();
+	void insert(double x1,double x2,void* item);
+	vector<void*>* query(double x);
+	vector<void*>* query(double x1, double x2);
+protected:
+	static class SIRIntersectsOp:public AbstractSTRtree::IntersectsOp {
+		public:
+			bool intersects(void* aBounds,void* bBounds);
+	};
+	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
+	AbstractNode* createNode(int level);
+//	IntersectsOp* getIntersectsOp(){return NULL;);
 };
 	
-class STRtree {
-public:
-	STRtree();
-	void insert(double a,double b,LineSegment *ls);
-};
+//Not used yet, thus not ported.
 
+/**
+ *  An R-tree created using the Sort-Tile-Recursive (STR) algorithm, described
+ *  in: P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
+ *  Application To GIS. Morgan Kaufmann, San Francisco, 2002. <P>
+ *
+ *  The STR packed R-tree is simple to implement and maximizes space
+ *  utilization; that is, as many leaves as possible are filled to capacity.
+ *  Overlap between nodes is far less than in a basic R-tree. However, once the
+ *  tree has been built (explicitly or on the first call to #query), items may
+ *  not be added or removed. <P>
+ *
+ *  This implementation is based on Rectangles rather than Nodes, because the
+ *  STR algorithm operates on both nodes and items, both of which are treated
+ *  here as Rectangles (using the Composite design pattern). [Jon Aquino]
+ */
+class STRtree: public AbstractSTRtree,public SpatialIndex {
+//private:
+//	Comparator* xComparator;
+//	Comparator* yComparator;
+//	double centreX(Envelope *e);
+//	double avg(double a, double b);
+//	double centreY(Envelope *e);
+//	IntersectsOp* intersectsOp;
+//	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
+//	vector<Boundable*>* createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*>* verticalSlices, int newLevel);
+//protected:
+//	Comparator* getComparator();
+//	vector<Boundable*>* createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel);
+//	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
+//	AbstractNode* createNode(int level)
+//	IntersectsOp* getIntersectsOp();
+//public:
+//	STRtree();
+//	STRtree(int nodeCapacity);
+//	void insert(Envelope *itemEnv,void* item);
+//	vector<void*>* query(Envelope *searchEnv);
+};
 
 #endif

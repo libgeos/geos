@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <typeinfo>
 
+
 AbstractSTRtree::AbstractSTRtree(int newNodeCapacity) {
 	built=false;
 	itemBoundables=new vector<Boundable*>();
@@ -25,13 +26,11 @@ void AbstractSTRtree::checkConsistency() {
 	if (!built) {
 		build();
 	}
-//Don't know
-	//HashSet itemBoundablesInTree = new HashSet(boundablesAtLevel(-1));
-	//Assert.equals(new Integer(new HashSet(itemBoundables).size()),
-	//new Integer(itemBoundablesInTree.size()));
+	vector<Boundable*>* itemBoundablesInTree=boundablesAtLevel(-1);
+	Assert::isTrue(itemBoundables->size()==itemBoundablesInTree->size());
 }
 
-bool getComparator(Boundable *a, Boundable *b){
+bool compareAbsBoundables(Boundable *a, Boundable *b){
 	return false;
 }
 
@@ -44,7 +43,7 @@ vector<Boundable*>* AbstractSTRtree::createParentBoundables(vector<Boundable*> *
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 	parentBoundables->push_back(createNode(newLevel));
 	vector<Boundable*> *sortedChildBoundables=new vector<Boundable*>(childBoundables->begin(),childBoundables->end());
-	sort(sortedChildBoundables->begin(),sortedChildBoundables->end(),getComparator);
+	sort(sortedChildBoundables->begin(),sortedChildBoundables->end(),compareAbsBoundables);
 	for(int i=0;i<(int)sortedChildBoundables->size();i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
 		if (lastNode(parentBoundables)->getChildBoundables()->size()==nodeCapacity) {
@@ -60,8 +59,7 @@ AbstractNode* AbstractSTRtree::lastNode(vector<Boundable*> *nodes) {
 }
 
 int AbstractSTRtree::compareDoubles(double a, double b) {
-//	return a>b?1:(a<b?-1:0);
-	return 0;
+	return a>b?1:(a<b?-1:0);
 }
 
 /**
@@ -107,7 +105,7 @@ vector<void*>* AbstractSTRtree::query(void* searchBounds) {
 		Assert::isTrue(root->getBounds()==NULL);
 		return matches;
 	}
-	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds)) {
+	if (intersectsOp->intersects(root->getBounds(),searchBounds)) {
 		query(searchBounds,root,matches);
 	}
 	return matches;
@@ -117,7 +115,7 @@ void AbstractSTRtree::query(void* searchBounds,AbstractNode* node,vector<void*> 
 	vector<Boundable*> *vb=node->getChildBoundables();
 	for(int i=0;i<(int)vb->size();i++) {
 		Boundable *childBoundable=(*vb)[i];
-		if (!getIntersectsOp()->intersects(childBoundable->getBounds(),searchBounds)) {
+		if (!intersectsOp->intersects(childBoundable->getBounds(),searchBounds)) {
 			continue;
 		}
 		if (typeid(*childBoundable)==typeid(AbstractNode)) {

@@ -4,6 +4,7 @@
 #include <set>
 #include "../../headers/util.h"
 
+
 CGAlgorithms* IsValidOp::cga=new RobustCGAlgorithms();
 
 Coordinate& IsValidOp::findPtNotNode(CoordinateList *testCoords,LinearRing *searchRing, GeometryGraph *graph) {

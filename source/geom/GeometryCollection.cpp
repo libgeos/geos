@@ -1,8 +1,9 @@
-include "../headers/geom.h"
+#include "../headers/geom.h"
 #include "../headers/util.h"
 #include "../headers/geosAlgorithm.h"
 #include <algorithm>
 #include <typeinfo>
+
 
 GeometryCollection::GeometryCollection(){
 	geometries=new vector<Geometry *>();

@@ -2,6 +2,7 @@
 #include "../headers/util.h"
 #include <typeinfo>
 
+
 GeometryFactory::GeometryFactory() {
 	precisionModel=new PrecisionModel();
 	SRID=0;

@@ -1,6 +1,7 @@
 #ifndef GEOS_INDEXQUADTREE_H
 #define GEOS_INDEXQUADTREE_H
 
+
 #include <vector>
 #include "platform.h"
 #include "geom.h"

@@ -1,6 +1,7 @@
 #ifndef GEOS_GRAPH_INDEX_H
 #define GEOS_GRAPH_INDEX_H
 
+
 #include "graph.h"
 #include "geom.h"
 #include <vector>

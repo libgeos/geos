@@ -1,6 +1,7 @@
 #ifndef GEOS_ALGORITHM_H
 #define GEOS_ALGORITHM_H
 
+
 #include "geom.h"
 #include "platform.h"
 #include "indexBintree.h"

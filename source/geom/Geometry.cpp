@@ -10,7 +10,6 @@
 #include "../headers/opOverlay.h"
 #include "../headers/io.h"
 
-
 CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();
 GeometryComponentFilter* Geometry::geometryChangedFilter=new GeometryComponentFilter();
 
