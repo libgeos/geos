@@ -7,6 +7,12 @@ AC_CANONICAL_SYSTEM
 VERSION_MAJOR=1
 VERSION_MINOR=4
 VERSION_PATCH=0
+dnl -- CURRENT: current interface number
+dnl -- REVISION: revision of CURRENT interface
+dnl -- AGE: number of previous interfaces supported
+INTERFACE_CURRENT=2
+INTERFACE_REVISION=0
+INTERFACE_AGE=0
 AM_INIT_AUTOMAKE(geos, 1.4.0)
 AC_CONFIG_HEADERS(source/headers/config.h)
 AM_CONFIG_HEADER(source/headers/geos/platform.h)
@@ -53,7 +59,7 @@ dnl process with switches -------------------------------------------------
 dnl check for libraries ---------------------------------------------------
 
 dnl things to substitute in output ----------------------------------------
-AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
+AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE)
 
 dnl output stuff ----------------------------------------------------------
 
