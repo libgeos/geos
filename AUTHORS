@@ -1,0 +1,22 @@
+2003-11-06
+
+Development of GEOS was funded by:
+
+  Vivid Solutions Inc (www.vividsolutions.com)
+  Refractions Research Inc (www.refractions.net)
+  British Columbia Advanced Systems Institute (www.asi.bc.ca)
+
+GEOS is based on algorithms originally developed in Java
+by Martin Davis (mbdavis@vividsolutions.com) in the 
+JTS Topology Suite (www.vividsolutions.com/jts/jtshome.htm)
+
+Developers:
+
+  Yury Bychkov (me@yury.ca) - Initial Porting
+  Sandro Santilli (strk@keybit.net) - Bug Fixing / Maintenance
+  Martin Davis (mbdavis@vividsolutions.com) - Architecture
+  Dave Blasby (dblasby@refractions.net) - PostGIS Connectivity
+  Norman Vine (nvine@cape.com) - Porting / C++ Expertise
+  Fernando Villa (fvilla@zoo.uvm.edu) - GNU Build System
+  Paul Ramsey (pramsey@refractions.net) - Coordination / Build
+
