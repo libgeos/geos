@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/04/16 14:12:52  strk
+ * Memory leak fix in copy constructor
+ *
  * Revision 1.21  2004/04/16 08:35:52  strk
  * Memory leaks fixed and const correctness applied for Point class.
  *
@@ -71,7 +74,7 @@ Point::Point(const CoordinateList *newCoordinates, const GeometryFactory *newFac
 }
 
 Point::Point(const Point &p): Geometry(p.getFactory()) {
-	coordinates=CoordinateListFactory::internalFactory->createCoordinateList(p.getCoordinates());;
+	coordinates=CoordinateListFactory::internalFactory->createCoordinateList(p.coordinates);;
 }
 
 Geometry* Point::clone() const {
