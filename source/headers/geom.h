@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.34  2003/10/15 09:54:29  strk
+* Added getCoordinatesRO() public method.
+*
 * Revision 1.33  2003/10/13 12:51:28  strk
 * removed sortedClasses strings array from all geometries.
 *
@@ -854,6 +857,7 @@ public:
 	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
 	virtual ~LineString();
 	virtual CoordinateList* getCoordinates() const;
+	const CoordinateList* getCoordinatesRO() const;
 	virtual const Coordinate& getCoordinateN(int n) const;
 	virtual int getDimension() const;
 	virtual int getBoundaryDimension() const;

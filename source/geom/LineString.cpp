@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.22  2003/10/15 09:54:29  strk
+* Added getCoordinatesRO() public method.
+*
+*/
 #include "../headers/geom.h"
 #include <algorithm>
 #include <typeinfo>
@@ -39,6 +45,10 @@ LineString::~LineString(){
 CoordinateList* LineString::getCoordinates() const {
 	return CoordinateListFactory::internalFactory->createCoordinateList(points); // callers must be free to delete returned value ! - strk
 	//return points;
+}
+
+const CoordinateList* LineString::getCoordinatesRO() const {
+	return points;
 }
 
 const Coordinate& LineString::getCoordinateN(int n) const {
