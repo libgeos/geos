@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/09/21 09:47:36  strk
+ * fixed a mis-initialization bug in ::reduce
+ *
  * Revision 1.7  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -91,18 +94,9 @@ bool SimpleGeometryPrecisionReducer::getRemoveCollapsed() {
 }
 
 Geometry* SimpleGeometryPrecisionReducer::reduce(const Geometry *geom){
-	GeometryEditor *geomEdit;
-//	if (changePrecisionModel) {
-//		GeometryFactory *newFactory = new GeometryFactory(newPrecisionModel, geom->getSRID());
-//		geomEdit=new GeometryEditor(newFactory);
-//	} else {
-//		// don't change geometry factory
-//		geomEdit = new GeometryEditor();
-//	}
-	PrecisionReducerCoordinateOperation *prco=new PrecisionReducerCoordinateOperation(this);
-	Geometry *g=geomEdit->edit(geom, prco);
-	delete geomEdit;
-	delete prco;
+	GeometryEditor geomEdit;
+	PrecisionReducerCoordinateOperation prco(this);
+	Geometry *g=geomEdit.edit(geom, &prco);
 	return g;
 }
 
