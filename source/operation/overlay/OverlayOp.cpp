@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/04/14 13:14:29  strk
+ * Removed deletion of externally pointed GeometryFactory from OverlayOp destructor
+ *
  * Revision 1.15  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -110,7 +113,7 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOpera
 
 OverlayOp::~OverlayOp() {
 	delete graph;
-	delete geomFact;
+	//delete geomFact;
 	delete edgeList;
 	int i;
 	if ( resultPolyList )
