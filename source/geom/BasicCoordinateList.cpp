@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.12  2003/10/15 11:23:00  strk
+* Formalized const nature of toVector() method and of first argument to static removeRepeatedPoints().
+*
 * Revision 1.11  2003/10/15 10:17:36  strk
 * Made setPoints() get a const vector<Coordinate>.
 *
@@ -41,7 +44,7 @@ void BasicCoordinateList::setPoints(const vector<Coordinate> &v) {
 	vect=new vector<Coordinate>(v);
 }
 
-vector<Coordinate>* BasicCoordinateList::toVector() {
+vector<Coordinate>* BasicCoordinateList::toVector() const {
 	return new vector<Coordinate>(vect->begin(),vect->end());
 }
 

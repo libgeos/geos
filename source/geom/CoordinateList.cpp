@@ -115,7 +115,7 @@ void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 * being a copy of the input once with consecutive equal points
 * removed.
 **/
-CoordinateList* CoordinateList::removeRepeatedPoints(CoordinateList *cl){
+CoordinateList* CoordinateList::removeRepeatedPoints(const CoordinateList *cl){
 	CoordinateList* ret=CoordinateListFactory::internalFactory->createCoordinateList();
 	vector<Coordinate> *v=cl->toVector();
 	ret->add(v,false);

@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.36  2003/10/15 11:23:00  strk
+* Formalized const nature of toVector() method and of first argument to static removeRepeatedPoints().
+*
 * Revision 1.35  2003/10/15 10:17:36  strk
 * Made setPoints() get a const vector<Coordinate>.
 *
@@ -223,7 +226,7 @@ public:
 	virtual	const Coordinate& getAt(int pos) const=0;
 	virtual	void setAt(const Coordinate& c, int pos)=0;
 	virtual	void deleteAt(int pos)=0;
-	virtual	vector<Coordinate>* toVector()=0;
+	virtual	vector<Coordinate>* toVector() const=0;
 	virtual	string toString()=0;
 	virtual	void setPoints(const vector<Coordinate> &v)=0;
 	bool hasRepeatedPoints() const;
@@ -236,7 +239,7 @@ public:
 	static void reverse(CoordinateList *cl);
 	void add(vector<Coordinate>* vc,bool allowRepeated);
 	void add(const Coordinate& c,bool allowRepeated);
-	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
+	static CoordinateList* removeRepeatedPoints(const CoordinateList *cl);
 	virtual ~CoordinateList(){};
 };
 
@@ -254,7 +257,7 @@ public:
 	const Coordinate& getAt(int pos) const;
 	void setAt(const Coordinate& c, int pos);
 	void deleteAt(int pos);
-	vector<Coordinate>* toVector();
+	vector<Coordinate>* toVector() const;
 	string toString();
 	void setPoints(const vector<Coordinate> &v);
 private:
@@ -284,7 +287,7 @@ public:
 	void setAt(const Coordinate& c, int pos);
 	void setAt(point_3d p, int pos);
 	void deleteAt(int pos);
-	vector<Coordinate>* toVector();
+	vector<Coordinate>* toVector() const;
 	vector<point_3d>* toPointVector();
 	string toString();
 	void setPoints(const vector<Coordinate> &v);

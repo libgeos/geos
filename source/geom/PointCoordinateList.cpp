@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.15  2003/10/15 11:23:00  strk
+* Formalized const nature of toVector() method and of first argument to static removeRepeatedPoints().
+*
 * Revision 1.14  2003/10/15 10:17:36  strk
 * Made setPoints() get a const vector<Coordinate>.
 *
@@ -56,7 +59,7 @@ void PointCoordinateList::setPoints(vector<point_3d> &v) {
 	vect=new vector<point_3d>(v);
 }
 
-vector<Coordinate>* PointCoordinateList::toVector() {
+vector<Coordinate>* PointCoordinateList::toVector() const {
 	vector<Coordinate>* v=new vector<Coordinate>();
 	for(unsigned int i=0; i<vect->size(); i++) {
 		v->push_back(*(new Coordinate((*vect)[i].x,(*vect)[i].y,(*vect)[i].z)));
