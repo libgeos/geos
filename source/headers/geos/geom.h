@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/17 09:18:54  strk
+ * Added geos::version()
+ *
  * Revision 1.13  2004/07/14 21:17:10  strk
  * added inequality operator for Coordinate
  *
@@ -185,6 +188,8 @@
 using namespace std;
 
 namespace geos {
+
+string version();
 
 /// Geometry types
 enum GeometryTypeId {

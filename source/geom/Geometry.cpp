@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.63  2004/07/17 09:18:54  strk
+ * Added geos::version()
+ *
  * Revision 1.62  2004/07/14 21:20:58  strk
  * Added GeometricShapeFactory note on doxygen mainpage
  *
@@ -141,6 +144,7 @@
 #include <geos/opOverlay.h>
 #include <geos/opBuffer.h>
 #include <geos/io.h>
+#include <geos/version.h>
 
 namespace geos {
 
@@ -177,6 +181,12 @@ namespace geos {
  * to catch both if you care (this might change in the future)
  *
  */ 
+
+string
+version()
+{
+	return "GEOS "GEOS_VERSION" ported from JTS "GEOS_JTS_PORT;
+}
 
 GeometryComponentFilter Geometry::geometryChangedFilter;
 
