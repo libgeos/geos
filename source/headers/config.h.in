@@ -1,4 +1,4 @@
-/* source/headers/config.h.in.  Generated automatically from configure.in by autoheader.  */
+/* source/headers/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Define if the `closedir' function returns void instead of `int'. */
 #undef CLOSEDIR_VOID
