@@ -145,7 +145,8 @@ int GeometryCollection::compareToSameClass(GeometryCollection *gc) {
 
 Coordinate GeometryCollection::getCoordinate() {
 	if (isEmpty()) return Coordinate();
-	return geometries.at(0)->getCoordinate();
+//	return geometries.at(0)->getCoordinate();
+    return geometries[0]->getCoordinate();
 }
 
 /**
@@ -156,7 +157,8 @@ Coordinate GeometryCollection::getCoordinate() {
 double GeometryCollection::getArea() {
 	double area=0.0;
 	for(unsigned int i=0;i<geometries.size();i++) {
-		area+=geometries.at(i)->getArea();
+//		area+=geometries.at(i)->getArea();
+        area+=geometries[i]->getArea();
 	}
 	return area;
 }
@@ -169,7 +171,8 @@ double GeometryCollection::getArea() {
 double GeometryCollection::getLength() {
 	double sum=0.0;
 	for(unsigned int i=0;i<geometries.size();i++) {
-		sum+=((LineString*)geometries.at(i))->getLength();
+//		sum+=((LineString*)geometries.at(i))->getLength();
+        sum+=((LineString*)geometries[i])->getLength();
 	}
 	return sum;
 }
@@ -177,7 +180,8 @@ double GeometryCollection::getLength() {
 void GeometryCollection::apply(GeometryComponentFilter *filter) {
 	filter->filter(this);
 	for(unsigned int i=0;i<geometries.size();i++) {
-		geometries.at(i)->apply(filter);
+//		geometries.at(i)->apply(filter);
+        geometries[i]->apply(filter);
 	}
 }
 

@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <stdio.h>
 
 int Quadrant::quadrant(double dx, double dy) {
 	char buffer[255];

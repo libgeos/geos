@@ -38,9 +38,12 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../io/WKTWriter.cpp ../io/markup/MarkupSTL.cpp \
 			../util/Assert.cpp  \
 			../util/AssertionFailedException.cpp \
+                        ../algorithm/CGAlgorithms.cpp \
 			../algorithm/HCoordinate.cpp \
 			../algorithm/LineIntersector.cpp \
 			../algorithm/NotRepresentableException.cpp \
+                        ../algorithm/NonRobustCGAlgorithms.cpp \
+                        ../algorithm/NotRepresentableException.cpp \
 			../algorithm/PointInRing.cpp \
 			../algorithm/PointLocator.cpp \
 			../algorithm/RobustCGAlgorithms.cpp \
@@ -56,11 +59,12 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../operation/relate/RelateNodeFactory.cpp \
 			../operation/relate/RelateNodeGraph.cpp \
 			../operation/relate/RelateOp.cpp \
+                        ../operation/GeometryGraphOperation.cpp \
 			../operation/IsSimpleOp.cpp
 
 libgeos_la_SOURCES =	$(DIR_SOURCES) $(EXTERNAL_SOURCES)
 
-libgeos_la_LDFLAGS = -version-info 0:0:1
+libgeos_la_LDFLAGS = -version-info 1
 
 dist-local:
 		cp -p $(DIR_SOURCES) Makefile.am Makefile.in $(distdir)

@@ -26,7 +26,8 @@ int main(int argC, char* argV[]) {
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
 	int out=TEST_DESCR+TEST_RESULT;
 	int failed=0;
-	string source="d://test.xml";
+//	string source="d://test.xml";
+    string source="./test.xml";
 	string precisionModel="";
 	string desc="";
 	string geomAin="";
@@ -38,7 +39,7 @@ int main(int argC, char* argV[]) {
 	string opRes="";
 	int testCount=0;
 
-	WKTReader r(GeometryFactory(PrecisionModel(),10));
+	WKTReader *r = new WKTReader(GeometryFactory(PrecisionModel(),10));
 	WKTWriter *w=new WKTWriter();
 	Geometry *gA;
 	Geometry *gB;
@@ -46,9 +47,13 @@ int main(int argC, char* argV[]) {
 	CMarkupSTL xml;
 	bool a=xml.Load(source.c_str());
 
+    cout << "xml.ResetPos()\n";
 	xml.ResetPos();
+    cout << "xml.FindElem(\"run\")\n";
 	a=xml.FindElem("run");
+    cout << a << endl;
 	a=xml.FindChildElem("precisionModel");
+    cout << a << endl;
 	precisionModel=xml.GetChildAttrib("type");
 	cout << "Precision Model: " << precisionModel << endl;
 	while (xml.FindChildElem("case")) {
@@ -57,14 +62,20 @@ int main(int argC, char* argV[]) {
 		cout << "Test #" << testCount << endl;
 
 		a=xml.FindChildElem("desc");
+        cout << a << endl;
 		desc=xml.GetChildData();
+        cout << "desc = " << desc << endl;
 		if (out & TEST_DESCR)
 			cout << "\t" << desc << endl;
 
 		a=xml.FindChildElem("a");
+        cout << "xml.FindChildElem(\"a\") =  " << a << endl;
 		geomAin=xml.GetChildData();
-		gA=r.read(geomAin);
+        cout << "xml.GetChildData() = " << geomAin << endl;
+		gA=r->read(geomAin);
+        cout << "read(geomAin) = " << gA << endl;
 		geomAout=w->write(gA);
+        cout << "if (out &(GEOM_A_IN | GEOM_A_OUT))" << endl;
 		if (out &(GEOM_A_IN | GEOM_A_OUT)) {
 			cout << "\tGeometry A" << endl;
 			if (out & GEOM_A_IN)
@@ -74,9 +85,11 @@ int main(int argC, char* argV[]) {
 		}
 
 		a=xml.FindChildElem("b");
+        cout << "xml.FindChildElem(\"b\") = " << a << endl;
 		geomBin=xml.GetChildData();
-		gB=r.read(geomBin);
+		gB=r->read(geomBin);
 		geomBout=w->write(gB);
+        cout << "if (out &(GEOM_B_IN | GEOM_B_OUT))" << endl;
 		if (out &(GEOM_B_IN | GEOM_B_OUT)) {
 			cout << "\tGeometry B" << endl;
 			if (out & GEOM_B_IN)
@@ -87,7 +100,9 @@ int main(int argC, char* argV[]) {
 
 		a=xml.FindChildElem("test");
 		xml.IntoElem();
-		a=xml.FindChildElem("op");
+        cout << "a=xml.FindChildElem(\"op\")";
+        a=xml.FindChildElem("op");
+        cout << a << endl;
 		opName=xml.GetChildAttrib("name");
 		opSig=xml.GetChildAttrib("arg3");
 		opRes=xml.GetChildData();

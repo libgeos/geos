@@ -1,1 +1,1 @@
-SUBDIRS = algorithm geom graph headers io util operation
+SUBDIRS = algorithm geom graph headers io util operation test

@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <stdio.h>
 
 int Depth::depthAtLocation(int location) {
 	if (location == Location::EXTERIOR) return 0;

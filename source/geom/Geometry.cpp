@@ -280,11 +280,11 @@ void Geometry::checkEqualPrecisionModel(Geometry *other) {
 }
 
 int Geometry::getClassSortIndex() {
+    const type_info &t=typeid(*this);
+    string tst=t.name();
 	for (unsigned int i=0; i<sortedClasses.size(); i++) {
-		const type_info &t=typeid(*this);
-		string tst=t.name();
-		string tst2=sortedClasses.at(i);
-		if (sortedClasses.at(i)==typeid(*this).name()) {
+//		string tst2=sortedClasses[i];
+		if ( sortedClasses[i]==typeid(*this).name() ) {
 			return i;
 		}
 	}

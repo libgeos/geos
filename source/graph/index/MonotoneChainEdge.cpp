@@ -40,14 +40,14 @@ vector<int> MonotoneChainEdge::getStartIndexes() {
 }
 
 double MonotoneChainEdge::getMinX(int chainIndex){
-	double x1=pts.getAt(startIndex.at(chainIndex)).x;
-	double x2=pts.getAt(startIndex.at(chainIndex+1)).x;
+	double x1=pts.getAt(startIndex[chainIndex]).x;
+	double x2=pts.getAt(startIndex[chainIndex+1]).x;
 	return x1<x2?x1:x2;
 }
 
 double MonotoneChainEdge::getMaxX(int chainIndex) {
-	double x1=pts.getAt(startIndex.at(chainIndex)).x;
-	double x2=pts.getAt(startIndex.at(chainIndex+1)).x;
+	double x1=pts.getAt(startIndex[chainIndex]).x;
+	double x2=pts.getAt(startIndex[chainIndex+1]).x;
 	return x1>x2?x1:x2;
 }
 
@@ -60,8 +60,8 @@ void MonotoneChainEdge::computeIntersects(MonotoneChainEdge *mce,SegmentIntersec
 }
 
 void MonotoneChainEdge::computeIntersectsForChain(int chainIndex0,MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si){
-	computeIntersectsForChain(startIndex.at(chainIndex0),startIndex.at(chainIndex0+1),mce,
-							  mce->startIndex.at(chainIndex1),mce->startIndex.at(chainIndex1+1),si);
+	computeIntersectsForChain(startIndex[chainIndex0],startIndex[chainIndex0+1],mce,
+							  mce->startIndex[chainIndex1],mce->startIndex[chainIndex1+1],si);
 }
 
 void MonotoneChainEdge::computeIntersectsForChain(int start0,int end0,MonotoneChainEdge *mce,

@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <stdio.h>
 
 EdgeIntersection::EdgeIntersection(Coordinate newCoord, int newSegmentIndex, double newDist):
 	coord(newCoord) {

@@ -65,14 +65,17 @@ EdgeEnd* EdgeEndStar::getNextCW(EdgeEnd *ee){
 	getEdges();
 	int i;
 	for(unsigned int j=0;j<edgeList->size();j++)
-		if (ee->compareTo(*(edgeList->at(j)))==0) {
+    {
+//        if (ee->compareTo( *(edgeList->at(j)))==0) {
+        if (ee->compareTo( *((*edgeList)[j]) )==0) {
 			i=j;
 			break;
 		}
+    }
 	int iNextCW=i-1;
 	if (i==0)
 		iNextCW=(int)edgeList->size()-1;
-	return edgeList->at(iNextCW);
+	return (*edgeList)[iNextCW];
 }
 
 void EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom){
@@ -112,7 +115,8 @@ void EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom){
 	* area label propagation, symLabel merging, then finally null label resolution.
 	*/
 	bool hasDimensionalCollapseEdge[2]={false,false};
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+    vector<EdgeEnd*>::iterator it;
+	for (it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		for(int geomi=0; geomi<2; geomi++) {
@@ -149,7 +153,8 @@ void EdgeEndStar::computeEdgeEndLabels(){
 int EdgeEndStar::getLocation(int geomIndex,Coordinate p,vector<GeometryGraph*> *geom){
 	// compute location only on demand
 	if (ptInAreaLocation[geomIndex]==Location::UNDEF) {
-		ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(geom->at(geomIndex))->getGeometry());
+//		ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(geom->at(geomIndex))->getGeometry());
+        ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(*geom)[geomIndex]->getGeometry());
 	}
 	return ptInAreaLocation[geomIndex];
 }
@@ -168,7 +173,7 @@ bool EdgeEndStar::checkAreaLabelsConsistent(int geomIndex){
 		return true;
 	// initialize startLoc to location of last L side (if any)
 	int lastEdgeIndex=(int)edges->size()-1;
-	Label *startLabel=(edges->at(lastEdgeIndex))->getLabel();
+	Label *startLabel=((*edgeList)[lastEdgeIndex])->getLabel();
 	int startLoc=startLabel->getLocation(geomIndex,Position::LEFT);
 	Assert::isTrue(startLoc!=Location::UNDEF, "Found unlabelled area edge");
 	int currLoc=startLoc;
@@ -198,7 +203,8 @@ void EdgeEndStar::propagateSideLabels(int geomIndex){
 	// As we move around the ring we move from the right to the left side of the edge
 	int startLoc=Location::UNDEF ;
 	// initialize loc to location of last L side (if any)
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+    vector<EdgeEnd*>::iterator it;
+	for (it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		if (label->isArea(geomIndex) && label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
@@ -243,7 +249,7 @@ void EdgeEndStar::propagateSideLabels(int geomIndex){
 int EdgeEndStar::findIndex(EdgeEnd *eSearch){
 	getIterator();   // force edgelist to be computed
 	for (unsigned int i=0; i<edgeList->size(); i++ ) {
-		EdgeEnd *e=edgeList->at(i);
+		EdgeEnd *e=(*edgeList)[i];
 		if (e->compareTo(*eSearch)) return i;
 	}
 	return -1;

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "graphindex.h"
 
 SweepLineEvent::SweepLineEvent(int newGeomIndex,double x,SweepLineEvent *newInsertEvent,void *newObj){

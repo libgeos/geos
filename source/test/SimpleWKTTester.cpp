@@ -1,20 +1,21 @@
 // CTS.cpp : Testing class
 //
 
-#include "io.h"
 #include <iostream>
 #include <fstream>
+#include "io.h"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
+    
 	try {
 		ofstream out("WKTOut");
 		ifstream in("WKTIn");
 		string instr;
 		string outstr;
-		WKTReader r(GeometryFactory(PrecisionModel(),10));
+		WKTReader *r = new WKTReader(GeometryFactory(PrecisionModel(),10));
 		WKTWriter *w=new WKTWriter();
 		Geometry *g;
 
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
 		while(!in.eof()) {
 			&getline(in,instr);
 			if (instr!="") {
-				g=r.read(instr);
+				g=r->read(instr);
 				outstr=w->write(g);
 				out << "----------" << endl;
 				out << instr << endl;

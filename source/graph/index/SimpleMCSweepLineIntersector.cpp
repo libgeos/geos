@@ -48,7 +48,7 @@ bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second) {
 void SimpleMCSweepLineIntersector::prepareEvents(){
 	sort(events.begin(),events.end(),sleLessThen);
 	for(int i=0;i<(int)events.size();i++ ){
-		SweepLineEvent *ev=events.at(i);
+		SweepLineEvent *ev=events[i];
 		if (ev->isDelete()){
 			SweepLineEvent *iev=ev->getInsertEvent();
 			iev->setDeleteEventIndex(i);
@@ -60,7 +60,7 @@ void SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si,b
 	nOverlaps=0;
 	prepareEvents();
 	for(int i=0;i<(int)events.size();i++) {
-		SweepLineEvent *ev=events.at(i);
+		SweepLineEvent *ev=events[i];
 		MonotoneChain *mc=(MonotoneChain*)ev->getObject();
 		if (ev->isInsert()) {
 			processOverlaps(i,ev->getDeleteEventIndex(),mc,si,doMutualOnly);
@@ -76,7 +76,7 @@ void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,MonotoneCha
 	* Last index can be skipped, because it must be a Delete event.
 	*/
 	for(int i=start;i<end;i++) {
-		SweepLineEvent *ev=events.at(i);
+		SweepLineEvent *ev=events[i];
 		if (ev->isInsert()) {
 			MonotoneChain *mc1=(MonotoneChain*) ev->getObject();
 			if (!doMutualOnly || (mc0->getGeomIndex()!=mc1->getGeomIndex())) {

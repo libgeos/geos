@@ -198,7 +198,8 @@ double Polygon::getArea() {
 	double area=0.0;
 	area+=fabs(CGAlgorithms::signedArea(shell->getCoordinates()));
 	for(unsigned int i=0;i<holes.size();i++) {
-		area-=fabs(CGAlgorithms::signedArea(holes.at(i)->getCoordinates()));
+//		area-=fabs(CGAlgorithms::signedArea(holes.at(i)->getCoordinates()));
+        area-=fabs(CGAlgorithms::signedArea(holes[i]->getCoordinates()));
 	}
 	return area;
 }
@@ -212,7 +213,8 @@ double Polygon::getLength() {
 	double len=0.0;
 	len+=shell->getLength();
 	for(unsigned int i=0;i<holes.size();i++) {
-		len+=holes.at(i)->getLength();
+//		len+=holes.at(i)->getLength();
+        len+=holes[i]->getLength();
 	}
 	return len;
 }
@@ -220,7 +222,8 @@ double Polygon::getLength() {
 void Polygon::apply(GeometryComponentFilter *filter) {
 	shell->apply(filter);
 	for(unsigned int i=0;i<holes.size();i++) {
-		holes.at(i)->apply(filter);
+//		holes.at(i)->apply(filter);
+        holes[i]->apply(filter);
 	}
 }
 

@@ -2,6 +2,7 @@
 #include "util.h"
 #include <typeinfo>
 #include "math.h"
+#include <stdio.h>
 
 CGAlgorithms* EdgeEnd::cga=new RobustCGAlgorithms();
 

@@ -31,8 +31,8 @@ void SegmentIntersector::setBoundaryNodes(vector<Node*> *bdyNodes0,vector<Node*>
 	if (bdyNodes==NULL)
 		bdyNodes=new vector<vector<Node*>*>();
 	bdyNodes->resize(2);
-	bdyNodes->at(0)=bdyNodes0;
-	bdyNodes->at(1)=bdyNodes1;
+	*(bdyNodes->begin())=bdyNodes0;
+	*(bdyNodes->begin()+1)=bdyNodes1;
 }
 
 /**
@@ -139,8 +139,8 @@ void SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int se
 
 bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<vector<Node*>*> *tstBdyNodes) {
 	if (tstBdyNodes==NULL) return false;
-	if (isBoundaryPoint(li,tstBdyNodes->at(0))) return true;
-	if (isBoundaryPoint(li,tstBdyNodes->at(1))) return true;
+	if (isBoundaryPoint(li,(*tstBdyNodes)[0])) return true;
+	if (isBoundaryPoint(li,(*tstBdyNodes)[1])) return true;
 	return false;
 }
 

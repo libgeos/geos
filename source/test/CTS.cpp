@@ -5,13 +5,13 @@
 #include <iostream>
 using namespace std;
 
-/*
+
 int main(int argc, char** argv)
 {
 	try {
 	cout << "Start:" << endl;
 	
-/*	Coordinate c1(10.531,20.5e-5,30);
+	Coordinate c1(10.531,20.5e-5,30);
 	Coordinate c2(c1);
 	Coordinate c3;
 	cout << c1.equals2D(c2) << endl;
@@ -31,21 +31,21 @@ int main(int argc, char** argv)
 
 	Coordinate c0(10,20.5e-5,30);
 	cout << c0.distance(c2) << endl;
-*/
 
-/*	cout << Dimension::toDimensionSymbol(-2) << endl;
+/*    
+	cout << Dimension::toDimensionSymbol(-2) << endl;
 	cout << Dimension::toDimensionSymbol(Dimension::DONTCARE) << endl;
 	cout << Dimension::toDimensionSymbol(87) << endl;
 	cout << Dimension::toDimensionSymbol(Dimension::DONTCARE) << endl;
-*/
-/*	cout << Dimension::toDimensionValue('T') << endl;
+
+	cout << Dimension::toDimensionValue('T') << endl;
 	cout << Dimension::toDimensionValue('*') << endl;
 	cout << Dimension::toDimensionValue('t') << endl;
 	cout << Dimension::toDimensionValue('Q') << endl;
 	cout << Dimension::toDimensionValue('*') << endl;
 */
-
-/*	Coordinate c1(10,20,30);
+/*    
+	Coordinate c1(10,20,30);
 	Coordinate c2(40,50,60);
 	Coordinate c3(1,2,3);
 	Envelope e1;
@@ -55,37 +55,37 @@ int main(int argc, char** argv)
 	Envelope e5(e2);
 	e2.setToNull();
 */
-
-/*	Coordinate c1(10,20,30);
+/*
+	Coordinate c1(10,20,30);
 	Coordinate c2(40,50,60);
 	LineSegment ls1;
 	ls1.setCoordinates(c1,c2);
-*/
-/*	cout << Location::UNDEF << endl;
+
+	cout << Location::UNDEF << endl;
 	cout << Location::toLocationSymbol(Location::UNDEF) << endl;
 	cout << Location::toLocationSymbol(Location::EXTERIOR) << endl;
 	cout << Location::toLocationSymbol(99) << endl;
 	cout << Location::toLocationSymbol(Location::INTERIOR) << endl;
-*/
-/*	Coordinate c1(10,20,30);
+
+	Coordinate c1(10,20,30);
 	PrecisionModel pm;
 	Point p(c1,pm,10);
-*/
 
-/*	Coordinate c1(10,20,30);
+
+	Coordinate c1(10,20,30);
 	Coordinate c2(1,2,3);
 	CoordinateList cl1;
 	CoordinateList cl2(c1);
 	cl1.add(c1);
 	c1.setCoordinate(c2);
-*/
 
-/*	Point p;
+
+	Point p;
 	cout << p.getNumPoints() << endl;
 	cout << p.isEmpty() << endl;
 
-*/
-/*	Coordinate c2(1,2,3);
+
+	Coordinate c2(1,2,3);
 	PrecisionModel pm;
 	Point p1(c2,pm,2);
 	cout << p1.getNumPoints() << endl;
@@ -93,31 +93,32 @@ int main(int argc, char** argv)
 	CoordinateList cl=p1.getCoordinates();
 
 	Point p2(p1);
-*/
 
-/*	Coordinate c1(10,20,30);
+
+	Coordinate c1(10,20,30);
 	PrecisionModel pm(10,5,1);
 	cout << pm.toString() << endl;
 	Coordinate c2=pm.toInternal(c1);
 	cout << c1.toString() << endl;
 	cout << c2.toString() << endl;
-*/
-/*	IntersectionMatrix im("TF*012TF*aaa");
+
+	IntersectionMatrix im("TF*012TF*aaa");
 	cout << im.matches("TF*012TF*") << endl;
 	cout << im.matches("TF*012TFT") << endl;
 //	cout << im.matches("TF*012TF*aaa") << endl;
 	cout << im.toString() << endl;
 	im.transpose();
 	cout << im.toString() << endl;
-*/
+
 	
-/*	LineString ls;
+	LineString ls;
 	Point p;
 	cout << ls.isEquivalentClass(&ls) << endl;
 	cout << ls.isEquivalentClass(&p) << endl;
-*/
 
-/*	Coordinate c1(0,0);
+*/
+/*    
+	Coordinate c1(0,0);
 	Coordinate c2(100,0);
 	Coordinate c3(100,100);
 	Coordinate c4(0,100);
@@ -173,6 +174,7 @@ int main(int argc, char** argv)
 
 	p.normalize();
 */
+/*
 //	throw ParseException("Test Message","ErrorLoc");
 
 //	Geometry g(PrecisionModel(),10);
@@ -198,15 +200,16 @@ int main(int argc, char** argv)
 //		cout << "Word: " << st.getSVal() <<endl;
 //	else 
 //		cout << "Something else" <<endl;
+*/
 
-/*	WKTReader r(GeometryFactory(PrecisionModel(),10));
+    /*	WKTReader r(GeometryFactory(PrecisionModel(),10));
 	Geometry* g=r.read("POLYGON((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 330 120, 260 50, 100 50, 170 120))");
 //	Geometry* g=r.read("POLYGON((150 150, 410 150, 280 20, 20 20, 150 150))");
 	WKTWriter *w=new WKTWriter();
 
 	string s=w->write(g);
 	cout << s << endl;
-
+*/
 	cout << "End" << endl;
 	} catch (char *message){
         cout << message << endl;
@@ -217,4 +220,3 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-*/

@@ -25,7 +25,7 @@ Coordinate RelateComputer::getInvalidPoint() {
 }
 
 bool RelateComputer::isNodeConsistentArea() {
-	SegmentIntersector *intersector=arg->at(0)->computeSelfNodes((LineIntersector*)li);
+	SegmentIntersector *intersector=(*arg)[0]->computeSelfNodes((LineIntersector*)li);
 	if (intersector->hasProperIntersection()) {
 		invalidPoint.setCoordinate(intersector->getProperIntersectionPoint());
 		return false;
@@ -41,7 +41,7 @@ bool RelateComputer::isNodeConsistentArea() {
 	* Build EdgeEnds for all intersections.
 	*/
 	EdgeEndBuilder eeBuilder;
-	vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds(arg->at(0)->getEdges());
+	vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds((*arg)[0]->getEdges());
 	insertEdgeEnds(ee0);
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
@@ -85,15 +85,15 @@ IntersectionMatrix RelateComputer::computeIM() {
 	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
 	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
 	// if the Geometries don't overlap there is nothing to do
-	if (! arg->at(0)->getGeometry()->getEnvelopeInternal().overlaps(
-							arg->at(1)->getGeometry()->getEnvelopeInternal())) {
+	if (! (*arg)[0]->getGeometry()->getEnvelopeInternal().overlaps(
+							(*arg)[1]->getGeometry()->getEnvelopeInternal())) {
 		computeDisjointIM(im);
 		return IntersectionMatrix(*im);
 	}
-	arg->at(0)->computeSelfNodes((LineIntersector*)li);
-	arg->at(1)->computeSelfNodes((LineIntersector*)li);
+	(*arg)[0]->computeSelfNodes((LineIntersector*)li);
+	(*arg)[1]->computeSelfNodes((LineIntersector*)li);
 	// compute intersections between edges of the two input geometries
-	SegmentIntersector *intersector=arg->at(0)->computeEdgeIntersections(arg->at(1),(LineIntersector*)li,false);
+	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1],(LineIntersector*)li,false);
 	computeIntersectionNodes(0);
 	computeIntersectionNodes(1);
 	/**
@@ -116,9 +116,9 @@ IntersectionMatrix RelateComputer::computeIM() {
 	*/
 	// build EdgeEnds for all intersections
 	EdgeEndBuilder eeBuilder;
-	vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds(arg->at(0)->getEdges());
+	vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds((*arg)[0]->getEdges());
 	insertEdgeEnds(ee0);
-	vector<EdgeEnd*> *ee1=eeBuilder.computeEdgeEnds(arg->at(1)->getEdges());
+	vector<EdgeEnd*> *ee1=eeBuilder.computeEdgeEnds((*arg)[1]->getEdges());
 	insertEdgeEnds(ee1);
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
@@ -150,8 +150,8 @@ void RelateComputer::insertEdgeEnds(vector<EdgeEnd*> *ee) {
 
 void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *im) {
 	// If a proper intersection is found, we can set a lower bound on the IM.
-	int dimA=arg->at(0)->getGeometry()->getDimension();
-	int dimB=arg->at(1)->getGeometry()->getDimension();
+	int dimA=(*arg)[0]->getGeometry()->getDimension();
+	int dimB=(*arg)[1]->getGeometry()->getDimension();
 	bool hasProper=intersector->hasProperIntersection();
 	bool hasProperInterior=intersector->hasProperInteriorIntersection();
 	// For Geometrys of dim 0 there can never be proper intersections.
@@ -200,7 +200,7 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 * in the interior due to the Boundary Determination Rule)
 */
 void RelateComputer::copyNodesAndLabels(int argIndex) {
-	map<Coordinate,Node*,CoordLT> nMap(arg->at(argIndex)->getNodeMap()->nodeMap);
+	map<Coordinate,Node*,CoordLT> nMap((*arg)[argIndex]->getNodeMap()->nodeMap);
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
@@ -219,7 +219,8 @@ void RelateComputer::copyNodesAndLabels(int argIndex) {
 * Endpoint nodes will already be labelled from when they were inserted.
 */
 void RelateComputer::computeIntersectionNodes(int argIndex) {
-	vector<Edge*> *edges=arg->at(argIndex)->getEdges();
+//   vector<Edge*> *edges=arg->at(argIndex)->getEdges();
+	vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
@@ -246,7 +247,8 @@ void RelateComputer::computeIntersectionNodes(int argIndex) {
 * Endpoint nodes will already be labelled from when they were inserted.
 */
 void RelateComputer::labelIntersectionNodes(int argIndex) {
-	vector<Edge*> *edges=arg->at(argIndex)->getEdges();
+//    vector<Edge*> *edges=arg->at(argIndex)->getEdges();
+	vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
@@ -270,12 +272,12 @@ void RelateComputer::labelIntersectionNodes(int argIndex) {
 * boundary dimension in the Ext rows in the IM
 */
 void RelateComputer::computeDisjointIM(IntersectionMatrix *im) {
-	Geometry *ga=arg->at(0)->getGeometry();
+	Geometry *ga=(*arg)[0]->getGeometry();
 	if (!ga->isEmpty()) {
 		im->set(Location::INTERIOR,Location::EXTERIOR,ga->getDimension());
 		im->set(Location::BOUNDARY,Location::EXTERIOR,ga->getBoundaryDimension());
 	}
-	Geometry *gb=arg->at(1)->getGeometry();
+	Geometry *gb=(*arg)[1]->getGeometry();
 	if (!gb->isEmpty()) {
 		im->set(Location::EXTERIOR,Location::INTERIOR,gb->getDimension());
 		im->set(Location::EXTERIOR,Location::BOUNDARY,gb->getBoundaryDimension());
@@ -340,11 +342,13 @@ void RelateComputer::updateIM(IntersectionMatrix *im) {
 * not be isolated)
 */
 void RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex) {
-	vector<Edge*> *edges=arg->at(thisIndex)->getEdges();
+//	vector<Edge*> *edges=arg->at(thisIndex)->getEdges();
+	vector<Edge*> *edges=(*arg)[thisIndex]->getEdges();
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		if (e->isIsolated()) {
-			labelIsolatedEdge(e,targetIndex,(arg->at(targetIndex))->getGeometry());
+			labelIsolatedEdge(e,targetIndex,(*arg)[targetIndex]->getGeometry());
+//			labelIsolatedEdge(e,targetIndex,(arg->at(targetIndex))->getGeometry());
 			isolatedEdges.push_back(e);
 		}
 	}
@@ -399,7 +403,8 @@ void RelateComputer::labelIsolatedNodes() {
 * Label an isolated node with its relationship to the target geometry.
 */
 void RelateComputer::labelIsolatedNode(Node *n,int targetIndex) {
-	int loc=((PointLocator*) ptLocator)->locate(n->getCoordinate(),arg->at(targetIndex)->getGeometry());
+	int loc=((PointLocator*) ptLocator)->locate(n->getCoordinate(),
+                                                (*arg)[targetIndex]->getGeometry());
 	n->getLabel()->setAllLocations(targetIndex,loc);
 	//debugPrintln(n.getLabel());
 }
