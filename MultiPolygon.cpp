@@ -30,7 +30,7 @@ Geometry MultiPolygon::getBoundary() {
 		Polygon pg(*((Polygon *)geometries[i]));
 		GeometryCollection rings(*dynamic_cast<GeometryCollection *>(&pg.getBoundary()));
 		for (int j = 0; j < rings.getNumGeometries(); j++) {
-			allRings.push_back(&rings.getGeometryN(j));
+			allRings.push_back(rings.getGeometryN(j));
 		}
 	}
 //LineString[] allRingsArray = new LineString[allRings.size()];

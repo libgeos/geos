@@ -182,7 +182,8 @@ void WKTWriter::appendPolygonText(Polygon *polygon, int level, bool indentFirst,
 		appendLineStringText(&(polygon->getExteriorRing()), level, false, writer);
 		for (int i=0; i<polygon->getNumInteriorRing(); i++) {
 			writer->write(", ");
-			appendLineStringText(&(polygon->getInteriorRingN(i)), level + 1, true, writer);
+			LineString *ls=polygon->getInteriorRingN(i);
+			appendLineStringText(polygon->getInteriorRingN(i), level + 1, true, writer);
 		}
 		writer->write(")");
 	}
@@ -197,7 +198,7 @@ void WKTWriter::appendMultiPointText(MultiPoint *multiPoint, int level, Writer *
 			if (i > 0) {
 				writer->write(", ");
 			}
-			appendCoordinate(((Point* )&(multiPoint->getGeometryN(i)))->getCoordinate(), writer,
+			appendCoordinate(((Point* )multiPoint->getGeometryN(i))->getCoordinate(), writer,
 							  multiPoint->getPrecisionModel());
 		}
 		writer->write(")");
@@ -218,7 +219,7 @@ void WKTWriter::appendMultiLineStringText(MultiLineString *multiLineString, int 
 				level2=level+1;
 				doIndent=true;
 			}
-			appendLineStringText((LineString *) &(multiLineString->getGeometryN(i)), level2, doIndent, writer);
+			appendLineStringText((LineString *) multiLineString->getGeometryN(i), level2, doIndent, writer);
 		}
 		writer->write(")");
 	}
@@ -237,7 +238,7 @@ void WKTWriter::appendMultiPolygonText(MultiPolygon *multiPolygon, int level, Wr
 				level2=level+1;
 				doIndent=true;
 			}
-			appendPolygonText((Polygon *) &(multiPolygon->getGeometryN(i)), level2, doIndent, writer);
+			appendPolygonText((Polygon *) multiPolygon->getGeometryN(i), level2, doIndent, writer);
 		}
 		writer->write(")");
 	}
@@ -254,7 +255,7 @@ void WKTWriter::appendGeometryCollectionText(GeometryCollection *geometryCollect
 				writer->write(", ");
 				level2=level+1;
 			}
-			appendGeometryTaggedText(&(geometryCollection->getGeometryN(i)),level2,writer);
+			appendGeometryTaggedText(geometryCollection->getGeometryN(i),level2,writer);
 		}
 		writer->write(")");
 	}

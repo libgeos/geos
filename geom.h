@@ -427,7 +427,7 @@ bool greaterThen(Geometry *first, Geometry *second);
 class SFSGeometryCollection { //: public SFSGeometry {
 public:
 	virtual int getNumGeometries()=0;
-	virtual Geometry getGeometryN(int n)=0;
+	virtual Geometry *getGeometryN(int n)=0;
 };
 
 class GeometryCollection : public Geometry, public SFSGeometryCollection {
@@ -441,7 +441,7 @@ public:
 	virtual int getDimension();
 	virtual int getBoundaryDimension();
 	virtual int getNumGeometries();
-	virtual Geometry getGeometryN(int n);
+	virtual Geometry *getGeometryN(int n);
 	virtual int getNumPoints();
 	virtual string getGeometryType();
 	virtual bool isSimple();
@@ -596,7 +596,7 @@ class SFSPolygon : public SFSSurface {
 public:
 	virtual LineString getExteriorRing()=0;
 	virtual int getNumInteriorRing()=0;
-	virtual LineString getInteriorRingN(int n)=0;
+	virtual LineString *getInteriorRingN(int n)=0;
 };
 
 class Polygon: public Geometry, public SFSPolygon  {
@@ -614,7 +614,7 @@ public:
 	bool isSimple();
 	LineString getExteriorRing();
 	int getNumInteriorRing();
-	LineString getInteriorRingN(int n);
+	LineString *getInteriorRingN(int n);
 	string getGeometryType();
 	Geometry getBoundary();
 	bool equalsExact(Geometry *other);

@@ -60,8 +60,8 @@ int GeometryCollection::getNumGeometries() {
 	return (int)geometries.size();
 }
 
-Geometry GeometryCollection::getGeometryN(int n) {
-	return *geometries[n];
+Geometry *GeometryCollection::getGeometryN(int n) {
+	return geometries[n];
 }
 
 int GeometryCollection::getNumPoints() {

@@ -54,7 +54,7 @@ Geometry *GeometryCollectionIterator::next() {
 	if (index>=max) {
 		throw "NoSuchElementException";
 	}
-	Geometry *obj=&(parent.getGeometryN(index++));
+	Geometry *obj=parent.getGeometryN(index++);
 	if (typeid(*obj)==typeid(GeometryCollection)) {
 		subcollectionIterator=new GeometryCollectionIterator(*(GeometryCollection *)obj);
 		// there will always be at least one element in the sub-collection

@@ -5,6 +5,7 @@
 #include <iostream>
 using namespace std;
 
+/*
 int main(int argc, char** argv)
 {
 	try {
@@ -198,6 +199,14 @@ int main(int argc, char** argv)
 //	else 
 //		cout << "Something else" <<endl;
 
+/*	WKTReader r(GeometryFactory(PrecisionModel(),10));
+	Geometry* g=r.read("POLYGON((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 330 120, 260 50, 100 50, 170 120))");
+//	Geometry* g=r.read("POLYGON((150 150, 410 150, 280 20, 20 20, 150 150))");
+	WKTWriter *w=new WKTWriter();
+
+	string s=w->write(g);
+	cout << s << endl;
+
 	cout << "End" << endl;
 	} catch (char *message){
         cout << message << endl;
@@ -208,3 +217,4 @@ int main(int argc, char** argv)
 	return 0;
 }
 
+*/

@@ -85,8 +85,8 @@ int Polygon::getNumInteriorRing() {
 	return (int)holes.size();
 }
 
-LineString Polygon::getInteriorRingN(int n) {
-	return *((LineString *)holes[n]);
+LineString* Polygon::getInteriorRingN(int n) {
+	return (LineString *)holes[n];
 }
 
 string Polygon::getGeometryType() {

@@ -62,7 +62,8 @@ MultiPoint GeometryFactory::createMultiPoint(vector<Geometry *> *point) {
 MultiPoint GeometryFactory::createMultiPoint(CoordinateList coordinates) {
 	vector<Geometry *> *pts=new vector<Geometry *>;
 	for (int i=0; i<coordinates.getSize(); i++) {
-		pts->push_back(&createPoint(coordinates.getAt(i)));
+		Point *pt=new Point(createPoint(coordinates.getAt(i)));
+		pts->push_back(pt);
 	}
 	return createMultiPoint(pts);
 }
