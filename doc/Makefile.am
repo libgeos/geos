@@ -1,4 +1,4 @@
-noinst_PROGRAMS = example
+noinst_PROGRAMS = example doxygen
 
 LIBS = ../source/geom/libgeos.la
 
