@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/05/28 18:16:01  ybychkov
+ * Changed rounding method to make compilable with VC++
+ *
  * Revision 1.22  2004/05/21 13:39:31  strk
  * ::makePrecise make use of nearbyint() now, to be compatible with JTS
  *
@@ -67,6 +70,33 @@ const double maximumPreciseValue=9007199254740992.0;
 //     */
 //}
 
+
+/**
+* Implementation of rint() for Visual C++
+*/
+double rint_vc(double val) {
+	double n;
+	double f=fabs(modf(val,&n));
+	if (val>=0) {
+		if (f<0.5) {
+			return floor(val);
+		} else if (f>0.5) {
+			return ceil(val);
+		} else {
+			return(floor(n/2)==n/2)?n:n+1.0;
+		}
+	} else {
+		if (f<0.5) {
+			return ceil(val);
+		} else if (f>0.5) {
+			return floor(val);
+		} else {
+			return(floor(n/2)==n/2)?n:n-1.0;
+		}
+	}
+}
+
+
 /**
 * Rounds an numeric value to the PrecisionModel grid.
 */
@@ -78,7 +108,8 @@ double PrecisionModel::makePrecise(double val) const {
 	if (modelType == FIXED) {
 		//double d=val*scale;
 		//double me=((d >= 0.0) ? floor(d+0.5)/scale : - floor(-d+0.5)/scale);
-		double ret = nearbyint(val*scale)/scale;
+//		double ret = nearbyint(val*scale)/scale;
+		double ret = rint_vc(val*scale)/scale;
 		return ret;
 	}
 	// modelType == FLOATING - no rounding necessary
