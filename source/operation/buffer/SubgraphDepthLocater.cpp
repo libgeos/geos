@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/05 12:29:44  strk
+ * memleak fixed in ::getDepth
+ *
  * Revision 1.2  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -38,7 +41,9 @@ SubgraphDepthLocater::~SubgraphDepthLocater(){
 	delete cga;
 }
 
-int SubgraphDepthLocater::getDepth(Coordinate &p) {
+int
+SubgraphDepthLocater::getDepth(Coordinate &p)
+{
 	vector<DepthSegment*> *stabbedSegments=findStabbedSegments(p);
 	// if no segments on stabbing line subgraph must be outside all others->
 	if ((int)stabbedSegments->size()==0)
@@ -48,8 +53,14 @@ int SubgraphDepthLocater::getDepth(Coordinate &p) {
 	}
 	sort(stabbedSegments->begin(),stabbedSegments->end(),DepthSegmentLT);
 	DepthSegment *ds=(*stabbedSegments)[0];
+	int ret = ds->leftDepth;
+
+	vector<DepthSegment *>::iterator it;
+	for (it=stabbedSegments->begin(); it != stabbedSegments->end(); it++)
+		delete *it;
 	delete stabbedSegments;
-	return ds->leftDepth;
+
+	return ret;
 }
 
 /**
@@ -97,7 +108,9 @@ void SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,vec
 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
 * @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
 */
-void SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments){
+void
+SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments)
+{
 	const CoordinateList *pts=dirEdge->getEdge()->getCoordinates();
 	for (int i=0; i<pts->getSize()-1; i++) {
 		seg->p0=pts->getAt(i);
