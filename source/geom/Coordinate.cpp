@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/14 21:17:10  strk
+ * added inequality operator for Coordinate
+ *
  * Revision 1.13  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -225,7 +228,18 @@ string Coordinate::toString() const {
  *      have the same values for x, y and z.
  */
 bool operator==(const Coordinate& a, const Coordinate& b) {
-	return a.equals2D(b);
+	//return a.equals2D(b);
 	//return (a.x == b.x) && ( a.y == b.y) && (( a.z == b.z)||(a.z==DoubleNotANumber && b.z==DoubleNotANumber));
+	if ( a.x != b.x ) return false;
+	if ( a.y != b.y ) return false;
+	//if ( a.z != b.z ) return false;
+	return true;
+}
+
+bool operator!=(const Coordinate& a, const Coordinate& b) {
+	if ( a.x != b.x ) return true;
+	if ( a.y != b.y ) return true;
+	//if ( a.z != b.z ) return true;
+	return false;
 }
 }

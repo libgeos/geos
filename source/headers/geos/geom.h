@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/14 21:17:10  strk
+ * added inequality operator for Coordinate
+ *
  * Revision 1.12  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -1734,6 +1737,7 @@ public:
 
 //Operators
 bool operator==(const Coordinate& a, const Coordinate& b);
+bool operator!=(const Coordinate& a, const Coordinate& b);
 bool operator==(const Envelope a, const Envelope b);
 bool operator==(const PrecisionModel a, const PrecisionModel b);
 bool operator==(const LineSegment a, const LineSegment b);
