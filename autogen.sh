@@ -8,6 +8,8 @@ if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
    AMFLAGS=$AMFLAGS" --include-deps";
 fi
 
+echo "Running autoheader"
+autoheader
 echo "Running aclocal"
 aclocal
 echo "Running automake"
