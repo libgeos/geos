@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/05/26 19:48:19  strk
+ * Changed abs() to fabs() when working with doubles.
+ * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
+ *
  * Revision 1.8  2004/05/19 13:40:49  strk
  * Fixed bug in ::addCircle
  *
@@ -387,8 +391,8 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 		case BufferOp::CAP_SQUARE:
 			// add a square defined by extensions of the offset segment endpoints
 			Coordinate *squareCapSideOffset=new Coordinate();
-			squareCapSideOffset->x=abs(distance)*cos(angle);
-			squareCapSideOffset->y=abs(distance)*sin(angle);
+			squareCapSideOffset->x=fabs(distance)*cos(angle);
+			squareCapSideOffset->y=fabs(distance)*sin(angle);
 			Coordinate *squareCapLOffset=new Coordinate(offsetL->p1.x+squareCapSideOffset->x, offsetL->p1.y+squareCapSideOffset->y);
 			Coordinate *squareCapROffset=new Coordinate(offsetR->p1.x+squareCapSideOffset->x, offsetR->p1.y+squareCapSideOffset->y);
 			addPt(*squareCapLOffset);
@@ -432,7 +436,7 @@ void OffsetCurveBuilder::addFillet(const Coordinate &p,const Coordinate &p0,cons
 */
 void OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle, double endAngle, int direction, double distance){
 	int directionFactor=direction==CGAlgorithms::CLOCKWISE ? -1 : 1;
-	double totalAngle=abs(startAngle-endAngle);
+	double totalAngle=fabs(startAngle-endAngle);
 	int nSegs=(int) (totalAngle / filletAngleQuantum+0.5);
 	if (nSegs<1) return;   // no segments because angle is less than increment-nothing to do!
 	double initAngle, currAngleInc;

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/26 19:48:19  strk
+ * Changed abs() to fabs() when working with doubles.
+ * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
+ *
  * Revision 1.9  2004/05/19 09:57:54  ybychkov
  * Bugfix in OffsetCurveSetBuilder::addPolygon (JTS 1.4.1)
  *
@@ -118,26 +122,33 @@ void
 OffsetCurveSetBuilder::add(const Geometry *g)
 {
 	if (g->isEmpty()) return;
-	if (typeid(*g)==typeid(Polygon))
-		addPolygon((Polygon*) g);
-	else if (typeid(*g)==typeid(LineString))
-		addLineString((LineString*) g);
-	else if (typeid(*g)==typeid(LinearRing))
-		addLineString((LineString*) g);
-	else if (typeid(*g)==typeid(Point))
-		addPoint((Point*) g);
-	else if (typeid(*g)==typeid(MultiPoint))
-		addCollection((MultiPoint*) g);
-	else if (typeid(*g)==typeid(MultiLineString))
-		addCollection((MultiLineString*) g);
-	else if (typeid(*g)==typeid(MultiPolygon))
-		addCollection((MultiPolygon*) g);
-	else if (typeid(*g)==typeid(GeometryCollection))
-		addCollection((GeometryCollection*) g);
-	else {
-		string out=typeid(*g).name();
-		throw new UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
+
+	const Polygon *poly = dynamic_cast<const Polygon *>(g);
+	if ( poly ) {
+		addPolygon(poly);
+		return;
 	}
+
+	const LineString *line = dynamic_cast<const LineString *>(g);
+	if ( line ) {
+		addLineString(line);
+		return;
+	}
+
+	const Point *point = dynamic_cast<const Point *>(g);
+	if ( point ) {
+		addPoint(point);
+		return;
+	}
+
+	const GeometryCollection *collection = dynamic_cast<const GeometryCollection *>(g);
+	if ( collection ) {
+		addCollection(collection);
+		return;
+	}
+
+	string out=typeid(*g).name();
+	throw new UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
 }
 
 void OffsetCurveSetBuilder::addCollection(const GeometryCollection *gc){
@@ -267,7 +278,7 @@ bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateList *ringCoord, double
 	delete ring;
 	delete md;
 	//System->out->println(md->getDiameter());
-	return minDiam < 2 * abs(bufferDistance);
+	return minDiam < 2 * fabs(bufferDistance);
 }
 
 /**
@@ -291,7 +302,7 @@ bool OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateList *triangleC
 	Triangle *tri=new Triangle(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
 	Coordinate *inCentre=tri->inCentre();
 	double distToCentre=cga->distancePointLine(*inCentre, tri->p0, tri->p1);
-	return distToCentre < abs(bufferDistance);
+	return distToCentre < fabs(bufferDistance);
 }
 
 
