@@ -171,7 +171,7 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 	CoordinateList* coord=CoordinateList::removeRepeatedPoints(lr->getCoordinates());
 	if (coord->getSize()<4) {
 		hasTooFewPointsVar=true;
-		invalidPoint=coord->getAt(0);
+		invalidPoint=&(coord->getAt(0));
 		return;
 	}
 	int left=cwLeft;
@@ -201,7 +201,7 @@ void GeometryGraph::addLineString(LineString *line){
 	CoordinateList* coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
 	if(coord->getSize()<2) {
 		hasTooFewPointsVar=true;
-		invalidPoint=coord->getAt(0);
+		invalidPoint=&(coord->getAt(0));
 		return;
 	}
 	// add the edge for the LineString

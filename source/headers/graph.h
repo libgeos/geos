@@ -558,7 +558,7 @@ private:
 	int argIndex;  // the index of this geometry as an argument to a spatial function (used for labelling)
 	vector<Node*>* boundaryNodes;
 	bool hasTooFewPointsVar;
-	Coordinate& invalidPoint;
+	Coordinate* invalidPoint;
 	EdgeSetIntersector* createEdgeSetIntersector();
 	void add(Geometry *g);
 	void addCollection(GeometryCollection *gc);

@@ -12,7 +12,7 @@ void MCPointInRing::MCSelecter::select(LineSegment *ls) {
 
 MCPointInRing::MCPointInRing(LinearRing *newRing) {
 	ring=newRing;
-	intTree=NULL;
+	tree=NULL;
 	crossings=0;
     buildIndex();
 	interval=new BinTreeInterval();

@@ -204,12 +204,13 @@ public:
 	bool hasRepeatedPoints();
 	Coordinate* minCoordinate();
 	static bool hasRepeatedPoints(CoordinateList *cl);
-	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
-	static void reverse(CoordinateList *cl);
 	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
+	static int indexOf(Coordinate *coordinate, CoordinateList *cl);
+
 	static Coordinate* minCoordinate(CoordinateList *cl);
 	static void scroll(CoordinateList *cl, Coordinate *firstCoordinate);
-	static int indexOf(Coordinate *coordinate, CoordinateList *cl);
+	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
+	static void reverse(CoordinateList *cl);
 };
 
 class BasicCoordinateList : public CoordinateList {
@@ -948,7 +949,7 @@ public:
 
 //Skipped a lot of list to array convertors
 
-	static Point* createPointFromInternalCoord(Coordinate& coord,Geometry *exemplar);
+	static Point* createPointFromInternalCoord(Coordinate* coord,Geometry *exemplar);
 	static Geometry* toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID);
 	PrecisionModel* getPrecisionModel();
 	Point* createPoint(Coordinate& coordinate);

@@ -15,9 +15,9 @@ GeometryFactory::~GeometryFactory(){
 	delete precisionModel;
 }
   
-Point* GeometryFactory::createPointFromInternalCoord(Coordinate& coord, Geometry *exemplar) {
+Point* GeometryFactory::createPointFromInternalCoord(Coordinate* coord, Geometry *exemplar) {
 	exemplar->getPrecisionModel()->makePrecise(coord);
-	return new Point(coord,exemplar->getPrecisionModel(),exemplar->getSRID());
+	return new Point(*coord,exemplar->getPrecisionModel(),exemplar->getSRID());
 }
 
 

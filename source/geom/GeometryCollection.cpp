@@ -1,5 +1,6 @@
 #include "../headers/geom.h"
 #include "../headers/util.h"
+#include "../headers/geosAlgorithm.h"
 #include <algorithm>
 #include <typeinfo>
 
@@ -199,7 +200,7 @@ GeometryCollection::~GeometryCollection(void){
 * @return
 */
 Point* GeometryCollection::getCentroid() {
-	Coordinate& centPt;
+	Coordinate* centPt;
 	int dim=getDimension();
 	if(dim==0) {
 		CentroidPoint *cent=new CentroidPoint();

@@ -6,6 +6,7 @@
 #include "../headers/operation.h"
 #include "../headers/opRelate.h"
 #include "../headers/opValid.h"
+#include "../headers/opDistance.h"
 #include "../headers/opOverlay.h"
 #include "../headers/io.h"
 
@@ -142,7 +143,7 @@ bool Geometry::isWithinDistance(Geometry *geom,double cDistance) {
 * @return a {@link Point} which is the centroid of this Geometry
 */
 Point* Geometry::getCentroid() {
-	Coordinate& centPt;
+	Coordinate* centPt;
 	int dim=getDimension();
 	if(dim==0) {
 		CentroidPoint *cent=new CentroidPoint();
@@ -169,7 +170,7 @@ Point* Geometry::getCentroid() {
 * @return a {@link Point} which is in the interior of this Geometry
 */
 Point* Geometry::getInteriorPoint() {
-	Coordinate& interiorPt;
+	Coordinate* interiorPt;
 	int dim=getDimension();
 	if (dim==0) {
 		InteriorPointPoint* intPt=new InteriorPointPoint(this);
@@ -300,7 +301,7 @@ Geometry* Geometry::buffer(double distance) {
 //!!! External Dependency
 Geometry* Geometry::buffer(double distance,int quadrantSegments) {
 	//!!! External Dependency
-	return BufferOp.bufferOp(this, distance, quadrantSegments);
+//	return BufferOp.bufferOp(this, distance, quadrantSegments);
 	return NULL;
 }
 
@@ -441,9 +442,7 @@ int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) {
 *@param  g  the <code>Geometry</code> from which to compute the distance
 */
 double Geometry::distance(Geometry *g) {
-//!!! External Dependency
-//	return DistanceOp::distance(this,g);
-	return 0.0;
+	return DistanceOp::distance(this,g);
 }
 
 /**
