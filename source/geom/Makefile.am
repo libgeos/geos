@@ -39,10 +39,10 @@ EXTERNAL_SOURCES =  \
 	util/LinearComponentExtracter.cpp \
 	util/PointExtracter.cpp \
 	util/PolygonExtracter.cpp \
+	../algorithm/CGAlgorithms.cpp \
 	../algorithm/CentroidArea.cpp \
 	../algorithm/CentroidLine.cpp \
 	../algorithm/CentroidPoint.cpp \
-	../algorithm/CGAlgorithms.cpp \
 	../algorithm/ConvexHull.cpp \
 	../algorithm/HCoordinate.cpp \
 	../algorithm/InteriorPointArea.cpp \
@@ -50,6 +50,7 @@ EXTERNAL_SOURCES =  \
 	../algorithm/InteriorPointPoint.cpp \
 	../algorithm/LineIntersector.cpp \
 	../algorithm/MCPointInRing.cpp \
+	../algorithm/MinimumDiameter.cpp \
 	../algorithm/NonRobustCGAlgorithms.cpp \
 	../algorithm/NonRobustLineIntersector.cpp \
 	../algorithm/NotRepresentableException.cpp \
@@ -57,9 +58,14 @@ EXTERNAL_SOURCES =  \
 	../algorithm/RobustCGAlgorithms.cpp \
 	../algorithm/RobustDeterminant.cpp \
 	../algorithm/RobustLineIntersector.cpp \
+	../algorithm/SIRtreePointInRing.cpp \
 	../algorithm/SimplePointInAreaLocator.cpp \
 	../algorithm/SimplePointInRing.cpp \
-	../algorithm/SIRtreePointInRing.cpp \
+	../precision/CommonBits.cpp \
+	../precision/CommonBitsOp.cpp \
+	../precision/CommonBitsRemover.cpp \
+	../precision/EnhancedPrecisionOp.cpp \
+	../precision/SimpleGeometryPrecisionReducer.cpp \
 	../geomgraph/Depth.cpp \
 	../geomgraph/DirectedEdge.cpp \
 	../geomgraph/DirectedEdgeStar.cpp \
@@ -80,6 +86,15 @@ EXTERNAL_SOURCES =  \
 	../geomgraph/Position.cpp \
 	../geomgraph/Quadrant.cpp \
 	../geomgraph/TopologyLocation.cpp \
+	../geomgraph/index/MonotoneChain.cpp \
+	../geomgraph/index/MonotoneChainEdge.cpp \
+	../geomgraph/index/MonotoneChainIndexer.cpp \
+	../geomgraph/index/SegmentIntersector.cpp \
+	../geomgraph/index/SimpleEdgeSetIntersector.cpp \
+	../geomgraph/index/SimpleMCSweepLineIntersector.cpp \
+	../geomgraph/index/SimpleSweepLineIntersector.cpp \
+	../geomgraph/index/SweepLineEvent.cpp \
+	../geomgraph/index/SweepLineSegment.cpp \
 	../index/bintree/Bintree.cpp \
 	../index/bintree/BinTreeInterval.cpp \
 	../index/bintree/BinTreeNode.cpp \
