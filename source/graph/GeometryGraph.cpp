@@ -23,14 +23,16 @@ int GeometryGraph::determineBoundary(int boundaryCount){
 	return isInBoundary(boundaryCount)?Location::BOUNDARY : Location::INTERIOR;
 }
 
-GeometryGraph::GeometryGraph(){
+GeometryGraph::GeometryGraph():PlanarGraph(){
 	precisionModel=NULL;
 //	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
 	newPM=NULL;
 	useBoundaryDeterminationRule=false;
+	boundaryNodes=NULL;
 }
 
-GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom) {
+GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGraph() {
+	boundaryNodes=NULL;
 	precisionModel=NULL;
 	newPM=NULL;
 	useBoundaryDeterminationRule=false;
@@ -60,7 +62,8 @@ EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {
 * This constructor is used by clients that wish to add Edges explicitly,
 * rather than adding a Geometry.  (An example is BufferOp).
 */
-GeometryGraph::GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel, int newSRID){
+GeometryGraph::GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel, int newSRID):PlanarGraph(){
+	boundaryNodes=NULL;
 	GeometryGraph(newArgIndex,NULL);
 	precisionModel=newPrecisionModel;
 	SRID=newSRID;
@@ -100,7 +103,7 @@ Edge* GeometryGraph::findEdge(LineString *line){
 }
 
 void GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist) {
-	for (vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		e->eiList->addSplitEdges(edgelist);
 	}
@@ -267,7 +270,7 @@ void GeometryGraph::insertBoundaryPoint(int argIndex,Coordinate coord){
 }
 
 void GeometryGraph::addSelfIntersectionNodes(int argIndex){
-	for (vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		vector<EdgeIntersection*> eil=e->eiList->list;
@@ -293,7 +296,7 @@ void GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate coord,int lo
 		insertPoint(argIndex,coord,loc);
 }
 
-vector<Edge*> GeometryGraph::getEdges() {
+vector<Edge*> *GeometryGraph::getEdges() {
 	return edges;
 }
 

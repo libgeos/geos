@@ -120,8 +120,9 @@ void EdgeEndBundle::computeLabelSide(int geomIndex, int side) {
 			if (loc==Location::INTERIOR) {
 				label->setLocation(geomIndex,side,Location::INTERIOR);
 				return;
-			} else if (loc==Location::EXTERIOR)
+			} else if (loc==Location::EXTERIOR) {
 				label->setLocation(geomIndex,side,Location::EXTERIOR);
+			}
 		}
 	}
 }
@@ -134,7 +135,7 @@ void EdgeEndBundle::updateIM(IntersectionMatrix *im) {
 }
 
 string EdgeEndBundle::print() {
-	string out="EdgeEndBundle--> Label: "+label->toString();
+	string out="EdgeEndBundle--> Label: "+label->toString()+"\n";
 	for(vector<EdgeEnd*>::iterator it=edgeEnds.begin();it<edgeEnds.end();it++) {
 		EdgeEnd *e=*it;
 		out+=e->print();

@@ -25,7 +25,8 @@ EdgeEndStar::~EdgeEndStar(){
  * since the list of edges has now changed
  */
 void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
-	(*edgeMap)[e]=obj;
+	edgeMap->insert(pair<EdgeEnd*,void*>(e,obj));
+//	(*edgeMap)[e]=obj;
 	edgeList=NULL;  // edge list has changed - clear the cache
 }
 
@@ -47,8 +48,11 @@ vector<EdgeEnd*>* EdgeEndStar::getEdges() {
 	map<EdgeEnd*,void*,EdgeEndLT>::iterator mapIter;
 	if (edgeList==NULL) {
 		edgeList=new vector<EdgeEnd*>();
-		for(mapIter=edgeMap->begin();mapIter!=edgeMap->end();mapIter++)
-			edgeList->push_back(mapIter->first);
+		for(mapIter=edgeMap->begin();mapIter!=edgeMap->end();mapIter++) {
+//			edgeList->push_back(mapIter->first);
+			EdgeEnd *e=(EdgeEnd*) mapIter->second;
+			edgeList->push_back(e);
+		}
 	}
 	return edgeList;
 }
@@ -71,7 +75,7 @@ EdgeEnd* EdgeEndStar::getNextCW(EdgeEnd *ee){
 	return edgeList->at(iNextCW);
 }
 
-void EdgeEndStar::computeLabelling(vector<GeometryGraph*> geom){
+void EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom){
 	computeEdgeEndLabels();
 	// Propagate side labels  around the edges in the star
 	// for each parent Geometry
@@ -142,11 +146,10 @@ void EdgeEndStar::computeEdgeEndLabels(){
 	}
 }
 
-int EdgeEndStar::getLocation(int geomIndex,Coordinate p,vector<GeometryGraph*> geom){
+int EdgeEndStar::getLocation(int geomIndex,Coordinate p,vector<GeometryGraph*> *geom){
 	// compute location only on demand
 	if (ptInAreaLocation[geomIndex]==Location::UNDEF) {
-//!!!External Dependency
-//		ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,geom[geomIndex].getGeometry());
+		ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(geom->at(geomIndex))->getGeometry());
 	}
 	return ptInAreaLocation[geomIndex];
 }
@@ -200,7 +203,7 @@ void EdgeEndStar::propagateSideLabels(int geomIndex){
 		Label *label=e->getLabel();
 		if (label->isArea(geomIndex) && label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
 			startLoc=label->getLocation(geomIndex,Position::LEFT);
-		}
+	}
 		// no labelled sides found, so no labels to propagate
 	if (startLoc==Location::UNDEF) return;
 	int currLoc=startLoc;
@@ -247,7 +250,7 @@ int EdgeEndStar::findIndex(EdgeEnd *eSearch){
 }
 
 string EdgeEndStar::print(){
-	string out="EdgeEndStar:   " + getCoordinate().toString();
+	string out="EdgeEndStar:   " + getCoordinate().toString()+"\n";
 	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		EdgeEnd *e=*it;
 		out+=e->print();

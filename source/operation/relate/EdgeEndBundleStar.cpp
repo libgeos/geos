@@ -11,7 +11,12 @@ EdgeEndBundleStar::EdgeEndBundleStar(){}
 * <br>
 */
 void EdgeEndBundleStar::insert(EdgeEnd *e) {
-	EdgeEndBundle *eb=(EdgeEndBundle*) (edgeMap->find(e)->second);
+	EdgeEndBundle *eb;
+	map<EdgeEnd*,void*,EdgeEndLT>::iterator i=edgeMap->find(e);
+	if (i==edgeMap->end())
+		eb=NULL;
+	else
+		eb=(EdgeEndBundle*) (i->second);
 	if (eb==NULL) {
 		eb=new EdgeEndBundle(e);
 		insertEdgeEnd(e,eb);

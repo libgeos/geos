@@ -8,6 +8,7 @@ SweepLineEvent::SweepLineEvent(int newGeomIndex,double x,SweepLineEvent *newInse
 	if(insertEvent!=NULL)
 		eventType=DELETE;
 	obj=newObj;
+	deleteEventIndex=0;
 }
 
 bool SweepLineEvent::isInsert() {
@@ -55,4 +56,17 @@ int SweepLineEvent::compareTo(SweepLineEvent *sle) {
 	if (eventType<sle->eventType) return -1;
 	if (eventType>sle->eventType) return 1;
 	return 0;
+}
+
+string SweepLineEvent::print() {
+	char buffer[255];
+	string out="SweepLineEvent:";
+	sprintf(buffer," geomIndex: %i xValue=%g deleteEventIndex=%i",geomIndex,xValue,deleteEventIndex);
+	out.append(buffer);
+	out+=((eventType==INSERT)? " INSERT" : " DELETE");
+	if (insertEvent!=NULL)
+		out+="\n\tinsertEvent="+insertEvent->print();
+	else 
+		out+="\n\tinsertEvent=NULL";
+	return out;
 }

@@ -71,7 +71,7 @@ DirectedEdge* DirectedEdgeStar::getRightmostEdge() {
  * Compute the labelling for all dirEdges in this star, as well
  * as the overall labelling
  */
-void DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> geom){
+void DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom){
 	EdgeEndStar::computeLabelling(geom);
 	// determine the overall labelling for this DirectedEdgeStar
 	// (i.e. for the node it is based at)

@@ -139,14 +139,14 @@ public:
 	GraphComponent(Label* newLabel);
 	~GraphComponent();
 	Label* getLabel();
-	void setLabel(Label* newLabel);
-	void setInResult(bool isInResult);
-	bool isInResult();
-	void setCovered(bool isCovered);
-	bool isCovered();
-	bool isCoveredSet();
-	bool isVisited();
-	void setVisited(bool isVisited);
+	virtual void setLabel(Label* newLabel);
+	virtual void setInResult(bool isInResult);
+	virtual bool isInResult();
+	virtual void setCovered(bool isCovered);
+	virtual bool isCovered();
+	virtual bool isCoveredSet();
+	virtual bool isVisited();
+	virtual void setVisited(bool isVisited);
 	virtual Coordinate getCoordinate()=0;
 	virtual bool isIsolated()=0;
 	virtual void updateIM(IntersectionMatrix *im);
@@ -171,29 +171,29 @@ public:
 	Edge(CoordinateList newPts, Label *newLabel);
 	Edge(CoordinateList newPts);
 	~Edge();
-	int getNumPoints();
-	void setName(string newName);
-	CoordinateList getCoordinates();
-	Coordinate getCoordinate(int i);
-	Coordinate getCoordinate();
-	Depth *getDepth();
-	int getDepthDelta();
-	void setDepthDelta(int newDepthDelta);
-	int getMaximumSegmentIndex();
-	EdgeIntersectionList *getEdgeIntersectionList();
-	MonotoneChainEdge *getMonotoneChainEdge();
-	bool isClosed();
-	bool isCollapsed();
-	Edge getCollapsedEdge();
-	void setIsolated(bool newIsIsolated);
-	bool isIsolated();
-	void addIntersections(LineIntersector *li,int segmentIndex,int geomIndex);
-	void addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex);
-	void computeIM(IntersectionMatrix *im);
-	bool isPointwiseEqual(Edge *e);
-	string print();
-	string printReverse();
-	bool equals(Edge* e);
+	virtual int getNumPoints();
+	virtual void setName(string newName);
+	virtual CoordinateList getCoordinates();
+	virtual Coordinate getCoordinate(int i);
+	virtual Coordinate getCoordinate();
+	virtual Depth *getDepth();
+	virtual int getDepthDelta();
+	virtual void setDepthDelta(int newDepthDelta);
+	virtual int getMaximumSegmentIndex();
+	virtual EdgeIntersectionList *getEdgeIntersectionList();
+	virtual MonotoneChainEdge *getMonotoneChainEdge();
+	virtual bool isClosed();
+	virtual bool isCollapsed();
+	virtual Edge getCollapsedEdge();
+	virtual void setIsolated(bool newIsIsolated);
+	virtual bool isIsolated();
+	virtual void addIntersections(LineIntersector *li,int segmentIndex,int geomIndex);
+	virtual void addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex);
+	virtual void computeIM(IntersectionMatrix *im);
+	virtual bool isPointwiseEqual(Edge *e);
+	virtual string print();
+	virtual string printReverse();
+	virtual bool equals(Edge* e);
 private:
 	string name;
 	MonotoneChainEdge *mce;
@@ -207,25 +207,25 @@ public:
 	EdgeEnd();
 	EdgeEnd(Edge* newEdge, Coordinate p0, Coordinate p1);
 	EdgeEnd(Edge* newEdge, Coordinate p0, Coordinate p1, Label* newLabel);
-	Edge* getEdge();
-	Label* getLabel();
-	Coordinate getCoordinate();
-	Coordinate getDirectedCoordinate();
-	int getQuadrant();
-	double getDx();
-	double getDy();
-	void setNode(Node* newNode);
-	Node* getNode();
-	int compareTo(EdgeEnd e);
-	int compareDirection(EdgeEnd e);
-	void computeLabel();
-	string print();
+	virtual Edge* getEdge();
+	virtual Label* getLabel();
+	virtual Coordinate getCoordinate();
+	virtual Coordinate getDirectedCoordinate();
+	virtual int getQuadrant();
+	virtual double getDx();
+	virtual double getDy();
+	virtual void setNode(Node* newNode);
+	virtual Node* getNode();
+	virtual int compareTo(EdgeEnd e);
+	virtual int compareDirection(EdgeEnd e);
+	virtual void computeLabel();
+	virtual string print();
 protected:
 	static CGAlgorithms *cga;
 	Edge* edge;// the parent edge of this edge end
 	Label* label;
 	EdgeEnd(Edge* newEdge);
-	void init(Coordinate newP0, Coordinate newP1);
+	virtual void init(Coordinate newP0, Coordinate newP1);
 private:
 	Node* node;          // the node this edge end originates at
 	Coordinate p0, p1;  // points of initial line segment
@@ -246,25 +246,25 @@ public:
 	~EdgeEndStar();
 	EdgeEndStar(const EdgeEndStar &ees);
 	virtual void insert(EdgeEnd *e){};
-	Coordinate getCoordinate();
-	int getDegree();
-	vector<EdgeEnd*>::iterator getIterator();
-	vector<EdgeEnd*>* getEdges();
-	EdgeEnd* getNextCW(EdgeEnd *ee);
-	void computeLabelling(vector<GeometryGraph*> geom);
-	int getLocation(int geomIndex,Coordinate p,vector<GeometryGraph*> geom);
-	bool isAreaLabelsConsistent();
-	void propagateSideLabels(int geomIndex);
-	int findIndex(EdgeEnd *eSearch);
-	string print();
+	virtual Coordinate getCoordinate();
+	virtual int getDegree();
+	virtual vector<EdgeEnd*>::iterator getIterator();
+	virtual vector<EdgeEnd*>* getEdges();
+	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
+	virtual void computeLabelling(vector<GeometryGraph*> *geom);
+	virtual int getLocation(int geomIndex,Coordinate p,vector<GeometryGraph*> *geom);
+	virtual bool isAreaLabelsConsistent();
+	virtual void propagateSideLabels(int geomIndex);
+	virtual int findIndex(EdgeEnd *eSearch);
+	virtual string print();
 protected:
 	map<EdgeEnd*,void*,EdgeEndLT> *edgeMap;
 	vector<EdgeEnd*> *edgeList;
-	void insertEdgeEnd(EdgeEnd *e,void* obj);
+	virtual void insertEdgeEnd(EdgeEnd *e,void* obj);
 private:
 	int ptInAreaLocation[2];
-	void computeEdgeEndLabels();
-	bool checkAreaLabelsConsistent(int geomIndex);
+	virtual void computeEdgeEndLabels();
+	virtual bool checkAreaLabelsConsistent(int geomIndex);
 };
 
 class DirectedEdge;
@@ -278,7 +278,7 @@ public:
 	int getOutgoingDegree();
 	int getOutgoingDegree(EdgeRing *er);
 	DirectedEdge* getRightmostEdge();
-	void computeLabelling(vector<GeometryGraph*> geom);
+	void computeLabelling(vector<GeometryGraph*> *geom);
 	void mergeSymLabels();
 	void updateLabelling(Label *nodeLabel);
 	void linkResultDirectedEdges();
@@ -307,25 +307,25 @@ class Node: public GraphComponent {
 public:
 	Node(Coordinate newCoord, EdgeEndStar* newEdges);
 	~Node();
-	Coordinate getCoordinate();
-	EdgeEndStar* getEdges();
-	bool isIsolated();
-	void add(EdgeEnd *e);
-	void mergeLabel(Node n);
-	void mergeLabel(Label* label2);
-	void setLabel(int argIndex, int onLocation);
-	void setLabelBoundary(int argIndex);
-	int computeMergedLocation(Label* label2, int eltIndex);
-	string print();
+	virtual Coordinate getCoordinate();
+	virtual EdgeEndStar* getEdges();
+	virtual bool isIsolated();
+	virtual void add(EdgeEnd *e);
+	virtual void mergeLabel(Node n);
+	virtual void mergeLabel(Label* label2);
+	virtual void setLabel(int argIndex, int onLocation);
+	virtual void setLabelBoundary(int argIndex);
+	virtual int computeMergedLocation(Label* label2, int eltIndex);
+	virtual string print();
 protected:
 	Coordinate coord;
 	EdgeEndStar* edges;
-	void computeIM(IntersectionMatrix *im) {};
+	virtual void computeIM(IntersectionMatrix *im) {};
 };
 
 class NodeFactory {
 public:
-	Node* createNode(Coordinate coord);
+	virtual Node* createNode(Coordinate coord);
 };
 
 class EdgeIntersection {
@@ -482,32 +482,32 @@ public:
 	static void linkResultDirectedEdges(vector<Node*> allNodes);
 	PlanarGraph(NodeFactory *nodeFact);
 	PlanarGraph();
-	vector<Edge*>::iterator getEdgeIterator();
-	vector<EdgeEnd*> getEdgeEnds();
-	bool isBoundaryNode(int geomIndex,Coordinate coord);
-	void add(EdgeEnd *e);
-	map<Coordinate,Node*,CoordLT>::iterator getNodeIterator();
+	virtual vector<Edge*>::iterator getEdgeIterator();
+	virtual vector<EdgeEnd*> *getEdgeEnds();
+	virtual bool isBoundaryNode(int geomIndex,Coordinate coord);
+	virtual void add(EdgeEnd *e);
+	virtual map<Coordinate,Node*,CoordLT>::iterator getNodeIterator();
 //	Wouldn't work. Use iterator
 //	Collection getNodes() { return nodes.values(); }
-	Node* addNode(Node *node);
-	Node* addNode(Coordinate coord);
-	Node* find(Coordinate coord);
-	void addEdges(vector<Edge*> edgesToAdd);
-	void linkResultDirectedEdges();
-	void linkAllDirectedEdges();
-	EdgeEnd* findEdgeEnd(Edge *e);
-	Edge* findEdge(Coordinate p0,Coordinate p1);
-	Edge* findEdgeInSameDirection(Coordinate p0,Coordinate p1);
-	string printEdges();
-	NodeMap *getNodeMap();
+	virtual Node* addNode(Node *node);
+	virtual Node* addNode(Coordinate coord);
+	virtual Node* find(Coordinate coord);
+	virtual void addEdges(vector<Edge*> edgesToAdd);
+	virtual void linkResultDirectedEdges();
+	virtual void linkAllDirectedEdges();
+	virtual EdgeEnd* findEdgeEnd(Edge *e);
+	virtual Edge* findEdge(Coordinate p0,Coordinate p1);
+	virtual Edge* findEdgeInSameDirection(Coordinate p0,Coordinate p1);
+	virtual string printEdges();
+	virtual NodeMap *getNodeMap();
 	//Not used 
 	//string debugPrint();
 	//string debugPrintln();
 protected:
-	vector<Edge*> edges;
+	vector<Edge*> *edges;
 	NodeMap *nodes;
-	vector<EdgeEnd*> edgeEndList;
-	void insertEdge(Edge *e);
+	vector<EdgeEnd*> *edgeEndList;
+	virtual void insertEdge(Edge *e);
 private:
 	bool matchInSameDirection(Coordinate p0,Coordinate p1,Coordinate ep0,Coordinate ep1);
 };
@@ -536,7 +536,7 @@ public:
 	void addPoint(Coordinate pt);
 	SegmentIntersector* computeSelfNodes(LineIntersector *li);
 	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,LineIntersector *li,bool includeProper);
-	vector<Edge*> getEdges();
+	vector<Edge*> *getEdges();
 private:
 	Geometry *parentGeom;
 	// the precision model of the Geometry represented by this graph

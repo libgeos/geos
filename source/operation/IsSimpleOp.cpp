@@ -45,8 +45,8 @@ bool IsSimpleOp::isSimpleLinearGeometry(Geometry *geom){
 * The Geometry is not simple if there are intersections not at endpoints.
 */
 bool IsSimpleOp::hasNonEndpointIntersection(GeometryGraph *graph) {
-	vector<Edge*> edges(graph->getEdges());
-	for (vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	vector<Edge*> *edges=graph->getEdges();
+	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
 		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
@@ -68,8 +68,8 @@ bool IsSimpleOp::hasNonEndpointIntersection(GeometryGraph *graph) {
 */
 bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 	map<Coordinate,EndpointInfo*,CoordLT> *endPoints=new map<Coordinate,EndpointInfo*,CoordLT>();
-	vector<Edge*> edges(graph->getEdges());
-	for (vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	vector<Edge*> *edges=graph->getEdges();
+	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
 		bool isClosed=e->isClosed();

@@ -181,4 +181,3 @@ string Label::toString(){
 	}
 	return buf;
 }
-

@@ -58,7 +58,8 @@ void PointLocator::computeLocation(Coordinate p,Geometry *geom) {
 		GeometryCollectionIterator geomi((GeometryCollection*) geom);
 		while (geomi.hasNext()) {
 			Geometry *g2=geomi.next();
-			if (! g2->equals(geom))
+//			if (! g2->equals(geom))
+			if (g2!=geom)
 				computeLocation(p,g2);
 		}
 	}

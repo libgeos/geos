@@ -3,19 +3,19 @@
 
 SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector(){}
 
-void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> edges,SegmentIntersector *si){
+void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,SegmentIntersector *si){
 	add(edges,0);
 	computeIntersections(si,false);
 }
 
-void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> edges0,vector<Edge*> edges1,SegmentIntersector *si){
+void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si){
 	add(edges0,0);
 	add(edges1,1);
 	computeIntersections(si,true);
 }
 
-void SimpleMCSweepLineIntersector::add(vector<Edge*> edges,int geomIndex){
-	for(vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges,int geomIndex){
+	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *edge=*i;
 		add(edge,geomIndex);
 	}
@@ -28,12 +28,13 @@ void SimpleMCSweepLineIntersector::add(Edge *edge,int geomIndex){
 		MonotoneChain *mc=new MonotoneChain(mce,i,geomIndex);
 		SweepLineEvent *insertEvent=new SweepLineEvent(geomIndex,mce->getMinX(i),NULL,mc);
 		events.push_back(insertEvent);
-		events.push_back(new SweepLineEvent(geomIndex,mce->getMaxX(i),insertEvent,mc));
+		SweepLineEvent *deleteEvent=new SweepLineEvent(geomIndex,mce->getMaxX(i),insertEvent,mc);
+		events.push_back(deleteEvent);
 	}
 }
 
 bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second) {
-	if (first->compareTo(second)<=0)
+	if (first->compareTo(second)<0)
 		return true;
 	else
 		return false;
@@ -49,7 +50,8 @@ void SimpleMCSweepLineIntersector::prepareEvents(){
 	for(int i=0;i<(int)events.size();i++ ){
 		SweepLineEvent *ev=events.at(i);
 		if (ev->isDelete()){
-			ev->getInsertEvent()->setDeleteEventIndex(i);
+			SweepLineEvent *iev=ev->getInsertEvent();
+			iev->setDeleteEventIndex(i);
 		}
 	}
 }

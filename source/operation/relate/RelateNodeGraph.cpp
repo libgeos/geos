@@ -37,8 +37,8 @@ void RelateNodeGraph::build(GeometryGraph *geomGraph) {
 * Precondition: edge intersections have been computed.
 */
 void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int argIndex) {
-	vector<Edge*> edges(geomGraph->getEdges());
-	for(vector<Edge*>::iterator edgeIt=edges.begin();edgeIt<edges.end();edgeIt++) {
+	vector<Edge*> *edges=geomGraph->getEdges();
+	for(vector<Edge*>::iterator edgeIt=edges->begin();edgeIt<edges->end();edgeIt++) {
 		Edge *e=*edgeIt;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		vector<EdgeIntersection*> eiL(e->getEdgeIntersectionList()->list);

@@ -52,14 +52,14 @@ public:
 	/**
 	* Computes all self-intersections between edges in a set of edges
 	*/
-	virtual void computeIntersections(vector<Edge*> edges,SegmentIntersector *si)=0;
+	virtual void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si)=0;
 	/**
 	* Computes all mutual intersections between two sets of edges
 	*/
-	virtual void computeIntersections(vector<Edge*> edges0,vector<Edge*> edges1,SegmentIntersector *si)=0;
+	virtual void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si)=0;
 protected:
-	vector<Edge*> edges0;
-	vector<Edge*> edges1;
+	vector<Edge*> edgesZero;
+	vector<Edge*> edgesOne;
 };
 
 class SweepLineSegment{
@@ -90,6 +90,7 @@ public:
 	void* getObject();
 	int compareTo(void *o);
 	int compareTo(SweepLineEvent *sle);
+	string print();
 protected:
 	void* obj;
 private:
@@ -147,14 +148,14 @@ protected:
 class SimpleMCSweepLineIntersector: public EdgeSetIntersector {
 public:
 	SimpleMCSweepLineIntersector();
-	void computeIntersections(vector<Edge*> edges,SegmentIntersector *si);
-	void computeIntersections(vector<Edge*> edges0,vector<Edge*> edges1,SegmentIntersector *si);
+	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si);
+	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 protected:
 	vector<SweepLineEvent*> events;
 	// statistics information
 	int nOverlaps;
 private:
-	void add(vector<Edge*> edges,int geomIndex);
+	void add(vector<Edge*> *edges,int geomIndex);
 	void add(Edge *edge,int geomIndex);
 	void prepareEvents();
 	void computeIntersections(SegmentIntersector *si,bool doMutualOnly);

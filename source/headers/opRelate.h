@@ -24,7 +24,7 @@ protected:
 class EdgeEndBuilder {
 public:
 	EdgeEndBuilder();
-	vector<EdgeEnd*> *computeEdgeEnds(vector<Edge*> edges);
+	vector<EdgeEnd*> *computeEdgeEnds(vector<Edge*> *edges);
 	void computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l);
 protected:
 	void createEdgeEndForPrev(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiPrev);
@@ -40,12 +40,12 @@ public:
 	void insert(EdgeEnd *e);
 	void computeLabel() ; 
 	void updateIM(IntersectionMatrix *im);
+	string print();
 protected:
 	vector<EdgeEnd*> edgeEnds;
 	void computeLabelOn(int geomIndex);
 	void computeLabelSides(int geomIndex);
 	void computeLabelSide(int geomIndex,int side);
-	string print();
 };
 
 class EdgeEndBundleStar: public EdgeEndStar {

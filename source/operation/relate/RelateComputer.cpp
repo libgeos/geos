@@ -219,8 +219,8 @@ void RelateComputer::copyNodesAndLabels(int argIndex) {
 * Endpoint nodes will already be labelled from when they were inserted.
 */
 void RelateComputer::computeIntersectionNodes(int argIndex) {
-	vector<Edge*> edges=arg->at(argIndex)->getEdges();
-	for(vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	vector<Edge*> *edges=arg->at(argIndex)->getEdges();
+	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		vector<EdgeIntersection*> eiL(e->getEdgeIntersectionList()->list);
@@ -246,8 +246,8 @@ void RelateComputer::computeIntersectionNodes(int argIndex) {
 * Endpoint nodes will already be labelled from when they were inserted.
 */
 void RelateComputer::labelIntersectionNodes(int argIndex) {
-	vector<Edge*> edges=arg->at(argIndex)->getEdges();
-	for(vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	vector<Edge*> *edges=arg->at(argIndex)->getEdges();
+	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		vector<EdgeIntersection*> eiL(e->getEdgeIntersectionList()->list);
@@ -304,7 +304,7 @@ void RelateComputer::labelNodeEdges() {
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
-		node->getEdges()->computeLabelling(*arg);
+		node->getEdges()->computeLabelling(arg);
 		//Debug.print(node.getEdges());
 		//node.print(System.out);
 	}
@@ -340,11 +340,11 @@ void RelateComputer::updateIM(IntersectionMatrix *im) {
 * not be isolated)
 */
 void RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex) {
-	vector<Edge*> edges=arg->at(thisIndex)->getEdges();
-	for(vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	vector<Edge*> *edges=arg->at(thisIndex)->getEdges();
+	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		if (e->isIsolated()) {
-			labelIsolatedEdge(e,targetIndex,arg->at(targetIndex)->getGeometry());
+			labelIsolatedEdge(e,targetIndex,(arg->at(targetIndex))->getGeometry());
 			isolatedEdges.push_back(e);
 		}
 	}

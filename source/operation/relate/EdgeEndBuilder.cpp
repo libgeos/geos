@@ -3,9 +3,9 @@
 
 EdgeEndBuilder::EdgeEndBuilder() {}
 
-vector<EdgeEnd*> *EdgeEndBuilder::computeEdgeEnds(vector<Edge*> edges) {
+vector<EdgeEnd*> *EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges) {
 	vector<EdgeEnd*> *l=new vector<EdgeEnd*>();
-	for(vector<Edge*>::iterator i=edges.begin();i<edges.end();i++) {
+	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		computeEdgeEnds(e,l);
 	}

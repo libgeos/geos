@@ -17,16 +17,21 @@ void linkResultDirectedEdges(vector<Node*> allNodes){
 
 PlanarGraph::PlanarGraph(NodeFactory *nodeFact) {
 	nodes=new NodeMap(nodeFact);
+	edges=new vector<Edge*>();
+	edgeEndList=new vector<EdgeEnd*>();
+
 }
 
 PlanarGraph::PlanarGraph(){
 	nodes=new NodeMap(new NodeFactory());
+	edges=new vector<Edge*>();
+	edgeEndList=new vector<EdgeEnd*>();
 }
 
 vector<Edge*>::iterator PlanarGraph::getEdgeIterator() {
-	return edges.begin();
+	return edges->begin();
 }
-vector<EdgeEnd*> PlanarGraph::getEdgeEnds(){
+vector<EdgeEnd*> *PlanarGraph::getEdgeEnds(){
 	return edgeEndList;
 }
 
@@ -39,12 +44,12 @@ bool PlanarGraph::isBoundaryNode(int geomIndex,Coordinate coord){
 }
 
 void PlanarGraph::insertEdge(Edge *e){
-	edges.push_back(e);
+	edges->push_back(e);
 }
 
 void PlanarGraph::add(EdgeEnd *e){
 	nodes->add(e);
-	edgeEndList.push_back(e);
+	edgeEndList->push_back(e);
 }
 
 map<Coordinate,Node*,CoordLT>::iterator PlanarGraph::getNodeIterator() {
@@ -76,7 +81,7 @@ void PlanarGraph::addEdges(vector<Edge*> edgesToAdd){
 	// create all the nodes for the edges
 	for (vector<Edge*>::iterator it=edgesToAdd.begin();it<edgesToAdd.end();it++) {
 		Edge *e=*it;
-		edges.push_back(e);
+		edges->push_back(e);
 		DirectedEdge *de1=new DirectedEdge(e, true);
 		DirectedEdge *de2=new DirectedEdge(e, false);
 		de1->setSym(de2);
@@ -118,7 +123,7 @@ void PlanarGraph::linkAllDirectedEdges(){
 *    <code>null</code> if the edge was not found
 */
 EdgeEnd* PlanarGraph::findEdgeEnd(Edge *e) {
-	for (vector<EdgeEnd*>::iterator i=getEdgeEnds().begin();i<getEdgeEnds().end();i++) {
+	for (vector<EdgeEnd*>::iterator i=getEdgeEnds()->begin();i<getEdgeEnds()->end();i++) {
 		EdgeEnd *ee=*i;
 		if (ee->getEdge()==e)
 			return ee;
@@ -133,8 +138,8 @@ EdgeEnd* PlanarGraph::findEdgeEnd(Edge *e) {
 *    <code>null</code> if the edge was not found
 */
 Edge* PlanarGraph::findEdge(Coordinate p0, Coordinate p1) {
-	for(unsigned int i=0; i<edges.size();i++) {
-		Edge *e=edges.at(i);
+	for(unsigned int i=0; i<edges->size();i++) {
+		Edge *e=edges->at(i);
 		CoordinateList eCoord(e->getCoordinates());
 		if (p0==eCoord.getAt(0) && p1==eCoord.getAt(1))
 			return e;
@@ -150,8 +155,8 @@ Edge* PlanarGraph::findEdge(Coordinate p0, Coordinate p1) {
 *    <code>null</code> if the edge was not found
 */
 Edge* PlanarGraph::findEdgeInSameDirection(Coordinate p0,Coordinate p1) {
-	for(unsigned int i=0; i<edges.size();i++) {
-		Edge *e=edges.at(i);
+	for(unsigned int i=0; i<edges->size();i++) {
+		Edge *e=edges->at(i);
 		CoordinateList eCoord(e->getCoordinates());
 		if (matchInSameDirection(p0,p1,eCoord.getAt(0),eCoord.getAt(1)))
 			return e;
@@ -177,11 +182,11 @@ bool PlanarGraph::matchInSameDirection(Coordinate p0,Coordinate p1,Coordinate ep
 
 string PlanarGraph::printEdges(){
 	string out="Edges: ";
-	for(unsigned int i=0;i<edges.size();i++) {
+	for(unsigned int i=0;i<edges->size();i++) {
 		out+="edge ";
 		out+=i;
 		out+=":\n";
-		Edge *e=edges.at(i);
+		Edge *e=edges->at(i);
 		out+=e->print();
 		out+=e->eiList->print();
 	}
