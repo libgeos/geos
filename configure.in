@@ -41,12 +41,12 @@ dnl Checks for library functions.
 
 AC_OUTPUT( 	Makefile \
  	source/Makefile \
+ 	source/algorithm/Makefile \
  	source/geom/Makefile \
  	source/graph/Makefile \
  	source/graph/index/Makefile \
  	source/io/Makefile \
  	source/io/markup/Makefile \
- 	source/test/Makefile \
  	source/util/Makefile \
 
 )

@@ -1,6 +1,6 @@
-SUBDIRS =	geom \
+SUBDIRS =	algorithm \
+	geom \
 	graph \
 	io \
-	util \
-	test
+	util
 
