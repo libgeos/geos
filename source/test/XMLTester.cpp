@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.45  2004/09/13 12:39:49  strk
+ * Added missing newline at end of output
+ *
  * Revision 1.44  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).
  * Dropped WKTWriter default constructor (internally created GeometryFactory).
@@ -506,7 +509,7 @@ try{
 
 //	_CrtDumpMemoryLeaks();
 
-	cout << "End Test";
+	cout << "End Test"<<endl;
 	delete pm;
 	delete factory;
 	delete r; r=NULL;
