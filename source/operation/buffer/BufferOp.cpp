@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2003/12/11 17:01:35  strk
+ * made buffer(0) back to its *correct* semantic (empy collection)
+ *
  * Revision 1.11  2003/12/11 16:01:12  strk
  * made buffer operation return a cloned input geom when called with 0 as distance
  *
@@ -43,8 +46,6 @@ namespace geos {
 
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 
-	if ( ! distance ) return g->clone();
-
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry *geomBuf;
 	try {
@@ -59,8 +60,6 @@ Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 }
 
 Geometry* BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments){
-	if ( ! distance ) return g->clone(); 
-	
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry *geomBuf;
 	try {
