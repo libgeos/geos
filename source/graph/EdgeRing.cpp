@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.21  2003/11/06 17:59:03  strk
+* Memory leaks fixed in ::containsPoint()
+*
 * Revision 1.20  2003/10/20 14:02:14  strk
 * more explicit exception thrown on null Directed Edge detection
 *
@@ -188,15 +191,24 @@ void EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge){
  * It will also check any holes, if they have been assigned.
  */
 bool EdgeRing::containsPoint(Coordinate& p){
-	LinearRing *lrShell=getLinearRing();
-	Envelope* env=lrShell->getEnvelopeInternal();
-	if (!env->contains(p)) return false;
+	//LinearRing *lrShell=getLinearRing();
+	//Envelope* env=lrShell->getEnvelopeInternal();
+	Envelope* env=ring->getEnvelopeInternal();
+	if (!env->contains(p))
+	{
+		delete env;
+		return false;
+	}
+	delete env;
+
 //External Dependency
 //	if (!cga.isPointInPolygon(p, shell.getCoordinates()) ) return false;
 	for (vector<EdgeRing*>::iterator i=holes->begin();i<holes->end();i++) {
 		EdgeRing *hole=*i;
 		if (hole->containsPoint(p))
+		{
 			return false;
+		}
 	}
 	return true;
 }
