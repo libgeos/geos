@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/05/27 08:37:16  strk
+ * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
+ *
  * Revision 1.19  2004/05/26 09:49:03  strk
  * PlanarGraph made local to ::buffer instead of Class private.
  *
@@ -426,6 +429,8 @@ private:
 	* Adds a CW square around a point
 	*/
 	void addSquare(const Coordinate &p, double distance);
+private:
+	vector<CoordinateList *>ptLists;
 };
 
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/27 08:37:16  strk
+ * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
+ *
  * Revision 1.9  2004/05/26 19:48:19  strk
  * Changed abs() to fabs() when working with doubles.
  * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
@@ -103,6 +106,7 @@ OffsetCurveBuilder::~OffsetCurveBuilder(){
 	delete offset0;
 	delete offset1;
 	delete ptList;
+	for (int i=0; i<ptLists.size(); i++) delete ptLists[i];
 }
 
 void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
@@ -168,7 +172,11 @@ OffsetCurveBuilder::getRingCurve(const CoordinateList *inputPts, int side, doubl
 void OffsetCurveBuilder::init(double newDistance){
 	distance=newDistance;
 	maxCurveSegmentError=distance*(1-cos(filletAngleQuantum/2.0));
-	//ptList=CoordinateListFactory::internalFactory->createCoordinateList();
+	// Point list needs to be reset
+	// but if a previous point list exists
+	// we'd better back it up for final deletion
+	ptLists.push_back(ptList);
+	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
 }
 
 CoordinateList* OffsetCurveBuilder::getCoordinates(){
