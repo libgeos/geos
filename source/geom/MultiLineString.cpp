@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/22 08:45:50  strk
+ * Documentation updates, memory leaks fixed.
+ *
  * Revision 1.21  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -123,18 +126,21 @@ bool MultiLineString::isClosed() const {
 }
 
 bool MultiLineString::isSimple() const {
-	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
-	return iso->isSimple((MultiLineString*) toInternalGeometry(this));
+	IsSimpleOp iso;
+	Geometry *in = toInternalGeometry(this);
+	bool issimple = iso.isSimple((MultiLineString *)in);
+	if ( in != this ) delete(in);
+	return issimple;
 }
 
 Geometry* MultiLineString::getBoundary() const {
 	if (isEmpty()) {
 		return getFactory()->createGeometryCollection(NULL);
 	}
-	GeometryGraph gg(0, toInternalGeometry(this));
-	//GeometryGraph *g=new GeometryGraph(0,toInternalGeometry(this));
+	Geometry *in = toInternalGeometry(this);
+	GeometryGraph gg(0, in);
 	CoordinateSequence *pts=gg.getBoundaryPoints();
-	//delete g;
+	if ( in != this ) delete(in);
 	Geometry *ret = getFactory()->createMultiPoint(*pts);
 	delete pts;
 	return ret;

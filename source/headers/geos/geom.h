@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/07/22 08:45:50  strk
+ * Documentation updates, memory leaks fixed.
+ *
  * Revision 1.20  2004/07/22 07:19:21  strk
  * Changed getCoordinatesRO description.
  *
@@ -1324,7 +1327,11 @@ public:
 	/// Returns a vertex of this Geometry.
 	virtual const Coordinate* getCoordinate() const=0; //Abstract
 
-	/// Returns this Geometry vertices.
+	/**
+	 * \brief
+	 * Returns this Geometry vertices.
+	 * Caller takes ownership of the returned object.
+	 */
 	virtual CoordinateSequence* getCoordinates() const=0; //Abstract
 
 	/// Returns the count of this Geometrys vertices.
@@ -1356,7 +1363,8 @@ public:
 	/// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
 	virtual int getDimension() const=0; //Abstract
 
-	/** \brief
+	/**
+	 * \brief
 	 * Returns the boundary, or the empty geometry if this Geometry
 	 * is empty.
 	 */
@@ -1863,7 +1871,14 @@ public:
 	virtual int getDimension() const;
 
 	virtual Geometry* getBoundary() const;
+
+	/**
+	 * \brief
+	 * Returns the maximum boundary dimension of geometries in
+	 * this collection.
+	 */
 	virtual int getBoundaryDimension() const;
+
 	virtual int getNumPoints() const;
 	virtual string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
@@ -1944,13 +1959,17 @@ public:
 	/// Returns point dimension (0)
 	int getDimension() const;
 
+	/// Returns Dimension::False (Point has no boundary)
 	int getBoundaryDimension() const;
+
+	/// Returns an EMPTY Geometry.
+	Geometry* getBoundary() const;
+
 	double getX() const;
 	double getY() const;
 	const Coordinate* getCoordinate() const;
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
-	Geometry* getBoundary() const;
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(CoordinateFilter *filter);
 	void apply_ro(GeometryFilter *filter) const;
@@ -1993,7 +2012,20 @@ public:
 	/// Returns line dimension (1)
 	virtual int getDimension() const;
 
+	/**
+	 * \brief
+	 * Returns Dimension::False for a closed LineString,
+	 * 0 otherwise (LineString boundary is a MultiPoint)
+	 */
 	virtual int getBoundaryDimension() const;
+
+	/**
+	 * \brief
+	 * Returns a MultiPoint.
+	 * Empty for closed LineString, a Point for each vertex otherwise.
+	 */
+	virtual Geometry* getBoundary() const;
+
 	virtual bool isEmpty() const;
 	virtual int getNumPoints() const;
 	virtual Point* getPointN(int n) const;
@@ -2004,7 +2036,6 @@ public:
 	virtual string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
-	virtual Geometry* getBoundary() const;
 	virtual bool isCoordinate(Coordinate& pt) const;
 	virtual bool equalsExact(const Geometry *other, double tolerance) const;
 	virtual void apply_rw(CoordinateFilter *filter);
@@ -2013,7 +2044,10 @@ public:
 	virtual void apply_ro(GeometryFilter *filter) const;
 	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
+
+	/// Normalize a LineString.  
 	virtual void normalize();
+
 	//was protected
 	virtual int compareToSameClass(const Geometry *ls) const;
 	virtual int compareTo(const LineString *ls) const;
@@ -2114,7 +2148,17 @@ public:
 	/// Returns surface dimension (2)
 	int getDimension() const;
 
+	/// Returns 1 (Polygon boundary is a MultiLineString)
 	int getBoundaryDimension() const;
+
+	/**
+	 * \brief
+	 * Returns a MultiLineString.
+	 * One LineString for the shell and one for each hole.
+	 * Empty for an empty Polygon.
+	 */
+	Geometry* getBoundary() const;
+
 	bool isEmpty() const;
 	bool isSimple() const;
 	
@@ -2129,7 +2173,6 @@ public:
 
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
-	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 	void apply_rw(CoordinateFilter *filter);
 	void apply_ro(CoordinateFilter *filter) const;
@@ -2164,20 +2207,23 @@ class MultiPoint: public GeometryCollection{
 public:
 
 	/**
-	* Constructs a <code>MultiPoint</code>.
-	*
-	* @param  newPoints
-	*	the <code>Point</code>s for this <code>MultiPoint</code>,
-	*	or <code>null</code> or an empty array to create the empty
-	* 	geometry.
-	*	Elements may be empty <code>Point</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will take ownership of
-	*	the vector and its elements.
-	*
-	* @param newFactory the GeometryFactory used to create this geometry
-	*/
+	 * \brief Constructs a <code>MultiPoint</code>.
+	 *
+	 * @param  newPoints
+	 *	the <code>Point</code>s for this <code>MultiPoint</code>,
+	 *	or <code>null</code> or an empty array to create the empty
+	 * 	geometry.
+	 *	Elements may be empty <code>Point</code>s,
+	 *	but not <code>null</code>s.
+	 *
+	 *	Constructed object will take ownership of
+	 *	the vector and its elements.
+	 *
+	 * @param newFactory
+	 * 	The GeometryFactory used to create this geometry
+	 *	Caller must keep the factory alive for the life-time
+	 *	of the constructed MultiPoint.
+	 */
 	MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
 
 	virtual ~MultiPoint();
@@ -2185,13 +2231,17 @@ public:
 	/// Returns point dimension (0)
 	int getDimension() const;
 
+	/// Returns Dimension::False (Point has no boundary)
 	int getBoundaryDimension() const;
+
+	/// Returns an EMPTY Geometry
+	Geometry* getBoundary() const;
+
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isValid() const;
 	bool isClosed() const;
 	bool isSimple() const;
-	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 protected:
 	const Coordinate* getCoordinate(int n) const;
@@ -2207,20 +2257,24 @@ class MultiLineString: public GeometryCollection{
 public:
 
 	/**
-	* Constructs a <code>MultiLineString</code>.
-	*
-	* @param  newLines
-	*	the <code>LineStrings</code>s for this
-	*	<code>MultiLineString</code>, or <code>null</code>
-	*	or an empty array to create the empty geometry.
-	*	Elements may be empty <code>LineString</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	Constructed object will take ownership of
-	*	the vector and its elements.
-	*
-	* @param newFactory the GeometryFactory used to create this geometry
-	*/
+	 * \brief Constructs a <code>MultiLineString</code>.
+	 *
+	 * @param  newLines
+	 *	The <code>LineStrings</code>s for this
+	 *	<code>MultiLineString</code>, or <code>null</code>
+	 *	or an empty array to create the empty geometry.
+	 *	Elements may be empty <code>LineString</code>s,
+	 *	but not <code>null</code>s.
+	 *
+	 *	Constructed object will take ownership of
+	 *	the vector and its elements.
+	 *
+	 * @param newFactory
+	 * 	The GeometryFactory used to create this geometry.
+	 *	Caller must keep the factory alive for the life-time
+	 *	of the constructed MultiLineString.
+	 * 	
+	 */
 	MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *newFactory);
 
 	virtual ~MultiLineString();
@@ -2228,12 +2282,20 @@ public:
 	/// Returns line dimension (1)
 	int getDimension() const;
 
+	/**
+	 * \brief
+	 * Returns Dimension::False if all LineStrings in the collection
+	 * are closed, 0 otherwise.
+	 */
 	int getBoundaryDimension() const;
+
+	/// Returns a (possibly empty) MultiPoint 
+	Geometry* getBoundary() const;
+
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
 	bool isSimple() const;
-	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 private:
 	static const int64 serialVersionUID = 8166665132445433741LL;
@@ -2248,21 +2310,26 @@ class MultiPolygon: public GeometryCollection {
 public:
 
 	/**
-	* @param newPolys
-	*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-	*	or <code>null</code> or an empty array to create the empty
-	*	geometry. Elements may be empty <code>Polygon</code>s, but
-	*	not <code>null</code>s.
-	*	The polygons must conform to the assertions specified in the
-	*	<A HREF="http://www.opengis.org/techno/specs.htm">
-	*	OpenGIS Simple Features Specification for SQL
-	*	</A>.
-	*
-	*	Constructed object will take ownership of
-	*	the vector and its elements.
-	*
-	* @param newFactory the GeometryFactory used to create this geometry
-	*/
+	 * \brief Construct a MultiPolygon
+	 *
+	 * @param newPolys
+	 *	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+	 *	or <code>null</code> or an empty array to create the empty
+	 *	geometry. Elements may be empty <code>Polygon</code>s, but
+	 *	not <code>null</code>s.
+	 *	The polygons must conform to the assertions specified in the
+	 *	<A HREF="http://www.opengis.org/techno/specs.htm">
+	 *	OpenGIS Simple Features Specification for SQL
+	 *	</A>.
+	 *
+	 *	Constructed object will take ownership of
+	 *	the vector and its elements.
+	 *
+	 * @param newFactory
+	 * 	The GeometryFactory used to create this geometry
+	 *	Caller must keep the factory alive for the life-time
+	 *	of the constructed MultiPolygon.
+	 */
 	MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
 	virtual ~MultiPolygon();
@@ -2270,11 +2337,19 @@ public:
 	/// Returns surface dimension (2)
 	int getDimension() const;
 
+	/// Returns 1 (MultiPolygon boundary is MultiLineString)
 	int getBoundaryDimension() const;
+
+	/**
+	 * \brief
+	 * Returns a MultiLineString composed of one LineString for
+	 * each of the composing Polygon's shells and holes.
+	 */
+	Geometry* getBoundary() const;
+
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isSimple() const;
-	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 private:
 	static const int64 serialVersionUID = -551033529766975875LL;

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.42  2004/07/22 08:45:50  strk
+ * Documentation updates, memory leaks fixed.
+ *
  * Revision 1.41  2004/07/22 07:04:49  strk
  * Documented missing geometry functions.
  *
@@ -209,14 +212,12 @@ string GeometryCollection::getGeometryType() const {
 }
 
 bool GeometryCollection::isSimple() const {
-	checkNotGeometryCollection(this);
-	Assert::shouldNeverReachHere("isSimple() on GeometryCollection failed to throw an exception");
-    return false;
-  }
+	throw new IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
+	return false;
+}
 
 Geometry* GeometryCollection::getBoundary() const {
-	checkNotGeometryCollection(this);
-	Assert::shouldNeverReachHere("getBoundary() on GeometryCollection failed to throw an exception");
+	throw new IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
 	return NULL;
 }
 

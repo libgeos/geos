@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/07/22 08:45:50  strk
+ * Documentation updates, memory leaks fixed.
+ *
  * Revision 1.22  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -113,8 +116,11 @@ Geometry* MultiPoint::getBoundary() const {
 }
 
 bool MultiPoint::isSimple() const {
-	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
-	return iso->isSimple((MultiPoint*) toInternalGeometry(this));
+	IsSimpleOp iso;
+	Geometry *in = toInternalGeometry(this);
+	bool issimple = iso.isSimple((MultiPoint *)in);
+	if ( in != this ) delete(in);
+	return issimple;
 }
 
 bool MultiPoint::isValid() const {

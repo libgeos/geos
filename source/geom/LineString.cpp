@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.42  2004/07/22 08:45:50  strk
+ * Documentation updates, memory leaks fixed.
+ *
  * Revision 1.41  2004/07/19 13:19:30  strk
  * Documentation fixes
  *
@@ -212,8 +215,11 @@ string LineString::getGeometryType() const {
 }
 
 bool LineString::isSimple() const {
-	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
-	return iso->isSimple((LineString*) toInternalGeometry(this));
+	IsSimpleOp iso;
+	Geometry *in = toInternalGeometry(this);
+	bool issimple = iso.isSimple((LineString *)in);
+	if ( in != this ) delete(in);
+	return issimple;
 }
 
 Geometry* LineString::getBoundary() const {
@@ -346,11 +352,6 @@ const Coordinate* LineString::getCoordinate() const
 	return &(points->getAt(0));
 }
 
-/**
-*  Returns the length of this <code>LineString</code>
-*
-*@return the area of the polygon
-*/
 double LineString::getLength() const {
 	return CGAlgorithms::length(points);
 }
