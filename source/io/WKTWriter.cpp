@@ -16,7 +16,7 @@ string WKTWriter::createFormatter(PrecisionModel precisionModel) {
 	// to accomodate the maximum precision of a double.
 	int decimalPlaces = 16;
 	if (!precisionModel.isFloating()) {
-		decimalPlaces = 1 + (int) ceil(log(precisionModel.getScale())/log(10));
+		decimalPlaces = 1 + (int) ceil(log(precisionModel.getScale())/log(10.0));
 	}
 	string fmt="%.";
 	char buffer[255];
