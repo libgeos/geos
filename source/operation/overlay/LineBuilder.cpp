@@ -72,8 +72,8 @@ void LineBuilder::collectLineEdge(DirectedEdge *de,int opCode,vector<Edge*> *edg
 	// include L edges which are in the result
 	if (de->isLineEdge()) {
 		if (!de->isVisited() && OverlayOp::isResultOfOp(label,opCode) && !e->isCovered()) {
-			//Debug.println("de: " + de.getLabel());
-			//Debug.println("edge: " + e.getLabel());
+			//Debug.println("de: "+de.getLabel());
+			//Debug.println("edge: "+e.getLabel());
 			edges->push_back(e);
 			de->setVisitedEdge(true);
 		}

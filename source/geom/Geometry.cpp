@@ -6,6 +6,7 @@
 #include "operation.h"
 #include "opRelate.h"
 #include "opValid.h"
+#include "opOverlay.h"
 #include "io.h"
 
 
@@ -199,47 +200,39 @@ Geometry* Geometry::convexHull() {
 	return new Geometry();
 }
 
-//!!! External Dependency
 Geometry* Geometry::intersection(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
-//!!! External Dependency
-	//return OverlayOp.overlayOp(this, other, OverlayOp::INTERSECTION);
+	return OverlayOp::overlayOp(this,other,OverlayOp::INTERSECTION);
 	return new Geometry();
 }
 
-//!!! External Dependency
 Geometry* Geometry::Union(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
-//!!! External Dependency
-	//return OverlayOp.overlayOp(this, other, OverlayOp::UNION);
+	return OverlayOp::overlayOp(this,other,OverlayOp::UNION);
 	return new Geometry();
 }
 
-//!!! External Dependency
 Geometry* Geometry::difference(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
-//!!! External Dependency
-	//return OverlayOp.overlayOp(this, other, OverlayOp::DIFFERENCE);
+	return OverlayOp::overlayOp(this,other,OverlayOp::DIFFERENCE);
 	return new Geometry();
 }
 
-//!!! External Dependency
 Geometry* Geometry::symDifference(Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
-//!!! External Dependency
-	//return OverlayOp.overlayOp(this, other, OverlayOp::SYMDIFFERENCE);
+	return OverlayOp::overlayOp(this,other,OverlayOp::SYMDIFFERENCE);
 	return new Geometry();
 }
 

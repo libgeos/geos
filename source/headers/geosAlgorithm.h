@@ -245,4 +245,16 @@ private:
 	void testLineSegment(Coordinate& p,LineSegment *seg);
 };
 
+class IntTreePointInRing: public PointInRing {
+private:
+	LinearRing *ring;
+	IntervalTree *intTree;
+	int crossings;  // number of segment/ray crossings
+	void buildIndex();
+	void testLineSegment(Coordinate& p,LineSegment *seg);
+public:
+	IntTreePointInRing(LinearRing *newRing);
+	bool isInside(Coordinate& pt);
+};
+
 #endif

@@ -7,22 +7,160 @@
 #include "platform.h"
 #include "graph.h"
 #include "geosAlgorithm.h"
+#include "operation.h"
 
 using namespace std;
 
-class OverlayOp {
+class OverlayOp: public GeometryGraphOperation {
 public:
+	/**
+	* The spatial functions supported by this class.
+	* These operations implement various boolean combinations of the resultants of the overlay.
+	*/
 	enum {
 		INTERSECTION=1,
 		UNION,
 		DIFFERENCE,
 		SYMDIFFERENCE
 	};
-	PlanarGraph* getGraph() {return NULL;}
-	static bool isResultOfOp(Label *l,int o) {return false;}
-	bool isCoveredByLA(Coordinate& c) {return false;}
-	bool isCoveredByA(Coordinate& c) {return false;}
-	Geometry* getArgGeometry(int i) {return NULL;}
+	static Geometry* overlayOp(Geometry *geom0,Geometry *geom1,int opCode);
+	static bool isResultOfOp(Label *label,int opCode);
+	/**
+	* This method will handle arguments of Location.NULL correctly
+	*
+	* @return true if the locations correspond to the opCode
+	*/
+	static bool isResultOfOp(int loc0,int loc1,int opCode);
+	OverlayOp(Geometry *g0,Geometry *g1);
+	~OverlayOp();
+	Geometry* getResultGeometry(int funcCode);
+	PlanarGraph* getGraph();
+	/**
+	* This method is used to decide if a point node should be included in the result or not.
+	*
+	* @return true if the coord point is covered by a result Line or Area geometry
+	*/
+	bool isCoveredByLA(Coordinate& coord);
+	/**
+	* This method is used to decide if an L edge should be included in the result or not.
+	*
+	* @return true if the coord point is covered by a result Area geometry
+	*/
+	bool isCoveredByA(Coordinate& coord);
+	/**
+	* @return true if the coord is located in the interior or boundary of
+	* a geometry in the list.
+	*/
+protected:
+	/**
+	* Insert an edge from one of the noded input graphs.
+	* Checks edges that are inserted to see if an
+	* identical edge already exists.
+	* If so, the edge is not inserted, but its label is merged
+	* with the existing edge.
+	*/
+	void insertUniqueEdge(Edge *e);
+private:
+	static PointLocator *ptLocator;
+	GeometryFactory *geomFact;
+	Geometry *resultGeom;
+	PlanarGraph *graph;
+	EdgeList *edgeList;
+	vector<Polygon*> *resultPolyList;
+	vector<LineString*> *resultLineList;
+	vector<Point*> *resultPointList;
+	void computeOverlay(int opCode);
+	void insertUniqueEdges(vector<Edge*> *edges);
+	/**
+	* If either of the GeometryLocations for the existing label is
+	* exactly opposite to the one in the labelToMerge,
+	* this indicates a dimensional collapse has happened.
+	* In this case, convert the label for that Geometry to a Line label
+	*/
+	//Not needed
+	//void checkDimensionalCollapse(Label labelToMerge, Label existingLabel);
+	/**
+	* Update the labels for edges according to their depths.
+	* For each edge, the depths are first normalized.
+	* Then, if the depths for the edge are equal,
+	* this edge must have collapsed into a line edge.
+	* If the depths are not equal, update the label
+	* with the locations corresponding to the depths
+	* (i.e. a depth of 0 corresponds to a Location of EXTERIOR,
+	* a depth of 1 corresponds to INTERIOR)
+	*/
+	void computeLabelsFromDepths();
+	/**
+	* If edges which have undergone dimensional collapse are found,
+	* replace them with a new edge which is a L edge
+	*/
+	void replaceCollapsedEdges();
+	/**
+	* Copy all nodes from an arg geometry into this graph.
+	* The node label in the arg geometry overrides any previously computed
+	* label for that argIndex.
+	* (E.g. a node may be an intersection node with
+	* a previously computed label of BOUNDARY,
+	* but in the original arg Geometry it is actually
+	* in the interior due to the Boundary Determination Rule)
+	*/
+	void copyPoints(int argIndex);
+	/**
+	* Compute initial labelling for all DirectedEdges at each node.
+	* In this step, DirectedEdges will acquire a complete labelling
+	* (i.e. one with labels for both Geometries)
+	* only if they
+	* are incident on a node which has edges for both Geometries
+	*/
+	void computeLabelling();
+	/**
+	* For nodes which have edges from only one Geometry incident on them,
+	* the previous step will have left their dirEdges with no labelling for the other
+	* Geometry.  However, the sym dirEdge may have a labelling for the other
+	* Geometry, so merge the two labels.
+	*/
+	void mergeSymLabels();
+	void updateNodeLabelling();
+	/**
+	* Incomplete nodes are nodes whose labels are incomplete.
+	* (e.g. the location for one Geometry is NULL).
+	* These are either isolated nodes,
+	* or nodes which have edges from only a single Geometry incident on them.
+	*
+	* Isolated nodes are found because nodes in one graph which don't intersect
+	* nodes in the other are not completely labelled by the initial process
+	* of adding nodes to the nodeList.
+	* To complete the labelling we need to check for nodes that lie in the
+	* interior of edges, and in the interior of areas.
+	* <p>
+	* When each node labelling is completed, the labelling of the incident
+	* edges is updated, to complete their labelling as well.
+	*/
+	void labelIncompleteNodes();
+	/**
+	* Label an isolated node with its relationship to the target geometry.
+	*/
+	void labelIncompleteNode(Node *n,int targetIndex);
+	/**
+	* Find all edges whose label indicates that they are in the result area(s),
+	* according to the operation being performed.  Since we want polygon shells to be
+	* oriented CW, choose dirEdges with the interior of the result on the RHS.
+	* Mark them as being in the result.
+	* Interior Area edges are the result of dimensional collapses.
+	* They do not form part of the result area boundary.
+	*/
+	void findResultAreaEdges(int opCode);
+	/**
+	* If both a dirEdge and its sym are marked as being in the result, cancel
+	* them out.
+	*/
+	void cancelDuplicateResultEdges();
+	bool isCovered(Coordinate& coord,vector<Geometry*> *geomList);
+	bool isCovered(Coordinate& coord,vector<Polygon*> *geomList);
+	bool isCovered(Coordinate& coord,vector<LineString*> *geomList);
+	Geometry* computeGeometry(vector<Point*> *nResultPointList,
+                              vector<LineString*> *nResultLineList,
+                              vector<Polygon*> *nResultPolyList);
 };
 
 /**
@@ -41,7 +179,7 @@ public:
 };
 
 /**
- * A MaximalEdgeRing is a ring of edges which may contain nodes of degree > 2.
+ * A MaximalEdgeRing is a ring of edges which may contain nodes of degree>2.
  * A MaximalEdgeRing may represent two different spatial entities:
  * <ul>
  * <li>a single polygon possibly containing inversions (if the ring is oriented CW)
@@ -187,7 +325,7 @@ private:
 	* no shell is returned.
 	*
 	* @return the shell EdgeRing, if there is one
-	* @return null, if all the rings are holes
+	* @return NULL, if all the rings are holes
 	*/
 	EdgeRing* findShell(vector<MinimalEdgeRing*>* minEdgeRings);
 	/**
@@ -236,7 +374,7 @@ private:
 	* (which is guaranteed to be the case if the hole does not touch its shell)
 	*
 	* @return containing EdgeRing, if there is one
-	* @return null if no containing EdgeRing is found
+	* @return NULL if no containing EdgeRing is found
 	*/
 	EdgeRing* findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRing*> *newShellList);
 	vector<Polygon*>* computePolygons(vector<EdgeRing*> *newShellList);
