@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/05/05 15:51:29  strk
+ * Fixed big leak in intersectChains()
+ *
  * Revision 1.4  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -76,6 +79,7 @@ void MCQuadtreeNoder::intersectChains() {
 				nOverlaps++;
 			}
 		}
+		delete overlapChains;
 	}
 
 	delete overlapAction;
