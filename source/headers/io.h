@@ -23,10 +23,16 @@ private:
 
 class StringTokenizer {
 public:
-	static const int TT_EOF=0;
-	static const int TT_EOL=1;
-	static const int TT_NUMBER=2;
-	static const int TT_WORD=3;
+	enum {
+		TT_EOF,
+		TT_EOL,
+		TT_NUMBER,
+		TT_WORD
+	};
+//	static const int TT_EOF=0;
+//	static const int TT_EOL=1;
+//	static const int TT_NUMBER=2;
+//	static const int TT_WORD=3;
 	StringTokenizer();
 	StringTokenizer(string txt);
 	~StringTokenizer();
@@ -107,7 +113,10 @@ protected:
 	void appendMultiPolygonText(MultiPolygon *multiPolygon, int level, Writer *writer);
 	void appendGeometryCollectionText(GeometryCollection *geometryCollection, int level,Writer *writer);
 private:
-	static const int INDENT = 2;
+	enum {
+		INDENT = 2
+	};
+//	static const int INDENT = 2;
 	static string createFormatter(PrecisionModel precisionModel);
 	bool isFormatted;
 	int level;

@@ -9,3 +9,9 @@ public:
 	double getEdgeDistance(int geomIndex,int intIndex){return 0.0;};
 
 };
+
+class RobustCGAlgorithms:public CGAlgorithms{
+};
+
+class RobustLineIntersector: public LineIntersector{
+};

@@ -13,9 +13,14 @@ using namespace std;
 
 class Position {
 public:
-	static const int ON=0;
-	static const int LEFT=1;
-	static const int RIGHT=2;
+	enum {
+		ON,
+		LEFT,
+		RIGHT
+	};
+//	static const int ON=0;
+//	static const int LEFT=1;
+//	static const int RIGHT=2;
 	static int opposite(int position);
 };
 
@@ -102,7 +107,10 @@ public:
 	void add(Label lbl);
 	string toString();
 private:
-	static const int DEPTHNULL=-1; //Replaces NULL
+	enum {
+		DEPTHNULL=-1 //Replaces NULL
+	};
+//	static const int DEPTHNULL=-1; //Replaces NULL
 	int depth[2][3];
 };
 
@@ -178,7 +186,6 @@ public:
 	bool isPointwiseEqual(Edge *e);
 	string print();
 	string printReverse();
-protected:
 private:
 	string name;
 	MonotoneChainEdge *mce;
@@ -281,8 +288,12 @@ private:
 	vector<DirectedEdge*> *resultAreaEdgeList;
 	Label *label;
 	vector<DirectedEdge*>* getResultAreaEdges();
-	static const int SCANNING_FOR_INCOMING=1;
-	static const int LINKING_TO_OUTGOING=2;
+	enum {
+		SCANNING_FOR_INCOMING=1,
+		LINKING_TO_OUTGOING
+	};
+//	static const int SCANNING_FOR_INCOMING=1;
+//	static const int LINKING_TO_OUTGOING=2;
 	int computeDepths(int startIndex, int endIndex, int startDepth);
 };
 
@@ -293,7 +304,7 @@ public:
 	Coordinate getCoordinate();
 	EdgeEndStar* getEdges();
 	bool isIsolated();
-	void add(EdgeEnd e);
+	void add(EdgeEnd *e);
 	void mergeLabel(Node n);
 	void mergeLabel(Label* label2);
 	void setLabel(int argIndex, int onLocation);
@@ -358,8 +369,8 @@ public:
 	NodeFactory *nodeFact;
 	NodeMap(NodeFactory *newNodeFact);
 	Node* addNode(Coordinate coord);
-	Node* addNode(Node n);
-	void add(EdgeEnd e);
+	Node* addNode(Node *n);
+	void add(EdgeEnd *e);
 	Node *find(Coordinate coord);
 	map<Coordinate,Node*,CoordLT>::iterator iterator();
 	//Collection values(); //Doesn't work yet. Use iterator.
@@ -455,6 +466,43 @@ private:
 	EdgeRing *shell;   // if non-null, the ring is a hole and this EdgeRing is its containing shell
 	vector<EdgeRing*> holes; // a list of EdgeRings which are holes in this EdgeRing
 	void computeMaxNodeDegree();
+};
+
+class PlanarGraph {
+public:
+	static const CGAlgorithms *cga;
+	static const LineIntersector *li;
+	static void linkResultDirectedEdges(vector<Node*> allNodes);
+	PlanarGraph(NodeFactory *nodeFact);
+	PlanarGraph();
+	vector<Edge*>::iterator getEdgeIterator();
+	vector<EdgeEnd*> getEdgeEnds();
+	bool isBoundaryNode(int geomIndex,Coordinate coord);
+	void add(EdgeEnd *e);
+	map<Coordinate,Node*,CoordLT>::iterator getNodeIterator();
+//	Wouldn't work. Use iterator
+//	Collection getNodes() { return nodes.values(); }
+	Node* addNode(Node *node);
+	Node* addNode(Coordinate coord);
+	Node* find(Coordinate coord);
+	void addEdges(vector<Edge*> edgesToAdd);
+	void linkResultDirectedEdges();
+	void linkAllDirectedEdges();
+	EdgeEnd* findEdgeEnd(Edge *e);
+	Edge* findEdge(Coordinate p0,Coordinate p1);
+	Edge* findEdgeInSameDirection(Coordinate p0,Coordinate p1);
+	string printEdges();
+	//Not used 
+	//string debugPrint();
+	//string debugPrintln();
+
+protected:
+	vector<Edge*> edges;
+	NodeMap *nodes;
+	vector<EdgeEnd*> edgeEndList;
+	void insertEdge(Edge *e);
+private:
+	bool matchInSameDirection(Coordinate p0,Coordinate p1,Coordinate ep0,Coordinate ep1);
 };
 
 //Operators

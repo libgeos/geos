@@ -92,8 +92,12 @@ private:
 
 class PrecisionModel {
 public:
-	static const int FIXED=1;
-	static const int FLOATING=2;
+	enum {
+		FIXED=1,
+		FLOATING
+	};
+//	static const int FIXED=1;
+//	static const int FLOATING=2;
 	static const double maximumPreciseValue;
 	static double makePrecise(double val);
 	PrecisionModel(void);
@@ -145,12 +149,20 @@ public:
  */
 class Dimension {
 public:
-	static const int P = 0;			/// Dimension value of a point (0).
-	static const int L = 1;			/// Dimension value of a curve (1).
-	static const int A = 2;			/// Dimension value of a surface (2).
-	static const int False = -1;	/// Dimension value of the empty geometry (-1).
-	static const int True = -2;		/// Dimension value of non-empty geometries (= {P, L, A}).
-	static const int DONTCARE = -3;	/// Dimension value for any dimension (= {FALSE, TRUE}).
+	enum {
+		DONTCARE=-3,	/// Dimension value for any dimension (= {FALSE, TRUE}).
+		True,			/// Dimension value of non-empty geometries (= {P, L, A}).
+		False,			/// Dimension value of the empty geometry (-1).
+		P,				/// Dimension value of a point (0).
+		L,				/// Dimension value of a curve (1).
+		A				/// Dimension value of a surface (2).
+	};
+	//static const int P = 0;			/// Dimension value of a point (0).
+	//static const int L = 1;			/// Dimension value of a curve (1).
+	//static const int A = 2;			/// Dimension value of a surface (2).
+	//static const int False = -1;	/// Dimension value of the empty geometry (-1).
+	//static const int True = -2;		/// Dimension value of non-empty geometries (= {P, L, A}).
+	//static const int DONTCARE = -3;	/// Dimension value for any dimension (= {FALSE, TRUE}).
 	static char toDimensionSymbol(int dimensionValue);
 	static int toDimensionValue(char dimensionSymbol);
 };
@@ -386,28 +398,34 @@ private:
  */
 class Location {
 public:
-  /**
-   *  DE-9IM row index of the interior of the first geometry and column index of
-   *  the interior of the second geometry. Location value for the interior of a
-   *  geometry.
-   */
-	static const int INTERIOR = 0;
-  /**
-   *  DE-9IM row index of the boundary of the first geometry and column index of
-   *  the boundary of the second geometry. Location value for the boundary of a
-   *  geometry.
-   */
-	static const int BOUNDARY = 1;
-  /**
-   *  DE-9IM row index of the exterior of the first geometry and column index of
-   *  the exterior of the second geometry. Location value for the exterior of a
-   *  geometry.
-   */
-	static const int EXTERIOR = 2;
-  /**
-   *  Used for uninitialized location values.
-   */
-	static const int UNDEF = -1;   ///Instead of NULL
+	enum {
+		/**
+		*  Used for uninitialized location values.
+		*/
+		UNDEF=-1,   ///Instead of NULL
+		/**
+		*  DE-9IM row index of the interior of the first geometry and column index of
+		*  the interior of the second geometry. Location value for the interior of a
+		*  geometry.
+		*/
+		INTERIOR,
+		/**
+		*  DE-9IM row index of the boundary of the first geometry and column index of
+		*  the boundary of the second geometry. Location value for the boundary of a
+		*  geometry.
+		*/
+		BOUNDARY,
+		/**
+		*  DE-9IM row index of the exterior of the first geometry and column index of
+		*  the exterior of the second geometry. Location value for the exterior of a
+		*  geometry.
+		*/
+		EXTERIOR = 2
+	};
+	//static const int INTERIOR = 0;
+	//static const int BOUNDARY = 1;
+	//static const int EXTERIOR = 2;
+	//static const int UNDEF = -1;   ///Instead of NULL
 	static char toLocationSymbol(int locationValue);
 };
 

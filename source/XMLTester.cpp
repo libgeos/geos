@@ -1,9 +1,10 @@
 #include "MarkupSTL.h"
-#include "io.h"
+//#include "io.h"
 #include <string>
 #include <iostream>
 #include <fstream>
 #include "util.h"
+#include "graph.h"
 
 using namespace std;
 
@@ -20,7 +21,9 @@ int main(int argC, char* argV[]) {
 	string opRes="";
 	int testCount=0;
 
-	try {
+//	PlanarGraph::cga++;
+
+/*	try {
 		Assert::equals(Coordinate(10,10),Coordinate(10,10));
 		Assert::equals(Coordinate(10,10),Coordinate(20,20));
 	} catch (AssertionFailedException afe) {
@@ -76,5 +79,5 @@ int main(int argC, char* argV[]) {
 
 		xml.OutOfElem();
 	}
-
+*/
 }

@@ -14,18 +14,18 @@ Node* NodeMap::addNode(Coordinate coord){
 	return node;
 }
 
-Node* NodeMap::addNode(Node n){
-	Node *node=nodeMap.find(n.getCoordinate())->second;
+Node* NodeMap::addNode(Node *n){
+	Node *node=nodeMap.find(n->getCoordinate())->second;
 	if (node==NULL) {
-		nodeMap[n.getCoordinate()]=&n;
-		return &n;
+		nodeMap[n->getCoordinate()]=n;
+		return n;
 	}
-	node->mergeLabel(n);
+	node->mergeLabel(*n);
 	return node;
 }
 
-void NodeMap::add(EdgeEnd e) {
-	Coordinate p(e.getCoordinate());
+void NodeMap::add(EdgeEnd *e) {
+	Coordinate p(e->getCoordinate());
 	Node *n=addNode(p);
 	n->add(e);
 }

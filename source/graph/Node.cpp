@@ -22,10 +22,10 @@ bool Node::isIsolated() {
 	return (label->getGeometryCount()==1);
 }
 
-void Node::add(EdgeEnd e) {
+void Node::add(EdgeEnd *e) {
 	// Assert: start pt of e is equal to node point
-	edges->insert(&e);
-	e.setNode(this);
+	edges->insert(e);
+	e->setNode(this);
 }
 
 void Node::mergeLabel(Node n) {
