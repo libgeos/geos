@@ -2,7 +2,7 @@ noinst_PROGRAMS = TestSweepLineSpeed
 
 LIBS = ../geom/libgeos.la
 
-TestSweepLineSpeed_SOURCES = TestSweepLineSpeed.cpp
+TestSweepLineSpeed_SOURCES = TestSweepLineSpeed.cpp GeometryTestFactory.cpp
 TestSweepLineSpeed_LDADD = $(LIBS)
 
 INCLUDES = -I../headers

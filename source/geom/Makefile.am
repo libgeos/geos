@@ -71,7 +71,6 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../util/GEOSException.cpp \
                     ../util/IllegalArgumentException.cpp \
                     ../util/UnsupportedOperationException.cpp \
-                    ../bigtest/GeometryTestFactory.cpp \
                     ../algorithm/CGAlgorithms.cpp \
                     ../algorithm/HCoordinate.cpp \
                     ../algorithm/InteriorPointArea.cpp \
