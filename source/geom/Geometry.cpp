@@ -11,156 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.71  2004/09/16 09:48:40  strk
- * Finer short-circuit tests for equals, within, contains.
- *
- * Revision 1.70  2004/09/16 07:32:15  strk
- * Added short-circuit tests. Can be disabled at compile-time
- *
- * Revision 1.69  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.68  2004/07/22 16:58:01  strk
- * runtime version extractor functions split. geos::version() is now
- * geos::geosversion() and geos::jtsport()
- *
- * Revision 1.67  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.66  2004/07/20 08:34:18  strk
- * Fixed a bug in opDistance.h.
- * Removed doxygen tags from obsoleted CoordinateList.cpp.
- * Got doxygen to run with no warnings.
- *
- * Revision 1.65  2004/07/19 13:19:30  strk
- * Documentation fixes
- *
- * Revision 1.64  2004/07/17 10:48:04  strk
- * fixed typo in documentation
- *
- * Revision 1.63  2004/07/17 09:18:54  strk
- * Added geos::version()
- *
- * Revision 1.62  2004/07/14 21:20:58  strk
- * Added GeometricShapeFactory note on doxygen mainpage
- *
- * Revision 1.61  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.60  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.59  2004/07/06 17:58:21  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.58  2004/07/05 19:40:48  strk
- * Added GeometryFactory::destroyGeometry(Geometry *)
- *
- * Revision 1.57  2004/07/05 15:20:18  strk
- * Documentation again.
- *
- * Revision 1.56  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.55  2004/07/03 12:51:37  strk
- * Documentation cleanups for DoxyGen.
- *
- * Revision 1.54  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.53  2004/07/01 17:34:07  strk
- * GeometryFactory argument in Geometry constructor reverted
- * to its copy-and-destroy semantic.
- *
- * Revision 1.52  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.51  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.50  2004/05/21 13:58:47  strk
- * ::intersection missed to invalidate geometryCollection inputs
- *
- * Revision 1.49  2004/05/17 07:23:05  strk
- * ::getCeontroid(): reduced dynamic allocations, added missing check for isEmpty
- *
- * Revision 1.48  2004/05/14 12:14:08  strk
- * const correctness
- *
- * Revision 1.47  2004/05/07 09:05:13  strk
- * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateSequence.
- *
- * Revision 1.46  2004/05/05 16:51:29  strk
- * avoided copy constructor in Geometry::geometryChangedFilter initializzazion
- *
- * Revision 1.45  2004/05/05 10:54:48  strk
- * Removed some private static heap explicit allocation, less cleanup done by
- * the unloader.
- *
- * Revision 1.44  2004/04/30 09:15:28  strk
- * Enlarged exception specifications to allow for AssertionFailedException.
- * Added missing initializers.
- *
- * Revision 1.43  2004/04/20 10:14:20  strk
- * Memory leaks removed.
- *
- * Revision 1.42  2004/04/14 13:56:26  strk
- * All geometries returned by {from,to}InternalGeometry calls are
- * now deleted after use (unless NOT new).
- * Some 'commented' throw specifications in geom.h
- *
- * Revision 1.41  2004/04/14 07:29:43  strk
- * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
- *
- * Revision 1.40  2004/04/01 10:44:33  ybychkov
- * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
- *
- * Revision 1.39  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.38  2004/03/01 22:04:59  strk
- * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
- *
- * Revision 1.37  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.36  2003/10/20 15:41:34  strk
- * Geometry::checkNotGeometryCollection made static and non-distructive.
- *
- * Revision 1.35  2003/10/13 12:51:28  strk
- * removed sortedClasses strings array from all geometries.
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <geos/util.h>
@@ -991,11 +842,166 @@ void Geometry::apply_ro(GeometryComponentFilter *filter) const {
 void Geometry::apply_rw(GeometryComponentFilter *filter) {
 	filter->filter_rw(this);
 }
+
 Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const{
 	Coordinate newcoord = *coord;
 	exemplar->getPrecisionModel()->makePrecise(&newcoord);
 	return exemplar->getFactory()->createPoint(newcoord);
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.72  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
+ * Revision 1.71  2004/09/16 09:48:40  strk
+ * Finer short-circuit tests for equals, within, contains.
+ *
+ * Revision 1.70  2004/09/16 07:32:15  strk
+ * Added short-circuit tests. Can be disabled at compile-time
+ *
+ * Revision 1.69  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.68  2004/07/22 16:58:01  strk
+ * runtime version extractor functions split. geos::version() is now
+ * geos::geosversion() and geos::jtsport()
+ *
+ * Revision 1.67  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
+ * Revision 1.66  2004/07/20 08:34:18  strk
+ * Fixed a bug in opDistance.h.
+ * Removed doxygen tags from obsoleted CoordinateList.cpp.
+ * Got doxygen to run with no warnings.
+ *
+ * Revision 1.65  2004/07/19 13:19:30  strk
+ * Documentation fixes
+ *
+ * Revision 1.64  2004/07/17 10:48:04  strk
+ * fixed typo in documentation
+ *
+ * Revision 1.63  2004/07/17 09:18:54  strk
+ * Added geos::version()
+ *
+ * Revision 1.62  2004/07/14 21:20:58  strk
+ * Added GeometricShapeFactory note on doxygen mainpage
+ *
+ * Revision 1.61  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.60  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
+ * Revision 1.59  2004/07/06 17:58:21  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
+ * Revision 1.58  2004/07/05 19:40:48  strk
+ * Added GeometryFactory::destroyGeometry(Geometry *)
+ *
+ * Revision 1.57  2004/07/05 15:20:18  strk
+ * Documentation again.
+ *
+ * Revision 1.56  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
+ * Revision 1.55  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
+ * Revision 1.54  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.53  2004/07/01 17:34:07  strk
+ * GeometryFactory argument in Geometry constructor reverted
+ * to its copy-and-destroy semantic.
+ *
+ * Revision 1.52  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.51  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.50  2004/05/21 13:58:47  strk
+ * ::intersection missed to invalidate geometryCollection inputs
+ *
+ * Revision 1.49  2004/05/17 07:23:05  strk
+ * ::getCeontroid(): reduced dynamic allocations, added missing check for isEmpty
+ *
+ * Revision 1.48  2004/05/14 12:14:08  strk
+ * const correctness
+ *
+ * Revision 1.47  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateSequence.
+ *
+ * Revision 1.46  2004/05/05 16:51:29  strk
+ * avoided copy constructor in Geometry::geometryChangedFilter initializzazion
+ *
+ * Revision 1.45  2004/05/05 10:54:48  strk
+ * Removed some private static heap explicit allocation, less cleanup done by
+ * the unloader.
+ *
+ * Revision 1.44  2004/04/30 09:15:28  strk
+ * Enlarged exception specifications to allow for AssertionFailedException.
+ * Added missing initializers.
+ *
+ * Revision 1.43  2004/04/20 10:14:20  strk
+ * Memory leaks removed.
+ *
+ * Revision 1.42  2004/04/14 13:56:26  strk
+ * All geometries returned by {from,to}InternalGeometry calls are
+ * now deleted after use (unless NOT new).
+ * Some 'commented' throw specifications in geom.h
+ *
+ * Revision 1.41  2004/04/14 07:29:43  strk
+ * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
+ *
+ * Revision 1.40  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
+ * Revision 1.39  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
+ * Revision 1.38  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
+ * Revision 1.37  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.36  2003/10/20 15:41:34  strk
+ * Geometry::checkNotGeometryCollection made static and non-distructive.
+ *
+ * Revision 1.35  2003/10/13 12:51:28  strk
+ * removed sortedClasses strings array from all geometries.
+ *
+ **********************************************************************/
 

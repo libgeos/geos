@@ -129,8 +129,8 @@ PlanarGraph::getNodes()
 Node*
 PlanarGraph::addNode(Node *node)
 {
-#ifdef DEBUG
-	cerr<<"PlanarGraph::addNode("<<node->print()<<")"<<endl;
+#if DEBUG
+	cerr<<"PlanarGraph::addNode(Node * "<<node->print()<<")"<<endl;
 #endif
 	return nodes->addNode(node);
 }
@@ -138,6 +138,9 @@ PlanarGraph::addNode(Node *node)
 Node*
 PlanarGraph::addNode(const Coordinate& coord)
 {
+#if DEBUG
+	cerr<<"PlanarGraph::addNode(Coordinate& "<<coord.toString()<<")"<<endl;
+#endif
 	return nodes->addNode(coord);
 }
 
@@ -304,10 +307,14 @@ PlanarGraph::getNodeMap()
 	return nodes;
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.10  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

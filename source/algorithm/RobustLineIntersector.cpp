@@ -17,7 +17,10 @@
 #include <geos/util.h>
 
 #define DEBUG_INTERSECT 0
-#define COMPUTE_Z 0
+
+#ifndef COMPUTE_Z
+#define COMPUTE_Z 1
+#endif // COMPUTE_Z
 
 namespace geos {
 
@@ -38,7 +41,7 @@ RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate&
 			if (p.equals3D(p1) || p.equals3D(p2))
 #else // ! COMPUTE_Z
 			if ((p==p1) || (p==p2))
-#endif
+#endif // COMPUTE_Z
 			{
 				isProperVar=false;
 			}
@@ -359,6 +362,10 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.19  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

@@ -17,7 +17,7 @@
 #include <geos/geomgraphindex.h>
 #include <math.h>
 
-//#define DEBUG_INTERSECT 1
+#define DEBUG_INTERSECT 1
 
 namespace geos {
 
@@ -168,10 +168,16 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 		}
 		//intersectionFound = true;
 		numIntersections++;
-		// if the segments are adjacent they have at least one trivial intersection,
-		// the shared endpoint.  Don't bother adding it if it is the
+
+		// If the segments are adjacent they have at least one trivial
+		// intersection, the shared endpoint.
+		// Don't bother adding it if it is the
 		// only intersection.
-		if (!isTrivialIntersection(e0,segIndex0,e1,segIndex1)) {
+		if (!isTrivialIntersection(e0,segIndex0,e1,segIndex1))
+		{
+#ifdef DEBUG_INTERSECT
+			cerr<<"SegmentIntersector::addIntersections(): has !TrivialIntersection"<<endl;
+#endif // DEBUG_INTERSECT
 			hasIntersectionVar=true;
 			if (includeProper || !li->isProper()) {
 				//Debug.println(li);
@@ -217,6 +223,10 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.4  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *

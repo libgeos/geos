@@ -20,6 +20,12 @@
 #ifndef DEBUG_INTERSECT
 #define DEBUG_INTERSECT 0
 #endif
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+#ifndef COMPUTE_Z
+#define COMPUTE_Z 1
+#endif
 
 namespace geos {
 
@@ -67,11 +73,12 @@ OverlayOp::isResultOfOp(int loc0,int loc1,int opCode)
 OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOperation(g0,g1)
 {
 	graph=new PlanarGraph(new OverlayNodeFactory());
-    /**
-     * Use factory of primary geometry.
-     * Note that this does NOT handle mixed-precision arguments
-     * where the second arg has greater precision than the first.
-     */
+
+	/*
+	 * Use factory of primary geometry.
+	 * Note that this does NOT handle mixed-precision arguments
+	 * where the second arg has greater precision than the first.
+	 */
 	geomFact=g0->getFactory();
 	resultGeom=NULL;
 	edgeList=new EdgeList();
@@ -188,6 +195,9 @@ OverlayOp::computeLabelling()
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
 		Node *node=it->second;
+#if DEBUG
+		cerr<<"Node "<<node->print()<<" has "<<node->getEdges()->getEdges()->size()<<" edgeEnds"<<endl;
+#endif
 		node->getEdges()->computeLabelling(arg);
 	}
 	mergeSymLabels();
@@ -268,10 +278,21 @@ OverlayOp::labelIncompleteNodes()
  * Label an isolated node with its relationship to the target geometry.
  */
 void
-OverlayOp::labelIncompleteNode(Node *n,int targetIndex)
+OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 {
-	int loc=ptLocator->locate(n->getCoordinate(),(*arg)[targetIndex]->getGeometry());
+	const Geometry *targetGeom = (*arg)[targetIndex]->getGeometry();
+	int loc=ptLocator->locate(n->getCoordinate(), targetGeom);
 	n->getLabel()->setLocation(targetIndex,loc);
+
+#if COMPUTE_Z
+	const LineString *line = dynamic_cast<const LineString *>(targetGeom);
+	if ( loc == Location::INTERIOR && line)
+	{
+#if DEBUG_INTERSECTS
+		cerr<<"Node is the INTERIOR of a line, should interpolate the Z value"<<endl;
+#endif // DEBUG_INTERSECTS
+	}
+#endif // COMPUTE_Z
 }
 
 /*
@@ -510,7 +531,8 @@ OverlayOp::computeOverlay(int opCode)
 		resultLineList=lineBuilder->build(opCode);
 		pointBuilder=new PointBuilder(this,geomFact,ptLocator);
 		resultPointList=pointBuilder->build(opCode);
-		// gather the results from all calculations into a single Geometry for the result set
+		// gather the results from all calculations into a single
+		// Geometry for the result set
 		resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
 
 
@@ -593,10 +615,10 @@ OverlayOp::computeLabelsFromDepths()
 		Label *lbl=e->getLabel();
 		Depth *depth=e->getDepth();
 		/**
-		* Only check edges for which there were duplicates,
-		* since these are the only ones which might
-		* be the result of dimensional collapses.
-		*/
+		 * Only check edges for which there were duplicates,
+		 * since these are the only ones which might
+		 * be the result of dimensional collapses.
+		 */
 		if (!depth->isNull()) {
 			depth->normalize();
 			for (int i=0;i<2;i++) {
@@ -631,6 +653,10 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.24  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

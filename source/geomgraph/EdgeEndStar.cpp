@@ -56,7 +56,9 @@ void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
 /**
  * @return the coordinate for the node this star is based at
  */
-Coordinate& EdgeEndStar::getCoordinate(){
+Coordinate&
+EdgeEndStar::getCoordinate()
+{
 	if (getEdges()->size()==0)
 		return *(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
 	vector<EdgeEnd*>::iterator it=getIterator();
@@ -302,9 +304,12 @@ int EdgeEndStar::findIndex(EdgeEnd *eSearch){
 	return -1;
 }
 
-string EdgeEndStar::print(){
+string
+EdgeEndStar::print()
+{
 	string out="EdgeEndStar:   " + getCoordinate().toString()+"\n";
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++)
+	{
 		EdgeEnd *e=*it;
 		out+=e->print();
 	}
@@ -315,6 +320,10 @@ string EdgeEndStar::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.5  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

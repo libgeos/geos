@@ -40,7 +40,7 @@ EdgeIntersection*
 EdgeIntersectionList::add(const Coordinate& coord, int segmentIndex, double dist)
 {
 #if DEBUG
-	cerr<<"EdgeIntersectionLiest::add("<<coord.toString()<<","<<segmentIndex<<","<<dist<<")"<<endl;
+	cerr<<"EdgeIntersectionList::add("<<coord.toString()<<","<<segmentIndex<<","<<dist<<")"<<endl;
 #endif // DEBUG
 	vector<EdgeIntersection *>::iterator insertIt=list->begin();
 	bool isInList=findInsertionPoint(segmentIndex,dist,&insertIt);
@@ -128,11 +128,12 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *e
 {
 	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
 	const Coordinate& lastSegStartPt=edge->pts->getAt(ei1->segmentIndex);
-	// if the last intersection point is not equal to the its segment start pt,
-	// add it to the points list as well.
-	// (This check is needed because the distance metric is not totally reliable!)
-    // The check for point equality is 2D only - Z values are ignored
-    bool useIntPt1=ei1->dist>0.0 || !ei1->coord.equals2D(lastSegStartPt);
+	// if the last intersection point is not equal to the its segment
+	// start pt, add it to the points list as well.
+	// (This check is needed because the distance metric is not totally
+	// reliable!). The check for point equality is 2D only - Z values
+	// are ignored
+	bool useIntPt1=ei1->dist>0.0 || !ei1->coord.equals2D(lastSegStartPt);
 	if (!useIntPt1) {
 		npts--;
 	}
@@ -146,7 +147,7 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *e
 		pts->setAt(edge->pts->getAt(i),ipt++);
 	}
 	if (useIntPt1) pts->setAt(ei1->coord,ipt);
-	return new Edge(pts,new Label(edge->getLabel()));
+	return new Edge(pts, new Label(edge->getLabel()));
 }
 
 string
@@ -161,10 +162,14 @@ EdgeIntersectionList::print()
 	return out;
 }
 
-}
+} // namespace
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.6  2004/11/04 19:08:06  strk
  * Cleanups, initializers list, profiling.
  *

@@ -1143,7 +1143,7 @@ public:
 	/*
 	 * Sets the ID of the Spatial Reference System used by the
 	 * <code>Geometry</code>.
-	 * @deprecated use {@link setUserData} instead
+	 * @deprecated use setUserData instead
 	 */
 	virtual void setSRID(int newSRID);
 
@@ -1176,14 +1176,14 @@ public:
 	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
 
 	/**
-	* \brief Tests the validity of this <code>Geometry</code>.
-	*
-	* Subclasses provide their own definition of "valid".
-	*
-	* @return <code>true</code> if this <code>Geometry</code> is valid
-	*
-	* @see IsValidOp
-	*/
+	 * \brief Tests the validity of this <code>Geometry</code>.
+	 *
+	 * Subclasses provide their own definition of "valid".
+	 *
+	 * @return <code>true</code> if this <code>Geometry</code> is valid
+	 *
+	 * @see IsValidOp
+	 */
 	virtual bool isValid() const;
 
 	/// Returns whether or not the set of points in this Geometry is empty.
@@ -2378,6 +2378,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.29  2004/11/08 10:57:42  strk
  * Moved Log lines at the bottom, and cut oldest
  *

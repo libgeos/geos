@@ -11,36 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.21  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.20  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.19  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.18  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.17  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.16  2003/10/16 08:50:00  strk
- * Memory leak fixes. Improved performance by mean of more calls to 
- * new getCoordinatesRO() when applicable.
- *
- * Revision 1.15  2003/10/15 15:47:43  strk
- * Adapted to new getCoordinatesRO() interface
- *
  **********************************************************************/
-
 
 #include <geos/geosAlgorithm.h>
 #include <typeinfo>
@@ -74,9 +45,11 @@ bool PointLocator::intersects(const Coordinate& p,const Geometry *geom) {
 * The algorithm for multi-part Geometries
 * takes into account the boundaryDetermination rule.
 *
-* @return the {@link Location} of the point relative to the input Geometry
+* @return the Location of the point relative to the input Geometry
 */
-int PointLocator::locate(const Coordinate& p, const Geometry *geom) {
+int
+PointLocator::locate(const Coordinate& p, const Geometry *geom)
+{
 	if (geom->isEmpty()) return Location::EXTERIOR;
 	if (typeid(*geom)==typeid(LineString)) {
 		return locate(p,(LineString*) geom);
@@ -95,7 +68,9 @@ int PointLocator::locate(const Coordinate& p, const Geometry *geom) {
 	return Location::EXTERIOR;
 }
 
-void PointLocator::computeLocation(const Coordinate& p, const Geometry *geom) {
+void
+PointLocator::computeLocation(const Coordinate& p, const Geometry *geom)
+{
 	if (typeid(*geom)==typeid(LineString)) {
 		updateLocationInfo(locate(p,(LineString*) geom));
 	}
@@ -126,12 +101,16 @@ void PointLocator::computeLocation(const Coordinate& p, const Geometry *geom) {
 	}
 }
 
-void PointLocator::updateLocationInfo(int loc) {
+void
+PointLocator::updateLocationInfo(int loc)
+{
 	if (loc==Location::INTERIOR) isIn=true;
 	if (loc==Location::BOUNDARY) numBoundaries++;
 }
 
-int PointLocator::locate(const Coordinate& p, const LineString *l) {
+int
+PointLocator::locate(const Coordinate& p, const LineString *l)
+{
 	const CoordinateSequence* pt=l->getCoordinatesRO();
 	if (! l->isClosed()) {
 		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
@@ -143,7 +122,9 @@ int PointLocator::locate(const Coordinate& p, const LineString *l) {
 	return Location::EXTERIOR;
 }
 
-int PointLocator::locate(const Coordinate& p, const LinearRing *ring) {
+int
+PointLocator::locate(const Coordinate& p, const LinearRing *ring)
+{
 	const CoordinateSequence *cl = ring->getCoordinatesRO();
 	if (CGAlgorithms::isOnLine(p,cl)) {
 		return Location::BOUNDARY;
@@ -155,7 +136,9 @@ int PointLocator::locate(const Coordinate& p, const LinearRing *ring) {
 	return Location::EXTERIOR;
 }
 
-int PointLocator::locate(const Coordinate& p,const Polygon *poly) {
+int
+PointLocator::locate(const Coordinate& p,const Polygon *poly)
+{
 	if (poly->isEmpty()) return Location::EXTERIOR;
 
 	const LinearRing *shell=(LinearRing*) poly->getExteriorRing();
@@ -173,5 +156,39 @@ int PointLocator::locate(const Coordinate& p,const Polygon *poly) {
 	return Location::INTERIOR;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.22  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
+ * Revision 1.21  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.20  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.19  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.18  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
+ * Revision 1.17  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.16  2003/10/16 08:50:00  strk
+ * Memory leak fixes. Improved performance by mean of more calls to 
+ * new getCoordinatesRO() when applicable.
+ *
+ * Revision 1.15  2003/10/15 15:47:43  strk
+ * Adapted to new getCoordinatesRO() interface
+ *
+ **********************************************************************/
 

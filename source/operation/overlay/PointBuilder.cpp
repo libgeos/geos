@@ -21,7 +21,7 @@
 #define DEBUG 0
 #endif
 #ifndef COMPUTE_Z
-#define COMPUTE_Z 0
+#define COMPUTE_Z 1
 #endif
 
 namespace geos {
@@ -50,7 +50,8 @@ vector<Node*>*
 PointBuilder::collectNodes(int opCode)
 {
 	vector<Node*>* resultNodeList=new vector<Node*>();
-	// add nodes from edge intersections which have not already been included in the result
+	// add nodes from edge intersections which have not already been
+	// included in the result
 	map<Coordinate,Node*,CoordLT> *nodeMap=op->getGraph()->getNodeMap()->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
@@ -86,7 +87,10 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 #endif // DEBUG
 		EdgeEndStar *ees = n->getEdges();
 		vector<EdgeEnd*>*eev = ees->getEdges();
-		cerr<<"PointBuilder::simplifyPoints: eev:"<<endl;
+#if DEBUG
+		cerr<<"PointBuilder::simplifyPoints: eev ("<<eev->size()<<"):"
+			<<endl;
+#endif // DEBUG
 		for (int i=0; i<eev->size(); i++)
 		{
 			EdgeEnd *ee=(*eev)[i];
@@ -103,10 +107,14 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 	return nonCoveredPointList;
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.11  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

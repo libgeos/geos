@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.5  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *
@@ -676,9 +680,6 @@ public:
 	GeometryGraph();
 	virtual ~GeometryGraph();
 	GeometryGraph(int newArgIndex, const Geometry *newParentGeom);
-//	GeometryGraph(int newArgIndex, const PrecisionModel *newPrecisionModel, int newSRID);
-//	const PrecisionModel* getPrecisionModel();
-//	int getSRID();
 	const Geometry* getGeometry();
 	vector<Node*>* getBoundaryNodes();
 	CoordinateSequence* getBoundaryPoints();
@@ -686,8 +687,10 @@ public:
 	void computeSplitEdges(vector<Edge*> *edgelist);
 	void addEdge(Edge *e);
 	void addPoint(Coordinate& pt);
-	SegmentIntersector* computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes);
-	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,LineIntersector *li,bool includeProper);
+	SegmentIntersector* computeSelfNodes(LineIntersector *li,
+		bool computeRingSelfNodes);
+	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
+		LineIntersector *li,bool includeProper);
 	vector<Edge*> *getEdges();
 	bool hasTooFewPoints();
 	const Coordinate& getInvalidPoint(); 

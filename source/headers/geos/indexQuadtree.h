@@ -282,6 +282,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.8  2004/11/04 08:49:13  strk
  * Unlinked new documentation.
  *
@@ -322,7 +326,7 @@ private:
  * Memory leaks fixes. Const and throw specifications added.
  *
  * Revision 1.14  2004/03/25 02:23:55  ybychkov
- * All "index/*" packages upgraded to JTS 1.4
+ * All "index/" packages upgraded to JTS 1.4
  *
  * Revision 1.13  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h

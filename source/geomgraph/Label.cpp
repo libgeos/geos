@@ -11,22 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geomgraph.h>
 
@@ -217,5 +202,25 @@ string Label::toString() const {
 	return buf;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.3  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
+ * Revision 1.2  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.10  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

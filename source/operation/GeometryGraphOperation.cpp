@@ -57,10 +57,14 @@ GeometryGraphOperation::~GeometryGraphOperation() {
 	delete arg;
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.15  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

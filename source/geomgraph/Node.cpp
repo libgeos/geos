@@ -20,13 +20,16 @@
 #define DEBUG 0
 #endif
 #ifndef COMPUTE_Z
-#define COMPUTE_Z 0
+#define COMPUTE_Z 1
 #endif
 
 namespace geos {
 
 Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Label(0,Location::UNDEF)) {
 	coord=newCoord;
+#if DEBUG
+	cerr<<"Node::Node("<<newCoord.toString()<<")"<<endl;
+#endif
 #if COMPUTE_Z
 	z=0;
 	validz=0;
@@ -127,6 +130,10 @@ string Node::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2004/11/17 08:13:16  strk
+ * Indentation changes.
+ * Some Z_COMPUTATION activated by default.
+ *
  * Revision 1.3  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *
