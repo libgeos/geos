@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.22  2004/07/20 08:34:18  strk
  * Fixed a bug in opDistance.h.
  * Removed doxygen tags from obsoleted CoordinateList.cpp.
@@ -68,9 +72,9 @@ bool CoordinateList::hasRepeatedPoints() const {
 }
 
 /*
-* Returns either the given coordinate array if its length is greater than the
-* given amount, or an empty coordinate array.
-*/
+ * Returns either the given coordinate array if its length is greater than the
+ * given amount, or an empty coordinate array.
+ */
 CoordinateList* atLeastNCoordinatesOrNothing(int n, CoordinateList *c) {
 	return c->size()>=n?c:DefaultCoordinateListFactory::instance()->create(NULL);
 }      

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.1  2004/07/08 19:38:56  strk
  * renamed from *List* equivalents
  *
@@ -34,16 +38,19 @@ bool CoordinateSequence::hasRepeatedPoints() const {
 	return false;
 }
 
-/**
-* Returns either the given coordinate array if its length is greater than the
-* given amount, or an empty coordinate array.
-*/
-CoordinateSequence* atLeastNCoordinatesOrNothing(int n, CoordinateSequence *c) {
+/*
+ * Returns either the given coordinate array if its length is greater than the
+ * given amount, or an empty coordinate array.
+ */
+CoordinateSequence *
+CoordinateSequence::atLeastNCoordinatesOrNothing(int n, CoordinateSequence *c)
+{
 	return c->getSize()>=n?c:DefaultCoordinateSequenceFactory::instance()->create(NULL);
 }      
 
 
-bool CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl) {
+bool
+CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl) {
 	int size=(int) cl->getSize();
 	for(int i=1;i<size; i++) {
 		if (cl->getAt(i-1)==cl->getAt(i)) {

@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.13  2004/07/19 13:19:30  strk
  * Documentation fixes
  *
@@ -507,7 +511,7 @@ double Envelope::distance(const Envelope* env) const {
 	return sqrt(dx*dx+dy*dy);
 }
 
-/// Checks if two Envelopes are equal
+// Checks if two Envelopes are equal
 bool operator==(const Envelope a, const Envelope b) {
 	if (a.isNull()) {
 		return b.isNull();

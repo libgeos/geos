@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.14  2004/07/14 21:17:10  strk
  * added inequality operator for Coordinate
  *
@@ -195,32 +199,9 @@ string Coordinate::toString() const {
 	return result;
 }
 
-////clone()
-////Implemented by copy constructor
-//
-///**
-// * "Fixes" this Coordinate to the PrecisionModel grid.
-// */
-//void Coordinate::makePrecise() {
-//	x = PrecisionModel::makePrecise(x);
-//	y = PrecisionModel::makePrecise(y);
-//}
-//
-///**
-// *  Returns the distance to another <code>Coordinate</code>.
-// *
-// *@param  p  a <code>Coordinate</code> the distance to which has to be computed .
-// *@return        distance between coordinates.
-// */
-//double Coordinate::distance(Coordinate& p) {
-//    double dx = x - p.x;
-//    double dy = y - p.y;
-//    return sqrt(dx * dx + dy * dy);
-//}
-//
-/**
- *  Returns <code>true</code> if <code>a</code> and <code>b</code> have the same values for x,
- *  y and z.
+/*
+ *  Returns <code>true</code> if <code>a</code> and <code>b</code>
+ *  have the same values for x and y.
  *
  *@param  a  a <code>Coordinate</code> with which to do the 3D comparison.
  *@param  b  a <code>Coordinate</code> with which to do the 3D comparison.

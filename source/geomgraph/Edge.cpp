@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.4  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -230,9 +234,9 @@ void Edge::computeIM(IntersectionMatrix *im){
 	updateIM(label,im);
 }
 
-/**
+/*
  * equals is defined to be:
- * <p>
+ * 
  * e1 equals e2
  * <b>iff</b>
  * the coordinates of e1 are the same or the reverse of the coordinates in e2

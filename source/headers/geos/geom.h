@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.17  2004/07/20 08:34:18  strk
  * Fixed a bug in opDistance.h.
  * Removed doxygen tags from obsoleted CoordinateList.cpp.
@@ -198,19 +202,34 @@
 
 using namespace std;
 
+/**
+ * \brief Basic namespace for all GEOS functionalities.
+ */
 namespace geos {
 
+/**
+ * \brief Return a string containing GEOS library version
+ * and functionally equivalent JTS version.
+ */
 string version();
 
 /// Geometry types
 enum GeometryTypeId {
+	/// a point
 	GEOS_POINT,
+	/// a linestring
 	GEOS_LINESTRING,
+	/// a linear ring (linestring with 1st point == last point)
 	GEOS_LINEARRING,
+	/// a polygon
 	GEOS_POLYGON,
+	/// a collection of points
 	GEOS_MULTIPOINT,
+	/// a collection of linestrings
 	GEOS_MULTILINESTRING,
+	/// a collection of polygons
 	GEOS_MULTIPOLYGON,
+	/// a collection of heterogeneus geometries
 	GEOS_GEOMETRYCOLLECTION
 };
 

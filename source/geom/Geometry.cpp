@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.67  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.66  2004/07/20 08:34:18  strk
  * Fixed a bug in opDistance.h.
  * Removed doxygen tags from obsoleted CoordinateList.cpp.
@@ -179,6 +183,9 @@ namespace geos {
  * If you need to construct geometric shaped geometries, you
  * can use geos::GeometricShapeFactory.
  *
+ * GEOS version info (as a string) can be obtained using
+ * geos::version().
+ *
  * \section io_sect Input / Output
  *
  * For WKT input/output you can use geos::WKTReader and geos::WKTWriter
@@ -194,8 +201,8 @@ namespace geos {
  */ 
 
 
-/**
- * \brief Return a string containing GEOS library version
+/*
+ * Return a string containing GEOS library version
  * and functionally equivalent JTS version.
  */
 string

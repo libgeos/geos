@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.27  2004/07/12 15:42:03  strk
  * Fixed maximumPreciseValue scope
  *
@@ -72,10 +76,12 @@ namespace geos {
 
 const double PrecisionModel::maximumPreciseValue=9007199254740992.0;
 
-/**
-* Implementation of rint() for Visual C++
-*/
-double rint_vc(double val) {
+/*
+ * \brief Implementation of rint() for Visual C++
+ */
+static double
+rint_vc(double val)
+{
 	double n;
 	double f=fabs(modf(val,&n));
 	if (val>=0) {

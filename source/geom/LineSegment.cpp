@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/07/21 09:55:24  strk
+ * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
+ * Documentation fixes.
+ *
  * Revision 1.15  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -420,14 +424,14 @@ LineSegment::intersection(const LineSegment *line) const
 }
 
 
-/**
-*  Returns <code>true</code> if <code>other</code> has the same values for
-*  its points.
-*
-*@param  other  a <code>LineSegment</code> with which to do the comparison.
-*@return        <code>true</code> if <code>other</code> is a <code>LineSegment</code>
-*      with the same values for the x and y ordinates.
-*/
+/*
+ *  Returns <code>true</code> if <code>a</code> has the same values of
+ *  <code>b</code> for its points.
+ *
+ * @return  <code>true</code> if <code>other</code> is a
+ *          <code>LineSegment</code>
+ *          with the same values for the x and y ordinates.
+ */
 bool operator==(const LineSegment a, const LineSegment b) {
 	return a.p0==b.p0 && a.p1==b.p1;
 }
