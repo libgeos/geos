@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.32  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
  * Revision 1.31  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -55,6 +58,7 @@ Polygon::Polygon(){
 	shell=new LinearRing(NULL,NULL);
 	holes=new vector<Geometry *>();
 }
+
 Polygon::Polygon(const Polygon &p): Geometry(p.getFactory()){
 	shell=new LinearRing(*p.shell);
 	holes=new vector<Geometry *>();

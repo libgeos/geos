@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
  * Revision 1.3  2004/04/20 12:47:57  strk
  * MinimumDiameter leaks plugged.
  *
@@ -200,6 +203,7 @@ void MinimumDiameter::computeConvexRingMinDiameter(const CoordinateList* pts){
 		seg->p1=pts->getAt(i + 1);
 		currMaxIndex=findMaxPerpDistance(pts, seg, currMaxIndex);
 	}
+	delete seg;
 }
 
 int

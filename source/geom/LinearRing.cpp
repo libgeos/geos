@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
  * Revision 1.15  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -51,8 +54,9 @@ LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
 *      <code>LinearRing</code>
 * @deprecated Use GeometryFactory instead
 */
-LinearRing::LinearRing(const CoordinateList* points, const PrecisionModel* pm,
-	int SRID): LineString(points, new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)) {
+LinearRing::LinearRing(const CoordinateList* pts, const PrecisionModel* pm,
+	int SRID): LineString(pts, pm, SRID)
+{
 	validateConstruction();	
 }
 

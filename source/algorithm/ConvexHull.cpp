@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
  * Revision 1.8  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -305,7 +308,7 @@ Geometry* ConvexHull::lineOrPolygon(CoordinateList *newCoordinates) {
 		delete cl1;
 		return ret;
 	}
-	LinearRing *linearRing=new LinearRing(coordinates,geometry->getPrecisionModel(),geometry->getSRID());
+	LinearRing *linearRing=new LinearRing(coordinates, geometry->getFactory());
 	delete coordinates;
 	return factory->createPolygon(linearRing,NULL);
 }

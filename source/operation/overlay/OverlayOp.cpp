@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
  * Revision 1.16  2004/04/14 13:14:29  strk
  * Removed deletion of externally pointed GeometryFactory from OverlayOp destructor
  *
@@ -498,6 +501,7 @@ void OverlayOp::computeOverlay(int opCode)
 		for(int i=0;i<(int)gv->size();i++) {
 			resultPolyList->push_back((Polygon*)(*gv)[i]);
 		}
+		delete gv;
 		lineBuilder=new LineBuilder(this,geomFact,ptLocator);
 		resultLineList=lineBuilder->build(opCode);
 		pointBuilder=new PointBuilder(this,geomFact,ptLocator);

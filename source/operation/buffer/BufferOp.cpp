@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
  * Revision 1.24  2004/04/20 10:14:20  strk
  * Memory leaks removed.
  *
@@ -241,7 +244,9 @@ BufferOp::bufferOriginalPrecision()
 	delete bufBuilder;
 }
 
-void BufferOp::bufferFixedPrecision(int precisionDigits) {
+void
+BufferOp::bufferFixedPrecision(int precisionDigits)
+{
 	double sizeBasedScaleFactor=precisionScaleFactor(argGeom, distance, precisionDigits);
 	PrecisionModel *fixedPM=new PrecisionModel(sizeBasedScaleFactor);
 	// don't change the precision model of the Geometry, just reduce the precision
@@ -258,11 +263,13 @@ void BufferOp::bufferFixedPrecision(int precisionDigits) {
 	} catch (...) {
 		delete bufBuilder;
 		delete reducer;
+		delete fixedPM;
 		delete reducedGeom;
 		throw;
 	}
 	delete bufBuilder;
 	delete reducer;
+	delete fixedPM;
 	delete reducedGeom;
 }
 

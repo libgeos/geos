@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2004/04/20 13:24:15  strk
+ * More leaks removed.
+ *
  * Revision 1.29  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -71,8 +74,12 @@ LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 *      <code>LineString</code>
 * @deprecated Use GeometryFactory instead 
 */  
-LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm,
-					   int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
+
+////////////////////////////////////////////////////////////////////
+// WARNING! This constructor is deprecated (and bogus) USE 
+// LineString(const CoordinateList *, const GeometryFactory *)
+////////////////////////////////////////////////////////////////////
+LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm, int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
 	if (pts==NULL) {
 		pts=CoordinateListFactory::internalFactory->createCoordinateList();
 	}
