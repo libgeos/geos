@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.53  2004/04/14 07:29:43  strk
+ * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
+ *
  * Revision 1.52  2004/04/13 08:15:51  strk
  * Changed all 'long long' with int64.
  * Changed all 'long long' constants to end with two Ls.
@@ -791,7 +794,7 @@ public:
 	void throw_exception ();
 	Geometry(void);
 	Geometry(const Geometry &geom);
-	Geometry(GeometryFactory *newFactory);
+	Geometry(const GeometryFactory *newFactory);
 	/**
 	* Gets the factory which contains the context in which this geometry was created.
 	*
@@ -1636,6 +1639,12 @@ public:
 	* @param SRID the SRID to use
 	*/
 	GeometryFactory(const PrecisionModel* pm, int newSRID);
+	/**
+	* Copy constructor
+	*
+	* @param gf the GeometryFactory to clone from
+	*/
+	GeometryFactory(const GeometryFactory &gf);
 	virtual ~GeometryFactory();
 
 //Skipped a lot of list to array convertors

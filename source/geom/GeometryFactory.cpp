@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.32  2004/04/14 07:29:43  strk
+ * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
+ *
  * Revision 1.31  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -64,7 +67,7 @@ GeometryFactory::GeometryFactory() {
 * PrecisionModel, spatial-reference ID, and CoordinateSequence implementation.
 */
 GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateListFactory *nCoordinateListFactory) {
-	precisionModel=pm;
+	precisionModel=new PrecisionModel(*pm);
 	coordinateListFactory=nCoordinateListFactory;
 	SRID=newSRID;
 }
@@ -88,7 +91,7 @@ GeometryFactory::GeometryFactory(CoordinateListFactory *nCoordinateListFactory) 
 * @param precisionModel the PrecisionModel to use
 */
 GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
-	precisionModel=pm;
+	precisionModel=new PrecisionModel(*pm);
 	SRID=0;
 	coordinateListFactory=CoordinateListFactory::internalFactory;
 }
@@ -102,9 +105,15 @@ GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
 * @param SRID the SRID to use
 */
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID){
-    precisionModel=pm;
+    precisionModel=new PrecisionModel(*pm);
     SRID=newSRID;
 	coordinateListFactory=CoordinateListFactory::internalFactory;
+}
+
+GeometryFactory::GeometryFactory(const GeometryFactory &gf){
+    precisionModel=new PrecisionModel(*(gf.precisionModel));
+    SRID=gf.SRID;
+    coordinateListFactory=gf.coordinateListFactory;
 }
 GeometryFactory::~GeometryFactory(){
 	delete precisionModel;

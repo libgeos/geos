@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.41  2004/04/14 07:29:43  strk
+ * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
+ *
  * Revision 1.40  2004/04/01 10:44:33  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -53,8 +56,8 @@ namespace geos {
 GeometryComponentFilter* Geometry::geometryChangedFilter=new GeometryComponentFilter();
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
-Geometry::Geometry(GeometryFactory *newFactory) {
-	factory=newFactory;
+Geometry::Geometry(const GeometryFactory *newFactory) {
+	factory=new GeometryFactory(*newFactory);
 	SRID=factory->getSRID();
 	envelope=new Envelope();
 	userData=NULL;
@@ -68,7 +71,7 @@ Geometry::Geometry() {
 }
 
 Geometry::Geometry(const Geometry &geom) {
-	factory=geom.getFactory();
+	factory=new GeometryFactory(*(geom.factory));
 	envelope=new Envelope(*(geom.envelope));
 	SRID=geom.getSRID();
 	userData=NULL;
@@ -599,7 +602,7 @@ double Geometry::getLength() const {
 Geometry::~Geometry(){
 	delete factory;
 	delete envelope;
-	delete userData;
+	//delete userData; /* TODO: make this a Template type (not void*) */
 }
 
 bool lessThen(Coordinate& a, Coordinate& b) {
