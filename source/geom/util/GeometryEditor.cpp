@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/05/05 12:20:22  strk
+ * Memory leak plugged in editGeometryCollection
+ *
  * Revision 1.5  2004/05/03 17:15:38  strk
  * leaks on exception fixed.
  *
@@ -144,6 +147,7 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 	else {
 		ret = factory->createGeometryCollection(geometries);
 	}
+	delete newCollection;
 	delete geometries;
 	return ret;
 }
