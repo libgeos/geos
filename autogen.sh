@@ -2,7 +2,8 @@
 
 OSTYPE=`uname -s`
 
-AMFLAGS="--add-missing --copy --force-missing"
+#AMFLAGS="--add-missing --copy --force-missing"
+AMFLAGS="--add-missing --copy"
 if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
    AMFLAGS=$AMFLAGS" --include-deps";
 fi
