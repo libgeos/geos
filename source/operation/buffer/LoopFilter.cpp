@@ -43,7 +43,7 @@ void LoopFilter::addPoint(Coordinate p) {
 * If none exists, return 0
 */
 int LoopFilter::checkForLoop(CoordinateList *pts,int startIndex){
-	Coordinate& startPt=pts->getAt(startIndex);
+	const Coordinate& startPt=pts->getAt(startIndex);
 	Envelope *env=new Envelope();
 	env->expandToInclude(startPt);
 	int endIndex=startIndex;

@@ -22,7 +22,7 @@ namespace geos {
 * result of <b>rounding</b> points which lie on the line,
 * but not safe to use for <b>truncated</b> points.
 */
-double LineIntersector::computeEdgeDistance(Coordinate& p,Coordinate& p0,Coordinate& p1) {
+double LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,const Coordinate& p1) {
 	double dx=fabs(p1.x-p0.x);
 	double dy=fabs(p1.y-p0.y);
 	double dist=-1.0;	// sentinel value
@@ -47,7 +47,7 @@ double LineIntersector::computeEdgeDistance(Coordinate& p,Coordinate& p0,Coordin
 * This function is non-robust, since it may compute the square of large numbers.
 * Currently not sure how to improve this.
 */
-double LineIntersector::nonRobustComputeEdgeDistance(Coordinate& p,Coordinate& p1,Coordinate& p2) {
+double LineIntersector::nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) {
 	double dx=p.x-p1.x;
 	double dy=p.y-p1.y;
 	double dist=sqrt(dx*dx+dy*dy);   // dummy value
@@ -72,18 +72,18 @@ LineIntersector::LineIntersector() {
 LineIntersector::~LineIntersector() {
 }
 
-void LineIntersector::setMakePrecise(PrecisionModel *newPM){
+void LineIntersector::setMakePrecise(const PrecisionModel *newPM){
 	precisionModel=newPM;
 }
 
-bool LineIntersector::isCollinear() {
+bool LineIntersector::isCollinear() const {
 	return result==COLLINEAR;
 }
 
 /**
 * Computes the intersection of the lines p1-p2 and p3-p4
 */
-void LineIntersector::computeIntersection(Coordinate& p1,Coordinate& p2,Coordinate& p3,Coordinate& p4) {
+void LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4) {
 	inputLines[0][0]=p1;
 	inputLines[0][1]=p2;
 	inputLines[1][0]=p3;
@@ -92,7 +92,7 @@ void LineIntersector::computeIntersection(Coordinate& p1,Coordinate& p2,Coordina
 	//numIntersects++;
 }
 
-string LineIntersector::toString() {
+string LineIntersector::toString() const {
 	string str=inputLines[0][0].toString()+" "
 			  +inputLines[0][1].toString()+" "
 			  +inputLines[1][0].toString()+" "
@@ -109,7 +109,7 @@ string LineIntersector::toString() {
 	return str;
 }
 
-bool LineIntersector::isEndPoint() {
+bool LineIntersector::isEndPoint() const {
 	return hasIntersection()&&!isProperVar;
 }
 
@@ -118,14 +118,14 @@ bool LineIntersector::isEndPoint() {
 *
 * @return true if the input geometries intersect
 */
-bool LineIntersector::hasIntersection() {
+bool LineIntersector::hasIntersection() const {
 	return result!=DONT_INTERSECT;
 }
 
 /**
 * Returns the number of intersection points found.  This will be either 0, 1 or 2.
 */
-int LineIntersector::getIntersectionNum() {
+int LineIntersector::getIntersectionNum() const {
 	return result;
 }
 
@@ -136,7 +136,7 @@ int LineIntersector::getIntersectionNum() {
 *
 * @return the intIndex'th intersection point
 */
-Coordinate& LineIntersector::getIntersection(int intIndex){
+const Coordinate& LineIntersector::getIntersection(int intIndex) const {
 	return intPt[intIndex];
 }
 
@@ -168,7 +168,7 @@ void LineIntersector::computeIntLineIndex() {
 *
 * @return true if the input point is one of the intersection points.
 */
-bool LineIntersector::isIntersection(Coordinate& pt) {
+bool LineIntersector::isIntersection(const Coordinate& pt) const {
 	for (int i=0;i<result;i++) {
 		if (intPt[i].equals2D(pt)) {
 			return true;
@@ -191,7 +191,7 @@ bool LineIntersector::isIntersection(Coordinate& pt) {
 *
 * @return true if the intersection is proper
 */
-bool LineIntersector::isProper() {
+bool LineIntersector::isProper() const {
 	return hasIntersection()&&isProperVar;
 }
 
@@ -204,7 +204,7 @@ bool LineIntersector::isProper() {
 *
 * @return the intIndex'th intersection point in the direction of the specified input line segment
 */
-Coordinate& LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex) {
+const Coordinate& LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex) {
 	// lazily compute int line array
 	computeIntLineIndex();
 	return intPt[intLineIndex[segmentIndex][intIndex]];
@@ -244,7 +244,7 @@ void LineIntersector::computeIntLineIndex(int segmentIndex) {
 *
 * @return the edge distance of the intersection point
 */
-double LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) {
+double LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const {
 	double dist=computeEdgeDistance(intPt[intIndex],inputLines[segmentIndex][0],inputLines[segmentIndex][1]);
 	return dist;
 }

@@ -28,7 +28,7 @@ Label* GraphComponent::getLabel() {
 }
 
 void GraphComponent::setLabel(Label* newLabel){
-	this->label=newLabel;
+	label=newLabel;
 }
 
 void GraphComponent::setInResult(bool isInResult) {

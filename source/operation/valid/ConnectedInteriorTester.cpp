@@ -21,7 +21,7 @@ Coordinate& ConnectedInteriorTester::getCoordinate() {
 	return disconnectedRingcoord;
 }
 
-Coordinate& ConnectedInteriorTester::findDifferentPoint(CoordinateList *coord,Coordinate& pt){
+const Coordinate& ConnectedInteriorTester::findDifferentPoint(const CoordinateList *coord, const Coordinate& pt){
 	for(int i=0;i<coord->getSize();i++) {
 		if(!(coord->getAt(i)==pt))
 			return coord->getAt(i);
@@ -89,28 +89,28 @@ vector<EdgeRing*>* ConnectedInteriorTester::buildEdgeRings(vector<EdgeEnd*> *dir
 * Mark all the edges for the edgeRings corresponding to the shells
 * of the input polygons.  Note only ONE ring gets marked for each shell.
 */
-void ConnectedInteriorTester::visitShellInteriors(Geometry *g, PlanarGraph *graph) {
+void ConnectedInteriorTester::visitShellInteriors(const Geometry *g, PlanarGraph *graph) {
 	if (typeid(*g)==typeid(Polygon)) {
-		Polygon *p=(Polygon*) g;
+		const Polygon *p=(Polygon*) g;
 		visitInteriorRing(p->getExteriorRing(),graph);
 	}
 	if (typeid(*g)==typeid(MultiPolygon)) {
-		MultiPolygon *mp=(MultiPolygon*) g;
+		const MultiPolygon *mp=(MultiPolygon*) g;
 		for(int i=0; i<(int)mp->getNumGeometries();i++) {
-			Polygon *p=(Polygon*)mp->getGeometryN(i);
+			const Polygon *p=(Polygon*)mp->getGeometryN(i);
 			visitInteriorRing(p->getExteriorRing(),graph);
 		}
 	}
 }
 
-void ConnectedInteriorTester::visitInteriorRing(LineString *ring, PlanarGraph *graph) {
+void ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph *graph) {
 	CoordinateList *pts=ring->getCoordinates();
-	Coordinate& pt0=pts->getAt(0);
+	const Coordinate& pt0=pts->getAt(0);
     /**
      * Find first point in coord list different to initial point.
      * Need special check since the first point may be repeated.
      */
-    Coordinate& pt1=findDifferentPoint(pts,pt0);
+    	const Coordinate& pt1=findDifferentPoint(pts,pt0);
 	Edge *e=graph->findEdgeInSameDirection(pt0,pt1);
 	DirectedEdge *de=(DirectedEdge*) graph->findEdgeEnd(e);
 	DirectedEdge *intDe=NULL;

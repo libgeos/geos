@@ -72,8 +72,8 @@ void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
 
 	CoordinateList *pts=minDe->getEdge()->getCoordinates();
 	Assert::isTrue(minIndex>0 && minIndex<pts->getSize(), "rightmost point expected to be interior vertex of edge");
-	Coordinate& pPrev=pts->getAt(minIndex-1);
-	Coordinate& pNext=pts->getAt(minIndex+1);
+	const Coordinate& pPrev=pts->getAt(minIndex-1);
+	const Coordinate& pNext=pts->getAt(minIndex+1);
 	int orientation=cga->computeOrientation(minCoord,pNext,pPrev);
 	bool usePrev=false;
 	// both segments are below min point

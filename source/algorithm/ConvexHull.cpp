@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.6  2003/10/11 01:56:08  strk
+* Code base padded with 'const' keywords ;)
+*
+*/
 #include "../headers/geosAlgorithm.h"
 #include "../headers/platform.h"
 #include "../headers/util.h"
@@ -14,24 +20,34 @@ ConvexHull::~ConvexHull() {
 	delete pointLocator;
 }
 
-Geometry* ConvexHull::getConvexHull(Geometry *newGeometry) {
+/*
+* Fixed to leave argument alone.
+*/
+Geometry* ConvexHull::getConvexHull(const Geometry *newGeometry) {
 	geometry=newGeometry;
 	UniqueCoordinateArrayFilter *filter=new UniqueCoordinateArrayFilter();
-	geometry->apply(filter);
-	CoordinateList *pts=filter->getCoordinates();
+	geometry->apply_ro(filter);
+
+	// Work with a copy of filtered coordinates
+	CoordinateList *pts =
+		CoordinateListFactory::internalFactory->createCoordinateList(
+				filter->getCoordinates());
+
 	if (pts->getSize()==0) {
 		Geometry *g=new GeometryCollection(new vector<Geometry*>(),geometry->getPrecisionModel(),geometry->getSRID());
+		delete pts;
 		delete filter;
 		return g;
 	}
 	if (pts->getSize()==1) {
 		Geometry *g=new Point(pts->getAt(0),geometry->getPrecisionModel(),geometry->getSRID());
+		delete pts;
 		delete filter;
 		return g;
 	}
 	if (pts->getSize()==2) {
-		pts=CoordinateListFactory::internalFactory->createCoordinateList(pts);
 		Geometry *g=new LineString(pts,geometry->getPrecisionModel(),geometry->getSRID());
+		delete pts;
 		delete filter;
 		return g;
 	}
@@ -43,7 +59,7 @@ Geometry* ConvexHull::getConvexHull(Geometry *newGeometry) {
 		// Use Graham scan to find convex hull.
 		cH=grahamScan(preSort(rpts));
 		delete filter;
-		if ( rpts != pts ) delete rpts; // sometimes reduce returns untouched input
+		delete rpts; 
 	} else {
 		// Use Graham scan to find convex hull.
 		cH=grahamScan(preSort(pts));
@@ -51,11 +67,13 @@ Geometry* ConvexHull::getConvexHull(Geometry *newGeometry) {
 	}
 	// Convert array to linear ring.
 	Geometry *g=lineOrPolygon(cH);
+	delete pts;
 	delete cH;
 	return g;
 }
 
-CoordinateList* ConvexHull::reduce(CoordinateList *pts) {
+// Always return a new CoordinateList --strk
+CoordinateList* ConvexHull::reduce(const CoordinateList *pts) {
 	auto_ptr<BigQuad> bigQuad(makeBigQuad(pts));
 	// Build a linear ring defining a big poly.
 	CoordinateList *bigPoly=CoordinateListFactory::internalFactory->createCoordinateList();
@@ -71,7 +89,7 @@ CoordinateList* ConvexHull::reduce(CoordinateList *pts) {
 	}
 	if (bigPoly->getSize()<3) {
 		delete bigPoly;
-		return pts;
+		return CoordinateListFactory::internalFactory->createCoordinateList(pts);
 	}
 	bigPoly->add(bigQuad->westmost);
 	LinearRing *bQ=new LinearRing(bigPoly,geometry->getPrecisionModel(),geometry->getSRID());
@@ -110,7 +128,7 @@ CoordinateList* ConvexHull::preSort(CoordinateList *pts) {
 }
 
 // returns a newly allocated CoordinateList object
-CoordinateList* ConvexHull::grahamScan(CoordinateList *c) {
+CoordinateList* ConvexHull::grahamScan(const CoordinateList *c) {
 	Coordinate p;
 	Coordinate p1;
 	Coordinate p2;
@@ -210,7 +228,7 @@ bool ConvexHull::isBetween(Coordinate c1, Coordinate c2, Coordinate c3) {
 	return false;
 }
 
-BigQuad* ConvexHull::makeBigQuad(CoordinateList *pts) {
+BigQuad* ConvexHull::makeBigQuad(const CoordinateList *pts) {
 	BigQuad *bigQuad=new BigQuad();
 	bigQuad->northmost=pts->getAt(0);
 	bigQuad->southmost=pts->getAt(0);

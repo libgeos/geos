@@ -66,13 +66,15 @@ CoordinateList* Edge::getCoordinates(){
 	return pts;
 }
 
-Coordinate& Edge::getCoordinate(int i){
+const Coordinate& Edge::getCoordinate(int i){
 	return pts->getAt(i);
 }
 
-Coordinate& Edge::getCoordinate(){
+// const or new return value ??
+const Coordinate& Edge::getCoordinate(){
 	if (pts->getSize()>0) return pts->getAt(0);
-	return *(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
+	auto_ptr<const Coordinate> ret(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
+	return *ret;
 }
 
 Depth* Edge::getDepth() {
@@ -146,13 +148,13 @@ void Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex
  * to use the higher of the two possible segmentIndexes
  */
 void Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex){
-	Coordinate& intPt=li->getIntersection(intIndex);
+	const Coordinate& intPt=li->getIntersection(intIndex);
 	int normalizedSegmentIndex=segmentIndex;
 	double dist=li->getEdgeDistance(geomIndex,intIndex);
 	// normalize the intersection point location
 	int nextSegIndex=normalizedSegmentIndex+1;
 	if (nextSegIndex<pts->getSize()) {
-		Coordinate& nextPt=pts->getAt(nextSegIndex);
+		const Coordinate& nextPt=pts->getAt(nextSegIndex);
         // Normalize segment index if intPt falls on vertex
         // The check for point equality is 2D only - Z values are ignored
 		if (intPt.equals2D(nextPt)) {

@@ -3,19 +3,19 @@
 
 namespace geos {
 
-vector<Geometry*>* LineExtracterFilter::getLines(Geometry *geom) {
-	vector<Geometry*> *lns=new vector<Geometry*>();
+vector<const Geometry*>* LineExtracterFilter::getLines(const Geometry *geom) {
+	vector<const Geometry*> *lns=new vector<const Geometry*>();
 	LineExtracterFilter *l=new LineExtracterFilter(lns);
-	geom->apply(l);
+	geom->apply_ro(l);
 	delete l;
 	return lns;
 }
 
-LineExtracterFilter::LineExtracterFilter(vector<Geometry*> *newLines){
+LineExtracterFilter::LineExtracterFilter(vector<const Geometry*> *newLines){
 	lines=newLines;
 }
 
-void LineExtracterFilter::filter(Geometry *geom) {
+void LineExtracterFilter::filter_ro(const Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString) || typeid(*geom)==typeid(LinearRing)) lines->push_back(geom);
 }
 }

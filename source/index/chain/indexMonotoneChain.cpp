@@ -22,8 +22,8 @@ indexMonotoneChain::~indexMonotoneChain() {
 
 Envelope* indexMonotoneChain::getEnvelope() {
 	if (env==NULL) {
-		Coordinate& p0=pts->getAt(start);
-		Coordinate& p1=pts->getAt(end);
+		const Coordinate& p0=pts->getAt(start);
+		const Coordinate& p1=pts->getAt(end);
 		env=new Envelope(p0,p1);
 	}
 	return env;
@@ -61,8 +61,8 @@ void indexMonotoneChain::select(Envelope *searchEnv,MonotoneChainSelectAction *m
 }
 
 void indexMonotoneChain::computeSelect(Envelope *searchEnv,int start0,int end0,MonotoneChainSelectAction *mcs ) {
-	Coordinate& p0=pts->getAt(start0);
-	Coordinate& p1=pts->getAt(end0);
+	const Coordinate& p0=pts->getAt(start0);
+	const Coordinate& p1=pts->getAt(end0);
 	env1->init(p0,p1);
 	//Debug.println("trying:"+p0+p1+" [ "+start0+","+end0+" ]");
 	// terminating condition for the recursion
@@ -91,10 +91,10 @@ void indexMonotoneChain::computeOverlaps(indexMonotoneChain *mc,MonotoneChainOve
 }
 
 void indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,int start1,int end1,MonotoneChainOverlapAction *mco){
-	Coordinate& p00=pts->getAt(start0);
-	Coordinate& p01=pts->getAt(end0);
-	Coordinate& p10=mc->pts->getAt(start1);
-	Coordinate& p11=mc->pts->getAt(end1);
+	const Coordinate& p00=pts->getAt(start0);
+	const Coordinate& p01=pts->getAt(end0);
+	const Coordinate& p10=mc->pts->getAt(start1);
+	const Coordinate& p11=mc->pts->getAt(end1);
 	//Debug.println("computeIntersectsForChain:"+p00+p01+p10+p11);
 	// terminating condition for the recursion
 	if (end0-start0==1 && end1-start1==1) {

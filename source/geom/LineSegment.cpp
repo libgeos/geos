@@ -1,3 +1,11 @@
+/*
+* $Log$
+* Revision 1.9  2003/10/11 01:56:08  strk
+* Code base padded with 'const' keywords ;)
+*
+*/
+
+#include "stdio.h"
 #include "../headers/geom.h"
 #include "../headers/geosAlgorithm.h"
 
@@ -14,7 +22,7 @@ LineSegment::LineSegment(void){}
  *@param  c0      start of the <code>LineSegment</code>.
  *@param  c1      end of the <code>LineSegment</code>.
  */
-LineSegment::LineSegment(Coordinate& c0, Coordinate& c1){
+LineSegment::LineSegment(const Coordinate& c0, const Coordinate& c1){
 	p0=c0;
 	p1=c1;
 }
@@ -30,19 +38,19 @@ LineSegment::LineSegment(const LineSegment &ls):p0(ls.p0),p1(ls.p1) {}
  *@param  c0      new start of the <code>LineSegment</code>.
  *@param  c1      new end of the <code>LineSegment</code>.
  */
-void LineSegment::setCoordinates(Coordinate& c0, Coordinate& c1) {
+void LineSegment::setCoordinates(const Coordinate& c0, const Coordinate& c1) {
 	p0.x = c0.x;
 	p0.y = c0.y;
 	p1.x = c1.x;
 	p1.y = c1.y;
 }
 
-Coordinate& LineSegment::getCoordinate(int i) {
+const Coordinate& LineSegment::getCoordinate(int i) const {
 	if (i==0) return p0;
 	return p1;
 }
 
-void LineSegment::setCoordinates(LineSegment ls) {
+void LineSegment::setCoordinates(const LineSegment ls) {
 	setCoordinates(ls.p0,ls.p1);
 }
 
@@ -50,7 +58,7 @@ void LineSegment::setCoordinates(LineSegment ls) {
 * Computes the length of the line segment.
 * @return the length of the line segment
 */
-double LineSegment::getLength() {
+double LineSegment::getLength() const {
 	return p0.distance(p1);
 }
 
@@ -75,21 +83,21 @@ void LineSegment::normalize(){
 /**
 * @return the angle this segment makes with the x-axis (in radians)
 */
-double LineSegment::angle() {
+double LineSegment::angle() const {
 	return atan2(p1.y-p0.y,p1.x-p0.x);
 }
 
 /**
 * Computes the distance between this line segment and another one.
 */
-double LineSegment::distance(LineSegment ls) {
+double LineSegment::distance(const LineSegment ls) const {
 	return CGAlgorithms::distanceLineLine(p0,p1,ls.p0,ls.p1);
 }
 
 /**
 * Computes the distance between this line segment and another one.
 */
-double LineSegment::distance(Coordinate& p) {
+double LineSegment::distance(const Coordinate& p) const {
 	return CGAlgorithms::distancePointLine(p,p0,p1);
 }
 
@@ -99,7 +107,7 @@ double LineSegment::distance(Coordinate& p) {
 * by which the vector for this segment must be multiplied to
 * equal the vector for the projection of p.
 */
-double LineSegment::projectionFactor(Coordinate& p) {
+double LineSegment::projectionFactor(const Coordinate& p) const {
 	if (p==p0) return 0.0;
 	if (p==p1) return 1.0;
     // Otherwise, use comp.graphics.algorithms Frequently Asked Questions method
@@ -128,10 +136,10 @@ double LineSegment::projectionFactor(Coordinate& p) {
 * may lie outside the line segment.  If this is the case,
 * the projection factor will lie outside the range [0.0, 1.0].
 */
-Coordinate& LineSegment::project(Coordinate& p) {
-	if (p==p0 || p==p1) return *(new Coordinate(p));
+Coordinate* LineSegment::project(const Coordinate& p) const {
+	if (p==p0 || p==p1) return new Coordinate(p);
 	double r=projectionFactor(p);
-	return *(new Coordinate(p0.x+r*(p1.x-p0.x),p0.y+r*(p1.y-p0.y)));
+	return new Coordinate(p0.x+r*(p1.x-p0.x),p0.y+r*(p1.y-p0.y));
 }
 
 /**
@@ -146,19 +154,18 @@ Coordinate& LineSegment::project(Coordinate& p) {
 * @param seg the line segment to project
 * @return the projected line segment, or <code>null</code> if there is no overlap
 */
-LineSegment* LineSegment::project(LineSegment *seg) {
+LineSegment* LineSegment::project(const LineSegment *seg) const {
 	double pf0=projectionFactor(seg->p0);
 	double pf1=projectionFactor(seg->p1);
 	// check if segment projects at all
 	if (pf0>=1.0 && pf1>=1.0) return NULL;
 	if (pf0<=0.0 && pf1<=0.0) return NULL;
-	Coordinate& newp0=project(seg->p0);
-	if (pf0<0.0) newp0=p0;
-	if (pf0>1.0) newp0=p1;
-	Coordinate& newp1=project(seg->p1);
-	if (pf1<0.0) newp1=p0;
-	if (pf1>1.0) newp1=p1;
-	return new LineSegment(newp0,newp1);
+	Coordinate *newp0=project(seg->p0);
+	Coordinate *newp1=project(seg->p1);
+	LineSegment *ret = new LineSegment(*newp0,*newp1);
+	delete newp0;
+	delete newp1;
+	return ret;
 }
 
 /**
@@ -166,7 +173,7 @@ LineSegment* LineSegment::project(LineSegment *seg) {
 * @param p the point to find the closest point to
 * @return a Coordinate which is the closest point on the line segment to the point p
 */
-Coordinate& LineSegment::closestPoint(Coordinate& p) {
+Coordinate* LineSegment::closestPoint(const Coordinate& p) const {
 	double factor=projectionFactor(p);
 	if (factor>0 && factor<1) {
 		return project(p);
@@ -174,8 +181,8 @@ Coordinate& LineSegment::closestPoint(Coordinate& p) {
 	double dist0=p0.distance(p);
 	double dist1=p1.distance(p);
 	if (dist0<dist1)
-		return p0;
-	return p1;
+		return new Coordinate(p0);
+	return new Coordinate(p1);
 }
 
 /**
@@ -187,7 +194,7 @@ Coordinate& LineSegment::closestPoint(Coordinate& p) {
 *@return    a negative integer, zero, or a positive integer as this <code>LineSegment</code>
 *      is less than, equal to, or greater than the specified <code>LineSegment</code>
 */
-int LineSegment::compareTo(LineSegment other) {
+int LineSegment::compareTo(LineSegment other) const {
 	int comp0=p0.compareTo(other.p0);
 	if (comp0!=0) return comp0;
 	return p1.compareTo(other.p1);
@@ -202,19 +209,15 @@ int LineSegment::compareTo(LineSegment other) {
 *@return        <code>true</code> if <code>other</code> is a <code>LineSegment</code>
 *      with the same values for the x and y ordinates.
 */
-bool LineSegment::equalsTopo(LineSegment other) {
+bool LineSegment::equalsTopo(const LineSegment other) const {
 	return (p0==other.p0 && p1==other.p1) || (p0==other.p1 && p1==other.p0);
 }
 
-string LineSegment::toString() {
+string LineSegment::toString() const {
 	string out="LINESTRING( ";
-	out+=p0.x;
-	out+=" ";
-	out+=p0.y;
-	out+=", ";
-	out+=p1.x;
-	out+=" ";
-	out+=p1.y;
+	char buf[256];
+	sprintf(buf, "%f %f, %f %f", p0.x, p0.y, p1.x, p1.y);
+	out += buf;
 	out+=")";
 	return out;
 }
@@ -227,7 +230,7 @@ string LineSegment::toString() {
 *@return        <code>true</code> if <code>other</code> is a <code>LineSegment</code>
 *      with the same values for the x and y ordinates.
 */
-bool operator==(LineSegment a,LineSegment b) {
+bool operator==(const LineSegment a, const LineSegment b) {
 	return a.p0==b.p0 && a.p1==b.p1;
 }
 }

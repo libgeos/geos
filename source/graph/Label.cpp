@@ -2,7 +2,7 @@
 
 namespace geos {
 
-Label* Label::toLineLabel(Label* label) {
+Label* Label::toLineLabel(const Label* label) {
 	Label *lineLabel=new Label(Location::UNDEF);
 	for (int i=0; i<2; i++) {
 		lineLabel->setLocation(i,label->getLocation(i));
@@ -43,7 +43,7 @@ Label::Label() {
 	elt[1]=new TopologyLocation(Location::UNDEF);
 }
 
-Label::Label(Label *l) {
+Label::Label(const Label *l) {
 	elt[0]=new TopologyLocation(l->elt[0]);
 	elt[1]=new TopologyLocation(l->elt[1]);
 }
@@ -67,7 +67,7 @@ Label::Label(int geomIndex,int onLoc,int leftLoc,int rightLoc){
  * Construct a Label with the same values as the argument for the
  * given Geometry index.
  */
-Label::Label(int geomIndex,TopologyLocation* gl){
+Label::Label(int geomIndex,const TopologyLocation* gl){
 	elt[0]=new TopologyLocation(gl->getLocations());
 	elt[1]=new TopologyLocation(gl->getLocations());
 	elt[geomIndex]->setLocations(*gl);
@@ -78,11 +78,11 @@ void Label::flip(){
 	elt[1]->flip();
 }
 
-int Label::getLocation(int geomIndex,int posIndex) {
+int Label::getLocation(int geomIndex,int posIndex) const {
 	return elt[geomIndex]->get(posIndex);
 }
 
-int Label::getLocation(int geomIndex) {
+int Label::getLocation(int geomIndex) const {
 	return elt[geomIndex]->get(Position::ON);
 }
 
@@ -111,7 +111,7 @@ void Label::setAllLocationsIfNull(int location){
  * Merge this label with another one.
  * Merging updates any null attributes of this label with the attributes from lbl
  */
-void Label::merge(Label* lbl) {
+void Label::merge(const Label* lbl) {
 	for (int i=0; i<2; i++) {
 		if (elt[i]==NULL && lbl->elt[i]!=NULL) {
 			elt[i]=new TopologyLocation(lbl->elt[i]);
@@ -121,45 +121,45 @@ void Label::merge(Label* lbl) {
 	}
 }
 
-void Label::setGeometryLocation(int geomIndex, TopologyLocation* tl){
+void Label::setGeometryLocation(int geomIndex, const TopologyLocation* tl){
 	if (tl==NULL) return;
 	elt[geomIndex]->setLocations(*tl);
 }
 
-int Label::getGeometryCount() {
+int Label::getGeometryCount() const {
 	int count = 0;
 	if (!elt[0]->isNull()) count++;
     if (!elt[1]->isNull()) count++;
 	return count;
 }
 
-bool Label::isNull(int geomIndex) {
+bool Label::isNull(int geomIndex) const {
 	return elt[geomIndex]->isNull();
 }
 
-bool Label::isAnyNull(int geomIndex) {
+bool Label::isAnyNull(int geomIndex) const {
 	return elt[geomIndex]->isAnyNull();
 }
 
-bool Label::isArea() {
+bool Label::isArea() const {
 	return elt[0]->isArea() || elt[1]->isArea();
 }
 
-bool Label::isArea(int geomIndex){
+bool Label::isArea(int geomIndex) const {
 	return elt[geomIndex]->isArea();
 }
 
-bool Label::isLine(int geomIndex){
+bool Label::isLine(int geomIndex) const {
 	return elt[geomIndex]->isLine();
 }
 
-bool Label::isEqualOnSide(Label* lbl, int side) {
+bool Label::isEqualOnSide(Label* lbl, int side) const {
 	return 
 		elt[0]->isEqualOnSide(*(lbl->elt[0]), side)
 		&& elt[1]->isEqualOnSide(*(lbl->elt[1]), side);
 }
 
-bool Label::allPositionsEqual(int geomIndex, int loc){
+bool Label::allPositionsEqual(int geomIndex, int loc) const {
 	return elt[geomIndex]->allPositionsEqual(loc);
 }
 
@@ -174,7 +174,7 @@ void Label::toLine(int geomIndex){
 	}
 }
 
-string Label::toString(){
+string Label::toString() const {
 	string buf="";
 	if (elt[0]!=NULL) {
 		buf.append("a:");

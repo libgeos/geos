@@ -146,7 +146,7 @@ namespace geos {
  *
  *@return    a <code>string</code> of the form <I>(x,y,z)</I>
  */
-string Coordinate::toString() {
+string Coordinate::toString() const {
 	string result("");
 	char buffer[255];
 	if (z==DoubleNotANumber) {
@@ -193,7 +193,7 @@ string Coordinate::toString() {
  *@return        <code>true</code> if <code>a</code> and <code>b</code>
  *      have the same values for x, y and z.
  */
-bool operator==(Coordinate& a, Coordinate& b) {
+bool operator==(const Coordinate& a, const Coordinate& b) {
     return (a.x == b.x) && ( a.y == b.y) && (( a.z == b.z)||(a.z==DoubleNotANumber && b.z==DoubleNotANumber));
 }
 }

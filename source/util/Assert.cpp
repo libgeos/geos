@@ -17,11 +17,11 @@ void Assert::isTrue(bool assertion, string message) {
 	}
 }
 
-void Assert::equals(Coordinate& expectedValue, Coordinate& actualValue){
+void Assert::equals(const Coordinate& expectedValue, const Coordinate& actualValue){
 	equals(expectedValue, actualValue, string());
 }
 
-void Assert::equals(Coordinate& expectedValue, Coordinate& actualValue, string message){
+void Assert::equals(const Coordinate& expectedValue, const Coordinate& actualValue, string message){
 	if (!(actualValue==expectedValue)) {
 		throw new AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
 			+ actualValue.toString() + (!message.empty() ? ": " + message : ""));

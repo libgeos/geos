@@ -231,12 +231,12 @@ void RelateComputer::labelIntersectionNodes(int argIndex) {
 * boundary dimension in the Ext rows in the IM
 */
 void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
-	Geometry *ga=(*arg)[0]->getGeometry();
+	const Geometry *ga=(*arg)[0]->getGeometry();
 	if (!ga->isEmpty()) {
 		imX->set(Location::INTERIOR,Location::EXTERIOR,ga->getDimension());
 		imX->set(Location::BOUNDARY,Location::EXTERIOR,ga->getBoundaryDimension());
 	}
-	Geometry *gb=(*arg)[1]->getGeometry();
+	const Geometry *gb=(*arg)[1]->getGeometry();
 	if (!gb->isEmpty()) {
 		imX->set(Location::EXTERIOR,Location::INTERIOR,gb->getDimension());
 		imX->set(Location::EXTERIOR,Location::BOUNDARY,gb->getBoundaryDimension());
@@ -316,7 +316,7 @@ void RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex) {
 * If the target has dim 2 or 1, the edge can either be in the interior or the exterior.
 * If the target has dim 0, the edge must be in the exterior
 */
-void RelateComputer::labelIsolatedEdge(Edge *e,int targetIndex,Geometry *target){
+void RelateComputer::labelIsolatedEdge(Edge *e,int targetIndex, const Geometry *target){
 	// this won't work for GeometryCollections with both dim 2 and 1 geoms
 	if (target->getDimension()>0) {
 		// since edge is not in boundary, may not need the full generality of PointLocator?

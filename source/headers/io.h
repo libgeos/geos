@@ -87,39 +87,39 @@ public:
 	WKTWriter();
 	~WKTWriter();
 	static string stringOfChar(char ch, int count);
-	string write(Geometry *geometry);
-	void write(Geometry *geometry, Writer *writer);
-	string writeFormatted(Geometry *geometry);
-	void writeFormatted(Geometry *geometry, Writer *writer);
+	string write(const Geometry *geometry);
+	void write(const Geometry *geometry, Writer *writer);
+	string writeFormatted(const Geometry *geometry);
+	void writeFormatted(const Geometry *geometry, Writer *writer);
 protected:
 	string formatter;
-	void appendGeometryTaggedText(Geometry *geometry, int level, Writer *writer);
-	void appendPointTaggedText(Coordinate* coordinate, int level, Writer *writer,PrecisionModel* precisionModel);
-	void appendLineStringTaggedText(LineString *lineString, int level, Writer *writer);
-	void appendLinearRingTaggedText(LinearRing *lineString, int level, Writer *writer);
-	void appendPolygonTaggedText(Polygon *polygon, int level, Writer *writer);
-	void appendMultiPointTaggedText(MultiPoint *multipoint, int level, Writer *writer);
-	void appendMultiLineStringTaggedText(MultiLineString *multiLineString, int level,Writer *writer);
-	void appendMultiPolygonTaggedText(MultiPolygon *multiPolygon, int level, Writer *writer);
-	void appendGeometryCollectionTaggedText(GeometryCollection *geometryCollection, int level,Writer *writer);
-	void appendPointText(Coordinate* coordinate, int level, Writer *writer,PrecisionModel* precisionModel);
-	void appendCoordinate(Coordinate* coordinate, Writer *writer, PrecisionModel* precisionModel);
+	void appendGeometryTaggedText(const Geometry *geometry, int level, Writer *writer);
+	void appendPointTaggedText(const Coordinate* coordinate, int level, Writer *writer, const PrecisionModel* precisionModel);
+	void appendLineStringTaggedText(const LineString *lineString, int level, Writer *writer);
+	void appendLinearRingTaggedText(const LinearRing *lineString, int level, Writer *writer);
+	void appendPolygonTaggedText(const Polygon *polygon, int level, Writer *writer);
+	void appendMultiPointTaggedText(const MultiPoint *multipoint, int level, Writer *writer);
+	void appendMultiLineStringTaggedText(const MultiLineString *multiLineString, int level,Writer *writer);
+	void appendMultiPolygonTaggedText(const MultiPolygon *multiPolygon, int level, Writer *writer);
+	void appendGeometryCollectionTaggedText(const GeometryCollection *geometryCollection, int level,Writer *writer);
+	void appendPointText(const Coordinate* coordinate, int level, Writer *writer, const PrecisionModel* precisionModel);
+	void appendCoordinate(const Coordinate* coordinate, Writer *writer, const PrecisionModel* precisionModel);
 	string writeNumber(double d);
-	void appendLineStringText(LineString *lineString, int level, bool doIndent, Writer *writer);
-	void appendPolygonText(Polygon *polygon, int level, bool indentFirst, Writer *writer);
-	void appendMultiPointText(MultiPoint *multiPoint, int level, Writer *writer);
-	void appendMultiLineStringText(MultiLineString *multiLineString, int level, bool indentFirst,Writer *writer);
-	void appendMultiPolygonText(MultiPolygon *multiPolygon, int level, Writer *writer);
-	void appendGeometryCollectionText(GeometryCollection *geometryCollection, int level,Writer *writer);
+	void appendLineStringText(const LineString *lineString, int level, bool doIndent, Writer *writer);
+	void appendPolygonText(const Polygon *polygon, int level, bool indentFirst, Writer *writer);
+	void appendMultiPointText(const MultiPoint *multiPoint, int level, Writer *writer);
+	void appendMultiLineStringText(const MultiLineString *multiLineString, int level, bool indentFirst,Writer *writer);
+	void appendMultiPolygonText(const MultiPolygon *multiPolygon, int level, Writer *writer);
+	void appendGeometryCollectionText(const GeometryCollection *geometryCollection, int level,Writer *writer);
 private:
 	enum {
 		INDENT = 2
 	};
 //	static const int INDENT = 2;
-	static string createFormatter(PrecisionModel* precisionModel);
+	static string createFormatter(const PrecisionModel* precisionModel);
 	bool isFormatted;
 	int level;
-	void writeFormatted(Geometry *geometry, bool isFormatted, Writer *writer);
+	void writeFormatted(const Geometry *geometry, bool isFormatted, Writer *writer);
 	void indent(int level, Writer *writer);
 };
 }

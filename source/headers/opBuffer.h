@@ -90,9 +90,9 @@ public:
 class BufferLineBuilder {
 public:
 	static const int DEFAULT_QUADRANT_SEGMENTS=6;    // controls point density in fillets
-	BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi,PrecisionModel *newPM);
+	BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi,const PrecisionModel *newPM);
 	~BufferLineBuilder();
-	BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi,PrecisionModel *newPM,int quadrantSegments);
+	BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi,const PrecisionModel *newPM,int quadrantSegments);
 	vector<CoordinateList*>* getLineBuffer(CoordinateList *inputPts, double distance);
 	vector<CoordinateList*>* getRingBuffer(CoordinateList *inputPts, int side, double distance);
 private: 
@@ -106,13 +106,13 @@ private:
 	double angleInc;
 	CoordinateList *ptList;
 	double distance;
-	PrecisionModel *precisionModel;
+	const PrecisionModel *precisionModel;
 	vector<CoordinateList*> *lineList;
 	void init(double newDistance);
 	CoordinateList* getCoordinates();
 	void computeLineBuffer(CoordinateList *inputPts);
 	void computeRingBuffer(CoordinateList *inputPts, int side);
-	void addPt(Coordinate &pt);
+	void addPt(const Coordinate &pt);
 	void closePts();
 	Coordinate s0, s1, s2;
 	LineSegment *seg0;
@@ -120,14 +120,14 @@ private:
 	LineSegment *offset0;
 	LineSegment *offset1;
 	int side;
-	void initSideSegments(Coordinate &ns1, Coordinate &ns2, int nside);
-	void addNextSegment(Coordinate &p, bool addStartPoint);
+	void initSideSegments(const Coordinate &ns1, const Coordinate &ns2, int nside);
+	void addNextSegment(const Coordinate &p, bool addStartPoint);
 	void addLastSegment();
 	void computeOffsetSegment(LineSegment *seg, int side, double distance, LineSegment *offset);
-	void addLineEndCap(Coordinate &p0, Coordinate &p1);
-	void addFillet(Coordinate &p, Coordinate &p0, Coordinate &p1, int direction, double distance);
-	void addFillet(Coordinate &p, double startAngle, double endAngle, int direction, double distance);
-	void addCircle(Coordinate &p, double distance);
+	void addLineEndCap(const Coordinate &p0, const Coordinate &p1);
+	void addFillet(const Coordinate &p, const Coordinate &p0, const Coordinate &p1, int direction, double distance);
+	void addFillet(const Coordinate &p, double startAngle, double endAngle, int direction, double distance);
+	void addCircle(const Coordinate &p, double distance);
 };
 
 
@@ -143,17 +143,17 @@ private:
 	BufferLineBuilder *lineBuilder;
 	vector<Edge*> *edgeList;
 	void addEdges(vector<CoordinateList*> *lineList, int leftLoc, int rightLoc);
-	void addEdge(CoordinateList *coord, int leftLoc, int rightLoc);
-	void add(Geometry *g);
-	void addCollection(GeometryCollection *gc);
-	void addPoint(Point *p);
-	void addLineString(LineString *line);
-	void addPolygon(Polygon *p);
-	void addPolygonRing(LinearRing *lr, double distance, int side, int cwLeftLoc, int cwRightLoc);
+	void addEdge(const CoordinateList *coord, int leftLoc, int rightLoc);
+	void add(const Geometry *g);
+	void addCollection(const GeometryCollection *gc);
+	void addPoint(const Point *p);
+	void addLineString(const LineString *line);
+	void addPolygon(const Polygon *p);
+	void addPolygonRing(const LinearRing *lr, double distance, int side, int cwLeftLoc, int cwRightLoc);
 public:
-	BufferEdgeBuilder(CGAlgorithms *newCga,LineIntersector *li,double newDistance,PrecisionModel *precisionModel,int quadrantSegments);
+	BufferEdgeBuilder(CGAlgorithms *newCga,LineIntersector *li,double newDistance, const PrecisionModel *precisionModel,int quadrantSegments);
 	~BufferEdgeBuilder();
-	vector<Edge*>* getEdges(Geometry *geom);
+	vector<Edge*>* getEdges(const Geometry *geom);
 };
 
 class BufferOp: public GeometryGraphOperation {

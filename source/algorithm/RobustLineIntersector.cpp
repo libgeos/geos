@@ -6,7 +6,7 @@ namespace geos {
 RobustLineIntersector::RobustLineIntersector(){}
 RobustLineIntersector::~RobustLineIntersector(){}
 
-void RobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2) {
+void RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) {
 	isProperVar=false;
 
 	// do between check first, since it is faster than the orientation test
@@ -24,7 +24,7 @@ void RobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coo
 	result = DONT_INTERSECT;
 }
 
-int RobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2){
+int RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2){
 	isProperVar=false;
 
     // first try a fast test to see if the envelopes of the lines intersect
@@ -92,7 +92,7 @@ int RobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordi
 //	}
 //}
 
-int RobustLineIntersector::computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
+int RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) {
 	bool p1q1p2=Envelope::intersects(p1,p2,q1);
 	bool p1q2p2=Envelope::intersects(p1,p2,q2);
 	bool q1p1q2=Envelope::intersects(q1,q2,p1);
@@ -131,7 +131,7 @@ int RobustLineIntersector::computeCollinearIntersection(Coordinate& p1,Coordinat
 	return DONT_INTERSECT;
 }
 
-Coordinate* RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2) {
+Coordinate* RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const {
 	//HCoordinate *l1=new HCoordinate(HCoordinate(p1),HCoordinate(p2));
 	//HCoordinate *l2=new HCoordinate(HCoordinate(q1),HCoordinate(q2));
 	//HCoordinate intHCoord(*l1,*l2);
@@ -174,7 +174,8 @@ Coordinate* RobustLineIntersector::intersection(Coordinate& p1,Coordinate& p2,Co
 	return new Coordinate(intPt);
 }
 
-void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt){
+
+void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt) const {
 	normPt->x=smallestInAbsValue(n1->x,n2->x,n3->x,n4->x);
 	normPt->y=smallestInAbsValue(n1->y,n2->y,n3->y,n4->y);
 	n1->x-=normPt->x;
@@ -187,7 +188,7 @@ void RobustLineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *
 	n4->y-=normPt->y;
 }
 
-double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4){
+double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) const {
 	double x=x1;
 	double xabs=fabs(x);
 	if(fabs(x2)<xabs) {

@@ -27,7 +27,7 @@ int GeometryGraph::determineBoundary(int boundaryCount){
 
 GeometryGraph::GeometryGraph():PlanarGraph(){
 	precisionModel=NULL;
-	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
+	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
 	useBoundaryDeterminationRule=false;
 	boundaryNodes=NULL;
 	parentGeom=NULL;
@@ -43,11 +43,11 @@ GeometryGraph::~GeometryGraph(){
 	delete lineEdgeMap;
 }
 
-GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGraph() {
+GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom):PlanarGraph() {
 	hasTooFewPointsVar=false;
 	boundaryNodes=NULL;
 	precisionModel=NULL;
-	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
+	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
 	useBoundaryDeterminationRule=false;
 	argIndex=newArgIndex;
 	parentGeom=newParentGeom;
@@ -75,9 +75,9 @@ EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {
 * This constructor is used by clients that wish to add Edges explicitly,
 * rather than adding a Geometry.  (An example is BufferOp).
 */
-GeometryGraph::GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel, int newSRID):PlanarGraph(){
+GeometryGraph::GeometryGraph(int newArgIndex, const PrecisionModel *newPrecisionModel, int newSRID):PlanarGraph(){
 	boundaryNodes=NULL;
-	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
+	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
 	useBoundaryDeterminationRule=false;
 	argIndex=newArgIndex;
 	parentGeom=NULL;
@@ -86,7 +86,7 @@ GeometryGraph::GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel,
 	hasTooFewPointsVar=false;
 }
 
-PrecisionModel* GeometryGraph::getPrecisionModel(){
+const PrecisionModel* GeometryGraph::getPrecisionModel(){
 	return precisionModel;
 }
 
@@ -94,7 +94,7 @@ int GeometryGraph::getSRID() {
 	return SRID;
 }
 
-Geometry* GeometryGraph::getGeometry() {
+const Geometry* GeometryGraph::getGeometry() {
 	return parentGeom;
 }
 
@@ -116,7 +116,7 @@ CoordinateList* GeometryGraph::getBoundaryPoints() {
 	return pts;
 }
 
-Edge* GeometryGraph::findEdge(LineString *line){
+Edge* GeometryGraph::findEdge(const LineString *line){
 	return lineEdgeMap->find(line)->second;
 }
 
@@ -127,7 +127,7 @@ void GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist) {
 	}
 }
 
-void GeometryGraph::add(Geometry *g) {
+void GeometryGraph::add(const Geometry *g) {
 	if (g->isEmpty()) return;
 	// check if this Geometry should obey the Boundary Determination Rule
 	// all collections except MultiPolygons obey the rule
@@ -157,9 +157,9 @@ void GeometryGraph::add(Geometry *g) {
 	}
 }
 
-void GeometryGraph::addCollection(GeometryCollection *gc) {
+void GeometryGraph::addCollection(const GeometryCollection *gc) {
 	for (int i=0;i<gc->getNumGeometries();i++) {
-		Geometry *g=gc->getGeometryN(i);
+		const Geometry *g=gc->getGeometryN(i);
 		add(g);
 	}
 }
@@ -167,8 +167,8 @@ void GeometryGraph::addCollection(GeometryCollection *gc) {
 /**
 * Add a Point to the graph.
 */
-void GeometryGraph::addPoint(Point *p){
-	Coordinate& coord=*(p->getCoordinate());
+void GeometryGraph::addPoint(const Point *p){
+	const Coordinate& coord=*(p->getCoordinate());
 	insertPoint(argIndex,coord,Location::INTERIOR);
 }
 
@@ -177,15 +177,14 @@ void GeometryGraph::addPoint(Point *p){
 * If the ring is in the opposite orientation,
 * the left and right locations must be interchanged.
 */
-void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
+void GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight) {
 	CoordinateList *lrcl;
 	lrcl = lr->getCoordinates();
 	CoordinateList* coord=CoordinateList::removeRepeatedPoints(lrcl);
 	delete lrcl; // strk 2003-10-07
 	if (coord->getSize()<4) {
 		hasTooFewPointsVar=true;
-		// should make a copy of this, and drop coord -- strk;
-		invalidPoint=new Coordinate(coord->getAt(0));
+		invalidPoint=coord->getAt(0); // its now a Coordinate
 		delete coord;
 		return;
 	}
@@ -214,7 +213,7 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 #endif
 }
 
-void GeometryGraph::addPolygon(Polygon *p){
+void GeometryGraph::addPolygon(const Polygon *p){
 	addPolygonRing((LinearRing*) p->getExteriorRing(),Location::EXTERIOR,Location::INTERIOR);
 	for (int i=0;i<p->getNumInteriorRing();i++) {
 		// Holes are topologically labelled opposite to the shell, since
@@ -224,11 +223,11 @@ void GeometryGraph::addPolygon(Polygon *p){
 	}
 }
 
-void GeometryGraph::addLineString(LineString *line){
+void GeometryGraph::addLineString(const LineString *line){
 	CoordinateList* coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
 	if(coord->getSize()<2) {
 		hasTooFewPointsVar=true;
-		invalidPoint=&(coord->getAt(0));
+		invalidPoint=coord->getAt(0);
 		return;
 	}
 	// add the edge for the LineString
@@ -306,7 +305,7 @@ SegmentIntersector* GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	return si;
 }
 
-void GeometryGraph::insertPoint(int argIndex,Coordinate& coord, int onLocation){
+void GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLocation){
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	if (lbl==NULL) {
@@ -321,7 +320,7 @@ void GeometryGraph::insertPoint(int argIndex,Coordinate& coord, int onLocation){
 * an endpoint of a Curve is on the boundary
 * iff if it is in the boundaries of an odd number of Geometries
 */
-void GeometryGraph::insertBoundaryPoint(int argIndex,Coordinate& coord){
+void GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord){
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	// the new point to insert is on a boundary
@@ -370,7 +369,7 @@ bool GeometryGraph::hasTooFewPoints() {
 	return hasTooFewPointsVar;
 }
 
-Coordinate* GeometryGraph::getInvalidPoint() {
+const Coordinate& GeometryGraph::getInvalidPoint() {
 	return invalidPoint;
 }
 

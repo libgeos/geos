@@ -47,8 +47,8 @@ Geometry::Geometry(const Geometry &geom) {
 	sortedClasses->push_back(typeid(GeometryCollection).name());
 }
 
-Geometry::Geometry(PrecisionModel* newPrecisionModel, int newSRID){
-	precisionModel=new PrecisionModel(*newPrecisionModel);
+Geometry::Geometry(const PrecisionModel *pm, int newSRID){
+	precisionModel=new PrecisionModel(*pm);
 	envelope=new Envelope();
 	SRID = newSRID;
 	sortedClasses=new vector<string>();
@@ -71,7 +71,7 @@ bool Geometry::hasNonEmptyElements(vector<Geometry *>* geometries) {
 	return false;
 }
 
-bool Geometry::hasNullElements(CoordinateList* list){
+bool Geometry::hasNullElements(const CoordinateList* list){
 	for (int i = 0; i<list->getSize(); i++) {
 		if (list->getAt(i)==Coordinate::getNull()) {
 			return true;
@@ -159,7 +159,7 @@ bool Geometry::isWithinDistance(Geometry *geom,double cDistance) {
 *
 * @return a {@link Point} which is the centroid of this Geometry
 */
-Point* Geometry::getCentroid() {
+Point* Geometry::getCentroid() const {
 	Coordinate* centPt;
 	int dim=getDimension();
 	if(dim==0) {
@@ -192,7 +192,7 @@ Point* Geometry::getCentroid() {
 * @return a {@link Point} which is in the interior of this Geometry
 */
 Point* Geometry::getInteriorPoint() {
-	Coordinate* interiorPt;
+	const Coordinate* interiorPt;
 	int dim=getDimension();
 	if (dim==0) {
 		InteriorPointPoint* intPt=new InteriorPointPoint(this);
@@ -218,7 +218,7 @@ Point* Geometry::getInteriorPoint() {
 * and/or update any information it has cached (such as its {@link Envelope} ).
 */
 void Geometry::geometryChanged() {
-	apply(geometryChangedFilter);
+	apply_rw(geometryChangedFilter);
 }
 
 /**
@@ -231,13 +231,13 @@ void Geometry::geometryChangedAction() {
 	envelope=NULL;
 }
 
-int Geometry::getSRID() {return SRID;}
+int Geometry::getSRID() const {return SRID;}
 
 void Geometry::setSRID(int newSRID) {SRID=newSRID;}
 
-PrecisionModel* Geometry::getPrecisionModel() {return precisionModel;}
+PrecisionModel* Geometry::getPrecisionModel() const {return precisionModel;}
 
-bool Geometry::isValid() {
+bool Geometry::isValid() const {
 	IsValidOp isValidOp(this);
 	return isValidOp.isValid();
 }
@@ -246,7 +246,7 @@ Geometry* Geometry::getEnvelope() {
 	return GeometryFactory::toGeometry(getEnvelopeInternal(),precisionModel,SRID);
 }
 
-Envelope* Geometry::getEnvelopeInternal() {
+Envelope* Geometry::getEnvelopeInternal() const {
 	if (envelope->isNull()) {
 		return computeEnvelopeInternal();
 	} else 
@@ -353,14 +353,14 @@ Geometry* Geometry::buffer(double distance,int quadrantSegments) {
 	return BufferOp::bufferOp(this, distance, quadrantSegments);
 }
 
-Geometry* Geometry::convexHull() {
+Geometry* Geometry::convexHull() const {
 	ConvexHull *ch=new ConvexHull(cgAlgorithms);
 	Geometry *g=ch->getConvexHull(this);
 	delete ch;
 	return g;
 }
 
-Geometry* Geometry::intersection(Geometry *other) {
+Geometry* Geometry::intersection(const Geometry *other) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::INTERSECTION);
@@ -384,7 +384,7 @@ Geometry* Geometry::symDifference(Geometry *other) {
 	return OverlayOp::overlayOp(this,other,OverlayOp::SYMDIFFERENCE);
 }
 
-int Geometry::compareTo(Geometry *geom){
+int Geometry::compareTo(const Geometry *geom) const {
 	if (getClassSortIndex()!=geom->getClassSortIndex()) {
 		return getClassSortIndex()-geom->getClassSortIndex();
 	}
@@ -400,14 +400,14 @@ int Geometry::compareTo(Geometry *geom){
 	return compareToSameClass(geom);
 }
 
-bool Geometry::isEquivalentClass(Geometry *other){
+bool Geometry::isEquivalentClass(const Geometry *other) const {
 	if (typeid(*this)==typeid(*other))
 		return true;
 	else
 		return false;
 }
 
-void Geometry::checkNotGeometryCollection(Geometry *g){
+void Geometry::checkNotGeometryCollection(const Geometry *g) const {
 	if ((typeid(*g)==typeid(GeometryCollection))) {
 		delete precisionModel;
 		delete envelope;
@@ -427,7 +427,7 @@ void Geometry::checkNotGeometryCollection(Geometry *g){
 //	}
 //}
 
-int Geometry::getClassSortIndex() {
+int Geometry::getClassSortIndex() const {
     const type_info &t=typeid(*this);
     string tst=t.name();
 	for (unsigned int i=0; i<sortedClasses->size(); i++) {
@@ -442,7 +442,7 @@ int Geometry::getClassSortIndex() {
 	return -1;
 }
 
-int Geometry::compare(vector<Coordinate> a, vector<Coordinate> b){
+int Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const {
 	unsigned int i=0;
 	unsigned int j=0;
 	while (i<a.size() && j<b.size()) {
@@ -464,7 +464,7 @@ int Geometry::compare(vector<Coordinate> a, vector<Coordinate> b){
 	return 0;
 }
 
-int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) {
+int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const {
 	unsigned int i=0;
 	unsigned int j=0;
 	while (i<a.size() && j<b.size()) {
@@ -492,7 +492,7 @@ int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) {
 *
 *@param  g  the <code>Geometry</code> from which to compute the distance
 */
-double Geometry::distance(Geometry *g) {
+double Geometry::distance(const Geometry *g) const {
 	return DistanceOp::distance(this,g);
 }
 
@@ -504,7 +504,7 @@ double Geometry::distance(Geometry *g) {
 *
 *@return the area of the Geometry
 */
-double Geometry::getArea() {
+double Geometry::getArea() const {
 	return 0.0;
 }
 
@@ -517,7 +517,7 @@ double Geometry::getArea() {
 *
 *@return the length of the Geometry
 */
-double Geometry::getLength() {
+double Geometry::getLength() const {
 	return 0.0;
 }
 
@@ -542,9 +542,28 @@ bool greaterThen(Geometry *first, Geometry *second) {
 		return false;
 }
 
-bool Geometry::equal(Coordinate& a,Coordinate& b,double tolerance) {
+bool
+Geometry::equal(const Coordinate& a, const Coordinate& b,double tolerance) const
+{
 	if (tolerance==0) {return a==b;}
 	return a.distance(b)<=tolerance;
 }
+
+void Geometry::apply_ro(GeometryFilter *filter) const {
+	filter->filter_ro(this);
+}
+
+void Geometry::apply_rw(GeometryFilter *filter) {
+	filter->filter_rw(this);
+}
+
+void Geometry::apply_ro(GeometryComponentFilter *filter) const {
+	filter->filter_ro(this);
+}
+
+void Geometry::apply_rw(GeometryComponentFilter *filter) {
+	filter->filter_rw(this);
+}
+
 }
 

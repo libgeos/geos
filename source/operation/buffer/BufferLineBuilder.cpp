@@ -44,11 +44,11 @@ double BufferLineBuilder::angleBetween(Coordinate &pa, Coordinate &p, Coordinate
 	return theta;
 }
 
-BufferLineBuilder::BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi,PrecisionModel *newPM){
+BufferLineBuilder::BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi, const PrecisionModel *newPM){
 	BufferLineBuilder(newCga,newLi,newPM,DEFAULT_QUADRANT_SEGMENTS);
 }
 
-BufferLineBuilder::BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi,PrecisionModel *newPM,int quadrantSegments){
+BufferLineBuilder::BufferLineBuilder(CGAlgorithms *newCga,LineIntersector *newLi, const PrecisionModel *newPM,int quadrantSegments){
 	side=0;
 	distance=0.0;
 	seg0=new LineSegment();
@@ -119,8 +119,8 @@ void BufferLineBuilder::init(double newDistance) {
 CoordinateList* BufferLineBuilder::getCoordinates(){
 	// check that points are a ring-add the startpoint again if they are not
 	if (ptList->getSize()>1) {
-		Coordinate &start=ptList->getAt(0);
-		Coordinate &end=ptList->getAt(1);
+		const Coordinate &start=ptList->getAt(0);
+		const Coordinate &end=ptList->getAt(1);
 		if (!(start==end)) addPt(start);
 	}
 	return ptList;
@@ -157,7 +157,7 @@ void BufferLineBuilder::computeRingBuffer(CoordinateList *inputPts, int side){
 	closePts();
 }
 
-void BufferLineBuilder::addPt(Coordinate &pt) {
+void BufferLineBuilder::addPt(const Coordinate &pt) {
 	Coordinate *c=new Coordinate(pt);
 	Coordinate& bufPt=*(c);
 	precisionModel->makePrecise(&bufPt);
@@ -184,7 +184,7 @@ void BufferLineBuilder::addPt(Coordinate &pt) {
 void BufferLineBuilder::closePts(){
 	if (ptList->getSize()<1) return;
 	Coordinate& startPt=*(new Coordinate(ptList->getAt(0)));
-	Coordinate& lastPt=ptList->getAt(ptList->getSize()-1);
+	const Coordinate& lastPt=ptList->getAt(ptList->getSize()-1);
 	Coordinate last2Pt;
 	if (ptList->getSize()>=2)
 		last2Pt=ptList->getAt(ptList->getSize()-2);
@@ -204,7 +204,7 @@ void BufferLineBuilder::closePts(){
 	ptList->add(startPt);
 }
 
-void BufferLineBuilder::initSideSegments(Coordinate &ns1, Coordinate &ns2, int nside){
+void BufferLineBuilder::initSideSegments(const Coordinate &ns1, const Coordinate &ns2, int nside){
 	s1=ns1;
 	s2=ns2;
 	side=nside;
@@ -212,7 +212,7 @@ void BufferLineBuilder::initSideSegments(Coordinate &ns1, Coordinate &ns2, int n
 	computeOffsetSegment(seg1, side, distance, offset1);
 }
 
-void BufferLineBuilder::addNextSegment(Coordinate &p, bool addStartPoint){
+void BufferLineBuilder::addNextSegment(const Coordinate &p, bool addStartPoint){
 	s0=s1;
 	s1=s2;
 	s2=p;
@@ -295,7 +295,7 @@ void BufferLineBuilder::computeOffsetSegment(LineSegment *seg, int side, double 
 /**
 *Add an end cap around point p1, terminating a line segment coming from p0
 */
-void BufferLineBuilder::addLineEndCap(Coordinate &p0, Coordinate &p1){
+void BufferLineBuilder::addLineEndCap(const Coordinate &p0, const Coordinate &p1){
 	LineSegment *seg=new LineSegment(p0,p1);
 	LineSegment *offsetL=new LineSegment();
 	computeOffsetSegment(seg,Position::LEFT, distance, offsetL);
@@ -313,7 +313,7 @@ void BufferLineBuilder::addLineEndCap(Coordinate &p0, Coordinate &p1){
 *@param p0 is start point of fillet curve
 *@param p1 is endpoint of fillet curve
 */
-void BufferLineBuilder::addFillet(Coordinate &p, Coordinate &p0, Coordinate &p1, int direction, double distance){
+void BufferLineBuilder::addFillet(const Coordinate &p, const Coordinate &p0, const Coordinate &p1, int direction, double distance){
 	double dx0=p0.x-p.x;
 	double dy0=p0.y-p.y;
 	double startAngle=atan2(dy0, dx0);
@@ -336,7 +336,7 @@ void BufferLineBuilder::addFillet(Coordinate &p, Coordinate &p0, Coordinate &p1,
 *
 *@param direction is -1 for a CW angle, 1 for a CCW angle
 */
-void BufferLineBuilder::addFillet(Coordinate &p, double startAngle, double endAngle, int direction, double distance){
+void BufferLineBuilder::addFillet(const Coordinate &p, double startAngle, double endAngle, int direction, double distance){
 	int directionFactor=direction<0 ? -1 : 1;
 	double totalAngle=fabs(startAngle-endAngle);
 	int nSegs=(int)(totalAngle/angleInc+0.5);
@@ -363,11 +363,11 @@ void BufferLineBuilder::addFillet(Coordinate &p, double startAngle, double endAn
 /**
 *Adds a CW circle around a point
 */
-void BufferLineBuilder::addCircle(Coordinate &p, double distance){
+void BufferLineBuilder::addCircle(const Coordinate &p, double distance){
 // add start point
 	Coordinate *c=new Coordinate(p.x+distance,p.y);
-	Coordinate& pt=*(c);
-	addPt(pt);
+	//Coordinate& pt=*(c);
+	addPt(*c);
 	addFillet(p,0.0,2.0*PI,-1,distance);
 	delete c;
 }

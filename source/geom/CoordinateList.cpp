@@ -3,7 +3,7 @@
 
 namespace geos {
 
-bool CoordinateList::hasRepeatedPoints(){
+bool CoordinateList::hasRepeatedPoints() const {
 	int size=(int) getSize();
 	for(int i=1; i<size; i++) {
 		if (getAt(i-1)==getAt(i)) {
@@ -13,7 +13,7 @@ bool CoordinateList::hasRepeatedPoints(){
 	return false;
 }
 
-bool CoordinateList::hasRepeatedPoints(CoordinateList *cl){
+bool CoordinateList::hasRepeatedPoints(const CoordinateList *cl) {
 	int size=(int) cl->getSize();
 	for(int i=1;i<size; i++) {
 		if (cl->getAt(i-1)==cl->getAt(i)) {
@@ -23,8 +23,8 @@ bool CoordinateList::hasRepeatedPoints(CoordinateList *cl){
 	return false;
 }
 
-Coordinate* CoordinateList::minCoordinate(){
-	Coordinate* minCoord=NULL;
+const Coordinate* CoordinateList::minCoordinate() const {
+	const Coordinate* minCoord=NULL;
 	int size=(int) getSize();
 	for(int i=0; i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(getAt(i))>0) {
@@ -34,8 +34,10 @@ Coordinate* CoordinateList::minCoordinate(){
 	return minCoord;
 }
 
-Coordinate* CoordinateList::minCoordinate(CoordinateList *cl){
-	Coordinate* minCoord=NULL;
+const Coordinate*
+CoordinateList::minCoordinate(CoordinateList *cl)
+{
+	const Coordinate* minCoord=NULL;
 	int size=(int) cl->getSize();
 	for(int i=0;i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(cl->getAt(i))>0) {
@@ -45,7 +47,9 @@ Coordinate* CoordinateList::minCoordinate(CoordinateList *cl){
 	return minCoord;
 }
 
-int CoordinateList::indexOf(Coordinate *coordinate,CoordinateList *cl) {
+int
+CoordinateList::indexOf(const Coordinate *coordinate, const CoordinateList *cl)
+{
 	for (int i=0; i<cl->getSize(); i++) {
 		if ((*coordinate)==cl->getAt(i)) {
 			return i;
@@ -54,7 +58,9 @@ int CoordinateList::indexOf(Coordinate *coordinate,CoordinateList *cl) {
 	return -1;
 }
 
-void CoordinateList::scroll(CoordinateList* cl,Coordinate* firstCoordinate) {
+void
+CoordinateList::scroll(CoordinateList* cl,const Coordinate* firstCoordinate)
+{
 	int ind=indexOf(firstCoordinate,cl);
 	if (ind<0) return;
 	int length=cl->getSize();
@@ -72,7 +78,7 @@ void CoordinateList::reverse(CoordinateList *cl){
 	int last=cl->getSize()-1;
 	int mid=last/2;
 	for(int i=0;i<=mid;i++) {
-		Coordinate& tmp=cl->getAt(i);
+		const Coordinate& tmp=cl->getAt(i);
 		cl->setAt(cl->getAt(last-i),i);
 		cl->setAt(tmp,last-i);
 	}
@@ -94,10 +100,10 @@ void CoordinateList::add(vector<Coordinate>* vc,bool allowRepeated) {
 	}
 }
 
-void CoordinateList::add(Coordinate& c,bool allowRepeated) {
+void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	if (!allowRepeated) {
 		if (getSize()>=1) {
-			Coordinate& last=getAt(getSize()-1);
+			const Coordinate& last=getAt(getSize()-1);
 			if (last==c) return;
 		}
 	}

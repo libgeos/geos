@@ -3,7 +3,7 @@
 
 namespace geos {
 
-BasicCoordinateList::BasicCoordinateList(CoordinateList *c){
+BasicCoordinateList::BasicCoordinateList(const CoordinateList *c){
 	vect=new vector<Coordinate>();
 	int size=c->getSize();
 	for(int i=0; i<size; i++) {
@@ -21,7 +21,7 @@ BasicCoordinateList::BasicCoordinateList(int n) {
 	vect->resize(n);
 }
 
-BasicCoordinateList::BasicCoordinateList(Coordinate& c) {
+BasicCoordinateList::BasicCoordinateList(const Coordinate& c) {
 	vect=new vector<Coordinate>(1,c);
 }
 
@@ -38,26 +38,26 @@ vector<Coordinate>* BasicCoordinateList::toVector() {
 	return new vector<Coordinate>(vect->begin(),vect->end());
 }
 
-bool BasicCoordinateList::isEmpty() {
+bool BasicCoordinateList::isEmpty() const {
 	return vect->empty();
 }
 
-void BasicCoordinateList::add(Coordinate& c){
+void BasicCoordinateList::add(const Coordinate& c){
 	vect->push_back(c);
 }
 
-int BasicCoordinateList::getSize(){
+int BasicCoordinateList::getSize() const {
 	return (int) vect->size();
 }
 
-Coordinate& BasicCoordinateList::getAt(int pos){
+const Coordinate& BasicCoordinateList::getAt(int pos) const {
 //	if (pos>=0 && pos<=vect->size()-1) 
 		return (*vect)[pos];
 //	else
 //		throw "BasicCoordinateList exception: can't retrieve element\n";
 }
 
-void BasicCoordinateList::setAt(Coordinate& c, int pos){
+void BasicCoordinateList::setAt(const Coordinate& c, int pos){
 //	if (pos>=0 && pos<=vect->size()-1) 
 		(*vect)[pos]=c;
 //	else

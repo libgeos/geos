@@ -4,7 +4,7 @@
 
 namespace geos {
 
-InteriorPointPoint::InteriorPointPoint(Geometry *g) {
+InteriorPointPoint::InteriorPointPoint(const Geometry *g) {
 	interiorPoint=NULL;
 	minDistance=DoubleInfinity;
 	auto_ptr<Point> p(g->getCentroid());
@@ -20,7 +20,7 @@ InteriorPointPoint::~InteriorPointPoint() {
 * If a Geometry is not of dimension 0 it is not tested.
 * @param geom the geometry to add
 */
-void InteriorPointPoint::add(Geometry *geom) {
+void InteriorPointPoint::add(const Geometry *geom) {
 	if (typeid(*geom)==typeid(Point)) {
 		add(geom->getCoordinate());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -34,16 +34,15 @@ void InteriorPointPoint::add(Geometry *geom) {
 	}
 }
 
-void InteriorPointPoint::add(Coordinate *point) {
+void InteriorPointPoint::add(const Coordinate *point) {
 	double dist=point->distance(*centroid);
 	if (dist<minDistance) {
-		delete interiorPoint;
-		interiorPoint=new Coordinate(*point);
+		interiorPoint=point;
 		minDistance=dist;
 	}
 }
 
-Coordinate* InteriorPointPoint::getInteriorPoint() {
+const Coordinate* InteriorPointPoint::getInteriorPoint() const {
 	return interiorPoint;
 }
 }

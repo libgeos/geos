@@ -7,7 +7,7 @@ namespace geos {
 
 NonRobustLineIntersector::NonRobustLineIntersector(){}
 
-void NonRobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2) {
+void NonRobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) {
 	double a1;
 	double b1;
 	double c1;
@@ -52,7 +52,7 @@ void NonRobustLineIntersector::computeIntersection(Coordinate& p,Coordinate& p1,
 	result=DO_INTERSECT;
 }
 
-int NonRobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& p3,Coordinate& p4){
+int NonRobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4){
 	double a1;
 	double b1;
 	double c1;
@@ -168,7 +168,7 @@ int NonRobustLineIntersector::computeIntersect(Coordinate& p1,Coordinate& p2,Coo
 *  DO_INTERSECT		: the inputLines intersect in a single point
 *  only,pa
 */
-int NonRobustLineIntersector::computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& p3,Coordinate& p4){
+int NonRobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4){
 	double r1;
 	double r2;
 	double r3;
@@ -225,7 +225,7 @@ int NonRobustLineIntersector::computeCollinearIntersection(Coordinate& p1,Coordi
 *  in the parameterized equation
 *  of the line from p1 to p2.  The 'distance' of p along p1-p2
 */
-double NonRobustLineIntersector::rParameter(Coordinate& p1,Coordinate& p2,Coordinate& p) {
+double NonRobustLineIntersector::rParameter(const Coordinate& p1,const Coordinate& p2,const Coordinate& p) const {
 	double r;
 	// compute maximum delta,for numerical stability
 	// also handle case of p1-p2 being vertical or horizontal

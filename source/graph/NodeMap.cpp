@@ -17,7 +17,7 @@ NodeMap::~NodeMap() {
 	delete nodeFact;
 }
 
-Node* NodeMap::addNode(Coordinate& coord){
+Node* NodeMap::addNode(const Coordinate& coord){
 	Node *node=find(coord);
 	if (node==NULL) {
 		node=nodeFact->createNode(coord);
@@ -26,6 +26,8 @@ Node* NodeMap::addNode(Coordinate& coord){
 	return node;
 }
 
+// first arg cannot be const because
+// it is liable to label-merging ... --strk;
 Node* NodeMap::addNode(Node *n){
 	Node *node=find(n->getCoordinate());
 	if (node==NULL) {
@@ -45,7 +47,7 @@ void NodeMap::add(EdgeEnd *e) {
 /**
  * @return the node if found; null otherwise
  */
-Node* NodeMap::find(Coordinate& coord){
+Node* NodeMap::find(const Coordinate& coord) const {
 	map<Coordinate,Node*,CoordLT>::iterator found=nodeMap->find(coord);
 	if (found==nodeMap->end())
 		return NULL;
@@ -53,7 +55,7 @@ Node* NodeMap::find(Coordinate& coord){
 		return found->second;
 }
 
-map<Coordinate,Node*,CoordLT>::iterator NodeMap::iterator() {
+map<Coordinate,Node*,CoordLT>::iterator NodeMap::iterator() const {
 	return nodeMap->begin();
 }
 
@@ -62,7 +64,7 @@ map<Coordinate,Node*,CoordLT>::iterator NodeMap::iterator() {
 //	return nodeMap.values();
 //}
 
-vector<Node*>* NodeMap::getBoundaryNodes(int geomIndex){
+vector<Node*>* NodeMap::getBoundaryNodes(int geomIndex) const {
 	vector<Node*>* bdyNodes=new vector<Node*>();
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
@@ -73,7 +75,7 @@ vector<Node*>* NodeMap::getBoundaryNodes(int geomIndex){
 	return bdyNodes;
 }
 
-string NodeMap::print(){
+string NodeMap::print() const {
 	string out="";
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {

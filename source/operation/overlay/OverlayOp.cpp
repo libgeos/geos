@@ -4,7 +4,7 @@
 
 namespace geos {
 
-Geometry* OverlayOp::overlayOp(Geometry *geom0,Geometry *geom1,int opCode) {
+Geometry* OverlayOp::overlayOp(const Geometry *geom0,const Geometry *geom1,int opCode) {
 	OverlayOp *gov=new OverlayOp(geom0,geom1);
 	Geometry* geomOv=gov->getResultGeometry(opCode);
 	delete gov;
@@ -40,7 +40,7 @@ bool OverlayOp::isResultOfOp(int loc0,int loc1,int opCode) {
 	return false;
 }
 
-OverlayOp::OverlayOp(Geometry *g0,Geometry *g1): GeometryGraphOperation(g0,g1) {
+OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOperation(g0,g1) {
 	graph=new PlanarGraph(new OverlayNodeFactory());
 	geomFact=new GeometryFactory(g0->getPrecisionModel(),g0->getSRID());
 	resultGeom=NULL;
@@ -273,7 +273,7 @@ void OverlayOp::cancelDuplicateResultEdges() {
 *
 * @return true if the coord point is covered by a result Line or Area geometry
 */
-bool OverlayOp::isCoveredByLA(Coordinate& coord) {
+bool OverlayOp::isCoveredByLA(const Coordinate& coord) {
 	if (isCovered(coord,resultLineList)) return true;
 	if (isCovered(coord,resultPolyList)) return true;
 	return false;
@@ -283,7 +283,7 @@ bool OverlayOp::isCoveredByLA(Coordinate& coord) {
 *
 * @return true if the coord point is covered by a result Area geometry
 */
-bool OverlayOp::isCoveredByA(Coordinate& coord) {
+bool OverlayOp::isCoveredByA(const Coordinate& coord) {
 	if (isCovered(coord,resultPolyList)) return true;
 	return false;
 }
@@ -292,7 +292,7 @@ bool OverlayOp::isCoveredByA(Coordinate& coord) {
 * @return true if the coord is located in the interior or boundary of
 * a geometry in the list.
 */
-bool OverlayOp::isCovered(Coordinate& coord,vector<Geometry*> *geomList) {
+bool OverlayOp::isCovered(const Coordinate& coord,vector<Geometry*> *geomList) {
 	for(int i=0;i<(int)geomList->size();i++) {
 		Geometry *geom=(*geomList)[i];
 		int loc=ptLocator->locate(coord,geom);
@@ -305,7 +305,7 @@ bool OverlayOp::isCovered(Coordinate& coord,vector<Geometry*> *geomList) {
 * @return true if the coord is located in the interior or boundary of
 * a geometry in the list.
 */
-bool OverlayOp::isCovered(Coordinate& coord,vector<LineString*> *geomList) {
+bool OverlayOp::isCovered(const Coordinate& coord,vector<LineString*> *geomList) {
 	for(int i=0;i<(int)geomList->size();i++) {
 		Geometry *geom=(Geometry*)(*geomList)[i];
 		int loc=ptLocator->locate(coord,geom);
@@ -318,7 +318,7 @@ bool OverlayOp::isCovered(Coordinate& coord,vector<LineString*> *geomList) {
 * @return true if the coord is located in the interior or boundary of
 * a geometry in the list.
 */
-bool OverlayOp::isCovered(Coordinate& coord,vector<Polygon*> *geomList) {
+bool OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList) {
 	for(int i=0;i<(int)geomList->size();i++) {
 		Geometry *geom=(Geometry*)(*geomList)[i];
 		int loc=ptLocator->locate(coord,geom);

@@ -62,14 +62,14 @@ class RepeatedPointTester {
 public:
 	RepeatedPointTester() {};
 	Coordinate& getCoordinate();
-	bool hasRepeatedPoint(Geometry *g);
-	bool hasRepeatedPoint(CoordinateList *coord);
+	bool hasRepeatedPoint(const Geometry *g);
+	bool hasRepeatedPoint(const CoordinateList *coord);
 private:
 	Coordinate repeatedCoord;
-	bool hasRepeatedPoint(Polygon *p);
-	bool hasRepeatedPoint(GeometryCollection *gc);
-	bool hasRepeatedPoint(MultiPolygon *gc);
-	bool hasRepeatedPoint(MultiLineString *gc);
+	bool hasRepeatedPoint(const Polygon *p);
+	bool hasRepeatedPoint(const GeometryCollection *gc);
+	bool hasRepeatedPoint(const MultiPolygon *gc);
+	bool hasRepeatedPoint(const MultiLineString *gc);
 };
 
 /**
@@ -173,7 +173,7 @@ public:
 	~ConnectedInteriorTester();
 	Coordinate& getCoordinate();
 	bool isInteriorsConnected();
-	static Coordinate& findDifferentPoint(CoordinateList *coord,Coordinate& pt);
+	static const Coordinate& findDifferentPoint(const CoordinateList *coord, const Coordinate& pt);
 private:
 	GeometryFactory *geometryFactory;
 	CGAlgorithms *cga;
@@ -187,8 +187,8 @@ private:
 	* Mark all the edges for the edgeRings corresponding to the shells
 	* of the input polygons.  Note only ONE ring gets marked for each shell.
 	*/
-	void visitShellInteriors(Geometry *g, PlanarGraph *graph);
-	void visitInteriorRing(LineString *ring, PlanarGraph *graph);
+	void visitShellInteriors(const Geometry *g, PlanarGraph *graph);
+	void visitInteriorRing(const LineString *ring, PlanarGraph *graph);
 	/**
 	* Check if any shell ring has an unvisited edge.
 	* A shell ring is a ring which is not a hole and which has the interior
@@ -213,9 +213,8 @@ public:
 	*
 	* @return the point found, or <code>null</code> if none found
 	*/
-	static Coordinate& 
-		findPtNotNode(CoordinateList *testCoords,LinearRing *searchRing, GeometryGraph *graph);
-	IsValidOp(Geometry *newParentGeometry);
+	static const Coordinate& findPtNotNode(const CoordinateList *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
+	IsValidOp(const Geometry *parentGeometry);
 	virtual ~IsValidOp();
 	bool isValid();
 	TopologyValidationError* getValidationError();
@@ -224,11 +223,11 @@ private:
 	Geometry *parentGeometry;  // the base Geometry to be validated
 	bool isChecked;
 	TopologyValidationError* validErr;
-	void checkValid(Geometry *g);
-	void checkValid(LineString *g);
-	void checkValid(Polygon *g);
-	void checkValid(MultiPolygon *g);
-	void checkValid(GeometryCollection *gc);
+	void checkValid(const Geometry *g);
+	void checkValid(const LineString *g);
+	void checkValid(const Polygon *g);
+	void checkValid(const MultiPolygon *g);
+	void checkValid(const GeometryCollection *gc);
 	void checkConsistentArea(GeometryGraph *graph);
 	void checkNoSelfIntersectingRings(GeometryGraph *graph);
 	/**
@@ -246,7 +245,7 @@ private:
 	* provide the point is chosen such that it does not lie on the
 	* boundary of the shell.
 	*/
-	void checkHolesInShell(Polygon *p,GeometryGraph *graph);
+	void checkHolesInShell(const Polygon *p,GeometryGraph *graph);
 //	void OLDcheckHolesInShell(Polygon *p);
 	/**
 	* Tests that no hole is nested inside another hole.
@@ -260,7 +259,7 @@ private:
 	* (checked by <code>checkRelateConsistency</code>)
 	* </ul>
 	*/
-	void checkHolesNotNested(Polygon *p,GeometryGraph *graph);
+	void checkHolesNotNested(const Polygon *p,GeometryGraph *graph);
 //	void SLOWcheckHolesNotNested(Polygon *p);
 	/**
 	* Test that no element polygon is wholly in the interior of another element polygon.
@@ -275,7 +274,7 @@ private:
 	* This routine relies on the fact that while polygon shells may touch at one or
 	* more vertices, they cannot touch at ALL vertices.
 	*/
-	void checkShellsNotNested(MultiPolygon *mp,GeometryGraph *graph);
+	void checkShellsNotNested(const MultiPolygon *mp,GeometryGraph *graph);
 	/**
 	* Check if a shell is incorrectly nested within a polygon.  This is the case
 	* if the shell is inside the polygon shell, but not inside a polygon hole.
@@ -285,11 +284,11 @@ private:
 	* E.g. they cannot partially overlap (this has been previously checked by
 	* <code>checkRelateConsistency</code>
 	*/
-	void checkShellNotNested(LinearRing *shell,Polygon *p,GeometryGraph *graph);
+	void checkShellNotNested(const LinearRing *shell,const Polygon *p,GeometryGraph *graph);
 	/**
 	* This routine checks to see if a shell is properly contained in a hole.
 	*/
-	void checkShellInsideHole(LinearRing *shell,LinearRing *hole,GeometryGraph *graph);
+	void checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph);
 	void checkConnectedInteriors(GeometryGraph *graph);
 };
 }

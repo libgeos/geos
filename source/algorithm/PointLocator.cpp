@@ -19,7 +19,7 @@ PointLocator::~PointLocator() {
 * @param geom the Geometry to test
 * @return <code>true</code> if the point is in the interior or boundary of the Geometry
 */
-bool PointLocator::intersects(Coordinate& p,Geometry *geom) {
+bool PointLocator::intersects(const Coordinate& p,const Geometry *geom) {
 	return locate(p,geom)!=Location::EXTERIOR;
 }
 
@@ -34,7 +34,7 @@ bool PointLocator::intersects(Coordinate& p,Geometry *geom) {
 *
 * @return the {@link Location} of the point relative to the input Geometry
 */
-int PointLocator::locate(Coordinate& p,Geometry *geom) {
+int PointLocator::locate(const Coordinate& p, const Geometry *geom) {
 	if (geom->isEmpty()) return Location::EXTERIOR;
 	if (typeid(*geom)==typeid(LineString)) {
 		return locate(p,(LineString*) geom);
@@ -53,7 +53,7 @@ int PointLocator::locate(Coordinate& p,Geometry *geom) {
 	return Location::EXTERIOR;
 }
 
-void PointLocator::computeLocation(Coordinate& p,Geometry *geom) {
+void PointLocator::computeLocation(const Coordinate& p, const Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) {
 		updateLocationInfo(locate(p,(LineString*) geom));
 	}
@@ -76,7 +76,7 @@ void PointLocator::computeLocation(Coordinate& p,Geometry *geom) {
 	} else if (typeid(*geom)==typeid(GeometryCollection)) {
 		GeometryCollectionIterator geomi((GeometryCollection*) geom);
 		while (geomi.hasNext()) {
-			Geometry *g2=geomi.next();
+			const Geometry *g2=geomi.next();
 //			if (! g2->equals(geom))
 			if (g2!=geom)
 				computeLocation(p,g2);
@@ -89,8 +89,8 @@ void PointLocator::updateLocationInfo(int loc) {
 	if (loc==Location::BOUNDARY) numBoundaries++;
 }
 
-int PointLocator::locate(Coordinate& p,LineString *l) {
-	CoordinateList* pt=l->getCoordinates();
+int PointLocator::locate(const Coordinate& p, const LineString *l) {
+	const CoordinateList* pt=l->getCoordinates();
 	if (! l->isClosed()) {
 		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
 			return Location::BOUNDARY;
@@ -101,7 +101,7 @@ int PointLocator::locate(Coordinate& p,LineString *l) {
 	return Location::EXTERIOR;
 }
 
-int PointLocator::locate(Coordinate& p,LinearRing *ring) {
+int PointLocator::locate(const Coordinate& p, const LinearRing *ring) {
 	CoordinateList *cl; // will be a copy -- strk
 	cl = ring->getCoordinates();
 	if (cga->isOnLine(p,cl)) {
@@ -117,10 +117,10 @@ int PointLocator::locate(Coordinate& p,LinearRing *ring) {
 	return Location::EXTERIOR;
 }
 
-int PointLocator::locate(Coordinate& p,Polygon *poly) {
+int PointLocator::locate(const Coordinate& p,const Polygon *poly) {
 	if (poly->isEmpty()) return Location::EXTERIOR;
 
-	LinearRing *shell=(LinearRing*) poly->getExteriorRing();
+	const LinearRing *shell=(LinearRing*) poly->getExteriorRing();
 
 	int shellLoc=locate(p,shell);
 	if (shellLoc==Location::EXTERIOR) return Location::EXTERIOR;

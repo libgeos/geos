@@ -2,7 +2,7 @@
 
 namespace geos {
 
-TopologyLocation::TopologyLocation(vector<int>* newLocation){
+TopologyLocation::TopologyLocation(const vector<int>* newLocation){
 	location=new vector<int>();
 	init((int)newLocation->size());
 }
@@ -12,8 +12,11 @@ TopologyLocation::TopologyLocation(){
 }
 
 TopologyLocation::~TopologyLocation(){
-	location->clear();
-	delete location;
+	if ( location )
+	{
+		location->clear();
+		delete location;
+	}
 }
 
 TopologyLocation::TopologyLocation(int on, int left, int right) {
@@ -30,7 +33,7 @@ TopologyLocation::TopologyLocation(int on) {
 	(*location)[Position::ON]=on;
 }
 
-TopologyLocation::TopologyLocation(TopologyLocation *gl) {
+TopologyLocation::TopologyLocation(const TopologyLocation *gl) {
 	location=new vector<int>(gl->location->begin(),gl->location->end());
 }
 
@@ -39,7 +42,7 @@ void TopologyLocation::init(int size){
 	setAllLocations(Location::UNDEF);
 }
 
-int TopologyLocation::get(int posIndex) {
+int TopologyLocation::get(int posIndex) const {
 	if (posIndex< (int)location->size()) return (*location)[posIndex];
 	return Location::UNDEF;
 }
@@ -47,7 +50,7 @@ int TopologyLocation::get(int posIndex) {
 /**
  * @return true if all locations are NULL
  */
-bool TopologyLocation::isNull(){
+bool TopologyLocation::isNull() const {
 	for (unsigned int i=0; i<location->size(); i++) {
 		if ((*location)[i]!=Location::UNDEF) return false;
 	}
@@ -57,22 +60,22 @@ bool TopologyLocation::isNull(){
 /**
  * @return true if any locations are NULL
  */
-bool TopologyLocation::isAnyNull(){
+bool TopologyLocation::isAnyNull() const {
 	for (unsigned int i=0; i<location->size(); i++) {
 		if ((*location)[i]==Location::UNDEF) return true;
 	}
 	return false;
 }
 
-bool TopologyLocation::isEqualOnSide(TopologyLocation &le, int locIndex){
+bool TopologyLocation::isEqualOnSide(const TopologyLocation &le, int locIndex) const {
 	return (*location)[locIndex]==(*(le.location))[locIndex];
 }
 
-bool TopologyLocation::isArea() {
+bool TopologyLocation::isArea() const {
 	return location->size()>1;
 }
 
-bool TopologyLocation::isLine() {
+bool TopologyLocation::isLine() const {
 	return location->size()==1;
 }
 
@@ -103,7 +106,7 @@ void TopologyLocation::setLocation(int locValue){
 	setLocation(Position::ON, locValue);
 }
 
-vector<int>* TopologyLocation::getLocations(){
+const vector<int>* TopologyLocation::getLocations() const {
 	return location;
 }
 
@@ -113,13 +116,13 @@ void TopologyLocation::setLocations(int on, int left, int right) {
 	(*location)[Position::RIGHT]=right;
 }
 
-void TopologyLocation::setLocations(TopologyLocation& gl){
+void TopologyLocation::setLocations(const TopologyLocation& gl){
 	for (unsigned int i=0; i<gl.location->size(); i++) {
 		(*location)[i]=(*(gl.location))[i];
 	}
 }
 
-bool TopologyLocation::allPositionsEqual(int loc){
+bool TopologyLocation::allPositionsEqual(int loc) const {
 	for (unsigned int i=0; i<location->size(); i++) {
 		if ((*location)[i]!=loc) return false;
 	}
@@ -130,7 +133,7 @@ bool TopologyLocation::allPositionsEqual(int loc){
  * merge updates only the NULL attributes of this object
  * with the attributes of another.
  */
-void TopologyLocation::merge(TopologyLocation* gl){
+void TopologyLocation::merge(const TopologyLocation* gl){
 	// if the src is an Area label & and the dest is not, increase the dest to be an Area
 	if (gl->location->size()>location->size()) {
 		vector<int> newLoc(3);
@@ -145,7 +148,7 @@ void TopologyLocation::merge(TopologyLocation* gl){
 	}
 }
 
-string TopologyLocation::toString(){
+string TopologyLocation::toString() const {
 	string buf="";
 	if (location->size()>1) buf+=Location::toLocationSymbol((*location)[Position::LEFT]);
 	buf+=Location::toLocationSymbol((*location)[Position::ON]);

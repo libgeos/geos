@@ -11,7 +11,7 @@ SimplePointInRing::~SimplePointInRing(){
 	delete cga;
 }
 
-bool SimplePointInRing::isInside(Coordinate& pt){
+bool SimplePointInRing::isInside(const Coordinate& pt){
 	return cga->isPointInRing(pt,pts);
 }
 

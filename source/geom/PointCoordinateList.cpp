@@ -3,7 +3,7 @@
 
 namespace geos {
 
-PointCoordinateList::PointCoordinateList(CoordinateList *c){
+PointCoordinateList::PointCoordinateList(const CoordinateList *c){
 	vect=new vector<point_3d>();
 	point_3d pt;
 	int size=c->getSize();
@@ -25,7 +25,7 @@ PointCoordinateList::PointCoordinateList(int n) {
 	vect->resize(n);
 }
 
-PointCoordinateList::PointCoordinateList(Coordinate& c) {
+PointCoordinateList::PointCoordinateList(const Coordinate& c) {
 	point_3d pt={c.x,c.y,c.z};
 	vect=new vector<point_3d>(1,pt);
 }
@@ -61,11 +61,11 @@ vector<point_3d>* PointCoordinateList::toPointVector() {
 	return vect;
 }
 
-bool PointCoordinateList::isEmpty() {
+bool PointCoordinateList::isEmpty() const {
 	return vect->empty();
 }
 
-void PointCoordinateList::add(Coordinate& c){
+void PointCoordinateList::add(const Coordinate& c){
 	point_3d pt={c.x,c.y,c.z};
 	vect->push_back(pt);
 }
@@ -74,11 +74,11 @@ void PointCoordinateList::add(point_3d p){
 	vect->push_back(p);
 }
 
-int PointCoordinateList::getSize(){
+int PointCoordinateList::getSize() const {
 	return (int) vect->size();
 }
 
-Coordinate& PointCoordinateList::getAt(int pos){
+const Coordinate& PointCoordinateList::getAt(int pos) const {
 	point_3d pt;
 //	if (pos>=0 && pos<=vect->size()-1) {
 		pt=(*vect)[pos];
@@ -94,7 +94,7 @@ point_3d PointCoordinateList::getPointAt(int pos){
 //		throw "PointCoordinateList exception: can't retrieve element\n";
 }
 
-void PointCoordinateList::setAt(Coordinate& c, int pos){
+void PointCoordinateList::setAt(const Coordinate& c, int pos){
 	point_3d pt={c.x,c.y,c.z};
 //	if (pos>=0 && pos<=vect->size()-1) 
 		(*vect)[pos]=pt;

@@ -3,7 +3,7 @@
 
 namespace geos {
 
-MCPointInRing::MCSelecter::MCSelecter(Coordinate& newP,MCPointInRing *prt) {
+MCPointInRing::MCSelecter::MCSelecter(const Coordinate& newP,MCPointInRing *prt) {
 	p=newP;
 	parent=prt;
 }
@@ -40,7 +40,7 @@ void MCPointInRing::buildIndex() {
 	delete mcList;
 }
 
-bool MCPointInRing::isInside(Coordinate& pt) {
+bool MCPointInRing::isInside(const Coordinate& pt) {
 	crossings=0;
 	// test all segments intersected by ray from pt in positive x direction
 	Envelope *rayEnv=new Envelope(DoubleNegInfinity,DoubleInfinity,pt.y,pt.y);

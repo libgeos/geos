@@ -15,7 +15,9 @@ NonRobustCGAlgorithms::~NonRobustCGAlgorithms(){
 * ring is expected to contain a closing point;
 * i.e. ring[0]=ring[length-1]
 */
-bool NonRobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring){
+bool
+NonRobustCGAlgorithms::isPointInRing(const Coordinate& p,
+		const CoordinateList* ring) const {
 	int i,i1;		// point index;i1=i-1 mod n
 	double xInt;		// x intersection of e with ray
 	int	crossings=0;	// number of edge/ray crossings
@@ -25,8 +27,8 @@ bool NonRobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring){
 	/* For each line edge l=(i-1,i),see if it crosses ray from test point in positive x direction. */
 	for(i=1;i<nPts;i++){
 		i1=i-1;
-		Coordinate& p1=ring->getAt(i);
-		Coordinate& p2=ring->getAt(i1);
+		const Coordinate& p1=ring->getAt(i);
+		const Coordinate& p2=ring->getAt(i1);
 		x1=p1.x-p.x;
 		y1=p1.y-p.y;
 		x2=p2.x-p.x;
@@ -49,10 +51,10 @@ bool NonRobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring){
 
 
 
-bool NonRobustCGAlgorithms::isOnLine(Coordinate& p,CoordinateList* pt) {
+bool NonRobustCGAlgorithms::isOnLine(const Coordinate& p,const CoordinateList* pt) const {
 	for(int i=1;i<pt->getSize();i++){
-		Coordinate& p0=pt->getAt(i-1);
-		Coordinate& p1=pt->getAt(i);
+		const Coordinate& p0=pt->getAt(i-1);
+		const Coordinate& p1=pt->getAt(i);
 		li->computeIntersection(p,p0,p1);
 		if(li->hasIntersection())
 			return true;
@@ -60,7 +62,7 @@ bool NonRobustCGAlgorithms::isOnLine(Coordinate& p,CoordinateList* pt) {
 	return false;
 }
 
-bool NonRobustCGAlgorithms::isCCW(CoordinateList* ring) {
+bool NonRobustCGAlgorithms::isCCW(const CoordinateList* ring) const {
 	Coordinate hip,p,prev,next;
 	int hii,i;
 	int nPts=ring->getSize();
@@ -113,7 +115,9 @@ bool NonRobustCGAlgorithms::isCCW(CoordinateList* ring) {
 	}
 }
 
-int NonRobustCGAlgorithms::computeOrientation(Coordinate& p1,Coordinate& p2,Coordinate& q){
+int
+NonRobustCGAlgorithms::computeOrientation(const Coordinate& p1,
+		const Coordinate& p2,const Coordinate& q) const {
 	double dx1=p2.x-p1.x;
 	double dy1=p2.y-p1.y;
 	double dx2=q.x-p2.x;

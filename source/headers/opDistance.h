@@ -15,11 +15,12 @@ namespace geos {
  */
 class PointExtracterFilter: public GeometryFilter {
 public:
-	static vector<Geometry*>* getPoints(Geometry *geom);
-	PointExtracterFilter(vector<Geometry*> *newPts);
-	void filter(Geometry *geom);
+	static vector<const Geometry*>* getPoints(const Geometry *geom);
+	PointExtracterFilter(vector<const Geometry*> *newPts);
+	void filter_ro(const Geometry *geom);
+	void filter_rw(Geometry *geom) {};
 private:
-	vector<Geometry*> *pts;
+	vector<const Geometry*> *pts;
 };
 
 /**
@@ -28,11 +29,12 @@ private:
  */
 class LineExtracterFilter: public GeometryComponentFilter {
 public:
-	static vector<Geometry*>* getLines(Geometry *geom);
-	LineExtracterFilter(vector<Geometry*> *newLines);
-	void filter(Geometry *geom);
+	static vector<const Geometry*>* getLines(const Geometry *geom);
+	LineExtracterFilter(vector<const Geometry*> *newLines);
+	void filter_ro(const Geometry *geom);
+	void filter_rw(Geometry *geom) {};
 private:
-	vector<Geometry*> *lines;
+	vector<const Geometry*> *lines;
 };
 
 /**
@@ -41,11 +43,12 @@ private:
  */
 class PolygonExtracterFilter: public GeometryFilter {
 public:
-	static vector<Geometry*>* getPolygons(Geometry *geom);
-	PolygonExtracterFilter(vector<Geometry*> *newComps);
-	void filter(Geometry *geom);
+	static vector<const Geometry*>* getPolygons(const Geometry *geom);
+	PolygonExtracterFilter(vector<const Geometry*> *newComps);
+	void filter_ro(const Geometry *geom);
+	void filter_rw(Geometry *geom) {};
 private:
-	vector<Geometry*> *comps;
+	vector<const Geometry*> *comps;
 };
 
 /**
@@ -56,11 +59,12 @@ private:
  */
 class ConnectedElementPointFilter: public GeometryFilter {
 public:
-	static vector<Coordinate*>* getCoordinates(Geometry *geom);
-	ConnectedElementPointFilter(vector<Coordinate*> *newPts);
-	void filter(Geometry *geom);
+	static vector<const Coordinate*>* getCoordinates(const Geometry *geom);
+	ConnectedElementPointFilter(vector<const Coordinate*> *newPts);
+	void filter_ro(const Geometry *geom);
+	void filter_rw(Geometry *geom) {};
 private:
-	vector<Coordinate*> *pts;
+	vector<const Coordinate*> *pts;
 };
 
 /**
@@ -70,23 +74,23 @@ private:
  */
 class DistanceOp {
 public:
-	static double distance(Geometry *g0,Geometry *g1);
-	DistanceOp(Geometry *g0,Geometry *g1);
+	static double distance(const Geometry *g0, const Geometry *g1);
+	DistanceOp(const Geometry *g0, const Geometry *g1);
 	virtual ~DistanceOp();
 	double distance();
 private:
 	PointLocator *ptLocator;
-	vector<Geometry*> *geom;
+	vector<const Geometry*> *geom;
 	double minDistance;
 	void updateMinDistance(double dist);
 	void computeMinDistance();
-	void computeInside(vector<Coordinate*> *pts,vector<Geometry*> *polys);
-	void computeInside(Coordinate *pt,Polygon *poly);
-	void computeMinDistanceLines(vector<Geometry*> *lines0,vector<Geometry*> *lines1);
-	void computeMinDistancePoints(vector<Geometry*> *points0,vector<Geometry*> *points1);
-	void computeMinDistanceLinesPoints(vector<Geometry*> *lines,vector<Geometry*> *points);
-	void computeMinDistance(LineString *line0,LineString *line1);
-	void computeMinDistance(LineString *line,Point *pt);
+	void computeInside(vector<const Coordinate*> *pts,vector<const Geometry*> *polys);
+	void computeInside(const Coordinate *pt,const Polygon *poly);
+	void computeMinDistanceLines(vector<const Geometry*> *lines0,vector<const Geometry*> *lines1);
+	void computeMinDistancePoints(vector<const Geometry*> *points0,vector<const Geometry*> *points1);
+	void computeMinDistanceLinesPoints(vector<const Geometry*> *lines,vector<const Geometry*> *points);
+	void computeMinDistance(const LineString *line0, const LineString *line1);
+	void computeMinDistance(const LineString *line, const Point *pt);
 };
 }
 #endif

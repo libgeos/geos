@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.14  2003/10/11 01:56:08  strk
+* Code base padded with 'const' keywords ;)
+*
 * Revision 1.13  2003/10/09 10:10:05  strk
 * Throw an exception if scale is 0. Added Log entry.
 *
@@ -26,7 +29,7 @@ const double maximumPreciseValue=9007199254740992.0;
 /**
 * Rounds an numeric value to the PrecisionModel grid.
 */
-double PrecisionModel::makePrecise(double val) {
+double PrecisionModel::makePrecise(double val) const {
 	double v=val*scale;
 	if (val>=0.0) 
 		v=floor(v+0.5);
@@ -38,7 +41,7 @@ double PrecisionModel::makePrecise(double val) {
 /**
 * Rounds a Coordinate to the PrecisionModel grid.
 */
-void PrecisionModel::makePrecise(Coordinate *coord) {
+void PrecisionModel::makePrecise(Coordinate *coord) const {
 	if (modelType==FLOATING) return;
 	coord->x=makePrecise(coord->x);
 	coord->y=makePrecise(coord->y);
@@ -95,7 +98,7 @@ PrecisionModel::PrecisionModel(const PrecisionModel &pm) {
 	offsetY = pm.offsetY;
 }
 
-bool PrecisionModel::isFloating(){
+bool PrecisionModel::isFloating() const {
 	return modelType == FLOATING;
 }
 
@@ -107,7 +110,7 @@ bool PrecisionModel::isFloating(){
 *@return    the amount by which to multiply a coordinate after subtracting
 *      the offset
 */
-double PrecisionModel::getScale(){
+double PrecisionModel::getScale() const {
 	return scale;
 }
 
@@ -121,15 +124,15 @@ void PrecisionModel::setScale(double newScale) {
 	scale=fabs(newScale);
 }
 
-double PrecisionModel::getOffsetX(){
+double PrecisionModel::getOffsetX() const {
 	return offsetX;
 }
 
-double PrecisionModel::getOffsetY() {
+double PrecisionModel::getOffsetY() const {
 	return offsetY;
 }
 
-void PrecisionModel::toInternal (Coordinate& external, Coordinate* internal) {
+void PrecisionModel::toInternal (const Coordinate& external, Coordinate* internal) const {
 	if (isFloating()) {
 		internal->x = external.x;
 		internal->y = external.y;
@@ -140,24 +143,24 @@ void PrecisionModel::toInternal (Coordinate& external, Coordinate* internal) {
 	internal->z = external.z;
 }
 
-Coordinate* PrecisionModel::toInternal(Coordinate& external) {
+Coordinate* PrecisionModel::toInternal(const Coordinate& external) const {
 	Coordinate* internal=new Coordinate();
 	toInternal(external, internal);
 	return internal;
 }
 
-Coordinate* PrecisionModel::toExternal(Coordinate& internal) {
+Coordinate* PrecisionModel::toExternal(const Coordinate& internal) const {
 	Coordinate* external=new Coordinate();
 	toExternal(internal, external);
 	return external;
 }
 
-void PrecisionModel::toExternal(Coordinate& internal, Coordinate* external) {
+void PrecisionModel::toExternal(const Coordinate& internal, Coordinate* external) const {
 	external->x = internal.x;
 	external->y = internal.y;
 }
   
-string PrecisionModel::toString() {
+string PrecisionModel::toString() const {
 	string result("");
 	char buffer[255];
     if (isFloating()) {
@@ -173,7 +176,7 @@ string PrecisionModel::toString() {
 
 PrecisionModel::~PrecisionModel(){}
 
-bool operator==(PrecisionModel a, PrecisionModel b) {
+bool operator==(const PrecisionModel a, const PrecisionModel b) {
 	return a.isFloating() == b.isFloating() &&
 			a.getOffsetX() == b.getOffsetX() &&
 			a.getOffsetY() == b.getOffsetY() &&
@@ -189,8 +192,7 @@ bool operator==(PrecisionModel a, PrecisionModel b) {
 *@return    a negative integer, zero, or a positive integer as this <code>PrecisionModel</code>
 *      is less than, equal to, or greater than the specified <code>PrecisionModel</code>
 */
-int PrecisionModel::compareTo(void* o) {
-	PrecisionModel *other=(PrecisionModel*) o;
+int PrecisionModel::compareTo(const PrecisionModel *other) const {
 	if (modelType==FLOATING && other->modelType==FLOATING) return 0;
 	if (modelType==FLOATING && other->modelType!=FLOATING) return 1;
 	if (modelType!=FLOATING && other->modelType==FLOATING) return -1;

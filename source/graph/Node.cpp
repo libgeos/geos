@@ -12,7 +12,7 @@ Node::~Node(){
 	delete edges;
 }
 
-Coordinate& Node::getCoordinate() {
+const Coordinate& Node::getCoordinate() const {
 	return coord;
 }
 
@@ -32,11 +32,11 @@ void Node::add(EdgeEnd *e) {
 	e->setNode(this);
 }
 
-void Node::mergeLabel(Node* n) {
+void Node::mergeLabel(const Node* n) {
 	mergeLabel(n->label);
 }
 
-void Node::mergeLabel(Label* label2) {
+void Node::mergeLabel(const Label* label2) {
 	for (int i=0; i<2; i++) {
 		int loc=computeMergedLocation(label2, i);
 		int thisLoc=label->getLocation(i);
@@ -65,7 +65,7 @@ void Node::setLabelBoundary(int argIndex) {
 	label->setLocation(argIndex, newLoc);
 }
 
-int Node::computeMergedLocation(Label* label2, int eltIndex){
+int Node::computeMergedLocation(const Label* label2, int eltIndex){
 	int loc=Location::UNDEF;
 	loc=label->getLocation(eltIndex);
 	if (!label2->isNull(eltIndex)) {

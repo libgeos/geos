@@ -73,11 +73,13 @@ map<Coordinate,Node*,CoordLT>::iterator PlanarGraph::getNodeIterator() {
 //Wouldn't work. Use iterator
 //Collection PlanarGraph::getNodes() { return nodes.values(); }
 
+// arg cannot be const, NodeMap::addNode will
+// occasionally label-merge first arg.
 Node* PlanarGraph::addNode(Node *node) {
 	return nodes->addNode(node);
 }
 
-Node* PlanarGraph::addNode(Coordinate& coord) {
+Node* PlanarGraph::addNode(const Coordinate& coord) {
 	return nodes->addNode(coord);
 }
 
@@ -152,7 +154,7 @@ EdgeEnd* PlanarGraph::findEdgeEnd(Edge *e) {
 * @return the edge, if found
 *    <code>null</code> if the edge was not found
 */
-Edge* PlanarGraph::findEdge(Coordinate& p0, Coordinate& p1) {
+Edge* PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1) {
     unsigned int i;
 	for(i=0; i<edges->size();i++) {
 //        Edge *e=edges->at(i);
@@ -171,7 +173,7 @@ Edge* PlanarGraph::findEdge(Coordinate& p0, Coordinate& p1) {
 * @return the edge, if found
 *    <code>null</code> if the edge was not found
 */
-Edge* PlanarGraph::findEdgeInSameDirection(Coordinate& p0,Coordinate& p1) {
+Edge* PlanarGraph::findEdgeInSameDirection(const Coordinate& p0, const Coordinate& p1) {
 	for(unsigned int i=0; i<edges->size();i++) {
 		Edge *e=(*edges)[i];
 //		Edge *e=edges->at(i);
@@ -189,7 +191,7 @@ Edge* PlanarGraph::findEdgeInSameDirection(Coordinate& p0,Coordinate& p1) {
 * E.g. the segments are parallel and in the same quadrant
 * (as opposed to parallel and opposite!).
 */
-bool PlanarGraph::matchInSameDirection(Coordinate& p0,Coordinate& p1,Coordinate& ep0,Coordinate& ep1) {
+bool PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1, const Coordinate& ep0, const Coordinate& ep1) {
 	if (!(p0==ep0))
 		return false;
 	if (cga->computeOrientation(p0,p1,ep1)==CGAlgorithms::COLLINEAR

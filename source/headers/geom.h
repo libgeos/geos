@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.32  2003/10/11 01:56:08  strk
+* Code base padded with 'const' keywords ;)
+*
 * Revision 1.31  2003/10/09 15:35:13  strk
 * added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
 *
@@ -58,23 +61,23 @@ public:
 		FLOATING
 	};
 	static const double maximumPreciseValue;
-	double makePrecise(double val);
-	void makePrecise(Coordinate *coord);
+	double makePrecise(double val) const;
+	void makePrecise(Coordinate *coord) const;
 	PrecisionModel(void);
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
 	PrecisionModel(double newScale);
 	PrecisionModel(const PrecisionModel &pm);
 	virtual ~PrecisionModel(void);
-	bool isFloating();
-	double getScale();
-	double getOffsetX();
-	double getOffsetY();
-	void toInternal(Coordinate& external, Coordinate* internal);
-	Coordinate* toInternal(Coordinate& external);
-	Coordinate* toExternal(Coordinate& internal);
-	void toExternal(Coordinate& internal, Coordinate* external);
-	string toString();
-	int compareTo(void* o);
+	bool isFloating() const;
+	double getScale() const;
+	double getOffsetX() const;
+	double getOffsetY() const;
+	void toInternal(const Coordinate& external, Coordinate* internal) const;
+	Coordinate* toInternal(const Coordinate& external) const;
+	Coordinate* toExternal(const Coordinate& internal) const;
+	void toExternal(const Coordinate& internal, Coordinate* external) const;
+	string toString() const;
+	int compareTo(const PrecisionModel* other) const;
 private:
 	void setScale(double newScale);
 	int modelType;
@@ -110,7 +113,7 @@ public:
 	//bool equals2D(Coordinate& other);
 	//int compareTo(Coordinate& other);
 	//bool equals3D(Coordinate& other);
-	string toString();
+	string toString() const;
 	//void makePrecise();
 	//double distance(Coordinate& p);
 	static Coordinate nullCoord;
@@ -149,13 +152,13 @@ public:
 		z=DoubleNotANumber;
 	}
 
-	void Coordinate::setCoordinate(Coordinate& other) {
+	void Coordinate::setCoordinate(const Coordinate& other) {
 		x = other.x;
 		y = other.y;
 		z = other.z;
 	}
 
-	bool Coordinate::equals2D(Coordinate& other) {
+	bool Coordinate::equals2D(const Coordinate& other) const {
 		if (x != other.x) {
 		return false;
 		}
@@ -165,7 +168,7 @@ public:
 		return true;
 	}
 
-	int Coordinate::compareTo(Coordinate& other) {
+	int Coordinate::compareTo(const Coordinate& other) const {
 		if (x < other.x) {
 		return -1;
 		}
@@ -181,16 +184,16 @@ public:
 		return 0;
 	}
 
-	bool Coordinate::equals3D(Coordinate& other) {
+	bool Coordinate::equals3D(const Coordinate& other) const {
 		return (x == other.x) && ( y == other.y) && (( z == other.z)||(z==DoubleNotANumber && other.z==DoubleNotANumber));
 	}
 
-	void Coordinate::makePrecise(PrecisionModel *precisionModel) {
+	void Coordinate::makePrecise(const PrecisionModel *precisionModel) {
 		x = precisionModel->makePrecise(x);
 		y = precisionModel->makePrecise(y);
 	}
 
-	double Coordinate::distance(Coordinate& p) {
+	double Coordinate::distance(const Coordinate& p) const {
 		double dx = x - p.x;
 		double dy = y - p.y;
 		return sqrt(dx * dx + dy * dy);
@@ -204,25 +207,25 @@ public:
 
 class CoordinateList {
 public:
-	virtual	bool isEmpty()=0;
-	virtual	void add(Coordinate& c)=0;
-	virtual	int getSize()=0;
-	virtual	Coordinate& getAt(int pos)=0;
-	virtual	void setAt(Coordinate& c, int pos)=0;
+	virtual	bool isEmpty() const=0;
+	virtual	void add(const Coordinate& c)=0;
+	virtual	int getSize() const=0;
+	virtual	const Coordinate& getAt(int pos) const=0;
+	virtual	void setAt(const Coordinate& c, int pos)=0;
 	virtual	void deleteAt(int pos)=0;
 	virtual	vector<Coordinate>* toVector()=0;
 	virtual	string toString()=0;
 	virtual	void setPoints(vector<Coordinate> &v)=0;
-	bool hasRepeatedPoints();
-	Coordinate* minCoordinate();
-	static bool hasRepeatedPoints(CoordinateList *cl);
-	static Coordinate* minCoordinate(CoordinateList *cl);
-	static int indexOf(Coordinate *coordinate, CoordinateList *cl);
+	bool hasRepeatedPoints() const;
+	const Coordinate* minCoordinate() const;
+	static bool hasRepeatedPoints(const CoordinateList *cl);
+	static const Coordinate* minCoordinate(CoordinateList *cl);
+	static int indexOf(const Coordinate *coordinate, const CoordinateList *cl);
 	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
-	static void scroll(CoordinateList *cl, Coordinate *firstCoordinate);
+	static void scroll(CoordinateList *cl, const Coordinate *firstCoordinate);
 	static void reverse(CoordinateList *cl);
 	void add(vector<Coordinate>* vc,bool allowRepeated);
-	void add(Coordinate& c,bool allowRepeated);
+	void add(const Coordinate& c,bool allowRepeated);
 	static CoordinateList* removeRepeatedPoints(CoordinateList *cl);
 	virtual ~CoordinateList(){};
 };
@@ -231,15 +234,15 @@ class BasicCoordinateList : public CoordinateList {
 public:
 	BasicCoordinateList();
 	BasicCoordinateList(int n);
-	BasicCoordinateList(Coordinate& c);
+	BasicCoordinateList(const Coordinate& c);
 	BasicCoordinateList(const BasicCoordinateList &cl);
-	BasicCoordinateList(CoordinateList *c);
+	BasicCoordinateList(const CoordinateList *c);
 	virtual ~BasicCoordinateList();
-	bool isEmpty();
-	void add(Coordinate& c);
-	int getSize();
-	Coordinate& getAt(int pos);
-	void setAt(Coordinate& c, int pos);
+	bool isEmpty() const;
+	void add(const Coordinate& c);
+	int getSize() const;
+	const Coordinate& getAt(int pos) const;
+	void setAt(const Coordinate& c, int pos);
 	void deleteAt(int pos);
 	vector<Coordinate>* toVector();
 	string toString();
@@ -258,17 +261,17 @@ class PointCoordinateList : public CoordinateList {
 public:
 	PointCoordinateList();
 	PointCoordinateList(int n);
-	PointCoordinateList(Coordinate& c);
+	PointCoordinateList(const Coordinate& c);
 	PointCoordinateList(const PointCoordinateList &cl);
-	PointCoordinateList(CoordinateList *c);
+	PointCoordinateList(const CoordinateList *c);
 	virtual ~PointCoordinateList();
-	bool isEmpty();
-	void add(Coordinate& c);
+	bool isEmpty() const;
+	void add(const Coordinate& c);
 	void add(point_3d p);
-	int getSize();
-	Coordinate& getAt(int pos);
+	int getSize() const;
+	const Coordinate& getAt(int pos) const;
 	point_3d getPointAt(int pos);
-	void setAt(Coordinate& c, int pos);
+	void setAt(const Coordinate& c, int pos);
 	void setAt(point_3d p, int pos);
 	void deleteAt(int pos);
 	vector<Coordinate>* toVector();
@@ -284,23 +287,23 @@ class CoordinateListFactory {
 public:
 	virtual CoordinateList* createCoordinateList()=0;
 	virtual CoordinateList* createCoordinateList(int size)=0;
-	virtual CoordinateList* createCoordinateList(Coordinate& c)=0;
-	virtual CoordinateList* createCoordinateList(CoordinateList *c)=0;
+	virtual CoordinateList* createCoordinateList(const Coordinate& c)=0;
+	virtual CoordinateList* createCoordinateList(const CoordinateList *c)=0;
 	static CoordinateListFactory* internalFactory;
 };
 
 class BasicCoordinateListFactory: public CoordinateListFactory {
 	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
 	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
-	CoordinateList* createCoordinateList(Coordinate& c) {return new BasicCoordinateList(c);};
-	CoordinateList* createCoordinateList(CoordinateList *c) {return new BasicCoordinateList(c);};
+	CoordinateList* createCoordinateList(const Coordinate& c) {return new BasicCoordinateList(c);};
+	CoordinateList* createCoordinateList(const CoordinateList *c) {return new BasicCoordinateList(c);};
 };
 
 class PointCoordinateListFactory: public CoordinateListFactory {
 	CoordinateList* createCoordinateList() {return new PointCoordinateList();};
 	CoordinateList* createCoordinateList(int size) {return new PointCoordinateList(size);};
-	CoordinateList* createCoordinateList(Coordinate& c) {return new PointCoordinateList(c);};
-	CoordinateList* createCoordinateList(CoordinateList *c) {return new PointCoordinateList(c);};
+	CoordinateList* createCoordinateList(const Coordinate& c) {return new PointCoordinateList(c);};
+	CoordinateList* createCoordinateList(const CoordinateList *c) {return new PointCoordinateList(c);};
 };
 
 /**
@@ -321,7 +324,8 @@ public:
    *
    *@param  coord  a <code>Coordinate</code> to which the filter is applied.
    */
-   virtual void filter(Coordinate& coord)=0;
+   virtual void filter_rw(Coordinate& coord)=0;
+   virtual void filter_ro(const Coordinate& coord)=0;
 };
 
 /**
@@ -346,7 +350,8 @@ public:
 	*@param  geom  a <code>Geometry</code> to which the filter is applied.
 	*/
 //	virtual void filter(Geometry *geom)=0;
-	virtual void filter(Geometry *geom);
+	virtual void filter_rw(Geometry *geom);
+	virtual void filter_ro(const Geometry *geom); // Unsupported
 };
 
 
@@ -392,39 +397,39 @@ class Envelope {
 public:
 	Envelope(void);
 	Envelope(double x1, double x2, double y1, double y2);
-	Envelope(Coordinate& p1, Coordinate& p2);
-	Envelope(Coordinate& p);
+	Envelope(const Coordinate& p1, const Coordinate& p2);
+	Envelope(const Coordinate& p);
 	Envelope(const Envelope &env);
 	virtual ~Envelope(void);
-	static bool intersects(Coordinate& p1,Coordinate& p2,Coordinate& q);
-	static bool intersects(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
+	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
+	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
 	void init(void);
 	void init(double x1, double x2, double y1, double y2);
-	void init(Coordinate& p1, Coordinate& p2);
-	void init(Coordinate& p);
+	void init(const Coordinate& p1, const Coordinate& p2);
+	void init(const Coordinate& p);
 	void init(Envelope env);
 	void setToNull(void);
-	bool isNull(void);
-	double getWidth(void);
-	double getHeight(void);
-	double getMaxY();
-	double getMaxX();
-	double getMinY();
-	double getMinX();
-	void expandToInclude(Coordinate& p);
+	bool isNull(void) const;
+	double getWidth(void) const;
+	double getHeight(void) const;
+	double getMaxY() const;
+	double getMaxX() const;
+	double getMinY() const;
+	double getMinX() const;
+	void expandToInclude(const Coordinate& p);
 	void expandToInclude(double x, double y);
-	void expandToInclude(Envelope* other);
-	bool contains(Coordinate& p);
-	bool contains(double x, double y);
-	bool contains(Envelope* other);
-	bool overlaps(Coordinate& p);
-	bool overlaps(double x, double y);
-	bool overlaps(Envelope* other);
-	bool intersects(Coordinate& p);
-	bool intersects(double x, double y);
-	bool intersects(Envelope* other);
-	string toString(void);
-	double distance(Envelope* env);
+	void expandToInclude(const Envelope* other);
+	bool contains(const Coordinate& p) const;
+	bool contains(double x, double y) const;
+	bool contains(const Envelope* other) const;
+	bool overlaps(const Coordinate& p) const;
+	bool overlaps(double x, double y) const;
+	bool overlaps(const Envelope* other) const;
+	bool intersects(const Coordinate& p) const;
+	bool intersects(double x, double y) const;
+	bool intersects(const Envelope* other) const;
+	string toString(void) const;
+	double distance(const Envelope* env) const;
 private:
 	static double distance(double x0,double y0,double x1,double y1);
 	double minx;	/// the minimum x-coordinate
@@ -439,15 +444,15 @@ class IntersectionMatrix;
 
 class SFSGeometry {
 public:
-	virtual int getSRID()=0;
-	virtual string getGeometryType()=0;
-	virtual PrecisionModel* getPrecisionModel()=0;
-	virtual Envelope* getEnvelopeInternal()=0;
+	virtual int getSRID() const=0;
+	virtual string getGeometryType() const=0;
+	virtual PrecisionModel* getPrecisionModel() const=0;
+	virtual Envelope* getEnvelopeInternal() const=0;
 	virtual Geometry* getEnvelope()=0;
-	virtual bool isEmpty()=0;
-	virtual bool isSimple()=0;
-	virtual Geometry* getBoundary()=0;
-	virtual int getDimension()=0;
+	virtual bool isEmpty() const=0;
+	virtual bool isSimple() const=0;
+	virtual Geometry* getBoundary() const=0;
+	virtual int getDimension() const=0;
 	virtual bool equals(Geometry *other)=0;
 	virtual bool disjoint(Geometry *other)=0;
 	virtual bool intersects(Geometry *other)=0;
@@ -459,8 +464,8 @@ public:
 	virtual bool relate(Geometry *other, string intersectionPattern)=0;
 	virtual IntersectionMatrix* relate(Geometry *other)=0;
 	virtual Geometry* buffer(double distance)=0;
-	virtual Geometry* convexHull()=0;
-	virtual Geometry* intersection(Geometry *other)=0;
+	virtual Geometry* convexHull() const=0;
+	virtual Geometry* intersection(const Geometry *other)=0;
 	virtual Geometry* Union(Geometry *other)=0;
 	virtual Geometry* difference(Geometry *other)=0;
 	virtual Geometry* symDifference(Geometry *other)=0;
@@ -475,22 +480,22 @@ public:
 	void throw_exception ();
 	Geometry(void);
 	Geometry(const Geometry &geom);
-	Geometry(PrecisionModel* precisionModel, int SRID);
-	virtual string getGeometryType()=0; //Abstract
-	virtual int getSRID();
+	Geometry(const PrecisionModel* pm, int SRID);
+	virtual string getGeometryType() const=0; //Abstract
+	virtual int getSRID() const;
 	virtual void setSRID(int newSRID);
-	virtual PrecisionModel* getPrecisionModel();
-	virtual Coordinate* getCoordinate()=0; //Abstract
-	virtual CoordinateList* getCoordinates()=0; //Abstract
-	virtual int getNumPoints()=0; //Abstract
-	virtual bool isSimple()=0; //Abstract
-	virtual bool isValid();
-	virtual bool isEmpty()=0; //Abstract
-	virtual int getDimension()=0; //Abstract
-	virtual Geometry* getBoundary()=0; //Abstract
-	virtual int getBoundaryDimension()=0; //Abstract
+	virtual PrecisionModel* getPrecisionModel() const;
+	virtual const Coordinate* getCoordinate() const=0; //Abstract
+	virtual CoordinateList* getCoordinates() const=0; //Abstract
+	virtual int getNumPoints() const=0; //Abstract
+	virtual bool isSimple() const=0; //Abstract
+	virtual bool isValid() const;
+	virtual bool isEmpty() const=0; //Abstract
+	virtual int getDimension() const=0; //Abstract
+	virtual Geometry* getBoundary() const=0; //Abstract
+	virtual int getBoundaryDimension() const=0; //Abstract
 	virtual Geometry* getEnvelope();
-	virtual Envelope* getEnvelopeInternal();
+	virtual Envelope* getEnvelopeInternal() const;
 	virtual bool disjoint(Geometry *g);
 	virtual bool touches(Geometry *g);
 	virtual bool intersects(Geometry *g);
@@ -505,24 +510,27 @@ public:
 	virtual string toText();
 	virtual Geometry* buffer(double distance);
 	virtual Geometry* buffer(double distance,int quadrantSegments);
-	virtual Geometry* convexHull();
-	virtual Geometry* intersection(Geometry *other);
+	virtual Geometry* convexHull() const;
+	virtual Geometry* intersection(const Geometry *other);
 	virtual Geometry* Union(Geometry *other);
 	virtual Geometry* difference(Geometry *other);
 	virtual Geometry* symDifference(Geometry *other);
-	virtual bool equalsExact(Geometry *other, double tolerance)=0; //Abstract
-	virtual void apply(CoordinateFilter *filter)=0; //Abstract
-	virtual void apply(GeometryFilter *filter)=0; //Abstract
-	virtual void apply(GeometryComponentFilter *filter)=0;
+	virtual bool equalsExact(const Geometry *other, double tolerance) const=0; //Abstract
+	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
+	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
+	virtual void apply_rw(GeometryFilter *filter);
+	virtual void apply_ro(GeometryFilter *filter) const;
+	virtual void apply_rw(GeometryComponentFilter *filter);
+	virtual void apply_ro(GeometryComponentFilter *filter) const;
 	//public Object clone() // Replaced by copy constructor
 	virtual void normalize()=0; //Abstract
-	virtual int compareTo(Geometry *geom);
-	virtual double distance(Geometry *g);
-	virtual double getArea();
-	virtual double getLength();
+	virtual int compareTo(const Geometry *geom) const;
+	virtual double distance(const Geometry *g) const;
+	virtual double getArea() const;
+	virtual double getLength() const;
 	virtual ~Geometry();
 	virtual bool isWithinDistance(Geometry *geom,double cDistance);
-	virtual Point* getCentroid();
+	virtual Point* getCentroid() const;
 	virtual Point* getInteriorPoint();
 	virtual void geometryChanged();
 	void geometryChangedAction();
@@ -532,24 +540,24 @@ protected:
 	Envelope* envelope;
 	static CGAlgorithms *cgAlgorithms;
 	static bool hasNonEmptyElements(vector<Geometry *>* geometries);
-	static bool hasNullElements(CoordinateList* list);
+	static bool hasNullElements(const CoordinateList* list);
 	static bool hasNullElements(vector<Geometry *>* lrs);
 //	static void reversePointOrder(CoordinateList* coordinates);
 //	static Coordinate& minCoordinate(CoordinateList* coordinates);
 //	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
 //	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
-	virtual bool isEquivalentClass(Geometry *other);
-	virtual void checkNotGeometryCollection(Geometry *g);
+	virtual bool isEquivalentClass(const Geometry *other) const;
+	virtual void checkNotGeometryCollection(const Geometry *g) const;
 	//virtual void checkEqualSRID(Geometry *other);
 	//virtual void checkEqualPrecisionModel(Geometry *other);
-	virtual Envelope* computeEnvelopeInternal()=0; //Abstract
-	virtual int compareToSameClass(Geometry *geom)=0; //Abstract
-	int compare(vector<Coordinate> a, vector<Coordinate> b);
-	int compare(vector<Geometry *> a, vector<Geometry *> b);
-	bool equal(Coordinate& a,Coordinate& b,double tolerance);
+	virtual Envelope* computeEnvelopeInternal() const=0; //Abstract
+	virtual int compareToSameClass(const Geometry *geom) const=0; //Abstract
+	int compare(vector<Coordinate> a, vector<Coordinate> b) const;
+	int compare(vector<Geometry *> a, vector<Geometry *> b) const;
+	bool equal(const Coordinate& a, const Coordinate& b,double tolerance) const;
 private:
 	vector<string> *sortedClasses;
-	virtual int getClassSortIndex();
+	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter* geometryChangedFilter;
 };
 
@@ -570,7 +578,8 @@ public:
    *
    *@param  geom  a <code>Geometry</code> to which the filter is applied.
    */
-	virtual void filter(Geometry *geom)=0;
+	virtual void filter_ro(const Geometry *geom)=0;
+	virtual void filter_rw(Geometry *geom)=0;
 };
 
 /**
@@ -583,24 +592,24 @@ public:
 	Coordinate p1; /// Segemnt end
 	LineSegment(void);
 	LineSegment(const LineSegment &ls);
-	LineSegment(Coordinate& c0, Coordinate& c1);
+	LineSegment(const Coordinate& c0, const Coordinate& c1);
 	virtual ~LineSegment(void);
-	virtual void setCoordinates(Coordinate& c0, Coordinate& c1);
-	virtual Coordinate& getCoordinate(int i);
-	virtual void setCoordinates(LineSegment ls);
-	virtual double getLength();
+	virtual void setCoordinates(const Coordinate& c0, const Coordinate& c1);
+	virtual const Coordinate& getCoordinate(int i) const;
+	virtual void setCoordinates(const LineSegment ls);
+	virtual double getLength() const;
 	virtual void reverse();
 	virtual void normalize();
-	virtual double angle();
-	virtual double distance(LineSegment ls);
-	virtual double distance(Coordinate& p);
-	virtual double projectionFactor(Coordinate& p);
-	virtual Coordinate& project(Coordinate& p);
-	virtual LineSegment* project(LineSegment *seg);
-	virtual Coordinate& closestPoint(Coordinate& p);
-	virtual int compareTo(LineSegment other);
-	virtual bool equalsTopo(LineSegment other);
-	virtual string toString();
+	virtual double angle() const;
+	virtual double distance(const LineSegment ls) const;
+	virtual double distance(const Coordinate& p) const;
+	virtual double projectionFactor(const Coordinate& p) const;
+	virtual Coordinate* project(const Coordinate& p) const;
+	virtual LineSegment* project(const LineSegment *seg) const;
+	virtual Coordinate* closestPoint(const Coordinate& p) const;
+	virtual int compareTo(const LineSegment other) const;
+	virtual bool equalsTopo(const LineSegment other) const;
+	virtual string toString() const;
 };
 
 class IntersectionMatrix {
@@ -694,18 +703,18 @@ protected:
 };
 
 //Operators
-bool operator==(Coordinate& a, Coordinate& b);
-bool operator==(Envelope a, Envelope b);
-bool operator==(PrecisionModel a, PrecisionModel b);
-bool operator==(LineSegment a, LineSegment b);
+bool operator==(const Coordinate& a, const Coordinate& b);
+bool operator==(const Envelope a, const Envelope b);
+bool operator==(const PrecisionModel a, const PrecisionModel b);
+bool operator==(const LineSegment a, const LineSegment b);
 
 bool lessThen(Coordinate& a,Coordinate& b);
 bool greaterThen(Geometry *first, Geometry *second);
 
 class SFSGeometryCollection { //: public SFSGeometry {
 public:
-	virtual int getNumGeometries()=0;
-	virtual Geometry* getGeometryN(int n)=0;
+	virtual int getNumGeometries() const=0;
+	virtual const Geometry* getGeometryN(int n) const=0;
 };
 
 class GeometryCollection : public Geometry, public SFSGeometryCollection {
@@ -714,42 +723,45 @@ public:
 	GeometryCollection(const GeometryCollection &gc);
 	GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
 	virtual ~GeometryCollection();
-	virtual CoordinateList* getCoordinates();
-	virtual bool isEmpty();
-	virtual int getDimension();
-	virtual int getBoundaryDimension();
-	virtual int getNumGeometries();
-	virtual Geometry* getGeometryN(int n);
-	virtual int getNumPoints();
-	virtual string getGeometryType();
-	virtual bool isSimple();
-	virtual Geometry* getBoundary();
-	virtual bool equalsExact(Geometry *other, double tolerance);
-	virtual void apply(CoordinateFilter *filter);
-	virtual void apply(GeometryFilter *filter);
-	virtual void apply(GeometryComponentFilter *filter);
+	virtual CoordinateList* getCoordinates() const;
+	virtual bool isEmpty() const;
+	virtual int getDimension() const;
+	virtual int getBoundaryDimension() const;
+	virtual int getNumGeometries() const;
+	virtual const Geometry* getGeometryN(int n) const;
+	virtual int getNumPoints() const;
+	virtual string getGeometryType() const;
+	virtual bool isSimple() const;
+	virtual Geometry* getBoundary() const;
+	virtual bool equalsExact(const Geometry *other, double tolerance) const;
+	virtual void apply_ro(CoordinateFilter *filter) const;
+	virtual void apply_rw(CoordinateFilter *filter);
+	virtual void apply_ro(GeometryFilter *filter) const;
+	virtual void apply_rw(GeometryFilter *filter);
+	virtual void apply_ro(GeometryComponentFilter *filter) const;
+	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void normalize();
-	virtual Coordinate* getCoordinate();
-	virtual double getArea();
-	virtual double getLength();
-	virtual Point* getCentroid();
+	virtual const Coordinate* getCoordinate() const;
+	virtual double getArea() const;
+	virtual double getLength() const;
+	virtual Point* getCentroid() const;
 protected:
 	vector<Geometry *>* geometries;
-	virtual Envelope* computeEnvelopeInternal();
-	virtual int compareToSameClass(Geometry *gc);
+	virtual Envelope* computeEnvelopeInternal() const;
+	virtual int compareToSameClass(const Geometry *gc) const;
 };
 
 class GeometryCollectionIterator {
 public:
 	GeometryCollectionIterator();
 	GeometryCollectionIterator(const GeometryCollectionIterator &gci);
-	GeometryCollectionIterator(GeometryCollection *newParent);
+	GeometryCollectionIterator(const GeometryCollection *newParent);
 	virtual ~GeometryCollectionIterator();
-	bool hasNext();
-	Geometry *next();
+	bool hasNext() const;
+	const Geometry *next();
 	void remove(); //Not implemented
 private:
-	GeometryCollection* parent;
+	const GeometryCollection* parent;
 	bool atStart;
 	int max;
 	int index;
@@ -758,7 +770,7 @@ private:
 
 class SFSMultiCurve { //: public SFSGeometryCollection {
 public:
-	virtual bool isClosed()=0;
+	virtual bool isClosed() const=0;
 };
 
 class SFSMultiLineString : public SFSMultiCurve {
@@ -775,54 +787,57 @@ class SFSMultiPolygon : public SFSMultiSurface {
 
 class SFSPoint {// : public SFSGeometry {
 public:
-	virtual double getX()=0;
-	virtual double getY()=0;
-	virtual Coordinate* getCoordinate()=0;
+	virtual double getX() const=0;
+	virtual double getY() const=0;
+	virtual const Coordinate* getCoordinate() const=0;
 };
 
 class Point : public Geometry, public SFSPoint {
 public:
 	Point(void);
-	Point(Coordinate& c, PrecisionModel* precisionModel, int SRID);
+	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
 	Point(const Point &p); //replaces clone()
 	virtual ~Point();
-	CoordinateList* getCoordinates(void);
-	int getNumPoints();
-	bool isEmpty();
-	bool isSimple();
-	bool isValid();
-	int getDimension();
-	int getBoundaryDimension();
-	double getX();
-	double getY();
-	Coordinate* getCoordinate();
-	string getGeometryType();
-	Geometry* getBoundary();
-	void apply(CoordinateFilter *filter);
-	void apply(GeometryFilter *filter);
-	void apply(GeometryComponentFilter *filter);
-	bool equalsExact(Geometry *other, double tolerance);
+	CoordinateList* getCoordinates(void) const;
+	int getNumPoints() const;
+	bool isEmpty() const;
+	bool isSimple() const;
+	bool isValid() const;
+	int getDimension() const;
+	int getBoundaryDimension() const;
+	double getX() const;
+	double getY() const;
+	const Coordinate* getCoordinate() const;
+	string getGeometryType() const;
+	Geometry* getBoundary() const;
+	void apply_ro(CoordinateFilter *filter) const;
+	void apply_rw(CoordinateFilter *filter);
+	void apply_ro(GeometryFilter *filter) const;
+	void apply_rw(GeometryFilter *filter);
+	void apply_rw(GeometryComponentFilter *filter);
+	void apply_ro(GeometryComponentFilter *filter) const;
+	bool equalsExact(const Geometry *other, double tolerance) const;
 	void normalize(void) { };
 protected:
 	Coordinate coordinate;
-	Envelope* computeEnvelopeInternal();
-	int compareToSameClass(Geometry *p);
+	Envelope* computeEnvelopeInternal() const;
+	int compareToSameClass(const Geometry *p) const;
 };
 
 class  SFSCurve { //: public SFSGeometry {
 public:
-	virtual Point* getStartPoint()=0;
-	virtual Point* getEndPoint()=0;
-	virtual bool isClosed()=0;
-	virtual bool isRing()=0;
-	virtual bool isSimple()=0;
+	virtual Point* getStartPoint() const=0;
+	virtual Point* getEndPoint() const=0;
+	virtual bool isClosed() const=0;
+	virtual bool isRing() const=0;
+	virtual bool isSimple() const=0;
 };
 
 class SFSLineString : public SFSCurve  {
 public:
-	virtual int getNumPoints()=0;
-	virtual Point* getPointN(int n)=0;
-	virtual Coordinate& getCoordinateN(int n)=0;
+	virtual int getNumPoints() const=0;
+	virtual Point* getPointN(int n) const=0;
+	virtual const Coordinate& getCoordinateN(int n) const=0;
 
 };
 
@@ -833,47 +848,51 @@ class LineString: public Geometry, public SFSLineString {
 public:
 	LineString();
 	LineString(const LineString &ls);
-	LineString(CoordinateList* newPoints, PrecisionModel* precisionModel, int SRID);
+	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
 	virtual ~LineString();
-	virtual CoordinateList* getCoordinates();
-	virtual Coordinate& getCoordinateN(int n);
-	virtual int getDimension();
-	virtual int getBoundaryDimension();
-	virtual bool isEmpty();
-	virtual int getNumPoints();
-	virtual Point* getPointN(int n);
-	virtual Point* getStartPoint();
-	virtual Point* getEndPoint();
-	virtual bool isClosed();
-	virtual bool isRing();
-	virtual string getGeometryType();
-	virtual bool isSimple();
-	virtual Geometry* getBoundary();
-	virtual bool isCoordinate(Coordinate& pt);
-	virtual bool equalsExact(Geometry *other, double tolerance);
-	virtual void apply(CoordinateFilter *filter);
-	virtual void apply(GeometryFilter *filter);
-	virtual void apply(GeometryComponentFilter *filter);
+	virtual CoordinateList* getCoordinates() const;
+	virtual const Coordinate& getCoordinateN(int n) const;
+	virtual int getDimension() const;
+	virtual int getBoundaryDimension() const;
+	virtual bool isEmpty() const;
+	virtual int getNumPoints() const;
+	virtual Point* getPointN(int n) const;
+	virtual Point* getStartPoint() const;
+	virtual Point* getEndPoint() const;
+	virtual bool isClosed() const;
+	virtual bool isRing() const;
+	virtual string getGeometryType() const;
+	virtual bool isSimple() const;
+	virtual Geometry* getBoundary() const;
+	virtual bool isCoordinate(Coordinate& pt) const;
+	virtual bool equalsExact(const Geometry *other, double tolerance) const;
+	virtual void apply_rw(CoordinateFilter *filter);
+	virtual void apply_ro(CoordinateFilter *filter) const;
+	virtual void apply_rw(GeometryFilter *filter);
+	virtual void apply_ro(GeometryFilter *filter) const;
+	virtual void apply_rw(GeometryComponentFilter *filter);
+	virtual void apply_ro(GeometryComponentFilter *filter) const;
 	virtual void normalize();
-	virtual int compareToSameClass(Geometry *ls); //was protected
-	virtual int compareTo(LineString *ls);
-	virtual Coordinate* getCoordinate();
-	virtual double getLength();
+	//was protected
+	virtual int compareToSameClass(const Geometry *ls) const;
+	virtual int compareTo(const LineString *ls) const;
+	virtual const Coordinate* getCoordinate() const;
+	virtual double getLength() const;
 protected:
 	CoordinateList* points;
-	virtual Envelope* computeEnvelopeInternal();
-	virtual bool isEquivalentClass(Geometry *other);
+	virtual Envelope* computeEnvelopeInternal() const;
+	virtual bool isEquivalentClass(const Geometry *other) const;
 };
 
 class LinearRing : public LineString, public SFSLinearRing {
 public:
 	LinearRing();
 	LinearRing(const LinearRing &lr);
-	LinearRing(CoordinateList* points,PrecisionModel* precisionModel,int SRID);
+	LinearRing(const CoordinateList* points, const PrecisionModel* pm, int SRID);
 	virtual ~LinearRing();
-	bool isSimple();
-	string getGeometryType();
-	bool isClosed();
+	bool isSimple() const;
+	string getGeometryType() const;
+	bool isClosed() const;
 	void setPoints(CoordinateList* cl);
 };
 
@@ -882,9 +901,9 @@ class SFSSurface { //: public SFSGeometry {
 
 class SFSPolygon : public SFSSurface {
 public:
-	virtual LineString* getExteriorRing()=0;
-	virtual int getNumInteriorRing()=0;
-	virtual LineString* getInteriorRingN(int n)=0;
+	virtual const LineString* getExteriorRing() const=0;
+	virtual int getNumInteriorRing() const=0;
+	virtual const LineString* getInteriorRingN(int n) const=0;
 };
 
 class Polygon: public Geometry, public SFSPolygon  {
@@ -894,31 +913,34 @@ public:
 	virtual ~Polygon();
 	Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID);
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel* precisionModel, int SRID);
-	CoordinateList* getCoordinates();
-	int getNumPoints();
-	int getDimension();
-	int getBoundaryDimension();
-	bool isEmpty();
-	bool isSimple();
-	LineString* getExteriorRing();
-	int getNumInteriorRing();
-	LineString* getInteriorRingN(int n);
-	string getGeometryType();
-	Geometry* getBoundary();
-	bool equalsExact(Geometry *other, double tolerance);
-	void apply(CoordinateFilter *filter);
-	void apply(GeometryFilter *filter);
-	Geometry* convexHull();
+	CoordinateList* getCoordinates() const;
+	int getNumPoints() const;
+	int getDimension() const;
+	int getBoundaryDimension() const;
+	bool isEmpty() const;
+	bool isSimple() const;
+	const LineString* getExteriorRing() const;
+	int getNumInteriorRing() const;
+	const LineString* getInteriorRingN(int n) const;
+	string getGeometryType() const;
+	Geometry* getBoundary() const;
+	bool equalsExact(const Geometry *other, double tolerance) const;
+	void apply_rw(CoordinateFilter *filter);
+	void apply_ro(CoordinateFilter *filter) const;
+	void apply_rw(GeometryFilter *filter);
+	void apply_ro(GeometryFilter *filter) const;
+	Geometry* convexHull() const;
 	void normalize();
-	int compareToSameClass(Geometry *p); //was protected
-	Coordinate* getCoordinate();
-	double getArea();
-	double getLength();
-	void apply(GeometryComponentFilter *filter);
+	int compareToSameClass(const Geometry *p) const; //was protected
+	const Coordinate* getCoordinate() const;
+	double getArea() const;
+	double getLength() const;
+	void apply_rw(GeometryComponentFilter *filter);
+	void apply_ro(GeometryComponentFilter *filter) const;
 protected:
 	LinearRing *shell;
 	vector<Geometry *> *holes; //Actually vector<LinearRing *>
-	Envelope* computeEnvelopeInternal();
+	Envelope* computeEnvelopeInternal() const;
 private:
 	void normalize(LinearRing *ring, bool clockwise);
 };
@@ -928,16 +950,16 @@ public:
 	MultiPoint();
 	MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID);
 	virtual ~MultiPoint();
-	int getDimension();
-	int getBoundaryDimension();
-	string getGeometryType();
-	bool isValid();
-	bool isClosed();
-	bool isSimple();
-	Geometry* getBoundary();
-	bool equalsExact(Geometry *other, double tolerance);
+	int getDimension() const;
+	int getBoundaryDimension() const;
+	string getGeometryType() const;
+	bool isValid() const;
+	bool isClosed() const;
+	bool isSimple() const;
+	Geometry* getBoundary() const;
+	bool equalsExact(const Geometry *other, double tolerance) const;
 protected:
-	Coordinate* getCoordinate(int n);
+	const Coordinate* getCoordinate(int n) const;
 };
 
 class MultiLineString: public GeometryCollection, public SFSMultiLineString  {
@@ -945,13 +967,13 @@ public:
 	MultiLineString();
 	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
 	virtual ~MultiLineString();
-	int getDimension();
-	int getBoundaryDimension();
-	string getGeometryType();
-	bool isClosed();
-	bool isSimple();
-	Geometry* getBoundary();
-	bool equalsExact(Geometry *other, double tolerance);
+	int getDimension() const;
+	int getBoundaryDimension() const;
+	string getGeometryType() const;
+	bool isClosed() const;
+	bool isSimple() const;
+	Geometry* getBoundary() const;
+	bool equalsExact(const Geometry *other, double tolerance) const;
 };
 
 class MultiPolygon: public GeometryCollection, public SFSMultiPolygon   {
@@ -959,12 +981,12 @@ public:
 	MultiPolygon();
 	MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
 	virtual ~MultiPolygon();
-	int getDimension();
-	int getBoundaryDimension();
-	string getGeometryType();
-	bool isSimple();
-	Geometry* getBoundary();
-	bool equalsExact(Geometry *other, double tolerance);
+	int getDimension() const;
+	int getBoundaryDimension() const;
+	string getGeometryType() const;
+	bool isSimple() const;
+	Geometry* getBoundary() const;
+	bool equalsExact(const Geometry *other, double tolerance) const;
 };
 
 class GeometryFactory {
@@ -975,10 +997,10 @@ public:
 
 //Skipped a lot of list to array convertors
 
-	static Point* createPointFromInternalCoord(Coordinate* coord,Geometry *exemplar);
+	static Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar);
 	static Geometry* toGeometry(Envelope* envelope,PrecisionModel* precisionModel,int SRID);
-	PrecisionModel* getPrecisionModel();
-	Point* createPoint(Coordinate& coordinate);
+	PrecisionModel* getPrecisionModel() const;
+	Point* createPoint(const Coordinate& coordinate);
 	MultiLineString* createMultiLineString(vector<Geometry *> *lineStrings);
 	GeometryCollection* createGeometryCollection(vector<Geometry *> *geometries);
 	MultiPolygon* createMultiPolygon(vector<Geometry *> *polygons);

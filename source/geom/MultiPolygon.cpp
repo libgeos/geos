@@ -7,23 +7,23 @@ MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisi
 GeometryCollection(polygons, precisionModel, SRID){}
 MultiPolygon::~MultiPolygon(){}
 
-int MultiPolygon::getDimension() {
+int MultiPolygon::getDimension() const {
 	return 2;
 }
 
-int MultiPolygon::getBoundaryDimension() {
+int MultiPolygon::getBoundaryDimension() const {
 	return 1;
 }
 
-string MultiPolygon::getGeometryType() {
+string MultiPolygon::getGeometryType() const {
 	return "MultiPolygon";
 }
 
-bool MultiPolygon::isSimple(){
+bool MultiPolygon::isSimple() const {
 	return true;
 }
 
-Geometry* MultiPolygon::getBoundary() {
+Geometry* MultiPolygon::getBoundary() const {
 	if (isEmpty()) {
 		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
@@ -43,7 +43,9 @@ Geometry* MultiPolygon::getBoundary() {
 	return ret;
 }
 
-bool MultiPolygon::equalsExact(Geometry *other, double tolerance) {
+bool
+MultiPolygon::equalsExact(const Geometry *other, double tolerance) const
+{
     if (!isEquivalentClass(other)) {
       return false;
     }

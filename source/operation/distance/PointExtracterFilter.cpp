@@ -3,19 +3,19 @@
 
 namespace geos {
 
-vector<Geometry*>* PointExtracterFilter::getPoints(Geometry *geom) {
-	vector<Geometry*> *points=new vector<Geometry*>();
+vector<const Geometry*>* PointExtracterFilter::getPoints(const Geometry *geom) {
+	vector<const Geometry*> *points=new vector<const Geometry*>();
 	PointExtracterFilter *p=new PointExtracterFilter(points);
-	geom->apply(p);
+	geom->apply_ro(p);
 	delete p;
 	return points;
 }
 
-PointExtracterFilter::PointExtracterFilter(vector<Geometry*> *newPts){
+PointExtracterFilter::PointExtracterFilter(vector<const Geometry*> *newPts){
 	pts=newPts;
 }
 
-void PointExtracterFilter::filter(Geometry *geom) {
+void PointExtracterFilter::filter_ro(const Geometry *geom) {
 	if (typeid(*geom)==typeid(Point)) pts->push_back(geom);
 }
 }

@@ -20,19 +20,19 @@ namespace geos {
 class GeometryGraphOperation {
 friend class Unload;
 public:
-	GeometryGraphOperation(Geometry *g0,Geometry *g1);
-	GeometryGraphOperation(Geometry *g0);
+	GeometryGraphOperation(const Geometry *g0,const Geometry *g1);
+	GeometryGraphOperation(const Geometry *g0);
 	virtual ~GeometryGraphOperation();
-	Geometry* getArgGeometry(int i);
+	const Geometry* getArgGeometry(int i) const;
 protected:
 	static CGAlgorithms *cga;
 	static LineIntersector *li;
-	PrecisionModel* resultPrecisionModel;
+	const PrecisionModel* resultPrecisionModel;
 	/**
 	* The operation args into an array so they can be accessed by index
 	*/
 	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
-	void setComputationPrecision(PrecisionModel* pm);
+	void setComputationPrecision(const PrecisionModel* pm);
 };
 
 class EndpointInfo{
@@ -40,7 +40,7 @@ public:
 	Coordinate pt;
 	bool isClosed;
 	int degree;
-    EndpointInfo(Coordinate& newPt);
+    	EndpointInfo(const Coordinate& newPt);
 	void addEndpoint(bool newIsClosed);
 };
 /**
@@ -53,14 +53,14 @@ public:
 class IsSimpleOp {
 public:
 	IsSimpleOp();
-	bool isSimple(LineString *geom);
-	bool isSimple(MultiLineString *geom);
-	bool isSimple(MultiPoint *mp);
-	bool isSimpleLinearGeometry(Geometry *geom);
+	bool isSimple(const LineString *geom);
+	bool isSimple(const MultiLineString *geom);
+	bool isSimple(const MultiPoint *mp);
+	bool isSimpleLinearGeometry(const Geometry *geom);
 private:
 	bool hasNonEndpointIntersection(GeometryGraph *graph);
 	bool hasClosedEndpointIntersection(GeometryGraph *graph);
-	void addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate& p,bool isClosed);
+	void addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints, const Coordinate& p,bool isClosed);
 };
 }
 #endif

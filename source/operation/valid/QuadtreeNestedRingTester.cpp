@@ -52,7 +52,7 @@ bool QuadtreeNestedRingTester::isNonNested() {
 			}
 			delete e1;
 			delete e2;
-			Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
+			const Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(!(innerRingPt==Coordinate::getNull()),"Unable to find a ring point not a node of the search ring");
 			//Coordinate innerRingPt = innerRingPts[0];
 			bool isInside=cga->isPointInRing(innerRingPt,searchRingPts);

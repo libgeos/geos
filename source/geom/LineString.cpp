@@ -18,94 +18,91 @@ LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRI
 	points=CoordinateListFactory::internalFactory->createCoordinateList(ls.points);
 }
 
-LineString::LineString(CoordinateList *newPoints, PrecisionModel* precisionModel, int SRID):
-						Geometry(precisionModel, SRID){
-	if (newPoints==NULL) {
-		newPoints=CoordinateListFactory::internalFactory->createCoordinateList();
+LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm,
+		int SRID): Geometry(precisionModel, SRID){
+	if (pts==NULL) {
+		pts=CoordinateListFactory::internalFactory->createCoordinateList();
 	}
-	if (hasNullElements(newPoints)) {
-		delete newPoints;
+	if (hasNullElements(pts)) {
 		throw new IllegalArgumentException("point array must not contain null elements\n");
 	}
-	if (newPoints->getSize()==1) {
-		delete newPoints;
+	if (pts->getSize()==1) {
 		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
-	//points=newPoints;
-	points=CoordinateListFactory::internalFactory->createCoordinateList(newPoints); // xie 
+	points=CoordinateListFactory::internalFactory->createCoordinateList(pts); // xie 
 }
 
 LineString::~LineString(){
 	delete points;
 }
 
-CoordinateList* LineString::getCoordinates() {
+CoordinateList* LineString::getCoordinates() const {
 	return CoordinateListFactory::internalFactory->createCoordinateList(points); // callers must be free to delete returned value ! - strk
 	//return points;
 }
 
-Coordinate& LineString::getCoordinateN(int n) {
+const Coordinate& LineString::getCoordinateN(int n) const {
 	return points->getAt(n);
 }
 
-int LineString::getDimension() {
+int LineString::getDimension() const {
 	return 1;
 }
 
-int LineString::getBoundaryDimension() {
+int LineString::getBoundaryDimension() const {
 	if (isClosed()) {
 		return Dimension::False;
 	}
 	return 0;
 }
 
-bool LineString::isEmpty() {
+bool LineString::isEmpty() const {
 	return points->getSize()==0;
 }
 
-int LineString::getNumPoints() {
+int LineString::getNumPoints() const {
 	return points->getSize();
 }
 
-Point* LineString::getPointN(int n) {
+Point* LineString::getPointN(int n) const {
 	return new Point(points->getAt(n), getPrecisionModel(), SRID);
 }
 
-Point* LineString::getStartPoint() {
+Point* LineString::getStartPoint() const {
 	if (isEmpty()) {
 		return new Point();
 	}
 	return getPointN(0);
 }
 
-Point* LineString::getEndPoint() {
+Point* LineString::getEndPoint() const {
 	if (isEmpty()) {
 		return new Point();
 	}
 	return getPointN(getNumPoints() - 1);
 }
 
-bool LineString::isClosed() {
+bool LineString::isClosed() const {
 	if (isEmpty()) {
 		return false;
 	}
 	return getCoordinateN(0).equals2D(getCoordinateN(getNumPoints()-1));
 }
 
-bool LineString::isRing() {
+bool LineString::isRing() const {
 	return isClosed() && isSimple();
 }
 
-string LineString::getGeometryType() {
+string LineString::getGeometryType() const {
 	return "LineString";
 }
 
-bool LineString::isSimple(){
+bool LineString::isSimple() const {
 	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
 	return iso->isSimple(this);
 }
 
-Geometry* LineString::getBoundary() {
+Geometry* LineString::getBoundary() const {
 	if (isEmpty()) {
 		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
@@ -118,7 +115,7 @@ Geometry* LineString::getBoundary() {
 	return new MultiPoint(pts,precisionModel, SRID);
 }
 
-bool LineString::isCoordinate(Coordinate& pt) {
+bool LineString::isCoordinate(Coordinate& pt) const {
 	for (int i = 1; i < points->getSize(); i++) {
 		if (points->getAt(i)==pt) {
 			return true;
@@ -127,7 +124,7 @@ bool LineString::isCoordinate(Coordinate& pt) {
 	return false;
 }
 
-Envelope* LineString::computeEnvelopeInternal() {
+Envelope* LineString::computeEnvelopeInternal() const {
 	if (isEmpty()) {
 		return new Envelope();
 	}
@@ -144,11 +141,11 @@ Envelope* LineString::computeEnvelopeInternal() {
 	return new Envelope(minx, maxx, miny, maxy);
 }
 
-bool LineString::equalsExact(Geometry *other, double tolerance) {
+bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 	if (!isEquivalentClass(other)) {
 		return false;
 	}
-	LineString *otherLineString=dynamic_cast<LineString*>(other);
+	const LineString *otherLineString=dynamic_cast<const LineString*>(other);
 	if (points->getSize()!=otherLineString->points->getSize()) {
 		return false;
 	}
@@ -160,14 +157,27 @@ bool LineString::equalsExact(Geometry *other, double tolerance) {
 	return true;
 }
 
-void LineString::apply(CoordinateFilter *filter) {
+void LineString::apply_rw(CoordinateFilter *filter) {
 	for (int i = 0; i < points->getSize(); i++) {
-		filter->filter(points->getAt(i));
+		Coordinate newcoord = points->getAt(i);
+		filter->filter_rw(newcoord);
+		points->setAt(newcoord, i);
 	}
-	}
+}
 
-void LineString::apply(GeometryFilter *filter) {
-	filter->filter(this);
+void LineString::apply_ro(CoordinateFilter *filter) const {
+	for (int i = 0; i < points->getSize(); i++) {
+		// getAt returns a 'const' coordinate
+		filter->filter_ro(points->getAt(i));
+	}
+}
+
+void LineString::apply_rw(GeometryFilter *filter) {
+	filter->filter_rw(this);
+}
+
+void LineString::apply_ro(GeometryFilter *filter) const {
+	filter->filter_ro(this);
 }
 
 /**
@@ -187,14 +197,14 @@ void LineString::normalize() {
 	}
 }
 
-bool LineString::isEquivalentClass(Geometry *other) {
+bool LineString::isEquivalentClass(const Geometry *other) const {
 	if (typeid(*other)==typeid(LineString))
 		return true;
 	else 
 		return false;
 }
 
-int LineString::compareToSameClass(Geometry *ls) {
+int LineString::compareToSameClass(const Geometry *ls) const {
 	LineString *line=(LineString*)ls;
 	// MD - optimized implementation
 	int i=0;
@@ -217,7 +227,10 @@ int LineString::compareToSameClass(Geometry *ls) {
 //	return compare(*(points->toVector()),*(((LineString*)ls)->points->toVector()));
 }
 
-Coordinate* LineString::getCoordinate() {
+const Coordinate* LineString::getCoordinate() const
+{
+	// should use auto_ptr here or return NULL or throw an exception !
+	// 	--strk;
 	if (isEmpty()) return(new Coordinate());
 	return &(points->getAt(0));
 }
@@ -227,15 +240,19 @@ Coordinate* LineString::getCoordinate() {
 *
 *@return the area of the polygon
 */
-double LineString::getLength() {
+double LineString::getLength() const {
 	return CGAlgorithms::length(points);
 }
 
-void LineString::apply(GeometryComponentFilter *filter) {
-	filter->filter(this);
+void LineString::apply_rw(GeometryComponentFilter *filter) {
+	filter->filter_rw(this);
 }
 
-int LineString::compareTo(LineString *ls){
+void LineString::apply_ro(GeometryComponentFilter *filter) const {
+	filter->filter_ro(this);
+}
+
+int LineString::compareTo(const LineString *ls) const {
 	if (isEmpty() && ls->isEmpty()) {
 		return 0;
 	}

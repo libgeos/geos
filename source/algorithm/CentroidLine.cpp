@@ -18,7 +18,7 @@ CentroidLine::~CentroidLine() {
 * If the geometry is not linear it does not contribute to the centroid
 * @param geom the geometry to add
 */
-void CentroidLine::add(Geometry *geom) {
+void CentroidLine::add(const Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) {
 		add(geom->getCoordinates());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -36,7 +36,7 @@ void CentroidLine::add(Geometry *geom) {
 * Adds the length defined by an array of coordinates.
 * @param pts an array of {@link Coordinate}s
 */
-void CentroidLine::add(CoordinateList *pts) {
+void CentroidLine::add(const CoordinateList *pts) {
 	for(int i=0;i<pts->getSize()-1;i++) {
 		double segmentLen=pts->getAt(i).distance(pts->getAt(i + 1));
 		totalLength+=segmentLen;
@@ -47,7 +47,7 @@ void CentroidLine::add(CoordinateList *pts) {
 	}
 }
 
-Coordinate* CentroidLine::getCentroid() {
+Coordinate* CentroidLine::getCentroid() const {
 	return new Coordinate(centSum->x/totalLength,centSum->y/totalLength);
 }
 }

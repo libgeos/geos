@@ -218,7 +218,7 @@ void PolygonBuilder::placeFreeHoles(vector<EdgeRing*>* newShellList, vector<Edge
 EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRing*> *newShellList) {
 	LinearRing *testRing=testEr->getLinearRing();
 	Envelope *testEnv=testRing->getEnvelopeInternal();
-	Coordinate& testPt=testRing->getCoordinateN(0);
+	const Coordinate& testPt=testRing->getCoordinateN(0);
 	EdgeRing *minShell=NULL;
 	Envelope *minEnv=NULL;
 	for(int i=0;i<(int)newShellList->size();i++) {

@@ -46,7 +46,7 @@ vector<Point*>* PointBuilder::simplifyPoints(vector<Node*> *resultNodeList) {
 	vector<Point*>* nonCoveredPointList=new vector<Point*>();
 	for(int i=0;i<(int)resultNodeList->size();i++) {
 		Node *n=(*resultNodeList)[i];
-		Coordinate& coord=n->getCoordinate();
+		const Coordinate& coord=n->getCoordinate();
 		if(!op->isCoveredByLA(coord)) {
 			Point *pt=geometryFactory->createPoint(coord);
 			nonCoveredPointList->push_back(pt);

@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.26  2003/10/11 01:56:08  strk
+* Code base padded with 'const' keywords ;)
+*
 * Revision 1.25  2003/10/09 15:35:13  strk
 * added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
 *
@@ -31,9 +34,16 @@ GeometryFactory::~GeometryFactory(){
 	delete precisionModel;
 }
   
-Point* GeometryFactory::createPointFromInternalCoord(Coordinate* coord, Geometry *exemplar) {
-	exemplar->getPrecisionModel()->makePrecise(coord);
-	return new Point(*coord,exemplar->getPrecisionModel(),exemplar->getSRID());
+Point*
+GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
+		const Geometry *exemplar)
+{
+	Point *ret;
+	const PrecisionModel *pm = exemplar->getPrecisionModel();
+	Coordinate newcoord = *coord;
+	pm->makePrecise(&newcoord);
+	ret = new Point(newcoord,pm, exemplar->getSRID());
+	return ret;
 }
 
 
@@ -53,11 +63,11 @@ Geometry* GeometryFactory::toGeometry(Envelope* envelope,PrecisionModel* precisi
 	return new Polygon(new LinearRing(cl,precisionModel,SRID),precisionModel,SRID);
 }
 
-PrecisionModel* GeometryFactory::getPrecisionModel(){
+PrecisionModel* GeometryFactory::getPrecisionModel() const {
 	return precisionModel;
 }
 
-Point* GeometryFactory::createPoint(Coordinate& coordinate){
+Point* GeometryFactory::createPoint(const Coordinate& coordinate){
 	return new Point(coordinate,precisionModel,SRID);
 }
 

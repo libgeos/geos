@@ -8,39 +8,41 @@ MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
 GeometryCollection(points, pm, SRID){}
 MultiPoint::~MultiPoint(){}
 
-int MultiPoint::getDimension() {
+int MultiPoint::getDimension() const {
 	return 0;
 }
 
-int MultiPoint::getBoundaryDimension() {
+int MultiPoint::getBoundaryDimension() const {
 	return Dimension::False;
 }
 
-string MultiPoint::getGeometryType() {
+string MultiPoint::getGeometryType() const {
 	return "MultiPoint";
 }
 
-Geometry* MultiPoint::getBoundary() {
+Geometry* MultiPoint::getBoundary() const {
 	return new GeometryCollection(NULL, precisionModel, SRID);
 }
 
-bool MultiPoint::isSimple(){
+bool MultiPoint::isSimple() const {
 	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
 	return iso->isSimple(this);
 }
 
-bool MultiPoint::isValid() {
+bool MultiPoint::isValid() const {
 	return true;
 }
 
-bool MultiPoint::equalsExact(Geometry *other, double tolerance) {
+bool
+MultiPoint::equalsExact(const Geometry *other, double tolerance) const
+{
     if (!isEquivalentClass(other)) {
       return false;
     }
 	return GeometryCollection::equalsExact(other,tolerance);
   }
 
-Coordinate* MultiPoint::getCoordinate(int n) {
+const Coordinate* MultiPoint::getCoordinate(int n) const {
 	return ((Point *)(*geometries)[n])->getCoordinate();
 }
 }

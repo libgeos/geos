@@ -18,7 +18,9 @@ GeometryCollectionIterator::GeometryCollectionIterator(const GeometryCollectionI
 	index=gci.index;
 	max=gci.max;
 }
-GeometryCollectionIterator::GeometryCollectionIterator(GeometryCollection *newParent){
+
+GeometryCollectionIterator::GeometryCollectionIterator(
+		const GeometryCollection *newParent){
 	parent=newParent;
 	subcollectionIterator=NULL;
     atStart=true;
@@ -26,7 +28,7 @@ GeometryCollectionIterator::GeometryCollectionIterator(GeometryCollection *newPa
     max=newParent->getNumGeometries();
 }
 
-bool GeometryCollectionIterator::hasNext() {
+bool GeometryCollectionIterator::hasNext() const {
 	if (atStart) {
 		return true;
 	}
@@ -34,7 +36,7 @@ bool GeometryCollectionIterator::hasNext() {
 		if (subcollectionIterator->hasNext()) {
 			return true;
 		}
-		subcollectionIterator=NULL;
+		//subcollectionIterator=NULL;
 	}
 	if (index>=max) {
 		return false;
@@ -42,7 +44,7 @@ bool GeometryCollectionIterator::hasNext() {
 	return true;
 }
 
-Geometry* GeometryCollectionIterator::next() {
+const Geometry* GeometryCollectionIterator::next() {
 	// the parent GeometryCollection is the first object returned
 	if (atStart) {
 		atStart=false;
@@ -52,14 +54,15 @@ Geometry* GeometryCollectionIterator::next() {
 		if (subcollectionIterator->hasNext()) {
 			return subcollectionIterator->next();
 		} else {
-			subcollectionIterator=NULL;
+			delete subcollectionIterator;
+			subcollectionIterator=NULL; // is this automatic ?
 		}
 	}
 	if (index>=max) {
-		delete subcollectionIterator;
+		if ( subcollectionIterator ) delete subcollectionIterator; 
 		throw new UnsupportedOperationException("No more elements");
 	}
-	Geometry *obj=parent->getGeometryN(index++);
+	const Geometry *obj=parent->getGeometryN(index++);
 	if ((typeid(*obj)==typeid(GeometryCollection)) ||
 			   (typeid(*obj)==typeid(MultiPoint)) ||
 			   (typeid(*obj)==typeid(MultiLineString)) ||

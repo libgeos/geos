@@ -33,27 +33,27 @@ class TopologyLocation {
 public:
 	TopologyLocation();
 	virtual ~TopologyLocation();
-	TopologyLocation(vector<int>* newLocation);
+	TopologyLocation(const vector<int>* newLocation);
 	TopologyLocation(int on, int left, int right);
 	TopologyLocation(int on);
-	TopologyLocation(TopologyLocation *gl);
-	int get(int posIndex);
-	bool isNull();
-	bool isAnyNull();
-	bool isEqualOnSide(TopologyLocation &le, int locIndex);
-	bool isArea();
-	bool isLine();
+	TopologyLocation(const TopologyLocation *gl);
+	int get(int posIndex) const;
+	bool isNull() const;
+	bool isAnyNull() const;
+	bool isEqualOnSide(const TopologyLocation &le, int locIndex) const;
+	bool isArea() const;
+	bool isLine() const;
 	void flip();
 	void setAllLocations(int locValue);
 	void setAllLocationsIfNull(int locValue);
 	void setLocation(int locIndex, int locValue);
 	void setLocation(int locValue);
-	vector<int>* getLocations();
+	const vector<int>* getLocations() const;
 	void setLocations(int on, int left, int right);
-	void setLocations(TopologyLocation &gl);
-	bool allPositionsEqual(int loc);
-	void merge(TopologyLocation* gl);
-	string toString();
+	void setLocations(const TopologyLocation &gl);
+	bool allPositionsEqual(int loc) const;
+	void merge(const TopologyLocation* gl);
+	string toString() const;
 protected:
 	vector<int>* location;
 private:
@@ -62,38 +62,38 @@ private:
 
 class Label {
 public:
-	static Label* toLineLabel(Label* label);
+	static Label* toLineLabel(const Label* label);
 	Label(int onLoc);
 	Label(int geomIndex, int onLoc);
 	Label(int onLoc, int leftLoc, int rightLoc);
-	Label(Label *l);
+	Label(const Label *l);
 	Label();
 	virtual ~Label();
 	Label(int geomIndex,int onLoc,int leftLoc,int rightLoc);
-	Label(int geomIndex,TopologyLocation* gl);
+	Label(int geomIndex,const TopologyLocation* gl);
 	void flip();
-	int getLocation(int geomIndex, int posIndex);
-	int getLocation(int geomIndex);
+	int getLocation(int geomIndex, int posIndex) const;
+	int getLocation(int geomIndex) const;
 	void setLocation(int geomIndex, int posIndex, int location);
 	void setLocation(int geomIndex, int location);
 	void setAllLocations(int geomIndex, int location);
 	void setAllLocationsIfNull(int geomIndex, int location);
 	void setAllLocationsIfNull(int location);
-	void merge(Label* lbl);
-	int getGeometryCount();
-	bool isNull(int geomIndex);
-	bool isAnyNull(int geomIndex);
-	bool isArea();
-	bool isArea(int geomIndex);
-	bool isLine(int geomIndex);
-	bool isEqualOnSide(Label* lbl, int side);
-	bool allPositionsEqual(int geomIndex, int loc);
+	void merge(const Label* lbl);
+	int getGeometryCount() const;
+	bool isNull(int geomIndex) const;
+	bool isAnyNull(int geomIndex) const;
+	bool isArea() const;
+	bool isArea(int geomIndex) const;
+	bool isLine(int geomIndex) const;
+	bool isEqualOnSide(Label* lbl, int side) const;
+	bool allPositionsEqual(int geomIndex, int loc) const;
 	void toLine(int geomIndex);
-	string toString();
+	string toString() const;
 protected:
 	TopologyLocation* elt[2];
 private:
-	void setGeometryLocation(int geomIndex, TopologyLocation* tl);
+	void setGeometryLocation(int geomIndex, const TopologyLocation* tl);
 };
 
 class Depth {
@@ -124,7 +124,7 @@ private:
 class Quadrant {
 public:
 	static int quadrant(double dx, double dy);
-	static int quadrant(Coordinate& p0, Coordinate& p1);
+	static int quadrant(const Coordinate& p0, const Coordinate& p1);
 	static bool isOpposite(int quad1, int quad2);
 	static int commonHalfPlane(int quad1, int quad2);
 	static bool isInHalfPlane(int quad, int halfPlane);
@@ -135,7 +135,7 @@ public:
 class GraphComponent {
 public:
 	GraphComponent();
-	GraphComponent(Label* newLabel);
+	GraphComponent(Label* newLabel); // newLabel is deleted by destructor
 	~GraphComponent();
 	Label* getLabel();
 	virtual void setLabel(Label* newLabel);
@@ -146,7 +146,7 @@ public:
 	virtual bool isCoveredSet();
 	virtual bool isVisited();
 	virtual void setVisited(bool isVisited);
-	virtual Coordinate& getCoordinate()=0;
+	//virtual Coordinate& getCoordinate()=0; // strk removed
 	virtual bool isIsolated()=0;
 	virtual void updateIM(IntersectionMatrix *im);
 protected:
@@ -173,8 +173,8 @@ public:
 	virtual int getNumPoints();
 	virtual void setName(string newName);
 	virtual CoordinateList* getCoordinates();
-	virtual Coordinate& getCoordinate(int i);
-	virtual Coordinate& getCoordinate();
+	virtual const Coordinate& getCoordinate(int i);
+	virtual const Coordinate& getCoordinate(); 
 	virtual Depth *getDepth();
 	virtual int getDepthDelta();
 	virtual void setDepthDelta(int newDepthDelta);
@@ -226,7 +226,7 @@ protected:
 	Edge* edge;// the parent edge of this edge end
 	Label* label;
 	EdgeEnd(Edge* newEdge);
-	virtual void init(Coordinate& newP0, Coordinate& newP1);
+	virtual void init(const Coordinate& newP0, const Coordinate& newP1);
 private:
 	Node* node;          // the node this edge end originates at
 	Coordinate p0,p1;  // points of initial line segment
@@ -307,15 +307,15 @@ class Node: public GraphComponent {
 public:
 	Node(Coordinate& newCoord, EdgeEndStar* newEdges);
 	virtual ~Node();
-	virtual Coordinate& getCoordinate();
+	virtual const Coordinate& getCoordinate() const;
 	virtual EdgeEndStar* getEdges();
 	virtual bool isIsolated();
 	virtual void add(EdgeEnd *e);
-	virtual void mergeLabel(Node* n);
-	virtual void mergeLabel(Label* label2);
+	virtual void mergeLabel(const Node* n);
+	virtual void mergeLabel(const Label* label2);
 	virtual void setLabel(int argIndex, int onLocation);
 	virtual void setLabelBoundary(int argIndex);
-	virtual int computeMergedLocation(Label* label2, int eltIndex);
+	virtual int computeMergedLocation(const Label* label2, int eltIndex);
 	virtual string print();
 protected:
 	Coordinate coord;
@@ -333,7 +333,7 @@ public:
 	Coordinate coord;
 	int segmentIndex;
 	double dist;
-	EdgeIntersection(Coordinate& newCoord, int newSegmentIndex, double newDist);
+	EdgeIntersection(const Coordinate& newCoord, int newSegmentIndex, double newDist);
 	virtual ~EdgeIntersection();
 	int compare(int newSegmentIndex, double newDist);
 	bool isEndPoint(int maxSegmentIndex);
@@ -346,11 +346,11 @@ public:
 	Edge *edge;
 	EdgeIntersectionList(Edge *edge);
 	~EdgeIntersectionList();
-	EdgeIntersection* add(Coordinate& coord, int segmentIndex, double dist);
+	EdgeIntersection* add(const Coordinate& coord, int segmentIndex, double dist);
 	vector<EdgeIntersection*>::iterator iterator();
 	bool isEmpty();
 	bool findInsertionPoint(int segmentIndex,double dist,vector<EdgeIntersection*>::iterator *insertIt);
-	bool isIntersection(Coordinate& pt);
+	bool isIntersection(const Coordinate& pt);
 	void addEndpoints();
 	void addSplitEdges(vector<Edge*> *edgeList);
 	Edge *createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1);
@@ -376,17 +376,17 @@ class NodeMap{
 public:
 	map<Coordinate,Node*,CoordLT>* nodeMap;
 	NodeFactory *nodeFact;
-	NodeMap(NodeFactory *newNodeFact);
+	NodeMap(NodeFactory *newNodeFact); // this is no const !! why ?
 	virtual ~NodeMap();
-	Node* addNode(Coordinate& coord);
+	Node* addNode(const Coordinate& coord);
 	Node* addNode(Node *n);
 	void add(EdgeEnd *e);
-	Node *find(Coordinate& coord);
-	map<Coordinate,Node*,CoordLT>::iterator iterator();
+	Node *find(const Coordinate& coord) const;
+	map<Coordinate,Node*,CoordLT>::iterator iterator() const;
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
-	vector<Node*>* getBoundaryNodes(int geomIndex);
-	string print();
+	vector<Node*>* getBoundaryNodes(int geomIndex) const; //returns new obj
+	string print() const;
 };
 
 class EdgeRing;
@@ -445,7 +445,7 @@ public:
 	virtual ~EdgeRing();
 	bool isIsolated();
 	bool isHole();
-	Coordinate& getCoordinate(int i);
+	const Coordinate& getCoordinate(int i);
 	LinearRing* getLinearRing();
 	Label* getLabel();
 	bool isShell();
@@ -496,14 +496,14 @@ public:
 //	Wouldn't work. Use iterator
 //	Collection getNodes() { return nodes.values(); }
 	virtual Node* addNode(Node *node);
-	virtual Node* addNode(Coordinate& coord);
+	virtual Node* addNode(const Coordinate& coord);
 	virtual Node* find(Coordinate& coord);
 	virtual void addEdges(vector<Edge*>* edgesToAdd);
 	virtual void linkResultDirectedEdges();
 	virtual void linkAllDirectedEdges();
 	virtual EdgeEnd* findEdgeEnd(Edge *e);
-	virtual Edge* findEdge(Coordinate& p0,Coordinate& p1);
-	virtual Edge* findEdgeInSameDirection(Coordinate& p0,Coordinate& p1);
+	virtual Edge* findEdge(const Coordinate& p0,const Coordinate& p1);
+	virtual Edge* findEdgeInSameDirection(const Coordinate& p0,const Coordinate& p1);
 	virtual string printEdges();
 	virtual NodeMap* getNodeMap();
 	//Not used 
@@ -515,11 +515,11 @@ protected:
 	vector<EdgeEnd*> *edgeEndList;
 	virtual void insertEdge(Edge *e);
 private:
-	bool matchInSameDirection(Coordinate& p0,Coordinate& p1,Coordinate& ep0,Coordinate& ep1);
+	bool matchInSameDirection(const Coordinate& p0, const Coordinate& p1, const Coordinate& ep0, const Coordinate& ep1);
 };
 
 struct LineStringLT {
-	bool operator()(LineString *ls1, LineString *ls2) const {
+	bool operator()(const LineString *ls1, const LineString *ls2) const {
 		return ls1->compareTo(ls2)<0;
 	}
 };
@@ -530,14 +530,14 @@ public:
 	static int determineBoundary(int boundaryCount);
 	GeometryGraph();
 	virtual ~GeometryGraph();
-	GeometryGraph(int newArgIndex, Geometry *newParentGeom);
-	GeometryGraph(int newArgIndex, PrecisionModel *newPrecisionModel, int newSRID);
-	PrecisionModel* getPrecisionModel();
+	GeometryGraph(int newArgIndex, const Geometry *newParentGeom);
+	GeometryGraph(int newArgIndex, const PrecisionModel *newPrecisionModel, int newSRID);
+	const PrecisionModel* getPrecisionModel();
 	int getSRID();
-	Geometry* getGeometry();
+	const Geometry* getGeometry();
 	vector<Node*>* getBoundaryNodes();
 	CoordinateList* getBoundaryPoints();
-	Edge* findEdge(LineString *line);
+	Edge* findEdge(const LineString *line);
 	void computeSplitEdges(vector<Edge*> *edgelist);
 	void addEdge(Edge *e);
 	void addPoint(Coordinate& pt);
@@ -545,18 +545,18 @@ public:
 	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,LineIntersector *li,bool includeProper);
 	vector<Edge*> *getEdges();
 	bool hasTooFewPoints();
-	Coordinate* getInvalidPoint();
+	const Coordinate& getInvalidPoint(); 
 private:
-	Geometry *parentGeom;
+	const Geometry *parentGeom;
 	// the precision model of the Geometry represented by this graph
-	PrecisionModel *precisionModel;
+	const PrecisionModel *precisionModel;
 	int SRID;
 	/**
 	* The lineEdgeMap is a map of the linestring components of the
 	* parentGeometry to the edges which are derived from them.
 	* This is used to efficiently perform findEdge queries
 	*/
-	map<LineString*,Edge*,LineStringLT>* lineEdgeMap;
+	map<const LineString*,Edge*,LineStringLT>* lineEdgeMap;
 	/**
 	* If this flag is true, the Boundary Determination Rule will used when deciding
 	* whether nodes are in the boundary or not
@@ -565,16 +565,16 @@ private:
 	int argIndex;  // the index of this geometry as an argument to a spatial function (used for labelling)
 	vector<Node*>* boundaryNodes;
 	bool hasTooFewPointsVar;
-	Coordinate* invalidPoint;
+	Coordinate invalidPoint; 
 	EdgeSetIntersector* createEdgeSetIntersector();
-	void add(Geometry *g);
-	void addCollection(GeometryCollection *gc);
-	void addPoint(Point *p);
-	void addPolygonRing(LinearRing *lr,int cwLeft,int cwRight);
-	void addPolygon(Polygon *p);
-	void addLineString(LineString *line);
-	void insertPoint(int argIndex,Coordinate& coord,int onLocation);
-	void insertBoundaryPoint(int argIndex,Coordinate& coord);
+	void add(const Geometry *g);
+	void addCollection(const GeometryCollection *gc);
+	void addPoint(const Point *p);
+	void addPolygonRing(const LinearRing *lr,int cwLeft,int cwRight);
+	void addPolygon(const Polygon *p);
+	void addLineString(const LineString *line);
+	void insertPoint(int argIndex, const Coordinate& coord,int onLocation);
+	void insertBoundaryPoint(int argIndex, const Coordinate& coord);
 	void addSelfIntersectionNodes(int argIndex);
 	void addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc);
 };

@@ -2,7 +2,7 @@
 
 namespace geos {
 
-int RobustCGAlgorithms::orientationIndex(Coordinate& p1,Coordinate& p2,Coordinate& q) {
+int RobustCGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q) {
 	// travelling along p1->p2, turn counter clockwise to get to q return 1,
 	// travelling along p1->p2, turn clockwise to get to q return -1,
 	// p1, p2 and q are colinear return 0.
@@ -31,7 +31,7 @@ RobustCGAlgorithms::~RobustCGAlgorithms() {
 * @param ring an array of coordinates forming a ring
 * @return <code>true</code> if the ring is oriented counter-clockwise.
 */
-bool RobustCGAlgorithms::isCCW(CoordinateList* ring) {
+bool RobustCGAlgorithms::isCCW(const CoordinateList* ring) const {
 	Coordinate hip;
 	Coordinate p;
 	Coordinate prev;
@@ -87,7 +87,9 @@ bool RobustCGAlgorithms::isCCW(CoordinateList* ring) {
 *
 * @param ring assumed to have first point identical to last point
 */
-bool RobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring) {
+bool
+RobustCGAlgorithms::isPointInRing(const Coordinate& p,
+		const CoordinateList* ring) const {
 	int i;
 	int i1;       // point index; i1 = i-1
 	double xInt;  // x intersection of segment with ray
@@ -103,8 +105,8 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring) {
 	*/
 	for (i=1;i<nPts;i++) {
 		i1=i-1;
-		Coordinate& p1=ring->getAt(i);
-		Coordinate& p2=ring->getAt(i1);
+		const Coordinate& p1=ring->getAt(i);
+		const Coordinate& p2=ring->getAt(i1);
 		x1=p1.x-p.x;
 		y1=p1.y-p.y;
 		x2=p2.x-p.x;
@@ -133,11 +135,14 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate& p,CoordinateList* ring) {
 	}
 }
 
-bool RobustCGAlgorithms::isOnLine(Coordinate& p,CoordinateList* pt) {
+bool
+RobustCGAlgorithms::isOnLine(const Coordinate& p,
+		const CoordinateList* pt) const
+{
 	auto_ptr<LineIntersector> lineIntersector(new RobustLineIntersector());
 	for(int i=1;i<pt->getSize();i++) {
-		Coordinate& p0=pt->getAt(i-1);
-		Coordinate& p1=pt->getAt(i);
+		const Coordinate& p0=pt->getAt(i-1);
+		const Coordinate& p1=pt->getAt(i);
 		lineIntersector->computeIntersection(p,p0,p1);
 		if (lineIntersector->hasIntersection()) {
 			return true;
@@ -146,11 +151,11 @@ bool RobustCGAlgorithms::isOnLine(Coordinate& p,CoordinateList* pt) {
 	return false;
 }
 
-int RobustCGAlgorithms::computeOrientation(Coordinate& p1,Coordinate& p2,Coordinate& q) {
+int RobustCGAlgorithms::computeOrientation(const Coordinate& p1,const Coordinate& p2,const Coordinate& q) const {
 	return orientationIndex(p1,p2,q);
 }
 
-bool RobustCGAlgorithms::isInEnvelope(Coordinate& p,CoordinateList* ring) {
+bool RobustCGAlgorithms::isInEnvelope(const Coordinate& p, const CoordinateList* ring) const {
 	Envelope envelope;
 	for(int i=0;i<ring->getSize();i++) {
 		envelope.expandToInclude(ring->getAt(i));

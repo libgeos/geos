@@ -26,7 +26,7 @@ public:
 		DIFFERENCE,
 		SYMDIFFERENCE
 	};
-	static Geometry* overlayOp(Geometry *geom0,Geometry *geom1,int opCode);
+	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode);
 	static bool isResultOfOp(Label *label,int opCode);
 	/**
 	* This method will handle arguments of Location.NULL correctly
@@ -34,7 +34,7 @@ public:
 	* @return true if the locations correspond to the opCode
 	*/
 	static bool isResultOfOp(int loc0,int loc1,int opCode);
-	OverlayOp(Geometry *g0,Geometry *g1);
+	OverlayOp(const Geometry *g0, const Geometry *g1);
 	virtual ~OverlayOp();
 	Geometry* getResultGeometry(int funcCode);
 	PlanarGraph* getGraph();
@@ -43,13 +43,13 @@ public:
 	*
 	* @return true if the coord point is covered by a result Line or Area geometry
 	*/
-	bool isCoveredByLA(Coordinate& coord);
+	bool isCoveredByLA(const Coordinate& coord);
 	/**
 	* This method is used to decide if an L edge should be included in the result or not.
 	*
 	* @return true if the coord point is covered by a result Area geometry
 	*/
-	bool isCoveredByA(Coordinate& coord);
+	bool isCoveredByA(const Coordinate& coord);
 	/**
 	* @return true if the coord is located in the interior or boundary of
 	* a geometry in the list.
@@ -158,9 +158,9 @@ private:
 	* them out.
 	*/
 	void cancelDuplicateResultEdges();
-	bool isCovered(Coordinate& coord,vector<Geometry*> *geomList);
-	bool isCovered(Coordinate& coord,vector<Polygon*> *geomList);
-	bool isCovered(Coordinate& coord,vector<LineString*> *geomList);
+	bool isCovered(const Coordinate& coord,vector<Geometry*> *geomList);
+	bool isCovered(const Coordinate& coord,vector<Polygon*> *geomList);
+	bool isCovered(const Coordinate& coord,vector<LineString*> *geomList);
 	Geometry* computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList);

@@ -24,7 +24,7 @@ public:
 class PointInRing{
 public:
 	virtual ~PointInRing(){};
-	virtual bool isInside(Coordinate& pt)=0;
+	virtual bool isInside(const Coordinate& pt)=0;
 };
 
 class CGAlgorithms {
@@ -42,7 +42,7 @@ public:
 	*
 	* @return true if the point lies in the interior of the ring
 	*/
-	virtual bool isPointInRing(Coordinate& p,CoordinateList* ring)=0;
+	virtual bool isPointInRing(const Coordinate& p, const CoordinateList* ring) const=0;
 	/**
 	* Test whether a point lies on a linestring.
 	*
@@ -50,13 +50,13 @@ public:
 	* the point is a vertex of the line or lies in the interior of a line
 	* segment in the linestring
 	*/
-	virtual bool isOnLine(Coordinate& p,CoordinateList* linestring)=0;
+	virtual bool isOnLine(const Coordinate& p, const CoordinateList* linestring) const=0;
 	/**
 	* Test whether a ring (simple polygon) is oriented counter-clockwise.
 	*
 	* @return true if the ring is oriented counter-clockwise
 	*/
-	virtual bool isCCW(CoordinateList* ring)=0;
+	virtual bool isCCW(const CoordinateList* ring) const=0;
 	/**
 	* Computes the orientation of a point q to the directed line segment p1-p2.
 	* The orientation of a point relative to a directed line segment indicates
@@ -66,9 +66,9 @@ public:
 	* @return -1 if q is clockwise from p1-p2
 	* @return 0 if q is collinear with p1-p2
 	*/
-	virtual int computeOrientation(Coordinate& p1,Coordinate& p2,Coordinate& q)=0;
-	static double distancePointLine(Coordinate& p,Coordinate& A,Coordinate& B);
-	static double distanceLineLine(Coordinate& A,Coordinate& B,Coordinate& C,Coordinate& D);
+	virtual int computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q) const=0;
+	static double distancePointLine(const Coordinate& p,const Coordinate& A,const Coordinate& B);
+	static double distanceLineLine(const Coordinate& A, const Coordinate& B, const Coordinate& C, const Coordinate& D);
 	static double signedArea(CoordinateList* ring);
 	static double length(CoordinateList* pts);
 };
@@ -90,7 +90,7 @@ class SimplePointInRing: public PointInRing {
 public:
 	SimplePointInRing(LinearRing *ring);
 	virtual ~SimplePointInRing();
-	bool isInside(Coordinate& pt);
+	bool isInside(const Coordinate& pt);
 private:
 	CGAlgorithms *cga;
 	CoordinateList* pts;
@@ -98,37 +98,37 @@ private:
 
 class LineIntersector{
 public:	
-	static double computeEdgeDistance(Coordinate& p,Coordinate& p0,Coordinate& p1);
-	static double nonRobustComputeEdgeDistance(Coordinate& p,Coordinate& p1,Coordinate& p2);
+	static double computeEdgeDistance(const Coordinate& p, const Coordinate& p0, const Coordinate& p1);
+	static double nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
 	LineIntersector();
 	virtual ~LineIntersector();
-	virtual void setMakePrecise(PrecisionModel *newPM);
+	virtual void setMakePrecise(const PrecisionModel *newPM);
 	/**
 	* Compute the intersection of a point p and the line p1-p2
 	*/
-	virtual void computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2)=0;
+	virtual void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2) =0;
 	enum {
 		DONT_INTERSECT,
 		DO_INTERSECT,
 		COLLINEAR
 	};
-	virtual void computeIntersection(Coordinate& p1,Coordinate& p2,Coordinate& p3, Coordinate& p4);
-	virtual string toString();
-	virtual bool hasIntersection();
-	virtual int getIntersectionNum();
-	virtual Coordinate& getIntersection(int intIndex);
-	virtual bool isSameSignAndNonZero(double a,double b);
-	virtual bool isIntersection(Coordinate& pt);
-	virtual bool isProper();
-	virtual Coordinate& getIntersectionAlongSegment(int segmentIndex,int intIndex);
+	virtual void computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3, const Coordinate& p4);
+	virtual string toString() const;
+	virtual bool hasIntersection() const;
+	virtual int getIntersectionNum() const;
+	virtual const Coordinate& getIntersection(int intIndex) const;
+	static bool isSameSignAndNonZero(double a,double b);
+	virtual bool isIntersection(const Coordinate& pt) const;
+	virtual bool isProper() const;
+	virtual const Coordinate& getIntersectionAlongSegment(int segmentIndex,int intIndex);
 	virtual int getIndexAlongSegment(int segmentIndex,int intIndex);
-	virtual double getEdgeDistance(int geomIndex,int intIndex);
+	virtual double getEdgeDistance(int geomIndex,int intIndex) const;
 protected:
 	/**
 	* If makePrecise is true, computed intersection coordinates will be made precise
 	* using Coordinate#makePrecise
 	*/
-	PrecisionModel *precisionModel;
+	const PrecisionModel *precisionModel;
 	int result;
 	Coordinate inputLines[2][2];
 	Coordinate intPt[2];
@@ -140,9 +140,9 @@ protected:
 	bool isProperVar;
 	Coordinate pa;
 	Coordinate pb;
-	virtual bool isCollinear();
-	virtual int computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2)=0;
-	virtual bool isEndPoint();
+	virtual bool isCollinear() const;
+	virtual int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)=0;
+	virtual bool isEndPoint() const;
 	virtual void computeIntLineIndex();
 	virtual void computeIntLineIndex(int segmentIndex);
 };
@@ -156,58 +156,58 @@ class RobustLineIntersector: public LineIntersector {
 public:
 	RobustLineIntersector();
 	virtual ~RobustLineIntersector();
-	void computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2);
-	int computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
+	void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
+	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
 private:
 //	bool between(Coordinate& p1,Coordinate& p2,Coordinate& q);
-	int computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
-	Coordinate* intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
-	void normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt);
-	double smallestInAbsValue(double x1,double x2,double x3,double x4);
+	int computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
+	Coordinate* intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const;
+	void normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt) const;
+	double smallestInAbsValue(double x1,double x2,double x3,double x4) const;
 };
 
 class NonRobustLineIntersector: public LineIntersector {
 public:
 	NonRobustLineIntersector();
-	void computeIntersection(Coordinate& p,Coordinate& p1,Coordinate& p2);
+	void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
 protected:
-	int computeIntersect(Coordinate& p1,Coordinate& p2,Coordinate& p3,Coordinate& p4);
+	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4);
 private:
-	int computeCollinearIntersection(Coordinate& p1,Coordinate& p2,Coordinate& p3,Coordinate& p4);
-	double rParameter(Coordinate& p1,Coordinate& p2,Coordinate& p);
+	int computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4);
+	double rParameter(const Coordinate& p1,const Coordinate& p2,const Coordinate& p) const;
 };
 
 class RobustCGAlgorithms: public CGAlgorithms {
 public:
-	static int orientationIndex(Coordinate& p1,Coordinate& p2,Coordinate& q);
+	static int orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
 	RobustCGAlgorithms();
 	~RobustCGAlgorithms();
-	bool isCCW(CoordinateList* ring);
-	bool isPointInRing(Coordinate& p,CoordinateList* ring);
-	bool isOnLine(Coordinate& p,CoordinateList* pt);
-	int computeOrientation(Coordinate& p1,Coordinate& p2,Coordinate& q);
+	bool isCCW(const CoordinateList* ring) const;
+	bool isPointInRing(const Coordinate& p, const CoordinateList* ring) const;
+	bool isOnLine(const Coordinate& p,const CoordinateList* pt) const;
+	int computeOrientation(const Coordinate& p1,const Coordinate& p2, const Coordinate& q) const;
 private:
-	bool isInEnvelope(Coordinate& p,CoordinateList* ring);
+	bool isInEnvelope(const Coordinate& p, const CoordinateList* ring) const;
 };
 
 class NonRobustCGAlgorithms: public CGAlgorithms {
 public:
 	NonRobustCGAlgorithms();
 	~NonRobustCGAlgorithms();
-	bool isPointInRing(Coordinate& p,CoordinateList* ring);
-	bool isOnLine(Coordinate& p,CoordinateList* pt);
-	bool isCCW(CoordinateList* ring);
-	int computeOrientation(Coordinate& p1,Coordinate& p2,Coordinate& q);
+	bool isPointInRing(const Coordinate& p, const CoordinateList* ring) const;
+	bool isOnLine(const Coordinate& p, const CoordinateList* pt) const;
+	bool isCCW(const CoordinateList* ring) const;
+	int computeOrientation(const Coordinate& p1,const Coordinate& p2,const Coordinate& q) const;
 protected:
 	LineIntersector *li;
 };
 
 class SimplePointInAreaLocator {
 public:
-	static int locate(Coordinate& p,Geometry *geom);
-	static bool containsPointInPolygon(Coordinate& p,Polygon *poly);
+	static int locate(const Coordinate& p, const Geometry *geom);
+	static bool containsPointInPolygon(const Coordinate& p,const Polygon *poly);
 private:
-	static bool containsPoint(Coordinate& p,Geometry *geom);
+	static bool containsPoint(const Coordinate& p,const Geometry *geom);
 };
 
 /**
@@ -222,16 +222,16 @@ class PointLocator {
 public:
 	PointLocator();
 	~PointLocator();
-	int locate(Coordinate& p,Geometry *geom);
-	bool intersects(Coordinate& p,Geometry *geom);
-	int locate(Coordinate& p,LineString *l);
-	int locate(Coordinate& p,LinearRing *ring);
-	int locate(Coordinate& p,Polygon *poly);
+	int locate(const Coordinate& p,const Geometry *geom);
+	bool intersects(const Coordinate& p,const Geometry *geom);
+	int locate(const Coordinate& p,const LineString *l);
+	int locate(const Coordinate& p,const LinearRing *ring);
+	int locate(const Coordinate& p,const Polygon *poly);
 private:
 	CGAlgorithms *cga;
 	bool isIn;         // true if the point lies in or on any Geometry element
 	int numBoundaries;    // the number of sub-elements whose boundaries the point lies in
-	void computeLocation(Coordinate& p,Geometry *geom);
+	void computeLocation(const Coordinate& p,const Geometry *geom);
 	void updateLocationInfo(int loc);
 };
 
@@ -240,14 +240,14 @@ class MCPointInRing: public PointInRing {
 public:
 	MCPointInRing(LinearRing *newRing);
 	virtual ~MCPointInRing();
-	bool isInside(Coordinate& pt);
+	bool isInside(const Coordinate& pt);
 	void testLineSegment(Coordinate& p,LineSegment *seg);
 	class MCSelecter: public MonotoneChainSelectAction {
 	private:
 		Coordinate p;
 		MCPointInRing *parent;
 	public:
-		MCSelecter(Coordinate& newP,MCPointInRing *prt);
+		MCSelecter(const Coordinate& newP,MCPointInRing *prt);
 	    void select(LineSegment *ls);
 	};
 private:
@@ -265,10 +265,10 @@ private:
 	SIRtree *sirTree;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
-	void testLineSegment(Coordinate& p,LineSegment *seg);
+	void testLineSegment(const Coordinate& p,LineSegment *seg);
 public:
 	SIRtreePointInRing(LinearRing *newRing);
-	bool isInside(Coordinate& pt);
+	bool isInside(const Coordinate& pt);
 };
 
 class CentroidPoint {
@@ -278,9 +278,9 @@ private:
 public:
 	CentroidPoint();
 	virtual ~CentroidPoint();
-	void add(Geometry *geom);
-	void add(Coordinate *pt);
-	Coordinate* getCentroid();
+	void add(const Geometry *geom);
+	void add(const Coordinate *pt);
+	Coordinate* getCentroid() const;
 };
 
 class CentroidLine {
@@ -290,9 +290,9 @@ private:
 public:
 	CentroidLine();
 	virtual ~CentroidLine();
-	void add(Geometry *geom);
-	void add(CoordinateList *pts);
-	Coordinate* getCentroid();
+	void add(const Geometry *geom);
+	void add(const CoordinateList *pts);
+	Coordinate* getCentroid() const;
 };
 
 /**
@@ -309,22 +309,22 @@ class CentroidArea {
 public:
 	CentroidArea();
 	virtual ~CentroidArea();
-	void add(Geometry *geom);
-	void add(CoordinateList *ring);
-	Coordinate* getCentroid();
+	void add(const Geometry *geom);
+	void add(const CoordinateList *ring);
+	Coordinate* getCentroid() const;
 private:
 	CGAlgorithms *cga;
-	Coordinate* basePt;// the point all triangles are based at
+	const Coordinate* basePt;// the point all triangles are based at
 	Coordinate* triangleCent3;// temporary variable to hold centroid of triangle
 	double areasum2;        /* Partial area sum */
 	Coordinate* cg3; // partial centroid sum
-	void setBasePoint(Coordinate *newbasePt);
-	void add(Polygon *poly);
-	void addShell(CoordinateList *pts);
-	void addHole(CoordinateList *pts);
-	inline void addTriangle(Coordinate &p0,Coordinate &p1,Coordinate &p2,bool isPositiveArea);
-	static inline  void centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordinate *c);
-	static inline double area2(Coordinate &p1,Coordinate &p2,Coordinate &p3);
+	void setBasePoint(const Coordinate *newbasePt);
+	void add(const Polygon *poly);
+	void addShell(const CoordinateList *pts);
+	void addHole(const CoordinateList *pts);
+	inline void addTriangle(const Coordinate &p0, const Coordinate &p1, const Coordinate &p2,bool isPositiveArea);
+	static inline  void centroid3(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3,Coordinate *c);
+	static inline double area2(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3);
 };
 
 /**
@@ -334,15 +334,15 @@ private:
  */
 class InteriorPointPoint {
 private:
-	Coordinate* centroid;
+	const Coordinate* centroid;
 	double minDistance;
-	Coordinate* interiorPoint;
-	void add(Geometry *geom);
-	void add(Coordinate *point);
+	const Coordinate* interiorPoint;
+	void add(const Geometry *geom);
+	void add(const Coordinate *point);
 public:
-	InteriorPointPoint(Geometry *g);
+	InteriorPointPoint(const Geometry *g);
 	virtual	~InteriorPointPoint();
-	Coordinate* getInteriorPoint();
+	const Coordinate* getInteriorPoint() const;
 };
 
 /**
@@ -359,16 +359,16 @@ class InteriorPointLine {
 public:
 	InteriorPointLine(Geometry *g);
 	virtual ~InteriorPointLine();
-	Coordinate* getInteriorPoint();
+	Coordinate* getInteriorPoint() const;
 private:
-	Coordinate *centroid;
+	const Coordinate *centroid;
 	double minDistance;
 	Coordinate *interiorPoint;
-	void addInterior(Geometry *geom);
-	void addInterior(CoordinateList *pts);
-	void addEndpoints(Geometry *geom);
-	void addEndpoints(CoordinateList *pts);
-	void add(Coordinate *point);
+	void addInterior(const Geometry *geom);
+	void addInterior(const CoordinateList *pts);
+	void addEndpoints(const Geometry *geom);
+	void addEndpoints(const CoordinateList *pts);
+	void add(const Coordinate *point);
 };
 
 /**
@@ -394,17 +394,17 @@ private:
 	GeometryFactory *factory;
 	Coordinate *interiorPoint;
 	double maxWidth;
-	void add(Geometry *geom);
+	void add(const Geometry *geom);
 public:
-	InteriorPointArea(Geometry *g);
+	InteriorPointArea(const Geometry *g);
 	virtual ~InteriorPointArea();
-	Coordinate* getInteriorPoint();
-	void addPolygon(Geometry *geometry);
-	Coordinate* centre(Envelope *envelope);
+	Coordinate* getInteriorPoint() const;
+	void addPolygon(const Geometry *geometry);
+	Coordinate* centre(const Envelope *envelope) const;
 protected:
-	Geometry *widestGeometry(Geometry *geometry);
-	Geometry *widestGeometry(GeometryCollection *gc);
-	LineString *horizontalBisector(Geometry *geometry);
+	const Geometry *widestGeometry(const Geometry *geometry);
+	const Geometry *widestGeometry(const GeometryCollection *gc);
+	LineString *horizontalBisector(const Geometry *geometry);
 
 };
 
@@ -420,20 +420,20 @@ class ConvexHull {
 private:
 	PointLocator *pointLocator;
 	CGAlgorithms *cgAlgorithms;
-	Geometry *geometry;
-	CoordinateList* reduce(CoordinateList *pts);
+	const Geometry *geometry;
+	CoordinateList* reduce(const CoordinateList *pts);
 	CoordinateList* preSort(CoordinateList *pts);
-	CoordinateList* grahamScan(CoordinateList *c);
+	CoordinateList* grahamScan(const CoordinateList *c);
 	void radialSort(CoordinateList *p);
 	int polarCompare(Coordinate o, Coordinate p, Coordinate q);
 	bool isBetween(Coordinate c1, Coordinate c2, Coordinate c3);
-    BigQuad* makeBigQuad(CoordinateList *pts);
+    BigQuad* makeBigQuad(const CoordinateList *pts);
 	Geometry* lineOrPolygon(CoordinateList *newCoordinates);
 	CoordinateList* cleanRing(CoordinateList *original);
 public:
 	ConvexHull(CGAlgorithms *newCgAlgorithms);
 	~ConvexHull();
-	Geometry* getConvexHull(Geometry *newGeometry);
+	Geometry* getConvexHull(const Geometry *newGeometry);
 };
 }
 #endif

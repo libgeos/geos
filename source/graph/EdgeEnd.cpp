@@ -48,7 +48,7 @@ EdgeEnd::EdgeEnd(Edge* newEdge, Coordinate& newP0, Coordinate& newP1, Label* new
 	label=newLabel;
 }
 
-void EdgeEnd::init(Coordinate& newP0, Coordinate& newP1){
+void EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1){
 	p0=newP0;
 	p1=newP1;
 	dx=p1.x-p0.x;

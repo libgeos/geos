@@ -24,7 +24,7 @@ InteriorPointLine::~InteriorPointLine() {
 * If a Geometry is not of dimension 1 it is not tested.
 * @param geom the geometry to add
 */
-void InteriorPointLine::addInterior(Geometry *geom){
+void InteriorPointLine::addInterior(const Geometry *geom){
 	if (typeid(*geom)==typeid(LineString)) {
 		addInterior(geom->getCoordinates());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -38,7 +38,7 @@ void InteriorPointLine::addInterior(Geometry *geom){
 	}
 }
 
-void InteriorPointLine::addInterior(CoordinateList *pts) {
+void InteriorPointLine::addInterior(const CoordinateList *pts) {
 	for(int i=1;i<pts->getSize()-1;i++) {
 		add(&(pts->getAt(i)));
 	}
@@ -50,7 +50,7 @@ void InteriorPointLine::addInterior(CoordinateList *pts) {
 * If a Geometry is not of dimension 1 it is not tested.
 * @param geom the geometry to add
 */
-void InteriorPointLine::addEndpoints(Geometry *geom) {
+void InteriorPointLine::addEndpoints(const Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) {
 		addEndpoints(geom->getCoordinates());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -64,12 +64,12 @@ void InteriorPointLine::addEndpoints(Geometry *geom) {
 	}
 }
 
-void InteriorPointLine::addEndpoints(CoordinateList *pts){
+void InteriorPointLine::addEndpoints(const CoordinateList *pts){
 	add(&(pts->getAt(0)));
 	add(&(pts->getAt(pts->getSize()-1)));
 }
 
-void InteriorPointLine::add(Coordinate *point) {
+void InteriorPointLine::add(const Coordinate *point) {
 	double dist=point->distance(*centroid);
 	if (dist<minDistance) {
 		delete interiorPoint;
@@ -78,7 +78,7 @@ void InteriorPointLine::add(Coordinate *point) {
 	}
 }
 
-Coordinate* InteriorPointLine::getInteriorPoint() {
+Coordinate* InteriorPointLine::getInteriorPoint() const {
 	return interiorPoint;
 }
 }

@@ -3,7 +3,7 @@
 
 namespace geos {
 
-BufferEdgeBuilder::BufferEdgeBuilder(CGAlgorithms *newCga,LineIntersector *li,double newDistance,PrecisionModel *precisionModel,int quadrantSegments) {
+BufferEdgeBuilder::BufferEdgeBuilder(CGAlgorithms *newCga,LineIntersector *li,double newDistance,const PrecisionModel *precisionModel,int quadrantSegments) {
 	cga=newCga;
 	distance=newDistance;
 	//lineBuilder=new BufferMultiLineBuilder(cga, li);
@@ -19,7 +19,7 @@ BufferEdgeBuilder::~BufferEdgeBuilder() {
 	delete edgeList;
 }
 
-vector<Edge*>* BufferEdgeBuilder::getEdges(Geometry *geom){
+vector<Edge*>* BufferEdgeBuilder::getEdges(const Geometry *geom){
 	add(geom);
 	return edgeList;
 }
@@ -39,7 +39,7 @@ void BufferEdgeBuilder::addEdges(vector<CoordinateList*> *lineList, int leftLoc,
 *<br>Left: Location.EXTERIOR
 *<br>Right: Location.INTERIOR
 */
-void BufferEdgeBuilder::addEdge(CoordinateList *coord, int leftLoc, int rightLoc){
+void BufferEdgeBuilder::addEdge(const CoordinateList *coord, int leftLoc, int rightLoc){
 	// don't add null buffers!
 	if (coord->getSize()<2) return;
 	// add the edge for a coordinate list which is a ring of a buffer
@@ -47,7 +47,7 @@ void BufferEdgeBuilder::addEdge(CoordinateList *coord, int leftLoc, int rightLoc
 	edgeList->push_back(e);
 }
 
-void BufferEdgeBuilder::add(Geometry *g){
+void BufferEdgeBuilder::add(const Geometry *g){
 	if (g->isEmpty()) return;
 	if (typeid(*g)==typeid(Polygon)) addPolygon((Polygon*) g);
 	// LineString also handles LinearRings
@@ -60,9 +60,9 @@ void BufferEdgeBuilder::add(Geometry *g){
 	else throw new UnsupportedOperationException(typeid(*g).name());
 }
 
-void BufferEdgeBuilder::addCollection(GeometryCollection *gc) {
+void BufferEdgeBuilder::addCollection(const GeometryCollection *gc) {
 	for (int i=0;i<gc->getNumGeometries(); i++) {
-		Geometry *g=gc->getGeometryN(i);
+		const Geometry *g=gc->getGeometryN(i);
 		add(g);
 	}
 }
@@ -70,7 +70,7 @@ void BufferEdgeBuilder::addCollection(GeometryCollection *gc) {
 /**
 *Add a Point to the graph.
 */
-void BufferEdgeBuilder::addPoint(Point *p) {
+void BufferEdgeBuilder::addPoint(const Point *p) {
 	if (distance<=0.0) return;
 	CoordinateList *coord=p->getCoordinates();
 	vector<CoordinateList*> *lineList=lineBuilder->getLineBuffer(coord,distance);
@@ -79,14 +79,14 @@ void BufferEdgeBuilder::addPoint(Point *p) {
 }
 
 
-void BufferEdgeBuilder::addLineString(LineString *line) {
+void BufferEdgeBuilder::addLineString(const LineString *line) {
 	if (distance<=0.0) return;
 	CoordinateList *coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
 	vector<CoordinateList*> *lineList=lineBuilder->getLineBuffer(coord,distance);
 	addEdges(lineList,Location::EXTERIOR, Location::INTERIOR);
 }
 
-void BufferEdgeBuilder::addPolygon(Polygon *p) {
+void BufferEdgeBuilder::addPolygon(const Polygon *p) {
 	double lineDistance=distance;
 	int side=Position::LEFT;
 	if (distance<0.0) {
@@ -114,7 +114,7 @@ void BufferEdgeBuilder::addPolygon(Polygon *p) {
 *@param cwLeftLoc the location on the L side of the ring (if it is CW)
 *@param cwRightLoc the location on the R side of the ring (if it is CW)
 */
-void BufferEdgeBuilder::addPolygonRing(LinearRing *lr, double distance, int side, int cwLeftLoc, int cwRightLoc){
+void BufferEdgeBuilder::addPolygonRing(const LinearRing *lr, double distance, int side, int cwLeftLoc, int cwRightLoc){
 	CoordinateList *coord=CoordinateList::removeRepeatedPoints(lr->getCoordinates());
 	int leftLoc=cwLeftLoc;
 	int rightLoc=cwRightLoc;

@@ -3,7 +3,7 @@
 
 namespace geos {
 
-EdgeIntersection::EdgeIntersection(Coordinate& newCoord, int newSegmentIndex, double newDist) {
+EdgeIntersection::EdgeIntersection(const Coordinate& newCoord, int newSegmentIndex, double newDist) {
 	coord=newCoord;
 	segmentIndex=newSegmentIndex;
 	dist=newDist;

@@ -10,7 +10,10 @@ namespace geos {
 * @param q the point to test for intersection
 * @return <code>true</code> if q intersects the envelope p1-p2
 */
-bool Envelope::intersects(Coordinate& p1,Coordinate& p2,Coordinate& q) {
+bool
+Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
+		const Coordinate& q)
+{
 	if (((q.x>=min(p1.x,p2.x))&&(q.x<=max(p1.x,p2.x))) &&
 		((q.y>=min(p1.y,p2.y))&&(q.y<=max(p1.y,p2.y)))) {
 			return true;
@@ -26,7 +29,7 @@ bool Envelope::intersects(Coordinate& p1,Coordinate& p2,Coordinate& q) {
 * @param q2 another extremal point of the envelope Q
 * @return <code>true</code> if Q intersects P
 */
-bool Envelope::intersects(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2){
+bool Envelope::intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) {
 	double minq=min(q1.x,q2.x);
 	double maxq=max(q1.x,q2.x);
 	double minp=min(p1.x,p2.x);
@@ -80,7 +83,7 @@ Envelope::Envelope(double x1, double x2, double y1, double y2){
  *@param  p1  the first Coordinate
  *@param  p2  the second Coordinate
  */
-Envelope::Envelope(Coordinate& p1, Coordinate& p2){
+Envelope::Envelope(const Coordinate& p1, const Coordinate& p2){
 	init(p1, p2);
 }
 
@@ -89,7 +92,7 @@ Envelope::Envelope(Coordinate& p1, Coordinate& p2){
  *
  *@param  p1  the Coordinate
  */
-Envelope::Envelope(Coordinate& p){
+Envelope::Envelope(const Coordinate& p){
 	init(p);
 }
 
@@ -143,7 +146,7 @@ void Envelope::init(double x1, double x2, double y1, double y2){
  *@param  p1  the first Coordinate
  *@param  p2  the second Coordinate
  */
-void Envelope::init(Coordinate& p1, Coordinate& p2){
+void Envelope::init(const Coordinate& p1, const Coordinate& p2){
 	init(p1.x, p2.x, p1.y, p2.y);
 }
 
@@ -152,7 +155,7 @@ void Envelope::init(Coordinate& p1, Coordinate& p2){
  *
  *@param  p  the Coordinate
  */
-void Envelope::init(Coordinate& p){
+void Envelope::init(const Coordinate& p){
 	init(p.x, p.x, p.y, p.y);
 }
 
@@ -183,7 +186,7 @@ void Envelope::setToNull() {
  *@return    <code>true</code> if this <code>Envelope</code> is uninitialized
  *      or is the envelope of the empty geometry.
  */
-bool Envelope::isNull() {
+bool Envelope::isNull() const {
 	return maxx < minx;
 }
 
@@ -192,7 +195,7 @@ bool Envelope::isNull() {
  *
  *@return    max x - min x, or 0 if this is a null <code>Envelope</code>
  */
-double Envelope::getWidth() {
+double Envelope::getWidth() const {
 	if (isNull()) {
 		return 0;
 	}
@@ -204,7 +207,7 @@ double Envelope::getWidth() {
  *
  *@return    max y - min y, or 0 if this is a null <code>Envelope</code>
  */
-double Envelope::getHeight() {
+double Envelope::getHeight() const {
 	if (isNull()) {
 		return 0;
 	}
@@ -217,7 +220,7 @@ double Envelope::getHeight() {
  *
  *@return    the maximum y-coordinate
  */
-double Envelope::getMaxY() {
+double Envelope::getMaxY() const {
 	return maxy;
 }
 
@@ -227,7 +230,7 @@ double Envelope::getMaxY() {
  *
  *@return    the maximum x-coordinate
  */
-double Envelope::getMaxX() {
+double Envelope::getMaxX() const {
 	return maxx;
 }
 
@@ -237,7 +240,7 @@ double Envelope::getMaxX() {
  *
  *@return    the minimum y-coordinate
  */
-double Envelope::getMinY() {
+double Envelope::getMinY() const {
 	return miny;
 }
 
@@ -247,7 +250,7 @@ double Envelope::getMinY() {
  *
  *@return    the minimum x-coordinate
  */
-double Envelope::getMinX() {
+double Envelope::getMinX() const {
 	return minx;
 }
 
@@ -257,7 +260,7 @@ double Envelope::getMinX() {
  *
  *@param  p  the Coordinate to include
  */
-void Envelope::expandToInclude(Coordinate& p) {
+void Envelope::expandToInclude(const Coordinate& p) {
 	expandToInclude(p.x, p.y);
 }
 
@@ -297,7 +300,7 @@ void Envelope::expandToInclude(double x, double y) {
  *
  *@param  other  the <code>Envelope</code> to merge with
  */
-void Envelope::expandToInclude(Envelope* other) {
+void Envelope::expandToInclude(const Envelope* other) {
 	if (other->isNull()) {
 		return;
 	}
@@ -330,7 +333,7 @@ void Envelope::expandToInclude(Envelope* other) {
  *@return    <code>true</code> if the point lies in the interior or
  *      on the boundary of this <code>Envelope</code>.
  */
-bool Envelope::contains(Coordinate& p) {
+bool Envelope::contains(const Coordinate& p) const {
 	return contains(p.x, p.y);
 }
 
@@ -344,7 +347,7 @@ bool Envelope::contains(Coordinate& p) {
  *@return    <code>true</code> if <code>(x, y)</code> lies in the interior or
  *      on the boundary of this <code>Envelope</code>.
  */
-bool Envelope::contains(double x, double y) {
+bool Envelope::contains(double x, double y) const {
 	return  x >= minx &&
 			x <= maxx &&
 			y >= miny &&
@@ -360,7 +363,7 @@ bool Envelope::contains(double x, double y) {
  *@return        <code>true</code> if <code>other</code>
  *              is contained in this <code>Envelope</code>
  */
-bool Envelope::contains(Envelope* other) {
+bool Envelope::contains(const Envelope* other) const {
 	return  other->getMinX() >= minx &&
 			other->getMaxX() <= maxx &&
 			other->getMinY() >= miny &&
@@ -374,14 +377,14 @@ bool Envelope::contains(Envelope* other) {
  *@param  other  the <code>Coordinate</code> to be tested
  *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
  */
-bool Envelope::intersects(Coordinate& p) {
+bool Envelope::intersects(const Coordinate& p) const {
 	return intersects(p.x, p.y);
 }
 
 /**
 * @deprecated Use #intersects instead.
 */
-bool Envelope::overlaps(Coordinate& p) {
+bool Envelope::overlaps(const Coordinate& p) const {
 	return intersects(p);
 }
 
@@ -393,7 +396,7 @@ bool Envelope::overlaps(Coordinate& p) {
  *@param  y  the y-ordinate of the point
  *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
  */
-bool Envelope::intersects(double x, double y) {
+bool Envelope::intersects(double x, double y) const {
 	return !(x > maxx ||
 			 x < minx ||
 			 y > maxy ||
@@ -403,7 +406,7 @@ bool Envelope::intersects(double x, double y) {
 /**
 * @deprecated Use #intersects instead.
 */
-bool Envelope::overlaps(double x, double y) {
+bool Envelope::overlaps(double x, double y) const {
 	return intersects(x,y);
 }
 
@@ -416,7 +419,7 @@ bool Envelope::overlaps(double x, double y) {
  *          being checked for overlapping
  *@return        <code>true</code> if the <code>Envelope</code>s overlap
  */
-bool Envelope::intersects(Envelope* other) {
+bool Envelope::intersects(const Envelope* other) const {
 	return !(other->getMinX() > maxx ||
 			 other->getMaxX() < minx ||
 			 other->getMinY() > maxy ||
@@ -428,7 +431,7 @@ bool Envelope::intersects(Envelope* other) {
 * changed to be a true overlap check; that is, whether the intersection is
 * two-dimensional.
 */
-bool Envelope::overlaps(Envelope *other) {
+bool Envelope::overlaps(const Envelope *other) const {
 	return intersects(other);
 }
 
@@ -437,7 +440,7 @@ bool Envelope::overlaps(Envelope *other) {
  *
  *@return    a <code>string</code> of the form <I>Env[minx:maxx,miny:maxy]</I>
  */
-string Envelope::toString() {
+string Envelope::toString() const {
 	string result("");
 	char buffer[255];
 	sprintf(buffer,"Env[%g:%g,%g:%g]",minx,maxx,miny,maxy);
@@ -452,7 +455,7 @@ string Envelope::toString() {
 * The distance between overlapping Envelopes is 0.  Otherwise, the
 * distance is the Euclidean distance between the closest points.
 */
-double Envelope::distance(Envelope* env) {
+double Envelope::distance(const Envelope* env) const {
 	if (intersects(env)) return 0;
 	double dx=0.0;
 	if(maxx<env->minx) dx=env->minx-maxx;
@@ -467,7 +470,7 @@ double Envelope::distance(Envelope* env) {
 }
 
 /// Checks if two Envelopes are equal
-bool operator==(Envelope a, Envelope b) {
+bool operator==(const Envelope a, const Envelope b) {
 	if (a.isNull()) {
 		return b.isNull();
 	}

@@ -8,7 +8,7 @@ double InteriorPointArea::avg(double a, double b){
 	return (a+b)/2.0;
 }
 
-InteriorPointArea::InteriorPointArea(Geometry *g) {
+InteriorPointArea::InteriorPointArea(const Geometry *g) {
 	interiorPoint=NULL;
 	maxWidth=0.0;
 	factory=new GeometryFactory(g->getPrecisionModel(),g->getSRID());
@@ -19,7 +19,7 @@ InteriorPointArea::~InteriorPointArea() {
 	delete factory;
 }
 
-Coordinate* InteriorPointArea::getInteriorPoint(){
+Coordinate* InteriorPointArea::getInteriorPoint() const {
 	return interiorPoint;
 }
 
@@ -29,7 +29,7 @@ Coordinate* InteriorPointArea::getInteriorPoint(){
 * If a Geometry is not of dimension 1 it is not tested.
 * @param geom the geometry to add
 */
-void InteriorPointArea::add(Geometry *geom) {
+void InteriorPointArea::add(const Geometry *geom) {
 	if (typeid(*geom)==typeid(Polygon)) {
 		addPolygon(geom);
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -49,10 +49,10 @@ void InteriorPointArea::add(Geometry *geom) {
 * @return the midpoint of the largest intersection between the geometry and
 * a line halfway down its envelope
 */
-void InteriorPointArea::addPolygon(Geometry *geometry) {
+void InteriorPointArea::addPolygon(const Geometry *geometry) {
 	LineString *bisector=horizontalBisector(geometry);
 	Geometry *intersections=bisector->intersection(geometry);
-	Geometry *widestIntersection=widestGeometry(intersections);
+	const Geometry *widestIntersection=widestGeometry(intersections);
 	Envelope *env=widestIntersection->getEnvelopeInternal();
 	double width=env->getWidth();
 	if (interiorPoint==NULL || width>maxWidth) {
@@ -66,7 +66,7 @@ void InteriorPointArea::addPolygon(Geometry *geometry) {
 
 //@return if geometry is a collection, the widest sub-geometry; otherwise,
 //the geometry itself
-Geometry* InteriorPointArea::widestGeometry(Geometry *geometry) {
+const Geometry* InteriorPointArea::widestGeometry(const Geometry *geometry) {
 	if ((typeid(*geometry)==typeid(GeometryCollection)) ||
 				(typeid(*geometry)==typeid(MultiPoint)) ||
 				(typeid(*geometry)==typeid(MultiPolygon)) ||
@@ -77,11 +77,12 @@ Geometry* InteriorPointArea::widestGeometry(Geometry *geometry) {
 	}
 }
 
-Geometry* InteriorPointArea::widestGeometry(GeometryCollection* gc) {
+const Geometry*
+InteriorPointArea::widestGeometry(const GeometryCollection* gc) {
 	if (gc->isEmpty()) {
 		return gc;
 	}
-	Geometry* widestGeometry=gc->getGeometryN(0);
+	const Geometry* widestGeometry=gc->getGeometryN(0);
 	for(int i=1;i<gc->getNumGeometries();i++) { //Start at 1
 		auto_ptr<Envelope> env1(gc->getGeometryN(i)->getEnvelopeInternal());
 		auto_ptr<Envelope> env2(widestGeometry->getEnvelopeInternal());
@@ -92,7 +93,7 @@ Geometry* InteriorPointArea::widestGeometry(GeometryCollection* gc) {
 	return widestGeometry;
 }
 
-LineString* InteriorPointArea::horizontalBisector(Geometry *geometry) {
+LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
 	Envelope *envelope=geometry->getEnvelopeInternal();
 	// Assert: for areas, minx <> maxx
 	double avgY=avg(envelope->getMinY(),envelope->getMaxY());
@@ -112,7 +113,7 @@ LineString* InteriorPointArea::horizontalBisector(Geometry *geometry) {
 * @param envelope the envelope to analyze
 * @return the centre of the envelope
 */
-Coordinate* InteriorPointArea::centre(Envelope *envelope) {
+Coordinate* InteriorPointArea::centre(const Envelope *envelope) const {
 	return new Coordinate(avg(envelope->getMinX(),
 							  envelope->getMaxX()),
 						  avg(envelope->getMinY(),

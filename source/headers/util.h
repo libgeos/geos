@@ -51,8 +51,8 @@ public:
 	static void isTrue(bool assertion);
 	static void isTrue(bool assertion, string message);
 
-	static void equals(Coordinate& expectedValue, Coordinate& actualValue);
-	static void equals(Coordinate& expectedValue, Coordinate& actualValue, string message);
+	static void equals(const Coordinate& expectedValue, const Coordinate& actualValue);
+	static void equals(const Coordinate& expectedValue, const Coordinate& actualValue, string message);
 
 	static void shouldNeverReachHere();
 	static void shouldNeverReachHere(string message);
@@ -63,8 +63,10 @@ public:
 	CoordinateList* pts;
 	int n;
 	CoordinateArrayFilter(int size);
-	virtual CoordinateList* getCoordinates();
-	virtual void filter(Coordinate &coord);
+	~CoordinateArrayFilter();
+	virtual const CoordinateList* getCoordinates() const;
+	virtual void filter_ro(const Coordinate &coord);
+	virtual void filter_rw(Coordinate &coord); // Unsopported
 };
 
 class UniqueCoordinateArrayFilter:public CoordinateFilter {
@@ -72,8 +74,9 @@ public:
 	CoordinateList *list;
 	UniqueCoordinateArrayFilter();
 	virtual ~UniqueCoordinateArrayFilter();
-	virtual CoordinateList* getCoordinates();
-	virtual void filter(Coordinate &coord);
+	virtual const CoordinateList* getCoordinates() const;
+	virtual void filter_ro(const Coordinate &coord);
+	virtual void filter_rw(Coordinate &coord); // Unsupported
 };
 
 }

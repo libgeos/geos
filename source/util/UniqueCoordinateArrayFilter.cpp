@@ -13,14 +13,18 @@ UniqueCoordinateArrayFilter::~UniqueCoordinateArrayFilter() {
 *
 *@return    the <code>Coordinate</code>s collected by this <code>CoordinateArrayFilter</code>
 */
-CoordinateList* UniqueCoordinateArrayFilter::getCoordinates() {
+const CoordinateList* UniqueCoordinateArrayFilter::getCoordinates() const {
 	return list;
 }
 
-void UniqueCoordinateArrayFilter::filter(Coordinate &coord) {
+void UniqueCoordinateArrayFilter::filter_ro(const Coordinate &coord) {
 	if (CoordinateList::indexOf(&coord,list)==-1) {
 		list->add(coord);
 	}
+}
+
+void UniqueCoordinateArrayFilter::filter_rw(Coordinate &coord) {
+	throw new UnsupportedOperationException("UniqueCoordinateArrayFilter is a read-only filter");
 }
 
 }

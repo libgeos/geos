@@ -35,7 +35,7 @@ bool SimpleNestedRingTester::isNonNested(){
 				continue;
 			if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
 				continue;
-			Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
+			const Coordinate& innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(innerRingPt==Coordinate::getNull(), "Unable to find a ring point not a node of the search ring");
 
 			bool isInside=cga->isPointInRing(innerRingPt,searchRingPts);

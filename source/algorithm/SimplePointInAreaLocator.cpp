@@ -8,14 +8,14 @@ namespace geos {
 * and multi-element Geometries.  The algorithm for multi-element Geometries
 * is more complex, since it has to take into account the boundaryDetermination rule
 */
-int SimplePointInAreaLocator::locate(Coordinate& p,Geometry *geom){
+int SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry *geom){
 	if (geom->isEmpty()) return Location::EXTERIOR;
 	if (containsPoint(p,geom))
 		return Location::INTERIOR;
 	return Location::EXTERIOR;
 }
 
-bool SimplePointInAreaLocator::containsPoint(Coordinate& p,Geometry *geom){
+bool SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry *geom) {
 	if (typeid(*geom)==typeid(Polygon)) {
 		return containsPointInPolygon(p,(Polygon*)geom);
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -24,7 +24,7 @@ bool SimplePointInAreaLocator::containsPoint(Coordinate& p,Geometry *geom){
 			   (typeid(*geom)==typeid(MultiPolygon))) {
 		GeometryCollectionIterator geomi((GeometryCollection*)geom);
 		while (geomi.hasNext()) {
-			Geometry *g2=geomi.next();
+			const Geometry *g2=geomi.next();
 			if (g2!=geom)
 				if (containsPoint(p,g2))
 					return true;
@@ -33,10 +33,10 @@ bool SimplePointInAreaLocator::containsPoint(Coordinate& p,Geometry *geom){
 	return false;
 }
 
-bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate& p,Polygon *poly) {
+bool SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p,const Polygon *poly) {
 	auto_ptr<CGAlgorithms> cga(new RobustCGAlgorithms());
 	if (poly->isEmpty()) return false;
-	LineString *shell=poly->getExteriorRing();
+	const LineString *shell=poly->getExteriorRing();
 	CoordinateList *cl;
 	cl = shell->getCoordinates();
 	if (!cga->isPointInRing(p,cl)) {

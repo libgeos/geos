@@ -8,7 +8,7 @@ Coordinate& RepeatedPointTester::getCoordinate(){
 	return repeatedCoord;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(Geometry *g){
+bool RepeatedPointTester::hasRepeatedPoint(const Geometry *g){
 	if (g->isEmpty()) return false;
 	if (typeid(*g)==typeid(Point)) return false;
 	else if (typeid(*g)==typeid(MultiPoint)) return false;
@@ -21,7 +21,7 @@ bool RepeatedPointTester::hasRepeatedPoint(Geometry *g){
 	else  throw new UnsupportedOperationException(string(typeid(*g).name()));
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(CoordinateList *coord){
+bool RepeatedPointTester::hasRepeatedPoint(const CoordinateList *coord){
 	for(int i=1; i<coord->getSize(); i++) {
 		if (coord->getAt(i - 1)==coord->getAt(i)) {
 			repeatedCoord=coord->getAt(i);
@@ -31,7 +31,7 @@ bool RepeatedPointTester::hasRepeatedPoint(CoordinateList *coord){
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(Polygon *p){
+bool RepeatedPointTester::hasRepeatedPoint(const Polygon *p){
 	if (hasRepeatedPoint(p->getExteriorRing()->getCoordinates())) return true;
 	for(int i=0; i<p->getNumInteriorRing(); i++) {
 		if (hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinates())) return true;
@@ -39,25 +39,25 @@ bool RepeatedPointTester::hasRepeatedPoint(Polygon *p){
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(GeometryCollection *gc){
+bool RepeatedPointTester::hasRepeatedPoint(const GeometryCollection *gc){
 	for(int i = 0; i<gc->getNumGeometries(); i++) {
-		Geometry *g=gc->getGeometryN(i);
+		const Geometry *g=gc->getGeometryN(i);
 		if (hasRepeatedPoint(g)) return true;
 	}
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(MultiPolygon *gc){
+bool RepeatedPointTester::hasRepeatedPoint(const MultiPolygon *gc){
 	for(int i = 0; i<gc->getNumGeometries(); i++) {
-		Geometry *g=gc->getGeometryN(i);
+		const Geometry *g=gc->getGeometryN(i);
 		if (hasRepeatedPoint(g)) return true;
 	}
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(MultiLineString *gc){
+bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
 	for(int i = 0; i<gc->getNumGeometries(); i++) {
-		Geometry *g=gc->getGeometryN(i);
+		const Geometry *g=gc->getGeometryN(i);
 		if (hasRepeatedPoint(g)) return true;
 	}
 	return false;

@@ -113,7 +113,7 @@ private:
 	void labelNodeEdges();
 	void updateIM(IntersectionMatrix *imX);
 	void labelIsolatedEdges(int thisIndex,int targetIndex);
-	void labelIsolatedEdge(Edge *e,int targetIndex,Geometry *target);
+	void labelIsolatedEdge(Edge *e,int targetIndex, const Geometry *target);
 	void labelIsolatedNodes();
 	void labelIsolatedNode(Node *n,int targetIndex);
 };
@@ -131,15 +131,15 @@ private:
 class RelateOp: public GeometryGraphOperation {
 public:
 	static IntersectionMatrix* relate(Geometry *a,Geometry *b);
-	RelateOp(Geometry *g0,Geometry *g1);
+	RelateOp(const Geometry *g0, const Geometry *g1);
 	virtual ~RelateOp();
 	IntersectionMatrix* getIntersectionMatrix();
 private:
 	RelateComputer *relateComp;
-	static vector<Geometry*>* toList(Geometry *geom);
-	static vector<Geometry*>* addToList(Geometry *geom, vector<Geometry*>* geomList);
-	static bool isBaseGeometryCollection(Geometry* geom);
-	static IntersectionMatrix* relateGC(vector<Geometry*> *a,vector<Geometry*> *b);
+	static vector<const Geometry*>* toList(const Geometry *geom);
+	static vector<const Geometry*>* addToList(const Geometry *geom, vector<const Geometry*>* geomList);
+	static bool isBaseGeometryCollection(const Geometry* geom);
+	static IntersectionMatrix* relateGC(vector<const Geometry*> *a,vector<const Geometry*> *b);
 };
 }
 

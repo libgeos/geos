@@ -21,7 +21,7 @@ void SIRtreePointInRing::buildIndex() {
 	}
 }
 
-bool SIRtreePointInRing::isInside(Coordinate& pt) {
+bool SIRtreePointInRing::isInside(const Coordinate& pt) {
 	crossings=0;
 	// test all segments intersected by vertical ray at pt
 	vector<void*> *segs=sirTree->query(pt.y);
@@ -40,7 +40,7 @@ bool SIRtreePointInRing::isInside(Coordinate& pt) {
 	return false;
 }
 
-void SIRtreePointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
+void SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg) {
 	double xInt;  // x intersection of segment with ray
 	double x1;    // translated coordinates
 	double y1;

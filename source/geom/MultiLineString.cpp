@@ -8,22 +8,22 @@ MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel
 GeometryCollection(lineStrings, precisionModel,SRID){}
 MultiLineString::~MultiLineString(){}
 
-int MultiLineString::getDimension() {
+int MultiLineString::getDimension() const {
 	return 1;
 }
 
-int MultiLineString::getBoundaryDimension() {
+int MultiLineString::getBoundaryDimension() const {
 	if (isClosed()) {
 		return Dimension::False;
 	}
 	return 0;
 }
 
-string MultiLineString::getGeometryType() {
+string MultiLineString::getGeometryType() const {
 	return "MultiLineString";
 }
 
-bool MultiLineString::isClosed() {
+bool MultiLineString::isClosed() const {
 	if (isEmpty()) {
 		return false;
 	}
@@ -35,12 +35,12 @@ bool MultiLineString::isClosed() {
 	return true;
 }
 
-bool MultiLineString::isSimple(){
+bool MultiLineString::isSimple() const {
 	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
 	return iso->isSimple(this);
 }
 
-Geometry* MultiLineString::getBoundary() {
+Geometry* MultiLineString::getBoundary() const {
 	if (isEmpty()) {
 		return new GeometryCollection(NULL, precisionModel, SRID);
 	}
@@ -51,7 +51,9 @@ Geometry* MultiLineString::getBoundary() {
 	return fact.createMultiPoint(pts);
 }
 
-bool MultiLineString::equalsExact(Geometry *other, double tolerance) {
+bool
+MultiLineString::equalsExact(const Geometry *other, double tolerance) const
+{
     if (!isEquivalentClass(other)) {
       return false;
     }

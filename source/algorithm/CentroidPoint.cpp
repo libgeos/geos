@@ -18,7 +18,7 @@ CentroidPoint::~CentroidPoint() {
 * If the geometry is not of dimension 0 it does not contribute to the centroid.
 * @param geom the geometry to add
 */
-void CentroidPoint::add(Geometry *geom) {
+void CentroidPoint::add(const Geometry *geom) {
 	if (typeid(*geom)==typeid(Point)) {
 		add(geom->getCoordinate());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -36,13 +36,13 @@ void CentroidPoint::add(Geometry *geom) {
 * Adds the length defined by an array of coordinates.
 * @param pts an array of {@link Coordinate}s
 */
-void CentroidPoint::add(Coordinate *pt) {
+void CentroidPoint::add(const Coordinate *pt) {
 	ptCount+=1;
 	centSum->x+=pt->x;
 	centSum->y+=pt->y;
 }
 
-Coordinate* CentroidPoint::getCentroid() {
+Coordinate* CentroidPoint::getCentroid() const {
 	return new Coordinate(centSum->x/ptCount,centSum->y/ptCount);
 }
 }

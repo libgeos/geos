@@ -38,7 +38,7 @@ bool EdgeRing::isHole(){
 	return isHoleVar;
 }
 
-Coordinate& EdgeRing::getCoordinate(int i) {
+const Coordinate& EdgeRing::getCoordinate(int i) {
 	return pts->getAt(i);
 }
 

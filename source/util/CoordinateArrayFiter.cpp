@@ -18,12 +18,20 @@ CoordinateArrayFilter::CoordinateArrayFilter(int size) {
 *
 *@return    the <code>Coordinate</code>s collected by this <code>CoordinateArrayFilter</code>
 */
-CoordinateList* CoordinateArrayFilter::getCoordinates() {
+const CoordinateList* CoordinateArrayFilter::getCoordinates() const {
 	return pts;
 }
 
-void CoordinateArrayFilter::filter(Coordinate &coord) {
+void CoordinateArrayFilter::filter_ro(const Coordinate &coord) {
 	pts->setAt(coord,n++);
+}
+
+void CoordinateArrayFilter::filter_rw(Coordinate &coord) {
+	throw new UnsupportedOperationException("CoordinateArrayFilter is a read-only filter");
+}
+
+CoordinateArrayFilter::~CoordinateArrayFilter() {
+	delete pts;
 }
 
 }

@@ -6,23 +6,23 @@ namespace geos {
 
 IsSimpleOp::IsSimpleOp(){}
 
-bool IsSimpleOp::isSimple(LineString *geom){
+bool IsSimpleOp::isSimple(const LineString *geom){
 	return isSimpleLinearGeometry(geom);
 }
 
-bool IsSimpleOp::isSimple(MultiLineString *geom){
+bool IsSimpleOp::isSimple(const MultiLineString *geom){
 	return isSimpleLinearGeometry(geom);
 }
 
 /**
 * A MultiPoint is simple iff it has no repeated points
 */
-bool IsSimpleOp::isSimple(MultiPoint *mp) {
+bool IsSimpleOp::isSimple(const MultiPoint *mp) {
 	if (mp->isEmpty()) return true;
 	set<Coordinate,CoordLT> *points=new set<Coordinate,CoordLT>();
 	for(int i=0;i<mp->getNumGeometries();i++) {
 		Point *pt=(Point*) mp->getGeometryN(i);
-		Coordinate* p=pt->getCoordinate();
+		const Coordinate* p=pt->getCoordinate();
 		if (points->find(*p)!=points->end()) {
 			delete points;
 			return false;
@@ -33,7 +33,7 @@ bool IsSimpleOp::isSimple(MultiPoint *mp) {
 	return true;
 }
 
-bool IsSimpleOp::isSimpleLinearGeometry(Geometry *geom){
+bool IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom){
 	if (geom->isEmpty()) return true;
 	GeometryGraph *graph=new GeometryGraph(0,geom);
 	LineIntersector *li=new RobustLineIntersector();
@@ -102,9 +102,9 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
 		bool isClosed=e->isClosed();
-		Coordinate& p0=e->getCoordinate(0);
+		const Coordinate& p0=e->getCoordinate(0);
 		addEndpoint(endPoints,p0,isClosed);
-		Coordinate& p1=e->getCoordinate(e->getNumPoints()-1);
+		const Coordinate& p1=e->getCoordinate(e->getNumPoints()-1);
 		addEndpoint(endPoints,p1,isClosed);
 	}
 	map<Coordinate,EndpointInfo*,CoordLT>::iterator it=endPoints->begin();
@@ -132,7 +132,8 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 /**
 * Add an endpoint to the map, creating an entry for it if none exists
 */
-void IsSimpleOp::addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Coordinate& p,bool isClosed) {
+void IsSimpleOp::addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,
+		const Coordinate& p,bool isClosed) {
 	map<Coordinate,EndpointInfo*,CoordLT>::iterator it=endPoints->find(p);
 	EndpointInfo *eiInfo;
 	if (it==endPoints->end()) {
@@ -147,7 +148,7 @@ void IsSimpleOp::addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints,Co
 	eiInfo->addEndpoint(isClosed);
 }
 
-EndpointInfo::EndpointInfo(Coordinate& newPt) {
+EndpointInfo::EndpointInfo(const Coordinate& newPt) {
 	pt.setCoordinate(newPt);
 	isClosed=false;
 	degree=0;

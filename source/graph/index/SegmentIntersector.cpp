@@ -111,11 +111,11 @@ void SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int se
 	if (e0==e1 && segIndex0==segIndex1) return;
 	numTests++;
 	CoordinateList* cl0=e0->getCoordinates();
-	Coordinate& p00=cl0->getAt(segIndex0);
-	Coordinate& p01=cl0->getAt(segIndex0+1);
+	const Coordinate& p00=cl0->getAt(segIndex0);
+	const Coordinate& p01=cl0->getAt(segIndex0+1);
 	CoordinateList* cl1=e1->getCoordinates();
-	Coordinate& p10=cl1->getAt(segIndex1);
-	Coordinate& p11=cl1->getAt(segIndex1+1);
+	const Coordinate& p10=cl1->getAt(segIndex1);
+	const Coordinate& p11=cl1->getAt(segIndex1+1);
 	li->computeIntersection(p00,p01,p10,p11);
 	/**
 	*  Always record any non-proper intersections.
@@ -160,7 +160,7 @@ bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<vector<Node*
 bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNodes){
 	for(vector<Node*>::iterator i=tstBdyNodes->begin();i<tstBdyNodes->end();i++) {
 		Node *node=*i;
-		Coordinate& pt=node->getCoordinate();
+		const Coordinate& pt=node->getCoordinate();
 		if (li->isIntersection(pt)) return true;
 	}
 	return false;
