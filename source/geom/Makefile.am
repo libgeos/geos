@@ -80,7 +80,18 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../operation/valid/RepeatedPointTester.cpp \
 			../operation/valid/SimpleNestedRingTester.cpp \
 			../operation/valid/SweeplineNestedRingTester.cpp \
-			../operation/valid/TopologyValidationError.cpp
+			../operation/valid/TopologyValidationError.cpp \
+			../index/chain/MonotoneChainBuilder.cpp \
+			../index/chain/MonotoneChainOverlapAction.cpp \
+			../index/chain/MonotoneChainSelectAction.cpp \
+			../index/chain/indexMonotoneChain.cpp \
+			../index/intervaltree/IntervalNode.cpp \
+			../index/intervaltree/IntervalTree.cpp \
+			../index/quadtree/Quad.cpp \
+			../index/quadtree/Quadtree.cpp \
+			../index/sweepline/SweepLineIndex.cpp \
+			../index/sweepline/SweepLineInterval.cpp \
+			../index/sweepline/indexSweepLineEvent.cpp
 
 libgeos_la_SOURCES =	$(DIR_SOURCES) $(EXTERNAL_SOURCES)
 
