@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
  * Revision 1.7  2004/05/06 15:54:15  strk
  * SegmentNodeList keeps track of created splitEdges for later destruction.
  * SegmentString constructor copies given Label.
@@ -57,10 +63,10 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, doubl
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder(){
 	delete cga;
 	for (int i=0; i<curveList->size(); i++)
-	{
 		delete (*curveList)[i];
-	}
 	delete curveList;
+	for (int i=0; i<newLabels.size(); i++)
+		delete newLabels[i];
 }
 /**
 * Computes the set of raw offset curves for the buffer.
@@ -100,7 +106,7 @@ OffsetCurveSetBuilder::addCurve(const CoordinateList *coord, int leftLoc, int ri
 	// add the edge for a coordinate list which is a raw offset curve
 	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
 	SegmentString *e=new SegmentString(coord,newlabel);
-	delete newlabel;
+	newLabels.push_back(newlabel);
 	curveList->push_back(e);
 }
 

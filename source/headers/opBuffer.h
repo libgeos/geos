@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
  * Revision 1.17  2004/05/05 16:57:48  strk
  * Rewritten static cga allocation to avoid copy constructor calls.
  *
@@ -439,6 +445,7 @@ public:
 	vector<SegmentString*>* getCurves();
 	void addCurves(const vector<CoordinateList*> *lineList, int leftLoc, int rightLoc);
 private:
+	vector<Label*> newLabels;
 	CGAlgorithms *cga;
 	const Geometry *inputGeom;
 	double distance;

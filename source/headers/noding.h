@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
  * Revision 1.9  2004/05/06 15:54:15  strk
  * SegmentNodeList keeps track of created splitEdges for later destruction.
  * SegmentString constructor copies given Label.
@@ -149,12 +155,12 @@ class SegmentString {
 private:
 	SegmentNodeList *eiList;
 	const CoordinateList *pts;
-	const Label* context;
+	const void* context;
 	bool isIsolatedVar;
 public:
-	SegmentString(const CoordinateList *newPts, const Label* newContext);
+	SegmentString(const CoordinateList *newPts, const void* newContext);
 	virtual ~SegmentString();
-	const Label* getContext() const;
+	const void* getContext() const;
 	SegmentNodeList* getIntersectionList() const;
 	int size() const;
 	const Coordinate& getCoordinate(int i) const;

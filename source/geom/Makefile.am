@@ -74,6 +74,7 @@ EXTERNAL_SOURCES =  \
 	../geomgraph/EdgeEndStar.cpp \
 	../geomgraph/EdgeIntersection.cpp \
 	../geomgraph/EdgeIntersectionList.cpp \
+	../geomgraph/EdgeNodingValidator.cpp \
 	../geomgraph/EdgeList.cpp \
 	../geomgraph/EdgeRing.cpp \
 	../geomgraph/GeometryGraph.cpp \

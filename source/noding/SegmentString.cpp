@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
  * Revision 1.3  2004/05/06 15:54:15  strk
  * SegmentNodeList keeps track of created splitEdges for later destruction.
  * SegmentString constructor copies given Label.
@@ -32,20 +38,19 @@
 
 namespace geos {
 
-SegmentString::SegmentString(const CoordinateList *newPts, const Label* newContext)
+SegmentString::SegmentString(const CoordinateList *newPts, const void* newContext)
 {
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
 	pts=newPts;
-	context=new Label(newContext);
+	context=newContext;
 }
 
 SegmentString::~SegmentString() {
 	delete eiList;
-	delete context;
 }
 
-const Label*
+const void*
 SegmentString::getContext() const
 {
 	return context;
