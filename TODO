@@ -1,7 +1,5 @@
 - Check Makefile.am -release use instead of -version-info
 
-- Add GeometricShapeFactory examples in doc/example.cpp
-
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
 
 - Check header files layout
