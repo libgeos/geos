@@ -11,7 +11,6 @@ int Key::computeLevel(BinTreeInterval *interval) {
 Key::Key(BinTreeInterval *interval){
 	pt=0.0;
 	level=0;
-	interval=NULL;
 	computeKey(interval);
 }
 

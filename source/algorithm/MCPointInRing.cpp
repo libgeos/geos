@@ -15,8 +15,8 @@ MCPointInRing::MCPointInRing(LinearRing *newRing) {
 	ring=newRing;
 	tree=NULL;
 	crossings=0;
-    buildIndex();
 	interval=new BinTreeInterval();
+    buildIndex();
 }
 
 void MCPointInRing::buildIndex() {

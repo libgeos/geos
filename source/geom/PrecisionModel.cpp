@@ -109,7 +109,7 @@ double PrecisionModel::getScale(){
 *
 */
 void PrecisionModel::setScale(double newScale) {
-	scale=fabs(scale);
+	scale=fabs(newScale);
 }
 
 double PrecisionModel::getOffsetX(){

@@ -38,6 +38,7 @@ GeometryGraph::~GeometryGraph(){
 }
 
 GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGraph() {
+	hasTooFewPointsVar=false;
 	boundaryNodes=NULL;
 	precisionModel=NULL;
 	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
@@ -49,7 +50,6 @@ GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGra
 		SRID=parentGeom->getSRID();
 		add(parentGeom);
 	}
-	hasTooFewPointsVar=false;
 }
 
 EdgeSetIntersector* GeometryGraph::createEdgeSetIntersector() {

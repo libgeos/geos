@@ -24,7 +24,7 @@ IntersectionMatrix* RelateOp::relateGC(vector<Geometry*> *a,vector<Geometry*> *b
 	IntersectionMatrix *finalIM=new IntersectionMatrix();
 	for(int i=0;i<(int)a->size();i++) {
 		Geometry *aGeom=(*a)[i];
-		for(int j=0;j<(int)b->size();i++) {
+		for(int j=0;j<(int)b->size();j++) {
 			Geometry *bGeom=(*b)[j];
 			RelateOp *relOp=new RelateOp(aGeom,bGeom);
 			IntersectionMatrix *im=relOp->getIntersectionMatrix();
@@ -63,12 +63,18 @@ vector<Geometry*>* RelateOp::addToList(Geometry *geom, vector<Geometry*>* geomLi
 }
 
 bool RelateOp::isBaseGeometryCollection(Geometry* geom) {
-	if ((typeid(*geom)==typeid(GeometryCollection)) ||
-		(typeid(*geom)==typeid(MultiPoint)) ||
-		(typeid(*geom)==typeid(MultiLineString)) ||
-		(typeid(*geom)==typeid(MultiPolygon))) {
+	//if ((typeid(*geom)==typeid(GeometryCollection)) ||
+	//	(typeid(*geom)==typeid(MultiPoint)) ||
+	//	(typeid(*geom)==typeid(MultiLineString)) ||
+	//	(typeid(*geom)==typeid(MultiPolygon))) {
+	//	return true;
+	//} else {
+	//	return false;
+	//}
+	if (typeid(*geom)==typeid(GeometryCollection)) {
 		return true;
 	} else {
 		return false;
 	}
+
 }
