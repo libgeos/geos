@@ -1,4 +1,4 @@
-- Check why library still gets called 1.0 instead of 1.4.0 !!
+- Check Makefile.am -release use instead of -version-info
 
 - Add GeometricShapeFactory examples in doc/example.cpp
 
