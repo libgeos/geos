@@ -1,3 +1,6 @@
+- Check how to disable GEOS_VERSION define on command line
+  (or make GEOS_VERSION define in version.h optional)
+
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
 
 - Check header files layout
