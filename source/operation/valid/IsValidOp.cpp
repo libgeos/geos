@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/09/13 09:18:10  strk
+ * Added IsValidOp::isValid(Coordinate &)
+ *
  * Revision 1.19  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -80,6 +83,20 @@ IsValidOp::~IsValidOp(){
 bool IsValidOp::isValid() {
 	checkValid(parentGeometry);
 	return validErr==NULL;
+}
+
+/*
+ * Checks whether a coordinate is valid for processing.
+ * Coordinates are valid iff their x and y coordinates are in the
+ * range of the floating point representation.
+ *
+ * @param coord the coordinate to validate
+ * @return <code>true</code> if the coordinate is valid
+ */
+bool IsValidOp::isValid(const Coordinate &coord) {
+	if (! finite(coord.x) ) return false;
+	if (! finite(coord.y) ) return false;
+	return true;
 }
 
 TopologyValidationError* IsValidOp::getValidationError() {

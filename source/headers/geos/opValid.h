@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/09/13 09:18:10  strk
+ * Added IsValidOp::isValid(Coordinate &)
+ *
  * Revision 1.3  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -295,6 +298,17 @@ public:
 	* @return the point found, or <code>null</code> if none found
 	*/
 	static const Coordinate& findPtNotNode(const CoordinateSequence *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
+
+	/**
+	 * Checks whether a coordinate is valid for processing.
+	 * Coordinates are valid iff their x and y coordinates are in the
+	 * range of the floating point representation.
+	 *
+	 * @param coord the coordinate to validate
+	 * @return <code>true</code> if the coordinate is valid
+	 */
+	static bool isValid(const Coordinate &coord);
+
 	IsValidOp(const Geometry *geom);
 	virtual ~IsValidOp();
 	bool isValid();
