@@ -1010,6 +1010,33 @@
 			<Filter
 				Name="noding"
 				Filter="">
+				<File
+					RelativePath="..\source\noding\IteratedNoder.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\MCQuadtreeNoder.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\Noder.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\nodingSegmentIntersector.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\NodingValidator.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\SegmentNode.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\SegmentNodeList.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\SegmentString.cpp">
+				</File>
+				<File
+					RelativePath="..\source\noding\SimpleNoder.cpp">
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
