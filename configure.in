@@ -1,12 +1,9 @@
 dnl local vars to hold user's preferences --------------------------------
 AC_INIT(source/headers/geom.h)
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(geos, 0.1)
+AM_INIT_AUTOMAKE(geos, 0.0.1)
 AM_CONFIG_HEADER(source/headers/config.h)
 AC_PROG_CC
-
-dnl put version here -----------------------------------------------------
-GEOS_VERSION=0.1
 
 dnl use libtool ----------------------------------------------------------
 AC_LIBTOOL_DLOPEN
@@ -40,7 +37,7 @@ dnl process with switches -------------------------------------------------
 dnl check for libraries ---------------------------------------------------
 
 dnl things to substitute in output ----------------------------------------
-AC_SUBST(GEOS_VERSION)
+AC_SUBST(VERSION)
 
 dnl output stuff ----------------------------------------------------------
 

@@ -69,7 +69,6 @@ CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 EXEEXT = @EXEEXT@
-GEOS_VERSION = @GEOS_VERSION@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
@@ -83,7 +82,7 @@ VERSION = @VERSION@
 geosdir = $(prefix)/include
 
 geos_HEADERS = geom.h graph.h io.h platform.h geosAlgorithm.h graphindex.h  \
-		operation.h  util.h
+		operation.h  util.h geosAlgorithm.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h

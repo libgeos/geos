@@ -1,20 +1,21 @@
 prefix=@prefix@
 top_srcdir=@top_srcdir@
-GEOS_VERSION=@GEOS_VERSION@
+GEOS_VERSION=@VERSION@
 
 pkglibdir=$(prefix)/lib
 pkglib_LTLIBRARIES = libgeos.la
 
 INCLUDES += -I$(top_srcdir)/source/headers -DGEOS_VERSION=\""$(GEOS_VERSION)"\"
 
-libgeos_la_SOURCES =    Coordinate.cpp GeometryFactory.cpp MultiPoint.cpp \
+DIR_SOURCES =		Coordinate.cpp GeometryFactory.cpp MultiPoint.cpp \
 			CoordinateList.cpp IntersectionMatrix.cpp  \
 			MultiPolygon.cpp Dimension.cpp LinearRing.cpp \
 			Point.cpp Envelope.cpp LineSegment.cpp Polygon.cpp \
 			GeometryCollection.cpp LineString.cpp \
-			PrecisionModel.cpp GeometryCollectionIterator.cpp  \
-			Location.cpp Geometry.cpp MultiLineString.cpp \
-			../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
+			PrecisionModel.cpp GeometryCollectionIterator.cpp \
+			Location.cpp Geometry.cpp MultiLineString.cpp
+
+EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../graph/DirectedEdge.cpp ../graph/GraphComponent.cpp \
 			../graph/DirectedEdgeStar.cpp ../graph/Label.cpp \
 			../graph/Edge.cpp ../graph/Node.cpp \
@@ -48,4 +49,9 @@ libgeos_la_SOURCES =    Coordinate.cpp GeometryFactory.cpp MultiPoint.cpp \
 			../algorithm/SimplePointInAreaLocator.cpp \
 			../algorithm/SimplePointInRing.cpp
 
-libgeos_la_LDFLAGS = -version-info 1:0:0
+libgeos_la_SOURCES =	$(DIR_SOURCES) $(EXTERNAL_SOURCES)
+
+libgeos_la_LDFLAGS = -version-info 0:0:1
+
+dist-local:
+		cp -p $(DIR_SOURCES) Makefile.am Makefile.in $(distdir)

@@ -1,0 +1,7 @@
+2002-09-04  Ferdinando Villa  <villa@cbl.umces.edu>
+
+	* configure.in: version number is hard-coded in AC_INIT_AUTOMAKE
+	macro. It's in source/headers/config.h AND passed as GEOS_VERSION
+	define on compiler command line. Currently set at 0.0.1, should be
+	changed whenever release number is bumped up.
+
