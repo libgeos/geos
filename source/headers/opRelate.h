@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
  * Revision 1.12  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -153,7 +156,7 @@ private:
 */
 class RelateOp: public GeometryGraphOperation {
 public:
-	static IntersectionMatrix* relate(Geometry *a,Geometry *b);
+	static IntersectionMatrix* relate(const Geometry *a,const Geometry *b);
 	RelateOp(const Geometry *g0, const Geometry *g1);
 	virtual ~RelateOp();
 	IntersectionMatrix* getIntersectionMatrix();

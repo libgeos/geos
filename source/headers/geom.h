@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.43  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
  * Revision 1.42  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -23,6 +26,9 @@
 
 /*
 * $Log$
+* Revision 1.43  2004/03/01 22:04:59  strk
+* applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+*
 * Revision 1.42  2003/11/07 01:23:42  pramsey
 * Add standard CVS headers licence notices and copyrights to all cpp and h
 * files.
@@ -513,28 +519,28 @@ public:
 	virtual string getGeometryType() const=0;
 	virtual PrecisionModel* getPrecisionModel() const=0;
 	virtual Envelope* getEnvelopeInternal() const=0;
-	virtual Geometry* getEnvelope()=0;
+	virtual Geometry* getEnvelope() const=0;
 	virtual bool isEmpty() const=0;
 	virtual bool isSimple() const=0;
 	virtual Geometry* getBoundary() const=0;
 	virtual int getDimension() const=0;
-	virtual bool equals(Geometry *other)=0;
-	virtual bool disjoint(Geometry *other)=0;
-	virtual bool intersects(Geometry *other)=0;
-	virtual bool touches(Geometry *other)=0;
-	virtual bool crosses(Geometry *other)=0;
-	virtual bool within(Geometry *other)=0;
-	virtual bool contains(Geometry *other)=0;
-	virtual bool overlaps(Geometry *other)=0;
-	virtual bool relate(Geometry *other, string intersectionPattern)=0;
-	virtual IntersectionMatrix* relate(Geometry *other)=0;
-	virtual Geometry* buffer(double distance)=0;
+	virtual bool equals(const Geometry *other) const=0;
+	virtual bool disjoint(const Geometry *other) const=0;
+	virtual bool intersects(const Geometry *other) const=0;
+	virtual bool touches(const Geometry *other) const=0;
+	virtual bool crosses(const Geometry *other) const=0;
+	virtual bool within(const Geometry *other) const=0;
+	virtual bool contains(const Geometry *other) const=0;
+	virtual bool overlaps(const Geometry *other) const=0;
+	virtual bool relate(const Geometry *other, string intersectionPattern) const=0;
+	virtual IntersectionMatrix* relate(const Geometry *other) const=0;
+	virtual Geometry* buffer(double distance) const=0;
 	virtual Geometry* convexHull() const=0;
-	virtual Geometry* intersection(const Geometry *other)=0;
-	virtual Geometry* Union(Geometry *other)=0;
-	virtual Geometry* difference(Geometry *other)=0;
-	virtual Geometry* symDifference(Geometry *other)=0;
-	virtual string toText()=0;
+	virtual Geometry* intersection(const Geometry *other) const=0;
+	virtual Geometry* Union(const Geometry *other) const=0;
+	virtual Geometry* difference(const Geometry *other) const=0;
+	virtual Geometry* symDifference(const Geometry *other) const=0;
+	virtual string toText() const=0;
 };
 
 class CGAlgorithms;
@@ -560,27 +566,27 @@ public:
 	virtual int getDimension() const=0; //Abstract
 	virtual Geometry* getBoundary() const=0; //Abstract
 	virtual int getBoundaryDimension() const=0; //Abstract
-	virtual Geometry* getEnvelope();
+	virtual Geometry* getEnvelope() const;
 	virtual Envelope* getEnvelopeInternal() const;
-	virtual bool disjoint(Geometry *g);
-	virtual bool touches(Geometry *g);
-	virtual bool intersects(Geometry *g);
-	virtual bool crosses(Geometry *g);
-	virtual bool within(Geometry *g);
-	virtual bool contains(Geometry *g);
-	virtual bool overlaps(Geometry *g);
-	virtual bool relate(Geometry *g, string intersectionPattern);
-	virtual IntersectionMatrix* relate(Geometry *g);
-	virtual bool equals(Geometry *g);
-	virtual string toString();
-	virtual string toText();
-	virtual Geometry* buffer(double distance);
-	virtual Geometry* buffer(double distance,int quadrantSegments);
+	virtual bool disjoint(const Geometry *g) const;
+	virtual bool touches(const Geometry *g) const;
+	virtual bool intersects(const Geometry *g) const;
+	virtual bool crosses(const Geometry *g) const;
+	virtual bool within(const Geometry *g) const;
+	virtual bool contains(const Geometry *g) const;
+	virtual bool overlaps(const Geometry *g) const;
+	virtual bool relate(const Geometry *g, string intersectionPattern) const;
+	virtual IntersectionMatrix* relate(const Geometry *g) const;
+	virtual bool equals(const Geometry *g) const;
+	virtual string toString() const;
+	virtual string toText() const;
+	virtual Geometry* buffer(double distance) const;
+	virtual Geometry* buffer(double distance,int quadrantSegments) const;
 	virtual Geometry* convexHull() const;
-	virtual Geometry* intersection(const Geometry *other);
-	virtual Geometry* Union(Geometry *other);
-	virtual Geometry* difference(Geometry *other);
-	virtual Geometry* symDifference(Geometry *other);
+	virtual Geometry* intersection(const Geometry *other) const;
+	virtual Geometry* Union(const Geometry *other) const;
+	virtual Geometry* difference(const Geometry *other) const;
+	virtual Geometry* symDifference(const Geometry *other) const;
 	virtual bool equalsExact(const Geometry *other, double tolerance) const=0; //Abstract
 	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
 	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract

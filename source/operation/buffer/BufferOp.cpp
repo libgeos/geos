@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
  * Revision 1.12  2003/12/11 17:01:35  strk
  * made buffer(0) back to its *correct* semantic (empy collection)
  *
@@ -44,7 +47,7 @@
 
 namespace geos {
 
-Geometry* BufferOp::bufferOp(Geometry *g, double distance){
+Geometry* BufferOp::bufferOp(const Geometry *g, double distance){
 
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry *geomBuf;
@@ -59,7 +62,7 @@ Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 	return geomBuf;
 }
 
-Geometry* BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments){
+Geometry* BufferOp::bufferOp(const Geometry *g, double distance, int quadrantSegments){
 	BufferOp *gBuf=new BufferOp(g);
 	Geometry *geomBuf;
 	try {
@@ -86,7 +89,7 @@ int BufferOp::depthDelta(Label *label){
 	return 0;
 }
 
-BufferOp::BufferOp(Geometry *g0): GeometryGraphOperation(g0) {
+BufferOp::BufferOp(const Geometry *g0): GeometryGraphOperation(g0) {
 	resultGeom=NULL;
 	edgeList=new EdgeList();
 	graph=new PlanarGraph(new OverlayNodeFactory());

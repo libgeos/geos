@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.38  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
  * Revision 1.37  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -242,7 +245,7 @@ bool Geometry::isValid() const {
 	return isValidOp.isValid();
 }
 
-Geometry* Geometry::getEnvelope() {
+Geometry* Geometry::getEnvelope() const {
 	return GeometryFactory::toGeometry(getEnvelopeInternal(),precisionModel,SRID);
 }
 
@@ -253,85 +256,85 @@ Envelope* Geometry::getEnvelopeInternal() const {
 		return new Envelope(*envelope);
 }
 
-bool Geometry::disjoint(Geometry *g){
+bool Geometry::disjoint(const Geometry *g) const{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isDisjoint();
 	delete im;
 	return res;
 }
 
-bool Geometry::touches(Geometry *g){
+bool Geometry::touches(const Geometry *g) const{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isTouches(getDimension(), g->getDimension());
 	delete im;
 	return res;
 }
 
-bool Geometry::intersects(Geometry *g){
+bool Geometry::intersects(const Geometry *g) const{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isIntersects();
 	delete im;
 	return res;
 }
 
-bool Geometry::crosses(Geometry *g){
+bool Geometry::crosses(const Geometry *g) const{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isCrosses(getDimension(), g->getDimension());
 	delete im;
 	return res;
 }
 
-bool Geometry::within(Geometry *g){
+bool Geometry::within(const Geometry *g) const{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isWithin();
 	delete im;
 	return res;
 }
 
-bool Geometry::contains(Geometry *g){
+bool Geometry::contains(const Geometry *g) const{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isContains();
 	delete im;
 	return res;
 }
 
-bool Geometry::overlaps(Geometry *g){
+bool Geometry::overlaps(const Geometry *g) const{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isOverlaps(getDimension(), g->getDimension());
 	delete im;
 	return res;
 }
 
-bool Geometry::relate(Geometry *g, string intersectionPattern) {
+bool Geometry::relate(const Geometry *g, string intersectionPattern) const {
 	IntersectionMatrix *im=relate(g);
 	bool res=im->matches(intersectionPattern);
 	delete im;
 	return res;
 }
 
-bool Geometry::equals(Geometry *g){
+bool Geometry::equals(const Geometry *g) const {
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isEquals(getDimension(), g->getDimension());
 	delete im;
 	return res;
 }
 
-IntersectionMatrix* Geometry::relate(Geometry *g) {
+IntersectionMatrix* Geometry::relate(const Geometry *g) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(g);
 	return RelateOp::relate(this,g);
 }
 
-string Geometry::toString() {
+string Geometry::toString() const {
 	return toText();
 }
 
-string Geometry::toText() {
+string Geometry::toText() const {
 	WKTWriter writer;
 	return writer.write(this);
 }
 
-Geometry* Geometry::buffer(double distance) {
+Geometry* Geometry::buffer(double distance) const {
 	return BufferOp::bufferOp(this, distance);
 }
 
@@ -349,7 +352,7 @@ Geometry* Geometry::buffer(double distance) {
 *@return           all points whose distance from this <code>Geometry</code>
 *      are less than or equal to <code>distance</code>
 */
-Geometry* Geometry::buffer(double distance,int quadrantSegments) {
+Geometry* Geometry::buffer(double distance,int quadrantSegments) const {
 	return BufferOp::bufferOp(this, distance, quadrantSegments);
 }
 
@@ -360,25 +363,25 @@ Geometry* Geometry::convexHull() const {
 	return g;
 }
 
-Geometry* Geometry::intersection(const Geometry *other) {
+Geometry* Geometry::intersection(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::INTERSECTION);
 }
 
-Geometry* Geometry::Union(Geometry *other) {
+Geometry* Geometry::Union(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::UNION);
 }
 
-Geometry* Geometry::difference(Geometry *other) {
+Geometry* Geometry::difference(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::DIFFERENCE);
 }
 
-Geometry* Geometry::symDifference(Geometry *other) {
+Geometry* Geometry::symDifference(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::SYMDIFFERENCE);

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
  * Revision 1.6  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -184,9 +187,9 @@ public:
 
 class BufferOp: public GeometryGraphOperation {
 public:
-	static Geometry* bufferOp(Geometry *g, double distance);
-	static Geometry* bufferOp(Geometry *g, double distance, int quadrantSegments);
-	BufferOp(Geometry *g0);
+	static Geometry* bufferOp(const Geometry *g, double distance);
+	static Geometry* bufferOp(const Geometry *g, double distance, int quadrantSegments);
+	BufferOp(const Geometry *g0);
 	~BufferOp();
 	Geometry* getResultGeometry(double distance);
 	Geometry* getResultGeometry(double distance,int quadrantSegments);

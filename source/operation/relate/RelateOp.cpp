@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/03/01 22:04:59  strk
+ * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -27,7 +30,7 @@
 
 namespace geos {
 
-IntersectionMatrix* RelateOp::relate(Geometry *a,Geometry *b) {
+IntersectionMatrix* RelateOp::relate(const Geometry *a, const Geometry *b) {
 	if (isBaseGeometryCollection(a) || isBaseGeometryCollection(b)) {
 		return relateGC(toList(a),toList(b));
 	}else {
