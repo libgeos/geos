@@ -192,7 +192,8 @@ EXTERNAL_SOURCES =  \
 	../util/GEOSException.cpp \
 	../util/IllegalArgumentException.cpp \
 	../util/UniqueCoordinateArrayFilter.cpp \
-	../util/UnsupportedOperationException.cpp
+	../util/UnsupportedOperationException.cpp \
+	../util/GeometricShapeFactory.cpp 
 
 libgeos_la_SOURCES = $(DIR_SOURCES) $(EXTERNAL_SOURCES)
 
