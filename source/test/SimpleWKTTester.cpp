@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 		ifstream in("WKTIn");
 		string instr;
 		string outstr;
-		WKTReader *r = new WKTReader(GeometryFactory(PrecisionModel(),10));
+		WKTReader *r = new WKTReader(GeometryFactory(new PrecisionModel(),10));
 		WKTWriter *w=new WKTWriter();
 		Geometry *g;
 
