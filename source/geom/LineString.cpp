@@ -247,3 +247,4 @@ int LineString::compareTo(LineString *ls){
 }
 
 }
+

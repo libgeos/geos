@@ -20,3 +20,4 @@ void MinimalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er) {
 	de->setMinEdgeRing(er);
 }
 }
+

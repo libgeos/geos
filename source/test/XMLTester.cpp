@@ -1,6 +1,8 @@
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
+#ifdef _MSC_VER
 #include <crtdbg.h>
+#endif
 
 #include <string>
 #include <iostream>
@@ -18,8 +20,10 @@
 //#include "opRelate.h"
 //#include "MarkupSTL.h"
 
+#ifdef _MSC_VER
 #include <windows.h>
 #include "Stackwalker.h"
+#endif
 
 using namespace std;
 using namespace geos;
@@ -35,8 +39,10 @@ using namespace geos;
 
 int main(int argC, char* argV[]) {
 
+#ifdef _MSC_VER
 	InitAllocCheck();
 	{
+#endif
 //	_CrtSetBreakAlloc(137304);
 	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
 //	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
@@ -313,6 +319,8 @@ int main(int argC, char* argV[]) {
 	delete r;
 	delete w;
 
+#ifdef _MSC_VER
 	}
 	DeInitAllocCheck();
+#endif
 }

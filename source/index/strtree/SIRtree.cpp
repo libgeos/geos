@@ -78,3 +78,4 @@ vector<void*>* SIRtree::query(double x1, double x2) {
 	return AbstractSTRtree::query(new Interval(min(x1, x2),max(x1, x2)));
 }
 }
+

@@ -190,3 +190,4 @@ bool EdgeRing::containsPoint(Coordinate& p){
 	return true;
 }
 }
+

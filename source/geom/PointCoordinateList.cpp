@@ -132,3 +132,4 @@ PointCoordinateList::~PointCoordinateList() {
 	delete vect;
 }
 }
+

@@ -149,3 +149,4 @@ int BufferSubgraph::compareTo(BufferSubgraph *bsg) {
 	return 0;
 }
 }
+

@@ -158,3 +158,4 @@ bool RobustCGAlgorithms::isInEnvelope(Coordinate& p,CoordinateList* ring) {
 	return envelope.contains(p);
 }
 }
+

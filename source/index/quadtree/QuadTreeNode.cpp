@@ -142,3 +142,4 @@ QuadTreeNode* QuadTreeNode::createSubnode(int index) {
 	return node;
 }
 }
+

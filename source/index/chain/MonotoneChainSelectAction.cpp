@@ -16,3 +16,4 @@ void MonotoneChainSelectAction::select(indexMonotoneChain *mc,int start) {
 	select(seg);
 }
 }
+

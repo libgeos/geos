@@ -91,3 +91,4 @@ void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){
 	}
 }
 }
+

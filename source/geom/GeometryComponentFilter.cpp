@@ -6,3 +6,4 @@ void GeometryComponentFilter::filter(Geometry *geom) {
 	geom->geometryChangedAction();
 }
 }
+

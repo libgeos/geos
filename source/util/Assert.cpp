@@ -39,3 +39,4 @@ void Assert::shouldNeverReachHere(string message) {
 }
 
 }
+

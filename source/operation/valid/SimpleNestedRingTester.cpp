@@ -48,3 +48,4 @@ bool SimpleNestedRingTester::isNonNested(){
 	return true;
 }
 }
+

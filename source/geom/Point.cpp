@@ -95,3 +95,4 @@ int Point::compareToSameClass(Geometry *point) {
 Point::~Point(){
 }
 }
+

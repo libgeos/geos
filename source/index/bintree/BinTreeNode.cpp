@@ -117,3 +117,4 @@ BinTreeNode* BinTreeNode::createSubnode(int index) {
 	return node;
 }
 }
+

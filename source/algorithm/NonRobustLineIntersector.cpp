@@ -239,3 +239,4 @@ double NonRobustLineIntersector::rParameter(Coordinate& p1,Coordinate& p2,Coordi
 	return r;
 }
 }
+

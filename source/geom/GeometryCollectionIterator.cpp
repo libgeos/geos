@@ -85,3 +85,4 @@ GeometryCollectionIterator::~GeometryCollectionIterator(){
 	delete subcollectionIterator;
 }
 }
+

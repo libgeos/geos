@@ -118,3 +118,4 @@ string EdgeIntersectionList::print(){
 }
 
 }
+

@@ -204,3 +204,4 @@ double RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,d
 	return x;
 }
 }
+

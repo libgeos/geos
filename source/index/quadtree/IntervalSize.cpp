@@ -11,3 +11,4 @@ bool IntervalSize::isZeroWidth(double mn,double mx){
 	return level<=MIN_BINARY_EXPONENT;
 }
 }
+

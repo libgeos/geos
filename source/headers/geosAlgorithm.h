@@ -322,9 +322,9 @@ private:
 	void add(Polygon *poly);
 	void addShell(CoordinateList *pts);
 	void addHole(CoordinateList *pts);
-	void addTriangle(Coordinate &p0,Coordinate &p1,Coordinate &p2,bool isPositiveArea);
-	static void centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordinate *c);
-	static double area2(Coordinate &p1,Coordinate &p2,Coordinate &p3);
+	inline void addTriangle(Coordinate &p0,Coordinate &p1,Coordinate &p2,bool isPositiveArea);
+	static inline  void centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordinate *c);
+	static inline double area2(Coordinate &p1,Coordinate &p2,Coordinate &p3);
 };
 
 /**

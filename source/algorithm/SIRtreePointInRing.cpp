@@ -73,3 +73,4 @@ void SIRtreePointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
 	}
 }
 }
+

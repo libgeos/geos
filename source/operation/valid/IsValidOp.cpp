@@ -428,3 +428,4 @@ void IsValidOp::checkConnectedInteriors(GeometryGraph *graph) {
 		cit->getCoordinate());
 }
 }
+

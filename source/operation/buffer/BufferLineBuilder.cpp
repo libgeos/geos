@@ -361,3 +361,4 @@ void BufferLineBuilder::addCircle(Coordinate &p, double distance){
 	addFillet(p,0.0,2.0*PI,-1,distance);
 }
 }
+

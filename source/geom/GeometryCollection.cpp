@@ -229,3 +229,4 @@ Point* GeometryCollection::getCentroid() {
 	return GeometryFactory::createPointFromInternalCoord(centPt,this);
 }
 }
+

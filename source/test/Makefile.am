@@ -1,9 +1,11 @@
-noinst_PROGRAMS = CTS SimpleWKTTester XMLTester
+noinst_PROGRAMS = SimpleWKTTester XMLTester
+# CTS
 
 LIBS = ../geom/libgeos.la
+# -lmpatrol -lbfd -lintl -liberty -limagehlp
 
-CTS_SOURCES = CTS.cpp
-CTS_LDADD = $(LIBS)
+# CTS_SOURCES = CTS.cpp
+# CTS_LDADD = $(LIBS)
 
 SimpleWKTTester_SOURCES = SimpleWKTTester.cpp
 SimpleWKTTester_LDADD = $(LIBS)

@@ -30,3 +30,4 @@ void GEOSException::setMessage(string msg){
 	txt=msg;
 }
 }
+

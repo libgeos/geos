@@ -244,3 +244,4 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 	return geometryFactory->createGeometryCollection(geoms);
 }
 }
+

@@ -480,3 +480,4 @@ bool operator==(Envelope a, Envelope b) {
 		   a.getMinY() == b.getMinY();
 }
 }
+

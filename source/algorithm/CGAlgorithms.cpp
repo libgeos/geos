@@ -118,3 +118,4 @@ double CGAlgorithms::length(CoordinateList* pts) {
 	return sum;
 }
 }
+

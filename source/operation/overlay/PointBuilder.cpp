@@ -55,3 +55,4 @@ vector<Point*>* PointBuilder::simplifyPoints(vector<Node*> *resultNodeList) {
 	return nonCoveredPointList;
 }
 }
+

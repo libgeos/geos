@@ -24,3 +24,4 @@ void UniqueCoordinateArrayFilter::filter(Coordinate &coord) {
 }
 
 }
+

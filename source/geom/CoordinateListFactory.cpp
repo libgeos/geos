@@ -6,3 +6,4 @@ CoordinateListFactory* CoordinateListFactory::internalFactory=new BasicCoordinat
 //CoordinateListFactory* CoordinateListFactory::internalFactory=new PointCoordinateListFactory();
 
 }
+

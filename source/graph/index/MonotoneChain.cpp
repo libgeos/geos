@@ -12,3 +12,4 @@ void MonotoneChain::computeIntersections(MonotoneChain *mc,SegmentIntersector *s
 }
 
 }
+

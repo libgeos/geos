@@ -119,3 +119,4 @@ void EndpointInfo::addEndpoint(bool newIsClosed) {
 	isClosed|=newIsClosed;
 }
 }
+

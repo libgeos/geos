@@ -83,3 +83,4 @@ bool RelateOp::isBaseGeometryCollection(Geometry* geom) {
 
 }
 }
+

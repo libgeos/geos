@@ -16,7 +16,7 @@ using namespace geos;
  * wraps an array of point_3d. Since the array is fixed length, methods like 'add' or
  * 'deleteAt' will not work.
  */
-class CustomPointCoordinateList : public CoordinateList {
+class CustomPointCoordinateList : public BasicCoordinateList {
 public:
 	CustomPointCoordinateList(point_3d *newPts,int newSize);
 	CustomPointCoordinateList(const CustomPointCoordinateList &cl);

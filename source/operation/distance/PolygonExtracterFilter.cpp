@@ -17,3 +17,4 @@ void PolygonExtracterFilter::filter(Geometry *geom) {
 	if (typeid(*geom)==typeid(Polygon)) comps->push_back(geom);
 }
 }
+

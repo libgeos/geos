@@ -266,3 +266,4 @@ CoordinateList* ConvexHull::cleanRing(CoordinateList *original) {
 }
 
 }
+

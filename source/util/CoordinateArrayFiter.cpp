@@ -27,3 +27,4 @@ void CoordinateArrayFilter::filter(Coordinate &coord) {
 }
 
 }
+

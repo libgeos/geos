@@ -23,3 +23,4 @@ void RelateNode::updateIMFromEdges(IntersectionMatrix *im) {
 	((EdgeEndBundleStar*) edges)->updateIM(im);
 }
 }
+

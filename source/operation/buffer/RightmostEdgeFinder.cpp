@@ -125,3 +125,4 @@ int RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i){
 	return pos;
 }
 }
+

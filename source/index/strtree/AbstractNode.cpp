@@ -37,3 +37,4 @@ void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 	childBoundables->push_back(childBoundable);
 }
 }
+

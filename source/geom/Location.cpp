@@ -27,3 +27,4 @@ char Location::toLocationSymbol(int locationValue) {
 	}
 }
 }
+

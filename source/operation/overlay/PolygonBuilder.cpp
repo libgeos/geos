@@ -274,3 +274,4 @@ bool PolygonBuilder::containsPoint(Coordinate& p) {
 	return false;
 }
 }
+

@@ -142,3 +142,4 @@ void LineBuilder::labelIsolatedLine(Edge *e,int targetIndex) {
 	e->getLabel()->setLocation(targetIndex,loc);
 }
 }
+

@@ -107,3 +107,4 @@ void SimpleSweepLineIntersector::processOverlaps(int start,int end,SweepLineEven
 }
 
 }
+

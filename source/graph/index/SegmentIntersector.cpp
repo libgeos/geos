@@ -166,3 +166,4 @@ bool SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstB
 	return false;
 }
 }
+

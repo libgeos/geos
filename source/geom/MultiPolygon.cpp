@@ -46,3 +46,4 @@ bool MultiPolygon::equalsExact(Geometry *other, double tolerance) {
 	return GeometryCollection::equalsExact(other, tolerance);
 }
 }
+

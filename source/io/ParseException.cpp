@@ -29,3 +29,4 @@ ParseException::ParseException(string msg, double num){
 
 ParseException::~ParseException(){}
 }
+

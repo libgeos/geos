@@ -244,3 +244,4 @@ Polygon::~Polygon(){
 	delete holes;
 }
 }
+

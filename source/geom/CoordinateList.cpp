@@ -117,3 +117,4 @@ CoordinateList* CoordinateList::removeRepeatedPoints(CoordinateList *cl){
 	return cl;
 }
 }
+

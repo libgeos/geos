@@ -13,3 +13,4 @@ IllegalArgumentException::IllegalArgumentException(string msg){
 
 IllegalArgumentException::~IllegalArgumentException(){}
 }
+

@@ -13,3 +13,4 @@ AssertionFailedException::AssertionFailedException(string msg){
 
 AssertionFailedException::~AssertionFailedException(){}
 }
+

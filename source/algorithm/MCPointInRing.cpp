@@ -104,3 +104,4 @@ void MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
 	}
 }
 }
+

@@ -110,3 +110,4 @@ int QuadTreeNodeBase::nodeCount() {
 	return subSize+1;
 }
 }
+

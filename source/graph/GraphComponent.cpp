@@ -65,3 +65,4 @@ void GraphComponent::updateIM(IntersectionMatrix *im){
 	computeIM(im);
 }
 }
+

@@ -7,3 +7,4 @@ Node* NodeFactory::createNode(Coordinate coord) {
 }
 
 }
+

@@ -29,3 +29,4 @@ vector<Edge*>* EdgeSetNoder::getNodedEdges() {
 	return splitEdges;
 }
 }
+

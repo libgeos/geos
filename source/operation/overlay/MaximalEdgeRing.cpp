@@ -47,3 +47,4 @@ vector<MinimalEdgeRing*>* MaximalEdgeRing::buildMinimalRings() {
 }
 
 }
+

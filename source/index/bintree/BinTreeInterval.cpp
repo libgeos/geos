@@ -65,3 +65,4 @@ bool BinTreeInterval::contains(double p) {
 	return (p>=min && p<=max);
 }
 }
+

@@ -16,3 +16,4 @@ bool SimplePointInRing::isInside(Coordinate& pt){
 }
 
 }
+

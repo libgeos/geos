@@ -74,3 +74,4 @@ bool SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searc
 	return false;
 }
 }
+

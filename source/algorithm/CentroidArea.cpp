@@ -81,7 +81,7 @@ void CentroidArea::addHole(CoordinateList *pts){
 	}
 }
 
-void CentroidArea::addTriangle(Coordinate &p0,Coordinate &p1,Coordinate &p2,bool isPositiveArea){
+inline void CentroidArea::addTriangle(Coordinate &p0,Coordinate &p1,Coordinate &p2,bool isPositiveArea){
 	double sign=(isPositiveArea)?1.0:-1.0;
 	centroid3(p0,p1,p2,triangleCent3);
 	double area2res=area2(p0,p1,p2);
@@ -89,12 +89,13 @@ void CentroidArea::addTriangle(Coordinate &p0,Coordinate &p1,Coordinate &p2,bool
 	cg3->y+=sign*area2res*triangleCent3->y;
 	areasum2+=sign*area2res;
 }
+
 /**
 * Returns three times the centroid of the triangle p1-p2-p3.
 * The factor of 3 is
 * left in to permit division to be avoided until later.
 */
-void CentroidArea::centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordinate *c){
+inline void CentroidArea::centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordinate *c){
 	c->x=p1.x+p2.x+p3.x;
 	c->y=p1.y+p2.y+p3.y;
 }
@@ -103,7 +104,8 @@ void CentroidArea::centroid3(Coordinate &p1,Coordinate &p2,Coordinate &p3,Coordi
 * Returns twice the signed area of the triangle p1-p2-p3,
 * positive if a,b,c are oriented ccw, and negative if cw.
 */
-double CentroidArea::area2(Coordinate &p1,Coordinate &p2,Coordinate &p3){
+inline double CentroidArea::area2(Coordinate &p1,Coordinate &p2,Coordinate &p3){
 	return (p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y);
 }
 }
+

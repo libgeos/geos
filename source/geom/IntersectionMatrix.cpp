@@ -257,3 +257,4 @@ string IntersectionMatrix::toString() {
 	return result;
 }
 }
+

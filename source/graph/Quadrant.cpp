@@ -69,3 +69,4 @@ bool Quadrant::isNorthern(int quad) {
 	return quad==0 || quad==1;
 }
 }
+

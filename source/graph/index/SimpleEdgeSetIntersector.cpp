@@ -45,3 +45,4 @@ void SimpleEdgeSetIntersector::computeIntersects(Edge *e0,Edge *e1,SegmentInters
 	}
 }
 }
+

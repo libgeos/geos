@@ -62,3 +62,4 @@ Coordinate* HCoordinate::getCoordinate() {
 	return new Coordinate(getX(),getY());
 }
 }
+

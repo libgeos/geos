@@ -17,3 +17,4 @@ void PointExtracterFilter::filter(Geometry *geom) {
 	if (typeid(*geom)==typeid(Point)) pts->push_back(geom);
 }
 }
+

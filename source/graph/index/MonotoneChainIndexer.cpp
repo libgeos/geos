@@ -32,3 +32,4 @@ int MonotoneChainIndexer::findChainEnd(CoordinateList* pts,int start){
 	return last-1;
 }
 }
+

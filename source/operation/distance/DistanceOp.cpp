@@ -136,3 +136,4 @@ void DistanceOp::computeMinDistance(LineString *line,Point *pt){
 	}
 }
 }
+

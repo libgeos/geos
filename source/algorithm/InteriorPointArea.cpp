@@ -109,3 +109,4 @@ Coordinate* InteriorPointArea::centre(Envelope *envelope) {
 						      envelope->getMaxY()));
 }
 }
+

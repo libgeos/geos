@@ -37,3 +37,4 @@ bool Interval::equals(void *o) {
 	return imin==other->imin && imax==other->imax;
 }
 }
+

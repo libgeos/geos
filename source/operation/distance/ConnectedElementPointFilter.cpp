@@ -20,3 +20,4 @@ void ConnectedElementPointFilter::filter(Geometry *geom) {
 			pts->push_back(geom->getCoordinate());
 }
 }
+

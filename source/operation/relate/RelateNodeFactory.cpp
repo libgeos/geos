@@ -7,3 +7,4 @@ Node* RelateNodeFactory::createNode(Coordinate coord) {
 	return new RelateNode(coord,new EdgeEndBundleStar());
 }
 }
+

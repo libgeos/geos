@@ -86,3 +86,4 @@ void Quadtree::collectStats(Envelope *itemEnv){
 		minExtent=delY;
 }
 }
+

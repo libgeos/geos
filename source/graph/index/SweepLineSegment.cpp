@@ -24,3 +24,4 @@ void SweepLineSegment::computeIntersections(SweepLineSegment *ss,SegmentIntersec
 	si->addIntersections(edge,ptIndex,ss->edge,ss->ptIndex);
 }
 }
+

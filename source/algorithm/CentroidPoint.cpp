@@ -46,3 +46,4 @@ Coordinate* CentroidPoint::getCentroid() {
 	return new Coordinate(centSum->x/ptCount,centSum->y/ptCount);
 }
 }
+

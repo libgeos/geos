@@ -107,7 +107,7 @@ public:
 	string toString();
 	//void makePrecise();
 	//double distance(Coordinate& p);
-	static Coordinate& nullCoord;
+	static Coordinate nullCoord;
 
 	void Coordinate::setNull() {
 		x=DoubleNotANumber;

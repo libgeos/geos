@@ -231,3 +231,4 @@ bool operator==(LineSegment a,LineSegment b) {
 	return a.p0==b.p0 && a.p1==b.p1;
 }
 }
+

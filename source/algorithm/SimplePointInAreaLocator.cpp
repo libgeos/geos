@@ -50,3 +50,4 @@ bool SimplePointInAreaLocator::containsPointInPolygon(Coordinate& p,Polygon *pol
 	return true;
 }
 }
+

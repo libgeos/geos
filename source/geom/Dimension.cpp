@@ -64,3 +64,4 @@ int Dimension::toDimensionValue(char dimensionSymbol) {
 	}
 }
 }
+

@@ -60,3 +60,4 @@ int LoopFilter::checkForLoop(CoordinateList *pts,int startIndex){
 	return 0;
 }
 }
+

@@ -23,3 +23,4 @@ void* SweepLineInterval::getItem() {
 	return item;
 }
 }
+

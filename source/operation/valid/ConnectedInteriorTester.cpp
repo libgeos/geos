@@ -169,3 +169,4 @@ bool ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings
 	return false;
 }
 }
+

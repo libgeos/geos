@@ -101,3 +101,4 @@ void Bintree::collectStats(BinTreeInterval *interval) {
 		minExtent=del;
 }
 }
+

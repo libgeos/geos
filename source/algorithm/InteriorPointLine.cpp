@@ -79,3 +79,4 @@ Coordinate* InteriorPointLine::getInteriorPoint() {
 	return interiorPoint;
 }
 }
+

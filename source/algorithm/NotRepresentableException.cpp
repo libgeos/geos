@@ -13,3 +13,4 @@ NotRepresentableException::NotRepresentableException(string msg){
 NotRepresentableException::~NotRepresentableException(){}
 
 }
+

@@ -34,3 +34,4 @@ void TopologyException::setMessage(string msg){
 }
 
 }
+

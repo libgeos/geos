@@ -51,3 +51,4 @@ Coordinate* CentroidLine::getCentroid() {
 	return new Coordinate(centSum->x/totalLength,centSum->y/totalLength);
 }
 }
+

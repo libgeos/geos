@@ -56,3 +56,4 @@ void Key::computeInterval(int level,BinTreeInterval *itemInterval){
 	interval->init(pt,pt+size);
 }
 }
+

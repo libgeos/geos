@@ -271,3 +271,4 @@ void WKTWriter::indent(int level, Writer *writer) {
 	writer->write(stringOfChar(' ', INDENT * level));
 }
 }
+

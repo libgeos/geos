@@ -93,3 +93,4 @@ void EdgeEndBuilder::createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeInt
 	l->push_back(e);
 }
 }
+

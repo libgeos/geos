@@ -63,3 +63,4 @@ bool RepeatedPointTester::hasRepeatedPoint(MultiLineString *gc){
 	return false;
 }
 }
+

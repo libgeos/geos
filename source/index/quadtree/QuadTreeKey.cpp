@@ -63,3 +63,4 @@ void QuadTreeKey::computeKey(int level,Envelope *itemEnv){
 	env->init(pt->x,pt->x+quadSize,pt->y,pt->y+quadSize);
 }
 }
+

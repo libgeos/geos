@@ -276,3 +276,4 @@ string EdgeEndStar::print(){
 	return out;
 }
 }
+

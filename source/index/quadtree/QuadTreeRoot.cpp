@@ -68,3 +68,4 @@ bool QuadTreeRoot::isSearchMatch(Envelope *searchEnv){
 	return true;
 }
 }
+

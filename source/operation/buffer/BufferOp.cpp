@@ -227,3 +227,4 @@ Geometry* BufferOp::toLineStrings(EdgeList *edges){
 	return geom;
 }
 }
+

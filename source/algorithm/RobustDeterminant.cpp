@@ -255,3 +255,4 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	}
 }
 }
+

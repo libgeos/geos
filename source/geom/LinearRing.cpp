@@ -36,3 +36,4 @@ void LinearRing::setPoints(CoordinateList* cl){
 	delete v;
 }
 }
+

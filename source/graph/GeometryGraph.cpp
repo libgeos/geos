@@ -360,3 +360,4 @@ Coordinate* GeometryGraph::getInvalidPoint() {
 }
 
 }
+

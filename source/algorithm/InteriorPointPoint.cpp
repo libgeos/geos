@@ -45,3 +45,4 @@ Coordinate* InteriorPointPoint::getInteriorPoint() {
 	return interiorPoint;
 }
 }
+

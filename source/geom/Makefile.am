@@ -7,35 +7,38 @@ pkglib_LTLIBRARIES = libgeos.la
 
 INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=""$(GEOS_VERSION)""
 
-DIR_SOURCES =       BasicCoordinateList.cpp \
-                    Coordinate.cpp \
-                    CoordinateList.cpp \
-                    CoordinateListFactory.cpp \
-                    Dimension.cpp \
-                    Envelope.cpp \
-                    Geometry.cpp \
-                    GeometryCollection.cpp \
-                    GeometryCollectionIterator.cpp \
-                    GeometryComponentFilter.cpp \
-                    GeometryFactory.cpp \
-                    IntersectionMatrix.cpp  \
-                    LinearRing.cpp \
-                    LineSegment.cpp \
-                    LineString.cpp \
-                    Location.cpp \
-                    MultiLineString.cpp \
-                    MultiPoint.cpp \
-                    MultiPolygon.cpp \
-                    PointCoordinateList.cpp \
-                    Point.cpp \
-                    Polygon.cpp \
-		    PrecisionModel.cpp \
-                    TopologyException.cpp 
+DIR_SOURCES = \
+	BasicCoordinateList.cpp \
+	Coordinate.cpp \
+	CoordinateList.cpp \
+	CoordinateListFactory.cpp \
+	Dimension.cpp \
+	Envelope.cpp \
+	Geometry.cpp \
+	GeometryCollection.cpp \
+	GeometryCollectionIterator.cpp \
+	GeometryComponentFilter.cpp \
+	GeometryFactory.cpp \
+	IntersectionMatrix.cpp \
+	LinearRing.cpp \
+	LineSegment.cpp \
+	LineString.cpp \
+	Location.cpp \
+	MultiLineString.cpp \
+	MultiPoint.cpp \
+	MultiPolygon.cpp \
+	Point.cpp \
+	PointCoordinateList.cpp \
+	Polygon.cpp \
+	PrecisionModel.cpp \
+	TopologyException.cpp
 
-EXTERNAL_SOURCES = ../algorithm/CentroidArea.cpp \
+EXTERNAL_SOURCES =  \
+	../algorithm/CentroidArea.cpp \
 	../algorithm/CentroidLine.cpp \
 	../algorithm/CentroidPoint.cpp \
 	../algorithm/CGAlgorithms.cpp \
+	../algorithm/ConvexHull.cpp \
 	../algorithm/HCoordinate.cpp \
 	../algorithm/InteriorPointArea.cpp \
 	../algorithm/InteriorPointLine.cpp \
@@ -152,8 +155,10 @@ EXTERNAL_SOURCES = ../algorithm/CentroidArea.cpp \
 	../operation/valid/TopologyValidationError.cpp \
 	../util/Assert.cpp \
 	../util/AssertionFailedException.cpp \
+	../util/CoordinateArrayFiter.cpp \
 	../util/GEOSException.cpp \
 	../util/IllegalArgumentException.cpp \
+	../util/UniqueCoordinateArrayFilter.cpp \
 	../util/UnsupportedOperationException.cpp
 
 libgeos_la_SOURCES = $(DIR_SOURCES) $(EXTERNAL_SOURCES)

@@ -124,3 +124,4 @@ int NonRobustCGAlgorithms::computeOrientation(Coordinate& p1,Coordinate& p2,Coor
 	return 0;
 }
 }
+

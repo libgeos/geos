@@ -1,22 +1,21 @@
-geosdir = $(prefix)/include/geos
-
-geos_HEADERS = bigtest.h \
+EXTRA_DIST =  \
+	bigtest.h \
 	geom.h \
 	geosAlgorithm.h \
 	graph.h \
 	graphindex.h \
+	indexBintree.h \
 	indexChain.h \
 	indexQuadtree.h \
+	indexStrtree.h \
 	indexSweepline.h \
 	io.h \
+	opBuffer.h \
+	opDistance.h \
+	operation.h \
 	opOverlay.h \
 	opRelate.h \
 	opValid.h \
-	operation.h \
 	platform.h \
-	util.h \
-	config.h \
-	opDistance.h \
 	spatialIndex.h \
-	indexStrtree.h \
-	indexBintree.h
+	util.h

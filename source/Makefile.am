@@ -1,1 +1,6 @@
-SUBDIRS = geom headers test bigtest examples
+SUBDIRS = \
+	geom \
+	headers \
+	bigtest \
+	examples \
+	test

@@ -542,3 +542,4 @@ bool Geometry::equal(Coordinate& a,Coordinate& b,double tolerance) {
 	return a.distance(b)<=tolerance;
 }
 }
+

@@ -8,3 +8,4 @@ int Position::opposite(int position){
 	return position;
 }
 }
+

@@ -37,3 +37,4 @@ string EdgeIntersection::print(){
 	return out;
 }
 }
+

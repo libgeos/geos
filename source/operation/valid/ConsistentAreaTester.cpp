@@ -84,3 +84,4 @@ bool ConsistentAreaTester::hasDuplicateRings() {
 	return false;
 }
 }
+

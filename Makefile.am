@@ -1,1 +1,4 @@
-SUBDIRS = source macros tools
+SUBDIRS = \
+	source \
+	macros \
+	tools

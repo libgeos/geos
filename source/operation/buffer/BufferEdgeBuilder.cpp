@@ -130,3 +130,4 @@ void BufferEdgeBuilder::addPolygonRing(LinearRing *lr, double distance, int side
 	*/
 }
 }
+

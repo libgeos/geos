@@ -250,3 +250,4 @@ double LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) {
 }
 
 }
+

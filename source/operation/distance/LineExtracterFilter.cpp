@@ -17,3 +17,4 @@ void LineExtracterFilter::filter(Geometry *geom) {
 	if (typeid(*geom)==typeid(LineString)) lines->push_back(geom);
 }
 }
+

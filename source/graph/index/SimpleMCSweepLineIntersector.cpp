@@ -112,3 +112,4 @@ void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,SweepLineEv
 }
 
 }
+

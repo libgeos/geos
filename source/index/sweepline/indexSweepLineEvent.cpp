@@ -53,3 +53,4 @@ int indexSweepLineEvent::compareTo(void *o) {
 	return 0;
 }
 }
+

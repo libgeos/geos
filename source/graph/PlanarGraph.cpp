@@ -32,7 +32,8 @@ PlanarGraph::PlanarGraph(){
 
 PlanarGraph::~PlanarGraph(){
 	delete nodes;
-	for(int i=0;i<(int)edges->size();i++) {
+    int i;
+	for(i=0;i<(int)edges->size();i++) {
 		delete (*edges)[i];
 	}
 	delete edges;

@@ -46,3 +46,4 @@ void EdgeEndBundleStar::updateIM(IntersectionMatrix *im) {
 	}
 }
 }
+

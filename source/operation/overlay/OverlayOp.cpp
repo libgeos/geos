@@ -55,7 +55,8 @@ OverlayOp::~OverlayOp() {
 	delete graph;
 	delete geomFact;
 	delete edgeList;
-	for(int i=0;i<(int)resultPolyList->size();i++) {
+    int i;
+	for( i=0;i<(int)resultPolyList->size();i++) {
 		delete (*resultPolyList)[i];
 	}
 	delete resultPolyList;
@@ -66,6 +67,8 @@ OverlayOp::~OverlayOp() {
 	for(int i=0;i<(int)resultPointList->size();i++) {
 		delete (*resultPointList)[i];
 	}
+    delete resultLineList;
+    delete resultPolyList;
 	delete resultPointList;
 	delete ptLocator;
 }
@@ -329,9 +332,10 @@ bool OverlayOp::isCovered(Coordinate& coord,vector<Polygon*> *geomList) {
 Geometry* OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList) {
+    int i;
 	vector<Geometry*> *geomList=new vector<Geometry*>();
 	// element geometries of the result are always in the order P,L,A
-	for(int i=0;i<(int)nResultPointList->size();i++) {
+	for(i=0;i<(int)nResultPointList->size();i++) {
 		Point *pt=new Point(*(*nResultPointList)[i]);
 		geomList->push_back(pt);
 	}
@@ -510,3 +514,4 @@ void OverlayOp::computeLabelsFromDepths() {
 	}
 }
 }
+
