@@ -11,64 +11,6 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.27  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.26  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.25  2004/07/05 10:50:21  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.24  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.23  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.22  2004/06/15 20:30:00  strk
- * fixed a typo
- *
- * Revision 1.21  2004/06/15 20:16:19  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.20  2004/05/14 12:10:54  strk
- * avoided leaks on malformed LinearRing
- *
- * Revision 1.19  2004/05/07 13:23:51  strk
- * Memory leaks fixed.
- *
- * Revision 1.18  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.17  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.16  2003/10/15 08:52:55  strk
- * Memory leaks fixed.
- *
  **********************************************************************/
 
 
@@ -278,20 +220,32 @@ MultiPoint* WKTReader::readMultiPointText(StringTokenizer *tokenizer) {
 	return ret;
 }
 
-Polygon* WKTReader::readPolygonText(StringTokenizer *tokenizer) {
+Polygon*
+WKTReader::readPolygonText(StringTokenizer *tokenizer)
+{
+	Polygon *poly=NULL;
+	LinearRing *shell=NULL;
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createPolygon(NULL,NULL);
 	}
+
 	vector<Geometry *> *holes=new vector<Geometry *>();
-	LinearRing *shell=readLinearRingText(tokenizer);
-	nextToken=getNextCloserOrComma(tokenizer);
-	while(nextToken==",") {
-		LinearRing *hole=readLinearRingText(tokenizer);
-		holes->push_back(hole);
+	try {
+		shell=readLinearRingText(tokenizer);
 		nextToken=getNextCloserOrComma(tokenizer);
+		while(nextToken==",") {
+			LinearRing *hole=readLinearRingText(tokenizer);
+			holes->push_back(hole);
+			nextToken=getNextCloserOrComma(tokenizer);
+		}
+		poly = geometryFactory->createPolygon(shell,holes);
+	} catch (...) {
+		for (int i=0; i<holes->size(); i++) delete (*holes)[i];
+		delete holes;
+		delete shell;
+		throw;
 	}
-	return geometryFactory->createPolygon(shell,holes);
 }
 
 MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) {
@@ -356,3 +310,65 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 }
 }
 
+/**********************************************************************
+ * $Log$
+ * Revision 1.28  2004/10/21 07:03:31  strk
+ * Removed leak in ::readPolygonText reported by Carlos A. Rueda
+ *
+ * Revision 1.27  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.26  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
+ * Revision 1.25  2004/07/05 10:50:21  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
+ * Revision 1.24  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.23  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.22  2004/06/15 20:30:00  strk
+ * fixed a typo
+ *
+ * Revision 1.21  2004/06/15 20:16:19  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
+ * Revision 1.20  2004/05/14 12:10:54  strk
+ * avoided leaks on malformed LinearRing
+ *
+ * Revision 1.19  2004/05/07 13:23:51  strk
+ * Memory leaks fixed.
+ *
+ * Revision 1.18  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
+ * Revision 1.17  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.16  2003/10/15 08:52:55  strk
+ * Memory leaks fixed.
+ *
+ **********************************************************************/
