@@ -1,0 +1,402 @@
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.1  2004/04/08 04:53:56  ybychkov
+ * "operation/polygonize" ported from JTS 1.4
+ *
+ *
+ **********************************************************************/
+
+
+#ifndef GEOS_OPPOLYGONIZE_H
+#define GEOS_OPPOLYGONIZE_H
+
+#include "platform.h"
+#include "planargraph.h"
+#include "geosAlgorithm.h"
+#include "geom.h"
+#include <vector>
+
+namespace geos {
+
+/**
+* An edge of a polygonization graph.
+*
+* @version 1.4
+*/
+class PolygonizeEdge: public planarEdge {
+private:
+	LineString *line;
+public:
+	PolygonizeEdge(LineString *newLine);
+	LineString* getLine();
+};
+
+
+/**
+ * Represents a ring of {@link PolygonizeDirectedEdge}s which form
+ * a ring of a polygon.  The ring may be either an outer shell or a hole.
+ *
+ */
+class polygonizeEdgeRing {
+private:
+	GeometryFactory *factory;
+	static CGAlgorithms *cga;
+	vector<planarDirectedEdge*> *deList;
+	// cache the following data for efficiency
+	LinearRing *ring;
+	CoordinateList *ringPts;
+	vector<LinearRing*> *holes;
+	/**
+	* Computes the list of coordinates which are contained in this ring.
+	* The coordinatea are computed once only and cached.
+	*
+	* @return an array of the {@link Coordinate}s in this ring
+	*/
+	CoordinateList* getCoordinates();
+	static void addEdge(CoordinateList *coords, bool isForward, CoordinateList *coordList);
+public:
+	/**
+	* Find the innermost enclosing shell polygonizeEdgeRing containing the argument polygonizeEdgeRing, if any.
+	* The innermost enclosing ring is the <i>smallest</i> enclosing ring.
+	* The algorithm used depends on the fact that:
+	* <br>
+	*  ring A contains ring B iff envelope(ring A) contains envelope(ring B)
+	* <br>
+	* This routine is only safe to use if the chosen point of the hole
+	* is known to be properly contained in a shell
+	* (which is guaranteed to be the case if the hole does not touch its shell)
+	*
+	* @return containing polygonizeEdgeRing, if there is one
+	* @return null if no containing polygonizeEdgeRing is found
+	*/
+	static polygonizeEdgeRing* findEdgeRingContaining(polygonizeEdgeRing *testEr, vector<polygonizeEdgeRing*> *shellList);
+	/**
+	* Finds a point in a list of points which is not contained in another list of points
+	* @param testPts the {@link Coordinate}s to test
+	* @param pts an array of {@link Coordinate}s to test the input points against
+	* @return a {@link Coordinate} from <code>testPts</code> which is not in <code>pts</code>, '
+	* or <code>null</code>
+	*/
+	static Coordinate& ptNotInList(CoordinateList *testPts, CoordinateList *pts);
+	/**
+	* Tests whether a given point is in an array of points.
+	* Uses a value-based test.
+	*
+	* @param pt a {@link Coordinate} for the test point
+	* @param pts an array of {@link Coordinate}s to test
+	* @return <code>true</code> if the point is in the array
+	*/
+	static bool isInList(Coordinate &pt, CoordinateList *pts);
+	polygonizeEdgeRing(GeometryFactory *newFactory);
+	~polygonizeEdgeRing();
+	/**
+	* Adds a {@link DirectedEdge} which is known to form part of this ring.
+	* @param de the {@link DirectedEdge} to add.
+	*/
+	void add(planarDirectedEdge *de);
+	/**
+	* Tests whether this ring is a hole.
+	* Due to the way the edges in the polyongization graph are linked,
+	* a ring is a hole if it is oriented counter-clockwise.
+	* @return <code>true</code> if this ring is a hole
+	*/
+	bool isHole();
+	/**
+	* Adds a hole to the polygon formed by this ring.
+	* @param hole the {@link LinearRing} forming the hole.
+	*/
+	void addHole(LinearRing *hole);
+	/**
+	* Computes the {@link Polygon formed by this ring and any contained holes.
+	*
+	* @return the {@link Polygon} formed by this ring and its holes.
+	*/
+	Polygon* getPolygon();
+	/**
+	* Tests if the {@link LinearRing} ring formed by this edge ring is topologically valid.
+	* @return
+	*/
+	bool isValid();
+	/**
+	* Gets the coordinates for this ring as a {@link LineString}.
+	* Used to return the coordinates in this ring
+	* as a valid geometry, when it has been detected that the ring is topologically
+	* invalid.
+	* @return a {@link LineString} containing the coordinates in this ring
+	*/
+	LineString* getLineString();
+	/**
+	* Returns this ring as a {@link LinearRing}, or null if an Exception occurs while
+	* creating it (such as a topology problem). Details of problems are written to
+	* standard output.
+	*/
+	LinearRing* getRing();
+};
+
+
+/**
+ * A {@link DirectedEdge} of a {@link PolygonizeGraph}, which represents
+ * an edge of a polygon formed by the graph.
+ * May be logically deleted from the graph by setting the <code>marked</code> flag.
+ *
+ */
+class PolygonizeDirectedEdge: public planarDirectedEdge {
+private:
+	polygonizeEdgeRing *edgeRing;
+	PolygonizeDirectedEdge *next;
+	long label;
+public:
+	/**
+	* Constructs a directed edge connecting the <code>from</code> node to the
+	* <code>to</code> node.
+	*
+	* @param directionPt
+	*                  specifies this DirectedEdge's direction (given by an imaginary
+	*                  line from the <code>from</code> node to <code>directionPt</code>)
+	* @param edgeDirection
+	*                  whether this DirectedEdge's direction is the same as or
+	*                  opposite to that of the parent Edge (if any)
+	*/
+	PolygonizeDirectedEdge(planarNode *newFrom,planarNode *newTo,Coordinate& newDirectionPt,bool nEdgeDirection);
+	/**
+	* Returns the identifier attached to this directed edge.
+	*/
+	long getLabel();
+	/**
+	* Attaches an identifier to this directed edge.
+	*/
+	void setLabel(long newLabel);
+	/**
+	* Returns the next directed edge in the EdgeRing that this directed edge is a member
+	* of.
+	*/
+	PolygonizeDirectedEdge* getNext();
+	/**
+	* Sets the next directed edge in the EdgeRing that this directed edge is a member
+	* of.
+	*/
+	void setNext(PolygonizeDirectedEdge *newNext);
+	/**
+	* Returns the ring of directed edges that this directed edge is
+	* a member of, or null if the ring has not been set.
+	* @see #setRing(EdgeRing)
+	*/
+	bool isInRing();
+	/**
+	* Sets the ring of directed edges that this directed edge is
+	* a member of.
+	*/
+	void setRing(polygonizeEdgeRing *newEdgeRing);
+};
+
+
+/**
+ * Represents a planar graph of edges that can be used to compute a
+ * polygonization, and implements the algorithms to compute the
+ * {@link EdgeRings} formed by the graph.
+ * <p>
+ * The marked flag on {@link DirectedEdge}s is used to indicate that a directed edge
+ * has be logically deleted from the graph.
+ *
+ */
+class PolygonizeGraph: public planarPlanarGraph {
+public:
+	/**
+	* Deletes all edges at a node
+	*/
+	static void deleteAllEdges(planarNode *node);
+	/**
+	* Create a new polygonization graph.
+	*/
+	PolygonizeGraph(GeometryFactory *newFactory);
+	/**
+	* Add a {@link LineString} forming an edge of the polygon graph.
+	* @param line the line to add
+	*/
+	void addEdge(LineString *line);
+	/**
+	* Computes the EdgeRings formed by the edges in this graph.
+	* @return a list of the {@link EdgeRing}s found by the polygonization process.
+	*/
+	vector<polygonizeEdgeRing*>* getEdgeRings();
+	/**
+	* Finds and removes all cut edges from the graph.
+	* @return a list of the {@link LineString}s forming the removed cut edges
+	*/
+	vector<LineString*>* deleteCutEdges();
+	/**
+	* Marks all edges from the graph which are "dangles".
+	* Dangles are which are incident on a node with degree 1.
+	* This process is recursive, since removing a dangling edge
+	* may result in another edge becoming a dangle.
+	* In order to handle large recursion depths efficiently,
+	* an explicit recursion stack is used
+	*
+	* @return a List containing the {@link LineStrings} that formed dangles
+	*/
+	vector<LineString*>* deleteDangles();
+private:
+	static int getDegreeNonDeleted(planarNode *node);
+	static int getDegree(planarNode *node, long label);
+	GeometryFactory *factory;
+	planarNode* getNode(Coordinate& pt);
+	void computeNextCWEdges();
+	/**
+	* Convert the maximal edge rings found by the initial graph traversal
+	* into the minimal edge rings required by JTS polygon topology rules.
+	*
+	* @param ringEdges the list of start edges for the edgeRings to convert.
+	*/
+	void convertMaximalToMinimalEdgeRings(vector<PolygonizeDirectedEdge*> *ringEdges);
+	/**
+	* Finds all nodes in a maximal edgering which are self-intersection nodes
+	* @param startDE
+	* @param label
+	* @return the list of intersection nodes found,
+	* or <code>null</code> if no intersection nodes were found
+	*/
+	static vector<planarNode*>* findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label);
+	/**
+	*
+	* @param dirEdges a List of the DirectedEdges in the graph
+	* @return a List of DirectedEdges, one for each edge ring found
+	*/
+	static vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(vector<planarDirectedEdge*> *dirEdges);
+	static void label(vector<planarDirectedEdge*> *dirEdges, long label);
+	static void computeNextCWEdges(planarNode *node);
+	/**
+	* Computes the next edge pointers going CCW around the given node, for the
+	* given edgering label.
+	* This algorithm has the effect of converting maximal edgerings into minimal edgerings
+	*/
+	static void computeNextCCWEdges(planarNode *node, long label);
+	/**
+	* Traverse a ring of DirectedEdges, accumulating them into a list.
+	* This assumes that all dangling directed edges have been removed
+	* from the graph, so that there is always a next dirEdge.
+	*
+	* @param startDE the DirectedEdge to start traversing at
+	* @return a List of DirectedEdges that form a ring
+	*/
+	static vector<planarDirectedEdge*>* findDirEdgesInRing(PolygonizeDirectedEdge *startDE);
+	polygonizeEdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
+};
+
+/**
+ * Polygonizes a set of Geometrys which contain linework that
+ * represents the edges of a planar graph.
+ * Any dimension of Geometry is handled - the constituent linework is extracted
+ * to form the edges.
+ * The edges must be correctly noded; that is, they must only meet
+ * at their endpoints.  The Polygonizer will still run on incorrectly noded input
+ * but will not form polygons from incorrected noded edges.
+ * <p>
+ * The Polygonizer reports the follow kinds of errors:
+ * <ul>
+ * <li><b>Dangles</b> - edges which have one or both ends which are not incident on another edge endpoint
+ * <li><b>Cut Edges</b> - edges which are connected at both ends but which do not form part of polygon
+ * <li><b>Invalid Ring Lines</b> - edges which form rings which are invalid
+ * (e.g. the component lines contain a self-intersection)
+ * </ul>
+ *
+ */
+class Polygonizer {
+private:
+	/**
+	* Add every linear element in a geometry into the polygonizer graph.
+	*/
+	class LineStringAdder: public GeometryComponentFilter {
+	public:
+		Polygonizer *pol;
+		LineStringAdder(Polygonizer *p);
+		void filter_rw(Geometry *g);
+		void filter_ro(const Geometry *g){};
+	};
+
+	// default factory
+	LineStringAdder *lineStringAdder;
+	/**
+	* Add a linestring to the graph of polygon edges.
+	*
+	* @param line the {@link LineString} to add
+	*/
+	void add(LineString *line);
+	/**
+	* Perform the polygonization, if it has not already been carried out.
+	*/
+	void polygonize();
+	void findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<polygonizeEdgeRing*> *validEdgeRingList,vector<LineString*> *invalidRingList);
+	void findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList);
+	static void assignHolesToShells(vector<polygonizeEdgeRing*> *holeList,vector<polygonizeEdgeRing*> *shellList);
+	static void assignHoleToShell(polygonizeEdgeRing *holeER,vector<polygonizeEdgeRing*> *shellList);
+protected:
+	PolygonizeGraph *graph;
+	// initialize with empty collections, in case nothing is computed
+	vector<LineString*> *dangles;
+	vector<LineString*> *cutEdges;
+	vector<LineString*> *invalidRingLines;
+
+	vector<polygonizeEdgeRing*> *holeList;
+	vector<polygonizeEdgeRing*> *shellList;
+	vector<Polygon*> *polyList;
+public:
+	/**
+	* Create a polygonizer with the same {@link GeometryFactory}
+	* as the input {@link Geometry}s
+	*/
+	Polygonizer();
+	~Polygonizer();
+	/**
+	* Add a collection of geometries to be polygonized.
+	* May be called multiple times.
+	* Any dimension of Geometry may be added;
+	* the constituent linework will be extracted and used
+	*
+	* @param geomList a list of {@link Geometry}s with linework to be polygonized
+	*/
+	void add(vector<Geometry*> *geomList);
+	/**
+	* Add a geometry to the linework to be polygonized.
+	* May be called multiple times.
+	* Any dimension of Geometry may be added;
+	* the constituent linework will be extracted and used
+	*
+	* @param g a {@link Geometry} with linework to be polygonized
+	*/
+	void add(Geometry *g);
+	/**
+	* Gets the list of polygons formed by the polygonization.
+	* @return a collection of {@link Polygons}
+	*/
+	vector<Polygon*>* getPolygons();
+	/**
+	* Get the list of dangling lines found during polygonization.
+	* @return a collection of the input {@LineStrings} which are dangles
+	*/
+	vector<LineString*>* getDangles();
+	/**
+	* Get the list of cut edges found during polygonization.
+	* @return a collection of the input {@LineStrings} which are cut edges
+	*/
+	vector<LineString*>* getCutEdges();
+	/**
+	* Get the list of lines forming invalid rings found during polygonization.
+	* @return a collection of the input {@LineStrings} which form invalid rings
+	*/
+	vector<LineString*>* getInvalidRingLines();
+};
+}
+#endif

@@ -551,6 +551,25 @@
 						RelativePath="..\source\operation\linemerge\LineMerger.cpp">
 					</File>
 				</Filter>
+				<Filter
+					Name="polygonize"
+					Filter="">
+					<File
+						RelativePath="..\source\operation\polygonize\PolygonizeDirectedEdge.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\polygonize\PolygonizeEdge.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\polygonize\polygonizeEdgeRing.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\polygonize\PolygonizeGraph.cpp">
+					</File>
+					<File
+						RelativePath="..\source\operation\polygonize\Polygonizer.cpp">
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="io"
@@ -1195,6 +1214,9 @@
 			</File>
 			<File
 				RelativePath="..\source\headers\opOverlay.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\opPolygonize.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\opRelate.h">
