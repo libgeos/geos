@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/06/15 07:40:30  strk
+ * Added missing <stdio.h> include
+ *
  * Revision 1.2  2004/05/03 12:09:22  strk
  * newline added at end of file
  *
@@ -24,6 +27,7 @@
 
 
 #include "../headers/noding.h"
+#include <stdio.h>
 
 namespace geos {
 SegmentNode::SegmentNode(Coordinate *newCoord, int nSegmentIndex, double newDist) {

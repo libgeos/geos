@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/06/15 07:40:30  strk
+ * Added missing <stdio.h> include
+ *
  * Revision 1.2  2004/05/03 10:43:43  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -27,6 +30,7 @@
 #include "../headers/geomgraph.h"
 #include "math.h"
 #include <typeinfo>
+#include <stdio.h>
 
 namespace geos {
 
