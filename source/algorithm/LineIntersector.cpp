@@ -380,12 +380,20 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	cerr<<"LineIntersector::interpolateZ("<<p.toString()<<", "<<p1.toString()<<", "<<p2.toString()<<")"<<endl;
 #endif
 
-	if ( p1.z == DoubleNotANumber || p2.z == DoubleNotANumber )
+	if ( p1.z == DoubleNotANumber )
 	{
 #if DEBUG
-		cerr<<" p1 or p2 do not have a Z"<<endl;
+		cerr<<" p1 do not have a Z"<<endl;
 #endif
-		return DoubleNotANumber;
+		return p2.z; // might be DoubleNotANumber again
+	}
+
+	if ( p2.z == DoubleNotANumber )
+	{
+#if DEBUG
+		cerr<<" p2 do not have a Z"<<endl;
+#endif
+		return p1.z; // might be DoubleNotANumber again
 	}
 
 	if (p==p1)
@@ -404,6 +412,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	}
 
 	double zgap = p2.z - p1.z;
+	if ( ! zgap ) return p2.z;
 	double seglen = sqrt(fabs(p2.x-p1.x)*fabs(p2.y-p1.y));
 	double pdist = sqrt(fabs(p.x-p1.x)*fabs(p.y-p1.y));
 	double fract = pdist/seglen;
@@ -414,23 +423,6 @@ LineIntersector::interpolateZ(const Coordinate &p,
 #endif
 	return interpolated;
 
-
-	double z=0;
-	int hits=0;
-	if (p.z != DoubleNotANumber) {
-		z += p.z;
-		hits++;
-	}
-	if (p1.z != DoubleNotANumber) {
-		z += p1.z;
-		hits++;
-	}
-	if (p2.z != DoubleNotANumber) {
-		z += p1.z;
-		hits++;
-	}
-	if ( hits ) return z/hits;
-	else return DoubleNotANumber;
 }
 
 
@@ -438,6 +430,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2004/11/24 18:10:23  strk
+ * Cleanup of interpolateZ
+ *
  * Revision 1.16  2004/11/23 19:53:06  strk
  * Had LineIntersector compute Z by interpolation.
  *
