@@ -11,6 +11,7 @@ Options:
      [--libs]
      [--cflags]
      [--includes]
+     [--jtsport]
 EOF
     exit $1
 }
@@ -37,6 +38,9 @@ case $1 in
       ;;
     --includes)
       echo @prefix@/include
+      ;;
+    --jtsport)
+    echo @JTS_PORT@ 
       ;;
     *)
       usage 1 1>&2
