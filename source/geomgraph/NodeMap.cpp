@@ -15,10 +15,15 @@
 
 #include <geos/geomgraph.h>
 
+#define DEBUG 0
+
 namespace geos {
 
 NodeMap::NodeMap(NodeFactory *newNodeFact)
 {
+#if DEBUG
+	cerr<<"["<<this<<"] NodeMap::NodeMap"<<endl;
+#endif
 	nodeFact=newNodeFact;
 	nodeMap=new map<Coordinate,Node*,CoordLT>();
 }
@@ -37,10 +42,23 @@ NodeMap::~NodeMap()
 Node*
 NodeMap::addNode(const Coordinate& coord)
 {
+#if DEBUG
+	cerr<<"["<<this<<"] NodeMap::addNode("<<coord.toString()<<")";
+#endif
 	Node *node=find(coord);
 	if (node==NULL) {
+#if DEBUG
+		cerr<<" is new"<<endl;
+#endif
 		node=nodeFact->createNode(coord);
 		(*nodeMap)[coord]=node;
+	}
+	else
+	{
+#if DEBUG
+		cerr<<" already found ("<<node->getCoordinate().toString()<<") - adding Z"<<endl;
+#endif
+		node->addZ(coord.z);
 	}
 	return node;
 }
@@ -50,11 +68,23 @@ NodeMap::addNode(const Coordinate& coord)
 Node*
 NodeMap::addNode(Node *n)
 {
+#if DEBUG
+	cerr<<"["<<this<<"] NodeMap::addNode("<<n->print()<<")";
+#endif
 	Node *node=find(n->getCoordinate());
 	if (node==NULL) {
+#if DEBUG
+		cerr<<" is new"<<endl;
+#endif
 		(*nodeMap)[n->getCoordinate()]=n;
 		return n;
 	}
+#if DEBUG
+	else
+	{
+		cerr<<" found already, merging label"<<endl;
+	}
+#endif // DEBUG
 	node->mergeLabel(n);
 	return node;
 }
@@ -120,6 +150,9 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2004/11/20 15:41:41  strk
+ * Added Z merging in ::addNode
+ *
  * Revision 1.3  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *
