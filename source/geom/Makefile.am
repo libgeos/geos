@@ -126,10 +126,8 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../index/bintree/Bintree.cpp \
                     ../index/bintree/BinTreeInterval.cpp \
                     ../index/bintree/BinTreeNode.cpp \
-                    ../index/bintree/Interval.cpp \
                     ../index/bintree/Key.cpp \
                     ../index/bintree/NodeBase.cpp \
-                    ../index/bintree/Node.cpp \
                     ../index/bintree/Root.cpp \
                     ../index/chain/indexMonotoneChain.cpp \
                     ../index/chain/MonotoneChainBuilder.cpp \
