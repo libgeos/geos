@@ -1,3 +1,6 @@
+#ifndef GEOS_IO_H
+#define GEOS_IO_H
+
 #include <iostream>
 #include <string>
 //#include <vector>
@@ -123,3 +126,5 @@ private:
 	void writeFormatted(Geometry *geometry, bool isFormatted, Writer *writer);
 	void indent(int level, Writer *writer);
 };
+
+#endif

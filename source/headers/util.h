@@ -1,3 +1,6 @@
+#ifndef GEOS_UTIL_H
+#define GEOS_UTIL_H
+
 //#include <iostream>
 #include <string>
 //#include <vector>
@@ -33,3 +36,5 @@ public:
 	static void shouldNeverReachHere();
 	static void shouldNeverReachHere(string message);
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef GEOS_GEOM_H
+#define GEOS_GEOM_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -717,3 +720,5 @@ private:
 	PrecisionModel precisionModel;
 	int SRID;
 };
+
+#endif

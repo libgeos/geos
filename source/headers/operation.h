@@ -1,3 +1,6 @@
+#ifndef GEOS_OPERATION_H
+#define GEOS_OPERATION_H
+
 //#include <iostream>
 //#include <string>
 //#include <vector>
@@ -7,3 +10,4 @@
 
 using namespace std;
 
+#endif

@@ -1,3 +1,6 @@
+#ifndef GEOS_GRAPH_H
+#define GEOS_GRAPH_H
+
 //#include <iostream>
 #include <string>
 #include <vector>
@@ -5,11 +8,16 @@
 #include <set>
 #include "geom.h"
 #include "graphindex.h"
-#include <geosAlgorithm.h>
+#include "geosAlgorithm.h"
 //#include "math.h"
 //#include "platform.h"
 
 using namespace std;
+
+class EdgeSetIntersector;
+class SegmentIntersector;
+class MonotoneChainEdge;
+
 
 class Position {
 public:
@@ -567,3 +575,5 @@ private:
 };
 //Operators
 bool operator==(Edge a, Edge b);
+
+#endif

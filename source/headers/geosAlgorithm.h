@@ -1,3 +1,6 @@
+#ifndef GEOS_ALGORITHM_H
+#define GEOS_ALGORITHM_H
+
 class CGAlgorithms{
 };
 
@@ -15,3 +18,5 @@ class RobustCGAlgorithms:public CGAlgorithms{
 
 class RobustLineIntersector: public LineIntersector{
 };
+
+#endif
