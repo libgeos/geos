@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.2  2004/05/03 20:49:20  strk
  * Some more leaks fixed
  *
@@ -68,7 +71,7 @@ void SegmentNodeList::addEndpoints(){
 */
 void SegmentNodeList::addSplitEdges(vector<SegmentString*> *edgeList){
 	// testingOnly
-	vector<SegmentString*> *testingSplitEdges=new vector<SegmentString*>();
+	//vector<SegmentString*> *testingSplitEdges=new vector<SegmentString*>();
 	// ensure that the list has entries for the first and last point of the edge
 	addEndpoints();
 
@@ -80,7 +83,7 @@ void SegmentNodeList::addSplitEdges(vector<SegmentString*> *edgeList){
 		SegmentNode *ei=*it;
 		SegmentString *newEdge=createSplitEdge(eiPrev, ei);
 		edgeList->push_back(newEdge);
-		testingSplitEdges->push_back(newEdge);
+		//testingSplitEdges->push_back(newEdge);
 		eiPrev = ei;
 	}
 	//checkSplitEdgesCorrectness(testingSplitEdges);

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.7  2004/04/30 09:15:28  strk
  * Enlarged exception specifications to allow for AssertionFailedException.
  * Added missing initializers.
@@ -65,18 +68,21 @@ IteratedNoder::~IteratedNoder() {
 */
 vector<SegmentString*>*
 IteratedNoder::node(vector<SegmentString*> *segStrings)
-	throw(GEOSException *)
+	// throw(GEOSException *)
 {
 	int numInteriorIntersections;
-	vector<SegmentString*> *nodedEdges=segStrings;
+	vector<SegmentString*> *nodedEdges=new vector<SegmentString *>(*segStrings);
 	int nodingIterationCount = 0;
 	int lastNodesCreated = -1;
 	do {
+		vector<SegmentString*> *oString = nodedEdges;
 		nodedEdges=node(nodedEdges,&numInteriorIntersections);
+		delete oString;
 		nodingIterationCount++;
 		int nodesCreated=numInteriorIntersections;
 		//System.out.println("# nodes created: " + nodesCreated);
 		if (lastNodesCreated > 0 && nodesCreated > lastNodesCreated) {
+			delete nodedEdges;
 			throw new TopologyException("Iterated noding failed to converge");
 		}
 		lastNodesCreated = nodesCreated;
@@ -91,7 +97,9 @@ IteratedNoder::node(vector<SegmentString*> *segStrings)
 * Node the input segment strings once
 * and create the split edges between the nodes
 */
-vector<SegmentString*>* IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersections){
+vector<SegmentString*>*
+IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersections)
+{
 	nodingSegmentIntersector *si=new nodingSegmentIntersector(li);
 	MCQuadtreeNoder *noder = new MCQuadtreeNoder();
 	noder->setSegmentIntersector(si);

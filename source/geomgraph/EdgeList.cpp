@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -67,8 +70,13 @@ Edge* EdgeList::findEqualEdge(Edge *e) {
 	vector<void*> *testEdges=index->query(e->getEnvelope());
 	for (int i=0; i<(int)testEdges->size();i++) {
 		Edge* testEdge=(Edge*) (*testEdges)[i];
-		if (testEdge->equals(e)) return testEdge;
+		if (testEdge->equals(e))
+		{
+			delete testEdges;
+			return testEdge;
+		}
 	}
+	delete testEdges;
 	return NULL;
 }
 

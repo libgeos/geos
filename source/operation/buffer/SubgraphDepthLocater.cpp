@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.1  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -39,9 +42,13 @@ int SubgraphDepthLocater::getDepth(Coordinate &p) {
 	vector<DepthSegment*> *stabbedSegments=findStabbedSegments(p);
 	// if no segments on stabbing line subgraph must be outside all others->
 	if ((int)stabbedSegments->size()==0)
+	{
+		delete stabbedSegments;
 		return 0;
+	}
 	sort(stabbedSegments->begin(),stabbedSegments->end(),DepthSegmentLT);
 	DepthSegment *ds=(*stabbedSegments)[0];
+	delete stabbedSegments;
 	return ds->leftDepth;
 }
 

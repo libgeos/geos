@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.7  2004/04/30 09:15:28  strk
  * Enlarged exception specifications to allow for AssertionFailedException.
  * Added missing initializers.
@@ -365,7 +368,7 @@ public:
 	* @return a collection of the noded SegmentStrings
 	* @throws TopologyException if the iterated noding fails to converge.
 	*/
-	vector<SegmentString*>* node(vector<SegmentString*> *segStrings) throw(GEOSException *);
+	vector<SegmentString*>* node(vector<SegmentString*> *segStrings); // throw(GEOSException *);
 };
 
 }

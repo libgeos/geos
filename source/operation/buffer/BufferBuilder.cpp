@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.9  2004/05/03 17:15:38  strk
  * leaks on exception fixed.
  *
@@ -178,23 +181,23 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 	try 
 	{
 		nodedSegStrings=noder->node(bufferSegStrList);
-	} catch (GEOSException *ge) {
+
+		// DEBUGGING ONLY
+		//BufferDebug->saveEdges(nodedEdges, "run" + BufferDebug->runCount + "_nodedEdges");
+		for (int i=0;i<(int)nodedSegStrings->size();i++) {
+			SegmentString *segStr=(*nodedSegStrings)[i];
+			Label *oldLabel=(Label*) segStr->getContext();
+			Edge *edge=new Edge((CoordinateList*) segStr->getCoordinates(), new Label(oldLabel));
+			insertEdge(edge);
+		}
+		//saveEdges(edgeList->getEdges(), "run" + runCount + "_collapsedEdges");
+	} catch (...) {
 		delete nodedSegStrings;
 		delete noder;
 		throw;
 	} 
+	delete nodedSegStrings;
 	delete noder;
-
-	
-	// DEBUGGING ONLY
-	//BufferDebug->saveEdges(nodedEdges, "run" + BufferDebug->runCount + "_nodedEdges");
-	for (int i=0;i<(int)nodedSegStrings->size();i++) {
-		SegmentString *segStr=(*nodedSegStrings)[i];
-		Label *oldLabel=(Label*) segStr->getContext();
-		Edge *edge=new Edge((CoordinateList*) segStr->getCoordinates(), new Label(oldLabel));
-		insertEdge(edge);
-	}
-	//saveEdges(edgeList->getEdges(), "run" + runCount + "_collapsedEdges");
 }
 
 
@@ -251,6 +254,7 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph)
 			subgraphList->push_back(subgraph);
 		}
 	}
+	delete n;
 	/**
 	* Sort the subgraphs in descending order of their rightmost coordinate->
 	* This ensures that when the Polygons for the subgraphs are built,

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.7  2004/05/03 17:15:38  strk
  * leaks on exception fixed.
  *
@@ -82,6 +85,7 @@ void BufferSubgraph::addReachable(Node *startNode) {
 		nodeStack->pop_back();
 		add(node, nodeStack);
 	}
+	delete nodeStack;
 }
 
 /**

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.2  2004/05/03 12:09:22  strk
  * newline added at end of file
  *
@@ -27,7 +30,9 @@
 
 namespace geos {
 
-vector<SegmentString*>* Noder::getNodedEdges(vector<SegmentString*>* segStrings) {
+vector<SegmentString*>*
+Noder::getNodedEdges(vector<SegmentString*>* segStrings)
+{
 	vector<SegmentString*>* resultEdgelist=new vector<SegmentString*>();
 	getNodedEdges(segStrings, resultEdgelist);
 	return resultEdgelist;

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
  * Revision 1.3  2004/04/19 16:14:52  strk
  * Some memory leaks plugged in noding algorithms.
  *
@@ -45,7 +48,9 @@ MCQuadtreeNoder::~MCQuadtreeNoder(){
 	delete chains;
 	delete index;
 }
-vector<SegmentString*> *MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings){
+vector<SegmentString*> *
+MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
+{
 	for(int i=0; i<(int)inputSegStrings->size();i++) {
 		add((*inputSegStrings)[i]);
 	}
