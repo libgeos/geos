@@ -1,5 +1,3 @@
-- geos::version() function and GEOS_JTSPORT define.
-
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
 
 - Check header files layout
