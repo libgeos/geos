@@ -8,13 +8,6 @@ EdgeEndStar::EdgeEndStar(){
 	edgeList=new vector<EdgeEnd*>();
 }
 
-EdgeEndStar::EdgeEndStar(const EdgeEndStar &ees){
-	ptInAreaLocation[0]=Location::UNDEF;
-	ptInAreaLocation[1]=Location::UNDEF;
-	edgeMap=new map<EdgeEnd*,void*,EdgeEndLT>((ees.edgeMap)->begin(),(ees.edgeMap)->end());
-	edgeList=new vector<EdgeEnd*>((ees.edgeList)->begin(),(ees.edgeList)->end());
-}
-
 EdgeEndStar::~EdgeEndStar(){
 	delete edgeMap;
 	delete edgeList;

@@ -245,7 +245,6 @@ class EdgeEndStar {
 public:
 	EdgeEndStar();
 	~EdgeEndStar();
-	EdgeEndStar(const EdgeEndStar &ees);
 	virtual void insert(EdgeEnd *e){};
 	virtual Coordinate getCoordinate();
 	virtual int getDegree();
