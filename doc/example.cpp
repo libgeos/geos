@@ -10,6 +10,9 @@
 //  obscure reports from memory checkers like valgrind.
 //
 // $Log$
+// Revision 1.6  2003/10/21 16:16:46  strk
+// Uncommented point creation lines. Updated comments about segfaults.
+//
 // Revision 1.5  2003/10/20 17:50:30  strk
 // added Union example
 //
@@ -160,9 +163,11 @@ create_simple_collection(Geometry *g1, Geometry *g2)
 		global_factory->createGeometryCollection(collection);
 
 
-	// We HAVE to delete the vectore used to store
-	// goemetry pointers, but created object will
+	// We HAVE to delete the vectors used to store
+	// geometry pointers, but created object will
 	// delete pointed geometries, weird uh?
+	// It seems that somebody else will delete this...
+	// must inspect --strk;
 	delete collection;
 
 	return ret;
@@ -172,12 +177,11 @@ create_simple_collection(Geometry *g1, Geometry *g2)
 // Start reading here
 void do_all()
 {
-	int numgeoms = 4;
+	int numgeoms = 5;
 	Geometry *geoms[numgeoms];
 
 	// Define a precision model using 0,0 as the reference origin
 	// and 2.0 as coordinates scale.
-	// Using 1.0 as scale will segfault, dunno why --strk;
 	PrecisionModel *pm = new PrecisionModel(2.0, 0, 0);
 
 	// Initialize global factory with defined PrecisionModel
@@ -205,8 +209,8 @@ void do_all()
 			new LinearRing(*((LinearRing *)geoms[0])),
 			new Polygon(*((Polygon *)geoms[1])));
 
-	// WKT-printing a point geometry segfaults !!
-	//geoms[4] = create_point(150, 350);
+	// The simplest geometry: a point !
+	geoms[4] = create_point(150, 350);
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
