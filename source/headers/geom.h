@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.54  2004/04/14 13:56:26  strk
+ * All geometries returned by {from,to}InternalGeometry calls are
+ * now deleted after use (unless NOT new).
+ * Some 'commented' throw specifications in geom.h
+ *
  * Revision 1.53  2004/04/14 07:29:43  strk
  * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
  *
@@ -877,7 +882,7 @@ public:
 	virtual Geometry* buffer(double distance,int quadrantSegments) const;
 	virtual Geometry* convexHull() const;
 	virtual Geometry* intersection(const Geometry *other) const;
-	virtual Geometry* Union(const Geometry *other) const;
+	virtual Geometry* Union(const Geometry *other) const; // throw(IllegalArgumentException *, TopologyException *);
 	virtual Geometry* difference(const Geometry *other) const;
 	virtual Geometry* symDifference(const Geometry *other) const;
 	virtual bool equalsExact(const Geometry *other, double tolerance) const=0; //Abstract
@@ -909,7 +914,7 @@ protected:
 //	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
 //	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
 	virtual bool isEquivalentClass(const Geometry *other) const;
-	static void checkNotGeometryCollection(const Geometry *g);
+	static void checkNotGeometryCollection(const Geometry *g); // throw(IllegalArgumentException *);
 	//virtual void checkEqualSRID(Geometry *other);
 	//virtual void checkEqualPrecisionModel(Geometry *other);
 	virtual Envelope* computeEnvelopeInternal() const=0; //Abstract

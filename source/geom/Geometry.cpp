@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.42  2004/04/14 13:56:26  strk
+ * All geometries returned by {from,to}InternalGeometry calls are
+ * now deleted after use (unless NOT new).
+ * Some 'commented' throw specifications in geom.h
+ *
  * Revision 1.41  2004/04/14 07:29:43  strk
  * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
  *
@@ -177,24 +182,26 @@ bool Geometry::isWithinDistance(Geometry *geom,double cDistance) {
 Point* Geometry::getCentroid() const {
 	const Coordinate* centPt;
 	int dim=getDimension();
+	Geometry *in = toInternalGeometry(this);
 	if(dim==0) {
 		CentroidPoint *cent=new CentroidPoint();
-		cent->add(toInternalGeometry(this));
+		cent->add(in);
 		centPt=cent->getCentroid();
 		delete cent;
 	} else if (dim==1) {
 		CentroidLine *cent=new CentroidLine();
-		cent->add(toInternalGeometry(this));
+		cent->add(in);
 		centPt=cent->getCentroid();
 		delete cent;
 	} else {
 		CentroidArea *cent=new CentroidArea();
-		cent->add(toInternalGeometry(this));
+		cent->add(in);
 		centPt=cent->getCentroid();
 		delete cent;
 	}
 	Point *pt=createPointFromInternalCoord(centPt,this);
 	delete centPt;
+	if ( in != this ) delete(in);
 	return pt;
 }
 
@@ -209,21 +216,23 @@ Point* Geometry::getCentroid() const {
 Point* Geometry::getInteriorPoint() {
 	const Coordinate* interiorPt;
 	int dim=getDimension();
+	Geometry *in = toInternalGeometry(this);
 	if (dim==0) {
-		InteriorPointPoint* intPt=new InteriorPointPoint(toInternalGeometry(this));
+		InteriorPointPoint* intPt=new InteriorPointPoint(in);
 		interiorPt=intPt->getInteriorPoint();
 		delete intPt;
 	} else if (dim==1) {
-		InteriorPointLine* intPt=new InteriorPointLine(toInternalGeometry(this));
+		InteriorPointLine* intPt=new InteriorPointLine(in);
 		interiorPt=intPt->getInteriorPoint();
 		delete intPt;
 	} else {
-		InteriorPointArea* intPt=new InteriorPointArea(toInternalGeometry(this));
+		InteriorPointArea* intPt=new InteriorPointArea(in);
 		interiorPt=intPt->getInteriorPoint();
 		delete intPt;
 	}
 	Point *p=createPointFromInternalCoord(interiorPt,this);
 	delete interiorPt;
+	if ( in != this ) delete (in);
 	return p;
 }
 
@@ -288,8 +297,11 @@ const PrecisionModel* Geometry::getPrecisionModel() const {
 }
 
 bool Geometry::isValid() const {
-	IsValidOp isValidOp(toInternalGeometry(this));
-	return isValidOp.isValid();
+	Geometry *in = toInternalGeometry(this);
+	IsValidOp isValidOp(in);
+	bool ret = isValidOp.isValid();
+	if (in != this) delete (in);
+	return ret;
 }
 
 Geometry* Geometry::getEnvelope() const {
@@ -366,10 +378,26 @@ bool Geometry::equals(const Geometry *g) const {
 	return res;
 }
 
-IntersectionMatrix* Geometry::relate(const Geometry *g) const {
+IntersectionMatrix*
+Geometry::relate(const Geometry *other) const
+	//throw(IllegalArgumentException *)
+{
 	checkNotGeometryCollection(this);
-	checkNotGeometryCollection(g);
-	return RelateOp::relate(toInternalGeometry(this),toInternalGeometry(g));
+	checkNotGeometryCollection(other);
+	Geometry *in1 = toInternalGeometry(this);
+	Geometry *in2 = toInternalGeometry(other);
+	IntersectionMatrix *im = NULL;
+	try {
+		im = RelateOp::relate(in1, in2);
+	}
+	catch (...) {
+		if ( in1 != this ) delete (in1);
+		if ( in2 != other ) delete (in2);
+		throw;
+	}
+	if ( in1 != this ) delete (in1);
+	if ( in2 != other ) delete (in2);
+	return im;
 }
 
 string Geometry::toString() const {
@@ -382,7 +410,19 @@ string Geometry::toText() const {
 }
 
 Geometry* Geometry::buffer(double distance) const {
-	return fromInternalGeometry(BufferOp::bufferOp(toInternalGeometry(this), distance));
+	Geometry *in1 = toInternalGeometry(this);
+	Geometry *out = NULL;
+	try {
+		out = BufferOp::bufferOp(in1, distance);
+	}
+	catch(...) {
+		if ( in1 != this ) delete (in1);
+		throw;
+	}
+	if ( in1 != this ) delete (in1);
+	Geometry *ret = fromInternalGeometry(out);
+	if ( ret != out ) delete (out);
+	return ret;
 }
 
 
@@ -424,38 +464,113 @@ Geometry* Geometry::fromInternalGeometry(const Geometry* g) const {
 *      are less than or equal to <code>distance</code>
 */
 Geometry* Geometry::buffer(double distance,int quadrantSegments) const {
-	return fromInternalGeometry(BufferOp::bufferOp(toInternalGeometry(this), distance, quadrantSegments));
+	Geometry *in = toInternalGeometry(this);
+	Geometry *out = BufferOp::bufferOp(in, distance, quadrantSegments);
+	if ( in != this ) delete(in);
+	Geometry *ret = fromInternalGeometry(out);
+	if ( out != ret ) delete(out);
+	return ret;
 }
 
-Geometry* Geometry::convexHull() const {
-	ConvexHull *ch=(ConvexHull*)fromInternalGeometry((const Geometry*)new ConvexHull(toInternalGeometry(this)));
-	Geometry *g=ch->getConvexHull();
+Geometry*
+Geometry::convexHull() const
+{
+	Geometry *in = toInternalGeometry(this);
+	ConvexHull *ch = new ConvexHull(in);
+	Geometry *out=ch->getConvexHull();
 	delete ch;
-	return g;
+	if ( in != this ) delete(in);
+	Geometry *ret = fromInternalGeometry(out);
+	if ( out != ret ) delete(out);
+	return ret;
 }
 
 Geometry* Geometry::intersection(const Geometry *other) const {
-	checkNotGeometryCollection(this);
-	checkNotGeometryCollection(other);
-	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::INTERSECTION));
+	Geometry *in1 = toInternalGeometry(this);
+	Geometry *in2 = toInternalGeometry(other);
+	Geometry *out = NULL;
+	try {
+		out = OverlayOp::overlayOp(in1,in2,OverlayOp::INTERSECTION);
+	}
+	catch (...) {
+		if ( in1 != this ) delete (in1);
+		if ( in2 != other ) delete (in2);
+		throw;
+	}
+	if ( in1 != this ) delete (in1);
+	if ( in2 != other ) delete (in2);
+	Geometry *ret = fromInternalGeometry(out);
+	if ( ret != out ) delete (out);
+	return ret;
 }
 
-Geometry* Geometry::Union(const Geometry *other) const {
+Geometry*
+Geometry::Union(const Geometry *other) const
+	//throw(TopologyException *, IllegalArgumentException *)
+{
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::UNION));
+	Geometry *in1 = toInternalGeometry(this);
+	Geometry *in2 = toInternalGeometry(other);
+	Geometry *out = NULL;
+	try {
+		out = OverlayOp::overlayOp(in1,in2,OverlayOp::UNION);
+	}
+	catch (...) {
+		if ( in1 != this ) delete (in1);
+		if ( in2 != other ) delete (in2);
+		throw;
+	}
+	if ( in1 != this ) delete (in1);
+	if ( in2 != other ) delete (in2);
+	Geometry *ret = fromInternalGeometry(out);
+	if ( ret != out ) delete (out);
+	return ret;
 }
 
-Geometry* Geometry::difference(const Geometry *other) const {
+Geometry*
+Geometry::difference(const Geometry *other) const
+	//throw(IllegalArgumentException *)
+{
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::DIFFERENCE));
+	Geometry *in1 = toInternalGeometry(this);
+	Geometry *in2 = toInternalGeometry(other);
+	Geometry *out = NULL;
+	try {
+		out = OverlayOp::overlayOp(in1,in2,OverlayOp::DIFFERENCE);
+	}
+	catch (...) {
+		if ( in1 != this ) delete (in1);
+		if ( in2 != other ) delete (in2);
+		throw;
+	}
+	if ( in1 != this ) delete (in1);
+	if ( in2 != other ) delete (in2);
+	Geometry *ret = fromInternalGeometry(out);
+	if ( ret != out ) delete (out);
+	return ret;
 }
 
 Geometry* Geometry::symDifference(const Geometry *other) const {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return fromInternalGeometry(OverlayOp::overlayOp(toInternalGeometry(this),other,OverlayOp::SYMDIFFERENCE));
+	Geometry *in1 = toInternalGeometry(this);
+	Geometry *in2 = toInternalGeometry(other);
+	Geometry *out = NULL;
+	try {
+		out = OverlayOp::overlayOp(in1,in2,OverlayOp::SYMDIFFERENCE);
+	}
+	catch (...) {
+		if ( in1 != this ) delete (in1);
+		if ( in2 != other ) delete (in2);
+		throw;
+	}
+	if ( in1 != this ) delete (in1);
+	if ( in2 != other ) delete (in2);
+	Geometry *ret = fromInternalGeometry(out);
+	if ( ret != out ) delete (out);
+	return ret;
 }
 
 int Geometry::compareTo(const Geometry *geom) const {
@@ -481,7 +596,10 @@ bool Geometry::isEquivalentClass(const Geometry *other) const {
 		return false;
 }
 
-void Geometry::checkNotGeometryCollection(const Geometry *g) {
+void
+Geometry::checkNotGeometryCollection(const Geometry *g)
+	//throw(IllegalArgumentException *)
+{
 	if ((typeid(*g)==typeid(GeometryCollection))) {
 		throw new IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 	}
@@ -568,8 +686,21 @@ int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const {
 *
 *@param  g  the <code>Geometry</code> from which to compute the distance
 */
-double Geometry::distance(const Geometry *g) const {
-	return DistanceOp::distance(toInternalGeometry(this),toInternalGeometry(g));
+double Geometry::distance(const Geometry *other) const {
+	Geometry *in1 = toInternalGeometry(this);
+	Geometry *in2 = toInternalGeometry(other);
+	double ret;
+	try {
+		ret = DistanceOp::distance(in1,in2);
+	}
+	catch (...) {
+		if ( in1 != this ) delete (in1);
+		if ( in2 != other ) delete (in2);
+		throw;
+	}
+	if ( in1 != this ) delete (in1);
+	if ( in2 != other ) delete (in2);
+	return ret;
 }
 
 /**
