@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/07/26 16:35:19  strk
+ * Removed dangling MultiPoint::isClosed() method definition.
+ *
  * Revision 1.22  2004/07/22 16:58:01  strk
  * runtime version extractor functions split. geos::version() is now
  * geos::geosversion() and geos::jtsport()
@@ -2248,7 +2251,6 @@ public:
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isValid() const;
-	bool isClosed() const;
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
 protected:
