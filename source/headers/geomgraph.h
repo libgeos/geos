@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/05/26 09:50:05  strk
+ * Added comments about OverlayNodeFactory() ownership in NodeMap and PlanarGraph constuctors
+ *
  * Revision 1.4  2004/05/03 10:43:42  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -486,7 +489,8 @@ class NodeMap{
 public:
 	map<Coordinate,Node*,CoordLT>* nodeMap;
 	NodeFactory *nodeFact;
-	NodeMap(NodeFactory *newNodeFact); // this is no const !! why ?
+	// newNodeFact will be deleted by ~NodeMap
+	NodeMap(NodeFactory *newNodeFact);
 	virtual ~NodeMap();
 	Node* addNode(const Coordinate& coord);
 	Node* addNode(Node *n);
@@ -597,6 +601,7 @@ public:
 	static CGAlgorithms *cga;
 //	static LineIntersector *li;
 	static void linkResultDirectedEdges(vector<Node*>* allNodes); // throw(TopologyException *);
+	// nodeFact will be deleted by ~NodeMap
 	PlanarGraph(NodeFactory *nodeFact);
 	PlanarGraph();
 	virtual ~PlanarGraph();
