@@ -7,6 +7,10 @@ Quad::Quad(Quad* newParent,Envelope *newEnv) {
 	centre.x=(env->getMinX()+env->getMaxX())/2;
 	centre.y=(env->getMinY()+env->getMaxY())/2;
 	items=new vector<void*>();
+	subquad[0]=NULL;
+	subquad[1]=NULL;
+	subquad[2]=NULL;
+	subquad[3]=NULL;
 }
 
 Quad::~Quad() {

@@ -58,6 +58,8 @@ private:
 	Coordinate repeatedCoord;
 	bool hasRepeatedPoint(Polygon *p);
 	bool hasRepeatedPoint(GeometryCollection *gc);
+	bool hasRepeatedPoint(MultiPolygon *gc);
+	bool hasRepeatedPoint(MultiLineString *gc);
 };
 
 class ConsistentAreaTester {

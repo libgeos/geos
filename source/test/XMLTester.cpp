@@ -106,7 +106,11 @@ int main(int argC, char* argV[]) {
 			IntersectionMatrix *im=gA->relate(gB);
 			if (out & TEST_RESULT)
 				cout << "\tResult: matrix='" << im->toString() << "' result=" << (im->matches(opSig)?"true":"false") <<endl;
-			if (!im->matches(opSig)) failed++; else succeeded++;
+			if (!im->matches(opSig)) {
+				failed++;
+			} else {
+				succeeded++;
+			}
 		} else if (opName=="isValid") {
 			string result;
 			if (gA->isValid()) {

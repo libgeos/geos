@@ -25,12 +25,12 @@ void MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings() {
 	} while (de!=startDe);
 }
 
-vector<EdgeRing*>* MaximalEdgeRing::buildMinimalRings() {
-	vector<EdgeRing*> *minEdgeRings=new vector<EdgeRing*>;
+vector<MinimalEdgeRing*>* MaximalEdgeRing::buildMinimalRings() {
+	vector<MinimalEdgeRing*> *minEdgeRings=new vector<MinimalEdgeRing*>;
 	DirectedEdge *de=startDe;
 	do {
 		if(de->getMinEdgeRing()==NULL) {
-			EdgeRing *minEr=new MinimalEdgeRing(de,geometryFactory,cga);
+			MinimalEdgeRing *minEr=new MinimalEdgeRing(de,geometryFactory,cga);
 			minEdgeRings->push_back(minEr);
 		}
 		de=de->getNext();

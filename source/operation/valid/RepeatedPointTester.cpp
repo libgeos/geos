@@ -14,6 +14,8 @@ bool RepeatedPointTester::hasRepeatedPoint(Geometry *g){
 	// LineString also handles LinearRings
 	else if (typeid(*g)==typeid(LineString)) return hasRepeatedPoint(((LineString*)g)->getCoordinates());
 	else if (typeid(*g)==typeid(Polygon)) return hasRepeatedPoint((Polygon*)g);
+	else if (typeid(*g)==typeid(MultiPolygon)) return hasRepeatedPoint((MultiPolygon*)g);
+	else if (typeid(*g)==typeid(MultiLineString)) return hasRepeatedPoint((MultiLineString*)g);
 	else if (typeid(*g)==typeid(GeometryCollection)) return hasRepeatedPoint((GeometryCollection*)g);
 	else  throw "UnsupportedOperationException"+string(typeid(*g).name());
 }
@@ -37,6 +39,22 @@ bool RepeatedPointTester::hasRepeatedPoint(Polygon *p){
 }
 
 bool RepeatedPointTester::hasRepeatedPoint(GeometryCollection *gc){
+	for(int i = 0; i<gc->getNumGeometries(); i++) {
+		Geometry *g=gc->getGeometryN(i);
+		if (hasRepeatedPoint(g)) return true;
+	}
+	return false;
+}
+
+bool RepeatedPointTester::hasRepeatedPoint(MultiPolygon *gc){
+	for(int i = 0; i<gc->getNumGeometries(); i++) {
+		Geometry *g=gc->getGeometryN(i);
+		if (hasRepeatedPoint(g)) return true;
+	}
+	return false;
+}
+
+bool RepeatedPointTester::hasRepeatedPoint(MultiLineString *gc){
 	for(int i = 0; i<gc->getNumGeometries(); i++) {
 		Geometry *g=gc->getGeometryN(i);
 		if (hasRepeatedPoint(g)) return true;

@@ -8,7 +8,7 @@ LineIntersector* PlanarGraph::li=new RobustLineIntersector();
  * This allows clients to link only a subset of nodes in the graph, for
  * efficiency (because they know that only a subset is of interest).
  */
-void linkResultDirectedEdges(vector<Node*>* allNodes){
+void linkResultDirectedEdges(vector<Node*> *allNodes){
 	for(vector<Node*>::iterator nodeit=allNodes->begin();nodeit<allNodes->end();nodeit++) {
 		Node *node=*nodeit;
 		((DirectedEdgeStar*) node->getEdges())->linkResultDirectedEdges();

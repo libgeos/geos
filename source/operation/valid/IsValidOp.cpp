@@ -169,14 +169,14 @@ void IsValidOp::checkNoRepeatedPoint(Geometry *g) {
 void IsValidOp::checkHolesInShell(Polygon *p) {
 	LinearRing *shell=(LinearRing*) p->getExteriorRing();
 	CoordinateList *shellPts=shell->getCoordinates();
-	//PointInRing pir = new SimplePointInRing(shell);
-	//PointInRing pir = new IntTreePointInRing(shell);
+	//PointInRing pir=new SimplePointInRing(shell);
+	//PointInRing pir=new IntTreePointInRing(shell);
 	PointInRing *pir=new MCPointInRing(shell);
 	for(int i=0;i<p->getNumInteriorRing();i++) {
 		LinearRing *hole=(LinearRing*) p->getInteriorRingN(i);
 		Coordinate& holePt=findPtNotNode(hole->getCoordinates(),shell,(*arg)[0]);
-		Assert::isTrue(!(holePt==Coordinate::getNull()), "Unable to find a hole point not a vertex of the shell");
-		//OLD Coordinate holePt = hole.getCoordinateN(0);
+//		Assert::isTrue(!(holePt==Coordinate::getNull()), "Unable to find a hole point not a vertex of the shell");
+		//OLD Coordinate holePt=hole.getCoordinateN(0);
 		bool outside=!pir->isInside(holePt);
 		if (outside) {
 			validErr=new TopologyValidationError(
@@ -220,8 +220,8 @@ void IsValidOp::OLDcheckHolesInShell(Polygon *p) {
 */
 void IsValidOp::checkHolesNotNested(Polygon *p) {
 	QuadtreeNestedRingTester *nestedTester=new QuadtreeNestedRingTester((*arg)[0]);
-	//SimpleNestedRingTester nestedTester = new SimpleNestedRingTester(arg[0]);
-	//SweeplineNestedRingTester nestedTester = new SweeplineNestedRingTester(arg[0]);
+	//SimpleNestedRingTester nestedTester=new SimpleNestedRingTester(arg[0]);
+	//SweeplineNestedRingTester nestedTester=new SweeplineNestedRingTester(arg[0]);
 	for(int i=0;i<p->getNumInteriorRing();i++) {
 		LinearRing *innerHole=(LinearRing*) p->getInteriorRingN(i);
 		nestedTester->add(innerHole);

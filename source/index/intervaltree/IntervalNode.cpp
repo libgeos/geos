@@ -7,6 +7,8 @@ IntervalNode::IntervalNode(IntervalNode* newParent,double newMin,double newMax){
 	max=newMax;
 	centre=(min+max)/2;
 	items=new vector<void*>();
+	subinterval[0]=NULL;
+	subinterval[1]=NULL;
 }
 
 IntervalNode::~IntervalNode(){

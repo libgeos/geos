@@ -5,6 +5,7 @@
 #include "geosAlgorithm.h"
 #include "operation.h"
 #include "opRelate.h"
+#include "opValid.h"
 #include "io.h"
 
 
@@ -115,11 +116,9 @@ void Geometry::setSRID(int newSRID) {SRID=newSRID;}
 
 PrecisionModel* Geometry::getPrecisionModel() {return precisionModel;}
 
-//!!! External Dependency
 bool Geometry::isValid() {
-//	IsValidOp isValidOp(this);
-//	return isValidOp.isValid();
-	return false;
+	IsValidOp isValidOp(this);
+	return isValidOp.isValid();
 }
 
 Geometry* Geometry::getEnvelope() {
