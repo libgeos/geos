@@ -17,14 +17,17 @@ bool IsSimpleOp::isSimple(MultiLineString *geom){
 */
 bool IsSimpleOp::isSimple(MultiPoint *mp) {
 	if (mp->isEmpty()) return true;
-	set<Coordinate,CoordLT> points;
+	set<Coordinate,CoordLT> *points=new set<Coordinate,CoordLT>();
 	for(int i=0;i<mp->getNumGeometries();i++) {
 		Point *pt=(Point*) mp->getGeometryN(i);
-		Coordinate p(*pt->getCoordinate());
-		if (points.find(p)!=points.end())
+		Coordinate *p=pt->getCoordinate();
+		if (points->find(*p)!=points->end()) {
+			delete points;
 			return false;
-		points.insert(p);
+		}
+		points->insert(*p);
 	}
+	delete points;
 	return true;
 }
 
@@ -81,9 +84,12 @@ bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
 	map<Coordinate,EndpointInfo*,CoordLT>::iterator it=endPoints->begin();
 	for (;it!=endPoints->end();it++) {
 		EndpointInfo *eiInfo=it->second;
-		if (eiInfo->isClosed && eiInfo->degree!=2)
-			return true;
+		if (eiInfo->isClosed && eiInfo->degree!=2) {
+			delete endPoints;
+            return true;
+		}
 	}
+	delete endPoints;
 	return false;
 }
 

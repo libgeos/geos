@@ -5,8 +5,8 @@ RelateNodeGraph::RelateNodeGraph() {
 	nodes=new NodeMap(new RelateNodeFactory());
 }
 
-map<Coordinate,Node*,CoordLT> RelateNodeGraph::getNodeMap() {
-	return nodes->nodeMap;
+map<Coordinate,Node*,CoordLT>* RelateNodeGraph::getNodeMap() {
+	return &(nodes->nodeMap);
 }
 
 void RelateNodeGraph::build(GeometryGraph *geomGraph) {
@@ -23,6 +23,7 @@ void RelateNodeGraph::build(GeometryGraph *geomGraph) {
 	EdgeEndBuilder *eeBuilder=new EdgeEndBuilder();
 	vector<EdgeEnd*> *eeList=eeBuilder->computeEdgeEnds(geomGraph->getEdges());
 	insertEdgeEnds(eeList);
+	delete eeBuilder;
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
 }
@@ -41,8 +42,8 @@ void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int arg
 	for(vector<Edge*>::iterator edgeIt=edges->begin();edgeIt<edges->end();edgeIt++) {
 		Edge *e=*edgeIt;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> eiL(e->getEdgeIntersectionList()->list);
-		for(vector<EdgeIntersection*>::iterator eiIt=eiL.begin();eiIt<eiL.end();eiIt++) {
+		vector<EdgeIntersection*> *eiL=new vector<EdgeIntersection*>(e->getEdgeIntersectionList()->list);
+		for(vector<EdgeIntersection*>::iterator eiIt=eiL->begin();eiIt<eiL->end();eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
 			if (eLoc==Location::BOUNDARY)
@@ -53,6 +54,7 @@ void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int arg
 			}
 			//Debug.println(n);
 		}
+		delete eiL;
 	}
 }
 /**
@@ -65,14 +67,15 @@ void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int arg
 * in the interior due to the Boundary Determination Rule)
 */
 void RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex) {
-	map<Coordinate,Node*,CoordLT> nMap(geomGraph->getNodeMap()->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=new map<Coordinate,Node*,CoordLT>(geomGraph->getNodeMap()->nodeMap);
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
+	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes->addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
 		//node.print(System.out);
 	}
+	delete nMap;
 }
 
 void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){

@@ -29,15 +29,16 @@ protected:
 class EdgeEndBundle: public EdgeEnd {
 public:
 	EdgeEndBundle(EdgeEnd *e);
+	~EdgeEndBundle();
 	Label *getLabel();
 //Iterator iterator() //Not needed
-	vector<EdgeEnd*> getEdgeEnds();
+	vector<EdgeEnd*>* getEdgeEnds();
 	void insert(EdgeEnd *e);
 	void computeLabel() ; 
 	void updateIM(IntersectionMatrix *im);
 	string print();
 protected:
-	vector<EdgeEnd*> edgeEnds;
+	vector<EdgeEnd*> *edgeEnds;
 	void computeLabelOn(int geomIndex);
 	void computeLabelSides(int geomIndex);
 	void computeLabelSide(int geomIndex,int side);
@@ -59,7 +60,7 @@ class RelateNodeGraph {
 public:
 	RelateNodeGraph();
 //	Iterator getNodeIterator();
-	map<Coordinate,Node*,CoordLT> getNodeMap();
+	map<Coordinate,Node*,CoordLT>* getNodeMap();
 	void build(GeometryGraph *geomGraph);
 	void computeIntersectionNodes(GeometryGraph *geomGraph,int argIndex);
 	void copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex);
@@ -72,6 +73,7 @@ class RelateComputer {
 public:
 	static const LineIntersector* li;
 	RelateComputer();
+	~RelateComputer();
 	RelateComputer(vector<GeometryGraph*> *newArg);
 	Coordinate getInvalidPoint();
 	bool isNodeConsistentArea();
@@ -83,7 +85,7 @@ private:
 	NodeMap *nodes;
 	// this intersection matrix will hold the results compute for the relate
 	IntersectionMatrix *im;
-	vector<Edge*> isolatedEdges;
+	vector<Edge*> *isolatedEdges;
 	// the intersection point found (if any)
 	Coordinate invalidPoint;
 	void insertEdgeEnds(vector<EdgeEnd*> *ee);
@@ -110,6 +112,7 @@ class RelateOp: public GeometryGraphOperation {
 public:
 	static IntersectionMatrix* relate(Geometry *a,Geometry *b);
 	RelateOp(Geometry *g0,Geometry *g1);
+	~RelateOp();
 	IntersectionMatrix* getIntersectionMatrix();
 private:
 	RelateComputer *relateComp;

@@ -10,6 +10,10 @@ RelateOp::RelateOp(Geometry *g0,Geometry *g1):GeometryGraphOperation(g0,g1) {
 	relateComp=new RelateComputer(arg);
 }
 
+RelateOp::~RelateOp() {
+	delete relateComp;
+}
+
 IntersectionMatrix* RelateOp::getIntersectionMatrix() {
 	return relateComp->computeIM();
 }

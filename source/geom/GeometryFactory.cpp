@@ -99,7 +99,7 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 	if (isHeterogeneous) {
 		return createGeometryCollection(geoms);
 	}
-	Geometry *geom0=(*geoms)[i];
+	Geometry *geom0=(*geoms)[0];
 	if (isCollection) {
 		if (typeid(*geom0)==typeid(Polygon)) {
 			return createMultiPolygon(geoms);

@@ -3,7 +3,12 @@
 
 EdgeEndBundle::EdgeEndBundle(EdgeEnd *e): EdgeEnd(e->getEdge(),e->getCoordinate(),
 										  e->getDirectedCoordinate(),new Label(*(e->getLabel()))) {
+	edgeEnds=new vector<EdgeEnd*>();
 	insert(e);
+}
+
+EdgeEndBundle::~EdgeEndBundle(){
+	delete edgeEnds;
 }
 
 Label* EdgeEndBundle::getLabel(){
@@ -13,14 +18,14 @@ Label* EdgeEndBundle::getLabel(){
 //Not needed
 //public Iterator iterator() { return edgeEnds.iterator(); }
 
-vector<EdgeEnd*> EdgeEndBundle::getEdgeEnds() {
+vector<EdgeEnd*>* EdgeEndBundle::getEdgeEnds() {
 	return edgeEnds;
 }
 
 void EdgeEndBundle::insert(EdgeEnd *e){
 	// Assert: start point is the same
 	// Assert: direction is the same
-	edgeEnds.push_back(e);
+	edgeEnds->push_back(e);
 }
   
 
@@ -33,7 +38,7 @@ void EdgeEndBundle::computeLabel() {
 	// create the label.  If any of the edges belong to areas,
 	// the label must be an area label
 	bool isArea=false;
-	for(vector<EdgeEnd*>::iterator it=edgeEnds.begin();it<edgeEnds.end();it++) {
+	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
 		if (e->getLabel()->isArea()) isArea=true;
 	}
@@ -75,7 +80,7 @@ void EdgeEndBundle::computeLabelOn(int geomIndex) {
 	int boundaryCount=0;
 	bool foundInterior=false;
 
-	for(vector<EdgeEnd*>::iterator it=edgeEnds.begin();it<edgeEnds.end();it++) {
+	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
 		int loc=e->getLabel()->getLocation(geomIndex);
 		if (loc==Location::BOUNDARY) boundaryCount++;
@@ -113,7 +118,7 @@ void EdgeEndBundle::computeLabelSides(int geomIndex) {
 *  results in the summary label having the Geometry interior on <b>both</b> sides.
 */
 void EdgeEndBundle::computeLabelSide(int geomIndex, int side) {
-	for(vector<EdgeEnd*>::iterator it=edgeEnds.begin();it<edgeEnds.end();it++) {
+	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
 		if (e->getLabel()->isArea()) {
 			int loc=e->getLabel()->getLocation(geomIndex,side);
@@ -136,7 +141,7 @@ void EdgeEndBundle::updateIM(IntersectionMatrix *im) {
 
 string EdgeEndBundle::print() {
 	string out="EdgeEndBundle--> Label: "+label->toString()+"\n";
-	for(vector<EdgeEnd*>::iterator it=edgeEnds.begin();it<edgeEnds.end();it++) {
+	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
 		out+=e->print();
 		out+="\n";
