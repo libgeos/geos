@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.3  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -151,7 +155,7 @@ public:
 	RelateNodeGraph();
 	virtual ~RelateNodeGraph();
 //	Iterator getNodeIterator();
-	map<Coordinate,Node*,CoordLT>* getNodeMap();
+	map<Coordinate*,Node*,CoordLT> &getNodeMap();
 	void build(GeometryGraph *geomGraph);
 	void computeIntersectionNodes(GeometryGraph *geomGraph,int argIndex);
 	void copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex);

@@ -55,51 +55,51 @@ int CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,con
 * @param ring assumed to have first point identical to last point
 * @return <code>true</code> if p is inside ring
 */
-bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring) {
-	int i;
-	int i1;       // point index; i1 = i-1
+bool
+CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
+{
 	double xInt;  // x intersection of segment with ray
 	int crossings = 0;  // number of segment/ray crossings
 	double x1;    // translated coordinates
 	double y1;
 	double x2;
 	double y2;
-	int nPts=ring->getSize();
+
 	/*
-	*  For each segment l = (i-1, i), see if it crosses ray from test point in positive x direction.
-	*/
-	for(i=1;i<nPts;i++) {
-		i1 = i - 1;
-		Coordinate p1=ring->getAt(i);
-		Coordinate p2=ring->getAt(i1);
+	 * For each segment l = (i-1, i), see if it crosses ray from
+	 * test point in positive x direction.
+	 */
+	int nPts=ring->getSize();
+	for(int i=1; i<nPts; i++)
+	{
+		const Coordinate &p1=ring->getAt(i);
+		const Coordinate &p2=ring->getAt(i-1);
 		x1 = p1.x - p.x;
 		y1 = p1.y - p.y;
 		x2 = p2.x - p.x;
 		y2 = p2.y - p.y;
 
 		if (((y1 > 0) && (y2 <= 0)) ||
-			((y2 > 0) && (y1 <= 0))) {
+			((y2 > 0) && (y1 <= 0)))
+		{
 			/*
-			*  segment straddles x axis, so compute intersection.
-			*/
-			xInt = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2) / (y2 - y1);
-			//xsave = xInt;
+			 *  segment straddles x axis, so compute intersection.
+			 */
+			xInt = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2)
+				/ (y2 - y1);
+
 			/*
-			*  crosses ray if strictly positive intersection.
-			*/
-			if (0.0 < xInt) {
-				crossings++;
-			}
+			 *  crosses ray if strictly positive intersection.
+			 */
+			if (0.0 < xInt) crossings++;
 		}
 	}
+
 	/*
-	*  p is inside if number of crossings is odd.
-	*/
-	if ((crossings % 2) == 1) {
-		return true;
-	} else {
-		return false;
-	}
+	 *  p is inside if number of crossings is odd.
+	 */
+	if ((crossings % 2) == 1) return true;
+	return false;
 }
 
 /**
@@ -136,38 +136,44 @@ CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
  * @param ring an array of coordinates forming a ring
  * @return <code>true</code> if the ring is oriented counter-clockwise.
  */
-bool CGAlgorithms::isCCW(const CoordinateSequence* ring) {
+bool
+CGAlgorithms::isCCW(const CoordinateSequence* ring)
+{
 	// # of points without closing endpoint
 	int nPts=ring->getSize()-1;
+
 	// find highest point
-	Coordinate hip=ring->getAt(0);
+	const Coordinate *hip=&ring->getAt(0);
 	int hii=0;
 	for (int i=1;i<=nPts;i++) {
-		Coordinate p=ring->getAt(i);
-		if (p.y > hip.y) {
+		const Coordinate *p=&ring->getAt(i);
+		if (p->y > hip->y) {
 			hip = p;
 			hii = i;
 		}
 	}
+
 	// find distinct point before highest point
 	int iPrev = hii;
 	do {
 		iPrev = iPrev - 1;
 		if (iPrev < 0) iPrev = nPts;
-	} while (ring->getAt(iPrev)==hip && iPrev!=hii);
+	} while (ring->getAt(iPrev)==*hip && iPrev!=hii);
+
 	// find distinct point after highest point
 	int iNext = hii;
 	do {
 		iNext = (iNext + 1) % nPts;
-	} while (ring->getAt(iNext)==hip && iNext != hii);
-	Coordinate prev=ring->getAt(iPrev);
-	Coordinate next=ring->getAt(iNext);
+	} while (ring->getAt(iNext)==*hip && iNext != hii);
+
+	const Coordinate *prev=&ring->getAt(iPrev);
+	const Coordinate *next=&ring->getAt(iNext);
 
 	/*
 	 * this will catch all cases where there are not 3 distinct points,
 	 * including the case where the input array has fewer than 4 elements
 	 */
-	if (prev==hip || next==hip || prev==next)
+	if (*prev==*hip || *next==*hip || *prev==*next)
 	{
 		return false;
 		// MD - don't bother throwing exception,
@@ -175,25 +181,28 @@ bool CGAlgorithms::isCCW(const CoordinateSequence* ring) {
 		//throw new IllegalArgumentException("degenerate ring (does not contain 3 distinct points)");
 	}
 
-	int disc = computeOrientation(prev, hip, next);
+	int disc = computeOrientation(*prev, *hip, *next);
 
 	/**
-	*  If disc is exactly 0, lines are collinear.  There are two possible cases:
-	*  (1) the lines lie along the x axis in opposite directions
-	*  (2) the lines lie on top of one another
-	*
-	*  (1) is handled by checking if next is left of prev ==> CCW
-	*  (2) should never happen, so we're going to ignore it!
-	*  (Might want to assert this)
-	*/
+	 *  If disc is exactly 0, lines are collinear. 
+	 * There are two possible cases:
+	 *  (1) the lines lie along the x axis in opposite directions
+	 *  (2) the lines lie on top of one another
+	 *
+	 *  (1) is handled by checking if next is left of prev ==> CCW
+	 *  (2) should never happen, so we're going to ignore it!
+	 *  (Might want to assert this)
+	 */
 	bool isCCW=false;
+
 	if (disc == 0) {
 		// poly is CCW if prev x is right of next x
-		isCCW = (prev.x > next.x);
+		isCCW = (prev->x > next->x);
 	} else {
 		// if area is positive, points are ordered CCW
 		isCCW = (disc > 0);
 	}
+
 	return isCCW;
 }
 
@@ -370,6 +379,10 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.19  2004/11/20 15:39:57  strk
  * Reduced HEAP allocations.
  *

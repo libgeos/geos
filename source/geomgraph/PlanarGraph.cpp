@@ -106,7 +106,7 @@ PlanarGraph::add(EdgeEnd *e)
 	edgeEndList->push_back(e);
 }
 
-map<Coordinate,Node*,CoordLT>::iterator
+map<Coordinate*,Node*,CoordLT>::iterator
 PlanarGraph::getNodeIterator()
 {
 	return nodes->iterator();
@@ -116,8 +116,8 @@ vector<Node*>*
 PlanarGraph::getNodes()
 {
 	vector<Node*> *values=new vector<Node*>();
-	map<Coordinate,Node*,CoordLT>::iterator it=nodes->nodeMap->begin();
-	while(it!=nodes->nodeMap->end()) {
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodes->nodeMap.begin();
+	while(it!=nodes->nodeMap.end()) {
 		values->push_back(it->second);
 		it++;
 	}
@@ -184,7 +184,8 @@ PlanarGraph::linkResultDirectedEdges()
 #if DEBUG
 	cerr<<"PlanarGraph::linkResultDirectedEdges called"<<endl;
 #endif
-	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap->end();nodeit++) {
+	map<Coordinate*,Node*,CoordLT>::iterator nodeit=nodes->nodeMap.begin();
+	for (;nodeit!=nodes->nodeMap.end();nodeit++) {
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkResultDirectedEdges();
 	}
@@ -201,7 +202,8 @@ PlanarGraph::linkAllDirectedEdges()
 #if DEBUG
 	cerr<<"PlanarGraph::linkAllDirectedEdges called"<<endl;
 #endif
-	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap->end();nodeit++) {
+	map<Coordinate*,Node*,CoordLT>::iterator nodeit=nodes->nodeMap.begin();
+	for (;nodeit!=nodes->nodeMap.end();nodeit++) {
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkAllDirectedEdges();
 	}
@@ -311,6 +313,10 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.11  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

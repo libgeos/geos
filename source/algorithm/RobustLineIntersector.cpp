@@ -388,13 +388,13 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 Coordinate*
 RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const
 {
-	Coordinate *n1=new Coordinate(p1);
-	Coordinate *n2=new Coordinate(p2);
-	Coordinate *n3=new Coordinate(q1);
-	Coordinate *n4=new Coordinate(q2);
-	Coordinate *normPt=new Coordinate();
-	normalize(n1, n2, n3, n4, normPt);
-	Coordinate intPt;
+	Coordinate n1=p1;
+	Coordinate n2=p2;
+	Coordinate n3=q1;
+	Coordinate n4=q2;
+	Coordinate normPt;
+	normalize(&n1, &n2, &n3, &n4, &normPt);
+	Coordinate *intPt;
 
 #if DEBUG
 	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2) called:"<<endl;
@@ -403,33 +403,29 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 	cerr<<" q1"<<q1.toString()<<endl;
 	cerr<<" q2"<<q2.toString()<<endl;
 
-	cerr<<" n1"<<n1->toString()<<endl;
-	cerr<<" n2"<<n2->toString()<<endl;
-	cerr<<" n3"<<n3->toString()<<endl;
-	cerr<<" n4"<<n4->toString()<<endl;
+	cerr<<" n1"<<n1.toString()<<endl;
+	cerr<<" n2"<<n2.toString()<<endl;
+	cerr<<" n3"<<n3.toString()<<endl;
+	cerr<<" n4"<<n4.toString()<<endl;
 #endif
 
 	try {
-		Coordinate *h=HCoordinate::intersection(*n1,*n2,*n3,*n4);
-		intPt.setCoordinate(*h);
+		intPt=HCoordinate::intersection(n1,n2,n3,n4);
 #if DEBUG
 		cerr<<" HCoordinate found intersection h:"<<h->toString()<<endl;
 #endif
 
-		delete h;
 	} catch (NotRepresentableException *e) {
+		delete intPt;
 		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
-    }
-	intPt.x+=normPt->x;
-	intPt.y+=normPt->y;
+    	}
+
+	intPt->x+=normPt.x;
+	intPt->y+=normPt.y;
 	if (precisionModel!=NULL) {
-		precisionModel->makePrecise(&intPt);
+		precisionModel->makePrecise(intPt);
 	}
-	delete n1;
-	delete n2;
-	delete n3;
-	delete n4;
-	delete normPt;
+
     /**
      * MD - after fairly extensive testing
      * it appears that the computed intPt always lies in the segment envelopes
@@ -440,14 +436,14 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 #if COMPUTE_Z
 	double ztot = 0;
 	double zvals = 0;
-	double zp = interpolateZ(intPt, p1, p2);
-	double zq = interpolateZ(intPt, q1, q2);
+	double zp = interpolateZ(*intPt, p1, p2);
+	double zq = interpolateZ(*intPt, q1, q2);
 	if ( !ISNAN(zp)) { ztot += zp; zvals++; }
 	if ( !ISNAN(zq)) { ztot += zq; zvals++; }
-	if ( zvals ) intPt.z = ztot/zvals;
+	if ( zvals ) intPt->z = ztot/zvals;
 #endif // COMPUTE_Z
 
-	return new Coordinate(intPt);
+	return intPt;
 }
 
 
@@ -506,8 +502,8 @@ RobustLineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x
 bool
 RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 {
-	Envelope *env0=new Envelope(inputLines[0][0], inputLines[0][1]);
-	Envelope *env1=new Envelope(inputLines[1][0], inputLines[1][1]);
+	Envelope *env0=new Envelope(*inputLines[0][0], *inputLines[0][1]);
+	Envelope *env1=new Envelope(*inputLines[1][0], *inputLines[1][1]);
 	return env0->contains(intPt) && env1->contains(intPt);
 }
 
@@ -516,6 +512,10 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.30  2005/01/18 17:09:53  strk
  * Fixed interpolateZ call using final intersection point instead of HCoordinate.
  *

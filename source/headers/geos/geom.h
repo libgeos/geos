@@ -405,18 +405,10 @@ public:
 	}
 
 	int Coordinate::compareTo(const Coordinate& other) const {
-		if (x < other.x) {
-		return -1;
-		}
-		if (x > other.x) {
-		return 1;
-		}
-		if (y < other.y) {
-		return -1;
-		}
-		if (y > other.y) {
-		return 1;
-		}
+		if (x < other.x) return -1;
+		if (x > other.x) return 1;
+		if (y < other.y) return -1;
+		if (y > other.y) return 1;
 		return 0;
 	}
 
@@ -2432,6 +2424,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.36  2005/02/04 23:55:23  strk
  * Envelope destructor made non-virtual to give compiler more static
  * binding options.

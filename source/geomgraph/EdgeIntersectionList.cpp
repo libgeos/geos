@@ -29,8 +29,8 @@ EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge)
 
 EdgeIntersectionList::~EdgeIntersectionList()
 {
-//	delete edge;
-	for(int i=0;i<(int)list->size();i++) {
+	unsigned int size=list->size();
+	for(unsigned int i=0; i<size; i++) {
 		delete (*list)[i];
 	}
 	delete list;
@@ -162,9 +162,6 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *e
 	}
 	CoordinateSequence* pts=new DefaultCoordinateSequence(npts);
 	int ipt=0;
-	//Coordinate *c=new Coordinate(ei0->coord);
-	//pts->setAt(*c,ipt++);
-	//delete c;
 	pts->setAt(ei0->coord,ipt++);
 #if DEBUG
 	cerr<<"    pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
@@ -209,6 +206,10 @@ EdgeIntersectionList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.10  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -88,18 +88,12 @@ LineIntersector::nonRobustComputeEdgeDistance(const Coordinate& p,const Coordina
 	return dist;
 }
 
-LineIntersector::LineIntersector()
+LineIntersector::LineIntersector(): pa(intPt[0]), pb(intPt[1])
 {
 	precisionModel=NULL;
-	Coordinate *c=new Coordinate();
-	intPt[0].setCoordinate(*c);
-	delete c;
-	c=new Coordinate();
-	intPt[1].setCoordinate(*c);
-	delete c;
 	// alias the intersection points for ease of reference
-	pa.setCoordinate(intPt[0]);
-	pb.setCoordinate(intPt[1]);
+	//pa=intPt[0];
+	//pb=intPt[1];
 	result=0;
 }
 
@@ -142,10 +136,10 @@ LineIntersector::isCollinear() const
 void
 LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4)
 {
-	inputLines[0][0]=p1;
-	inputLines[0][1]=p2;
-	inputLines[1][0]=p3;
-	inputLines[1][1]=p4;
+	inputLines[0][0]=&p1;
+	inputLines[0][1]=&p2;
+	inputLines[1][0]=&p3;
+	inputLines[1][1]=&p4;
 	result=computeIntersect(p1,p2,p3,p4);
 	//numIntersects++;
 }
@@ -153,10 +147,10 @@ LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,c
 string
 LineIntersector::toString() const
 {
-	string str=inputLines[0][0].toString()+"_"
-			  +inputLines[0][1].toString()+" "
-			  +inputLines[1][0].toString()+"_"
-			  +inputLines[1][1].toString()+" : ";
+	string str=inputLines[0][0]->toString()+"_"
+			  +inputLines[0][1]->toString()+" "
+			  +inputLines[1][0]->toString()+"_"
+			  +inputLines[1][1]->toString()+" : ";
 	if (isEndPoint()) {
 		str+=" endpoint";
 	}
@@ -334,7 +328,9 @@ LineIntersector::computeIntLineIndex(int segmentIndex)
 double
 LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const
 {
-	double dist=computeEdgeDistance(intPt[intIndex],inputLines[segmentIndex][0],inputLines[segmentIndex][1]);
+	double dist=computeEdgeDistance(intPt[intIndex],
+		*inputLines[segmentIndex][0],
+		*inputLines[segmentIndex][1]);
 	return dist;
 }
 
@@ -363,11 +359,13 @@ LineIntersector::isInteriorIntersection()
 bool
 LineIntersector::isInteriorIntersection(int inputLineIndex)
 {
-	for (int i = 0; i < result; i++) {
-		if (!(intPt[i].equals2D(inputLines[inputLineIndex][0])
-            || intPt[i].equals2D(inputLines[inputLineIndex][1]) )) {
-				return true;
-			}
+	for (int i=0; i<result; i++)
+	{
+		if (!(intPt[i].equals2D(*inputLines[inputLineIndex][0])
+            		|| intPt[i].equals2D(*inputLines[inputLineIndex][1])))
+	    	{
+			return true;
+		}
 	}
 	return false;
 }
@@ -443,6 +441,10 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.21  2005/01/18 17:22:03  strk
  * reverted previous change, sign was actually stored in zgap
  *

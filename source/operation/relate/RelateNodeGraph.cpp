@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.10  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -38,7 +42,8 @@ RelateNodeGraph::~RelateNodeGraph() {
 	delete nodes;
 }
 
-map<Coordinate,Node*,CoordLT>* RelateNodeGraph::getNodeMap() {
+map<Coordinate*,Node*,CoordLT>&
+RelateNodeGraph::getNodeMap() {
 	return nodes->nodeMap;
 }
 
@@ -101,9 +106,9 @@ void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int arg
 * in the interior due to the Boundary Determination Rule)
 */
 void RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex) {
-	map<Coordinate,Node*,CoordLT> *nMap=geomGraph->getNodeMap()->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
+	map<Coordinate*,Node*,CoordLT> &nMap=geomGraph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes->addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));

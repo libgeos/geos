@@ -41,15 +41,11 @@ SegmentNodeList::~SegmentNodeList()
 	for(it=nodes->begin(); it != nodes->end(); it++) delete *it;
 	delete nodes;
 
-	unsigned int i;
-	for(i=0; i<splitEdges.size(); i++)
-	{
-		delete splitEdges[i];
-	}
-	for(i=0; i<splitCoordLists.size(); i++)
-	{
-		delete splitCoordLists[i];
-	}
+	unsigned int i=0;
+
+	for(; i<splitEdges.size(); i++) delete splitEdges[i];
+
+	for(i=0; i<splitCoordLists.size(); i++) delete splitCoordLists[i];
 }
 
 /**
@@ -147,7 +143,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 {
 	//Debug.print("\ncreateSplitEdge"); Debug.print(ei0); Debug.print(ei1);
 	int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
-	Coordinate lastSegStartPt=edge->getCoordinate(ei1->segmentIndex);
+	const Coordinate &lastSegStartPt=edge->getCoordinate(ei1->segmentIndex);
 	// if the last intersection point is not equal to the its segment start pt,
 	// add it to the points list as well.
 	// (This check is needed because the distance metric is not totally reliable!)
@@ -158,7 +154,6 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 	CoordinateSequence *pts = new DefaultCoordinateSequence(npts); 
 	int ipt = 0;
-	//pts->setAt(Coordinate(*(ei0->coord)),ipt++);
 	pts->setAt(*(ei0->coord), ipt++);
 	for (int i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
 		pts->setAt(edge->getCoordinate(i),ipt++);
@@ -184,6 +179,10 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.13  2005/02/01 14:18:36  strk
  * More profiler labels
  *

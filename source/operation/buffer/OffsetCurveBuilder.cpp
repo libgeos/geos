@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.15  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *
@@ -233,36 +237,31 @@ void OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence *inputP
 	closePts();
 }
 
-void OffsetCurveBuilder::addPt(const Coordinate &pt){
-	Coordinate *bufPt=new Coordinate(pt);
-	precisionModel->makePrecise(bufPt);
+void
+OffsetCurveBuilder::addPt(const Coordinate &pt)
+{
+	Coordinate bufPt=pt;
+	precisionModel->makePrecise(&bufPt);
+
 	// don't add duplicate points
-	Coordinate *lastPt=NULL;
-	if (ptList->getSize()>= 1)
-		lastPt=(Coordinate*)&(ptList->getAt(ptList->getSize()-1));
-	if (lastPt!=NULL && (*bufPt)==(*lastPt))
-	{
-		delete bufPt;
-		return;
-	}
-	ptList->add(*bufPt);
-	delete bufPt;
-	//System.out.println(bufPt);
+	const Coordinate *lastPt=NULL;
+	int last=ptList->getSize()-1;
+	if ( last>=0 && bufPt==ptList->getAt(last) ) return;
+
+	ptList->add(bufPt);
 }
 
 void OffsetCurveBuilder::closePts(){
-	if (ptList->getSize()<1) return;
-	Coordinate startPt=ptList->getAt(0);
-	Coordinate lastPt=ptList->getAt(ptList->getSize()-1);
-	Coordinate last2Pt;
 
-	//Coordinate *startPt=new Coordinate(ptList->getAt(0));
-	//Coordinate *lastPt=(Coordinate*)&(ptList->getAt(ptList->getSize()-1));
-	if (ptList->getSize()>= 2)
-	{
-		last2Pt=ptList->getAt(ptList->getSize()-2);
-	}
-	if ((startPt)==(lastPt)) return;
+	int ptsize=ptList->getSize();
+
+	if (ptsize<1) return;
+
+	const Coordinate &startPt=ptList->getAt(0);
+	const Coordinate &lastPt=ptList->getAt(ptsize-1);
+
+	if (startPt==lastPt) return;
+
 	ptList->add(startPt);
 }
 

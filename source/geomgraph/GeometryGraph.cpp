@@ -297,15 +297,6 @@ GeometryGraph::addLineString(const LineString *line)
 		return;
 	}
 
-	// add the edge for the LineString
-	// line edges do not have locations for their left and right sides
-	//CoordinateSequence *ncr=CoordinateSequenceFactory::internalFactory->createCoordinateSequence();
-	//for(int i=0;i<coord->getSize();i++) {
-		//ncr->add(coord->getAt(i));
-	//}
-	//CoordinateSequence *ncr = coord->clone();
-
-//	Edge *e=new Edge(ncr,new Label(argIndex,Location::INTERIOR));
 	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
 	(*lineEdgeMap)[line]=e;
 	insertEdge(e);
@@ -320,7 +311,6 @@ GeometryGraph::addLineString(const LineString *line)
 	Assert::isTrue(coord->getSize()>= 2,"found LineString with single point");
 	insertBoundaryPoint(argIndex, coord->getAt(0));
 	insertBoundaryPoint(argIndex, coord->getAt(coord->getSize()-1));
-//	delete coord;
 }
 
 /*
@@ -486,6 +476,10 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.10  2004/11/22 11:34:49  strk
  * More debugging lines and comments/indentation cleanups
  *

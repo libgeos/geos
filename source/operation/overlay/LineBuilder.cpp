@@ -61,9 +61,9 @@ void
 LineBuilder::findCoveredLineEdges()
 {
 // first set covered for all L edges at nodes which have A edges too
-	map<Coordinate,Node*,CoordLT> *nodeMap=op->getGraph()->getNodeMap()->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph()->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		//node.print(System.out);
 		((DirectedEdgeStar*)node->getEdges())->findCoveredLineEdges();
@@ -269,6 +269,10 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.18  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

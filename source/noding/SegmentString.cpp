@@ -42,7 +42,6 @@ SegmentString::SegmentString(const CoordinateSequence *newPts, const void* newCo
 
 SegmentString::~SegmentString() {
 	delete eiList;
-	//delete pts;
 }
 
 const void*
@@ -122,7 +121,6 @@ SegmentString::addIntersection(LineIntersector *li, int segmentIndex, int geomIn
 	const Coordinate &intPt=li->getIntersection(intIndex);
 	double dist=li->getEdgeDistance(geomIndex, intIndex);
 	addIntersection((Coordinate&)intPt, segmentIndex, dist);
-	//delete intPt;
 }
 
 /**
@@ -171,6 +169,10 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.12  2005/02/01 14:18:36  strk
  * More profiler labels
  *

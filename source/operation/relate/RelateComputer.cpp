@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.19  2004/08/04 08:26:02  strk
  * comments lift, stack allocation reduced
  *
@@ -213,9 +217,9 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 * in the interior due to the Boundary Determination Rule)
 */
 void RelateComputer::copyNodesAndLabels(int argIndex) {
-	map<Coordinate,Node*,CoordLT> *nMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
+	map<Coordinate*,Node*,CoordLT>&nMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes->addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
@@ -300,9 +304,9 @@ void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
 
 
 void RelateComputer::labelNodeEdges() {
-	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
+	map<Coordinate*,Node*,CoordLT> &nMap=nodes->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		node->getEdges()->computeLabelling(arg);
 		//Debug.print(node.getEdges());
@@ -320,9 +324,9 @@ void RelateComputer::updateIM(IntersectionMatrix *imX) {
 		e->GraphComponent::updateIM(imX);
 		//Debug.println(im);
 	}
-	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
+	map<Coordinate*,Node*,CoordLT> &nMap=nodes->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		node->updateIM(imX);
 		//Debug.println(im);
@@ -379,9 +383,9 @@ void RelateComputer::labelIsolatedEdge(Edge *e,int targetIndex, const Geometry *
 * interior of edges, and in the interior of areas.
 */
 void RelateComputer::labelIsolatedNodes() {
-	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
+	map<Coordinate*,Node*,CoordLT> &nMap=nodes->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *n=nodeIt->second;
 		Label *label=n->getLabel();
 		// isolated nodes should always have at least one geometry in their label

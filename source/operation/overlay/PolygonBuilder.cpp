@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.18  2004/07/27 16:35:47  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -82,9 +86,9 @@ PolygonBuilder::add(PlanarGraph *graph)
 	for(int i=0;i<(int)ee->size();i++) {
 		dirEdges->push_back((DirectedEdge*)(*ee)[i]);
 	}
-	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		nodes->push_back(node);
 	}

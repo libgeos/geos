@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.3  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *
@@ -67,7 +71,9 @@ int Quadrant::quadrant(const Coordinate& p0, const Coordinate& p1) {
 	double dx=p1.x-p0.x;
 	double dy=p1.y-p0.y;
 	if (dx==0.0 && dy==0.0)
+	{
 		throw new IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
+	}
 	return quadrant(dx, dy);
 }
 

@@ -188,9 +188,9 @@ OverlayOp::replaceCollapsedEdges()
 void
 OverlayOp::copyPoints(int argIndex)
 {
-	map<Coordinate,Node*,CoordLT> *nodeMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT>&nodeMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *graphNode=it->second;
 		Node *newNode=graph->addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
@@ -208,18 +208,18 @@ void
 OverlayOp::computeLabelling()
 	//throw(TopologyException *) // and what else ?
 {
-	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
 
 #if DEBUG
 	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList->print()<<endl;
 #endif
 
 #if DEBUG
-	cerr<<"OverlayOp::computeLabelling() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+	cerr<<"OverlayOp::computeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 #if DEBUG
 		cerr<<"     "<<node->print()<<" has "<<node->getEdges()->getEdges()->size()<<" edgeEnds"<<endl;
@@ -249,14 +249,14 @@ OverlayOp::computeLabelling()
 void
 OverlayOp::mergeSymLabels()
 {
-	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>&nodeMap=graph->getNodeMap()->nodeMap;
 
 #if DEBUG
 	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
 #endif
 
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
 #if DEBUG
@@ -273,12 +273,12 @@ OverlayOp::updateNodeLabelling()
 	// The label for a node is updated from the edges incident on it
 	// (Note that a node may have already been labelled
 	// because it is a point in one of the input geometries)
-	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
 #if DEBUG
-	cerr<<"OverlayOp::updateNodeLabelling() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+	cerr<<"OverlayOp::updateNodeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		Label *lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
 		node->getLabel()->merge(lbl);
@@ -306,12 +306,12 @@ OverlayOp::updateNodeLabelling()
 void
 OverlayOp::labelIncompleteNodes()
 {
-	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
 #if DEBUG
-	cerr<<"OverlayOp::labelIncompleteNodes() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+	cerr<<"OverlayOp::labelIncompleteNodes() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *n=it->second;
 		Label *label=n->getLabel();
 		if (n->isIsolated()) {
@@ -833,6 +833,10 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.37  2004/12/08 14:31:17  strk
  * elevationMatrix deleted by destructor
  *

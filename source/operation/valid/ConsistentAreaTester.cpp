@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.7  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -65,9 +69,9 @@ bool ConsistentAreaTester::isNodeConsistentArea() {
 * If any are not, return false
 */
 bool ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent() {
-	map<Coordinate,Node*,CoordLT> *nMap=nodeGraph->getNodeMap();
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
+	map<Coordinate*,Node*,CoordLT> &nMap=nodeGraph->getNodeMap();
+	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		if (!node->getEdges()->isAreaLabelsConsistent()) {
 			Coordinate *c=new Coordinate(node->getCoordinate());
@@ -95,9 +99,9 @@ bool ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent() {
 * @return true if this area Geometry is topologically consistent but has two duplicate rings
 */
 bool ConsistentAreaTester::hasDuplicateRings() {
-	map<Coordinate,Node*,CoordLT> *nMap=nodeGraph->getNodeMap();
-	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
+	map<Coordinate*,Node*,CoordLT> &nMap=nodeGraph->getNodeMap();
+	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		vector<EdgeEnd*> *v=node->getEdges()->getEdges();
 		for(int i=0; i<(int)v->size(); i++) {

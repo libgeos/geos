@@ -52,9 +52,9 @@ PointBuilder::collectNodes(int opCode)
 	vector<Node*>* resultNodeList=new vector<Node*>();
 	// add nodes from edge intersections which have not already been
 	// included in the result
-	map<Coordinate,Node*,CoordLT> *nodeMap=op->getGraph()->getNodeMap()->nodeMap;
-	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph()->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		if (!node->isInResult()) {
 			Label *label=node->getLabel();
@@ -93,6 +93,10 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.13  2004/11/17 15:09:08  strk
  * Changed COMPUTE_Z defaults to be more conservative
  *

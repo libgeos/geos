@@ -458,14 +458,17 @@ private:
 };
 
 struct CoordLT {
-	bool operator()(Coordinate s1, Coordinate s2) const {
-		return s1.compareTo(s2)<0;
+	bool operator()(Coordinate *s1, Coordinate *s2) const {
+		return s1->compareTo(*s2)<0;
+	}
+	bool operator()(const Coordinate *s1, const Coordinate *s2) const {
+		return s1->compareTo(*s2)<0;
 	}
 };
 
 class NodeMap{
 public:
-	map<Coordinate,Node*,CoordLT>* nodeMap;
+	map<Coordinate*,Node*,CoordLT>nodeMap;
 	NodeFactory *nodeFact;
 	// newNodeFact will be deleted by ~NodeMap
 	NodeMap(NodeFactory *newNodeFact);
@@ -474,7 +477,8 @@ public:
 	Node* addNode(Node *n);
 	void add(EdgeEnd *e);
 	Node *find(const Coordinate& coord) const;
-	map<Coordinate,Node*,CoordLT>::iterator iterator() const;
+	map<Coordinate*,Node*,CoordLT>::const_iterator iterator() const;
+	map<Coordinate*,Node*,CoordLT>::iterator iterator();
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
 	vector<Node*>* getBoundaryNodes(int geomIndex) const; //returns new obj
@@ -587,7 +591,7 @@ public:
 	virtual vector<EdgeEnd*>* getEdgeEnds();
 	virtual bool isBoundaryNode(int geomIndex,Coordinate& coord);
 	virtual void add(EdgeEnd *e);
-	virtual map<Coordinate,Node*,CoordLT>::iterator getNodeIterator();
+	virtual map<Coordinate*,Node*,CoordLT>::iterator getNodeIterator();
 	virtual vector<Node*>* getNodes();
 	virtual Node* addNode(Node *node);
 	virtual Node* addNode(const Coordinate& coord);
@@ -713,6 +717,10 @@ bool operator==(Edge a,Edge b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.7  2004/11/20 15:46:45  strk
  * Added composing Z management functions and elements for class Node
  *

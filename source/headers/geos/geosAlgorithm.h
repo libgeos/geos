@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.9  2004/11/23 19:53:07  strk
  * Had LineIntersector compute Z by interpolation.
  *
@@ -298,7 +302,7 @@ protected:
 	*/
 	const PrecisionModel *precisionModel;
 	int result;
-	Coordinate inputLines[2][2];
+	const Coordinate *inputLines[2][2];
 	Coordinate intPt[2];
 	/**
 	* The indexes of the endpoints of the intersection lines, in order along
@@ -306,8 +310,8 @@ protected:
 	*/
 	int intLineIndex[2][2];
 	bool isProperVar;
-	Coordinate pa;
-	Coordinate pb;
+	Coordinate &pa;
+	Coordinate &pb;
 	virtual bool isCollinear() const;
 	virtual int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)=0;
 	virtual bool isEndPoint() const;

@@ -260,7 +260,7 @@ void IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph) {
 * If any occur more than once, that must be a self-intersection.
 */
 void IsValidOp::checkSelfIntersectingRing(EdgeIntersectionList *eiList) {
-	set<Coordinate,CoordLT> *nodeSet=new set<Coordinate,CoordLT>();
+	set<Coordinate*,CoordLT>nodeSet;
 	bool isFirst=true;
 	vector<EdgeIntersection*> *l=eiList->list;
 	for(int i=0;i<(int)l->size();i++) {
@@ -269,17 +269,15 @@ void IsValidOp::checkSelfIntersectingRing(EdgeIntersectionList *eiList) {
 			isFirst=false;
 			continue;
 		}
-		if (nodeSet->find(ei->coord)!=nodeSet->end()) {
+		if (nodeSet.find(&ei->coord)!=nodeSet.end()) {
 			validErr=new TopologyValidationError(
 				TopologyValidationError::RING_SELF_INTERSECTION,
 				ei->coord);
-			delete nodeSet;
 			return;
 		} else {
-			nodeSet->insert(ei->coord);
+			nodeSet.insert(&ei->coord);
 		}
 	}
-	delete nodeSet;
 }
 
 /* NO LONGER NEEDED AS OF JTS Ver 1.2
@@ -504,6 +502,10 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.27  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -78,7 +78,7 @@ MCQuadtreeNoder::intersectChains()
 	SegmentOverlapAction overlapAction(segInt);
 
 	unsigned int chainsize=chains->size();
-	for (unsigned int i=0; i<chainsize;i++) {
+	for (unsigned int i=0; i<chainsize; i++) {
 		indexMonotoneChain *queryChain=(*chains)[i];
 #if PROFILE
 		queryprof->start();
@@ -153,6 +153,10 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.16  2005/02/01 16:09:46  strk
  * more profiling labels
  *

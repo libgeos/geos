@@ -36,10 +36,11 @@ MonotoneChainBuilder::getChains(CoordinateSequence *pts, void* context)
 {
 	vector<indexMonotoneChain*> *mcList=new vector<indexMonotoneChain*>();
 	vector<int> *startIndex=getChainStartIndices(pts);
-	for(int i=0;i<(int)startIndex->size()-1;i++)
+	unsigned int n=startIndex->size()-1;
+	for(unsigned int i=0; i<n; i++)
 	{
 		indexMonotoneChain *mc=new indexMonotoneChain(pts,
-			(*startIndex)[i], (*startIndex)[i + 1], context);
+			(*startIndex)[i], (*startIndex)[i+1], context);
 		mcList->push_back(mc);
 	}
 	delete startIndex;
@@ -60,11 +61,13 @@ MonotoneChainBuilder::getChainStartIndices(CoordinateSequence *pts)
 	int start=0;
 	vector<int> *startIndexList=new vector<int>();
 	startIndexList->push_back(start);
+	unsigned int n=pts->getSize()-1;
 	do {
 		int last=findChainEnd(pts, start);
 		startIndexList->push_back(last);
 		start=last;
-	} while(start<pts->getSize()-1);
+	} while(start<n);
+
 	// copy list to an array of ints, for efficiency
 	//int[] startIndex = toIntArray(startIndexList);
 	return startIndexList;
@@ -80,7 +83,8 @@ MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
 	int last=start+1;
-	while (last<pts->getSize())
+	unsigned int npts=pts->getSize();
+	while (last<npts)
 	{
 		// compute quadrant for next possible segment in chain
 		int quad=Quadrant::quadrant(pts->getAt(last-1),pts->getAt(last));
@@ -97,6 +101,10 @@ MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.12  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -81,7 +81,7 @@ public:
 private:
 	bool hasNonEndpointIntersection(GeometryGraph *graph);
 	bool hasClosedEndpointIntersection(GeometryGraph *graph);
-	void addEndpoint(map<Coordinate,EndpointInfo*,CoordLT> *endPoints, const Coordinate& p,bool isClosed);
+	void addEndpoint(map<const Coordinate*,EndpointInfo*,CoordLT>&endPoints, const Coordinate *p,bool isClosed);
 };
 
 } // namespace geos
@@ -90,6 +90,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
  * Revision 1.3  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.
