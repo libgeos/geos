@@ -1,0 +1,9 @@
+1.4.0
+
+	- Added geos.h for quick inclusion
+
+	- Multi geometry classes costructors copy given arguments
+
+	- SegmentString constructor now copies given CoordinateList
+
+	- Added geos_version.h with version numbers and string defines
