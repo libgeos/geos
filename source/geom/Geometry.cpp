@@ -13,7 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.53  2004/07/01 17:34:07  strk
+ * GeometryFactory argument in Geometry constructor reverted
+ * to its copy-and-destroy semantic.
+ *
  * Revision 1.52  2004/07/01 14:12:44  strk
+ *
  * Geometry constructors come now in two flavors:
  * 	- deep-copy args (pass-by-reference)
  * 	- take-ownership of args (pass-by-pointer)
@@ -99,22 +104,22 @@ namespace geos {
 GeometryComponentFilter Geometry::geometryChangedFilter;
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
-Geometry::Geometry(const GeometryFactory *newFactory) {
-	factory=newFactory;
+Geometry::Geometry(const GeometryFactory *fromFactory) {
+	factory=new GeometryFactory(*fromFactory);
 	SRID=factory->getSRID();
 	envelope=new Envelope();
 	userData=NULL;
 }
 
 Geometry::Geometry() {
-	factory=INTERNAL_GEOMETRY_FACTORY; 
+	factory=new GeometryFactory();
 	SRID=0;
 	envelope=new Envelope();
 	userData=NULL;
 }
 
 Geometry::Geometry(const Geometry &geom) {
-	factory=geom.factory;
+	factory=new GeometryFactory(*(geom.factory));
 	envelope=new Envelope(*(geom.envelope));
 	SRID=geom.getSRID();
 	userData=NULL;
@@ -780,7 +785,7 @@ double Geometry::getLength() const {
 
 
 Geometry::~Geometry(){
-	//delete factory;
+	delete factory;
 	delete envelope;
 	//delete userData; /* TODO: make this a Template type (not void*) */
 }
