@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2003/11/12 16:14:56  strk
+ * Added some more throw specifications and cleanup on exception (leaks removed).
+ *
  * Revision 1.10  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -49,7 +52,7 @@ public:
 		DIFFERENCE,
 		SYMDIFFERENCE
 	};
-	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode);
+	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode) throw(TopologyException *);
 	static bool isResultOfOp(Label *label,int opCode);
 	/**
 	* This method will handle arguments of Location.NULL correctly
@@ -59,7 +62,7 @@ public:
 	static bool isResultOfOp(int loc0,int loc1,int opCode);
 	OverlayOp(const Geometry *g0, const Geometry *g1);
 	virtual ~OverlayOp();
-	Geometry* getResultGeometry(int funcCode);
+	Geometry* getResultGeometry(int funcCode) throw(TopologyException *);
 	PlanarGraph* getGraph();
 	/**
 	* This method is used to decide if a point node should be included in the result or not.
@@ -95,7 +98,7 @@ private:
 	vector<Polygon*> *resultPolyList;
 	vector<LineString*> *resultLineList;
 	vector<Point*> *resultPointList;
-	void computeOverlay(int opCode);
+	void computeOverlay(int opCode) throw(TopologyException *);
 	void insertUniqueEdges(vector<Edge*> *edges);
 	/**
 	* If either of the GeometryLocations for the existing label is
@@ -138,7 +141,7 @@ private:
 	* only if they
 	* are incident on a node which has edges for both Geometries
 	*/
-	void computeLabelling();
+	void computeLabelling() throw(TopologyException *);
 	/**
 	* For nodes which have edges from only one Geometry incident on them,
 	* the previous step will have left their dirEdges with no labelling for the other

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2003/11/12 16:14:56  strk
+ * Added some more throw specifications and cleanup on exception (leaks removed).
+ *
  * Revision 1.10  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -27,9 +30,21 @@
 
 namespace geos {
 
-Geometry* OverlayOp::overlayOp(const Geometry *geom0,const Geometry *geom1,int opCode) {
-	OverlayOp *gov=new OverlayOp(geom0,geom1);
-	Geometry* geomOv=gov->getResultGeometry(opCode);
+Geometry*
+OverlayOp::overlayOp(const Geometry *geom0,const Geometry *geom1,int opCode)
+	throw(TopologyException *)
+{
+	OverlayOp *gov;
+	Geometry* geomOv;
+
+	gov=new OverlayOp(geom0,geom1);
+	try {
+		// can throw a TopologyException *
+		geomOv=gov->getResultGeometry(opCode);
+	} catch (...) {
+		delete gov;
+		throw;
+	}
 	delete gov;
 	return geomOv;
 }
@@ -78,24 +93,36 @@ OverlayOp::~OverlayOp() {
 	delete graph;
 	delete geomFact;
 	delete edgeList;
-    int i;
-	for( i=0;i<(int)resultPolyList->size();i++) {
-		delete (*resultPolyList)[i];
+	int i;
+	if ( resultPolyList )
+	{
+		for( i=0;i<(int)resultPolyList->size();i++) {
+			delete (*resultPolyList)[i];
+		}
+		delete resultPolyList;
 	}
-	delete resultPolyList;
-	for(i=0;i<(int)resultLineList->size();i++) {
-		delete (*resultLineList)[i];
+	if ( resultLineList )
+	{
+		for(i=0;i<(int)resultLineList->size();i++) {
+			delete (*resultLineList)[i];
+		}
+		delete resultLineList;
 	}
-	delete resultLineList;
-	for(int i=0;i<(int)resultPointList->size();i++) {
-		delete (*resultPointList)[i];
+	if ( resultPointList )
+	{
+		for(int i=0;i<(int)resultPointList->size();i++) {
+			delete (*resultPointList)[i];
+		}
+		delete resultPointList;
 	}
-	delete resultPointList;
 	delete ptLocator;
 }
 
-Geometry* OverlayOp::getResultGeometry(int funcCode) {
-	computeOverlay(funcCode);
+Geometry*
+OverlayOp::getResultGeometry(int funcCode)
+	throw(TopologyException *)
+{
+	computeOverlay(funcCode); // this can throw TopologyException *
 	return resultGeom;
 }
 
@@ -164,7 +191,9 @@ void OverlayOp::copyPoints(int argIndex) {
 * only if they
 * are incident on a node which has edges for both Geometries
 */
-void OverlayOp::computeLabelling() {
+void OverlayOp::computeLabelling()
+	throw(TopologyException *) // and what else ?
+{
 	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
@@ -378,13 +407,17 @@ Geometry* OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 	return g;
 }
 
-void OverlayOp::computeOverlay(int opCode) {
+void OverlayOp::computeOverlay(int opCode)
+	throw(TopologyException *)
+{
 	// copy points from input Geometries.
 	// This ensures that any Point geometries
 	// in the input are considered for inclusion in the result set
 
 	copyPoints(0);
 	copyPoints(1);
+
+
 	// node the input Geometries
 	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes(li,false);
 	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes(li,false);
@@ -413,11 +446,19 @@ void OverlayOp::computeOverlay(int opCode) {
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
 	graph->addEdges(edgeList);
-	computeLabelling();
+
+	try {
+		// this can throw TopologyException *
+		computeLabelling();
+	} catch (...) {
+		delete baseSplitEdges;
+		throw;
+	}
 	//Debug.printWatch();
 	labelIncompleteNodes();
 	//Debug.printWatch();
 	//nodeMap.print(System.out);
+
 
 	/**
 	* The ordering of building the result Geometries is important.
