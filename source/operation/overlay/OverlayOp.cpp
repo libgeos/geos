@@ -88,10 +88,12 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOpera
 
 	Envelope env(*(g0->getEnvelopeInternal()));
 	env.expandToInclude(g1->getEnvelopeInternal());
+#if USE_ELEVATION_MATRIX
 	elevationMatrix = new ElevationMatrix(env, 3, 3);
 	elevationMatrix->add(g0);
 	elevationMatrix->add(g1);
-#endif
+#endif // USE_ELEVATION_MATRIX
+#endif // COMPUTE_Z
 }
 
 OverlayOp::~OverlayOp()
@@ -822,6 +824,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2004/11/24 18:10:42  strk
+ * Stricter handling of USE_ELEVATION_MATRIX define
+ *
  * Revision 1.32  2004/11/23 19:53:07  strk
  * Had LineIntersector compute Z by interpolation.
  *
