@@ -33,3 +33,4 @@ geos_HEADERS = \
 	profiler.h \
 	timeval.h
 
+nodist_geos_HEADERS = version.h platform.h
