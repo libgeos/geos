@@ -25,7 +25,8 @@ namespace geos {
 //}
 
 static bool yComparator(Boundable *a, Boundable *b){
-	return AbstractSTRtree::compareDoubles(STRtree::centreY((Envelope*)a->getBounds()), STRtree::centreY((Envelope*)b->getBounds()));
+	//return AbstractSTRtree::compareDoubles(STRtree::centreY((Envelope*)a->getBounds()), STRtree::centreY((Envelope*)b->getBounds()));
+	return STRtree::centreY((Envelope*)a->getBounds()) < STRtree::centreY((Envelope*)b->getBounds());
 }
 
 /**
@@ -198,6 +199,10 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2005/02/22 18:21:46  strk
+ * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
+ * construction costs.
+ *
  * Revision 1.21  2005/02/22 15:16:30  strk
  * STRtree::avg() and STRtree::centreY() inlined.
  *

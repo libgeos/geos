@@ -28,7 +28,7 @@ SegmentNodeList::SegmentNodeList(const SegmentString *newEdge)
 	static Profile *prof = profiler->get("SegmentNodeList::SegmentNodeList");
 	prof->start();
 #endif
-	nodes=new set<SegmentNode*,SegmentNodeLT>();
+	//nodes=new set<SegmentNode*,SegmentNodeLT>();
 	edge=newEdge;
 #if PROFILE
 	prof->stop();
@@ -37,15 +37,15 @@ SegmentNodeList::SegmentNodeList(const SegmentString *newEdge)
 
 SegmentNodeList::~SegmentNodeList()
 {
-	set<SegmentNode *, SegmentNodeLT>::iterator it;
-	for(it=nodes->begin(); it != nodes->end(); it++) delete *it;
-	delete nodes;
+	set<SegmentNode *, SegmentNodeLT>::iterator it=nodes.begin();
+	for(; it!=nodes.end(); it++) delete *it;
 
 	unsigned int i=0;
 
 	for(; i<splitEdges.size(); i++) delete splitEdges[i];
 
-	for(i=0; i<splitCoordLists.size(); i++) delete splitCoordLists[i];
+	unsigned int n=splitCoordLists.size();
+	for(i=0; i<n; i++) delete splitCoordLists[i];
 }
 
 /**
@@ -62,8 +62,8 @@ SegmentNodeList::add(Coordinate *intPt, int segmentIndex, double dist)
 #endif
 	SegmentNode *eiNew=new SegmentNode(intPt, segmentIndex, dist);
 
-	set<SegmentNode*,SegmentNodeLT>::iterator it  = nodes->find(eiNew);
-	if ( it != nodes->end() )
+	set<SegmentNode*,SegmentNodeLT>::iterator it  = nodes.find(eiNew);
+	if ( it != nodes.end() )
 	{
 		delete eiNew;
 #if PROFILE
@@ -72,7 +72,7 @@ SegmentNodeList::add(Coordinate *intPt, int segmentIndex, double dist)
 		return *it;
 	}
 
-	nodes->insert(eiNew);
+	nodes.insert(eiNew);
 #if PROFILE
 	prof->stop();
 #endif
@@ -103,11 +103,11 @@ SegmentNodeList::addSplitEdges(vector<SegmentString*> *edgeList)
 	// ensure that the list has entries for the first and last point of the edge
 	addEndpoints();
 
-	set<SegmentNode*,SegmentNodeLT>::iterator it=nodes->begin();
+	set<SegmentNode*,SegmentNodeLT>::iterator it=nodes.begin();
 	// there should always be at least two entries in the list
 	SegmentNode *eiPrev=*it;
 	it++;
-	for(;it!=nodes->end();it++) {
+	for(;it!=nodes.end();it++) {
 		SegmentNode *ei=*it;
 		SegmentString *newEdge=createSplitEdge(eiPrev, ei);
 		edgeList->push_back(newEdge);
@@ -148,17 +148,17 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	// add it to the points list as well.
 	// (This check is needed because the distance metric is not totally reliable!)
 	// The check for point equality is 2D only - Z values are ignored
-	bool useIntPt1=ei1->dist > 0.0 || ! ei1->coord->equals2D(lastSegStartPt);
+	bool useIntPt1=ei1->dist > 0.0 || ! ei1->coord.equals2D(lastSegStartPt);
 	if (! useIntPt1) {
 		npts--;
 	}
 	CoordinateSequence *pts = new DefaultCoordinateSequence(npts); 
 	int ipt = 0;
-	pts->setAt(*(ei0->coord), ipt++);
+	pts->setAt(ei0->coord, ipt++);
 	for (int i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
 		pts->setAt(edge->getCoordinate(i),ipt++);
 	}
-	if (useIntPt1) 	pts->setAt(*(ei1->coord),ipt++);
+	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 	SegmentString *ret = new SegmentString(pts,edge->getContext());
 	splitEdges.push_back(ret);
 	splitCoordLists.push_back(pts);
@@ -167,8 +167,8 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 
 string SegmentNodeList::print(){
 	string out="Intersections:";
-	set<SegmentNode*,SegmentNodeLT>::iterator it=nodes->begin();
-	for(;it!=nodes->end();it++) {
+	set<SegmentNode*,SegmentNodeLT>::iterator it=nodes.begin();
+	for(;it!=nodes.end();it++) {
 		SegmentNode *ei=*it;
 		out.append(ei->print());
 	}
@@ -179,6 +179,10 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/02/22 18:21:46  strk
+ * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
+ * construction costs.
+ *
  * Revision 1.14  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

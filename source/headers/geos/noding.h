@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2005/02/22 18:21:46  strk
+ * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
+ * construction costs.
+ *
  * Revision 1.6  2005/02/22 16:23:28  strk
  * Cached number of points in CoordinateSequence.
  *
@@ -103,15 +107,15 @@ namespace geos {
 
 /*
  * Represents an intersection point between two {@link SegmentString}s.
- *
+ * Final class.
  */
-class SegmentNode {
+/* final */ class SegmentNode {
 public:
-	Coordinate *coord;   // the point of intersection
+	Coordinate coord;   // the point of intersection
 	int segmentIndex;   // the index of the containing line segment in the parent edge
 	double dist;        // the edge distance of this point along the containing line segment
 	SegmentNode(Coordinate *newCoord, int nSegmentIndex, double newDist);
-	virtual ~SegmentNode();
+	//~SegmentNode();
 	/**
 	* @return -1 this EdgeIntersection is located before the argument location
 	* @return 0 this EdgeIntersection is at the argument location
@@ -137,7 +141,7 @@ class SegmentString;
  */
 class SegmentNodeList {
 private:
-	set<SegmentNode*,SegmentNodeLT> *nodes;
+	set<SegmentNode*,SegmentNodeLT>nodes;
 	const SegmentString *edge;  // the parent edge
 	vector<SegmentNode*> *sortedNodes;
 
@@ -172,7 +176,7 @@ public:
 	* returns the set of SegmentNodes
 	*/
 	//replaces iterator()
-	set<SegmentNode*,SegmentNodeLT>* getNodes() { return nodes; }
+	set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodes; }
 
 	/**
 	* Adds entries for the first and last points of the edge to the list
@@ -193,11 +197,13 @@ public:
 
 
 /*
- * Contains a list of consecutive line segments which can be used to node the segments.
+ * Contains a list of consecutive line segments which can be used to node
+ * the segments.
  * The line segments are represented by an array of {@link Coordinate}s.
  *
+ * Final class.
  */
-class SegmentString {
+/* final */ class SegmentString {
 private:
 	SegmentNodeList *eiList;
 	const CoordinateSequence *pts;
@@ -240,6 +246,9 @@ public:
 	void addIntersection(Coordinate& intPt, int segmentIndex);
 	void addIntersection(Coordinate& intPt, int segmentIndex, double dist);
 };
+
+inline const Coordinate&
+SegmentString::getCoordinate(int i) const { return pts->getAt(i); }
 
 /*
  * Computes the intersections between two line segments in {@link SegmentString}s

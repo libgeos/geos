@@ -63,11 +63,11 @@ SegmentString::size() const
 	return npts;
 }
 
-const Coordinate&
-SegmentString::getCoordinate(int i) const
-{
-	return pts->getAt(i);
-}
+//const Coordinate&
+//SegmentString::getCoordinate(int i) const
+//{
+	//return pts->getAt(i);
+//}
 
 CoordinateSequence*
 SegmentString::getCoordinates() const
@@ -171,6 +171,10 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/02/22 18:21:46  strk
+ * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
+ * construction costs.
+ *
  * Revision 1.15  2005/02/22 16:23:28  strk
  * Cached number of points in CoordinateSequence.
  *

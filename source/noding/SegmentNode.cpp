@@ -18,18 +18,18 @@
 
 namespace geos {
 
-SegmentNode::SegmentNode(Coordinate *newCoord, int nSegmentIndex, double newDist)
+SegmentNode::SegmentNode(Coordinate *newCoord, int nSegmentIndex, double newDist): coord(*newCoord), segmentIndex(nSegmentIndex), dist(newDist)
 {
-	//coord=newCoord; 
-	coord=new Coordinate(*newCoord);
-	segmentIndex=nSegmentIndex;
-	dist=newDist;
+	//coord=*newCoord; 
+	//coord=new Coordinate(*newCoord);
+	//segmentIndex=nSegmentIndex;
+	//dist=newDist;
 }
 
-SegmentNode::~SegmentNode()
-{
-	delete coord;
-}
+//SegmentNode::~SegmentNode()
+//{
+	//delete coord;
+//}
 
 /**
  * @return -1 this EdgeIntersection is located before the argument location
@@ -65,7 +65,7 @@ string
 SegmentNode::print()
 {
 	ostringstream s;
-	s<<coord->toString()<<" seg#="<<segmentIndex<<" dist="<<dist;
+	s<<coord.toString()<<" seg#="<<segmentIndex<<" dist="<<dist;
 	return s.str();
 }
 
@@ -73,6 +73,10 @@ SegmentNode::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/02/22 18:21:46  strk
+ * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
+ * construction costs.
+ *
  * Revision 1.6  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *
