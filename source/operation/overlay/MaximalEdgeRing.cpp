@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.8  2003/10/13 17:47:49  strk
+* delete statement removed
+*
+*/
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 
@@ -33,6 +39,9 @@ void MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings() {
 	} while (de!=startDe);
 }
 
+// This function returns a newly allocated vector of
+// pointers to newly allocated MinimalEdgeRing objects.
+//
 vector<MinimalEdgeRing*>* MaximalEdgeRing::buildMinimalRings() {
 	vector<MinimalEdgeRing*> *minEdgeRings=new vector<MinimalEdgeRing*>;
 	DirectedEdge *de=startDe;

@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.9  2003/10/13 17:47:49  strk
+* delete statement removed
+*
+*/
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 #include "../../headers/util.h"
@@ -79,9 +85,9 @@ vector<MaximalEdgeRing*> *PolygonBuilder::buildMaximalEdgeRings(vector<DirectedE
 	return maxEdgeRings;
 }
 
-vector<MaximalEdgeRing*> *PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
-												vector<EdgeRing*> *newShellList,
-												vector<EdgeRing*> *freeHoleList) {
+vector<MaximalEdgeRing*> *
+PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
+	vector<EdgeRing*> *newShellList, vector<EdgeRing*> *freeHoleList) {
 	vector<MaximalEdgeRing*> *edgeRings=new vector<MaximalEdgeRing*>();
 	for(int i=0;i<(int)maxEdgeRings->size();i++) {
 		MaximalEdgeRing *er=(*maxEdgeRings)[i];
@@ -98,9 +104,6 @@ vector<MaximalEdgeRing*> *PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEd
 				freeHoleList->insert(freeHoleList->end(),minEdgeRings->begin(),minEdgeRings->end());
 			}
 			delete er;
-			for(int i=0;i<(int)minEdgeRings->size();i++) {
-				delete (*minEdgeRings)[i];
-			}
 			delete minEdgeRings;
 		} else {
 			edgeRings->push_back(er);
@@ -127,6 +130,7 @@ EdgeRing* PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings) {
 		if (!er->isHole()) {
 			shell=er;
 			shellCount++;
+			// Should MinimalEdgeRing object pointed to
 			minEdgeRings->erase(minEdgeRings->begin()+i);
 			i--;
 		}
