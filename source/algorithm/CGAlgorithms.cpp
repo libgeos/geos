@@ -91,16 +91,21 @@ limiting conditions:
 * Returns the signed area for a ring.  The area is positive if
 * the ring is oriented CW.
 */
+<<<<<<< CGAlgorithms.cpp
+double CGAlgorithms::signedArea(CoordinateList* ring) {
+	if (ring->getSize()<3) return 0.0;
+=======
 double CGAlgorithms::signedArea(CoordinateList& ring) {
 	if (ring.getSize()<3) return 0.0;
+>>>>>>> 1.2
 	double sum=0.0;
-	double ax=ring.getAt(0).x;
-	double ay=ring.getAt(0).y;
-	for (int i=1;i<ring.getSize()-1;i++) {
-		double bx=ring.getAt(i).x;
-		double by=ring.getAt(i).y;
-		double cx=ring.getAt(i+1).x;
-		double cy=ring.getAt(i+1).y;
+	double ax=ring->getAt(0).x;
+	double ay=ring->getAt(0).y;
+	for (int i=1;i<ring->getSize()-1;i++) {
+		double bx=ring->getAt(i).x;
+		double by=ring->getAt(i).y;
+		double cx=ring->getAt(i+1).x;
+		double cy=ring->getAt(i+1).y;
 		sum+=ax*by-ay*bx+ay*cx-ax*cy+bx*cy-cx*by;
 	}
 	return -sum/2.0;
@@ -109,11 +114,16 @@ double CGAlgorithms::signedArea(CoordinateList& ring) {
 /**
 * Returns the length of a list of line segments.
 */
+<<<<<<< CGAlgorithms.cpp
+double CGAlgorithms::length(CoordinateList* pts) {
+	if (pts->getSize()<1) return 0.0;
+=======
 double CGAlgorithms::length(CoordinateList& pts) {
 	if (pts.getSize()<1) return 0.0;
+>>>>>>> 1.2
 	double sum=0.0;
-	for(int i=1;i<pts.getSize();i++) {
-		sum+=pts.getAt(i).distance(pts.getAt(i - 1));
+	for(int i=1;i<pts->getSize();i++) {
+		sum+=pts->getAt(i).distance(pts->getAt(i - 1));
 	}
 	return sum;
 }
