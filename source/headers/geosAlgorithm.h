@@ -220,4 +220,84 @@ private:
 	int locate(Coordinate& p,LinearRing *ring);
 	int locate(Coordinate& p,Polygon *poly);
 };
+
+
+class MCPointInRing: public PointInRing {
+public:
+	MCPointInRing(LinearRing *newRing);
+	bool isInside(Coordinate& pt);
+
+  //class MCSelecter extends MonotoneChainSelectAction
+  //{
+  //  Coordinate p;
+
+  //  public MCSelecter(Coordinate p)
+  //  {
+  //    this.p = p;
+  //  }
+
+  //  public void select(LineSegment ls)
+  //  {
+  //    testLineSegment(p, ls);
+  //  }
+  //}
+
+//private:
+//	LinearRing *ring;
+//	IntervalTree *intTree;
+//	int crossings = 0;  // number of segment/ray crossings
+  //private void buildIndex()
+  //{
+  //  Envelope env = ring.getEnvelopeInternal();
+  //  intTree = new IntervalTree(env.getMinY(), env.getMaxY());
+
+  //  Coordinate[] pts = ring.getCoordinates();
+  //  List mcList = MonotoneChainBuilder.getChains(pts);
+
+  //  for (int i = 0; i < mcList.size(); i++) {
+  //    MonotoneChain mc = (MonotoneChain) mcList.get(i);
+  //    Envelope mcEnv = mc.getEnvelope();
+  //    intTree.insert(mcEnv.getMinY(), mcEnv.getMaxY(), mc);
+  //  }
+  //}
+  //private void testMonotoneChain(Envelope rayEnv, MCSelecter mcSelecter, MonotoneChain mc)
+  //{
+  //  mc.select(rayEnv, mcSelecter);
+  //}
+
+  //private void testLineSegment(Coordinate p, LineSegment seg) {
+  //  double xInt;  // x intersection of segment with ray
+  //  double x1;    // translated coordinates
+  //  double y1;
+  //  double x2;
+  //  double y2;
+
+  //  /*
+  //   *  Test if segment crosses ray from test point in positive x direction.
+  //   */
+  //  Coordinate p1 = seg.p0;
+  //  Coordinate p2 = seg.p1;
+  //  x1 = p1.x - p.x;
+  //  y1 = p1.y - p.y;
+  //  x2 = p2.x - p.x;
+  //  y2 = p2.y - p.y;
+
+  //  if (((y1 > 0) && (y2 <= 0)) ||
+  //      ((y2 > 0) && (y1 <= 0))) {
+  //      /*
+  //       *  segment straddles x axis, so compute intersection.
+  //       */
+  //    xInt = RobustDeterminant.signOfDet2x2(x1, y1, x2, y2) / (y2 - y1);
+  //      //xsave = xInt;
+  //      /*
+  //       *  crosses ray if strictly positive intersection.
+  //       */
+  //    if (0.0 < xInt) {
+  //      crossings++;
+  //    }
+  //  }
+  //}
+
+};
+
 #endif

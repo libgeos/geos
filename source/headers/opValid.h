@@ -184,10 +184,91 @@ protected:
 	void visitLinkedDirectedEdges(DirectedEdge *start);
 };
 
-class IsValidOp {
+class IsValidOp: public GeometryGraphOperation {
 public:
+	/**
+	* Find a point from the list of testCoords
+	* that is NOT a node in the edge for the list of searchCoords
+	*
+	* @return the point found, or <code>null</code> if none found
+	*/
 	static Coordinate& 
-		findPtNotNode(CoordinateList *innerRingPts,LinearRing *searchRing, GeometryGraph *graph);
+		findPtNotNode(CoordinateList *testCoords,LinearRing *searchRing, GeometryGraph *graph);
+	IsValidOp(Geometry *g);
+	bool isValid();
+	TopologyValidationError* getValidationError();
+private:
+	bool isChecked;
+	TopologyValidationError* validErr;
+	void checkValid(Geometry *g);
+	void checkValid(LineString *g);
+	void checkValid(Polygon *g);
+	void checkValid(MultiPolygon *g);
+	void checkValid(GeometryCollection *gc);
+	void checkConsistentArea();
+	void checkNoSelfIntersectingRings(GeometryGraph *graph);
+	/**
+	* check that a ring does not self-intersect, except at its endpoints.
+	* Algorithm is to count the number of times each node along edge occurs.
+	* If any occur more than once, that must be a self-intersection.
+	*/
+	void checkSelfIntersectingRing(EdgeIntersectionList *eiList);
+	void checkNoRepeatedPoint(Geometry *g);
+	/**
+	* Test that each hole is inside the polygon shell.
+	* This routine assumes that the holes have previously been tested
+	* to ensure that all vertices lie on the shell or inside it.
+	* A simple test of a single point in the hole can be used,
+	* provide the point is chosen such that it does not lie on the
+	* boundary of the shell.
+	*/
+	void checkHolesInShell(Polygon *p);
+	void OLDcheckHolesInShell(Polygon *p);
+	/**
+	* Tests that no hole is nested inside another hole.
+	* This routine assumes that the holes are disjoint.
+	* To ensure this, holes have previously been tested
+	* to ensure that:
+	* <ul>
+	* <li>they do not partially overlap
+	* (checked by <code>checkRelateConsistency</code>)
+	* <li>they are not identical
+	* (checked by <code>checkRelateConsistency</code>)
+	* <li>they do not touch at a vertex
+	* (checked by <code>????</code>)
+	* </ul>
+	*/
+	void checkHolesNotNested(Polygon *p);
+	void SLOWcheckHolesNotNested(Polygon *p);
+	/**
+	* Test that no element polygon is wholly in the interior of another element polygon.
+	* TODO: It handles the case that one polygon is nested inside a hole of another.
+	* <p>
+	* Preconditions:
+	* <ul>
+	* <li>shells do not partially overlap
+	* <li>shells do not touch along an edge
+	* <li>no duplicate rings exist
+	* </ul>
+	* This routine relies on the fact that while polygon shells may touch at one or
+	* more vertices, they cannot touch at ALL vertices.
+	*/
+	void checkShellsNotNested(MultiPolygon *mp);
+	/**
+	* Check if a shell is incorrectly nested within a polygon.  This is the case
+	* if the shell is inside the polygon shell, but not inside a polygon hole.
+	* (If the shell is inside a polygon hole, the nesting is valid.)
+	* <p>
+	* The algorithm used relies on the fact that the rings must be properly contained.
+	* E.g. they cannot partially overlap (this has been previously checked by
+	* <code>checkRelateConsistency</code>
+	*/
+	void checkShellNotNested(LinearRing *shell,Polygon *p);
+	/**
+	* This routine checks to see if a shell is properly contained in a hole.
+	*/
+	void checkShellInsideHole(LinearRing *shell,LinearRing *hole);
+	void checkConnectedInteriors();
 };
 
 #endif
