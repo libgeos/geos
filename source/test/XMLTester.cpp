@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.32  2003/10/16 13:01:31  strk
+* Added call to Unload::Release()
+*
 * Revision 1.31  2003/10/16 12:09:48  strk
 * bug fixed in exception handling
 *
@@ -22,6 +25,7 @@
 #include "../headers/io.h"
 #include "../headers/opRelate.h"
 #include "../io/markup/MarkupSTL.h"
+#include "../headers/unload.h"
 
 //#include "util.h"
 //#include "graph.h"
@@ -421,4 +425,6 @@ try{
 } catch (GEOSException *exc) {
 	cerr<<"Exception: "<<exc->toString()<<endl;
 }
+
+	Unload::Release();
 }
