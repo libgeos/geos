@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/05/14 09:20:47  strk
+ * Mem leaks fixed
+ *
  * Revision 1.1  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -32,7 +35,8 @@ namespace geos {
 */
 vector<Geometry*>* PolygonExtracter::getPolygons(Geometry *geom){
 	vector<Geometry*> *ret=new vector<Geometry*>();
-	geom->apply_rw(new PolygonExtracter(ret));
+	PolygonExtracter pe(ret);
+	geom->apply_rw(&pe);
 	return ret;
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/14 09:20:47  strk
+ * Mem leaks fixed
+ *
  * Revision 1.2  2004/05/03 20:49:20  strk
  * Some more leaks fixed
  *
@@ -35,7 +38,8 @@ namespace geos {
 */
 vector<Geometry*>* PointExtracter::getPoints(Geometry *geom){
 	vector<Geometry*> *ret=new vector<Geometry*>();
-	geom->apply_rw(new PointExtracter(ret));
+	PointExtracter pe(ret);
+	geom->apply_rw(&pe);
 	return ret;
 }
 
@@ -45,6 +49,7 @@ vector<Geometry*>* PointExtracter::getPoints(Geometry *geom){
 PointExtracter::PointExtracter(vector<Geometry*> *newComps){
 	comps=newComps;
 }
+
 
 void PointExtracter::filter_rw(Geometry *geom) {
 	if (typeid(*geom)==typeid(Point)) comps->push_back(geom);
