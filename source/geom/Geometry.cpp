@@ -234,6 +234,13 @@ Point* Geometry::getCentroid() const {
 		cent.add(in);
 		centPt=cent.getCentroid();
 	}
+
+	if ( ! centPt )
+	{
+		if ( in != this ) delete(in);
+		return NULL;
+	}
+
 	Point *pt=createPointFromInternalCoord(centPt,this);
 	delete centPt;
 	if ( in != this ) delete(in);
@@ -853,6 +860,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.73  2004/12/30 13:31:20  strk
+ * Fixed a segfault on EMPTYGEOM->getCeontroid()
+ *
  * Revision 1.72  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.
