@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/01/28 07:58:04  strk
+ * removed sprintf usage, ad ::toString call Coordinate::toString
+ *
  * Revision 1.3  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *
@@ -26,7 +29,7 @@
 
 
 #include <geos/geom.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 namespace geos {
 
@@ -112,11 +115,12 @@ void DefaultCoordinateSequence::deleteAt(int pos){
 string DefaultCoordinateSequence::toString() const {
 	string result("");
 	if (getSize()>0) {
-		char buffer[100];
+		//char buffer[100];
 		for (unsigned int i=0; i<vect->size(); i++) {
 			Coordinate& c=(*vect)[i];
-			sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
-			result.append(buffer);
+			//sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
+			//result.append(buffer);
+			result.append(c.toString());
 		}
 		result.append("");
 	}
