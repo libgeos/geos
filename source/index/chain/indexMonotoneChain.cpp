@@ -116,24 +116,29 @@ indexMonotoneChain::computeOverlaps(indexMonotoneChain *mc, MonotoneChainOverlap
 void
 indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,int start1,int end1,MonotoneChainOverlapAction *mco)
 {
-	const Coordinate& p00=pts->getAt(start0);
-	const Coordinate& p01=pts->getAt(end0);
-	const Coordinate& p10=mc->pts->getAt(start1);
-	const Coordinate& p11=mc->pts->getAt(end1);
 	//Debug.println("computeIntersectsForChain:"+p00+p01+p10+p11);
 	// terminating condition for the recursion
 	if (end0-start0==1 && end1-start1==1) {
 		mco->overlap(this,start0,mc,start1);
 		return;
 	}
+
+	const Coordinate& p00=pts->getAt(start0);
+	const Coordinate& p01=pts->getAt(end0);
+	const Coordinate& p10=mc->pts->getAt(start1);
+	const Coordinate& p11=mc->pts->getAt(end1);
+
 	// nothing to do if the envelopes of these chains don't overlap
 	mco->tempEnv1->init(p00,p01);
 	mco->tempEnv2->init(p10,p11);
 	if (!mco->tempEnv1->intersects(mco->tempEnv2)) return;
+
 	// the chains overlap,so split each in half and iterate (binary search)
 	int mid0=(start0+end0)/2;
 	int mid1=(start1+end1)/2;
-	// Assert: mid != start or end (since we checked above for end-start <= 1)
+
+	// Assert: mid != start or end (since we checked above for
+	// end-start <= 1)
 	// check terminating conditions before recursing
 	if (start0<mid0) {
 		if (start1<mid1)
@@ -153,6 +158,9 @@ indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,i
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/02/01 16:06:53  strk
+ * Small optimizations.
+ *
  * Revision 1.13  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -413,7 +413,8 @@ bool Envelope::equals(const Envelope* other) const {
  * @return  <code>true</code> if the point overlaps this Envelope
  */
 bool Envelope::intersects(const Coordinate& other) const {
-	return intersects(other.x, other.y);
+	//return intersects(other.x, other.y);
+	return (other.x <= maxx && other.x >= minx && other.y <= maxy && other.y >= miny);
 }
 
 /**
@@ -532,6 +533,9 @@ int Envelope::hashCode() const{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/02/01 16:06:53  strk
+ * Small optimizations.
+ *
  * Revision 1.18  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *
