@@ -1,8 +1,11 @@
+- Check header files layout
+
+- Check GEOS_VERSION defines and functions
+
+- Add geometry constructors taking ownership of passed arguments.
+
 - speedup in BufferSubgraph::computeDepths (read comment there)
 
 - Add class for use in Geometry::userData setting.
 
-- Add geometry constructors taking ownership of passed arguments.
-
 - Remove all explicit heap allocations for private static members.
-
