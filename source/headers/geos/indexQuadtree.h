@@ -22,10 +22,11 @@
 #include <geos/geom.h>
 #include <geos/spatialIndex.h>
 
-// Threating FP number as IEEE formatted will make the code
-// loose portability w/out speeding things up.
-// It will nonetheless be more accurate
+#ifdef __STDC_IEC_559__
 #define ASSUME_IEEE_DOUBLE 1
+#else
+#define ASSUME_IEEE_DOUBLE 0
+#endif
 
 
 using namespace std;
@@ -265,7 +266,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/02 16:05:49  strk
+ * Autodetect availability of IEEE-754 FP
+ *
  * Revision 1.5  2004/11/02 15:49:59  strk
+ *
  * Moved ASSUME_IEEE_DOUBLE define from DoubleBits.cpp to indexQuadtree.h.
  * Fixed a bug in powerOf2(). Made the !IEEE version less prone to
  * round-offs (still has approximation errors).
