@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2004/04/10 22:41:24  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
  * Revision 1.27  2004/04/01 10:44:33  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -227,7 +230,7 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 void LineString::apply_rw(CoordinateFilter *filter) {
 	for (int i = 0; i < points->getSize(); i++) {
 		Coordinate newcoord = points->getAt(i);
-		filter->filter_rw(newcoord);
+		filter->filter_rw(&newcoord);
 		points->setAt(newcoord, i);
 	}
 }
@@ -235,7 +238,7 @@ void LineString::apply_rw(CoordinateFilter *filter) {
 void LineString::apply_ro(CoordinateFilter *filter) const {
 	for (int i = 0; i < points->getSize(); i++) {
 		// getAt returns a 'const' coordinate
-		filter->filter_ro(points->getAt(i));
+		filter->filter_ro(&(points->getAt(i)));
 	}
 }
 

@@ -1154,6 +1154,25 @@
 					</FileConfiguration>
 				</File>
 			</Filter>
+			<Filter
+				Name="precision"
+				Filter="">
+				<File
+					RelativePath="..\source\precision\CommonBits.cpp">
+				</File>
+				<File
+					RelativePath="..\source\precision\CommonBitsOp.cpp">
+				</File>
+				<File
+					RelativePath="..\source\precision\CommonBitsRemover.cpp">
+				</File>
+				<File
+					RelativePath="..\source\precision\EnhancedPrecisionOp.cpp">
+				</File>
+				<File
+					RelativePath="..\source\precision\SimpleGeometryPrecisionReducer.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1232,6 +1251,9 @@
 			</File>
 			<File
 				RelativePath="..\source\headers\platform.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\precision.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\SpatialIndex.h">

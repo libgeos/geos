@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/04/10 22:41:25  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
  * Revision 1.13  2004/03/18 10:42:44  ybychkov
  * "IO" and "Util" upgraded to JTS 1.4
  * "Geometry" partially upgraded.
@@ -27,6 +30,9 @@
 
 /*
 * $Log$
+* Revision 1.14  2004/04/10 22:41:25  ybychkov
+* "precision" upgraded to JTS 1.4
+*
 * Revision 1.13  2004/03/18 10:42:44  ybychkov
 * "IO" and "Util" upgraded to JTS 1.4
 * "Geometry" partially upgraded.
@@ -132,8 +138,8 @@ public:
 	UniqueCoordinateArrayFilter();
 	virtual ~UniqueCoordinateArrayFilter();
 	virtual const CoordinateList* getCoordinates() const;
-	virtual void filter_ro(const Coordinate &coord);
-	virtual void filter_rw(Coordinate &coord); // Unsupported
+	virtual void filter_ro(const Coordinate *coord);
+	virtual void filter_rw(Coordinate *coord); // Unsupported
 };
 
 

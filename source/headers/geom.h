@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.51  2004/04/10 22:41:24  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
  * Revision 1.50  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  *
@@ -573,8 +576,8 @@ public:
    *
    *@param  coord  a <code>Coordinate</code> to which the filter is applied.
    */
-   virtual void filter_rw(Coordinate& coord)=0;
-   virtual void filter_ro(const Coordinate& coord)=0;
+   virtual void filter_rw(Coordinate* coord)=0;
+   virtual void filter_ro(const Coordinate* coord)=0;
 };
 
 /**

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/04/10 22:41:25  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
  * Revision 1.15  2004/04/10 08:40:01  ybychkov
  * "operation/buffer" upgraded to JTS 1.4
  *
@@ -21,6 +24,7 @@
 
 
 #include "../../headers/opBuffer.h"
+#include "../../headers/precision.h"
 
 namespace geos {
 
@@ -79,13 +83,13 @@ Geometry* BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments)
 	return geomBuf;
 }
 
+int BufferOp::MAX_PRECISION_DIGITS=12;
 /**
 * Initializes a buffer computation for the given geometry
 *
 * @param g the geometry to buffer
 */
 BufferOp::BufferOp(Geometry *g) {
-	MAX_PRECISION_DIGITS=12;
 	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
 	int endCapStyle=BufferOp::CAP_ROUND;
 	resultGeometry=NULL;

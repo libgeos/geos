@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/04/10 22:41:25  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
  * Revision 1.4  2003/11/07 01:23:43  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -40,13 +43,13 @@ const CoordinateList* UniqueCoordinateArrayFilter::getCoordinates() const {
 	return list;
 }
 
-void UniqueCoordinateArrayFilter::filter_ro(const Coordinate &coord) {
-	if (CoordinateList::indexOf(&coord,list)==-1) {
-		list->add(coord);
+void UniqueCoordinateArrayFilter::filter_ro(const Coordinate *coord) {
+	if (CoordinateList::indexOf(coord,list)==-1) {
+		list->add(*coord);
 	}
 }
 
-void UniqueCoordinateArrayFilter::filter_rw(Coordinate &coord) {
+void UniqueCoordinateArrayFilter::filter_rw(Coordinate *coord) {
 	throw new UnsupportedOperationException("UniqueCoordinateArrayFilter is a read-only filter");
 }
 

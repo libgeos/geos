@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/04/10 22:41:24  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
  * Revision 1.18  2004/03/31 07:50:37  ybychkov
  * "geom" partially upgraded to JTS 1.4
  *
@@ -123,7 +126,7 @@ Envelope* Point::computeEnvelopeInternal() const {
 
 void Point::apply_ro(CoordinateFilter *filter) const {
     if (isEmpty()) {return;}
-	filter->filter_ro(*getCoordinate());
+	filter->filter_ro(getCoordinate());
 }
 
 void Point::apply_rw(CoordinateFilter *filter) {
