@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # libtool - Provide generalized library-building support services.
-# Generated automatically by  (GNU geos 0.0.1)
+# Generated automatically by  (GNU geos 1)
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 # Copyright (C) 1996-2000 Free Software Foundation, Inc.
@@ -35,7 +35,7 @@ if test "X${CDPATH+set}" = Xset; then CDPATH=:; export CDPATH; fi
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host basil.snr.uvm.edu:
+# Libtool was configured on host hydra:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -53,7 +53,7 @@ build_libtool_need_lc=no
 fast_install=yes
 
 # The host system.
-host_alias=i686-pc-linux-gnu
+host_alias=
 host=i686-pc-linux-gnu
 
 # An echo program that does not interpret backslashes.
@@ -113,7 +113,7 @@ libext="a"
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag="          -fPIC"
+pic_flag=" -fPIC"
 pic_mode=default
 
 # Does compiler simultaneously support -c and -o options?
@@ -259,10 +259,10 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib"
+sys_lib_search_path_spec="/lib /usr/lib /usr/local/lib /usr/X11R6/lib"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib"
+sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/X11R6/lib"
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""

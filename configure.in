@@ -9,9 +9,9 @@ AM_CONFIG_HEADER(source/headers/config.h)
 AC_PROG_CC
 
 dnl use libtool ----------------------------------------------------------
-AC_LIBTOOL_WIN32_DLL
 AC_LIBTOOL_DLOPEN
-AM_PROG_LIBTOOL
+AC_LIBTOOL_WIN32_DLL
+AC_PROG_LIBTOOL
 
 dnl check for programs ----------------------------------------------------
 AC_PROG_CXX

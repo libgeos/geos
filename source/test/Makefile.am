@@ -1,6 +1,6 @@
 noinst_PROGRAMS = CTS SimpleWKTTester XMLTester
 
-LIBS += ../geom/libgeos.la
+LIBS = ../geom/libgeos.la
 #LIBS += ../graph/libgraph.a
 #LIBS += ../graph/index/libindex.a
 #LIBS += ../io/libio.a
@@ -16,7 +16,7 @@ SimpleWKTTester_LDADD = $(LIBS)
 XMLTester_SOURCES = XMLTester.cpp
 XMLTester_LDADD = $(LIBS)
 
-INCLUDES += -I../headers
+INCLUDES = -I../headers
 INCLUDES += -I../io/markup
 
 

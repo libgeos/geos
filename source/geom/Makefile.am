@@ -5,7 +5,7 @@ GEOS_VERSION=@VERSION@
 pkglibdir=$(prefix)/lib
 pkglib_LTLIBRARIES = libgeos.la
 
-INCLUDES += -I$(top_srcdir)/source/headers -DGEOS_VERSION=\""$(GEOS_VERSION)"\"
+INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=\""$(GEOS_VERSION)"\"
 
 DIR_SOURCES =		Coordinate.cpp GeometryFactory.cpp MultiPoint.cpp \
 			CoordinateList.cpp IntersectionMatrix.cpp  \
@@ -41,7 +41,6 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
                         ../algorithm/CGAlgorithms.cpp \
 			../algorithm/HCoordinate.cpp \
 			../algorithm/LineIntersector.cpp \
-			../algorithm/NotRepresentableException.cpp \
                         ../algorithm/NonRobustCGAlgorithms.cpp \
                         ../algorithm/NotRepresentableException.cpp \
 			../algorithm/PointInRing.cpp \
