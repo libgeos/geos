@@ -86,7 +86,7 @@
   <desc>A - polygon with no holes</desc>
   <a>POLYGON(  (40 60, 420 60, 420 320, 40 320, 40 60))</a>
 <test>
-  <op name="getboundary" arg1="A">MULTILINESTRING(  (40 60, 420 60, 420 320, 40 320, 40 60))</op>
+  <op name="getboundary" arg1="A">LINESTRING(40 60, 420 60, 420 320, 40 320, 40 60)</op>
 </test>
 </case>
 
@@ -94,7 +94,9 @@
   <desc>A - polygon with 1 hole</desc>
   <a>POLYGON(  (40 60, 420 60, 420 320, 40 320, 40 60),   (200 140, 160 220, 260 200, 200 140))</a>
 <test>
-  <op name="getboundary" arg1="A">MULTILINESTRING(  (40 60, 420 60, 420 320, 40 320, 40 60),   (200 140, 160 220, 260 200, 200 140))</op>
+  <op name="getboundary" arg1="A">
+  MULTILINESTRING((40 60, 420 60, 420 320, 40 320, 40 60), (200 140, 160 220, 260 200, 200 140))
+  </op>
 </test>
 </case>
 
@@ -1046,8 +1048,8 @@
   </b>
 <test>
   <op name="getboundary" arg1="A">
-    MULTILINESTRING(
-      (60 160, 140 160, 140 60, 60 60, 60 160))
+    LINESTRING(
+      60 160, 140 160, 140 60, 60 60, 60 160)
   </op>
 </test>
 <test>
@@ -3440,8 +3442,8 @@ GEOMETRYCOLLECTION(
   </b>
 <test>
   <op name="getboundary" arg1="A">
-    MULTILINESTRING(
-      (83 33, 62 402, 68 402, 83 33))
+    LINESTRING(
+      83 33, 62 402, 68 402, 83 33)
   </op>
 </test>
 <test>
@@ -3498,8 +3500,8 @@ GEOMETRYCOLLECTION(
   </b>
 <test>
   <op name="getboundary" arg1="A">
-    MULTILINESTRING(
-      (95 9, 81 414, 87 414, 95 9))
+    LINESTRING(
+      95 9, 81 414, 87 414, 95 9)
   </op>
 </test>
 <test>
