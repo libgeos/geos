@@ -1,12 +1,8 @@
 SUBDIRS =	markup
 
-noinst_LIBRARIES = libio.a
-
-libio_a_SOURCES =	ParseException.cpp \
+EXTRA_DIST =	ParseException.cpp \
 	StringTokenizer.cpp \
 	WKTReader.cpp \
 	WKTWriter.cpp \
 	Writer.cpp
-
-INCLUDES += -I../headers
 

@@ -1,7 +1,3 @@
-noinst_LIBRARIES = libutil.a
-
-libutil_a_SOURCES =	Assert.cpp \
+EXTRA_DIST =	Assert.cpp \
 	AssertionFailedException.cpp
-
-INCLUDES += -I../headers
 

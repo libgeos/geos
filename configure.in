@@ -1,52 +1,48 @@
-dnl Process this file with autoconf to produce a configure script.
-AC_INIT(source/io/markup/MarkupSTL.h)
-
-# Initialize the automake stuff
-AM_INIT_AUTOMAKE(GEOS, 0.0.1)
-
-dnl Checks for programs.
+dnl local vars to hold user's preferences --------------------------------
+AC_INIT(source/headers/geom.h)
+AC_CANONICAL_SYSTEM
+AM_INIT_AUTOMAKE(geos, 0.1)
+AM_CONFIG_HEADER(source/headers/config.h)
 AC_PROG_CC
-AC_PROG_MAKE_SET
-AC_PROG_CC
+
+dnl put version here -----------------------------------------------------
+GEOS_VERSION=0.1
+
+dnl use libtool ----------------------------------------------------------
+AC_LIBTOOL_DLOPEN
+AM_PROG_LIBTOOL
+
+dnl check for programs ----------------------------------------------------
 AC_PROG_CXX
-AC_PROG_RANLIB
-AC_PROG_INSTALL
-AC_PROG_LN_S
+AC_ISC_POSIX
 
-# Initialize libtool
-# AM_PROG_LIBTOOL
-
-# Initialize maintainer mode
-# AM_MAINTAINER_MODE
-
-# This is needed for AC_TRY_COMPILE later
-# AC_ISC_POSIX
-
-# Check to see if this `configure' is being run in the `Cygwin32' environment
-# AM_CYGWIN32
-
-# Determine version of automake ... important for now
-AUTO_MAKE_VERSION=`automake --version | head -1 | awk '{print $4}' | sed -e 's/\.//'`
-
-dnl Checks for programs.
-
-dnl Checks for libraries.
-
-dnl Checks for header files.
-
-dnl Checks for typedefs, structures, and compiler characteristics.
+dnl function checks ------------------------------------------------------
+AC_FUNC_CLOSEDIR_VOID
+AC_FUNC_MEMCMP
+AC_FUNC_STRFTIME
+AC_FUNC_VPRINTF
+AC_FUNC_ALLOCA
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS(memory.h)
+AC_CHECK_HEADERS(unistd.h)
+AC_CHECK_HEADERS(sys/file.h)
+AC_CHECK_FUNCS(strchr memcpy)
+AC_HEADER_STAT
+AC_STRUCT_TM
+AC_TYPE_SIZE_T
 AC_C_CONST
 
-dnl Checks for library functions.
+dnl process enable switches ----------------------------------------------
 
-AC_OUTPUT( 	Makefile \
- 	source/Makefile \
- 	source/algorithm/Makefile \
- 	source/geom/Makefile \
- 	source/graph/Makefile \
- 	source/graph/index/Makefile \
- 	source/io/Makefile \
- 	source/io/markup/Makefile \
- 	source/util/Makefile \
+dnl process with switches -------------------------------------------------
 
-)
+dnl check for libraries ---------------------------------------------------
+
+dnl things to substitute in output ----------------------------------------
+AC_SUBST(GEOS_VERSION)
+
+dnl output stuff ----------------------------------------------------------
+
+AC_OUTPUT(Makefile source/Makefile source/geom/Makefile source/algorithm/Makefile source/graph/Makefile source/graph/index/Makefile source/headers/Makefile source/io/Makefile source/io/markup/Makefile source/util/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile)
+

@@ -1,15 +1,10 @@
-noinst_LIBRARIES = libalgorithm.a
+prefix=@prefix@
+top_srcdir=@top_srcdir@
+GEOS_VERSION=@GEOS_VERSION@
 
-libalgorithm_a_SOURCES =	HCoordinate.cpp \
-	LineIntersector.cpp \
-	NotRepresentableException.cpp \
-	PointInRing.cpp \
-	PointLocator.cpp \
-	RobustCGAlgorithms.cpp \
-	RobustDeterminant.cpp \
-	RobustLineIntersector.cpp \
-	SimplePointInAreaLocator.cpp \
-	SimplePointInRing.cpp
-
-INCLUDES += -I../headers
+EXTRA_DIST = HCoordinate.cpp RobustCGAlgorithms.cpp \
+	LineIntersector.cpp RobustDeterminant.cpp \
+	NotRepresentableException.cpp RobustLineIntersector.cpp \
+	PointInRing.cpp SimplePointInAreaLocator.cpp \
+	PointLocator.cpp SimplePointInRing.cpp
 

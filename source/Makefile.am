@@ -1,6 +1,1 @@
-SUBDIRS =	algorithm \
-	geom \
-	graph \
-	io \
-	util
-
+SUBDIRS = algorithm geom graph headers io util

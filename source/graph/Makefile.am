@@ -1,8 +1,6 @@
 SUBDIRS =	index
 
-noinst_LIBRARIES = libgraph.a
-
-libgraph_a_SOURCES =	Depth.cpp \
+EXTRA_DIST =	Depth.cpp \
 	DirectedEdge.cpp \
 	DirectedEdgeStar.cpp \
 	Edge.cpp \
@@ -22,6 +20,3 @@ libgraph_a_SOURCES =	Depth.cpp \
 	Position.cpp \
 	Quadrant.cpp \
 	TopologyLocation.cpp
-
-INCLUDES += -I../headers
-
