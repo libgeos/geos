@@ -116,8 +116,61 @@ int main(int argc, char** argv)
 	cout << ls.isEquivalentClass(&p) << endl;
 */
 
-//	Polygon p;
+	Coordinate c1(0,0);
+	Coordinate c2(100,0);
+	Coordinate c3(100,100);
+	Coordinate c4(0,100);
 
+	Coordinate d1(25,25);
+	Coordinate d2(75,25);
+	Coordinate d3(75,75);
+	Coordinate d4(25,75);
+
+	CoordinateList outlist;
+	outlist.add(c1);
+	outlist.add(c2);
+	outlist.add(c3);
+	outlist.add(c4);
+	outlist.add(c1);
+
+	CoordinateList inlist(5);
+	inlist.add(d1);
+	inlist.add(d2);
+	inlist.add(d3);
+	inlist.add(d4);
+	inlist.add(d1);
+
+	int a=inlist.getSize();
+	a=outlist.getSize();
+	CoordinateList testlist(outlist);
+	a=testlist.getSize();
+	cout << outlist.toString() <<endl;
+	cout << testlist.toString() <<endl;
+	outlist.deleteAt(2);
+	a=outlist.getSize();
+	a=testlist.getSize();
+	cout << outlist.toString() <<endl;
+	cout << testlist.toString() <<endl;
+
+	LinearRing outring(outlist,PrecisionModel(),100);
+	LinearRing inring(inlist,PrecisionModel(),50);
+
+	vector<Geometry *> h(1,&inring);
+	Polygon p(&outring,&h,PrecisionModel(),10);
+
+	a=p.getNumPoints();
+
+	LineString ls1(inlist,PrecisionModel(),1);
+	LineString ls2(outlist,PrecisionModel(),1);
+
+	bool z=ls1.equalsExact(&p);
+	z=ls1.equalsExact(&ls2);
+	z=ls1.equalsExact(&ls1);
+
+	Polygon p1(p);
+	p.compareToSameClass(p1);
+
+	p.normalize();
 
 	cout << "End" << endl;
 	} catch (char *message){

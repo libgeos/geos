@@ -13,3 +13,7 @@ bool Geometry::isEquivalentClass(Geometry *other){
 
 
 Geometry::~Geometry(){}
+
+bool greaterThen(Geometry *first, Geometry *second) {
+	return first->compareTo(second);
+}

@@ -1,7 +1,8 @@
 #include "geom.h"
 
 MultiPoint::MultiPoint(){}
-MultiPoint::MultiPoint(vector<Geometry> *geometry,PrecisionModel pm, int b){}
+MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel pm, int SRID):
+GeometryCollection(points, pm, SRID){}
 MultiPoint::~MultiPoint(){}
 
 int MultiPoint::getDimension() {
@@ -38,5 +39,5 @@ bool MultiPoint::equalsExact(Geometry *other) {
   }
 
 Coordinate MultiPoint::getCoordinate(int n) {
-	return dynamic_cast<Point *>(geometries[n])->getCoordinate();
+	return ((Point *)geometries[n])->getCoordinate();
 }

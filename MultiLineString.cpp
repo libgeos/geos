@@ -1,7 +1,8 @@
 #include "geom.h"
 
 MultiLineString::MultiLineString(){}
-//	MultiLineString(LineString[] lineStrings, PrecisionModel precisionModel, int SRID);
+MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel precisionModel, int SRID):
+GeometryCollection(lineStrings, precisionModel,SRID){}
 MultiLineString::~MultiLineString(){}
 
 int MultiLineString::getDimension() {
@@ -24,7 +25,7 @@ bool MultiLineString::isClosed() {
 		return false;
 	}
 	for (unsigned int i = 0; i < geometries.size(); i++) {
-		if (!(dynamic_cast<LineString *>(geometries[i])->isClosed())) {
+		if (!((LineString *)geometries[i])->isClosed()) {
 			return false;
 		}
 	}

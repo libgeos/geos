@@ -21,3 +21,7 @@ string LinearRing::getGeometryType(){
 bool LinearRing::isClosed() {
 	return true;
 }
+
+void LinearRing::setPoints(CoordinateList cl){
+	points.setPoints(cl.toVector());
+}

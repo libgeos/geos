@@ -1,44 +1,51 @@
 #include "geom.h"
 
 CoordinateList::CoordinateList() {
-	head=new List();
-	tail=head;
-	current=NULL;
-	size=0;
+	vect=new vector<Coordinate>();
+	current=-1;
+}
+
+CoordinateList::CoordinateList(int n) {
+	vect=new vector<Coordinate>();
+	vect->reserve(n);
+	current=-1;
 }
 
 CoordinateList::CoordinateList(Coordinate c) {
-	head=new List(c);
-	tail=head;
-	current=NULL;
-	size=1;
+	vect=new vector<Coordinate>(1,c);
+	current=-1;
+}
+
+CoordinateList::CoordinateList(const CoordinateList &c) {
+	vect=new vector<Coordinate>(*(c.vect));
+//	vect=c.vect->c;
+	current=c.current;
+}
+
+void CoordinateList::setPoints(const vector<Coordinate> &v) {
+	vect=new vector<Coordinate>(v);
 }
 
 void CoordinateList::reset(){
-	current=NULL;
+	current=-1;
 }
 
 vector<Coordinate> CoordinateList::toVector() {
-	return vector<Coordinate>();
+	return vector<Coordinate>(vect->begin(),vect->end());
 }
 
 bool CoordinateList::isEmpty() {
-	if (size==0) return true;
-	else return false;
+	return vect->empty();
 }
 
 Coordinate CoordinateList::getNext(){
-	if (current==NULL) {
-		current=head;
-	} else {
-		current=current->next;
-	}
-	if (current==NULL) current=tail;
-	return current->data;
+	if (current==vect->size()-1) current=-1;
+	current++;
+	return (*vect)[current];
 }
 
 bool CoordinateList::hasNext(){
-	if (current==tail) {
+	if (current>=vect->size()-1) {
 		return false;
 	} else {
 		return true;
@@ -46,29 +53,18 @@ bool CoordinateList::hasNext(){
 }
 
 void CoordinateList::add(Coordinate c){
-	if (size==0) {
-		head->data=Coordinate(c);
-	} else {
-		tail->next=new List(c);
-		(tail->next)->prev=tail;
-		tail=tail->next;
-	}
-	size++;
+	vect->push_back(c);
 }
 
 int CoordinateList::getSize(){
-	return size;
+	return (int) vect->size();
 }
 
 void CoordinateList::moveTo(int pos){
-	reset();
-	for(int i=0; i<=pos; i++) {
-		if (current==NULL) {
-			current=head;
-		} else {
-			current=current->next;
-		}
-	}
+	if (pos>vect->size()-1) 
+		throw "Invalid argument: out of bounds\n" ;
+	else
+		current=pos;
 }
 
 Coordinate CoordinateList::getAt(int pos){
@@ -86,40 +82,38 @@ void CoordinateList::deleteAt(int pos){
 }
 
 Coordinate CoordinateList::get(){
-	if (current!=NULL) {
-		return current->data;
-	} else {
-		return Coordinate();
-	}
+	if (current>=0 && current<=vect->size()-1) 
+		return (*vect)[current];
+	else
+		throw "CoordinateList exception: can't retrieve element\n";
 }
 
 void CoordinateList::set(Coordinate c){
-	if (current!=NULL) {
-		current->data=c;
-	}
+	if (current>=0 && current<=vect->size()-1) 
+		(*vect)[current]=c;
+	else
+		throw "CoordinateList exception: can't change element\n";
 }
 
 void CoordinateList::remove(){
-	if (current!=NULL) {
-		if (current==head) {
-			head=current->next;
-			head->prev=NULL;
-			delete current;
-			current=head;
-		} else if (current==tail) {
-			tail=current->prev;
-			tail->next=NULL;
-			delete current;
-			current=tail;
-		} else {
-			(current->prev)->next=current->next;
-			(current->next)->prev=current->prev;
-			delete current;
-			ListPtr tmp=current->next;
-			current=tmp;
-		}
-	size--;
-	}
+	if (current>=0 && current<=vect->size()-1) 
+		vect->erase(vect->begin()+current);
+	else
+		throw "CoordinateList exception: can't remove element\n";
 }
 
-CoordinateList::~CoordinateList() {}
+string CoordinateList::toString() {
+	string result("");
+	char buffer[100];
+	for (unsigned int i=0; i<vect->size(); i++) {
+		Coordinate c=(*vect)[i];
+		sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
+		result.append(buffer);
+	}
+	result.append("");
+	return result;
+}
+
+CoordinateList::~CoordinateList() {
+	delete vect;
+}

@@ -8,23 +8,28 @@ LineString::LineString(){
 }
 
 //Replaces clone()
-LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRID) {
-	points=ls.points;
+LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRID), points(ls.points) {
+//	CoordinateList pts(ls.points);
+//	points=pts;
+//	points=ls.points;
 }
 
 LineString::LineString(CoordinateList newPoints, PrecisionModel precisionModel, int SRID):
-						Geometry(precisionModel, SRID) {
+						Geometry(precisionModel, SRID), points(newPoints) {
 	// Can't be null
 	//if (points == null) {
 	//	points = new Coordinate[]{};
 	//}
-	if (hasNullElements(points)) {
+	if (hasNullElements(newPoints)) {
 		throw "IllegalArgumentException: point array must not contain null elements\n";
 	}
-	if (points.getSize()==1) {
+	if (newPoints.getSize()==1) {
 		throw "IllegalArgumentException: point array must contain 0 or >1 elements\n";
 	}
-	points=newPoints;
+//	CoordinateList pts(newPoints);
+//	points=pts;
+//	points=CoordinateList(newPoints);
+//?	points=newPoints;
 }
 
 LineString::~LineString(){}
@@ -173,9 +178,13 @@ void LineString::normalize() {
 }
 
 bool LineString::isEquivalentClass(Geometry *other) {
-	return (typeid(*other)==typeid(LineString));
+	if (typeid(*other)==typeid(LineString))
+		return true;
+	else 
+		return false;
 }
 
-int LineString::compareToSameClass(LineString ls) {
+bool LineString::compareToSameClass(LineString ls) {
 	return compare(points.toVector(),ls.points.toVector());
 }
+

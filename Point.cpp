@@ -80,7 +80,7 @@ bool Point::equalsExact(Geometry *other) {
 	return dynamic_cast<Point *>(other)->coordinate==coordinate;
 }
 
-int Point::compareToSameClass(Point point) {
+bool Point::compareToSameClass(Point point) {
 	return coordinate==point.getCoordinate();
 }
 
