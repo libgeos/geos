@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
  * Revision 1.9  2004/03/25 02:23:55  ybychkov
  * All "index/*" packages upgraded to JTS 1.4
  *
@@ -210,12 +213,16 @@ protected:
 //	IntersectsOp* getIntersectsOp(){return NULL;);
 };
 	
-//Not used yet, thus not ported.
+class STRAbstractNode: public AbstractNode{
+public:
+	STRAbstractNode(int level);
+protected:
+	void* computeBounds();
+};
 
 /**
  *  A query-only R-tree created using the Sort-Tile-Recursive (STR) algorithm. 
  *  For two-dimensional spatial data. <P>
-
  *
  *  The STR packed R-tree is simple to implement and maximizes space
  *  utilization; that is, as many leaves as possible are filled to capacity.
@@ -228,26 +235,31 @@ protected:
  *
  */
 class STRtree: public AbstractSTRtree,public SpatialIndex {
-//private:
+private:
 //	Comparator* xComparator;
 //	Comparator* yComparator;
-//	double centreX(Envelope *e);
-//	double avg(double a, double b);
-//	double centreY(Envelope *e);
 //	IntersectsOp* intersectsOp;
-//	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
-//	vector<Boundable*>* createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*>* verticalSlices, int newLevel);
-//protected:
+	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
+	vector<Boundable*>* createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*>* verticalSlices, int newLevel);
+protected:
 //	Comparator* getComparator();
-//	vector<Boundable*>* createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel);
-//	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
-//	AbstractNode* createNode(int level)
+	vector<Boundable*>* createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel);
+	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
+	AbstractNode* createNode(int level);
 //	IntersectsOp* getIntersectsOp();
+	class STRIntersectsOp:public AbstractSTRtree::IntersectsOp {
+		public:
+			bool intersects(void* aBounds,void* bBounds);
+	};
 public:
 	STRtree();
-//	STRtree(int nodeCapacity);
-//	void insert(Envelope *itemEnv,void* item);
-//	vector<void*>* query(Envelope *searchEnv);
+	~STRtree();
+	STRtree(int nodeCapacity);
+	void insert(Envelope *itemEnv,void* item);
+	vector<void*>* query(Envelope *searchEnv);
+	static double centreX(Envelope *e);
+	static double avg(double a, double b);
+	static double centreY(Envelope *e);
 };
 }
 #endif

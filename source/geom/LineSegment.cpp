@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
  * Revision 1.11  2004/03/29 06:59:24  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -302,7 +305,7 @@ int LineSegment::orientationIndex(LineSegment *seg) const {
 * by this line segment and a point.
 */
 double LineSegment::distancePerpendicular(const Coordinate& p) const {
-	return CGAlgorithms::distancePointLinePerpendicular(p, p0, p1);
+	return CGAlgorithms::distancePointLinePerpendicular(p,p0,p1);
 }
 
 /**

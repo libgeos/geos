@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
  * Revision 1.12  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -264,7 +267,7 @@ CGAlgorithms::distancePointLine(const Coordinate& p, const Coordinate& A,
 * @param B another point of the line (must be different to A)
 * @return the distance from p to line AB
 */
-double distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B) {
+double CGAlgorithms::distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B) {
     // use comp.graphics.algorithms Frequently Asked Questions method
     /*(2)
                      (Ay-Cy)(Bx-Ax)-(Ax-Cx)(By-Ay)

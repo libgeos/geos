@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
  * Revision 1.6  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -26,6 +29,11 @@
 
 namespace geos {
 
+/**
+* Returns a list containing a Coordinate from each Polygon, LineString, and Point
+* found inside the specified geometry. Thus, if the specified geometry is
+* not a GeometryCollection, an empty list will be returned.
+*/
 vector<const Coordinate*>* ConnectedElementPointFilter::getCoordinates(const Geometry *geom) {
 	vector<const Coordinate*> *points=new vector<const Coordinate*>();
 	ConnectedElementPointFilter *c=new ConnectedElementPointFilter(points);

@@ -498,31 +498,16 @@
 					Name="distance"
 					Filter="">
 					<File
+						RelativePath="..\source\operation\distance\ConnectedElementLocationFilter.cpp">
+					</File>
+					<File
 						RelativePath="..\source\operation\distance\ConnectedElementPointFilter.cpp">
 					</File>
 					<File
 						RelativePath="..\source\operation\distance\DistanceOp.cpp">
 					</File>
 					<File
-						RelativePath="..\source\operation\distance\LineExtracterFilter.cpp">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\source\operation\distance\PointExtracterFilter.cpp">
-					</File>
-					<File
-						RelativePath="..\source\operation\distance\PolygonExtracterFilter.cpp">
+						RelativePath="..\source\operation\distance\GeometryLocation.cpp">
 					</File>
 				</Filter>
 				<Filter
