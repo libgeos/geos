@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.8  2003/10/15 11:24:28  strk
+* Use getCoordinatesRO() introduced.
+*
+*/
 #include "../../headers/opValid.h"
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
@@ -104,7 +110,7 @@ void ConnectedInteriorTester::visitShellInteriors(const Geometry *g, PlanarGraph
 }
 
 void ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph *graph) {
-	CoordinateList *pts=ring->getCoordinates();
+	const CoordinateList *pts=ring->getCoordinatesRO();
 	const Coordinate& pt0=pts->getAt(0);
     /**
      * Find first point in coord list different to initial point.

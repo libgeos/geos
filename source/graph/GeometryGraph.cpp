@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.29  2003/10/15 11:24:28  strk
+* Use getCoordinatesRO() introduced.
+*
+*/
 #include "../headers/graph.h"
 #include <typeinfo>
 #include "../headers/util.h"
@@ -224,10 +230,11 @@ void GeometryGraph::addPolygon(const Polygon *p){
 }
 
 void GeometryGraph::addLineString(const LineString *line){
-	CoordinateList* coord=CoordinateList::removeRepeatedPoints(line->getCoordinates());
+	CoordinateList* coord=CoordinateList::removeRepeatedPoints(line->getCoordinatesRO());
 	if(coord->getSize()<2) {
 		hasTooFewPointsVar=true;
 		invalidPoint=coord->getAt(0);
+		delete coord;
 		return;
 	}
 	// add the edge for the LineString
@@ -248,6 +255,7 @@ void GeometryGraph::addLineString(const LineString *line){
 	Assert::isTrue(coord->getSize()>= 2,"found LineString with single point");
 	insertBoundaryPoint(argIndex,coord->getAt(0));
 	insertBoundaryPoint(argIndex,coord->getAt(coord->getSize()-1));
+	delete coord;
 }
 
 /**
