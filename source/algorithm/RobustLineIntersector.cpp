@@ -37,10 +37,36 @@ RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate&
 		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
 			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
 			isProperVar=true;
-			if ((p==p1) || (p==p2))
+			if ((p==p1)||(p==p2)) // 2d only test
 			{
 				isProperVar=false;
 			}
+#if COMPUTE_Z
+			intPt[0].setCoordinate(p);
+			if (p==p1) {
+				if ( p1.z != DoubleNotANumber )
+					intPt[0].z = (intPt[0].z + p1.z) / 2;
+			} else if (p==p2) {
+				if ( p2.z != DoubleNotANumber )
+					intPt[0].z = (intPt[0].z + p2.z) / 2;
+			} else {
+				double z=0;
+				int hits=0;
+				if (p.z != DoubleNotANumber) {
+					z += p.z;
+					hits++;
+				}
+				if (p1.z != DoubleNotANumber) {
+					z += p1.z;
+					hits++;
+				}
+				if (p2.z != DoubleNotANumber) {
+					z += p1.z;
+					hits++;
+				}
+				if ( hits ) intPt[0].z = z/hits;
+			}
+#endif // COMPUTE_Z
 			result=DO_INTERSECT;
 			return;
 		}
@@ -370,6 +396,9 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2004/11/20 15:40:49  strk
+ * Added Z computation in point-segment intersection.
+ *
  * Revision 1.22  2004/11/17 15:09:08  strk
  * Changed COMPUTE_Z defaults to be more conservative
  *
