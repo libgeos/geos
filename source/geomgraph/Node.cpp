@@ -20,7 +20,7 @@
 #define DEBUG 0
 #endif
 #ifndef COMPUTE_Z
-#define COMPUTE_Z 0
+#define COMPUTE_Z 1
 #endif
 
 namespace geos {
@@ -130,6 +130,9 @@ string Node::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/19 10:10:23  strk
+ * COMPUTE_Z re-enabled by default
+ *
  * Revision 1.5  2004/11/17 15:09:08  strk
  * Changed COMPUTE_Z defaults to be more conservative
  *
