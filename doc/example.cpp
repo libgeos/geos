@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2003/11/12 22:03:54  strk
+ * added relational operators
+ *
  * Revision 1.12  2003/11/12 11:08:39  strk
  * removed old changelog, moved comments in the nice standard frame
  *
@@ -250,9 +253,9 @@ void do_all()
 	// been copied to global_factory private storage
 	delete pm;
 
-	/////////////////////////////////////////////
-	// BASIC GEOMETRY CREATION
-	/////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+// GEOMETRY CREATION
+////////////////////////////////////////////////////////////////////////
 
 	// Read function bodies to see the magic behind them
 	geoms->push_back(create_point(150, 350));
@@ -266,6 +269,11 @@ void do_all()
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
 	wkt_print_geoms(geoms);
+
+
+////////////////////////////////////////////////////////////////////////
+// UNARY OPERATIONS
+////////////////////////////////////////////////////////////////////////
 
 	/////////////////////////////////////////////
 	// CENTROID
@@ -333,11 +341,382 @@ void do_all()
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
+
+////////////////////////////////////////////////////////////////////////
+// RELATIONAL OPERATORS
+////////////////////////////////////////////////////////////////////////
+
+cout<<"-------------------------------------------------------------------------------"<<endl;
+cout<<"RELATIONAL OPERATORS"<<endl;
+cout<<"-------------------------------------------------------------------------------"<<endl;
+
+	/////////////////////////////////////////////
+	// DISJOINT
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"   DISJOINT   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->disjoint(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
 	
+	/////////////////////////////////////////////
+	// TOUCHES
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"    TOUCHES   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->touches(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// INTERSECTS
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<" INTERSECTS   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->intersects(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// CROSSES
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"    CROSSES   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->crosses(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// WITHIN
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"     WITHIN   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->within(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// CONTAINS
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"   CONTAINS   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->contains(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// OVERLAPS
+	/////////////////////////////////////////////
+	
+	cout<<endl;
+	cout<<"   OVERLAPS   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->overlaps(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// RELATE
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"     RELATE   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->relate(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// EQUALS
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"     EQUALS   ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				if ( g1->equals(g2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// EQUALS_EXACT
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"EQUALS_EXACT  ";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				// second argument is a tolerance
+				if ( g1->equalsExact(g2, 0.5) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+	/////////////////////////////////////////////
+	// IS_WITHIN_DISTANCE
+	/////////////////////////////////////////////
+
+	cout<<endl;
+	cout<<"IS_WITHIN_DIST";
+	for (int i=0; i<geoms->size(); i++) {
+		cout<<"\t["<<i<<"]";
+	}
+	cout<<endl;
+	for (int i=0; i<geoms->size(); i++) {
+		Geometry *g1 = (*geoms)[i];
+		cout<<"      ["<<i<<"]\t";
+		for (int j=0; j<geoms->size(); j++) {
+			Geometry *g2 = (*geoms)[j];
+			try {
+				// second argument is the distance
+				if ( g1->isWithinDistance(g2,2) ) cout<<" 1\t";
+				else cout<<" 0\t";
+			}
+			// Geometry Collection is not a valid argument
+			catch (IllegalArgumentException *exc) {
+				cout<<" X\t";
+				delete exc;
+			}
+			catch (GEOSException *exc) {
+				cerr<<exc->toString()<<endl;
+				delete exc;
+			}
+		}
+		cout<<endl;
+	}
+
+////////////////////////////////////////////////////////////////////////
+// COMBINATIONS
+////////////////////////////////////////////////////////////////////////
+
+cout<<endl;
+cout<<"-------------------------------------------------------------------------------"<<endl;
+cout<<"COMBINATIONS"<<endl;
+cout<<"-------------------------------------------------------------------------------"<<endl;
+
 	/////////////////////////////////////////////
 	// UNION
 	/////////////////////////////////////////////
-	
+
 	// Make unions of all geoms
 	newgeoms = new vector<Geometry *>;
 	for (int i=0; i<geoms->size()-1; i++) {
