@@ -10,6 +10,9 @@
 //  obscure reports from memory checkers like valgrind.
 //
 // $Log$
+// Revision 1.5  2003/10/20 17:50:30  strk
+// added Union example
+//
 // Revision 1.4  2003/10/09 11:20:12  strk
 // moved Log to a better place
 //
@@ -36,12 +39,28 @@ GeometryFactory *global_factory;
 void
 wkt_print_geoms(int numgeoms, Geometry **geoms)
 {
-	// WKT-print created geometries
+	// WKT-print given geometries
 	WKTWriter *wkt = new WKTWriter();
 	for (int i=0; i<numgeoms; i++) {
-		cout<<wkt->write(geoms[i])<<endl;
+		//string tmp="test";
+		string tmp=wkt->write(geoms[i]);
+		cout<<tmp<<endl;
+		//cout<<wkt->write(geoms[i])<<endl;
 	}
 	delete wkt;
+}
+
+// This is the simpler geometry you can get: a point.
+Point *
+create_point(double x, double y)
+{
+	Point p0;
+	Coordinate c;
+       	c.x = x;
+	c.y = y;
+	// the geometry factory will copy coordinate
+	Point *p = global_factory->createPoint(c);
+	return p;
 }
 
 // This function will create a LinearRing
@@ -153,7 +172,7 @@ create_simple_collection(Geometry *g1, Geometry *g2)
 // Start reading here
 void do_all()
 {
-	int numgeoms = 3;
+	int numgeoms = 4;
 	Geometry *geoms[numgeoms];
 
 	// Define a precision model using 0,0 as the reference origin
@@ -176,14 +195,18 @@ void do_all()
 	// Read function bodies to see the magic behind them
 	geoms[0] = create_square_linearring(0,0,100);
 	geoms[1] = create_square_polygon(0,200,300);
+	geoms[2] = create_square_polygon(0,250,300);
 
 	// here we write this bad-looking code to copy
 	// geometries before putting them in a collection
 	// object, since it will take responsability about
 	// passed arguments life.
-	geoms[2] = create_simple_collection(
+	geoms[3] = create_simple_collection(
 			new LinearRing(*((LinearRing *)geoms[0])),
 			new Polygon(*((Polygon *)geoms[1])));
+
+	// WKT-printing a point geometry segfaults !!
+	//geoms[4] = create_point(150, 350);
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
@@ -203,10 +226,53 @@ void do_all()
 	cout<<"--------HERE COMES THE HULLS----------"<<endl;
 	wkt_print_geoms(numgeoms, hulls);
 
-	// Delete created geometries and hulls
+	// Delete the hulls
+	for (int i=0; i<numgeoms; i++) {
+		delete hulls[i];
+	}
+	
+	/////////////////////////////////////////////
+	// UNION
+	/////////////////////////////////////////////
+	
+	// Make unions of all geoms
+	Geometry *unions[numgeoms*numgeoms];
+	int numunions=0;
+	for (int i=0; i<numgeoms-1; i++) {
+		Geometry *g1 = geoms[i];
+		for (int j=i+1; j<numgeoms; j++) {
+			Geometry *g2 = geoms[j];
+			try {
+				unions[numunions] = g1->Union(g2);
+				numunions++;
+			}
+			// It's illegal to union a collection ...
+			catch (IllegalArgumentException *ill) {
+				//cerr <<ill->toString()<<"\n";
+				delete ill;
+			}
+			catch (GEOSException *exc) {
+				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
+			}
+		}
+	}
+
+	// Print all unions
+	cout<<"--------HERE COMES THE UNIONS----------"<<endl;
+	wkt_print_geoms(numunions, unions);
+
+	// Delete the resulting geoms
+	for (int i=0; i<numunions; i++) {
+		delete unions[i];
+	}
+	
+	/////////////////////////////////////////////
+	// CLEANUP
+	/////////////////////////////////////////////
+
+	// Delete base geometries 
 	for (int i=0; i<numgeoms; i++) {
 		delete geoms[i];
-		delete hulls[i];
 	}
 
 	delete global_factory;
@@ -222,7 +288,7 @@ main()
 	// one, so this is a catch-all 
 	catch (GEOSException *exc)
 	{
-		cerr <<"Generic exception: "<<exc->toString()<<"\n";
+		cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
 		exit(1);
 	}
 	// and this is a catch-all non standard ;)
