@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/07/14 21:15:49  strk
+ * Added GeometricShapeFactory example: createCircle.
+ * Added simple filter to send example output to a postgis table.
+ *
  * Revision 1.19  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -67,9 +71,7 @@
  **********************************************************************/
 
 #include <stdio.h>
-#include <geos/geom.h>
-#include <geos/io.h>
-#include <geos/unload.h>
+#include <geos.h>
 
 using namespace geos;
 
@@ -208,6 +210,36 @@ create_simple_collection(vector<Geometry *> *geoms)
 	// return global_factory->createGeometryCollection(geoms);
 }
 
+//
+// This function uses GeometricShapeFactory to render
+// a circle having given center and radius
+//
+Polygon *
+create_circle(double centerX, double centerY, double radius)
+{
+	GeometricShapeFactory shapefactory(global_factory);
+	shapefactory.setCentre(Coordinate(centerX, centerY));
+	shapefactory.setSize(radius);
+	// same as:
+	//	shapefactory.setHeight(radius);
+	//	shapefactory.setWidth(radius);
+	return shapefactory.createCircle();
+};
+
+//
+// This function uses GeometricShapeFactory to render
+// an ellipse having given center and axis size
+//
+Polygon *
+create_ellipse(double centerX, double centerY, double width, double height)
+{
+	GeometricShapeFactory shapefactory(global_factory);
+	shapefactory.setCentre(Coordinate(centerX, centerY));
+	shapefactory.setHeight(height);
+	shapefactory.setWidth(width);
+	return shapefactory.createCircle();
+};
+
 
 // Start reading here
 void do_all()
@@ -233,13 +265,16 @@ void do_all()
 ////////////////////////////////////////////////////////////////////////
 
 	// Read function bodies to see the magic behind them
-	geoms->push_back(create_point(150, 350));
-	geoms->push_back(create_ushaped_linestring(60,60,100));
-	geoms->push_back(create_square_linearring(0,0,100));
-	geoms->push_back(create_square_polygon(0,200,300));
-	geoms->push_back(create_square_polygon(0,250,300));
-	geoms->push_back(create_simple_collection(geoms));
+	//geoms->push_back(create_point(150, 350));
+	//geoms->push_back(create_ushaped_linestring(60,60,100));
+	//geoms->push_back(create_square_linearring(0,0,100));
+	//geoms->push_back(create_square_polygon(0,200,300));
+	//geoms->push_back(create_square_polygon(0,250,300));
+	//geoms->push_back(create_simple_collection(geoms));
 
+	// These ones use a GeometricShapeFactory
+	geoms->push_back(create_circle(0, 0, 10));
+	geoms->push_back(create_ellipse(0, 0, 8, 12));
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
