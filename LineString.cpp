@@ -170,7 +170,7 @@ void LineString::normalize() {
 		int j = points.getSize() - 1 - i;
 		if (!(points.getAt(i)==points.getAt(j))) {
 			if (points.getAt(i).compareTo(points.getAt(j)) > 0) {
-				reversePointOrder(points);
+				reversePointOrder(&points);
 			}
 			return;
 		}
@@ -184,7 +184,7 @@ bool LineString::isEquivalentClass(Geometry *other) {
 		return false;
 }
 
-bool LineString::compareToSameClass(LineString ls) {
-	return compare(points.toVector(),ls.points.toVector());
+int LineString::compareToSameClass(LineString *ls) {
+	return compare(points.toVector(),ls->points.toVector());
 }
 

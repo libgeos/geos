@@ -114,6 +114,10 @@ string CoordinateList::toString() {
 	return result;
 }
 
+void CoordinateList::swap(vector<Coordinate> v) {
+	vect->swap(v);
+}
+
 CoordinateList::~CoordinateList() {
 	delete vect;
 }

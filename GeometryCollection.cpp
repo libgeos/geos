@@ -142,8 +142,8 @@ Envelope GeometryCollection::computeEnvelopeInternal() {
 	return envelope;
 }
 
-int GeometryCollection::compareToSameClass(GeometryCollection gc) {
-	return compare(geometries, gc.geometries);
+int GeometryCollection::compareToSameClass(GeometryCollection *gc) {
+	return compare(geometries, gc->geometries);
 }
 
 GeometryCollection::~GeometryCollection(void){}

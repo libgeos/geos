@@ -168,10 +168,11 @@ int main(int argc, char** argv)
 	z=ls1.equalsExact(&ls1);
 
 	Polygon p1(p);
-	p.compareToSameClass(p1);
+	p.compareToSameClass(&p1);
 
 	p.normalize();
 */
+	Geometry g(PrecisionModel(),10);
 	GeometryFactory gf;
 	string a(typeid(gf).name());
 	cout << a << endl;

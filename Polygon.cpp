@@ -165,8 +165,8 @@ void Polygon::normalize() {
 	sort(holes.begin(),holes.end(),greaterThen);
 }
 
-bool Polygon::compareToSameClass(Polygon p) {
-	return shell.compareToSameClass(p.shell);
+int Polygon::compareToSameClass(Polygon *p) {
+	return shell.compareToSameClass(&(p->shell));
 }
 
 //!!! External dependency
@@ -182,7 +182,7 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	ring->setPoints(uniqueCoordinates);
 //!!! External dependency
 //	if (cgAlgorithms.isCCW(ring.getCoordinates()) == clockwise) {
-//		reversePointOrder(ring.getCoordinates());
+//		reversePointOrder(&(ring.getCoordinates()));
 //	}
 }
 

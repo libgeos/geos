@@ -83,6 +83,7 @@ public:
 	vector<Coordinate> toVector();
 	string toString();
 	void setPoints(const vector<Coordinate> &v);
+	void swap(vector<Coordinate> v);
 private:
 	void moveTo(int pos);
 	int current;
@@ -205,72 +206,110 @@ private:
 	double maxy;	/// the maximum y-coordinate
 };
 
+class Geometry;
 class GeometryFilter;
-class Geometry {
+class IntersectionMatrix;
+
+class SFSGeometry {
+public:
+	virtual int getSRID()=0;
+	virtual string getGeometryType()=0;
+	virtual PrecisionModel getPrecisionModel()=0;
+	virtual Envelope getEnvelopeInternal()=0;
+	virtual Geometry getEnvelope()=0;
+	virtual bool isEmpty()=0;
+	virtual bool isSimple()=0;
+	virtual Geometry getBoundary()=0;
+	virtual int getDimension()=0;
+	virtual bool equals(Geometry *other)=0;
+	virtual bool disjoint(Geometry *other)=0;
+	virtual bool intersects(Geometry *other)=0;
+	virtual bool touches(Geometry *other)=0;
+	virtual bool crosses(Geometry *other)=0;
+	virtual bool within(Geometry *other)=0;
+	virtual bool contains(Geometry *other)=0;
+	virtual bool overlaps(Geometry *other)=0;
+	virtual bool relate(Geometry *other, string intersectionPattern)=0;
+	virtual IntersectionMatrix relate(Geometry *other)=0;
+	virtual Geometry buffer(double distance)=0;
+	virtual Geometry convexHull()=0;
+	virtual Geometry intersection(Geometry *other)=0;
+	virtual Geometry Union(Geometry *other)=0;
+	virtual Geometry difference(Geometry *other)=0;
+	virtual Geometry symDifference(Geometry *other)=0;
+	virtual string toText()=0;
+};
+
+class Geometry: public SFSGeometry {
 public:
 	Geometry(void);
 	Geometry(const Geometry &geom);
 	Geometry(PrecisionModel precisionModel, int SRID);
-	virtual ~Geometry(void);
-	virtual bool isEmpty() {return 1;};
+	virtual string getGeometryType(){return "Geometry";}; //Abstract
+	virtual int getSRID();
+	virtual void setSRID(int newSRID);
+	virtual PrecisionModel getPrecisionModel();
+	virtual CoordinateList getCoordinates(){return CoordinateList();}; //Abstract
+	virtual int getNumPoints(){return 0;}; //Abstract
+	virtual bool isSimple() {return false;}; //Abstract
+	virtual bool isValid();
+	virtual bool isEmpty() {return false;}; //Abstract
+	virtual int getDimension(){return 0;}; //Abstract
+	virtual Geometry getBoundary() {return Geometry();}; //Abstract
+	virtual int getBoundaryDimension(){return 0;}; //Abstract
+	virtual Geometry getEnvelope();
+	virtual Envelope getEnvelopeInternal();
+	virtual bool disjoint(Geometry *g);
+	virtual bool touches(Geometry *g);
+	virtual bool intersects(Geometry *g);
+	virtual bool crosses(Geometry *g);
+	virtual bool within(Geometry *g);
+	virtual bool contains(Geometry *g);
+	virtual bool overlaps(Geometry *g);
+	virtual bool relate(Geometry *g, string intersectionPattern);
+	virtual IntersectionMatrix relate(Geometry *g);
+	virtual bool equals(Geometry *g);
+	virtual string toString();
+	virtual string toText();
+	virtual Geometry buffer(double distance);
+	virtual Geometry convexHull();
+	virtual Geometry intersection(Geometry *other);
+	virtual Geometry Union(Geometry *other);
+	virtual Geometry difference(Geometry *other);
+	virtual Geometry symDifference(Geometry *other);
+	virtual bool equalsExact(Geometry *other){return false;}; //Abstract
+	virtual void apply(CoordinateFilter *filter){}; //Abstract
+	virtual void apply(GeometryFilter *filter){}; //Abstract
+	//public Object clone() // Replaced by copy constructor
+	virtual void normalize(){}; //Abstract
+	virtual int compareTo(Geometry *geom);
 
-//public abstract String getGeometryType();
-//public int getSRID()
-//public void setSRID(int SRID)
-	virtual PrecisionModel getPrecisionModel(){return PrecisionModel();};
-	virtual CoordinateList getCoordinates(){return CoordinateList();};
-	virtual int getNumPoints(){return 0;};
-//public abstract boolean isSimple()
-//public boolean isValid()
-	virtual int getDimension(){return 0;};
-//public abstract Geometry getBoundary()
-	virtual int getBoundaryDimension(){return 0;};
-//public Geometry getEnvelope()
-	Envelope getEnvelopeInternal(){return Envelope();};
-//public boolean disjoint(Geometry g)
-//public boolean touches(Geometry g)
-//public boolean intersects(Geometry g)
-//public boolean crosses(Geometry g)
-//public boolean within(Geometry g)
-//public boolean contains(Geometry g)
-//public boolean overlaps(Geometry g)
-//public boolean relate(Geometry g, String intersectionPattern)
-//public IntersectionMatrix relate(Geometry g)
-//public boolean equals(Geometry g)
-//public String toString()
-//public String toText()
-//public Geometry buffer(double distance)
-	virtual Geometry convexHull(){return Geometry();};
-//public Geometry intersection(Geometry other)
-//public Geometry Union(Geometry other)
-//public Geometry difference(Geometry other)
-//public Geometry symDifference(Geometry other)
-	bool equalsExact(Geometry *other){return false;};
-	void apply(CoordinateFilter *filter){};
-	void apply(GeometryFilter *filter){};
-//public Object clone()
-	void normalize(){};
-	bool compareTo(Geometry *geom){return true;}; //Modified
-//private int getClassSortIndex()
+	virtual ~Geometry(void);
 protected:
 	PrecisionModel precisionModel;
 	int SRID;
 	Envelope envelope;
-	bool isEquivalentClass(Geometry *other);
-	static bool hasNonEmptyElements(vector<Geometry *> geometries) {return false;};
-	static bool hasNullElements(CoordinateList list) {return false;};
-	static bool hasNullElements(vector<Geometry *> lrs) {return false;};
-	static void reversePointOrder(CoordinateList coordinates){};
-	static Coordinate minCoordinate(CoordinateList coordinates){return Coordinate();};
-	static void scroll(CoordinateList *coordinates, Coordinate firstCoordinate){};
-//static int indexOf(Coordinate coordinate, Coordinate[] coordinates)
-	void checkNotGeometryCollection(Geometry *g){};
-//protected void checkEqualSRID(Geometry other)
-//protected void checkEqualPrecisionModel(Geometry other)
-//protected abstract Envelope computeEnvelopeInternal()
-//protected abstract int compareToSameClass(Object o)
-	bool compare(vector<Coordinate> a, vector<Coordinate> b){return true;}; //Possibly add another vector type
-	bool compare(vector<Geometry *> a, vector<Geometry *> b){return true;}; //Possibly add another vector type
+//!!! External dependency
+//	static CGAlgorithms cgAlgorithms = new RobustCGAlgorithms();
+	static bool hasNonEmptyElements(vector<Geometry *> geometries);
+	static bool hasNullElements(CoordinateList list);
+	static bool hasNullElements(vector<Geometry *> lrs);
+	static void reversePointOrder(CoordinateList *coordinates);
+	static Coordinate minCoordinate(CoordinateList coordinates);
+	static void scroll(CoordinateList *coordinates, Coordinate firstCoordinate);
+	static int indexOf(Coordinate coordinate, CoordinateList *coordinates);
+	virtual bool isEquivalentClass(Geometry *other);
+	virtual void checkNotGeometryCollection(Geometry *g);
+	virtual void checkEqualSRID(Geometry *other);
+	virtual void checkEqualPrecisionModel(Geometry *other);
+	virtual Envelope computeEnvelopeInternal(){return Envelope();}; //Abstract
+	virtual int compareToSameClass(Geometry *geom){return 0;}; //Abstract
+	int compare(vector<Coordinate> a, vector<Coordinate> b);
+	int compare(vector<Geometry *> a, vector<Geometry *> b);
+private:
+	vector<string> sortedClasses;
+	virtual int getClassSortIndex();
+
 };
 
 /**
@@ -382,39 +421,10 @@ bool operator==(Coordinate a, Coordinate b);
 bool operator==(Envelope a, Envelope b);
 bool operator==(PrecisionModel a, PrecisionModel b);
 
+bool lessThen(Coordinate a,Coordinate b);
 bool greaterThen(Geometry *first, Geometry *second);
 
-class SFSGeometry {
-public:
-//	virtual int getSRID()=0;
-//	virtual string getGeometryType()=0;
-//	virtual PrecisionModel getPrecisionModel()=0;
-//	virtual Envelope getEnvelopeInternal()=0;
-//	virtual Geometry getEnvelope()=0;
-//	virtual bool isEmpty()=0;
-//	virtual bool isSimple()=0;
-//	virtual Geometry getBoundary()=0;
-//	virtual int getDimension()=0;
-//	virtual bool equals(Geometry other)=0;
-//	virtual bool disjoint(Geometry other)=0;
-//	virtual bool intersects(Geometry other)=0;
-//	virtual bool touches(Geometry other)=0;
-//	virtual bool crosses(Geometry other)=0;
-//	virtual bool within(Geometry other)=0;
-//	virtual bool contains(Geometry other)=0;
-//	virtual bool overlaps(Geometry other)=0;
-//	virtual bool relate(Geometry other, string intersectionPattern)=0;
-//	virtual IntersectionMatrix relate(Geometry other)=0;
-//	virtual Geometry buffer(double distance)=0;
-//	virtual Geometry convexHull()=0;
-//	virtual Geometry intersection(Geometry other)=0;
-//	virtual Geometry Union(Geometry other)=0;
-//	virtual Geometry difference(Geometry other)=0;
-//	virtual Geometry symDifference(Geometry other)=0;
-//	virtual string toText()=0;
-};
-
-class SFSGeometryCollection : public SFSGeometry {
+class SFSGeometryCollection { //: public SFSGeometry {
 public:
 	virtual int getNumGeometries()=0;
 	virtual Geometry getGeometryN(int n)=0;
@@ -443,7 +453,7 @@ public:
 protected:
 	vector<Geometry *> geometries;
 	virtual Envelope computeEnvelopeInternal();
-	virtual int compareToSameClass(GeometryCollection gc);
+	virtual int compareToSameClass(GeometryCollection *gc);
 };
 
 class GeometryCollectionIterator {
@@ -480,7 +490,7 @@ class SFSMultiSurface { //: public SFSGeometryCollection {
 class SFSMultiPolygon : public SFSMultiSurface {
 };
 
-class SFSPoint : public SFSGeometry {
+class SFSPoint {// : public SFSGeometry {
 public:
 	virtual double getX()=0;
 	virtual double getY()=0;
@@ -512,10 +522,10 @@ public:
 protected:
 	Coordinate coordinate;
 	Envelope computeEnvelopeInternal();
-	bool compareToSameClass(Point p);
+	int compareToSameClass(Point *p);
 };
 
-class  SFSCurve : public SFSGeometry {
+class  SFSCurve { //: public SFSGeometry {
 public:
 	virtual Point getStartPoint()=0;
 	virtual Point getEndPoint()=0;
@@ -560,7 +570,7 @@ public:
 	virtual void apply(CoordinateFilter *filter);
 	virtual void apply(GeometryFilter *filter);
 	virtual void normalize();
-	virtual bool compareToSameClass(LineString ls); //was protected
+	virtual int compareToSameClass(LineString *ls); //was protected
 protected:
 	CoordinateList points;
 	virtual Envelope computeEnvelopeInternal();
@@ -579,7 +589,7 @@ public:
 	void setPoints(CoordinateList cl);
 };
 
-class SFSSurface : public SFSGeometry {
+class SFSSurface { //: public SFSGeometry {
 };
 
 class SFSPolygon : public SFSSurface {
@@ -612,7 +622,7 @@ public:
 	void apply(GeometryFilter *filter);
 	Geometry convexHull();
 	void normalize();
-	bool compareToSameClass(Polygon p); //was protected
+	int compareToSameClass(Polygon *p); //was protected
 protected:
 	LinearRing shell;
 	vector<Geometry *> holes; //Actually vector<LinearRing *>
