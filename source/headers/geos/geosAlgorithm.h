@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/09/13 10:12:49  strk
+ * Added invalid coordinates checks in IsValidOp.
+ * Cleanups.
+ *
  * Revision 1.5  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -105,18 +109,20 @@ public:
 		STRAIGHT
 	};
 	CGAlgorithms(){};
-  /**
-   * Test whether a point lies inside a ring.
-   * The ring may be oriented in either direction.
-   * If the point lies on the ring boundary the result of this method is unspecified.
-   * <p>
-   * This algorithm does not attempt to first check the point against the envelope
-   * of the ring.
-   *
-   * @param p point to check for ring inclusion
-   * @param ring assumed to have first point identical to last point
-   * @return <code>true</code> if p is inside ring
-   */
+
+	/**
+	 * Test whether a point lies inside a ring.
+	 * The ring may be oriented in either direction.
+	 * If the point lies on the ring boundary the result
+	 * of this method is unspecified.
+	 * 
+	 * This algorithm does not attempt to first check the
+	 *point against the envelope of the ring.
+	 *
+	 * @param p point to check for ring inclusion
+	 * @param ring assumed to have first point identical to last point
+	 * @return <code>true</code> if p is inside ring
+	 */
 	static bool isPointInRing(const Coordinate& p, const CoordinateSequence* ring);
 	/**
 	* Test whether a point lies on a linestring.

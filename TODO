@@ -1,3 +1,5 @@
+- Make CGAlgorithms Robust. Keep RobustCGAlgorithms as a staub
+  for backward compatibility. (check if this is already the case)
 
 - Check how to disable GEOS_VERSION define on command line
   (or make GEOS_VERSION define in version.h optional)

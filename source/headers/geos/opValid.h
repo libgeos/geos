@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/09/13 10:12:49  strk
+ * Added invalid coordinates checks in IsValidOp.
+ * Cleanups.
+ *
  * Revision 1.4  2004/09/13 09:18:10  strk
  * Added IsValidOp::isValid(Coordinate &)
  *
@@ -94,7 +98,8 @@ public:
 		RING_SELF_INTERSECTION,
 		NESTED_SHELLS,
 		DUPLICATE_RINGS,
-		TOO_FEW_POINTS
+		TOO_FEW_POINTS,
+		INVALID_COORDINATE
 	};
 
 TopologyValidationError(int newErrorType,Coordinate newPt);
@@ -385,6 +390,9 @@ private:
 	*/
 	const Coordinate& checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph);
 	void checkConnectedInteriors(GeometryGraph *graph);
+	void checkInvalidCoordinates(const CoordinateSequence *cs);
+	void checkInvalidCoordinates(const Polygon *poly);
 };
+
 }
 #endif

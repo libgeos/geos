@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/09/13 10:12:49  strk
+ * Added invalid coordinates checks in IsValidOp.
+ * Cleanups.
+ *
  * Revision 1.20  2004/09/13 09:18:10  strk
  * Added IsValidOp::isValid(Coordinate &)
  *
@@ -123,6 +127,8 @@ void IsValidOp::checkValid(const Geometry *g) {
 * Checks validity of a LineString.  Almost anything goes for linestrings!
 */
 void IsValidOp::checkValid(const LineString *g){
+	checkInvalidCoordinates(g->getCoordinatesRO());
+	if (validErr != NULL) return;
 	GeometryGraph *graph=new GeometryGraph(0,g);
 	checkTooFewPoints(graph);
 	delete graph;
@@ -132,6 +138,8 @@ void IsValidOp::checkValid(const LineString *g){
 * Checks validity of a LinearRing.
 */
 void IsValidOp::checkValid(const LinearRing *g){
+	checkInvalidCoordinates(g->getCoordinatesRO());
+	if (validErr != NULL) return;
 	GeometryGraph *graph = new GeometryGraph(0, g);
 	checkTooFewPoints(graph);
 	if (validErr!=NULL) {
@@ -150,8 +158,9 @@ void IsValidOp::checkValid(const LinearRing *g){
 * Sets the validErr flag.
 */
 void IsValidOp::checkValid(const Polygon *g){
+	checkInvalidCoordinates(g);
+	if (validErr != NULL) return;
 	GeometryGraph *graph=new GeometryGraph(0,g);
-
 	checkTooFewPoints(graph);
 	if (validErr!=NULL) {
 		delete graph;
@@ -182,9 +191,16 @@ void IsValidOp::checkValid(const Polygon *g){
 	delete graph;
 }
 
-void IsValidOp::checkValid(const MultiPolygon *g){
-	GeometryGraph *graph=new GeometryGraph(0,g);
+void
+IsValidOp::checkValid(const MultiPolygon *g)
+{
+	for (int i=0; i<g->getNumGeometries(); i++)
+	{
+		checkInvalidCoordinates((const Polygon *)g->getGeometryN(i));
+		if (validErr != NULL) return;
+	}
 
+	GeometryGraph *graph=new GeometryGraph(0,g);
 	checkTooFewPoints(graph);
 	if (validErr!=NULL) {
 		delete graph;
@@ -339,23 +355,6 @@ void IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph) {
 	}
 }
 
-//void IsValidOp::OLDcheckHolesInShell(Polygon *p) {
-//	LinearRing *shell=(LinearRing*) p->getExteriorRing();
-//	CoordinateSequence *shellPts=shell->getCoordinates();
-//	for(int i=0;i<p->getNumInteriorRing();i++) {
-//		Coordinate& holePt=findPtNotNode(p->getInteriorRingN(i)->getCoordinates(),shell,(*arg)[0]);
-//		Assert::isTrue(!(holePt==Coordinate::getNull()),"Unable to find a hole point not a vertex of the shell");
-//		bool onBdy=cga->isOnLine(holePt,shellPts);
-//		bool inside=cga->isPointInRing(holePt,shellPts);
-//		bool outside=!(onBdy||inside);
-//		if(outside) {
-//			validErr=new TopologyValidationError(
-//				TopologyValidationError::HOLE_OUTSIDE_SHELL,
-//				holePt);
-//			return;
-//		}
-//	}
-//}
 /**
 * Tests that no hole is nested inside another hole.
 * This routine assumes that the holes are disjoint.
@@ -384,43 +383,22 @@ void IsValidOp::checkHolesNotNested(const Polygon *p,GeometryGraph *graph) {
 	}
 }
 
-//void IsValidOp::SLOWcheckHolesNotNested(Polygon *p) {
-//	for(int i=0;i<p->getNumInteriorRing();i++) {
-//		LinearRing *innerHole=(LinearRing*) p->getInteriorRingN(i);
-//		CoordinateSequence *innerHolePts=innerHole->getCoordinates();
-//		for(int j=0;j<p->getNumInteriorRing();j++) {
-//			// don't test hole against itself!
-//			if (i==j) continue;
-//			LinearRing *searchHole=(LinearRing*) p->getInteriorRingN(j);
-//			// if envelopes don't overlap, holes are not nested
-//			if (!innerHole->getEnvelopeInternal()->overlaps(searchHole->getEnvelopeInternal()))
-//				continue;
-//			CoordinateSequence *searchHolePts=searchHole->getCoordinates();
-//			Coordinate& innerholePt=findPtNotNode(innerHolePts,searchHole,(*arg)[0]);
-//			Assert::isTrue(!(innerholePt==Coordinate::getNull()),"Unable to find a hole point not a node of the search hole");
-//			bool inside=cga->isPointInRing(innerholePt,searchHolePts);
-//			if (inside) {
-//				validErr=new TopologyValidationError(
-//					TopologyValidationError::NESTED_HOLES,
-//					innerholePt);
-//				return;
-//			}
-//		}
-//	}
-//}
-/**
-* Tests that no element polygon is wholly in the interior of another element polygon.
-* <p>
-* Preconditions:
-* <ul>
-* <li>shells do not partially overlap
-* <li>shells do not touch along an edge
-* <li>no duplicate rings exist
-* </ul>
-* This routine relies on the fact that while polygon shells may touch at one or
-* more vertices, they cannot touch at ALL vertices.
-*/
-void IsValidOp::checkShellsNotNested(const MultiPolygon *mp,GeometryGraph *graph) {
+/*
+ * Tests that no element polygon is wholly in the interior of another
+ * element polygon.
+ * 
+ * Preconditions:
+ * 
+ * - shells do not partially overlap
+ * - shells do not touch along an edge
+ * - no duplicate rings exist
+ *
+ * This routine relies on the fact that while polygon shells may touch at
+ * one or more vertices, they cannot touch at ALL vertices.
+ */
+void
+IsValidOp::checkShellsNotNested(const MultiPolygon *mp,GeometryGraph *graph)
+{
 	for(int i=0;i<mp->getNumGeometries();i++) {
 		Polygon *p=(Polygon*)mp->getGeometryN(i);
 		LinearRing *shell=(LinearRing*) p->getExteriorRing();
@@ -461,31 +439,36 @@ void IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,Ge
 		return;
 	}
 	
-    /**
-     * Check if the shell is inside one of the holes.
-     * This is the case if one of the calls to checkShellInsideHole
-     * returns a null coordinate.
-     * Otherwise, the shell is not properly contained in a hole, which is an error.
-     */
+	/**
+	 * Check if the shell is inside one of the holes.
+	 * This is the case if one of the calls to checkShellInsideHole
+	 * returns a null coordinate.
+	 * Otherwise, the shell is not properly contained in a hole, which is
+	 * an error.
+	 */
 	Coordinate& badNestedPt=Coordinate::getNull();
-	for(int i=0;i<p->getNumInteriorRing();i++) {
+	for(int i=0; i<p->getNumInteriorRing(); i++) {
 		LinearRing *hole=(LinearRing*) p->getInteriorRingN(i);
-		badNestedPt=checkShellInsideHole(shell,hole,graph);
+		badNestedPt = checkShellInsideHole(shell, hole, graph);
 		if (badNestedPt==Coordinate::getNull()) return;
 	}
-	validErr=new TopologyValidationError(TopologyValidationError::NESTED_SHELLS,badNestedPt);
+	validErr=new TopologyValidationError(
+		TopologyValidationError::NESTED_SHELLS, badNestedPt
+	);
 }
 
-/**
-* This routine checks to see if a shell is properly contained in a hole.
-* It assumes that the edges of the shell and hole do not
-* properly intersect.
-*
-* @return <code>null</code> if the shell is properly contained, or
-*   a Coordinate which is not inside the hole if it is not
-*
-*/
-const Coordinate& IsValidOp::checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph) {
+/*
+ * This routine checks to see if a shell is properly contained in a hole.
+ * It assumes that the edges of the shell and hole do not
+ * properly intersect.
+ *
+ * @return <code>null</code> if the shell is properly contained, or
+ *   a Coordinate which is not inside the hole if it is not
+ *
+ */
+const Coordinate&
+IsValidOp::checkShellInsideHole(const LinearRing *shell, const LinearRing *hole, GeometryGraph *graph)
+{
 	const CoordinateSequence *shellPts=shell->getCoordinatesRO();
 	const CoordinateSequence *holePts=hole->getCoordinatesRO();
 	// TODO: improve performance of this - by sorting pointlists for instance?
@@ -516,5 +499,38 @@ void IsValidOp::checkConnectedInteriors(GeometryGraph *graph) {
 		TopologyValidationError::DISCONNECTED_INTERIOR,
 		cit->getCoordinate());
 }
+
+
+void
+IsValidOp::checkInvalidCoordinates(const CoordinateSequence *cs)
+{
+	for (int i = 0; i<cs->getSize(); i++)
+	{
+		if (! isValid(cs->getAt(i)) )
+		{
+			validErr = new TopologyValidationError(
+				TopologyValidationError::INVALID_COORDINATE,
+				cs->getAt(i));
+			return;
+
+		}
+	}
+}
+
+void
+IsValidOp::checkInvalidCoordinates(const Polygon *poly)
+{
+	checkInvalidCoordinates(poly->getExteriorRing()->getCoordinatesRO());
+	if (validErr != NULL) return;
+	for (int i=0; i<poly->getNumInteriorRing(); i++)
+	{
+		checkInvalidCoordinates(
+			poly->getInteriorRingN(i)->getCoordinatesRO()
+		);
+		if (validErr != NULL) return;
+	}
+}
+
+
 }
 
