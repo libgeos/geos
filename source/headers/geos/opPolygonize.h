@@ -485,6 +485,9 @@ public:
 	 * invalid rings
 	 */
 	vector<LineString*>* getInvalidRingLines();
+
+// This seems to be needed by    GCC 2.95.4
+//friend class Polygonizer::LineStringAdder;
 };
 
 } // namespace geos
@@ -492,6 +495,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2004/12/13 13:54:42  strk
+ * Added a not about gcc 2.95.4 required friendship
+ *
  * Revision 1.5  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.
