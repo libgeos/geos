@@ -1,22 +1,41 @@
-/*
-* $Log$
-* Revision 1.28  2003/10/15 16:39:03  strk
-* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
-*
-* Revision 1.27  2003/10/14 15:58:51  strk
-* Useless vector<Geometry *> leaking allocations removed
-*
-* Revision 1.26  2003/10/11 01:56:08  strk
-*
-* Code base padded with 'const' keywords ;)
-*
-* Revision 1.25  2003/10/09 15:35:13  strk
-* added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
-*
-* Revision 1.24  2003/10/09 10:14:06  strk
-* just a style change in top Log comment.
-*
-*/
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.29  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.28  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ *
+ * Revision 1.27  2003/10/14 15:58:51  strk
+ * Useless vector<Geometry *> leaking allocations removed
+ *
+ * Revision 1.26  2003/10/11 01:56:08  strk
+ *
+ * Code base padded with 'const' keywords ;)
+ *
+ * Revision 1.25  2003/10/09 15:35:13  strk
+ * added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
+ *
+ * Revision 1.24  2003/10/09 10:14:06  strk
+ * just a style change in top Log comment.
+ *
+ **********************************************************************/
+
+
 #include "../headers/geom.h"
 #include "../headers/util.h"
 #include <typeinfo>

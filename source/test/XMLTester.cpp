@@ -1,18 +1,37 @@
-/*
-* $Log$
-* Revision 1.33  2003/10/17 05:51:21  ybychkov
-* Fixed a small memory leak.
-*
-* Revision 1.32  2003/10/16 13:01:31  strk
-* Added call to Unload::Release()
-*
-* Revision 1.31  2003/10/16 12:09:48  strk
-* bug fixed in exception handling
-*
-* Revision 1.30  2003/10/16 08:48:06  strk
-* Exceptions handled
-*
-*/
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.34  2003/11/07 01:23:43  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.33  2003/10/17 05:51:21  ybychkov
+ * Fixed a small memory leak.
+ *
+ * Revision 1.32  2003/10/16 13:01:31  strk
+ * Added call to Unload::Release()
+ *
+ * Revision 1.31  2003/10/16 12:09:48  strk
+ * bug fixed in exception handling
+ *
+ * Revision 1.30  2003/10/16 08:48:06  strk
+ * Exceptions handled
+ *
+ **********************************************************************/
+
+
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
 #ifdef _MSC_VER

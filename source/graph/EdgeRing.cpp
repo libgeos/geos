@@ -1,15 +1,39 @@
-/*
-* $Log$
-* Revision 1.21  2003/11/06 17:59:03  strk
-* Memory leaks fixed in ::containsPoint()
-*
-* Revision 1.20  2003/10/20 14:02:14  strk
-* more explicit exception thrown on null Directed Edge detection
-*
-* Revision 1.19  2003/10/15 16:39:03  strk
-* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
-*
-*/
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.22  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.21  2003/11/06 17:59:03  strk
+ * Memory leaks fixed in ::containsPoint()
+ *
+ * Revision 1.20  2003/10/20 14:02:14  strk
+ * more explicit exception thrown on null Directed Edge detection
+ *
+ * Revision 1.19  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ * $Log$
+ * Revision 1.22  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+
+
 #include "../headers/graph.h"
 #include "../headers/util.h"
 

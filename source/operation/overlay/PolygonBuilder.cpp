@@ -1,12 +1,31 @@
-/*
-* $Log$
-* Revision 1.10  2003/11/06 18:48:30  strk
-* added throw information comment in PolygonBuilder
-*
-* Revision 1.9  2003/10/13 17:47:49  strk
-* delete statement removed
-*
-*/
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.11  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.10  2003/11/06 18:48:30  strk
+ * added throw information comment in PolygonBuilder
+ *
+ * Revision 1.9  2003/10/13 17:47:49  strk
+ * delete statement removed
+ *
+ **********************************************************************/
+
+
 #include "../../headers/opOverlay.h"
 #include "stdio.h"
 #include "../../headers/util.h"

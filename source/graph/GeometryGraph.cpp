@@ -1,15 +1,36 @@
-/*
-* $Log$
-* Revision 1.31  2003/10/20 13:53:03  strk
-* LinearRing handled as a LineString in GeometryGraph::add(const Geometry *) - more explicit exception thrown for unknown geometries
-*
-* Revision 1.30  2003/10/15 16:39:03  strk
-* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
-*
-* Revision 1.29  2003/10/15 11:24:28  strk
-* Use getCoordinatesRO() introduced.
-*
-*/
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.32  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.31  2003/10/20 13:53:03  strk
+ * LinearRing handled as a LineString in 
+ * GeometryGraph::add(const Geometry *) - more explicit exception 
+ * thrown for unknown geometries
+ *
+ * Revision 1.30  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ *
+ * Revision 1.29  2003/10/15 11:24:28  strk
+ * Use getCoordinatesRO() introduced.
+ *
+ **********************************************************************/
+
+
 #include "../headers/graph.h"
 #include <typeinfo>
 #include "../headers/util.h"

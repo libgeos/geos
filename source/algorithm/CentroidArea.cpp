@@ -1,16 +1,36 @@
-/*
-* $Log$
-* Revision 1.9  2003/10/16 08:50:00  strk
-* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
-*
-* Revision 1.8  2003/10/13 15:39:03  strk
-* Fixed some leak or fault flips (forced copy of a single coordinate)
-*
-* Revision 1.7  2003/10/11 01:56:08  strk
-*
-* Code base padded with 'const' keywords ;)
-*
-*/
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.10  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.9  2003/10/16 08:50:00  strk
+ * Memory leak fixes. Improved performance by mean of more calls to 
+ * new getCoordinatesRO() when applicable.
+ *
+ * Revision 1.8  2003/10/13 15:39:03  strk
+ * Fixed some leak or fault flips (forced copy of a single coordinate)
+ *
+ * Revision 1.7  2003/10/11 01:56:08  strk
+ *
+ * Code base padded with 'const' keywords ;)
+ *
+ **********************************************************************/
+
+
 #include "../headers/geosAlgorithm.h"
 #include "../headers/platform.h"
 #include <typeinfo>

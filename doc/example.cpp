@@ -1,3 +1,26 @@
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.11  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+
+
 // This file should document by example usage of the GEOS library.
 // It could actually be a live discuss-by-example board for
 // architectural design choices.
@@ -11,6 +34,10 @@
 //  obscure reports from memory checkers like valgrind.
 //
 // $Log$
+// Revision 1.11  2003/11/07 01:23:42  pramsey
+// Add standard CVS headers licence notices and copyrights to all cpp and h
+// files.
+//
 // Revision 1.10  2003/11/06 17:41:41  strk
 // Added Buffer,Intersection,Difference and Symdifference. Exception cleanup
 //

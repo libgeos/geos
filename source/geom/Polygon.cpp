@@ -1,15 +1,36 @@
-/*
-* $Log$
-* Revision 1.26  2003/10/31 16:36:04  strk
-* Re-introduced clone() method. Copy constructor could not really replace it.
-*
-* Revision 1.25  2003/10/17 05:51:21  ybychkov
-* Fixed a small memory leak.
-*
-* Revision 1.24  2003/10/16 08:50:00  strk
-* Memory leak fixes. Improved performance by mean of more calls to new getCoordinatesRO() when applicable.
-*
-*/
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ * $Log$
+ * Revision 1.27  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.26  2003/10/31 16:36:04  strk
+ * Re-introduced clone() method. Copy constructor could not really 
+ * replace it.
+ *
+ * Revision 1.25  2003/10/17 05:51:21  ybychkov
+ * Fixed a small memory leak.
+ *
+ * Revision 1.24  2003/10/16 08:50:00  strk
+ * Memory leak fixes. Improved performance by mean of more calls to 
+ * new getCoordinatesRO() when applicable.
+ *
+ **********************************************************************/
+
+
 #include "../headers/geom.h"
 #include <typeinfo>
 #include "../headers/geosAlgorithm.h"
