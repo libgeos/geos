@@ -417,7 +417,7 @@ public:
 	}
 
 	bool Coordinate::equals3D(const Coordinate& other) const {
-		return (x == other.x) && ( y == other.y) && (( z == other.z)||(z==DoubleNotANumber && other.z==DoubleNotANumber));
+		return (x == other.x) && ( y == other.y) && ((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
 	}
 
 	void Coordinate::makePrecise(const PrecisionModel *precisionModel) {
@@ -2375,6 +2375,13 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.31  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *

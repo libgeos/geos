@@ -44,9 +44,9 @@ RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate&
 #if COMPUTE_Z
 			intPt[0].setCoordinate(p);
 			double z = interpolateZ(p, p1, p2);
-			if ( FINITE(z) )
+			if ( !ISNAN(z) )
 			{
-				if ( !FINITE(intPt[0].z) )
+				if ( ISNAN(intPt[0].z) )
 					intPt[0].z = z;
 				else
 					intPt[0].z = (intPt[0].z+z)/2;
@@ -129,7 +129,7 @@ RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p
 		if (Pq1==0) {
 			intPt[0].setCoordinate(q1);
 #if COMPUTE_Z
-			if ( FINITE(q1.z) )
+			if ( !ISNAN(q1.z) )
 			{
 				z += q1.z;
 				hits++;
@@ -139,7 +139,7 @@ RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p
 		if (Pq2==0) {
 			intPt[0].setCoordinate(q2);
 #if COMPUTE_Z
-			if ( FINITE(q2.z) )
+			if ( !ISNAN(q2.z) )
 			{
 				z += q2.z;
 				hits++;
@@ -149,7 +149,7 @@ RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p
 		if (Qp1==0) {
 			intPt[0].setCoordinate(p1);
 #if COMPUTE_Z
-			if ( FINITE(p1.z) )
+			if ( !ISNAN(p1.z) )
 			{
 				z += p1.z;
 				hits++;
@@ -159,7 +159,7 @@ RobustLineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p
 		if (Qp2==0) {
 			intPt[0].setCoordinate(p2);
 #if COMPUTE_Z
-			if ( FINITE(p2.z) )
+			if ( !ISNAN(p2.z) )
 			{
 				z += p2.z;
 				hits++;
@@ -224,8 +224,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (FINITE(q1z)) { ztot+=q1z; hits++; }
-		if (FINITE(q1.z)) { ztot+=q1.z; hits++; }
+		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
+		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1].setCoordinate(q2);
@@ -233,8 +233,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (FINITE(q2z)) { ztot+=q2z; hits++; }
-		if (FINITE(q2.z)) { ztot+=q2.z; hits++; }
+		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
+		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if DEBUG
@@ -252,8 +252,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (FINITE(p1z)) { ztot+=p1z; hits++; }
-		if (FINITE(p1.z)) { ztot+=p1.z; hits++; }
+		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
+		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1].setCoordinate(p2);
@@ -261,8 +261,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (FINITE(p2z)) { ztot+=p2z; hits++; }
-		if (FINITE(p2.z)) { ztot+=p2.z; hits++; }
+		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
+		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 		return COLLINEAR;
@@ -276,8 +276,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (FINITE(q1z)) { ztot+=q1z; hits++; }
-		if (FINITE(q1.z)) { ztot+=q1.z; hits++; }
+		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
+		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1].setCoordinate(p1);
@@ -285,8 +285,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (FINITE(p1z)) { ztot+=p1z; hits++; }
-		if (FINITE(p1.z)) { ztot+=p1.z; hits++; }
+		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
+		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if DEBUG
@@ -304,8 +304,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (FINITE(q1z)) { ztot+=q1z; hits++; }
-		if (FINITE(q1.z)) { ztot+=q1.z; hits++; }
+		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
+		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1].setCoordinate(p2);
@@ -313,8 +313,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (FINITE(p2z)) { ztot+=p2z; hits++; }
-		if (FINITE(p2.z)) { ztot+=p2.z; hits++; }
+		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
+		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if DEBUG
@@ -332,8 +332,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (FINITE(q2z)) { ztot+=q2z; hits++; }
-		if (FINITE(q2.z)) { ztot+=q2.z; hits++; }
+		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
+		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1].setCoordinate(p1);
@@ -341,8 +341,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (FINITE(p1z)) { ztot+=p1z; hits++; }
-		if (FINITE(p1.z)) { ztot+=p1.z; hits++; }
+		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
+		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if DEBUG
@@ -360,8 +360,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (FINITE(q2z)) { ztot+=q2z; hits++; }
-		if (FINITE(q2.z)) { ztot+=q2.z; hits++; }
+		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
+		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1].setCoordinate(p2);
@@ -369,8 +369,8 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 		ztot=0;
 		hits=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (FINITE(p2z)) { ztot+=p2z; hits++; }
-		if (FINITE(p2.z)) { ztot+=p2.z; hits++; }
+		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
+		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if DEBUG
@@ -400,8 +400,8 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 		double zvals = 0;
 		double zp = interpolateZ(intPt, p1, p2);
 		double zq = interpolateZ(intPt, q1, q2);
-		if ( FINITE(zp)) { ztot += zp; zvals++; }
-		if ( FINITE(zq)) { ztot += zq; zvals++; }
+		if ( !ISNAN(zp)) { ztot += zp; zvals++; }
+		if ( !ISNAN(zq)) { ztot += zq; zvals++; }
 		if ( zvals ) intPt.z = ztot/zvals;
 #endif // COMPUTE_Z
 		delete h;
@@ -494,6 +494,13 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.27  2004/11/26 09:53:48  strk
  * Added more FINITE calls, and added inf and -inf to FINITE checks
  *

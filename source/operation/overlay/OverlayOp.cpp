@@ -379,7 +379,7 @@ OverlayOp::getAverageZ(const Polygon *poly)
 	for (unsigned int i=0; i<pts->getSize(); i++)
 	{
 		const Coordinate &c = pts->getAt(i);
-		if ( FINITE(c.z) )
+		if ( !ISNAN(c.z) )
 		{
 			totz += c.z;
 			zcount++;
@@ -832,6 +832,13 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.34  2004/11/26 09:22:50  strk
  * Added FINITE(x) macro and its use.
  * Made input geoms average Z computation optional in OverlayOp.

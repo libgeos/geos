@@ -31,7 +31,7 @@ ElevationMatrixCell::~ElevationMatrixCell()
 void
 ElevationMatrixCell::add(const Coordinate &c)
 {
-	if ( FINITE(c.z) )
+	if ( !ISNAN(c.z) )
 	{
 		if ( zvals.insert(c.z).second )
 		{
@@ -43,7 +43,7 @@ ElevationMatrixCell::add(const Coordinate &c)
 void
 ElevationMatrixCell::add(double z)
 {
-	if ( FINITE(z) )
+	if ( !ISNAN(z) )
 	{
 		if ( zvals.insert(z).second )
 		{
@@ -78,6 +78,13 @@ ElevationMatrixCell::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.2  2004/11/26 09:22:50  strk
  * Added FINITE(x) macro and its use.
  * Made input geoms average Z computation optional in OverlayOp.

@@ -11,22 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.11  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.10  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geosAlgorithm.h>
 #include <geos/platform.h>
@@ -76,15 +61,19 @@ HCoordinate::HCoordinate(HCoordinate p1, HCoordinate p2) {
 
 double HCoordinate::getX() {
 	double a = x/w;
-	if ((a==DoubleNotANumber)||(a==DoubleInfinity)||(a==DoubleNegInfinity)) {
+	if (!FINITE(a))
+	{
 		throw new NotRepresentableException();
 	}
 	return a;
 }
 
-double HCoordinate::getY() {
+double
+HCoordinate::getY()
+{
 	double a = y/w;
-	if ((a==DoubleNotANumber)||(a==DoubleInfinity)||(a==DoubleNegInfinity)) {
+	if (!FINITE(a))
+	{
 		throw new NotRepresentableException();
 	}
 	return a;
@@ -93,5 +82,29 @@ double HCoordinate::getY() {
 Coordinate* HCoordinate::getCoordinate() {
 	return new Coordinate(getX(),getY());
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.12  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
+ * Revision 1.11  2004/10/20 17:32:14  strk
+ * Initial approach to 2.5d intersection()
+ *
+ * Revision 1.10  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.9  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

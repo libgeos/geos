@@ -30,6 +30,8 @@ ElevationMatrix::ElevationMatrix(const Envelope &newEnv,
 {
 	cellwidth=env.getWidth()/cols;
 	cellheight=env.getHeight()/rows;
+	if ( ! cellwidth ) cols=1;
+	if ( ! cellheight ) rows=1;
 }
 
 ElevationMatrix::~ElevationMatrix()
@@ -66,7 +68,7 @@ ElevationMatrix::add(const CoordinateSequence *cs)
 void
 ElevationMatrix::add(const Coordinate &c)
 {
-	if ( !FINITE(c.z) ) return;
+	if ( ISNAN(c.z) ) return;
 	try {
 		ElevationMatrixCell &emc = getCell(c);
 		emc.add(c);
@@ -81,18 +83,28 @@ ElevationMatrix::add(const Coordinate &c)
 ElevationMatrixCell &
 ElevationMatrix::getCell(const Coordinate &c) 
 {
-	double xoffset = c.x - env.getMinX();
-	double yoffset = c.y - env.getMinY();
-	int col = (int)(xoffset/cellwidth);
-	if ( col == cols ) col = cols-1;
-	int row = (int)(yoffset/cellheight);
-	if ( row == rows ) row = rows-1;
+	int col, row;
+
+	if ( ! cellwidth ) col=0;
+	else
+	{
+		double xoffset = c.x - env.getMinX();
+		col = (int)(xoffset/cellwidth);
+		if ( col == cols ) col = cols-1;
+	}
+	if ( ! cellheight ) row=0;
+	else
+	{
+		double yoffset = c.y - env.getMinY();
+		row = (int)(yoffset/cellheight);
+		if ( row == rows ) row = rows-1;
+	}
 	int celloffset = (cols*row)+col;
 
 	if  (celloffset<0 || celloffset >= cols*rows)
 	{
 		ostringstream s;
-		s<<"ElevationMatrix::getCell got a Coordinate out of grid extent ("<<env.toString()<<")";
+		s<<"ElevationMatrix::getCell got a Coordinate out of grid extent ("<<env.toString()<<") - cols:"<<cols<<" rows:"<<rows;
 		throw new IllegalArgumentException(s.str());
 	}
 
@@ -118,7 +130,7 @@ ElevationMatrix::getAvgElevation() const
 		{
 			const ElevationMatrixCell &cell = cells[(r*cols)+c];
 			double e = cell.getAvg();
-			if ( FINITE(e) )
+			if ( !ISNAN(e) )
 			{
 				zvals++;
 				ztot+=e;
@@ -156,6 +168,13 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.3  2004/11/26 09:22:50  strk
  * Added FINITE(x) macro and its use.
  * Made input geoms average Z computation optional in OverlayOp.

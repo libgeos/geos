@@ -380,7 +380,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	cerr<<"LineIntersector::interpolateZ("<<p.toString()<<", "<<p1.toString()<<", "<<p2.toString()<<")"<<endl;
 #endif
 
-	if ( !FINITE(p1.z) )
+	if ( ISNAN(p1.z) )
 	{
 #if DEBUG
 		cerr<<" p1 do not have a Z"<<endl;
@@ -388,7 +388,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 		return p2.z; // might be DoubleNotANumber again
 	}
 
-	if ( !FINITE(p2.z) )
+	if ( ISNAN(p2.z) )
 	{
 #if DEBUG
 		cerr<<" p2 do not have a Z"<<endl;
@@ -412,10 +412,20 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	}
 
 	double zgap = p2.z - p1.z;
-	if ( ! zgap ) return p2.z;
-	double seglen = sqrt(fabs(p2.x-p1.x)*fabs(p2.y-p1.y));
-	double pdist = sqrt(fabs(p.x-p1.x)*fabs(p.y-p1.y));
-	double fract = pdist/seglen;
+	if ( ! zgap )
+	{
+#if DEBUG
+		cerr<<" no zgap, returning "<<p2.z<<endl;
+#endif
+		return p2.z;
+	}
+	double xoff = (p2.x-p1.x);
+	double yoff = (p2.y-p1.y);
+	double seglen = (xoff*xoff+yoff*yoff);
+	xoff = (p.x-p1.x);
+	yoff = (p.y-p1.y);
+	double pdist = (xoff*xoff+yoff*yoff);
+	double fract = sqrt(pdist/seglen);
 	double interpolated = p1.z+(zgap*fract);
 #if DEBUG
 	cerr<<" zgap:"<<zgap<<" seglen:"<<seglen<<" pdist:"<<pdist
@@ -430,6 +440,13 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.18  2004/11/26 09:53:48  strk
  * Added more FINITE calls, and added inf and -inf to FINITE checks
  *

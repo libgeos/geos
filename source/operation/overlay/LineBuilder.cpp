@@ -170,7 +170,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 	unsigned int cssize = cs->getSize();
 	for (i=0; i<cssize; i++)
 	{
-		if ( cs->getAt(i).z != DoubleNotANumber ) v3d.push_back(i);
+		if ( !ISNAN(cs->getAt(i).z) ) v3d.push_back(i);
 	}
 
 #if DEBUG
@@ -269,6 +269,13 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.16  2004/11/24 11:32:39  strk
  * Re-enabled Z propagation in output lines.
  *

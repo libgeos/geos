@@ -37,12 +37,12 @@ ElevationMatrixFilter::filter_rw(Coordinate *c)
 	cerr<<"ElevationMatrixFilter::filter_rw("<<c->toString()<<") called"
 		<<endl;
 #endif
-	if ( !FINITE(c->z) && FINITE(avgElevation) )
+	if ( ISNAN(c->z) && !ISNAN(avgElevation) )
 	{
 		try {
 			const ElevationMatrixCell &emc = em->getCell(*c);
 			c->z = emc.getAvg();
-			if ( !FINITE(c->z) ) c->z = avgElevation;
+			if ( ISNAN(c->z) ) c->z = avgElevation;
 #if DEBUG
 			cerr<<"  z set to "<<c->z<<endl;
 #endif
@@ -63,6 +63,13 @@ ElevationMatrixFilter::filter_rw(Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.2  2004/11/26 09:22:50  strk
  * Added FINITE(x) macro and its use.
  * Made input geoms average Z computation optional in OverlayOp.

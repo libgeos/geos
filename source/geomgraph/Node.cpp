@@ -134,7 +134,7 @@ Node::addZ(double z)
 #if DEBUG
 	cerr<<"["<<this<<"] Node::addZ("<<z<<")";
 #endif
-	if ( !FINITE(z) )
+	if ( ISNAN(z) )
 	{
 #if DEBUG
 		cerr<<" skipped"<<endl;
@@ -152,7 +152,7 @@ Node::addZ(double z)
 	ztot+=z;
 	coord.z=ztot/zvals.size();
 #if DEBUG
-	cerr<<" added ["<<ztot<<"/"<<zvals.size()<<"="<<coord.z<<"]"<<endl;
+	cerr<<" added "<<z<<": ["<<ztot<<"/"<<zvals.size()<<"="<<coord.z<<"]"<<endl;
 #endif
 }
 
@@ -166,6 +166,13 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2004/11/29 16:05:33  strk
+ * Fixed a bug in LineIntersector::interpolateZ causing NaN values
+ * to come out.
+ * Handled dimensional collapses in ElevationMatrix.
+ * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
+ * dispendious isnan() and finite() calls.
+ *
  * Revision 1.8  2004/11/26 09:53:48  strk
  * Added more FINITE calls, and added inf and -inf to FINITE checks
  *
