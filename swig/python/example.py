@@ -57,9 +57,9 @@ def create_square_polygon(xoffset,yoffset,side):
     holes = geos.vector_GeometryP()
     holes.push_back(inner)
 
-    poly = global_factory.createPolygon(outer,holes)
-    outer.thisown = 0
-    holes.thisown = 0
+    poly = global_factory.createPolygonPP(outer,holes)
+    assert outer.thisown == 0
+    assert holes.thisown == 0
     inner.thisown = 0
     return poly
 
@@ -414,7 +414,7 @@ def do_all():
         print
 
 ####################
-# COMBINATIONS                           #
+# COMBINATIONS
 ####################
 
     print
@@ -423,7 +423,7 @@ def do_all():
     print "-------------------------------------------------------------------------------"
 
     ################
-    # UNION                               #
+    # UNION
     ################
 
     newgeoms = []
@@ -441,7 +441,7 @@ def do_all():
     wkt_print_geoms(newgeoms)
 
     ################
-    # INTERSECTION               #
+    # INTERSECTION
     ################
 
     newgeoms = []
@@ -459,7 +459,7 @@ def do_all():
     wkt_print_geoms(newgeoms)
 
     ################
-    # DIFFERENCE                   #
+    # DIFFERENCE
     ################
 
     newgeoms = []
@@ -492,6 +492,40 @@ def do_all():
                 pass
 
     print "\n", "----- HERE ARE SYMMETRIC DIFFERENCES ------"
+    wkt_print_geoms(newgeoms)
+
+    ################
+    # LINEMERGE
+    ################
+    temp = geos.vector_GeometryP()
+    for g in geoms:
+        temp.push_back(g)
+    lm = geos.LineMerger()
+    lm.add(temp)
+    mls = lm.getMergedLineStrings()
+    newgeoms = []
+    for i in range(mls.size()):
+        newgeoms.append(mls[i])
+    del mls
+
+    print "\n", "----- HERE IS THE LINEMERGE OUTPUT ------"
+    wkt_print_geoms(newgeoms)
+    
+    ################
+    # POLYGONIZE
+    ################
+    temp = geos.vector_GeometryP()
+    for g in geoms:
+        temp.push_back(g)
+    plgnzr = geos.Polygonizer()
+    plgnzr.add(temp)
+    polys = plgnzr.getPolygons()
+    newgeoms = []
+    for i in range(polys.size()):
+        newgeoms.append(polys[i])
+    del polys
+
+    print "\n", "----- HERE IS POLYGONIZE OUTPUT ------"
     wkt_print_geoms(newgeoms)
 
 print "GEOS", geos.geosversion(), "ported from JTS", geos.jtsport()
