@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
  * Revision 1.3  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -347,7 +350,7 @@ public:
 	void setChangePrecisionModel(bool nChangePrecisionModel);
 	PrecisionModel* getPrecisionModel();
 	bool getRemoveCollapsed();
-	Geometry* reduce(Geometry *geom);
+	Geometry* reduce(const Geometry *geom);
 };
 
 }

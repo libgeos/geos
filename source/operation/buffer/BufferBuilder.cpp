@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
  * Revision 1.8  2004/05/03 10:43:43  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -270,15 +273,20 @@ void
 BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder)
 {
 	vector<BufferSubgraph*> *processedGraphs=new vector<BufferSubgraph*>();
-	for (int i=0;i<(int)subgraphList->size();i++) {
-		BufferSubgraph *subgraph=(*subgraphList)[i];
-		Coordinate *p=subgraph->getRightmostCoordinate();
-		SubgraphDepthLocater *locater=new SubgraphDepthLocater(processedGraphs);
-		int outsideDepth=locater->getDepth(*p);
-		subgraph->computeDepth(outsideDepth);
-		subgraph->findResultEdges();
-		processedGraphs->push_back(subgraph);
-		polyBuilder->add(subgraph->getDirectedEdges(), subgraph->getNodes());
+	try {
+		for (int i=0;i<(int)subgraphList->size();i++) {
+			BufferSubgraph *subgraph=(*subgraphList)[i];
+			Coordinate *p=subgraph->getRightmostCoordinate();
+			SubgraphDepthLocater locater=SubgraphDepthLocater(processedGraphs);
+			int outsideDepth=locater.getDepth(*p);
+			subgraph->computeDepth(outsideDepth);
+			subgraph->findResultEdges();
+			processedGraphs->push_back(subgraph);
+			polyBuilder->add(subgraph->getDirectedEdges(), subgraph->getNodes());
+		}
+	} catch (...) {
+		delete processedGraphs;
+		throw;
 	}
 	delete processedGraphs;
 }

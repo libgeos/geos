@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
  * Revision 1.3  2004/04/20 10:14:20  strk
  * Memory leaks removed.
  *
@@ -70,7 +73,7 @@ bool SimpleGeometryPrecisionReducer::getRemoveCollapsed() {
 	return removeCollapsed;
 }
 
-Geometry* SimpleGeometryPrecisionReducer::reduce(Geometry *geom){
+Geometry* SimpleGeometryPrecisionReducer::reduce(const Geometry *geom){
 	GeometryEditor *geomEdit;
 	if (changePrecisionModel) {
 		GeometryFactory *newFactory = new GeometryFactory(newPrecisionModel, geom->getSRID());

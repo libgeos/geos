@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
  * Revision 1.6  2004/05/03 16:29:21  strk
  * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
  * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
@@ -128,7 +131,9 @@ vector<Boundable*>* STRtree::createParentBoundablesFromVerticalSlices(vector<vec
 	return parentBoundables;
 }
 
-vector<Boundable*>* STRtree::createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel) {
+vector<Boundable*>*
+STRtree::createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel)
+{
 	return AbstractSTRtree::createParentBoundables(childBoundables, newLevel);
 }
 

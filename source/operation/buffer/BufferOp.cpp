@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
  * Revision 1.26  2004/04/23 00:02:18  strk
  * const-correctness changes
  *
@@ -218,6 +221,8 @@ BufferOp::computeGeometry()
 
 		if (resultGeometry!=NULL)
 		{
+			// debug
+			//if ( saveException ) cerr<<saveException->toString()<<endl;
 			delete saveException;
 			return;
 		}

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
  * Revision 1.4  2004/04/20 10:14:20  strk
  * Memory leaks removed.
  *
@@ -71,7 +74,7 @@ Geometry* GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation
 				(typeid(*geometry)==typeid(MultiPoint)) ||
 				(typeid(*geometry)==typeid(MultiPolygon)) ||
 				(typeid(*geometry)==typeid(MultiLineString))) {
-		return editGeometryCollection((GeometryCollection*) geometry,operation);
+		return editGeometryCollection((const GeometryCollection*) geometry, operation);
 	}
 
 	if (typeid(*geometry)==typeid(Polygon)) {
@@ -116,7 +119,10 @@ Polygon* GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperat
 	return factory->createPolygon(shell,holes);
 }
 
-GeometryCollection* GeometryEditor::editGeometryCollection(const GeometryCollection *collection, GeometryEditorOperation *operation) {
+GeometryCollection*
+GeometryEditor::editGeometryCollection(const GeometryCollection *collection, GeometryEditorOperation *operation)
+{
+	GeometryCollection *ret;
 	GeometryCollection *newCollection = (GeometryCollection*) operation->edit(collection,factory);
 	vector<Geometry*> *geometries = new vector<Geometry*>();
 	for (int i = 0; i < newCollection->getNumGeometries(); i++) {
@@ -127,15 +133,19 @@ GeometryCollection* GeometryEditor::editGeometryCollection(const GeometryCollect
 		geometries->push_back(geometry);
 	}
 	if (typeid(*newCollection)==typeid(MultiPoint)) {
-		return factory->createMultiPoint(geometries);
+		ret = factory->createMultiPoint(geometries);
 	}
-	if (typeid(*newCollection)==typeid(MultiLineString)) {
-		return factory->createMultiLineString(geometries);
+	else if (typeid(*newCollection)==typeid(MultiLineString)) {
+		ret = factory->createMultiLineString(geometries);
 	}
-	if (typeid(*newCollection)==typeid(MultiPolygon)) {
-		return factory->createMultiPolygon(geometries);
+	else if (typeid(*newCollection)==typeid(MultiPolygon)) {
+		ret = factory->createMultiPolygon(geometries);
 	}
-	return factory->createGeometryCollection(geometries);
+	else {
+		ret = factory->createGeometryCollection(geometries);
+	}
+	delete geometries;
+	return ret;
 }
 
 /**

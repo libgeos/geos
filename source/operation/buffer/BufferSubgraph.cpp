@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
  * Revision 1.6  2004/04/16 12:48:07  strk
  * Leak fixes.
  *
@@ -219,28 +222,37 @@ void BufferSubgraph::computeDepths(DirectedEdge *startEdge){
 	nodeQueue->push_back(startNode);
 	nodesVisited->push_back(startNode);
 	startEdge->setVisited(true);
-	while (! nodeQueue->empty()) {
-		//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
-		Node *n=(*nodeQueue)[0];
-		nodeQueue->erase(nodeQueue->begin());
-		nodesVisited->push_back(n);
-		// compute depths around node, starting at this edge since it has depths assigned
-		computeNodeDepth(n);
-		// add all adjacent nodes to process queue,
-		// unless the node has been visited already
-		vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
-		for(int i=0;i<(int)ees->size();i++) {
-			DirectedEdge *de=(DirectedEdge*) (*ees)[i];
-			DirectedEdge *sym=de->getSym();
-			if (sym->isVisited()) continue;
-			Node *adjNode=sym->getNode();
+	try 
+	{
+		while (! nodeQueue->empty()) {
+			//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
+			Node *n=(*nodeQueue)[0];
+			nodeQueue->erase(nodeQueue->begin());
+			nodesVisited->push_back(n);
+			// compute depths around node, starting at this edge since it has depths assigned
+			computeNodeDepth(n);
+			// add all adjacent nodes to process queue,
+			// unless the node has been visited already
+			vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
+			for(int i=0;i<(int)ees->size();i++) {
+				DirectedEdge *de=(DirectedEdge*) (*ees)[i];
+				DirectedEdge *sym=de->getSym();
+				if (sym->isVisited()) continue;
+				Node *adjNode=sym->getNode();
 
-			if (! contains(nodesVisited,adjNode)) {
-				nodeQueue->push_back(adjNode);
-				nodesVisited->push_back(adjNode);
+				if (! contains(nodesVisited,adjNode)) {
+					nodeQueue->push_back(adjNode);
+					nodesVisited->push_back(adjNode);
+				}
 			}
 		}
+	} catch (...) {
+		delete nodesVisited;
+		delete nodeQueue;
+		throw;
 	}
+	delete nodesVisited;
+	delete nodeQueue;
 }
 
 bool BufferSubgraph::contains(vector<Node*> *nodes,Node *node) {
