@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/05/14 12:10:54  strk
+ * avoided leaks on malformed LinearRing
+ *
  * Revision 1.19  2004/05/07 13:23:51  strk
  * Memory leaks fixed.
  *
@@ -224,7 +227,13 @@ LineString* WKTReader::readLineStringText(StringTokenizer *tokenizer) {
 
 LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
 	CoordinateList *coords = getCoordinates(tokenizer);
-	LinearRing *ret = geometryFactory->createLinearRing(coords);
+	LinearRing *ret;
+	try {
+		ret = geometryFactory->createLinearRing(coords);
+	} catch (...) {
+		delete coords;
+		throw;
+	}
 	delete coords;
 	return ret;
 }
