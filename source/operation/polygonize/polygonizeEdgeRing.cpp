@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.3  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -86,7 +91,7 @@ polygonizeEdgeRing* polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRin
 * @return a {@link Coordinate} from <code>testPts</code> which is not in <code>pts</code>, '
 * or <code>null</code>
 */
-Coordinate& polygonizeEdgeRing::ptNotInList(CoordinateList *testPts,CoordinateList *pts){
+Coordinate& polygonizeEdgeRing::ptNotInList(CoordinateSequence *testPts,CoordinateSequence *pts){
 	for (int i=0; i<testPts->getSize(); i++) {
 		Coordinate& testPt=(Coordinate)testPts->getAt(i);
 		if (isInList(testPt,pts))
@@ -103,7 +108,7 @@ Coordinate& polygonizeEdgeRing::ptNotInList(CoordinateList *testPts,CoordinateLi
 * @param pts an array of {@link Coordinate}s to test
 * @return <code>true</code> if the point is in the array
 */
-bool polygonizeEdgeRing::isInList(Coordinate& pt, CoordinateList *pts){
+bool polygonizeEdgeRing::isInList(Coordinate& pt, CoordinateSequence *pts){
 	for (int i=0; i < pts->getSize(); i++) {
 		if (pt==pts->getAt(i))
 			return false;
@@ -192,9 +197,10 @@ bool polygonizeEdgeRing::isValid() {
 *
 * @return an array of the {@link Coordinate}s in this ring
 */
-CoordinateList* polygonizeEdgeRing::getCoordinates() {
+CoordinateSequence*
+polygonizeEdgeRing::getCoordinates() {
 	if (ringPts==NULL) {
-		ringPts=CoordinateListFactory::internalFactory->createCoordinateList();
+		ringPts=factory->getCoordinateSequenceFactory()->create(NULL);
 		for (int i=0;i<(int)deList->size();i++) {
 			planarDirectedEdge *de=(*deList)[i];
 			PolygonizeEdge *edge=(PolygonizeEdge*) de->getEdge();
@@ -233,7 +239,7 @@ LinearRing* polygonizeEdgeRing::getRing(){
 	return ring;
 }
 
-void polygonizeEdgeRing::addEdge(CoordinateList *coords, bool isForward, CoordinateList *coordList){
+void polygonizeEdgeRing::addEdge(CoordinateSequence *coords, bool isForward, CoordinateSequence *coordList){
 	if (isForward) {
 		for (int i=0; i < coords->getSize(); i++) {
 			coordList->add(coords->getAt(i), false);

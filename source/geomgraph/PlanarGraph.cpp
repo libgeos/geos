@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.5  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -218,7 +223,7 @@ Edge* PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1) {
 	for(i=0; i<edges->size();i++) {
 //        Edge *e=edges->at(i);
         Edge *e=(*edges)[i];
-		const CoordinateList* eCoord=e->getCoordinates();
+		const CoordinateSequence* eCoord=e->getCoordinates();
 		if (p0==eCoord->getAt(0) && p1==eCoord->getAt(1))
 			return e;
 	}
@@ -236,7 +241,7 @@ Edge* PlanarGraph::findEdgeInSameDirection(const Coordinate& p0, const Coordinat
 	for(unsigned int i=0; i<edges->size();i++) {
 		Edge *e=(*edges)[i];
 //		Edge *e=edges->at(i);
-		const CoordinateList* eCoord=e->getCoordinates();
+		const CoordinateSequence* eCoord=e->getCoordinates();
 		if (matchInSameDirection(p0,p1,eCoord->getAt(0),eCoord->getAt(1)))
 			return e;
 		if (matchInSameDirection(p0,p1,eCoord->getAt(eCoord->getSize()-1),eCoord->getAt(eCoord->getSize()-2)))

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -76,7 +81,7 @@ PolygonizeGraph::PolygonizeGraph(GeometryFactory *newFactory){
 */
 void PolygonizeGraph::addEdge(LineString *line){
 	if (line->isEmpty()) { return;}
-	CoordinateList *linePts=CoordinateList::removeRepeatedPoints(line->getCoordinates());
+	CoordinateSequence *linePts=CoordinateSequence::removeRepeatedPoints(line->getCoordinates());
 	Coordinate& startPt=(Coordinate)linePts->getAt(0);
 	Coordinate& endPt=(Coordinate)linePts->getAt(linePts->getSize()-1);
 	planarNode *nStart=getNode(startPt);

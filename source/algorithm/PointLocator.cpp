@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.20  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -127,7 +132,7 @@ void PointLocator::updateLocationInfo(int loc) {
 }
 
 int PointLocator::locate(const Coordinate& p, const LineString *l) {
-	const CoordinateList* pt=l->getCoordinatesRO();
+	const CoordinateSequence* pt=l->getCoordinatesRO();
 	if (! l->isClosed()) {
 		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
 			return Location::BOUNDARY;
@@ -139,7 +144,7 @@ int PointLocator::locate(const Coordinate& p, const LineString *l) {
 }
 
 int PointLocator::locate(const Coordinate& p, const LinearRing *ring) {
-	const CoordinateList *cl = ring->getCoordinatesRO();
+	const CoordinateSequence *cl = ring->getCoordinatesRO();
 	if (CGAlgorithms::isOnLine(p,cl)) {
 		return Location::BOUNDARY;
 	}

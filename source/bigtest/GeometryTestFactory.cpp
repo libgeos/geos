@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -35,13 +40,13 @@
 using namespace geos;
 
 Polygon* GeometryTestFactory::createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen) {
-	CoordinateList *pts=createBox(minx, miny, nSide, segLen);
+	CoordinateSequence *pts=createBox(minx, miny, nSide, segLen);
     return fact->createPolygon(fact->createLinearRing(pts),NULL);
 }
 
-CoordinateList* GeometryTestFactory::createBox(double minx, double miny,int nSide,double segLen) {
+CoordinateSequence* GeometryTestFactory::createBox(double minx, double miny,int nSide,double segLen) {
 	int i;
-	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence *pts=new DefaultCoordinateSequence();
 	double maxx=minx+nSide*segLen;
 	double maxy=miny+nSide*segLen;
 
@@ -76,8 +81,8 @@ CoordinateList* GeometryTestFactory::createBox(double minx, double miny,int nSid
 	* @param size the size of the envelope of the star
 	* @param nPts the number of points in the star
 	*/
-CoordinateList* GeometryTestFactory::createCircle(double basex,double basey,double size,int nPts) {
-	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList(nPts+1);
+CoordinateSequence* GeometryTestFactory::createCircle(double basex,double basey,double size,int nPts) {
+	CoordinateSequence *pts=new DefaultCoordinateSequence(nPts+1); 
 	double len=size/2.0;
 
 	for(int i=0;i<nPts;i++) {
@@ -91,7 +96,7 @@ CoordinateList* GeometryTestFactory::createCircle(double basex,double basey,doub
 }
 
 Polygon* GeometryTestFactory::createCircle(GeometryFactory *fact,double basex,double basey,double size,int nPts) {
-	CoordinateList *pts=createCircle(basex, basey, size, nPts);
+	CoordinateSequence *pts=createCircle(basex, basey, size, nPts);
     return fact->createPolygon(fact->createLinearRing(pts),NULL);
 }
 
@@ -104,7 +109,7 @@ Polygon* GeometryTestFactory::createCircle(GeometryFactory *fact,double basex,do
 	* @param nArms the number of arms of the star
 	* @param nPts the number of points in the star
 	*/
-CoordinateList* GeometryTestFactory::createSineStar(double basex,double basey,double size,double armLen,int nArms,int nPts) {
+CoordinateSequence* GeometryTestFactory::createSineStar(double basex,double basey,double size,double armLen,int nArms,int nPts) {
 	double armBaseLen=size/2-armLen;
 	if (armBaseLen<0) armBaseLen=0.5;
 
@@ -113,7 +118,7 @@ CoordinateList* GeometryTestFactory::createSineStar(double basex,double basey,do
 	if (nArmPt<5) nArmPt=5;
 
 	int nPts2=nArmPt*nArms;
-	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence *pts=new DefaultCoordinateSequence(); 
 
 	double starAng=0.0;
 
@@ -132,6 +137,6 @@ CoordinateList* GeometryTestFactory::createSineStar(double basex,double basey,do
 }
 
 Polygon* GeometryTestFactory::createSineStar(GeometryFactory *fact,double basex,double basey,double size,double armLen,int nArms,int nPts){
-	CoordinateList *pts=createSineStar(basex, basey, size, armLen, nArms, nPts);
+	CoordinateSequence *pts=createSineStar(basex, basey, size, armLen, nArms, nPts);
 	return fact->createPolygon(fact->createLinearRing(pts),NULL);
 }

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.15  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -79,7 +84,7 @@ int CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,con
 * @param ring assumed to have first point identical to last point
 * @return <code>true</code> if p is inside ring
 */
-bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateList* ring) {
+bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring) {
 	int i;
 	int i1;       // point index; i1 = i-1
 	double xInt;  // x intersection of segment with ray
@@ -133,7 +138,7 @@ bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateList* ring
 * the point is a vertex of the line or lies in the interior of a line
 * segment in the linestring
 */
-bool CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateList* pt) {
+bool CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt) {
 	LineIntersector *lineIntersector=new RobustLineIntersector();
 	for(int i=1;i<pt->getSize();i++) {
 		Coordinate p0=pt->getAt(i-1);
@@ -158,7 +163,7 @@ bool CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateList* pt) {
 * @return <code>true</code> if the ring is oriented counter-clockwise.
 * @throws IllegalArgumentException if the ring is degenerate (does not contain 3 distinct points)
 */
-bool CGAlgorithms::isCCW(const CoordinateList* ring) {
+bool CGAlgorithms::isCCW(const CoordinateSequence* ring) {
 	// # of points without closing endpoint
 	int nPts=ring->getSize()-1;
 	// find highest point
@@ -353,7 +358,7 @@ limiting conditions:
 * Returns the signed area for a ring.  The area is positive if
 * the ring is oriented CW.
 */
-double CGAlgorithms::signedArea(const CoordinateList* ring) {
+double CGAlgorithms::signedArea(const CoordinateSequence* ring) {
 	if (ring->getSize()<3) return 0.0;
 	double sum=0.0;
 	for (int i=0;i<ring->getSize()-1;i++) {
@@ -369,7 +374,7 @@ double CGAlgorithms::signedArea(const CoordinateList* ring) {
 /**
 * Returns the length of a list of line segments.
 */
-double CGAlgorithms::length(const CoordinateList* pts) {
+double CGAlgorithms::length(const CoordinateSequence* pts) {
 	if (pts->getSize()<1) return 0.0;
 	double sum=0.0;
 	for(int i=1;i<pts->getSize();i++) {

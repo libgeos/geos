@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -144,12 +149,12 @@ public:
 	* @param geometry the geometry containing the coordinate list
 	* @return an edited coordinate array (which may be the same as the input)
 	*/
-	virtual CoordinateList* edit(const CoordinateList* coordinates, const Geometry *geometry)=0;
+	virtual CoordinateSequence* edit(const CoordinateSequence* coordinates, const Geometry *geometry)=0;
 };
 
 class gfCoordinateOperation: public CoordinateOperation {
 public:
-	virtual CoordinateList* edit(const CoordinateList *coordinates, const Geometry *geometry);
+	virtual CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *geometry);
 };
 
 

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.14  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -320,38 +325,45 @@ double LineSegment::distancePerpendicular(const Coordinate& p) const {
 * Computes the closest points on two line segments.
 * @param p the point to find the closest point to
 * @return a pair of Coordinates which are the closest points on the line segments
-* The returned CoordinateList must be delete by the caller
+* The returned CoordinateSequence must be delete by the caller
 */
-CoordinateList* LineSegment::closestPoints(const LineSegment *line){
+CoordinateSequence* LineSegment::closestPoints(const LineSegment *line){
 	// test for intersection
 	Coordinate *intPt = intersection(line);
 	if (intPt!=NULL) {
-		CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
-		cl->add(*intPt);
-		cl->add(*intPt);
+		CoordinateSequence *cl=new DefaultCoordinateSequence(new vector<Coordinate>(2, *intPt));
+		//cl->add(*intPt);
+		//cl->add(*intPt);
 		delete intPt;
 		return cl;
 	}
 
-	/**
-	*  if no intersection closest pair contains at least one endpoint.
-	* Test each endpoint in turn.
-	*/
-	CoordinateList *closestPt=CoordinateListFactory::internalFactory->createCoordinateList(2);
+	/*
+	 * if no intersection closest pair contains at least one endpoint.
+	 * Test each endpoint in turn.
+	 */
+	CoordinateSequence *closestPt=new DefaultCoordinateSequence(2);
+	//vector<Coordinate> *cv = new vector<Coordinate>(2);
+
 	double minDistance=DoubleInfinity;
 	double dist;
 	Coordinate *close00 = closestPoint(line->p0);
 	minDistance = close00->distance(line->p0);
 	closestPt->setAt(*close00,0);
+	//(*cv)[0] = *close00;
 	delete close00;
 
 	closestPt->setAt(line->p0,1);
+	//(*cv)[1] = line->p0; 
+
 	Coordinate *close01 = closestPoint(line->p1);
 	dist = close01->distance(line->p1);
 	if (dist < minDistance) {
 		minDistance = dist;
 		closestPt->setAt(*close01,0);
 		closestPt->setAt(line->p1,1);
+		//(*cv)[0] = *close01;
+		//(*cv)[1] = line->p1; 
 	}
 	delete close01;
 
@@ -361,6 +373,8 @@ CoordinateList* LineSegment::closestPoints(const LineSegment *line){
 		minDistance = dist;
 		closestPt->setAt(p0,0);
 		closestPt->setAt(*close10,1);
+		//(*cv)[0] = p0;
+		//(*cv)[1] = *close10;
 	}
 	delete close10;
 
@@ -370,8 +384,12 @@ CoordinateList* LineSegment::closestPoints(const LineSegment *line){
 		minDistance = dist;
 		closestPt->setAt(p1,0);
 		closestPt->setAt(*close11,1);
+		//(*cv)[0] = p1;
+		//(*cv)[1] = *close11;
 	}
 	delete close11;
+
+	//CoordinateSequence *closestPt=new DefaultCoordinateSequence(cv);
 
 	return closestPt;
 }

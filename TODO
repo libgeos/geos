@@ -1,5 +1,6 @@
-- Make CoordinateList, CoordinateSequence and CoordinateSequenceFactory
-  reflect JTS semantics (really?)
+- Rename BasicCoordinateSequence to Default ...
+
+- Make postgis use new CoordinateSequence
 
 - Add tests and examples for new functionalities
 

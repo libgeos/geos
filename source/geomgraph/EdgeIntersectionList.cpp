@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -127,7 +132,7 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	if (!useIntPt1) {
 		npts--;
 	}
-	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(npts);
+	CoordinateSequence* pts=new DefaultCoordinateSequence(npts);
 	int ipt=0;
 	//Coordinate *c=new Coordinate(ei0->coord);
 	//pts->setAt(*c,ipt++);

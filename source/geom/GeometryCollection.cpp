@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.40  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.39  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -57,7 +62,7 @@
  *
  * Revision 1.31  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateList.
+ * to handle NULL CoordinateSequence.
  *
  * Revision 1.30  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
@@ -137,27 +142,28 @@ Geometry* GeometryCollection::clone() const {
 }
 
 /**
-* Collects all coordinates of all subgeometries into a CoordinateList.
+* Collects all coordinates of all subgeometries into a CoordinateSequence.
 * 
 * Note that while changes to the coordinate objects themselves
-* may modify the Geometries in place, the returned CoordinateList as such 
+* may modify the Geometries in place, the returned CoordinateSequence as such 
 * is only a temporary container which is not synchronized back.
 * 
 * @return the collected coordinates
 *
 */
-CoordinateList* GeometryCollection::getCoordinates() const {
-	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList(getNumPoints());
+CoordinateSequence* GeometryCollection::getCoordinates() const {
+	vector<Coordinate> *coordinates = new vector<Coordinate>(getNumPoints());
+
 	int k = -1;
 	for (unsigned int i=0; i<geometries->size(); i++) {
-		CoordinateList* childCoordinates=(*geometries)[i]->getCoordinates();
+		CoordinateSequence* childCoordinates=(*geometries)[i]->getCoordinates();
 		for (int j=0; j<childCoordinates->getSize(); j++) {
 			k++;
-			coordinates->setAt(childCoordinates->getAt(j),k);
+			(*coordinates)[k] = childCoordinates->getAt(j);
 		}
 		delete childCoordinates; // xie
 	}
-	return coordinates;
+	return DefaultCoordinateSequenceFactory::instance()->create(coordinates);
 }
 
 bool GeometryCollection::isEmpty() const {

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.4  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -115,7 +120,7 @@ void SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,vec
 void
 SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments)
 {
-	const CoordinateList *pts=dirEdge->getEdge()->getCoordinates();
+	const CoordinateSequence *pts=dirEdge->getEdge()->getCoordinates();
 	for (int i=0; i<pts->getSize()-1; i++) {
 		seg->p0=pts->getAt(i);
 		seg->p1=pts->getAt(i + 1);

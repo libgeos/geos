@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -334,8 +339,10 @@ public:
 };
 
 /**
+ * \brief
  * Computes the raw offset curve for a
- * single {@link Geometry} component (ring, line or point).
+ * single Geometry component (ring, line or point).
+ *
  * A raw offset curve line is not noded -
  * it may contain self-intersections (and usually will).
  * The final buffer polygon is computed by forming a topological graph
@@ -345,16 +352,20 @@ public:
  */
 class OffsetCurveBuilder {
 public:
-	/**
-	* The default number of facets into which to divide a fillet of 90 degrees.
+	/** \brief
+	* The default number of facets into which to divide a fillet
+	* of 90 degrees.
+	*
 	* A value of 8 gives less than 2% max error in the buffer distance.
 	* For a max error of < 1%, use QS = 12
 	*/
 	static const int DEFAULT_QUADRANT_SEGMENTS=8;
+
 	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel);
 	~OffsetCurveBuilder();
 	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments);
 	void setEndCapStyle(int newEndCapStyle);
+
 	/**
 	* This method handles single points as well as lines.
 	* Lines are assumed to <b>not</b> be closed (the function will not
@@ -362,15 +373,18 @@ public:
 	*
 	* @return a List of Coordinate[]
 	*/
-	vector<CoordinateList*>* getLineCurve(const CoordinateList *inputPts, double distance);
+	vector<CoordinateSequence*>* getLineCurve(const CoordinateSequence *inputPts, double distance);
+
 	/**
 	* This method handles the degenerate cases of single points and lines,
 	* as well as rings.
 	*
 	* @return a List of Coordinate[]
 	*/
-	vector<CoordinateList*>* getRingCurve(const CoordinateList *inputPts, int side, double distance);
+	vector<CoordinateSequence*>* getRingCurve(const CoordinateSequence *inputPts, int side, double distance);
+
 private:
+
 	static double PI_OVER_2;
 	static double MAX_CLOSING_SEG_LEN;
 //	static final Coordinate[] arrayTypeCoordinate = new Coordinate[0];
@@ -385,7 +399,7 @@ private:
 	* the max error of approximation between a quad segment and the true fillet curve
 	*/
 	double maxCurveSegmentError;
-	CoordinateList *ptList;
+	CoordinateSequence *ptList;
 	double distance;
 	const PrecisionModel *precisionModel;
 	int endCapStyle;
@@ -396,11 +410,11 @@ private:
 	LineSegment *offset0;
 	LineSegment *offset1;
 	int side;
-//	static CoordinateList* copyCoordinates(CoordinateList *pts);
+//	static CoordinateSequence* copyCoordinates(CoordinateSequence *pts);
 	void init(double newDistance);
-	CoordinateList* getCoordinates();
-	void computeLineBufferCurve(const CoordinateList *inputPts);
-	void computeRingBufferCurve(const CoordinateList *inputPts, int side);
+	CoordinateSequence* getCoordinates();
+	void computeLineBufferCurve(const CoordinateSequence *inputPts);
+	void computeRingBufferCurve(const CoordinateSequence *inputPts, int side);
 	void addPt(const Coordinate &pt);
 	void closePts();
 	void initSideSegments(const Coordinate &nS1, const Coordinate &nS2, int nSide);
@@ -445,7 +459,7 @@ private:
 	*/
 	void addSquare(const Coordinate &p, double distance);
 private:
-	vector<CoordinateList *>ptLists;
+	vector<CoordinateSequence *>ptLists;
 };
 
 
@@ -466,7 +480,7 @@ public:
 	* @return a Collection of SegmentStrings representing the raw buffer curves
 	*/
 	vector<SegmentString*>* getCurves();
-	void addCurves(const vector<CoordinateList*> *lineList, int leftLoc, int rightLoc);
+	void addCurves(const vector<CoordinateSequence*> *lineList, int leftLoc, int rightLoc);
 private:
 	vector<Label*> newLabels;
 	CGAlgorithms *cga;
@@ -483,7 +497,7 @@ private:
 	* <br>Left: Location.EXTERIOR
 	* <br>Right: Location.INTERIOR
 	*/
-	void addCurve(const CoordinateList *coord, int leftLoc, int rightLoc);
+	void addCurve(const CoordinateSequence *coord, int leftLoc, int rightLoc);
 	void add(const Geometry *g);
 	void addCollection(const GeometryCollection *gc);
 	/**
@@ -505,7 +519,7 @@ private:
 	* @param cwLeftLoc the location on the L side of the ring (if it is CW)
 	* @param cwRightLoc the location on the R side of the ring (if it is CW)
 	*/
-	void addPolygonRing(const CoordinateList *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc);
+	void addPolygonRing(const CoordinateSequence *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc);
 	/**
 	* The ringCoord is assumed to contain no repeated points.
 	* It may be degenerate (i.e. contain only 1, 2, or 3 points).
@@ -515,7 +529,7 @@ private:
 	* @param offsetDistance
 	* @return
 	*/
-	bool isErodedCompletely(CoordinateList *ringCoord, double bufferDistance);
+	bool isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance);
 	/**
 	* Tests whether a triangular ring would be eroded completely by the given
 	* buffer distance.
@@ -533,7 +547,7 @@ private:
 	* @param bufferDistance
 	* @return
 	*/
-	bool isTriangleErodedCompletely(CoordinateList *triangleCoord,double bufferDistance);
+	bool isTriangleErodedCompletely(CoordinateSequence *triangleCoord,double bufferDistance);
 };
 
 /**

@@ -13,30 +13,10 @@
  *
  **********************************************************************
  * $Log$
- * Revision 1.20  2004/07/05 14:23:03  strk
- * More documentation cleanups.
- *
- * Revision 1.19  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.18  2004/05/18 13:15:25  strk
- * made ::scroll handle already scrolled vect and more readable
- *
- * Revision 1.17  2004/05/17 21:03:56  ybychkov
- * JavaDoc updated
- *
- * Revision 1.16  2004/04/07 06:55:50  ybychkov
- * "operation/linemerge" ported from JTS 1.4
- *
- * Revision 1.15  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.14  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.21  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
  *
  **********************************************************************/
 
@@ -46,10 +26,36 @@
 
 namespace geos {
 
+bool CoordinateList::CoordinateList() {
+	vect = new vector<Coordinate>();
+}
+
+// takes ownership of given vector
+bool CoordinateList::CoordinateList(vector<Coordinate> *coords, bool allowRepeated=false) {
+	if ( allowRepeated ) vect = coords;
+	else {
+		if ( ! coords->size() )
+		{
+		}
+		vect = new vector<Coordinate>();
+		vect->push_back(coords[0]);
+		for(int i=1;i<(int)coords->size();i++) {
+		}
+	}
+}
+
+bool CoordinateList::CoordinateList(const CoordinateList &cl) {
+	vect = new vector<Coordinate>(*(cl.vect));
+}
+
+bool CoordinateList::~CoordinateList() {
+	delete vect;
+}
+
 bool CoordinateList::hasRepeatedPoints() const {
-	int size=(int) getSize();
-	for(int i=1; i<size; i++) {
-		if (getAt(i-1)==getAt(i)) {
+	//int size=size();
+	for(int i=1; i<size(); i++) {
+		if (getCoordinate(i-1)==getCoordinate(i)) {
 			return true;
 		}
 	}
@@ -61,12 +67,12 @@ bool CoordinateList::hasRepeatedPoints() const {
 * given amount, or an empty coordinate array.
 */
 CoordinateList* atLeastNCoordinatesOrNothing(int n, CoordinateList *c) {
-	return c->getSize()>=n?c:CoordinateListFactory::internalFactory->createCoordinateList();
+	return c->size()>=n?c:DefaultCoordinateListFactory::instance()->create(NULL);
 }      
 
 
 bool CoordinateList::hasRepeatedPoints(const CoordinateList *cl) {
-	int size=(int) cl->getSize();
+	int size=(int) cl->size();
 	for(int i=1;i<size; i++) {
 		if (cl->getAt(i-1)==cl->getAt(i)) {
 			return true;
@@ -77,7 +83,7 @@ bool CoordinateList::hasRepeatedPoints(const CoordinateList *cl) {
 
 const Coordinate* CoordinateList::minCoordinate() const {
 	const Coordinate* minCoord=NULL;
-	int size=(int) getSize();
+	int size=(int) size();
 	for(int i=0; i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(getAt(i))>0) {
 			minCoord=&getAt(i);
@@ -90,7 +96,7 @@ const Coordinate*
 CoordinateList::minCoordinate(CoordinateList *cl)
 {
 	const Coordinate* minCoord=NULL;
-	int size=(int) cl->getSize();
+	int size=(int) cl->size();
 	for(int i=0;i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(cl->getAt(i))>0) {
 			minCoord=&(cl->getAt(i));
@@ -102,7 +108,7 @@ CoordinateList::minCoordinate(CoordinateList *cl)
 int
 CoordinateList::indexOf(const Coordinate *coordinate, const CoordinateList *cl)
 {
-	for (int i=0; i<cl->getSize(); i++) {
+	for (int i=0; i<cl->size(); i++) {
 		if ((*coordinate)==cl->getAt(i)) {
 			return i;
 		}
@@ -116,7 +122,7 @@ CoordinateList::scroll(CoordinateList* cl,const Coordinate* firstCoordinate)
 	int i, j=0;
 	int ind=indexOf(firstCoordinate,cl);
 	if (ind<1) return; // not found or already first
-	int length=cl->getSize();
+	int length=cl->size();
 	vector<Coordinate> v(length);
 	for (i=ind; i<length; i++) {
 		v[j++]=cl->getAt(i);
@@ -128,7 +134,7 @@ CoordinateList::scroll(CoordinateList* cl,const Coordinate* firstCoordinate)
 }
 
 void CoordinateList::reverse(CoordinateList *cl){
-	int last=cl->getSize()-1;
+	int last=cl->size()-1;
 	int mid=last/2;
 	for(int i=0;i<=mid;i++) {
 		const Coordinate& tmp=cl->getAt(i);
@@ -140,8 +146,8 @@ void CoordinateList::reverse(CoordinateList *cl){
 bool CoordinateList::equals(CoordinateList *cl1,CoordinateList *cl2){
 	if (cl1==cl2) return true;
 	if (cl1==NULL||cl2==NULL) return false;
-	if (cl1->getSize()!=cl2->getSize()) return false;
-	for (int i = 0; i<cl1->getSize(); i++) {
+	if (cl1->size()!=cl2->size()) return false;
+	for (int i = 0; i<cl1->size(); i++) {
 		if (!(cl1->getAt(i)==cl2->getAt(i))) return false;
 	}
 	return true;
@@ -165,8 +171,8 @@ void CoordinateList::add(vector<Coordinate>* vc,bool allowRepeated) {
 */
 void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 	if (!allowRepeated) {
-		if (getSize()>=1) {
-			const Coordinate& last=getAt(getSize()-1);
+		if (size()>=1) {
+			const Coordinate& last=getAt(size()-1);
 			if (last.equals2D(c)) return;
 		}
 	}
@@ -181,11 +187,11 @@ void CoordinateList::add(const Coordinate& c,bool allowRepeated) {
 */
 void CoordinateList::add(CoordinateList *cl,bool allowRepeated,bool direction){
 	if (direction) {
-		for (int i = 0; i < cl->getSize(); i++) {
+		for (int i = 0; i < cl->size(); i++) {
 			add(cl->getAt(i), allowRepeated);
 		}
 	} else {
-		for (int j =cl->getSize()-1;j>=0;j--) {
+		for (int j =cl->size()-1;j>=0;j--) {
 			add(cl->getAt(j), allowRepeated);
 		}
 	}

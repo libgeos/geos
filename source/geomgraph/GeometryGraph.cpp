@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.3  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -149,9 +154,9 @@ vector<Node*>* GeometryGraph::getBoundaryNodes() {
 	return boundaryNodes;
 }
 
-CoordinateList* GeometryGraph::getBoundaryPoints() {
+CoordinateSequence* GeometryGraph::getBoundaryPoints() {
 	vector<Node*> *coll=getBoundaryNodes();
-	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList((int)coll->size());
+	CoordinateSequence *pts=new DefaultCoordinateSequence((int)coll->size());
 	int i=0;
 	for (vector<Node*>::iterator it=coll->begin();it<coll->end();it++) {
 		Node *node=*it;
@@ -227,9 +232,9 @@ void GeometryGraph::addPoint(const Point *p){
 * the left and right locations must be interchanged.
 */
 void GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight) {
-	CoordinateList *lrcl;
+	CoordinateSequence *lrcl;
 	lrcl = lr->getCoordinates();
-	CoordinateList* coord=CoordinateList::removeRepeatedPoints(lrcl);
+	CoordinateSequence* coord=CoordinateSequence::removeRepeatedPoints(lrcl);
 	delete lrcl; // strk 2003-10-07
 	if (coord->getSize()<4) {
 		hasTooFewPointsVar=true;
@@ -248,18 +253,6 @@ void GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight
 	(*lineEdgeMap)[lr]=e;
 	insertEdge(e);
 	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
-#if 0
-	CoordinateList *ncr=CoordinateListFactory::internalFactory->createCoordinateList();
-	for(int i=0;i<coord->getSize();i++) {
-		ncr->add(coord->getAt(i));
-	}
-	Edge *e=new Edge(ncr,new Label(argIndex,Location::BOUNDARY,left,right));
-//	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
-	(*lineEdgeMap)[lr]=e;
-	insertEdge(e);
-	// insert the endpoint as a node, to mark that it is on the boundary
-	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
-#endif
 }
 
 void GeometryGraph::addPolygon(const Polygon *p){
@@ -273,19 +266,22 @@ void GeometryGraph::addPolygon(const Polygon *p){
 }
 
 void GeometryGraph::addLineString(const LineString *line){
-	CoordinateList* coord=CoordinateList::removeRepeatedPoints(line->getCoordinatesRO());
+	CoordinateSequence* coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
 	if(coord->getSize()<2) {
 		hasTooFewPointsVar=true;
 		invalidPoint=coord->getAt(0);
 		delete coord;
 		return;
 	}
+
 	// add the edge for the LineString
 	// line edges do not have locations for their left and right sides
-	CoordinateList *ncr=CoordinateListFactory::internalFactory->createCoordinateList();
-	for(int i=0;i<coord->getSize();i++) {
-		ncr->add(coord->getAt(i));
-	}
+	//CoordinateSequence *ncr=CoordinateSequenceFactory::internalFactory->createCoordinateSequence();
+	//for(int i=0;i<coord->getSize();i++) {
+		//ncr->add(coord->getAt(i));
+	//}
+	CoordinateSequence *ncr = coord->clone();
+
 	Edge *e=new Edge(ncr,new Label(argIndex,Location::INTERIOR));
 //	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
 	(*lineEdgeMap)[line]=e;
@@ -307,7 +303,7 @@ void GeometryGraph::addLineString(const LineString *line){
 */
 void GeometryGraph::addEdge(Edge *e) {
 	insertEdge(e);
-	const CoordinateList* coord=e->getCoordinates();
+	const CoordinateSequence* coord=e->getCoordinates();
 	// insert the endpoint as a node, to mark that it is on the boundary
 	insertPoint(argIndex,coord->getAt(0),Location::BOUNDARY);
 	insertPoint(argIndex,coord->getAt(coord->getSize()-1),Location::BOUNDARY);

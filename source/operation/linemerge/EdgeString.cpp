@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.3  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -56,11 +61,11 @@ void EdgeString::add(LineMergeDirectedEdge *directedEdge) {
 	directedEdges->push_back(directedEdge);
 }
 
-const CoordinateList* EdgeString::getCoordinates() {
+const CoordinateSequence* EdgeString::getCoordinates() {
 	if (coordinates==NULL) {
 		int forwardDirectedEdges = 0;
 		int reverseDirectedEdges = 0;
-		coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
+		coordinates=factory->getCoordinateSequenceFactory()->create(NULL);
 		for (int i=0;i<(int)directedEdges->size();i++) {
 			LineMergeDirectedEdge* directedEdge=(*directedEdges)[i];
 			if (directedEdge->getEdgeDirection()) {
@@ -71,7 +76,7 @@ const CoordinateList* EdgeString::getCoordinates() {
 			coordinates->add(((LineMergeEdge*)directedEdge->getEdge())->getLine()->getCoordinates(),false,directedEdge->getEdgeDirection());
 		}
 		if (reverseDirectedEdges > forwardDirectedEdges) {
-			CoordinateList::reverse(coordinates);
+			CoordinateSequence::reverse(coordinates);
 		}
 	}
 	return coordinates;

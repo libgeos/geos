@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.12  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -58,7 +63,7 @@ Coordinate& ConnectedInteriorTester::getCoordinate() {
 	return disconnectedRingcoord;
 }
 
-const Coordinate& ConnectedInteriorTester::findDifferentPoint(const CoordinateList *coord, const Coordinate& pt){
+const Coordinate& ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence *coord, const Coordinate& pt){
 	for(int i=0;i<coord->getSize();i++) {
 		if(!(coord->getAt(i)==pt))
 			return coord->getAt(i);
@@ -141,7 +146,7 @@ void ConnectedInteriorTester::visitShellInteriors(const Geometry *g, PlanarGraph
 }
 
 void ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph *graph) {
-	const CoordinateList *pts=ring->getCoordinatesRO();
+	const CoordinateSequence *pts=ring->getCoordinatesRO();
 	const Coordinate& pt0=pts->getAt(0);
     /**
      * Find first point in coord list different to initial point.

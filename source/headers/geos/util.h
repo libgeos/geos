@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.4  2004/07/07 10:29:54  strk
  * Adjusted exceptions documentation.
  *
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -49,6 +54,11 @@
 
 /*
 * $Log$
+* Revision 1.5  2004/07/08 19:34:49  strk
+* Mirrored JTS interface of CoordinateSequence, factory and
+* default implementations.
+* Added DefaultCoordinateSequenceFactory::instance() function.
+*
 * Revision 1.4  2004/07/07 10:29:54  strk
 * Adjusted exceptions documentation.
 *
@@ -60,8 +70,8 @@
 * in GeometryFactory.
 * Deep-copy geometry construction takes care of cleaning up copies
 * on exception.
-* Implemented clone() method for CoordinateList
-* Changed createMultiPoint(CoordinateList) signature to reflect
+* Implemented clone() method for CoordinateSequence
+* Changed createMultiPoint(CoordinateSequence) signature to reflect
 * copy semantic (by-ref instead of by-pointer).
 * Cleaned up documentation.
 *
@@ -198,21 +208,21 @@ public:
 
 class CoordinateArrayFilter:public CoordinateFilter {
 public:
-	CoordinateList* pts;
+	CoordinateSequence* pts;
 	int n;
 	CoordinateArrayFilter(int size);
 	virtual ~CoordinateArrayFilter();
-	virtual const CoordinateList* getCoordinates() const;
+	virtual const CoordinateSequence* getCoordinates() const;
 	virtual void filter_ro(const Coordinate &coord);
 	virtual void filter_rw(Coordinate &coord); // Unsopported
 };
 
 class UniqueCoordinateArrayFilter:public CoordinateFilter {
 public:
-	CoordinateList *list;
+	CoordinateSequence *list;
 	UniqueCoordinateArrayFilter();
 	virtual ~UniqueCoordinateArrayFilter();
-	virtual const CoordinateList* getCoordinates() const;
+	virtual const CoordinateSequence* getCoordinates() const;
 	virtual void filter_ro(const Coordinate *coord);
 	virtual void filter_rw(Coordinate *coord); // Unsupported
 };

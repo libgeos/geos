@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.3  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -119,7 +124,7 @@ Polygon* GeometricShapeFactory::createRectangle(){
 	double XsegLen = dim->getEnvelope()->getWidth() / nSide;
 	double YsegLen = dim->getEnvelope()->getHeight() / nSide;
 
-	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(4 * nSide + 1);
+	CoordinateSequence* pts=new DefaultCoordinateSequence(4*nSide+1);
 	Envelope* env=dim->getEnvelope();
 
 	double maxx = env->getMinX() + nSide * XsegLen;
@@ -169,7 +174,7 @@ Polygon* GeometricShapeFactory::createCircle() {
 	double centreX = env->getMinX() + xRadius;
 	double centreY = env->getMinY() + yRadius;
 
-	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(nPts + 1);
+	CoordinateSequence* pts=CoordinateSequenceFactory::internalFactory->createCoordinateSequence(nPts + 1);
 	int iPt = 0;
 		for (int i = 0; i < nPts; i++) {
 		double ang = i * (2 * 3.14159265358979 / nPts);
@@ -202,7 +207,7 @@ LineString* GeometricShapeFactory::createArc(double startAng,double endAng){
 	angSize = 2 * 3.14159265358979;
 	double angInc = angSize / nPts;
 
-	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(nPts);
+	CoordinateSequence* pts=CoordinateSequenceFactory::internalFactory->createCoordinateSequence(nPts);
 	int iPt = 0;
 	for (int i = 0; i < nPts; i++) {
 		double ang = startAng + i * angInc;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.9  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -34,7 +39,7 @@
 
 namespace geos {
 
-indexMonotoneChain::indexMonotoneChain(CoordinateList *newPts,int nstart,int nend, void* nContext) {
+indexMonotoneChain::indexMonotoneChain(CoordinateSequence *newPts,int nstart,int nend, void* nContext) {
 	env=NULL;
 	// these envelopes are created once and reused
 	pts=newPts;
@@ -83,12 +88,8 @@ void indexMonotoneChain::getLineSegment(int index,LineSegment *ls) {
 * Return the subsequence of coordinates forming this chain.
 * Allocates a new array to hold the Coordinates
 */
-CoordinateList* indexMonotoneChain::getCoordinates() {
-	CoordinateList *coord=CoordinateListFactory::internalFactory->createCoordinateList();
-	for(int i=start;i<=end;i++) {
-		coord->add(pts->getAt(i));
-	}
-	return coord;
+CoordinateSequence* indexMonotoneChain::getCoordinates() {
+	return pts->clone();
 }
 
 /**

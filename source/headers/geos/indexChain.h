@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -141,7 +146,7 @@ public:
  */
 class indexMonotoneChain {
 public:
-	indexMonotoneChain(CoordinateList *newPts,int nstart,int nend, void* nContext);
+	indexMonotoneChain(CoordinateSequence *newPts,int nstart,int nend, void* nContext);
 	~indexMonotoneChain();
 	Envelope* getEnvelope();
 	int getStartIndex();
@@ -151,7 +156,7 @@ public:
 	* Return the subsequence of coordinates forming this chain.
 	* Allocates a new array to hold the Coordinates
 	*/
-	CoordinateList* getCoordinates();
+	CoordinateSequence* getCoordinates();
 	/**
 	* Determine all the line segments in the chain whose envelopes overlap
 	* the searchEnvelope, and process them
@@ -165,7 +170,7 @@ public:
 private:
 	void computeSelect(Envelope *searchEnv,int start0,int end0,MonotoneChainSelectAction *mcs);
 	void computeOverlaps(int start0,int end0,indexMonotoneChain *mc,int start1,int end1,MonotoneChainOverlapAction *mco);
-	CoordinateList *pts;
+	CoordinateSequence *pts;
 	int start, end;
 	Envelope *env;
 	void *context;// user-defined information
@@ -180,23 +185,23 @@ class MonotoneChainBuilder {
 public:
 //	static int[] toIntArray(List list); //Not needed
 	MonotoneChainBuilder(){}
-	static vector<indexMonotoneChain*>* getChains(CoordinateList *pts);
+	static vector<indexMonotoneChain*>* getChains(CoordinateSequence *pts);
 	/**
 	* Return a list of the {@link MonotoneChain}s
 	* for the given list of coordinates.
 	*/
-	static vector<indexMonotoneChain*>* getChains(CoordinateList *pts,void* context);
+	static vector<indexMonotoneChain*>* getChains(CoordinateSequence *pts,void* context);
 	/**
 	* Return an array containing lists of start/end indexes of the monotone chains
 	* for the given list of coordinates.
 	* The last entry in the array points to the end point of the point array,
 	* for use as a sentinel.
 	*/
-	static vector<int>* getChainStartIndices(CoordinateList *pts);
+	static vector<int>* getChainStartIndices(CoordinateSequence *pts);
 	/**
 	* @return the index of the last point in the monotone chain starting at <code>start</code>.
 	*/
-	static int findChainEnd(CoordinateList *pts,int start);
+	static int findChainEnd(CoordinateSequence *pts,int start);
 };
 }
 #endif

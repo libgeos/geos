@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.26  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).
  * Dropped WKTWriter default constructor (internally created GeometryFactory).
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -101,12 +106,12 @@ Geometry* WKTReader::read(string wellKnownText){
 	return g;
 }
 
-CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
+CoordinateSequence* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return CoordinateListFactory::internalFactory->createCoordinateList();
+		return new DefaultCoordinateSequence(); 
 	}
-	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence *coordinates = new DefaultCoordinateSequence();
 	Coordinate *coord = getPreciseCoordinate(tokenizer);
 	coordinates->add(*coord);
 	delete coord; coord=NULL;
@@ -254,20 +259,20 @@ Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
 }
 
 LineString* WKTReader::readLineStringText(StringTokenizer *tokenizer) {
-	CoordinateList *coords = getCoordinates(tokenizer);
+	CoordinateSequence *coords = getCoordinates(tokenizer);
 	LineString *ret = geometryFactory->createLineString(coords);
 	return ret;
 }
 
 LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
-	CoordinateList *coords = getCoordinates(tokenizer);
+	CoordinateSequence *coords = getCoordinates(tokenizer);
 	LinearRing *ret;
 	ret = geometryFactory->createLinearRing(coords);
 	return ret;
 }
 
 MultiPoint* WKTReader::readMultiPointText(StringTokenizer *tokenizer) {
-	CoordinateList *coords = getCoordinates(tokenizer);
+	CoordinateSequence *coords = getCoordinates(tokenizer);
 	MultiPoint *ret = geometryFactory->createMultiPoint(*coords);
 	delete coords;
 	return ret;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.12  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -65,7 +70,7 @@ double DistanceOp::distance(const Geometry *g0, const Geometry *g1) {
 * @param g1 another {@link Geometry}
 * @return the closest points in the geometries
 */
-CoordinateList* DistanceOp::closestPoints(Geometry *g0,Geometry *g1){
+CoordinateSequence* DistanceOp::closestPoints(Geometry *g0,Geometry *g1){
 	DistanceOp distOp(g0,g1);
 	return distOp.closestPoints();
 }
@@ -107,11 +112,11 @@ double DistanceOp::distance() {
 * Report the coordinates of the closest points in the input geometries.
 * The points are presented in the same order as the input Geometries.
 *
-* @return a pair of {@link Coordinate}s of the closest points
+* @return a pair of Coordinate s of the closest points
 */
-CoordinateList* DistanceOp::closestPoints() {
+CoordinateSequence* DistanceOp::closestPoints() {
 	computeMinDistance();
-	CoordinateList* closestPts=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence* closestPts=new DefaultCoordinateSequence();
 	closestPts->add((*minDistanceLocation)[0]->getCoordinate());
 	closestPts->add((*minDistanceLocation)[1]->getCoordinate());
 	return closestPts;
@@ -360,8 +365,8 @@ void DistanceOp::computeMinDistance(const LineString *line0, const LineString *l
 	}
 	delete env0;
 	delete env1;
-	const CoordinateList *coord0=line0->getCoordinatesRO();
-	const CoordinateList *coord1=line1->getCoordinatesRO();
+	const CoordinateSequence *coord0=line0->getCoordinatesRO();
+	const CoordinateSequence *coord1=line1->getCoordinatesRO();
 	// brute force approach!
 	for(int i=0;i<coord0->getSize()-1;i++) {
 		for(int j=0;j<coord1->getSize()-1;j++) {
@@ -371,7 +376,7 @@ void DistanceOp::computeMinDistance(const LineString *line0, const LineString *l
 				minDistance = dist;
 				LineSegment *seg0 = new LineSegment(coord0->getAt(i), coord0->getAt(i + 1));
 				LineSegment *seg1 = new LineSegment(coord1->getAt(j), coord1->getAt(j + 1));
-				CoordinateList* closestPt = seg0->closestPoints(seg1);
+				CoordinateSequence* closestPt = seg0->closestPoints(seg1);
 				delete seg0;
 				delete seg1;
 				Coordinate *c1 = new Coordinate(closestPt->getAt(0));
@@ -404,7 +409,7 @@ DistanceOp::computeMinDistance(const LineString *line, const Point *pt,vector<Ge
 	}
 	delete env0;
 	delete env1;
-	const CoordinateList *coord0=line->getCoordinatesRO();
+	const CoordinateSequence *coord0=line->getCoordinatesRO();
 	Coordinate *coord=new Coordinate(*(pt->getCoordinate()));
 	newCoords.push_back(coord);
 	// brute force approach!

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.8  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -102,7 +107,7 @@ void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
 	* determine their relative orientation to decide which is rightmost.
 	*/
 
-	const CoordinateList *pts=minDe->getEdge()->getCoordinates();
+	const CoordinateSequence *pts=minDe->getEdge()->getCoordinates();
 	Assert::isTrue(minIndex>0 && minIndex<pts->getSize(), "rightmost point expected to be interior vertex of edge");
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
@@ -124,7 +129,7 @@ void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
 }
 
 void RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de) {
-	const CoordinateList *coord=de->getEdge()->getCoordinates();
+	const CoordinateSequence *coord=de->getEdge()->getCoordinates();
 	// only check vertices which are the starting point of a non-horizontal segment
 	for(int i=0;i<coord->getSize()-1;i++) {
      // only check vertices which are the start or end point of a non-horizontal segment
@@ -151,7 +156,7 @@ int RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index){
 
 int RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i){
 	Edge *e=de->getEdge();
-	const CoordinateList *coord=e->getCoordinates();
+	const CoordinateSequence *coord=e->getCoordinates();
 	if (i<0 || i+1>=coord->getSize()) return -1;
 	if (coord->getAt(i).y==coord->getAt(i+1).y) return -1;    // indicates edge is parallel to x-axis
 	int pos=Position::LEFT;

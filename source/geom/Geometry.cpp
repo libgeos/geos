@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.61  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.60  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).
  * Dropped WKTWriter default constructor (internally created GeometryFactory).
@@ -36,8 +41,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -75,7 +80,7 @@
  *
  * Revision 1.47  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateList.
+ * to handle NULL CoordinateSequence.
  *
  * Revision 1.46  2004/05/05 16:51:29  strk
  * avoided copy constructor in Geometry::geometryChangedFilter initializzazion
@@ -148,7 +153,7 @@ namespace geos {
  * derive.
  *
  * Construction and destruction of Geometries is done
- * using a geos::GeometryFactory. You'll feed it geos::CoordinateList
+ * using a geos::GeometryFactory. You'll feed it geos::CoordinateSequence
  * for base geometries or vectors of geometries for collections.
  *
  * \section io_sect Input / Output
@@ -195,7 +200,7 @@ Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries)
 }
 
 bool
-Geometry::hasNullElements(const CoordinateList* list) 
+Geometry::hasNullElements(const CoordinateSequence* list) 
 {
 	for (int i = 0; i<list->getSize(); i++) {
 		if (list->getAt(i)==Coordinate::getNull()) {
@@ -216,7 +221,7 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 	return false;
 }
 	
-//void Geometry::reversePointOrder(CoordinateList* coordinates) {
+//void Geometry::reversePointOrder(CoordinateSequence* coordinates) {
 //	int length=coordinates->getSize();
 //	vector<Coordinate> v(length);
 //	for (int i=0; i<length; i++) {
@@ -225,13 +230,13 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 //	coordinates->setPoints(v);
 //}
 	
-//Coordinate& Geometry::minCoordinate(CoordinateList* coordinates){
+//Coordinate& Geometry::minCoordinate(CoordinateSequence* coordinates){
 //	vector<Coordinate> v(*(coordinates->toVector()));
 //	sort(v.begin(),v.end(),lessThen);
 //	return v.front();
 //}
 
-//void Geometry::scroll(CoordinateList* coordinates,Coordinate* firstCoordinate) {
+//void Geometry::scroll(CoordinateSequence* coordinates,Coordinate* firstCoordinate) {
 //	int ind=indexOf(firstCoordinate,coordinates);
 //	Assert::isTrue(ind > -1);
 //	int length=coordinates->getSize();
@@ -245,7 +250,7 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 //	coordinates->setPoints(v);
 //}
 //
-//int Geometry::indexOf(Coordinate* coordinate,CoordinateList* coordinates) {
+//int Geometry::indexOf(Coordinate* coordinate,CoordinateSequence* coordinates) {
 //	for (int i=0; i<coordinates->getSize(); i++) {
 //		if ((*coordinate)==coordinates->getAt(i)) {
 //			return i;
@@ -536,26 +541,26 @@ Geometry* Geometry::buffer(double distance) const {
 
 /**
 * The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
-* are fast, which may not be the case if the CoordinateList is not a
-* BasicCoordinateList (e.g. if it were implemented using separate arrays
+* are fast, which may not be the case if the CoordinateSequence is not a
+* DefaultCoordinateSequence (e.g. if it were implemented using separate arrays
 * for the x- and y-values), in which case frequent construction of Coordinates
 * takes up much space and time. To solve this performance problem,
-* #toInternalGeometry converts the Geometry to a BasicCoordinateList
+* #toInternalGeometry converts the Geometry to a DefaultCoordinateSequence
 * implementation before sending it to the JTS algorithms.
 *
-* Note: if the Geometry is already implemented with BasicCoordinateList
+* Note: if the Geometry is already implemented with DefaultCoordinateSequence
 * it is returned untouched, so you should check returned value before
 * releasing memory associated with the one used as argument.
 */
 Geometry* Geometry::toInternalGeometry(const Geometry *g) const {
-	if (BasicCoordinateListFactory::internalFactory==factory->getCoordinateListFactory()) {
+	if (DefaultCoordinateSequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
 		return (Geometry*)g;
 	}
 	return INTERNAL_GEOMETRY_FACTORY->createGeometry(g);
 }
 
 Geometry* Geometry::fromInternalGeometry(const Geometry* g) const {
-	if (BasicCoordinateListFactory::internalFactory==factory->getCoordinateListFactory()) {
+	if (DefaultCoordinateSequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
 		return (Geometry*)g;
 	}
 	return getFactory()->createGeometry(g);

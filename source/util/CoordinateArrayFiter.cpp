@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.5  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -37,7 +42,7 @@ namespace geos {
 */
 CoordinateArrayFilter::CoordinateArrayFilter(int size) {
 	n=0;
-	pts=CoordinateListFactory::internalFactory->createCoordinateList(size);
+	pts=new DefaultCoordinateSequence(size);
 }
 
 /**
@@ -45,7 +50,7 @@ CoordinateArrayFilter::CoordinateArrayFilter(int size) {
 *
 *@return    the <code>Coordinate</code>s collected by this <code>CoordinateArrayFilter</code>
 */
-const CoordinateList* CoordinateArrayFilter::getCoordinates() const {
+const CoordinateSequence* CoordinateArrayFilter::getCoordinates() const {
 	return pts;
 }
 

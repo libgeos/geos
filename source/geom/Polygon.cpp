@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.40  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.39  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -155,26 +160,29 @@ Geometry *Polygon::clone() const {
 	return new Polygon(*this);
 }
 
-CoordinateList* Polygon::getCoordinates() const {
+CoordinateSequence* Polygon::getCoordinates() const {
 	if (isEmpty()) {
-		return CoordinateListFactory::internalFactory->createCoordinateList();
+		return getFactory()->getCoordinateSequenceFactory()->create(NULL);
 	}
-	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList(getNumPoints());
+
+	vector<Coordinate> *cl = new vector<Coordinate>;
+
 	int k = -1;
-	CoordinateList* shellCoordinates=shell->getCoordinates();
-	for (int x = 0; x < shellCoordinates->getSize(); x++) {
+	const CoordinateSequence* shellCoords=shell->getCoordinatesRO();
+	for (int x = 0; x < shellCoords->getSize(); x++) {
 		k++;
-		coordinates->setAt(shellCoordinates->getAt(x),k);
+		cl->push_back(shellCoords->getAt(x));
 	}
-	delete shellCoordinates;
+
 	for (unsigned int i = 0; i < holes->size(); i++) {
-		const CoordinateList* childCoordinates=((LinearRing *)(*holes)[i])->getCoordinatesRO();
-		for (int j = 0; j < childCoordinates->getSize(); j++) {
+		const CoordinateSequence* childCoords=((LinearRing *)(*holes)[i])->getCoordinatesRO();
+		for (int j = 0; j < childCoords->getSize(); j++) {
 			k++;
-			coordinates->setAt(childCoordinates->getAt(j),k);
+			cl->push_back(childCoords->getAt(j));
 		}
 	}
-	return coordinates;
+
+	return getFactory()->getCoordinateSequenceFactory()->create(cl);
 }
 
 int Polygon::getNumPoints() const {
@@ -301,13 +309,13 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	if (ring->isEmpty()) {
 		return;
 	}
-	CoordinateList* uniqueCoordinates=ring->getCoordinates();
+	CoordinateSequence* uniqueCoordinates=ring->getCoordinates();
 	uniqueCoordinates->deleteAt(uniqueCoordinates->getSize()-1);
-	const Coordinate* minCoordinate=CoordinateList::minCoordinate(uniqueCoordinates);
-	CoordinateList::scroll(uniqueCoordinates, minCoordinate);
+	const Coordinate* minCoordinate=CoordinateSequence::minCoordinate(uniqueCoordinates);
+	CoordinateSequence::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
 	if (CGAlgorithms::isCCW(uniqueCoordinates)==clockwise) {
-		CoordinateList::reverse(uniqueCoordinates);
+		CoordinateSequence::reverse(uniqueCoordinates);
 	}
 	ring->setPoints(uniqueCoordinates);
 	delete(uniqueCoordinates);
@@ -326,7 +334,7 @@ double Polygon::getArea() const {
 	double area=0.0;
 	area+=fabs(CGAlgorithms::signedArea(shell->getCoordinatesRO()));
 	for(unsigned int i=0;i<holes->size();i++) {
-		CoordinateList *h=(*holes)[i]->getCoordinates();
+		CoordinateSequence *h=(*holes)[i]->getCoordinates();
         	area-=fabs(CGAlgorithms::signedArea(h));
 		delete h;
 	}

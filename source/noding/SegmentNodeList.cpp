@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.8  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -26,7 +31,7 @@
  * including buildGeometry().
  *
  * Revision 1.6  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
  * Other associated fixes.
  *
@@ -124,14 +129,14 @@ void SegmentNodeList::addSplitEdges(vector<SegmentString*> *edgeList){
 }
 
 void SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges){
-	const CoordinateList *edgePts=edge->getCoordinates();
+	const CoordinateSequence *edgePts=edge->getCoordinates();
 	// check that first and last points of split edges are same as endpoints of edge
 	SegmentString *split0=(*splitEdges)[0];
 	Coordinate pt0=split0->getCoordinate(0);
 	if (!(pt0==edgePts->getAt(0)))
 		throw new GEOSException("bad split edge start point at " + pt0.toString());
 	SegmentString *splitn=(*splitEdges)[splitEdges->size()-1];
-	const CoordinateList *splitnPts=splitn->getCoordinates();
+	const CoordinateSequence *splitnPts=splitn->getCoordinates();
 	Coordinate ptn=splitnPts->getAt(splitnPts->getSize()-1);
 	if (!(ptn==edgePts->getAt(edgePts->getSize()-1)))
 		throw new GEOSException("bad split edge end point at " + ptn.toString());
@@ -156,7 +161,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	if (! useIntPt1) {
 		npts--;
 	}
-	CoordinateList *pts = CoordinateListFactory::internalFactory->createCoordinateList(npts);
+	CoordinateSequence *pts = new DefaultCoordinateSequence(npts); 
 	int ipt = 0;
 	pts->setAt(Coordinate(*(ei0->coord)),ipt++);
 	for (int i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {

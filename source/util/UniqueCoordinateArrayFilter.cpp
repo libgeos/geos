@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.6  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -32,8 +37,9 @@
 #include <geos/geom.h>
 
 namespace geos {
+
 UniqueCoordinateArrayFilter::UniqueCoordinateArrayFilter() {
-	list=CoordinateListFactory::internalFactory->createCoordinateList();
+	list=new DefaultCoordinateSequence();
 }
 UniqueCoordinateArrayFilter::~UniqueCoordinateArrayFilter() {
 	delete list;
@@ -43,12 +49,12 @@ UniqueCoordinateArrayFilter::~UniqueCoordinateArrayFilter() {
 *
 *@return    the <code>Coordinate</code>s collected by this <code>CoordinateArrayFilter</code>
 */
-const CoordinateList* UniqueCoordinateArrayFilter::getCoordinates() const {
+const CoordinateSequence* UniqueCoordinateArrayFilter::getCoordinates() const {
 	return list;
 }
 
 void UniqueCoordinateArrayFilter::filter_ro(const Coordinate *coord) {
-	if (CoordinateList::indexOf(coord,list)==-1) {
+	if (CoordinateSequence::indexOf(coord,list)==-1) {
 		list->add(*coord);
 	}
 }

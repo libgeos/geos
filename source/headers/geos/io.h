@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.3  2004/07/07 10:29:54  strk
  * Adjusted exceptions documentation.
  *
@@ -122,7 +127,7 @@ public:
 //	Geometry* read(Reader reader);	//Not implemented yet
 
 protected:
-	CoordinateList* getCoordinates(StringTokenizer *tokenizer);
+	CoordinateSequence* getCoordinates(StringTokenizer *tokenizer);
 	double getNextNumber(StringTokenizer *tokenizer);
 	string getNextEmptyOrOpener(StringTokenizer *tokenizer);
 	string getNextCloserOrComma(StringTokenizer *tokenizer);

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -176,20 +181,20 @@ CoordinateOperation::edit(const Geometry *geometry, const GeometryFactory *facto
 {
 
 	if (typeid(*geometry)==typeid(LinearRing)) {
-		CoordinateList *coords = geometry->getCoordinates();
-		CoordinateList *newCoords = edit(coords,geometry);
+		CoordinateSequence *coords = geometry->getCoordinates();
+		CoordinateSequence *newCoords = edit(coords,geometry);
 		delete coords;
 		return factory->createLinearRing(newCoords);
 	}
 	else if (typeid(*geometry)==typeid(LineString)) {
-		CoordinateList *coords = geometry->getCoordinates();
-		CoordinateList *newCoords = edit(coords,geometry);
+		CoordinateSequence *coords = geometry->getCoordinates();
+		CoordinateSequence *newCoords = edit(coords,geometry);
 		delete coords;
 		return factory->createLineString(newCoords);
 	}
 	else if (typeid(*geometry)==typeid(Point)) {
-		CoordinateList *coords = geometry->getCoordinates();
-		CoordinateList *newCoords = edit(coords,geometry);
+		CoordinateSequence *coords = geometry->getCoordinates();
+		CoordinateSequence *newCoords = edit(coords,geometry);
 		delete coords;
 		return factory->createPoint(newCoords);
 	}

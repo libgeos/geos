@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.8  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -90,8 +95,8 @@ void SweeplineNestedRingTester::buildIndex() {
 }
 
 bool SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing) {
-	CoordinateList *innerRingPts=innerRing->getCoordinates();
-	CoordinateList *searchRingPts=searchRing->getCoordinates();
+	CoordinateSequence *innerRingPts=innerRing->getCoordinates();
+	CoordinateSequence *searchRingPts=searchRing->getCoordinates();
 
 	if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
 		return false;

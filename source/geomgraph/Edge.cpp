@@ -13,12 +13,17 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.3  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
  *
  * Revision 1.2  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
  * Other associated fixes.
  *
@@ -71,8 +76,8 @@ Edge::~Edge(){
 	delete env;
 }
 
-Edge::Edge(CoordinateList* newPts, Label *newLabel):GraphComponent(newLabel){
-	//cerr<<"["<<this<<"] Edge(CoordinateList *, Label *)"<<endl;
+Edge::Edge(CoordinateSequence* newPts, Label *newLabel):GraphComponent(newLabel){
+	//cerr<<"["<<this<<"] Edge(CoordinateSequence *, Label *)"<<endl;
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
@@ -83,8 +88,8 @@ Edge::Edge(CoordinateList* newPts, Label *newLabel):GraphComponent(newLabel){
 	env=NULL;
 }
 
-Edge::Edge(CoordinateList* newPts){
-	//cerr<<"["<<this<<"] Edge(CoordinateList *)"<<endl;
+Edge::Edge(CoordinateSequence* newPts){
+	//cerr<<"["<<this<<"] Edge(CoordinateSequence *)"<<endl;
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
@@ -103,11 +108,11 @@ void Edge::setName(string newName) {
 	name=newName;
 }
 
-//CoordinateList Edge::getCoordinates(){
+//CoordinateSequence Edge::getCoordinates(){
 //	return pts;
 //}
 
-const CoordinateList* Edge::getCoordinates() const {
+const CoordinateSequence* Edge::getCoordinates() const {
 	return pts;
 }
 
@@ -167,10 +172,10 @@ bool Edge::isCollapsed(){
 }
 
 Edge* Edge::getCollapsedEdge() {
-	CoordinateList *newPts=CoordinateListFactory::internalFactory->createCoordinateList(2);
+	CoordinateSequence *newPts = new DefaultCoordinateSequence(2);
 	newPts->setAt(pts->getAt(0),0);
 	newPts->setAt(pts->getAt(1),1);
-	return new Edge(newPts,Label::toLineLabel(label));
+	return new Edge(newPts, Label::toLineLabel(label));
 }
 
 void Edge::setIsolated(bool newIsIsolated){

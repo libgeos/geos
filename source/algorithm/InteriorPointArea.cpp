@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.12  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -142,14 +147,25 @@ LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
 	Envelope *envelope=geometry->getEnvelopeInternal();
 	// Assert: for areas, minx <> maxx
 	double avgY=avg(envelope->getMinY(),envelope->getMaxY());
-	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
-	Coordinate *c1=new Coordinate(envelope->getMinX(),avgY);
-	Coordinate *c2=new Coordinate(envelope->getMaxX(),avgY);
-	cl->add(*c1);
-	cl->add(*c2);
-	delete c1;
-	delete c2;
+
+	vector<Coordinate>*cv=new vector<Coordinate>(2);
+	(*cv)[0].x = envelope->getMinX();
+	(*cv)[0].y = avgY;
+	(*cv)[1].x = envelope->getMaxX();
+	(*cv)[1].y = avgY;
+
+	//CoordinateSequence *cl=CoordinateSequenceFactory::internalFactory->createCoordinateSequence();
+	//Coordinate *c1=new Coordinate(envelope->getMinX(),avgY);
+	//Coordinate *c2=new Coordinate(envelope->getMaxX(),avgY);
+	//cl->add(*c1);
+	//cl->add(*c2);
+	//delete c1;
+	//delete c2;
+
 	delete envelope;
+
+	CoordinateSequence *cl = factory->getCoordinateSequenceFactory()->create(cv);
+
 	LineString *ret = factory->createLineString(cl);
 	//delete cl;
 	return ret;

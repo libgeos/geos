@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.21  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -46,7 +51,7 @@
  * Added holes argument check in Polygon.cpp.
  *
  * Revision 1.16  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
  * Other associated fixes.
  *
@@ -55,7 +60,7 @@
  *
  * Revision 1.14  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateList.
+ * to handle NULL CoordinateSequence.
  *
  * Revision 1.13  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.

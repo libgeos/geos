@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.40  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.39  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -27,8 +32,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -56,7 +61,7 @@
  *
  * Revision 1.31  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateList.
+ * to handle NULL CoordinateSequence.
  *
  * Revision 1.30  2004/04/20 13:24:15  strk
  * More leaks removed.
@@ -103,22 +108,22 @@ namespace geos {
 //LineString::LineString(){}
 
 LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
-	points=CoordinateListFactory::internalFactory->createCoordinateList(ls.points);
+	points=ls.points->clone();
 }
 
 /**
  * Constructs a <code>LineString</code> taking ownership of the
- * given CoordinateList.
+ * given CoordinateSequence.
  *
  * @param newCoords the list of coordinates making up the linestring,
  *	or <code>null</code> to create the empty geometry.
  *	Consecutive points may not be equal.
  *
  */  
-LineString::LineString(CoordinateList *newCoords, const GeometryFactory *factory): Geometry(factory)
+LineString::LineString(CoordinateSequence *newCoords, const GeometryFactory *factory): Geometry(factory)
 {
 	if (newCoords==NULL) {
-		points=CoordinateListFactory::internalFactory->createCoordinateList();
+		points=factory->getCoordinateSequenceFactory()->create(NULL);
 		return;
 	}
 	if (newCoords->getSize()==1) {
@@ -136,12 +141,12 @@ Geometry* LineString::clone() const {
 	return new LineString(*this);
 }
 
-CoordinateList* LineString::getCoordinates() const {
-	return CoordinateListFactory::internalFactory->createCoordinateList(points);
+CoordinateSequence* LineString::getCoordinates() const {
+	return points->clone();
 	//return points;
 }
 
-const CoordinateList* LineString::getCoordinatesRO() const {
+const CoordinateSequence* LineString::getCoordinatesRO() const {
 	return points;
 }
 
@@ -298,7 +303,7 @@ void LineString::normalize() {
 		int j = points->getSize() - 1 - i;
 		if (!(points->getAt(i)==points->getAt(j))) {
 			if (points->getAt(i).compareTo(points->getAt(j)) > 0) {
-				CoordinateList::reverse(points);
+				CoordinateSequence::reverse(points);
 			}
 			return;
 		}

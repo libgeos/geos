@@ -13,12 +13,17 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.8  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
  *
  * Revision 1.7  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
  * Other associated fixes.
  *
@@ -99,7 +104,7 @@ MCQuadtreeNoder::intersectChains()
 }
 
 void MCQuadtreeNoder::add(SegmentString *segStr) {
-	vector<indexMonotoneChain*> *segChains=MonotoneChainBuilder::getChains((CoordinateList*)segStr->getCoordinatesRO(),segStr);
+	vector<indexMonotoneChain*> *segChains=MonotoneChainBuilder::getChains((CoordinateSequence*)segStr->getCoordinatesRO(),segStr);
 	for (int i=0; i<(int)segChains->size();i++) {
 		indexMonotoneChain *mc=(*segChains)[i];
 		mc->setId(idCounter++);

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.11  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -73,7 +78,6 @@ Unload::~Unload(void)
 
 void Unload::Release()
 {
-	delete CoordinateListFactory::internalFactory;
 	delete PlanarGraph::cga;
 	delete planarDirectedEdge::cga;
 	delete GeometryGraphOperation::cga;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -317,7 +322,7 @@ private:
 	SimpleGeometryPrecisionReducer *sgpr;
 public:
 	PrecisionReducerCoordinateOperation(SimpleGeometryPrecisionReducer *newSgpr);
-	CoordinateList* edit(const CoordinateList *coordinates, const Geometry *geom);
+	CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *geom);
 };
 
 /**

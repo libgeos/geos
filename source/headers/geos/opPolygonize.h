@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -60,7 +65,7 @@ private:
 	vector<planarDirectedEdge*> *deList;
 	// cache the following data for efficiency
 	LinearRing *ring;
-	CoordinateList *ringPts;
+	CoordinateSequence *ringPts;
 	vector<LinearRing*> *holes;
 	/**
 	* Computes the list of coordinates which are contained in this ring.
@@ -68,8 +73,9 @@ private:
 	*
 	* @return an array of the {@link Coordinate}s in this ring
 	*/
-	CoordinateList* getCoordinates();
-	static void addEdge(CoordinateList *coords, bool isForward, CoordinateList *coordList);
+	CoordinateSequence* getCoordinates();
+	static void addEdge(CoordinateSequence *coords, bool isForward, CoordinateSequence *coordList);
+
 public:
 	/**
 	* Find the innermost enclosing shell polygonizeEdgeRing containing the argument polygonizeEdgeRing, if any.
@@ -86,6 +92,7 @@ public:
 	* @return null if no containing polygonizeEdgeRing is found
 	*/
 	static polygonizeEdgeRing* findEdgeRingContaining(polygonizeEdgeRing *testEr, vector<polygonizeEdgeRing*> *shellList);
+
 	/**
 	* Finds a point in a list of points which is not contained in another list of points
 	* @param testPts the {@link Coordinate}s to test
@@ -93,7 +100,7 @@ public:
 	* @return a {@link Coordinate} from <code>testPts</code> which is not in <code>pts</code>, '
 	* or <code>null</code>
 	*/
-	static Coordinate& ptNotInList(CoordinateList *testPts, CoordinateList *pts);
+	static Coordinate& ptNotInList(CoordinateSequence *testPts, CoordinateSequence *pts);
 	/**
 	* Tests whether a given point is in an array of points.
 	* Uses a value-based test.
@@ -102,7 +109,7 @@ public:
 	* @param pts an array of {@link Coordinate}s to test
 	* @return <code>true</code> if the point is in the array
 	*/
-	static bool isInList(Coordinate &pt, CoordinateList *pts);
+	static bool isInList(Coordinate &pt, CoordinateSequence *pts);
 	polygonizeEdgeRing(GeometryFactory *newFactory);
 	~polygonizeEdgeRing();
 	/**

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -57,8 +62,8 @@ void SimpleSegmentStringsSnapper::computeNodes(vector<SegmentString*>* edges, Se
 * This has n^2 performance.
 */
 void SimpleSegmentStringsSnapper::computeSnaps(SegmentString *e0, SegmentString *e1, SegmentSnapper *ss){
-	const CoordinateList *pts0=e0->getCoordinates();
-	const CoordinateList *pts1=e1->getCoordinates();
+	const CoordinateSequence *pts0=e0->getCoordinates();
+	const CoordinateSequence *pts1=e1->getCoordinates();
 	for (int i0 = 0; i0 < pts0->getSize()- 1; i0++) {
 		for (int i1 = 0; i1 < pts1->getSize()-1; i1++) {
 			bool isNodeAdded = ss->addSnappedNode((Coordinate&)pts0->getAt(i0), e1, i1);

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.4  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -45,6 +50,11 @@
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.4  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -83,7 +93,7 @@ EdgeRing::EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFac
 	geometryFactory=newGeometryFactory;
 	cga=newCga;
 	edges=new vector<DirectedEdge*>();
-	pts=CoordinateListFactory::internalFactory->createCoordinateList();
+	pts=geometryFactory->getCoordinateSequenceFactory()->create(NULL);
 	ring=NULL;
 	shell=NULL;
 	holes=new vector<EdgeRing*>();
@@ -154,7 +164,7 @@ Polygon* EdgeRing::toPolygon(const GeometryFactory* geometryFactory){
 void EdgeRing::computeRing() {
 	if (ring!=NULL) return;   // don't compute more than once
 	ring=geometryFactory->createLinearRing(*pts);
-	const CoordinateList *cl = ring->getCoordinatesRO();
+	const CoordinateSequence *cl = ring->getCoordinatesRO();
 	isHoleVar=cga->isCCW(cl);
 }
 
@@ -233,7 +243,7 @@ void EdgeRing::mergeLabel(Label *deLabel, int geomIndex){
 }
 
 void EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge){
-	const CoordinateList* edgePts=edge->getCoordinates();
+	const CoordinateSequence* edgePts=edge->getCoordinates();
 	if (isForward) {
 		int startIndex=1;
 		if (isFirstEdge) startIndex=0;

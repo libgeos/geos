@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -25,7 +30,7 @@
  * including buildGeometry().
  *
  * Revision 1.11  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
  * Other associated fixes.
  *
@@ -126,7 +131,7 @@ private:
 	vector<SegmentString*> splitEdges;
 
 	// This vector is here to keep track of created Coordinates
-	vector<CoordinateList*> splitCoordLists;
+	vector<CoordinateSequence*> splitCoordLists;
 
 	void checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges);
 	/**
@@ -181,21 +186,21 @@ public:
 class SegmentString {
 private:
 	SegmentNodeList *eiList;
-	const CoordinateList *pts;
+	const CoordinateSequence *pts;
 	const void* context;
 	bool isIsolatedVar;
 public:
 	/**
-	 * This function copies given CoordinateList
+	 * This function copies given CoordinateSequence
 	 */
-	SegmentString(const CoordinateList *newPts, const void* newContext);
+	SegmentString(const CoordinateSequence *newPts, const void* newContext);
 	virtual ~SegmentString();
 	const void* getContext() const;
 	SegmentNodeList* getIntersectionList() const;
 	int size() const;
 	const Coordinate& getCoordinate(int i) const;
-	CoordinateList* getCoordinates() const;
-	const CoordinateList* getCoordinatesRO() const;
+	CoordinateSequence* getCoordinates() const;
+	const CoordinateSequence* getCoordinatesRO() const;
 	void setIsolated(bool isIsolated);
 	bool isIsolated() const;
 	bool isClosed() const;

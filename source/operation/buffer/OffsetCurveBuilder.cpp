@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.11  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -78,7 +83,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel)
 	li=new RobustLineIntersector();
 	int limitedQuadSegs=DEFAULT_QUADRANT_SEGMENTS<1 ? 1 : DEFAULT_QUADRANT_SEGMENTS;
 	filletAngleQuantum=3.14159265358979 / 2.0 / limitedQuadSegs;
-	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
+	ptList=new DefaultCoordinateSequence();
 }
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments)
@@ -99,7 +104,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,i
 	li=new RobustLineIntersector();
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=3.14159265358979  / 2.0 / limitedQuadSegs;
-	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
+	ptList=new DefaultCoordinateSequence();
 }
 
 OffsetCurveBuilder::~OffsetCurveBuilder(){
@@ -123,10 +128,10 @@ void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
 *
 * @return a List of Coordinate[]
 */
-vector<CoordinateList*>*
-OffsetCurveBuilder::getLineCurve(const CoordinateList *inputPts, double distance)
+vector<CoordinateSequence*>*
+OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts, double distance)
 {
-	vector<CoordinateList*> *lineList=new vector<CoordinateList*>();
+	vector<CoordinateSequence*> *lineList=new vector<CoordinateSequence*>();
 	// a zero or negative width buffer of a line/point is empty
 	if (distance<= 0.0) return lineList;
 	init(distance);
@@ -142,7 +147,7 @@ OffsetCurveBuilder::getLineCurve(const CoordinateList *inputPts, double distance
 		}
 	} else
 		computeLineBufferCurve(inputPts);
-	CoordinateList *lineCoord=getCoordinates();
+	CoordinateSequence *lineCoord=getCoordinates();
 	lineList->push_back(lineCoord);
 	return lineList;
 }
@@ -153,10 +158,10 @@ OffsetCurveBuilder::getLineCurve(const CoordinateList *inputPts, double distance
 *
 * @return a List of Coordinate[]
 */
-vector<CoordinateList*>*
-OffsetCurveBuilder::getRingCurve(const CoordinateList *inputPts, int side, double distance)
+vector<CoordinateSequence*>*
+OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts, int side, double distance)
 {
-	vector<CoordinateList*>* lineList=new vector<CoordinateList*>();
+	vector<CoordinateSequence*>* lineList=new vector<CoordinateSequence*>();
 	init(distance);
 	if (inputPts->getSize()<= 2)
 	{
@@ -165,7 +170,7 @@ OffsetCurveBuilder::getRingCurve(const CoordinateList *inputPts, int side, doubl
 	}
 	// optimize creating ring for for zero distance
 	if (distance==0.0) {
-		lineList->push_back(CoordinateListFactory::internalFactory->createCoordinateList(inputPts));
+		lineList->push_back(inputPts->clone());
 		return lineList;
 	}
 	computeRingBufferCurve(inputPts, side);
@@ -180,21 +185,21 @@ void OffsetCurveBuilder::init(double newDistance){
 	// but if a previous point list exists
 	// we'd better back it up for final deletion
 	ptLists.push_back(ptList);
-	ptList=CoordinateListFactory::internalFactory->createCoordinateList();
+	ptList=new DefaultCoordinateSequence();
 }
 
-CoordinateList* OffsetCurveBuilder::getCoordinates(){
+// returns ptList / is private / might just e avoided !
+CoordinateSequence* OffsetCurveBuilder::getCoordinates(){
 	// check that points are a ring-add the startpoint again if they are not
 	if (ptList->getSize()>1) {
 		const Coordinate &start=ptList->getAt(0);
 		const Coordinate &end=ptList->getAt(1);
 		if (!(start==end)) addPt(start);
 	}
-	//return CoordinateListFactory::internalFactory->createCoordinateList(ptList);;
 	return ptList;
 }
 
-void OffsetCurveBuilder::computeLineBufferCurve(const CoordinateList *inputPts){
+void OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence *inputPts){
 	int n=inputPts->getSize()-1;
 	// compute points for left side of line
 	initSideSegments(inputPts->getAt(0),inputPts->getAt(1), Position::LEFT);
@@ -215,7 +220,7 @@ void OffsetCurveBuilder::computeLineBufferCurve(const CoordinateList *inputPts){
 	closePts();
 }
 
-void OffsetCurveBuilder::computeRingBufferCurve(const CoordinateList *inputPts, int side){
+void OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence *inputPts, int side){
 	int n=inputPts->getSize()-1;
 	initSideSegments(inputPts->getAt(n-1),inputPts->getAt(0), side);
 	for (int i=1;i<= n;i++) {

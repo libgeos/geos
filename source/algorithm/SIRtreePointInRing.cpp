@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.8  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -43,7 +48,7 @@ SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing){
 void SIRtreePointInRing::buildIndex() {
 	Envelope *env=ring->getEnvelopeInternal();
 	sirTree=new SIRtree();
-	const CoordinateList *pts=ring->getCoordinatesRO();
+	const CoordinateSequence *pts=ring->getCoordinatesRO();
 	for(int i=1;i<pts->getSize();i++) {
 		if(pts->getAt(i-1)==pts->getAt(i)) {continue;} //Optimization suggested by MD. [Jon Aquino]
 		LineSegment *seg=new LineSegment(pts->getAt(i-1),pts->getAt(i));

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.16  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -61,7 +66,7 @@ MCPointInRing::~MCPointInRing() {
 void MCPointInRing::buildIndex() {
 //	Envelope *env=ring->getEnvelopeInternal();
 	tree=new Bintree();
-	pts=CoordinateList::removeRepeatedPoints(ring->getCoordinatesRO());
+	pts=CoordinateSequence::removeRepeatedPoints(ring->getCoordinatesRO());
 	vector<indexMonotoneChain*> *mcList=MonotoneChainBuilder::getChains(pts);
 	for(int i=0;i<(int)mcList->size();i++) {
 		indexMonotoneChain *mc=(*mcList)[i];

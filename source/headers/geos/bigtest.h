@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -36,10 +41,10 @@ using namespace geos;
 class GeometryTestFactory {
 public:
 	static Polygon* createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen);
-	static CoordinateList* createBox(double minx,double miny,int nSide,double segLen);
-	static CoordinateList* createCircle(double basex,double basey,double size,int nPts);
+	static CoordinateSequence* createBox(double minx,double miny,int nSide,double segLen);
+	static CoordinateSequence* createCircle(double basex,double basey,double size,int nPts);
 	static Polygon* createCircle(GeometryFactory *fact,double basex,double basey,double size,int nPts);
-	static CoordinateList* createSineStar(double basex,double basey,double size,double armLen,int nArms,int nPts);
+	static CoordinateSequence* createSineStar(double basex,double basey,double size,double armLen,int nArms,int nPts);
 	static Polygon* createSineStar(GeometryFactory *fact,double basex,double basey,double size,double armLen,int nArms,int nPts);
 };
 

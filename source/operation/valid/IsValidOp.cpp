@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.18  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -47,7 +52,7 @@
 
 namespace geos {
 
-const Coordinate& IsValidOp::findPtNotNode(const CoordinateList *testCoords,const LinearRing *searchRing, GeometryGraph *graph) {
+const Coordinate& IsValidOp::findPtNotNode(const CoordinateSequence *testCoords,const LinearRing *searchRing, GeometryGraph *graph) {
 	// find edge corresponding to searchRing.
 	Edge *searchEdge=graph->findEdge(searchRing);
 	// find a point in the testCoords which is not a node of the searchRing
@@ -298,7 +303,7 @@ void IsValidOp::checkNoRepeatedPoint(Geometry *g) {
 */
 void IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph) {
 	LinearRing *shell=(LinearRing*) p->getExteriorRing();
-	const CoordinateList *shellPts=shell->getCoordinatesRO();
+	const CoordinateSequence *shellPts=shell->getCoordinatesRO();
 	//PointInRing pir=new SimplePointInRing(shell);
 	//PointInRing pir=new SIRtreePointInRing(shell);
 //	auto_ptr<PointInRing> pir(new MCPointInRing(shell));
@@ -319,7 +324,7 @@ void IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph) {
 
 //void IsValidOp::OLDcheckHolesInShell(Polygon *p) {
 //	LinearRing *shell=(LinearRing*) p->getExteriorRing();
-//	CoordinateList *shellPts=shell->getCoordinates();
+//	CoordinateSequence *shellPts=shell->getCoordinates();
 //	for(int i=0;i<p->getNumInteriorRing();i++) {
 //		Coordinate& holePt=findPtNotNode(p->getInteriorRingN(i)->getCoordinates(),shell,(*arg)[0]);
 //		Assert::isTrue(!(holePt==Coordinate::getNull()),"Unable to find a hole point not a vertex of the shell");
@@ -365,7 +370,7 @@ void IsValidOp::checkHolesNotNested(const Polygon *p,GeometryGraph *graph) {
 //void IsValidOp::SLOWcheckHolesNotNested(Polygon *p) {
 //	for(int i=0;i<p->getNumInteriorRing();i++) {
 //		LinearRing *innerHole=(LinearRing*) p->getInteriorRingN(i);
-//		CoordinateList *innerHolePts=innerHole->getCoordinates();
+//		CoordinateSequence *innerHolePts=innerHole->getCoordinates();
 //		for(int j=0;j<p->getNumInteriorRing();j++) {
 //			// don't test hole against itself!
 //			if (i==j) continue;
@@ -373,7 +378,7 @@ void IsValidOp::checkHolesNotNested(const Polygon *p,GeometryGraph *graph) {
 //			// if envelopes don't overlap, holes are not nested
 //			if (!innerHole->getEnvelopeInternal()->overlaps(searchHole->getEnvelopeInternal()))
 //				continue;
-//			CoordinateList *searchHolePts=searchHole->getCoordinates();
+//			CoordinateSequence *searchHolePts=searchHole->getCoordinates();
 //			Coordinate& innerholePt=findPtNotNode(innerHolePts,searchHole,(*arg)[0]);
 //			Assert::isTrue(!(innerholePt==Coordinate::getNull()),"Unable to find a hole point not a node of the search hole");
 //			bool inside=cga->isPointInRing(innerholePt,searchHolePts);
@@ -421,10 +426,10 @@ void IsValidOp::checkShellsNotNested(const MultiPolygon *mp,GeometryGraph *graph
 * <code>checkRelateConsistency</code>
 */
 void IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,GeometryGraph *graph) {
-	const CoordinateList *shellPts=shell->getCoordinatesRO();
+	const CoordinateSequence *shellPts=shell->getCoordinatesRO();
 	// test if shell is inside polygon shell
 	LinearRing *polyShell=(LinearRing*) p->getExteriorRing();
-	const CoordinateList *polyPts=polyShell->getCoordinatesRO();
+	const CoordinateSequence *polyPts=polyShell->getCoordinatesRO();
 	const Coordinate& shellPt=findPtNotNode(shellPts,polyShell,graph);
 	// if no point could be found, we can assume that the shell is outside the polygon
 	if (shellPt==Coordinate::getNull())
@@ -464,8 +469,8 @@ void IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,Ge
 *
 */
 const Coordinate& IsValidOp::checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph) {
-	const CoordinateList *shellPts=shell->getCoordinatesRO();
-	const CoordinateList *holePts=hole->getCoordinatesRO();
+	const CoordinateSequence *shellPts=shell->getCoordinatesRO();
+	const CoordinateSequence *holePts=hole->getCoordinatesRO();
 	// TODO: improve performance of this - by sorting pointlists for instance?
 	const Coordinate& shellPt=findPtNotNode(shellPts,hole,graph);
 	// if point is on shell but not hole, check that the shell is inside the hole

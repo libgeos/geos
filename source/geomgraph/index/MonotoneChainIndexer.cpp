@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -38,7 +43,7 @@
 namespace geos {
 
 vector<int>*
-MonotoneChainIndexer::getChainStartIndices(const CoordinateList* pts)
+MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts)
 {
 	// find the startpoint (and endpoints) of all monotone chains in this edge
 	int start=0;
@@ -56,7 +61,7 @@ MonotoneChainIndexer::getChainStartIndices(const CoordinateList* pts)
 /**
 * @return the index of the last point in the monotone chain
 */
-int MonotoneChainIndexer::findChainEnd(const CoordinateList* pts,int start){
+int MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts,int start){
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
 	int last=start+1;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.15  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -66,7 +71,7 @@ bool SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry 
 bool SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p,const Polygon *poly) {
 	if (poly->isEmpty()) return false;
 	const LineString *shell=poly->getExteriorRing();
-	const CoordinateList *cl;
+	const CoordinateSequence *cl;
 	cl = shell->getCoordinatesRO();
 	if (!CGAlgorithms::isPointInRing(p,cl)) {
 		return false;

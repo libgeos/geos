@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -79,7 +84,7 @@ MonotoneChainEdge::MonotoneChainEdge(Edge *newE) {
 	delete mcb;
 }
 
-const CoordinateList* MonotoneChainEdge::getCoordinates() {
+const CoordinateSequence* MonotoneChainEdge::getCoordinates() {
 	return pts;
 }
 

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -145,10 +150,10 @@ void SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int se
 //	if (e0->equals(e1) && segIndex0==segIndex1) return;
 	if (e0==e1 && segIndex0==segIndex1) return;
 	numTests++;
-	const CoordinateList* cl0=e0->getCoordinates();
+	const CoordinateSequence* cl0=e0->getCoordinates();
 	const Coordinate& p00=cl0->getAt(segIndex0);
 	const Coordinate& p01=cl0->getAt(segIndex0+1);
-	const CoordinateList* cl1=e1->getCoordinates();
+	const CoordinateSequence* cl1=e1->getCoordinates();
 	const Coordinate& p10=cl1->getAt(segIndex1);
 	const Coordinate& p11=cl1->getAt(segIndex1+1);
 	li->computeIntersection(p00,p01,p10,p11);

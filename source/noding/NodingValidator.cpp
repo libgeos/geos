@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.2  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -54,8 +59,8 @@ void NodingValidator::checkProperIntersections() {
 }
 
 void NodingValidator::checkProperIntersections(SegmentString *ss0, SegmentString *ss1){
-	const CoordinateList *pts0=ss0->getCoordinates();
-	const CoordinateList *pts1=ss1->getCoordinates();
+	const CoordinateSequence *pts0=ss0->getCoordinates();
+	const CoordinateSequence *pts1=ss1->getCoordinates();
 	for (int i0=0;i0<pts0->getSize()-1; i0++) {
 		for (int i1=0;i1<pts1->getSize()-1; i1++) {
 			checkProperIntersections(ss0, i0, ss1, i1);
@@ -95,7 +100,7 @@ bool NodingValidator::hasInteriorIntersection(LineIntersector *aLi, Coordinate& 
 void NodingValidator::checkNoInteriorPointsSame() {
 	for (int i=0; i<(int)segStrings->size();i++) {
 		SegmentString *ss0=(*segStrings)[i];
-		const CoordinateList *pts=ss0->getCoordinates();
+		const CoordinateSequence *pts=ss0->getCoordinates();
 		checkNoInteriorPointsSame(pts->getAt(0), segStrings);
 		checkNoInteriorPointsSame(pts->getAt(pts->getSize()-1), segStrings);
 	}
@@ -104,7 +109,7 @@ void NodingValidator::checkNoInteriorPointsSame() {
 void NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<SegmentString*> *aSegStrings) {
 	for (int i=0; i<(int)segStrings->size();i++) {
 			SegmentString *ss0=(*segStrings)[i];
-			const CoordinateList *pts=ss0->getCoordinates();
+			const CoordinateSequence *pts=ss0->getCoordinates();
 			for (int j=1;j<pts->getSize()-1; j++) {
 				if (pts->getAt(j)==testPt)
 					throw new GEOSException("found bad noding at pt " + testPt.toString());

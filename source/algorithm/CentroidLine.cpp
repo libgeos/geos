@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -69,7 +74,7 @@ void CentroidLine::add(const Geometry *geom) {
 * Adds the length defined by an array of coordinates.
 * @param pts an array of {@link Coordinate}s
 */
-void CentroidLine::add(const CoordinateList *pts) {
+void CentroidLine::add(const CoordinateSequence *pts) {
 	for(int i=0;i<pts->getSize()-1;i++) {
 		double segmentLen=pts->getAt(i).distance(pts->getAt(i + 1));
 		totalLength+=segmentLen;

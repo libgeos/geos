@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.47  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.46  2004/07/05 19:40:48  strk
  * Added GeometryFactory::destroyGeometry(Geometry *)
  *
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -48,7 +53,7 @@
  * including buildGeometry().
  *
  * Revision 1.39  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
  * Other associated fixes.
  *
@@ -60,7 +65,7 @@
  *
  * Revision 1.36  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateList.
+ * to handle NULL CoordinateSequence.
  *
  * Revision 1.35  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
@@ -119,33 +124,33 @@ namespace geos {
 GeometryFactory::GeometryFactory() {
 	precisionModel=new PrecisionModel();
 	SRID=0;
-	coordinateListFactory=CoordinateListFactory::internalFactory;
+	coordinateListFactory=DefaultCoordinateSequenceFactory::instance();
 }
 
 /**
 * Constructs a GeometryFactory that generates Geometries having the given
-* PrecisionModel, spatial-reference ID, and CoordinateList implementation.
+* PrecisionModel, spatial-reference ID, and CoordinateSequence implementation.
 */
-GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateListFactory *nCoordinateListFactory) {
+GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateSequenceFactory *nCoordinateSequenceFactory) {
 	precisionModel=new PrecisionModel(*pm);
-	coordinateListFactory=nCoordinateListFactory;
+	coordinateListFactory=nCoordinateSequenceFactory;
 	SRID=newSRID;
 }
 
 /**
 * Constructs a GeometryFactory that generates Geometries having the given
-* CoordinateList implementation, a double-precision floating PrecisionModel and a
+* CoordinateSequence implementation, a double-precision floating PrecisionModel and a
 * spatial-reference ID of 0.
 */
-GeometryFactory::GeometryFactory(CoordinateListFactory *nCoordinateListFactory) {
+GeometryFactory::GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory) {
 	precisionModel=new PrecisionModel();
 	SRID=0;
-	coordinateListFactory=nCoordinateListFactory;
+	coordinateListFactory=nCoordinateSequenceFactory;
 }
 
 /**
 * Constructs a GeometryFactory that generates Geometries having the given
-* {@link PrecisionModel} and the default CoordinateList
+* {@link PrecisionModel} and the default CoordinateSequence
 * implementation.
 *
 * @param precisionModel the PrecisionModel to use
@@ -153,12 +158,12 @@ GeometryFactory::GeometryFactory(CoordinateListFactory *nCoordinateListFactory) 
 GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
 	precisionModel=new PrecisionModel(*pm);
 	SRID=0;
-	coordinateListFactory=CoordinateListFactory::internalFactory;
+	coordinateListFactory=DefaultCoordinateSequenceFactory::instance();
 }
 
 /**
 * Constructs a GeometryFactory that generates Geometries having the given
-* {@link PrecisionModel} and spatial-reference ID, and the default CoordinateList
+* {@link PrecisionModel} and spatial-reference ID, and the default CoordinateSequence
 * implementation.
 *
 * @param precisionModel the PrecisionModel to use
@@ -167,7 +172,7 @@ GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID){
     precisionModel=new PrecisionModel(*pm);
     SRID=newSRID;
-	coordinateListFactory=CoordinateListFactory::internalFactory;
+	coordinateListFactory=DefaultCoordinateSequenceFactory::instance();
 }
 
 GeometryFactory::GeometryFactory(const GeometryFactory &gf){
@@ -205,7 +210,7 @@ GeometryFactory::toGeometry(Envelope* envelope) const
 		coord.y = envelope->getMinY();
 		return createPoint(coord);
 	}
-	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence *cl=DefaultCoordinateSequenceFactory::instance()->create(NULL);
 	coord.x = envelope->getMinX();
 	coord.y = envelope->getMinY();
 	cl->add(coord);
@@ -251,15 +256,15 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const {
 	if (coordinate==Coordinate::nullCoord) {
 		return createPoint();
 	} else {
-		CoordinateList *cl=coordinateListFactory->createCoordinateList(1);
-		cl->setAt(coordinate, 0);
+		CoordinateSequence *cl=coordinateListFactory->create(new vector<Coordinate>(1, coordinate));
+		//cl->setAt(coordinate, 0);
 		Point *ret = createPoint(cl);
 		return ret;
 	}
 }
 
 /**
-* Creates a Point using the given CoordinateList (must have 1 element)
+* Creates a Point using the given CoordinateSequence (must have 1 element)
 *
 * @param  newCoords
 *	contains the single coordinate on which to base this
@@ -269,23 +274,22 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const {
 *	If not null the created Point will take ownership of newCoords.
 */  
 Point*
-GeometryFactory::createPoint(CoordinateList *coordinates) const
+GeometryFactory::createPoint(CoordinateSequence *coordinates) const
 {
 	return new Point(coordinates,this);
 }
 
 /**
-* Creates a Point using the given CoordinateList (must have 1 element)
+* Creates a Point using the given CoordinateSequence (must have 1 element)
 *
 * @param  fromCoords
 *	contains the single coordinate on which to base this
 *	<code>Point</code>. 
 */
 Point*
-GeometryFactory::createPoint(const CoordinateList &fromCoords) const
+GeometryFactory::createPoint(const CoordinateSequence &fromCoords) const
 {
-	//CoordinateList *newCoords = CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
-	CoordinateList *newCoords = fromCoords.clone();
+	CoordinateSequence *newCoords = fromCoords.clone();
 	Point *g = NULL;
 	try {
 		g = new Point(newCoords,this); 
@@ -497,33 +501,33 @@ GeometryFactory::createLinearRing() const
 }
 
 /**
-* Creates a LinearRing using the given CoordinateList;
-* a null or empty CoordinateList will
+* Creates a LinearRing using the given CoordinateSequence;
+* a null or empty CoordinateSequence will
 * create an empty LinearRing. The points must form a closed and simple
 * linestring. Consecutive points must not be equal.
 *
-* @param coordinates a CoordinateList possibly empty, or null
+* @param coordinates a CoordinateSequence possibly empty, or null
 *
 * LinearRing will take ownership of coordinates.
 * 
 */
 LinearRing*
-GeometryFactory::createLinearRing(CoordinateList* newCoords) const
+GeometryFactory::createLinearRing(CoordinateSequence* newCoords) const
 {
 	return new LinearRing(newCoords,this);
 }
 
 /**
-* Creates a LinearRing using a copy of the given CoordinateList.
-* An empty CoordinateList will create an empty LinearRing.
+* Creates a LinearRing using a copy of the given CoordinateSequence.
+* An empty CoordinateSequence will create an empty LinearRing.
 * The points must form a closed and simple
 * linestring. Consecutive points must not be equal.
-* @param fromCoords a CoordinateList possibly empty.
+* @param fromCoords a CoordinateSequence possibly empty.
 */
 LinearRing*
-GeometryFactory::createLinearRing(const CoordinateList& fromCoords) const
+GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
-	CoordinateList *newCoords = fromCoords.clone();
+	CoordinateSequence *newCoords = fromCoords.clone();
 	LinearRing *g = NULL;
 	try {
 		g = new LinearRing(newCoords, this);
@@ -597,11 +601,11 @@ GeometryFactory::createMultiPoint() const
 }
 
 /**
-* Creates a MultiPoint using the given CoordinateList.
-* @param fromCoords a CoordinateList used for Points construction.
+* Creates a MultiPoint using the given CoordinateSequence.
+* @param fromCoords a CoordinateSequence used for Points construction.
 */
 MultiPoint*
-GeometryFactory::createMultiPoint(const CoordinateList &fromCoords) const
+GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 {
 	vector<Geometry *> *pts=new vector<Geometry *>();
 	for (int i=0; i<fromCoords.getSize(); i++) {
@@ -703,7 +707,7 @@ GeometryFactory::createLineString() const
 
 /**
  * Constructs a <code>LineString</code> taking ownership of the
- * given CoordinateList.
+ * given CoordinateSequence.
  *
  * @param newCoords the list of coordinates making up the linestring,
  *	or <code>null</code> to create the empty geometry.
@@ -711,7 +715,7 @@ GeometryFactory::createLineString() const
  *
  */  
 LineString*
-GeometryFactory::createLineString(CoordinateList* coordinates)
+GeometryFactory::createLineString(CoordinateSequence* coordinates)
 	const
 {
 	return new LineString(coordinates, this);
@@ -719,17 +723,16 @@ GeometryFactory::createLineString(CoordinateList* coordinates)
 
 /**
  * Constructs a <code>LineString</code> copying the
- * given CoordinateList.
+ * given CoordinateSequence.
  *
  * @param fromCoords the list of coordinates making up the linestring.
  *	Consecutive points may not be equal.
  */  
 LineString*
-GeometryFactory::createLineString(const CoordinateList &fromCoords)
+GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 	const
 {
-	//CoordinateListFactory::internalFactory->createCoordinateList(&fromCoords);
-	CoordinateList *newCoords = fromCoords.clone();
+	CoordinateSequence *newCoords = fromCoords.clone();
 	LineString *g = NULL;
 	try {
 		g = new LineString(newCoords, this);
@@ -875,27 +878,21 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 }
 
 
-CoordinateList*
-gfCoordinateOperation::edit(const CoordinateList *coordinates, const Geometry *geometry)
-{
-	return CoordinateListFactory::internalFactory->createCoordinateList(coordinates);
-}
-//Remember to add this.
-
 /**
- * @return a clone of g based on a CoordinateList created by this
- * GeometryFactory's CoordinateListFactory
+ * @return a clone of g based on a CoordinateSequence created by this
+ * GeometryFactory's CoordinateSequenceFactory
  */
 Geometry*
 GeometryFactory::createGeometry(const Geometry *g) const
 {
 	// could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
-	GeometryEditor *editor=new GeometryEditor(this);
-	gfCoordinateOperation *coordOp = new gfCoordinateOperation();
-	Geometry *ret=editor->edit(g, coordOp);
-	delete coordOp;
-	delete editor;
-	return ret;
+	return g->clone();
+	//GeometryEditor *editor=new GeometryEditor(this);
+	//gfCoordinateOperation *coordOp = new gfCoordinateOperation();
+	//Geometry *ret=editor->edit(g, coordOp);
+	//delete coordOp;
+	//delete editor;
+	//return ret;
 }
 
 /**

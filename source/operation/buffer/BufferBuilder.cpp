@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.20  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -215,7 +220,7 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 		for (int i=0;i<(int)nodedSegStrings->size();i++) {
 			SegmentString *segStr=(*nodedSegStrings)[i];
 			Label *oldLabel=(Label*) segStr->getContext();
-			Edge *edge=new Edge((CoordinateList*) segStr->getCoordinates(), new Label(oldLabel));
+			Edge *edge=new Edge((CoordinateSequence*) segStr->getCoordinates(), new Label(oldLabel));
 			insertEdge(edge);
 		}
 		//saveEdges(edgeList->getEdges(), "run" + runCount + "_collapsedEdges");

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -179,7 +184,7 @@ public:
 	* @param g1 another {@link Geometry}
 	* @return the closest points in the geometries
 	*/
-	static CoordinateList* closestPoints(Geometry *g0,Geometry *g1);
+	static CoordinateSequence* closestPoints(Geometry *g0,Geometry *g1);
 	/**
 	* Constructs a DistanceOp that computes the distance and closest points between
 	* the two specified geometries.
@@ -198,7 +203,7 @@ public:
 	*
 	* @return a pair of {@link Coordinate}s of the closest points
 	*/
-	CoordinateList* closestPoints();
+	CoordinateSequence* closestPoints();
 	/**
 	* Report the locations of the closest points in the input geometries.
 	* The locations are presented in the same order as the input Geometries.

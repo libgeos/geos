@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.9  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).
  * Dropped WKTWriter default constructor (internally created GeometryFactory).
@@ -39,8 +44,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -73,7 +78,7 @@
  * GeometryCollections constructors make a deep copy of Geometry vector argument.
  *
  * Revision 1.64  2004/05/19 13:18:24  strk
- * made CoordinateList::toString() a const member function
+ * made CoordinateSequence::toString() a const member function
  *
  * Revision 1.63  2004/05/17 21:14:47  ybychkov
  * JavaDoc updated
@@ -86,7 +91,7 @@
  *
  * Revision 1.60  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateList.
+ * to handle NULL CoordinateSequence.
  *
  * Revision 1.59  2004/05/05 10:54:48  strk
  * Removed some private static heap explicit allocation, less cleanup done by
@@ -581,8 +586,74 @@ private:
 };
 
 
+/** \class CoordinateList geom.h geos.h
+ *
+ * \brief A list of Coordinates, which may be set to prevent
+ * repeated coordinates from occuring in the list.
+ */
+class CoordinateList {
+public:
+	~CoordinateList(){};
+
+	/// copy constructor
+	CoordinateList(const CoordinateList &cl);
+
+	/// constructor an empty CoordinateList
+	CoordinateList();
+
+	/** \brief
+	 * Constructs a new list from a vector of Coordinates.
+	 * Caller can specify if repeated points are to be removed.
+	 * Default is allowing repeated points.
+	 * Will take ownership of coords.
+	 */
+	CoordinateList(vector<Coordinate> *coords, bool allowRepeted=false);
+
+	/**
+	 * \brief Add an array of coordinates 
+	 * @param vc The coordinates
+	 * @param allowRepeated if set to false, repeated coordinates
+	 * 	are collapsed
+	 * @return true (as by general collection contract)
+	 */
+	void add(vector<Coordinate>* vc, bool allowRepeated);
+
+	/**
+	 * \brief Add an array of coordinates 
+	 * @param cl The coordinates
+	 * @param allowRepeated if set to false, repeated coordinates
+	 * are collapsed
+	 * @param direction if false, the array is added in reverse order
+	 * @return true (as by general collection contract)
+	 */
+	void add(CoordinateList *cl,bool allowRepeated,bool direction);
+
+	/**
+	 * \brief Add a coordinate
+	 * @param c The coordinate to add
+	 * @param allowRepeated if set to false, repeated coordinates
+	 * are collapsed
+	 * @return true (as by general collection contract)
+	 */
+	void add(const Coordinate& c,bool allowRepeated);
+
+	/// Add a Coordinate to the list
+	void add(const Coordinate& c);
+
+	/// Get a reference to the nth Coordinate 
+	//const Coordinate& getCoordinate(int n) const;
+	const Coordinate& getAt(int n) const;
+
+	/// Get vector
+	const vector<Coordinate>* toCoordinateArray() const;
+
+private:
+
+	vector<Coordinate> *vect;
+};
+
 /**
- * \class CoordinateList geom.h geos.h
+ * \class CoordinateSequence geom.h geos.h
  *
  * \brief
  * The internal representation of a list of coordinates inside a Geometry.
@@ -593,75 +664,67 @@ private:
  * and an array of Ys. or you might want to use your own coordinate class, one
  * that supports extra attributes like M-values.
  * 
- * You can do this by implementing the CoordinateList and
- * CoordinateListFactory interfaces. You would then create a
- * GeometryFactory parameterized by your CoordinateListFactory, and use
+ * You can do this by implementing the CoordinateSequence and
+ * CoordinateSequenceFactory interfaces. You would then create a
+ * GeometryFactory parameterized by your CoordinateSequenceFactory, and use
  * this GeometryFactory to create new Geometries. All of these new Geometries
- * will use your CoordinateList implementation.
+ * will use your CoordinateSequence implementation.
  * 
  */
-class CoordinateList {
+class CoordinateSequence {
 public:
-	virtual ~CoordinateList(){};
+	virtual ~CoordinateSequence(){};
 
-	/// substitutes copy constructor
-	virtual CoordinateList *clone() const=0;
-
-	/// Returns a new CoordinateList being a copy of the input with any consecutive equal Coordinate removed.
-	static CoordinateList* removeRepeatedPoints(const CoordinateList *cl);
-
-	/**
-	* \brief Returns true if given CoordinateList contains
-	* any two consecutive Coordinate 
-	*/
-	static bool hasRepeatedPoints(const CoordinateList *cl);
-
-	/**
-	* \brief Returns either the given coordinate array if its length
-	* is greater than the given amount, or an empty coordinate array.
-	*/
-	static CoordinateList* atLeastNCoordinatesOrNothing(int n, CoordinateList *c);
-
-	/**
-	 * \brief Returns lower-left Coordinate in given CoordinateList.
-	 * This is actually the Coordinate with lower X (and Y if needed)
-	 * ordinate.
+	/** \brief
+	 * Returns a deep copy of this collection.
 	 */
-	static const Coordinate* minCoordinate(CoordinateList *cl);
+	virtual CoordinateSequence *clone() const=0;
 
-	/// Return position of a Coordinate, or -1 if not found
-	static int indexOf(const Coordinate *coordinate, const CoordinateList *cl);
+	/** \brief
+	 * Returns a read-only reference to Coordinate at position i.
+	 *
+	 * Whether or not the Coordinate returned is the actual underlying
+	 * Coordinate or merely a copy depends on the implementation.
+	 */
+	//virtual const Coordinate& getCoordinate(int i) const=0;
+	virtual const Coordinate& getAt(int i) const=0;
+
+	/** \brief
+	 * Returns the number of Coordinates (actual or otherwise, as
+	 * this implementation may not store its data in Coordinate objects).
+	 */
+	//virtual int size() const=0;
+	virtual int getSize() const=0;
+
+	/** \brief
+	 * Returns a read-only vector with the Coordinates in this collection.
+	 *
+	 * Whether or not the Coordinates returned are the actual underlying
+	 * Coordinates or merely copies depends on the implementation.
+	 * Note that if this implementation does not store its data as an
+	 * array of Coordinates, this method will incur a performance penalty
+	 * because the array needs to be built from scratch.
+	 */
+	virtual	const vector<Coordinate>* toVector() const=0;
+
 	/**
-	* \brief
-	* Returns true if the two arrays are identical, both null,
-	* or pointwise equal 
-	*/
-	static bool equals(CoordinateList *cl1, CoordinateList *cl2);
-
-	/// Scroll given CoordinateList so to start with given Coordinate.
-	static void scroll(CoordinateList *cl, const Coordinate *firstCoordinate);
-
-	/// Reverse Coordinate order in given CoordinateList
-	static void reverse(CoordinateList *cl);
+	 * \brief Add an array of coordinates 
+	 * @param vc The coordinates
+	 * @param allowRepeated if set to false, repeated coordinates
+	 * 	are collapsed
+	 * @return true (as by general collection contract)
+	 */
+	void add(const vector<Coordinate>* vc, bool allowRepeated);
 
 	/**
-	 * \brief Add an array of coordinates
+	 * \brief Add an array of coordinates 
 	 * @param cl The coordinates
 	 * @param allowRepeated if set to false, repeated coordinates
 	 * are collapsed
 	 * @param direction if false, the array is added in reverse order
 	 * @return true (as by general collection contract)
 	 */
-	void add(CoordinateList *cl,bool allowRepeated,bool direction);
-
-	/**
-	 * \brief Add an array of coordinates
-	 * @param vc The coordinates
-	 * @param allowRepeated if set to false, repeated coordinates
-	 * 	are collapsed
-	 * @return true (as by general collection contract)
-	 */
-	void add(vector<Coordinate>* vc, bool allowRepeated);
+	void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
 
 	/**
 	 * \brief Add a coordinate
@@ -678,11 +741,11 @@ public:
 	/// Add a Coordinate to the list
 	virtual	void add(const Coordinate& c)=0;
 
-	/// Get number of coordinates
-	virtual	int getSize() const=0;
+	// Get number of coordinates
+	//virtual int getSize() const=0;
 
 	/// Get a reference to Coordinate at position pos
-	virtual	const Coordinate& getAt(int pos) const=0;
+	//virtual	const Coordinate& getAt(int pos) const=0;
 
 	/// Copy Coordinate c to position pos
 	virtual	void setAt(const Coordinate& c, int pos)=0;
@@ -690,10 +753,7 @@ public:
 	/// Delete Coordinate at position pos (list will shrink).
 	virtual	void deleteAt(int pos)=0;
 
-	/// CoordinateList to vector<Coordinate> converter
-	virtual	vector<Coordinate>* toVector() const=0;
-
-	/// Get a string rapresentation of CoordinateList
+	/// Get a string rapresentation of CoordinateSequence
 	virtual	string toString() const=0;
 
 	/// Substitute Coordinate list with a copy of the given vector
@@ -705,29 +765,83 @@ public:
 	/// Returns lower-left Coordinate in list
 	const Coordinate* minCoordinate() const;
 
+
+	/// Returns a new CoordinateSequence being a copy of the input with any consecutive equal Coordinate removed.
+	static CoordinateSequence* removeRepeatedPoints(const CoordinateSequence *cl);
+
+	/**
+	* \brief Returns true if given CoordinateSequence contains
+	* any two consecutive Coordinate 
+	*/
+	static bool hasRepeatedPoints(const CoordinateSequence *cl);
+
+	/**
+	* \brief Returns either the given CoordinateSequence if its length
+	* is greater than the given amount, or an empty CoordinateSequence.
+	*/
+	static CoordinateSequence* atLeastNCoordinatesOrNothing(int n, CoordinateSequence *c);
+
+	/**
+	 * \brief Returns lower-left Coordinate in given CoordinateSequence.
+	 * This is actually the Coordinate with lower X (and Y if needed)
+	 * ordinate.
+	 */
+	static const Coordinate* minCoordinate(CoordinateSequence *cl);
+
+	/// Return position of a Coordinate, or -1 if not found
+	static int indexOf(const Coordinate *coordinate, const CoordinateSequence *cl);
+	/**
+	* \brief
+	* Returns true if the two arrays are identical, both null,
+	* or pointwise equal 
+	*/
+	static bool equals(CoordinateSequence *cl1, CoordinateSequence *cl2);
+
+	/// Scroll given CoordinateSequence so to start with given Coordinate.
+	static void scroll(CoordinateSequence *cl, const Coordinate *firstCoordinate);
+
+	/// Reverse Coordinate order in given CoordinateSequence
+	static void reverse(CoordinateSequence *cl);
+
 };
 
 /**
- * \class BasicCoordinateList geom.h geos.h
+ * \class DefaultCoordinateSequence geom.h geos.h
  *
- * \brief The default implementation of CoordinateList
+ * \brief The default implementation of CoordinateSequence
  */
-class BasicCoordinateList : public CoordinateList {
+class DefaultCoordinateSequence : public CoordinateSequence {
 public:
-	BasicCoordinateList();
-	BasicCoordinateList(int n);
-	BasicCoordinateList(const Coordinate& c);
-	BasicCoordinateList(const BasicCoordinateList &cl);
-	BasicCoordinateList(const CoordinateList *c);
-	virtual ~BasicCoordinateList();
-	CoordinateList *clone() const;
+	//DefaultCoordinateSequence(int n);
+	//DefaultCoordinateSequence(const Coordinate& c);
+	//DefaultCoordinateSequence(const CoordinateSequence *c);
+
+	DefaultCoordinateSequence(const DefaultCoordinateSequence &cl);
+
+	CoordinateSequence *clone() const;
+
+	//const Coordinate& getCoordinate(int pos) const;
+	const Coordinate& getAt(int pos) const;
+
+	//int size() const;
+	int getSize() const;
+	vector<Coordinate>* toVector() const;
+
+	/// Construct an empty sequence
+	DefaultCoordinateSequence();
+
+	/// Construct sequence taking ownership of given Coordinate vector
+	DefaultCoordinateSequence(vector<Coordinate> *coords);
+
+	/// Construct sequence allocating space for n coordinates
+	DefaultCoordinateSequence(int n);
+
+	virtual ~DefaultCoordinateSequence();
+
 	bool isEmpty() const;
 	void add(const Coordinate& c);
-	int getSize() const;
-	const Coordinate& getAt(int pos) const;
 	void setAt(const Coordinate& c, int pos);
 	void deleteAt(int pos);
-	vector<Coordinate>* toVector() const;
 	string toString() const;
 	void setPoints(const vector<Coordinate> &v);
 private:
@@ -740,15 +854,15 @@ struct point_3d {
 	double z;
 };
 
-class PointCoordinateList : public CoordinateList {
+class PointCoordinateSequence : public CoordinateSequence {
 public:
-	PointCoordinateList();
-	PointCoordinateList(int n);
-	PointCoordinateList(const Coordinate& c);
-	PointCoordinateList(const PointCoordinateList &cl);
-	PointCoordinateList(const CoordinateList *c);
-	virtual ~PointCoordinateList();
-	CoordinateList *clone() const;
+	PointCoordinateSequence();
+	PointCoordinateSequence(int n);
+	PointCoordinateSequence(const Coordinate& c);
+	PointCoordinateSequence(const PointCoordinateSequence &cl);
+	PointCoordinateSequence(const CoordinateSequence *c);
+	virtual ~PointCoordinateSequence();
+	CoordinateSequence *clone() const;
 	bool isEmpty() const;
 	void add(const Coordinate& c);
 	void add(point_3d p);
@@ -768,52 +882,78 @@ private:
 };
 
 /**
- * \class CoordinateListFactory geom.h geos.h
+ * \class CoordinateSequenceFactory geom.h geos.h
  *
  * \brief
  * An object that knows how to build a particular implementation of
- * CoordinateList from an array of Coordinates.
+ * CoordinateSequence from an array of Coordinates.
  */
-class CoordinateListFactory {
+class CoordinateSequenceFactory {
 public:
-	/// create an empty CoordinateList
-	virtual CoordinateList* createCoordinateList()=0;
-	/// create an empty CoordinateList with 'size' Coordinate slots
-	virtual CoordinateList* createCoordinateList(int size)=0;
-	virtual CoordinateList* createCoordinateList(const Coordinate& c)=0;
-	/// create an CoordinateList containing the given Coordinate 
-	virtual CoordinateList* createCoordinateList(const CoordinateList *c)=0;
-	/// the default publically available CoordinateListFactory (BasicCoordinateListFactory)
-	static CoordinateListFactory* internalFactory;
+	// create an empty CoordinateSequence
+	//virtual CoordinateSequence* createCoordinateSequence()=0;
+
+	// create an empty CoordinateSequence with 'size' Coordinate slots
+	//virtual CoordinateSequence* createCoordinateSequence(int size)=0;
+
+	//virtual CoordinateSequence* createCoordinateSequence(const Coordinate& c)=0;
+	// create an CoordinateSequence containing the given Coordinate 
+	//virtual CoordinateSequence* createCoordinateSequence(const CoordinateSequence *c)=0;
+
+	/** \brief
+	 * Returns a CoordinateSequence based on the given array.
+	 * Whether or not the vector is copied is implementation-dependent,
+	 * for this reason caller does give up ownership of it.
+	 * Implementations that will not copy it will need take care
+	 * of deleting it.
+	 * Note that a NULL value is allowed as coordinates, and will
+	 * create an empty CoordinateSequence.
+	 */
+	virtual CoordinateSequence *create(vector<Coordinate> *coordinates) const=0;
 };
 
 /**
- * \class BasicCoordinateListFactory geom.h geos.h
+ * \class DefaultCoordinateSequenceFactory geom.h geos.h
  *
  * \brief
- * Factory for BasicCoordinateList objects.
+ * Creates CoordinateSequences internally represented as an array of
+ * Coordinates.
  */
-class BasicCoordinateListFactory: public CoordinateListFactory {
-	/// create an empty BasicCoordinateList
-	CoordinateList* createCoordinateList() {return new BasicCoordinateList();};
-	/// create an empty BasicCoordinateList with 'size' Coordinate slots
-	CoordinateList* createCoordinateList(int size) {return new BasicCoordinateList(size);};
-	CoordinateList* createCoordinateList(const Coordinate& c) {return new BasicCoordinateList(c);};
-	/// create an BasicCoordinateList containing the given Coordinate 
-	CoordinateList* createCoordinateList(const CoordinateList *cl) {return new BasicCoordinateList(cl);};
+class DefaultCoordinateSequenceFactory: public CoordinateSequenceFactory {
+
+public:
+	// create an empty DefaultCoordinateSequence
+	//CoordinateSequence *createCoordinateSequence() {return new DefaultCoordinateSequence();};
+	// create an empty DefaultCoordinateSequence with 'size' Coordinate slots
+	//CoordinateSequence* createCoordinateSequence(int size) {return new DefaultCoordinateSequence(size);};
+	//CoordinateSequence* createCoordinateSequence(const Coordinate& c) {return new DefaultCoordinateSequence(c);};
+
+	// create an DefaultCoordinateSequence containing the given Coordinate 
+	//CoordinateSequence* createCoordinateSequence(const CoordinateSequence *cl) {return new DefaultCoordinateSequence(cl);};
+
+
+	/** \brief
+	 * Returns a DefaultCoordinateSequence based on the given vector
+	 * (the vector is not copied - callers give up ownership).
+	 */
+	CoordinateSequence *create(vector<Coordinate> *coords) const;
+
+	/** \brief
+	 * Returns the singleton instance of DefaultCoordinateSequenceFactory
+	 */
+	static const CoordinateSequenceFactory *instance();
 };
 
 /*
- * \class PointCoordinateListFactory geom.h geos.h
+ * \class PointCoordinateSequenceFactory geom.h geos.h
  *
  * \brief
- * Factory for PointCoordinateList objects.
+ * Factory for PointCoordinateSequence objects.
  */
-class PointCoordinateListFactory: public CoordinateListFactory {
-	CoordinateList* createCoordinateList() {return new PointCoordinateList();};
-	CoordinateList* createCoordinateList(int size) {return new PointCoordinateList(size);};
-	CoordinateList* createCoordinateList(const Coordinate& c) {return new PointCoordinateList(c);};
-	CoordinateList* createCoordinateList(const CoordinateList *c) {return new PointCoordinateList(c);};
+class PointCoordinateSequenceFactory: public CoordinateSequenceFactory {
+public:
+
+	CoordinateSequence *create(vector<Coordinate> *coords) const;
 };
 
 /**
@@ -1130,7 +1270,7 @@ public:
 	virtual const Coordinate* getCoordinate() const=0; //Abstract
 
 	/// Returns this Geometry vertices.
-	virtual CoordinateList* getCoordinates() const=0; //Abstract
+	virtual CoordinateSequence* getCoordinates() const=0; //Abstract
 
 	/// Returns the count of this Geometrys vertices.
 	virtual int getNumPoints() const=0; //Abstract
@@ -1338,16 +1478,16 @@ protected:
 	/// Returns true if the array contains any non-empty Geometrys.
 	static bool hasNonEmptyElements(const vector<Geometry *>* geometries);
 
-	/// Returns true if the CoordinateList contains any null elements.
-	static bool hasNullElements(const CoordinateList* list);
+	/// Returns true if the CoordinateSequence contains any null elements.
+	static bool hasNullElements(const CoordinateSequence* list);
 
 	/// Returns true if the vector contains any null elements.
 	static bool hasNullElements(const vector<Geometry *>* lrs);
 
-//	static void reversePointOrder(CoordinateList* coordinates);
-//	static Coordinate& minCoordinate(CoordinateList* coordinates);
-//	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
-//	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
+//	static void reversePointOrder(CoordinateSequence* coordinates);
+//	static Coordinate& minCoordinate(CoordinateSequence* coordinates);
+//	static void scroll(CoordinateSequence* coordinates,Coordinate* firstCoordinate);
+//	static int indexOf(Coordinate* coordinate,CoordinateSequence* coordinates);
 //
 	/** \brief
 	 * Returns whether the two Geometrys are equal, from the point
@@ -1368,12 +1508,13 @@ protected:
 	/**
 	* The GEOS algorithms assume that Geometry::getCoordinate() and
 	* #getCoordinates
-	* are fast, which may not be the case if the CoordinateList is not a
-	* BasicCoordinateList (e.g. if it were implemented using separate
+	* are fast, which may not be the case if the CoordinateSequence is not a
+	* DefaultCoordinateSequence (e.g. if it were implemented using separate
 	* arrays for the x- and y-values), in which case frequent
 	* construction of Coordinates takes up much space and time.
 	* To solve this performance problem, toInternalGeometry converts the
-	* Geometry to a BasicCoordinateList implementation before sending it
+	* Geometry to a DefaultCoordinateSequence
+	* implementation before sending it
 	* to the JTS algorithms.
 	*/
 	Geometry* toInternalGeometry(const Geometry *g) const;
@@ -1484,13 +1625,15 @@ public:
 	virtual Coordinate* closestPoint(const Coordinate& p) const;
 	virtual int compareTo(const LineSegment other) const;
 	virtual bool equalsTopo(const LineSegment other) const;
+
 	/**
 	* Computes the closest points on two line segments.
 	* @param p the point to find the closest point to
 	* @return a pair of Coordinates which are the closest points on the line segments
-	* The returned CoordianteList must be deleted by caller
+	* The returned CoordinateList must be deleted by caller
 	*/
-	virtual CoordinateList* closestPoints(const LineSegment *line);
+	virtual CoordinateSequence* closestPoints(const LineSegment *line);
+
 	/**
 	* Computes an intersection point between two segments, if there is one.
 	* There may be 0, 1 or many intersection points between two segments.
@@ -1637,16 +1780,16 @@ public:
 	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
 	/**
-	* Collects all coordinates of all subgeometries into a CoordinateList.
+	* Collects all coordinates of all subgeometries into a CoordinateSequence.
 	* 
 	* Note that while changes to the coordinate objects themselves
-	* may modify the Geometries in place, the returned CoordinateList as such 
+	* may modify the Geometries in place, the returned CoordinateSequence as such 
 	* is only a temporary container which is not synchronized back.
 	* 
 	* @return the collected coordinates
 	*
 	*/
-	virtual CoordinateList* getCoordinates() const;
+	virtual CoordinateSequence* getCoordinates() const;
 	virtual bool isEmpty() const;
 	virtual int getDimension() const;
 	virtual Geometry* getBoundary() const;
@@ -1704,7 +1847,7 @@ public:
 
 	/**
 	 * \brief
-	 * Creates a Point taking ownership of the given CoordinateList
+	 * Creates a Point taking ownership of the given CoordinateSequence
 	 * (must have 1 element)
 	 *
 	 * @param  newCoords
@@ -1713,12 +1856,12 @@ public:
 	 *	the empty geometry.
 	 *
 	 */  
-	Point(CoordinateList *newCoords, const GeometryFactory *factory);
+	Point(CoordinateSequence *newCoords, const GeometryFactory *factory);
 
 	Point(const Point &p); 
 	virtual ~Point();
 	Geometry *clone() const;
-	CoordinateList* getCoordinates(void) const;
+	CoordinateSequence* getCoordinates(void) const;
 	int getNumPoints() const;
 	bool isEmpty() const;
 	bool isSimple() const;
@@ -1746,7 +1889,7 @@ private:
 	/**
 	*  The <code>Coordinate</code> wrapped by this <code>Point</code>.
 	*/
-	CoordinateList *coordinates;
+	CoordinateSequence *coordinates;
 	static const int64 serialVersionUID = 4902022702746614570LL;
 };
 
@@ -1758,15 +1901,15 @@ class LineString: public Geometry {
 public:
 	LineString(const LineString &ls);
 
-	/// Constructs a LineString taking ownership the given CoordinateList.
-	LineString(CoordinateList *pts, const GeometryFactory *newFactory);
+	/// Constructs a LineString taking ownership the given CoordinateSequence.
+	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
 
 	virtual ~LineString();
 	virtual Geometry *clone() const;
-	virtual CoordinateList* getCoordinates() const;
+	virtual CoordinateSequence* getCoordinates() const;
 
-	/// Returns a pointer to the CoordinateList making up this Geometry.
-	const CoordinateList* getCoordinatesRO() const;
+	/// Returns a pointer to the CoordinateSequence making up this Geometry.
+	const CoordinateSequence* getCoordinatesRO() const;
 
 	virtual const Coordinate& getCoordinateN(int n) const;
 	virtual int getDimension() const;
@@ -1798,7 +1941,7 @@ public:
 	virtual double getLength() const;
 protected:
 	virtual Envelope* computeEnvelopeInternal() const;
-	CoordinateList* points;
+	CoordinateSequence* points;
 private:
 	static const int64 serialVersionUID = 3110669828065365560LL;
 };
@@ -1828,14 +1971,14 @@ public:
 	*	If not null LinearRing will take ownership of points.
 	*
 	*/
-	LinearRing(CoordinateList* points, const GeometryFactory *newFactory);
+	LinearRing(CoordinateSequence* points, const GeometryFactory *newFactory);
 
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
-	void setPoints(CoordinateList* cl);
+	void setPoints(CoordinateSequence* cl);
 private:
 	static const int64 serialVersionUID = -4261142084085851829LL;
 	void validateConstruction();
@@ -1881,7 +2024,7 @@ public:
 		const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const;
-	CoordinateList* getCoordinates() const;
+	CoordinateSequence* getCoordinates() const;
 	int getNumPoints() const;
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -2027,7 +2170,7 @@ private:
 /**
  * \class GeometryFactory geom.h geos.h
  * \brief Supplies a set of utility methods for building Geometry objects
- * from CoordinateList or other Geometry objects.
+ * from CoordinateSequence or other Geometry objects.
  */
 class GeometryFactory {
 public:
@@ -2042,22 +2185,22 @@ public:
 	* \brief
 	* Constructs a GeometryFactory that generates Geometries having
 	* the given PrecisionModel, spatial-reference ID, and
-	* CoordinateList implementation.
+	* CoordinateSequence implementation.
 	*/
-	GeometryFactory(const PrecisionModel *pm, int newSRID, CoordinateListFactory *nCoordinateListFactory);
+	GeometryFactory(const PrecisionModel *pm, int newSRID, CoordinateSequenceFactory *nCoordinateSequenceFactory);
 
 	/**
 	* \brief
 	* Constructs a GeometryFactory that generates Geometries having the
-	* given CoordinateList implementation, a double-precision floating
+	* given CoordinateSequence implementation, a double-precision floating
 	* PrecisionModel and a spatial-reference ID of 0.
 	*/
-	GeometryFactory(CoordinateListFactory *nCoordinateListFactory);
+	GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory);
 
 	/**
 	* \brief
 	* Constructs a GeometryFactory that generates Geometries having
-	* the given PrecisionModel and the default CoordinateList
+	* the given PrecisionModel and the default CoordinateSequence
 	* implementation.
 	*
 	* @param precisionModel the PrecisionModel to use
@@ -2068,7 +2211,7 @@ public:
 	* \brief
 	* Constructs a GeometryFactory that generates Geometries having
 	* the given {@link PrecisionModel} and spatial-reference ID,
-	* and the default CoordinateList implementation.
+	* and the default CoordinateSequence implementation.
 	*
 	* @param precisionModel the PrecisionModel to use
 	* @param SRID the SRID to use
@@ -2101,11 +2244,11 @@ public:
 	/// Creates a Point using the given Coordinate
 	Point* createPoint(const Coordinate& coordinate) const;
 
-	/// Creates a Point taking ownership of the given CoordinateList
-	Point* createPoint(CoordinateList *coordinates) const;
+	/// Creates a Point taking ownership of the given CoordinateSequence
+	Point* createPoint(CoordinateSequence *coordinates) const;
 
-	/// Creates a Point with a deep-copy of the given CoordinateList.
-	Point* createPoint(const CoordinateList &coordinates) const;
+	/// Creates a Point with a deep-copy of the given CoordinateSequence.
+	Point* createPoint(const CoordinateSequence &coordinates) const;
 
 	/// Construct an EMPTY GeometryCollection
 	GeometryCollection* createGeometryCollection() const;
@@ -2138,10 +2281,10 @@ public:
 	LinearRing* createLinearRing() const;
 
 	/// Construct a LinearRing taking ownership of given arguments
-	LinearRing* createLinearRing(CoordinateList* coordinates) const;
+	LinearRing* createLinearRing(CoordinateSequence* coordinates) const;
 
 	/// Construct a LinearRing with a deep-copy of given arguments
-	LinearRing* createLinearRing(const CoordinateList& coordinates) const;
+	LinearRing* createLinearRing(const CoordinateSequence& coordinates) const;
 
 	/// Constructs an EMPTY <code>MultiPoint</code>.
 	MultiPoint* createMultiPoint() const;
@@ -2153,7 +2296,7 @@ public:
 	MultiPoint* createMultiPoint(const vector<Geometry *> &fromPoints) const;
 
 	/// Construct a MultiPoint containing a Point geometry for each Coordinate in the given list.
-	MultiPoint* createMultiPoint(const CoordinateList &fromCoords) const;
+	MultiPoint* createMultiPoint(const CoordinateSequence &fromCoords) const;
 
 	/// Construct an EMPTY Polygon 
 	Polygon* createPolygon() const;
@@ -2168,10 +2311,10 @@ public:
 	LineString* createLineString() const;
 
 	/// Construct a LineString taking ownership of given argument
-	LineString* createLineString(CoordinateList* coordinates) const;
+	LineString* createLineString(CoordinateSequence* coordinates) const;
 
 	/// Construct a LineString with a deep-copy of given argument
-	LineString* createLineString(const CoordinateList& coordinates) const;
+	LineString* createLineString(const CoordinateSequence& coordinates) const;
 
 	/// Construct the most suitable Geometry using the given Geometries; will take ownership of arguments.
 	Geometry* buildGeometry(vector<Geometry *> *geoms) const;
@@ -2181,7 +2324,7 @@ public:
 	
 	int getSRID() const {return SRID;};
 
-	CoordinateListFactory* getCoordinateListFactory() const {return coordinateListFactory;};
+	const CoordinateSequenceFactory* getCoordinateSequenceFactory() const {return coordinateListFactory;};
 
 	/// Returns a clone of given Geometry.
 	Geometry* createGeometry(const Geometry *g) const;
@@ -2193,7 +2336,7 @@ private:
 	const PrecisionModel* precisionModel;
 	int SRID;
 	static const int64 serialVersionUID = -6820524753094095635LL;
-	CoordinateListFactory *coordinateListFactory;
+	const CoordinateSequenceFactory *coordinateListFactory;
 };
 
 /**

@@ -8,10 +8,13 @@ pkglib_LTLIBRARIES = libgeos.la
 INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=""$(GEOS_VERSION)""
 
 DIR_SOURCES = \
-	BasicCoordinateList.cpp \
 	Coordinate.cpp \
-	CoordinateList.cpp \
-	CoordinateListFactory.cpp \
+	CoordinateSequence.cpp \
+	CoordinateSequenceFactory.cpp \
+	DefaultCoordinateSequence.cpp \
+	DefaultCoordinateSequenceFactory.cpp \
+	PointCoordinateSequenceFactory.cpp \
+	PointCoordinateSequence.cpp \
 	Dimension.cpp \
 	Envelope.cpp \
 	Geometry.cpp \
@@ -28,7 +31,6 @@ DIR_SOURCES = \
 	MultiPoint.cpp \
 	MultiPolygon.cpp \
 	Point.cpp \
-	PointCoordinateList.cpp \
 	Polygon.cpp \
 	PrecisionModel.cpp \
 	TopologyException.cpp \

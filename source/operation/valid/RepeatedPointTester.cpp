@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.10  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -50,7 +55,7 @@ bool RepeatedPointTester::hasRepeatedPoint(const Geometry *g){
 	else  throw new UnsupportedOperationException(typeid(*g).name());
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(const CoordinateList *coord){
+bool RepeatedPointTester::hasRepeatedPoint(const CoordinateSequence *coord){
 	for(int i=1; i<coord->getSize(); i++) {
 		if (coord->getAt(i - 1)==coord->getAt(i)) {
 			repeatedCoord=coord->getAt(i);

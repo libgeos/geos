@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.18  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -107,21 +112,21 @@ LineString *
 create_ushaped_linestring(double xoffset, double yoffset, double side)
 {
 	// We will use a coordinate list to build the linestring
-	CoordinateList *cl = new BasicCoordinateList();
+	CoordinateSequence *cl = new DefaultCoordinateSequence();
 
 	cl->add(Coordinate(xoffset, yoffset));
 	cl->add(Coordinate(xoffset, yoffset+side));
 	cl->add(Coordinate(xoffset+side, yoffset+side));
 	cl->add(Coordinate(xoffset+side, yoffset));
 
-	// Now that we have a CoordinateList we can create 
+	// Now that we have a CoordinateSequence we can create 
 	// the linestring.
 	// The newly created LineString will take ownership
-	// of the CoordinateList.
+	// of the CoordinateSequence.
 	LineString *ls = global_factory->createLineString(cl);
 
 	// This is what you do if you want the new LineString
-	// to make a copy of your CoordinateList:
+	// to make a copy of your CoordinateSequence:
 	// LineString *ls = global_factory->createLineString(*cl);
 	
 	return ls; // our LineString
@@ -134,7 +139,7 @@ LinearRing *
 create_square_linearring(double xoffset, double yoffset, double side)
 {
 	// We will use a coordinate list to build the linearring
-	CoordinateList *cl = new BasicCoordinateList();
+	CoordinateSequence *cl = new DefaultCoordinateSequence();
 
 	cl->add(Coordinate(xoffset, yoffset));
 	cl->add(Coordinate(xoffset, yoffset+side));
@@ -142,14 +147,14 @@ create_square_linearring(double xoffset, double yoffset, double side)
 	cl->add(Coordinate(xoffset+side, yoffset));
 	cl->add(Coordinate(xoffset, yoffset));
 
-	// Now that we have a CoordinateList we can create 
+	// Now that we have a CoordinateSequence we can create 
 	// the linearring.
 	// The newly created LinearRing will take ownership
-	// of the CoordinateList.
+	// of the CoordinateSequence.
 	LinearRing *lr = global_factory->createLinearRing(cl);
 
 	// This is what you do if you want the new LinearRing
-	// to make a copy of your CoordinateList:
+	// to make a copy of your CoordinateSequence:
 	// LinearRing *lr = global_factory->createLinearRing(*cl);
 	
 	return lr; // our LinearRing

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.9  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -37,14 +42,14 @@
 
 namespace geos {
 
-vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateList *pts) {
+vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateSequence *pts) {
 	return getChains(pts,NULL);
 }
 /**
  * Return a list of the {@link MonotoneChain}s
  * for the given list of coordinates.
  */
-vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateList *pts, void* context) {
+vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateSequence *pts, void* context) {
 	vector<indexMonotoneChain*> *mcList=new vector<indexMonotoneChain*>();
 	vector<int> *startIndex=getChainStartIndices(pts);
 	for(int i=0;i<(int)startIndex->size()-1;i++) {
@@ -61,7 +66,7 @@ vector<indexMonotoneChain*>* MonotoneChainBuilder::getChains(CoordinateList *pts
 * The last entry in the array points to the end point of the point array,
 * for use as a sentinel.
 */
-vector<int>* MonotoneChainBuilder::getChainStartIndices(CoordinateList *pts) {
+vector<int>* MonotoneChainBuilder::getChainStartIndices(CoordinateSequence *pts) {
 	// find the startpoint (and endpoints) of all monotone chains in this edge
 	int start=0;
 	vector<int> *startIndexList=new vector<int>();
@@ -79,7 +84,7 @@ vector<int>* MonotoneChainBuilder::getChainStartIndices(CoordinateList *pts) {
 /**
 * @return the index of the last point in the monotone chain starting at <code>start</code>.
 */
-int MonotoneChainBuilder::findChainEnd(CoordinateList *pts,int start) {
+int MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts,int start) {
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
 	int last=start+1;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.13  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -87,7 +92,7 @@ void CentroidArea::add(const Geometry *geom) {
 * i.e. end with the same coordinate as it starts with.
 * @param ring an array of {@link Coordinate}s
 */
-void CentroidArea::add(const CoordinateList *ring) {
+void CentroidArea::add(const CoordinateSequence *ring) {
 	setBasePoint(&(ring->getAt(0)));
 	addShell(ring);
 }
@@ -111,14 +116,14 @@ void CentroidArea::add(const Polygon *poly) {
 	}
 }
 
-void CentroidArea::addShell(const CoordinateList *pts) {
+void CentroidArea::addShell(const CoordinateSequence *pts) {
 	bool isPositiveArea=!CGAlgorithms::isCCW(pts);
 	for(int i=0;i<pts->getSize()-1;i++) {
 		addTriangle(*basePt,pts->getAt(i),pts->getAt(i+1),isPositiveArea);
 	}
 }
 
-void CentroidArea::addHole(const CoordinateList *pts){
+void CentroidArea::addHole(const CoordinateSequence *pts){
 	bool isPositiveArea=CGAlgorithms::isCCW(pts);
 	for(int i=0;i<pts->getSize()-1;i++) {
 		addTriangle(*basePt,pts->getAt(i),pts->getAt(i+1),isPositiveArea);

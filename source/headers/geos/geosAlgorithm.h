@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.3  2004/07/07 10:29:54  strk
  * Adjusted exceptions documentation.
  *
@@ -109,7 +114,7 @@ public:
    * @param ring assumed to have first point identical to last point
    * @return <code>true</code> if p is inside ring
    */
-	static bool isPointInRing(const Coordinate& p, const CoordinateList* ring);
+	static bool isPointInRing(const Coordinate& p, const CoordinateSequence* ring);
 	/**
 	* Test whether a point lies on a linestring.
 	*
@@ -117,7 +122,7 @@ public:
 	* the point is a vertex of the line or lies in the interior of a line
 	* segment in the linestring
 	*/
-	static bool isOnLine(const Coordinate& p, const CoordinateList* pt);
+	static bool isOnLine(const Coordinate& p, const CoordinateSequence* pt);
 	/**
 	* Computes whether a ring defined by an array of {@link Coordinate} is
 	* oriented counter-clockwise.
@@ -128,7 +133,7 @@ public:
 	* @return <code>true</code> if the ring is oriented counter-clockwise.
 	* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 distinct points)
 	*/
-	static bool isCCW(const CoordinateList* ring);
+	static bool isCCW(const CoordinateSequence* ring);
 	/**
 	* Computes the orientation of a point q to the directed line segment p1-p2.
 	* The orientation of a point relative to a directed line segment indicates
@@ -151,14 +156,14 @@ public:
 	*/
 	static double distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B);
 	static double distanceLineLine(const Coordinate& A, const Coordinate& B, const Coordinate& C, const Coordinate& D);
-	static double signedArea(const CoordinateList* ring);
+	static double signedArea(const CoordinateSequence* ring);
 	/**
 	* Computes the length of a linestring specified by a sequence of points.
 	*
 	* @param pts the points specifying the linestring
 	* @return the length of the linestring
 	*/
-	static double length(const CoordinateList* pts);
+	static double length(const CoordinateSequence* pts);
 	/**
 	* Returns the index of the direction of the point <code>q</code>
 	* relative to a
@@ -196,7 +201,7 @@ public:
 	virtual ~SimplePointInRing();
 	bool isInside(const Coordinate& pt);
 private:
-	const CoordinateList* pts;
+	const CoordinateSequence* pts;
 };
 
 class LineIntersector{
@@ -327,8 +332,8 @@ public:
 	* @param ring an array of coordinates forming a ring
 	* @return <code>true</code> if the ring is oriented counter-clockwise.
 	*/
-	static bool isPointInRing(const Coordinate& p, const CoordinateList* ring);
-//	static bool isOnLine(const Coordinate& p, const CoordinateList* pt) const;
+	static bool isPointInRing(const Coordinate& p, const CoordinateSequence* ring);
+//	static bool isOnLine(const Coordinate& p, const CoordinateSequence* pt) const;
 	/**
 	* Computes whether a ring defined by an array of {@link Coordinate} is
 	* oriented counter-clockwise.
@@ -339,7 +344,7 @@ public:
 	* @return <code>true</code> if the ring is oriented counter-clockwise.
 	* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 different points)
 	*/
-	static bool isCCW(const CoordinateList* ring);
+	static bool isCCW(const CoordinateSequence* ring);
 	static int computeOrientation(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
 };
 
@@ -393,7 +398,7 @@ public:
 private:
 	LinearRing *ring;
 	BinTreeInterval *interval;
-	CoordinateList *pts;
+	CoordinateSequence *pts;
 	Bintree *tree;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
@@ -432,7 +437,7 @@ public:
 	CentroidLine();
 	virtual ~CentroidLine();
 	void add(const Geometry *geom);
-	void add(const CoordinateList *pts);
+	void add(const CoordinateSequence *pts);
 	Coordinate* getCentroid() const;
 };
 
@@ -451,7 +456,7 @@ public:
 	CentroidArea();
 	virtual ~CentroidArea();
 	void add(const Geometry *geom);
-	void add(const CoordinateList *ring);
+	void add(const CoordinateSequence *ring);
 	Coordinate* getCentroid() const;
 private:
 	CGAlgorithms *cga;
@@ -461,8 +466,8 @@ private:
 	Coordinate* cg3; // partial centroid sum
 	void setBasePoint(const Coordinate *newbasePt);
 	void add(const Polygon *poly);
-	void addShell(const CoordinateList *pts);
-	void addHole(const CoordinateList *pts);
+	void addShell(const CoordinateSequence *pts);
+	void addHole(const CoordinateSequence *pts);
 	inline void addTriangle(const Coordinate &p0, const Coordinate &p1, const Coordinate &p2,bool isPositiveArea);
 	static inline  void centroid3(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3,Coordinate *c);
 	static inline double area2(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3);
@@ -506,9 +511,9 @@ private:
 	double minDistance;
 	Coordinate *interiorPoint;
 	void addInterior(const Geometry *geom);
-	void addInterior(const CoordinateList *pts);
+	void addInterior(const CoordinateSequence *pts);
 	void addEndpoints(const Geometry *geom);
-	void addEndpoints(const CoordinateList *pts);
+	void addEndpoints(const CoordinateSequence *pts);
 	void add(const Coordinate *point);
 };
 
@@ -563,15 +568,15 @@ private:
 	//CGAlgorithms *cgAlgorithms;
 	const Geometry *geometry;
 	const GeometryFactory *factory;
-	CoordinateList* reduce(const CoordinateList *pts);
-	CoordinateList* preSort(CoordinateList *pts);
-	CoordinateList* grahamScan(const CoordinateList *c);
-	void radialSort(CoordinateList *p);
+	CoordinateSequence* reduce(const CoordinateSequence *pts);
+	CoordinateSequence* preSort(CoordinateSequence *pts);
+	CoordinateSequence* grahamScan(const CoordinateSequence *c);
+	void radialSort(CoordinateSequence *p);
 	int polarCompare(Coordinate o, Coordinate p, Coordinate q);
 	bool isBetween(Coordinate c1, Coordinate c2, Coordinate c3);
-    BigQuad* makeBigQuad(const CoordinateList *pts);
-	Geometry* lineOrPolygon(CoordinateList *newCoordinates);
-	CoordinateList* cleanRing(CoordinateList *original);
+    BigQuad* makeBigQuad(const CoordinateSequence *pts);
+	Geometry* lineOrPolygon(CoordinateSequence *newCoordinates);
+	CoordinateSequence* cleanRing(CoordinateSequence *original);
 public:
 	ConvexHull(const Geometry *newGeometry);
 	~ConvexHull();
@@ -613,9 +618,9 @@ private:
 	* @param pts
 	* @return
 	*/
-	void computeConvexRingMinDiameter(const CoordinateList *pts);
-	int findMaxPerpDistance(const CoordinateList* pts, LineSegment* seg, int startIndex);
-	static int getNextIndex(const CoordinateList* pts, int index);
+	void computeConvexRingMinDiameter(const CoordinateSequence *pts);
+	int findMaxPerpDistance(const CoordinateSequence* pts, LineSegment* seg, int startIndex);
+	static int getNextIndex(const CoordinateSequence* pts, int index);
 public:
 	~MinimumDiameter();
 

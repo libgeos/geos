@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -261,15 +266,15 @@ class EdgeIntersectionList;
 class Edge: public GraphComponent{
 public:
 	static void updateIM(Label *lbl,IntersectionMatrix *im);
-	CoordinateList* pts;
+	CoordinateSequence* pts;
 	EdgeIntersectionList *eiList;
 	Edge();
-	Edge(CoordinateList* newPts, Label *newLabel);
-	Edge(CoordinateList* newPts);
+	Edge(CoordinateSequence* newPts, Label *newLabel);
+	Edge(CoordinateSequence* newPts);
 	virtual ~Edge();
 	virtual int getNumPoints();
 	virtual void setName(string newName);
-	virtual const CoordinateList* getCoordinates() const;
+	virtual const CoordinateSequence* getCoordinates() const;
 	virtual const Coordinate& getCoordinate(int i);
 	virtual const Coordinate& getCoordinate(); 
 	virtual Depth *getDepth();
@@ -595,7 +600,7 @@ protected:
 private:
 	int maxNodeDegree;
 	vector<DirectedEdge*>* edges; // the DirectedEdges making up this EdgeRing
-	CoordinateList* pts;
+	CoordinateSequence* pts;
 	Label* label; // label stores the locations of each geometry on the face surrounded by this ring
 	LinearRing *ring;  // the ring created for this EdgeRing
 	bool isHoleVar;
@@ -659,7 +664,7 @@ public:
 //	int getSRID();
 	const Geometry* getGeometry();
 	vector<Node*>* getBoundaryNodes();
-	CoordinateList* getBoundaryPoints();
+	CoordinateSequence* getBoundaryPoints();
 	Edge* findEdge(const LineString *line);
 	void computeSplitEdges(vector<Edge*> *edgelist);
 	void addEdge(Edge *e);

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.6  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -105,20 +110,27 @@ PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(SimpleG
 	sgpr=newSgpr;
 }
 
-CoordinateList*
-PrecisionReducerCoordinateOperation::edit(const CoordinateList *coordinates, const Geometry *geom)
+CoordinateSequence*
+PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Geometry *geom)
 {
-	if (coordinates->getSize()==0) return NULL;
-	CoordinateList *reducedCoords =CoordinateListFactory::internalFactory->createCoordinateList(coordinates->getSize());
+	if (cs->getSize()==0) return NULL;
+
+	vector<Coordinate> *vc = new vector<Coordinate>(cs->getSize());
+
 	// copy coordinates and reduce
-	for (int i=0;i<coordinates->getSize(); i++) {
-		Coordinate *coord=new Coordinate(coordinates->getAt(i));
+	for (int i=0;i<cs->getSize(); i++) {
+		Coordinate *coord=new Coordinate(cs->getAt(i));
 		sgpr->getPrecisionModel()->makePrecise(coord);
-		reducedCoords->setAt(*coord,i);
+		//reducedCoords->setAt(*coord,i);
+		(*vc)[i] = *coord;
 		delete coord;
 	}
+
+	CoordinateSequence *reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
+
 	// remove repeated points, to simplify returned geometry as much as possible
-	CoordinateList *noRepeatedCoords=CoordinateList::removeRepeatedPoints(reducedCoords);
+	CoordinateSequence *noRepeatedCoords=CoordinateSequence::removeRepeatedPoints(reducedCoords);
+
 	/**
 	* Check to see if the removal of repeated points
 	* collapsed the coordinate List to an invalid length
@@ -132,7 +144,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateList *coordinates, con
 	int minLength = 0;
 	if (typeid(*geom)==typeid(LineString)) minLength = 2;
 	if (typeid(*geom)==typeid(LinearRing)) minLength = 4;
-	CoordinateList *collapsedCoords = reducedCoords;
+	CoordinateSequence *collapsedCoords = reducedCoords;
 	if (sgpr->getRemoveCollapsed()) collapsedCoords=NULL;
 	// return null or orginal length coordinate array
 	if (noRepeatedCoords->getSize()<minLength) {

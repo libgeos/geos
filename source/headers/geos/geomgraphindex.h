@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -44,7 +49,7 @@ namespace geos {
 
 class Edge;
 class Node;
-class CoordinateList;
+class CoordinateSequence;
 
 class SegmentIntersector{
 public:
@@ -122,7 +127,7 @@ public:
 	void computeIntersections(SweepLineSegment *ss,SegmentIntersector *si);
 protected:
 	Edge *edge;
-	const CoordinateList* pts;
+	const CoordinateSequence* pts;
 	int ptIndex;
 };
 
@@ -156,9 +161,9 @@ class MonotoneChainIndexer{
 public:
 //	public static int[] toIntArray(List list); //Not needed
 	MonotoneChainIndexer(){};
-	vector<int>* getChainStartIndices(const CoordinateList* pts);
+	vector<int>* getChainStartIndices(const CoordinateSequence* pts);
 private:
-	int findChainEnd(const CoordinateList* pts,int start);
+	int findChainEnd(const CoordinateSequence* pts,int start);
 };
 
 class MonotoneChainEdge{
@@ -166,7 +171,7 @@ public:
 	MonotoneChainEdge();
 	~MonotoneChainEdge();
 	MonotoneChainEdge(Edge *newE);
-	const CoordinateList* getCoordinates();
+	const CoordinateSequence* getCoordinates();
 	vector<int>* getStartIndexes();
 	double getMinX(int chainIndex);
 	double getMaxX(int chainIndex);
@@ -174,7 +179,7 @@ public:
 	void computeIntersectsForChain(int chainIndex0,MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si);
 protected:
 	Edge *e;
-	const CoordinateList* pts; // cache a reference to the coord array, for efficiency
+	const CoordinateSequence* pts; // cache a reference to the coord array, for efficiency
 	// the lists of start/end indexes of the monotone chains.
 	// Includes the end point of the edge as a sentinel
 	vector<int>* startIndex;

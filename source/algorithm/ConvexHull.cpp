@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.11  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -80,9 +85,7 @@ Geometry* ConvexHull::getConvexHull() {
 	geometry->apply_ro(filter);
 
 	// Work with a copy of filtered coordinates
-	CoordinateList *pts =
-		CoordinateListFactory::internalFactory->createCoordinateList(
-				filter->getCoordinates());
+	CoordinateSequence *pts = filter->getCoordinates()->clone();
 
 	if (pts->getSize()==0) {
 		Geometry *g=factory->createGeometryCollection(NULL);
@@ -103,10 +106,10 @@ Geometry* ConvexHull::getConvexHull() {
 		return g;
 	}
 	// sort points for Graham scan.
-	CoordinateList *cH;
+	CoordinateSequence *cH;
 	if (pts->getSize()>10) {
 		//Probably should be somewhere between 50 and 100?
-		CoordinateList *rpts=reduce(pts);
+		CoordinateSequence *rpts=reduce(pts);
 		// Use Graham scan to find convex hull.
 		cH=grahamScan(preSort(rpts));
 		delete filter;
@@ -123,24 +126,26 @@ Geometry* ConvexHull::getConvexHull() {
 	return g;
 }
 
-// Always return a new CoordinateList --strk
-CoordinateList* ConvexHull::reduce(const CoordinateList *pts) {
+// Always return a new CoordinateSequence --strk
+CoordinateSequence* ConvexHull::reduce(const CoordinateSequence *pts) {
 	auto_ptr<BigQuad> bigQuad(makeBigQuad(pts));
+
 	// Build a linear ring defining a big poly.
-	CoordinateList *bigPoly=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence *bigPoly=factory->getCoordinateSequenceFactory()->create(NULL);
+
 	bigPoly->add(bigQuad->westmost);
-	if (CoordinateList::indexOf(&(bigQuad->northmost),bigPoly)==-1) {
+	if (CoordinateSequence::indexOf(&(bigQuad->northmost),bigPoly)==-1) {
 		bigPoly->add(bigQuad->northmost);
 	}
-	if (CoordinateList::indexOf(&(bigQuad->eastmost),bigPoly)==-1) {
+	if (CoordinateSequence::indexOf(&(bigQuad->eastmost),bigPoly)==-1) {
 		bigPoly->add(bigQuad->eastmost);
 	}
-	if (CoordinateList::indexOf(&(bigQuad->southmost),bigPoly)==-1) {
+	if (CoordinateSequence::indexOf(&(bigQuad->southmost),bigPoly)==-1) {
 		bigPoly->add(bigQuad->southmost);
 	}
 	if (bigPoly->getSize()<3) {
 		delete bigPoly;
-		return CoordinateListFactory::internalFactory->createCoordinateList(pts);
+		return pts->clone();
 	}
 	bigPoly->add(bigQuad->westmost);
 	LinearRing *bQ=factory->createLinearRing(*bigPoly);
@@ -149,7 +154,7 @@ CoordinateList* ConvexHull::reduce(const CoordinateList *pts) {
 
 //!!!Note to self: this might not work properly because of sorting.
 
-	CoordinateList *cl=bigPoly;
+	CoordinateSequence *cl=bigPoly;
 	for(int i=0;i<pts->getSize();i++) {
 		if (pointLocator->locate(pts->getAt(i),bQ)==Location::EXTERIOR) {
 			cl->add(pts->getAt(i));
@@ -160,7 +165,7 @@ CoordinateList* ConvexHull::reduce(const CoordinateList *pts) {
 	return cl;
 }
 
-CoordinateList* ConvexHull::preSort(CoordinateList *pts) {
+CoordinateSequence* ConvexHull::preSort(CoordinateSequence *pts) {
 	Coordinate t;
 	// find the lowest point in the set. If two or more points have
 	// the same minimum y coordinate choose the one with the minimu x.
@@ -177,8 +182,8 @@ CoordinateList* ConvexHull::preSort(CoordinateList *pts) {
 	return pts;
 }
 
-// returns a newly allocated CoordinateList object
-CoordinateList* ConvexHull::grahamScan(const CoordinateList *c) {
+// returns a newly allocated CoordinateSequence object
+CoordinateSequence* ConvexHull::grahamScan(const CoordinateSequence *c) {
 	Coordinate p;
 	Coordinate p1;
 	Coordinate p2;
@@ -200,13 +205,15 @@ CoordinateList* ConvexHull::grahamScan(const CoordinateList *c) {
 	}
 	ps->push_back(c->getAt(0));
 	p=c->getAt(0);
-	CoordinateList *cl=CoordinateListFactory::internalFactory->createCoordinateList();
-	cl->setPoints(*ps);
-	delete ps;
-	return cl;
+
+	//CoordinateSequence *cl=CoordinateSequenceFactory::internalFactory->createCoordinateSequence();
+	//cl->setPoints(*ps);
+	//delete ps;
+
+	return factory->getCoordinateSequenceFactory()->create(ps);
 }
 
-void ConvexHull::radialSort(CoordinateList *p) {
+void ConvexHull::radialSort(CoordinateSequence *p) {
 	// A selection sort routine, assumes the pivot point is
 	// the first point (i.e., p[0]).
 	Coordinate t;
@@ -278,7 +285,7 @@ bool ConvexHull::isBetween(Coordinate c1, Coordinate c2, Coordinate c3) {
 	return false;
 }
 
-BigQuad* ConvexHull::makeBigQuad(const CoordinateList *pts) {
+BigQuad* ConvexHull::makeBigQuad(const CoordinateSequence *pts) {
 	BigQuad *bigQuad=new BigQuad();
 	bigQuad->northmost=pts->getAt(0);
 	bigQuad->southmost=pts->getAt(0);
@@ -308,10 +315,10 @@ BigQuad* ConvexHull::makeBigQuad(const CoordinateList *pts) {
 *      collinear;otherwise, a <code>Polygon</code> with unnecessary
 *      (collinear) vertices removed
 */
-Geometry* ConvexHull::lineOrPolygon(CoordinateList *newCoordinates) {
-	CoordinateList *coordinates=cleanRing(newCoordinates);
+Geometry* ConvexHull::lineOrPolygon(CoordinateSequence *newCoordinates) {
+	CoordinateSequence *coordinates=cleanRing(newCoordinates);
 	if (coordinates->getSize()==3) { // shouldn't this be 2 ??
-		CoordinateList *cl1=CoordinateListFactory::internalFactory->createCoordinateList();
+		CoordinateSequence *cl1=factory->getCoordinateSequenceFactory()->create(NULL);
 		cl1->add(coordinates->getAt(0));
 		cl1->add(coordinates->getAt(1));
 		delete coordinates;
@@ -330,9 +337,9 @@ Geometry* ConvexHull::lineOrPolygon(CoordinateList *newCoordinates) {
 *@return           the coordinates with unnecessary (collinear) vertices
 *      removed
 */
-CoordinateList* ConvexHull::cleanRing(CoordinateList *original) {
+CoordinateSequence* ConvexHull::cleanRing(CoordinateSequence *original) {
 	Assert::equals(original->getAt(0),original->getAt(original->getSize()-1));
-	CoordinateList *cleanedRing=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence *cleanedRing=factory->getCoordinateSequenceFactory()->create(NULL);
 	Coordinate previousDistinctCoordinate;
 	Coordinate currentCoordinate;
 	Coordinate nextCoordinate;

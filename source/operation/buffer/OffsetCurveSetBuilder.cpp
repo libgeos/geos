@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.13  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -106,10 +111,10 @@ vector<SegmentString*>* OffsetCurveSetBuilder::getCurves(){
 }
 
 void
-OffsetCurveSetBuilder::addCurves(const vector<CoordinateList*> *lineList, int leftLoc, int rightLoc)
+OffsetCurveSetBuilder::addCurves(const vector<CoordinateSequence*> *lineList, int leftLoc, int rightLoc)
 {
 	for (int i=0;i<(int)lineList->size();i++) {
-		const CoordinateList *coords=(*lineList)[i];
+		const CoordinateSequence *coords=(*lineList)[i];
 		addCurve(coords, leftLoc, rightLoc);
 	}
 }
@@ -124,7 +129,7 @@ OffsetCurveSetBuilder::addCurves(const vector<CoordinateList*> *lineList, int le
 * <br>Right: Location.INTERIOR
 */
 void
-OffsetCurveSetBuilder::addCurve(const CoordinateList *coord, int leftLoc, int rightLoc)
+OffsetCurveSetBuilder::addCurve(const CoordinateSequence *coord, int leftLoc, int rightLoc)
 {
 	// don't add null curves!
 	if (coord->getSize() < 2) return;
@@ -180,8 +185,8 @@ void OffsetCurveSetBuilder::addCollection(const GeometryCollection *gc){
 */
 void OffsetCurveSetBuilder::addPoint(const Point *p){
 	if (distance <= 0.0) return;
-	CoordinateList *coord=p->getCoordinates();
-	vector<CoordinateList*> *lineList=curveBuilder->getLineCurve(coord, distance);
+	CoordinateSequence *coord=p->getCoordinates();
+	vector<CoordinateSequence*> *lineList=curveBuilder->getLineCurve(coord, distance);
 	delete coord;
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
 	delete lineList;
@@ -189,8 +194,8 @@ void OffsetCurveSetBuilder::addPoint(const Point *p){
 
 void OffsetCurveSetBuilder::addLineString(const LineString *line){
 	if (distance <= 0.0) return;
-	CoordinateList *coord=CoordinateList::removeRepeatedPoints(line->getCoordinatesRO());
-	vector<CoordinateList*> *lineList=curveBuilder->getLineCurve(coord, distance);
+	CoordinateSequence *coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
+	vector<CoordinateSequence*> *lineList=curveBuilder->getLineCurve(coord, distance);
 	delete coord;
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
 	delete lineList;
@@ -206,7 +211,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 		offsetSide=Position::RIGHT;
 	}
 	const LinearRing *shell=(const LinearRing *)p->getExteriorRing();
-	CoordinateList *shellCoord=CoordinateList::removeRepeatedPoints(shell->getCoordinatesRO());
+	CoordinateSequence *shellCoord=CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
 	// optimization - don't bother computing buffer
 	// if the polygon would be completely eroded
 	if (distance < 0.0 && isErodedCompletely(shellCoord, distance))
@@ -218,7 +223,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 	delete shellCoord;
 	for (int i=0;i<p->getNumInteriorRing(); i++) {
 		const LinearRing *hole=(const LinearRing *)p->getInteriorRingN(i);
-		CoordinateList *holeCoord=CoordinateList::removeRepeatedPoints(hole->getCoordinatesRO());
+		CoordinateSequence *holeCoord=CoordinateSequence::removeRepeatedPoints(hole->getCoordinatesRO());
 		// optimization - don't bother computing buffer for this hole
 		// if the hole would be completely covered
 		if (distance > 0.0 && isErodedCompletely(holeCoord, -distance))
@@ -247,7 +252,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 * @param cwLeftLoc the location on the L side of the ring (if it is CW)
 * @param cwRightLoc the location on the R side of the ring (if it is CW)
 */
-void OffsetCurveSetBuilder::addPolygonRing(const CoordinateList *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc){
+void OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc){
 	//Coordinate[] coord=CoordinateArrays->removeRepeatedPoints(lr->getCoordinates());
 	int leftLoc =cwLeftLoc;
 	int rightLoc=cwRightLoc;
@@ -256,7 +261,7 @@ void OffsetCurveSetBuilder::addPolygonRing(const CoordinateList *coord, double o
 		rightLoc=cwLeftLoc;
 		side=Position::opposite(side);
 	}
-	vector<CoordinateList*> *lineList=curveBuilder->getRingCurve(coord, side, offsetDistance);
+	vector<CoordinateSequence*> *lineList=curveBuilder->getRingCurve(coord, side, offsetDistance);
 	addCurves(lineList, leftLoc, rightLoc);
 	delete lineList;
 }
@@ -270,7 +275,7 @@ void OffsetCurveSetBuilder::addPolygonRing(const CoordinateList *coord, double o
 * @param offsetDistance
 * @return
 */
-bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateList *ringCoord, double bufferDistance){
+bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance){
 	double minDiam=0.0;
 	// degenerate ring has no area
 	if (ringCoord->getSize() < 4)
@@ -316,7 +321,7 @@ bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateList *ringCoord, double
 * @param bufferDistance
 * @return
 */
-bool OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateList *triangleCoord,double bufferDistance){
+bool OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateSequence *triangleCoord,double bufferDistance){
 	Triangle *tri=new Triangle(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
 	Coordinate *inCentre=tri->inCentre();
 	double distToCentre=cga->distancePointLine(*inCentre, tri->p0, tri->p1);

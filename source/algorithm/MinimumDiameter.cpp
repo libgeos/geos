@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.6  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -122,10 +127,11 @@ Coordinate* MinimumDiameter::getWidthCoordinate() {
 */
 LineString* MinimumDiameter::getSupportingSegment() {
 	computeMinimumDiameter();
-	CoordinateList* cl=CoordinateListFactory::internalFactory->createCoordinateList();
+	const GeometryFactory *fact = inputGeom->getFactory();
+	CoordinateSequence* cl=fact->getCoordinateSequenceFactory()->create(NULL);
 	cl->add(minBaseSeg->p0);
 	cl->add(minBaseSeg->p1);
-	return inputGeom->getFactory()->createLineString(cl);
+	return fact->createLineString(cl);
 }
 
 /**
@@ -139,7 +145,7 @@ LineString* MinimumDiameter::getDiameter(){
 	if (minWidthPt==NULL)
 		return inputGeom->getFactory()->createLineString(NULL);
 	Coordinate* basePt=minBaseSeg->project(*minWidthPt);
-	CoordinateList* cl=CoordinateListFactory::internalFactory->createCoordinateList();
+	CoordinateSequence* cl=inputGeom->getFactory()->getCoordinateSequenceFactory()->create(NULL);
 	cl->add(*basePt);
 	cl->add(*minWidthPt);
 	delete basePt;
@@ -167,7 +173,7 @@ MinimumDiameter::computeMinimumDiameter(){
 void
 MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 	//System.out.println("Input = " + geom);
-	CoordinateList* pts=NULL;
+	CoordinateSequence* pts=NULL;
 	if (typeid(*geom)==typeid(Polygon))
 		pts=((Polygon*)geom)->getExteriorRing()->getCoordinates();
 	else
@@ -200,7 +206,7 @@ MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 * @param pts
 * @return
 */
-void MinimumDiameter::computeConvexRingMinDiameter(const CoordinateList* pts){
+void MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts){
 	minWidth=DoubleInfinity;
 	int currMaxIndex=1;
 	LineSegment* seg=new LineSegment();
@@ -214,7 +220,7 @@ void MinimumDiameter::computeConvexRingMinDiameter(const CoordinateList* pts){
 }
 
 int
-MinimumDiameter::findMaxPerpDistance(const CoordinateList *pts, LineSegment* seg, int startIndex)
+MinimumDiameter::findMaxPerpDistance(const CoordinateSequence *pts, LineSegment* seg, int startIndex)
 {
 	double maxPerpDistance=seg->distancePerpendicular(pts->getAt(startIndex));
 	double nextPerpDistance = maxPerpDistance;
@@ -240,7 +246,7 @@ MinimumDiameter::findMaxPerpDistance(const CoordinateList *pts, LineSegment* seg
 	return maxIndex;
 }
 
-int MinimumDiameter::getNextIndex(const CoordinateList *pts, int index) {
+int MinimumDiameter::getNextIndex(const CoordinateSequence *pts, int index) {
 	index++;
 	if (index >= pts->getSize()) index = 0;
 	return index;

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.29  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.28  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -78,7 +83,7 @@ namespace geos {
 
 
 /**
-* Creates a Point using the given CoordinateList (must have 1 element)
+* Creates a Point using the given CoordinateSequence (must have 1 element)
 *
 * @param  newCoords
 *	contains the single coordinate on which to base this
@@ -87,9 +92,9 @@ namespace geos {
 *
 *	If not null the created Point will take ownership of newCoords.
 */  
-Point::Point(CoordinateList *newCoords, const GeometryFactory *factory): Geometry(factory) {
+Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory): Geometry(factory) {
 	if (newCoords==NULL) {
-		coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
+		coordinates=factory->getCoordinateSequenceFactory()->create(NULL);
 		return;
 	}        
 	if (newCoords->getSize() != 1)
@@ -100,20 +105,17 @@ Point::Point(CoordinateList *newCoords, const GeometryFactory *factory): Geometr
 }
 
 Point::Point(const Point &p): Geometry(p.getFactory()) {
-	coordinates=CoordinateListFactory::internalFactory->createCoordinateList(p.coordinates);;
+	coordinates=p.coordinates->clone();
 }
 
 Geometry* Point::clone() const {
 	return new Point(*this);
 }
 
-CoordinateList* Point::getCoordinates() const {
-	if (isEmpty()) {
-		return CoordinateListFactory::internalFactory->createCoordinateList();
-	} else {
-		return CoordinateListFactory::internalFactory->createCoordinateList(coordinates);
-	}
+CoordinateSequence* Point::getCoordinates() const {
+	return coordinates->clone();
 }
+
 int Point::getNumPoints() const {
 	return isEmpty() ? 0 : 1;
 }

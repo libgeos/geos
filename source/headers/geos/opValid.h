@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -108,7 +113,7 @@ public:
 	RepeatedPointTester() {};
 	Coordinate& getCoordinate();
 	bool hasRepeatedPoint(const Geometry *g);
-	bool hasRepeatedPoint(const CoordinateList *coord);
+	bool hasRepeatedPoint(const CoordinateSequence *coord);
 private:
 	Coordinate repeatedCoord;
 	bool hasRepeatedPoint(const Polygon *p);
@@ -241,7 +246,7 @@ public:
 	~ConnectedInteriorTester();
 	Coordinate& getCoordinate();
 	bool isInteriorsConnected();
-	static const Coordinate& findDifferentPoint(const CoordinateList *coord, const Coordinate& pt);
+	static const Coordinate& findDifferentPoint(const CoordinateSequence *coord, const Coordinate& pt);
 private:
 	GeometryFactory *geometryFactory;
 	CGAlgorithms *cga;
@@ -286,7 +291,7 @@ public:
 	*
 	* @return the point found, or <code>null</code> if none found
 	*/
-	static const Coordinate& findPtNotNode(const CoordinateList *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
+	static const Coordinate& findPtNotNode(const CoordinateSequence *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
 	IsValidOp(const Geometry *geom);
 	virtual ~IsValidOp();
 	bool isValid();

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -81,27 +86,30 @@ public:
 };
 
 /**
- * A sequence of {@link LineMergeDirectedEdge}s forming one of the lines that will
+ * \brief
+ * A sequence of LineMergeDirectedEdge forming one of the lines that will
  * be output by the line-merging process.
- *
  */
 class EdgeString {
 private:
 	GeometryFactory *factory;
 	vector<LineMergeDirectedEdge*> *directedEdges;
-	CoordinateList *coordinates;
-	const CoordinateList* getCoordinates();
+	CoordinateSequence *coordinates;
+	const CoordinateSequence* getCoordinates();
 public:
 	/**
 	* Constructs an EdgeString with the given factory used to convert this EdgeString
 	* to a LineString
 	*/
 	EdgeString(GeometryFactory *newFactory);
+
 	~EdgeString();
+
 	/**
 	* Adds a directed edge which is known to form part of this line.
 	*/
 	void add(LineMergeDirectedEdge *directedEdge);
+
 	/**
 	* Converts this EdgeString into a LineString.
 	*/

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.8  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -26,7 +31,7 @@
  * including buildGeometry().
  *
  * Revision 1.6  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateList argument.
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
  * Fixed memory leaks associated with this and MultiGeometry constructors.
  * Other associated fixes.
  *
@@ -59,14 +64,13 @@
 namespace geos {
 
 /**
- * This function copies given CoordinateList
+ * This function copies given CoordinateSequence
  */
-SegmentString::SegmentString(const CoordinateList *newPts, const void* newContext)
+SegmentString::SegmentString(const CoordinateSequence *newPts, const void* newContext)
 {
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
 	pts=newPts;
-	//pts = CoordinateListFactory::internalFactory->createCoordinateList(newPts);
 	context=newContext;
 }
 
@@ -99,14 +103,13 @@ SegmentString::getCoordinate(int i) const
 	return pts->getAt(i);
 }
 
-CoordinateList*
+CoordinateSequence*
 SegmentString::getCoordinates() const
 {
-	//return pts;
-	return CoordinateListFactory::internalFactory->createCoordinateList(pts);
+	return pts->clone();
 }
 
-const CoordinateList*
+const CoordinateSequence*
 SegmentString::getCoordinatesRO() const
 {
 	return pts;

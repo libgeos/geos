@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.21  2004/07/06 17:58:22  strk
  * Removed deprecated Geometry constructors based on PrecisionModel and
  * SRID specification. Removed SimpleGeometryPrecisionReducer capability
@@ -24,8 +29,8 @@
  * in GeometryFactory.
  * Deep-copy geometry construction takes care of cleaning up copies
  * on exception.
- * Implemented clone() method for CoordinateList
- * Changed createMultiPoint(CoordinateList) signature to reflect
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
  * copy semantic (by-ref instead of by-pointer).
  * Cleaned up documentation.
  *
@@ -82,7 +87,7 @@ LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
 *	The created LinearRing will take ownership of points.
 *
 */
-LinearRing::LinearRing(CoordinateList* newCoords, const GeometryFactory *newFactory): LineString(newCoords,newFactory) {
+LinearRing::LinearRing(CoordinateSequence* newCoords, const GeometryFactory *newFactory): LineString(newCoords,newFactory) {
 	validateConstruction();	
 }
 
@@ -98,7 +103,7 @@ void LinearRing::validateConstruction() {
 
 
 		
-// superclass LineString will delete internal CoordinateList
+// superclass LineString will delete internal CoordinateSequence
 LinearRing::~LinearRing(){
 }
 
@@ -112,8 +117,8 @@ bool LinearRing::isClosed() const {
 	return true;
 }
 
-void LinearRing::setPoints(CoordinateList* cl){
-	vector<Coordinate> *v=cl->toVector();
+void LinearRing::setPoints(CoordinateSequence* cl){
+	const vector<Coordinate> *v=cl->toVector();
 	points->setPoints(*(v));
 	delete v;
 }

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -68,7 +73,7 @@ void InteriorPointLine::addInterior(const Geometry *geom){
 	}
 }
 
-void InteriorPointLine::addInterior(const CoordinateList *pts) {
+void InteriorPointLine::addInterior(const CoordinateSequence *pts) {
 	for(int i=1;i<pts->getSize()-1;i++) {
 		add(&(pts->getAt(i)));
 	}
@@ -94,7 +99,7 @@ void InteriorPointLine::addEndpoints(const Geometry *geom) {
 	}
 }
 
-void InteriorPointLine::addEndpoints(const CoordinateList *pts){
+void InteriorPointLine::addEndpoints(const CoordinateSequence *pts){
 	add(&(pts->getAt(0)));
 	add(&(pts->getAt(pts->getSize()-1)));
 }

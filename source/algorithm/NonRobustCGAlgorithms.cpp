@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
  * Revision 1.13  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -45,7 +50,7 @@ NonRobustCGAlgorithms::~NonRobustCGAlgorithms(){
 */
 bool
 NonRobustCGAlgorithms::isPointInRing(const Coordinate& p,
-		const CoordinateList* ring){
+		const CoordinateSequence* ring){
 	int i,i1;		// point index;i1=i-1 mod n
 	double xInt;		// x intersection of e with ray
 	int	crossings=0;	// number of edge/ray crossings
@@ -78,7 +83,7 @@ NonRobustCGAlgorithms::isPointInRing(const Coordinate& p,
 }
 
 
-//bool NonRobustCGAlgorithms::isOnLine(const Coordinate& p,const CoordinateList* pt) const {
+//bool NonRobustCGAlgorithms::isOnLine(const Coordinate& p,const CoordinateSequence* pt) const {
 //	for(int i=1;i<pt->getSize();i++){
 //		const Coordinate& p0=pt->getAt(i-1);
 //		const Coordinate& p1=pt->getAt(i);
@@ -99,7 +104,7 @@ NonRobustCGAlgorithms::isPointInRing(const Coordinate& p,
 * @return <code>true</code> if the ring is oriented counter-clockwise.
 * @throws IllegalArgumentException if the ring is degenerate (does not contain 3 different points)
 */
-bool NonRobustCGAlgorithms::isCCW(const CoordinateList* ring){
+bool NonRobustCGAlgorithms::isCCW(const CoordinateSequence* ring){
     // # of points without closing endpoint
 	int nPts=ring->getSize()-1;
     // check that this is a valid ring - if not, simply return a dummy value
