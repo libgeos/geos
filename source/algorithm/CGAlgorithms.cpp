@@ -124,16 +124,18 @@ bool CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt) {
 	return false;
 }
 
-/**
-* Computes whether a ring defined by an array of {@link Coordinate} is
-* oriented counter-clockwise.
-* <p>
-* This will handle coordinate lists which contain repeated points.
-*
-* @param ring an array of coordinates forming a ring
-* @return <code>true</code> if the ring is oriented counter-clockwise.
-* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 distinct points)
-*/
+/*
+ * Computes whether a ring defined by an array of Coordinate is
+ * oriented counter-clockwise.
+ * 
+ *  - The list of points is assumed to have the first and last points equal.
+ *  - This will handle coordinate lists which contain repeated points.
+ *  - If the ring is invalid, the answer returned may not be correct.
+ * 
+ *
+ * @param ring an array of coordinates forming a ring
+ * @return <code>true</code> if the ring is oriented counter-clockwise.
+ */
 bool CGAlgorithms::isCCW(const CoordinateSequence* ring) {
 	// # of points without closing endpoint
 	int nPts=ring->getSize()-1;
@@ -160,10 +162,19 @@ bool CGAlgorithms::isCCW(const CoordinateSequence* ring) {
 	} while (ring->getAt(iNext)==hip && iNext != hii);
 	Coordinate prev=ring->getAt(iPrev);
 	Coordinate next=ring->getAt(iNext);
-	// this will catch all cases where there are not 3 distinct points,
-	// including the case where the input array has fewer than 4 elements
+
+	/*
+	 * this will catch all cases where there are not 3 distinct points,
+	 * including the case where the input array has fewer than 4 elements
+	 */
 	if (prev==hip || next==hip || prev==next)
-		throw new IllegalArgumentException("degenerate ring (does not contain 3 distinct points)");
+	{
+		return false;
+		// MD - don't bother throwing exception,
+		// since this isn't a complete check for ring validity
+		//throw new IllegalArgumentException("degenerate ring (does not contain 3 distinct points)");
+	}
+
 	int disc = computeOrientation(prev, hip, next);
 
 	/**
@@ -359,6 +370,10 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2004/11/06 08:16:46  strk
+ * Fixed CGAlgorithms::isCCW from JTS port.
+ * Code cleanup in IsValidOp.
+ *
  * Revision 1.17  2004/11/05 11:41:57  strk
  * Made IsValidOp handle IllegalArgumentException throw from GeometryGraph
  * as a sign of invalidity (just for Polygon geometries).

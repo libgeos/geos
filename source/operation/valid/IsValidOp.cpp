@@ -135,47 +135,29 @@ void IsValidOp::checkValid(const LinearRing *g){
 void IsValidOp::checkValid(const Polygon *g){
 	checkInvalidCoordinates(g);
 	if (validErr != NULL) return;
-	GeometryGraph *graph=NULL;
-	try
-	{
-		graph=new GeometryGraph(0,g);
-	}
-	catch (IllegalArgumentException *ex)
-	{
-		isChecked = true;
-		validErr = new TopologyValidationError(TopologyValidationError::TOO_FEW_POINTS);
-		//ex->toString());
-		delete ex;
+	auto_ptr<GeometryGraph> graph(new GeometryGraph(0,g));
+	checkTooFewPoints(graph.get());
+	if (validErr!=NULL) {
 		return;
 	}
-	checkTooFewPoints(graph);
+	checkConsistentArea(graph.get());
 	if (validErr!=NULL) {
-		delete graph;
 		return;
 	}
-	checkConsistentArea(graph);
+	checkNoSelfIntersectingRings(graph.get());
 	if (validErr!=NULL) {
-		delete graph;
 		return;
 	}
-	checkNoSelfIntersectingRings(graph);
+	checkHolesInShell(g,graph.get());
 	if (validErr!=NULL) {
-		delete graph;
-		return;
-	}
-	checkHolesInShell(g,graph);
-	if (validErr!=NULL) {
-		delete graph;
 		return;
 	}
 	//SLOWcheckHolesNotNested(g);
-	checkHolesNotNested(g,graph);
+	checkHolesNotNested(g,graph.get());
 	if (validErr!=NULL) {
-		delete graph;
 		return;
 	}
-	checkConnectedInteriors(graph);
-	delete graph;
+	checkConnectedInteriors(graph.get());
 }
 
 void
@@ -522,6 +504,10 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2004/11/06 08:16:46  strk
+ * Fixed CGAlgorithms::isCCW from JTS port.
+ * Code cleanup in IsValidOp.
+ *
  * Revision 1.25  2004/11/05 11:41:57  strk
  * Made IsValidOp handle IllegalArgumentException throw from GeometryGraph
  * as a sign of invalidity (just for Polygon geometries).

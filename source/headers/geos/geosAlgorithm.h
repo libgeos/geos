@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/11/06 08:16:46  strk
+ * Fixed CGAlgorithms::isCCW from JTS port.
+ * Code cleanup in IsValidOp.
+ *
  * Revision 1.7  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *
@@ -135,17 +139,22 @@ public:
 	* segment in the linestring
 	*/
 	static bool isOnLine(const Coordinate& p, const CoordinateSequence* pt);
-	/**
-	* Computes whether a ring defined by an array of {@link Coordinate} is
-	* oriented counter-clockwise.
-	* <p>
-	* This will handle coordinate lists which contain repeated points.
-	*
-	* @param ring an array of coordinates forming a ring
-	* @return <code>true</code> if the ring is oriented counter-clockwise.
-	* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 distinct points)
-	*/
+
+	/*
+	 * Computes whether a ring defined by an array of Coordinate is
+	 * oriented counter-clockwise.
+	 * 
+	 *  - The list of points is assumed to have the first and last
+	 *    points equal.
+	 *  - This will handle coordinate lists which contain repeated points.
+	 *  - If the ring is invalid, the answer returned may not be correct.
+	 * 
+	 *
+	 * @param ring an array of coordinates forming a ring
+	 * @return <code>true</code> if the ring is oriented counter-clockwise.
+	 */
 	static bool isCCW(const CoordinateSequence* ring);
+
 	/**
 	* Computes the orientation of a point q to the directed line segment p1-p2.
 	* The orientation of a point relative to a directed line segment indicates
