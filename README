@@ -3,29 +3,18 @@ CLIENT APPLICATIONS
 
 To compile programs against GEOS:
 
-	CFLAGS += `geos-config --cflags`
+	CFLAGS += -I`geos-config --includes`
 	LDFLAGS += `geos-config --libs`
 
-Headers inclusion (quick):
+Headers:
 
-	// geometries, version and exceptions 
 	#include <geos.h>
-
-Headers inclusion (manual):
-
-	// geometries
-	#include <geos/geom.h>
-
-	// exceptions
-	#include <geos/util.h>
-
-	// version
-	#include <geos/version.h>
-
-	... check documentation for more tips ...
 
 Example usage:
 
 	doc/example.cpp contains basic usage
 	examples.
 
+Documentation:
+
+	cd doc; make doxygen-html

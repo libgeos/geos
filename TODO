@@ -1,10 +1,8 @@
 - Check how to disable GEOS_VERSION define on command line
   (or make GEOS_VERSION define in version.h optional)
+  not a major problems, just makes the compiler issue some warninigs.
 
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
-
-- Check header files layout
-
-- Add class for use in Geometry::userData setting.
+  [not documented]
 
 - Remove all explicit heap allocations for private static members.
