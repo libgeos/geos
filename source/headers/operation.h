@@ -25,7 +25,7 @@ protected:
 	/**
 	* The operation args into an array so they can be accessed by index
 	*/
-	vector<GeometryGraph*> arg;  // the arg(s) of the operation
+	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
 	bool makePrecise;
 	void setComputationPrecision(PrecisionModel pm);
 };

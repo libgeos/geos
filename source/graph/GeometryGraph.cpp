@@ -159,11 +159,10 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 	CoordinateList coord(lr->getCoordinates());
 	int left=cwLeft;
 	int right=cwRight;
-//!!! External dependency
-	//if (cga->isCCW(coord)) {
-	//	left=cwRight;
-	//	right=cwLeft;
-	//}
+	if (cga->isCCW(coord)) {
+		left=cwRight;
+		right=cwLeft;
+	}
 	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
 	lineEdgeMap[lr]=e;
 	insertEdge(e);

@@ -6,16 +6,16 @@ NodeMap::NodeMap(NodeFactory *newNodeFact) {
 }
 
 Node* NodeMap::addNode(Coordinate coord){
-	Node *node=nodeMap.find(coord)->second;
+	Node *node=find(coord);
 	if (node==NULL) {
-		node=&(nodeFact->createNode(coord));
+		node=nodeFact->createNode(coord);
 		nodeMap[coord]=node;
 	}
 	return node;
 }
 
 Node* NodeMap::addNode(Node *n){
-	Node *node=nodeMap.find(n->getCoordinate())->second;
+	Node *node=find(n->getCoordinate());
 	if (node==NULL) {
 		nodeMap[n->getCoordinate()]=n;
 		return n;
@@ -34,7 +34,11 @@ void NodeMap::add(EdgeEnd *e) {
  * @return the node if found; null otherwise
  */
 Node* NodeMap::find(Coordinate coord){
-	return nodeMap.find(coord)->second;
+	map<Coordinate,Node*,CoordLT>::iterator found=nodeMap.find(coord);
+	if (found==nodeMap.end())
+		return NULL;
+	else
+		return found->second;
 }
 
 map<Coordinate,Node*,CoordLT>::iterator NodeMap::iterator() {

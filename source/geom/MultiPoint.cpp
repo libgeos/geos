@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "operation.h"
 
 MultiPoint::MultiPoint(){}
 MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel pm, int SRID):
@@ -21,10 +22,8 @@ Geometry MultiPoint::getBoundary() {
 	return GeometryCollection(NULL, precisionModel, SRID);
 }
 
-//!!! External dependency
 bool MultiPoint::isSimple(){
-	return false;
-	//	return (new IsSimpleOp()).isSimple(this);
+	return (new IsSimpleOp())->isSimple(this);
 }
 
 bool MultiPoint::isValid() {

@@ -1,6 +1,12 @@
 #include "graph.h"
 
-EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge): edge(*newEdge){}
+EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge) {
+	edge=newEdge;
+}
+
+//EdgeIntersectionList::~EdgeIntersectionList() {
+//	delete edge;
+//}
 
 EdgeIntersection* EdgeIntersectionList::add(Coordinate coord, int segmentIndex, double dist){
 	vector<EdgeIntersection *>::iterator insertIt=list.begin();
@@ -50,9 +56,9 @@ bool EdgeIntersectionList::isIntersection(Coordinate pt){
 }
 
 void EdgeIntersectionList::addEndpoints(){
-	int maxSegIndex=edge.pts.getSize()-1;
-	add(edge.pts.getAt(0), 0, 0.0);
-	add(edge.pts.getAt(maxSegIndex), maxSegIndex, 0.0);
+	int maxSegIndex=edge->pts.getSize()-1;
+	add(edge->pts.getAt(0), 0, 0.0);
+	add(edge->pts.getAt(maxSegIndex), maxSegIndex, 0.0);
 }
 
 void EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList) {
@@ -72,7 +78,7 @@ void EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList) {
 
 Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1) {
 	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
-	Coordinate lastSegStartPt(edge.pts.getAt(ei1->segmentIndex));
+	Coordinate lastSegStartPt(edge->pts.getAt(ei1->segmentIndex));
 	// if the last intersection point is not equal to the its segment start pt,
 	// add it to the points list as well.
 	// (This check is needed because the distance metric is not totally reliable!)
@@ -84,10 +90,10 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	int ipt=0;
 	pts.setAt(Coordinate(ei0->coord),ipt++);
 	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++) {
-		pts.setAt(edge.pts.getAt(i),ipt++);
+		pts.setAt(edge->pts.getAt(i),ipt++);
 	}
 	if (useIntPt1) pts.setAt(ei1->coord,ipt);
-	return new Edge(pts,edge.getLabel());
+	return new Edge(pts,edge->getLabel());
 }
 
 string EdgeIntersectionList::print(){

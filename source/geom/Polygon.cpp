@@ -170,7 +170,6 @@ int Polygon::compareToSameClass(Polygon *p) {
 	return shell->compareToSameClass(p->shell);
 }
 
-//!!! External dependency
 void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	if (ring->isEmpty()) {
 		return;
@@ -181,10 +180,9 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	Geometry::scroll(&uniqueCoordinates, minCoordinate);
 	uniqueCoordinates.add(uniqueCoordinates.getAt(0));
 	ring->setPoints(uniqueCoordinates);
-//!!! External dependency
-//	if (cgAlgorithms.isCCW(ring.getCoordinates()) == clockwise) {
-//		reversePointOrder(&(ring.getCoordinates()));
-//	}
+	if (cgAlgorithms->isCCW(ring->getCoordinates())==clockwise) {
+		reversePointOrder(&(ring->getCoordinates()));
+	}
 }
 
 Coordinate Polygon::getCoordinate() {

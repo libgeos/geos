@@ -282,6 +282,7 @@ public:
 	virtual string toText()=0;
 };
 
+class CGAlgorithms;
 class Geometry: public SFSGeometry {
 public:
 	Geometry(void);
@@ -335,8 +336,7 @@ protected:
 	PrecisionModel precisionModel;
 	int SRID;
 	Envelope envelope;
-//!!! External dependency
-//	static CGAlgorithms cgAlgorithms = new RobustCGAlgorithms();
+	static CGAlgorithms *cgAlgorithms;
 	static bool hasNonEmptyElements(vector<Geometry *> geometries);
 	static bool hasNullElements(CoordinateList list);
 	static bool hasNullElements(vector<Geometry *> lrs);

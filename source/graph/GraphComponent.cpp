@@ -57,7 +57,7 @@ void GraphComponent::setVisited(bool isVisited) {
 	isVisitedVar = isVisited;
 }
 
-void GraphComponent::updateIM(IntersectionMatrix im){
+void GraphComponent::updateIM(IntersectionMatrix *im){
 	Assert::isTrue(label->getGeometryCount() >= 2, "found partial label");
 	computeIM(im);
 }

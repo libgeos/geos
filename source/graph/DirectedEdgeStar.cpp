@@ -17,7 +17,7 @@ DirectedEdgeStar::~DirectedEdgeStar(){
  */
 void DirectedEdgeStar::insert(EdgeEnd *ee){
 	DirectedEdge *de=(DirectedEdge*) ee;
-	insertEdgeEnd(de);
+	insertEdgeEnd(de,de);
 }
 
 Label* DirectedEdgeStar::getLabel() {

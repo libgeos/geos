@@ -24,6 +24,8 @@ bool Node::isIsolated() {
 
 void Node::add(EdgeEnd *e) {
 	// Assert: start pt of e is equal to node point
+	if (edges==NULL)
+		edges=new EdgeEndStar();
 	edges->insert(e);
 	e->setNode(this);
 }

@@ -2,11 +2,15 @@
 #include "util.h"
 #include <typeinfo>
 #include <algorithm>
+#include "geosAlgorithm.h"
+#include "operation.h"
+#include "opRelate.h"
+#include "io.h"
 
+
+CGAlgorithms* Geometry::cgAlgorithms=new RobustCGAlgorithms();
 Geometry::Geometry(): precisionModel(PrecisionModel()), envelope(Envelope()){
 	SRID=0;
-//!!! External dependency
-//	static CGAlgorithms cgAlgorithms = new RobustCGAlgorithms();
 	sortedClasses.push_back(typeid(Point).name());
 	sortedClasses.push_back(typeid(MultiPoint).name());
 	sortedClasses.push_back(typeid(LineString).name());
@@ -77,7 +81,6 @@ Coordinate Geometry::minCoordinate(CoordinateList coordinates){
 	return v.front();
 }
 
-//!!! External Dependency
 void Geometry::scroll(CoordinateList *coordinates, Coordinate firstCoordinate) {
 	int ind=indexOf(firstCoordinate,coordinates);
 	Assert::isTrue(ind > -1);
@@ -109,10 +112,9 @@ PrecisionModel Geometry::getPrecisionModel() {return precisionModel;}
 
 //!!! External Dependency
 bool Geometry::isValid() {
-//!!! External Dependency
-	//IsValidOp isValidOp = new IsValidOp(this);
-	//return isValidOp.isValid();
-	return true;
+//	IsValidOp isValidOp(this);
+//	return isValidOp.isValid();
+	return false;
 }
 
 Geometry Geometry::getEnvelope() {
@@ -162,27 +164,21 @@ bool Geometry::equals(Geometry *g){
 	return relate(g).isEquals(getDimension(), g->getDimension());
 }
 
-//!!! External Dependency
 IntersectionMatrix Geometry::relate(Geometry *g) {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(g);
 	checkEqualSRID(g);
 	checkEqualPrecisionModel(g);
-//!!! External Dependency
-//	return RelateOp::relate(this, g);
-	return IntersectionMatrix();
+	return RelateOp::relate(this,g);
 }
 
 string Geometry::toString() {
 	return toText();
 }
 
-//!!! External Dependency
 string Geometry::toText() {
-//!!! External Dependency
-//	WKTWriter writer = new WKTWriter();
-//	return writer.write(this);
-	return "Geometry";
+	WKTWriter writer;
+	return writer.write(this);
 }
 
 //!!! External Dependency
@@ -285,7 +281,10 @@ void Geometry::checkEqualPrecisionModel(Geometry *other) {
 
 int Geometry::getClassSortIndex() {
 	for (unsigned int i=0; i<sortedClasses.size(); i++) {
-		if (sortedClasses[i]==typeid(*this).name()) {
+		const type_info &t=typeid(*this);
+		string tst=t.name();
+		string tst2=sortedClasses.at(i);
+		if (sortedClasses.at(i)==typeid(*this).name()) {
 			return i;
 		}
 	}

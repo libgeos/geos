@@ -3,6 +3,8 @@
 #include <typeinfo>
 #include "math.h"
 
+CGAlgorithms* EdgeEnd::cga=new RobustCGAlgorithms();
+
 EdgeEnd::EdgeEnd(): p0(),p1(){
 	this->edge=NULL;
 	label=NULL;
@@ -61,17 +63,15 @@ int EdgeEnd::compareTo(EdgeEnd e) {
 	return compareDirection(e);
 }
 
-//!!!External dependency
 int EdgeEnd::compareDirection(EdgeEnd e) {
 	if (dx == e.dx && dy == e.dy)
 		return 0;
 	// if the rays are in different quadrants, determining the ordering is trivial
-	if (quadrant > e.quadrant) return 1;
-	if (quadrant < e.quadrant) return -1;
+	if (quadrant>e.quadrant) return 1;
+	if (quadrant<e.quadrant) return -1;
 	// vectors are in the same quadrant - check relative orientation of direction vectors
 	// this is > e if it is CCW of e
-//	return cga.computeOrientation(e.p0, e.p1, p1);
-	return 0;
+	return cga->computeOrientation(e.p0,e.p1,p1);
 }
 
 void EdgeEnd::computeLabel(){

@@ -5,6 +5,8 @@
 #include <fstream>
 #include "util.h"
 #include "graph.h"
+#include "io.h"
+#include "opRelate.h"
 
 using namespace std;
 
@@ -20,15 +22,6 @@ int main(int argC, char* argV[]) {
 	string opSig="";
 	string opRes="";
 	int testCount=0;
-
-//	PlanarGraph::cga++;
-
-/*	try {
-		Assert::equals(Coordinate(10,10),Coordinate(10,10));
-		Assert::equals(Coordinate(10,10),Coordinate(20,20));
-	} catch (AssertionFailedException afe) {
-		cout << afe.toString() << endl;
-	}
 
 	WKTReader r(GeometryFactory(PrecisionModel(),10));
 	WKTWriter *w=new WKTWriter();
@@ -75,9 +68,13 @@ int main(int argC, char* argV[]) {
 		opSig=xml.GetChildAttrib("arg3");
 		opRes=xml.GetChildData();
 		cout << "\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
-		xml.OutOfElem();
+		if (opName=="relate") {
+			IntersectionMatrix im(gA->relate(gB));
+			cout << "\tResult: matrix='" << im.toString() << "' result=" << (im.matches(opSig)?"true":"false") <<endl;
+		}
 
 		xml.OutOfElem();
+		xml.OutOfElem();
 	}
-*/
+	cout << "End Test";
 }

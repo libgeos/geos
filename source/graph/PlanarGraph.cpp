@@ -169,10 +169,9 @@ Edge* PlanarGraph::findEdgeInSameDirection(Coordinate p0,Coordinate p1) {
 bool PlanarGraph::matchInSameDirection(Coordinate p0,Coordinate p1,Coordinate ep0,Coordinate ep1) {
 	if (!(p0==ep0))
 		return false;
-//!!!External Dependency
-	//if (cga->computeOrientation(p0,p1,ep1)==CGAlgorithms::COLLINEAR
-	//	&& Quadrant::quadrant(p0,p1)==Quadrant::quadrant(ep0,ep1))
-	//		return true;
+	if (cga->computeOrientation(p0,p1,ep1)==CGAlgorithms::COLLINEAR
+		&& Quadrant::quadrant(p0,p1)==Quadrant::quadrant(ep0,ep1))
+			return true;
 	return false;
 }
 
@@ -187,4 +186,8 @@ string PlanarGraph::printEdges(){
 		out+=e->eiList->print();
 	}
 	return out;
+}
+
+NodeMap* PlanarGraph::getNodeMap(){
+	return nodes;
 }

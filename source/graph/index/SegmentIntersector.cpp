@@ -68,7 +68,7 @@ bool SegmentIntersector::hasProperInteriorIntersection() {
 * and end segments.
 */
 bool SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,int segIndex1){
-	if (*e0==*e1) {
+	if (e0->equals(e1)) {
 		if (li->getIntersectionNum()==1) {
 			if (isAdjacentSegments(segIndex0,segIndex1))
 				return true;
@@ -91,7 +91,7 @@ bool SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,i
 * certain pairs of segments for efficiency reasons.
 */
 void SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segIndex1){
-	if (*e0==*e1 && segIndex0==segIndex1) return;
+	if (e0->equals(e1) && segIndex0==segIndex1) return;
 	numTests++;
 	Coordinate p00(e0->getCoordinates().getAt(segIndex0));
 	Coordinate p01(e0->getCoordinates().getAt(segIndex0+1));

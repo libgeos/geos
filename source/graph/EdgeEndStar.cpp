@@ -4,14 +4,14 @@
 EdgeEndStar::EdgeEndStar(){
 	ptInAreaLocation[0]=Location::UNDEF;
 	ptInAreaLocation[1]=Location::UNDEF;
-	edgeMap=new set<EdgeEnd*,EdgeEndLT>();
+	edgeMap=new map<EdgeEnd*,void*,EdgeEndLT>();
 	edgeList=new vector<EdgeEnd*>();
 }
 
 EdgeEndStar::EdgeEndStar(const EdgeEndStar &ees){
 	ptInAreaLocation[0]=Location::UNDEF;
 	ptInAreaLocation[1]=Location::UNDEF;
-	edgeMap=new set<EdgeEnd*,EdgeEndLT>((ees.edgeMap)->begin(),(ees.edgeMap)->end());
+	edgeMap=new map<EdgeEnd*,void*,EdgeEndLT>((ees.edgeMap)->begin(),(ees.edgeMap)->end());
 	edgeList=new vector<EdgeEnd*>((ees.edgeList)->begin(),(ees.edgeList)->end());
 }
 
@@ -24,8 +24,8 @@ EdgeEndStar::~EdgeEndStar(){
  * Insert an EdgeEnd into the map, and clear the edgeList cache,
  * since the list of edges has now changed
  */
-void EdgeEndStar::insertEdgeEnd(EdgeEnd *e){
-	edgeMap->insert(e);
+void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
+	(*edgeMap)[e]=obj;
 	edgeList=NULL;  // edge list has changed - clear the cache
 }
 
@@ -44,8 +44,11 @@ int EdgeEndStar::getDegree(){
 }
 
 vector<EdgeEnd*>* EdgeEndStar::getEdges() {
+	map<EdgeEnd*,void*,EdgeEndLT>::iterator mapIter;
 	if (edgeList==NULL) {
-		edgeList=new vector<EdgeEnd*>(edgeMap->begin(),edgeMap->end());
+		edgeList=new vector<EdgeEnd*>();
+		for(mapIter=edgeMap->begin();mapIter!=edgeMap->end();mapIter++)
+			edgeList->push_back(mapIter->first);
 	}
 	return edgeList;
 }

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <typeinfo>
 #include "geosAlgorithm.h"
+#include "operation.h"
 
 
 LineString::LineString(){
@@ -95,10 +96,8 @@ string LineString::getGeometryType() {
 	return "LineString";
 }
 
-//!!! External dependency
 bool LineString::isSimple(){
-	return false;
-	//	return (new IsSimpleOp()).isSimple(this);
+	return (new IsSimpleOp())->isSimple(this);
 }
 
 Geometry LineString::getBoundary() {
@@ -108,10 +107,10 @@ Geometry LineString::getBoundary() {
 	if (isClosed()) {
 		return MultiPoint(NULL, precisionModel, SRID);
 	}
-//!!! to compile
-	return MultiPoint(NULL, precisionModel, SRID);
-
-//	return MultiPoint(new Point[]={getStartPoint(), getEndPoint()}, precisionModel, SRID);
+	vector<Geometry*> *pts=new vector<Geometry*>();
+	pts->push_back(&getStartPoint());
+	pts->push_back(&getEndPoint());
+	return MultiPoint(pts,precisionModel, SRID);
 }
 
 bool LineString::isCoordinate(Coordinate pt) {

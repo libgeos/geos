@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <set>
 #include "geom.h"
 #include "graphindex.h"
 #include "geosAlgorithm.h"
@@ -150,10 +149,10 @@ public:
 	void setVisited(bool isVisited);
 	virtual Coordinate getCoordinate()=0;
 	virtual bool isIsolated()=0;
-	void updateIM(IntersectionMatrix im);
+	virtual void updateIM(IntersectionMatrix *im);
 protected:
 	Label* label;
-	virtual void computeIM(IntersectionMatrix im)=0;
+	virtual void computeIM(IntersectionMatrix *im)=0;
 private:
 	bool isInResultVar;
 	bool isCoveredVar;
@@ -165,7 +164,7 @@ class Node;
 class EdgeIntersectionList;
 class Edge: public GraphComponent{
 public:
-	static void updateIM(Label lbl,IntersectionMatrix im);
+	static void updateIM(Label *lbl,IntersectionMatrix *im);
 	CoordinateList pts;
 	EdgeIntersectionList *eiList;
 	Edge();
@@ -190,10 +189,11 @@ public:
 	bool isIsolated();
 	void addIntersections(LineIntersector *li,int segmentIndex,int geomIndex);
 	void addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex);
-	void computeIM(IntersectionMatrix im);
+	void computeIM(IntersectionMatrix *im);
 	bool isPointwiseEqual(Edge *e);
 	string print();
 	string printReverse();
+	bool equals(Edge* e);
 private:
 	string name;
 	MonotoneChainEdge *mce;
@@ -221,8 +221,7 @@ public:
 	void computeLabel();
 	string print();
 protected:
-	//!!!External Dependency
-	//static final CGAlgorithms cga = new RobustCGAlgorithms();
+	static CGAlgorithms *cga;
 	Edge* edge;// the parent edge of this edge end
 	Label* label;
 	EdgeEnd(Edge* newEdge);
@@ -246,7 +245,7 @@ public:
 	EdgeEndStar();
 	~EdgeEndStar();
 	EdgeEndStar(const EdgeEndStar &ees);
-	virtual void insert(EdgeEnd *e)=0;;
+	virtual void insert(EdgeEnd *e){};
 	Coordinate getCoordinate();
 	int getDegree();
 	vector<EdgeEnd*>::iterator getIterator();
@@ -259,10 +258,9 @@ public:
 	int findIndex(EdgeEnd *eSearch);
 	string print();
 protected:
-	set<EdgeEnd*,EdgeEndLT> *edgeMap;
+	map<EdgeEnd*,void*,EdgeEndLT> *edgeMap;
 	vector<EdgeEnd*> *edgeList;
-	//Was:	void insertEdgeEnd(EdgeEnd e, Object obj);
-	void insertEdgeEnd(EdgeEnd *e);
+	void insertEdgeEnd(EdgeEnd *e,void* obj);
 private:
 	int ptInAreaLocation[2];
 	void computeEdgeEndLabels();
@@ -322,12 +320,12 @@ public:
 protected:
 	Coordinate coord;
 	EdgeEndStar* edges;
-	void computeIM(IntersectionMatrix im) {};
+	void computeIM(IntersectionMatrix *im) {};
 };
 
 class NodeFactory {
 public:
-	Node createNode(Coordinate coord);
+	Node* createNode(Coordinate coord);
 };
 
 class EdgeIntersection {
@@ -344,8 +342,9 @@ public:
 class EdgeIntersectionList{
 public:
 	vector<EdgeIntersection*> list;
-	Edge edge;
+	Edge *edge;
 	EdgeIntersectionList(Edge *edge);
+	//~EdgeIntersectionList();
 	EdgeIntersection* add(Coordinate coord, int segmentIndex, double dist);
 	vector<EdgeIntersection*>::iterator iterator();
 	bool isEmpty();
@@ -500,6 +499,7 @@ public:
 	Edge* findEdge(Coordinate p0,Coordinate p1);
 	Edge* findEdgeInSameDirection(Coordinate p0,Coordinate p1);
 	string printEdges();
+	NodeMap *getNodeMap();
 	//Not used 
 	//string debugPrint();
 	//string debugPrintln();
@@ -569,6 +569,6 @@ private:
 	void addSelfIntersectionNode(int argIndex,Coordinate coord,int loc);
 };
 //Operators
-bool operator==(Edge a, Edge b);
+bool operator==(Edge a,Edge b);
 
 #endif

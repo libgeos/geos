@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "operation.h"
 
 MultiLineString::MultiLineString(){}
 MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel precisionModel, int SRID):
@@ -32,21 +33,16 @@ bool MultiLineString::isClosed() {
 	return true;
 }
 
-//!!! External dependency
 bool MultiLineString::isSimple(){
-	return false;
-	//	return (new IsSimpleOp()).isSimple(this);
+	return (new IsSimpleOp())->isSimple(this);
 }
 
-//!!! External dependency
 Geometry MultiLineString::getBoundary() {
 	if (isEmpty()) {
 		return GeometryCollection(NULL, precisionModel, SRID);
 	}
-//	GeometryGraph g = new GeometryGraph(0, this);
-//	CoordinateList pts = g.getBoundaryPoints();
-
-	CoordinateList pts; //To Compile
+	GeometryGraph *g=new GeometryGraph(0,this);
+	CoordinateList pts(g->getBoundaryPoints());
 	GeometryFactory fact(precisionModel, SRID);
 	return fact.createMultiPoint(pts);
 }

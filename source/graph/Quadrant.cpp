@@ -2,9 +2,10 @@
 
 int Quadrant::quadrant(double dx, double dy) {
 	char buffer[255];
-	if (dx == 0.0 && dy == 0.0)
+	if (dx == 0.0 && dy == 0.0) {
 		sprintf(buffer,"IllegalArgumentException: Cannot compute the quadrant for point (%g, %g)\n",dx,dy);
 		throw buffer;
+	}
 	if (dx >= 0) {
 		if (dy >= 0)
 			return 0;

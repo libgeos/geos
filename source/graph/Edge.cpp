@@ -4,11 +4,11 @@
  * Updates an IM from the label for an edge.
  * Handles edges from both L and A geometrys.
  */
-void Edge::updateIM(Label lbl, IntersectionMatrix im){
-	im.setAtLeastIfValid(lbl.getLocation(0,Position::ON),lbl.getLocation(1,Position::ON),1);
-	if (lbl.isArea()) {
-		im.setAtLeastIfValid(lbl.getLocation(0,Position::LEFT),lbl.getLocation(1,Position::LEFT),2);
-		im.setAtLeastIfValid(lbl.getLocation(0,Position::RIGHT),lbl.getLocation(1,Position::RIGHT),2);
+void Edge::updateIM(Label *lbl,IntersectionMatrix *im){
+	im->setAtLeastIfValid(lbl->getLocation(0,Position::ON),lbl->getLocation(1,Position::ON),1);
+	if (lbl->isArea()) {
+		im->setAtLeastIfValid(lbl->getLocation(0,Position::LEFT),lbl->getLocation(1,Position::LEFT),2);
+		im->setAtLeastIfValid(lbl->getLocation(0,Position::RIGHT),lbl->getLocation(1,Position::RIGHT),2);
 	}
 }
 
@@ -17,19 +17,31 @@ Edge::Edge(){
 	isIsolatedVar=true;
 	depth=new Depth();
 	depthDelta=0;
+	mce=NULL;
 }
 
 Edge::~Edge(){
 	delete eiList;
 	delete depth;
+	delete mce;
 }
 
 Edge::Edge(CoordinateList newPts, Label *newLabel):pts(newPts){
+	eiList=new EdgeIntersectionList(this);
+	isIsolatedVar=true;
+	depth=new Depth();
+	depthDelta=0;
 	label=newLabel;
+	mce=NULL;
 }
 
 Edge::Edge(CoordinateList newPts): pts(newPts){
+	eiList=new EdgeIntersectionList(this);
+	isIsolatedVar=true;
+	depth=new Depth();
+	depthDelta=0;
 	label=NULL;
+	mce=NULL;
 }
 
 int Edge::getNumPoints() {
@@ -146,8 +158,8 @@ void Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,in
  * Update the IM with the contribution for this component.
  * A component only contributes if it has a labelling for both parent geometries
  */
-void Edge::computeIM(IntersectionMatrix im){
-	updateIM(*label, im);
+void Edge::computeIM(IntersectionMatrix *im){
+	updateIM(label,im);
 }
 
 /**
@@ -167,6 +179,30 @@ bool operator==(Edge e1, Edge e2){
 			isEqualForward=false;
 		}
 		if (!e1.pts.getAt(i).equals2D(e2.pts.getAt(--iRev))) {
+			isEqualReverse=false;
+		}
+		if (!isEqualForward && !isEqualReverse) return false;
+	}
+	return true;
+}
+
+/**
+ * equals is defined to be:
+ * <p>
+ * e1 equals e2
+ * <b>iff</b>
+ * the coordinates of e1 are the same or the reverse of the coordinates in e2
+ */
+bool Edge::equals(Edge *e){
+	if (pts.getSize()!=e->pts.getSize()) return false;
+	bool isEqualForward=true;
+	bool isEqualReverse=true;
+	int iRev=pts.getSize();
+	for (int i=0; i<pts.getSize();i++) {
+		if (!pts.getAt(i).equals2D(e->pts.getAt(i))) {
+			isEqualForward=false;
+		}
+		if (!pts.getAt(i).equals2D(e->pts.getAt(--iRev))) {
 			isEqualReverse=false;
 		}
 		if (!isEqualForward && !isEqualReverse) return false;
