@@ -1,12 +1,13 @@
-#include "MarkupSTL.h"
-//#include "io.h"
+
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "util.h"
-#include "graph.h"
-#include "io.h"
-#include "opRelate.h"
+
+#include "../headers/util.h"
+#include "../headers/graph.h"
+#include "../headers/io.h"
+#include "../headers/opRelate.h"
+#include "../headers/MarkupSTL.h"
 
 using namespace std;
 

@@ -1,9 +1,10 @@
 #include <stdio.h>
-#include "geom.h"
-#include "time.h"
-#include "bigtest.h"
+#include <time.h>
 
-#include "io.h"
+#include "../headers/geom.h"
+#include "../headers/bigtest.h"
+#include "../headers/io.h"
+
 /**
  * Run relate between two large geometries to test the performance
  * of the sweepline intersection detection algorithm

@@ -1,8 +1,11 @@
 // CTS.cpp : Testing class
 //
 
-#include "io.h"
 #include <iostream>
+
+#include "../headers/io.h"
+#include "../headers/geom.h"
+
 using namespace std;
 
 
