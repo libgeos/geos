@@ -39,7 +39,7 @@ bool CoordinateList::isEmpty() {
 	return vect->empty();
 }
 
-Coordinate CoordinateList::getNext(){
+Coordinate& CoordinateList::getNext(){
 	if (current==vect->size()-1) current=-1;
 	current++;
 	return (*vect)[current];
@@ -68,21 +68,36 @@ void CoordinateList::moveTo(int pos){
 		current=pos;
 }
 
-Coordinate CoordinateList::getAt(int pos){
-	moveTo(pos);
-	return get();
+Coordinate& CoordinateList::getAt(int pos){
+	if (pos>vect->size()-1) 
+		throw "Invalid argument: out of bounds\n" ;
+	else
+		current=pos;
+	if (current>=0 && current<=vect->size()-1) 
+		return (*vect)[current];
+	else
+		throw "CoordinateList exception: can't retrieve element\n";
 }
 
 void CoordinateList::setAt(Coordinate c, int pos){
-	moveTo(pos);
-	set(c);
+	if (pos>vect->size()-1) 
+		throw "Invalid argument: out of bounds\n" ;
+	else
+		current=pos;
+	if (current>=0 && current<=vect->size()-1) 
+		(*vect)[current]=c;
+	else
+		throw "CoordinateList exception: can't change element\n";
 }
 void CoordinateList::deleteAt(int pos){
-	moveTo(pos);
+	if (pos>vect->size()-1) 
+		throw "Invalid argument: out of bounds\n" ;
+	else
+		current=pos;
 	remove();
 }
 
-Coordinate CoordinateList::get(){
+Coordinate& CoordinateList::get(){
 	if (current>=0 && current<=vect->size()-1) 
 		return (*vect)[current];
 	else

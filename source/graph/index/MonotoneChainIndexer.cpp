@@ -1,6 +1,6 @@
 #include "graphindex.h"
 
-vector<int> MonotoneChainIndexer::getChainStartIndices(CoordinateList pts){
+vector<int> MonotoneChainIndexer::getChainStartIndices(CoordinateList& pts){
 	// find the startpoint (and endpoints) of all monotone chains in this edge
 	int start=0;
 	vector<int>startIndexList;
@@ -17,7 +17,7 @@ vector<int> MonotoneChainIndexer::getChainStartIndices(CoordinateList pts){
 /**
 * @return the index of the last point in the monotone chain
 */
-int MonotoneChainIndexer::findChainEnd(CoordinateList pts,int start){
+int MonotoneChainIndexer::findChainEnd(CoordinateList& pts,int start){
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts.getAt(start),pts.getAt(start + 1));
 	int last=start+1;

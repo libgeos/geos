@@ -50,15 +50,15 @@ public:
 class CoordinateListInterface {
 public:
 	virtual void reset()=0;
-	virtual Coordinate getNext()=0;
+	virtual Coordinate& getNext()=0;
 	virtual bool hasNext()=0;
 	virtual bool isEmpty()=0;
 	virtual void add(Coordinate c)=0;
 	virtual int getSize()=0;
-	virtual Coordinate getAt(int pos)=0;
+	virtual Coordinate& getAt(int pos)=0;
 	virtual void setAt(Coordinate c, int pos)=0;
 	virtual void deleteAt(int pos)=0;
-	virtual Coordinate get()=0;
+	virtual Coordinate& get()=0;
 	virtual void set(Coordinate c)=0;
 	virtual void remove()=0;
 	virtual vector<Coordinate> toVector()=0;
@@ -72,15 +72,15 @@ public:
 	CoordinateList(const CoordinateList &cl);
 	~CoordinateList();
 	void reset();
-	Coordinate getNext();
+	Coordinate& getNext();
 	bool hasNext();
 	bool isEmpty();
 	void add(Coordinate c);
 	int getSize();
-	Coordinate getAt(int pos);
+	Coordinate& getAt(int pos);
 	void setAt(Coordinate c, int pos);
 	void deleteAt(int pos);
-	Coordinate get();
+	Coordinate& get();
 	void set(Coordinate c);
 	void remove();
 	vector<Coordinate> toVector();

@@ -25,37 +25,73 @@ void RobustLineIntersector::computeIntersection(Coordinate p,Coordinate p1,Coord
 
 int RobustLineIntersector::computeIntersect(Coordinate p1,Coordinate p2,Coordinate q1,Coordinate q2){
 	isProperVar=false;
-	// for each endpoint,compute which side of the other segment it lies
+
+	// first try a fast test to see if the envelopes of the lines overlap
+	double minq=min(q1.x,q2.x);
+	double maxq=max(q1.x,q2.x);
+	double minp=min(p1.x,p2.x);
+	double maxp=max(p1.x,p2.x);
+
+	if(minp>maxq)
+		return DONT_INTERSECT;
+	if(maxp<minq)
+		return DONT_INTERSECT;
+
+	minq=min(q1.y,q2.y);
+	maxq=max(q1.y,q2.y);
+	minp=min(p1.y,p2.y);
+	maxp=max(p1.y,p2.y);
+
+	if(minp>maxq)
+		return DONT_INTERSECT;
+	if(maxp<minq)
+		return DONT_INTERSECT;
+
+	// for each endpoint, compute which side of the other segment it lies
+	// if both endpoints lie on the same side of the other segment,
+	// the segments do not intersect
 	int Pq1=RobustCGAlgorithms::orientationIndex(p1,p2,q1);
 	int Pq2=RobustCGAlgorithms::orientationIndex(p1,p2,q2);
+
+	if ((Pq1>0 && Pq2>0)||(Pq1<0 && Pq2<0)) {
+		return DONT_INTERSECT;
+	}
+
 	int Qp1=RobustCGAlgorithms::orientationIndex(q1,q2,p1);
 	int Qp2=RobustCGAlgorithms::orientationIndex(q1,q2,p2);
-	// if both endpoints lie on the same side of the other segment,the segments do not intersect
-	if (Pq1>0 && Pq2>0) {
+
+	if ((Qp1>0 && Qp2>0)||(Qp1<0 && Qp2<0)) {
 		return DONT_INTERSECT;
 	}
-	if (Qp1>0 && Qp2>0) {
-		return DONT_INTERSECT;
+
+	/* OLD
+	if (Pq1 > 0 && Pq2 > 0) {
+	return DONT_INTERSECT;
 	}
-	if (Pq1<0 && Pq2<0) {
-		return DONT_INTERSECT;
+	if (Qp1 > 0 && Qp2 > 0) {
+	return DONT_INTERSECT;
 	}
-	if (Qp1<0 && Qp2<0) {
-		return DONT_INTERSECT;
+	if (Pq1 < 0 && Pq2 < 0) {
+	return DONT_INTERSECT;
 	}
-	bool collinear=(Pq1==0) && (Pq2==0) && (Qp1==0) && (Qp2==0);
+	if (Qp1 < 0 && Qp2 < 0) {
+	return DONT_INTERSECT;
+	}
+	//*/
+
+	bool collinear=Pq1==0 && Pq2==0 && Qp1==0 && Qp2==0;
 	if (collinear) {
 		return computeCollinearIntersection(p1,p2,q1,q2);
 	}
 	/**
-	*  Check if the intersection is an endpoint. If it is,copy the endpoint as
+	*  Check if the intersection is an endpoint. If it is, copy the endpoint as
 	*  the intersection point. Copying the point rather than computing it
-	*  ensures the point has the exact value,which is important for
+	*  ensures the point has the exact value, which is important for
 	*  robustness. It is sufficient to simply check for an endpoint which is on
-	*  the other line,since at this point we know that the inputLines must
+	*  the other line, since at this point we know that the inputLines must
 	*  intersect.
 	*/
-	if ((Pq1==0) || (Pq2==0) || (Qp1==0) || (Qp2==0)) {
+	if (Pq1==0 || Pq2==0 || Qp1==0 || Qp2==0) {
 		isProperVar=false;
 		if (Pq1==0) {
 			intPt[0].setCoordinate(q1);
@@ -71,7 +107,7 @@ int RobustLineIntersector::computeIntersect(Coordinate p1,Coordinate p2,Coordina
 		}
 	} else {
 		isProperVar=true;
-		intPt[0].setCoordinate(intersection(p1,p2,q1,q2));
+		intPt[0].setCoordinate(intersection(p1, p2, q1, q2));
 	}
 	return DO_INTERSECT;
 }
