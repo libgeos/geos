@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.71  2004/09/16 09:48:40  strk
+ * Finer short-circuit tests for equals, within, contains.
+ *
  * Revision 1.70  2004/09/16 07:32:15  strk
  * Added short-circuit tests. Can be disabled at compile-time
  *
@@ -548,7 +551,7 @@ bool Geometry::crosses(const Geometry *g) const{
 bool Geometry::within(const Geometry *g) const{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+	if (! g->getEnvelopeInternal()->contains(getEnvelopeInternal()))
 		return false;
 #endif
 	IntersectionMatrix *im=relate(g);
@@ -560,7 +563,7 @@ bool Geometry::within(const Geometry *g) const{
 bool Geometry::contains(const Geometry *g) const{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+	if (! getEnvelopeInternal()->contains(g->getEnvelopeInternal()))
 		return false;
 #endif
 	IntersectionMatrix *im=relate(g);
@@ -591,7 +594,7 @@ bool Geometry::relate(const Geometry *g, string intersectionPattern) const {
 bool Geometry::equals(const Geometry *g) const {
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+	if (! getEnvelopeInternal()->equals(g->getEnvelopeInternal()))
 		return false;
 #endif
 	IntersectionMatrix *im=relate(g);
