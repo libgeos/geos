@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/09/13 12:50:11  strk
+ * comments cleanup
+ *
  * Revision 1.22  2004/09/13 12:39:14  strk
  * Made Point and MultiPoint subject to Validity tests.
  *
@@ -429,7 +432,7 @@ IsValidOp::checkShellsNotNested(const MultiPolygon *mp,GeometryGraph *graph)
 * Check if a shell is incorrectly nested within a polygon.  This is the case
 * if the shell is inside the polygon shell, but not inside a polygon hole.
 * (If the shell is inside a polygon hole, the nesting is valid.)
-* <p>
+* 
 * The algorithm used relies on the fact that the rings must be properly contained.
 * E.g. they cannot partially overlap (this has been previously checked by
 * <code>checkRelateConsistency</code>
