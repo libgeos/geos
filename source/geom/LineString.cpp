@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.43  2004/09/12 03:51:27  pramsey
+ * Casting changes to allow OS/X compilation.
+ *
  * Revision 1.42  2004/07/22 08:45:50  strk
  * Documentation updates, memory leaks fixed.
  *
@@ -218,7 +221,7 @@ bool LineString::isSimple() const {
 	IsSimpleOp iso;
 	Geometry *in = toInternalGeometry(this);
 	bool issimple = iso.isSimple((LineString *)in);
-	if ( in != this ) delete(in);
+	if ( (LineString *)in != this ) delete(in);
 	return issimple;
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/09/12 03:51:27  pramsey
+ * Casting changes to allow OS/X compilation.
+ *
  * Revision 1.22  2004/07/22 08:45:50  strk
  * Documentation updates, memory leaks fixed.
  *
@@ -129,7 +132,7 @@ bool MultiLineString::isSimple() const {
 	IsSimpleOp iso;
 	Geometry *in = toInternalGeometry(this);
 	bool issimple = iso.isSimple((MultiLineString *)in);
-	if ( in != this ) delete(in);
+	if ( (MultiLineString *)in != this ) delete(in);
 	return issimple;
 }
 
@@ -140,7 +143,7 @@ Geometry* MultiLineString::getBoundary() const {
 	Geometry *in = toInternalGeometry(this);
 	GeometryGraph gg(0, in);
 	CoordinateSequence *pts=gg.getBoundaryPoints();
-	if ( in != this ) delete(in);
+	if ( (MultiLineString *)in != this ) delete(in);
 	Geometry *ret = getFactory()->createMultiPoint(*pts);
 	delete pts;
 	return ret;

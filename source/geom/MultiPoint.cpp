@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.24  2004/09/12 03:51:27  pramsey
+ * Casting changes to allow OS/X compilation.
+ *
  * Revision 1.23  2004/07/22 08:45:50  strk
  * Documentation updates, memory leaks fixed.
  *
@@ -119,7 +122,7 @@ bool MultiPoint::isSimple() const {
 	IsSimpleOp iso;
 	Geometry *in = toInternalGeometry(this);
 	bool issimple = iso.isSimple((MultiPoint *)in);
-	if ( in != this ) delete(in);
+	if ( (MultiPoint *)in != this ) delete(in);
 	return issimple;
 }
 
