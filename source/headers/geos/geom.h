@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2004/09/07 08:29:57  strk
+ * Fixed doxygen malformed comment for Coordinate class
+ *
  * Revision 1.24  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -628,26 +631,30 @@ public:
 	}
 
 	int Coordinate::hashCode() {
-        //Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
-        int result = 17;
-        result = 37 * result + hashCode(x);
-        result = 37 * result + hashCode(y);
-        return result;
-    }
+		//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
+		int result = 17;
+		result = 37 * result + hashCode(x);
+		result = 37 * result + hashCode(y);
+		return result;
+	}
 
-    /**
-     * Returns a hash code for a double value, using the algorithm from
-     * Joshua Bloch's book <i>Effective Java"</i>
-     */
-    static int Coordinate::hashCode(double x) {
-        int64 f = (int64)(x);
-        return (int)(f^(f>>32));
-    }
+	/**
+	* Returns a hash code for a double value, using the algorithm from
+	* Joshua Bloch's book <i>Effective Java</i>
+	*/
+	static int Coordinate::hashCode(double x) {
+		int64 f = (int64)(x);
+		return (int)(f^(f>>32));
+	}
 
 
-	double x;	/// x-coordinate
-	double y;	/// y-coordinate
-	double z;	/// z-coordinate
+	/// x-coordinate
+	double x;
+	/// y-coordinate
+	double y;
+	/// z-coordinate
+	double z;
+
 private:
 	static const int64 serialVersionUID=6683108902428366910LL;
 
