@@ -36,7 +36,7 @@ case $1 in
       echo -L@prefix@/lib -lgeos
       ;;
     --includes)
-      echo @CFLAGS@ -I@prefix@/include
+      echo @prefix@/include
       ;;
     *)
       usage 1 1>&2
