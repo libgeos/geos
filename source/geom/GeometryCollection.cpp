@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.32  2004/05/17 21:14:47  ybychkov
+ * JavaDoc updated
+ *
  * Revision 1.31  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -97,6 +100,16 @@ Geometry* GeometryCollection::clone() const {
 	return new GeometryCollection(*this);
 }
 
+/**
+* Collects all coordinates of all subgeometries into a CoordinateList.
+* 
+* Note that while changes to the coordinate objects themselves
+* may modify the Geometries in place, the returned CoordinateList as such 
+* is only a temporary container which is not synchronized back.
+* 
+* @return the collected coordinates
+*
+*/
 CoordinateList* GeometryCollection::getCoordinates() const {
 	CoordinateList *coordinates=CoordinateListFactory::internalFactory->createCoordinateList(getNumPoints());
 	int k = -1;

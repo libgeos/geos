@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.63  2004/05/17 21:14:47  ybychkov
+ * JavaDoc updated
+ *
  * Revision 1.62  2004/05/17 21:03:56  ybychkov
  * JavaDoc updated
  *
@@ -1198,6 +1201,16 @@ public:
 	GeometryCollection(const vector<Geometry *> *newGeometries, const GeometryFactory *newFactory);
 	virtual Geometry *clone() const;
 	virtual ~GeometryCollection();
+	/**
+	* Collects all coordinates of all subgeometries into a CoordinateList.
+	* 
+	* Note that while changes to the coordinate objects themselves
+	* may modify the Geometries in place, the returned CoordinateList as such 
+	* is only a temporary container which is not synchronized back.
+	* 
+	* @return the collected coordinates
+	*
+	*/
 	virtual CoordinateList* getCoordinates() const;
 	virtual bool isEmpty() const;
 	virtual int getDimension() const;
