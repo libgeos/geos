@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2003/11/12 18:02:56  strk
+ * Added throw specification. Fixed leaks on exceptions.
+ *
  * Revision 1.18  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -35,9 +38,15 @@ LineIntersector* PlanarGraph::li=new RobustLineIntersector();
  * This allows clients to link only a subset of nodes in the graph, for
  * efficiency (because they know that only a subset is of interest).
  */
-void linkResultDirectedEdges(vector<Node*> *allNodes){
-	for(vector<Node*>::iterator nodeit=allNodes->begin();nodeit<allNodes->end();nodeit++) {
+void
+PlanarGraph::linkResultDirectedEdges(vector<Node*> *allNodes)
+	throw(TopologyException *)
+{
+	vector<Node*>::iterator nodeit;
+	for(nodeit=allNodes->begin(); nodeit<allNodes->end(); nodeit++)
+	{
 		Node *node=*nodeit;
+		// this might throw an exception
 		((DirectedEdgeStar*) node->getEdges())->linkResultDirectedEdges();
 	}
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2003/11/12 18:02:56  strk
+ * Added throw specification. Fixed leaks on exceptions.
+ *
  * Revision 1.11  2003/11/12 16:14:56  strk
  * Added some more throw specifications and cleanup on exception (leaks removed).
  *
@@ -326,13 +329,14 @@ public:
 	* The graph is assumed to contain one or more polygons,
 	* possibly with holes.
 	*/
-	void add(PlanarGraph *graph);
+	void add(PlanarGraph *graph) throw(TopologyException *);
 	/**
 	* Add a set of edges and nodes, which form a graph.
 	* The graph is assumed to contain one or more polygons,
 	* possibly with holes.
 	*/
-	void add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes);
+	void add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes)
+		throw(TopologyException *);
   	vector<Polygon*>* getPolygons();
 	bool containsPoint(Coordinate& p);
 private:

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2003/11/12 18:02:56  strk
+ * Added throw specification. Fixed leaks on exceptions.
+ *
  * Revision 1.26  2003/11/12 15:43:38  strk
  * Added some more throw specifications
  *
@@ -516,7 +519,8 @@ class PlanarGraph {
 public:
 	static CGAlgorithms *cga;
 	static LineIntersector *li;
-	static void linkResultDirectedEdges(vector<Node*>* allNodes);
+	static void linkResultDirectedEdges(vector<Node*>* allNodes)
+		throw(TopologyException *);
 	PlanarGraph(NodeFactory *nodeFact);
 	PlanarGraph();
 	virtual ~PlanarGraph();

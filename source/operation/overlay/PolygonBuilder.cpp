@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2003/11/12 18:02:57  strk
+ * Added throw specification. Fixed leaks on exceptions.
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -45,7 +48,10 @@ PolygonBuilder::~PolygonBuilder() {
 	delete shellList;
 }
 
-void PolygonBuilder::add(PlanarGraph *graph) {
+void
+PolygonBuilder::add(PlanarGraph *graph)
+	throw(TopologyException *)
+{
 	vector<DirectedEdge*> *dirEdges=new vector<DirectedEdge*>();
 	vector<Node*> *nodes=new vector<Node*>();
 	vector<EdgeEnd*> *ee=graph->getEdgeEnds();
@@ -58,12 +64,21 @@ void PolygonBuilder::add(PlanarGraph *graph) {
 		Node *node=it->second;
 		nodes->push_back(node);
 	}
-	add(dirEdges,nodes);
+	try {
+		add(dirEdges,nodes); // might throw a TopologyException *
+	} catch (...) {
+		delete dirEdges;
+		delete nodes;
+		throw;
+	}
 	delete dirEdges;
 	delete nodes;
 }
 
-void PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes) {
+void
+PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes)
+	throw(TopologyException *)
+{
 	//	PlanarGraph::linkResultDirectedEdgesS(nodes);
 
 	for(vector<Node*>::iterator nodeit=nodes->begin();nodeit<nodes->end();nodeit++) {
