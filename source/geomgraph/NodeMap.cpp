@@ -83,6 +83,11 @@ NodeMap::addNode(Node *n)
 	else
 	{
 		cerr<<" found already, merging label"<<endl;
+		const vector<double>&zvals = n->getZ();
+		for (unsigned int i=0; i<zvals.size(); i++)
+		{
+			node->addZ(zvals[i]);
+		}
 	}
 #endif // DEBUG
 	node->mergeLabel(n);
@@ -150,6 +155,9 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2004/11/20 15:45:47  strk
+ * Fixed Z merging in addNode(Node *)
+ *
  * Revision 1.4  2004/11/20 15:41:41  strk
  * Added Z merging in ::addNode
  *
