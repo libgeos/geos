@@ -103,24 +103,24 @@ bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* 
 }
 
 /**
-* Test whether a point lies on a linestring.
-*
-* @return true true if
-* the point is a vertex of the line or lies in the interior of a line
-* segment in the linestring
-*/
-bool CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt) {
-	LineIntersector *lineIntersector=new RobustLineIntersector();
+ * Test whether a point lies on a linestring.
+ *
+ * @return true true if
+ * the point is a vertex of the line or lies in the interior of a line
+ * segment in the linestring
+ */
+bool
+CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
+{
+	RobustLineIntersector lineIntersector;
 	for(int i=1;i<pt->getSize();i++) {
 		Coordinate p0=pt->getAt(i-1);
 		Coordinate p1=pt->getAt(i);	
-		lineIntersector->computeIntersection(p, p0, p1);
-		if (lineIntersector->hasIntersection()) {
-			delete lineIntersector;
+		lineIntersector.computeIntersection(p, p0, p1);
+		if (lineIntersector.hasIntersection()) {
 			return true;
 		}
 	}
-	delete lineIntersector;
 	return false;
 }
 
@@ -370,6 +370,9 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2004/11/20 15:39:57  strk
+ * Reduced HEAP allocations.
+ *
  * Revision 1.18  2004/11/06 08:16:46  strk
  * Fixed CGAlgorithms::isCCW from JTS port.
  * Code cleanup in IsValidOp.
