@@ -5,4 +5,4 @@ example
 Makefile
 Makefile.in
 doxygen_docs
-Doxygen
+Doxyfile
