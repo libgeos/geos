@@ -1,6 +1,6 @@
 noinst_PROGRAMS = CTS SimpleWKTTester XMLTester
 
-LIBS += ../geom/libgeom.la
+LIBS += ../geom/libgeos.la
 #LIBS += ../graph/libgraph.a
 #LIBS += ../graph/index/libindex.a
 #LIBS += ../io/libio.a
