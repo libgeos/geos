@@ -20,6 +20,7 @@
 #define DEBUG 0
 #define COMPUTE_Z 1
 #define USE_ELEVATION_MATRIX 1
+#define USE_INPUT_AVGZ 0
 
 namespace geos {
 
@@ -81,10 +82,12 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOpera
 	resultPointList=NULL;
 	ptLocator=new PointLocator();
 #if COMPUTE_Z
+#if USE_INPUT_AVGZ
 	avgz[0] = DoubleNotANumber;
 	avgz[1] = DoubleNotANumber;
 	avgzcomputed[0] = false;
 	avgzcomputed[1] = false;
+#endif // USE_INPUT_AVGZ
 
 	Envelope env(*(g0->getEnvelopeInternal()));
 	env.expandToInclude(g1->getEnvelopeInternal());
@@ -92,6 +95,9 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOpera
 	elevationMatrix = new ElevationMatrix(env, 3, 3);
 	elevationMatrix->add(g0);
 	elevationMatrix->add(g1);
+#if DEBUG
+	cerr<<elevationMatrix->print()<<endl;
+#endif
 #endif // USE_ELEVATION_MATRIX
 #endif // COMPUTE_Z
 }
@@ -353,10 +359,12 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	{
 		mergeZ(n, poly);
 	}
+#if USE_INPUT_AVGZ
 	if ( loc == Location::INTERIOR && poly )
 	{
 		n->addZ(getAverageZ(targetIndex));
 	}
+#endif // USE_INPUT_AVGZ
 #endif // COMPUTE_Z
 }
 
@@ -371,7 +379,7 @@ OverlayOp::getAverageZ(const Polygon *poly)
 	for (unsigned int i=0; i<pts->getSize(); i++)
 	{
 		const Coordinate &c = pts->getAt(i);
-		if ( c.z != DoubleNotANumber )
+		if ( FINITE(c.z) )
 		{
 			totz += c.z;
 			zcount++;
@@ -824,6 +832,10 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2004/11/26 09:22:50  strk
+ * Added FINITE(x) macro and its use.
+ * Made input geoms average Z computation optional in OverlayOp.
+ *
  * Revision 1.33  2004/11/24 18:10:42  strk
  * Stricter handling of USE_ELEVATION_MATRIX define
  *

@@ -66,7 +66,7 @@ ElevationMatrix::add(const CoordinateSequence *cs)
 void
 ElevationMatrix::add(const Coordinate &c)
 {
-	if ( c.z == DoubleNotANumber ) return;
+	if ( !FINITE(c.z) ) return;
 	try {
 		ElevationMatrixCell &emc = getCell(c);
 		emc.add(c);
@@ -118,7 +118,7 @@ ElevationMatrix::getAvgElevation() const
 		{
 			const ElevationMatrixCell &cell = cells[(r*cols)+c];
 			double e = cell.getAvg();
-			if ( e != DoubleNotANumber )
+			if ( FINITE(e) )
 			{
 				zvals++;
 				ztot+=e;
@@ -156,6 +156,10 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2004/11/26 09:22:50  strk
+ * Added FINITE(x) macro and its use.
+ * Made input geoms average Z computation optional in OverlayOp.
+ *
  * Revision 1.2  2004/11/24 12:29:36  strk
  * Handled boundary cases in ::getCell
  *

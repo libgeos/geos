@@ -37,12 +37,12 @@ ElevationMatrixFilter::filter_rw(Coordinate *c)
 	cerr<<"ElevationMatrixFilter::filter_rw("<<c->toString()<<") called"
 		<<endl;
 #endif
-	if ( c->z == DoubleNotANumber && avgElevation != DoubleNotANumber )
+	if ( !FINITE(c->z) && FINITE(avgElevation) )
 	{
 		try {
 			const ElevationMatrixCell &emc = em->getCell(*c);
 			c->z = emc.getAvg();
-			if ( c->z == DoubleNotANumber ) c->z = avgElevation;
+			if ( !FINITE(c->z) ) c->z = avgElevation;
 #if DEBUG
 			cerr<<"  z set to "<<c->z<<endl;
 #endif
@@ -63,6 +63,10 @@ ElevationMatrixFilter::filter_rw(Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2004/11/26 09:22:50  strk
+ * Added FINITE(x) macro and its use.
+ * Made input geoms average Z computation optional in OverlayOp.
+ *
  * Revision 1.1  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *

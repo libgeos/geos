@@ -31,7 +31,7 @@ ElevationMatrixCell::~ElevationMatrixCell()
 void
 ElevationMatrixCell::add(const Coordinate &c)
 {
-	if ( c.z != DoubleNotANumber )
+	if ( FINITE(c.z) )
 	{
 		if ( zvals.insert(c.z).second )
 		{
@@ -43,7 +43,7 @@ ElevationMatrixCell::add(const Coordinate &c)
 void
 ElevationMatrixCell::add(double z)
 {
-	if ( z != DoubleNotANumber )
+	if ( FINITE(z) )
 	{
 		if ( zvals.insert(z).second )
 		{
@@ -69,7 +69,8 @@ string
 ElevationMatrixCell::print() const
 {
 	ostringstream ret;
-	ret<<"["<<ztot<<"/"<<zvals.size()<<"]";
+	//ret<<"["<<ztot<<"/"<<zvals.size()<<"]";
+	ret<<"["<<ztot/zvals.size()<<"]";
 	return ret.str();
 }
 
@@ -77,6 +78,10 @@ ElevationMatrixCell::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2004/11/26 09:22:50  strk
+ * Added FINITE(x) macro and its use.
+ * Made input geoms average Z computation optional in OverlayOp.
+ *
  * Revision 1.1  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *
