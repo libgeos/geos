@@ -14,18 +14,30 @@
  **********************************************************************/
 
 #include <geos/noding.h>
+#include <geos/profiler.h>
 
 namespace geos {
+
+#if PROFILE
+static Profiler *profiler=Profiler::instance();
+#endif
 
 /**
  * This function copies given CoordinateSequence
  */
 SegmentString::SegmentString(const CoordinateSequence *newPts, const void* newContext)
 {
+#if PROFILE
+	static Profile *prof = profiler->get("SegmentString::SegmentString(const CoordinateSequence *, const void *)");
+	prof->start();
+#endif
 	eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
 	pts=newPts;
 	context=newContext;
+#if PROFILE
+	prof->stop();
+#endif
 }
 
 SegmentString::~SegmentString() {
@@ -159,6 +171,9 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/02/01 14:18:36  strk
+ * More profiler labels
+ *
  * Revision 1.11  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

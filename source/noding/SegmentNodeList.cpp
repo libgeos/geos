@@ -24,8 +24,15 @@ static Profiler *profiler = Profiler::instance();
 
 SegmentNodeList::SegmentNodeList(const SegmentString *newEdge)
 {
+#if PROFILE
+	static Profile *prof = profiler->get("SegmentNodeList::SegmentNodeList");
+	prof->start();
+#endif
 	nodes=new set<SegmentNode*,SegmentNodeLT>();
 	edge=newEdge;
+#if PROFILE
+	prof->stop();
+#endif
 }
 
 SegmentNodeList::~SegmentNodeList()
@@ -177,6 +184,9 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/02/01 14:18:36  strk
+ * More profiler labels
+ *
  * Revision 1.12  2005/02/01 13:44:59  strk
  * More profiling labels.
  *
