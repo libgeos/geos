@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.10  2003/11/06 18:48:30  strk
+* added throw information comment in PolygonBuilder
+*
 * Revision 1.9  2003/10/13 17:47:49  strk
 * delete statement removed
 *
@@ -46,6 +49,7 @@ void PolygonBuilder::add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes) {
 
 	for(vector<Node*>::iterator nodeit=nodes->begin();nodeit<nodes->end();nodeit++) {
 		Node *node=*nodeit;
+		// This might throw a TopologyException
 		((DirectedEdgeStar*) node->getEdges())->linkResultDirectedEdges();
 	}
 
