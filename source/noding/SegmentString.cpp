@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/05/27 10:27:03  strk
+ * Memory leaks fixed.
+ *
  * Revision 1.4  2004/05/07 07:57:27  strk
  * Added missing EdgeNodingValidator to build scripts.
  * Changed SegmentString constructor back to its original form
@@ -121,6 +124,7 @@ SegmentString::addIntersection(LineIntersector *li, int segmentIndex, int geomIn
 	Coordinate* intPt=new Coordinate(li->getIntersection(intIndex));
 	double dist=li->getEdgeDistance(geomIndex, intIndex);
 	addIntersection(*intPt, segmentIndex, dist);
+	delete intPt;
 }
 
 void SegmentString::OLDaddIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex){

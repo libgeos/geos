@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2004/05/27 10:27:03  strk
+ * Memory leaks fixed.
+ *
  * Revision 1.4  2004/05/06 15:54:15  strk
  * SegmentNodeList keeps track of created splitEdges for later destruction.
  * SegmentString constructor copies given Label.
@@ -57,7 +60,9 @@ SegmentNodeList::~SegmentNodeList() {
 SegmentNode* SegmentNodeList::add(Coordinate *intPt, int segmentIndex, double dist){
 	SegmentNode *eiNew=new SegmentNode(intPt, segmentIndex, dist);
 	if (nodes->find(eiNew)!=nodes->end()) {
-		return *nodes->find(eiNew);
+		SegmentNode *found = *nodes->find(eiNew);
+		delete eiNew;
+		return found;
 	}
 	nodes->insert(eiNew);
 	return eiNew;
