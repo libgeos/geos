@@ -35,7 +35,7 @@ Envelope::Envelope(double x1, double x2, double y1, double y2){
  *@param  p1  the first Coordinate
  *@param  p2  the second Coordinate
  */
-Envelope::Envelope(Coordinate p1, Coordinate p2){
+Envelope::Envelope(Coordinate& p1, Coordinate& p2){
 	init(p1, p2);
 }
 
@@ -44,7 +44,7 @@ Envelope::Envelope(Coordinate p1, Coordinate p2){
  *
  *@param  p1  the Coordinate
  */
-Envelope::Envelope(Coordinate p){
+Envelope::Envelope(Coordinate& p){
 	init(p);
 }
 
@@ -98,7 +98,7 @@ void Envelope::init(double x1, double x2, double y1, double y2){
  *@param  p1  the first Coordinate
  *@param  p2  the second Coordinate
  */
-void Envelope::init(Coordinate p1, Coordinate p2){
+void Envelope::init(Coordinate& p1, Coordinate& p2){
 	init(p1.x, p2.x, p1.y, p2.y);
 }
 
@@ -107,7 +107,7 @@ void Envelope::init(Coordinate p1, Coordinate p2){
  *
  *@param  p  the Coordinate
  */
-void Envelope::init(Coordinate p){
+void Envelope::init(Coordinate& p){
 	init(p.x, p.x, p.y, p.y);
 }
 
@@ -212,7 +212,7 @@ double Envelope::getMinX() {
  *
  *@param  p  the Coordinate to include
  */
-void Envelope::expandToInclude(Coordinate p) {
+void Envelope::expandToInclude(Coordinate& p) {
 	expandToInclude(p.x, p.y);
 }
 
@@ -285,7 +285,7 @@ void Envelope::expandToInclude(Envelope other) {
  *@return    <code>true</code> if the point lies in the interior or
  *      on the boundary of this <code>Envelope</code>.
  */
-bool Envelope::contains(Coordinate p) {
+bool Envelope::contains(Coordinate& p) {
 	return contains(p.x, p.y);
 }
 
@@ -329,7 +329,7 @@ bool Envelope::contains(Envelope other) {
  *@param  other  the <code>Coordinate</code> to be tested
  *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
  */
-bool Envelope::overlaps(Coordinate p) {
+bool Envelope::overlaps(Coordinate& p) {
 	return overlaps(p.x, p.y);
 }
 

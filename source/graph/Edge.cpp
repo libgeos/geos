@@ -26,26 +26,28 @@ Edge::~Edge(){
 	delete mce;
 }
 
-Edge::Edge(CoordinateList& newPts, Label *newLabel):pts(newPts){
+Edge::Edge(CoordinateList* newPts, Label *newLabel){
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
 	depthDelta=0;
 	label=newLabel;
 	mce=NULL;
+	pts=newPts;
 }
 
-Edge::Edge(CoordinateList& newPts): pts(newPts){
+Edge::Edge(CoordinateList* newPts){
 	eiList=new EdgeIntersectionList(this);
 	isIsolatedVar=true;
 	depth=new Depth();
 	depthDelta=0;
 	label=NULL;
 	mce=NULL;
+	pts=newPts;
 }
 
 int Edge::getNumPoints() {
-	return pts.getSize();
+	return pts->getSize();
 }
 
 void Edge::setName(string newName) {
@@ -56,16 +58,16 @@ void Edge::setName(string newName) {
 //	return pts;
 //}
 
-CoordinateList& Edge::getCoordinates(){
+CoordinateList* Edge::getCoordinates(){
 	return pts;
 }
 
 Coordinate Edge::getCoordinate(int i){
-	return pts.getAt(i);
+	return pts->getAt(i);
 }
 
 Coordinate Edge::getCoordinate(){
-	if (pts.getSize()>0) return pts.getAt(0);
+	if (pts->getSize()>0) return pts->getAt(0);
 	return Coordinate::getNull();
 }
 
@@ -82,7 +84,7 @@ void Edge::setDepthDelta(int newDepthDelta){
 }
 
 int Edge::getMaximumSegmentIndex(){
-	return pts.getSize()-1;
+	return pts->getSize()-1;
 }
 
 EdgeIntersectionList* Edge::getEdgeIntersectionList() {
@@ -95,7 +97,7 @@ MonotoneChainEdge* Edge::getMonotoneChainEdge(){
 }
 
 bool Edge::isClosed(){
-	return pts.getAt(0)==pts.getAt(pts.getSize()-1);
+	return pts->getAt(0)==pts->getAt(pts->getSize()-1);
 }
 
 /**
@@ -104,15 +106,15 @@ bool Edge::isClosed(){
  */
 bool Edge::isCollapsed(){
 	if (!label->isArea()) return false;
-	if (pts.getSize()!= 3) return false;
-	if (pts.getAt(0)==pts.getAt(2) ) return true;
+	if (pts->getSize()!= 3) return false;
+	if (pts->getAt(0)==pts->getAt(2) ) return true;
 	return false;
 }
 
 Edge Edge::getCollapsedEdge() {
-	CoordinateList newPts(2);
-	newPts.setAt(pts.getAt(0),0);
-	newPts.setAt(pts.getAt(1),1);
+	CoordinateList *newPts=new BasicCoordinateList(2);
+	newPts->setAt(pts->getAt(0),0);
+	newPts->setAt(pts->getAt(1),1);
 	return Edge(newPts,&(Label::toLineLabel(*label)));
 }
 
@@ -145,8 +147,8 @@ void Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,in
 	double dist=li->getEdgeDistance(geomIndex,intIndex);
 	// normalize the intersection point location
 	int nextSegIndex=normalizedSegmentIndex+1;
-	if (nextSegIndex<pts.getSize()) {
-		Coordinate nextPt(pts.getAt(nextSegIndex));
+	if (nextSegIndex<pts->getSize()) {
+		Coordinate nextPt(pts->getAt(nextSegIndex));
 		if (intPt==nextPt) {
 			normalizedSegmentIndex=nextSegIndex;
 			dist=0.0;
@@ -174,15 +176,15 @@ void Edge::computeIM(IntersectionMatrix *im){
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
 bool operator==(Edge e1, Edge e2){
-	if (e1.pts.getSize()!=e2.pts.getSize()) return false;
+	if (e1.pts->getSize()!=e2.pts->getSize()) return false;
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
-	int iRev=e1.pts.getSize();
-	for (int i=0; i<e1.pts.getSize();i++) {
-		if (!e1.pts.getAt(i).equals2D(e2.pts.getAt(i))) {
+	int iRev=e1.pts->getSize();
+	for (int i=0; i<e1.pts->getSize();i++) {
+		if (!e1.pts->getAt(i).equals2D(e2.pts->getAt(i))) {
 			isEqualForward=false;
 		}
-		if (!e1.pts.getAt(i).equals2D(e2.pts.getAt(--iRev))) {
+		if (!e1.pts->getAt(i).equals2D(e2.pts->getAt(--iRev))) {
 			isEqualReverse=false;
 		}
 		if (!isEqualForward && !isEqualReverse) return false;
@@ -198,15 +200,15 @@ bool operator==(Edge e1, Edge e2){
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
 bool Edge::equals(Edge *e){
-	if (pts.getSize()!=e->pts.getSize()) return false;
+	if (pts->getSize()!=e->pts->getSize()) return false;
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
-	int iRev=pts.getSize();
-	for (int i=0; i<pts.getSize();i++) {
-		if (!pts.getAt(i).equals2D(e->pts.getAt(i))) {
+	int iRev=pts->getSize();
+	for (int i=0; i<pts->getSize();i++) {
+		if (!pts->getAt(i).equals2D(e->pts->getAt(i))) {
 			isEqualForward=false;
 		}
-		if (!pts.getAt(i).equals2D(e->pts.getAt(--iRev))) {
+		if (!pts->getAt(i).equals2D(e->pts->getAt(--iRev))) {
 			isEqualReverse=false;
 		}
 		if (!isEqualForward && !isEqualReverse) return false;
@@ -218,9 +220,9 @@ bool Edge::equals(Edge *e){
  * @return true if the coordinate sequences of the Edges are identical
  */
 bool Edge::isPointwiseEqual(Edge *e){
-	if (pts.getSize()!=e->pts.getSize()) return false;
-	for (int i=0;i<pts.getSize();i++) {
-		if (!pts.getAt(i).equals2D(e->pts.getAt(i))) {
+	if (pts->getSize()!=e->pts->getSize()) return false;
+	for (int i=0;i<pts->getSize();i++) {
+		if (!pts->getAt(i).equals2D(e->pts->getAt(i))) {
 			return false;
 		}
 	}
@@ -230,9 +232,9 @@ bool Edge::isPointwiseEqual(Edge *e){
 string Edge::print(){
 	string out="edge " + name + ": ";
 	out+="LINESTRING (";
-	for(int i=0; i<pts.getSize();i++) {
+	for(int i=0; i<pts->getSize();i++) {
 		if (i>0) out+=",";
-		out+=pts.getAt(i).toString();
+		out+=pts->getAt(i).toString();
 	}
 	out+=")  ";
 	out+=label->toString();
@@ -243,8 +245,8 @@ string Edge::print(){
   
 string Edge::printReverse(){
 	string out="edge " + name + ": ";
-	for(int i=pts.getSize()-1;i>=0;i--) {
-		out+=pts.getAt(i).toString() + " ";
+	for(int i=pts->getSize()-1;i>=0;i--) {
+		out+=pts->getAt(i).toString() + " ";
 	}
 	out+="\n";
 	return out;

@@ -71,9 +71,9 @@ void PointLocator::updateLocationInfo(int loc) {
 }
 
 int PointLocator::locate(Coordinate p,LineString *l) {
-	CoordinateList& pt=l->getCoordinates();
+	CoordinateList* pt=l->getCoordinates();
 	if (! l->isClosed()) {
-		if ((p==pt.getAt(0)) || (p==pt.getAt(pt.getSize()-1))) {
+		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
 			return Location::BOUNDARY;
 		}
 	}

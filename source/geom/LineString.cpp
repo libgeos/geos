@@ -5,43 +5,40 @@
 #include "operation.h"
 
 
-LineString::LineString(){
-	CoordinateList points;
-}
+LineString::LineString(){}
 
 //Replaces clone()
-LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRID), points(ls.points) {
+LineString::LineString(const LineString &ls): Geometry(ls.precisionModel, ls.SRID) {
 //	CoordinateList pts(ls.points);
 //	points=pts;
-//	points=ls.points;
+	points=ls.points;
 }
 
-LineString::LineString(CoordinateList& newPoints, PrecisionModel precisionModel, int SRID):
-						Geometry(precisionModel, SRID), points(newPoints) {
-	// Can't be null
-	//if (points == null) {
-	//	points = new Coordinate[]{};
-	//}
+LineString::LineString(CoordinateList *newPoints, PrecisionModel precisionModel, int SRID):
+						Geometry(precisionModel, SRID){
+	if (newPoints==NULL) {
+		newPoints=new BasicCoordinateList();
+	}
 	if (hasNullElements(newPoints)) {
 		throw "IllegalArgumentException: point array must not contain null elements\n";
 	}
-	if (newPoints.getSize()==1) {
+	if (newPoints->getSize()==1) {
 		throw "IllegalArgumentException: point array must contain 0 or >1 elements\n";
 	}
 //	CoordinateList pts(newPoints);
 //	points=pts;
 //	points=CoordinateList(newPoints);
-//?	points=newPoints;
+	points=newPoints;
 }
 
 LineString::~LineString(){}
 
-CoordinateList& LineString::getCoordinates() {
+CoordinateList* LineString::getCoordinates() {
 	return points;
 }
 
 Coordinate LineString::getCoordinateN(int n) {
-	return points.getAt(n);
+	return points->getAt(n);
 }
 
 int LineString::getDimension() {
@@ -56,15 +53,15 @@ int LineString::getBoundaryDimension() {
 }
 
 bool LineString::isEmpty() {
-	return points.getSize()==0;
+	return points->getSize()==0;
 }
 
 int LineString::getNumPoints() {
-	return points.getSize();
+	return points->getSize();
 }
 
 Point LineString::getPointN(int n) {
-	return Point(points.getAt(n), getPrecisionModel(), SRID);
+	return Point(points->getAt(n), getPrecisionModel(), SRID);
 }
 
 Point LineString::getStartPoint() {
@@ -113,9 +110,9 @@ Geometry LineString::getBoundary() {
 	return MultiPoint(pts,precisionModel, SRID);
 }
 
-bool LineString::isCoordinate(Coordinate pt) {
-	for (int i = 1; i < points.getSize(); i++) {
-		if (points.getAt(i)==pt) {
+bool LineString::isCoordinate(Coordinate& pt) {
+	for (int i = 1; i < points->getSize(); i++) {
+		if (points->getAt(i)==pt) {
 			return true;
 		}
 	}
@@ -126,15 +123,15 @@ Envelope LineString::computeEnvelopeInternal() {
 	if (isEmpty()) {
 		return Envelope();
 	}
-	double minx = points.getAt(0).x;
-	double miny = points.getAt(0).y;
-	double maxx = points.getAt(0).x;
-	double maxy = points.getAt(0).y;
-	for (int i = 1; i < points.getSize(); i++) {
-		minx = min(minx, points.getAt(i).x); //min
-		maxx = max(maxx, points.getAt(i).x);
-		miny = min(miny, points.getAt(i).y);
-		maxy = max(maxy, points.getAt(i).y);
+	double minx = points->getAt(0).x;
+	double miny = points->getAt(0).y;
+	double maxx = points->getAt(0).x;
+	double maxy = points->getAt(0).y;
+	for (int i = 1; i < points->getSize(); i++) {
+		minx = min(minx, points->getAt(i).x); //min
+		maxx = max(maxx, points->getAt(i).x);
+		miny = min(miny, points->getAt(i).y);
+		maxy = max(maxy, points->getAt(i).y);
 	}
 	return Envelope(minx, maxx, miny, maxy);
 }
@@ -144,11 +141,11 @@ bool LineString::equalsExact(Geometry *other) {
 		return false;
 	}
 	LineString *otherLineString=dynamic_cast<LineString*>(other);
-	if (points.getSize()!=otherLineString->points.getSize()) {
+	if (points->getSize()!=otherLineString->points->getSize()) {
 		return false;
 	}
-	for (int i = 0; i < points.getSize(); i++) {
-		if (!(points.getAt(i)==otherLineString->points.getAt(i))) {
+	for (int i = 0; i < points->getSize(); i++) {
+		if (!(points->getAt(i)==otherLineString->points->getAt(i))) {
 			return false;
 		}
 	}
@@ -156,8 +153,8 @@ bool LineString::equalsExact(Geometry *other) {
 }
 
 void LineString::apply(CoordinateFilter *filter) {
-	for (int i = 0; i < points.getSize(); i++) {
-		filter->filter(points.getAt(i));
+	for (int i = 0; i < points->getSize(); i++) {
+		filter->filter(points->getAt(i));
 	}
 	}
 
@@ -166,10 +163,10 @@ void LineString::apply(GeometryFilter *filter) {
 }
 
 void LineString::normalize() {
-	for (int i = 0; i < points.getSize(); i++) {
-		int j = points.getSize() - 1 - i;
-		if (!(points.getAt(i)==points.getAt(j))) {
-			if (points.getAt(i).compareTo(points.getAt(j)) > 0) {
+	for (int i = 0; i < points->getSize(); i++) {
+		int j = points->getSize() - 1 - i;
+		if (!(points->getAt(i)==points->getAt(j))) {
+			if (points->getAt(i).compareTo(points->getAt(j)) > 0) {
 				reversePointOrder(points);
 			}
 			return;
@@ -185,12 +182,12 @@ bool LineString::isEquivalentClass(Geometry *other) {
 }
 
 int LineString::compareToSameClass(LineString *ls) {
-	return compare(points.toVector(),ls->points.toVector());
+	return compare(points->toVector(),ls->points->toVector());
 }
 
-Coordinate LineString::getCoordinate() {
+Coordinate& LineString::getCoordinate() {
 	if (isEmpty()) return Coordinate();
-	return points.getAt(0);
+	return points->getAt(0);
 }
 
 /**

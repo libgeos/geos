@@ -165,16 +165,16 @@ class EdgeIntersectionList;
 class Edge: public GraphComponent{
 public:
 	static void updateIM(Label *lbl,IntersectionMatrix *im);
-	CoordinateList pts;
+	CoordinateList* pts;
 	EdgeIntersectionList *eiList;
 	Edge();
-	Edge(CoordinateList& newPts, Label *newLabel);
-	Edge(CoordinateList& newPts);
+	Edge(CoordinateList* newPts, Label *newLabel);
+	Edge(CoordinateList* newPts);
 	~Edge();
 	virtual int getNumPoints();
 	virtual void setName(string newName);
 //	virtual CoordinateList getCoordinates();
-	virtual CoordinateList& getCoordinates();
+	virtual CoordinateList* getCoordinates();
 	virtual Coordinate getCoordinate(int i);
 	virtual Coordinate getCoordinate();
 	virtual Depth *getDepth();
@@ -467,7 +467,7 @@ protected:
 private:
 	int maxNodeDegree;
 	vector<DirectedEdge*> edges; // the DirectedEdges making up this EdgeRing
-	CoordinateList pts;
+	CoordinateList* pts;
 	Label label; // label stores the locations of each geometry on the face surrounded by this ring
 	LinearRing *ring;  // the ring created for this EdgeRing
 	bool isHoleVar;
@@ -530,7 +530,7 @@ public:
 	int getSRID();
 	Geometry* getGeometry();
 	vector<Node*>* getBoundaryNodes();
-	CoordinateList& getBoundaryPoints();
+	CoordinateList* getBoundaryPoints();
 	Edge* findEdge(LineString *line);
 	void computeSplitEdges(vector<Edge*> *edgelist);
 	void addEdge(Edge *e);

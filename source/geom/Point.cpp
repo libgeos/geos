@@ -11,11 +11,11 @@ Point::Point(const Point &p): Geometry(p.precisionModel,p.SRID) {
 	coordinate=p.coordinate;
 }
 
-CoordinateList& Point::getCoordinates() {
+CoordinateList* Point::getCoordinates() {
 	if (isEmpty()) {
-		return CoordinateList();
+		return new BasicCoordinateList();
 	} else {
-		return CoordinateList(coordinate);
+		return new BasicCoordinateList(coordinate);
 	}
 }
 int Point::getNumPoints() {
@@ -45,7 +45,7 @@ double Point::getY() {
 	return coordinate.y;
 }
 
-Coordinate Point::getCoordinate() {return coordinate;}
+Coordinate& Point::getCoordinate() {return coordinate;}
 
 string Point::getGeometryType() {
 	return "Point";

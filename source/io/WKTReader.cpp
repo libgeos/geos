@@ -15,24 +15,24 @@ Geometry* WKTReader::read(string wellKnownText){
 //	}
 }
 
-CoordinateList WKTReader::getCoordinates(StringTokenizer *tokenizer) {
+CoordinateList* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return CoordinateList();
+		return new BasicCoordinateList();
 	}
-	CoordinateList coordinates;
+	BasicCoordinateList *coordinates=new BasicCoordinateList();
 	Coordinate externalCoordinate;
 	Coordinate internalCoordinate;
 	externalCoordinate.x=getNextNumber(tokenizer);
 	externalCoordinate.y=getNextNumber(tokenizer);
 	precisionModel.toInternal(externalCoordinate,&internalCoordinate);
-	coordinates.add(internalCoordinate);
+	coordinates->add(internalCoordinate);
 	nextToken=getNextCloserOrComma(tokenizer);
 	while (nextToken==",") {
 		externalCoordinate.x=getNextNumber(tokenizer);
 		externalCoordinate.y=getNextNumber(tokenizer);
 		precisionModel.toInternal(externalCoordinate,&internalCoordinate);
-		coordinates.add(internalCoordinate);
+		coordinates->add(internalCoordinate);
 		nextToken=getNextCloserOrComma(tokenizer);
 	}
 	return coordinates;

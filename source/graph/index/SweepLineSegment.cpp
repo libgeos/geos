@@ -1,7 +1,7 @@
 #include "graphindex.h"
 
 SweepLineSegment::SweepLineSegment(Edge *newEdge,int newPtIndex,int newGeomIndex){
-	pts=&(newEdge->getCoordinates());
+	pts=newEdge->getCoordinates();
 	edge=newEdge;
 	ptIndex=newPtIndex;
 	geomIndex=newGeomIndex;

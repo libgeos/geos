@@ -21,16 +21,16 @@
 MonotoneChainEdge::MonotoneChainEdge() {
 	env1=new Envelope();
 	env2=new Envelope();
-	pts=new CoordinateList();
+	pts=new BasicCoordinateList();
 }
 
 MonotoneChainEdge::MonotoneChainEdge(Edge *newE) {
-	pts=&(newE->getCoordinates());
+	pts=newE->getCoordinates();
 	env1=new Envelope();
 	env2=new Envelope();
 	e=newE;
 	MonotoneChainIndexer *mcb=new MonotoneChainIndexer();
-	startIndex=mcb->getChainStartIndices(*pts);
+	startIndex=mcb->getChainStartIndices(pts);
 }
 
 CoordinateList* MonotoneChainEdge::getCoordinates() {

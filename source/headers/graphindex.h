@@ -106,9 +106,9 @@ class MonotoneChainIndexer{
 public:
 //	public static int[] toIntArray(List list); //Not needed
 	MonotoneChainIndexer(){};
-	vector<int> getChainStartIndices(CoordinateList& pts);
+	vector<int> getChainStartIndices(CoordinateList* pts);
 private:
-	int findChainEnd(CoordinateList& pts,int start);
+	int findChainEnd(CoordinateList* pts,int start);
 };
 
 class MonotoneChainEdge{

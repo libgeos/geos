@@ -56,7 +56,7 @@ public:
 	Geometry* read(string wellKnownText);
 //	Geometry* read(Reader reader);	//Not implemented yet
 protected:
-	CoordinateList getCoordinates(StringTokenizer *tokenizer);
+	CoordinateList* getCoordinates(StringTokenizer *tokenizer);
 	double getNextNumber(StringTokenizer *tokenizer);
 	string getNextEmptyOrOpener(StringTokenizer *tokenizer);
 	string getNextCloserOrComma(StringTokenizer *tokenizer);

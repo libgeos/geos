@@ -32,7 +32,7 @@ void LineSegment::setCoordinates(Coordinate c0, Coordinate c1) {
 	p1.y = c1.y;
 }
 
-Coordinate LineSegment::getCoordinate(int i) {
+Coordinate& LineSegment::getCoordinate(int i) {
 	if (i==0) return p0;
 	return p1;
 }
@@ -68,7 +68,7 @@ double LineSegment::distance(LineSegment ls) {
 /**
 * Computes the distance between this line segment and another one.
 */
-double LineSegment::distance(Coordinate p) {
+double LineSegment::distance(Coordinate& p) {
 	return CGAlgorithms::distancePointLine(p,p0,p1);
 }
 
@@ -78,7 +78,7 @@ double LineSegment::distance(Coordinate p) {
 * by which the vector for this segment must be multiplied to
 * equal the vector for the projection of p.
 */
-double LineSegment::projectionFactor(Coordinate p) {
+double LineSegment::projectionFactor(Coordinate& p) {
 	if (p==p0) return 0.0;
 	if (p==p1) return 1.0;
     // Otherwise, use comp.graphics.algorithms Frequently Asked Questions method
@@ -99,7 +99,7 @@ double LineSegment::projectionFactor(Coordinate p) {
 	return r;
 }
 
-Coordinate LineSegment::project(Coordinate p) {
+Coordinate LineSegment::project(Coordinate& p) {
 	if (p==p0 || p==p1) return Coordinate(p);
 	double r=projectionFactor(p);
 	return Coordinate(p0.x+r*(p1.x-p0.x),p0.y+r*(p1.y-p0.y));

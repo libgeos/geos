@@ -10,18 +10,18 @@ NonRobustCGAlgorithms::NonRobustCGAlgorithms(){
 * ring is expected to contain a closing point;
 * i.e. ring[0]=ring[length-1]
 */
-bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList& ring){
+bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring){
 	int i,i1;		// point index;i1=i-1 mod n
 	double xInt;		// x intersection of e with ray
 	int	crossings=0;	// number of edge/ray crossings
 	double x1,y1,x2,y2;
-	int nPts=ring.getSize();
+	int nPts=ring->getSize();
 
 	/* For each line edge l=(i-1,i),see if it crosses ray from test point in positive x direction. */
 	for(i=1;i<nPts;i++){
 		i1=i-1;
-		Coordinate p1(ring.getAt(i));
-		Coordinate p2(ring.getAt(i1));
+		Coordinate p1(ring->getAt(i));
+		Coordinate p2(ring->getAt(i1));
 		x1=p1.x-p.x;
 		y1=p1.y-p.y;
 		x2=p2.x-p.x;
@@ -44,10 +44,10 @@ bool NonRobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList& ring){
 
 
 
-bool NonRobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList& pt) {
-	for(int i=1;i<pt.getSize();i++){
-		Coordinate p0(pt.getAt(i-1));
-		Coordinate p1(pt.getAt(i));
+bool NonRobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList* pt) {
+	for(int i=1;i<pt->getSize();i++){
+		Coordinate p0(pt->getAt(i-1));
+		Coordinate p1(pt->getAt(i));
 		li->computeIntersection(p,p0,p1);
 		if(li->hasIntersection())
 			return true;
@@ -55,16 +55,16 @@ bool NonRobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList& pt) {
 	return false;
 }
 
-bool NonRobustCGAlgorithms::isCCW(CoordinateList& ring) {
+bool NonRobustCGAlgorithms::isCCW(CoordinateList* ring) {
 	Coordinate hip,p,prev,next;
 	int hii,i;
-	int nPts=ring.getSize();
+	int nPts=ring->getSize();
 	// algorithm to check if a Ring is stored in CCW order
 	// find highest point
-	hip.setCoordinate(ring.getAt(0));
+	hip.setCoordinate(ring->getAt(0));
 	hii=0;
 	for(i=1;i<nPts;i++)	{
-		p.setCoordinate(ring.getAt(i));
+		p.setCoordinate(ring->getAt(i));
 		if(p.y>hip.y){
 			hip.setCoordinate(p);
 			hii=i;
@@ -75,8 +75,8 @@ bool NonRobustCGAlgorithms::isCCW(CoordinateList& ring) {
 	if(iPrev<0) iPrev=nPts-2;
 	int iNext=hii+1;
 	if(iNext>=nPts) iNext=1;
-	prev.setCoordinate(ring.getAt(iPrev));
-	next.setCoordinate(ring.getAt(iNext));
+	prev.setCoordinate(ring->getAt(iPrev));
+	next.setCoordinate(ring->getAt(iNext));
 	// translate so that hip is at the origin.
 	// This will not affect the area calculation,and will avoid
 	// finite-accuracy errors(i.e very small vectors with very large coordinates)

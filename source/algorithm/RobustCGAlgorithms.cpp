@@ -15,20 +15,20 @@ RobustCGAlgorithms::RobustCGAlgorithms() {
 	lineIntersector=new RobustLineIntersector();
 }
 
-bool RobustCGAlgorithms::isCCW(CoordinateList& ring) {
+bool RobustCGAlgorithms::isCCW(CoordinateList* ring) {
 	Coordinate hip;
 	Coordinate p;
 	Coordinate prev;
 	Coordinate next;
 	int hii;
 	int i;
-	int nPts=ring.getSize();
+	int nPts=ring->getSize();
 	// algorithm to check if a Ring is stored in CCW order
 	// find highest point
-	hip=ring.getAt(0);
+	hip=ring->getAt(0);
 	hii=0;
 	for(i=1;i<nPts;i++) {
-		p=ring.getAt(i);
+		p=ring->getAt(i);
 		if (p.y>hip.y) {
 			hip=p;
 			hii=i;
@@ -43,8 +43,8 @@ bool RobustCGAlgorithms::isCCW(CoordinateList& ring) {
 	if (iNext>=nPts) {
 		iNext=1;
 	}
-	prev=ring.getAt(iPrev);
-	next=ring.getAt(iNext);
+	prev=ring->getAt(iPrev);
+	next=ring->getAt(iNext);
 	int disc=computeOrientation(prev,hip,next);
 	/*
 	*  If disc is exactly 0, lines are collinear.  There are two possible cases:
@@ -69,7 +69,7 @@ bool RobustCGAlgorithms::isCCW(CoordinateList& ring) {
 *
 * @param ring assumed to have first point identical to last point
 */
-bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList& ring) {
+bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList* ring) {
 	int i;
 	int i1;       // point index; i1 = i-1
 	double xInt;  // x intersection of segment with ray
@@ -78,15 +78,15 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList& ring) {
 	double y1;
 	double x2;
 	double y2;
-	int nPts=ring.getSize();
+	int nPts=ring->getSize();
 
 	/*
 	*  For each segment l = (i-1, i), see if it crosses ray from test point in positive x direction.
 	*/
 	for (i=1;i<nPts;i++) {
 		i1=i-1;
-		Coordinate p1(ring.getAt(i));
-		Coordinate p2(ring.getAt(i1));
+		Coordinate p1(ring->getAt(i));
+		Coordinate p2(ring->getAt(i1));
 		x1=p1.x-p.x;
 		y1=p1.y-p.y;
 		x2=p2.x-p.x;
@@ -115,10 +115,10 @@ bool RobustCGAlgorithms::isPointInRing(Coordinate p,CoordinateList& ring) {
 	}
 }
 
-bool RobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList& pt) {
-	for(int i=1;i<pt.getSize();i++) {
-		Coordinate p0(pt.getAt(i-1));
-		Coordinate p1(pt.getAt(i));
+bool RobustCGAlgorithms::isOnLine(Coordinate p,CoordinateList* pt) {
+	for(int i=1;i<pt->getSize();i++) {
+		Coordinate p0(pt->getAt(i-1));
+		Coordinate p1(pt->getAt(i));
 		lineIntersector->computeIntersection(p,p0,p1);
 		if (lineIntersector->hasIntersection()) {
 			return true;
@@ -131,10 +131,10 @@ int RobustCGAlgorithms::computeOrientation(Coordinate p1,Coordinate p2,Coordinat
 	return orientationIndex(p1,p2,q);
 }
 
-bool RobustCGAlgorithms::isInEnvelope(Coordinate p,CoordinateList ring) {
+bool RobustCGAlgorithms::isInEnvelope(Coordinate p,CoordinateList* ring) {
 	Envelope envelope;
-	for(int i=0;i<ring.getSize();i++) {
-		envelope.expandToInclude(ring.getAt(i));
+	for(int i=0;i<ring->getSize();i++) {
+		envelope.expandToInclude(ring->getAt(i));
 	}
 	return envelope.contains(p);
 }

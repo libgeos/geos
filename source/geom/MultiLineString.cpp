@@ -42,7 +42,7 @@ Geometry MultiLineString::getBoundary() {
 		return GeometryCollection(NULL, precisionModel, SRID);
 	}
 	GeometryGraph *g=new GeometryGraph(0,this);
-	CoordinateList pts(g->getBoundaryPoints());
+	CoordinateList *pts=g->getBoundaryPoints();
 	GeometryFactory fact(precisionModel, SRID);
 	return fact.createMultiPoint(pts);
 }

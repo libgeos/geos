@@ -48,9 +48,9 @@ bool Geometry::hasNonEmptyElements(vector<Geometry *> geometries) {
 	return false;
 }
 
-bool Geometry::hasNullElements(CoordinateList& list){
-	for (int i = 0; i<list.getSize(); i++) {
-		if (list.getAt(i)==Coordinate::getNull()) {
+bool Geometry::hasNullElements(CoordinateList* list){
+	for (int i = 0; i<list->getSize(); i++) {
+		if (list->getAt(i)==Coordinate::getNull()) {
 			return true;
 		}
 	}
@@ -66,38 +66,38 @@ bool Geometry::hasNullElements(vector<Geometry *> lrs) {
 	return false;
 }
 	
-void Geometry::reversePointOrder(CoordinateList& coordinates) {
-	int length=coordinates.getSize();
+void Geometry::reversePointOrder(CoordinateList* coordinates) {
+	int length=coordinates->getSize();
 	vector<Coordinate> v(length);
 	for (int i=0; i<length; i++) {
-		v[i]=coordinates.getAt(length - 1 - i);
+		v[i]=coordinates->getAt(length - 1 - i);
 	}
-	coordinates.swap(v);
+	coordinates->swap(v);
 }
 	
-Coordinate Geometry::minCoordinate(CoordinateList& coordinates){
-	vector<Coordinate> v(coordinates.toVector());
+Coordinate& Geometry::minCoordinate(CoordinateList* coordinates){
+	vector<Coordinate> v(coordinates->toVector());
 	sort(v.begin(),v.end(),lessThen);
 	return v.front();
 }
 
-void Geometry::scroll(CoordinateList& coordinates,Coordinate& firstCoordinate) {
+void Geometry::scroll(CoordinateList* coordinates,Coordinate& firstCoordinate) {
 	int ind=indexOf(firstCoordinate,coordinates);
 	Assert::isTrue(ind > -1);
-	int length=coordinates.getSize();
+	int length=coordinates->getSize();
 	vector<Coordinate> v(length);
 	for (int i=ind; i<length; i++) {
-		v[i-ind]=coordinates.getAt(i);
+		v[i-ind]=coordinates->getAt(i);
 	}
 	for (int i=0; i<ind; i++) {
-		v[length-ind+i]=coordinates.getAt(i);
+		v[length-ind+i]=coordinates->getAt(i);
 	}
-	coordinates.swap(v);
+	coordinates->swap(v);
 }
 
-int Geometry::indexOf(Coordinate& coordinate,CoordinateList& coordinates) {
-	for (int i=0; i<coordinates.getSize(); i++) {
-		if (coordinate==coordinates.getAt(i)) {
+int Geometry::indexOf(Coordinate& coordinate,CoordinateList* coordinates) {
+	for (int i=0; i<coordinates->getSize(); i++) {
+		if (coordinate==coordinates->getAt(i)) {
 			return i;
 		}
 	}
@@ -379,7 +379,7 @@ double Geometry::getLength() {
 
 Geometry::~Geometry(){}
 
-bool lessThen(Coordinate a, Coordinate b) {
+bool lessThen(Coordinate& a, Coordinate& b) {
 	if (a.compareTo(b)<=0)
 		return true;
 	else

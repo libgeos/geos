@@ -50,7 +50,7 @@ double PrecisionModel::getOffsetY() {
 	return offsetY;
 }
 
-void PrecisionModel::toInternal (Coordinate external, Coordinate *internal) {
+void PrecisionModel::toInternal (Coordinate& external, Coordinate *internal) {
 	if (isFloating()) {
 		internal->x = external.x;
 		internal->y = external.y;
@@ -61,19 +61,19 @@ void PrecisionModel::toInternal (Coordinate external, Coordinate *internal) {
 	internal->z = external.z;
 }
 
-Coordinate PrecisionModel::toInternal(Coordinate external) {
+Coordinate& PrecisionModel::toInternal(Coordinate& external) {
 	Coordinate internal;
 	toInternal(external, &internal);
 	return internal;
 }
 
-Coordinate PrecisionModel::toExternal(Coordinate internal) {
+Coordinate& PrecisionModel::toExternal(Coordinate& internal) {
 	Coordinate external;
 	toExternal(internal, &external);
 	return external;
 }
 
-void PrecisionModel::toExternal(Coordinate internal, Coordinate *external) {
+void PrecisionModel::toExternal(Coordinate& internal, Coordinate *external) {
 	if (isFloating()) {
 		external->x = internal.x;
 		external->y = internal.y;
@@ -106,7 +106,7 @@ string PrecisionModel::toString() {
 *@param  p1  the coordinate whose values will be changed to the
 *      external representation of <code>internal</code>
 */
-void PrecisionModel::round(Coordinate p0,Coordinate p1) {
+void PrecisionModel::round(Coordinate& p0,Coordinate& p1) {
 	toInternal(p0,&p1);
 	toExternal(p1,&p1);
 }
