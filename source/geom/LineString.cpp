@@ -102,8 +102,8 @@ Geometry* LineString::getBoundary() {
 		return new MultiPoint(NULL, precisionModel, SRID);
 	}
 	vector<Geometry*> *pts=new vector<Geometry*>();
-	pts->push_back(&getStartPoint());
-	pts->push_back(&getEndPoint());
+	pts->push_back(getStartPoint());
+	pts->push_back(getEndPoint());
 	return new MultiPoint(pts,precisionModel, SRID);
 }
 

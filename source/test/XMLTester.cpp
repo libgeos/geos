@@ -9,6 +9,12 @@
 #include "../headers/opRelate.h"
 #include "../io/markup/MarkupSTL.h"
 
+//#include "util.h"
+//#include "graph.h"
+//#include "io.h"
+//#include "opRelate.h"
+//#include "MarkupSTL.h"
+
 using namespace std;
 
 #define TEST_DESCR 1
@@ -29,8 +35,8 @@ int main(int argC, char* argV[]) {
 //	int out=0;
 	int failed=0;
 	int succeeded=0;
-//	string source="d://test.xml";
-	string source="./test.xml";
+	string source="d://test.xml";
+//	string source="./test.xml";
 	string precisionModel="";
 	string desc="";
 	string geomAin="";
@@ -42,7 +48,7 @@ int main(int argC, char* argV[]) {
 	string opRes="";
 	int testCount=0;
 
-	WKTReader *r = new WKTReader(GeometryFactory(PrecisionModel(),10));
+	WKTReader *r=new WKTReader(GeometryFactory(new PrecisionModel(),10));
 	WKTWriter *w=new WKTWriter();
 	Geometry *gA;
 	Geometry *gB;
@@ -97,10 +103,11 @@ int main(int argC, char* argV[]) {
 		if (out & TEST_OP)
 			cout << "\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
 		if (opName=="relate") {
-			IntersectionMatrix im(gA->relate(gB));
+			IntersectionMatrix *im=gA->relate(gB);
+			string a=im->toString();
 			if (out & TEST_RESULT)
-				cout << "\tResult: matrix='" << im.toString() << "' result=" << (im.matches(opSig)?"true":"false") <<endl;
-			if (!im.matches(opSig)) failed++; else succeeded++;
+				cout << "\tResult: matrix='" << im->toString() << "' result=" << (im->matches(opSig)?"true":"false") <<endl;
+			if (!im->matches(opSig)) failed++; else succeeded++;
 		}
 		if (out & PRED) {
 			cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;

@@ -22,8 +22,8 @@ Geometry* GeometryGraphOperation::getArgGeometry(int i) {
 	return (*arg)[i]->getGeometry();
 }
 
-void GeometryGraphOperation::setComputationPrecision(PrecisionModel pm) {
-	makePrecise=!pm.isFloating();
+void GeometryGraphOperation::setComputationPrecision(PrecisionModel* pm) {
+	makePrecise=!pm->isFloating();
 	li->setMakePrecise(makePrecise);
 }
 

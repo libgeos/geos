@@ -266,15 +266,15 @@ public:
 	double getMinX();
 	void expandToInclude(Coordinate& p);
 	void expandToInclude(double x, double y);
-	void expandToInclude(Envelope other);
+	void expandToInclude(Envelope* other);
 	bool contains(Coordinate& p);
 	bool contains(double x, double y);
-	bool contains(Envelope other);
+	bool contains(Envelope* other);
 	bool overlaps(Coordinate& p);
 	bool overlaps(double x, double y);
-	bool overlaps(Envelope other);
+	bool overlaps(Envelope* other);
 	string toString(void);
-	double distance(Envelope env);
+	double distance(Envelope* env);
 private:
 	static double distance(double x0,double y0,double x1,double y1);
 	double minx;	/// the minimum x-coordinate

@@ -27,7 +27,7 @@ protected:
 	*/
 	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
 	bool makePrecise;
-	void setComputationPrecision(PrecisionModel pm);
+	void setComputationPrecision(PrecisionModel* pm);
 };
 
 class EndpointInfo{

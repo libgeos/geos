@@ -7,13 +7,13 @@ const PointLocator* RelateComputer::ptLocator=new PointLocator();
 
 RelateComputer::RelateComputer() {
 	nodes=new NodeMap(new RelateNodeFactory());
-	im=NULL;
-	arg=NULL;
+	im=new IntersectionMatrix();
+	arg=new vector<GeometryGraph*>();
 }
 
 RelateComputer::RelateComputer(vector<GeometryGraph*> *newArg) {
 	nodes=new NodeMap(new RelateNodeFactory());
-	im=NULL;
+	im=new IntersectionMatrix();
 	arg=newArg;
 }
 
@@ -80,15 +80,15 @@ bool RelateComputer::hasDuplicateRings() {
 	return false;
 }
 
-IntersectionMatrix RelateComputer::computeIM() {
-	IntersectionMatrix *im=new IntersectionMatrix();
+IntersectionMatrix* RelateComputer::computeIM() {
+//	IntersectionMatrix *im=new IntersectionMatrix();
 	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
 	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
 	// if the Geometries don't overlap there is nothing to do
-	if (! (*arg)[0]->getGeometry()->getEnvelopeInternal().overlaps(
+	if (! (*arg)[0]->getGeometry()->getEnvelopeInternal()->overlaps(
 							(*arg)[1]->getGeometry()->getEnvelopeInternal())) {
 		computeDisjointIM(im);
-		return IntersectionMatrix(*im);
+		return im;
 	}
 	(*arg)[0]->computeSelfNodes((LineIntersector*)li);
 	(*arg)[1]->computeSelfNodes((LineIntersector*)li);
@@ -139,7 +139,7 @@ cout << "# segment intersection tests: " << intersector->numTests << endl;
 	labelIsolatedEdges(1,0);
 	// update the IM from all components
 	updateIM(im);
-	return IntersectionMatrix(*im);
+	return im;
 }
 
 void RelateComputer::insertEdgeEnds(vector<EdgeEnd*> *ee) {
@@ -149,7 +149,7 @@ void RelateComputer::insertEdgeEnds(vector<EdgeEnd*> *ee) {
 	}
 }
 
-void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *im) {
+void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *imX) {
 	// If a proper intersection is found, we can set a lower bound on the IM.
 	int dimA=(*arg)[0]->getGeometry()->getDimension();
 	int dimB=(*arg)[1]->getGeometry()->getDimension();
@@ -160,7 +160,7 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 	* If edge segments of Areas properly intersect, the areas must properly overlap.
 	*/
 	if (dimA==2 && dimB==2) {
-		if (hasProper) im->setAtLeast("212101212");
+		if (hasProper) imX->setAtLeast("212101212");
 	}
 	/**
 	* If an Line segment properly intersects an edge segment of an Area,
@@ -171,11 +171,11 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 	* of the Area, since there may be another Area component which contains the rest of the Line.
 	*/
 	 else if (dimA==2 && dimB==1) {
-		if (hasProper) im->setAtLeast("FFF0FFFF2");
-		if (hasProperInterior) im->setAtLeast("1FFFFF1FF");
+		if (hasProper) imX->setAtLeast("FFF0FFFF2");
+		if (hasProperInterior) imX->setAtLeast("1FFFFF1FF");
 	} else if (dimA==1 && dimB==2) {
-		if (hasProper) im->setAtLeast("F0FFFFFF2");
-		if (hasProperInterior) im->setAtLeast("1F1FFFFFF");
+		if (hasProper) imX->setAtLeast("F0FFFFFF2");
+		if (hasProperInterior) imX->setAtLeast("1F1FFFFFF");
 	}
 	/* If edges of LineStrings properly intersect *in an interior point*, all
 	we can deduce is that
@@ -187,7 +187,7 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 	have a proper intersection on one segment that is also a boundary point of another segment.
 	*/
 	else if (dimA==1 && dimB==1) {
-		if (hasProperInterior) im->setAtLeast("0FFFFFFFF");
+		if (hasProperInterior) imX->setAtLeast("0FFFFFFFF");
 	}
 }
 
@@ -272,16 +272,16 @@ void RelateComputer::labelIntersectionNodes(int argIndex) {
 * If the Geometries are disjoint, we need to enter their dimension and
 * boundary dimension in the Ext rows in the IM
 */
-void RelateComputer::computeDisjointIM(IntersectionMatrix *im) {
+void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
 	Geometry *ga=(*arg)[0]->getGeometry();
 	if (!ga->isEmpty()) {
-		im->set(Location::INTERIOR,Location::EXTERIOR,ga->getDimension());
-		im->set(Location::BOUNDARY,Location::EXTERIOR,ga->getBoundaryDimension());
+		imX->set(Location::INTERIOR,Location::EXTERIOR,ga->getDimension());
+		imX->set(Location::BOUNDARY,Location::EXTERIOR,ga->getBoundaryDimension());
 	}
 	Geometry *gb=(*arg)[1]->getGeometry();
 	if (!gb->isEmpty()) {
-		im->set(Location::EXTERIOR,Location::INTERIOR,gb->getDimension());
-		im->set(Location::EXTERIOR,Location::BOUNDARY,gb->getBoundaryDimension());
+		imX->set(Location::EXTERIOR,Location::INTERIOR,gb->getDimension());
+		imX->set(Location::EXTERIOR,Location::BOUNDARY,gb->getBoundaryDimension());
 	}
 }
 
@@ -316,20 +316,20 @@ void RelateComputer::labelNodeEdges() {
 /**
 * update the IM with the sum of the IMs for each component
 */
-void RelateComputer::updateIM(IntersectionMatrix *im) {
+void RelateComputer::updateIM(IntersectionMatrix *imX) {
 	//Debug.println(im);
 	for (vector<Edge*>::iterator ei=isolatedEdges.begin();ei<isolatedEdges.end();ei++) {
 		Edge *e=*ei;
-		e->GraphComponent::updateIM(im);
+		e->GraphComponent::updateIM(imX);
 		//Debug.println(im);
 	}
 	map<Coordinate,Node*,CoordLT> nMap(nodes->nodeMap);
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
-		node->updateIM(im);
+		node->updateIM(imX);
 		//Debug.println(im);
-		node->updateIMFromEdges(im);
+		node->updateIMFromEdges(imX);
 		//Debug.println(im);
 		//node.print(System.out);
 	}

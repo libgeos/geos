@@ -1,16 +1,11 @@
 #ifndef GEOS_OPRELATE_H
 #define GEOS_OPRELATE_H
 
-//#include <iostream>
 #include <string>
 #include <vector>
-//#include <map>
-//#include <algorithm>
-//#include "math.h"
 #include "platform.h"
 #include "operation.h"
 #include "graph.h"
-//#include "geom.h"
 #include "geosAlgorithm.h"
 
 class RelateNode: public Node {
@@ -81,7 +76,7 @@ public:
 	Coordinate getInvalidPoint();
 	bool isNodeConsistentArea();
 	bool hasDuplicateRings();
-	IntersectionMatrix computeIM();
+	IntersectionMatrix* computeIM();
 private:
 	static const PointLocator* ptLocator;
 	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
@@ -92,14 +87,14 @@ private:
 	// the intersection point found (if any)
 	Coordinate invalidPoint;
 	void insertEdgeEnds(vector<EdgeEnd*> *ee);
-	void computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *im);
+	void computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *imX);
 	void copyNodesAndLabels(int argIndex);
 	void computeIntersectionNodes(int argIndex);
 	void labelIntersectionNodes(int argIndex);
-	void computeDisjointIM(IntersectionMatrix *im);
+	void computeDisjointIM(IntersectionMatrix *imX);
 	bool isNodeEdgeAreaLabelsConsistent();
 	void labelNodeEdges();
-	void updateIM(IntersectionMatrix *im);
+	void updateIM(IntersectionMatrix *imX);
 	void labelIsolatedEdges(int thisIndex,int targetIndex);
 	void labelIsolatedEdge(Edge *e,int targetIndex,Geometry *target);
 	void labelIsolatedNodes();
@@ -113,9 +108,9 @@ private:
  */
 class RelateOp: public GeometryGraphOperation {
 public:
-	static IntersectionMatrix relate(Geometry *a,Geometry *b);
+	static IntersectionMatrix* relate(Geometry *a,Geometry *b);
 	RelateOp(Geometry *g0,Geometry *g1);
-	IntersectionMatrix getIntersectionMatrix();
+	IntersectionMatrix* getIntersectionMatrix();
 private:
 	RelateComputer *relateComp;
 };

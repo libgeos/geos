@@ -4,7 +4,7 @@
 
 Polygon::Polygon(){
 	shell=new LinearRing();
-	holes=new vector<Geometry *>()
+	holes=new vector<Geometry *>();
 }
 Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID){
 	shell=p.shell;
@@ -27,7 +27,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 	if (hasNullElements(newHoles)) {
 		throw "IllegalArgumentException: holes must not contain null elements";
 	}
-	if (newShell->isEmpty() && hasNonEmptyElements(*newHoles)) {
+	if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
 		throw "IllegalArgumentException: shell is empty but holes are not";
 	}
 	shell=newShell;
@@ -45,7 +45,7 @@ CoordinateList* Polygon::getCoordinates() {
 		k++;
 		coordinates->setAt(shellCoordinates->getAt(x),k);
 	}
-	for (unsigned int i = 0; i < holes.size(); i++) {
+	for (unsigned int i = 0; i < holes->size(); i++) {
 		CoordinateList* childCoordinates=((LinearRing *)(*holes)[i])->getCoordinates();
 		for (int j = 0; j < childCoordinates->getSize(); j++) {
 			k++;
@@ -123,7 +123,7 @@ bool Polygon::equalsExact(Geometry *other) {
 	if (typeid(*(otherPolygon->shell))!=typeid(Geometry)) {
 		return false;
 	}
-	Geometry* otherPolygonShell=dynamic_cast<Geometry *>(otherPolygon.shell);
+	Geometry* otherPolygonShell=dynamic_cast<Geometry *>(otherPolygon->shell);
 	if (!shell->equalsExact(otherPolygonShell)) {
 		return false;
 	}

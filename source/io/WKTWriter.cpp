@@ -11,12 +11,12 @@ WKTWriter::WKTWriter() {
 
 WKTWriter::~WKTWriter() {}
 
-string WKTWriter::createFormatter(PrecisionModel precisionModel) {
+string WKTWriter::createFormatter(PrecisionModel* precisionModel) {
 	// the default number of decimal places is 16, which is sufficient
 	// to accomodate the maximum precision of a double.
 	int decimalPlaces = 16;
-	if (!precisionModel.isFloating()) {
-		decimalPlaces = 1 + (int) ceil(log(precisionModel.getScale())/log(10.0));
+	if (!precisionModel->isFloating()) {
+		decimalPlaces = 1 + (int) ceil(log(precisionModel->getScale())/log(10.0));
 	}
 	string fmt="%.";
 	char buffer[255];
@@ -70,8 +70,8 @@ void WKTWriter::writeFormatted(Geometry *geometry, bool isFormatted, Writer *wri
 void WKTWriter::appendGeometryTaggedText(Geometry *geometry, int level, Writer *writer) {
 	indent(level, writer);
 	if (typeid(*geometry)==typeid(Point)) {
-		Point point(*(Point*)geometry);
-		appendPointTaggedText(*point.getCoordinate(),level,writer, point.getPrecisionModel());
+		Point* point=(Point*)geometry;
+		appendPointTaggedText(point->getCoordinate(),level,writer,point->getPrecisionModel());
 	} else if (typeid(*geometry)==typeid(LineString)) {
 		appendLineStringTaggedText((LineString*)geometry, level, writer);
 	} else if (typeid(*geometry)==typeid(Polygon)) {
@@ -90,8 +90,8 @@ void WKTWriter::appendGeometryTaggedText(Geometry *geometry, int level, Writer *
 	}
 }
 
-void WKTWriter::appendPointTaggedText(Coordinate coordinate, int level, Writer *writer,
-									  PrecisionModel precisionModel) {
+void WKTWriter::appendPointTaggedText(Coordinate* coordinate, int level, Writer *writer,
+									  PrecisionModel* precisionModel) {
 	writer->write("POINT ");
 	appendPointText(coordinate, level, writer, precisionModel);
 }
@@ -126,8 +126,8 @@ void WKTWriter::appendGeometryCollectionTaggedText(GeometryCollection *geometryC
 	appendGeometryCollectionText(geometryCollection, level, writer);
 }
 
-void WKTWriter::appendPointText(Coordinate coordinate, int level, Writer *writer,PrecisionModel precisionModel) {
-	if (coordinate==Coordinate::getNull()) {
+void WKTWriter::appendPointText(Coordinate* coordinate, int level, Writer *writer,PrecisionModel* precisionModel) {
+	if (coordinate==NULL) {
 		writer->write("EMPTY");
 	} else {
 		writer->write("(");
@@ -136,13 +136,13 @@ void WKTWriter::appendPointText(Coordinate coordinate, int level, Writer *writer
 	}
 }
 
-void WKTWriter::appendCoordinate(Coordinate coordinate, Writer *writer, PrecisionModel precisionModel) {
-	Coordinate externalCoordinate;
-	precisionModel.toExternal(coordinate, &externalCoordinate);
+void WKTWriter::appendCoordinate(Coordinate* coordinate, Writer *writer, PrecisionModel* precisionModel) {
+	Coordinate* externalCoordinate=new Coordinate();
+	precisionModel->toExternal(*coordinate, externalCoordinate);
 	string out="";
-	out+=writeNumber(externalCoordinate.x);
+	out+=writeNumber(externalCoordinate->x);
 	out+=" ";
-	out+=writeNumber(externalCoordinate.y);
+	out+=writeNumber(externalCoordinate->y);
 	writer->write(out);
 }
 
@@ -166,7 +166,7 @@ void WKTWriter::appendLineStringText(LineString *lineString, int level, bool doI
 				writer->write(", ");
 				if (i%10==0) indent(level + 2, writer);
 			}
-			appendCoordinate(lineString->getCoordinateN(i), writer, lineString->getPrecisionModel());
+			appendCoordinate(&(lineString->getCoordinateN(i)), writer, lineString->getPrecisionModel());
 		}
 		writer->write(")");
 	}
@@ -197,7 +197,7 @@ void WKTWriter::appendMultiPointText(MultiPoint *multiPoint, int level, Writer *
 			if (i > 0) {
 				writer->write(", ");
 			}
-			appendCoordinate(*(((Point* )multiPoint->getGeometryN(i))->getCoordinate()), writer,
+			appendCoordinate(((Point* )multiPoint->getGeometryN(i))->getCoordinate(), writer,
 							  multiPoint->getPrecisionModel());
 		}
 		writer->write(")");

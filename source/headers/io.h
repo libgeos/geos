@@ -99,15 +99,15 @@ public:
 protected:
 	string formatter;
 	void appendGeometryTaggedText(Geometry *geometry, int level, Writer *writer);
-	void appendPointTaggedText(Coordinate coordinate, int level, Writer *writer,PrecisionModel precisionModel);
+	void appendPointTaggedText(Coordinate* coordinate, int level, Writer *writer,PrecisionModel* precisionModel);
 	void appendLineStringTaggedText(LineString *lineString, int level, Writer *writer);
 	void appendPolygonTaggedText(Polygon *polygon, int level, Writer *writer);
 	void appendMultiPointTaggedText(MultiPoint *multipoint, int level, Writer *writer);
 	void appendMultiLineStringTaggedText(MultiLineString *multiLineString, int level,Writer *writer);
 	void appendMultiPolygonTaggedText(MultiPolygon *multiPolygon, int level, Writer *writer);
 	void appendGeometryCollectionTaggedText(GeometryCollection *geometryCollection, int level,Writer *writer);
-	void appendPointText(Coordinate coordinate, int level, Writer *writer,PrecisionModel precisionModel);
-	void appendCoordinate(Coordinate coordinate, Writer *writer, PrecisionModel precisionModel);
+	void appendPointText(Coordinate* coordinate, int level, Writer *writer,PrecisionModel* precisionModel);
+	void appendCoordinate(Coordinate* coordinate, Writer *writer, PrecisionModel* precisionModel);
 	string writeNumber(double d);
 	void appendLineStringText(LineString *lineString, int level, bool doIndent, Writer *writer);
 	void appendPolygonText(Polygon *polygon, int level, bool indentFirst, Writer *writer);
@@ -120,7 +120,7 @@ private:
 		INDENT = 2
 	};
 //	static const int INDENT = 2;
-	static string createFormatter(PrecisionModel precisionModel);
+	static string createFormatter(PrecisionModel* precisionModel);
 	bool isFormatted;
 	int level;
 	void writeFormatted(Geometry *geometry, bool isFormatted, Writer *writer);

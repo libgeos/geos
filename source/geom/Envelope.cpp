@@ -252,27 +252,27 @@ void Envelope::expandToInclude(double x, double y) {
  *
  *@param  other  the <code>Envelope</code> to merge with
  */
-void Envelope::expandToInclude(Envelope other) {
-	if (other.isNull()) {
+void Envelope::expandToInclude(Envelope* other) {
+	if (other->isNull()) {
 		return;
 	}
 	if (isNull()) {
-		minx = other.getMinX();
-		maxx = other.getMaxX();
-		miny = other.getMinY();
-		maxy = other.getMaxY();
+		minx = other->getMinX();
+		maxx = other->getMaxX();
+		miny = other->getMinY();
+		maxy = other->getMaxY();
 	} else {
-		if (other.minx < minx) {
-			minx = other.minx;
+		if (other->minx < minx) {
+			minx = other->minx;
 		}
-		if (other.maxx > maxx) {
-			maxx = other.maxx;
+		if (other->maxx > maxx) {
+			maxx = other->maxx;
 		}
-		if (other.miny < miny) {
-			miny = other.miny;
+		if (other->miny < miny) {
+			miny = other->miny;
 		}
-		if (other.maxy > maxy) {
-			maxy = other.maxy;
+		if (other->maxy > maxy) {
+			maxy = other->maxy;
 		}
 	}
 }
@@ -315,11 +315,11 @@ bool Envelope::contains(double x, double y) {
  *@return        <code>true</code> if <code>other</code>
  *              is contained in this <code>Envelope</code>
  */
-bool Envelope::contains(Envelope other) {
-	return  other.getMinX() >= minx &&
-			other.getMaxX() <= maxx &&
-			other.getMinY() >= miny &&
-			other.getMaxY() <= maxy;
+bool Envelope::contains(Envelope* other) {
+	return  other->getMinX() >= minx &&
+			other->getMaxX() <= maxx &&
+			other->getMinY() >= miny &&
+			other->getMaxY() <= maxy;
 }
 
 /**
@@ -356,11 +356,11 @@ bool Envelope::overlaps(double x, double y) {
  *          being checked for overlapping
  *@return        <code>true</code> if the <code>Envelope</code>s overlap
  */
-bool Envelope::overlaps(Envelope other) {
-	return !(other.getMinX() > maxx ||
-			 other.getMaxX() < minx ||
-			 other.getMinY() > maxy ||
-			 other.getMaxY() < miny);
+bool Envelope::overlaps(Envelope* other) {
+	return !(other->getMinX() > maxx ||
+			 other->getMaxX() < minx ||
+			 other->getMinY() > maxy ||
+			 other->getMaxY() < miny);
 }
 
 /**
@@ -383,31 +383,31 @@ string Envelope::toString() {
 * The distance between overlapping Envelopes is 0.  Otherwise, the
 * distance is the Euclidean distance between the closest points.
 */
-double Envelope::distance(Envelope env) {
+double Envelope::distance(Envelope* env) {
 	if (overlaps(env)) return 0;
-	if (maxx<env.minx) {
+	if (maxx<env->minx) {
 		// this is left of env
-		if (maxy<env.miny) {
+		if (maxy<env->miny) {
 			// this is below left of env
-			return distance(maxx,maxy,env.minx,env.miny);
-		} else if (miny>env.maxy) {
+			return distance(maxx,maxy,env->minx,env->miny);
+		} else if (miny>env->maxy) {
 			// this is above left of env
-			return distance(maxx,miny,env.minx,env.maxy);
+			return distance(maxx,miny,env->minx,env->maxy);
 		} else {
 			// this is directly left of env
-			return env.minx-maxx;
+			return env->minx-maxx;
 		}
 	} else {
 		// this is right of env
-		if (maxy<env.miny) {
+		if (maxy<env->miny) {
 			// this is below right of env
-			return distance(minx,maxy,env.maxx,env.miny);
-		} else if (miny>env.maxy) {
+			return distance(minx,maxy,env->maxx,env->miny);
+		} else if (miny>env->maxy) {
 			// this is above right of env
-			return distance(minx,miny,env.maxx,env.maxy);
+			return distance(minx,miny,env->maxx,env->maxy);
 		} else {
 			// this is directly right of env
-			return minx-env.maxx;
+			return minx-env->maxx;
 		}
 	}
 }

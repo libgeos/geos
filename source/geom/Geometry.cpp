@@ -30,7 +30,7 @@ Geometry::Geometry(const Geometry &geom): sortedClasses(geom.sortedClasses) {
 	SRID=geom.SRID;
 }
 
-Geometry::Geometry(PrecisionModel newPrecisionModel, int newSRID){
+Geometry::Geometry(PrecisionModel* newPrecisionModel, int newSRID){
 	precisionModel=newPrecisionModel;
 	envelope=new Envelope();
 	SRID = newSRID;
@@ -174,7 +174,7 @@ IntersectionMatrix* Geometry::relate(Geometry *g) {
 	checkNotGeometryCollection(g);
 	checkEqualSRID(g);
 	checkEqualPrecisionModel(g);
-	return *(RelateOp::relate(this,g));
+	return RelateOp::relate(this,g);
 }
 
 string Geometry::toString() {

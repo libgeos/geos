@@ -2,18 +2,18 @@
 #include "stdio.h"
 
 IntersectionMatrix::IntersectionMatrix(){
-//    matrix = new int[3][3];
+	//matrix = new int[3][3];
 	setAll(Dimension::False);
 }
 
 IntersectionMatrix::IntersectionMatrix(string elements){
-//    matrix = new int[3][3];
+	//matrix = new int[3][3];
 	setAll(Dimension::False);
     set(elements);
 }
 
 IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix &im){
-//	matrix = new int[3][3];
+	//matrix = new int[3][3];
 	setAll(Dimension::False);
 	matrix[Location::INTERIOR][Location::INTERIOR] = im.matrix[Location::INTERIOR][Location::INTERIOR];
 	matrix[Location::INTERIOR][Location::BOUNDARY] = im.matrix[Location::INTERIOR][Location::BOUNDARY];
@@ -27,7 +27,7 @@ IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix &im){
 }
 
 IntersectionMatrix::~IntersectionMatrix(){
-//	delete[] matrix;
+	//delete[] matrix;
 }
 
 bool IntersectionMatrix::matches(int actualDimensionValue, char requiredDimensionSymbol) {
