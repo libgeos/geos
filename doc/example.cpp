@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23  2004/07/17 09:19:32  strk
+ * added GEOS version report
+ *
  * Revision 1.22  2004/07/16 10:00:45  strk
  * Bug fixed in GeometricShapeFactory examples.
  * Added example of GeometricShapeFactory::createArc.
@@ -930,6 +933,7 @@ cout<<"-------------------------------------------------------------------------
 
 main()
 {
+	cout<<geos::version()<<endl;
 	try
 	{
 		do_all();
