@@ -13,9 +13,9 @@
  *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
-#include <stdio.h>
 
 #ifndef DEBUG
 #define DEBUG 0
@@ -172,19 +172,19 @@ QuadTreeNode* QuadTreeNode::createSubnode(int index) {
 string
 QuadTreeNode::toString() const
 {
-	char buf[10];
-	sprintf(buf, "%d", level);
-	string tmp = buf;
-
-	string ret = "L"+tmp+" "+env->toString()+" Ctr["+centre->toString()+"]";
-	ret += " "+QuadTreeNodeBase::toString();
-	return ret;
+	ostringstream os;
+	os <<"L"<<level<<" "<<env->toString()<<" Ctr["<<centre->toString()<<"]";
+	os <<" "+QuadTreeNodeBase::toString();
+	return os.str();
 }
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2004/11/19 16:15:55  strk
+ * Completely removed sprintf usage, substituted by stringstream.
+ *
  * Revision 1.9  2004/11/19 16:09:53  strk
  * Added <stdio.h> include for sprintf recognition.
  *
