@@ -1,3 +1,9 @@
+/*
+ * $Log$
+ * Revision 1.17  2003/11/06 19:04:28  strk
+ * removed useless Coordinate copy in ::createSplitEdge()
+ *
+ */
 #include "../headers/graph.h"
 
 namespace geos {
@@ -97,9 +103,10 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 	}
 	CoordinateList* pts=CoordinateListFactory::internalFactory->createCoordinateList(npts);
 	int ipt=0;
-	Coordinate *c=new Coordinate(ei0->coord);
-	pts->setAt(*c,ipt++);
-	delete c;
+	//Coordinate *c=new Coordinate(ei0->coord);
+	//pts->setAt(*c,ipt++);
+	//delete c;
+	pts->setAt(ei0->coord,ipt++);
 	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++) {
 		pts->setAt(edge->pts->getAt(i),ipt++);
 	}
