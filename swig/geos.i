@@ -16,10 +16,10 @@
  
 %module geos
 %include "std_string.i"
+%include "exception.i"
 
 %{ 
-#include "../../source/headers/geos/geom.h"
-#include "../../source/headers/geos/io.h"
+#include "../../source/headers/geos.h"
 %}
 
 // Following methods are prototypes but unimplemented and are to be ignored
@@ -28,7 +28,18 @@
 // Required renaming
 %rename(Coordinate_Coordinate) Coordinate::Coordinate;
 
+%exception {
+    try {
+        $action
+    }
+    catch (geos::GEOSException *e) {
+        SWIG_exception(SWIG_RuntimeError, e->toString().data());
+    }
+}
+
+
 // Now include the headers to be wrapped
 %include "../../source/headers/geos/geom.h"
+%include "../../source/headers/geos/util.h"
 %include "../../source/headers/geos/io.h"
 
