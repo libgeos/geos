@@ -46,6 +46,11 @@ MCQuadtreeNoder::~MCQuadtreeNoder(){
 vector<SegmentString*> *
 MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
 {
+#if PROFILE
+	static Profile *prof = profiler->get("MCQuadtreeNoder::node(vector<SegmentString*>*)");
+	prof->start();
+#endif
+
 	unsigned int size=inputSegStrings->size();
 	for(unsigned int i=0; i<size;i++) {
 		add((*inputSegStrings)[i]);
@@ -56,6 +61,9 @@ MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
 
 	vector<SegmentString*> *nodedSegStrings=getNodedEdges(inputSegStrings);
 
+#if PROFILE
+	prof->stop();
+#endif
 	return nodedSegStrings;
 }
 
@@ -107,6 +115,10 @@ MCQuadtreeNoder::intersectChains()
 void
 MCQuadtreeNoder::add(SegmentString *segStr)
 {
+#if PROFILE
+	static Profile *prof = profiler->get("MCQuadtreeNoder::add(SegmentString*)");
+	prof->start();
+#endif
 	vector<indexMonotoneChain*> *segChains=MonotoneChainBuilder::getChains((CoordinateSequence*)segStr->getCoordinatesRO(),segStr);
 #if DEBUG
 	cerr<<"MCQuadtreeNoder: adding "<<segChains->size()<<" items in STRtree index"<<endl;
@@ -119,6 +131,10 @@ MCQuadtreeNoder::add(SegmentString *segStr)
 		chains->push_back(mc);
 	}
 	delete segChains;
+
+#if PROFILE
+	prof->stop();
+#endif
 }
 
 MCQuadtreeNoder::SegmentOverlapAction::SegmentOverlapAction(nodingSegmentIntersector *newSi){
@@ -137,6 +153,9 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/02/01 16:09:46  strk
+ * more profiling labels
+ *
  * Revision 1.15  2005/01/31 15:41:03  strk
  * Small optimizations.
  *

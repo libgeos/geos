@@ -14,14 +14,26 @@
  **********************************************************************/
 
 #include <geos/noding.h>
+#include <geos/profiler.h>
 
 namespace geos {
+
+#if PROFILE
+static Profiler *profiler = Profiler::instance();
+#endif
 
 vector<SegmentString*>*
 Noder::getNodedEdges(vector<SegmentString*>* segStrings)
 {
+#if PROFILE
+	static Profile *prof = profiler->get("Noder::getNodedEdges(vector<SegmentString*>*)");
+	prof->start();
+#endif
 	vector<SegmentString*>* resultEdgelist=new vector<SegmentString*>();
 	getNodedEdges(segStrings, resultEdgelist);
+#if PROFILE
+	prof->stop();
+#endif
 	return resultEdgelist;
 }
 
@@ -44,6 +56,9 @@ Noder::setSegmentIntersector(nodingSegmentIntersector *newSegInt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/02/01 16:09:46  strk
+ * more profiling labels
+ *
  * Revision 1.6  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
  *
