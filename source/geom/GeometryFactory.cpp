@@ -1,7 +1,9 @@
-/*$Log$
- *Revision 1.23  2003/10/09 09:42:42  strk
- *Tried to "formalize" constant nature of the first argument given to constructor by PrecisionModel and SRID specification. Added CVS Log on top.
- **/
+/*
+* $Log$
+* Revision 1.24  2003/10/09 10:14:06  strk
+* just a style change in top Log comment.
+*
+*/
 #include "../headers/geom.h"
 #include "../headers/util.h"
 #include <typeinfo>
