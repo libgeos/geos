@@ -180,7 +180,7 @@ public:
 	BasicCoordinateList(int n);
 	BasicCoordinateList(Coordinate& c);
 	BasicCoordinateList(const BasicCoordinateList &cl);
-	~BasicCoordinateList();
+	virtual ~BasicCoordinateList();
 	bool isEmpty();
 	void add(Coordinate& c);
 	int getSize();
@@ -206,7 +206,7 @@ public:
 	PointCoordinateList(int n);
 	PointCoordinateList(Coordinate& c);
 	PointCoordinateList(const PointCoordinateList &cl);
-	~PointCoordinateList();
+	virtual ~PointCoordinateList();
 	bool isEmpty();
 	void add(Coordinate& c);
 	void add(point_3d p);
