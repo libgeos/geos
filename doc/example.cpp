@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/06/15 20:42:43  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.15  2004/04/13 14:28:37  strk
  * Removed spurious line
  *
@@ -208,32 +211,33 @@ create_square_polygon(double xoffset, double yoffset, double side)
 //
 // This function will create a GeoemtryCollection
 // containing copies of all Geometries in given vector.
-// NOTE that this functionality is not available in GEOS
-// where every GeometryCollection constructor will
-// take ownership of Geometries passed as arguments.
 //
 GeometryCollection *
 create_simple_collection(vector<Geometry *> *geoms)
 {
-	// We need to construct a <Geometry *> vector
-	// to use as argument to the factory function
 	//
-	// This vector will have to contain COPIES of
+	// Prior to GEOS 1.4 we needed to construct a
+	// <Geometry *> vector to use as argument to the
+	// factory function.
+	//
+	// This vector did have to contain COPIES of
 	// passed objects since GeometryCollection
-	// constructors will take ownership of them.
+	// constructors did take ownership of them.
 	//
-	vector<Geometry *> *collection = new vector<Geometry *>;
-	for (int i=0; i<geoms->size(); i++) {
-		const Geometry *g = (*geoms)[i];
-		collection->push_back(g->clone());
-	}
+	//vector<Geometry *> *collection = new vector<Geometry *>;
+	//for (int i=0; i<geoms->size(); i++) {
+	//	const Geometry *g = (*geoms)[i];
+	//	collection->push_back(g->clone());
+	//}
 
 	GeometryCollection *ret =
-		global_factory->createGeometryCollection(collection);
+		global_factory->createGeometryCollection(geoms);
 
-	// We can delete vector used to store geometries
-	// ( I don't like it but this is what you should do )
-	delete collection;
+	//
+	// We could delete vector used to store geometries
+	// (see above)
+	//
+	//delete collection;
 
 	return ret;
 }

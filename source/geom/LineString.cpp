@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.32  2004/06/15 20:38:44  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.31  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -197,6 +200,8 @@ Geometry* LineString::getBoundary() const {
 	pts->push_back(getStartPoint());
 	pts->push_back(getEndPoint());
 	MultiPoint *mp = getFactory()->createMultiPoint(pts);
+	delete (*pts)[0];
+	delete (*pts)[1];
 	delete pts;
 	return mp;
 }

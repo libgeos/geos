@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.33  2004/06/15 20:30:47  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.32  2004/04/20 13:24:15  strk
  * More leaks removed.
  *
@@ -249,9 +252,10 @@ Geometry* Polygon::getBoundary() const {
 		return getFactory()->createGeometryCollection(NULL);
 	}
 	vector<Geometry *> *rings=new vector<Geometry *>(holes->size() + 1);
-	(*rings)[0]=new LineString(*shell);
+	(*rings)[0]=shell;
 	for (unsigned int i=0; i<holes->size(); i++) {
-		(*rings)[i + 1] =new LineString(*(LineString*)(*holes)[i]);
+		//(*rings)[i + 1] =(LineString*)(*holes)[i];
+		(*rings)[i + 1] = (*holes)[i];
 	}
 	MultiLineString *ret =getFactory()->createMultiLineString(rings);
 	delete rings;

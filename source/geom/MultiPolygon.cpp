@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2004/06/15 20:34:52  strk
+ * updated to respect deep-copy GeometryCollection interface
+ *
  * Revision 1.14  2004/05/07 09:05:13  strk
  * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
  * to handle NULL CoordinateList.
@@ -73,7 +76,7 @@ Geometry* MultiPolygon::getBoundary() const {
 		Geometry *g=pg->getBoundary();
 		GeometryCollection* rings=(GeometryCollection*)g;
 		for (int j = 0; j < rings->getNumGeometries(); j++) {
-			allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
+			allRings->push_back((LineString*)rings->getGeometryN(j));
 		}
 		delete g;
 	}
