@@ -1,3 +1,9 @@
+/*
+* $Log$
+* Revision 1.10  2003/10/16 17:05:07  strk
+* Made TopologyException inherit from GEOSException. Adjusted IllegalArgumentException subclassing.
+*
+*/
 #ifndef GEOS_UTIL_H
 #define GEOS_UTIL_H
 
@@ -36,6 +42,19 @@ public:
 	IllegalArgumentException();
 	IllegalArgumentException(string msg);
 	~IllegalArgumentException();
+};
+
+/**
+ * Indicates an invalid or inconsistent topological situation encountered during processing
+ */
+class TopologyException: public GEOSException {
+public:
+	TopologyException(string msg);
+	TopologyException(string msg,const Coordinate *newPt);
+	~TopologyException();
+	Coordinate* getCoordinate();
+private:
+	Coordinate *pt;
 };
 
 class UnsupportedOperationException: public GEOSException {

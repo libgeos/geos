@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.38  2003/10/16 17:05:07  strk
+* Made TopologyException inherit from GEOSException. Adjusted IllegalArgumentException subclassing.
+*
 * Revision 1.37  2003/10/15 16:39:03  strk
 * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
 *
@@ -699,23 +702,6 @@ public:
 	static char toLocationSymbol(int locationValue);
 };
 
-/**
- * Indicates an invalid or inconsistent topological situation encountered during processing
- */
-class TopologyException {
-private:
-	static string msgWithCoord(string msg,Coordinate *newPt);
-	Coordinate *pt;
-public:
-	TopologyException(string msg);
-	TopologyException(string msg,Coordinate *newPt);
-	Coordinate* getCoordinate();
-	void setName(string nname);
-	void setMessage(string msg);
-protected:
-	string txt;
-	string name;
-};
 
 //Operators
 bool operator==(const Coordinate& a, const Coordinate& b);
