@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.64  2004/07/17 10:48:04  strk
+ * fixed typo in documentation
+ *
  * Revision 1.63  2004/07/17 09:18:54  strk
  * Added geos::version()
  *
@@ -176,7 +179,7 @@ namespace geos {
  *
  * Internal exceptions are thrown as pointers to geos::GEOSException.
  *
- * Other standard exceptions are not mapped to this handled, nor
+ * Other standard exceptions are not mapped to this handler, nor
  * does GEOSException inerit from standard exception, so you'll need
  * to catch both if you care (this might change in the future)
  *
