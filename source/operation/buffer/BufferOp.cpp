@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.29  2004/05/05 10:22:49  strk
+ * Removed dynamic allocations.
+ *
  * Revision 1.28  2004/05/05 10:03:49  strk
  * Reduced dynamic allocations in bufferOriginalPrecision and bufferFixedPrecision.
  *
@@ -99,16 +102,7 @@ double BufferOp::precisionScaleFactor(Geometry *g,double distance,int maxPrecisi
 * @return the buffer of the input geometry
 */
 Geometry* BufferOp::bufferOp(Geometry *g, double distance){
-	BufferOp *gBuf=new BufferOp(g);
-	Geometry* geomBuf;
-	try {
-		geomBuf=gBuf->getResultGeometry(distance);
-	} catch (...) {
-		delete gBuf;
-		throw;
-	}
-	delete gBuf;
-	return geomBuf;
+	return BufferOp(g).getResultGeometry(distance);
 }
 
 /**
@@ -124,17 +118,9 @@ Geometry* BufferOp::bufferOp(Geometry *g, double distance){
 Geometry*
 BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments)
 {
-	BufferOp *bufOp=new BufferOp(g);
-	Geometry *geomBuf;
-	bufOp->setQuadrantSegments(quadrantSegments);
-	try {
-		geomBuf=bufOp->getResultGeometry(distance);
-	} catch (...) {
-		delete bufOp;
-		throw;
-	}
-	delete bufOp;
-	return geomBuf;
+	BufferOp bufOp=BufferOp(g);
+	bufOp.setQuadrantSegments(quadrantSegments);
+	return bufOp.getResultGeometry(distance);
 }
 
 int BufferOp::MAX_PRECISION_DIGITS=12;
@@ -217,10 +203,7 @@ BufferOp::computeGeometry()
 			delete saveException;
 			saveException=ex;
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
-		} catch (...) {
-			throw;
-		}
-
+		} 
 
 		if (resultGeometry!=NULL)
 		{
