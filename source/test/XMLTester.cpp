@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.42  2004/05/27 08:40:13  strk
+ * Fixed a memleak in buffer test.
+ *
  * Revision 1.41  2004/05/18 13:49:18  strk
  * Output made more neat (geometry B is not printed if not existent).
  * Added support for buffer tests.
@@ -422,6 +425,7 @@ try{
 						}
 					}
 					delete gRealRes;
+					delete gRes;
 				} else if (opName=="getInteriorPoint") {
 					Geometry *gRes=r->read(opRes);
 					gRes->normalize();
