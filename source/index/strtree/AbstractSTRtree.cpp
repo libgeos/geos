@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/03 13:17:55  strk
+ * Fixed comparator function to express StrictWeakOrdering.
+ *
  * Revision 1.9  2004/04/28 14:58:47  strk
  * Made AbstractSTRtree::query use dynamic_cast<> to simulate java's
  * instanceof. Previous typeid(*) use missed to catch an STRAbstractNode
@@ -114,8 +117,9 @@ AbstractNode* AbstractSTRtree::lastNode(vector<Boundable*> *nodes) {
 	return (AbstractNode*)(*nodes)[nodes->size()-1];
 }
 
-int AbstractSTRtree::compareDoubles(double a, double b) {
-	return a>b?1:(a<b?-1:0);
+bool AbstractSTRtree::compareDoubles(double a, double b) {
+	//return a>b?1:(a<b?-1:0);
+	return a < b;
 }
 
 /**

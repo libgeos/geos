@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/05/03 13:17:55  strk
+ * Fixed comparator function to express StrictWeakOrdering.
+ *
  * Revision 1.10  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -172,7 +175,7 @@ private:
 public:
 	IntersectsOp* intersectsOp;
 	AbstractSTRtree(int newNodeCapacity);
-	static int compareDoubles(double a, double b);
+	static bool compareDoubles(double a, double b);
 	virtual ~AbstractSTRtree();
 	virtual void build();
 //	virtual void checkConsistency();
