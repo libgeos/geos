@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.42  2004/07/22 07:04:49  strk
+ * Documented missing geometry functions.
+ *
  * Revision 1.41  2004/07/13 08:33:52  strk
  * Added missing virtual destructor to virtual classes.
  * Fixed implicit unsigned int -> int casts
@@ -110,7 +113,7 @@ Polygon::Polygon(const Polygon &p): Geometry(p.getFactory()){
 	}
 }
 
-/**
+/*
 * Constructs a <code>Polygon</code> with the given exterior
 * and interior boundaries.
 *
@@ -329,7 +332,7 @@ const Coordinate* Polygon::getCoordinate() const {
 	return shell->getCoordinate();
 }
 
-/**
+/*
 *  Returns the area of this <code>Polygon</code>
 *
 *@return the area of the polygon
@@ -346,10 +349,10 @@ double Polygon::getArea() const {
 }
 
 /**
-*  Returns the perimeter of this <code>Polygon</code>
-*
-*@return the perimeter of the polygon
-*/
+ * Returns the perimeter of this <code>Polygon</code>
+ *
+ * @return the perimeter of the polygon
+ */
 double Polygon::getLength() const {
 	double len=0.0;
 	len+=shell->getLength();

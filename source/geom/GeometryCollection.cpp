@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.41  2004/07/22 07:04:49  strk
+ * Documented missing geometry functions.
+ *
  * Revision 1.40  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -94,10 +97,6 @@
 
 namespace geos {
 
-//GeometryCollection::GeometryCollection(){
-//	geometries=new vector<Geometry *>();
-//}
-
 GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 	Geometry(gc.getFactory()){
 	geometries=new vector<Geometry *>();
@@ -141,17 +140,15 @@ Geometry* GeometryCollection::clone() const {
 	return new GeometryCollection(*this);
 }
 
-/**
+/*
 * Collects all coordinates of all subgeometries into a CoordinateSequence.
 * 
-* Note that while changes to the coordinate objects themselves
-* may modify the Geometries in place, the returned CoordinateSequence as such 
-* is only a temporary container which is not synchronized back.
-* 
-* @return the collected coordinates
+* Returns a newly the collected coordinates
 *
 */
-CoordinateSequence* GeometryCollection::getCoordinates() const {
+CoordinateSequence *
+GeometryCollection::getCoordinates() const
+{
 	vector<Coordinate> *coordinates = new vector<Coordinate>(getNumPoints());
 
 	int k = -1;
@@ -161,7 +158,7 @@ CoordinateSequence* GeometryCollection::getCoordinates() const {
 			k++;
 			(*coordinates)[k] = childCoordinates->getAt(j);
 		}
-		delete childCoordinates; // xie
+		delete childCoordinates; 
 	}
 	return DefaultCoordinateSequenceFactory::instance()->create(coordinates);
 }
@@ -303,9 +300,7 @@ const Coordinate* GeometryCollection::getCoordinate() const
 }
 
 /**
-*  Returns the area of this <code>GeometryCollection</code>
-*
-*@return the area of the polygon
+* @return the area of this collection
 */
 double GeometryCollection::getArea() const {
 	double area=0.0;
@@ -317,14 +312,12 @@ double GeometryCollection::getArea() const {
 }
 
 /**
-*  Returns the area of this <code>MultiLineString</code>
-*
-*@return the area of the polygon
+* @return the total length of this collection
 */
 double GeometryCollection::getLength() const {
 	double sum=0.0;
 	for(unsigned int i=0;i<geometries->size();i++) {
-        sum+=(*geometries)[i]->getLength();
+        	sum+=(*geometries)[i]->getLength();
 	}
 	return sum;
 }
@@ -350,41 +343,10 @@ GeometryCollection::~GeometryCollection(){
 	delete geometries;
 }
 
-/**
-* Computes the centroid of a heterogenous GeometryCollection.
-* The centroid
-* is equal to the centroid of the set of component Geometrys of highest
-* dimension (since the lower-dimension geometries contribute zero
-* "weight" to the centroid)
-* @return
-*/
-//Point* GeometryCollection::getCentroid() const {
-//	Coordinate* centPt;
-//	int dim=getDimension();
-//	if(dim==0) {
-//		CentroidPoint *cent=new CentroidPoint();
-//		cent->add(this);
-//		centPt=cent->getCentroid();
-//		delete cent;
-//	} else if (dim==1) {
-//		CentroidLine *cent=new CentroidLine();
-//		cent->add(this);
-//		centPt=cent->getCentroid();
-//		delete cent;
-//	} else {
-//		CentroidArea *cent=new CentroidArea();
-//		cent->add(this);
-//		centPt=cent->getCentroid();
-//		delete cent;
-//	}
-//	Point *pt=GeometryFactory::createPointFromInternalCoord(centPt,this);
-//	delete centPt;
-//	return pt;
-//}
-
 GeometryTypeId
 GeometryCollection::getGeometryTypeId() const {
 	return GEOS_GEOMETRYCOLLECTION;
 }
+
 }
 

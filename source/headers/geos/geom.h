@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/07/22 07:04:49  strk
+ * Documented missing geometry functions.
+ *
  * Revision 1.18  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -1347,7 +1350,7 @@ public:
 	/// Returns whether or not the set of points in this Geometry is empty.
 	virtual bool isEmpty() const=0; //Abstract
 
-	/// Returns the dimension of this Geometry.
+	/// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
 	virtual int getDimension() const=0; //Abstract
 
 	/** \brief
@@ -1800,61 +1803,64 @@ bool greaterThen(Geometry *first, Geometry *second);
  */
 class GeometryCollection : public Geometry{
 public:
-//	GeometryCollection(void);
 	GeometryCollection(const GeometryCollection &gc);
 
-	/**
-	* @param newGeoms
-	*	The <code>Geometry</code>s for this
-	*	<code>GeometryCollection</code>,
-	*	or <code>null</code> or an empty array to
-	*	create the empty geometry.
-	*	Elements may be empty <code>Geometry</code>s,
-	*	but not <code>null</code>s.
-	*
-	*	If construction succeed the created object will take
-	*	ownership of newGeoms vector and elements.
-	*
-	*	If construction	fails "IllegalArgumentException *"
-	*	is thrown and it is your responsibility to delete newGeoms
-	*	vector and content.
-	*
-	* @param newFactory the GeometryFactory used to create this geometry
-	*/
+	/** \brief
+	 * Construct a GeometryCollection with the given GeometryFactory.
+	 * Will keep a reference to the factory, so don't
+	 * delete it until al Geometry objects referring to
+	 * it are deleted.
+	 * Will take ownership of the Geometry vector.
+	 *
+	 * @param newGeoms
+	 *	The <code>Geometry</code>s for this
+	 *	<code>GeometryCollection</code>,
+	 *	or <code>null</code> or an empty array to
+	 *	create the empty geometry.
+	 *	Elements may be empty <code>Geometry</code>s,
+	 *	but not <code>null</code>s.
+	 *
+	 *	If construction succeed the created object will take
+	 *	ownership of newGeoms vector and elements.
+	 *
+	 *	If construction	fails "IllegalArgumentException *"
+	 *	is thrown and it is your responsibility to delete newGeoms
+	 *	vector and content.
+	 *
+	 * @param newFactory the GeometryFactory used to create this geometry
+	 */
 	GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
 
-	/**
-	* @param fromGeoms
-	*            the <code>Geometry</code>s for this
-	*	     <code>GeometryCollection</code>,
-	*	     Elements may be empty <code>Geometry</code>s,
-	*            but not <code>null</code>s.
-	*	     
-	*            fromGeoms vector and elements will be copied. 
-	*
-	* @param newFactory the GeometryFactory used to create this geometry
-	*/
-	GeometryCollection(const vector<Geometry *> &fromGeoms, const GeometryFactory *newFactory);
-
 	virtual Geometry *clone() const;
+
 	virtual ~GeometryCollection();
+
 	/**
-	* Collects all coordinates of all subgeometries into a CoordinateSequence.
-	* 
-	* Note that while changes to the coordinate objects themselves
-	* may modify the Geometries in place, the returned CoordinateSequence as such 
-	* is only a temporary container which is not synchronized back.
-	* 
-	* @return the collected coordinates
-	*
-	*/
+	 * \brief
+	 * Collects all coordinates of all subgeometries into a
+	 * CoordinateSequence.
+	 * 
+	 * Note that the returned coordinates are copies, so
+	 * you want be able to use them to modify the geometries
+	 * in place. Also you'll need to delete the CoordinateSequence
+	 * when finished using it.
+	 * 
+	 * @return the collected coordinates
+	 *
+	 */
 	virtual CoordinateSequence* getCoordinates() const;
+
 	virtual bool isEmpty() const;
+
+	/**
+	 * \brief
+	 * Returns the maximum dimension of geometries in this collection
+	 * (0=point, 1=line, 2=surface)
+	 */
 	virtual int getDimension() const;
+
 	virtual Geometry* getBoundary() const;
 	virtual int getBoundaryDimension() const;
-	virtual int getNumGeometries() const;
-	virtual const Geometry* getGeometryN(int n) const;
 	virtual int getNumPoints() const;
 	virtual string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
@@ -1869,9 +1875,14 @@ public:
 	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void normalize();
 	virtual const Coordinate* getCoordinate() const;
+	/// Returns the total area of this collection
 	virtual double getArea() const;
+	/// Returns the total length of this collection
 	virtual double getLength() const;
-//	virtual Point* getCentroid() const;
+	/// Returns the number of geometries in this collection
+	virtual int getNumGeometries() const;
+	/// Returns a pointer to the nth Geometry int this collection
+	virtual const Geometry* getGeometryN(int n) const;
 protected:
 	vector<Geometry *>* geometries;
 	virtual Envelope* computeEnvelopeInternal() const;
@@ -1926,7 +1937,10 @@ public:
 	bool isEmpty() const;
 	bool isSimple() const;
 	bool isValid() const;
+
+	/// Returns point dimension (0)
 	int getDimension() const;
+
 	int getBoundaryDimension() const;
 	double getX() const;
 	double getY() const;
@@ -1972,7 +1986,10 @@ public:
 	const CoordinateSequence* getCoordinatesRO() const;
 
 	virtual const Coordinate& getCoordinateN(int n) const;
+
+	/// Returns line dimension (1)
 	virtual int getDimension() const;
+
 	virtual int getBoundaryDimension() const;
 	virtual bool isEmpty() const;
 	virtual int getNumPoints() const;
@@ -2090,13 +2107,23 @@ public:
 	virtual Geometry *clone() const;
 	CoordinateSequence* getCoordinates() const;
 	int getNumPoints() const;
+
+	/// Returns surface dimension (2)
 	int getDimension() const;
+
 	int getBoundaryDimension() const;
 	bool isEmpty() const;
 	bool isSimple() const;
+	
+	/// Returns the exterior ring (shell)
 	const LineString* getExteriorRing() const;
+
+	/// Returns number of interior rings (hole)
 	int getNumInteriorRing() const;
+
+	/// Get nth interior ring (hole)
 	const LineString* getInteriorRingN(int n) const;
+
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	Geometry* getBoundary() const;
@@ -2109,8 +2136,12 @@ public:
 	void normalize();
 	int compareToSameClass(const Geometry *p) const; //was protected
 	const Coordinate* getCoordinate() const;
+
 	double getArea() const;
+
+ 	/// Returns the perimeter of this <code>Polygon</code>
 	double getLength() const;
+
 	void apply_rw(GeometryComponentFilter *filter);
 	void apply_ro(GeometryComponentFilter *filter) const;
 protected:
@@ -2147,7 +2178,10 @@ public:
 	MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
 
 	virtual ~MultiPoint();
+
+	/// Returns point dimension (0)
 	int getDimension() const;
+
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
@@ -2187,7 +2221,10 @@ public:
 	MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *newFactory);
 
 	virtual ~MultiLineString();
+
+	/// Returns line dimension (1)
 	int getDimension() const;
+
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
@@ -2226,7 +2263,10 @@ public:
 	MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
 	virtual ~MultiPolygon();
+
+	/// Returns surface dimension (2)
 	int getDimension() const;
+
 	int getBoundaryDimension() const;
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;

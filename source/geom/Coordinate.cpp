@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/07/22 07:04:49  strk
+ * Documented missing geometry functions.
+ *
  * Revision 1.15  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -42,6 +45,7 @@
 namespace geos {
 
 	Coordinate Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
+
 //void Coordinate::setNull() {
 //	x=DoubleNotANumber;
 //	y=DoubleNotANumber;
