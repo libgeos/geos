@@ -89,15 +89,10 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 	delete sortedChildBoundables;
 	vector<Boundable*> *ret;
 	ret = createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
-	for (unsigned int i=0; i<verticalSlicesV->size(); i++)
+	unsigned int vssize=verticalSlicesV->size();
+	for (unsigned int i=0; i<vssize; i++)
 	{
 		vector<Boundable *>*inner = (*verticalSlicesV)[i];
-		//for (unsigned int j=0; j<inner->size(); j++)
-		//{
-			// some of these might be provided,
-			// some of these might be created
-			//delete (*inner)[j];
-		//}
 		delete inner;
 	}
 	delete verticalSlicesV;
@@ -109,7 +104,9 @@ STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *v
 {
 	Assert::isTrue(verticalSlices->size()>0);
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
-	for (unsigned int i = 0; i <verticalSlices->size(); i++) {
+
+	unsigned int vssize=verticalSlices->size();
+	for (unsigned int i = 0; i<vssize; i++) {
 		vector<Boundable*> *toAdd=createParentBoundablesFromVerticalSlice((*verticalSlices)[i], newLevel);
 		parentBoundables->insert(parentBoundables->end(),toAdd->begin(),toAdd->end());
 		delete toAdd;
@@ -205,6 +202,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/01/31 15:41:03  strk
+ * Small optimizations.
+ *
  * Revision 1.18  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

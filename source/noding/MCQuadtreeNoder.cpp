@@ -34,7 +34,8 @@ MCQuadtreeNoder::MCQuadtreeNoder():
 }
 
 MCQuadtreeNoder::~MCQuadtreeNoder(){
-	for (unsigned int i=0; i<chains->size(); i++)
+	unsigned int size=chains->size();
+	for (unsigned int i=0; i<size; i++)
 	{
 		delete (*chains)[i];
 	}
@@ -45,7 +46,8 @@ MCQuadtreeNoder::~MCQuadtreeNoder(){
 vector<SegmentString*> *
 MCQuadtreeNoder::node(vector<SegmentString*> *inputSegStrings)
 {
-	for(int i=0; i<(int)inputSegStrings->size();i++) {
+	unsigned int size=inputSegStrings->size();
+	for(unsigned int i=0; i<size;i++) {
 		add((*inputSegStrings)[i]);
 	}
 
@@ -67,7 +69,8 @@ MCQuadtreeNoder::intersectChains()
 	//MonotoneChainOverlapAction *overlapAction = new SegmentOverlapAction(segInt);
 	SegmentOverlapAction overlapAction(segInt);
 
-	for (int i=0; i<(int)chains->size();i++) {
+	unsigned int chainsize=chains->size();
+	for (unsigned int i=0; i<chainsize;i++) {
 		indexMonotoneChain *queryChain=(*chains)[i];
 #if PROFILE
 		queryprof->start();
@@ -76,7 +79,8 @@ MCQuadtreeNoder::intersectChains()
 #if PROFILE
 		queryprof->stop();
 #endif
-		for (int j=0; j<(int)overlapChains->size();j++) {
+		unsigned int overlapsize=overlapChains->size();
+		for (unsigned int j=0; j<overlapsize; j++) {
 			indexMonotoneChain *testChain=(indexMonotoneChain*)(*overlapChains)[j];
 			/**
 			 * following test makes sure we only compare each
@@ -107,7 +111,8 @@ MCQuadtreeNoder::add(SegmentString *segStr)
 #if DEBUG
 	cerr<<"MCQuadtreeNoder: adding "<<segChains->size()<<" items in STRtree index"<<endl;
 #endif
-	for (int i=0; i<(int)segChains->size();i++) {
+	unsigned int size=segChains->size();
+	for (unsigned int i=0; i<size;i++) {
 		indexMonotoneChain *mc=(*segChains)[i];
 		mc->setId(idCounter++);
 		index->insert(mc->getEnvelope(), mc);
@@ -132,6 +137,9 @@ MCQuadtreeNoder::SegmentOverlapAction::overlap(indexMonotoneChain *mc1, int star
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/01/31 15:41:03  strk
+ * Small optimizations.
+ *
  * Revision 1.14  2004/11/08 15:58:13  strk
  * More performance tuning.
  *

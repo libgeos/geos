@@ -94,11 +94,13 @@ AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables, int
 	for(unsigned int i=0; i<scbsize; i++) {
 		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
 
-		if (lastNode(parentBoundables)->getChildBoundables()->size()==(unsigned int)nodeCapacity)
+		AbstractNode *last = lastNode(parentBoundables);
+		if (last->getChildBoundables()->size()==(unsigned int)nodeCapacity)
 		{
-			parentBoundables->push_back(createNode(newLevel));
+			last=createNode(newLevel);
+			parentBoundables->push_back(last);
 		}
-		lastNode(parentBoundables)->addChildBoundable(childBoundable);
+		last->addChildBoundable(childBoundable);
 	}
 	delete sortedChildBoundables;
 	return parentBoundables;
@@ -253,6 +255,9 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2005/01/31 15:41:03  strk
+ * Small optimizations.
+ *
  * Revision 1.22  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
