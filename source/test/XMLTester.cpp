@@ -104,11 +104,28 @@ int main(int argC, char* argV[]) {
 			cout << "\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
 		if (opName=="relate") {
 			IntersectionMatrix *im=gA->relate(gB);
-			string a=im->toString();
 			if (out & TEST_RESULT)
 				cout << "\tResult: matrix='" << im->toString() << "' result=" << (im->matches(opSig)?"true":"false") <<endl;
 			if (!im->matches(opSig)) failed++; else succeeded++;
+		} else if (opName=="isValid") {
+			string result;
+			if (gA->isValid()) {
+				result="true";
+			} else {
+				result="false";
+			}
+			if (out & TEST_RESULT) {
+				if (result==opRes) {
+					cout << "\tResult: isValid='" << result << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\tResult: isValid='" << result << "' result=false"  <<endl;
+					failed++;
+				}
+			}
 		}
+
+
 		if (out & PRED) {
 			cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
 			cout << "\tDisjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;
