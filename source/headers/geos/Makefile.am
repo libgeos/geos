@@ -23,11 +23,9 @@ geos_HEADERS = \
 	opValid.h \
 	opDistance.h \
 	opPolygonize.h \
-	platform.h \
 	precision.h \
 	operation.h \
 	spatialIndex.h \
 	unload.h \
 	util.h \
-	profiler.h \
-	version.h
+	profiler.h 

@@ -3,4 +3,5 @@ SUBDIRS = \
 	macros \
 	tools \
 	swig \
-	doc
+	doc \
+	VisualStudio 
