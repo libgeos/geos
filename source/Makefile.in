@@ -79,7 +79,7 @@ RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
 
-SUBDIRS = algorithm geom graph headers io util
+SUBDIRS = algorithm geom graph headers io util operation
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../source/headers/config.h
 CONFIG_CLEAN_FILES = 

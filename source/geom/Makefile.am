@@ -47,7 +47,9 @@ EXTERNAL_SOURCES = 	../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../algorithm/RobustDeterminant.cpp \
 			../algorithm/RobustLineIntersector.cpp \
 			../algorithm/SimplePointInAreaLocator.cpp \
-			../algorithm/SimplePointInRing.cpp
+			../algorithm/SimplePointInRing.cpp \
+			../operation/GeometryGraphOperation.cpp \
+			../operation/IsSimpleOp.cpp
 
 libgeos_la_SOURCES =	$(DIR_SOURCES) $(EXTERNAL_SOURCES)
 

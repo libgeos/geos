@@ -126,7 +126,9 @@ EXTERNAL_SOURCES = ../graph/Depth.cpp  ../graph/GeometryGraph.cpp \
 			../algorithm/RobustDeterminant.cpp \
 			../algorithm/RobustLineIntersector.cpp \
 			../algorithm/SimplePointInAreaLocator.cpp \
-			../algorithm/SimplePointInRing.cpp
+			../algorithm/SimplePointInRing.cpp \
+			../operation/GeometryGraphOperation.cpp \
+			../operation/IsSimpleOp.cpp
 
 
 libgeos_la_SOURCES = $(DIR_SOURCES) $(EXTERNAL_SOURCES)
@@ -170,7 +172,8 @@ MultiLineString.lo ../graph/Depth.lo ../graph/GeometryGraph.lo \
 ../algorithm/PointLocator.lo ../algorithm/RobustCGAlgorithms.lo \
 ../algorithm/RobustDeterminant.lo ../algorithm/RobustLineIntersector.lo \
 ../algorithm/SimplePointInAreaLocator.lo \
-../algorithm/SimplePointInRing.lo
+../algorithm/SimplePointInRing.lo \
+../operation/GeometryGraphOperation.lo ../operation/IsSimpleOp.lo
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -210,7 +213,9 @@ DEP_FILES =  .deps/../algorithm/HCoordinate.P \
 .deps/../graph/index/SweepLineSegment.P .deps/../io/ParseException.P \
 .deps/../io/StringTokenizer.P .deps/../io/WKTReader.P \
 .deps/../io/WKTWriter.P .deps/../io/Writer.P \
-.deps/../io/markup/MarkupSTL.P .deps/../util/Assert.P \
+.deps/../io/markup/MarkupSTL.P \
+.deps/../operation/GeometryGraphOperation.P \
+.deps/../operation/IsSimpleOp.P .deps/../util/Assert.P \
 .deps/../util/AssertionFailedException.P .deps/Coordinate.P \
 .deps/CoordinateList.P .deps/Dimension.P .deps/Envelope.P \
 .deps/Geometry.P .deps/GeometryCollection.P \

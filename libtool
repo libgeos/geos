@@ -35,7 +35,7 @@ if test "X${CDPATH+set}" = Xset; then CDPATH=:; export CDPATH; fi
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host basil:
+# Libtool was configured on host basil.snr.uvm.edu:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -113,7 +113,7 @@ libext="a"
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag="        -fPIC"
+pic_flag="         -fPIC"
 pic_mode=default
 
 # Does compiler simultaneously support -c and -o options?
