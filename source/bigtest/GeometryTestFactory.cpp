@@ -1,6 +1,7 @@
+#include <math.h>
+
 #include "bigtest.h"
-#include "geom.h"
-#include "math.h"
+#include "../headers/geom.h"
 
 #define PI 3.14159265358979
 
