@@ -16,10 +16,6 @@
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
 
-// Threating FP number as IEEE formatted will make the code
-// loose portability w/out really speed things up
-#define IEEE_DOUBLE 0
-
 namespace geos {
 
 double
@@ -27,10 +23,12 @@ DoubleBits::powerOf2(int exp)
 {
 	if (exp>1023 || exp<-1022)
 		throw new IllegalArgumentException("Exponent out of bounds");
-#ifdef IEEE_DOUBLE
-	long expBias=exp+EXPONENT_BIAS;
-	int64 bits=(int64)expBias << 52;
-	return (double) bits;
+#if ASSUME_IEEE_DOUBLE
+	int64 expBias=exp+EXPONENT_BIAS;
+	int64 bits=expBias << 52;
+	double ret;
+	memcpy(&ret, &bits, sizeof(int64));
+	return ret;
 #else
 	return pow(2.0, exp);
 #endif
@@ -39,12 +37,8 @@ DoubleBits::powerOf2(int exp)
 int
 DoubleBits::exponent(double d)
 {
-#ifdef IEEE_DOUBLE
 	DoubleBits db(d);
 	return db.getExponent();
-#else
-	return (int)(log(d)/log(2.0));
-#endif
 }
 
 double
@@ -76,6 +70,7 @@ DoubleBits::maximumCommonMantissa(double d1, double d2)
 DoubleBits::DoubleBits(double nx)
 {
 	memcpy(&xBits,&nx,sizeof(double));
+	x = nx;
 }
 
 double DoubleBits::getDouble()
@@ -105,7 +100,11 @@ DoubleBits::biasedExponent()
 int
 DoubleBits::getExponent()
 {
+#if ASSUME_IEEE_DOUBLE
 	return biasedExponent()-EXPONENT_BIAS;
+#else
+	return (int)((log(x)/log(2.0))+(x<1?-1:0.00000000001));
+#endif
 }
 
 void
@@ -141,11 +140,11 @@ int DoubleBits::numCommonMantissaBits(DoubleBits *db) {
 }
 
 /**
-* A representation of the Double bits formatted for easy readability
-* @return
-*/
+ * A representation of the Double bits formatted for easy readability
+ * @return
+ */
 string DoubleBits::toString() {
-//String numStr = Long.toBinaryString(xBits);
+	//String numStr = Long.toBinaryString(xBits);
 //// 64 zeroes!
 //String zero64 = "0000000000000000000000000000000000000000000000000000000000000000";
 //String padStr =  zero64 + numStr;
@@ -162,6 +161,11 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2004/11/02 15:49:59  strk
+ * Moved ASSUME_IEEE_DOUBLE define from DoubleBits.cpp to indexQuadtree.h.
+ * Fixed a bug in powerOf2(). Made the !IEEE version less prone to
+ * round-offs (still has approximation errors).
+ *
  * Revision 1.13  2004/11/02 14:13:38  strk
  * Fixed bug in IEEE-based exponent and PowerOf2 computation, but disabled
  * at compile time.
