@@ -84,10 +84,12 @@ ElevationMatrix::getCell(const Coordinate &c)
 	double xoffset = c.x - env.getMinX();
 	double yoffset = c.y - env.getMinY();
 	int col = (int)(xoffset/cellwidth);
+	if ( col == cols ) col = cols-1;
 	int row = (int)(yoffset/cellheight);
+	if ( row == rows ) row = rows-1;
 	int celloffset = (cols*row)+col;
 
-	if  (celloffset<0 || celloffset >= cells.size() )
+	if  (celloffset<0 || celloffset >= cols*rows)
 	{
 		ostringstream s;
 		s<<"ElevationMatrix::getCell got a Coordinate out of grid extent ("<<env.toString()<<")";
@@ -154,6 +156,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2004/11/24 12:29:36  strk
+ * Handled boundary cases in ::getCell
+ *
  * Revision 1.1  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *
