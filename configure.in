@@ -8,14 +8,14 @@ AM_INIT_AUTOMAKE(geos, 1)
 AM_CONFIG_HEADER(source/headers/config.h)
 AC_PROG_CC
 
+dnl check for programs ----------------------------------------------------
+AC_PROG_CXX
+AC_ISC_POSIX
+
 dnl use libtool ----------------------------------------------------------
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
-
-dnl check for programs ----------------------------------------------------
-AC_PROG_CXX
-AC_ISC_POSIX
 
 dnl function checks ------------------------------------------------------
 AC_FUNC_CLOSEDIR_VOID
