@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.14  2004/05/06 15:00:59  strk
  * Boundable destructor made virtual.
  * Added vector <AbstractNode *> *nodes member in AbstractSTRTree,
@@ -52,9 +55,9 @@
 
 #include <memory>
 #include <vector>
-#include "platform.h"
-#include "spatialIndex.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/spatialIndex.h>
+#include <geos/geom.h>
 
 using namespace std;
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.32  2004/06/30 20:59:12  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -38,13 +41,13 @@
 #define GEOS_ALGORITHM_H
 
 #include <memory>
-#include "geom.h"
-#include "util.h"
-#include "platform.h"
-#include "indexBintree.h"
-#include "indexStrtree.h"
-#include "indexStrtree.h"
-#include "indexChain.h"
+#include <geos/geom.h>
+#include <geos/util.h>
+#include <geos/platform.h>
+#include <geos/indexBintree.h>
+#include <geos/indexStrtree.h>
+#include <geos/indexStrtree.h>
+#include <geos/indexChain.h>
 
 namespace geos {
 

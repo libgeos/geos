@@ -1,8 +1,8 @@
 #ifndef GEOS_H
 #define GEOS_H
 
-#include "geos_version.h"
-#include "geom.h"
-#include "util.h"
+#include "geos/version.h"
+#include "geos/geom.h"
+#include "geos/util.h"
 
 #endif

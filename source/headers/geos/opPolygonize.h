@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.1  2004/04/08 04:53:56  ybychkov
  * "operation/polygonize" ported from JTS 1.4
  *
@@ -23,10 +26,10 @@
 #ifndef GEOS_OPPOLYGONIZE_H
 #define GEOS_OPPOLYGONIZE_H
 
-#include "platform.h"
-#include "planargraph.h"
-#include "geosAlgorithm.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/planargraph.h>
+#include <geos/geosAlgorithm.h>
+#include <geos/geom.h>
 #include <vector>
 
 namespace geos {

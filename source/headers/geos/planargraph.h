@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.3  2004/04/16 08:52:52  strk
  * Unload::Release final delete (static heap allocations should be gone now)
  *
@@ -29,8 +32,8 @@
 #ifndef GEOS_PLANARGRAPH_H
 #define GEOS_PLANARGRAPH_H
 
-#include "platform.h"
-#include "geosAlgorithm.h"
+#include <geos/platform.h>
+#include <geos/geosAlgorithm.h>
 #include <vector>
 #include <string>
 #include <map>

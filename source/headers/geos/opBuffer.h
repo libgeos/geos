@@ -13,7 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.22  2004/07/01 14:12:44  strk
+ *
  * Geometry constructors come now in two flavors:
  * 	- deep-copy args (pass-by-reference)
  * 	- take-ownership of args (pass-by-pointer)
@@ -87,12 +91,12 @@
 #define GEOS_OPBUFFER_H
 
 #include <memory>
-#include "platform.h"
-#include "operation.h"
-#include "opOverlay.h"
-#include "geomgraph.h"
-#include "noding.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/operation.h>
+#include <geos/opOverlay.h>
+#include <geos/geomgraph.h>
+#include <geos/noding.h>
+#include <geos/geom.h>
 #include <vector>
 
 namespace geos {

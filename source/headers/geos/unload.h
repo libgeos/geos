@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.2  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -21,8 +24,18 @@
  **********************************************************************/
 
 
-/* Set to 1 if type "long int" works and is 64 bits */
-#undef HAVE_LONG_INT_64
+#ifndef GEOS_UNLOAD_H
+#define GEOS_UNLOAD_H
+//xie add for realse static memory 2003,10,06
+namespace geos {
 
-/* Set to 1 if type "long long int" works and is 64 bits */
-#undef HAVE_LONG_LONG_INT_64
+class Unload
+{
+public:
+	Unload(void);
+	~Unload(void);
+	static void Release();
+};
+
+}
+#endif

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.4  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -25,7 +28,7 @@
 #define GEOS_BIGTEST_H
 
 #include <memory>
-#include "geom.h"
+#include <geos/geom.h>
 
 using namespace std;
 using namespace geos;

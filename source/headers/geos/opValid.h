@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.15  2004/05/18 00:02:37  ybychkov
  * IsValidOp::checkShellNotNested() bugfix from JTS 1.4.1 (not released yet) has been added.
  *
@@ -36,10 +39,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "platform.h"
-#include "opRelate.h"
-#include "indexSweepline.h"
-#include "indexQuadtree.h"
+#include <geos/platform.h>
+#include <geos/opRelate.h>
+#include <geos/indexSweepline.h>
+#include <geos/indexQuadtree.h>
 
 namespace geos {
 

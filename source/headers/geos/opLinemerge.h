@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.1  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  *
@@ -23,9 +26,9 @@
 #ifndef GEOS_OPLINEMERGE_H
 #define GEOS_OPLINEMERGE_H
 
-#include "platform.h"
-#include "planargraph.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/planargraph.h>
+#include <geos/geom.h>
 #include <vector>
 
 namespace geos {

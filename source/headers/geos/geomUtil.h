@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.4  2004/05/14 14:45:28  strk
  * Fixed bogus inheritance of LinearComponentExtracter
  *
@@ -32,8 +35,8 @@
 #ifndef GEOS_GEOMUTIL_H
 #define GEOS_GEOMUTIL_H
 
-#include "geom.h"
-#include "platform.h"
+#include <geos/geom.h>
+#include <geos/platform.h>
 #include <vector>
 
 using namespace std;

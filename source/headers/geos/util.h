@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.14  2004/04/10 22:41:25  ybychkov
  * "precision" upgraded to JTS 1.4
  *
@@ -30,6 +33,9 @@
 
 /*
 * $Log$
+* Revision 1.1  2004/07/02 13:20:42  strk
+* Header files moved under geos/ dir.
+*
 * Revision 1.14  2004/04/10 22:41:25  ybychkov
 * "precision" upgraded to JTS 1.4
 *
@@ -53,8 +59,8 @@
 
 #include <memory>
 #include <string>
-#include "platform.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/geom.h>
 
 using namespace std;
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.6  2004/06/30 20:59:12  strk
  * Removed GeoemtryFactory copy from geometry constructors.
  * Enforced const-correctness on GeometryFactory arguments.
@@ -56,10 +59,10 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "geom.h"
-#include "geomgraphindex.h"
-#include "geosAlgorithm.h"
-#include "platform.h"
+#include <geos/geom.h>
+#include <geos/geomgraphindex.h>
+#include <geos/geosAlgorithm.h>
+#include <geos/platform.h>
 
 using namespace std;
 

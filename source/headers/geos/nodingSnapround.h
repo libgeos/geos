@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.1  2004/03/29 06:59:24  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -25,9 +28,9 @@
 #ifndef GEOS_NODING_SNAPROUND_H
 #define GEOS_NODING_SNAPROUND_H
 
-#include "platform.h"
-#include "noding.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/noding.h>
+#include <geos/geom.h>
 #include <vector>
 
 using namespace std;

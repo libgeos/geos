@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.15  2004/03/29 06:59:25  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -39,10 +42,10 @@
 #include <map>
 //#include <algorithm>
 //#include "math.h"
-#include "platform.h"
-#include "geomgraph.h"
-#include "geom.h"
-#include "geosAlgorithm.h"
+#include <geos/platform.h>
+#include <geos/geomgraph.h>
+#include <geos/geom.h>
+#include <geos/geosAlgorithm.h>
 
 using namespace std;
 

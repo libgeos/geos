@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.6  2004/05/06 16:30:58  strk
  * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
  * deleted at destruction time. doc/example.cpp runs with no leaks.
@@ -33,8 +36,8 @@
 
 #include <memory>
 #include <vector>
-#include "platform.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/geom.h>
 
 using namespace std;
 

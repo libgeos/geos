@@ -13,7 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.68  2004/07/01 14:12:44  strk
+ *
  * Geometry constructors come now in two flavors:
  * 	- deep-copy args (pass-by-reference)
  * 	- take-ownership of args (pass-by-pointer)
@@ -123,9 +127,9 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-#include "math.h"
+#include <math.h>
 //#include "geomUtil.h"
-#include "platform.h"
+#include <geos/platform.h>
 
 using namespace std;
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.4  2004/05/03 17:15:38  strk
  * leaks on exception fixed.
  *
@@ -33,9 +36,9 @@
 #ifndef GEOS_PRECISION_H
 #define GEOS_PRECISION_H
 
-#include "platform.h"
-#include "geom.h"
-#include "geomUtil.h"
+#include <geos/platform.h>
+#include <geos/geom.h>
+#include <geos/geomUtil.h>
 #include <string>
 #include <vector>
 

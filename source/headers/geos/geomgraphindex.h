@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.2  2004/04/04 06:29:11  ybychkov
  * "planargraph" and "geom/utill" upgraded to JTS 1.4
  *
@@ -31,11 +34,11 @@
 #define GEOS_GEOMGRAPH_INDEX_H
 
 #include <memory>
-#include "geomgraph.h"
-#include "geom.h"
+#include <geos/geomgraph.h>
+#include <geos/geom.h>
 #include <vector>
-#include "geosAlgorithm.h"
-#include "platform.h"
+#include <geos/geosAlgorithm.h>
+#include <geos/platform.h>
 
 namespace geos {
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.10  2004/05/14 13:42:46  strk
  * DistanceOp bug removed, cascading errors fixed.
  *
@@ -38,9 +41,9 @@
 #define GEOS_OPDISTANCE_H
 
 #include <memory>
-#include "platform.h"
-#include "operation.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/operation.h>
+#include <geos/geom.h>
 #include <vector>
 
 namespace geos {

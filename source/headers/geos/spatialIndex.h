@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
  * Revision 1.6  2004/04/19 15:14:45  strk
  * Added missing virtual destructor in SpatialIndex class.
  * Memory leaks fixes. Const and throw specifications added.
@@ -32,8 +35,8 @@
 #define GEOS_INDEX_H
 
 #include <memory>
-#include "platform.h"
-#include "geom.h"
+#include <geos/platform.h>
+#include <geos/geom.h>
 
 using namespace std;
 
