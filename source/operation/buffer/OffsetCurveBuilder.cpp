@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/16 13:03:17  strk
+ * More leaks fixed
+ *
  * Revision 1.2  2004/04/16 12:48:07  strk
  * Leak fixes.
  *
@@ -321,7 +324,9 @@ void OffsetCurveBuilder::computeOffsetSegment(LineSegment *seg, int side, double
 /**
 * Add an end cap around point p1, terminating a line segment coming from p0
 */
-void OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1){
+void
+OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
+{
 	LineSegment *seg=new LineSegment(p0, p1);
 	LineSegment *offsetL=new LineSegment();
 	computeOffsetSegment(seg, Position::LEFT, distance, offsetL);
@@ -347,14 +352,18 @@ void OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1
 			Coordinate *squareCapSideOffset=new Coordinate();
 			squareCapSideOffset->x=abs(distance)*cos(angle);
 			squareCapSideOffset->y=abs(distance)*sin(angle);
-			Coordinate *squareCapLOffset=new Coordinate(offsetL->p1.x+squareCapSideOffset->x,
-														offsetL->p1.y+squareCapSideOffset->y);
-			Coordinate *squareCapROffset=new Coordinate(offsetR->p1.x+squareCapSideOffset->x,
-														offsetR->p1.y+squareCapSideOffset->y);
+			Coordinate *squareCapLOffset=new Coordinate(offsetL->p1.x+squareCapSideOffset->x, offsetL->p1.y+squareCapSideOffset->y);
+			Coordinate *squareCapROffset=new Coordinate(offsetR->p1.x+squareCapSideOffset->x, offsetR->p1.y+squareCapSideOffset->y);
 			addPt(*squareCapLOffset);
 			addPt(*squareCapROffset);
+			delete squareCapSideOffset;
+			delete squareCapLOffset;
+			delete squareCapROffset;
 			break;
 	}
+	delete seg;
+	delete offsetL;
+	delete offsetR;
 }
 /**
 * @param p base point of curve
