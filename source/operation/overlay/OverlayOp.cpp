@@ -17,15 +17,8 @@
 #include <stdio.h>
 #include <geos/util.h>
 
-#ifndef DEBUG_INTERSECT
-#define DEBUG_INTERSECT 0
-#endif
-#ifndef DEBUG
 #define DEBUG 0
-#endif
-#ifndef COMPUTE_Z
-#define COMPUTE_Z 0
-#endif
+#define COMPUTE_Z 1
 
 namespace geos {
 
@@ -122,14 +115,14 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 		insertUniqueEdge(e);
 	}
 
-#if DEBUG_INTERSECT
+#if DEBUG
 	cerr<<"OverlayOp::insertUniqueEdges("<<edges->size()<<"): "<<endl;
 	for(int i=0;i<(int)edges->size();i++) {
 		Edge *e=(*edges)[i];
 		if ( ! e ) cerr <<" NULL"<<endl;
 		cerr <<" "<< e->print() << endl;
 	}
-#endif // DEBUG_INTERSECT
+#endif // DEBUG
 
 }
 
@@ -192,11 +185,16 @@ OverlayOp::computeLabelling()
 	//throw(TopologyException *) // and what else ?
 {
 	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+
+#if DEBUG
+	cerr<<"OverlayOp::computeLabelling() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+#endif
+
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
 		Node *node=it->second;
 #if DEBUG
-		cerr<<"Node "<<node->print()<<" has "<<node->getEdges()->getEdges()->size()<<" edgeEnds"<<endl;
+		cerr<<"     "<<node->print()<<" has "<<node->getEdges()->getEdges()->size()<<" edgeEnds"<<endl;
 #endif
 		node->getEdges()->computeLabelling(arg);
 	}
@@ -258,6 +256,9 @@ void
 OverlayOp::labelIncompleteNodes()
 {
 	map<Coordinate,Node*,CoordLT> *nodeMap=graph->getNodeMap()->nodeMap;
+#if DEBUG
+	cerr<<"OverlayOp::labelIncompleteNodes() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+#endif
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
 		Node *n=it->second;
@@ -280,17 +281,46 @@ OverlayOp::labelIncompleteNodes()
 void
 OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 {
+#if DEBUG
+	cerr<<"OverlayOp::labelIncompleteNode("<<n->print()<<", "<<targetIndex<<")"<<endl;
+#endif
 	const Geometry *targetGeom = (*arg)[targetIndex]->getGeometry();
 	int loc=ptLocator->locate(n->getCoordinate(), targetGeom);
 	n->getLabel()->setLocation(targetIndex,loc);
 
+#if DEBUG
+	cerr<<"   after location set: "<<n->print()<<endl;
+#endif
+
 #if COMPUTE_Z
+	/*
+	 * If this node has been labeled INTERIOR of a line
+	 * or BOUNDARY of a polygon we must merge
+	 * Z values of the intersected segment.
+	 * The intersection point has been already computed
+	 * by LineIntersector invoked by CGAlgorithms::isOnLine
+	 * invoked by PointLocator.
+	 */
 	const LineString *line = dynamic_cast<const LineString *>(targetGeom);
-	if ( loc == Location::INTERIOR && line)
+	if ( loc == Location::INTERIOR && line )
 	{
-#if DEBUG_INTERSECTS
-		cerr<<"Node is the INTERIOR of a line, should interpolate the Z value"<<endl;
-#endif // DEBUG_INTERSECTS
+		const CoordinateSequence *pts = line->getCoordinatesRO();
+		const Coordinate &p = n->getCoordinate();
+		RobustLineIntersector li;
+		for(int i=1;i<pts->getSize();i++) {
+			Coordinate p0=pts->getAt(i-1);
+			Coordinate p1=pts->getAt(i);	
+			li.computeIntersection(p, p0, p1);
+			if (li.hasIntersection()) {
+				if ( p == p0 ) n->addZ(p0.z);
+				else if ( p == p1 ) n->addZ(p1.z);
+				else {
+					n->addZ(p0.z);
+					n->addZ(p1.z);
+				}
+				break;
+			}
+		}
 	}
 #endif // COMPUTE_Z
 }
@@ -467,14 +497,14 @@ OverlayOp::computeOverlay(int opCode)
 	delete (*arg)[0]->computeSelfNodes(li,false);
 	delete (*arg)[1]->computeSelfNodes(li,false);
 
-#if DEBUG_INTERSECT
+#if DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed SelfNodes"<<endl;
 #endif
 
 	// compute intersections between edges of the two input geometries
 	delete (*arg)[0]->computeEdgeIntersections((*arg)[1],li,true);
 
-#if DEBUG_INTERSECT
+#if DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed EdgeIntersections"<<endl;
 	cerr<<"OverlayOp::computeOverlay: li: "<<li->toString()<<endl;
 #endif
@@ -649,10 +679,13 @@ OverlayOp::computeLabelsFromDepths()
 	}
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2004/11/20 16:25:17  strk
+ * Added Z computation for point on line case.
+ *
  * Revision 1.26  2004/11/17 15:09:08  strk
  * Changed COMPUTE_Z defaults to be more conservative
  *
