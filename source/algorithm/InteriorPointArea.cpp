@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/07 14:12:23  strk
+ * Fixed segfault in destructor
+ *
  * Revision 1.9  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -46,7 +49,7 @@ InteriorPointArea::InteriorPointArea(const Geometry *g) {
 }
 
 InteriorPointArea::~InteriorPointArea() {
-	delete factory;
+	//delete factory;
 }
 
 Coordinate* InteriorPointArea::getInteriorPoint() const {
