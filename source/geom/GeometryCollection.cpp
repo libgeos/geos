@@ -15,16 +15,24 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 	geometries=gc.geometries;	
 }
 
+/*
+* Copies given vector<Geometry *> to private area.
+* WARNING: Geometries pointed to by vector elements will
+* be deleted by GeometryCollection destructor, so callers
+* should not touch them anymore (althought they can safely
+* delete vector used to store them).
+*/
 GeometryCollection::GeometryCollection(vector<Geometry *> *newGeometries,PrecisionModel* pm,int SRID):
 	Geometry(pm,SRID){
 	if (newGeometries==NULL) {
-		newGeometries=new vector<Geometry *>();
+		geometries=new vector<Geometry *>();
+		return;
 	}
 	if (hasNullElements(newGeometries)) {
-		delete newGeometries;
 		throw new IllegalArgumentException("geometries must not contain null elements\n");
+		return;
 	}
-	geometries=newGeometries;
+	geometries=new vector<Geometry *>(*newGeometries);
 }
 
 CoordinateList* GeometryCollection::getCoordinates() {
