@@ -285,18 +285,24 @@ bool operator==(Edge e1, Edge e2)
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
 bool Edge::equals(Edge *e){
-	if (pts->getSize()!=e->pts->getSize()) return false;
+	unsigned int npts=pts->getSize();
+	if (npts!=(unsigned int)e->pts->getSize()) return false;
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
-	int iRev=pts->getSize();
-	for (int i=0; i<pts->getSize();i++) {
-		if (!pts->getAt(i).equals2D(e->pts->getAt(i))) {
+	unsigned int iRev=npts;
+	for (unsigned int i=0; i<npts; i++) {
+		const Coordinate &c=pts->getAt(i);
+		if (isEqualForward && !c.equals2D(e->pts->getAt(i))) 
+		{
 			isEqualForward=false;
+			if ( ! isEqualReverse ) return false;
 		}
-		if (!pts->getAt(i).equals2D(e->pts->getAt(--iRev))) {
+		if (isEqualReverse && !c.equals2D(e->pts->getAt(--iRev)))
+		{
 			isEqualReverse=false;
+			if ( ! isEqualForward ) return false;
 		}
-		if (!isEqualForward && !isEqualReverse) return false;
+		//if (!isEqualForward && !isEqualReverse) return false;
 	}
 	return true;
 }
@@ -359,6 +365,9 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/02/22 10:55:41  strk
+ * Optimized Edge::equals(Edge *e)
+ *
  * Revision 1.10  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
