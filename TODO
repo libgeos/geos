@@ -1,3 +1,5 @@
+- Check Polygonizer output (contains duplicated rings)
+
 - Add distinct binary predicates test suppor in XMLTester
 
 - IsValidTest.cpp in source/test ?
