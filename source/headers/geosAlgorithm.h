@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.29  2004/02/27 17:42:15  strk
+ * made CGAlgorithms::signedArea() and CGAlgorithms::length() arguments const-correct
+ *
  * Revision 1.28  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -92,8 +95,8 @@ public:
 	virtual int computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q) const=0;
 	static double distancePointLine(const Coordinate& p,const Coordinate& A,const Coordinate& B);
 	static double distanceLineLine(const Coordinate& A, const Coordinate& B, const Coordinate& C, const Coordinate& D);
-	static double signedArea(CoordinateList* ring);
-	static double length(CoordinateList* pts);
+	static double signedArea(const CoordinateList* ring);
+	static double length(const CoordinateList* pts);
 };
 
 class HCoordinate {

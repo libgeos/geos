@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/02/27 17:42:15  strk
+ * made CGAlgorithms::signedArea() and CGAlgorithms::length() arguments const-correct
+ *
  * Revision 1.10  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -122,7 +125,7 @@ limiting conditions:
 * Returns the signed area for a ring.  The area is positive if
 * the ring is oriented CW.
 */
-double CGAlgorithms::signedArea(CoordinateList* ring) {
+double CGAlgorithms::signedArea(const CoordinateList* ring) {
 	if (ring->getSize()<3) return 0.0;
 	double sum=0.0;
 	for (int i=0;i<ring->getSize()-1;i++) {
@@ -138,7 +141,7 @@ double CGAlgorithms::signedArea(CoordinateList* ring) {
 /**
 * Returns the length of a list of line segments.
 */
-double CGAlgorithms::length(CoordinateList* pts) {
+double CGAlgorithms::length(const CoordinateList* pts) {
 	if (pts->getSize()<1) return 0.0;
 	double sum=0.0;
 	for(int i=1;i<pts->getSize();i++) {
