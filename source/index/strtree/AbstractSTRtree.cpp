@@ -13,6 +13,13 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/04/28 14:58:47  strk
+ * Made AbstractSTRtree::query use dynamic_cast<> to simulate java's
+ * instanceof. Previous typeid(*) use missed to catch an STRAbstractNode
+ * as a class derived from AbstractNode. Still have to check if this
+ * is the correct semantic with Martin, but at least lots of SIGABORT
+ * are no more raised.
+ *
  * Revision 1.8  2004/04/26 12:37:19  strk
  * Some leaks fixed.
  *
@@ -171,10 +178,13 @@ void AbstractSTRtree::query(void* searchBounds,AbstractNode* node,vector<void*> 
 		if (!intersectsOp->intersects(childBoundable->getBounds(),searchBounds)) {
 			continue;
 		}
-		if (typeid(*childBoundable)==typeid(AbstractNode)) {
-			query(searchBounds,(AbstractNode*)childBoundable,matches);
-		} else if (typeid(*childBoundable)==typeid(ItemBoundable)) {
-			matches->push_back(((ItemBoundable*)childBoundable)->getItem());
+
+		if(AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
+		{
+			query(searchBounds,an,matches);
+		} else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
+		{
+			matches->push_back(ib->getItem());
 		} else {
 			Assert::shouldNeverReachHere("AbstractSTRtree::query encountered an unsupported childBoundable type");
 		}
