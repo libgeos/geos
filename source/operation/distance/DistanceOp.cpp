@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2004/04/13 10:05:51  strk
+ * GeometryLocation constructor made const-correct.
+ * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
+ *
  * Revision 1.8  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -256,15 +260,17 @@ void DistanceOp::computeMinDistanceLines(vector<Geometry*> *lines0,vector<Geomet
 
 void DistanceOp::computeMinDistancePoints(vector<Geometry*> *points0,vector<Geometry*> *points1,vector<GeometryLocation*> *locGeom){
 	for (int i=0;i<(int)points0->size();i++) {
-		Point *pt0=(Point*) (*points0)[i];
+		//Point *pt0=(Point*) (*points0)[i];
+		Geometry *pt0=(*points0)[i];
 		for (int j=0;j<(int)points1->size();j++) {
-			Point *pt1=(Point*) (*points1)[j];
+			//Point *pt1=(Point*) (*points1)[j];
+			Geometry *pt1=(*points1)[j];
 			double dist=pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
 			if (dist < minDistance) {
 				minDistance = dist;
 				// this is wrong - need to determine closest points on both segments!!!
-				(*locGeom)[0] = new GeometryLocation(pt0, 0, (Coordinate)*(pt0->getCoordinate()));
-				(*locGeom)[1] = new GeometryLocation(pt1, 0, (Coordinate)*(pt1->getCoordinate()));
+				(*locGeom)[0] = new GeometryLocation(pt0, 0, *(pt0->getCoordinate()));
+				(*locGeom)[1] = new GeometryLocation(pt1, 0, *(pt1->getCoordinate()));
 			}
 			if (minDistance<=0.0) return;
 		}

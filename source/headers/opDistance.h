@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/04/13 10:05:51  strk
+ * GeometryLocation constructor made const-correct.
+ * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
+ *
  * Revision 1.7  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -60,7 +64,7 @@ public:
 	* Constructs a GeometryLocation specifying a point on a geometry, as well as the 
 	* segment that the point is on (or INSIDE_AREA if the point is not on a segment).
 	*/
-	GeometryLocation(Geometry *newComponent, int newSegIndex, Coordinate &newPt);
+	GeometryLocation(const Geometry *newComponent, int newSegIndex, const Coordinate &newPt);
 	/**
 	* Constructs a GeometryLocation specifying a point inside an area geometry.
 	*/  

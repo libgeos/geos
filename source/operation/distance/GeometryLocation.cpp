@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/13 10:05:51  strk
+ * GeometryLocation constructor made const-correct.
+ * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
+ *
  * Revision 1.1  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -28,7 +32,7 @@ namespace geos {
 * Constructs a GeometryLocation specifying a point on a geometry, as well as the 
 * segment that the point is on (or INSIDE_AREA if the point is not on a segment).
 */
-GeometryLocation::GeometryLocation(Geometry *newComponent, int newSegIndex, Coordinate &newPt){
+GeometryLocation::GeometryLocation(const Geometry *newComponent, int newSegIndex, const Coordinate &newPt){
 	component = newComponent;
 	segIndex = newSegIndex;
 	pt = newPt;
@@ -37,7 +41,7 @@ GeometryLocation::GeometryLocation(Geometry *newComponent, int newSegIndex, Coor
 /**
 * Constructs a GeometryLocation specifying a point inside an area geometry.
 */  
-GeometryLocation::GeometryLocation(Geometry *newComponent, Coordinate &newPt){
+GeometryLocation::GeometryLocation(Geometry *newComponent, const Coordinate &newPt){
 	component = newComponent;
 	segIndex = INSIDE_AREA;
 	pt = newPt;
