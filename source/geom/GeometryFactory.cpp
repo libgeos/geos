@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.38  2004/06/15 21:35:32  strk
+ * fixed buildGeometry to always return a newly allocated geometry
+ *
  * Revision 1.37  2004/06/15 20:07:51  strk
  * GeometryCollections constructors make a deep copy of Geometry vector argument.
  *
@@ -408,23 +411,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *geoms) const
 		}
 		Assert::shouldNeverReachHere("buildGeomtry encountered an unkwnon geometry type");
 	}
-	if (typeid(*geom0)==typeid(Polygon))
-		return (Polygon*) geom0;
-	// LineString also handles LinearRings
-	else if (typeid(*geom0)==typeid(LineString))
-		return (LineString*) geom0;
-	else if (typeid(*geom0)==typeid(Point))
-		return (Point*) geom0;
-	else if (typeid(*geom0)==typeid(MultiPoint))
-		return (MultiPoint*) geom0;
-	else if (typeid(*geom0)==typeid(MultiLineString))
-		return (MultiLineString*) geom0;
-	else if (typeid(*geom0)==typeid(MultiPolygon))
-		return (MultiPolygon*) geom0;
-	else if (typeid(*geom0)==typeid(GeometryCollection))
-		return (GeometryCollection*) geom0;
-	else 
-		return geom0;
+	return geom0->clone();
 }
 
 
