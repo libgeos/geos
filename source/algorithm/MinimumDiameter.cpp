@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/20 12:47:57  strk
+ * MinimumDiameter leaks plugged.
+ *
  * Revision 1.2  2004/04/20 10:14:20  strk
  * Memory leaks removed.
  *
@@ -133,19 +136,26 @@ LineString* MinimumDiameter::getDiameter(){
 	return inputGeom->getFactory()->createLineString(cl);
 }
 
-void MinimumDiameter::computeMinimumDiameter(){
+/* private */
+void
+MinimumDiameter::computeMinimumDiameter(){
 	// check if computation is cached
 	if (minWidthPt!=NULL)
 		return;
 	if (isConvex)
 		computeWidthConvex(inputGeom);
 	else {
-		Geometry* convexGeom=(new ConvexHull(inputGeom))->getConvexHull();
+		ConvexHull *ch = new ConvexHull(inputGeom);
+		Geometry* convexGeom=ch->getConvexHull();
 		computeWidthConvex(convexGeom);
+		delete convexGeom;
+		delete ch;
 	}
 }
 
-void MinimumDiameter::computeWidthConvex(const Geometry *geom) {
+/* private */
+void
+MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 	//System.out.println("Input = " + geom);
 	CoordinateList* pts=NULL;
 	if (typeid(*geom)==typeid(Polygon))
@@ -170,6 +180,7 @@ void MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 		minBaseSeg->p1=pts->getAt(1);
 	} else
 		computeConvexRingMinDiameter(pts);
+	//delete pts; // can I safely delete these ? --strk
 }
 
 /**
@@ -180,8 +191,6 @@ void MinimumDiameter::computeWidthConvex(const Geometry *geom) {
 * @return
 */
 void MinimumDiameter::computeConvexRingMinDiameter(const CoordinateList* pts){
-	//if (
-	// for each segment in the ring
 	minWidth=DoubleInfinity;
 	int currMaxIndex=1;
 	LineSegment* seg=new LineSegment();
@@ -193,7 +202,9 @@ void MinimumDiameter::computeConvexRingMinDiameter(const CoordinateList* pts){
 	}
 }
 
-int MinimumDiameter::findMaxPerpDistance(const CoordinateList *pts,LineSegment* seg, int startIndex) {
+int
+MinimumDiameter::findMaxPerpDistance(const CoordinateList *pts, LineSegment* seg, int startIndex)
+{
 	double maxPerpDistance=seg->distancePerpendicular(pts->getAt(startIndex));
 	double nextPerpDistance = maxPerpDistance;
 	int maxIndex = startIndex;
@@ -208,7 +219,9 @@ int MinimumDiameter::findMaxPerpDistance(const CoordinateList *pts,LineSegment* 
 	if (maxPerpDistance < minWidth) {
 		minPtIndex = maxIndex;
 		minWidth = maxPerpDistance;
+		delete minWidthPt; 
 		minWidthPt = new Coordinate(pts->getAt(minPtIndex));
+		delete minBaseSeg;
 		minBaseSeg = new LineSegment(*seg);
 //      System.out.println(minBaseSeg);
 //      System.out.println(minWidth);

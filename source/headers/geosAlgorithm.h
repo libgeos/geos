@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.31  2004/04/20 12:47:57  strk
+ * MinimumDiameter leaks plugged.
+ *
  * Revision 1.30  2004/03/17 02:00:33  ybychkov
  * "Algorithm" upgraded to JTS 1.4
  *
@@ -578,7 +581,7 @@ class MinimumDiameter {
 private:
 	const Geometry* inputGeom;
 	bool isConvex;
-	LineSegment* minBaseSeg;;
+	LineSegment* minBaseSeg;
 	Coordinate* minWidthPt;
 	int minPtIndex;
 	double minWidth;
@@ -596,12 +599,14 @@ private:
 	static int getNextIndex(const CoordinateList* pts, int index);
 public:
 	~MinimumDiameter();
+
 	/**
 	* Compute a minimum diameter for a giver {@link Geometry}.
 	*
 	* @param geom a Geometry
 	*/
 	MinimumDiameter(const Geometry* newInputGeom);
+
 	/**
 	* Compute a minimum diameter for a giver {@link Geometry},
 	* with a hint if
@@ -613,24 +618,28 @@ public:
 	* @param isConvex <code>true</code> if the input geometry is convex
 	*/
 	MinimumDiameter(const Geometry* newInputGeom,const bool newIsConvex);
+
 	/**
 	* Gets the length of the minimum diameter of the input Geometry
 	*
 	* @return the length of the minimum diameter
 	*/
 	double getLength();
+
 	/**
 	* Gets the {@link Coordinate} forming one end of the minimum diameter
 	*
 	* @return a coordinate forming one end of the minimum diameter
 	*/
 	Coordinate* getWidthCoordinate();
+
 	/**
 	* Gets the segment forming the base of the minimum diameter
 	*
 	* @return the segment forming the base of the minimum diameter
 	*/
 	LineString* getSupportingSegment();
+
 	/**
 	* Gets a {@link LineString} which is a minimum diameter
 	*
