@@ -77,6 +77,7 @@ PolygonizeGraph::~PolygonizeGraph()
 		delete newNodes[i];
 	for (i=0; i<newEdgeRings.size(); i++)
 		delete newEdgeRings[i];
+	for (i=0; i<newCoords.size(); i++) delete newCoords[i];
 }
 
 /*
@@ -103,7 +104,7 @@ PolygonizeGraph::addEdge(const LineString *line)
 	edge->setDirectedEdges(de0, de1);
 	add(edge);
 
-	delete linePts;
+	newCoords.push_back(linePts);
 }
 
 planarNode *
@@ -428,6 +429,10 @@ PolygonizeGraph::deleteDangles()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2004/12/14 10:35:44  strk
+ * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
+ * for delayed destruction.
+ *
  * Revision 1.7  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

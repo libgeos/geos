@@ -11,34 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2004/10/19 19:51:14  strk
- * Fixed many leaks and bugs in Polygonizer.
- * Output still bogus.
- *
- * Revision 1.5  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.4  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/06/15 07:40:30  strk
- * Added missing <stdio.h> include
- *
- * Revision 1.2  2004/05/03 10:43:43  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.1  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/planargraph.h>
 #include <geos/geomgraph.h>
@@ -189,24 +162,23 @@ planarDirectedEdge::setSym(planarDirectedEdge *newSym)
 }
 
 /**
-* Returns 1 if this planarDirectedEdge has a greater angle with the
-* positive x-axis than b", 0 if the planarDirectedEdges are collinear, and -1 otherwise.
-* <p>
-* Using the obvious algorithm of simply computing the angle is not robust,
-* since the angle calculation is susceptible to roundoff. A robust algorithm
-* is:
-* <ul>
-* <li>first compare the quadrants. If the quadrants are different, it it
-* trivial to determine which vector is "greater".
-* <li>if the vectors lie in the same quadrant, the robust
-* {@link RobustCGAlgorithms#computeOrientation(Coordinate, Coordinate, Coordinate)}
-* function can be used to decide the relative orientation of the vectors.
-* </ul>
-*/
+ * Returns 1 if this planarDirectedEdge has a greater angle with the
+ * positive x-axis than b", 0 if the planarDirectedEdges are collinear, and -1 otherwise.
+ * <p>
+ * Using the obvious algorithm of simply computing the angle is not robust,
+ * since the angle calculation is susceptible to roundoff. A robust algorithm
+ * is:
+ * <ul>
+ * <li>first compare the quadrants. If the quadrants are different, it it
+ * trivial to determine which vector is "greater".
+ * <li>if the vectors lie in the same quadrant, the robust
+ * {@link RobustCGAlgorithms#computeOrientation(Coordinate, Coordinate, Coordinate)}
+ * function can be used to decide the relative orientation of the vectors.
+ * </ul>
+ */
 int
-planarDirectedEdge::compareTo(void* obj) const
+planarDirectedEdge::compareTo(const planarDirectedEdge* de) const
 {
-	planarDirectedEdge* de = (planarDirectedEdge*) obj;
 	return compareDirection(de);
 }
 
@@ -226,7 +198,7 @@ planarDirectedEdge::compareTo(void* obj) const
 * </ul>
 */
 int
-planarDirectedEdge::compareDirection(planarDirectedEdge *e) const
+planarDirectedEdge::compareDirection(const planarDirectedEdge *e) const
 {
 // if the rays are in different quadrants, determining the ordering is trivial
 	if (quadrant > e->quadrant) return 1;
@@ -256,4 +228,38 @@ planarDirectedEdge::print() const
 
 
 //} // namespace planargraph
+
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2004/12/14 10:35:44  strk
+ * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
+ * for delayed destruction.
+ *
+ * Revision 1.6  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
+ * Revision 1.5  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.4  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.3  2004/06/15 07:40:30  strk
+ * Added missing <stdio.h> include
+ *
+ * Revision 1.2  2004/05/03 10:43:43  strk
+ * Exception specification considered harmful - left as comment.
+ *
+ * Revision 1.1  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

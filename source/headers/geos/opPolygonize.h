@@ -363,6 +363,7 @@ private:
 	vector<planarDirectedEdge *>newDirEdges;
 	vector<planarNode *>newNodes;
 	vector<polygonizeEdgeRing *>newEdgeRings;
+	vector<CoordinateSequence *>newCoords;
 };
 
 /*
@@ -495,6 +496,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2004/12/14 10:35:44  strk
+ * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
+ * for delayed destruction.
+ *
  * Revision 1.6  2004/12/13 13:54:42  strk
  * Added a not about gcc 2.95.4 required friendship
  *

@@ -11,24 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/planargraph.h>
 
@@ -118,7 +101,7 @@ planarDirectedEdgeStar::getEdges()
 }
 
 bool
-pdeLessThan(planarDirectedEdge *first,planarDirectedEdge * second)
+pdeLessThan(planarDirectedEdge *first, planarDirectedEdge * second)
 {
 	if (first->compareTo(second)<=0)
 		return true;
@@ -143,7 +126,7 @@ int
 planarDirectedEdgeStar::getIndex(planarEdge *edge)
 {
 	sortEdges();
-	for (int i = 0; i<(int)outEdges->size(); i++) {
+	for (unsigned int i = 0; i<outEdges->size(); i++) {
 		planarDirectedEdge *de =(*outEdges)[i];
 		if (de->getEdge() == edge)
 		return i;
@@ -159,7 +142,7 @@ int
 planarDirectedEdgeStar::getIndex(planarDirectedEdge *dirEdge)
 {
 	sortEdges();
-	for (int i = 0; i <(int) outEdges->size(); i++) {
+	for (unsigned int i = 0; i <outEdges->size(); i++) {
 		planarDirectedEdge *de =(*outEdges)[i];
 		if (de == dirEdge)
 		return i;
@@ -193,3 +176,26 @@ planarDirectedEdgeStar::getNextEdge(planarDirectedEdge *dirEdge)
 
 //} // namespace planargraph
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2004/12/14 10:35:44  strk
+ * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
+ * for delayed destruction.
+ *
+ * Revision 1.3  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

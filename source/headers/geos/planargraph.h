@@ -11,40 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.5  2004/10/19 19:51:14  strk
- * Fixed many leaks and bugs in Polygonizer.
- * Output still bogus.
- *
- * Revision 1.4  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.3  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.2  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.3  2004/04/16 08:52:52  strk
- * Unload::Release final delete (static heap allocations should be gone now)
- *
- * Revision 1.2  2004/04/07 06:55:50  ybychkov
- * "operation/linemerge" ported from JTS 1.4
- *
- * Revision 1.1  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_PLANARGRAPH_H
 #define GEOS_PLANARGRAPH_H
@@ -481,7 +448,7 @@ public:
 	 *   the vectors.
 	 * 
 	 */
-	int compareTo(void* obj) const;
+	int compareTo(const planarDirectedEdge* obj) const;
 
 	/*
 	 * \brief
@@ -502,7 +469,7 @@ public:
 	 *   the vectors.
 	 *
 	 */
-	int compareDirection(planarDirectedEdge *e) const;
+	int compareDirection(const planarDirectedEdge *e) const;
 
 	/*
 	 * \brief
@@ -722,3 +689,42 @@ public:
 //} // namespace planargraph
 } // namespace geos
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.6  2004/12/14 10:35:44  strk
+ * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
+ * for delayed destruction.
+ *
+ * Revision 1.5  2004/10/19 19:51:14  strk
+ * Fixed many leaks and bugs in Polygonizer.
+ * Output still bogus.
+ *
+ * Revision 1.4  2004/10/13 10:03:02  strk
+ * Added missing linemerge and polygonize operation.
+ * Bug fixes and leaks removal from the newly added modules and
+ * planargraph (used by them).
+ * Some comments and indentation changes.
+ *
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.2  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.3  2004/04/16 08:52:52  strk
+ * Unload::Release final delete (static heap allocations should be gone now)
+ *
+ * Revision 1.2  2004/04/07 06:55:50  ybychkov
+ * "operation/linemerge" ported from JTS 1.4
+ *
+ * Revision 1.1  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+
