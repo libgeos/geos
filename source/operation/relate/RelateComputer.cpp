@@ -74,7 +74,7 @@ bool RelateComputer::isNodeConsistentArea() {
 * @return true if this area Geometry is topologically consistent but has two duplicate rings
 */
 bool RelateComputer::hasDuplicateRings() {
-	map<Coordinate,Node*,CoordLT> *nMap=new map<Coordinate,Node*,CoordLT>(nodes->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
@@ -87,7 +87,6 @@ bool RelateComputer::hasDuplicateRings() {
 			}
 		}
 	}
-	delete nMap;
 	return false;
 }
 
@@ -212,9 +211,9 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 * in the interior due to the Boundary Determination Rule)
 */
 void RelateComputer::copyNodesAndLabels(int argIndex) {
-	map<Coordinate,Node*,CoordLT> nMap((*arg)[argIndex]->getNodeMap()->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
+	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes->addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
@@ -236,7 +235,7 @@ void RelateComputer::computeIntersectionNodes(int argIndex) {
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> *eiL=new vector<EdgeIntersection*>(e->getEdgeIntersectionList()->list);
+		vector<EdgeIntersection*> *eiL=e->getEdgeIntersectionList()->list;
 		for(vector<EdgeIntersection*>::iterator eiIt=eiL->begin();eiIt<eiL->end();eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
@@ -248,7 +247,7 @@ void RelateComputer::computeIntersectionNodes(int argIndex) {
 			}
 			//Debug.println(n);
 		}
-		delete eiL;
+//		delete eiL;
 	}
 }
 
@@ -264,7 +263,7 @@ void RelateComputer::labelIntersectionNodes(int argIndex) {
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> *eiL=new vector<EdgeIntersection*>(e->getEdgeIntersectionList()->list);
+		vector<EdgeIntersection*> *eiL=e->getEdgeIntersectionList()->list;
 		for(vector<EdgeIntersection*>::iterator eiIt=eiL->begin();eiIt<eiL->end();eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->find(ei->coord);
@@ -276,7 +275,7 @@ void RelateComputer::labelIntersectionNodes(int argIndex) {
 			}
 			//n.print(System.out);
 		}
-		delete eiL;
+//		delete eiL;
 	}
 }
 
@@ -302,22 +301,20 @@ void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
 * If any are not, return false
 */
 bool RelateComputer::isNodeEdgeAreaLabelsConsistent() {
-	map<Coordinate,Node*,CoordLT> *nMap=new map<Coordinate,Node*,CoordLT>(nodes->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		if (!node->getEdges()->isAreaLabelsConsistent()) {
 			invalidPoint.setCoordinate(node->getCoordinate());
-			delete nMap;
 			return false;
 		}
 	}
-	delete nMap;
 	return true;
 }
 
 void RelateComputer::labelNodeEdges() {
-	map<Coordinate,Node*,CoordLT> *nMap=new map<Coordinate,Node*,CoordLT>(nodes->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
@@ -325,7 +322,6 @@ void RelateComputer::labelNodeEdges() {
 		//Debug.print(node.getEdges());
 		//node.print(System.out);
 	}
-	delete nMap;
 }
 
 /**
@@ -338,7 +334,7 @@ void RelateComputer::updateIM(IntersectionMatrix *imX) {
 		e->GraphComponent::updateIM(imX);
 		//Debug.println(im);
 	}
-	map<Coordinate,Node*,CoordLT> *nMap=new map<Coordinate,Node*,CoordLT>(nodes->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
@@ -348,7 +344,6 @@ void RelateComputer::updateIM(IntersectionMatrix *imX) {
 		//Debug.println(im);
 		//node.print(System.out);
 	}
-	delete nMap;
 }
 
 /**
@@ -398,7 +393,7 @@ void RelateComputer::labelIsolatedEdge(Edge *e,int targetIndex,Geometry *target)
 * interior of edges, and in the interior of areas.
 */
 void RelateComputer::labelIsolatedNodes() {
-	map<Coordinate,Node*,CoordLT> *nMap=new map<Coordinate,Node*,CoordLT>(nodes->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=nodes->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		Node *n=nodeIt->second;
@@ -412,7 +407,6 @@ void RelateComputer::labelIsolatedNodes() {
 				labelIsolatedNode(n,1);
 		}
 	}
-	delete nMap;
 }
 
 /**

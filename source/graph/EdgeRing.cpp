@@ -1,16 +1,31 @@
 #include "graph.h"
 #include "util.h"
 
-EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CGAlgorithms *newCga):label(Location::UNDEF){
+EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
+	label=new Label(Location::UNDEF);
 	maxNodeDegree=-1;
 	geometryFactory=newGeometryFactory;
 	cga=newCga;
+	edges=new vector<DirectedEdge*>();
+	pts=CoordinateListFactory::internalFactory->createCoordinateList();
+	ring=new LinearRing();
+//	shell=new EdgeRing();
+	holes=new vector<EdgeRing*>();
 	computePoints(newStart);
 	computeRing();
 }
 
+EdgeRing::~EdgeRing(){
+	delete edges;
+	delete pts;
+	delete label;
+	delete ring;
+	delete shell;
+	delete holes;
+}
+
 bool EdgeRing::isIsolated(){
-	return (label.getGeometryCount()==1);
+	return (label->getGeometryCount()==1);
 }
 
 bool EdgeRing::isHole(){
@@ -25,7 +40,7 @@ LinearRing* EdgeRing::getLinearRing() {
 	return ring;
 }
 
-Label EdgeRing::getLabel() {
+Label* EdgeRing::getLabel() {
 	return label;
 }
 
@@ -43,15 +58,15 @@ void EdgeRing::setShell(EdgeRing *newShell) {
 }
 
 void EdgeRing::addHole(EdgeRing *edgeRing) {
-	holes.push_back(edgeRing);
+	holes->push_back(edgeRing);
 }
 
-Polygon EdgeRing::toPolygon(GeometryFactory geometryFactory){
+Polygon* EdgeRing::toPolygon(GeometryFactory* geometryFactory){
 	vector<Geometry *> *holeLR=new vector<Geometry *>();
-	for (unsigned int i=0;i<holes.size();i++) {
-        holeLR->push_back(holes[i]->getLinearRing());
+	for (unsigned int i=0;i<holes->size();i++) {
+        holeLR->push_back((*holes)[i]->getLinearRing());
 	}
-	return *(geometryFactory.createPolygon(getLinearRing(), holeLR));
+	return geometryFactory->createPolygon(getLinearRing(),holeLR);
 }
 
 //!!!External Dependency
@@ -64,7 +79,7 @@ void EdgeRing::computeRing() {
   /**
  * Returns the list of DirectedEdges that make up this EdgeRing
  */
-vector<DirectedEdge*> EdgeRing::getEdges() {
+vector<DirectedEdge*>* EdgeRing::getEdges() {
 	return edges;
 }
 
@@ -74,7 +89,7 @@ void EdgeRing::computePoints(DirectedEdge *newStart){
 	bool isFirstEdge=true;
 	do {
 		Assert::isTrue(de!=NULL,"found null Directed Edge");
-		edges.push_back(de);
+		edges->push_back(de);
 		Label *deLabel=de->getLabel();
 		Assert::isTrue(deLabel->isArea());
 		mergeLabel(deLabel);
@@ -127,8 +142,8 @@ void EdgeRing::mergeLabel(Label *deLabel, int geomIndex){
 	// no information to be had from this label
 	if (loc==Location::UNDEF) return;
 	// if there is no current RHS value, set it
-	if (label.getLocation(geomIndex)==Location::UNDEF) {
-		label.setLocation(geomIndex,loc);
+	if (label->getLocation(geomIndex)==Location::UNDEF) {
+		label->setLocation(geomIndex,loc);
 		return;
 	}
 }
@@ -160,7 +175,7 @@ bool EdgeRing::containsPoint(Coordinate p){
 	if (!env->contains(p)) return false;
 //External Dependency
 //	if (!cga.isPointInPolygon(p, shell.getCoordinates()) ) return false;
-	for (vector<EdgeRing*>::iterator i=holes.begin();i<holes.end();i++) {
+	for (vector<EdgeRing*>::iterator i=holes->begin();i<holes->end();i++) {
 		EdgeRing *hole=*i;
 		if (hole->containsPoint(p))
 			return false;

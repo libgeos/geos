@@ -1,9 +1,9 @@
 #include "graph.h"
 
-Label Label::toLineLabel(Label label) {
-	Label lineLabel(Location::UNDEF);
+Label* Label::toLineLabel(Label* label) {
+	Label *lineLabel=new Label(Location::UNDEF);
 	for (int i=0; i<2; i++) {
-		lineLabel.setLocation(i,label.getLocation(i));
+		lineLabel->setLocation(i,label->getLocation(i));
 	}
 	return lineLabel;
 }
@@ -65,10 +65,10 @@ Label::Label(int geomIndex,int onLoc,int leftLoc,int rightLoc){
  * Construct a Label with the same values as the argument for the
  * given Geometry index.
  */
-Label::Label(int geomIndex,TopologyLocation gl){
-	elt[0]=new TopologyLocation(gl.getLocations());
-	elt[1]=new TopologyLocation(gl.getLocations());
-	elt[geomIndex]->setLocations(gl);
+Label::Label(int geomIndex,TopologyLocation* gl){
+	elt[0]=new TopologyLocation(gl->getLocations());
+	elt[1]=new TopologyLocation(gl->getLocations());
+	elt[geomIndex]->setLocations(*gl);
 }
 
 void Label::flip(){
@@ -109,12 +109,12 @@ void Label::setAllLocationsIfNull(int location){
  * Merge this label with another one.
  * Merging updates any null attributes of this label with the attributes from lbl
  */
-void Label::merge(Label lbl) {
+void Label::merge(Label* lbl) {
 	for (int i=0; i<2; i++) {
-		if (elt[i]==NULL && lbl.elt[i]!=NULL) {
-			elt[i]=new TopologyLocation(*(lbl.elt[i]));
+		if (elt[i]==NULL && lbl->elt[i]!=NULL) {
+			elt[i]=new TopologyLocation(*(lbl->elt[i]));
 		} else {
-			elt[i]->merge(lbl.elt[i]);
+			elt[i]->merge(lbl->elt[i]);
 		}
 	}
 }
@@ -151,10 +151,10 @@ bool Label::isLine(int geomIndex){
 	return elt[geomIndex]->isLine();
 }
 
-bool Label::isEqualOnSide(Label lbl, int side) {
+bool Label::isEqualOnSide(Label* lbl, int side) {
 	return 
-		elt[0]->isEqualOnSide(*(lbl.elt[0]), side)
-		&& elt[1]->isEqualOnSide(*(lbl.elt[1]), side);
+		elt[0]->isEqualOnSide(*(lbl->elt[0]), side)
+		&& elt[1]->isEqualOnSide(*(lbl->elt[1]), side);
 }
 
 bool Label::allPositionsEqual(int geomIndex, int loc){
@@ -166,7 +166,7 @@ bool Label::allPositionsEqual(int geomIndex, int loc){
  */
 void Label::toLine(int geomIndex){
 	if (elt[geomIndex]->isArea())
-		elt[geomIndex]=new TopologyLocation(elt[geomIndex]->getLocations()[0]);
+		elt[geomIndex]=new TopologyLocation((*(elt[geomIndex]->getLocations()))[0]);
 }
 
 string Label::toString(){

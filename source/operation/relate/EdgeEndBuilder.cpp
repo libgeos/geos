@@ -21,18 +21,18 @@ void EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l) {
 	//Debug.print(eiList);
 	// ensure that the list has entries for the first and last point of the edge
 	if (!edge->isClosed()) eiList->addEndpoints();
-	vector<EdgeIntersection*>::iterator it=eiList->list.begin();
+	vector<EdgeIntersection*>::iterator it=eiList->list->begin();
 	EdgeIntersection *eiPrev=NULL;
 	EdgeIntersection *eiCurr=NULL;
 	// no intersections, so there is nothing to do
-	if (!(it<eiList->list.end())) return;
+	if (!(it<eiList->list->end())) return;
 	EdgeIntersection *eiNext=*it;
 	it++;
 	do {
 		eiPrev=eiCurr;
 		eiCurr=eiNext;
 		eiNext=NULL;
-		if (it<eiList->list.end()) {
+		if (it<eiList->list->end()) {
 			eiNext=*it;
 			it++;
 		}

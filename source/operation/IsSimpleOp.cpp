@@ -53,8 +53,8 @@ bool IsSimpleOp::hasNonEndpointIntersection(GeometryGraph *graph) {
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
 		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
-		vector<EdgeIntersection*> intList(eiL->list);
-		for(vector<EdgeIntersection*>::iterator eiIt=intList.begin();eiIt<intList.end();eiIt++) {
+		vector<EdgeIntersection*> *intList=eiL->list;
+		for(vector<EdgeIntersection*>::iterator eiIt=intList->begin();eiIt<intList->end();eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			if (!ei->isEndPoint(maxSegmentIndex))
 				return true;

@@ -46,12 +46,9 @@ DirectedEdge* DirectedEdgeStar::getRightmostEdge() {
 	vector<EdgeEnd*> *edges=getEdges();
 	int size=(int)edges->size();
 	if (size<1) return NULL;
-//    EdgeEnd* e0 = edges->at(0);
-    EdgeEnd* e0 = (EdgeEnd *)edges;
-//	DirectedEdge *de0=(DirectedEdge*) edges->at(0);
+    EdgeEnd* e0=(EdgeEnd*) edges;
     DirectedEdge *de0=(DirectedEdge*) edges;
 	if (size==1) return de0;
-//	DirectedEdge *deLast=(DirectedEdge*) edges->at(size-1);
     DirectedEdge *deLast=(DirectedEdge*)(*edges)[size-1];
 	int quad0=de0->getQuadrant();
 	int quad1=deLast->getQuadrant();
@@ -100,7 +97,7 @@ void DirectedEdgeStar::mergeSymLabels(){
 	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
-		deLabel->merge(*(de->getSym()->getLabel()));
+		deLabel->merge(de->getSym()->getLabel());
 	}
 }
 
@@ -154,7 +151,6 @@ void DirectedEdgeStar::linkResultDirectedEdges(){
 	int state=SCANNING_FOR_INCOMING;
 	// link edges in CCW order
 	for (unsigned int i=0; i<resultAreaEdgeList->size();i++) {
-//		DirectedEdge *nextOut=(DirectedEdge*) resultAreaEdgeList->at(i);
         DirectedEdge *nextOut=(DirectedEdge*) (*resultAreaEdgeList)[i];
 		DirectedEdge *nextIn=nextOut->getSym();
 		// skip de's that we're not interested in
@@ -189,7 +185,6 @@ void DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er){
 	int state=SCANNING_FOR_INCOMING;
 	// link edges in CW order
 	for (int i=(int)resultAreaEdgeList->size()-1;i>=0;i--) {
-//		DirectedEdge *nextOut=(DirectedEdge*)resultAreaEdgeList->at(i);
         DirectedEdge *nextOut=(DirectedEdge*)(*resultAreaEdgeList)[i];
 		DirectedEdge *nextIn=nextOut->getSym();
 		// record first outgoing edge, in order to link the last incoming edge
@@ -221,7 +216,6 @@ void DirectedEdgeStar::linkAllDirectedEdges(){
 	DirectedEdge *firstIn=NULL;
 	// link edges in CW order
 	for(int i=(int)edgeList->size()-1;i>=0;i--) {
-//		DirectedEdge *nextOut=(DirectedEdge*)edgeList->at(i);
         DirectedEdge *nextOut=(DirectedEdge*)(*edgeList)[i];
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (firstIn==NULL) firstIn=nextIn;
@@ -305,7 +299,6 @@ void DirectedEdgeStar::computeDepths(DirectedEdge *de){
 int DirectedEdgeStar::computeDepths(int startIndex,int endIndex,int startDepth){
 	int currDepth=startDepth;
 	for (int i=startIndex;i<=endIndex;i++) {
-//		DirectedEdge *nextDe=(DirectedEdge*)edgeList->at(i);
         DirectedEdge *nextDe=(DirectedEdge*)(*edgeList)[i];
 		Label *deLabel=nextDe->getLabel();
 		nextDe->setEdgeDepths(Position::RIGHT, currDepth);

@@ -10,7 +10,7 @@ Node::~Node(){
 	delete edges;
 }
 
-Coordinate Node::getCoordinate() {
+Coordinate& Node::getCoordinate() {
 	return coord;
 }
 
@@ -30,8 +30,8 @@ void Node::add(EdgeEnd *e) {
 	e->setNode(this);
 }
 
-void Node::mergeLabel(Node n) {
-	mergeLabel(n.label);
+void Node::mergeLabel(Node* n) {
+	mergeLabel(n->label);
 }
 
 void Node::mergeLabel(Label* label2) {

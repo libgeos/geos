@@ -1,7 +1,13 @@
 #include "graphindex.h"
 #include <algorithm>
 
-SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector(){}
+SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector(){
+	events=new vector<SweepLineEvent*>();
+}
+
+SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector(){
+	delete events;
+}
 
 void SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,SegmentIntersector *si){
 	add(edges,0);
@@ -24,13 +30,13 @@ void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges,int geomIndex){
 
 void SimpleMCSweepLineIntersector::add(Edge *edge,int geomIndex){
 	MonotoneChainEdge *mce=edge->getMonotoneChainEdge();
-	vector<int> startIndex(mce->getStartIndexes());
-	for(int i=0;i<(int)startIndex.size()-1;i++) {
+	vector<int>* startIndex=mce->getStartIndexes();
+	for(int i=0;i<(int)startIndex->size()-1;i++) {
 		MonotoneChain *mc=new MonotoneChain(mce,i,geomIndex);
 		SweepLineEvent *insertEvent=new SweepLineEvent(geomIndex,mce->getMinX(i),NULL,mc);
-		events.push_back(insertEvent);
+		events->push_back(insertEvent);
 		SweepLineEvent *deleteEvent=new SweepLineEvent(geomIndex,mce->getMaxX(i),insertEvent,mc);
-		events.push_back(deleteEvent);
+		events->push_back(deleteEvent);
 	}
 }
 
@@ -47,10 +53,10 @@ bool sleLessThan(SweepLineEvent *first,SweepLineEvent *second) {
 * compared to a given Insert event object.
 */
 void SimpleMCSweepLineIntersector::prepareEvents(){
-	sort(events.begin(),events.end(),sleLessThan);
-int numdel=0;
-	for(int i=0;i<(int)events.size();i++ ){
-		SweepLineEvent *ev=events[i];
+	sort(events->begin(),events->end(),sleLessThan);
+	int numdel=0;
+	for(int i=0;i<(int)events->size();i++ ){
+		SweepLineEvent *ev=(*events)[i];
 		if (ev->isDelete()){
 			numdel++;
 			SweepLineEvent *iev=ev->getInsertEvent();
@@ -64,8 +70,8 @@ void SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si,b
 	nOverlaps=0;
 	prepareEvents();
 	int numov=0;
-	for(int i=0;i<(int)events.size();i++) {
-		SweepLineEvent *ev=events[i];
+	for(int i=0;i<(int)events->size();i++) {
+		SweepLineEvent *ev=(*events)[i];
 		MonotoneChain *mc=(MonotoneChain*)ev->getObject();
 		if (ev->isInsert()) {
 			numov++;
@@ -83,7 +89,7 @@ void SimpleMCSweepLineIntersector::processOverlaps(int start,int end,MonotoneCha
 	* Last index can be skipped, because it must be a Delete event.
 	*/
 	for(int i=start;i<end;i++) {
-		SweepLineEvent *ev=events[i];
+		SweepLineEvent *ev=(*events)[i];
 		if (ev->isInsert()) {
 			MonotoneChain *mc1=(MonotoneChain*) ev->getObject();
 			if (!doMutualOnly || (mc0->getGeomIndex()!=mc1->getGeomIndex())) {

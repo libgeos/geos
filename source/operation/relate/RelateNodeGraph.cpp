@@ -6,7 +6,7 @@ RelateNodeGraph::RelateNodeGraph() {
 }
 
 map<Coordinate,Node*,CoordLT>* RelateNodeGraph::getNodeMap() {
-	return &(nodes->nodeMap);
+	return nodes->nodeMap;
 }
 
 void RelateNodeGraph::build(GeometryGraph *geomGraph) {
@@ -42,7 +42,7 @@ void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int arg
 	for(vector<Edge*>::iterator edgeIt=edges->begin();edgeIt<edges->end();edgeIt++) {
 		Edge *e=*edgeIt;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> *eiL=new vector<EdgeIntersection*>(e->getEdgeIntersectionList()->list);
+		vector<EdgeIntersection*> *eiL=e->getEdgeIntersectionList()->list;
 		for(vector<EdgeIntersection*>::iterator eiIt=eiL->begin();eiIt<eiL->end();eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
@@ -54,7 +54,7 @@ void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int arg
 			}
 			//Debug.println(n);
 		}
-		delete eiL;
+//		delete eiL;
 	}
 }
 /**
@@ -67,7 +67,7 @@ void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int arg
 * in the interior due to the Boundary Determination Rule)
 */
 void RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex) {
-	map<Coordinate,Node*,CoordLT> *nMap=new map<Coordinate,Node*,CoordLT>(geomGraph->getNodeMap()->nodeMap);
+	map<Coordinate,Node*,CoordLT> *nMap=geomGraph->getNodeMap()->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap->begin();nodeIt!=nMap->end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
@@ -75,7 +75,6 @@ void RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex) 
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
 		//node.print(System.out);
 	}
-	delete nMap;
 }
 
 void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){

@@ -1,17 +1,17 @@
 #include "graphindex.h"
 
-vector<int> MonotoneChainIndexer::getChainStartIndices(CoordinateList* pts){
+vector<int>* MonotoneChainIndexer::getChainStartIndices(CoordinateList* pts){
 	// find the startpoint (and endpoints) of all monotone chains in this edge
 	int start=0;
-	vector<int>startIndexList;
-	startIndexList.push_back(start);
+	vector<int>* startIndexList=new vector<int>();
+	startIndexList->push_back(start);
 	do {
 		int last=findChainEnd(pts,start);
-		startIndexList.push_back(last);
+		startIndexList->push_back(last);
 		start=last;
 	} while(start<(int)pts->getSize()-1);
 	// copy list to an array of ints, for efficiency
-	return vector<int>(startIndexList);
+	return startIndexList;
 }
 
 /**

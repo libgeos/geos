@@ -6,6 +6,7 @@ GraphComponent::GraphComponent() {
 	isCoveredVar = false;
 	isCoveredSetVar = false;
 	isVisitedVar = false;
+	label=new Label();
 }
 
 GraphComponent::GraphComponent(Label* newLabel){
@@ -17,7 +18,7 @@ GraphComponent::GraphComponent(Label* newLabel){
 }
 
 GraphComponent::~GraphComponent() {
-	delete label;
+//	delete label;
 }
 
 Label* GraphComponent::getLabel() {

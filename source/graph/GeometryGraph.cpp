@@ -25,16 +25,24 @@ int GeometryGraph::determineBoundary(int boundaryCount){
 
 GeometryGraph::GeometryGraph():PlanarGraph(){
 	precisionModel=NULL;
-//	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
-	newPM=NULL;
+	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
 	useBoundaryDeterminationRule=false;
 	boundaryNodes=NULL;
+
+	parentGeom=new Geometry();
+}
+
+GeometryGraph::~GeometryGraph(){
+	delete parentGeom;
+	delete precisionModel;
+	delete lineEdgeMap;
+	delete boundaryNodes;
 }
 
 GeometryGraph::GeometryGraph(int newArgIndex, Geometry *newParentGeom):PlanarGraph() {
 	boundaryNodes=NULL;
 	precisionModel=NULL;
-	newPM=NULL;
+	lineEdgeMap=new map<LineString*,Edge*,LineStringLT>();
 	useBoundaryDeterminationRule=false;
 	argIndex=newArgIndex;
 	parentGeom=newParentGeom;
@@ -83,15 +91,15 @@ Geometry* GeometryGraph::getGeometry() {
 
 vector<Node*>* GeometryGraph::getBoundaryNodes() {
 	if (boundaryNodes==NULL)
-		boundaryNodes=new vector<Node*>(nodes->getBoundaryNodes(argIndex));
+		boundaryNodes=nodes->getBoundaryNodes(argIndex);
 	return boundaryNodes;
 }
 
 CoordinateList* GeometryGraph::getBoundaryPoints() {
-	vector<Node*> coll(*getBoundaryNodes());
-	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList((int)coll.size());
+	vector<Node*> *coll=getBoundaryNodes();
+	CoordinateList *pts=CoordinateListFactory::internalFactory->createCoordinateList((int)coll->size());
 	int i=0;
-	for (vector<Node*>::iterator it=coll.begin();it<coll.end();it++) {
+	for (vector<Node*>::iterator it=coll->begin();it<coll->end();it++) {
 		Node *node=*it;
 		pts->setAt(node->getCoordinate(),i++);
 	}
@@ -99,7 +107,7 @@ CoordinateList* GeometryGraph::getBoundaryPoints() {
 }
 
 Edge* GeometryGraph::findEdge(LineString *line){
-	return lineEdgeMap.find(line)->second;
+	return lineEdgeMap->find(line)->second;
 }
 
 void GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist) {
@@ -151,7 +159,7 @@ void GeometryGraph::addCollection(GeometryCollection *gc) {
 * Add a Point to the graph.
 */
 void GeometryGraph::addPoint(Point *p){
-	Coordinate coord(*p->getCoordinate());
+	Coordinate& coord=*(p->getCoordinate());
 	insertPoint(argIndex,coord,Location::INTERIOR);
 }
 
@@ -169,7 +177,7 @@ void GeometryGraph::addPolygonRing(LinearRing *lr, int cwLeft, int cwRight) {
 		right=cwLeft;
 	}
 	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
-	lineEdgeMap[lr]=e;
+	(*lineEdgeMap)[lr]=e;
 	insertEdge(e);
 	// insert the endpoint as a node, to mark that it is on the boundary
 	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
@@ -190,7 +198,7 @@ void GeometryGraph::addLineString(LineString *line){
 	// add the edge for the LineString
 	// line edges do not have locations for their left and right sides
 	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
-	lineEdgeMap[line]=e;
+	(*lineEdgeMap)[line]=e;
 	insertEdge(e);
 	/**
 	* Add the boundary points of the LineString, if any.
@@ -218,7 +226,7 @@ void GeometryGraph::addEdge(Edge *e) {
 * Add a point computed externally.  The point is assumed to be a
 * Point Geometry part, which has a location of INTERIOR.
 */
-void GeometryGraph::addPoint(Coordinate pt) {
+void GeometryGraph::addPoint(Coordinate& pt) {
 	insertPoint(argIndex,pt,Location::INTERIOR);
 }
 
@@ -275,8 +283,8 @@ void GeometryGraph::addSelfIntersectionNodes(int argIndex){
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> eil=e->eiList->list;
-		for (vector<EdgeIntersection*>::iterator eiIt=eil.begin();eiIt<eil.end();eiIt++) {
+		vector<EdgeIntersection*> *eil=e->eiList->list;
+		for (vector<EdgeIntersection*>::iterator eiIt=eil->begin();eiIt<eil->end();eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			addSelfIntersectionNode(argIndex,ei->coord,eLoc);
 		}

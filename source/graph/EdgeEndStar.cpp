@@ -26,9 +26,9 @@ void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
 /**
  * @return the coordinate for the node this star is based at
  */
-Coordinate EdgeEndStar::getCoordinate(){
-	if ( getEdges()->size() == 0 )
-		return Coordinate::getNull();
+Coordinate& EdgeEndStar::getCoordinate(){
+	if (getEdges()->size()==0)
+		return *(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
 	vector<EdgeEnd*>::iterator it=getIterator();
 	EdgeEnd *e=*it;
 	return e->getCoordinate();
@@ -61,7 +61,7 @@ EdgeEnd* EdgeEndStar::getNextCW(EdgeEnd *ee){
 	for(unsigned int j=0;j<edgeList->size();j++)
     {
 //        if (ee->compareTo( *(edgeList->at(j)))==0) {
-        if (ee->compareTo( *((*edgeList)[j]) )==0) {
+        if (ee->compareTo((*edgeList)[j])==0) {
 			i=j;
 			break;
 		}
@@ -144,7 +144,7 @@ void EdgeEndStar::computeEdgeEndLabels(){
 	}
 }
 
-int EdgeEndStar::getLocation(int geomIndex,Coordinate p,vector<GeometryGraph*> *geom){
+int EdgeEndStar::getLocation(int geomIndex,Coordinate& p,vector<GeometryGraph*> *geom){
 	// compute location only on demand
 	if (ptInAreaLocation[geomIndex]==Location::UNDEF) {
 //		ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(geom->at(geomIndex))->getGeometry());
@@ -244,7 +244,7 @@ int EdgeEndStar::findIndex(EdgeEnd *eSearch){
 	getIterator();   // force edgelist to be computed
 	for (unsigned int i=0; i<edgeList->size(); i++ ) {
 		EdgeEnd *e=(*edgeList)[i];
-		if (e->compareTo(*eSearch)) return i;
+		if (e->compareTo(eSearch)) return i;
 	}
 	return -1;
 }

@@ -19,6 +19,16 @@ DirectedEdge::DirectedEdge() {
 	depth[0]=0;
 	depth[1]=-999;
 	depth[2]=-999;
+
+	sym=new DirectedEdge();
+	next=new DirectedEdge();
+	nextMin=new DirectedEdge();
+}
+
+DirectedEdge::~DirectedEdge() {
+	delete sym;
+	delete next;
+	delete nextMin;
 }
 
 DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward): EdgeEnd(newEdge){
@@ -27,6 +37,10 @@ DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward): EdgeEnd(newEdge){
 	depth[0]=0;
 	depth[1]=-999;
 	depth[2]=-999;
+
+	sym=new DirectedEdge();
+	next=new DirectedEdge();
+	nextMin=new DirectedEdge();
 
 	isForwardVar=newIsForward;
 	if (isForwardVar) {

@@ -8,8 +8,8 @@ LineIntersector* PlanarGraph::li=new RobustLineIntersector();
  * This allows clients to link only a subset of nodes in the graph, for
  * efficiency (because they know that only a subset is of interest).
  */
-void linkResultDirectedEdges(vector<Node*> allNodes){
-	for(vector<Node*>::iterator nodeit=allNodes.begin();nodeit<allNodes.end();nodeit++) {
+void linkResultDirectedEdges(vector<Node*>* allNodes){
+	for(vector<Node*>::iterator nodeit=allNodes->begin();nodeit<allNodes->end();nodeit++) {
 		Node *node=*nodeit;
 		((DirectedEdgeStar*) node->getEdges())->linkResultDirectedEdges();
 	}
@@ -26,6 +26,12 @@ PlanarGraph::PlanarGraph(){
 	nodes=new NodeMap(new NodeFactory());
 	edges=new vector<Edge*>();
 	edgeEndList=new vector<EdgeEnd*>();
+}
+
+PlanarGraph::~PlanarGraph(){
+	delete nodes;
+	delete edges;
+	delete edgeEndList;
 }
 
 vector<Edge*>::iterator PlanarGraph::getEdgeIterator() {
@@ -77,9 +83,9 @@ Node* PlanarGraph::find(Coordinate coord) {
 * Add a set of edges to the graph.  For each edge two DirectedEdges
 * will be created.  DirectedEdges are NOT linked by this method.
 */
-void PlanarGraph::addEdges(vector<Edge*> edgesToAdd){
+void PlanarGraph::addEdges(vector<Edge*>* edgesToAdd){
 	// create all the nodes for the edges
-	for (vector<Edge*>::iterator it=edgesToAdd.begin();it<edgesToAdd.end();it++) {
+	for (vector<Edge*>::iterator it=edgesToAdd->begin();it<edgesToAdd->end();it++) {
 		Edge *e=*it;
 		edges->push_back(e);
 		DirectedEdge *de1=new DirectedEdge(e, true);
@@ -97,7 +103,7 @@ void PlanarGraph::addEdges(vector<Edge*> edgesToAdd){
 * efficiency (because they know that only a subset is of interest).
 */
 void PlanarGraph::linkResultDirectedEdges(){
-	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap.end();nodeit++) {
+	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap->end();nodeit++) {
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkResultDirectedEdges();
 	}
@@ -109,7 +115,7 @@ void PlanarGraph::linkResultDirectedEdges(){
 * efficiency (because they know that only a subset is of interest).
 */
 void PlanarGraph::linkAllDirectedEdges(){
-	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap.end();nodeit++) {
+	for (map<Coordinate,Node*,CoordLT>::iterator nodeit=nodes->iterator();nodeit!=nodes->nodeMap->end();nodeit++) {
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkAllDirectedEdges();
 	}

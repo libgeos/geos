@@ -16,8 +16,6 @@ Depth::Depth() {
 	}
 }
 
-Depth::~Depth(){}
-
 int Depth::getDepth(int geomIndex,int posIndex){
 	return depth[geomIndex][posIndex];
 }
@@ -86,10 +84,10 @@ void Depth::normalize() {
 	}
 }
 
-void Depth::add(Label lbl){
+void Depth::add(Label* lbl){
 	for (int i=0; i<2; i++) {
 		for (int j=1; j<3; j++) {
-			int loc=lbl.getLocation(i,j);
+			int loc=lbl->getLocation(i,j);
 			if (loc==Location::EXTERIOR || loc==Location::INTERIOR) {
 			// initialize depth if it is null, otherwise add this location value
 				if (isNull(i,j)) {

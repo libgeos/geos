@@ -48,7 +48,6 @@ private:
 
 class EdgeSetIntersector{
 public:
-	EdgeSetIntersector() {};
 	/**
 	* Computes all self-intersections between edges in a set of edges
 	*/
@@ -58,8 +57,8 @@ public:
 	*/
 	virtual void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si)=0;
 protected:
-	vector<Edge*> edgesZero;
-	vector<Edge*> edgesOne;
+//	vector<Edge*>* edgesZero;
+//	vector<Edge*>* edgesOne;
 };
 
 class SweepLineSegment{
@@ -70,7 +69,6 @@ public:
 	void computeIntersections(SweepLineSegment *ss,SegmentIntersector *si);
 protected:
 	Edge *edge;
-//	CoordinateList pts;
 	CoordinateList* pts;
 	int ptIndex;
 	int geomIndex;
@@ -106,7 +104,7 @@ class MonotoneChainIndexer{
 public:
 //	public static int[] toIntArray(List list); //Not needed
 	MonotoneChainIndexer(){};
-	vector<int> getChainStartIndices(CoordinateList* pts);
+	vector<int>* getChainStartIndices(CoordinateList* pts);
 private:
 	int findChainEnd(CoordinateList* pts,int start);
 };
@@ -114,20 +112,20 @@ private:
 class MonotoneChainEdge{
 public:
 	MonotoneChainEdge();
+	~MonotoneChainEdge();
 	MonotoneChainEdge(Edge *newE);
 	CoordinateList* getCoordinates();
-	vector<int> getStartIndexes();
+	vector<int>* getStartIndexes();
 	double getMinX(int chainIndex);
 	double getMaxX(int chainIndex);
 	void computeIntersects(MonotoneChainEdge *mce,SegmentIntersector *si);
 	void computeIntersectsForChain(int chainIndex0,MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si);
 protected:
 	Edge *e;
-//	CoordinateList pts; // cache a reference to the coord array, for efficiency
 	CoordinateList* pts; // cache a reference to the coord array, for efficiency
 	// the lists of start/end indexes of the monotone chains.
 	// Includes the end point of the edge as a sentinel
-	vector<int> startIndex;
+	vector<int>* startIndex;
 	// these envelopes are created once and reused
 	Envelope *env1;
 	Envelope *env2;
@@ -150,10 +148,11 @@ protected:
 class SimpleMCSweepLineIntersector: public EdgeSetIntersector {
 public:
 	SimpleMCSweepLineIntersector();
+	~SimpleMCSweepLineIntersector();
 	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si);
 	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 protected:
-	vector<SweepLineEvent*> events;
+	vector<SweepLineEvent*>* events;
 	// statistics information
 	int nOverlaps;
 private:

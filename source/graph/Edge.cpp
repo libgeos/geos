@@ -18,12 +18,15 @@ Edge::Edge(){
 	depth=new Depth();
 	depthDelta=0;
 	mce=NULL;
+	pts=CoordinateListFactory::internalFactory->createCoordinateList();
 }
 
 Edge::~Edge(){
 	delete eiList;
 	delete depth;
 	delete mce;
+	delete pts;
+
 }
 
 Edge::Edge(CoordinateList* newPts, Label *newLabel){
@@ -62,13 +65,13 @@ CoordinateList* Edge::getCoordinates(){
 	return pts;
 }
 
-Coordinate Edge::getCoordinate(int i){
+Coordinate& Edge::getCoordinate(int i){
 	return pts->getAt(i);
 }
 
-Coordinate Edge::getCoordinate(){
+Coordinate& Edge::getCoordinate(){
 	if (pts->getSize()>0) return pts->getAt(0);
-	return Coordinate::getNull();
+	return *(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
 }
 
 Depth* Edge::getDepth() {
@@ -111,11 +114,11 @@ bool Edge::isCollapsed(){
 	return false;
 }
 
-Edge Edge::getCollapsedEdge() {
+Edge* Edge::getCollapsedEdge() {
 	CoordinateList *newPts=CoordinateListFactory::internalFactory->createCoordinateList(2);
 	newPts->setAt(pts->getAt(0),0);
 	newPts->setAt(pts->getAt(1),1);
-	return Edge(newPts,&(Label::toLineLabel(*label)));
+	return new Edge(newPts,Label::toLineLabel(label));
 }
 
 void Edge::setIsolated(bool newIsIsolated){
@@ -142,13 +145,13 @@ void Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex
  * to use the higher of the two possible segmentIndexes
  */
 void Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex){
-	Coordinate intPt(li->getIntersection(intIndex));
+	Coordinate& intPt=li->getIntersection(intIndex);
 	int normalizedSegmentIndex=segmentIndex;
 	double dist=li->getEdgeDistance(geomIndex,intIndex);
 	// normalize the intersection point location
 	int nextSegIndex=normalizedSegmentIndex+1;
 	if (nextSegIndex<pts->getSize()) {
-		Coordinate nextPt(pts->getAt(nextSegIndex));
+		Coordinate& nextPt=pts->getAt(nextSegIndex);
 		if (intPt==nextPt) {
 			normalizedSegmentIndex=nextSegIndex;
 			dist=0.0;

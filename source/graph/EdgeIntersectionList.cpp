@@ -1,37 +1,39 @@
 #include "graph.h"
 
 EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge) {
+	list=new vector<EdgeIntersection*>();
 	edge=newEdge;
 }
 
-//EdgeIntersectionList::~EdgeIntersectionList() {
+EdgeIntersectionList::~EdgeIntersectionList() {
 //	delete edge;
-//}
+	delete list;
+}
 
 EdgeIntersection* EdgeIntersectionList::add(Coordinate coord, int segmentIndex, double dist){
-	vector<EdgeIntersection *>::iterator insertIt=list.begin();
+	vector<EdgeIntersection *>::iterator insertIt=list->begin();
 	bool isInList=findInsertionPoint(segmentIndex,dist,&insertIt);
 	EdgeIntersection *ei;
 	if (!isInList) {
 		ei=new EdgeIntersection(coord,segmentIndex,dist);
-		list.insert(insertIt,ei);
+		list->insert(insertIt,ei);
 	} else
 		ei=*insertIt;
 	return ei;
 }
 
 vector<EdgeIntersection*>::iterator EdgeIntersectionList::iterator(){
-	return list.begin();
+	return list->begin();
 }
 
 bool EdgeIntersectionList::isEmpty() {
-	return list.empty();
+	return list->empty();
 }
 
 bool EdgeIntersectionList::findInsertionPoint(int segmentIndex, double dist,vector<EdgeIntersection*>::iterator *insertIt){
-	vector<EdgeIntersection *>::iterator findIt=list.begin();
+	vector<EdgeIntersection *>::iterator findIt=list->begin();
 	bool found=false;
-	while(findIt<list.end()) {
+	while(findIt<list->end()) {
 		EdgeIntersection *ei=*findIt;
 		findIt++;
 		int compare=ei->compare(segmentIndex, dist);
@@ -47,7 +49,7 @@ bool EdgeIntersectionList::findInsertionPoint(int segmentIndex, double dist,vect
 
 bool EdgeIntersectionList::isIntersection(Coordinate pt){
 	vector<EdgeIntersection *>::iterator it;
-	for (it=list.begin();it<list.end();it++) {
+	for (it=list->begin();it<list->end();it++) {
 		EdgeIntersection *ei=*it;
 		if (ei->coord==pt)
 			return true;
@@ -64,10 +66,10 @@ void EdgeIntersectionList::addEndpoints(){
 void EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList) {
 	// ensure that the list has entries for the first and last point of the edge
 	addEndpoints();
-	vector<EdgeIntersection *>::iterator it=list.begin();
+	vector<EdgeIntersection *>::iterator it=list->begin();
 	// there should always be at least two entries in the list
 	EdgeIntersection *eiPrev=*it;
-	while (it<list.end()) {
+	while (it<list->end()) {
 		it++;
 		EdgeIntersection *ei=*it;
 		Edge *newEdge=createSplitEdge(eiPrev,ei);
@@ -99,7 +101,7 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 string EdgeIntersectionList::print(){
 	string out="Intersections: ";
 	vector<EdgeIntersection *>::iterator it;
-	for (it=list.begin();it<list.end();it++) {
+	for (it=list->begin();it<list->end();it++) {
 		EdgeIntersection *ei=*it;
 		out+=ei->print();
 	}
