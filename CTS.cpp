@@ -116,7 +116,7 @@ int main(int argc, char** argv)
 	cout << ls.isEquivalentClass(&p) << endl;
 */
 
-	Coordinate c1(0,0);
+/*	Coordinate c1(0,0);
 	Coordinate c2(100,0);
 	Coordinate c3(100,100);
 	Coordinate c4(0,100);
@@ -171,6 +171,10 @@ int main(int argc, char** argv)
 	p.compareToSameClass(p1);
 
 	p.normalize();
+*/
+	GeometryFactory gf;
+	string a(typeid(gf).name());
+	cout << a << endl;
 
 	cout << "End" << endl;
 	} catch (char *message){
