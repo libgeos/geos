@@ -1,5 +1,8 @@
 /*
 * $Log$
+* Revision 1.8  2003/11/06 18:47:55  strk
+* Added throw specification for BufferOp's ::buildSubgraphs() and ::computeBuffer(). Cleanup on exception in computeBuffer().
+*
 * Revision 1.7  2003/11/06 18:00:15  strk
 * Cleanup on exception in ::bufferOp()
 *
@@ -68,7 +71,7 @@ Geometry* BufferOp::getResultGeometry(double distance, int quadrantSegments) {
 	return resultGeom;
 }
 
-void BufferOp::computeBuffer(double distance, int quadrantSegments) {
+void BufferOp::computeBuffer(double distance, int quadrantSegments) throw(TopologyException *) {
 	BufferEdgeBuilder *bufEdgeBuilder=new BufferEdgeBuilder(cga,li,distance,resultPrecisionModel,quadrantSegments);
 	vector<Edge*> *bufferEdgeList=bufEdgeBuilder->getEdges(getArgGeometry(0));
 	vector<Edge*> *nodedEdges=nodeEdges(bufferEdgeList);
@@ -81,7 +84,22 @@ void BufferOp::computeBuffer(double distance, int quadrantSegments) {
 
 	vector<BufferSubgraph*> *subgraphList=createSubgraphs();
 	PolygonBuilder *polyBuilder=new PolygonBuilder(geomFact,cga);
-	buildSubgraphs(subgraphList,polyBuilder);
+
+	try {
+		buildSubgraphs(subgraphList,polyBuilder);
+	}
+	// *Should* throw a TopologyException only
+	catch (...)
+	{
+		delete polyBuilder;
+		delete nodedEdges;
+		delete bufEdgeBuilder;
+		for(int i=0;i<(int)subgraphList->size();i++) {
+			delete (*subgraphList)[i];
+		}
+		delete subgraphList;
+		throw;
+	}
 	vector<Polygon*> *resultPolyList=polyBuilder->getPolygons();
 	resultGeom=computeGeometry(resultPolyList);
 	//computeBufferLine(graph);
@@ -219,7 +237,7 @@ vector<BufferSubgraph*>* BufferOp::createSubgraphs(){
 	return subgraphList;
 }
 
-void BufferOp::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder){
+void BufferOp::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder) throw (TopologyException *) {
 	for(int i=0;i<(int)subgraphList->size();i++) {
 		BufferSubgraph *subgraph=(*subgraphList)[i];
 		Coordinate& p=subgraph->getRightmostCoordinate();
@@ -228,6 +246,7 @@ void BufferOp::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 			outsideDepth=1;
 		subgraph->computeDepth(outsideDepth);
 		subgraph->findResultEdges();
+		// This might throw a TopologyException
 		polyBuilder->add(subgraph->getDirectedEdges(),subgraph->getNodes());
 	}
 }
