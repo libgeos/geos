@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/05/26 13:12:58  strk
+ * Removed try/catch block from ::buildSubgraphs
+ *
  * Revision 1.15  2004/05/26 09:49:03  strk
  * PlanarGraph made local to ::buffer instead of Class private.
  *
@@ -276,22 +279,16 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph)
 void
 BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder)
 {
-	vector<BufferSubgraph*> *processedGraphs=new vector<BufferSubgraph*>();
-	try {
-		for (int i=0;i<(int)subgraphList->size();i++) {
-			BufferSubgraph *subgraph=(*subgraphList)[i];
-			Coordinate *p=subgraph->getRightmostCoordinate();
-			SubgraphDepthLocater locater=SubgraphDepthLocater(processedGraphs);
-			int outsideDepth=locater.getDepth(*p);
-			subgraph->computeDepth(outsideDepth);
-			subgraph->findResultEdges();
-			processedGraphs->push_back(subgraph);
-			polyBuilder->add(subgraph->getDirectedEdges(), subgraph->getNodes());
-		}
-	} catch (...) {
-		delete processedGraphs;
-		throw;
+	vector<BufferSubgraph*> processedGraphs;
+	for (int i=0;i<(int)subgraphList->size();i++) {
+		BufferSubgraph *subgraph=(*subgraphList)[i];
+		Coordinate *p=subgraph->getRightmostCoordinate();
+		SubgraphDepthLocater locater=SubgraphDepthLocater(&processedGraphs);
+		int outsideDepth=locater.getDepth(*p);
+		subgraph->computeDepth(outsideDepth);
+		subgraph->findResultEdges();
+		processedGraphs.push_back(subgraph);
+		polyBuilder->add(subgraph->getDirectedEdges(), subgraph->getNodes());
 	}
-	delete processedGraphs;
 }
 }
