@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.44  2004/11/12 18:12:05  strk
+ * Changed ::getBoundary() to return LineString if polygon has no holes.
+ * (has required to pass OGC conformance test T20)
+ *
  * Revision 1.43  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -242,6 +246,11 @@ Geometry* Polygon::getBoundary() const {
 	if (isEmpty()) {
 		return getFactory()->createGeometryCollection(NULL);
 	}
+	if ( ! holes->size() )
+	{
+		return shell->clone();
+	}
+
 	vector<Geometry *> rings(holes->size()+1);
 	rings[0]=shell;
 	for (unsigned int i=0; i<holes->size(); i++) {
