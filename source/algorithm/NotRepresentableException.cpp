@@ -8,3 +8,4 @@ NotRepresentableException::NotRepresentableException(string msg): txt(""){
 }
 NotRepresentableException::~NotRepresentableException(){}
 string NotRepresentableException::toString(){return txt;}
+

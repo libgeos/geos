@@ -1,4 +1,5 @@
 #include "io.h"
+#include "stdio.h"
 
 ParseException::ParseException(): txt(""){}
 ParseException::ParseException(string msg): txt(""){

@@ -9,3 +9,4 @@ void Writer::write(string txt){
 string Writer::toString() {
 	return str;
 }
+

@@ -77,8 +77,8 @@ int RobustLineIntersector::computeIntersect(Coordinate p1,Coordinate p2,Coordina
 }
 
 bool RobustLineIntersector::between(Coordinate p1,Coordinate p2,Coordinate q) {
-	if (((q.x>=__min(p1.x,p2.x)) && (q.x<=__max(p1.x,p2.x))) &&
-		((q.y>=__min(p1.y,p2.y)) && (q.y<=__max(p1.y,p2.y)))) {
+	if (((q.x>=min(p1.x,p2.x)) && (q.x<=max(p1.x,p2.x))) &&
+		((q.y>=min(p1.y,p2.y)) && (q.y<=max(p1.y,p2.y)))) {
 			return true;
 	} else {
 		return false;

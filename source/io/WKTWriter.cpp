@@ -1,6 +1,7 @@
 #include "io.h"
 #include "util.h"
 #include <typeinfo>
+#include "stdio.h"
 
 WKTWriter::WKTWriter() {
 	isFormatted=false;
