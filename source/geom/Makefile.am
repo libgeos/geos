@@ -68,7 +68,6 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../bigtest/GeometryTestFactory.cpp \
                     ../algorithm/CGAlgorithms.cpp \
                     ../algorithm/HCoordinate.cpp \
-                    ../algorithm/IntTreePointInRing.cpp \
                     ../algorithm/LineIntersector.cpp \
                     ../algorithm/MCPointInRing.cpp \
                     ../algorithm/NonRobustCGAlgorithms.cpp \
@@ -110,9 +109,6 @@ EXTERNAL_SOURCES =  ../graph/Depth.cpp \
                     ../index/chain/MonotoneChainBuilder.cpp \
                     ../index/chain/MonotoneChainOverlapAction.cpp \
                     ../index/chain/MonotoneChainSelectAction.cpp \
-                    ../index/intervaltree/IntervalNode.cpp \
-                    ../index/intervaltree/IntervalTree.cpp \
-                    ../index/quadtree/Quad.cpp \
                     ../index/quadtree/Quadtree.cpp \
                     ../index/sweepline/indexSweepLineEvent.cpp \
                     ../index/sweepline/SweepLineIndex.cpp \
