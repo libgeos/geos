@@ -26,7 +26,7 @@ void run(int nPts, GeometryFactory *fact) {
 //	cout << "n Pts: " << nPts << "   Executed in " << totalTime << endl;
 }
 
-void main(int argC, char* argV[]) {
+int main(int argC, char* argV[]) {
 
 	GeometryFactory *fact=new GeometryFactory();
 
