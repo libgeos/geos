@@ -443,7 +443,7 @@ try{
 						for (unsigned int i=0; i<polys->size(); i++)
 							newgeoms->push_back((*polys)[i]);
 						delete polys;
-						gRealRes=factory->createMultiPolygon(newgeoms);
+						gRealRes=factory->createGeometryCollection(newgeoms);
 						gRealRes->normalize();
 					} catch ( ... ) {
 						delete gRealRes;
@@ -542,6 +542,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.52  2005/01/03 16:06:27  strk
+ * Changed polygonize op to return a GeometryCollection
+ *
  * Revision 1.51  2005/01/03 15:56:21  strk
  * Fixed memory leaks just introduced for Polygonizer test case.
  *
