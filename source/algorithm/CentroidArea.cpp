@@ -1,5 +1,6 @@
 #include "../headers/geosAlgorithm.h"
 #include "../headers/platform.h"
+#include <typeinfo>
 
 CentroidArea::CentroidArea() {
 	basePt=NULL;
