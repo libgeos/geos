@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.70  2004/09/16 07:32:15  strk
+ * Added short-circuit tests. Can be disabled at compile-time
+ *
  * Revision 1.69  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -169,6 +172,8 @@
 #include <geos/opBuffer.h>
 #include <geos/io.h>
 #include <geos/version.h>
+
+#define SHORTCIRCUIT_PREDICATES 1
 
 namespace geos {
 
@@ -493,6 +498,11 @@ Geometry::getEnvelopeInternal() const {
 }
 
 bool Geometry::disjoint(const Geometry *g) const{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return true;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isDisjoint();
 	delete im;
@@ -500,6 +510,11 @@ bool Geometry::disjoint(const Geometry *g) const{
 }
 
 bool Geometry::touches(const Geometry *g) const{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return false;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isTouches(getDimension(), g->getDimension());
 	delete im;
@@ -507,6 +522,11 @@ bool Geometry::touches(const Geometry *g) const{
 }
 
 bool Geometry::intersects(const Geometry *g) const{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return false;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isIntersects();
 	delete im;
@@ -514,6 +534,11 @@ bool Geometry::intersects(const Geometry *g) const{
 }
 
 bool Geometry::crosses(const Geometry *g) const{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return false;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isCrosses(getDimension(), g->getDimension());
 	delete im;
@@ -521,6 +546,11 @@ bool Geometry::crosses(const Geometry *g) const{
 }
 
 bool Geometry::within(const Geometry *g) const{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return false;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isWithin();
 	delete im;
@@ -528,6 +558,11 @@ bool Geometry::within(const Geometry *g) const{
 }
 
 bool Geometry::contains(const Geometry *g) const{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return false;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isContains();
 	delete im;
@@ -535,6 +570,11 @@ bool Geometry::contains(const Geometry *g) const{
 }
 
 bool Geometry::overlaps(const Geometry *g) const{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return false;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isOverlaps(getDimension(), g->getDimension());
 	delete im;
@@ -549,6 +589,11 @@ bool Geometry::relate(const Geometry *g, string intersectionPattern) const {
 }
 
 bool Geometry::equals(const Geometry *g) const {
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
+		return false;
+#endif
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isEquals(getDimension(), g->getDimension());
 	delete im;
