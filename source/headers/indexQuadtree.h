@@ -5,7 +5,7 @@
 #include <vector>
 #include "platform.h"
 #include "geom.h"
-#include "SpatialIndex.h"
+#include "spatialIndex.h"
 
 using namespace std;
 
