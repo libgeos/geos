@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/05/27 10:26:50  strk
+ * set (useless?) recordIsolated member in constructor
+ *
  * Revision 1.2  2004/05/03 12:09:22  strk
  * newline added at end of file
  *
@@ -43,6 +46,7 @@ nodingSegmentIntersector::nodingSegmentIntersector(LineIntersector *newLi) {
 	numInteriorIntersections = 0;
 	numProperIntersections = 0;
 	numTests = 0;
+	recordIsolated = false;
 }
 
 LineIntersector* nodingSegmentIntersector::getLineIntersector() {
