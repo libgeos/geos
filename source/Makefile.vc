@@ -1,0 +1,237 @@
+# $Id$
+# $Log$
+# Revision 1.1  2004/12/03 16:25:47  frank
+# New
+#
+
+CFLAGS = -Iheaders /GX /MD /GR /nologo
+
+LIBNAME =	geos.lib
+
+OBJ =	algorithm\CGAlgorithms.obj \
+	algorithm\CentroidArea.obj \
+	algorithm\CentroidLine.obj \
+	algorithm\CentroidPoint.obj \
+	algorithm\ConvexHull.obj \
+	algorithm\HCoordinate.obj \
+	algorithm\InteriorPointArea.obj \
+	algorithm\InteriorPointLine.obj \
+	algorithm\InteriorPointPoint.obj \
+	algorithm\LineIntersector.obj \
+	algorithm\MCPointInRing.obj \
+	algorithm\MinimumDiameter.obj \
+	algorithm\NonRobustCGAlgorithms.obj \
+	algorithm\NonRobustLineIntersector.obj \
+	algorithm\NotRepresentableException.obj \
+	algorithm\PointLocator.obj \
+	algorithm\RobustCGAlgorithms.obj \
+	algorithm\RobustDeterminant.obj \
+	algorithm\RobustLineIntersector.obj \
+	algorithm\SIRtreePointInRing.obj \
+	algorithm\SimplePointInAreaLocator.obj \
+	algorithm\SimplePointInRing.obj \
+	geom\Coordinate.obj \
+	geom\CoordinateSequence.obj \
+	geom\CoordinateSequenceFactory.obj \
+	geom\DefaultCoordinateSequence.obj \
+	geom\DefaultCoordinateSequenceFactory.obj \
+	geom\Dimension.obj \
+	geom\Envelope.obj \
+	geom\Geometry.obj \
+	geom\GeometryCollection.obj \
+	geom\GeometryCollectionIterator.obj \
+	geom\GeometryComponentFilter.obj \
+	geom\GeometryFactory.obj \
+	geom\IntersectionMatrix.obj \
+	geom\LineSegment.obj \
+	geom\LineString.obj \
+	geom\LinearRing.obj \
+	geom\Location.obj \
+	geom\MultiLineString.obj \
+	geom\MultiPoint.obj \
+	geom\MultiPolygon.obj \
+	geom\Point.obj \
+	geom\PointCoordinateSequence.obj \
+	geom\PointCoordinateSequenceFactory.obj \
+	geom\Polygon.obj \
+	geom\PrecisionModel.obj \
+	geom\TopologyException.obj \
+	geom\Triangle.obj \
+	geom\util\GeometryEditor.obj \
+	geom\util\LinearComponentExtracter.obj \
+	geom\util\PointExtracter.obj \
+	geom\util\PolygonExtracter.obj \
+	geomgraph\index\MonotoneChain.obj \
+	geomgraph\index\MonotoneChainEdge.obj \
+	geomgraph\index\MonotoneChainIndexer.obj \
+	geomgraph\index\SegmentIntersector.obj \
+	geomgraph\index\SimpleEdgeSetIntersector.obj \
+	geomgraph\index\SimpleMCSweepLineIntersector.obj \
+	geomgraph\index\SimpleSweepLineIntersector.obj \
+	geomgraph\index\SweepLineEvent.obj \
+	geomgraph\index\SweepLineSegment.obj \
+	geomgraph\Depth.obj \
+	geomgraph\DirectedEdge.obj \
+	geomgraph\DirectedEdgeStar.obj \
+	geomgraph\Edge.obj \
+	geomgraph\EdgeEnd.obj \
+	geomgraph\EdgeEndStar.obj \
+	geomgraph\EdgeIntersection.obj \
+	geomgraph\EdgeIntersectionList.obj \
+	geomgraph\EdgeList.obj \
+	geomgraph\EdgeNodingValidator.obj \
+	geomgraph\EdgeRing.obj \
+	geomgraph\GeometryGraph.obj \
+	geomgraph\GraphComponent.obj \
+	geomgraph\Label.obj \
+	geomgraph\Node.obj \
+	geomgraph\NodeFactory.obj \
+	geomgraph\NodeMap.obj \
+	geomgraph\PlanarGraph.obj \
+	geomgraph\Position.obj \
+	geomgraph\Quadrant.obj \
+	geomgraph\TopologyLocation.obj \
+	index\bintree\BinTreeInterval.obj \
+	index\bintree\BinTreeNode.obj \
+	index\bintree\Bintree.obj \
+	index\bintree\Key.obj \
+	index\bintree\NodeBase.obj \
+	index\bintree\Root.obj \
+	index\chain\MonotoneChainBuilder.obj \
+	index\chain\MonotoneChainOverlapAction.obj \
+	index\chain\MonotoneChainSelectAction.obj \
+	index\chain\indexMonotoneChain.obj \
+	index\quadtree\DoubleBits.obj \
+	index\quadtree\IntervalSize.obj \
+	index\quadtree\QuadTreeKey.obj \
+	index\quadtree\QuadTreeNode.obj \
+	index\quadtree\QuadTreeNodeBase.obj \
+	index\quadtree\QuadTreeRoot.obj \
+	index\quadtree\Quadtree.obj \
+	index\strtree\AbstractNode.obj \
+	index\strtree\AbstractSTRtree.obj \
+	index\strtree\Interval.obj \
+	index\strtree\ItemBoundable.obj \
+	index\strtree\SIRtree.obj \
+	index\strtree\STRtree.obj \
+	index\sweepline\SweepLineIndex.obj \
+	index\sweepline\SweepLineInterval.obj \
+	index\sweepline\indexSweepLineEvent.obj \
+	io\ParseException.obj \
+	io\StringTokenizer.obj \
+	io\Unload.obj \
+	io\WKTReader.obj \
+	io\WKTWriter.obj \
+	io\Writer.obj \
+	io\markup\MarkupSTL.obj \
+	noding\snapround\SegmentSnapper.obj \
+	noding\snapround\SimpleSegmentStringsSnapper.obj \
+	noding\snapround\SnapRounder.obj \
+	noding\IteratedNoder.obj \
+	noding\MCQuadtreeNoder.obj \
+	noding\Noder.obj \
+	noding\NodingValidator.obj \
+	noding\SegmentNode.obj \
+	noding\SegmentNodeList.obj \
+	noding\SegmentString.obj \
+	noding\SimpleNoder.obj \
+	noding\nodingSegmentIntersector.obj \
+	operation\GeometryGraphOperation.obj \
+	operation\IsSimpleOp.obj \
+	operation\buffer\BufferBuilder.obj \
+	operation\buffer\BufferOp.obj \
+	operation\buffer\BufferSubgraph.obj \
+	operation\buffer\OffsetCurveBuilder.obj \
+	operation\buffer\OffsetCurveSetBuilder.obj \
+	operation\buffer\RightmostEdgeFinder.obj \
+	operation\buffer\SubgraphDepthLocater.obj \
+	operation\distance\ConnectedElementLocationFilter.obj \
+	operation\distance\ConnectedElementPointFilter.obj \
+	operation\distance\DistanceOp.obj \
+	operation\distance\GeometryLocation.obj \
+	operation\linemerge\EdgeString.obj \
+	operation\linemerge\LineMergeDirectedEdge.obj \
+	operation\linemerge\LineMergeEdge.obj \
+	operation\linemerge\LineMergeGraph.obj \
+	operation\linemerge\LineMerger.obj \
+	operation\overlay\EdgeSetNoder.obj \
+	operation\overlay\ElevationMatrix.obj \
+	operation\overlay\ElevationMatrixCell.obj \
+	operation\overlay\ElevationMatrixFilter.obj \
+	operation\overlay\LineBuilder.obj \
+	operation\overlay\MaximalEdgeRing.obj \
+	operation\overlay\MinimalEdgeRing.obj \
+	operation\overlay\OverlayNodeFactory.obj \
+	operation\overlay\OverlayOp.obj \
+	operation\overlay\PointBuilder.obj \
+	operation\overlay\PolygonBuilder.obj \
+	operation\polygonize\PolygonizeDirectedEdge.obj \
+	operation\polygonize\PolygonizeEdge.obj \
+	operation\polygonize\PolygonizeGraph.obj \
+	operation\polygonize\Polygonizer.obj \
+	operation\polygonize\polygonizeEdgeRing.obj \
+	operation\relate\EdgeEndBuilder.obj \
+	operation\relate\EdgeEndBundle.obj \
+	operation\relate\EdgeEndBundleStar.obj \
+	operation\relate\RelateComputer.obj \
+	operation\relate\RelateNode.obj \
+	operation\relate\RelateNodeFactory.obj \
+	operation\relate\RelateNodeGraph.obj \
+	operation\relate\RelateOp.obj \
+	operation\valid\ConnectedInteriorTester.obj \
+	operation\valid\ConsistentAreaTester.obj \
+	operation\valid\IsValidOp.obj \
+	operation\valid\QuadtreeNestedRingTester.obj \
+	operation\valid\RepeatedPointTester.obj \
+	operation\valid\SimpleNestedRingTester.obj \
+	operation\valid\SweeplineNestedRingTester.obj \
+	operation\valid\TopologyValidationError.obj \
+	planargraph\planarDirectedEdge.obj \
+	planargraph\planarDirectedEdgeStar.obj \
+	planargraph\planarEdge.obj \
+	planargraph\planarGraphComponent.obj \
+	planargraph\planarNode.obj \
+	planargraph\planarNodeMap.obj \
+	planargraph\planarPlanarGraph.obj \
+	precision\CommonBits.obj \
+	precision\CommonBitsOp.obj \
+	precision\CommonBitsRemover.obj \
+	precision\EnhancedPrecisionOp.obj \
+	precision\SimpleGeometryPrecisionReducer.obj \
+	util\Assert.obj \
+	util\AssertionFailedException.obj \
+	util\CoordinateArrayFiter.obj \
+	util\GEOSException.obj \
+	util\GeometricShapeFactory.obj \
+	util\IllegalArgumentException.obj \
+	util\Profiler.obj \
+	util\UniqueCoordinateArrayFilter.obj \
+	util\UnsupportedOperationException.obj
+
+TEST_EXE =	TestSweepLineSpeed.exe
+
+default:	$(LIBNAME) $(TEST_EXE)
+
+$(LIBNAME):	headers/geos/platform.h $(OBJ)
+	if exist $(LIBNAME) del $(LIBNAME)
+	lib /out:$(LIBNAME) $(OBJ)
+
+headers/geos/platform.h: headers/geos/platform.h.vc
+	copy headers\geos\platform.h.vc headers\geos\platform.h
+
+.cpp.obj:
+	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
+
+clean:
+	del $(OBJ)
+	del $(LIBNAME)
+	del *.dll
+
+TestSweepLineSpeed.exe:	$(LIBNAME) \
+		bigtest\GeometryTestFactory.obj \
+		bigtest\TestSweepLineSpeed.obj \
+		
+	$(CC) $(CFLAGS) \
+		bigtest\TestSweepLineSpeed.obj \
+		bigtest\GeometryTestFactory.obj \
+		$(LIBNAME)
