@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/05/05 10:54:48  strk
+ * Removed some private static heap explicit allocation, less cleanup done by
+ * the unloader.
+ *
  * Revision 1.9  2004/04/16 08:52:52  strk
  * Unload::Release final delete (static heap allocations should be gone now)
  *
@@ -66,7 +70,6 @@ Unload::~Unload(void)
 void Unload::Release()
 {
 	delete CoordinateListFactory::internalFactory;
-	delete Geometry::geometryChangedFilter;
 	delete PlanarGraph::cga;
 	delete planarDirectedEdge::cga;
 	delete GeometryGraphOperation::cga;
@@ -75,6 +78,5 @@ void Unload::Release()
 	delete RelateComputer::ptLocator;
 	delete QuadTreeRoot::origin;
 	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
-	delete BufferBuilder::cga;
 }
 }

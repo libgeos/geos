@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2004/05/05 10:54:48  strk
+ * Removed some private static heap explicit allocation, less cleanup done by
+ * the unloader.
+ *
  * Revision 1.15  2004/05/03 10:43:42  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -626,7 +630,7 @@ private:
 	* Compute the change in depth as an edge is crossed from R to L
 	*/
 	static int depthDelta(Label *label);
-	static CGAlgorithms *cga;
+	static CGAlgorithms cga;
 	int quadrantSegments;
 	int endCapStyle;
 	PrecisionModel *workingPrecisionModel;

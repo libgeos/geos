@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.59  2004/05/05 10:54:48  strk
+ * Removed some private static heap explicit allocation, less cleanup done by
+ * the unloader.
+ *
  * Revision 1.58  2004/04/20 08:52:01  strk
  * GeometryFactory and Geometry const correctness.
  * Memory leaks removed from SimpleGeometryPrecisionReducer
@@ -942,7 +946,7 @@ protected:
 	Geometry* fromInternalGeometry(const Geometry *g) const;
 private:
 	virtual int getClassSortIndex() const;
-	static GeometryComponentFilter* geometryChangedFilter;
+	static GeometryComponentFilter geometryChangedFilter;
     static const int64 serialVersionUID = 8763622679187376702LL;
 	GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;

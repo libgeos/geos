@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.45  2004/05/05 10:54:48  strk
+ * Removed some private static heap explicit allocation, less cleanup done by
+ * the unloader.
+ *
  * Revision 1.44  2004/04/30 09:15:28  strk
  * Enlarged exception specifications to allow for AssertionFailedException.
  * Added missing initializers.
@@ -65,7 +69,7 @@
 
 namespace geos {
 
-GeometryComponentFilter* Geometry::geometryChangedFilter=new GeometryComponentFilter();
+GeometryComponentFilter Geometry::geometryChangedFilter=GeometryComponentFilter();
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
 Geometry::Geometry(const GeometryFactory *newFactory) {
@@ -249,7 +253,7 @@ Point* Geometry::getInteriorPoint() {
 * and/or update any information it has cached (such as its {@link Envelope} ).
 */
 void Geometry::geometryChanged() {
-	apply_rw(geometryChangedFilter);
+	apply_rw(&geometryChangedFilter);
 }
 
 /**

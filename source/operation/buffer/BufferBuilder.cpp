@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2004/05/05 10:54:48  strk
+ * Removed some private static heap explicit allocation, less cleanup done by
+ * the unloader.
+ *
  * Revision 1.10  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -66,7 +70,7 @@ int BufferBuilder::depthDelta(Label *label) {
 	return 0;
 }
 
-CGAlgorithms* BufferBuilder::cga=new RobustCGAlgorithms();
+CGAlgorithms BufferBuilder::cga=RobustCGAlgorithms();
 
 /**
 * Creates a new BufferBuilder
@@ -150,7 +154,7 @@ BufferBuilder::buffer(Geometry *g, double distance)
 		graph=new PlanarGraph(onf);
 		graph->addEdges(edgeList->getEdges());
 		subgraphList=createSubgraphs(graph);
-		polyBuilder=new PolygonBuilder(geomFact,cga);
+		polyBuilder=new PolygonBuilder(geomFact,&cga);
 		buildSubgraphs(subgraphList, polyBuilder);
 		resultPolyList=polyBuilder->getPolygons();
 		resultGeom=geomFact->buildGeometry(resultPolyList);
@@ -249,7 +253,7 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph)
 	for (int i=0;i<(int)n->size();i++) {
 		Node *node=(*n)[i];
 		if (!node->isVisited()) {
-			BufferSubgraph *subgraph=new BufferSubgraph(cga);
+			BufferSubgraph *subgraph=new BufferSubgraph(&cga);
 			subgraph->create(node);
 			subgraphList->push_back(subgraph);
 		}
