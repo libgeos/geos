@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2004/04/16 09:01:29  strk
+ * Removed memory leak in CGAlgorithms::isOnline
+ *
  * Revision 1.13  2004/04/05 06:35:14  ybychkov
  * "operation/distance" upgraded to JTS 1.4
  *
@@ -133,9 +136,11 @@ bool CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateList* pt) {
 		Coordinate p1=pt->getAt(i);	
 		lineIntersector->computeIntersection(p, p0, p1);
 		if (lineIntersector->hasIntersection()) {
+			delete lineIntersector;
 			return true;
 		}
 	}
+	delete lineIntersector;
 	return false;
 }
 
