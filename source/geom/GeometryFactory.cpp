@@ -1,3 +1,7 @@
+/*$Log$
+ *Revision 1.23  2003/10/09 09:42:42  strk
+ *Tried to "formalize" constant nature of the first argument given to constructor by PrecisionModel and SRID specification. Added CVS Log on top.
+ **/
 #include "../headers/geom.h"
 #include "../headers/util.h"
 #include <typeinfo>
@@ -9,8 +13,15 @@ GeometryFactory::GeometryFactory() {
 	SRID=0;
 }
 
-GeometryFactory::GeometryFactory(PrecisionModel* newPrecisionModel, int newSRID){
-    precisionModel=new PrecisionModel(*newPrecisionModel);
+/**
+* Create a geometry factory using given precision model and srid.
+* Will make a copy of given PrecisionModel object, so callers
+* can safely delete it afterwards.
+* We should use the 'const' modifier, but that made my compiler
+* crazy !! --strk;
+*/
+GeometryFactory::GeometryFactory(PrecisionModel* pm, int newSRID){
+    precisionModel=new PrecisionModel(*pm);
     SRID=newSRID;
 }
 GeometryFactory::~GeometryFactory(){
