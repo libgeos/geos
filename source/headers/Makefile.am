@@ -1,7 +1,22 @@
 geosdir = $(prefix)/include/geos
 
-geos_HEADERS =  geom.h graph.h io.h platform.h geosAlgorithm.h graphindex.h  \
-		operation.h  util.h geosAlgorithm.h opRelate.h \
-		indexChain.h indexQuadtree.h \
-		indexSweepline.h opOverlay.h opValid.h 
-
+geos_HEADERS = bigtest.h \
+	geom.h \
+	geosAlgorithm.h \
+	graph.h \
+	graphindex.h \
+	indexChain.h \
+	indexQuadtree.h \
+	indexSweepline.h \
+	io.h \
+	opOverlay.h \
+	opRelate.h \
+	opValid.h \
+	operation.h \
+	platform.h \
+	util.h \
+	config.h \
+	opDistance.h \
+	SpatialIndex.h \
+	indexStrtree.h \
+	indexBintree.h
