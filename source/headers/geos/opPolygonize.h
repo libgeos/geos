@@ -488,7 +488,7 @@ public:
 	vector<LineString*>* getInvalidRingLines();
 
 // This seems to be needed by    GCC 2.95.4
-//friend class Polygonizer::LineStringAdder;
+friend class Polygonizer::LineStringAdder;
 };
 
 } // namespace geos
@@ -496,6 +496,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/03/26 08:19:54  strk
+ * Commented out Polygonizer::LineStringAdder friendship
+ *
  * Revision 1.7  2004/12/14 10:35:44  strk
  * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
  * for delayed destruction.
