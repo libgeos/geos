@@ -360,6 +360,23 @@ int main(int argC, char* argV[]) {
 					}
 					delete gRes;
 					delete gRealRes;
+				} else if (opName=="isWithinDistance") {
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
+					string result;
+					if (gA->isWithinDistance(gB,atof(opSig.c_str()))) {
+						result="true";
+					} else {
+						result="false";
+					}
+					if (out & TEST_RESULT) {
+						if (result==opRes) {
+							cout << "\t\tResult: isWithinDistance='" << result << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: isWithinDistance='" << result << "' result=false"  <<endl;
+							failed++;
+						}
+					}
 				} else {
 					cout<<"Something else\n";
 				}

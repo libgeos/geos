@@ -3,14 +3,14 @@
 namespace geos {
 
 double DistanceOp::distance(Geometry *g0,Geometry *g1) {
-	DistanceOp *distOp=new DistanceOp(g0,g1);
+	auto_ptr<DistanceOp> distOp(new DistanceOp(g0,g1));
 	return distOp->distance();
 }
 
 DistanceOp::DistanceOp(Geometry *g0,Geometry *g1){
 	ptLocator=new PointLocator();
 	minDistance=DoubleInfinity;
-	geom=new vector<Geometry*>;
+	geom=new vector<Geometry*>(2);
 	(*geom)[0]=g0;
 	(*geom)[1]=g1;
 }
@@ -37,24 +37,64 @@ void DistanceOp::computeMinDistance() {
 	if (polys1->size()>0) {
 		vector<Coordinate*> *insidePts0=ConnectedElementPointFilter::getCoordinates((*geom)[0]);
 		computeInside(insidePts0,polys1);
-		if (minDistance<=0.0) return;
+		delete insidePts0;
+		if (minDistance<=0.0) {
+			delete polys0;
+			delete polys1;
+			return;
+		}
 	}
 	if (polys0->size()>0) {
 		vector<Coordinate*> *insidePts1=ConnectedElementPointFilter::getCoordinates((*geom)[1]);
 		computeInside(insidePts1,polys0);
-		if (minDistance<=0.0) return;
+		delete insidePts1;
+		if (minDistance<=0.0) {
+			delete polys0;
+			delete polys1;
+			return;
+		}
 	}
 	vector<Geometry*> *lines0=LineExtracterFilter::getLines((*geom)[0]);
 	vector<Geometry*> *lines1=LineExtracterFilter::getLines((*geom)[1]);
 	vector<Geometry*> *pts0=PointExtracterFilter::getPoints((*geom)[0]);
 	vector<Geometry*> *pts1=PointExtracterFilter::getPoints((*geom)[1]);
 	computeMinDistanceLines(lines0,lines1);
-	if (minDistance<=0.0) return;
+	if (minDistance<=0.0) {
+		delete polys0;
+		delete polys1;
+		delete lines0;
+		delete lines1;
+		delete pts0;
+		delete pts1;
+		return;
+	}
 	computeMinDistanceLinesPoints(lines0,pts1);
-	if (minDistance<=0.0) return;
+	if (minDistance<=0.0) {
+		delete polys0;
+		delete polys1;
+		delete lines0;
+		delete lines1;
+		delete pts0;
+		delete pts1;
+		return;
+	}
 	computeMinDistanceLinesPoints(lines1,pts0);
-	if (minDistance<=0.0) return;
+	if (minDistance<=0.0) {
+		delete polys0;
+		delete polys1;
+		delete lines0;
+		delete lines1;
+		delete pts0;
+		delete pts1;
+		return;
+	}
 	computeMinDistancePoints(pts0,pts1);
+	delete polys0;
+	delete polys1;
+	delete lines0;
+	delete lines1;
+	delete pts0;
+	delete pts1;
 }
 
 void DistanceOp::computeInside(vector<Coordinate*> *pts,vector<Geometry*> *polys){
@@ -108,8 +148,15 @@ void DistanceOp::computeMinDistanceLinesPoints(vector<Geometry*> *lines,vector<G
 }
 
 void DistanceOp::computeMinDistance(LineString *line0,LineString *line1) {
-	if (line0->getEnvelopeInternal()->distance(line1->getEnvelopeInternal())>minDistance)
+	Envelope *env0=line0->getEnvelopeInternal();
+	Envelope *env1=line1->getEnvelopeInternal();
+	if (env0->distance(env1)>minDistance) {
+		delete env0;
+		delete env1;
 		return;
+	}
+	delete env0;
+	delete env1;
 	CoordinateList *coord0=line0->getCoordinates();
 	CoordinateList *coord1=line1->getCoordinates();
 	// brute force approach!
@@ -124,8 +171,15 @@ void DistanceOp::computeMinDistance(LineString *line0,LineString *line1) {
 }
 
 void DistanceOp::computeMinDistance(LineString *line,Point *pt){
-	if (line->getEnvelopeInternal()->distance(pt->getEnvelopeInternal())>minDistance)
+	Envelope *env0=line->getEnvelopeInternal();
+	Envelope *env1=pt->getEnvelopeInternal();
+	if (env0->distance(env1)>minDistance) {
+		delete env0;
+		delete env1;
 		return;
+	}
+	delete env0;
+	delete env1;
 	CoordinateList *coord0=line->getCoordinates();
 	Coordinate *coord=pt->getCoordinate();
 	// brute force approach!

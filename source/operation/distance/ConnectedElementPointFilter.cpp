@@ -5,7 +5,9 @@ namespace geos {
 
 vector<Coordinate*>* ConnectedElementPointFilter::getCoordinates(Geometry *geom) {
 	vector<Coordinate*> *points=new vector<Coordinate*>();
-	geom->apply(new ConnectedElementPointFilter(points));
+	ConnectedElementPointFilter *c=new ConnectedElementPointFilter(points);
+	geom->apply(c);
+	delete c;
 	return points;
 }
 

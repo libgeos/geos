@@ -26,7 +26,7 @@ private:
  * A LineExtracterFilter extracts all the component LineStrings from a Geometry
  * and returns them in a list
  */
-class LineExtracterFilter: public GeometryFilter {
+class LineExtracterFilter: public GeometryComponentFilter {
 public:
 	static vector<Geometry*>* getLines(Geometry *geom);
 	LineExtracterFilter(vector<Geometry*> *newLines);

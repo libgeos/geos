@@ -136,7 +136,11 @@ bool Geometry::hasNullElements(vector<Geometry *>* lrs) {
 * @return <code>true</code> if the geometries are less than <code>distance</code> apart.
 */
 bool Geometry::isWithinDistance(Geometry *geom,double cDistance) {
-	double envDist=getEnvelopeInternal()->distance(geom->getEnvelopeInternal());
+	Envelope *env0=getEnvelopeInternal();
+	Envelope *env1=geom->getEnvelopeInternal();
+	double envDist=env0->distance(env1);
+	delete env0;
+	delete env1;
 	if (envDist>cDistance)
 		return false;
 	// NOTE: this could be implemented more efficiently

@@ -5,7 +5,9 @@ namespace geos {
 
 vector<Geometry*>* PointExtracterFilter::getPoints(Geometry *geom) {
 	vector<Geometry*> *points=new vector<Geometry*>();
-	geom->apply(new PointExtracterFilter(points));
+	PointExtracterFilter *p=new PointExtracterFilter(points);
+	geom->apply(p);
+	delete p;
 	return points;
 }
 

@@ -5,7 +5,9 @@ namespace geos {
 
 vector<Geometry*>* LineExtracterFilter::getLines(Geometry *geom) {
 	vector<Geometry*> *lns=new vector<Geometry*>();
-	geom->apply(new LineExtracterFilter(lns));
+	LineExtracterFilter *l=new LineExtracterFilter(lns);
+	geom->apply(l);
+	delete l;
 	return lns;
 }
 
@@ -14,7 +16,7 @@ LineExtracterFilter::LineExtracterFilter(vector<Geometry*> *newLines){
 }
 
 void LineExtracterFilter::filter(Geometry *geom) {
-	if (typeid(*geom)==typeid(LineString)) lines->push_back(geom);
+	if (typeid(*geom)==typeid(LineString) || typeid(*geom)==typeid(LinearRing)) lines->push_back(geom);
 }
 }
 

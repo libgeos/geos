@@ -5,7 +5,9 @@ namespace geos {
 
 vector<Geometry*>* PolygonExtracterFilter::getPolygons(Geometry *geom) {
 	vector<Geometry*> *cmp=new vector<Geometry*>();
-	geom->apply(new PolygonExtracterFilter(cmp));
+	PolygonExtracterFilter *p=new PolygonExtracterFilter(cmp);
+	geom->apply(p);
+	delete p;
 	return cmp;
 }
 
