@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/04/16 14:09:17  strk
+ * Leaks fixes
+ *
  * Revision 1.20  2004/04/16 11:04:24  strk
  * Memory leaks plugged on exception thrown
  *
@@ -55,6 +58,7 @@ namespace geos {
 double BufferOp::precisionScaleFactor(Geometry *g,double distance,int maxPrecisionDigits){
 	Envelope *env=g->getEnvelopeInternal();
 	double envSize=max(env->getHeight(), env->getWidth());
+	delete env;
 	double expandByDistance=distance > 0.0 ? distance : 0.0;
 	double bufEnvSize=envSize + 2 * expandByDistance;
 	// the smallest power of 10 greater than the buffer envelope
@@ -193,11 +197,11 @@ void BufferOp::bufferOriginalPrecision() {
 		resultGeometry=bufBuilder->buffer(argGeom, distance);
 	} catch (TopologyException *ex) {
 		saveException=ex;
-		// don't propagate the exception - it will be detected by fact that resultGeometry is null
+	} catch (...) {
+		delete bufBuilder;
+		throw;
 	}
-	// Deleting the BufferBuilder gives a segfault
-	// at edgeList deletion time... must check why
-	//delete bufBuilder;
+	delete bufBuilder;
 }
 
 void BufferOp::bufferFixedPrecision(int precisionDigits) {
