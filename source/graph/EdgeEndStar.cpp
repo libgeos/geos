@@ -27,8 +27,9 @@ void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
  * @return the coordinate for the node this star is based at
  */
 Coordinate EdgeEndStar::getCoordinate(){
+	if ( getEdges()->size() == 0 )
+		return Coordinate::getNull();
 	vector<EdgeEnd*>::iterator it=getIterator();
-	if (it==NULL) return Coordinate::getNull();
 	EdgeEnd *e=*it;
 	return e->getCoordinate();
 }
