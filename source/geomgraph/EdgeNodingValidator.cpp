@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -34,7 +37,7 @@ namespace geos {
 vector<SegmentString*>* EdgeNodingValidator::toSegmentStrings(vector<Edge*> *edges) {
 	// convert Edges to SegmentStrings
     vector<SegmentString*> *segStrings=new vector<SegmentString*>();
-	for(int i;i<(int)edges->size();i++) {
+	for(int i=0;i<(int)edges->size();i++) {
 		Edge *e=(*edges)[i];
 		segStrings->push_back(new SegmentString(e->getCoordinates(),e));
     }

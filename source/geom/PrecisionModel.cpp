@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.16  2003/11/12 17:15:05  strk
  * made sure PrecisionModel scale is never 0
  *
@@ -38,6 +41,23 @@ namespace geos {
 
 const double maximumPreciseValue=9007199254740992.0;
 
+map<string,PrecisionModel::Type*>* PrecisionModel::Type::nameToTypeMap=new map<string,PrecisionModel::Type*>();
+PrecisionModel::Type* PrecisionModel::FIXED=new PrecisionModel::Type("FIXED");
+PrecisionModel::Type* PrecisionModel::FLOATING=new PrecisionModel::Type("FLOATING");
+PrecisionModel::Type* PrecisionModel::FLOATING_SINGLE=new PrecisionModel::Type("FLOATING SINGLE");
+PrecisionModel::Type::Type(string newName) { 
+	name=newName;
+	nameToTypeMap->insert(pair<string,PrecisionModel::Type*>(name, this));
+}
+
+void* PrecisionModel::Type::readResolve() {
+	return nameToTypeMap->find(name)->second;
+}    
+
+string PrecisionModel::Type::toString() {
+	return name;
+}
+
 //double PrecisionModel::makePrecise(double val){
 //	//return rint(val);
 //	return ((val >= 0.0) ? floor(val+0.5) : - floor(-val+0.5));
@@ -53,30 +73,56 @@ const double maximumPreciseValue=9007199254740992.0;
 * Rounds an numeric value to the PrecisionModel grid.
 */
 double PrecisionModel::makePrecise(double val) const {
-	double v=val*scale;
-	if (val>=0.0) 
-		v=floor(v+0.5);
-	else 
-		v=-floor(-v+0.5);
-	return v/scale;
+	if (modelType==FLOATING_SINGLE) {
+		float floatSingleVal = (float) val;
+		return (double) floatSingleVal;
+	}
+	if (modelType == FIXED) {
+		double v=val*scale;
+		if (val>=0.0) 
+			v=floor(v+0.5);
+		else 
+			v=-floor(-v+0.5);
+		return v/scale;
+	}
+	// modelType == FLOATING - no rounding necessary
+	return val;
 }
 
 /**
 * Rounds a Coordinate to the PrecisionModel grid.
 */
 void PrecisionModel::makePrecise(Coordinate *coord) const {
+    // optimization for full precision
 	if (modelType==FLOATING) return;
 	coord->x=makePrecise(coord->x);
 	coord->y=makePrecise(coord->y);
 }
 
 
+	/**
+	* Creates a <code>PrecisionModel</code> with a default precision
+	* of FLOATING.
+	*/
 PrecisionModel::PrecisionModel(){
 	modelType=FLOATING;
 	scale=1.0;
-	offsetX=0.0;
-	offsetY=0.0;
 }
+
+/**
+* Creates a <code>PrecisionModel</code> that specifies
+* an explicit precision model type.
+* If the model type is FIXED the scale factor will default to 1.
+*
+* @param modelType the type of the precision model
+*/
+PrecisionModel::PrecisionModel(Type* nModelType){
+	modelType=nModelType;
+	if (modelType==FIXED){
+		setScale(1.0);
+	}
+}
+
 
 /**
 *  Creates a <code>PrecisionModel</code> that specifies Fixed precision.
@@ -88,15 +134,13 @@ PrecisionModel::PrecisionModel(){
 *@param  offsetX  not used.
 *@param  offsetY  not used.
 *
-* @deprecated
+* @deprecated offsets are no longer supported, since internal representation is rounded floating point
 */
 PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY)
 	//throw(IllegalArgumentException *)
 {
 	modelType = FIXED;
 	setScale(newScale);
-	offsetX = newOffsetX;
-	offsetY = newOffsetY;
 }
 
 /**
@@ -112,8 +156,6 @@ PrecisionModel::PrecisionModel(double newScale)
 {
 	modelType=FIXED;
 	setScale(scale);
-	offsetX=0;
-	offsetY=0;
 }
 
 
@@ -121,12 +163,41 @@ PrecisionModel::PrecisionModel(const PrecisionModel &pm)
 {
 	modelType = pm.modelType;
 	scale = pm.scale;
-	offsetX = pm.offsetX;
-	offsetY = pm.offsetY;
 }
 
+/**
+* Tests whether the precision model supports floating point
+* @return <code>true</code> if the precision model supports floating point
+*/
 bool PrecisionModel::isFloating() const {
-	return modelType == FLOATING;
+	return (modelType == FLOATING || modelType == FLOATING_SINGLE);
+}
+
+/**
+* Returns the maximum number of significant digits provided by this
+* precision model.
+* Intended for use by routines which need to print out precise values.
+*
+* @return the maximum number of decimal places provided by this precision model
+*/
+int PrecisionModel::getMaximumSignificantDigits() const {
+	int maxSigDigits = 16;
+	if (modelType == FLOATING) {
+		maxSigDigits = 16;
+	} else if (modelType == FLOATING_SINGLE) {
+		maxSigDigits = 6;
+	} else if (modelType == FIXED) {
+		maxSigDigits = 1 + (int)ceil((double)log(getScale())/(double)log(10.0));
+	}
+	return maxSigDigits;
+}
+
+/**
+* Gets the type of this PrecisionModel
+* @return the type of this PrecisionModel
+*/
+PrecisionModel::Type* PrecisionModel::getType(){
+	return modelType;
 }
 
 /**
@@ -152,14 +223,36 @@ void PrecisionModel::setScale(double newScale) {
 	scale=fabs(newScale);
 }
 
+/**
+* Returns the x-offset used to obtain a precise coordinate.
+*
+* @return the amount by which to subtract the x-coordinate before
+*         multiplying by the scale
+* @deprecated Offsets are no longer used
+*/
 double PrecisionModel::getOffsetX() const {
-	return offsetX;
+	return 0;
 }
 
+/**
+* Returns the y-offset used to obtain a precise coordinate.
+*
+* @return the amount by which to subtract the y-coordinate before
+*         multiplying by the scale
+* @deprecated Offsets are no longer used
+*/
 double PrecisionModel::getOffsetY() const {
-	return offsetY;
+	return 0;
 }
 
+/**
+*  Sets <code>internal</code> to the precise representation of <code>external</code>.
+*
+* @param external the original coordinate
+* @param internal the coordinate whose values will be changed to the
+*                 precise representation of <code>external</code>
+* @deprecated use makePrecise instead
+*/
 void PrecisionModel::toInternal (const Coordinate& external, Coordinate* internal) const {
 	if (isFloating()) {
 		internal->x = external.x;
@@ -171,18 +264,42 @@ void PrecisionModel::toInternal (const Coordinate& external, Coordinate* interna
 	internal->z = external.z;
 }
 
+/**
+*  Returns the precise representation of <code>external</code>.
+*
+*@param  external  the original coordinate
+*@return           the coordinate whose values will be changed to the precise
+*      representation of <code>external</code>
+* @deprecated use makePrecise instead
+*/
 Coordinate* PrecisionModel::toInternal(const Coordinate& external) const {
-	Coordinate* internal=new Coordinate();
-	toInternal(external, internal);
+	Coordinate* internal=new Coordinate(external);
+	makePrecise(internal);
 	return internal;
 }
 
+/**
+*  Returns the external representation of <code>internal</code>.
+*
+*@param  internal  the original coordinate
+*@return           the coordinate whose values will be changed to the
+*      external representation of <code>internal</code>
+* @deprecated no longer needed, since internal representation is same as external representation
+*/
 Coordinate* PrecisionModel::toExternal(const Coordinate& internal) const {
-	Coordinate* external=new Coordinate();
-	toExternal(internal, external);
+	Coordinate* external=new Coordinate(internal);
 	return external;
 }
 
+/**
+*  Sets <code>external</code> to the external representation of <code>internal</code>
+*  .
+*
+*@param  internal  the original coordinate
+*@param  external  the coordinate whose values will be changed to the
+*      external representation of <code>internal</code>
+* @deprecated no longer needed, since internal representation is same as external representation
+*/
 void PrecisionModel::toExternal(const Coordinate& internal, Coordinate* external) const {
 	external->x = internal.x;
 	external->y = internal.y;
@@ -191,11 +308,14 @@ void PrecisionModel::toExternal(const Coordinate& internal, Coordinate* external
 string PrecisionModel::toString() const {
 	string result("");
 	char buffer[255];
-    if (isFloating()) {
-		result="Floating";
-	}
-    else {
-		sprintf(buffer,"Fixed (Scale=%g, Offset X=%g, Offset Y=%g)",scale,offsetX,offsetY);
+	result="UNKNOWN";
+  	if (modelType == FLOATING) {
+  		result = "Floating";
+  	} else if (modelType == FLOATING_SINGLE) {
+  		result = "Floating-Single";
+  	} else if (modelType == FIXED) {
+		sprintf(buffer,"Fixed (Scale=%g)",getScale());
+		result="";
 		result.append(buffer);
 		result.append("");
     }
@@ -206,14 +326,16 @@ PrecisionModel::~PrecisionModel(){}
 
 bool operator==(const PrecisionModel a, const PrecisionModel b) {
 	return a.isFloating() == b.isFloating() &&
-			a.getOffsetX() == b.getOffsetX() &&
-			a.getOffsetY() == b.getOffsetY() &&
 			a.getScale() == b.getScale();
 }
 
 /**
 *  Compares this {@link PrecisionModel} object with the specified object for order.
 * A PrecisionModel is greater than another if it provides greater precision.
+* The comparison is based on the value returned by the
+* {@link getMaximumSignificantDigits) method.
+* This comparison is not strictly accurate when comparing floating precision models
+* to fixed models; however, it is correct when both models are either floating or fixed.
 *
 *@param  o  the <code>PrecisionModel</code> with which this <code>PrecisionModel</code>
 *      is being compared
@@ -221,19 +343,22 @@ bool operator==(const PrecisionModel a, const PrecisionModel b) {
 *      is less than, equal to, or greater than the specified <code>PrecisionModel</code>
 */
 int PrecisionModel::compareTo(const PrecisionModel *other) const {
-	if (modelType==FLOATING && other->modelType==FLOATING) return 0;
-	if (modelType==FLOATING && other->modelType!=FLOATING) return 1;
-	if (modelType!=FLOATING && other->modelType==FLOATING) return -1;
-	if (modelType==FIXED && other->modelType==FIXED) {
-		if (scale>other->scale)
-			return 1;
-		else if (scale<other->scale)
-			return -1;
-		else
-			return 0;
-	}
-	Assert::shouldNeverReachHere("Unknown Precision Model type encountered");
-	return 0;
+	int sigDigits=getMaximumSignificantDigits();
+	int otherSigDigits=other->getMaximumSignificantDigits();
+	return sigDigits<otherSigDigits? -1: (sigDigits==otherSigDigits? 0:1);
+	//if (modelType==FLOATING && other->modelType==FLOATING) return 0;
+	//if (modelType==FLOATING && other->modelType!=FLOATING) return 1;
+	//if (modelType!=FLOATING && other->modelType==FLOATING) return -1;
+	//if (modelType==FIXED && other->modelType==FIXED) {
+	//	if (scale>other->scale)
+	//		return 1;
+	//	else if (scale<other->scale)
+	//		return -1;
+	//	else
+	//		return 0;
+	//}
+	//Assert::shouldNeverReachHere("Unknown Precision Model type encountered");
+	//return 0;
 }
 }
 

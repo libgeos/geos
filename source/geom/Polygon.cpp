@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.29  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.28  2004/02/27 17:43:45  strk
  * memory leak fix in Polygon::getArea() - reported by 'Manuel  Prieto Villegas' <mprieto@dap.es>
  *
@@ -53,10 +56,57 @@ Polygon::Polygon(const Polygon &p): Geometry(p.precisionModel, p.SRID){
 	}
 }
 
-Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID): Geometry(precisionModel, SRID) {
+/**
+*  Constructs a <code>Polygon</code> with the given exterior boundary and
+*  interior boundaries.
+*
+*@param  shell           the outer boundary of the new <code>Polygon</code>,
+*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
+*      geometry is to be created.
+*@param  holes           the inner boundaries of the new <code>Polygon</code>
+*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
+*      geometry is to be created.
+*/
+Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,GeometryFactory *newFactory): Geometry(newFactory) {
 	if (newShell==NULL) {
 		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		newShell=new LinearRing(p,precisionModel, SRID);
+		newShell=getFactory()->createLinearRing(p);
+		delete p;
+	}
+	if (newHoles==NULL)
+		newHoles=new vector<Geometry *>();
+
+	if (hasNullElements(newHoles)) {
+		delete newShell;
+		delete newHoles;
+		throw new IllegalArgumentException("holes must not contain null elements");
+	}
+	if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
+		delete newShell;
+		delete newHoles;
+		throw new IllegalArgumentException("shell is empty but holes are not");
+	}
+	shell=newShell;
+	holes=newHoles;
+}
+
+ /**
+*  Constructs a <code>Polygon</code> with the given exterior boundary.
+*
+*@param  shell           the outer boundary of the new <code>Polygon</code>,
+*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
+*      geometry is to be created.
+*@param  precisionModel  the specification of the grid of allowable points
+*      for this <code>Polygon</code>
+*@param  SRID            the ID of the Spatial Reference System used by this
+*      <code>Polygon</code>
+* @deprecated Use GeometryFactory instead
+*/
+Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID):
+	Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
+	if (newShell==NULL) {
+		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
+		newShell=getFactory()->createLinearRing(p);
 		delete p;
 	}
 	holes=new vector<Geometry *>();
@@ -73,12 +123,28 @@ Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID)
 	shell=newShell;
 }
 
+/**
+*  Constructs a <code>Polygon</code> with the given exterior boundary and
+*  interior boundaries.
+*
+*@param  shell           the outer boundary of the new <code>Polygon</code>,
+*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
+*      geometry is to be created.
+*@param  holes           the inner boundaries of the new <code>Polygon</code>
+*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
+*      geometry is to be created.
+*@param  precisionModel  the specification of the grid of allowable points
+*      for this <code>Polygon</code>
+*@param  SRID            the ID of the Spatial Reference System used by this
+*      <code>Polygon</code>
+* @deprecated Use GeometryFactory instead
+*/
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 				 PrecisionModel* precisionModel, int SRID):
-				Geometry(precisionModel, SRID) {
+				Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
 	if (newShell==NULL) {
 		CoordinateList *p=CoordinateListFactory::internalFactory->createCoordinateList();
-		newShell=new LinearRing(p,precisionModel, SRID);
+		newShell=getFactory()->createLinearRing(p);
 		delete p;
 	}
 
@@ -168,14 +234,14 @@ string Polygon::getGeometryType() const {
 // Returns a newly allocated Geometry object
 Geometry* Polygon::getBoundary() const {
 	if (isEmpty()) {
-		return new GeometryCollection(NULL, precisionModel, SRID);
+		return getFactory()->createGeometryCollection(NULL);
 	}
 	vector<Geometry *> *rings=new vector<Geometry *>(holes->size() + 1);
 	(*rings)[0]=new LineString(*shell);
 	for (unsigned int i=0; i<holes->size(); i++) {
 		(*rings)[i + 1] =new LineString(*(LineString*)(*holes)[i]);
 	}
-	MultiLineString *ret = new MultiLineString(rings, precisionModel, SRID);
+	MultiLineString *ret =getFactory()->createMultiLineString(rings);
 	delete rings;
 	return ret;
 }
@@ -189,9 +255,6 @@ bool Polygon::equalsExact(const Geometry *other, double tolerance) const {
 		return false;
 	}
 	const Polygon* otherPolygon=dynamic_cast<const Polygon*>(other);
-	if (typeid(*shell)!=typeid(Geometry)) {
-		return false;
-	}
 	Geometry* thisShell=dynamic_cast<Geometry *>(shell);
 	if (typeid(*(otherPolygon->shell))!=typeid(Geometry)) {
 		return false;
@@ -204,12 +267,6 @@ bool Polygon::equalsExact(const Geometry *other, double tolerance) const {
 		return false;
 	}
 	for (unsigned int i = 0; i < holes->size(); i++) {
-		if (typeid(*(*holes)[i])!=typeid(Geometry)) {
-			return false;
-		}
-		if (typeid(*((*(otherPolygon->holes))[i]))!=typeid(Geometry)) {
-			return false;
-		}
 		if (!((LinearRing *)(*holes)[i])->equalsExact((*(otherPolygon->holes))[i],tolerance)) {
 			return false;
 		}

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.17  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -26,16 +29,39 @@
 
 namespace geos {
 
-Point::Point(){
-	coordinate.setNull();
-}
+/**
+*  Constructs a <code>Point</code> with the given coordinate.
+*
+*@param  coordinate      the coordinate on which to base this <code>Point</code>
+*      , or <code>null</code> to create the empty geometry.
+*@param  precisionModel  the specification of the grid of allowable points
+*      for this <code>Point</code>
+*@param  SRID            the ID of the Spatial Reference System used by this
+*      <code>Point</code>
+* @deprecated Use GeometryFactory instead
+*/
 Point::Point(const Coordinate& c, const PrecisionModel* precisionModel,
-		int SRID): Geometry(precisionModel,SRID) {
-	coordinate=c;
+			 int SRID): Geometry(new GeometryFactory(precisionModel,SRID,CoordinateListFactory::internalFactory)) {
+	coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
+	if (!(c==Coordinate::nullCoord)) {
+		coordinates->add(c);
+	}
 }
 
-Point::Point(const Point &p): Geometry(p.precisionModel,p.SRID) {
-	coordinate=p.coordinate;
+/**
+*@param  coordinates      contains the single coordinate on which to base this <code>Point</code>
+*      , or <code>null</code> to create the empty geometry.
+*/  
+Point::Point(CoordinateList *newCoordinates, GeometryFactory *newFactory): Geometry(newFactory) {
+	if (newCoordinates==NULL) {
+		newCoordinates=CoordinateListFactory::internalFactory->createCoordinateList();
+	}        
+	Assert::isTrue(coordinates->getSize()<=1);
+	coordinates=newCoordinates;
+}
+
+Point::Point(const Point &p): Geometry(p.getFactory()) {
+	coordinates=CoordinateListFactory::internalFactory->createCoordinateList(p.getCoordinates());;
 }
 
 Geometry* Point::clone() const {
@@ -46,7 +72,7 @@ CoordinateList* Point::getCoordinates() const {
 	if (isEmpty()) {
 		return CoordinateListFactory::internalFactory->createCoordinateList();
 	} else {
-		return CoordinateListFactory::internalFactory->createCoordinateList(coordinate);
+		return CoordinateListFactory::internalFactory->createCoordinateList(coordinates);
 	}
 }
 int Point::getNumPoints() const {
@@ -54,7 +80,7 @@ int Point::getNumPoints() const {
 }
 
 bool Point::isEmpty() const {
-	return coordinate == Coordinate::getNull();
+	return (*getCoordinate())==Coordinate::getNull();
 }
 
 bool Point::isSimple() const {return true;}
@@ -66,36 +92,38 @@ double Point::getX() const {
 	if (isEmpty()) {
 		throw new UnsupportedOperationException("getX called on empty Point\n");
 	}
-	return coordinate.x;
+	return getCoordinate()->x;
 }
 
 double Point::getY() const {
 	if (isEmpty()) {
 		throw new UnsupportedOperationException("getY called on empty Point\n");
 	}
-	return coordinate.y;
+	return getCoordinate()->y;
 }
 
-const Coordinate* Point::getCoordinate() const {return &coordinate;}
+const Coordinate* Point::getCoordinate() const {
+	return coordinates->getSize()!=0 ? &(coordinates->getAt(0)) : NULL;
+}
 
 string Point::getGeometryType() const {
 	return "Point";
 }
 
 Geometry* Point::getBoundary() const {
-	return new GeometryCollection(NULL, precisionModel, SRID);
+	return getFactory()->createGeometryCollection(NULL);
 }
 
 Envelope* Point::computeEnvelopeInternal() const {
 	if (isEmpty()) {
 		return new Envelope();
 	}
-	return new Envelope(coordinate.x, coordinate.x, coordinate.y, coordinate.y);
+	return new Envelope(getCoordinate()->x, getCoordinate()->x, getCoordinate()->y, getCoordinate()->y);
 }
 
 void Point::apply_ro(CoordinateFilter *filter) const {
     if (isEmpty()) {return;}
-	filter->filter_ro(coordinate);
+	filter->filter_ro(*getCoordinate());
 }
 
 void Point::apply_rw(CoordinateFilter *filter) {
@@ -125,11 +153,11 @@ bool Point::equalsExact(const Geometry *other, double tolerance) const
 	if (isEmpty() && other->isEmpty()) {
 		return true;
 	}
-    return equal(((Point*) other)->coordinate, coordinate, tolerance);
+    return equal(*((Point*) other)->getCoordinate(), *getCoordinate(), tolerance);
 }
 
 int Point::compareToSameClass(const Geometry *point) const {
-	return coordinate.compareTo(*(((Point*)point)->getCoordinate()));
+	return getCoordinate()->compareTo(*(((Point*)point)->getCoordinate()));
 }
 
 Point::~Point(){

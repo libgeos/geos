@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.47  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.46  2004/03/29 06:59:24  ybychkov
  * "noding/snapround" package ported (JTS 1.4);
  * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -38,6 +41,9 @@
 
 /*
 * $Log$
+* Revision 1.47  2004/03/31 07:50:37  ybychkov
+* "geom" partially upgraded to JTS 1.4
+*
 * Revision 1.46  2004/03/29 06:59:24  ybychkov
 * "noding/snapround" package ported (JTS 1.4);
 * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
@@ -100,6 +106,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <map>
 #include "math.h"
 //#include "util.h"
 #include "platform.h"
@@ -132,7 +139,7 @@ class Coordinate;
  * Coordinates are assumed to be precise in geometries.
  * That is, the coordinates are assumed to be rounded to the
  * precision model given for the geometry.
- * GEOS input routines automatically round coordinates to the precision model
+ * JTS input routines automatically round coordinates to the precision model
  * before creating Geometries.
  * All internal operations
  * assume that coordinates are rounded to the precision model.
@@ -154,38 +161,175 @@ class Coordinate;
  *      <LI> jtsPt.y = round( (inputPt.y * scale ) / scale
  *    </UL>
  * </ul>
+ *  Coordinates are represented internally as Java double-precision values.
+ * Since Java uses the IEEE-394 floating point standard, this
+ *  provides 53 bits of precision. (Thus the maximum precisely representable
+ *  integer is 9,007,199,254,740,992).
+ *<p>
+ *  JTS methods currently do not handle inputs with different precision models.
+ *
  */
-
 class PrecisionModel {
 public:
-	enum {
-		FIXED=1,
-		FLOATING
+	/**
+	* The types of Precision Model which GEOS supports.
+	* <p>
+	* This class is only for use to support the "enums" for the types of precision model.
+	* <p>
+	*/
+	static class Type {
+	private:
+		static const long long serialVersionUID = -5528602631731589822L;
+		static map<string,PrecisionModel::Type*> *nameToTypeMap;
+		string name;
+		void* readResolve();
+	public:
+		string toString();
+		Type(string newName);
 	};
+	/**
+	* Fixed Precision indicates that coordinates have a fixed number of decimal places.
+	* The number of decimal places is determined by the log10 of the scale factor.
+	*/
+	static Type* FIXED;
+	/**
+	* Floating precision corresponds to the standard Java
+	* double-precision floating-point representation, which is
+	* based on the IEEE-754 standard
+	*/
+	static Type* FLOATING;
+	/**
+	* Floating single precision corresponds to the standard Java
+	* single-precision floating-point representation, which is
+	* based on the IEEE-754 standard
+	*/
+	static Type* FLOATING_SINGLE;
+
+  /**
+	*  The maximum precise value representable in a double. Since IEE754
+	*  double-precision numbers allow 53 bits of mantissa, the value is equal to
+	*  2^53 - 1.  This provides <i>almost</i> 16 decimal digits of precision.
+	*/
 	static const double maximumPreciseValue;
+	/**
+	* Rounds a numeric value to the PrecisionModel grid.
+	*/
 	double makePrecise(double val) const;
 	void makePrecise(Coordinate *coord) const;
+	/**
+	* Creates a <code>PrecisionModel</code> with a default precision
+	* of FLOATING.
+	*/
 	PrecisionModel(void);
+	PrecisionModel(Type* nModelType);
+	/**
+	*  Creates a <code>PrecisionModel</code> that specifies Fixed precision.
+	*  Fixed-precision coordinates are represented as precise internal coordinates,
+	*  which are rounded to the grid defined by the scale factor.
+	*
+	*@param  scale    amount by which to multiply a coordinate after subtracting
+	*      the offset, to obtain a precise coordinate
+	*@param  offsetX  not used.
+	*@param  offsetY  not used.
+	*
+	* @deprecated offsets are no longer supported, since internal representation is rounded floating point
+	*/
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
 	PrecisionModel(double newScale);
 	PrecisionModel(const PrecisionModel &pm);
 	virtual ~PrecisionModel(void);
+	/**
+	* Tests whether the precision model supports floating point
+	* @return <code>true</code> if the precision model supports floating point
+	*/
 	bool isFloating() const;
+	/**
+	* Returns the maximum number of significant digits provided by this
+	* precision model.
+	* Intended for use by routines which need to print out precise values.
+	*
+	* @return the maximum number of decimal places provided by this precision model
+	*/
+	int getMaximumSignificantDigits() const;
+	/**
+	* Gets the type of this PrecisionModel
+	* @return the type of this PrecisionModel
+	*/
+	Type* getType();
 	double getScale() const;
+	/**
+	* Returns the x-offset used to obtain a precise coordinate.
+	*
+	* @return the amount by which to subtract the x-coordinate before
+	*         multiplying by the scale
+	* @deprecated Offsets are no longer used
+	*/
 	double getOffsetX() const;
+	/**
+	* Returns the y-offset used to obtain a precise coordinate.
+	*
+	* @return the amount by which to subtract the y-coordinate before
+	*         multiplying by the scale
+	* @deprecated Offsets are no longer used
+	*/
 	double getOffsetY() const;
+	/**
+	*  Sets <code>internal</code> to the precise representation of <code>external</code>.
+	*
+	* @param external the original coordinate
+	* @param internal the coordinate whose values will be changed to the
+	*                 precise representation of <code>external</code>
+	* @deprecated use makePrecise instead
+	*/
 	void toInternal(const Coordinate& external, Coordinate* internal) const;
+	/**
+	*  Returns the precise representation of <code>external</code>.
+	*
+	*@param  external  the original coordinate
+	*@return           the coordinate whose values will be changed to the precise
+	*      representation of <code>external</code>
+	* @deprecated use makePrecise instead
+	*/
 	Coordinate* toInternal(const Coordinate& external) const;
+	/**
+	*  Returns the external representation of <code>internal</code>.
+	*
+	*@param  internal  the original coordinate
+	*@return           the coordinate whose values will be changed to the
+	*      external representation of <code>internal</code>
+	* @deprecated no longer needed, since internal representation is same as external representation
+	*/
 	Coordinate* toExternal(const Coordinate& internal) const;
+	/**
+	*  Sets <code>external</code> to the external representation of <code>internal</code>
+	*  .
+	*
+	*@param  internal  the original coordinate
+	*@param  external  the coordinate whose values will be changed to the
+	*      external representation of <code>internal</code>
+	* @deprecated no longer needed, since internal representation is same as external representation
+	*/
 	void toExternal(const Coordinate& internal, Coordinate* external) const;
 	string toString() const;
+	/**
+	*  Compares this {@link PrecisionModel} object with the specified object for order.
+	* A PrecisionModel is greater than another if it provides greater precision.
+	* The comparison is based on the value returned by the
+	* {@link getMaximumSignificantDigits) method.
+	* This comparison is not strictly accurate when comparing floating precision models
+	* to fixed models; however, it is correct when both models are either floating or fixed.
+	*
+	*@param  o  the <code>PrecisionModel</code> with which this <code>PrecisionModel</code>
+	*      is being compared
+	*@return    a negative integer, zero, or a positive integer as this <code>PrecisionModel</code>
+	*      is less than, equal to, or greater than the specified <code>PrecisionModel</code>
+	*/
 	int compareTo(const PrecisionModel* other) const;
 private:
 	void setScale(double newScale);
-	int modelType;
+	Type* modelType;
 	double scale;
-	double offsetX;
-	double offsetY;
+	static const long long serialVersionUID = 7777263578777803835L;    
 };
 
 /**
@@ -991,26 +1135,28 @@ public:
 class SFSMultiLineString : public SFSMultiCurve {
 };
 
-class SFSMultiPoint { //: public SFSGeometryCollection {
-};
-
 class SFSMultiSurface { //: public SFSGeometryCollection {
 };
 
-class SFSMultiPolygon : public SFSMultiSurface {
-};
-
-class SFSPoint {// : public SFSGeometry {
+/**
+ *  Basic implementation of <code>Point</code>.
+ *
+ */
+class Point : public Geometry{
 public:
-	virtual double getX() const=0;
-	virtual double getY() const=0;
-	virtual const Coordinate* getCoordinate() const=0;
-};
-
-class Point : public Geometry, public SFSPoint {
-public:
-	Point(void);
+	/**
+	*  Constructs a <code>Point</code> with the given coordinate.
+	*
+	*@param  coordinate      the coordinate on which to base this <code>Point</code>
+	*      , or <code>null</code> to create the empty geometry.
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>Point</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>Point</code>
+	* @deprecated Use GeometryFactory instead
+	*/
 	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
+	Point(CoordinateList *newCoordinates, GeometryFactory *newFactory);
 	Point(const Point &p); 
 	virtual ~Point();
 	Geometry *clone() const;
@@ -1038,9 +1184,14 @@ public:
 	bool equalsExact(const Geometry *other, double tolerance) const;
 	void normalize(void) { };
 protected:
-	Coordinate coordinate;
 	Envelope* computeEnvelopeInternal() const;
 	int compareToSameClass(const Geometry *p) const;
+private:
+	/**
+	*  The <code>Coordinate</code> wrapped by this <code>Point</code>.
+	*/
+	CoordinateList *coordinates;
+	static const long long serialVersionUID = 4902022702746614570L;
 };
 
 class  SFSCurve { //: public SFSGeometry {
@@ -1123,20 +1274,65 @@ public:
 class SFSSurface { //: public SFSGeometry {
 };
 
-class SFSPolygon : public SFSSurface {
-public:
-	virtual const LineString* getExteriorRing() const=0;
-	virtual int getNumInteriorRing() const=0;
-	virtual const LineString* getInteriorRingN(int n) const=0;
-};
-
-class Polygon: public Geometry, public SFSPolygon  {
+/**
+ * Represents a linear polygon, which may include holes.
+ * The shell and holes of the polygon are represented by {@link LinearRing}s.
+ * In a valid polygon, holes may touch the shell or other holes at a single point.
+ * However, no sequence of touching holes may split the polygon into two pieces.
+ * The orientation of the rings in the polygon does not matter.
+ * <p>
+ *  The shell and holes must conform to the assertions specified in the <A
+ *  HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
+ *  Specification for SQL</A> .
+ *
+ */
+class Polygon: public Geometry{
 public:
 	Polygon();
 	Polygon(const Polygon &p);
 	virtual ~Polygon();
+	/**
+	*  Constructs a <code>Polygon</code> with the given exterior boundary.
+	*
+	*@param  shell           the outer boundary of the new <code>Polygon</code>,
+	*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
+	*      geometry is to be created.
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>Polygon</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>Polygon</code>
+	* @deprecated Use GeometryFactory instead
+	*/
 	Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID);
+	/**
+	*  Constructs a <code>Polygon</code> with the given exterior boundary and
+	*  interior boundaries.
+	*
+	*@param  shell           the outer boundary of the new <code>Polygon</code>,
+	*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
+	*      geometry is to be created.
+	*@param  holes           the inner boundaries of the new <code>Polygon</code>
+	*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
+	*      geometry is to be created.
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>Polygon</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>Polygon</code>
+	* @deprecated Use GeometryFactory instead
+	*/
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel* precisionModel, int SRID);
+	/**
+	*  Constructs a <code>Polygon</code> with the given exterior boundary and
+	*  interior boundaries.
+	*
+	*@param  shell           the outer boundary of the new <code>Polygon</code>,
+	*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
+	*      geometry is to be created.
+	*@param  holes           the inner boundaries of the new <code>Polygon</code>
+	*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
+	*      geometry is to be created.
+	*/
+	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,GeometryFactory *newFactory);
 	virtual Geometry *clone() const;
 	CoordinateList* getCoordinates() const;
 	int getNumPoints() const;
@@ -1171,12 +1367,35 @@ protected:
 	Envelope* computeEnvelopeInternal() const;
 private:
 	void normalize(LinearRing *ring, bool clockwise);
+	static const long long serialVersionUID = -3494792200821764533L;  
 };
 
-class MultiPoint: public GeometryCollection, public SFSMultiPoint {
+/**
+ *  Models a collection of <code>Point</code>s.
+ *
+ */
+class MultiPoint: public GeometryCollection{
 public:
-	MultiPoint();
+//	MultiPoint();
+	/**
+	*  Constructs a <code>MultiPoint</code>.
+	*
+	*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
+	*      , or <code>null</code> or an empty array to create the empty geometry.
+	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>MultiPoint</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>MultiPoint</code>
+	* @deprecated Use GeometryFactory instead
+	*/
 	MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID);
+	/**
+	*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
+	*      , or <code>null</code> or an empty array to create the empty geometry.
+	*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
+	*/
+	MultiPoint(vector<Geometry *> *points, GeometryFactory *newFactory);
 	virtual ~MultiPoint();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1191,6 +1410,8 @@ public:
 	bool equalsExact(const Geometry *other, double tolerance) const;
 protected:
 	const Coordinate* getCoordinate(int n) const;
+private:
+	static const long long serialVersionUID = -8048474874175355449L;  
 };
 
 class MultiLineString: public GeometryCollection, public SFSMultiLineString  {
@@ -1210,10 +1431,40 @@ public:
 	bool equalsExact(const Geometry *other, double tolerance) const;
 };
 
-class MultiPolygon: public GeometryCollection, public SFSMultiPolygon   {
+/**
+ *  Basic implementation of <code>MultiPolygon</code>.
+ *
+ */
+class MultiPolygon: public GeometryCollection {
 public:
-	MultiPolygon();
+	//MultiPolygon();
+	/**
+	*  Constructs a <code>MultiPolygon</code>.
+	*
+	*@param  polygons        the <code>Polygon</code>s for this <code>MultiPolygon</code>
+	*      , or <code>null</code> or an empty array to create the empty geometry.
+	*      Elements may be empty <code>Polygon</code>s, but not <code>null</code>
+	*      s. The polygons must conform to the assertions specified in the <A
+	*      HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
+	*      Specification for SQL</A> .
+	*@param  precisionModel  the specification of the grid of allowable points
+	*      for this <code>MultiPolygon</code>
+	*@param  SRID            the ID of the Spatial Reference System used by this
+	*      <code>MultiPolygon</code>
+	* @deprecated Use GeometryFactory instead
+	*/
 	MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
+	/**
+	* @param polygons
+	*            the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+	*            or <code>null</code> or an empty array to create the empty
+	*            geometry. Elements may be empty <code>Polygon</code>s, but
+	*            not <code>null</code>s. The polygons must conform to the
+	*            assertions specified in the <A
+	*            HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple
+	*            Features Specification for SQL</A>.
+	*/
+	MultiPolygon(vector<Geometry *> *polygons, GeometryFactory *newFactory);
 	virtual ~MultiPolygon();
 	int getDimension() const;
 	int getBoundaryDimension() const;
@@ -1224,6 +1475,8 @@ public:
 	bool isSimple() const;
 	Geometry* getBoundary() const;
 	bool equalsExact(const Geometry *other, double tolerance) const;
+private:
+	static const long long serialVersionUID = -551033529766975875L;
 };
 
 class GeometryFactory {

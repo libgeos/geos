@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.25  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -110,14 +113,14 @@ Point* LineString::getPointN(int n) const {
 
 Point* LineString::getStartPoint() const {
 	if (isEmpty()) {
-		return new Point();
+		return new Point(NULL,NULL);
 	}
 	return getPointN(0);
 }
 
 Point* LineString::getEndPoint() const {
 	if (isEmpty()) {
-		return new Point();
+		return new Point(NULL,NULL);
 	}
 	return getPointN(getNumPoints() - 1);
 }

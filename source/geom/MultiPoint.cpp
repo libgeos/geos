@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.12  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -26,9 +29,29 @@
 
 namespace geos {
 
-MultiPoint::MultiPoint(){}
+//MultiPoint::MultiPoint(){}
+/**
+*  Constructs a <code>MultiPoint</code>.
+*
+*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
+*      , or <code>null</code> or an empty array to create the empty geometry.
+*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
+*@param  precisionModel  the specification of the grid of allowable points
+*      for this <code>MultiPoint</code>
+*@param  SRID            the ID of the Spatial Reference System used by this
+*      <code>MultiPoint</code>
+* @deprecated Use GeometryFactory instead
+*/
 MultiPoint::MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID):
-GeometryCollection(points, pm, SRID){}
+	GeometryCollection(points, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
+
+/**
+*@param  points          the <code>Point</code>s for this <code>MultiPoint</code>
+*      , or <code>null</code> or an empty array to create the empty geometry.
+*      Elements may be empty <code>Point</code>s, but not <code>null</code>s.
+*/
+MultiPoint::MultiPoint(vector<Geometry *> *points, GeometryFactory *newFactory): 
+	GeometryCollection(points,newFactory){}
 MultiPoint::~MultiPoint(){}
 
 int MultiPoint::getDimension() const {
@@ -44,12 +67,12 @@ string MultiPoint::getGeometryType() const {
 }
 
 Geometry* MultiPoint::getBoundary() const {
-	return new GeometryCollection(NULL, precisionModel, SRID);
+	return getFactory()->createGeometryCollection(NULL);
 }
 
 bool MultiPoint::isSimple() const {
 	auto_ptr<IsSimpleOp> iso(new IsSimpleOp());
-	return iso->isSimple(this);
+	return iso->isSimple((MultiPoint*) toInternalGeometry(this));
 }
 
 bool MultiPoint::isValid() const {

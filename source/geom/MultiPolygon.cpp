@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2004/03/31 07:50:37  ybychkov
+ * "geom" partially upgraded to JTS 1.4
+ *
  * Revision 1.11  2003/11/07 01:23:42  pramsey
  * Add standard CVS headers licence notices and copyrights to all cpp and h
  * files.
@@ -28,9 +31,13 @@
 
 namespace geos {
 
-MultiPolygon::MultiPolygon(){}
+//MultiPolygon::MultiPolygon(){}
 MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID):
-GeometryCollection(polygons, precisionModel, SRID){}
+	GeometryCollection(polygons, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
+
+MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, GeometryFactory *newFactory): 
+	GeometryCollection(polygons,newFactory){}
+
 MultiPolygon::~MultiPolygon(){}
 
 int MultiPolygon::getDimension() const {
@@ -51,7 +58,7 @@ bool MultiPolygon::isSimple() const {
 
 Geometry* MultiPolygon::getBoundary() const {
 	if (isEmpty()) {
-		return new GeometryCollection(NULL, precisionModel, SRID);
+		return getFactory()->createGeometryCollection(NULL);
 	}
 	vector<Geometry *>* allRings=new vector<Geometry *>();
 	for (unsigned int i = 0; i < geometries->size(); i++) {
@@ -64,7 +71,7 @@ Geometry* MultiPolygon::getBoundary() const {
 		delete g;
 	}
 //LineString[] allRingsArray = new LineString[allRings.size()];
-	Geometry *ret=new MultiLineString(allRings,precisionModel,SRID);
+	Geometry *ret=getFactory()->createMultiLineString(allRings);
 	delete allRings;
 	return ret;
 }
