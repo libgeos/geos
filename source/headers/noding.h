@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/04/19 12:51:01  strk
+ * Memory leaks fixes. Throw specifications added.
+ *
  * Revision 1.3  2004/04/14 09:30:48  strk
  * Private iterated noding funx now use int* instead of vector to know
  * when it's time to stop.
@@ -351,7 +354,7 @@ public:
 	* @return a collection of the noded SegmentStrings
 	* @throws TopologyException if the iterated noding fails to converge.
 	*/
-	vector<SegmentString*>* node(vector<SegmentString*> *segStrings);
+	vector<SegmentString*>* node(vector<SegmentString*> *segStrings) throw(TopologyException *);
 };
 
 }

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2004/04/19 12:51:01  strk
+ * Memory leaks fixes. Throw specifications added.
+ *
  * Revision 1.3  2004/04/16 12:48:07  strk
  * Leak fixes.
  *
@@ -50,7 +53,10 @@ IteratedNoder::~IteratedNoder() {
 * @return a collection of the noded SegmentStrings
 * @throws TopologyException if the iterated noding fails to converge.
 */
-vector<SegmentString*>* IteratedNoder::node(vector<SegmentString*> *segStrings) {
+vector<SegmentString*>*
+IteratedNoder::node(vector<SegmentString*> *segStrings)
+	throw(TopologyException *)
+{
 	int numInteriorIntersections;
 	vector<SegmentString*> *nodedEdges=segStrings;
 	int nodingIterationCount = 0;

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.22  2004/04/19 12:51:01  strk
+ * Memory leaks fixes. Throw specifications added.
+ *
  * Revision 1.21  2004/04/16 14:09:17  strk
  * Leaks fixes
  *
@@ -111,6 +114,7 @@ BufferOp::BufferOp(Geometry *g) {
 	endCapStyle=BufferOp::CAP_ROUND;
 	argGeom = g;
 	resultGeometry=NULL;
+	saveException=NULL;
 }
 
 /**
@@ -166,7 +170,9 @@ Geometry* BufferOp::getResultGeometry(double nDistance, int nQuadrantSegments){
 	return resultGeometry;
 }
 
-void BufferOp::computeGeometry(){
+void
+BufferOp::computeGeometry()
+{
 	bufferOriginalPrecision();
 	if (resultGeometry!=NULL) return;
 	// try and compute with decreasing precision
@@ -189,15 +195,20 @@ void BufferOp::computeGeometry(){
 	//return resultGeometry;
 }
 
-void BufferOp::bufferOriginalPrecision() {
+void
+BufferOp::bufferOriginalPrecision()
+{
 	BufferBuilder *bufBuilder=new BufferBuilder();
 	try {
 		bufBuilder->setQuadrantSegments(quadrantSegments);
 		bufBuilder->setEndCapStyle(endCapStyle);
 		resultGeometry=bufBuilder->buffer(argGeom, distance);
 	} catch (TopologyException *ex) {
+		// bufBuilder will be deleted below
+		if ( saveException ) delete saveException;
 		saveException=ex;
 	} catch (...) {
+		// Unexpected!
 		delete bufBuilder;
 		throw;
 	}

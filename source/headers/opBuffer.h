@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/04/19 12:51:01  strk
+ * Memory leaks fixes. Throw specifications added.
+ *
  * Revision 1.9  2004/04/15 14:00:30  strk
  * Added new cleanup to Unload::Release
  *
@@ -600,7 +603,7 @@ public:
 	*/
 	void setWorkingPrecisionModel(PrecisionModel *pm);
 	void setEndCapStyle(int nEndCapStyle);
-	Geometry* buffer(Geometry *g, double distance);
+	Geometry* buffer(Geometry *g, double distance) throw (TopologyException *);
 private:
 	/**
 	* Compute the change in depth as an edge is crossed from R to L
@@ -613,7 +616,7 @@ private:
 	GeometryFactory *geomFact;
 	PlanarGraph *graph;
 	EdgeList *edgeList;
-	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, PrecisionModel *precisionModel);
+	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, PrecisionModel *precisionModel) throw(TopologyException *);
 	/**
 	* Inserted edges are checked to see if an identical edge already exists.
 	* If so, the edge is not inserted, but its label is merged

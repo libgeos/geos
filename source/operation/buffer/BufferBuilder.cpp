@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2004/04/19 12:51:01  strk
+ * Memory leaks fixes. Throw specifications added.
+ *
  * Revision 1.2  2004/04/14 08:38:52  strk
  * BufferBuilder constructor missed to initialize workingPrecisionModel
  *
@@ -47,6 +50,7 @@ CGAlgorithms* BufferBuilder::cga=new RobustCGAlgorithms();
 */
 BufferBuilder::BufferBuilder() {
 	workingPrecisionModel=NULL;
+	graph=NULL;
 	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
 	endCapStyle=BufferOp::CAP_ROUND;
 	edgeList=new EdgeList();
@@ -54,6 +58,7 @@ BufferBuilder::BufferBuilder() {
 
 BufferBuilder::~BufferBuilder() {
 	delete edgeList;
+	delete graph;
 }
 
 /**
@@ -81,10 +86,14 @@ void BufferBuilder::setEndCapStyle(int nEndCapStyle){
 	endCapStyle=nEndCapStyle;
 }
 
-Geometry* BufferBuilder::buffer(Geometry *g, double distance){
+Geometry*
+BufferBuilder::buffer(Geometry *g, double distance)
+	throw(TopologyException *)
+{
 	PrecisionModel *precisionModel=workingPrecisionModel;
 	if (precisionModel==NULL)
 		precisionModel=(PrecisionModel*) g->getPrecisionModel();
+
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
 	OffsetCurveBuilder *curveBuilder=new OffsetCurveBuilder(precisionModel, quadrantSegments);
@@ -94,23 +103,70 @@ Geometry* BufferBuilder::buffer(Geometry *g, double distance){
 	// short-circuit test
 	if ((int)bufferSegStrList->size()<=0) {
 		Geometry *emptyGeom=geomFact->createGeometryCollection(new vector<Geometry*>());
+		delete curveBuilder;
+		delete bufferSegStrList;
 		return emptyGeom;
 	}
-	computeNodedEdges(bufferSegStrList, precisionModel);
-	graph=new PlanarGraph(new OverlayNodeFactory());
-	graph->addEdges(edgeList->getEdges());
-	vector<BufferSubgraph*> *subgraphList=createSubgraphs(graph);
-	PolygonBuilder *polyBuilder=new PolygonBuilder(geomFact,cga);
-	buildSubgraphs(subgraphList, polyBuilder);
-	vector<Geometry*> *resultPolyList=polyBuilder->getPolygons();
-	Geometry* resultGeom=geomFact->buildGeometry(resultPolyList);
+	delete curveBuilder;
+
+	try {
+		computeNodedEdges(bufferSegStrList, precisionModel);
+	} catch (TopologyException *) {
+		delete curveSetBuilder;
+		throw;
+	} catch (...) {
+		// Unexpected exception thrown
+		delete curveSetBuilder;
+		throw;
+	}
+
+	Geometry* resultGeom=NULL;
+	PolygonBuilder *polyBuilder=NULL;
+	vector<Geometry*> *resultPolyList=NULL;
+	vector<BufferSubgraph*> *subgraphList=NULL;
+	try {
+		graph=new PlanarGraph(new OverlayNodeFactory());
+		graph->addEdges(edgeList->getEdges());
+		subgraphList=createSubgraphs(graph);
+		polyBuilder=new PolygonBuilder(geomFact,cga);
+		buildSubgraphs(subgraphList, polyBuilder);
+		resultPolyList=polyBuilder->getPolygons();
+		resultGeom=geomFact->buildGeometry(resultPolyList);
+	} catch (TopologyException *exc) {
+		delete subgraphList;
+		delete resultPolyList;
+		delete polyBuilder;
+		throw;
+	} catch (...) {
+		delete subgraphList;
+		delete resultPolyList;
+		delete polyBuilder;
+		fprintf(stderr, "Unexpected!\n");
+		throw;
+	}
+	delete subgraphList;
+	delete resultPolyList;
+	delete polyBuilder;
 	return resultGeom;
 }
 
-void BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, PrecisionModel *precisionModel){
+void BufferBuilder::computeNodedEdges(vector<SegmentString*> *
+bufferSegStrList, PrecisionModel *precisionModel)
+	throw(TopologyException *)
+{
 	//BufferCurveGraphNoder noder=new BufferCurveGraphNoder(geomFact->getPrecisionModel());
 	IteratedNoder *noder=new IteratedNoder(precisionModel);
-	vector<SegmentString*> *nodedSegStrings=noder->node(bufferSegStrList);
+	vector<SegmentString*> *nodedSegStrings;
+	
+	try 
+	{
+		nodedSegStrings=noder->node(bufferSegStrList);
+	} catch (...) {
+		delete nodedSegStrings;
+		throw;
+	}
+
+	
 	// DEBUGGING ONLY
 	//BufferDebug->saveEdges(nodedEdges, "run" + BufferDebug->runCount + "_nodedEdges");
 	for (int i=0;i<(int)nodedSegStrings->size();i++) {
@@ -192,7 +248,9 @@ vector<BufferSubgraph*>* BufferBuilder::createSubgraphs(PlanarGraph *graph){
 * @param subgraphList the subgraphs to build
 * @param polyBuilder the PolygonBuilder which will build the final polygons
 */
-void BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder){
+void BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *
+subgraphList,PolygonBuilder *polyBuilder)
+{
 	vector<BufferSubgraph*> *processedGraphs=new vector<BufferSubgraph*>();
 	for (int i=0;i<(int)subgraphList->size();i++) {
 		BufferSubgraph *subgraph=(*subgraphList)[i];
