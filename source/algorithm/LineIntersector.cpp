@@ -426,7 +426,8 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	yoff = (p.y-p1.y);
 	double pdist = (xoff*xoff+yoff*yoff);
 	double fract = sqrt(pdist/seglen);
-	double interpolated = p1.z+(zgap*fract);
+	double zoff = zgap*fract;
+	double interpolated = p1.z < p2.z ? p1.z+zoff : p1.z-zoff;
 #if DEBUG
 	cerr<<" zgap:"<<zgap<<" seglen:"<<seglen<<" pdist:"<<pdist
 		<<" fract:"<<fract<<" z:"<<interpolated<<endl;
@@ -440,6 +441,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/01/14 08:04:38  strk
+ * Fixed Z interpolation to use the correct sign
+ *
  * Revision 1.19  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.
