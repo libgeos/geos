@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.39  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.38  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -86,11 +92,6 @@
 
 namespace geos {
 
-Polygon::Polygon(){
-	shell=new LinearRing(NULL,NULL);
-	holes=new vector<Geometry *>();
-}
-
 Polygon::Polygon(const Polygon &p): Geometry(p.getFactory()){
 	shell=new LinearRing(*p.shell);
 	holes=new vector<Geometry *>();
@@ -146,55 +147,6 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const Geome
 		for (int i=0; i<newHoles->size(); i++)
 			if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
 				throw new IllegalArgumentException("holes must be LinearRings");
-		holes=newHoles;
-	}
-}
-
-
-
-// @deprecated Use GeometryFactory instead
-Polygon::Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID): Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
-	if (newShell==NULL) {
-		shell=getFactory()->createLinearRing(NULL);
-	}
-	else
-	{
-		if (newShell->isEmpty() && hasNonEmptyElements(holes)) {
-			delete newShell;
-			delete holes;
-			throw new IllegalArgumentException("shell is empty but holes are not");
-		}
-		shell=newShell;
-	}
-	holes=new vector<Geometry *>();
-}
-
-// @deprecated Use GeometryFactory instead
-Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel* precisionModel, int SRID): Geometry(new GeometryFactory(precisionModel, SRID, CoordinateListFactory::internalFactory)) {
-	if (newShell==NULL) {
-		shell=getFactory()->createLinearRing(NULL);
-	}
-	else
-	{
-		if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
-			delete newShell;
-			delete newHoles;
-			throw new IllegalArgumentException("shell is empty but holes are not");
-		}
-		shell=newShell;
-	}
-
-	if (newHoles==NULL)
-	{
-		holes=new vector<Geometry *>();
-	}
-	else
-	{
-		if (hasNullElements(newHoles)) {
-			delete newShell;
-			delete newHoles;
-			throw new IllegalArgumentException("holes must not contain null elements");
-		}
 		holes=newHoles;
 	}
 }

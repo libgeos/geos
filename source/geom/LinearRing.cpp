@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.20  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -66,25 +72,6 @@
 namespace geos {
 
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
-
-/**
-*  Constructs a <code>LinearRing</code> with the given points.
-*
-*@param  points          points forming a closed and simple linestring, or
-*      <code>null</code> or an empty array to create the empty geometry.
-*      This array must not contain <code>null</code> elements.
-*
-*@param  precisionModel  the specification of the grid of allowable points
-*      for this <code>LinearRing</code>
-*@param  SRID            the ID of the Spatial Reference System used by this
-*      <code>LinearRing</code>
-* @deprecated Use GeometryFactory instead
-*/
-LinearRing::LinearRing(const CoordinateList* pts, const PrecisionModel* pm,
-	int SRID): LineString(pts, pm, SRID)
-{
-	validateConstruction();	
-}
 
 /**
 *  Constructs a <code>LinearRing</code> with the given points.

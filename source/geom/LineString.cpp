@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.39  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.38  2004/07/05 14:23:03  strk
  * More documentation cleanups.
  *
@@ -98,29 +104,6 @@ namespace geos {
 
 LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 	points=CoordinateListFactory::internalFactory->createCoordinateList(ls.points);
-}
-
-/*
-* Constructs a <code>LineString</code> with the given points.
-*
-*@param  points          the points of the linestring, or <code>null</code>
-*      to create the empty geometry. This array must not contain <code>null</code>
-*      elements. Consecutive points may not be equal.
-*@param  precisionModel  the specification of the grid of allowable points
-*      for this <code>LineString</code>
-*@param  SRID            the ID of the Spatial Reference System used by this
-*      <code>LineString</code>
-* @deprecated Use GeometryFactory instead 
-*/  
-LineString::LineString(const CoordinateList *pts, const PrecisionModel* pm, int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){ 
-	if (pts==NULL) {
-		points=CoordinateListFactory::internalFactory->createCoordinateList();
-		return;
-	}
-	if (pts->getSize()==1) {
-		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
-	}
-	points=CoordinateListFactory::internalFactory->createCoordinateList(pts); // xie 
 }
 
 /**

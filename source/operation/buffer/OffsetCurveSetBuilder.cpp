@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.12  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -285,10 +291,10 @@ bool OffsetCurveSetBuilder::isErodedCompletely(CoordinateList *ringCoord, double
 	*
 	*/
 	LinearRing *ring=inputGeom->getFactory()->createLinearRing(*ringCoord);
-	MinimumDiameter *md=new MinimumDiameter(ring);
-	minDiam=md->getLength();
+	MinimumDiameter md(ring); //=new MinimumDiameter(ring);
+	minDiam=md.getLength();
 	delete ring;
-	delete md;
+	//delete md;
 	//System->out->println(md->getDiameter());
 	return minDiam < 2 * fabs(bufferDistance);
 }

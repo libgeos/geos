@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.39  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.38  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -94,22 +100,6 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 		geometries->push_back((*gc.geometries)[i]->clone());
 	}
 	//geometries=gc.geometries;	
-}
-
-// @deprecated Use GeometryFactory instead
-GeometryCollection::GeometryCollection(const vector<Geometry *> *geoms,PrecisionModel* pm,int SRID): Geometry(new GeometryFactory(pm,SRID,CoordinateListFactory::internalFactory)){
-	if (geoms==NULL) {
-		geometries=new vector<Geometry *>();
-		return;
-	}
-	if (hasNullElements(geoms)) {
-		throw new IllegalArgumentException("geometries must not contain null elements\n");
-		return;
-	}
-	geometries=new vector<Geometry *>(geoms->size());
-	for (int i=0; i<geoms->size(); i++) {
-		(*geometries)[i] = (*geoms)[i]->clone();
-	}
 }
 
 /**

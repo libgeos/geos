@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.27  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -70,24 +76,6 @@
 
 namespace geos {
 
-/**
-*  Constructs a <code>Point</code> with the given coordinate.
-*
-*@param  coordinate      the coordinate on which to base this <code>Point</code>
-*      , or <code>null</code> to create the empty geometry.
-*@param  precisionModel  the specification of the grid of allowable points
-*      for this <code>Point</code>
-*@param  SRID            the ID of the Spatial Reference System used by this
-*      <code>Point</code>
-* @deprecated Use GeometryFactory instead
-*/
-Point::Point(const Coordinate& c, const PrecisionModel* precisionModel,
-			 int SRID): Geometry(new GeometryFactory(precisionModel,SRID,CoordinateListFactory::internalFactory)) {
-	coordinates=CoordinateListFactory::internalFactory->createCoordinateList();
-	if (!(c==Coordinate::nullCoord)) {
-		coordinates->add(c);
-	}
-}
 
 /**
 * Creates a Point using the given CoordinateList (must have 1 element)

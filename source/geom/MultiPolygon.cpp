@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.20  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -73,11 +79,6 @@
 #include <geos/geom.h>
 
 namespace geos {
-
-//MultiPolygon::MultiPolygon(){}
-
-// @deprecated Use GeometryFactory instead
-MultiPolygon::MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID): GeometryCollection(polygons, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)){}
 
 /**
 * @param newPolys

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -331,7 +337,7 @@ class SimpleGeometryPrecisionReducer {
 private:
 	PrecisionModel *newPrecisionModel;
 	bool removeCollapsed;
-	bool changePrecisionModel;
+	//bool changePrecisionModel;
 public:
 	SimpleGeometryPrecisionReducer(PrecisionModel *pm);
 	/**
@@ -342,7 +348,8 @@ public:
 	* @param removeCollapsed if <code>true</code> collapsed components will be removed
 	*/
 	void setRemoveCollapsedComponents(bool nRemoveCollapsed);
-	/**
+
+	/*
 	* Sets whether the {@link PrecisionModel} of the new reduced Geometry
 	* will be changed to be the {@link PrecisionModel} supplied to
 	* specify the reduction.  The default is to not change the precision model
@@ -350,8 +357,10 @@ public:
 	* @param changePrecisionModel if <code>true</code> the precision model of the created Geometry will be the
 	* the precisionModel supplied in the constructor.
 	*/
-	void setChangePrecisionModel(bool nChangePrecisionModel);
+	//void setChangePrecisionModel(bool nChangePrecisionModel);
+
 	PrecisionModel* getPrecisionModel();
+
 	bool getRemoveCollapsed();
 	Geometry* reduce(const Geometry *geom);
 };

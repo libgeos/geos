@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.59  2004/07/06 17:58:21  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.58  2004/07/05 19:40:48  strk
  * Added GeometryFactory::destroyGeometry(Geometry *)
  *
@@ -147,22 +153,15 @@ GeometryComponentFilter Geometry::geometryChangedFilter;
 
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
-Geometry::Geometry(const GeometryFactory *fromFactory) {
-	factory=new GeometryFactory(*fromFactory);
+Geometry::Geometry(const GeometryFactory *newFactory) {
+	factory=newFactory; //new GeometryFactory(*fromFactory);
 	SRID=factory->getSRID();
 	envelope=new Envelope();
 	userData=NULL;
 }
 
-Geometry::Geometry() {
-	factory=new GeometryFactory();
-	SRID=0;
-	envelope=new Envelope();
-	userData=NULL;
-}
-
 Geometry::Geometry(const Geometry &geom) {
-	factory=new GeometryFactory(*(geom.factory));
+	factory=geom.factory; //new GeometryFactory(*(geom.factory));
 	envelope=new Envelope(*(geom.envelope));
 	SRID=factory->getSRID();
 	userData=NULL;
@@ -818,7 +817,7 @@ double Geometry::getLength() const {
 
 
 Geometry::~Geometry(){
-	delete factory;
+	//delete factory;
 	delete envelope;
 	//delete userData; /* TODO: make this a Template type (not void*) */
 }

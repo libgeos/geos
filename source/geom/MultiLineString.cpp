@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.20  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.19  2004/07/05 10:50:20  strk
  * deep-dopy construction taken out of Geometry and implemented only
  * in GeometryFactory.
@@ -66,11 +72,6 @@
 #include <geos/operation.h>
 
 namespace geos {
-
-//MultiLineString::MultiLineString(){}
-
-// @deprecated Use GeometryFactory instead
-MultiLineString::MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID): GeometryCollection(lineStrings, new GeometryFactory(precisionModel, SRID,CoordinateListFactory::internalFactory)) { }
 
 /**
 * Constructs a <code>MultiLineString</code>.

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.5  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -42,7 +48,7 @@ namespace geos {
 
 SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(PrecisionModel *pm){
 	removeCollapsed = true;
-	changePrecisionModel = false;
+	//changePrecisionModel = false;
 	newPrecisionModel = pm;
 }
 
@@ -57,17 +63,19 @@ void SimpleGeometryPrecisionReducer::setRemoveCollapsedComponents(bool nRemoveCo
 	removeCollapsed=nRemoveCollapsed;
 }
 
-/**
-* Sets whether the {@link PrecisionModel} of the new reduced Geometry
-* will be changed to be the {@link PrecisionModel} supplied to
-* specify the reduction.  The default is to not change the precision model
+/*
+* Sets whether the PrecisionModel of the new reduced Geometry
+* will be changed to be the PrecisionModel supplied to
+* specify the reduction.  The default is to not change the precision model.
+* Caller will need to take care of deletion of the newly created
+* GeometryFactory if nChangePrecisionModel is set to true (see Geometry::getFactory())
 *
 * @param changePrecisionModel if <code>true</code> the precision model of the created Geometry will be the
 * the precisionModel supplied in the constructor.
 */
-void SimpleGeometryPrecisionReducer::setChangePrecisionModel(bool nChangePrecisionModel){
-	changePrecisionModel=nChangePrecisionModel;
-}
+//void SimpleGeometryPrecisionReducer::setChangePrecisionModel(bool nChangePrecisionModel){
+//	changePrecisionModel=nChangePrecisionModel;
+//}
 
 PrecisionModel* SimpleGeometryPrecisionReducer::getPrecisionModel() {
 	return newPrecisionModel;
@@ -79,13 +87,13 @@ bool SimpleGeometryPrecisionReducer::getRemoveCollapsed() {
 
 Geometry* SimpleGeometryPrecisionReducer::reduce(const Geometry *geom){
 	GeometryEditor *geomEdit;
-	if (changePrecisionModel) {
-		GeometryFactory *newFactory = new GeometryFactory(newPrecisionModel, geom->getSRID());
-		geomEdit=new GeometryEditor(newFactory);
-	} else {
-		// don't change geometry factory
-		geomEdit = new GeometryEditor();
-	}
+//	if (changePrecisionModel) {
+//		GeometryFactory *newFactory = new GeometryFactory(newPrecisionModel, geom->getSRID());
+//		geomEdit=new GeometryEditor(newFactory);
+//	} else {
+//		// don't change geometry factory
+//		geomEdit = new GeometryEditor();
+//	}
 	PrecisionReducerCoordinateOperation *prco=new PrecisionReducerCoordinateOperation(this);
 	Geometry *g=geomEdit->edit(geom, prco);
 	delete geomEdit;

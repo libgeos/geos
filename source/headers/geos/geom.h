@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/07/06 17:58:22  strk
+ * Removed deprecated Geometry constructors based on PrecisionModel and
+ * SRID specification. Removed SimpleGeometryPrecisionReducer capability
+ * of changing Geometry's factory. Reverted Geometry::factory member
+ * to be a reference to external factory.
+ *
  * Revision 1.7  2004/07/05 19:40:48  strk
  * Added GeometryFactory::destroyGeometry(Geometry *)
  *
@@ -153,7 +159,6 @@
 #include <algorithm>
 #include <map>
 #include <math.h>
-//#include "geomUtil.h"
 #include <geos/platform.h>
 
 using namespace std;
@@ -957,6 +962,7 @@ class GeometryFactory;
  * destructed by GeometryFactory.
  *
  *  <code>clone</code> returns a deep copy of the object.
+ *  Use GeometryFactory to construct.
  *
  *  <H3>Binary Predicates</H3>
  * Because it is not clear at this time
@@ -1035,13 +1041,16 @@ class GeometryFactory;
 class Geometry{
 friend class Unload;
 public:
-	/* Default constructor, will create a default GeometryFactory */
-	Geometry();
 
 	Geometry(const Geometry &geom);
 
-	/* Will copy passed GeometryFactory */
-	Geometry(const GeometryFactory *newFactory);
+	/** \brief
+	 * Construct a geometry with the given GeometryFactory.
+	 * Will keep a reference to the factory, so don't
+	 * delete it until al Geometry objects referring to
+	 * it are deleted.
+	 */
+	Geometry(const GeometryFactory *factory);
 
 	/** Destroy Geometry and all components */
 	virtual ~Geometry();
@@ -1590,7 +1599,6 @@ class GeometryCollection : public Geometry{
 public:
 //	GeometryCollection(void);
 	GeometryCollection(const GeometryCollection &gc);
-	GeometryCollection(const vector<Geometry *> *newGeometries,PrecisionModel* pm, int SRID);
 
 	/**
 	* @param newGeoms
@@ -1688,19 +1696,6 @@ private:
  */
 class Point : public Geometry{
 public:
-	/*
-	 * \brief Constructs a <code>Point</code> with the given coordinate.
-	 *
-	 * @param coordinate the coordinate on which to base this Point,
-	 *      , or <code>null</code> to create the empty geometry.
-	 * @param precisionModel the specification of the grid of
-	 *     allowable points
-	 *      for this <code>Point</code>
-	 * @param SRID the ID of the Spatial Reference System used by this
-	 *      <code>Point</code>
-	 * @deprecated Use GeometryFactory instead
-	 */
-	Point(const Coordinate& c, const PrecisionModel* pm, int SRID);
 
 	/**
 	 * \brief
@@ -1756,11 +1751,7 @@ private:
  */
 class LineString: public Geometry {
 public:
-//	LineString();
 	LineString(const LineString &ls);
-
-	// DEPRECATED Use GeometryFactory instead 
-	LineString(const CoordinateList *pts, const PrecisionModel *pm, int SRID);
 
 	/// Constructs a LineString taking ownership the given CoordinateList.
 	LineString(CoordinateList *pts, const GeometryFactory *newFactory);
@@ -1818,23 +1809,11 @@ private:
  *
  */
 class LinearRing : public LineString{
+
 public:
-//	LinearRing();
+
 	LinearRing(const LinearRing &lr);
-	/*
-	*  Constructs a <code>LinearRing</code> with the given points.
-	*
-	*@param  points          points forming a closed and simple linestring, or
-	*      <code>null</code> or an empty array to create the empty geometry.
-	*      This array must not contain <code>null</code> elements.
-	*
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>LinearRing</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>LinearRing</code>
-	* @deprecated Use GeometryFactory instead
-	*/
-	LinearRing(const CoordinateList* points, const PrecisionModel* pm, int SRID);
+
 	/**
 	* \brief Constructs a <code>LinearRing</code> with the given points.
 	*
@@ -1874,58 +1853,27 @@ private:
  */
 class Polygon: public Geometry{
 public:
-	Polygon();
 	Polygon(const Polygon &p);
 	virtual ~Polygon();
-	/*
-	*  Constructs a <code>Polygon</code> with the given exterior boundary.
-	*
-	*@param  shell           the outer boundary of the new <code>Polygon</code>,
-	*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
-	*      geometry is to be created.
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>Polygon</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>Polygon</code>
-	* @deprecated Use GeometryFactory instead
-	*/
-	Polygon(LinearRing *newShell, PrecisionModel* precisionModel, int SRID);
-
-	/*
-	*  Constructs a <code>Polygon</code> with the given exterior boundary and
-	*  interior boundaries.
-	*
-	*@param  shell           the outer boundary of the new <code>Polygon</code>,
-	*      or <code>null</code> or an empty <code>LinearRing</code> if the empty
-	*      geometry is to be created.
-	*@param  holes           the inner boundaries of the new <code>Polygon</code>
-	*      , or <code>null</code> or empty <code>LinearRing</code>s if the empty
-	*      geometry is to be created.
-	*@param  precisionModel  the specification of the grid of allowable points
-	*      for this <code>Polygon</code>
-	*@param  SRID            the ID of the Spatial Reference System used by this
-	*      <code>Polygon</code>
-	* @deprecated Use GeometryFactory instead
-	*/
-	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, PrecisionModel* precisionModel, int SRID);
 
 	/**
-	* Constructs a <code>Polygon</code> with the given exterior 
-	* and interior boundaries.
-	*
-	* @param  shell     the outer boundary of the new <code>Polygon</code>,
-	*                   or <code>null</code> or an empty
-	*		    <code>LinearRing</code> if the empty geometry
-	*                   is to be created.
-	*
-	* @param  holes     the <code>LinearRings</code> defining the inner
-	*                   boundaries of the new <code>Polygon</code>, or
-	*                   <code>null</code> or empty <code>LinearRing</code>s 
-	*                   if the empty  geometry is to be created.
-	*
-	* Polygon will take ownership of Shell and Holes LinearRings 
-	*/
-	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const GeometryFactory *newFactory);
+	 * Constructs a <code>Polygon</code> with the given exterior 
+	 * and interior boundaries.
+	 *
+	 * @param  shell     the outer boundary of the new Polygon,
+	 *                   or <code>null</code> or an empty
+	 *		     LinearRing if the empty geometry
+	 *                   is to be created.
+	 *
+	 * @param  holes     the LinearRings defining the inner
+	 *                   boundaries of the new Polygon, or
+	 *                   null or empty LinearRing 
+	 *                   if the empty  geometry is to be created.
+	 *
+	 * Polygon will take ownership of Shell and Holes LinearRings 
+	 */
+	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
+		const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const;
 	CoordinateList* getCoordinates() const;
@@ -1968,10 +1916,6 @@ private:
  */
 class MultiPoint: public GeometryCollection{
 public:
-//	MultiPoint();
-
-	// @deprecated Use GeometryFactory instead
-	MultiPoint(vector<Geometry *> *points,PrecisionModel* pm, int SRID);
 
 	/**
 	* Constructs a <code>MultiPoint</code>.
@@ -2010,10 +1954,6 @@ private:
  */
 class MultiLineString: public GeometryCollection{
 public:
-//	MultiLineString();
-
-	// @deprecated Use GeometryFactory instead
-	MultiLineString(vector<Geometry *> *lineStrings, PrecisionModel* precisionModel, int SRID);
 
 	/**
 	* Constructs a <code>MultiLineString</code>.
@@ -2048,11 +1988,8 @@ private:
  * \brief Basic implementation of <code>MultiPolygon</code>.
  */
 class MultiPolygon: public GeometryCollection {
-public:
-	//MultiPolygon();
 
-	// @deprecated Use GeometryFactory instead
-	MultiPolygon(vector<Geometry *> *polygons, PrecisionModel* precisionModel, int SRID);
+public:
 
 	/**
 	* @param newPolys
