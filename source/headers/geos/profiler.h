@@ -49,10 +49,27 @@ public:
 	~Profile();
 
 	/** \brief start a new timer */
-	void start();
+	void start() {
+		gettimeofday(&starttime, NULL);
+	}
 
 	/** \brief stop current timer */
-	void stop();
+	void stop()
+	{
+		gettimeofday(&stoptime, NULL);
+		double elapsed = 1000000*(stoptime.tv_sec-starttime.tv_sec)+
+			(stoptime.tv_usec-starttime.tv_usec);
+
+		timings.push_back(elapsed);
+		totaltime += elapsed;
+		if ( timings.size() == 1 ) max = min = elapsed;
+		else
+		{
+			if ( elapsed > max ) max = elapsed;
+			if ( elapsed < min ) min = elapsed;
+		}
+		avg = totaltime / timings.size();
+	}
 
 	/** \brief Return Max stored timing */
 	double getMax() const;
@@ -147,6 +164,9 @@ ostream& operator<< (ostream& os, const Profiler&);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/02/01 14:18:04  strk
+ * Made profiler start/stop inline
+ *
  * Revision 1.4  2004/12/03 16:21:07  frank
  * dont try for sys/time.h with MSVC
  *

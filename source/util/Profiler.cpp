@@ -30,6 +30,7 @@ Profile::~Profile()
 {
 }
 
+#if 0
 void
 Profile::start()
 {
@@ -53,6 +54,7 @@ Profile::stop()
 	}
 	avg = totaltime / timings.size();
 }
+#endif
 
 double
 Profile::getMax() const
@@ -160,6 +162,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/02/01 14:18:04  strk
+ * Made profiler start/stop inline
+ *
  * Revision 1.5  2005/02/01 13:44:59  strk
  * More profiling labels.
  *
