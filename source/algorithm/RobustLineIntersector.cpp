@@ -16,7 +16,7 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 
-#define DEBUG 0
+//#define DEBUG 1
 
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
@@ -43,6 +43,9 @@ RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate&
 			}
 #if COMPUTE_Z
 			intPt[0].setCoordinate(p);
+#if DEBUG
+			cerr<<"RobustIntersector::computeIntersection(Coordinate,Coordinate,Coordinate) calling interpolateZ"<<endl;
+#endif
 			double z = interpolateZ(p, p1, p2);
 			if ( !ISNAN(z) )
 			{
@@ -392,18 +395,27 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 	Coordinate *normPt=new Coordinate();
 	normalize(n1, n2, n3, n4, normPt);
 	Coordinate intPt;
+
+#if DEBUG
+	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2) called:"<<endl;
+	cerr<<" p1"<<p1.toString()<<endl;
+	cerr<<" p2"<<p2.toString()<<endl;
+	cerr<<" q1"<<q1.toString()<<endl;
+	cerr<<" q2"<<q2.toString()<<endl;
+
+	cerr<<" n1"<<n1->toString()<<endl;
+	cerr<<" n2"<<n2->toString()<<endl;
+	cerr<<" n3"<<n3->toString()<<endl;
+	cerr<<" n4"<<n4->toString()<<endl;
+#endif
+
 	try {
 		Coordinate *h=HCoordinate::intersection(*n1,*n2,*n3,*n4);
 		intPt.setCoordinate(*h);
-#if COMPUTE_Z
-		double ztot = 0;
-		double zvals = 0;
-		double zp = interpolateZ(intPt, p1, p2);
-		double zq = interpolateZ(intPt, q1, q2);
-		if ( !ISNAN(zp)) { ztot += zp; zvals++; }
-		if ( !ISNAN(zq)) { ztot += zq; zvals++; }
-		if ( zvals ) intPt.z = ztot/zvals;
-#endif // COMPUTE_Z
+#if DEBUG
+		cerr<<" HCoordinate found intersection h:"<<h->toString()<<endl;
+#endif
+
 		delete h;
 	} catch (NotRepresentableException *e) {
 		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
@@ -424,6 +436,16 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
      */
     //if (! isInSegmentEnvelopes(intPt))
     //    System.out.println("outside segment envelopes: " + intPt);
+
+#if COMPUTE_Z
+	double ztot = 0;
+	double zvals = 0;
+	double zp = interpolateZ(intPt, p1, p2);
+	double zq = interpolateZ(intPt, q1, q2);
+	if ( !ISNAN(zp)) { ztot += zp; zvals++; }
+	if ( !ISNAN(zq)) { ztot += zq; zvals++; }
+	if ( zvals ) intPt.z = ztot/zvals;
+#endif // COMPUTE_Z
 
 	return new Coordinate(intPt);
 }
@@ -494,6 +516,9 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2005/01/18 17:09:53  strk
+ * Fixed interpolateZ call using final intersection point instead of HCoordinate.
+ *
  * Revision 1.29  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
