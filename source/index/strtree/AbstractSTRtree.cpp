@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2004/04/14 12:28:43  strk
+ * shouldNeverReachHere exceptions made more verbose
+ *
  * Revision 1.6  2004/03/25 02:23:55  ybychkov
  * All "index/*" packages upgraded to JTS 1.4
  *
@@ -164,7 +167,7 @@ void AbstractSTRtree::query(void* searchBounds,AbstractNode* node,vector<void*> 
 		} else if (typeid(*childBoundable)==typeid(ItemBoundable)) {
 			matches->push_back(((ItemBoundable*)childBoundable)->getItem());
 		} else {
-			Assert::shouldNeverReachHere();
+			Assert::shouldNeverReachHere("AbstractSTRtree::query encountered an unsupported childBoundable type");
 		}
 	}
 }

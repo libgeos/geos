@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.29  2004/04/14 12:28:43  strk
+ * shouldNeverReachHere exceptions made more verbose
+ *
  * Revision 1.28  2004/04/01 10:44:33  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -147,13 +150,13 @@ string GeometryCollection::getGeometryType() const {
 
 bool GeometryCollection::isSimple() const {
 	checkNotGeometryCollection(this);
-	Assert::shouldNeverReachHere();
+	Assert::shouldNeverReachHere("isSimple() on GeometryCollection failed to throw an exception");
     return false;
   }
 
 Geometry* GeometryCollection::getBoundary() const {
 	checkNotGeometryCollection(this);
-	Assert::shouldNeverReachHere();
+	Assert::shouldNeverReachHere("getBoundary() on GeometryCollection failed to throw an exception");
 	return NULL;
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.33  2004/04/14 12:28:43  strk
+ * shouldNeverReachHere exceptions made more verbose
+ *
  * Revision 1.32  2004/04/14 07:29:43  strk
  * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
  *
@@ -332,10 +335,12 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 			return createMultiPolygon(geoms);
 		} else if (typeid(*geom0)==typeid(LineString)) {
 			return createMultiLineString(geoms);
+		} else if (typeid(*geom0)==typeid(LinearRing)) {
+			return createMultiLineString(geoms);
 		} else if (typeid(*geom0)==typeid(Point)) {
 			return createMultiPoint(geoms);
 		}
-		Assert::shouldNeverReachHere();
+		Assert::shouldNeverReachHere("buildGeomtry encountered an unkwnon geometry type");
 	}
 	if (typeid(*geom0)==typeid(Polygon))
 		return (Polygon*) geom0;
