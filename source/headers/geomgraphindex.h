@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -24,26 +27,8 @@
  **********************************************************************/
 
 
-/*
-* $Log$
-* Revision 1.1  2004/03/19 09:48:45  ybychkov
-* "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
-*
-* Revision 1.20  2003/11/07 01:23:42  pramsey
-* Add standard CVS headers licence notices and copyrights to all cpp and h
-* files.
-*
-* Revision 1.19  2003/10/15 16:39:03  strk
-* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
-*
-* Revision 1.18  2003/10/15 15:30:32  strk
-* Declared a SweepLineEventOBJ from which MonotoneChain and SweepLineSegment
-* derive to abstract SweepLineEvent object previously done on void * pointers.
-* No more compiler warnings...
-*
-*/
-#ifndef GEOS_GRAPH_INDEX_H
-#define GEOS_GRAPH_INDEX_H
+#ifndef GEOS_GEOMGRAPH_INDEX_H
+#define GEOS_GEOMGRAPH_INDEX_H
 
 #include <memory>
 #include "geomgraph.h"

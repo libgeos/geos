@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.49  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
  * Revision 1.48  2004/04/01 10:44:34  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -41,69 +44,6 @@
  *
  **********************************************************************/
 
-
-/*
-* $Log$
-* Revision 1.48  2004/04/01 10:44:34  ybychkov
-* All "geom" classes from JTS 1.3 upgraded to JTS 1.4
-*
-* Revision 1.47  2004/03/31 07:50:37  ybychkov
-* "geom" partially upgraded to JTS 1.4
-*
-* Revision 1.46  2004/03/29 06:59:24  ybychkov
-* "noding/snapround" package ported (JTS 1.4);
-* "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
-* "geom" partially upgraded.
-*
-* Revision 1.45  2004/03/18 10:42:44  ybychkov
-* "IO" and "Util" upgraded to JTS 1.4
-* "Geometry" partially upgraded.
-*
-* Revision 1.44  2004/03/17 02:00:33  ybychkov
-* "Algorithm" upgraded to JTS 1.4
-*
-* Revision 1.43  2004/03/01 22:04:59  strk
-* applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
-*
-* Revision 1.42  2003/11/07 01:23:42  pramsey
-* Add standard CVS headers licence notices and copyrights to all cpp and h
-* files.
-*
-* Revision 1.41  2003/10/31 16:36:04  strk
-* Re-introduced clone() method. Copy constructor could not really replace it.
-*
-* Revision 1.40  2003/10/24 21:27:31  strk
-* Added GeometryTypeId enum and getGeometryTypeId abstract Geometry method.
-*
-* Revision 1.39  2003/10/20 15:41:34  strk
-* Geometry::checkNotGeometryCollection made static and non-distructive.
-*
-* Revision 1.38  2003/10/16 17:05:07  strk
-* Made TopologyException inherit from GEOSException. Adjusted IllegalArgumentException subclassing.
-*
-* Revision 1.37  2003/10/15 16:39:03  strk
-* Made Edge::getCoordinates() return a 'const' value. Adapted code set.
-*
-* Revision 1.36  2003/10/15 11:23:00  strk
-* Formalized const nature of toVector() method and of first argument to static removeRepeatedPoints().
-*
-* Revision 1.35  2003/10/15 10:17:36  strk
-* Made setPoints() get a const vector<Coordinate>.
-*
-* Revision 1.34  2003/10/15 09:54:29  strk
-* Added getCoordinatesRO() public method.
-*
-* Revision 1.33  2003/10/13 12:51:28  strk
-* removed sortedClasses strings array from all geometries.
-*
-* Revision 1.32  2003/10/11 01:56:08  strk
-*
-* Code base padded with 'const' keywords ;)
-*
-* Revision 1.31  2003/10/09 15:35:13  strk
-* added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
-*
-*/
 #ifndef GEOS_GEOM_H
 #define GEOS_GEOM_H
 
@@ -114,7 +54,7 @@
 #include <algorithm>
 #include <map>
 #include "math.h"
-//#include "util.h"
+//#include "geomUtil.h"
 #include "platform.h"
 
 using namespace std;

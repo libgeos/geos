@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
  *
@@ -33,8 +36,8 @@
 
 
 
-#ifndef GEOS_GRAPH_H
-#define GEOS_GRAPH_H
+#ifndef GEOS_GEOMGRAPH_H
+#define GEOS_GEOMGRAPH_H
 
 #include <memory>
 #include <string>

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.31  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
  * Revision 1.30  2004/04/01 10:44:33  ybychkov
  * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
  *
@@ -40,6 +43,7 @@
 
 
 #include "../headers/geom.h"
+#include "../headers/geomUtil.h"
 #include "../headers/util.h"
 #include <typeinfo>
 
@@ -343,21 +347,19 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 		return geom0;
 }
 
-  
+
+CoordinateList* gfCoordinateOperation::edit(CoordinateList *coordinates, Geometry *geometry) {
+	return coordinates;
+}
 //Remember to add this.
   /**
    * @return a clone of g based on a CoordinateSequence created by this
    * GeometryFactory's CoordinateSequenceFactory
    */
 Geometry* GeometryFactory::createGeometry(const Geometry *g) const {
-  //  // could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
-  //  GeometryEditor editor = new GeometryEditor(this);
-  //  return editor.edit(g, new GeometryEditor.CoordinateOperation() {
-  //    public Coordinate[] edit(Coordinate[] coordinates, Geometry geometry) {
-  //                return coordinates;
-  //        }
-  //  });
-	return NULL;
+	// could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
+	GeometryEditor *editor=new GeometryEditor((GeometryFactory*)this);
+	return editor->edit((Geometry*)g,new gfCoordinateOperation());
 }
 
 }

@@ -378,6 +378,22 @@
 				<File
 					RelativePath="..\source\geom\Triangle.cpp">
 				</File>
+				<Filter
+					Name="util"
+					Filter="">
+					<File
+						RelativePath="..\source\geom\util\GeometryEditor.cpp">
+					</File>
+					<File
+						RelativePath="..\source\geom\util\LinearComponentExtracter.cpp">
+					</File>
+					<File
+						RelativePath="..\source\geom\util\PointExtracter.cpp">
+					</File>
+					<File
+						RelativePath="..\source\geom\util\PolygonExtracter.cpp">
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="operation"
@@ -1051,6 +1067,67 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="planargraph"
+				Filter="">
+				<File
+					RelativePath="..\source\planargraph\planarDirectedEdge.cpp">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\source\planargraph\planarDirectedEdgeStar.cpp">
+				</File>
+				<File
+					RelativePath="..\source\planargraph\planarEdge.cpp">
+				</File>
+				<File
+					RelativePath="..\source\planargraph\PlanarGraph.cpp">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\source\planargraph\planarGraphComponent.cpp">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\source\planargraph\planarNode.cpp">
+				</File>
+				<File
+					RelativePath="..\source\planargraph\planarNodeMap.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -1069,6 +1146,9 @@
 			</File>
 			<File
 				RelativePath="..\source\headers\geomgraphindex.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\geomUtil.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\geosAlgorithm.h">
@@ -1114,6 +1194,9 @@
 			</File>
 			<File
 				RelativePath="..\source\headers\opValid.h">
+			</File>
+			<File
+				RelativePath="..\source\headers\planargraph.h">
 			</File>
 			<File
 				RelativePath="..\source\headers\platform.h">
