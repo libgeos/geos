@@ -26,3 +26,4 @@ void GeometryGraphOperation::setComputationPrecision(PrecisionModel pm) {
 	makePrecise=!pm.isFloating();
 	li->setMakePrecise(makePrecise);
 }
+

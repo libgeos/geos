@@ -9,3 +9,4 @@ SimplePointInRing::SimplePointInRing(LinearRing ring){
 bool SimplePointInRing::isInside(Coordinate pt){
 	return cga->isPointInRing(pt,pts);
 }
+

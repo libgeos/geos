@@ -239,3 +239,4 @@ double LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) {
 	double dist=computeEdgeDistance(intPt[intIndex],inputLines[segmentIndex][0],inputLines[segmentIndex][1]);
 	return dist;
 }
+
