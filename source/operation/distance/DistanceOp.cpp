@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2004/04/14 10:56:38  strk
+ * Uncommented initializzazion and destruction of DistanceOp::minDistanceLocation
+ *
  * Revision 1.9  2004/04/13 10:05:51  strk
  * GeometryLocation constructor made const-correct.
  * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
@@ -64,7 +67,7 @@ DistanceOp::DistanceOp(Geometry *g0, Geometry *g1){
 	ptLocator=new PointLocator();
 	minDistance=DoubleInfinity;
 	geom=new vector<Geometry*>(2);
-//	minDistanceLocation=new vector<GeometryLocation*>();
+	minDistanceLocation=new vector<GeometryLocation*>();
 	(*geom)[0]=g0;
 	(*geom)[1]=g1;
 }
@@ -72,7 +75,7 @@ DistanceOp::DistanceOp(Geometry *g0, Geometry *g1){
 DistanceOp::~DistanceOp(){
 	delete ptLocator;
 	delete geom;
-//	delete minDistanceLocation;
+	delete minDistanceLocation;
 }
 
 /**
