@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2004/04/14 09:11:57  strk
+ * endCapStyle was never set in BufferOp contructor
+ *
  * Revision 1.17  2004/04/14 08:38:31  strk
  * BufferOp constructor missed to set argGeom
  *
@@ -94,7 +97,7 @@ int BufferOp::MAX_PRECISION_DIGITS=12;
 */
 BufferOp::BufferOp(Geometry *g) {
 	quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
-	int endCapStyle=BufferOp::CAP_ROUND;
+	endCapStyle=BufferOp::CAP_ROUND;
 	argGeom = g;
 	resultGeometry=NULL;
 }
