@@ -21,7 +21,7 @@
 #define DEBUG 0
 #endif
 #ifndef COMPUTE_Z
-#define COMPUTE_Z 1
+#define COMPUTE_Z 0
 #endif
 
 namespace geos {
@@ -81,24 +81,6 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 	{
 		Node *n=(*resultNodeList)[i];
 		const Coordinate& coord=n->getCoordinate();
-#if COMPUTE_Z
-#if DEBUG
-		cerr<<"PointBuilder::simplifyPoints: "<<n->print()<<endl;
-#endif // DEBUG
-		EdgeEndStar *ees = n->getEdges();
-		vector<EdgeEnd*>*eev = ees->getEdges();
-#if DEBUG
-		cerr<<"PointBuilder::simplifyPoints: eev ("<<eev->size()<<"):"
-			<<endl;
-#endif // DEBUG
-		for (int i=0; i<eev->size(); i++)
-		{
-			EdgeEnd *ee=(*eev)[i];
-#if DEBUG
-			cerr<<" "<<ee->getCoordinate().toString()<<endl;
-#endif // DEBUG
-		}
-#endif // COMPUTE_Z
 		if(!op->isCoveredByLA(coord)) {
 			Point *pt=geometryFactory->createPoint(coord);
 			nonCoveredPointList->push_back(pt);
@@ -111,6 +93,9 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2004/11/17 15:09:08  strk
+ * Changed COMPUTE_Z defaults to be more conservative
+ *
  * Revision 1.12  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

@@ -37,11 +37,7 @@ RobustLineIntersector::computeIntersection(const Coordinate& p,const Coordinate&
 		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
 			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
 			isProperVar=true;
-#if COMPUTE_Z
-			if (p.equals3D(p1) || p.equals3D(p2))
-#else // ! COMPUTE_Z
 			if ((p==p1) || (p==p2))
-#endif // COMPUTE_Z
 			{
 				isProperVar=false;
 			}
@@ -374,6 +370,9 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2004/11/17 15:09:08  strk
+ * Changed COMPUTE_Z defaults to be more conservative
+ *
  * Revision 1.21  2004/11/17 08:41:42  strk
  * Fixed a bug in Z computation and removed debugging output by default.
  *
