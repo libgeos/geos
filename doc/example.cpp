@@ -1,8 +1,3 @@
-// $Log$
-// Revision 1.3  2003/10/09 11:19:20  strk
-// added convexHull and PrecisionModel
-//
-//
 // This file should document by example usage of the GEOS library.
 // It could actually be a live discuss-by-example board for
 // architectural design choices.
@@ -13,6 +8,14 @@
 //  and GLIBCXX_FORCE_NEW or GLIBCPP_FORCE_NEW at run time with gcc 3.2.2+
 //  to force libstdc++ avoid caching memory. This should remove some
 //  obscure reports from memory checkers like valgrind.
+//
+// $Log$
+// Revision 1.4  2003/10/09 11:20:12  strk
+// moved Log to a better place
+//
+// Revision 1.3  2003/10/09 11:19:20  strk
+// added convexHull and PrecisionModel
+//
 // 
 #include <stdio.h>
 #include <io.h>
