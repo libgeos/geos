@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.21  2004/05/19 19:39:05  ybychkov
+ * Changed rounding method to make compilable with VC++
+ *
  * Revision 1.20  2004/05/17 10:45:58  strk
  * Fixed bogus FIXED coordinate rounding
  *
@@ -70,7 +73,9 @@ double PrecisionModel::makePrecise(double val) const {
 		return (double) floatSingleVal;
 	}
 	if (modelType == FIXED) {
-		return rint(val*scale)/scale;
+		double d=val*scale;
+		return ((d >= 0.0) ? floor(d+0.5)/scale : - floor(-d+0.5)/scale);
+//		return rint(val*scale)/scale;
 	}
 	// modelType == FLOATING - no rounding necessary
 	return val;
