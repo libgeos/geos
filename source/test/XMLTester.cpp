@@ -322,7 +322,11 @@ try{
 					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					Geometry *gRealRes=gA->getCentroid();
-					gRealRes->normalize();
+					if ( gRealRes ) {
+						gRealRes->normalize();
+					} else {
+						gRealRes = factory->createGeometryCollection();
+					}
 					if (out & TEST_RESULT) {
 						if (gRes->compareTo(gRealRes)==0) {
 							cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=true"  <<endl;
@@ -502,6 +506,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.49  2004/12/30 13:32:30  strk
+ * Handled NULL result from getCentroid()
+ *
  * Revision 1.48  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *
