@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "stdio.h"
 
 /**
  *  Converts the location value to a location symbol, for example, <code>EXTERIOR => 'e'</code>.

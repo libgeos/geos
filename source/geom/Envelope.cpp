@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "stdio.h"
 
 /**
  *  Creates a null <code>Envelope</code>.

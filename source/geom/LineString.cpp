@@ -131,10 +131,10 @@ Envelope LineString::computeEnvelopeInternal() {
 	double maxx = points.getAt(0).x;
 	double maxy = points.getAt(0).y;
 	for (int i = 1; i < points.getSize(); i++) {
-		minx = __min(minx, points.getAt(i).x); //min
-		maxx = __max(maxx, points.getAt(i).x);
-		miny = __min(miny, points.getAt(i).y);
-		maxy = __max(maxy, points.getAt(i).y);
+		minx = min(minx, points.getAt(i).x); //min
+		maxx = max(maxx, points.getAt(i).x);
+		miny = min(miny, points.getAt(i).y);
+		maxy = max(maxy, points.getAt(i).y);
 	}
 	return Envelope(minx, maxx, miny, maxy);
 }

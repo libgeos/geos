@@ -44,7 +44,7 @@ bool GeometryCollection::isEmpty() {
 int GeometryCollection::getDimension() {
 	int dimension=Dimension::False;
 	for (unsigned int i=0; i<geometries.size(); i++) {
-		dimension=__max(dimension,geometries[i]->getDimension());
+		dimension=max(dimension,geometries[i]->getDimension());
 	}
 	return dimension;
 }

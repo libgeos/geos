@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "stdio.h"
 
 /**
  *  Converts the dimension value to a dimension symbol, for example, <code>TRUE => 'T'</code>.

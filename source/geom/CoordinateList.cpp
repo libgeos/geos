@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "stdio.h"
 
 CoordinateList::CoordinateList() {
 	vect=new vector<Coordinate>();

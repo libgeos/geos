@@ -111,3 +111,4 @@ Geometry GeometryFactory::buildGeometry(vector<Geometry *> geoms) {
 	}
 	return Geometry(*(geoms[0]));
 }
+

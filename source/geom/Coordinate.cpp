@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "stdio.h"
 
 void Coordinate::setNull() {
 	x=DoubleNotANumber;

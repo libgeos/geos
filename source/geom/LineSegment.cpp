@@ -34,3 +34,4 @@ void LineSegment::setCoordinates(Coordinate c0, Coordinate c1) {
 	p1.x = c1.x;
 	p1.y = c1.y;
 }
+

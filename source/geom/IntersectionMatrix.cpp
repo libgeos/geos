@@ -1,4 +1,5 @@
 #include "geom.h"
+#include "stdio.h"
 
 IntersectionMatrix::IntersectionMatrix(){
 //    matrix = new int[3][3];
