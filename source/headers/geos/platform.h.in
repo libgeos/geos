@@ -1,8 +1,6 @@
 #ifndef GEOS_PLATFORM_H
 #define GEOS_PLATFORM_H
 
-#include <stdio.h>
-
 /* Set to 1 if `long int' is 64 bits */
 #undef HAVE_LONG_INT_64
 
