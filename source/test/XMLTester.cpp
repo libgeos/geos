@@ -35,8 +35,8 @@ int main(int argC, char* argV[]) {
 //	int out=0;
 	int failed=0;
 	int succeeded=0;
-//	string source="d://test.xml";
-	string source="./test.xml";
+	string source="d://test.xml";
+//	string source="./test.xml";
 	string precisionModel="";
 	string desc="";
 	string geomAin="";
@@ -46,6 +46,7 @@ int main(int argC, char* argV[]) {
 	string opName="";
 	string opSig="";
 	string opRes="";
+	int caseCount=0;
 	int testCount=0;
 
 	WKTReader *r=new WKTReader(new GeometryFactory(new PrecisionModel(),10));
@@ -63,11 +64,11 @@ int main(int argC, char* argV[]) {
 	cout << "Precision Model: " << precisionModel << endl;
 	while (xml.FindChildElem("case")) {
 		xml.IntoElem();
-		testCount++;
+		caseCount++;
 		xml.FindChildElem("desc");
 		desc=xml.GetChildData();
 		if (out & TEST_DESCR) {
-			cout << "Test #" << testCount << endl;
+			cout << "Case #" << caseCount << endl;
 			cout << "\t" << desc << endl;
 		}
 		xml.FindChildElem("a");
@@ -94,54 +95,114 @@ int main(int argC, char* argV[]) {
 				cout << "\t\tOut:" << geomBout << endl;
 		}
 
-		xml.FindChildElem("test");
-		xml.IntoElem();
-        xml.FindChildElem("op");
-		opName=xml.GetChildAttrib("name");
-		opSig=xml.GetChildAttrib("arg3");
-		opRes=xml.GetChildData();
-		if (out & TEST_OP)
-			cout << "\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
-		if (opName=="relate") {
-			IntersectionMatrix *im=gA->relate(gB);
-			if (out & TEST_RESULT)
-				cout << "\tResult: matrix='" << im->toString() << "' result=" << (im->matches(opSig)?"true":"false") <<endl;
-			if (!im->matches(opSig)) {
-				failed++;
-			} else {
-				succeeded++;
+		testCount=0;
+		while(xml.FindChildElem("test")) {
+			testCount++;
+			if (out & TEST_DESCR) {
+				cout << "\tTest #" << testCount << endl;
 			}
-		} else if (opName=="isValid") {
-			string result;
-			if (gA->isValid()) {
-				result="true";
-			} else {
-				result="false";
-			}
-			if (out & TEST_RESULT) {
-				if (result==opRes) {
-					cout << "\tResult: isValid='" << result << "' result=true"  <<endl;
-					succeeded++;
-				} else {
-					cout << "\tResult: isValid='" << result << "' result=false"  <<endl;
-					failed++;
+			xml.IntoElem();
+			xml.FindChildElem("op");
+			opName=xml.GetChildAttrib("name");
+			opSig=xml.GetChildAttrib("arg3");
+			opRes=xml.GetChildData();
+			if (out & TEST_OP) {
+				if (opName=="relate") {
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
+					IntersectionMatrix *im=gA->relate(gB);
+					if (out & TEST_RESULT)
+						cout << "\t\tResult: matrix='" << im->toString() << "' result=" << (im->matches(opSig)?"true":"false") <<endl;
+					if (!im->matches(opSig)) {
+						failed++;
+					} else {
+						succeeded++;
+					}
+				} else if (opName=="isValid") {
+					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
+					string result;
+					if (gA->isValid()) {
+						result="true";
+					} else {
+						result="false";
+					}
+					if (out & TEST_RESULT) {
+						if (result==opRes) {
+							cout << "\t\tResult: isValid='" << result << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: isValid='" << result << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+				} else if (opName=="intersection") {
+					Geometry *gRes=r->read(opRes);
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->intersection(gB);
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+				} else if (opName=="union") {
+					Geometry *gRes=r->read(opRes);
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->Union(gB);
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: union='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: union='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+				} else if (opName=="difference") {
+					Geometry *gRes=r->read(opRes);
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->difference(gB);
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: difference='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: difference='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
+				} else if (opName=="symdifference") {
+					Geometry *gRes=r->read(opRes);
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+					Geometry *gRealRes=gA->symDifference(gB);
+					if (out & TEST_RESULT) {
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "\t\tResult: symdifference='" << gRealRes->toString() << "' result=true"  <<endl;
+							succeeded++;
+						} else {
+							cout << "\t\tResult: symdifference='" << gRealRes->toString() << "' result=false"  <<endl;
+							failed++;
+						}
+					}
 				}
 			}
+
+			if (out & PRED) {
+				cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
+				cout << "\tDisjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;
+				cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << endl;
+				cout << "\tTouches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << endl;
+				cout << "\tCrosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << endl;
+				cout << "\tWithin:\t\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << endl;
+				cout << "\tContains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << endl;
+				cout << "\tOverlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << endl;
+			}
+
+			xml.OutOfElem();
 		}
-
-
-		if (out & PRED) {
-			cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
-			cout << "\tDisjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;
-			cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << endl;
-			cout << "\tTouches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << endl;
-			cout << "\tCrosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << endl;
-			cout << "\tWithin:\t\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << endl;
-			cout << "\tContains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << endl;
-			cout << "\tOverlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << endl;
-		}
-
-		xml.OutOfElem();
+			
 		xml.OutOfElem();
 	}
 	cout << "Failed: ";

@@ -96,7 +96,7 @@ Edge* EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersect
 		pts->setAt(edge->pts->getAt(i),ipt++);
 	}
 	if (useIntPt1) pts->setAt(ei1->coord,ipt);
-	return new Edge(pts,edge->getLabel());
+	return new Edge(pts,new Label(*(edge->getLabel())));
 }
 
 string EdgeIntersectionList::print(){

@@ -2,7 +2,8 @@
 #include "util.h"
 
 DirectedEdgeStar::DirectedEdgeStar(){
-	resultAreaEdgeList=new vector<DirectedEdge*>();
+//	resultAreaEdgeList=new vector<DirectedEdge*>();
+	resultAreaEdgeList=NULL;
 	label=new Label();
 }
 

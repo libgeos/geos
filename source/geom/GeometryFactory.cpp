@@ -111,6 +111,22 @@ Geometry* GeometryFactory::buildGeometry(vector<Geometry *> *geoms) {
 		}
 		Assert::shouldNeverReachHere();
 	}
-	return new Geometry(*(*geoms)[i]);
+	if (typeid(*geom0)==typeid(Polygon))
+		return new Polygon(*((Polygon*) geom0));
+	// LineString also handles LinearRings
+	else if (typeid(*geom0)==typeid(LineString))
+		return new LineString(*((LineString*) geom0));
+	else if (typeid(*geom0)==typeid(Point))
+		return new Point(*((Point*) geom0));
+	else if (typeid(*geom0)==typeid(MultiPoint))
+		return new MultiPoint(*((MultiPoint*) geom0));
+	else if (typeid(*geom0)==typeid(MultiLineString))
+		return new MultiLineString(*((MultiLineString*) geom0));
+	else if (typeid(*geom0)==typeid(MultiPolygon))
+		return new MultiPolygon(*((MultiPolygon*) geom0));
+	else if (typeid(*geom0)==typeid(GeometryCollection))
+		return new GeometryCollection(*((GeometryCollection*) geom0));
+	else 
+		return new Geometry(*geom0);
 }
 

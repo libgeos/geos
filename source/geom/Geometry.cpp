@@ -206,7 +206,6 @@ Geometry* Geometry::intersection(Geometry *other) {
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::INTERSECTION);
-	return new Geometry();
 }
 
 Geometry* Geometry::Union(Geometry *other) {
@@ -215,7 +214,6 @@ Geometry* Geometry::Union(Geometry *other) {
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::UNION);
-	return new Geometry();
 }
 
 Geometry* Geometry::difference(Geometry *other) {
@@ -224,7 +222,6 @@ Geometry* Geometry::difference(Geometry *other) {
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::DIFFERENCE);
-	return new Geometry();
 }
 
 Geometry* Geometry::symDifference(Geometry *other) {
@@ -233,7 +230,6 @@ Geometry* Geometry::symDifference(Geometry *other) {
 	checkEqualSRID(other);
 	checkEqualPrecisionModel(other);
 	return OverlayOp::overlayOp(this,other,OverlayOp::SYMDIFFERENCE);
-	return new Geometry();
 }
 
 int Geometry::compareTo(Geometry *geom){

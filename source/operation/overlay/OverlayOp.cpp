@@ -72,6 +72,10 @@ void OverlayOp::insertUniqueEdges(vector<Edge*> *edges) {
 		Edge *e=(*edges)[i];
 		insertUniqueEdge(e);
 	}
+//for(int i=0;i<(int)edgeList->size();i++) {
+//	Edge *e=(*edgeList)[i];
+//	cout << endl << e->print() << endl;
+//}
 }
 
 /**
@@ -126,7 +130,6 @@ void OverlayOp::computeLabelling() {
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
 	for (;it!=nodeMap->end();it++) {
 		Node *node=it->second;
-		//if (node.getCoordinate().equals(new Coordinate(222, 100)) ) Debug.addWatch(node.getEdges());
 		node->getEdges()->computeLabelling(arg);
 	}
 	mergeSymLabels();
@@ -324,6 +327,7 @@ void OverlayOp::computeOverlay(int opCode) {
 	// copy points from input Geometries.
 	// This ensures that any Point geometries
 	// in the input are considered for inclusion in the result set
+
 	copyPoints(0);
 	copyPoints(1);
 	// node the input Geometries
@@ -335,6 +339,7 @@ void OverlayOp::computeOverlay(int opCode) {
 	vector<Edge*> *baseSplitEdges=new vector<Edge*>();
 	(*arg)[0]->computeSplitEdges(baseSplitEdges);
 	(*arg)[1]->computeSplitEdges(baseSplitEdges);
+
 	vector<Edge*> *splitEdges=baseSplitEdges;
 	/* NO LONGER USED
 	// if we are working in fixed precision, we must renode to ensure noding is complete
@@ -344,7 +349,9 @@ void OverlayOp::computeOverlay(int opCode) {
 	}
 	*/
 	// add the noded edges to this result graph
+
 	insertUniqueEdges(baseSplitEdges);
+
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
@@ -389,6 +396,7 @@ void OverlayOp::insertUniqueEdge(Edge *e) {
 		Edge *existingEdge=(*edgeList)[foundIndex];
 		Label *existingLabel=existingEdge->getLabel();
 		Label *labelToMerge=e->getLabel();
+
 		// check if new edge is in reverse direction to existing edge
 		// if so, must flip the label before merging it
 		if (!existingEdge->isPointwiseEqual(e)) {
@@ -403,6 +411,7 @@ void OverlayOp::insertUniqueEdge(Edge *e) {
 		}
 		//*/
 		depth->add(labelToMerge);
+
 		existingLabel->merge(labelToMerge);
 		//Debug.print("inserted edge: "); Debug.println(e);
 		//Debug.print("existing edge: "); Debug.println(existingEdge);

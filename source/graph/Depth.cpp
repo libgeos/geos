@@ -1,17 +1,18 @@
 #include "graph.h"
 #include <stdio.h>
+#define DEPTHNULL -1
 
 int Depth::depthAtLocation(int location) {
 	if (location == Location::EXTERIOR) return 0;
 	if (location == Location::INTERIOR) return 1;
-	return NULL;
+	return DEPTHNULL;
 }
 
 Depth::Depth() {
 	// initialize depth array to a sentinel value
 	for (int i=0; i<2; i++) {
 		for (int j=0; j<3;j++) {
-			depth[i][j] = NULL;
+			depth[i][j]=DEPTHNULL;
 		}
 	}
 }
@@ -40,7 +41,7 @@ void Depth::add(int geomIndex,int posIndex,int location){
 bool Depth::isNull() {
 	for (int i=0; i<2; i++) {
 		for (int j=0; j<3; j++) {
-			if (depth[i][j] != NULL)
+			if (depth[i][j] != DEPTHNULL)
 				return false;
 		}
 	}
@@ -48,11 +49,11 @@ bool Depth::isNull() {
 }
 
 bool Depth::isNull(int geomIndex) {
-	return depth[geomIndex][1] == NULL;
+	return depth[geomIndex][1] == DEPTHNULL;
 }
 
 bool Depth::isNull(int geomIndex, int posIndex){
-	return depth[geomIndex][posIndex] == NULL;
+	return depth[geomIndex][posIndex] == DEPTHNULL;
 }
 
 int Depth::getDelta(int geomIndex) {
