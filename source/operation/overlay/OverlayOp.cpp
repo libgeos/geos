@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2004/05/17 08:34:31  strk
+ * reduced stack allocations, try/catch blocks in ::overlayOp
+ *
  * Revision 1.18  2004/05/03 10:43:43  strk
  * Exception specification considered harmful - left as comment.
  *
@@ -57,19 +60,8 @@ Geometry*
 OverlayOp::overlayOp(const Geometry *geom0,const Geometry *geom1,int opCode)
 	// throw(TopologyException *)
 {
-	OverlayOp *gov;
-	Geometry* geomOv;
-
-	gov=new OverlayOp(geom0,geom1);
-	try {
-		// can throw a TopologyException *
-		geomOv=gov->getResultGeometry(opCode);
-	} catch (...) {
-		delete gov;
-		throw;
-	}
-	delete gov;
-	return geomOv;
+	OverlayOp gov(geom0, geom1);
+	return gov.getResultGeometry(opCode);
 }
 
 bool OverlayOp::isResultOfOp(Label *label,int opCode) {
