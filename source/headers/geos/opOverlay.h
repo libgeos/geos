@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2004/11/22 15:51:52  strk
+ * Added interpolation of containing geometry's average Z for point_in_poly case.
+ *
  * Revision 1.5  2004/11/20 18:17:26  strk
  * Added Z propagation for overlay lines output.
  *
@@ -294,6 +297,15 @@ private:
 	 * @returns 1 if an intersection is found, 0 otherwise.
 	 */
 	int OverlayOp::mergeZ(Node *n, const LineString *line) const;
+
+	/*
+	 * Average Z of input geometries
+	 */
+	double avgz[2];
+	bool avgzcomputed[2];
+
+	double getAverageZ(int targetIndex);
+	static double getAverageZ(const Polygon *poly);
 
 };
 

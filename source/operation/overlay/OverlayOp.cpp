@@ -79,6 +79,12 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOpera
 	resultLineList=NULL;
 	resultPointList=NULL;
 	ptLocator=new PointLocator();
+#if COMPUTE_Z
+	avgz[0] = DoubleNotANumber;
+	avgz[1] = DoubleNotANumber;
+	avgzcomputed[0] = false;
+	avgzcomputed[1] = false;
+#endif
 }
 
 OverlayOp::~OverlayOp()
@@ -338,7 +344,53 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	{
 		mergeZ(n, poly);
 	}
+	if ( loc == Location::INTERIOR && poly )
+	{
+		n->addZ(getAverageZ(targetIndex));
+	}
 #endif // COMPUTE_Z
+}
+
+double
+OverlayOp::getAverageZ(const Polygon *poly)
+{
+	double totz = 0.0;
+	int zcount = 0;
+
+	const CoordinateSequence *pts =
+		poly->getExteriorRing()->getCoordinatesRO();
+	for (unsigned int i=0; i<pts->getSize(); i++)
+	{
+		const Coordinate &c = pts->getAt(i);
+		if ( c.z != DoubleNotANumber )
+		{
+			totz += c.z;
+			zcount++;
+		}
+	}
+
+	if ( zcount ) return totz/zcount;
+	else return DoubleNotANumber;
+}
+
+/*
+ * This caches result to avoid multiple scans
+ */
+double
+OverlayOp::getAverageZ(int targetIndex)
+{
+	if ( avgzcomputed[targetIndex] ) return avgz[targetIndex];
+
+	const Geometry *targetGeom = (*arg)[targetIndex]->getGeometry();
+	double totz = 0.0;
+	int zcount = 0;
+
+	Assert::isTrue(targetGeom->getGeometryTypeId() == GEOS_POLYGON, 
+		"OverlayOp::getAverageZ(int) called with a ! polygon");
+
+	avgz[targetIndex] = getAverageZ((const Polygon *)targetGeom);
+	avgzcomputed[targetIndex] = true;
+	return avgz[targetIndex];
 }
 
 /*
@@ -757,6 +809,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2004/11/22 15:51:52  strk
+ * Added interpolation of containing geometry's average Z for point_in_poly case.
+ *
  * Revision 1.29  2004/11/22 11:34:49  strk
  * More debugging lines and comments/indentation cleanups
  *
