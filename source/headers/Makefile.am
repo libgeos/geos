@@ -22,6 +22,7 @@ geos_HEADERS = \
 	opOverlay.h \
 	opRelate.h \
 	opValid.h \
+	opDistance.h \
 	opPolygonize.h \
 	platform.h \
 	precision.h \
