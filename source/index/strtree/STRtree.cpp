@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/05 17:42:06  strk
+ * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
+ * SIRAbstractNode and STRAbstractNode destructors added to get rid of
+ * AbstractNode::bounds in the right way (is a void * casted to appropriate
+ * Class in the subClasses).
+ *
  * Revision 1.7  2004/05/03 17:15:38  strk
  * leaks on exception fixed.
  *
@@ -159,6 +165,10 @@ vector<vector<Boundable*>*>* STRtree::verticalSlices(vector<Boundable*>* childBo
 }
 
 STRAbstractNode::STRAbstractNode(int level):AbstractNode(level) {}
+
+STRAbstractNode::~STRAbstractNode() {
+	delete (Envelope *)bounds;
+}
 
 void* STRAbstractNode::computeBounds() {
 	Envelope* bounds=NULL;

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/05/05 17:42:06  strk
+ * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
+ * SIRAbstractNode and STRAbstractNode destructors added to get rid of
+ * AbstractNode::bounds in the right way (is a void * casted to appropriate
+ * Class in the subClasses).
+ *
  * Revision 1.12  2004/05/03 16:29:21  strk
  * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
  * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
@@ -108,7 +114,6 @@ private:
 class AbstractNode: public Boundable {
 private:
 	vector<Boundable*> *childBoundables;
-	void* bounds;
 	int level;
 public:
 	AbstractNode(int newLevel);
@@ -129,6 +134,7 @@ public:
 	void addChildBoundable(Boundable *childBoundable);
 protected:
 	virtual void* computeBounds()=0;
+	void* bounds;
 };
 
 /**
@@ -193,6 +199,7 @@ public:
 class SIRAbstractNode: public AbstractNode{
 public:
 	SIRAbstractNode(int level);
+	~SIRAbstractNode();
 protected:
 	void* computeBounds();
 };
@@ -225,6 +232,7 @@ protected:
 class STRAbstractNode: public AbstractNode{
 public:
 	STRAbstractNode(int level);
+	~STRAbstractNode();
 protected:
 	void* computeBounds();
 };

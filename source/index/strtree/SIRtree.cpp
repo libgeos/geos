@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2004/05/05 17:42:06  strk
+ * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
+ * SIRAbstractNode and STRAbstractNode destructors added to get rid of
+ * AbstractNode::bounds in the right way (is a void * casted to appropriate
+ * Class in the subClasses).
+ *
  * Revision 1.7  2004/05/03 16:29:21  strk
  * Added sortBoundables(const vector<Boundable *>) pure virtual in AbstractSTRtree,
  * implemented in SIRtree and STRtree. Comparator funx made static in STRtree.cpp
@@ -83,6 +89,11 @@ SIRtree::~SIRtree() {
 }
 
 SIRAbstractNode::SIRAbstractNode(int level):AbstractNode(level) {}
+
+SIRAbstractNode::~SIRAbstractNode()
+{
+	delete (Interval *)bounds;
+}
 
 void* SIRAbstractNode::computeBounds() {
 	Interval* bounds=NULL;

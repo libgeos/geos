@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2004/05/05 17:42:06  strk
+ * AbstractNode destructor made virtual. AbstractNode::bounds made protected.
+ * SIRAbstractNode and STRAbstractNode destructors added to get rid of
+ * AbstractNode::bounds in the right way (is a void * casted to appropriate
+ * Class in the subClasses).
+ *
  * Revision 1.12  2004/05/03 22:56:44  strk
  * leaks fixed, exception specification omitted.
  *
@@ -73,6 +79,7 @@ AbstractSTRtree::~AbstractSTRtree() {
 		delete (*itemBoundables)[i];
 	}
 	delete itemBoundables;
+	delete root;
 }
 
 /**
