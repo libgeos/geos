@@ -6,7 +6,6 @@ example_SOURCES = example.cpp
 example_LDADD = $(LIBS)
 
 INCLUDES = -I../source/headers
-INCLUDES += -I../io/markup
 
 doxygen:
 	doxygen Doxyfile
