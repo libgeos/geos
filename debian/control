@@ -36,10 +36,9 @@ Description: GEOS (Geometry Engine - Open Source) library
  topology functions such as IsValid().
 
 Package: libgeos-doc
-Section: science
+Section: doc
 Priority: optional
 Architecture: all
-Recommends: libgeos (= ${Source-Version})
 Description: GEOS (Geometry Engine - Open Source) documentation
  GEOS (Geometry Engine - Open Source) is a C++ port of the 
  Java Topology Suite (JTS). As such, it aims to contain the 

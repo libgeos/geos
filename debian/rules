@@ -25,8 +25,6 @@ else
 endif
 ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
 	INSTALL_PROGRAM += -s
-#	MAKESTRIP=$(MAKE) install-strip DESTDIR=$(CURDIR)/debian/tmp #woody
-#else
 endif
 
 # shared library versions
@@ -35,20 +33,28 @@ version=`ls source/geom/.libs/lib*.so.* | \
 major=`ls source/geom/.libs/lib*.so.* | \
  awk '{if (match($$0,/\.so\.[0-9]+$$/)) print substr($$0,RSTART+4)}'`
 
+#ifeq "2" "$(major)"
+#	POSTGIS_CONFLICT='-u-DConflicts="libpostgis (<< 0.9.0)"'
+#	echo "ver 2"
+#endif
+
 config.status: configure
 	dh_testdir
 	# Add here commands to configure the package.
-	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info
+	CFLAGS="$(CFLAGS)" \
+	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
+				--prefix=/usr --mandir=\$${prefix}/share/man \
+				--infodir=\$${prefix}/share/info
 
 
 build: build-stamp
 build-stamp:  config.status
 	dh_testdir
-
+	
 	# Add here commands to compile the package.
 	$(MAKE)
 	$(MAKE) check
-
+	
 	touch build-stamp
 
 clean:
@@ -56,7 +62,7 @@ clean:
 	dh_testroot
 	rm -f build-stamp 
 	rm -f debian/shlibs.local
-
+	
 	# Add here commands to clean up after the build process.
 	-$(MAKE) distclean
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
@@ -65,8 +71,7 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-
-
+	
 	dh_clean 
 
 install: build
@@ -74,11 +79,10 @@ install: build
 	dh_testroot
 	dh_clean -k 
 	dh_installdirs
-
+	
 	# Add here commands to install the package into debian/tmp
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
 	$(MAKE) installcheck DESTDIR=$(CURDIR)/debian/tmp
-	$(MAKESTRIP)
 	$(CURDIR)/debian/makedoc
 
 
@@ -115,7 +119,7 @@ binary-arch: build install
 	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
-	dh_gencontrol
+	dh_gencontrol $(POSTGIS_CONFLICT)
 	dh_md5sums
 	dh_builddeb
 
