@@ -5,9 +5,9 @@
 #include <vector>
 #include <map>
 #include "platform.h"
+#include "operation.h"
 #include "graph.h"
 #include "geosAlgorithm.h"
-#include "operation.h"
 
 using namespace std;
 
@@ -389,7 +389,7 @@ private:
 class OverlayNodeFactory: public NodeFactory {
 public:
 //	OverlayNodeFactory() {};
-	Node* createNode(Coordinate& coord);
+	Node* createNode(Coordinate coord);
 };
 
 class EdgeSetNoder {

@@ -8,11 +8,12 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,GeometryFactory *newGeometryFactory,CG
 	cga=newCga;
 	edges=new vector<DirectedEdge*>();
 	pts=CoordinateListFactory::internalFactory->createCoordinateList();
-	ring=new LinearRing();
+	ring=NULL;
 //	shell=new EdgeRing();
 	holes=new vector<EdgeRing*>();
-	computePoints(newStart);
-	computeRing();
+//	Commented out to fix different polymorphism in C++ (from Java)
+//	computePoints(newStart);
+//	computeRing();
 }
 
 EdgeRing::~EdgeRing(){
@@ -69,7 +70,6 @@ Polygon* EdgeRing::toPolygon(GeometryFactory* geometryFactory){
 	return geometryFactory->createPolygon(getLinearRing(),holeLR);
 }
 
-//!!!External Dependency
 void EdgeRing::computeRing() {
 	if (ring!=NULL) return;   // don't compute more than once
 	ring=geometryFactory->createLinearRing(pts);

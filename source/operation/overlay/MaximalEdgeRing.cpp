@@ -2,7 +2,10 @@
 #include "stdio.h"
 
 MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFactory, CGAlgorithms *cga):
-EdgeRing(start,geometryFactory,cga){}
+EdgeRing(start,geometryFactory,cga){
+	computePoints(start);
+	computeRing();
+}
 
 DirectedEdge* MaximalEdgeRing::getNext(DirectedEdge *de) {
 	return de->getNext();

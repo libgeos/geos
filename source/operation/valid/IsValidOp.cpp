@@ -44,6 +44,7 @@ void IsValidOp::checkValid(Geometry *g) {
     else if (typeid(*g)==typeid(LineString)) checkValid((LineString*)g);
     else if (typeid(*g)==typeid(Polygon)) checkValid((Polygon*)g);
     else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
+    else if (typeid(*g)==typeid(MultiLineString)) checkValid((MultiLineString*)g);
     else if (typeid(*g)==typeid(GeometryCollection)) checkValid((GeometryCollection*)g);
 	else throw "UnsupportedOperationException";
 }
@@ -120,6 +121,7 @@ void IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph) {
 	for(int i=0;i<(int)edges->size();i++) {
 		Edge *e=(*edges)[i];
 		checkSelfIntersectingRing(e->getEdgeIntersectionList());
+		if(validErr!=NULL) return;
 	}
 }
 
@@ -175,7 +177,7 @@ void IsValidOp::checkHolesInShell(Polygon *p) {
 	for(int i=0;i<p->getNumInteriorRing();i++) {
 		LinearRing *hole=(LinearRing*) p->getInteriorRingN(i);
 		Coordinate& holePt=findPtNotNode(hole->getCoordinates(),shell,(*arg)[0]);
-//		Assert::isTrue(!(holePt==Coordinate::getNull()), "Unable to find a hole point not a vertex of the shell");
+		Assert::isTrue(!(holePt==Coordinate::getNull()), "Unable to find a hole point not a vertex of the shell");
 		//OLD Coordinate holePt=hole.getCoordinateN(0);
 		bool outside=!pir->isInside(holePt);
 		if (outside) {

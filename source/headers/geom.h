@@ -764,6 +764,7 @@ public:
 	virtual void apply(GeometryComponentFilter *filter);
 	virtual void normalize();
 	virtual int compareToSameClass(LineString *ls); //was protected
+	virtual int compareTo(LineString *ls);
 	virtual Coordinate* getCoordinate();
 	virtual double getLength();
 protected:

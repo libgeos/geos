@@ -29,7 +29,6 @@ bool ConnectedInteriorTester::isInteriorsConnected() {
 	setAllEdgesInResult(graph);
 	graph->linkAllDirectedEdges();
 	vector<EdgeRing*> *edgeRings=buildEdgeRings(graph->getEdgeEnds());
-
 	/**
 	* Mark all the edges for the edgeRings corresponding to the shells
 	* of the input polygons.  Note only ONE ring gets marked for each shell.

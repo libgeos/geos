@@ -88,7 +88,8 @@ string EdgeEnd::print() {
 	char buffer[255];
 	sprintf(buffer,"%i:%g",quadrant,atan2(dy,dx));
 	string angleStr(buffer);
-	string className=typeid(*this).name();
+//	string className=typeid(*this).name();
+	string className="EdgeEnd";
 	string out="  "+className+": "+p0.toString()+" - "+p1.toString()+" ";
 	out.append(angleStr);
 	out+="   " + label->toString();

@@ -17,9 +17,9 @@ protected:
 	LineSegment *seg;
 public:
 	MonotoneChainSelectAction();
-	~MonotoneChainSelectAction();
-	void select(indexMonotoneChain *mc,int start);
-	void select(LineSegment *newSeg){}
+	virtual ~MonotoneChainSelectAction();
+	virtual void select(indexMonotoneChain *mc,int start);
+	virtual void select(LineSegment *newSeg){}
 };
 
 /**

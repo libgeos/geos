@@ -69,12 +69,13 @@ void EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList) {
 	vector<EdgeIntersection *>::iterator it=list->begin();
 	// there should always be at least two entries in the list
 	EdgeIntersection *eiPrev=*it;
+	it++;
 	while (it<list->end()) {
-		it++;
 		EdgeIntersection *ei=*it;
 		Edge *newEdge=createSplitEdge(eiPrev,ei);
-		(*edgeList).push_back(newEdge);
+		edgeList->push_back(newEdge);
 		eiPrev=ei;
+		it++;
 	}
 }
 

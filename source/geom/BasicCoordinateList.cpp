@@ -7,7 +7,8 @@ BasicCoordinateList::BasicCoordinateList() {
 
 BasicCoordinateList::BasicCoordinateList(int n) {
 	vect=new vector<Coordinate>();
-	vect->reserve(n);
+//	vect->reserve(n);
+	vect->resize(n);
 }
 
 BasicCoordinateList::BasicCoordinateList(Coordinate& c) {

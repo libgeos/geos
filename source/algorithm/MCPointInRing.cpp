@@ -51,7 +51,7 @@ bool MCPointInRing::isInside(Coordinate& pt) {
 
 
 void MCPointInRing::testMonotoneChain(Envelope *rayEnv,MCSelecter *mcSelecter,indexMonotoneChain *mc) {
-//	mc.select(rayEnv, mcSelecter);
+	mc->select(rayEnv, mcSelecter);
 }
 
 void MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {

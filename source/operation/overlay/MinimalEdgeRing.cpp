@@ -2,7 +2,10 @@
 #include "stdio.h"
 
 MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start,GeometryFactory *geometryFactory,CGAlgorithms *cga):
-	EdgeRing(start,geometryFactory,cga){}
+	EdgeRing(start,geometryFactory,cga){
+	computePoints(start);
+	computeRing();
+}
 
 DirectedEdge* MinimalEdgeRing::getNext(DirectedEdge *de) {
 	return de->getNextMin();

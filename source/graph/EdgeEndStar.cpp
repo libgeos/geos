@@ -5,12 +5,11 @@ EdgeEndStar::EdgeEndStar(){
 	ptInAreaLocation[0]=Location::UNDEF;
 	ptInAreaLocation[1]=Location::UNDEF;
 	edgeMap=new map<EdgeEnd*,void*,EdgeEndLT>();
-	edgeList=new vector<EdgeEnd*>();
+	edgeList=NULL;
 }
 
 EdgeEndStar::~EdgeEndStar(){
 	delete edgeMap;
-	delete edgeList;
 }
 
 /**
@@ -48,6 +47,10 @@ vector<EdgeEnd*>* EdgeEndStar::getEdges() {
 			edgeList->push_back(e);
 		}
 	}
+//cout << endl << "edgeList:" << endl;
+//for(int i=0;i<(int)edgeList->size();i++) {
+//	cout << endl << (*edgeList)[i]->print() << endl;
+//}
 	return edgeList;
 }
 

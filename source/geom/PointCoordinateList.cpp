@@ -7,7 +7,8 @@ PointCoordinateList::PointCoordinateList() {
 
 PointCoordinateList::PointCoordinateList(int n) {
 	vect=new vector<point_3d>();
-	vect->reserve(n);
+//	vect->reserve(n);
+	vect->resize(n);
 }
 
 PointCoordinateList::PointCoordinateList(Coordinate& c) {

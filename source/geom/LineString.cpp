@@ -200,3 +200,16 @@ void LineString::apply(GeometryComponentFilter *filter) {
 	filter->filter(this);
 }
 
+int LineString::compareTo(LineString *ls){
+	if (isEmpty() && ls->isEmpty()) {
+		return 0;
+	}
+	if (isEmpty()) {
+		return -1;
+	}
+	if (ls->isEmpty()) {
+		return 1;
+	}
+	return compareToSameClass(ls);
+}
+
