@@ -176,7 +176,7 @@ void Polygon::normalize(LinearRing *ring, bool clockwise) {
 	}
 	CoordinateList* uniqueCoordinates=ring->getCoordinates();
 	uniqueCoordinates->deleteAt(uniqueCoordinates->getSize()-1);
-	Coordinate& minCoordinate=Geometry::minCoordinate(ring->getCoordinates());
+	Coordinate* minCoordinate=ring->getCoordinates()->minCoordinate();
 	Geometry::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
 	ring->setPoints(uniqueCoordinates);

@@ -58,6 +58,8 @@ public:
 	virtual	vector<Coordinate>* toVector()=0;
 	virtual	string toString()=0;
 	virtual	void setPoints(const vector<Coordinate> &v)=0;
+	bool hasRepeatedPoints();
+	Coordinate* minCoordinate();
 };
 
 class BasicCoordinateList : public CoordinateList {
@@ -374,9 +376,9 @@ protected:
 	static bool hasNullElements(CoordinateList* list);
 	static bool hasNullElements(vector<Geometry *> lrs);
 	static void reversePointOrder(CoordinateList* coordinates);
-	static Coordinate& minCoordinate(CoordinateList* coordinates);
-	static void scroll(CoordinateList* coordinates,Coordinate& firstCoordinate);
-	static int indexOf(Coordinate& coordinate,CoordinateList* coordinates);
+//	static Coordinate& minCoordinate(CoordinateList* coordinates);
+	static void scroll(CoordinateList* coordinates,Coordinate* firstCoordinate);
+	static int indexOf(Coordinate* coordinate,CoordinateList* coordinates);
 	virtual bool isEquivalentClass(Geometry *other);
 	virtual void checkNotGeometryCollection(Geometry *g);
 	virtual void checkEqualSRID(Geometry *other);

@@ -22,17 +22,19 @@ PointCoordinateList::PointCoordinateList(const PointCoordinateList &c) {
 void PointCoordinateList::setPoints(const vector<Coordinate> &v) {
 	vect=new vector<point_3d>();
 	point_3d pt;
-	for(unsigned int i=0; i<v.size(); i++)
+	for(unsigned int i=0; i<v.size(); i++) {
 		pt.x=v[i].x;
 		pt.y=v[i].y;
 		pt.z=v[i].z;
 		vect->push_back(pt);
+	}
 }
 
 vector<Coordinate>* PointCoordinateList::toVector() {
 	vector<Coordinate>* v=new vector<Coordinate>();
-	for(unsigned int i=0; i<vect->size(); i++)
+	for(unsigned int i=0; i<vect->size(); i++) {
 		v->push_back(Coordinate((*vect)[i].x,(*vect)[i].y,(*vect)[i].z));
+	}
 	return v;
 }
 

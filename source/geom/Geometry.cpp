@@ -75,13 +75,13 @@ void Geometry::reversePointOrder(CoordinateList* coordinates) {
 	coordinates->setPoints(v);
 }
 	
-Coordinate& Geometry::minCoordinate(CoordinateList* coordinates){
-	vector<Coordinate> v(*(coordinates->toVector()));
-	sort(v.begin(),v.end(),lessThen);
-	return v.front();
-}
+//Coordinate& Geometry::minCoordinate(CoordinateList* coordinates){
+//	vector<Coordinate> v(*(coordinates->toVector()));
+//	sort(v.begin(),v.end(),lessThen);
+//	return v.front();
+//}
 
-void Geometry::scroll(CoordinateList* coordinates,Coordinate& firstCoordinate) {
+void Geometry::scroll(CoordinateList* coordinates,Coordinate* firstCoordinate) {
 	int ind=indexOf(firstCoordinate,coordinates);
 	Assert::isTrue(ind > -1);
 	int length=coordinates->getSize();
@@ -95,9 +95,9 @@ void Geometry::scroll(CoordinateList* coordinates,Coordinate& firstCoordinate) {
 	coordinates->setPoints(v);
 }
 
-int Geometry::indexOf(Coordinate& coordinate,CoordinateList* coordinates) {
+int Geometry::indexOf(Coordinate* coordinate,CoordinateList* coordinates) {
 	for (int i=0; i<coordinates->getSize(); i++) {
-		if (coordinate==coordinates->getAt(i)) {
+		if ((*coordinate)==coordinates->getAt(i)) {
 			return i;
 		}
 	}
