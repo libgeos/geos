@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2005/04/14 11:49:01  strk
+ * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
+ *
  * Revision 1.5  2004/07/19 10:33:12  strk
  * Class documentation changed to report geos.h as WKT writer/parser header file
  *
@@ -91,17 +94,18 @@ public:
 		TT_NUMBER,
 		TT_WORD
 	};
-	StringTokenizer();
-	StringTokenizer(string txt);
-	~StringTokenizer();
+	//StringTokenizer();
+	StringTokenizer(const string& txt);
+	~StringTokenizer() {};
 	int nextToken();
 	int peekNextToken();
 	double getNVal();
 	string getSVal();
 private:
-	string str;
+	const string &str;
 	string stok;
 	double ntok;
+	string::const_iterator iter;
 };
 
 /**
@@ -122,10 +126,10 @@ public:
 	 */
 	WKTReader(const GeometryFactory *gf);
 
-	~WKTReader();
+	~WKTReader() {};
 
 	/// Parse a WKT string returning a Geometry
-	Geometry* read(string wellKnownText);
+	Geometry* read(const string &wellKnownText);
 
 //	Geometry* read(Reader reader);	//Not implemented yet
 

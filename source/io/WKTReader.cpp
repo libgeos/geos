@@ -29,11 +29,11 @@ WKTReader::WKTReader(const GeometryFactory *gf){
 	precisionModel=gf->getPrecisionModel();
 }
 
-WKTReader::~WKTReader(){
-	//delete geometryFactory;
-}
+//WKTReader::~WKTReader(){ }
 
-Geometry* WKTReader::read(string wellKnownText){
+Geometry *
+WKTReader::read(const string &wellKnownText)
+{
 	auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
 	StringTokenizer *st=tokenizer.release();
 	Geometry *g=NULL;
@@ -314,6 +314,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2005/04/14 11:49:02  strk
+ * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
+ *
  * Revision 1.30  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

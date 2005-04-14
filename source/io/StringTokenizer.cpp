@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2005/04/14 11:49:02  strk
+ * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
+ *
  * Revision 1.11  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -39,59 +42,60 @@
 
 namespace geos {
 
-StringTokenizer::StringTokenizer(){
-	str="";
+//StringTokenizer::StringTokenizer(){
+	//str="";
+	//stok="";
+	//ntok=0.0;
+//}
+StringTokenizer::StringTokenizer(const string &txt): str(txt) {
+	//str=txt;
 	stok="";
 	ntok=0.0;
+	iter=str.begin();
 }
-StringTokenizer::StringTokenizer(string txt) {
-	str=txt;
-	stok="";
-	ntok=0.0;
-}
-StringTokenizer::~StringTokenizer(){}
 
-int StringTokenizer::nextToken(){
+//StringTokenizer::~StringTokenizer(){}
+
+int
+StringTokenizer::nextToken()
+{
 	string tok="";
-	if (str.size()==0)
+	if (iter==str.end())
 		return StringTokenizer::TT_EOF;
-	switch(str[0]) {
+	switch(*iter) {
 		case '(':
-			str=str.substr(1);
-			return '(';
 		case ')':
-			str=str.substr(1);
-			return ')';
 		case ',':
-			str=str.substr(1);
-			return ',';
+			return *iter++;
 		case '\n':
 		case '\r':
 		case '\t':
 		case ' ':
-			string::size_type pos=str.find_first_not_of(" \n\r\t");
+			string::size_type pos=str.find_first_not_of(" \n\r\t",
+				iter-str.begin());
 			if (pos==string::npos) {
 				return StringTokenizer::TT_EOF;
 			} else {
-				str=str.substr(pos);
+				iter=str.begin()+pos;
 				return nextToken();
 			}
-		}
-	string::size_type pos=str.find_first_of("\n\r\t() ,");
+	}
+	string::size_type pos=str.find_first_of("\n\r\t() ,",
+		iter-str.begin());
 	if (pos==string::npos) {
-		if (str.size()>0) {
-			tok=str.substr(0);
-			str="";
+		if (iter!=str.end()) {
+			tok.assign(iter,str.end());
+			iter=str.end();
 		} else {
 			return StringTokenizer::TT_EOF;
 		}
 	} else {
-		tok=str.substr(0,pos);
-		str=str.substr(pos);
+		tok.assign(iter, str.begin()+pos);
+		iter=str.begin()+pos;
 	}
 	char *stopstring;
 	double dbl=strtod(tok.c_str(),&stopstring);
-	if (strcmp(stopstring,"")==0) {
+	if (*stopstring=='\0') {
 		ntok=dbl;
 		stok="";
 		return StringTokenizer::TT_NUMBER;
@@ -102,35 +106,35 @@ int StringTokenizer::nextToken(){
 	}
 }
 
-int StringTokenizer::peekNextToken(){
+int
+StringTokenizer::peekNextToken()
+{
 	string::size_type pos;
 	string tok="";
-	if (str.size()==0)
+	if (iter==str.end())
 		return StringTokenizer::TT_EOF;
 
-	pos=str.find_first_not_of(" \r\n\t");
+	pos=str.find_first_not_of(" \r\n\t", iter-str.begin());
 	if (pos==string::npos) return StringTokenizer::TT_EOF;
 	switch(str[pos]) {
 		case '(':
-			return '(';
 		case ')':
-			return ')';
 		case ',':
-			return ',';
+			return str[pos];
 	}
-	pos=str.find_first_of("\n\r\t() ,");
+	pos=str.find_first_of("\n\r\t() ,", iter-str.begin());
 	if (pos==string::npos) {
-		if (str.size()>0) {
-			tok=str.substr(0);
+		if (iter!=str.end()) {
+			tok.assign(iter,str.end());
 		} else {
 			return StringTokenizer::TT_EOF;
 		}
 	} else {
-		tok=str.substr(0,pos);
+		tok.assign(iter,str.end());
 	}
 	char *stopstring;
 	double dbl=strtod(tok.c_str(),&stopstring);
-	if (strcmp(stopstring,"")==0) {
+	if (*stopstring=='\0') {
 		ntok=dbl;
 		stok="";
 		return StringTokenizer::TT_NUMBER;
