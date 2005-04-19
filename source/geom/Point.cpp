@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.32  2005/04/19 11:49:26  strk
+ * Fixed segfault in ::isEmpty
+ *
  * Revision 1.31  2004/11/23 16:22:49  strk
  * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *
@@ -127,7 +130,7 @@ int Point::getNumPoints() const {
 }
 
 bool Point::isEmpty() const {
-	return (*getCoordinate())==Coordinate::getNull();
+	return coordinates->isEmpty();
 }
 
 bool Point::isSimple() const {return true;}
