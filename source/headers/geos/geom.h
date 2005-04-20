@@ -28,6 +28,8 @@
 
 using namespace std;
 
+typedef unsigned char byte;
+
 /**
  * \brief Basic namespace for all GEOS functionalities.
  */
@@ -2487,6 +2489,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2005/04/20 17:22:46  strk
+ * Added initial implementation of WKBReaderT and ByteOrderDataInStreamT
+ * class templates and ByteOrderValues class.
+ * Work is unfinished as WKBReader requires new interface of CoordinateSequence
+ * taking higher dimensions into account.
+ *
  * Revision 1.39  2005/02/17 09:56:03  strk
  * Applied patch from Jon Schlueter using <cmath> instead of <math.h>
  *

@@ -11,50 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2005/04/14 11:49:01  strk
- * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
- *
- * Revision 1.5  2004/07/19 10:33:12  strk
- * Class documentation changed to report geos.h as WKT writer/parser header file
- *
- * Revision 1.4  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/07 10:29:54  strk
- * Adjusted exceptions documentation.
- *
- * Revision 1.2  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.15  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.14  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.13  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_IO_H
 #define GEOS_IO_H
@@ -62,9 +19,6 @@
 #include <memory>
 #include <iostream>
 #include <string>
-//#include <vector>
-//#include <algorithm>
-//#include "math.h"
 #include <geos/platform.h>
 #include <geos/geom.h>
 #include <geos/util.h>
@@ -106,6 +60,21 @@ private:
 	string stok;
 	double ntok;
 	string::const_iterator iter;
+};
+
+/**
+ * Constant values used by the WKB format
+ */
+namespace WKBConstants {
+	const int wkbXDR = 0;
+	const int wkbNDR = 1;
+	const int wkbPoint = 1;
+	const int wkbLineString = 2;
+	const int wkbPolygon = 3;
+	const int wkbMultiPoint = 4;
+	const int wkbMultiLineString = 5;
+	const int wkbMultiPolygon = 6;
+	const int wkbGeometryCollection = 7;
 };
 
 /**
@@ -156,6 +125,31 @@ private:
 	bool isNumberNext(StringTokenizer *tokenizer);
 };
 
+/*
+ * \class ByteOrderValues io.h geos.h
+ * 
+ * Methods to read and write primitive Java datatypes from/to byte
+ * sequences, allowing the byte order to be specified
+ * 
+ * Similar to the standard Java <code>ByteBuffer</code> class.
+ */
+class ByteOrderValues {
+
+public:
+	/*final*/ static int ENDIAN_BIG;
+	/*final*/ static int ENDIAN_LITTLE;
+
+	static int getInt(const byte *buf, int byteOrder);
+	static void putInt(int intValue, byte *buf, int byteOrder);
+
+	static int64 getLong(const byte *buf, int byteOrder);
+	static void putLong(int64 longValue, byte *buf, int byteOrder);
+
+	static double getDouble(const byte *buf, int byteOrder);
+	static void putDouble(double doubleValue, byte *buf, int byteOrder);
+
+};
+ 
 class Writer {
 public:
 	Writer();
@@ -236,5 +230,58 @@ private:
 	void writeFormatted(const Geometry *geometry, bool isFormatted, Writer *writer);
 	void indent(int level, Writer *writer);
 };
-}
+
+} // namespace geos
+
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2005/04/20 17:22:47  strk
+ * Added initial implementation of WKBReaderT and ByteOrderDataInStreamT
+ * class templates and ByteOrderValues class.
+ * Work is unfinished as WKBReader requires new interface of CoordinateSequence
+ * taking higher dimensions into account.
+ *
+ * Revision 1.6  2005/04/14 11:49:01  strk
+ * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
+ *
+ * Revision 1.5  2004/07/19 10:33:12  strk
+ * Class documentation changed to report geos.h as WKT writer/parser header file
+ *
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.3  2004/07/07 10:29:54  strk
+ * Adjusted exceptions documentation.
+ *
+ * Revision 1.2  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.15  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.14  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
+ * Revision 1.13  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+

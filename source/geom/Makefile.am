@@ -127,6 +127,7 @@ EXTERNAL_SOURCES =  \
 	../index/sweepline/SweepLineInterval.cpp \
 	../io/ParseException.cpp \
 	../io/StringTokenizer.cpp \
+	../io/ByteOrderValues.cpp \
 	../io/WKTReader.cpp \
 	../io/WKTWriter.cpp \
 	../io/Writer.cpp \
