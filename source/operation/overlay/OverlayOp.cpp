@@ -444,8 +444,8 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	const Coordinate &p = n->getCoordinate();
 	RobustLineIntersector li;
 	for(int i=1;i<pts->getSize();i++) {
-		Coordinate p0=pts->getAt(i-1);
-		Coordinate p1=pts->getAt(i);	
+		const Coordinate &p0=pts->getAt(i-1);
+		const Coordinate &p1=pts->getAt(i);	
 		li.computeIntersection(p, p0, p1);
 		if (li.hasIntersection()) {
 			if ( p == p0 ) n->addZ(p0.z);
@@ -833,6 +833,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2005/04/21 11:16:14  strk
+ * Removed useless Coordinate copies in mergeZ() - patch by Safe Software
+ *
  * Revision 1.38  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
