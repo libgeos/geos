@@ -1,3 +1,59 @@
+2005-04-21 13:16  strk
+
+	* source/operation/overlay/OverlayOp.cpp: Removed useless
+	  Coordinate copies in mergeZ() - patch by Safe Software
+
+2005-04-20 19:56  strk
+
+	* source/: algorithm/NonRobustCGAlgorithms.cpp,
+	  algorithm/RobustCGAlgorithms.cpp, geom/Makefile.am: Removed
+	  NonRobustCGAlgorithms and RobustCGAlgorithms, already unused
+	  (CGAlgorithms replaces both with robust implementation).
+
+2005-04-20 19:22  strk
+
+	* source/: geom/Makefile.am, headers/geos/ByteOrderDataInStreamT.h,
+	  headers/geos/Makefile.am, headers/geos/WKBReaderT.h,
+	  headers/geos/geom.h, headers/geos/io.h, io/ByteOrderValues.cpp,
+	  io/WKBReader.cpp: Added initial implementation of WKBReaderT and
+	  ByteOrderDataInStreamT class templates and ByteOrderValues class.
+	  Work is unfinished as WKBReader requires new interface of
+	  CoordinateSequence taking higher dimensions into account.
+
+2005-04-20 19:18  strk
+
+	* source/headers/geos.h: Added standard copyright header
+
+2005-04-19 13:49  strk
+
+	* source/geom/Point.cpp: Fixed segfault in ::isEmpty
+
+2005-04-14 13:49  strk
+
+	* source/: headers/geos/io.h, io/StringTokenizer.cpp,
+	  io/WKTReader.cpp: Applied slightly modified patch by Cheng Shan
+	  to speedup WKT parsing.
+
+2005-04-07 20:43  strk
+
+	* source/operation/valid/IsValidOp.cpp: Fixed bug throwing an
+	  exception when a result could be returned instead (ported JTS
+	  patch)
+
+2005-04-06 13:09  strk
+
+	* ChangeLog, ltmain.sh, source/algorithm/CGAlgorithms.cpp,
+	  source/algorithm/LineIntersector.cpp,
+	  source/algorithm/NonRobustLineIntersector.cpp,
+	  source/algorithm/RobustDeterminant.cpp,
+	  source/bigtest/GeometryTestFactory.cpp,
+	  source/geomgraph/DirectedEdge.cpp, source/geomgraph/EdgeEnd.cpp,
+	  source/geomgraph/index/SegmentIntersector.cpp,
+	  source/headers/geos/platform.h.in,
+	  source/noding/snapround/SegmentSnapper.cpp,
+	  source/planargraph/planarDirectedEdge.cpp: Applied patch from Jon
+	  Schlueter (math.h => cmath; ieeefp.h in "C" block)
+
 2005-04-02 19:07  sgillies
 
 	* swig/python/setup.py: now supporting the win32 platform, thanks

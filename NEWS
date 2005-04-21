@@ -1,5 +1,43 @@
+2.1.1
+	- WKT parsing speedup - curtesy of Cheng Shan
+
+	- Fixed a bug in IsValid throwing exception on some invalid inputs
+
+	- New args for geos-config: --includedir and --libdir
+
+	- Optimizations:
+		- reduction of Coordinate copies
+		- more inlines
+		- reduced ->size, ->getSize calls in loops
+		- caching of number of points in Edge
+		- BufferSubgraph interface changed to use
+		  set<> instead of vector<>
+		- Envelope made a concrete class
+
+	- Few memory faults fixes.
+
+	- New features of XMLTester:
+		- polygonize test 
+		- point-per-quadrant arg for buffer test
+
+	- removal of standard C lib headers dependencies.
+
 2.1.0
 	- Added Polygonizer and LineMerger classes.
+
+	- python wrapper examples
+
+	- General cleanup / warnings removal
+
+	- cleaner win32 / older copilers builds
+
+	- Reduced heap allocations
+
+	- debian package builder scripts
+
+	- reduction of standard C lib headers dependency
+
+	- Z support in overlay operations.
 
 2.0.0
 
