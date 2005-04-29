@@ -25,13 +25,16 @@
 
 namespace geos {
 
-/*
+/**
  * \class WKBReaderT io.h geos.h
- * \brief WKB parser class; see also WKBWriter.
  *
- * Reads a Geometry from a byte stream in Well-Known Binary format.
- * Supports use of an T, which allows easy use
- * with arbitary byte stream sources.
+ * \brief Reads a Geometry from Well-Known Binary format.
+ *
+ * This is a template class.
+ * Supports use of a template arg, which allows easy use
+ * with arbitary byte stream sources. The template argument
+ * must support the ``what read(howmany)'' interface, what
+ * being a byte array.
  * 
  * This class is designed to support reuse of a single instance to read
  * multiple geometries. This class is not thread-safe; each thread should
@@ -43,8 +46,6 @@ namespace geos {
  * This implementation supports the extended WKB standard which allows
  * representing 3-dimensional coordinates.
  *
- * This is a template class.
- * 
  */
 template <class T>
 class WKBReaderT {
@@ -55,7 +56,7 @@ public:
 	WKBReaderT(const GeometryFactory &f): factory(f) {};
 
 	/**
-	 * Reads a Geometry from an T.
+	 * \brief Reads a Geometry from an T.
 	 *
 	 * @param is the stream to read from 
 	 * @return the Geometry read
@@ -337,7 +338,14 @@ WKBReaderT<T>::readCoordinate()
 	}
 }
 
-// biostringstream-based WKB reader
+/**
+ *
+ * \brief The default WKBReaderT template class instance.
+ * 
+ * Uses geos::biostringstream as template parameter.
+ *
+ * @see WKBWriter
+ */
 typedef WKBReaderT<biostringstream> WKBReader;
 
 

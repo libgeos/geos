@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -58,6 +59,8 @@ namespace geos {
  * \section io_sect Input / Output
  *
  * For WKT input/output you can use geos::WKTReader and geos::WKTWriter
+ *
+ * For WKB input/output you can use geos::WKBReader and geos::WKBWriter
  *
  * \section exc_sect Exceptions
  *
@@ -860,6 +863,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.74  2005/04/29 17:40:35  strk
+ * Updated Doxygen documentation and some Copyright headers.
+ *
  * Revision 1.73  2004/12/30 13:31:20  strk
  * Fixed a segfault on EMPTYGEOM->getCeontroid()
  *

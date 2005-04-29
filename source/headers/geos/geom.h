@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -28,12 +29,13 @@
 
 using namespace std;
 
-typedef unsigned char byte;
-
 /**
  * \brief Basic namespace for all GEOS functionalities.
  */
 namespace geos {
+
+/// An unsigned char
+typedef unsigned char byte;
 
 /// Return current GEOS version
 string geosversion();
@@ -917,7 +919,7 @@ public:
 		return new DefaultCoordinateSequence(coords);
 	}
 
-   	/// @see CoordinateSequenceFactory::create(unsigned int, int)
+   	/** @see CoordinateSequenceFactory::create(unsigned int, int) */
 	CoordinateSequence *create(unsigned int size, int dimension=3) const
 	{
 		/* DefaultCoordinateSequence only accepts 3d Coordinates */
@@ -2563,6 +2565,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2005/04/29 17:40:36  strk
+ * Updated Doxygen documentation and some Copyright headers.
+ *
  * Revision 1.41  2005/04/29 11:52:40  strk
  * Added new JTS interfaces for CoordinateSequence and factories,
  * removed example implementations to reduce maintainance costs.

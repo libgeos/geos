@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,7 +18,6 @@
 #include <geos/util.h>
 
 namespace geos {
-namespace io {
 
 int ByteOrderValues::ENDIAN_BIG = 1;
 int ByteOrderValues::ENDIAN_LITTLE = 2;
@@ -142,11 +141,13 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 	putLong(longValue, buf, byteOrder);
 }
 
-} // namespace io
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2005/04/29 17:40:36  strk
+ * Updated Doxygen documentation and some Copyright headers.
+ *
  * Revision 1.2  2005/04/29 15:34:21  strk
  * Typedef'ed biostringstream, preferred parameter for
  * WKB parser templates.

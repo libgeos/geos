@@ -28,9 +28,13 @@ namespace geos {
  *
  * \class WKBWriterT io.h geos.h
  *
- * Writes a Geometry into Well-Known Binary format.
- * Supports use of an OutStream, which allows easy use
- * with arbitary byte stream sinks.
+ * \brief Writes a Geometry into Well-Known Binary format.
+ *
+ * This is a template class.
+ * Supports use of a template arg, which allows easy use
+ * with arbitary byte stream sinks. The template argument
+ * must support the ``write(what, howmany)'' interface, what
+ * being a byte array.
  * 
  * The WKB format is specified in the OGC Simple Features for SQL specification.
  * This implementation supports the extended WKB standard for representing
@@ -47,6 +51,7 @@ namespace geos {
  * instance.
  *
  * @see WKBReaderT
+ * @see WKBWriter
  */
 template <class T>
 class WKBWriterT {
@@ -57,9 +62,9 @@ public:
 		outputDimension(dims), byteOrder(bo), outStream(NULL) {};
 
 	/**
-	 * Write a Geometry to a T.
+	 * \brief Write a Geometry to a T.
 	 *
-	 * @param geom the geometry to write
+	 * @param g the geometry to write
 	 * @param os the output stream
 	 * @throws IOException
 	 */
@@ -236,7 +241,14 @@ WKBWriterT<T>::writeCoordinate(const CoordinateSequence &cs, int idx,
 	}
 }
 
-// biostringstream-based WKB writer
+/**
+ *
+ * \brief The default WKBWriterT template class instance.
+ * 
+ * Uses biostringstream as template parameter.
+ *
+ * @see WKBReader
+ */
 typedef WKBWriterT<biostringstream> WKBWriter;
 
 } // namespace geos
@@ -245,6 +257,9 @@ typedef WKBWriterT<biostringstream> WKBWriter;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2005/04/29 17:40:36  strk
+ * Updated Doxygen documentation and some Copyright headers.
+ *
  * Revision 1.2  2005/04/29 15:34:21  strk
  * Typedef'ed biostringstream, preferred parameter for
  * WKB parser templates.

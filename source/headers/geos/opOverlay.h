@@ -85,7 +85,7 @@ private:
 };
 
 /*
- * Computes the overlay of two {@link Geometry}s.  The overlay
+ * Computes the overlay of two Geometry.  The overlay
  * can be used to determine any boolean combination of the geometries.
  */
 class OverlayOp: public GeometryGraphOperation {
@@ -573,6 +573,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/04/29 17:40:36  strk
+ * Updated Doxygen documentation and some Copyright headers.
+ *
  * Revision 1.8  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

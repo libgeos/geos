@@ -435,7 +435,7 @@ OverlayOp::mergeZ(Node *n, const Polygon *poly) const
 /*
  * Merge Z values of node with those of the segment or vertex in
  * the given LineString it is on.
- * @returns 1 if an intersection is found, 0 otherwise.
+ * returns 1 if an intersection is found, 0 otherwise.
  */
 int
 OverlayOp::mergeZ(Node *n, const LineString *line) const
@@ -833,6 +833,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2005/04/29 17:40:36  strk
+ * Updated Doxygen documentation and some Copyright headers.
+ *
  * Revision 1.39  2005/04/21 11:16:14  strk
  * Removed useless Coordinate copies in mergeZ() - patch by Safe Software
  *

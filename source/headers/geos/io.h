@@ -30,7 +30,10 @@ using namespace std;
 
 namespace geos {
 
-// A facility for use with WKB parser
+/**
+ * \brief A byte input-ouput stringstream type for use with WKB parsers.
+ * Default instance of WKBReaderT and WKBWriterT use this type.
+ */
 typedef basic_stringstream<byte> biostringstream;
 
 // biostringstream output
@@ -272,6 +275,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/04/29 17:40:36  strk
+ * Updated Doxygen documentation and some Copyright headers.
+ *
  * Revision 1.10  2005/04/29 16:36:43  strk
  * Fixed biostringstream stream output.
  *
