@@ -14,8 +14,6 @@ DIR_SOURCES = \
 	CoordinateSequenceFactory.cpp \
 	DefaultCoordinateSequence.cpp \
 	DefaultCoordinateSequenceFactory.cpp \
-	PointCoordinateSequenceFactory.cpp \
-	PointCoordinateSequence.cpp \
 	Dimension.cpp \
 	Envelope.cpp \
 	Geometry.cpp \

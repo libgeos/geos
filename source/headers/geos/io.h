@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -233,10 +234,20 @@ private:
 
 } // namespace geos
 
+#include <geos/ByteOrderDataInStreamT.h>
+#include <geos/WKBReaderT.h>
+#include <geos/WKBWriterT.h>
+
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/04/29 11:52:40  strk
+ * Added new JTS interfaces for CoordinateSequence and factories,
+ * removed example implementations to reduce maintainance costs.
+ * Added first implementation of WKBWriter, made ByteOrderDataInStream
+ * a template class.
+ *
  * Revision 1.7  2005/04/20 17:22:47  strk
  * Added initial implementation of WKBReaderT and ByteOrderDataInStreamT
  * class templates and ByteOrderValues class.

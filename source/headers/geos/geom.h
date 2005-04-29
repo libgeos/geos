@@ -585,6 +585,7 @@ Coordinate::hashCode(double x)
  * will use your CoordinateSequence implementation.
  * 
  */
+class Envelope;
 class CoordinateSequence {
 public:
 	virtual ~CoordinateSequence(){};
@@ -720,6 +721,66 @@ public:
 	/// Reverse Coordinate order in given CoordinateSequence
 	static void reverse(CoordinateSequence *cl);
 
+	/// Standard ordinate index values
+	enum { X,Y,Z,M };
+
+	/**
+	 * Returns the dimension (number of ordinates in each coordinate)
+	 * for this sequence.
+	 *
+	 * @return the dimension of the sequence.
+	 */
+	virtual int getDimension() const=0;
+
+	/**
+	 * Returns the ordinate of a coordinate in this sequence.
+	 * Ordinate indices 0 and 1 are assumed to be X and Y.
+	 * Ordinates indices greater than 1 have user-defined semantics
+	 * (for instance, they may contain other dimensions or measure values).
+	 *
+	 * @param index  the coordinate index in the sequence
+	 * @param ordinateIndex the ordinate index in the coordinate
+	 * 	   (in range [0, dimension-1])
+	 */
+	virtual double getOrdinate(int index, int ordinateIndex) const=0;
+
+	/**
+	 * Returns ordinate X (0) of the specified coordinate.
+	 *
+	 * @param index
+	 * @return the value of the X ordinate in the index'th coordinate
+	 */
+	virtual double getX(int index) const { return getOrdinate(index, X); }
+
+	/**
+	 * Returns ordinate Y (1) of the specified coordinate.
+	 *
+	 * @param index
+	 * @return the value of the Y ordinate in the index'th coordinate
+	 */
+	virtual double getY(int index) const { return getOrdinate(index, Y); }
+
+
+	/**
+	 * Sets the value for a given ordinate of a coordinate in this sequence.
+	 *
+	 * @param index  the coordinate index in the sequence
+	 * @param ordinateIndex the ordinate index in the coordinate
+	 * 		(in range [0, dimension-1])
+	 * @param value  the new ordinate value
+	 */
+	virtual void setOrdinate(int index, int ordinateIndex, double value)=0;
+
+	/**
+	 * Expands the given Envelope to include the coordinates in the
+	 * sequence.
+	 * Allows implementing classes to optimize access to coordinate values.
+	 *
+	 * @param env the envelope to expand
+	 */
+	virtual void expandEnvelope(Envelope &env) const;
+
+
 };
 
 /**
@@ -750,7 +811,7 @@ public:
 	/// Construct sequence allocating space for n coordinates
 	DefaultCoordinateSequence(int n);
 
-	virtual ~DefaultCoordinateSequence();
+	~DefaultCoordinateSequence();
 
 	bool isEmpty() const;
 	void add(const Coordinate& c);
@@ -758,6 +819,12 @@ public:
 	void deleteAt(int pos);
 	string toString() const;
 	void setPoints(const vector<Coordinate> &v);
+
+	double getOrdinate(int index, int ordinateIndex) const;
+	void setOrdinate(int index, int ordinateIndex, double value);
+	void expandEnvelope(Envelope &env) const;
+	int getDimension() const { return 3; }
+
 private:
 	vector<Coordinate> *vect;
 };
@@ -805,15 +872,6 @@ private:
  */
 class CoordinateSequenceFactory {
 public:
-	// create an empty CoordinateSequence
-	//virtual CoordinateSequence* createCoordinateSequence()=0;
-
-	// create an empty CoordinateSequence with 'size' Coordinate slots
-	//virtual CoordinateSequence* createCoordinateSequence(int size)=0;
-
-	//virtual CoordinateSequence* createCoordinateSequence(const Coordinate& c)=0;
-	// create an CoordinateSequence containing the given Coordinate 
-	//virtual CoordinateSequence* createCoordinateSequence(const CoordinateSequence *c)=0;
 
 	/** \brief
 	 * Returns a CoordinateSequence based on the given array.
@@ -825,6 +883,18 @@ public:
 	 * create an empty CoordinateSequence.
 	 */
 	virtual CoordinateSequence *create(vector<Coordinate> *coordinates) const=0;
+
+	/** \brief
+	 * Creates a CoordinateSequence of the specified size and dimension.
+	 * For this to be useful, the CoordinateSequence implementation must
+	 * be mutable.
+	 *
+	 * @param size the number of coordinates in the sequence
+	 * @param dimension the dimension of the coordinates in the sequence
+	 * 	(if user-specifiable, otherwise ignored)
+	 */
+	virtual CoordinateSequence *create(unsigned int size, int dimension)
+		const=0;
 };
 
 /**
@@ -837,21 +907,22 @@ public:
 class DefaultCoordinateSequenceFactory: public CoordinateSequenceFactory {
 
 public:
-	// create an empty DefaultCoordinateSequence
-	//CoordinateSequence *createCoordinateSequence() {return new DefaultCoordinateSequence();};
-	// create an empty DefaultCoordinateSequence with 'size' Coordinate slots
-	//CoordinateSequence* createCoordinateSequence(int size) {return new DefaultCoordinateSequence(size);};
-	//CoordinateSequence* createCoordinateSequence(const Coordinate& c) {return new DefaultCoordinateSequence(c);};
-
-	// create an DefaultCoordinateSequence containing the given Coordinate 
-	//CoordinateSequence* createCoordinateSequence(const CoordinateSequence *cl) {return new DefaultCoordinateSequence(cl);};
-
 
 	/** \brief
 	 * Returns a DefaultCoordinateSequence based on the given vector
 	 * (the vector is not copied - callers give up ownership).
 	 */
-	CoordinateSequence *create(vector<Coordinate> *coords) const;
+	CoordinateSequence *create(vector<Coordinate> *coords) const
+	{
+		return new DefaultCoordinateSequence(coords);
+	}
+
+   	/// @see CoordinateSequenceFactory::create(unsigned int, int)
+	CoordinateSequence *create(unsigned int size, int dimension=3) const
+	{
+		/* DefaultCoordinateSequence only accepts 3d Coordinates */
+		return new DefaultCoordinateSequence(size);
+	}
 
 	/** \brief
 	 * Returns the singleton instance of DefaultCoordinateSequenceFactory
@@ -1858,6 +1929,9 @@ public:
 	virtual ~Point();
 	Geometry *clone() const;
 	CoordinateSequence* getCoordinates(void) const;
+	const CoordinateSequence* getCoordinatesRO() const {
+		return coordinates;
+	}
 	int getNumPoints() const;
 	bool isEmpty() const;
 	bool isSimple() const;
@@ -2489,6 +2563,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2005/04/29 11:52:40  strk
+ * Added new JTS interfaces for CoordinateSequence and factories,
+ * removed example implementations to reduce maintainance costs.
+ * Added first implementation of WKBWriter, made ByteOrderDataInStream
+ * a template class.
+ *
  * Revision 1.40  2005/04/20 17:22:46  strk
  * Added initial implementation of WKBReaderT and ByteOrderDataInStreamT
  * class templates and ByteOrderValues class.

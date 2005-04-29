@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,6 +18,7 @@
 
 #include <geos/geom.h>
 #include <geos/io.h>
+#include <geos/platform.h>
 #include <geos/ByteOrderDataInStreamT.h>
 
 namespace geos {
@@ -27,7 +28,7 @@ namespace geos {
  * \brief WKB parser class; see also WKBWriter.
  *
  * Reads a Geometry from a byte stream in Well-Known Binary format.
- * Supports use of an InStream, which allows easy use
+ * Supports use of an T, which allows easy use
  * with arbitary byte stream sources.
  * 
  * This class is designed to support reuse of a single instance to read
@@ -43,9 +44,25 @@ namespace geos {
  * This is a template class.
  * 
  */
-template <class InStream>
+template <class T>
 class WKBReaderT {
 
+public:
+
+	WKBReaderT() {};
+	WKBReaderT(const GeometryFactory &f): factory(f) {};
+
+	/**
+	 * Reads a Geometry from an T.
+	 *
+	 * @param is the stream to read from 
+	 * @return the Geometry read
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	Geometry *read(T &is);
+		// throws IOException, ParseException
+ 
 private:
 
 	static string BAD_GEOM_TYPE_MSG;
@@ -55,7 +72,7 @@ private:
 	// for now support the WKB standard only - may be generalized later
 	int inputDimension;
 
-	ByteOrderDataInStreamT<InStream> dis;
+	ByteOrderDataInStreamT<T> dis;
 
 	vector<double> ordValues;
 
@@ -91,29 +108,13 @@ private:
 	void readCoordinate(); // throws IOException
 
 
-public:
-
-	WKBReaderT() {};
-	WKBReaderT(const GeometryFactory &f): factory(f) {};
-
-	/**
-	 * Reads a Geometry from an InStream.
-	 *
-	 * @param is the stream to read from 
-	 * @return the Geometry read
-	 * @throws IOException
-	 * @throws ParseException
-	 */
-	Geometry *read(InStream &is);
-		// throws IOException, ParseException
- 
 };
-template<class InStream> string WKBReaderT<InStream>::BAD_GEOM_TYPE_MSG = "bad geometry type encountered in ";
+template<class T> string WKBReaderT<T>::BAD_GEOM_TYPE_MSG = "bad geometry type encountered in ";
 
-template<class InStream> Geometry *
-WKBReaderT<InStream>::read(InStream &is)
+template<class T> Geometry *
+WKBReaderT<T>::read(T &is)
 {
-	dis.setInStream(is);
+	dis.setInStream(&is);
 	inputDimension = 2; // handle 2d only for now
 
 	// only allocate ordValues buffer if necessary
@@ -123,8 +124,8 @@ WKBReaderT<InStream>::read(InStream &is)
 	return readGeometry();
 }
 
-template<class InStream> Geometry *
-WKBReaderT<InStream>::readGeometry()
+template<class T> Geometry *
+WKBReaderT<T>::readGeometry()
 {
 	// determine byte order
 	byte byteOrder = dis.readByte();
@@ -156,31 +157,31 @@ WKBReaderT<InStream>::readGeometry()
 	throw new ParseException("Unknown WKB type " + geometryType);
 }
 
-template<class InStream> Point *
-WKBReaderT<InStream>::readPoint()
+template<class T> Point *
+WKBReaderT<T>::readPoint()
 {
 	readCoordinate();
 	return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
 }
 
-template<class InStream> LineString *
-WKBReaderT<InStream>::readLineString()
+template<class T> LineString *
+WKBReaderT<T>::readLineString()
 {
 	int size = dis.readInt();
 	CoordinateSequence *pts = readCoordinateSequence(size);
 	return factory.createLineString(pts);
 }
 
-template<class InStream> LinearRing *
-WKBReaderT<InStream>::readLinearRing()
+template<class T> LinearRing *
+WKBReaderT<T>::readLinearRing()
 {
 	int size = dis.readInt();
 	CoordinateSequence *pts = readCoordinateSequence(size);
 	return factory.createLinearRing(pts);
 }
 
-template<class InStream> Polygon *
-WKBReaderT<InStream>::readPolygon()
+template<class T> Polygon *
+WKBReaderT<T>::readPolygon()
 {
 	int numRings = dis.readInt();
 	LinearRing *shell = readLinearRing();
@@ -203,8 +204,8 @@ WKBReaderT<InStream>::readPolygon()
 	return factory.createPolygon(shell, holes);
 }
 
-template<class InStream> MultiPoint *
-WKBReaderT<InStream>::readMultiPoint()
+template<class T> MultiPoint *
+WKBReaderT<T>::readMultiPoint()
 {
 	int numGeoms = dis.readInt();
 	vector<Geometry *> *geoms = new vector<Geometry *>(numGeoms);
@@ -227,8 +228,8 @@ WKBReaderT<InStream>::readMultiPoint()
 	return factory.createMultiPoint(geoms);
 }
 
-template<class InStream> MultiLineString *
-WKBReaderT<InStream>::readMultiLineString()
+template<class T> MultiLineString *
+WKBReaderT<T>::readMultiLineString()
 {
 	int numGeoms = dis.readInt();
 	vector<Geometry *> *geoms = new vector<Geometry *>(numGeoms);
@@ -251,8 +252,8 @@ WKBReaderT<InStream>::readMultiLineString()
 	return factory.createMultiLineString(geoms);
 }
 
-template<class InStream> MultiPolygon *
-WKBReaderT<InStream>::readMultiPolygon()
+template<class T> MultiPolygon *
+WKBReaderT<T>::readMultiPolygon()
 {
 	int numGeoms = dis.readInt();
 	vector<Geometry *> *geoms = new vector<Geometry *>(numGeoms);
@@ -275,8 +276,8 @@ WKBReaderT<InStream>::readMultiPolygon()
 	return factory.createMultiPolygon(geoms);
 }
 
-template<class InStream> GeometryCollection *
-WKBReaderT<InStream>::readGeometryCollection()
+template<class T> GeometryCollection *
+WKBReaderT<T>::readGeometryCollection()
 {
 	int numGeoms = dis.readInt();
 	vector<Geometry *> *geoms = new vector<Geometry *>(numGeoms);
@@ -293,8 +294,8 @@ WKBReaderT<InStream>::readGeometryCollection()
 	return factory.createGeometryCollection(geoms);
 }
 
-template<class InStream> CoordinateSequence *
-WKBReaderT<InStream>::readCoordinateSequence(int size)
+template<class T> CoordinateSequence *
+WKBReaderT<T>::readCoordinateSequence(int size)
 {
 	CoordinateSequence *seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
 	int targetDim = seq->getDimension();
@@ -309,8 +310,8 @@ WKBReaderT<InStream>::readCoordinateSequence(int size)
 	return seq;
 }
 
-template<class InStream> void
-WKBReaderT<InStream>::readCoordinate()
+template<class T> void
+WKBReaderT<T>::readCoordinate()
 {
 	for (int i=0; i<inputDimension; ++i)
 	{

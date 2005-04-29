@@ -210,10 +210,23 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 	return ret;
 }
 
+void
+CoordinateSequence::expandEnvelope(Envelope &env) const
+{
+	int size = getSize();
+	for (int i=0; i<size; i++) env.expandToInclude(getAt(i));
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/04/29 11:52:40  strk
+ * Added new JTS interfaces for CoordinateSequence and factories,
+ * removed example implementations to reduce maintainance costs.
+ * Added first implementation of WKBWriter, made ByteOrderDataInStream
+ * a template class.
+ *
  * Revision 1.8  2005/02/22 17:10:47  strk
  * Reduced CoordinateSequence::getSize() calls.
  *
