@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <geos/platform.h>
 #include <geos/geom.h>
@@ -27,6 +28,26 @@
 using namespace std;
 
 namespace geos {
+
+// A facility for use with WKB parser
+typedef basic_stringstream<byte> biostringstream;
+
+// biostringstream output
+inline ostream &operator<<(ostream &s, biostringstream &o) {
+	long pos = o.tellg(); // take note of get pointer
+	o.seekg(0, ios::beg); // rewind
+	s<<hex<<uppercase;
+	byte each=0;
+	while(o.read(&each, 1)) {
+		s<<(int)each<<"-";
+	}
+	s<<dec;
+	o.clear();
+	o.seekg(pos);
+	return s;
+}
+
+
 
 /**
  * \class ParseException io.h geos.h
@@ -129,7 +150,7 @@ private:
 /*
  * \class ByteOrderValues io.h geos.h
  * 
- * Methods to read and write primitive Java datatypes from/to byte
+ * Methods to read and write primitive datatypes from/to byte
  * sequences, allowing the byte order to be specified
  * 
  * Similar to the standard Java <code>ByteBuffer</code> class.
@@ -242,6 +263,14 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/04/29 15:34:21  strk
+ * Typedef'ed biostringstream, preferred parameter for
+ * WKB parser templates.
+ * Added << operator for biostringstream.
+ * Typedef'ed WKBWriter and WKBReader to be parametrized by
+ * biostringstream.
+ * Added WKBtest in doc/example.cpp
+ *
  * Revision 1.8  2005/04/29 11:52:40  strk
  * Added new JTS interfaces for CoordinateSequence and factories,
  * removed example implementations to reduce maintainance costs.

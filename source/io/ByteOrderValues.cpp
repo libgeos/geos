@@ -95,17 +95,6 @@ ByteOrderValues::putLong(int64 longValue, byte *buf, int byteOrder)
 {
 	if ( byteOrder == ENDIAN_BIG )
 	{
-		buf[0] = (byte)(longValue >> 56);
-		buf[1] = (byte)(longValue >> 48);
-		buf[2] = (byte)(longValue >> 40);
-		buf[3] = (byte)(longValue >> 32);
-		buf[4] = (byte)(longValue >> 24);
-		buf[5] = (byte)(longValue >> 16);
-		buf[6] = (byte)(longValue >> 8);
-		buf[7] = (byte) longValue;
-	}
-	else // ENDIAN_LITTLE
-	{
 		buf[7] = (byte)(longValue >> 56);
 		buf[6] = (byte)(longValue >> 48);
 		buf[5] = (byte)(longValue >> 40);
@@ -115,6 +104,17 @@ ByteOrderValues::putLong(int64 longValue, byte *buf, int byteOrder)
 		buf[1] = (byte)(longValue >> 8);
 		buf[0] = (byte) longValue;
 	}
+	else // ENDIAN_LITTLE
+	{
+		buf[0] = (byte)(longValue >> 56);
+		buf[1] = (byte)(longValue >> 48);
+		buf[2] = (byte)(longValue >> 40);
+		buf[3] = (byte)(longValue >> 32);
+		buf[4] = (byte)(longValue >> 24);
+		buf[5] = (byte)(longValue >> 16);
+		buf[6] = (byte)(longValue >> 8);
+		buf[7] = (byte) longValue;
+	}
 }
 
 double
@@ -123,6 +123,7 @@ ByteOrderValues::getDouble(const byte *buf, int byteOrder)
 	int64 longValue = getLong(buf, byteOrder);
 	double ret;
 	memcpy(&ret, &longValue, sizeof(double));
+	return ret;
 }
 
 void
@@ -130,6 +131,14 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 {
 	int64 longValue;
 	memcpy(&longValue, &doubleValue, sizeof(double));
+#if DEBUG_BYTEORDER_VALUES
+	cout<<"ByteOrderValues::putDouble("<<doubleValue<<
+		", order:"<<byteOrder
+		<<") = "<<hex;
+	for (int i=0; i<8; i++)
+		cout<<"["<<(int)buf[i]<<"]";
+	cout<<dec<<endl;
+#endif
 	putLong(longValue, buf, byteOrder);
 }
 
@@ -138,6 +147,14 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2005/04/29 15:34:21  strk
+ * Typedef'ed biostringstream, preferred parameter for
+ * WKB parser templates.
+ * Added << operator for biostringstream.
+ * Typedef'ed WKBWriter and WKBReader to be parametrized by
+ * biostringstream.
+ * Added WKBtest in doc/example.cpp
+ *
  * Revision 1.1  2005/04/20 17:22:47  strk
  * Added initial implementation of WKBReaderT and ByteOrderDataInStreamT
  * class templates and ByteOrderValues class.

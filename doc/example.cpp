@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -31,8 +32,15 @@
 #include <geos.h>
 #include <geos/opLinemerge.h>
 #include <geos/opPolygonize.h>
+#include <sstream>
+#include <iomanip>
 
 using namespace geos;
+
+
+// Prototypes
+void wkt_print_geoms(vector<Geometry *> *geoms);
+
 
 // This object will be used to construct our geometries.
 // It might be bypassed by directly call geometry constructors,
@@ -41,17 +49,117 @@ using namespace geos;
 // cached inside a GeometryFactory object.
 GeometryFactory *global_factory;
 
+//
+// This function tests writing and reading WKB
+// TODO:
+//	- compare input and output geometries for equality
+//	- remove debugging lines (on stream state)
+//
+void WKBtest(vector<Geometry*>*geoms)
+{
+	biostringstream s;
+	WKBReader wkbReader;
+	WKBWriter wkbWriter;
+	Geometry *gout;
+
+#if DEBUG_STREAM_STATE
+	cout<<"WKBtest: machine byte order: "<<BYTE_ORDER<<endl;
+#endif
+
+
+	unsigned int ngeoms=geoms->size();
+	for (unsigned int i=0; i<ngeoms; ++i)
+	{
+		Geometry *gin = (*geoms)[i];
+
+#if DEBUG_STREAM_STATE
+		cout<<"State of stream before WRITE: ";
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<
+			" good:"<<s.good()<<
+			" eof:"<<s.eof()<<
+			" bad:"<<s.bad()<<
+			" fail:"<<s.fail()<<endl; 
+#endif
+
+		s.seekp(0, ios::beg); // rewind writer pointer
+
+		wkbWriter.write(*gin, s);
+#if DEBUG_STREAM_STATE
+		cout<<"wkbWriter wrote and reached ";
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<endl; 
+
+		cout<<"State of stream before DUMP: ";
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<
+			" good:"<<s.good()<<
+			" eof:"<<s.eof()<<
+			" bad:"<<s.bad()<<
+			" fail:"<<s.fail()<<endl; 
+#endif
+
+#if DEBUG_STREAM_STATE
+		cout<<"State of stream after DUMP: ";
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<
+			" good:"<<s.good()<<
+			" eof:"<<s.eof()<<
+			" bad:"<<s.bad()<<
+			" fail:"<<s.fail()<<endl; 
+#endif
+
+		s.seekg(0, ios::beg); // rewind reader pointer
+
+#if DEBUG_STREAM_STATE
+		cout<<"State of stream before READ: ";
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<
+			" good:"<<s.good()<<
+			" eof:"<<s.eof()<<
+			" bad:"<<s.bad()<<
+			" fail:"<<s.fail()<<endl; 
+#endif
+
+		gout = wkbReader.read(s);
+
+#if DEBUG_STREAM_STATE
+		cout<<"State of stream after READ: ";
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<
+			" good:"<<s.good()<<
+			" eof:"<<s.eof()<<
+			" bad:"<<s.bad()<<
+			" fail:"<<s.fail()<<endl; 
+#endif
+
+		gin->normalize();
+		gout->normalize();
+		int failed = gin->compareTo(gout);
+		if ( failed ) cout<<"{"<<i<<"} (WKB) ";
+		else cout<<"["<<i<<"] (WKB) ";
+
+		cout<<s<<endl;
+
+		if ( failed ) {
+			WKTWriter wkt;
+			cout<<"  IN: "<<wkt.write(gin)<<endl;
+			cout<<" OUT: "<<wkt.write(gout)<<endl;
+		}
+
+	}
+
+}
+
+
 // This function will print given geometries in WKT
-// format to stdout.
+// format to stdout. As a side-effect, will test WKB
+// output and input, using the WKBtest function.
 void
 wkt_print_geoms(vector<Geometry *> *geoms)
 {
+	WKBtest(geoms); // test WKB parser
+
 	// WKT-print given geometries
 	WKTWriter *wkt = new WKTWriter();
 	for (unsigned int i=0; i<geoms->size(); i++) {
 		const Geometry *g = (*geoms)[i];
 		string tmp=wkt->write(g);
-		cout<<"["<<i<<"] "<<tmp<<endl;
+		cout<<"["<<i<<"] (WKT) "<<tmp<<endl;
 	}
 	delete wkt;
 }
@@ -238,8 +346,7 @@ void do_all()
 {
 	vector<Geometry *> *geoms = new vector<Geometry *>;
 	vector<Geometry *> *newgeoms;
-	//Geometry *geom;
-
+	
 	// Define a precision model using 0,0 as the reference origin
 	// and 2.0 as coordinates scale.
 	PrecisionModel *pm = new PrecisionModel(2.0, 0, 0);
@@ -936,6 +1043,11 @@ main()
 		delete exc;
 		exit(1);
 	}
+	catch (exception e)
+	{
+		cerr <<"Standard exception thrown: "<<e.what()<<endl;
+		exit(1);
+	}
 	// and this is a catch-all non standard ;)
 	catch (...)
 	{
@@ -953,6 +1065,14 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2005/04/29 15:34:20  strk
+ * Typedef'ed biostringstream, preferred parameter for
+ * WKB parser templates.
+ * Added << operator for biostringstream.
+ * Typedef'ed WKBWriter and WKBReader to be parametrized by
+ * biostringstream.
+ * Added WKBtest in doc/example.cpp
+ *
  * Revision 1.26  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -21,6 +21,8 @@
 #include <geos/platform.h>
 #include <geos/ByteOrderDataInStreamT.h>
 
+#define DEBUG_WKB_READER 0
+
 namespace geos {
 
 /*
@@ -114,7 +116,7 @@ template<class T> string WKBReaderT<T>::BAD_GEOM_TYPE_MSG = "bad geometry type e
 template<class T> Geometry *
 WKBReaderT<T>::read(T &is)
 {
-	dis.setInStream(&is);
+	dis.setInStream(&is); // will default to machine endian
 	inputDimension = 2; // handle 2d only for now
 
 	// only allocate ordValues buffer if necessary
@@ -129,14 +131,27 @@ WKBReaderT<T>::readGeometry()
 {
 	// determine byte order
 	byte byteOrder = dis.readByte();
-	// default is big endian
+
+#if DEBUG_WKB_READER
+	cout<<"WKB byteOrder: "<<(int)byteOrder<<endl;
+#endif
+
+	// default is machine endian
 	if (byteOrder == WKBConstants::wkbNDR)
 		dis.setOrder(ByteOrderValues::ENDIAN_LITTLE);
 
 	int typeInt = dis.readInt();
+#if DEBUG_WKB_READER
+	cout<<"WKB type: "<<typeInt<<endl;
+#endif
+
 	int geometryType = typeInt & 0xff;
 	bool hasZ = (typeInt & 0x80000000) != 0;
 	if (hasZ) inputDimension = 3;
+
+#if DEBUG_WKB_READER
+	cout<<"WKB dimensions: "<<inputDimension<<endl;
+#endif
 
 	switch (geometryType) {
 		case WKBConstants::wkbPoint :
@@ -161,6 +176,9 @@ template<class T> Point *
 WKBReaderT<T>::readPoint()
 {
 	readCoordinate();
+#if DEBUG_WKB_READER
+	cout<<"Coordinates: "<<ordValues[0]<<","<<ordValues[1]<<endl;
+#endif
 	return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
 }
 
@@ -318,6 +336,10 @@ WKBReaderT<T>::readCoordinate()
 		ordValues[i] = dis.readDouble();
 	}
 }
+
+// biostringstream-based WKB reader
+typedef WKBReaderT<biostringstream> WKBReader;
+
 
 } // namespace geos
 

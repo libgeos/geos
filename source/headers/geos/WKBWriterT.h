@@ -23,11 +23,12 @@
 
 namespace geos {
 
+
 /**
  *
  * \class WKBWriterT io.h geos.h
  *
- * Writes a Geometry} into Well-Known Binary format.
+ * Writes a Geometry into Well-Known Binary format.
  * Supports use of an OutStream, which allows easy use
  * with arbitary byte stream sinks.
  * 
@@ -137,8 +138,17 @@ WKBWriterT<T>::writePoint(const Point &g)
 IllegalArgumentException("Empty Points cannot be represented in WKB");
 
 	writeByteOrder();
+#if DEBUG_WKB_WRITER
+	cout<<"ByteOrder: "<<*outStream<<endl;
+#endif
 	writeGeometryType(WKBConstants::wkbPoint);
+#if DEBUG_WKB_WRITER
+	cout<<"GeometryType: "<<*outStream<<endl;
+#endif
 	writeCoordinateSequence(*(g.getCoordinatesRO()), false);
+#if DEBUG_WKB_WRITER
+	cout<<"CoordinateSequence: "<<*outStream<<endl;
+#endif
 }
 
 template<class T> void
@@ -210,6 +220,9 @@ template<class T> void
 WKBWriterT<T>::writeCoordinate(const CoordinateSequence &cs, int idx,
 	bool is3d) 
 {
+#if DEBUG_WKB_WRITER
+	cout<<"writeCoordinate: X:"<<cs.getX(idx)<<" Y:"<<cs.getY(idx)<<endl;
+#endif
 	ByteOrderValues::putDouble(cs.getX(idx), buf, byteOrder);
 	outStream->write(buf, 8);
 	ByteOrderValues::putDouble(cs.getY(idx), buf, byteOrder);
@@ -223,12 +236,23 @@ WKBWriterT<T>::writeCoordinate(const CoordinateSequence &cs, int idx,
 	}
 }
 
+// biostringstream-based WKB writer
+typedef WKBWriterT<biostringstream> WKBWriter;
+
 } // namespace geos
 
 #endif // _WKBWRITERT_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2005/04/29 15:34:21  strk
+ * Typedef'ed biostringstream, preferred parameter for
+ * WKB parser templates.
+ * Added << operator for biostringstream.
+ * Typedef'ed WKBWriter and WKBReader to be parametrized by
+ * biostringstream.
+ * Added WKBtest in doc/example.cpp
+ *
  * Revision 1.1  2005/04/29 11:52:40  strk
  * Added new JTS interfaces for CoordinateSequence and factories,
  * removed example implementations to reduce maintainance costs.
