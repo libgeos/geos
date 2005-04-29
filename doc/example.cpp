@@ -58,7 +58,7 @@ GeometryFactory *global_factory;
 void WKBtest(vector<Geometry*>*geoms)
 {
 	biostringstream s;
-	WKBReader wkbReader;
+	WKBReader wkbReader(*global_factory);
 	WKBWriter wkbWriter;
 	Geometry *gout;
 
@@ -1065,6 +1065,10 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2005/04/29 16:36:28  strk
+ * Made WKBReader use global_factory, for having WKB reads produce
+ * same context of input geoms.
+ *
  * Revision 1.27  2005/04/29 15:34:20  strk
  * Typedef'ed biostringstream, preferred parameter for
  * WKB parser templates.
