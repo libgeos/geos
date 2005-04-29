@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <string>
 #include <geos/platform.h>
@@ -34,16 +35,24 @@ typedef basic_stringstream<byte> biostringstream;
 
 // biostringstream output
 inline ostream &operator<<(ostream &s, biostringstream &o) {
-	long pos = o.tellg(); // take note of get pointer
+
+	ios_base::fmtflags fl = s.flags(); // take note of output stream flags
+
+	// Set hex,uppercase,fill and width output stream flags
+	s.setf(ios::uppercase);
+	s.setf(ios::hex, ios::basefield);
+	s.setf(ios::hex, ios::basefield);
+	s.fill('0');
+
+	long pos = o.tellg(); // take note of input stream get pointer
 	o.seekg(0, ios::beg); // rewind
-	s<<hex<<uppercase;
+
 	byte each=0;
-	while(o.read(&each, 1)) {
-		s<<(int)each<<"-";
-	}
-	s<<dec;
-	o.clear();
-	o.seekg(pos);
+	while(o.read(&each, 1)) s<<setw(2)<<(int)each;
+
+	o.clear(); // clear input stream eof flag
+	o.seekg(pos); // reset input stream position
+	s.setf(fl);  // reset output stream status
 	return s;
 }
 
@@ -263,6 +272,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/04/29 16:36:43  strk
+ * Fixed biostringstream stream output.
+ *
  * Revision 1.9  2005/04/29 15:34:21  strk
  * Typedef'ed biostringstream, preferred parameter for
  * WKB parser templates.
