@@ -1,3 +1,7 @@
+- WKB tester in doc/examples.cpp should do point-by-point comparison.
+
+- WKB extension with LINEARRIN ?
+
 - DoubleBits misregards BYTE_ENDIAN, must check it.
 
 - Have IsValidOp handle all possible exceptions thrown by
