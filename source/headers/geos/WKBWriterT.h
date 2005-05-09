@@ -112,7 +112,7 @@ private:
 };
 
 template<class T> void
-WKBWriterT<T>::write(const Geometry &g, T &os=outStream) 
+WKBWriterT<T>::write(const Geometry &g, T &os) 
 {
 	outStream = &os;
 
@@ -257,6 +257,9 @@ typedef WKBWriterT<biostringstream> WKBWriter;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2005/05/09 21:17:57  strk
+ * Second argument to ::write made mandatory.
+ *
  * Revision 1.3  2005/04/29 17:40:36  strk
  * Updated Doxygen documentation and some Copyright headers.
  *
