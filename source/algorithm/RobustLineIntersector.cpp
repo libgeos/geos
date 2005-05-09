@@ -393,7 +393,10 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 	Coordinate n3=q1;
 	Coordinate n4=q2;
 	Coordinate normPt;
-	normalize(&n1, &n2, &n3, &n4, &normPt);
+
+	//normalize(&n1, &n2, &n3, &n4, &normPt);
+	normalizeToEnvCentre(n1, n2, n3, n4, normPt);
+
 	Coordinate *intPt=NULL;
 
 #if DEBUG
@@ -422,16 +425,28 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 
 	intPt->x+=normPt.x;
 	intPt->y+=normPt.y;
-	if (precisionModel!=NULL) {
-		precisionModel->makePrecise(intPt);
-	}
 
-    /**
-     * MD - after fairly extensive testing
-     * it appears that the computed intPt always lies in the segment envelopes
-     */
-    //if (! isInSegmentEnvelopes(intPt))
-    //    System.out.println("outside segment envelopes: " + intPt);
+/**
+ *
+ * MD - May 4 2005 - This is still a problem.  Here is a failure case:
+ *
+ * LINESTRING (2089426.5233462777 1180182.3877339689,
+ *             2085646.6891757075 1195618.7333999649)
+ * LINESTRING (1889281.8148903656 1997547.0560044837,
+ *             2259977.3672235999 483675.17050843034)
+ * int point = (2097408.2633752143,1144595.8008114607)
+ */
+
+#if DEBUG
+	if (! isInSegmentEnvelopes(intPt)) 
+	{
+		cerr<<"Intersection outside segment envelopes: "<<
+			intPt->toString();
+	}
+#endif
+ 
+	if (precisionModel!=NULL) precisionModel->makePrecise(intPt);
+
 
 #if COMPUTE_Z
 	double ztot = 0;
@@ -507,11 +522,59 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 	return env0->contains(intPt) && env1->contains(intPt);
 }
 
+void
+RobustLineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
+		Coordinate &n10, Coordinate &n11, Coordinate &normPt) const
+{
+	double minX0 = n00.x < n01.x ? n00.x : n01.x;
+	double minY0 = n00.y < n01.y ? n00.y : n01.y;
+	double maxX0 = n00.x > n01.x ? n00.x : n01.x;
+	double maxY0 = n00.y > n01.y ? n00.y : n01.y;
+	
+	double minX1 = n10.x < n11.x ? n10.x : n11.x;
+	double minY1 = n10.y < n11.y ? n10.y : n11.y;
+	double maxX1 = n10.x > n11.x ? n10.x : n11.x;
+	double maxY1 = n10.y > n11.y ? n10.y : n11.y;
+	
+	double intMinX = minX0 > minX1 ? minX0 : minX1;
+	double intMaxX = maxX0 < maxX1 ? maxX0 : maxX1;
+	double intMinY = minY0 > minY1 ? minY0 : minY1;
+	double intMaxY = maxY0 < maxY1 ? maxY0 : maxY1;
+	
+	double intMidX = (intMinX + intMaxX) / 2.0;
+	double intMidY = (intMinY + intMaxY) / 2.0;
+
+	normPt.x = intMidX;
+	normPt.y = intMidY;
+
+	n00.x -= normPt.x;    n00.y -= normPt.y;
+	n01.x -= normPt.x;    n01.y -= normPt.y;
+	n10.x -= normPt.x;    n10.y -= normPt.y;
+	n11.x -= normPt.x;    n11.y -= normPt.y;
+
+#if COMPUTE_Z
+	double minZ0 = n00.z < n01.z ? n00.z : n01.z;
+	double minZ1 = n10.z < n11.z ? n10.z : n11.z;
+	double maxZ0 = n00.z > n01.z ? n00.z : n01.z;
+	double maxZ1 = n10.z > n11.z ? n10.z : n11.z;
+	double intMinZ = minZ0 > minZ1 ? minZ0 : minZ1;
+	double intMaxZ = maxZ0 < maxZ1 ? maxZ0 : maxZ1;
+	double intMidZ = (intMinZ + intMaxZ) / 2.0;
+	normPt.z = intMidZ;
+	n00.z -= normPt.z;
+	n01.z -= normPt.z;
+	n10.z -= normPt.z;
+	n11.z -= normPt.z;
+#endif
+}
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2005/05/09 10:35:20  strk
+ * Ported JTS robustness patches made by Martin on suggestions by Kevin.
+ *
  * Revision 1.32  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2005/05/09 10:35:20  strk
+ * Ported JTS robustness patches made by Martin on suggestions by Kevin.
+ *
  * Revision 1.10  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
@@ -325,27 +328,61 @@ public:
 };
 
 class RobustLineIntersector: public LineIntersector {
+
 public:
+
 	RobustLineIntersector();
+
 	virtual ~RobustLineIntersector();
-	void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
-	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
+
+	void computeIntersection(const Coordinate& p,
+		const Coordinate& p1, const Coordinate& p2);
+
+	int computeIntersect(const Coordinate& p1, const Coordinate& p2,
+		const Coordinate& q1, const Coordinate& q2);
+
 private:
+
 //	bool between(Coordinate& p1,Coordinate& p2,Coordinate& q);
-	int computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
-	Coordinate* intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const;
-	void normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt) const;
-	double smallestInAbsValue(double x1,double x2,double x3,double x4) const;
+
+	int computeCollinearIntersection(const Coordinate& p1,
+		const Coordinate& p2, const Coordinate& q1,
+		const Coordinate& q2);
+
+	Coordinate* intersection(const Coordinate& p1, const Coordinate& p2,
+		const Coordinate& q1, const Coordinate& q2) const;
+
+	void normalize(Coordinate *n1, Coordinate *n2,
+		Coordinate *n3, Coordinate *n4, Coordinate *normPt) const;
+
+	double smallestInAbsValue(double x1, double x2,
+		double x3, double x4) const;
+
 	/**
-	* Test whether a point lies in the envelopes of both input segments.
-	* A correctly computed intersection point should return <code>true</code>
-	* for this test.
-	* Since this test is for debugging purposes only, no attempt is
-	* made to optimize the envelope test.
-	*
-	* @return <code>true</code> if the input point lies within both input segment envelopes
-	*/
+	 * Test whether a point lies in the envelopes of both input segments.
+	 * A correctly computed intersection point should return true
+	 * for this test.
+	 * Since this test is for debugging purposes only, no attempt is
+	 * made to optimize the envelope test.
+	 *
+	 * @return true if the input point lies within both
+	 *         input segment envelopes
+	 */
 	bool isInSegmentEnvelopes(const Coordinate& intPt);
+
+	/**
+	 * Normalize the supplied coordinates to
+	 * so that the midpoint of their intersection envelope
+	 * lies at the origin.
+	 *
+	 * @param n00
+	 * @param n01
+	 * @param n10
+	 * @param n11
+	 * @param normPt
+	 */
+	void normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
+		Coordinate &n10, Coordinate &n11, Coordinate &normPt) const;
 };
 
 class NonRobustLineIntersector: public LineIntersector {
