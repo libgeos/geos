@@ -1456,7 +1456,7 @@ public:
 	 * Returns true if the two Geometrys are exactly equal,
 	 * up to a specified tolerance.
 	 */
-	virtual bool equalsExact(const Geometry *other, double tolerance)
+	virtual bool equalsExact(const Geometry *other, double tolerance=0)
 		const=0; //Abstract
 
 	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
@@ -1859,7 +1859,7 @@ public:
 	virtual string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
-	virtual bool equalsExact(const Geometry *other, double tolerance) const;
+	virtual bool equalsExact(const Geometry *other, double tolerance=0) const;
 
 	virtual void apply_ro(CoordinateFilter *filter) const;
 	virtual void apply_rw(CoordinateFilter *filter);
@@ -1959,7 +1959,7 @@ public:
 	void apply_rw(GeometryFilter *filter);
 	void apply_rw(GeometryComponentFilter *filter);
 	void apply_ro(GeometryComponentFilter *filter) const;
-	bool equalsExact(const Geometry *other, double tolerance) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 	void normalize(void) { };
 protected:
 	Envelope* computeEnvelopeInternal() const;
@@ -2024,7 +2024,8 @@ public:
 	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
 	virtual bool isCoordinate(Coordinate& pt) const;
-	virtual bool equalsExact(const Geometry *other, double tolerance) const;
+	virtual bool equalsExact(const Geometry *other, double tolerance=0)
+		const;
 	virtual void apply_rw(CoordinateFilter *filter);
 	virtual void apply_ro(CoordinateFilter *filter) const;
 	virtual void apply_rw(GeometryFilter *filter);
@@ -2169,7 +2170,7 @@ public:
 
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
-	bool equalsExact(const Geometry *other, double tolerance) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 	void apply_rw(CoordinateFilter *filter);
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(GeometryFilter *filter);
@@ -2241,7 +2242,7 @@ public:
 	virtual GeometryTypeId getGeometryTypeId() const;
 	//bool isValid() const;
 	bool isSimple() const;
-	bool equalsExact(const Geometry *other, double tolerance) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 protected:
 	const Coordinate* getCoordinate(int n) const;
 private:
@@ -2299,7 +2300,7 @@ public:
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
 	bool isSimple() const;
-	bool equalsExact(const Geometry *other, double tolerance) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 private:
 #ifdef INT64_CONST_IS_I64
 	static const int64 serialVersionUID = 8166665132445433741I64;
@@ -2357,7 +2358,7 @@ public:
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isSimple() const;
-	bool equalsExact(const Geometry *other, double tolerance) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 private:
 #ifdef INT64_CONST_IS_I64
 	static const int64 serialVersionUID = -551033529766975875I64;
@@ -2565,6 +2566,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2005/05/13 18:06:11  strk
+ * Added default tolerance parameter for equalsExact
+ *
  * Revision 1.42  2005/04/29 17:40:36  strk
  * Updated Doxygen documentation and some Copyright headers.
  *
