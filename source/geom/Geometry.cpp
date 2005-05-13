@@ -831,9 +831,14 @@ bool greaterThen(Geometry *first, Geometry *second) {
 }
 
 bool
-Geometry::equal(const Coordinate& a, const Coordinate& b,double tolerance) const
+Geometry::equal(const Coordinate& a, const Coordinate& b,
+	double tolerance) const
 {
-	if (tolerance==0) {return a==b;}
+	if (tolerance==0)
+	{
+		return a == b; // 2D only !!!
+	}
+	double dist=a.distance(b);
 	return a.distance(b)<=tolerance;
 }
 
@@ -863,6 +868,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.75  2005/05/13 17:14:54  strk
+ * Added comment about 2D-only comparison of ::equal(Coordinate, Coordinate, double)
+ *
  * Revision 1.74  2005/04/29 17:40:35  strk
  * Updated Doxygen documentation and some Copyright headers.
  *
