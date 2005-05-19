@@ -5,14 +5,39 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/opOverlay.h>
+#include <stdio.h>
+
+namespace geos {
+
+MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory,CGAlgorithms *cga):
+	EdgeRing(start,geometryFactory)
+{
+	computePoints(start);
+	computeRing();
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.10  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.9  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -27,28 +52,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/opOverlay.h>
-#include <stdio.h>
-
-namespace geos {
-
-MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory,CGAlgorithms *cga):
-	EdgeRing(start,geometryFactory,cga){
-	computePoints(start);
-	computeRing();
-}
-
-MinimalEdgeRing::~MinimalEdgeRing(){
-}
-
-DirectedEdge* MinimalEdgeRing::getNext(DirectedEdge *de) {
-	return de->getNextMin();
-}
-
-void MinimalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er) {
-	de->setMinEdgeRing(er);
-}
-}
 

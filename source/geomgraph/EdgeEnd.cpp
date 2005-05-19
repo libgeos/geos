@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -121,6 +122,14 @@ string EdgeEnd::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.5  2005/04/06 11:09:41  strk
  * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
  *

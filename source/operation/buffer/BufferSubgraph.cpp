@@ -5,56 +5,34 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.13  2005/02/04 18:49:48  strk
- * Changed ::computeDepths to use a set instead of a vector for checking
- * visited Edges.
- *
- * Revision 1.12  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.11  2004/07/07 07:52:13  strk
- * Removed note about required speedup in BufferSubgraph.
- * I've made tests with 'sets' and there is actually a big slow down..
- *
- * Revision 1.10  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2004/05/19 12:50:53  strk
- * Removed all try/catch blocks transforming stack allocated-vectors to auto-heap-allocations
- *
- * Revision 1.8  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.7  2004/05/03 17:15:38  strk
- * leaks on exception fixed.
- *
- * Revision 1.6  2004/04/16 12:48:07  strk
- * Leak fixes.
- *
- * Revision 1.5  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/opBuffer.h>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 namespace geos {
-BufferSubgraph::BufferSubgraph(CGAlgorithms *cga) {
-	dirEdgeList=new vector<DirectedEdge*>();
-	nodes=new vector<Node*>();
-	rightMostCoord=NULL;
-	finder=new RightmostEdgeFinder(cga);
+
+// Argument is unused
+BufferSubgraph::BufferSubgraph(CGAlgorithms *cga):
+	dirEdgeList(new vector<DirectedEdge*>()),
+	nodes(new vector<Node*>()),
+	rightMostCoord(NULL),
+	finder(new RightmostEdgeFinder())
+{
+	//dirEdgeList=new vector<DirectedEdge*>();
+	//nodes=new vector<Node*>();
+	//rightMostCoord=NULL;
+	//finder=new RightmostEdgeFinder(cga);
 }
 
 BufferSubgraph::~BufferSubgraph() {
@@ -63,39 +41,28 @@ BufferSubgraph::~BufferSubgraph() {
 	delete finder;
 }
 
-vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() { 
-	return dirEdgeList;
-}
-vector<Node*>* BufferSubgraph::getNodes() { 
-	return nodes;
-}
-
 /**
-* Gets the rightmost coordinate in the edges of the subgraph
-*/
-Coordinate* BufferSubgraph::getRightmostCoordinate() {
-	return rightMostCoord;
-}
-
-/**
-* Creates the subgraph consisting of all edges reachable from this node.
-* Finds the edges in the graph and the rightmost coordinate.
-*
-* @param node a node to start the graph traversal from
-*/
-void BufferSubgraph::create(Node *node) {
+ * Creates the subgraph consisting of all edges reachable from this node.
+ * Finds the edges in the graph and the rightmost coordinate.
+ *
+ * @param node a node to start the graph traversal from
+ */
+void BufferSubgraph::create(Node *node)
+{
 	addReachable(node);
 	finder->findEdge(dirEdgeList);
 	rightMostCoord=&(finder->getCoordinate());
 }
 
 /**
-* Adds all nodes and edges reachable from this node to the subgraph.
-* Uses an explicit stack to avoid a large depth of recursion.
-*
-* @param node a node known to be in the subgraph
-*/
-void BufferSubgraph::addReachable(Node *startNode) {
+ * Adds all nodes and edges reachable from this node to the subgraph.
+ * Uses an explicit stack to avoid a large depth of recursion.
+ *
+ * @param node a node known to be in the subgraph
+ */
+void
+BufferSubgraph::addReachable(Node *startNode)
+{
 	vector<Node*> *nodeStack=new vector<Node*>();
 	nodeStack->push_back(startNode);
 	while (!nodeStack->empty()) {
@@ -107,11 +74,13 @@ void BufferSubgraph::addReachable(Node *startNode) {
 }
 
 /**
-* Adds the argument node and all its out edges to the subgraph
-* @param node the node to add
-* @param nodeStack the current set of nodes being traversed
-*/
-void BufferSubgraph::add(Node *node, vector<Node*> *nodeStack){
+ * Adds the argument node and all its out edges to the subgraph
+ * @param node the node to add
+ * @param nodeStack the current set of nodes being traversed
+ */
+void
+BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
+{
 	node->setVisited(true);
 	nodes->push_back(node);
 	vector<EdgeEnd*> *ees=node->getEdges()->getEdges();
@@ -129,14 +98,18 @@ void BufferSubgraph::add(Node *node, vector<Node*> *nodeStack){
 	}
 }
 
-void BufferSubgraph::clearVisitedEdges() {
+void
+BufferSubgraph::clearVisitedEdges()
+{
 	for(int i=0;i<(int)dirEdgeList->size();i++) {
 		DirectedEdge *de=(*dirEdgeList)[i];
 		de->setVisited(false);
 	}
 }
 
-void BufferSubgraph::computeDepth(int outsideDepth) {
+void
+BufferSubgraph::computeDepth(int outsideDepth)
+{
 	clearVisitedEdges();
 	// find an outside edge to assign depth to
 	DirectedEdge *de=finder->getEdge();
@@ -176,52 +149,68 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	}
 }
 
-void BufferSubgraph::copySymDepths(DirectedEdge *de){
+void
+BufferSubgraph::copySymDepths(DirectedEdge *de)
+{
 	DirectedEdge *sym=de->getSym();
 	sym->setDepth(Position::LEFT, de->getDepth(Position::RIGHT));
 	sym->setDepth(Position::RIGHT, de->getDepth(Position::LEFT));
 }
 
 /**
-* Find all edges whose depths indicates that they are in the result area(s).
-* Since we want polygon shells to be
-* oriented CW, choose dirEdges with the interior of the result on the RHS.
-* Mark them as being in the result.
-* Interior Area edges are the result of dimensional collapses.
-* They do not form part of the result area boundary.
-*/
-void BufferSubgraph::findResultEdges() {
-	for(int i=0;i<(int)dirEdgeList->size();i++) {
+ * Find all edges whose depths indicates that they are in the result area(s).
+ * Since we want polygon shells to be
+ * oriented CW, choose dirEdges with the interior of the result on the RHS.
+ * Mark them as being in the result.
+ * Interior Area edges are the result of dimensional collapses.
+ * They do not form part of the result area boundary.
+ */
+void
+BufferSubgraph::findResultEdges()
+{
+#if DEBUG
+	cerr<<"BufferSubgraph::findResultEdges got "<<dirEdgeList->size()<<" edges"<<endl;
+#endif
+	for(unsigned int i=0; i<dirEdgeList->size(); ++i)
+	{
 		DirectedEdge *de=(*dirEdgeList)[i];
+
 		/**
-		* Select edges which have an interior depth on the RHS
-		* and an exterior depth on the LHS.
-		* Note that because of weird rounding effects there may be
-		* edges which have negative depths!  Negative depths
-		* count as "outside".
-		*/
+		 * Select edges which have an interior depth on the RHS
+		 * and an exterior depth on the LHS.
+		 * Note that because of weird rounding effects there may be
+		 * edges which have negative depths!  Negative depths
+		 * count as "outside".
+		 */
 		// <FIX> - handle negative depths
-		if (	de->getDepth(Position::RIGHT)>=1
+#if DEBUG
+		cerr<<" dirEdge "<<i<<": depth:"<<de->getDepth(Position::RIGHT)<<endl;
+#endif
+		if ( de->getDepth(Position::RIGHT)>=1
 			&&  de->getDepth(Position::LEFT)<=0
 			&& !de->isInteriorAreaEdge()) {
 					de->setInResult(true);
-					//Debug.print("in result "); Debug.println(de);
+#if DEBUG
+					cerr<<"   in result"<<endl;
+#endif
 		}
 	}
 }
 
 /**
-* BufferSubgraphs are compared on the x-value of their rightmost Coordinate.
-* This defines a partial ordering on the graphs such that:
-* <p>
-* g1 >= g2 <==> Ring(g2) does not contain Ring(g1)
-* <p>
-* where Polygon(g) is the buffer polygon that is built from g.
-* <p>
-* This relationship is used to sort the BufferSubgraphs so that shells are guaranteed to
-* be built before holes.
-*/
-int BufferSubgraph::compareTo(void* o) {
+ * BufferSubgraphs are compared on the x-value of their rightmost Coordinate.
+ * This defines a partial ordering on the graphs such that:
+ * 
+ * g1 >= g2 <==> Ring(g2) does not contain Ring(g1)
+ * 
+ * where Polygon(g) is the buffer polygon that is built from g.
+ * 
+ * This relationship is used to sort the BufferSubgraphs so that shells are
+ * guaranteed to be built before holes.
+ */
+int
+BufferSubgraph::compareTo(void* o)
+{
 	BufferSubgraph *graph=(BufferSubgraph*) o;
 	if (rightMostCoord->x<graph->rightMostCoord->x) {
 		return -1;
@@ -233,11 +222,15 @@ int BufferSubgraph::compareTo(void* o) {
 }
 
 /**
-* Compute depths for all dirEdges via breadth-first traversal of nodes in graph
-* @param startEdge edge to start processing with
-*/
+ * Compute depths for all dirEdges via breadth-first traversal of
+ * nodes in graph.
+ *
+ * @param startEdge edge to start processing with
+ */
 // <FIX> MD - use iteration & queue rather than recursion, for speed and robustness
-void BufferSubgraph::computeDepths(DirectedEdge *startEdge){
+void
+BufferSubgraph::computeDepths(DirectedEdge *startEdge)
+{
 	//vector<Node*> nodesVisited; //Used to be a HashSet
 	set<Node *>nodesVisited;
 	vector<Node*> nodeQueue;
@@ -282,14 +275,50 @@ BufferSubgraph::contains(set<Node*>&nodes,Node *node)
 	//bool result=false;
 	if ( nodes.find(node) != nodes.end() ) return true;
 	return false;
-	//unsigned int nnodes=nodes->size();
-	//for(unsigned int i=0; i<nnodes; i++) {
-		//if (node==(*nodes)[i]) {
-			//result=true;
-			//break;
-		//}
-	//}
-	//return result;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.14  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
+ * Revision 1.13  2005/02/04 18:49:48  strk
+ * Changed ::computeDepths to use a set instead of a vector for checking
+ * visited Edges.
+ *
+ * Revision 1.12  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.11  2004/07/07 07:52:13  strk
+ * Removed note about required speedup in BufferSubgraph.
+ * I've made tests with 'sets' and there is actually a big slow down..
+ *
+ * Revision 1.10  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.9  2004/05/19 12:50:53  strk
+ * Removed all try/catch blocks transforming stack allocated-vectors to auto-heap-allocations
+ *
+ * Revision 1.8  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
+ * Revision 1.7  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
+ * Revision 1.6  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
+ * Revision 1.5  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

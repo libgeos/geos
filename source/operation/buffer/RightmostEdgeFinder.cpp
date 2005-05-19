@@ -5,60 +5,34 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.10  2005/02/22 17:10:47  strk
- * Reduced CoordinateSequence::getSize() calls.
- *
- * Revision 1.9  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.8  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- * Revision 1.6  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.5  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- *
  **********************************************************************/
-
 
 #include <geos/opBuffer.h>
 #include <geos/util.h>
 
 namespace geos {
 
-RightmostEdgeFinder::RightmostEdgeFinder(CGAlgorithms *newCga){
-	cga=newCga;
+/*
+ * Argument kept for backward-compatibility. Actually unused.
+ */
+RightmostEdgeFinder::RightmostEdgeFinder(CGAlgorithms *newCga)
+{
 	minIndex=-1;
 	minDe=NULL;
 	orientedDe=NULL;
 	minCoord.setNull();
 }
-DirectedEdge* RightmostEdgeFinder::getEdge() {
-	return orientedDe;
-}
 
-Coordinate& RightmostEdgeFinder::getCoordinate() {
-	return minCoord;
-}
-
-void RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList){
+void
+RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList)
+{
 	/**
 	* Check all forward DirectedEdges only.  This is still general,
 	* because each edge has a forward DirectedEdge.
@@ -91,7 +65,9 @@ void RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList){
 	}
 }
 
-void RightmostEdgeFinder::findRightmostEdgeAtNode(){
+void
+RightmostEdgeFinder::findRightmostEdgeAtNode()
+{
 	Node *node=minDe->getNode();
 	DirectedEdgeStar *star=(DirectedEdgeStar*) node->getEdges();
 	minDe=star->getRightmostEdge();
@@ -103,7 +79,9 @@ void RightmostEdgeFinder::findRightmostEdgeAtNode(){
 	}
 }
 
-void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
+void
+RightmostEdgeFinder::findRightmostEdgeAtVertex()
+{
 	/**
 	* The rightmost point is an interior vertex, so it has a segment on either side of it.
 	* If these segments are both above or below the rightmost point, we need to
@@ -114,7 +92,7 @@ void RightmostEdgeFinder::findRightmostEdgeAtVertex() {
 	Assert::isTrue(minIndex>0 && minIndex<pts->getSize(), "rightmost point expected to be interior vertex of edge");
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
-	int orientation=cga->computeOrientation(minCoord,pNext,pPrev);
+	int orientation=CGAlgorithms::computeOrientation(minCoord,pNext,pPrev);
 	bool usePrev=false;
 	// both segments are below min point
 	if (pPrev.y<minCoord.y && pNext.y<minCoord.y
@@ -151,7 +129,9 @@ RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de)
 	}
 }
 
-int RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index){
+int
+RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index)
+{
 	int side=getRightmostSideOfSegment(de,index);
 	if (side<0)
 		side=getRightmostSideOfSegment(de,index-1);
@@ -163,7 +143,9 @@ int RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index){
 	return side;
 }
 
-int RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i){
+int
+RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
+{
 	Edge *e=de->getEdge();
 	const CoordinateSequence *coord=e->getCoordinates();
 	if (i<0 || i+1>=coord->getSize()) return -1;
@@ -172,5 +154,40 @@ int RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i){
 	if (coord->getAt(i).y<coord->getAt(i+1).y) pos=Position::RIGHT;
 	return pos;
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.11  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
+ * Revision 1.10  2005/02/22 17:10:47  strk
+ * Reduced CoordinateSequence::getSize() calls.
+ *
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.8  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.7  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ * Revision 1.6  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.5  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ *
+ **********************************************************************/
 

@@ -5,75 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.11  2005/05/09 10:35:20  strk
- * Ported JTS robustness patches made by Martin on suggestions by Kevin.
- *
- * Revision 1.10  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.9  2004/11/23 19:53:07  strk
- * Had LineIntersector compute Z by interpolation.
- *
- * Revision 1.8  2004/11/06 08:16:46  strk
- * Fixed CGAlgorithms::isCCW from JTS port.
- * Code cleanup in IsValidOp.
- *
- * Revision 1.7  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.6  2004/09/13 10:12:49  strk
- * Added invalid coordinates checks in IsValidOp.
- * Cleanups.
- *
- * Revision 1.5  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.4  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/07 10:29:54  strk
- * Adjusted exceptions documentation.
- *
- * Revision 1.2  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.32  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.31  2004/04/20 12:47:57  strk
- * MinimumDiameter leaks plugged.
- *
- * Revision 1.30  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.29  2004/02/27 17:42:15  strk
- * made CGAlgorithms::signedArea() and CGAlgorithms::length() arguments const-correct
- *
- * Revision 1.28  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_ALGORITHM_H
 #define GEOS_ALGORITHM_H
@@ -551,7 +490,7 @@ public:
 	void add(const CoordinateSequence *ring);
 	Coordinate* getCentroid() const;
 private:
-	CGAlgorithms *cga;
+	//CGAlgorithms *cga;
 	Coordinate* basePt;// the point all triangles are based at
 	Coordinate* triangleCent3;// temporary variable to hold centroid of triangle
 	double areasum2;        /* Partial area sum */
@@ -768,5 +707,78 @@ public:
 	LineString* getDiameter();
 };
 
-}
+} // namespace geos
+
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.12  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
+ * Revision 1.11  2005/05/09 10:35:20  strk
+ * Ported JTS robustness patches made by Martin on suggestions by Kevin.
+ *
+ * Revision 1.10  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
+ * Revision 1.9  2004/11/23 19:53:07  strk
+ * Had LineIntersector compute Z by interpolation.
+ *
+ * Revision 1.8  2004/11/06 08:16:46  strk
+ * Fixed CGAlgorithms::isCCW from JTS port.
+ * Code cleanup in IsValidOp.
+ *
+ * Revision 1.7  2004/10/21 22:29:54  strk
+ * Indentation changes and some more COMPUTE_Z rules
+ *
+ * Revision 1.6  2004/09/13 10:12:49  strk
+ * Added invalid coordinates checks in IsValidOp.
+ * Cleanups.
+ *
+ * Revision 1.5  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.4  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.3  2004/07/07 10:29:54  strk
+ * Adjusted exceptions documentation.
+ *
+ * Revision 1.2  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.32  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.31  2004/04/20 12:47:57  strk
+ * MinimumDiameter leaks plugged.
+ *
+ * Revision 1.30  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
+ * Revision 1.29  2004/02/27 17:42:15  strk
+ * made CGAlgorithms::signedArea() and CGAlgorithms::length() arguments const-correct
+ *
+ * Revision 1.28  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+

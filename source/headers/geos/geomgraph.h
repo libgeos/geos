@@ -492,28 +492,36 @@ class DirectedEdge: public EdgeEnd{
 public:
 	static int depthFactor(int currLocation, int nextLocation);
 	DirectedEdge();	
-	virtual ~DirectedEdge();	
+	//virtual ~DirectedEdge();	
 	DirectedEdge(Edge *newEdge, bool newIsForward);
-	Edge* getEdge();
-	void setInResult(bool newIsInResult);
-	bool isInResult();
-	bool isVisited();
-	void setVisited(bool newIsVisited);
-	void setEdgeRing(EdgeRing *newEdgeRing);
-	EdgeRing* getEdgeRing();
-	void setMinEdgeRing(EdgeRing *newMinEdgeRing);
-	EdgeRing* getMinEdgeRing();
-	int getDepth(int position);
+	inline Edge* getEdge();
+	inline void setInResult(bool newIsInResult);
+	inline bool isInResult();
+	inline bool isVisited();
+	inline void setVisited(bool newIsVisited);
+	inline void setEdgeRing(EdgeRing *newEdgeRing);
+	inline EdgeRing* getEdgeRing();
+	inline void setMinEdgeRing(EdgeRing *newMinEdgeRing);
+	inline EdgeRing* getMinEdgeRing();
+	inline int getDepth(int position);
 	void setDepth(int position, int newDepth);
 	int getDepthDelta();
 	void setVisitedEdge(bool newIsVisited);
-	DirectedEdge* getSym();
-	bool isForward();
-	void setSym(DirectedEdge *de);
-	DirectedEdge* getNext();
-	void setNext(DirectedEdge *newNext);
-	DirectedEdge* getNextMin();
-	void setNextMin(DirectedEdge *newNextMin);
+
+	/**
+	 * Each Edge gives rise to a pair of symmetric DirectedEdges,
+	 * in opposite directions.
+	 * @return the DirectedEdge for the same Edge but in the
+	 *         opposite direction
+	 */
+	inline DirectedEdge* getSym();
+
+	inline bool isForward();
+	inline void setSym(DirectedEdge *de);
+	inline DirectedEdge* getNext();
+	inline void setNext(DirectedEdge *newNext);
+	inline DirectedEdge* getNextMin();
+	inline void setNextMin(DirectedEdge *newNextMin);
 	bool isLineEdge();
 	bool isInteriorAreaEdge();
 	void setEdgeDepths(int position, int newDepth);
@@ -522,6 +530,7 @@ public:
 	string printEdge();
 protected:
 	bool isForwardVar;
+
 private:
 	bool isInResultVar;
 	bool isVisitedVar;
@@ -538,9 +547,31 @@ private:
 	void computeDirectedLabel();
 };
 
-class EdgeRing{
+// INLINES
+Edge* DirectedEdge::getEdge() { return edge; }
+void DirectedEdge::setInResult(bool v) { isInResultVar=v; }
+bool DirectedEdge::isInResult() { return isInResultVar; }
+bool DirectedEdge::isVisited() { return isVisitedVar; }
+void DirectedEdge::setVisited(bool v) { isVisitedVar=v; }
+void DirectedEdge::setEdgeRing(EdgeRing *er) { edgeRing=er; }
+EdgeRing* DirectedEdge::getEdgeRing() { return edgeRing; }
+void DirectedEdge::setMinEdgeRing(EdgeRing *mer) { minEdgeRing=mer; }
+EdgeRing* DirectedEdge::getMinEdgeRing() { return minEdgeRing; }
+int DirectedEdge::getDepth(int position){ return depth[position]; }
+DirectedEdge* DirectedEdge::getSym() { return sym; }
+bool DirectedEdge::isForward() { return isForwardVar; }
+void DirectedEdge::setSym(DirectedEdge *de){ sym=de; }
+DirectedEdge* DirectedEdge::getNext() { return next; }
+void DirectedEdge::setNext(DirectedEdge *newNext) { next=newNext; }
+DirectedEdge* DirectedEdge::getNextMin() { return nextMin; }
+void DirectedEdge::setNextMin(DirectedEdge *nm) { nextMin=nm; }
+
+class EdgeRing {
 public:
-	EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga);
+
+	// CGAlgorithms argument obsoleted, unused.
+	EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga=NULL);
+
 	virtual ~EdgeRing();
 	bool isIsolated();
 	bool isHole();
@@ -562,7 +593,7 @@ public:
 protected:
 	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
 	const GeometryFactory *geometryFactory;
-	CGAlgorithms *cga;
+	//CGAlgorithms *cga;
 	void computePoints(DirectedEdge *newStart);
 	void mergeLabel(Label *deLabel);
 	void mergeLabel(Label *deLabel, int geomIndex);
@@ -718,6 +749,14 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.9  2005/02/22 16:24:18  strk
  * cached number of points in Edge
  *

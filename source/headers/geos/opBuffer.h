@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -37,7 +38,7 @@ namespace geos {
  */
 class RightmostEdgeFinder {
 private:
-	CGAlgorithms* cga;
+	//CGAlgorithms* cga;
 	int minIndex;
 	Coordinate minCoord;
 	DirectedEdge *minDe;
@@ -49,17 +50,24 @@ private:
 	int getRightmostSideOfSegment(DirectedEdge *de, int i);
 
 public:
+
 	/*
 	 * A RightmostEdgeFinder finds the DirectedEdge with the
 	 * rightmost coordinate.
 	 * The DirectedEdge returned is guranteed to have the R of
 	 * the world on its RHS.
+	 * The CGAlgorithms arg is kept for backward compatibility,
+	 * there's no use for it.
 	 */
-	RightmostEdgeFinder(CGAlgorithms *newCga);
-	DirectedEdge* getEdge();
-	Coordinate& getCoordinate();
+	RightmostEdgeFinder(CGAlgorithms *newCga=NULL);
+	inline DirectedEdge* getEdge();
+	inline Coordinate& getCoordinate();
 	void findEdge(vector<DirectedEdge*>* dirEdgeList);
 };
+
+// INLINES
+DirectedEdge* RightmostEdgeFinder::getEdge() { return orientedDe; }
+Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
 
 /*
  * \class BufferSubgraph opBuffer.h geos/opBuffer.h
@@ -110,15 +118,22 @@ private:
 	bool contains(set<Node*>&nodes,Node *node);
 
 public:
-	BufferSubgraph(CGAlgorithms *cga);
+
+	/*
+	 * CGAlgorithms arg kept for backward-compatibility.
+	 * It is unused.
+	 */
+	BufferSubgraph(CGAlgorithms *cga=NULL);
 	~BufferSubgraph();
-	vector<DirectedEdge*>* getDirectedEdges();
-	vector<Node*>* getNodes();
+
+	inline vector<DirectedEdge*>* getDirectedEdges();
+
+	inline vector<Node*>* getNodes();
 
 	/*
 	 * Gets the rightmost coordinate in the edges of the subgraph
 	 */
-	Coordinate* getRightmostCoordinate();
+	inline Coordinate* getRightmostCoordinate();
 
 	/*
 	 * Creates the subgraph consisting of all edges reachable from
@@ -157,6 +172,12 @@ public:
 	 */
 	int compareTo(void* o);
 };
+// INLINES
+Coordinate* BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
+vector<Node*>* BufferSubgraph::getNodes() { return nodes; }
+vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
+	return dirEdgeList;
+}
 
 /*
  * \class BufferOp opBuffer.h geos/opBuffer.h
@@ -275,7 +296,7 @@ public:
 	 *
 	 * @param endCapStyle the end cap style to specify
 	 */
-	void setEndCapStyle(int nEndCapStyle);
+	inline void setEndCapStyle(int nEndCapStyle);
 
 	/**
 	 * Specifies the end cap style of the generated buffer.
@@ -284,7 +305,7 @@ public:
 	 *
 	 * @param endCapStyle the end cap style to specify
 	 */
-	void setQuadrantSegments(int nQuadrantSegments);
+	inline void setQuadrantSegments(int nQuadrantSegments);
 
 	/**
 	 * Returns the buffer computed for a geometry for a given buffer
@@ -310,6 +331,10 @@ public:
 	 */
 	Geometry* getResultGeometry(double nDistance, int nQuadrantSegments);
 };
+
+// BufferOp inlines
+void BufferOp::setQuadrantSegments(int q) { quadrantSegments=q; }
+void BufferOp::setEndCapStyle(int s) { endCapStyle=s; }
 
 /*
  * \class OffsetCurveBuilder opBuffer.h geos/opBuffer.h
@@ -339,7 +364,7 @@ public:
 	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel);
 	~OffsetCurveBuilder();
 	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments);
-	void setEndCapStyle(int newEndCapStyle);
+	inline void setEndCapStyle(int newEndCapStyle);
 
 	/**
 	 * This method handles single points as well as lines.
@@ -363,7 +388,7 @@ private:
 	static double PI_OVER_2;
 	static double MAX_CLOSING_SEG_LEN;
 //	static final Coordinate[] arrayTypeCoordinate = new Coordinate[0];
-	CGAlgorithms *cga;
+	//CGAlgorithms *cga;
 	LineIntersector *li;
 
 	/**
@@ -442,6 +467,11 @@ private:
 	vector<CoordinateSequence *>ptLists;
 };
 
+// INLINES
+void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
+	endCapStyle=newEndCapStyle;
+}
+
 
 /*
  * \class OffsetCurveSetBuilder opBuffer.h geos/opBuffer.h
@@ -455,20 +485,28 @@ private:
  */
 class OffsetCurveSetBuilder {
 public:
-	OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder);
+	OffsetCurveSetBuilder(const Geometry *newInputGeom,
+		double newDistance, OffsetCurveBuilder *newCurveBuilder);
+
 	~OffsetCurveSetBuilder();
+
 	/**
-	* Computes the set of raw offset curves for the buffer.
-	* Each offset curve has an attached {@link Label} indicating
-	* its left and right location.
-	*
-	* @return a Collection of SegmentStrings representing the raw buffer curves
-	*/
+	 * Computes the set of raw offset curves for the buffer.
+	 * Each offset curve has an attached {@link Label} indicating
+	 * its left and right location.
+	 *
+	 * @return a Collection of SegmentStrings representing the raw
+	 * buffer curves
+	 */
 	vector<SegmentString*>* getCurves();
-	void addCurves(const vector<CoordinateSequence*> *lineList, int leftLoc, int rightLoc);
+
+	void addCurves(const vector<CoordinateSequence*> *lineList,
+		int leftLoc, int rightLoc);
+
 private:
 	vector<Label*> newLabels;
-	CGAlgorithms *cga;
+	//CGAlgorithms cga;
+
 	const Geometry *inputGeom;
 	double distance;
 	OffsetCurveBuilder *curveBuilder;
@@ -598,7 +636,7 @@ public:
 private:
 	vector<BufferSubgraph*> *subgraphs;
 	LineSegment *seg;
-	CGAlgorithms *cga;
+	//CGAlgorithms *cga;
 	/**
 	* Finds all non-horizontal segments intersecting the stabbing line.
 	* The stabbing line is the ray to the right of stabbingRayLeftPt.
@@ -686,7 +724,7 @@ private:
 	 * Compute the change in depth as an edge is crossed from R to L
 	 */
 	static int depthDelta(Label *label);
-	static CGAlgorithms *cga;
+	//static CGAlgorithms *cga;
 	int quadrantSegments;
 	int endCapStyle;
 	PrecisionModel *workingPrecisionModel;
@@ -723,6 +761,14 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.7  2005/02/04 18:49:48  strk
  * Changed ::computeDepths to use a set instead of a vector for checking
  * visited Edges.

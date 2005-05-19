@@ -13,6 +13,14 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.5  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -39,15 +47,18 @@
 
 namespace geos {
 
-SubgraphDepthLocater::SubgraphDepthLocater(vector<BufferSubgraph*> *newSubgraphs){
-	seg=new LineSegment();
-	cga=new RobustCGAlgorithms();
-	subgraphs=newSubgraphs;
+SubgraphDepthLocater::SubgraphDepthLocater(vector<BufferSubgraph*> *nsg):
+	seg(new LineSegment()),
+	subgraphs(nsg)
+{
+	//seg=new LineSegment();
+	//cga=new RobustCGAlgorithms();
+	//subgraphs=newSubgraphs;
 }
 
 SubgraphDepthLocater::~SubgraphDepthLocater(){
 	delete seg;
-	delete cga;
+	//delete cga;
 }
 
 int
@@ -138,7 +149,8 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 		if (stabbingRayLeftPt.y < seg->p0.y || stabbingRayLeftPt.y > seg->p1.y)
 			continue;
 		// skip if stabbing ray is right of the segment
-		if (cga->computeOrientation(seg->p0, seg->p1, stabbingRayLeftPt)==CGAlgorithms::RIGHT)
+		if (CGAlgorithms::computeOrientation(seg->p0, seg->p1,
+				stabbingRayLeftPt)==CGAlgorithms::RIGHT)
 			continue;
 		// stabbing line cuts this segment, so record it
 		int depth=dirEdge->getDepth(Position::LEFT);

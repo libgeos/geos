@@ -13,6 +13,14 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.15  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.14  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -54,14 +62,14 @@ namespace geos {
 
 CentroidArea::CentroidArea() {
 	basePt=NULL;
-	cga=new RobustCGAlgorithms();
+	//cga=new RobustCGAlgorithms();
 	triangleCent3=new Coordinate();
 	areasum2=0;
 	cg3=new Coordinate();
 }
 
 CentroidArea::~CentroidArea() {
-	delete cga;
+	//delete cga;
 	delete triangleCent3;
 	delete cg3;
 	delete basePt;

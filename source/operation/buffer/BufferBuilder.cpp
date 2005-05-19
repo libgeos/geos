@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -41,8 +42,8 @@ BufferBuilder::depthDelta(Label *label)
 	return 0;
 }
 
-static RobustCGAlgorithms rCGA;
-CGAlgorithms *BufferBuilder::cga=&rCGA;
+//static CGAlgorithms rCGA;
+//CGAlgorithms *BufferBuilder::cga=&rCGA;
 
 /**
  * Creates a new BufferBuilder
@@ -108,6 +109,9 @@ BufferBuilder::buffer(Geometry *g, double distance)
 	curveBuilder.setEndCapStyle(endCapStyle);
 	OffsetCurveSetBuilder curveSetBuilder(g, distance, &curveBuilder);
 	vector<SegmentString*> *bufferSegStrList=curveSetBuilder.getCurves();
+#if DEBUG
+	cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList->size()<<" curves"<<endl;
+#endif
 	// short-circuit test
 	if (bufferSegStrList->size()<=0) {
 		Geometry *emptyGeom=geomFact->createGeometryCollection(NULL);
@@ -136,9 +140,15 @@ BufferBuilder::buffer(Geometry *g, double distance)
 		PlanarGraph graph(new OverlayNodeFactory());
 		graph.addEdges(edgeList->getEdges());
 		subgraphList=createSubgraphs(&graph);
-		PolygonBuilder polyBuilder(geomFact,cga);
+#if DEBUG
+	cerr<<"Created "<<subgraphList->size()<<" subgraphs"<<endl;
+#endif
+		PolygonBuilder polyBuilder(geomFact);
 		buildSubgraphs(subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
+#if DEBUG
+	cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<endl;
+#endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (GEOSException *exc) {
 		for (unsigned int i=0; i<subgraphList->size(); i++)
@@ -265,7 +275,7 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph)
 	for (unsigned int i=0;i<n->size();i++) {
 		Node *node=(*n)[i];
 		if (!node->isVisited()) {
-			BufferSubgraph *subgraph=new BufferSubgraph(cga);
+			BufferSubgraph *subgraph=new BufferSubgraph();
 			subgraph->create(node);
 			subgraphList->push_back(subgraph);
 		}
@@ -304,10 +314,19 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 		polyBuilder->add(subgraph->getDirectedEdges(), subgraph->getNodes());
 	}
 }
-}
+
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.26  2005/02/01 13:44:59  strk
  * More profiling labels.
  *

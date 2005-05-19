@@ -5,75 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.17  2005/02/17 09:56:31  strk
- * Commented out unused variable.
- *
- * Revision 1.16  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.15  2004/12/08 13:54:44  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.14  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.13  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.12  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.11  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.10  2004/05/27 08:37:16  strk
- * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
- *
- * Revision 1.9  2004/05/26 19:48:19  strk
- * Changed abs() to fabs() when working with doubles.
- * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
- *
- * Revision 1.8  2004/05/19 13:40:49  strk
- * Fixed bug in ::addCircle
- *
- * Revision 1.7  2004/05/05 13:08:01  strk
- * Leaks fixed, explicit allocations/deallocations reduced.
- *
- * Revision 1.6  2004/04/20 10:58:04  strk
- * More memory leaks removed.
- *
- * Revision 1.5  2004/04/19 16:14:52  strk
- * Some memory leaks plugged in noding algorithms.
- *
- * Revision 1.4  2004/04/19 15:14:46  strk
- * Added missing virtual destructor in SpatialIndex class.
- * Memory leaks fixes. Const and throw specifications added.
- *
- * Revision 1.3  2004/04/16 13:03:17  strk
- * More leaks fixed
- *
- * Revision 1.2  2004/04/16 12:48:07  strk
- * Leak fixes.
- *
- * Revision 1.1  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/opBuffer.h>
 
@@ -83,7 +22,6 @@ double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
 double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
-	cga(new RobustCGAlgorithms()),
 	li(new RobustLineIntersector()),
 	maxCurveSegmentError(0.0),
 	ptList(new DefaultCoordinateSequence()),
@@ -101,7 +39,6 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		int quadrantSegments):
-	cga(new RobustCGAlgorithms()),
 	li(new RobustLineIntersector()),
 	maxCurveSegmentError(0.0),
 	ptList(new DefaultCoordinateSequence()),
@@ -117,8 +54,8 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 	filletAngleQuantum=3.14159265358979  / 2.0 / limitedQuadSegs;
 }
 
-OffsetCurveBuilder::~OffsetCurveBuilder(){
-	delete cga;
+OffsetCurveBuilder::~OffsetCurveBuilder()
+{
 	delete li;
 	delete seg0;
 	delete seg1;
@@ -128,16 +65,14 @@ OffsetCurveBuilder::~OffsetCurveBuilder(){
 	for (unsigned int i=0; i<ptLists.size(); i++) delete ptLists[i];
 }
 
-void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
-	endCapStyle=newEndCapStyle;
-}
+
 /**
-* This method handles single points as well as lines.
-* Lines are assumed to <b>not</b> be closed (the function will not
-* fail for closed lines, but will generate superfluous line caps).
-*
-* @return a List of Coordinate[]
-*/
+ * This method handles single points as well as lines.
+ * Lines are assumed to <b>not</b> be closed (the function will not
+ * fail for closed lines, but will generate superfluous line caps).
+ *
+ * @return a List of Coordinate[]
+ */
 vector<CoordinateSequence*>*
 OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts, double distance)
 {
@@ -163,11 +98,11 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts, double dist
 }
 
 /**
-* This method handles the degenerate cases of single points and lines,
-* as well as rings.
-*
-* @return a List of Coordinate[]
-*/
+ * This method handles the degenerate cases of single points and lines,
+ * as well as rings.
+ *
+ * @return a List of Coordinate[]
+ */
 vector<CoordinateSequence*>*
 OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts, int side, double distance)
 {
@@ -180,7 +115,9 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts, int side, d
 	}
 	// optimize creating ring for for zero distance
 	if (distance==0.0) {
-		lineList->push_back(inputPts->clone());
+		ptLists.push_back(ptList);
+		ptList = inputPts->clone();
+		lineList->push_back(ptList);
 		return lineList;
 	}
 	computeRingBufferCurve(inputPts, side);
@@ -188,7 +125,9 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts, int side, d
 	return lineList;
 }
 
-void OffsetCurveBuilder::init(double newDistance){
+void
+OffsetCurveBuilder::init(double newDistance)
+{
 	distance=newDistance;
 	maxCurveSegmentError=distance*(1-cos(filletAngleQuantum/2.0));
 	// Point list needs to be reset
@@ -199,8 +138,11 @@ void OffsetCurveBuilder::init(double newDistance){
 }
 
 // returns ptList / is private / might just e avoided !
-CoordinateSequence* OffsetCurveBuilder::getCoordinates(){
-	// check that points are a ring-add the startpoint again if they are not
+CoordinateSequence*
+OffsetCurveBuilder::getCoordinates()
+{
+	// check that points are a ring-add the startpoint again if they
+	// are not
 	if (ptList->getSize()>1) {
 		const Coordinate &start=ptList->getAt(0);
 		const Coordinate &end=ptList->getAt(1);
@@ -209,7 +151,9 @@ CoordinateSequence* OffsetCurveBuilder::getCoordinates(){
 	return ptList;
 }
 
-void OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence *inputPts){
+void
+OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence *inputPts)
+{
 	int n=inputPts->getSize()-1;
 	// compute points for left side of line
 	initSideSegments(inputPts->getAt(0),inputPts->getAt(1), Position::LEFT);
@@ -230,7 +174,10 @@ void OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence *inputP
 	closePts();
 }
 
-void OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence *inputPts, int side){
+void
+OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence *inputPts,
+	int side)
+{
 	int n=inputPts->getSize()-1;
 	initSideSegments(inputPts->getAt(n-1),inputPts->getAt(0), side);
 	for (int i=1;i<= n;i++) {
@@ -254,7 +201,9 @@ OffsetCurveBuilder::addPt(const Coordinate &pt)
 	ptList->add(bufPt);
 }
 
-void OffsetCurveBuilder::closePts(){
+void
+OffsetCurveBuilder::closePts()
+{
 
 	int ptsize=ptList->getSize();
 
@@ -278,7 +227,9 @@ OffsetCurveBuilder::initSideSegments(const Coordinate &nS1, const Coordinate &nS
 	computeOffsetSegment(seg1, side, distance, offset1);
 }
 
-void OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint){
+void
+OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
+{
 	// s0-s1-s2 are the coordinates of the previous segment and the current one
 	s0=s1;
 	s1=s2;
@@ -290,7 +241,7 @@ void OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 
 	// do nothing if points are equal
 	if (s1==s2) return;
-	int orientation=cga->computeOrientation(s0, s1, s2);
+	int orientation=CGAlgorithms::computeOrientation(s0, s1, s2);
 	bool outsideTurn =(orientation==CGAlgorithms::CLOCKWISE
 						&& side==Position::LEFT)
 						||(orientation==CGAlgorithms::COUNTERCLOCKWISE 
@@ -355,22 +306,28 @@ void OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 }
 
 /**
-* Add last offset point
-*/
-void OffsetCurveBuilder::addLastSegment() {
+ * Add last offset point
+ */
+void
+OffsetCurveBuilder::addLastSegment()
+{
 	addPt(offset1->p1);
 }
 
 /**
-* Compute an offset segment for an input segment on a given side and at a given distance.
-* The offset points are computed in full double precision, for accuracy.
-*
-* @param seg the segment to offset
-* @param side the side of the segment the offset lies on
-* @param distance the offset distance
-* @param offset the points computed for the offset segment
-*/
-void OffsetCurveBuilder::computeOffsetSegment(LineSegment *seg, int side, double distance, LineSegment *offset){
+ * Compute an offset segment for an input segment on a given side and at
+ * a given distance.
+ * The offset points are computed in full double precision, for accuracy.
+ *
+ * @param seg the segment to offset
+ * @param side the side of the segment the offset lies on
+ * @param distance the offset distance
+ * @param offset the points computed for the offset segment
+ */
+void
+OffsetCurveBuilder::computeOffsetSegment(LineSegment *seg, int side,
+	double distance, LineSegment *offset)
+{
 	int sideSign=side==Position::LEFT ? 1 : -1;
 	double dx=seg->p1.x-seg->p0.x;
 	double dy=seg->p1.y-seg->p0.y;
@@ -385,8 +342,8 @@ void OffsetCurveBuilder::computeOffsetSegment(LineSegment *seg, int side, double
 }
 
 /**
-* Add an end cap around point p1, terminating a line segment coming from p0
-*/
+ * Add an end cap around point p1, terminating a line segment coming from p0
+ */
 void
 OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 {
@@ -428,12 +385,16 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 	delete offsetL;
 	delete offsetR;
 }
+
 /**
-* @param p base point of curve
-* @param p0 start point of fillet curve
-* @param p1 endpoint of fillet curve
-*/
-void OffsetCurveBuilder::addFillet(const Coordinate &p,const Coordinate &p0,const Coordinate &p1, int direction, double distance){
+ * @param p base point of curve
+ * @param p0 start point of fillet curve
+ * @param p1 endpoint of fillet curve
+ */
+void
+OffsetCurveBuilder::addFillet(const Coordinate &p, const Coordinate &p0,
+	const Coordinate &p1, int direction, double distance)
+{
 	double dx0=p0.x-p.x;
 	double dy0=p0.y-p.y;
 	double startAngle=atan2(dy0, dx0);
@@ -451,12 +412,16 @@ void OffsetCurveBuilder::addFillet(const Coordinate &p,const Coordinate &p0,cons
 }
 
 /**
-* Adds points for a fillet->  The start and end point for the fillet are not added -
-* the caller must add them if required->
-*
-* @param direction is -1 for a CW angle, 1 for a CCW angle
-*/
-void OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle, double endAngle, int direction, double distance){
+ * Adds points for a fillet.
+ * The start and end point for the fillet are not added,
+ * the caller must add them if required.
+ *
+ * @param direction is -1 for a CW angle, 1 for a CCW angle
+ */
+void
+OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle,
+	double endAngle, int direction, double distance)
+{
 	int directionFactor=direction==CGAlgorithms::CLOCKWISE ? -1 : 1;
 	double totalAngle=fabs(startAngle-endAngle);
 	int nSegs=(int) (totalAngle / filletAngleQuantum+0.5);
@@ -478,9 +443,11 @@ void OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle, doubl
 
 
 /**
-* Adds a CW circle around a point
-*/
-void OffsetCurveBuilder::addCircle(const Coordinate &p, double distance){
+ * Adds a CW circle around a point
+ */
+void
+OffsetCurveBuilder::addCircle(const Coordinate &p, double distance)
+{
 	// add start point
 	Coordinate pt(p);
 	pt.x+=distance;
@@ -489,9 +456,11 @@ void OffsetCurveBuilder::addCircle(const Coordinate &p, double distance){
 }
 
 /**
-* Adds a CW square around a point
-*/
-void OffsetCurveBuilder::addSquare(const Coordinate &p, double distance){
+ * Adds a CW square around a point
+ */
+void
+OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
+{
 	// add start point
 	addPt(*(new Coordinate(p.x+distance, p.y+distance)));
 	addPt(*(new Coordinate(p.x+distance, p.y-distance)));
@@ -499,4 +468,77 @@ void OffsetCurveBuilder::addSquare(const Coordinate &p, double distance){
 	addPt(*(new Coordinate(p.x-distance, p.y+distance)));
 	addPt(*(new Coordinate(p.x+distance, p.y+distance)));
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.18  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
+ * Revision 1.17  2005/02/17 09:56:31  strk
+ * Commented out unused variable.
+ *
+ * Revision 1.16  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
+ * Revision 1.15  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.14  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.13  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.12  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.11  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.10  2004/05/27 08:37:16  strk
+ * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
+ *
+ * Revision 1.9  2004/05/26 19:48:19  strk
+ * Changed abs() to fabs() when working with doubles.
+ * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
+ *
+ * Revision 1.8  2004/05/19 13:40:49  strk
+ * Fixed bug in ::addCircle
+ *
+ * Revision 1.7  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
+ * Revision 1.6  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
+ * Revision 1.5  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
+ * Revision 1.4  2004/04/19 15:14:46  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
+ * Revision 1.3  2004/04/16 13:03:17  strk
+ * More leaks fixed
+ *
+ * Revision 1.2  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
+ * Revision 1.1  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

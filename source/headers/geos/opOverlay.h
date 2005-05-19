@@ -317,11 +317,20 @@ private:
  */
 class MinimalEdgeRing: public EdgeRing {
 public:
-	MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory,CGAlgorithms *cga);
-	virtual ~MinimalEdgeRing();
-	DirectedEdge* getNext(DirectedEdge *de);
-	void setEdgeRing(DirectedEdge *de,EdgeRing *er);
+	// CGAlgorithms argument obsoleted
+	MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory,CGAlgorithms *cga=NULL);
+	//virtual ~MinimalEdgeRing();
+	inline DirectedEdge* getNext(DirectedEdge *de);
+	inline void setEdgeRing(DirectedEdge *de,EdgeRing *er);
 };
+
+// INLINES
+void MinimalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er) {
+	de->setMinEdgeRing(er);
+}
+DirectedEdge* MinimalEdgeRing::getNext(DirectedEdge *de) {
+	return de->getNextMin();
+}
 
 /*
  * A ring of {@link edges} which may contain nodes of degree > 2.
@@ -342,8 +351,12 @@ public:
  */
 
 class MaximalEdgeRing: public EdgeRing {
+
 public:
-	MaximalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory, CGAlgorithms *cga);
+
+	// CGAlgorithms arg is obsoleted
+	MaximalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory, CGAlgorithms *cga=NULL);
+
 	virtual ~MaximalEdgeRing();
 	DirectedEdge* getNext(DirectedEdge *de);
 	void setEdgeRing(DirectedEdge* de,EdgeRing* er);
@@ -440,7 +453,10 @@ private:
  */
 class PolygonBuilder {
 public:
-	PolygonBuilder(const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga);
+
+	// CGAlgorithms argument is unused
+	PolygonBuilder(const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga=NULL);
+
 	~PolygonBuilder();
 	/**
 	* Add a complete graph.
@@ -573,6 +589,14 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.9  2005/04/29 17:40:36  strk
  * Updated Doxygen documentation and some Copyright headers.
  *

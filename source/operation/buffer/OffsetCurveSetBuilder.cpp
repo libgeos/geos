@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -16,10 +17,13 @@
 #include <geos/opBuffer.h>
 #include <typeinfo>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 namespace geos {
 
 OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder):
-	cga(new RobustCGAlgorithms()),
 	inputGeom(newInputGeom),
 	distance(newDistance),
 	curveBuilder(newCurveBuilder),
@@ -27,8 +31,9 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, doubl
 {
 }
 
-OffsetCurveSetBuilder::~OffsetCurveSetBuilder(){
-	delete cga;
+OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
+{
+	//delete cga;
 	for (unsigned int i=0; i<curveList->size(); i++)
 		delete (*curveList)[i];
 	delete curveList;
@@ -50,25 +55,28 @@ vector<SegmentString*>* OffsetCurveSetBuilder::getCurves()
 }
 
 void
-OffsetCurveSetBuilder::addCurves(const vector<CoordinateSequence*> *lineList, int leftLoc, int rightLoc)
+OffsetCurveSetBuilder::addCurves(const vector<CoordinateSequence*> *lineList,
+	int leftLoc, int rightLoc)
 {
-	for (unsigned int i=0;i<lineList->size();i++) {
+	for (unsigned int i=0;i<lineList->size();i++)
+	{
 		const CoordinateSequence *coords=(*lineList)[i];
 		addCurve(coords, leftLoc, rightLoc);
 	}
 }
 
 /**
-* Creates a {@link SegmentString} for a coordinate list which is a raw offset curve,
-* and adds it to the list of buffer curves.
-* The SegmentString is tagged with a Label giving the topology of the curve.
-* The curve may be oriented in either direction.
-* If the curve is oriented CW, the locations will be:
-* <br>Left: Location.EXTERIOR
-* <br>Right: Location.INTERIOR
-*/
+ * Creates a SegmentString for a coordinate list which is a raw offset curve,
+ * and adds it to the list of buffer curves.
+ * The SegmentString is tagged with a Label giving the topology of the curve.
+ * The curve may be oriented in either direction.
+ * If the curve is oriented CW, the locations will be:
+ * <br>Left: Location.EXTERIOR
+ * <br>Right: Location.INTERIOR
+ */
 void
-OffsetCurveSetBuilder::addCurve(const CoordinateSequence *coord, int leftLoc, int rightLoc)
+OffsetCurveSetBuilder::addCurve(const CoordinateSequence *coord,
+	int leftLoc, int rightLoc)
 {
 	// don't add null curves!
 	if (coord->getSize() < 2) return;
@@ -113,16 +121,21 @@ OffsetCurveSetBuilder::add(const Geometry *g)
 	throw new UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
 }
 
-void OffsetCurveSetBuilder::addCollection(const GeometryCollection *gc){
+void
+OffsetCurveSetBuilder::addCollection(const GeometryCollection *gc)
+{
 	for (int i=0;i<gc->getNumGeometries(); i++) {
 		const Geometry *g=gc->getGeometryN(i);
 		add(g);
 	}
 }
+
 /**
-* Add a Point to the graph->
-*/
-void OffsetCurveSetBuilder::addPoint(const Point *p){
+ * Add a Point to the graph.
+ */
+void
+OffsetCurveSetBuilder::addPoint(const Point *p)
+{
 	if (distance <= 0.0) return;
 	CoordinateSequence *coord=p->getCoordinates();
 	vector<CoordinateSequence*> *lineList=curveBuilder->getLineCurve(coord, distance);
@@ -146,13 +159,17 @@ void
 OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 {
 	double offsetDistance=distance;
+
 	int offsetSide=Position::LEFT;
-	if (distance < 0.0) {
-		offsetDistance=-distance;
-		offsetSide=Position::RIGHT;
+	if (distance < 0.0)
+	{
+		offsetDistance = -distance;
+		offsetSide = Position::RIGHT;
 	}
+
 	const LinearRing *shell=(const LinearRing *)p->getExteriorRing();
 	CoordinateSequence *shellCoord = CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
+
 	// optimization - don't bother computing buffer
 	// if the polygon would be completely eroded
 	if (distance < 0.0 && isErodedCompletely(shellCoord, distance))
@@ -160,9 +177,18 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 		delete shellCoord;
 		return;
 	}
-	addPolygonRing(shellCoord,offsetDistance,offsetSide,Location::EXTERIOR,Location::INTERIOR);
+
+	addPolygonRing(
+		shellCoord,
+		offsetDistance,
+		offsetSide,
+		Location::EXTERIOR,
+		Location::INTERIOR);
+
 	delete shellCoord;
-	for (int i=0;i<p->getNumInteriorRing(); i++) {
+
+	for (int i=0;i<p->getNumInteriorRing(); i++)
+	{
 		const LinearRing *hole=(const LinearRing *)p->getInteriorRingN(i);
 		CoordinateSequence *holeCoord=CoordinateSequence::removeRepeatedPoints(hole->getCoordinatesRO());
 
@@ -173,33 +199,46 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 			delete holeCoord;
 			continue;
 		}
-		// Holes are topologically labelled opposite to the shell, since
-		// the interior of the polygon lies on their opposite side
-		// (on the left, if the hole is oriented CCW)
-		addPolygonRing(holeCoord,offsetDistance,Position::opposite(offsetSide),Location::INTERIOR,Location::EXTERIOR);
+
+		// Holes are topologically labelled opposite to the shell,
+		// since the interior of the polygon lies on their opposite
+		// side (on the left, if the hole is oriented CCW)
+		addPolygonRing(
+			holeCoord,
+			offsetDistance,
+			Position::opposite(offsetSide),
+			Location::INTERIOR,
+			Location::EXTERIOR);
+
 		delete holeCoord;
 	}
 }
 
 /**
-* Add an offset curve for a ring->
-* The side and left and right topological location arguments
-* assume that the ring is oriented CW->
-* If the ring is in the opposite orientation,
-* the left and right locations must be interchanged and the side flipped->
-*
-* @param coord the coordinates of the ring (must not contain repeated points)
-* @param offsetDistance the distance at which to create the buffer
-* @param side the side of the ring on which to construct the buffer line
-* @param cwLeftLoc the location on the L side of the ring (if it is CW)
-* @param cwRightLoc the location on the R side of the ring (if it is CW)
-*/
-void OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc){
-	int leftLoc =cwLeftLoc;
+ * Add an offset curve for a ring.
+ * The side and left and right topological location arguments
+ * assume that the ring is oriented CW.
+ * If the ring is in the opposite orientation,
+ * the left and right locations must be interchanged and the side flipped.
+ *
+ * @param coord the coordinates of the ring (must not contain repeated points)
+ * @param offsetDistance the distance at which to create the buffer
+ * @param side the side of the ring on which to construct the buffer line
+ * @param cwLeftLoc the location on the L side of the ring (if it is CW)
+ * @param cwRightLoc the location on the R side of the ring (if it is CW)
+ */
+void
+OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
+	double offsetDistance, int side, int cwLeftLoc, int cwRightLoc)
+{
+	int leftLoc=cwLeftLoc;
 	int rightLoc=cwRightLoc;
-	if (cga->isCCW(coord)) {
-		leftLoc=cwRightLoc;
-		rightLoc=cwLeftLoc;
+#if DEBUG
+	cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<CGAlgorithms::isCCW(coord)<<endl;
+#endif
+	if (CGAlgorithms::isCCW(coord)) {
+		//leftLoc=cwRightLoc;
+		//rightLoc=cwLeftLoc;
 		side=Position::opposite(side);
 	}
 	vector<CoordinateSequence*> *lineList=curveBuilder->getRingCurve(coord, side, offsetDistance);
@@ -217,7 +256,8 @@ void OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord, doub
  * @return
  */
 bool
-OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance)
+OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord,
+	double bufferDistance)
 {
 	double minDiam=0.0;
 	// degenerate ring has no area
@@ -251,30 +291,34 @@ OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord, double 
 }
 
 /**
-* Tests whether a triangular ring would be eroded completely by the given
-* buffer distance->
-* This is a precise test->  It uses the fact that the inner buffer of a
-* triangle converges on the inCentre of the triangle (the point
-* equidistant from all sides)->  If the buffer distance is greater than the
-* distance of the inCentre from a side, the triangle will be eroded completely->
-*
-* This test is important, since it removes a problematic case where
-* the buffer distance is slightly larger than the inCentre distance->
-* In this case the triangle buffer curve "inverts" with incorrect topology,
-* producing an incorrect hole in the buffer->
-*
-* @param triangleCoord
-* @param bufferDistance
-* @return
-*/
+ * Tests whether a triangular ring would be eroded completely by the given
+ * buffer distance.
+ * This is a precise test.  It uses the fact that the inner buffer of a
+ * triangle converges on the inCentre of the triangle (the point
+ * equidistant from all sides).  If the buffer distance is greater than the
+ * distance of the inCentre from a side, the triangle will be
+ * eroded completely
+ *
+ * This test is important, since it removes a problematic case where
+ * the buffer distance is slightly larger than the inCentre distance->
+ * In this case the triangle buffer curve "inverts" with incorrect topology,
+ * producing an incorrect hole in the buffer
+ *
+ * @param triangleCoord
+ * @param bufferDistance
+ * @return
+ */
 bool
-OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateSequence *triangleCoord, double bufferDistance)
+OffsetCurveSetBuilder::isTriangleErodedCompletely(
+	CoordinateSequence *triangleCoord, double bufferDistance)
 {
-	Triangle *tri=new Triangle(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
-	Coordinate *inCentre=tri->inCentre();
-	double distToCentre=cga->distancePointLine(*inCentre, tri->p0, tri->p1);
+	//Triangle *tri=new Triangle(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
+	Triangle tri(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
+
+	Coordinate *inCentre=tri.inCentre();
+	double distToCentre=CGAlgorithms::distancePointLine(*inCentre, tri.p0, tri.p1);
 	bool ret = distToCentre < fabs(bufferDistance);
-	delete tri;
+	//delete tri;
 	return ret;
 }
 
@@ -283,6 +327,14 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(CoordinateSequence *triangleCo
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
  * Revision 1.17  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *
