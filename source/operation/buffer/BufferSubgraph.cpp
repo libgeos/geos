@@ -90,10 +90,10 @@ BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 		DirectedEdge *sym=de->getSym();
 		Node *symNode=sym->getNode();
 		/**
-		* NOTE: this is a depth-first traversal of the graph.
-		* This will cause a large depth of recursion.
-		* It might be better to do a breadth-first traversal.
-		*/
+		 * NOTE: this is a depth-first traversal of the graph.
+		 * This will cause a large depth of recursion.
+		 * It might be better to do a breadth-first traversal.
+		 */
 		if (! symNode->isVisited()) nodeStack->push_back(symNode);
 	}
 }
@@ -184,7 +184,7 @@ BufferSubgraph::findResultEdges()
 		 */
 		// <FIX> - handle negative depths
 #if DEBUG
-		cerr<<" dirEdge "<<i<<": depth:"<<de->getDepth(Position::RIGHT)<<endl;
+		cerr<<" dirEdge "<<i<<": depth right:"<<de->getDepth(Position::RIGHT)<<endl;
 #endif
 		if ( de->getDepth(Position::RIGHT)>=1
 			&&  de->getDepth(Position::LEFT)<=0
@@ -281,6 +281,9 @@ BufferSubgraph::contains(set<Node*>&nodes,Node *node)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/05/20 16:15:41  strk
+ * Code cleanups
+ *
  * Revision 1.14  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

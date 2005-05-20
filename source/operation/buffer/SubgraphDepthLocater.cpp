@@ -5,45 +5,21 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2005/05/19 10:29:28  strk
- * Removed some CGAlgorithms instances substituting them with direct calls
- * to the static functions. Interfaces accepting CGAlgorithms pointers kept
- * for backward compatibility but modified to make the argument optional.
- * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
- * Inlined some smaller functions encountered during bug hunting.
- * Updated Copyright notices in the touched files.
- *
- * Revision 1.5  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.4  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/05/05 12:29:44  strk
- * memleak fixed in ::getDepth
- *
- * Revision 1.2  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.1  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
 
-
 #include <geos/opBuffer.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 
 namespace geos {
 
@@ -157,6 +133,9 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 		// if segment direction was flipped, use RHS depth instead
 		if (! (seg->p0==pts->getAt(i)))
 			depth=dirEdge->getDepth(Position::RIGHT);
+#if DEBUG
+	cerr<<" depth: "<<depth<<endl;
+#endif
 		DepthSegment *ds=new DepthSegment(seg, depth);
 		stabbedSegments->push_back(ds);
 	}
@@ -233,4 +212,39 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
 		return false;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2005/05/20 16:15:41  strk
+ * Code cleanups
+ *
+ * Revision 1.6  2005/05/19 10:29:28  strk
+ * Removed some CGAlgorithms instances substituting them with direct calls
+ * to the static functions. Interfaces accepting CGAlgorithms pointers kept
+ * for backward compatibility but modified to make the argument optional.
+ * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
+ * Inlined some smaller functions encountered during bug hunting.
+ * Updated Copyright notices in the touched files.
+ *
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.4  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.3  2004/05/05 12:29:44  strk
+ * memleak fixed in ::getDepth
+ *
+ * Revision 1.2  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
+ * Revision 1.1  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

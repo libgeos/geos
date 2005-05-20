@@ -5,14 +5,43 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/geomgraph.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
+namespace geos {
+
+/**
+* Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
+* otherwise.
+*/
+int Position::opposite(int position){
+	if (position==LEFT) return RIGHT;
+	if (position==RIGHT) return LEFT;
+#if DEBUG
+	cerr<<"Position::opposite: position is neither LEFT ("<<LEFT<<") nor RIGHT ("<<RIGHT<<") but "<<position<<endl;
+#endif
+	return position;
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.3  2005/05/20 16:15:41  strk
+ * Code cleanups
+ *
  * Revision 1.2  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -26,20 +55,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/geomgraph.h>
-
-namespace geos {
-
-/**
-* Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
-* otherwise.
-*/
-int Position::opposite(int position){
-	if (position==LEFT) return RIGHT;
-	if (position==RIGHT) return LEFT;
-	return position;
-}
-}
 
