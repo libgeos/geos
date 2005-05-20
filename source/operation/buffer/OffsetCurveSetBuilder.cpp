@@ -237,8 +237,11 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 	cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<CGAlgorithms::isCCW(coord)<<endl;
 #endif
 	if (CGAlgorithms::isCCW(coord)) {
-		//leftLoc=cwRightLoc;
-		//rightLoc=cwLeftLoc;
+		leftLoc=cwRightLoc;
+		rightLoc=cwLeftLoc;
+#if DEBUG
+	cerr<<" side "<<side<<" becomes "<<Position::opposite(side)<<endl;
+#endif
 		side=Position::opposite(side);
 	}
 	vector<CoordinateSequence*> *lineList=curveBuilder->getRingCurve(coord, side, offsetDistance);
@@ -327,6 +330,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/05/20 16:14:52  strk
+ * Fixed a bug in addPolygonRing setting wrong depths on Edges
+ *
  * Revision 1.18  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept
