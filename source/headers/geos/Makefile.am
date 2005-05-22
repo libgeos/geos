@@ -20,6 +20,7 @@ geos_HEADERS = \
 	io.h \
 	ByteOrderDataInStreamT.h \
 	WKBReaderT.h \
+	WKBWriterT.h \
 	opLinemerge.h \
 	opBuffer.h \
 	operation.h \
