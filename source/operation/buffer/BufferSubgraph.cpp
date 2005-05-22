@@ -24,10 +24,10 @@ namespace geos {
 
 // Argument is unused
 BufferSubgraph::BufferSubgraph(CGAlgorithms *cga):
+	finder(new RightmostEdgeFinder()),
 	dirEdgeList(new vector<DirectedEdge*>()),
 	nodes(new vector<Node*>()),
-	rightMostCoord(NULL),
-	finder(new RightmostEdgeFinder())
+	rightMostCoord(NULL)
 {
 	//dirEdgeList=new vector<DirectedEdge*>();
 	//nodes=new vector<Node*>();
@@ -281,6 +281,9 @@ BufferSubgraph::contains(set<Node*>&nodes,Node *node)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/05/22 17:45:27  strk
+ * Fixed initialization list order
+ *
  * Revision 1.15  2005/05/20 16:15:41  strk
  * Code cleanups
  *
