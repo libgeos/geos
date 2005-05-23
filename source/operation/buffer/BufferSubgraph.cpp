@@ -113,6 +113,9 @@ BufferSubgraph::computeDepth(int outsideDepth)
 	clearVisitedEdges();
 	// find an outside edge to assign depth to
 	DirectedEdge *de=finder->getEdge();
+#if DEBUG
+cerr<<"outside depth: "<<outsideDepth<<endl;
+#endif
 	//Node *n=de->getNode();
 	//Label *label=de->getLabel();
 	// right side of line returned by finder is on the outside
@@ -155,6 +158,9 @@ BufferSubgraph::copySymDepths(DirectedEdge *de)
 	DirectedEdge *sym=de->getSym();
 	sym->setDepth(Position::LEFT, de->getDepth(Position::RIGHT));
 	sym->setDepth(Position::RIGHT, de->getDepth(Position::LEFT));
+#if DEBUG
+cerr<<"copySymDepths: "<<de->getDepth(Position::LEFT)<<", "<<de->getDepth(Position::RIGHT)<<endl;
+#endif
 }
 
 /**
@@ -281,6 +287,9 @@ BufferSubgraph::contains(set<Node*>&nodes,Node *node)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/05/23 15:13:00  strk
+ * Added debugging output
+ *
  * Revision 1.16  2005/05/22 17:45:27  strk
  * Fixed initialization list order
  *

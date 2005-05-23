@@ -50,6 +50,9 @@ SubgraphDepthLocater::getDepth(Coordinate &p)
 	sort(stabbedSegments->begin(),stabbedSegments->end(),DepthSegmentLT);
 	DepthSegment *ds=(*stabbedSegments)[0];
 	int ret = ds->leftDepth;
+#if DEBUG
+	cerr<<"SubgraphDepthLocater::getDepth("<<p.toString()<<"): "<<ret<<endl;
+#endif
 
 	vector<DepthSegment *>::iterator it;
 	for (it=stabbedSegments->begin(); it != stabbedSegments->end(); it++)
@@ -108,26 +111,64 @@ void
 SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments)
 {
 	const CoordinateSequence *pts=dirEdge->getEdge()->getCoordinates();
+
 	for (int i=0; i<pts->getSize()-1; i++) {
 		seg->p0=pts->getAt(i);
 		seg->p1=pts->getAt(i + 1);
+
+#if DEBUG
+	cerr<<" SubgraphDepthLocater::findStabbedSegments: segment "<<i<<" ("<<seg->toString()<<") ";
+#endif
+
 		// ensure segment always points upwards
 		if (seg->p0.y > seg->p1.y)
+		{
 			seg->reverse();
+#if DEBUG
+			cerr<<" reverse ("<<seg->toString()<<") ";
+#endif
+		}
+
 		// skip segment if it is left of the stabbing line
 		double maxx=max(seg->p0.x, seg->p1.x);
 		if (maxx < stabbingRayLeftPt.x)
+		{
+#if DEBUG
+			cerr<<" segment is left to stabbing line, skipping "<<endl;
+#endif
 			continue;
-		// skip horizontal segments (there will be a non-horizontal one carrying the same depth info
+		}
+
+		// skip horizontal segments (there will be a non-horizontal
+		// one carrying the same depth info
 		if (seg->isHorizontal())
+		{
+#if DEBUG
+			cerr<<" segment is horizontal, skipping "<<endl;
+#endif
 			continue;
+		}
+
 		// skip if segment is above or below stabbing line
-		if (stabbingRayLeftPt.y < seg->p0.y || stabbingRayLeftPt.y > seg->p1.y)
+		if (stabbingRayLeftPt.y < seg->p0.y ||
+			stabbingRayLeftPt.y > seg->p1.y)
+		{
+#if DEBUG
+			cerr<<" segment above or below stabbing line, skipping "<<endl;
+#endif
 			continue;
+		}
+
 		// skip if stabbing ray is right of the segment
 		if (CGAlgorithms::computeOrientation(seg->p0, seg->p1,
 				stabbingRayLeftPt)==CGAlgorithms::RIGHT)
+		{
+#if DEBUG
+			cerr<<" stabbing ray right of segment, skipping"<<endl;
+#endif
 			continue;
+		}
+
 		// stabbing line cuts this segment, so record it
 		int depth=dirEdge->getDepth(Position::LEFT);
 		// if segment direction was flipped, use RHS depth instead
@@ -216,6 +257,9 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/05/23 15:13:00  strk
+ * Added debugging output
+ *
  * Revision 1.7  2005/05/20 16:15:41  strk
  * Code cleanups
  *
