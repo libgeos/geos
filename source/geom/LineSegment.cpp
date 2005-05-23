@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16.2.1  2005/05/23 15:22:28  strk
+ * Back-ported bugfix in ::reverse
+ *
  * Revision 1.16  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -109,7 +112,7 @@ double LineSegment::getLength() const {
 * Reverses the direction of the line segment.
 */
 void LineSegment::reverse() {
-	Coordinate& temp=p0;
+	Coordinate temp=p0;
 	p0.setCoordinate(p1);
 	p1.setCoordinate(temp);
 }
