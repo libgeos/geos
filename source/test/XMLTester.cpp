@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -27,6 +28,7 @@
 #include <geos/geomgraph.h>
 #include <geos/io.h>
 #include <geos/opRelate.h>
+#include <geos/opPolygonize.h>
 #include <geos/profiler.h>
 #include "../io/markup/MarkupSTL.h"
 #include <geos/unload.h>
@@ -88,6 +90,9 @@ try{
 	string geomBout="";
 	string opName="";
 	string opSig="";
+	string opArg1="";
+	string opArg2="";
+	string opArg3="";
 	string opRes="";
 	int caseCount=0;
 	int testCount=0;
@@ -169,6 +174,9 @@ try{
 			xml.IntoElem();
 			xml.FindChildElem("op");
 			opName=xml.GetChildAttrib("name");
+			opArg1=xml.GetChildAttrib("arg1");
+			opArg2=xml.GetChildAttrib("arg2");
+			opArg3=xml.GetChildAttrib("arg3");
 			opSig=xml.GetChildAttrib("arg3");
 			opRes=xml.GetChildData();
 		// trim blanks
@@ -322,7 +330,11 @@ try{
 					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					Geometry *gRealRes=gA->getCentroid();
-					gRealRes->normalize();
+					if ( gRealRes ) {
+						gRealRes->normalize();
+					} else {
+						gRealRes = factory->createGeometryCollection();
+					}
 					if (out & TEST_RESULT) {
 						if (gRes->compareTo(gRealRes)==0) {
 							cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=true"  <<endl;
@@ -373,7 +385,12 @@ try{
 					gRes->normalize();
 					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
 					profile->start();
-					Geometry *gRealRes=gA->buffer(atof(opSig.c_str()));
+					Geometry *gRealRes;
+					if ( opArg2 != "" ) {
+						gRealRes=gA->buffer(atof(opSig.c_str()), atoi(opArg2.c_str()));
+					} else {
+						gRealRes=gA->buffer(atof(opSig.c_str()));
+					}
 					profile->stop();
 					gRealRes->normalize();
 					if (out & TEST_RESULT) {
@@ -424,6 +441,41 @@ try{
 							failed++;
 						}
 					}
+				} else if (opName=="Polygonize") {
+					Geometry *gRes=NULL;
+					Geometry *gRealRes=NULL;
+					gRes=r->read(opRes);
+					gRes->normalize();
+					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
+					try {
+						Polygonizer plgnzr;
+						plgnzr.add(gA);
+						vector<Polygon *>*polys = plgnzr.getPolygons();
+						vector<Geometry *>*newgeoms = new vector<Geometry *>;
+						for (unsigned int i=0; i<polys->size(); i++)
+							newgeoms->push_back((*polys)[i]);
+						delete polys;
+						gRealRes=factory->createGeometryCollection(newgeoms);
+						gRealRes->normalize();
+					} catch ( ... ) {
+						delete gRealRes;
+						delete gRes;
+						throw;
+					}
+					if (out & TEST_RESULT) {
+						cout << "\t\tResult: Polygonize='" << gRealRes->toString() <<"'"<<endl;
+						cout << "Test result=";
+						if (gRes->compareTo(gRealRes)==0) {
+							cout << "true";
+							succeeded++;
+						} else {
+							cout << "false";
+							failed++;
+						}
+						cout <<endl;
+					}
+					delete gRealRes;
+					delete gRes;
 				} else {
 					cout<<"Something else\n";
 					//GeometryFactory *gf=new GeometryFactory(pm,0);
@@ -502,6 +554,10 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48.2.1  2005/05/23 17:53:40  strk
+ * Added support for point-per-quadrant argument in buffer tests (using arg2)
+ * and for Polygonize tests.
+ *
  * Revision 1.48  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *
