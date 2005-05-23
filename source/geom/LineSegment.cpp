@@ -104,7 +104,7 @@ double LineSegment::getLength() const {
 * Reverses the direction of the line segment.
 */
 void LineSegment::reverse() {
-	Coordinate& temp=p0;
+	Coordinate temp=p0;
 	p0.setCoordinate(p1);
 	p1.setCoordinate(temp);
 }
@@ -432,6 +432,9 @@ bool operator==(const LineSegment a, const LineSegment b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/05/23 15:04:10  strk
+ * Fixed bug in ::reverse()
+ *
  * Revision 1.19  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.
