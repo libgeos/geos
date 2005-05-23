@@ -9,3 +9,4 @@ Changes from 2.1.1 to 2.1.2
 - Avoided throws by IsValid on invalid input
 - Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
 - Better support for older compilers (Polygonizer::LineStringAdder friendship)
+- Removed useless Coordinate copies in CGAlgorithms::isOnLine() 
