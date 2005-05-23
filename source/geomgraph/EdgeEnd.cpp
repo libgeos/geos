@@ -17,7 +17,7 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 #include <typeinfo>
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 
 namespace geos {
@@ -118,6 +118,9 @@ string EdgeEnd::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.3  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *

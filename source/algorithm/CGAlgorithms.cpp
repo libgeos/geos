@@ -15,7 +15,7 @@
 
 #include <geos/geosAlgorithm.h>
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 
@@ -370,6 +370,9 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.19  2004/11/20 15:39:57  strk
  * Reduced HEAP allocations.
  *

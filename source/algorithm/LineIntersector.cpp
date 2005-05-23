@@ -16,7 +16,7 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 #include <geos/geom.h>
-#include <math.h>
+#include <cmath>
 
 #ifndef DEBUG_INTERSECT
 #define DEBUG_INTERSECT 0
@@ -440,6 +440,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.19  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

@@ -15,7 +15,7 @@
 
 #include <geos/planargraph.h>
 #include <geos/geomgraph.h>
-#include <math.h>
+#include <cmath>
 #include <typeinfo>
 #include <stdio.h>
 
@@ -233,6 +233,9 @@ planarDirectedEdge::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.7  2004/12/14 10:35:44  strk
  * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
  * for delayed destruction.
