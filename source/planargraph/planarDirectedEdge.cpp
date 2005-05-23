@@ -17,7 +17,7 @@
 #include <geos/geomgraph.h>
 #include <cmath>
 #include <typeinfo>
-#include <stdio.h>
+#include <sstream>
 
 namespace geos {
 //namespace planargraph {
@@ -214,16 +214,10 @@ planarDirectedEdge::compareDirection(const planarDirectedEdge *e) const
 string
 planarDirectedEdge::print() const
 {
-	string out=typeid(*this).name();
-	out+=" : ";
-	out+=p0.toString();
-	out+=" - ";
-	out+=p1.toString();
-	char buffer[255];
-	sprintf(buffer," %i:%g) ",quadrant,angle);
-	out.append(buffer);
-	out.append("");
-	return out;
+	ostringstream s;
+	s<<typeid(*this).name()<<": "<<p0.toString()<<" - "<<p1.toString();
+	s<<" "<<quadrant<<":"<<angle;
+	return s.str();
 }
 
 
@@ -233,6 +227,9 @@ planarDirectedEdge::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7.2.2  2005/05/23 18:41:51  strk
+ * Replaced sprintf uses with ostringstream
+ *
  * Revision 1.7.2.1  2005/05/23 17:10:08  strk
  * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
  *
