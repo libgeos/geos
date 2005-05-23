@@ -5,3 +5,4 @@ Changes from 2.1.1 to 2.1.2
 - Bugfix in LineSegment::reverse
 - Added multipolygon buffering test in source/test/testLeaksBig
 - Ported JTS robustness patch for RobustLineIntersector
+- Removed useless Coordinate copies in OverlayOp::mergeZ() 
