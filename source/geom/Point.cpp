@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -213,6 +214,9 @@ Point::getGeometryTypeId() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.34  2005/05/23 16:42:43  strk
+ * Added Refractions copyright
+ *
  * Revision 1.33  2005/05/13 17:15:34  strk
  * cleanups and indentations
  *
