@@ -13,3 +13,4 @@ Changes from 2.1.1 to 2.1.2
 - Removed useless Coordinate copies in CGAlgorithms::isOnLine() 
 - Added support for polygonize and parametrized buffer tests in XMLTester
 - Fixed support for --includedir and --libdir 
+- Fixed Z interpolation in LineIntersector

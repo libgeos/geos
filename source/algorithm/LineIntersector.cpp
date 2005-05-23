@@ -88,18 +88,12 @@ LineIntersector::nonRobustComputeEdgeDistance(const Coordinate& p,const Coordina
 	return dist;
 }
 
-LineIntersector::LineIntersector()
+LineIntersector::LineIntersector(): pa(intPt[0]), pb(intPt[1])
 {
 	precisionModel=NULL;
-	Coordinate *c=new Coordinate();
-	intPt[0].setCoordinate(*c);
-	delete c;
-	c=new Coordinate();
-	intPt[1].setCoordinate(*c);
-	delete c;
 	// alias the intersection points for ease of reference
-	pa.setCoordinate(intPt[0]);
-	pb.setCoordinate(intPt[1]);
+	//pa=intPt[0];
+	//pb=intPt[1];
 	result=0;
 }
 
@@ -334,7 +328,9 @@ LineIntersector::computeIntLineIndex(int segmentIndex)
 double
 LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const
 {
-	double dist=computeEdgeDistance(intPt[intIndex],inputLines[segmentIndex][0],inputLines[segmentIndex][1]);
+	double dist=computeEdgeDistance(intPt[intIndex],
+		inputLines[segmentIndex][0],
+		inputLines[segmentIndex][1]);
 	return dist;
 }
 
@@ -363,11 +359,13 @@ LineIntersector::isInteriorIntersection()
 bool
 LineIntersector::isInteriorIntersection(int inputLineIndex)
 {
-	for (int i = 0; i < result; i++) {
+	for (int i=0; i<result; i++)
+	{
 		if (!(intPt[i].equals2D(inputLines[inputLineIndex][0])
-            || intPt[i].equals2D(inputLines[inputLineIndex][1]) )) {
-				return true;
-			}
+            		|| intPt[i].equals2D(inputLines[inputLineIndex][1])))
+	    	{
+			return true;
+		}
 	}
 	return false;
 }
@@ -411,6 +409,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 		return p2.z;
 	}
 
+	//double zgap = fabs(p2.z - p1.z);
 	double zgap = p2.z - p1.z;
 	if ( ! zgap )
 	{
@@ -426,7 +425,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	yoff = (p.y-p1.y);
 	double pdist = (xoff*xoff+yoff*yoff);
 	double fract = sqrt(pdist/seglen);
-	double interpolated = p1.z+(zgap*fract);
+	double zoff = zgap*fract;
+	//double interpolated = p1.z < p2.z ? p1.z+zoff : p1.z-zoff;
+	double interpolated = p1.z+zoff;
 #if DEBUG
 	cerr<<" zgap:"<<zgap<<" seglen:"<<seglen<<" pdist:"<<pdist
 		<<" fract:"<<fract<<" z:"<<interpolated<<endl;
@@ -440,6 +441,9 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19.2.2  2005/05/23 19:01:52  strk
+ * Back-ported fix in Z interpolation
+ *
  * Revision 1.19.2.1  2005/05/23 17:10:08  strk
  * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
  *
