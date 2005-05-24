@@ -20,11 +20,21 @@ Changes in 2.1.2
 - Input checking and promoting in GeometryFactory::createMultiLineString()
 - Segfault fix in GeometryEditor::editPolygon() 
 
+
 Changes in 2.1.1
+
 
 Changes in 2.1.0
 
 - Added Polygonizer and LineMerger classes.
+- python wrapper examples
+- General cleanup / warnings removal
+- cleaner win32 / older copilers builds
+- Reduced heap allocations
+- debian package builder scripts
+- reduction of standard C lib headers dependency
+- Z support in overlay operations.
+
 
 Changes in 2.0.0
 
