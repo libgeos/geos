@@ -17,5 +17,6 @@ Changes from 2.1.1 to 2.1.2
 - Handled NULL results from getCentroid() in XMLTester
 - Segfault fix in (EMPTY)Geometry::getCentroid()
 - Made polygon::getBoundary() always OGC-valid (no LinearRings)
+- Input checking and promoting in GeometryFactory::createMultiLineString()
 
 @@@ from Changelog 2004-12-30 @@@
