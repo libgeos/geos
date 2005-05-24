@@ -23,6 +23,15 @@ Changes in 2.1.2
 
 Changes in 2.1.1
 
+- Fixed uninitialized Coordinate in TopologyException
+- Added install of version.h, platform.h and timeval.h
+- Memleak fix in PolygonizeGraph
+- Memleak fix in OverlayOp
+- Compiler warnings removal
+- Cleaner w32 build
+- Z interpolation in overlay operations
+- Debian package build scripts 
+
 
 Changes in 2.1.0
 
