@@ -5,110 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.45  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.44  2004/11/12 18:12:05  strk
- * Changed ::getBoundary() to return LineString if polygon has no holes.
- * (has required to pass OGC conformance test T20)
- *
- * Revision 1.43  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.42  2004/07/22 07:04:49  strk
- * Documented missing geometry functions.
- *
- * Revision 1.41  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.40  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.39  2004/07/06 17:58:22  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.38  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.37  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.36  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.35  2004/06/28 21:58:24  strk
- * Constructors speedup.
- *
- * Revision 1.34  2004/06/28 21:11:43  strk
- * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
- * Added holes argument check in Polygon.cpp.
- *
- * Revision 1.33  2004/06/15 20:30:47  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.32  2004/04/20 13:24:15  strk
- * More leaks removed.
- *
- * Revision 1.31  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.30  2004/04/01 10:44:33  ybychkov
- * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
- *
- * Revision 1.29  2004/03/31 07:50:37  ybychkov
- * "geom" partially upgraded to JTS 1.4
- *
- * Revision 1.28  2004/02/27 17:43:45  strk
- * memory leak fix in Polygon::getArea() - reported by 'Manuel  Prieto Villegas' <mprieto@dap.es>
- *
- * Revision 1.27  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.26  2003/10/31 16:36:04  strk
- * Re-introduced clone() method. Copy constructor could not really 
- * replace it.
- *
- * Revision 1.25  2003/10/17 05:51:21  ybychkov
- * Fixed a small memory leak.
- *
- * Revision 1.24  2003/10/16 08:50:00  strk
- * Memory leak fixes. Improved performance by mean of more calls to 
- * new getCoordinatesRO() when applicable.
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <typeinfo>
@@ -251,15 +155,15 @@ Geometry* Polygon::getBoundary() const {
 	}
 	if ( ! holes->size() )
 	{
-		return shell->clone();
+		return new LineString(*shell);
 	}
 
-	vector<Geometry *> rings(holes->size()+1);
-	rings[0]=shell;
+	vector<Geometry *> *rings = new vector<Geometry *>(holes->size()+1);
+	(*rings)[0]=new LineString(*shell);
 	for (unsigned int i=0; i<holes->size(); i++) {
-		rings[i + 1] = (*holes)[i];
+		(*rings)[i + 1] = new LineString((const LineString &)*(*holes)[i]);
 	}
-	MultiLineString *ret =getFactory()->createMultiLineString(rings);
+	MultiLineString *ret = getFactory()->createMultiLineString(rings);
 	return ret;
 }
 
@@ -405,5 +309,37 @@ GeometryTypeId
 Polygon::getGeometryTypeId() const {
 	return GEOS_POLYGON;
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.45.2.1  2005/05/24 07:29:36  strk
+ * Fixed polygon::getBoundary() to never return (MULTI)LinearRings.
+ *
+ * Revision 1.45  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.44  2004/11/12 18:12:05  strk
+ * Changed ::getBoundary() to return LineString if polygon has no holes.
+ * (has required to pass OGC conformance test T20)
+ *
+ * Revision 1.43  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.42  2004/07/22 07:04:49  strk
+ * Documented missing geometry functions.
+ *
+ * Revision 1.41  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.40  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ **********************************************************************/
 

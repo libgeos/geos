@@ -16,5 +16,6 @@ Changes from 2.1.1 to 2.1.2
 - Fixed Z interpolation in LineIntersector
 - Handled NULL results from getCentroid() in XMLTester
 - Segfault fix in (EMPTY)Geometry::getCentroid()
+- Made polygon::getBoundary() always OGC-valid (no LinearRings)
 
 @@@ from Changelog 2004-12-30 @@@
