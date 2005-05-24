@@ -1,4 +1,4 @@
-Changes from 2.1.1 to 2.1.2
+Changes in 2.1.2
 
 - Segfault fix in Point::isEmpty
 - Mem Leak fix in OffsetCurveBuilder::getRingCurve
@@ -19,6 +19,3 @@ Changes from 2.1.1 to 2.1.2
 - Made polygon::getBoundary() always OGC-valid (no LinearRings)
 - Input checking and promoting in GeometryFactory::createMultiLineString()
 - Segfault fix in GeometryEditor::editPolygon() 
-
-
-@@@ from Changelog 2004-12-22 @@@
