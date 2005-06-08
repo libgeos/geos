@@ -1,3 +1,8 @@
+Compatibility notes
+===================
+
+GCC 2.95.2 seems to lack the 'sstream' header file required
+to build GEOS. GCC 2.96 is known to work.
 
 Quickstart
 ==================
