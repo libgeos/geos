@@ -15,7 +15,7 @@
 
 
 #include <geos/geomgraphindex.h>
-#include <math.h>
+#include <cmath>
 
 #define DEBUG_INTERSECT 0
 #define DEBUG 0
@@ -231,6 +231,9 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.7  2004/11/23 19:53:06  strk
  * Had LineIntersector compute Z by interpolation.
  *

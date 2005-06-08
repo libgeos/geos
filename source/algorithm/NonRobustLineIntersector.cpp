@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.9  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -28,7 +31,7 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 

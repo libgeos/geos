@@ -444,8 +444,8 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	const Coordinate &p = n->getCoordinate();
 	RobustLineIntersector li;
 	for(int i=1;i<pts->getSize();i++) {
-		Coordinate p0=pts->getAt(i-1);
-		Coordinate p1=pts->getAt(i);	
+		const Coordinate &p0=pts->getAt(i-1);
+		const Coordinate &p1=pts->getAt(i);	
 		li.computeIntersection(p, p0, p1);
 		if (li.hasIntersection()) {
 			if ( p == p0 ) n->addZ(p0.z);
@@ -833,6 +833,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37.2.1  2005/05/23 16:41:45  strk
+ * Back-ported removal of useless Coordinate copies in mergeZ() - patch by Safe Software
+ *
  * Revision 1.37  2004/12/08 14:31:17  strk
  * elevationMatrix deleted by destructor
  *
