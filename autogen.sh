@@ -12,6 +12,8 @@ echo "Running autoheader"
 autoheader
 echo "Running aclocal"
 aclocal
+echo "Running libtoolize"
+libtoolize --force --copy
 echo "Running automake"
 automake $AMFLAGS
 echo "Running autoconf"
