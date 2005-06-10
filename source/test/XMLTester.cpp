@@ -46,6 +46,7 @@
 
 using namespace std;
 using namespace geos;
+using geos::Polygon; // for mingw providing a Polygon global function
 
 #define TEST_DESCR 1
 #define GEOM_A_IN 2
@@ -554,6 +555,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48.2.2  2005/06/10 13:24:17  strk
+ * Added use declaration to make MingW build work
+ *
  * Revision 1.48.2.1  2005/05/23 17:53:40  strk
  * Added support for point-per-quadrant argument in buffer tests (using arg2)
  * and for Polygonize tests.
