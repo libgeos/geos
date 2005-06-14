@@ -46,7 +46,7 @@
 
 using namespace std;
 using namespace geos;
-using geos::Polygon; // for mingw providing a Polygon global function
+//using geos::Polygon; // for mingw providing a Polygon global function
 
 #define TEST_DESCR 1
 #define GEOM_A_IN 2
@@ -451,7 +451,7 @@ try{
 					try {
 						Polygonizer plgnzr;
 						plgnzr.add(gA);
-						vector<Polygon *>*polys = plgnzr.getPolygons();
+						vector<geos::Polygon *>*polys = plgnzr.getPolygons();
 						vector<Geometry *>*newgeoms = new vector<Geometry *>;
 						for (unsigned int i=0; i<polys->size(); i++)
 							newgeoms->push_back((*polys)[i]);
@@ -555,6 +555,9 @@ try{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48.2.3  2005/06/14 11:59:46  strk
+ * Added workaround for mingw Polygon name clash
+ *
  * Revision 1.48.2.2  2005/06/10 13:24:17  strk
  * Added use declaration to make MingW build work
  *
