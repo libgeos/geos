@@ -2,7 +2,7 @@ Changes in 3.0.0
 
    These are mostly ABI breaking changes.
    In few cases the API also changed, but the most external one
-   (the one documented) should be unchanged.
+   (the documented one) is unchanged.
 
 - WKT parser speedup
 - New WKB parser
@@ -17,6 +17,10 @@ Changes in 3.0.0
   binding options.
 - Changed BufferSubgraph::computeDepths to use a set instead of a vector
   for checking visited Edges.
+
+Changes in 2.1.3cvs
+
+- win32/mingw build support
 
 Changes in 2.1.2
 
