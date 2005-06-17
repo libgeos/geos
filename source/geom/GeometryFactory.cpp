@@ -5,125 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.51  2004/12/30 10:14:09  strk
- * input checking and class promoting in createMultiLineString()
- *
- * Revision 1.50  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.49  2004/07/19 13:19:30  strk
- * Documentation fixes
- *
- * Revision 1.48  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.47  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.46  2004/07/05 19:40:48  strk
- * Added GeometryFactory::destroyGeometry(Geometry *)
- *
- * Revision 1.45  2004/07/05 14:23:03  strk
- * More documentation cleanups.
- *
- * Revision 1.44  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.43  2004/07/03 12:51:37  strk
- * Documentation cleanups for DoxyGen.
- *
- * Revision 1.42  2004/07/02 14:27:32  strk
- * Added deep-copy / take-ownerhship for Point type.
- *
- * Revision 1.41  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.40  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.39  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateSequence argument.
- * Fixed memory leaks associated with this and MultiGeometry constructors.
- * Other associated fixes.
- *
- * Revision 1.38  2004/06/15 21:35:32  strk
- * fixed buildGeometry to always return a newly allocated geometry
- *
- * Revision 1.37  2004/06/15 20:07:51  strk
- * GeometryCollections constructors make a deep copy of Geometry vector argument.
- *
- * Revision 1.36  2004/05/07 09:05:13  strk
- * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateSequence.
- *
- * Revision 1.35  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.34  2004/04/16 08:35:52  strk
- * Memory leaks fixed and const correctness applied for Point class.
- *
- * Revision 1.33  2004/04/14 12:28:43  strk
- * shouldNeverReachHere exceptions made more verbose
- *
- * Revision 1.32  2004/04/14 07:29:43  strk
- * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
- *
- * Revision 1.31  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- * Revision 1.30  2004/04/01 10:44:33  ybychkov
- * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
- *
- * Revision 1.29  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.28  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- *
- * Revision 1.27  2003/10/14 15:58:51  strk
- * Useless vector<Geometry *> leaking allocations removed
- *
- * Revision 1.26  2003/10/11 01:56:08  strk
- *
- * Code base padded with 'const' keywords ;)
- *
- * Revision 1.25  2003/10/09 15:35:13  strk
- * added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
- *
- * Revision 1.24  2003/10/09 10:14:06  strk
- * just a style change in top Log comment.
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <geos/geomUtil.h>
@@ -546,12 +435,8 @@ GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
 	CoordinateSequence *newCoords = fromCoords.clone();
 	LinearRing *g = NULL;
-	try {
-		g = new LinearRing(newCoords, this);
-	} catch (...) {
-		delete newCoords;
-		throw;
-	}
+	// construction failure will delete newCoords
+	g = new LinearRing(newCoords, this);
 	return g;
 }
 
@@ -741,12 +626,8 @@ GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 {
 	CoordinateSequence *newCoords = fromCoords.clone();
 	LineString *g = NULL;
-	try {
-		g = new LineString(newCoords, this);
-	} catch (...) {
-		delete newCoords;
-		throw;
-	}
+	// construction failure will delete newCoords
+	g = new LineString(newCoords, this);
 	return g;
 }
 
@@ -910,5 +791,121 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 	delete g;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.52  2005/06/17 14:58:51  strk
+ * Fixed segfault in LinearRing and LineString constructors
+ *
+ * Revision 1.51  2004/12/30 10:14:09  strk
+ * input checking and class promoting in createMultiLineString()
+ *
+ * Revision 1.50  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.49  2004/07/19 13:19:30  strk
+ * Documentation fixes
+ *
+ * Revision 1.48  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.47  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.46  2004/07/05 19:40:48  strk
+ * Added GeometryFactory::destroyGeometry(Geometry *)
+ *
+ * Revision 1.45  2004/07/05 14:23:03  strk
+ * More documentation cleanups.
+ *
+ * Revision 1.44  2004/07/05 10:50:20  strk
+ * deep-dopy construction taken out of Geometry and implemented only
+ * in GeometryFactory.
+ * Deep-copy geometry construction takes care of cleaning up copies
+ * on exception.
+ * Implemented clone() method for CoordinateSequence
+ * Changed createMultiPoint(CoordinateSequence) signature to reflect
+ * copy semantic (by-ref instead of by-pointer).
+ * Cleaned up documentation.
+ *
+ * Revision 1.43  2004/07/03 12:51:37  strk
+ * Documentation cleanups for DoxyGen.
+ *
+ * Revision 1.42  2004/07/02 14:27:32  strk
+ * Added deep-copy / take-ownerhship for Point type.
+ *
+ * Revision 1.41  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.40  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.39  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
+ * Revision 1.38  2004/06/15 21:35:32  strk
+ * fixed buildGeometry to always return a newly allocated geometry
+ *
+ * Revision 1.37  2004/06/15 20:07:51  strk
+ * GeometryCollections constructors make a deep copy of Geometry vector argument.
+ *
+ * Revision 1.36  2004/05/07 09:05:13  strk
+ * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
+ * to handle NULL CoordinateSequence.
+ *
+ * Revision 1.35  2004/04/20 08:52:01  strk
+ * GeometryFactory and Geometry const correctness.
+ * Memory leaks removed from SimpleGeometryPrecisionReducer
+ * and GeometryFactory.
+ *
+ * Revision 1.34  2004/04/16 08:35:52  strk
+ * Memory leaks fixed and const correctness applied for Point class.
+ *
+ * Revision 1.33  2004/04/14 12:28:43  strk
+ * shouldNeverReachHere exceptions made more verbose
+ *
+ * Revision 1.32  2004/04/14 07:29:43  strk
+ * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
+ *
+ * Revision 1.31  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
+ * Revision 1.30  2004/04/01 10:44:33  ybychkov
+ * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
+ *
+ * Revision 1.29  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.28  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ *
+ * Revision 1.27  2003/10/14 15:58:51  strk
+ * Useless vector<Geometry *> leaking allocations removed
+ *
+ * Revision 1.26  2003/10/11 01:56:08  strk
+ *
+ * Code base padded with 'const' keywords ;)
+ *
+ * Revision 1.25  2003/10/09 15:35:13  strk
+ * added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
+ *
+ * Revision 1.24  2003/10/09 10:14:06  strk
+ * just a style change in top Log comment.
+ *
+ **********************************************************************/
 
