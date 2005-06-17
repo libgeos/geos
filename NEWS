@@ -1,6 +1,8 @@
 Changes in 2.1.3cvs
 
 - win32/mingw build support
+- Segfault fix in LinearRing and LineString constructors
+- Segfault fix in Polygonizer
 
 Changes in 2.1.2
 
