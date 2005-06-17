@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -39,6 +40,7 @@ polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRing *testEr,
 	vector<polygonizeEdgeRing*> *shellList)
 {
 	LinearRing *testRing=testEr->getRingInternal();
+	if ( ! testRing ) return NULL;
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
 	Coordinate testPt=testRing->getCoordinateN(0);
 	polygonizeEdgeRing *minShell=NULL;
@@ -191,15 +193,13 @@ polygonizeEdgeRing::getPolygon()
 	return poly;
 }
 
-/**
-* Tests if the {@link LinearRing} ring formed by this edge ring is topologically valid.
-* @return
-*/
+/*
+ * Tests if the LinearRing formed by this edge ring is topologically valid.
+ */
 bool
 polygonizeEdgeRing::isValid()
 {
-	getRingInternal(); // computes cached ring
-	if (ring->getCoordinatesRO()->getSize() <= 3) return false;
+	if ( ! getRingInternal() ) return false; // computes cached ring
 	return ring->isValid();
 }
 
@@ -250,14 +250,10 @@ polygonizeEdgeRing::getRingInternal()
 	if (ring!=NULL) return ring;
 
 	getCoordinates();
-	if (ringPts->getSize() < 3) {
-		cout<<ringPts->toString();
-		return NULL;
-	}
 	try {
 		ring=factory->createLinearRing(*ringPts);
-	} catch (void* x) {
-		cout << ringPts->toString();
+	} catch (...) {
+		return NULL;
 	}
 	return ring;
 }
@@ -294,6 +290,9 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/06/17 15:08:07  strk
+ * Polygonizer segfault fix
+ *
  * Revision 1.8  2004/10/27 13:57:07  strk
  * Added some debugging lines (disabled by default)
  *

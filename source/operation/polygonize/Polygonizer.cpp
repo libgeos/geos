@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -246,10 +247,13 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER, vector<polygonizeEdge
 }
 
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/06/17 15:08:06  strk
+ * Polygonizer segfault fix
+ *
  * Revision 1.6  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *
