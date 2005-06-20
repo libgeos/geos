@@ -2,7 +2,8 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 top_builddir=@top_builddir@
 
-noinst_PROGRAMS = SimpleWKTTester XMLTester
+noinst_PROGRAMS = SimpleWKTTester
+bin_PROGRAMS = XMLTester
 # CTS
 
 LIBS = $(top_builddir)/source/geom/libgeos.la
