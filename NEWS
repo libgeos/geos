@@ -24,6 +24,7 @@ Changes in 2.1.3cvs
 - Segfault fix in LinearRing and LineString constructors
 - Segfault fix in Polygonizer
 - XMLTester installed by default
+- XMLTester code cleanup
 
 Changes in 2.1.2
 

@@ -31,6 +31,7 @@
 #include <geos/profiler.h>
 #include "../io/markup/MarkupSTL.h"
 #include <geos/unload.h>
+#include "XMLTester.h"
 
 //#include "util.h"
 //#include "geomgraph.h"
@@ -47,63 +48,45 @@ using namespace std;
 using namespace geos;
 //using geos::Polygon; // for mingw providing a Polygon global function
 
-#define TEST_DESCR 1
-#define GEOM_A_IN 2
-#define GEOM_A_OUT 4
-#define GEOM_B_IN 8
-#define GEOM_B_OUT 16
-#define TEST_OP 32
-#define TEST_RESULT 64
-#define PRED 128
 
-int main(int argC, char* argV[]) {
-	PrecisionModel *pm=NULL;
-	GeometryFactory *factory=NULL;
-	WKTReader *r=NULL;
-	WKTWriter *w=NULL;
-	Geometry *gA=NULL;
-	Geometry *gB=NULL;
+XMLTester::XMLTester(const char *source)
+{
+	r=NULL;
+	w=NULL;
+	pm=NULL;
+	factory=NULL;
+	failed=succeeded=caseCount=testCount=0;
+	xml.Load(source);
+	out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
+}
 
-try{
 
-#ifdef _MSC_VER
-	InitAllocCheck();
-	{
-#endif
-//	_CrtSetBreakAlloc(837964);
-	int out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
-//	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
-//	int out=GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT+PRED;
-//	int out=TEST_DESCR+GEOM_A_IN+GEOM_B_IN+TEST_OP+TEST_RESULT;
-//	int out=TEST_DESCR+TEST_RESULT;
-//	int out=0;
-	int failed=0;
-	int succeeded=0;
-	string source="./test.xml";
-//	string source="d:\\test.xml";
-	if ( argC > 1 ) source = argV[1];
-	string precisionModel="";
-	string desc="";
-	string geomAin="";
-	string geomBin="";
-	string geomAout="";
-	string geomBout="";
-	string opName="";
-	string opSig="";
-	string opArg1="";
-	string opArg2="";
-	string opArg3="";
-	string opRes="";
-	int caseCount=0;
-	int testCount=0;
-	//	_CrtSetBreakAlloc(18);
-	CMarkupSTL xml;
-	//bool a=
-	xml.Load(source.c_str());
-
+void
+XMLTester::run()
+{
 	xml.ResetPos();
 	xml.FindElem("run");
 	xml.FindChildElem("precisionModel");
+	parsePrecisionModel();
+	while (xml.FindChildElem("case")) {
+		try {
+			parseCase();
+		} catch (GEOSException *exc) {
+			cerr<<exc->toString()<<endl;
+		}
+	}
+	cout << "Failed: ";
+	cout << failed << endl;
+	cout << "Succeeded: ";
+	cout << succeeded << endl;
+
+}
+
+void
+XMLTester::parsePrecisionModel()
+{
+	string precisionModel;
+
 	/* This does not seem to work... */
 	//precisionModel=xml.GetChildAttrib("type");
 	string scaleStr=xml.GetChildAttrib("scale");
@@ -126,434 +109,479 @@ try{
 	factory = new GeometryFactory(pm);
 	r=new WKTReader(factory);
 	w=new WKTWriter();
+}
+
+void
+XMLTester::parseCase()
+{
+	string geomAin;
+	string geomBin;
+	string geomAout;
+	string geomBout;
+	string desc;
+
 	gA=NULL;
 	gB=NULL;
 
-	while (xml.FindChildElem("case")) {
-		xml.IntoElem();
-		caseCount++;
-		xml.FindChildElem("desc");
-		desc=xml.GetChildData();
-		if (out & TEST_DESCR) {
-			cout << "Case #" << caseCount << endl;
-			cout << "\t" << desc << endl;
-		}
-
-		xml.FindChildElem("a");
-		geomAin=xml.GetChildData();
-		gA=r->read(geomAin);
-		geomAout=w->write(gA);
-		if (out &(GEOM_A_IN | GEOM_A_OUT)) {
-			cout << "\tGeometry A" << endl;
-			if (out & GEOM_A_IN)
-				cout << "\t\tIn:" << geomAin << endl;
-			if (out & GEOM_A_OUT)
-				cout << "\t\tOut:" << geomAout << endl;
-		}
-
-		if ( xml.FindChildElem("b") )
-		{
-			geomBin=xml.GetChildData();
-			gB=r->read(geomBin);
-			geomBout=w->write(gB);
-			if (out &(GEOM_B_IN | GEOM_B_OUT)) {
-				cout << "\tGeometry B" << endl;
-				if (out & GEOM_B_IN)
-					cout << "\t\tIn:" << geomBin << endl;
-				if (out & GEOM_B_OUT)
-					cout << "\t\tOut:" << geomBout << endl;
-			}
-		}
-
-		testCount=0;
-		while(xml.FindChildElem("test")) {
-			testCount++;
-			if (out & TEST_DESCR) {
-				cout << "\tTest #" << testCount << endl;
-			}
-			xml.IntoElem();
-			xml.FindChildElem("op");
-			opName=xml.GetChildAttrib("name");
-			opArg1=xml.GetChildAttrib("arg1");
-			opArg2=xml.GetChildAttrib("arg2");
-			opArg3=xml.GetChildAttrib("arg3");
-			opSig=xml.GetChildAttrib("arg3");
-			opRes=xml.GetChildData();
-		// trim blanks
-		string::size_type pos = opRes.find_first_not_of(" \t\n\r");
-		if (pos!=string::npos) opRes=opRes.substr(pos);
-		pos = opRes.find_last_not_of(" \t\n\r");
-		if (pos!=string::npos) opRes=opRes.substr(0, pos+1);
-
-			if (out & TEST_OP) {
-				Profile *profile = new Profile("op");
-				if (opName=="relate") {
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
-					IntersectionMatrix *im=gA->relate(gB);
-					if (out & TEST_RESULT)
-						cout << "\t\tResult: matrix='" << im->toString() << "' result=" << (im->matches(opSig)?"true":"false") <<endl;
-					if (!im->matches(opSig)) {
-						failed++;
-					} else {
-						succeeded++;
-					}
-					delete im;
-				} else if (opName=="isValid") {
-					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
-					string result;
-					if (gA->isValid()) {
-						result="true";
-					} else {
-						result="false";
-					}
-					if (out & TEST_RESULT) {
-						if (result==opRes) {
-							cout << "\t\tResult: isValid='" << result << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: isValid='" << result << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-				} else if (opName=="intersection") {
-					Geometry *gRes=NULL;
-					Geometry *gRealRes=NULL;
-					gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					try {
-						gRealRes=gA->intersection(gB);
-						gRealRes->normalize();
-					} catch ( ... ) {
-						delete gRealRes;
-						delete gRes;
-						throw;
-					}
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="union") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->Union(gB);
-					gRealRes->normalize();
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: union='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: union='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="difference") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->difference(gB);
-					gRealRes->normalize();
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: difference='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: difference='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="symdifference") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->symDifference(gB);
-					gRealRes->normalize();
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: symdifference='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: symdifference='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="intersects") {
-					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
-					string result;
-					if (gA->intersects(gB)) {
-						result="true";
-					} else {
-						result="false";
-					}
-					if (out & TEST_RESULT) {
-						if (result==opRes) {
-							cout << "\t\tResult: intersects='" << result << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: intersects='" << result << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-				} else if (opName=="getboundary") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->getBoundary();
-					gRealRes->normalize();
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="getCentroid") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->getCentroid();
-					if ( gRealRes ) {
-						gRealRes->normalize();
-					} else {
-						gRealRes = factory->createGeometryCollection();
-					}
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="isSimple") {
-					cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
-					string result;
-					if (gA->isSimple()) {
-						result="true";
-					} else {
-						result="false";
-					}
-					if (out & TEST_RESULT) {
-						if (result==opRes) {
-							cout << "\t\tResult: isSimple='" << result << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: isSimple='" << result << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-				} else if (opName=="convexhull") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->convexHull();
-					gRealRes->normalize();
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: convexHull='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: convexHull='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="buffer") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					profile->start();
-					Geometry *gRealRes;
-					if ( opArg2 != "" ) {
-						gRealRes=gA->buffer(atof(opSig.c_str()), atoi(opArg2.c_str()));
-					} else {
-						gRealRes=gA->buffer(atof(opSig.c_str()));
-					}
-					profile->stop();
-					gRealRes->normalize();
-					if (out & TEST_RESULT) {
-						cout << "\t\tResult: buffer='" << gRealRes->toString() <<"'"<<endl;
-						cout << "Test result=";
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "true";
-							succeeded++;
-						} else {
-							cout << "false";
-							failed++;
-						}
-						cout << " Test time:" << profile->getTot()<<endl;
-					}
-					delete gRealRes;
-					delete gRes;
-				} else if (opName=="getInteriorPoint") {
-					Geometry *gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
-					Geometry *gRealRes=gA->getInteriorPoint();
-					gRealRes->normalize();
-					if (out & TEST_RESULT) {
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "\t\tResult: getInteriorPoint='" << gRealRes->toString() << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: getInteriorPoint='" << gRealRes->toString() << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-					delete gRes;
-					delete gRealRes;
-				} else if (opName=="isWithinDistance") {
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
-					string result;
-					if (gA->isWithinDistance(gB,atof(opSig.c_str()))) {
-						result="true";
-					} else {
-						result="false";
-					}
-					if (out & TEST_RESULT) {
-						if (result==opRes) {
-							cout << "\t\tResult: isWithinDistance='" << result << "' result=true"  <<endl;
-							succeeded++;
-						} else {
-							cout << "\t\tResult: isWithinDistance='" << result << "' result=false"  <<endl;
-							failed++;
-						}
-					}
-				} else if (opName=="Polygonize") {
-					Geometry *gRes=NULL;
-					Geometry *gRealRes=NULL;
-					gRes=r->read(opRes);
-					gRes->normalize();
-					cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
-					try {
-						Polygonizer plgnzr;
-						plgnzr.add(gA);
-						vector<geos::Polygon *>*polys = plgnzr.getPolygons();
-						vector<Geometry *>*newgeoms = new vector<Geometry *>;
-						for (unsigned int i=0; i<polys->size(); i++)
-							newgeoms->push_back((*polys)[i]);
-						delete polys;
-						gRealRes=factory->createGeometryCollection(newgeoms);
-						gRealRes->normalize();
-					} catch ( ... ) {
-						delete gRealRes;
-						delete gRes;
-						throw;
-					}
-					if (out & TEST_RESULT) {
-						cout << "\t\tResult: Polygonize='" << gRealRes->toString() <<"'"<<endl;
-						cout << "Test result=";
-						if (gRes->compareTo(gRealRes)==0) {
-							cout << "true";
-							succeeded++;
-						} else {
-							cout << "false";
-							failed++;
-						}
-						cout <<endl;
-					}
-					delete gRealRes;
-					delete gRes;
-				} else {
-					cout<<"Something else\n";
-					//GeometryFactory *gf=new GeometryFactory(pm,0);
-					//Geometry *g1=gf->createPoint(*(new Coordinate(10,10)));
-					//Geometry *g2=gf->createPoint(*(new Coordinate(20,20)));
-					//delete g1;
-					//cout << endl;
-  				}
-				delete profile;
-			}
-			if (out & PRED) {
-				cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
-				cout << "\tDisjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;
-				cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << endl;
-				cout << "\tTouches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << endl;
-				cout << "\tCrosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << endl;
-				cout << "\tWithin:\t\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << endl;
-				cout << "\tContains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << endl;
-				cout << "\tOverlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << endl;
-			}
-
-			xml.OutOfElem();
-		}
-			
-		xml.OutOfElem();
-		delete gA; gA=NULL;
-		delete gB; gB=NULL;
+	xml.IntoElem();
+	caseCount++;
+	xml.FindChildElem("desc");
+	desc=xml.GetChildData();
+	if (out & TEST_DESCR) {
+		cout << "Case #" << caseCount << endl;
+		cout << "\t" << desc << endl;
 	}
-	cout << "Failed: ";
-	cout << failed << endl;
-	cout << "Succeeded: ";
-	cout << succeeded << endl;
 
-//	_CrtDumpMemoryLeaks();
+	xml.FindChildElem("a");
+	geomAin=xml.GetChildData();
+	gA=r->read(geomAin);
+	geomAout=w->write(gA);
+	if (out &(GEOM_A_IN | GEOM_A_OUT)) {
+		cout << "\tGeometry A" << endl;
+		if (out & GEOM_A_IN)
+			cout << "\t\tIn:" << geomAin << endl;
+		if (out & GEOM_A_OUT)
+			cout << "\t\tOut:" << geomAout << endl;
+	}
 
-	cout << "End Test"<<endl;
+	if ( xml.FindChildElem("b") )
+	{
+		geomBin=xml.GetChildData();
+		gB=r->read(geomBin);
+		geomBout=w->write(gB);
+		if (out &(GEOM_B_IN | GEOM_B_OUT)) {
+			cout << "\tGeometry B" << endl;
+			if (out & GEOM_B_IN)
+				cout << "\t\tIn:" << geomBin << endl;
+			if (out & GEOM_B_OUT)
+				cout << "\t\tOut:" << geomBout << endl;
+		}
+	}
+
+	testCount=0;
+	while(xml.FindChildElem("test")) {
+		parseTest();
+	}
+		
+	xml.OutOfElem();
+	delete gA;
+	delete gB;
+}
+
+void
+XMLTester::parseTest()
+{
+	string opName;
+	string opSig;
+	string opArg1;
+	string opArg2;
+	string opArg3;
+	string opRes;
+
+	testCount++;
+	if (out & TEST_DESCR) {
+		cout << "\tTest #" << testCount << endl;
+	}
+	xml.IntoElem();
+	xml.FindChildElem("op");
+	opName=xml.GetChildAttrib("name");
+	opArg1=xml.GetChildAttrib("arg1");
+	opArg2=xml.GetChildAttrib("arg2");
+	opArg3=xml.GetChildAttrib("arg3");
+	opSig=xml.GetChildAttrib("arg3");
+	opRes=xml.GetChildData();
+	// trim blanks
+	string::size_type pos = opRes.find_first_not_of(" \t\n\r");
+	if (pos!=string::npos) opRes=opRes.substr(pos);
+	pos = opRes.find_last_not_of(" \t\n\r");
+	if (pos!=string::npos) opRes=opRes.substr(0, pos+1);
+
+	if (out & TEST_OP) {
+		Profile *profile = new Profile("op");
+		if (opName=="relate") {
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
+			IntersectionMatrix *im=gA->relate(gB);
+			if (out & TEST_RESULT)
+				cout << "\t\tResult: matrix='" << im->toString() << "' result=" << (im->matches(opSig)?"true":"false") <<endl;
+			if (!im->matches(opSig)) {
+				failed++;
+			} else {
+				succeeded++;
+			}
+			delete im;
+		} else if (opName=="isValid") {
+			Geometry *gT=gA;
+			string gTname="A";
+			if ( opArg1 == "B" && gB ) {
+				gT=gB;
+				gTname="B";
+			} 
+			cout << "\t\tOperation '" << opName << "(" << gTname << ")' should be " << opRes << endl;
+			string result;
+			if (gT->isValid()) {
+				result="true";
+			} else {
+				result="false";
+			}
+			if (out & TEST_RESULT) {
+				if (result==opRes) {
+					cout << "\t\tResult: isValid='" << result << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: isValid='" << result << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+		} else if (opName=="intersection") {
+			Geometry *gRes=NULL;
+			Geometry *gRealRes=NULL;
+			gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+			try {
+				gRealRes=gA->intersection(gB);
+				gRealRes->normalize();
+			} catch ( ... ) {
+				delete gRealRes;
+				delete gRes;
+				throw;
+			}
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: intersection='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="union") {
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+			Geometry *gRealRes=gA->Union(gB);
+			gRealRes->normalize();
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: union='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: union='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="difference") {
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+			Geometry *gRealRes=gA->difference(gB);
+			gRealRes->normalize();
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: difference='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: difference='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="symdifference") {
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+			Geometry *gRealRes=gA->symDifference(gB);
+			gRealRes->normalize();
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: symdifference='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: symdifference='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="intersects") {
+			cout << "\t\tOperation '" << opName << " should be " << opRes << endl;
+			string result;
+			if (gA->intersects(gB)) {
+				result="true";
+			} else {
+				result="false";
+			}
+			if (out & TEST_RESULT) {
+				if (result==opRes) {
+					cout << "\t\tResult: intersects='" << result << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: intersects='" << result << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+		} else if (opName=="getboundary") {
+			Geometry *gT=gA;
+			string gTname="A";
+			if ( opArg1 == "B" && gB ) {
+				gT=gB;
+				gTname="B";
+			} 
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "(" << gTname <<")' should be " << gRes->toString() << endl;
+			Geometry *gRealRes=gT->getBoundary();
+			gRealRes->normalize();
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: getboundary='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="getCentroid") {
+			Geometry *gT=gA;
+			string gTname="A";
+			if ( opArg1 == "B" && gB ) {
+				gT=gB;
+				gTname="B";
+			} 
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "(" << gTname <<")' should be " << gRes->toString() << endl;
+			Geometry *gRealRes=gT->getCentroid();
+			if ( gRealRes ) {
+				gRealRes->normalize();
+			} else {
+				gRealRes = factory->createGeometryCollection();
+			}
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: getCentroid='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="isSimple") {
+			Geometry *gT=gA;
+			string gTname="A";
+			if ( opArg1 == "B" && gB ) {
+				gT=gB;
+				gTname="B";
+			} 
+			cout << "\t\tOperation '" << opName << "(" << gTname <<")' should be " << opRes << endl;
+			string result;
+			if (gT->isSimple()) {
+				result="true";
+			} else {
+				result="false";
+			}
+			if (out & TEST_RESULT) {
+				if (result==opRes) {
+					cout << "\t\tResult: isSimple='" << result << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: isSimple='" << result << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+		} else if (opName=="convexhull") {
+			Geometry *gT=gA;
+			string gTname="A";
+			if ( opArg1 == "B" && gB ) {
+				gT=gB;
+				gTname="B";
+			} 
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "(" << gTname <<")' should be " << gRes->toString() << endl;
+			Geometry *gRealRes=gT->convexHull();
+			gRealRes->normalize();
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: convexHull='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: convexHull='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="buffer") {
+			Geometry *gT=gA;
+			string gTname="A";
+			if ( opArg1 == "B" && gB ) {
+				gT=gB;
+				gTname="B";
+			} 
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			profile->start();
+			Geometry *gRealRes;
+			if ( opArg2 != "" ) {
+				cout << "\t\tOperation '" << opName << "(" << gTname <<", "<<opSig<<", "<<opArg2<<")' should be " << gRes->toString() << endl;
+				gRealRes=gT->buffer(atof(opSig.c_str()), atoi(opArg2.c_str()));
+			} else {
+				cout << "\t\tOperation '" << opName << "(" << gTname <<", "<<opSig<<")' should be " << gRes->toString() << endl;
+				gRealRes=gT->buffer(atof(opSig.c_str()));
+			}
+			profile->stop();
+			gRealRes->normalize();
+			if (out & TEST_RESULT) {
+				cout << "\t\tResult: buffer='" << gRealRes->toString() <<"'"<<endl;
+				cout << "Test result=";
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "true";
+					succeeded++;
+				} else {
+					cout << "false";
+					failed++;
+				}
+				cout << " Test time:" << profile->getTot()<<endl;
+			}
+			delete gRealRes;
+			delete gRes;
+		} else if (opName=="getInteriorPoint") {
+			Geometry *gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << gRes->toString() << endl;
+			Geometry *gRealRes=gA->getInteriorPoint();
+			gRealRes->normalize();
+			if (out & TEST_RESULT) {
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "\t\tResult: getInteriorPoint='" << gRealRes->toString() << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: getInteriorPoint='" << gRealRes->toString() << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+			delete gRes;
+			delete gRealRes;
+		} else if (opName=="isWithinDistance") {
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
+			string result;
+			if (gA->isWithinDistance(gB,atof(opSig.c_str()))) {
+				result="true";
+			} else {
+				result="false";
+			}
+			if (out & TEST_RESULT) {
+				if (result==opRes) {
+					cout << "\t\tResult: isWithinDistance='" << result << "' result=true"  <<endl;
+					succeeded++;
+				} else {
+					cout << "\t\tResult: isWithinDistance='" << result << "' result=false"  <<endl;
+					failed++;
+				}
+			}
+		} else if (opName=="Polygonize") {
+			Geometry *gRes=NULL;
+			Geometry *gRealRes=NULL;
+			gRes=r->read(opRes);
+			gRes->normalize();
+			cout << "\t\tOperation '" << opName << "[" << opSig <<"]' should be " << opRes << endl;
+			try {
+				Polygonizer plgnzr;
+				plgnzr.add(gA);
+				vector<geos::Polygon *>*polys = plgnzr.getPolygons();
+				vector<Geometry *>*newgeoms = new vector<Geometry *>;
+				for (unsigned int i=0; i<polys->size(); i++)
+					newgeoms->push_back((*polys)[i]);
+				delete polys;
+				gRealRes=factory->createGeometryCollection(newgeoms);
+				gRealRes->normalize();
+			} catch ( ... ) {
+				delete gRealRes;
+				delete gRes;
+				throw;
+			}
+			if (out & TEST_RESULT) {
+				cout << "\t\tResult: Polygonize='" << gRealRes->toString() <<"'"<<endl;
+				cout << "Test result=";
+				if (gRes->compareTo(gRealRes)==0) {
+					cout << "true";
+					succeeded++;
+				} else {
+					cout << "false";
+					failed++;
+				}
+				cout <<endl;
+			}
+			delete gRealRes;
+			delete gRes;
+		} else {
+			cout<<"Something else\n";
+			//GeometryFactory *gf=new GeometryFactory(pm,0);
+			//Geometry *g1=gf->createPoint(*(new Coordinate(10,10)));
+			//Geometry *g2=gf->createPoint(*(new Coordinate(20,20)));
+			//delete g1;
+			//cout << endl;
+		}
+		delete profile;
+	}
+	if (out & PRED) {
+		cout << "\tEquals:\t\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
+		cout << "\tDisjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;
+		cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << endl;
+		cout << "\tTouches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << endl;
+		cout << "\tCrosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << endl;
+		cout << "\tWithin:\t\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << endl;
+		cout << "\tContains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << endl;
+		cout << "\tOverlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << endl;
+	}
+
+	xml.OutOfElem();
+}
+
+XMLTester::~XMLTester()
+{
 	delete pm;
 	delete factory;
 	delete r; r=NULL;
 	delete w; w=NULL;
+}
+
+
+int main(int argC, char* argV[]) {
+
+#ifdef _MSC_VER
+	InitAllocCheck();
+	{
+#endif
+
+	string source="./test.xml";
+	if ( argC > 1 ) source = argV[1];
+	XMLTester tester(source.c_str());
+	tester.run();
 
 #ifdef _MSC_VER
 	}
 	DeInitAllocCheck();
 #endif
 
-} catch (GEOSException *exc) {
-	cerr<<"Exception: "<<exc->toString()<<endl;
-	delete pm;
-	delete factory;
-	delete r;
-	delete w;
-	delete gA;
-	delete gB;
-	delete exc;
-} catch (exception e) {
-	cerr<<"Exception: "<<e.what()<<endl;
-	delete pm;
-	delete factory;
-	delete r;
-	delete w;
-	delete gA;
-	delete gB;
-} catch (...) {
-	cerr<<"unexpected exception: "<<endl;
-	delete pm;
-	delete factory;
-	delete r;
-	delete w;
-	delete gA;
-	delete gB;
-}
-
 	Unload::Release();
 }
 
 /**********************************************************************
  * $Log$
+ * Revision 1.56  2005/06/21 12:22:19  strk
+ * XMLTester code cleanups
+ *
  * Revision 1.55  2005/06/14 11:57:03  strk
  * Added workaround for mingw Polygon name clash
  *
