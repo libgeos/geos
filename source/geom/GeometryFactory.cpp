@@ -703,8 +703,9 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 			return createMultiLineString(newGeoms);
 		} else if (typeid(*geom0)==typeid(Point)) {
 			return createMultiPoint(newGeoms);
+		} else {
+			return createGeometryCollection(newGeoms);
 		}
-		Assert::shouldNeverReachHere("buildGeomtry encountered an unkwnon geometry type");
 	}
 
 	// since this is not a collection we can delete vector
@@ -795,6 +796,9 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2005/06/22 00:46:38  strk
+ * Fixed bugus handling of collections in ::buildGeometry
+ *
  * Revision 1.52  2005/06/17 14:58:51  strk
  * Fixed segfault in LinearRing and LineString constructors
  *
