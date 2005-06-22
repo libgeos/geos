@@ -25,6 +25,8 @@ Changes in 2.1.3cvs
 - Segfault fix in Polygonizer
 - XMLTester installed by default
 - XMLTester code cleanup
+- Fixed handling of collection input in GeometryFactory::buildGeometry
+- Added shortcircuit test for Union operation
 
 Changes in 2.1.2
 

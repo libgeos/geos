@@ -602,9 +602,44 @@ Geometry::Union(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
+
+	Geometry *out = NULL;
+
+#ifdef SHORTCIRCUIT_PREDICATES
+	// if envelopes are disjoint return a MULTI geom or
+	// a geometrycollection
+	if ( ! getEnvelopeInternal()->intersects(other->getEnvelopeInternal()) )
+	{
+//cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
+		const GeometryCollection *coll;
+		int ngeoms, i;
+		vector<Geometry *> *v = new vector<Geometry *>();
+
+		if ( coll = dynamic_cast<const GeometryCollection *>(this) )
+		{
+			ngeoms = coll->getNumGeometries();
+			for (i=0; i<ngeoms; i++)
+				v->push_back(coll->getGeometryN(i)->clone());
+		} else {
+			v->push_back(this->clone());
+		}
+
+		if ( coll = dynamic_cast<const GeometryCollection *>(other) )
+		{
+			ngeoms = coll->getNumGeometries();
+			for (i=0; i<ngeoms; i++)
+				v->push_back(coll->getGeometryN(i)->clone());
+		} else {
+			v->push_back(other->clone());
+		}
+
+		out = factory->buildGeometry(v);
+		return out;
+	}
+#endif
+
 	Geometry *in1 = toInternalGeometry(this);
 	Geometry *in2 = toInternalGeometry(other);
-	Geometry *out = NULL;
 	try {
 		out = OverlayOp::overlayOp(in1,in2,OverlayOp::UNION);
 	}
@@ -868,6 +903,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.76  2005/06/22 00:46:57  strk
+ * Shortcircuit tests for Union
+ *
  * Revision 1.75  2005/05/13 17:14:54  strk
  * Added comment about 2D-only comparison of ::equal(Coordinate, Coordinate, double)
  *
