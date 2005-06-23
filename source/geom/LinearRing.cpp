@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2005/06/23 14:22:33  strk
+ * Inlined and added missing ::clone() for Geometry subclasses
+ *
  * Revision 1.24  2004/12/16 16:27:24  strk
  * Fixed LinearRing::clone() to return LinearRing instead of LineString
  *
@@ -127,10 +130,6 @@ void LinearRing::setPoints(CoordinateSequence* cl){
 	const vector<Coordinate> *v=cl->toVector();
 	points->setPoints(*(v));
 	//delete v;
-}
-
-Geometry* LinearRing::clone() const {
-	return new LinearRing(*this);
 }
 
 GeometryTypeId

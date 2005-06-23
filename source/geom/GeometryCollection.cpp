@@ -60,10 +60,6 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const Geome
 	geometries=newGeoms;
 }
 
-Geometry* GeometryCollection::clone() const {
-	return new GeometryCollection(*this);
-}
-
 /*
 * Collects all coordinates of all subgeometries into a CoordinateSequence.
 * 
@@ -274,6 +270,9 @@ GeometryCollection::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2005/06/23 14:22:32  strk
+ * Inlined and added missing ::clone() for Geometry subclasses
+ *
  * Revision 1.44  2004/12/08 14:32:54  strk
  * cleanups
  *

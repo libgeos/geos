@@ -49,12 +49,6 @@ Point::Point(const Point &p): Geometry(p.getFactory())
 	coordinates=p.coordinates->clone();
 }
 
-Geometry *
-Point::clone() const
-{
-	return new Point(*this);
-}
-
 CoordinateSequence *
 Point::getCoordinates() const
 {
@@ -214,6 +208,9 @@ Point::getGeometryTypeId() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.35  2005/06/23 14:22:33  strk
+ * Inlined and added missing ::clone() for Geometry subclasses
+ *
  * Revision 1.34  2005/05/23 16:42:43  strk
  * Added Refractions copyright
  *

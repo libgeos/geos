@@ -1818,7 +1818,9 @@ public:
 	 */
 	GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
 
-	virtual Geometry *clone() const;
+	virtual Geometry *clone() const {
+		return new GeometryCollection(*this);
+	}
 
 	virtual ~GeometryCollection();
 
@@ -1929,7 +1931,7 @@ public:
 
 	Point(const Point &p); 
 	virtual ~Point();
-	Geometry *clone() const;
+	Geometry *clone() const { return new Point(*this); }
 	CoordinateSequence* getCoordinates(void) const;
 	const CoordinateSequence* getCoordinatesRO() const {
 		return coordinates;
@@ -1988,7 +1990,7 @@ public:
 	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
 
 	virtual ~LineString();
-	virtual Geometry *clone() const;
+	virtual Geometry *clone() const { return new LineString(*this); }
 	virtual CoordinateSequence* getCoordinates() const;
 
 	/// Returns a read-only pointer to internal CoordinateSequence
@@ -2081,7 +2083,7 @@ public:
 	*/
 	LinearRing(CoordinateSequence* points, const GeometryFactory *newFactory);
 
-	virtual Geometry *clone() const;
+	virtual Geometry *clone() const { return new LinearRing(*this); }
 	virtual ~LinearRing();
 	bool isSimple() const;
 	string getGeometryType() const;
@@ -2138,7 +2140,7 @@ public:
 	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		const GeometryFactory *newFactory);
 
-	virtual Geometry *clone() const;
+	virtual Geometry *clone() const { return new Polygon(*this); }
 	CoordinateSequence* getCoordinates() const;
 	int getNumPoints() const;
 
@@ -2243,6 +2245,10 @@ public:
 	//bool isValid() const;
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
+
+	MultiPoint(const MultiPoint &mp): GeometryCollection(mp) {}
+	Geometry *clone() const { return new MultiPoint(*this); };
+
 protected:
 	const Coordinate* getCoordinate(int n) const;
 private:
@@ -2301,6 +2307,10 @@ public:
 	bool isClosed() const;
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
+
+	MultiLineString(const MultiPoint &mp): GeometryCollection(mp) {}
+	Geometry *clone() const { return new MultiLineString(*this); };
+
 private:
 #ifdef INT64_CONST_IS_I64
 	static const int64 serialVersionUID = 8166665132445433741I64;
@@ -2359,6 +2369,10 @@ public:
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
+
+	MultiPolygon(const MultiPoint &mp): GeometryCollection(mp) {}
+	Geometry *clone() const { return new MultiPolygon(*this); };
+
 private:
 #ifdef INT64_CONST_IS_I64
 	static const int64 serialVersionUID = -551033529766975875I64;
@@ -2566,6 +2580,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.44  2005/06/23 14:22:33  strk
+ * Inlined and added missing ::clone() for Geometry subclasses
+ *
  * Revision 1.43  2005/05/13 18:06:11  strk
  * Added default tolerance parameter for equalsExact
  *

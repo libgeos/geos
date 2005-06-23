@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.47  2005/06/23 14:22:33  strk
+ * Inlined and added missing ::clone() for Geometry subclasses
+ *
  * Revision 1.46  2004/12/30 10:14:51  strk
  * never return LinearRing or MultiLinearRing from getBoundary
  *
@@ -176,10 +179,6 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles, const Geome
 				throw new IllegalArgumentException("holes must be LinearRings");
 		holes=newHoles;
 	}
-}
-
-Geometry *Polygon::clone() const {
-	return new Polygon(*this);
 }
 
 CoordinateSequence* Polygon::getCoordinates() const {

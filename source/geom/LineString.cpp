@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.48  2005/06/23 14:22:33  strk
+ * Inlined and added missing ::clone() for Geometry subclasses
+ *
  * Revision 1.47  2005/02/22 17:10:47  strk
  * Reduced CoordinateSequence::getSize() calls.
  *
@@ -158,10 +161,6 @@ LineString::LineString(CoordinateSequence *newCoords, const GeometryFactory *fac
 
 LineString::~LineString(){
 	delete points;
-}
-
-Geometry* LineString::clone() const {
-	return new LineString(*this);
 }
 
 CoordinateSequence* LineString::getCoordinates() const {

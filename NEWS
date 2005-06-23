@@ -17,6 +17,8 @@ Changes in 3.0.0
   binding options.
 - Changed BufferSubgraph::computeDepths to use a set instead of a vector
   for checking visited Edges.
+- Added missing ::clone() methods for Multi* geoms and made all
+  geometry clone() methods inlined
 
 Changes in 2.1.3cvs
 
