@@ -119,13 +119,17 @@ bool
 CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 {
 	RobustLineIntersector lineIntersector;
-	for(int i=1;i<pt->getSize();i++) {
-		const Coordinate &p0=pt->getAt(i-1);
+	int ptsize = pt->getSize();
+	if ( ptsize == 0 ) return false;
+
+	const Coordinate *pp=&(pt->getAt(0));
+	for(int i=1; i<ptsize; i++) {
 		const Coordinate &p1=pt->getAt(i);	
-		lineIntersector.computeIntersection(p, p0, p1);
+		lineIntersector.computeIntersection(p, *pp, p1);
 		if (lineIntersector.hasIntersection()) {
 			return true;
 		}
+		pp=&p1;
 	}
 	return false;
 }
@@ -376,6 +380,9 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19.2.4  2005/06/23 11:20:38  strk
+ * Minor performance improvements
+ *
  * Revision 1.19.2.3  2005/06/23 10:53:14  strk
  * Removed useless Coordinate copy in CGAlgorithms::isPointInRing()
  *

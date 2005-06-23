@@ -8,6 +8,7 @@ Changes in 2.1.3cvs
 - Fixed handling of collection input in GeometryFactory::buildGeometry
 - Added shortcircuit test for Union operation
 - Reduced useless Coordinate copies in CGAlgorithms::isPointInRing()
+- Other minor performance improvements
 
 Changes in 2.1.2
 
