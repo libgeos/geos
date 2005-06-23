@@ -27,6 +27,8 @@ Changes in 2.1.3cvs
 - XMLTester code cleanup
 - Fixed handling of collection input in GeometryFactory::buildGeometry
 - Added shortcircuit test for Union operation
+- Performance improvements in CGAlgorithms::isOnLine()
+- Other minor performance improvements
 
 Changes in 2.1.2
 
