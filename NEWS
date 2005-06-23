@@ -7,6 +7,7 @@ Changes in 2.1.3cvs
 - XMLTester code cleanup
 - Fixed handling of collection input in GeometryFactory::buildGeometry
 - Added shortcircuit test for Union operation
+- Reduced useless Coordinate copies in CGAlgorithms::isPointInRing()
 
 Changes in 2.1.2
 
