@@ -19,6 +19,7 @@ Changes in 3.0.0
   for checking visited Edges.
 - Added missing ::clone() methods for Multi* geoms and made all
   geometry clone() methods inlined
+- Made LineIntersector a concrete type
 
 Changes in 2.1.3cvs
 
