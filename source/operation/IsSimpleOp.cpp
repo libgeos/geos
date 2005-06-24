@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.15  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
@@ -71,35 +76,30 @@ IsSimpleOp::isSimple(const MultiPoint *mp)
 bool IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom){
 	if (geom->isEmpty()) return true;
 	GeometryGraph *graph=new GeometryGraph(0,geom);
-	LineIntersector *li=new RobustLineIntersector();
-	SegmentIntersector *si=graph->computeSelfNodes(li,true);
+	LineIntersector li;
+	SegmentIntersector *si=graph->computeSelfNodes(&li,true);
 	// if no self-intersection, must be simple
 	if (!si->hasIntersection()) {
 		delete graph;
-		delete li;
 		delete si;
 		return true;
 	}
 	if (si->hasProperIntersection()) {
 		delete graph;
-		delete li;
 		delete si;
 		return false;
 	}
 	if (hasNonEndpointIntersection(graph)) {
 		delete graph;
-		delete li;
 		delete si;
 		return false;
 	}
 	if (hasClosedEndpointIntersection(graph)) {
 		delete graph;
-		delete li;
 		delete si;
 		return false;
 	}
 	delete graph;
-	delete li;
 	delete si;
 	return true;
 }

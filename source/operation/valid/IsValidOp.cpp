@@ -121,10 +121,9 @@ void IsValidOp::checkValid(const LinearRing *g){
 		delete graph;
 		return;
 	}
-	LineIntersector *li = new RobustLineIntersector();
-	delete graph->computeSelfNodes(li, true);
+	LineIntersector li;
+	delete graph->computeSelfNodes(&li, true);
 	checkNoSelfIntersectingRings(graph);
-	delete li;
 	delete graph;
 }
 
@@ -503,6 +502,11 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.29  2005/04/07 18:43:20  strk
  * Fixed bug throwing an exception when a result could be returned instead
  * (ported JTS patch)

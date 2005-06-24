@@ -112,17 +112,15 @@ CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 bool
 CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 {
-	RobustLineIntersector lineIntersector;
+	//LineIntersector lineIntersector;
 	int ptsize = pt->getSize();
 	if ( ptsize == 0 ) return false;
 
 	const Coordinate *pp=&(pt->getAt(0));
 	for(int i=1; i<ptsize; i++) {
 		const Coordinate &p1=pt->getAt(i);	
-		lineIntersector.computeIntersection(p, *pp, p1);
-		if (lineIntersector.hasIntersection()) {
+		if ( LineIntersector::hasIntersection(p, *pp, p1) )
 			return true;
-		}
 		pp=&p1;
 	}
 	return false;
@@ -383,6 +381,11 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2005/06/24 11:09:42  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.23  2005/06/23 11:23:36  strk
  * performance improvement for CGAlgorithms::isOnLine()
  *

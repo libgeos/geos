@@ -22,7 +22,7 @@ double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
 double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
-	li(new RobustLineIntersector()),
+	li(new LineIntersector()),
 	maxCurveSegmentError(0.0),
 	ptList(new DefaultCoordinateSequence()),
 	distance(0.0),
@@ -39,7 +39,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		int quadrantSegments):
-	li(new RobustLineIntersector()),
+	li(new LineIntersector()),
 	maxCurveSegmentError(0.0),
 	ptList(new DefaultCoordinateSequence()),
 	distance(0.0),
@@ -473,6 +473,11 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.18  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

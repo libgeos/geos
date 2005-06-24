@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.7  2005/02/22 18:21:46  strk
  * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
  * construction costs.
@@ -431,7 +436,7 @@ private:
 	*/
 	vector<SegmentString*>* node(vector<SegmentString*> *segStrings, int *numInteriorIntersections);
 	const PrecisionModel *pm;
-	LineIntersector *li;
+	LineIntersector li;
 public:
 	IteratedNoder(const PrecisionModel *newPm);
 	virtual ~IteratedNoder();

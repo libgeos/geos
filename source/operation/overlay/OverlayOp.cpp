@@ -442,8 +442,9 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 {
 	const CoordinateSequence *pts = line->getCoordinatesRO();
 	const Coordinate &p = n->getCoordinate();
-	RobustLineIntersector li;
-	for(int i=1;i<pts->getSize();i++) {
+	LineIntersector li;
+	int size = pts->getSize();
+	for(int i=1; i<size; i++) {
 		const Coordinate &p0=pts->getAt(i-1);
 		const Coordinate &p1=pts->getAt(i);	
 		li.computeIntersection(p, p0, p1);
@@ -833,6 +834,11 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.40  2005/04/29 17:40:36  strk
  * Updated Doxygen documentation and some Copyright headers.
  *

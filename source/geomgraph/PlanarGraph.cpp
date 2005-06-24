@@ -22,7 +22,6 @@
 namespace geos {
 
 CGAlgorithms* PlanarGraph::cga=new CGAlgorithms();
-//LineIntersector* PlanarGraph::li=new RobustLineIntersector();
 
 /**
  * For nodes in the vector, link the DirectedEdges at the node that are in the result.
@@ -313,6 +312,11 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/06/24 11:09:42  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.12  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

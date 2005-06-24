@@ -396,7 +396,7 @@ CoordinateSequence* LineSegment::closestPoints(const LineSegment *line){
 * If there are 0, null is returned. If there is 1 or more, a single one
 * is returned (chosen at the discretion of the algorithm).  If
 * more information is required about the details of the intersection,
-* the {@link RobustLineIntersector} class should be used.
+* the LineIntersector class should be used.
 *
 * @param line
 * @return an intersection point, or <code>null</code> if there is none
@@ -404,14 +404,12 @@ CoordinateSequence* LineSegment::closestPoints(const LineSegment *line){
 Coordinate *
 LineSegment::intersection(const LineSegment *line) const
 {
-	LineIntersector *li = new RobustLineIntersector();
-	li->computeIntersection(p0, p1, line->p0, line->p1);
-	if (li->hasIntersection()) {
-		Coordinate *c=new Coordinate(li->getIntersection(0));
-		delete li;
+	LineIntersector li;
+	li.computeIntersection(p0, p1, line->p0, line->p1);
+	if (li.hasIntersection()) {
+		Coordinate *c=new Coordinate(li.getIntersection(0));
 		return c;
 	}
-	delete li;
 	return NULL;
 }
 
@@ -432,6 +430,11 @@ bool operator==(const LineSegment a, const LineSegment b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/06/24 11:09:42  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.20  2005/05/23 15:04:10  strk
  * Fixed bug in ::reverse()
  *

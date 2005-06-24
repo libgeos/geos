@@ -20,7 +20,7 @@ namespace geos {
 NodingValidator::NodingValidator(vector<SegmentString*> *newSegStrings)
 {
 	segStrings=newSegStrings;
-	li=new RobustLineIntersector();
+	li=new LineIntersector();
 }
 
 NodingValidator::~NodingValidator()
@@ -124,6 +124,11 @@ NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<Segme
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.4  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

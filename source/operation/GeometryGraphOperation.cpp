@@ -19,7 +19,7 @@
 namespace geos {
 
 CGAlgorithms* GeometryGraphOperation::cga=new CGAlgorithms();
-LineIntersector* GeometryGraphOperation::li=new RobustLineIntersector();
+LineIntersector* GeometryGraphOperation::li=new LineIntersector();
 
 GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0, const Geometry *g1) {
 	// use the most precise model for the result
@@ -61,6 +61,11 @@ GeometryGraphOperation::~GeometryGraphOperation() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.16  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

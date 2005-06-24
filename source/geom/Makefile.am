@@ -52,11 +52,9 @@ EXTERNAL_SOURCES =  \
 	../algorithm/LineIntersector.cpp \
 	../algorithm/MCPointInRing.cpp \
 	../algorithm/MinimumDiameter.cpp \
-	../algorithm/NonRobustLineIntersector.cpp \
 	../algorithm/NotRepresentableException.cpp \
 	../algorithm/PointLocator.cpp \
 	../algorithm/RobustDeterminant.cpp \
-	../algorithm/RobustLineIntersector.cpp \
 	../algorithm/SIRtreePointInRing.cpp \
 	../algorithm/SimplePointInAreaLocator.cpp \
 	../algorithm/SimplePointInRing.cpp \

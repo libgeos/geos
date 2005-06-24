@@ -38,15 +38,15 @@ bool PointLocator::intersects(const Coordinate& p,const Geometry *geom) {
 
 
 /**
-* Computes the topological relationship ({@link Location}) of a single point
-* to a Geometry.
-* It handles both single-element
-* and multi-element Geometries.
-* The algorithm for multi-part Geometries
-* takes into account the boundaryDetermination rule.
-*
-* @return the Location of the point relative to the input Geometry
-*/
+ * Computes the topological relationship ({@link Location}) of a single point
+ * to a Geometry.
+ * It handles both single-element
+ * and multi-element Geometries.
+ * The algorithm for multi-part Geometries
+ * takes into account the boundaryDetermination rule.
+ *
+ * @return the Location of the point relative to the input Geometry
+ */
 int
 PointLocator::locate(const Coordinate& p, const Geometry *geom)
 {
@@ -160,6 +160,11 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2005/06/24 11:09:42  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.22  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

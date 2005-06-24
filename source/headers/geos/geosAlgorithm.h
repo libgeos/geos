@@ -81,12 +81,12 @@ public:
 	 */
 	static bool isPointInRing(const Coordinate& p, const CoordinateSequence* ring);
 	/**
-	* Test whether a point lies on a linestring.
-	*
-	* @return true true if
-	* the point is a vertex of the line or lies in the interior of a line
-	* segment in the linestring
-	*/
+	 * Test whether a point lies on a linestring.
+	 *
+	 * @return true true if
+	 * the point is a vertex of the line or lies in the interior of a line
+	 * segment in the linestring
+	 */
 	static bool isOnLine(const Coordinate& p, const CoordinateSequence* pt);
 
 	/*
@@ -174,7 +174,7 @@ private:
 	const CoordinateSequence* pts;
 };
 
-class LineIntersector{
+class LineIntersector {
 public:	
 	// Return a Z value being the interpolation of Z from p0 and p1 at
 	// the given point p
@@ -182,7 +182,7 @@ public:
 	static double computeEdgeDistance(const Coordinate& p, const Coordinate& p0, const Coordinate& p1);
 	static double nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
 	LineIntersector();
-	virtual ~LineIntersector();
+	~LineIntersector();
 
 	/*
 	 * Tests whether either intersection point is an interior point of
@@ -191,7 +191,7 @@ public:
 	 * @return <code>true</code> if either intersection point is in
 	 * the interior of one of the input segments
 	 */
-	virtual bool isInteriorIntersection();
+	bool isInteriorIntersection();
 
 	/*
 	 * Tests whether either intersection point is an interior point
@@ -200,11 +200,11 @@ public:
 	 * @return <code>true</code> if either intersection point is in
 	 * the interior of the input segment
 	 */
-	virtual bool isInteriorIntersection(int inputLineIndex);
+	bool isInteriorIntersection(int inputLineIndex);
 
-	virtual void setMakePrecise(const PrecisionModel *newPM);
+	void setMakePrecise(const PrecisionModel *newPM);
 
-	virtual void setPrecisionModel(const PrecisionModel *newPM);
+	void setPrecisionModel(const PrecisionModel *newPM);
 
 	/*
 	 * Compute the intersection of a point p and the line p1-p2.
@@ -212,7 +212,13 @@ public:
 	 * The actual value of the intersection (if there is one)
 	 * is equal to the value of <code>p</code>.
 	 */
-	virtual void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2)=0;
+	void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
+
+	/*
+	 * Same as above but doen's compute intersection point. Faster.
+	 */
+	static bool hasIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
+
 
 	enum {
 		DONT_INTERSECT,
@@ -220,28 +226,36 @@ public:
 		COLLINEAR
 	};
 
-	virtual void computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3, const Coordinate& p4);
+	void computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3, const Coordinate& p4);
 
-	virtual string toString() const;
 
-	virtual bool hasIntersection() const;
+	string toString() const;
 
-	virtual int getIntersectionNum() const;
+	/**
+	 * Tests whether the input geometries intersect.
+	 *
+	 * @return true if the input geometries intersect
+	 */
+	bool hasIntersection() const { return result!=DONT_INTERSECT; }
 
-	virtual const Coordinate& getIntersection(int intIndex) const;
+	int getIntersectionNum() const;
+
+	const Coordinate& getIntersection(int intIndex) const;
 
 	static bool isSameSignAndNonZero(double a,double b);
 
-	virtual bool isIntersection(const Coordinate& pt) const;
-	virtual bool isProper() const;
-	virtual const Coordinate& getIntersectionAlongSegment(int segmentIndex,int intIndex);
-	virtual int getIndexAlongSegment(int segmentIndex,int intIndex);
-	virtual double getEdgeDistance(int geomIndex,int intIndex) const;
-protected:
+	bool isIntersection(const Coordinate& pt) const;
+	bool isProper() const;
+	const Coordinate& getIntersectionAlongSegment(int segmentIndex,int intIndex);
+	int getIndexAlongSegment(int segmentIndex,int intIndex);
+	double getEdgeDistance(int geomIndex,int intIndex) const;
+
+private:
+
 	/**
-	* If makePrecise is true, computed intersection coordinates will be made precise
-	* using Coordinate#makePrecise
-	*/
+	 * If makePrecise is true, computed intersection coordinates
+	 * will be made precise using Coordinate#makePrecise
+	 */
 	const PrecisionModel *precisionModel;
 	int result;
 	const Coordinate *inputLines[2][2];
@@ -254,35 +268,12 @@ protected:
 	bool isProperVar;
 	Coordinate &pa;
 	Coordinate &pb;
-	virtual bool isCollinear() const;
-	virtual int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)=0;
-	virtual bool isEndPoint() const;
-	virtual void computeIntLineIndex();
-	virtual void computeIntLineIndex(int segmentIndex);
-};
+	bool isCollinear() const;
+	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
+	bool isEndPoint() const;
+	void computeIntLineIndex();
+	void computeIntLineIndex(int segmentIndex);
 
-class RobustDeterminant {
-public:
-	static int signOfDet2x2(double x1,double y1,double x2,double y2);
-};
-
-class RobustLineIntersector: public LineIntersector {
-
-public:
-
-	RobustLineIntersector();
-
-	virtual ~RobustLineIntersector();
-
-	void computeIntersection(const Coordinate& p,
-		const Coordinate& p1, const Coordinate& p2);
-
-	int computeIntersect(const Coordinate& p1, const Coordinate& p2,
-		const Coordinate& q1, const Coordinate& q2);
-
-private:
-
-//	bool between(Coordinate& p1,Coordinate& p2,Coordinate& q);
 
 	int computeCollinearIntersection(const Coordinate& p1,
 		const Coordinate& p2, const Coordinate& q1,
@@ -324,51 +315,9 @@ private:
 		Coordinate &n10, Coordinate &n11, Coordinate &normPt) const;
 };
 
-class NonRobustLineIntersector: public LineIntersector {
+class RobustDeterminant {
 public:
-	NonRobustLineIntersector();
-	void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
-protected:
-	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4);
-private:
-	int computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4);
-	double rParameter(const Coordinate& p1,const Coordinate& p2,const Coordinate& p) const;
-};
-
-/*
- * Stub version of RobustCGAlgorithms for backwards compatibility.
- * Will be deprecated in next release - use CGAlgorithms instead.
- */
-class RobustCGAlgorithms: public CGAlgorithms {
-};
-
-class NonRobustCGAlgorithms: public CGAlgorithms {
-public:
-	NonRobustCGAlgorithms();
-	~NonRobustCGAlgorithms();
-	/**
-	* Computes whether a ring defined by an array of {@link Coordinate} is
-	* oriented counter-clockwise.
-	* <p>
-	* This will handle coordinate lists which contain repeated points.
-	*
-	* @param ring an array of coordinates forming a ring
-	* @return <code>true</code> if the ring is oriented counter-clockwise.
-	*/
-	static bool isPointInRing(const Coordinate& p, const CoordinateSequence* ring);
-//	static bool isOnLine(const Coordinate& p, const CoordinateSequence* pt) const;
-	/**
-	* Computes whether a ring defined by an array of {@link Coordinate} is
-	* oriented counter-clockwise.
-	* <p>
-	* This will handle coordinate lists which contain repeated points.
-	*
-	* @param ring an array of coordinates forming a ring
-	* @return <code>true</code> if the ring is oriented counter-clockwise.
-	* @throws IllegalArgumentException if the ring is degenerate (does not contain 3 different points)
-	*/
-	static bool isCCW(const CoordinateSequence* ring);
-	static int computeOrientation(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
+	static int signOfDet2x2(double x1,double y1,double x2,double y2);
 };
 
 class SimplePointInAreaLocator {
@@ -713,6 +662,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.12  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

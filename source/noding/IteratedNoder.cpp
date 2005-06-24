@@ -27,14 +27,15 @@ static Profiler *profiler = Profiler::instance();
 #endif
 
 
-IteratedNoder::IteratedNoder(const PrecisionModel *newPm) {
-	li = new RobustLineIntersector();
+IteratedNoder::IteratedNoder(const PrecisionModel *newPm)
+{
+	//li = new LineIntersector();
 	pm=newPm;
-	li->setPrecisionModel(pm);
+	li.setPrecisionModel(pm);
 }
 
 IteratedNoder::~IteratedNoder() {
-	delete li;
+	//delete li;
 }
 
 /*
@@ -87,7 +88,7 @@ vector<SegmentString*>*
 IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersections)
 {
 	//nodingSegmentIntersector *si = new nodingSegmentIntersector(li);
-	nodingSegmentIntersector si(li);
+	nodingSegmentIntersector si(&li);
 	MCQuadtreeNoder noder;
 	noder.setSegmentIntersector(&si);
 	// perform the noding
@@ -111,6 +112,11 @@ IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersec
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
  * Revision 1.12  2005/02/01 13:44:59  strk
  * More profiling labels.
  *
