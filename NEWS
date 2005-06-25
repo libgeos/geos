@@ -20,6 +20,9 @@ Changes in 3.0.0
 - Added missing ::clone() methods for Multi* geoms and made all
   geometry clone() methods inlined
 - Made LineIntersector a concrete type
+- New Node::isIncidentEdgeInResult() method
+- OverlayOp's PointBuilder performance improvement by reduction
+  of LineIntersector calls.
 
 Changes in 2.1.3cvs
 

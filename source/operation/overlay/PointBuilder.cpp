@@ -54,14 +54,15 @@ PointBuilder::collectNodes(int opCode)
 	// included in the result
 	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph()->getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++) {
+	for (;it!=nodeMap.end();it++)
+	{
 		Node *node=it->second;
-		if (!node->isInResult()) {
-			Label *label=node->getLabel();
-			if (OverlayOp::isResultOfOp(label,opCode)) {
-				resultNodeList->push_back(node);
-			}
-		}
+		if (node->isInResult()) continue;
+		if (node->isIncidentEdgeInResult()) continue;
+
+		Label *label=node->getLabel();
+		if (OverlayOp::isResultOfOp(label,opCode)) 
+			resultNodeList->push_back(node);
 	}
 	return resultNodeList;
 }
@@ -93,6 +94,9 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/06/25 10:20:39  strk
+ * OverlayOp speedup (JTS port)
+ *
  * Revision 1.14  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

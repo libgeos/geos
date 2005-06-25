@@ -386,6 +386,7 @@ public:
 	virtual string print();
 	virtual const vector<double> &getZ() const;
 	virtual void addZ(double);
+	virtual bool isIncidentEdgeInResult() const;
 
 protected:
 	Coordinate coord;
@@ -749,6 +750,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/06/25 10:20:39  strk
+ * OverlayOp speedup (JTS port)
+ *
  * Revision 1.10  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

@@ -67,6 +67,19 @@ bool Node::isIsolated() {
 	return (label->getGeometryCount()==1);
 }
 
+bool
+Node::isIncidentEdgeInResult() const
+{
+	vector<EdgeEnd*>*v = edges->getEdges();
+	unsigned int size = v->size();
+	for (unsigned int i=0; i<size; i++)
+	{
+		DirectedEdge *de = (DirectedEdge *)(*v)[i];
+		if ( de->isInResult() ) return true;
+	}
+	return false;
+}
+
 void Node::add(EdgeEnd *e) {
 #if DEBUG
 	cerr<<"["<<this<<"] Node::add("<<e->print()<<")"<<endl;
@@ -166,6 +179,9 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/06/25 10:20:39  strk
+ * OverlayOp speedup (JTS port)
+ *
  * Revision 1.10  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
