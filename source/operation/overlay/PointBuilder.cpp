@@ -54,14 +54,15 @@ PointBuilder::collectNodes(int opCode)
 	// included in the result
 	map<Coordinate,Node*,CoordLT> *nodeMap=op->getGraph()->getNodeMap()->nodeMap;
 	map<Coordinate,Node*,CoordLT>::iterator	it=nodeMap->begin();
-	for (;it!=nodeMap->end();it++) {
+	for (;it!=nodeMap->end();it++)
+	{
 		Node *node=it->second;
-		if (!node->isInResult()) {
-			Label *label=node->getLabel();
-			if (OverlayOp::isResultOfOp(label,opCode)) {
-				resultNodeList->push_back(node);
-			}
-		}
+		if (node->isInResult()) continue;
+		if (node->isIncidentEdgeInResult()) continue;
+
+		Label *label=node->getLabel();
+		if (OverlayOp::isResultOfOp(label,opCode)) 
+			resultNodeList->push_back(node);
 	}
 	return resultNodeList;
 }
@@ -93,6 +94,9 @@ PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13.2.1  2005/06/26 09:40:19  strk
+ * Backport of OverlayOp performance improvements
+ *
  * Revision 1.13  2004/11/17 15:09:08  strk
  * Changed COMPUTE_Z defaults to be more conservative
  *

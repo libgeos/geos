@@ -10,6 +10,9 @@ Changes in 2.1.3cvs
 - Reduced useless Coordinate copies in CGAlgorithms::isPointInRing()
 - Performance improvements in CGAlgorithms::isOnLine()
 - Other minor performance improvements
+- New Node::isIncidentEdgeInResult() method
+- OverlayOp's PointBuilder performance improvement by reduction
+  of LineIntersector calls.
 
 Changes in 2.1.2
 
