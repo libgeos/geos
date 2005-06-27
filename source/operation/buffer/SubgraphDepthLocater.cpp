@@ -185,9 +185,9 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 //		if (! (seg->p0==pts->getAt(i)))
 //			depth=dirEdge->getDepth(Position::RIGHT);
 		int depth = swap ?
-			depth=dirEdge->getDepth(Position::RIGHT)
+			dirEdge->getDepth(Position::LEFT)
 			:
-			dirEdge->getDepth(Position::LEFT);
+			dirEdge->getDepth(Position::RIGHT);
 
 #if DEBUG
 	cerr<<" depth: "<<depth<<endl;
@@ -274,6 +274,9 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/06/27 21:24:54  strk
+ * Fixed bug just-introduced with optimization.
+ *
  * Revision 1.9  2005/06/27 21:21:21  strk
  * Reduced Coordinate copies due to LineSegment overuse
  *
