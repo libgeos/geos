@@ -264,7 +264,7 @@ int DepthSegment::compareX(LineSegment *seg0, LineSegment *seg1){
 }
 
 bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
-	if (first->compareTo(second)<=0)
+	if (first->compareTo(second)<0)
 		return true;
 	else
 		return false;
@@ -274,6 +274,9 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/06/27 21:58:31  strk
+ * Bugfix in DepthSegmentLT as suggested by Graeme Hiebert
+ *
  * Revision 1.10  2005/06/27 21:24:54  strk
  * Fixed bug just-introduced with optimization.
  *
