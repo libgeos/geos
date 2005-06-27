@@ -35,6 +35,7 @@ Changes in 2.1.3cvs
 - Added shortcircuit test for Union operation
 - Performance improvements in CGAlgorithms::isOnLine()
 - Other minor performance improvements
+- Optimizations in Buffer operation
 
 Changes in 2.1.2
 
