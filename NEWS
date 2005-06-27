@@ -13,6 +13,7 @@ Changes in 2.1.3cvs
 - New Node::isIncidentEdgeInResult() method
 - OverlayOp's PointBuilder performance improvement by reduction
   of LineIntersector calls.
+- Optimizations in Buffer operation
 
 Changes in 2.1.2
 
