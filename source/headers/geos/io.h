@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,6 +14,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5.2.1  2005/05/23 18:16:40  strk
+ * more math.h to cmath conversions
+ *
  * Revision 1.5  2004/07/19 10:33:12  strk
  * Class documentation changed to report geos.h as WKT writer/parser header file
  *
@@ -59,9 +63,6 @@
 #include <memory>
 #include <iostream>
 #include <string>
-//#include <vector>
-//#include <algorithm>
-//#include "math.h"
 #include <geos/platform.h>
 #include <geos/geom.h>
 #include <geos/util.h>

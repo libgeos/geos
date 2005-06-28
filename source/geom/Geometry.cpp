@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -234,6 +235,13 @@ Point* Geometry::getCentroid() const {
 		cent.add(in);
 		centPt=cent.getCentroid();
 	}
+
+	if ( ! centPt )
+	{
+		if ( in != this ) delete(in);
+		return NULL;
+	}
+
 	Point *pt=createPointFromInternalCoord(centPt,this);
 	delete centPt;
 	if ( in != this ) delete(in);
@@ -592,9 +600,44 @@ Geometry::Union(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
+
+	Geometry *out = NULL;
+
+#ifdef SHORTCIRCUIT_PREDICATES
+	// if envelopes are disjoint return a MULTI geom or
+	// a geometrycollection
+	if ( ! getEnvelopeInternal()->intersects(other->getEnvelopeInternal()) )
+	{
+//cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
+		const GeometryCollection *coll;
+		int ngeoms, i;
+		vector<Geometry *> *v = new vector<Geometry *>();
+
+		if ( coll = dynamic_cast<const GeometryCollection *>(this) )
+		{
+			ngeoms = coll->getNumGeometries();
+			for (i=0; i<ngeoms; i++)
+				v->push_back(coll->getGeometryN(i)->clone());
+		} else {
+			v->push_back(this->clone());
+		}
+
+		if ( coll = dynamic_cast<const GeometryCollection *>(other) )
+		{
+			ngeoms = coll->getNumGeometries();
+			for (i=0; i<ngeoms; i++)
+				v->push_back(coll->getGeometryN(i)->clone());
+		} else {
+			v->push_back(other->clone());
+		}
+
+		out = factory->buildGeometry(v);
+		return out;
+	}
+#endif
+
 	Geometry *in1 = toInternalGeometry(this);
 	Geometry *in2 = toInternalGeometry(other);
-	Geometry *out = NULL;
 	try {
 		out = OverlayOp::overlayOp(in1,in2,OverlayOp::UNION);
 	}
@@ -853,6 +896,12 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.72.2.2  2005/06/22 00:46:53  strk
+ * Shortcircuit tests for Union
+ *
+ * Revision 1.72.2.1  2005/05/24 07:26:40  strk
+ * back-ported segfault fix in EMPTYGEOM::getCentroid()
+ *
  * Revision 1.72  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

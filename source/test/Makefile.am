@@ -2,7 +2,8 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 top_builddir=@top_builddir@
 
-noinst_PROGRAMS = SimpleWKTTester XMLTester
+noinst_PROGRAMS = SimpleWKTTester
+bin_PROGRAMS = XMLTester
 # CTS
 
 LIBS = $(top_builddir)/source/geom/libgeos.la
@@ -20,10 +21,5 @@ XMLTester_LDADD = $(LIBS)
 INCLUDES = -I$(top_srcdir)/source/headers
 INCLUDES += -I$(top_srcdir)/source/io/markup
 
-
-
-
-
-
-
-
+static:
+	$(CXX) $(CXXFLAGS) -I../headers -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../source/geom/.libs/libgeos.a
