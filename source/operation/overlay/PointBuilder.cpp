@@ -26,11 +26,13 @@
 
 namespace geos {
 
-PointBuilder::PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory,PointLocator *newPtLocator)
+PointBuilder::PointBuilder(OverlayOp *newOp,
+	const GeometryFactory *newGeometryFactory,
+	PointLocator *newPtLocator):
+		op(newOp),
+		geometryFactory(newGeometryFactory),
+		resultPointList(new vector<Point *>())
 {
-	op=newOp;
-	geometryFactory=newGeometryFactory;
-	ptLocator=newPtLocator;
 }
 
 /*
@@ -40,60 +42,68 @@ PointBuilder::PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryF
 vector<Point*>*
 PointBuilder::build(int opCode)
 {
-	vector<Node*>* nodeList=collectNodes(opCode);
-	vector<Point*>* resultPointList=simplifyPoints(nodeList);
-	delete nodeList;
+	extractNonCoveredResultNodes(opCode);
 	return resultPointList;
 }
 
-vector<Node*>*
-PointBuilder::collectNodes(int opCode)
-{
-	vector<Node*>* resultNodeList=new vector<Node*>();
-	// add nodes from edge intersections which have not already been
-	// included in the result
-	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph()->getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++)
-	{
-		Node *node=it->second;
-		if (node->isInResult()) continue;
-		if (node->isIncidentEdgeInResult()) continue;
-
-		Label *label=node->getLabel();
-		if (OverlayOp::isResultOfOp(label,opCode)) 
-			resultNodeList->push_back(node);
-	}
-	return resultNodeList;
-}
-
 /*
- * This method simplifies the resultant Geometry by finding and eliminating
- * "covered" points.
- * A point is covered if it is contained in another element Geometry
- * with higher dimension (e.g. a point might be contained in a polygon,
- * in which case the point can be eliminated from the resultant).
+ * Determines nodes which are in the result, and creates Point for them.
+ *
+ * This method determines nodes which are candidates for the result via their
+ * labelling and their graph topology.
+ *
+ * @param opCode the overlay operation
  */
-vector<Point*>*
-PointBuilder::simplifyPoints(vector<Node*> *resultNodeList)
+void
+PointBuilder::extractNonCoveredResultNodes(int opCode)
 {
-	vector<Point*>* nonCoveredPointList=new vector<Point*>();
-	for(int i=0;i<(int)resultNodeList->size();i++)
+	map<Coordinate*,Node*,CoordLT> &nodeMap =
+		op->getGraph()->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	for (; it!=nodeMap.end(); ++it)
 	{
-		Node *n=(*resultNodeList)[i];
-		const Coordinate& coord=n->getCoordinate();
-		if(!op->isCoveredByLA(coord)) {
-			Point *pt=geometryFactory->createPoint(coord);
-			nonCoveredPointList->push_back(pt);
+		Node *n=it->second;
+
+		// filter out nodes which are known to be in the result
+		if (n->isInResult()) continue;
+
+		// if an incident edge is in the result, then
+		// the node coordinate is included already
+		if (n->isIncidentEdgeInResult()) continue;
+
+		if ( n->getEdges()->getDegree() == 0 ||
+			opCode == OverlayOp::INTERSECTION )
+		{
+
+			/**
+			 * For nodes on edges, only INTERSECTION can result 
+			 * in edge nodes being included even
+			 * if none of their incident edges are included
+			 */
+			Label *label=n->getLabel();
+			if (OverlayOp::isResultOfOp(label,opCode)) 
+				filterCoveredNodeToPoint(n);
 		}
 	}
-	return nonCoveredPointList;
+}
+
+void
+PointBuilder::filterCoveredNodeToPoint(const Node *n)
+{
+	const Coordinate& coord=n->getCoordinate();
+	if(!op->isCoveredByLA(coord)) {
+		Point *pt=geometryFactory->createPoint(coord);
+		resultPointList->push_back(pt);
+	}
 }
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/06/28 01:07:02  strk
+ * improved extraction of result points in overlay op
+ *
  * Revision 1.15  2005/06/25 10:20:39  strk
  * OverlayOp speedup (JTS port)
  *

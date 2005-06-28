@@ -369,23 +369,36 @@ public:
  */
 class PointBuilder {
 private:
+
 	OverlayOp *op;
 	const GeometryFactory *geometryFactory;
-	PointLocator *ptLocator;
-	vector<Node*>* collectNodes(int opCode);
-	/**
-	* This method simplifies the resultant Geometry by finding and eliminating
-	* "covered" points.
-	* A point is covered if it is contained in another element Geometry
-	* with higher dimension (e.g. a point might be contained in a polygon,
-	* in which case the point can be eliminated from the resultant).
-	*/
-	vector<Point*>* simplifyPoints(vector<Node*>* resultNodeList);
+	void extractNonCoveredResultNodes(int opCode);
+
+	/*
+	 * Converts non-covered nodes to Point objects and adds them to
+	 * the result.
+	 *
+	 * A node is covered if it is contained in another element Geometry
+	 * with higher dimension (e.g. a node point might be contained in
+	 * a polygon, in which case the point can be eliminated from
+	 * the result).
+	 *
+	 * @param n the node to test
+	 */
+	void filterCoveredNodeToPoint(const Node *);
+
+	vector<Point*> *resultPointList;
+
 public:
-	PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator);
-	/**
-	* @return a list of the Points in the result of the specified overlay operation
-	*/
+
+	PointBuilder(OverlayOp *newOp,
+		const GeometryFactory *newGeometryFactory,
+		PointLocator *newPtLocator=NULL);
+
+	/*
+	 * @return a list of the Points in the result of the specified
+	 * overlay operation
+	 */
 	vector<Point*>* build(int opCode);
 };
 
@@ -589,6 +602,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/06/28 01:07:02  strk
+ * improved extraction of result points in overlay op
+ *
  * Revision 1.10  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept
