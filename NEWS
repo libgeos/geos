@@ -36,6 +36,7 @@ Changes in 2.1.3cvs
 - Performance improvements in CGAlgorithms::isOnLine()
 - Other minor performance improvements
 - Optimizations in Buffer operation
+- Sever BUGFIX in DepthSegmentLT as suggested by Graeme Hiebert
 
 Changes in 2.1.2
 
