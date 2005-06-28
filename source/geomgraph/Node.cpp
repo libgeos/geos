@@ -162,10 +162,29 @@ Node::getZ() const
 	return zvals;
 }
 
+bool
+Node::isIncidentEdgeInResult() const
+{
+	vector<EdgeEnd*>*v = edges->getEdges();
+	unsigned int size = v->size();
+	for (unsigned int i=0; i<size; i++)
+	{
+		DirectedEdge *de = (DirectedEdge *)(*v)[i];
+		if ( de->getEdge()->isInResult() ) return true;
+	}
+	return false;
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10.2.2  2005/06/28 00:05:50  strk
+ * improved ::isIncidentEdgeInResult() method
+ *
+ * Revision 1.10.2.1  2005/06/26 09:40:19  strk
+ * Backport of OverlayOp performance improvements
+ *
  * Revision 1.10  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

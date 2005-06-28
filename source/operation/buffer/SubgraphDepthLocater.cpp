@@ -11,29 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.5  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.4  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/05/05 12:29:44  strk
- * memleak fixed in ::getDepth
- *
- * Revision 1.2  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.1  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/opBuffer.h>
 
@@ -110,41 +88,100 @@ void SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,vec
 }
 
 /**
-* Finds all non-horizontal segments intersecting the stabbing line
-* in the input dirEdge->
-* The stabbing line is the ray to the right of stabbingRayLeftPt->
-*
-* @param stabbingRayLeftPt the left-hand origin of the stabbing line
-* @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
-*/
+ * Finds all non-horizontal segments intersecting the stabbing line
+ * in the input dirEdge->
+ * The stabbing line is the ray to the right of stabbingRayLeftPt->
+ *
+ * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+ * @param stabbedSegments the current list of DepthSegments
+ * intersecting the stabbing line
+ */
 void
 SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments)
 {
 	const CoordinateSequence *pts=dirEdge->getEdge()->getCoordinates();
+
 	for (int i=0; i<pts->getSize()-1; i++) {
-		seg->p0=pts->getAt(i);
-		seg->p1=pts->getAt(i + 1);
-		// ensure segment always points upwards
-		if (seg->p0.y > seg->p1.y)
-			seg->reverse();
+		//seg->p0=pts->getAt(i);
+		//seg->p1=pts->getAt(i + 1);
+
+		const Coordinate *low=&(pts->getAt(i));
+		const Coordinate *high=&(pts->getAt(i+1));
+		const Coordinate *swap=NULL;
+
+#if DEBUG
+	cerr<<" SubgraphDepthLocater::findStabbedSegments: segment "<<i<<" ("<<seg->toString()<<") ";
+#endif
+
+//		// ensure segment always points upwards
+//		//if (seg->p0.y > seg->p1.y)
+//		{
+//			seg->reverse();
+//#if DEBUG
+//			cerr<<" reverse ("<<seg->toString()<<") ";
+//#endif
+//		}
+
 		// skip segment if it is left of the stabbing line
-		double maxx=max(seg->p0.x, seg->p1.x);
+		//double maxx=max(seg->p0.x, seg->p1.x);
+		double maxx=max(low->x, high->x);
 		if (maxx < stabbingRayLeftPt.x)
+		{
+#if DEBUG
+			cerr<<" segment is left to stabbing line, skipping "<<endl;
+#endif
 			continue;
-		// skip horizontal segments (there will be a non-horizontal one carrying the same depth info
-		if (seg->isHorizontal())
+		}
+
+		// skip horizontal segments (there will be a non-horizontal
+		// one carrying the same depth info
+		//if (seg->isHorizontal())
+		if (low->y == high->y)
+		{
+#if DEBUG
+			cerr<<" segment is horizontal, skipping "<<endl;
+#endif
 			continue;
+		}
+
 		// skip if segment is above or below stabbing line
-		if (stabbingRayLeftPt.y < seg->p0.y || stabbingRayLeftPt.y > seg->p1.y)
+		//if (stabbingRayLeftPt.y < seg->p0.y ||
+			//stabbingRayLeftPt.y > seg->p1.y)
+		if (stabbingRayLeftPt.y < low->y ||
+			stabbingRayLeftPt.y > high->y)
+		{
+#if DEBUG
+			cerr<<" segment above or below stabbing line, skipping "<<endl;
+#endif
 			continue;
+		}
+
 		// skip if stabbing ray is right of the segment
-		if (cga->computeOrientation(seg->p0, seg->p1, stabbingRayLeftPt)==CGAlgorithms::RIGHT)
+		//if (CGAlgorithms::computeOrientation(seg->p0, seg->p1,
+		if (CGAlgorithms::computeOrientation(*low, *high,
+				stabbingRayLeftPt)==CGAlgorithms::RIGHT)
+		{
+#if DEBUG
+			cerr<<" stabbing ray right of segment, skipping"<<endl;
+#endif
 			continue;
-		// stabbing line cuts this segment, so record it
-		int depth=dirEdge->getDepth(Position::LEFT);
-		// if segment direction was flipped, use RHS depth instead
-		if (! (seg->p0==pts->getAt(i)))
-			depth=dirEdge->getDepth(Position::RIGHT);
+		}
+
+//		// stabbing line cuts this segment, so record it
+//		int depth=dirEdge->getDepth(Position::LEFT);
+//		// if segment direction was flipped, use RHS depth instead
+//		if (! (seg->p0==pts->getAt(i)))
+//			depth=dirEdge->getDepth(Position::RIGHT);
+		int depth = swap ?
+			dirEdge->getDepth(Position::LEFT)
+			:
+			dirEdge->getDepth(Position::RIGHT);
+
+#if DEBUG
+	cerr<<" depth: "<<depth<<endl;
+#endif
+		seg->p0 = *low;
+		seg->p1 = *high;
 		DepthSegment *ds=new DepthSegment(seg, depth);
 		stabbedSegments->push_back(ds);
 	}
@@ -215,10 +252,40 @@ int DepthSegment::compareX(LineSegment *seg0, LineSegment *seg1){
 }
 
 bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
-	if (first->compareTo(second)<=0)
+	if (first->compareTo(second)<0)
 		return true;
 	else
 		return false;
 }
 
-}
+} // geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.5.2.2  2005/06/27 21:55:44  strk
+ * Bug fix in DepthSegmentLT comparator as suggested by Graeme Hiebert
+ *
+ * Revision 1.5.2.1  2005/06/27 21:29:00  strk
+ * Reduced Coordinate copies due to LineSegment overuse
+ *
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.4  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.3  2004/05/05 12:29:44  strk
+ * memleak fixed in ::getDepth
+ *
+ * Revision 1.2  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
+ * Revision 1.1  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

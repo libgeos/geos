@@ -385,6 +385,8 @@ public:
 	virtual string print();
 	virtual const vector<double> &getZ() const;
 	virtual void addZ(double);
+	bool isIncidentEdgeInResult() const;
+
 
 protected:
 	Coordinate coord;
@@ -713,6 +715,9 @@ bool operator==(Edge a,Edge b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7.2.1  2005/06/26 09:40:19  strk
+ * Backport of OverlayOp performance improvements
+ *
  * Revision 1.7  2004/11/20 15:46:45  strk
  * Added composing Z management functions and elements for class Node
  *

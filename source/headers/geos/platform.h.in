@@ -11,7 +11,10 @@
 #undef HAVE_IEEEFP_H
 
 #ifdef HAVE_IEEEFP_H
+extern "C"
+{
 #include <ieeefp.h>
+}
 #endif
 
 

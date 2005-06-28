@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -22,7 +23,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-#include <math.h>
+#include <cmath>
 #include <geos/platform.h>
 
 using namespace std;
@@ -2431,6 +2432,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34.2.1  2005/05/23 18:16:40  strk
+ * more math.h to cmath conversions
+ *
  * Revision 1.34  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *
