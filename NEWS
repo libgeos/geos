@@ -14,6 +14,7 @@ Changes in 2.1.3cvs
 - OverlayOp's PointBuilder performance improvement by reduction
   of LineIntersector calls.
 - Optimizations in Buffer operation
+- Sever BUGFIX in DepthSegmentLT as suggested by Graeme Hiebert
 
 Changes in 2.1.2
 
