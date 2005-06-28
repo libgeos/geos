@@ -137,7 +137,7 @@ XMLTester::parseCase()
 	gA=r->read(geomAin);
 	geomAout=w->write(gA);
 	if (out &(GEOM_A_IN | GEOM_A_OUT)) {
-		cout << "\tGeometry A" << endl;
+		cout << "\tGeometry A (points: " << gA->getNumPoints() <<")" << endl;
 		if (out & GEOM_A_IN)
 			cout << "\t\tIn:" << geomAin << endl;
 		if (out & GEOM_A_OUT)
@@ -150,7 +150,7 @@ XMLTester::parseCase()
 		gB=r->read(geomBin);
 		geomBout=w->write(gB);
 		if (out &(GEOM_B_IN | GEOM_B_OUT)) {
-			cout << "\tGeometry B" << endl;
+			cout << "\tGeometry B (points: " << gB->getNumPoints() <<")" << endl;
 			if (out & GEOM_B_IN)
 				cout << "\t\tIn:" << geomBin << endl;
 			if (out & GEOM_B_OUT)
@@ -579,6 +579,9 @@ int main(int argC, char* argV[]) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.57  2005/06/28 16:52:09  strk
+ * Added number of points count as a debugging aid
+ *
  * Revision 1.56  2005/06/21 12:22:19  strk
  * XMLTester code cleanups
  *
