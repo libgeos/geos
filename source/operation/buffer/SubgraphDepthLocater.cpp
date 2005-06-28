@@ -113,30 +113,51 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 {
 	const CoordinateSequence *pts=dirEdge->getEdge()->getCoordinates();
 
+// It seems that LineSegment is *very* slow... undef this
+// to see yourself
+#define SKIP_LS 1
+
 	for (int i=0; i<pts->getSize()-1; i++) {
-		//seg->p0=pts->getAt(i);
-		//seg->p1=pts->getAt(i + 1);
+#ifndef SKIP_LS
+		seg->p0=pts->getAt(i);
+		seg->p1=pts->getAt(i + 1);
+#else
 
 		const Coordinate *low=&(pts->getAt(i));
 		const Coordinate *high=&(pts->getAt(i+1));
 		const Coordinate *swap=NULL;
 
+#endif
+
 #if DEBUG
 	cerr<<" SubgraphDepthLocater::findStabbedSegments: segment "<<i<<" ("<<seg->toString()<<") ";
 #endif
 
-//		// ensure segment always points upwards
-//		//if (seg->p0.y > seg->p1.y)
-//		{
-//			seg->reverse();
-//#if DEBUG
-//			cerr<<" reverse ("<<seg->toString()<<") ";
-//#endif
-//		}
+#ifndef SKIP_LS
+		// ensure segment always points upwards
+		//if (seg->p0.y > seg->p1.y)
+		{
+			seg->reverse();
+#if DEBUG
+			cerr<<" reverse ("<<seg->toString()<<") ";
+#endif
+		}
+#else
+		if (low->y > high->y)
+		{
+			swap=low;
+			low=high;
+			high=swap;
+		}
+#endif
 
 		// skip segment if it is left of the stabbing line
-		//double maxx=max(seg->p0.x, seg->p1.x);
+		// skip if segment is above or below stabbing line
+#ifndef SKIP_LS
+		double maxx=max(seg->p0.x, seg->p1.x);
+#else
 		double maxx=max(low->x, high->x);
+#endif
 		if (maxx < stabbingRayLeftPt.x)
 		{
 #if DEBUG
@@ -147,8 +168,11 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 
 		// skip horizontal segments (there will be a non-horizontal
 		// one carrying the same depth info
-		//if (seg->isHorizontal())
+#ifndef SKIP_LS
+		if (seg->isHorizontal())
+#else
 		if (low->y == high->y)
+#endif
 		{
 #if DEBUG
 			cerr<<" segment is horizontal, skipping "<<endl;
@@ -157,10 +181,13 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 		}
 
 		// skip if segment is above or below stabbing line
-		//if (stabbingRayLeftPt.y < seg->p0.y ||
-			//stabbingRayLeftPt.y > seg->p1.y)
+#ifndef SKIP_LS
+		if (stabbingRayLeftPt.y < seg->p0.y ||
+			stabbingRayLeftPt.y > seg->p1.y)
+#else
 		if (stabbingRayLeftPt.y < low->y ||
 			stabbingRayLeftPt.y > high->y)
+#endif
 		{
 #if DEBUG
 			cerr<<" segment above or below stabbing line, skipping "<<endl;
@@ -169,8 +196,11 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 		}
 
 		// skip if stabbing ray is right of the segment
-		//if (CGAlgorithms::computeOrientation(seg->p0, seg->p1,
+#ifndef SKIP_LS
+		if (CGAlgorithms::computeOrientation(seg->p0, seg->p1,
+#else
 		if (CGAlgorithms::computeOrientation(*low, *high,
+#endif
 				stabbingRayLeftPt)==CGAlgorithms::RIGHT)
 		{
 #if DEBUG
@@ -179,21 +209,27 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 			continue;
 		}
 
-//		// stabbing line cuts this segment, so record it
-//		int depth=dirEdge->getDepth(Position::LEFT);
-//		// if segment direction was flipped, use RHS depth instead
-//		if (! (seg->p0==pts->getAt(i)))
-//			depth=dirEdge->getDepth(Position::RIGHT);
+#ifndef SKIP_LS
+		// stabbing line cuts this segment, so record it
+		int depth=dirEdge->getDepth(Position::LEFT);
+		// if segment direction was flipped, use RHS depth instead
+		if (! (seg->p0==pts->getAt(i)))
+			depth=dirEdge->getDepth(Position::RIGHT);
+#else
 		int depth = swap ?
-			dirEdge->getDepth(Position::LEFT)
+			dirEdge->getDepth(Position::RIGHT)
 			:
-			dirEdge->getDepth(Position::RIGHT);
+			dirEdge->getDepth(Position::LEFT);
+#endif
 
 #if DEBUG
 	cerr<<" depth: "<<depth<<endl;
 #endif
+
+#ifdef SKIP_LS
 		seg->p0 = *low;
 		seg->p1 = *high;
+#endif
 		DepthSegment *ds=new DepthSegment(seg, depth);
 		stabbedSegments->push_back(ds);
 	}
@@ -274,6 +310,9 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/06/28 21:13:43  strk
+ * Fixed a bug introduced by LineSegment skip - made LineSegment skip a compile-time optione
+ *
  * Revision 1.11  2005/06/27 21:58:31  strk
  * Bugfix in DepthSegmentLT as suggested by Graeme Hiebert
  *
