@@ -75,7 +75,7 @@ Node::isIncidentEdgeInResult() const
 	for (unsigned int i=0; i<size; i++)
 	{
 		DirectedEdge *de = (DirectedEdge *)(*v)[i];
-		if ( de->isInResult() ) return true;
+		if ( de->getEdge()->isInResult() ) return true;
 	}
 	return false;
 }
@@ -179,6 +179,9 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/06/28 00:04:48  strk
+ * improved ::isIncidentEdgeInResult() method
+ *
  * Revision 1.11  2005/06/25 10:20:39  strk
  * OverlayOp speedup (JTS port)
  *
