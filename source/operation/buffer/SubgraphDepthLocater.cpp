@@ -63,16 +63,28 @@ SubgraphDepthLocater::getDepth(Coordinate &p)
 }
 
 /**
-* Finds all non-horizontal segments intersecting the stabbing line->
-* The stabbing line is the ray to the right of stabbingRayLeftPt->
-*
-* @param stabbingRayLeftPt the left-hand origin of the stabbing line
-* @return a List of {@link DepthSegments} intersecting the stabbing line
-*/
-vector<DepthSegment*>* SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt){
+ * Finds all non-horizontal segments intersecting the stabbing line
+ * The stabbing line is the ray to the right of stabbingRayLeftPt
+ *
+ * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+ * @return a List of DepthSegments intersecting the stabbing line
+ */
+vector<DepthSegment*>*
+SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt)
+{
 	vector<DepthSegment*> *stabbedSegments=new vector<DepthSegment*>();
-	for (int i=0;i<(int)subgraphs->size();i++) {
+	unsigned int size = subgraphs->size();
+	for (unsigned int i=0; i<size; ++i)
+	{
 		BufferSubgraph *bsg=(*subgraphs)[i];
+
+		// optimization - don't bother checking subgraphs
+		// which the ray does not intersect
+		Envelope *env = bsg->getEnvelope();
+		if ( stabbingRayLeftPt.y < env->getMinY()
+			|| stabbingRayLeftPt.y > env->getMaxY() )
+				continue;
+
 		findStabbedSegments(stabbingRayLeftPt, bsg->getDirectedEdges(), stabbedSegments);
 	}
 	return stabbedSegments;
@@ -117,7 +129,8 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 // to see yourself
 #define SKIP_LS 1
 
-	for (int i=0; i<pts->getSize()-1; i++) {
+	int n = pts->getSize()-1;
+	for (int i=0; i<n; ++i) {
 #ifndef SKIP_LS
 		seg->p0=pts->getAt(i);
 		seg->p1=pts->getAt(i + 1);
@@ -310,6 +323,9 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/06/30 18:31:48  strk
+ * Ported SubgraphDepthLocator optimizations from JTS code
+ *
  * Revision 1.12  2005/06/28 21:13:43  strk
  * Fixed a bug introduced by LineSegment skip - made LineSegment skip a compile-time optione
  *

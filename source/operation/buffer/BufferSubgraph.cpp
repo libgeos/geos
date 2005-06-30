@@ -27,7 +27,8 @@ BufferSubgraph::BufferSubgraph(CGAlgorithms *cga):
 	finder(new RightmostEdgeFinder()),
 	dirEdgeList(new vector<DirectedEdge*>()),
 	nodes(new vector<Node*>()),
-	rightMostCoord(NULL)
+	rightMostCoord(NULL),
+	env(NULL)
 {
 	//dirEdgeList=new vector<DirectedEdge*>();
 	//nodes=new vector<Node*>();
@@ -39,6 +40,7 @@ BufferSubgraph::~BufferSubgraph() {
 	delete dirEdgeList;
 	delete nodes;
 	delete finder;
+	delete env;
 }
 
 /**
@@ -283,10 +285,32 @@ BufferSubgraph::contains(set<Node*>&nodes,Node *node)
 	return false;
 }
 
+Envelope *
+BufferSubgraph::getEnvelope()
+{
+	if (env == NULL) {
+		env = new Envelope();
+		unsigned int size = dirEdgeList->size();
+		for(unsigned int i=0; i<size; ++i)
+		{
+			DirectedEdge *dirEdge=(*dirEdgeList)[i];
+			const CoordinateSequence *pts = dirEdge->getEdge()->getCoordinates();
+			int n = pts->getSize()-1;
+			for (int j=0; j<n; ++j) {
+				env->expandToInclude(pts->getAt(j));
+			}
+		}
+	}
+	return env;
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/06/30 18:31:48  strk
+ * Ported SubgraphDepthLocator optimizations from JTS code
+ *
  * Revision 1.17  2005/05/23 15:13:00  strk
  * Added debugging output
  *

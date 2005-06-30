@@ -88,6 +88,8 @@ private:
 
 	Coordinate *rightMostCoord;
 
+	Envelope *env;
+
 	/*
 	 * Adds all nodes and edges reachable from this node to the subgraph.
 	 * Uses an explicit stack to avoid a large depth of recursion.
@@ -145,6 +147,7 @@ public:
 	void create(Node *node);
 
 	void computeDepth(int outsideDepth);
+
 	/*
 	 * Find all edges whose depths indicates that they are in the
 	 * result area(s).
@@ -171,6 +174,14 @@ public:
 	 * be built before holes.
 	 */
 	int compareTo(void* o);
+
+	/**
+	 * Computes the envelope of the edges in the subgraph.
+	 * The envelope is cached after being computed.
+	 *
+	 * @return the envelope of the graph.
+	 */
+	Envelope *getEnvelope();
 };
 // INLINES
 Coordinate* BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
@@ -638,30 +649,32 @@ private:
 	LineSegment *seg;
 	//CGAlgorithms *cga;
 	/**
-	* Finds all non-horizontal segments intersecting the stabbing line.
-	* The stabbing line is the ray to the right of stabbingRayLeftPt.
-	*
-	* @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	* @return a List of {@link DepthSegments} intersecting the stabbing line
-	*/
+	 * Finds all non-horizontal segments intersecting the stabbing line.
+	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
+	 *
+	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+	 * @return a List of DepthSegments intersecting the stabbing line
+	 */
 	vector<DepthSegment*>* findStabbedSegments(Coordinate &stabbingRayLeftPt);
 	/**
-	* Finds all non-horizontal segments intersecting the stabbing line
-	* in the list of dirEdges.
-	* The stabbing line is the ray to the right of stabbingRayLeftPt.
-	*
-	* @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	* @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
-	*/
+	 * Finds all non-horizontal segments intersecting the stabbing line
+	 * in the list of dirEdges.
+	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
+	 *
+	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+	 * @param stabbedSegments the current list of DepthSegments
+	 *        intersecting the stabbing line
+	 */
 	void findStabbedSegments(Coordinate &stabbingRayLeftPt,vector<DirectedEdge*> *dirEdges,vector<DepthSegment*> *stabbedSegments);
+
 	/**
-	* Finds all non-horizontal segments intersecting the stabbing line
-	* in the input dirEdge.
-	* The stabbing line is the ray to the right of stabbingRayLeftPt.
-	*
-	* @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	* @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
-	*/
+	 * Finds all non-horizontal segments intersecting the stabbing line
+	 * in the input dirEdge.
+	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
+	 *
+	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+	 * @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
+	 */
 	void findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments);
 };
 
@@ -761,6 +774,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/06/30 18:31:48  strk
+ * Ported SubgraphDepthLocator optimizations from JTS code
+ *
  * Revision 1.8  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept
