@@ -1,4 +1,4 @@
-Changes in 2.1.3cvs
+Changes in 2.1.3
 
 - win32/mingw build support
 - Segfault fix in LinearRing and LineString constructors
