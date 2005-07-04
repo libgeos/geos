@@ -313,7 +313,8 @@ void IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph) {
 	for(int i=0;i<p->getNumInteriorRing();i++) {
 		LinearRing *hole=(LinearRing*) p->getInteriorRingN(i);
 		const Coordinate& holePt=findPtNotNode(hole->getCoordinatesRO(),shell,graph);
-		Assert::isTrue(!(holePt==Coordinate::getNull()), "Unable to find a hole point not a vertex of the shell");
+		//Assert::isTrue(!(holePt==Coordinate::getNull()), "Unable to find a hole point not a vertex of the shell");
+		if (holePt==Coordinate::getNull()) return;
 		bool outside=!pir->isInside(holePt);
 		if (outside) {
 			validErr=new TopologyValidationError(
@@ -504,6 +505,9 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27.2.1  2005/05/23 16:57:05  strk
+ * Backported fix avoiding throws
+ *
  * Revision 1.27  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *
