@@ -32,7 +32,7 @@
 #include <geos.h>
 #include <geos/opLinemerge.h>
 #include <geos/opPolygonize.h>
-#include <sstream>
+//#include <sstream>
 #include <iomanip>
 
 using namespace geos;
@@ -1065,6 +1065,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2005/07/11 12:17:26  strk
+ * Commented out useless include
+ *
  * Revision 1.28  2005/04/29 16:36:28  strk
  * Made WKBReader use global_factory, for having WKB reads produce
  * same context of input geoms.
