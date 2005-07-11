@@ -873,7 +873,7 @@ Geometry::equal(const Coordinate& a, const Coordinate& b,
 	{
 		return a == b; // 2D only !!!
 	}
-	double dist=a.distance(b);
+	//double dist=a.distance(b);
 	return a.distance(b)<=tolerance;
 }
 
@@ -903,6 +903,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.77  2005/07/11 10:23:17  strk
+ * removed useless assignment
+ *
  * Revision 1.76  2005/06/22 00:46:57  strk
  * Shortcircuit tests for Union
  *
