@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
-#ifndef _BYTEORDERDATAINSTREAMT_H
-#define _BYTEORDERDATAINSTREAMT_H 1
+#ifndef BYTEORDERDATAINSTREAMT_H
+#define BYTEORDERDATAINSTREAMT_H 1
 
 #include <geos/io.h>
 #include <geos/platform.h>
@@ -80,4 +80,4 @@ private:
 
 } // namespace geos
 
-#endif // _BYTEORDERDATAINSTREAMT_H
+#endif // BYTEORDERDATAINSTREAMT_H

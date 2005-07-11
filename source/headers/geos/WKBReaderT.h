@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
-#ifndef _WKBREADERT_H
-#define _WKBREADERT_H 1
+#ifndef WKBREADERT_H
+#define WKBREADERT_H 1
 
 #include <geos/geom.h>
 #include <geos/io.h>
@@ -351,4 +351,4 @@ typedef WKBReaderT<biostringstream> WKBReader;
 
 } // namespace geos
 
-#endif // _WKBREADERT_H
+#endif // WKBREADERT_H

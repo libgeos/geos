@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
-#ifndef _WKBWRITERT_H
-#define _WKBWRITERT_H 1
+#ifndef WKBWRITERT_H
+#define WKBWRITERT_H 1
 
 #include <geos/geom.h>
 #include <geos/io.h>
@@ -253,10 +253,13 @@ typedef WKBWriterT<biostringstream> WKBWriter;
 
 } // namespace geos
 
-#endif // _WKBWRITERT_H
+#endif // WKBWRITERT_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/07/11 16:21:42  strk
+ * Removed '_' prefix from header guards
+ *
  * Revision 1.4  2005/05/09 21:17:57  strk
  * Second argument to ::write made mandatory.
  *
