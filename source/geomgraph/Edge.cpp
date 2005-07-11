@@ -287,11 +287,11 @@ bool operator==(const Edge &e1, const Edge &e2)
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
 bool Edge::equals(Edge *e){
-	if (npts!=(unsigned int)e->npts) return false;
+	if (npts!=e->npts) return false;
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
 	unsigned int iRev=npts;
-	for (unsigned int i=0; i<npts; i++) {
+	for (int i=0; i<npts; i++) {
 		const Coordinate &c=pts->getAt(i);
 		if (isEqualForward && !c.equals2D(e->pts->getAt(i))) 
 		{
@@ -366,6 +366,9 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/07/11 10:27:47  strk
+ * Cleaned up signed/unsigned mismatches
+ *
  * Revision 1.12  2005/02/22 16:24:17  strk
  * cached number of points in Edge
  *

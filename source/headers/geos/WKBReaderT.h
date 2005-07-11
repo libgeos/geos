@@ -73,7 +73,7 @@ private:
 	const GeometryFactory factory;
 
 	// for now support the WKB standard only - may be generalized later
-	int inputDimension;
+	unsigned int inputDimension;
 
 	ByteOrderDataInStreamT<T> dis;
 
@@ -213,7 +213,7 @@ WKBReaderT<T>::readPolygon()
 			for (int i=0; i<numRings-1; i++)
 				(*holes)[i] = (Geometry *)readLinearRing();
 		} catch (...) {
-			for (int i=0; i<holes->size(); i++)
+			for (unsigned int i=0; i<holes->size(); i++)
 				delete (*holes)[i];
 			delete holes;
 			delete shell;
@@ -239,7 +239,7 @@ WKBReaderT<T>::readMultiPoint()
 			(*geoms)[i] = g;
 		}
 	} catch (...) {
-		for (int i=0; i<geoms->size(); i++)
+		for (unsigned int i=0; i<geoms->size(); i++)
 			delete (*geoms)[i];
 		delete geoms;
 		throw;
@@ -263,7 +263,7 @@ WKBReaderT<T>::readMultiLineString()
 			(*geoms)[i] = g;
 		}
 	} catch (...) {
-		for (int i=0; i<geoms->size(); i++)
+		for (unsigned int i=0; i<geoms->size(); i++)
 			delete (*geoms)[i];
 		delete geoms;
 		throw;
@@ -287,7 +287,7 @@ WKBReaderT<T>::readMultiPolygon()
 			(*geoms)[i] = g;
 		}
 	} catch (...) {
-		for (int i=0; i<geoms->size(); i++)
+		for (unsigned int i=0; i<geoms->size(); i++)
 			delete (*geoms)[i];
 		delete geoms;
 		throw;
@@ -305,7 +305,7 @@ WKBReaderT<T>::readGeometryCollection()
 		for (int i=0; i<numGeoms; i++)
 			(*geoms)[i] = (readGeometry());
 	} catch (...) {
-		for (int i=0; i<geoms->size(); i++)
+		for (unsigned int i=0; i<geoms->size(); i++)
 			delete (*geoms)[i];
 		delete geoms;
 		throw;
@@ -317,12 +317,12 @@ template<class T> CoordinateSequence *
 WKBReaderT<T>::readCoordinateSequence(int size)
 {
 	CoordinateSequence *seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
-	int targetDim = seq->getDimension();
+	unsigned int targetDim = seq->getDimension();
 	if ( targetDim > inputDimension )
 		targetDim = inputDimension;
 	for (int i=0; i<size; i++) {
 		readCoordinate();
-		for (int j=0; j<targetDim; j++) {
+		for (unsigned int j=0; j<targetDim; j++) {
 			seq->setOrdinate(i, j, ordValues[j]);
 		}
 	}
@@ -332,7 +332,7 @@ WKBReaderT<T>::readCoordinateSequence(int size)
 template<class T> void
 WKBReaderT<T>::readCoordinate()
 {
-	for (int i=0; i<inputDimension; ++i)
+	for (unsigned int i=0; i<inputDimension; ++i)
 	{
 		ordValues[i] = dis.readDouble();
 	}
