@@ -104,11 +104,11 @@ BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments)
  * @param g the geometry to buffer
  */
 BufferOp::BufferOp(Geometry *g):
+	argGeom(g),
+	saveException(NULL),
 	quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(BufferOp::CAP_ROUND),
-	argGeom(g),
-	resultGeometry(NULL),
-	saveException(NULL)
+	resultGeometry(NULL)
 {
 	//quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
 	//endCapStyle=BufferOp::CAP_ROUND;
@@ -241,6 +241,9 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2005/07/11 10:27:14  strk
+ * Fixed initializzazion lists
+ *
  * Revision 1.36  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

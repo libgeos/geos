@@ -24,8 +24,8 @@
 namespace geos {
 
 SubgraphDepthLocater::SubgraphDepthLocater(vector<BufferSubgraph*> *nsg):
-	seg(new LineSegment()),
-	subgraphs(nsg)
+	subgraphs(nsg),
+	seg(new LineSegment())
 {
 	//seg=new LineSegment();
 	//cga=new RobustCGAlgorithms();
@@ -323,6 +323,9 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/07/11 10:27:14  strk
+ * Fixed initializzazion lists
+ *
  * Revision 1.13  2005/06/30 18:31:48  strk
  * Ported SubgraphDepthLocator optimizations from JTS code
  *

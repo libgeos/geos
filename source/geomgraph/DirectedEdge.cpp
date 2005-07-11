@@ -53,14 +53,14 @@ DirectedEdge::DirectedEdge():
 
 DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward):
 	EdgeEnd(newEdge),
+	isForwardVar(newIsForward),
 	isInResultVar(false),
 	isVisitedVar(false),
 	sym(NULL),
 	next(NULL),
 	nextMin(NULL),
 	edgeRing(NULL),
-	minEdgeRing(NULL),
-	isForwardVar(newIsForward)
+	minEdgeRing(NULL)
 {
 	depth[0]=0;
 	depth[1]=-999;
@@ -235,6 +235,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/07/11 10:27:13  strk
+ * Fixed initializzazion lists
+ *
  * Revision 1.4  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept
