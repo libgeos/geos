@@ -109,7 +109,7 @@ namespace WKBConstants {
 	const int wkbMultiLineString = 5;
 	const int wkbMultiPolygon = 6;
 	const int wkbGeometryCollection = 7;
-};
+}
 
 /**
  * \class WKTReader io.h geos.h
@@ -275,6 +275,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/07/11 12:17:47  strk
+ * Cleaned up syntax
+ *
  * Revision 1.11  2005/04/29 17:40:36  strk
  * Updated Doxygen documentation and some Copyright headers.
  *

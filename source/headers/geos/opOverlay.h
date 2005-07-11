@@ -286,14 +286,14 @@ private:
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given Polygon it is on.
 	 */
-	int OverlayOp::mergeZ(Node *n, const Polygon *poly) const;
+	int mergeZ(Node *n, const Polygon *poly) const;
 
 	/*
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given LineString it is on.
 	 * @returns 1 if an intersection is found, 0 otherwise.
 	 */
-	int OverlayOp::mergeZ(Node *n, const LineString *line) const;
+	int mergeZ(Node *n, const LineString *line) const;
 
 	/*
 	 * Average Z of input geometries
@@ -455,7 +455,7 @@ private:
 	 * The Z value is interpolated between 3d vertexes and copied
 	 * from a 3d vertex to the end.
 	 */
-	void LineBuilder::propagateZ(CoordinateSequence *cs);
+	void propagateZ(CoordinateSequence *cs);
 };
 
 /*
@@ -602,6 +602,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/07/11 12:17:47  strk
+ * Cleaned up syntax
+ *
  * Revision 1.11  2005/06/28 01:07:02  strk
  * improved extraction of result points in overlay op
  *
