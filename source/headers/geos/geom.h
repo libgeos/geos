@@ -732,7 +732,7 @@ public:
 	 *
 	 * @return the dimension of the sequence.
 	 */
-	virtual int getDimension() const=0;
+	virtual unsigned int getDimension() const=0;
 
 	/**
 	 * Returns the ordinate of a coordinate in this sequence.
@@ -825,7 +825,7 @@ public:
 	double getOrdinate(int index, int ordinateIndex) const;
 	void setOrdinate(int index, int ordinateIndex, double value);
 	void expandEnvelope(Envelope &env) const;
-	int getDimension() const { return 3; }
+	unsigned int getDimension() const { return 3; }
 
 private:
 	vector<Coordinate> *vect;
@@ -2580,6 +2580,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2005/07/11 10:26:26  strk
+ * Made CoordinateSequence::getDimension return unsigned int instead of int
+ *
  * Revision 1.44  2005/06/23 14:22:33  strk
  * Inlined and added missing ::clone() for Geometry subclasses
  *
