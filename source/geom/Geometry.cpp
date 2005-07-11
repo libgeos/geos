@@ -615,7 +615,7 @@ Geometry::Union(const Geometry *other) const
 		int ngeoms, i;
 		vector<Geometry *> *v = new vector<Geometry *>();
 
-		if ( coll = dynamic_cast<const GeometryCollection *>(this) )
+		if ( (coll = dynamic_cast<const GeometryCollection *>(this)) )
 		{
 			ngeoms = coll->getNumGeometries();
 			for (i=0; i<ngeoms; i++)
@@ -624,7 +624,7 @@ Geometry::Union(const Geometry *other) const
 			v->push_back(this->clone());
 		}
 
-		if ( coll = dynamic_cast<const GeometryCollection *>(other) )
+		if ( (coll = dynamic_cast<const GeometryCollection *>(other)) )
 		{
 			ngeoms = coll->getNumGeometries();
 			for (i=0; i<ngeoms; i++)
@@ -903,6 +903,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.78  2005/07/11 10:50:19  strk
+ * Added parens suggested by compiler
+ *
  * Revision 1.77  2005/07/11 10:23:17  strk
  * removed useless assignment
  *
