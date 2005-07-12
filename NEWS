@@ -20,11 +20,9 @@ Changes in 3.0.0
 - Added missing ::clone() methods for Multi* geoms and made all
   geometry clone() methods inlined
 - Made LineIntersector a concrete type
-- New Node::isIncidentEdgeInResult() method
-- OverlayOp's PointBuilder performance improvement by reduction
-  of LineIntersector calls.
+- Node::isIncidentEdgeInResult() method made virtual
 
-Changes in 2.1.3cvs
+Changes in 2.1.3
 
 - win32/mingw build support
 - Segfault fix in LinearRing and LineString constructors
@@ -33,8 +31,12 @@ Changes in 2.1.3cvs
 - XMLTester code cleanup
 - Fixed handling of collection input in GeometryFactory::buildGeometry
 - Added shortcircuit test for Union operation
+- Reduced useless Coordinate copies in CGAlgorithms::isPointInRing()
 - Performance improvements in CGAlgorithms::isOnLine()
 - Other minor performance improvements
+- New Node::isIncidentEdgeInResult() method
+- OverlayOp's PointBuilder performance improvement by reduction
+  of LineIntersector calls.
 - Optimizations in Buffer operation
 - Sever BUGFIX in DepthSegmentLT as suggested by Graeme Hiebert
 
