@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.3  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
@@ -30,7 +33,7 @@
 
 
 #include <geos/nodingSnapround.h>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 

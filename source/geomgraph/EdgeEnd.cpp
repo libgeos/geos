@@ -17,8 +17,8 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 #include <typeinfo>
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <sstream>
 
 namespace geos {
 
@@ -103,21 +103,31 @@ void EdgeEnd::computeLabel(){
 }
 
 string EdgeEnd::print() {
-	char buffer[255];
-	sprintf(buffer,"%i:%g",quadrant,atan2(dy,dx));
-	string angleStr(buffer);
-//	string className=typeid(*this).name();
-	string className="EdgeEnd";
-	string out="  "+className+": "+p0.toString()+" - "+p1.toString()+" ";
-	out.append(angleStr);
-	out+="   " + label->toString();
-	return out;
+	ostringstream s;
+
+	s<<"EdgeEnd: ";
+	s<<p0.toString();
+	s<<" - ";
+	s<<p1.toString();
+	s<<" ";
+	s<<quadrant<<":"<<atan2(dy,dx);
+	s<<"  ";
+	s<<label->toString();
+
+	return s.str();
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3.2.2  2005/05/23 18:41:51  strk
+ * Replaced sprintf uses with ostringstream
+ *
+ *
+ * Revision 1.3.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.3  2004/10/21 22:29:54  strk
  * Indentation changes and some more COMPUTE_Z rules
  *
@@ -127,10 +137,5 @@ string EdgeEnd::print() {
  *
  * Revision 1.1  2004/03/19 09:48:45  ybychkov
  * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.12  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/

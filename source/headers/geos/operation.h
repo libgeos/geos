@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -17,12 +18,8 @@
 #define GEOS_OPERATION_H
 
 #include <memory>
-//#include <iostream>
-//#include <string>
 #include <vector>
 #include <map>
-//#include <algorithm>
-//#include "math.h"
 #include <geos/platform.h>
 #include <geos/geomgraph.h>
 #include <geos/geom.h>
@@ -90,6 +87,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3.2.1  2005/05/23 18:16:40  strk
+ * more math.h to cmath conversions
+ *
  * Revision 1.3  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.
