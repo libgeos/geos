@@ -261,7 +261,7 @@ BufferBuilder::insertEdge(Edge *e)
 }
 
 bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second) {
-	if (first->compareTo(second)>=0)
+	if (first->compareTo(second)>0)
 		return true;
 	else
 		return false;
@@ -319,6 +319,10 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2005/08/22 13:31:17  strk
+ * Fixed comparator functions used with STL sort() algorithm to
+ * implement StrictWeakOrdering semantic.
+ *
  * Revision 1.27  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

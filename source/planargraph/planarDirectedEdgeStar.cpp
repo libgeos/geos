@@ -103,7 +103,7 @@ planarDirectedEdgeStar::getEdges()
 bool
 pdeLessThan(planarDirectedEdge *first, planarDirectedEdge * second)
 {
-	if (first->compareTo(second)<=0)
+	if (first->compareTo(second)<0)
 		return true;
 	else
 		return false;
@@ -179,6 +179,10 @@ planarDirectedEdgeStar::getNextEdge(planarDirectedEdge *dirEdge)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/08/22 13:31:17  strk
+ * Fixed comparator functions used with STL sort() algorithm to
+ * implement StrictWeakOrdering semantic.
+ *
  * Revision 1.4  2004/12/14 10:35:44  strk
  * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
  * for delayed destruction.

@@ -852,14 +852,14 @@ Geometry::~Geometry(){
 }
 
 bool lessThen(Coordinate& a, Coordinate& b) {
-	if (a.compareTo(b)<=0)
+	if (a.compareTo(b)<0)
 		return true;
 	else
 		return false;
 }
 
 bool greaterThen(Geometry *first, Geometry *second) {
-	if (first->compareTo(second)>=0)
+	if (first->compareTo(second)>0)
 		return true;
 	else
 		return false;
@@ -903,6 +903,10 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.79  2005/08/22 13:31:16  strk
+ * Fixed comparator functions used with STL sort() algorithm to
+ * implement StrictWeakOrdering semantic.
+ *
  * Revision 1.78  2005/07/11 10:50:19  strk
  * Added parens suggested by compiler
  *
