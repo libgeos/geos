@@ -1,3 +1,8 @@
+Changes in 2.1.4
+
+- Severe BUGFIX in BufferSubgraphGT and other functions used
+  as StrictWeakOrdering predicates for sort()
+
 Changes in 2.1.3
 
 - win32/mingw build support
@@ -14,7 +19,7 @@ Changes in 2.1.3
 - OverlayOp's PointBuilder performance improvement by reduction
   of LineIntersector calls.
 - Optimizations in Buffer operation
-- Sever BUGFIX in DepthSegmentLT as suggested by Graeme Hiebert
+- Severe BUGFIX in DepthSegmentLT as suggested by Graeme Hiebert
 
 Changes in 2.1.2
 
