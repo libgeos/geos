@@ -18,9 +18,6 @@ geos_HEADERS = \
 	noding.h \
 	nodingSnapround.h \
 	io.h \
-	ByteOrderDataInStreamT.h \
-	WKBReaderT.h \
-	WKBWriterT.h \
 	opLinemerge.h \
 	opBuffer.h \
 	operation.h \

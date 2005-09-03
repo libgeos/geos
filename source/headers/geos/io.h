@@ -26,40 +26,10 @@
 #include <geos/geom.h>
 #include <geos/util.h>
 
+
 using namespace std;
 
 namespace geos {
-
-/**
- * \brief A byte input-ouput stringstream type for use with WKB parsers.
- * Default instance of WKBReaderT and WKBWriterT use this type.
- */
-typedef basic_stringstream<byte> biostringstream;
-
-// biostringstream output
-inline ostream &operator<<(ostream &s, biostringstream &o) {
-
-	ios_base::fmtflags fl = s.flags(); // take note of output stream flags
-
-	// Set hex,uppercase,fill and width output stream flags
-	s.setf(ios::uppercase);
-	s.setf(ios::hex, ios::basefield);
-	s.setf(ios::hex, ios::basefield);
-	s.fill('0');
-
-	long pos = o.tellg(); // take note of input stream get pointer
-	o.seekg(0, ios::beg); // rewind
-
-	byte each=0;
-	while(o.read(&each, 1)) s<<setw(2)<<(int)each;
-
-	o.clear(); // clear input stream eof flag
-	o.seekg(pos); // reset input stream position
-	s.setf(fl);  // reset output stream status
-	return s;
-}
-
-
 
 /**
  * \class ParseException io.h geos.h
@@ -265,16 +235,239 @@ private:
 	void indent(int level, Writer *writer);
 };
 
-} // namespace geos
+/*
+ * \class ByteOrderData io.h geos.h
+ * 
+ * Allows reading a stream of Java primitive datatypes from an underlying
+ * istream, with the representation being in either common byte ordering.
+ *
+ */
+class ByteOrderDataInStream {
 
-#include <geos/ByteOrderDataInStreamT.h>
-#include <geos/WKBReaderT.h>
-#include <geos/WKBWriterT.h>
+public:
+
+	ByteOrderDataInStream(istream *s=NULL):
+		byteOrder(getMachineByteOrder()),
+		stream(s) {};
+	~ByteOrderDataInStream() {};
+
+	/**
+	 * Allows a single ByteOrderDataInStreamT to be reused
+	 * on multiple istream.
+	 */
+	void setInStream(istream *s) { stream=s; };
+	void setOrder(int order) { byteOrder=order; };
+
+	byte readByte() // throws IOException
+	{
+		stream->read(reinterpret_cast<char *>(buf), 1);
+		return buf[0];
+	}
+
+	int readInt() // throws IOException
+	{
+		stream->read(reinterpret_cast<char *>(buf), 4);
+		return ByteOrderValues::getInt(buf, byteOrder);
+	}
+
+	long readLong() // throws IOException
+	{
+		stream->read(reinterpret_cast<char *>(buf), 8);
+		return ByteOrderValues::getLong(buf, byteOrder);
+	}
+
+	double readDouble() // throws IOException
+	{
+		stream->read(reinterpret_cast<char *>(buf), 8);
+		return ByteOrderValues::getDouble(buf, byteOrder);
+	}
+
+private:
+	int byteOrder;
+	istream *stream;
+
+	// buffers to hold primitive datatypes
+	byte buf[8];
+
+};
+
+/**
+ * \class WKBReader io.h geos.h
+ *
+ * \brief Reads a Geometry from Well-Known Binary format.
+ *
+ * This class is designed to support reuse of a single instance to read
+ * multiple geometries. This class is not thread-safe; each thread should
+ * create its own instance.
+ *
+ * The Well-known Binary format is defined in the <A
+ * HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
+ * Specification for SQL</A>.
+ * This implementation supports the extended WKB standard which allows
+ * representing 3-dimensional coordinates.
+ *
+ */
+class WKBReader {
+
+public:
+
+	WKBReader() {};
+	WKBReader(const GeometryFactory &f): factory(f) {};
+
+	/**
+	 * \brief Reads a Geometry from an istream.
+	 *
+	 * @param is the stream to read from 
+	 * @return the Geometry read
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	Geometry *read(istream &is);
+		// throws IOException, ParseException
+
+	/**
+	 * \brief Print WKB in HEX form to out stream
+	 *
+	 * @param is is the stream to read from
+	 * @param os is the stream to write to
+	 */
+	static ostream &printHEX(istream &is, ostream &os);
+ 
+private:
+
+	static string BAD_GEOM_TYPE_MSG;
+
+	const GeometryFactory factory;
+
+	// for now support the WKB standard only - may be generalized later
+	unsigned int inputDimension;
+
+	ByteOrderDataInStream dis;
+
+	vector<double> ordValues;
+
+	Geometry *readGeometry();
+		// throws IOException, ParseException
+
+	Point *readPoint();
+		// throws IOException
+
+	LineString *readLineString();
+		// throws IOException
+
+	LinearRing *readLinearRing();
+		// throws IOException
+
+	Polygon *readPolygon();
+		// throws IOException
+
+	MultiPoint *readMultiPoint();
+		// throws IOException, ParseException
+
+	MultiLineString *readMultiLineString();
+		// throws IOException, ParseException
+
+	MultiPolygon *readMultiPolygon();
+		// throws IOException, ParseException
+
+	GeometryCollection *readGeometryCollection();
+		// throws IOException, ParseException
+
+	CoordinateSequence *readCoordinateSequence(int); // throws IOException
+
+	void readCoordinate(); // throws IOException
+
+
+};
+
+/**
+ *
+ * \class WKBWriter io.h geos.h
+ *
+ * \brief Writes a Geometry into Well-Known Binary format.
+ *
+ * The WKB format is specified in the OGC Simple Features for SQL specification.
+ * This implementation supports the extended WKB standard for representing
+ * 3-dimensional coordinates.  The presence of 3D coordinates is signified
+ * by setting the high bit of the wkbType word.
+ *
+ * Empty Points cannot be represented in WKB; an
+ * IllegalArgumentException will be thrown if one is
+ * written. The WKB specification does not support representing LinearRing
+ * they will be written as LineString
+ * 
+ * This class is designed to support reuse of a single instance to read multiple
+ * geometries. This class is not thread-safe; each thread should create its own
+ * instance.
+ *
+ * @see WKBReader
+ */
+class WKBWriter {
+
+public:
+
+	WKBWriter(int dims=2, int bo=getMachineByteOrder()):
+		outputDimension(dims), byteOrder(bo), outStream(NULL) {};
+
+	/**
+	 * \brief Write a Geometry to an ostream.
+	 *
+	 * @param g the geometry to write
+	 * @param os the output stream
+	 * @throws IOException
+	 */
+	void write(const Geometry &g, ostream &os);
+		// throws IOException, ParseException
+
+private:
+
+	int outputDimension;
+
+	int byteOrder;
+
+	ostream *outStream;
+
+	byte buf[8];
+
+	void writePoint(const Point &p);
+		// throws IOException
+
+	void writeLineString(const LineString &ls);
+		// throws IOException
+
+	void writePolygon(const Polygon &p);
+		// throws IOException
+
+	void writeGeometryCollection(const GeometryCollection &c, int wkbtype);
+		// throws IOException, ParseException
+
+	void writeCoordinateSequence(const CoordinateSequence &cs, bool sized);
+		// throws IOException
+
+	void writeCoordinate(const CoordinateSequence &cs, int idx, bool is3d);
+		// throws IOException
+
+	void writeGeometryType(int geometryType);
+		// throws IOException
+
+	void writeByteOrder();
+		// throws IOException
+
+	void writeInt(int intValue);
+		// throws IOException
+
+};
+
+
+} // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/09/03 21:26:42  strk
+ * Reworked WKB I/O to avoid use of templates and make better use of STL
+ *
  * Revision 1.12  2005/07/11 12:17:47  strk
  * Cleaned up syntax
  *

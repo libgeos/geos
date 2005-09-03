@@ -124,6 +124,8 @@ EXTERNAL_SOURCES =  \
 	../io/ByteOrderValues.cpp \
 	../io/WKTReader.cpp \
 	../io/WKTWriter.cpp \
+	../io/WKBReader.cpp \
+	../io/WKBWriter.cpp \
 	../io/Writer.cpp \
 	../io/Unload.cpp \
 	../operation/GeometryGraphOperation.cpp \

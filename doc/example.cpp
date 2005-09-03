@@ -49,6 +49,9 @@ void wkt_print_geoms(vector<Geometry *> *geoms);
 // cached inside a GeometryFactory object.
 GeometryFactory *global_factory;
 
+//#define DEBUG_STREAM_STATE 1
+
+
 //
 // This function tests writing and reading WKB
 // TODO:
@@ -57,7 +60,7 @@ GeometryFactory *global_factory;
 //
 void WKBtest(vector<Geometry*>*geoms)
 {
-	biostringstream s;
+	stringstream s(ios_base::binary|ios_base::in|ios_base::out);
 	WKBReader wkbReader(*global_factory);
 	WKBWriter wkbWriter;
 	Geometry *gout;
@@ -81,7 +84,14 @@ void WKBtest(vector<Geometry*>*geoms)
 			" fail:"<<s.fail()<<endl; 
 #endif
 
-		s.seekp(0, ios::beg); // rewind writer pointer
+#if DEBUG_STREAM_STATE
+		cout<<"State of stream after SEEKP: ";
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<
+			" good:"<<s.good()<<
+			" eof:"<<s.eof()<<
+			" bad:"<<s.bad()<<
+			" fail:"<<s.fail()<<endl; 
+#endif
 
 		wkbWriter.write(*gin, s);
 #if DEBUG_STREAM_STATE
@@ -133,13 +143,16 @@ void WKBtest(vector<Geometry*>*geoms)
 		if ( failed ) cout<<"{"<<i<<"} (WKB) ";
 		else cout<<"["<<i<<"] (WKB) ";
 
-		cout<<s<<endl;
+		WKBReader::printHEX(s, cout);
+		cout<<endl;
 
 		if ( failed ) {
 			WKTWriter wkt;
 			cout<<"  IN: "<<wkt.write(gin)<<endl;
 			cout<<" OUT: "<<wkt.write(gout)<<endl;
 		}
+
+		s.seekp(0, ios::beg); // rewind writer pointer
 
 	}
 
@@ -1065,6 +1078,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2005/09/03 21:26:42  strk
+ * Reworked WKB I/O to avoid use of templates and make better use of STL
+ *
  * Revision 1.29  2005/07/11 12:17:26  strk
  * Commented out useless include
  *
