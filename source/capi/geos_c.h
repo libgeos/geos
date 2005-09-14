@@ -20,9 +20,10 @@
  *	- Remember to call initGEOS() before any use of this library's
  *	  functions, and call finishGEOS() when done.
  *
- *	- Remember to GEOSGeom_destroy() all returned GEOSGeom, and
- *	  to free all returned char *.
- *	  This might change before release.
+ *	- Currently you have to explicitly GEOSGeom_destroy() all
+ *	  GEOSGeom objects to avoid memory leaks, and to free()
+ *	  all returned char * (unless const). This might change
+ *	  before first release to ensure greater API stability.
  *
  ***********************************************************************/
 
@@ -140,9 +141,6 @@ extern char GEOSHasZ(const GEOSGeom g1);
 
 extern int       GEOSGeomTypeId(const GEOSGeom g1);
 extern int       GEOSGetNumCoordinate(const GEOSGeom g1);
-extern GEOSGeom  GEOSGetGeometryN(GEOSGeom g1, int n);
-extern GEOSGeom  GEOSGetExteriorRing(GEOSGeom g1);
-extern GEOSGeom  GEOSGetInteriorRingN(GEOSGeom g1,int n);
 extern int       GEOSGetNumInteriorRings(const GEOSGeom g1);
 extern int       GEOSGetSRID(const GEOSGeom g1);
 extern int       GEOSGetNumGeometries(const GEOSGeom g1);
