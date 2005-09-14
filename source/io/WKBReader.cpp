@@ -76,15 +76,15 @@ WKBReader::readGeometry()
 	cout<<"WKB type: "<<typeInt<<endl;
 #endif
 
-	int geometryistreamype = typeInt & 0xff;
-	bool hasZ = (typeInt & 0x80000000) != 0;
+	int geometryType = typeInt & 0xff;
+	bool hasZ = ((typeInt & 0x80000000) != 0);
 	if (hasZ) inputDimension = 3;
 
 #if DEBUG_WKB_READER
 	cout<<"WKB dimensions: "<<inputDimension<<endl;
 #endif
 
-	switch (geometryistreamype) {
+	switch (geometryType) {
 		case WKBConstants::wkbPoint :
 			return readPoint();
 		case WKBConstants::wkbLineString :
@@ -100,7 +100,7 @@ WKBReader::readGeometry()
 		case WKBConstants::wkbGeometryCollection :
 			return readGeometryCollection();
 	}
-	throw new ParseException("Unknown WKB type " + geometryistreamype);
+	throw new ParseException("Unknown WKB type " + geometryType);
 }
 
 Point *
