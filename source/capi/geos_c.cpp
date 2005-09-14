@@ -1,3 +1,20 @@
+/************************************************************************
+ *
+ * $Id$
+ *
+ * C-Wrapper for GEOS library
+ *
+ * Copyright (C) 2005 Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ * Author: Sandro Santilli <strk@refractions.net>
+ *
+ ***********************************************************************/
+
 #include <stdio.h>
 
 #include <string>
@@ -62,7 +79,7 @@ extern "C" char GEOSisRing(Geometry *g1);
 extern "C" Geometry *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry *GEOSGetCentroid(Geometry *g);
 
-extern "C" char *GEOSversion();
+extern "C" const char *GEOSversion();
 extern "C" char *GEOSjtsport();
 extern "C" char *GEOSasText(Geometry *g1);
 extern "C" char *GEOSGeometryType(Geometry *g1);
@@ -1050,7 +1067,7 @@ GEOSGetSRID(Geometry *g1)
 	}
 }
 
-char *
+const char *
 GEOSversion()
 {
 	//string version = geosversion();

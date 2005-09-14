@@ -1,17 +1,31 @@
 /************************************************************************
  *
- * C-Wrapper for JTS library
+ * $Id$
  *
- * (C) 2005 Sandro Santilli, strk@refractions.net
+ * C-Wrapper for GEOS library
+ *
+ * Copyright (C) 2005 Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ * Author: Sandro Santilli <strk@refractions.net>
  *
  ***********************************************************************
  *
  * GENERAL NOTES:
  *
  *	- Remember to call initGEOS() before any use of this library's
- *	  functions. 
+ *	  functions, and call finishGEOS() when done.
+ *
+ *	- Remember to GEOSGeom_destroy() all returned GEOSGeom, and
+ *	  to free all returned char *.
+ *	  This might change before release.
  *
  ***********************************************************************/
+
  
 /************************************************************************
  *
@@ -37,13 +51,14 @@ enum GEOSGeomTypeId {
 
 /************************************************************************
  *
- * Initialization, cleanup
+ * Initializzation, cleanup, version
  *
  ***********************************************************************/
 
 extern void initGEOS(GEOSMessageHandler notice_function,
 	GEOSMessageHandler error_function);
 extern void finishGEOS(void);
+extern const char *GEOSversion();
 
 
 /************************************************************************
@@ -88,7 +103,7 @@ extern GEOSGeom GEOSPolygonize(GEOSGeom geoms[], unsigned int ngeoms);
 
 /************************************************************************
  *
- *  Binary predicates - return 2 on exception.
+ *  Binary predicates - return 2 on exception, 1 on true, 0 on false
  *
  ***********************************************************************/
 
@@ -106,7 +121,7 @@ extern char GEOSEquals(const GEOSGeom g1, const GEOSGeom g2);
 
 /************************************************************************
  *
- *  Unary predicate - return 2 on exception
+ *  Unary predicate - return 2 on exception, 1 on true, 0 on false
  *
  ***********************************************************************/
 

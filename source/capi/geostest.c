@@ -1,8 +1,19 @@
-/*
- * GEOS C-Wrapper library tester
+/************************************************************************
  *
- * (C) 2005 Sandro Santilli, strk@refractions.net
- */ 
+ * $Id$
+ *
+ * Test for C-Wrapper of GEOS library
+ *
+ * Copyright (C) 2005 Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ * Author: Sandro Santilli <strk@refractions.net>
+ *
+ ***********************************************************************/
 
 #define _GNU_SOURCE
 
