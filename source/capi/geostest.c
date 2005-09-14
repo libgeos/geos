@@ -1,0 +1,253 @@
+/*
+ * GEOS C-Wrapper library tester
+ *
+ * (C) 2005 Sandro Santilli, strk@refractions.net
+ */ 
+
+#define _GNU_SOURCE
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+#include "geos_c.h"
+
+#define MAXWKTLEN 1047551
+
+void
+usage(char *me)
+{
+	fprintf(stderr, "Usage: %s <wktfile>\n", me);
+	exit(1);
+}
+
+void
+notice(const char *fmt, ...) {
+	char *msg;
+	va_list ap;
+
+	va_start (ap, fmt);
+
+	/*
+	 * This is a GNU extension.
+	 * Dunno how to handle errors here.
+	 */
+	if (!vasprintf (&msg, fmt, ap))
+	{
+		va_end (ap);
+		return;
+	}
+	printf("NOTICE: %s\n", msg);
+	va_end(ap);
+	free(msg);
+}
+
+void
+log_and_exit(const char *fmt, ...) {
+	char *msg;
+	va_list ap;
+
+	va_start (ap, fmt);
+
+	/*
+	 * This is a GNU extension.
+	 * Dunno how to handle errors here.
+	 */
+	if (!vasprintf (&msg, fmt, ap))
+	{
+		va_end (ap);
+		return;
+	}
+	fprintf(stderr, "ERROR: %s\n", msg);
+	va_end(ap);
+	free(msg);
+	exit(1);
+}
+
+void
+printHEX(FILE *where, const unsigned char *bytes, size_t n)
+{
+	static char hex[] = "0123456789ABCDEF";
+	int i;
+
+	for (i=0; i<n; i++)
+	{
+		fprintf(where, "%c%c", hex[bytes[i]>>4], hex[bytes[i]&0x0F]);
+	}
+}
+
+int
+do_all(char *inputfile)
+{
+	GEOSGeom g1, g2, g3, g4;
+	char wkt[MAXWKTLEN];
+	FILE *input;
+	char *ptr;
+	size_t size;
+
+	input = fopen(inputfile, "r");
+	if ( ! input ) { perror("fopen"); exit(1); }
+
+	size = fread(wkt, 1, MAXWKTLEN-1, input);
+	fclose(input);
+	if ( ! size ) { perror("fread"); exit(1); }
+	if ( size == MAXWKTLEN-1 ) { perror("WKT input too big!"); exit(1); }
+	wkt[size] = '\0'; /* ensure it is null terminated */
+
+	/* WKT input */
+	g1 = GEOSGeomFromWKT(wkt);
+
+	/* WKT output */
+	ptr = GEOSGeomToWKT(g1);
+	printf("Input (WKT): %s\n", ptr); 
+	free(ptr);
+
+	/* WKB output */
+	ptr = GEOSGeomToWKB_buf(g1, &size);
+	printf("Input (WKB): "); printHEX(stdout, ptr, size); putchar('\n');
+
+	/* WKB input */
+	g2 = GEOSGeomFromWKB_buf(ptr, size); free(ptr);
+	if ( ! GEOSEquals(g1, g2) ) log_and_exit("Round WKB conversion failed");
+
+	/* Unary predicates */
+	if ( GEOSisEmpty(g1) ) printf("isEmpty\n");
+	if ( GEOSisValid(g1) ) printf("isValid\n");
+	if ( GEOSisSimple(g1) ) printf("isSimple\n");
+	if ( GEOSisRing(g1) ) printf("isRing\n");
+
+	/* Convex Hull */
+	g2 = GEOSConvexHull(g1);
+	ptr = GEOSGeomToWKT(g2);
+	printf("ConvexHull: %s\n", ptr); 
+	free(ptr);
+
+	/* Buffer */
+	g1 = GEOSBuffer(g2, 100, 30);
+	ptr = GEOSGeomToWKT(g1);
+	printf("Buffer: %s\n", ptr); 
+	free(ptr);
+
+	/* Intersection */
+	g3 = GEOSIntersection(g1, g2);
+	if ( ! GEOSEquals(g3, g2) )
+	{
+		GEOSGeom_destroy(g1);
+		GEOSGeom_destroy(g2);
+		GEOSGeom_destroy(g3);
+		log_and_exit("Intersection(g, Buffer(g)) didn't return g");
+	}
+	ptr = GEOSGeomToWKT(g3);
+	printf("Intersection: %s\n", ptr); 
+	GEOSGeom_destroy(g3);
+	free(ptr);
+
+	/* Difference */
+	g3 = GEOSDifference(g1, g2);
+	ptr = GEOSGeomToWKT(g3);
+	printf("Difference: %s\n", ptr); 
+	GEOSGeom_destroy(g3);
+	free(ptr);
+
+	/* SymDifference */
+	g3 = GEOSSymDifference(g1, g2);
+	ptr = GEOSGeomToWKT(g3);
+	printf("SymDifference: %s\n", ptr); 
+	free(ptr);
+
+	/* Boundary */
+	g4 = GEOSBoundary(g3);
+	ptr = GEOSGeomToWKT(g4);
+	printf("Boundary: %s\n", ptr); 
+	GEOSGeom_destroy(g3);
+	GEOSGeom_destroy(g4);
+	free(ptr);
+
+	/* Union */
+	g3 = GEOSUnion(g1, g2);
+	if ( ! GEOSEquals(g3, g1) )
+	{
+		GEOSGeom_destroy(g1);
+		GEOSGeom_destroy(g2);
+		GEOSGeom_destroy(g3);
+		log_and_exit("Union(g, Buffer(g)) didn't return Buffer(g)");
+	}
+	ptr = GEOSGeomToWKT(g3);
+	printf("Union: %s\n", ptr); 
+	free(ptr);
+
+	/* PointOnSurcace */
+	g4 = GEOSPointOnSurface(g3);
+	ptr = GEOSGeomToWKT(g4);
+	printf("PointOnSurface: %s\n", ptr); 
+	GEOSGeom_destroy(g3);
+	GEOSGeom_destroy(g4);
+	free(ptr);
+
+	/* Centroid */
+	g3 = GEOSGetCentroid(g2);
+	ptr = GEOSGeomToWKT(g3);
+	printf("Centroid: %s\n", ptr); 
+	GEOSGeom_destroy(g3);
+	free(ptr);
+
+	/* Relate (and RelatePattern )*/
+	ptr = GEOSRelate(g1, g2);
+	if ( ! GEOSRelatePattern(g1, g2, ptr) )
+	{
+		GEOSGeom_destroy(g1);
+		GEOSGeom_destroy(g2);
+		log_and_exit("! RelatePattern(g1, g2, Relate(g1, g2))");
+	}
+	printf("Relate: %s\n", ptr); 
+	free(ptr);
+
+#if 0
+	/* Polygonize (UNIMPLEMENTED) */
+	gg = malloc(2*sizeof(GEOSGeom*));
+	gg[0] = g1;
+	gg[1] = g2;
+	g3 = GEOSPolygonize(gg, 2);
+	ptr = GEOSGeomToWKT(g3);
+	printf("Polygonize: %s\n", ptr); 
+#endif
+
+	/* Binary predicates */
+	if ( GEOSIntersects(g1, g2) ) printf("Intersect\n");
+	if ( GEOSDisjoint(g1, g2) ) printf("Disjoint\n");
+	if ( GEOSTouches(g1, g2) ) printf("Touches\n");
+	if ( GEOSCrosses(g1, g2) ) printf("Crosses\n");
+	if ( GEOSWithin(g1, g2) ) printf("Within\n");
+	if ( GEOSContains(g1, g2) ) printf("Contains\n");
+	if ( GEOSOverlaps(g1, g2) ) printf("Overlaps\n");
+
+	GEOSGeom_destroy(g1);
+	GEOSGeom_destroy(g2);
+
+	return 0;
+}
+
+int
+main(int argc, char **argv)
+{
+	int i, n=1;
+
+	initGEOS(notice, log_and_exit);
+	printf("GEOS version %s\n", GEOSversion());
+
+	if ( argc < 2 ) usage(argv[0]);
+	if ( argc > 2 ) n=atoi(argv[2]);
+	if ( ! n ) n=1;
+
+	for (i=0; i<n; i++) {
+		putc('.', stderr); fflush(stderr);
+		do_all(argv[1]);
+		putc('+', stderr); fflush(stderr);
+	}
+	putc('\n', stderr);
+
+	finishGEOS();
+
+	return i;
+}
+

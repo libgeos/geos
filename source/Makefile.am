@@ -1,6 +1,7 @@
 SUBDIRS = \
 	geom \
 	headers \
+	capi \
 	bigtest \
 	test
 

@@ -71,5 +71,5 @@ AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INT
 
 dnl output stuff ----------------------------------------------------------
 
-AC_OUTPUT(Makefile source/Makefile source/geom/Makefile source/headers/Makefile source/headers/geos/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile doc/Makefile source/headers/geos/version.h doc/Doxyfile swig/Makefile swig/python/Makefile swig/python/tests/Makefile swig/python/tests/cases/Makefile VisualStudio/Makefile)
+AC_OUTPUT(Makefile source/Makefile source/capi/Makefile source/geom/Makefile source/headers/Makefile source/headers/geos/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile doc/Makefile source/headers/geos/version.h doc/Doxyfile swig/Makefile swig/python/Makefile swig/python/tests/Makefile swig/python/tests/cases/Makefile VisualStudio/Makefile)
 
