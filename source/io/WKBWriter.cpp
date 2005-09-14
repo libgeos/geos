@@ -33,8 +33,17 @@ WKBWriter::write(const Geometry &g, ostream &os)
 		case GEOS_POLYGON:
 			return writePolygon((Polygon &)g);
 		case GEOS_MULTIPOINT:
+			return writeGeometryCollection(
+				(GeometryCollection &)g,
+				WKBConstants::wkbMultiPoint);
 		case GEOS_MULTILINESTRING:
+			return writeGeometryCollection(
+				(GeometryCollection &)g,
+				WKBConstants::wkbMultiLineString);
 		case GEOS_MULTIPOLYGON:
+			return writeGeometryCollection(
+				(GeometryCollection &)g,
+				WKBConstants::wkbMultiPolygon);
 		case GEOS_GEOMETRYCOLLECTION:
 			return writeGeometryCollection(
 				(GeometryCollection &)g,
