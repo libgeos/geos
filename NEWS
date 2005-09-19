@@ -21,6 +21,7 @@ Changes in 3.0.0
   geometry clone() methods inlined
 - Made LineIntersector a concrete type
 - Node::isIncidentEdgeInResult() method made virtual
+- Initial simplified C api implementation
 
 Changes in 2.1.4
 
