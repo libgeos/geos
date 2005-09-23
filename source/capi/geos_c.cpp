@@ -89,6 +89,9 @@ extern "C" int GEOSGeometryTypeId(Geometry *g1);
 extern "C" void GEOSGeom_destroy(Geometry *a);
 extern "C" bool GEOSHasZ(Geometry *g1);
 
+extern "C" Geometry *GEOSPolygonize(Geometry **, unsigned int);
+extern "C" Geometry *GEOSMakeCollection(int type, Geometry **, unsigned int);
+
 //## GLOBALS ################################################
 
 static GeometryFactory *geomFactory = NULL;
@@ -1054,7 +1057,7 @@ GEOSMakeCollection(int type, Geometry **geoms, unsigned int ngeoms)
 }
 
 Geometry *
-GEOSpolygonize(Geometry **g, unsigned int ngeoms)
+GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 {
 	unsigned int i;
 	Geometry *out = NULL;
