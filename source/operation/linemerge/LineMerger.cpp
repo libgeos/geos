@@ -27,17 +27,20 @@ LineMerger::add(vector<Geometry*> *geometries)
 	}
 }
 
-LineMerger::LineMerger()
+LineMerger::LineMerger():
+	mergedLineStrings(NULL),
+	edgeStrings(NULL),
+	factory(NULL)
 {
-	graph=new LineMergeGraph();
-	mergedLineStrings=NULL;
-	edgeStrings=NULL;
-	factory=NULL;
+//	graph=new LineMergeGraph();
+//	mergedLineStrings=NULL;
+//	edgeStrings=NULL;
+//	factory=NULL;
 }
 
 LineMerger::~LineMerger()
 {
-	delete graph;
+//	delete graph;
 //	delete mergedLineStrings;
 	if ( edgeStrings )
 	{
@@ -79,7 +82,7 @@ LineMerger::add(LineString *lineString)
 	if (factory==NULL) {
 		factory=lineString->getFactory();
 	}
-	graph->addEdge(lineString);
+	graph.addEdge(lineString);
 }
 
 void
@@ -114,7 +117,7 @@ LineMerger::buildEdgeStringsForIsolatedLoops()
 void
 LineMerger::buildEdgeStringsForUnprocessedNodes()
 {
-	vector<planarNode*> *nodes=graph->getNodes();
+	vector<planarNode*> *nodes=graph.getNodes();
 	for (int i=0;i<(int)nodes->size();i++) {
 		planarNode *node=(*nodes)[i];
 		if (!node->isMarked()) { 
@@ -129,7 +132,7 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 void
 LineMerger::buildEdgeStringsForNonDegree2Nodes()
 {
-	vector<planarNode*> *nodes=graph->getNodes();
+	vector<planarNode*> *nodes=graph.getNodes();
 	for (int i=0;i<(int)nodes->size();i++) {
 		planarNode *node=(*nodes)[i];
 		if (node->getDegree()!=2) { 
@@ -181,6 +184,9 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/09/23 17:20:13  strk
+ * Made LineMerger graph be a real object (rather then a pointer to it)
+ *
  * Revision 1.4  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

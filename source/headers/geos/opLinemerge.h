@@ -185,7 +185,7 @@ public:
 
 private:
 
-	LineMergeGraph *graph;
+	LineMergeGraph graph;
 	vector<LineString*> *mergedLineStrings;
 	vector<EdgeString*> *edgeStrings;
 	const GeometryFactory *factory;
@@ -211,6 +211,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/09/23 17:20:13  strk
+ * Made LineMerger graph be a real object (rather then a pointer to it)
+ *
  * Revision 1.4  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
