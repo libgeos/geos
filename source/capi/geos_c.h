@@ -77,6 +77,19 @@ extern char *GEOSGeomToWKB_buf(const GEOSGeom g, size_t *size);
 
 /************************************************************************
  *
+ * Constructors
+ *
+ ***********************************************************************/
+
+/*
+ * The provided GEOSGeoms will be destroyed by destruction of the
+ * returned object, be aware about not destroying them twice!
+ */
+extern GEOSGeom GEOSMakeCollection(int type, GEOSGeom *geoms,
+	unsigned int ngeoms);
+
+/************************************************************************
+ *
  * Memory management
  *
  ***********************************************************************/

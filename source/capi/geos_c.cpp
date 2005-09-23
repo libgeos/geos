@@ -982,6 +982,7 @@ GEOSGetCentroid(Geometry *g)
 {
 	try{
 		Geometry *ret = g->getCentroid();
+		if ( ! ret ) return geomFactory->createGeometryCollection();
 		return ret;
 	}
 	catch (GEOSException *ge)
@@ -991,6 +992,62 @@ GEOSGetCentroid(Geometry *g)
 		return NULL;
 	}
 	catch(...)
+	{
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSMakeCollection(int type, Geometry **geoms, unsigned int ngeoms)
+{
+#ifdef DEBUG
+	char buf[256];
+	sprintf(buf, "PostGIS2GEOS_collection: requested type %d, ngeoms: %d",
+			type, ngeoms);
+	NOTICE_MESSAGE(buf);
+#endif
+
+	try
+	{
+		Geometry *g;
+		unsigned int t;
+		vector<Geometry *> *subGeos=new vector<Geometry *>(ngeoms);
+
+		for (t=0; t<ngeoms; t++)
+		{
+			(*subGeos)[t] = geoms[t];
+		}
+		//g = geomFactory->buildGeometry(subGeos);
+		switch (type)
+		{
+			case GEOS_GEOMETRYCOLLECTION:
+				g = geomFactory->createGeometryCollection(subGeos);
+				break;
+			case GEOS_MULTIPOINT:
+				g = geomFactory->createMultiPoint(subGeos);
+				break;
+			case GEOS_MULTILINESTRING:
+				g = geomFactory->createMultiLineString(subGeos);
+				break;
+			case GEOS_MULTIPOLYGON:
+				g = geomFactory->createMultiPolygon(subGeos);
+				break;
+			default:
+				NOTICE_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
+				g = NULL;
+				
+		}
+		if (g==NULL) return NULL;
+		return g;
+	}
+	catch (GEOSException *ge)
+	{
+		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+
+	catch (...)
 	{
 		return NULL;
 	}
