@@ -154,6 +154,7 @@ void WKBtest(vector<Geometry*>*geoms)
 
 		s.seekp(0, ios::beg); // rewind writer pointer
 
+		delete gout;
 	}
 
 }
@@ -1078,6 +1079,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2005/09/26 08:17:19  strk
+ * Removed memory leak from WKB tester
+ *
  * Revision 1.30  2005/09/03 21:26:42  strk
  * Reworked WKB I/O to avoid use of templates and make better use of STL
  *
