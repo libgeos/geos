@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.30  2005/09/26 12:23:51  strk
+ * Initializzation lists in PrecisionModel ctors
+ *
  * Revision 1.29  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *
@@ -138,12 +141,13 @@ void PrecisionModel::makePrecise(Coordinate *coord) const {
 
 
 /**
-* Creates a <code>PrecisionModel</code> with a default precision
-* of FLOATING.
-*/
-PrecisionModel::PrecisionModel(){
-	modelType=FLOATING;
-	scale=1.0;
+ * Creates a <code>PrecisionModel</code> with a default precision
+ * of FLOATING.
+ */
+PrecisionModel::PrecisionModel(): modelType(FLOATING), scale(1.0)
+{
+	//modelType=FLOATING;
+	//scale=1.0;
 }
 
 /**
@@ -153,8 +157,9 @@ PrecisionModel::PrecisionModel(){
 *
 * @param modelType the type of the precision model
 */
-PrecisionModel::PrecisionModel(Type nModelType){
-	modelType=nModelType;
+PrecisionModel::PrecisionModel(Type nModelType): modelType(nModelType)
+{
+	//modelType=nModelType;
 	if (modelType==FIXED){
 		setScale(1.0);
 	}
@@ -174,10 +179,10 @@ PrecisionModel::PrecisionModel(Type nModelType){
  * @deprecated offsets are no longer supported,
  * since internal representation is rounded floating point
  */
-PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY)
+PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOffsetY): modelType(FIXED)
 	//throw(IllegalArgumentException *)
 {
-	modelType = FIXED;
+	//modelType = FIXED;
 	setScale(newScale);
 }
 
@@ -189,18 +194,19 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
  *@param  scale    amount by which to multiply a coordinate after subtracting
  *      the offset, to obtain a precise coordinate
  */
-PrecisionModel::PrecisionModel(double newScale)
+PrecisionModel::PrecisionModel(double newScale): modelType(FIXED)
 	//throw (IllegalArgumentException *)
 {
-	modelType=FIXED;
+	//modelType=FIXED;
 	setScale(newScale);
 }
 
 
-PrecisionModel::PrecisionModel(const PrecisionModel &pm)
+PrecisionModel::PrecisionModel(const PrecisionModel &pm):
+	modelType(pm.modelType), scale(pm.scale)
 {
-	modelType = pm.modelType;
-	scale = pm.scale;
+	//modelType = pm.modelType;
+	//scale = pm.scale;
 }
 
 /**
