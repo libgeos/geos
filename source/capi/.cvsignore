@@ -2,3 +2,6 @@ Makefile.in
 Makefile
 .deps
 .libs
+geostest
+*.lo
+*.la
