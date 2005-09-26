@@ -90,7 +90,7 @@ printHEX(FILE *where, const unsigned char *bytes, size_t n)
 int
 do_all(char *inputfile)
 {
-	GEOSGeom g1, g2, g3, g4;
+	GEOSGeom g1, g2, g3, g4, *gg;
 	char wkt[MAXWKTLEN];
 	FILE *input;
 	char *ptr;
@@ -120,6 +120,7 @@ do_all(char *inputfile)
 	/* WKB input */
 	g2 = GEOSGeomFromWKB_buf(ptr, size); free(ptr);
 	if ( ! GEOSEquals(g1, g2) ) log_and_exit("Round WKB conversion failed");
+	GEOSGeom_destroy(g2);
 
 	/* Unary predicates */
 	if ( GEOSisEmpty(g1) ) printf("isEmpty\n");
@@ -134,6 +135,7 @@ do_all(char *inputfile)
 	free(ptr);
 
 	/* Buffer */
+	GEOSGeom_destroy(g1);
 	g1 = GEOSBuffer(g2, 100, 30);
 	ptr = GEOSGeomToWKT(g1);
 	printf("Buffer: %s\n", ptr); 
@@ -208,20 +210,29 @@ do_all(char *inputfile)
 	{
 		GEOSGeom_destroy(g1);
 		GEOSGeom_destroy(g2);
+		free(ptr);
 		log_and_exit("! RelatePattern(g1, g2, Relate(g1, g2))");
 	}
 	printf("Relate: %s\n", ptr); 
 	free(ptr);
 
-#if 0
-	/* Polygonize (UNIMPLEMENTED) */
-	gg = malloc(2*sizeof(GEOSGeom*));
+	/* Polygonize */
+	gg = (GEOSGeom *)malloc(2*sizeof(GEOSGeom));
 	gg[0] = g1;
 	gg[1] = g2;
 	g3 = GEOSPolygonize(gg, 2);
+	free(gg);
 	ptr = GEOSGeomToWKT(g3);
+	GEOSGeom_destroy(g3);
 	printf("Polygonize: %s\n", ptr); 
-#endif
+	free(ptr);
+
+	/* LineMerge */
+	g3 = GEOSLineMerge(g1);
+	ptr = GEOSGeomToWKT(g3);
+	printf("LineMerge: %s\n", ptr); 
+	free(ptr);
+	GEOSGeom_destroy(g3);
 
 	/* Binary predicates */
 	if ( GEOSIntersects(g1, g2) ) printf("Intersect\n");

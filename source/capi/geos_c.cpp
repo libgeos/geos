@@ -25,6 +25,7 @@
 #include <geos.h>
 #include <geos/opValid.h>
 #include <geos/opPolygonize.h>
+#include <geos/opLinemerge.h>
 
 using namespace geos;
 
@@ -91,6 +92,7 @@ extern "C" bool GEOSHasZ(Geometry *g1);
 
 extern "C" Geometry *GEOSPolygonize(Geometry **, unsigned int);
 extern "C" Geometry *GEOSMakeCollection(int type, Geometry **, unsigned int);
+extern "C" Geometry *GEOSLineMerge(Geometry *);
 
 //## GLOBALS ################################################
 
@@ -314,6 +316,7 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 		s= im->toString();
 		result = (char*) malloc( s.length() + 1);
 		strcpy(result, s.c_str() );
+		delete im;
 
 		return result;
 	}
@@ -1092,6 +1095,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 
 		geoms = new vector<Geometry *>(polys->size());
 		for (i=0; i<polys->size(); i++) (*geoms)[i] = (*polys)[i];
+		delete polys;
 		out = geomFactory->createGeometryCollection(geoms);
 	}
 	catch (GEOSException *ge)
@@ -1106,6 +1110,44 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	}
 
 	return out;
+}
+
+Geometry *
+GEOSLineMerge(Geometry *g)
+{
+        unsigned int i;
+        Geometry *out = NULL;
+
+        try{
+                // LineMerge
+                LineMerger lmrgr;
+
+                lmrgr.add(g);
+
+                vector<LineString *>*lines = lmrgr.getMergedLineStrings();
+
+#if DEBUG
+        NOTICE_MESSAGE("output lines got");
+#endif
+
+                vector<Geometry *>*geoms = new vector<Geometry *>(lines->size());
+                for (i=0; i<lines->size(); i++) (*geoms)[i] = (*lines)[i];
+                delete lines;
+                out = geomFactory->buildGeometry(geoms);
+                //out = geomFactory->createGeometryCollection(geoms);
+        }
+        catch (GEOSException *ge)
+        {
+                NOTICE_MESSAGE((char *)ge->toString().c_str());
+                delete ge;
+                return NULL;
+        }
+        catch(...)
+        {
+                return NULL;
+        }
+
+        return out;
 }
 
 int

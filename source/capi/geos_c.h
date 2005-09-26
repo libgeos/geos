@@ -114,6 +114,7 @@ extern GEOSGeom GEOSPointOnSurface(GEOSGeom g1);
 extern GEOSGeom GEOSGetCentroid(GEOSGeom g);
 extern char *GEOSRelate(const GEOSGeom g1, const GEOSGeom g2);
 extern GEOSGeom GEOSPolygonize(GEOSGeom geoms[], unsigned int ngeoms);
+extern GEOSGeom GEOSLineMerge(const GEOSGeom g);
 
 /************************************************************************
  *
