@@ -15,6 +15,8 @@
 
 #include <geos/io.h>
 
+//#define DEBUG_WKB_READER 1
+
 namespace geos {
 
 string WKBReader::BAD_GEOM_TYPE_MSG = "bad geometry type encountered in ";
@@ -48,12 +50,6 @@ Geometry *
 WKBReader::read(istream &is)
 {
 	dis.setInStream(&is); // will default to machine endian
-	inputDimension = 2; // handle 2d only for now
-
-	// only allocate ordValues buffer if necessary
-	if ( ordValues.size() < inputDimension )
-		ordValues.resize(inputDimension);
-
 	return readGeometry();
 }
 
@@ -72,17 +68,28 @@ WKBReader::readGeometry()
 		dis.setOrder(ByteOrderValues::ENDIAN_LITTLE);
 
 	int typeInt = dis.readInt();
+	int geometryType = typeInt & 0xff;
+
 #if DEBUG_WKB_READER
-	cout<<"WKB type: "<<typeInt<<endl;
+	cout<<"WKB geometryType: "<<geometryType<<endl;
 #endif
 
-	int geometryType = typeInt & 0xff;
 	bool hasZ = ((typeInt & 0x80000000) != 0);
 	if (hasZ) inputDimension = 3;
+	else inputDimension = 2; // doesn't handle M currently
+
+#if DEBUG_WKB_READER
+	cout<<"WKB hasZ: "<<hasZ<<endl;
+#endif
 
 #if DEBUG_WKB_READER
 	cout<<"WKB dimensions: "<<inputDimension<<endl;
 #endif
+
+	// allocate space for ordValues 
+	if ( ordValues.size() < inputDimension )
+		ordValues.resize(inputDimension);
+
 
 	switch (geometryType) {
 		case WKBConstants::wkbPoint :
@@ -246,6 +253,7 @@ WKBReader::readGeometryCollection()
 CoordinateSequence *
 WKBReader::readCoordinateSequence(int size)
 {
+	cerr<<"WKBReader::readCoordinateSequence("<<size<<") called"<<endl;
 	CoordinateSequence *seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
 	unsigned int targetDim = seq->getDimension();
 	if ( targetDim > inputDimension )
