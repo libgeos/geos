@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2005/09/26 11:01:32  strk
+ * Const correctness changes in LineMerger package, and a few speedups.
+ *
  * Revision 1.5  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -46,14 +49,16 @@
 #include <geos/opLinemerge.h>
 
 namespace geos {
+
 /**
-* Constructs an EdgeString with the given factory used to convert this EdgeString
-* to a LineString
-*/
-EdgeString::EdgeString(const GeometryFactory *newFactory) {
-	directedEdges=new vector<LineMergeDirectedEdge*>();
-	coordinates=NULL;
-	factory=newFactory;
+ * Constructs an EdgeString with the given factory used to convert
+ * this EdgeString to a LineString
+ */
+EdgeString::EdgeString(const GeometryFactory *newFactory):
+	factory(newFactory),
+	directedEdges(new vector<LineMergeDirectedEdge*>()),
+	coordinates(NULL)
+{
 }
 
 EdgeString::~EdgeString() {
@@ -61,9 +66,11 @@ EdgeString::~EdgeString() {
 }
 
 /**
-* Adds a directed edge which is known to form part of this line.
-*/
-void EdgeString::add(LineMergeDirectedEdge *directedEdge) {
+ * Adds a directed edge which is known to form part of this line.
+ */
+void
+EdgeString::add(LineMergeDirectedEdge *directedEdge)
+{
 	directedEdges->push_back(directedEdge);
 }
 
@@ -99,4 +106,5 @@ EdgeString::toLineString()
 	//return factory->createLineString(*(getCoordinates()));
 	return factory->createLineString(getCoordinates());
 }
-}
+
+} // namespace geos

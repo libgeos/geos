@@ -25,7 +25,7 @@ namespace geos {
  * representation of an edge. 
  */
 void
-LineMergeGraph::addEdge(LineString *lineString)
+LineMergeGraph::addEdge(const LineString *lineString)
 {
 	if (lineString->isEmpty())
 	{
@@ -75,6 +75,9 @@ LineMergeGraph::~LineMergeGraph()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/09/26 11:01:32  strk
+ * Const correctness changes in LineMerger package, and a few speedups.
+ *
  * Revision 1.5  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

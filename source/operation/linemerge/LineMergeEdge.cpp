@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/09/26 11:01:32  strk
+ * Const correctness changes in LineMerger package, and a few speedups.
+ *
  * Revision 1.3  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -37,14 +40,17 @@ namespace geos {
 /**
 * Constructs a LineMergeEdge with vertices given by the specified LineString.
 */
-LineMergeEdge::LineMergeEdge(LineString *newLine) {
-	line=newLine;
+LineMergeEdge::LineMergeEdge(const LineString *newLine):
+	line(newLine)
+{
+	//line=newLine;
 }
 
 /**
  * Returns the LineString specifying the vertices of this edge.
  */
-LineString* LineMergeEdge::getLine() {
+const LineString *
+LineMergeEdge::getLine() const {
 	return line;
 }
 }

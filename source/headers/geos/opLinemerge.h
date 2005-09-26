@@ -31,16 +31,18 @@ namespace geos {
  */
 class LineMergeEdge: public planarEdge {
 private:
-	LineString *line;
+	const LineString *line;
 public:
 	/**
-	* Constructs a LineMergeEdge with vertices given by the specified LineString.
-	*/
-	LineMergeEdge(LineString *newLine);
+	 * Constructs a LineMergeEdge with vertices given by the specified
+	 * LineString.
+	 */
+	LineMergeEdge(const LineString *newLine);
+
 	/**
-	* Returns the LineString specifying the vertices of this edge.
-	*/
-	LineString* getLine();
+	 * Returns the LineString specifying the vertices of this edge.
+	 */
+	const LineString* getLine() const;
 };
 
 
@@ -120,7 +122,7 @@ public:
 	 * Adds an Edge, DirectedEdges, and Nodes for the given
 	 * LineString representation of an edge. 
 	 */
-	void addEdge(LineString *lineString);
+	void addEdge(const LineString *lineString);
 
 	~LineMergeGraph();
 private:
@@ -173,7 +175,7 @@ public:
 	 * Any dimension of Geometry may be added; the constituent
 	 * linework will be extracted.
 	 */  
-	void add(Geometry *geometry);
+	void add(const Geometry *geometry);
 
 	/*
 	 * \brief
@@ -181,7 +183,7 @@ public:
 	 */
 	vector<LineString*>* getMergedLineStrings();
 
-	void add(LineString *lineString);
+	void add(const LineString *lineString);
 
 private:
 
@@ -203,7 +205,7 @@ public:
 	LineMerger *lm;
 	LMGeometryComponentFilter(LineMerger *newLm);
 	virtual void filter_rw(Geometry *geom);
-	virtual void filter_ro(const Geometry *geom){}; // Unsupported
+	virtual void filter_ro(const Geometry *geom);
 };
 
 }
@@ -211,6 +213,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/09/26 11:01:32  strk
+ * Const correctness changes in LineMerger package, and a few speedups.
+ *
  * Revision 1.5  2005/09/23 17:20:13  strk
  * Made LineMerger graph be a real object (rather then a pointer to it)
  *

@@ -64,20 +64,28 @@ LMGeometryComponentFilter::filter_rw(Geometry *geom)
 	}	
 }
 
+void
+LMGeometryComponentFilter::filter_ro(const Geometry *geom)
+{
+	const LineString *ls = dynamic_cast<const LineString *>(geom);
+	if ( ls )
+		lm->add(ls);
+}
+
 /**
  * Adds a Geometry to be processed. May be called multiple times.
  * Any dimension of Geometry may be added; the constituent linework will be
  * extracted.
  */  
 void
-LineMerger::add(Geometry *geometry)
+LineMerger::add(const Geometry *geometry)
 {
 	LMGeometryComponentFilter lmgcf(this);
-	geometry->apply_rw(&lmgcf);
+	geometry->apply_ro(&lmgcf);
 }
 
 void
-LineMerger::add(LineString *lineString)
+LineMerger::add(const LineString *lineString)
 {
 	if (factory==NULL) {
 		factory=lineString->getFactory();
@@ -133,7 +141,8 @@ void
 LineMerger::buildEdgeStringsForNonDegree2Nodes()
 {
 	vector<planarNode*> *nodes=graph.getNodes();
-	for (int i=0;i<(int)nodes->size();i++) {
+	unsigned int size=nodes->size();
+	for (unsigned int i=0; i<size; i++) {
 		planarNode *node=(*nodes)[i];
 		if (node->getDegree()!=2) { 
 			buildEdgeStringsStartingAt(node);
@@ -147,7 +156,8 @@ void
 LineMerger::buildEdgeStringsStartingAt(planarNode *node)
 {
 	vector<planarDirectedEdge*> *edges=node->getOutEdges()->getEdges();
-	for (int i=0;i<(int)edges->size();i++)
+	unsigned int size = edges->size();
+	for (unsigned int i=0; i<size; i++)
 	{
 		LineMergeDirectedEdge *directedEdge=(LineMergeDirectedEdge*) (*edges)[i];
 		if (directedEdge->getEdge()->isMarked()) {
@@ -184,6 +194,9 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/09/26 11:01:32  strk
+ * Const correctness changes in LineMerger package, and a few speedups.
+ *
  * Revision 1.5  2005/09/23 17:20:13  strk
  * Made LineMerger graph be a real object (rather then a pointer to it)
  *
