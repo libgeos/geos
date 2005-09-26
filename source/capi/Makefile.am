@@ -1,6 +1,6 @@
 prefix=@prefix@
 top_srcdir=@top_srcdir@
-GEOS_CAPI_VERSION=@CAPI_VERSION@
+GEOS_CAPI_VERSION="@VERSION@-CAPI-@CAPI_VERSION@"
 
 noinst_PROGRAMS = geostest 
 
@@ -21,7 +21,7 @@ DIR_SOURCES = \
 	geos_c.cpp 
 
 libgeos_c_la_SOURCES = $(DIR_SOURCES)
-libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='"$(GEOS_CAPI_VERSION)"'
+libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)'
 
 
 libgeos_c_la_LDFLAGS = -version-info @CAPI_INTERFACE_CURRENT@:@CAPI_INTERFACE_REVISION@:@CAPI_INTERFACE_AGE@
