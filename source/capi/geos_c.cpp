@@ -1172,9 +1172,8 @@ GEOSGetSRID(Geometry *g1)
 const char *
 GEOSversion()
 {
-	//string version = geosversion();
-	static char *res = strdup(geosversion().c_str());
-	return res;
+	//static string version = GEOS_CAPI_VERSION;
+	return GEOS_CAPI_VERSION;
 }
 
 char *

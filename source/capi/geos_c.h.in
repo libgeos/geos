@@ -27,6 +27,27 @@
  *
  ***********************************************************************/
 
+/************************************************************************
+ *
+ * Version
+ *
+ ***********************************************************************/
+
+#define GEOS_VERSION_MAJOR @VERSION_MAJOR@
+#define GEOS_VERSION_MINOR @VERSION_MINOR@
+#define GEOS_VERSION_PATCH @VERSION_PATCH@
+#define GEOS_FIRST_INTERFACE GEOS_VERSION_MAJOR 
+#define GEOS_LAST_INTERFACE (GEOS_VERSION_MAJOR+GEOS_VERSION_MINOR)
+#define GEOS_VERSION "@VERSION@"
+#define GEOS_JTS_PORT "@JTS_PORT@"
+
+#define GEOS_CAPI_VERSION_MAJOR @CAPI_VERSION_MAJOR@
+#define GEOS_CAPI_VERSION_MINOR @CAPI_VERSION_MINOR@
+#define GEOS_CAPI_VERSION_PATCH @CAPI_VERSION_PATCH@
+#define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
+#define GEOS_CAPI_LAST_INTERFACE (GEOS_CAPI_VERSION_MAJOR+GEOS_CAPI_VERSION_MINOR)
+#define GEOS_CAPI_VERSION "@VERSION@-CAPI-@CAPI_VERSION@"
+
  
 /************************************************************************
  *
@@ -52,7 +73,7 @@ enum GEOSGeomTypeId {
 
 /************************************************************************
  *
- * Initializzation, cleanup, version
+ * Initialization, cleanup, version
  *
  ***********************************************************************/
 

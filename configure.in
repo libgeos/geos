@@ -15,10 +15,20 @@ INTERFACE_AGE=0
 dnl -- JTS_PORT: the version of JTS this release is bound to
 JTS_PORT=1.4.1
 
+dnl -- Vertion info for the CAPI
+CAPI_INTERFACE_CURRENT=1
+CAPI_INTERFACE_REVISION=0
+CAPI_INTERFACE_AGE=0
+
 VERSION_MAJOR=$(($INTERFACE_CURRENT-$INTERFACE_AGE))
 VERSION_MINOR=$INTERFACE_AGE
 VERSION_PATCH=$INTERFACE_REVISION
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
+
+CAPI_VERSION_MAJOR=$(($CAPI_INTERFACE_CURRENT-$CAPI_INTERFACE_AGE))
+CAPI_VERSION_MINOR=$CAPI_INTERFACE_AGE
+CAPI_VERSION_PATCH=$CAPI_INTERFACE_REVISION
+CAPI_VERSION="$CAPI_VERSION_MAJOR.$CAPI_VERSION_MINOR.$CAPI_VERSION_PATCH"
 
 AM_INIT_AUTOMAKE(geos, $VERSION, no-define)
 AC_CONFIG_HEADERS(source/headers/config.h)
@@ -67,9 +77,9 @@ dnl process with switches -------------------------------------------------
 dnl check for libraries ---------------------------------------------------
 
 dnl things to substitute in output ----------------------------------------
-AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE JTS_PORT)
+AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE JTS_PORT CAPI_VERSION CAPI_VERSION_MAJOR CAPI_VERSION_MINOR CAPI_VERSION_PATCH CAPI_INTERFACE_CURRENT CAPI_INTERFACE_REVISION CAPI_INTERFACE_AGE)
 
 dnl output stuff ----------------------------------------------------------
 
-AC_OUTPUT(Makefile source/Makefile source/capi/Makefile source/geom/Makefile source/headers/Makefile source/headers/geos/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile doc/Makefile source/headers/geos/version.h doc/Doxyfile swig/Makefile swig/python/Makefile swig/python/tests/Makefile swig/python/tests/cases/Makefile VisualStudio/Makefile)
+AC_OUTPUT(Makefile source/Makefile source/capi/Makefile source/geom/Makefile source/headers/Makefile source/headers/geos/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile doc/Makefile source/headers/geos/version.h doc/Doxyfile swig/Makefile swig/python/Makefile swig/python/tests/Makefile swig/python/tests/cases/Makefile VisualStudio/Makefile source/capi/geos_c.h)
 
