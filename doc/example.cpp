@@ -61,7 +61,7 @@ GeometryFactory *global_factory;
 void WKBtest(vector<Geometry*>*geoms)
 {
 	stringstream s(ios_base::binary|ios_base::in|ios_base::out);
-	WKBReader wkbReader(global_factory);
+	WKBReader wkbReader(*global_factory);
 	WKBWriter wkbWriter;
 	Geometry *gout;
 
@@ -1079,6 +1079,12 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2005/09/27 16:20:43  strk
+ * Reverted previous change, fixed the bug by turning WKBReader.factory
+ * into a reference rather then a real object. ABI still breaks, but API
+ * at least is safe (we didn't release any WKB-aware package so breaking
+ * ABI is not a big deal at this stage).
+ *
  * Revision 1.32  2005/09/27 16:00:26  strk
  * Fixed bug in WKBReader destroying the GeometryFactory used in Geometry
  * construction. Changed it's definition to *require* a GeometryFactory

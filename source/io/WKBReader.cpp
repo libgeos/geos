@@ -117,7 +117,7 @@ WKBReader::readPoint()
 #if DEBUG_WKB_READER
 	cout<<"Coordinates: "<<ordValues[0]<<","<<ordValues[1]<<endl;
 #endif
-	return factory->createPoint(Coordinate(ordValues[0], ordValues[1]));
+	return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
 }
 
 LineString *
@@ -125,7 +125,7 @@ WKBReader::readLineString()
 {
 	int size = dis.readInt();
 	CoordinateSequence *pts = readCoordinateSequence(size);
-	return factory->createLineString(pts);
+	return factory.createLineString(pts);
 }
 
 LinearRing *
@@ -133,7 +133,7 @@ WKBReader::readLinearRing()
 {
 	int size = dis.readInt();
 	CoordinateSequence *pts = readCoordinateSequence(size);
-	return factory->createLinearRing(pts);
+	return factory.createLinearRing(pts);
 }
 
 Polygon *
@@ -157,7 +157,7 @@ WKBReader::readPolygon()
 			throw;
 		}
 	}
-	return factory->createPolygon(shell, holes);
+	return factory.createPolygon(shell, holes);
 }
 
 MultiPoint *
@@ -181,7 +181,7 @@ WKBReader::readMultiPoint()
 		delete geoms;
 		throw;
 	}
-	return factory->createMultiPoint(geoms);
+	return factory.createMultiPoint(geoms);
 }
 
 MultiLineString *
@@ -205,7 +205,7 @@ WKBReader::readMultiLineString()
 		delete geoms;
 		throw;
 	}
-	return factory->createMultiLineString(geoms);
+	return factory.createMultiLineString(geoms);
 }
 
 MultiPolygon *
@@ -229,7 +229,7 @@ WKBReader::readMultiPolygon()
 		delete geoms;
 		throw;
 	}
-	return factory->createMultiPolygon(geoms);
+	return factory.createMultiPolygon(geoms);
 }
 
 GeometryCollection *
@@ -247,13 +247,13 @@ WKBReader::readGeometryCollection()
 		delete geoms;
 		throw;
 	}
-	return factory->createGeometryCollection(geoms);
+	return factory.createGeometryCollection(geoms);
 }
 
 CoordinateSequence *
 WKBReader::readCoordinateSequence(int size)
 {
-	CoordinateSequence *seq = factory->getCoordinateSequenceFactory()->create(size, inputDimension);
+	CoordinateSequence *seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
 	unsigned int targetDim = seq->getDimension();
 	if ( targetDim > inputDimension )
 		targetDim = inputDimension;
