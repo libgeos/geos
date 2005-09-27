@@ -61,7 +61,7 @@ GeometryFactory *global_factory;
 void WKBtest(vector<Geometry*>*geoms)
 {
 	stringstream s(ios_base::binary|ios_base::in|ios_base::out);
-	WKBReader wkbReader(*global_factory);
+	WKBReader wkbReader(global_factory);
 	WKBWriter wkbWriter;
 	Geometry *gout;
 
@@ -1079,6 +1079,11 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2005/09/27 16:00:26  strk
+ * Fixed bug in WKBReader destroying the GeometryFactory used in Geometry
+ * construction. Changed it's definition to *require* a GeometryFactory
+ * pointer parameter.
+ *
  * Revision 1.31  2005/09/26 08:17:19  strk
  * Removed memory leak from WKB tester
  *

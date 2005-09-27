@@ -490,7 +490,7 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 	try
 	{
 		string wkbstring = string(wkb, size); // make it binary !
-		WKBReader r(*geomFactory);
+		WKBReader r(geomFactory);
 		istringstream s(ios_base::binary);
 		s.str(wkbstring);
 

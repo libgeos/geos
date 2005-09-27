@@ -311,8 +311,7 @@ class WKBReader {
 
 public:
 
-	WKBReader() {};
-	WKBReader(const GeometryFactory &f): factory(f) {};
+	WKBReader(const GeometryFactory *f): factory(f) {};
 
 	/**
 	 * \brief Reads a Geometry from an istream.
@@ -337,7 +336,7 @@ private:
 
 	static string BAD_GEOM_TYPE_MSG;
 
-	const GeometryFactory factory;
+	const GeometryFactory *factory;
 
 	// for now support the WKB standard only - may be generalized later
 	unsigned int inputDimension;
@@ -465,6 +464,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/09/27 16:00:26  strk
+ * Fixed bug in WKBReader destroying the GeometryFactory used in Geometry
+ * construction. Changed it's definition to *require* a GeometryFactory
+ * pointer parameter.
+ *
  * Revision 1.13  2005/09/03 21:26:42  strk
  * Reworked WKB I/O to avoid use of templates and make better use of STL
  *
