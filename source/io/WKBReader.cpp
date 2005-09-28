@@ -29,15 +29,18 @@ WKBReader::printHEX(istream &is, ostream &os)
 	// Set hex,uppercase,fill and width output stream flags
 	os.setf(ios::uppercase);
 	os.setf(ios::hex, ios::basefield);
-	os.setf(ios::hex, ios::basefield);
 	os.fill('0');
 
 	long pos = is.tellg(); // take note of input stream get pointer
-	is.seekg(0, ios::beg); // rewind
+	is.seekg(0, ios::beg); // rewind input stream
 
-	byte each=0;
-	while(is.read(reinterpret_cast<char *>(&each), 1))
-		os<<setw(2)<<(int)each;
+	char each=0;
+	while(!is.eof())
+	{
+		is.read(&each, 1);
+		os << setw(2) <<
+			static_cast<int>(static_cast<unsigned char>(each));
+	}
 
 	is.clear(); // clear input stream eof flag
 	is.seekg(pos); // reset input stream position
