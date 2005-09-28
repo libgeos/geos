@@ -44,6 +44,7 @@ extern "C" Geometry *GEOSGeomFromWKT(const char *wkt);
 extern "C" Geometry *GEOSGeomFromWKB_buf(const char *wkb, size_t size);
 extern "C" char *GEOSGeomToWKT(const Geometry *g);
 extern "C" char *GEOSGeomToWKB_buf(const Geometry *g, size_t *size);
+extern "C" int GEOS_setWKBOutputDims(int newdims);
 
 extern "C" void GEOSSetSRID(Geometry *g, int SRID);
 
@@ -99,6 +100,7 @@ extern "C" Geometry *GEOSLineMerge(Geometry *);
 static GeometryFactory *geomFactory = NULL;
 static GEOSMessageHandler NOTICE_MESSAGE;
 static GEOSMessageHandler ERROR_MESSAGE;
+static int WKBOutputDims = 2;
 
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
@@ -459,7 +461,7 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 {
 	try
 	{
-		WKBWriter w;
+		WKBWriter w(WKBOutputDims);
 		ostringstream s(ios_base::binary);
 		w.write(*g, s);
 		string wkbstring = s.str();
@@ -1201,4 +1203,14 @@ GEOSHasZ(Geometry *g)
 	//sprintf(msg, "ZCoord: %g", az);
 	//NOTICE_MESSAGE(msg);
 	return (finite(az) && az != DoubleNotANumber);
+}
+
+int
+GEOS_setWKBOutputDims(int newdims)
+{
+	if ( newdims < 2 || newdims > 3 )
+		ERROR_MESSAGE("WKB output dimensions out of range 2..3");
+	int olddims = WKBOutputDims;
+	WKBOutputDims = newdims;
+	return olddims;
 }
