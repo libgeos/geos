@@ -405,8 +405,7 @@ class WKBWriter {
 
 public:
 
-	WKBWriter(int dims=2, int bo=getMachineByteOrder()):
-		outputDimension(dims), byteOrder(bo), outStream(NULL) {};
+	WKBWriter(int dims=2, int bo=getMachineByteOrder());
 
 	/**
 	 * \brief Write a Geometry to an ostream.
@@ -464,6 +463,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/09/28 10:15:34  strk
+ * WKBWriter ctor out-lined (will require changes in the near future, for higher dimensions support), added support for 3d WKB output
+ *
  * Revision 1.15  2005/09/27 16:20:43  strk
  * Reverted previous change, fixed the bug by turning WKBReader.factory
  * into a reference rather then a real object. ABI still breaks, but API

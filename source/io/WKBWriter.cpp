@@ -19,6 +19,13 @@
 
 namespace geos {
 
+WKBWriter::WKBWriter(int dims, int bo):
+		outputDimension(dims), byteOrder(bo), outStream(NULL)
+{
+	if ( dims < 2 || dims > 3 )
+		throw new IllegalArgumentException("WKB output dimension must be 2 or 3");
+}
+
 void
 WKBWriter::write(const Geometry &g, ostream &os) 
 {
@@ -108,7 +115,10 @@ WKBWriter::writeByteOrder()
 void
 WKBWriter::writeGeometryType(int typeId) 
 {
-	writeInt(typeId);
+	int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
+        int typeInt = typeId | flag3D;
+	//writeInt(typeId);
+	writeInt(typeInt);
 }
 
 void
