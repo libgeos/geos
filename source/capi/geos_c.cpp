@@ -1176,13 +1176,16 @@ GEOSGetNumGeometries(Geometry *g1)
 }
 
 
-//call only on GEOMETRYCOLLECTION or MULTI*
+/*
+ * Call only on GEOMETRYCOLLECTION or MULTI*.
+ * Return a copy of the internal Geometry.
+ */
 const Geometry *
 GEOSGetGeometryN(Geometry *g1, int n)
 {
 	try{
 		const GeometryCollection *gc = (GeometryCollection *) g1;
-		return gc->getGeometryN(n);
+		return gc->getGeometryN(n)->clone();
 	}
 	catch (GEOSException *ge)
 	{
@@ -1205,13 +1208,21 @@ GEOSGetGeometryN(Geometry *g1, int n)
 }
 
 
-//call only on polygon
+/*
+ * Call only on polygon
+ * Return a copy of the internal Geometry.
+ */
 const Geometry *
 GEOSGetExteriorRing(Geometry *g1)
 {
 	try{
-		Polygon *p = (Polygon *) g1;
-		return p->getExteriorRing();
+		Polygon *p = dynamic_cast<Polygon *>(g1);
+		if ( ! p ) 
+		{
+			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
+			return NULL;
+		}
+		return p->getExteriorRing()->clone();
 	}
 	catch (GEOSException *ge)
 	{
@@ -1233,13 +1244,21 @@ GEOSGetExteriorRing(Geometry *g1)
 	}
 }
 
-//call only on polygon
+/*
+ * Call only on polygon
+ * Return a copy of the internal Geometry.
+ */
 const Geometry *
 GEOSGetInteriorRingN(Geometry *g1, int n)
 {
 	try{
-		Polygon *p = (Polygon *) g1;
-		return p->getInteriorRingN(n);
+		Polygon *p = dynamic_cast<Polygon *>(g1);
+		if ( ! p ) 
+		{
+			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
+			return NULL;
+		}
+		return p->getInteriorRingN(n)->clone();
 	}
 	catch (GEOSException *ge)
 	{

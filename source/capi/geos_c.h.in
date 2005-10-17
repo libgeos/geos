@@ -186,15 +186,38 @@ extern char GEOSHasZ(const GEOSGeom g1);
 
 /* Return -1 on exception */
 extern int       GEOSGeomTypeId(const GEOSGeom g1);
-/* Return -1 on exception */
-extern int       GEOSGetNumCoordinate(const GEOSGeom g1);
-/* Return -1 on exception */
-extern int       GEOSGetNumInteriorRings(const GEOSGeom g1);
+
 /* Return 0 on exception */
 extern int       GEOSGetSRID(const GEOSGeom g1);
+
+extern void      GEOSSetSRID(GEOSGeom g, int SRID);
+
 /* Return -1 on exception */
 extern int       GEOSGetNumGeometries(const GEOSGeom g1);
-extern void      GEOSSetSRID(GEOSGeom g, int SRID);
+
+/*
+ * Return NULL on exception, Geometry must be a Collection.
+ * Returned object is a copy, must be destroyed after use.
+ */
+extern GEOSGeom  GEOSGetGeometryN(GEOSGeom g, int n);
+
+/* Return -1 on exception */
+extern int       GEOSGetNumInteriorRings(const GEOSGeom g1);
+
+/*
+ * Return NULL on exception, Geometry must be a Polygon.
+ * Returned object is a copy, must be destroyed after use.
+ */
+extern GEOSGeom  GEOSGetInteriorRingN(GEOSGeom g, int n);
+
+/*
+ * Return NULL on exception, Geometry must be a Polygon.
+ * Returned object is a copy, must be destroyed after use.
+ */
+extern GEOSGeom  GEOSGetExteriorRing(GEOSGeom g);
+
+/* Return -1 on exception */
+extern int       GEOSGetNumCoordinate(const GEOSGeom g1);
 
 /************************************************************************
  *
