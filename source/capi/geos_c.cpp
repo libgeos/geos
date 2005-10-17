@@ -81,6 +81,9 @@ extern "C" char GEOSisRing(Geometry *g1);
 extern "C" Geometry *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry *GEOSGetCentroid(Geometry *g);
 
+extern "C" int GEOSDistance(const Geometry *g1, const Geometry *g2,
+	double *dist);
+
 extern "C" const char *GEOSversion();
 extern "C" char *GEOSjtsport();
 extern "C" char *GEOSasText(Geometry *g1);
@@ -135,12 +138,19 @@ GEOSDisjoint(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return 2;
 	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 2;
+	}
+
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -155,13 +165,20 @@ GEOSTouches(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -176,13 +193,20 @@ GEOSIntersects(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -197,13 +221,20 @@ GEOSCrosses(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -218,13 +249,20 @@ GEOSWithin(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -243,13 +281,20 @@ GEOSContains(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -264,13 +309,20 @@ GEOSOverlaps(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -291,13 +343,20 @@ GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -324,13 +383,20 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -367,13 +433,20 @@ GEOSisValid(const Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 
@@ -394,14 +467,48 @@ GEOSEquals(const Geometry *g1, const Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
+	}
+}
+
+int
+GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
+{
+	try {
+		*dist = g1->distance(g2);
+		return 1;
+	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return 0;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return 0;
 	}
 }
 
@@ -418,13 +525,20 @@ GEOSGeomFromWKT(const char *wkt)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -444,13 +558,20 @@ GEOSGeomToWKT(const Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -475,13 +596,20 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -502,13 +630,20 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -522,13 +657,20 @@ GEOSisEmpty(const Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -542,13 +684,20 @@ GEOSisSimple(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -567,13 +716,20 @@ GEOSisRing(Geometry *g)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return 2;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return 2;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return 2;
 	}
 }
@@ -596,13 +752,20 @@ GEOSGeometryType(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -617,13 +780,20 @@ GEOSGeometryTypeId(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return -1;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return -1;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return -1;
 	}
 }
@@ -645,13 +815,20 @@ GEOSIntersection(Geometry *g1, Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -666,13 +843,20 @@ GEOSBuffer(Geometry *g1, double width, int quadrantsegments)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -687,13 +871,20 @@ GEOSConvexHull(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -708,13 +899,20 @@ GEOSDifference(Geometry *g1, Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -729,13 +927,20 @@ GEOSBoundary(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -750,13 +955,20 @@ GEOSSymDifference(Geometry *g1, Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -771,12 +983,19 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return NULL;
 	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -792,13 +1011,20 @@ GEOSPointOnSurface(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -820,7 +1046,7 @@ GEOSGeom_destroy(Geometry *a)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		//return NULL;
 	}
@@ -846,7 +1072,7 @@ GEOSdeleteChar(char *a)
 	}
 	catch (GEOSException *ge) // ???
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		//return NULL;
 	}
@@ -867,7 +1093,7 @@ GEOSGetNumCoordinate(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return 0;
 	}
@@ -887,7 +1113,7 @@ GEOSGetNumInteriorRings(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return 0;
 	}
@@ -909,7 +1135,7 @@ GEOSGetNumGeometries(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return 0;
 	}
@@ -931,7 +1157,7 @@ GEOSGetGeometryN(Geometry *g1, int n)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return NULL;
 	}
@@ -953,7 +1179,7 @@ GEOSGetExteriorRing(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return 0;
 	}
@@ -974,7 +1200,7 @@ GEOSGetInteriorRingN(Geometry *g1, int n)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return NULL;
 	}
@@ -995,7 +1221,7 @@ GEOSGetCentroid(Geometry *g)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return NULL;
 	}
@@ -1012,7 +1238,7 @@ GEOSMakeCollection(int type, Geometry **geoms, unsigned int ngeoms)
 	char buf[256];
 	sprintf(buf, "PostGIS2GEOS_collection: requested type %d, ngeoms: %d",
 			type, ngeoms);
-	NOTICE_MESSAGE(buf);
+	ERROR_MESSAGE(buf);
 #endif
 
 	try
@@ -1041,7 +1267,7 @@ GEOSMakeCollection(int type, Geometry **geoms, unsigned int ngeoms)
 				g = geomFactory->createMultiPolygon(subGeos);
 				break;
 			default:
-				NOTICE_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
+				ERROR_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
 				g = NULL;
 				
 		}
@@ -1050,13 +1276,20 @@ GEOSMakeCollection(int type, Geometry **geoms, unsigned int ngeoms)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
+		return NULL;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
 
 	catch (...)
 	{
+		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
 	}
 }
@@ -1072,7 +1305,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	for (i=0; i<ngeoms; i++) (*geoms)[i] = g[i];
 
 #if DEBUG
-	NOTICE_MESSAGE("geometry vector constructed");
+	ERROR_MESSAGE("geometry vector constructed");
 #endif
 
 	try{
@@ -1080,19 +1313,19 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 		Polygonizer plgnzr;
 		plgnzr.add(geoms);
 #if DEBUG
-	NOTICE_MESSAGE("geometry vector added to polygonizer");
+	ERROR_MESSAGE("geometry vector added to polygonizer");
 #endif
 
 		vector<Polygon *>*polys = plgnzr.getPolygons();
 
 #if DEBUG
-	NOTICE_MESSAGE("output polygons got");
+	ERROR_MESSAGE("output polygons got");
 #endif
 
 		delete geoms;
 
 #if DEBUG
-	NOTICE_MESSAGE("geometry vector deleted");
+	ERROR_MESSAGE("geometry vector deleted");
 #endif
 
 		geoms = new vector<Geometry *>(polys->size());
@@ -1102,7 +1335,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return NULL;
 	}
@@ -1129,7 +1362,7 @@ GEOSLineMerge(Geometry *g)
                 vector<LineString *>*lines = lmrgr.getMergedLineStrings();
 
 #if DEBUG
-        NOTICE_MESSAGE("output lines got");
+        ERROR_MESSAGE("output lines got");
 #endif
 
                 vector<Geometry *>*geoms = new vector<Geometry *>(lines->size());
@@ -1140,7 +1373,7 @@ GEOSLineMerge(Geometry *g)
         }
         catch (GEOSException *ge)
         {
-                NOTICE_MESSAGE((char *)ge->toString().c_str());
+                ERROR_MESSAGE((char *)ge->toString().c_str());
                 delete ge;
                 return NULL;
         }
@@ -1160,7 +1393,7 @@ GEOSGetSRID(Geometry *g1)
 	}
 	catch (GEOSException *ge)
 	{
-		NOTICE_MESSAGE((char *)ge->toString().c_str());
+		ERROR_MESSAGE((char *)ge->toString().c_str());
 		delete ge;
 		return 0;
 	}
@@ -1201,7 +1434,7 @@ GEOSHasZ(Geometry *g)
 	//char msg[256];
 	double az = g->getCoordinate()->z;
 	//sprintf(msg, "ZCoord: %g", az);
-	//NOTICE_MESSAGE(msg);
+	//ERROR_MESSAGE(msg);
 	return (finite(az) && az != DoubleNotANumber);
 }
 

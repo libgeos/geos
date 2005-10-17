@@ -95,6 +95,7 @@ do_all(char *inputfile)
 	FILE *input;
 	char *ptr;
 	size_t size;
+	double dist;
 
 	input = fopen(inputfile, "r");
 	if ( ! input ) { perror("fopen"); exit(1); }
@@ -242,6 +243,9 @@ do_all(char *inputfile)
 	if ( GEOSWithin(g1, g2) ) printf("Within\n");
 	if ( GEOSContains(g1, g2) ) printf("Contains\n");
 	if ( GEOSOverlaps(g1, g2) ) printf("Overlaps\n");
+
+	/* Distance */
+	if ( GEOSDistance(g1, g2, &dist) ) printf("Distance: %g\n", dist);
 
 	GEOSGeom_destroy(g1);
 	GEOSGeom_destroy(g2);

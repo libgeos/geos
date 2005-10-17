@@ -92,8 +92,14 @@ extern const char *GEOSversion();
 extern GEOSGeom GEOSGeomFromWKT(const char *wkt);
 extern char *GEOSGeomToWKT(const GEOSGeom g);
 
-extern GEOSGeom GEOSGeomFromWKB_buf(const char *wkb, size_t size);
-extern char *GEOSGeomToWKB_buf(const GEOSGeom g, size_t *size);
+/*
+ * Specify whether output WKB should be 2d or 3d.
+ * Return previously set number of dimensions.
+ */
+extern int GEOS_setWKBOutputDims(int newDims);
+
+extern GEOSGeom GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size);
+extern unsigned char *GEOSGeomToWKB_buf(const GEOSGeom g, size_t *size);
 
 
 /************************************************************************
@@ -181,3 +187,11 @@ extern int       GEOSGetSRID(const GEOSGeom g1);
 extern int       GEOSGetNumGeometries(const GEOSGeom g1);
 extern void      GEOSSetSRID(GEOSGeom g, int SRID);
 
+/************************************************************************
+ *
+ *  Misc functions 
+ *
+ ***********************************************************************/
+
+/* Return 0 on exception, 1 otherwise */
+extern int GEOSDistance(GEOSGeom g1, GEOSGeom g2, double *dist);
