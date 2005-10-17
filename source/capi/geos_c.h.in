@@ -184,10 +184,15 @@ extern char GEOSHasZ(const GEOSGeom g1);
  *
  ***********************************************************************/
 
+/* Return -1 on exception */
 extern int       GEOSGeomTypeId(const GEOSGeom g1);
+/* Return -1 on exception */
 extern int       GEOSGetNumCoordinate(const GEOSGeom g1);
+/* Return -1 on exception */
 extern int       GEOSGetNumInteriorRings(const GEOSGeom g1);
+/* Return 0 on exception */
 extern int       GEOSGetSRID(const GEOSGeom g1);
+/* Return -1 on exception */
 extern int       GEOSGetNumGeometries(const GEOSGeom g1);
 extern void      GEOSSetSRID(GEOSGeom g, int SRID);
 
