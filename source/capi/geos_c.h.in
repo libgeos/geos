@@ -27,6 +27,10 @@
  *
  ***********************************************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /************************************************************************
  *
  * Version
@@ -56,7 +60,7 @@
  ***********************************************************************/
 
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
-typedef struct GEOSGeom *GEOSGeom;
+typedef struct GEOSGeom_t *GEOSGeom;
 
 /* Supported geometry types */
 enum GEOSGeomTypeId {
@@ -195,3 +199,7 @@ extern void      GEOSSetSRID(GEOSGeom g, int SRID);
 
 /* Return 0 on exception, 1 otherwise */
 extern int GEOSDistance(GEOSGeom g1, GEOSGeom g2, double *dist);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
