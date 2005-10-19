@@ -89,6 +89,15 @@ WKBReader::readGeometry()
 	cout<<"WKB dimensions: "<<inputDimension<<endl;
 #endif
 
+	bool hasSRID = ((typeInt & 0x20000000) != 0);
+
+#if DEBUG_WKB_READER
+	cout<<"WKB hasSRID: "<<hasZ<<endl;
+#endif
+
+	if (hasSRID) dis.readInt(); // skip SRID
+
+
 	// allocate space for ordValues 
 	if ( ordValues.size() < inputDimension )
 		ordValues.resize(inputDimension);
