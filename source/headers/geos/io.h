@@ -236,9 +236,9 @@ private:
 };
 
 /*
- * \class ByteOrderData io.h geos.h
+ * \class ByteOrderDataInStream io.h geos.h
  * 
- * Allows reading a stream of Java primitive datatypes from an underlying
+ * Allows reading an stream of primitive datatypes from an underlying
  * istream, with the representation being in either common byte ordering.
  *
  */
@@ -258,27 +258,35 @@ public:
 	void setInStream(istream *s) { stream=s; };
 	void setOrder(int order) { byteOrder=order; };
 
-	byte readByte() // throws IOException
+	byte readByte() // throws ParseException
 	{
 		stream->read(reinterpret_cast<char *>(buf), 1);
+		if ( stream->eof() )
+			throw new ParseException("Unespected EOF parsing WKB");
 		return buf[0];
 	}
 
-	int readInt() // throws IOException
+	int readInt() // throws ParseException
 	{
 		stream->read(reinterpret_cast<char *>(buf), 4);
+		if ( stream->eof() )
+			throw new ParseException("Unespected EOF parsing WKB");
 		return ByteOrderValues::getInt(buf, byteOrder);
 	}
 
-	long readLong() // throws IOException
+	long readLong() // throws ParseException
 	{
 		stream->read(reinterpret_cast<char *>(buf), 8);
+		if ( stream->eof() )
+			throw new ParseException("Unespected EOF parsing WKB");
 		return ByteOrderValues::getLong(buf, byteOrder);
 	}
 
-	double readDouble() // throws IOException
+	double readDouble() // throws ParseException
 	{
 		stream->read(reinterpret_cast<char *>(buf), 8);
+		if ( stream->eof() )
+			throw new ParseException("Unespected EOF parsing WKB");
 		return ByteOrderValues::getDouble(buf, byteOrder);
 	}
 
@@ -463,6 +471,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/10/19 12:59:35  strk
+ * Added input stream checks in ByteOrderDataInStream, throwing ParseException on unexpected EOF
+ *
  * Revision 1.16  2005/09/28 10:15:34  strk
  * WKBWriter ctor out-lined (will require changes in the near future, for higher dimensions support), added support for 3d WKB output
  *
