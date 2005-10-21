@@ -18,3 +18,7 @@ Example usage:
 Documentation:
 
 	cd doc; make doxygen-html
+
+
+Win32 Visual Studio Builds:
+	source\makefile.vc
