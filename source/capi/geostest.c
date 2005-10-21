@@ -34,44 +34,26 @@ usage(char *me)
 
 void
 notice(const char *fmt, ...) {
-	char *msg;
 	va_list ap;
 
+        fprintf( stdout, "NOTICE: ");
+        
 	va_start (ap, fmt);
-
-	/*
-	 * This is a GNU extension.
-	 * Dunno how to handle errors here.
-	 */
-	if (!vasprintf (&msg, fmt, ap))
-	{
-		va_end (ap);
-		return;
-	}
-	printf("NOTICE: %s\n", msg);
-	va_end(ap);
-	free(msg);
+        vfprintf( stdout, fmt, ap);
+        va_end(ap);
+        fprintf( stdout, "\n" );
 }
 
 void
 log_and_exit(const char *fmt, ...) {
-	char *msg;
 	va_list ap;
 
+        fprintf( stdout, "ERROR: ");
+        
 	va_start (ap, fmt);
-
-	/*
-	 * This is a GNU extension.
-	 * Dunno how to handle errors here.
-	 */
-	if (!vasprintf (&msg, fmt, ap))
-	{
-		va_end (ap);
-		return;
-	}
-	fprintf(stderr, "ERROR: %s\n", msg);
-	va_end(ap);
-	free(msg);
+        vfprintf( stdout, fmt, ap);
+        va_end(ap);
+        fprintf( stdout, "\n" );
 	exit(1);
 }
 
@@ -91,7 +73,7 @@ int
 do_all(char *inputfile)
 {
 	GEOSGeom g1, g2, g3, g4, *gg;
-	char wkt[MAXWKTLEN];
+        static char wkt[MAXWKTLEN];
 	FILE *input;
 	char *ptr;
 	size_t size;
