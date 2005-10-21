@@ -1,5 +1,8 @@
 # $Id$
 # $Log$
+# Revision 1.3  2005/10/21 01:57:08  frank
+# updated for 3.0.0 and added C API
+#
 # Revision 1.2  2004/12/04 01:20:20  frank
 # removed dll delete
 #
@@ -7,7 +10,7 @@
 # New
 #
 
-CFLAGS = -Iheaders /GX /MD /GR /nologo
+CFLAGS = -Iheaders /GX /MD /GR /Ox /nologo
 
 LIBNAME =	geos.lib
 
@@ -23,13 +26,10 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	algorithm\LineIntersector.obj \
 	algorithm\MCPointInRing.obj \
 	algorithm\MinimumDiameter.obj \
-	algorithm\NonRobustCGAlgorithms.obj \
-	algorithm\NonRobustLineIntersector.obj \
 	algorithm\NotRepresentableException.obj \
 	algorithm\PointLocator.obj \
-	algorithm\RobustCGAlgorithms.obj \
 	algorithm\RobustDeterminant.obj \
-	algorithm\RobustLineIntersector.obj \
+	algorithm\LineIntersector.obj \
 	algorithm\SIRtreePointInRing.obj \
 	algorithm\SimplePointInAreaLocator.obj \
 	algorithm\SimplePointInRing.obj \
@@ -54,8 +54,6 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	geom\MultiPoint.obj \
 	geom\MultiPolygon.obj \
 	geom\Point.obj \
-	geom\PointCoordinateSequence.obj \
-	geom\PointCoordinateSequenceFactory.obj \
 	geom\Polygon.obj \
 	geom\PrecisionModel.obj \
 	geom\TopologyException.obj \
@@ -209,7 +207,8 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	util\IllegalArgumentException.obj \
 	util\Profiler.obj \
 	util\UniqueCoordinateArrayFilter.obj \
-	util\UnsupportedOperationException.obj
+	util\UnsupportedOperationException.obj \
+	capi\geos_c.obj
 
 TEST_EXE =	TestSweepLineSpeed.exe
 
