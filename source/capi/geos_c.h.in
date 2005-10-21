@@ -123,45 +123,45 @@ extern unsigned char GEOS_DLL *GEOSGeomToWKB_buf(const GEOSGeom g, size_t *size)
  * of ``dims'' dimensions.
  * Return NULL on exception.
  */
-extern GEOSCoordSeq GEOSCoordSeq_create(unsigned int size, unsigned int dims);
+extern GEOSCoordSeq GEOS_DLL GEOSCoordSeq_create(unsigned int size, unsigned int dims);
 
 /*
  * Clone a Coordinate Sequence.
  * Return NULL on exception.
  */
-extern GEOSCoordSeq GEOSCoordSeq_clone(GEOSCoordSeq s);
+extern GEOSCoordSeq GEOS_DLL GEOSCoordSeq_clone(GEOSCoordSeq s);
 
 /*
  * Destroy a Coordinate Sequence.
  */
-extern void GEOSCoordSeq_destroy(GEOSCoordSeq s);
+extern void GEOS_DLL GEOSCoordSeq_destroy(GEOSCoordSeq s);
 
 /*
  * Set ordinate values in a Coordinate Sequence.
  * Return 0 on exception.
  */
-extern int GEOSCoordSeq_setX(GEOSCoordSeq s, unsigned int idx, double val);
-extern int GEOSCoordSeq_setY(GEOSCoordSeq s, unsigned int idx, double val);
-extern int GEOSCoordSeq_setZ(GEOSCoordSeq s, unsigned int idx, double val);
-extern int GEOSCoordSeq_setOrdinate(GEOSCoordSeq s, unsigned int idx,
+extern int GEOS_DLL GEOSCoordSeq_setX(GEOSCoordSeq s, unsigned int idx, double val);
+extern int GEOS_DLL GEOSCoordSeq_setY(GEOSCoordSeq s, unsigned int idx, double val);
+extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSeq s, unsigned int idx, double val);
+extern int GEOS_DLL GEOSCoordSeq_setOrdinate(GEOSCoordSeq s, unsigned int idx,
 	unsigned int dim, double val);
 
 /*
  * Get ordinate values from a Coordinate Sequence.
  * Return 0 on exception.
  */
-extern int GEOSCoordSeq_getX(GEOSCoordSeq s, unsigned int idx, double *val);
-extern int GEOSCoordSeq_getY(GEOSCoordSeq s, unsigned int idx, double *val);
-extern int GEOSCoordSeq_getZ(GEOSCoordSeq s, unsigned int idx, double *val);
-extern int GEOSCoordSeq_getOrdinate(GEOSCoordSeq s, unsigned int idx,
+extern int GEOS_DLL GEOSCoordSeq_getX(GEOSCoordSeq s, unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getY(GEOSCoordSeq s, unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getZ(GEOSCoordSeq s, unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getOrdinate(GEOSCoordSeq s, unsigned int idx,
 	unsigned int dim, double *val);
 
 /*
  * Get size and dimensions info from a Coordinate Sequence.
  * Return 0 on exception.
  */
-extern int GEOSCoordSeq_getSize(GEOSCoordSeq s, unsigned int *size);
-extern int GEOSCoordSeq_getDimensions(GEOSCoordSeq s, unsigned int *dims);
+extern int GEOS_DLL GEOSCoordSeq_getSize(GEOSCoordSeq s, unsigned int *size);
+extern int GEOS_DLL GEOSCoordSeq_getDimensions(GEOSCoordSeq s, unsigned int *dims);
 
 
 /************************************************************************
