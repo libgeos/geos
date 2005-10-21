@@ -27,6 +27,16 @@
 #include <geos/opPolygonize.h>
 #include <geos/opLinemerge.h>
 
+#ifndef GEOS_CAPI_VERSION
+#  define GEOS_CAPI_VERSION "3.0.0-CAPI-1.0.0"
+#endif
+
+#if defined(_MSC_VER)
+#  define GEOS_DLL     __declspec(dllexport)
+#else
+#  define GEOS_DLL
+#endif
+
 using namespace geos;
 
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
@@ -34,69 +44,69 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 //## PROTOTYPES #############################################
 
 /* Initialize GEOS library */
-extern "C" void initGEOS(GEOSMessageHandler notice, GEOSMessageHandler err);
+extern "C" void GEOS_DLL initGEOS(GEOSMessageHandler notice, GEOSMessageHandler err);
 
 /* Release GEOS resources */
-extern "C" void finishGEOS();
+extern "C" void GEOS_DLL finishGEOS();
 
 /* Input and Output functions, return NULL on exception. */
-extern "C" Geometry *GEOSGeomFromWKT(const char *wkt);
-extern "C" Geometry *GEOSGeomFromWKB_buf(const char *wkb, size_t size);
-extern "C" char *GEOSGeomToWKT(const Geometry *g);
-extern "C" char *GEOSGeomToWKB_buf(const Geometry *g, size_t *size);
-extern "C" int GEOS_setWKBOutputDims(int newdims);
+extern "C" Geometry GEOS_DLL *GEOSGeomFromWKT(const char *wkt);
+extern "C" Geometry GEOS_DLL *GEOSGeomFromWKB_buf(const char *wkb, size_t size);
+extern "C" char GEOS_DLL *GEOSGeomToWKT(const Geometry *g);
+extern "C" char GEOS_DLL *GEOSGeomToWKB_buf(const Geometry *g, size_t *size);
+extern "C" int GEOS_DLL GEOS_setWKBOutputDims(int newdims);
 
-extern "C" void GEOSSetSRID(Geometry *g, int SRID);
+extern "C" void GEOS_DLL GEOSSetSRID(Geometry *g, int SRID);
 
-extern "C" char *GEOSRelate(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat);
-extern "C" char GEOSDisjoint(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOSTouches(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOSIntersects(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOSCrosses(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOSWithin(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOSContains(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOSOverlaps(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL *GEOSRelate(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat);
+extern "C" char GEOS_DLL GEOSDisjoint(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL GEOSTouches(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL GEOSIntersects(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL GEOSCrosses(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL GEOSWithin(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL GEOSContains(const Geometry *g1, const Geometry *g2);
+extern "C" char GEOS_DLL GEOSOverlaps(const Geometry *g1, const Geometry *g2);
 
-extern "C" Geometry *GEOSpolygonize(Geometry **geoms, unsigned int ngeoms);
-extern "C" char GEOSisValid(const Geometry *g1);
-extern "C" char GEOSisEmpty(const Geometry *g1);
-extern "C" Geometry *GEOSIntersection(Geometry *g1,Geometry *g1);
-extern "C" Geometry *GEOSBuffer(Geometry *g1,double width,int quadsegs);
-extern "C" Geometry *GEOSConvexHull(Geometry *g1);
-extern "C" Geometry *GEOSDifference(Geometry *g1,Geometry *g2);
-extern "C" Geometry *GEOSBoundary(Geometry *g1);
-extern "C" Geometry *GEOSSymDifference(Geometry *g1,Geometry *g2);
-extern "C" Geometry *GEOSUnion(Geometry *g1,Geometry *g2);
-extern "C" int GEOSGetNumCoordinate(Geometry *g1);
-extern "C" const Geometry *GEOSGetGeometryN(Geometry *g1, int n);
-extern "C" const Geometry *GEOSGetExteriorRing(Geometry *g1);
-extern "C" const Geometry *GEOSGetInteriorRingN(Geometry *g1, int n);
-extern "C" int GEOSGetNumInteriorRings(Geometry *g1);
-extern "C" int GEOSGetSRID(Geometry *g1);
-extern "C" int GEOSGetNumGeometries(Geometry *g1);
-extern "C" char GEOSisSimple(Geometry *g1);
-extern "C" char GEOSEquals(const Geometry *g1, const Geometry*g2);
-extern "C" char GEOSisRing(Geometry *g1);
-extern "C" Geometry *GEOSPointOnSurface(Geometry *g1);
-extern "C" Geometry *GEOSGetCentroid(Geometry *g);
+extern "C" Geometry GEOS_DLL *GEOSpolygonize(Geometry **geoms, unsigned int ngeoms);
+extern "C" char GEOS_DLL GEOSisValid(const Geometry *g1);
+extern "C" char GEOS_DLL GEOSisEmpty(const Geometry *g1);
+extern "C" Geometry GEOS_DLL *GEOSIntersection(Geometry *g1,Geometry *g2);
+extern "C" Geometry GEOS_DLL *GEOSBuffer(Geometry *g1,double width,int quadsegs);
+extern "C" Geometry GEOS_DLL *GEOSConvexHull(Geometry *g1);
+extern "C" Geometry GEOS_DLL *GEOSDifference(Geometry *g1,Geometry *g2);
+extern "C" Geometry GEOS_DLL *GEOSBoundary(Geometry *g1);
+extern "C" Geometry GEOS_DLL *GEOSSymDifference(Geometry *g1,Geometry *g2);
+extern "C" Geometry GEOS_DLL *GEOSUnion(Geometry *g1,Geometry *g2);
+extern "C" int GEOS_DLL GEOSGetNumCoordinate(Geometry *g1);
+extern "C" const Geometry GEOS_DLL *GEOSGetGeometryN(Geometry *g1, int n);
+extern "C" const Geometry GEOS_DLL *GEOSGetExteriorRing(Geometry *g1);
+extern "C" const Geometry GEOS_DLL *GEOSGetInteriorRingN(Geometry *g1, int n);
+extern "C" int GEOS_DLL GEOSGetNumInteriorRings(Geometry *g1);
+extern "C" int GEOS_DLL GEOSGetSRID(Geometry *g1);
+extern "C" int GEOS_DLL GEOSGetNumGeometries(Geometry *g1);
+extern "C" char GEOS_DLL GEOSisSimple(Geometry *g1);
+extern "C" char GEOS_DLL GEOSEquals(const Geometry *g1, const Geometry*g2);
+extern "C" char GEOS_DLL GEOSisRing(Geometry *g1);
+extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
+extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
 
-extern "C" int GEOSDistance(const Geometry *g1, const Geometry *g2,
+extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
 
-extern "C" const char *GEOSversion();
-extern "C" char *GEOSjtsport();
-extern "C" char *GEOSasText(Geometry *g1);
-extern "C" char *GEOSGeomType(Geometry *g1);
-extern "C" int GEOSGeomTypeId(Geometry *g1);
+extern "C" const char GEOS_DLL *GEOSversion();
+extern "C" char GEOS_DLL *GEOSjtsport();
+extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
+extern "C" char GEOS_DLL *GEOSGeomType(Geometry *g1);
+extern "C" int GEOS_DLL GEOSGeomTypeId(Geometry *g1);
 
 //extern "C" void GEOSdeleteChar(char *a);
-extern "C" void GEOSGeom_destroy(Geometry *a);
-extern "C" bool GEOSHasZ(Geometry *g1);
+extern "C" void GEOS_DLL  GEOSGeom_destroy(Geometry *a);
+extern "C" bool GEOS_DLL GEOSHasZ(Geometry *g1);
 
-extern "C" Geometry *GEOSPolygonize(Geometry **, unsigned int);
-extern "C" Geometry *GEOSMakeCollection(int type, Geometry **, unsigned int);
-extern "C" Geometry *GEOSLineMerge(Geometry *);
+extern "C" Geometry GEOS_DLL *GEOSPolygonize(Geometry **, unsigned int);
+extern "C" Geometry GEOS_DLL *GEOSMakeCollection(int type, Geometry **, unsigned int);
+extern "C" Geometry GEOS_DLL *GEOSLineMerge(Geometry *);
 
 //## GLOBALS ################################################
 
