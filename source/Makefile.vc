@@ -1,5 +1,8 @@
 # $Id$
 # $Log$
+# Revision 1.4  2005/10/21 02:41:25  frank
+# added DLL building, and geostest.exe
+#
 # Revision 1.3  2005/10/21 01:57:08  frank
 # updated for 3.0.0 and added C API
 #
@@ -10,9 +13,11 @@
 # New
 #
 
-CFLAGS = -Iheaders /GX /MD /GR /Ox /nologo
+CFLAGS = -Iheaders /GX /MD /GR /Zi /nologo
 
 LIBNAME =	geos.lib
+DLLNAME = 	geos.dll
+SLIBNAME =	geos_i.lib
 
 OBJ =	algorithm\CGAlgorithms.obj \
 	algorithm\CentroidArea.obj \
@@ -29,7 +34,6 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	algorithm\NotRepresentableException.obj \
 	algorithm\PointLocator.obj \
 	algorithm\RobustDeterminant.obj \
-	algorithm\LineIntersector.obj \
 	algorithm\SIRtreePointInRing.obj \
 	algorithm\SimplePointInAreaLocator.obj \
 	algorithm\SimplePointInRing.obj \
@@ -118,9 +122,12 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	index\sweepline\SweepLineIndex.obj \
 	index\sweepline\SweepLineInterval.obj \
 	index\sweepline\indexSweepLineEvent.obj \
+	io\ByteOrderValues.obj \
 	io\ParseException.obj \
 	io\StringTokenizer.obj \
 	io\Unload.obj \
+	io\WKBReader.obj \
+	io\WKBWriter.obj \
 	io\WKTReader.obj \
 	io\WKTWriter.obj \
 	io\Writer.obj \
@@ -212,11 +219,14 @@ OBJ =	algorithm\CGAlgorithms.obj \
 
 TEST_EXE =	TestSweepLineSpeed.exe
 
-default:	$(LIBNAME) $(TEST_EXE)
+default:	$(LIBNAME) $(DLLNAME) $(TEST_EXE)
 
 $(LIBNAME):	headers/geos/platform.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
 	lib /out:$(LIBNAME) $(OBJ)
+
+$(DLLNAME):	$(OBJ)
+	link /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
 
 headers/geos/platform.h: headers/geos/platform.h.vc
 	copy headers\geos\platform.h.vc headers\geos\platform.h
@@ -224,15 +234,25 @@ headers/geos/platform.h: headers/geos/platform.h.vc
 .cpp.obj:
 	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
+.c.obj:
+	$(CC) $(CFLAGS) /c $*.c /Fo$@
+
 clean:
 	del $(OBJ)
 	del $(LIBNAME)
+	del $(SLIBNAME)
+	del $(DLLNAME)
+	del bigtest\*.obj
+	del capi\*.obj
+	del *.exe
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \
 		bigtest\GeometryTestFactory.obj \
-		bigtest\TestSweepLineSpeed.obj \
-		
-	$(CC) $(CFLAGS) \
+		bigtest\TestSweepLineSpeed.obj
+	link /debug /out:TestSweepLineSpeed.exe \
 		bigtest\TestSweepLineSpeed.obj \
 		bigtest\GeometryTestFactory.obj \
 		$(LIBNAME)
+
+geostest.exe: $(DLLNAME) capi\geostest.obj
+	link /debug capi\geostest.obj $(SLIBNAME)
