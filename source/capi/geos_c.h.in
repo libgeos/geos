@@ -61,6 +61,7 @@ extern "C" {
 
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 typedef struct GEOSGeom_t *GEOSGeom;
+typedef struct GEOSCoordSeq_t *GEOSCoordSeq;
 
 /* Supported geometry types */
 enum GEOSGeomTypeId {
@@ -95,7 +96,7 @@ extern const char GEOS_DLL *GEOSversion();
 
 /************************************************************************
  *
- * Input and Output functions, return NULL on exception.
+ * Geometry Input and Output functions, return NULL on exception.
  *
  ***********************************************************************/
 
@@ -111,19 +112,73 @@ extern int GEOS_DLL GEOS_setWKBOutputDims(int newDims);
 extern GEOSGeom GEOS_DLL GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size);
 extern unsigned char GEOS_DLL *GEOSGeomToWKB_buf(const GEOSGeom g, size_t *size);
 
-
 /************************************************************************
  *
- * Constructors
+ * Coordinate Sequence functions
  *
  ***********************************************************************/
 
 /*
- * The provided GEOSGeoms will be destroyed by destruction of the
- * returned object, be aware about not destroying them twice!
+ * Create a Coordinate sequence with ``size'' coordinates
+ * of ``dims'' dimensions.
+ * Return NULL on exception.
  */
-extern GEOSGeom GEOS_DLL GEOSMakeCollection(int type, GEOSGeom *geoms,
-	unsigned int ngeoms);
+extern GEOSCoordSeq GEOSCoordSeq_create(unsigned int size, unsigned int dims);
+
+/*
+ * Clone a Coordinate Sequence.
+ * Return NULL on exception.
+ */
+extern GEOSCoordSeq GEOSCoordSeq_clone(GEOSCoordSeq s);
+
+/*
+ * Destroy a Coordinate Sequence.
+ */
+extern void GEOSCoordSeq_destroy(GEOSCoordSeq s);
+
+/*
+ * Set ordinate values in a Coordinate Sequence.
+ * Return 0 on exception.
+ */
+extern int GEOSCoordSeq_setX(GEOSCoordSeq s, unsigned int idx, double val);
+extern int GEOSCoordSeq_setY(GEOSCoordSeq s, unsigned int idx, double val);
+extern int GEOSCoordSeq_setZ(GEOSCoordSeq s, unsigned int idx, double val);
+extern int GEOSCoordSeq_setOrdinate(GEOSCoordSeq s, unsigned int idx,
+	unsigned int dim, double val);
+
+/*
+ * Get ordinate values from a Coordinate Sequence.
+ * Return 0 on exception.
+ */
+extern int GEOSCoordSeq_getX(GEOSCoordSeq s, unsigned int idx, double *val);
+extern int GEOSCoordSeq_getY(GEOSCoordSeq s, unsigned int idx, double *val);
+extern int GEOSCoordSeq_getZ(GEOSCoordSeq s, unsigned int idx, double *val);
+extern int GEOSCoordSeq_getOrdinate(GEOSCoordSeq s, unsigned int idx,
+	unsigned int dim, double *val);
+
+/*
+ * Get size and dimensions info from a Coordinate Sequence.
+ * Return 0 on exception.
+ */
+extern int GEOSCoordSeq_getSize(GEOSCoordSeq s, unsigned int *size);
+extern int GEOSCoordSeq_getDimensions(GEOSCoordSeq s, unsigned int *dims);
+
+
+/************************************************************************
+ *
+ * Geometry Constructors.
+ * All arguments remain ownership of the caller.
+ * Return NULL on exception.
+ *
+ ***********************************************************************/
+
+extern GEOSGeom GEOS_DLL GEOSGeom_createPoint(const GEOSCoordSeq s);
+extern GEOSGeom GEOS_DLL GEOSGeom_createLinearRing(const GEOSCoordSeq s);
+extern GEOSGeom GEOS_DLL GEOSGeom_createLineString(const GEOSCoordSeq s);
+extern GEOSGeom GEOS_DLL GEOSGeom_createPolygon(const GEOSGeom shell,
+	const GEOSGeom *holes, unsigned int nholes);
+extern GEOSGeom GEOS_DLL GEOSGeom_createCollection(int type,
+	const GEOSGeom *geoms, unsigned int ngeoms);
 
 /************************************************************************
  *
@@ -224,6 +279,9 @@ extern GEOSGeom GEOS_DLL GEOSGetExteriorRing(GEOSGeom g);
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGetNumCoordinate(const GEOSGeom g1);
+
+/* Return NULL on exception */
+extern GEOSCoordSeq GEOS_DLL GEOSGeom_getCoordSeq(const GEOSGeom g);
 
 /************************************************************************
  *

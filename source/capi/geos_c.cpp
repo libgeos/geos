@@ -78,7 +78,6 @@ extern "C" Geometry GEOS_DLL *GEOSDifference(Geometry *g1,Geometry *g2);
 extern "C" Geometry GEOS_DLL *GEOSBoundary(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSSymDifference(Geometry *g1,Geometry *g2);
 extern "C" Geometry GEOS_DLL *GEOSUnion(Geometry *g1,Geometry *g2);
-extern "C" int GEOS_DLL GEOSGetNumCoordinate(Geometry *g1);
 extern "C" const Geometry GEOS_DLL *GEOSGetGeometryN(Geometry *g1, int n);
 extern "C" const Geometry GEOS_DLL *GEOSGetExteriorRing(Geometry *g1);
 extern "C" const Geometry GEOS_DLL *GEOSGetInteriorRingN(Geometry *g1, int n);
@@ -90,6 +89,7 @@ extern "C" char GEOS_DLL GEOSEquals(const Geometry *g1, const Geometry*g2);
 extern "C" char GEOS_DLL GEOSisRing(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
+extern "C" CoordinateSequence GEOS_DLL *GEOSGeom_getCoordSeq(const Geometry *g1);
 
 extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
@@ -105,8 +105,39 @@ extern "C" void GEOS_DLL  GEOSGeom_destroy(Geometry *a);
 extern "C" bool GEOS_DLL GEOSHasZ(Geometry *g1);
 
 extern "C" Geometry GEOS_DLL *GEOSPolygonize(Geometry **, unsigned int);
-extern "C" Geometry GEOS_DLL *GEOSMakeCollection(int type, Geometry **, unsigned int);
 extern "C" Geometry GEOS_DLL *GEOSLineMerge(Geometry *);
+
+/*************************************************************************
+ *
+ * Coordinate Sequences
+ *
+ *************************************************************************/
+
+extern "C" CoordinateSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int, unsigned int);
+extern "C" int GEOS_DLL GEOSCoordSeq_getSize(CoordinateSequence *, unsigned int *size);
+extern "C" int GEOS_DLL GEOSCoordSeq_getDimensions(CoordinateSequence *, unsigned int *dims);
+extern "C" int GEOS_DLL GEOSCoordSeq_setX(CoordinateSequence *, unsigned int, double);
+extern "C" int GEOS_DLL GEOSCoordSeq_setY(CoordinateSequence *, unsigned int, double);
+extern "C" int GEOS_DLL GEOSCoordSeq_setZ(CoordinateSequence *, unsigned int, double);
+extern "C" int GEOS_DLL GEOSCoordSeq_setOrdinate(CoordinateSequence *, unsigned int, unsigned int, double);
+extern "C" int GEOS_DLL GEOSCoordSeq_getX(CoordinateSequence *, unsigned int, double *);
+extern "C" int GEOS_DLL GEOSCoordSeq_getY(CoordinateSequence *, unsigned int, double *);
+extern "C" int GEOS_DLL GEOSCoordSeq_getZ(CoordinateSequence *, unsigned int, double *);
+extern "C" int GEOS_DLL GEOSCoordSeq_getOrdinate(unsigned int, unsigned int, double *);
+extern "C" CoordinateSequence GEOS_DLL *GEOSCoordSeq_clone(CoordinateSequence *);
+extern "C" void GEOS_DLL GEOSCoordSeq_destroy(CoordinateSequence *);
+
+/*************************************************************************
+ *
+ * Geometry constructors
+ *
+ *************************************************************************/
+
+extern "C" Geometry GEOS_DLL *GEOSGeom_createPoint(const CoordinateSequence *);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createLinearRing(const CoordinateSequence *);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createLineString(const CoordinateSequence *);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createPolygon(const Geometry *, const Geometry **, unsigned int);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createCollection(int type, Geometry **, unsigned int);
 
 //## GLOBALS ################################################
 
@@ -1319,7 +1350,7 @@ GEOSGetCentroid(Geometry *g)
 }
 
 Geometry *
-GEOSMakeCollection(int type, Geometry **geoms, unsigned int ngeoms)
+GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 {
 #ifdef DEBUG
 	char buf[256];
@@ -1336,9 +1367,8 @@ GEOSMakeCollection(int type, Geometry **geoms, unsigned int ngeoms)
 
 		for (t=0; t<ngeoms; t++)
 		{
-			(*subGeos)[t] = geoms[t];
+			(*subGeos)[t] = geoms[t]->clone();
 		}
-		//g = geomFactory->buildGeometry(subGeos);
 		switch (type)
 		{
 			case GEOS_GEOMETRYCOLLECTION:
@@ -1556,4 +1586,349 @@ GEOS_setWKBOutputDims(int newdims)
 	int olddims = WKBOutputDims;
 	WKBOutputDims = newdims;
 	return olddims;
+}
+
+CoordinateSequence *
+GEOSCoordSeq_create(unsigned int size, unsigned int dims)
+{
+	try {
+		return geomFactory->getCoordinateSequenceFactory()->create(size, static_cast<int>(dims));
+	}
+
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
+}
+
+int
+GEOSCoordSeq_setOrdinate(CoordinateSequence *s, unsigned int idx,
+	unsigned int dim, double val)
+{
+	try {
+		s->setOrdinate(static_cast<int>(idx),
+			static_cast<int>(dim), val);
+		return 1;
+	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return 0;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return 0;
+	}
+}
+
+int
+GEOSCoordSeq_setX(CoordinateSequence *s, unsigned int idx, double val)
+{
+	return GEOSCoordSeq_setOrdinate(s, idx, 0, val);
+}
+
+int
+GEOSCoordSeq_setY(CoordinateSequence *s, unsigned int idx, double val)
+{
+	return GEOSCoordSeq_setOrdinate(s, idx, 1, val);
+}
+
+int
+GEOSCoordSeq_setZ(CoordinateSequence *s, unsigned int idx, double val)
+{
+	return GEOSCoordSeq_setOrdinate(s, idx, 2, val);
+}
+
+CoordinateSequence *
+GEOSCoordSeq_clone(CoordinateSequence *s)
+{
+	try { return s->clone(); }
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
+}
+
+int
+GEOSCoordSeq_getOrdinate(CoordinateSequence *s, unsigned int idx,
+	unsigned int dim, double *val)
+{
+	try {
+		double d = s->getOrdinate(static_cast<int>(idx),
+			static_cast<int>(dim));
+		*val = d;
+		return 1;
+	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return 0;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return 0;
+	}
+}
+
+int
+GEOSCoordSeq_getX(CoordinateSequence *s, unsigned int idx, double *val)
+{
+	return GEOSCoordSeq_getOrdinate(s, idx, 0, val);
+}
+
+int
+GEOSCoordSeq_getY(CoordinateSequence *s, unsigned int idx, double *val)
+{
+	return GEOSCoordSeq_getOrdinate(s, idx, 1, val);
+}
+
+int
+GEOSCoordSeq_getZ(CoordinateSequence *s, unsigned int idx, double *val)
+{
+	return GEOSCoordSeq_getOrdinate(s, idx, 2, val);
+}
+
+int
+GEOSCoordSeq_getSize(CoordinateSequence *s, unsigned int *size)
+{
+	try {
+		int sz = s->getSize();
+		*size = static_cast<unsigned int>(sz);
+		return 1;
+	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return 0;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return 0;
+	}
+}
+
+int
+GEOSCoordSeq_getDimensions(CoordinateSequence *s, unsigned int *dims)
+{
+	try {
+		unsigned int dm = s->getDimension();
+		*dims = dm;
+		return 1;
+	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return 0;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return 0;
+	}
+}
+
+void
+GEOSCoordSeq_destroy(CoordinateSequence *s)
+{
+	try{
+		delete s;
+	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+	}
+}
+
+CoordinateSequence *
+GEOSGeom_getCoordSeq(const Geometry *g)
+{
+	try { return g->getCoordinates(); }
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSGeom_createPoint(const CoordinateSequence *cs)
+{
+	try { return geomFactory->createPoint(*cs); }
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSGeom_createLinearRing(const CoordinateSequence *cs)
+{
+	try { return geomFactory->createLinearRing(*cs); }
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSGeom_createLineString(const CoordinateSequence *cs)
+{
+	try { return geomFactory->createLineString(*cs); }
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSGeom_createPolygon(const Geometry *shell, const Geometry **holes, 
+	unsigned int nholes)
+{
+	try
+	{
+		unsigned int i;
+		vector<Geometry *> *vholes=new vector<Geometry *>(nholes);
+		for (i=0; i<nholes; i++)
+		{
+			(*vholes)[i] = holes[i]->clone();
+		}
+		LinearRing *nshell = dynamic_cast<LinearRing *>(shell->clone());
+		return geomFactory->createPolygon(nshell, vholes);
+	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
 }
