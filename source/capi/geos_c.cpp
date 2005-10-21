@@ -138,6 +138,7 @@ extern "C" Geometry GEOS_DLL *GEOSGeom_createLinearRing(const CoordinateSequence
 extern "C" Geometry GEOS_DLL *GEOSGeom_createLineString(const CoordinateSequence *);
 extern "C" Geometry GEOS_DLL *GEOSGeom_createPolygon(const Geometry *, const Geometry **, unsigned int);
 extern "C" Geometry GEOS_DLL *GEOSGeom_createCollection(int type, Geometry **, unsigned int);
+extern "C" Geometry GEOS_DLL *GEOSGeom_clone(Geometry *);
 
 //## GLOBALS ################################################
 
@@ -1914,6 +1915,29 @@ GEOSGeom_createPolygon(const Geometry *shell, const Geometry **holes,
 		LinearRing *nshell = dynamic_cast<LinearRing *>(shell->clone());
 		return geomFactory->createPolygon(nshell, vholes);
 	}
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return NULL;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSGeom_clone(Geometry *g)
+{
+	try { return g->clone(); }
 	catch (GEOSException *ge)
 	{
 		ERROR_MESSAGE((char *)ge->toString().c_str());

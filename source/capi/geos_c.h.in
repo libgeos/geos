@@ -180,6 +180,8 @@ extern GEOSGeom GEOS_DLL GEOSGeom_createPolygon(const GEOSGeom shell,
 extern GEOSGeom GEOS_DLL GEOSGeom_createCollection(int type,
 	const GEOSGeom *geoms, unsigned int ngeoms);
 
+extern GEOSGeom GEOS_DLL GEOSGeom_clone(const GEOSGeom g);
+
 /************************************************************************
  *
  * Memory management
