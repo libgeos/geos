@@ -1,5 +1,24 @@
 # $Id$
+#
+# 	Building on Win32 with Visual Studio
+# 	------------------------------------
+#
+# 1) Requires at least Visual Studio 2002. 
+# 2) You will need to manually copy capi/geos_c.h.in to 
+#    capi/geos_c.h and edit in version information (or copy from unix).
+# 3) build in geos\source directory with the command "nmake /f makefile.vc"
+# 
+# Produces:
+#  geos.lib: static library for use of C or C++ API.
+#  geos.dll: DLL - only exports the C API
+#  geos_i.lib: Stub library to link against for use of geos.dll. 
+#
+# This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
+#
 # $Log$
+# Revision 1.5  2005/10/21 02:44:31  frank
+# added a wee readme
+#
 # Revision 1.4  2005/10/21 02:41:25  frank
 # added DLL building, and geostest.exe
 #
