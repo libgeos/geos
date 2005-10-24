@@ -89,7 +89,7 @@ extern "C" char GEOS_DLL GEOSEquals(const Geometry *g1, const Geometry*g2);
 extern "C" char GEOS_DLL GEOSisRing(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
-extern "C" CoordinateSequence GEOS_DLL *GEOSGeom_getCoordSeq(const Geometry *g1);
+extern "C" CoordinateSequence GEOS_DLL *GEOSGeom_getCoordSeq(Geometry *g1);
 
 extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
@@ -106,6 +106,9 @@ extern "C" bool GEOS_DLL GEOSHasZ(Geometry *g1);
 
 extern "C" Geometry GEOS_DLL *GEOSPolygonize(Geometry **, unsigned int);
 extern "C" Geometry GEOS_DLL *GEOSLineMerge(Geometry *);
+
+extern "C" int GEOS_DLL GEOSGeom_getDimensions(const Geometry *);
+extern "C" int GEOS_DLL GEOSGetNumCoordinates(const Geometry *);
 
 /*************************************************************************
  *
@@ -133,10 +136,10 @@ extern "C" void GEOS_DLL GEOSCoordSeq_destroy(CoordinateSequence *);
  *
  *************************************************************************/
 
-extern "C" Geometry GEOS_DLL *GEOSGeom_createPoint(const CoordinateSequence *);
-extern "C" Geometry GEOS_DLL *GEOSGeom_createLinearRing(const CoordinateSequence *);
-extern "C" Geometry GEOS_DLL *GEOSGeom_createLineString(const CoordinateSequence *);
-extern "C" Geometry GEOS_DLL *GEOSGeom_createPolygon(const Geometry *, const Geometry **, unsigned int);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createPoint(CoordinateSequence *);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createLinearRing(CoordinateSequence *);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createLineString(CoordinateSequence *);
+extern "C" Geometry GEOS_DLL *GEOSGeom_createPolygon(Geometry *, Geometry **, unsigned int);
 extern "C" Geometry GEOS_DLL *GEOSGeom_createCollection(int type, Geometry **, unsigned int);
 extern "C" Geometry GEOS_DLL *GEOSGeom_clone(Geometry *);
 
@@ -1136,7 +1139,7 @@ GEOSdeleteChar(char *a)
 
 
 int
-GEOSGetNumCoordinate(Geometry *g1)
+GEOSGetNumCoordinates(const Geometry *g1)
 {
 	try{
 		return g1->getNumPoints();
@@ -1220,14 +1223,19 @@ GEOSGetNumGeometries(Geometry *g1)
 
 /*
  * Call only on GEOMETRYCOLLECTION or MULTI*.
- * Return a copy of the internal Geometry.
+ * Return a pointer to the internal Geometry.
  */
 const Geometry *
 GEOSGetGeometryN(Geometry *g1, int n)
 {
 	try{
-		const GeometryCollection *gc = (GeometryCollection *) g1;
-		return gc->getGeometryN(n)->clone();
+		const GeometryCollection *gc = dynamic_cast<GeometryCollection *>(g1);
+		if ( ! gc )
+		{
+			ERROR_MESSAGE("Argument is not a GeometryCollection");
+			return NULL;
+		}
+		return gc->getGeometryN(n);
 	}
 	catch (GEOSException *ge)
 	{
@@ -1264,7 +1272,7 @@ GEOSGetExteriorRing(Geometry *g1)
 			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
 			return NULL;
 		}
-		return p->getExteriorRing()->clone();
+		return p->getExteriorRing();
 	}
 	catch (GEOSException *ge)
 	{
@@ -1288,7 +1296,7 @@ GEOSGetExteriorRing(Geometry *g1)
 
 /*
  * Call only on polygon
- * Return a copy of the internal Geometry.
+ * Return a pointer to internal storage, do not destroy it.
  */
 const Geometry *
 GEOSGetInteriorRingN(Geometry *g1, int n)
@@ -1300,7 +1308,7 @@ GEOSGetInteriorRingN(Geometry *g1, int n)
 			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
 			return NULL;
 		}
-		return p->getInteriorRingN(n)->clone();
+		return p->getInteriorRingN(n);
 	}
 	catch (GEOSException *ge)
 	{
@@ -1363,26 +1371,21 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 	try
 	{
 		Geometry *g;
-		unsigned int t;
-		vector<Geometry *> *subGeos=new vector<Geometry *>(ngeoms);
+		vector<Geometry *> *vgeoms=new vector<Geometry *>(geoms, geoms+ngeoms);
 
-		for (t=0; t<ngeoms; t++)
-		{
-			(*subGeos)[t] = geoms[t]->clone();
-		}
 		switch (type)
 		{
 			case GEOS_GEOMETRYCOLLECTION:
-				g = geomFactory->createGeometryCollection(subGeos);
+				g = geomFactory->createGeometryCollection(vgeoms);
 				break;
 			case GEOS_MULTIPOINT:
-				g = geomFactory->createMultiPoint(subGeos);
+				g = geomFactory->createMultiPoint(vgeoms);
 				break;
 			case GEOS_MULTILINESTRING:
-				g = geomFactory->createMultiLineString(subGeos);
+				g = geomFactory->createMultiLineString(vgeoms);
 				break;
 			case GEOS_MULTIPOLYGON:
-				g = geomFactory->createMultiPolygon(subGeos);
+				g = geomFactory->createMultiPolygon(vgeoms);
 				break;
 			default:
 				ERROR_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
@@ -1809,9 +1812,23 @@ GEOSCoordSeq_destroy(CoordinateSequence *s)
 }
 
 CoordinateSequence *
-GEOSGeom_getCoordSeq(const Geometry *g)
+GEOSGeom_getCoordSeq(Geometry *g)
 {
-	try { return g->getCoordinates(); }
+	try
+	{
+		LineString *ls = dynamic_cast<LineString *>(g);
+		if ( ls )
+		{
+	return const_cast<CoordinateSequence *>(ls->getCoordinatesRO());
+		}
+		Point *p = dynamic_cast<Point *>(g);
+		if ( p ) 
+		{
+	return const_cast<CoordinateSequence *>(p->getCoordinatesRO());
+		}
+		ERROR_MESSAGE("Geometry must be a Point or LineString");
+		return NULL;
+	}
 	catch (GEOSException *ge)
 	{
 		ERROR_MESSAGE((char *)ge->toString().c_str());
@@ -1832,9 +1849,9 @@ GEOSGeom_getCoordSeq(const Geometry *g)
 }
 
 Geometry *
-GEOSGeom_createPoint(const CoordinateSequence *cs)
+GEOSGeom_createPoint(CoordinateSequence *cs)
 {
-	try { return geomFactory->createPoint(*cs); }
+	try { return geomFactory->createPoint(cs); }
 	catch (GEOSException *ge)
 	{
 		ERROR_MESSAGE((char *)ge->toString().c_str());
@@ -1855,9 +1872,9 @@ GEOSGeom_createPoint(const CoordinateSequence *cs)
 }
 
 Geometry *
-GEOSGeom_createLinearRing(const CoordinateSequence *cs)
+GEOSGeom_createLinearRing(CoordinateSequence *cs)
 {
-	try { return geomFactory->createLinearRing(*cs); }
+	try { return geomFactory->createLinearRing(cs); }
 	catch (GEOSException *ge)
 	{
 		ERROR_MESSAGE((char *)ge->toString().c_str());
@@ -1878,9 +1895,9 @@ GEOSGeom_createLinearRing(const CoordinateSequence *cs)
 }
 
 Geometry *
-GEOSGeom_createLineString(const CoordinateSequence *cs)
+GEOSGeom_createLineString(CoordinateSequence *cs)
 {
-	try { return geomFactory->createLineString(*cs); }
+	try { return geomFactory->createLineString(cs); }
 	catch (GEOSException *ge)
 	{
 		ERROR_MESSAGE((char *)ge->toString().c_str());
@@ -1901,18 +1918,18 @@ GEOSGeom_createLineString(const CoordinateSequence *cs)
 }
 
 Geometry *
-GEOSGeom_createPolygon(const Geometry *shell, const Geometry **holes, 
+GEOSGeom_createPolygon(Geometry *shell, Geometry **holes, 
 	unsigned int nholes)
 {
 	try
 	{
-		unsigned int i;
-		vector<Geometry *> *vholes=new vector<Geometry *>(nholes);
-		for (i=0; i<nholes; i++)
+		vector<Geometry *> *vholes=new vector<Geometry *>(holes, holes+nholes);
+		LinearRing *nshell = dynamic_cast<LinearRing *>(shell);
+		if ( ! nshell )
 		{
-			(*vholes)[i] = holes[i]->clone();
+			ERROR_MESSAGE("Shell is not a LinearRing");
+			return NULL;
 		}
-		LinearRing *nshell = dynamic_cast<LinearRing *>(shell->clone());
 		return geomFactory->createPolygon(nshell, vholes);
 	}
 	catch (GEOSException *ge)
@@ -1954,5 +1971,58 @@ GEOSGeom_clone(Geometry *g)
 	{
 		ERROR_MESSAGE("Unkown exception thrown");
 		return NULL;
+	}
+}
+
+int
+GEOSGeom_getDimensions(const Geometry *g)
+{
+	try {
+		const LineString *ls = dynamic_cast<const LineString *>(g);
+		if ( ls )
+		{
+			return ls->getCoordinatesRO()->getDimension();
+		}
+
+		const Point *p = dynamic_cast<const Point *>(g);
+		if ( p )
+		{
+			return p->getCoordinatesRO()->getDimension();
+		}
+
+		const Polygon *poly = dynamic_cast<const Polygon *>(g);
+		if ( poly )
+		{
+			return GEOSGeom_getDimensions(poly->getExteriorRing());
+		}
+
+
+		const GeometryCollection *coll =
+			dynamic_cast<const GeometryCollection *>(g);
+		if ( coll )
+		{
+			return GEOSGeom_getDimensions(coll->getGeometryN(0));
+		}
+
+		ERROR_MESSAGE("Unknown geometry type");
+		return 0;
+	}
+
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return 0;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unkown exception thrown");
+		return 0;
 	}
 }

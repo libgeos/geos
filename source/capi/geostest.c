@@ -58,7 +58,7 @@ log_and_exit(const char *fmt, ...) {
 }
 
 GEOSGeom 
-fineGrainedReconstructionTest(GEOSGeom g1)
+fineGrainedReconstructionTest(const GEOSGeom g1)
 {
 	GEOSCoordSeq cs;
 	GEOSGeom g2, shell, gtmp;
@@ -71,44 +71,33 @@ fineGrainedReconstructionTest(GEOSGeom g1)
 	switch ( type )
 	{
 		case GEOS_POINT:
-			cs = GEOSGeom_getCoordSeq(g1);
+			cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(g1));
 			g2 = GEOSGeom_createPoint(cs);
-			GEOSCoordSeq_destroy(cs);
 			return g2;
 			break;
 		case GEOS_LINESTRING:
-			cs = GEOSGeom_getCoordSeq(g1);
+			cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(g1));
 			g2 = GEOSGeom_createLineString(cs);
-			GEOSCoordSeq_destroy(cs);
 			return g2;
 			break;
 		case GEOS_LINEARRING:
-			cs = GEOSGeom_getCoordSeq(g1);
+			cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(g1));
 			g2 = GEOSGeom_createLinearRing(cs);
-			GEOSCoordSeq_destroy(cs);
 			return g2;
 			break;
 		case GEOS_POLYGON:
 			gtmp = GEOSGetExteriorRing(g1);
-			cs = GEOSGeom_getCoordSeq(gtmp);
-			GEOSGeom_destroy(gtmp);
+			cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(gtmp));
 			shell = GEOSGeom_createLinearRing(cs);
-			GEOSCoordSeq_destroy(cs);
 			ngeoms = GEOSGetNumInteriorRings(g1);
 			geoms = malloc(ngeoms*sizeof(GEOSGeom));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetInteriorRingN(g1, i);
-				cs = GEOSGeom_getCoordSeq(gtmp);
+				cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(gtmp));
 				geoms[i] = GEOSGeom_createLinearRing(cs);
-				GEOSCoordSeq_destroy(cs);
 			}
 			g2 = GEOSGeom_createPolygon(shell, geoms, ngeoms);
-			GEOSGeom_destroy(shell);
-			for (i=0; i<ngeoms; i++)
-			{
-				GEOSGeom_destroy(geoms[i]);
-			}
 			free(geoms);
 			return g2;
 			break;
@@ -122,13 +111,8 @@ fineGrainedReconstructionTest(GEOSGeom g1)
 			{
 				gtmp = GEOSGetGeometryN(g1, i);
 				geoms[i] = fineGrainedReconstructionTest(gtmp);
-				GEOSGeom_destroy(gtmp);
 			}
 			g2 = GEOSGeom_createCollection(type, geoms, ngeoms);
-			for (i=0; i<ngeoms; i++)
-			{
-				GEOSGeom_destroy(geoms[i]);
-			}
 			free(geoms);
 			return g2; 
 			break;
@@ -154,7 +138,6 @@ int
 do_all(char *inputfile)
 {
 	GEOSGeom g1, g2, g3, g4, *gg;
-	GEOSCoordSeq cs;
 	unsigned int npoints, ndims;
         static char wkt[MAXWKTLEN];
 	FILE *input;
@@ -188,12 +171,10 @@ do_all(char *inputfile)
 	if ( ! GEOSEquals(g1, g2) ) log_and_exit("Round WKB conversion failed");
 	GEOSGeom_destroy(g2);
 
-	/* CoordinateSequence extraction */
-	cs = GEOSGeom_getCoordSeq(g1);
-	GEOSCoordSeq_getSize(cs, &npoints);
-	GEOSCoordSeq_getDimensions(cs, &ndims);
+	/* Size and dimension */
+	npoints = GEOSGetNumCoordinates(g1);
+	ndims = GEOSGeom_getDimensions(g1);
 	printf("Geometry coordinates: %dx%d\n", npoints, ndims);
-	GEOSCoordSeq_destroy(cs);
 
 	/* Geometry fine-grained deconstruction/reconstruction  test */
 	g2 = fineGrainedReconstructionTest(g1);

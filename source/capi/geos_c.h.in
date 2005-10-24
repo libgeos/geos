@@ -167,18 +167,24 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions(GEOSCoordSeq s, unsigned int *dim
 /************************************************************************
  *
  * Geometry Constructors.
- * All arguments remain ownership of the caller.
- * Return NULL on exception.
+ * GEOSCoordSeq arguments will become ownership of the returned object.
+ * All functions return NULL on exception.
  *
  ***********************************************************************/
 
-extern GEOSGeom GEOS_DLL GEOSGeom_createPoint(const GEOSCoordSeq s);
-extern GEOSGeom GEOS_DLL GEOSGeom_createLinearRing(const GEOSCoordSeq s);
-extern GEOSGeom GEOS_DLL GEOSGeom_createLineString(const GEOSCoordSeq s);
-extern GEOSGeom GEOS_DLL GEOSGeom_createPolygon(const GEOSGeom shell,
-	const GEOSGeom *holes, unsigned int nholes);
+extern GEOSGeom GEOS_DLL GEOSGeom_createPoint(GEOSCoordSeq s);
+extern GEOSGeom GEOS_DLL GEOSGeom_createLinearRing(GEOSCoordSeq s);
+extern GEOSGeom GEOS_DLL GEOSGeom_createLineString(GEOSCoordSeq s);
+
+/*
+ * Second argument is an array of GEOSGeom objects.
+ * The caller remains owner of the array, but pointed-to
+ * objects become ownership of the returned GEOSGeom.
+ */
+extern GEOSGeom GEOS_DLL GEOSGeom_createPolygon(GEOSGeom shell,
+	GEOSGeom *holes, unsigned int nholes);
 extern GEOSGeom GEOS_DLL GEOSGeom_createCollection(int type,
-	const GEOSGeom *geoms, unsigned int ngeoms);
+	GEOSGeom *geoms, unsigned int ngeoms);
 
 extern GEOSGeom GEOS_DLL GEOSGeom_clone(const GEOSGeom g);
 
@@ -260,7 +266,8 @@ extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
 
 /*
  * Return NULL on exception, Geometry must be a Collection.
- * Returned object is a copy, must be destroyed after use.
+ * Returned object is a pointer to internal storage:
+ * it must NOT be destroyed directly.
  */
 extern GEOSGeom GEOS_DLL GEOSGetGeometryN(GEOSGeom g, int n);
 
@@ -269,21 +276,31 @@ extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeom g1);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.
- * Returned object is a copy, must be destroyed after use.
+ * Returned object is a pointer to internal storage:
+ * it must NOT be destroyed directly.
  */
 extern GEOSGeom GEOS_DLL GEOSGetInteriorRingN(GEOSGeom g, int n);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.
- * Returned object is a copy, must be destroyed after use.
+ * Returned object is a pointer to internal storage:
+ * it must NOT be destroyed directly.
  */
 extern GEOSGeom GEOS_DLL GEOSGetExteriorRing(GEOSGeom g);
 
 /* Return -1 on exception */
-extern int GEOS_DLL GEOSGetNumCoordinate(const GEOSGeom g1);
+extern int GEOS_DLL GEOSGetNumCoordinates(const GEOSGeom g1);
 
-/* Return NULL on exception */
+/*
+ * Return NULL on exception.
+ * Geometry must be a LineString, LinearRing or Point.
+ */
 extern GEOSCoordSeq GEOS_DLL GEOSGeom_getCoordSeq(const GEOSGeom g);
+
+/*
+ * Return 0 on exception (or empty geometry)
+ */
+extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
 
 /************************************************************************
  *
