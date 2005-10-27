@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -74,20 +75,13 @@ void SimpleMCSweepLineIntersector::add(Edge *edge,void* edgeSet){
 	}
 }
 
-bool MCsleLessThan(SweepLineEvent *first,SweepLineEvent *second) {
-	if (first->compareTo(second)<0)
-		return true;
-	else
-		return false;
-}
-
 /**
-* Because Delete Events have a link to their corresponding Insert event,
-* it is possible to compute exactly the range of events which must be
-* compared to a given Insert event object.
-*/
+ * Because Delete Events have a link to their corresponding Insert event,
+ * it is possible to compute exactly the range of events which must be
+ * compared to a given Insert event object.
+ */
 void SimpleMCSweepLineIntersector::prepareEvents(){
-	sort(events->begin(),events->end(),MCsleLessThan);
+	sort(events->begin(),events->end(),SweepLineEventLessThen());
 	for(int i=0;i<(int)events->size();i++ ){
 		SweepLineEvent *ev=(*events)[i];
 		if (ev->isDelete()){
@@ -138,6 +132,9 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/10/27 14:05:19  strk
+ * Added a SweepLineEventLessThen functor to be used by sort algorithm.
+ *
  * Revision 1.4  2004/11/22 11:34:49  strk
  * More debugging lines and comments/indentation cleanups
  *

@@ -5,38 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.2  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.2  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.20  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_GEOMGRAPH_INDEX_H
 #define GEOS_GEOMGRAPH_INDEX_H
@@ -134,7 +110,10 @@ protected:
 	int ptIndex;
 };
 
+class SweepLineEventLessThen;
+
 class SweepLineEvent{
+friend class SweepLineEventLessThen;
 public:
 	enum {
 		INSERT=1,
@@ -158,6 +137,11 @@ private:
 	int eventType;
 	SweepLineEvent *insertEvent; // null if this is an INSERT event
 	int deleteEventIndex;
+};
+
+class SweepLineEventLessThen {
+public:
+	bool operator()(const SweepLineEvent *f, const SweepLineEvent *s) const;
 };
 
 class MonotoneChainIndexer{
@@ -265,6 +249,36 @@ private:
 	void processOverlaps(int start,int end,SweepLineEvent *ev0,SegmentIntersector *si);
 };
 
-bool sleLessThen(SweepLineEvent *first,SweepLineEvent *second);
-}
+} // namespace geos
+
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2005/10/27 14:05:20  strk
+ * Added a SweepLineEventLessThen functor to be used by sort algorithm.
+ *
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.2  2004/04/04 06:29:11  ybychkov
+ * "planargraph" and "geom/utill" upgraded to JTS 1.4
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.20  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+
