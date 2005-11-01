@@ -60,8 +60,8 @@ bool IsValidOp::isValid() {
  * @return <code>true</code> if the coordinate is valid
  */
 bool IsValidOp::isValid(const Coordinate &coord) {
-	if (! finite(coord.x) ) return false;
-	if (! finite(coord.y) ) return false;
+	if (! FINITE(coord.x) ) return false;
+	if (! FINITE(coord.y) ) return false;
 	return true;
 }
 
@@ -505,6 +505,9 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27.2.2  2005/11/01 09:40:36  strk
+ * Replaced finite() with FINITE() calls.
+ *
  * Revision 1.27.2.1  2005/05/23 16:57:05  strk
  * Backported fix avoiding throws
  *
