@@ -60,8 +60,8 @@ bool IsValidOp::isValid() {
  * @return <code>true</code> if the coordinate is valid
  */
 bool IsValidOp::isValid(const Coordinate &coord) {
-	if (! finite(coord.x) ) return false;
-	if (! finite(coord.y) ) return false;
+	if (! FINITE(coord.x) ) return false;
+	if (! FINITE(coord.y) ) return false;
 	return true;
 }
 
@@ -502,6 +502,9 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2005/11/01 09:40:42  strk
+ * Replaced finite() with FINITE() calls.
+ *
  * Revision 1.30  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
