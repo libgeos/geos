@@ -831,40 +831,6 @@ private:
 	vector<Coordinate> *vect;
 };
 
-struct point_3d {
-	double x;
-	double y;
-	double z;
-};
-
-class PointCoordinateSequence : public CoordinateSequence {
-public:
-	PointCoordinateSequence();
-	PointCoordinateSequence(int n);
-	PointCoordinateSequence(const Coordinate& c);
-	PointCoordinateSequence(const PointCoordinateSequence &cl);
-	PointCoordinateSequence(const CoordinateSequence *c);
-	virtual ~PointCoordinateSequence();
-	CoordinateSequence *clone() const;
-	bool isEmpty() const;
-	void add(const Coordinate& c);
-	void add(point_3d p);
-	int getSize() const;
-	const Coordinate& getAt(int pos) const;
-	point_3d getPointAt(int pos);
-	void setAt(const Coordinate& c, int pos);
-	void setAt(point_3d p, int pos);
-	void deleteAt(int pos);
-	const vector<Coordinate>* toVector() const;
-	vector<point_3d>* toPointVector();
-	string toString() const;
-	void setPoints(const vector<Coordinate> &v);
-	void setPoints(vector<point_3d> &v);
-private:
-	vector<point_3d> *vect;
-	mutable vector<Coordinate>*cached_vector;
-};
-
 /**
  * \class CoordinateSequenceFactory geom.h geos.h
  *
@@ -930,18 +896,6 @@ public:
 	 * Returns the singleton instance of DefaultCoordinateSequenceFactory
 	 */
 	static const CoordinateSequenceFactory *instance();
-};
-
-/*
- * \class PointCoordinateSequenceFactory geom.h geos.h
- *
- * \brief
- * Factory for PointCoordinateSequence objects.
- */
-class PointCoordinateSequenceFactory: public CoordinateSequenceFactory {
-public:
-
-	CoordinateSequence *create(vector<Coordinate> *coords) const;
 };
 
 /*
@@ -2580,6 +2534,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.46  2005/11/03 09:15:37  strk
+ * Removed declaration of PointCoordinateSequence and PointCoordinateSequenceFactory
+ *
  * Revision 1.45  2005/07/11 10:26:26  strk
  * Made CoordinateSequence::getDimension return unsigned int instead of int
  *
