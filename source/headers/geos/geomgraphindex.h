@@ -66,27 +66,29 @@ private:
 	bool isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNodes);
 };
 
-class EdgeSetIntersector{
+/* 
+ * This is derived from a Java interface.
+ */
+class EdgeSetIntersector {
 public:
 	/**
-	* Computes all self-intersections between edges in a set of edges,
-	* allowing client to choose whether self-intersections are computed.
-	*
-	* @param edges a list of edges to test for intersections
-	* @param si the SegmentIntersector to use
-	* @param testAllSegments true if self-intersections are to be tested as well
-	*/
+	 * Computes all self-intersections between edges in a set of edges,
+	 * allowing client to choose whether self-intersections are computed.
+	 *
+	 * @param edges a list of edges to test for intersections
+	 * @param si the SegmentIntersector to use
+	 * @param testAllSegments true if self-intersections are to be tested as well
+	 */
 	virtual void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments)=0;
+
 	/**
-	* Computes all mutual intersections between two sets of edges
-	*/
+	 * Computes all mutual intersections between two sets of edges
+	 */
 	virtual void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si)=0;
 	virtual ~EdgeSetIntersector(){};
-protected:
-//	vector<Edge*>* edgesZero;
-//	vector<Edge*>* edgesOne;
 };
-//
+
+
 // This is here so that SweepLineEvent constructor
 // can use it as argument type. 
 // Both  SweepLineSegment and MonotoneChain will
@@ -203,7 +205,7 @@ public:
 	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments);
 	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 protected:
-	vector<SweepLineEvent*>* events;
+	vector<SweepLineEvent*> *events;
 	// statistics information
 	int nOverlaps;
 private:
@@ -239,7 +241,7 @@ public:
 	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 private:
 	void add(vector<Edge*> *edges);
-	vector<SweepLineEvent*>* events;
+	vector<SweepLineEvent*> *events;
 	// statistics information
 	int nOverlaps;
 	void add(vector<Edge*> *edges,void* edgeSet);
@@ -255,6 +257,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/03 19:51:28  strk
+ * Indentation changes, small vector memory allocation optimization.
+ *
  * Revision 1.4  2005/10/27 14:05:20  strk
  * Added a SweepLineEventLessThen functor to be used by sort algorithm.
  *

@@ -19,12 +19,14 @@
 
 namespace geos {
 
-SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector(){
-	events=new vector<SweepLineEvent*>();
+SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
+{
 }
 
-SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector(){
-	for(int i=0;i<(int)events->size();i++) {
+SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector()
+{
+	for(unsigned int i=0; i<events->size(); ++i)
+	{
 		SweepLineEvent *sle=(*events)[i];
 		if (sle->isDelete()) delete sle;
 	}
@@ -32,7 +34,8 @@ SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector(){
 }
 
 void
-SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges, SegmentIntersector *si, bool testAllSegments)
+SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,
+	SegmentIntersector *si, bool testAllSegments)
 {
 	if (testAllSegments)
 		add(edges,NULL);
@@ -42,32 +45,44 @@ SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges, Segment
 }
 
 void
-SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0, vector<Edge*> *edges1, SegmentIntersector *si)
+SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,
+	vector<Edge*> *edges1, SegmentIntersector *si)
 {
 	add(edges0,edges0);
 	add(edges1,edges1);
 	computeIntersections(si);
 }
 
-void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges) {
-	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
-		Edge *edge=*i;
+void
+SimpleMCSweepLineIntersector::add(vector<Edge*> *edges)
+{
+	for (unsigned int i=0; i<edges->size(); ++i)
+	{
+		Edge *edge=(*edges)[i];
 		// edge is its own group
-		add(edge,edge);
+		add(edge, edge);
 	}
 }
 
-void SimpleMCSweepLineIntersector::add(vector<Edge*> *edges,void* edgeSet){
-	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
-		Edge *edge=*i;
+void
+SimpleMCSweepLineIntersector::add(vector<Edge*> *edges,void* edgeSet)
+{
+	for (unsigned int i=0; i<edges->size(); ++i)
+	{
+		Edge *edge=(*edges)[i];
 		add(edge,edgeSet);
 	}
 }
 
-void SimpleMCSweepLineIntersector::add(Edge *edge,void* edgeSet){
+void
+SimpleMCSweepLineIntersector::add(Edge *edge, void* edgeSet)
+{
 	MonotoneChainEdge *mce=edge->getMonotoneChainEdge();
 	vector<int>* startIndex=mce->getStartIndexes();
-	for(int i=0;i<(int)startIndex->size()-1;i++) {
+	unsigned int n = startIndex->size()-1;
+	events->reserve(events->size()+(n*2));
+	for(unsigned int i=0; i<n; ++i)
+	{
 		MonotoneChain *mc=new MonotoneChain(mce,i);
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),NULL,mc);
 		events->push_back(insertEvent);
@@ -80,11 +95,15 @@ void SimpleMCSweepLineIntersector::add(Edge *edge,void* edgeSet){
  * it is possible to compute exactly the range of events which must be
  * compared to a given Insert event object.
  */
-void SimpleMCSweepLineIntersector::prepareEvents(){
-	sort(events->begin(),events->end(),SweepLineEventLessThen());
-	for(int i=0;i<(int)events->size();i++ ){
+void
+SimpleMCSweepLineIntersector::prepareEvents()
+{
+	sort(events->begin(), events->end(), SweepLineEventLessThen());
+	for(unsigned int i=0; i<events->size(); ++i)
+	{
 		SweepLineEvent *ev=(*events)[i];
-		if (ev->isDelete()){
+		if (ev->isDelete())
+		{
 			ev->getInsertEvent()->setDeleteEventIndex(i);
 		}
 	}
@@ -95,9 +114,11 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 {
 	nOverlaps=0;
 	prepareEvents();
-	for(int i=0;i<(int)events->size();i++) {
+	for(unsigned int i=0; i<events->size(); ++i)
+	{
 		SweepLineEvent *ev=(*events)[i];
-		if (ev->isInsert()) {
+		if (ev->isInsert())
+		{
 			processOverlaps(i,ev->getDeleteEventIndex(),ev,si);
 		}
 	}
@@ -108,14 +129,17 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 	SweepLineEvent *ev0, SegmentIntersector *si)
 {
 	MonotoneChain *mc0=(MonotoneChain*) ev0->getObject();
+
 	/*
 	 * Since we might need to test for self-intersections,
 	 * include current insert event object in list of event objects to test.
 	 * Last index can be skipped, because it must be a Delete event.
 	 */
-	for(int i=start; i<end; i++) {
+	for(int i=start; i<end; ++i)
+	{
 		SweepLineEvent *ev1=(*events)[i];
-		if (ev1->isInsert()) {
+		if (ev1->isInsert())
+		{
 			MonotoneChain *mc1=(MonotoneChain*) ev1->getObject();
 			// don't compare edges in same group
 			// null group indicates that edges should be compared
@@ -132,6 +156,9 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/03 19:51:28  strk
+ * Indentation changes, small vector memory allocation optimization.
+ *
  * Revision 1.5  2005/10/27 14:05:19  strk
  * Added a SweepLineEventLessThen functor to be used by sort algorithm.
  *
