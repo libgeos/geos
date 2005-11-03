@@ -19,6 +19,7 @@
 namespace geos {
 
 SimpleSweepLineIntersector::SimpleSweepLineIntersector():
+	events(new vector<SweepLineEvent*>()),
 	nOverlaps(0)
 {
 }
@@ -149,6 +150,9 @@ SimpleSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/03 21:28:06  strk
+ * Fixed constructors broke by previous commit
+ *
  * Revision 1.4  2005/11/03 19:51:28  strk
  * Indentation changes, small vector memory allocation optimization.
  *
