@@ -23,6 +23,9 @@ Changes in 3.0.0
 - Node::isIncidentEdgeInResult() method made virtual
 - Initial simplified C api implementation
 - Const-correct signatures in LineMerger package
+- Added closed ring checks in IsValidOp
+- Changed operation/valid/*NestedRingTester classes interface
+  to use Coordinate pointers instead of copies.
 
 Changes in 2.1.5CVS
 
