@@ -24,6 +24,11 @@ Changes in 3.0.0
 - Initial simplified C api implementation
 - Const-correct signatures in LineMerger package
 
+Changes in 2.1.5CVS
+
+- Performance improvement in OverlayOp::insertUniqueEdge()
+- Minor memory allocation improvements 
+
 Changes in 2.1.4
 
 - Severe BUGFIX in BufferSubgraphGT and other functions used

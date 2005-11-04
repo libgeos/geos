@@ -5,11 +5,16 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ ***********************************************************************
+ *
+ * Last port: operation/overlay/OverlayOp.java rev. 1.23
  *
  **********************************************************************/
 
@@ -25,7 +30,7 @@
 namespace geos {
 
 Geometry*
-OverlayOp::overlayOp(const Geometry *geom0,const Geometry *geom1,int opCode)
+OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 	// throw(TopologyException *)
 {
 	OverlayOp gov(geom0, geom1);
@@ -54,33 +59,35 @@ OverlayOp::isResultOfOp(int loc0,int loc1,int opCode)
 	switch (opCode) {
 		case INTERSECTION:
 			return loc0==Location::INTERIOR && loc1==Location::INTERIOR;
-	case UNION:
-		return loc0==Location::INTERIOR || loc1==Location::INTERIOR;
-	case DIFFERENCE:
-		return loc0==Location::INTERIOR && loc1!=Location::INTERIOR;
-	case SYMDIFFERENCE:
-		return (loc0==Location::INTERIOR && loc1!=Location::INTERIOR) 
-			|| (loc0!=Location::INTERIOR && loc1==Location::INTERIOR);
+		case UNION:
+			return loc0==Location::INTERIOR || loc1==Location::INTERIOR;
+		case DIFFERENCE:
+			return loc0==Location::INTERIOR && loc1!=Location::INTERIOR;
+		case SYMDIFFERENCE:
+			return (loc0==Location::INTERIOR && loc1!=Location::INTERIOR) 
+				|| (loc0!=Location::INTERIOR && loc1==Location::INTERIOR);
 	}
 	return false;
 }
 
-OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1): GeometryGraphOperation(g0,g1)
-{
-	graph=new PlanarGraph(new OverlayNodeFactory());
-
+OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1):
+	GeometryGraphOperation(g0, g1),
+	ptLocator(new PointLocator()),
 	/*
 	 * Use factory of primary geometry.
 	 * Note that this does NOT handle mixed-precision arguments
 	 * where the second arg has greater precision than the first.
 	 */
-	geomFact=g0->getFactory();
-	resultGeom=NULL;
-	edgeList=new EdgeList();
-	resultPolyList=NULL;
-	resultLineList=NULL;
-	resultPointList=NULL;
-	ptLocator=new PointLocator();
+	geomFact(g0->getFactory()),
+	resultGeom(NULL),
+	graph(new PlanarGraph(new OverlayNodeFactory())),
+	edgeList(new EdgeList()),
+	resultPolyList(NULL),
+	resultLineList(NULL),
+	resultPointList(NULL)
+
+{
+
 #if COMPUTE_Z
 #if USE_INPUT_AVGZ
 	avgz[0] = DoubleNotANumber;
@@ -153,13 +160,20 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 /*
  * If edges which have undergone dimensional collapse are found,
  * replace them with a new edge which is a L edge
+ *
+ * TODO: optimize this function, it might be possible
+ *       to simply replace original edge with the
+ *	 collapsed one, w/out using all these vectors
  */
 void
 OverlayOp::replaceCollapsedEdges()
 {
 	vector<Edge*> *newEdges=new vector<Edge*>();
 	vector<Edge*> *oldEdges=new vector<Edge*>();
-	for(int i=0;i<(int)edgeList->getEdges()->size();i++) {
+
+	unsigned int nedges=edgeList->getEdges()->size();
+	for(unsigned int i=0; i<nedges; ++i)
+	{
 		Edge *e=edgeList->get(i);
 		if (e->isCollapsed()) {
 			//Debug.print(e);
@@ -738,14 +752,17 @@ OverlayOp::insertUniqueEdge(Edge *e)
 	cerr<<"OverlayOp::insertUniqueEdge("<<e->print()<<")"<<endl;
 #endif
 
-	int foundIndex=edgeList->findEdgeIndex(e);
+	//<FIX> MD 8 Oct 03  speed up identical edge lookup
+	// fast lookup
+	Edge *existingEdge = edgeList->findEqualEdge(e);
+
 	// If an identical edge already exists, simply update its label
-	if (foundIndex>=0) {
+	if (existingEdge) {
 #if DEBUG
 		cerr<<"  found identical edge, should merge Z"<<endl;
 #endif
-		Edge *existingEdge=edgeList->get(foundIndex);
 		Label *existingLabel=existingEdge->getLabel();
+
 		Label *labelToMerge=e->getLabel();
 
 		// check if new edge is in reverse direction to existing edge
@@ -834,6 +851,10 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2005/11/04 08:28:29  strk
+ * Ported speedup of OverlayOp::insertUniqueEdge() from JTS-1.7 (rev 1.23)
+ * Updated NEWS file.
+ *
  * Revision 1.41  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
