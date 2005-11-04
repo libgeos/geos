@@ -5,31 +5,37 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/valid/TopologyValidationError.java rev. 1.13
+ *
  **********************************************************************/
 
 #include <geos/opValid.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 namespace geos {
 
 string TopologyValidationError::errMsg[]={
-    "Topology Validation Error",
-    "Repeated Point",
-    "Hole lies outside shell",
-    "Holes are nested",
-    "Interior is disconnected",
-    "Self-intersection",
-    "Ring Self-intersection",
-    "Nested shells",
-    "Duplicate Rings",
-    "Too few points in geometry component",
-    "Invalid Coordinate"
+	"Topology Validation Error",
+	"Repeated Point",
+	"Hole lies outside shell",
+	"Holes are nested",
+	"Interior is disconnected",
+	"Self-intersection",
+	"Ring Self-intersection",
+	"Nested shells",
+	"Duplicate Rings",
+	"Too few points in geometry component",
+	"Invalid Coordinate",
+	"Ring is not closed"
 };
 
 TopologyValidationError::TopologyValidationError(int newErrorType,Coordinate newPt):
@@ -64,6 +70,12 @@ string TopologyValidationError::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/04 11:04:09  strk
+ * Ported revision 1.38 of IsValidOp.java (adding closed Ring checks).
+ * Changed NestedRingTester classes to use Coorinate pointers
+ * rather then actual objects, to speedup NULL tests.
+ * Added JTS port revision when applicable.
+ *
  * Revision 1.8  2004/11/05 11:41:57  strk
  * Made IsValidOp handle IllegalArgumentException throw from GeometryGraph
  * as a sign of invalidity (just for Polygon geometries).

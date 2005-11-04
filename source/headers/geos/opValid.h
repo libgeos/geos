@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2005/11/04 11:04:09  strk
+ * Ported revision 1.38 of IsValidOp.java (adding closed Ring checks).
+ * Changed NestedRingTester classes to use Coorinate pointers
+ * rather then actual objects, to speedup NULL tests.
+ * Added JTS port revision when applicable.
+ *
  * Revision 1.7  2004/11/05 11:41:57  strk
  * Made IsValidOp handle IllegalArgumentException throw from GeometryGraph
  * as a sign of invalidity (just for Polygon geometries).
@@ -80,13 +86,19 @@ public:
 	SimpleNestedRingTester(GeometryGraph *newGraph);
 	~SimpleNestedRingTester();
 	void add(LinearRing *ring);
-	Coordinate& getNestedPoint();
+	/*
+	 * Be aware that the returned Coordinate (if != NULL)
+	 * will point to storage owned by one of the LinearRing
+	 * previously added. If you destroy them, this
+	 * will point to an invalid memory address.
+	 */
+	Coordinate *getNestedPoint();
 	bool isNonNested();
 private:
 	CGAlgorithms *cga;
 	GeometryGraph *graph;  // used to find non-node vertices
 	vector<LinearRing*> *rings;
-	Coordinate nestedPt;
+	Coordinate *nestedPt;
 };
 
 /*
@@ -107,7 +119,8 @@ public:
 		NESTED_SHELLS,
 		DUPLICATE_RINGS,
 		TOO_FEW_POINTS,
-		INVALID_COORDINATE
+		INVALID_COORDINATE,
+		RING_NOT_CLOSED
 	};
 
 	TopologyValidationError(int newErrorType,Coordinate newPt);
@@ -203,7 +216,13 @@ class SweeplineNestedRingTester {
 public:
 	SweeplineNestedRingTester(GeometryGraph *newGraph);
 	~SweeplineNestedRingTester();
-	Coordinate& getNestedPoint();
+	/*
+	 * Be aware that the returned Coordinate (if != NULL)
+	 * will point to storage owned by one of the LinearRing
+	 * previously added. If you destroy them, this
+	 * will point to an invalid memory address.
+	 */
+	Coordinate *getNestedPoint();
 	void add(LinearRing* ring);
 	bool isNonNested();
 	bool isInside(LinearRing *innerRing,LinearRing *searchRing);
@@ -221,7 +240,7 @@ private:
 	vector<LinearRing*> *rings;
 	Envelope *totalEnv;
 	SweepLineIndex *sweepLine;
-	Coordinate nestedPt;
+	Coordinate *nestedPt;
 	void buildIndex();
 };
 
@@ -235,7 +254,13 @@ class QuadtreeNestedRingTester {
 public:
 	QuadtreeNestedRingTester(GeometryGraph *newGraph);
 	virtual ~QuadtreeNestedRingTester();
-	Coordinate& getNestedPoint();
+	/*
+	 * Be aware that the returned Coordinate (if != NULL)
+	 * will point to storage owned by one of the LinearRing
+	 * previously added. If you destroy them, this
+	 * will point to an invalid memory address.
+	 */
+	Coordinate *getNestedPoint();
 	void add(LinearRing *ring);
 	bool isNonNested();
 private:
@@ -243,7 +268,7 @@ private:
 	vector<LinearRing*> *rings;
 	Envelope *totalEnv;
 	Quadtree *qt;
-	Coordinate nestedPt;
+	Coordinate *nestedPt;
 	void buildQuadtree();
 };
 
@@ -308,9 +333,9 @@ public:
 	* Find a point from the list of testCoords
 	* that is NOT a node in the edge for the list of searchCoords
 	*
-	* @return the point found, or <code>null</code> if none found
+	* @return the point found, or NULL if none found
 	*/
-	static const Coordinate& findPtNotNode(const CoordinateSequence *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
+	static const Coordinate *findPtNotNode(const CoordinateSequence *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
 
 	/**
 	 * Checks whether a coordinate is valid for processing.
@@ -339,68 +364,85 @@ private:
 	void checkValid(const GeometryCollection *gc);
 	void checkConsistentArea(GeometryGraph *graph);
 	void checkNoSelfIntersectingRings(GeometryGraph *graph);
+
 	/**
-	* check that a ring does not self-intersect, except at its endpoints.
-	* Algorithm is to count the number of times each node along edge occurs.
-	* If any occur more than once, that must be a self-intersection.
-	*/
+	 * check that a ring does not self-intersect, except at its endpoints.
+	 * Algorithm is to count the number of times each node along edge occurs.
+	 * If any occur more than once, that must be a self-intersection.
+	 */
 	void checkSelfIntersectingRing(EdgeIntersectionList *eiList);
+
 	void checkTooFewPoints(GeometryGraph *graph);
+
 	/**
-	* Test that each hole is inside the polygon shell.
-	* This routine assumes that the holes have previously been tested
-	* to ensure that all vertices lie on the shell or inside it.
-	* A simple test of a single point in the hole can be used,
-	* provide the point is chosen such that it does not lie on the
-	* boundary of the shell.
-	*/
+	 * Test that each hole is inside the polygon shell.
+	 * This routine assumes that the holes have previously been tested
+	 * to ensure that all vertices lie on the shell or inside it.
+	 * A simple test of a single point in the hole can be used,
+	 * provide the point is chosen such that it does not lie on the
+	 * boundary of the shell.
+	 *
+	 * @param p the polygon to be tested for hole inclusion
+	 * @param graph a GeometryGraph incorporating the polygon
+	 */
 	void checkHolesInShell(const Polygon *p,GeometryGraph *graph);
-//	void OLDcheckHolesInShell(Polygon *p);
+
 	/**
-	* Tests that no hole is nested inside another hole.
-	* This routine assumes that the holes are disjoint.
-	* To ensure this, holes have previously been tested
-	* to ensure that:
-	* <ul>
-	* <li>they do not partially overlap
-	* (checked by <code>checkRelateConsistency</code>)
-	* <li>they are not identical
-	* (checked by <code>checkRelateConsistency</code>)
-	* </ul>
-	*/
+	 * Tests that no hole is nested inside another hole.
+	 * This routine assumes that the holes are disjoint.
+	 * To ensure this, holes have previously been tested
+	 * to ensure that:
+	 * 
+	 *  - they do not partially overlap
+	 *    (checked by <code>checkRelateConsistency</code>)
+	 *  - they are not identical
+	 *    (checked by <code>checkRelateConsistency</code>)
+	 * 
+	 */
 	void checkHolesNotNested(const Polygon *p,GeometryGraph *graph);
-//	void SLOWcheckHolesNotNested(Polygon *p);
-	/**
-	* Test that no element polygon is wholly in the interior of another element polygon.
-	* TODO: It handles the case that one polygon is nested inside a hole of another.
-	* <p>
-	* Preconditions:
-	* <ul>
-	* <li>shells do not partially overlap
-	* <li>shells do not touch along an edge
-	* <li>no duplicate rings exist
-	* </ul>
-	* This routine relies on the fact that while polygon shells may touch at one or
-	* more vertices, they cannot touch at ALL vertices.
-	*/
+
+	/*
+	 * Tests that no element polygon is wholly in the interior of another
+	 * element polygon.
+	 * 
+	 * Preconditions:
+	 * 
+	 * - shells do not partially overlap
+	 * - shells do not touch along an edge
+	 * - no duplicate rings exist
+	 *
+	 * This routine relies on the fact that while polygon shells may touch at
+	 * one or more vertices, they cannot touch at ALL vertices.
+	 */
 	void checkShellsNotNested(const MultiPolygon *mp,GeometryGraph *graph);
+
 	/**
-	* Check if a shell is incorrectly nested within a polygon.  This is the case
-	* if the shell is inside the polygon shell, but not inside a polygon hole.
-	* (If the shell is inside a polygon hole, the nesting is valid.)
-	* <p>
-	* The algorithm used relies on the fact that the rings must be properly contained.
-	* E.g. they cannot partially overlap (this has been previously checked by
-	* <code>checkRelateConsistency</code>
-	*/
+	 * Check if a shell is incorrectly nested within a polygon.  This is the case
+	 * if the shell is inside the polygon shell, but not inside a polygon hole.
+	 * (If the shell is inside a polygon hole, the nesting is valid.)
+	 * 
+	 * The algorithm used relies on the fact that the rings must be properly contained.
+	 * E.g. they cannot partially overlap (this has been previously checked by
+	 * <code>checkRelateConsistency</code>
+	 */
 	void checkShellNotNested(const LinearRing *shell,const Polygon *p,GeometryGraph *graph);
+
 	/**
-	* This routine checks to see if a shell is properly contained in a hole.
-	*/
-	const Coordinate& checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph);
+	 * This routine checks to see if a shell is properly contained in a hole.
+	 */
+	const Coordinate *checkShellInsideHole(const LinearRing *shell,const LinearRing *hole,GeometryGraph *graph);
+
 	void checkConnectedInteriors(GeometryGraph *graph);
+
 	void checkInvalidCoordinates(const CoordinateSequence *cs);
+
 	void checkInvalidCoordinates(const Polygon *poly);
+
+	void checkClosedRings(const Polygon *poly);
+
+	void checkClosedRing(const LinearRing *ring);
+
+	static bool isSelfTouchingRingFormingHoleValid;
 };
 
 }
