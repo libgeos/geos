@@ -737,13 +737,15 @@ OverlayOp::insertUniqueEdge(Edge *e)
 	cerr<<"OverlayOp::insertUniqueEdge("<<e->print()<<")"<<endl;
 #endif
 
-	int foundIndex=edgeList->findEdgeIndex(e);
+	//<FIX> MD 8 Oct 03  speed up identical edge lookup
+	// fast lookup
+	Edge *existingEdge = edgeList->findEqualEdge(e);
+
 	// If an identical edge already exists, simply update its label
-	if (foundIndex>=0) {
+	if (existingEdge) {
 #if DEBUG
 		cerr<<"  found identical edge, should merge Z"<<endl;
 #endif
-		Edge *existingEdge=edgeList->get(foundIndex);
 		Label *existingLabel=existingEdge->getLabel();
 		Label *labelToMerge=e->getLabel();
 
@@ -833,6 +835,10 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37.2.2  2005/11/04 08:26:17  strk
+ * Ported OverlayOp::insertUniqueEdge() speedup from JTS-1.7 (rev.1.23).
+ * Switched version to 2.1.5, updated NEWS file.
+ *
  * Revision 1.37.2.1  2005/05/23 16:41:45  strk
  * Back-ported removal of useless Coordinate copies in mergeZ() - patch by Safe Software
  *
