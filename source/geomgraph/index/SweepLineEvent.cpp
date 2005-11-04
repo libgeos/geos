@@ -92,14 +92,20 @@ SweepLineEventLessThen::operator()(const SweepLineEvent *f,
 	const SweepLineEvent *s) const
 {
 	if (f->xValue<s->xValue) return true;
-	if (f->eventType<s->eventType) return true;
-	return false;
+        if (f->xValue>s->xValue) return false;
+        if (f->eventType<s->eventType) return true;
+        return false;
 }
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/04 15:42:52  strk
+ * Fixed bug in SweepLineEventLessThen functor
+ * (didn't conform to strict weak ordering).
+ * Note: this was introduced by previous commit.
+ *
  * Revision 1.4  2005/10/27 14:05:20  strk
  * Added a SweepLineEventLessThen functor to be used by sort algorithm.
  *
