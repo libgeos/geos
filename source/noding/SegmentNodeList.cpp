@@ -56,27 +56,15 @@ SegmentNodeList::~SegmentNodeList()
 SegmentNode*
 SegmentNodeList::add(Coordinate *intPt, int segmentIndex, double dist)
 {
-#if PROFILE
-	static Profile *prof = profiler->get("SegmentNodeList::add(Coordinate *, int, double)");
-	prof->start();
-#endif
 	SegmentNode *eiNew=new SegmentNode(intPt, segmentIndex, dist);
 
-	set<SegmentNode*,SegmentNodeLT>::iterator it  = nodes.find(eiNew);
-	if ( it != nodes.end() )
-	{
+	pair<SegmentNodeListIterator,bool> p = nodes.insert(eiNew);
+	if ( p.second ) { // new SegmentNode inserted
+		return eiNew;
+	} else {
 		delete eiNew;
-#if PROFILE
-	prof->stop();
-#endif
-		return *it;
+		return *(p.first);
 	}
-
-	nodes.insert(eiNew);
-#if PROFILE
-	prof->stop();
-#endif
-	return eiNew;
 }
 
 /**
@@ -179,6 +167,9 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/07 18:05:28  strk
+ * Reduced set<> lookups
+ *
  * Revision 1.15  2005/02/22 18:21:46  strk
  * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
  * construction costs.

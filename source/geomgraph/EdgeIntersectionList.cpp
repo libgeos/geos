@@ -42,15 +42,14 @@ EdgeIntersectionList::add(const Coordinate& coord,
 	int segmentIndex, double dist)
 {
 	EdgeIntersection *eiNew=new EdgeIntersection(coord, segmentIndex, dist);
-	EdgeIntersectionListIterator it = nodeMap.find(eiNew);
-	if ( it != nodeMap.end() )
-	{
-		delete eiNew;
-		return *it;
-	}
 
-	nodeMap.insert(eiNew);
-	return eiNew;
+	pair<EdgeIntersectionListIterator, bool> p = nodeMap.insert(eiNew);
+	if ( p.second ) { // new EdgeIntersection inserted
+		return eiNew;
+	} else {
+		delete eiNew;
+		return *(p.first);
+	}
 }
 
 bool
@@ -173,6 +172,9 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/11/07 18:05:28  strk
+ * Reduced set<> lookups
+ *
  * Revision 1.12  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

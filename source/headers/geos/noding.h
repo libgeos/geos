@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/07 18:05:28  strk
+ * Reduced set<> lookups
+ *
  * Revision 1.8  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
@@ -139,6 +142,9 @@ struct SegmentNodeLT {
 };
 
 class SegmentString;
+
+typedef set<SegmentNode*,SegmentNodeLT>::iterator SegmentNodeListIterator;
+
 /*
  * A list of the {@link SegmentNode}s present along a
  * noded {@link SegmentString}.
@@ -170,16 +176,16 @@ public:
 
 	virtual ~SegmentNodeList();
 
-	/**
-	* Adds an intersection into the list, if it isn't already there.
-	* The input segmentIndex and dist are expected to be normalized.
-	* @return the SegmentIntersection found or added
-	*/
+	/*
+	 * Adds an intersection into the list, if it isn't already there.
+	 * The input segmentIndex and dist are expected to be normalized.
+	 * @return the SegmentIntersection found or added
+	 */
 	SegmentNode* add(Coordinate *intPt, int segmentIndex, double dist);
 
-	/**
-	* returns the set of SegmentNodes
-	*/
+	/*
+	 * returns the set of SegmentNodes
+	 */
 	//replaces iterator()
 	set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodes; }
 
