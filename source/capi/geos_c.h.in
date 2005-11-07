@@ -140,28 +140,36 @@ extern void GEOS_DLL GEOSCoordSeq_destroy(GEOSCoordSeq s);
  * Set ordinate values in a Coordinate Sequence.
  * Return 0 on exception.
  */
-extern int GEOS_DLL GEOSCoordSeq_setX(GEOSCoordSeq s, unsigned int idx, double val);
-extern int GEOS_DLL GEOSCoordSeq_setY(GEOSCoordSeq s, unsigned int idx, double val);
-extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSeq s, unsigned int idx, double val);
-extern int GEOS_DLL GEOSCoordSeq_setOrdinate(GEOSCoordSeq s, unsigned int idx,
-	unsigned int dim, double val);
+extern int GEOS_DLL GEOSCoordSeq_setX(GEOSCoordSeq s,
+	unsigned int idx, double val);
+extern int GEOS_DLL GEOSCoordSeq_setY(GEOSCoordSeq s,
+	unsigned int idx, double val);
+extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSeq s,
+	unsigned int idx, double val);
+extern int GEOS_DLL GEOSCoordSeq_setOrdinate(GEOSCoordSeq s,
+	unsigned int idx, unsigned int dim, double val);
 
 /*
  * Get ordinate values from a Coordinate Sequence.
  * Return 0 on exception.
  */
-extern int GEOS_DLL GEOSCoordSeq_getX(GEOSCoordSeq s, unsigned int idx, double *val);
-extern int GEOS_DLL GEOSCoordSeq_getY(GEOSCoordSeq s, unsigned int idx, double *val);
-extern int GEOS_DLL GEOSCoordSeq_getZ(GEOSCoordSeq s, unsigned int idx, double *val);
-extern int GEOS_DLL GEOSCoordSeq_getOrdinate(GEOSCoordSeq s, unsigned int idx,
-	unsigned int dim, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getX(const GEOSCoordSeq s,
+	unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getY(const GEOSCoordSeq s,
+	unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getZ(const GEOSCoordSeq s,
+	unsigned int idx, double *val);
+extern int GEOS_DLL GEOSCoordSeq_getOrdinate(const GEOSCoordSeq s,
+	unsigned int idx, unsigned int dim, double *val);
 
 /*
  * Get size and dimensions info from a Coordinate Sequence.
  * Return 0 on exception.
  */
-extern int GEOS_DLL GEOSCoordSeq_getSize(GEOSCoordSeq s, unsigned int *size);
-extern int GEOS_DLL GEOSCoordSeq_getDimensions(GEOSCoordSeq s, unsigned int *dims);
+extern int GEOS_DLL GEOSCoordSeq_getSize(const GEOSCoordSeq s,
+	unsigned int *size);
+extern int GEOS_DLL GEOSCoordSeq_getDimensions(const GEOSCoordSeq s,
+	unsigned int *dims);
 
 
 /************************************************************************
@@ -203,17 +211,20 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeom g);
  *
  ***********************************************************************/
 
-extern GEOSGeom GEOS_DLL GEOSIntersection(GEOSGeom g1, GEOSGeom g2);
-extern GEOSGeom GEOS_DLL GEOSBuffer(GEOSGeom g1,double width, int quadsegs);
-extern GEOSGeom GEOS_DLL GEOSConvexHull(GEOSGeom g1);
-extern GEOSGeom GEOS_DLL GEOSDifference(GEOSGeom g1,GEOSGeom g2);
-extern GEOSGeom GEOS_DLL GEOSSymDifference(GEOSGeom g1,GEOSGeom g2);
-extern GEOSGeom GEOS_DLL GEOSBoundary(GEOSGeom g1);
-extern GEOSGeom GEOS_DLL GEOSUnion(GEOSGeom g1,GEOSGeom g2);
-extern GEOSGeom GEOS_DLL GEOSPointOnSurface(GEOSGeom g1);
-extern GEOSGeom GEOS_DLL GEOSGetCentroid(GEOSGeom g);
+extern GEOSGeom GEOS_DLL GEOSIntersection(const GEOSGeom g1, const GEOSGeom g2);
+extern GEOSGeom GEOS_DLL GEOSBuffer(const GEOSGeom g1,
+	double width, int quadsegs);
+extern GEOSGeom GEOS_DLL GEOSConvexHull(const GEOSGeom g1);
+extern GEOSGeom GEOS_DLL GEOSDifference(const GEOSGeom g1, const GEOSGeom g2);
+extern GEOSGeom GEOS_DLL GEOSSymDifference(const GEOSGeom g1,
+	const GEOSGeom g2);
+extern GEOSGeom GEOS_DLL GEOSBoundary(const GEOSGeom g1);
+extern GEOSGeom GEOS_DLL GEOSUnion(const GEOSGeom g1, const GEOSGeom g2);
+extern GEOSGeom GEOS_DLL GEOSPointOnSurface(const GEOSGeom g1);
+extern GEOSGeom GEOS_DLL GEOSGetCentroid(const GEOSGeom g);
 extern char GEOS_DLL *GEOSRelate(const GEOSGeom g1, const GEOSGeom g2);
-extern GEOSGeom GEOS_DLL GEOSPolygonize(GEOSGeom geoms[], unsigned int ngeoms);
+extern GEOSGeom GEOS_DLL GEOSPolygonize(const GEOSGeom geoms[],
+	unsigned int ngeoms);
 extern GEOSGeom GEOS_DLL GEOSLineMerge(const GEOSGeom g);
 
 /************************************************************************
@@ -269,7 +280,7 @@ extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
  */
-extern GEOSGeom GEOS_DLL GEOSGetGeometryN(GEOSGeom g, int n);
+extern const GEOSGeom GEOS_DLL GEOSGetGeometryN(const GEOSGeom g, int n);
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeom g1);
@@ -279,14 +290,14 @@ extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeom g1);
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
  */
-extern GEOSGeom GEOS_DLL GEOSGetInteriorRingN(GEOSGeom g, int n);
+extern const GEOSGeom GEOS_DLL GEOSGetInteriorRingN(const GEOSGeom g, int n);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
  */
-extern GEOSGeom GEOS_DLL GEOSGetExteriorRing(GEOSGeom g);
+extern const GEOSGeom GEOS_DLL GEOSGetExteriorRing(const GEOSGeom g);
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGetNumCoordinates(const GEOSGeom g1);
@@ -295,7 +306,7 @@ extern int GEOS_DLL GEOSGetNumCoordinates(const GEOSGeom g1);
  * Return NULL on exception.
  * Geometry must be a LineString, LinearRing or Point.
  */
-extern GEOSCoordSeq GEOS_DLL GEOSGeom_getCoordSeq(const GEOSGeom g);
+extern const GEOSCoordSeq GEOS_DLL GEOSGeom_getCoordSeq(const GEOSGeom g);
 
 /*
  * Return 0 on exception (or empty geometry)
@@ -309,7 +320,8 @@ extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
  ***********************************************************************/
 
 /* Return 0 on exception, 1 otherwise */
-extern int GEOS_DLL GEOSDistance(GEOSGeom g1, GEOSGeom g2, double *dist);
+extern int GEOS_DLL GEOSDistance(const GEOSGeom g1, const GEOSGeom g2,
+	double *dist);
 
 #ifdef __cplusplus
 } // extern "C"
