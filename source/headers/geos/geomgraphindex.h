@@ -123,12 +123,14 @@ public:
 	};
 	SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,SweepLineEventOBJ *newObj);
 	virtual ~SweepLineEvent();
-	bool isInsert();
-	bool isDelete();
-	SweepLineEvent* getInsertEvent();
-	int getDeleteEventIndex();
-	void setDeleteEventIndex(int newDeleteEventIndex);
-	SweepLineEventOBJ* getObject() const;
+	bool isInsert() { return insertEvent==NULL; }
+	bool isDelete() { return insertEvent!=NULL; }
+	SweepLineEvent* getInsertEvent() { return insertEvent; }
+	int getDeleteEventIndex() { return deleteEventIndex; }
+	void setDeleteEventIndex(int newDeleteEventIndex) {
+		deleteEventIndex=newDeleteEventIndex;
+	}
+	SweepLineEventOBJ* getObject() const { return obj; }
 	int compareTo(SweepLineEvent *sle);
 	string print();
 	void* edgeSet;    // used for red-blue intersection detection
@@ -143,7 +145,13 @@ private:
 
 class SweepLineEventLessThen {
 public:
-	bool operator()(const SweepLineEvent *f, const SweepLineEvent *s) const;
+	bool operator()(const SweepLineEvent *f, const SweepLineEvent *s) const
+	{
+		if (f->xValue<s->xValue) return true;
+		if (f->xValue>s->xValue) return false;
+		if (f->eventType<s->eventType) return true;
+		return false;
+	}
 };
 
 class MonotoneChainIndexer{
@@ -257,6 +265,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.5  2005/11/03 19:51:28  strk
  * Indentation changes, small vector memory allocation optimization.
  *

@@ -168,26 +168,18 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 void
 OverlayOp::replaceCollapsedEdges()
 {
-	vector<Edge*> *newEdges=new vector<Edge*>();
-	vector<Edge*> *oldEdges=new vector<Edge*>();
+	vector<Edge*> *edges=edgeList->getEdges();
 
-	unsigned int nedges=edgeList->getEdges()->size();
+	unsigned int nedges=edges->size();
 	for(unsigned int i=0; i<nedges; ++i)
 	{
-		Edge *e=edgeList->get(i);
+		Edge *e=(*edges)[i];
 		if (e->isCollapsed()) {
 			//Debug.print(e);
-			newEdges->push_back(e->getCollapsedEdge());
+			(*edges)[i]=e->getCollapsedEdge();
 			delete e;
-		} else {
-			//instead of removing from edgeList
-			oldEdges->push_back(e);
-		}
+		} 
 	}
-	oldEdges->insert(oldEdges->end(),newEdges->begin(),newEdges->end());
-	edgeList->getEdges()->assign(oldEdges->begin(),oldEdges->end());
-	delete oldEdges;
-	delete newEdges;
 }
 
 /*
@@ -851,6 +843,11 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.42  2005/11/04 08:28:29  strk
  * Ported speedup of OverlayOp::insertUniqueEdge() from JTS-1.7 (rev 1.23)
  * Updated NEWS file.

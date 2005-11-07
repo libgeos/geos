@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.9  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -42,26 +47,31 @@ vector<EdgeEnd*> *EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges) {
 }
 
 /**
-* Creates stub edges for all the intersections in this
-* Edge (if any) and inserts them into the graph.
-*/
-void EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l) {
+ * Creates stub edges for all the intersections in this
+ * Edge (if any) and inserts them into the graph.
+ */
+void
+EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l)
+{
 	EdgeIntersectionList *eiList=edge->getEdgeIntersectionList();
 	//Debug.print(eiList);
 	// ensure that the list has entries for the first and last point of the edge
 	eiList->addEndpoints();
-	vector<EdgeIntersection*>::iterator it=eiList->list->begin();
+
+	EdgeIntersectionListIterator it=eiList->begin();
+	// no intersections, so there is nothing to do
+	if (it==eiList->end()) return;
+
 	EdgeIntersection *eiPrev=NULL;
 	EdgeIntersection *eiCurr=NULL;
-	// no intersections, so there is nothing to do
-	if (!(it<eiList->list->end())) return;
+
 	EdgeIntersection *eiNext=*it;
 	it++;
 	do {
 		eiPrev=eiCurr;
 		eiCurr=eiNext;
 		eiNext=NULL;
-		if (it<eiList->list->end()) {
+		if (it!=eiList->end()) {
 			eiNext=*it;
 			it++;
 		}

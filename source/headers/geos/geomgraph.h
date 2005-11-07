@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <geos/geom.h>
 #include <geos/geomgraphindex.h>
 #include <geos/geosAlgorithm.h>
@@ -411,27 +412,69 @@ public:
 	double dist;
 	EdgeIntersection(const Coordinate& newCoord, int newSegmentIndex, double newDist);
 	virtual ~EdgeIntersection();
-	int compare(int newSegmentIndex, double newDist);
+	int compare(int newSegmentIndex, double newDist) const;
 	bool isEndPoint(int maxSegmentIndex);
-	string print();
-	int compareTo(void* obj);
+	string print() const;
+	int compareTo(const EdgeIntersection *) const;
 };
 
+struct EdgeIntersectionLessThen {
+	bool operator()(const EdgeIntersection *ei1,
+		const EdgeIntersection *ei2) const
+	{
+		return ei1->compareTo(ei2)<0;
+	}
+};
+
+typedef set<EdgeIntersection *, EdgeIntersectionLessThen>::iterator EdgeIntersectionListIterator;
+
+/**
+ * A list of edge intersections along an Edge.
+ * Implements splitting an edge with intersections
+ * into multiple resultant edges.
+ */
 class EdgeIntersectionList{
 public:
-	vector<EdgeIntersection*> *list;
 	Edge *edge;
 	EdgeIntersectionList(Edge *edge);
 	~EdgeIntersectionList();
-	EdgeIntersection* add(const Coordinate& coord, int segmentIndex, double dist);
-	vector<EdgeIntersection*>::iterator iterator();
-	bool isEmpty();
-	bool findInsertionPoint(int segmentIndex,double dist,vector<EdgeIntersection*>::iterator *insertIt);
-	bool isIntersection(const Coordinate& pt);
+
+	/*
+	 * Adds an intersection into the list, if it isn't already there.
+	 * The input segmentIndex and dist are expected to be normalized.
+	 * @return the EdgeIntersection found or added
+	 */
+	EdgeIntersection* add(const Coordinate& coord,
+		int segmentIndex, double dist);
+
+	EdgeIntersectionListIterator begin() { return nodeMap.begin(); }
+	EdgeIntersectionListIterator end() { return nodeMap.end(); }
+	EdgeIntersectionListIterator begin() const { return nodeMap.begin(); }
+	EdgeIntersectionListIterator end() const { return nodeMap.end(); }
+
+	bool isEmpty() const;
+	bool isIntersection(const Coordinate& pt) const;
+
+	/*
+	 * Adds entries for the first and last points of the edge to the list
+	 */
 	void addEndpoints();
+
+	/**
+	 * Creates new edges for all the edges that the intersections in this
+	 * list split the parent edge into.
+	 * Adds the edges to the input list (this is so a single list
+	 * can be used to accumulate all split edges for a Geometry).
+	 *
+	 * @param edgeList a list of EdgeIntersections
+	 */
 	void addSplitEdges(vector<Edge*> *edgeList);
+
 	Edge *createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1);
-	string print();
+	string print() const;
+
+private:
+	set<EdgeIntersection *, EdgeIntersectionLessThen> nodeMap;
 };
 
 class EdgeList {
@@ -750,6 +793,11 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.11  2005/06/25 10:20:39  strk
  * OverlayOp speedup (JTS port)
  *

@@ -5,29 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.11  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.10  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/opRelate.h>
 #include <stdio.h>
@@ -68,32 +53,38 @@ void RelateNodeGraph::build(GeometryGraph *geomGraph) {
 }
 
 /**
-* Insert nodes for all intersections on the edges of a Geometry.
-* Label the created nodes the same as the edge label if they do not already have a label.
-* This allows nodes created by either self-intersections or
-* mutual intersections to be labelled.
-* Endpoint nodes will already be labelled from when they were inserted.
-* <p>
-* Precondition: edge intersections have been computed.
-*/
-void RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph, int argIndex) {
+ * Insert nodes for all intersections on the edges of a Geometry.
+ * Label the created nodes the same as the edge label if they do not
+ * already have a label.
+ * This allows nodes created by either self-intersections or
+ * mutual intersections to be labelled.
+ * Endpoint nodes will already be labelled from when they were inserted.
+ * 
+ * Precondition: edge intersections have been computed.
+ */
+void
+RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
+	int argIndex)
+{
 	vector<Edge*> *edges=geomGraph->getEdges();
-	for(vector<Edge*>::iterator edgeIt=edges->begin();edgeIt<edges->end();edgeIt++) {
+	vector<Edge*>::iterator edgeIt=edges->begin();
+	for( ; edgeIt<edges->end(); ++edgeIt)
+	{
 		Edge *e=*edgeIt;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> *eiL=e->getEdgeIntersectionList()->list;
-		for(vector<EdgeIntersection*>::iterator eiIt=eiL->begin();eiIt<eiL->end();eiIt++) {
+		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
+		EdgeIntersectionListIterator eiIt=eiL->begin();
+		EdgeIntersectionListIterator eiEnd=eiL->end();
+		for( ; eiIt!=eiEnd; ++eiIt) {
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
 			if (eLoc==Location::BOUNDARY)
 				n->setLabelBoundary(argIndex);
 			else {
 				if (n->getLabel()->isNull(argIndex))
-					n->setLabel(argIndex,Location::INTERIOR);
+				  n->setLabel(argIndex,Location::INTERIOR);
 			}
-			//Debug.println(n);
 		}
-//		delete eiL;
 	}
 }
 /**
@@ -122,5 +113,28 @@ void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){
 		nodes->add(e);
 	}
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.12  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
+ * Revision 1.11  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
+ * Revision 1.10  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.9  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

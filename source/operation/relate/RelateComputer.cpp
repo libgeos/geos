@@ -5,47 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.21  2005/06/24 11:09:43  strk
- * Dropped RobustLineIntersector, made LineIntersector a concrete class.
- * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
- * to avoid computing intersection point (Z) when it's not necessary.
- *
- * Revision 1.20  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.19  2004/08/04 08:26:02  strk
- * comments lift, stack allocation reduced
- *
- * Revision 1.18  2004/07/27 16:35:47  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.17  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.16  2004/03/29 06:59:25  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.15  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/opRelate.h>
 #include <stdio.h>
@@ -234,59 +201,70 @@ void RelateComputer::copyNodesAndLabels(int argIndex) {
 
 
 /**
-* Insert nodes for all intersections on the edges of a Geometry.
-* Label the created nodes the same as the edge label if they do not already have a label.
-* This allows nodes created by either self-intersections or
-* mutual intersections to be labelled.
-* Endpoint nodes will already be labelled from when they were inserted.
-*/
-void RelateComputer::computeIntersectionNodes(int argIndex) {
-//   vector<Edge*> *edges=arg->at(argIndex)->getEdges();
+ * Insert nodes for all intersections on the edges of a Geometry.
+ * Label the created nodes the same as the edge label if they do not
+ * already have a label.
+ * This allows nodes created by either self-intersections or
+ * mutual intersections to be labelled.
+ * Endpoint nodes will already be labelled from when they were inserted.
+ */
+void
+RelateComputer::computeIntersectionNodes(int argIndex)
+{
 	vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
-	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
+	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++)
+	{
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> *eiL=e->getEdgeIntersectionList()->list;
-		for(vector<EdgeIntersection*>::iterator eiIt=eiL->begin();eiIt<eiL->end();eiIt++) {
-			EdgeIntersection *ei=*eiIt;
+		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
+		EdgeIntersectionListIterator it=eiL->begin();
+		EdgeIntersectionListIterator end=eiL->end();
+		for( ; it!=end; ++it)
+		{
+			EdgeIntersection *ei=*it;
 			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
 			if (eLoc==Location::BOUNDARY)
+			{
 				n->setLabelBoundary(argIndex);
-			else {
-				if (n->getLabel()->isNull(argIndex))
-					n->setLabel(argIndex,Location::INTERIOR);
 			}
-			//Debug.println(n);
+			else
+			{
+				if (n->getLabel()->isNull(argIndex))
+				  n->setLabel(argIndex,Location::INTERIOR);
+			}
 		}
-//		delete eiL;
 	}
 }
 
-/**
-* For all intersections on the edges of a Geometry,
-* label the corresponding node IF it doesn't already have a label.
-* This allows nodes created by either self-intersections or
-* mutual intersections to be labelled.
-* Endpoint nodes will already be labelled from when they were inserted.
-*/
-void RelateComputer::labelIntersectionNodes(int argIndex) {
+/*
+ * For all intersections on the edges of a Geometry,
+ * label the corresponding node IF it doesn't already have a label.
+ * This allows nodes created by either self-intersections or
+ * mutual intersections to be labelled.
+ * Endpoint nodes will already be labelled from when they were inserted.
+ */
+void
+RelateComputer::labelIntersectionNodes(int argIndex)
+{
 	vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> *eiL=e->getEdgeIntersectionList()->list;
-		for(vector<EdgeIntersection*>::iterator eiIt=eiL->begin();eiIt<eiL->end();eiIt++) {
+		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
+		EdgeIntersectionListIterator eiIt=eiL->begin();
+		EdgeIntersectionListIterator eiEnd=eiL->end();
+		
+		for( ; eiIt!=eiEnd; ++eiIt)
+		{
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->find(ei->coord);
 			if (n->getLabel()->isNull(argIndex)) {
 				if (eLoc==Location::BOUNDARY)
-					n->setLabelBoundary(argIndex);
+				  n->setLabelBoundary(argIndex);
 				else
-					n->setLabel(argIndex,Location::INTERIOR);
+				  n->setLabel(argIndex,Location::INTERIOR);
 			}
-			//n.print(System.out);
 		}
-//		delete eiL;
 	}
 }
 
@@ -308,10 +286,13 @@ void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
 }
 
 
-void RelateComputer::labelNodeEdges() {
+void
+RelateComputer::labelNodeEdges()
+{
 	map<Coordinate*,Node*,CoordLT> &nMap=nodes->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
+	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++)
+	{
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		node->getEdges()->computeLabelling(arg);
 		//Debug.print(node.getEdges());
@@ -320,11 +301,15 @@ void RelateComputer::labelNodeEdges() {
 }
 
 /**
-* update the IM with the sum of the IMs for each component
-*/
-void RelateComputer::updateIM(IntersectionMatrix *imX) {
+ * update the IM with the sum of the IMs for each component
+ */
+void
+RelateComputer::updateIM(IntersectionMatrix *imX)
+{
 	//Debug.println(im);
-	for (vector<Edge*>::iterator ei=isolatedEdges->begin();ei<isolatedEdges->end();ei++) {
+	vector<Edge *>::iterator ei=isolatedEdges->begin();
+	for ( ; ei<isolatedEdges->end(); ei++)
+	{
 		Edge *e=*ei;
 		e->GraphComponent::updateIM(imX);
 		//Debug.println(im);
@@ -414,5 +399,45 @@ void RelateComputer::labelIsolatedNode(Node *n,int targetIndex) {
 	//debugPrintln(n.getLabel());
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.22  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
+ * Revision 1.21  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
+ * Revision 1.20  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
+ * Revision 1.19  2004/08/04 08:26:02  strk
+ * comments lift, stack allocation reduced
+ *
+ * Revision 1.18  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.17  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.16  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
+ * Revision 1.15  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

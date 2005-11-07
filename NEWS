@@ -26,6 +26,7 @@ Changes in 3.0.0
 - Added closed ring checks in IsValidOp
 - Changed operation/valid/*NestedRingTester classes interface
   to use Coordinate pointers instead of copies.
+- Changed EdgeIntersectionList to use a set instead of a vector
 
 Changes in 2.1.5CVS
 

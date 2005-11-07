@@ -5,11 +5,16 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ ********************************************************************** 
+ *
+ * Last port: geomgraph/EdgeIntersectionList.java rev. 1.3
  *
  **********************************************************************/
 
@@ -21,89 +26,47 @@
 
 namespace geos {
 
-EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge)
+EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge):
+	edge(newEdge)
 {
-	list=new vector<EdgeIntersection*>();
-	edge=newEdge;
 }
 
 EdgeIntersectionList::~EdgeIntersectionList()
 {
-	unsigned int size=list->size();
-	for(unsigned int i=0; i<size; i++) {
-		delete (*list)[i];
-	}
-	delete list;
+	for ( EdgeIntersectionListIterator it=nodeMap.begin();
+		it!=nodeMap.end(); it++) delete *it;
 }
 
 EdgeIntersection*
-EdgeIntersectionList::add(const Coordinate& coord, int segmentIndex, double dist)
+EdgeIntersectionList::add(const Coordinate& coord,
+	int segmentIndex, double dist)
 {
-#if DEBUG
-	cerr<<"["<<this<<"] EdgeIntersectionList::add("<<coord.toString()<<","<<segmentIndex<<","<<dist<<")"<<endl;
-#endif // DEBUG
-	vector<EdgeIntersection *>::iterator insertIt=list->begin();
-	bool isInList=findInsertionPoint(segmentIndex,dist,&insertIt);
-	EdgeIntersection *ei;
-	if (!isInList)
+	EdgeIntersection *eiNew=new EdgeIntersection(coord, segmentIndex, dist);
+	EdgeIntersectionListIterator it = nodeMap.find(eiNew);
+	if ( it != nodeMap.end() )
 	{
-#if DEBUG
-		cerr<<"  intersection not in list"<<endl;
-#endif // DEBUG
-		ei=new EdgeIntersection(coord,segmentIndex,dist);
-		list->insert(insertIt,ei);
+		delete eiNew;
+		return *it;
 	}
-	else
+
+	nodeMap.insert(eiNew);
+	return eiNew;
+}
+
+bool
+EdgeIntersectionList::isEmpty() const
+{
+	return nodeMap.empty();
+}
+
+bool
+EdgeIntersectionList::isIntersection(const Coordinate& pt) const
+{
+	EdgeIntersectionListIterator it=nodeMap.begin();
+	for (; it != nodeMap.end(); it++)
 	{
-		ei=*insertIt;
-#if DEBUG
-		cerr<<"  intersection already in list (should merge z)"<<endl;
-		cerr<<"  current: "<<ei->coord.toString()<<endl;
-		cerr<<"  intersection: "<<coord.toString()<<endl;
-#endif // DEBUG
-	}
-	return ei;
-}
-
-vector<EdgeIntersection*>::iterator
-EdgeIntersectionList::iterator()
-{
-	return list->begin();
-}
-
-bool
-EdgeIntersectionList::isEmpty()
-{
-	return list->empty();
-}
-
-bool
-EdgeIntersectionList::findInsertionPoint(int segmentIndex, double dist,vector<EdgeIntersection*>::iterator *insertIt)
-{
-	vector<EdgeIntersection *>::iterator findIt=list->begin();
-	//bool found=false;
-	while(findIt<list->end()) {
-		EdgeIntersection *ei=*findIt;
-		findIt++;
-		int compare=ei->compare(segmentIndex, dist);
-		// intersection found - insertIt.next() will retrieve it
-		if (compare==0) return true;
-		// this ei is past the intersection location, so intersection was not found
-		if (compare>0) return false;
-		// this ei was before the intersection point, so move to next
-		(*insertIt)++;
-	}
-	return false;
-}
-
-bool
-EdgeIntersectionList::isIntersection(const Coordinate& pt)
-{
-	vector<EdgeIntersection *>::iterator it;
-	for (it=list->begin();it<list->end();it++) {
 		EdgeIntersection *ei=*it;
-		if (ei->coord==pt)
-			return true;
+		if (ei->coord==pt) return true;
 	}
 	return false;
 }
@@ -111,7 +74,7 @@ EdgeIntersectionList::isIntersection(const Coordinate& pt)
 void
 EdgeIntersectionList::addEndpoints()
 {
-	int maxSegIndex=edge->pts->getSize()-1;
+	int maxSegIndex=edge->getNumPoints()-1;
 	add(edge->pts->getAt(0), 0, 0.0);
 	add(edge->pts->getAt(maxSegIndex), maxSegIndex, 0.0);
 }
@@ -122,11 +85,14 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList)
 	// ensure that the list has entries for the first and last point
 	// of the edge
 	addEndpoints();
-	vector<EdgeIntersection *>::iterator it=list->begin();
+
+	EdgeIntersectionListIterator it=nodeMap.begin();
+
 	// there should always be at least two entries in the list
 	EdgeIntersection *eiPrev=*it;
 	it++;
-	while (it<list->end()) {
+
+	while (it!=nodeMap.end()) {
 		EdgeIntersection *ei=*it;
 		Edge *newEdge=createSplitEdge(eiPrev,ei);
 		edgeList->push_back(newEdge);
@@ -135,8 +101,9 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList)
 	}
 }
 
-Edge*
-EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1)
+Edge *
+EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
+	EdgeIntersection *ei1)
 {
 #if DEBUG
 	cerr<<"["<<this<<"] EdgeIntersectionList::createSplitEdge()"<<endl;
@@ -191,11 +158,11 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *e
 }
 
 string
-EdgeIntersectionList::print()
+EdgeIntersectionList::print() const
 {
 	string out="Intersections: ";
-	vector<EdgeIntersection *>::iterator it;
-	for (it=list->begin();it<list->end();it++) {
+	EdgeIntersectionListIterator it=begin();
+	for (; it!=end(); it++) {
 		EdgeIntersection *ei=*it;
 		out+=ei->print();
 	}
@@ -206,6 +173,11 @@ EdgeIntersectionList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.11  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

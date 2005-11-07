@@ -19,15 +19,16 @@
 
 namespace geos {
 
-SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,SweepLineEventOBJ *newObj){
-	edgeSet=newEdgeSet;
-	xValue=x;
-	insertEvent=newInsertEvent;
-	eventType=INSERT;
-	if(insertEvent!=NULL)
-		eventType=DELETE;
-	obj=newObj;
-	deleteEventIndex=0;
+SweepLineEvent::SweepLineEvent(void* newEdgeSet, double x,
+	SweepLineEvent *newInsertEvent, SweepLineEventOBJ *newObj):
+		edgeSet(newEdgeSet),
+		obj(newObj),
+		xValue(x),
+		insertEvent(newInsertEvent),
+		deleteEventIndex(0)
+{
+	if(insertEvent!=NULL) eventType=DELETE;
+	else eventType=INSERT;
 }
 
 SweepLineEvent::~SweepLineEvent(){
@@ -37,37 +38,16 @@ SweepLineEvent::~SweepLineEvent(){
 	}
 }
 
-bool SweepLineEvent::isInsert() {
-	return insertEvent==NULL;
-}
-
-bool SweepLineEvent::isDelete() {
-	return insertEvent!=NULL;
-}
-
-SweepLineEvent* SweepLineEvent::getInsertEvent() {
-	return insertEvent;
-}
-
-int SweepLineEvent::getDeleteEventIndex() {
-	return deleteEventIndex;
-}
-
-void SweepLineEvent::setDeleteEventIndex(int newDeleteEventIndex) {
-	deleteEventIndex=newDeleteEventIndex;
-}
-
-SweepLineEventOBJ* SweepLineEvent::getObject() const {
-	return obj;
-}
-
 /**
-* ProjectionEvents are ordered first by their x-value, and then by their eventType.
-* It is important that Insert events are sorted before Delete events, so that
-* items whose Insert and Delete events occur at the same x-value will be
-* correctly handled.
-*/
-int SweepLineEvent::compareTo(SweepLineEvent *sle) {
+ * ProjectionEvents are ordered first by their x-value, and then by their
+ * eventType.
+ * It is important that Insert events are sorted before Delete events, so that
+ * items whose Insert and Delete events occur at the same x-value will be
+ * correctly handled.
+ */
+int
+SweepLineEvent::compareTo(SweepLineEvent *sle)
+{
 	if (xValue<sle->xValue) return -1;
 	if (xValue>sle->xValue) return 1;
 	if (eventType<sle->eventType) return -1;
@@ -75,7 +55,9 @@ int SweepLineEvent::compareTo(SweepLineEvent *sle) {
 	return 0;
 }
 
-string SweepLineEvent::print() {
+string
+SweepLineEvent::print()
+{
 	ostringstream s;
 
 	s<<"SweepLineEvent:";
@@ -87,20 +69,15 @@ string SweepLineEvent::print() {
 	return s.str();
 }
 
-bool
-SweepLineEventLessThen::operator()(const SweepLineEvent *f,
-	const SweepLineEvent *s) const
-{
-	if (f->xValue<s->xValue) return true;
-        if (f->xValue>s->xValue) return false;
-        if (f->eventType<s->eventType) return true;
-        return false;
-}
-
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.5  2005/11/04 15:42:52  strk
  * Fixed bug in SweepLineEventLessThen functor
  * (didn't conform to strict weak ordering).

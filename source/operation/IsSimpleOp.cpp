@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.17  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.16  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
@@ -116,8 +121,8 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph *graph)
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
 		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
-		vector<EdgeIntersection*> *intList=eiL->list;
-		for(vector<EdgeIntersection*>::iterator eiIt=intList->begin();eiIt<intList->end();eiIt++) {
+		EdgeIntersectionListIterator eiIt=eiL->begin();
+		for( ;eiIt!=eiL->end(); eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			if (!ei->isEndPoint(maxSegmentIndex))
 				return true;

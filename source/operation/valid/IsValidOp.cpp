@@ -313,7 +313,7 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph)
 	for(unsigned int i=0; i<edges->size(); ++i)
 	{
 		Edge *e=(*edges)[i];
-		checkSelfIntersectingRing(e->getEdgeIntersectionList());
+		checkNoSelfIntersectingRing(e->getEdgeIntersectionList());
 		if(validErr!=NULL) return;
 	}
 }
@@ -324,14 +324,15 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph)
  * If any occur more than once, that must be a self-intersection.
  */
 void
-IsValidOp::checkSelfIntersectingRing(EdgeIntersectionList *eiList)
+IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList *eiList)
 {
 	set<Coordinate*,CoordLT>nodeSet;
 	bool isFirst=true;
-	vector<EdgeIntersection*> *l=eiList->list;
-	for(unsigned int i=0; i<l->size(); ++i)
+	EdgeIntersectionListIterator it=eiList->begin();
+	EdgeIntersectionListIterator end=eiList->end();
+	for(; it!=end; ++it)
 	{
-		EdgeIntersection *ei=(*l)[i];
+		EdgeIntersection *ei=*it;
 		if (isFirst) {
 			isFirst=false;
 			continue;
@@ -623,6 +624,11 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.32  2005/11/04 11:04:09  strk
  * Ported revision 1.38 of IsValidOp.java (adding closed Ring checks).
  * Changed NestedRingTester classes to use Coorinate pointers

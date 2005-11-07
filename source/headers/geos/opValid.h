@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.8  2005/11/04 11:04:09  strk
  * Ported revision 1.38 of IsValidOp.java (adding closed Ring checks).
  * Changed NestedRingTester classes to use Coorinate pointers
@@ -370,7 +375,7 @@ private:
 	 * Algorithm is to count the number of times each node along edge occurs.
 	 * If any occur more than once, that must be a self-intersection.
 	 */
-	void checkSelfIntersectingRing(EdgeIntersectionList *eiList);
+	void checkNoSelfIntersectingRing(EdgeIntersectionList *eiList);
 
 	void checkTooFewPoints(GeometryGraph *graph);
 

@@ -429,8 +429,9 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		vector<EdgeIntersection*> *eil=e->eiList->list;
-		for (vector<EdgeIntersection*>::iterator eiIt=eil->begin();eiIt<eil->end();eiIt++) {
+		EdgeIntersectionList *eiL=e->eiList;
+		EdgeIntersectionListIterator eiIt=eiL->begin();
+		for ( ; eiIt!=eiL->end(); eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			addSelfIntersectionNode(argIndex,ei->coord,eLoc);
 		}
@@ -476,6 +477,11 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.11  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

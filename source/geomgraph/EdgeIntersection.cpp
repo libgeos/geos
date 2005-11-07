@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
  * Revision 1.3  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *
@@ -46,7 +51,9 @@ EdgeIntersection::~EdgeIntersection() {
 	//aaa
 }
 
-int EdgeIntersection::compare(int newSegmentIndex, double newDist) {
+int
+EdgeIntersection::compare(int newSegmentIndex, double newDist) const
+{
 	if (segmentIndex<newSegmentIndex) return -1;
 	if (segmentIndex>newSegmentIndex) return 1;
 	if (dist<newDist) return -1;
@@ -60,16 +67,19 @@ bool EdgeIntersection::isEndPoint(int maxSegmentIndex) {
 	return false;
 }
 
-string EdgeIntersection::print(){
+string
+EdgeIntersection::print() const
+{
 	ostringstream s;
 	s<<coord.toString()<<" seg#="<<segmentIndex<<" dist="<<dist;
 	return s.str();
 
 }
 
-int EdgeIntersection::compareTo(void* obj) {
-	EdgeIntersection* other=(EdgeIntersection*) obj;
-	return compare(other->segmentIndex,other->dist);
+int
+EdgeIntersection::compareTo(const EdgeIntersection *other) const
+{
+	return compare(other->segmentIndex, other->dist);
 }
 
 } // namespace geos
