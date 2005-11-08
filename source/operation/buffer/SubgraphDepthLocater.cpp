@@ -24,8 +24,7 @@
 namespace geos {
 
 SubgraphDepthLocater::SubgraphDepthLocater(vector<BufferSubgraph*> *nsg):
-	subgraphs(nsg),
-	seg(new LineSegment())
+	subgraphs(nsg)
 {
 	//seg=new LineSegment();
 	//cga=new RobustCGAlgorithms();
@@ -33,7 +32,7 @@ SubgraphDepthLocater::SubgraphDepthLocater(vector<BufferSubgraph*> *nsg):
 }
 
 SubgraphDepthLocater::~SubgraphDepthLocater(){
-	delete seg;
+	//delete seg;
 	//delete cga;
 }
 
@@ -91,19 +90,26 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt)
 }
 
 /**
-* Finds all non-horizontal segments intersecting the stabbing line
-* in the list of dirEdges->
-* The stabbing line is the ray to the right of stabbingRayLeftPt->
-*
-* @param stabbingRayLeftPt the left-hand origin of the stabbing line
-* @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
-*/
-void SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,vector<DirectedEdge*> *dirEdges,vector<DepthSegment*> *stabbedSegments){
+ * Finds all non-horizontal segments intersecting the stabbing line
+ * in the list of dirEdges.
+ * The stabbing line is the ray to the right of stabbingRayLeftPt.
+ *
+ * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+ * @param stabbedSegments the current list of DepthSegments
+ * intersecting the stabbing line
+ */
+void
+SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
+	vector<DirectedEdge*> *dirEdges,
+	vector<DepthSegment*> *stabbedSegments)
+{
+
 	/**
-	* Check all forward DirectedEdges only->  This is still general,
-	* because each Edge has a forward DirectedEdge->
-	*/
-	for(int i=0;i<(int)dirEdges->size();i++) {
+	 * Check all forward DirectedEdges only. This is still general,
+	 * because each Edge has a forward DirectedEdge.
+	 */
+	for (unsigned int i=0; i<dirEdges->size(); ++i)
+	{
 		DirectedEdge *de=(*dirEdges)[i];
 		if (!de->isForward())
 			continue;
@@ -121,7 +127,8 @@ void SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,vec
  * intersecting the stabbing line
  */
 void
-SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments)
+SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
+	DirectedEdge *dirEdge, vector<DepthSegment*> *stabbedSegments)
 {
 	const CoordinateSequence *pts=dirEdge->getEdge()->getCoordinates();
 
@@ -132,8 +139,8 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 	int n = pts->getSize()-1;
 	for (int i=0; i<n; ++i) {
 #ifndef SKIP_LS
-		seg->p0=pts->getAt(i);
-		seg->p1=pts->getAt(i + 1);
+		seg.p0=pts->getAt(i);
+		seg.p1=pts->getAt(i + 1);
 #else
 
 		const Coordinate *low=&(pts->getAt(i));
@@ -148,11 +155,11 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 
 #ifndef SKIP_LS
 		// ensure segment always points upwards
-		//if (seg->p0.y > seg->p1.y)
+		//if (seg.p0.y > seg.p1.y)
 		{
-			seg->reverse();
+			seg.reverse();
 #if DEBUG
-			cerr<<" reverse ("<<seg->toString()<<") ";
+			cerr<<" reverse ("<<seg.toString()<<") ";
 #endif
 		}
 #else
@@ -167,7 +174,7 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 		// skip segment if it is left of the stabbing line
 		// skip if segment is above or below stabbing line
 #ifndef SKIP_LS
-		double maxx=max(seg->p0.x, seg->p1.x);
+		double maxx=max(seg.p0.x, seg.p1.x);
 #else
 		double maxx=max(low->x, high->x);
 #endif
@@ -182,7 +189,7 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 		// skip horizontal segments (there will be a non-horizontal
 		// one carrying the same depth info
 #ifndef SKIP_LS
-		if (seg->isHorizontal())
+		if (seg.isHorizontal())
 #else
 		if (low->y == high->y)
 #endif
@@ -195,8 +202,8 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 
 		// skip if segment is above or below stabbing line
 #ifndef SKIP_LS
-		if (stabbingRayLeftPt.y < seg->p0.y ||
-			stabbingRayLeftPt.y > seg->p1.y)
+		if (stabbingRayLeftPt.y < seg.p0.y ||
+			stabbingRayLeftPt.y > seg.p1.y)
 #else
 		if (stabbingRayLeftPt.y < low->y ||
 			stabbingRayLeftPt.y > high->y)
@@ -210,7 +217,7 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 
 		// skip if stabbing ray is right of the segment
 #ifndef SKIP_LS
-		if (CGAlgorithms::computeOrientation(seg->p0, seg->p1,
+		if (CGAlgorithms::computeOrientation(seg.p0, seg.p1,
 #else
 		if (CGAlgorithms::computeOrientation(*low, *high,
 #endif
@@ -226,7 +233,7 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 		// stabbing line cuts this segment, so record it
 		int depth=dirEdge->getDepth(Position::LEFT);
 		// if segment direction was flipped, use RHS depth instead
-		if (! (seg->p0==pts->getAt(i)))
+		if (! (seg.p0==pts->getAt(i)))
 			depth=dirEdge->getDepth(Position::RIGHT);
 #else
 		int depth = swap ?
@@ -240,89 +247,21 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,Directed
 #endif
 
 #ifdef SKIP_LS
-		seg->p0 = *low;
-		seg->p1 = *high;
+		seg.p0 = *low;
+		seg.p1 = *high;
 #endif
 		DepthSegment *ds=new DepthSegment(seg, depth);
 		stabbedSegments->push_back(ds);
 	}
 }
 
-DepthSegment::DepthSegment(LineSegment *seg, int depth){
-	// input seg is assumed to be normalized
-	upwardSeg=new LineSegment(*seg);
-	//upwardSeg->normalize();
-	leftDepth=depth;
-}
-
-DepthSegment::~DepthSegment(){
-	delete upwardSeg;
-}
-/**
-* Defines a comparision operation on DepthSegments
-* which orders them left to right
-*
-* <pre>
-* DS1 < DS2   if   DS1->seg is left of DS2->seg
-* DS1 > DS2   if   DS1->seg is right of DS2->seg
-* </pre>
-*
-* @param obj
-* @return
-*/
-int DepthSegment::compareTo(void* obj){
-	DepthSegment *other=(DepthSegment*) obj;
-	/**
-	* try and compute a determinate orientation for the segments->
-	* Test returns 1 if other is left of this (i->e-> this > other)
-	*/
-	int orientIndex=upwardSeg->orientationIndex(other->upwardSeg);
-	/**
-	* If comparison between this and other is indeterminate,
-	* try the opposite call order->
-	* orientationIndex value is 1 if this is left of other,
-	* so have to flip sign to get proper comparison value of
-	* -1 if this is leftmost
-	*/
-	if (orientIndex==0)
-		orientIndex=-1 * other->upwardSeg->orientationIndex(upwardSeg);
-	// if orientation is determinate, return it
-	if (orientIndex != 0)
-		return orientIndex;
-	// otherwise, segs must be collinear - sort based on minimum X value
-	return compareX(upwardSeg, other->upwardSeg);
-}
-
-/**
-* Compare two collinear segments for left-most ordering->
-* If segs are vertical, use vertical ordering for comparison->
-* If segs are equal, return 0->
-* Segments are assumed to be directed so that the second coordinate is >= to the first
-* (e->g-> up and to the right)->
-*
-* @param seg0 a segment to compare
-* @param seg1 a segment to compare
-* @return
-*/
-int DepthSegment::compareX(LineSegment *seg0, LineSegment *seg1){
-	int compare0=seg0->p0.compareTo(seg1->p0);
-	if (compare0!=0)
-		return compare0;
-	return seg0->p1.compareTo(seg1->p1);
-
-}
-
-bool DepthSegmentLT(DepthSegment *first, DepthSegment *second) {
-	if (first->compareTo(second)<0)
-		return true;
-	else
-		return false;
-}
-
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/11/08 20:12:44  strk
+ * Memory overhead reductions in buffer operations.
+ *
  * Revision 1.14  2005/07/11 10:27:14  strk
  * Fixed initializzazion lists
  *

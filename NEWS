@@ -27,6 +27,11 @@ Changes in 3.0.0
 - Changed operation/valid/*NestedRingTester classes interface
   to use Coordinate pointers instead of copies.
 - Changed EdgeIntersectionList to use a set instead of a vector
+- Changed DepthSegment to store a real Coordinate rather then a pointer.
+- Changed SubgraphDepthLocater to store real containers rather then pointers.
+- Changed BufferSubgraph to store a real RightmostEdgeFinder and real
+  containers rather then pointers.
+- Stronger methods typing (removed some void * args).
 
 Changes in 2.1.5CVS
 

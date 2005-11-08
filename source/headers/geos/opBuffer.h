@@ -80,11 +80,11 @@ Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
  */
 class BufferSubgraph {
 private:
-	RightmostEdgeFinder *finder;
+	RightmostEdgeFinder finder;
 
-	vector<DirectedEdge*> *dirEdgeList;
+	vector<DirectedEdge*> dirEdgeList;
 
-	vector<Node*> *nodes;
+	vector<Node*> nodes;
 
 	Coordinate *rightMostCoord;
 
@@ -173,7 +173,7 @@ public:
 	 * that shells are guaranteed to
 	 * be built before holes.
 	 */
-	int compareTo(void* o);
+	int compareTo(BufferSubgraph *);
 
 	/**
 	 * Computes the envelope of the edges in the subgraph.
@@ -183,11 +183,12 @@ public:
 	 */
 	Envelope *getEnvelope();
 };
+
 // INLINES
 Coordinate* BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
-vector<Node*>* BufferSubgraph::getNodes() { return nodes; }
+vector<Node*>* BufferSubgraph::getNodes() { return &nodes; }
 vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
-	return dirEdgeList;
+	return &dirEdgeList;
 }
 
 /*
@@ -595,36 +596,40 @@ private:
  */
 class DepthSegment {
 private:
-	LineSegment *upwardSeg;
+	LineSegment upwardSeg;
+
 	/**
-	* Compare two collinear segments for left-most ordering.
-	* If segs are vertical, use vertical ordering for comparison.
-	* If segs are equal, return 0.
-	* Segments are assumed to be directed so that the second coordinate is >= to the first
-	* (e.g. up and to the right).
-	*
-	* @param seg0 a segment to compare
-	* @param seg1 a segment to compare
-	* @return
-	*/
+	 * Compare two collinear segments for left-most ordering.
+	 * If segs are vertical, use vertical ordering for comparison.
+	 * If segs are equal, return 0.
+	 * Segments are assumed to be directed so that the second
+	 * coordinate is >= to the first
+	 * (e.g. up and to the right).
+	 *
+	 * @param seg0 a segment to compare
+	 * @param seg1 a segment to compare
+	 * @return
+	 */
 	int compareX(LineSegment *seg0, LineSegment *seg1);
+
 public:
 	int leftDepth;
-	DepthSegment(LineSegment *seg, int depth);
+	DepthSegment(const LineSegment &seg, int depth);
 	~DepthSegment();
+
 	/**
-	* Defines a comparision operation on DepthSegments
-	* which orders them left to right
-	*
-	* <pre>
-	* DS1 < DS2   if   DS1.seg is left of DS2.seg
-	* DS1 > DS2   if   DS1.seg is right of DS2.seg
-	* </pre>
-	*
-	* @param obj
-	* @return
-	*/
-	int compareTo(void* obj);
+	 * Defines a comparision operation on DepthSegments
+	 * which orders them left to right
+	 *
+	 * <pre>
+	 * DS1 < DS2   if   DS1.seg is left of DS2.seg
+	 * DS1 > DS2   if   DS1.seg is right of DS2.seg
+	 * </pre>
+	 *
+	 * @param obj
+	 * @return
+	 */
+	int compareTo(DepthSegment *);
 };
 
 bool DepthSegmentLT(DepthSegment *first, DepthSegment *second);
@@ -646,7 +651,7 @@ public:
 	int getDepth(Coordinate &p);
 private:
 	vector<BufferSubgraph*> *subgraphs;
-	LineSegment *seg;
+	LineSegment seg;
 	//CGAlgorithms *cga;
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line.
@@ -774,6 +779,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/08 20:12:44  strk
+ * Memory overhead reductions in buffer operations.
+ *
  * Revision 1.9  2005/06/30 18:31:48  strk
  * Ported SubgraphDepthLocator optimizations from JTS code
  *

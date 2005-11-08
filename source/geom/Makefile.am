@@ -133,6 +133,7 @@ EXTERNAL_SOURCES =  \
 	../operation/buffer/BufferBuilder.cpp \
 	../operation/buffer/BufferOp.cpp \
 	../operation/buffer/BufferSubgraph.cpp \
+	../operation/buffer/DepthSegment.cpp \
 	../operation/buffer/OffsetCurveBuilder.cpp \
 	../operation/buffer/OffsetCurveSetBuilder.cpp \
 	../operation/buffer/RightmostEdgeFinder.cpp \

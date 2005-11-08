@@ -1615,89 +1615,120 @@ public:
  */
 class LineSegment {
 public:
+
 	Coordinate p0; /// Segment start
+
 	Coordinate p1; /// Segemnt end
+
 	LineSegment(void);
+
 	LineSegment(const LineSegment &ls);
+
 	LineSegment(const Coordinate& c0, const Coordinate& c1);
+
 	virtual ~LineSegment(void);
+
 	virtual void setCoordinates(const Coordinate& c0, const Coordinate& c1);
+
 	virtual const Coordinate& getCoordinate(int i) const;
+
 	virtual void setCoordinates(const LineSegment ls);
+
 	virtual double getLength() const;
+
 	/**
-	* Tests whether the segment is horizontal.
-	*
-	* @return <code>true</code> if the segment is horizontal
-	*/
+	 * Tests whether the segment is horizontal.
+	 *
+	 * @return <code>true</code> if the segment is horizontal
+	 */
 	virtual bool isHorizontal() const;
+
 	/**
-	* Tests whether the segment is vertical.
-	*
-	* @return <code>true</code> if the segment is vertical
-	*/
+	 * Tests whether the segment is vertical.
+	 *
+	 * @return <code>true</code> if the segment is vertical
+	 */
 	virtual bool isVertical() const;
+
 	/**
-	* Determines the orientation of a LineSegment relative to this segment.
-	* The concept of orientation is specified as follows:
-	* Given two line segments A and L,
-	* <ul
-	* <li>A is to the left of a segment L if A lies wholly in the
-	* closed half-plane lying to the left of L
-	* <li>A is to the right of a segment L if A lies wholly in the
-	* closed half-plane lying to the right of L
-	* <li>otherwise, A has indeterminate orientation relative to L. This
-	* happens if A is collinear with L or if A crosses the line determined by L.
-	* </ul>
-	*
-	* @param seg the LineSegment to compare
-	*
-	* @return 1 if <code>seg</code> is to the left of this segment
-	* @return -1 if <code>seg</code> is to the right of this segment
-	* @return 0 if <code>seg</code> has indeterminate orientation relative to this segment
-	*/
+	 * Determines the orientation of a LineSegment relative to this segment.
+	 * The concept of orientation is specified as follows:
+	 * Given two line segments A and L,
+	 * <ul
+	 * <li>A is to the left of a segment L if A lies wholly in the
+	 * closed half-plane lying to the left of L
+	 * <li>A is to the right of a segment L if A lies wholly in the
+	 * closed half-plane lying to the right of L
+	 * <li>otherwise, A has indeterminate orientation relative to L.
+	 *     This happens if A is collinear with L or if A crosses
+	 *     the line determined by L.
+	 * </ul>
+	 *
+	 * @param seg the LineSegment to compare
+	 *
+	 * @return 1 if seg is to the left of this segment
+	 * @return -1 if seg is to the right of this segment
+	 * @return 0 if seg has indeterminate orientation relative
+	 *	     to this segment
+	 */
 	virtual int orientationIndex(LineSegment *seg) const;
+
 	virtual void reverse();
+
 	virtual void normalize();
+
 	virtual double angle() const;
+
 	virtual double distance(const LineSegment ls) const;
+
 	/**
-	* Computes the distance between this line segment and a point.
-	*/
+	 * Computes the distance between this line segment and a point.
+	 */
 	virtual double distance(const Coordinate& p) const;
+
 	/**
-	* Computes the perpendicular distance between the (infinite) line defined
-	* by this line segment and a point.
-	*/
+	 * Computes the perpendicular distance between the (infinite)
+	 * line defined by this line segment and a point.
+	 */
 	virtual double distancePerpendicular(const Coordinate& p) const;
+
 	virtual double projectionFactor(const Coordinate& p) const;
+
 	virtual Coordinate* project(const Coordinate& p) const;
+
 	virtual LineSegment* project(const LineSegment *seg) const;
+
 	virtual Coordinate* closestPoint(const Coordinate& p) const;
+
 	virtual int compareTo(const LineSegment other) const;
+
 	virtual bool equalsTopo(const LineSegment other) const;
 
 	/**
-	* Computes the closest points on two line segments.
-	* @param p the point to find the closest point to
-	* @return a pair of Coordinates which are the closest points on the line segments
-	* The returned CoordinateList must be deleted by caller
-	*/
+	 * Computes the closest points on two line segments.
+	 * @param p the point to find the closest point to
+	 * @return a pair of Coordinates which are the closest points on
+	 * the line segments.
+	 * The returned CoordinateList must be deleted by caller
+	 */
 	virtual CoordinateSequence* closestPoints(const LineSegment *line);
 
 	/**
-	* Computes an intersection point between two segments, if there is one.
-	* There may be 0, 1 or many intersection points between two segments.
-	* If there are 0, null is returned. If there is 1 or more, a single one
-	* is returned (chosen at the discretion of the algorithm).  If
-	* more information is required about the details of the intersection,
-	* the {@link RobustLineIntersector} class should be used.
-	*
-	* @param line
-	* @return an intersection point, or <code>null</code> if there is none
-	*/
+	 * Computes an intersection point between two segments,
+	 * if there is one.
+	 * There may be 0, 1 or many intersection points between two segments.
+	 * If there are 0, null is returned. If there is 1 or more, a single
+	 * one is returned (chosen at the discretion of the algorithm). 
+	 * If more information is required about the details of the
+	 * intersection, the LineIntersector class should be used.
+	 *
+	 * @param line
+	 * @return an intersection point, or <code>null</code> if there is none
+	 */
 	Coordinate* intersection(const LineSegment *line) const;
+
 	virtual string toString() const;
+
 private:
 #ifdef INT64_CONST_IS_I64
   static const int64 serialVersionUID=3252005833466256227I64;
@@ -2590,6 +2621,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48  2005/11/08 20:12:44  strk
+ * Memory overhead reductions in buffer operations.
+ *
  * Revision 1.47  2005/11/08 10:03:28  strk
  * Set library version to 2.2.0.
  * Cleaned up Doxygen warnings.

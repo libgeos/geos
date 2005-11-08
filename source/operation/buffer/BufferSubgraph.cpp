@@ -24,22 +24,13 @@ namespace geos {
 
 // Argument is unused
 BufferSubgraph::BufferSubgraph(CGAlgorithms *cga):
-	finder(new RightmostEdgeFinder()),
-	dirEdgeList(new vector<DirectedEdge*>()),
-	nodes(new vector<Node*>()),
 	rightMostCoord(NULL),
 	env(NULL)
 {
-	//dirEdgeList=new vector<DirectedEdge*>();
-	//nodes=new vector<Node*>();
-	//rightMostCoord=NULL;
-	//finder=new RightmostEdgeFinder(cga);
 }
 
-BufferSubgraph::~BufferSubgraph() {
-	delete dirEdgeList;
-	delete nodes;
-	delete finder;
+BufferSubgraph::~BufferSubgraph()
+{
 	delete env;
 }
 
@@ -49,11 +40,12 @@ BufferSubgraph::~BufferSubgraph() {
  *
  * @param node a node to start the graph traversal from
  */
-void BufferSubgraph::create(Node *node)
+void
+BufferSubgraph::create(Node *node)
 {
 	addReachable(node);
-	finder->findEdge(dirEdgeList);
-	rightMostCoord=&(finder->getCoordinate());
+	finder.findEdge(&dirEdgeList);
+	rightMostCoord=&(finder.getCoordinate());
 }
 
 /**
@@ -65,14 +57,13 @@ void BufferSubgraph::create(Node *node)
 void
 BufferSubgraph::addReachable(Node *startNode)
 {
-	vector<Node*> *nodeStack=new vector<Node*>();
-	nodeStack->push_back(startNode);
-	while (!nodeStack->empty()) {
-		Node *node=*(nodeStack->end()-1);
-		nodeStack->pop_back();
-		add(node, nodeStack);
+	vector<Node*> nodeStack;
+	nodeStack.push_back(startNode);
+	while (!nodeStack.empty()) {
+		Node *node=nodeStack.back();
+		nodeStack.pop_back();
+		add(node, &nodeStack);
 	}
-	delete nodeStack;
 }
 
 /**
@@ -84,11 +75,11 @@ void
 BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 {
 	node->setVisited(true);
-	nodes->push_back(node);
+	nodes.push_back(node);
 	vector<EdgeEnd*> *ees=node->getEdges()->getEdges();
-	for(int i=0;i<(int)ees->size();i++) {
+	for(unsigned int i=0; i<ees->size(); ++i) {
 		DirectedEdge *de=(DirectedEdge*) (*ees)[i];
-		dirEdgeList->push_back(de);
+		dirEdgeList.push_back(de);
 		DirectedEdge *sym=de->getSym();
 		Node *symNode=sym->getNode();
 		/**
@@ -103,8 +94,9 @@ BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 void
 BufferSubgraph::clearVisitedEdges()
 {
-	for(int i=0;i<(int)dirEdgeList->size();i++) {
-		DirectedEdge *de=(*dirEdgeList)[i];
+	for(unsigned int i=0; i<dirEdgeList.size(); ++i)
+	{
+		DirectedEdge *de=dirEdgeList[i];
 		de->setVisited(false);
 	}
 }
@@ -114,7 +106,7 @@ BufferSubgraph::computeDepth(int outsideDepth)
 {
 	clearVisitedEdges();
 	// find an outside edge to assign depth to
-	DirectedEdge *de=finder->getEdge();
+	DirectedEdge *de=finder.getEdge();
 #if DEBUG
 cerr<<"outside depth: "<<outsideDepth<<endl;
 #endif
@@ -177,11 +169,11 @@ void
 BufferSubgraph::findResultEdges()
 {
 #if DEBUG
-	cerr<<"BufferSubgraph::findResultEdges got "<<dirEdgeList->size()<<" edges"<<endl;
+	cerr<<"BufferSubgraph::findResultEdges got "<<dirEdgeList.size()<<" edges"<<endl;
 #endif
-	for(unsigned int i=0; i<dirEdgeList->size(); ++i)
+	for(unsigned int i=0; i<dirEdgeList.size(); ++i)
 	{
-		DirectedEdge *de=(*dirEdgeList)[i];
+		DirectedEdge *de=dirEdgeList[i];
 
 		/**
 		 * Select edges which have an interior depth on the RHS
@@ -217,9 +209,8 @@ BufferSubgraph::findResultEdges()
  * guaranteed to be built before holes.
  */
 int
-BufferSubgraph::compareTo(void* o)
+BufferSubgraph::compareTo(BufferSubgraph *graph)
 {
-	BufferSubgraph *graph=(BufferSubgraph*) o;
 	if (rightMostCoord->x<graph->rightMostCoord->x) {
 		return -1;
 	}
@@ -278,10 +269,10 @@ BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 }
 
 bool
-BufferSubgraph::contains(set<Node*>&nodes,Node *node)
+BufferSubgraph::contains(set<Node*>&nodeSet, Node *node)
 {
 	//bool result=false;
-	if ( nodes.find(node) != nodes.end() ) return true;
+	if ( nodeSet.find(node) != nodeSet.end() ) return true;
 	return false;
 }
 
@@ -290,10 +281,10 @@ BufferSubgraph::getEnvelope()
 {
 	if (env == NULL) {
 		env = new Envelope();
-		unsigned int size = dirEdgeList->size();
+		unsigned int size = dirEdgeList.size();
 		for(unsigned int i=0; i<size; ++i)
 		{
-			DirectedEdge *dirEdge=(*dirEdgeList)[i];
+			DirectedEdge *dirEdge=dirEdgeList[i];
 			const CoordinateSequence *pts = dirEdge->getEdge()->getCoordinates();
 			int n = pts->getSize()-1;
 			for (int j=0; j<n; ++j) {
@@ -308,6 +299,9 @@ BufferSubgraph::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/11/08 20:12:44  strk
+ * Memory overhead reductions in buffer operations.
+ *
  * Revision 1.18  2005/06/30 18:31:48  strk
  * Ported SubgraphDepthLocator optimizations from JTS code
  *
