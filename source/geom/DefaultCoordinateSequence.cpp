@@ -14,49 +14,41 @@
  **********************************************************************/
 
 #include <geos/geom.h>
-//#include <stdio.h>
 
 namespace geos {
 
-//DefaultCoordinateSequence::DefaultCoordinateSequence(const CoordinateSequence *c){
-//	vect=new vector<Coordinate>();
-//	int size=c->getSize();
-//	for(int i=0; i<size; i++) {
-//		vect->push_back(c->getAt(i));
-//	}
-//}
-
-DefaultCoordinateSequence::DefaultCoordinateSequence() {
-	vect=new vector<Coordinate>();
-}
-
-DefaultCoordinateSequence::DefaultCoordinateSequence(int n) {
-	vect=new vector<Coordinate>(n);
-}
-
-//DefaultCoordinateSequence::DefaultCoordinateSequence(const Coordinate& c) {
-//	vect=new vector<Coordinate>(1,c);
-//}
-
-DefaultCoordinateSequence::DefaultCoordinateSequence(vector<Coordinate> *coords)
+DefaultCoordinateSequence::DefaultCoordinateSequence():
+	vect(new vector<Coordinate>())
 {
-	if ( ! coords ) vect = new vector<Coordinate>();
-	else vect=coords;
 }
 
-DefaultCoordinateSequence::DefaultCoordinateSequence(const DefaultCoordinateSequence &c) {
-	vect=new vector<Coordinate>(*(c.vect));
+DefaultCoordinateSequence::DefaultCoordinateSequence(int n):
+	vect(new vector<Coordinate>(n))
+{
+}
+
+DefaultCoordinateSequence::DefaultCoordinateSequence(
+	vector<Coordinate> *coords): vect(coords)
+{
+	if ( ! vect ) vect = new vector<Coordinate>();
+}
+
+DefaultCoordinateSequence::DefaultCoordinateSequence(
+	const DefaultCoordinateSequence &c):
+		vect(new vector<Coordinate>(*(c.vect)))
+{
 }
 
 CoordinateSequence *
-DefaultCoordinateSequence::clone() const {
+DefaultCoordinateSequence::clone() const
+{
 	return new DefaultCoordinateSequence(*this);
 }
 
-void DefaultCoordinateSequence::setPoints(const vector<Coordinate> &v) {
-	//vect->swap(v);
-	delete vect;
-	vect=new vector<Coordinate>(v);
+void
+DefaultCoordinateSequence::setPoints(const vector<Coordinate> &v)
+{
+	vect->assign(v.begin(), v.end());
 }
 
 const vector<Coordinate>*
@@ -65,39 +57,57 @@ DefaultCoordinateSequence::toVector() const
 	return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
-bool DefaultCoordinateSequence::isEmpty() const {
+bool
+DefaultCoordinateSequence::isEmpty() const
+{
 	return vect->empty();
 }
 
-void DefaultCoordinateSequence::add(const Coordinate& c){
+void
+DefaultCoordinateSequence::add(const Coordinate& c)
+{
 	vect->push_back(c);
 }
 
-int DefaultCoordinateSequence::getSize() const {
-	return (int) vect->size();
+int
+DefaultCoordinateSequence::getSize() const
+{
+	return (int)vect->size();
 }
 
-const Coordinate& DefaultCoordinateSequence::getAt(int pos) const {
-//	if (pos>=0 && pos<=vect->size()-1) 
-		return (*vect)[pos];
-//	else
-//		cerr<<"DefaultCoordinateSequence exception: can't retrieve element\n";
+const Coordinate &
+DefaultCoordinateSequence::getAt(int pos) const
+{
+#if PARANOIA_LEVEL > 0
+	if (pos<0 || pos>=vect->size()) 
+	throw IllegalArgumentException("Coordinate number out of range");
+#endif
+	return (*vect)[pos];
 }
 
-void DefaultCoordinateSequence::setAt(const Coordinate& c, int pos){
-//	if (pos>=0 && pos<=vect->size()-1) 
-		(*vect)[pos]=c;
-//	else
-//		throw "DefaultCoordinateSequence exception: can't change element\n";
-}
-void DefaultCoordinateSequence::deleteAt(int pos){
-//	if (pos>=0 && pos<=vect->size()-1) 
-		vect->erase(vect->begin()+pos);
-//	else
-//		throw "DefaultCoordinateSequence exception: can't remove element\n";
+void
+DefaultCoordinateSequence::setAt(const Coordinate& c, int pos)
+{
+#if PARANOIA_LEVEL > 0
+	if (pos<0 || pos>=vect->size()) 
+	throw IllegalArgumentException("Coordinate number out of range");
+#endif
+	(*vect)[pos]=c;
 }
 
-string DefaultCoordinateSequence::toString() const {
+void
+DefaultCoordinateSequence::deleteAt(int pos)
+{
+#if PARANOIA_LEVEL > 0
+	if (pos<0 || pos>=vect->size()) 
+	throw IllegalArgumentException("Coordinate number out of range");
+#endif
+	vect->erase(vect->begin()+pos);
+}
+
+string
+DefaultCoordinateSequence::toString() const
+{
 	string result("");
 	if (getSize()>0) {
 		//char buffer[100];
@@ -112,15 +122,16 @@ string DefaultCoordinateSequence::toString() const {
 	return result;
 }
 
-DefaultCoordinateSequence::~DefaultCoordinateSequence() {
+DefaultCoordinateSequence::~DefaultCoordinateSequence()
+{
 	delete vect;
 }
 
 void
 DefaultCoordinateSequence::expandEnvelope(Envelope &env) const
 {
-	int size = (int)vect->size();
-	for (int i=0; i<size; i++) env.expandToInclude((*vect)[i]);
+	unsigned int size = vect->size();
+	for (unsigned int i=0; i<size; i++) env.expandToInclude((*vect)[i]);
 }
 
 double
@@ -128,7 +139,8 @@ DefaultCoordinateSequence::getOrdinate(int index, int ordinateIndex) const
 {
 
 #if PARANOIA_LEVEL > 0
-	if ( index < 0 || index > vect->size() ) return DoubleNotANumber;
+	if ( index < 0 || index >= vect->size() ) 
+	throw IllegalArgumentException("Coordinate number out of range");
 #endif
 
 	switch (ordinateIndex)
@@ -150,7 +162,8 @@ DefaultCoordinateSequence::setOrdinate(int index, int ordinateIndex,
 {
 
 #if PARANOIA_LEVEL > 0
-	if ( index < 0 || index > vect->size() ) return;
+	if ( index < 0 || index >= vect->size() ) 
+	throw IllegalArgumentException("Coordinate number out of range");
 #endif
 
 	switch (ordinateIndex)
@@ -171,6 +184,9 @@ DefaultCoordinateSequence::setOrdinate(int index, int ordinateIndex,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/08 12:32:41  strk
+ * Cleanups, ::setPoint small improvement
+ *
  * Revision 1.5  2005/04/29 11:52:40  strk
  * Added new JTS interfaces for CoordinateSequence and factories,
  * removed example implementations to reduce maintainance costs.
