@@ -160,10 +160,6 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 /*
  * If edges which have undergone dimensional collapse are found,
  * replace them with a new edge which is a L edge
- *
- * TODO: optimize this function, it might be possible
- *       to simply replace original edge with the
- *	 collapsed one, w/out using all these vectors
  */
 void
 OverlayOp::replaceCollapsedEdges()
@@ -843,6 +839,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.44  2005/11/08 11:33:10  strk
+ * comments cleanup
+ *
  * Revision 1.43  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.
