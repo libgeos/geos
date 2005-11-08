@@ -1075,7 +1075,7 @@ class GeometryFactory;
  *  analysis methods, it will throw an exception. If possible the exception will
  *  report the location of the collapse. <P>
  *
- *  #equals(Object) and #hashCode are not overridden, so that when two
+ *  equals(Object) and hashCode are not overridden, so that when two
  *  topologically equal Geometries are added to HashMaps and HashSets, they
  *  remain distinct. This behaviour is desired in many cases.
  *
@@ -2432,6 +2432,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34.2.2  2005/11/08 09:08:07  strk
+ * Cleaned up a couple of Doxygen warnings
+ *
  * Revision 1.34.2.1  2005/05/23 18:16:40  strk
  * more math.h to cmath conversions
  *

@@ -289,11 +289,11 @@ void Geometry::geometryChanged() {
 }
 
 /**
-* Notifies this Geometry that its Coordinates have been changed by an external
-* party. When #geometryChanged is called, this method will be called for
-* this Geometry and its component Geometries.
-* @see #apply(GeometryComponentFilter)
-*/
+ * Notifies this Geometry that its Coordinates have been changed by an external
+ * party. When geometryChanged is called, this method will be called for
+ * this Geometry and its component Geometries.
+ * @see apply(GeometryComponentFilter *)
+ */
 void Geometry::geometryChangedAction() {
 	delete envelope;
 	envelope=NULL;
@@ -896,6 +896,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.72.2.4  2005/11/08 09:08:07  strk
+ * Cleaned up a couple of Doxygen warnings
+ *
  * Revision 1.72.2.3  2005/08/22 13:30:32  strk
  * Fixed comparator functions used with STL sort() algorithm to
  * implement StrictWeakOrdering semantic.
