@@ -36,9 +36,39 @@ namespace geos {
  *
  * \section intro_sec Introduction
  *
- * Geometry Engine Open Source is a C++ port of the Java Topology Suite.
+ * Geometry Engine Open Source is a C++ port of the Java Topology Suite
+ * released under the LGPL license.
+ * It has interfaces for C++, C and python (though swig).
  *
  * \section getstart_sec Getting Started
+ *
+ * The recommended low-level interface to the GEOS library
+ * is the simplified \ref c_iface. This will ensure stability of the
+ * API and the ABI of the library during performance improvements
+ * that will likely change classes definitions.
+ *
+ * If you prefer troubles you can use the \ref cpp_iface.
+ */
+
+/** \page c_iface C wrapper interface
+ *
+ * \section Overview
+ *
+ * This is the preferred access method for GEOS.
+ *
+ * It is designed to keep binary compatibility across releases.
+ *
+ * \section Usage
+ *
+ * In order to use the C-API of geos you must link your code against
+ * libgeos_c.so and include the geos_c.h header file, which also contain
+ * function-level documentation.
+ *
+ */
+
+/** \page cpp_iface C++ interface
+ *
+ * \section Overview
  *
  * Main class is geos::Geometry, from which all geometry types
  * derive.
@@ -292,9 +322,9 @@ void Geometry::geometryChanged() {
 
 /**
 * Notifies this Geometry that its Coordinates have been changed by an external
-* party. When #geometryChanged is called, this method will be called for
+* party. When geometryChanged is called, this method will be called for
 * this Geometry and its component Geometries.
-* @see #apply(GeometryComponentFilter)
+* @see apply(GeometryComponentFilter *)
 */
 void Geometry::geometryChangedAction() {
 	delete envelope;
@@ -903,6 +933,12 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.80  2005/11/08 10:03:28  strk
+ * Set library version to 2.2.0.
+ * Cleaned up Doxygen warnings.
+ * Inlined more Envelope methods.
+ * Dropped deprecated Envelope::overlaps methods.
+ *
  * Revision 1.79  2005/08/22 13:31:16  strk
  * Fixed comparator functions used with STL sort() algorithm to
  * implement StrictWeakOrdering semantic.

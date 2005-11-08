@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -19,12 +20,12 @@
 namespace geos {
 
 /**
-* Test the point q to see whether it intersects the Envelope defined by p1-p2
-* @param p1 one extremal point of the envelope
-* @param p2 another extremal point of the envelope
-* @param q the point to test for intersection
-* @return <code>true</code> if q intersects the envelope p1-p2
-*/
+ * Test the point q to see whether it intersects the Envelope defined by p1-p2
+ * @param p1 one extremal point of the envelope
+ * @param p2 another extremal point of the envelope
+ * @param q the point to test for intersection
+ * @return <code>true</code> if q intersects the envelope p1-p2
+ */
 bool
 Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
 		const Coordinate& q)
@@ -37,16 +38,20 @@ Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
 	}
 	return false;
 }
+
 /**
-* Test the envelope defined by p1-p2 for intersection
-* with the envelope defined by q1-q2
-* @param p1 one extremal point of the envelope P
-* @param p2 another extremal point of the envelope P
-* @param q1 one extremal point of the envelope Q
-* @param q2 another extremal point of the envelope Q
-* @return <code>true</code> if Q intersects P
-*/
-bool Envelope::intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) {
+ * Test the envelope defined by p1-p2 for intersection
+ * with the envelope defined by q1-q2
+ * @param p1 one extremal point of the envelope P
+ * @param p2 another extremal point of the envelope P
+ * @param q1 one extremal point of the envelope Q
+ * @param q2 another extremal point of the envelope Q
+ * @return <code>true</code> if Q intersects P
+ */
+bool
+Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
+	const Coordinate& q1, const Coordinate& q2)
+{
 	double minq=min(q1.x,q2.x);
 	double maxq=max(q1.x,q2.x);
 	double minp=min(p1.x,p2.x);
@@ -69,7 +74,9 @@ bool Envelope::intersects(const Coordinate& p1,const Coordinate& p2,const Coordi
 /**
  * Compute the distance between two points specified by their ordinate values
  */
-double Envelope::distance(double x0,double y0,double x1,double y1) {
+double
+Envelope::distance(double x0,double y0,double x1,double y1)
+{
 	double dx=x1-x0;
 	double dy=y1-y0;
 	return sqrt(dx*dx+dy*dy);
@@ -78,19 +85,22 @@ double Envelope::distance(double x0,double y0,double x1,double y1) {
 /**
  *  Creates a null <code>Envelope</code>.
  */
-Envelope::Envelope(void) {
+Envelope::Envelope(void)
+{
 	init();
 }
 
 /**
- *  Creates an <code>Envelope</code> for a region defined by maximum and minimum values.
+ * Creates an <code>Envelope</code> for a region defined by maximum and
+ * minimum values.
  *
  *@param  x1  the first x-value
  *@param  x2  the second x-value
  *@param  y1  the first y-value
  *@param  y2  the second y-value
  */
-Envelope::Envelope(double x1, double x2, double y1, double y2){
+Envelope::Envelope(double x1, double x2, double y1, double y2)
+{
 	init(x1, x2, y1, y2);
 }
 
@@ -100,7 +110,8 @@ Envelope::Envelope(double x1, double x2, double y1, double y2){
  *@param  p1  the first Coordinate
  *@param  p2  the second Coordinate
  */
-Envelope::Envelope(const Coordinate& p1, const Coordinate& p2){
+Envelope::Envelope(const Coordinate& p1, const Coordinate& p2)
+{
 	init(p1, p2);
 }
 
@@ -109,16 +120,18 @@ Envelope::Envelope(const Coordinate& p1, const Coordinate& p2){
  *
  * @param  p  the Coordinate
  */
-Envelope::Envelope(const Coordinate& p){
+Envelope::Envelope(const Coordinate& p)
+{
 	init(p);
 }
 
 /**
  *  Create an <code>Envelope</code> from an existing Envelope.
  *
- *@param  env  the Envelope to initialize from
+ * @param  env  the Envelope to initialize from
  */
-Envelope::Envelope(const Envelope &env){
+Envelope::Envelope(const Envelope &env)
+{
 	init(env.minx, env.maxx, env.miny, env.maxy);
 }
 
@@ -133,7 +146,8 @@ void Envelope::init(){
 }
 
 /**
- *  Initialize an <code>Envelope</code> for a region defined by maximum and minimum values.
+ *  Initialize an <code>Envelope</code> for a region defined by
+ *  maximum and minimum values.
  *
  *@param  x1  the first x-value
  *@param  x2  the second x-value
@@ -160,19 +174,24 @@ void Envelope::init(double x1, double x2, double y1, double y2){
 /**
  *  Initialize an <code>Envelope</code> to a region defined by two Coordinates.
  *
- *@param  p1  the first Coordinate
- *@param  p2  the second Coordinate
+ * @param  p1  the first Coordinate
+ * @param  p2  the second Coordinate
  */
-void Envelope::init(const Coordinate& p1, const Coordinate& p2){
+void
+Envelope::init(const Coordinate& p1, const Coordinate& p2)
+{
 	init(p1.x, p2.x, p1.y, p2.y);
 }
 
 /**
- *  Initialize an <code>Envelope</code> to a region defined by a single Coordinate.
+ * Initialize an <code>Envelope</code> to a region defined by a single
+ * Coordinate.
  *
  *@param  p  the Coordinate
  */
-void Envelope::init(const Coordinate& p){
+void
+Envelope::init(const Coordinate& p)
+{
 	init(p.x, p.x, p.y, p.y);
 }
 
@@ -181,7 +200,9 @@ void Envelope::init(const Coordinate& p){
  *
  *@param  env  the Envelope to initialize from
  */
-void Envelope::init(Envelope env){
+void
+Envelope::init(Envelope env)
+{
 	init(env.minx, env.maxx, env.miny, env.maxy);
 }
 
@@ -189,14 +210,16 @@ void Envelope::init(Envelope env){
  *  Makes this <code>Envelope</code> a "null" envelope, that is, the envelope
  *  of the empty geometry.
  */
-void Envelope::setToNull() {
+void
+Envelope::setToNull()
+{
 	minx=0;
 	maxx=-1;
 	miny=0;
 	maxy=-1;
 }
 
-/**
+/*
  *  Returns <code>true</code> if this <code>Envelope</code> is a "null"
  *  envelope.
  *
@@ -212,7 +235,9 @@ void Envelope::setToNull() {
  *
  *@return    max x - min x, or 0 if this is a null <code>Envelope</code>
  */
-double Envelope::getWidth() const {
+double
+Envelope::getWidth() const
+{
 	if (isNull()) {
 		return 0;
 	}
@@ -231,64 +256,29 @@ double Envelope::getHeight() const {
 	return maxy - miny;
 }
 
-/**
- *  Returns the <code>Envelope</code>s maximum y-value. min y > max y
- *  indicates that this is a null <code>Envelope</code>.
- *
- *@return    the maximum y-coordinate
- */
-//double Envelope::getMaxY() const {
-	//return maxy;
-//}
-
-/**
- *  Returns the <code>Envelope</code>s maximum x-value. min x > max x
- *  indicates that this is a null <code>Envelope</code>.
- *
- *@return    the maximum x-coordinate
- */
-//double Envelope::getMaxX() const {
-	//return maxx;
-//}
-
-/**
- *  Returns the <code>Envelope</code>s minimum y-value. min y > max y
- *  indicates that this is a null <code>Envelope</code>.
- *
- *@return    the minimum y-coordinate
- */
-//double Envelope::getMinY() const {
-	//return miny;
-//}
-
-/**
- *  Returns the <code>Envelope</code>s minimum x-value. min x > max x
- *  indicates that this is a null <code>Envelope</code>.
- *
- *@return    the minimum x-coordinate
- */
-//double Envelope::getMinX() const {
-	//return minx;
-//}
 
 /**
  *  Enlarges the boundary of the <code>Envelope</code> so that it contains
  *  p. Does nothing if p is already on or within the boundaries.
  *
- *@param  p  the Coordinate to include
+ * @param  p  the Coordinate to include
  */
-void Envelope::expandToInclude(const Coordinate& p) {
+void
+Envelope::expandToInclude(const Coordinate& p)
+{
 	expandToInclude(p.x, p.y);
 }
 
 /**
- *  Enlarges the boundary of the <code>Envelope</code> so that it contains
- *  (x,y). Does nothing if (x,y) is already on or within the boundaries.
+ * Enlarges the boundary of the <code>Envelope</code> so that it contains
+ * (x,y). Does nothing if (x,y) is already on or within the boundaries.
  *
- *@param  x  the value to lower the minimum x to or to raise the maximum x to
- *@param  y  the value to lower the minimum y to or to raise the maximum y to
+ * @param  x  the value to lower the minimum x to or to raise the maximum x to
+ * @param  y  the value to lower the minimum y to or to raise the maximum y to
  */
-void Envelope::expandToInclude(double x, double y) {
+void
+Envelope::expandToInclude(double x, double y)
+{
 	if (isNull()) {
 		minx = x;
 		maxx = x;
@@ -315,9 +305,11 @@ void Envelope::expandToInclude(double x, double y) {
  *  <code>other</code>. Does nothing if <code>other</code> is wholly on or
  *  within the boundaries.
  *
- *@param  other  the <code>Envelope</code> to merge with
+ * @param  other  the <code>Envelope</code> to merge with
  */
-void Envelope::expandToInclude(const Envelope* other) {
+void
+Envelope::expandToInclude(const Envelope* other)
+{
 	if (other->isNull()) {
 		return;
 	}
@@ -345,12 +337,14 @@ void Envelope::expandToInclude(const Envelope* other) {
 /**
  *  Returns <code>true</code> if the given point lies in or on the envelope.
  *
- *@param  p  the point which this <code>Envelope</code> is
+ * @param  p  the point which this <code>Envelope</code> is
  *      being checked for containing
- *@return    <code>true</code> if the point lies in the interior or
+ * @return    <code>true</code> if the point lies in the interior or
  *      on the boundary of this <code>Envelope</code>.
  */
-bool Envelope::contains(const Coordinate& p) const {
+bool
+Envelope::contains(const Coordinate& p) const
+{
 	return contains(p.x, p.y);
 }
 
@@ -364,7 +358,9 @@ bool Envelope::contains(const Coordinate& p) const {
  *@return    <code>true</code> if <code>(x, y)</code> lies in the interior or
  *      on the boundary of this <code>Envelope</code>.
  */
-bool Envelope::contains(double x, double y) const {
+bool
+Envelope::contains(double x, double y) const
+{
 	return  x >= minx &&
 			x <= maxx &&
 			y >= miny &&
@@ -380,7 +376,9 @@ bool Envelope::contains(double x, double y) const {
  *@return        <code>true</code> if <code>other</code>
  *              is contained in this <code>Envelope</code>
  */
-bool Envelope::contains(const Envelope* other) const {
+bool
+Envelope::contains(const Envelope* other) const
+{
 	if (isNull() || other->isNull()) { return false; }
 	return  other->getMinX() >= minx &&
 			other->getMaxX() <= maxx &&
@@ -397,7 +395,9 @@ bool Envelope::contains(const Envelope* other) const {
  * @return <code>true</code> if this and <code>other</code>
  *         Envelope objs are spatially equal
  */
-bool Envelope::equals(const Envelope* other) const {
+bool
+Envelope::equals(const Envelope* other) const
+{
 	if (isNull() || other->isNull()) { return false; }
 	return  other->getMinX() == minx &&
 			other->getMaxX() == maxx &&
@@ -406,80 +406,13 @@ bool Envelope::equals(const Envelope* other) const {
 }
 
 /**
- * Check if the point <code>other</code>
- * overlaps (lies inside) the region of this <code>Envelope</code>.
- *
- * @param  other  the Coordinate to be tested
- * @return  <code>true</code> if the point overlaps this Envelope
- */
-bool Envelope::intersects(const Coordinate& other) const {
-	//return intersects(other.x, other.y);
-	return (other.x <= maxx && other.x >= minx && other.y <= maxy && other.y >= miny);
-}
-
-/**
- * @deprecated Use #intersects instead.
- */
-bool Envelope::overlaps(const Coordinate& p) const {
-	return intersects(p);
-}
-
-/**
- *  Check if the point <code>(x, y)</code>
- *  overlaps (lies inside) the region of this <code>Envelope</code>.
- *
- *@param  x  the x-ordinate of the point
- *@param  y  the y-ordinate of the point
- *@return        <code>true</code> if the point overlaps this <code>Envelope</code>
- */
-bool
-Envelope::intersects(double x, double y) const
-{
-	return (x <= maxx && x >= minx && y <= maxy && y >= miny);
-}
-
-/**
-* @deprecated Use #intersects instead.
-*/
-bool Envelope::overlaps(double x, double y) const {
-	return intersects(x,y);
-}
-
-
-/**
- *  Check if the region defined by <code>other</code>
- *  overlaps (intersects) the region of this <code>Envelope</code>.
- *
- *@param  other  the <code>Envelope</code> which this <code>Envelope</code> is
- *          being checked for overlapping
- *@return        <code>true</code> if the <code>Envelope</code>s overlap
- */
-//bool
-//Envelope::intersects(const Envelope* other) const
-//{
-//	// Optimized to reduce function calls
-//	if ( maxx<minx || other->maxx<other->minx ) return false;
-//	return !(other->minx > maxx ||
-//			 other->maxx < minx ||
-//			 other->miny > maxy ||
-//			 other->maxy < miny);
-//}
-
-/**
-* @deprecated Use #intersects instead. In the future, #overlaps may be
-* changed to be a true overlap check; that is, whether the intersection is
-* two-dimensional.
-*/
-bool Envelope::overlaps(const Envelope *other) const {
-	return intersects(other);
-}
-
-/**
  *  Returns a <code>string</code> of the form <I>Env[minx:maxx,miny:maxy]</I> .
  *
- *@return    a <code>string</code> of the form <I>Env[minx:maxx,miny:maxy]</I>
+ * @return a <code>string</code> of the form <I>Env[minx:maxx,miny:maxy]</I>
  */
-string Envelope::toString() const {
+string
+Envelope::toString() const
+{
 	ostringstream s;
 	s<<"Env["<<minx<<":"<<maxx<<","<<miny<<":"<<maxy<<"]";
 	return s.str();
@@ -491,7 +424,9 @@ string Envelope::toString() const {
  * The distance between overlapping Envelopes is 0.  Otherwise, the
  * distance is the Euclidean distance between the closest points.
  */
-double Envelope::distance(const Envelope* env) const {
+double
+Envelope::distance(const Envelope* env) const
+{
 	if (intersects(env)) return 0;
 	double dx=0.0;
 	if(maxx<env->minx) dx=env->minx-maxx;
@@ -506,7 +441,9 @@ double Envelope::distance(const Envelope* env) const {
 }
 
 // Checks if two Envelopes are equal
-bool operator==(const Envelope a, const Envelope b) {
+bool
+operator==(const Envelope a, const Envelope b)
+{
 	if (a.isNull()) {
 		return b.isNull();
 	}
@@ -519,7 +456,9 @@ bool operator==(const Envelope a, const Envelope b) {
 		   a.getMinY() == b.getMinY();
 }
 
-int Envelope::hashCode() const{
+int
+Envelope::hashCode() const
+{
 	//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
 	int result = 17;
 	result = 37 * result + Coordinate::hashCode(minx);
@@ -533,6 +472,12 @@ int Envelope::hashCode() const{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/11/08 10:03:28  strk
+ * Set library version to 2.2.0.
+ * Cleaned up Doxygen warnings.
+ * Inlined more Envelope methods.
+ * Dropped deprecated Envelope::overlaps methods.
+ *
  * Revision 1.20  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.

@@ -1013,9 +1013,29 @@ public:
 
 	double getWidth(void) const;
 	double getHeight(void) const;
+
+	/**
+	 *  Returns the Envelope maximum y-value. min y > max y
+	 *  indicates that this is a null Envelope.
+	 */
 	inline double getMaxY() const;
+
+	/**
+	 *  Returns the Envelope maximum x-value. min x > max x
+	 *  indicates that this is a null Envelope.
+	 */
 	inline double getMaxX() const;
+
+	/**
+	 *  Returns the Envelope minimum y-value. min y > max y
+	 *  indicates that this is a null Envelope.
+	 */
 	inline double getMinY() const;
+
+	/**
+	 *  Returns the Envelope minimum x-value. min x > max x
+	 *  indicates that this is a null Envelope.
+	 */
 	inline double getMinX() const;
 	void expandToInclude(const Coordinate& p);
 	void expandToInclude(double x, double y);
@@ -1023,12 +1043,35 @@ public:
 	bool contains(const Coordinate& p) const;
 	bool contains(double x, double y) const;
 	bool contains(const Envelope* other) const;
-	bool overlaps(const Coordinate& p) const;
-	bool overlaps(double x, double y) const;
-	bool overlaps(const Envelope* other) const;
-	bool intersects(const Coordinate& p) const;
-	bool intersects(double x, double y) const;
 
+	/**
+	 * Check if the point p
+	 * overlaps (lies inside) the region of this Envelope.
+	 *
+	 * @param  p  	the Coordinate to be tested
+	 * @return true if the point overlaps this Envelope
+	 */
+	inline bool intersects(const Coordinate& p) const;
+
+	/**
+	 *  Check if the point (x, y)
+	 *  overlaps (lies inside) the region of this Envelope.
+	 *
+	 * @param  x  the x-ordinate of the point
+	 * @param  y  the y-ordinate of the point
+	 * @return <code>true</code> if the point overlaps this Envelope
+	 */
+	inline bool intersects(double x, double y) const;
+
+	/**
+	 * Check if the region defined by other Envelope
+	 * overlaps (intersects) the region of this Envelope.
+	 *
+	 * @param other the Envelope which this Envelope is
+	 *              being checked for overlapping
+	 *
+	 * @return      true if the Envelopes overlap
+	 */
 	inline bool intersects(const Envelope* other) const;
 
 	bool equals(const Envelope* other) const;
@@ -1055,6 +1098,13 @@ inline double Envelope::getMinY() const { return miny; }
 inline double Envelope::getMinX() const { return minx; }
 
 inline bool
+Envelope::intersects(const Coordinate& other) const
+{
+	return (other.x <= maxx && other.x >= minx &&
+		other.y <= maxy && other.y >= miny);
+}
+
+inline bool
 Envelope::isNull(void) const
 {
 	return maxx < minx;
@@ -1070,6 +1120,13 @@ Envelope::intersects(const Envelope* other) const
 			 other->miny > maxy ||
 			 other->maxy < miny);
 }
+
+inline bool
+Envelope::intersects(double x, double y) const
+{
+	return (x <= maxx && x >= minx && y <= maxy && y >= miny);
+}
+
 
 class Geometry;
 class GeometryFilter;
@@ -1139,26 +1196,26 @@ class GeometryFactory;
  *  <H4> Constructed Points And The Precision Model </H4>
  *
  *  The results computed by the set-theoretic methods may
- *  contain constructed points which are not present in the input <code>Geometry</code>
- *  s. These new points arise from intersections between line segments in the
- *  edges of the input <code>Geometry</code>s. In the general case it is not
+ *  contain constructed points which are not present in the input Geometry.
+ *  These new points arise from intersections between line segments in the
+ *  edges of the input Geometry. In the general case it is not
  *  possible to represent constructed points exactly. This is due to the fact
  *  that the coordinates of an intersection point may contain twice as many bits
  *  of precision as the coordinates of the input line segments. In order to
  *  represent these constructed points explicitly, JTS must truncate them to fit
- *  the <code>PrecisionModel</code>. <P>
+ *  the PrecisionModel. 
  *
  *  Unfortunately, truncating coordinates moves them slightly. Line segments
  *  which would not be coincident in the exact result may become coincident in
  *  the truncated representation. This in turn leads to "topology collapses" --
  *  situations where a computed element has a lower dimension than it would in
- *  the exact result. <P>
+ *  the exact result. 
  *
  *  When JTS detects topology collapses during the computation of spatial
  *  analysis methods, it will throw an exception. If possible the exception will
- *  report the location of the collapse. <P>
+ *  report the location of the collapse. 
  *
- *  #equals(Object) and #hashCode are not overridden, so that when two
+ *  equals(Object) and hashCode are not overridden, so that when two
  *  topologically equal Geometries are added to HashMaps and HashSets, they
  *  remain distinct. This behaviour is desired in many cases.
  *
@@ -1229,7 +1286,6 @@ public:
 	 * @return the ID of the coordinate space in which the
 	 * <code>Geometry</code> is defined.
 	 *
-	 * @deprecated use getUserData instead
 	 */
 	virtual int getSRID() const;
 
@@ -2534,6 +2590,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.47  2005/11/08 10:03:28  strk
+ * Set library version to 2.2.0.
+ * Cleaned up Doxygen warnings.
+ * Inlined more Envelope methods.
+ * Dropped deprecated Envelope::overlaps methods.
+ *
  * Revision 1.46  2005/11/03 09:15:37  strk
  * Removed declaration of PointCoordinateSequence and PointCoordinateSequenceFactory
  *
