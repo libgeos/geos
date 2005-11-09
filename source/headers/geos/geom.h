@@ -1743,7 +1743,6 @@ public:
 	IntersectionMatrix();
 	IntersectionMatrix(string elements);
 	IntersectionMatrix(const IntersectionMatrix &im);
-	virtual ~IntersectionMatrix();
 	static bool matches(int actualDimensionValue, char requiredDimensionSymbol);
 	static bool matches(string actualDimensionSymbols, string requiredDimensionSymbols);
 	void add(IntersectionMatrix *im);
@@ -2621,6 +2620,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.49  2005/11/09 08:57:07  strk
+ * IntersectionMatrix made a concrete and final type.
+ * Cleanups in class definition.
+ *
  * Revision 1.48  2005/11/08 20:12:44  strk
  * Memory overhead reductions in buffer operations.
  *
