@@ -422,7 +422,10 @@ struct EdgeIntersectionLessThen {
 	bool operator()(const EdgeIntersection *ei1,
 		const EdgeIntersection *ei2) const
 	{
-		return ei1->compareTo(ei2)<0;
+		if ( ei1->segmentIndex<ei2->segmentIndex ||
+			( ei1->segmentIndex==ei2->segmentIndex &&
+		     	ei1->dist<ei2->dist ) ) return true;
+		return false;
 	}
 };
 
@@ -511,6 +514,10 @@ struct CoordLT {
 	}
 };
 
+typedef map<Coordinate*,Node*,CoordLT>::iterator NodeMapIterator;
+typedef map<Coordinate*,Node*,CoordLT>::const_iterator NodeMapConstIterator;
+typedef pair<Coordinate*,Node*> NodeMapValueType;
+
 class NodeMap{
 public:
 	map<Coordinate*,Node*,CoordLT>nodeMap;
@@ -522,8 +529,8 @@ public:
 	Node* addNode(Node *n);
 	void add(EdgeEnd *e);
 	Node *find(const Coordinate& coord) const;
-	map<Coordinate*,Node*,CoordLT>::const_iterator iterator() const;
-	map<Coordinate*,Node*,CoordLT>::iterator iterator();
+	NodeMapConstIterator iterator() const;
+	NodeMapIterator iterator();
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
 	vector<Node*>* getBoundaryNodes(int geomIndex) const; //returns new obj
@@ -793,6 +800,10 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/11/09 13:44:28  strk
+ * Cleanups in Node and NodeMap.
+ * Optimization of EdgeIntersectionLessThen.
+ *
  * Revision 1.12  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

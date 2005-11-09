@@ -30,7 +30,7 @@ NodeMap::NodeMap(NodeFactory *newNodeFact)
 
 NodeMap::~NodeMap()
 {
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	NodeMapConstIterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		delete it->second;
 	}
@@ -42,24 +42,24 @@ Node*
 NodeMap::addNode(const Coordinate& coord)
 {
 #if DEBUG
-	cerr<<"["<<this<<"] NodeMap::addNode("<<coord.toString()<<")";
+        cerr<<"["<<this<<"] NodeMap::addNode("<<coord.toString()<<")";
 #endif
-	Node *node=find(coord);
-	if (node==NULL) {
+        Node *node=find(coord);
+        if (node==NULL) {
 #if DEBUG
-		cerr<<" is new"<<endl;
+                cerr<<" is new"<<endl;
 #endif
-		node=nodeFact->createNode(coord);
-		nodeMap[const_cast<Coordinate *>(&coord)]=node;
-	}
-	else
-	{
+                node=nodeFact->createNode(coord);
+                nodeMap[const_cast<Coordinate *>(&coord)]=node;
+        }
+        else
+        {
 #if DEBUG
-		cerr<<" already found ("<<node->getCoordinate().toString()<<") - adding Z"<<endl;
+                cerr<<" already found ("<<node->getCoordinate().toString()<<") - adding Z"<<endl;
 #endif
-		node->addZ(coord.z);
-	}
-	return node;
+                node->addZ(coord.z);
+        }
+        return node;
 }
 
 // first arg cannot be const because
@@ -110,7 +110,7 @@ NodeMap::find(const Coordinate& coord) const
 {
 	Coordinate *c=const_cast<Coordinate *>(&coord);
 
-	map<Coordinate*,Node*,CoordLT>::const_iterator found=nodeMap.find(c);
+	NodeMapConstIterator found=nodeMap.find(c);
 
 	if (found==nodeMap.end())
 		return NULL;
@@ -118,28 +118,23 @@ NodeMap::find(const Coordinate& coord) const
 		return found->second;
 }
 
-map<Coordinate*,Node*,CoordLT>::const_iterator
+NodeMapConstIterator
 NodeMap::iterator() const
 {
 	return nodeMap.begin();
 }
 
-map<Coordinate*,Node*,CoordLT>::iterator
+NodeMapIterator
 NodeMap::iterator() 
 {
 	return nodeMap.begin();
 }
 
-//Doesn't work yet. Use iterator.
-//public Collection NodeMap::values(){
-//	return nodeMap.values();
-//}
-
 vector<Node*>*
 NodeMap::getBoundaryNodes(int geomIndex) const
 {
 	vector<Node*>* bdyNodes=new vector<Node*>();
-	map<Coordinate*,Node*,CoordLT>::const_iterator it=nodeMap.begin();
+	NodeMapConstIterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		if (node->getLabel()->getLocation(geomIndex)==Location::BOUNDARY)
@@ -151,8 +146,9 @@ NodeMap::getBoundaryNodes(int geomIndex) const
 string
 NodeMap::print() const
 {
+cerr<<"Print called!"<<endl;
 	string out="";
-	map<Coordinate*,Node*,CoordLT>::const_iterator it=nodeMap.begin();
+	NodeMapConstIterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		out+=node->print();
@@ -164,6 +160,10 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/09 13:44:28  strk
+ * Cleanups in Node and NodeMap.
+ * Optimization of EdgeIntersectionLessThen.
+ *
  * Revision 1.6  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

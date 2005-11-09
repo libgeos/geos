@@ -25,8 +25,12 @@
 
 namespace geos {
 
-Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Label(0,Location::UNDEF)) {
-	coord=newCoord;
+Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges):
+	GraphComponent(new Label(0,Location::UNDEF)),
+	coord(newCoord),
+	edges(newEdges)
+
+{
 #if DEBUG
 	cerr<<"["<<this<<"] Node::Node("<<newCoord.toString()<<")"<<endl;
 #endif
@@ -34,9 +38,9 @@ Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Labe
 #if COMPUTE_Z
 	ztot = 0;
 	addZ(newCoord.z);
-	if ( newEdges )
+	if ( edges )
 	{
-		vector<EdgeEnd*>*eev = newEdges->getEdges();
+		vector<EdgeEnd*>*eev = edges->getEdges();
 		for (unsigned int i=0; i<eev->size(); i++)
 		{
 			EdgeEnd *ee = (*eev)[i];
@@ -44,26 +48,31 @@ Node::Node(Coordinate& newCoord, EdgeEndStar* newEdges): GraphComponent(new Labe
 		}
 	}
 #endif // COMPUTE_Z
-
-	edges=newEdges;
 }
 
-Node::~Node(){
+Node::~Node()
+{
 #if DEBUG
 	cerr<<"["<<this<<"] Node::~Node()"<<endl;
 #endif
 	delete edges;
 }
 
-const Coordinate& Node::getCoordinate() const {
+const Coordinate&
+Node::getCoordinate() const
+{
 	return coord;
 }
 
-EdgeEndStar* Node::getEdges() {
+EdgeEndStar *
+Node::getEdges()
+{
 	return edges;
 }
 
-bool Node::isIsolated() {
+bool
+Node::isIsolated()
+{
 	return (label->getGeometryCount()==1);
 }
 
@@ -80,7 +89,9 @@ Node::isIncidentEdgeInResult() const
 	return false;
 }
 
-void Node::add(EdgeEnd *e) {
+void
+Node::add(EdgeEnd *e)
+{
 #if DEBUG
 	cerr<<"["<<this<<"] Node::add("<<e->print()<<")"<<endl;
 #endif
@@ -93,11 +104,15 @@ void Node::add(EdgeEnd *e) {
 #endif
 }
 
-void Node::mergeLabel(const Node* n) {
+void
+Node::mergeLabel(const Node* n)
+{
 	mergeLabel(n->label);
 }
 
-void Node::mergeLabel(const Label* label2) {
+void
+Node::mergeLabel(const Label* label2)
+{
 	for (int i=0; i<2; i++) {
 		int loc=computeMergedLocation(label2, i);
 		int thisLoc=label->getLocation(i);
@@ -105,14 +120,18 @@ void Node::mergeLabel(const Label* label2) {
 	}
 }
 
-void Node::setLabel(int argIndex, int onLocation) {
+void
+Node::setLabel(int argIndex, int onLocation)
+{
 	if (label==NULL) {
 		label=new Label(argIndex, onLocation);
 	} else
 		label->setLocation(argIndex, onLocation);
 }
 
-void Node::setLabelBoundary(int argIndex) {
+void
+Node::setLabelBoundary(int argIndex)
+{
 	int loc=Location::UNDEF;
 	if (label!=NULL)
 		loc=label->getLocation(argIndex);
@@ -126,7 +145,9 @@ void Node::setLabelBoundary(int argIndex) {
 	label->setLocation(argIndex, newLoc);
 }
 
-int Node::computeMergedLocation(const Label* label2, int eltIndex){
+int
+Node::computeMergedLocation(const Label* label2, int eltIndex)
+{
 	int loc=Location::UNDEF;
 	loc=label->getLocation(eltIndex);
 	if (!label2->isNull(eltIndex)) {
@@ -136,7 +157,9 @@ int Node::computeMergedLocation(const Label* label2, int eltIndex){
 	return loc;
 }
 
-string Node::print(){
+string
+Node::print()
+{
 	string out="node "+coord.toString()+" lbl: "+label->toString();
 	return out;
 }
@@ -179,6 +202,10 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/11/09 13:44:28  strk
+ * Cleanups in Node and NodeMap.
+ * Optimization of EdgeIntersectionLessThen.
+ *
  * Revision 1.12  2005/06/28 00:04:48  strk
  * improved ::isIncidentEdgeInResult() method
  *
