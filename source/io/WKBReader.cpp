@@ -35,9 +35,8 @@ WKBReader::printHEX(istream &is, ostream &os)
 	is.seekg(0, ios::beg); // rewind input stream
 
 	char each=0;
-	while(!is.eof())
+	while(is.read(&each, 1))
 	{
-		is.read(&each, 1);
 		os << setw(2) <<
 			static_cast<int>(static_cast<unsigned char>(each));
 	}
