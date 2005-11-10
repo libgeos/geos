@@ -130,8 +130,8 @@ public:
 	CoordinateArrayFilter(int size);
 	virtual ~CoordinateArrayFilter();
 	virtual const CoordinateSequence* getCoordinates() const;
-	virtual void filter_ro(const Coordinate &coord);
-	virtual void filter_rw(Coordinate &coord); // Unsopported
+	virtual void filter_ro(const Coordinate *coord);
+	virtual void filter_rw(Coordinate *coord); // Unsopported
 };
 
 class UniqueCoordinateArrayFilter:public CoordinateFilter {
@@ -262,6 +262,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/10 10:24:08  strk
+ * Fixed virtual overload of CoordinateArrayFilter::filter*
+ *
  * Revision 1.8  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

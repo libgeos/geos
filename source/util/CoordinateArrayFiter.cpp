@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/10 10:24:08  strk
+ * Fixed virtual overload of CoordinateArrayFilter::filter*
+ *
  * Revision 1.6  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -54,11 +57,11 @@ const CoordinateSequence* CoordinateArrayFilter::getCoordinates() const {
 	return pts;
 }
 
-void CoordinateArrayFilter::filter_ro(const Coordinate &coord) {
-	pts->setAt(coord,n++);
+void CoordinateArrayFilter::filter_ro(const Coordinate *coord) {
+	pts->setAt(*coord,n++);
 }
 
-void CoordinateArrayFilter::filter_rw(Coordinate &coord) {
+void CoordinateArrayFilter::filter_rw(Coordinate *coord) {
 	throw new UnsupportedOperationException("CoordinateArrayFilter is a read-only filter");
 }
 
