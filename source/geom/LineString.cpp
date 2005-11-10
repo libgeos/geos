@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.49  2005/11/10 09:33:17  strk
+ * Removed virtual overloading LineString::compareTo(LineString *)
+ *
  * Revision 1.48  2005/06/23 14:22:33  strk
  * Inlined and added missing ::clone() for Geometry subclasses
  *
@@ -343,26 +346,18 @@ void LineString::normalize() {
 	}
 }
 
-int LineString::compareToSameClass(const Geometry *ls) const {
+int
+LineString::compareToSameClass(const Geometry *ls) const {
 	LineString *line=(LineString*)ls;
 	// MD - optimized implementation
-	int i=0;
-	int j=0;
 	int mynpts=points->getSize();
 	int othnpts=line->points->getSize();
-	while(i<mynpts && j<othnpts) {
-		int comparison=points->getAt(i).compareTo(line->points->getAt(j));
-		if(comparison!=0) {
-			return comparison;
-		}
-		i++;
-		j++;
-	}
-	if (i<mynpts) {
-		return 1;
-	}
-	if (j<othnpts) {
-		return -1;
+	if ( mynpts > othnpts ) return 1;
+	if ( mynpts < othnpts ) return -1;
+	for (int i=0; i<mynpts; i++)
+	{
+		int cmp=points->getAt(i).compareTo(line->points->getAt(i));
+		if (cmp) return cmp;
 	}
 	return 0;
 }
@@ -385,19 +380,6 @@ void LineString::apply_rw(GeometryComponentFilter *filter) {
 
 void LineString::apply_ro(GeometryComponentFilter *filter) const {
 	filter->filter_ro(this);
-}
-
-int LineString::compareTo(const LineString *ls) const {
-	if (isEmpty() && ls->isEmpty()) {
-		return 0;
-	}
-	if (isEmpty()) {
-		return -1;
-	}
-	if (ls->isEmpty()) {
-		return 1;
-	}
-	return compareToSameClass(ls);
 }
 
 GeometryTypeId

@@ -2080,7 +2080,6 @@ public:
 
 	//was protected
 	virtual int compareToSameClass(const Geometry *ls) const;
-	virtual int compareTo(const LineString *ls) const;
 	virtual const Coordinate* getCoordinate() const;
 	virtual double getLength() const;
 protected:
@@ -2620,6 +2619,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.50  2005/11/10 09:33:17  strk
+ * Removed virtual overloading LineString::compareTo(LineString *)
+ *
  * Revision 1.49  2005/11/09 08:57:07  strk
  * IntersectionMatrix made a concrete and final type.
  * Cleanups in class definition.
