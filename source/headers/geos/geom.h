@@ -2289,7 +2289,7 @@ public:
 	Geometry *clone() const { return new MultiPoint(*this); };
 
 protected:
-	const Coordinate* getCoordinate(int n) const;
+	const Coordinate* getCoordinateN(int n) const;
 private:
 #ifdef INT64_CONST_IS_I64
 	static const int64 serialVersionUID = -8048474874175355449I64;
@@ -2619,6 +2619,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.51  2005/11/10 10:47:09  strk
+ * Renamed MultiPoint::getCoordinate(int) to MultiPoint::getCoordinateN(int)
+ * to avoid hiding of Geometry::getCoordinate().
+ *
  * Revision 1.50  2005/11/10 09:33:17  strk
  * Removed virtual overloading LineString::compareTo(LineString *)
  *

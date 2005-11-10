@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.26  2005/11/10 10:47:09  strk
+ * Renamed MultiPoint::getCoordinate(int) to MultiPoint::getCoordinateN(int)
+ * to avoid hiding of Geometry::getCoordinate().
+ *
  * Revision 1.25  2004/09/13 12:39:14  strk
  * Made Point and MultiPoint subject to Validity tests.
  *
@@ -140,8 +144,8 @@ MultiPoint::equalsExact(const Geometry *other, double tolerance) const
 	return GeometryCollection::equalsExact(other,tolerance);
   }
 
-const Coordinate* MultiPoint::getCoordinate(int n) const {
-	return ((Point *)(*geometries)[n])->getCoordinate();
+const Coordinate* MultiPoint::getCoordinateN(int n) const {
+	return ((*geometries)[n])->getCoordinate();
 }
 GeometryTypeId
 MultiPoint::getGeometryTypeId() const {
