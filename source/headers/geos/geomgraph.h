@@ -222,6 +222,7 @@ private:
 class Node;
 class EdgeIntersectionList;
 class Edge: public GraphComponent{
+using GraphComponent::updateIM;
 public:
 	static void updateIM(Label *lbl,IntersectionMatrix *im);
 	CoordinateSequence* pts;
@@ -371,6 +372,7 @@ private:
 };
 
 class Node: public GraphComponent {
+using GraphComponent::setLabel;
 
 public:
 	Node(Coordinate& newCoord, EdgeEndStar* newEdges);
@@ -706,6 +708,9 @@ struct LineStringLT {
 };
 
 class GeometryGraph: public PlanarGraph {
+using PlanarGraph::add;
+using PlanarGraph::findEdge;
+
 public:
 	static bool isInBoundary(int boundaryCount);
 	static int determineBoundary(int boundaryCount);
@@ -800,6 +805,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/10 15:20:32  strk
+ * Made virtual overloads explicit.
+ *
  * Revision 1.13  2005/11/09 13:44:28  strk
  * Cleanups in Node and NodeMap.
  * Optimization of EdgeIntersectionLessThen.

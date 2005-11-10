@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/10 15:20:32  strk
+ * Made virtual overloads explicit.
+ *
  * Revision 1.4  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -321,6 +324,7 @@ public:
 class SimpleGeometryPrecisionReducer;
 
 class PrecisionReducerCoordinateOperation: public CoordinateOperation {
+using CoordinateOperation::edit;
 private:
 	SimpleGeometryPrecisionReducer *sgpr;
 public:

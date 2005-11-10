@@ -364,12 +364,13 @@ public:
 	bool isInside(const Coordinate& pt);
 	void testLineSegment(Coordinate& p,LineSegment *seg);
 	class MCSelecter: public MonotoneChainSelectAction {
+	using MonotoneChainSelectAction::select;
 	private:
 		Coordinate p;
 		MCPointInRing *parent;
 	public:
 		MCSelecter(const Coordinate& newP,MCPointInRing *prt);
-	    void select(LineSegment *ls);
+		void select(LineSegment *ls);
 	};
 private:
 	LinearRing *ring;
@@ -662,6 +663,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/10 15:20:32  strk
+ * Made virtual overloads explicit.
+ *
  * Revision 1.13  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)

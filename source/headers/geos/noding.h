@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/10 15:20:32  strk
+ * Made virtual overloads explicit.
+ *
  * Revision 1.9  2005/11/07 18:05:28  strk
  * Reduced set<> lookups
  *
@@ -406,6 +409,7 @@ public:
 	virtual ~MCQuadtreeNoder();
 	vector<SegmentString*>* node(vector<SegmentString*> *inputSegStrings);
 	class SegmentOverlapAction: public MonotoneChainOverlapAction {
+		using MonotoneChainOverlapAction::overlap;
 		private:
 			nodingSegmentIntersector *si;
 		public:

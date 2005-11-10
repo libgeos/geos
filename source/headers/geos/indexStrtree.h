@@ -228,6 +228,8 @@ protected:
  * @see STRtree
  */
 class SIRtree: public AbstractSTRtree {
+using AbstractSTRtree::insert;
+using AbstractSTRtree::query;
 
 public:
 	SIRtree();
@@ -276,7 +278,10 @@ protected:
  * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002. 
  *
  */
-class STRtree: public AbstractSTRtree,public SpatialIndex {
+class STRtree: public AbstractSTRtree, public SpatialIndex
+{
+using AbstractSTRtree::insert;
+using AbstractSTRtree::query;
 
 private:
 	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
@@ -321,6 +326,9 @@ inline double STRtree::centreY(Envelope *e) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/10 15:20:32  strk
+ * Made virtual overloads explicit.
+ *
  * Revision 1.9  2005/02/22 15:16:30  strk
  * STRtree::avg() and STRtree::centreY() inlined.
  *
