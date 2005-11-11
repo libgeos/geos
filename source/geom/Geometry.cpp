@@ -613,7 +613,7 @@ Geometry::Union(const Geometry *other) const
 		int ngeoms, i;
 		vector<Geometry *> *v = new vector<Geometry *>();
 
-		if ( coll = dynamic_cast<const GeometryCollection *>(this) )
+		if ( (coll=dynamic_cast<const GeometryCollection *>(this)) )
 		{
 			ngeoms = coll->getNumGeometries();
 			for (i=0; i<ngeoms; i++)
@@ -622,7 +622,7 @@ Geometry::Union(const Geometry *other) const
 			v->push_back(this->clone());
 		}
 
-		if ( coll = dynamic_cast<const GeometryCollection *>(other) )
+		if ( (coll=dynamic_cast<const GeometryCollection *>(other)) )
 		{
 			ngeoms = coll->getNumGeometries();
 			for (i=0; i<ngeoms; i++)
@@ -896,6 +896,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.72.2.5  2005/11/11 12:05:50  strk
+ * wrapped boolean expression in parentesis, as suggested by compiler
+ *
  * Revision 1.72.2.4  2005/11/08 09:08:07  strk
  * Cleaned up a couple of Doxygen warnings
  *
