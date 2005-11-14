@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.10  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.
@@ -101,7 +106,7 @@ void EdgeEndBuilder::createEdgeEndForPrev(Edge *edge,vector<EdgeEnd*> *l,EdgeInt
 	// if prev intersection is past the previous vertex, use it instead
 	if (eiPrev!=NULL && eiPrev->segmentIndex>=iPrev)
 		pPrev.setCoordinate(eiPrev->coord);
-	Label *label=new Label(edge->getLabel());
+	Label *label=new Label(*(edge->getLabel()));
 	// since edgeStub is oriented opposite to it's parent edge, have to flip sides for edge label
 	label->flip();
 	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pPrev,label);
@@ -125,7 +130,7 @@ void EdgeEndBuilder::createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeInt
 	// if the next intersection is in the same segment as the current, use it as the endpoint
 	if (eiNext!=NULL && eiNext->segmentIndex==eiCurr->segmentIndex)
 		pNext.setCoordinate(eiNext->coord);
-	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pNext,new Label(edge->getLabel()));
+	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pNext,new Label(*(edge->getLabel())));
 	//Debug.println(e);
 	l->push_back(e);
 }

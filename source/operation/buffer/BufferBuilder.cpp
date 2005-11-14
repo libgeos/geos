@@ -196,7 +196,7 @@ BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const
 		for (unsigned int i=0;i<nodedSegStrings->size();i++) {
 			SegmentString *segStr=(*nodedSegStrings)[i];
 			Label *oldLabel=(Label*) segStr->getContext();
-			Edge *edge=new Edge((CoordinateSequence*) segStr->getCoordinates(), new Label(oldLabel));
+			Edge *edge=new Edge((CoordinateSequence*) segStr->getCoordinates(), new Label(*oldLabel));
 			insertEdge(edge);
 		}
 #if PROFILE
@@ -241,11 +241,11 @@ BufferBuilder::insertEdge(Edge *e)
 		// if so, must flip the label before merging it
 		if (! existingEdge->isPointwiseEqual(e))
 		{
-			labelToMerge=new Label(e->getLabel());
+			labelToMerge=new Label(*(e->getLabel()));
 			labelToMerge->flip();
 			newLabels.push_back(labelToMerge);
 		}
-		existingLabel->merge(labelToMerge);
+		existingLabel->merge(*labelToMerge);
 		// compute new depth delta of sum of edges
 		int mergeDelta=depthDelta(labelToMerge);
 		int existingDelta=existingEdge->getDepthDelta();
@@ -319,6 +319,11 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.28  2005/08/22 13:31:17  strk
  * Fixed comparator functions used with STL sort() algorithm to
  * implement StrictWeakOrdering semantic.

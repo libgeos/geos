@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.10  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -30,8 +35,11 @@
 
 namespace geos {
 
-EdgeEndBundle::EdgeEndBundle(EdgeEnd *e): EdgeEnd(e->getEdge(),e->getCoordinate(),
-										  e->getDirectedCoordinate(),new Label(e->getLabel())) {
+EdgeEndBundle::EdgeEndBundle(EdgeEnd *e):
+	EdgeEnd(e->getEdge(),e->getCoordinate(),
+		e->getDirectedCoordinate(),
+		new Label(*(e->getLabel())))
+{
 	edgeEnds=new vector<EdgeEnd*>();
 	insert(e);
 }

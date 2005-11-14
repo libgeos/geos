@@ -283,7 +283,7 @@ OverlayOp::updateNodeLabelling()
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		Label *lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
-		node->getLabel()->merge(lbl);
+		node->getLabel()->merge(*lbl);
 #if DEBUG
 		cerr<<"     "<<node->print()<<endl;
 #endif
@@ -763,12 +763,12 @@ OverlayOp::insertUniqueEdge(Edge *e)
 		// if this is the first duplicate found for this edge, initialize the depths
 		///*
 		if (depth->isNull()) {
-			depth->add(existingLabel);
+			depth->add(*existingLabel);
 		}
 		//*/
-		depth->add(labelToMerge);
+		depth->add(*labelToMerge);
 
-		existingLabel->merge(labelToMerge);
+		existingLabel->merge(*labelToMerge);
 		//Debug.print("inserted edge: "); Debug.println(e);
 		//Debug.print("existing edge: "); Debug.println(existingEdge);
 		dupEdges.push_back(e);
@@ -839,6 +839,11 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.44  2005/11/08 11:33:10  strk
  * comments cleanup
  *

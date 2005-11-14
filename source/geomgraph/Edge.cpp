@@ -178,19 +178,7 @@ Edge::getCollapsedEdge()
 	CoordinateSequence *newPts = new DefaultCoordinateSequence(2);
 	newPts->setAt(pts->getAt(0),0);
 	newPts->setAt(pts->getAt(1),1);
-	return new Edge(newPts, Label::toLineLabel(label));
-}
-
-void
-Edge::setIsolated(bool newIsIsolated)
-{
-	isIsolatedVar=newIsIsolated;
-}
-
-bool
-Edge::isIsolated()
-{
-	return isIsolatedVar;
+	return new Edge(newPts, Label::toLineLabel(*label));
 }
 
 /*
@@ -367,6 +355,11 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.14  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

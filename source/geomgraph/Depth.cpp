@@ -5,31 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2005/01/28 09:47:51  strk
- * Replaced sprintf uses with ostringstream.
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <sstream>
 #include <geos/geomgraph.h>
@@ -37,13 +20,16 @@
 
 namespace geos {
 
-int Depth::depthAtLocation(int location) {
+int
+Depth::depthAtLocation(int location)
+{
 	if (location == Location::EXTERIOR) return 0;
 	if (location == Location::INTERIOR) return 1;
 	return DEPTHNULL;
 }
 
-Depth::Depth() {
+Depth::Depth()
+{
 	// initialize depth array to a sentinel value
 	for (int i=0; i<2; i++) {
 		for (int j=0; j<3;j++) {
@@ -52,24 +38,33 @@ Depth::Depth() {
 	}
 }
 
-Depth::~Depth() {
+Depth::~Depth()
+{
 //	delete[] &depth;
 }
 
-int Depth::getDepth(int geomIndex,int posIndex){
+int
+Depth::getDepth(int geomIndex,int posIndex) const
+{
 	return depth[geomIndex][posIndex];
 }
 
-void Depth::setDepth(int geomIndex,int posIndex,int depthValue){
+void
+Depth::setDepth(int geomIndex,int posIndex,int depthValue)
+{
 	depth[geomIndex][posIndex] = depthValue;
 }
 
-int Depth::getLocation(int geomIndex,int posIndex) {
+int
+Depth::getLocation(int geomIndex,int posIndex) const
+{
 	if (depth[geomIndex][posIndex] <= 0) return Location::EXTERIOR;
 	return Location::INTERIOR;
 }
 
-void Depth::add(int geomIndex,int posIndex,int location){
+void
+Depth::add(int geomIndex,int posIndex,int location)
+{
 	if (location == Location::INTERIOR)
 		depth[geomIndex][posIndex]++;
 }
@@ -77,7 +72,9 @@ void Depth::add(int geomIndex,int posIndex,int location){
 /**
  * A Depth object is null (has never been initialized) if all depths are null.
  */
-bool Depth::isNull() {
+bool
+Depth::isNull() const
+{
 	for (int i=0; i<2; i++) {
 		for (int j=0; j<3; j++) {
 			if (depth[i][j] != DEPTHNULL)
@@ -87,15 +84,21 @@ bool Depth::isNull() {
 	return true;
 }
 
-bool Depth::isNull(int geomIndex) {
+bool
+Depth::isNull(int geomIndex) const
+{
 	return depth[geomIndex][1] == DEPTHNULL;
 }
 
-bool Depth::isNull(int geomIndex, int posIndex){
+bool
+Depth::isNull(int geomIndex, int posIndex) const
+{
 	return depth[geomIndex][posIndex] == DEPTHNULL;
 }
 
-int Depth::getDelta(int geomIndex) {
+int
+Depth::getDelta(int geomIndex) const
+{
 	return depth[geomIndex][Position::RIGHT]-depth[geomIndex][Position::LEFT];
 }
 
@@ -107,7 +110,9 @@ int Depth::getDelta(int geomIndex) {
  * involves reducing the depths by the same amount so that at least
  * one of them is 0.  If the remaining value is > 0, it is set to 1.
  */
-void Depth::normalize() {
+void
+Depth::normalize()
+{
 	for (int i=0; i<2; i++) {
 		if (!isNull(i)) {
 			int minDepth=depth[i][1];
@@ -124,12 +129,16 @@ void Depth::normalize() {
 	}
 }
 
-void Depth::add(Label* lbl){
+void
+Depth::add(const Label& lbl)
+{
 	for (int i=0; i<2; i++) {
 		for (int j=1; j<3; j++) {
-			int loc=lbl->getLocation(i,j);
-			if (loc==Location::EXTERIOR || loc==Location::INTERIOR) {
-			// initialize depth if it is null, otherwise add this location value
+			int loc=lbl.getLocation(i,j);
+			if (loc==Location::EXTERIOR || loc==Location::INTERIOR)
+			{
+				// initialize depth if it is null, otherwise
+				// add this location value
 				if (isNull(i,j)) {
 					depth[i][j]=depthAtLocation(loc);
 				} else
@@ -139,7 +148,9 @@ void Depth::add(Label* lbl){
 	}
 }
 
-string Depth::toString() {
+string
+Depth::toString() const
+{
 	ostringstream s;
 	s<<"A:"<<depth[0][1]<<","<<depth[0][2]<<" ";
 	s<<"B:"<<depth[1][1]<<","<<depth[1][2]<<"]";
@@ -147,5 +158,29 @@ string Depth::toString() {
 }
 
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2005/11/14 18:14:03  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
+ * Revision 1.3  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
+ * Revision 1.2  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.10  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

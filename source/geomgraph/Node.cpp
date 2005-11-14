@@ -71,7 +71,7 @@ Node::getEdges()
 }
 
 bool
-Node::isIsolated()
+Node::isIsolated() const
 {
 	return (label->getGeometryCount()==1);
 }
@@ -202,6 +202,11 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.13  2005/11/09 13:44:28  strk
  * Cleanups in Node and NodeMap.
  * Optimization of EdgeIntersectionLessThen.

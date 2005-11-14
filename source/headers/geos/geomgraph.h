@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -39,35 +40,49 @@ class MonotoneChainEdge;
 class Position {
 public:
 	enum {
-		/* An indicator that a Location is <i>on</i> a GraphComponent */
-		ON,
-		/* An indicator that a Location is to the <i>left</i> of a GraphComponent */  
+		/*
+		 * An indicator that a Location is <i>on</i>
+		 * a GraphComponent
+		 */
+		ON=0,
+
+		/*
+		 * An indicator that a Location is to the
+		 * <i>left</i> of a GraphComponent
+		 */  
 		LEFT,
-		/* An indicator that a Location is to the <i>right</i> of a GraphComponent */  
+
+		/*
+		 * An indicator that a Location is to the
+		 * <i>right</i> of a GraphComponent
+		 */  
 		RIGHT
 	};
+
 	/**
-	* Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
-	* otherwise.
-	*/
+	 * Returns LEFT if the position is RIGHT, RIGHT if
+	 * the position is LEFT, or the position otherwise.
+	 */
 	static int opposite(int position);
 };
 
 class TopologyLocation {
 public:
 	TopologyLocation();
-	virtual ~TopologyLocation();
-	TopologyLocation(const vector<int>* newLocation);
+	~TopologyLocation();
+	TopologyLocation(const vector<int> &newLocation);
+
 	/**
-	* Constructs a TopologyLocation specifying how points on, to the left of, and to the
-	* right of some GraphComponent relate to some Geometry. Possible values for the
-	* parameters are Location.NULL, Location.EXTERIOR, Location.BOUNDARY, 
-	* and Location.INTERIOR.
-	* @see Location
-	*/
+	 * Constructs a TopologyLocation specifying how points on,
+	 * to the left of, and to the right of some GraphComponent
+	 * relate to some Geometry. Possible values for the
+	 * parameters are Location.NULL, Location.EXTERIOR, Location.BOUNDARY, 
+	 * and Location.INTERIOR.
+	 * @see Location
+	 */
 	TopologyLocation(int on, int left, int right);
 	TopologyLocation(int on);
-	TopologyLocation(const TopologyLocation *gl);
+	TopologyLocation(const TopologyLocation &gl);
 	int get(int posIndex) const;
 	bool isNull() const;
 	bool isAnyNull() const;
@@ -79,29 +94,28 @@ public:
 	void setAllLocationsIfNull(int locValue);
 	void setLocation(int locIndex, int locValue);
 	void setLocation(int locValue);
-	const vector<int>* getLocations() const;
+	const vector<int> &getLocations() const;
 	void setLocations(int on, int left, int right);
 	void setLocations(const TopologyLocation &gl);
 	bool allPositionsEqual(int loc) const;
-	void merge(const TopologyLocation* gl);
+	void merge(const TopologyLocation &gl);
 	string toString() const;
-protected:
-	vector<int>* location;
 private:
-	void init(int size);
+	vector<int> location;
+	//void init(int size);
 };
 
 class Label {
 public:
-	static Label* toLineLabel(const Label* label);
+	static Label* toLineLabel(const Label& label);
 	Label(int onLoc);
 	Label(int geomIndex, int onLoc);
 	Label(int onLoc, int leftLoc, int rightLoc);
-	Label(const Label *l);
+	Label(const Label &l);
 	Label();
 	virtual ~Label();
 	Label(int geomIndex,int onLoc,int leftLoc,int rightLoc);
-	Label(int geomIndex,const TopologyLocation* gl);
+	Label(int geomIndex, const TopologyLocation& gl);
 	void flip();
 	int getLocation(int geomIndex, int posIndex) const;
 	int getLocation(int geomIndex) const;
@@ -110,21 +124,21 @@ public:
 	void setAllLocations(int geomIndex, int location);
 	void setAllLocationsIfNull(int geomIndex, int location);
 	void setAllLocationsIfNull(int location);
-	void merge(const Label* lbl);
+	void merge(const Label &lbl);
 	int getGeometryCount() const;
 	bool isNull(int geomIndex) const;
 	bool isAnyNull(int geomIndex) const;
 	bool isArea() const;
 	bool isArea(int geomIndex) const;
 	bool isLine(int geomIndex) const;
-	bool isEqualOnSide(Label* lbl, int side) const;
+	bool isEqualOnSide(const Label &lbl, int side) const;
 	bool allPositionsEqual(int geomIndex, int loc) const;
 	void toLine(int geomIndex);
 	string toString() const;
 protected:
-	TopologyLocation* elt[2];
+	TopologyLocation elt[2];
 private:
-	void setGeometryLocation(int geomIndex, const TopologyLocation* tl);
+	void setGeometryLocation(int geomIndex, const TopologyLocation& tl);
 };
 
 class Depth {
@@ -132,17 +146,17 @@ public:
 	static int depthAtLocation(int location);
 	Depth();
 	virtual ~Depth();
-	int getDepth(int geomIndex,int posIndex);
+	int getDepth(int geomIndex,int posIndex) const;
 	void setDepth(int geomIndex,int posIndex,int depthValue);
-	int getLocation(int geomIndex,int posIndex);
+	int getLocation(int geomIndex,int posIndex) const;
 	void add(int geomIndex,int posIndex,int location);
-	bool isNull();
-	bool isNull(int geomIndex);
-	bool isNull(int geomIndex,int posIndex);
-	int getDelta(int geomIndex);
+	bool isNull() const;
+	bool isNull(int geomIndex) const;
+	bool isNull(int geomIndex, int posIndex) const;
+	int getDelta(int geomIndex) const;
 	void normalize();
-	void add(Label* lbl);
-	string toString();
+	void add(const Label& lbl);
+	string toString() const;
 private:
 	enum {
 		DEPTHNULL=-1 //Replaces NULL
@@ -163,31 +177,38 @@ private:
 class Quadrant {
 public:
 	/**
-	* Returns the quadrant of a directed line segment (specified as x and y
-	* displacements, which cannot both be 0).
-	*/
+	 * Returns the quadrant of a directed line segment
+	 * (specified as x and y displacements, which cannot both be 0).
+	 */
 	static int quadrant(double dx, double dy);
+
 	/**
-	* Returns the quadrant of a directed line segment from p0 to p1.
-	*/
+	 * Returns the quadrant of a directed line segment from p0 to p1.
+	 */
 	static int quadrant(const Coordinate& p0, const Coordinate& p1);
+
 	/**
-	* Returns true if the quadrants are 1 and 3, or 2 and 4
-	*/
+	 * Returns true if the quadrants are 1 and 3, or 2 and 4
+	 */
 	static bool isOpposite(int quad1, int quad2);
+
 	/* 
-	* Returns the right-hand quadrant of the halfplane defined by the two quadrants,
-	* or -1 if the quadrants are opposite, or the quadrant if they are identical.
-	*/
+	 * Returns the right-hand quadrant of the halfplane defined by
+	 * the two quadrants,
+	 * or -1 if the quadrants are opposite, or the quadrant if they
+	 * are identical.
+	 */
 	static int commonHalfPlane(int quad1, int quad2);
+
 	/**
-	* Returns whether the given quadrant lies within the given halfplane (specified
-	* by its right-hand quadrant).
-	*/
+	 * Returns whether the given quadrant lies within the given halfplane
+	 * (specified by its right-hand quadrant).
+	 */
 	static bool isInHalfPlane(int quad, int halfPlane);
+
 	/**
-	* Returns true if the given quadrant is 0 or 1.
-	*/
+	 * Returns true if the given quadrant is 0 or 1.
+	 */
 	static bool isNorthern(int quad);
 };
 
@@ -195,19 +216,22 @@ public:
 class GraphComponent {
 public:
 	GraphComponent();
-	GraphComponent(Label* newLabel); // newLabel is deleted by destructor
+	/*
+	 * GraphComponent takes ownership of the given Label.
+	 * newLabel is deleted by destructor.
+	 */
+	GraphComponent(Label* newLabel); 
 	virtual ~GraphComponent();
 	Label* getLabel();
 	virtual void setLabel(Label* newLabel);
-	virtual void setInResult(bool isInResult);
-	virtual bool isInResult();
+	virtual void setInResult(bool isInResult) { isInResultVar=isInResult; }
+	virtual bool isInResult() const { return isInResultVar; }
 	virtual void setCovered(bool isCovered);
-	virtual bool isCovered();
-	virtual bool isCoveredSet();
-	virtual bool isVisited();
-	virtual void setVisited(bool isVisited);
-	//virtual Coordinate& getCoordinate()=0; // strk removed
-	virtual bool isIsolated()=0;
+	virtual bool isCovered() const { return isCoveredVar; }
+	virtual bool isCoveredSet() const { return isCoveredSetVar; }
+	virtual bool isVisited() const { return isVisitedVar; }
+	virtual void setVisited(bool isVisited) { isVisitedVar = isVisited; }
+	virtual bool isIsolated() const=0;
 	virtual void updateIM(IntersectionMatrix *im);
 protected:
 	Label* label;
@@ -237,10 +261,12 @@ public:
 	virtual const Coordinate& getCoordinate(int i);
 	virtual const Coordinate& getCoordinate(); 
 	virtual Depth *getDepth();
+
 	/**
-	* The depthDelta is the change in depth as an edge is crossed from R to L
-	* @return the change in depth as the edge is crossed from R to L
-	*/
+	 * The depthDelta is the change in depth as an edge is crossed
+	 * from R to L
+	 * @return the change in depth as the edge is crossed from R to L
+	 */
 	virtual int getDepthDelta();
 	virtual void setDepthDelta(int newDepthDelta);
 	virtual int getMaximumSegmentIndex();
@@ -249,8 +275,10 @@ public:
 	virtual bool isClosed();
 	virtual bool isCollapsed();
 	virtual Edge* getCollapsedEdge();
-	virtual void setIsolated(bool newIsIsolated);
-	virtual bool isIsolated();
+	virtual void setIsolated(bool newIsIsolated) {
+		isIsolatedVar=newIsIsolated;
+	}
+	virtual bool isIsolated() const { return isIsolatedVar; }
 	virtual void addIntersections(LineIntersector *li,int segmentIndex,int geomIndex);
 	virtual void addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex);
 	virtual void computeIM(IntersectionMatrix *im);
@@ -379,7 +407,7 @@ public:
 	virtual ~Node();
 	virtual const Coordinate& getCoordinate() const;
 	virtual EdgeEndStar* getEdges();
-	virtual bool isIsolated();
+	virtual bool isIsolated() const;
 	virtual void add(EdgeEnd *e);
 	virtual void mergeLabel(const Node* n);
 	virtual void mergeLabel(const Label* label2);
@@ -805,6 +833,11 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.14  2005/11/10 15:20:32  strk
  * Made virtual overloads explicit.
  *

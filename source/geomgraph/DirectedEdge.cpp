@@ -158,7 +158,7 @@ void
 DirectedEdge::computeDirectedLabel()
 {
 	delete label;
-	label=new Label(edge->getLabel());
+	label=new Label(*(edge->getLabel()));
 	if (!isForwardVar)
 		label->flip();
 }
@@ -235,6 +235,11 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.5  2005/07/11 10:27:13  strk
  * Fixed initializzazion lists
  *

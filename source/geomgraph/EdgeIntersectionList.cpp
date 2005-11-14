@@ -153,7 +153,7 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 		cerr<<"    ustIntPt1: pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
 #endif // DEBUG
 	}
-	return new Edge(pts, new Label(edge->getLabel()));
+	return new Edge(pts, new Label(*(edge->getLabel())));
 }
 
 string
@@ -172,6 +172,11 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.13  2005/11/07 18:05:28  strk
  * Reduced set<> lookups
  *

@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
  * Revision 1.5  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
@@ -149,7 +154,7 @@ void DirectedEdgeStar::mergeSymLabels(){
 	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
-		deLabel->merge(de->getSym()->getLabel());
+		deLabel->merge(*(de->getSym()->getLabel()));
 	}
 }
 
