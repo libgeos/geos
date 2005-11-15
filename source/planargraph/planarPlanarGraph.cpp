@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -23,16 +24,16 @@ namespace geos {
  */
 planarPlanarGraph::planarPlanarGraph()
 {
-	edges=new vector<planarEdge*>();
-	dirEdges=new vector<planarDirectedEdge*>();
-	nodeMap=new planarNodeMap();
+	//edges=new vector<planarEdge*>();
+	//dirEdges=new vector<planarDirectedEdge*>();
+	//nodeMap=new planarNodeMap();
 }
 
 planarPlanarGraph::~planarPlanarGraph()
 {
-	delete edges;
-	delete dirEdges;
-	delete nodeMap;
+	//delete edges;
+	//delete dirEdges;
+	//delete nodeMap;
 }
 
 /*
@@ -41,7 +42,7 @@ planarPlanarGraph::~planarPlanarGraph()
 planarNode *
 planarPlanarGraph::findNode(const Coordinate& pt)
 {
-	return nodeMap->find(pt);
+	return nodeMap.find(pt);
 }
 
 /*
@@ -51,7 +52,7 @@ planarPlanarGraph::findNode(const Coordinate& pt)
 void
 planarPlanarGraph::add(planarNode *node)
 {
-	nodeMap->add(node);
+	nodeMap.add(node);
 }
 
 /*
@@ -64,7 +65,7 @@ planarPlanarGraph::add(planarNode *node)
 void
 planarPlanarGraph::add(planarEdge *edge)
 {
-	edges->push_back(edge);
+	edges.push_back(edge);
 	add(edge->getDirEdge(0));
 	add(edge->getDirEdge(1));
 }
@@ -77,7 +78,7 @@ planarPlanarGraph::add(planarEdge *edge)
 void
 planarPlanarGraph::add(planarDirectedEdge *dirEdge)
 {
-	dirEdges->push_back(dirEdge);
+	dirEdges.push_back(dirEdge);
 }
 
 /*
@@ -86,12 +87,12 @@ planarPlanarGraph::add(planarDirectedEdge *dirEdge)
 map<Coordinate,planarNode*,planarCoordLT>::iterator
 planarPlanarGraph::nodeIterator()
 {
-	return nodeMap->iterator();
+	return nodeMap.iterator();
 }
 
 vector<planarNode*>*
 planarPlanarGraph::getNodes() {
-	return nodeMap->getNodes();
+	return nodeMap.getNodes();
 }
 
 /*
@@ -104,7 +105,7 @@ planarPlanarGraph::getNodes() {
 vector<planarDirectedEdge*>::iterator
 planarPlanarGraph::dirEdgeIterator()
 {
-	return dirEdges->begin();
+	return dirEdges.begin();
 }
 
 /*
@@ -116,7 +117,7 @@ planarPlanarGraph::dirEdgeIterator()
 vector<planarEdge*>::iterator
 planarPlanarGraph::edgeIterator()
 {
-	return edges->begin();
+	return edges.begin();
 }
 
 /*
@@ -126,7 +127,7 @@ planarPlanarGraph::edgeIterator()
 vector<planarEdge*>*
 planarPlanarGraph::getEdges() 
 {
-	return edges;
+	return &edges;
 }
 
 /*
@@ -140,10 +141,11 @@ planarPlanarGraph::remove(planarEdge *edge)
 {
 	remove(edge->getDirEdge(0));
 	remove(edge->getDirEdge(1));
-	for(int i=0;i<(int)edges->size();i++) {
-		if((*edges)[i]==edge) {
-			edges->erase(edges->begin()+i);
-			i--;
+	for(unsigned int i=0; i<edges.size();++i)
+	{
+		if(edges[i]==edge) {
+			edges.erase(edges.begin()+i);
+			--i;
 		}
 	}
 }
@@ -160,10 +162,10 @@ planarPlanarGraph::remove(planarDirectedEdge *de)
 	planarDirectedEdge *sym = de->getSym();
 	if (sym!=NULL) sym->setSym(NULL);
 	de->getFromNode()->getOutEdges()->remove(de);
-	for(int i=0;i<(int)dirEdges->size();i++) {
-		if((*dirEdges)[i]==de) {
-			dirEdges->erase(dirEdges->begin()+i);
-			i--;
+	for(unsigned int i=0; i<dirEdges.size(); ++i) {
+		if(dirEdges[i]==de) {
+			dirEdges.erase(dirEdges.begin()+i);
+			--i;
 		}
 	}
 }
@@ -176,31 +178,31 @@ void
 planarPlanarGraph::remove(planarNode *node)
 {
 	// unhook all directed edges
-	vector<planarDirectedEdge*> *outEdges=node->getOutEdges()->getEdges();
-	for(int i=0;i<(int)outEdges->size();i++) {
-		planarDirectedEdge *de =(*outEdges)[i];
+	vector<planarDirectedEdge*> &outEdges=node->getOutEdges()->getEdges();
+	for(unsigned int i=0; i<outEdges.size(); ++i) {
+		planarDirectedEdge *de =outEdges[i];
 		planarDirectedEdge *sym = de->getSym();
 		// remove the diredge that points to this node
 		if (sym!=NULL) remove(sym);
 		// remove this diredge from the graph collection
-		for(int j=0;j<(int)dirEdges->size();j++) {
-			if((*dirEdges)[j]==de) {
-				dirEdges->erase(dirEdges->begin()+j);
-				j--;
+		for(unsigned int j=0; j<dirEdges.size(); ++j) {
+			if (dirEdges[j]==de) {
+				dirEdges.erase(dirEdges.begin()+j);
+				--j;
 			}
 		}
 		planarEdge *edge=de->getEdge();
 		if (edge!=NULL) {
-			for(int k=0;k<(int)edges->size();k++) {
-				if((*edges)[k]==edge) {
-					edges->erase(edges->begin()+k);
-					k--;
+			for(unsigned int k=0; k<edges.size(); ++k) {
+				if(edges[k]==edge) {
+					edges.erase(edges.begin()+k);
+					--k;
 				}
 			}
 		}
 	}
 	// remove the node from the graph
-	nodeMap->remove(node->getCoordinate());
+	nodeMap.remove(node->getCoordinate());
 	//nodes.remove(node);
 }
 
@@ -212,9 +214,9 @@ vector<planarNode*>*
 planarPlanarGraph::findNodesOfDegree(int degree)
 {
 	vector<planarNode*> *nodesFound=new vector<planarNode*>();
-	map<Coordinate,planarNode*,planarCoordLT> *nm=nodeMap->getNodeMap();
-	map<Coordinate,planarNode*,planarCoordLT>::iterator	it=nm->begin();
-	for (;it!=nm->end();it++) {
+	map<Coordinate,planarNode*,planarCoordLT> &nm=nodeMap.getNodeMap();
+	map<Coordinate,planarNode*,planarCoordLT>::iterator it=nm.begin();
+	for ( ; it!=nm.end(); ++it) {
 		planarNode *node=it->second;
 		if (node->getDegree()==degree)
 			nodesFound->push_back(node);
@@ -227,6 +229,10 @@ planarPlanarGraph::findNodesOfDegree(int degree)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.3  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and

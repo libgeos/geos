@@ -5,16 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
  **********************************************************************/
-
 
 #include <geos/opLinemerge.h>
 
@@ -75,6 +73,10 @@ LineMergeGraph::~LineMergeGraph()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.6  2005/09/26 11:01:32  strk
  * Const correctness changes in LineMerger package, and a few speedups.
  *
@@ -99,3 +101,4 @@ LineMergeGraph::~LineMergeGraph()
  * Revision 1.1  2004/04/07 06:55:50  ybychkov
  * "operation/linemerge" ported from JTS 1.4
  **********************************************************************/
+

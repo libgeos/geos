@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -104,7 +105,7 @@ protected:
 	/*
 	 * \brief The underlying list of outgoing DirectedEdges
 	 */
-	vector<planarDirectedEdge*> *outEdges;
+	vector<planarDirectedEdge*> outEdges;
 
 private:
 	bool sorted;
@@ -138,39 +139,39 @@ public:
 	 * \brief Returns the number of edges around the Node associated
 	 * with this DirectedEdgeStar.
 	 */
-	int getDegree();
+	unsigned int getDegree() const;
 
 	/*
 	 * \brief Returns the coordinate for the node at wich this
 	 * star is based
 	 */
-	Coordinate& getCoordinate();
+	Coordinate& getCoordinate() const;
 
 	/*
 	 * \brief Returns the DirectedEdges, in ascending order
 	 * by angle with the positive x-axis.
 	 */
-	vector<planarDirectedEdge*>* getEdges();
+	vector<planarDirectedEdge*>& getEdges();
 
 	/*
 	 * \brief Returns the zero-based index of the given Edge,
 	 * after sorting in ascending order by angle with the
 	 * positive x-axis.
 	 */
-	int getIndex(planarEdge *edge);
+	int getIndex(const planarEdge *edge);
 
 	/*
 	 * \brief Returns the zero-based index of the given DirectedEdge,
 	 * after sorting in ascending order
 	 * by angle with the positive x-axis.
 	 */  
-	int getIndex(planarDirectedEdge *dirEdge);
+	int getIndex(const planarDirectedEdge *dirEdge);
 
 	/*
 	 * \brief Returns the remainder when i is divided by the number of
 	 * edges in this DirectedEdgeStar. 
 	 */
-	int getIndex(int i);
+	int getIndex(int i) const;
 
 	/*
 	 * \brief Returns the DirectedEdge on the left-hand side
@@ -494,14 +495,14 @@ struct planarCoordLT {
  */
 class planarNodeMap {
 private:
-	map<Coordinate,planarNode*, planarCoordLT> *nodeMap;
+	map<Coordinate,planarNode*, planarCoordLT> nodeMap;
 public:  
 	/*
 	 * \brief Constructs a NodeMap without any Nodes.
 	 */
 	planarNodeMap();
 
-	map<Coordinate,planarNode*,planarCoordLT>* getNodeMap();
+	map<Coordinate,planarNode*,planarCoordLT>& getNodeMap();
 
 	virtual ~planarNodeMap();
 
@@ -560,9 +561,9 @@ class planarPlanarGraph {
 
 protected:
 
-	vector<planarEdge*> *edges;
-	vector<planarDirectedEdge*> *dirEdges;
-	planarNodeMap *nodeMap;
+	vector<planarEdge*> edges;
+	vector<planarDirectedEdge*> dirEdges;
+	planarNodeMap nodeMap;
 
 	/*
 	 * \brief
@@ -692,6 +693,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.6  2004/12/14 10:35:44  strk
  * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
  * for delayed destruction.

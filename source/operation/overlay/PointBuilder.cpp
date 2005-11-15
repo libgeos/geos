@@ -58,7 +58,7 @@ void
 PointBuilder::extractNonCoveredResultNodes(int opCode)
 {
 	map<Coordinate*,Node*,CoordLT> &nodeMap =
-		op->getGraph()->getNodeMap()->nodeMap;
+		op->getGraph().getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
 	for (; it!=nodeMap.end(); ++it)
 	{
@@ -101,6 +101,10 @@ PointBuilder::filterCoveredNodeToPoint(const Node *n)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.16  2005/06/28 01:07:02  strk
  * improved extraction of result points in overlay op
  *

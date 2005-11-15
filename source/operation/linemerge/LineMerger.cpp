@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -12,6 +13,7 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
+
 #include <geos/opLinemerge.h>
 #include <geos/util.h>
 #include <typeinfo>
@@ -32,16 +34,10 @@ LineMerger::LineMerger():
 	edgeStrings(NULL),
 	factory(NULL)
 {
-//	graph=new LineMergeGraph();
-//	mergedLineStrings=NULL;
-//	edgeStrings=NULL;
-//	factory=NULL;
 }
 
 LineMerger::~LineMerger()
 {
-//	delete graph;
-//	delete mergedLineStrings;
 	if ( edgeStrings )
 	{
 		for (unsigned int i=0; i<edgeStrings->size(); i++)
@@ -103,10 +99,13 @@ LineMerger::merge()
 	edgeStrings=new vector<EdgeString*>();
 	buildEdgeStringsForObviousStartNodes();
 	buildEdgeStringsForIsolatedLoops();
-	mergedLineStrings=new vector<LineString*>();    
-	for (int i=0;i<(int)edgeStrings->size();i++) {
+
+	unsigned numEdgeStrings = edgeStrings->size();
+	mergedLineStrings=new vector<LineString*>(numEdgeStrings);
+	for (unsigned int i=0; i<numEdgeStrings; ++i)
+	{
 		EdgeString *edgeString=(*edgeStrings)[i];
-		mergedLineStrings->push_back(edgeString->toLineString());
+		(*mergedLineStrings)[i]=edgeString->toLineString();
 	}    
 }
 
@@ -126,7 +125,7 @@ void
 LineMerger::buildEdgeStringsForUnprocessedNodes()
 {
 	vector<planarNode*> *nodes=graph.getNodes();
-	for (int i=0;i<(int)nodes->size();i++) {
+	for (unsigned int i=0; i<nodes->size(); ++i) {
 		planarNode *node=(*nodes)[i];
 		if (!node->isMarked()) { 
 			Assert::isTrue(node->getDegree()==2);
@@ -155,11 +154,11 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 void
 LineMerger::buildEdgeStringsStartingAt(planarNode *node)
 {
-	vector<planarDirectedEdge*> *edges=node->getOutEdges()->getEdges();
-	unsigned int size = edges->size();
+	vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
+	unsigned int size = edges.size();
 	for (unsigned int i=0; i<size; i++)
 	{
-		LineMergeDirectedEdge *directedEdge=(LineMergeDirectedEdge*) (*edges)[i];
+		LineMergeDirectedEdge *directedEdge=(LineMergeDirectedEdge*) edges[i];
 		if (directedEdge->getEdge()->isMarked()) {
 			continue;
 		}
@@ -194,6 +193,10 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.6  2005/09/26 11:01:32  strk
  * Const correctness changes in LineMerger package, and a few speedups.
  *

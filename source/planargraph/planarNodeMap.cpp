@@ -5,14 +5,106 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/planargraph.h>
+
+namespace geos {
+//namespace planargraph {
+
+/**
+ * Constructs a NodeMap without any Nodes.
+ */
+planarNodeMap::planarNodeMap()
+{
+	//nodeMap=new map<Coordinate,planarNode*,planarCoordLT>();	
+}
+
+planarNodeMap::~planarNodeMap()
+{
+	//delete nodeMap;	
+}
+
+map<Coordinate,planarNode*,planarCoordLT>&
+planarNodeMap::getNodeMap()
+{
+	return nodeMap;	
+}
+
+/**
+ * Adds a node to the map, replacing any that is already at that location.
+ * @return the added node
+ */
+planarNode*
+planarNodeMap::add(planarNode *n)
+{
+	nodeMap.insert(pair<Coordinate,planarNode*>(n->getCoordinate(),n));
+	return n;
+}
+
+/**
+ * Removes the Node at the given location, and returns it
+ * (or null if no Node was there).
+ */
+planarNode *
+planarNodeMap::remove(Coordinate& pt)
+{
+	planarNode *n=find(pt);
+	nodeMap.erase(pt);
+	return n;
+}
+
+vector<planarNode*>*
+planarNodeMap::getNodes()
+{
+	vector<planarNode*> *values=new vector<planarNode*>();
+	map<Coordinate,planarNode*,planarCoordLT>::iterator it=nodeMap.begin();
+	while(it!=nodeMap.end()) {
+		values->push_back(it->second);
+		++it;
+	}
+	return values;
+}
+
+/**
+ * Returns the Node at the given location, or null if no Node was there.
+ */
+planarNode*
+planarNodeMap::find(const Coordinate& coord)
+{
+	map<Coordinate,planarNode*,planarCoordLT>::iterator found=nodeMap.find(coord);
+	if (found==nodeMap.end())
+		return NULL;
+	else
+		return found->second;
+}
+
+/**
+ * Returns an Iterator over the Nodes in this NodeMap, sorted in
+ * ascending order by angle with the positive x-axis.
+ */
+map<Coordinate,planarNode*,planarCoordLT>::iterator
+planarNodeMap::iterator()
+{
+	return nodeMap.begin();
+}
+
+//} //namespace planargraph 
+} //namespace geos 
+
+/**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.6  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.
@@ -39,75 +131,3 @@
  *
  **********************************************************************/
 
-
-#include <geos/planargraph.h>
-
-namespace geos {
-//namespace planargraph {
-
-/**
-* Constructs a NodeMap without any Nodes.
-*/
-planarNodeMap::planarNodeMap() {
-	nodeMap=new map<Coordinate,planarNode*,planarCoordLT>();	
-}
-
-planarNodeMap::~planarNodeMap() {
-	delete nodeMap;	
-}
-
-map<Coordinate,planarNode*,planarCoordLT>* planarNodeMap::getNodeMap() {
-	return nodeMap;	
-}
-
-/**
-* Adds a node to the map, replacing any that is already at that location.
-* @return the added node
-*/
-planarNode* planarNodeMap::add(planarNode *n){
-	nodeMap->insert(pair<Coordinate,planarNode*>(n->getCoordinate(),n));
-	return n;
-}
-
-/**
-* Removes the Node at the given location, and returns it (or null if no Node was there).
-*/
-planarNode* planarNodeMap::remove(Coordinate& pt){
-	planarNode *n=find(pt);
-	nodeMap->erase(pt);
-	return n;
-}
-
-vector<planarNode*>*
-planarNodeMap::getNodes()
-{
-	vector<planarNode*> *values=new vector<planarNode*>();
-	map<Coordinate,planarNode*,planarCoordLT>::iterator it=nodeMap->begin();
-	while(it!=nodeMap->end()) {
-		values->push_back(it->second);
-		it++;
-	}
-	return values;
-}
-
-/**
-* Returns the Node at the given location, or null if no Node was there.
-*/
-planarNode* planarNodeMap::find(const Coordinate& coord)  {
-	map<Coordinate,planarNode*,planarCoordLT>::iterator found=nodeMap->find(coord);
-	if (found==nodeMap->end())
-		return NULL;
-	else
-		return found->second;
-}
-
-/**
-* Returns an Iterator over the Nodes in this NodeMap, sorted in ascending order
-* by angle with the positive x-axis.
-*/
-map<Coordinate,planarNode*,planarCoordLT>::iterator planarNodeMap::iterator(){
-	return nodeMap->begin();
-}
-
-//} //namespace planargraph 
-} //namespace geos 

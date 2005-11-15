@@ -72,7 +72,6 @@ OverlayOp::isResultOfOp(int loc0,int loc1,int opCode)
 
 OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1):
 	GeometryGraphOperation(g0, g1),
-	ptLocator(new PointLocator()),
 	/*
 	 * Use factory of primary geometry.
 	 * Note that this does NOT handle mixed-precision arguments
@@ -80,7 +79,7 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1):
 	 */
 	geomFact(g0->getFactory()),
 	resultGeom(NULL),
-	graph(new PlanarGraph(new OverlayNodeFactory())),
+	graph(new OverlayNodeFactory()),
 	edgeList(new EdgeList()),
 	resultPolyList(NULL),
 	resultLineList(NULL),
@@ -111,12 +110,10 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1):
 
 OverlayOp::~OverlayOp()
 {
-	delete graph;
 	delete edgeList;
 	delete resultPolyList;
 	delete resultLineList;
 	delete resultPointList;
-	delete ptLocator;
 	for (unsigned int i=0; i<dupEdges.size(); i++)
 		delete dupEdges[i];
 #if USE_ELEVATION_MATRIX
@@ -132,7 +129,7 @@ OverlayOp::getResultGeometry(int funcCode)
 	return resultGeom;
 }
 
-PlanarGraph*
+PlanarGraph&
 OverlayOp::getGraph()
 {
 	return graph;
@@ -194,7 +191,7 @@ OverlayOp::copyPoints(int argIndex)
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *graphNode=it->second;
-		Node *newNode=graph->addNode(graphNode->getCoordinate());
+		Node *newNode=graph.addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
 	}
 }
@@ -210,7 +207,7 @@ void
 OverlayOp::computeLabelling()
 	//throw(TopologyException *) // and what else ?
 {
-	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nodeMap=graph.getNodeMap()->nodeMap;
 
 #if DEBUG
 	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList->print()<<endl;
@@ -251,7 +248,7 @@ OverlayOp::computeLabelling()
 void
 OverlayOp::mergeSymLabels()
 {
-	map<Coordinate*,Node*,CoordLT>&nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>&nodeMap=graph.getNodeMap()->nodeMap;
 
 #if DEBUG
 	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
@@ -275,7 +272,7 @@ OverlayOp::updateNodeLabelling()
 	// The label for a node is updated from the edges incident on it
 	// (Note that a node may have already been labelled
 	// because it is a point in one of the input geometries)
-	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nodeMap=graph.getNodeMap()->nodeMap;
 #if DEBUG
 	cerr<<"OverlayOp::updateNodeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
@@ -308,7 +305,7 @@ OverlayOp::updateNodeLabelling()
 void
 OverlayOp::labelIncompleteNodes()
 {
-	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nodeMap=graph.getNodeMap()->nodeMap;
 #if DEBUG
 	cerr<<"OverlayOp::labelIncompleteNodes() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
@@ -338,7 +335,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	cerr<<"OverlayOp::labelIncompleteNode("<<n->print()<<", "<<targetIndex<<")"<<endl;
 #endif
 	const Geometry *targetGeom = (*arg)[targetIndex]->getGeometry();
-	int loc=ptLocator->locate(n->getCoordinate(), targetGeom);
+	int loc=ptLocator.locate(n->getCoordinate(), targetGeom);
 	n->getLabel()->setLocation(targetIndex,loc);
 
 #if DEBUG
@@ -477,7 +474,7 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 void
 OverlayOp::findResultAreaEdges(int opCode)
 {
-	vector<EdgeEnd*> *ee=graph->getEdgeEnds();
+	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
 	for(unsigned int i=0;i<ee->size();i++) {
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		// mark all dirEdges with the appropriate label
@@ -503,7 +500,7 @@ OverlayOp::cancelDuplicateResultEdges()
 {
 	// remove any dirEdges whose sym is also included
 	// (they "cancel each other out")
-	vector<EdgeEnd*> *ee=graph->getEdgeEnds();
+	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
 	for(int i=0;i<(int)ee->size();i++) {
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		DirectedEdge *sym=de->getSym();
@@ -552,7 +549,7 @@ OverlayOp::isCovered(const Coordinate& coord,vector<Geometry*> *geomList)
 {
 	for(int i=0;i<(int)geomList->size();i++) {
 		Geometry *geom=(*geomList)[i];
-		int loc=ptLocator->locate(coord,geom);
+		int loc=ptLocator.locate(coord,geom);
 		if (loc!=Location::EXTERIOR) return true;
 	}
 	return false;
@@ -567,7 +564,7 @@ OverlayOp::isCovered(const Coordinate& coord,vector<LineString*> *geomList)
 {
 	for(int i=0;i<(int)geomList->size();i++) {
 		Geometry *geom=(Geometry*)(*geomList)[i];
-		int loc=ptLocator->locate(coord,geom);
+		int loc=ptLocator.locate(coord,geom);
 		if (loc!=Location::EXTERIOR) return true;
 	}
 	return false;
@@ -582,7 +579,7 @@ OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList)
 {
 	for(int i=0;i<(int)geomList->size();i++) {
 		Geometry *geom=(Geometry*)(*geomList)[i];
-		int loc=ptLocator->locate(coord,geom);
+		int loc=ptLocator.locate(coord,geom);
 		if (loc!=Location::EXTERIOR) return true;
 	}
 	return false;
@@ -620,18 +617,12 @@ void
 OverlayOp::computeOverlay(int opCode)
 	//throw(TopologyException *)
 {
-	vector<Edge*> *baseSplitEdges=NULL;
-	PolygonBuilder *polyBuilder=NULL;
-	LineBuilder *lineBuilder=NULL;
-	PointBuilder *pointBuilder=NULL;
 
 	// copy points from input Geometries.
 	// This ensures that any Point geometries
 	// in the input are considered for inclusion in the result set
-
 	copyPoints(0);
 	copyPoints(1);
-
 
 	// node the input Geometries
 	delete (*arg)[0]->computeSelfNodes(li,false);
@@ -650,12 +641,12 @@ OverlayOp::computeOverlay(int opCode)
 #endif
 
 
-	baseSplitEdges = new vector<Edge*>();
-	(*arg)[0]->computeSplitEdges(baseSplitEdges);
-	(*arg)[1]->computeSplitEdges(baseSplitEdges);
+	vector<Edge*> baseSplitEdges;
+	(*arg)[0]->computeSplitEdges(&baseSplitEdges);
+	(*arg)[1]->computeSplitEdges(&baseSplitEdges);
 
 	// add the noded edges to this result graph
-	insertUniqueEdges(baseSplitEdges);
+	insertUniqueEdges(&baseSplitEdges);
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
@@ -664,65 +655,52 @@ OverlayOp::computeOverlay(int opCode)
     	//NodingValidator nv = new NodingValidator(edgeList.getEdges());
     	//nv.checkValid();
 
-	graph->addEdges(edgeList->getEdges());
+	graph.addEdges(edgeList->getEdges());
 
-	try {
-		// this can throw TopologyException *
-		computeLabelling();
+	// this can throw TopologyException *
+	computeLabelling();
 
-		//Debug.printWatch();
-		labelIncompleteNodes();
-		//Debug.printWatch();
-		//nodeMap.print(System.out);
-
-
-		/*
-		 * The ordering of building the result Geometries is important.
-		 * Areas must be built before lines, which must be built
-		 * before points.
-		 * This is so that lines which are covered by areas are not
-		 * included explicitly, and similarly for points.
-		 */
-		findResultAreaEdges(opCode);
-		cancelDuplicateResultEdges();
-
-		polyBuilder=new PolygonBuilder(geomFact,cga);
-		
-		// might throw a TopologyException *
-		polyBuilder->add(graph);
-
-		vector<Geometry*> *gv=polyBuilder->getPolygons();
-		resultPolyList=new vector<Polygon*>();
-		for(int i=0;i<(int)gv->size();i++) {
-			resultPolyList->push_back((Polygon*)(*gv)[i]);
-		}
-		delete gv;
-		lineBuilder=new LineBuilder(this,geomFact,ptLocator);
-		resultLineList=lineBuilder->build(opCode);
-		pointBuilder=new PointBuilder(this,geomFact,ptLocator);
-		resultPointList=pointBuilder->build(opCode);
-		// gather the results from all calculations into a single
-		// Geometry for the result set
-		resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
-#if USE_ELEVATION_MATRIX
-		elevationMatrix->elevate(resultGeom);
-#endif // USE_ELEVATION_MATRIX
-		
+	//Debug.printWatch();
+	labelIncompleteNodes();
+	//Debug.printWatch();
+	//nodeMap.print(System.out);
 
 
-	} catch (...) {
-		delete baseSplitEdges;
-		delete polyBuilder;
-		delete lineBuilder;
-		delete pointBuilder;
-		throw;
+	/*
+	 * The ordering of building the result Geometries is important.
+	 * Areas must be built before lines, which must be built
+	 * before points.
+	 * This is so that lines which are covered by areas are not
+	 * included explicitly, and similarly for points.
+	 */
+	findResultAreaEdges(opCode);
+	cancelDuplicateResultEdges();
+
+	PolygonBuilder polyBuilder(geomFact,cga);
+	
+	// might throw a TopologyException *
+	polyBuilder.add(&graph);
+
+	vector<Geometry*> *gv=polyBuilder.getPolygons();
+	resultPolyList=new vector<Polygon*>();
+	for(unsigned int i=0; i<gv->size(); ++i) {
+		resultPolyList->push_back((Polygon*)(*gv)[i]);
 	}
+	delete gv;
 
+	LineBuilder lineBuilder(this,geomFact,&ptLocator);
+	resultLineList=lineBuilder.build(opCode);
 
-	delete polyBuilder;
-	delete lineBuilder;
-	delete pointBuilder;
-	delete baseSplitEdges;
+	PointBuilder pointBuilder(this,geomFact,&ptLocator);
+	resultPointList=pointBuilder.build(opCode);
+
+	// gather the results from all calculations into a single
+	// Geometry for the result set
+	resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
+#if USE_ELEVATION_MATRIX
+	elevationMatrix->elevate(resultGeom);
+#endif // USE_ELEVATION_MATRIX
+	
 }
 
 /*
@@ -839,6 +817,10 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.46  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.45  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

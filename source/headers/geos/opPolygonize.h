@@ -330,9 +330,9 @@ private:
 	 * @param dirEdges a List of the DirectedEdges in the graph
 	 * @return a List of DirectedEdges, one for each edge ring found
 	 */
-	static vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(vector<planarDirectedEdge*> *dirEdges);
+	static vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(vector<planarDirectedEdge*> &dirEdges);
 
-	static void label(vector<planarDirectedEdge*> *dirEdges, long label);
+	static void label(vector<planarDirectedEdge*> &dirEdges, long label);
 
 	static void computeNextCWEdges(planarNode *node);
 
@@ -496,6 +496,10 @@ friend class Polygonizer::LineStringAdder;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.8  2005/03/26 08:19:54  strk
  * Commented out Polygonizer::LineStringAdder friendship
  *

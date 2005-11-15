@@ -61,7 +61,7 @@ void
 LineBuilder::findCoveredLineEdges()
 {
 // first set covered for all L edges at nodes which have A edges too
-	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph()->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph().getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
@@ -73,7 +73,7 @@ LineBuilder::findCoveredLineEdges()
 	 * For all L edges which weren't handled by the above,
 	 * use a point-in-poly test to determine whether they are covered
 	 */
-	vector<EdgeEnd*> *ee=op->getGraph()->getEdgeEnds();
+	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
 	for(int i=0;i<(int)ee->size();i++) {
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		Edge *e=de->getEdge();
@@ -87,7 +87,7 @@ LineBuilder::findCoveredLineEdges()
 void
 LineBuilder::collectLines(int opCode)
 {
-	vector<EdgeEnd*> *ee=op->getGraph()->getEdgeEnds();
+	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
 	for(int i=0;i<(int)ee->size();i++) {
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		collectLineEdge(de,opCode,lineEdgesList);
@@ -269,6 +269,10 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.19  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

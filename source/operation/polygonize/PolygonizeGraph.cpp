@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -19,22 +20,27 @@
 
 namespace geos {
 
-int PolygonizeGraph::getDegreeNonDeleted(planarNode *node) {
-	vector<planarDirectedEdge*> *edges=node->getOutEdges()->getEdges();
+int
+PolygonizeGraph::getDegreeNonDeleted(planarNode *node)
+{
+	vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
 	int degree=0;
-	for(int i=0;i<(int)edges->size();i++) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*) (*edges)[i];
-		if (!de->isMarked()) degree++;
+	for(unsigned int i=0; i<edges.size(); ++i) {
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
+		if (!de->isMarked()) ++degree;
 	}
 	return degree;
 }
 
-int PolygonizeGraph::getDegree(planarNode *node, long label){
-	vector<planarDirectedEdge*> *edges=node->getOutEdges()->getEdges();
+int
+PolygonizeGraph::getDegree(planarNode *node, long label)
+{
+	vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
 	int degree=0;
-	for(int i=0;i<(int)edges->size();i++) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*) (*edges)[i];
-		if (de->getLabel()==label) degree++;
+	for(unsigned int i=0; i<edges.size(); ++i)
+	{
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
+		if (de->getLabel()==label) ++degree;
 	}
 	return degree;
 }
@@ -45,9 +51,9 @@ int PolygonizeGraph::getDegree(planarNode *node, long label){
 void
 PolygonizeGraph::deleteAllEdges(planarNode *node)
 {
-	vector<planarDirectedEdge*> *edges=node->getOutEdges()->getEdges();
-	for(int i=0;i<(int)edges->size();i++) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*) (*edges)[i];
+	vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
+	for(unsigned int i=0; i<edges.size(); ++i) {
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
 		de->setMarked(true);
 		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
 		if (sym!=NULL)
@@ -58,9 +64,9 @@ PolygonizeGraph::deleteAllEdges(planarNode *node)
 /*
  * Create a new polygonization graph.
  */
-PolygonizeGraph::PolygonizeGraph(const GeometryFactory *newFactory)
+PolygonizeGraph::PolygonizeGraph(const GeometryFactory *newFactory):
+	factory(newFactory)
 {
-	factory=newFactory;
 }
 
 /*
@@ -202,15 +208,16 @@ PolygonizeGraph::getEdgeRings()
 	computeNextCWEdges();
 
 	// clear labels of all edges in graph
-	label(dirEdges,-1);
+	label(dirEdges, -1);
 	vector<PolygonizeDirectedEdge*> *maximalRings=findLabeledEdgeRings(dirEdges);
 	convertMaximalToMinimalEdgeRings(maximalRings);
 	delete maximalRings;
 
 	// find all edgerings
 	vector<polygonizeEdgeRing*> *edgeRingList=new vector<polygonizeEdgeRing*>();
-	for(int i=0;i<(int)dirEdges->size();i++) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)(*dirEdges)[i];
+	for(unsigned int i=0; i<dirEdges.size(); ++i)
+	{
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
 		if (de->isMarked()) continue;
 		if (de->isInRing()) continue;
 		polygonizeEdgeRing *er=findEdgeRing(de);
@@ -225,20 +232,21 @@ PolygonizeGraph::getEdgeRings()
 * @return a List of DirectedEdges, one for each edge ring found
 */
 vector<PolygonizeDirectedEdge*>*
-PolygonizeGraph::findLabeledEdgeRings(vector<planarDirectedEdge*> *dirEdges)
+PolygonizeGraph::findLabeledEdgeRings(vector<planarDirectedEdge*> &dirEdges)
 {
 	vector<PolygonizeDirectedEdge*> *edgeRingStarts=new vector<PolygonizeDirectedEdge*>();
 	// label the edge rings formed
 	long currLabel=1;
-	for(int i=0;i<(int)dirEdges->size();i++) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)(*dirEdges)[i];
+	for(unsigned int i=0; i<dirEdges.size(); ++i)
+	{
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
 		if (de->isMarked()) continue;
 		if (de->getLabel() >= 0) continue;
 		edgeRingStarts->push_back(de);
 		vector<planarDirectedEdge*> *edges=findDirEdgesInRing(de);
-		label(edges, currLabel);
+		label(*edges, currLabel);
 		delete edges;
-		currLabel++;
+		++currLabel;
 	}
 	return edgeRingStarts;
 }
@@ -260,8 +268,8 @@ PolygonizeGraph::deleteCutEdges()
 	 * Delete them, and record them
 	 */
 	vector<const LineString*> *cutLines=new vector<const LineString*>();
-	for(int i=0;i<(int)dirEdges->size();i++) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)(*dirEdges)[i];
+	for(unsigned int i=0; i<dirEdges.size(); ++i) {
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
 		if (de->isMarked()) continue;
 		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
 		if (de->getLabel()==sym->getLabel()) {
@@ -275,22 +283,27 @@ PolygonizeGraph::deleteCutEdges()
 	return cutLines;
 }
 
-void PolygonizeGraph::label(vector<planarDirectedEdge*> *dirEdges, long label){
-	for(int i=0;i<(int)dirEdges->size();i++) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)(*dirEdges)[i];
+void
+PolygonizeGraph::label(vector<planarDirectedEdge*> &dirEdges, long label)
+{
+	for(unsigned int i=0; i<dirEdges.size(); ++i)
+	{
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
 		de->setLabel(label);
 	}
 }
 
-void PolygonizeGraph::computeNextCWEdges(planarNode *node){
+void
+PolygonizeGraph::computeNextCWEdges(planarNode *node)
+{
 	planarDirectedEdgeStar *deStar=node->getOutEdges();
 	PolygonizeDirectedEdge *startDE=NULL;
 	PolygonizeDirectedEdge *prevDE=NULL;
 
 	// the edges are stored in CCW order around the star
-	vector<planarDirectedEdge*> *pde=deStar->getEdges();
-	for(int i=0;i<(int)pde->size();i++) {
-		PolygonizeDirectedEdge *outDE=(PolygonizeDirectedEdge*)(*pde)[i];
+	vector<planarDirectedEdge*> &pde=deStar->getEdges();
+	for(unsigned int i=0; i<pde.size(); ++i) {
+		PolygonizeDirectedEdge *outDE=(PolygonizeDirectedEdge*)pde[i];
 		if (outDE->isMarked()) continue;
 		if (startDE==NULL)
 			startDE=outDE;
@@ -305,20 +318,25 @@ void PolygonizeGraph::computeNextCWEdges(planarNode *node){
 		sym->setNext(startDE);
 	}
 }
+
 /**
-* Computes the next edge pointers going CCW around the given node, for the
-* given edgering label.
-* This algorithm has the effect of converting maximal edgerings into minimal edgerings
-*/
-void PolygonizeGraph::computeNextCCWEdges(planarNode *node, long label) {
+ * Computes the next edge pointers going CCW around the given node, for the
+ * given edgering label.
+ * This algorithm has the effect of converting maximal edgerings into
+ * minimal edgerings
+ */
+void
+PolygonizeGraph::computeNextCCWEdges(planarNode *node, long label)
+{
 	planarDirectedEdgeStar *deStar=node->getOutEdges();
 	PolygonizeDirectedEdge *firstOutDE=NULL;
 	PolygonizeDirectedEdge *prevInDE=NULL;
 
 	// the edges are stored in CCW order around the star
-	vector<planarDirectedEdge*> *edges=deStar->getEdges();
-	for(int i=(int)edges->size()-1;i>=0;i--) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)(*edges)[i];
+	vector<planarDirectedEdge*> &edges=deStar->getEdges();
+	for(unsigned int i=edges.size()-1; i>=0; --i)
+	{
+		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
 		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
 		PolygonizeDirectedEdge *outDE=NULL;
 		if (de->getLabel()==label) outDE=de;
@@ -406,9 +424,10 @@ PolygonizeGraph::deleteDangles()
 		planarNode *node=nodeStack[nodeStack.size()-1];
 		nodeStack.pop_back();
 		deleteAllEdges(node);
-		vector<planarDirectedEdge*> *nodeOutEdges=node->getOutEdges()->getEdges();
-		for(int j=0;j<(int)nodeOutEdges->size();j++) {
-			PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*) (*nodeOutEdges)[j];
+		vector<planarDirectedEdge*> &nodeOutEdges=node->getOutEdges()->getEdges();
+		for(unsigned int j=0; j<nodeOutEdges.size(); ++j)
+		{
+			PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)nodeOutEdges[j];
 			// delete this edge and its sym
 			de->setMarked(true);
 			PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
@@ -425,10 +444,15 @@ PolygonizeGraph::deleteDangles()
 	}
 	return dangleLines;
 }
-}
+
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.8  2004/12/14 10:35:44  strk
  * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
  * for delayed destruction.

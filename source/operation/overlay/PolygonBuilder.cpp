@@ -15,7 +15,6 @@
  **********************************************************************/
 
 #include <geos/opOverlay.h>
-#include <stdio.h>
 #include <geos/util.h>
 
 #ifndef DEBUG
@@ -25,49 +24,44 @@
 namespace geos {
 
 PolygonBuilder::PolygonBuilder(const GeometryFactory *newGeometryFactory,
-	CGAlgorithms *newCga):
-		geometryFactory(newGeometryFactory),
-		//cga(newCga), 
-		shellList(new vector<EdgeRing*>)
+		CGAlgorithms *newCga):
+	geometryFactory(newGeometryFactory)
 {
-	//geometryFactory=newGeometryFactory;
-	//cga=newCga;
-	//shellList=new vector<EdgeRing*>();
 }
 
 PolygonBuilder::~PolygonBuilder()
 {
-	for(int i=0;i<(int)shellList->size();i++) {
-		delete (*shellList)[i];
+	for(unsigned int i=0; i<shellList.size(); ++i)
+	{
+		delete shellList[i];
 	}
-	delete shellList;
 }
 
 void
 PolygonBuilder::add(PlanarGraph *graph)
 	//throw(TopologyException *)
 {
-	vector<DirectedEdge*> *dirEdges=new vector<DirectedEdge*>();
-	vector<Node*> *nodes=new vector<Node*>();
 	vector<EdgeEnd*> *ee=graph->getEdgeEnds();
-	for(int i=0;i<(int)ee->size();i++) {
-		dirEdges->push_back((DirectedEdge*)(*ee)[i]);
+
+	unsigned int eeSize=ee->size();
+	vector<DirectedEdge*> dirEdges(eeSize);
+
+	for(unsigned int i=0; i<eeSize; ++i)
+	{
+		dirEdges[i]=(DirectedEdge*)(*ee)[i];
 	}
+
 	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
+	vector<Node*> nodes;
+	nodes.reserve(nodeMap.size());
+
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();++it) {
 		Node *node=it->second;
-		nodes->push_back(node);
+		nodes.push_back(node);
 	}
-	try {
-		add(dirEdges,nodes); // might throw a TopologyException *
-	} catch (...) {
-		delete dirEdges;
-		delete nodes;
-		throw;
-	}
-	delete dirEdges;
-	delete nodes;
+
+	add(&dirEdges,&nodes); // might throw a TopologyException *
 }
 
 void
@@ -84,11 +78,10 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 	}
 
 	vector<MaximalEdgeRing*>* maxEdgeRings=buildMaximalEdgeRings(dirEdges);
-	vector<EdgeRing*> *freeHoleList=new vector<EdgeRing*>();
-	vector<MaximalEdgeRing*> *edgeRings=buildMinimalEdgeRings(maxEdgeRings,shellList,freeHoleList);
-	sortShellsAndHoles(edgeRings,shellList,freeHoleList);
-	placeFreeHoles(shellList, freeHoleList);
-	delete freeHoleList;
+	vector<EdgeRing*> freeHoleList;
+	vector<MaximalEdgeRing*> *edgeRings=buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
+	sortShellsAndHoles(edgeRings,&shellList,&freeHoleList);
+	placeFreeHoles(&shellList, &freeHoleList);
 	delete maxEdgeRings;
 	delete edgeRings;
 	//Assert: every hole on freeHoleList has a shell assigned to it
@@ -97,7 +90,7 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 vector<Geometry*>*
 PolygonBuilder::getPolygons()
 {
-	vector<Geometry*> *resultPolyList=computePolygons(shellList);
+	vector<Geometry*> *resultPolyList=computePolygons(&shellList);
 	return resultPolyList;
 }
 
@@ -304,11 +297,11 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 			minEnv=lr->getEnvelopeInternal();
 		}
 		bool isContained=false;
-		CoordinateSequence *rcl = tryRing->getCoordinates();
+		const CoordinateSequence *rcl = tryRing->getCoordinatesRO();
 		if (tryEnv->contains(testEnv)
 			&& CGAlgorithms::isPointInRing(testPt,rcl))
 				isContained=true;
-		delete rcl;
+		//delete rcl;
 		// check if this new containing ring is smaller than the current minimum ring
 		if (isContained) {
 			if (minShell==NULL
@@ -349,8 +342,8 @@ PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList)
 bool
 PolygonBuilder::containsPoint(Coordinate& p)
 {
-	for(int i=0;i<(int)shellList->size();i++) {
-		EdgeRing *er=(*shellList)[i];
+	for(unsigned int i=0;i<shellList.size(); ++i) {
+		EdgeRing *er=shellList[i];
 		if (er->containsPoint(p))
 			return true;
 	}
@@ -361,6 +354,10 @@ PolygonBuilder::containsPoint(Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.20  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

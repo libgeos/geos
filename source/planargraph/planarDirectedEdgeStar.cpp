@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -21,15 +22,16 @@ namespace geos {
 /*
  * Constructs a DirectedEdgeStar with no edges.
  */
-planarDirectedEdgeStar::planarDirectedEdgeStar()
+planarDirectedEdgeStar::planarDirectedEdgeStar():
+	sorted(false)
 {
-	outEdges = new vector<planarDirectedEdge*>();
-	sorted=false;
+	//outEdges = new vector<planarDirectedEdge*>();
+	//sorted=false;
 }
 
 planarDirectedEdgeStar::~planarDirectedEdgeStar()
 {
-	delete outEdges;
+	//delete outEdges;
 }
 
 /*
@@ -38,7 +40,7 @@ planarDirectedEdgeStar::~planarDirectedEdgeStar()
 void
 planarDirectedEdgeStar::add(planarDirectedEdge *de)
 {
-	outEdges->push_back(de);
+	outEdges.push_back(de);
 	sorted=false;
 }
 
@@ -48,10 +50,12 @@ planarDirectedEdgeStar::add(planarDirectedEdge *de)
 void
 planarDirectedEdgeStar::remove(planarDirectedEdge *de)
 {
-	for(int i=0;i<(int)outEdges->size();i++) {
-		if((*outEdges)[i]==de) {
-			outEdges->erase(outEdges->begin()+i);
-			i--;
+	for(unsigned int i=0; i<outEdges.size(); ++i)
+	{
+		if(outEdges[i]==de)
+		{
+			outEdges.erase(outEdges.begin()+i);
+			--i;
 		}
 	}
 }
@@ -64,28 +68,28 @@ vector<planarDirectedEdge*>::iterator
 planarDirectedEdgeStar::iterator()
 {
 	sortEdges();
-	return outEdges->begin();
+	return outEdges.begin();
 }
 
 /*
  * Returns the number of edges around the Node associated with this
  * DirectedEdgeStar.
  */
-int
-planarDirectedEdgeStar::getDegree()
+unsigned int
+planarDirectedEdgeStar::getDegree() const
 { 
-	return (int)outEdges->size();
+	return outEdges.size();
 }
 
 /*
  * Returns the coordinate for the node at wich this star is based
  */
 Coordinate&
-planarDirectedEdgeStar::getCoordinate()
+planarDirectedEdgeStar::getCoordinate() const
 {
-	if (outEdges->empty())
+	if (outEdges.empty())
 		return Coordinate::nullCoord;
-	planarDirectedEdge *e=(*outEdges)[0];
+	planarDirectedEdge *e=outEdges[0];
 	return e->getCoordinate();
 }
 
@@ -93,7 +97,7 @@ planarDirectedEdgeStar::getCoordinate()
  * Returns the DirectedEdges, in ascending order by angle with
  * the positive x-axis.
  */
-vector<planarDirectedEdge*>*
+vector<planarDirectedEdge*>&
 planarDirectedEdgeStar::getEdges()
 {
 	sortEdges();
@@ -113,7 +117,7 @@ void
 planarDirectedEdgeStar::sortEdges()
 {
 	if (!sorted) {
-		sort(outEdges->begin(),outEdges->end(),pdeLessThan);
+		sort(outEdges.begin(), outEdges.end(), pdeLessThan);
 		sorted=true;
 	}
 }
@@ -123,11 +127,12 @@ planarDirectedEdgeStar::sortEdges()
  * ascending order by angle with the positive x-axis.
  */
 int
-planarDirectedEdgeStar::getIndex(planarEdge *edge)
+planarDirectedEdgeStar::getIndex(const planarEdge *edge)
 {
 	sortEdges();
-	for (unsigned int i = 0; i<outEdges->size(); i++) {
-		planarDirectedEdge *de =(*outEdges)[i];
+	for (unsigned int i = 0; i<outEdges.size(); ++i)
+	{
+		planarDirectedEdge *de =outEdges[i];
 		if (de->getEdge() == edge)
 		return i;
 	}
@@ -139,11 +144,12 @@ planarDirectedEdgeStar::getIndex(planarEdge *edge)
  * in ascending order by angle with the positive x-axis.
  */  
 int
-planarDirectedEdgeStar::getIndex(planarDirectedEdge *dirEdge)
+planarDirectedEdgeStar::getIndex(const planarDirectedEdge *dirEdge)
 {
 	sortEdges();
-	for (unsigned int i = 0; i <outEdges->size(); i++) {
-		planarDirectedEdge *de =(*outEdges)[i];
+	for (unsigned int i = 0; i <outEdges.size(); ++i)
+	{
+		planarDirectedEdge *de =outEdges[i];
 		if (de == dirEdge)
 		return i;
 	}
@@ -155,11 +161,11 @@ planarDirectedEdgeStar::getIndex(planarDirectedEdge *dirEdge)
  * DirectedEdgeStar. 
  */
 int
-planarDirectedEdgeStar::getIndex(int i)
+planarDirectedEdgeStar::getIndex(int i) const
 {
-	int modi = i % (int)outEdges->size();
+	int modi = i % (int)outEdges.size();
 	//I don't think modi can be 0 (assuming i is positive) [Jon Aquino 10/28/2003] 
-	if (modi < 0) modi += (int)outEdges->size();
+	if (modi < 0) modi += (int)outEdges.size();
 	return modi;
 }
 
@@ -171,7 +177,7 @@ planarDirectedEdge*
 planarDirectedEdgeStar::getNextEdge(planarDirectedEdge *dirEdge)
 {
 	int i = getIndex(dirEdge);
-	return (*outEdges)[getIndex(i + 1)];
+	return outEdges[getIndex(i + 1)];
 }
 
 //} // namespace planargraph
@@ -179,6 +185,10 @@ planarDirectedEdgeStar::getNextEdge(planarDirectedEdge *dirEdge)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.5  2005/08/22 13:31:17  strk
  * Fixed comparator functions used with STL sort() algorithm to
  * implement StrictWeakOrdering semantic.

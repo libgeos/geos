@@ -122,7 +122,7 @@ public:
 	Geometry* getResultGeometry(int funcCode);
 		// throw(TopologyException *);
 
-	PlanarGraph* getGraph();
+	PlanarGraph& getGraph();
 
 	/*
 	 * This method is used to decide if a point node should be included
@@ -158,10 +158,10 @@ protected:
 	void insertUniqueEdge(Edge *e);
 
 private:
-	PointLocator *ptLocator;
+	PointLocator ptLocator;
 	const GeometryFactory *geomFact;
 	Geometry *resultGeom;
-	PlanarGraph *graph;
+	PlanarGraph graph;
 	EdgeList *edgeList;
 	vector<Polygon*> *resultPolyList;
 	vector<LineString*> *resultLineList;
@@ -487,82 +487,97 @@ public:
 	bool containsPoint(Coordinate& p);
 private:
 	const GeometryFactory *geometryFactory;
-	CGAlgorithms *cga;
-//	List dirEdgeList; //Doesn't seem to be used at all
-//	NodeMap *nodes;
-	vector<EdgeRing*> *shellList;
+	vector<EdgeRing*> shellList;
+
 	/**
-	* for all DirectedEdges in result, form them into MaximalEdgeRings
-	*/
-	vector<MaximalEdgeRing*>* buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges);
-	vector<MaximalEdgeRing*>* buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
-												vector<EdgeRing*> *newShellList,
-												vector<EdgeRing*> *freeHoleList);
+	 * for all DirectedEdges in result, form them into MaximalEdgeRings
+	 */
+	vector<MaximalEdgeRing*>* buildMaximalEdgeRings(
+		vector<DirectedEdge*> *dirEdges);
+
+	vector<MaximalEdgeRing*>* buildMinimalEdgeRings(
+		vector<MaximalEdgeRing*> *maxEdgeRings,
+		vector<EdgeRing*> *newShellList,
+		vector<EdgeRing*> *freeHoleList);
 	/**
-	* This method takes a list of MinimalEdgeRings derived from a MaximalEdgeRing,
-	* and tests whether they form a Polygon.  This is the case if there is a single shell
-	* in the list.  In this case the shell is returned.
-	* The other possibility is that they are a series of connected holes, in which case
-	* no shell is returned.
-	*
-	* @return the shell EdgeRing, if there is one
-	* @return NULL, if all the rings are holes
-	*/
+	 * This method takes a list of MinimalEdgeRings derived from a
+	 * MaximalEdgeRing, and tests whether they form a Polygon. 
+	 * This is the case if there is a single shell
+	 * in the list.  In this case the shell is returned.
+	 * The other possibility is that they are a series of connected
+	 * holes, in which case no shell is returned.
+	 *
+	 * @return the shell EdgeRing, if there is one
+	 * @return NULL, if all the rings are holes
+	 */
 	EdgeRing* findShell(vector<MinimalEdgeRing*>* minEdgeRings);
+
 	/**
-	* This method assigns the holes for a Polygon (formed from a list of
-	* MinimalEdgeRings) to its shell.
-	* Determining the holes for a MinimalEdgeRing polygon serves two purposes:
-	* <ul>
-	* <li>it is faster than using a point-in-polygon check later on.
-	* <li>it ensures correctness, since if the PIP test was used the point
-	* chosen might lie on the shell, which might return an incorrect result from the
-	* PIP test
-	* </ul>
-	*/
-	void placePolygonHoles(EdgeRing *shell,vector<MinimalEdgeRing*> *minEdgeRings);
+	 * This method assigns the holes for a Polygon (formed from a list of
+	 * MinimalEdgeRings) to its shell.
+	 * Determining the holes for a MinimalEdgeRing polygon serves two
+	 * purposes:
+	 * 
+	 *  - it is faster than using a point-in-polygon check later on.
+	 *  - it ensures correctness, since if the PIP test was used the point
+	 *    chosen might lie on the shell, which might return an incorrect
+	 *    result from the PIP test
+	 */
+	void placePolygonHoles(EdgeRing *shell,
+		vector<MinimalEdgeRing*> *minEdgeRings);
+
 	/**
-	* For all rings in the input list,
-	* determine whether the ring is a shell or a hole
-	* and add it to the appropriate list.
-	* Due to the way the DirectedEdges were linked,
-	* a ring is a shell if it is oriented CW, a hole otherwise.
-	*/
+	 * For all rings in the input list,
+	 * determine whether the ring is a shell or a hole
+	 * and add it to the appropriate list.
+	 * Due to the way the DirectedEdges were linked,
+	 * a ring is a shell if it is oriented CW, a hole otherwise.
+	 */
 	void sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
-												vector<EdgeRing*> *newShellList,
-												vector<EdgeRing*> *freeHoleList);
+		vector<EdgeRing*> *newShellList,
+		vector<EdgeRing*> *freeHoleList);
+
 	/**
-	* This method determines finds a containing shell for all holes
-	* which have not yet been assigned to a shell.
-	* These "free" holes should
-	* all be <b>properly</b> contained in their parent shells, so it is safe to use the
-	* <code>findEdgeRingContaining</code> method.
-	* (This is the case because any holes which are NOT
-	* properly contained (i.e. are connected to their
-	* parent shell) would have formed part of a MaximalEdgeRing
-	* and been handled in a previous step).
-	*/
-	void placeFreeHoles(vector<EdgeRing*>* newShellList, vector<EdgeRing*> *freeHoleList);
+	 * This method determines finds a containing shell for all holes
+	 * which have not yet been assigned to a shell.
+	 * These "free" holes should
+	 * all be <b>properly</b> contained in their parent shells, so it
+	 * is safe to use the
+	 * <code>findEdgeRingContaining</code> method.
+	 * (This is the case because any holes which are NOT
+	 * properly contained (i.e. are connected to their
+	 * parent shell) would have formed part of a MaximalEdgeRing
+	 * and been handled in a previous step).
+	 */
+	void placeFreeHoles(vector<EdgeRing*>* newShellList,
+		vector<EdgeRing*> *freeHoleList);
+
 	/**
-	* Find the innermost enclosing shell EdgeRing containing the argument EdgeRing, if any.
-	* The innermost enclosing ring is the <i>smallest</i> enclosing ring.
-	* The algorithm used depends on the fact that:
-	* <br>
-	*  ring A contains ring B iff envelope(ring A) contains envelope(ring B)
-	* <br>
-	* This routine is only safe to use if the chosen point of the hole
-	* is known to be properly contained in a shell
-	* (which is guaranteed to be the case if the hole does not touch its shell)
-	*
-	* @return containing EdgeRing, if there is one
-	* @return NULL if no containing EdgeRing is found
-	*/
-	EdgeRing* findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRing*> *newShellList);
+	 * Find the innermost enclosing shell EdgeRing containing the
+	 * argument EdgeRing, if any.
+	 * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
+	 * The algorithm used depends on the fact that:
+	 *
+	 * ring A contains ring B iff envelope(ring A)
+	 * contains envelope(ring B)
+	 * 
+	 * This routine is only safe to use if the chosen point of the hole
+	 * is known to be properly contained in a shell
+	 * (which is guaranteed to be the case if the hole does not touch
+	 * its shell)
+	 *
+	 * @return containing EdgeRing, if there is one
+	 * @return NULL if no containing EdgeRing is found
+	 */
+	EdgeRing* findEdgeRingContaining(EdgeRing *testEr,
+		vector<EdgeRing*> *newShellList);
+
 	vector<Geometry*>* computePolygons(vector<EdgeRing*> *newShellList);
+
 	/**
-	* Checks the current set of shells (with their associated holes) to
-	* see if any of them contain the point.
-	*/
+	 * Checks the current set of shells (with their associated holes) to
+	 * see if any of them contain the point.
+	 */
 
 };
 
@@ -602,6 +617,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
  * Revision 1.12  2005/07/11 12:17:47  strk
  * Cleaned up syntax
  *
