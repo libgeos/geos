@@ -159,14 +159,6 @@ TopologyLocation::setLocations(int on, int left, int right)
 	location[Position::RIGHT]=right;
 }
 
-void
-TopologyLocation::setLocations(const TopologyLocation& gl)
-{
-	for (unsigned int i=0; i<gl.location.size(); i++) {
-		location[i]=gl.location[i];
-	}
-}
-
 bool
 TopologyLocation::allPositionsEqual(int loc) const
 {
@@ -209,6 +201,9 @@ TopologyLocation::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2005/11/15 18:30:59  strk
+ * Removed dead code
+ *
  * Revision 1.3  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

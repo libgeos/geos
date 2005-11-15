@@ -89,17 +89,6 @@ Label::Label(int geomIndex,int onLoc,int leftLoc,int rightLoc)
 	elt[geomIndex].setLocations(onLoc,leftLoc,rightLoc);
 }
 
-/**
- * Construct a Label with the same values as the argument for the
- * given Geometry index.
- */
-Label::Label(int geomIndex, const TopologyLocation &gl)
-{
-	elt[0]=TopologyLocation(gl.getLocations());
-	elt[1]=TopologyLocation(gl.getLocations());
-	elt[geomIndex].setLocations(gl);
-}
-
 void
 Label::flip()
 {
@@ -161,12 +150,6 @@ Label::merge(const Label &lbl)
 	for (int i=0; i<2; i++) {
 		elt[i].merge(lbl.elt[i]);
 	}
-}
-
-void
-Label::setGeometryLocation(int geomIndex, const TopologyLocation& tl)
-{
-	elt[geomIndex].setLocations(tl);
 }
 
 int
@@ -248,6 +231,9 @@ Label::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/15 18:30:59  strk
+ * Removed dead code
+ *
  * Revision 1.4  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

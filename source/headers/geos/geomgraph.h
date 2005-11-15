@@ -96,13 +96,11 @@ public:
 	void setLocation(int locValue);
 	const vector<int> &getLocations() const;
 	void setLocations(int on, int left, int right);
-	void setLocations(const TopologyLocation &gl);
 	bool allPositionsEqual(int loc) const;
 	void merge(const TopologyLocation &gl);
 	string toString() const;
 private:
 	vector<int> location;
-	//void init(int size);
 };
 
 class Label {
@@ -115,7 +113,6 @@ public:
 	Label();
 	virtual ~Label();
 	Label(int geomIndex,int onLoc,int leftLoc,int rightLoc);
-	Label(int geomIndex, const TopologyLocation& gl);
 	void flip();
 	int getLocation(int geomIndex, int posIndex) const;
 	int getLocation(int geomIndex) const;
@@ -137,8 +134,6 @@ public:
 	string toString() const;
 protected:
 	TopologyLocation elt[2];
-private:
-	void setGeometryLocation(int geomIndex, const TopologyLocation& tl);
 };
 
 class Depth {
@@ -833,6 +828,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/15 18:30:59  strk
+ * Removed dead code
+ *
  * Revision 1.15  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

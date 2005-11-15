@@ -282,9 +282,6 @@ private:
 	Coordinate* intersection(const Coordinate& p1, const Coordinate& p2,
 		const Coordinate& q1, const Coordinate& q2) const;
 
-	void normalize(Coordinate *n1, Coordinate *n2,
-		Coordinate *n3, Coordinate *n4, Coordinate *normPt) const;
-
 	double smallestInAbsValue(double x1, double x2,
 		double x3, double x4) const;
 
@@ -663,6 +660,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/11/15 18:30:59  strk
+ * Removed dead code
+ *
  * Revision 1.14  2005/11/10 15:20:32  strk
  * Made virtual overloads explicit.
  *

@@ -844,29 +844,6 @@ LineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Co
 }
 
 
-void
-LineIntersector::normalize(Coordinate *n1,Coordinate *n2,Coordinate *n3,Coordinate *n4,Coordinate *normPt) const
-{
-	normPt->x=smallestInAbsValue(n1->x,n2->x,n3->x,n4->x);
-	normPt->y=smallestInAbsValue(n1->y,n2->y,n3->y,n4->y);
-	n1->x-=normPt->x;
-	n1->y-=normPt->y;
-	n2->x-=normPt->x;
-	n2->y-=normPt->y;
-	n3->x-=normPt->x;
-	n3->y-=normPt->y;
-	n4->x-=normPt->x;
-	n4->y-=normPt->y;
-
-#if COMPUTE_Z
-	normPt->z=smallestInAbsValue(n1->z,n2->z,n3->z,n4->z);
-	n1->z-=normPt->z;
-	n2->z-=normPt->z;
-	n3->z-=normPt->z;
-	n4->z-=normPt->z;
-#endif
-}
-
 double
 LineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) const
 {
@@ -954,6 +931,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2005/11/15 18:30:59  strk
+ * Removed dead code
+ *
  * Revision 1.24  2005/06/24 11:09:42  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
