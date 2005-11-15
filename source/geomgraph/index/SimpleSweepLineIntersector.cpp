@@ -19,16 +19,16 @@
 namespace geos {
 
 SimpleSweepLineIntersector::SimpleSweepLineIntersector():
-	events(new vector<SweepLineEvent*>()),
+	//events(new vector<SweepLineEvent*>()),
 	nOverlaps(0)
 {
 }
 
 SimpleSweepLineIntersector::~SimpleSweepLineIntersector()
 {
-	for(unsigned int i=0; i<events->size(); ++i)
-		delete (*events)[i];
-	delete events;
+	for(unsigned int i=0; i<events.size(); ++i)
+		delete events[i];
+	//delete events;
 }
 
 void
@@ -80,8 +80,8 @@ SimpleSweepLineIntersector::add(Edge *edge, void* edgeSet)
 	{
 		SweepLineSegment *ss=new SweepLineSegment(edge, i);
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet, ss->getMinX(), NULL, ss);
-		events->push_back(insertEvent);
-		events->push_back(new SweepLineEvent(edgeSet, ss->getMaxX(), insertEvent, ss));
+		events.push_back(insertEvent);
+		events.push_back(new SweepLineEvent(edgeSet, ss->getMaxX(), insertEvent, ss));
 	}
 }
 
@@ -93,10 +93,10 @@ SimpleSweepLineIntersector::add(Edge *edge, void* edgeSet)
 void
 SimpleSweepLineIntersector::prepareEvents()
 {
-	sort(events->begin(), events->end(), SweepLineEventLessThen());
-	for(unsigned int i=0; i<events->size(); i++ )
+	sort(events.begin(), events.end(), SweepLineEventLessThen());
+	for(unsigned int i=0; i<events.size(); ++i )
 	{
-		SweepLineEvent *ev=(*events)[i];
+		SweepLineEvent *ev=events[i];
 		if (ev->isDelete())
 		{
 			ev->getInsertEvent()->setDeleteEventIndex(i);
@@ -109,9 +109,9 @@ SimpleSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 {
 	nOverlaps=0;
 	prepareEvents();
-	for(unsigned int i=0; i<events->size(); i++)
+	for(unsigned int i=0; i<events.size(); ++i)
 	{
-		SweepLineEvent *ev=(*events)[i];
+		SweepLineEvent *ev=events[i];
 		if (ev->isInsert())
 		{
 			processOverlaps(i,ev->getDeleteEventIndex(),ev,si);
@@ -131,9 +131,9 @@ SimpleSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev
 	 * include current insert event object in list of event objects to test.
 	 * Last index can be skipped, because it must be a Delete event.
  	 */
-	for(int i=start;i<end;i++)
+	for(int i=start; i<end; ++i)
 	{
-		SweepLineEvent *ev1=(*events)[i];
+		SweepLineEvent *ev1=events[i];
 		if (ev1->isInsert())
 		{
 			SweepLineSegment *ss1=(SweepLineSegment*) ev1->getObject();
@@ -150,6 +150,11 @@ SimpleSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/15 10:04:37  strk
+ * Reduced heap allocations (vectors, mostly).
+ * Enforced const-correctness, changed some interfaces
+ * to use references rather then pointers when appropriate.
+ *
  * Revision 1.5  2005/11/03 21:28:06  strk
  * Fixed constructors broke by previous commit
  *

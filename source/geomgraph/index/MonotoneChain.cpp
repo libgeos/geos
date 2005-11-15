@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/11/15 10:04:37  strk
+ * Reduced heap allocations (vectors, mostly).
+ * Enforced const-correctness, changed some interfaces
+ * to use references rather then pointers when appropriate.
+ *
  * Revision 1.3  2004/10/20 17:32:14  strk
  * Initial approach to 2.5d intersection()
  *
@@ -53,7 +58,7 @@ MonotoneChain::~MonotoneChain() {
 void
 MonotoneChain::computeIntersections(MonotoneChain *mc, SegmentIntersector *si)
 {
-	mce->computeIntersectsForChain(chainIndex,mc->mce,mc->chainIndex,si);
+	mce->computeIntersectsForChain(chainIndex,*(mc->mce),mc->chainIndex,*si);
 }
 
 }

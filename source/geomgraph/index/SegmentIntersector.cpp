@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -28,48 +29,54 @@ SegmentIntersector::isAdjacentSegments(int i1,int i2)
 	return abs(i1-i2)==1;
 }
 
-SegmentIntersector::SegmentIntersector()
+#if 0
+SegmentIntersector::SegmentIntersector():
+	numTests(0),
+	hasIntersectionVar(false),
+	hasProper(false),
+	hasProperInterior(false),
+	li(NULL),
+	includeProper(false),
+	recordIsolated(false),
+	numIntersections(0),
+	bdyNodes(NULL)
 {
-	hasIntersectionVar=false;
-	hasProper=false;
-	hasProperInterior=false;
-	numIntersections=0;
-	numTests=0;
-	bdyNodes=NULL;
 }
+#endif
 
 SegmentIntersector::~SegmentIntersector()
 {
 	if (bdyNodes!=NULL) {
-		for(int i=0;i<(int)bdyNodes->size();i++) {
+		for(unsigned int i=0; i<bdyNodes->size(); ++i)
+		{
 			delete (*bdyNodes)[i];
 		}
 		delete bdyNodes;
 	}
 }
 
-SegmentIntersector::SegmentIntersector(LineIntersector *newLi,bool newIncludeProper,bool newRecordIsolated)
+SegmentIntersector::SegmentIntersector(LineIntersector *newLi,
+		bool newIncludeProper, bool newRecordIsolated):
+	numTests(0),
+	hasIntersectionVar(false),
+	hasProper(false),
+	hasProperInterior(false),
+	li(newLi),
+	includeProper(newIncludeProper),
+	recordIsolated(newRecordIsolated),
+	numIntersections(0),
+	bdyNodes(NULL)
 {
-	hasIntersectionVar=false;
-	hasProper=false;
-	hasProperInterior=false;
-	numIntersections=0;
-	numTests=0;
-
-	li=newLi;
-	includeProper=newIncludeProper;
-	recordIsolated=newRecordIsolated;
-	bdyNodes=NULL;
 }
 
 void
-SegmentIntersector::setBoundaryNodes(vector<Node*> *bdyNodes0,vector<Node*> *bdyNodes1)
+SegmentIntersector::setBoundaryNodes(vector<Node*> *bdyNodes0,
+	vector<Node*> *bdyNodes1)
 {
 	if (bdyNodes==NULL)
-		bdyNodes=new vector<vector<Node*>*>();
-	bdyNodes->resize(2);
-	*(bdyNodes->begin())=bdyNodes0;
-	*(bdyNodes->begin()+1)=bdyNodes1;
+		bdyNodes=new vector<vector<Node*>*>(2);
+	(*bdyNodes)[0]=bdyNodes0;
+	(*bdyNodes)[1]=bdyNodes1;
 }
 
 /*
@@ -231,6 +238,11 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/15 10:04:37  strk
+ * Reduced heap allocations (vectors, mostly).
+ * Enforced const-correctness, changed some interfaces
+ * to use references rather then pointers when appropriate.
+ *
  * Revision 1.8  2005/04/06 11:09:41  strk
  * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
  *

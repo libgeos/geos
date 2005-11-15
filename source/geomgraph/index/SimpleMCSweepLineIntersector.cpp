@@ -19,19 +19,19 @@
 
 namespace geos {
 
-SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector():
-	events(new vector<SweepLineEvent*>())
+SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
+	//events(new vector<SweepLineEvent*>())
 {
 }
 
 SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector()
 {
-	for(unsigned int i=0; i<events->size(); ++i)
+	for(unsigned int i=0; i<events.size(); ++i)
 	{
-		SweepLineEvent *sle=(*events)[i];
+		SweepLineEvent *sle=events[i];
 		if (sle->isDelete()) delete sle;
 	}
-	delete events;
+	//delete events;
 }
 
 void
@@ -79,15 +79,15 @@ void
 SimpleMCSweepLineIntersector::add(Edge *edge, void* edgeSet)
 {
 	MonotoneChainEdge *mce=edge->getMonotoneChainEdge();
-	vector<int>* startIndex=mce->getStartIndexes();
-	unsigned int n = startIndex->size()-1;
-	events->reserve(events->size()+(n*2));
+	vector<int> &startIndex=mce->getStartIndexes();
+	unsigned int n = startIndex.size()-1;
+	events.reserve(events.size()+(n*2));
 	for(unsigned int i=0; i<n; ++i)
 	{
 		MonotoneChain *mc=new MonotoneChain(mce,i);
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),NULL,mc);
-		events->push_back(insertEvent);
-		events->push_back(new SweepLineEvent(edgeSet,mce->getMaxX(i),insertEvent,mc));
+		events.push_back(insertEvent);
+		events.push_back(new SweepLineEvent(edgeSet,mce->getMaxX(i),insertEvent,mc));
 	}
 }
 
@@ -99,10 +99,10 @@ SimpleMCSweepLineIntersector::add(Edge *edge, void* edgeSet)
 void
 SimpleMCSweepLineIntersector::prepareEvents()
 {
-	sort(events->begin(), events->end(), SweepLineEventLessThen());
-	for(unsigned int i=0; i<events->size(); ++i)
+	sort(events.begin(), events.end(), SweepLineEventLessThen());
+	for(unsigned int i=0; i<events.size(); ++i)
 	{
-		SweepLineEvent *ev=(*events)[i];
+		SweepLineEvent *ev=events[i];
 		if (ev->isDelete())
 		{
 			ev->getInsertEvent()->setDeleteEventIndex(i);
@@ -115,9 +115,9 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 {
 	nOverlaps=0;
 	prepareEvents();
-	for(unsigned int i=0; i<events->size(); ++i)
+	for(unsigned int i=0; i<events.size(); ++i)
 	{
-		SweepLineEvent *ev=(*events)[i];
+		SweepLineEvent *ev=events[i];
 		if (ev->isInsert())
 		{
 			processOverlaps(i,ev->getDeleteEventIndex(),ev,si);
@@ -138,7 +138,7 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 	 */
 	for(int i=start; i<end; ++i)
 	{
-		SweepLineEvent *ev1=(*events)[i];
+		SweepLineEvent *ev1=events[i];
 		if (ev1->isInsert())
 		{
 			MonotoneChain *mc1=(MonotoneChain*) ev1->getObject();
@@ -157,6 +157,11 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/11/15 10:04:37  strk
+ * Reduced heap allocations (vectors, mostly).
+ * Enforced const-correctness, changed some interfaces
+ * to use references rather then pointers when appropriate.
+ *
  * Revision 1.7  2005/11/03 21:28:06  strk
  * Fixed constructors broke by previous commit
  *

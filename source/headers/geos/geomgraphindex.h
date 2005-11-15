@@ -35,7 +35,7 @@ public:
 	static bool isAdjacentSegments(int i1,int i2);
 	// testing only
 	int numTests;
-	SegmentIntersector();
+	//SegmentIntersector();
 	virtual ~SegmentIntersector();
 	SegmentIntersector(LineIntersector *newLi,bool newIncludeProper,bool newRecordIsolated);
 	void setBoundaryNodes(vector<Node*> *bdyNodes0,vector<Node*> *bdyNodes1);
@@ -57,7 +57,7 @@ private:
 	LineIntersector *li;
 	bool includeProper;
 	bool recordIsolated;
-	bool isSelfIntersection;
+	//bool isSelfIntersection;
 	//bool intersectionFound;
 	int numIntersections;
 	vector<vector<Node*>*> *bdyNodes;
@@ -158,34 +158,42 @@ class MonotoneChainIndexer{
 public:
 //	public static int[] toIntArray(List list); //Not needed
 	MonotoneChainIndexer(){};
-	vector<int>* getChainStartIndices(const CoordinateSequence* pts);
+	void getChainStartIndices(const CoordinateSequence*, vector<int>&);
 private:
 	int findChainEnd(const CoordinateSequence* pts,int start);
 };
 
 class MonotoneChainEdge{
 public:
-	MonotoneChainEdge();
+	//MonotoneChainEdge();
 	~MonotoneChainEdge();
 	MonotoneChainEdge(Edge *newE);
 	const CoordinateSequence* getCoordinates();
-	vector<int>* getStartIndexes();
+	vector<int>& getStartIndexes();
 	double getMinX(int chainIndex);
 	double getMaxX(int chainIndex);
-	void computeIntersects(MonotoneChainEdge *mce,SegmentIntersector *si);
-	void computeIntersectsForChain(int chainIndex0,MonotoneChainEdge *mce,int chainIndex1,SegmentIntersector *si);
+
+	void computeIntersects(const MonotoneChainEdge &mce,
+		SegmentIntersector &si);
+
+	void computeIntersectsForChain(int chainIndex0,
+		const MonotoneChainEdge &mce, int chainIndex1,
+		SegmentIntersector &si);
+
 protected:
 	Edge *e;
 	const CoordinateSequence* pts; // cache a reference to the coord array, for efficiency
 	// the lists of start/end indexes of the monotone chains.
 	// Includes the end point of the edge as a sentinel
-	vector<int>* startIndex;
+	vector<int> startIndex;
 	// these envelopes are created once and reused
-	Envelope *env1;
-	Envelope *env2;
+	Envelope env1;
+	Envelope env2;
 private:
-	void computeIntersectsForChain(int start0,int end0,MonotoneChainEdge *mce,
-									int start1,int end1,SegmentIntersector *ei);
+	void computeIntersectsForChain(int start0, int end0,
+		const MonotoneChainEdge &mce,
+		int start1, int end1,
+		SegmentIntersector &ei);
 };
 
 class MonotoneChain: public SweepLineEventOBJ {
@@ -213,7 +221,7 @@ public:
 	void computeIntersections(vector<Edge*> *edges,SegmentIntersector *si,bool testAllSegments);
 	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 protected:
-	vector<SweepLineEvent*> *events;
+	vector<SweepLineEvent*> events;
 	// statistics information
 	int nOverlaps;
 private:
@@ -249,7 +257,7 @@ public:
 	void computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si);
 private:
 	void add(vector<Edge*> *edges);
-	vector<SweepLineEvent*> *events;
+	vector<SweepLineEvent*> events;
 	// statistics information
 	int nOverlaps;
 	void add(vector<Edge*> *edges,void* edgeSet);
@@ -265,6 +273,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/15 10:04:37  strk
+ * Reduced heap allocations (vectors, mostly).
+ * Enforced const-correctness, changed some interfaces
+ * to use references rather then pointers when appropriate.
+ *
  * Revision 1.6  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

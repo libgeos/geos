@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2005/11/15 10:04:37  strk
+ * Reduced heap allocations (vectors, mostly).
+ * Enforced const-correctness, changed some interfaces
+ * to use references rather then pointers when appropriate.
+ *
  * Revision 1.3  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -42,20 +47,22 @@
 
 namespace geos {
 
-vector<int>*
-MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts)
+void
+MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts,
+	vector<int> &startIndexList)
 {
-	// find the startpoint (and endpoints) of all monotone chains in this edge
+	// find the startpoint (and endpoints) of all monotone chains
+	// in this edge
 	int start=0;
-	vector<int>* startIndexList=new vector<int>();
-	startIndexList->push_back(start);
+	//vector<int>* startIndexList=new vector<int>();
+	startIndexList.push_back(start);
 	do {
 		int last=findChainEnd(pts,start);
-		startIndexList->push_back(last);
+		startIndexList.push_back(last);
 		start=last;
 	} while(start<(int)pts->getSize()-1);
 	// copy list to an array of ints, for efficiency
-	return startIndexList;
+	//return startIndexList;
 }
 
 /**
