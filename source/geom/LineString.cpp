@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.50  2005/11/15 10:02:27  strk
+ * optimized envelope computation reducing virtual calls
+ *
  * Revision 1.49  2005/11/10 09:33:17  strk
  * Removed virtual overloading LineString::compareTo(LineString *)
  *
@@ -270,16 +273,18 @@ Envelope* LineString::computeEnvelopeInternal() const {
 	if (isEmpty()) {
 		return new Envelope();
 	}
-	double minx = points->getAt(0).x;
-	double miny = points->getAt(0).y;
-	double maxx = points->getAt(0).x;
-	double maxy = points->getAt(0).y;
+	const Coordinate &c=points->getAt(0);
+	double minx = c.x;
+	double miny = c.y;
+	double maxx = c.x;
+	double maxy = c.y;
 	int npts=points->getSize();
 	for (int i=1; i<npts; i++) {
-		minx = minx < points->getAt(i).x ? minx : points->getAt(i).x;
-		maxx = maxx > points->getAt(i).x ? maxx : points->getAt(i).x;
-		miny = miny < points->getAt(i).y ? miny : points->getAt(i).y;
-		maxy = maxy > points->getAt(i).y ? maxy : points->getAt(i).y;
+		const Coordinate &c=points->getAt(i);
+		minx = minx < c.x ? minx : c.x;
+		maxx = maxx > c.x ? maxx : c.x;
+		miny = miny < c.y ? miny : c.y;
+		maxy = maxy > c.y ? maxy : c.y;
 	}
 	return new Envelope(minx, maxx, miny, maxy);
 }
