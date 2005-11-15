@@ -617,10 +617,6 @@ void
 OverlayOp::computeOverlay(int opCode)
 	//throw(TopologyException *)
 {
-	vector<Edge*> *baseSplitEdges=NULL;
-	PolygonBuilder *polyBuilder=NULL;
-	LineBuilder *lineBuilder=NULL;
-	PointBuilder *pointBuilder=NULL;
 
 	// copy points from input Geometries.
 	// This ensures that any Point geometries
@@ -647,12 +643,12 @@ OverlayOp::computeOverlay(int opCode)
 #endif
 
 
-	baseSplitEdges = new vector<Edge*>();
-	(*arg)[0]->computeSplitEdges(baseSplitEdges);
-	(*arg)[1]->computeSplitEdges(baseSplitEdges);
+	vector<Edge*> baseSplitEdges;
+	(*arg)[0]->computeSplitEdges(&baseSplitEdges);
+	(*arg)[1]->computeSplitEdges(&baseSplitEdges);
 
 	// add the noded edges to this result graph
-	insertUniqueEdges(baseSplitEdges);
+	insertUniqueEdges(&baseSplitEdges);
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
@@ -663,63 +659,53 @@ OverlayOp::computeOverlay(int opCode)
 
 	graph->addEdges(edgeList->getEdges());
 
-	try {
-		// this can throw TopologyException *
-		computeLabelling();
+	// this can throw TopologyException *
+	computeLabelling();
 
-		//Debug.printWatch();
-		labelIncompleteNodes();
-		//Debug.printWatch();
-		//nodeMap.print(System.out);
-
-
-		/*
-		 * The ordering of building the result Geometries is important.
-		 * Areas must be built before lines, which must be built
-		 * before points.
-		 * This is so that lines which are covered by areas are not
-		 * included explicitly, and similarly for points.
-		 */
-		findResultAreaEdges(opCode);
-		cancelDuplicateResultEdges();
-
-		polyBuilder=new PolygonBuilder(geomFact,cga);
-		
-		// might throw a TopologyException *
-		polyBuilder->add(graph);
-
-		vector<Geometry*> *gv=polyBuilder->getPolygons();
-		resultPolyList=new vector<Polygon*>();
-		for(int i=0;i<(int)gv->size();i++) {
-			resultPolyList->push_back((Polygon*)(*gv)[i]);
-		}
-		delete gv;
-		lineBuilder=new LineBuilder(this,geomFact,ptLocator);
-		resultLineList=lineBuilder->build(opCode);
-		pointBuilder=new PointBuilder(this,geomFact,ptLocator);
-		resultPointList=pointBuilder->build(opCode);
-		// gather the results from all calculations into a single
-		// Geometry for the result set
-		resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
-#if USE_ELEVATION_MATRIX
-		elevationMatrix->elevate(resultGeom);
-#endif // USE_ELEVATION_MATRIX
-		
+	//Debug.printWatch();
+	labelIncompleteNodes();
+	//Debug.printWatch();
+	//nodeMap.print(System.out);
 
 
-	} catch (...) {
-		delete baseSplitEdges;
-		delete polyBuilder;
-		delete lineBuilder;
-		delete pointBuilder;
-		throw;
+	/*
+	 * The ordering of building the result Geometries is important.
+	 * Areas must be built before lines, which must be built
+	 * before points.
+	 * This is so that lines which are covered by areas are not
+	 * included explicitly, and similarly for points.
+	 */
+	findResultAreaEdges(opCode);
+	cancelDuplicateResultEdges();
+
+	PolygonBuilder polyBuilder(geomFact,cga);
+	
+	// might throw a TopologyException *
+	polyBuilder.add(graph);
+
+	vector<Geometry*> *gv=polyBuilder.getPolygons();
+	unsigned int gvSize=gv->size();
+	resultPolyList=new vector<Polygon*>(gvSize);
+	for(unsigned int i=0; i<gvSize; ++i) {
+		(*resultPolyList)[i]=(Polygon*)(*gv)[i];
 	}
+	delete gv;
+
+	LineBuilder lineBuilder(this,geomFact,ptLocator);
+	resultLineList=lineBuilder.build(opCode);
+
+	PointBuilder pointBuilder(this,geomFact,ptLocator);
+	resultPointList=pointBuilder.build(opCode);
+
+	// gather the results from all calculations into a single
+	// Geometry for the result set
+	resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
+#if USE_ELEVATION_MATRIX
+	elevationMatrix->elevate(resultGeom);
+#endif // USE_ELEVATION_MATRIX
+	
 
 
-	delete polyBuilder;
-	delete lineBuilder;
-	delete pointBuilder;
-	delete baseSplitEdges;
 }
 
 /*
@@ -835,6 +821,11 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37.2.3  2005/11/15 12:20:46  strk
+ * Removed useless CoordinateSequence copy in
+ * PolygonBuilder::findEdgeRingContaining.
+ * Reduced heap allocations in OverlayOp::computeOverlay
+ *
  * Revision 1.37.2.2  2005/11/04 08:26:17  strk
  * Ported OverlayOp::insertUniqueEdge() speedup from JTS-1.7 (rev.1.23).
  * Switched version to 2.1.5, updated NEWS file.
