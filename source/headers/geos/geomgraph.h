@@ -32,9 +32,19 @@ using namespace std;
 
 namespace geos {
 
+// forward decls
 class EdgeSetIntersector;
 class SegmentIntersector;
 class MonotoneChainEdge;
+class Node;
+class EdgeIntersectionList;
+class Edge;
+class GeometryGraph;
+class DirectedEdge;
+class EdgeRing;
+class SegmentString;
+class NodingValidator;
+class EdgeRing;
 
 
 class Position {
@@ -207,10 +217,10 @@ public:
 	static bool isNorthern(int quad);
 };
 
-//class IntersectionMatrix;
 class GraphComponent {
 public:
 	GraphComponent();
+
 	/*
 	 * GraphComponent takes ownership of the given Label.
 	 * newLabel is deleted by destructor.
@@ -236,60 +246,6 @@ private:
 	bool isCoveredVar;
 	bool isCoveredSetVar;
 	bool isVisitedVar;
-};
-
-class Node;
-class EdgeIntersectionList;
-class Edge: public GraphComponent{
-using GraphComponent::updateIM;
-public:
-	static void updateIM(Label *lbl,IntersectionMatrix *im);
-	CoordinateSequence* pts;
-	EdgeIntersectionList *eiList;
-	Edge();
-	Edge(CoordinateSequence* newPts, Label *newLabel);
-	Edge(CoordinateSequence* newPts);
-	virtual ~Edge();
-	virtual int getNumPoints();
-	virtual void setName(string newName);
-	virtual const CoordinateSequence* getCoordinates() const;
-	virtual const Coordinate& getCoordinate(int i);
-	virtual const Coordinate& getCoordinate(); 
-	virtual Depth *getDepth();
-
-	/**
-	 * The depthDelta is the change in depth as an edge is crossed
-	 * from R to L
-	 * @return the change in depth as the edge is crossed from R to L
-	 */
-	virtual int getDepthDelta();
-	virtual void setDepthDelta(int newDepthDelta);
-	virtual int getMaximumSegmentIndex();
-	virtual EdgeIntersectionList* getEdgeIntersectionList();
-	virtual MonotoneChainEdge* getMonotoneChainEdge();
-	virtual bool isClosed();
-	virtual bool isCollapsed();
-	virtual Edge* getCollapsedEdge();
-	virtual void setIsolated(bool newIsIsolated) {
-		isIsolatedVar=newIsIsolated;
-	}
-	virtual bool isIsolated() const { return isIsolatedVar; }
-	virtual void addIntersections(LineIntersector *li,int segmentIndex,int geomIndex);
-	virtual void addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex);
-	virtual void computeIM(IntersectionMatrix *im);
-	virtual bool isPointwiseEqual(Edge *e);
-	virtual string print();
-	virtual string printReverse();
-	virtual bool equals(Edge* e);
-	virtual Envelope* getEnvelope();
-private:
-	string name;
-	MonotoneChainEdge *mce;
-	Envelope *env;
-	bool isIsolatedVar;
-	Depth *depth;
-	int depthDelta;   // the change in area depth from the R to L side of this edge
-	int npts;
 };
 
 class EdgeEnd {
@@ -331,7 +287,6 @@ struct EdgeEndLT {
 	}
 };
 
-class GeometryGraph;
 class EdgeEndStar {
 public:
 	EdgeEndStar();
@@ -358,8 +313,6 @@ private:
 	virtual bool checkAreaLabelsConsistent(int geomIndex);
 };
 
-class DirectedEdge;
-class EdgeRing;
 class DirectedEdgeStar: public EdgeEndStar {
 public:
 	DirectedEdgeStar();
@@ -562,8 +515,6 @@ public:
 	string print() const;
 };
 
-class EdgeRing;
-
 class DirectedEdge: public EdgeEnd{
 public:
 	static int depthFactor(int currLocation, int nextLocation);
@@ -764,7 +715,7 @@ private:
 	 * parentGeometry to the edges which are derived from them.
 	 * This is used to efficiently perform findEdge queries
 	 */
-	map<const LineString*,Edge*,LineStringLT>* lineEdgeMap;
+	map<const LineString*,Edge*,LineStringLT> lineEdgeMap;
 
 	/*
 	 * If this flag is true, the Boundary Determination Rule will
@@ -800,8 +751,6 @@ private:
 	void addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc);
 };
 
-class SegmentString;
-class NodingValidator;
 
 /*
  * Validates that a collection of SegmentStrings is correctly noded.
@@ -819,6 +768,63 @@ public:
 	void checkValid();
 };
 
+class Edge: public GraphComponent{
+using GraphComponent::updateIM;
+public:
+	static void updateIM(Label *lbl,IntersectionMatrix *im);
+	CoordinateSequence* pts;
+	EdgeIntersectionList eiList;
+	//Edge();
+	Edge(CoordinateSequence* newPts, Label *newLabel);
+	Edge(CoordinateSequence* newPts);
+	virtual ~Edge();
+	virtual int getNumPoints() const;
+	virtual void setName(const string &newName);
+	virtual const CoordinateSequence* getCoordinates() const;
+	virtual const Coordinate& getCoordinate(int i) const;
+	virtual const Coordinate& getCoordinate() const; 
+	virtual Depth &getDepth();
+
+	/**
+	 * The depthDelta is the change in depth as an edge is crossed
+	 * from R to L
+	 * @return the change in depth as the edge is crossed from R to L
+	 */
+	virtual int getDepthDelta();
+	virtual void setDepthDelta(int newDepthDelta);
+	virtual int getMaximumSegmentIndex();
+	virtual EdgeIntersectionList& getEdgeIntersectionList();
+	virtual MonotoneChainEdge* getMonotoneChainEdge();
+	virtual bool isClosed();
+	virtual bool isCollapsed();
+	virtual Edge* getCollapsedEdge();
+	virtual void setIsolated(bool newIsIsolated) {
+		isIsolatedVar=newIsIsolated;
+	}
+	virtual bool isIsolated() const { return isIsolatedVar; }
+	virtual void addIntersections(LineIntersector *li,int segmentIndex,int geomIndex);
+	virtual void addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex);
+	virtual void computeIM(IntersectionMatrix *im);
+	virtual bool isPointwiseEqual(Edge *e);
+	virtual string print();
+	virtual string printReverse();
+	virtual bool equals(Edge* e);
+	virtual Envelope* getEnvelope();
+private:
+	string name;
+
+	// This is a pointer because a MonotoneChainEdge is
+	// only constructed on demand (often not constructed)
+	MonotoneChainEdge *mce;
+
+	Envelope *env;
+	bool isIsolatedVar;
+	Depth depth;
+	int depthDelta;   // the change in area depth from the R to L side of this edge
+	int npts;
+};
+
+
 //Operators
 bool operator==(const Edge &a, const Edge &b);
 
@@ -828,6 +834,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.16  2005/11/15 18:30:59  strk
  * Removed dead code
  *

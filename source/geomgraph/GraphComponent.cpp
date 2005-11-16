@@ -20,7 +20,7 @@
 namespace geos {
 
 GraphComponent::GraphComponent():
-	label(new Label()),
+	label(NULL),
 	isInResultVar(false),
 	isCoveredVar(false),
 	isCoveredSetVar(false),
@@ -73,6 +73,9 @@ GraphComponent::updateIM(IntersectionMatrix *im)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.3  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

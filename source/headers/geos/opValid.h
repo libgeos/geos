@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,6 +14,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.9  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.
@@ -375,7 +379,7 @@ private:
 	 * Algorithm is to count the number of times each node along edge occurs.
 	 * If any occur more than once, that must be a self-intersection.
 	 */
-	void checkNoSelfIntersectingRing(EdgeIntersectionList *eiList);
+	void checkNoSelfIntersectingRing(EdgeIntersectionList &eiList);
 
 	void checkTooFewPoints(GeometryGraph *graph);
 

@@ -27,7 +27,9 @@ namespace geos {
  * Updates an IM from the label for an edge.
  * Handles edges from both L and A geometrys.
  */
-void Edge::updateIM(Label *lbl,IntersectionMatrix *im){
+void
+Edge::updateIM(Label *lbl,IntersectionMatrix *im)
+{
 	im->setAtLeastIfValid(lbl->getLocation(0,Position::ON),lbl->getLocation(1,Position::ON),1);
 	if (lbl->isArea()) {
 		im->setAtLeastIfValid(lbl->getLocation(0,Position::LEFT),lbl->getLocation(1,Position::LEFT),2);
@@ -35,7 +37,9 @@ void Edge::updateIM(Label *lbl,IntersectionMatrix *im){
 	}
 }
 
-Edge::Edge(){
+#if 0
+Edge::Edge()
+{
 	//cerr<<"["<<this<<"] Edge()"<<endl;
 	eiList=NULL;
 	isIsolatedVar=true;
@@ -45,74 +49,74 @@ Edge::Edge(){
 	pts=NULL;
 	env=NULL;
 }
+#endif
 
-Edge::~Edge(){
+Edge::~Edge()
+{
 	//cerr<<"["<<this<<"] ~Edge()"<<endl;
-	delete eiList;
-	delete depth;
 	delete mce;
 	delete pts;
 	delete env;
 }
 
-Edge::Edge(CoordinateSequence* newPts, Label *newLabel):GraphComponent(newLabel){
-	//cerr<<"["<<this<<"] Edge(CoordinateSequence *, Label *)"<<endl;
-	eiList=new EdgeIntersectionList(this);
-	isIsolatedVar=true;
-	depth=new Depth();
-	depthDelta=0;
-//	label=newLabel;
-	mce=NULL;
-	pts=newPts;
-	npts=pts->getSize();
-	env=NULL;
+Edge::Edge(CoordinateSequence* newPts, Label *newLabel):
+	GraphComponent(newLabel),
+	pts(newPts),
+	eiList(this),
+	mce(NULL),
+	env(NULL),
+	isIsolatedVar(true),
+	depth(),
+	depthDelta(0),
+	npts(pts->getSize())
+{
 }
 
-Edge::Edge(CoordinateSequence* newPts){
-	//cerr<<"["<<this<<"] Edge(CoordinateSequence *)"<<endl;
-	eiList=new EdgeIntersectionList(this);
-	isIsolatedVar=true;
-	depth=new Depth();
-	depthDelta=0;
-	label=NULL;
-	mce=NULL;
-	pts=newPts;
-	npts=pts->getSize();
-	env=NULL;
+Edge::Edge(CoordinateSequence* newPts):
+	GraphComponent(),
+	pts(newPts),
+	eiList(this),
+	mce(NULL),
+	env(NULL),
+	isIsolatedVar(true),
+	//depth(new Depth()),
+	depth(),
+	depthDelta(0),
+	npts(pts->getSize())
+{
 }
 
-int Edge::getNumPoints() {
+int
+Edge::getNumPoints() const
+{
 	return npts;
 }
 
-void Edge::setName(string newName) {
+void
+Edge::setName(const string &newName)
+{
 	name=newName;
 }
 
-//CoordinateSequence Edge::getCoordinates(){
-//	return pts;
-//}
-
-const CoordinateSequence* Edge::getCoordinates() const {
+const CoordinateSequence*
+Edge::getCoordinates() const
+{
 	return pts;
 }
 
-const
-Coordinate& Edge::getCoordinate(int i)
+const Coordinate&
+Edge::getCoordinate(int i) const
 {
 	return pts->getAt(i);
 }
 
-// const or new return value ??
-const
-Coordinate& Edge::getCoordinate()
+const Coordinate&
+Edge::getCoordinate() const
 {
-	if (npts>0) return pts->getAt(0);
-	auto_ptr<const Coordinate> ret(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
-	return *ret;
+	return pts->getAt(0);
 }
 
-Depth*
+Depth &
 Edge::getDepth()
 {
 	return depth;
@@ -140,7 +144,7 @@ Edge::getMaximumSegmentIndex()
 	return npts-1;
 }
 
-EdgeIntersectionList*
+EdgeIntersectionList&
 Edge::getEdgeIntersectionList()
 {
 	return eiList;
@@ -229,8 +233,7 @@ Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int int
 #if DEBUG
 	cerr<<"Edge::addIntersection adding to edge intersection list point "<<intPt.toString()<<endl;
 #endif
-	//EdgeIntersection *ei=eiList->add(intPt,normalizedSegmentIndex,dist);
-	eiList->add(intPt,normalizedSegmentIndex,dist);
+	eiList.add(intPt,normalizedSegmentIndex,dist);
 }
 
 /*
@@ -355,6 +358,9 @@ Envelope* Edge::getEnvelope(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.15  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -297,7 +298,7 @@ PlanarGraph::printEdges()
 		Edge *e=(*edges)[i];
 //		Edge *e=edges->at(i);
 		out+=e->print();
-		out+=e->eiList->print();
+		out+=e->eiList.print();
 	}
 	return out;
 }
@@ -312,6 +313,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.13  2005/06/24 11:09:42  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)

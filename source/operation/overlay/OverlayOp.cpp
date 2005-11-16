@@ -737,14 +737,14 @@ OverlayOp::insertUniqueEdge(Edge *e)
 //			labelToMerge=new Label(e->getLabel());
 			labelToMerge->flip();
 		}
-		Depth *depth=existingEdge->getDepth();
+		Depth &depth=existingEdge->getDepth();
 		// if this is the first duplicate found for this edge, initialize the depths
 		///*
-		if (depth->isNull()) {
-			depth->add(*existingLabel);
+		if (depth.isNull()) {
+			depth.add(*existingLabel);
 		}
 		//*/
-		depth->add(*labelToMerge);
+		depth.add(*labelToMerge);
 
 		existingLabel->merge(*labelToMerge);
 		//Debug.print("inserted edge: "); Debug.println(e);
@@ -777,23 +777,23 @@ OverlayOp::computeLabelsFromDepths()
 	for(int j=0;j<(int)edgeList->getEdges()->size();j++) {
 		Edge *e=edgeList->get(j);
 		Label *lbl=e->getLabel();
-		Depth *depth=e->getDepth();
+		Depth &depth=e->getDepth();
 		/**
 		 * Only check edges for which there were duplicates,
 		 * since these are the only ones which might
 		 * be the result of dimensional collapses.
 		 */
-		if (!depth->isNull()) {
-			depth->normalize();
+		if (!depth.isNull()) {
+			depth.normalize();
 			for (int i=0;i<2;i++) {
-				if (!lbl->isNull(i) && lbl->isArea() && !depth->isNull(i)) {
+				if (!lbl->isNull(i) && lbl->isArea() && !depth.isNull(i)) {
 					/**
 					* if the depths are equal, this edge is the result of
 					* the dimensional collapse of two or more edges.
 					* It has the same location on both sides of the edge,
 					* so it has collapsed to a line.
 					*/
-					if (depth->getDelta(i)==0) {
+					if (depth.getDelta(i)==0) {
 						lbl->toLine(i);
 					} else {
 						/**
@@ -802,10 +802,10 @@ OverlayOp::computeLabelsFromDepths()
 						* label of the edge must be updated to reflect the resultant
 						* side locations indicated by the depth values.
 						*/
-						Assert::isTrue(!depth->isNull(i,Position::LEFT),"depth of LEFT side has not been initialized");
-						lbl->setLocation(i,Position::LEFT,depth->getLocation(i,Position::LEFT));
-						Assert::isTrue(!depth->isNull(i,Position::RIGHT),"depth of RIGHT side has not been initialized");
-						lbl->setLocation(i,Position::RIGHT,depth->getLocation(i,Position::RIGHT));
+						Assert::isTrue(!depth.isNull(i,Position::LEFT),"depth of LEFT side has not been initialized");
+						lbl->setLocation(i,Position::LEFT,depth.getLocation(i,Position::LEFT));
+						Assert::isTrue(!depth.isNull(i,Position::RIGHT),"depth of RIGHT side has not been initialized");
+						lbl->setLocation(i,Position::RIGHT,depth.getLocation(i,Position::RIGHT));
 					}
 				}
 			}
@@ -817,6 +817,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.47  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.46  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

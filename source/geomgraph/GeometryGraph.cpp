@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -48,43 +49,33 @@ GeometryGraph::determineBoundary(int boundaryCount)
 	return isInBoundary(boundaryCount)?Location::BOUNDARY : Location::INTERIOR;
 }
 
-GeometryGraph::GeometryGraph():PlanarGraph()
+GeometryGraph::GeometryGraph():
+	PlanarGraph(),
+	parentGeom(NULL),
+	//lineEdgeMap(),
+	useBoundaryDeterminationRule(false),
+	argIndex(-1),
+	boundaryNodes(NULL),
+	hasTooFewPointsVar(false)
 {
-	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
-	useBoundaryDeterminationRule=false;
-	boundaryNodes=NULL;
-	parentGeom=NULL;
-	hasTooFewPointsVar=false;
+	//lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
 }
 
-GeometryGraph::~GeometryGraph(){
-//	map<LineString*,Edge*,LineStringLT>::iterator it=lineEdgeMap->begin();
-//	for (;it!=lineEdgeMap->end();it++) {
-//		Edge *e=it->second;
-//		delete e;
-//	}
-	delete lineEdgeMap;
+GeometryGraph::~GeometryGraph()
+{
+	//delete lineEdgeMap;
 }
 
-GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom): PlanarGraph()
+GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom):
+	PlanarGraph(),
+	parentGeom(newParentGeom),
+	//lineEdgeMap(),
+	useBoundaryDeterminationRule(false),
+	argIndex(newArgIndex),
+	boundaryNodes(NULL),
+	hasTooFewPointsVar(false)
 {
-	hasTooFewPointsVar=false;
-	boundaryNodes=NULL;
-	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
-	useBoundaryDeterminationRule=false;
-	argIndex=newArgIndex;
-	parentGeom=newParentGeom;
-	if (parentGeom!=NULL) {
-		try
-		{
-			add(parentGeom);
-		}
-		catch(...)
-		{
-			delete lineEdgeMap;
-			throw;
-		}
-	}
+	if (parentGeom!=NULL) add(parentGeom);
 }
 
 EdgeSetIntersector*
@@ -101,30 +92,6 @@ GeometryGraph::createEdgeSetIntersector()
 	//return new SimpleEdgeSetIntersector();
 	return new SimpleMCSweepLineIntersector();
 }
-
-//NO LONGER USED
-/**
-* This constructor is used by clients that wish to add Edges explicitly,
-* rather than adding a Geometry.  (An example is BufferOp).
-*/
-//GeometryGraph::GeometryGraph(int newArgIndex, const PrecisionModel *newPrecisionModel, int newSRID):PlanarGraph(){
-//	boundaryNodes=NULL;
-//	lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
-//	useBoundaryDeterminationRule=false;
-//	argIndex=newArgIndex;
-//	parentGeom=NULL;
-//	precisionModel=newPrecisionModel;
-//	SRID=newSRID;
-//	hasTooFewPointsVar=false;
-//}
-//
-//const PrecisionModel* GeometryGraph::getPrecisionModel(){
-//	return precisionModel;
-//}
-//
-//int GeometryGraph::getSRID() {
-//	return SRID;
-//}
 
 const
 Geometry* GeometryGraph::getGeometry()
@@ -157,7 +124,7 @@ GeometryGraph::getBoundaryPoints()
 Edge*
 GeometryGraph::findEdge(const LineString *line)
 {
-	return lineEdgeMap->find(line)->second;
+	return lineEdgeMap.find(line)->second;
 }
 
 void
@@ -171,7 +138,7 @@ GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist)
 #if DEBUG
 		cerr<<"   "<<e->print()<<" adding split edges from arg"<<endl;
 #endif
-		e->eiList->addSplitEdges(edgelist);
+		e->eiList.addSplitEdges(edgelist);
 	}
 }
 
@@ -269,7 +236,7 @@ GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 	}
 
 	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
-	(*lineEdgeMap)[lr]=e;
+	lineEdgeMap[lr]=e;
 	insertEdge(e);
 	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
 }
@@ -298,7 +265,7 @@ GeometryGraph::addLineString(const LineString *line)
 	}
 
 	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
-	(*lineEdgeMap)[line]=e;
+	lineEdgeMap[line]=e;
 	insertEdge(e);
 
 	/*
@@ -429,9 +396,9 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		EdgeIntersectionList *eiL=e->eiList;
-		EdgeIntersectionListIterator eiIt=eiL->begin();
-		for ( ; eiIt!=eiL->end(); eiIt++) {
+		EdgeIntersectionList &eiL=e->eiList;
+		EdgeIntersectionListIterator eiIt=eiL.begin();
+		for ( ; eiIt!=eiL.end(); eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			addSelfIntersectionNode(argIndex,ei->coord,eLoc);
 		}
@@ -477,6 +444,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.12  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

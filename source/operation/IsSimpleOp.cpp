@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,6 +14,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.17  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.
@@ -120,9 +124,9 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph *graph)
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
-		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator eiIt=eiL->begin();
-		for( ;eiIt!=eiL->end(); eiIt++) {
+		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
+		EdgeIntersectionListIterator eiIt=eiL.begin();
+		for( ;eiIt!=eiL.end(); eiIt++) {
 			EdgeIntersection *ei=*eiIt;
 			if (!ei->isEndPoint(maxSegmentIndex))
 				return true;

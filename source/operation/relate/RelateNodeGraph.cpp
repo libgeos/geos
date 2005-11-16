@@ -72,9 +72,9 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
 	{
 		Edge *e=*edgeIt;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator eiIt=eiL->begin();
-		EdgeIntersectionListIterator eiEnd=eiL->end();
+		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
+		EdgeIntersectionListIterator eiIt=eiL.begin();
+		EdgeIntersectionListIterator eiEnd=eiL.end();
 		for( ; eiIt!=eiEnd; ++eiIt) {
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
@@ -118,6 +118,9 @@ void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.12  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

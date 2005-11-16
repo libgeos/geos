@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,6 +14,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.6  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -51,7 +55,7 @@ vector<Edge*>* EdgeSetNoder::getNodedEdges() {
 	vector<Edge*> *splitEdges=new vector<Edge*>();
 	for(int i=0;i<(int)inputEdges->size();i++) {
 		Edge* e=(*inputEdges)[i];
-		e->getEdgeIntersectionList()->addSplitEdges(splitEdges);
+		e->getEdgeIntersectionList().addSplitEdges(splitEdges);
 	}
 	return splitEdges;
 }

@@ -41,11 +41,11 @@ IsValidOp::findPtNotNode(const CoordinateSequence *testCoords,
 	// find edge corresponding to searchRing.
 	Edge *searchEdge=graph->findEdge(searchRing);
 	// find a point in the testCoords which is not a node of the searchRing
-	EdgeIntersectionList *eiList=searchEdge->getEdgeIntersectionList();
+	EdgeIntersectionList &eiList=searchEdge->getEdgeIntersectionList();
 	// somewhat inefficient - is there a better way? (Use a node map, for instance?)
 	for(int i=0;i<testCoords->getSize(); i++) {
 		const Coordinate& pt=testCoords->getAt(i);
-		if (!eiList->isIntersection(pt)) {
+		if (!eiList.isIntersection(pt)) {
 			return &pt;
 		}
 	}
@@ -324,12 +324,12 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph)
  * If any occur more than once, that must be a self-intersection.
  */
 void
-IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList *eiList)
+IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList &eiList)
 {
 	set<Coordinate*,CoordLT>nodeSet;
 	bool isFirst=true;
-	EdgeIntersectionListIterator it=eiList->begin();
-	EdgeIntersectionListIterator end=eiList->end();
+	EdgeIntersectionListIterator it=eiList.begin();
+	EdgeIntersectionListIterator end=eiList.end();
 	for(; it!=end; ++it)
 	{
 		EdgeIntersection *ei=*it;
@@ -624,6 +624,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.33  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

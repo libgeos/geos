@@ -216,9 +216,9 @@ RelateComputer::computeIntersectionNodes(int argIndex)
 	{
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator it=eiL->begin();
-		EdgeIntersectionListIterator end=eiL->end();
+		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
+		EdgeIntersectionListIterator it=eiL.begin();
+		EdgeIntersectionListIterator end=eiL.end();
 		for( ; it!=end; ++it)
 		{
 			EdgeIntersection *ei=*it;
@@ -250,9 +250,9 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
-		EdgeIntersectionList *eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator eiIt=eiL->begin();
-		EdgeIntersectionListIterator eiEnd=eiL->end();
+		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
+		EdgeIntersectionListIterator eiIt=eiL.begin();
+		EdgeIntersectionListIterator eiEnd=eiL.end();
 		
 		for( ; eiIt!=eiEnd; ++eiIt)
 		{
@@ -403,6 +403,9 @@ void RelateComputer::labelIsolatedNode(Node *n,int targetIndex) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.22  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

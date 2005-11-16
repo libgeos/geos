@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,6 +14,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
  * Revision 1.11  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.
@@ -58,14 +62,14 @@ vector<EdgeEnd*> *EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges) {
 void
 EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l)
 {
-	EdgeIntersectionList *eiList=edge->getEdgeIntersectionList();
+	EdgeIntersectionList &eiList=edge->getEdgeIntersectionList();
 	//Debug.print(eiList);
 	// ensure that the list has entries for the first and last point of the edge
-	eiList->addEndpoints();
+	eiList.addEndpoints();
 
-	EdgeIntersectionListIterator it=eiList->begin();
+	EdgeIntersectionListIterator it=eiList.begin();
 	// no intersections, so there is nothing to do
-	if (it==eiList->end()) return;
+	if (it==eiList.end()) return;
 
 	EdgeIntersection *eiPrev=NULL;
 	EdgeIntersection *eiCurr=NULL;
@@ -76,7 +80,7 @@ EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l)
 		eiPrev=eiCurr;
 		eiCurr=eiNext;
 		eiNext=NULL;
-		if (it!=eiList->end()) {
+		if (it!=eiList.end()) {
 			eiNext=*it;
 			it++;
 		}
