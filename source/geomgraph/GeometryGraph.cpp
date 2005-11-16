@@ -412,7 +412,8 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
  * Otherwise, just add it as a regular node.
  */
 void
-GeometryGraph::addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc)
+GeometryGraph::addSelfIntersectionNode(int argIndex,
+	const Coordinate& coord, int loc)
 {
 	// if this node is already a boundary node, don't change it
 	if (isBoundaryNode(argIndex,coord)) return;
@@ -444,6 +445,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/16 22:21:45  strk
+ * enforced const-correctness and use of initializer lists.
+ *
  * Revision 1.13  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

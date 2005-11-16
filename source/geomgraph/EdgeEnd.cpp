@@ -25,47 +25,57 @@ namespace geos {
 
 //CGAlgorithms* EdgeEnd::cga=new RobustCGAlgorithms();
 
-EdgeEnd::EdgeEnd() {
-	this->edge=NULL;
-	label=NULL;
-	node=NULL;
-	dx=dy=0.0;
-	quadrant=0;
+EdgeEnd::EdgeEnd():
+	edge(NULL),
+	label(NULL),
+	node(NULL),
+	dx(0.0),
+	dy(0.0),
+	quadrant(0)
+{
 }
 
-EdgeEnd::~EdgeEnd() {
-//	delete edge;
+EdgeEnd::~EdgeEnd()
+{
 	delete label;
-//	delete node;  
 }
 
-EdgeEnd::EdgeEnd(Edge* newEdge){
-	this->edge=newEdge;
-	label=NULL;
-	node=NULL;
-	dx=dy=0.0;
-	quadrant=0;
+EdgeEnd::EdgeEnd(Edge* newEdge):
+	edge(newEdge),
+	label(NULL),
+	node(NULL),
+	dx(0.0),
+	dy(0.0),
+	quadrant(0)
+{
 }
 
-EdgeEnd::EdgeEnd(Edge* newEdge,Coordinate& newP0, Coordinate& newP1){
-	this->edge=newEdge;
-	node=NULL;
-	dx=dy=0.0;
-	quadrant=0;
+EdgeEnd::EdgeEnd(Edge* newEdge,
+		const Coordinate& newP0, const Coordinate& newP1):
+	edge(newEdge),
+	label(NULL),
+	node(NULL),
+	dx(0.0),
+	dy(0.0),
+	quadrant(0)
+{
 	init(newP0,newP1);
-	label=NULL;
 }
 
-EdgeEnd::EdgeEnd(Edge* newEdge, Coordinate& newP0, Coordinate& newP1, Label* newLabel){
-	this->edge=newEdge;
-	node=NULL;
-	dx=dy=0.0;
-	quadrant=0;
+EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
+		const Coordinate& newP1, Label* newLabel):
+	edge(newEdge),
+	label(newLabel),
+	node(NULL),
+	dx(0.0),
+	dy(0.0),
+	quadrant(0)
+{
 	init(newP0,newP1);
-	label=newLabel;
 }
 
-void EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1){
+void EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
+{
 	p0=newP0;
 	p1=newP1;
 	dx=p1.x-p0.x;
@@ -122,6 +132,9 @@ string EdgeEnd::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/16 22:21:45  strk
+ * enforced const-correctness and use of initializer lists.
+ *
  * Revision 1.6  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

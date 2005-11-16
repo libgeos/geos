@@ -326,7 +326,7 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph)
 void
 IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList &eiList)
 {
-	set<Coordinate*,CoordLT>nodeSet;
+	set<const Coordinate*,CoordLT>nodeSet;
 	bool isFirst=true;
 	EdgeIntersectionListIterator it=eiList.begin();
 	EdgeIntersectionListIterator end=eiList.end();
@@ -624,6 +624,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2005/11/16 22:21:45  strk
+ * enforced const-correctness and use of initializer lists.
+ *
  * Revision 1.34  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

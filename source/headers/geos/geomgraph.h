@@ -253,8 +253,10 @@ friend class Unload;
 public:
 	EdgeEnd();
 	virtual ~EdgeEnd();
-	EdgeEnd(Edge* newEdge, Coordinate& newP0, Coordinate& newP1);
-	EdgeEnd(Edge* newEdge, Coordinate& newP0, Coordinate& newP1, Label* newLabel);
+	EdgeEnd(Edge* newEdge, const Coordinate& newP0,
+		const Coordinate& newP1);
+	EdgeEnd(Edge* newEdge, const Coordinate& newP0,
+		const Coordinate& newP1, Label* newLabel);
 	virtual Edge* getEdge();
 	virtual Label* getLabel();
 	virtual Coordinate& getCoordinate();
@@ -648,7 +650,7 @@ public:
 	virtual ~PlanarGraph();
 	virtual vector<Edge*>::iterator getEdgeIterator();
 	virtual vector<EdgeEnd*>* getEdgeEnds();
-	virtual bool isBoundaryNode(int geomIndex,Coordinate& coord);
+	virtual bool isBoundaryNode(int geomIndex, const Coordinate& coord);
 	virtual void add(EdgeEnd *e);
 	virtual map<Coordinate*,Node*,CoordLT>::iterator getNodeIterator();
 	virtual vector<Node*>* getNodes();
@@ -748,7 +750,8 @@ private:
 	void insertBoundaryPoint(int argIndex, const Coordinate& coord);
 
 	void addSelfIntersectionNodes(int argIndex);
-	void addSelfIntersectionNode(int argIndex,Coordinate& coord,int loc);
+	void addSelfIntersectionNode(int argIndex,
+		const Coordinate& coord, int loc);
 };
 
 
@@ -834,6 +837,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/11/16 22:21:45  strk
+ * enforced const-correctness and use of initializer lists.
+ *
  * Revision 1.17  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

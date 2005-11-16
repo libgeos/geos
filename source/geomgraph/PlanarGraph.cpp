@@ -84,7 +84,7 @@ PlanarGraph::getEdgeEnds()
 }
 
 bool
-PlanarGraph::isBoundaryNode(int geomIndex,Coordinate& coord)
+PlanarGraph::isBoundaryNode(int geomIndex, const Coordinate& coord)
 {
 	Node *node=nodes->find(coord);
 	if (node==NULL) return false;
@@ -313,6 +313,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/11/16 22:21:45  strk
+ * enforced const-correctness and use of initializer lists.
+ *
  * Revision 1.14  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/16 22:21:45  strk
+ * enforced const-correctness and use of initializer lists.
+ *
  * Revision 1.4  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.
@@ -41,14 +44,16 @@
 
 namespace geos {
 
-EdgeIntersection::EdgeIntersection(const Coordinate& newCoord, int newSegmentIndex, double newDist) {
-	coord=newCoord;
-	segmentIndex=newSegmentIndex;
-	dist=newDist;
+EdgeIntersection::EdgeIntersection(const Coordinate& newCoord,
+		int newSegmentIndex, double newDist):
+	coord(newCoord),
+	segmentIndex(newSegmentIndex),
+	dist(newDist)
+{
 }
 
-EdgeIntersection::~EdgeIntersection() {
-	//aaa
+EdgeIntersection::~EdgeIntersection()
+{
 }
 
 int
