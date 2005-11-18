@@ -20,29 +20,37 @@
 namespace geos {
 
 // CGAlgorithms obsoleted
-MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,const GeometryFactory *geometryFactory, CGAlgorithms *cga):
-	EdgeRing(start,geometryFactory)
+MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
+		const GeometryFactory *geometryFactory, CGAlgorithms *cga):
+	EdgeRing(start, geometryFactory)
 {
 	computePoints(start);
 	computeRing();
 }
 
-MaximalEdgeRing::~MaximalEdgeRing(){
+MaximalEdgeRing::~MaximalEdgeRing()
+{
 }
 
-DirectedEdge* MaximalEdgeRing::getNext(DirectedEdge *de) {
+DirectedEdge*
+MaximalEdgeRing::getNext(DirectedEdge *de)
+{
 	return de->getNext();
 }
 
-void MaximalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er) {
+void
+MaximalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er)
+{
 	de->setEdgeRing(er);
 }
 
 /**
-* For all nodes in this EdgeRing,
-* link the DirectedEdges at the node to form minimalEdgeRings
-*/
-void MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings() {
+ * For all nodes in this EdgeRing,
+ * link the DirectedEdges at the node to form minimalEdgeRings
+ */
+void
+MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings()
+{
 	DirectedEdge* de=startDe;
 	do {
 		Node* node=de->getNode();
@@ -54,7 +62,9 @@ void MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings() {
 // This function returns a newly allocated vector of
 // pointers to newly allocated MinimalEdgeRing objects.
 //
-vector<MinimalEdgeRing*>* MaximalEdgeRing::buildMinimalRings() {
+vector<MinimalEdgeRing*>*
+MaximalEdgeRing::buildMinimalRings()
+{
 	vector<MinimalEdgeRing*> *minEdgeRings=new vector<MinimalEdgeRing*>;
 	DirectedEdge *de=startDe;
 	do {
@@ -71,6 +81,15 @@ vector<MinimalEdgeRing*>* MaximalEdgeRing::buildMinimalRings() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2005/11/18 00:55:29  strk
+ * Fixed a bug in EdgeRing::containsPoint().
+ * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
+ * usages from PolygonBuilder.
+ * Removed CoordinateSequence copy in EdgeRing (ownership is transferred
+ * to its LinearRing).
+ * Removed heap allocations for EdgeRing containers.
+ * Initialization lists and cleanups.
+ *
  * Revision 1.12  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

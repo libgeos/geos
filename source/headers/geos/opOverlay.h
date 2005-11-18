@@ -484,7 +484,7 @@ public:
 	*/
 	void add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes); // throw(TopologyException *);
   	vector<Geometry*>* getPolygons();
-	bool containsPoint(Coordinate& p);
+	bool containsPoint(const Coordinate& p);
 private:
 	const GeometryFactory *geometryFactory;
 	vector<EdgeRing*> shellList;
@@ -617,6 +617,15 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/18 00:55:29  strk
+ * Fixed a bug in EdgeRing::containsPoint().
+ * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
+ * usages from PolygonBuilder.
+ * Removed CoordinateSequence copy in EdgeRing (ownership is transferred
+ * to its LinearRing).
+ * Removed heap allocations for EdgeRing containers.
+ * Initialization lists and cleanups.
+ *
  * Revision 1.13  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

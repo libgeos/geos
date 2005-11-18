@@ -19,8 +19,9 @@
 
 namespace geos {
 
-MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory,CGAlgorithms *cga):
-	EdgeRing(start,geometryFactory)
+MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start,
+		const GeometryFactory *geometryFactory,CGAlgorithms *cga):
+	EdgeRing(start, geometryFactory)
 {
 	computePoints(start);
 	computeRing();
@@ -30,6 +31,15 @@ MinimalEdgeRing::MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geo
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/11/18 00:55:29  strk
+ * Fixed a bug in EdgeRing::containsPoint().
+ * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
+ * usages from PolygonBuilder.
+ * Removed CoordinateSequence copy in EdgeRing (ownership is transferred
+ * to its LinearRing).
+ * Removed heap allocations for EdgeRing containers.
+ * Initialization lists and cleanups.
+ *
  * Revision 1.10  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept

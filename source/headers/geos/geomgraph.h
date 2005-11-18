@@ -33,18 +33,17 @@ using namespace std;
 namespace geos {
 
 // forward decls
+class DirectedEdge;
+class Edge;
+class EdgeIntersectionList;
+class EdgeRing;
 class EdgeSetIntersector;
-class SegmentIntersector;
+class GeometryGraph;
 class MonotoneChainEdge;
 class Node;
-class EdgeIntersectionList;
-class Edge;
-class GeometryGraph;
-class DirectedEdge;
-class EdgeRing;
-class SegmentString;
 class NodingValidator;
-class EdgeRing;
+class SegmentString;
+class SegmentIntersector;
 
 
 class Position {
@@ -604,21 +603,33 @@ public:
 	virtual ~EdgeRing();
 	bool isIsolated();
 	bool isHole();
-	const Coordinate& getCoordinate(int i);
+
+	/*
+	 * Return a pointer to the LinearRing owned by
+	 * this object. Make a copy if you need it beyond
+	 * this objects's lifetime.
+	 */
 	LinearRing* getLinearRing();
+
 	Label* getLabel();
 	bool isShell();
 	EdgeRing *getShell();
 	void setShell(EdgeRing *newShell);
 	void addHole(EdgeRing *edgeRing);
+
+	/*
+	 * Return a Polygon copying coordinates from this
+	 * EdgeRing and its holes.
+	 */
 	Polygon* toPolygon(const GeometryFactory* geometryFactory);
+
 	void computeRing();
 	virtual DirectedEdge* getNext(DirectedEdge *de)=0;
 	virtual void setEdgeRing(DirectedEdge *de, EdgeRing *er)=0;
 	vector<DirectedEdge*>* getEdges();
 	int getMaxNodeDegree();
 	void setInResult();
-	bool containsPoint(Coordinate& p);
+	bool containsPoint(const Coordinate& p);
 protected:
 	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
 	const GeometryFactory *geometryFactory;
@@ -627,10 +638,10 @@ protected:
 	void mergeLabel(Label *deLabel);
 	void mergeLabel(Label *deLabel, int geomIndex);
 	void addPoints(Edge *edge, bool isForward, bool isFirstEdge);
-	vector<EdgeRing*>* holes; // a list of EdgeRings which are holes in this EdgeRing
+	vector<EdgeRing*> holes; // a list of EdgeRings which are holes in this EdgeRing
 private:
 	int maxNodeDegree;
-	vector<DirectedEdge*>* edges; // the DirectedEdges making up this EdgeRing
+	vector<DirectedEdge*> edges; // the DirectedEdges making up this EdgeRing
 	CoordinateSequence* pts;
 	Label* label; // label stores the locations of each geometry on the face surrounded by this ring
 	LinearRing *ring;  // the ring created for this EdgeRing
@@ -837,6 +848,15 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/11/18 00:55:29  strk
+ * Fixed a bug in EdgeRing::containsPoint().
+ * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
+ * usages from PolygonBuilder.
+ * Removed CoordinateSequence copy in EdgeRing (ownership is transferred
+ * to its LinearRing).
+ * Removed heap allocations for EdgeRing containers.
+ * Initialization lists and cleanups.
+ *
  * Revision 1.18  2005/11/16 22:21:45  strk
  * enforced const-correctness and use of initializer lists.
  *

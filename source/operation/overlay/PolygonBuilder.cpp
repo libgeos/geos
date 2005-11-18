@@ -301,21 +301,15 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		if (tryEnv->contains(testEnv)
 			&& CGAlgorithms::isPointInRing(testPt,rcl))
 				isContained=true;
-		//delete rcl;
-		// check if this new containing ring is smaller than the current minimum ring
+		// check if this new containing ring is smaller than
+		// the current minimum ring
 		if (isContained) {
 			if (minShell==NULL
 				|| minEnv->contains(tryEnv)) {
 					minShell=tryShell;
 			}
 		}
-		delete tryRing;
-		delete lr;
-		//delete tryEnv;
 	}
-	//delete minEnv;
-	delete testRing;
-	//delete testEnv;
 	return minShell;
 }
 
@@ -340,7 +334,7 @@ PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList)
  * see if any of them contain the point.
  */
 bool
-PolygonBuilder::containsPoint(Coordinate& p)
+PolygonBuilder::containsPoint(const Coordinate& p)
 {
 	for(unsigned int i=0;i<shellList.size(); ++i) {
 		EdgeRing *er=shellList[i];
@@ -354,6 +348,15 @@ PolygonBuilder::containsPoint(Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2005/11/18 00:55:29  strk
+ * Fixed a bug in EdgeRing::containsPoint().
+ * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
+ * usages from PolygonBuilder.
+ * Removed CoordinateSequence copy in EdgeRing (ownership is transferred
+ * to its LinearRing).
+ * Removed heap allocations for EdgeRing containers.
+ * Initialization lists and cleanups.
+ *
  * Revision 1.21  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.
