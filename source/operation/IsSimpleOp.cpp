@@ -13,52 +13,26 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
- * $Log$
- * Revision 1.18  2005/11/16 15:49:54  strk
- * Reduced gratuitous heap allocations.
- *
- * Revision 1.17  2005/11/07 12:31:24  strk
- * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
- * to avoid dynamic allocation of initial header.
- * Inlined short SweepLineEvent methods.
- *
- * Revision 1.16  2005/06/24 11:09:43  strk
- * Dropped RobustLineIntersector, made LineIntersector a concrete class.
- * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
- * to avoid computing intersection point (Z) when it's not necessary.
- *
- * Revision 1.15  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.14  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.13  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.12  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 
-
 #include <geos/operation.h>
-#include <stdio.h>
 #include <set>
 
 namespace geos {
 
-IsSimpleOp::IsSimpleOp(){}
+IsSimpleOp::IsSimpleOp()
+{}
 
-bool IsSimpleOp::isSimple(const LineString *geom){
+bool
+IsSimpleOp::isSimple(const LineString *geom)
+{
 	return isSimpleLinearGeometry(geom);
 }
 
-bool IsSimpleOp::isSimple(const MultiLineString *geom){
+bool
+IsSimpleOp::isSimple(const MultiLineString *geom)
+{
 	return isSimpleLinearGeometry(geom);
 }
 
@@ -82,45 +56,42 @@ IsSimpleOp::isSimple(const MultiPoint *mp)
 	return true;
 }
 
-bool IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom){
+bool
+IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom)
+{
 	if (geom->isEmpty()) return true;
-	GeometryGraph *graph=new GeometryGraph(0,geom);
+	GeometryGraph graph(0,geom);
 	LineIntersector li;
-	SegmentIntersector *si=graph->computeSelfNodes(&li,true);
+	SegmentIntersector *si=graph.computeSelfNodes(&li,true);
 	// if no self-intersection, must be simple
 	if (!si->hasIntersection()) {
-		delete graph;
 		delete si;
 		return true;
 	}
 	if (si->hasProperIntersection()) {
-		delete graph;
 		delete si;
 		return false;
 	}
 	if (hasNonEndpointIntersection(graph)) {
-		delete graph;
 		delete si;
 		return false;
 	}
 	if (hasClosedEndpointIntersection(graph)) {
-		delete graph;
 		delete si;
 		return false;
 	}
-	delete graph;
 	delete si;
 	return true;
 }
 
 /**
-* For all edges, check if there are any intersections which are NOT at an endpoint.
-* The Geometry is not simple if there are intersections not at endpoints.
-*/
+ * For all edges, check if there are any intersections which are NOT at an endpoint.
+ * The Geometry is not simple if there are intersections not at endpoints.
+ */
 bool
-IsSimpleOp::hasNonEndpointIntersection(GeometryGraph *graph)
+IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 {
-	vector<Edge*> *edges=graph->getEdges();
+	vector<Edge*> *edges=graph.getEdges();
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
@@ -136,14 +107,16 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph *graph)
 }
 
 /**
-* Test that no edge intersection is the
-* endpoint of a closed line.  To check this we compute the
-* degree of each endpoint. The degree of endpoints of closed lines
-* must be exactly 2.
-*/
-bool IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph *graph) {
+ * Test that no edge intersection is the
+ * endpoint of a closed line.  To check this we compute the
+ * degree of each endpoint. The degree of endpoints of closed lines
+ * must be exactly 2.
+ */
+bool
+IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
+{
 	map<const Coordinate*,EndpointInfo*,CoordLT>endPoints;
-	vector<Edge*> *edges=graph->getEdges();
+	vector<Edge*> *edges=graph.getEdges();
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		//int maxSegmentIndex=e->getMaximumSegmentIndex();
@@ -197,16 +170,89 @@ IsSimpleOp::addEndpoint(
 	eiInfo->addEndpoint(isClosed);
 }
 
-EndpointInfo::EndpointInfo(const Coordinate& newPt) {
-	pt.setCoordinate(newPt);
+EndpointInfo::EndpointInfo(const Coordinate& newPt)
+{
+	pt=newPt;
 	isClosed=false;
 	degree=0;
 }
 
-void EndpointInfo::addEndpoint(bool newIsClosed) {
+void
+EndpointInfo::addEndpoint(bool newIsClosed)
+{
 	degree++;
 	isClosed|=newIsClosed;
 }
 
 } //namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.19  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
+ * Revision 1.18  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
+ * Revision 1.17  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
+ * Revision 1.16  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
+ * Revision 1.15  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
+ * Revision 1.14  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.13  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.12  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

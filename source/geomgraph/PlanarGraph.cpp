@@ -42,19 +42,19 @@ PlanarGraph::linkResultDirectedEdges(vector<Node*> *allNodes)
 	}
 }
 
-PlanarGraph::PlanarGraph(NodeFactory *nodeFact)
+PlanarGraph::PlanarGraph(const NodeFactory &nodeFact):
+	edges(new vector<Edge*>()),
+	nodes(new NodeMap(nodeFact)),
+	edgeEndList(new vector<EdgeEnd*>())
 {
-	nodes=new NodeMap(nodeFact);
-	edges=new vector<Edge*>();
-	edgeEndList=new vector<EdgeEnd*>();
 
 }
 
-PlanarGraph::PlanarGraph()
+PlanarGraph::PlanarGraph():
+	edges(new vector<Edge*>()),
+	nodes(new NodeMap(NodeFactory::instance())),
+	edgeEndList(new vector<EdgeEnd*>())
 {
-	nodes=new NodeMap(new NodeFactory());
-	edges=new vector<Edge*>();
-	edgeEndList=new vector<EdgeEnd*>();
 }
 
 PlanarGraph::~PlanarGraph()
@@ -203,9 +203,13 @@ PlanarGraph::linkAllDirectedEdges()
 	cerr<<"PlanarGraph::linkAllDirectedEdges called"<<endl;
 #endif
 	map<Coordinate*,Node*,CoordLT>::iterator nodeit=nodes->nodeMap.begin();
-	for (;nodeit!=nodes->nodeMap.end();nodeit++) {
+	for (;nodeit!=nodes->nodeMap.end();nodeit++)
+	{
 		Node *node=nodeit->second;
-		((DirectedEdgeStar*)node->getEdges())->linkAllDirectedEdges();
+		EdgeEndStar *ees=node->getEdges();
+		DirectedEdgeStar *des=dynamic_cast<DirectedEdgeStar *>(ees);
+		Assert::isTrue(des!=NULL, "Unespected non-DirectedEdgeStar in node");
+		des->linkAllDirectedEdges();
 	}
 }
 
@@ -313,6 +317,43 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.15  2005/11/16 22:21:45  strk
  * enforced const-correctness and use of initializer lists.
  *

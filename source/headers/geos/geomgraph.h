@@ -265,8 +265,8 @@ public:
 	virtual double getDy();
 	virtual void setNode(Node* newNode);
 	virtual Node* getNode();
-	virtual int compareTo(EdgeEnd *e);
-	virtual int compareDirection(EdgeEnd *e);
+	virtual int compareTo(const EdgeEnd *e) const;
+	virtual int compareDirection(const EdgeEnd *e) const;
 	virtual void computeLabel();
 	virtual string print();
 protected:
@@ -283,16 +283,23 @@ private:
 };
 
 struct EdgeEndLT {
-	bool operator()(EdgeEnd *s1, EdgeEnd *s2) const {
+	bool operator()(const EdgeEnd *s1, const EdgeEnd *s2) const {
 		return s1->compareTo(s2)<0;
 	}
 };
 
+/**
+ * A EdgeEndStar is an ordered list of EdgeEnds around a node.
+ * They are maintained in CCW order (starting with the positive x-axis) around the node
+ * for efficient lookup and topology building.
+ *
+ * @version 1.4
+ */
 class EdgeEndStar {
 public:
 	EdgeEndStar();
 	virtual ~EdgeEndStar();
-	virtual void insert(EdgeEnd *e);
+	virtual void insert(EdgeEnd *e)=0;
 	virtual Coordinate& getCoordinate();
 	virtual int getDegree();
 	virtual vector<EdgeEnd*>::iterator getIterator();
@@ -305,9 +312,10 @@ public:
 	virtual int findIndex(EdgeEnd *eSearch);
 	virtual string print();
 protected:
-	map<EdgeEnd*,void*,EdgeEndLT> *edgeMap;
+	//map<EdgeEnd*,void*,EdgeEndLT> *edgeMap;
+	set<EdgeEnd *, EdgeEndLT> *edgeMap;
 	vector<EdgeEnd*> *edgeList;
-	virtual void insertEdgeEnd(EdgeEnd *e,void* obj);
+	virtual void insertEdgeEnd(EdgeEnd *e);
 private:
 	int ptInAreaLocation[2];
 	virtual void computeEdgeEndLabels();
@@ -319,7 +327,7 @@ public:
 	DirectedEdgeStar();
 	~DirectedEdgeStar();
 	void insert(EdgeEnd *ee);
-	Label *getLabel();
+	Label &getLabel();
 	int getOutgoingDegree();
 	int getOutgoingDegree(EdgeRing *er);
 	DirectedEdge* getRightmostEdge();
@@ -337,14 +345,12 @@ private:
 	 * A list of all outgoing edges in the result, in CCW order
 	 */
 	vector<DirectedEdge*> *resultAreaEdgeList;
-	Label *label;
+	Label label;
 	vector<DirectedEdge*>* getResultAreaEdges();
 	enum {
 		SCANNING_FOR_INCOMING=1,
 		LINKING_TO_OUTGOING
 	};
-//	static const int SCANNING_FOR_INCOMING=1;
-//	static const int LINKING_TO_OUTGOING=2;
 	int computeDepths(int startIndex, int endIndex, int startDepth);
 };
 
@@ -352,7 +358,7 @@ class Node: public GraphComponent {
 using GraphComponent::setLabel;
 
 public:
-	Node(Coordinate& newCoord, EdgeEndStar* newEdges);
+	Node(const Coordinate& newCoord, EdgeEndStar* newEdges);
 	virtual ~Node();
 	virtual const Coordinate& getCoordinate() const;
 	virtual EdgeEndStar* getEdges();
@@ -381,7 +387,10 @@ private:
 
 class NodeFactory {
 public:
-	virtual Node* createNode(Coordinate coord);
+	virtual Node* createNode(const Coordinate &coord) const;
+	static const NodeFactory &instance();
+protected:
+	NodeFactory() {};
 };
 
 class EdgeIntersection {
@@ -500,9 +509,9 @@ typedef pair<Coordinate*,Node*> NodeMapValueType;
 class NodeMap{
 public:
 	map<Coordinate*,Node*,CoordLT>nodeMap;
-	NodeFactory *nodeFact;
+	const NodeFactory &nodeFact;
 	// newNodeFact will be deleted by ~NodeMap
-	NodeMap(NodeFactory *newNodeFact);
+	NodeMap(const NodeFactory &newNodeFact);
 	virtual ~NodeMap();
 	Node* addNode(const Coordinate& coord);
 	Node* addNode(Node *n);
@@ -570,7 +579,7 @@ private:
 	/**
 	 * The depth of each side (position) of this edge.
 	 * The 0 element of the array is never used.
-	*/
+	 */
 	int depth[3];
 	void computeDirectedLabel();
 };
@@ -655,8 +664,7 @@ public:
 	static CGAlgorithms *cga;
 //	static LineIntersector *li;
 	static void linkResultDirectedEdges(vector<Node*>* allNodes); // throw(TopologyException *);
-	// nodeFact will be deleted by ~NodeMap
-	PlanarGraph(NodeFactory *nodeFact);
+	PlanarGraph(const NodeFactory &nodeFact);
 	PlanarGraph();
 	virtual ~PlanarGraph();
 	virtual vector<Edge*>::iterator getEdgeIterator();
@@ -848,7 +856,45 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.19  2005/11/18 00:55:29  strk
+ *
  * Fixed a bug in EdgeRing::containsPoint().
  * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
  * usages from PolygonBuilder.

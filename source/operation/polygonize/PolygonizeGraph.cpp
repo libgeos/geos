@@ -334,7 +334,12 @@ PolygonizeGraph::computeNextCCWEdges(planarNode *node, long label)
 
 	// the edges are stored in CCW order around the star
 	vector<planarDirectedEdge*> &edges=deStar->getEdges();
-	for(unsigned int i=edges.size()-1; i>=0; --i)
+
+	/*
+	 * Must use a SIGNED int here to allow for beak condition
+	 * to be true.
+	 */
+	for(int i=edges.size()-1; i>=0; --i)
 	{
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
 		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
@@ -449,6 +454,43 @@ PolygonizeGraph::deleteDangles()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.9  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

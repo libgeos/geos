@@ -23,28 +23,23 @@ namespace geos {
 const LineIntersector* RelateComputer::li=new LineIntersector();
 const PointLocator* RelateComputer::ptLocator=new PointLocator();
 
-RelateComputer::RelateComputer() {
-	nodes=new NodeMap(new RelateNodeFactory());
-	im=new IntersectionMatrix();
-	arg=new vector<GeometryGraph*>();
-	isolatedEdges=new vector<Edge*>();
+RelateComputer::RelateComputer(vector<GeometryGraph*> *newArg):
+	arg(newArg),
+	nodes(RelateNodeFactory::instance()),
+	im(new IntersectionMatrix())
+	//isolatedEdges(new vector<Edge*>())
+{
 }
 
-RelateComputer::RelateComputer(vector<GeometryGraph*> *newArg) {
-	nodes=new NodeMap(new RelateNodeFactory());
-	im=new IntersectionMatrix();
-	arg=newArg;
-	isolatedEdges=new vector<Edge*>();
+RelateComputer::~RelateComputer()
+{
+	//delete nodes;
+	//delete isolatedEdges;
 }
 
-RelateComputer::~RelateComputer() {
-	delete nodes;
-//	delete im;
-//	delete arg;
-	delete isolatedEdges;
-}
-
-IntersectionMatrix* RelateComputer::computeIM() {
+IntersectionMatrix*
+RelateComputer::computeIM()
+{
 	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
 	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
 	// if the Geometries don't overlap there is nothing to do
@@ -130,14 +125,18 @@ IntersectionMatrix* RelateComputer::computeIM() {
 	return im;
 }
 
-void RelateComputer::insertEdgeEnds(vector<EdgeEnd*> *ee) {
+void
+RelateComputer::insertEdgeEnds(vector<EdgeEnd*> *ee)
+{
 	for(vector<EdgeEnd*>::iterator i=ee->begin();i<ee->end();i++) {
 		EdgeEnd *e=*i;
-		nodes->add(e);
+		nodes.add(e);
 	}
 }
 
-void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *imX) {
+void
+RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *imX)
+{
 	// If a proper intersection is found, we can set a lower bound on the IM.
 	int dimA=(*arg)[0]->getGeometry()->getDimension();
 	int dimB=(*arg)[1]->getGeometry()->getDimension();
@@ -180,20 +179,22 @@ void RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector
 }
 
 /**
-* Copy all nodes from an arg geometry into this graph.
-* The node label in the arg geometry overrides any previously computed
-* label for that argIndex.
-* (E.g. a node may be an intersection node with
-* a computed label of BOUNDARY,
-* but in the original arg Geometry it is actually
-* in the interior due to the Boundary Determination Rule)
-*/
-void RelateComputer::copyNodesAndLabels(int argIndex) {
+ * Copy all nodes from an arg geometry into this graph.
+ * The node label in the arg geometry overrides any previously computed
+ * label for that argIndex.
+ * (E.g. a node may be an intersection node with
+ * a computed label of BOUNDARY,
+ * but in the original arg Geometry it is actually
+ * in the interior due to the Boundary Determination Rule)
+ */
+void
+RelateComputer::copyNodesAndLabels(int argIndex)
+{
 	map<Coordinate*,Node*,CoordLT>&nMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
-		Node *newNode=nodes->addNode(graphNode->getCoordinate());
+		Node *newNode=nodes.addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
 		//node.print(System.out);
 	}
@@ -222,7 +223,7 @@ RelateComputer::computeIntersectionNodes(int argIndex)
 		for( ; it!=end; ++it)
 		{
 			EdgeIntersection *ei=*it;
-			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
+			RelateNode *n=(RelateNode*) nodes.addNode(ei->coord);
 			if (eLoc==Location::BOUNDARY)
 			{
 				n->setLabelBoundary(argIndex);
@@ -257,7 +258,7 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 		for( ; eiIt!=eiEnd; ++eiIt)
 		{
 			EdgeIntersection *ei=*eiIt;
-			RelateNode *n=(RelateNode*) nodes->find(ei->coord);
+			RelateNode *n=(RelateNode*) nodes.find(ei->coord);
 			if (n->getLabel()->isNull(argIndex)) {
 				if (eLoc==Location::BOUNDARY)
 				  n->setLabelBoundary(argIndex);
@@ -269,10 +270,12 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 }
 
 /**
-* If the Geometries are disjoint, we need to enter their dimension and
-* boundary dimension in the Ext rows in the IM
-*/
-void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
+ * If the Geometries are disjoint, we need to enter their dimension and
+ * boundary dimension in the Ext rows in the IM
+ */
+void
+RelateComputer::computeDisjointIM(IntersectionMatrix *imX)
+{
 	const Geometry *ga=(*arg)[0]->getGeometry();
 	if (!ga->isEmpty()) {
 		imX->set(Location::INTERIOR,Location::EXTERIOR,ga->getDimension());
@@ -289,7 +292,7 @@ void RelateComputer::computeDisjointIM(IntersectionMatrix *imX) {
 void
 RelateComputer::labelNodeEdges()
 {
-	map<Coordinate*,Node*,CoordLT> &nMap=nodes->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nMap=nodes.nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++)
 	{
@@ -307,14 +310,14 @@ void
 RelateComputer::updateIM(IntersectionMatrix *imX)
 {
 	//Debug.println(im);
-	vector<Edge *>::iterator ei=isolatedEdges->begin();
-	for ( ; ei<isolatedEdges->end(); ei++)
+	vector<Edge *>::iterator ei=isolatedEdges.begin();
+	for ( ; ei<isolatedEdges.end(); ++ei)
 	{
 		Edge *e=*ei;
 		e->GraphComponent::updateIM(imX);
 		//Debug.println(im);
 	}
-	map<Coordinate*,Node*,CoordLT> &nMap=nodes->nodeMap;
+	map<Coordinate*,Node*,CoordLT> &nMap=nodes.nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
@@ -339,17 +342,19 @@ void RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex) {
 		Edge *e=*i;
 		if (e->isIsolated()) {
 			labelIsolatedEdge(e,targetIndex,(*arg)[targetIndex]->getGeometry());
-			isolatedEdges->push_back(e);
+			isolatedEdges.push_back(e);
 		}
 	}
 }
 
 /**
-* Label an isolated edge of a graph with its relationship to the target geometry.
-* If the target has dim 2 or 1, the edge can either be in the interior or the exterior.
-* If the target has dim 0, the edge must be in the exterior
-*/
-void RelateComputer::labelIsolatedEdge(Edge *e,int targetIndex, const Geometry *target){
+ * Label an isolated edge of a graph with its relationship to the target geometry.
+ * If the target has dim 2 or 1, the edge can either be in the interior or the exterior.
+ * If the target has dim 0, the edge must be in the exterior
+ */
+void
+RelateComputer::labelIsolatedEdge(Edge *e, int targetIndex, const Geometry *target)
+{
 	// this won't work for GeometryCollections with both dim 2 and 1 geoms
 	if (target->getDimension()>0) {
 		// since edge is not in boundary, may not need the full generality of PointLocator?
@@ -364,16 +369,18 @@ void RelateComputer::labelIsolatedEdge(Edge *e,int targetIndex, const Geometry *
 }
 
 /**
-* Isolated nodes are nodes whose labels are incomplete
-* (e.g. the location for one Geometry is null).
-* This is the case because nodes in one graph which don't intersect
-* nodes in the other are not completely labelled by the initial process
-* of adding nodes to the nodeList.
-* To complete the labelling we need to check for nodes that lie in the
-* interior of edges, and in the interior of areas.
-*/
-void RelateComputer::labelIsolatedNodes() {
-	map<Coordinate*,Node*,CoordLT> &nMap=nodes->nodeMap;
+ * Isolated nodes are nodes whose labels are incomplete
+ * (e.g. the location for one Geometry is null).
+ * This is the case because nodes in one graph which don't intersect
+ * nodes in the other are not completely labelled by the initial process
+ * of adding nodes to the nodeList.
+ * To complete the labelling we need to check for nodes that lie in the
+ * interior of edges, and in the interior of areas.
+ */
+void
+RelateComputer::labelIsolatedNodes()
+{
+	map<Coordinate*,Node*,CoordLT> &nMap=nodes.nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *n=nodeIt->second;
@@ -390,9 +397,11 @@ void RelateComputer::labelIsolatedNodes() {
 }
 
 /**
-* Label an isolated node with its relationship to the target geometry.
-*/
-void RelateComputer::labelIsolatedNode(Node *n,int targetIndex) {
+ * Label an isolated node with its relationship to the target geometry.
+ */
+void
+RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
+{
 	int loc=((PointLocator*) ptLocator)->locate(n->getCoordinate(),
                                                 (*arg)[targetIndex]->getGeometry());
 	n->getLabel()->setAllLocations(targetIndex,loc);
@@ -403,6 +412,43 @@ void RelateComputer::labelIsolatedNode(Node *n,int targetIndex) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.23  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

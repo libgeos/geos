@@ -201,7 +201,7 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 			}
 			if (li->isProper())
 			{
-				properIntersectionPoint.setCoordinate(li->getIntersection(0));
+				properIntersectionPoint=li->getIntersection(0);
 #if DEBUG
 				cerr<<"SegmentIntersector::addIntersections(): properIntersectionPoint: "<<properIntersectionPoint.toString()<<endl;
 #endif // DEBUG_INTERSECT
@@ -238,7 +238,45 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.9  2005/11/15 10:04:37  strk
+ *
  * Reduced heap allocations (vectors, mostly).
  * Enforced const-correctness, changed some interfaces
  * to use references rather then pointers when appropriate.

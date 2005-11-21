@@ -19,13 +19,12 @@
 
 namespace geos {
 
-NodeMap::NodeMap(NodeFactory *newNodeFact)
+NodeMap::NodeMap(const NodeFactory &newNodeFact):
+	nodeFact(newNodeFact)
 {
 #if DEBUG
 	cerr<<"["<<this<<"] NodeMap::NodeMap"<<endl;
 #endif
-	nodeFact=newNodeFact;
-	//nodeMap=new map<Coordinate*,Node*,CoordLT>();
 }
 
 NodeMap::~NodeMap()
@@ -34,8 +33,6 @@ NodeMap::~NodeMap()
 	for (;it!=nodeMap.end();it++) {
 		delete it->second;
 	}
-	//delete nodeMap;
-	delete nodeFact;
 }
 
 Node*
@@ -49,7 +46,7 @@ NodeMap::addNode(const Coordinate& coord)
 #if DEBUG
                 cerr<<" is new"<<endl;
 #endif
-                node=nodeFact->createNode(coord);
+                node=nodeFact.createNode(coord);
                 nodeMap[const_cast<Coordinate *>(&coord)]=node;
         }
         else
@@ -146,7 +143,6 @@ NodeMap::getBoundaryNodes(int geomIndex) const
 string
 NodeMap::print() const
 {
-cerr<<"Print called!"<<endl;
 	string out="";
 	NodeMapConstIterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
@@ -156,10 +152,47 @@ cerr<<"Print called!"<<endl;
 	return out;
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.7  2005/11/09 13:44:28  strk
  * Cleanups in Node and NodeMap.
  * Optimization of EdgeIntersectionLessThen.

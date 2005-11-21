@@ -15,12 +15,12 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
-#include <stdio.h>
 
 namespace geos {
 
-RelateNodeGraph::RelateNodeGraph() {
-	nodes=new NodeMap(new RelateNodeFactory());
+RelateNodeGraph::RelateNodeGraph()
+{
+	nodes=new NodeMap(RelateNodeFactory::instance());
 }
 
 RelateNodeGraph::~RelateNodeGraph() {
@@ -28,11 +28,14 @@ RelateNodeGraph::~RelateNodeGraph() {
 }
 
 map<Coordinate*,Node*,CoordLT>&
-RelateNodeGraph::getNodeMap() {
+RelateNodeGraph::getNodeMap()
+{
 	return nodes->nodeMap;
 }
 
-void RelateNodeGraph::build(GeometryGraph *geomGraph) {
+void
+RelateNodeGraph::build(GeometryGraph *geomGraph)
+{
 	// compute nodes for intersections between previously noded edges
 	computeIntersectionNodes(geomGraph,0);
 	/**
@@ -87,16 +90,19 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
 		}
 	}
 }
+
 /**
-* Copy all nodes from an arg geometry into this graph.
-* The node label in the arg geometry overrides any previously computed
-* label for that argIndex.
-* (E.g. a node may be an intersection node with
-* a computed label of BOUNDARY,
-* but in the original arg Geometry it is actually
-* in the interior due to the Boundary Determination Rule)
-*/
-void RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex) {
+ * Copy all nodes from an arg geometry into this graph.
+ * The node label in the arg geometry overrides any previously computed
+ * label for that argIndex.
+ * (E.g. a node may be an intersection node with
+ * a computed label of BOUNDARY,
+ * but in the original arg Geometry it is actually
+ * in the interior due to the Boundary Determination Rule)
+ */
+void
+RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex)
+{
 	map<Coordinate*,Node*,CoordLT> &nMap=geomGraph->getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
@@ -107,7 +113,9 @@ void RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex) 
 	}
 }
 
-void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){
+void
+RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee)
+{
 	for(vector<EdgeEnd*>::iterator i=ee->begin();i<ee->end();i++) {
 		EdgeEnd *e=*i;
 		nodes->add(e);
@@ -118,6 +126,43 @@ void RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.13  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

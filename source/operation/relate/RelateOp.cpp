@@ -5,14 +5,85 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/opRelate.h>
+#include <stdio.h>
+#include <typeinfo>
+
+namespace geos {
+
+IntersectionMatrix*
+RelateOp::relate(const Geometry *a, const Geometry *b)
+{
+	RelateOp relOp(a,b);
+	return relOp.getIntersectionMatrix();
+}
+
+RelateOp::RelateOp(const Geometry *g0, const Geometry *g1):
+	GeometryGraphOperation(g0, g1),
+	relateComp(&arg)
+{
+}
+
+RelateOp::~RelateOp()
+{
+}
+
+IntersectionMatrix*
+RelateOp::getIntersectionMatrix()
+{
+	return relateComp.computeIM();
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.15  2004/07/27 16:35:47  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -36,85 +107,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/opRelate.h>
-#include <stdio.h>
-#include <typeinfo>
-
-namespace geos {
-
-IntersectionMatrix* RelateOp::relate(const Geometry *a, const Geometry *b) {
-	RelateOp relOp(a,b);
-	return relOp.getIntersectionMatrix();
-}
-
-///**
-//* Implements relate on GeometryCollections as the sum of
-//* the Intersection matrices for the components of the
-//* collection(s).
-//* This may or may not be appropriate semantics for this operation.
-//* @param a a List of Geometries, none of which are a basic GeometryCollection
-//* @param b a List of Geometries, none of which are a basic GeometryCollection
-//* @return the matrix representing the topological relationship of the geometries
-//*/
-//IntersectionMatrix* RelateOp::relateGC(vector<const Geometry*> *a,vector<const Geometry*> *b) {
-//	IntersectionMatrix *finalIM=new IntersectionMatrix();
-//	for(int i=0;i<(int)a->size();i++) {
-//		const Geometry *aGeom=(*a)[i];
-//		for(int j=0;j<(int)b->size();j++) {
-//			const Geometry *bGeom=(*b)[j];
-//			RelateOp *relOp=new RelateOp(aGeom,bGeom);
-//			IntersectionMatrix *im=relOp->getIntersectionMatrix();
-//			finalIM->add(im);
-//		}
-//	}
-//	return finalIM;
-//}
-
-RelateOp::RelateOp(const Geometry *g0, const Geometry *g1):GeometryGraphOperation(g0,g1), relateComp(arg) {
-	//relateComp=new RelateComputer(arg);
-}
-
-RelateOp::~RelateOp() {
-	//delete relateComp;
-}
-
-IntersectionMatrix* RelateOp::getIntersectionMatrix() {
-	return relateComp.computeIM();
-}
-
-//vector<const Geometry*>* RelateOp::toList(const Geometry *geom) {
-//	vector<const Geometry*> *geomList=new vector<const Geometry*>();
-//	return addToList(geom,geomList);
-//}
-
-//vector<const Geometry*>* RelateOp::addToList(const Geometry *geom, vector<const Geometry*>* geomList) {
-//	if (isBaseGeometryCollection(geom)) {
-//		const GeometryCollection *gc=(GeometryCollection*) geom;
-//		for(int i=0;i<gc->getNumGeometries();i++) {
-//			addToList(gc->getGeometryN(i),geomList);
-//		}
-//	} else
-//		geomList->push_back(geom);
-//	return geomList;
-//}
-
-//bool RelateOp::isBaseGeometryCollection(const Geometry* geom) {
-//	//if ((typeid(*geom)==typeid(GeometryCollection)) ||
-//	//	(typeid(*geom)==typeid(MultiPoint)) ||
-//	//	(typeid(*geom)==typeid(MultiLineString)) ||
-//	//	(typeid(*geom)==typeid(MultiPolygon))) {
-//	//	return true;
-//	//} else {
-//	//	return false;
-//	//}
-//	if (typeid(*geom)==typeid(GeometryCollection)) {
-//		return true;
-//	} else {
-//		return false;
-//	}
-//
-//}
-}
 

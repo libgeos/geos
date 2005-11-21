@@ -79,8 +79,8 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1):
 	 */
 	geomFact(g0->getFactory()),
 	resultGeom(NULL),
-	graph(new OverlayNodeFactory()),
-	edgeList(new EdgeList()),
+	graph(OverlayNodeFactory::instance()),
+	//edgeList(new EdgeList()),
 	resultPolyList(NULL),
 	resultLineList(NULL),
 	resultPointList(NULL)
@@ -110,7 +110,7 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1):
 
 OverlayOp::~OverlayOp()
 {
-	delete edgeList;
+	//delete edgeList;
 	delete resultPolyList;
 	delete resultLineList;
 	delete resultPointList;
@@ -138,7 +138,7 @@ OverlayOp::getGraph()
 void
 OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 {
-	for(int i=0;i<(int)edges->size();i++) {
+	for(unsigned int i=0; i<edges->size(); ++i) {
 		Edge *e=(*edges)[i];
 		insertUniqueEdge(e);
 	}
@@ -161,7 +161,7 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 void
 OverlayOp::replaceCollapsedEdges()
 {
-	vector<Edge*> *edges=edgeList->getEdges();
+	vector<Edge*> *edges=edgeList.getEdges();
 
 	unsigned int nedges=edges->size();
 	for(unsigned int i=0; i<nedges; ++i)
@@ -187,7 +187,7 @@ OverlayOp::replaceCollapsedEdges()
 void
 OverlayOp::copyPoints(int argIndex)
 {
-	map<Coordinate*,Node*,CoordLT>&nodeMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordLT>&nodeMap=arg[argIndex]->getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *graphNode=it->second;
@@ -210,7 +210,7 @@ OverlayOp::computeLabelling()
 	map<Coordinate*,Node*,CoordLT> &nodeMap=graph.getNodeMap()->nodeMap;
 
 #if DEBUG
-	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList->print()<<endl;
+	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList.print()<<endl;
 #endif
 
 #if DEBUG
@@ -223,18 +223,18 @@ OverlayOp::computeLabelling()
 #if DEBUG
 		cerr<<"     "<<node->print()<<" has "<<node->getEdges()->getEdges()->size()<<" edgeEnds"<<endl;
 #endif
-		node->getEdges()->computeLabelling(arg);
+		node->getEdges()->computeLabelling(&arg);
 	}
 #if DEBUG
-	cerr<<"OverlayOp::computeLabelling(): after edge labelling: "<<edgeList->print()<<endl;
+	cerr<<"OverlayOp::computeLabelling(): after edge labelling: "<<edgeList.print()<<endl;
 #endif
 	mergeSymLabels();
 #if DEBUG
-	cerr<<"OverlayOp::computeLabelling(): after labels sym merging: "<<edgeList->print()<<endl;
+	cerr<<"OverlayOp::computeLabelling(): after labels sym merging: "<<edgeList.print()<<endl;
 #endif
 	updateNodeLabelling();
 #if DEBUG
-	cerr<<"OverlayOp::computeLabelling(): after node labeling update: "<<edgeList->print()<<endl;
+	cerr<<"OverlayOp::computeLabelling(): after node labeling update: "<<edgeList.print()<<endl;
 #endif
 }
 
@@ -279,8 +279,8 @@ OverlayOp::updateNodeLabelling()
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
-		Label *lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
-		node->getLabel()->merge(*lbl);
+		Label &lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
+		node->getLabel()->merge(lbl);
 #if DEBUG
 		cerr<<"     "<<node->print()<<endl;
 #endif
@@ -334,7 +334,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 #if DEBUG
 	cerr<<"OverlayOp::labelIncompleteNode("<<n->print()<<", "<<targetIndex<<")"<<endl;
 #endif
-	const Geometry *targetGeom = (*arg)[targetIndex]->getGeometry();
+	const Geometry *targetGeom = arg[targetIndex]->getGeometry();
 	int loc=ptLocator.locate(n->getCoordinate(), targetGeom);
 	n->getLabel()->setLocation(targetIndex,loc);
 
@@ -400,7 +400,7 @@ OverlayOp::getAverageZ(int targetIndex)
 {
 	if ( avgzcomputed[targetIndex] ) return avgz[targetIndex];
 
-	const Geometry *targetGeom = (*arg)[targetIndex]->getGeometry();
+	const Geometry *targetGeom = arg[targetIndex]->getGeometry();
 
 	Assert::isTrue(targetGeom->getGeometryTypeId() == GEOS_POLYGON, 
 		"OverlayOp::getAverageZ(int) called with a ! polygon");
@@ -593,21 +593,28 @@ Geometry*
 OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList) {
-	int i;
+	unsigned int i;
+	unsigned int nPoints=nResultPointList->size();
+	unsigned int nLines=nResultLineList->size();
+	unsigned int nPolys=nResultPolyList->size();
+
 	vector<Geometry*> *geomList=new vector<Geometry*>();
+	geomList->reserve(nPoints+nLines+nPolys);
+
 	// element geometries of the result are always in the order P,L,A
-	for(i=0;i<(int)nResultPointList->size();i++) {
+	for(i=0; i<nPoints; ++i) {
 		Point *pt=(*nResultPointList)[i];
 		geomList->push_back(pt);
 	}
-	for(i=0;i<(int)nResultLineList->size();i++) {
+	for(i=0; i<nLines; ++i) {
 		LineString *ls=(*nResultLineList)[i];
 		geomList->push_back(ls);
 	}
-	for(i=0;i<(int)nResultPolyList->size();i++) {
+	for(i=0; i<nPolys; ++i) {
 		Polygon *q=(*nResultPolyList)[i];
 		geomList->push_back(q);
 	}
+
 	// build the most specific geometry possible
 	Geometry *g=geomFact->buildGeometry(geomList);
 	return g;
@@ -625,15 +632,15 @@ OverlayOp::computeOverlay(int opCode)
 	copyPoints(1);
 
 	// node the input Geometries
-	delete (*arg)[0]->computeSelfNodes(li,false);
-	delete (*arg)[1]->computeSelfNodes(li,false);
+	delete arg[0]->computeSelfNodes(li,false);
+	delete arg[1]->computeSelfNodes(li,false);
 
 #if DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed SelfNodes"<<endl;
 #endif
 
 	// compute intersections between edges of the two input geometries
-	delete (*arg)[0]->computeEdgeIntersections((*arg)[1],li,true);
+	delete arg[0]->computeEdgeIntersections(arg[1],li,true);
 
 #if DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed EdgeIntersections"<<endl;
@@ -642,8 +649,8 @@ OverlayOp::computeOverlay(int opCode)
 
 
 	vector<Edge*> baseSplitEdges;
-	(*arg)[0]->computeSplitEdges(&baseSplitEdges);
-	(*arg)[1]->computeSplitEdges(&baseSplitEdges);
+	arg[0]->computeSplitEdges(&baseSplitEdges);
+	arg[1]->computeSplitEdges(&baseSplitEdges);
 
 	// add the noded edges to this result graph
 	insertUniqueEdges(&baseSplitEdges);
@@ -655,7 +662,7 @@ OverlayOp::computeOverlay(int opCode)
     	//NodingValidator nv = new NodingValidator(edgeList.getEdges());
     	//nv.checkValid();
 
-	graph.addEdges(edgeList->getEdges());
+	graph.addEdges(edgeList.getEdges());
 
 	// this can throw TopologyException *
 	computeLabelling();
@@ -720,7 +727,7 @@ OverlayOp::insertUniqueEdge(Edge *e)
 
 	//<FIX> MD 8 Oct 03  speed up identical edge lookup
 	// fast lookup
-	Edge *existingEdge = edgeList->findEqualEdge(e);
+	Edge *existingEdge = edgeList.findEqualEdge(e);
 
 	// If an identical edge already exists, simply update its label
 	if (existingEdge) {
@@ -757,7 +764,7 @@ OverlayOp::insertUniqueEdge(Edge *e)
 		// add this new edge to the list of edges in this graph
 		//e.setName(name+edges.size());
 		//e.getDepth().add(e.getLabel());
-		edgeList->add(e);
+		edgeList.add(e);
 	}
 }
 
@@ -774,8 +781,8 @@ OverlayOp::insertUniqueEdge(Edge *e)
 void
 OverlayOp::computeLabelsFromDepths()
 {
-	for(int j=0;j<(int)edgeList->getEdges()->size();j++) {
-		Edge *e=edgeList->get(j);
+	for(unsigned int j=0; j<edgeList.getEdges()->size(); ++j) {
+		Edge *e=edgeList.get(j);
 		Label *lbl=e->getLabel();
 		Depth &depth=e->getDepth();
 		/**
@@ -817,6 +824,43 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.47  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

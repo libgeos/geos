@@ -74,7 +74,8 @@ EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
 	init(newP0,newP1);
 }
 
-void EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
+void
+EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
 {
 	p0=newP0;
 	p1=newP1;
@@ -94,11 +95,15 @@ double EdgeEnd::getDy() {return dy;}
 void EdgeEnd::setNode(Node* newNode) {node=newNode;}
 Node* EdgeEnd::getNode() {return node;}
 
-int EdgeEnd::compareTo(EdgeEnd* e) {
+int
+EdgeEnd::compareTo(const EdgeEnd* e) const
+{
 	return compareDirection(e);
 }
 
-int EdgeEnd::compareDirection(EdgeEnd* e) {
+int
+EdgeEnd::compareDirection(const EdgeEnd* e) const
+{
 	if (dx == e->dx && dy == e->dy)
 		return 0;
 	// if the rays are in different quadrants, determining the ordering is trivial
@@ -109,11 +114,15 @@ int EdgeEnd::compareDirection(EdgeEnd* e) {
 	return CGAlgorithms::computeOrientation(e->p0,e->p1,p1);
 }
 
-void EdgeEnd::computeLabel(){
+void
+EdgeEnd::computeLabel()
+{
 	// subclasses should override this if they are using labels
 }
 
-string EdgeEnd::print() {
+string
+EdgeEnd::print()
+{
 	ostringstream s;
 
 	s<<"EdgeEnd: ";
@@ -132,6 +141,43 @@ string EdgeEnd::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.7  2005/11/16 22:21:45  strk
  * enforced const-correctness and use of initializer lists.
  *

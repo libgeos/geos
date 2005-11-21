@@ -67,10 +67,77 @@ bool operator!=(const Coordinate& a, const Coordinate& b) {
 	return false;
 }
 
+bool CoordinateLessThen::operator()(const Coordinate& a, const Coordinate& b)
+{
+	if (a.compareTo(b)<0)
+		return true;
+	else
+		return false;
+}
+
+
+#ifdef PROFILE_COORDINATE_COPIES
+
+Coordinate::Coordinate(const Coordinate& c)
+{
+	x=c.x;
+	y=c.y;
+	z=c.z;
+}
+
+Coordinate &
+Coordinate::operator=(const Coordinate &c)
+{
+	//if ( this == &c ) return *this;
+	x=c.x;
+	y=c.y;
+	z=c.z;
+	return *this;
+}
+
+#endif // PROFILE_COORDINATE_COPIES
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.20  2005/01/28 08:47:06  strk
  * Removed sprintf usage, replaced with sstream
  *

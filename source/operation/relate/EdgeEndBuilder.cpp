@@ -13,40 +13,19 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
- * $Log$
- * Revision 1.12  2005/11/16 15:49:54  strk
- * Reduced gratuitous heap allocations.
- *
- * Revision 1.11  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.10  2005/11/07 12:31:24  strk
- * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
- * to avoid dynamic allocation of initial header.
- * Inlined short SweepLineEvent methods.
- *
- * Revision 1.9  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 
-
 #include <geos/opRelate.h>
-#include <stdio.h>
 
 namespace geos {
 
-EdgeEndBuilder::EdgeEndBuilder() {}
+EdgeEndBuilder::EdgeEndBuilder()
+{}
 
-vector<EdgeEnd*> *EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges) {
+vector<EdgeEnd*> *
+EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges)
+{
 	vector<EdgeEnd*> *l=new vector<EdgeEnd*>();
 	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
@@ -60,7 +39,7 @@ vector<EdgeEnd*> *EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges) {
  * Edge (if any) and inserts them into the graph.
  */
 void
-EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l)
+EdgeEndBuilder::computeEdgeEnds(Edge *edge, vector<EdgeEnd*> *l)
 {
 	EdgeIntersectionList &eiList=edge->getEdgeIntersectionList();
 	//Debug.print(eiList);
@@ -92,14 +71,17 @@ EdgeEndBuilder::computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l)
 }
 
 /**
-* Create a EdgeStub for the edge before the intersection eiCurr.
-* The previous intersection is provided
-* in case it is the endpoint for the stub edge.
-* Otherwise, the previous point from the parent edge will be the endpoint.
-* <br>
-* eiCurr will always be an EdgeIntersection, but eiPrev may be null.
-*/
-void EdgeEndBuilder::createEdgeEndForPrev(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiPrev) {
+ * Create a EdgeStub for the edge before the intersection eiCurr.
+ * The previous intersection is provided
+ * in case it is the endpoint for the stub edge.
+ * Otherwise, the previous point from the parent edge will be the endpoint.
+ * 
+ * eiCurr will always be an EdgeIntersection, but eiPrev may be null.
+ */
+void
+EdgeEndBuilder::createEdgeEndForPrev(Edge *edge, vector<EdgeEnd*> *l,
+		EdgeIntersection *eiCurr, EdgeIntersection *eiPrev)
+{
 	int iPrev=eiCurr->segmentIndex;
 	if (eiCurr->dist==0.0) {
 		// if at the start of the edge there is no previous edge
@@ -109,7 +91,7 @@ void EdgeEndBuilder::createEdgeEndForPrev(Edge *edge,vector<EdgeEnd*> *l,EdgeInt
 	Coordinate pPrev(edge->getCoordinate(iPrev));
 	// if prev intersection is past the previous vertex, use it instead
 	if (eiPrev!=NULL && eiPrev->segmentIndex>=iPrev)
-		pPrev.setCoordinate(eiPrev->coord);
+		pPrev=eiPrev->coord; 
 	Label *label=new Label(*(edge->getLabel()));
 	// since edgeStub is oriented opposite to it's parent edge, have to flip sides for edge label
 	label->flip();
@@ -119,24 +101,91 @@ void EdgeEndBuilder::createEdgeEndForPrev(Edge *edge,vector<EdgeEnd*> *l,EdgeInt
 }
 
 /**
-* Create a StubEdge for the edge after the intersection eiCurr.
-* The next intersection is provided
-* in case it is the endpoint for the stub edge.
-* Otherwise, the next point from the parent edge will be the endpoint.
-* <br>
-* eiCurr will always be an EdgeIntersection, but eiNext may be null.
-*/
-void EdgeEndBuilder::createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiNext) {
+ * Create a StubEdge for the edge after the intersection eiCurr.
+ * The next intersection is provided
+ * in case it is the endpoint for the stub edge.
+ * Otherwise, the next point from the parent edge will be the endpoint.
+ * 
+ * eiCurr will always be an EdgeIntersection, but eiNext may be null.
+ */
+void
+EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
+		EdgeIntersection *eiCurr, EdgeIntersection *eiNext)
+{
 	int iNext=eiCurr->segmentIndex + 1;
 	// if there is no next edge there is nothing to do
 	if (iNext>=edge->getNumPoints() && eiNext==NULL) return;
 	Coordinate pNext(edge->getCoordinate(iNext));
 	// if the next intersection is in the same segment as the current, use it as the endpoint
 	if (eiNext!=NULL && eiNext->segmentIndex==eiCurr->segmentIndex)
-		pNext.setCoordinate(eiNext->coord);
+		pNext=eiNext->coord; 
 	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pNext,new Label(*(edge->getLabel())));
 	//Debug.println(e);
 	l->push_back(e);
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.13  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
+ * Revision 1.12  2005/11/16 15:49:54  strk
+ * Reduced gratuitous heap allocations.
+ *
+ * Revision 1.11  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
+ * Revision 1.10  2005/11/07 12:31:24  strk
+ * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
+ * to avoid dynamic allocation of initial header.
+ * Inlined short SweepLineEvent methods.
+ *
+ * Revision 1.9  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.8  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

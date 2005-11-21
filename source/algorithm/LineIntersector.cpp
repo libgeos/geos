@@ -5,11 +5,22 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * A LineIntersector is an algorithm that can both test whether
+ * two line segments intersect and compute the intersection point
+ * if they do.
+ * The intersection point may be computed in a precise or non-precise manner.
+ * Computing it precisely involves rounding it to an integer.  (This assumes
+ * that the input coordinates have been made precise by scaling them to
+ * an integer grid.)
  *
  **********************************************************************/
 
@@ -24,10 +35,13 @@
 
 namespace geos {
 
-LineIntersector::LineIntersector(): pa(intPt[0]), pb(intPt[1])
+LineIntersector::LineIntersector():
+	precisionModel(NULL),
+	result(0)
+	//pa(intPt[0]), pb(intPt[1])
 {
-	precisionModel=NULL;
-	result=0;
+	//precisionModel=NULL;
+	//result=0;
 }
 
 LineIntersector::~LineIntersector(){}
@@ -412,7 +426,7 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 				isProperVar=false;
 			}
 #if COMPUTE_Z
-			intPt[0].setCoordinate(p);
+			intPt[0]=p;
 #if DEBUG
 			cerr<<"RobustIntersector::computeIntersection(Coordinate,Coordinate,Coordinate) calling interpolateZ"<<endl;
 #endif
@@ -512,7 +526,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 #endif
 		isProperVar=false;
 		if (Pq1==0) {
-			intPt[0].setCoordinate(q1);
+			intPt[0]=q1;
 #if COMPUTE_Z
 			if ( !ISNAN(q1.z) )
 			{
@@ -522,7 +536,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 #endif
 		}
 		if (Pq2==0) {
-			intPt[0].setCoordinate(q2);
+			intPt[0]=q2;
 #if COMPUTE_Z
 			if ( !ISNAN(q2.z) )
 			{
@@ -532,7 +546,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 #endif
 		}
 		if (Qp1==0) {
-			intPt[0].setCoordinate(p1);
+			intPt[0]=p1;
 #if COMPUTE_Z
 			if ( !ISNAN(p1.z) )
 			{
@@ -542,7 +556,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 #endif
 		}
 		if (Qp2==0) {
-			intPt[0].setCoordinate(p2);
+			intPt[0]=p2;
 #if COMPUTE_Z
 			if ( !ISNAN(p2.z) )
 			{
@@ -559,24 +573,13 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 #endif // COMPUTE_Z
 	} else {
 		isProperVar=true;
-		Coordinate *c=intersection(p1, p2, q1, q2);
-		intPt[0].setCoordinate(*c);
-		delete c;
+		intersection(p1, p2, q1, q2, intPt[0]);
 	}
 #if DEBUG
 	cerr<<" DO_INTERSECT; intPt[0]:"<<intPt[0].toString()<<endl;
 #endif // DEBUG
 	return DO_INTERSECT;
 }
-
-//bool LineIntersector::intersectsEnvelope(Coordinate& p1,Coordinate& p2,Coordinate& q) {
-//	if (((q.x>=min(p1.x,p2.x)) && (q.x<=max(p1.x,p2.x))) &&
-//		((q.y>=min(p1.y,p2.y)) && (q.y<=max(p1.y,p2.y)))) {
-//			return true;
-//	} else {
-//		return false;
-//	}
-//}
 
 int
 LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)
@@ -604,7 +607,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 #if DEBUG
 		cerr<<" p1q1p2 && p1q2p2"<<endl;
 #endif
-		intPt[0].setCoordinate(q1);
+		intPt[0]=q1;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -613,7 +616,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
-		intPt[1].setCoordinate(q2);
+		intPt[1]=q2;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -632,7 +635,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 #if DEBUG
 		cerr<<" q1p1q2 && q1p2q2"<<endl;
 #endif
-		intPt[0].setCoordinate(p1);
+		intPt[0]=p1;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -641,7 +644,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
-		intPt[1].setCoordinate(p2);
+		intPt[1]=p2;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -656,7 +659,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 #if DEBUG
 		cerr<<" p1q1p2 && q1p1q2"<<endl;
 #endif
-		intPt[0].setCoordinate(q1);
+		intPt[0]=q1;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -665,7 +668,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
-		intPt[1].setCoordinate(p1);
+		intPt[1]=p1;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -684,7 +687,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 #if DEBUG
 		cerr<<" p1q1p2 && q1p2q2"<<endl;
 #endif
-		intPt[0].setCoordinate(q1);
+		intPt[0]=q1;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -693,7 +696,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
-		intPt[1].setCoordinate(p2);
+		intPt[1]=p2;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -712,7 +715,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 #if DEBUG
 		cerr<<" p1q2p2 && q1p1q2"<<endl;
 #endif
-		intPt[0].setCoordinate(q2);
+		intPt[0]=q2;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -721,7 +724,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
-		intPt[1].setCoordinate(p1);
+		intPt[1]=p1;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -740,7 +743,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 #if DEBUG
 		cerr<<" p1q2p2 && q1p2q2"<<endl;
 #endif
-		intPt[0].setCoordinate(q2);
+		intPt[0]=q2;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -749,7 +752,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
-		intPt[1].setCoordinate(p2);
+		intPt[1]=p2;
 #if COMPUTE_Z
 		ztot=0;
 		hits=0;
@@ -767,8 +770,9 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 	return DONT_INTERSECT;
 }
 
-Coordinate*
-LineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const
+void
+LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
+	const Coordinate& q1, const Coordinate& q2, Coordinate &intPt) const
 {
 	Coordinate n1=p1;
 	Coordinate n2=p2;
@@ -779,10 +783,8 @@ LineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Co
 	//normalize(&n1, &n2, &n3, &n4, &normPt);
 	normalizeToEnvCentre(n1, n2, n3, n4, normPt);
 
-	Coordinate *intPt=NULL;
-
 #if DEBUG
-	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2) called:"<<endl;
+	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2,intPt) called:"<<endl;
 	cerr<<" p1"<<p1.toString()<<endl;
 	cerr<<" p2"<<p2.toString()<<endl;
 	cerr<<" q1"<<q1.toString()<<endl;
@@ -795,18 +797,17 @@ LineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Co
 #endif
 
 	try {
-		intPt=HCoordinate::intersection(n1,n2,n3,n4);
+		HCoordinate::intersection(n1,n2,n3,n4,intPt);
 #if DEBUG
 		cerr<<" HCoordinate found intersection h:"<<h->toString()<<endl;
 #endif
 
 	} catch (NotRepresentableException *e) {
-		delete intPt;
 		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
     	}
 
-	intPt->x+=normPt.x;
-	intPt->y+=normPt.y;
+	intPt.x+=normPt.x;
+	intPt.y+=normPt.y;
 
 /**
  *
@@ -820,27 +821,26 @@ LineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Co
  */
 
 #if DEBUG
-	if (! isInSegmentEnvelopes(intPt)) 
+	if (! isInSegmentEnvelopes(&intPt)) 
 	{
 		cerr<<"Intersection outside segment envelopes: "<<
-			intPt->toString();
+			intPt.toString();
 	}
 #endif
  
-	if (precisionModel!=NULL) precisionModel->makePrecise(intPt);
+	if (precisionModel!=NULL) precisionModel->makePrecise(&intPt);
 
 
 #if COMPUTE_Z
 	double ztot = 0;
 	double zvals = 0;
-	double zp = interpolateZ(*intPt, p1, p2);
-	double zq = interpolateZ(*intPt, q1, q2);
+	double zp = interpolateZ(intPt, p1, p2);
+	double zq = interpolateZ(intPt, q1, q2);
 	if ( !ISNAN(zp)) { ztot += zp; zvals++; }
 	if ( !ISNAN(zq)) { ztot += zq; zvals++; }
-	if ( zvals ) intPt->z = ztot/zvals;
+	if ( zvals ) intPt.z = ztot/zvals;
 #endif // COMPUTE_Z
 
-	return intPt;
 }
 
 
@@ -876,9 +876,9 @@ LineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) con
 bool
 LineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 {
-	Envelope *env0=new Envelope(*inputLines[0][0], *inputLines[0][1]);
-	Envelope *env1=new Envelope(*inputLines[1][0], *inputLines[1][1]);
-	return env0->contains(intPt) && env1->contains(intPt);
+	Envelope env0(*inputLines[0][0], *inputLines[0][1]);
+	Envelope env1(*inputLines[1][0], *inputLines[1][1]);
+	return env0.contains(intPt) && env1.contains(intPt);
 }
 
 void
@@ -931,6 +931,43 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.25  2005/11/15 18:30:59  strk
  * Removed dead code
  *

@@ -849,46 +849,43 @@ double Geometry::distance(const Geometry *other) const {
 }
 
 /**
-*  Returns the area of this <code>Geometry</code>.
-*  Areal Geometries have a non-zero area.
-*  They override this function to compute the area.
-*  Others return 0.0
-*
-* @return the area of the Geometry
-*/
-double Geometry::getArea() const {
+ *  Returns the area of this <code>Geometry</code>.
+ *  Areal Geometries have a non-zero area.
+ *  They override this function to compute the area.
+ *  Others return 0.0
+ *
+ * @return the area of the Geometry
+ */
+double
+Geometry::getArea() const
+{
 	return 0.0;
 }
 
 /**
-*  Returns the length of this <code>Geometry</code>.
-*  Linear geometries return their length.
-*  Areal geometries return their perimeter.
-*  They override this function to compute the area.
-*  Others return 0.0
-*
-*@return the length of the Geometry
-*/
-double Geometry::getLength() const {
+ *  Returns the length of this <code>Geometry</code>.
+ *  Linear geometries return their length.
+ *  Areal geometries return their perimeter.
+ *  They override this function to compute the area.
+ *  Others return 0.0
+ *
+ * @return the length of the Geometry
+ */
+double
+Geometry::getLength() const
+{
 	return 0.0;
 }
 
 
 
-Geometry::~Geometry(){
-	//delete factory;
+Geometry::~Geometry()
+{
 	delete envelope;
-	//delete userData; /* TODO: make this a Template type (not void*) */
 }
 
-bool lessThen(Coordinate& a, Coordinate& b) {
-	if (a.compareTo(b)<0)
-		return true;
-	else
-		return false;
-}
-
-bool greaterThen(Geometry *first, Geometry *second) {
+bool GeometryGreaterThen::operator()(const Geometry *first, const Geometry *second)
+{
 	if (first->compareTo(second)>0)
 		return true;
 	else
@@ -933,6 +930,43 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.81  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.80  2005/11/08 10:03:28  strk
  * Set library version to 2.2.0.
  * Cleaned up Doxygen warnings.

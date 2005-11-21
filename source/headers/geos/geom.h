@@ -34,6 +34,15 @@ using namespace std;
  */
 namespace geos {
 
+class CGAlgorithms;
+class Coordinate;
+class Envelope;
+class Geometry;
+class GeometryFactory;
+class GeometryFilter;
+class IntersectionMatrix;
+class Point;
+
 /// An unsigned char
 typedef unsigned char byte;
 
@@ -66,8 +75,6 @@ enum GeometryTypeId {
 	/// a collection of heterogeneus geometries
 	GEOS_GEOMETRYCOLLECTION
 };
-
-class Coordinate;
 
 /**
  * \class PrecisionModel geom.h geos.h
@@ -342,6 +349,9 @@ private:
  * The standard comparison functions will ignore the z-ordinate.
  *
  */
+// Define the following to make assignments and copy constructions 
+// NON-inline (will let profilers report usages)
+//#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
 public:
 	inline void setNull(void);
@@ -349,9 +359,13 @@ public:
 	//virtual ~Coordinate(){};
 	inline Coordinate();
 	inline Coordinate(double xNew, double yNew, double zNew);
+#ifndef PROFILE_COORDINATE_COPIES
 	inline Coordinate(const Coordinate& c);
+#else
+	Coordinate(const Coordinate& c);
+	Coordinate &operator=(const Coordinate &c);
+#endif
 	inline Coordinate(double xNew, double yNew);
-	inline void setCoordinate(const Coordinate& other);
 	inline bool equals2D(const Coordinate& other) const;
 	inline int compareTo(const Coordinate& other) const;
 	inline bool equals3D(const Coordinate& other) const;
@@ -412,6 +426,7 @@ Coordinate::Coordinate(double xNew, double yNew, double zNew)
 	z=zNew;
 }
 
+#ifndef PROFILE_COORDINATE_COPIES
 inline
 Coordinate::Coordinate(const Coordinate& c)
 {
@@ -419,6 +434,7 @@ Coordinate::Coordinate(const Coordinate& c)
 	y=c.y;
 	z=c.z;
 }
+#endif
 
 inline
 Coordinate::Coordinate(double xNew, double yNew)
@@ -426,14 +442,6 @@ Coordinate::Coordinate(double xNew, double yNew)
 	x=xNew;
 	y=yNew;
 	z=DoubleNotANumber;
-}
-
-inline void
-Coordinate::setCoordinate(const Coordinate& other)
-{
-	x = other.x;
-	y = other.y;
-	z = other.z;
 }
 
 inline bool
@@ -500,6 +508,10 @@ Coordinate::hashCode(double x)
 	int64 f = (int64)(x);
 	return (int)(f^(f>>32));
 }
+
+struct CoordinateLessThen {
+	bool operator()(const Coordinate& a, const Coordinate& b);
+};
 
 
 
@@ -587,7 +599,6 @@ Coordinate::hashCode(double x)
  * will use your CoordinateSequence implementation.
  * 
  */
-class Envelope;
 class CoordinateSequence {
 public:
 	virtual ~CoordinateSequence(){};
@@ -921,7 +932,6 @@ public:
    virtual void filter_ro(const Coordinate* coord)=0;
 };
 
-class Geometry;
 
 /*
  *  <code>Geometry</code> classes support the concept of applying
@@ -1127,15 +1137,6 @@ Envelope::intersects(double x, double y) const
 	return (x <= maxx && x >= minx && y <= maxy && y >= miny);
 }
 
-
-class Geometry;
-class GeometryFilter;
-class IntersectionMatrix;
-
-
-class CGAlgorithms;
-class Point;
-class GeometryFactory;
 
 /**
  * \class Geometry geom.h geos.h
@@ -1580,6 +1581,11 @@ private:
 	Point* createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const;
 };
 
+struct GeometryGreaterThen {
+	bool operator()(const Geometry *first, const Geometry *second);
+};
+
+
 /*
  * Geometry classes support the concept of applying a Geometry
  * filter to the Geometry. In the case of GeometryCollection
@@ -1815,9 +1821,6 @@ bool operator!=(const Coordinate& a, const Coordinate& b);
 bool operator==(const Envelope a, const Envelope b);
 bool operator==(const PrecisionModel a, const PrecisionModel b);
 bool operator==(const LineSegment a, const LineSegment b);
-
-bool lessThen(Coordinate& a,Coordinate& b);
-bool greaterThen(Geometry *first, Geometry *second);
 
 /**
  * \class GeometryCollection geom.h geos.h
@@ -2619,6 +2622,43 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.52  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.51  2005/11/10 10:47:09  strk
  * Renamed MultiPoint::getCoordinate(int) to MultiPoint::getCoordinateN(int)
  * to avoid hiding of Geometry::getCoordinate().

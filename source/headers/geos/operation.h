@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -17,12 +18,8 @@
 #define GEOS_OPERATION_H
 
 #include <memory>
-//#include <iostream>
-//#include <string>
 #include <vector>
 #include <map>
-//#include <algorithm>
-//#include "math.h"
 #include <geos/platform.h>
 #include <geos/geomgraph.h>
 #include <geos/geom.h>
@@ -50,7 +47,7 @@ protected:
 	/*
 	 * The operation args into an array so they can be accessed by index
 	 */
-	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
+	vector<GeometryGraph*> arg;  // the arg(s) of the operation
 	void setComputationPrecision(const PrecisionModel* pm);
 };
 
@@ -79,8 +76,8 @@ public:
 	bool isSimple(const MultiPoint *mp);
 	bool isSimpleLinearGeometry(const Geometry *geom);
 private:
-	bool hasNonEndpointIntersection(GeometryGraph *graph);
-	bool hasClosedEndpointIntersection(GeometryGraph *graph);
+	bool hasNonEndpointIntersection(GeometryGraph &graph);
+	bool hasClosedEndpointIntersection(GeometryGraph &graph);
 	void addEndpoint(map<const Coordinate*,EndpointInfo*,CoordLT>&endPoints, const Coordinate *p,bool isClosed);
 };
 
@@ -90,6 +87,43 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.4  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.

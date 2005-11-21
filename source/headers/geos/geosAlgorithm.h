@@ -154,15 +154,18 @@ public:
 /// Represents a homogeneous coordinate for 2-D coordinates.
 class HCoordinate {
 public:
-	static Coordinate* intersection(Coordinate& p1,Coordinate& p2,Coordinate& q1,Coordinate& q2);
+
+	static void intersection(const Coordinate &p1, const Coordinate &p2,
+		const Coordinate &q1, const Coordinate &q2, Coordinate &ret);
+
 	double x,y,w;
 	HCoordinate();
 	HCoordinate(double _x, double _y, double _w);
-	HCoordinate(Coordinate& p);
-	HCoordinate(HCoordinate p1, HCoordinate p2);
-	double getX();
-	double getY();
-	Coordinate* getCoordinate();
+	HCoordinate(const Coordinate& p);
+	HCoordinate(const HCoordinate &p1, const HCoordinate &p2);
+	double getX() const;
+	double getY() const;
+	void getCoordinate(Coordinate &ret) const;
 };
 
 class SimplePointInRing: public PointInRing {
@@ -174,6 +177,16 @@ private:
 	const CoordinateSequence* pts;
 };
 
+/*
+ * A LineIntersector is an algorithm that can both test whether
+ * two line segments intersect and compute the intersection point
+ * if they do.
+ * The intersection point may be computed in a precise or non-precise manner.
+ * Computing it precisely involves rounding it to an integer.  (This assumes
+ * that the input coordinates have been made precise by scaling them to
+ * an integer grid.)
+ *
+ */
 class LineIntersector {
 public:	
 	// Return a Z value being the interpolation of Z from p0 and p1 at
@@ -259,15 +272,22 @@ private:
 	const PrecisionModel *precisionModel;
 	int result;
 	const Coordinate *inputLines[2][2];
+
+	/*
+	 * We store real Coordinates here because
+	 * we must compute the Z of intersection point.
+	 */
 	Coordinate intPt[2];
+
 	/**
-	* The indexes of the endpoints of the intersection lines, in order along
-	* the corresponding line
-	*/
+	 * The indexes of the endpoints of the intersection lines, in order along
+	 * the corresponding line
+	 */
 	int intLineIndex[2][2];
+
 	bool isProperVar;
-	Coordinate &pa;
-	Coordinate &pb;
+	//Coordinate &pa;
+	//Coordinate &pb;
 	bool isCollinear() const;
 	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
 	bool isEndPoint() const;
@@ -279,8 +299,9 @@ private:
 		const Coordinate& p2, const Coordinate& q1,
 		const Coordinate& q2);
 
-	Coordinate* intersection(const Coordinate& p1, const Coordinate& p2,
-		const Coordinate& q1, const Coordinate& q2) const;
+	void intersection(const Coordinate& p1, const Coordinate& p2,
+		const Coordinate& q1, const Coordinate& q2,
+		Coordinate &ret) const;
 
 	double smallestInAbsValue(double x1, double x2,
 		double x3, double x4) const;
@@ -438,17 +459,17 @@ public:
 	Coordinate* getCentroid() const;
 private:
 	//CGAlgorithms *cga;
-	Coordinate* basePt;// the point all triangles are based at
-	Coordinate* triangleCent3;// temporary variable to hold centroid of triangle
+	Coordinate basePt;// the point all triangles are based at
+	Coordinate triangleCent3;// temporary variable to hold centroid of triangle
 	double areasum2;        /* Partial area sum */
-	Coordinate* cg3; // partial centroid sum
-	void setBasePoint(const Coordinate *newbasePt);
+	Coordinate cg3; // partial centroid sum
+	void setBasePoint(const Coordinate &newbasePt);
 	void add(const Polygon *poly);
 	void addShell(const CoordinateSequence *pts);
 	void addHole(const CoordinateSequence *pts);
-	inline void addTriangle(const Coordinate &p0, const Coordinate &p1, const Coordinate &p2,bool isPositiveArea);
-	static inline  void centroid3(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3,Coordinate *c);
-	static inline double area2(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3);
+	void addTriangle(const Coordinate &p0, const Coordinate &p1, const Coordinate &p2,bool isPositiveArea);
+	static void centroid3(const Coordinate &p1, const Coordinate &p2, const Coordinate &p3, Coordinate &c);
+	static double area2(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3);
 };
 
 /*
@@ -546,7 +567,7 @@ public:
 
 class ConvexHull {
 private:
-	PointLocator *pointLocator;
+	PointLocator pointLocator;
 	//CGAlgorithms *cgAlgorithms;
 	const Geometry *geometry;
 	const GeometryFactory *factory;
@@ -554,13 +575,27 @@ private:
 	CoordinateSequence* preSort(CoordinateSequence *pts);
 	CoordinateSequence* grahamScan(const CoordinateSequence *c);
 	void radialSort(CoordinateSequence *p);
-	int polarCompare(Coordinate o, Coordinate p, Coordinate q);
-	bool isBetween(Coordinate c1, Coordinate c2, Coordinate c3);
-    BigQuad* makeBigQuad(const CoordinateSequence *pts);
-	Geometry* lineOrPolygon(CoordinateSequence *newCoordinates);
-	CoordinateSequence* cleanRing(CoordinateSequence *original);
+	int polarCompare(const Coordinate &o, const Coordinate &p, const Coordinate &q);
+	bool isBetween(const Coordinate &c1, const Coordinate &c2, const Coordinate &c3);
+	void makeBigQuad(const CoordinateSequence *pts, BigQuad &ret);
+	Geometry* lineOrPolygon(const CoordinateSequence *newCoordinates);
+	CoordinateSequence* cleanRing(const CoordinateSequence *original);
 public:
+
+	/*
+	 * Returns a Geometry that represents the convex hull of the input
+	 * geometry.
+	 * The geometry will contain the minimal number of points needed to
+	 * represent the convex hull.  In particular, no more than two consecutive
+	 * points will be collinear.
+	 *
+	 * @return if the convex hull contains 3 or more points, a Polygon;
+	 * 2 points, a LineString;
+	 * 1 point, a Point;
+	 * 0 points, an empty GeometryCollection.
+	 */
 	ConvexHull(const Geometry *newGeometry);
+
 	~ConvexHull();
 	Geometry* getConvexHull();
 };
@@ -660,6 +695,43 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.15  2005/11/15 18:30:59  strk
  * Removed dead code
  *

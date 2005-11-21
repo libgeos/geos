@@ -12,7 +12,176 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
+ *
+ **********************************************************************/
+
+#include <geos/geosAlgorithm.h>
+#include <geos/platform.h>
+#include <typeinfo>
+
+namespace geos {
+
+CentroidArea::CentroidArea():
+	areasum2(0)
+{
+}
+
+CentroidArea::~CentroidArea()
+{
+}
+
+/**
+ * Adds the area defined by a Geometry to the centroid total.
+ * If the geometry has no area it does not contribute to the centroid.
+ *
+ * @param geom the geometry to add
+ */
+void
+CentroidArea::add(const Geometry *geom)
+{
+	if(const Polygon *poly=dynamic_cast<const Polygon*>(geom)) {
+		setBasePoint(poly->getExteriorRing()->getCoordinateN(0));
+		add(poly);
+	}
+	else if(const GeometryCollection *gc=dynamic_cast<const GeometryCollection*>(geom)) 
+	{
+		for(int i=0;i<gc->getNumGeometries();i++) {
+			add(gc->getGeometryN(i));
+		}
+	}
+}
+
+/**
+ * Adds the area defined by an array of
+ * coordinates.  The array must be a ring;
+ * i.e. end with the same coordinate as it starts with.
+ * @param ring an array of {@link Coordinate}s
+ */
+void
+CentroidArea::add(const CoordinateSequence *ring)
+{
+	setBasePoint(ring->getAt(0));
+	addShell(ring);
+}
+
+Coordinate*
+CentroidArea::getCentroid() const
+{
+	Coordinate *cent = new Coordinate();
+	cent->x = cg3.x/3.0/areasum2;
+	cent->y = cg3.y/3.0/areasum2;
+	return cent;
+}
+
+void
+CentroidArea::setBasePoint(const Coordinate &newbasePt)
+{
+	basePt=newbasePt;
+}
+
+void
+CentroidArea::add(const Polygon *poly)
+{
+	addShell(poly->getExteriorRing()->getCoordinatesRO());
+	for(int i=0;i<poly->getNumInteriorRing();i++) {
+		addHole(poly->getInteriorRingN(i)->getCoordinatesRO());
+	}
+}
+
+void
+CentroidArea::addShell(const CoordinateSequence *pts)
+{
+	bool isPositiveArea=!CGAlgorithms::isCCW(pts);
+	for(int i=0; i<pts->getSize()-1; ++i) {
+		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
+	}
+}
+
+void
+CentroidArea::addHole(const CoordinateSequence *pts)
+{
+	bool isPositiveArea=CGAlgorithms::isCCW(pts);
+	for(int i=0;i<pts->getSize()-1;i++) {
+		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
+	}
+}
+
+void
+CentroidArea::addTriangle(const Coordinate &p0, const Coordinate &p1,
+		const Coordinate &p2, bool isPositiveArea)
+{
+	double sign=(isPositiveArea)?1.0:-1.0;
+	centroid3(p0,p1,p2,triangleCent3);
+	double area2res=area2(p0,p1,p2);
+	cg3.x+=sign*area2res*triangleCent3.x;
+	cg3.y+=sign*area2res*triangleCent3.y;
+	areasum2+=sign*area2res;
+}
+
+/**
+ * Returns three times the centroid of the triangle p1-p2-p3.
+ * The factor of 3 is
+ * left in to permit division to be avoided until later.
+ */
+void
+CentroidArea::centroid3(const Coordinate &p1, const Coordinate &p2,
+		const Coordinate &p3, Coordinate &c)
+{
+	c.x=p1.x+p2.x+p3.x;
+	c.y=p1.y+p2.y+p3.y;
+}
+
+/**
+ * Returns twice the signed area of the triangle p1-p2-p3,
+ * positive if a,b,c are oriented ccw, and negative if cw.
+ */
+double
+CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate &p3)
+{
+	return (p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y);
+}
+
+} //namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.15  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept
@@ -53,122 +222,4 @@
  *
  **********************************************************************/
 
-
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
-#include <typeinfo>
-
-namespace geos {
-
-CentroidArea::CentroidArea() {
-	basePt=NULL;
-	//cga=new RobustCGAlgorithms();
-	triangleCent3=new Coordinate();
-	areasum2=0;
-	cg3=new Coordinate();
-}
-
-CentroidArea::~CentroidArea() {
-	//delete cga;
-	delete triangleCent3;
-	delete cg3;
-	delete basePt;
-}
-
-/**
-* Adds the area defined by a Geometry to the centroid total.
-* If the geometry has no area it does not contribute to the centroid.
-*
-* @param geom the geometry to add
-*/
-void CentroidArea::add(const Geometry *geom) {
-	if(const Polygon *poly=dynamic_cast<const Polygon*>(geom)) {
-		setBasePoint(&(poly->getExteriorRing()->getCoordinateN(0)));
-		add(poly);
-	}
-	else if(const GeometryCollection *gc=dynamic_cast<const GeometryCollection*>(geom)) 
-	{
-		for(int i=0;i<gc->getNumGeometries();i++) {
-			add(gc->getGeometryN(i));
-		}
-	}
-}
-
-/**
-* Adds the area defined by an array of
-* coordinates.  The array must be a ring;
-* i.e. end with the same coordinate as it starts with.
-* @param ring an array of {@link Coordinate}s
-*/
-void CentroidArea::add(const CoordinateSequence *ring) {
-	setBasePoint(&(ring->getAt(0)));
-	addShell(ring);
-}
-
-Coordinate* CentroidArea::getCentroid() const {
-	Coordinate *cent = new Coordinate();
-	cent->x = cg3->x/3.0/areasum2;
-	cent->y = cg3->y/3.0/areasum2;
-	return cent;
-}
-
-void CentroidArea::setBasePoint(const Coordinate *newbasePt)
-{
-	if(basePt==NULL) basePt=new Coordinate(*newbasePt);
-}
-
-void CentroidArea::add(const Polygon *poly) {
-	addShell(poly->getExteriorRing()->getCoordinatesRO());
-	for(int i=0;i<poly->getNumInteriorRing();i++) {
-		addHole(poly->getInteriorRingN(i)->getCoordinatesRO());
-	}
-}
-
-void CentroidArea::addShell(const CoordinateSequence *pts) {
-	bool isPositiveArea=!CGAlgorithms::isCCW(pts);
-	for(int i=0;i<pts->getSize()-1;i++) {
-		addTriangle(*basePt,pts->getAt(i),pts->getAt(i+1),isPositiveArea);
-	}
-}
-
-void CentroidArea::addHole(const CoordinateSequence *pts){
-	bool isPositiveArea=CGAlgorithms::isCCW(pts);
-	for(int i=0;i<pts->getSize()-1;i++) {
-		addTriangle(*basePt,pts->getAt(i),pts->getAt(i+1),isPositiveArea);
-	}
-}
-
-inline void
-CentroidArea::addTriangle(const Coordinate &p0, const Coordinate &p1,
-		const Coordinate &p2,bool isPositiveArea)
-{
-	double sign=(isPositiveArea)?1.0:-1.0;
-	centroid3(p0,p1,p2,triangleCent3);
-	double area2res=area2(p0,p1,p2);
-	cg3->x+=sign*area2res*triangleCent3->x;
-	cg3->y+=sign*area2res*triangleCent3->y;
-	areasum2+=sign*area2res;
-}
-
-/**
-* Returns three times the centroid of the triangle p1-p2-p3.
-* The factor of 3 is
-* left in to permit division to be avoided until later.
-*/
-inline void
-CentroidArea::centroid3(const Coordinate &p1, const Coordinate &p2,
-		const Coordinate &p3, Coordinate *c)
-{
-	c->x=p1.x+p2.x+p3.x;
-	c->y=p1.y+p2.y+p3.y;
-}
-
-/**
-* Returns twice the signed area of the triangle p1-p2-p3,
-* positive if a,b,c are oriented ccw, and negative if cw.
-*/
-inline double CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate &p3){
-	return (p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y);
-}
-}
 

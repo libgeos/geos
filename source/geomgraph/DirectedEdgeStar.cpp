@@ -5,94 +5,77 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.5  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.4  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.2  2004/04/21 14:14:28  strk
- * Fixed bug in computeDepths
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.17  2003/11/12 15:43:38  strk
- * Added some more throw specifications
- *
- * Revision 1.16  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
+#define DEBUG 0
+
 namespace geos {
 
-DirectedEdgeStar::DirectedEdgeStar(){
-//	resultAreaEdgeList=new vector<DirectedEdge*>();
-	resultAreaEdgeList=NULL;
-	label=new Label();
+DirectedEdgeStar::DirectedEdgeStar():
+	EdgeEndStar(),
+	resultAreaEdgeList(NULL)
+	//label(new Label())
+{
 }
 
-DirectedEdgeStar::~DirectedEdgeStar(){
+DirectedEdgeStar::~DirectedEdgeStar()
+{
 	delete resultAreaEdgeList;
-	delete label;
-
+	//delete label;
 }
 
 /**
  * Insert a directed edge in the list
  */
-void DirectedEdgeStar::insert(EdgeEnd *ee){
-	DirectedEdge *de=(DirectedEdge*) ee;
-	insertEdgeEnd(de,de);
+void
+DirectedEdgeStar::insert(EdgeEnd *ee)
+{
+	DirectedEdge *de=static_cast<DirectedEdge*>(ee);
+	insertEdgeEnd(de);
 }
 
-Label* DirectedEdgeStar::getLabel() {
+Label &
+DirectedEdgeStar::getLabel()
+{
 	return label;
 }
 
-int DirectedEdgeStar::getOutgoingDegree(){
+int
+DirectedEdgeStar::getOutgoingDegree()
+{
 	int degree = 0;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end(); ++it)
+	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		if (de->isInResult()) degree++;
 	}
 	return degree;
 }
 
-int DirectedEdgeStar::getOutgoingDegree(EdgeRing *er){
+int
+DirectedEdgeStar::getOutgoingDegree(EdgeRing *er)
+{
 	int degree = 0;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it) {
 		DirectedEdge *de=(DirectedEdge*) *it;
-		if (de->getEdgeRing()==er) degree++;
+		if (de->getEdgeRing()==er) ++degree;
 	}
 	return degree;
 }
 
-DirectedEdge* DirectedEdgeStar::getRightmostEdge() {
+DirectedEdge*
+DirectedEdgeStar::getRightmostEdge()
+{
 	vector<EdgeEnd*> *edges=getEdges();
 	int size=(int)edges->size();
 	if (size<1) return NULL;
@@ -132,16 +115,17 @@ DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
 
 	// determine the overall labelling for this DirectedEdgeStar
 	// (i.e. for the node it is based at)
-	delete label;
-	label=new Label(Location::UNDEF);
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+	//delete label;
+	label=Label(Location::UNDEF);
+	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	{
 		EdgeEnd *ee=*it;
 		Edge *e=ee->getEdge();
 		Label *eLabel=e->getLabel();
 		for (int i=0; i<2;i++) {
 			int eLoc=eLabel->getLocation(i);
 			if (eLoc==Location::INTERIOR || eLoc==Location::BOUNDARY)
-				label->setLocation(i,Location::INTERIOR);
+				label.setLocation(i, Location::INTERIOR);
 		}
 	}
 }
@@ -150,8 +134,11 @@ DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
  * For each dirEdge in the star,
  * merge the label from the sym dirEdge into the label
  */
-void DirectedEdgeStar::mergeSymLabels(){
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+void
+DirectedEdgeStar::mergeSymLabels()
+{
+	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
 		deLabel->merge(*(de->getSym()->getLabel()));
@@ -161,8 +148,11 @@ void DirectedEdgeStar::mergeSymLabels(){
 /**
  * Update incomplete dirEdge labels from the labelling for the node
  */
-void DirectedEdgeStar::updateLabelling(Label *nodeLabel){
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+void
+DirectedEdgeStar::updateLabelling(Label *nodeLabel)
+{
+	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
 		deLabel->setAllLocationsIfNull(0,nodeLabel->getLocation(0));
@@ -170,13 +160,16 @@ void DirectedEdgeStar::updateLabelling(Label *nodeLabel){
 	}
 }
 
-vector<DirectedEdge*>* DirectedEdgeStar::getResultAreaEdges() {
+vector<DirectedEdge*>*
+DirectedEdgeStar::getResultAreaEdges()
+{
 	if (resultAreaEdgeList!=NULL) return resultAreaEdgeList;
 	resultAreaEdgeList=new vector<DirectedEdge*>();
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
-		DirectedEdge *de=(DirectedEdge*) *it;
+	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	{
+		DirectedEdge *de=static_cast<DirectedEdge*>(*it);
 		if (de->isInResult() || de->getSym()->isInResult())
-		resultAreaEdgeList->push_back(de);
+			resultAreaEdgeList->push_back(de);
 	}
 	return resultAreaEdgeList;
 }
@@ -185,18 +178,17 @@ vector<DirectedEdge*>* DirectedEdgeStar::getResultAreaEdges() {
  * Traverse the star of DirectedEdges, linking the included edges together.
  * To link two dirEdges, the <next> pointer for an incoming dirEdge
  * is set to the next outgoing edge.
- * <p>
+ * 
  * DirEdges are only linked if:
- * <ul>
- * <li>they belong to an area (i.e. they have sides)
- * <li>they are marked as being in the result
- * </ul>
- * <p>
+ * 
+ * - they belong to an area (i.e. they have sides)
+ * - they are marked as being in the result
+ * 
  * Edges are linked in CCW order (the order they are stored).
  * This means that rings have their face on the Right
  * (in other words,
  * the topological location of the face is given by the RHS label of the DirectedEdge)
- * <p>
+ * 
  * PRECONDITION: No pair of dirEdges are both marked as being in the result
  */
 void
@@ -210,13 +202,18 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	DirectedEdge *incoming=NULL;
 	int state=SCANNING_FOR_INCOMING;
 	// link edges in CCW order
-	for (unsigned int i=0; i<resultAreaEdgeList->size();i++) {
-        DirectedEdge *nextOut=(DirectedEdge*) (*resultAreaEdgeList)[i];
-		DirectedEdge *nextIn=nextOut->getSym();
+	for (unsigned int i=0; i<resultAreaEdgeList->size(); ++i)
+	{
+        	DirectedEdge *nextOut=(*resultAreaEdgeList)[i];
+
 		// skip de's that we're not interested in
 		if (!nextOut->getLabel()->isArea()) continue;
+
+		DirectedEdge *nextIn=nextOut->getSym();
+
 		// record first outgoing edge, in order to link the last incoming edge
 		if (firstOut==NULL && nextOut->isInResult()) firstOut=nextOut;
+
 		// assert: sym.isInResult() == false, since pairs of dirEdges should have been removed already
 		switch (state) {
 			case SCANNING_FOR_INCOMING:
@@ -234,20 +231,27 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	if (state==LINKING_TO_OUTGOING) {
 		if (firstOut==NULL)
 			throw new TopologyException("no outgoing dirEdge found",&(getCoordinate()));
-//		Assert::isTrue(firstOut!=NULL, "no outgoing dirEdge found");
 		Assert::isTrue(firstOut->isInResult(), "unable to link last incoming dirEdge");
 		incoming->setNext(firstOut);
 	}
 }
 
-void DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er){
+void
+DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
+{
 	// find first area edge (if any) to start linking at
 	DirectedEdge *firstOut=NULL;
 	DirectedEdge *incoming=NULL;
 	int state=SCANNING_FOR_INCOMING;
 	// link edges in CW order
-	for (int i=(int)resultAreaEdgeList->size()-1;i>=0;i--) {
-        DirectedEdge *nextOut=(DirectedEdge*)(*resultAreaEdgeList)[i];
+
+	/*
+	 * We must use a SIGNED integer here to be able to check for i<0
+	 * to end the loop.
+	 */
+	for (int i=resultAreaEdgeList->size()-1; i>=0; --i)
+	{
+        	DirectedEdge *nextOut=(DirectedEdge*)(*resultAreaEdgeList)[i];
 		DirectedEdge *nextIn=nextOut->getSym();
 		// record first outgoing edge, in order to link the last incoming edge
 		if (firstOut==NULL && nextOut->getEdgeRing()==er) firstOut=nextOut;
@@ -261,7 +265,7 @@ void DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er){
 				if (nextOut->getEdgeRing()!=er) continue;
 				incoming->setNextMin(nextOut);
 				state = SCANNING_FOR_INCOMING;
-			break;
+				break;
 		}
 	}
 	if (state==LINKING_TO_OUTGOING) {
@@ -271,14 +275,23 @@ void DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er){
 	}
 }
 
-void DirectedEdgeStar::linkAllDirectedEdges(){
+void
+DirectedEdgeStar::linkAllDirectedEdges()
+{
 	getEdges();
+
 	// find first area edge (if any) to start linking at
 	DirectedEdge *prevOut=NULL;
 	DirectedEdge *firstIn=NULL;
 	// link edges in CW order
-	for(int i=(int)edgeList->size()-1;i>=0;i--) {
-        DirectedEdge *nextOut=(DirectedEdge*)(*edgeList)[i];
+
+	/*
+	 * We must use a SIGNED integer here to be able to check for i<0
+	 * to end the loop.
+	 */
+	for(int i=edgeList->size()-1; i>=0; --i)
+	{
+        	DirectedEdge *nextOut=static_cast<DirectedEdge*>((*edgeList)[i]);
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (firstIn==NULL) firstIn=nextIn;
 		if (prevOut!=NULL) nextIn->setNext(prevOut);
@@ -293,7 +306,9 @@ void DirectedEdgeStar::linkAllDirectedEdges(){
  * area at this node (if any).
  * If any L edges are found in the interior of the result, mark them as covered.
  */
-void DirectedEdgeStar::findCoveredLineEdges(){
+void
+DirectedEdgeStar::findCoveredLineEdges()
+{
 	// Since edges are stored in CCW order around the node,
 	// as we move around the ring we move from the right to the left side of the edge
 
@@ -305,8 +320,9 @@ void DirectedEdgeStar::findCoveredLineEdges(){
 	 * - EXTERIOR if the edge is incoming
 	 */
 	int startLoc=Location::UNDEF;
-    vector<EdgeEnd*>::iterator it;
-	for (it=getIterator();it<edgeList->end();it++) {
+	vector<EdgeEnd*>::iterator it;
+	for (it=getIterator(); it<edgeList->end(); ++it)
+	{
 		DirectedEdge *nextOut=(DirectedEdge*) *it;
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (!nextOut->isLineEdge()) {
@@ -320,15 +336,18 @@ void DirectedEdgeStar::findCoveredLineEdges(){
 			}
 		}
 	}
+
 	// no A edges found, so can't determine if L edges are covered or not
 	if (startLoc==Location::UNDEF) return;
+
 	/**
 	 * move around ring, keeping track of the current location
 	 * (Interior or Exterior) for the result area.
 	 * If L edges are found, mark them as covered if they are in the interior
 	 */
 	int currLoc=startLoc;
-	for (it=getIterator();it<edgeList->end();it++) {
+	for (it=getIterator(); it<edgeList->end(); ++it)
+	{
 		DirectedEdge *nextOut=(DirectedEdge*) *it;
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (nextOut->isLineEdge()) {
@@ -342,7 +361,9 @@ void DirectedEdgeStar::findCoveredLineEdges(){
 	}
 }
 
-void DirectedEdgeStar::computeDepths(DirectedEdge *de){
+void
+DirectedEdgeStar::computeDepths(DirectedEdge *de)
+{
 	int edgeIndex=findIndex(de);
 	//Label *deLabel=de->getLabel();
 	int startDepth=de->getDepth(Position::LEFT);
@@ -362,10 +383,13 @@ void DirectedEdgeStar::computeDepths(DirectedEdge *de){
  *
  * @return the last depth assigned (from the R side of the last edge visited)
  */
-int DirectedEdgeStar::computeDepths(int startIndex,int endIndex,int startDepth){
+int
+DirectedEdgeStar::computeDepths(int startIndex,int endIndex,int startDepth)
+{
 	int currDepth=startDepth;
-	for (int i=startIndex;i<endIndex;i++) {
-        DirectedEdge *nextDe=(DirectedEdge*)(*edgeList)[i];
+	for (int i=startIndex; i<endIndex; ++i)
+	{
+        	DirectedEdge *nextDe=(DirectedEdge*)(*edgeList)[i];
 		//Label *deLabel=nextDe->getLabel();
 		nextDe->setEdgeDepths(Position::RIGHT, currDepth);
 		currDepth=nextDe->getDepth(Position::LEFT);
@@ -373,9 +397,12 @@ int DirectedEdgeStar::computeDepths(int startIndex,int endIndex,int startDepth){
 	return currDepth;
 }
 
-string DirectedEdgeStar::print() {
+string
+DirectedEdgeStar::print()
+{
 	string out="DirectedEdgeStar: " + getCoordinate().toString();
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		out+="out ";
 		out+=de->print();
@@ -387,5 +414,75 @@ string DirectedEdgeStar::print() {
 	return out;
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
+ * Revision 1.6  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
+ * Revision 1.5  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.4  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.3  2004/05/03 10:43:42  strk
+ * Exception specification considered harmful - left as comment.
+ *
+ * Revision 1.2  2004/04/21 14:14:28  strk
+ * Fixed bug in computeDepths
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.17  2003/11/12 15:43:38  strk
+ * Added some more throw specifications
+ *
+ * Revision 1.16  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

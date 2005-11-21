@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,35 +21,31 @@
 
 namespace geos {
 
-EdgeEndStar::EdgeEndStar(){
+EdgeEndStar::EdgeEndStar():
+	edgeMap(new set<EdgeEnd*,EdgeEndLT>()),
+	edgeList(NULL)
+{
 	ptInAreaLocation[0]=Location::UNDEF;
 	ptInAreaLocation[1]=Location::UNDEF;
-	edgeMap=new map<EdgeEnd*,void*,EdgeEndLT>();
-	edgeList=NULL;
 }
 
-EdgeEndStar::~EdgeEndStar(){
-//	map<EdgeEnd*,void*,EdgeEndLT>::iterator	it=edgeMap->begin();
-//	for (;it!=edgeMap->end();it++) {
-//		EdgeEnd *ee=(EdgeEnd*) it->second;
-////		void *ee= it->second;
-//		delete ee;
-//	}
+EdgeEndStar::~EdgeEndStar()
+{
 	delete edgeMap;
 	delete edgeList;
-}
-
-void EdgeEndStar::insert(EdgeEnd *e){
-	delete e;
 }
 
 /**
  * Insert an EdgeEnd into the map, and clear the edgeList cache,
  * since the list of edges has now changed
  */
-void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
-	edgeMap->insert(pair<EdgeEnd*,void*>(e,obj));
-//	(*edgeMap)[e]=obj;
+void
+EdgeEndStar::insertEdgeEnd(EdgeEnd *e)
+{
+#if DEBUG
+	cerr<<"EdgeEndStar["<<this<<"]::insertEdgeEnd("<<e<<" - "<<typeid(*e).name()<<") called"<<endl;
+#endif
+	edgeMap->insert(e);
 	delete edgeList;
 	edgeList=NULL;  // edge list has changed - clear the cache
 }
@@ -59,33 +56,46 @@ void EdgeEndStar::insertEdgeEnd(EdgeEnd *e,void* obj){
 Coordinate&
 EdgeEndStar::getCoordinate()
 {
-	if (getEdges()->size()==0)
-		return *(new Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber));
+	static Coordinate nullCoord(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
+	if (getEdges()->size()==0) return nullCoord;
+
 	vector<EdgeEnd*>::iterator it=getIterator();
 	EdgeEnd *e=*it;
 	return e->getCoordinate();
 }
 
-int EdgeEndStar::getDegree(){
+int
+EdgeEndStar::getDegree()
+{
 	return (int)edgeMap->size();
 }
 
 vector<EdgeEnd*>*
 EdgeEndStar::getEdges()
 {
-	map<EdgeEnd*,void*,EdgeEndLT>::iterator mapIter;
-	if (edgeList==NULL) {
+	if (edgeList==NULL)
+	{
+#if DEBUG
+		cerr<<"EdgeEndStar["<<this<<"]::getEdges() computing edgeList"<<endl;
+#endif
 		edgeList=new vector<EdgeEnd*>();
-		for(mapIter=edgeMap->begin();mapIter!=edgeMap->end();mapIter++) {
-//			edgeList->push_back(mapIter->first);
-			EdgeEnd *e=(EdgeEnd*) mapIter->second;
+		set<EdgeEnd*,EdgeEndLT>::iterator mapIter;
+		for(mapIter=edgeMap->begin(); mapIter!=edgeMap->end(); mapIter++)
+		{
+			//EdgeEnd *e=(EdgeEnd*) mapIter->second;
+			EdgeEnd *e=*mapIter;
 			edgeList->push_back(e);
 		}
+#if DEBUG
+		cerr<<"EdgeEndStar["<<this<<"]::getEdges() computed edgeList at "<<edgeList<<" with size "<<edgeList->size()<<endl;
+#endif
 	}
-//cout << endl << "edgeList:" << endl;
-//for(int i=0;i<(int)edgeList->size();i++) {
-//	cout << endl << (*edgeList)[i]->print() << endl;
-//}
+#if DEBUG
+	else
+	{
+		cerr<<"EdgeEndStar["<<this<<"]::getEdges() using cached edgeList "<<edgeList<<" with size "<<edgeList->size()<<endl;
+	}
+#endif
 	return edgeList;
 }
 
@@ -99,7 +109,7 @@ EdgeEnd*
 EdgeEndStar::getNextCW(EdgeEnd *ee)
 {
 	getEdges();
-	int i=0;
+	unsigned int i=0;
 	for(unsigned int j=0;j<edgeList->size();j++)
 	{
 		//if (ee->compareTo( *(edgeList->at(j)))==0) 
@@ -109,8 +119,8 @@ EdgeEndStar::getNextCW(EdgeEnd *ee)
 			break;
 		}
 	}
-	int iNextCW=i-1;
-	if (i==0) iNextCW=(int)edgeList->size()-1;
+	unsigned int iNextCW=i-1;
+	if (i==0) iNextCW=edgeList->size()-1;
 	return (*edgeList)[iNextCW];
 }
 
@@ -263,7 +273,7 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	// Since edges are stored in CCW order around the node,
 	// As we move around the ring we move from the right to the
 	// left side of the edge
-	int startLoc=Location::UNDEF ;
+	int startLoc=Location::UNDEF;
 
 	// initialize loc to location of last L side (if any)
 	vector<EdgeEnd*>::iterator it;
@@ -322,11 +332,12 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	}
 }
 
-int EdgeEndStar::findIndex(EdgeEnd *eSearch){
+int
+EdgeEndStar::findIndex(EdgeEnd *eSearch)
+{
 	getIterator();   // force edgelist to be computed
-	for (unsigned int i=0; i<edgeList->size(); i++ ) {
+	for (unsigned int i=0; i<edgeList->size(); ++i) {
 		EdgeEnd *e=(*edgeList)[i];
-//		if (e->compareTo(eSearch)) return i;
 		if (e==eSearch) return i;
 	}
 	return -1;
@@ -344,10 +355,47 @@ EdgeEndStar::print()
 	return out;
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/21 16:03:20  strk
+ * Coordinate interface change:
+ *         Removed setCoordinate call, use assignment operator
+ *         instead. Provided a compile-time switch to
+ *         make copy ctor and assignment operators non-inline
+ *         to allow for more accurate profiling.
+ *
+ * Coordinate copies removal:
+ *         NodeFactory::createNode() takes now a Coordinate reference
+ *         rather then real value. This brings coordinate copies
+ *         in the testLeaksBig.xml test from 654818 to 645991
+ *         (tested in 2.1 branch). In the head branch Coordinate
+ *         copies are 222198.
+ *         Removed useless coordinate copies in ConvexHull
+ *         operations
+ *
+ * STL containers heap allocations reduction:
+ *         Converted many containers element from
+ *         pointers to real objects.
+ *         Made some use of .reserve() or size
+ *         initialization when final container size is known
+ *         in advance.
+ *
+ * Stateless classes allocations reduction:
+ *         Provided ::instance() function for
+ *         NodeFactories, to avoid allocating
+ *         more then one (they are all
+ *         stateless).
+ *
+ * HCoordinate improvements:
+ *         Changed HCoordinate constructor by HCoordinates
+ *         take reference rather then real objects.
+ *         Changed HCoordinate::intersection to avoid
+ *         a new allocation but rather return into a provided
+ *         storage. LineIntersector changed to reflect
+ *         the above change.
+ *
  * Revision 1.9  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
