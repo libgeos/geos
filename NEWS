@@ -32,6 +32,9 @@ Changes in 3.0.0
 - Changed BufferSubgraph to store a real RightmostEdgeFinder and real
   containers rather then pointers.
 - Stronger methods typing (removed some void * args).
+- CoordinateSequence API changes:
+	- point index and size related functions
+	  use unsigned int rather then int
 
 Changes in 2.1.5CVS
 
