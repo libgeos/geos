@@ -28,7 +28,7 @@ namespace geos {
  * Handles edges from both L and A geometrys.
  */
 void
-Edge::updateIM(Label *lbl,IntersectionMatrix *im)
+Edge::updateIM(Label *lbl, IntersectionMatrix *im) 
 {
 	im->setAtLeastIfValid(lbl->getLocation(0,Position::ON),lbl->getLocation(1,Position::ON),1);
 	if (lbl->isArea()) {
@@ -127,7 +127,7 @@ Edge::getDepth()
  * @return the change in depth as the edge is crossed from R to L
  */
 int
-Edge::getDepthDelta()
+Edge::getDepthDelta() const
 {
 	return depthDelta;
 }
@@ -139,7 +139,7 @@ Edge::setDepthDelta(int newDepthDelta)
 }
 
 int
-Edge::getMaximumSegmentIndex()
+Edge::getMaximumSegmentIndex() const
 {
 	return npts-1;
 }
@@ -158,7 +158,7 @@ Edge::getMonotoneChainEdge()
 }
 
 bool
-Edge::isClosed()
+Edge::isClosed() const
 {
 	return pts->getAt(0)==pts->getAt(npts-1);
 }
@@ -168,7 +168,7 @@ Edge::isClosed()
  * two segments which are equal and opposite (eg a zero-width V).
  */
 bool
-Edge::isCollapsed()
+Edge::isCollapsed() const
 {
 	if (!label->isArea()) return false;
 	if (npts!= 3) return false;
@@ -241,9 +241,9 @@ Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int int
  * A component only contributes if it has a labelling for both parent geometries
  */
 void
-Edge::computeIM(IntersectionMatrix *im)
+Edge::computeIM(IntersectionMatrix *im) 
 {
-	updateIM(label,im);
+	updateIM(label, im);
 }
 
 /*
@@ -267,7 +267,7 @@ operator==(const Edge &e1, const Edge &e2)
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
 bool
-Edge::equals(Edge *e) const
+Edge::equals(const Edge *e) const
 {
 	unsigned int npts1=getNumPoints(); 
 	unsigned int npts2=e->getNumPoints(); 
@@ -303,7 +303,7 @@ Edge::equals(Edge *e) const
  * @return true if the coordinate sequences of the Edges are identical
  */
 bool
-Edge::isPointwiseEqual(Edge *e)
+Edge::isPointwiseEqual(const Edge *e) const
 {
 #if DEBUG > 2
 	cerr<<"Edge::isPointwiseEqual call"<<endl;
@@ -321,7 +321,7 @@ Edge::isPointwiseEqual(Edge *e)
 }
 
 string
-Edge::print()
+Edge::print() const
 {
 	string out="edge " + name + ": ";
 	out+="LINESTRING (";
@@ -337,7 +337,7 @@ Edge::print()
 }
   
 string
-Edge::printReverse()
+Edge::printReverse() const
 {
 	string out="edge " + name + ": ";
 	for(int i=npts-1; i>=0; i--) {
@@ -366,6 +366,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2005/11/24 23:43:13  strk
+ * Yes another fix, sorry. Missing const-correctness.
+ *
  * Revision 1.18  2005/11/24 23:24:38  strk
  * Fixed equals() function [ optimized in previous commit, but unchecked ]
  *

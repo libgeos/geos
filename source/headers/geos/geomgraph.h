@@ -812,25 +812,27 @@ public:
 	 * from R to L
 	 * @return the change in depth as the edge is crossed from R to L
 	 */
-	virtual int getDepthDelta();
+	virtual int getDepthDelta() const;
 	virtual void setDepthDelta(int newDepthDelta);
-	virtual int getMaximumSegmentIndex();
+	virtual int getMaximumSegmentIndex() const;
 	virtual EdgeIntersectionList& getEdgeIntersectionList();
 	virtual MonotoneChainEdge* getMonotoneChainEdge();
-	virtual bool isClosed();
-	virtual bool isCollapsed();
+	virtual bool isClosed() const;
+	virtual bool isCollapsed() const;
 	virtual Edge* getCollapsedEdge();
 	virtual void setIsolated(bool newIsIsolated) {
 		isIsolatedVar=newIsIsolated;
 	}
 	virtual bool isIsolated() const { return isIsolatedVar; }
-	virtual void addIntersections(LineIntersector *li,int segmentIndex,int geomIndex);
-	virtual void addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex);
+	virtual void addIntersections(LineIntersector *li, int segmentIndex,
+		int geomIndex);
+	virtual void addIntersection(LineIntersector *li, int segmentIndex,
+		int geomIndex, int intIndex);
 	virtual void computeIM(IntersectionMatrix *im);
-	virtual bool isPointwiseEqual(Edge *e);
-	virtual string print();
-	virtual string printReverse();
-	virtual bool equals(Edge* e) const;
+	virtual bool isPointwiseEqual(const Edge *e) const;
+	virtual string print() const;
+	virtual string printReverse() const;
+	virtual bool equals(const Edge* e) const;
 	virtual Envelope* getEnvelope();
 private:
 	string name;
@@ -856,6 +858,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2005/11/24 23:43:13  strk
+ * Yes another fix, sorry. Missing const-correctness.
+ *
  * Revision 1.21  2005/11/24 23:24:38  strk
  * Fixed equals() function [ optimized in previous commit, but unchecked ]
  *
