@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -165,22 +166,29 @@ MinimumDiameter::computeWidthConvex(const Geometry *geom)
 		pts=geom->getCoordinates();
 
 	// special cases for lines or points or degenerate rings
-	if (pts->getSize()==0) {
-		minWidth=0.0;
-		minWidthPt=NULL;
-		minBaseSeg=NULL;
-	} else if (pts->getSize()==1) {
-		minWidth = 0.0;
-		minWidthPt=new Coordinate(pts->getAt(0));
-		minBaseSeg->p0=pts->getAt(0);
-		minBaseSeg->p1=pts->getAt(0);
-	} else if (pts->getSize()==2 || pts->getSize()==3) {
-		minWidth = 0.0;
-		minWidthPt=new Coordinate(pts->getAt(0));
-		minBaseSeg->p0=pts->getAt(0);
-		minBaseSeg->p1=pts->getAt(1);
-	} else
-		computeConvexRingMinDiameter(pts);
+	switch(pts->getSize())
+	{
+		case 0:
+			minWidth=0.0;
+			minWidthPt=NULL;
+			minBaseSeg=NULL;
+			break;
+		case 1:
+			minWidth = 0.0;
+			minWidthPt=new Coordinate(pts->getAt(0));
+			minBaseSeg->p0=pts->getAt(0);
+			minBaseSeg->p1=pts->getAt(0);
+			break;
+		case 2:
+		case 3:
+			minWidth = 0.0;
+			minWidthPt=new Coordinate(pts->getAt(0));
+			minBaseSeg->p0=pts->getAt(0);
+			minBaseSeg->p1=pts->getAt(1);
+			break;
+		default:
+			computeConvexRingMinDiameter(pts);
+	}
 	delete pts; 
 }
 
@@ -196,14 +204,15 @@ MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
 {
 	minWidth=DoubleInfinity;
 	int currMaxIndex=1;
-	LineSegment* seg=new LineSegment();
+	LineSegment seg;
+
 	// compute the max distance for all segments in the ring, and pick the minimum
-	for (int i = 0; i < pts->getSize()-1; i++) {
-		seg->p0=pts->getAt(i);
-		seg->p1=pts->getAt(i + 1);
-		currMaxIndex=findMaxPerpDistance(pts, seg, currMaxIndex);
+	unsigned int npts=pts->getSize();
+	for (unsigned int i=1; i<npts; ++i) {
+		seg.p0=pts->getAt(i-1);
+		seg.p1=pts->getAt(i);
+		currMaxIndex=findMaxPerpDistance(pts, &seg, currMaxIndex);
 	}
-	delete seg;
 }
 
 int
@@ -245,6 +254,12 @@ MinimumDiameter::getNextIndex(const CoordinateSequence *pts, int index)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.8  2004/11/04 19:08:06  strk
  * Cleanups, initializers list, profiling.
  *

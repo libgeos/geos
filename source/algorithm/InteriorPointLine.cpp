@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -12,7 +13,119 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
+ *
+ **********************************************************************/
+
+#include <geos/geosAlgorithm.h>
+#include <geos/platform.h>
+#include <typeinfo>
+
+namespace geos {
+
+InteriorPointLine::InteriorPointLine(Geometry *g)
+{
+	interiorPoint=NULL;
+	minDistance=DoubleInfinity;
+	Point *p=g->getCentroid();
+	centroid=p->getCoordinate();
+	addInterior(g);
+	if (interiorPoint==NULL)
+		addEndpoints(g);
+	delete p;
+}
+
+InteriorPointLine::~InteriorPointLine()
+{
+}
+
+/**
+ * Tests the interior vertices (if any)
+ * defined by a linear Geometry for the best inside point.
+ * If a Geometry is not of dimension 1 it is not tested.
+ * @param geom the geometry to add
+ */
+void
+InteriorPointLine::addInterior(const Geometry *geom)
+{
+	if (typeid(*geom)==typeid(LineString)) {
+		addInterior(((LineString *)geom)->getCoordinatesRO());
+	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
+				(typeid(*geom)==typeid(MultiPoint)) ||
+				(typeid(*geom)==typeid(MultiPolygon)) ||
+				(typeid(*geom)==typeid(MultiLineString))) {
+		GeometryCollection *gc=(GeometryCollection*) geom;
+		for(int i=0;i<gc->getNumGeometries();i++) {
+			addInterior(gc->getGeometryN(i));
+		}
+	}
+}
+
+void
+InteriorPointLine::addInterior(const CoordinateSequence *pts)
+{
+	unsigned int n=pts->getSize()-1;
+	for(unsigned int i=1; i<n; ++i)
+	{
+		add(&(pts->getAt(i)));
+	}
+}
+
+/**
+ * Tests the endpoint vertices
+ * defined by a linear Geometry for the best inside point.
+ * If a Geometry is not of dimension 1 it is not tested.
+ * @param geom the geometry to add
+ */
+void
+InteriorPointLine::addEndpoints(const Geometry *geom)
+{
+	if (typeid(*geom)==typeid(LineString)) {
+		addEndpoints(((LineString*)geom)->getCoordinatesRO());
+	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
+				(typeid(*geom)==typeid(MultiPoint)) ||
+				(typeid(*geom)==typeid(MultiPolygon)) ||
+				(typeid(*geom)==typeid(MultiLineString))) {
+		GeometryCollection *gc=(GeometryCollection*) geom;
+		for(int i=0;i<gc->getNumGeometries();i++) {
+			addEndpoints(gc->getGeometryN(i));
+		}
+	}
+}
+
+void
+InteriorPointLine::addEndpoints(const CoordinateSequence *pts)
+{
+	add(&(pts->getAt(0)));
+	add(&(pts->getAt(pts->getSize()-1)));
+}
+
+void
+InteriorPointLine::add(const Coordinate *point)
+{
+	double dist=point->distance(*centroid);
+	if (dist<minDistance) {
+		delete interiorPoint;
+		interiorPoint=new Coordinate(*point);
+		minDistance=dist;
+	}
+}
+
+Coordinate*
+InteriorPointLine::getInteriorPoint() const
+{
+	return interiorPoint;
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.11  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.10  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -31,90 +144,4 @@
  * new getCoordinatesRO() when applicable.
  *
  **********************************************************************/
-
-
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
-#include <typeinfo>
-
-namespace geos {
-
-InteriorPointLine::InteriorPointLine(Geometry *g) {
-	interiorPoint=NULL;
-	minDistance=DoubleInfinity;
-	Point *p=g->getCentroid();
-	centroid=p->getCoordinate();
-	addInterior(g);
-	if (interiorPoint==NULL)
-		addEndpoints(g);
-	delete p;
-}
-
-InteriorPointLine::~InteriorPointLine() {
-}
-
-/**
-* Tests the interior vertices (if any)
-* defined by a linear Geometry for the best inside point.
-* If a Geometry is not of dimension 1 it is not tested.
-* @param geom the geometry to add
-*/
-void InteriorPointLine::addInterior(const Geometry *geom){
-	if (typeid(*geom)==typeid(LineString)) {
-		addInterior(((LineString *)geom)->getCoordinatesRO());
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
-			addInterior(gc->getGeometryN(i));
-		}
-	}
-}
-
-void InteriorPointLine::addInterior(const CoordinateSequence *pts) {
-	for(int i=1;i<pts->getSize()-1;i++) {
-		add(&(pts->getAt(i)));
-	}
-}
-
-/**
-* Tests the endpoint vertices
-* defined by a linear Geometry for the best inside point.
-* If a Geometry is not of dimension 1 it is not tested.
-* @param geom the geometry to add
-*/
-void InteriorPointLine::addEndpoints(const Geometry *geom) {
-	if (typeid(*geom)==typeid(LineString)) {
-		addEndpoints(((LineString*)geom)->getCoordinatesRO());
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
-			addEndpoints(gc->getGeometryN(i));
-		}
-	}
-}
-
-void InteriorPointLine::addEndpoints(const CoordinateSequence *pts){
-	add(&(pts->getAt(0)));
-	add(&(pts->getAt(pts->getSize()-1)));
-}
-
-void InteriorPointLine::add(const Coordinate *point) {
-	double dist=point->distance(*centroid);
-	if (dist<minDistance) {
-		delete interiorPoint;
-		interiorPoint=new Coordinate(*point);
-		minDistance=dist;
-	}
-}
-
-Coordinate* InteriorPointLine::getInteriorPoint() const {
-	return interiorPoint;
-}
-}
 

@@ -92,7 +92,9 @@ void
 CentroidArea::addShell(const CoordinateSequence *pts)
 {
 	bool isPositiveArea=!CGAlgorithms::isCCW(pts);
-	for(int i=0; i<pts->getSize()-1; ++i) {
+	unsigned int n=pts->getSize()-1;
+	for(unsigned int i=0; i<n; ++i)
+	{
 		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
 	}
 }
@@ -101,7 +103,9 @@ void
 CentroidArea::addHole(const CoordinateSequence *pts)
 {
 	bool isPositiveArea=CGAlgorithms::isCCW(pts);
-	for(int i=0;i<pts->getSize()-1;i++) {
+	unsigned int n=pts->getSize()-1;
+	for(unsigned int i=0; i<n; ++i)
+	{
 		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
 	}
 }
@@ -145,7 +149,14 @@ CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.16  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

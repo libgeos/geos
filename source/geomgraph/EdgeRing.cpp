@@ -225,17 +225,25 @@ EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 	Assert::isTrue(ring==NULL, "EdgeRing::addPoints: can't add points after LinearRing construction");
 
 	const CoordinateSequence* edgePts=edge->getCoordinates();
+
+	unsigned int numEdgePts=edgePts->getSize();
+
 	if (isForward) {
-		int startIndex=1;
+		unsigned int startIndex=1;
 		if (isFirstEdge) startIndex=0;
-		for (int i=startIndex; i<edgePts->getSize(); i++) {
+		for (unsigned int i=startIndex; i<numEdgePts; ++i)
+		{
 			pts->add(edgePts->getAt(i));
 		}
-	} else { // is backward
-		int startIndex=edgePts->getSize()-2;
-		if (isFirstEdge) startIndex=edgePts->getSize()-1;
-		for (int i=startIndex;i>=0;i--) {
-			pts->add(edgePts->getAt(i));
+	}
+	
+	else { // is backward
+		unsigned int startIndex=numEdgePts-1;
+		if (isFirstEdge) startIndex=numEdgePts;
+		//for (int i=startIndex;i>=0;i--) {
+		for (unsigned int i=startIndex; i>0; --i)
+		{
+			pts->add(edgePts->getAt(i-1));
 		}
 	}
 }
@@ -267,7 +275,14 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.8  2005/11/18 00:55:29  strk
+ *
  * Fixed a bug in EdgeRing::containsPoint().
  * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
  * usages from PolygonBuilder.
@@ -326,7 +341,14 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.9  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.8  2005/11/18 00:55:29  strk
+ *
  * Fixed a bug in EdgeRing::containsPoint().
  * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
  * usages from PolygonBuilder.

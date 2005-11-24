@@ -509,8 +509,10 @@ GeometryFactory::createMultiPoint() const
 MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 {
-	vector<Geometry *> *pts=new vector<Geometry *>();
-	for (int i=0; i<fromCoords.getSize(); i++) {
+	unsigned int npts=fromCoords.getSize();
+	vector<Geometry *> *pts=new vector<Geometry *>;
+	pts->reserve(npts);
+	for (unsigned int i=0; i<npts; ++i) {
 		Point *pt=createPoint(fromCoords.getAt(i));
 		pts->push_back(pt);
 	}
@@ -518,7 +520,7 @@ GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 	try {
 		mp = createMultiPoint(pts);
 	} catch (...) {
-		for (unsigned int i=0; i<pts->size(); i++) delete (*pts)[i];
+		for (unsigned int i=0; i<npts; ++i) delete (*pts)[i];
 		delete pts;
 		throw;
 	}
@@ -796,6 +798,12 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.54  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.53  2005/06/22 00:46:38  strk
  * Fixed bugus handling of collections in ::buildGeometry
  *

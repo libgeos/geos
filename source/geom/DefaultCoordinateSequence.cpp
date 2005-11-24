@@ -14,8 +14,11 @@
  **********************************************************************/
 
 #include <geos/geom.h>
+#include <geos/util.h>
 
 namespace geos {
+
+#define PARANOIA_LEVEL 1
 
 DefaultCoordinateSequence::DefaultCoordinateSequence():
 	vect(new vector<Coordinate>())
@@ -69,14 +72,14 @@ DefaultCoordinateSequence::add(const Coordinate& c)
 	vect->push_back(c);
 }
 
-int
+unsigned int
 DefaultCoordinateSequence::getSize() const
 {
-	return (int)vect->size();
+	return vect->size();
 }
 
 const Coordinate &
-DefaultCoordinateSequence::getAt(int pos) const
+DefaultCoordinateSequence::getAt(unsigned int pos) const
 {
 #if PARANOIA_LEVEL > 0
 	if (pos<0 || pos>=vect->size()) 
@@ -86,7 +89,7 @@ DefaultCoordinateSequence::getAt(int pos) const
 }
 
 void
-DefaultCoordinateSequence::setAt(const Coordinate& c, int pos)
+DefaultCoordinateSequence::setAt(const Coordinate& c, unsigned int pos)
 {
 #if PARANOIA_LEVEL > 0
 	if (pos<0 || pos>=vect->size()) 
@@ -96,7 +99,7 @@ DefaultCoordinateSequence::setAt(const Coordinate& c, int pos)
 }
 
 void
-DefaultCoordinateSequence::deleteAt(int pos)
+DefaultCoordinateSequence::deleteAt(unsigned int pos)
 {
 #if PARANOIA_LEVEL > 0
 	if (pos<0 || pos>=vect->size()) 
@@ -135,7 +138,7 @@ DefaultCoordinateSequence::expandEnvelope(Envelope &env) const
 }
 
 double
-DefaultCoordinateSequence::getOrdinate(int index, int ordinateIndex) const
+DefaultCoordinateSequence::getOrdinate(unsigned int index, unsigned int ordinateIndex) const
 {
 
 #if PARANOIA_LEVEL > 0
@@ -157,7 +160,7 @@ DefaultCoordinateSequence::getOrdinate(int index, int ordinateIndex) const
 }
 
 void
-DefaultCoordinateSequence::setOrdinate(int index, int ordinateIndex,
+DefaultCoordinateSequence::setOrdinate(unsigned int index, unsigned int ordinateIndex,
 	double value)
 {
 
@@ -184,6 +187,12 @@ DefaultCoordinateSequence::setOrdinate(int index, int ordinateIndex,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.6  2005/11/08 12:32:41  strk
  * Cleanups, ::setPoint small improvement
  *

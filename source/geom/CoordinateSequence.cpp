@@ -40,7 +40,7 @@ CoordinateSequence::hasRepeatedPoints() const
  * given amount, or an empty coordinate array.
  */
 CoordinateSequence *
-CoordinateSequence::atLeastNCoordinatesOrNothing(int n, CoordinateSequence *c)
+CoordinateSequence::atLeastNCoordinatesOrNothing(unsigned int n, CoordinateSequence *c)
 {
 	return c->getSize()>=n?c:DefaultCoordinateSequenceFactory::instance()->create(NULL);
 }      
@@ -120,10 +120,10 @@ void CoordinateSequence::reverse(CoordinateSequence *cl){
 	}
 }
 
-bool CoordinateSequence::equals(CoordinateSequence *cl1,CoordinateSequence *cl2){
+bool CoordinateSequence::equals(CoordinateSequence *cl1, CoordinateSequence *cl2){
 	if (cl1==cl2) return true;
 	if (cl1==NULL||cl2==NULL) return false;
-	int npts1=cl1->getSize();
+	unsigned int npts1=cl1->getSize();
 	if (npts1!=cl2->getSize()) return false;
 	for (int i=0; i<npts1; i++) {
 		if (!(cl1->getAt(i)==cl2->getAt(i))) return false;
@@ -221,6 +221,12 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.9  2005/04/29 11:52:40  strk
  * Added new JTS interfaces for CoordinateSequence and factories,
  * removed example implementations to reduce maintainance costs.

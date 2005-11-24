@@ -615,14 +615,14 @@ public:
 	 * Coordinate or merely a copy depends on the implementation.
 	 */
 	//virtual const Coordinate& getCoordinate(int i) const=0;
-	virtual const Coordinate& getAt(int i) const=0;
+	virtual const Coordinate& getAt(unsigned int i) const=0;
 
 	/** \brief
 	 * Returns the number of Coordinates (actual or otherwise, as
 	 * this implementation may not store its data in Coordinate objects).
 	 */
 	//virtual int size() const=0;
-	virtual int getSize() const=0;
+	virtual unsigned int getSize() const=0;
 
 	/** \brief
 	 * Returns a read-only vector with the Coordinates in this collection.
@@ -676,13 +676,13 @@ public:
 	//virtual int getSize() const=0;
 
 	/// Get a reference to Coordinate at position pos
-	//virtual	const Coordinate& getAt(int pos) const=0;
+	//virtual	const Coordinate& getAt(unsigned int pos) const=0;
 
 	/// Copy Coordinate c to position pos
-	virtual	void setAt(const Coordinate& c, int pos)=0;
+	virtual	void setAt(const Coordinate& c, unsigned int pos)=0;
 
 	/// Delete Coordinate at position pos (list will shrink).
-	virtual	void deleteAt(int pos)=0;
+	virtual	void deleteAt(unsigned int pos)=0;
 
 	/// Get a string rapresentation of CoordinateSequence
 	virtual	string toString() const=0;
@@ -710,7 +710,7 @@ public:
 	* \brief Returns either the given CoordinateSequence if its length
 	* is greater than the given amount, or an empty CoordinateSequence.
 	*/
-	static CoordinateSequence* atLeastNCoordinatesOrNothing(int n, CoordinateSequence *c);
+	static CoordinateSequence* atLeastNCoordinatesOrNothing(unsigned int n, CoordinateSequence *c);
 
 	/**
 	 * \brief Returns lower-left Coordinate in given CoordinateSequence.
@@ -755,7 +755,7 @@ public:
 	 * @param ordinateIndex the ordinate index in the coordinate
 	 * 	   (in range [0, dimension-1])
 	 */
-	virtual double getOrdinate(int index, int ordinateIndex) const=0;
+	virtual double getOrdinate(unsigned int index, unsigned int ordinateIndex) const=0;
 
 	/**
 	 * Returns ordinate X (0) of the specified coordinate.
@@ -763,7 +763,7 @@ public:
 	 * @param index
 	 * @return the value of the X ordinate in the index'th coordinate
 	 */
-	virtual double getX(int index) const { return getOrdinate(index, X); }
+	virtual double getX(unsigned int index) const { return getOrdinate(index, X); }
 
 	/**
 	 * Returns ordinate Y (1) of the specified coordinate.
@@ -771,7 +771,7 @@ public:
 	 * @param index
 	 * @return the value of the Y ordinate in the index'th coordinate
 	 */
-	virtual double getY(int index) const { return getOrdinate(index, Y); }
+	virtual double getY(unsigned int index) const { return getOrdinate(index, Y); }
 
 
 	/**
@@ -782,7 +782,7 @@ public:
 	 * 		(in range [0, dimension-1])
 	 * @param value  the new ordinate value
 	 */
-	virtual void setOrdinate(int index, int ordinateIndex, double value)=0;
+	virtual void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value)=0;
 
 	/**
 	 * Expands the given Envelope to include the coordinates in the
@@ -809,10 +809,10 @@ public:
 	CoordinateSequence *clone() const;
 
 	//const Coordinate& getCoordinate(int pos) const;
-	const Coordinate& getAt(int pos) const;
+	const Coordinate& getAt(unsigned int pos) const;
 
 	//int size() const;
-	int getSize() const;
+	unsigned int getSize() const;
 	const vector<Coordinate>* toVector() const;
 
 	/// Construct an empty sequence
@@ -828,13 +828,13 @@ public:
 
 	bool isEmpty() const;
 	void add(const Coordinate& c);
-	void setAt(const Coordinate& c, int pos);
-	void deleteAt(int pos);
+	void setAt(const Coordinate& c, unsigned int pos);
+	void deleteAt(unsigned int pos);
 	string toString() const;
 	void setPoints(const vector<Coordinate> &v);
 
-	double getOrdinate(int index, int ordinateIndex) const;
-	void setOrdinate(int index, int ordinateIndex, double value);
+	double getOrdinate(unsigned int index, unsigned int ordinateIndex) const;
+	void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value);
 	void expandEnvelope(Envelope &env) const;
 	unsigned int getDimension() const { return 3; }
 
@@ -2622,7 +2622,14 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.52  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

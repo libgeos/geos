@@ -92,21 +92,30 @@ Polygon::getCoordinates() const
 		return getFactory()->getCoordinateSequenceFactory()->create(NULL);
 	}
 
+	unsigned int i, j, npts;
+	unsigned int nholes=holes->size();
+
 	vector<Coordinate> *cl = new vector<Coordinate>;
 
-	int k = -1;
+	// Add shell points
 	const CoordinateSequence* shellCoords=shell->getCoordinatesRO();
-	for (int x = 0; x < shellCoords->getSize(); x++) {
-		k++;
-		cl->push_back(shellCoords->getAt(x));
-	}
+	npts=shellCoords->getSize();
 
-	for (unsigned int i = 0; i < holes->size(); i++) {
+	/*
+	 * reserve space in the vector as if all holes have the same
+	 * amount of points. Holes usually have less, so this should
+	 * be a good compromise
+	 */
+	cl->reserve((nholes+1)*npts);
+
+	for (j=0; j<npts; ++j) cl->push_back(shellCoords->getAt(j));
+
+	for (i=0; i<nholes; ++i)
+	{
+		// Add hole points
 		const CoordinateSequence* childCoords=((LinearRing *)(*holes)[i])->getCoordinatesRO();
-		for (int j = 0; j < childCoords->getSize(); j++) {
-			k++;
-			cl->push_back(childCoords->getAt(j));
-		}
+		npts=childCoords->getSize();
+		for (j=0; j<npts; ++j) cl->push_back(childCoords->getAt(j));
 	}
 
 	return getFactory()->getCoordinateSequenceFactory()->create(cl);
@@ -381,7 +390,14 @@ Polygon::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.49  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.48  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

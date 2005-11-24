@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -129,7 +130,9 @@ ConvexHull::reduce(const CoordinateSequence *pts)
 //!!!Note to self: this might not work properly because of sorting.
 
 	CoordinateSequence *cl=bigPoly;
-	for(int i=0;i<pts->getSize();i++) {
+	unsigned int npts=pts->getSize();
+	for(unsigned int i=0; i<npts; ++i)
+	{
 		if (pointLocator.locate(pts->getAt(i),bQ)==Location::EXTERIOR) {
 			cl->add(pts->getAt(i));
 		}
@@ -150,13 +153,16 @@ ConvexHull::preSort(CoordinateSequence *pts)
 	// find the lowest point in the set. If two or more points have
 	// the same minimum y coordinate choose the one with the minimu x.
 	// This focal point is put in array location pts[0].
-	for(int i=1;i<pts->getSize();i++)
+	unsigned int npts=pts->getSize();
+	for(unsigned int i=1; i<npts; ++i)
 	{
-		if ((pts->getAt(i).y<pts->getAt(0).y) || ((pts->getAt(i).y==pts->getAt(0).y) && (pts->getAt(i).x<pts->getAt(0).x)))
+		const Coordinate &p0=pts->getAt(0); // this will change
+		const Coordinate &pi=pts->getAt(i);
+		if ( (pi.y<p0.y) || ((pi.y==p0.y) && (pi.x<p0.x)) )
 		{
-			t=pts->getAt(0);
-			pts->setAt(pts->getAt(i),0);
-			pts->setAt(t,i);
+			t=p0;
+			pts->setAt(pi, 0);
+			pts->setAt( t, i);
 		}
 	}
 	// sort the points radially around the focal point.
@@ -178,7 +184,8 @@ ConvexHull::grahamScan(const CoordinateSequence *c)
 	ps->push_back(c->getAt(2));
 
 	p=&(c->getAt(2));
-	for(int i=3; i<c->getSize(); ++i)
+	unsigned int npts=c->getSize();
+	for(unsigned int i=3; i<npts; ++i)
 	{
 		p=&(ps->back());
 		ps->pop_back();
@@ -189,10 +196,8 @@ ConvexHull::grahamScan(const CoordinateSequence *c)
 		}
 		ps->push_back(*p);
 		ps->push_back(c->getAt(i));
-		//p=c->getAt(i);
 	}
 	ps->push_back(c->getAt(0));
-	//p=c->getAt(0);
 
 	return factory->getCoordinateSequenceFactory()->create(ps);
 }
@@ -202,17 +207,36 @@ ConvexHull::radialSort(CoordinateSequence *p)
 {
 	// A selection sort routine, assumes the pivot point is
 	// the first point (i.e., p[0]).
+
+	const Coordinate &p0=p->getAt(0); // the pivot point
+
 	Coordinate t;
-	for(int i=1;i<(p->getSize()-1);i++) {
-		int min=i;
-		for(int j=i+1;j<p->getSize();j++) {
-			if (polarCompare(p->getAt(0),p->getAt(j),p->getAt(min))<0) {
+	unsigned int npts=p->getSize();
+	for(unsigned int i=1; i<npts-1; ++i)
+	{
+		unsigned int min=i;
+
+		for(unsigned int j=i+1; j<npts; ++j)
+		{
+			const Coordinate &pj=p->getAt(j);
+
+			if ( polarCompare(p0, pj, p->getAt(min)) < 0 )
+			{
 				min=j;
 			}
 		}
-		t=p->getAt(i);
-		p->setAt(p->getAt(min),i);
-		p->setAt(t,min);
+
+		/*
+		 * Swap point[i] and point[min]
+		 * We can skip this if they have
+		 * the same value
+		 */
+		if ( i != min )
+		{
+			t=p->getAt(i);
+			p->setAt(p->getAt(min), i);
+			p->setAt(t, min);
+		}
 	}
 }
 
@@ -278,23 +302,25 @@ ConvexHull::isBetween(const Coordinate &c1, const Coordinate &c2, const Coordina
 void
 ConvexHull::makeBigQuad(const CoordinateSequence *pts, BigQuad &bigQuad)
 {
-	bigQuad.northmost=pts->getAt(0);
-	bigQuad.southmost=pts->getAt(0);
-	bigQuad.westmost=pts->getAt(0);
-	bigQuad.eastmost=pts->getAt(0);
-	for (int i=1;i<pts->getSize();i++) {
-		if (pts->getAt(i).x<bigQuad.westmost.x) {
-			bigQuad.westmost=pts->getAt(i);
-		}
-		if (pts->getAt(i).x>bigQuad.eastmost.x) {
-			bigQuad.eastmost=pts->getAt(i);
-		}
-		if (pts->getAt(i).y<bigQuad.southmost.y) {
-			bigQuad.southmost=pts->getAt(i);
-		}
-		if (pts->getAt(i).y>bigQuad.northmost.y) {
-			bigQuad.northmost=pts->getAt(i);
-		}
+	bigQuad.northmost=bigQuad.southmost=
+		bigQuad.westmost=bigQuad.eastmost=pts->getAt(0);
+
+	unsigned int npts=pts->getSize();
+	for (unsigned int i=1; i<npts; ++i)
+	{
+		const Coordinate &pi=pts->getAt(i);
+
+		if (pi.x<bigQuad.westmost.x)
+			bigQuad.westmost=pi;
+
+		if (pi.x>bigQuad.eastmost.x)
+			bigQuad.eastmost=pi;
+
+		if (pi.y<bigQuad.southmost.y)
+			bigQuad.southmost=pi;
+
+		if (pi.y>bigQuad.northmost.y)
+			bigQuad.northmost=pi;
 	}
 }
 
@@ -331,24 +357,35 @@ ConvexHull::cleanRing(const CoordinateSequence *original)
 {
 	Assert::equals(original->getAt(0),original->getAt(original->getSize()-1));
 
-	CoordinateSequence *cleanedRing=factory->getCoordinateSequenceFactory()->create(NULL);
+	unsigned int npts=original->getSize();
+
+	vector<Coordinate> *newPts=new vector<Coordinate>;
+	newPts->reserve(npts);
+
 	const Coordinate *previousDistinctCoordinate=NULL;
-	for(int i=0; i<=original->getSize()-2; ++i)
+	for(unsigned int i=0; i<npts-1; ++i)
 	{
 		const Coordinate &currentCoordinate=original->getAt(i);
 		const Coordinate &nextCoordinate=original->getAt(i+1);
-		if (currentCoordinate==nextCoordinate) {
-			continue;
-		}
+
+		// skip repeated points (shouldn't this have been already done elsewhere?)
+		if (currentCoordinate==nextCoordinate) continue;
+
+		// skip collinear point
 		if (previousDistinctCoordinate!=NULL && 
 			isBetween(*previousDistinctCoordinate, currentCoordinate, nextCoordinate))
 		{
 			continue;
 		}
-		cleanedRing->add(currentCoordinate);
+
+		newPts->push_back(currentCoordinate);
+
 		previousDistinctCoordinate=&currentCoordinate;
 	}
-	cleanedRing->add(original->getAt(original->getSize()-1));
+
+	newPts->push_back(original->getAt(npts-1));
+
+	CoordinateSequence *cleanedRing=factory->getCoordinateSequenceFactory()->create(newPts);
 	return cleanedRing;
 }
 
@@ -356,7 +393,14 @@ ConvexHull::cleanRing(const CoordinateSequence *original)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.13  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

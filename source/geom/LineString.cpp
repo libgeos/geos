@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.51  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.50  2005/11/15 10:02:27  strk
  * optimized envelope computation reducing virtual calls
  *
@@ -294,7 +300,7 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 		return false;
 	}
 	const LineString *otherLineString=dynamic_cast<const LineString*>(other);
-	int npts=points->getSize();
+	unsigned int npts=points->getSize();
 	if (npts!=otherLineString->points->getSize()) {
 		return false;
 	}

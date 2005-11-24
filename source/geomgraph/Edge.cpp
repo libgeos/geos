@@ -253,22 +253,10 @@ Edge::computeIM(IntersectionMatrix *im)
  * <b>iff</b>
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
-bool operator==(const Edge &e1, const Edge &e2)
+bool
+operator==(const Edge &e1, const Edge &e2)
 {
-	if (e1.pts->getSize()!=e2.pts->getSize()) return false;
-	bool isEqualForward=true;
-	bool isEqualReverse=true;
-	int iRev=e1.pts->getSize();
-	for (int i=0; i<e1.pts->getSize(); i++) {
-		if (!e1.pts->getAt(i).equals2D(e2.pts->getAt(i))) {
-			isEqualForward=false;
-		}
-		if (!e1.pts->getAt(i).equals2D(e2.pts->getAt(--iRev))) {
-			isEqualReverse=false;
-		}
-		if (!isEqualForward && !isEqualReverse) return false;
-	}
-	return true;
+	return e1.equals(e2);
 }
 
 /*
@@ -278,24 +266,35 @@ bool operator==(const Edge &e1, const Edge &e2)
  * <b>iff</b>
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
-bool Edge::equals(Edge *e){
-	if (npts!=e->npts) return false;
+bool
+Edge::equals(Edge *e)
+{
+	unsigned int npts1=e1.getNumPoints(); //e1.pts->getSize();
+	unsigned int npts2=e2.getNumPoints(); //e2.pts->getSize();
+
+	if (npts1 != npts2 ) return false;
+
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
-	unsigned int iRev=npts;
-	for (int i=0; i<npts; i++) {
-		const Coordinate &c=pts->getAt(i);
-		if (isEqualForward && !c.equals2D(e->pts->getAt(i))) 
+
+	int iRev=npts1; 
+	for (unsigned int i=0; i<npts1; ++i, --iRev)
+	{
+		const Coordinate e1pi=e1.pts->getAt(i);
+		const Coordinate e2pi=e2.pts->getAt(i);
+		const Coordinate e2piRev=e2.pts->getAt(iRev);
+
+		if ( !e1pi.equals2D(e2pi) )
 		{
 			isEqualForward=false;
-			if ( ! isEqualReverse ) return false;
 		}
-		if (isEqualReverse && !c.equals2D(e->pts->getAt(--iRev)))
+
+		if ( !e1pi.equals2D(e2piRev) )
 		{
 			isEqualReverse=false;
-			if ( ! isEqualForward ) return false;
 		}
-		//if (!isEqualForward && !isEqualReverse) return false;
+
+		if (!isEqualForward && !isEqualReverse) return false;
 	}
 	return true;
 }
@@ -321,7 +320,9 @@ Edge::isPointwiseEqual(Edge *e)
 	return true;
 }
 
-string Edge::print(){
+string
+Edge::print()
+{
 	string out="edge " + name + ": ";
 	out+="LINESTRING (";
 	for(int i=0; i<npts; i++) {
@@ -335,7 +336,9 @@ string Edge::print(){
 	return out;
 }
   
-string Edge::printReverse(){
+string
+Edge::printReverse()
+{
 	string out="edge " + name + ": ";
 	for(int i=npts-1; i>=0; i--) {
 		out+=pts->getAt(i).toString() + " ";
@@ -344,20 +347,31 @@ string Edge::printReverse(){
 	return out;
 }
 
-Envelope* Edge::getEnvelope(){
+Envelope*
+Edge::getEnvelope()
+{
 	// compute envelope lazily
-	if (env==NULL) {
+	if (env==NULL)
+	{
 		env=new Envelope();
-		for (int i = 0; i<npts; i++) {
+		for (int i = 0; i<npts; i++)
+		{
 			env->expandToInclude(pts->getAt(i));
-	}
+		}
 	}
 	return env;
 }
-}
+
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.16  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

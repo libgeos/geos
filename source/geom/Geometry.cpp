@@ -126,16 +126,17 @@ GeometryComponentFilter Geometry::geometryChangedFilter;
 
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
-Geometry::Geometry(const GeometryFactory *newFactory) {
-	factory=newFactory; //new GeometryFactory(*fromFactory);
+Geometry::Geometry(const GeometryFactory *newFactory)
+{
+	factory=newFactory; 
 	SRID=factory->getSRID();
-	//envelope=new Envelope();
 	envelope=NULL;
 	userData=NULL;
 }
 
-Geometry::Geometry(const Geometry &geom) {
-	factory=geom.factory; //new GeometryFactory(*(geom.factory));
+Geometry::Geometry(const Geometry &geom)
+{
+	factory=geom.factory; 
 	envelope=new Envelope(*(geom.envelope));
 	SRID=factory->getSRID();
 	userData=NULL;
@@ -155,7 +156,8 @@ Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries)
 bool
 Geometry::hasNullElements(const CoordinateSequence* list) 
 {
-	for (int i = 0; i<list->getSize(); i++) {
+	unsigned int npts=list->getSize();
+	for (unsigned int i=0; i<npts; ++i) {
 		if (list->getAt(i)==Coordinate::getNull()) {
 			return true;
 		}
@@ -166,7 +168,8 @@ Geometry::hasNullElements(const CoordinateSequence* list)
 bool
 Geometry::hasNullElements(const vector<Geometry *>* lrs) 
 {
-	for (unsigned int i = 0; i<lrs->size(); i++) {
+	unsigned int n=lrs->size();
+	for (unsigned int i=0; i<n; ++i) {
 		if ((*lrs)[i]==NULL) {
 			return true;
 		}
@@ -174,44 +177,6 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 	return false;
 }
 	
-//void Geometry::reversePointOrder(CoordinateSequence* coordinates) {
-//	int length=coordinates->getSize();
-//	vector<Coordinate> v(length);
-//	for (int i=0; i<length; i++) {
-//		v[i]=coordinates->getAt(length - 1 - i);
-//	}
-//	coordinates->setPoints(v);
-//}
-	
-//Coordinate& Geometry::minCoordinate(CoordinateSequence* coordinates){
-//	vector<Coordinate> v(*(coordinates->toVector()));
-//	sort(v.begin(),v.end(),lessThen);
-//	return v.front();
-//}
-
-//void Geometry::scroll(CoordinateSequence* coordinates,Coordinate* firstCoordinate) {
-//	int ind=indexOf(firstCoordinate,coordinates);
-//	Assert::isTrue(ind > -1);
-//	int length=coordinates->getSize();
-//	vector<Coordinate> v(length);
-//	for (int i=ind; i<length; i++) {
-//		v[i-ind]=coordinates->getAt(i);
-//	}
-//	for (int j=0; j<ind; j++) {
-//		v[length-ind+j]=coordinates->getAt(j);
-//	}
-//	coordinates->setPoints(v);
-//}
-//
-//int Geometry::indexOf(Coordinate* coordinate,CoordinateSequence* coordinates) {
-//	for (int i=0; i<coordinates->getSize(); i++) {
-//		if ((*coordinate)==coordinates->getAt(i)) {
-//			return i;
-//		}
-//	}
-//	return -1;
-//}
-
 /**
  * Tests whether the distance from this <code>Geometry</code>
  * to another is less than or equal to a specified value.
@@ -221,7 +186,9 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
  * @return <code>true</code> if the geometries are less than
  *  <code>distance</code> apart.
  */
-bool Geometry::isWithinDistance(const Geometry *geom,double cDistance) {
+bool
+Geometry::isWithinDistance(const Geometry *geom,double cDistance)
+{
 	const Envelope *env0=getEnvelopeInternal();
 	const Envelope *env1=geom->getEnvelopeInternal();
 	double envDist=env0->distance(env1);
@@ -241,15 +208,17 @@ bool Geometry::isWithinDistance(const Geometry *geom,double cDistance) {
 }
 
 /**
-* Computes the centroid of this <code>Geometry</code>.
-* The centroid
-* is equal to the centroid of the set of component Geometrys of highest
-* dimension (since the lower-dimension geometries contribute zero
-* "weight" to the centroid)
-*
-* @return a {@link Point} which is the centroid of this Geometry
-*/
-Point* Geometry::getCentroid() const {
+ * Computes the centroid of this <code>Geometry</code>.
+ * The centroid
+ * is equal to the centroid of the set of component Geometrys of highest
+ * dimension (since the lower-dimension geometries contribute zero
+ * "weight" to the centroid)
+ *
+ * @return a {@link Point} which is the centroid of this Geometry
+ */
+Point*
+Geometry::getCentroid() const
+{
 	if ( isEmpty() ) { return NULL; }
 	Coordinate* centPt;
 	int dim=getDimension();
@@ -281,14 +250,16 @@ Point* Geometry::getCentroid() const {
 }
 
 /**
-* Computes an interior point of this <code>Geometry</code>.
-* An interior point is guaranteed to lie in the interior of the Geometry,
-* if it possible to calculate such a point exactly. Otherwise,
-* the point may lie on the boundary of the geometry.
-*
-* @return a {@link Point} which is in the interior of this Geometry
-*/
-Point* Geometry::getInteriorPoint() {
+ * Computes an interior point of this <code>Geometry</code>.
+ * An interior point is guaranteed to lie in the interior of the Geometry,
+ * if it possible to calculate such a point exactly. Otherwise,
+ * the point may lie on the boundary of the geometry.
+ *
+ * @return a {@link Point} which is in the interior of this Geometry
+ */
+Point*
+Geometry::getInteriorPoint()
+{
 	const Coordinate* interiorPt;
 	int dim=getDimension();
 	Geometry *in = toInternalGeometry(this);
@@ -312,21 +283,25 @@ Point* Geometry::getInteriorPoint() {
 }
 
 /**
-* Notifies this Geometry that its Coordinates have been changed by an external
-* party (using a CoordinateFilter, for example). The Geometry will flush
-* and/or update any information it has cached (such as its {@link Envelope} ).
-*/
-void Geometry::geometryChanged() {
+ * Notifies this Geometry that its Coordinates have been changed by an external
+ * party (using a CoordinateFilter, for example). The Geometry will flush
+ * and/or update any information it has cached (such as its {@link Envelope} ).
+ */
+void
+Geometry::geometryChanged()
+{
 	apply_rw(&geometryChangedFilter);
 }
 
 /**
-* Notifies this Geometry that its Coordinates have been changed by an external
-* party. When geometryChanged is called, this method will be called for
-* this Geometry and its component Geometries.
-* @see apply(GeometryComponentFilter *)
-*/
-void Geometry::geometryChangedAction() {
+ * Notifies this Geometry that its Coordinates have been changed by an external
+ * party. When geometryChanged is called, this method will be called for
+ * this Geometry and its component Geometries.
+ * @see apply(GeometryComponentFilter *)
+ */
+void
+Geometry::geometryChangedAction()
+{
 	delete envelope;
 	envelope=NULL;
 }
@@ -335,43 +310,52 @@ int Geometry::getSRID() const {return SRID;}
 void Geometry::setSRID(int newSRID) {SRID=newSRID;}
 
 /**
-* Gets the factory which contains the context in which this geometry was created.
-*
-* @return the factory for this geometry
-*/
+ * Gets the factory which contains the context in which this geometry was created.
+ *
+ * @return the factory for this geometry
+ */
 const GeometryFactory*
-Geometry::getFactory() const{
+Geometry::getFactory() const
+{
 	return factory;
 }
 
 /**
-* Gets the user data object for this geometry, if any.
-*
-* @return the user data object, or <code>null</code> if none set
-*/
-void* Geometry::getUserData() {
+ * Gets the user data object for this geometry, if any.
+ *
+ * @return the user data object, or <code>null</code> if none set
+ */
+void *
+Geometry::getUserData()
+{
 	return userData;
 }
 
 /**
-* A simple scheme for applications to add their own custom data to a Geometry.
-* An example use might be to add an object representing a Coordinate Reference System.
-* <p>
-* Note that user data objects are not present in geometries created by
-* construction methods.
-*
-* @param userData an object, the semantics for which are defined by the
-* application using this Geometry
-*/
-void Geometry::setUserData(void* newUserData) {
+ * A simple scheme for applications to add their own custom data to a Geometry.
+ * An example use might be to add an object representing a Coordinate Reference System.
+ *
+ * Note that user data objects are not present in geometries created by
+ * construction methods.
+ *
+ * @param userData an object, the semantics for which are defined by the
+ * application using this Geometry
+ */
+void
+Geometry::setUserData(void* newUserData)
+{
 	userData=newUserData;
 }
 
-const PrecisionModel* Geometry::getPrecisionModel() const {
+const PrecisionModel*
+Geometry::getPrecisionModel() const
+{
 	return factory->getPrecisionModel();
 }
 
-bool Geometry::isValid() const {
+bool
+Geometry::isValid() const
+{
 	Geometry *in = toInternalGeometry(this);
 	IsValidOp isValidOp(in);
 	bool ret = isValidOp.isValid();
@@ -379,19 +363,24 @@ bool Geometry::isValid() const {
 	return ret;
 }
 
-Geometry* Geometry::getEnvelope() const {
+Geometry*
+Geometry::getEnvelope() const
+{
 	return getFactory()->toGeometry(getEnvelopeInternal());
 }
 
 const Envelope *
-Geometry::getEnvelopeInternal() const {
+Geometry::getEnvelopeInternal() const
+{
 	if (!envelope) {
 		envelope = computeEnvelopeInternal();
 	}
 	return envelope;
 }
 
-bool Geometry::disjoint(const Geometry *g) const{
+bool
+Geometry::disjoint(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
@@ -403,7 +392,9 @@ bool Geometry::disjoint(const Geometry *g) const{
 	return res;
 }
 
-bool Geometry::touches(const Geometry *g) const{
+bool
+Geometry::touches(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
@@ -415,7 +406,9 @@ bool Geometry::touches(const Geometry *g) const{
 	return res;
 }
 
-bool Geometry::intersects(const Geometry *g) const{
+bool
+Geometry::intersects(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
@@ -427,7 +420,9 @@ bool Geometry::intersects(const Geometry *g) const{
 	return res;
 }
 
-bool Geometry::crosses(const Geometry *g) const{
+bool
+Geometry::crosses(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
@@ -439,7 +434,9 @@ bool Geometry::crosses(const Geometry *g) const{
 	return res;
 }
 
-bool Geometry::within(const Geometry *g) const{
+bool
+Geometry::within(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! g->getEnvelopeInternal()->contains(getEnvelopeInternal()))
@@ -451,7 +448,9 @@ bool Geometry::within(const Geometry *g) const{
 	return res;
 }
 
-bool Geometry::contains(const Geometry *g) const{
+bool
+Geometry::contains(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->contains(g->getEnvelopeInternal()))
@@ -463,7 +462,9 @@ bool Geometry::contains(const Geometry *g) const{
 	return res;
 }
 
-bool Geometry::overlaps(const Geometry *g) const{
+bool
+Geometry::overlaps(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
@@ -475,14 +476,18 @@ bool Geometry::overlaps(const Geometry *g) const{
 	return res;
 }
 
-bool Geometry::relate(const Geometry *g, string intersectionPattern) const {
+bool
+Geometry::relate(const Geometry *g, string intersectionPattern) const
+{
 	IntersectionMatrix *im=relate(g);
 	bool res=im->matches(intersectionPattern);
 	delete im;
 	return res;
 }
 
-bool Geometry::equals(const Geometry *g) const {
+bool
+Geometry::equals(const Geometry *g) const
+{
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->equals(g->getEnvelopeInternal()))
@@ -516,16 +521,22 @@ Geometry::relate(const Geometry *other) const
 	return im;
 }
 
-string Geometry::toString() const {
+string
+Geometry::toString() const
+{
 	return toText();
 }
 
-string Geometry::toText() const {
+string
+Geometry::toText() const
+{
 	WKTWriter writer;
 	return writer.write(this);
 }
 
-Geometry* Geometry::buffer(double distance) const {
+Geometry*
+Geometry::buffer(double distance) const
+{
 	Geometry *in1 = toInternalGeometry(this);
 	Geometry *out = NULL;
 	try {
@@ -543,26 +554,30 @@ Geometry* Geometry::buffer(double distance) const {
 
 
 /**
-* The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
-* are fast, which may not be the case if the CoordinateSequence is not a
-* DefaultCoordinateSequence (e.g. if it were implemented using separate arrays
-* for the x- and y-values), in which case frequent construction of Coordinates
-* takes up much space and time. To solve this performance problem,
-* #toInternalGeometry converts the Geometry to a DefaultCoordinateSequence
-* implementation before sending it to the JTS algorithms.
-*
-* Note: if the Geometry is already implemented with DefaultCoordinateSequence
-* it is returned untouched, so you should check returned value before
-* releasing memory associated with the one used as argument.
-*/
-Geometry* Geometry::toInternalGeometry(const Geometry *g) const {
+ * The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
+ * are fast, which may not be the case if the CoordinateSequence is not a
+ * DefaultCoordinateSequence (e.g. if it were implemented using separate arrays
+ * for the x- and y-values), in which case frequent construction of Coordinates
+ * takes up much space and time. To solve this performance problem,
+ * #toInternalGeometry converts the Geometry to a DefaultCoordinateSequence
+ * implementation before sending it to the JTS algorithms.
+ *
+ * Note: if the Geometry is already implemented with DefaultCoordinateSequence
+ * it is returned untouched, so you should check returned value before
+ * releasing memory associated with the one used as argument.
+ */
+Geometry*
+Geometry::toInternalGeometry(const Geometry *g) const
+{
 	if (DefaultCoordinateSequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
 		return (Geometry*)g;
 	}
 	return INTERNAL_GEOMETRY_FACTORY->createGeometry(g);
 }
 
-Geometry* Geometry::fromInternalGeometry(const Geometry* g) const {
+Geometry*
+Geometry::fromInternalGeometry(const Geometry* g) const
+{
 	if (DefaultCoordinateSequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
 		return (Geometry*)g;
 	}
@@ -570,20 +585,22 @@ Geometry* Geometry::fromInternalGeometry(const Geometry* g) const {
 }
 
 /**
-*  Returns a buffer region around this <code>Geometry</code> having the given
-*  width and with a specified number of segments used to approximate curves.
-* The buffer of a Geometry is the Minkowski sum of the Geometry with
-* a disc of radius <code>distance</code>.  Curves in the buffer polygon are
-* approximated with line segments.  This method allows specifying the
-* accuracy of that approximation.
-*
-*@param  distance  the width of the buffer, interpreted according to the
-*      <code>PrecisionModel</code> of the <code>Geometry</code>
-*@param quadrantSegments the number of segments to use to approximate a quadrant of a circle
-*@return           all points whose distance from this <code>Geometry</code>
-*      are less than or equal to <code>distance</code>
-*/
-Geometry* Geometry::buffer(double distance,int quadrantSegments) const {
+ *  Returns a buffer region around this <code>Geometry</code> having the given
+ *  width and with a specified number of segments used to approximate curves.
+ * The buffer of a Geometry is the Minkowski sum of the Geometry with
+ * a disc of radius <code>distance</code>.  Curves in the buffer polygon are
+ * approximated with line segments.  This method allows specifying the
+ * accuracy of that approximation.
+ *
+ *@param  distance  the width of the buffer, interpreted according to the
+ *      <code>PrecisionModel</code> of the <code>Geometry</code>
+ *@param quadrantSegments the number of segments to use to approximate a quadrant of a circle
+ *@return           all points whose distance from this <code>Geometry</code>
+ *      are less than or equal to <code>distance</code>
+ */
+Geometry*
+Geometry::buffer(double distance,int quadrantSegments) const
+{
 	Geometry *in = toInternalGeometry(this);
 	Geometry *out = BufferOp::bufferOp(in, distance, quadrantSegments);
 	if ( in != this ) delete(in);
@@ -605,7 +622,9 @@ Geometry::convexHull() const
 	return ret;
 }
 
-Geometry* Geometry::intersection(const Geometry *other) const {
+Geometry*
+Geometry::intersection(const Geometry *other) const
+{
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	Geometry *in1 = toInternalGeometry(this);
@@ -709,7 +728,9 @@ Geometry::difference(const Geometry *other) const
 	return ret;
 }
 
-Geometry* Geometry::symDifference(const Geometry *other) const {
+Geometry*
+Geometry::symDifference(const Geometry *other) const
+{
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
 	Geometry *in1 = toInternalGeometry(this);
@@ -730,7 +751,9 @@ Geometry* Geometry::symDifference(const Geometry *other) const {
 	return ret;
 }
 
-int Geometry::compareTo(const Geometry *geom) const {
+int
+Geometry::compareTo(const Geometry *geom) const
+{
 	if (getClassSortIndex()!=geom->getClassSortIndex()) {
 		return getClassSortIndex()-geom->getClassSortIndex();
 	}
@@ -746,7 +769,9 @@ int Geometry::compareTo(const Geometry *geom) const {
 	return compareToSameClass(geom);
 }
 
-bool Geometry::isEquivalentClass(const Geometry *other) const {
+bool
+Geometry::isEquivalentClass(const Geometry *other) const
+{
 	if (typeid(*this)==typeid(*other))
 		return true;
 	else
@@ -762,7 +787,9 @@ Geometry::checkNotGeometryCollection(const Geometry *g)
 	}
 }
 
-int Geometry::getClassSortIndex() const {
+int
+Geometry::getClassSortIndex() const
+{
 	//const type_info &t=typeid(*this);
 
 	     if ( typeid(*this) == typeid(Point)              ) return 0;
@@ -781,7 +808,9 @@ int Geometry::getClassSortIndex() const {
 	return -1;
 }
 
-int Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const {
+int
+Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
+{
 	unsigned int i=0;
 	unsigned int j=0;
 	while (i<a.size() && j<b.size()) {
@@ -803,7 +832,9 @@ int Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const {
 	return 0;
 }
 
-int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const {
+int
+Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const
+{
 	unsigned int i=0;
 	unsigned int j=0;
 	while (i<a.size() && j<b.size()) {
@@ -831,7 +862,9 @@ int Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const {
  *
  * @param  other  the Geometry from which to compute the distance
  */
-double Geometry::distance(const Geometry *other) const {
+double
+Geometry::distance(const Geometry *other) const
+{
 	Geometry *in1 = toInternalGeometry(this);
 	Geometry *in2 = toInternalGeometry(other);
 	double ret;
@@ -877,14 +910,13 @@ Geometry::getLength() const
 	return 0.0;
 }
 
-
-
 Geometry::~Geometry()
 {
 	delete envelope;
 }
 
-bool GeometryGreaterThen::operator()(const Geometry *first, const Geometry *second)
+bool
+GeometryGreaterThen::operator()(const Geometry *first, const Geometry *second)
 {
 	if (first->compareTo(second)>0)
 		return true;
@@ -904,23 +936,33 @@ Geometry::equal(const Coordinate& a, const Coordinate& b,
 	return a.distance(b)<=tolerance;
 }
 
-void Geometry::apply_ro(GeometryFilter *filter) const {
+void
+Geometry::apply_ro(GeometryFilter *filter) const
+{
 	filter->filter_ro(this);
 }
 
-void Geometry::apply_rw(GeometryFilter *filter) {
+void
+Geometry::apply_rw(GeometryFilter *filter)
+{
 	filter->filter_rw(this);
 }
 
-void Geometry::apply_ro(GeometryComponentFilter *filter) const {
+void
+Geometry::apply_ro(GeometryComponentFilter *filter) const
+{
 	filter->filter_ro(this);
 }
 
-void Geometry::apply_rw(GeometryComponentFilter *filter) {
+void
+Geometry::apply_rw(GeometryComponentFilter *filter)
+{
 	filter->filter_rw(this);
 }
 
-Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const{
+Point*
+Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const
+{
 	Coordinate newcoord = *coord;
 	exemplar->getPrecisionModel()->makePrecise(&newcoord);
 	return exemplar->getFactory()->createPoint(newcoord);
@@ -930,7 +972,14 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.82  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.81  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

@@ -20,19 +20,21 @@
 namespace geos {
 
 /**
-* Returns the index of the direction of the point <code>q</code>
-* relative to a
-* vector specified by <code>p1-p2</code>.
-*
-* @param p1 the origin point of the vector
-* @param p2 the final point of the vector
-* @param q the point to compute the direction to
-*
-* @return 1 if q is counter-clockwise (left) from p1-p2
-* @return -1 if q is clockwise (right) from p1-p2
-* @return 0 if q is collinear with p1-p2
-*/
-int CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q) {
+ * Returns the index of the direction of the point <code>q</code>
+ * relative to a
+ * vector specified by <code>p1-p2</code>.
+ *
+ * @param p1 the origin point of the vector
+ * @param p2 the final point of the vector
+ * @param q the point to compute the direction to
+ *
+ * @return 1 if q is counter-clockwise (left) from p1-p2
+ * @return -1 if q is clockwise (right) from p1-p2
+ * @return 0 if q is collinear with p1-p2
+ */
+int
+CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q)
+{
 	// travelling along p1->p2, turn counter clockwise to get to q return 1,
 	// travelling along p1->p2, turn clockwise to get to q return -1,
 	// p1, p2 and q are colinear return 0.
@@ -44,17 +46,17 @@ int CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,con
 }
 
 /**
-* Test whether a point lies inside a ring.
-* The ring may be oriented in either direction.
-* If the point lies on the ring boundary the result of this method is unspecified.
-* <p>
-* This algorithm does not attempt to first check the point against the envelope
-* of the ring.
-*
-* @param p point to check for ring inclusion
-* @param ring assumed to have first point identical to last point
-* @return <code>true</code> if p is inside ring
-*/
+ * Test whether a point lies inside a ring.
+ * The ring may be oriented in either direction.
+ * If the point lies on the ring boundary the result of this method is unspecified.
+ *
+ * This algorithm does not attempt to first check the point against the envelope
+ * of the ring.
+ *
+ * @param p point to check for ring inclusion
+ * @param ring assumed to have first point identical to last point
+ * @return <code>true</code> if p is inside ring
+ */
 bool
 CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 {
@@ -69,8 +71,8 @@ CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 	 * For each segment l = (i-1, i), see if it crosses ray from
 	 * test point in positive x direction.
 	 */
-	int nPts=ring->getSize();
-	for(int i=1; i<nPts; i++)
+	unsigned int nPts=ring->getSize();
+	for(unsigned int i=1; i<nPts; i++)
 	{
 		const Coordinate &p1=ring->getAt(i);
 		const Coordinate &p2=ring->getAt(i-1);
@@ -113,11 +115,12 @@ bool
 CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 {
 	//LineIntersector lineIntersector;
-	int ptsize = pt->getSize();
+	unsigned int ptsize = pt->getSize();
 	if ( ptsize == 0 ) return false;
 
 	const Coordinate *pp=&(pt->getAt(0));
-	for(int i=1; i<ptsize; i++) {
+	for(unsigned int i=1; i<ptsize; ++i)
+	{
 		const Coordinate &p1=pt->getAt(i);	
 		if ( LineIntersector::hasIntersection(p, *pp, p1) )
 			return true;
@@ -142,12 +145,13 @@ bool
 CGAlgorithms::isCCW(const CoordinateSequence* ring)
 {
 	// # of points without closing endpoint
-	int nPts=ring->getSize()-1;
+	unsigned int nPts=ring->getSize()-1;
 
 	// find highest point
 	const Coordinate *hip=&ring->getAt(0);
 	int hii=0;
-	for (int i=1;i<=nPts;i++) {
+	for (unsigned int i=1; i<=nPts; ++i)
+	{
 		const Coordinate *p=&ring->getAt(i);
 		if (p->y > hip->y) {
 			hip = p;
@@ -209,28 +213,30 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 }
 
 /**
-* Computes the orientation of a point q to the directed line segment p1-p2.
-* The orientation of a point relative to a directed line segment indicates
-* which way you turn to get to q after travelling from p1 to p2.
-*
-* @return 1 if q is counter-clockwise from p1-p2
-* @return -1 if q is clockwise from p1-p2
-* @return 0 if q is collinear with p1-p2
-*/
-int CGAlgorithms::computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q) {
+ * Computes the orientation of a point q to the directed line segment p1-p2.
+ * The orientation of a point relative to a directed line segment indicates
+ * which way you turn to get to q after travelling from p1 to p2.
+ *
+ * @return 1 if q is counter-clockwise from p1-p2
+ * @return -1 if q is clockwise from p1-p2
+ * @return 0 if q is collinear with p1-p2
+ */
+int
+CGAlgorithms::computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q)
+{
 	return orientationIndex(p1,p2,q);
 }
 
 /**
-* Computes the distance from a point p to a line segment AB
-*
-* Note: NON-ROBUST!
-*
-* @param p the point to compute the distance for
-* @param A one point of the line
-* @param B another point of the line (must be different to A)
-* @return the distance from p to line segment AB
-*/
+ * Computes the distance from a point p to a line segment AB
+ *
+ * Note: NON-ROBUST!
+ *
+ * @param p the point to compute the distance for
+ * @param A one point of the line
+ * @param B another point of the line (must be different to A)
+ * @return the distance from p to line segment AB
+ */
 double
 CGAlgorithms::distancePointLine(const Coordinate& p, const Coordinate& A,
 		const Coordinate& B)
@@ -266,15 +272,17 @@ CGAlgorithms::distancePointLine(const Coordinate& p, const Coordinate& A,
 }
 
 /**
-* Computes the perpendicular distance from a point p
-* to the (infinite) line containing the points AB
-*
-* @param p the point to compute the distance for
-* @param A one point of the line
-* @param B another point of the line (must be different to A)
-* @return the distance from p to line AB
-*/
-double CGAlgorithms::distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B) {
+ * Computes the perpendicular distance from a point p
+ * to the (infinite) line containing the points AB
+ *
+ * @param p the point to compute the distance for
+ * @param A one point of the line
+ * @param B another point of the line (must be different to A)
+ * @return the distance from p to line AB
+ */
+double
+CGAlgorithms::distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B)
+{
     // use comp.graphics.algorithms Frequently Asked Questions method
     /*(2)
                      (Ay-Cy)(Bx-Ax)-(Ax-Cx)(By-Ay)
@@ -291,15 +299,15 @@ double CGAlgorithms::distancePointLinePerpendicular(const Coordinate& p,const Co
 }
 
 /**
-* Computes the distance from a line segment AB to a line segment CD
-*
-* Note: NON-ROBUST!
-*
-* @param A a point of one line
-* @param B the second point of  (must be different to A)
-* @param C one point of the line
-* @param D another point of the line (must be different to A)
-*/
+ * Computes the distance from a line segment AB to a line segment CD
+ *
+ * Note: NON-ROBUST!
+ *
+ * @param A a point of one line
+ * @param B the second point of  (must be different to A)
+ * @param C one point of the line
+ * @param D another point of the line (must be different to A)
+ */
 double
 CGAlgorithms::distanceLineLine(const Coordinate& A, const Coordinate& B,
 		const Coordinate& C, const Coordinate& D)
@@ -348,13 +356,19 @@ limiting conditions:
 }
 
 /**
-* Returns the signed area for a ring.  The area is positive if
-* the ring is oriented CW.
-*/
-double CGAlgorithms::signedArea(const CoordinateSequence* ring) {
-	if (ring->getSize()<3) return 0.0;
+ * Returns the signed area for a ring.  The area is positive if
+ * the ring is oriented CW.
+ */
+double
+CGAlgorithms::signedArea(const CoordinateSequence* ring)
+{
+	unsigned int npts=ring->getSize();
+
+	if (npts<3) return 0.0;
+
 	double sum=0.0;
-	for (int i=0;i<ring->getSize()-1;i++) {
+	for (unsigned int i=0; i<npts-1; ++i)
+	{
 		double bx=ring->getAt(i).x;
 		double by=ring->getAt(i).y;
 		double cx=ring->getAt(i+1).x;
@@ -365,12 +379,19 @@ double CGAlgorithms::signedArea(const CoordinateSequence* ring) {
 }
 
 /**
-* Returns the length of a list of line segments.
-*/
-double CGAlgorithms::length(const CoordinateSequence* pts) {
-	if (pts->getSize()<1) return 0.0;
+ * Returns the length of a list of line segments.
+ */
+double
+CGAlgorithms::length(const CoordinateSequence* pts)
+{
+	unsigned int npts=pts->getSize();
+
+	if (npts<1) return 0.0;
+
 	double sum=0.0;
-	for(int i=1;i<pts->getSize();i++) {
+
+	for(unsigned int i=1; i<npts; ++i)
+	{
 		sum+=pts->getAt(i).distance(pts->getAt(i - 1));
 	}
 	return sum;
@@ -381,6 +402,12 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.24  2005/06/24 11:09:42  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)

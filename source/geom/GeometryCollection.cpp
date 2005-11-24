@@ -79,7 +79,8 @@ GeometryCollection::getCoordinates() const
 	int k = -1;
 	for (unsigned int i=0; i<geometries->size(); ++i) {
 		CoordinateSequence* childCoordinates=(*geometries)[i]->getCoordinates();
-		for (int j=0; j<childCoordinates->getSize(); j++) {
+		unsigned int npts;
+		for (unsigned int j=0; j<npts; ++j) {
 			k++;
 			(*coordinates)[k] = childCoordinates->getAt(j);
 		}
@@ -323,7 +324,14 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.47  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.46  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

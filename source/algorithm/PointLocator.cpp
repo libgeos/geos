@@ -141,9 +141,9 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 {
 	if (poly->isEmpty()) return Location::EXTERIOR;
 
-	const LinearRing *shell=(LinearRing*) poly->getExteriorRing();
+	const LinearRing *shell=(LinearRing *)poly->getExteriorRing();
 
-	int shellLoc=locate(p,shell);
+	int shellLoc=locate(p, shell);
 	if (shellLoc==Location::EXTERIOR) return Location::EXTERIOR;
 	if (shellLoc==Location::BOUNDARY) return Location::BOUNDARY;
 	// now test if the point lies in or on the holes
@@ -160,6 +160,12 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
  * Revision 1.23  2005/06/24 11:09:42  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)

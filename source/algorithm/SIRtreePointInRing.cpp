@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -12,56 +13,41 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
- * $Log$
- * Revision 1.10  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.9  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.8  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.6  2003/10/16 08:50:00  strk
- * Memory leak fixes. Improved performance by mean of more calls to 
- * new getCoordinatesRO() when applicable.
  *
  **********************************************************************/
 
-
 #include <geos/geosAlgorithm.h>
-#include <stdio.h>
 
 namespace geos {
 
-SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing){
-	ring=newRing;
-	sirTree=NULL;
-	crossings=0;
+SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing):
+	PointInRing(),
+	ring(newRing),
+	sirTree(NULL),
+	crossings(0)
+{
 	buildIndex();
 }
 
-void SIRtreePointInRing::buildIndex() {
+void
+SIRtreePointInRing::buildIndex()
+{
 	//Envelope *env=ring->getEnvelopeInternal();
 	sirTree=new SIRtree();
 	const CoordinateSequence *pts=ring->getCoordinatesRO();
-	for(int i=1;i<pts->getSize();i++) {
-		if(pts->getAt(i-1)==pts->getAt(i)) {continue;} //Optimization suggested by MD. [Jon Aquino]
-		LineSegment *seg=new LineSegment(pts->getAt(i-1),pts->getAt(i));
-		sirTree->insert(seg->p0.y,seg->p1.y,seg);
+
+	unsigned int npts=pts->getSize();
+	for(unsigned int i=1; i<npts; ++i)
+	{
+		if(pts->getAt(i-1)==pts->getAt(i)) continue; // Optimization suggested by MD. [Jon Aquino]
+		LineSegment *seg=new LineSegment(pts->getAt(i-1), pts->getAt(i));
+		sirTree->insert(seg->p0.y, seg->p1.y, seg);
 	}
 }
 
-bool SIRtreePointInRing::isInside(const Coordinate& pt) {
+bool
+SIRtreePointInRing::isInside(const Coordinate& pt)
+{
 	crossings=0;
 	// test all segments intersected by vertical ray at pt
 	vector<void*> *segs=sirTree->query(pt.y);
@@ -80,7 +66,9 @@ bool SIRtreePointInRing::isInside(const Coordinate& pt) {
 	return false;
 }
 
-void SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg) {
+void
+SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg)
+{
 	double xInt;  // x intersection of segment with ray
 	double x1;    // translated coordinates
 	double y1;
@@ -112,5 +100,38 @@ void SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg) {
 		}
 	}
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.11  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
+ * Revision 1.10  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.9  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.8  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.7  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.6  2003/10/16 08:50:00  strk
+ * Memory leak fixes. Improved performance by mean of more calls to 
+ * new getCoordinatesRO() when applicable.
+ *
+ **********************************************************************/
 

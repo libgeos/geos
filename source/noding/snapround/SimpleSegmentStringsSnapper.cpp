@@ -12,21 +12,6 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.2  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/29 06:59:25  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
  *
  **********************************************************************/
 
@@ -72,4 +57,30 @@ void SimpleSegmentStringsSnapper::computeSnaps(SegmentString *e0, SegmentString 
 	}
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2005/11/24 23:09:15  strk
+ * CoordinateSequence indexes switched from int to the more
+ * the correct unsigned int. Optimizations here and there
+ * to avoid calling getSize() in loops.
+ * Update of all callers is not complete yet.
+ *
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.2  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/03/29 06:59:25  ybychkov
+ * "noding/snapround" package ported (JTS 1.4);
+ * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
+ * "geom" partially upgraded.
+ *
+ *
+ **********************************************************************/
+
