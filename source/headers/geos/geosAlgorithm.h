@@ -426,11 +426,11 @@ public:
 
 class CentroidLine {
 private:
-	Coordinate* centSum;
+	Coordinate centSum;
 	double totalLength;
 public:
 	CentroidLine();
-	virtual ~CentroidLine();
+	~CentroidLine();
 	void add(const Geometry *geom);
 	void add(const CoordinateSequence *pts);
 	Coordinate* getCentroid() const;
@@ -695,7 +695,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/11/24 23:07:00  strk
+ * CentroidLine made concrete class (only destructor was virtual) - avoided heap allocation for owned Coordinate centSum
+ *
  * Revision 1.16  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to
