@@ -830,7 +830,7 @@ public:
 	virtual bool isPointwiseEqual(Edge *e);
 	virtual string print();
 	virtual string printReverse();
-	virtual bool equals(Edge* e);
+	virtual bool equals(Edge* e) const;
 	virtual Envelope* getEnvelope();
 private:
 	string name;
@@ -856,7 +856,11 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/11/24 23:24:38  strk
+ * Fixed equals() function [ optimized in previous commit, but unchecked ]
+ *
  * Revision 1.20  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

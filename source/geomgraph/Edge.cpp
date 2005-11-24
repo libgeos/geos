@@ -256,7 +256,7 @@ Edge::computeIM(IntersectionMatrix *im)
 bool
 operator==(const Edge &e1, const Edge &e2)
 {
-	return e1.equals(e2);
+	return e1.equals(&e2);
 }
 
 /*
@@ -267,10 +267,10 @@ operator==(const Edge &e1, const Edge &e2)
  * the coordinates of e1 are the same or the reverse of the coordinates in e2
  */
 bool
-Edge::equals(Edge *e)
+Edge::equals(Edge *e) const
 {
-	unsigned int npts1=e1.getNumPoints(); //e1.pts->getSize();
-	unsigned int npts2=e2.getNumPoints(); //e2.pts->getSize();
+	unsigned int npts1=getNumPoints(); 
+	unsigned int npts2=e->getNumPoints(); 
 
 	if (npts1 != npts2 ) return false;
 
@@ -280,9 +280,9 @@ Edge::equals(Edge *e)
 	int iRev=npts1; 
 	for (unsigned int i=0; i<npts1; ++i, --iRev)
 	{
-		const Coordinate e1pi=e1.pts->getAt(i);
-		const Coordinate e2pi=e2.pts->getAt(i);
-		const Coordinate e2piRev=e2.pts->getAt(iRev);
+		const Coordinate e1pi=pts->getAt(i);
+		const Coordinate e2pi=e->pts->getAt(i);
+		const Coordinate e2piRev=e->pts->getAt(iRev);
 
 		if ( !e1pi.equals2D(e2pi) )
 		{
@@ -366,6 +366,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/11/24 23:24:38  strk
+ * Fixed equals() function [ optimized in previous commit, but unchecked ]
+ *
  * Revision 1.17  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
