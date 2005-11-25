@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2005/11/25 11:40:21  strk
+ * Another getSize in for loop, another int-unsigned int warning
+ *
  * Revision 1.8  2004/09/21 09:47:36  strk
  * fixed a mis-initialization bug in ::reduce
  *
@@ -109,15 +112,16 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 {
 	if (cs->getSize()==0) return NULL;
 
-	vector<Coordinate> *vc = new vector<Coordinate>(cs->getSize());
+	unsigned int csSize=cs->getSize();
+
+	vector<Coordinate> *vc = new vector<Coordinate>(csSize);
 
 	// copy coordinates and reduce
-	for (int i=0;i<cs->getSize(); i++) {
-		Coordinate *coord=new Coordinate(cs->getAt(i));
-		sgpr->getPrecisionModel()->makePrecise(coord);
+	for (unsigned int i=0; i<csSize; ++i) {
+		Coordinate coord=cs->getAt(i);
+		sgpr->getPrecisionModel()->makePrecise(&coord);
 		//reducedCoords->setAt(*coord,i);
-		(*vc)[i] = *coord;
-		delete coord;
+		(*vc)[i] = coord;
 	}
 
 	CoordinateSequence *reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
@@ -135,7 +139,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 	* first computed, or null if collapses are being removed.
 	* (This may create an invalid geometry - the client must handle this.)
 	*/
-	int minLength = 0;
+	unsigned int minLength = 0;
 	if (typeid(*geom)==typeid(LineString)) minLength = 2;
 	if (typeid(*geom)==typeid(LinearRing)) minLength = 4;
 	CoordinateSequence *collapsedCoords = reducedCoords;
@@ -149,4 +153,5 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 	delete reducedCoords;
 	return noRepeatedCoords;
 }
-}
+
+} // namespace geos
