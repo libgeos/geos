@@ -47,7 +47,9 @@ ConnectedInteriorTester::getCoordinate()
 const Coordinate&
 ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence *coord, const Coordinate& pt)
 {
-	for(int i=0;i<coord->getSize();i++) {
+	unsigned int npts=coord->getSize();
+	for(unsigned int i=0; i<npts; ++i)
+	{
 		if(!(coord->getAt(i)==pt))
 			return coord->getAt(i);
 	}
@@ -218,7 +220,11 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
  * Revision 1.14  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

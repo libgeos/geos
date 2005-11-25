@@ -11,47 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.14  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.13  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.12  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.11  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.10  2004/05/07 14:12:23  strk
- * Fixed segfault in destructor
- *
- * Revision 1.9  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.8  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.7  2003/10/16 08:50:00  strk
- * Memory leak fixes. Improved performance by mean of more calls to 
- * new getCoordinatesRO() when applicable.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geosAlgorithm.h>
 #include <geos/platform.h>
@@ -173,11 +133,58 @@ LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
 * @param envelope the envelope to analyze
 * @return the centre of the envelope
 */
-Coordinate* InteriorPointArea::centre(const Envelope *envelope) const {
-	return new Coordinate(avg(envelope->getMinX(),
-							  envelope->getMaxX()),
-						  avg(envelope->getMinY(),
-						      envelope->getMaxY()));
+Coordinate*
+InteriorPointArea::centre(const Envelope *envelope) const
+{
+	return new Coordinate(
+		avg(envelope->getMinX(), envelope->getMaxX()),
+		avg(envelope->getMinY(), envelope->getMaxY())
+		);
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.15  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
+ * Revision 1.14  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.13  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.12  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.11  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.10  2004/05/07 14:12:23  strk
+ * Fixed segfault in destructor
+ *
+ * Revision 1.9  2004/03/17 02:00:33  ybychkov
+ * "Algorithm" upgraded to JTS 1.4
+ *
+ * Revision 1.8  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.7  2003/10/16 08:50:00  strk
+ * Memory leak fixes. Improved performance by mean of more calls to 
+ * new getCoordinatesRO() when applicable.
+ *
+ *
+ **********************************************************************/
 

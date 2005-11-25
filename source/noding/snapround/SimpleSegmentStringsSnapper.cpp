@@ -49,8 +49,10 @@ void SimpleSegmentStringsSnapper::computeNodes(vector<SegmentString*>* edges, Se
 void SimpleSegmentStringsSnapper::computeSnaps(SegmentString *e0, SegmentString *e1, SegmentSnapper *ss){
 	const CoordinateSequence *pts0=e0->getCoordinates();
 	const CoordinateSequence *pts1=e1->getCoordinates();
-	for (int i0 = 0; i0 < pts0->getSize()- 1; i0++) {
-		for (int i1 = 0; i1 < pts1->getSize()-1; i1++) {
+	unsigned int npts0=pts0->getSize();
+	unsigned int npts1=pts1->getSize();
+	for (unsigned int i0=0; i0 <npts0-1; ++i0) {
+		for (unsigned int i1=0; i1<npts1-1; ++i1) {
 			bool isNodeAdded = ss->addSnappedNode((Coordinate&)pts0->getAt(i0), e1, i1);
 			if (isNodeAdded) nSnaps++;
 		}
@@ -61,6 +63,9 @@ void SimpleSegmentStringsSnapper::computeSnaps(SegmentString *e0, SegmentString 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
  * Revision 1.4  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there

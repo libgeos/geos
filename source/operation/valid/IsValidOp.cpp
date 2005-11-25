@@ -42,7 +42,9 @@ IsValidOp::findPtNotNode(const CoordinateSequence *testCoords,
 	// find a point in the testCoords which is not a node of the searchRing
 	EdgeIntersectionList &eiList=searchEdge->getEdgeIntersectionList();
 	// somewhat inefficient - is there a better way? (Use a node map, for instance?)
-	for(int i=0;i<testCoords->getSize(); i++) {
+	unsigned int npts=testCoords->getSize();
+	for(unsigned int i=0; i<npts; ++i)
+	{
 		const Coordinate& pt=testCoords->getAt(i);
 		if (!eiList.isIntersection(pt)) {
 			return &pt;
@@ -562,8 +564,8 @@ IsValidOp::checkConnectedInteriors(GeometryGraph &graph)
 void
 IsValidOp::checkInvalidCoordinates(const CoordinateSequence *cs)
 {
-	int size=cs->getSize();
-	for (int i=0; i<size; ++i)
+	unsigned int size=cs->getSize();
+	for (unsigned int i=0; i<size; ++i)
 	{
 		if (! isValid(cs->getAt(i)) )
 		{
@@ -623,7 +625,11 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
  * Revision 1.36  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

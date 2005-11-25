@@ -11,23 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.2  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/26 07:48:30  ybychkov
- * "noding" package ported (JTS 1.4)
- *
- *
  **********************************************************************/
-
 
 #include <geos/noding.h>
 
@@ -45,14 +29,40 @@ vector<SegmentString*>* SimpleNoder::node(vector<SegmentString*>* inputSegString
 	return nodedSegStrings;
 }
 
-void SimpleNoder::computeIntersects(SegmentString *e0, SegmentString *e1){
+void
+SimpleNoder::computeIntersects(SegmentString *e0, SegmentString *e1)
+{
 	const CoordinateSequence *pts0=e0->getCoordinates();
 	const CoordinateSequence *pts1=e1->getCoordinates();
-	for (int i0=0;i0<pts0->getSize()-1;i0++) {
-		for (int i1=0;i1<pts1->getSize()-1;i1++) {
+
+	unsigned int npts0=pts0->getSize();
+	unsigned int npts1=pts1->getSize();
+	for (unsigned int i0=0; i0<npts0-1; ++i0) {
+		for (unsigned int i1=0; i1<npts1-1; ++i1) {
 			segInt->processIntersections(e0, i0, e1, i1);
 		}
 	}
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
+ * Revision 1.3  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.2  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/03/26 07:48:30  ybychkov
+ * "noding" package ported (JTS 1.4)
+ *
+ *
+ **********************************************************************/
+

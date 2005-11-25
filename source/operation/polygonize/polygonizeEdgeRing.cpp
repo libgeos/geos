@@ -88,7 +88,9 @@ const Coordinate&
 polygonizeEdgeRing::ptNotInList(const CoordinateSequence *testPts,
 	const CoordinateSequence *pts)
 {
-	for (int i=0; i<testPts->getSize(); i++) {
+	unsigned int npts=testPts->getSize();
+	for (unsigned int i=0; i<npts; ++i)
+	{
 		const Coordinate& testPt=testPts->getAt(i);
 		if (isInList(testPt, pts))
 			return testPt;
@@ -108,7 +110,9 @@ bool
 polygonizeEdgeRing::isInList(const Coordinate& pt,
 	const CoordinateSequence *pts)
 {
-	for (int i=0; i < pts->getSize(); i++) {
+	unsigned int npts=pts->getSize();
+	for (unsigned int i=0; i<npts; ++i)
+	{
 		if (pt==pts->getAt(i))
 			return false;
 	}
@@ -276,13 +280,15 @@ void
 polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 	CoordinateSequence *coordList)
 {
+	unsigned int npts=coords->getSize();
 	if (isForward) {
-		for (int i=0; i < coords->getSize(); i++) {
+		for (unsigned int i=0; i<npts; ++i)
+		{
 			coordList->add(coords->getAt(i), false);
 		}
 	} else {
-		for (int i=coords->getSize()-1; i >= 0; i--) {
-			coordList->add(coords->getAt(i), false);
+		for (unsigned int i=npts; i>0; --i) {
+			coordList->add(coords->getAt(i-1), false);
 		}
 	}
 }
@@ -290,6 +296,9 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
  * Revision 1.9  2005/06/17 15:08:07  strk
  * Polygonizer segfault fix
  *

@@ -378,7 +378,8 @@ OverlayOp::getAverageZ(const Polygon *poly)
 
 	const CoordinateSequence *pts =
 		poly->getExteriorRing()->getCoordinatesRO();
-	for (int i=0; i<pts->getSize(); i++)
+	unsigned int npts=pts->getSize();
+	for (unsigned int i=0; i<npts; ++i)
 	{
 		const Coordinate &c = pts->getAt(i);
 		if ( !ISNAN(c.z) )
@@ -442,8 +443,8 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	const CoordinateSequence *pts = line->getCoordinatesRO();
 	const Coordinate &p = n->getCoordinate();
 	LineIntersector li;
-	int size = pts->getSize();
-	for(int i=1; i<size; i++) {
+	unsigned int size = pts->getSize();
+	for(unsigned int i=1; i<size; ++i) {
 		const Coordinate &p0=pts->getAt(i-1);
 		const Coordinate &p1=pts->getAt(i);	
 		li.computeIntersection(p, p0, p1);
@@ -824,7 +825,11 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.49  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
  * Revision 1.48  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

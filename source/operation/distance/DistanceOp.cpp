@@ -12,48 +12,8 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
- * $Log$
- * Revision 1.15  2004/07/27 16:35:47  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.14  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.13  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.12  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.11  2004/05/14 13:42:46  strk
- * DistanceOp bug removed, cascading errors fixed.
- *
- * Revision 1.10  2004/04/14 10:56:38  strk
- * Uncommented initializzazion and destruction of DistanceOp::minDistanceLocation
- *
- * Revision 1.9  2004/04/13 10:05:51  strk
- * GeometryLocation constructor made const-correct.
- * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
- *
- * Revision 1.8  2004/04/05 06:35:14  ybychkov
- * "operation/distance" upgraded to JTS 1.4
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.6  2003/10/16 08:50:00  strk
- * Memory leak fixes. Improved performance by mean of more calls to 
- * new getCoordinatesRO() when applicable.
  *
  **********************************************************************/
-
 
 #include <geos/opDistance.h>
 #include <geos/geomUtil.h>
@@ -374,11 +334,17 @@ void DistanceOp::computeMinDistance(const LineString *line0, const LineString *l
 	}
 	//delete env0;
 	//delete env1;
+
 	const CoordinateSequence *coord0=line0->getCoordinatesRO();
 	const CoordinateSequence *coord1=line1->getCoordinatesRO();
+	unsigned int npts0=coord0->getSize();
+	unsigned int npts1=coord1->getSize();
+
 	// brute force approach!
-	for(int i=0;i<coord0->getSize()-1;i++) {
-		for(int j=0;j<coord1->getSize()-1;j++) {
+	for(unsigned int i=0; i<npts0-1; ++i)
+	{
+		for(unsigned int j=0; j<npts1-1; ++j)
+		{
 			double dist=CGAlgorithms::distanceLineLine(coord0->getAt(i),coord0->getAt(i+1),
 				coord1->getAt(j),coord1->getAt(j+1));
 			if (dist < minDistance) {
@@ -397,7 +363,7 @@ void DistanceOp::computeMinDistance(const LineString *line0, const LineString *l
 				(*locGeom)[1] = new GeometryLocation(line1, j, *c2);
 			}
 			if (minDistance<=0.0) return;
-			if ( i<coord0->getSize()-1 || j<coord1->getSize()-1)
+			if ( i<npts0-1 || j<npts1-1)
 			{
 				delete (*locGeom)[0]; (*locGeom)[0]=NULL;
 				delete (*locGeom)[1]; (*locGeom)[1]=NULL;
@@ -422,7 +388,10 @@ DistanceOp::computeMinDistance(const LineString *line, const Point *pt,vector<Ge
 	Coordinate *coord=new Coordinate(*(pt->getCoordinate()));
 	newCoords.push_back(coord);
 	// brute force approach!
-	for(int i=0;i<coord0->getSize()-1;i++) {
+
+	unsigned int npts0=coord0->getSize();
+	for(unsigned int i=0; i<npts0-1; ++i)
+	{
 		double dist=CGAlgorithms::distancePointLine(*coord,coord0->getAt(i),coord0->getAt(i+1));
         	if (dist < minDistance) {
           		minDistance = dist;
@@ -439,5 +408,51 @@ DistanceOp::computeMinDistance(const LineString *line, const Point *pt,vector<Ge
 	}
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.16  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
+ * Revision 1.15  2004/07/27 16:35:47  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.14  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.13  2004/07/08 19:34:50  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.12  2004/07/02 13:28:28  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.11  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
+ * Revision 1.10  2004/04/14 10:56:38  strk
+ * Uncommented initializzazion and destruction of DistanceOp::minDistanceLocation
+ *
+ * Revision 1.9  2004/04/13 10:05:51  strk
+ * GeometryLocation constructor made const-correct.
+ * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
+ *
+ * Revision 1.8  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
+ * Revision 1.7  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.6  2003/10/16 08:50:00  strk
+ * Memory leak fixes. Improved performance by mean of more calls to 
+ * new getCoordinatesRO() when applicable.
+ *
+ **********************************************************************/
 

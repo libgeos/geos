@@ -53,8 +53,11 @@ NodingValidator::checkProperIntersections(SegmentString *ss0, SegmentString *ss1
 {
 	const CoordinateSequence *pts0=ss0->getCoordinates();
 	const CoordinateSequence *pts1=ss1->getCoordinates();
-	for (int i0=0;i0<pts0->getSize()-1; i0++) {
-		for (int i1=0;i1<pts1->getSize()-1; i1++) {
+	unsigned int npts0=pts0->getSize();
+	unsigned int npts1=pts1->getSize();
+
+	for (unsigned int i0=0; i0<npts0-1; i0++) {
+		for (unsigned int i1=0; i1<npts1-1; i1++) {
 			checkProperIntersections(ss0, i0, ss1, i1);
 		}
 	}
@@ -99,21 +102,25 @@ NodingValidator::hasInteriorIntersection(LineIntersector *aLi, Coordinate& p0, C
 void
 NodingValidator::checkNoInteriorPointsSame()
 {
-	for (int i=0; i<(int)segStrings->size();i++) {
+	for (unsigned int i=0; i<segStrings->size(); ++i) {
 		SegmentString *ss0=(*segStrings)[i];
 		const CoordinateSequence *pts=ss0->getCoordinates();
 		checkNoInteriorPointsSame(pts->getAt(0), segStrings);
-		checkNoInteriorPointsSame(pts->getAt(pts->getSize()-1), segStrings);
+		checkNoInteriorPointsSame(pts->getAt(pts->getSize()-1),
+			segStrings);
 	}
 }
 
 void
 NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<SegmentString*> *aSegStrings)
 {
-	for (int i=0; i<(int)segStrings->size();i++) {
+	unsigned int nSegStrings=segStrings->size();
+	for (unsigned int i=0; i<nSegStrings; ++i) {
 			SegmentString *ss0=(*segStrings)[i];
 			const CoordinateSequence *pts=ss0->getCoordinates();
-			for (int j=1;j<pts->getSize()-1; j++) {
+			unsigned int npts=pts->getSize();
+			for (unsigned int j=1; j<npts-1; ++j)
+			{
 				if (pts->getAt(j)==testPt)
 					throw new GEOSException("found bad noding at pt " + testPt.toString());
 			}
@@ -124,6 +131,9 @@ NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<Segme
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
  * Revision 1.5  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)

@@ -34,10 +34,12 @@ void
 RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList)
 {
 	/**
-	* Check all forward DirectedEdges only.  This is still general,
-	* because each edge has a forward DirectedEdge.
-	*/
-	for(int i=0;i<(int)dirEdgeList->size();i++) {
+	 * Check all forward DirectedEdges only.  This is still general,
+	 * because each edge has a forward DirectedEdge.
+	 */
+	unsigned int dirEdgeListSize=dirEdgeList->size();
+	for(unsigned int i=0; i<dirEdgeListSize; ++i)
+	{
 		DirectedEdge *de=(*dirEdgeList)[i];
 		if (!de->isForward())
 			continue;
@@ -45,19 +47,21 @@ RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList)
 	}
 
 	/**
-	* If the rightmost point is a node, we need to identify which of
-	* the incident edges is rightmost.
-	*/
-	Assert::isTrue(minIndex!=0 || minCoord==minDe->getCoordinate(), "inconsistency in rightmost processing");
+	 * If the rightmost point is a node, we need to identify which of
+	 * the incident edges is rightmost.
+	 */
+	Assert::isTrue(minIndex!=0 || minCoord==minDe->getCoordinate(),
+		"inconsistency in rightmost processing");
+
 	if (minIndex==0 ) {
 		findRightmostEdgeAtNode();
 	} else {
 		findRightmostEdgeAtVertex();
 	}
 	/**
-	* now check that the extreme side is the R side.
-	* If not, use the sym instead.
-	*/
+	 * now check that the extreme side is the R side.
+	 * If not, use the sym instead.
+	 */
 	orientedDe=minDe;
 	int rightmostSide=getRightmostSide(minDe,minIndex);
 	if (rightmostSide==Position::LEFT) {
@@ -75,7 +79,7 @@ RightmostEdgeFinder::findRightmostEdgeAtNode()
 	// necessarily in the forward direction. Use the sym edge if it isn't.
 	if (!minDe->isForward()) {
 		minDe=minDe->getSym();
-		minIndex=minDe->getEdge()->getCoordinates()->getSize()-1;
+		minIndex=(int)(minDe->getEdge()->getCoordinates()->getSize())-1;
 	}
 }
 
@@ -83,17 +87,22 @@ void
 RightmostEdgeFinder::findRightmostEdgeAtVertex()
 {
 	/**
-	* The rightmost point is an interior vertex, so it has a segment on either side of it.
-	* If these segments are both above or below the rightmost point, we need to
-	* determine their relative orientation to decide which is rightmost.
-	*/
+	 * The rightmost point is an interior vertex, so it has
+	 * a segment on either side of it.
+	 * If these segments are both above or below the rightmost
+	 * point, we need to determine their relative orientation
+	 * to decide which is rightmost.
+	 */
 
 	const CoordinateSequence *pts=minDe->getEdge()->getCoordinates();
-	Assert::isTrue(minIndex>0 && minIndex<pts->getSize(), "rightmost point expected to be interior vertex of edge");
+	Assert::isTrue(minIndex>0 && minIndex<(int)pts->getSize(),
+		"rightmost point expected to be interior vertex of edge");
+
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
 	int orientation=CGAlgorithms::computeOrientation(minCoord,pNext,pPrev);
 	bool usePrev=false;
+
 	// both segments are below min point
 	if (pPrev.y<minCoord.y && pNext.y<minCoord.y
 		&& orientation==CGAlgorithms::COUNTERCLOCKWISE) {
@@ -102,6 +111,7 @@ RightmostEdgeFinder::findRightmostEdgeAtVertex()
 		&& orientation==CGAlgorithms::CLOCKWISE) {
 			usePrev=true;
 	}
+
 	// if both segments are on the same side, do nothing - either is safe
 	// to select as a rightmost segment
 	if (usePrev) {
@@ -114,8 +124,8 @@ RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de)
 {
 	const CoordinateSequence *coord=de->getEdge()->getCoordinates();
 	// only check vertices which are the starting point of a non-horizontal segment
-	int n=coord->getSize()-1;
-	for(int i=0; i<n; i++)
+	unsigned int n=coord->getSize()-1;
+	for(unsigned int i=0; i<n; i++)
 	{
      // only check vertices which are the start or end point of a non-horizontal segment
      // <FIX> MD 19 Sep 03 - NO!  we can test all vertices, since the rightmost must have a non-horiz segment adjacent to it
@@ -123,7 +133,7 @@ RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de)
 			coord->getAt(i).x>minCoord.x )
 		{
 			minDe=de;
-			minIndex=i;
+			minIndex=(int)i;
 			minCoord=coord->getAt(i);
 		}
 	}
@@ -148,7 +158,7 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 {
 	Edge *e=de->getEdge();
 	const CoordinateSequence *coord=e->getCoordinates();
-	if (i<0 || i+1>=coord->getSize()) return -1;
+	if (i<0 || i+1>=(int)coord->getSize()) return -1;
 	if (coord->getAt(i).y==coord->getAt(i+1).y) return -1;    // indicates edge is parallel to x-axis
 	int pos=Position::LEFT;
 	if (coord->getAt(i).y<coord->getAt(i+1).y) pos=Position::RIGHT;
@@ -159,6 +169,9 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/11/25 11:31:21  strk
+ * Removed all CoordinateSequence::getSize() calls embedded in for loops.
+ *
  * Revision 1.11  2005/05/19 10:29:28  strk
  * Removed some CGAlgorithms instances substituting them with direct calls
  * to the static functions. Interfaces accepting CGAlgorithms pointers kept
