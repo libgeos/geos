@@ -79,7 +79,7 @@ GeometryCollection::getCoordinates() const
 	int k = -1;
 	for (unsigned int i=0; i<geometries->size(); ++i) {
 		CoordinateSequence* childCoordinates=(*geometries)[i]->getCoordinates();
-		unsigned int npts;
+		unsigned int npts=childCoordinates->getSize();
 		for (unsigned int j=0; j<npts; ++j) {
 			k++;
 			(*coordinates)[k] = childCoordinates->getAt(j);
@@ -324,6 +324,9 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48  2005/11/25 09:57:51  strk
+ * Fixed bug in getCoordinates() [ introduced by previous commit ]
+ *
  * Revision 1.47  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
