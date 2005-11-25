@@ -277,24 +277,15 @@ Edge::equals(const Edge *e) const
 	bool isEqualForward=true;
 	bool isEqualReverse=true;
 
-	int iRev=npts1; 
-	for (unsigned int i=0; i<npts1; ++i, --iRev)
+	for (unsigned int i=0, iRev=npts1-1; i<npts1; ++i, --iRev)
 	{
 		const Coordinate e1pi=pts->getAt(i);
 		const Coordinate e2pi=e->pts->getAt(i);
 		const Coordinate e2piRev=e->pts->getAt(iRev);
 
-		if ( !e1pi.equals2D(e2pi) )
-		{
-			isEqualForward=false;
-		}
-
-		if ( !e1pi.equals2D(e2piRev) )
-		{
-			isEqualReverse=false;
-		}
-
-		if (!isEqualForward && !isEqualReverse) return false;
+		if ( !e1pi.equals2D(e2pi) ) isEqualForward=false;
+		if ( !e1pi.equals2D(e2piRev) ) isEqualReverse=false;
+		if ( !isEqualForward && !isEqualReverse ) return false;
 	}
 	return true;
 }
@@ -366,6 +357,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/11/25 11:30:38  strk
+ * Fix in ::equals() - this finally passes testLeaksBig.xml tests
+ *
  * Revision 1.19  2005/11/24 23:43:13  strk
  * Yes another fix, sorry. Missing const-correctness.
  *
