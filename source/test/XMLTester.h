@@ -21,13 +21,11 @@ using namespace geos;
 class XMLTester {
 
 public:
-	XMLTester(const char *);
+	XMLTester();
 	~XMLTester();
-	void run();
-	int failed;
-	int succeeded;
-	int caseCount;
-	int testCount;
+	void run(const string &testFile);
+	void resultSummary(ostream &os) const;
+	void resetCounters();
 
 private:
 	enum {
@@ -56,6 +54,13 @@ private:
 	CMarkupSTL xml;
 
 	int out;
+
+	int failed;
+	int succeeded;
+	int caseCount;
+	int testCount;
+	int testFileCount;
+	int totalTestCount;
 
 };
 

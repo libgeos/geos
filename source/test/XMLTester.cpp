@@ -49,21 +49,27 @@ using namespace geos;
 //using geos::Polygon; // for mingw providing a Polygon global function
 
 
-XMLTester::XMLTester(const char *source)
+XMLTester::XMLTester()
 {
 	r=NULL;
 	w=NULL;
 	pm=NULL;
 	factory=NULL;
-	failed=succeeded=caseCount=testCount=0;
-	xml.Load(source);
+	failed=succeeded=caseCount=testCount=testFileCount=totalTestCount=0;
+	//xml.Load(source);
 	out=TEST_DESCR+GEOM_A_IN+GEOM_A_OUT+GEOM_B_IN+GEOM_B_OUT+TEST_OP+TEST_RESULT;
 }
 
 
 void
-XMLTester::run()
+XMLTester::run(const string &source)
 {
+	++testFileCount;
+
+	caseCount=0;
+
+	xml.Load(source.c_str());
+
 	xml.ResetPos();
 	xml.FindElem("run");
 	xml.FindChildElem("precisionModel");
@@ -75,12 +81,23 @@ XMLTester::run()
 			cerr<<exc->toString()<<endl;
 		}
 	}
-	cout << "Failed: ";
-	cout << failed << endl;
-	cout << "Succeeded: ";
-	cout << succeeded << endl;
-
 }
+
+void 
+XMLTester::resultSummary(ostream &os) const
+{
+	os<<"Files: "<<testFileCount<<endl;
+	os<<"Tests: "<<totalTestCount<<endl;
+	os<<"Failed: "<<failed<<endl;
+	os<<"Succeeded: "<<succeeded<<endl;
+}
+
+void 
+XMLTester::resetCounters() 
+{
+	testFileCount=totalTestCount=failed=succeeded=0;
+}
+
 
 void
 XMLTester::parsePrecisionModel()
@@ -124,7 +141,7 @@ XMLTester::parseCase()
 	gB=NULL;
 
 	xml.IntoElem();
-	caseCount++;
+	++caseCount;
 	xml.FindChildElem("desc");
 	desc=xml.GetChildData();
 	if (out & TEST_DESCR) {
@@ -162,6 +179,7 @@ XMLTester::parseCase()
 	while(xml.FindChildElem("test")) {
 		parseTest();
 	}
+	totalTestCount+=testCount;
 		
 	xml.OutOfElem();
 	delete gA;
@@ -178,7 +196,7 @@ XMLTester::parseTest()
 	string opArg3;
 	string opRes;
 
-	testCount++;
+	++testCount;
 	if (out & TEST_DESCR) {
 		cout << "\tTest #" << testCount << endl;
 	}
@@ -557,17 +575,32 @@ XMLTester::~XMLTester()
 }
 
 
-int main(int argC, char* argV[]) {
+static void
+usage(char *me, int exitcode, ostream &os)
+{
+	os<<"Usage: "<<me<<" <test> [<test> ...]"<<endl;
+	exit(exitcode);
+}
+
+int
+main(int argC, char* argV[])
+{
 
 #ifdef _MSC_VER
 	InitAllocCheck();
 	{
 #endif
 
-	string source="./test.xml";
-	if ( argC > 1 ) source = argV[1];
-	XMLTester tester(source.c_str());
-	tester.run();
+	if ( argC < 2 ) usage(argV[0], 1, cerr);
+
+	XMLTester tester;
+	for (int i=1; i<argC; ++i)
+	{
+		string source = argV[i];
+		cout<<"TestFile: "<<source<<endl;
+		tester.run(source);
+	}
+	tester.resultSummary(cout);
 
 #ifdef _MSC_VER
 	}
@@ -579,6 +612,10 @@ int main(int argC, char* argV[]) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.58  2005/11/25 12:22:42  strk
+ * Made XMLTester able to run multiple test files and keep overall
+ * counters.
+ *
  * Revision 1.57  2005/06/28 16:52:09  strk
  * Added number of points count as a debugging aid
  *

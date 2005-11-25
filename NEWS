@@ -35,6 +35,8 @@ Changes in 3.0.0
 - CoordinateSequence API changes:
 	- point index and size related functions
 	  use unsigned int rather then int
+- XMLTester accepts multiple test files as args and reports overall
+  summary
 
 Changes in 2.1.5CVS
 
