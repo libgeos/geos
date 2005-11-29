@@ -338,6 +338,9 @@ private:
  * The standard comparison functions will ignore the z-ordinate.
  *
  */
+// Define the following to make assignments and copy constructions
+// NON-inline (will let profilers report usages)
+#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
 public:
 	//void setNull(void);
@@ -377,11 +380,16 @@ public:
 		z=zNew;
 	}
 
+#ifndef PROFILE_COORDINATE_COPIES
 	Coordinate::Coordinate(const Coordinate& c){
 		x=c.x;
 		y=c.y;
 		z=c.z;
 	}
+#else
+	Coordinate::Coordinate(const Coordinate& c);
+	Coordinate &operator=(const Coordinate &c);
+#endif
 
 	Coordinate::Coordinate(double xNew, double yNew){
 		x=xNew;
@@ -2461,6 +2469,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34.2.2.2.2  2005/11/29 17:51:15  strk
+ * Forgot to add the capi/ dir
+ *
  * Revision 1.34.2.2.2.1  2005/11/29 16:58:17  strk
  * Back-ported WKB IO and C api.
  * Added required higher dimensional interfaces for CoordinateSequence

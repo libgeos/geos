@@ -66,10 +66,35 @@ bool operator!=(const Coordinate& a, const Coordinate& b) {
 	return false;
 }
 
+#ifdef PROFILE_COORDINATE_COPIES
+
+Coordinate::Coordinate(const Coordinate& c)
+{
+	x=c.x;
+	y=c.y;
+	z=c.z;
+}
+
+Coordinate &
+Coordinate::operator=(const Coordinate &c)
+{
+	//if ( this == &c ) return *this;
+	x=c.x;
+	y=c.y;
+	z=c.z;
+	return *this;
+}
+
+#endif // PROFILE_COORDINATE_COPIES
+
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19.2.1.2.1  2005/11/29 17:51:15  strk
+ * Forgot to add the capi/ dir
+ *
  * Revision 1.19.2.1  2005/05/23 18:41:51  strk
  * Replaced sprintf uses with ostringstream
  *
