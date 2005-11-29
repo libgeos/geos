@@ -4,39 +4,53 @@ Changes in 3.0.0
    In few cases the API also changed, but the most external one
    (the documented one) is unchanged.
 
-- WKT parser speedup
-- New WKB parser
-- Optimizations: function inlining, Coordinate copies reduction,
-  dynamic allocations reduction
-- Higher dimensions support for CoordinateSequence
-- Changed SegmentNode to contain a *real* Coordinate (not a pointer)
-  to reduce construction costs.
-- Cached number of points in Edge
-- Changed geomgraph nodeMap to use Coordinate pointers as keys
-- Envelope destructor made non-virtual to give compiler more static
-  binding options.
-- Changed BufferSubgraph::computeDepths to use a set instead of a vector
-  for checking visited Edges.
-- Added missing ::clone() methods for Multi* geoms and made all
-  geometry clone() methods inlined
-- Made LineIntersector a concrete type
-- Node::isIncidentEdgeInResult() method made virtual
-- Initial simplified C api implementation
-- Const-correct signatures in LineMerger package
-- Added closed ring checks in IsValidOp
-- Changed operation/valid/*NestedRingTester classes interface
-  to use Coordinate pointers instead of copies.
-- Changed EdgeIntersectionList to use a set instead of a vector
-- Changed DepthSegment to store a real Coordinate rather then a pointer.
-- Changed SubgraphDepthLocater to store real containers rather then pointers.
-- Changed BufferSubgraph to store a real RightmostEdgeFinder and real
-  containers rather then pointers.
-- Stronger methods typing (removed some void * args).
-- CoordinateSequence API changes:
-	- point index and size related functions
-	  use unsigned int rather then int
-- XMLTester accepts multiple test files as args and reports overall
-  summary
+- New things:
+	- WKB parser
+	- simplified and stabler C interface
+	- Higher dimensions support for CoordinateSequence
+	- Added closed ring checks in IsValidOp
+	- Added missing ::clone() methods for Multi* geoms 
+	- Multi-input support in XMLTester 
+
+- Optimizations:
+	- WKT parser speedup
+	- Function inlining
+	- Coordinate copies reduction
+  	- Heap allocations reduction
+	- More classes made final
+	- Better use of standard containers
+
+- Correctness:
+	- More const-correct signatures
+	- Stronger methods typing (removed some void * args).
+	- Changed index-related funx signatures to use unsigned int
+	  rather then int
+
+
+- (Partial) Detailed list of changes:
+	- Changed SegmentNode to contain a *real* Coordinate (not a pointer)
+  	  to reduce construction costs.
+	- Cached number of points in Edge
+	- Changed geomgraph nodeMap to use Coordinate pointers as keys
+	- Envelope destructor made non-virtual to give compiler more static
+	  binding options.
+	- Changed BufferSubgraph::computeDepths to use a set instead of a
+	  vector for checking visited Edges.
+	- Made LineIntersector a concrete type
+	- Node::isIncidentEdgeInResult() method made virtual
+	- Const-correct signatures in LineMerger package
+	- Changed operation/valid/*NestedRingTester classes interface
+	  to use Coordinate pointers instead of copies.
+	- Changed EdgeIntersectionList to use a set instead of a vector
+	- Changed DepthSegment to store a real Coordinate rather then a pointer.
+	- Changed SubgraphDepthLocater to store real containers rather then
+	  pointers.
+	- Changed BufferSubgraph to store a real RightmostEdgeFinder and real
+ 	  containers rather then pointers.
+	- CoordinateSequence API changes:
+		- point index and size related functions
+	  	  use unsigned int rather then int
+	- Changed EdgeEndStar to maintain a single container for EdgeEnds 
 
 Changes in 2.1.5CVS
 
