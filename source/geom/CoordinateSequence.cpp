@@ -125,7 +125,7 @@ bool CoordinateSequence::equals(CoordinateSequence *cl1, CoordinateSequence *cl2
 	if (cl1==NULL||cl2==NULL) return false;
 	unsigned int npts1=cl1->getSize();
 	if (npts1!=cl2->getSize()) return false;
-	for (int i=0; i<npts1; i++) {
+	for (unsigned int i=0; i<npts1; i++) {
 		if (!(cl1->getAt(i)==cl2->getAt(i))) return false;
 	}
 	return true;
@@ -221,6 +221,9 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/11/29 14:39:08  strk
+ * More signed/unsigned fixes
+ *
  * Revision 1.10  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there

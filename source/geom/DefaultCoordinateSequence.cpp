@@ -25,7 +25,7 @@ DefaultCoordinateSequence::DefaultCoordinateSequence():
 {
 }
 
-DefaultCoordinateSequence::DefaultCoordinateSequence(int n):
+DefaultCoordinateSequence::DefaultCoordinateSequence(unsigned int n):
 	vect(new vector<Coordinate>(n))
 {
 }
@@ -187,6 +187,9 @@ DefaultCoordinateSequence::setOrdinate(unsigned int index, unsigned int ordinate
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/11/29 14:39:08  strk
+ * More signed/unsigned fixes
+ *
  * Revision 1.7  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
