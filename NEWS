@@ -5,9 +5,6 @@ Changes in 3.0.0
    (the documented one) is unchanged.
 
 - New things:
-	- WKB IO
-	- simplified and stabler C interface
-	- Higher dimensions support for CoordinateSequence
 	- Added closed ring checks in IsValidOp
 	- Added missing ::clone() methods for Multi* geoms 
 	- Multi-input support in XMLTester 
@@ -53,10 +50,15 @@ Changes in 3.0.0
 	  	  use unsigned int rather then int
 	- Changed EdgeEndStar to maintain a single container for EdgeEnds 
 
-Changes in 2.1.5CVS
+Changes in 2.2.0CVS
 
 - Performance improvement in OverlayOp::insertUniqueEdge()
+- CoordinateSequence copy removal in EdgeRing
 - Minor memory allocation improvements 
+- Higher dimensions interface for CoordinateSequence
+- Added getCoordinatesRO for Point class
+- NEW WKB IO
+- NEW Simplified and stabler C API 
 
 Changes in 2.1.4
 
