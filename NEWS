@@ -5,7 +5,7 @@ Changes in 3.0.0
    (the documented one) is unchanged.
 
 - New things:
-	- WKB parser
+	- WKB IO
 	- simplified and stabler C interface
 	- Higher dimensions support for CoordinateSequence
 	- Added closed ring checks in IsValidOp
@@ -19,6 +19,8 @@ Changes in 3.0.0
   	- Heap allocations reduction
 	- More classes made final
 	- Better use of standard containers
+	- Use of singletons when appropriate
+	- Removed many function calls in loops' end conditions
 
 - Correctness:
 	- More const-correct signatures
