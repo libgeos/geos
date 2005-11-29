@@ -41,10 +41,10 @@ Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges):
 	addZ(newCoord.z);
 	if ( edges )
 	{
-		vector<EdgeEnd*>*eev = edges->getEdges();
-		for (unsigned int i=0; i<eev->size(); i++)
+		EdgeEndStar::iterator endIt = edges->end();
+		for (EdgeEndStar::iterator it=edges->begin(); it!=endIt; ++it)
 		{
-			EdgeEnd *ee = (*eev)[i];
+			EdgeEnd *ee = *it;
 			addZ(ee->getCoordinate().z);
 		}
 	}
@@ -80,11 +80,11 @@ Node::isIsolated() const
 bool
 Node::isIncidentEdgeInResult() const
 {
-	vector<EdgeEnd*>*v = edges->getEdges();
-	unsigned int size = v->size();
-	for (unsigned int i=0; i<size; i++)
+	EdgeEndStar::iterator it=edges->begin();
+	EdgeEndStar::iterator endIt=edges->end();
+	for ( ; it!=endIt; ++it)
 	{
-		DirectedEdge *de = (DirectedEdge *)(*v)[i];
+		DirectedEdge *de = (DirectedEdge *)(*it);
 		if ( de->getEdge()->isInResult() ) return true;
 	}
 	return false;
@@ -204,7 +204,13 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/11/29 00:48:35  strk
+ * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
+ * Restructured iterated access by use of standard ::iterator abstraction
+ * with scoped typedefs.
+ *
  * Revision 1.15  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

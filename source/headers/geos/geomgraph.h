@@ -290,36 +290,81 @@ struct EdgeEndLT {
 
 /**
  * A EdgeEndStar is an ordered list of EdgeEnds around a node.
- * They are maintained in CCW order (starting with the positive x-axis) around the node
- * for efficient lookup and topology building.
+ * They are maintained in CCW order (starting with the positive x-axis)
+ * around the node for efficient lookup and topology building.
  *
  * @version 1.4
  */
 class EdgeEndStar {
 public:
+
+	typedef set<EdgeEnd *, EdgeEndLT> container;
+
+	typedef container::iterator iterator;
+	typedef container::reverse_iterator reverse_iterator;
+
 	EdgeEndStar();
-	virtual ~EdgeEndStar();
+
+	virtual ~EdgeEndStar() {};
+
 	virtual void insert(EdgeEnd *e)=0;
+
 	virtual Coordinate& getCoordinate();
-	virtual int getDegree();
-	virtual vector<EdgeEnd*>::iterator getIterator();
-	virtual vector<EdgeEnd*>* getEdges();
+
+	virtual unsigned int getDegree() { return edgeMap.size(); }
+
+	//virtual vector<EdgeEnd*>::iterator getIterator();
+	virtual iterator begin() { return edgeMap.begin(); }
+	virtual iterator end() { return edgeMap.end(); }
+
+	virtual reverse_iterator rbegin() { return edgeMap.rbegin(); }
+	virtual reverse_iterator rend() { return edgeMap.rend(); }
+
+	//virtual vector<EdgeEnd*>* getEdges();
+	virtual container &getEdges() { return edgeMap; }
+
 	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
-	virtual void computeLabelling(vector<GeometryGraph*> *geom); // throw(TopologyException *);
-	virtual int getLocation(int geomIndex,Coordinate& p,vector<GeometryGraph*> *geom);
+
+	virtual void computeLabelling(vector<GeometryGraph*> *geom);
+		// throw(TopologyException *);
+
+	virtual int getLocation(int geomIndex,
+		const Coordinate& p,
+		vector<GeometryGraph*> *geom); 
+
 	virtual bool isAreaLabelsConsistent();
-	virtual void propagateSideLabels(int geomIndex); // throw(TopologyException *);
-	virtual int findIndex(EdgeEnd *eSearch);
+
+	virtual void propagateSideLabels(int geomIndex);
+		// throw(TopologyException *);
+
+	//virtual int findIndex(EdgeEnd *eSearch);
+	virtual iterator find(EdgeEnd *eSearch) {
+		return edgeMap.find(eSearch);
+	}
+
 	virtual string print();
+
 protected:
+
 	//map<EdgeEnd*,void*,EdgeEndLT> *edgeMap;
-	set<EdgeEnd *, EdgeEndLT> *edgeMap;
-	vector<EdgeEnd*> *edgeList;
-	virtual void insertEdgeEnd(EdgeEnd *e);
+	//set<EdgeEnd *, EdgeEndLT> edgeMap;
+	EdgeEndStar::container edgeMap;
+
+	//vector<EdgeEnd*> *edgeList;
+
+	/**
+	 * Insert an EdgeEnd into the map.
+	 */
+	virtual void insertEdgeEnd(EdgeEnd *e) { edgeMap.insert(e); }
+
 private:
+
 	int ptInAreaLocation[2];
+
 	virtual void computeEdgeEndLabels();
+
 	virtual bool checkAreaLabelsConsistent(int geomIndex);
+
 };
 
 class DirectedEdgeStar: public EdgeEndStar {
@@ -351,7 +396,8 @@ private:
 		SCANNING_FOR_INCOMING=1,
 		LINKING_TO_OUTGOING
 	};
-	int computeDepths(int startIndex, int endIndex, int startDepth);
+	int computeDepths(EdgeEndStar::iterator startIt,
+		EdgeEndStar::iterator endIt, int startDepth);
 };
 
 class Node: public GraphComponent {
@@ -858,6 +904,11 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2005/11/29 00:48:35  strk
+ * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
+ * Restructured iterated access by use of standard ::iterator abstraction
+ * with scoped typedefs.
+ *
  * Revision 1.22  2005/11/24 23:43:13  strk
  * Yes another fix, sorry. Missing const-correctness.
  *

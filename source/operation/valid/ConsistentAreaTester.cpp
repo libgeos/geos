@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/29 00:48:35  strk
+ * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
+ * Restructured iterated access by use of standard ::iterator abstraction
+ * with scoped typedefs.
+ *
  * Revision 1.9  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
@@ -106,11 +111,14 @@ bool ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent() {
 bool ConsistentAreaTester::hasDuplicateRings() {
 	map<Coordinate*,Node*,CoordLT> &nMap=nodeGraph->getNodeMap();
 	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
+	for(nodeIt=nMap.begin(); nodeIt!=nMap.end(); ++nodeIt)
+	{
 		RelateNode *node=(RelateNode*) nodeIt->second;
-		vector<EdgeEnd*> *v=node->getEdges()->getEdges();
-		for(int i=0; i<(int)v->size(); i++) {
-			EdgeEndBundle *eeb=(EdgeEndBundle*) (*v)[i];
+		EdgeEndStar *ees=node->getEdges();
+		EdgeEndStar::iterator endIt=ees->end();
+		for(EdgeEndStar::iterator it=ees->begin(); it!=endIt; ++it)
+		{
+			EdgeEndBundle *eeb=(EdgeEndBundle*) (*it);
 			if (eeb->getEdgeEnds()->size()>1) {
 				invalidPoint=eeb->getEdge()->getCoordinate(0);
 				return true;

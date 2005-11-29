@@ -25,8 +25,9 @@ EdgeEndBundleStar::EdgeEndBundleStar():
 
 EdgeEndBundleStar::~EdgeEndBundleStar()
 {
-	set<EdgeEnd*,EdgeEndLT>::iterator it=edgeMap->begin();
-	for (;it!=edgeMap->end(); ++it)
+	EdgeEndStar::iterator it=begin();
+	EdgeEndStar::iterator endIt=end();
+	for (; it!=endIt; ++it)
 	{
 		EdgeEndBundle *eeb=static_cast<EdgeEndBundle*>(*it);
 		delete eeb;
@@ -43,15 +44,16 @@ void
 EdgeEndBundleStar::insert(EdgeEnd *e)
 {
 	EdgeEndBundle *eb;
-	set<EdgeEnd*,EdgeEndLT>::iterator i=edgeMap->find(e);
-	if (i==edgeMap->end())
+	//set<EdgeEnd*,EdgeEndLT>::iterator i=edgeMap->find(e);
+	EdgeEndStar::iterator it=find(e);
+	if (it==end())
 	{
 		eb=new EdgeEndBundle(e);
 		insertEdgeEnd(eb);
 	}
 	else
 	{
-		eb=static_cast<EdgeEndBundle*>(*i);
+		eb=static_cast<EdgeEndBundle*>(*it);
 		eb->insert(e);
 	}
 }
@@ -62,8 +64,10 @@ EdgeEndBundleStar::insert(EdgeEnd *e)
 void
 EdgeEndBundleStar::updateIM(IntersectionMatrix *im)
 {
-	vector<EdgeEnd*> *edges=getEdges();
-	for (vector<EdgeEnd*>::iterator it=edges->begin();it<edges->end(); ++it)
+	//vector<EdgeEnd*> *edges=getEdges();
+	EdgeEndStar::iterator it=begin();
+	EdgeEndStar::iterator endIt=end();
+	for (; it!=endIt; ++it)
 	{
 		EdgeEndBundle *esb=static_cast<EdgeEndBundle*>(*it);
 		esb->updateIM(im);
@@ -74,7 +78,13 @@ EdgeEndBundleStar::updateIM(IntersectionMatrix *im)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/29 00:48:35  strk
+ * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
+ * Restructured iterated access by use of standard ::iterator abstraction
+ * with scoped typedefs.
+ *
  * Revision 1.9  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

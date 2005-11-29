@@ -76,9 +76,12 @@ BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 {
 	node->setVisited(true);
 	nodes.push_back(node);
-	vector<EdgeEnd*> *ees=node->getEdges()->getEdges();
-	for(unsigned int i=0; i<ees->size(); ++i) {
-		DirectedEdge *de=(DirectedEdge*) (*ees)[i];
+	EdgeEndStar *ees=node->getEdges();
+	EdgeEndStar::iterator it=ees->begin();
+	EdgeEndStar::iterator endIt=ees->end();
+	for( ; it!=endIt; ++it)
+	{
+		DirectedEdge *de=(DirectedEdge*) (*it);
 		dirEdgeList.push_back(de);
 		DirectedEdge *sym=de->getSym();
 		Node *symNode=sym->getNode();
@@ -125,9 +128,15 @@ BufferSubgraph::computeNodeDepth(Node *n)
 {
 	// find a visited dirEdge to start at
 	DirectedEdge *startEdge=NULL;
-	vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
-	for(int i=0;i<(int)ees->size();i++) {
-		DirectedEdge *de=(DirectedEdge*) (*ees)[i];
+
+	DirectedEdgeStar *ees=(DirectedEdgeStar *)n->getEdges();
+
+	EdgeEndStar::iterator endIt=ees->end();
+
+	EdgeEndStar::iterator it=ees->begin();
+	for(; it!=endIt; ++it)
+	{
+		DirectedEdge *de=(DirectedEdge*)*it;
 		if (de->isVisited() || de->getSym()->isVisited()) {
 			startEdge=de;
 			break;
@@ -136,11 +145,12 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	// MD - testing  Result: breaks algorithm
 	//if (startEdge==null) return;
 	Assert::isTrue(startEdge!=NULL, "unable to find edge to compute depths at " + n->getCoordinate().toString());
-	((DirectedEdgeStar*) n->getEdges())->computeDepths(startEdge);
+	ees->computeDepths(startEdge);
+
 	// copy depths to sym edges
-	vector<EdgeEnd*> *ees1=n->getEdges()->getEdges();
-	for(int j=0;j<(int)ees1->size();j++) {
-		DirectedEdge *de=(DirectedEdge*) (*ees)[j];
+	for(it=ees->begin(); it!=endIt; ++it)
+	{
+		DirectedEdge *de=(DirectedEdge*) (*it);
 		de->setVisited(true);
 		copySymDepths(de);
 	}
@@ -239,7 +249,8 @@ BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 	nodesVisited.insert(startNode);
 	startEdge->setVisited(true);
 
-	while (! nodeQueue.empty()) {
+	while (! nodeQueue.empty())
+	{
 		//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
 		Node *n=nodeQueue[0];
 		nodeQueue.erase(nodeQueue.begin());
@@ -250,10 +261,12 @@ BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 
 		// add all adjacent nodes to process queue,
 		// unless the node has been visited already
-		vector<EdgeEnd*> *ees=n->getEdges()->getEdges();
-		unsigned int eessize=ees->size();
-		for(unsigned int i=0; i<eessize; i++) {
-			DirectedEdge *de=(DirectedEdge*) (*ees)[i];
+		EdgeEndStar *ees=n->getEdges();
+		EdgeEndStar::iterator endIt=ees->end();
+		EdgeEndStar::iterator it=ees->begin();
+		for(; it!=endIt; ++it)
+		{
+			DirectedEdge *de=(DirectedEdge*) (*it);
 			DirectedEdge *sym=de->getSym();
 			if (sym->isVisited()) continue;
 			Node *adjNode=sym->getNode();
@@ -299,6 +312,11 @@ BufferSubgraph::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2005/11/29 00:48:35  strk
+ * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
+ * Restructured iterated access by use of standard ::iterator abstraction
+ * with scoped typedefs.
+ *
  * Revision 1.19  2005/11/08 20:12:44  strk
  * Memory overhead reductions in buffer operations.
  *

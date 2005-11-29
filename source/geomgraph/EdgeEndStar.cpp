@@ -22,32 +22,12 @@
 namespace geos {
 
 EdgeEndStar::EdgeEndStar():
-	edgeMap(new set<EdgeEnd*,EdgeEndLT>()),
-	edgeList(NULL)
+	//edgeMap(new set<EdgeEnd*,EdgeEndLT>()),
+	edgeMap()
+	//edgeList(NULL)
 {
 	ptInAreaLocation[0]=Location::UNDEF;
 	ptInAreaLocation[1]=Location::UNDEF;
-}
-
-EdgeEndStar::~EdgeEndStar()
-{
-	delete edgeMap;
-	delete edgeList;
-}
-
-/**
- * Insert an EdgeEnd into the map, and clear the edgeList cache,
- * since the list of edges has now changed
- */
-void
-EdgeEndStar::insertEdgeEnd(EdgeEnd *e)
-{
-#if DEBUG
-	cerr<<"EdgeEndStar["<<this<<"]::insertEdgeEnd("<<e<<" - "<<typeid(*e).name()<<") called"<<endl;
-#endif
-	edgeMap->insert(e);
-	delete edgeList;
-	edgeList=NULL;  // edge list has changed - clear the cache
 }
 
 /**
@@ -57,32 +37,33 @@ Coordinate&
 EdgeEndStar::getCoordinate()
 {
 	static Coordinate nullCoord(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
-	if (getEdges()->size()==0) return nullCoord;
+	if (edgeMap.size()==0) return nullCoord;
 
-	vector<EdgeEnd*>::iterator it=getIterator();
+	EdgeEndStar::iterator it=begin();
 	EdgeEnd *e=*it;
 	return e->getCoordinate();
 }
 
-int
-EdgeEndStar::getDegree()
-{
-	return (int)edgeMap->size();
-}
-
-vector<EdgeEnd*>*
+#if 0
+//vector<EdgeEnd*>*
+EdgeEndStar::container &
 EdgeEndStar::getEdges()
 {
+	return edgeMap;
+#if 0
 	if (edgeList==NULL)
 	{
 #if DEBUG
 		cerr<<"EdgeEndStar["<<this<<"]::getEdges() computing edgeList"<<endl;
 #endif
 		edgeList=new vector<EdgeEnd*>();
+
 		set<EdgeEnd*,EdgeEndLT>::iterator mapIter;
-		for(mapIter=edgeMap->begin(); mapIter!=edgeMap->end(); mapIter++)
+		set<EdgeEnd*,EdgeEndLT>::iterator begin=edgeMap.begin();
+		set<EdgeEnd*,EdgeEndLT>::iterator end=edgeMap.end();
+
+		for(mapIter=begin; mapIter!=end; ++mapIter)
 		{
-			//EdgeEnd *e=(EdgeEnd*) mapIter->second;
 			EdgeEnd *e=*mapIter;
 			edgeList->push_back(e);
 		}
@@ -97,17 +78,19 @@ EdgeEndStar::getEdges()
 	}
 #endif
 	return edgeList;
+#endif
 }
-
-vector<EdgeEnd*>::iterator
-EdgeEndStar::getIterator()
-{
-	return getEdges()->begin();
-}
+#endif
 
 EdgeEnd*
 EdgeEndStar::getNextCW(EdgeEnd *ee)
 {
+	EdgeEndStar::iterator it=find(ee);
+	if ( it==end() ) return NULL;
+	if ( it==begin() ) { it=end(); --it; }
+	else --it;
+	return *it;
+#if 0
 	getEdges();
 	unsigned int i=0;
 	for(unsigned int j=0;j<edgeList->size();j++)
@@ -122,6 +105,7 @@ EdgeEndStar::getNextCW(EdgeEnd *ee)
 	unsigned int iNextCW=i-1;
 	if (i==0) iNextCW=edgeList->size()-1;
 	return (*edgeList)[iNextCW];
+#endif
 }
 
 void
@@ -176,8 +160,10 @@ EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom)
 	 * resolution.
 	 */
 	bool hasDimensionalCollapseEdge[2]={false,false};
-	vector<EdgeEnd*>::iterator it;
-	for (it=getIterator();it<edgeList->end();it++) {
+
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
+	{
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		for(int geomi=0; geomi<2; geomi++)
@@ -186,7 +172,9 @@ EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom)
 				hasDimensionalCollapseEdge[geomi]=true;
 		}
 	}
-	for (it=getIterator();it<edgeList->end();it++) {
+
+	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
+	{
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		for(int geomi=0;geomi<2;geomi++){
@@ -208,8 +196,7 @@ void
 EdgeEndStar::computeEdgeEndLabels()
 {
 	// Compute edge label for each EdgeEnd
-	vector<EdgeEnd*>::iterator it;
-	for (it=getIterator(); it<edgeList->end(); it++)
+	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
 	{
 		EdgeEnd *e=*it;
 		e->computeLabel();
@@ -217,7 +204,8 @@ EdgeEndStar::computeEdgeEndLabels()
 }
 
 int
-EdgeEndStar::getLocation(int geomIndex,Coordinate& p,vector<GeometryGraph*> *geom)
+EdgeEndStar::getLocation(int geomIndex,
+	const Coordinate& p, vector<GeometryGraph*> *geom)
 {
 	// compute location only on demand
 	if (ptInAreaLocation[geomIndex]==Location::UNDEF)
@@ -232,20 +220,26 @@ bool EdgeEndStar::isAreaLabelsConsistent(){
 	return checkAreaLabelsConsistent(0);
 }
 
-bool EdgeEndStar::checkAreaLabelsConsistent(int geomIndex){
+bool
+EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
+{
 	// Since edges are stored in CCW order around the node,
-	// As we move around the ring we move from the right to the left side of the edge
-	vector<EdgeEnd*> *edges=getEdges();
+	// As we move around the ring we move from the right to
+	// the left side of the edge
+
 	// if no edges, trivially consistent
-	if (edges->size()<=0)
-		return true;
+	if (edgeMap.size()==0) return true;
+
 	// initialize startLoc to location of last L side (if any)
-	int lastEdgeIndex=(int)edges->size()-1;
-	Label *startLabel=((*edgeList)[lastEdgeIndex])->getLabel();
-	int startLoc=startLabel->getLocation(geomIndex,Position::LEFT);
+	EdgeEndStar::reverse_iterator it=rbegin();
+
+	Label *startLabel=(*it)->getLabel();
+	int startLoc=startLabel->getLocation(geomIndex, Position::LEFT);
 	Assert::isTrue(startLoc!=Location::UNDEF, "Found unlabelled area edge");
 	int currLoc=startLoc;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++) {
+
+	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
+	{
 		EdgeEnd *e=*it;
 		Label *eLabel=e->getLabel();
 		// we assume that we are only checking a area
@@ -275,9 +269,12 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	// left side of the edge
 	int startLoc=Location::UNDEF;
 
+	EdgeEndStar::iterator beginIt=begin();
+	EdgeEndStar::iterator endIt=end();
+	EdgeEndStar::iterator it;
+
 	// initialize loc to location of last L side (if any)
-	vector<EdgeEnd*>::iterator it;
-	for (it=getIterator();it<edgeList->end();it++)
+	for (EdgeEndStar::iterator it=beginIt; it!=endIt; ++it)
 	{
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
@@ -285,10 +282,13 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 			label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
 			startLoc=label->getLocation(geomIndex,Position::LEFT);
 	}
+
 	// no labelled sides found, so no labels to propagate
 	if (startLoc==Location::UNDEF) return;
+
 	int currLoc=startLoc;
-	for (it=getIterator();it<edgeList->end();it++) {
+	for (it=beginIt; it!=endIt; ++it)
+	{
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
 		// set null ON values to be in current location
@@ -298,9 +298,14 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 		// if (label.isArea())  //ORIGINAL
 		if (label->isArea(geomIndex))
 		{
-			int leftLoc=label->getLocation(geomIndex,Position::LEFT);
-			int rightLoc=label->getLocation(geomIndex,Position::RIGHT);
-			// if there is a right location, that is the next location to propagate
+			int leftLoc=label->getLocation(geomIndex,
+				Position::LEFT);
+
+			int rightLoc=label->getLocation(geomIndex,
+				Position::RIGHT);
+
+			// if there is a right location, that is the next
+			// location to propagate
 			if (rightLoc!=Location::UNDEF) {
 				if (rightLoc!=currLoc)
 					throw new TopologyException("side location conflict",&(e->getCoordinate()));
@@ -332,22 +337,11 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	}
 }
 
-int
-EdgeEndStar::findIndex(EdgeEnd *eSearch)
-{
-	getIterator();   // force edgelist to be computed
-	for (unsigned int i=0; i<edgeList->size(); ++i) {
-		EdgeEnd *e=(*edgeList)[i];
-		if (e==eSearch) return i;
-	}
-	return -1;
-}
-
 string
 EdgeEndStar::print()
 {
 	string out="EdgeEndStar:   " + getCoordinate().toString()+"\n";
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end();it++)
+	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
 	{
 		EdgeEnd *e=*it;
 		out+=e->print();
@@ -359,7 +353,13 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2005/11/29 00:48:35  strk
+ * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
+ * Restructured iterated access by use of standard ::iterator abstraction
+ * with scoped typedefs.
+ *
  * Revision 1.10  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

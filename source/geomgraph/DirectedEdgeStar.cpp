@@ -54,10 +54,11 @@ int
 DirectedEdgeStar::getOutgoingDegree()
 {
 	int degree = 0;
-	for (vector<EdgeEnd*>::iterator it=getIterator();it<edgeList->end(); ++it)
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *de=(DirectedEdge*) *it;
-		if (de->isInResult()) degree++;
+		if (de->isInResult()) ++degree;
 	}
 	return degree;
 }
@@ -66,7 +67,9 @@ int
 DirectedEdgeStar::getOutgoingDegree(EdgeRing *er)
 {
 	int degree = 0;
-	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it) {
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
+	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		if (de->getEdgeRing()==er) ++degree;
 	}
@@ -76,13 +79,16 @@ DirectedEdgeStar::getOutgoingDegree(EdgeRing *er)
 DirectedEdge*
 DirectedEdgeStar::getRightmostEdge()
 {
-	vector<EdgeEnd*> *edges=getEdges();
-	int size=(int)edges->size();
-	if (size<1) return NULL;
-//    EdgeEnd* e0=(EdgeEnd*) edges;
-    DirectedEdge *de0=(DirectedEdge*) (*edges)[0];
-	if (size==1) return de0;
-    DirectedEdge *deLast=(DirectedEdge*)(*edges)[size-1];
+	EdgeEndStar::iterator it=begin();
+	if ( it==end() ) return NULL;
+
+	DirectedEdge *de0=(DirectedEdge*) *it;
+	++it;
+	if ( it==end() ) return de0;
+
+	it=end(); --it;
+	DirectedEdge *deLast=(DirectedEdge*) *it;
+
 	int quad0=de0->getQuadrant();
 	int quad1=deLast->getQuadrant();
 	if (Quadrant::isNorthern(quad0) && Quadrant::isNorthern(quad1))
@@ -117,7 +123,8 @@ DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
 	// (i.e. for the node it is based at)
 	//delete label;
 	label=Label(Location::UNDEF);
-	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		EdgeEnd *ee=*it;
 		Edge *e=ee->getEdge();
@@ -137,7 +144,8 @@ DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
 void
 DirectedEdgeStar::mergeSymLabels()
 {
-	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	EdgeEndStar::iterator endIt=end(); 
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
@@ -151,7 +159,8 @@ DirectedEdgeStar::mergeSymLabels()
 void
 DirectedEdgeStar::updateLabelling(Label *nodeLabel)
 {
-	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		Label *deLabel=de->getLabel();
@@ -164,8 +173,11 @@ vector<DirectedEdge*>*
 DirectedEdgeStar::getResultAreaEdges()
 {
 	if (resultAreaEdgeList!=NULL) return resultAreaEdgeList;
+
 	resultAreaEdgeList=new vector<DirectedEdge*>();
-	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *de=static_cast<DirectedEdge*>(*it);
 		if (de->isInResult() || de->getSym()->isInResult())
@@ -278,20 +290,18 @@ DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
 void
 DirectedEdgeStar::linkAllDirectedEdges()
 {
-	getEdges();
+	//getEdges();
 
 	// find first area edge (if any) to start linking at
 	DirectedEdge *prevOut=NULL;
 	DirectedEdge *firstIn=NULL;
-	// link edges in CW order
 
-	/*
-	 * We must use a SIGNED integer here to be able to check for i<0
-	 * to end the loop.
-	 */
-	for(int i=edgeList->size()-1; i>=0; --i)
+	// link edges in CW order
+	EdgeEndStar::reverse_iterator rbeginIt=rbegin(); 
+	EdgeEndStar::reverse_iterator rendIt=rend(); 
+	for(EdgeEndStar::reverse_iterator it=rbeginIt; it!=rendIt; ++it)
 	{
-        	DirectedEdge *nextOut=static_cast<DirectedEdge*>((*edgeList)[i]);
+        	DirectedEdge *nextOut=static_cast<DirectedEdge*>(*it);
 		DirectedEdge *nextIn=nextOut->getSym();
 		if (firstIn==NULL) firstIn=nextIn;
 		if (prevOut!=NULL) nextIn->setNext(prevOut);
@@ -320,8 +330,9 @@ DirectedEdgeStar::findCoveredLineEdges()
 	 * - EXTERIOR if the edge is incoming
 	 */
 	int startLoc=Location::UNDEF;
-	vector<EdgeEnd*>::iterator it;
-	for (it=getIterator(); it<edgeList->end(); ++it)
+
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *nextOut=(DirectedEdge*) *it;
 		DirectedEdge *nextIn=nextOut->getSym();
@@ -346,7 +357,7 @@ DirectedEdgeStar::findCoveredLineEdges()
 	 * If L edges are found, mark them as covered if they are in the interior
 	 */
 	int currLoc=startLoc;
-	for (it=getIterator(); it<edgeList->end(); ++it)
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *nextOut=(DirectedEdge*) *it;
 		DirectedEdge *nextIn=nextOut->getSym();
@@ -364,15 +375,20 @@ DirectedEdgeStar::findCoveredLineEdges()
 void
 DirectedEdgeStar::computeDepths(DirectedEdge *de)
 {
-	int edgeIndex=findIndex(de);
+	EdgeEndStar::iterator edgeIterator=find(de);
+
 	//Label *deLabel=de->getLabel();
 	int startDepth=de->getDepth(Position::LEFT);
 	int targetLastDepth=de->getDepth(Position::RIGHT);
 
 	// compute the depths from this edge up to the end of the edge array
-	int nextDepth=computeDepths(edgeIndex+1, edgeList->size(), startDepth);
+	EdgeEndStar::iterator nextEdgeIterator=edgeIterator;
+	++nextEdgeIterator;
+	int nextDepth=computeDepths(nextEdgeIterator, end(), startDepth);
+
 	// compute the depths for the initial part of the array
-	int lastDepth=computeDepths(0,edgeIndex,nextDepth);
+	int lastDepth=computeDepths(begin(), edgeIterator, nextDepth);
+
 	if (lastDepth!=targetLastDepth)
 		throw new TopologyException("depth mismatch at ",&(de->getCoordinate()));
 //	Assert::isTrue(lastDepth==targetLastDepth, "depth mismatch at " + de->getCoordinate().toString());
@@ -384,12 +400,13 @@ DirectedEdgeStar::computeDepths(DirectedEdge *de)
  * @return the last depth assigned (from the R side of the last edge visited)
  */
 int
-DirectedEdgeStar::computeDepths(int startIndex,int endIndex,int startDepth)
+DirectedEdgeStar::computeDepths(EdgeEndStar::iterator startIt,
+	EdgeEndStar::iterator endIt, int startDepth)
 {
 	int currDepth=startDepth;
-	for (int i=startIndex; i<endIndex; ++i)
+	for (EdgeEndStar::iterator it=startIt; it!=endIt; ++it)
 	{
-        	DirectedEdge *nextDe=(DirectedEdge*)(*edgeList)[i];
+        	DirectedEdge *nextDe=(DirectedEdge*)(*it);
 		//Label *deLabel=nextDe->getLabel();
 		nextDe->setEdgeDepths(Position::RIGHT, currDepth);
 		currDepth=nextDe->getDepth(Position::LEFT);
@@ -401,7 +418,9 @@ string
 DirectedEdgeStar::print()
 {
 	string out="DirectedEdgeStar: " + getCoordinate().toString();
-	for (vector<EdgeEnd*>::iterator it=getIterator(); it<edgeList->end(); ++it)
+
+	EdgeEndStar::iterator endIt=end();
+	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *de=(DirectedEdge*) *it;
 		out+="out ";
@@ -418,7 +437,13 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/11/29 00:48:35  strk
+ * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
+ * Restructured iterated access by use of standard ::iterator abstraction
+ * with scoped typedefs.
+ *
  * Revision 1.7  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to
