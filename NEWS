@@ -30,7 +30,6 @@ Changes in 3.0.0
 - (Partial) Detailed list of changes:
 	- Changed SegmentNode to contain a *real* Coordinate (not a pointer)
   	  to reduce construction costs.
-	- Cached number of points in Edge
 	- Changed geomgraph nodeMap to use Coordinate pointers as keys
 	- Envelope destructor made non-virtual to give compiler more static
 	  binding options.
