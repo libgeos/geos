@@ -12,10 +12,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ * 
+ * TODO:
+ * 	- avoid heap allocation for LineSegment and Coordinate
+ *
  **********************************************************************/
 
 #include <geos/geosAlgorithm.h>
-#include <stdio.h>
 #include <typeinfo>
 
 namespace geos {
@@ -203,7 +207,7 @@ void
 MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
 {
 	minWidth=DoubleInfinity;
-	int currMaxIndex=1;
+	unsigned int currMaxIndex=1;
 	LineSegment seg;
 
 	// compute the max distance for all segments in the ring, and pick the minimum
@@ -215,19 +219,21 @@ MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
 	}
 }
 
-int
-MinimumDiameter::findMaxPerpDistance(const CoordinateSequence *pts, LineSegment* seg, int startIndex)
+unsigned int
+MinimumDiameter::findMaxPerpDistance(const CoordinateSequence *pts,
+		LineSegment* seg, unsigned int startIndex)
 {
 	double maxPerpDistance=seg->distancePerpendicular(pts->getAt(startIndex));
 	double nextPerpDistance = maxPerpDistance;
-	int maxIndex = startIndex;
-	int nextIndex = maxIndex;
+	unsigned int maxIndex = startIndex;
+	unsigned int nextIndex = maxIndex;
 	while (nextPerpDistance >= maxPerpDistance) {
 		maxPerpDistance = nextPerpDistance;
 		maxIndex=nextIndex;
 		nextIndex=getNextIndex(pts, maxIndex);
 		nextPerpDistance = seg->distancePerpendicular(pts->getAt(nextIndex));
 	}
+
 	// found maximum width for this segment - update global min dist if appropriate
 	if (maxPerpDistance < minWidth) {
 		minPtIndex = maxIndex;
@@ -242,11 +248,11 @@ MinimumDiameter::findMaxPerpDistance(const CoordinateSequence *pts, LineSegment*
 	return maxIndex;
 }
 
-int
-MinimumDiameter::getNextIndex(const CoordinateSequence *pts, int index)
+unsigned int
+MinimumDiameter::getNextIndex(const CoordinateSequence *pts,
+	unsigned int index)
 {
-	index++;
-	if (index >= pts->getSize()) index = 0;
+	if (++index >= pts->getSize()) index = 0;
 	return index;
 }
 
@@ -254,6 +260,9 @@ MinimumDiameter::getNextIndex(const CoordinateSequence *pts, int index)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/11/29 15:16:44  strk
+ * Fixed sign-related warnings and signatures.
+ *
  * Revision 1.9  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there

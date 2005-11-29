@@ -629,15 +629,20 @@ private:
 	void computeMinimumDiameter();
 	void computeWidthConvex(const Geometry* geom);
 	/**
-	* Compute the width information for a ring of {@link Coordinate}s.
-	* Leaves the width information in the instance variables.
-	*
-	* @param pts
-	* @return
-	*/
+	 * Compute the width information for a ring of {@link Coordinate}s.
+	 * Leaves the width information in the instance variables.
+	 *
+	 * @param pts
+	 * @return
+	 */
 	void computeConvexRingMinDiameter(const CoordinateSequence *pts);
-	int findMaxPerpDistance(const CoordinateSequence* pts, LineSegment* seg, int startIndex);
-	static int getNextIndex(const CoordinateSequence* pts, int index);
+
+	unsigned int findMaxPerpDistance(const CoordinateSequence* pts,
+		LineSegment* seg, unsigned int startIndex);
+
+	static unsigned int getNextIndex(const CoordinateSequence* pts,
+		unsigned int index);
+
 public:
 	~MinimumDiameter();
 
@@ -695,6 +700,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/11/29 15:16:44  strk
+ * Fixed sign-related warnings and signatures.
+ *
  * Revision 1.17  2005/11/24 23:07:00  strk
  * CentroidLine made concrete class (only destructor was virtual) - avoided heap allocation for owned Coordinate centSum
  *
