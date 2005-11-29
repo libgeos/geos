@@ -60,9 +60,9 @@ TopologyLocation::TopologyLocation(const TopologyLocation &gl):
 }
 
 int
-TopologyLocation::get(int posIndex) const
+TopologyLocation::get(unsigned int posIndex) const
 {
-	if (posIndex< (int)location.size()) return location[posIndex];
+	if (posIndex<location.size()) return location[posIndex];
 	return Location::UNDEF;
 }
 
@@ -72,7 +72,7 @@ TopologyLocation::get(int posIndex) const
 bool
 TopologyLocation::isNull() const
 {
-	for (unsigned int i=0; i<location.size(); i++) {
+	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]!=Location::UNDEF) return false;
 	}
 	return true;
@@ -84,7 +84,7 @@ TopologyLocation::isNull() const
 bool
 TopologyLocation::isAnyNull() const
 {
-	for (unsigned int i=0; i<location.size(); i++) {
+	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]==Location::UNDEF) return true;
 	}
 	return false;
@@ -120,7 +120,7 @@ TopologyLocation::flip()
 void
 TopologyLocation::setAllLocations(int locValue)
 {
-	for (unsigned int i=0; i<location.size(); i++) {
+	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
 		location[i]=locValue;
 	}
 }
@@ -128,13 +128,13 @@ TopologyLocation::setAllLocations(int locValue)
 void
 TopologyLocation::setAllLocationsIfNull(int locValue)
 {
-	for (unsigned int i=0; i<location.size(); i++) {
+	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]==Location::UNDEF) location[i]=locValue;
 	}
 }
 
 void
-TopologyLocation::setLocation(int locIndex, int locValue)
+TopologyLocation::setLocation(unsigned int locIndex, int locValue)
 {
 	location[locIndex]=locValue;
 }
@@ -162,7 +162,7 @@ TopologyLocation::setLocations(int on, int left, int right)
 bool
 TopologyLocation::allPositionsEqual(int loc) const
 {
-	for (unsigned int i=0; i<location.size(); i++) {
+	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]!=loc) return false;
 	}
 	return true;
@@ -176,13 +176,15 @@ void
 TopologyLocation::merge(const TopologyLocation &gl)
 {
 	// if the src is an Area label & and the dest is not, increase the dest to be an Area
-	if (gl.location.size()>location.size()) {
+	unsigned int sz=location.size();
+	unsigned int glsz=gl.location.size();
+	if (glsz>sz) {
 		location.resize(3);
 		location[Position::LEFT]=Location::UNDEF;
 		location[Position::RIGHT]=Location::UNDEF;
 	}
-	for (unsigned int i=0; i<location.size(); i++) {
-		if (location[i]==Location::UNDEF && i<gl.location.size())
+	for (unsigned int i=0; i<sz; ++i) {
+		if (location[i]==Location::UNDEF && i<glsz)
 			location[i]=gl.location[i];
 	}
 }
@@ -201,6 +203,9 @@ TopologyLocation::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/11/29 15:45:39  strk
+ * Fixed signedness of TopologyLocation methods, cleanups.
+ *
  * Revision 1.4  2005/11/15 18:30:59  strk
  * Removed dead code
  *

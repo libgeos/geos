@@ -92,7 +92,7 @@ public:
 	TopologyLocation(int on, int left, int right);
 	TopologyLocation(int on);
 	TopologyLocation(const TopologyLocation &gl);
-	int get(int posIndex) const;
+	int get(unsigned int posIndex) const;
 	bool isNull() const;
 	bool isAnyNull() const;
 	bool isEqualOnSide(const TopologyLocation &le, int locIndex) const;
@@ -101,7 +101,7 @@ public:
 	void flip();
 	void setAllLocations(int locValue);
 	void setAllLocationsIfNull(int locValue);
-	void setLocation(int locIndex, int locValue);
+	void setLocation(unsigned int locIndex, int locValue);
 	void setLocation(int locValue);
 	const vector<int> &getLocations() const;
 	void setLocations(int on, int left, int right);
@@ -903,6 +903,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2005/11/29 15:45:39  strk
+ * Fixed signedness of TopologyLocation methods, cleanups.
+ *
  * Revision 1.24  2005/11/29 14:39:46  strk
  * Removed number of points cache in Edge, replaced with local caches.
  *
