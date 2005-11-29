@@ -67,8 +67,7 @@ Edge::Edge(CoordinateSequence* newPts, Label *newLabel):
 	env(NULL),
 	isIsolatedVar(true),
 	depth(),
-	depthDelta(0),
-	npts(pts->getSize())
+	depthDelta(0)
 {
 }
 
@@ -81,15 +80,14 @@ Edge::Edge(CoordinateSequence* newPts):
 	isIsolatedVar(true),
 	//depth(new Depth()),
 	depth(),
-	depthDelta(0),
-	npts(pts->getSize())
+	depthDelta(0)
 {
 }
 
 int
 Edge::getNumPoints() const
 {
-	return npts;
+	return pts->getSize();
 }
 
 void
@@ -141,7 +139,7 @@ Edge::setDepthDelta(int newDepthDelta)
 int
 Edge::getMaximumSegmentIndex() const
 {
-	return npts-1;
+	return getNumPoints()-1;
 }
 
 EdgeIntersectionList&
@@ -160,7 +158,7 @@ Edge::getMonotoneChainEdge()
 bool
 Edge::isClosed() const
 {
-	return pts->getAt(0)==pts->getAt(npts-1);
+	return pts->getAt(0)==pts->getAt(getNumPoints()-1);
 }
 
 /*
@@ -171,7 +169,7 @@ bool
 Edge::isCollapsed() const
 {
 	if (!label->isArea()) return false;
-	if (npts!= 3) return false;
+	if (getNumPoints()!= 3) return false;
 	if (pts->getAt(0)==pts->getAt(2) ) return true;
 	return false;
 }
@@ -206,18 +204,21 @@ Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
  * to use the higher of the two possible segmentIndexes
  */
 void
-Edge::addIntersection(LineIntersector *li,int segmentIndex,int geomIndex,int intIndex)
+Edge::addIntersection(LineIntersector *li,
+	int segmentIndex, int geomIndex, int intIndex)
 {
 #if DEBUG
 	cerr<<"["<<this<<"] Edge::addIntersection("<<li->toString()<<", "<<segmentIndex<<", "<<geomIndex<<", "<<intIndex<<") called"<<endl;
 #endif
 	const Coordinate& intPt=li->getIntersection(intIndex);
-	int normalizedSegmentIndex=segmentIndex;
+	unsigned int normalizedSegmentIndex=segmentIndex;
 	double dist=li->getEdgeDistance(geomIndex,intIndex);
 
 	// normalize the intersection point location
-	int nextSegIndex=normalizedSegmentIndex+1;
-	if (nextSegIndex<npts) {
+	unsigned int nextSegIndex=normalizedSegmentIndex+1;
+	unsigned int npts=getNumPoints();
+	if (nextSegIndex<npts)
+	{
 		const Coordinate& nextPt=pts->getAt(nextSegIndex);
         // Normalize segment index if intPt falls on vertex
         // The check for point equality is 2D only - Z values are ignored
@@ -299,11 +300,14 @@ Edge::isPointwiseEqual(const Edge *e) const
 #if DEBUG > 2
 	cerr<<"Edge::isPointwiseEqual call"<<endl;
 #endif
-	if (npts!=e->npts) return false;
+	unsigned int npts=getNumPoints();
+	unsigned int enpts=e->getNumPoints();
+	if (npts!=enpts) return false;
 #if DEBUG
 	cerr<<"Edge::isPointwiseEqual scanning "<<e->npts()<<"x"<<npts<<" points"<<endl;
 #endif
-	for (int i=0;i<npts;i++) {
+	for (unsigned int i=0; i<npts; ++i)
+	{
 		if (!pts->getAt(i).equals2D(e->pts->getAt(i))) {
 			return false;
 		}
@@ -316,7 +320,9 @@ Edge::print() const
 {
 	string out="edge " + name + ": ";
 	out+="LINESTRING (";
-	for(int i=0; i<npts; i++) {
+	unsigned int npts=getNumPoints();
+	for (unsigned int i=0; i<npts; ++i)
+	{
 		if (i>0) out+=",";
 		out+=pts->getAt(i).toString();
 	}
@@ -331,8 +337,10 @@ string
 Edge::printReverse() const
 {
 	string out="edge " + name + ": ";
-	for(int i=npts-1; i>=0; i--) {
-		out+=pts->getAt(i).toString() + " ";
+	unsigned int npts=getNumPoints();
+	for (unsigned int i=npts; i>0; --i)
+	{
+		out+=pts->getAt(i-1).toString() + " ";
 	}
 	out+="\n";
 	return out;
@@ -345,7 +353,8 @@ Edge::getEnvelope()
 	if (env==NULL)
 	{
 		env=new Envelope();
-		for (int i = 0; i<npts; i++)
+		unsigned int npts=getNumPoints();
+		for (unsigned int i = 0; i<npts; ++i)
 		{
 			env->expandToInclude(pts->getAt(i));
 		}
@@ -357,6 +366,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/11/29 14:39:46  strk
+ * Removed number of points cache in Edge, replaced with local caches.
+ *
  * Revision 1.20  2005/11/25 11:30:38  strk
  * Fix in ::equals() - this finally passes testLeaksBig.xml tests
  *

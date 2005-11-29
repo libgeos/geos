@@ -891,7 +891,6 @@ private:
 	bool isIsolatedVar;
 	Depth depth;
 	int depthDelta;   // the change in area depth from the R to L side of this edge
-	int npts;
 };
 
 
@@ -904,6 +903,9 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2005/11/29 14:39:46  strk
+ * Removed number of points cache in Edge, replaced with local caches.
+ *
  * Revision 1.23  2005/11/29 00:48:35  strk
  * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
  * Restructured iterated access by use of standard ::iterator abstraction
