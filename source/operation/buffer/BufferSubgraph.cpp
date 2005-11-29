@@ -105,8 +105,7 @@ void BufferSubgraph::add(Node *node, vector<Node*> *nodeStack){
 }
 
 void BufferSubgraph::clearVisitedEdges() {
-	unsigned int size = dirEdgeList->size();
-	for(int i=0; i<size; ++i)
+	for(unsigned int i=0, sz=dirEdgeList->size(); i<sz; ++i)
 	{
 		DirectedEdge *de=(*dirEdgeList)[i];
 		de->setVisited(false);
@@ -283,6 +282,10 @@ BufferSubgraph::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12.2.1.2.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
  * Revision 1.12.2.1  2005/06/30 18:31:21  strk
  * Ported SubgraphDepthLocator optimizations from JTS code
  *

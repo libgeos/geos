@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3.2.1.2.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
  * Revision 1.3.2.1  2005/05/23 18:41:51  strk
  * Replaced sprintf uses with ostringstream
  *
@@ -129,4 +133,52 @@ string DefaultCoordinateSequence::toString() const {
 DefaultCoordinateSequence::~DefaultCoordinateSequence() {
 	delete vect;
 }
+
+double
+DefaultCoordinateSequence::getOrdinate(unsigned int index, unsigned int ordinateIndex) const
+{
+
+#if PARANOIA_LEVEL > 0
+	if ( index < 0 || index >= vect->size() ) 
+	throw IllegalArgumentException("Coordinate number out of range");
+#endif
+
+	switch (ordinateIndex)
+	{
+		case CoordinateSequence::X:
+			return (*vect)[index].x;
+		case CoordinateSequence::Y:
+			return (*vect)[index].y;
+		case CoordinateSequence::Z:
+			return (*vect)[index].z;
+		default:
+			return DoubleNotANumber;
+	}
 }
+
+void
+DefaultCoordinateSequence::setOrdinate(unsigned int index, unsigned int ordinateIndex,
+	double value)
+{
+
+#if PARANOIA_LEVEL > 0
+	if ( index < 0 || index >= vect->size() ) 
+	throw IllegalArgumentException("Coordinate number out of range");
+#endif
+
+	switch (ordinateIndex)
+	{
+		case CoordinateSequence::X:
+			(*vect)[index].x = value;
+		case CoordinateSequence::Y:
+			(*vect)[index].y = value;
+		case CoordinateSequence::Z:
+			(*vect)[index].z = value;
+		default:
+			return;
+	}
+}
+
+
+
+} // namespace geos

@@ -127,6 +127,9 @@ EXTERNAL_SOURCES =  \
 	../io/StringTokenizer.cpp \
 	../io/WKTReader.cpp \
 	../io/WKTWriter.cpp \
+	../io/WKBReader.cpp \
+	../io/WKBWriter.cpp \
+	../io/ByteOrderValues.cpp \
 	../io/Writer.cpp \
 	../io/Unload.cpp \
 	../operation/GeometryGraphOperation.cpp \

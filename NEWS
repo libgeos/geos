@@ -1,8 +1,12 @@
-Changes in 2.1.5CVS
+Changes in 2.2.0CVS
 
 - Performance improvement in OverlayOp::insertUniqueEdge()
 - CoordinateSequence copy removal in EdgeRing
 - Minor memory allocation improvements 
+- Higher dimensions interface for CoordinateSequence
+- Added getCoordinatesRO for Point class
+- NEW WKB IO
+- NEW Simplified and stabler C API 
 
 Changes in 2.1.4
 

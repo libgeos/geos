@@ -154,10 +154,20 @@ Point::getGeometryTypeId() const {
 	return GEOS_POINT;
 }
 
+const CoordinateSequence *
+Point::getCoordinatesRO() const
+{
+	return coordinates;
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31.2.1.2.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
  * Revision 1.31.2.1  2005/05/23 16:02:33  strk
  * Backported segfault fix in isEmpty
  *
