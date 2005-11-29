@@ -145,6 +145,9 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3.2.1  2005/11/29 18:13:50  strk
+ * Forgot to add these as well
+ *
  * Revision 1.3  2005/04/29 17:40:36  strk
  * Updated Doxygen documentation and some Copyright headers.
  *
