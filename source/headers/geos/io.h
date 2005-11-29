@@ -31,6 +31,9 @@ using namespace std;
 
 namespace geos {
 
+/// An unsigned char
+typedef unsigned char byte;
+
 /**
  * \class ParseException io.h geos.h
  * \brief Notifies a parsing error
@@ -248,15 +251,15 @@ public:
 
 	ByteOrderDataInStream(istream *s=NULL):
 		byteOrder(getMachineByteOrder()),
-		stream(s) {};
-	~ByteOrderDataInStream() {};
+		stream(s) {}
+	~ByteOrderDataInStream() {}
 
 	/**
 	 * Allows a single ByteOrderDataInStreamT to be reused
 	 * on multiple istream.
 	 */
-	void setInStream(istream *s) { stream=s; };
-	void setOrder(int order) { byteOrder=order; };
+	void setInStream(istream *s) { stream=s; }
+	void setOrder(int order) { byteOrder=order; }
 
 	byte readByte() // throws ParseException
 	{
@@ -471,6 +474,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2005/11/29 13:39:56  strk
+ * Moved byte typedef from geom.h to io.h.
+ * Removed useless commas at inlined funx end.
+ * Changed CoordinateSequenceFactory::create(siz,dims) to use unsigned for dims.
+ *
  * Revision 1.17  2005/10/19 12:59:35  strk
  * Added input stream checks in ByteOrderDataInStream, throwing ParseException on unexpected EOF
  *

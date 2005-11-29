@@ -43,9 +43,6 @@ class GeometryFilter;
 class IntersectionMatrix;
 class Point;
 
-/// An unsigned char
-typedef unsigned char byte;
-
 /// Return current GEOS version
 string geosversion();
 
@@ -822,7 +819,7 @@ public:
 	DefaultCoordinateSequence(vector<Coordinate> *coords);
 
 	/// Construct sequence allocating space for n coordinates
-	DefaultCoordinateSequence(int n);
+	DefaultCoordinateSequence(unsigned int n);
 
 	~DefaultCoordinateSequence();
 
@@ -872,7 +869,7 @@ public:
 	 * @param dimension the dimension of the coordinates in the sequence
 	 * 	(if user-specifiable, otherwise ignored)
 	 */
-	virtual CoordinateSequence *create(unsigned int size, int dimension)
+	virtual CoordinateSequence *create(unsigned int size, unsigned int dimension)
 		const=0;
 };
 
@@ -896,8 +893,13 @@ public:
 		return new DefaultCoordinateSequence(coords);
 	}
 
+	CoordinateSequence *create(vector<Coordinate> *coords, int dims) const
+	{
+		return new DefaultCoordinateSequence(coords);
+	}
+
    	/** @see CoordinateSequenceFactory::create(unsigned int, int) */
-	CoordinateSequence *create(unsigned int size, int dimension=3) const
+	CoordinateSequence *create(unsigned int size, unsigned int dimension=3) const
 	{
 		/* DefaultCoordinateSequence only accepts 3d Coordinates */
 		return new DefaultCoordinateSequence(size);
@@ -2622,6 +2624,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.54  2005/11/29 13:39:56  strk
+ * Moved byte typedef from geom.h to io.h.
+ * Removed useless commas at inlined funx end.
+ * Changed CoordinateSequenceFactory::create(siz,dims) to use unsigned for dims.
+ *
  * Revision 1.53  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
