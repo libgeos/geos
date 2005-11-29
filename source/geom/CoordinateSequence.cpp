@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -125,12 +126,15 @@ bool CoordinateSequence::equals(CoordinateSequence *cl1,CoordinateSequence *cl2)
 }
 
 /** Add an array of coordinates
-* @param vc The coordinates
-* @param allowRepeated if set to false, repeated coordinates are collapsed
-* @return true (as by general collection contract)
-*/
-void CoordinateSequence::add(const vector<Coordinate>* vc,bool allowRepeated) {
-	for(int i=0;i<(int)vc->size();i++) {
+ * @param vc The coordinates
+ * @param allowRepeated if set to false, repeated coordinates are collapsed
+ * @return true (as by general collection contract)
+ */
+void
+CoordinateSequence::add(const vector<Coordinate>* vc,bool allowRepeated)
+{
+	unsigned int size=vc->size();
+	for(unsigned int i=0; i<size; i++) {
 		add((*vc)[i],allowRepeated);
 	}
 }
@@ -140,7 +144,7 @@ void CoordinateSequence::add(const vector<Coordinate>* vc,bool allowRepeated) {
 * @param allowRepeated if set to false, repeated coordinates are collapsed
 * @return true (as by general collection contract)
 */
-void CoordinateSequence::add(const Coordinate& c,bool allowRepeated) {
+void CoordinateSequence::add(const Coordinate& c, bool allowRepeated) {
 	if (!allowRepeated) {
 		if (getSize()>=1) {
 			const Coordinate& last=getAt(getSize()-1);
@@ -198,6 +202,9 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6.2.1  2005/06/23 11:20:38  strk
+ * Minor performance improvements
+ *
  * Revision 1.6  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *

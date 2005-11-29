@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -15,7 +16,7 @@
 
 #include <geos/geosAlgorithm.h>
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 
 namespace geos {
 
@@ -44,18 +45,21 @@ int CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,con
 }
 
 /**
-* Test whether a point lies inside a ring.
-* The ring may be oriented in either direction.
-* If the point lies on the ring boundary the result of this method is unspecified.
-* <p>
-* This algorithm does not attempt to first check the point against the envelope
-* of the ring.
-*
-* @param p point to check for ring inclusion
-* @param ring assumed to have first point identical to last point
-* @return <code>true</code> if p is inside ring
-*/
-bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring) {
+ * Test whether a point lies inside a ring.
+ * The ring may be oriented in either direction.
+ * If the point lies on the ring boundary the result of this method is
+ * unspecified.
+ * 
+ * This algorithm does not attempt to first check the point against the envelope
+ * of the ring.
+ *
+ * @param p point to check for ring inclusion
+ * @param ring assumed to have first point identical to last point
+ * @return <code>true</code> if p is inside ring
+ */
+bool
+CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
+{
 	int i;
 	int i1;       // point index; i1 = i-1
 	double xInt;  // x intersection of segment with ray
@@ -65,13 +69,15 @@ bool CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* 
 	double x2;
 	double y2;
 	int nPts=ring->getSize();
+
 	/*
-	*  For each segment l = (i-1, i), see if it crosses ray from test point in positive x direction.
-	*/
+	 * For each segment l = (i-1, i), see if it crosses ray from test
+	 * point in positive x direction.
+	 */
 	for(i=1;i<nPts;i++) {
 		i1 = i - 1;
-		Coordinate p1=ring->getAt(i);
-		Coordinate p2=ring->getAt(i1);
+		const Coordinate &p1=ring->getAt(i);
+		const Coordinate &p2=ring->getAt(i1);
 		x1 = p1.x - p.x;
 		y1 = p1.y - p.y;
 		x2 = p2.x - p.x;
@@ -113,13 +119,17 @@ bool
 CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 {
 	RobustLineIntersector lineIntersector;
-	for(int i=1;i<pt->getSize();i++) {
-		Coordinate p0=pt->getAt(i-1);
-		Coordinate p1=pt->getAt(i);	
-		lineIntersector.computeIntersection(p, p0, p1);
+	int ptsize = pt->getSize();
+	if ( ptsize == 0 ) return false;
+
+	const Coordinate *pp=&(pt->getAt(0));
+	for(int i=1; i<ptsize; i++) {
+		const Coordinate &p1=pt->getAt(i);	
+		lineIntersector.computeIntersection(p, *pp, p1);
 		if (lineIntersector.hasIntersection()) {
 			return true;
 		}
+		pp=&p1;
 	}
 	return false;
 }
@@ -370,6 +380,18 @@ double CGAlgorithms::length(const CoordinateSequence* pts) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19.2.4  2005/06/23 11:20:38  strk
+ * Minor performance improvements
+ *
+ * Revision 1.19.2.3  2005/06/23 10:53:14  strk
+ * Removed useless Coordinate copy in CGAlgorithms::isPointInRing()
+ *
+ * Revision 1.19.2.2  2005/05/23 17:29:11  strk
+ * Removed useless Coordinate copies in CGAlgorithms::isOnLine()
+ *
+ * Revision 1.19.2.1  2005/05/23 17:10:08  strk
+ * Stricter C++ syntax (math.h=>cmath, ieeefp.h in "C" block)
+ *
  * Revision 1.19  2004/11/20 15:39:57  strk
  * Reduced HEAP allocations.
  *

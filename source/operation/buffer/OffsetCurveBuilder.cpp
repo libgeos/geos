@@ -5,68 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.15  2004/12/08 13:54:44  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.14  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.13  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.12  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.11  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.10  2004/05/27 08:37:16  strk
- * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
- *
- * Revision 1.9  2004/05/26 19:48:19  strk
- * Changed abs() to fabs() when working with doubles.
- * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
- *
- * Revision 1.8  2004/05/19 13:40:49  strk
- * Fixed bug in ::addCircle
- *
- * Revision 1.7  2004/05/05 13:08:01  strk
- * Leaks fixed, explicit allocations/deallocations reduced.
- *
- * Revision 1.6  2004/04/20 10:58:04  strk
- * More memory leaks removed.
- *
- * Revision 1.5  2004/04/19 16:14:52  strk
- * Some memory leaks plugged in noding algorithms.
- *
- * Revision 1.4  2004/04/19 15:14:46  strk
- * Added missing virtual destructor in SpatialIndex class.
- * Memory leaks fixes. Const and throw specifications added.
- *
- * Revision 1.3  2004/04/16 13:03:17  strk
- * More leaks fixed
- *
- * Revision 1.2  2004/04/16 12:48:07  strk
- * Leak fixes.
- *
- * Revision 1.1  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/opBuffer.h>
 
@@ -173,7 +119,9 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts, int side, d
 	}
 	// optimize creating ring for for zero distance
 	if (distance==0.0) {
-		lineList->push_back(inputPts->clone());
+		ptLists.push_back(ptList);
+		ptList = inputPts->clone();
+		lineList->push_back(ptList);
 		return lineList;
 	}
 	computeRingBufferCurve(inputPts, side);
@@ -497,4 +445,65 @@ void OffsetCurveBuilder::addSquare(const Coordinate &p, double distance){
 	addPt(*(new Coordinate(p.x-distance, p.y+distance)));
 	addPt(*(new Coordinate(p.x+distance, p.y+distance)));
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.15.2.1  2005/05/23 16:03:37  strk
+ * back-ported memleak plug in getRingCurve()
+ *
+ * Revision 1.15  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.14  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.13  2004/07/13 08:33:53  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.12  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.11  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.10  2004/05/27 08:37:16  strk
+ * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
+ *
+ * Revision 1.9  2004/05/26 19:48:19  strk
+ * Changed abs() to fabs() when working with doubles.
+ * Used dynamic_cast<> instead of typeid() when JTS uses instanceof.
+ *
+ * Revision 1.8  2004/05/19 13:40:49  strk
+ * Fixed bug in ::addCircle
+ *
+ * Revision 1.7  2004/05/05 13:08:01  strk
+ * Leaks fixed, explicit allocations/deallocations reduced.
+ *
+ * Revision 1.6  2004/04/20 10:58:04  strk
+ * More memory leaks removed.
+ *
+ * Revision 1.5  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
+ * Revision 1.4  2004/04/19 15:14:46  strk
+ * Added missing virtual destructor in SpatialIndex class.
+ * Memory leaks fixes. Const and throw specifications added.
+ *
+ * Revision 1.3  2004/04/16 13:03:17  strk
+ * More leaks fixed
+ *
+ * Revision 1.2  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
+ * Revision 1.1  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+
