@@ -340,7 +340,7 @@ private:
  */
 // Define the following to make assignments and copy constructions
 // NON-inline (will let profilers report usages)
-#define PROFILE_COORDINATE_COPIES 1
+//#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
 public:
 	//void setNull(void);
@@ -2469,6 +2469,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34.2.2.2.3  2005/11/29 17:52:21  strk
+ * undef PROFILE_COORDINATE_COPIES (was introduced by previous commit, to easy profiling)
+ *
  * Revision 1.34.2.2.2.2  2005/11/29 17:51:15  strk
  * Forgot to add the capi/ dir
  *
