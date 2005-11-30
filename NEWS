@@ -1,4 +1,4 @@
-Changes in 2.2.0CVS
+Changes in 2.2.0
 
 - Performance improvement in OverlayOp::insertUniqueEdge()
 - CoordinateSequence copy removal in EdgeRing
