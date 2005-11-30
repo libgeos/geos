@@ -1056,7 +1056,7 @@ main()
 		delete exc;
 		exit(1);
 	}
-	catch (exception e)
+	catch (exception &e)
 	{
 		cerr <<"Standard exception thrown: "<<e.what()<<endl;
 		exit(1);
@@ -1078,6 +1078,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2005/11/30 11:27:07  strk
+ * catch std::exception by ref
+ *
  * Revision 1.34  2005/11/30 11:25:12  strk
  * includes cleanup
  *
