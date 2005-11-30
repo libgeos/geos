@@ -5,3 +5,4 @@ Makefile
 geostest
 *.lo
 *.la
+geos_c.h
