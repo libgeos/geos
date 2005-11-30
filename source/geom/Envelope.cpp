@@ -417,7 +417,7 @@ bool Envelope::intersects(const Coordinate& other) const {
 }
 
 /**
- * @deprecated Use #intersects instead.
+ * @deprecated Use intersects instead.
  */
 bool Envelope::overlaps(const Coordinate& p) const {
 	return intersects(p);
@@ -438,7 +438,7 @@ Envelope::intersects(double x, double y) const
 }
 
 /**
-* @deprecated Use #intersects instead.
+* @deprecated Use intersects instead.
 */
 bool Envelope::overlaps(double x, double y) const {
 	return intersects(x,y);
@@ -465,7 +465,7 @@ Envelope::intersects(const Envelope* other) const
 }
 
 /**
-* @deprecated Use #intersects instead. In the future, #overlaps may be
+* @deprecated Use intersects instead. In the future, overlaps may be
 * changed to be a true overlap check; that is, whether the intersection is
 * two-dimensional.
 */
@@ -532,6 +532,9 @@ int Envelope::hashCode() const{
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17.2.1.2.1  2005/11/30 11:18:07  strk
+ * Fixed doxygen warnings
+ *
  * Revision 1.17.2.1  2005/05/23 18:41:51  strk
  * Replaced sprintf uses with ostringstream
  *
