@@ -28,12 +28,11 @@
  *
  **********************************************************************/
 
-#include <stdio.h>
+#include <sstream>
+#include <iomanip>
 #include <geos.h>
 #include <geos/opLinemerge.h>
 #include <geos/opPolygonize.h>
-//#include <sstream>
-#include <iomanip>
 
 using namespace geos;
 
@@ -1079,6 +1078,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2005/11/30 11:25:12  strk
+ * includes cleanup
+ *
  * Revision 1.33  2005/09/27 16:20:43  strk
  * Reverted previous change, fixed the bug by turning WKBReader.factory
  * into a reference rather then a real object. ABI still breaks, but API
