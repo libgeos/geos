@@ -36,9 +36,39 @@ namespace geos {
  *
  * \section intro_sec Introduction
  *
- * Geometry Engine Open Source is a C++ port of the Java Topology Suite.
+ * Geometry Engine Open Source is a C++ port of the Java Topology Suite
+ * released under the LGPL license.
+ * It has interfaces for C++, C and python (though swig).
  *
  * \section getstart_sec Getting Started
+ *
+ * The recommended low-level interface to the GEOS library
+ * is the simplified \ref c_iface. This will ensure stability of the
+ * API and the ABI of the library during performance improvements
+ * that will likely change classes definitions.
+ *
+ * If you prefer troubles you can use the \ref cpp_iface.
+ */
+
+/** \page c_iface C wrapper interface
+ *
+ * \section Overview
+ *
+ * This is the preferred access method for GEOS.
+ *
+ * It is designed to keep binary compatibility across releases.
+ *
+ * \section Usage
+ *
+ * In order to use the C-API of geos you must link your code against
+ * libgeos_c.so and include the geos_c.h header file, which also contain
+ * function-level documentation.
+ *
+ */
+
+/** \page cpp_iface C++ interface
+ *
+ * \section Overview
  *
  * Main class is geos::Geometry, from which all geometry types
  * derive.
@@ -60,6 +90,8 @@ namespace geos {
  *
  * For WKT input/output you can use geos::WKTReader and geos::WKTWriter
  *
+ * For WKB input/output you can use geos::WKBReader and geos::WKBWriter
+ *
  * \section exc_sect Exceptions
  *
  * Internal exceptions are thrown as pointers to geos::GEOSException.
@@ -69,6 +101,8 @@ namespace geos {
  * to catch both if you care (this might change in the future)
  *
  */ 
+
+
 
 
 /*
@@ -896,6 +930,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.72.2.5.2.1  2005/11/30 12:33:23  strk
+ * Updated Doxygen doc to reccommend use of the C API.
+ *
  * Revision 1.72.2.5  2005/11/11 12:05:50  strk
  * wrapped boolean expression in parentesis, as suggested by compiler
  *
