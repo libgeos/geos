@@ -10,6 +10,7 @@ Options:
      [--version]
      [--libs]
      [--cflags]
+     [--ldflags]
      [--includes]
      [--jtsport]
 EOF
@@ -35,6 +36,9 @@ case $1 in
       ;;
     --libs)
       echo -L@prefix@/lib -lgeos
+      ;;
+    --ldflags)
+      echo -L@prefix@/lib
       ;;
     --includes)
       echo @prefix@/include
