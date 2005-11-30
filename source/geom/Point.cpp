@@ -5,82 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.31  2004/11/23 16:22:49  strk
- * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
- *
- * Revision 1.30  2004/09/13 12:39:14  strk
- * Made Point and MultiPoint subject to Validity tests.
- *
- * Revision 1.29  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.28  2004/07/06 17:58:22  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.27  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.26  2004/07/02 14:27:32  strk
- * Added deep-copy / take-ownerhship for Point type.
- *
- * Revision 1.25  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.24  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.23  2004/06/28 21:11:43  strk
- * Moved getGeometryTypeId() definitions from geom.h to each geometry module.
- * Added holes argument check in Polygon.cpp.
- *
- * Revision 1.22  2004/04/16 14:12:52  strk
- * Memory leak fix in copy constructor
- *
- * Revision 1.21  2004/04/16 08:35:52  strk
- * Memory leaks fixed and const correctness applied for Point class.
- *
- * Revision 1.20  2004/04/13 14:45:54  strk
- * Removed faulty assert in constructor
- *
- * Revision 1.19  2004/04/10 22:41:24  ybychkov
- * "precision" upgraded to JTS 1.4
- *
- * Revision 1.18  2004/03/31 07:50:37  ybychkov
- * "geom" partially upgraded to JTS 1.4
- *
- * Revision 1.17  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geom.h>
 #include <geos/util.h>
@@ -127,7 +59,8 @@ int Point::getNumPoints() const {
 }
 
 bool Point::isEmpty() const {
-	return (*getCoordinate())==Coordinate::getNull();
+	//return (*getCoordinate())==Coordinate::getNull();
+	return coordinates->isEmpty();
 }
 
 bool Point::isSimple() const {return true;}
@@ -220,5 +153,34 @@ GeometryTypeId
 Point::getGeometryTypeId() const {
 	return GEOS_POINT;
 }
+
+const CoordinateSequence *
+Point::getCoordinatesRO() const
+{
+	return coordinates;
 }
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.31.2.1.2.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
+ * Revision 1.31.2.1  2005/05/23 16:02:33  strk
+ * Backported segfault fix in isEmpty
+ *
+ * Revision 1.31  2004/11/23 16:22:49  strk
+ * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
+ *
+ * Revision 1.30  2004/09/13 12:39:14  strk
+ * Made Point and MultiPoint subject to Validity tests.
+ *
+ * Revision 1.29  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ **********************************************************************/
 

@@ -5,118 +5,50 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.5  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.4  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.2  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.22  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.21  2003/11/06 17:59:03  strk
- * Memory leaks fixed in ::containsPoint()
- *
- * Revision 1.20  2003/10/20 14:02:14  strk
- * more explicit exception thrown on null Directed Edge detection
- *
- * Revision 1.19  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- * $Log$
- * Revision 1.6  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.5  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.4  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.2  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.22  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
 namespace geos {
 
-EdgeRing::EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFactory,CGAlgorithms *newCga) {
-	label=new Label(Location::UNDEF);
-	maxNodeDegree=-1;
-	geometryFactory=newGeometryFactory;
-	cga=newCga;
-	edges=new vector<DirectedEdge*>();
-	pts=geometryFactory->getCoordinateSequenceFactory()->create(NULL);
-	ring=NULL;
-	shell=NULL;
-	holes=new vector<EdgeRing*>();
-//	Commented out to fix different polymorphism in C++ (from Java)
-//	computePoints(newStart);
-//	computeRing();
+EdgeRing::EdgeRing(DirectedEdge *newStart,
+		const GeometryFactory *newGeometryFactory,
+		CGAlgorithms *newCga):
+        startDe(NULL),
+        geometryFactory(newGeometryFactory),
+	cga(newCga),
+        holes(new vector<EdgeRing *>()),
+        maxNodeDegree(-1),
+        edges(new vector<DirectedEdge*>()),
+        pts(newGeometryFactory->getCoordinateSequenceFactory()->create(NULL)),
+        label(new Label(Location::UNDEF)),
+        ring(NULL),
+        isHoleVar(false),
+        shell(NULL)
+{
 }
 
 EdgeRing::~EdgeRing(){
 	delete edges;
-	delete pts;
+
+	/*
+	 * If we constructed a ring, we did by transferring
+	 * ownership of the CoordinateSequence, so it will be
+	 * destroyed by `ring' dtor and we must not destroy
+	 * it twice.
+	 */
+	if ( ring == NULL ) delete pts;
+	else delete ring;
+
 	delete label;
-	delete ring;
 //	delete shell;
 	for(int i=0;i<(int)holes->size();i++) {
 		delete (*holes)[i];
@@ -173,9 +105,8 @@ Polygon* EdgeRing::toPolygon(const GeometryFactory* geometryFactory){
 
 void EdgeRing::computeRing() {
 	if (ring!=NULL) return;   // don't compute more than once
-	ring=geometryFactory->createLinearRing(*pts);
-	const CoordinateSequence *cl = ring->getCoordinatesRO();
-	isHoleVar=cga->isCCW(cl);
+	ring=geometryFactory->createLinearRing(pts);
+	isHoleVar=cga->isCCW(pts);
 }
 
   /**
@@ -294,5 +225,92 @@ bool EdgeRing::containsPoint(Coordinate& p){
 	}
 	return true;
 }
-}
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.6.2.1  2005/11/17 10:49:54  strk
+ * Removed a useless CoordinateSequence copy in EdgeRing.
+ *
+ * Revision 1.6  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.4  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.3  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.2  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.22  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.21  2003/11/06 17:59:03  strk
+ * Memory leaks fixed in ::containsPoint()
+ *
+ * Revision 1.20  2003/10/20 14:02:14  strk
+ * more explicit exception thrown on null Directed Edge detection
+ *
+ * Revision 1.19  2003/10/15 16:39:03  strk
+ * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
+ * $Log$
+ * Revision 1.6.2.1  2005/11/17 10:49:54  strk
+ * Removed a useless CoordinateSequence copy in EdgeRing.
+ *
+ * Revision 1.6  2004/07/27 16:35:46  strk
+ * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
+ * This should reduce object copies as once computed the envelope of a
+ * geometry remains the same.
+ *
+ * Revision 1.5  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.4  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.3  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.2  2004/06/30 20:59:12  strk
+ * Removed GeoemtryFactory copy from geometry constructors.
+ * Enforced const-correctness on GeometryFactory arguments.
+ *
+ * Revision 1.1  2004/03/19 09:48:45  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.22  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

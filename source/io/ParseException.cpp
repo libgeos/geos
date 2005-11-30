@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9.2.1  2005/05/23 18:41:51  strk
+ * Replaced sprintf uses with ostringstream
+ *
  * Revision 1.9  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -28,8 +31,8 @@
  **********************************************************************/
 
 
+#include <sstream>
 #include <geos/io.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -48,15 +51,12 @@ ParseException::ParseException(string msg, string var){
 }
 ParseException::ParseException(string msg, double num){
 	setName("ParseException");
-	string ntxt="";
-	ntxt+=msg;
-	ntxt+=": ";
-	char buffer[255];
-	sprintf(buffer,"%g",num);
-	ntxt.append(buffer);
-	setMessage(ntxt);
+	ostringstream s;
+	s<<msg<<": "<<num;
+	setMessage(s.str());
 }
 
 ParseException::~ParseException(){}
-}
+
+} // namespace geos
 

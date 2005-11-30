@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.1.4.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
  * Revision 1.1  2004/07/08 19:38:56  strk
  * renamed from *List* equivalents
  *
@@ -31,5 +35,12 @@ PointCoordinateSequenceFactory::create(vector<Coordinate> *coords) const
 	delete coords;
 	return cs;
 }
+
+CoordinateSequence *
+PointCoordinateSequenceFactory::create(unsigned int size, unsigned int dims) const
+{
+	return new PointCoordinateSequence(size);
+}
+
 
 }

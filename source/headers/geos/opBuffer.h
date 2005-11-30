@@ -80,6 +80,8 @@ private:
 
 	Coordinate *rightMostCoord;
 
+	Envelope *env;
+
 	/*
 	 * Adds all nodes and edges reachable from this node to the subgraph.
 	 * Uses an explicit stack to avoid a large depth of recursion.
@@ -156,6 +158,14 @@ public:
 	 * be built before holes.
 	 */
 	int compareTo(void* o);
+
+	/**
+	 * Computes the envelope of the edges in the subgraph.
+	 * The envelope is cached after being computed.
+	 *
+	 * @return the envelope of the graph.
+	 */
+	Envelope *getEnvelope();
 };
 
 /*
@@ -723,6 +733,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6.2.1  2005/06/30 18:31:21  strk
+ * Ported SubgraphDepthLocator optimizations from JTS code
+ *
  * Revision 1.6  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -5,94 +5,51 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.11  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.10  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.9  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.7  2004/06/15 20:20:45  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.6  2004/05/05 12:20:22  strk
- * Memory leak plugged in editGeometryCollection
- *
- * Revision 1.5  2004/05/03 17:15:38  strk
- * leaks on exception fixed.
- *
- * Revision 1.4  2004/04/20 10:14:20  strk
- * Memory leaks removed.
- *
- * Revision 1.3  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.2  2004/04/14 11:05:07  strk
- * Added support for LinearRing in GeometryEditor
- *
- * Revision 1.1  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/geomUtil.h>
 #include <geos/util.h>
 #include <typeinfo>
 
 namespace geos {
+
 /**
-* Creates a new GeometryEditor object which will create
-* an edited {@link Geometry} with the same {@link GeometryFactory} as the input Geometry.
-*/
+ * Creates a new GeometryEditor object which will create
+ * an edited Geometry with the same GeometryFactory as the input Geometry.
+ */
 GeometryEditor::GeometryEditor(){
 	factory=NULL;
 }
 
 /**
-* Creates a new GeometryEditor object which will create
-* the edited Geometry with the given {@link GeometryFactory}
-*
-* @param factory the GeometryFactory to create the edited Geometry with
-*/
+ * Creates a new GeometryEditor object which will create
+ * the edited Geometry with the given {@link GeometryFactory}
+ *
+ * @param factory the GeometryFactory to create the edited Geometry with
+ */
 GeometryEditor::GeometryEditor(const GeometryFactory *newFactory){
 	factory=newFactory;
 }
 
 /**
-* Edit the input {@link Geometry} with the given edit operation.
-* Clients will create subclasses of {@link GeometryEditorOperation} or
-* {@link CoordinateOperation} to perform required modifications.
-*
-* @param geometry the Geometry to edit
-* @param operation the edit operation to carry out
-* @return a new {@link Geometry} which is the result of the editing
-*/
-Geometry* GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operation){
+ * Edit the input {@link Geometry} with the given edit operation.
+ * Clients will create subclasses of {@link GeometryEditorOperation} or
+ * {@link CoordinateOperation} to perform required modifications.
+ *
+ * @param geometry the Geometry to edit
+ * @param operation the edit operation to carry out
+ * @return a new {@link Geometry} which is the result of the editing
+ */
+Geometry*
+GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operation)
+{
 	// if client did not supply a GeometryFactory, use the one from the input Geometry
 	if (factory == NULL)
 		factory=geometry->getFactory();
@@ -119,7 +76,9 @@ Geometry* GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation
 	return NULL;
 }
 
-Polygon* GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *operation) {
+Polygon*
+GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *operation)
+{
 	Polygon* newPolygon=(Polygon*) operation->edit(polygon, factory);
 	if (newPolygon->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
@@ -159,18 +118,21 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 		}
 		geometries->push_back(geometry);
 	}
-	delete newCollection;
 
 	if (typeid(*newCollection)==typeid(MultiPoint)) {
+		delete newCollection;
 		return factory->createMultiPoint(geometries);
 	}
 	else if (typeid(*newCollection)==typeid(MultiLineString)) {
+		delete newCollection;
 		return factory->createMultiLineString(geometries);
 	}
 	else if (typeid(*newCollection)==typeid(MultiPolygon)) {
+		delete newCollection;
 		return factory->createMultiPolygon(geometries);
 	}
 	else {
+		delete newCollection;
 		return factory->createGeometryCollection(geometries);
 	}
 }
@@ -182,19 +144,19 @@ Geometry*
 CoordinateOperation::edit(const Geometry *geometry, const GeometryFactory *factory)
 {
 
-	if (typeid(*geometry)==typeid(LinearRing)) {
-		CoordinateSequence *coords = geometry->getCoordinates();
+	const LinearRing *ring = dynamic_cast<const LinearRing *>(geometry);
+	if (ring) {
+		const CoordinateSequence *coords = ring->getCoordinatesRO();
 		CoordinateSequence *newCoords = edit(coords,geometry);
-		delete coords;
 		return factory->createLinearRing(newCoords);
 	}
-	else if (typeid(*geometry)==typeid(LineString)) {
-		CoordinateSequence *coords = geometry->getCoordinates();
+	const LineString *line = dynamic_cast<const LineString *>(geometry);
+	if (line) {
+		const CoordinateSequence *coords = line->getCoordinatesRO();
 		CoordinateSequence *newCoords = edit(coords,geometry);
-		delete coords;
 		return factory->createLineString(newCoords);
 	}
-	else if (typeid(*geometry)==typeid(Point)) {
+	if (typeid(*geometry)==typeid(Point)) {
 		CoordinateSequence *coords = geometry->getCoordinates();
 		CoordinateSequence *newCoords = edit(coords,geometry);
 		delete coords;
@@ -204,4 +166,25 @@ CoordinateOperation::edit(const Geometry *geometry, const GeometryFactory *facto
 	return geometry->clone();
 }
 
-}
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.11.2.1  2005/05/24 07:39:26  strk
+ * Segfault fix in GeometryEditor::editPolygon(), CoordinateSequence copy
+ * reduction
+ *
+ * Revision 1.11  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.10  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.9  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ **********************************************************************/
+
