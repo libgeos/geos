@@ -41,7 +41,7 @@ AC_ISC_POSIX
 
 dnl use libtool ----------------------------------------------------------
 AC_LIBTOOL_DLOPEN
-# AC_LIBTOOL_WIN32_DLL
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 dnl types checks ------------------------------------------------------
