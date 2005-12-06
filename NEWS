@@ -50,7 +50,11 @@ Changes in 3.0.0
 	  	  use unsigned int rather then int
 	- Changed EdgeEndStar to maintain a single container for EdgeEnds 
 
-Changes in 2.2.0CVS
+Changes in 2.2.1CVS
+
+- Support for MingW builds
+
+Changes in 2.2.0
 
 - Performance improvement in OverlayOp::insertUniqueEdge()
 - CoordinateSequence copy removal in EdgeRing

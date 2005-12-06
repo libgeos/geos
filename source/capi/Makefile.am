@@ -24,7 +24,9 @@ libgeos_c_la_SOURCES = $(DIR_SOURCES)
 libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)'
 
 
-libgeos_c_la_LDFLAGS = -version-info @CAPI_INTERFACE_CURRENT@:@CAPI_INTERFACE_REVISION@:@CAPI_INTERFACE_AGE@
+libgeos_c_la_LDFLAGS = \
+	-version-info @CAPI_INTERFACE_CURRENT@:@CAPI_INTERFACE_REVISION@:@CAPI_INTERFACE_AGE@ \
+	-no-undefined
 
 dist-local:
 	cp -p $(DIST_SOURCES) Makefile.am Makefile.in $(distdir)
