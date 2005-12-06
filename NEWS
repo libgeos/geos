@@ -1,3 +1,7 @@
+Changes in 2.2.1CVS
+
+- Support for MingW builds
+
 Changes in 2.2.0
 
 - Performance improvement in OverlayOp::insertUniqueEdge()
