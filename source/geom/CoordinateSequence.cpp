@@ -190,7 +190,7 @@ CoordinateSequence::add(const CoordinateSequence *cl,bool allowRepeated,bool dir
 
 /**
  * This function allocates space for a CoordinateSequence object
- * being a copy of the input once with consecutive equal points
+ * being a copy of the input one with consecutive equal points
  * removed.
  */
 CoordinateSequence*
@@ -200,10 +200,13 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 	static Profile *prof= profiler->get("CoordinateSequence::removeRepeatedPoints()");
 	prof->start();
 #endif
-	CoordinateSequence* ret=DefaultCoordinateSequenceFactory::instance()->create(NULL);
 	const vector<Coordinate> *v=cl->toVector();
-	ret->add(v,false);
-	//delete v;
+
+	vector<Coordinate> *nv=new vector<Coordinate>;
+	nv->reserve(v->size());
+	unique_copy(v->begin(), v->end(), back_inserter(*nv));
+	CoordinateSequence* ret=DefaultCoordinateSequenceFactory::instance()->create(nv);
+
 #if PROFILE
 	prof->stop();
 #endif
@@ -221,6 +224,9 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/12/07 21:55:44  strk
+ * Optimized memory allocations in ::removeRepeatedPoints
+ *
  * Revision 1.11  2005/11/29 14:39:08  strk
  * More signed/unsigned fixes
  *
