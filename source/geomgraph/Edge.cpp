@@ -280,9 +280,9 @@ Edge::equals(const Edge *e) const
 
 	for (unsigned int i=0, iRev=npts1-1; i<npts1; ++i, --iRev)
 	{
-		const Coordinate e1pi=pts->getAt(i);
-		const Coordinate e2pi=e->pts->getAt(i);
-		const Coordinate e2piRev=e->pts->getAt(iRev);
+		const Coordinate &e1pi=pts->getAt(i);
+		const Coordinate &e2pi=e->pts->getAt(i);
+		const Coordinate &e2piRev=e->pts->getAt(iRev);
 
 		if ( !e1pi.equals2D(e2pi) ) isEqualForward=false;
 		if ( !e1pi.equals2D(e2piRev) ) isEqualReverse=false;
@@ -366,6 +366,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2005/12/07 20:49:23  strk
+ * Oops, removed Coordinate copies introduced by recent code cleanups
+ *
  * Revision 1.21  2005/11/29 14:39:46  strk
  * Removed number of points cache in Edge, replaced with local caches.
  *
