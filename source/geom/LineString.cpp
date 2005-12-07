@@ -192,22 +192,16 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 	return true;
 }
 
-void LineString::apply_rw(CoordinateFilter *filter)
+void
+LineString::apply_rw(CoordinateFilter *filter)
 {
-	int npts=points->getSize();
-	for (int i=0; i<npts; i++) {
-		Coordinate newcoord = points->getAt(i);
-		filter->filter_rw(&newcoord);
-		points->setAt(newcoord, i);
-	}
+	points->apply_rw(filter);
 }
 
-void LineString::apply_ro(CoordinateFilter *filter) const {
-	int npts=points->getSize();
-	for (int i=0; i<npts; i++) {
-		// getAt returns a 'const' coordinate
-		filter->filter_ro(&(points->getAt(i)));
-	}
+void
+LineString::apply_ro(CoordinateFilter *filter) const
+{
+	points->apply_ro(filter);
 }
 
 void LineString::apply_rw(GeometryFilter *filter) {
@@ -282,6 +276,13 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2005/12/07 22:52:03  strk
+ * Added CoordinateSequence::apply_rw(CoordinateFilter *) and
+ * CoordinateSequence::apply_ro(CoordinateFilter *) const
+ * to reduce coordinate copies on read-write CoordinateFilter
+ * applications (previously required getAt()/setAt() calls).
+ * Undefined PROFILE_COORDINATE_COPIES (erroneously left defined by previous commit)
+ *
  * Revision 1.52  2005/11/28 18:37:32  strk
  * Minor warning removal
  *

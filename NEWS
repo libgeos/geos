@@ -53,6 +53,8 @@ Changes in 3.0.0
 	  rathern then a non-const vector by pointer
 	- Changed EdgeList::addAll to take a const vector by ref
 	  rather then a non-const vector by pointer
+	- Added apply_rw(CoordinateFilter *) and apply_ro(CoordinateFilter *) const
+	  to CoordinateSequence
 
 Changes in 2.2.1CVS
 

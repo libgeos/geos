@@ -182,11 +182,35 @@ DefaultCoordinateSequence::setOrdinate(unsigned int index, unsigned int ordinate
 	}
 }
 
+void
+DefaultCoordinateSequence::apply_rw(CoordinateFilter *filter)
+{
+	for (vector<Coordinate>::iterator i=vect->begin(), e=vect->end(); i!=e; ++i)
+	{
+		filter->filter_rw(&(*i));
+	}
+}
+
+void
+DefaultCoordinateSequence::apply_ro(CoordinateFilter *filter) const
+{
+	for (vector<Coordinate>::const_iterator i=vect->begin(), e=vect->end(); i!=e; ++i)
+	{
+		filter->filter_ro(&(*i));
+	}
+}
 
 } //namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/12/07 22:52:03  strk
+ * Added CoordinateSequence::apply_rw(CoordinateFilter *) and
+ * CoordinateSequence::apply_ro(CoordinateFilter *) const
+ * to reduce coordinate copies on read-write CoordinateFilter
+ * applications (previously required getAt()/setAt() calls).
+ * Undefined PROFILE_COORDINATE_COPIES (erroneously left defined by previous commit)
+ *
  * Revision 1.8  2005/11/29 14:39:08  strk
  * More signed/unsigned fixes
  *

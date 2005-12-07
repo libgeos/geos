@@ -36,6 +36,7 @@ namespace geos {
 
 class CGAlgorithms;
 class Coordinate;
+class CoordinateFilter;
 class Envelope;
 class Geometry;
 class GeometryFactory;
@@ -348,7 +349,7 @@ private:
  */
 // Define the following to make assignments and copy constructions 
 // NON-inline (will let profilers report usages)
-#define PROFILE_COORDINATE_COPIES 1
+//#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
 public:
 	inline void setNull(void);
@@ -790,6 +791,8 @@ public:
 	 */
 	virtual void expandEnvelope(Envelope &env) const;
 
+	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
+	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
 
 };
 
@@ -834,6 +837,8 @@ public:
 	void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value);
 	void expandEnvelope(Envelope &env) const;
 	unsigned int getDimension() const { return 3; }
+	void apply_rw(CoordinateFilter *filter); 
+	void apply_ro(CoordinateFilter *filter) const; 
 
 private:
 	vector<Coordinate> *vect;
@@ -2624,6 +2629,13 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.56  2005/12/07 22:52:03  strk
+ * Added CoordinateSequence::apply_rw(CoordinateFilter *) and
+ * CoordinateSequence::apply_ro(CoordinateFilter *) const
+ * to reduce coordinate copies on read-write CoordinateFilter
+ * applications (previously required getAt()/setAt() calls).
+ * Undefined PROFILE_COORDINATE_COPIES (erroneously left defined by previous commit)
+ *
  * Revision 1.55  2005/12/07 19:18:23  strk
  * Changed PlanarGraph::addEdges and EdgeList::addAll to take
  * a const vector by reference rather then a non-const vector by
