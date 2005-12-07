@@ -44,44 +44,6 @@ EdgeEndStar::getCoordinate()
 	return e->getCoordinate();
 }
 
-#if 0
-//vector<EdgeEnd*>*
-EdgeEndStar::container &
-EdgeEndStar::getEdges()
-{
-	return edgeMap;
-#if 0
-	if (edgeList==NULL)
-	{
-#if DEBUG
-		cerr<<"EdgeEndStar["<<this<<"]::getEdges() computing edgeList"<<endl;
-#endif
-		edgeList=new vector<EdgeEnd*>();
-
-		set<EdgeEnd*,EdgeEndLT>::iterator mapIter;
-		set<EdgeEnd*,EdgeEndLT>::iterator begin=edgeMap.begin();
-		set<EdgeEnd*,EdgeEndLT>::iterator end=edgeMap.end();
-
-		for(mapIter=begin; mapIter!=end; ++mapIter)
-		{
-			EdgeEnd *e=*mapIter;
-			edgeList->push_back(e);
-		}
-#if DEBUG
-		cerr<<"EdgeEndStar["<<this<<"]::getEdges() computed edgeList at "<<edgeList<<" with size "<<edgeList->size()<<endl;
-#endif
-	}
-#if DEBUG
-	else
-	{
-		cerr<<"EdgeEndStar["<<this<<"]::getEdges() using cached edgeList "<<edgeList<<" with size "<<edgeList->size()<<endl;
-	}
-#endif
-	return edgeList;
-#endif
-}
-#endif
-
 EdgeEnd*
 EdgeEndStar::getNextCW(EdgeEnd *ee)
 {
@@ -90,22 +52,6 @@ EdgeEndStar::getNextCW(EdgeEnd *ee)
 	if ( it==begin() ) { it=end(); --it; }
 	else --it;
 	return *it;
-#if 0
-	getEdges();
-	unsigned int i=0;
-	for(unsigned int j=0;j<edgeList->size();j++)
-	{
-		//if (ee->compareTo( *(edgeList->at(j)))==0) 
-		if (ee->compareTo((*edgeList)[j])==0)
-		{
-			i=j;
-			break;
-		}
-	}
-	unsigned int iNextCW=i-1;
-	if (i==0) iNextCW=edgeList->size()-1;
-	return (*edgeList)[iNextCW];
-#endif
 }
 
 void
@@ -177,7 +123,8 @@ EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom)
 	{
 		EdgeEnd *e=*it;
 		Label *label=e->getLabel();
-		for(int geomi=0;geomi<2;geomi++){
+		for(int geomi=0; geomi<2; ++geomi)
+		{
 			if (label->isAnyNull(geomi)) {
 				int loc=Location::UNDEF;
 				if (hasDimensionalCollapseEdge[geomi]){
@@ -215,7 +162,9 @@ EdgeEndStar::getLocation(int geomIndex,
 	return ptInAreaLocation[geomIndex];
 }
 
-bool EdgeEndStar::isAreaLabelsConsistent(){
+bool
+EdgeEndStar::isAreaLabelsConsistent()
+{
 	computeEdgeEndLabels();
 	return checkAreaLabelsConsistent(0);
 }
@@ -353,6 +302,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2005/12/07 20:51:47  strk
+ * removed dead code
+ *
  * Revision 1.11  2005/11/29 00:48:35  strk
  * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
  * Restructured iterated access by use of standard ::iterator abstraction
