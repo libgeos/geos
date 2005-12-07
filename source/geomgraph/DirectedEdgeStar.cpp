@@ -24,14 +24,12 @@ namespace geos {
 DirectedEdgeStar::DirectedEdgeStar():
 	EdgeEndStar(),
 	resultAreaEdgeList(NULL)
-	//label(new Label())
 {
 }
 
 DirectedEdgeStar::~DirectedEdgeStar()
 {
 	delete resultAreaEdgeList;
-	//delete label;
 }
 
 /**
@@ -121,7 +119,6 @@ DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
 
 	// determine the overall labelling for this DirectedEdgeStar
 	// (i.e. for the node it is based at)
-	//delete label;
 	label=Label(Location::UNDEF);
 	EdgeEndStar::iterator endIt=end();
 	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
@@ -129,7 +126,7 @@ DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
 		EdgeEnd *ee=*it;
 		Edge *e=ee->getEdge();
 		Label *eLabel=e->getLabel();
-		for (int i=0; i<2;i++) {
+		for (int i=0; i<2; ++i) {
 			int eLoc=eLabel->getLocation(i);
 			if (eLoc==Location::INTERIOR || eLoc==Location::BOUNDARY)
 				label.setLocation(i, Location::INTERIOR);
@@ -437,6 +434,9 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/12/07 20:51:20  strk
+ * minor cleanups
+ *
  * Revision 1.8  2005/11/29 00:48:35  strk
  * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
  * Restructured iterated access by use of standard ::iterator abstraction
