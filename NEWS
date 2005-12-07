@@ -49,6 +49,10 @@ Changes in 3.0.0
 		- point index and size related functions
 	  	  use unsigned int rather then int
 	- Changed EdgeEndStar to maintain a single container for EdgeEnds 
+	- Changed PlanarGraph::addEdges to take a const vector by ref
+	  rathern then a non-const vector by pointer
+	- Changed EdgeList::addAll to take a const vector by ref
+	  rather then a non-const vector by pointer
 
 Changes in 2.2.1CVS
 

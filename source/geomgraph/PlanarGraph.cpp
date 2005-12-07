@@ -158,10 +158,12 @@ PlanarGraph::find(Coordinate& coord)
  * will be created.  DirectedEdges are NOT linked by this method.
  */
 void
-PlanarGraph::addEdges(vector<Edge*>* edgesToAdd)
+PlanarGraph::addEdges(const vector<Edge*> &edgesToAdd)
 {
 	// create all the nodes for the edges
-	for (vector<Edge*>::iterator it=edgesToAdd->begin();it<edgesToAdd->end();it++) {
+	for (vector<Edge*>::const_iterator it=edgesToAdd.begin(),
+		endIt=edgesToAdd.end(); it!=endIt; ++it)
+	{
 		Edge *e=*it;
 		edges->push_back(e);
 		DirectedEdge *de1=new DirectedEdge(e, true);
@@ -317,7 +319,14 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/12/07 19:18:23  strk
+ * Changed PlanarGraph::addEdges and EdgeList::addAll to take
+ * a const vector by reference rather then a non-const vector by
+ * pointer.
+ * Optimized polygon vector allocations in OverlayOp::computeOverlay.
+ *
  * Revision 1.16  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

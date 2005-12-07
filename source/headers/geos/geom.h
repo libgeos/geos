@@ -348,7 +348,7 @@ private:
  */
 // Define the following to make assignments and copy constructions 
 // NON-inline (will let profilers report usages)
-//#define PROFILE_COORDINATE_COPIES 1
+#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
 public:
 	inline void setNull(void);
@@ -2624,6 +2624,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.55  2005/12/07 19:18:23  strk
+ * Changed PlanarGraph::addEdges and EdgeList::addAll to take
+ * a const vector by reference rather then a non-const vector by
+ * pointer.
+ * Optimized polygon vector allocations in OverlayOp::computeOverlay.
+ *
  * Revision 1.54  2005/11/29 13:39:56  strk
  * Moved byte typedef from geom.h to io.h.
  * Removed useless commas at inlined funx end.

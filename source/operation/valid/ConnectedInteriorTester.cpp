@@ -65,7 +65,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 
 	// polygonize the edges
 	PlanarGraph graph(OverlayNodeFactory::instance());
-	graph.addEdges(&splitEdges);
+	graph.addEdges(splitEdges);
 	setAllEdgesInResult(graph);
 	graph.linkAllDirectedEdges();
 	vector<EdgeRing*> *edgeRings=buildEdgeRings(graph.getEdgeEnds());
@@ -220,6 +220,12 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/12/07 19:18:23  strk
+ * Changed PlanarGraph::addEdges and EdgeList::addAll to take
+ * a const vector by reference rather then a non-const vector by
+ * pointer.
+ * Optimized polygon vector allocations in OverlayOp::computeOverlay.
+ *
  * Revision 1.15  2005/11/25 11:31:21  strk
  * Removed all CoordinateSequence::getSize() calls embedded in for loops.
  *

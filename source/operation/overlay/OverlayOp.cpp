@@ -161,15 +161,14 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 void
 OverlayOp::replaceCollapsedEdges()
 {
-	vector<Edge*> *edges=edgeList.getEdges();
+	vector<Edge*> &edges=edgeList.getEdges();
 
-	unsigned int nedges=edges->size();
-	for(unsigned int i=0; i<nedges; ++i)
+	for(unsigned int i=0, nedges=edges.size(); i<nedges; ++i)
 	{
-		Edge *e=(*edges)[i];
+		Edge *e=edges[i];
 		if (e->isCollapsed()) {
 			//Debug.print(e);
-			(*edges)[i]=e->getCollapsedEdge();
+			edges[i]=e->getCollapsedEdge();
 			delete e;
 		} 
 	}
@@ -690,9 +689,10 @@ OverlayOp::computeOverlay(int opCode)
 	polyBuilder.add(&graph);
 
 	vector<Geometry*> *gv=polyBuilder.getPolygons();
-	resultPolyList=new vector<Polygon*>();
-	for(unsigned int i=0; i<gv->size(); ++i) {
-		resultPolyList->push_back((Polygon*)(*gv)[i]);
+	unsigned int gvsize=gv->size();
+	resultPolyList=new vector<Polygon*>(gvsize);
+	for(unsigned int i=0; i<gvsize; ++i) {
+		(*resultPolyList)[i]=(Polygon*)(*gv)[i];
 	}
 	delete gv;
 
@@ -782,7 +782,8 @@ OverlayOp::insertUniqueEdge(Edge *e)
 void
 OverlayOp::computeLabelsFromDepths()
 {
-	for(unsigned int j=0; j<edgeList.getEdges()->size(); ++j) {
+	for(unsigned int j=0, s=edgeList.getEdges().size(); j<s; ++j)
+	{
 		Edge *e=edgeList.get(j);
 		Label *lbl=e->getLabel();
 		Depth &depth=e->getDepth();
@@ -825,6 +826,12 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.50  2005/12/07 19:18:23  strk
+ * Changed PlanarGraph::addEdges and EdgeList::addAll to take
+ * a const vector by reference rather then a non-const vector by
+ * pointer.
+ * Optimized polygon vector allocations in OverlayOp::computeOverlay.
+ *
  * Revision 1.49  2005/11/25 11:31:21  strk
  * Removed all CoordinateSequence::getSize() calls embedded in for loops.
  *

@@ -519,23 +519,26 @@ public:
 	EdgeList();
 	virtual ~EdgeList();
 	void add(Edge *e);
-	void addAll(vector<Edge*> *edgeColl);
-	vector<Edge*>* getEdges();
+	void addAll(const vector<Edge*> &edgeColl);
+	vector<Edge*> &getEdges();
 	Edge* findEqualEdge(Edge* e);
 	Edge* get(int i);
 	int findEdgeIndex(Edge *e);
 	string print();
+
 private:
-	vector<Edge*> *edges;
+
+	vector<Edge*> edges;
+
 	/**
-	* An index of the edges, for fast lookup.
-	*
-	* a Quadtree is used, because this index needs to be dynamic
-	* (e.g. allow insertions after queries).
-	* An alternative would be to use an ordered set based on the values
-	* of the edge coordinates
-	*
-	*/
+	 * An index of the edges, for fast lookup.
+	 *
+	 * a Quadtree is used, because this index needs to be dynamic
+	 * (e.g. allow insertions after queries).
+	 * An alternative would be to use an ordered set based on the values
+	 * of the edge coordinates
+	 *
+	 */
 	SpatialIndex* index;
 };
 
@@ -722,7 +725,7 @@ public:
 	virtual Node* addNode(Node *node);
 	virtual Node* addNode(const Coordinate& coord);
 	virtual Node* find(Coordinate& coord);
-	virtual void addEdges(vector<Edge*>* edgesToAdd);
+	virtual void addEdges(const vector<Edge*> &edgesToAdd);
 	virtual void linkResultDirectedEdges();
 	virtual void linkAllDirectedEdges();
 	virtual EdgeEnd* findEdgeEnd(Edge *e);
@@ -903,6 +906,12 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2005/12/07 19:18:23  strk
+ * Changed PlanarGraph::addEdges and EdgeList::addAll to take
+ * a const vector by reference rather then a non-const vector by
+ * pointer.
+ * Optimized polygon vector allocations in OverlayOp::computeOverlay.
+ *
  * Revision 1.25  2005/11/29 15:45:39  strk
  * Fixed signedness of TopologyLocation methods, cleanups.
  *

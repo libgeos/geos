@@ -28,30 +28,40 @@ namespace geos {
 static Profiler *profiler = Profiler::instance();
 #endif
 
-EdgeList::EdgeList(){
-	edges=new vector<Edge*>();
-	index=new Quadtree();
+EdgeList::EdgeList():
+	index(new Quadtree())
+{
+	//edges=new vector<Edge*>();
+	//index=new Quadtree();
 }
 
-EdgeList::~EdgeList(){
-	delete edges;
+EdgeList::~EdgeList()
+{
+	//delete edges;
 	delete index;
 }
 /**
  * Insert an edge unless it is already in the list
  */
-void EdgeList::add(Edge *e) {
-	edges->push_back(e);
-	index->insert(e->getEnvelope(),e);
+void
+EdgeList::add(Edge *e)
+{
+	edges.push_back(e);
+	index->insert(e->getEnvelope(), e);
 }
 
-void EdgeList::addAll(vector<Edge*> *edgeColl) {
-	for (int i=0; i<(int)edgeColl->size();i++) {
-		add((*edgeColl)[i]);
+void
+EdgeList::addAll(const vector<Edge*> &edgeColl)
+{
+	for (unsigned int i=0, s=edgeColl.size(); i<s ; ++i)
+	{
+		add(edgeColl[i]);
 	}
 }
 
-vector<Edge*>* EdgeList::getEdges() {
+vector<Edge*> &
+EdgeList::getEdges()
+{
 	return edges;
 }
 
@@ -78,7 +88,8 @@ EdgeList::findEqualEdge(Edge *e)
 	cerr<<"EdgeList::findEqualEdge found "<<testEdges->size()<<" overlapping edges"<<endl;
 #endif
 
-	for (int i=0; i<(int)testEdges->size();i++) {
+	for (unsigned int i=0, s=testEdges->size(); i<s; ++i)
+	{
 		Edge* testEdge=(Edge*) (*testEdges)[i];
 		if (testEdge->equals(e))
 		{
@@ -90,8 +101,10 @@ EdgeList::findEqualEdge(Edge *e)
 	return NULL;
 }
 
-Edge* EdgeList::get(int i) {
-	return (*edges)[i];
+Edge*
+EdgeList::get(int i)
+{
+	return edges[i];
 }
 
 /**
@@ -99,19 +112,23 @@ Edge* EdgeList::get(int i) {
  * @return  index, if e is already in the list
  *          -1 otherwise
  */
-int EdgeList::findEdgeIndex(Edge *e) {
-	for (int i=0; i<(int)edges->size();i++) {
-		if ( (*edges)[i]->equals(e) )
-            return i;
+int
+EdgeList::findEdgeIndex(Edge *e)
+{
+	for (int i=0, s=(int)edges.size(); i<s; ++i)
+	{
+		if ( edges[i]->equals(e) ) return i;
 	}
 	return -1;
 }
 
-string EdgeList::print() {
+string
+EdgeList::print()
+{
 	string out="EdgeList( ";
-	for(unsigned int j=0; j<edges->size();j++)
+	for(unsigned int j=0, s=edges.size(); j<s; ++j)
 	{
-       		Edge *e=(*edges)[j];
+       		Edge *e=edges[j];
 		if (j) out+=",";
 		out += e->print();
 	}
@@ -123,6 +140,12 @@ string EdgeList::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/12/07 19:18:23  strk
+ * Changed PlanarGraph::addEdges and EdgeList::addAll to take
+ * a const vector by reference rather then a non-const vector by
+ * pointer.
+ * Optimized polygon vector allocations in OverlayOp::computeOverlay.
+ *
  * Revision 1.7  2005/02/01 13:44:59  strk
  * More profiling labels.
  *
