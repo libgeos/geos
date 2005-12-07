@@ -111,11 +111,13 @@ CoordinateSequence*
 GeometryGraph::getBoundaryPoints()
 {
 	vector<Node*> *coll=getBoundaryNodes();
-	CoordinateSequence *pts=new DefaultCoordinateSequence((int)coll->size());
-	int i=0;
-	for (vector<Node*>::iterator it=coll->begin();it<coll->end();it++) {
+	CoordinateSequence *pts=new DefaultCoordinateSequence(coll->size());
+	unsigned int i=0;
+	for (vector<Node*>::iterator it=coll->begin(), endIt=coll->end();
+		it!=endIt; ++it)
+	{
 		Node *node=*it;
-		pts->setAt(node->getCoordinate(),i++);
+		pts->setAt(node->getCoordinate(), i++);
 	}
 	delete coll;
 	return pts;
@@ -133,7 +135,9 @@ GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist)
 #if DEBUG
 	cerr<<"["<<this<<"] GeometryGraph::computeSplitEdges() scanning "<<edges->size()<<" local and "<<edgelist->size()<<" provided edges"<<endl;
 #endif
-	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
+	for (vector<Edge*>::iterator i=edges->begin(), endIt=edges->end();
+		i!=endIt; ++i)
+	{
 		Edge *e=*i;
 #if DEBUG
 		cerr<<"   "<<e->print()<<" adding split edges from arg"<<endl;
@@ -192,7 +196,7 @@ void
 GeometryGraph::addPoint(const Point *p)
 {
 	const Coordinate& coord=*(p->getCoordinate());
-	insertPoint(argIndex,coord,Location::INTERIOR);
+	insertPoint(argIndex, coord, Location::INTERIOR);
 }
 
 /*
@@ -355,7 +359,8 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 }
 
 void
-GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLocation)
+GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
+	int onLocation)
 {
 #if DEBUG
 	cerr<<"GeometryGraph::insertPoint("<<coord.toString()<<" called"<<endl;
@@ -363,9 +368,9 @@ GeometryGraph::insertPoint(int argIndex,const Coordinate& coord, int onLocation)
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
 	if (lbl==NULL) {
-		n->setLabel(argIndex,onLocation);
+		n->setLabel(argIndex, onLocation);
 	} else
-		lbl->setLocation(argIndex,onLocation);
+		lbl->setLocation(argIndex, onLocation);
 }
 
 /*
@@ -393,14 +398,17 @@ GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
 void
 GeometryGraph::addSelfIntersectionNodes(int argIndex)
 {
-	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
+	for (vector<Edge*>::iterator i=edges->begin(), endIt=edges->end();
+		i!=endIt; ++i)
+	{
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->eiList;
-		EdgeIntersectionListIterator eiIt=eiL.begin();
-		for ( ; eiIt!=eiL.end(); eiIt++) {
+		for (EdgeIntersectionListIterator eiIt=eiL.begin(), eiEnd=eiL.end();
+			eiIt!=eiEnd; ++eiIt)
+		{
 			EdgeIntersection *ei=*eiIt;
-			addSelfIntersectionNode(argIndex,ei->coord,eLoc);
+			addSelfIntersectionNode(argIndex, ei->coord, eLoc);
 		}
 	}
 }
@@ -441,10 +449,13 @@ GeometryGraph::getInvalidPoint()
 	return invalidPoint;
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/12/07 20:52:32  strk
+ * minor container methods call reduction
+ *
  * Revision 1.14  2005/11/16 22:21:45  strk
  * enforced const-correctness and use of initializer lists.
  *
