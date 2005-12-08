@@ -22,18 +22,19 @@
 
 namespace geos {
 
-LineBuilder::LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator)
+LineBuilder::LineBuilder(OverlayOp *newOp,
+		const GeometryFactory *newGeometryFactory,
+		PointLocator *newPtLocator):
+	op(newOp),
+	geometryFactory(newGeometryFactory),
+	ptLocator(newPtLocator),
+	//lineEdgesList(new vector<Edge *>()),
+	resultLineList(new vector<LineString *>())
 {
-	op=newOp;
-	geometryFactory=newGeometryFactory;
-	ptLocator=newPtLocator;
-	lineEdgesList=new vector<Edge*>();
-	resultLineList=new vector<LineString*>();
 }
 
 LineBuilder::~LineBuilder()
 {
-	delete lineEdgesList;
 }
 
 /*
@@ -45,7 +46,7 @@ LineBuilder::build(int opCode)
 {
 	findCoveredLineEdges();
 	collectLines(opCode);
-	//labelIsolatedLines(lineEdgesList);
+	//labelIsolatedLines(&lineEdgesList);
 	buildLines(opCode);
 	return resultLineList;
 }
@@ -63,7 +64,9 @@ LineBuilder::findCoveredLineEdges()
 // first set covered for all L edges at nodes which have A edges too
 	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph().getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++) {
+	map<Coordinate*,Node*,CoordLT>::iterator endIt=nodeMap.end();
+	for ( ; it!=endIt; ++it)
+	{
 		Node *node=it->second;
 		//node.print(System.out);
 		((DirectedEdgeStar*)node->getEdges())->findCoveredLineEdges();
@@ -74,7 +77,8 @@ LineBuilder::findCoveredLineEdges()
 	 * use a point-in-poly test to determine whether they are covered
 	 */
 	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
-	for(int i=0;i<(int)ee->size();i++) {
+	for(unsigned int i=0, s=ee->size(); i<s; ++i)
+	{
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		Edge *e=de->getEdge();
 		if (de->isLineEdge() && !e->isCoveredSet()) {
@@ -88,10 +92,11 @@ void
 LineBuilder::collectLines(int opCode)
 {
 	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
-	for(int i=0;i<(int)ee->size();i++) {
+	for(unsigned int i=0, s=ee->size(); i<s; ++i)
+	{
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
-		collectLineEdge(de,opCode,lineEdgesList);
-		collectBoundaryTouchEdge(de,opCode,lineEdgesList);
+		collectLineEdge(de, opCode, &lineEdgesList);
+		collectBoundaryTouchEdge(de, opCode, &lineEdgesList);
 	}
 }
 
@@ -139,8 +144,9 @@ void
 LineBuilder::buildLines(int opCode)
 {
 	// need to simplify lines?
-	for(int i=0;i<(int)lineEdgesList->size();i++) {
-		Edge *e=(*lineEdgesList)[i];
+	for(unsigned int i=0, s=lineEdgesList.size(); i<s; ++i)
+	{
+		Edge *e=lineEdgesList[i];
 		//Label *label=e->getLabel();
 		CoordinateSequence *cs = e->getCoordinates()->clone();
 #if COMPUTE_Z
@@ -242,7 +248,8 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 void
 LineBuilder::labelIsolatedLines(vector<Edge*> *edgesList)
 {
-	for(int i=0;i<(int)edgesList->size();i++) {
+	for(unsigned int i=0, s=edgesList->size(); i<s; ++i)
+	{
 		Edge *e=(*edgesList)[i];
 		Label *label=e->getLabel();
 		//n.print(System.out);
@@ -265,10 +272,14 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 	e->getLabel()->setLocation(targetIndex,loc);
 }
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2005/12/08 00:03:51  strk
+ * LineBuilder::lineEdgesList made a real vector, rather then pointer (private member).
+ * Small optimizations in LineBuilder loops, cleanups in LineBuilder class dox.
+ *
  * Revision 1.20  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

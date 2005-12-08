@@ -412,39 +412,44 @@ class LineBuilder {
 public:
 	LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator);
 	~LineBuilder();
+
 	/**
-	* @return a list of the LineStrings in the result of the specified overlay operation
-	*/
+	 * @return a list of the LineStrings in the result of the specified overlay operation
+	 */
 	vector<LineString*>* build(int opCode);
+
 	/**
-	* Find and mark L edges which are "covered" by the result area (if any).
-	* L edges at nodes which also have A edges can be checked by checking
-	* their depth at that node.
-	* L edges at nodes which do not have A edges can be checked by doing a
-	* point-in-polygon test with the previously computed result areas.
-	*/
+	 * Find and mark L edges which are "covered" by the result area (if any).
+	 * L edges at nodes which also have A edges can be checked by checking
+	 * their depth at that node.
+	 * L edges at nodes which do not have A edges can be checked by doing a
+	 * point-in-polygon test with the previously computed result areas.
+	 */
 	void collectLineEdge(DirectedEdge *de,int opCode,vector<Edge*>* edges);
+
 	/**
-	* Collect edges from Area inputs which should be in the result but
-	* which have not been included in a result area.
-	* This happens ONLY:
-	* <ul>
-	* <li>during an intersection when the boundaries of two
-	* areas touch in a line segment
-	* <li> OR as a result of a dimensional collapse.
-	* </ul>
-	*/
+	 * Collect edges from Area inputs which should be in the result but
+	 * which have not been included in a result area.
+	 * This happens ONLY:
+	 * 
+	 *  -  during an intersection when the boundaries of two
+	 *     areas touch in a line segment
+	 *  -   OR as a result of a dimensional collapse.
+	 * 
+	 */
 	void collectBoundaryTouchEdge(DirectedEdge *de,int opCode,vector<Edge*>* edges);
+
 private:
 	OverlayOp *op;
 	const GeometryFactory *geometryFactory;
 	PointLocator *ptLocator;
-	vector<Edge*>* lineEdgesList;
+	vector<Edge*> lineEdgesList;
 	vector<LineString*>* resultLineList;
 	void findCoveredLineEdges();
 	void collectLines(int opCode);
 	void buildLines(int opCode);
 	void labelIsolatedLines(vector<Edge*> *edgesList);
+
 	/**
 	 * Label an isolated node with its relationship to the target geometry.
 	 */
@@ -618,7 +623,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/12/08 00:03:51  strk
+ * LineBuilder::lineEdgesList made a real vector, rather then pointer (private member).
+ * Small optimizations in LineBuilder loops, cleanups in LineBuilder class dox.
+ *
  * Revision 1.15  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

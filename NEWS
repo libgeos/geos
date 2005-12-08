@@ -55,6 +55,7 @@ Changes in 3.0.0
 	  rather then a non-const vector by pointer
 	- Added apply_rw(CoordinateFilter *) and apply_ro(CoordinateFilter *) const
 	  to CoordinateSequence
+	- LineBuilder::lineEdgesList made a real vector, rather then pointer (private member)
 
 Changes in 2.2.1CVS
 
