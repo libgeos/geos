@@ -33,8 +33,12 @@ EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge):
 
 EdgeIntersectionList::~EdgeIntersectionList()
 {
-	for ( EdgeIntersectionListIterator it=nodeMap.begin();
-		it!=nodeMap.end(); it++) delete *it;
+	for (EdgeIntersectionListIterator it=nodeMap.begin(),
+		endIt=nodeMap.end();
+		it!=endIt; ++it)
+	{
+		delete *it;
+	}
 }
 
 EdgeIntersection*
@@ -61,8 +65,8 @@ EdgeIntersectionList::isEmpty() const
 bool
 EdgeIntersectionList::isIntersection(const Coordinate& pt) const
 {
-	EdgeIntersectionListIterator it=nodeMap.begin();
-	for (; it != nodeMap.end(); it++)
+	EdgeIntersectionListIterator it=nodeMap.begin(), endIt=nodeMap.end();
+	for (; it!=endIt; ++it)
 	{
 		EdgeIntersection *ei=*it;
 		if (ei->coord==pt) return true;
@@ -89,7 +93,7 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList)
 
 	// there should always be at least two entries in the list
 	EdgeIntersection *eiPrev=*it;
-	it++;
+	++it;
 
 	while (it!=nodeMap.end()) {
 		EdgeIntersection *ei=*it;
@@ -108,9 +112,6 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 	cerr<<"["<<this<<"] EdgeIntersectionList::createSplitEdge()"<<endl;
 #endif // DEBUG
 	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
-#if DEBUG
-	cerr<<"    npts:"<<npts<<endl;
-#endif // DEBUG
 
 	const Coordinate& lastSegStartPt=edge->pts->getAt(ei1->segmentIndex);
 
@@ -122,6 +123,10 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 	bool useIntPt1=ei1->dist>0.0 || !ei1->coord.equals2D(lastSegStartPt);
 
 	if (!useIntPt1) --npts;
+
+#if DEBUG
+	cerr<<"    npts:"<<npts<<endl;
+#endif // DEBUG
 
 	vector<Coordinate> *vc=new vector<Coordinate>();
 	vc->reserve(npts);
@@ -153,8 +158,8 @@ string
 EdgeIntersectionList::print() const
 {
 	string out="Intersections: ";
-	EdgeIntersectionListIterator it=begin();
-	for (; it!=end(); it++) {
+	EdgeIntersectionListIterator it=begin(), endIt=end();
+	for (; it!=endIt; ++it) {
 		EdgeIntersection *ei=*it;
 		out+=ei->print();
 	}
@@ -165,6 +170,9 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2005/12/08 01:11:29  strk
+ * minor optimizations in loops
+ *
  * Revision 1.15  2005/12/08 00:24:41  strk
  * Reduced coordinate assignments in ::createSplitEdge
  *
