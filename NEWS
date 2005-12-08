@@ -53,9 +53,12 @@ Changes in 3.0.0
 	  rathern then a non-const vector by pointer
 	- Changed EdgeList::addAll to take a const vector by ref
 	  rather then a non-const vector by pointer
-	- Added apply_rw(CoordinateFilter *) and apply_ro(CoordinateFilter *) const
-	  to CoordinateSequence
-	- LineBuilder::lineEdgesList made a real vector, rather then pointer (private member)
+	- Added apply_rw(CoordinateFilter *) and apply_ro(CoordinateFilter *)
+	  const to CoordinateSequence
+	- LineBuilder::lineEdgesList made a real vector, rather then pointer
+	  (private member)
+	- SegmentString::eiList made a real SegmentNodeList, rather then
+	  a pointer (private member)
 
 Changes in 2.2.1CVS
 

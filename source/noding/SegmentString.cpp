@@ -25,13 +25,15 @@ static Profiler *profiler=Profiler::instance();
 /**
  * This function copies given CoordinateSequence
  */
-SegmentString::SegmentString(const CoordinateSequence *newPts, const void* newContext)
+SegmentString::SegmentString(const CoordinateSequence *newPts,
+		const void* newContext):
+	eiList(this)
 {
 #if PROFILE
 	static Profile *prof = profiler->get("SegmentString::SegmentString(const CoordinateSequence *, const void *)");
 	prof->start();
 #endif
-	eiList=new SegmentNodeList(this);
+	//eiList=new SegmentNodeList(this);
 	isIsolatedVar=false;
 	pts=newPts;
 	npts=pts->getSize();
@@ -41,8 +43,9 @@ SegmentString::SegmentString(const CoordinateSequence *newPts, const void* newCo
 #endif
 }
 
-SegmentString::~SegmentString() {
-	delete eiList;
+SegmentString::~SegmentString()
+{
+	//delete eiList;
 }
 
 const void*
@@ -51,8 +54,14 @@ SegmentString::getContext() const
 	return context;
 }
 
-SegmentNodeList*
+const SegmentNodeList &
 SegmentString::getIntersectionList() const
+{
+	return eiList;
+}
+
+SegmentNodeList &
+SegmentString::getIntersectionList() 
 {
 	return eiList;
 }
@@ -81,7 +90,9 @@ SegmentString::getCoordinatesRO() const
 	return pts;
 }
 
-void SegmentString::setIsolated(bool isIsolated)  {
+void
+SegmentString::setIsolated(bool isIsolated)
+{
 	isIsolatedVar=isIsolated;
 }
 
@@ -99,11 +110,12 @@ SegmentString::isClosed() const
 }
 
 /**
-* Adds EdgeIntersections for one or both
-* intersections found for a segment of an edge to the edge intersection list.
-*/
+ * Adds EdgeIntersections for one or both
+ * intersections found for a segment of an edge to the edge intersection list.
+ */
 void
-SegmentString::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
+SegmentString::addIntersections(LineIntersector *li, int segmentIndex,
+		int geomIndex)
 {
 	for (int i=0; i<li->getIntersectionNum(); i++) {
 		addIntersection(li,segmentIndex, geomIndex, i);
@@ -117,7 +129,8 @@ SegmentString::addIntersections(LineIntersector *li, int segmentIndex, int geomI
  * to use the higher of the two possible segmentIndexes
  */
 void
-SegmentString::addIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex)
+SegmentString::addIntersection(LineIntersector *li, int segmentIndex,
+		int geomIndex, int intIndex)
 {
 	const Coordinate &intPt=li->getIntersection(intIndex);
 	double dist=li->getEdgeDistance(geomIndex, intIndex);
@@ -162,7 +175,7 @@ SegmentString::addIntersection(Coordinate& intPt,
 	 * Add the intersection point to edge intersection list.
 	 */
 	//SegmentNode *ei=
-	eiList->add(&intPt, normalizedSegmentIndex, dist);
+	eiList.add(&intPt, normalizedSegmentIndex, dist);
 	//ei.print(System.out);
 
 }
@@ -171,6 +184,10 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/12/08 01:39:28  strk
+ * SegmentString::eiList made a real object rather then a pointer.
+ * Adde getter for const and non-const references of it (dropping get by pointer)
+ *
  * Revision 1.16  2005/02/22 18:21:46  strk
  * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
  * construction costs.

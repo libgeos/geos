@@ -42,7 +42,7 @@ Noder::getNodedEdges(vector<SegmentString*>* segStrings, vector<SegmentString*>*
 {
 	for (int i=0; i<(int)segStrings->size();i++) {
 		SegmentString *ss=(*segStrings)[i];
-		ss->getIntersectionList()->addSplitEdges(resultEdgelist);
+		ss->getIntersectionList().addSplitEdges(resultEdgelist);
 	}
 }
 
@@ -56,6 +56,10 @@ Noder::setSegmentIntersector(nodingSegmentIntersector *newSegInt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2005/12/08 01:39:28  strk
+ * SegmentString::eiList made a real object rather then a pointer.
+ * Adde getter for const and non-const references of it (dropping get by pointer)
+ *
  * Revision 1.7  2005/02/01 16:09:46  strk
  * more profiling labels
  *

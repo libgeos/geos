@@ -11,95 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.10  2005/11/10 15:20:32  strk
- * Made virtual overloads explicit.
- *
- * Revision 1.9  2005/11/07 18:05:28  strk
- * Reduced set<> lookups
- *
- * Revision 1.8  2005/06/24 11:09:43  strk
- * Dropped RobustLineIntersector, made LineIntersector a concrete class.
- * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
- * to avoid computing intersection point (Z) when it's not necessary.
- *
- * Revision 1.7  2005/02/22 18:21:46  strk
- * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
- * construction costs.
- *
- * Revision 1.6  2005/02/22 16:23:28  strk
- * Cached number of points in CoordinateSequence.
- *
- * Revision 1.5  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.4  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.3  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.2  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.12  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.11  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateSequence argument.
- * Fixed memory leaks associated with this and MultiGeometry constructors.
- * Other associated fixes.
- *
- * Revision 1.10  2004/05/07 07:57:27  strk
- * Added missing EdgeNodingValidator to build scripts.
- * Changed SegmentString constructor back to its original form
- * (takes const void *), implemented local tracking of "contexts"
- * in caller objects for proper destruction.
- *
- * Revision 1.9  2004/05/06 15:54:15  strk
- * SegmentNodeList keeps track of created splitEdges for later destruction.
- * SegmentString constructor copies given Label.
- * Buffer operation does no more leaks for doc/example.cpp
- *
- * Revision 1.8  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.7  2004/04/30 09:15:28  strk
- * Enlarged exception specifications to allow for AssertionFailedException.
- * Added missing initializers.
- *
- * Revision 1.6  2004/04/23 00:02:18  strk
- * const-correctness changes
- *
- * Revision 1.5  2004/04/19 16:14:52  strk
- * Some memory leaks plugged in noding algorithms.
- *
- * Revision 1.4  2004/04/19 12:51:01  strk
- * Memory leaks fixes. Throw specifications added.
- *
- * Revision 1.3  2004/04/14 09:30:48  strk
- * Private iterated noding funx now use int* instead of vector to know
- * when it's time to stop.
- *
- * Revision 1.2  2004/03/26 07:48:30  ybychkov
- * "noding" package ported (JTS 1.4)
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_NODING_H
 #define GEOS_NODING_H
@@ -115,6 +27,9 @@
 using namespace std;
 
 namespace geos {
+
+class SegmentString;
+
 
 /*
  * Represents an intersection point between two {@link SegmentString}s.
@@ -143,8 +58,6 @@ struct SegmentNodeLT {
 		return s1->compareTo(s2)<0;
 	}
 };
-
-class SegmentString;
 
 typedef set<SegmentNode*,SegmentNodeLT>::iterator SegmentNodeListIterator;
 
@@ -219,7 +132,7 @@ public:
  */
 /* final */ class SegmentString {
 private:
-	SegmentNodeList *eiList;
+	SegmentNodeList eiList;
 	const CoordinateSequence *pts;
 	int npts;
 	const void* context;
@@ -231,7 +144,8 @@ public:
 	SegmentString(const CoordinateSequence *newPts, const void* newContext);
 	virtual ~SegmentString();
 	const void* getContext() const;
-	SegmentNodeList* getIntersectionList() const;
+	const SegmentNodeList& getIntersectionList() const;
+	SegmentNodeList& getIntersectionList();
 	int size() const;
 	const Coordinate& getCoordinate(int i) const;
 	CoordinateSequence* getCoordinates() const;
@@ -463,6 +377,99 @@ public:
 	vector<SegmentString*>* node(vector<SegmentString*> *segStrings); // throw(GEOSException *);
 };
 
-}
+} // namespace geos
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.11  2005/12/08 01:39:28  strk
+ * SegmentString::eiList made a real object rather then a pointer.
+ * Adde getter for const and non-const references of it (dropping get by pointer)
+ *
+ * Revision 1.10  2005/11/10 15:20:32  strk
+ * Made virtual overloads explicit.
+ *
+ * Revision 1.9  2005/11/07 18:05:28  strk
+ * Reduced set<> lookups
+ *
+ * Revision 1.8  2005/06/24 11:09:43  strk
+ * Dropped RobustLineIntersector, made LineIntersector a concrete class.
+ * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
+ * to avoid computing intersection point (Z) when it's not necessary.
+ *
+ * Revision 1.7  2005/02/22 18:21:46  strk
+ * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
+ * construction costs.
+ *
+ * Revision 1.6  2005/02/22 16:23:28  strk
+ * Cached number of points in CoordinateSequence.
+ *
+ * Revision 1.5  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.4  2004/11/01 16:43:04  strk
+ * Added Profiler code.
+ * Temporarly patched a bug in DoubleBits (must check drawbacks).
+ * Various cleanups and speedups.
+ *
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.12  2004/07/01 14:12:44  strk
+ *
+ * Geometry constructors come now in two flavors:
+ * 	- deep-copy args (pass-by-reference)
+ * 	- take-ownership of args (pass-by-pointer)
+ * Same functionality is available through GeometryFactory,
+ * including buildGeometry().
+ *
+ * Revision 1.11  2004/06/16 13:13:25  strk
+ * Changed interface of SegmentString, now copying CoordinateSequence argument.
+ * Fixed memory leaks associated with this and MultiGeometry constructors.
+ * Other associated fixes.
+ *
+ * Revision 1.10  2004/05/07 07:57:27  strk
+ * Added missing EdgeNodingValidator to build scripts.
+ * Changed SegmentString constructor back to its original form
+ * (takes const void *), implemented local tracking of "contexts"
+ * in caller objects for proper destruction.
+ *
+ * Revision 1.9  2004/05/06 15:54:15  strk
+ * SegmentNodeList keeps track of created splitEdges for later destruction.
+ * SegmentString constructor copies given Label.
+ * Buffer operation does no more leaks for doc/example.cpp
+ *
+ * Revision 1.8  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
+ * Revision 1.7  2004/04/30 09:15:28  strk
+ * Enlarged exception specifications to allow for AssertionFailedException.
+ * Added missing initializers.
+ *
+ * Revision 1.6  2004/04/23 00:02:18  strk
+ * const-correctness changes
+ *
+ * Revision 1.5  2004/04/19 16:14:52  strk
+ * Some memory leaks plugged in noding algorithms.
+ *
+ * Revision 1.4  2004/04/19 12:51:01  strk
+ * Memory leaks fixes. Throw specifications added.
+ *
+ * Revision 1.3  2004/04/14 09:30:48  strk
+ * Private iterated noding funx now use int* instead of vector to know
+ * when it's time to stop.
+ *
+ * Revision 1.2  2004/03/26 07:48:30  ybychkov
+ * "noding" package ported (JTS 1.4)
+ *
+ *
+ **********************************************************************/
 
