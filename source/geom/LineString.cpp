@@ -193,7 +193,7 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 }
 
 void
-LineString::apply_rw(CoordinateFilter *filter)
+LineString::apply_rw(const CoordinateFilter *filter)
 {
 	points->apply_rw(filter);
 }
@@ -276,6 +276,12 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.54  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.53  2005/12/07 22:52:03  strk
  * Added CoordinateSequence::apply_rw(CoordinateFilter *) and
  * CoordinateSequence::apply_ro(CoordinateFilter *) const

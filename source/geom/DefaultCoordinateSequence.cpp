@@ -183,7 +183,7 @@ DefaultCoordinateSequence::setOrdinate(unsigned int index, unsigned int ordinate
 }
 
 void
-DefaultCoordinateSequence::apply_rw(CoordinateFilter *filter)
+DefaultCoordinateSequence::apply_rw(const CoordinateFilter *filter)
 {
 	for (vector<Coordinate>::iterator i=vect->begin(), e=vect->end(); i!=e; ++i)
 	{
@@ -204,6 +204,12 @@ DefaultCoordinateSequence::apply_ro(CoordinateFilter *filter) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.9  2005/12/07 22:52:03  strk
  * Added CoordinateSequence::apply_rw(CoordinateFilter *) and
  * CoordinateSequence::apply_ro(CoordinateFilter *) const

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.7  2004/07/08 19:34:50  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -59,7 +65,9 @@ void UniqueCoordinateArrayFilter::filter_ro(const Coordinate *coord) {
 	}
 }
 
-void UniqueCoordinateArrayFilter::filter_rw(Coordinate *coord) {
+void
+UniqueCoordinateArrayFilter::filter_rw(Coordinate *coord) const
+{
 	throw new UnsupportedOperationException("UniqueCoordinateArrayFilter is a read-only filter");
 }
 

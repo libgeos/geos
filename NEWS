@@ -59,6 +59,10 @@ Changes in 3.0.0
 	  (private member)
 	- SegmentString::eiList made a real SegmentNodeList, rather then
 	  a pointer (private member)
+	- Removed coordinate copies in ElevationMatrix::elevate
+	- Changed CoordinateFilter interface to have a const method
+	  for filter_rw, updated interfaces using this to take
+	  const CoordinateFilter (apply_rw).
 
 Changes in 2.2.1CVS
 

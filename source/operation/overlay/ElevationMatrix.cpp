@@ -18,13 +18,14 @@
 #include <geos/opOverlay.h>
 
 #define DEBUG 0
-#define ASSERT 1
+#define PARANOIA_LEVEL 0
 
 namespace geos
 {
 
 ElevationMatrix::ElevationMatrix(const Envelope &newEnv,
 		unsigned int newRows, unsigned int newCols):
+	filter(*this),
 	env(newEnv), cols(newCols), rows(newRows),
 	avgElevationComputed(false),
 	avgElevation(DoubleNotANumber),
@@ -47,16 +48,16 @@ ElevationMatrix::add(const Geometry *geom)
 	cerr<<"ElevationMatrix::add(Geometry *) called"<<endl;
 #endif // DEBUG
 
-#if ASSERT
+#if PARANOIA_LEVEL > 0
 	Assert::isTrue(!avgElevationComputed, "Cannot add Geometries to an ElevationMatrix after it's average elevation has been computed");
 #endif
 
-	// Todo: optimize so to not require a CoordinateSequence copy
-	CoordinateSequence *cs = geom->getCoordinates();
-	add(cs);
-	delete cs;
+	//ElevationMatrixFilter filter(this);
+	geom->apply_ro(&filter);
+
 }
 
+#if 0
 void
 ElevationMatrix::add(const CoordinateSequence *cs)
 {
@@ -66,6 +67,7 @@ ElevationMatrix::add(const CoordinateSequence *cs)
 		add(cs->getAt(i));
 	}
 }
+#endif
 
 void
 ElevationMatrix::add(const Coordinate &c)
@@ -162,7 +164,6 @@ ElevationMatrix::print() const
 void
 ElevationMatrix::elevate(Geometry *g) const
 {
-	ElevationMatrixFilter filter(this);
 	g->apply_rw(&filter);
 }
 
@@ -170,6 +171,12 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.5  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

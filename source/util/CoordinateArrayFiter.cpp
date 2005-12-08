@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.7  2005/11/10 10:24:08  strk
  * Fixed virtual overload of CoordinateArrayFilter::filter*
  *
@@ -61,7 +67,9 @@ void CoordinateArrayFilter::filter_ro(const Coordinate *coord) {
 	pts->setAt(*coord,n++);
 }
 
-void CoordinateArrayFilter::filter_rw(Coordinate *coord) {
+void
+CoordinateArrayFilter::filter_rw(Coordinate *coord) const
+{
 	throw new UnsupportedOperationException("CoordinateArrayFilter is a read-only filter");
 }
 

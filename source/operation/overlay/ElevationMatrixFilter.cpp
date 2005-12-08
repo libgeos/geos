@@ -21,8 +21,9 @@
 namespace geos
 {
 
-ElevationMatrixFilter::ElevationMatrixFilter(const ElevationMatrix *newEm):
-	em(newEm), avgElevation(newEm->getAvgElevation())
+ElevationMatrixFilter::ElevationMatrixFilter(ElevationMatrix &newEm):
+	em(newEm),
+	avgElevation(newEm.getAvgElevation())
 {
 }
 
@@ -31,7 +32,7 @@ ElevationMatrixFilter::~ElevationMatrixFilter()
 }
 
 void
-ElevationMatrixFilter::filter_rw(Coordinate *c)
+ElevationMatrixFilter::filter_rw(Coordinate *c) const
 {
 #if DEBUG
 	cerr<<"ElevationMatrixFilter::filter_rw("<<c->toString()<<") called"
@@ -40,7 +41,7 @@ ElevationMatrixFilter::filter_rw(Coordinate *c)
 	if ( ISNAN(c->z) && !ISNAN(avgElevation) )
 	{
 		try {
-			const ElevationMatrixCell &emc = em->getCell(*c);
+			const ElevationMatrixCell &emc = em.getCell(*c);
 			c->z = emc.getAvg();
 			if ( ISNAN(c->z) ) c->z = avgElevation;
 #if DEBUG
@@ -59,10 +60,26 @@ ElevationMatrixFilter::filter_rw(Coordinate *c)
 #endif
 }
 
+void
+ElevationMatrixFilter::filter_ro(const Coordinate *c)
+{
+#if DEBUG
+	cerr<<"ElevationMatrixFilter::filter_ro("<<c->toString()<<") called"
+		<<endl;
+#endif
+	em.add(*c);
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.3  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

@@ -32,6 +32,10 @@ using namespace std;
 
 namespace geos {
 
+class ElevationMatrix;
+class ElevationMatrixCell;
+class ElevationMatrixFilter;
+
 class ElevationMatrixCell {
 public:
 	ElevationMatrixCell();
@@ -47,8 +51,28 @@ private:
 };
 
 /*
+ * This is the CoordinateFilter used by ElevationMatrix.
+ * filter_ro is used to add Geometry Coordinate's Z
+ * values to the matrix.
+ * filter_rw is used to actually elevate Geometries.
+ */
+class ElevationMatrixFilter: public CoordinateFilter
+{
+public:
+	ElevationMatrixFilter(ElevationMatrix &em);
+	~ElevationMatrixFilter();
+	void filter_rw(Coordinate *c) const;
+	void filter_ro(const Coordinate *c);
+private:
+	ElevationMatrix &em;
+	double avgElevation;
+};
+
+
+/*
  */
 class ElevationMatrix {
+friend class ElevationMatrixFilter;
 public:
 	ElevationMatrix(const Envelope &extent, unsigned int rows,
 		unsigned int cols);
@@ -61,7 +85,8 @@ public:
 	const ElevationMatrixCell &getCell(const Coordinate &c) const;
 	string print() const;
 private:
-	void add(const CoordinateSequence *cs);
+	ElevationMatrixFilter filter;
+	//void add(const CoordinateSequence *cs);
 	void add(const Coordinate &c);
 	Envelope env;
 	unsigned int cols;
@@ -71,18 +96,6 @@ private:
 	mutable bool avgElevationComputed;
 	mutable double avgElevation;
 	vector<ElevationMatrixCell>cells;
-};
-
-class ElevationMatrixFilter: public CoordinateFilter
-{
-public:
-	ElevationMatrixFilter(const ElevationMatrix *em);
-	~ElevationMatrixFilter();
-	void filter_rw(Coordinate *c);
-	void filter_ro(const Coordinate *c) {};
-private:
-	const ElevationMatrix *em;
-	double avgElevation;
 };
 
 /*
@@ -623,6 +636,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.16  2005/12/08 00:03:51  strk
  * LineBuilder::lineEdgesList made a real vector, rather then pointer (private member).
  * Small optimizations in LineBuilder loops, cleanups in LineBuilder class dox.

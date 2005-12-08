@@ -242,7 +242,7 @@ Polygon::apply_ro(CoordinateFilter *filter) const
 }
 
 void
-Polygon::apply_rw(CoordinateFilter *filter)
+Polygon::apply_rw(const CoordinateFilter *filter)
 {
 	shell->apply_rw(filter);
 	for (unsigned int i = 0; i < holes->size(); ++i)
@@ -390,6 +390,12 @@ Polygon::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.50  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.49  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there

@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.5  2005/11/10 15:20:32  strk
  * Made virtual overloads explicit.
  *
@@ -125,7 +131,7 @@ private:
 public:
 	CommonCoordinateFilter();
 	~CommonCoordinateFilter();
-	void filter_rw(Coordinate *coord);
+	void filter_rw(Coordinate *coord) const;
 	void filter_ro(const Coordinate *coord);
 	Coordinate* getCommonCoordinate();
 };
@@ -135,7 +141,7 @@ private:
 	Coordinate trans;
 public:
 	Translater(Coordinate &newTrans);
-	void filter_rw(Coordinate *coord);
+	void filter_rw(Coordinate *coord) const;
 	void filter_ro(const Coordinate *coord){}; //Not used
 };
 

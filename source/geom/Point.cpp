@@ -140,7 +140,7 @@ Point::apply_ro(CoordinateFilter *filter) const
 }
 
 void
-Point::apply_rw(CoordinateFilter *filter)
+Point::apply_rw(const CoordinateFilter *filter)
 {
 	if (isEmpty()) {return;}
 	Coordinate newcoord = coordinates->getAt(0);
@@ -208,6 +208,12 @@ Point::getGeometryTypeId() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.36  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.35  2005/06/23 14:22:33  strk
  * Inlined and added missing ::clone() for Geometry subclasses
  *

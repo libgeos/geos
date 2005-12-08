@@ -131,7 +131,7 @@ public:
 	virtual ~CoordinateArrayFilter();
 	virtual const CoordinateSequence* getCoordinates() const;
 	virtual void filter_ro(const Coordinate *coord);
-	virtual void filter_rw(Coordinate *coord); // Unsopported
+	virtual void filter_rw(Coordinate *coord) const; // Unsupported
 };
 
 class UniqueCoordinateArrayFilter:public CoordinateFilter {
@@ -141,7 +141,7 @@ public:
 	virtual ~UniqueCoordinateArrayFilter();
 	virtual const CoordinateSequence* getCoordinates() const;
 	virtual void filter_ro(const Coordinate *coord);
-	virtual void filter_rw(Coordinate *coord); // Unsupported
+	virtual void filter_rw(Coordinate *coord) const; // Unsupported
 };
 
 
@@ -262,6 +262,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.9  2005/11/10 10:24:08  strk
  * Fixed virtual overload of CoordinateArrayFilter::filter*
  *

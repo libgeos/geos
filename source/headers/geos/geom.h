@@ -791,7 +791,7 @@ public:
 	 */
 	virtual void expandEnvelope(Envelope &env) const;
 
-	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
+	virtual void apply_rw(const CoordinateFilter *filter)=0; //Abstract
 	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
 
 };
@@ -837,7 +837,7 @@ public:
 	void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value);
 	void expandEnvelope(Envelope &env) const;
 	unsigned int getDimension() const { return 3; }
-	void apply_rw(CoordinateFilter *filter); 
+	void apply_rw(const CoordinateFilter *filter); 
 	void apply_ro(CoordinateFilter *filter) const; 
 
 private:
@@ -930,12 +930,19 @@ public:
 class CoordinateFilter {
 public:
    virtual ~CoordinateFilter() {}
+
    /**
-    *  Performs an operation with or on <code>coord</code>.
+    * Performs an operation on <code>coord</code>.
     *
-    *@param  coord  a <code>Coordinate</code> to which the filter is applied.
+    * @param  coord  a <code>Coordinate</code> to which the filter is applied.
     */
-   virtual void filter_rw(Coordinate* coord)=0;
+   virtual void filter_rw(Coordinate* coord) const=0;
+
+   /**
+    * Performs an operation with <code>coord</code>.
+    *
+    * @param  coord  a <code>Coordinate</code> to which the filter is applied.
+    */
    virtual void filter_ro(const Coordinate* coord)=0;
 };
 
@@ -956,11 +963,11 @@ public:
 class GeometryComponentFilter {
 public:
 	/**
-	*  Performs an operation with or on <code>geom</code>.
-	*
-	*@param  geom  a <code>Geometry</code> to which the filter is applied.
-	*/
-//	virtual void filter(Geometry *geom)=0;
+	 *  Performs an operation with or on <code>geom</code>.
+	 *
+	 * @param  geom  a <code>Geometry</code> to which the filter
+	 * is applied.
+	 */
 	virtual void filter_rw(Geometry *geom);
 	virtual void filter_ro(const Geometry *geom); // Unsupported
 };
@@ -1477,7 +1484,7 @@ public:
 	virtual bool equalsExact(const Geometry *other, double tolerance=0)
 		const=0; //Abstract
 
-	virtual void apply_rw(CoordinateFilter *filter)=0; //Abstract
+	virtual void apply_rw(const CoordinateFilter *filter)=0; //Abstract
 	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
 	virtual void apply_rw(GeometryFilter *filter);
 	virtual void apply_ro(GeometryFilter *filter) const;
@@ -1914,7 +1921,7 @@ public:
 	virtual bool equalsExact(const Geometry *other, double tolerance=0) const;
 
 	virtual void apply_ro(CoordinateFilter *filter) const;
-	virtual void apply_rw(CoordinateFilter *filter);
+	virtual void apply_rw(const CoordinateFilter *filter);
 	virtual void apply_ro(GeometryFilter *filter) const;
 	virtual void apply_rw(GeometryFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
@@ -2006,7 +2013,7 @@ public:
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	void apply_ro(CoordinateFilter *filter) const;
-	void apply_rw(CoordinateFilter *filter);
+	void apply_rw(const CoordinateFilter *filter);
 	void apply_ro(GeometryFilter *filter) const;
 	void apply_rw(GeometryFilter *filter);
 	void apply_rw(GeometryComponentFilter *filter);
@@ -2078,7 +2085,7 @@ public:
 	virtual bool isCoordinate(Coordinate& pt) const;
 	virtual bool equalsExact(const Geometry *other, double tolerance=0)
 		const;
-	virtual void apply_rw(CoordinateFilter *filter);
+	virtual void apply_rw(const CoordinateFilter *filter);
 	virtual void apply_ro(CoordinateFilter *filter) const;
 	virtual void apply_rw(GeometryFilter *filter);
 	virtual void apply_ro(GeometryFilter *filter) const;
@@ -2222,7 +2229,7 @@ public:
 	string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
-	void apply_rw(CoordinateFilter *filter);
+	void apply_rw(const CoordinateFilter *filter);
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(GeometryFilter *filter);
 	void apply_ro(GeometryFilter *filter) const;
@@ -2629,6 +2636,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.57  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.56  2005/12/07 22:52:03  strk
  * Added CoordinateSequence::apply_rw(CoordinateFilter *) and
  * CoordinateSequence::apply_ro(CoordinateFilter *) const

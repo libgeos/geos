@@ -184,7 +184,7 @@ GeometryCollection::equalsExact(const Geometry *other, double tolerance) const
 }
 
 void
-GeometryCollection::apply_rw(CoordinateFilter *filter)
+GeometryCollection::apply_rw(const CoordinateFilter *filter)
 {
 	for (unsigned int i=0; i<geometries->size(); ++i)
 	{
@@ -324,6 +324,12 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.49  2005/12/08 14:14:07  strk
+ * ElevationMatrixFilter used for both elevation and Matrix fill,
+ * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
+ * Changed CoordinateFilter::filter_rw to be a const method: updated
+ * all apply_rw() methods to take a const CoordinateFilter.
+ *
  * Revision 1.48  2005/11/25 09:57:51  strk
  * Fixed bug in getCoordinates() [ introduced by previous commit ]
  *
