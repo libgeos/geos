@@ -120,39 +120,32 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 	// reliable!). The check for point equality is 2D only - Z values
 	// are ignored
 	bool useIntPt1=ei1->dist>0.0 || !ei1->coord.equals2D(lastSegStartPt);
-	if (!useIntPt1) {
-		npts--;
-#if DEBUG
-		cerr<<"    !useIntPt1 (npts:"<<npts<<")"<<endl;
-#endif // DEBUG
-	}
-	CoordinateSequence* pts=new DefaultCoordinateSequence(npts);
-	int ipt=0;
-	pts->setAt(ei0->coord,ipt++);
-#if DEBUG
-	cerr<<"    pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
-#endif // DEBUG
+
+	if (!useIntPt1) --npts;
+
+	vector<Coordinate> *vc=new vector<Coordinate>();
+	vc->reserve(npts);
+
+	vc->push_back(ei0->coord);
 	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++)
 	{
 		if ( ! useIntPt1 && ei1->segmentIndex == i )
 		{
-			pts->setAt(ei1->coord, ipt++);
+			vc->push_back(ei1->coord);
 		}
 		else
 		{
-			pts->setAt(edge->pts->getAt(i),ipt++);
+			vc->push_back(edge->pts->getAt(i));
 		}
-#if DEBUG
-		cerr<<"    pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
-#endif // DEBUG
 	}
+
 	if (useIntPt1)
 	{
-		pts->setAt(ei1->coord,ipt);
-#if DEBUG
-		cerr<<"    ustIntPt1: pt"<<(ipt-1)<<": "<<pts->getAt(ipt-1).toString()<<endl;
-#endif // DEBUG
+		vc->push_back(ei1->coord);
 	}
+
+	CoordinateSequence* pts=new DefaultCoordinateSequence(vc);
+
 	return new Edge(pts, new Label(*(edge->getLabel())));
 }
 
@@ -172,6 +165,9 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/12/08 00:24:41  strk
+ * Reduced coordinate assignments in ::createSplitEdge
+ *
  * Revision 1.14  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.
