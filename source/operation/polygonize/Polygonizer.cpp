@@ -86,11 +86,8 @@ Polygonizer::add(vector<Geometry*> *geomList)
 {
 	for(unsigned int i=0, n=geomList->size(); i<n; ++i)
 	{
-		cerr<<"Polygonizer::add "<<i<<endl;
 		Geometry *geometry=(*geomList)[i];
-		cerr<<"["<<geometry->toString()<<"]"<<endl;
 		add(geometry);
-		cerr<<"  added"<<i<<endl;
 	}
 }
 
@@ -272,6 +269,9 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2005/12/09 10:32:28  strk
+ * Cleaned up debugging line left over from previous commit
+ *
  * Revision 1.8  2005/12/09 10:03:46  strk
  * Fixed a bug making PolygonizeGraph choking on invalid LineStrings.
  * Minor optimizations in Polygonizer loops.
