@@ -1,6 +1,7 @@
 Changes in 2.2.1CVS
 
 - Support for MingW builds
+- Bugfix in Polygonizer chocking on invalid LineString inputs
 
 Changes in 2.2.0
 
