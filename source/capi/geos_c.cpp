@@ -195,7 +195,7 @@ GEOSDisjoint(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -223,7 +223,7 @@ GEOSTouches(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -251,7 +251,7 @@ GEOSIntersects(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -279,7 +279,7 @@ GEOSCrosses(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -307,7 +307,7 @@ GEOSWithin(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -339,7 +339,7 @@ GEOSContains(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -367,7 +367,7 @@ GEOSOverlaps(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -401,7 +401,7 @@ GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -441,7 +441,7 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -491,7 +491,7 @@ GEOSisValid(const Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 
@@ -525,7 +525,7 @@ GEOSEquals(const Geometry *g1, const Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -552,7 +552,7 @@ GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
 	}
 }
@@ -583,7 +583,7 @@ GEOSGeomFromWKT(const char *wkt)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -616,7 +616,7 @@ GEOSGeomToWKT(const Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -654,7 +654,7 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -688,7 +688,7 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -715,7 +715,7 @@ GEOSisEmpty(const Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -742,7 +742,7 @@ GEOSisSimple(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -774,7 +774,7 @@ GEOSisRing(Geometry *g)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 2;
 	}
 }
@@ -810,7 +810,7 @@ GEOSGeomType(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -838,7 +838,7 @@ GEOSGeomTypeId(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return -1;
 	}
 }
@@ -873,7 +873,7 @@ GEOSIntersection(Geometry *g1, Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -901,7 +901,7 @@ GEOSBuffer(Geometry *g1, double width, int quadrantsegments)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -929,7 +929,7 @@ GEOSConvexHull(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -957,7 +957,7 @@ GEOSDifference(Geometry *g1, Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -985,7 +985,7 @@ GEOSBoundary(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1013,7 +1013,7 @@ GEOSSymDifference(Geometry *g1, Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1040,7 +1040,7 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1069,7 +1069,7 @@ GEOSPointOnSurface(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1102,7 +1102,7 @@ GEOSGeom_destroy(Geometry *a)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 	}
 }
 
@@ -1132,7 +1132,7 @@ GEOSdeleteChar(char *a)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 	}
 }
 */
@@ -1159,7 +1159,7 @@ GEOSGetNumCoordinates(const Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return -1;
 	}
 }
@@ -1186,7 +1186,7 @@ GEOSGetNumInteriorRings(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return -1;
 	}
 }
@@ -1215,7 +1215,7 @@ GEOSGetNumGeometries(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return -1;
 	}
 }
@@ -1252,7 +1252,7 @@ GEOSGetGeometryN(Geometry *g1, int n)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1289,7 +1289,7 @@ GEOSGetExteriorRing(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1325,7 +1325,7 @@ GEOSGetInteriorRingN(Geometry *g1, int n)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1353,7 +1353,7 @@ GEOSGetCentroid(Geometry *g)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1410,7 +1410,7 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1469,7 +1469,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 
@@ -1515,7 +1515,7 @@ GEOSLineMerge(Geometry *g)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 
@@ -1543,7 +1543,7 @@ GEOSGetSRID(Geometry *g1)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
 	}
 }
@@ -1614,7 +1614,7 @@ GEOSCoordSeq_create(unsigned int size, unsigned int dims)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1642,7 +1642,7 @@ GEOSCoordSeq_setOrdinate(CoordinateSequence *s, unsigned int idx,
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
 	}
 }
@@ -1683,7 +1683,7 @@ GEOSCoordSeq_clone(CoordinateSequence *s)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1712,7 +1712,7 @@ GEOSCoordSeq_getOrdinate(CoordinateSequence *s, unsigned int idx,
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
 	}
 }
@@ -1757,7 +1757,7 @@ GEOSCoordSeq_getSize(CoordinateSequence *s, unsigned int *size)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
 	}
 }
@@ -1784,7 +1784,7 @@ GEOSCoordSeq_getDimensions(CoordinateSequence *s, unsigned int *dims)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
 	}
 }
@@ -1808,7 +1808,7 @@ GEOSCoordSeq_destroy(CoordinateSequence *s)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 	}
 }
 
@@ -1844,7 +1844,7 @@ GEOSGeom_getCoordSeq(Geometry *g)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1867,7 +1867,7 @@ GEOSGeom_createPoint(CoordinateSequence *cs)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1890,7 +1890,7 @@ GEOSGeom_createLinearRing(CoordinateSequence *cs)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1913,7 +1913,7 @@ GEOSGeom_createLineString(CoordinateSequence *cs)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1947,7 +1947,7 @@ GEOSGeom_createPolygon(Geometry *shell, Geometry **holes,
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -1970,7 +1970,7 @@ GEOSGeom_clone(Geometry *g)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return NULL;
 	}
 }
@@ -2023,7 +2023,7 @@ GEOSGeom_getDimensions(const Geometry *g)
 
 	catch (...)
 	{
-		ERROR_MESSAGE("Unkown exception thrown");
+		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
 	}
 }
