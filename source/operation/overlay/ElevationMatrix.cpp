@@ -142,6 +142,10 @@ ElevationMatrix::getAvgElevation() const
 		}
 	}
 	if ( zvals ) avgElevation = ztot/zvals;
+	else avgElevation = DoubleNotANumber;
+
+	avgElevationComputed = true;
+
 	return avgElevation;
 }
 
@@ -164,6 +168,10 @@ ElevationMatrix::print() const
 void
 ElevationMatrix::elevate(Geometry *g) const
 {
+
+	// Nothing to do if no elevation info in matrix
+	if ( ISNAN(getAvgElevation()) ) return;
+
 	g->apply_rw(&filter);
 }
 
@@ -171,6 +179,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2005/12/11 10:41:56  strk
+ * Fixed premature initialization of average Z value in ElevationMatrixFilter
+ *
  * Revision 1.6  2005/12/08 14:14:07  strk
  * ElevationMatrixFilter used for both elevation and Matrix fill,
  * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).

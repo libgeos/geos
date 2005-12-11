@@ -22,8 +22,7 @@ namespace geos
 {
 
 ElevationMatrixFilter::ElevationMatrixFilter(ElevationMatrix &newEm):
-	em(newEm),
-	avgElevation(newEm.getAvgElevation())
+	em(newEm)
 {
 }
 
@@ -38,26 +37,23 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 	cerr<<"ElevationMatrixFilter::filter_rw("<<c->toString()<<") called"
 		<<endl;
 #endif
-	if ( ISNAN(c->z) && !ISNAN(avgElevation) )
-	{
-		try {
-			const ElevationMatrixCell &emc = em.getCell(*c);
-			c->z = emc.getAvg();
-			if ( ISNAN(c->z) ) c->z = avgElevation;
+
+	// already has a Z value, nothing to do
+	if ( ! ISNAN(c->z) ) return;
+
+	double avgElevation = em.getAvgElevation();
+
+	try {
+		const ElevationMatrixCell &emc = em.getCell(*c);
+		c->z = emc.getAvg();
+		if ( ISNAN(c->z) ) c->z = avgElevation;
 #if DEBUG
-			cerr<<"  z set to "<<c->z<<endl;
+		cerr<<"  z set to "<<c->z<<endl;
 #endif
-		} catch (IllegalArgumentException *ex) {
-			delete ex;
-			c->z = avgElevation;
-		}
+	} catch (IllegalArgumentException *ex) {
+		delete ex;
+		c->z = avgElevation;
 	}
-#if DEBUG
-	else
-	{
-		cerr<<"  already has a Z or avgElevation == NaN"<<endl;
-	}
-#endif
 }
 
 void
@@ -74,6 +70,9 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2005/12/11 10:41:57  strk
+ * Fixed premature initialization of average Z value in ElevationMatrixFilter
+ *
  * Revision 1.4  2005/12/08 14:14:07  strk
  * ElevationMatrixFilter used for both elevation and Matrix fill,
  * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
