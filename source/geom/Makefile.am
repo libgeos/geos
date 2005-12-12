@@ -211,7 +211,7 @@ EXTERNAL_SOURCES =  \
 libgeos_la_SOURCES = $(DIR_SOURCES) $(EXTERNAL_SOURCES)
 
 libgeos_la_LDFLAGS = \
-	-version-info @INTERFACE_CURRENT@:@INTERFACE_REVISION@:@INTERFACE_AGE@ \
+	-release @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@ \
 	-no-undefined
 
 dist-local:
