@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2.4.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
  * Revision 1.2  2004/07/19 10:37:03  strk
  * defaultCoordinateSequenceFactory made module-static (use DefaultCoordinateSequenceFactory::instance() instead)
  *
@@ -33,6 +37,12 @@ CoordinateSequence *
 DefaultCoordinateSequenceFactory::create(vector<Coordinate> *coords) const
 {
 	return new DefaultCoordinateSequence(coords);
+}
+
+CoordinateSequence *
+DefaultCoordinateSequenceFactory::create(unsigned int size, unsigned int dims) const
+{
+	return new DefaultCoordinateSequence(size);
 }
 
 const CoordinateSequenceFactory *

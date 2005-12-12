@@ -2,8 +2,7 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 GEOS_VERSION=@VERSION@
 
-pkglibdir=$(prefix)/lib
-pkglib_LTLIBRARIES = libgeos.la
+lib_LTLIBRARIES = libgeos.la
 
 INCLUDES = -I$(top_srcdir)/source/headers -DGEOS_VERSION=""$(GEOS_VERSION)""
 
@@ -128,6 +127,9 @@ EXTERNAL_SOURCES =  \
 	../io/StringTokenizer.cpp \
 	../io/WKTReader.cpp \
 	../io/WKTWriter.cpp \
+	../io/WKBReader.cpp \
+	../io/WKBWriter.cpp \
+	../io/ByteOrderValues.cpp \
 	../io/Writer.cpp \
 	../io/Unload.cpp \
 	../operation/GeometryGraphOperation.cpp \
@@ -211,7 +213,9 @@ EXTERNAL_SOURCES =  \
 
 libgeos_la_SOURCES = $(DIR_SOURCES) $(EXTERNAL_SOURCES)
 
-libgeos_la_LDFLAGS = -version-info @INTERFACE_CURRENT@:@INTERFACE_REVISION@:@INTERFACE_AGE@
+libgeos_la_LDFLAGS = \
+	-version-info @INTERFACE_CURRENT@:@INTERFACE_REVISION@:@INTERFACE_AGE@ \
+	-no-undefined
 
 dist-local:
 	cp -p $(DIR_SOURCES) Makefile.am Makefile.in $(distdir)

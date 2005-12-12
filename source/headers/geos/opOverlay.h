@@ -286,14 +286,14 @@ private:
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given Polygon it is on.
 	 */
-	int OverlayOp::mergeZ(Node *n, const Polygon *poly) const;
+	int mergeZ(Node *n, const Polygon *poly) const;
 
 	/*
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given LineString it is on.
 	 * @returns 1 if an intersection is found, 0 otherwise.
 	 */
-	int OverlayOp::mergeZ(Node *n, const LineString *line) const;
+	int mergeZ(Node *n, const LineString *line) const;
 
 	/*
 	 * Average Z of input geometries
@@ -356,58 +356,81 @@ public:
  */
 class PointBuilder {
 private:
+
 	OverlayOp *op;
 	const GeometryFactory *geometryFactory;
-	PointLocator *ptLocator;
-	vector<Node*>* collectNodes(int opCode);
-	/**
-	* This method simplifies the resultant Geometry by finding and eliminating
-	* "covered" points.
-	* A point is covered if it is contained in another element Geometry
-	* with higher dimension (e.g. a point might be contained in a polygon,
-	* in which case the point can be eliminated from the resultant).
-	*/
-	vector<Point*>* simplifyPoints(vector<Node*>* resultNodeList);
+	void extractNonCoveredResultNodes(int opCode);
+
+	/*
+	 * Converts non-covered nodes to Point objects and adds them to
+	 * the result.
+	 *
+	 * A node is covered if it is contained in another element Geometry
+	 * with higher dimension (e.g. a node point might be contained in
+	 * a polygon, in which case the point can be eliminated from
+	 * the result).
+	 *
+	 * @param n the node to test
+	 */
+	void filterCoveredNodeToPoint(const Node *);
+
+	vector<Point*> *resultPointList;
+
 public:
-	PointBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator);
-	/**
-	* @return a list of the Points in the result of the specified overlay operation
-	*/
+
+	PointBuilder(OverlayOp *newOp,
+		const GeometryFactory *newGeometryFactory,
+		PointLocator *newPtLocator=NULL);
+
+	/*
+	 * @return a list of the Points in the result of the specified
+	 * overlay operation
+	 */
 	vector<Point*>* build(int opCode);
 };
 
 /*
- * Forms JTS LineStrings out of a the graph of {@link DirectedEdge}s
- * created by an {@link OverlayOp}.
+ * Forms JTS LineStrings out of a the graph of DirectedEdge
+ * created by an OverlayOp.
  *
  */
 class LineBuilder {
 public:
-	LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator);
+	LineBuilder(OverlayOp *newOp,
+		const GeometryFactory *newGeometryFactory,
+		PointLocator *newPtLocator);
+
 	~LineBuilder();
-	/**
-	* @return a list of the LineStrings in the result of the specified overlay operation
-	*/
+
+	/*
+	 * @return a list of the LineStrings in the result of the
+	 * specified overlay operation
+	 */
 	vector<LineString*>* build(int opCode);
-	/**
-	* Find and mark L edges which are "covered" by the result area (if any).
-	* L edges at nodes which also have A edges can be checked by checking
-	* their depth at that node.
-	* L edges at nodes which do not have A edges can be checked by doing a
-	* point-in-polygon test with the previously computed result areas.
-	*/
+
+	/*
+	 * Find and mark L edges which are "covered" by the result area
+	 * (if any).
+	 * L edges at nodes which also have A edges can be checked by
+	 * checking their depth at that node.
+	 * L edges at nodes which do not have A edges can be checked by
+	 * doing a point-in-polygon test with the previously computed
+	 * result areas.
+	 */
 	void collectLineEdge(DirectedEdge *de,int opCode,vector<Edge*>* edges);
-	/**
-	* Collect edges from Area inputs which should be in the result but
-	* which have not been included in a result area.
-	* This happens ONLY:
-	* <ul>
-	* <li>during an intersection when the boundaries of two
-	* areas touch in a line segment
-	* <li> OR as a result of a dimensional collapse.
-	* </ul>
-	*/
+
+	/*
+	 * Collect edges from Area inputs which should be in the result but
+	 * which have not been included in a result area.
+	 * This happens ONLY:
+	 * <ul>
+	 * <li>during an intersection when the boundaries of two
+	 * areas touch in a line segment
+	 * <li> OR as a result of a dimensional collapse.
+	 * </ul>
+	 */
 	void collectBoundaryTouchEdge(DirectedEdge *de,int opCode,vector<Edge*>* edges);
+
 private:
 	OverlayOp *op;
 	const GeometryFactory *geometryFactory;
@@ -418,7 +441,8 @@ private:
 	void collectLines(int opCode);
 	void buildLines(int opCode);
 	void labelIsolatedLines(vector<Edge*> *edgesList);
-	/**
+
+	/*
 	 * Label an isolated node with its relationship to the target geometry.
 	 */
 	void labelIsolatedLine(Edge *e,int targetIndex);
@@ -429,7 +453,7 @@ private:
 	 * The Z value is interpolated between 3d vertexes and copied
 	 * from a 3d vertex to the end.
 	 */
-	void LineBuilder::propagateZ(CoordinateSequence *cs);
+	void propagateZ(CoordinateSequence *cs);
 };
 
 /*
@@ -573,6 +597,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8.2.1.2.1  2005/11/30 11:18:07  strk
+ * Fixed doxygen warnings
+ *
+ * Revision 1.8.2.1  2005/06/28 01:07:11  strk
+ * improved extraction of result points in overlay op
+ *
  * Revision 1.8  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

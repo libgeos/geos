@@ -5,63 +5,42 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.12  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.11  2004/07/07 07:52:13  strk
- * Removed note about required speedup in BufferSubgraph.
- * I've made tests with 'sets' and there is actually a big slow down..
- *
- * Revision 1.10  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2004/05/19 12:50:53  strk
- * Removed all try/catch blocks transforming stack allocated-vectors to auto-heap-allocations
- *
- * Revision 1.8  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.7  2004/05/03 17:15:38  strk
- * leaks on exception fixed.
- *
- * Revision 1.6  2004/04/16 12:48:07  strk
- * Leak fixes.
- *
- * Revision 1.5  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/opBuffer.h>
 
 namespace geos {
-BufferSubgraph::BufferSubgraph(CGAlgorithms *cga) {
-	dirEdgeList=new vector<DirectedEdge*>();
-	nodes=new vector<Node*>();
-	rightMostCoord=NULL;
-	finder=new RightmostEdgeFinder(cga);
+BufferSubgraph::BufferSubgraph(CGAlgorithms *cga):
+	finder(new RightmostEdgeFinder(cga)),
+	dirEdgeList(new vector<DirectedEdge*>()),
+	nodes(new vector<Node*>()),
+	rightMostCoord(NULL),
+	env(NULL)
+{
+	//dirEdgeList=new vector<DirectedEdge*>();
+	//nodes=new vector<Node*>();
+	//rightMostCoord=NULL;
+	//finder=new RightmostEdgeFinder(cga);
 }
 
 BufferSubgraph::~BufferSubgraph() {
 	delete dirEdgeList;
 	delete nodes;
 	delete finder;
+	delete env;
 }
 
 vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() { 
 	return dirEdgeList;
 }
+
 vector<Node*>* BufferSubgraph::getNodes() { 
 	return nodes;
 }
@@ -126,7 +105,8 @@ void BufferSubgraph::add(Node *node, vector<Node*> *nodeStack){
 }
 
 void BufferSubgraph::clearVisitedEdges() {
-	for(int i=0;i<(int)dirEdgeList->size();i++) {
+	for(unsigned int i=0, sz=dirEdgeList->size(); i<sz; ++i)
+	{
 		DirectedEdge *de=(*dirEdgeList)[i];
 		de->setVisited(false);
 	}
@@ -279,4 +259,62 @@ bool BufferSubgraph::contains(vector<Node*> *nodes,Node *node) {
 	return result;
 }
 
+Envelope *
+BufferSubgraph::getEnvelope()
+{
+	if (env == NULL) {
+		env = new Envelope();
+		unsigned int size = dirEdgeList->size();
+		for(unsigned int i=0; i<size; ++i)
+		{
+			DirectedEdge *dirEdge=(*dirEdgeList)[i];
+			const CoordinateSequence *pts = dirEdge->getEdge()->getCoordinates();
+			int n = pts->getSize()-1;
+			for (int j=0; j<n; ++j) {
+				env->expandToInclude(pts->getAt(j));
+			}
+		}
+	}
+	return env;
 }
+
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.12.2.1.2.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
+ * Revision 1.12.2.1  2005/06/30 18:31:21  strk
+ * Ported SubgraphDepthLocator optimizations from JTS code
+ *
+ * Revision 1.12  2004/12/08 13:54:43  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.11  2004/07/07 07:52:13  strk
+ * Removed note about required speedup in BufferSubgraph.
+ * I've made tests with 'sets' and there is actually a big slow down..
+ *
+ * Revision 1.10  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.9  2004/05/19 12:50:53  strk
+ * Removed all try/catch blocks transforming stack allocated-vectors to auto-heap-allocations
+ *
+ * Revision 1.8  2004/05/03 22:56:44  strk
+ * leaks fixed, exception specification omitted.
+ *
+ * Revision 1.7  2004/05/03 17:15:38  strk
+ * leaks on exception fixed.
+ *
+ * Revision 1.6  2004/04/16 12:48:07  strk
+ * Leak fixes.
+ *
+ * Revision 1.5  2004/04/10 08:40:01  ybychkov
+ * "operation/buffer" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

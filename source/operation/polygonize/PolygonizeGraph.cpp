@@ -91,6 +91,16 @@ PolygonizeGraph::addEdge(const LineString *line)
 
 	CoordinateSequence *linePts=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
 
+	/*
+	 * This would catch invalid linestrings
+	 * (containing duplicated points only)
+	 */
+	if ( linePts->getSize() < 2 )
+	{
+		delete linePts;
+		return;
+	}
+
 	const Coordinate& startPt=linePts->getAt(0);
 	const Coordinate& endPt=linePts->getAt(linePts->getSize()-1);
 	planarNode *nStart=getNode(startPt);
@@ -429,6 +439,14 @@ PolygonizeGraph::deleteDangles()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8.4.2  2005/12/09 11:36:45  strk
+ * Small leak plugged in CAPI::GEOSHasZ() and in
+ * invalid input to PolygonizeGraph (again)
+ *
+ * Revision 1.8.4.1  2005/12/09 10:04:52  strk
+ * Fixed a bug making PolygonizeGraph choking on invalid LineStrings.
+ * Minor optimizations in Polygonizer loops.
+ *
  * Revision 1.8  2004/12/14 10:35:44  strk
  * Comments cleanup. PolygonizeGraph keeps track of generated CoordinateSequence
  * for delayed destruction.

@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -22,7 +23,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-#include <math.h>
+#include <cmath>
 #include <geos/platform.h>
 
 using namespace std;
@@ -337,6 +338,9 @@ private:
  * The standard comparison functions will ignore the z-ordinate.
  *
  */
+// Define the following to make assignments and copy constructions
+// NON-inline (will let profilers report usages)
+//#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
 public:
 	//void setNull(void);
@@ -376,11 +380,16 @@ public:
 		z=zNew;
 	}
 
+#ifndef PROFILE_COORDINATE_COPIES
 	Coordinate::Coordinate(const Coordinate& c){
 		x=c.x;
 		y=c.y;
 		z=c.z;
 	}
+#else
+	Coordinate::Coordinate(const Coordinate& c);
+	Coordinate &operator=(const Coordinate &c);
+#endif
 
 	Coordinate::Coordinate(double xNew, double yNew){
 		x=xNew;
@@ -689,6 +698,19 @@ public:
 	/// Reverse Coordinate order in given CoordinateSequence
 	static void reverse(CoordinateSequence *cl);
 
+	/// Get number of dimensions
+	virtual unsigned int getDimension() const=0;
+
+	virtual double getOrdinate(unsigned int index, unsigned int ordinateIndex) const=0;
+
+	virtual void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value)=0;
+
+	/// Standard ordinate index values
+	enum { X,Y,Z,M };
+
+	double getX(unsigned int index) const { return getOrdinate(index, X); }
+	double getY(unsigned int index) const { return getOrdinate(index, Y); }
+	double getZ(unsigned int index) const { return getOrdinate(index, Z); }
 };
 
 /**
@@ -729,6 +751,11 @@ public:
 	void setPoints(const vector<Coordinate> &v);
 private:
 	vector<Coordinate> *vect;
+
+public:
+	unsigned int getDimension() const { return 3; }
+	void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value);
+	double getOrdinate(unsigned int index, unsigned int ordinateIndex) const;
 };
 
 struct point_3d {
@@ -763,6 +790,10 @@ public:
 private:
 	vector<point_3d> *vect;
 	mutable vector<Coordinate>*cached_vector;
+public:
+	unsigned int getDimension() const { return 3; }
+	void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value);
+	double getOrdinate(unsigned int index, unsigned int ordinateIndex) const;
 };
 
 /**
@@ -794,6 +825,8 @@ public:
 	 * create an empty CoordinateSequence.
 	 */
 	virtual CoordinateSequence *create(vector<Coordinate> *coordinates) const=0;
+
+	virtual CoordinateSequence *create(unsigned int size, unsigned int dims) const=0;
 };
 
 /**
@@ -826,6 +859,8 @@ public:
 	 * Returns the singleton instance of DefaultCoordinateSequenceFactory
 	 */
 	static const CoordinateSequenceFactory *instance();
+
+	CoordinateSequence *create(unsigned int size, unsigned int dims) const;
 };
 
 /*
@@ -838,6 +873,7 @@ class PointCoordinateSequenceFactory: public CoordinateSequenceFactory {
 public:
 
 	CoordinateSequence *create(vector<Coordinate> *coords) const;
+	CoordinateSequence *create(unsigned int size, unsigned int dims) const;
 };
 
 /*
@@ -1074,7 +1110,7 @@ class GeometryFactory;
  *  analysis methods, it will throw an exception. If possible the exception will
  *  report the location of the collapse. <P>
  *
- *  #equals(Object) and #hashCode are not overridden, so that when two
+ *  equals(Object) and hashCode are not overridden, so that when two
  *  topologically equal Geometries are added to HashMaps and HashSets, they
  *  remain distinct. This behaviour is desired in many cases.
  *
@@ -1841,6 +1877,8 @@ private:
 #else        
 	static const int64 serialVersionUID = 4902022702746614570LL;
 #endif        
+public:
+	const CoordinateSequence *getCoordinatesRO() const;
 };
 
 /**
@@ -2431,6 +2469,22 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34.2.2.2.3  2005/11/29 17:52:21  strk
+ * undef PROFILE_COORDINATE_COPIES (was introduced by previous commit, to easy profiling)
+ *
+ * Revision 1.34.2.2.2.2  2005/11/29 17:51:15  strk
+ * Forgot to add the capi/ dir
+ *
+ * Revision 1.34.2.2.2.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
+ * Revision 1.34.2.2  2005/11/08 09:08:07  strk
+ * Cleaned up a couple of Doxygen warnings
+ *
+ * Revision 1.34.2.1  2005/05/23 18:16:40  strk
+ * more math.h to cmath conversions
+ *
  * Revision 1.34  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *

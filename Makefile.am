@@ -5,3 +5,5 @@ SUBDIRS = \
 	swig \
 	doc \
 	VisualStudio 
+
+EXTRA_DIST = acsite.m4

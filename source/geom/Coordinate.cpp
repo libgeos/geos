@@ -14,7 +14,7 @@
  **********************************************************************/
 
 #include <geos/geom.h>
-#include <stdio.h>
+#include <sstream>
 
 namespace geos {
 
@@ -26,18 +26,22 @@ namespace geos {
  *@return    a <code>string</code> of the form <I>(x,y,z)</I>
  */
 string Coordinate::toString() const {
-	string result("");
-	char buffer[255];
+	ostringstream s;
+	//string result("");
+	//char buffer[255];
 	if (ISNAN(z)) {
-		sprintf(buffer,"(%g,%g)",x,y);
-		result.append(buffer);
-		result.append("");
+		s<<"("<<x<<","<<y<<")";
+		//sprintf(buffer,"(%g,%g)",x,y);
+		//result.append(buffer);
+		//result.append("");
 	} else {
-		sprintf(buffer,"(%g,%g,%g)",x,y,z);
-		result.append(buffer);
-		result.append("");
+		s<<"("<<x<<","<<y<<","<<z<<")";
+		//sprintf(buffer,"(%g,%g,%g)",x,y,z);
+		//result.append(buffer);
+		//result.append("");
 	}
-	return result;
+	//return result;
+	return s.str();
 }
 
 /*
@@ -62,10 +66,38 @@ bool operator!=(const Coordinate& a, const Coordinate& b) {
 	return false;
 }
 
+#ifdef PROFILE_COORDINATE_COPIES
+
+Coordinate::Coordinate(const Coordinate& c)
+{
+	x=c.x;
+	y=c.y;
+	z=c.z;
+}
+
+Coordinate &
+Coordinate::operator=(const Coordinate &c)
+{
+	//if ( this == &c ) return *this;
+	x=c.x;
+	y=c.y;
+	z=c.z;
+	return *this;
+}
+
+#endif // PROFILE_COORDINATE_COPIES
+
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19.2.1.2.1  2005/11/29 17:51:15  strk
+ * Forgot to add the capi/ dir
+ *
+ * Revision 1.19.2.1  2005/05/23 18:41:51  strk
+ * Replaced sprintf uses with ostringstream
+ *
  * Revision 1.19  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/geom.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -148,17 +148,14 @@ void PointCoordinateSequence::deleteAt(int pos){
 }
 
 string PointCoordinateSequence::toString() const {
-	string result("");
+	ostringstream s;
 	if (getSize()>0) {
-		char buffer[100];
 		for (unsigned int i=0; i<vect->size(); i++) {
 			point_3d c=(*vect)[i];
-			sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
-			result.append(buffer);
+			s<<"("<<c.x<<","<<c.y<<","<<c.z<<") ";
 		}
-		result.append("");
 	}
-	return result;
+	return s.str();
 }
 
 PointCoordinateSequence::~PointCoordinateSequence() {
@@ -166,10 +163,62 @@ PointCoordinateSequence::~PointCoordinateSequence() {
 	delete cached_vector;
 }
 
+double
+PointCoordinateSequence::getOrdinate(unsigned int index, unsigned int ordinateIndex) const
+{
+
+#if PARANOIA_LEVEL > 0
+	if ( index < 0 || index >= vect->size() ) 
+	throw IllegalArgumentException("Coordinate number out of range");
+#endif
+
+	switch (ordinateIndex)
+	{
+		case CoordinateSequence::X:
+			return (*vect)[index].x;
+		case CoordinateSequence::Y:
+			return (*vect)[index].y;
+		case CoordinateSequence::Z:
+			return (*vect)[index].z;
+		default:
+			return DoubleNotANumber;
+	}
+}
+
+void
+PointCoordinateSequence::setOrdinate(unsigned int index, unsigned int ordinateIndex,
+	double value)
+{
+
+#if PARANOIA_LEVEL > 0
+	if ( index < 0 || index >= vect->size() ) 
+	throw IllegalArgumentException("Coordinate number out of range");
+#endif
+
+	switch (ordinateIndex)
+	{
+		case CoordinateSequence::X:
+			(*vect)[index].x = value;
+		case CoordinateSequence::Y:
+			(*vect)[index].y = value;
+		case CoordinateSequence::Z:
+			(*vect)[index].z = value;
+		default:
+			return;
+	}
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2.2.1.2.1  2005/11/29 16:58:17  strk
+ * Back-ported WKB IO and C api.
+ * Added required higher dimensional interfaces for CoordinateSequence
+ *
+ * Revision 1.2.2.1  2005/05/23 18:41:51  strk
+ * Replaced sprintf uses with ostringstream
+ *
  * Revision 1.2  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *

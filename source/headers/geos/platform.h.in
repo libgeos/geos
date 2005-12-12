@@ -11,7 +11,10 @@
 #undef HAVE_IEEEFP_H
 
 #ifdef HAVE_IEEEFP_H
+extern "C"
+{
 #include <ieeefp.h>
+}
 #endif
 
 
@@ -33,5 +36,12 @@
 #warning "Could not find 64bit integer definition!"
 #endif
 #endif
+
+inline int getMachineByteOrder() {
+        static int endian_check = 1; // don't modify !!
+        return *((char *)&endian_check); // 0 == big_endian | xdr,
+                                         // 1 == little_endian | ndr
+}
+
 
 #endif
