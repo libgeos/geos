@@ -14,6 +14,8 @@
  *
  **********************************************************************
  *
+ * Last port: algorightm/ConvexHull.java rev. 1.26
+ *
  **********************************************************************/
 
 #include <geos/geosAlgorithm.h>
@@ -98,7 +100,15 @@ ConvexHull::getConvexHull()
 	return g;
 }
 
-// Always return a new CoordinateSequence --strk
+/**
+ * Uses a heuristic to reduce the number of points scanned
+ * to compute the hull.
+ * The heuristic is to find a quadrilateral guaranteed to
+ * be in (or on) the hull, and eliminate all points inside it).
+ *
+ * @param pts
+ * @return a newly allocate CoordinateSequence
+ */
 CoordinateSequence*
 ConvexHull::reduce(const CoordinateSequence *pts)
 {
@@ -393,6 +403,9 @@ ConvexHull::cleanRing(const CoordinateSequence *original)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2005/12/14 02:32:41  strk
+ * New entry
+ *
  * Revision 1.14  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
