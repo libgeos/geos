@@ -1,6 +1,7 @@
 
 1: Increment CAPI_INTERFACE_X in configure.in
    - For a release with no interface changes just bump REVISION.
+     [ Even if *nothing* changed in CAPI ]
    - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
    - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
      [ THIS MUST BE CAREFULLY AVOIDED ]
