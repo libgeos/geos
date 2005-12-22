@@ -4,8 +4,10 @@
  * geos.i
  * 
  * Copyright 2004 Sean Gillies, sgillies@frii.com
+ * Updated 2005 Charlie Savage, cfis@interserv.com
  *
- * Interface for a SWIG generated geos module.
+ * Interface for a SWIG generated geos module.  Depends on 
+ * SWIG 1.3.28 and higher.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,33 +22,122 @@
 %include "exception.i"
 
 %{ 
-#include "../../source/headers/geos.h"
-#include "../../source/headers/geos/opLinemerge.h"
-#include "../../source/headers/geos/opPolygonize.h"
+#include "geos.h"
+#include "geos/planargraph.h"
+#include "geos/opLinemerge.h"
+#include "geos/opPolygonize.h"
 %}
 
-// Following methods are prototypes but unimplemented and are to be ignored
-%ignore geos::MultiPoint::isClosed;
 
+/* ================= Shadowed Methods ============== */
+
+/* The overloaded C++ methods cannot be disambiguated by
+   SWIG.  For example:
+   
+	geos::GeometryFactory::createPoint(CoordinateSequence *) const;
+	geos::GeometryFactory::createPoint(const CoordinateSequence&) const;
+   
+   For each pair of methods, one will take ownership
+   of the parameter (thus it is passed as a pointer) while
+   the other one will not (thus is passed as a const reference).
+   To be on the safe-side, we tell SWIG to ignore the method
+   that takes over ownership.  To expose these ignored methods
+   to a scripting language requires renaming the method to
+   something else.  This can be done in each language module
+   as it is loaded below.*/
+
+%ignore geos::GeometryFactory::buildGeometry(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createGeometryCollection(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createLinearRing(CoordinateSequence *) const;
+%ignore geos::GeometryFactory::createLineString(CoordinateSequence *) const;
+%ignore geos::GeometryFactory::createMultiLineString(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createMultiPoint(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createMultiPolygon(vector<Geometry * > *) const;
+%ignore geos::GeometryFactory::createPoint(CoordinateSequence *) const;
+%ignore geos::GeometryFactory::createPolygon(LinearRing *,vector<Geometry * > *) const;
+
+/* For scripting languages the CoordinateSequence::add method is ambigious
+   since there are two overloaded versions that are the same except
+   a const declaration.  However, one of them is available only for 
+   backwards compatibility so hide that one.*/
+%ignore geos::CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction);
+
+
+/* ================= Typemaps ============== */
+
+/* These typemaps allows scripting languages to call methods that take
+   iostreams and ostreams, such as WKTWriter.printHEX and WKBWriter.write. 
+   The results are returned from the method as a string object in the
+   scripting language.*/
+   
+/* Get rid of the ostream parameter by setting numinputs to 0 */   
+%typemap(in,numinputs=0) ostream& (std::ostringstream stream)
+{
+  $1 = &stream;
+}
+
+/* Return the results as a string object in the scripting language */
+%typemap(argout) ostream& 
+{
+	std::string str = stream$argnum.str();	
+	$result = SWIG_FromCharPtrAndSize(str.data(), str.size());
+}
+
+/* This typemap allows the scripting language to pass in a string
+   which will be converted to an istringstream for GEOS */
+%typemap(in) istream& (char *buf = 0, size_t size = 0, int alloc = 0, std::stringstream stream)
+{
+  /* Convert from scripting language string to char* */
+  if (SWIG_AsCharPtrAndSize($input, &buf, &size, &alloc) != SWIG_OK)
+  {
+    %argument_fail(SWIG_TypeError, "(TYPEMAP, SIZE)", $argnum);
+  }
+  
+  /* Write data to the stream */
+  stream.write(buf, size);
+
+  $1 = &stream;
+}
+
+/* Free allocated buffer created in the (in) typemap */
+%typemap(freearg) istream&
+{
+  if (alloc$argnum == SWIG_NEWOBJ) %delete_array(buf$argnum);
+}
+
+
+/* ==============  Language Specific Files ============ */
+
+/* Import language specific SWIG files.  This allows each language
+   to define its own renames as well as any special functionality
+   such as language specific iterators for collections. Note 
+   that %include allows the included files to generate interface
+   wrapper code while %import does not.  Thus use %include since
+   this is an important feature (for example, Ruby needs it to #undef
+   the select macro) */
+
+
+#ifdef SWIGPYTHON
+%include ../python/python.i
+#endif
+
+#ifdef SWIGRUBY
+%include ../ruby/ruby.i
+#endif
+
+
+/* ================= Ownership Rules ============== */
+
+/* These disown definitions are not correct in all cases - 
+   needs to be fixed */
 %apply SWIGTYPE *DISOWN { geos::CoordinateSequence * };
 %apply SWIGTYPE *DISOWN { geos::LinearRing * };
 %apply SWIGTYPE *DISOWN { std::vector<geos::Geometry * > * };
 
-// no transfer of ownership
-%ignore geos::GeometryFactory::createPoint(CoordinateSequence *) const;
-%rename(createLineStringP) geos::GeometryFactory::createLineString(CoordinateSequence *) const;
-%rename(createLinearRingP) geos::GeometryFactory::createLinearRing(CoordinateSequence *) const;
-%rename(createPolygonPP) geos::GeometryFactory::createPolygon(LinearRing *,vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createGeometryCollection(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::buildGeometry(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createMultiPoint(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createMultiLineString(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createMultiLinearRing(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createMultiPolygon(vector<Geometry * > *) const;
 
-// Required renaming
-%rename(Coordinate_Coordinate) Coordinate::Coordinate;
+/* ================= Exception Handling  ============== */
 
+/* Setup up generalized exception handling */
 %exception {
     try {
         $action
@@ -56,31 +147,24 @@
     }
 }
 
-
-// Now include the headers to be wrapped
-%include "../../source/headers/geos/geom.h"
-%include "../../source/headers/geos/util.h"
-%include "../../source/headers/geos/io.h"
-
-
+/* =============  Classes to ignore (why are these ignored? ======= */
 %ignore geos::LineMergeDirectedEdge;
 %ignore geos::PolygonizeEdge;
 %ignore geos::polygonizeEdgeRing;
 %ignore geos::PolygonizeDirectedEdge;
 %ignore geos::PolygonizeGraph;
 
+
+/* =============  Define Attributes ============ */
+%include <attribute.i>
+%attribute(geos::Point, double, x, getX);
+%attribute(geos::Point, double, y, getY);
+
+
+/* ===========  Headers To Wrap  ================ */
+%include "../../source/headers/geos/geom.h"
+%include "../../source/headers/geos/planargraph.h"
+%include "../../source/headers/geos/util.h"
+%include "../../source/headers/geos/io.h"
 %include "../../source/headers/geos/opLinemerge.h"
 %include "../../source/headers/geos/opPolygonize.h"
-
-//~ template<class T> 
-//~ class vector {
-//~ public:
-    //~ vector();
-    //~ ~vector();
-    //~ void push_back(const T obj);
-    //~ void reserve(size_t n);
-//~ };
-
-%template(vector_GeometryP) std::vector<geos::Geometry *>;
-%template(vector_LineStringP) std::vector<geos::LineString *>;
-%template(vector_PolygonP) std::vector<geos::Polygon *>;

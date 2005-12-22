@@ -12,27 +12,34 @@ Manifest
 
 The main interface file is geos.i.  Makefiles and specific instructions for
 target languages will be found in directories named for the target language.
-Currently Python is the only language supported.  Contributions are welcome,
-but the author (Sean) has no plans to write Makefiles for other languages.
+Currently Ruby and Python are the only languages supported, but the SWIG
+files should work with perl and tcl. Contributions are welcome.
+
+
+Compiling
+---------
+Each language provides a pre-generated SWIG wrapper file which is
+called geos_wrap.cxx.  Compile this file and link it against the
+appropriate shared libaries to create an extension for Ruby or
+Python.  For more information on how to build extensions, please
+see the Ruby or Python documentation.
+
+Note that these binding link directly against the GEOS C++ API, and not
+the GEOS C API.  As a result, the language extension must be built using
+the same compiler you used to build GEOS itself.
 
 
 Generating Module Source
 ------------------------
 
-Change directory to the target language directory, and note that the 
-following build instructions may be superceded by instructions in any
-language specific README.txt or INSTALL.txt file.
+If you have SWIG 1.3.28 or later installed you can regenerate the SWIG
+wrapper files (geos_wrap.cxx).  To do this change to the target 
+language directory, and type:
 
-To generate the module wrapper source, run swig substituting your target
-language for TARGET_LANG
-
-::
     $ swig -c++ -TARGET_LANG -o geos_wrap.cxx ../geos.i
 
-You should use a very recent SWIG release, 1.3.20+.  The result will be a
-pair of files: one geos module file for the target language (geos.py in the
-Python case), and a geos_wrap.cxx file, the source for the _geos shared 
-library.
+Make sure to check the language specific files for information that
+may supercede these instructions.
 
 
 Installation
