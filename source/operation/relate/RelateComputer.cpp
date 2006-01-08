@@ -218,8 +218,8 @@ RelateComputer::computeIntersectionNodes(int argIndex)
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator it=eiL.begin();
-		EdgeIntersectionListIterator end=eiL.end();
+		EdgeIntersectionList::iterator it=eiL.begin();
+		EdgeIntersectionList::iterator end=eiL.end();
 		for( ; it!=end; ++it)
 		{
 			EdgeIntersection *ei=*it;
@@ -252,8 +252,8 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator eiIt=eiL.begin();
-		EdgeIntersectionListIterator eiEnd=eiL.end();
+		EdgeIntersectionList::iterator eiIt=eiL.begin();
+		EdgeIntersectionList::iterator eiEnd=eiL.end();
 		
 		for( ; eiIt!=eiEnd; ++eiIt)
 		{
@@ -412,7 +412,14 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.24  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

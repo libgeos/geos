@@ -29,7 +29,7 @@ NodeMap::NodeMap(const NodeFactory &newNodeFact):
 
 NodeMap::~NodeMap()
 {
-	NodeMapConstIterator it=nodeMap.begin();
+	NodeMap::const_iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		delete it->second;
 	}
@@ -107,7 +107,7 @@ NodeMap::find(const Coordinate& coord) const
 {
 	Coordinate *c=const_cast<Coordinate *>(&coord);
 
-	NodeMapConstIterator found=nodeMap.find(c);
+	NodeMap::const_iterator found=nodeMap.find(c);
 
 	if (found==nodeMap.end())
 		return NULL;
@@ -115,23 +115,11 @@ NodeMap::find(const Coordinate& coord) const
 		return found->second;
 }
 
-NodeMapConstIterator
-NodeMap::iterator() const
-{
-	return nodeMap.begin();
-}
-
-NodeMapIterator
-NodeMap::iterator() 
-{
-	return nodeMap.begin();
-}
-
 vector<Node*>*
 NodeMap::getBoundaryNodes(int geomIndex) const
 {
 	vector<Node*>* bdyNodes=new vector<Node*>();
-	NodeMapConstIterator it=nodeMap.begin();
+	NodeMap::const_iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		if (node->getLabel()->getLocation(geomIndex)==Location::BOUNDARY)
@@ -144,7 +132,7 @@ string
 NodeMap::print() const
 {
 	string out="";
-	NodeMapConstIterator it=nodeMap.begin();
+	NodeMap::const_iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		out+=node->print();
@@ -156,7 +144,14 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.8  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

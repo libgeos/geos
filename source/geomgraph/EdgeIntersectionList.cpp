@@ -33,7 +33,7 @@ EdgeIntersectionList::EdgeIntersectionList(Edge *newEdge):
 
 EdgeIntersectionList::~EdgeIntersectionList()
 {
-	for (EdgeIntersectionListIterator it=nodeMap.begin(),
+	for (EdgeIntersectionList::iterator it=nodeMap.begin(),
 		endIt=nodeMap.end();
 		it!=endIt; ++it)
 	{
@@ -47,7 +47,7 @@ EdgeIntersectionList::add(const Coordinate& coord,
 {
 	EdgeIntersection *eiNew=new EdgeIntersection(coord, segmentIndex, dist);
 
-	pair<EdgeIntersectionListIterator, bool> p = nodeMap.insert(eiNew);
+	pair<EdgeIntersectionList::iterator, bool> p = nodeMap.insert(eiNew);
 	if ( p.second ) { // new EdgeIntersection inserted
 		return eiNew;
 	} else {
@@ -65,7 +65,10 @@ EdgeIntersectionList::isEmpty() const
 bool
 EdgeIntersectionList::isIntersection(const Coordinate& pt) const
 {
-	EdgeIntersectionListIterator it=nodeMap.begin(), endIt=nodeMap.end();
+	EdgeIntersectionList::const_iterator
+		it=nodeMap.begin(),
+		endIt=nodeMap.end();
+
 	for (; it!=endIt; ++it)
 	{
 		EdgeIntersection *ei=*it;
@@ -89,7 +92,7 @@ EdgeIntersectionList::addSplitEdges(vector<Edge*> *edgeList)
 	// of the edge
 	addEndpoints();
 
-	EdgeIntersectionListIterator it=nodeMap.begin();
+	EdgeIntersectionList::iterator it=nodeMap.begin();
 
 	// there should always be at least two entries in the list
 	EdgeIntersection *eiPrev=*it;
@@ -158,7 +161,7 @@ string
 EdgeIntersectionList::print() const
 {
 	string out="Intersections: ";
-	EdgeIntersectionListIterator it=begin(), endIt=end();
+	EdgeIntersectionList::const_iterator it=begin(), endIt=end();
 	for (; it!=endIt; ++it) {
 		EdgeIntersection *ei=*it;
 		out+=ei->print();
@@ -170,6 +173,12 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.16  2005/12/08 01:11:29  strk
  * minor optimizations in loops
  *

@@ -15,7 +15,10 @@
 
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <stdio.h>
+
+#ifndef M_PI
+#define M_PI        3.14159265358979323846
+#endif
 
 namespace geos {
 
@@ -255,6 +258,12 @@ Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.8  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

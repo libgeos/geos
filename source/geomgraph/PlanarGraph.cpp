@@ -106,17 +106,17 @@ PlanarGraph::add(EdgeEnd *e)
 	edgeEndList->push_back(e);
 }
 
-map<Coordinate*,Node*,CoordLT>::iterator
+NodeMap::iterator
 PlanarGraph::getNodeIterator()
 {
-	return nodes->iterator();
+	return nodes->begin();
 }
 
 vector<Node*>*
 PlanarGraph::getNodes()
 {
 	vector<Node*> *values=new vector<Node*>();
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodes->nodeMap.begin();
+	NodeMap::iterator it=nodes->nodeMap.begin();
 	while(it!=nodes->nodeMap.end()) {
 		values->push_back(it->second);
 		it++;
@@ -186,7 +186,7 @@ PlanarGraph::linkResultDirectedEdges()
 #if DEBUG
 	cerr<<"PlanarGraph::linkResultDirectedEdges called"<<endl;
 #endif
-	map<Coordinate*,Node*,CoordLT>::iterator nodeit=nodes->nodeMap.begin();
+	NodeMap::iterator nodeit=nodes->nodeMap.begin();
 	for (;nodeit!=nodes->nodeMap.end();nodeit++) {
 		Node *node=nodeit->second;
 		((DirectedEdgeStar*)node->getEdges())->linkResultDirectedEdges();
@@ -204,7 +204,7 @@ PlanarGraph::linkAllDirectedEdges()
 #if DEBUG
 	cerr<<"PlanarGraph::linkAllDirectedEdges called"<<endl;
 #endif
-	map<Coordinate*,Node*,CoordLT>::iterator nodeit=nodes->nodeMap.begin();
+	NodeMap::iterator nodeit=nodes->nodeMap.begin();
 	for (;nodeit!=nodes->nodeMap.end();nodeit++)
 	{
 		Node *node=nodeit->second;
@@ -319,6 +319,12 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.17  2005/12/07 19:18:23  strk
  * Changed PlanarGraph::addEdges and EdgeList::addAll to take
  * a const vector by reference rather then a non-const vector by

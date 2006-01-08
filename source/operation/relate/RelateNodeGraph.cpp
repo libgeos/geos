@@ -76,8 +76,8 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
 		Edge *e=*edgeIt;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator eiIt=eiL.begin();
-		EdgeIntersectionListIterator eiEnd=eiL.end();
+		EdgeIntersectionList::iterator eiIt=eiL.begin();
+		EdgeIntersectionList::iterator eiEnd=eiL.end();
 		for( ; eiIt!=eiEnd; ++eiIt) {
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
@@ -126,7 +126,14 @@ RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.14  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

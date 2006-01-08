@@ -329,8 +329,8 @@ IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList &eiList)
 {
 	set<const Coordinate*,CoordLT>nodeSet;
 	bool isFirst=true;
-	EdgeIntersectionListIterator it=eiList.begin();
-	EdgeIntersectionListIterator end=eiList.end();
+	EdgeIntersectionList::iterator it=eiList.begin();
+	EdgeIntersectionList::iterator end=eiList.end();
 	for(; it!=end; ++it)
 	{
 		EdgeIntersection *ei=*it;
@@ -625,6 +625,12 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.37  2005/11/25 11:31:21  strk
  * Removed all CoordinateSequence::getSize() calls embedded in for loops.
  *

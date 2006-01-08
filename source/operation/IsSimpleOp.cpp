@@ -96,8 +96,9 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 		Edge *e=*i;
 		int maxSegmentIndex=e->getMaximumSegmentIndex();
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionListIterator eiIt=eiL.begin();
-		for( ;eiIt!=eiL.end(); eiIt++) {
+		for ( EdgeIntersectionList::iterator eiIt=eiL.begin(),
+			eiEnd=eiL.end(); eiIt!=eiEnd; ++eiIt )
+		{
 			EdgeIntersection *ei=*eiIt;
 			if (!ei->isEndPoint(maxSegmentIndex))
 				return true;
@@ -188,7 +189,14 @@ EndpointInfo::addEndpoint(bool newIsClosed)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.19  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

@@ -46,7 +46,7 @@ EdgeEndBuilder::computeEdgeEnds(Edge *edge, vector<EdgeEnd*> *l)
 	// ensure that the list has entries for the first and last point of the edge
 	eiList.addEndpoints();
 
-	EdgeIntersectionListIterator it=eiList.begin();
+	EdgeIntersectionList::iterator it=eiList.begin();
 	// no intersections, so there is nothing to do
 	if (it==eiList.end()) return;
 
@@ -128,7 +128,14 @@ EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.13  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

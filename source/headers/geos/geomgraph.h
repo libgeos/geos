@@ -313,14 +313,12 @@ public:
 
 	virtual unsigned int getDegree() { return edgeMap.size(); }
 
-	//virtual vector<EdgeEnd*>::iterator getIterator();
 	virtual iterator begin() { return edgeMap.begin(); }
 	virtual iterator end() { return edgeMap.end(); }
 
 	virtual reverse_iterator rbegin() { return edgeMap.rbegin(); }
 	virtual reverse_iterator rend() { return edgeMap.rend(); }
 
-	//virtual vector<EdgeEnd*>* getEdges();
 	virtual container &getEdges() { return edgeMap; }
 
 	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
@@ -346,11 +344,7 @@ public:
 
 protected:
 
-	//map<EdgeEnd*,void*,EdgeEndLT> *edgeMap;
-	//set<EdgeEnd *, EdgeEndLT> edgeMap;
 	EdgeEndStar::container edgeMap;
-
-	//vector<EdgeEnd*> *edgeList;
 
 	/**
 	 * Insert an EdgeEnd into the map.
@@ -463,8 +457,6 @@ struct EdgeIntersectionLessThen {
 	}
 };
 
-typedef set<EdgeIntersection *, EdgeIntersectionLessThen>::iterator EdgeIntersectionListIterator;
-
 /**
  * A list of edge intersections along an Edge.
  * Implements splitting an edge with intersections
@@ -472,6 +464,9 @@ typedef set<EdgeIntersection *, EdgeIntersectionLessThen>::iterator EdgeIntersec
  */
 class EdgeIntersectionList{
 public:
+	typedef set<EdgeIntersection *, EdgeIntersectionLessThen> container;
+	typedef container::iterator iterator;
+	typedef container::const_iterator const_iterator;
 	Edge *edge;
 	EdgeIntersectionList(Edge *edge);
 	~EdgeIntersectionList();
@@ -484,10 +479,10 @@ public:
 	EdgeIntersection* add(const Coordinate& coord,
 		int segmentIndex, double dist);
 
-	EdgeIntersectionListIterator begin() { return nodeMap.begin(); }
-	EdgeIntersectionListIterator end() { return nodeMap.end(); }
-	EdgeIntersectionListIterator begin() const { return nodeMap.begin(); }
-	EdgeIntersectionListIterator end() const { return nodeMap.end(); }
+	iterator begin() { return nodeMap.begin(); }
+	iterator end() { return nodeMap.end(); }
+	const_iterator begin() const { return nodeMap.begin(); }
+	const_iterator end() const { return nodeMap.end(); }
 
 	bool isEmpty() const;
 	bool isIntersection(const Coordinate& pt) const;
@@ -511,7 +506,7 @@ public:
 	string print() const;
 
 private:
-	set<EdgeIntersection *, EdgeIntersectionLessThen> nodeMap;
+	container nodeMap;
 };
 
 class EdgeList {
@@ -551,13 +546,15 @@ struct CoordLT {
 	}
 };
 
-typedef map<Coordinate*,Node*,CoordLT>::iterator NodeMapIterator;
-typedef map<Coordinate*,Node*,CoordLT>::const_iterator NodeMapConstIterator;
-typedef pair<Coordinate*,Node*> NodeMapValueType;
-
 class NodeMap{
 public:
-	map<Coordinate*,Node*,CoordLT>nodeMap;
+
+	typedef map<Coordinate*,Node*,CoordLT> container;
+	typedef container::iterator iterator;
+	typedef container::const_iterator const_iterator;
+	typedef pair<Coordinate*,Node*> pair;
+
+	container nodeMap;
 	const NodeFactory &nodeFact;
 	// newNodeFact will be deleted by ~NodeMap
 	NodeMap(const NodeFactory &newNodeFact);
@@ -566,13 +563,14 @@ public:
 	Node* addNode(Node *n);
 	void add(EdgeEnd *e);
 	Node *find(const Coordinate& coord) const;
-	NodeMapConstIterator iterator() const;
-	NodeMapIterator iterator();
+	const_iterator begin() const { return nodeMap.begin(); }
+	iterator begin() { return nodeMap.begin(); }
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
 	vector<Node*>* getBoundaryNodes(int geomIndex) const; //returns new obj
 	string print() const;
 };
+
 
 class DirectedEdge: public EdgeEnd{
 public:
@@ -720,7 +718,7 @@ public:
 	virtual vector<EdgeEnd*>* getEdgeEnds();
 	virtual bool isBoundaryNode(int geomIndex, const Coordinate& coord);
 	virtual void add(EdgeEnd *e);
-	virtual map<Coordinate*,Node*,CoordLT>::iterator getNodeIterator();
+	virtual NodeMap::iterator getNodeIterator();
 	virtual vector<Node*>* getNodes();
 	virtual Node* addNode(Node *node);
 	virtual Node* addNode(const Coordinate& coord);
@@ -906,6 +904,12 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/01/08 15:24:40  strk
+ * Changed container-related typedef to class-scoped STL-like typedefs.
+ * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
+ * defined M_PI when undef as suggested by Charlie Savage.
+ * Removed <stdio.h> include from GeometricShapeFactory.cpp.
+ *
  * Revision 1.26  2005/12/07 19:18:23  strk
  * Changed PlanarGraph::addEdges and EdgeList::addAll to take
  * a const vector by reference rather then a non-const vector by
