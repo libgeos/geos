@@ -64,7 +64,7 @@ Changes in 3.0.0
 	  for filter_rw, updated interfaces using this to take
 	  const CoordinateFilter (apply_rw).
 
-Changes in 2.2.1CVS
+Changes in 2.2.1
 
 - Support for MingW builds
 - Bugfix in Polygonizer chocking on invalid LineString inputs
