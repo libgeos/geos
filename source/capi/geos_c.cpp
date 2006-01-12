@@ -468,7 +468,6 @@ GEOSisValid(const Geometry *g1)
 				NOTICE_MESSAGE((char *)errmsg.c_str());
 			}
 		}
-		result = g1->isValid();
 		return result;
 	}
 	catch (GEOSException *ge)
