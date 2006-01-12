@@ -456,12 +456,9 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 char
 GEOSisValid(const Geometry *g1)
 {
-#if GEOS_FIRST_INTERFACE <= 3 && GEOS_LAST_INTERFACE >= 3
 	IsValidOp ivo(g1);
-#endif
 	bool result;
 	try {
-#if GEOS_FIRST_INTERFACE <= 3 && GEOS_LAST_INTERFACE >= 3
 		result = ivo.isValid();
 		if ( result == 0 )
 		{
@@ -471,9 +468,6 @@ GEOSisValid(const Geometry *g1)
 				NOTICE_MESSAGE((char *)errmsg.c_str());
 			}
 		}
-#else // GEOS_INTERFACE 3 not supported
-		result = g1->isValid();
-#endif
 		return result;
 	}
 	catch (GEOSException *ge)
@@ -1558,16 +1552,8 @@ GEOSversion()
 char *
 GEOSjtsport()
 {
-#if GEOS_LAST_INTERFACE < 2
-	/*
-	 * GEOS upgrade needs postgis re-build, so this static
-	 * assignment is not going to be a problem
-	 */
-	char *res = strdup("1.3");
-#else
 	string version = jtsport();
 	char *res = strdup(version.c_str());
-#endif
 	return res;
 }
 
@@ -1580,7 +1566,7 @@ GEOSHasZ(Geometry *g)
 	double az = g->getCoordinate()->z;
 	//sprintf(msg, "ZCoord: %g", az);
 	//ERROR_MESSAGE(msg);
-	return (finite(az) && az != DoubleNotANumber);
+	return FINITE(az);
 }
 
 int
