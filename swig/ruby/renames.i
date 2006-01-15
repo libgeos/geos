@@ -301,6 +301,8 @@
 %rename(get_cut_edges) geos::Polygonizer::getCutEdges; 
 %rename(get_invalid_ring_lines) geos::Polygonizer::getInvalidRingLines; 
 %rename(print_hex) geos::WKBReader::printHEX; 
+%rename(read_hex) geos::WKBReader::readHEX; 
+%rename(write_hex) geos::WKBWriter::writeHEX; 
  
 // -------  SWIG Aliases ------------ 
 %alias geos::CoordinateSequenceFactory::create "create"; 

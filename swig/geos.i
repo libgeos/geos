@@ -90,7 +90,7 @@
   /* Convert from scripting language string to char* */
   if (SWIG_AsCharPtrAndSize($input, &buf, &size, &alloc) != SWIG_OK)
   {
-    %argument_fail(SWIG_TypeError, "(TYPEMAP, SIZE)", $argnum);
+    %argument_fail(SWIG_TypeError, "(TYPEMAP, SIZE)", $symname, $argnum);
   }
   
   /* Write data to the stream */
@@ -133,19 +133,79 @@
 %apply SWIGTYPE *DISOWN { geos::CoordinateSequence * };
 %apply SWIGTYPE *DISOWN { geos::LinearRing * };
 %apply SWIGTYPE *DISOWN { std::vector<geos::Geometry * > * };
+%apply SWIGTYPE *DISOWN { std::vector<geos::Coordinate> * };
 
+
+// These methods create new objects
+%newobject *::clone;
+%newobject *::getCoordinates;
+%newobject geos::WKBReader::read;
+%newobject geos::WKBReader::read_hex;
+%newobject geos::WKTReader::read;
+%newobject geos::DefaultCoordinateSequenceFactory::create;
+%newobject geos::GeometryFactory::createPointFromInternalCoord;
+%newobject geos::GeometryFactory::toGeometry;
+%newobject geos::GeometryFactory::createPoint;
+%newobject geos::GeometryFactory::createGeometryCollection;
+%newobject geos::GeometryFactory::createMultiLineString;
+%newobject geos::GeometryFactory::createMultiPolygon;
+%newobject geos::GeometryFactory::createLinearRing;
+%newobject geos::GeometryFactory::createMultiPoint;
+%newobject geos::GeometryFactory::createPolygon;
+%newobject geos::GeometryFactory::createLineString;
+%newobject geos::GeometryFactory::buildGeometry;
+%newobject geos::GeometryFactory::createGeometry;
+%newobject geos::GeometricShapeFactory::getEnvelope;
 
 /* ================= Exception Handling  ============== */
 
-/* Setup up generalized exception handling */
+/* Mark these classes as exception classes */
+%exceptionclass geos::GEOSException;
+
+/* These are all subclasses of GEOSException */
+%exceptionclass geos::AssertionFailedException;
+%exceptionclass geos::IllegalArgumentException;
+%exceptionclass geos::ParseException;
+%exceptionclass geos::TopologyException;
+%exceptionclass geos::UnsupportedOperationException;
+
+/* This exception class is not surfaced to SWIG 
+%exceptionclass geos::NotRepresentableException;*/
+
+/* Setup up generalized exception handling.  Note that GEOS throws
+   classes that are allocated on the heap so we need to catch them
+   by pointer and are responsible for freeing them.  To do this
+   we'll just pass the object along the scripting language (wrapped
+   of course) and make it responsbile for freeing the object via the
+   use of the SWIG_POINTER_OWN flag.*/
+
 %exception {
     try {
         $action
     }
+  catch (geos::AssertionFailedException *e) {
+			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__AssertionFailedException, SWIG_POINTER_OWN), "geos::AssertionFailedException", SWIGTYPE_p_geos__AssertionFailedException);
+  }
+  catch (geos::IllegalArgumentException *e) {
+			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__IllegalArgumentException, SWIG_POINTER_OWN), "geos::IllegalArgumentException", SWIGTYPE_p_geos__IllegalArgumentException);
+  }
+  catch (geos::ParseException *e) {
+			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__ParseException, SWIG_POINTER_OWN), "geos::ParseException", SWIGTYPE_p_geos__ParseException);
+  }
+  catch (geos::TopologyException *e) {
+			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__TopologyException, SWIG_POINTER_OWN), "geos::TopologyException", SWIGTYPE_p_geos__TopologyException);
+  }
+  catch (geos::UnsupportedOperationException *e) {
+			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__UnsupportedOperationException, SWIG_POINTER_OWN), "geos::UnsupportedOperationException", SWIGTYPE_p_geos__UnsupportedOperationException);
+  }
     catch (geos::GEOSException *e) {
-        SWIG_exception(SWIG_RuntimeError, e->toString().data());
+			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__GEOSException, SWIG_POINTER_OWN), "geos::GEOSException", SWIGTYPE_p_geos__GEOSException);
+  }
+  catch (...) {
+      SWIG_exception(SWIG_RuntimeError, "Unknown exception took place in the method: $symname.");
     }
 }
+
 
 /* =============  Classes to ignore (why are these ignored? ======= */
 %ignore geos::LineMergeDirectedEdge;
