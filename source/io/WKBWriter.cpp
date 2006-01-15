@@ -27,6 +27,19 @@ WKBWriter::WKBWriter(int dims, int bo):
 }
 
 void
+WKBWriter::writeHEX(const Geometry &g, ostream &os) 
+{
+  // setup input/output stream
+  stringstream stream;
+  
+  // write the geometry in wkb format
+  this->write(g, stream);
+
+  // convert to HEX
+  WKBReader::printHEX(stream, os);
+}
+
+void
 WKBWriter::write(const Geometry &g, ostream &os) 
 {
 	outStream = &os;

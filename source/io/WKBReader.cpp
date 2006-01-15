@@ -47,6 +47,137 @@ WKBReader::printHEX(istream &is, ostream &os)
 	return os;
 }
 
+Geometry *
+WKBReader::readHEX(istream &is)
+{
+	// setup input/output stream
+	stringstream os;
+
+	unsigned char high, low, result_high, result_low, value;
+
+	while(!is.eof())//readsome(&str[0], 2))
+	{
+		// get the high part of the byte
+		is >> high;
+		// geth the low part of the byte
+		is >> low;
+
+		switch (high)
+		{
+			case '0' :
+				result_high = 0;
+				break;
+			case '1' :
+				result_high = 1;
+				break;
+			case '2' :
+				result_high = 2;
+				break;
+			case '3' :
+				result_high = 3;
+				break;
+			case '4' :
+				result_high = 4;
+				break;
+			case '5' :
+				result_high = 5;
+				break;
+			case '6' :
+				result_high = 6;
+				break;
+			case '7' :
+				result_high = 7;
+				break;
+			case '8' :
+				result_high = 8;
+				break;
+			case '9' :
+				result_high = 9;
+				break;
+			case 'A' :
+				result_high = 10;
+				break;
+			case 'B' :
+				result_high = 11;
+				break;
+			case 'C' :
+				result_high = 12;
+				break;
+			case 'D' :
+				result_high = 13;
+				break;
+			case 'E' :
+				result_high = 14;
+				break;
+			case 'F' :
+				result_high = 15;
+				break;
+			default:
+				throw new ParseException("Invalid HEX char");
+		}
+
+		switch (low)
+		{
+			case '0' :
+				result_low = 0;
+				break;
+			case '1' :
+				result_low = 1;
+				break;
+			case '2' :
+				result_low = 2;
+				break;
+			case '3' :
+				result_low = 3;
+				break;
+			case '4' :
+				result_low = 4;
+				break;
+			case '5' :
+				result_low = 5;
+				break;
+			case '6' :
+				result_low = 6;
+				break;
+			case '7' :
+				result_low = 7;
+				break;
+			case '8' :
+				result_low = 8;
+				break;
+			case '9' :
+				result_low = 9;
+				break;
+			case 'A' :
+				result_low = 10;
+				break;
+			case 'B' :
+				result_low = 11;
+				break;
+			case 'C' :
+				result_low = 12;
+				break;
+			case 'D' :
+				result_low = 13;
+				break;
+			case 'E' :
+				result_low = 14;
+				break;
+			case 'F' :
+				result_low = 15;
+				break;
+			default:
+				throw new ParseException("Invalid HEX char");
+		}
+
+		value = (result_high<<4) + result_low;
+		// write the value to the output stream
+		os << value;
+	}
+  
+	// now call read to convert the geometry
+	return this->read(os);
+}
 
 Geometry *
 WKBReader::read(istream &is)

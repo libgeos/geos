@@ -265,7 +265,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 1);
 		if ( stream->eof() )
-			throw new ParseException("Unespected EOF parsing WKB");
+			throw new ParseException("Unexpected EOF parsing WKB");
 		return buf[0];
 	}
 
@@ -273,7 +273,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 4);
 		if ( stream->eof() )
-			throw new ParseException("Unespected EOF parsing WKB");
+			throw new ParseException("Unexpected EOF parsing WKB");
 		return ByteOrderValues::getInt(buf, byteOrder);
 	}
 
@@ -281,7 +281,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 8);
 		if ( stream->eof() )
-			throw new ParseException("Unespected EOF parsing WKB");
+			throw new ParseException("Unexpected EOF parsing WKB");
 		return ByteOrderValues::getLong(buf, byteOrder);
 	}
 
@@ -289,7 +289,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 8);
 		if ( stream->eof() )
-			throw new ParseException("Unespected EOF parsing WKB");
+			throw new ParseException("Unexpected EOF parsing WKB");
 		return ByteOrderValues::getDouble(buf, byteOrder);
 	}
 
@@ -333,6 +333,17 @@ public:
 	 * @throws ParseException
 	 */
 	Geometry *read(istream &is);
+		// throws IOException, ParseException
+
+	/**
+	 * \brief Reads a Geometry from an istream in hex format.
+	 *
+	 * @param is the stream to read from 
+	 * @return the Geometry read
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	Geometry *readHEX(istream &is);
 		// throws IOException, ParseException
 
 	/**
@@ -428,6 +439,16 @@ public:
 	void write(const Geometry &g, ostream &os);
 		// throws IOException, ParseException
 
+	/**
+	 * \brief Write a Geometry to an ostream in binary hex format.
+	 *
+	 * @param g the geometry to write
+	 * @param os the output stream
+	 * @throws IOException
+	 */
+	void writeHEX(const Geometry &g, ostream &os);
+		// throws IOException, ParseException
+
 private:
 
 	int outputDimension;
@@ -474,6 +495,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/01/15 21:19:06  strk
+ * Added WKBWriter::writeHEX() and WKBReader::readHEX()
+ *
  * Revision 1.18  2005/11/29 13:39:56  strk
  * Moved byte typedef from geom.h to io.h.
  * Removed useless commas at inlined funx end.
