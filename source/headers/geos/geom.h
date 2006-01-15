@@ -1023,6 +1023,7 @@ public:
 	Envelope(const Coordinate& p1, const Coordinate& p2);
 	Envelope(const Coordinate& p);
 	Envelope(const Envelope &env);
+	Envelope(const string &str);
 	~Envelope(void);
 	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
 	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
@@ -1070,31 +1071,31 @@ public:
 
 	/**
 	 * Check if the point p
-	 * overlaps (lies inside) the region of this Envelope.
+	 * intersects (lies inside) the region of this Envelope.
 	 *
 	 * @param  p  	the Coordinate to be tested
-	 * @return true if the point overlaps this Envelope
+	 * @return true if the point intersects this Envelope
 	 */
 	inline bool intersects(const Coordinate& p) const;
 
 	/**
 	 *  Check if the point (x, y)
-	 *  overlaps (lies inside) the region of this Envelope.
+	 *  intersects (lies inside) the region of this Envelope.
 	 *
 	 * @param  x  the x-ordinate of the point
 	 * @param  y  the y-ordinate of the point
-	 * @return <code>true</code> if the point overlaps this Envelope
+	 * @return <code>true</code> if the point intersects this Envelope
 	 */
 	inline bool intersects(double x, double y) const;
 
 	/**
 	 * Check if the region defined by other Envelope
-	 * overlaps (intersects) the region of this Envelope.
+	 * intersects (intersects) the region of this Envelope.
 	 *
 	 * @param other the Envelope which this Envelope is
-	 *              being checked for overlapping
+	 *              being checked for intersection
 	 *
-	 * @return      true if the Envelopes overlap
+	 * @return      true if the Envelopes intersects
 	 */
 	inline bool intersects(const Envelope* other) const;
 
@@ -1104,6 +1105,7 @@ public:
 	int hashCode() const;
 
 private:
+	vector<string> split(const string &str, const string &delimiters = " ");
 	static double distance(double x0,double y0,double x1,double y1);
 	double minx;	/// the minimum x-coordinate
 	double maxx;	/// the maximum x-coordinate
@@ -2636,6 +2638,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.58  2006/01/15 21:22:02  strk
+ * Added Envelope constructor by string (accepting what's returned by ::toString)
+ *
  * Revision 1.57  2005/12/08 14:14:07  strk
  * ElevationMatrixFilter used for both elevation and Matrix fill,
  * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).

@@ -135,6 +135,32 @@ Envelope::Envelope(const Envelope &env)
 	init(env.minx, env.maxx, env.miny, env.maxy);
 }
 
+/**
+ *  Create an <code>Envelope</code> from an Envelope 
+ *  string representation produced by Envelope.toString()
+ *
+ * @param  env  the string Envelope to initialize from
+ */
+Envelope::Envelope(const string &str)
+{
+  // The string should be in the format:
+  // Env[7.2:2.3,7.1:8.2]
+
+  // extract out the values between the [ and ] characters
+  int index = str.find("[");
+  string coordString = str.substr(index + 1, str.size() - 1 - 1);
+
+  // now split apart the string on : and , characters
+  vector<string> values = split(coordString, ":,");
+
+  // create a new envelopet
+  init(::atof(values[0].c_str()),
+       ::atof(values[1].c_str()),
+       ::atof(values[2].c_str()),
+       ::atof(values[3].c_str()));
+}
+
+
 ///Default destructor
 Envelope::~Envelope(void) {}
 
@@ -468,10 +494,42 @@ Envelope::hashCode() const
 	return result;
 }
 
+/* This is a generic function that really belongs in a utility
+   file somewhere */
+/**
+ * Splits a string into parts based on the supplied delimiters.
+ */
+vector<string> Envelope::split(const string &str, const string &delimiters)
+{
+  vector<string> tokens;
+
+  // Find first "non-delimiter".
+  string::size_type lastPos = 0;
+  string::size_type pos = str.find_first_of(delimiters, lastPos);
+
+  while (string::npos != pos || string::npos != lastPos)
+  {
+    // Found a token, add it to the vector.
+    tokens.push_back(str.substr(lastPos, pos - lastPos));
+    
+    // Skip delimiters.  Note the "not_of"
+    lastPos = str.find_first_not_of(delimiters, pos);
+
+    // Find next "non-delimiter"
+    pos = str.find_first_of(delimiters, lastPos);
+  }
+
+  return tokens;
+}
+
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/01/15 21:22:02  strk
+ * Added Envelope constructor by string (accepting what's returned by ::toString)
+ *
  * Revision 1.21  2005/11/08 10:03:28  strk
  * Set library version to 2.2.0.
  * Cleaned up Doxygen warnings.
