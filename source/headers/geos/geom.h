@@ -358,52 +358,52 @@ public:
 	//double distance(Coordinate& p);
 	static Coordinate nullCoord;
 
-	void Coordinate::setNull() {
+	void setNull() {
 		x=DoubleNotANumber;
 		y=DoubleNotANumber;
 		z=DoubleNotANumber;
 	}
 
-	static Coordinate& Coordinate::getNull() {
+	static Coordinate& getNull() {
 		return nullCoord;
 	}
 
-	Coordinate::Coordinate() {
+	Coordinate() {
 		x=0.0;
 		y=0.0;
 		z=DoubleNotANumber;
 	}
 
-	Coordinate::Coordinate(double xNew, double yNew, double zNew) {
+	Coordinate(double xNew, double yNew, double zNew) {
 		x=xNew;
 		y=yNew;
 		z=zNew;
 	}
 
 #ifndef PROFILE_COORDINATE_COPIES
-	Coordinate::Coordinate(const Coordinate& c){
+	Coordinate(const Coordinate& c){
 		x=c.x;
 		y=c.y;
 		z=c.z;
 	}
 #else
-	Coordinate::Coordinate(const Coordinate& c);
+	Coordinate(const Coordinate& c);
 	Coordinate &operator=(const Coordinate &c);
 #endif
 
-	Coordinate::Coordinate(double xNew, double yNew){
+	Coordinate(double xNew, double yNew){
 		x=xNew;
 		y=yNew;
 		z=DoubleNotANumber;
 	}
 
-	void Coordinate::setCoordinate(const Coordinate& other) {
+	void setCoordinate(const Coordinate& other) {
 		x = other.x;
 		y = other.y;
 		z = other.z;
 	}
 
-	bool Coordinate::equals2D(const Coordinate& other) const {
+	bool equals2D(const Coordinate& other) const {
 		if (x != other.x) {
 		return false;
 		}
@@ -413,7 +413,7 @@ public:
 		return true;
 	}
 
-	int Coordinate::compareTo(const Coordinate& other) const {
+	int compareTo(const Coordinate& other) const {
 		if (x < other.x) {
 		return -1;
 		}
@@ -429,22 +429,22 @@ public:
 		return 0;
 	}
 
-	bool Coordinate::equals3D(const Coordinate& other) const {
+	bool equals3D(const Coordinate& other) const {
 		return (x == other.x) && ( y == other.y) && ((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
 	}
 
-	void Coordinate::makePrecise(const PrecisionModel *precisionModel) {
+	void makePrecise(const PrecisionModel *precisionModel) {
 		x = precisionModel->makePrecise(x);
 		y = precisionModel->makePrecise(y);
 	}
 
-	double Coordinate::distance(const Coordinate& p) const {
+	double distance(const Coordinate& p) const {
 		double dx = x - p.x;
 		double dy = y - p.y;
 		return sqrt(dx * dx + dy * dy);
 	}
 
-	int Coordinate::hashCode() {
+	int hashCode() {
 		//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
 		int result = 17;
 		result = 37 * result + hashCode(x);
@@ -456,7 +456,7 @@ public:
 	* Returns a hash code for a double value, using the algorithm from
 	* Joshua Bloch's book <i>Effective Java</i>
 	*/
-	static int Coordinate::hashCode(double x) {
+	static int hashCode(double x) {
 		int64 f = (int64)(x);
 		return (int)(f^(f>>32));
 	}
@@ -2469,6 +2469,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34.2.2.2.4  2006/01/16 11:08:38  strk
+ * Removed invalid full qualification of in-class-declaration methods.
+ *
  * Revision 1.34.2.2.2.3  2005/11/29 17:52:21  strk
  * undef PROFILE_COORDINATE_COPIES (was introduced by previous commit, to easy profiling)
  *

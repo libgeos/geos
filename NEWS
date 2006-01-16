@@ -1,6 +1,7 @@
 Changes in 2.2.2
 
 - Cleanups in C-API
+- Support for gcc-4
 
 Changes in 2.2.1
 
