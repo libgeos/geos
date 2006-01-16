@@ -10,8 +10,8 @@ fi
 
 echo "Running autoheader"
 autoheader
-echo "Running aclocal"
-aclocal
+echo "Running aclocal -I macros"
+aclocal -I macros
 echo "Running libtoolize"
 libtoolize --force --copy
 echo "Running automake"

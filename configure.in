@@ -32,14 +32,14 @@ AC_CONFIG_HEADERS(source/headers/config.h)
 AM_CONFIG_HEADER(source/headers/geos/platform.h)
 AC_PROG_CC
 
-dnl check for programs ----------------------------------------------------
-AC_PROG_CXX
-AC_ISC_POSIX
-
 dnl use libtool ----------------------------------------------------------
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
+
+dnl check for programs ----------------------------------------------------
+AC_PROG_CXX
+AC_ISC_POSIX
 
 dnl types checks ------------------------------------------------------
 
@@ -67,11 +67,82 @@ AC_STRUCT_TM
 AC_TYPE_SIZE_T
 AC_C_CONST
 
-dnl process enable switches ----------------------------------------------
+dnl --------------------------------------------------------------------
+dnl - check for swig 
+dnl --------------------------------------------------------------------
 
-dnl process with switches -------------------------------------------------
+AC_PROG_SWIG(1.3.17)
+SWIG_ENABLE_CXX
 
-dnl check for libraries ---------------------------------------------------
+AC_ARG_ENABLE(swig, [  --disable-swig    Disable build of swig wrappers],
+	[case "${enableval}" in
+		yes) use_swig=true ;;
+		no)  use_swig=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-swig) ;;
+	esac],
+	[use_swig=true]
+)
+
+
+if test x"$SWIG" = x; then
+	use_swig=false
+fi
+
+AM_CONDITIONAL(ENABLE_SWIG, [ test x"$use_swig" = xtrue ])
+AC_SUBST(SWIG)
+
+dnl --------------------------------------------------------------------
+dnl - check for python 
+dnl --------------------------------------------------------------------
+
+AC_ARG_ENABLE(python, [  --enable-python    Enable build of python module],
+	[case "${enableval}" in
+		yes) use_python=true ;;
+		no)  use_python=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-python) ;;
+	esac],
+	[use_python=false]
+)
+
+SWIG_PYTHON
+if test x"$PYTHON" = "x"; then
+	use_python=false
+fi
+
+if test x"$use_swig" = xfalse; then use_python=false; fi
+
+AM_CONDITIONAL(ENABLE_PYTHON, [test x"$use_python" = xtrue])
+
+AC_SUBST(PYTHON)
+AC_SUBST(SWIG_PYTHON_CPPFLAGS)
+AC_SUBST(SWIG_PYTHON_OPT)
+
+
+dnl --------------------------------------------------------------------
+dnl - check for ruby 
+dnl --------------------------------------------------------------------
+
+use_ruby=true
+AC_SUBST(RUBY)
+
+AC_ARG_ENABLE(ruby, [  --enable-ruby    Enable build of ruby module],
+	[case "${enableval}" in
+		yes) use_ruby=true ;;
+		no)  use_ruby=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-ruby) ;;
+	esac],
+	[use_ruby=false]
+)
+
+AC_PATH_PROG(RUBY, ruby)
+if test x"$RUBY" = x; then
+	use_ruby=false
+fi
+
+if test x"$use_swig" = xfalse; then use_ruby=false; fi
+
+AM_CONDITIONAL(ENABLE_RUBY, [ test x"$use_ruby" = xtrue ])
+
 
 dnl things to substitute in output ----------------------------------------
 AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE JTS_PORT CAPI_VERSION CAPI_VERSION_MAJOR CAPI_VERSION_MINOR CAPI_VERSION_PATCH CAPI_INTERFACE_CURRENT CAPI_INTERFACE_REVISION CAPI_INTERFACE_AGE)
@@ -79,4 +150,11 @@ AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INT
 dnl output stuff ----------------------------------------------------------
 
 AC_OUTPUT(Makefile source/Makefile source/capi/Makefile source/geom/Makefile source/headers/Makefile source/headers/geos/Makefile tools/Makefile tools/geos-config macros/Makefile source/test/Makefile source/bigtest/Makefile doc/Makefile source/headers/geos/version.h doc/Doxyfile swig/Makefile swig/python/Makefile swig/python/tests/Makefile swig/python/tests/cases/Makefile source/capi/geos_c.h swig/ruby/Makefile swig/ruby/test/Makefile)
+
+
+echo "---------------------------------------"
+echo "Swig: $use_swig"
+echo "Python: $use_python"
+echo "Ruby: $use_ruby"
+echo "---------------------------------------"
 
