@@ -29,7 +29,7 @@ AC_DEFUN([AC_PROG_SWIG],[
         AC_PATH_PROG([SWIG],[swig])
         if test -z "$SWIG" ; then
                 AC_MSG_WARN([cannot find 'swig' program. You should look at http://www.swig.org])
-                SWIG='echo "Error: SWIG is not installed. You should look at http://www.swig.org" ; false'
+                SWIG=''
         elif test -n "$1" ; then
                 AC_MSG_CHECKING([for SWIG version])
                 [swig_version=`$SWIG -version 2>&1 | grep 'SWIG Version' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
@@ -71,7 +71,7 @@ AC_DEFUN([AC_PROG_SWIG],[
                                 -o $available_minor -ne $required_minor \
                                 -o $available_patch -lt $required_patch ; then
                                 AC_MSG_WARN([SWIG version >= $1 is required.  You have $swig_version.  You should look at http://www.swig.org])
-                                SWIG='echo "Error: SWIG version >= $1 is required.  You have '"$swig_version"'.  You should look at http://www.swig.org" ; false'
+                                SWIG=''
                         else
                                 AC_MSG_NOTICE([SWIG executable is '$SWIG'])
                                 SWIG_LIB=`$SWIG -swiglib`
@@ -79,7 +79,7 @@ AC_DEFUN([AC_PROG_SWIG],[
                         fi
                 else
                         AC_MSG_WARN([cannot determine SWIG version])
-                        SWIG='echo "Error: Cannot determine SWIG version.  You should look at http://www.swig.org" ; false'
+                        SWIG=''
                 fi
         fi
         AC_SUBST([SWIG_LIB])
