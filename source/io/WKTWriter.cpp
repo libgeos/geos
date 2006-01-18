@@ -64,13 +64,9 @@ void WKTWriter::write(const Geometry *geometry, Writer *writer) {
 }
 
 string WKTWriter::writeFormatted(const Geometry *geometry) {
-	Writer *sw=new Writer();
-//	try {
-		writeFormatted(geometry, true, sw);
-//	}catch (IOException ex) {
-//		Assert::shouldNeverReachHere();
-//	}
-	return sw->toString();
+	Writer sw;
+	writeFormatted(geometry, true, &sw);
+	return sw.toString();
 }
 
 void WKTWriter::writeFormatted(const Geometry *geometry, Writer *writer) {
@@ -311,6 +307,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/01/18 17:46:57  strk
+ * Fixed leak in ::writeFormatted(Geometry *)
+ *
  * Revision 1.21  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *
