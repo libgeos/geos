@@ -22,6 +22,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <geos/util.h>
 #include <geos/geomgraph.h>
@@ -53,6 +54,7 @@ XMLTester::XMLTester()
 {
 	r=NULL;
 	w=NULL;
+	br=NULL;
 	pm=NULL;
 	factory=NULL;
 	failed=succeeded=caseCount=testCount=testFileCount=totalTestCount=0;
@@ -126,6 +128,44 @@ XMLTester::parsePrecisionModel()
 	factory = new GeometryFactory(pm);
 	r=new WKTReader(factory);
 	w=new WKTWriter();
+	br=new WKBReader(*factory);
+}
+
+/**
+ * Parse WKT or HEXWKB
+ */
+Geometry *
+XMLTester::parseGeometry(const string &in)
+{
+	stringstream is(in, ios_base::in);
+	char first_char;
+
+	// Remove leading spaces
+	while (is.get(first_char) && std::isspace(first_char));
+	is.unget();
+
+	switch (first_char)
+	{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+			return br->readHEX(is);
+		default:
+			return r->read(in);
+	}
 }
 
 void
@@ -151,7 +191,7 @@ XMLTester::parseCase()
 
 	xml.FindChildElem("a");
 	geomAin=xml.GetChildData();
-	gA=r->read(geomAin);
+	gA=parseGeometry(geomAin);
 	geomAout=w->write(gA);
 	if (out &(GEOM_A_IN | GEOM_A_OUT)) {
 		cout << "\tGeometry A (points: " << gA->getNumPoints() <<")" << endl;
@@ -164,7 +204,7 @@ XMLTester::parseCase()
 	if ( xml.FindChildElem("b") )
 	{
 		geomBin=xml.GetChildData();
-		gB=r->read(geomBin);
+		gB=parseGeometry(geomBin);
 		geomBout=w->write(gB);
 		if (out &(GEOM_B_IN | GEOM_B_OUT)) {
 			cout << "\tGeometry B (points: " << gB->getNumPoints() <<")" << endl;
@@ -572,6 +612,7 @@ XMLTester::~XMLTester()
 	delete factory;
 	delete r; r=NULL;
 	delete w; w=NULL;
+	delete br; br=NULL;
 }
 
 
@@ -612,6 +653,11 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.59  2006/01/18 12:54:48  strk
+ * Added HEXWKB support in XMLTester. Added a simple test in HEXWKB form
+ * and a 'test' rule running the locally-available tests and showing
+ * result summay.
+ *
  * Revision 1.58  2005/11/25 12:22:42  strk
  * Made XMLTester able to run multiple test files and keep overall
  * counters.

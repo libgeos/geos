@@ -2,6 +2,8 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 top_builddir=@top_builddir@
 
+TESTS=testLeaksBig.xml hexwkb.xml
+
 noinst_PROGRAMS = SimpleWKTTester
 bin_PROGRAMS = XMLTester
 # CTS
@@ -24,3 +26,5 @@ INCLUDES += -I$(top_srcdir)/source/io/markup
 static:
 	$(CXX) $(CXXFLAGS) -I../headers -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../source/geom/.libs/libgeos.a
 
+test: XMLTester
+	./XMLTester $(TESTS) | tail -4

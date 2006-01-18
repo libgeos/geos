@@ -42,6 +42,7 @@ private:
 	void parsePrecisionModel();
 	void parseCase();
 	void parseTest();
+	Geometry *parseGeometry(const string &in);
 
 	Geometry *gA;
 	Geometry *gB;
@@ -51,6 +52,7 @@ private:
 	GeometryFactory *factory;
 	WKTReader *r;
 	WKTWriter *w;
+	WKBReader *br;
 	CMarkupSTL xml;
 
 	int out;
