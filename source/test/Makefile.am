@@ -2,7 +2,7 @@ prefix=@prefix@
 top_srcdir=@top_srcdir@
 top_builddir=@top_builddir@
 
-TESTS=testLeaksBig.xml hexwkb.xml
+TESTS=testLeaksBig.xml hexwkb.xml test.xml
 
 noinst_PROGRAMS = SimpleWKTTester
 bin_PROGRAMS = XMLTester
