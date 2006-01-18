@@ -171,6 +171,10 @@ WKBReader::readHEX(istream &is)
 		}
 
 		value = (result_high<<4) + result_low;
+
+#if DEBUG_WKB_READER
+	cout<<"HEX "<<high<<low<<" -> DEC "<<(int)value<<endl;
+#endif
 		// write the value to the output stream
 		os << value;
 	}
@@ -256,9 +260,6 @@ Point *
 WKBReader::readPoint()
 {
 	readCoordinate();
-#if DEBUG_WKB_READER
-	cout<<"Coordinates: "<<ordValues[0]<<","<<ordValues[1]<<endl;
-#endif
 	return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
 }
 
@@ -266,6 +267,9 @@ LineString *
 WKBReader::readLineString()
 {
 	int size = dis.readInt();
+#if DEBUG_WKB_READER
+	cout<<"WKB npoints: "<<size<<endl;
+#endif
 	CoordinateSequence *pts = readCoordinateSequence(size);
 	return factory.createLineString(pts);
 }
@@ -274,6 +278,9 @@ LinearRing *
 WKBReader::readLinearRing()
 {
 	int size = dis.readInt();
+#if DEBUG_WKB_READER
+	cout<<"WKB npoints: "<<size<<endl;
+#endif
 	CoordinateSequence *pts = readCoordinateSequence(size);
 	return factory.createLinearRing(pts);
 }
@@ -417,6 +424,9 @@ WKBReader::readCoordinate()
 		if ( i <= 1 ) ordValues[i] = pm.makePrecise(dis.readDouble());
 		else ordValues[i] = dis.readDouble();
 	}
+#if DEBUG_WKB_READER
+	cout<<"WKB coordinate: "<<ordValues[0]<<","<<ordValues[1]<<endl;
+#endif
 }
 
 } // namespace geos
