@@ -51,7 +51,7 @@ Geometry *
 WKBReader::readHEX(istream &is)
 {
 	// setup input/output stream
-	stringstream os;
+	stringstream os(ios_base::binary|ios_base::in|ios_base::out);
 
 	unsigned char high, low, result_high, result_low, value;
 
@@ -174,7 +174,7 @@ WKBReader::readHEX(istream &is)
 		// write the value to the output stream
 		os << value;
 	}
-  
+
 	// now call read to convert the geometry
 	return this->read(os);
 }
