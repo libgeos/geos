@@ -16,6 +16,7 @@
 #include <geos/io.h>
 
 //#define DEBUG_WKB_READER 1
+//#define DEBUG_HEX_READER 1
 
 namespace geos {
 
@@ -172,7 +173,7 @@ WKBReader::readHEX(istream &is)
 
 		value = (result_high<<4) + result_low;
 
-#if DEBUG_WKB_READER
+#if DEBUG_HEX_READER
 	cout<<"HEX "<<high<<low<<" -> DEC "<<(int)value<<endl;
 #endif
 		// write the value to the output stream
@@ -289,6 +290,11 @@ Polygon *
 WKBReader::readPolygon()
 {
 	int numRings = dis.readInt();
+
+#if DEBUG_WKB_READER
+	cout<<"WKB numRings: "<<numRings<<endl;
+#endif
+
 	LinearRing *shell = readLinearRing();
 
 	vector<Geometry *>*holes=NULL;
