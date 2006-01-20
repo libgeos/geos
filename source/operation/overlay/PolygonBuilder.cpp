@@ -115,6 +115,7 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 			if (de->getEdgeRing()==NULL) {
 				MaximalEdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
 				maxEdgeRings->push_back(er);
+				er->setInResult();
 				//System.out.println("max node degree=" + er.getMaxDegree());
 			}
 		}
@@ -227,7 +228,7 @@ PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
 {
 	for(int i=0;i<(int)edgeRings->size();i++) {
 		EdgeRing *er=(*edgeRings)[i];
-		er->setInResult();
+		//er->setInResult();
 		if (er->isHole() ) {
 			freeHoleList->push_back(er);
 		} else {
@@ -348,7 +349,11 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/01/20 19:21:24  strk
+ * Fixed bug #13
+ *
  * Revision 1.22  2005/11/18 00:55:29  strk
+ *
  * Fixed a bug in EdgeRing::containsPoint().
  * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
  * usages from PolygonBuilder.
