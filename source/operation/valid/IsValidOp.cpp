@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/IsValidOp.java rev. 1.38
+ * Last port: operation/valid/IsValidOp.java rev. 1.39 (JTS-1.7)
  *
  **********************************************************************/
 
@@ -625,6 +625,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2006/01/20 19:11:09  strk
+ * Updated last port info
+ *
  * Revision 1.38  2006/01/08 15:24:40  strk
  * Changed container-related typedef to class-scoped STL-like typedefs.
  * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;

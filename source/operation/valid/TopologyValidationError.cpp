@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/TopologyValidationError.java rev. 1.13
+ * Last port: operation/valid/TopologyValidationError.java rev. 1.14 (JTS-1.7)
  *
  **********************************************************************/
 
@@ -70,6 +70,9 @@ string TopologyValidationError::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/01/20 19:11:09  strk
+ * Updated last port info
+ *
  * Revision 1.9  2005/11/04 11:04:09  strk
  * Ported revision 1.38 of IsValidOp.java (adding closed Ring checks).
  * Changed NestedRingTester classes to use Coorinate pointers
