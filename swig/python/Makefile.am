@@ -32,8 +32,18 @@ geos_la_LIBADD = $(top_builddir)/source/geom/libgeos.la
 #install: geos.py setyp.py
 #	$(PYTHON) setup.py install
 
+if ENABLE_SWIG
+
 geos_wrap.cxx: ../geos.i
 	$(SWIG) $(SWIG_PYTHON_OPT) -o $@ $<
+
+else # ! ENABLE_SWIG
+
+geos_wrap.cxx: 
+	@echo "SWIG is disabled, can't build geos_wrap.cxx"
+	false
+
+endif # ENABLE_SWIG
 
 test: 
 	$(PYTHON) tests/runtests.py -v
