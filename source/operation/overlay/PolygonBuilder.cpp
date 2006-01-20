@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/overlay/PolygonBuilder.java rev. 1.18 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/opOverlay.h>
@@ -349,6 +353,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/01/20 19:28:39  strk
+ * Updated port information
+ *
  * Revision 1.23  2006/01/20 19:21:24  strk
  * Fixed bug #13
  *
