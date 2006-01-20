@@ -1,5 +1,6 @@
 <run>
-  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/>
+  <precisionModel type="FLOATING"/>
+  <!--precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/-->
 
 <case>
   <desc>HEXWKB POINT(0 1)</desc>
