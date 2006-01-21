@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: io/ByteOrderValues.java rev. 1.3 (JTS-1.7)
+ *
  **********************************************************************/
 
 
@@ -27,17 +31,17 @@ ByteOrderValues::getInt(const byte *buf, int byteOrder)
 {
 	if ( byteOrder == ENDIAN_BIG )
 	{
-		return ((int)buf[0]<<24)|
-			((int)buf[1]<<16)|
-			((int)buf[2]<<8)|
-			((int)buf[3]);
+		return  ((int) (buf[0]&0xff) <<24) |
+			((int) (buf[1]&0xff) <<16) |
+			((int) (buf[2]&0xff) <<8) |
+			((int) (buf[3]&0xff) );
 	}
 	else // ENDIAN_LITTLE
 	{
-		return ((int)buf[3]<<24)|
-			((int)buf[2]<<16)|
-			((int)buf[1]<<8)|
-			((int)buf[0]);
+		return  ((int) (buf[3]&0xff) <<24) |
+			((int) (buf[2]&0xff) <<16) |
+			((int) (buf[1]&0xff) <<8) |
+			((int) (buf[0]&0xff) );
 	}
 }
 
@@ -145,6 +149,10 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/01/21 16:08:30  strk
+ * Fixed integer conversion bug (ported from JTS-1.7).
+ * Added last port information.
+ *
  * Revision 1.3  2005/04/29 17:40:36  strk
  * Updated Doxygen documentation and some Copyright headers.
  *
