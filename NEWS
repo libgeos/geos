@@ -28,6 +28,11 @@ Changes in 3.0.0
 	- Changed index-related funx signatures to use unsigned int
 	  rather then int
 
+- Bug fixes:
+	- Fixed bug causing redundant linestrings to be returned in the
+	  result of overlaying polygons containing touching holes (#13)
+	- Fixed integer conversion bug
+
 
 - (Partial) Detailed list of changes:
 	- Changed SegmentNode to contain a *real* Coordinate (not a pointer)
