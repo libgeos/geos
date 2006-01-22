@@ -1,5 +1,8 @@
 - WKB tester in doc/examples.cpp should do point-by-point comparison.
 
+- Implement Safe's idea of a compile-time enabled 2d-only
+  inlineable CoordinateSequence
+
 - WKB extension with LINEARRIN ?
 
 - DoubleBits misregards BYTE_ENDIAN, must check it.
@@ -8,11 +11,7 @@
   GeometryGraph constructor (currently only with Polygon this
   is true).
 
-- polygonizer still failing (Envelope comparison again ?)
-
 - Add distinct binary predicates test support in XMLTester
-
-- IsValidTest.cpp in source/test ?
 
 - Check how to disable GEOS_VERSION define on command line
   (or make GEOS_VERSION define in version.h optional)
