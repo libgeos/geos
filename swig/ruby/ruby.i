@@ -14,9 +14,6 @@
  *
  * ========================================================================= */
 
-/* Include renames for methods */
-%include renames.i
-
 /* Next conflicts with a Ruby keyword */
 %rename(next_) geos::GeometryCollectionIterator::next();
 

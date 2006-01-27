@@ -7,7 +7,7 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
         # Check for Python include path
         AC_MSG_CHECKING([for Python include path])
         python_path=`echo $PYTHON | sed "s,/bin.*$,,"`
-        for i in "$python_path/include/python$PYTHON_VERSION/" "$python_path/include/python/" "$python_path/" ; do
+        for i in "$python_path/include/python$PYTHON_VERSION/" "$python_path/include/python/" "$python_path/" "$python_path/../include/" ; do
                 python_path=`find $i -type f -name Python.h -print | sed "1q"`
                 if test -n "$python_path" ; then
                         break
@@ -23,8 +23,16 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
         # Check for Python library path
         AC_MSG_CHECKING([for Python library path])
         python_path=`echo $PYTHON | sed "s,/bin.*$,,"`
-        for i in "$python_path/lib/python$PYTHON_VERSION/config/" "$python_path/lib/python$PYTHON_VERSION/" "$python_path/lib/python/config/" "$python_path/lib/python/" "$python_path/" ; do
+        for i in "$python_path/lib/python$PYTHON_VERSION/config/" "$python_path/lib/python$PYTHON_VERSION/" "$python_path/lib/python/config/" "$python_path/lib/python/" "$python_path/" "$python_path/../libs/" ; do
+
                 python_path=`find $i -type f -name libpython$PYTHON_VERSION.* -print | sed "1q"`
+                if test -n "$python_path" ; then
+                        break
+                fi
+
+		# on MinGW python lib is named with MAJOR.VERSION collapsed in a single value
+		mingw_libpython=`echo libpython$PYTHON_VERSION | sed "s/\.//"`
+                python_path=`find $i -type f -name $mingw_libpython.* -print | sed "1q"`
                 if test -n "$python_path" ; then
                         break
                 fi

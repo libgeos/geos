@@ -14,12 +14,13 @@ if ENABLE_PYTHON
 BUILT_SOURCES = geos_wrap.cxx
 
 pkgpython_PYTHON = geos.py
-pkgpyexec_LTLIBRARIES = geos.la
+pkgpyexec_LTLIBRARIES = _geos.la
 
-geos_la_SOURCES = geos_wrap.cxx 
-geos_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_srcdir)/src
-geos_la_LDFLAGS = -no-undefined -module -avoid-version
-geos_la_LIBADD = $(top_builddir)/source/geom/libgeos.la 
+_geos_la_SOURCES = geos_wrap.cxx 
+_geos_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_srcdir)/src
+# Specify -module and -avoid-version so we can create a file called geos.dll/so which is what Python wants
+_geos_la_LDFLAGS = -no-undefined -module -avoid-version
+_geos_la_LIBADD = $(top_builddir)/source/geom/libgeos.la $(PYTHON_LDFLAGS)
 
 
 
@@ -41,7 +42,7 @@ else # ! ENABLE_SWIG
 
 geos_wrap.cxx: 
 	@echo "SWIG is disabled, can't build geos_wrap.cxx"
-	false
+	@false
 
 endif # ENABLE_SWIG
 
