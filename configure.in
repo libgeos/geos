@@ -99,13 +99,13 @@ dnl --------------------------------------------------------------------
 dnl - check for python 
 dnl --------------------------------------------------------------------
 
-AC_ARG_ENABLE(python, [  --disable-python    Disable build of python module],
+AC_ARG_ENABLE(python, [  --enable-python    Enable build of python module],
 	[case "${enableval}" in
 		yes) use_python=true ;;
 		no)  use_python=false ;;
 		*) AC_MSG_ERROR(bad value ${enableval} for --enable-python) ;;
 	esac],
-	[use_python=true]
+	[use_python=false]
 )
 
 if test x"$use_python" = xtrue; then
@@ -128,13 +128,13 @@ dnl --------------------------------------------------------------------
 dnl - check for ruby 
 dnl --------------------------------------------------------------------
 
-AC_ARG_ENABLE(ruby, [  --disable-ruby    Disable build of ruby module],
+AC_ARG_ENABLE(ruby, [  --enable-ruby    Enable build of ruby module],
 	[case "${enableval}" in
 		yes) use_ruby=true ;;
 		no)  use_ruby=false ;;
 		*) AC_MSG_ERROR(bad value ${enableval} for --enable-ruby) ;;
 	esac],
-	[use_ruby=true]
+	[use_ruby=false]
 )
 
 if test x"$use_ruby" = xtrue; then
