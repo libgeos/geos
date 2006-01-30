@@ -27,7 +27,7 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
@@ -931,6 +931,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/01/30 21:59:18  frank
+ * yikes!  comment out debug define again
+ *
  * Revision 1.27  2006/01/30 21:58:38  frank
  * fixed up some debug messages
  *
