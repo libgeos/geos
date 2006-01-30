@@ -13,6 +13,7 @@ if ENABLE_PYTHON
 
 BUILT_SOURCES = geos_wrap.cxx
 
+python_DATA = geos.pth
 pkgpython_PYTHON = geos.py
 pkgpyexec_LTLIBRARIES = _geos.la
 

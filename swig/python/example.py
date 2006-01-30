@@ -57,10 +57,7 @@ def create_square_polygon(xoffset,yoffset,side):
     holes = geos.vector_GeometryP()
     holes.push_back(inner)
 
-    poly = global_factory.createPolygonPP(outer,holes)
-    assert outer.thisown == 0
-    assert holes.thisown == 0
-    inner.thisown = 0
+    poly = global_factory.createPolygon(outer,holes)
     return poly
 
 def create_simple_collection(geoms):
