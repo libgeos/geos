@@ -27,7 +27,7 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 
-//#define DEBUG 1
+#define DEBUG 1
 
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
@@ -799,7 +799,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 	try {
 		HCoordinate::intersection(n1,n2,n3,n4,intPt);
 #if DEBUG
-		cerr<<" HCoordinate found intersection h:"<<h->toString()<<endl;
+		cerr<<" HCoordinate found intersection h:"<<intPt.toString()<<endl;
 #endif
 
 	} catch (NotRepresentableException *e) {
@@ -821,7 +821,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
  */
 
 #if DEBUG
-	if (! isInSegmentEnvelopes(&intPt)) 
+	if (!((LineIntersector *)this)->isInSegmentEnvelopes(intPt))
 	{
 		cerr<<"Intersection outside segment envelopes: "<<
 			intPt.toString();
@@ -931,7 +931,11 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/01/30 21:58:38  frank
+ * fixed up some debug messages
+ *
  * Revision 1.26  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to
