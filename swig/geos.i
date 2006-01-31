@@ -93,8 +93,10 @@
     %argument_fail(SWIG_TypeError, "(TYPEMAP, SIZE)", $symname, $argnum);
   }
   
-  /* Write data to the stream */
-  stream.write(buf, size);
+  /* Write data to the stream.  Note that the returned size includes
+     the last character, which is a null character.  We do not want
+     to write that to the stream so subtract one from its size. */
+  stream.write(buf, size - 1);
 
   $1 = &stream;
 }
