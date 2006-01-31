@@ -1,0 +1,19 @@
+SUBDIRS = 
+
+noinst_LTLIBRARIES = libopbuffer.la
+
+INCLUDES = -I$(top_srcdir)/source/headers 
+
+libopbuffer_la_SOURCES = \
+	BufferBuilder.cpp \
+	BufferOp.cpp \
+	BufferSubgraph.cpp \
+	DepthSegment.cpp \
+	OffsetCurveBuilder.cpp \
+	OffsetCurveSetBuilder.cpp \
+	RightmostEdgeFinder.cpp \
+	SubgraphDepthLocater.cpp 
+
+libopbuffer_la_LIBADD = 
+
+

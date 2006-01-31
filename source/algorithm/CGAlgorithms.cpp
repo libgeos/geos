@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -80,6 +81,53 @@ CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 		y1 = p1.y - p.y;
 		x2 = p2.x - p.x;
 		y2 = p2.y - p.y;
+
+		if (((y1 > 0) && (y2 <= 0)) ||
+			((y2 > 0) && (y1 <= 0)))
+		{
+			/*
+			 *  segment straddles x axis, so compute intersection.
+			 */
+			xInt = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2)
+				/ (y2 - y1);
+
+			/*
+			 *  crosses ray if strictly positive intersection.
+			 */
+			if (0.0 < xInt) crossings++;
+		}
+	}
+
+	/*
+	 *  p is inside if number of crossings is odd.
+	 */
+	if ((crossings % 2) == 1) return true;
+	return false;
+}
+
+bool
+CGAlgorithms::isPointInRing(const Coordinate& p,
+		const Coordinate::ConstVect& ring)
+{
+	double xInt;  // x intersection of segment with ray
+	int crossings = 0;  // number of segment/ray crossings
+	double x1;    // translated coordinates
+	double y1;
+	double x2;
+	double y2;
+
+	/*
+	 * For each segment l = (i-1, i), see if it crosses ray from
+	 * test point in positive x direction.
+	 */
+	for(unsigned int i=1, nPts=ring.size(); i<nPts; ++i)
+	{
+		const Coordinate *p1=ring[i];
+		const Coordinate *p2=ring[i-1];
+		x1 = p1->x - p.x;
+		y1 = p1->y - p.y;
+		x2 = p2->x - p.x;
+		y2 = p2->y - p.y;
 
 		if (((y1 > 0) && (y2 <= 0)) ||
 			((y2 > 0) && (y1 <= 0)))
@@ -402,6 +450,28 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/01/31 19:07:33  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.25  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
@@ -441,7 +511,7 @@ CGAlgorithms::length(const CoordinateSequence* pts)
  * Revision 1.16  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
+ * Added CoordinateArraySequenceFactory::instance() function.
  *
  * Revision 1.15  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.

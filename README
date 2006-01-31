@@ -29,7 +29,7 @@ To compile programs against the C lib (recommended):
 
 Example usage:
 
-	source/capi/geostest.c contains basic usage
+	capi/geostest.c contains basic usage
 	examples.
 
 Using the C++ interface (discouraged)

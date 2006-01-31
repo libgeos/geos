@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,6 +21,7 @@
 #include <string>
 #include <geos/platform.h>
 #include <geos/geom.h>
+#include <vector>
 
 using namespace std;
 
@@ -123,25 +125,79 @@ public:
 	static void shouldNeverReachHere(string message);
 };
 
+/**
+ * A CoordinateFilter that adds read-only pointers
+ * to every Coordinate in a Geometry to a given
+ * vector.
+ *
+ * Last port: util/CoordinateArrayFilter.java rev. 1.15
+ */
 class CoordinateArrayFilter:public CoordinateFilter {
+private:
+	Coordinate::ConstVect &pts; // target vector reference
 public:
-	CoordinateSequence* pts;
-	int n;
-	CoordinateArrayFilter(int size);
-	virtual ~CoordinateArrayFilter();
-	virtual const CoordinateSequence* getCoordinates() const;
-	virtual void filter_ro(const Coordinate *coord);
-	virtual void filter_rw(Coordinate *coord) const; // Unsupported
+	/**
+	 * Constructs a CoordinateArrayFilter.
+	 *
+	 * @param  target   The destination vector. 
+	 */
+	CoordinateArrayFilter(Coordinate::ConstVect& target)
+		:
+		pts(target)
+		{}
+
+	virtual ~CoordinateArrayFilter() {}
+
+	virtual void filter_ro(const Coordinate *coord)
+	{
+		pts.push_back(coord);
+	}
+
+	virtual void filter_rw(Coordinate *coord) const
+	{
+		// Unsupported
+		throw new UnsupportedOperationException("CoordinateArrayFilter"
+			" is a read-only filter");
+	}
 };
 
+/*
+ *  A CoordinateFilter that fills a vector of Coordinate const pointers.
+ *  The set of coordinates contains no duplicate points.
+ *
+ *  Last port: util/UniqueCoordinateArrayFilter.java rev. 1.17
+ */
 class UniqueCoordinateArrayFilter:public CoordinateFilter {
+
+private:
+	Coordinate::ConstVect &pts;	// target set reference
+	Coordinate::ConstSet uniqPts; 	// unique points set
+
 public:
-	CoordinateSequence *list;
-	UniqueCoordinateArrayFilter();
-	virtual ~UniqueCoordinateArrayFilter();
-	virtual const CoordinateSequence* getCoordinates() const;
-	virtual void filter_ro(const Coordinate *coord);
-	virtual void filter_rw(Coordinate *coord) const; // Unsupported
+	/**
+	 * Constructs a CoordinateArrayFilter.
+	 *
+	 * @param  target   The destination set. 
+	 */
+	UniqueCoordinateArrayFilter(Coordinate::ConstVect &target)
+		:
+		pts(target)
+		{}
+
+	virtual ~UniqueCoordinateArrayFilter() {}
+
+	virtual void filter_ro(const Coordinate *coord)
+	{
+		if ( uniqPts.insert(coord).second )
+			pts.push_back(coord);
+	}
+
+	virtual void filter_rw(Coordinate *coord) const
+	{
+		 // Unsupported
+		throw new UnsupportedOperationException(
+			"UniqueCoordinateArrayFilter is a read-only filter");
+	}
 };
 
 
@@ -257,11 +313,34 @@ public:
 
 };
 
-}
-#endif
+} // namespace geos
+
+#endif // GEOS_UTIL_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/01/31 19:07:34  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.10  2005/12/08 14:14:07  strk
  * ElevationMatrixFilter used for both elevation and Matrix fill,
  * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).

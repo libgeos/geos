@@ -5,7 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -80,6 +80,10 @@ public:
 	 * @return <code>true</code> if p is inside ring
 	 */
 	static bool isPointInRing(const Coordinate& p, const CoordinateSequence* ring);
+
+	/// Same as above, but taking a Coordinate::ConstVect (faster)
+	static bool isPointInRing(const Coordinate& p, const Coordinate::ConstVect& ring);
+
 	/**
 	 * Test whether a point lies on a linestring.
 	 *
@@ -346,7 +350,7 @@ private:
 	static bool containsPoint(const Coordinate& p,const Geometry *geom);
 };
 
-/*
+/**
  * \class PointLocator geosAlgorithm.h geos/geosAlgorithm.h
  *
  * \brief
@@ -355,23 +359,52 @@ private:
  *
  * The algorithm obeys the SFS boundaryDetermination rule to correctly determine
  * whether the point lies on the boundary or not.
- * Note that instances of this class are not reentrant.
- * @version 1.3
+ *
+ * Notes:
+ *	- instances of this class are not reentrant.
+ *	- LinearRing objects do not enclose any area
+ *	  points inside the ring are still in the EXTERIOR of the ring.
+ *
+ * Last port: algorithm/PointLocator.java rev. 1.26 (JTS-1.7+)
  */
 class PointLocator {
 public:
-	PointLocator();
-	~PointLocator();
+	PointLocator() {}
+	~PointLocator() {}
+
+	/**
+	 * Computes the topological relationship (Location) of a single point
+	 * to a Geometry.
+	 * It handles both single-element
+	 * and multi-element Geometries.
+	 * The algorithm for multi-part Geometries
+	 * takes into account the boundaryDetermination rule.
+	 *
+	 * @return the Location of the point relative to the input Geometry
+	 */
 	int locate(const Coordinate& p,const Geometry *geom);
-	bool intersects(const Coordinate& p,const Geometry *geom);
-	int locate(const Coordinate& p,const LineString *l);
-	int locate(const Coordinate& p,const LinearRing *ring);
-	int locate(const Coordinate& p,const Polygon *poly);
+
+	/**
+	 * Convenience method to test a point for intersection with
+	 * a Geometry
+	 *
+	 * @param p the coordinate to test
+	 * @param geom the Geometry to test
+	 * @return <code>true</code> if the point is in the interior or boundary of the Geometry
+	 */
+	bool intersects(const Coordinate& p, const Geometry *geom) {
+		return locate(p,geom)!=Location::EXTERIOR;
+	}
+
 private:
 	bool isIn;         // true if the point lies in or on any Geometry element
 	int numBoundaries;    // the number of sub-elements whose boundaries the point lies in
 	void computeLocation(const Coordinate& p,const Geometry *geom);
 	void updateLocationInfo(int loc);
+	int locate(const Coordinate& p,const LineString *l);
+	int locateInPolygonRing(const Coordinate& p,const LinearRing *ring);
+	int locate(const Coordinate& p,const Polygon *poly);
+
 };
 
 
@@ -565,38 +598,148 @@ public:
 	Coordinate eastmost;
 };
 
+
+/**
+ * Computes the convex hull of a Geometry.
+ *
+ * The convex hull is the smallest convex Geometry that contains all the
+ * points in the input Geometry.
+ * 
+ * Uses the Graham Scan algorithm.
+ *
+ * Last port: algorithm/ConvexHull.java rev. 1.26 (JTS-1.7)
+ *
+ */
 class ConvexHull {
 private:
-	PointLocator pointLocator;
-	//CGAlgorithms *cgAlgorithms;
-	const Geometry *geometry;
-	const GeometryFactory *factory;
-	CoordinateSequence* reduce(const CoordinateSequence *pts);
-	CoordinateSequence* preSort(CoordinateSequence *pts);
-	CoordinateSequence* grahamScan(const CoordinateSequence *c);
+	const GeometryFactory *geomFactory;
+	Coordinate::ConstVect inputPts;
+
+	void extractCoordinates(const Geometry *geom)
+	{
+		UniqueCoordinateArrayFilter filter(inputPts);
+		geom->apply_ro(&filter);
+	}
+
+	/// Create a CoordinateSequence from the Coordinate::ConstVect
+	/// This is needed to construct the geometries.
+	/// Here coordinate copies happen
+	/// The returned object is newly allocated !NO EXCEPTION SAFE!
+	CoordinateSequence *toCoordinateSequence(Coordinate::ConstVect &cv);
+
+	void computeOctPts(const Coordinate::ConstVect &src,
+			Coordinate::ConstVect &tgt);
+
+	bool computeOctRing(const Coordinate::ConstVect &src,
+			Coordinate::ConstVect &tgt);
+
+	/**
+	 * Uses a heuristic to reduce the number of points scanned
+	 * to compute the hull.
+	 * The heuristic is to find a polygon guaranteed to
+	 * be in (or on) the hull, and eliminate all points inside it.
+	 * A quadrilateral defined by the extremal points
+	 * in the four orthogonal directions
+	 * can be used, but even more inclusive is
+	 * to use an octilateral defined by the points in the
+	 * 8 cardinal directions.
+	 *
+	 * Note that even if the method used to determine the polygon
+	 * vertices is not 100% robust, this does not affect the
+	 * robustness of the convex hull.
+	 *
+	 * @param pts The vector of const Coordinate pointers
+	 *            to be reduced
+	 *
+	 *
+	 * WARNING: the parameter will be modified
+	 *
+	 */
+	void reduce(Coordinate::ConstVect &pts);
+
+
+	/// parameter will be modified
+	void preSort(Coordinate::ConstVect &pts);
+
+	/**
+	 * Given two points p and q compare them with respect to their radial
+	 * ordering about point o.  First checks radial ordering.
+	 * If points are collinear, the comparison is based
+	 * on their distance to the origin.
+	 * 
+	 * p < q iff
+	 *
+	 * - ang(o-p) < ang(o-q) (e.g. o-p-q is CCW)
+	 * - or ang(o-p) == ang(o-q) && dist(o,p) < dist(o,q)
+	 *
+	 * @param o the origin
+	 * @param p a point
+	 * @param q another point
+	 * @return -1, 0 or 1 depending on whether p is less than,
+	 * equal to or greater than q
+	 */
+	int polarCompare(const Coordinate &o,
+			const Coordinate &p, const Coordinate &q);
+
+	void grahamScan(const Coordinate::ConstVect &c,
+			Coordinate::ConstVect &ps);
+
+	/**
+	 * @param  vertices  the vertices of a linear ring,
+	 *                   which may or may not be
+	 *                   flattened (i.e. vertices collinear)
+	 *
+	 * @return           a 2-vertex LineString if the vertices are
+	 *                   collinear; otherwise, a Polygon with unnecessary
+	 *                   (collinear) vertices removed
+	 */
+	Geometry* lineOrPolygon(const Coordinate::ConstVect &vertices);
+
+	/**
+	 * Write in 'cleaned' a version of 'input' with collinear
+	 * vertexes removed.
+   	 */
+	void cleanRing(const Coordinate::ConstVect &input,
+			Coordinate::ConstVect &cleaned);
+
+	/**
+	 * @return  whether the three coordinates are collinear
+	 *          and c2 lies between c1 and c3 inclusive
+	 */
+	bool isBetween(const Coordinate& c1, const Coordinate& c2, const Coordinate& c3);
+
+#if 0
 	void radialSort(CoordinateSequence *p);
-	int polarCompare(const Coordinate &o, const Coordinate &p, const Coordinate &q);
-	bool isBetween(const Coordinate &c1, const Coordinate &c2, const Coordinate &c3);
 	void makeBigQuad(const CoordinateSequence *pts, BigQuad &ret);
-	Geometry* lineOrPolygon(const CoordinateSequence *newCoordinates);
-	CoordinateSequence* cleanRing(const CoordinateSequence *original);
+#endif
+
 public:
 
-	/*
-	 * Returns a Geometry that represents the convex hull of the input
-	 * geometry.
-	 * The geometry will contain the minimal number of points needed to
-	 * represent the convex hull.  In particular, no more than two consecutive
-	 * points will be collinear.
-	 *
-	 * @return if the convex hull contains 3 or more points, a Polygon;
-	 * 2 points, a LineString;
-	 * 1 point, a Point;
-	 * 0 points, an empty GeometryCollection.
+	/**
+	 * Create a new convex hull construction for the input Geometry.
 	 */
-	ConvexHull(const Geometry *newGeometry);
+	ConvexHull(const Geometry *newGeometry)
+		:
+		geomFactory(newGeometry->getFactory())
+	{
+		extractCoordinates(newGeometry);
+	}
 
-	~ConvexHull();
+
+	~ConvexHull() {}
+
+	/**
+	 * Returns a Geometry that represents the convex hull of
+	 * the input geometry.
+	 * The returned geometry contains the minimal number of points
+	 * needed to represent the convex hull. 
+	 * In particular, no more than two consecutive points
+	 * will be collinear.
+	 *
+	 * @return if the convex hull contains 3 or more points,
+	 *         a Polygon; 2 points, a LineString;
+	 *         1 point, a Point; 0 points, an empty GeometryCollection.
+	 */
 	Geometry* getConvexHull();
 };
 
@@ -700,6 +843,28 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/01/31 19:07:34  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.18  2005/11/29 15:16:44  strk
  * Fixed sign-related warnings and signatures.
  *

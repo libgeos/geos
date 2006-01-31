@@ -104,8 +104,8 @@ IntersectionMatrix::matches(int actualDimensionValue,
 }
 
 bool
-IntersectionMatrix::matches(string actualDimensionSymbols,
-	string requiredDimensionSymbols)
+IntersectionMatrix::matches(const string& actualDimensionSymbols,
+	const string& requiredDimensionSymbols)
 {
 	IntersectionMatrix m(actualDimensionSymbols);
 	bool result=m.matches(requiredDimensionSymbols);
@@ -345,6 +345,28 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/01/31 19:07:33  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.13  2005/11/09 08:57:07  strk
  * IntersectionMatrix made a concrete and final type.
  * Cleanups in class definition.

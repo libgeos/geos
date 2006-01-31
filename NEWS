@@ -11,6 +11,14 @@ Changes in 3.0.0
 	- HEXWKB I/O
 	- Envelope(string) ctor
 	- Ruby interface
+	- New ShortCircuitedGeometryVisitor class
+	- New operation/predicate package
+	- Added CGAlgorithms::isPointInRing() version working with
+	  Coordinate::ConstVect type (faster!)
+	- Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence
+	  class.
+	- Moved GetNumGeometries() and GetGeometryN() interfaces
+	  from GeometryCollection to Geometry class.
 
 - Optimizations:
 	- WKT parser speedup
@@ -21,6 +29,12 @@ Changes in 3.0.0
 	- Better use of standard containers
 	- Use of singletons when appropriate
 	- Removed many function calls in loops' end conditions
+	- Improved XMLTester output and user interface
+	- Improved memory use in geos::geom::util::PolygonExtractor
+	- Ported JTS-1.7 version of ConvexHull with big attention to
+	  memory usage optimizations.
+	- Changed CoordinateArrayFilter to reduce memory copies
+	- Changed UniqueCoordinateArrayFilter to reduce memory copies
 
 - Correctness:
 	- More const-correct signatures
@@ -28,10 +42,20 @@ Changes in 3.0.0
 	- Changed index-related funx signatures to use unsigned int
 	  rather then int
 
+- Layout changes:
+	- geos::geom::util namespace used for geom/util stuff
+	- Moved source/bigtest and source/test to tests/bigtest
+	  and test/xmltester
+	- Moved C-API in it's own top-level dir capi/
+	- Reworked automake scripts to produce a static lib for each subdir
+	  and then link all subsystem's libs togheter
+	- Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+
 - Bug fixes:
 	- Fixed bug causing redundant linestrings to be returned in the
 	  result of overlaying polygons containing touching holes (#13)
 	- Fixed integer conversion bug
+	- Fixed PointLocator handling of LinearRings
 
 
 - (Partial) Detailed list of changes:

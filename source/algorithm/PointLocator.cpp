@@ -5,60 +5,38 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/PointLocator.java rev. 1.26 (JTS-1.7+)
+ *
  **********************************************************************/
 
 #include <geos/geosAlgorithm.h>
 #include <typeinfo>
 #include <geos/geomgraph.h>
+#include <geos/geom.h>
 
 namespace geos {
 
-PointLocator::PointLocator() {
-}
 
-PointLocator::~PointLocator() {
-}
-
-/**
-* Convenience method to test a point for intersection with
-* a Geometry
-* @param p the coordinate to test
-* @param geom the Geometry to test
-* @return <code>true</code> if the point is in the interior or boundary of the Geometry
-*/
-bool PointLocator::intersects(const Coordinate& p,const Geometry *geom) {
-	return locate(p,geom)!=Location::EXTERIOR;
-}
-
-
-/**
- * Computes the topological relationship ({@link Location}) of a single point
- * to a Geometry.
- * It handles both single-element
- * and multi-element Geometries.
- * The algorithm for multi-part Geometries
- * takes into account the boundaryDetermination rule.
- *
- * @return the Location of the point relative to the input Geometry
- */
 int
 PointLocator::locate(const Coordinate& p, const Geometry *geom)
 {
 	if (geom->isEmpty()) return Location::EXTERIOR;
-	if (typeid(*geom)==typeid(LineString)) {
-		return locate(p,(LineString*) geom);
-	}
-	if (typeid(*geom)==typeid(LinearRing)) {
-		return locate(p,(LinearRing*) geom);
-	} else if (typeid(*geom)==typeid(Polygon)) {
-		return locate(p,(Polygon*) geom);
-	}
+
+	const LineString *ls_geom = dynamic_cast<const LineString *>(geom);
+	if (ls_geom) return locate(p, ls_geom);
+
+	const Polygon *poly_geom = dynamic_cast<const Polygon *>(geom);
+	if (poly_geom) return locate(p, poly_geom);
+
 
 	isIn=false;
 	numBoundaries=0;
@@ -68,46 +46,56 @@ PointLocator::locate(const Coordinate& p, const Geometry *geom)
 	return Location::EXTERIOR;
 }
 
+/* private */
 void
 PointLocator::computeLocation(const Coordinate& p, const Geometry *geom)
 {
-	if (typeid(*geom)==typeid(LineString)) {
-		updateLocationInfo(locate(p,(LineString*) geom));
+
+	if (const LineString *ls=dynamic_cast<const LineString*>(geom))
+	{
+		updateLocationInfo(locate(p, ls));
 	}
-	if (typeid(*geom)==typeid(LinearRing)) {
-		updateLocationInfo(locate(p,(LinearRing*) geom));
-	} else if (typeid(*geom)==typeid(Polygon)) {
-		updateLocationInfo(locate(p,(Polygon*) geom));
-	} else if (typeid(*geom)==typeid(MultiLineString)) {
-		MultiLineString *ml=(MultiLineString*) geom;
-		for(int i=0;i<ml->getNumGeometries();i++) {
-			LineString *l=(LineString*) ml->getGeometryN(i);
+	else if (const Polygon *po=dynamic_cast<const Polygon*>(geom))
+	{
+		updateLocationInfo(locate(p, po));
+	}
+	else if (const MultiLineString *mls=dynamic_cast<const MultiLineString *>(geom))
+	{
+		for(int i=0, n=mls->getNumGeometries(); i<n; ++i)
+		{
+			const LineString *l=dynamic_cast<const LineString *>(mls->getGeometryN(i));
 			updateLocationInfo(locate(p,l));
 		}
-	} else if (typeid(*geom)==typeid(MultiPolygon)) {
-		MultiPolygon *mpoly=(MultiPolygon*) geom;
-		for(int i=0;i<mpoly->getNumGeometries();i++) {
-			Polygon *poly=(Polygon*) mpoly->getGeometryN(i);
-			updateLocationInfo(locate(p,poly));
-		}
-	} else if (typeid(*geom)==typeid(GeometryCollection)) {
-		GeometryCollectionIterator geomi((GeometryCollection*) geom);
-		while (geomi.hasNext()) {
-			const Geometry *g2=geomi.next();
-//			if (! g2->equals(geom))
-			if (g2!=geom)
-				computeLocation(p,g2);
+	}
+	else if (const MultiPolygon *mpo=dynamic_cast<const MultiPolygon *>(geom))
+	{
+		for(int i=0, n=mpo->getNumGeometries(); i<n; ++i)
+		{
+			const Polygon *po=dynamic_cast<const Polygon *>(mpo->getGeometryN(i));
+			updateLocationInfo(locate(p, po));
 		}
 	}
+	else if (const GeometryCollection *col=dynamic_cast<const GeometryCollection *>(geom))
+	{
+		GeometryCollectionIterator geomi(col);
+		while (geomi.hasNext()) {
+			const Geometry *g2=geomi.next();
+			if (g2!=geom) computeLocation(p,g2);
+				// is this check really needed ?
+		}
+	}
+
 }
 
+/* private */
 void
 PointLocator::updateLocationInfo(int loc)
 {
 	if (loc==Location::INTERIOR) isIn=true;
-	if (loc==Location::BOUNDARY) numBoundaries++;
+	if (loc==Location::BOUNDARY) ++numBoundaries;
 }
 
+/* private */
 int
 PointLocator::locate(const Coordinate& p, const LineString *l)
 {
@@ -122,34 +110,39 @@ PointLocator::locate(const Coordinate& p, const LineString *l)
 	return Location::EXTERIOR;
 }
 
+/* private */
 int
-PointLocator::locate(const Coordinate& p, const LinearRing *ring)
+PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing *ring)
 {
+	// can this test be folded into isPointInRing ?
+
 	const CoordinateSequence *cl = ring->getCoordinatesRO();
-	if (CGAlgorithms::isOnLine(p,cl)) {
+
+	if (CGAlgorithms::isOnLine(p,cl)) 
 		return Location::BOUNDARY;
-	}
 	if (CGAlgorithms::isPointInRing(p,cl))
-	{
 		return Location::INTERIOR;
-	}
 	return Location::EXTERIOR;
 }
 
+/* private */
 int
 PointLocator::locate(const Coordinate& p,const Polygon *poly)
 {
 	if (poly->isEmpty()) return Location::EXTERIOR;
 
-	const LinearRing *shell=(LinearRing *)poly->getExteriorRing();
+	const LinearRing *shell=dynamic_cast<const LinearRing *>(poly->getExteriorRing());
+	Assert::isTrue(shell);
 
-	int shellLoc=locate(p, shell);
+	int shellLoc=locateInPolygonRing(p, shell);
 	if (shellLoc==Location::EXTERIOR) return Location::EXTERIOR;
 	if (shellLoc==Location::BOUNDARY) return Location::BOUNDARY;
+
 	// now test if the point lies in or on the holes
-	for(int i=0;i<poly->getNumInteriorRing();i++) {
-		LinearRing *hole=(LinearRing*) poly->getInteriorRingN(i);
-		int holeLoc=locate(p,hole);
+	for(int i=0, n=poly->getNumInteriorRing(); i<n; ++i)
+	{
+		const LinearRing *hole=dynamic_cast<const LinearRing *>(poly->getInteriorRingN(i));
+		int holeLoc=locateInPolygonRing(p,hole);
 		if (holeLoc==Location::INTERIOR) return Location::EXTERIOR;
 		if (holeLoc==Location::BOUNDARY) return Location::BOUNDARY;
 	}
@@ -160,6 +153,28 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/01/31 19:07:33  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.24  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
@@ -178,7 +193,7 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
  * Revision 1.21  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
+ * Added CoordinateArraySequenceFactory::instance() function.
  *
  * Revision 1.20  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.

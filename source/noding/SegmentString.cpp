@@ -184,6 +184,28 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/01/31 19:07:34  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.17  2005/12/08 01:39:28  strk
  * SegmentString::eiList made a real object rather then a pointer.
  * Adde getter for const and non-const references of it (dropping get by pointer)
@@ -196,7 +218,7 @@ SegmentString::addIntersection(Coordinate& intPt,
  * Cached number of points in CoordinateSequence.
  *
  * Revision 1.14  2005/02/22 15:49:20  strk
- * Reduced calls to DefaultCoordinateSequence->getSize().
+ * Reduced calls to CoordinateArraySequence->getSize().
  *
  * Revision 1.13  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
@@ -216,7 +238,7 @@ SegmentString::addIntersection(Coordinate& intPt,
  * Revision 1.9  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
+ * Added CoordinateArraySequenceFactory::instance() function.
  *
  * Revision 1.8  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.

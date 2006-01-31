@@ -4,7 +4,7 @@ top_builddir=@top_builddir@
 
 noinst_PROGRAMS = example 
 
-LIBS = $(top_builddir)/source/geom/libgeos.la
+LIBS = $(top_builddir)/source/libgeos.la
 
 example_SOURCES = example.cpp 
 example_LDADD = $(LIBS)

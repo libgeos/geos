@@ -477,7 +477,7 @@ Geometry::overlaps(const Geometry *g) const
 }
 
 bool
-Geometry::relate(const Geometry *g, string intersectionPattern) const
+Geometry::relate(const Geometry *g, const string &intersectionPattern) const
 {
 	IntersectionMatrix *im=relate(g);
 	bool res=im->matches(intersectionPattern);
@@ -556,20 +556,20 @@ Geometry::buffer(double distance) const
 /**
  * The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
  * are fast, which may not be the case if the CoordinateSequence is not a
- * DefaultCoordinateSequence (e.g. if it were implemented using separate arrays
+ * CoordinateArraySequence (e.g. if it were implemented using separate arrays
  * for the x- and y-values), in which case frequent construction of Coordinates
  * takes up much space and time. To solve this performance problem,
- * #toInternalGeometry converts the Geometry to a DefaultCoordinateSequence
+ * #toInternalGeometry converts the Geometry to a CoordinateArraySequence
  * implementation before sending it to the JTS algorithms.
  *
- * Note: if the Geometry is already implemented with DefaultCoordinateSequence
+ * Note: if the Geometry is already implemented with CoordinateArraySequence
  * it is returned untouched, so you should check returned value before
  * releasing memory associated with the one used as argument.
  */
 Geometry*
 Geometry::toInternalGeometry(const Geometry *g) const
 {
-	if (DefaultCoordinateSequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
+	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
 		return (Geometry*)g;
 	}
 	return INTERNAL_GEOMETRY_FACTORY->createGeometry(g);
@@ -578,7 +578,7 @@ Geometry::toInternalGeometry(const Geometry *g) const
 Geometry*
 Geometry::fromInternalGeometry(const Geometry* g) const
 {
-	if (DefaultCoordinateSequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
+	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
 		return (Geometry*)g;
 	}
 	return getFactory()->createGeometry(g);
@@ -972,6 +972,28 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.83  2006/01/31 19:07:33  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.82  2005/11/24 23:09:15  strk
  * CoordinateSequence indexes switched from int to the more
  * the correct unsigned int. Optimizations here and there
@@ -1087,7 +1109,7 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
  * Revision 1.61  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
+ * Added CoordinateArraySequenceFactory::instance() function.
  *
  * Revision 1.60  2004/07/07 09:38:12  strk
  * Dropped WKTWriter::stringOfChars (implemented by std::string).

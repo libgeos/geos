@@ -373,7 +373,7 @@ LineSegment::closestPoints(const LineSegment *line)
 	// test for intersection
 	Coordinate *intPt = intersection(line);
 	if (intPt!=NULL) {
-		CoordinateSequence *cl=new DefaultCoordinateSequence(new vector<Coordinate>(2, *intPt));
+		CoordinateSequence *cl=new CoordinateArraySequence(new vector<Coordinate>(2, *intPt));
 		delete intPt;
 		return cl;
 	}
@@ -382,7 +382,7 @@ LineSegment::closestPoints(const LineSegment *line)
 	 * if no intersection closest pair contains at least one endpoint.
 	 * Test each endpoint in turn.
 	 */
-	CoordinateSequence *closestPt=new DefaultCoordinateSequence(2);
+	CoordinateSequence *closestPt=new CoordinateArraySequence(2);
 	//vector<Coordinate> *cv = new vector<Coordinate>(2);
 
 	double minDistance=DoubleInfinity;
@@ -429,7 +429,7 @@ LineSegment::closestPoints(const LineSegment *line)
 	}
 	delete close11;
 
-	//CoordinateSequence *closestPt=new DefaultCoordinateSequence(cv);
+	//CoordinateSequence *closestPt=new CoordinateArraySequence(cv);
 
 	return closestPt;
 }
@@ -476,7 +476,30 @@ operator==(const LineSegment a, const LineSegment b)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/01/31 19:07:33  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.22  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to
@@ -538,7 +561,7 @@ operator==(const LineSegment a, const LineSegment b)
  * Revision 1.15  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
+ * Added CoordinateArraySequenceFactory::instance() function.
  *
  * Revision 1.14  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.

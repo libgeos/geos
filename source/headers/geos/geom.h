@@ -5,7 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -23,6 +23,8 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <stack>
+#include <set>
 //#include <math.h>
 #include <cmath>
 #include <geos/platform.h>
@@ -37,12 +39,16 @@ namespace geos {
 class CGAlgorithms;
 class Coordinate;
 class CoordinateFilter;
+class CoordinateArraySequence;
+class CoordinateArraySequenceFactory;
+class CoordinateSequence;
 class Envelope;
 class Geometry;
 class GeometryFactory;
 class GeometryFilter;
 class IntersectionMatrix;
 class Point;
+struct CoordinateLessThen;
 
 /// Return current GEOS version
 string geosversion();
@@ -352,6 +358,18 @@ private:
 //#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
 public:
+	/// A set of const Coordinate pointers
+	typedef set<const Coordinate *, CoordinateLessThen> ConstSet;
+
+	/// A vector of const Coordinate pointers
+	typedef vector<const Coordinate *> ConstVect;
+
+	/// A stack of const Coordinate pointers
+	typedef stack<const Coordinate *> ConstStack;
+
+	/// A vector of Coordinate objects (real object, not pointers)
+	typedef vector<Coordinate> Vect;
+
 	inline void setNull(void);
 	inline static Coordinate& getNull(void);
 	//virtual ~Coordinate(){};
@@ -509,6 +527,7 @@ Coordinate::hashCode(double x)
 
 struct CoordinateLessThen {
 	bool operator()(const Coordinate& a, const Coordinate& b);
+	bool operator()(const Coordinate* a, const Coordinate* b);
 };
 
 
@@ -614,6 +633,11 @@ public:
 	 */
 	//virtual const Coordinate& getCoordinate(int i) const=0;
 	virtual const Coordinate& getAt(unsigned int i) const=0;
+
+	/** \brief
+	 * Write Coordinate at position i to given Coordinate.
+	 */
+	virtual void getAt(unsigned int i, Coordinate& c) const=0;
 
 	/** \brief
 	 * Returns the number of Coordinates (actual or otherwise, as
@@ -796,35 +820,42 @@ public:
 
 };
 
+/// This is for backward API compatibility
+typedef CoordinateArraySequence DefaultCoordinateSequence;
+
 /**
- * \class DefaultCoordinateSequence geom.h geos.h
+ * \class CoordinateArraySequence geom.h geos.h
  *
  * \brief The default implementation of CoordinateSequence
+ *
  */
-class DefaultCoordinateSequence : public CoordinateSequence {
+class CoordinateArraySequence : public CoordinateSequence {
 public:
 
-	DefaultCoordinateSequence(const DefaultCoordinateSequence &cl);
+	CoordinateArraySequence(const CoordinateArraySequence &cl);
 
 	CoordinateSequence *clone() const;
 
 	//const Coordinate& getCoordinate(int pos) const;
 	const Coordinate& getAt(unsigned int pos) const;
 
+	/// Copy Coordinate at position i to Coordinate c
+	virtual void getAt(unsigned int i, Coordinate& c) const;
+
 	//int size() const;
 	unsigned int getSize() const;
 	const vector<Coordinate>* toVector() const;
 
 	/// Construct an empty sequence
-	DefaultCoordinateSequence();
+	CoordinateArraySequence();
 
 	/// Construct sequence taking ownership of given Coordinate vector
-	DefaultCoordinateSequence(vector<Coordinate> *coords);
+	CoordinateArraySequence(vector<Coordinate> *coords);
 
 	/// Construct sequence allocating space for n coordinates
-	DefaultCoordinateSequence(unsigned int n);
+	CoordinateArraySequence(unsigned int n);
 
-	~DefaultCoordinateSequence();
+	~CoordinateArraySequence();
 
 	bool isEmpty() const;
 	void add(const Coordinate& c);
@@ -878,40 +909,43 @@ public:
 		const=0;
 };
 
+/// This is for backward API compatibility
+typedef CoordinateArraySequenceFactory DefaultCoordinateSequenceFactory;
+
 /**
- * \class DefaultCoordinateSequenceFactory geom.h geos.h
+ * \class CoordinateArraySequenceFactory geom.h geos.h
  *
  * \brief
  * Creates CoordinateSequences internally represented as an array of
  * Coordinates.
  */
-class DefaultCoordinateSequenceFactory: public CoordinateSequenceFactory {
+class CoordinateArraySequenceFactory: public CoordinateSequenceFactory {
 
 public:
 
 	/** \brief
-	 * Returns a DefaultCoordinateSequence based on the given vector
+	 * Returns a CoordinateArraySequence based on the given vector
 	 * (the vector is not copied - callers give up ownership).
 	 */
 	CoordinateSequence *create(vector<Coordinate> *coords) const
 	{
-		return new DefaultCoordinateSequence(coords);
+		return new CoordinateArraySequence(coords);
 	}
 
 	CoordinateSequence *create(vector<Coordinate> *coords, int dims) const
 	{
-		return new DefaultCoordinateSequence(coords);
+		return new CoordinateArraySequence(coords);
 	}
 
    	/** @see CoordinateSequenceFactory::create(unsigned int, int) */
 	CoordinateSequence *create(unsigned int size, unsigned int dimension=3) const
 	{
-		/* DefaultCoordinateSequence only accepts 3d Coordinates */
-		return new DefaultCoordinateSequence(size);
+		/* CoordinateArraySequence only accepts 3d Coordinates */
+		return new CoordinateArraySequence(size);
 	}
 
 	/** \brief
-	 * Returns the singleton instance of DefaultCoordinateSequenceFactory
+	 * Returns the singleton instance of CoordinateArraySequenceFactory
 	 */
 	static const CoordinateSequenceFactory *instance();
 };
@@ -962,6 +996,7 @@ public:
  */
 class GeometryComponentFilter {
 public:
+
 	/**
 	 *  Performs an operation with or on <code>geom</code>.
 	 *
@@ -1068,6 +1103,7 @@ public:
 	bool contains(const Coordinate& p) const;
 	bool contains(double x, double y) const;
 	bool contains(const Envelope* other) const;
+	bool contains(const Envelope& other) const { return contains(&other); }
 
 	/**
 	 * Check if the point p
@@ -1098,6 +1134,10 @@ public:
 	 * @return      true if the Envelopes intersects
 	 */
 	inline bool intersects(const Envelope* other) const;
+
+	inline bool intersects(const Envelope& other) const {
+		return intersects(&other);
+	}
 
 	bool equals(const Envelope* other) const;
 	string toString(void) const;
@@ -1241,6 +1281,9 @@ class Geometry{
 friend class Unload;
 public:
 
+	/// A vector of const Geometry pointers
+	typedef vector<const Geometry *> ConstVect;
+
 	Geometry(const Geometry &geom);
 
 	/** \brief
@@ -1341,6 +1384,14 @@ public:
 	/// Return an integer representation of this Geometry type
 	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
 
+	/// Returns the number of geometries in this collection
+	/// (or 1 if this is not a collection)
+	virtual int getNumGeometries() const { return 1; }
+
+	/// Returns a pointer to the nth Geometry int this collection
+	/// (or self if this is not a collection)
+	virtual const Geometry* getGeometryN(int n) const { return this; }
+
 	/**
 	 * \brief Tests the validity of this <code>Geometry</code>.
 	 *
@@ -1428,9 +1479,17 @@ public:
 	 * For more information on the DE-9IM, see the OpenGIS Simple
 	 * Features Specification.
 	 */
-	virtual bool relate(const Geometry *g, string intersectionPattern) const;
+	virtual bool relate(const Geometry *g, const string& intersectionPattern) const;
+
+	bool relate(const Geometry& g, const string& intersectionPattern) const {
+		return relate(&g, intersectionPattern);
+	}
+
 	/// Returns the DE-9IM intersection matrix for the two Geometrys.
 	virtual IntersectionMatrix* relate(const Geometry *g) const;
+	IntersectionMatrix* relate(const Geometry &g) const {
+		return relate(&g);
+	}
 
 	/**
 	 * \brief
@@ -1573,11 +1632,11 @@ protected:
 	* The GEOS algorithms assume that Geometry::getCoordinate() and
 	* #getCoordinates
 	* are fast, which may not be the case if the CoordinateSequence is not a
-	* DefaultCoordinateSequence (e.g. if it were implemented using separate
+	* CoordinateArraySequence (e.g. if it were implemented using separate
 	* arrays for the x- and y-values), in which case frequent
 	* construction of Coordinates takes up much space and time.
 	* To solve this performance problem, toInternalGeometry converts the
-	* Geometry to a DefaultCoordinateSequence
+	* Geometry to a CoordinateArraySequence
 	* implementation before sending it
 	* to the JTS algorithms.
 	*/
@@ -1766,7 +1825,7 @@ public:
 	IntersectionMatrix(string elements);
 	IntersectionMatrix(const IntersectionMatrix &im);
 	static bool matches(int actualDimensionValue, char requiredDimensionSymbol);
-	static bool matches(string actualDimensionSymbols, string requiredDimensionSymbols);
+	static bool matches(const string& actualDimensionSymbols, const string& requiredDimensionSymbols);
 	void add(IntersectionMatrix *im);
 	void set(int row, int column, int dimensionValue);
 	void set(string dimensionSymbols);
@@ -1928,6 +1987,7 @@ public:
 	virtual void apply_rw(GeometryFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
 	virtual void apply_rw(GeometryComponentFilter *filter);
+
 	virtual void normalize();
 	virtual const Coordinate* getCoordinate() const;
 	/// Returns the total area of this collection
@@ -1973,6 +2033,10 @@ private:
  */
 class Point : public Geometry{
 public:
+
+	/// A vector of const Point pointers
+	typedef vector<const Point *> ConstVect;
+
 
 	/**
 	 * \brief
@@ -2020,6 +2084,7 @@ public:
 	void apply_rw(GeometryFilter *filter);
 	void apply_rw(GeometryComponentFilter *filter);
 	void apply_ro(GeometryComponentFilter *filter) const;
+
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
 	void normalize(void) { };
 protected:
@@ -2043,6 +2108,10 @@ private:
  */
 class LineString: public Geometry {
 public:
+
+	/// A vector of const LineString pointers
+	typedef vector<const LineString *> ConstVect;
+
 	LineString(const LineString &ls);
 
 	/// Constructs a LineString taking ownership the given CoordinateSequence.
@@ -2174,6 +2243,10 @@ private:
  */
 class Polygon: public Geometry{
 public:
+
+	/// A vector of const Polygon pointers
+	typedef vector<const Polygon *> ConstVect;
+
 	Polygon(const Polygon &p);
 	virtual ~Polygon();
 
@@ -2235,6 +2308,7 @@ public:
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(GeometryFilter *filter);
 	void apply_ro(GeometryFilter *filter) const;
+
 	Geometry* convexHull() const;
 	void normalize();
 	int compareToSameClass(const Geometry *p) const; //was protected
@@ -2596,6 +2670,7 @@ public:
 	
 	int getSRID() const {return SRID;};
 
+	/// Returns the CoordinateSequenceFactory associated with this GeometryFactory
 	const CoordinateSequenceFactory* getCoordinateSequenceFactory() const {return coordinateListFactory;};
 
 	/// Returns a clone of given Geometry.
@@ -2638,6 +2713,28 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.59  2006/01/31 19:07:34  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.58  2006/01/15 21:22:02  strk
  * Added Envelope constructor by string (accepting what's returned by ::toString)
  *

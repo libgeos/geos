@@ -5,50 +5,14 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.4  2004/07/20 08:34:18  strk
- * Fixed a bug in opDistance.h.
- * Removed doxygen tags from obsoleted CoordinateList.cpp.
- * Got doxygen to run with no warnings.
- *
- * Revision 1.3  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.2  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.10  2004/05/14 13:42:46  strk
- * DistanceOp bug removed, cascading errors fixed.
- *
- * Revision 1.9  2004/04/13 12:29:21  strk
- * GeometryLocation const-correctness.
- *
- * Revision 1.8  2004/04/13 10:05:51  strk
- * GeometryLocation constructor made const-correct.
- * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
- *
- * Revision 1.7  2004/04/05 06:35:14  ybychkov
- * "operation/distance" upgraded to JTS 1.4
- *
- * Revision 1.6  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_OPDISTANCE_H
 #define GEOS_OPDISTANCE_H
@@ -217,7 +181,9 @@ public:
 	* @return a pair of {@link GeometryLocation}s for the closest points
 	*/
 	vector<GeometryLocation*>* closestLocations();
+
 private:
+
 	PointLocator ptLocator;
 	vector<Geometry const*> geom;
 	vector<Coordinate *> newCoords;
@@ -227,14 +193,101 @@ private:
 	void updateMinDistance(vector<GeometryLocation*> *locGeom, bool flip);
 	void computeMinDistance();
 	void computeContainmentDistance();
-	void computeInside(vector<GeometryLocation*> *locs,vector<Geometry*> *polys,vector<GeometryLocation*> *locPtPoly);
-	void computeInside(GeometryLocation *ptLoc,Polygon *poly,vector<GeometryLocation*> *locPtPoly);
+
+	void computeInside(vector<GeometryLocation*> *locs,
+			const Polygon::ConstVect& polys,
+			vector<GeometryLocation*> *locPtPoly);
+
+	void computeInside(GeometryLocation *ptLoc,
+			const Polygon *poly,
+			vector<GeometryLocation*> *locPtPoly);
+
 	void computeLineDistance();
-	void computeMinDistanceLines(vector<Geometry*> *lines0,vector<Geometry*> *lines1,vector<GeometryLocation*> *locGeom);
-	void computeMinDistancePoints(vector<Geometry*> *points0,vector<Geometry*> *points1,vector<GeometryLocation*> *locGeom);
-	void computeMinDistanceLinesPoints(vector<Geometry*> *lines,vector<Geometry*> *points,vector<GeometryLocation*> *locGeom);
-	void computeMinDistance(const LineString *line0, const LineString *line1,vector<GeometryLocation*> *locGeom);
-	void computeMinDistance(const LineString *line, const Point *pt,vector<GeometryLocation*> *locGeom);
+
+	void computeMinDistanceLines(
+			const LineString::ConstVect& lines0,
+			const LineString::ConstVect& lines1,
+			vector<GeometryLocation*>& locGeom);
+
+	void computeMinDistancePoints(
+			const Point::ConstVect& points0,
+			const Point::ConstVect& points1,
+			vector<GeometryLocation*>& locGeom);
+
+	void computeMinDistanceLinesPoints(
+			const LineString::ConstVect& lines0,
+			const Point::ConstVect& points1,
+			vector<GeometryLocation*>& locGeom);
+
+	void computeMinDistance(const LineString *line0,
+			const LineString *line1,
+			vector<GeometryLocation*>& locGeom);
+
+	void computeMinDistance(const LineString *line, const Point *pt,
+			vector<GeometryLocation*>& locGeom);
 };
-}
+
+} // namespace geos
+
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.5  2006/01/31 19:07:34  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
+ * Revision 1.4  2004/07/20 08:34:18  strk
+ * Fixed a bug in opDistance.h.
+ * Removed doxygen tags from obsoleted CoordinateList.cpp.
+ * Got doxygen to run with no warnings.
+ *
+ * Revision 1.3  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.2  2004/07/08 19:34:49  strk
+ * Mirrored JTS interface of CoordinateSequence, factory and
+ * default implementations.
+ * Added DefaultCoordinateSequenceFactory::instance() function.
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.10  2004/05/14 13:42:46  strk
+ * DistanceOp bug removed, cascading errors fixed.
+ *
+ * Revision 1.9  2004/04/13 12:29:21  strk
+ * GeometryLocation const-correctness.
+ *
+ * Revision 1.8  2004/04/13 10:05:51  strk
+ * GeometryLocation constructor made const-correct.
+ * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
+ *
+ * Revision 1.7  2004/04/05 06:35:14  ybychkov
+ * "operation/distance" upgraded to JTS 1.4
+ *
+ * Revision 1.6  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
+

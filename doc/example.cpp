@@ -194,7 +194,7 @@ LineString *
 create_ushaped_linestring(double xoffset, double yoffset, double side)
 {
 	// We will use a coordinate list to build the linestring
-	CoordinateSequence *cl = new DefaultCoordinateSequence();
+	CoordinateSequence *cl = new CoordinateArraySequence();
 
 	cl->add(Coordinate(xoffset, yoffset));
 	cl->add(Coordinate(xoffset, yoffset+side));
@@ -221,7 +221,7 @@ LinearRing *
 create_square_linearring(double xoffset, double yoffset, double side)
 {
 	// We will use a coordinate list to build the linearring
-	CoordinateSequence *cl = new DefaultCoordinateSequence();
+	CoordinateSequence *cl = new CoordinateArraySequence();
 
 	cl->add(Coordinate(xoffset, yoffset));
 	cl->add(Coordinate(xoffset, yoffset+side));
@@ -718,7 +718,8 @@ cout<<"-------------------------------------------------------------------------
 			IntersectionMatrix *im=NULL;
 			try {
 				// second argument is intersectionPattern
-				if ( g1->relate(g2, "212101212") ) cout<<" 1\t";
+				string pattern = "212101212";
+				if ( g1->relate(g2, pattern) ) cout<<" 1\t";
 				else cout<<" 0\t";
 				
 				// get the intersectionMatrix itself
@@ -1078,6 +1079,28 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/01/31 19:07:33  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
  * Revision 1.35  2005/11/30 11:27:07  strk
  * catch std::exception by ref
  *
