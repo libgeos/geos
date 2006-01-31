@@ -1,8 +1,0 @@
-Makefile.in
-Makefile
-.deps
-.libs
-geostest
-*.lo
-*.la
-geos_c.h
