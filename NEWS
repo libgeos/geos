@@ -35,6 +35,9 @@ Changes in 3.0.0
 	  memory usage optimizations.
 	- Changed CoordinateArrayFilter to reduce memory copies
 	- Changed UniqueCoordinateArrayFilter to reduce memory copies
+	- Added rectangle-based optimizations of intersects() and
+	  contains() ops
+	- Inlined all planarGraphComponent class
 
 - Correctness:
 	- More const-correct signatures
