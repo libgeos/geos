@@ -12,7 +12,26 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
+ *
+ * Last port: planargraph/GraphComponent.java rev. 1.7 (JTS-1.7)
+ *
+ **********************************************************************/
+
+#include <geos/planargraph.h>
+
+namespace geos {
+//namespace planargraph { // geos.planargraph
+
+
+//} // namespace geos.planargraph
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/01 22:21:29  strk
+ * - Added rectangle-based optimizations of intersects() and contains() ops
+ * - Inlined all planarGraphComponent class
+ *
  * Revision 1.4  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -33,51 +52,3 @@
  *
  **********************************************************************/
 
-
-#include <geos/planargraph.h>
-
-namespace geos {
-//namespace planargraph {
-
-planarGraphComponent::planarGraphComponent() {
-	isMarkedVar=false;
-	isVisitedVar=false;
-}
-
-planarGraphComponent::~planarGraphComponent() {
-}
-
-/**
-* Tests if a component has been visited during the course of a graph algorithm
-* @return <code>true</code> if the component has been visited
-*/
-bool planarGraphComponent::isVisited() {
-	return isVisitedVar;
-}
-
-/**
-* Sets the visited flag for this component.
-* @param isVisited the desired value of the visited flag
-*/
-void planarGraphComponent::setVisited(bool newIsVisited) { 
-	isVisitedVar=newIsVisited;
-}
-
-/**
-* Tests if a component has been marked at some point during the processing
-* involving this graph.
-* @return <code>true</code> if the component has been marked
-*/
-bool planarGraphComponent::isMarked() { 
-	return isMarkedVar;
-}
-
-/**
-* Sets the marked flag for this component.
-* @param isMarked the desired value of the marked flag
-*/
-void planarGraphComponent::setMarked(bool newIsMarked) { 
-	isMarkedVar=newIsMarked; }
-
-//} // namespace planargraph
-} // namespace geos

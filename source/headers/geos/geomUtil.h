@@ -90,7 +90,7 @@ public:
 	/**
 	 * Returns the Point components from a single geometry.
 	 * If more than one geometry is to be processed, it is more
-	 * efficient to create a single {@link PointExtracterFilter} instance
+	 * efficient to create a single PointExtracter filter instance
 	 * and pass it to multiple geometries.
 	 */
 	static void getPoints(const Geometry &geom, Point::ConstVect &ret)
@@ -286,8 +286,8 @@ public:
 	 * Creates a new GeometryEditor object which will create
 	 * the edited Geometry with the given GeometryFactory
 	 *
-	 * @param factory the GeometryFactory to create the edited
-	 * Geometry with
+	 * @param newFactory the GeometryFactory to create the edited
+	 *                   Geometry with
 	 */
 	GeometryEditor(const GeometryFactory *newFactory);
 
@@ -299,9 +299,10 @@ public:
 	 * @param geometry the Geometry to edit
 	 * @param operation the edit operation to carry out
 	 * @return a new Geometry which is the result of the editing
+	 *
 	 */
 	Geometry* edit(const Geometry *geometry,
-			GeometryEditorOperation *operation);
+			GeometryEditorOperation *operation); // final
 };
 
 /**
@@ -341,6 +342,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/01 22:21:29  strk
+ * - Added rectangle-based optimizations of intersects() and contains() ops
+ * - Inlined all planarGraphComponent class
+ *
  * Revision 1.5  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

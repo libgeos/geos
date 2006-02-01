@@ -17,6 +17,7 @@
 #include <geos/geom.h>
 #include <typeinfo>
 #include <geos/geosAlgorithm.h>
+#include <cassert>
 
 namespace geos {
 
@@ -386,10 +387,47 @@ Polygon::getGeometryTypeId() const
 	return GEOS_POLYGON;
 }
 
+bool
+Polygon::isRectangle() const
+{
+	if ( getNumInteriorRing() != 0 ) return false;
+	assert(shell!=NULL);
+	if ( shell->getNumPoints() != 5 ) return false;
+
+	const CoordinateSequence &seq = *(shell->getCoordinatesRO());
+
+	// check vertices have correct values
+	const Envelope &env = *getEnvelopeInternal();
+	for (int i=0; i<5; i++) {
+		double x = seq.getX(i);
+		if (! (x == env.getMinX() || x == env.getMaxX())) return false;
+		double y = seq.getX(i);
+		if (! (y == env.getMinY() || y == env.getMaxY())) return false;
+	}
+
+	// check vertices are in right order
+	double prevX = seq.getX(0);
+	double prevY = seq.getY(0);
+	for (int i = 1; i <= 4; i++) {
+		double x = seq.getX(i);
+		double y = seq.getY(i);
+		bool xChanged = (x != prevX);
+		bool yChanged = (y != prevY);
+		if (xChanged == yChanged) return false;
+		prevX = x;
+		prevY = y;
+	}
+	return true;
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.52  2006/02/01 22:21:29  strk
+ * - Added rectangle-based optimizations of intersects() and contains() ops
+ * - Inlined all planarGraphComponent class
+ *
  * Revision 1.51  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

@@ -7,5 +7,6 @@ libgeomutil_la_SOURCES = \
 	GeometryEditor.cpp \
 	LinearComponentExtracter.cpp \
 	PointExtracter.cpp \
-	PolygonExtracter.cpp 
+	PolygonExtracter.cpp \
+	ShortCircuitedGeometryVisitor.cpp
 

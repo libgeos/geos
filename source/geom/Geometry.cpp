@@ -25,12 +25,15 @@
 #include <geos/opDistance.h>
 #include <geos/opOverlay.h>
 #include <geos/opBuffer.h>
+#include <geos/opPredicate.h>
 #include <geos/io.h>
 #include <geos/version.h>
 
 #define SHORTCIRCUIT_PREDICATES 1
 
 namespace geos {
+
+using namespace operation::predicate;
 
 /** \mainpage 
  *
@@ -414,6 +417,31 @@ Geometry::intersects(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return false;
 #endif
+
+	/**
+	 * TODO: (MD) Add optimizations:
+	 *
+	 * - for P-A case:
+	 * If P is in env(A), test for point-in-poly
+	 *
+	 * - for A-A case:
+	 * If env(A1).overlaps(env(A2))
+	 * test for overlaps via point-in-poly first (both ways)
+	 * Possibly optimize selection of point to test by finding point of A1
+	 * closest to centre of env(A2).
+	 * (Is there a test where we shouldn't bother - e.g. if env A
+	 * is much smaller than env B, maybe there's no point in testing
+	 * pt(B) in env(A)?
+	 */
+
+	// optimization for rectangle arguments
+	if (isRectangle()) {
+		return RectangleIntersects::intersects((Polygon&)*this, *g);
+	}
+	if (g->isRectangle()) {
+		return RectangleIntersects::intersects((const Polygon&)*g, *this);
+	}
+
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isIntersects();
 	delete im;
@@ -437,15 +465,7 @@ Geometry::crosses(const Geometry *g) const
 bool
 Geometry::within(const Geometry *g) const
 {
-#ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! g->getEnvelopeInternal()->contains(getEnvelopeInternal()))
-		return false;
-#endif
-	IntersectionMatrix *im=relate(g);
-	bool res=im->isWithin();
-	delete im;
-	return res;
+	return g->contains(this);
 }
 
 bool
@@ -456,6 +476,15 @@ Geometry::contains(const Geometry *g) const
 	if (! getEnvelopeInternal()->contains(g->getEnvelopeInternal()))
 		return false;
 #endif
+
+	// optimization for rectangle arguments
+	if (isRectangle()) {
+		return RectangleContains::contains((Polygon&)*this, *g);
+	}
+	if (g->isRectangle()) {
+		return RectangleContains::contains((const Polygon&)*g, *this);
+	}
+
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isContains();
 	delete im;
@@ -972,6 +1001,10 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.84  2006/02/01 22:21:29  strk
+ * - Added rectangle-based optimizations of intersects() and contains() ops
+ * - Inlined all planarGraphComponent class
+ *
  * Revision 1.83  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

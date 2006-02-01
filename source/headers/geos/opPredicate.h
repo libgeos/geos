@@ -147,7 +147,7 @@ public:
 	/**
 	 * Create a new contains computer for two geometries.
 	 *
-	 * @param rectangle a rectangular geometry
+	 * @param rect a rectangular geometry
 	 */
 	RectangleContains(const Polygon& rect)
 		:

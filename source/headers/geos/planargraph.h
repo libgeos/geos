@@ -28,7 +28,11 @@ using namespace std;
 namespace geos {
 //namespace planargraph {
 
-/*
+class planarDirectedEdge;
+class planarEdge;
+
+
+/**
  * \class planarGraphComponent planargraph.h geos/planargraph.h
  *
  * \brief The base class for all graph component classes.
@@ -47,6 +51,8 @@ namespace geos {
  *    The visited flag may be set and cleared many times during the
  *    lifetime of a graph.
  *
+ * Last port: planargraph/GraphComponent.java rev. 1.7 (JTS-1.7)
+ *
  */
 class planarGraphComponent {
 
@@ -58,43 +64,46 @@ protected:
 
 public:
 
-	planarGraphComponent();
-	virtual ~planarGraphComponent();
+	planarGraphComponent()
+		:
+		isMarkedVar(false),
+		isVisitedVar(false)
+		{}
 
-	/*
-	 * \brief Tests if a component has been visited during the course
+	virtual ~planarGraphComponent() {};
+
+	/** \brief
+	 * Tests if a component has been visited during the course
 	 * of a graph algorithm.
 	 *
 	 * @return <code>true</code> if the component has been visited
 	 */
-	virtual bool isVisited();
+	virtual bool isVisited() { return isVisitedVar; }
 
-	/*
-	 * \brief Sets the visited flag for this component.
+	/** \brief
+	 * Sets the visited flag for this component.
 	 * @param isVisited the desired value of the visited flag
 	 */
-	virtual void setVisited(bool isVisited);
+	virtual void setVisited(bool isVisited) { isVisitedVar=isVisited; }
 
-	/*
-	 * \brief Tests if a component has been marked at some point
+	/** \brief
+	 * Tests if a component has been marked at some point
 	 * during the processing involving this graph.
 	 * @return <code>true</code> if the component has been marked
 	 */
-	virtual bool isMarked();
+	virtual bool isMarked() { return isMarkedVar; }
 
-	/*
-	 * \brief Sets the marked flag for this component.
+	/** \brief
+	 * Sets the marked flag for this component.
 	 * @param isMarked the desired value of the marked flag
 	 */
-	virtual void setMarked(bool isMarked);
-};
+	virtual void setMarked(bool isMarked) { isVisitedVar=isMarked; }
 
-class planarDirectedEdge;
-class planarEdge;
+};
 
 bool pdeLessThan(planarDirectedEdge *first,planarDirectedEdge * second);
 
-/*
+/**
  * \class planarDirectedEdgeStar planargraph.h geos/planargraph.h
  *
  * \brief
@@ -102,7 +111,7 @@ bool pdeLessThan(planarDirectedEdge *first,planarDirectedEdge * second);
  */
 class planarDirectedEdgeStar {
 protected:
-	/*
+	/**
 	 * \brief The underlying list of outgoing DirectedEdges
 	 */
 	vector<planarDirectedEdge*> outEdges;
@@ -112,68 +121,68 @@ private:
 	void sortEdges();
 
 public:
-	/*
+	/**
 	 * \brief Constructs a DirectedEdgeStar with no edges.
 	 */
 	planarDirectedEdgeStar();
 
 	virtual ~planarDirectedEdgeStar();
 
-	/*
+	/**
 	 * \brief Adds a new member to this DirectedEdgeStar.
 	 */
 	void add(planarDirectedEdge *de);
 
-	/*
+	/**
 	 * \brief Drops a member of this DirectedEdgeStar.
 	 */
 	void remove(planarDirectedEdge *de);
 
-	/*
+	/**
 	 * \brief Returns an Iterator over the DirectedEdges,
 	 * in ascending order by angle with the positive x-axis.
 	 */
 	vector<planarDirectedEdge*>::iterator iterator();
 
-	/*
+	/**
 	 * \brief Returns the number of edges around the Node associated
 	 * with this DirectedEdgeStar.
 	 */
 	unsigned int getDegree() const;
 
-	/*
+	/**
 	 * \brief Returns the coordinate for the node at wich this
 	 * star is based
 	 */
 	Coordinate& getCoordinate() const;
 
-	/*
+	/**
 	 * \brief Returns the DirectedEdges, in ascending order
 	 * by angle with the positive x-axis.
 	 */
 	vector<planarDirectedEdge*>& getEdges();
 
-	/*
+	/**
 	 * \brief Returns the zero-based index of the given Edge,
 	 * after sorting in ascending order by angle with the
 	 * positive x-axis.
 	 */
 	int getIndex(const planarEdge *edge);
 
-	/*
+	/**
 	 * \brief Returns the zero-based index of the given DirectedEdge,
 	 * after sorting in ascending order
 	 * by angle with the positive x-axis.
 	 */  
 	int getIndex(const planarDirectedEdge *dirEdge);
 
-	/*
+	/**
 	 * \brief Returns the remainder when i is divided by the number of
 	 * edges in this DirectedEdgeStar. 
 	 */
 	int getIndex(int i) const;
 
-	/*
+	/**
 	 * \brief Returns the DirectedEdge on the left-hand side
 	 * of the given DirectedEdge (which must be a member of this
 	 * DirectedEdgeStar). 
@@ -181,7 +190,7 @@ public:
 	planarDirectedEdge* getNextEdge(planarDirectedEdge *dirEdge);
 };
 
-/*
+/**
  * \class planarNode planargraph.h geos/planargraph.h
  *
  * \brief A node in a PlanarGraph is a location where 0 or more Edge meet.
@@ -195,63 +204,62 @@ public:
 class planarNode: public planarGraphComponent {
 protected:
 
-	/* \brief The location of this Node */
+	/// The location of this Node 
 	Coordinate pt;
 
-	/* \brief The collection of DirectedEdges that leave this Node */
+	/// The collection of DirectedEdges that leave this Node 
 	planarDirectedEdgeStar *deStar;
 
 public:
 
-	/*
+	/**
 	 * \brief Returns all Edges that connect the two nodes (which are
 	 * assumed to be different).
 	 */
 	static vector<planarEdge*>* getEdgesBetween(planarNode *node0, planarNode *node1);
 
-	/*
-	 * \brief Constructs a Node with the given location.
-	 */
+	/// Constructs a Node with the given location.
 	planarNode(const Coordinate& newPt);
 
 	~planarNode();
 
-	/*
+	/**
 	 * \brief Constructs a Node with the given location and
 	 * collection of outgoing planarDirectedEdges.
 	 */
 	planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar);
 
-	/*
+	/**
 	 * \brief Returns the location of this Node.
 	 */
 	Coordinate& getCoordinate();
 
-	/*
+	/**
 	 * \brief Adds an outgoing DirectedEdge to this Node.
 	 */
 	void addOutEdge(planarDirectedEdge *de);
 
-	/*
+	/**
 	 * \brief Returns the collection of DirectedEdges that
 	 * leave this Node.
 	 */
 	planarDirectedEdgeStar* getOutEdges();
 
-	/*
+	/**
 	 * \brief Returns the number of edges around this Node.
 	 */
 	int getDegree();
 
-	/*
+	/**
 	 * \brief Returns the zero-based index of the given Edge,
 	 * after sorting in ascending order by angle with
 	 * the positive x-axis.
 	 */
 	int getIndex(planarEdge *edge);
+
 };
 
-/*
+/**
  * \class planarEdge planargraph.h geos/planargraph.h
  *
  * \brief Represents an undirected edge of a PlanarGraph.
@@ -266,10 +274,10 @@ class planarEdge: public planarGraphComponent {
 
 protected:
 
-	/* \brief The two DirectedEdges associated with this Edge */
+	/** \brief The two DirectedEdges associated with this Edge */
 	vector<planarDirectedEdge*> dirEdge;
 
-	/*
+	/**
 	 * \brief Constructs an Edge whose DirectedEdges are not yet set.
 	 *
 	 * Be sure to call setDirectedEdges(DirectedEdge, DirectedEdge)
@@ -279,7 +287,7 @@ public:
 
 	planarEdge();
 
-	/*
+	/**
 	 * \brief Constructs an Edge initialized with the given DirectedEdges.
 	 *
 	 * For  each DirectedEdge: sets the Edge, sets the symmetric
@@ -287,7 +295,7 @@ public:
 	 */
 	planarEdge(planarDirectedEdge *de0, planarDirectedEdge *de1);
 
-	/*
+	/**
 	 * \brief Initializes this Edge's two DirectedEdges.
 	 *
 	 * For each DirectedEdge:
@@ -296,20 +304,20 @@ public:
 	 */
 	void setDirectedEdges(planarDirectedEdge *de0, planarDirectedEdge *de1);
 
-	/*
+	/**
 	 * \brief Returns one of the DirectedEdges associated with this Edge.
 	 * @param i 0 or 1
 	 */
 	planarDirectedEdge* getDirEdge(int i);
 
-	/*
+	/**
 	 * \brief Returns the DirectedEdge that starts from the given node,
 	 * or null if the node is not one of the two nodes associated
 	 * with this Edge.
 	 */
 	planarDirectedEdge* getDirEdge(planarNode *fromNode);
 
-	/*
+	/**
 	 * \brief If <code>node</code> is one of the two nodes associated
 	 * with this Edge, returns the other node; otherwise returns null.
 	 */
@@ -317,7 +325,7 @@ public:
 };
 
 
-/*
+/**
  * \class planarDirectedEdge planargraph.h geos/planargraph.h
  *
  * \brief Represents a directed edge in a PlanarGraph.
@@ -343,13 +351,13 @@ protected:
 	int quadrant;
 	double angle;
 public:
-	/*
+	/**
 	 * \brief Returns a List containing the parent Edge (possibly null)
 	 * for each of the given DirectedEdges.
 	 */
 	static vector<planarEdge*>* toEdges(vector<planarDirectedEdge*> *dirEdges);
 
-	/*
+	/**
 	 * \brief Constructs a DirectedEdge connecting the <code>from</code>
 	 * node to the <code>to</code> node.
 	 *
@@ -363,74 +371,74 @@ public:
 	 */
 	planarDirectedEdge(planarNode *newFrom,planarNode *newTo, const Coordinate &directionPt,bool newEdgeDirection);
 
-	/*
+	/**
 	 * \brief Returns this DirectedEdge's parent Edge,
 	 * or null if it has none.
 	 */
 	planarEdge* getEdge() const;
 
-	/*
+	/**
 	 * \brief Associates this DirectedEdge with an Edge
 	 * (possibly null, indicating no associated Edge).
 	 */
 	void setEdge(planarEdge* newParentEdge);
 
-	/*
+	/**
 	 * \brief Returns 0, 1, 2, or 3, indicating the quadrant in which
 	 * this DirectedEdge's orientation lies.
 	 */
 	int getQuadrant() const;
 
-	/*
+	/**
 	 * \brief Returns a point to which an imaginary line is drawn
 	 * from the from-node to specify this DirectedEdge's orientation.
 	 */
 	const Coordinate& getDirectionPt() const;
 
-	/*
+	/**
 	 * \brief Returns whether the direction of the parent Edge (if any)
 	 * is the same as that of this Directed Edge.
 	 */
 	bool getEdgeDirection() const;
 
-	/*
+	/**
 	 * \brief Returns the node from which this DirectedEdge leaves.
 	 */
 	planarNode* getFromNode() const;
 
-	/*
+	/**
 	 * \brief Returns the node to which this DirectedEdge goes.
 	 */
 	planarNode* getToNode() const;
 
-	/*
+	/**
 	 * \brief
 	 * Returns the coordinate of the from-node.
 	 */
 	Coordinate& getCoordinate() const;
 
-	/*
+	/**
 	 * \brief
 	 * Returns the angle that the start of this DirectedEdge makes
 	 * with the positive x-axis, in radians.
 	 */
 	double getAngle() const;
 
-	/*
+	/**
 	 * \brief
 	 * Returns the symmetric DirectedEdge -- the other DirectedEdge
 	 * associated with this DirectedEdge's parent Edge.
 	 */
 	planarDirectedEdge* getSym() const;
 
-	/*
+	/**
 	 * \brief
 	 * Sets this DirectedEdge's symmetric DirectedEdge, which runs
 	 * in the opposite direction.
 	 */
 	void setSym(planarDirectedEdge *newSym);
 
-	/*
+	/**
 	 * \brief
 	 * Returns 1 if this DirectedEdge has a greater angle with the
 	 * positive x-axis than b", 0 if the DirectedEdges are collinear,
@@ -451,7 +459,7 @@ public:
 	 */
 	int compareTo(const planarDirectedEdge* obj) const;
 
-	/*
+	/**
 	 * \brief
 	 * Returns 1 if this DirectedEdge has a greater angle with the
 	 * positive x-axis than b", 0 if the DirectedEdges are collinear,
@@ -472,7 +480,7 @@ public:
 	 */
 	int compareDirection(const planarDirectedEdge *e) const;
 
-	/*
+	/**
 	 * \brief
 	 * Prints a detailed string representation of this DirectedEdge
 	 * to the given PrintStream.
@@ -487,7 +495,7 @@ struct planarCoordLT {
 	}
 };
 
-/*
+/**
  * \class planarNodeMap planargraph.h geos/planargraph.h
  * \brief
  * A map of Node, indexed by the coordinate of the node.
@@ -497,7 +505,7 @@ class planarNodeMap {
 private:
 	map<Coordinate,planarNode*, planarCoordLT> nodeMap;
 public:  
-	/*
+	/**
 	 * \brief Constructs a NodeMap without any Nodes.
 	 */
 	planarNodeMap();
@@ -506,7 +514,7 @@ public:
 
 	virtual ~planarNodeMap();
 
-	/*
+	/**
 	 * \brief
 	 * Adds a node to the map, replacing any that is already
 	 * at that location.
@@ -514,21 +522,21 @@ public:
 	 */
 	planarNode* add(planarNode *n);
 
-	/*
+	/**
 	 * \brief
 	 * Removes the Node at the given location, and returns it
 	 * (or null if no Node was there).
 	 */
 	planarNode* remove(Coordinate& pt);
 
-	/*
+	/**
 	 * \brief
 	 * Returns the Node at the given location,
 	 * or null if no Node was there.
 	 */
 	planarNode* find(const Coordinate& coord);
 
-	/*
+	/**
 	 * \brief
 	 * Returns an Iterator over the Nodes in this NodeMap,
 	 * sorted in ascending order
@@ -536,7 +544,7 @@ public:
 	 */
 	map<Coordinate,planarNode*,planarCoordLT>::iterator iterator();
 
-	/*
+	/**
 	 * \brief
 	 * Returns the Nodes in this NodeMap, sorted in ascending order
 	 * by angle with the positive x-axis.
@@ -544,7 +552,7 @@ public:
 	vector<planarNode*>* getNodes();
 };
 
-/*
+/**
  * \class planarPlanarGraph planargraph.h geos/planargraph.h
  * \brief
  * Represents a directed graph which is embeddable in a planar surface.
@@ -565,7 +573,7 @@ protected:
 	vector<planarDirectedEdge*> dirEdges;
 	planarNodeMap nodeMap;
 
-	/*
+	/**
 	 * \brief
 	 * Adds a node to the map, replacing any that is already at that
 	 * location.
@@ -576,7 +584,7 @@ protected:
 	 */
 	void add(planarNode *node);
 
-	/*
+	/**
 	 * \brief
 	 * Adds the Edge and its DirectedEdges with this PlanarGraph.
 	 *
@@ -587,7 +595,7 @@ protected:
 	 */
 	void add(planarEdge *edge);
 
-	/*
+	/**
 	 * \brief
 	 * Adds the Edge to this PlanarGraph.
 	 *
@@ -598,7 +606,7 @@ protected:
 
 public:
 
-	/*
+	/**
 	 * \brief
 	 * Constructs a PlanarGraph without any Edges, DirectedEdges, or Nodes.
 	 */
@@ -606,26 +614,26 @@ public:
 
 	virtual ~planarPlanarGraph();
 
-	/*
+	/**
 	 * \brief
 	 * Returns the Node at the given location,
 	 * or null if no Node was there.
 	 */
 	planarNode* findNode(const Coordinate& pt);
 
-	/*
+	/**
 	 * \brief
 	 * Returns an Iterator over the Nodes in this PlanarGraph.
 	 */
 	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeIterator();
 
-	/*
+	/**
 	 * \brief
 	 * Returns the Nodes in this PlanarGraph.
 	 */  
 	vector<planarNode*>* getNodes();
 
-	/*
+	/**
 	 * \brief
 	 * Returns an Iterator over the DirectedEdges in this PlanarGraph,
 	 * in the order in which they were added.
@@ -635,7 +643,7 @@ public:
 	 */
 	vector<planarDirectedEdge*>::iterator dirEdgeIterator();
 
-	/*
+	/**
 	 * \brief
 	 * Returns an Iterator over the Edges in this PlanarGraph,
 	 * in the order in which they were added.
@@ -644,14 +652,14 @@ public:
 	 */
 	vector<planarEdge*>::iterator edgeIterator();
 
-	/*
+	/**
 	 * \brief
 	 * Returns the Edges that have been added to this PlanarGraph
 	 * @see #add(Edge)
 	 */
 	vector<planarEdge*>* getEdges();
 
-	/*
+	/**
 	 * \brief
 	 * Removes an Edge and its associated DirectedEdges from their
 	 * from-Nodes and from this PlanarGraph.
@@ -662,7 +670,7 @@ public:
 	 */
 	void remove(planarEdge *edge);
 
-	/*
+	/**
 	 * \brief
 	 * Removes DirectedEdge from its from-Node and from this PlanarGraph.
 	 *
@@ -673,14 +681,14 @@ public:
 	 */
 	void remove(planarDirectedEdge *de);
 
-	/*
+	/**
 	 * \brief
 	 * Removes a node from the graph, along with any associated
 	 * DirectedEdges and Edges.
 	 */
 	void remove(planarNode *node);
 
-	/*
+	/**
 	 * \brief
 	 * Returns all Nodes with the given number of Edges around it.
 	 */
@@ -693,6 +701,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/01 22:21:29  strk
+ * - Added rectangle-based optimizations of intersects() and contains() ops
+ * - Inlined all planarGraphComponent class
+ *
  * Revision 1.7  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

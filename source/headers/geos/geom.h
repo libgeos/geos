@@ -1642,6 +1642,9 @@ protected:
 	*/
 	Geometry* toInternalGeometry(const Geometry *g) const;
 	Geometry* fromInternalGeometry(const Geometry *g) const;
+
+	/// Polygon overrides to check for actual rectangle
+	virtual bool isRectangle() const { return false; }
 private:
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter geometryChangedFilter;
@@ -2321,11 +2324,17 @@ public:
 
 	void apply_rw(GeometryComponentFilter *filter);
 	void apply_ro(GeometryComponentFilter *filter) const;
+
+	bool isRectangle() const;
+
 protected:
+
 	LinearRing *shell;
 	vector<Geometry *> *holes; //Actually vector<LinearRing *>
 	Envelope* computeEnvelopeInternal() const;
+
 private:
+
 	void normalize(LinearRing *ring, bool clockwise);
 #ifdef INT64_CONST_IS_I64
 	static const int64 serialVersionUID = -3494792200821764533I64;
@@ -2713,6 +2722,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.60  2006/02/01 22:21:29  strk
+ * - Added rectangle-based optimizations of intersects() and contains() ops
+ * - Inlined all planarGraphComponent class
+ *
  * Revision 1.59  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

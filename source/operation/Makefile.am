@@ -4,6 +4,7 @@ SUBDIRS = \
 	linemerge 	\
 	overlay 	\
 	polygonize	\
+	predicate	\
 	relate		\
 	valid		
 
@@ -22,6 +23,7 @@ liboperation_la_LIBADD = \
 	overlay/libopoverlay.la		\
 	polygonize/liboppolygonize.la	\
 	relate/liboprelate.la		\
+	predicate/liboppredicate.la	\
 	valid/libopvalid.la
 
 

@@ -1,13 +1,13 @@
 #prefix=@prefix@
 #top_srcdir=@top_srcdir@
 
-noinst_LIBRARIES = liboppredicate.a
+noinst_LTLIBRARIES = liboppredicate.la
 
 INCLUDES = -I$(top_srcdir)/source/headers 
 
-DIR_SOURCES = \
+liboppredicate_la_SOURCES = \
 	RectangleIntersects.cpp \
 	RectangleContains.cpp \
 	SegmentIntersectionTester.cpp 
 
-liboppredicate_a_SOURCES = $(DIR_SOURCES) 
+liboppredicate_la_LIBADD = 
