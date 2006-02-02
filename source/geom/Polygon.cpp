@@ -401,7 +401,7 @@ Polygon::isRectangle() const
 	for (int i=0; i<5; i++) {
 		double x = seq.getX(i);
 		if (! (x == env.getMinX() || x == env.getMaxX())) return false;
-		double y = seq.getX(i);
+		double y = seq.getY(i);
 		if (! (y == env.getMinY() || y == env.getMaxY())) return false;
 	}
 
@@ -424,6 +424,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2006/02/02 02:20:15  strk
+ * Fixed bug in isRectangle() failing to detect rectangles.
+ *
  * Revision 1.52  2006/02/01 22:21:29  strk
  * - Added rectangle-based optimizations of intersects() and contains() ops
  * - Inlined all planarGraphComponent class
