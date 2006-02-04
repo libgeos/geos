@@ -49,6 +49,7 @@ class GeometryFilter;
 class IntersectionMatrix;
 class Point;
 struct CoordinateLessThen;
+struct LineStringLT;
 
 /// Return current GEOS version
 string geosversion();
@@ -2184,6 +2185,13 @@ private:
 #endif        
 };
 
+struct LineStringLT {
+	bool operator()(const LineString *ls1, const LineString *ls2) const {
+		return ls1->compareTo(ls2)<0;
+	}
+};
+
+
 /**
  * \class LinearRing geom.h geos.h
  *
@@ -2722,6 +2730,13 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.61  2006/02/04 00:54:57  strk
+ * - Doxygen dox updated
+ * - LineStringLT struct moved from geomgraph.h to geom.h
+ * - New planarSubgraph class
+ * - Fixed ruby Makefiles to avoid running tests when disabled
+ * - Renamed TESTS variable to XMLTESTS to not confuse 'make check' rule
+ *
  * Revision 1.60  2006/02/01 22:21:29  strk
  * - Added rectangle-based optimizations of intersects() and contains() ops
  * - Inlined all planarGraphComponent class

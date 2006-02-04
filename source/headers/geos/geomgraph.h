@@ -706,6 +706,29 @@ private:
 	void computeMaxNodeDegree();
 };
 
+/**
+ * \brief
+ * Represents a directed graph which is embeddable in a planar surface.
+ * 
+ * The computation of the IntersectionMatrix relies on the use of a structure
+ * called a "topology graph".  The topology graph contains nodes and edges
+ * corresponding to the nodes and line segments of a Geometry. Each
+ * node and edge in the graph is labeled with its topological location
+ * relative to the source geometry.
+ * 
+ * Note that there is no requirement that points of self-intersection
+ * be a vertex.
+ * Thus to obtain a correct topology graph, Geometry objects must be
+ * self-noded before constructing their graphs.
+ *
+ * Two fundamental operations are supported by topology graphs:
+ * 
+ *  - Computing the intersections between all the edges and nodes of
+ *    a single graph
+ *  - Computing the intersections between the edges and nodes of two
+ *    different graphs
+ * 
+ */
 class PlanarGraph {
 public:
 	static CGAlgorithms *cga;
@@ -741,12 +764,6 @@ protected:
 	virtual void insertEdge(Edge *e);
 private:
 	bool matchInSameDirection(const Coordinate& p0, const Coordinate& p1, const Coordinate& ep0, const Coordinate& ep1);
-};
-
-struct LineStringLT {
-	bool operator()(const LineString *ls1, const LineString *ls2) const {
-		return ls1->compareTo(ls2)<0;
-	}
 };
 
 class GeometryGraph: public PlanarGraph {
@@ -904,6 +921,13 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/02/04 00:54:57  strk
+ * - Doxygen dox updated
+ * - LineStringLT struct moved from geomgraph.h to geom.h
+ * - New planarSubgraph class
+ * - Fixed ruby Makefiles to avoid running tests when disabled
+ * - Renamed TESTS variable to XMLTESTS to not confuse 'make check' rule
+ *
  * Revision 1.27  2006/01/08 15:24:40  strk
  * Changed container-related typedef to class-scoped STL-like typedefs.
  * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;

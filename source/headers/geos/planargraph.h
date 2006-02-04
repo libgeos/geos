@@ -29,7 +29,13 @@ namespace geos {
 //namespace planargraph {
 
 class planarDirectedEdge;
+class planarDirectedEdgeStar;
 class planarEdge;
+class planarGraphComponent;
+class planarNode;
+class planarNodeMap;
+class planarPlanarGraph;
+class planarSubgraph;
 
 
 /**
@@ -272,6 +278,9 @@ public:
  */
 class planarEdge: public planarGraphComponent {
 
+public:
+	typedef set<const planarEdge *> ConstSet;
+
 protected:
 
 	/** \brief The two DirectedEdges associated with this Edge */
@@ -351,6 +360,10 @@ protected:
 	int quadrant;
 	double angle;
 public:
+
+	typedef vector<const planarDirectedEdge *> ConstVect;
+	typedef vector<planarDirectedEdge *> Vect;
+
 	/**
 	 * \brief Returns a List containing the parent Edge (possibly null)
 	 * for each of the given DirectedEdges.
@@ -695,12 +708,111 @@ public:
 	vector<planarNode*>* findNodesOfDegree(int degree);
 };
 
+/// A subgraph of a PlanarGraph.
+//
+/// A subgraph may contain any subset of {@link Edges}
+/// from the parent graph.
+/// It will also automatically contain all {@link DirectedEdge}s
+/// and {@link Node}s associated with those edges.
+/// No new objects are created when edges are added -
+/// all associated components must already exist in the parent graph.
+///
+class planarSubgraph
+{
+protected:
+	planarPlanarGraph &parentGraph;
+	planarEdge::ConstSet edges;
+	planarDirectedEdge::ConstVect dirEdges;
+	planarNodeMap nodeMap;
+
+public:
+	/**
+	 * Creates a new subgraph of the given {@link PlanarGraph}
+	 *
+	 * @param parentGraph the parent graph
+	 */
+	planarSubgraph(planarPlanarGraph &parent)
+		:
+		parentGraph(parent)
+		{}
+
+	/**
+	 * Gets the {@link PlanarGraph} which this subgraph
+	 * is part of.
+	 *
+	 * @return the parent PlanarGraph
+	 */
+	planarPlanarGraph& getParent() const { return parentGraph; }
+
+	/**
+	 * Adds an {@link Edge} to the subgraph.
+	 * The associated {@link DirectedEdge}s and {@link Node}s
+	 * are also added.
+	 *
+	 * @param e the edge to add
+	 *
+	 * @return a pair with first element being an iterator
+	 *         to the planarEdge in set and second element
+	 *	   being a boolean value indicating wheter
+	 *	   the planarEdge has been inserted now or was
+	 *	   already in the set.
+	 */
+	pair<planarEdge::ConstSet::iterator, bool> add(planarEdge *e);
+
+	/**
+	 * Returns an iterator over the planarDirectedEdge in this graph,
+	 * in the order in which they were added.
+	 *
+	 * @return an iterator over the directed edges
+	 *
+	 * @see add(planarEdge)
+	 */
+	planarDirectedEdge::ConstVect::iterator getDirEdgeBegin() {
+		return dirEdges.begin();
+	}
+
+	
+	/**
+	 * Returns an {@link Iterator} over the {@link Edge}s in this graph,
+	 * in the order in which they were added.
+	 *
+	 * @return an iterator over the edges
+	 *
+	 * @see add(planarEdge)
+	 */
+	planarEdge::ConstSet::iterator edgeBegin() { return edges.begin(); }
+
+	/**
+	 * Returns an {@link Iterator} over the {@link Nodes} in this graph.
+	 * @return an iterator over the nodes
+	 */
+	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeIterator() {
+		return nodeMap.iterator(); 
+	}
+
+	/**
+	 * Tests whether an {@link Edge} is contained in this subgraph
+	 * @param e the edge to test
+	 * @return <code>true</code> if the edge is contained in this subgraph
+	 */
+	bool contains(planarEdge *e) { return (edges.find(e) != edges.end()); }
+
+	
+};
+
 //} // namespace planargraph
 } // namespace geos
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/04 00:54:57  strk
+ * - Doxygen dox updated
+ * - LineStringLT struct moved from geomgraph.h to geom.h
+ * - New planarSubgraph class
+ * - Fixed ruby Makefiles to avoid running tests when disabled
+ * - Renamed TESTS variable to XMLTESTS to not confuse 'make check' rule
+ *
  * Revision 1.8  2006/02/01 22:21:29  strk
  * - Added rectangle-based optimizations of intersects() and contains() ops
  * - Inlined all planarGraphComponent class

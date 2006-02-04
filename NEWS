@@ -19,6 +19,7 @@ Changes in 3.0.0
 	  class.
 	- Moved GetNumGeometries() and GetGeometryN() interfaces
 	  from GeometryCollection to Geometry class.
+	- New planarSubgraph class
 
 - Optimizations:
 	- WKT parser speedup

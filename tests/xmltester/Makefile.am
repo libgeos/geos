@@ -2,7 +2,7 @@
 #top_srcdir=@top_srcdir@
 #top_builddir=@top_builddir@
 
-TESTS=testLeaksBig.xml hexwkb.xml test.xml TestConvexHull.xml
+XMLTESTS=testLeaksBig.xml hexwkb.xml test.xml TestConvexHull.xml
 
 noinst_PROGRAMS = SimpleWKTTester
 bin_PROGRAMS = XMLTester
@@ -27,4 +27,4 @@ static:
 	$(CXX) $(CXXFLAGS) -I../headers -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../source/geom/.libs/libgeos.a
 
 test: XMLTester
-	./XMLTester $(TESTS) 
+	./XMLTester $(XMLTESTS) 

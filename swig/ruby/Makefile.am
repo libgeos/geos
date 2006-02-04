@@ -1,5 +1,3 @@
-SUBDIRS = \
-	test
 
 EXTRA_DIST = \
 	ruby.i \
@@ -8,6 +6,9 @@ EXTRA_DIST = \
 CLEANFILES = geos_wrap.cxx
 
 if ENABLE_RUBY
+
+SUBDIRS = \
+	test
 
 BUILT_SOURCES = geos_wrap.cxx
 
