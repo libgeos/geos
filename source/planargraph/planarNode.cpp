@@ -22,91 +22,23 @@ namespace geos {
 /**
 * Returns all Edges that connect the two nodes (which are assumed to be different).
 */
-vector<planarEdge*>* planarNode::getEdgesBetween(planarNode *node0, planarNode *node1) {
-//	vector<planarEdge*> *edges0=planarDirectedEdge::toEdges(node0->getOutEdges()->getEdges());
-//Set commonEdges = new HashSet(edges0);
-//List edges1 = DirectedEdge.toEdges(node1.getOutEdges().getEdges());
-//commonEdges.retainAll(edges1);
-//return commonEdges;
+vector<planarEdge*>*
+planarNode::getEdgesBetween(planarNode *node0, planarNode *node1)
+{
 	return NULL;
 }
 
-/**
-* Constructs a Node with the given location.
-*/
-planarNode::planarNode(const Coordinate& newPt)
-{
-#ifdef DEBUG_ALLOC
-	cerr<<"["<<this<<"] planarNode(const Coordinate&)"<<endl;
-#endif
-	pt=newPt;
-	deStar=new planarDirectedEdgeStar();
-}
-
-/*
- * Constructs a Node with the given location and collection of
- * outgoing DirectedEdges.
- */
-planarNode::planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar)
-{
-#ifdef DEBUG_ALLOC
-	cerr<<"["<<this<<"] planarNode(const Coordinate&, planarDirectedEdgeStar *)"<<endl;
-#endif // DEBUG_ALLOC
-	pt=newPt;
-	deStar=newDeStar;
-}
-
-/**
-* Returns the location of this Node.
-*/
-Coordinate& planarNode::getCoordinate() {
-	return pt;
-}
-
-/*
- * Adds an outgoing DirectedEdge to this Node.
- */
-void
-planarNode::addOutEdge(planarDirectedEdge *de)
-{
-	deStar->add(de);
-}
-
-/**
-* Returns the collection of DirectedEdges that leave this Node.
-*/
-planarDirectedEdgeStar*
-planarNode::getOutEdges()
-{
-	return deStar;
-}
-/**
-* Returns the number of edges around this Node.
-*/
-int planarNode::getDegree() { 
-	return deStar->getDegree();
-}
-/**
-* Returns the zero-based index of the given Edge, after sorting in ascending order
-* by angle with the positive x-axis.
-*/
-int planarNode::getIndex(planarEdge *edge){
-	return deStar->getIndex(edge);
-}
-
-planarNode::~planarNode()
-{
-#ifdef DEBUG_ALLOC
-	cerr<<"["<<this<<"] ~planarNode()"<<endl;
-#endif // DEBUG_ALLOC
-	delete deStar;
-}
 
 //} // namespace planargraph 
 } // namespace geos 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/05 17:14:43  strk
+ * - New ConnectedSubgraphFinder class.
+ * - More iterators returning methods, inlining and cleanups
+ *   in planargraph.
+ *
  * Revision 1.4  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.

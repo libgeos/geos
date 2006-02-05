@@ -86,21 +86,16 @@ planarNodeMap::find(const Coordinate& coord)
 		return found->second;
 }
 
-/**
- * Returns an Iterator over the Nodes in this NodeMap, sorted in
- * ascending order by angle with the positive x-axis.
- */
-map<Coordinate,planarNode*,planarCoordLT>::iterator
-planarNodeMap::iterator()
-{
-	return nodeMap.begin();
-}
-
 //} //namespace planargraph 
 } //namespace geos 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/05 17:14:43  strk
+ * - New ConnectedSubgraphFinder class.
+ * - More iterators returning methods, inlining and cleanups
+ *   in planargraph.
+ *
  * Revision 1.7  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

@@ -19,41 +19,6 @@
 namespace geos {
 //namespace planargraph {
 
-/*
- * Constructs a PlanarGraph without any Edges, DirectedEdges, or Nodes.
- */
-planarPlanarGraph::planarPlanarGraph()
-{
-	//edges=new vector<planarEdge*>();
-	//dirEdges=new vector<planarDirectedEdge*>();
-	//nodeMap=new planarNodeMap();
-}
-
-planarPlanarGraph::~planarPlanarGraph()
-{
-	//delete edges;
-	//delete dirEdges;
-	//delete nodeMap;
-}
-
-/*
- * Returns the Node at the given location, or null if no Node was there.
- */
-planarNode *
-planarPlanarGraph::findNode(const Coordinate& pt)
-{
-	return nodeMap.find(pt);
-}
-
-/*
- * Adds a node to the map, replacing any that is already at that location.
- * Only subclasses can add Nodes, to ensure Nodes are of the right type.
- */
-void
-planarPlanarGraph::add(planarNode *node)
-{
-	nodeMap.add(node);
-}
 
 /*
  * Adds the Edge and its DirectedEdges with this PlanarGraph.
@@ -70,65 +35,6 @@ planarPlanarGraph::add(planarEdge *edge)
 	add(edge->getDirEdge(1));
 }
 
-
-/*
- * Adds the Edge to this PlanarGraph; only subclasses can add DirectedEdges,
- * to ensure the edges added are of the right class.
- */
-void
-planarPlanarGraph::add(planarDirectedEdge *dirEdge)
-{
-	dirEdges.push_back(dirEdge);
-}
-
-/*
- * Returns an Iterator over the Nodes in this PlanarGraph.
- */
-map<Coordinate,planarNode*,planarCoordLT>::iterator
-planarPlanarGraph::nodeIterator()
-{
-	return nodeMap.iterator();
-}
-
-vector<planarNode*>*
-planarPlanarGraph::getNodes() {
-	return nodeMap.getNodes();
-}
-
-/*
- * Returns an Iterator over the DirectedEdges in this PlanarGraph,
- * in the order in which they were added.
- *
- * @see #add(Edge)
- * @see #add(DirectedEdge)
- */
-vector<planarDirectedEdge*>::iterator
-planarPlanarGraph::dirEdgeIterator()
-{
-	return dirEdges.begin();
-}
-
-/*
- * Returns an Iterator over the Edges in this PlanarGraph,
- * in the order in which they were added.
- *
- * @see #add(Edge)
- */
-vector<planarEdge*>::iterator
-planarPlanarGraph::edgeIterator()
-{
-	return edges.begin();
-}
-
-/*
- * Returns the Edges that have been added to this PlanarGraph
- * @see #add(Edge)
- */
-vector<planarEdge*>*
-planarPlanarGraph::getEdges() 
-{
-	return &edges;
-}
 
 /*
  * Removes an Edge and its associated DirectedEdges from their from-Nodes and
@@ -229,6 +135,11 @@ planarPlanarGraph::findNodesOfDegree(int degree)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/05 17:14:43  strk
+ * - New ConnectedSubgraphFinder class.
+ * - More iterators returning methods, inlining and cleanups
+ *   in planargraph.
+ *
  * Revision 1.4  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

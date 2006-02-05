@@ -20,6 +20,7 @@ Changes in 3.0.0
 	- Moved GetNumGeometries() and GetGeometryN() interfaces
 	  from GeometryCollection to Geometry class.
 	- New planarSubgraph class
+	- New ConnectedSubgraphFinder class.
 
 - Optimizations:
 	- WKT parser speedup
@@ -39,6 +40,7 @@ Changes in 3.0.0
 	- Added rectangle-based optimizations of intersects() and
 	  contains() ops
 	- Inlined all planarGraphComponent class
+	- More iterators returning methods and inlining in planargraph.
 
 - Correctness:
 	- More const-correct signatures

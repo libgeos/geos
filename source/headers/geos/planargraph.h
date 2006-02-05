@@ -28,6 +28,7 @@ using namespace std;
 namespace geos {
 //namespace planargraph {
 
+class ConnectedSubgraphFinder;
 class planarDirectedEdge;
 class planarDirectedEdgeStar;
 class planarEdge;
@@ -35,6 +36,7 @@ class planarGraphComponent;
 class planarNode;
 class planarNodeMap;
 class planarPlanarGraph;
+class planarSubgraph;
 class planarSubgraph;
 
 
@@ -92,6 +94,21 @@ public:
 	 */
 	virtual void setVisited(bool isVisited) { isVisitedVar=isVisited; }
 
+	/**
+	 * Sets the Visited state for the elements in a map,
+	 * from start to end iterator.
+	 *
+	 * @param start the start element
+	 * @param end one past the last element
+	 * @param visited the state to set the visited flag to
+	 */
+	template <typename T>
+	static void setVisited(T start, T end, bool visited) {
+		for(T i=start; i!=end; ++i) {
+			(*i).second->setVisited(visited);
+		}
+	}
+
 	/** \brief
 	 * Tests if a component has been marked at some point
 	 * during the processing involving this graph.
@@ -130,9 +147,9 @@ public:
 	/**
 	 * \brief Constructs a DirectedEdgeStar with no edges.
 	 */
-	planarDirectedEdgeStar();
+	planarDirectedEdgeStar(): sorted(false) {}
 
-	virtual ~planarDirectedEdgeStar();
+	virtual ~planarDirectedEdgeStar() {}
 
 	/**
 	 * \brief Adds a new member to this DirectedEdgeStar.
@@ -148,13 +165,15 @@ public:
 	 * \brief Returns an Iterator over the DirectedEdges,
 	 * in ascending order by angle with the positive x-axis.
 	 */
-	vector<planarDirectedEdge*>::iterator iterator();
+	vector<planarDirectedEdge*>::iterator iterator() { return begin(); }
+	vector<planarDirectedEdge*>::iterator begin();
+	vector<planarDirectedEdge*>::iterator end();
 
 	/**
 	 * \brief Returns the number of edges around the Node associated
 	 * with this DirectedEdgeStar.
 	 */
-	unsigned int getDegree() const;
+	unsigned int getDegree() const { return outEdges.size(); }
 
 	/**
 	 * \brief Returns the coordinate for the node at wich this
@@ -222,46 +241,66 @@ public:
 	 * \brief Returns all Edges that connect the two nodes (which are
 	 * assumed to be different).
 	 */
-	static vector<planarEdge*>* getEdgesBetween(planarNode *node0, planarNode *node1);
+	static vector<planarEdge*>* getEdgesBetween(planarNode *node0,
+			planarNode *node1);
 
 	/// Constructs a Node with the given location.
-	planarNode(const Coordinate& newPt);
+	planarNode(const Coordinate& newPt)
+		:
+		pt(newPt)
+		{ deStar=new planarDirectedEdgeStar(); }
 
-	~planarNode();
+	/*virtual?*/ ~planarNode() {
+		delete deStar;
+	}
 
 	/**
 	 * \brief Constructs a Node with the given location and
 	 * collection of outgoing planarDirectedEdges.
 	 */
-	planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar);
+	planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar)
+		:
+		pt(newPt),
+		deStar(newDeStar)
+		{}
 
 	/**
 	 * \brief Returns the location of this Node.
 	 */
-	Coordinate& getCoordinate();
+	Coordinate& getCoordinate() {
+		return pt;
+	}
 
 	/**
 	 * \brief Adds an outgoing DirectedEdge to this Node.
 	 */
-	void addOutEdge(planarDirectedEdge *de);
+	void addOutEdge(planarDirectedEdge *de) {
+		deStar->add(de);
+	}
 
 	/**
 	 * \brief Returns the collection of DirectedEdges that
 	 * leave this Node.
 	 */
-	planarDirectedEdgeStar* getOutEdges();
+	planarDirectedEdgeStar* getOutEdges() {
+		return deStar;
+	}
 
 	/**
 	 * \brief Returns the number of edges around this Node.
 	 */
-	int getDegree();
+	int getDegree() {
+		return deStar->getDegree();
+	}
 
 	/**
 	 * \brief Returns the zero-based index of the given Edge,
 	 * after sorting in ascending order by angle with
 	 * the positive x-axis.
 	 */
-	int getIndex(planarEdge *edge);
+	int getIndex(planarEdge *edge) {
+		return deStar->getIndex(edge);
+	}
 
 };
 
@@ -503,7 +542,7 @@ public:
 };
 
 struct planarCoordLT {
-	bool operator()(Coordinate s1, Coordinate s2) const {
+	bool operator()(const Coordinate& s1, const Coordinate& s2) const {
 		return s1.compareTo(s2)<0;
 	}
 };
@@ -515,8 +554,11 @@ struct planarCoordLT {
  *
  */
 class planarNodeMap {
+public:
+	typedef map<Coordinate,planarNode*, planarCoordLT> container;
 private:
-	map<Coordinate,planarNode*, planarCoordLT> nodeMap;
+	//map<Coordinate,planarNode*, planarCoordLT>
+	container nodeMap;
 public:  
 	/**
 	 * \brief Constructs a NodeMap without any Nodes.
@@ -555,7 +597,17 @@ public:
 	 * sorted in ascending order
 	 * by angle with the positive x-axis.
 	 */
-	map<Coordinate,planarNode*,planarCoordLT>::iterator iterator();
+	map<Coordinate,planarNode*,planarCoordLT>::iterator iterator() {
+		return nodeMap.begin();
+	}
+
+	map<Coordinate,planarNode*,planarCoordLT>::iterator begin() {
+		return nodeMap.begin();
+	}
+
+	map<Coordinate,planarNode*,planarCoordLT>::iterator end() {
+		return nodeMap.end();
+	}
 
 	/**
 	 * \brief
@@ -595,7 +647,9 @@ protected:
 	 * of the right type.
 	 * @return the added node
 	 */
-	void add(planarNode *node);
+	void add(planarNode *node) {
+		nodeMap.add(node);
+	}
 
 	/**
 	 * \brief
@@ -612,39 +666,55 @@ protected:
 	 * \brief
 	 * Adds the Edge to this PlanarGraph.
 	 *
-	 * Only subclasses can add DirectedEdges,
+	 * Only subclasses can add planarDirectedEdges,
 	 * to ensure the edges added are of the right class.
 	 */
-	void add(planarDirectedEdge *dirEdge);
+	void add(planarDirectedEdge *dirEdge) {
+		dirEdges.push_back(dirEdge);
+	}
 
 public:
+
+	typedef vector<planarEdge *> EdgeContainer;
+	typedef EdgeContainer::iterator EdgeIterator;
+
 
 	/**
 	 * \brief
 	 * Constructs a PlanarGraph without any Edges, DirectedEdges, or Nodes.
 	 */
-	planarPlanarGraph();
+	planarPlanarGraph() {}
 
-	virtual ~planarPlanarGraph();
+	virtual ~planarPlanarGraph() {}
 
 	/**
 	 * \brief
 	 * Returns the Node at the given location,
 	 * or null if no Node was there.
 	 */
-	planarNode* findNode(const Coordinate& pt);
+	planarNode* findNode(const Coordinate& pt) {
+		return nodeMap.find(pt);
+	}
 
 	/**
 	 * \brief
 	 * Returns an Iterator over the Nodes in this PlanarGraph.
 	 */
-	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeIterator();
+	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeIterator() {
+		return nodeMap.begin();
+	}
+	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeBegin() {
+		return nodeMap.begin();
+	}
+	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeEnd() {
+		return nodeMap.end();
+	}
 
 	/**
 	 * \brief
 	 * Returns the Nodes in this PlanarGraph.
 	 */  
-	vector<planarNode*>* getNodes();
+	vector<planarNode*>* getNodes() { return nodeMap.getNodes(); }
 
 	/**
 	 * \brief
@@ -654,7 +724,9 @@ public:
 	 * @see add(Edge)
 	 * @see add(DirectedEdge)
 	 */
-	vector<planarDirectedEdge*>::iterator dirEdgeIterator();
+	vector<planarDirectedEdge*>::iterator dirEdgeIterator() {
+		return dirEdges.begin();
+	}
 
 	/**
 	 * \brief
@@ -663,14 +735,24 @@ public:
 	 *
 	 * @see #add(Edge)
 	 */
-	vector<planarEdge*>::iterator edgeIterator();
+	vector<planarEdge*>::iterator edgeIterator() {
+		return edges.begin();
+	}
+	vector<planarEdge*>::iterator edgeBegin() {
+		return edges.begin();
+	}
+	vector<planarEdge*>::iterator edgeEnd() {
+		return edges.end();
+	}
 
 	/**
 	 * \brief
 	 * Returns the Edges that have been added to this PlanarGraph
 	 * @see #add(Edge)
 	 */
-	vector<planarEdge*>* getEdges();
+	vector<planarEdge*>* getEdges() {
+		return &edges;
+	}
 
 	/**
 	 * \brief
@@ -708,7 +790,7 @@ public:
 	vector<planarNode*>* findNodesOfDegree(int degree);
 };
 
-/// A subgraph of a PlanarGraph.
+/// A subgraph of a planarPlanarGraph.
 //
 /// A subgraph may contain any subset of {@link Edges}
 /// from the parent graph.
@@ -716,6 +798,9 @@ public:
 /// and {@link Node}s associated with those edges.
 /// No new objects are created when edges are added -
 /// all associated components must already exist in the parent graph.
+///
+/// @@ Actually we'll be copying Coordinates in planarNodeMap.
+/// I guess that'll need to be changed soon.
 ///
 class planarSubgraph
 {
@@ -786,7 +871,7 @@ public:
 	 * Returns an {@link Iterator} over the {@link Nodes} in this graph.
 	 * @return an iterator over the nodes
 	 */
-	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeIterator() {
+	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeBegin() {
 		return nodeMap.iterator(); 
 	}
 
@@ -800,12 +885,66 @@ public:
 	
 };
 
+/**
+ * Finds all connected {@link planarSubgraph}s of a planarPlanarGraph.
+ * 
+ * <b>Note:</b> uses the <code>isVisited</code> flag on the nodes.
+ */
+class ConnectedSubgraphFinder
+{
+private:
+	planarPlanarGraph& graph;
+
+	/// Returns a newly allocated planarSubgraph
+	planarSubgraph* findSubgraph(planarNode* node);
+
+
+	/**
+	 * Adds all nodes and edges reachable from this node to the subgraph.
+	 * Uses an explicit stack to avoid a large depth of recursion.
+	 *
+	 * @param node a node known to be in the subgraph
+	 */
+	void addReachable(planarNode* node, planarSubgraph* subgraph);
+
+	/**
+	 * Adds the argument node and all its out edges to the subgraph.
+	 * @param node the node to add
+	 * @param nodeStack the current set of nodes being traversed
+	 */
+	void addEdges(planarNode* node, stack<planarNode *>& nodeStack,
+			planarSubgraph* subgraph);
+
+public:
+
+	ConnectedSubgraphFinder(planarPlanarGraph& newGraph)
+		:
+		graph(newGraph)
+		{}
+
+	/// \brief
+	/// Store newly allocated connected planarSubgraphs into the
+	/// given vector
+	///
+	/// Caller take responsibility in releasing memory associated
+	/// with the subgraphs themself.
+	///
+	///
+	void getConnectedSubgraphs(vector<planarSubgraph *>& dest);
+
+};
+
 //} // namespace planargraph
 } // namespace geos
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/05 17:14:43  strk
+ * - New ConnectedSubgraphFinder class.
+ * - More iterators returning methods, inlining and cleanups
+ *   in planargraph.
+ *
  * Revision 1.9  2006/02/04 00:54:57  strk
  * - Doxygen dox updated
  * - LineStringLT struct moved from geomgraph.h to geom.h

@@ -19,20 +19,6 @@
 namespace geos {
 //namespace planargraph {
 
-/*
- * Constructs a DirectedEdgeStar with no edges.
- */
-planarDirectedEdgeStar::planarDirectedEdgeStar():
-	sorted(false)
-{
-	//outEdges = new vector<planarDirectedEdge*>();
-	//sorted=false;
-}
-
-planarDirectedEdgeStar::~planarDirectedEdgeStar()
-{
-	//delete outEdges;
-}
 
 /*
  * Adds a new member to this DirectedEdgeStar.
@@ -60,26 +46,20 @@ planarDirectedEdgeStar::remove(planarDirectedEdge *de)
 	}
 }
 
-/*
- * Returns an Iterator over the DirectedEdges, in ascending order
- * by angle with the positive x-axis.
- */
 vector<planarDirectedEdge*>::iterator
-planarDirectedEdgeStar::iterator()
+planarDirectedEdgeStar::begin()
 {
 	sortEdges();
 	return outEdges.begin();
 }
 
-/*
- * Returns the number of edges around the Node associated with this
- * DirectedEdgeStar.
- */
-unsigned int
-planarDirectedEdgeStar::getDegree() const
-{ 
-	return outEdges.size();
+vector<planarDirectedEdge*>::iterator
+planarDirectedEdgeStar::end()
+{
+	sortEdges();
+	return outEdges.end();
 }
+
 
 /*
  * Returns the coordinate for the node at wich this star is based
@@ -185,6 +165,11 @@ planarDirectedEdgeStar::getNextEdge(planarDirectedEdge *dirEdge)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/05 17:14:43  strk
+ * - New ConnectedSubgraphFinder class.
+ * - More iterators returning methods, inlining and cleanups
+ *   in planargraph.
+ *
  * Revision 1.6  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.
