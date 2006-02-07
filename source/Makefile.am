@@ -7,6 +7,7 @@ SUBDIRS = \
 	noding \
 	operation \
 	planargraph \
+	geomgraph \
 	precision \
 	util
 
