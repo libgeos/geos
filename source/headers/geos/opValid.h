@@ -280,29 +280,6 @@ protected:
  */
 class IsValidOp {
 friend class Unload;
-public:
-	/**
-	 * Find a point from the list of testCoords
-	 * that is NOT a node in the edge for the list of searchCoords
-	 *
-	 * @return the point found, or NULL if none found
-	 */
-	static const Coordinate *findPtNotNode(const CoordinateSequence *testCoords,const LinearRing *searchRing, GeometryGraph *graph);
-
-	/**
-	 * Checks whether a coordinate is valid for processing.
-	 * Coordinates are valid iff their x and y coordinates are in the
-	 * range of the floating point representation.
-	 *
-	 * @param coord the coordinate to validate
-	 * @return <code>true</code> if the coordinate is valid
-	 */
-	static bool isValid(const Coordinate &coord);
-
-	IsValidOp(const Geometry *geom);
-	virtual ~IsValidOp();
-	bool isValid();
-	TopologyValidationError* getValidationError();
 private:
 	const Geometry *parentGeometry;  // the base Geometry to be validated
 	bool isChecked;
@@ -394,7 +371,64 @@ private:
 
 	void checkClosedRing(const LinearRing *ring);
 
-	static bool isSelfTouchingRingFormingHoleValid;
+	bool isSelfTouchingRingFormingHoleValid;
+
+public:
+	/**
+	 * Find a point from the list of testCoords
+	 * that is NOT a node in the edge for the list of searchCoords
+	 *
+	 * @return the point found, or NULL if none found
+	 */
+	static const Coordinate *findPtNotNode(
+			const CoordinateSequence *testCoords,
+			const LinearRing *searchRing, GeometryGraph *graph);
+
+	/**
+	 * Checks whether a coordinate is valid for processing.
+	 * Coordinates are valid iff their x and y coordinates are in the
+	 * range of the floating point representation.
+	 *
+	 * @param coord the coordinate to validate
+	 * @return <code>true</code> if the coordinate is valid
+	 */
+	static bool isValid(const Coordinate &coord);
+
+	IsValidOp(const Geometry *geom);
+	virtual ~IsValidOp();
+	bool isValid();
+	TopologyValidationError* getValidationError();
+
+	/**
+	 * Sets whether polygons using <b>Self-Touching Rings</b> to form
+	 * holes are reported as valid.
+	 * If this flag is set, the following Self-Touching conditions
+	 * are treated as being valid:
+	 * <ul>
+	 * <li>the shell ring self-touches to create a hole touching the shell
+	 * <li>a hole ring self-touches to create two holes touching at a point
+	 * </ul>
+	 * <p>
+	 * The default (following the OGC SFS standard)
+	 * is that this condition is <b>not</b> valid (<code>false</code>).
+	 * <p>
+	 * This does not affect whether Self-Touching Rings
+	 * disconnecting the polygon interior are considered valid
+	 * (these are considered to be <b>invalid</b> under the SFS,
+	 * and many other spatial models as well).
+	 * This includes "bow-tie" shells,
+	 * which self-touch at a single point causing the interior to
+	 * be disconnected,
+	 * and "C-shaped" holes which self-touch at a single point causing
+	 * an island to be formed.
+	 *
+	 * @param isValid states whether geometry with this condition is valid
+	 */
+	void setSelfTouchingRingFormingHoleValid(bool isValid)
+	{
+		isSelfTouchingRingFormingHoleValid = isValid;
+	}
+
 };
 
 } // namespace geos
@@ -403,7 +437,20 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.11  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

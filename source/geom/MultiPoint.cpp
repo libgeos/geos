@@ -13,6 +13,18 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.28  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.27  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -149,10 +161,12 @@ Geometry* MultiPoint::getBoundary() const {
 
 bool MultiPoint::isSimple() const {
 	IsSimpleOp iso;
-	Geometry *in = toInternalGeometry(this);
-	bool issimple = iso.isSimple((MultiPoint *)in);
-	if ( (MultiPoint *)in != this ) delete(in);
-	return issimple;
+	return iso.isSimple(this);
+	
+	//Geometry *in = toInternalGeometry(this);
+	//bool issimple = iso.isSimple((MultiPoint *)in);
+	//if ( (MultiPoint *)in != this ) delete(in);
+	//return issimple;
 }
 
 //bool MultiPoint::isValid() const { return true; }

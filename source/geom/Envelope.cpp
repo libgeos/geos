@@ -522,11 +522,72 @@ vector<string> Envelope::split(const string &str, const string &delimiters)
   return tokens;
 }
 
+bool
+Envelope::centre(Coordinate& centre) const
+{
+	if (isNull()) return false;
+	centre.x=(getMinX() + getMaxX()) / 2.0;
+	centre.y=(getMinY() + getMaxY()) / 2.0;
+	return true;
+}
+
+bool
+Envelope::intersection(const Envelope& env, Envelope& result)
+{
+	if (isNull() || env.isNull() || ! intersects(env)) return false;
+
+	double intMinX = minx > env.minx ? minx : env.minx;
+	double intMinY = miny > env.miny ? miny : env.miny;
+	double intMaxX = maxx < env.maxx ? maxx : env.maxx;
+	double intMaxY = maxy < env.maxy ? maxy : env.maxy;
+	result.init(intMinX, intMaxX, intMinY, intMaxY);
+	return true;
+}
+
+void
+Envelope::translate(double transX, double transY)
+{
+	if (isNull()) return;
+	init(getMinX() + transX, getMaxX() + transX,
+		getMinY() + transY, getMaxY() + transY);
+}
+
+
+void
+Envelope::expandBy(double deltaX, double deltaY)
+{
+	if (isNull()) return;
+
+	minx -= deltaX;
+	maxx += deltaX;
+	miny -= deltaY;
+	maxy += deltaY;
+
+	// check for envelope disappearing
+	if (minx > maxx || miny > maxy)
+		setToNull();
+}
+
+
+
+
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.22  2006/01/15 21:22:02  strk
  * Added Envelope constructor by string (accepting what's returned by ::toString)
  *

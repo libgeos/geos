@@ -47,7 +47,7 @@ int BufferOp::MAX_PRECISION_DIGITS=12;
  *         for the buffer computation
  */
 double
-BufferOp::precisionScaleFactor(Geometry *g, double distance,
+BufferOp::precisionScaleFactor(const Geometry *g, double distance,
 	int maxPrecisionDigits)
 {
 	const Envelope *env=g->getEnvelopeInternal();
@@ -63,23 +63,6 @@ BufferOp::precisionScaleFactor(Geometry *g, double distance,
 }
 
 /**
- * Computes the buffer of a geometry for a given buffer distance->
- *
- * @param g the geometry to buffer
- * @param distance the buffer distance
- * @return the buffer of the input geometry
- */
-Geometry*
-BufferOp::bufferOp(Geometry *g, double distance)
-{
-	Geometry *ret = BufferOp(g).getResultGeometry(distance);
-#if PROFILE
-	cerr<<*profiler<<endl;
-#endif
-	return ret;
-}
-
-/**
  * Comutes the buffer for a geometry for a given buffer distance
  * and accuracy of approximation->
  *
@@ -91,10 +74,13 @@ BufferOp::bufferOp(Geometry *g, double distance)
  *
  */
 Geometry*
-BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments)
+BufferOp::bufferOp(const Geometry *g, double distance,
+		int quadrantSegments,
+		int nEndCapStyle)
 {
 	BufferOp bufOp(g);
 	bufOp.setQuadrantSegments(quadrantSegments);
+	bufOp.setEndCapStyle(nEndCapStyle);
 	return bufOp.getResultGeometry(distance);
 }
 
@@ -103,7 +89,7 @@ BufferOp::bufferOp(Geometry *g, double distance, int quadrantSegments)
  *
  * @param g the geometry to buffer
  */
-BufferOp::BufferOp(Geometry *g):
+BufferOp::BufferOp(const Geometry *g):
 	argGeom(g),
 	saveException(NULL),
 	quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
@@ -241,6 +227,18 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.37  2005/07/11 10:27:14  strk
  * Fixed initializzazion lists
  *

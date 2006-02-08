@@ -28,6 +28,15 @@ LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 	points=ls.points->clone();
 }
 
+LineString*
+LineString::reverse() const
+{
+	CoordinateSequence* seq = points->clone();
+	CoordinateSequence::reverse(seq);
+	return getFactory()->createLineString(seq);
+}
+
+
 /**
  * Constructs a <code>LineString</code> taking ownership of the
  * given CoordinateSequence.
@@ -123,10 +132,7 @@ string LineString::getGeometryType() const {
 
 bool LineString::isSimple() const {
 	IsSimpleOp iso;
-	Geometry *in = toInternalGeometry(this);
-	bool issimple = iso.isSimple((LineString *)in);
-	if ( (LineString *)in != this ) delete(in);
-	return issimple;
+	return iso.isSimple(this); 
 }
 
 Geometry* LineString::getBoundary() const {
@@ -277,6 +283,18 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.56  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.55  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

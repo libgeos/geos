@@ -22,6 +22,16 @@ Changes in 3.0.0
 	- New planarSubgraph class
 	- New ConnectedSubgraphFinder class.
 	- New LineSequencer class
+	- New WKTWriter::toLineString and ::toPoint convenience methods
+	- New IsValidOp::setSelfTouchingRingFormingHoleValid method
+	- New WKTWriter::toLineString and ::toPoint convenience methods
+	- New IsValidOp::setSelfTouchingRingFormingHoleValid method
+	- New Envelope::centre()
+	- New Envelope::intersection(Envelope)
+	- New Envelope::expandBy(distance, [ydistance])
+	- New LineString::reverse()
+	- New MultiLineString::reverse()
+	- New Geometry::buffer(distance, quadSeg, endCapStyle)
 
 - Optimizations:
 	- WKT parser speedup
@@ -42,12 +52,14 @@ Changes in 3.0.0
 	  contains() ops
 	- Inlined all planarGraphComponent class
 	- More iterators returning methods and inlining in planargraph.
+	- Obsoleted toInternalGeometry/fromInternalGeometry 
 
 - Correctness:
 	- More const-correct signatures
 	- Stronger methods typing (removed some void * args).
 	- Changed index-related funx signatures to use unsigned int
 	  rather then int
+	- More const-correctness in Buffer "package"
 
 - Layout changes:
 	- geos::geom::util namespace used for geom/util stuff

@@ -225,30 +225,24 @@ Geometry::getCentroid() const
 	if ( isEmpty() ) { return NULL; }
 	Coordinate* centPt;
 	int dim=getDimension();
-	Geometry *in = toInternalGeometry(this);
 	if(dim==0) {
 		CentroidPoint cent; 
-		cent.add(in);
+		cent.add(this);
 		centPt=cent.getCentroid();
 	} else if (dim==1) {
 		CentroidLine cent;
-		cent.add(in);
+		cent.add(this);
 		centPt=cent.getCentroid();
 	} else {
 		CentroidArea cent;
-		cent.add(in);
+		cent.add(this);
 		centPt=cent.getCentroid();
 	}
 
-	if ( ! centPt )
-	{
-		if ( in != this ) delete(in);
-		return NULL;
-	}
+	if ( ! centPt ) return NULL;
 
 	Point *pt=createPointFromInternalCoord(centPt,this);
 	delete centPt;
-	if ( in != this ) delete(in);
 	return pt;
 }
 
@@ -265,23 +259,18 @@ Geometry::getInteriorPoint()
 {
 	const Coordinate* interiorPt;
 	int dim=getDimension();
-	Geometry *in = toInternalGeometry(this);
 	if (dim==0) {
-		InteriorPointPoint* intPt=new InteriorPointPoint(in);
-		interiorPt=intPt->getInteriorPoint();
-		delete intPt;
+		InteriorPointPoint intPt(this);
+		interiorPt=intPt.getInteriorPoint();
 	} else if (dim==1) {
-		InteriorPointLine* intPt=new InteriorPointLine(in);
-		interiorPt=intPt->getInteriorPoint();
-		delete intPt;
+		InteriorPointLine intPt(this);
+		interiorPt=intPt.getInteriorPoint();
 	} else {
-		InteriorPointArea* intPt=new InteriorPointArea(in);
-		interiorPt=intPt->getInteriorPoint();
-		delete intPt;
+		InteriorPointArea intPt(this);
+		interiorPt=intPt.getInteriorPoint();
 	}
 	Point *p=createPointFromInternalCoord(interiorPt,this);
 	delete interiorPt;
-	if ( in != this ) delete (in);
 	return p;
 }
 
@@ -359,11 +348,7 @@ Geometry::getPrecisionModel() const
 bool
 Geometry::isValid() const
 {
-	Geometry *in = toInternalGeometry(this);
-	IsValidOp isValidOp(in);
-	bool ret = isValidOp.isValid();
-	if (in != this) delete (in);
-	return ret;
+	return IsValidOp(this).isValid();
 }
 
 Geometry*
@@ -534,20 +519,7 @@ Geometry::relate(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	Geometry *in1 = toInternalGeometry(this);
-	Geometry *in2 = toInternalGeometry(other);
-	IntersectionMatrix *im = NULL;
-	try {
-		im = RelateOp::relate(in1, in2);
-	}
-	catch (...) {
-		if ( in1 != this ) delete (in1);
-		if ( in2 != other ) delete (in2);
-		throw;
-	}
-	if ( in1 != this ) delete (in1);
-	if ( in2 != other ) delete (in2);
-	return im;
+	return RelateOp::relate(this, other);
 }
 
 string
@@ -566,89 +538,41 @@ Geometry::toText() const
 Geometry*
 Geometry::buffer(double distance) const
 {
-	Geometry *in1 = toInternalGeometry(this);
-	Geometry *out = NULL;
-	try {
-		out = BufferOp::bufferOp(in1, distance);
-	}
-	catch(...) {
-		if ( in1 != this ) delete (in1);
-		throw;
-	}
-	if ( in1 != this ) delete (in1);
-	Geometry *ret = fromInternalGeometry(out);
-	if ( ret != out ) delete (out);
-	return ret;
+	return BufferOp::bufferOp(this, distance);
 }
 
-
-/**
- * The JTS algorithms assume that Geometry#getCoordinate and #getCoordinates
- * are fast, which may not be the case if the CoordinateSequence is not a
- * CoordinateArraySequence (e.g. if it were implemented using separate arrays
- * for the x- and y-values), in which case frequent construction of Coordinates
- * takes up much space and time. To solve this performance problem,
- * #toInternalGeometry converts the Geometry to a CoordinateArraySequence
- * implementation before sending it to the JTS algorithms.
- *
- * Note: if the Geometry is already implemented with CoordinateArraySequence
- * it is returned untouched, so you should check returned value before
- * releasing memory associated with the one used as argument.
- */
-Geometry*
-Geometry::toInternalGeometry(const Geometry *g) const
-{
-	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
-		return (Geometry*)g;
-	}
-	return INTERNAL_GEOMETRY_FACTORY->createGeometry(g);
-}
-
-Geometry*
-Geometry::fromInternalGeometry(const Geometry* g) const
-{
-	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) {
-		return (Geometry*)g;
-	}
-	return getFactory()->createGeometry(g);
-}
-
-/**
- *  Returns a buffer region around this <code>Geometry</code> having the given
- *  width and with a specified number of segments used to approximate curves.
- * The buffer of a Geometry is the Minkowski sum of the Geometry with
- * a disc of radius <code>distance</code>.  Curves in the buffer polygon are
- * approximated with line segments.  This method allows specifying the
- * accuracy of that approximation.
- *
- *@param  distance  the width of the buffer, interpreted according to the
- *      <code>PrecisionModel</code> of the <code>Geometry</code>
- *@param quadrantSegments the number of segments to use to approximate a quadrant of a circle
- *@return           all points whose distance from this <code>Geometry</code>
- *      are less than or equal to <code>distance</code>
- */
 Geometry*
 Geometry::buffer(double distance,int quadrantSegments) const
 {
-	Geometry *in = toInternalGeometry(this);
-	Geometry *out = BufferOp::bufferOp(in, distance, quadrantSegments);
-	if ( in != this ) delete(in);
-	Geometry *ret = fromInternalGeometry(out);
-	if ( out != ret ) delete(out);
-	return ret;
+	return BufferOp::bufferOp(this, distance, quadrantSegments);
 }
+
+Geometry*
+Geometry::buffer(double distance, int quadrantSegments, int endCapStyle) const
+{
+	return BufferOp::bufferOp(this, distance, quadrantSegments, endCapStyle);
+}
+
+
+
+#if 0 // Obsoleted
+Geometry*
+Geometry::toInternalGeometry(const Geometry *g) const {
+	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) { return (Geometry*)g; }
+	return INTERNAL_GEOMETRY_FACTORY->createGeometry(g);
+}
+Geometry*
+Geometry::fromInternalGeometry(const Geometry* g) const
+{
+	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) { return (Geometry*)g; }
+	return getFactory()->createGeometry(g);
+}
+#endif // 0
 
 Geometry*
 Geometry::convexHull() const
 {
-	Geometry *in = toInternalGeometry(this);
-	ConvexHull *ch = new ConvexHull(in);
-	Geometry *out=ch->getConvexHull();
-	delete ch;
-	if ( in != this ) delete(in);
-	Geometry *ret = fromInternalGeometry(out);
-	if ( out != ret ) delete(out);
-	return ret;
+	return ConvexHull(this).getConvexHull();
 }
 
 Geometry*
@@ -656,22 +580,7 @@ Geometry::intersection(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	Geometry *in1 = toInternalGeometry(this);
-	Geometry *in2 = toInternalGeometry(other);
-	Geometry *out = NULL;
-	try {
-		out = OverlayOp::overlayOp(in1,in2,OverlayOp::INTERSECTION);
-	}
-	catch (...) {
-		if ( in1 != this ) delete (in1);
-		if ( in2 != other ) delete (in2);
-		throw;
-	}
-	if ( in1 != this ) delete (in1);
-	if ( in2 != other ) delete (in2);
-	Geometry *ret = fromInternalGeometry(out);
-	if ( ret != out ) delete (out);
-	return ret;
+	return OverlayOp::overlayOp(this, other, OverlayOp::INTERSECTION);
 }
 
 Geometry*
@@ -716,21 +625,7 @@ Geometry::Union(const Geometry *other) const
 	}
 #endif
 
-	Geometry *in1 = toInternalGeometry(this);
-	Geometry *in2 = toInternalGeometry(other);
-	try {
-		out = OverlayOp::overlayOp(in1,in2,OverlayOp::UNION);
-	}
-	catch (...) {
-		if ( in1 != this ) delete (in1);
-		if ( in2 != other ) delete (in2);
-		throw;
-	}
-	if ( in1 != this ) delete (in1);
-	if ( in2 != other ) delete (in2);
-	Geometry *ret = fromInternalGeometry(out);
-	if ( ret != out ) delete (out);
-	return ret;
+	return OverlayOp::overlayOp(this, other, OverlayOp::UNION);
 }
 
 Geometry*
@@ -739,22 +634,7 @@ Geometry::difference(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	Geometry *in1 = toInternalGeometry(this);
-	Geometry *in2 = toInternalGeometry(other);
-	Geometry *out = NULL;
-	try {
-		out = OverlayOp::overlayOp(in1,in2,OverlayOp::DIFFERENCE);
-	}
-	catch (...) {
-		if ( in1 != this ) delete (in1);
-		if ( in2 != other ) delete (in2);
-		throw;
-	}
-	if ( in1 != this ) delete (in1);
-	if ( in2 != other ) delete (in2);
-	Geometry *ret = fromInternalGeometry(out);
-	if ( ret != out ) delete (out);
-	return ret;
+	return OverlayOp::overlayOp(this, other, OverlayOp::DIFFERENCE);
 }
 
 Geometry*
@@ -762,22 +642,7 @@ Geometry::symDifference(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	Geometry *in1 = toInternalGeometry(this);
-	Geometry *in2 = toInternalGeometry(other);
-	Geometry *out = NULL;
-	try {
-		out = OverlayOp::overlayOp(in1,in2,OverlayOp::SYMDIFFERENCE);
-	}
-	catch (...) {
-		if ( in1 != this ) delete (in1);
-		if ( in2 != other ) delete (in2);
-		throw;
-	}
-	if ( in1 != this ) delete (in1);
-	if ( in2 != other ) delete (in2);
-	Geometry *ret = fromInternalGeometry(out);
-	if ( ret != out ) delete (out);
-	return ret;
+	return OverlayOp::overlayOp(this, other, OverlayOp::SYMDIFFERENCE);
 }
 
 int
@@ -894,20 +759,7 @@ Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const
 double
 Geometry::distance(const Geometry *other) const
 {
-	Geometry *in1 = toInternalGeometry(this);
-	Geometry *in2 = toInternalGeometry(other);
-	double ret;
-	try {
-		ret = DistanceOp::distance(in1,in2);
-	}
-	catch (...) {
-		if ( in1 != this ) delete (in1);
-		if ( in2 != other ) delete (in2);
-		throw;
-	}
-	if ( in1 != this ) delete (in1);
-	if ( in2 != other ) delete (in2);
-	return ret;
+	return DistanceOp::distance(this, other);
 }
 
 /**
@@ -1001,6 +853,18 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.85  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.84  2006/02/01 22:21:29  strk
  * - Added rectangle-based optimizations of intersects() and contains() ops
  * - Inlined all planarGraphComponent class

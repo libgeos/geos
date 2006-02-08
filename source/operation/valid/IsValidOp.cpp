@@ -25,8 +25,6 @@
 
 namespace geos {
 
-bool IsValidOp::isSelfTouchingRingFormingHoleValid = false;
-
 /**
  * Find a point from the list of testCoords
  * that is NOT a node in the edge for the list of searchCoords
@@ -56,7 +54,9 @@ IsValidOp::findPtNotNode(const CoordinateSequence *testCoords,
 IsValidOp::IsValidOp(const Geometry *geom):
 	parentGeometry(geom),
 	isChecked(false),
-	validErr(NULL)
+	validErr(NULL),
+	isSelfTouchingRingFormingHoleValid(false)
+
 {
 }
 
@@ -625,6 +625,18 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.40  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

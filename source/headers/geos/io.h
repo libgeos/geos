@@ -206,6 +206,35 @@ public:
 
 	void writeFormatted(const Geometry *geometry, Writer *writer);
 
+	/**
+	 * Generates the WKT for a N-point <code>LineString</code>.
+	 *
+	 * @param seq the sequence to outpout
+	 *
+	 * @return the WKT
+	 */
+	static string toLineString(const CoordinateSequence& seq); 
+
+	/**
+	 * Generates the WKT for a 2-point <code>LineString</code>.
+	 *
+	 * @param p0 the first coordinate
+	 * @param p1 the second coordinate
+	 *
+	 * @return the WKT
+	 */
+	static string toLineString(const Coordinate& p0, const Coordinate& p1);
+
+	/**
+	 * Generates the WKT for a <code>Point</code>.
+	 *
+	 * @param p0 the point coordinate
+	 *
+	 * @return the WKT
+	 */
+	static string toPoint(const Coordinate& p0);
+ 
+
 protected:
 	string formatter;
 	void appendGeometryTaggedText(const Geometry *geometry, int level, Writer *writer);
@@ -495,6 +524,18 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.19  2006/01/15 21:19:06  strk
  * Added WKBWriter::writeHEX() and WKBReader::readHEX()
  *

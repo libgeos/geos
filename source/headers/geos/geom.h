@@ -1061,8 +1061,13 @@ public:
 	Envelope(const Envelope &env);
 	Envelope(const string &str);
 	~Envelope(void);
-	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q);
-	static bool intersects(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
+
+	static bool intersects(const Coordinate& p1, const Coordinate& p2,
+			const Coordinate& q);
+
+	static bool intersects(const Coordinate& p1, const Coordinate& p2,
+			const Coordinate& q1, const Coordinate& q2);
+
 	void init(void);
 	void init(double x1, double x2, double y1, double y2);
 	void init(const Coordinate& p1, const Coordinate& p2);
@@ -1098,6 +1103,56 @@ public:
 	 *  indicates that this is a null Envelope.
 	 */
 	inline double getMinX() const;
+
+	/**
+	 * Computes the coordinate of the centre of this envelope
+	 * (as long as it is non-null)
+	 *
+	 * @param centre The coordinate to write results into
+	 * @return NULL is the center could not be found
+	 * (null envelope).
+	 */
+	bool centre(Coordinate& centre) const;
+
+	/**
+	 * Computes the intersection of two {@link Envelopes}
+	 *
+	 * @param env the envelope to intersect with
+	 * @param result the envelope representing the intersection of
+	 *               the envelopes (this will be the null envelope
+	 *               if either argument is null, or they do not intersect)
+	 * @return false if not intersection is found
+	 */
+	bool intersection(const Envelope& env, Envelope& result);
+
+	/**
+	 * Translates this envelope by given amounts in the X and Y direction.
+	 *
+	 * @param transX the amount to translate along the X axis
+	 * @param transY the amount to translate along the Y axis
+	 */
+	void translate(double transX, double transY);
+
+	/**
+	 * Expands this envelope by a given distance in all directions.
+	 * Both positive and negative distances are supported.
+	 *
+	 * @param deltaX the distance to expand the envelope along 
+	 *               the X axis
+	 * @param deltaY the distance to expand the envelope along
+	 *               the Y axis
+	 */
+	void expandBy(double deltaX, double deltaY);
+
+	/**
+	 * Expands this envelope by a given distance in all directions.
+	 * Both positive and negative distances are supported.
+	 *
+	 * @param distance the distance to expand the envelope
+	 * @return this envelope
+	 */
+	void expandBy(double distance) { expandBy(distance, distance); }
+
 	void expandToInclude(const Coordinate& p);
 	void expandToInclude(double x, double y);
 	void expandToInclude(const Envelope* other);
@@ -1510,10 +1565,52 @@ public:
 	/// Returns a buffer region around this Geometry having the given width.
 	virtual Geometry* buffer(double distance) const;
 
-	/// Returns a buffer region around this Geometry having the given width and with a specified number of segments used to approximate curves.
+	/// \brief
+	/// Returns a buffer region around this Geometry having the
+	/// given width and with a specified number of segments used
+	/// to approximate curves.
 	virtual Geometry* buffer(double distance,int quadrantSegments) const;
 
-	/// Returns the smallest convex Polygon that contains all the points in the Geometry.
+	/** \brief
+	 * Computes a buffer area around this geometry having the given
+	 * width and with a specified accuracy of approximation for circular
+	 * arcs, and using a specified end cap style.
+	 * 
+	 * Buffer area boundaries can contain circular arcs.
+	 * To represent these arcs using linear geometry they must be
+	 * approximated with line segments.
+	 *
+	 * The <code>quadrantSegments</code> argument allows controlling the
+	 * accuracy of the approximation by specifying the number of line
+	 * segments used to represent a quadrant of a circle
+	 * 
+	 * The end cap style specifies the buffer geometry that will be
+	 * created at the ends of linestrings.  The styles provided are:
+	 * 
+	 * - BufferOp::CAP_ROUND - (default) a semi-circle
+	 * - BufferOp::CAP_BUTT  - a straight line perpendicular to the
+	 *                         end segment
+	 * - BufferOp::CAP_SQUARE - a half-square
+	 * 
+	 *
+	 * @param distance the width of the buffer
+	 *                 (may be positive, negative or 0)
+	 *
+	 * @param quadrantSegments the number of line segments used
+	 *                         to represent a quadrant of a circle
+	 *
+	 * @param endCapStyle the end cap style to use
+	 *
+	 * @return an area geometry representing the buffer region
+	 *
+	 * @see BufferOp
+	 */
+	virtual Geometry* buffer(double distance, int quadrantSegments,
+			int endCapStyle) const;
+
+	/// \brief
+	/// Returns the smallest convex Polygon that contains
+	/// all the points in the Geometry.
 	virtual Geometry* convexHull() const;
 
 	/** \brief
@@ -1648,20 +1745,11 @@ protected:
 	bool equal(const Coordinate& a, const Coordinate& b,double tolerance) const;
 	int SRID;
 
-	/**
-	* The GEOS algorithms assume that Geometry::getCoordinate() and
-	* #getCoordinates
-	* are fast, which may not be the case if the CoordinateSequence is not a
-	* CoordinateArraySequence (e.g. if it were implemented using separate
-	* arrays for the x- and y-values), in which case frequent
-	* construction of Coordinates takes up much space and time.
-	* To solve this performance problem, toInternalGeometry converts the
-	* Geometry to a CoordinateArraySequence
-	* implementation before sending it
-	* to the JTS algorithms.
-	*/
-	Geometry* toInternalGeometry(const Geometry *g) const;
-	Geometry* fromInternalGeometry(const Geometry *g) const;
+	/// @deprecated
+	//Geometry* toInternalGeometry(const Geometry *g) const;
+
+	/// @deprecated
+	//Geometry* fromInternalGeometry(const Geometry *g) const;
 
 	/// Polygon overrides to check for actual rectangle
 	virtual bool isRectangle() const { return false; }
@@ -2193,6 +2281,15 @@ public:
 	virtual int compareToSameClass(const Geometry *ls) const;
 	virtual const Coordinate* getCoordinate() const;
 	virtual double getLength() const;
+
+	/**
+	 * Creates a LineString whose coordinates are in the reverse
+	 * order of this objects
+	 *
+	 * @return a LineString with coordinates in the reverse order
+	 */
+  	LineString* reverse() const;
+
 protected:
 	virtual Envelope* computeEnvelopeInternal() const;
 	CoordinateSequence* points;
@@ -2453,7 +2550,8 @@ public:
 	 *	of the constructed MultiLineString.
 	 * 	
 	 */
-	MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *newFactory);
+	MultiLineString(vector<Geometry *> *newLines,
+			const GeometryFactory *newFactory);
 
 	virtual ~MultiLineString();
 
@@ -2478,6 +2576,16 @@ public:
 
 	MultiLineString(const MultiPoint &mp): GeometryCollection(mp) {}
 	Geometry *clone() const { return new MultiLineString(*this); };
+	/**
+	 * Creates a {@link MultiLineString} in the reverse
+	 * order to this object.
+	 * Both the order of the component LineStrings
+	 * and the order of their coordinate sequences
+	 * are reversed.
+	 *
+	 * @return a {@link MultiLineString} in the reverse order
+	 */
+	MultiLineString* reverse() const;
 
 private:
 #ifdef INT64_CONST_IS_I64
@@ -2749,6 +2857,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.63  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.62  2006/02/08 12:59:55  strk
  * - NEW Geometry::applyComponentFilter() templated method
  * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries

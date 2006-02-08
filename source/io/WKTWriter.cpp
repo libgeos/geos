@@ -16,7 +16,8 @@
 #include <geos/io.h>
 #include <geos/util.h>
 #include <typeinfo>
-#include <stdio.h>
+#include <stdio.h> // should avoid this
+#include <sstream>
 
 #define PRINT_Z 0
 
@@ -30,7 +31,66 @@ WKTWriter::WKTWriter() {
 
 WKTWriter::~WKTWriter() {}
 
-string WKTWriter::createFormatter(const PrecisionModel* precisionModel) {
+/*static*/
+string
+WKTWriter::toLineString(const CoordinateSequence& seq)
+{
+	stringstream buf("LINESTRING ", ios_base::in|ios_base::out);
+	unsigned int npts = seq.getSize();
+	if ( npts == 0 )
+	{
+		buf << "EMPTY";
+	}
+	else
+	{
+		buf << "(";
+		for (unsigned int i=0; i<npts; ++i)
+		{
+			if (i) buf << ", ";
+			buf << seq.getX(i) << " " << seq.getY(i);
+#if PRINT_Z
+			buf << seq.getZ(i);
+#endif
+		}
+		buf << ")";
+	}
+
+	return buf.str();
+}
+
+/*static*/
+string
+WKTWriter::toLineString(const Coordinate& p0, const Coordinate& p1)
+{
+	stringstream ret("LINESTRING (", ios_base::in|ios_base::out);
+	ret << p0.x << " " << p0.y;
+#if PRINT_Z
+	ret << " " << p0.z;
+#endif
+	ret << ", " << p1.x << " " << p1.y;
+#if PRINT_Z
+	ret << " " << p1.z;
+#endif
+
+	return ret.str();
+}
+
+/*static*/
+string
+WKTWriter::toPoint(const Coordinate& p0)
+{
+	stringstream ret("POINT (", ios_base::in|ios_base::out);
+#if PRINT_Z
+	ret << p0.x << " " << p0.y  << " " << p0.z << " )";
+#else
+	ret << p0.x << " " << p0.y  << " )";
+#endif
+	return ret.str();
+}
+
+string
+WKTWriter::createFormatter(const PrecisionModel* precisionModel)
+{
 	// the default number of decimal places is 16, which is sufficient
 	// to accomodate the maximum precision of a double.
     int decimalPlaces = precisionModel->getMaximumSignificantDigits();
@@ -307,6 +367,18 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.22  2006/01/18 17:46:57  strk
  * Fixed leak in ::writeFormatted(Geometry *)
  *

@@ -28,6 +28,15 @@
 
 namespace geos {
 
+class BufferBuilder;
+class BufferOp;
+class BufferSubgraph;
+class DepthSegment;
+class OffsetCurveBuilder;
+class OffsetCurveSetBuilder;
+class RightmostEdgeFinder;
+class SubgraphDepthLocater;
+
 /*
  * \class RightmostEdgeFinder opBuffer.h geos/opBuffer.h
  *
@@ -191,164 +200,7 @@ vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
 	return &dirEdgeList;
 }
 
-/*
- * \class BufferOp opBuffer.h geos/opBuffer.h
- *
- * \brief
- * Computes the buffer of a geometry, for both positive and negative
- * buffer distances.
- *
- * In GIS, the buffer of a geometry is defined as
- * the Minkowski sum or difference of the geometry
- * with a circle with radius equal to the absolute value of the buffer
- * distance.
- * In the CAD/CAM world buffers are known as </b>offset curves</b>.
- * 
- * Since true buffer curves may contain circular arcs,
- * computed buffer polygons can only be approximations to the true geometry.
- * The user can control the accuracy of the curve approximation by specifying
- * the number of linear segments with which to approximate a curve.
- * 
- * The end cap style of a linear buffer may be specified.
- * The following end cap styles are supported:
- * - CAP_ROUND - the usual round end caps
- * - CAP_BUTT - end caps are truncated flat at the line ends
- * - CAP_SQUARE - end caps are squared off at the buffer distance
- *   beyond the line ends
- * 
- * The computation uses an algorithm involving iterated noding and
- * precision reduction to provide a high degree of robustness.
- */
-class BufferOp {
-
-private:
-
-	static int MAX_PRECISION_DIGITS;
-
-	/*
-	 * Compute a reasonable scale factor to limit the precision of
-	 * a given combination of Geometry and buffer distance.
-	 * The scale factor is based on a heuristic.
-	 *
-	 * @param g the Geometry being buffered
-	 *
-	 * @param distance the buffer distance
-	 *
-	 * @param maxPrecisionDigits the mzx # of digits that should be
-	 *        allowed by the precision determined by the
-	 *        computed scale factor
-	 *
-	 * @return a scale factor that allows a reasonable amount of
-	 *         precision for the buffer computation
-	 */
-	static double precisionScaleFactor(Geometry *g,	double distance,int maxPrecisionDigits);
-
-	Geometry *argGeom;
-
-	TopologyException *saveException;
-
-	double distance;
-
-	int quadrantSegments;
-
-	int endCapStyle;
-
-	Geometry* resultGeometry;
-
-	void computeGeometry();
-
-	void bufferOriginalPrecision();
-
-	void bufferFixedPrecision(int precisionDigits);
-
-public:
-
-	enum {
-		/// Specifies a round line buffer end cap style.
-		CAP_ROUND,
-		/// Specifies a butt (or flat) line buffer end cap style.
-		CAP_BUTT,
-		/// Specifies a square line buffer end cap style.
-		CAP_SQUARE
-	};
-
-	/**
-	 * Computes the buffer of a geometry for a given buffer distance.
-	 *
-	 * @param g the geometry to buffer
-	 * @param distance the buffer distance
-	 * @return the buffer of the input geometry
-	 */
-	static Geometry* bufferOp(Geometry *g, double distance);
-
-	/**
-	 * Comutes the buffer for a geometry for a given buffer distance
-	 * and accuracy of approximation.
-	 *
-	 * @param g the geometry to buffer
-	 * @param distance the buffer distance
-	 * @param quadrantSegments the number of segments used to
-	 *        approximate a quarter circle
-	 * @return the buffer of the input geometry
-	 *
-	 */
-	static Geometry* bufferOp(Geometry *g, double distance, int quadrantSegments);
-
-	/**
-	 * Initializes a buffer computation for the given geometry
-	 *
-	 * @param g the geometry to buffer
-	 */
-	BufferOp(Geometry *g);
-
-	/**
-	 * Specifies the end cap style of the generated buffer.
-	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
-	 * The default is CAP_ROUND.
-	 *
-	 * @param endCapStyle the end cap style to specify
-	 */
-	inline void setEndCapStyle(int nEndCapStyle);
-
-	/**
-	 * Specifies the end cap style of the generated buffer.
-	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
-	 * The default is CAP_ROUND.
-	 *
-	 * @param endCapStyle the end cap style to specify
-	 */
-	inline void setQuadrantSegments(int nQuadrantSegments);
-
-	/**
-	 * Returns the buffer computed for a geometry for a given buffer
-	 * distance.
-	 *
-	 * @param g the geometry to buffer
-	 * @param distance the buffer distance
-	 * @return the buffer of the input geometry
-	 */
-	Geometry* getResultGeometry(double nDistance);
-
-	/**
-	 * Comutes the buffer for a geometry for a given buffer distance
-	 * and accuracy of approximation.
-	 *
-	 * @param g the geometry to buffer
-	 * @param distance the buffer distance
-	 * @param quadrantSegments the number of segments used to
-	 * approximate a quarter circle
-	 * @return the buffer of the input geometry
-	 *
-	 * @deprecated use setQuadrantSegments instead
-	 */
-	Geometry* getResultGeometry(double nDistance, int nQuadrantSegments);
-};
-
-// BufferOp inlines
-void BufferOp::setQuadrantSegments(int q) { quadrantSegments=q; }
-void BufferOp::setEndCapStyle(int s) { endCapStyle=s; }
-
-/*
+/**
  * \class OffsetCurveBuilder opBuffer.h geos/opBuffer.h
  *
  * \brief
@@ -486,6 +338,161 @@ void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
 
 
 /*
+ * \class BufferOp opBuffer.h geos/opBuffer.h
+ *
+ * \brief
+ * Computes the buffer of a geometry, for both positive and negative
+ * buffer distances.
+ *
+ * In GIS, the buffer of a geometry is defined as
+ * the Minkowski sum or difference of the geometry
+ * with a circle with radius equal to the absolute value of the buffer
+ * distance.
+ * In the CAD/CAM world buffers are known as </b>offset curves</b>.
+ * 
+ * Since true buffer curves may contain circular arcs,
+ * computed buffer polygons can only be approximations to the true geometry.
+ * The user can control the accuracy of the curve approximation by specifying
+ * the number of linear segments with which to approximate a curve.
+ * 
+ * The end cap style of a linear buffer may be specified.
+ * The following end cap styles are supported:
+ * - CAP_ROUND - the usual round end caps
+ * - CAP_BUTT - end caps are truncated flat at the line ends
+ * - CAP_SQUARE - end caps are squared off at the buffer distance
+ *   beyond the line ends
+ * 
+ * The computation uses an algorithm involving iterated noding and
+ * precision reduction to provide a high degree of robustness.
+ */
+class BufferOp {
+
+
+private:
+
+	static int MAX_PRECISION_DIGITS;
+
+	/*
+	 * Compute a reasonable scale factor to limit the precision of
+	 * a given combination of Geometry and buffer distance.
+	 * The scale factor is based on a heuristic.
+	 *
+	 * @param g the Geometry being buffered
+	 *
+	 * @param distance the buffer distance
+	 *
+	 * @param maxPrecisionDigits the mzx # of digits that should be
+	 *        allowed by the precision determined by the
+	 *        computed scale factor
+	 *
+	 * @return a scale factor that allows a reasonable amount of
+	 *         precision for the buffer computation
+	 */
+	static double precisionScaleFactor(const Geometry *g,
+			double distance,int maxPrecisionDigits);
+
+	const Geometry *argGeom;
+
+	TopologyException *saveException;
+
+	double distance;
+
+	int quadrantSegments;
+
+	int endCapStyle;
+
+	Geometry* resultGeometry;
+
+	void computeGeometry();
+
+	void bufferOriginalPrecision();
+
+	void bufferFixedPrecision(int precisionDigits);
+
+public:
+
+	enum {
+		/// Specifies a round line buffer end cap style.
+		CAP_ROUND,
+		/// Specifies a butt (or flat) line buffer end cap style.
+		CAP_BUTT,
+		/// Specifies a square line buffer end cap style.
+		CAP_SQUARE
+	};
+
+	/**
+	 * Comutes the buffer for a geometry for a given buffer distance
+	 * and accuracy of approximation.
+	 *
+	 * @param g the geometry to buffer
+	 * @param distance the buffer distance
+	 * @param quadrantSegments the number of segments used to
+	 *        approximate a quarter circle
+	 * @return the buffer of the input geometry
+	 *
+	 */
+	static Geometry* bufferOp(const Geometry *g,
+		double distance,
+		int quadrantSegments=
+			OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS,
+		int endCapStyle=BufferOp::CAP_ROUND);
+
+	/**
+	 * Initializes a buffer computation for the given geometry
+	 *
+	 * @param g the geometry to buffer
+	 */
+	BufferOp(const Geometry *g);
+
+	/**
+	 * Specifies the end cap style of the generated buffer.
+	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
+	 * The default is CAP_ROUND.
+	 *
+	 * @param endCapStyle the end cap style to specify
+	 */
+	inline void setEndCapStyle(int nEndCapStyle);
+
+	/**
+	 * Specifies the end cap style of the generated buffer.
+	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
+	 * The default is CAP_ROUND.
+	 *
+	 * @param endCapStyle the end cap style to specify
+	 */
+	inline void setQuadrantSegments(int nQuadrantSegments);
+
+	/**
+	 * Returns the buffer computed for a geometry for a given buffer
+	 * distance.
+	 *
+	 * @param g the geometry to buffer
+	 * @param distance the buffer distance
+	 * @return the buffer of the input geometry
+	 */
+	Geometry* getResultGeometry(double nDistance);
+
+	/**
+	 * Comutes the buffer for a geometry for a given buffer distance
+	 * and accuracy of approximation.
+	 *
+	 * @param g the geometry to buffer
+	 * @param distance the buffer distance
+	 * @param quadrantSegments the number of segments used to
+	 * approximate a quarter circle
+	 * @return the buffer of the input geometry
+	 *
+	 * @deprecated use setQuadrantSegments instead
+	 */
+	Geometry* getResultGeometry(double nDistance, int nQuadrantSegments);
+};
+
+// BufferOp inlines
+void BufferOp::setQuadrantSegments(int q) { quadrantSegments=q; }
+void BufferOp::setEndCapStyle(int s) { endCapStyle=s; }
+
+
+/**
  * \class OffsetCurveSetBuilder opBuffer.h geos/opBuffer.h
  *
  * \brief
@@ -734,7 +741,7 @@ public:
 
 	void setEndCapStyle(int nEndCapStyle);
 
-	Geometry* buffer(Geometry *g, double distance);
+	Geometry* buffer(const Geometry *g, double distance);
 		// throw (GEOSException *);
 
 private:
@@ -779,6 +786,18 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.10  2005/11/08 20:12:44  strk
  * Memory overhead reductions in buffer operations.
  *

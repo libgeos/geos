@@ -5,14 +5,127 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <vector>
+#include <cassert>
+#include <geos/geom.h>
+#include <geos/operation.h>
+
+namespace geos {
+
+/**
+* Constructs a <code>MultiLineString</code>.
+*
+* @param  newLines
+*	the <code>LineStrings</code>s for this
+*	<code>MultiLineString</code>, or <code>null</code>
+*	or an empty array to create the empty geometry.
+*	Elements may be empty <code>LineString</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will take ownership of
+*	the vector and its elements.
+*/
+MultiLineString::MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *factory): GeometryCollection(newLines,factory){}
+
+MultiLineString::~MultiLineString(){}
+
+int MultiLineString::getDimension() const {
+	return 1;
+}
+
+int MultiLineString::getBoundaryDimension() const {
+	if (isClosed()) {
+		return Dimension::False;
+	}
+	return 0;
+}
+
+string MultiLineString::getGeometryType() const {
+	return "MultiLineString";
+}
+
+bool MultiLineString::isClosed() const {
+	if (isEmpty()) {
+		return false;
+	}
+	for (unsigned int i = 0; i < geometries->size(); i++) {
+		if (!((LineString *)(*geometries)[i])->isClosed()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool MultiLineString::isSimple() const {
+	IsSimpleOp iso;
+	return iso.isSimple(this);
+}
+
+Geometry* MultiLineString::getBoundary() const {
+	if (isEmpty()) {
+		return getFactory()->createGeometryCollection(NULL);
+	}
+	//Geometry *in = toInternalGeometry(this);
+	GeometryGraph gg(0, this);
+	CoordinateSequence *pts=gg.getBoundaryPoints();
+	//if ( (MultiLineString *)in != this ) delete(in);
+	Geometry *ret = getFactory()->createMultiPoint(*pts);
+	delete pts;
+	return ret;
+}
+
+bool
+MultiLineString::equalsExact(const Geometry *other, double tolerance) const
+{
+    if (!isEquivalentClass(other)) {
+      return false;
+    }
+	return GeometryCollection::equalsExact(other, tolerance);
+}
+GeometryTypeId
+MultiLineString::getGeometryTypeId() const {
+	return GEOS_MULTILINESTRING;
+}
+
+MultiLineString*
+MultiLineString::reverse() const
+{
+	unsigned int nLines = geometries->size();
+	Geometry::NonConstVect *revLines = new Geometry::NonConstVect(nLines);
+	for (unsigned int i=0; i<nLines; ++i)
+	{
+		assert(dynamic_cast<LineString*>((*geometries)[i]));
+		LineString *iLS = static_cast<LineString*>((*geometries)[i]);
+		(*revLines)[nLines-1-i] = iLS->reverse();
+	}
+	return getFactory()->createMultiLineString(revLines);
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.25  2006/02/08 17:18:28  strk
+ * - New WKTWriter::toLineString and ::toPoint convenience methods
+ * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
+ * - New Envelope::centre()
+ * - New Envelope::intersection(Envelope)
+ * - New Envelope::expandBy(distance, [ydistance])
+ * - New LineString::reverse()
+ * - New MultiLineString::reverse()
+ * - New Geometry::buffer(distance, quadSeg, endCapStyle)
+ * - Obsoleted toInternalGeometry/fromInternalGeometry
+ * - More const-correctness in Buffer "package"
+ *
  * Revision 1.24  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -99,89 +212,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/geom.h>
-#include <geos/operation.h>
-
-namespace geos {
-
-/**
-* Constructs a <code>MultiLineString</code>.
-*
-* @param  newLines
-*	the <code>LineStrings</code>s for this
-*	<code>MultiLineString</code>, or <code>null</code>
-*	or an empty array to create the empty geometry.
-*	Elements may be empty <code>LineString</code>s,
-*	but not <code>null</code>s.
-*
-*	Constructed object will take ownership of
-*	the vector and its elements.
-*/
-MultiLineString::MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *factory): GeometryCollection(newLines,factory){}
-
-MultiLineString::~MultiLineString(){}
-
-int MultiLineString::getDimension() const {
-	return 1;
-}
-
-int MultiLineString::getBoundaryDimension() const {
-	if (isClosed()) {
-		return Dimension::False;
-	}
-	return 0;
-}
-
-string MultiLineString::getGeometryType() const {
-	return "MultiLineString";
-}
-
-bool MultiLineString::isClosed() const {
-	if (isEmpty()) {
-		return false;
-	}
-	for (unsigned int i = 0; i < geometries->size(); i++) {
-		if (!((LineString *)(*geometries)[i])->isClosed()) {
-			return false;
-		}
-	}
-	return true;
-}
-
-bool MultiLineString::isSimple() const {
-	IsSimpleOp iso;
-	Geometry *in = toInternalGeometry(this);
-	bool issimple = iso.isSimple((MultiLineString *)in);
-	if ( (MultiLineString *)in != this ) delete(in);
-	return issimple;
-}
-
-Geometry* MultiLineString::getBoundary() const {
-	if (isEmpty()) {
-		return getFactory()->createGeometryCollection(NULL);
-	}
-	Geometry *in = toInternalGeometry(this);
-	GeometryGraph gg(0, in);
-	CoordinateSequence *pts=gg.getBoundaryPoints();
-	if ( (MultiLineString *)in != this ) delete(in);
-	Geometry *ret = getFactory()->createMultiPoint(*pts);
-	delete pts;
-	return ret;
-}
-
-bool
-MultiLineString::equalsExact(const Geometry *other, double tolerance) const
-{
-    if (!isEquivalentClass(other)) {
-      return false;
-    }
-	return GeometryCollection::equalsExact(other, tolerance);
-}
-GeometryTypeId
-MultiLineString::getGeometryTypeId() const {
-	return GEOS_MULTILINESTRING;
-}
-}
 
