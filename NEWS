@@ -21,6 +21,7 @@ Changes in 3.0.0
 	  from GeometryCollection to Geometry class.
 	- New planarSubgraph class
 	- New ConnectedSubgraphFinder class.
+	- New LineSequencer class
 
 - Optimizations:
 	- WKT parser speedup
