@@ -5,7 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,6 +20,7 @@
 #include <geos/platform.h>
 #include <geos/geosAlgorithm.h>
 #include <vector>
+#include <list>
 #include <string>
 #include <map>
 
@@ -36,7 +37,6 @@ class planarGraphComponent;
 class planarNode;
 class planarNodeMap;
 class planarPlanarGraph;
-class planarSubgraph;
 class planarSubgraph;
 
 
@@ -95,7 +95,7 @@ public:
 	virtual void setVisited(bool isVisited) { isVisitedVar=isVisited; }
 
 	/**
-	 * Sets the Visited state for the elements in a map,
+	 * Sets the Visited state for the elements of a container,
 	 * from start to end iterator.
 	 *
 	 * @param start the start element
@@ -105,7 +105,14 @@ public:
 	template <typename T>
 	static void setVisited(T start, T end, bool visited) {
 		for(T i=start; i!=end; ++i) {
-			(*i).second->setVisited(visited);
+			//i->second->setVisited(visited);
+			(*i)->setVisited(visited);
+		}
+	}
+	template <typename T>
+	static void setVisitedMap(T start, T end, bool visited) {
+		for(T i=start; i!=end; ++i) {
+			i->second->setVisited(visited);
 		}
 	}
 
@@ -134,14 +141,14 @@ bool pdeLessThan(planarDirectedEdge *first,planarDirectedEdge * second);
  */
 class planarDirectedEdgeStar {
 protected:
+
+private:
 	/**
 	 * \brief The underlying list of outgoing DirectedEdges
 	 */
-	vector<planarDirectedEdge*> outEdges;
-
-private:
-	bool sorted;
-	void sortEdges();
+	mutable vector<planarDirectedEdge*> outEdges;
+	mutable bool sorted;
+	void sortEdges() const;
 
 public:
 	/**
@@ -168,12 +175,14 @@ public:
 	vector<planarDirectedEdge*>::iterator iterator() { return begin(); }
 	vector<planarDirectedEdge*>::iterator begin();
 	vector<planarDirectedEdge*>::iterator end();
+	vector<planarDirectedEdge*>::const_iterator begin() const;
+	vector<planarDirectedEdge*>::const_iterator end() const;
 
 	/**
 	 * \brief Returns the number of edges around the Node associated
 	 * with this DirectedEdgeStar.
 	 */
-	unsigned int getDegree() const { return outEdges.size(); }
+	int getDegree() const { return outEdges.size(); }
 
 	/**
 	 * \brief Returns the coordinate for the node at wich this
@@ -282,14 +291,13 @@ public:
 	 * \brief Returns the collection of DirectedEdges that
 	 * leave this Node.
 	 */
-	planarDirectedEdgeStar* getOutEdges() {
-		return deStar;
-	}
+	planarDirectedEdgeStar* getOutEdges() { return deStar; }
+	const planarDirectedEdgeStar* getOutEdges() const { return deStar; }
 
 	/**
 	 * \brief Returns the number of edges around this Node.
 	 */
-	int getDegree() {
+	int getDegree() const {
 		return deStar->getDegree();
 	}
 
@@ -319,6 +327,9 @@ class planarEdge: public planarGraphComponent {
 
 public:
 	typedef set<const planarEdge *> ConstSet;
+	typedef set<planarEdge *> NonConstSet;
+	typedef vector<planarEdge *> NonConstVect;
+	typedef vector<const planarEdge *> ConstVect;
 
 protected:
 
@@ -386,6 +397,12 @@ public:
  */
 class planarDirectedEdge: public planarGraphComponent {
 //friend class Unload;
+
+public:
+
+	typedef list<planarDirectedEdge *> NonConstList;
+	typedef list<const planarDirectedEdge *> ConstList;
+	typedef vector<planarDirectedEdge *> NonConstVect;
 
 protected:
 	//static const CGAlgorithms* cga;
@@ -597,15 +614,24 @@ public:
 	 * sorted in ascending order
 	 * by angle with the positive x-axis.
 	 */
-	map<Coordinate,planarNode*,planarCoordLT>::iterator iterator() {
+	//map<Coordinate,planarNode*,planarCoordLT>::iterator iterator() {
+	container::iterator iterator() {
 		return nodeMap.begin();
 	}
 
-	map<Coordinate,planarNode*,planarCoordLT>::iterator begin() {
+	//map<Coordinate,planarNode*,planarCoordLT>::iterator begin() {
+	container::iterator begin() {
+		return nodeMap.begin();
+	}
+	container::const_iterator begin() const {
 		return nodeMap.begin();
 	}
 
-	map<Coordinate,planarNode*,planarCoordLT>::iterator end() {
+	//map<Coordinate,planarNode*,planarCoordLT>::iterator end() {
+	container::iterator end() {
+		return nodeMap.end();
+	}
+	container::const_iterator end() const {
 		return nodeMap.end();
 	}
 
@@ -700,13 +726,23 @@ public:
 	 * \brief
 	 * Returns an Iterator over the Nodes in this PlanarGraph.
 	 */
-	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeIterator() {
+	planarNodeMap::container::iterator nodeIterator() {
 		return nodeMap.begin();
 	}
-	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeBegin() {
+
+	planarNodeMap::container::iterator nodeBegin() {
 		return nodeMap.begin();
 	}
-	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeEnd() {
+
+	planarNodeMap::container::const_iterator nodeBegin() const {
+		return nodeMap.begin();
+	}
+
+	planarNodeMap::container::iterator nodeEnd() {
+		return nodeMap.end();
+	}
+
+	planarNodeMap::container::const_iterator nodeEnd() const {
 		return nodeMap.end();
 	}
 
@@ -806,7 +842,7 @@ class planarSubgraph
 {
 protected:
 	planarPlanarGraph &parentGraph;
-	planarEdge::ConstSet edges;
+	planarEdge::NonConstSet edges;
 	planarDirectedEdge::ConstVect dirEdges;
 	planarNodeMap nodeMap;
 
@@ -842,7 +878,7 @@ public:
 	 *	   the planarEdge has been inserted now or was
 	 *	   already in the set.
 	 */
-	pair<planarEdge::ConstSet::iterator, bool> add(planarEdge *e);
+	pair<planarEdge::NonConstSet::iterator, bool> add(planarEdge *e);
 
 	/**
 	 * Returns an iterator over the planarDirectedEdge in this graph,
@@ -865,14 +901,24 @@ public:
 	 *
 	 * @see add(planarEdge)
 	 */
-	planarEdge::ConstSet::iterator edgeBegin() { return edges.begin(); }
+	planarEdge::NonConstSet::iterator edgeBegin() { return edges.begin(); }
+	planarEdge::NonConstSet::iterator edgeEnd() { return edges.end(); }
 
 	/**
-	 * Returns an {@link Iterator} over the {@link Nodes} in this graph.
-	 * @return an iterator over the nodes
+	 * Returns a iterators over the planarNodesMap::container
+	 * in this graph.
 	 */
-	map<Coordinate,planarNode*,planarCoordLT>::iterator nodeBegin() {
-		return nodeMap.iterator(); 
+	planarNodeMap::container::iterator nodeBegin() {
+		return nodeMap.begin(); 
+	}
+	planarNodeMap::container::const_iterator nodeEnd() const {
+		return nodeMap.end(); 
+	}
+	planarNodeMap::container::iterator nodeEnd() {
+		return nodeMap.end(); 
+	}
+	planarNodeMap::container::const_iterator nodeBegin() const {
+		return nodeMap.begin(); 
 	}
 
 	/**
@@ -940,6 +986,19 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/08 12:59:55  strk
+ * - NEW Geometry::applyComponentFilter() templated method
+ * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
+ *   to return unsigned int.
+ * - Changed planarNode::getDegree() to return unsigned int.
+ * - Added Geometry::NonConstVect typedef
+ * - NEW LineSequencer class
+ * - Changed planarDirectedEdgeStar::outEdges from protected to private
+ * - added static templated setVisitedMap to change Visited flag
+ *   for all values in a map
+ * - Added const versions of some planarDirectedEdgeStar methods.
+ * - Added containers typedefs for planarDirectedEdgeStar
+ *
  * Revision 1.10  2006/02/05 17:14:43  strk
  * - New ConnectedSubgraphFinder class.
  * - More iterators returning methods, inlining and cleanups

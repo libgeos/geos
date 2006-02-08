@@ -20,10 +20,19 @@
 #include <geos/planargraph.h>
 #include <geos/geom.h>
 #include <vector>
+#include <cassert>
 
 namespace geos {
 
 //using namespace planargraph;
+
+class EdgeString;
+class LMGeometryComponentFilter;
+class LineMergeDirectedEdge;
+class LineMergeEdge;
+class LineMergeGraph;
+class LineMerger;
+class LineSequencer;
 
 /*
  * An edge of a LineMergeGraph. The <code>marked</code> field indicates
@@ -208,11 +217,225 @@ public:
 	virtual void filter_ro(const Geometry *geom);
 };
 
-}
+
+/**
+ * Builds a sequence from a set of LineStrings so that
+ * they are ordered end to end.
+ * A sequence is a complete non-repeating list of the linear
+ * components of the input.  Each linestring is oriented
+ * so that identical endpoints are adjacent in the list.
+ *
+ * The input linestrings may form one or more connected sets.
+ * The input linestrings should be correctly noded, or the results may
+ * not be what is expected.
+ * The output of this method is a single MultiLineString containing the ordered
+ * linestrings in the sequence.
+ * 
+ * The sequencing employs the classic <b>Eulerian path</b> graph algorithm.
+ * Since Eulerian paths are not uniquely determined,
+ * further rules are used to
+ * make the computed sequence preserve as much as possible of the input
+ * ordering.
+ * Within a connected subset of lines, the ordering rules are:
+ *
+ * - If there is degree-1 node which is the start
+ *   node of an linestring, use that node as the start of the sequence
+ * - If there is a degree-1 node which is the end
+ *   node of an linestring, use that node as the end of the sequence
+ * - If the sequence has no degree-1 nodes, use any node as the start
+ *
+ * Not all arrangements of lines can be sequenced.
+ * For a connected set of edges in a graph,
+ * Euler's Theorem states that there is a sequence containing each edge once
+ * if and only if there are no more than 2 nodes of odd degree.
+ * If it is not possible to find a sequence, the isSequenceable method
+ * will return <code>false</code>.
+ *
+ * Last port: operation/linemerge/LineSequencer.java rev. 1.5 (JTS-1.7)
+ */
+class LineSequencer {
+
+private:
+	typedef vector<planarDirectedEdge::NonConstList *> Sequences;
+
+	LineMergeGraph graph;
+	const GeometryFactory *factory;
+	unsigned int lineCount;
+	bool isRun;
+	auto_ptr<Geometry> sequencedGeometry;
+	bool isSequenceableVar;
+
+	void addLine(const LineString *lineString);
+	void computeSequence();
+	Sequences* findSequences();
+	planarDirectedEdge::NonConstList* findSequence(planarSubgraph& graph);
+
+	/// return a newly allocated LineString
+	static LineString* reverse(const LineString *line);
+
+	/**
+	 * Builds a geometry ({@link LineString} or {@link MultiLineString} )
+	 * representing the sequence.
+	 *
+	 * @param sequences a vector of vectors of const planarDirectedEdges
+	 *                  with LineMergeEdges as their parent edges.
+	 * @return the sequenced geometry, possibly NULL
+	 *         if no sequence exists
+	 */
+	Geometry* buildSequencedGeometry(const Sequences& sequences);
+
+	static const planarNode* findLowestDegreeNode(const planarSubgraph& graph);
+
+	void addReverseSubpath(const planarDirectedEdge *de,
+		planarDirectedEdge::NonConstList& deList,
+		planarDirectedEdge::NonConstList::iterator lit,
+		bool expectedClosed);
+	
+	/**
+	 * Finds an {@link DirectedEdge} for an unvisited edge (if any),
+	 * choosing the dirEdge which preserves orientation, if possible.
+	 *
+	 * @param node the node to examine
+	 * @return the dirEdge found, or <code>null</code>
+	 *         if none were unvisited
+	 */
+	static const planarDirectedEdge* findUnvisitedBestOrientedDE(const planarNode* node);
+
+	/**
+	 * Computes a version of the sequence which is optimally
+	 * oriented relative to the underlying geometry.
+	 * 
+	 * Heuristics used are:
+	 * 
+	 * - If the path has a degree-1 node which is the start
+	 *   node of an linestring, use that node as the start of the sequence
+	 * - If the path has a degree-1 node which is the end
+	 *   node of an linestring, use that node as the end of the sequence
+	 * - If the sequence has no degree-1 nodes, use any node as the start
+	 *   (NOTE: in this case could orient the sequence according to the
+	 *   majority of the linestring orientations)
+	 *
+	 * @param seq a List of planarDirectedEdges 
+	 * @return the oriented sequence, possibly same as input if already
+	 *         oriented
+	 */
+	planarDirectedEdge::NonConstList*
+	orient(planarDirectedEdge::NonConstList* seq);
+
+	/**
+	 * Reverse the sequence.
+	 * This requires reversing the order of the dirEdges, and flipping
+	 * each dirEdge as well
+	 *
+	 * @param seq a List of DirectedEdges, in sequential order
+	 * @return the reversed sequence
+	 */
+	planarDirectedEdge::NonConstList* reverse(planarDirectedEdge::NonConstList& seq);
+
+	/**
+	 * Tests whether a complete unique path exists in a graph
+	 * using Euler's Theorem.
+	 *
+	 * @param graph the subgraph containing the edges
+	 * @return <code>true</code> if a sequence exists
+	 */
+	bool hasSequence(planarSubgraph& graph);
+
+public:
+
+	LineSequencer()
+		:
+		factory(NULL),
+		lineCount(0),
+		isRun(false),
+		sequencedGeometry(NULL),
+		isSequenceableVar(false)
+		{}
+
+	/**
+	 * Tests whether a {@link Geometry} is sequenced correctly.
+	 * {@llink LineString}s are trivially sequenced.
+	 * {@link MultiLineString}s are checked for correct sequencing.
+	 * Otherwise, <code>isSequenced</code> is defined
+	 * to be <code>true</code> for geometries that are not lineal.
+	 *
+	 * @param geom the geometry to test
+	 * @return true if the geometry is sequenced or is not lineal
+	 */
+	static bool isSequenced(const Geometry* geom);
+
+	/**
+	 * Tests whether the arrangement of linestrings has a valid
+	 * sequence.
+	 *
+	 * @return <code>true</code> if a valid sequence exists.
+	 */
+	bool isSequenceable() {
+		computeSequence();
+		return isSequenceableVar;
+	}
+
+	/**
+	 * Adds a {@link Geometry} to be sequenced.
+	 * May be called multiple times.
+	 * Any dimension of Geometry may be added; the constituent
+	 * linework will be extracted.
+	 *
+	 * @param geometry the geometry to add
+	 */
+	void add(const Geometry& geometry) {
+		geometry.applyComponentFilter(*this);
+	}
+
+	/**
+	 * Act as a GeometryComponentFilter so to extract
+	 * the linearworks
+	 */
+	void filter(const Geometry* g)
+	{
+		if (const LineString *ls=dynamic_cast<const LineString *>(g))
+		{
+			addLine(ls);
+		}
+	}
+
+	/**
+	 * Returns the LineString or MultiLineString
+	 * built by the sequencing process, if one exists.
+	 *
+	 * @param release release ownership of computed Geometry
+	 * @return the sequenced linestrings,
+	 *         or <code>null</code> if a valid sequence
+	 *         does not exist.
+	 */
+	Geometry* getSequencedLineStrings(bool release=1) {
+		computeSequence();
+		if (release) return sequencedGeometry.release();
+		else return sequencedGeometry.get();
+	}
+
+
+};
+
+} // namespace geos
+
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/08 12:59:55  strk
+ * - NEW Geometry::applyComponentFilter() templated method
+ * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
+ *   to return unsigned int.
+ * - Changed planarNode::getDegree() to return unsigned int.
+ * - Added Geometry::NonConstVect typedef
+ * - NEW LineSequencer class
+ * - Changed planarDirectedEdgeStar::outEdges from protected to private
+ * - added static templated setVisitedMap to change Visited flag
+ *   for all values in a map
+ * - Added const versions of some planarDirectedEdgeStar methods.
+ * - Added containers typedefs for planarDirectedEdgeStar
+ *
  * Revision 1.6  2005/09/26 11:01:32  strk
  * Const correctness changes in LineMerger package, and a few speedups.
  *

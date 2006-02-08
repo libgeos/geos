@@ -1285,6 +1285,9 @@ public:
 	/// A vector of const Geometry pointers
 	typedef vector<const Geometry *> ConstVect;
 
+	/// A vector of non-const Geometry pointers
+	typedef vector<Geometry *> NonConstVect;
+
 	Geometry(const Geometry &geom);
 
 	/** \brief
@@ -1552,6 +1555,22 @@ public:
 	virtual void apply_ro(GeometryFilter *filter) const;
 	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
+
+	/** \brief
+	 * Apply a fiter to each component of this geometry.
+	 * The filter is expected to provide a .filter(const Geometry*)
+	 * method.
+	 * 
+	 * I intend similar templated methods to replace
+	 * all the virtual apply_rw and apply_ro functions...
+	 *                --strk(2005-02-06);
+	 */
+	template <class T>
+	void applyComponentFilter(T& f) const
+	{
+		for(unsigned int i=0, n=getNumGeometries(); i<n; ++i)
+			f.filter(getGeometryN(i));
+	}
 
 	/// Converts this Geometry to normal form (or  canonical form).
 	virtual void normalize()=0; //Abstract
@@ -2730,6 +2749,19 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.62  2006/02/08 12:59:55  strk
+ * - NEW Geometry::applyComponentFilter() templated method
+ * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
+ *   to return unsigned int.
+ * - Changed planarNode::getDegree() to return unsigned int.
+ * - Added Geometry::NonConstVect typedef
+ * - NEW LineSequencer class
+ * - Changed planarDirectedEdgeStar::outEdges from protected to private
+ * - added static templated setVisitedMap to change Visited flag
+ *   for all values in a map
+ * - Added const versions of some planarDirectedEdgeStar methods.
+ * - Added containers typedefs for planarDirectedEdgeStar
+ *
  * Revision 1.61  2006/02/04 00:54:57  strk
  * - Doxygen dox updated
  * - LineStringLT struct moved from geomgraph.h to geom.h

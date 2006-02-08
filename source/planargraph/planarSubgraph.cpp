@@ -20,10 +20,10 @@
 namespace geos {
 //namespace planargraph {
 
-pair<planarEdge::ConstSet::iterator, bool>
+pair<planarEdge::NonConstSet::iterator, bool>
 planarSubgraph::add(planarEdge *e)
 {
-	pair<planarEdge::ConstSet::iterator,bool> p = edges.insert(e);
+	pair<planarEdge::NonConstSet::iterator,bool> p = edges.insert(e);
 	if (!p.second) return p;
 
 	dirEdges.push_back(e->getDirEdge(0));
@@ -39,6 +39,19 @@ planarSubgraph::add(planarEdge *e)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/08 12:59:56  strk
+ * - NEW Geometry::applyComponentFilter() templated method
+ * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
+ *   to return unsigned int.
+ * - Changed planarNode::getDegree() to return unsigned int.
+ * - Added Geometry::NonConstVect typedef
+ * - NEW LineSequencer class
+ * - Changed planarDirectedEdgeStar::outEdges from protected to private
+ * - added static templated setVisitedMap to change Visited flag
+ *   for all values in a map
+ * - Added const versions of some planarDirectedEdgeStar methods.
+ * - Added containers typedefs for planarDirectedEdgeStar
+ *
  * Revision 1.1  2006/02/04 00:54:57  strk
  * - Doxygen dox updated
  * - LineStringLT struct moved from geomgraph.h to geom.h

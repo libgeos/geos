@@ -22,7 +22,7 @@ namespace geos {
 void
 ConnectedSubgraphFinder::getConnectedSubgraphs(vector<planarSubgraph *>& subgraphs)
 {
-	planarGraphComponent::setVisited(graph.nodeBegin(),
+	planarGraphComponent::setVisitedMap(graph.nodeBegin(),
 			graph.nodeEnd(), false);
 
 	for (planarPlanarGraph::EdgeIterator
@@ -86,6 +86,19 @@ ConnectedSubgraphFinder::addEdges(planarNode* node,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/08 12:59:56  strk
+ * - NEW Geometry::applyComponentFilter() templated method
+ * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
+ *   to return unsigned int.
+ * - Changed planarNode::getDegree() to return unsigned int.
+ * - Added Geometry::NonConstVect typedef
+ * - NEW LineSequencer class
+ * - Changed planarDirectedEdgeStar::outEdges from protected to private
+ * - added static templated setVisitedMap to change Visited flag
+ *   for all values in a map
+ * - Added const versions of some planarDirectedEdgeStar methods.
+ * - Added containers typedefs for planarDirectedEdgeStar
+ *
  * Revision 1.1  2006/02/05 17:14:43  strk
  * - New ConnectedSubgraphFinder class.
  * - More iterators returning methods, inlining and cleanups

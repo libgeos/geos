@@ -9,7 +9,8 @@ liboplinemerge_la_SOURCES = \
 	LineMergeDirectedEdge.cpp \
 	LineMergeEdge.cpp \
 	LineMergeGraph.cpp \
-	LineMerger.cpp 
+	LineMerger.cpp \
+	LineSequencer.cpp
 
 liboplinemerge_la_LIBADD = 
 

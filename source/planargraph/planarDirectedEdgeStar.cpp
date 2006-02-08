@@ -47,19 +47,28 @@ planarDirectedEdgeStar::remove(planarDirectedEdge *de)
 }
 
 vector<planarDirectedEdge*>::iterator
-planarDirectedEdgeStar::begin()
-{
+planarDirectedEdgeStar::begin() {
 	sortEdges();
 	return outEdges.begin();
 }
 
 vector<planarDirectedEdge*>::iterator
-planarDirectedEdgeStar::end()
-{
+planarDirectedEdgeStar::end() {
 	sortEdges();
 	return outEdges.end();
 }
 
+vector<planarDirectedEdge*>::const_iterator
+planarDirectedEdgeStar::begin() const {
+	sortEdges();
+	return outEdges.begin();
+}
+
+vector<planarDirectedEdge*>::const_iterator
+planarDirectedEdgeStar::end() const {
+	sortEdges();
+	return outEdges.end();
+}
 
 /*
  * Returns the coordinate for the node at wich this star is based
@@ -93,8 +102,9 @@ pdeLessThan(planarDirectedEdge *first, planarDirectedEdge * second)
 		return false;
 }
 
+/*private*/
 void
-planarDirectedEdgeStar::sortEdges()
+planarDirectedEdgeStar::sortEdges() const
 {
 	if (!sorted) {
 		sort(outEdges.begin(), outEdges.end(), pdeLessThan);
@@ -165,6 +175,19 @@ planarDirectedEdgeStar::getNextEdge(planarDirectedEdge *dirEdge)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/08 12:59:56  strk
+ * - NEW Geometry::applyComponentFilter() templated method
+ * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
+ *   to return unsigned int.
+ * - Changed planarNode::getDegree() to return unsigned int.
+ * - Added Geometry::NonConstVect typedef
+ * - NEW LineSequencer class
+ * - Changed planarDirectedEdgeStar::outEdges from protected to private
+ * - added static templated setVisitedMap to change Visited flag
+ *   for all values in a map
+ * - Added const versions of some planarDirectedEdgeStar methods.
+ * - Added containers typedefs for planarDirectedEdgeStar
+ *
  * Revision 1.7  2006/02/05 17:14:43  strk
  * - New ConnectedSubgraphFinder class.
  * - More iterators returning methods, inlining and cleanups
