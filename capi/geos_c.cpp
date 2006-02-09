@@ -91,6 +91,7 @@ extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
 extern "C" CoordinateSequence GEOS_DLL *GEOSGeom_getCoordSeq(Geometry *g1);
 
+extern "C" int GEOS_DLL GEOSArea(const Geometry *g1, double *area);
 extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
 
@@ -550,6 +551,34 @@ GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
 		return 0;
 	}
 }
+
+int
+GEOSArea(const Geometry *g, double *area)
+{
+    try {
+        *area = g->getArea();
+        return 1;
+    }
+	catch (GEOSException *ge)
+	{
+		ERROR_MESSAGE((char *)ge->toString().c_str());
+		delete ge;
+		return 0;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 0;
+	}
+}
+
 
 
 Geometry *

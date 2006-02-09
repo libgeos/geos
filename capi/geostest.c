@@ -143,7 +143,7 @@ do_all(char *inputfile)
 	FILE *input;
 	char *ptr;
 	size_t size;
-	double dist;
+	double dist, area;
 
 	input = fopen(inputfile, "r");
 	if ( ! input ) { perror("fopen"); exit(1); }
@@ -309,6 +309,10 @@ do_all(char *inputfile)
 	/* Distance */
 	if ( GEOSDistance(g1, g2, &dist) ) printf("Distance: %g\n", dist);
 
+    /* Area */
+    if ( GEOSArea(g1, &area) ) printf("Area 1: %g\n", area);
+    if ( GEOSArea(g2, &area) ) printf("Area 2: %g\n", area);
+    
 	GEOSGeom_destroy(g1);
 	GEOSGeom_destroy(g2);
 

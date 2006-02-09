@@ -318,6 +318,7 @@ extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
  ***********************************************************************/
 
 /* Return 0 on exception, 1 otherwise */
+extern int GEOS_DLL GEOSArea(const GEOSGeom g1, double *area);
 extern int GEOS_DLL GEOSDistance(const GEOSGeom g1, const GEOSGeom g2,
 	double *dist);
 
