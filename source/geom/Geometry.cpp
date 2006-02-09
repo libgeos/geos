@@ -141,7 +141,7 @@ Geometry::Geometry(const Geometry &geom)
 {
 	factory=geom.factory; 
 	envelope=new Envelope(*(geom.envelope));
-	SRID=factory->getSRID();
+	SRID=geom.getSRID();
 	userData=NULL;
 }
 
@@ -296,53 +296,6 @@ Geometry::geometryChangedAction()
 {
 	delete envelope;
 	envelope=NULL;
-}
-
-int Geometry::getSRID() const {return SRID;}
-void Geometry::setSRID(int newSRID) {SRID=newSRID;}
-
-/**
- * Gets the factory which contains the context in which this geometry was created.
- *
- * @return the factory for this geometry
- */
-const GeometryFactory*
-Geometry::getFactory() const
-{
-	return factory;
-}
-
-/**
- * Gets the user data object for this geometry, if any.
- *
- * @return the user data object, or <code>null</code> if none set
- */
-void *
-Geometry::getUserData()
-{
-	return userData;
-}
-
-/**
- * A simple scheme for applications to add their own custom data to a Geometry.
- * An example use might be to add an object representing a Coordinate Reference System.
- *
- * Note that user data objects are not present in geometries created by
- * construction methods.
- *
- * @param userData an object, the semantics for which are defined by the
- * application using this Geometry
- */
-void
-Geometry::setUserData(void* newUserData)
-{
-	userData=newUserData;
-}
-
-const PrecisionModel*
-Geometry::getPrecisionModel() const
-{
-	return factory->getPrecisionModel();
 }
 
 bool
@@ -853,6 +806,10 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.86  2006/02/09 13:44:57  strk
+ * Added support for SRID in input WKB, undeprecated Geometry::setSRID
+ * and Geometry::getSRID
+ *
  * Revision 1.85  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

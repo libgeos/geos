@@ -230,31 +230,45 @@ WKBReader::readGeometry()
 	cout<<"WKB hasSRID: "<<hasZ<<endl;
 #endif
 
-	if (hasSRID) dis.readInt(); // skip SRID
+	int SRID = -1;
+	if (hasSRID) SRID = dis.readInt(); // read SRID
 
 
 	// allocate space for ordValues 
 	if ( ordValues.size() < inputDimension )
 		ordValues.resize(inputDimension);
 
+	Geometry *result;
 
 	switch (geometryType) {
 		case WKBConstants::wkbPoint :
-			return readPoint();
+			result = readPoint();
+			break;
 		case WKBConstants::wkbLineString :
-			return readLineString();
+			result = readLineString();
+			break;
 		case WKBConstants::wkbPolygon :
-			return readPolygon();
+			result = readPolygon();
+			break;
 		case WKBConstants::wkbMultiPoint :
-			return readMultiPoint();
+			result = readMultiPoint();
+			break;
 		case WKBConstants::wkbMultiLineString :
-			return readMultiLineString();
+			result = readMultiLineString();
+			break;
 		case WKBConstants::wkbMultiPolygon :
-			return readMultiPolygon();
+			result = readMultiPolygon();
+			break;
 		case WKBConstants::wkbGeometryCollection :
-			return readGeometryCollection();
+			result = readGeometryCollection();
+			break;
+		default:
+			throw new ParseException("Unknown WKB type " +
+					geometryType);
 	}
-	throw new ParseException("Unknown WKB type " + geometryType);
+
+	result->setSRID(SRID);
+	return result;
 }
 
 Point *

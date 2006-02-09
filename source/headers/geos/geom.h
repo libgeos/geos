@@ -38,16 +38,24 @@ namespace geos {
 
 class CGAlgorithms;
 class Coordinate;
-class CoordinateFilter;
 class CoordinateArraySequence;
 class CoordinateArraySequenceFactory;
+class CoordinateFilter;
 class CoordinateSequence;
 class Envelope;
 class Geometry;
+class GeometryCollection;
 class GeometryFactory;
 class GeometryFilter;
 class IntersectionMatrix;
+class LineString;
+class LinearRing;
+class MultiLineString;
+class MultiPoint;
+class MultiPolygon;
 class Point;
+class Point;
+class Polygon;
 struct CoordinateLessThen;
 struct LineStringLT;
 
@@ -1249,6 +1257,207 @@ Envelope::intersects(double x, double y) const
 	return (x <= maxx && x >= minx && y <= maxy && y >= miny);
 }
 
+/**
+ * \class GeometryFactory geom.h geos.h
+ * \brief Supplies a set of utility methods for building Geometry objects
+ * from CoordinateSequence or other Geometry objects.
+ */
+class GeometryFactory {
+public:
+	/**
+	 * \brief 
+	 * Constructs a GeometryFactory that generates Geometries having a
+	 * floating PrecisionModel and a spatial-reference ID of 0.
+	 */
+	GeometryFactory();
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having
+	 * the given PrecisionModel, spatial-reference ID, and
+	 * CoordinateSequence implementation.
+	 */
+	GeometryFactory(const PrecisionModel *pm, int newSRID,
+		CoordinateSequenceFactory *nCoordinateSequenceFactory);
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having the
+	 * given CoordinateSequence implementation, a double-precision floating
+	 * PrecisionModel and a spatial-reference ID of 0.
+	 */
+	GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory);
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having
+	 * the given PrecisionModel and the default CoordinateSequence
+	 * implementation.
+	 *
+	 * @param pm the PrecisionModel to use
+	 */
+	GeometryFactory(const PrecisionModel *pm);
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having
+	 * the given {@link PrecisionModel} and spatial-reference ID,
+	 * and the default CoordinateSequence implementation.
+	 *
+	 * @param pm the PrecisionModel to use
+	 * @param newSRID the SRID to use
+	 */
+	GeometryFactory(const PrecisionModel* pm, int newSRID);
+
+	/**
+	 * \brief Copy constructor
+	 *
+	 * @param gf the GeometryFactory to clone from
+	 */
+	GeometryFactory(const GeometryFactory &gf);
+
+	/// Destructor
+	virtual ~GeometryFactory();
+
+//Skipped a lot of list to array convertors
+
+	Point* createPointFromInternalCoord(const Coordinate* coord,
+			const Geometry *exemplar) const;
+
+	/// Envelope to Geometry converter
+	Geometry* toGeometry(const Envelope* envelope) const;
+
+	/// \brief
+	/// Returns the PrecisionModel that Geometries created by this
+	/// factory will be associated with.
+	const PrecisionModel* getPrecisionModel() const;
+
+	/// Creates an EMPTY Point
+	Point* createPoint() const;
+
+	/// Creates a Point using the given Coordinate
+	Point* createPoint(const Coordinate& coordinate) const;
+
+	/// Creates a Point taking ownership of the given CoordinateSequence
+	Point* createPoint(CoordinateSequence *coordinates) const;
+
+	/// Creates a Point with a deep-copy of the given CoordinateSequence.
+	Point* createPoint(const CoordinateSequence &coordinates) const;
+
+	/// Construct an EMPTY GeometryCollection
+	GeometryCollection* createGeometryCollection() const;
+
+	/// Construct a GeometryCollection taking ownership of given arguments
+	GeometryCollection* createGeometryCollection(
+			vector<Geometry *> *newGeoms) const;
+
+	/// Constructs a GeometryCollection with a deep-copy of args
+	GeometryCollection* createGeometryCollection(
+			const vector<Geometry *> &newGeoms) const;
+
+	/// Construct an EMPTY MultiLineString 
+	MultiLineString* createMultiLineString() const;
+
+	/// Construct a MultiLineString taking ownership of given arguments
+	MultiLineString* createMultiLineString(
+			vector<Geometry *> *newLines) const;
+
+	/// Construct a MultiLineString with a deep-copy of given arguments
+	MultiLineString* createMultiLineString(
+			const vector<Geometry *> &fromLines) const;
+
+	/// Construct an EMPTY MultiPolygon 
+	MultiPolygon* createMultiPolygon() const;
+
+	/// Construct a MultiPolygon taking ownership of given arguments
+	MultiPolygon* createMultiPolygon(vector<Geometry *> *newPolys) const;
+
+	/// Construct a MultiPolygon with a deep-copy of given arguments
+	MultiPolygon* createMultiPolygon(
+			const vector<Geometry *> &fromPolys) const;
+
+	/// Construct an EMPTY LinearRing 
+	LinearRing* createLinearRing() const;
+
+	/// Construct a LinearRing taking ownership of given arguments
+	LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
+
+	/// Construct a LinearRing with a deep-copy of given arguments
+	LinearRing* createLinearRing(
+			const CoordinateSequence& coordinates) const;
+
+	/// Constructs an EMPTY <code>MultiPoint</code>.
+	MultiPoint* createMultiPoint() const;
+
+	/// Construct a MultiPoint taking ownership of given arguments
+	MultiPoint* createMultiPoint(vector<Geometry *> *newPoints) const;
+
+	/// Construct a MultiPoint with a deep-copy of given arguments
+	MultiPoint* createMultiPoint(
+			const vector<Geometry *> &fromPoints) const;
+
+	/// \brief
+	/// Construct a MultiPoint containing a Point geometry
+	/// for each Coordinate in the given list.
+	MultiPoint* createMultiPoint(
+			const CoordinateSequence &fromCoords) const;
+
+	/// Construct an EMPTY Polygon 
+	Polygon* createPolygon() const;
+
+	/// Construct a Polygon taking ownership of given arguments
+	Polygon* createPolygon(LinearRing *shell,
+			vector<Geometry *> *holes) const;
+
+	/// Construct a Polygon with a deep-copy of given arguments
+	Polygon* createPolygon(const LinearRing &shell,
+			const vector<Geometry *> &holes) const;
+
+	/// Construct an EMPTY LineString 
+	LineString* createLineString() const;
+
+	/// Construct a LineString taking ownership of given argument
+	LineString* createLineString(CoordinateSequence* coordinates) const;
+
+	/// Construct a LineString with a deep-copy of given argument
+	LineString* createLineString(
+			const CoordinateSequence& coordinates) const;
+
+	/// \brief
+	/// Construct the most suitable Geometry using the
+	/// given Geometries; will take ownership of arguments.
+	Geometry* buildGeometry(vector<Geometry *> *geoms) const;
+
+	/// \brief
+	/// Construct the most suitable Geometry using the given Geometries;
+	/// will use a deep-copy of arguments.
+	Geometry* buildGeometry(const vector<Geometry *> &geoms) const;
+	
+	int getSRID() const {return SRID;};
+
+	/// \brief
+	/// Returns the CoordinateSequenceFactory associated
+	/// with this GeometryFactory
+	const CoordinateSequenceFactory* getCoordinateSequenceFactory() const
+	{return coordinateListFactory;};
+
+	/// Returns a clone of given Geometry.
+	Geometry* createGeometry(const Geometry *g) const;
+
+	/// Destroy a Geometry, or release it
+	void destroyGeometry(Geometry *g) const;
+
+private:
+	const PrecisionModel* precisionModel;
+	int SRID;
+#ifdef INT64_CONST_IS_I64
+	static const int64 serialVersionUID = -6820524753094095635I64;
+#else
+	static const int64 serialVersionUID = -6820524753094095635LL;
+#endif        
+	const CoordinateSequenceFactory *coordinateListFactory;
+};
+
 
 /**
  * \class Geometry geom.h geos.h
@@ -1366,7 +1575,7 @@ public:
 	 *
 	 * @return the factory for this geometry
 	 */
-	const GeometryFactory* getFactory() const;
+	const GeometryFactory* getFactory() const { return factory; }
 
 	/**
 	* \brief
@@ -1381,7 +1590,7 @@ public:
 	* @param newUserData an object, the semantics for which are
 	* defined by the application using this Geometry
 	*/
-	void setUserData(void* newUserData);
+	void setUserData(void* newUserData) { userData=newUserData; }
 
 	/**
 	* \brief
@@ -1389,7 +1598,7 @@ public:
 	*
 	* @return the user data object, or <code>null</code> if none set
 	*/
-	void* getUserData();
+	void* getUserData() { return userData; }
 
 	/*
 	 * \brief
@@ -1406,20 +1615,21 @@ public:
 	 * <code>Geometry</code> is defined.
 	 *
 	 */
-	virtual int getSRID() const;
+	virtual int getSRID() const { return SRID; }
 
 	/*
 	 * Sets the ID of the Spatial Reference System used by the
 	 * <code>Geometry</code>.
-	 * @deprecated use setUserData instead
 	 */
-	virtual void setSRID(int newSRID);
+	virtual void setSRID(int newSRID) { SRID=newSRID; }
 
 	/**
 	 * \brief
 	 * Get the PrecisionModel used to create this Geometry.
 	 */
-	virtual const PrecisionModel* getPrecisionModel() const;
+	virtual const PrecisionModel* getPrecisionModel() const {
+		return factory->getPrecisionModel();
+	}
 
 	/// Returns a vertex of this Geometry.
 	virtual const Coordinate* getCoordinate() const=0; //Abstract
@@ -1538,9 +1748,11 @@ public:
 	 * For more information on the DE-9IM, see the OpenGIS Simple
 	 * Features Specification.
 	 */
-	virtual bool relate(const Geometry *g, const string& intersectionPattern) const;
+	virtual bool relate(const Geometry *g,
+			const string& intersectionPattern) const;
 
-	bool relate(const Geometry& g, const string& intersectionPattern) const {
+	bool relate(const Geometry& g, const string& intersectionPattern) const
+	{
 		return relate(&g, intersectionPattern);
 	}
 
@@ -1735,14 +1947,19 @@ protected:
 	 */
 	virtual bool isEquivalentClass(const Geometry *other) const;
 
-	static void checkNotGeometryCollection(const Geometry *g); // throw(IllegalArgumentException *);
+	static void checkNotGeometryCollection(const Geometry *g);
+			// throw(IllegalArgumentException *);
+
 	//virtual void checkEqualSRID(Geometry *other);
+
 	//virtual void checkEqualPrecisionModel(Geometry *other);
+
 	virtual Envelope* computeEnvelopeInternal() const=0; //Abstract
 	virtual int compareToSameClass(const Geometry *geom) const=0; //Abstract
 	int compare(vector<Coordinate> a, vector<Coordinate> b) const;
 	int compare(vector<Geometry *> a, vector<Geometry *> b) const;
-	bool equal(const Coordinate& a, const Coordinate& b,double tolerance) const;
+	bool equal(const Coordinate& a, const Coordinate& b,
+			double tolerance) const;
 	int SRID;
 
 	/// @deprecated
@@ -1753,6 +1970,7 @@ protected:
 
 	/// Polygon overrides to check for actual rectangle
 	virtual bool isRectangle() const { return false; }
+
 private:
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter geometryChangedFilter;
@@ -1764,7 +1982,8 @@ private:
 	const GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 	void* userData;
-	Point* createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const;
+	Point* createPointFromInternalCoord(const Coordinate* coord,
+			const Geometry *exemplar) const;
 };
 
 struct GeometryGreaterThen {
@@ -2657,182 +2876,6 @@ private:
 #endif        
 };
 
-/**
- * \class GeometryFactory geom.h geos.h
- * \brief Supplies a set of utility methods for building Geometry objects
- * from CoordinateSequence or other Geometry objects.
- */
-class GeometryFactory {
-public:
-	/**
-	* \brief 
-	* Constructs a GeometryFactory that generates Geometries having a
-	* floating PrecisionModel and a spatial-reference ID of 0.
-	*/
-	GeometryFactory();
-
-	/**
-	* \brief
-	* Constructs a GeometryFactory that generates Geometries having
-	* the given PrecisionModel, spatial-reference ID, and
-	* CoordinateSequence implementation.
-	*/
-	GeometryFactory(const PrecisionModel *pm, int newSRID, CoordinateSequenceFactory *nCoordinateSequenceFactory);
-
-	/**
-	* \brief
-	* Constructs a GeometryFactory that generates Geometries having the
-	* given CoordinateSequence implementation, a double-precision floating
-	* PrecisionModel and a spatial-reference ID of 0.
-	*/
-	GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory);
-
-	/**
-	* \brief
-	* Constructs a GeometryFactory that generates Geometries having
-	* the given PrecisionModel and the default CoordinateSequence
-	* implementation.
-	*
-	* @param pm the PrecisionModel to use
-	*/
-	GeometryFactory(const PrecisionModel *pm);
-
-	/**
-	* \brief
-	* Constructs a GeometryFactory that generates Geometries having
-	* the given {@link PrecisionModel} and spatial-reference ID,
-	* and the default CoordinateSequence implementation.
-	*
-	* @param pm the PrecisionModel to use
-	* @param newSRID the SRID to use
-	*/
-	GeometryFactory(const PrecisionModel* pm, int newSRID);
-
-	/**
-	* \brief Copy constructor
-	*
-	* @param gf the GeometryFactory to clone from
-	*/
-	GeometryFactory(const GeometryFactory &gf);
-
-	/// Destructor
-	virtual ~GeometryFactory();
-
-//Skipped a lot of list to array convertors
-
-	Point* createPointFromInternalCoord(const Coordinate* coord, const Geometry *exemplar) const;
-
-	/// Envelope to Geometry converter
-	Geometry* toGeometry(const Envelope* envelope) const;
-
-	/// Returns the PrecisionModel that Geometries created by this factory will be associated with.
-	const PrecisionModel* getPrecisionModel() const;
-
-	/// Creates an EMPTY Point
-	Point* createPoint() const;
-
-	/// Creates a Point using the given Coordinate
-	Point* createPoint(const Coordinate& coordinate) const;
-
-	/// Creates a Point taking ownership of the given CoordinateSequence
-	Point* createPoint(CoordinateSequence *coordinates) const;
-
-	/// Creates a Point with a deep-copy of the given CoordinateSequence.
-	Point* createPoint(const CoordinateSequence &coordinates) const;
-
-	/// Construct an EMPTY GeometryCollection
-	GeometryCollection* createGeometryCollection() const;
-
-	/// Construct a GeometryCollection taking ownership of given arguments
-	GeometryCollection* createGeometryCollection(vector<Geometry *> *newGeoms) const;
-
-	/// Constructs a GeometryCollection with a deep-copy of args
-	GeometryCollection* createGeometryCollection(const vector<Geometry *> &newGeoms) const;
-
-	/// Construct an EMPTY MultiLineString 
-	MultiLineString* createMultiLineString() const;
-
-	/// Construct a MultiLineString taking ownership of given arguments
-	MultiLineString* createMultiLineString(vector<Geometry *> *newLines) const;
-
-	/// Construct a MultiLineString with a deep-copy of given arguments
-	MultiLineString* createMultiLineString(const vector<Geometry *> &fromLines) const;
-
-	/// Construct an EMPTY MultiPolygon 
-	MultiPolygon* createMultiPolygon() const;
-
-	/// Construct a MultiPolygon taking ownership of given arguments
-	MultiPolygon* createMultiPolygon(vector<Geometry *> *newPolys) const;
-
-	/// Construct a MultiPolygon with a deep-copy of given arguments
-	MultiPolygon* createMultiPolygon(const vector<Geometry *> &fromPolys) const;
-
-	/// Construct an EMPTY LinearRing 
-	LinearRing* createLinearRing() const;
-
-	/// Construct a LinearRing taking ownership of given arguments
-	LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
-
-	/// Construct a LinearRing with a deep-copy of given arguments
-	LinearRing* createLinearRing(const CoordinateSequence& coordinates) const;
-
-	/// Constructs an EMPTY <code>MultiPoint</code>.
-	MultiPoint* createMultiPoint() const;
-
-	/// Construct a MultiPoint taking ownership of given arguments
-	MultiPoint* createMultiPoint(vector<Geometry *> *newPoints) const;
-
-	/// Construct a MultiPoint with a deep-copy of given arguments
-	MultiPoint* createMultiPoint(const vector<Geometry *> &fromPoints) const;
-
-	/// Construct a MultiPoint containing a Point geometry for each Coordinate in the given list.
-	MultiPoint* createMultiPoint(const CoordinateSequence &fromCoords) const;
-
-	/// Construct an EMPTY Polygon 
-	Polygon* createPolygon() const;
-
-	/// Construct a Polygon taking ownership of given arguments
-	Polygon* createPolygon(LinearRing *shell, vector<Geometry *> *holes) const;
-
-	/// Construct a Polygon with a deep-copy of given arguments
-	Polygon* createPolygon(const LinearRing &shell, const vector<Geometry *> &holes) const;
-
-	/// Construct an EMPTY LineString 
-	LineString* createLineString() const;
-
-	/// Construct a LineString taking ownership of given argument
-	LineString* createLineString(CoordinateSequence* coordinates) const;
-
-	/// Construct a LineString with a deep-copy of given argument
-	LineString* createLineString(const CoordinateSequence& coordinates) const;
-
-	/// Construct the most suitable Geometry using the given Geometries; will take ownership of arguments.
-	Geometry* buildGeometry(vector<Geometry *> *geoms) const;
-
-	/// Construct the most suitable Geometry using the given Geometries; will use a deep-copy of arguments.
-	Geometry* buildGeometry(const vector<Geometry *> &geoms) const;
-	
-	int getSRID() const {return SRID;};
-
-	/// Returns the CoordinateSequenceFactory associated with this GeometryFactory
-	const CoordinateSequenceFactory* getCoordinateSequenceFactory() const {return coordinateListFactory;};
-
-	/// Returns a clone of given Geometry.
-	Geometry* createGeometry(const Geometry *g) const;
-
-	/// Destroy a Geometry, or release it
-	void destroyGeometry(Geometry *g) const;
-
-private:
-	const PrecisionModel* precisionModel;
-	int SRID;
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = -6820524753094095635I64;
-#else
-	static const int64 serialVersionUID = -6820524753094095635LL;
-#endif        
-	const CoordinateSequenceFactory *coordinateListFactory;
-};
 
 /*
  * Represents a planar triangle, and provides methods for calculating various
@@ -2857,6 +2900,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.64  2006/02/09 13:44:57  strk
+ * Added support for SRID in input WKB, undeprecated Geometry::setSRID
+ * and Geometry::getSRID
+ *
  * Revision 1.63  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
