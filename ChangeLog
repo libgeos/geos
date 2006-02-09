@@ -1,3 +1,8 @@
+2006-02-08  Frank Warmerdam  <warmerdam@pobox.com>
+
+	* source/io/WKBReader.cpp: Modified to allow reading a WKB 'POLYGON
+	EMPTY' (numRings==0).  
+
 2006-02-02 03:20  strk
 
 	* source/geom/Polygon.cpp (1.53): Fixed bug in isRectangle()
