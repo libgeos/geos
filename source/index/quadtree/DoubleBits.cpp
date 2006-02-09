@@ -22,7 +22,7 @@ double
 DoubleBits::powerOf2(int exp)
 {
 	if (exp>1023 || exp<-1022)
-		throw new IllegalArgumentException("Exponent out of bounds");
+		throw  IllegalArgumentException("Exponent out of bounds");
 #if ASSUME_IEEE_DOUBLE
 	int64 expBias=exp+EXPONENT_BIAS;
 	int64 bits=expBias << 52;
@@ -162,6 +162,9 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.17  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

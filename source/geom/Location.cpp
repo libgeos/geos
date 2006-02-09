@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.10  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *
@@ -53,7 +56,7 @@ char Location::toLocationSymbol(int locationValue) {
 		default:
 			ostringstream s;
 			s<<"Unknown location value: "<<locationValue;
-			throw new IllegalArgumentException(s.str());
+			throw  IllegalArgumentException(s.str());
 	}
 }
 }

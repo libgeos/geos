@@ -59,7 +59,7 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const Geome
 		return;
 	}
 	if (hasNullElements(newGeoms)) {
-		throw new IllegalArgumentException("geometries must not contain null elements\n");
+		throw  IllegalArgumentException("geometries must not contain null elements\n");
 		return;
 	}
 	geometries=newGeoms;
@@ -152,14 +152,14 @@ GeometryCollection::getGeometryType() const
 bool
 GeometryCollection::isSimple() const
 {
-	throw new IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
+	throw  IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
 	return false;
 }
 
 Geometry*
 GeometryCollection::getBoundary() const
 {
-	throw new IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
+	throw  IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
 	return NULL;
 }
 
@@ -324,6 +324,9 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.51  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.50  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

@@ -113,12 +113,12 @@ SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges)
 	SegmentString *split0=(*splitEdges)[0];
 	Coordinate pt0=split0->getCoordinate(0);
 	if (!(pt0==edgePts->getAt(0)))
-		throw new GEOSException("bad split edge start point at " + pt0.toString());
+		throw  GEOSException("bad split edge start point at " + pt0.toString());
 	SegmentString *splitn=(*splitEdges)[splitEdges->size()-1];
 	const CoordinateSequence *splitnPts=splitn->getCoordinatesRO();
 	const Coordinate &ptn=splitnPts->getAt(splitnPts->getSize()-1);
 	if (!(ptn==edgePts->getAt(edgePts->getSize()-1)))
-		throw new GEOSException("bad split edge end point at " + ptn.toString());
+		throw  GEOSException("bad split edge end point at " + ptn.toString());
 }
 
 /**
@@ -167,6 +167,9 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.17  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

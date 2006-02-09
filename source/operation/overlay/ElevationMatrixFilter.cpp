@@ -50,8 +50,7 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 #if DEBUG
 		cerr<<"  z set to "<<c->z<<endl;
 #endif
-	} catch (IllegalArgumentException *ex) {
-		delete ex;
+	} catch (const IllegalArgumentException& ex) {
 		c->z = avgElevation;
 	}
 }
@@ -70,6 +69,9 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.5  2005/12/11 10:41:57  strk
  * Fixed premature initialization of average Z value in ElevationMatrixFilter
  *

@@ -255,7 +255,7 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	for (unsigned int i=0; i<fromLines.size(); i++)
 	{
 		const LineString *line = dynamic_cast<const LineString *>(fromLines[i]);
-		if ( ! line ) throw new IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
+		if ( ! line ) throw  IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
 		(*newGeoms)[i] = new LineString(*line);
 	}
 	MultiLineString *g = NULL;
@@ -798,6 +798,9 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.56  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.55  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

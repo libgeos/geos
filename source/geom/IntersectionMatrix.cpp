@@ -301,7 +301,7 @@ IntersectionMatrix::matches(string requiredDimensionSymbols)
 		ostringstream s;
 		s<<"IllegalArgumentException: Should be length 9: "<<
 			requiredDimensionSymbols<<endl;
-		throw new IllegalArgumentException(s.str());
+		throw  IllegalArgumentException(s.str());
 	}
 	for (int ai = 0; ai < 3; ai++) {
 		for (int bi = 0; bi < 3; bi++) {
@@ -345,6 +345,9 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.14  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

@@ -176,7 +176,7 @@ GeometryGraph::add(const Geometry *g)
 		addCollection((GeometryCollection*) g);
 	else {
 		string out=typeid(*g).name();
-		throw new UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
+		throw  UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
 	}
 }
 
@@ -453,6 +453,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.17  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

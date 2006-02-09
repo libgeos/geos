@@ -433,9 +433,8 @@ void do_all()
 			Geometry *g2 = g->buffer(10);
 			newgeoms->push_back(g2);
 		}
-		catch (GEOSException *exc) {
-			cerr <<"GEOS Exception: geometry "<<i<<"->buffer(10): "<<exc->toString()<<"\n";
-			delete exc;
+		catch (const GEOSException& exc) {
+			cerr <<"GEOS Exception: geometry "<<i<<"->buffer(10): "<<exc.toString()<<"\n";
 		}
 	}
 
@@ -496,13 +495,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -528,13 +525,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -560,13 +555,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -592,13 +585,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -624,13 +615,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -656,13 +645,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -688,13 +675,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -727,13 +712,11 @@ cout<<"-------------------------------------------------------------------------
 				delete im; // delete afterwards
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -759,13 +742,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -792,13 +773,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -825,13 +804,11 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (IllegalArgumentException *exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
-				delete exc;
 			}
-			catch (GEOSException *exc) {
-				cerr<<exc->toString()<<endl;
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr<<exc.toString()<<endl;
 			}
 		}
 		cout<<endl;
@@ -861,13 +838,11 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// It's illegal to union a collection ...
-			catch (IllegalArgumentException *ill) {
-				//cerr <<ill->toString()<<"\n";
-				delete ill;
+			catch (const IllegalArgumentException& ill) {
+				//cerr <<ill.toString()<<"\n";
 			}
-			catch (GEOSException *exc) {
-				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
 			}
 		}
 	}
@@ -898,13 +873,11 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// Collection are illegal as intersection argument
-			catch (IllegalArgumentException *ill) {
-				//cerr <<ill->toString()<<"\n";
-				delete ill;
+			catch (const IllegalArgumentException& ill) {
+				//cerr <<ill.toString()<<"\n";
 			}
-			catch (GEOSException *exc) {
-				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
 			}
 		}
 	}
@@ -933,13 +906,11 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// Collection are illegal as difference argument
-			catch (IllegalArgumentException *ill) {
-				//cerr <<ill->toString()<<"\n";
-				delete ill;
+			catch (const IllegalArgumentException& ill) {
+				//cerr <<ill.toString()<<"\n";
 			}
-			catch (GEOSException *exc) {
-				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
 			}
 		}
 	}
@@ -968,13 +939,11 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// Collection are illegal as symdifference argument
-			catch (IllegalArgumentException *ill) {
-				//cerr <<ill->toString()<<"\n";
-				delete ill;
+			catch (const IllegalArgumentException& ill) {
+				//cerr <<ill.toString()<<"\n";
 			}
-			catch (GEOSException *exc) {
-				cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
-				delete exc;
+			catch (const GEOSException& exc) {
+				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
 			}
 		}
 	}
@@ -1051,13 +1020,12 @@ main()
 	}
 	// All exception thrown by GEOS are subclasses of this
 	// one, so this is a catch-all 
-	catch (GEOSException *exc)
+	catch (const GEOSException& exc)
 	{
-		cerr <<"GEOS Exception: "<<exc->toString()<<"\n";
-		delete exc;
+		cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
 		exit(1);
 	}
-	catch (exception &e)
+	catch (const exception &e)
 	{
 		cerr <<"Standard exception thrown: "<<e.what()<<endl;
 		exit(1);
@@ -1079,6 +1047,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.36  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

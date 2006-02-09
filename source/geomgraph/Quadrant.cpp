@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.4  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
@@ -49,7 +52,7 @@ int Quadrant::quadrant(double dx, double dy) {
 		ostringstream s;
 		s<<"Cannot compute the quadrant for point ";
 		s<<"("<<dx<<","<<dy<<")"<<endl;
-		throw new IllegalArgumentException(s.str());
+		throw  IllegalArgumentException(s.str());
 	}
 	if (dx >= 0) {
 		if (dy >= 0)
@@ -72,7 +75,7 @@ int Quadrant::quadrant(const Coordinate& p0, const Coordinate& p1) {
 	double dy=p1.y-p0.y;
 	if (dx==0.0 && dy==0.0)
 	{
-		throw new IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
+		throw  IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
 	}
 	return quadrant(dx, dy);
 }

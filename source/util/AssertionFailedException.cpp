@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.8  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -40,6 +43,6 @@ AssertionFailedException::AssertionFailedException(string msg){
 	setMessage(msg);
 }
 
-AssertionFailedException::~AssertionFailedException(){}
-}
+} // namespace geos
+
 

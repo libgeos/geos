@@ -148,7 +148,7 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 	do {
 		Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
 		if (de->getEdgeRing()==this)
-			throw new TopologyException("Directed Edge visited twice during ring-building at ",&(de->getCoordinate()));
+			throw  TopologyException("Directed Edge visited twice during ring-building at ",&(de->getCoordinate()));
 		edges.push_back(de);
 		Label *deLabel=de->getLabel();
 		Assert::isTrue(deLabel->isArea());
@@ -275,6 +275,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.10  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -363,6 +366,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.11  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.10  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

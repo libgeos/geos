@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.11  2004/07/07 10:29:54  strk
  * Adjusted exceptions documentation.
  *
@@ -46,7 +49,5 @@ NotRepresentableException::NotRepresentableException(string msg){
 	setName("NotRepresentableException");
 	setMessage(msg);
 }
-NotRepresentableException::~NotRepresentableException(){}
 
-}
-
+} // namespace geos

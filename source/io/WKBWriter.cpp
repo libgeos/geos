@@ -23,7 +23,7 @@ WKBWriter::WKBWriter(int dims, int bo):
 		outputDimension(dims), byteOrder(bo), outStream(NULL)
 {
 	if ( dims < 2 || dims > 3 )
-		throw new IllegalArgumentException("WKB output dimension must be 2 or 3");
+		throw  IllegalArgumentException("WKB output dimension must be 2 or 3");
 }
 
 void
@@ -76,7 +76,7 @@ WKBWriter::write(const Geometry &g, ostream &os)
 void
 WKBWriter::writePoint(const Point &g) 
 {
-	if (g.isEmpty()) throw new
+	if (g.isEmpty()) throw 
 IllegalArgumentException("Empty Points cannot be represented in WKB");
 
 	writeByteOrder();

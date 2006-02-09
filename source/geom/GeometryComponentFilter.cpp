@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.6  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -35,7 +38,7 @@ void GeometryComponentFilter::filter_rw(Geometry *geom) {
 }
 
 void GeometryComponentFilter::filter_ro(const Geometry *geom) {
-	throw new UnsupportedOperationException("GeometryComponentFilter only sets a geometry-changed flag, cannot be read-only\n");
+	throw  UnsupportedOperationException("GeometryComponentFilter only sets a geometry-changed flag, cannot be read-only\n");
 }
 
 

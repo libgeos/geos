@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.31  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.30  2005/09/26 12:23:51  strk
  * Initializzation lists in PrecisionModel ctors
  *
@@ -263,7 +266,7 @@ double PrecisionModel::getScale() const {
 *
 */
 void PrecisionModel::setScale(double newScale) {
-	if ( newScale == 0 ) throw new IllegalArgumentException("PrecisionModel scale cannot be 0"); 
+	if ( newScale == 0 ) throw  IllegalArgumentException("PrecisionModel scale cannot be 0"); 
 	scale=fabs(newScale);
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.12  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -87,7 +90,7 @@ const Geometry* GeometryCollectionIterator::next() {
 	}
 	if (index>=max) {
 		if ( subcollectionIterator ) delete subcollectionIterator; 
-		throw new UnsupportedOperationException("No more elements");
+		throw  UnsupportedOperationException("No more elements");
 	}
 	const Geometry *obj=parent->getGeometryN(index++);
 	if ((typeid(*obj)==typeid(GeometryCollection)) ||
@@ -108,7 +111,7 @@ const Geometry* GeometryCollectionIterator::next() {
  */
 void GeometryCollectionIterator::remove() {
 	delete subcollectionIterator;
-	throw new UnsupportedOperationException();
+	throw  UnsupportedOperationException();
 }
 
 GeometryCollectionIterator::~GeometryCollectionIterator(){

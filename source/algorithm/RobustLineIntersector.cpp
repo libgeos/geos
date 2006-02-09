@@ -418,9 +418,9 @@ RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,co
 		cerr<<" HCoordinate found intersection h:"<<h->toString()<<endl;
 #endif
 
-	} catch (NotRepresentableException *e) {
+	} catch (const NotRepresentableException& e) {
 		delete intPt;
-		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
+		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e.toString());
     	}
 
 	intPt->x+=normPt.x;
@@ -572,6 +572,9 @@ RobustLineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.33  2005/05/09 10:35:20  strk
  * Ported JTS robustness patches made by Martin on suggestions by Kevin.
  *

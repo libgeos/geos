@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.1  2004/07/08 19:41:27  strk
  * renamed to reflect JTS API.
  *
@@ -87,7 +90,7 @@ int main(int argc, char** argv) {
 	cout << "Geometry is valid? " << (geom->isValid()?"true":"false") << endl;
 
 	cout << "End" << endl;
-	} catch (GEOSException *ge) {
+	} catch (const GEOSException& ge) {
 		cout << ge->toString() << endl;
 
 	}

@@ -67,7 +67,7 @@ IteratedNoder::node(vector<SegmentString*> *segStrings)
 		//System.out.println("# nodes created: " + nodesCreated);
 		if (lastNodesCreated > 0 && nodesCreated > lastNodesCreated) {
 			delete nodedEdges;
-			throw new TopologyException("Iterated noding failed to converge");
+			throw  TopologyException("Iterated noding failed to converge");
 		}
 		lastNodesCreated = nodesCreated;
 		//saveEdges(nodedEdges, "run" + runCount + "_nodedEdges");
@@ -112,6 +112,9 @@ IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersec
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.13  2005/06/24 11:09:43  strk
  * Dropped RobustLineIntersector, made LineIntersector a concrete class.
  * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)

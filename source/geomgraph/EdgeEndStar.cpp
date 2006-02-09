@@ -257,7 +257,7 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 			// location to propagate
 			if (rightLoc!=Location::UNDEF) {
 				if (rightLoc!=currLoc)
-					throw new TopologyException("side location conflict",&(e->getCoordinate()));
+					throw  TopologyException("side location conflict",&(e->getCoordinate()));
 				if (leftLoc==Location::UNDEF) {
 					Assert::shouldNeverReachHere("found single null side (at " + (e->getCoordinate()).toString() + ")");
 				}
@@ -302,6 +302,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.12  2005/12/07 20:51:47  strk
  * removed dead code
  *

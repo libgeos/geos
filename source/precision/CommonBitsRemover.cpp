@@ -107,7 +107,7 @@ CommonCoordinateFilter::~CommonCoordinateFilter()
 void
 CommonCoordinateFilter::filter_rw(Coordinate *coord) const
 {
-	throw new UnsupportedOperationException("CommonCoordinateFilter is a read-only filter");
+	throw  UnsupportedOperationException("CommonCoordinateFilter is a read-only filter");
 }
 
 Coordinate*
@@ -139,6 +139,9 @@ CommonCoordinateFilter::filter_ro(const Coordinate *coord)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.3  2005/12/08 14:14:07  strk
  * ElevationMatrixFilter used for both elevation and Matrix fill,
  * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).

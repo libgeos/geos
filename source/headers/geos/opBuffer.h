@@ -393,7 +393,7 @@ private:
 
 	const Geometry *argGeom;
 
-	TopologyException *saveException;
+	TopologyException saveException;
 
 	double distance;
 
@@ -786,6 +786,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.11  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

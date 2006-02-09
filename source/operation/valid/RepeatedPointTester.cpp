@@ -39,7 +39,7 @@ RepeatedPointTester::hasRepeatedPoint(const Geometry *g)
 	else if (typeid(*g)==typeid(MultiPolygon)) return hasRepeatedPoint((MultiPolygon*)g);
 	else if (typeid(*g)==typeid(MultiLineString)) return hasRepeatedPoint((MultiLineString*)g);
 	else if (typeid(*g)==typeid(GeometryCollection)) return hasRepeatedPoint((GeometryCollection*)g);
-	else  throw new UnsupportedOperationException(typeid(*g).name());
+	else  throw  UnsupportedOperationException(typeid(*g).name());
 }
 
 bool
@@ -93,6 +93,9 @@ bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.13  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

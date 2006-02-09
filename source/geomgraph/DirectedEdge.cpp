@@ -84,7 +84,7 @@ DirectedEdge::setDepth(int position, int newDepth)
 {
 	if (depth[position]!=-999) {
 		if (depth[position]!=newDepth)
-			throw new TopologyException("assigned depths do not match", &getCoordinate());
+			throw  TopologyException("assigned depths do not match", &getCoordinate());
 			//Assert.isTrue(depth[position] == depthVal, "assigned depths do not match at " + getCoordinate());
 	}
 	depth[position]=newDepth;
@@ -235,6 +235,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.6  2005/11/14 18:14:04  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

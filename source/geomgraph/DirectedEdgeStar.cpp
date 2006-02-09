@@ -239,7 +239,7 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	}
 	if (state==LINKING_TO_OUTGOING) {
 		if (firstOut==NULL)
-			throw new TopologyException("no outgoing dirEdge found",&(getCoordinate()));
+			throw  TopologyException("no outgoing dirEdge found",&(getCoordinate()));
 		Assert::isTrue(firstOut->isInResult(), "unable to link last incoming dirEdge");
 		incoming->setNext(firstOut);
 	}
@@ -387,7 +387,7 @@ DirectedEdgeStar::computeDepths(DirectedEdge *de)
 	int lastDepth=computeDepths(begin(), edgeIterator, nextDepth);
 
 	if (lastDepth!=targetLastDepth)
-		throw new TopologyException("depth mismatch at ",&(de->getCoordinate()));
+		throw  TopologyException("depth mismatch at ",&(de->getCoordinate()));
 //	Assert::isTrue(lastDepth==targetLastDepth, "depth mismatch at " + de->getCoordinate().toString());
 }
 
@@ -434,6 +434,9 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.9  2005/12/07 20:51:20  strk
  * minor cleanups
  *

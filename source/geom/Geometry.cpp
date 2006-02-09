@@ -630,7 +630,7 @@ Geometry::checkNotGeometryCollection(const Geometry *g)
 	//throw(IllegalArgumentException *)
 {
 	if ((typeid(*g)==typeid(GeometryCollection))) {
-		throw new IllegalArgumentException("This method does not support GeometryCollection arguments\n");
+		throw  IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 	}
 }
 
@@ -806,6 +806,9 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.87  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.86  2006/02/09 13:44:57  strk
  * Added support for SRID in input WKB, undeprecated Geometry::setSRID
  * and Geometry::getSRID

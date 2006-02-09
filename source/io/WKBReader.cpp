@@ -114,7 +114,7 @@ WKBReader::readHEX(istream &is)
 				result_high = 15;
 				break;
 			default:
-				throw new ParseException("Invalid HEX char");
+				throw  ParseException("Invalid HEX char");
 		}
 
 		switch (low)
@@ -168,7 +168,7 @@ WKBReader::readHEX(istream &is)
 				result_low = 15;
 				break;
 			default:
-				throw new ParseException("Invalid HEX char");
+				throw  ParseException("Invalid HEX char");
 		}
 
 		value = (result_high<<4) + result_low;
@@ -263,7 +263,7 @@ WKBReader::readGeometry()
 			result = readGeometryCollection();
 			break;
 		default:
-			throw new ParseException("Unknown WKB type " +
+			throw  ParseException("Unknown WKB type " +
 					geometryType);
 	}
 
@@ -342,7 +342,7 @@ WKBReader::readMultiPoint()
 		{
 			Geometry *g = readGeometry();
 			if (!dynamic_cast<Point *>(g))
-				throw new ParseException(BAD_GEOM_TYPE_MSG+
+				throw  ParseException(BAD_GEOM_TYPE_MSG+
 					" MultiPoint");
 			(*geoms)[i] = g;
 		}
@@ -366,7 +366,7 @@ WKBReader::readMultiLineString()
 		{
 			Geometry *g = readGeometry();
 			if (!dynamic_cast<LineString *>(g))
-				throw new ParseException(BAD_GEOM_TYPE_MSG+
+				throw  ParseException(BAD_GEOM_TYPE_MSG+
 					" LineString");
 			(*geoms)[i] = g;
 		}
@@ -390,7 +390,7 @@ WKBReader::readMultiPolygon()
 		{
 			Geometry *g = readGeometry();
 			if (!dynamic_cast<Polygon *>(g))
-				throw new ParseException(BAD_GEOM_TYPE_MSG+
+				throw  ParseException(BAD_GEOM_TYPE_MSG+
 					" Polygon");
 			(*geoms)[i] = g;
 		}

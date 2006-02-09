@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.9  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -37,9 +40,9 @@ void Assert::isTrue(bool assertion) {
 void Assert::isTrue(bool assertion, string message) {
 	if (!assertion) {
 		if (message.empty()) {
-			throw new AssertionFailedException();
+			throw  AssertionFailedException();
 		} else {
-			throw new AssertionFailedException(message);
+			throw  AssertionFailedException(message);
 		}
 	}
 }
@@ -50,7 +53,7 @@ void Assert::equals(const Coordinate& expectedValue, const Coordinate& actualVal
 
 void Assert::equals(const Coordinate& expectedValue, const Coordinate& actualValue, string message){
 	if (!(actualValue==expectedValue)) {
-		throw new AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
+		throw  AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
 			+ actualValue.toString() + (!message.empty() ? ": " + message : ""));
 	}
 }
@@ -61,7 +64,7 @@ void Assert::shouldNeverReachHere() {
 }
 
 void Assert::shouldNeverReachHere(string message) {
-	throw new AssertionFailedException("Should never reach here"
+	throw  AssertionFailedException("Should never reach here"
 		+ (!message.empty() ? ": " + message : ""));
 }
 

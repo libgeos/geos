@@ -43,7 +43,7 @@ class NotRepresentableException: public GEOSException {
 public:
 	NotRepresentableException();
 	NotRepresentableException(string msg);
-	~NotRepresentableException();
+	~NotRepresentableException() throw() {}
 };
 
 class PointInRing{
@@ -843,6 +843,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.19  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

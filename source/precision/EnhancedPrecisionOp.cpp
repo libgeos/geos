@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.2  2004/07/02 13:28:29  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -35,11 +38,11 @@ namespace geos {
 * @return the Geometry representing the set-theoretic intersection of the input Geometries->
 */
 Geometry* EnhancedPrecisionOp::intersection(Geometry *geom0, Geometry *geom1) {
-	GEOSException *originalEx;
+	GEOSException originalEx;
 	try {
 		Geometry *result = geom0->intersection(geom1);
 		return result;
-	} catch (GEOSException *ex) {
+	} catch (const GEOSException& ex) {
 		originalEx = ex;
 	}
 	/*
@@ -54,7 +57,7 @@ Geometry* EnhancedPrecisionOp::intersection(Geometry *geom0, Geometry *geom1) {
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (GEOSException *ex2) {
+	} catch (const GEOSException& ex2) {
 		throw originalEx;
 	}
 }
@@ -65,11 +68,11 @@ Geometry* EnhancedPrecisionOp::intersection(Geometry *geom0, Geometry *geom1) {
 * @return the Geometry representing the set-theoretic union of the input Geometries->
 */
 Geometry* EnhancedPrecisionOp::Union(Geometry *geom0, Geometry *geom1){
-	GEOSException *originalEx;
+	GEOSException originalEx;
 	try {
 		Geometry* result = geom0->Union(geom1);
 		return result;
-	}catch (GEOSException *ex) {
+	}catch (const GEOSException& ex) {
 		originalEx = ex;
 	}
 	/*
@@ -84,7 +87,7 @@ Geometry* EnhancedPrecisionOp::Union(Geometry *geom0, Geometry *geom1){
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (GEOSException *ex2) {
+	} catch (const GEOSException& ex2) {
 		throw originalEx;
 	}
 }
@@ -95,11 +98,11 @@ Geometry* EnhancedPrecisionOp::Union(Geometry *geom0, Geometry *geom1){
 * @return the Geometry representing the set-theoretic difference of the input Geometries->
 */
 Geometry* EnhancedPrecisionOp::difference(Geometry *geom0, Geometry *geom1){
-	GEOSException *originalEx;
+	GEOSException originalEx;
 	try {
 		Geometry *result = geom0->difference(geom1);
 		return result;
-	} catch (GEOSException *ex) {
+	} catch (const GEOSException& ex) {
 		originalEx = ex;
 	}
 	/*
@@ -114,7 +117,7 @@ Geometry* EnhancedPrecisionOp::difference(Geometry *geom0, Geometry *geom1){
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (GEOSException *ex2) {
+	} catch (const GEOSException& ex2) {
 		throw originalEx;
 	}
 }
@@ -125,11 +128,11 @@ Geometry* EnhancedPrecisionOp::difference(Geometry *geom0, Geometry *geom1){
 * @return the Geometry representing the set-theoretic symmetric difference of the input Geometries->
 */
 Geometry* EnhancedPrecisionOp::symDifference(Geometry *geom0, Geometry *geom1){
-	GEOSException *originalEx;
+	GEOSException originalEx;
 	try {
 		Geometry *result = geom0->symDifference(geom1);
 		return result;
-	} catch (GEOSException *ex) {
+	} catch (const GEOSException& ex) {
 		originalEx = ex;
 	}
 	/*
@@ -144,7 +147,7 @@ Geometry* EnhancedPrecisionOp::symDifference(Geometry *geom0, Geometry *geom1){
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (GEOSException *ex2) {
+	} catch (const GEOSException& ex2) {
 		throw originalEx;
 	}
 }
@@ -158,11 +161,11 @@ Geometry* EnhancedPrecisionOp::symDifference(Geometry *geom0, Geometry *geom1){
 * @return the Geometry representing the buffer of the input Geometry->
 */
 Geometry* EnhancedPrecisionOp::buffer(Geometry *geom, double distance){
-	GEOSException *originalEx;
+	GEOSException originalEx;
 	try {
 		Geometry *result = geom->buffer(distance);
 		return result;
-	} catch (GEOSException *ex)	{
+	} catch (const GEOSException& ex)	{
 		originalEx = ex;
 	}
 	/*
@@ -177,7 +180,7 @@ Geometry* EnhancedPrecisionOp::buffer(Geometry *geom, double distance){
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (GEOSException *ex2) {
+	} catch (const GEOSException& ex2) {
 		throw originalEx;
 	}
 }

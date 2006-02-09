@@ -44,7 +44,7 @@ public:
 	ParseException(string msg);
 	ParseException(string msg, string var);
 	ParseException(string msg, double num);
-	~ParseException();
+	~ParseException() throw() {};
 };
 
 class StringTokenizer {
@@ -294,7 +294,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 1);
 		if ( stream->eof() )
-			throw new ParseException("Unexpected EOF parsing WKB");
+			throw  ParseException("Unexpected EOF parsing WKB");
 		return buf[0];
 	}
 
@@ -302,7 +302,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 4);
 		if ( stream->eof() )
-			throw new ParseException("Unexpected EOF parsing WKB");
+			throw  ParseException("Unexpected EOF parsing WKB");
 		return ByteOrderValues::getInt(buf, byteOrder);
 	}
 
@@ -310,7 +310,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 8);
 		if ( stream->eof() )
-			throw new ParseException("Unexpected EOF parsing WKB");
+			throw  ParseException("Unexpected EOF parsing WKB");
 		return ByteOrderValues::getLong(buf, byteOrder);
 	}
 
@@ -318,7 +318,7 @@ public:
 	{
 		stream->read(reinterpret_cast<char *>(buf), 8);
 		if ( stream->eof() )
-			throw new ParseException("Unexpected EOF parsing WKB");
+			throw  ParseException("Unexpected EOF parsing WKB");
 		return ByteOrderValues::getDouble(buf, byteOrder);
 	}
 
@@ -524,6 +524,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.20  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

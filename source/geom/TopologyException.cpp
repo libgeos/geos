@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.9  2004/12/13 13:53:03  strk
  * Fixed uninitialized Coordinate.
  *
@@ -34,6 +37,11 @@
 
 namespace geos {
 
+TopologyException::TopologyException(): GEOSException("TopologyException")
+{
+	pt=NULL;
+}
+
 TopologyException::TopologyException(string msg): GEOSException("TopologyException", msg) {
 	pt=NULL;
 }
@@ -43,14 +51,6 @@ TopologyException::TopologyException(string msg,const Coordinate *newPt): GEOSEx
 	else pt=NULL;
 }
 
-TopologyException::~TopologyException() {
-	delete pt;
-}
 
-Coordinate* TopologyException::getCoordinate() {
-	return pt;
-}
-
-
-}
+} // namespace geos
 

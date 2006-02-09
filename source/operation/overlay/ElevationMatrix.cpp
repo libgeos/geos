@@ -76,10 +76,9 @@ ElevationMatrix::add(const Coordinate &c)
 	try {
 		ElevationMatrixCell &emc = getCell(c);
 		emc.add(c);
-	} catch (IllegalArgumentException *exp) {
+	} catch (const IllegalArgumentException& exp) {
 		// coordinate do not overlap matrix
-		cerr<<"ElevationMatrix::add("<<c.toString()<<"): Coordinate does not overlap grid extent: "<<exp->toString()<<endl;
-		delete exp;
+		cerr<<"ElevationMatrix::add("<<c.toString()<<"): Coordinate does not overlap grid extent: "<<exp.toString()<<endl;
 		return;
 	}
 }
@@ -109,7 +108,7 @@ ElevationMatrix::getCell(const Coordinate &c)
 	{
 		ostringstream s;
 		s<<"ElevationMatrix::getCell got a Coordinate out of grid extent ("<<env.toString()<<") - cols:"<<cols<<" rows:"<<rows;
-		throw new IllegalArgumentException(s.str());
+		throw  IllegalArgumentException(s.str());
 	}
 
 	return cells[celloffset];
@@ -179,6 +178,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.7  2005/12/11 10:41:56  strk
  * Fixed premature initialization of average Z value in ElevationMatrixFilter
  *

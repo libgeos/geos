@@ -35,7 +35,7 @@ namespace geos {
  * Exceptions are thrown as pointers to this type.
  * Use toString() to get a readable message.
  */
-class GEOSException {
+class GEOSException: public std::exception {
 public:
 	GEOSException();
 
@@ -44,10 +44,15 @@ public:
 	/// Create an exception of given type containing given message 
 	GEOSException(string nname,string msg);
 
-	virtual ~GEOSException();
+	virtual ~GEOSException() throw() {}
 
 	/// Returns exception message
-	virtual string toString();
+	virtual string toString() const;
+
+	/// Implement std::exception.what()
+	virtual const char* what() const throw() {
+		return toString().c_str();
+	}
 
 	virtual void setName(string nname);
 	virtual void setMessage(string msg);
@@ -63,7 +68,7 @@ class AssertionFailedException: public GEOSException {
 public:
 	AssertionFailedException();
 	AssertionFailedException(string msg);
-	~AssertionFailedException();
+	~AssertionFailedException() throw() {}
 };
 
 /** \class IllegalArgumentException util.h geos.h
@@ -77,7 +82,7 @@ class IllegalArgumentException: public GEOSException {
 public:
 	IllegalArgumentException();
 	IllegalArgumentException(string msg);
-	~IllegalArgumentException();
+	~IllegalArgumentException() throw() {};
 };
 
 /**
@@ -89,10 +94,11 @@ public:
  */
 class TopologyException: public GEOSException {
 public:
+	TopologyException();
 	TopologyException(string msg);
 	TopologyException(string msg,const Coordinate *newPt);
-	~TopologyException();
-	Coordinate* getCoordinate();
+	~TopologyException() throw() { delete pt; }
+	Coordinate* getCoordinate() { return pt; }
 private:
 	Coordinate *pt;
 };
@@ -109,7 +115,7 @@ class UnsupportedOperationException: public GEOSException {
 public:
 	UnsupportedOperationException();
 	UnsupportedOperationException(string msg);
-	~UnsupportedOperationException();
+	~UnsupportedOperationException() throw() {};
 };
 
 class Coordinate;
@@ -156,7 +162,7 @@ public:
 	virtual void filter_rw(Coordinate *coord) const
 	{
 		// Unsupported
-		throw new UnsupportedOperationException("CoordinateArrayFilter"
+		throw  UnsupportedOperationException("CoordinateArrayFilter"
 			" is a read-only filter");
 	}
 };
@@ -195,7 +201,7 @@ public:
 	virtual void filter_rw(Coordinate *coord) const
 	{
 		 // Unsupported
-		throw new UnsupportedOperationException(
+		throw  UnsupportedOperationException(
 			"UniqueCoordinateArrayFilter is a read-only filter");
 	}
 };
@@ -319,6 +325,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.11  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

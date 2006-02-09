@@ -113,7 +113,7 @@ IsValidOp::checkValid(const Geometry *g)
 	else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
 	else if ((gc=dynamic_cast<const GeometryCollection *>(g)))
 		checkValid(gc);
-	else throw new UnsupportedOperationException();
+	else throw  UnsupportedOperationException();
 }
 
 /*
@@ -625,6 +625,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.41  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

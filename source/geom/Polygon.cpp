@@ -63,7 +63,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
 			delete newShell;
 			delete newHoles;
-			throw new IllegalArgumentException("shell is empty but holes are not");
+			throw  IllegalArgumentException("shell is empty but holes are not");
 		}
 		shell=newShell;
 	}
@@ -77,11 +77,11 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		if (hasNullElements(newHoles)) {
 			delete newShell;
 			delete newHoles;
-			throw new IllegalArgumentException("holes must not contain null elements");
+			throw  IllegalArgumentException("holes must not contain null elements");
 		}
 		for (unsigned int i=0; i<newHoles->size(); i++)
 			if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
-				throw new IllegalArgumentException("holes must be LinearRings");
+				throw  IllegalArgumentException("holes must be LinearRings");
 		holes=newHoles;
 	}
 }
@@ -424,6 +424,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.54  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.53  2006/02/02 02:20:15  strk
  * Fixed bug in isRectangle() failing to detect rectangles.
  *

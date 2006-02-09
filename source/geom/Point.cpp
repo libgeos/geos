@@ -39,7 +39,7 @@ Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory):
 	}        
 	if (newCoords->getSize() != 1)
 	{
-		throw new IllegalArgumentException("Point coordinate list must contain a single element");
+		throw  IllegalArgumentException("Point coordinate list must contain a single element");
 	}
 	coordinates=newCoords;
 }
@@ -91,7 +91,7 @@ double
 Point::getX() const
 {
 	if (isEmpty()) {
-		throw new UnsupportedOperationException("getX called on empty Point\n");
+		throw  UnsupportedOperationException("getX called on empty Point\n");
 	}
 	return getCoordinate()->x;
 }
@@ -100,7 +100,7 @@ double
 Point::getY() const
 {
 	if (isEmpty()) {
-		throw new UnsupportedOperationException("getY called on empty Point\n");
+		throw  UnsupportedOperationException("getY called on empty Point\n");
 	}
 	return getCoordinate()->y;
 }
@@ -208,6 +208,9 @@ Point::getGeometryTypeId() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.38  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.37  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

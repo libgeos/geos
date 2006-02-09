@@ -91,7 +91,6 @@ BufferOp::bufferOp(const Geometry *g, double distance,
  */
 BufferOp::BufferOp(const Geometry *g):
 	argGeom(g),
-	saveException(NULL),
 	quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(BufferOp::CAP_ROUND),
 	resultGeometry(NULL)
@@ -161,8 +160,7 @@ BufferOp::computeGeometry()
 #endif
 		try {
 			bufferFixedPrecision(precDigits);
-		} catch (TopologyException *ex) {
-			delete saveException;
+		} catch (const TopologyException& ex) {
 			saveException=ex;
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
 		} 
@@ -171,13 +169,11 @@ BufferOp::computeGeometry()
 		{
 			// debug
 			//if ( saveException ) cerr<<saveException->toString()<<endl;
-			delete saveException;
 			return;
 		}
 	}
 	// tried everything - have to bail
 	throw saveException;
-	//return resultGeometry;
 }
 
 void
@@ -190,9 +186,8 @@ BufferOp::bufferOriginalPrecision()
 	//cerr<<"computing with original precision"<<endl;
 	try {
 		resultGeometry=bufBuilder.buffer(argGeom, distance);
-	} catch (TopologyException *ex) {
+	} catch (const TopologyException& ex) {
 		//cerr<<ex->toString()<<endl;
-		delete saveException;
 		saveException=ex;
 		return;
 	} 
@@ -227,6 +222,9 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.38  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

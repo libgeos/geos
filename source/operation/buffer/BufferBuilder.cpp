@@ -150,7 +150,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<endl;
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
-	} catch (GEOSException *exc) {
+	} catch (const GEOSException& exc) {
 		for (unsigned int i=0; i<subgraphList->size(); i++)
 			delete (*subgraphList)[i];
 		delete subgraphList;
@@ -319,6 +319,9 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.32  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

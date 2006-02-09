@@ -112,7 +112,7 @@ string WKTWriter::write(const Geometry *geometry) {
 	Writer sw;
 //	try {
 		writeFormatted(geometry,false,&sw);
-//	} catch (IOException ex) {
+//	} catch (const IOException ex) {
 //		Assert::shouldNeverReachHere();
 //	}
 	string res=sw.toString();
@@ -367,6 +367,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.23  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

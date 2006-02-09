@@ -232,7 +232,7 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 		return false;
 		// MD - don't bother throwing exception,
 		// since this isn't a complete check for ring validity
-		//throw new IllegalArgumentException("degenerate ring (does not contain 3 distinct points)");
+		//throw  IllegalArgumentException("degenerate ring (does not contain 3 distinct points)");
 	}
 
 	int disc = computeOrientation(*prev, *hip, *next);
@@ -450,6 +450,9 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.26  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

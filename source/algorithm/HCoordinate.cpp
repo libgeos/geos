@@ -88,7 +88,7 @@ HCoordinate::getX() const
 	double a = x/w;
 	if (!FINITE(a))
 	{
-		throw new NotRepresentableException();
+		throw  NotRepresentableException();
 	}
 	return a;
 }
@@ -99,7 +99,7 @@ HCoordinate::getY() const
 	double a = y/w;
 	if (!FINITE(a))
 	{
-		throw new NotRepresentableException();
+		throw  NotRepresentableException();
 	}
 	return a;
 }
@@ -115,7 +115,11 @@ HCoordinate::getCoordinate(Coordinate &ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.13  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

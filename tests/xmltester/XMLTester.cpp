@@ -93,8 +93,8 @@ XMLTester::run(const string &source)
 	while (xml.FindChildElem("case")) {
 		try {
 			parseCase();
-		} catch (GEOSException *exc) {
-			cerr<<exc->toString()<<endl;
+		} catch (const GEOSException& exc) {
+			cerr<<exc.toString()<<endl;
 		}
 	}
 }
@@ -224,11 +224,10 @@ XMLTester::parseCase()
 			gB=parseGeometry(geomBin);
 		}
 	}
-	catch (GEOSException *ex) {
-		thrownException = ex->toString();
-		delete(ex);
+	catch (const GEOSException& ex) {
+		thrownException = ex.toString();
 	}
-	catch (std::exception &e) {
+	catch (const std::exception &e) {
 		thrownException = e.what();
 	}
 	catch (...) {
@@ -343,7 +342,7 @@ XMLTester::parseTest()
 			try {
 				gRealRes=gA->intersection(gB);
 				gRealRes->normalize();
-			} catch ( ... ) {
+			} catch (...) {
 				delete gRealRes;
 				delete gRes;
 				throw;
@@ -571,7 +570,7 @@ XMLTester::parseTest()
 				delete polys;
 				gRealRes=factory->createGeometryCollection(newgeoms);
 				gRealRes->normalize();
-			} catch ( ... ) {
+			} catch (...) {
 				delete gRealRes;
 				delete gRes;
 				throw;
@@ -600,12 +599,11 @@ XMLTester::parseTest()
 		}
 
 	}
-	catch (GEOSException *ex)
+	catch (const GEOSException& ex)
 	{
-		actual_result = ex->toString();
-		delete ex;
+		actual_result = ex.toString();
 	}
-	catch (std::exception &e)
+	catch (const std::exception &e)
 	{
 		actual_result = e.what();
 	}
@@ -727,6 +725,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.1  2006/01/31 19:07:35  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

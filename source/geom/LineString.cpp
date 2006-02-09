@@ -55,7 +55,7 @@ LineString::LineString(CoordinateSequence *newCoords, const GeometryFactory *fac
 		return;
 	}
 	if (newCoords->getSize()==1) {
-		throw new IllegalArgumentException("point array must contain 0 or >1 elements\n");
+		throw  IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
 	points=newCoords;
 }
@@ -283,6 +283,9 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.57  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.56  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

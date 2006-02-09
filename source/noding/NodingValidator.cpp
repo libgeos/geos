@@ -78,7 +78,7 @@ NodingValidator::checkProperIntersections(SegmentString *e0, int segIndex0, Segm
 		if (   li->isProper()
 			|| hasInteriorIntersection(li, p00, p01)
 			|| hasInteriorIntersection(li, p00, p01)) {
-				throw new GEOSException("found non-noded intersection at "+ p00.toString() + "-" + p01.toString()+ " and "+ p10.toString() + "-" + p11.toString());
+				throw  GEOSException("found non-noded intersection at "+ p00.toString() + "-" + p01.toString()+ " and "+ p10.toString() + "-" + p11.toString());
 		}
 	}
 }
@@ -122,7 +122,7 @@ NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<Segme
 			for (unsigned int j=1; j<npts-1; ++j)
 			{
 				if (pts->getAt(j)==testPt)
-					throw new GEOSException("found bad noding at pt " + testPt.toString());
+					throw  GEOSException("found bad noding at pt " + testPt.toString());
 			}
 	}
 }
@@ -131,6 +131,9 @@ NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<Segme
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.7  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

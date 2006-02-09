@@ -16,6 +16,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.2  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -136,7 +139,7 @@ int main(int argc, char** argv)
 	cout << "Result is: " << im->toString() << endl;
 
 	cout << "End" << endl;
-	} catch (GEOSException *ge) {
+	} catch (const GEOSException& ge) {
 		cout << ge->toString() << endl;
 	}
 

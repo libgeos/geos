@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.27  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.26  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -125,10 +128,10 @@ LinearRing::LinearRing(CoordinateSequence* newCoords, const GeometryFactory *new
 
 void LinearRing::validateConstruction() {
 	if (!LineString::isEmpty() && !LineString::isClosed()) {
-		throw new IllegalArgumentException("points must form a closed linestring");
+		throw  IllegalArgumentException("points must form a closed linestring");
     }
 	if (!points->isEmpty() && (points->getSize()>=1 && points->getSize()<=3)) {
-		throw new IllegalArgumentException("Number of points must be 0 or >3");
+		throw  IllegalArgumentException("Number of points must be 0 or >3");
 	}
 }
 

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.2  2005/01/28 09:47:51  strk
  * Replaced sprintf uses with ostringstream.
  *
@@ -57,7 +60,7 @@ void CustomPointCoordinateSequence::setPoints(const vector<Coordinate> &v) {
 			pts[i]=pt;
 		}
 	} else {
-		throw new CPCLException("size mismatch\n");
+		throw  CPCLException("size mismatch\n");
 	}
 }
 
@@ -67,7 +70,7 @@ void CustomPointCoordinateSequence::setPoints(const vector<point_3d> &v) {
 			pts[i]=v[i];
 		}
 	} else {
-		throw new CPCLException("size mismatch\n");
+		throw  CPCLException("size mismatch\n");
 	}
 }
 
@@ -92,11 +95,11 @@ bool CustomPointCoordinateSequence::isEmpty() {
 }
 
 void CustomPointCoordinateSequence::add(Coordinate& c){
-	throw new CPCLException("list's size can't be modified\n");
+	throw  CPCLException("list's size can't be modified\n");
 }
 
 void CustomPointCoordinateSequence::add(point_3d p){
-	throw new CPCLException("list's size can't be modified\n");
+	throw  CPCLException("list's size can't be modified\n");
 }
 
 int CustomPointCoordinateSequence::getSize(){
@@ -109,14 +112,14 @@ Coordinate& CustomPointCoordinateSequence::getAt(int pos){
 		pt=pts[pos];
 		return *(new Coordinate(pt.x,pt.y,pt.z));
 	} else
-		throw new CPCLException("can't retrieve element\n");
+		throw  CPCLException("can't retrieve element\n");
 }
 
 point_3d CustomPointCoordinateSequence::getPointAt(int pos){
 	if (pos>=0 && pos<size) {
 		return pts[pos];
 	} else
-		throw new CPCLException("can't retrieve element\n");
+		throw  CPCLException("can't retrieve element\n");
 }
 
 void CustomPointCoordinateSequence::setAt(Coordinate& c, int pos){
@@ -124,18 +127,18 @@ void CustomPointCoordinateSequence::setAt(Coordinate& c, int pos){
 	if (pos>=0 && pos<size) 
 		pts[pos]=pt;
 	else
-		throw new CPCLException("can't change element\n");
+		throw  CPCLException("can't change element\n");
 }
 
 void CustomPointCoordinateSequence::setAt(point_3d p, int pos){
 	if (pos>=0 && pos<size) 
 		pts[pos]=p;
 	else
-		throw new CPCLException("can't change element\n");
+		throw  CPCLException("can't change element\n");
 }
 
 void CustomPointCoordinateSequence::deleteAt(int pos){
-	throw new CPCLException("list's size can't be modified\n");
+	throw  CPCLException("list's size can't be modified\n");
 }
 
 string CustomPointCoordinateSequence::toString() {

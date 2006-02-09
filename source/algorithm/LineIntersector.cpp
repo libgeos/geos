@@ -802,8 +802,8 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 		cerr<<" HCoordinate found intersection h:"<<intPt.toString()<<endl;
 #endif
 
-	} catch (NotRepresentableException *e) {
-		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
+	} catch (const NotRepresentableException& e) {
+		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e.toString());
     	}
 
 	intPt.x+=normPt.x;
@@ -931,6 +931,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
  * Revision 1.28  2006/01/30 21:59:18  frank
  * yikes!  comment out debug define again
  *
