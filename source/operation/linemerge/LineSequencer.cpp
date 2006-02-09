@@ -19,6 +19,7 @@
 
 #include <cassert>
 #include <typeinfo>
+#include <limits>
 #include <geos/opLinemerge.h>
 #include <geos/util.h>
 #include <geos/geom.h>
@@ -414,6 +415,9 @@ LineSequencer::reverse(DirectedEdge::NonConstList& seq)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/09 01:13:24  strk
+ * Added missing <limits> include
+ *
  * Revision 1.1  2006/02/08 12:59:56  strk
  * - NEW Geometry::applyComponentFilter() templated method
  * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
