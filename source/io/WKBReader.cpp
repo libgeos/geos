@@ -297,7 +297,7 @@ WKBReader::readPolygon()
 
         LinearRing *shell = NULL;
         if( numRings > 0 )
-            LinearRing *shell = readLinearRing();
+            shell = readLinearRing();
 
 	vector<Geometry *>*holes=NULL;
 	if ( numRings > 1 )
