@@ -173,6 +173,7 @@ AC_OUTPUT([
 	source/index/Makefile
 	source/io/Makefile
 	source/noding/Makefile
+	source/noding/snapround/Makefile
 	source/operation/Makefile
 	source/operation/buffer/Makefile
 	source/operation/distance/Makefile

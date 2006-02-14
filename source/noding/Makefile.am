@@ -1,24 +1,22 @@
-SUBDIRS = 
+SUBDIRS = snapround
 
 noinst_LTLIBRARIES = libnoding.la
 
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libnoding_la_SOURCES = \
-	../noding/IteratedNoder.cpp \
-	../noding/MCQuadtreeNoder.cpp \
-	../noding/Noder.cpp \
-	../noding/NodingValidator.cpp \
-	../noding/SegmentNode.cpp \
-	../noding/SegmentNodeList.cpp \
-	../noding/SegmentString.cpp \
-	../noding/SimpleNoder.cpp \
-	../noding/nodingSegmentIntersector.cpp \
-	../noding/snapround/SegmentSnapper.cpp \
-	../noding/snapround/SimpleSegmentStringsSnapper.cpp \
-	../noding/snapround/SnapRounder.cpp 
+	IntersectionAdder.cpp \
+	IntersectionFinderAdder.cpp \
+	IteratedNoder.cpp \
+	MCIndexNoder.cpp \
+	NodingValidator.cpp \
+	SegmentNode.cpp \
+	SegmentNodeList.cpp \
+	SegmentString.cpp \
+	SimpleNoder.cpp \
+	Octant.cpp
 
-libnoding_la_LIBADD = 
+libnoding_la_LIBADD = snapround/libsnapround.la
 
 
 

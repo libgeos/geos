@@ -21,30 +21,31 @@
 
 namespace geos {
 
+/* static public */
 vector<indexMonotoneChain*>*
-MonotoneChainBuilder::getChains(CoordinateSequence *pts)
-{
-	return getChains(pts,NULL);
-}
-
-/**
- * Return a list of the MonotoneChain
- * for the given list of coordinates.
- */
-vector<indexMonotoneChain*>*
-MonotoneChainBuilder::getChains(CoordinateSequence *pts, void* context)
+MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
+		const void* context)
 {
 	vector<indexMonotoneChain*> *mcList=new vector<indexMonotoneChain*>();
-	vector<int> *startIndex=getChainStartIndices(pts);
-	unsigned int n=startIndex->size()-1;
+	getChains(pts, context, *mcList);
+	return mcList;
+}
+
+/* static public */
+void
+MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
+		const void* context,
+		vector<indexMonotoneChain*>& mcList)
+{
+	vector<int> startIndex;
+	getChainStartIndices(pts, startIndex);
+	unsigned int n=startIndex.size()-1;
 	for(unsigned int i=0; i<n; i++)
 	{
 		indexMonotoneChain *mc=new indexMonotoneChain(pts,
-			(*startIndex)[i], (*startIndex)[i+1], context);
-		mcList->push_back(mc);
+			startIndex[i], startIndex[i+1], context);
+		mcList.push_back(mc);
 	}
-	delete startIndex;
-	return mcList;
 }
 
 /**
@@ -53,24 +54,21 @@ MonotoneChainBuilder::getChains(CoordinateSequence *pts, void* context)
  * The last entry in the array points to the end point of the point array,
  * for use as a sentinel.
  */
-vector<int>*
-MonotoneChainBuilder::getChainStartIndices(CoordinateSequence *pts)
+void
+MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence *pts,
+		vector<int>& startIndexList)
 {
 	// find the startpoint (and endpoints) of all monotone chains
 	// in this edge
 	int start=0;
-	vector<int> *startIndexList=new vector<int>();
-	startIndexList->push_back(start);
+	startIndexList.push_back(start);
 	unsigned int n=pts->getSize()-1;
 	do {
 		int last=findChainEnd(pts, start);
-		startIndexList->push_back(last);
+		startIndexList.push_back(last);
 		start=last;
 	} while((unsigned int)start<n);
 
-	// copy list to an array of ints, for efficiency
-	//int[] startIndex = toIntArray(startIndexList);
-	return startIndexList;
 }
 
 /**
@@ -78,7 +76,7 @@ MonotoneChainBuilder::getChainStartIndices(CoordinateSequence *pts)
  * at <code>start</code>.
  */
 int
-MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
+MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 {
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
@@ -101,6 +99,11 @@ MonotoneChainBuilder::findChainEnd(CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/14 13:28:25  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.15  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

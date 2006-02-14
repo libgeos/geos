@@ -32,6 +32,7 @@ Changes in 3.0.0
 	- New LineString::reverse()
 	- New MultiLineString::reverse()
 	- New Geometry::buffer(distance, quadSeg, endCapStyle)
+	- New SnapRounding code
 
 - Optimizations:
 	- WKT parser speedup
@@ -53,6 +54,7 @@ Changes in 3.0.0
 	- Inlined all planarGraphComponent class
 	- More iterators returning methods and inlining in planargraph.
 	- Obsoleted toInternalGeometry/fromInternalGeometry 
+	- Improved buffering speed and robustness by using Snap Rounding
 
 - Correctness:
 	- More const-correct signatures

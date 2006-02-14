@@ -198,7 +198,9 @@ public:
 	static double interpolateZ(const Coordinate &p, const Coordinate &p0, const Coordinate &p1);
 	static double computeEdgeDistance(const Coordinate& p, const Coordinate& p0, const Coordinate& p1);
 	static double nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
-	LineIntersector();
+
+	LineIntersector(const PrecisionModel* initialPrecisionModel=NULL);
+
 	~LineIntersector();
 
 	/*
@@ -843,6 +845,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/14 13:28:25  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.20  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

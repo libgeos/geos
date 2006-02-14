@@ -692,8 +692,7 @@ private:
 
 bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
 
-/*
- * \class BufferBuilder opBuffer.h geos/opBuffer.h
+/**
  *
  * \brief
  * Builds the buffer geometry for a given input geometry and precision model.
@@ -709,54 +708,39 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
  * Retrying the computation in a fixed precision
  * can produce more robust results.
  *
+ * Last port: operation/buffer/BufferBuilder.java rev. 1.21 (JTS-1.7)
+ *
  */
 class BufferBuilder {
 friend class Unload;
-public:
-	/**
-	 * Creates a new BufferBuilder
-	 */
-	BufferBuilder();
-	~BufferBuilder();
-
-	/**
-	 * Sets the number of segments used to approximate a angle fillet
-	 *
-	 * @param quadrantSegments the number of segments in a fillet for
-	 *  a quadrant
-	 */
-	void setQuadrantSegments(int nQuadrantSegments);
-
-	/**
-	 * Sets the precision model to use during the curve computation
-	 * and noding,
-	 * if it is different to the precision model of the Geometry.
-	 * If the precision model is less than the precision of the
-	 * Geometry precision model,
-	 * the Geometry must have previously been rounded to that precision.
-	 *
-	 * @param pm the precision model to use
-	 */
-	void setWorkingPrecisionModel(PrecisionModel *pm);
-
-	void setEndCapStyle(int nEndCapStyle);
-
-	Geometry* buffer(const Geometry *g, double distance);
-		// throw (GEOSException *);
 
 private:
 	/**
 	 * Compute the change in depth as an edge is crossed from R to L
 	 */
 	static int depthDelta(Label *label);
-	//static CGAlgorithms *cga;
+
 	int quadrantSegments;
+
 	int endCapStyle;
-	PrecisionModel *workingPrecisionModel;
-	const GeometryFactory *geomFact;
-	EdgeList *edgeList;
-	vector<Label *>newLabels;
-	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel); // throw(GEOSException *);
+
+	PrecisionModel* workingPrecisionModel;
+
+	LineIntersector* li;
+
+	IntersectionAdder* intersectionAdder;
+
+	Noder* workingNoder;
+
+	const GeometryFactory* geomFact;
+
+	EdgeList* edgeList;
+
+	vector<Label *> newLabels;
+
+	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList,
+			const PrecisionModel *precisionModel);
+			// throw(GEOSException);
 
 	/**
 	 * Inserted edges are checked to see if an identical edge already
@@ -777,7 +761,79 @@ private:
 	 * @param polyBuilder the PolygonBuilder which will build
 	 *        the final polygons
 	 */
-	void buildSubgraphs(vector<BufferSubgraph*> *subgraphList, PolygonBuilder *polyBuilder);
+	void buildSubgraphs(vector<BufferSubgraph*> *subgraphList,
+			PolygonBuilder *polyBuilder);
+
+	/// \brief
+	/// Return the externally-set Noder OR a newly created
+	/// one using the given precisionModel.
+	//
+	/// NOTE: if an externally-set Noder is available no
+	/// check is performed to ensure it will use the
+	/// given PrecisionModel
+	///
+	Noder* getNoder(const PrecisionModel* precisionModel);
+
+
+public:
+	/**
+	 * Creates a new BufferBuilder
+	 */
+	BufferBuilder()
+		:
+		quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
+		endCapStyle(BufferOp::CAP_ROUND),
+		workingPrecisionModel(NULL),
+		li(NULL),
+		intersectionAdder(NULL),
+		workingNoder(NULL),
+		geomFact(NULL),
+		edgeList(new EdgeList())
+	{}
+
+	~BufferBuilder();
+
+	/**
+	 * Sets the number of segments used to approximate a angle fillet
+	 *
+	 * @param quadrantSegments the number of segments in a fillet for
+	 *  a quadrant
+	 */
+	void setQuadrantSegments(int nQuadrantSegments) {
+		quadrantSegments=nQuadrantSegments;
+	} 
+
+
+	/**
+	 * Sets the precision model to use during the curve computation
+	 * and noding,
+	 * if it is different to the precision model of the Geometry.
+	 * If the precision model is less than the precision of the
+	 * Geometry precision model,
+	 * the Geometry must have previously been rounded to that precision.
+	 *
+	 * @param pm the precision model to use
+	 */
+	void setWorkingPrecisionModel(PrecisionModel *pm) {
+		workingPrecisionModel=pm;
+	}
+
+	/**
+	 * Sets the {@link Noder} to use during noding.
+	 * This allows choosing fast but non-robust noding, or slower
+	 * but robust noding.
+	 *
+	 * @param noder the noder to use
+	 */
+	void setNoder(Noder* newNoder) { workingNoder = newNoder; }
+
+	void setEndCapStyle(int nEndCapStyle) {
+		endCapStyle=nEndCapStyle;
+	}
+
+	Geometry* buffer(const Geometry *g, double distance);
+		// throw (GEOSException);
+
 };
 
 } // namespace geos
@@ -786,6 +842,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/14 13:28:25  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.12  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

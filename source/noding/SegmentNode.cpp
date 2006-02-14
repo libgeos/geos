@@ -18,7 +18,11 @@
 
 namespace geos {
 
-SegmentNode::SegmentNode(Coordinate *newCoord, int nSegmentIndex, double newDist): coord(*newCoord), segmentIndex(nSegmentIndex), dist(newDist)
+SegmentNode::SegmentNode(const Coordinate *newCoord, int nSegmentIndex, double newDist)
+		:
+		coord(*newCoord),
+		segmentIndex(nSegmentIndex),
+		dist(newDist)
 {
 	//coord=*newCoord; 
 	//coord=new Coordinate(*newCoord);
@@ -73,6 +77,11 @@ SegmentNode::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.7  2005/02/22 18:21:46  strk
  * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
  * construction costs.

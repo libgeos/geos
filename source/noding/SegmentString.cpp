@@ -23,93 +23,6 @@ static Profiler *profiler=Profiler::instance();
 #endif
 
 /**
- * This function copies given CoordinateSequence
- */
-SegmentString::SegmentString(const CoordinateSequence *newPts,
-		const void* newContext):
-	eiList(this)
-{
-#if PROFILE
-	static Profile *prof = profiler->get("SegmentString::SegmentString(const CoordinateSequence *, const void *)");
-	prof->start();
-#endif
-	//eiList=new SegmentNodeList(this);
-	isIsolatedVar=false;
-	pts=newPts;
-	npts=pts->getSize();
-	context=newContext;
-#if PROFILE
-	prof->stop();
-#endif
-}
-
-SegmentString::~SegmentString()
-{
-	//delete eiList;
-}
-
-const void*
-SegmentString::getContext() const
-{
-	return context;
-}
-
-const SegmentNodeList &
-SegmentString::getIntersectionList() const
-{
-	return eiList;
-}
-
-SegmentNodeList &
-SegmentString::getIntersectionList() 
-{
-	return eiList;
-}
-
-int
-SegmentString::size() const 
-{
-	return npts;
-}
-
-//const Coordinate&
-//SegmentString::getCoordinate(int i) const
-//{
-	//return pts->getAt(i);
-//}
-
-CoordinateSequence*
-SegmentString::getCoordinates() const
-{
-	return pts->clone();
-}
-
-const CoordinateSequence*
-SegmentString::getCoordinatesRO() const
-{
-	return pts;
-}
-
-void
-SegmentString::setIsolated(bool isIsolated)
-{
-	isIsolatedVar=isIsolated;
-}
-
-bool
-SegmentString::isIsolated() const
-{
-	return isIsolatedVar;
-}
-
-
-bool
-SegmentString::isClosed() const
-{
-	return pts->getAt(0)==pts->getAt(npts-1);
-}
-
-/**
  * Adds EdgeIntersections for one or both
  * intersections found for a segment of an edge to the edge intersection list.
  */
@@ -143,14 +56,14 @@ SegmentString::addIntersection(LineIntersector *li, int segmentIndex,
  * to use the higher of the two possible segmentIndexes
  */
 void
-SegmentString::addIntersection(Coordinate& intPt, int segmentIndex)
+SegmentString::addIntersection(const Coordinate& intPt, int segmentIndex)
 {
 	double dist=LineIntersector::computeEdgeDistance(intPt,pts->getAt(segmentIndex),pts->getAt(segmentIndex + 1));
 	addIntersection(intPt, segmentIndex, dist);
 }
 
 void
-SegmentString::addIntersection(Coordinate& intPt,
+SegmentString::addIntersection(const Coordinate& intPt,
 	int segmentIndex, double dist)
 {
 	int normalizedSegmentIndex = segmentIndex;
@@ -180,10 +93,39 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 }
 
+/* public static */
+void
+SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
+	SegmentString::NonConstVect *resultEdgeList)
+{
+	for ( SegmentString::NonConstVect::const_iterator
+		i=segStrings.begin(), iEnd=segStrings.end();
+		i != iEnd; ++i )
+	{
+		SegmentString* ss = *i;
+		ss->getNodeList().addSplitEdges(resultEdgeList);
+	}
+}
+
+/* public static */
+SegmentString::NonConstVect*
+SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
+{
+	SegmentString::NonConstVect* resultEdgelist = \
+		new SegmentString::NonConstVect();
+	getNodedSubstrings(segStrings, resultEdgelist);
+	return resultEdgelist;
+}
+
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.18  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

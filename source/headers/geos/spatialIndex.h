@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/14 13:28:25  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.4  2004/10/26 17:46:18  strk
  * Removed slash-stars in comments to remove annoying compiler warnings.
  *
@@ -74,17 +79,18 @@ public:
 	virtual void insert(const Envelope *itemEnv, void *item)=0;
 
 	/*
-	* Queries the index for all items whose extents intersect the given search {@link Envelope}
-	* Note that some kinds of indexes may also return objects which do not in fact
-	* intersect the query envelope.
-	*
-	* @param searchEnv the envelope to query for
-	* @return a list of the items found by the query
-	*/
+	 * Queries the index for all items whose extents intersect the given search Envelope
+	 * Note that some kinds of indexes may also return objects which do not in fact
+	 * intersect the query envelope.
+	 *
+	 * @param searchEnv the envelope to query for
+	 * @return a list of the items found by the query
+	 */
 	virtual vector<void*>* query(const Envelope *searchEnv)=0;
 
 };
-}
+
+} // namespace geos
 
 #endif
 

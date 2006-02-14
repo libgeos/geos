@@ -5,14 +5,264 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#ifndef GEOS_NODING_SNAPROUND_H
+#define GEOS_NODING_SNAPROUND_H
+
+#include <geos/platform.h>
+#include <geos/noding.h>
+#include <geos/geom.h>
+#include <vector>
+
+using namespace std;
+
+#define KEEP_OBSOLETED
+
+namespace geos {
+
+/**
+ * Implements a "hot pixel" as used in the Snap Rounding algorithm.
+ * A hot pixel contains the interior of the tolerance square and
+ * the boundary
+ * <b>minus</b> the top and right segments.
+ * <p>
+ * The hot pixel operations are all computed in the integer domain
+ * to avoid rounding problems.
+ *
+ * @version 1.7
+ */
+class HotPixel {
+private:
+	LineIntersector& li;
+
+	Coordinate pt;
+	const Coordinate& originalPt;
+	Coordinate ptScaled;
+
+	Coordinate p0Scaled;
+	Coordinate p1Scaled;
+
+	double scaleFactor;
+
+	double minx;
+	double maxx;
+	double miny;
+	double maxy;
+
+	/**
+	 * The corners of the hot pixel, in the order:
+	 *  10
+	 *  23
+	 */
+	vector<Coordinate> corner;
+
+	// Owned by this class, constructed on demand
+	auto_ptr<Envelope> safeEnv; 
+
+	void initCorners(const Coordinate& pt);
+
+	double scale(double val) {
+		// Math.round
+		return round(val*scaleFactor);
+	}
+
+	void copyScaled(const Coordinate& p, Coordinate& pScaled) {
+		pScaled.x = scale(p.x);
+		pScaled.y = scale(p.y);
+	}
+
+	/**
+	 * Tests whether the segment p0-p1 intersects the hot pixel
+	 * tolerance square.
+	 * Because the tolerance square point set is partially open (along the
+	 * top and right) the test needs to be more sophisticated than
+	 * simply checking for any intersection.  However, it
+	 * can take advantage of the fact that because the hot pixel edges
+	 * do not lie on the coordinate grid.  It is sufficient to check
+	 * if there is at least one of:
+	 * <ul>
+	 * <li>a proper intersection with the segment and any hot pixel edge
+	 * <li>an intersection between the segment and both the left
+	 *     and bottom edges
+	 * <li>an intersection between a segment endpoint and the hot
+	 *     pixel coordinate
+	 * </ul>
+	 *
+	 * @param p0
+	 * @param p1
+	 * @return
+	 */
+	bool intersectsToleranceSquare(const Coordinate& p0,
+			const Coordinate& p1);
+ 
+
+	/**
+	 * Test whether the given segment intersects
+	 * the closure of this hot pixel.
+	 * This is NOT the test used in the standard snap-rounding
+	 * algorithm, which uses the partially closed tolerance square
+	 * instead.
+	 * This routine is provided for testing purposes only.
+	 *
+	 * @param p0 the start point of a line segment
+	 * @param p1 the end point of a line segment
+	 * @return <code>true</code> if the segment intersects the
+	 *         closure of the pixel's tolerance square
+	 */
+	bool intersectsPixelClosure(const Coordinate& p0,
+			const Coordinate& p1);
+ 
+public:
+
+	HotPixel(const Coordinate& pt, double scaleFact, LineIntersector& li);
+
+	/// \brief
+	/// Return reference to original Coordinate
+	/// (the one provided at construction time)
+	const Coordinate& getCoordinate() { return originalPt; }
+
+	/**
+	 * Returns a "safe" envelope that is guaranteed to contain
+	 * the hot pixel. Keeps ownership of it.
+	 */
+	const Envelope& getSafeEnvelope();
+
+	bool intersectsScaled(const Coordinate& p0, const Coordinate& p1);
+	bool intersects(const Coordinate& p0, const Coordinate& p1);
+ 
+
+
+
+};
+
+
+/**
+ * Uses Snap Rounding to compute a rounded,
+ * fully noded arrangement from a set of {@link SegmentString}s.
+ * Implements the Snap Rounding technique described in
+ * Hobby, Guibas & Marimont, and Goodrich et al.
+ * Snap Rounding assumes that all vertices lie on a uniform grid
+ * (hence the precision model of the input must be fixed precision,
+ * and all the input vertices must be rounded to that precision).
+ *
+ * This implementation uses simple iteration over the line segments.
+ *
+ * This implementation appears to be fully robust using an integer
+ * precision model.
+ * It will function with non-integer precision models, but the
+ * results are not 100% guaranteed to be correctly noded.
+ *
+ * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.2 (JTS-1.7)
+ *
+ * TODO: remove Noder inheritance (that's an interface)
+ * TODO: finish me
+ *
+ */
+class SimpleSnapRounder: public Noder { // implements NoderIface
+
+private:
+	const PrecisionModel& pm;
+	LineIntersector li;
+	double scaleFactor;
+	SegmentString::NonConstVect* nodedSegStrings;
+
+	void checkCorrectness(SegmentString::NonConstVect& inputSegmentStrings);
+
+	void snapRound(SegmentString::NonConstVect* segStrings,
+			LineIntersector& li);
+
+	/**
+	 * Computes all interior intersections in the vector
+	 * of SegmentString, and fill the given vector
+	 * with their Coordinates.
+	 *
+	 * Does NOT node the segStrings.
+	 *
+	 * @param segStrings a vector of const Coordinates for the intersections
+	 * @param li the LineIntersector to use
+	 * @param ret the vector to push intersection Coordinates to
+	 */
+	void findInteriorIntersections(SegmentString::NonConstVect& segStrings,
+			LineIntersector& li, vector<Coordinate>& ret);
+
+	/**
+	 * Computes nodes introduced as a result of snapping segments to snap points (hot pixels)
+	 * @param li
+	 */
+	void computeSnaps(const SegmentString::NonConstVect& segStrings,
+			vector<Coordinate>& snapPts);
+
+	void computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts);
+
+	/**
+	 * Performs a brute-force comparison of every segment in each {@link SegmentString}.
+	 * This has n^2 performance.
+	 */
+	void computeVertexSnaps(SegmentString* e0, SegmentString* e1);
+
+public:
+
+	SimpleSnapRounder(const PrecisionModel& newPm):
+		pm(newPm),
+		li(&newPm),
+		scaleFactor(newPm.getScale())
+	{
+	}
+
+	SegmentString::NonConstVect* getNodedSubstrings() const {
+		return nodedSegStrings;
+	}
+
+	void computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
+	{
+		nodedSegStrings = inputSegmentStrings;
+		snapRound(inputSegmentStrings, li);
+
+		// testing purposes only - remove in final version
+		checkCorrectness(*inputSegmentStrings);
+	}
+
+	void add(const SegmentString* segStr);
+
+	/**
+	 * Adds a new node (equal to the snap pt) to the segment if the segment
+	 * passes through the hot pixel.
+	 *
+	 * @param hotPix
+	 * @param segStr
+	 * @param segIndex
+	 * @return <code>true</code> if a node was added
+	 */
+	static bool addSnappedNode(HotPixel& hotPix, SegmentString* segStr, int segIndex);
+
+	/**
+	 * Computes nodes introduced as a result of
+	 * snapping segments to vertices of other segments
+	 *
+	 * @param segStrings the list of segment strings to snap together
+	 */
+	void computeVertexSnaps(const SegmentString::NonConstVect& edges);
+};
+
+} // namespace geos
+
+#endif
+
+/**********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/14 13:28:25  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.2  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -26,74 +276,4 @@
  *
  *
  **********************************************************************/
-
-
-#ifndef GEOS_NODING_SNAPROUND_H
-#define GEOS_NODING_SNAPROUND_H
-
-#include <geos/platform.h>
-#include <geos/noding.h>
-#include <geos/geom.h>
-#include <vector>
-
-using namespace std;
-
-namespace geos {
-
-class SegmentSnapper {
-private:
-	static double TOLERANCE;
-public:
-	/**
-	* @return true if the point p is within the snap tolerance of the line p0-p1
-	*/
-	static bool isWithinTolerance(const Coordinate& p,const Coordinate& p0,const Coordinate& p1);
-	/**
-	* Adds a new node (equal to the snap pt) to the segment
-	* if the snapPt is
-	* within tolerance of the segment
-	*
-	* @param snapPt
-	* @param segStr
-	* @param segIndex
-	* @return <code>true</code> if a node was added
-	*/
-	bool addSnappedNode(Coordinate& snapPt,SegmentString *segStr,int segIndex);
-};
-
-class SimpleSegmentStringsSnapper {
-private:
-	int nSnaps;
-	/**
-	* Performs a brute-force comparison of every segment in each SegmentString.
-	* This has n^2 performance.
-	*/
-	void computeSnaps(SegmentString *e0, SegmentString *e1, SegmentSnapper *ss);
-public:
-	SimpleSegmentStringsSnapper();
-	int getNumSnaps();
-	void computeNodes(vector<SegmentString*>* edges, SegmentSnapper *ss, bool testAllSegments);
-};
-
-/*
- * Uses snap rounding to compute a rounded, noded arrangement from a
- * set of linestrings.
- */
-class SnapRounder {
-protected:
-	LineIntersector *li;
-public:
-	void setLineIntersector(LineIntersector *newLi);
-	vector<SegmentString*>* node(vector<SegmentString*>* inputSegmentStrings);
-private:	
-	vector<SegmentString*>* fullyIntersectSegments(vector<SegmentString*>* segStrings, LineIntersector *aLi);
-	/**
-	* Computes new nodes introduced as a result of snapping segments to near vertices
-	* @param li
-	*/
-	vector<SegmentString*>* computeSnaps(vector<SegmentString*>* segStrings);
-};
-
-}
-#endif
 

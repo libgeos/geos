@@ -52,6 +52,14 @@ using namespace geos;
 
 XMLTester::XMLTester()
 	:
+	gA(0),
+	gB(0),
+	gT(0),
+	pm(0),
+	factory(0),
+	r(0),
+	w(0),
+	br(0),
 	test_predicates(0),
 	failed(0),
 	succeeded(0),
@@ -124,6 +132,8 @@ XMLTester::parsePrecisionModel()
 	//precisionModel=xml.GetChildAttrib("type");
 	string scaleStr=xml.GetChildAttrib("scale");
 
+	if ( pm ) delete pm;
+
 	if ( scaleStr == "" ) {
 		pm=new PrecisionModel();
 	} else {
@@ -143,9 +153,16 @@ XMLTester::parsePrecisionModel()
 		cout << *curr_file <<": run: Precision Model: " << pm->toString() <<endl;
 	}
 
+	if ( factory ) delete factory;
 	factory = new GeometryFactory(pm);
+
+	if ( r ) delete r;
 	r=new WKTReader(factory);
+
+	if ( w ) delete w;
 	w=new WKTWriter();
+
+	if ( br ) delete br;
 	br=new WKBReader(*factory);
 }
 
@@ -725,6 +742,11 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.2  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

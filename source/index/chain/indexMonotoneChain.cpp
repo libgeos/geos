@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -19,33 +20,9 @@
 
 namespace geos {
 
-indexMonotoneChain::indexMonotoneChain(CoordinateSequence *newPts,int nstart,int nend, void* nContext):
-	pts(newPts),
-	start(nstart),
-	end(nend),
-	env(NULL),
-	context(nContext)
+Envelope*
+indexMonotoneChain::getEnvelope()
 {
-}
-
-void indexMonotoneChain::setId(int nId) {
-	id=nId;
-}
-
-//int
-//indexMonotoneChain::getId() {
-	//return id;
-//}
-
-void* indexMonotoneChain::getContext() {
-	return context;
-}
-
-indexMonotoneChain::~indexMonotoneChain() {
-	delete env;
-}
-
-Envelope* indexMonotoneChain::getEnvelope() {
 	if (env==NULL) {
 		const Coordinate& p0=pts->getAt(start);
 		const Coordinate& p1=pts->getAt(end);
@@ -54,34 +31,32 @@ Envelope* indexMonotoneChain::getEnvelope() {
 	return env;
 }
 
-int indexMonotoneChain::getStartIndex(){
-	return start;
-}
-int indexMonotoneChain::getEndIndex(){
-	return end;
-}
-
-void indexMonotoneChain::getLineSegment(int index,LineSegment *ls) {
+void
+indexMonotoneChain::getLineSegment(int index, LineSegment *ls)
+{
 	ls->p0=pts->getAt(index);
 	ls->p1=pts->getAt(index+1);
 }
+
 /**
-* Return the subsequence of coordinates forming this chain.
-* Allocates a new array to hold the Coordinates
-*/
-CoordinateSequence* indexMonotoneChain::getCoordinates() {
+ * Return the subsequence of coordinates forming this chain.
+ * Allocates a new array to hold the Coordinates
+ */
+CoordinateSequence*
+indexMonotoneChain::getCoordinates() {
 	return pts->clone();
 }
 
-/**
-* Determine all the line segments in the chain whose envelopes overlap
-* the searchEnvelope,and process them
-*/
-void indexMonotoneChain::select(Envelope *searchEnv,MonotoneChainSelectAction *mcs) {
+void
+indexMonotoneChain::select(Envelope *searchEnv, MonotoneChainSelectAction *mcs)
+{
 	computeSelect(searchEnv,start,end,mcs);
 }
 
-void indexMonotoneChain::computeSelect(Envelope *searchEnv,int start0,int end0,MonotoneChainSelectAction *mcs ) {
+void
+indexMonotoneChain::computeSelect(Envelope *searchEnv, int start0, int end0,
+		MonotoneChainSelectAction *mcs )
+{
 	const Coordinate& p0=pts->getAt(start0);
 	const Coordinate& p1=pts->getAt(end0);
 	mcs->tempEnv1->init(p0,p1);
@@ -114,7 +89,8 @@ indexMonotoneChain::computeOverlaps(indexMonotoneChain *mc, MonotoneChainOverlap
 }
 
 void
-indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,int start1,int end1,MonotoneChainOverlapAction *mco)
+indexMonotoneChain::computeOverlaps(int start0, int end0, indexMonotoneChain *mc,
+		int start1, int end1, MonotoneChainOverlapAction *mco)
 {
 	//Debug.println("computeIntersectsForChain:"+p00+p01+p10+p11);
 	// terminating condition for the recursion
@@ -158,6 +134,11 @@ indexMonotoneChain::computeOverlaps(int start0,int end0,indexMonotoneChain *mc,i
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.16  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

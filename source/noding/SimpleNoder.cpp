@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -17,37 +18,51 @@
 
 namespace geos {
 
-vector<SegmentString*>* SimpleNoder::node(vector<SegmentString*>* inputSegStrings) {
-	for (int i0=0;i0<(int)inputSegStrings->size();i0++) {
-		SegmentString *edge0=(*inputSegStrings)[i0];
-		for (int i1=0;i1<(int)inputSegStrings->size();i1++) {
-			SegmentString *edge1=(*inputSegStrings)[i1];
-			computeIntersects(edge0, edge1);
-		}
-	}
-	vector<SegmentString*> *nodedSegStrings=getNodedEdges(inputSegStrings);
-	return nodedSegStrings;
-}
-
+/*private*/
 void
-SimpleNoder::computeIntersects(SegmentString *e0, SegmentString *e1)
+SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
 {
-	const CoordinateSequence *pts0=e0->getCoordinates();
-	const CoordinateSequence *pts1=e1->getCoordinates();
-
-	unsigned int npts0=pts0->getSize();
-	unsigned int npts1=pts1->getSize();
-	for (unsigned int i0=0; i0<npts0-1; ++i0) {
-		for (unsigned int i1=0; i1<npts1-1; ++i1) {
+	const CoordinateSequence* pts0 = e0->getCoordinatesRO();
+	const CoordinateSequence* pts1 = e1->getCoordinatesRO();
+	for (unsigned int i0=0, n0=pts0->getSize()-1; i0<n0; i0++) {
+		for (unsigned int i1=0, n1=pts1->getSize()-1; i1<n1; i1++) {
 			segInt->processIntersections(e0, i0, e1, i1);
 		}
 	}
+ 
 }
+
+/*public*/
+void
+SimpleNoder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
+{
+	nodedSegStrings=inputSegmentStrings;
+
+	for (SegmentString::NonConstVect::const_iterator
+			i0=inputSegmentStrings->begin(), i0End=inputSegmentStrings->end();
+			i0!=i0End; ++i0)
+	{
+		SegmentString* edge0 = *i0;
+		for (SegmentString::NonConstVect::iterator
+			i1=inputSegmentStrings->begin(), i1End=inputSegmentStrings->end();
+			i1!=i1End; ++i1)
+		{
+		        SegmentString* edge1 = *i1;
+			computeIntersects(edge0, edge1);
+		}
+	}
+}
+
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.5  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

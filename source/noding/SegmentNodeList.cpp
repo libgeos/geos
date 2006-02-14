@@ -54,7 +54,7 @@ SegmentNodeList::~SegmentNodeList()
  * @return the SegmentIntersection found or added
  */
 SegmentNode*
-SegmentNodeList::add(Coordinate *intPt, int segmentIndex, double dist)
+SegmentNodeList::add(const Coordinate *intPt, int segmentIndex, double dist)
 {
 	SegmentNode *eiNew=new SegmentNode(intPt, segmentIndex, dist);
 
@@ -167,6 +167,11 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.18  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

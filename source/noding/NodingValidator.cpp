@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -16,17 +17,6 @@
 #include <geos/noding.h>
 
 namespace geos {
-
-NodingValidator::NodingValidator(vector<SegmentString*> *newSegStrings)
-{
-	segStrings=newSegStrings;
-	li=new LineIntersector();
-}
-
-NodingValidator::~NodingValidator()
-{
-	delete li;
-}
 
 void
 NodingValidator::checkValid()
@@ -49,7 +39,7 @@ NodingValidator::checkProperIntersections()
 }
 
 void
-NodingValidator::checkProperIntersections(SegmentString *ss0, SegmentString *ss1)
+NodingValidator::checkProperIntersections(const SegmentString *ss0, const SegmentString *ss1)
 {
 	const CoordinateSequence *pts0=ss0->getCoordinates();
 	const CoordinateSequence *pts1=ss1->getCoordinates();
@@ -64,18 +54,18 @@ NodingValidator::checkProperIntersections(SegmentString *ss0, SegmentString *ss1
 }
 
 void
-NodingValidator::checkProperIntersections(SegmentString *e0, int segIndex0, SegmentString *e1, int segIndex1)
+NodingValidator::checkProperIntersections(const SegmentString *e0, int segIndex0, const SegmentString *e1, int segIndex1)
 {
 	if (e0 == e1 && segIndex0 == segIndex1) return;
 
 	//numTests++;
-	Coordinate p00=e0->getCoordinates()->getAt(segIndex0);
-	Coordinate p01=e0->getCoordinates()->getAt(segIndex0+1);
-	Coordinate p10=e1->getCoordinates()->getAt(segIndex1);
-	Coordinate p11=e1->getCoordinates()->getAt(segIndex1+1);
-	li->computeIntersection(p00, p01, p10, p11);
-	if (li->hasIntersection()) {
-		if (   li->isProper()
+	const Coordinate& p00=e0->getCoordinates()->getAt(segIndex0);
+	const Coordinate& p01=e0->getCoordinates()->getAt(segIndex0+1);
+	const Coordinate& p10=e1->getCoordinates()->getAt(segIndex1);
+	const Coordinate& p11=e1->getCoordinates()->getAt(segIndex1+1);
+	li.computeIntersection(p00, p01, p10, p11);
+	if (li.hasIntersection()) {
+		if (   li.isProper()
 			|| hasInteriorIntersection(li, p00, p01)
 			|| hasInteriorIntersection(li, p00, p01)) {
 				throw  GEOSException("found non-noded intersection at "+ p00.toString() + "-" + p01.toString()+ " and "+ p10.toString() + "-" + p11.toString());
@@ -88,11 +78,12 @@ NodingValidator::checkProperIntersections(SegmentString *e0, int segIndex0, Segm
  * endpoint of the segment p0-p1
  */
 bool
-NodingValidator::hasInteriorIntersection(LineIntersector *aLi, Coordinate& p0, Coordinate& p1)
+NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
+		const Coordinate& p0, const Coordinate& p1)
 {
-	for (int i = 0; i < aLi->getIntersectionNum(); i++)
+	for (int i=0, n=aLi.getIntersectionNum(); i<n; i++)
 	{
-		const Coordinate &intPt=aLi->getIntersection(i);
+		const Coordinate &intPt=aLi.getIntersection(i);
 		if (!(intPt==p0 || intPt==p1))
 			return true;
 	}
@@ -103,7 +94,7 @@ void
 NodingValidator::checkNoInteriorPointsSame()
 {
 	for (unsigned int i=0; i<segStrings->size(); ++i) {
-		SegmentString *ss0=(*segStrings)[i];
+		const SegmentString *ss0=(*segStrings)[i];
 		const CoordinateSequence *pts=ss0->getCoordinates();
 		checkNoInteriorPointsSame(pts->getAt(0), segStrings);
 		checkNoInteriorPointsSame(pts->getAt(pts->getSize()-1),
@@ -112,11 +103,12 @@ NodingValidator::checkNoInteriorPointsSame()
 }
 
 void
-NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<SegmentString*> *aSegStrings)
+NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,
+		const SegmentString::NonConstVect* aSegStrings)
 {
 	unsigned int nSegStrings=segStrings->size();
 	for (unsigned int i=0; i<nSegStrings; ++i) {
-			SegmentString *ss0=(*segStrings)[i];
+			const SegmentString *ss0=(*segStrings)[i];
 			const CoordinateSequence *pts=ss0->getCoordinates();
 			unsigned int npts=pts->getSize();
 			for (unsigned int j=1; j<npts-1; ++j)
@@ -131,6 +123,11 @@ NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,vector<Segme
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.8  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

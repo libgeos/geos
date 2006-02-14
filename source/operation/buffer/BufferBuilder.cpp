@@ -4,16 +4,22 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/BufferBuilder.java rev. 1.21 (JTS-1.7)
+ *
  **********************************************************************/
 
+#include <cassert>
+#include <geos/noding.h>
 #include <geos/opBuffer.h>
 #include <geos/profiler.h>
 
@@ -45,54 +51,13 @@ BufferBuilder::depthDelta(Label *label)
 //static CGAlgorithms rCGA;
 //CGAlgorithms *BufferBuilder::cga=&rCGA;
 
-/**
- * Creates a new BufferBuilder
- */
-BufferBuilder::BufferBuilder():
-	quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
-	endCapStyle(BufferOp::CAP_ROUND),
-	workingPrecisionModel(NULL),
-	edgeList(new EdgeList())
-{
-}
-
 BufferBuilder::~BufferBuilder()
 {
+	delete li;
+	delete intersectionAdder;
 	delete edgeList;
 	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
-}
-
-/**
- * Sets the number of segments used to approximate a angle fillet
- *
- * @param quadrantSegments the number of segments in a fillet for a quadrant
- */
-void
-BufferBuilder::setQuadrantSegments(int nQuadrantSegments)
-{
-	quadrantSegments=nQuadrantSegments;
-}
-
-/**
- * Sets the precision model to use during the curve computation and noding,
- * if it is different to the precision model of the Geometry->
- * If the precision model is less than the precision of the Geometry
- * precision model,
- * the Geometry must have previously been rounded to that precision->
- *
- * @param pm the precision model to use
- */
-void
-BufferBuilder::setWorkingPrecisionModel(PrecisionModel *pm)
-{
-	workingPrecisionModel=pm;
-}
-
-void
-BufferBuilder::setEndCapStyle(int nEndCapStyle)
-{
-	endCapStyle=nEndCapStyle;
 }
 
 Geometry*
@@ -102,6 +67,8 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	const PrecisionModel *precisionModel=workingPrecisionModel;
 	if (precisionModel==NULL)
 		precisionModel=g->getPrecisionModel();
+
+	assert(precisionModel);
 
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
@@ -165,53 +132,73 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	return resultGeom;
 }
 
-void
-BufferBuilder::computeNodedEdges(vector<SegmentString*> *bufferSegStrList, const PrecisionModel *precisionModel)
-	// throw(GEOSException *)
+/*private*/
+Noder*
+BufferBuilder::getNoder(const PrecisionModel* pm)
 {
-	//BufferCurveGraphNoder noder=new BufferCurveGraphNoder(geomFact->getPrecisionModel());
-	IteratedNoder noder(precisionModel);
-	vector<SegmentString*> *nodedSegStrings = NULL;
-	
-	try 
+	// this doesn't change workingNoder precisionModel!
+	if (workingNoder != NULL) return workingNoder;
+
+	// otherwise use a fast (but non-robust) noder
+	MCIndexNoder* noder = new MCIndexNoder();
+
+	if ( li ) // reuse existing IntersectionAdder and LineIntersector
 	{
-#if DEBUG
-		cerr<<"BufferBuilder::computeNodedEdges: getting nodedSegString"<<endl;
-#endif
-		nodedSegStrings=noder.node(bufferSegStrList);
-#if DEBUG
-		cerr<<"BufferBuilder::computeNodedEdges: done getting nodedSegString"<<endl;
+		li->setPrecisionModel(pm);
+		assert(intersectionAdder!=NULL);
+	}
+	else
+	{
+		li = new LineIntersector(pm);
+		intersectionAdder = new IntersectionAdder(*li);
+	}
+
+	noder->setSegmentIntersector(intersectionAdder);
+
+	return noder;
+
+#if 0
+	Noder noder = new IteratedNoder(precisionModel);
+	Noder noder = new SimpleSnapRounder(precisionModel);
+	Noder noder = new MCIndexSnapRounder(precisionModel);
+	Noder noder = new ScaledNoder(
+		new MCIndexSnapRounder(new PrecisionModel(1.0)),
+			precisionModel.getScale());
 #endif
 
-		// DEBUGGING ONLY
-		//BufferDebug->saveEdges(nodedEdges, "run" + BufferDebug->runCount + "_nodedEdges");
-#if DEBUG
-		cerr<<"BufferBuilder::computeNodedEdges: setting label for "<<nodedSegStrings->size()<<" nodedSegStrings"<<endl;
-#endif
 
-#if PROFILE
-		static Profile *prof = profiler->get("BufferBuilder::computeNodedEdges: labeling");
-		prof->start();
-#endif
-		for (unsigned int i=0;i<nodedSegStrings->size();i++) {
-			SegmentString *segStr=(*nodedSegStrings)[i];
-			Label *oldLabel=(Label*) segStr->getContext();
-			Edge *edge=new Edge((CoordinateSequence*) segStr->getCoordinates(), new Label(*oldLabel));
-			insertEdge(edge);
-		}
-#if PROFILE
-		prof->stop();
-#endif
+}
 
-#if DEBUG
-		cerr<<"BufferBuilder::computeNodedEdges: labeling for "<<nodedSegStrings->size()<<" nodedSegStrings done"<<endl;
-#endif
-		//saveEdges(edgeList->getEdges(), "run" + runCount + "_collapsedEdges");
-	} catch (...) {
+void
+BufferBuilder::computeNodedEdges(SegmentString::NonConstVect* bufferSegStrList,
+		const PrecisionModel *precisionModel) // throw(GEOSException)
+{
+	Noder *noder = getNoder(precisionModel);
+
+	noder->computeNodes(bufferSegStrList);
+
+	SegmentString::NonConstVect* nodedSegStrings = \
+			noder->getNodedSubstrings();
+
+
+	for (SegmentString::NonConstVect::iterator
+		i=nodedSegStrings->begin(), e=nodedSegStrings->end();
+		i!=e;
+		++i)
+	{
+		SegmentString* segStr = *i;
+		const Label* oldLabel = (Label*)(segStr->getData());
+		Edge* edge = new Edge(segStr->getCoordinates(),
+				new Label(*oldLabel));
+		insertEdge(edge);
+	}
+
+	if ( nodedSegStrings != bufferSegStrList )
+	{
 		delete nodedSegStrings;
-		throw;
-	} 
-	delete nodedSegStrings;
+	}
+
+	if ( noder != workingNoder ) delete noder;
 }
 
 
@@ -319,6 +306,11 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.33  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,8 +12,13 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/IteratedNoder.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/noding.h>
 #include <geos/profiler.h>
 
@@ -22,96 +28,66 @@
 
 namespace geos {
 
-#if PROFILE
-static Profiler *profiler = Profiler::instance();
-#endif
-
-
-IteratedNoder::IteratedNoder(const PrecisionModel *newPm)
-{
-	//li = new LineIntersector();
-	pm=newPm;
-	li.setPrecisionModel(pm);
-}
-
-IteratedNoder::~IteratedNoder() {
-	//delete li;
-}
-
-/*
- * Fully nodes a list of SegmentStrings, i.e. peforms noding iteratively
- * until no intersections are found between segments.
- * Maintains labelling of edges correctly through
- * the noding.
- *
- * @param segStrings a collection of SegmentStrings to be noded
- * @return a collection of the noded SegmentStrings
- * @throws TopologyException if the iterated noding fails to converge.
- */
-vector<SegmentString*>*
-IteratedNoder::node(vector<SegmentString*> *segStrings)
-	// throw(GEOSException *)
-{
-	int numInteriorIntersections;
-
-	vector<SegmentString*> *nodedEdges=new vector<SegmentString *>(*segStrings);
-
-	int nodingIterationCount = 0;
-	int lastNodesCreated = -1;
-	do {
-		vector<SegmentString*> *oString = nodedEdges;
-		nodedEdges=node(nodedEdges,&numInteriorIntersections);
-		delete oString;
-		nodingIterationCount++;
-		int nodesCreated=numInteriorIntersections;
-		//System.out.println("# nodes created: " + nodesCreated);
-		if (lastNodesCreated > 0 && nodesCreated > lastNodesCreated) {
-			delete nodedEdges;
-			throw  TopologyException("Iterated noding failed to converge");
-		}
-		lastNodesCreated = nodesCreated;
-		//saveEdges(nodedEdges, "run" + runCount + "_nodedEdges");
-	} while (lastNodesCreated > 0);
-	//System.out.println("# nodings = " + nodingIterationCount);
-#if DEBUG
-	cerr<<"IteratedNoder::node iterated "<<nodingIterationCount<<" times"<<endl;
-#endif
-	return nodedEdges;
-}
-
-
 /*
  * Node the input segment strings once
  * and create the split edges between the nodes
  */
-vector<SegmentString*>*
-IteratedNoder::node(vector<SegmentString*> *segStrings, int *numInteriorIntersections)
+void
+IteratedNoder::node(vector<SegmentString*> *segStrings,
+		int *numInteriorIntersections)
 {
-	//nodingSegmentIntersector *si = new nodingSegmentIntersector(li);
-	nodingSegmentIntersector si(&li);
-	MCQuadtreeNoder noder;
+	IntersectionAdder si(li);
+	MCIndexNoder noder;
 	noder.setSegmentIntersector(&si);
-	// perform the noding
-#if PROFILE
-	static Profile *prof = profiler->get("IteratedNoder::node");
-	prof->start();
-#endif
-	vector<SegmentString*> *nodedSegStrings=noder.node(segStrings);
-#if PROFILE
-	prof->stop();
-#endif
-	*numInteriorIntersections=si.numInteriorIntersections;
-	//System.out.println("# intersection tests: " + si.numTests);
-
-	//delete noder;
-	//delete si;
-	return nodedSegStrings;
+	noder.computeNodes(segStrings);
+	nodedSegStrings = noder.getNodedSubstrings();
+	*numInteriorIntersections = si.numInteriorIntersections;
+//System.out.println("# intersection tests: " + si.numTests);
 }
 
+void
+IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
+	// throw(GEOSException);
+{
+	int numInteriorIntersections;
+	nodedSegStrings = segStrings;
+	int nodingIterationCount = 0;
+	int lastNodesCreated = -1;
+	do {
+		node(nodedSegStrings, &numInteriorIntersections);
+		nodingIterationCount++;
+		int nodesCreated = numInteriorIntersections;
+
+		/**
+		 * Fail if the number of nodes created is not declining.
+		 * However, allow a few iterations at least before doing this
+		 */
+		//cerr<<"# nodes created: "<<nodesCreated<<endl;
+		if (lastNodesCreated > 0
+				&& nodesCreated >= lastNodesCreated
+				&& nodingIterationCount > maxIter)
+		{
+			stringstream s;
+			s<<"Iterated noding failed to converge after "<<
+                                    nodingIterationCount<<" iterations";
+			throw TopologyException(s.str());
+		}
+		lastNodesCreated = nodesCreated;
+
+	} while (lastNodesCreated > 0);
+	//cerr<<"# nodings = "<<nodingIterationCount<<endl;
 }
+
+
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.14  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

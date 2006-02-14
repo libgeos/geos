@@ -35,8 +35,8 @@
 
 namespace geos {
 
-LineIntersector::LineIntersector():
-	precisionModel(NULL),
+LineIntersector::LineIntersector(const PrecisionModel* initialPrecisionModel):
+	precisionModel(initialPrecisionModel),
 	result(0)
 	//pa(intPt[0]), pb(intPt[1])
 {
@@ -931,6 +931,11 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/02/14 13:28:25  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
  * Revision 1.29  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
