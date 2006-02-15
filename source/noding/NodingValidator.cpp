@@ -4,82 +4,184 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ ********************************************************************** 
+ *
+ * Last port: noding/NodingValidator.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/noding.h>
+#include <util.h>
 
 namespace geos {
 
+/*public*/
 void
-NodingValidator::checkValid()
+NodingValidator::checkValid() 
 {
-	checkNoInteriorPointsSame();
-	checkProperIntersections();
+	checkEndPtVertexIntersections();
+	checkInteriorIntersections();
+	checkCollapses();
 }
 
-
+/*private*/
 void
-NodingValidator::checkProperIntersections()
+NodingValidator::checkCollapses() const
 {
-	for (int i=0; i<(int)segStrings->size();i++) {
-		SegmentString *ss0=(*segStrings)[i];
-		for (int j=0; j<(int)segStrings->size();j++) {
-			SegmentString *ss1=(*segStrings)[j];
-			checkProperIntersections(ss0, ss1);
+	for (SegmentString::NonConstVect::const_iterator
+		it = segStrings.begin(), itEnd = segStrings.end();
+		it != itEnd;
+		++it)
+	{
+		const SegmentString* ss = *it;
+		checkCollapses(*ss);
+	}
+}
+
+/* private */
+void
+NodingValidator::checkCollapses(const SegmentString& ss) const
+{
+	const CoordinateSequence& pts = *(ss.getCoordinatesRO());
+	for (unsigned int i=0, n=pts.getSize()-2; i<n; ++i)
+	{
+		checkCollapse(pts[i], pts[i + 1], pts[i + 2]);
+	}
+}
+
+/* private */
+void
+NodingValidator::checkCollapse(const Coordinate& p0,
+		const Coordinate& p1, const Coordinate& p2) const
+{
+	if (p0.equals2D(p2))
+		throw GEOSException("found non-noded collapse at " +
+			p0.toString() + ", " +
+			p1.toString() + ", " +
+			p2.toString());
+}
+
+/*private*/
+void
+NodingValidator::checkInteriorIntersections() 
+{
+	for (SegmentString::NonConstVect::const_iterator
+		it = segStrings.begin(), itEnd = segStrings.end();
+		it != itEnd;
+		++it)
+	{
+		SegmentString* ss0 = *it;
+		for (SegmentString::NonConstVect::const_iterator
+			j = segStrings.begin(), jEnd = segStrings.end();
+			j != jEnd; ++j)
+		{
+        		const SegmentString* ss1 = *j;
+			checkInteriorIntersections(*ss0, *ss1);
+		}
+	}
+ 
+}
+
+/* private */
+void
+NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
+		const SegmentString& ss1) 
+{
+	const CoordinateSequence& pts0 = *(ss0.getCoordinatesRO());
+	const CoordinateSequence& pts1 = *(ss1.getCoordinatesRO());
+	for (unsigned int i0=0, n0=pts0.size(); i0<n0-1; i0++) {
+		for (unsigned int i1=0, n1=pts1.size(); i1<n1-1; i1++) {
+			checkInteriorIntersections(ss0, i0, ss1, i1);
 		}
 	}
 }
 
+
+/* private */
 void
-NodingValidator::checkProperIntersections(const SegmentString *ss0, const SegmentString *ss1)
+NodingValidator::checkInteriorIntersections(
+		const SegmentString& e0, unsigned int segIndex0,
+		const SegmentString& e1, unsigned int segIndex1) 
 {
-	const CoordinateSequence *pts0=ss0->getCoordinates();
-	const CoordinateSequence *pts1=ss1->getCoordinates();
-	unsigned int npts0=pts0->getSize();
-	unsigned int npts1=pts1->getSize();
+	if (&e0 == &e1 && segIndex0 == segIndex1) return;
+	const Coordinate& p00 = e0.getCoordinatesRO()->getAt(segIndex0);
+	const Coordinate& p01 = e0.getCoordinatesRO()->getAt(segIndex0 + 1);
+	const Coordinate& p10 = e1.getCoordinatesRO()->getAt(segIndex1);
+	const Coordinate& p11 = e1.getCoordinatesRO()->getAt(segIndex1 + 1);
 
-	for (unsigned int i0=0; i0<npts0-1; i0++) {
-		for (unsigned int i1=0; i1<npts1-1; i1++) {
-			checkProperIntersections(ss0, i0, ss1, i1);
-		}
-	}
-}
-
-void
-NodingValidator::checkProperIntersections(const SegmentString *e0, int segIndex0, const SegmentString *e1, int segIndex1)
-{
-	if (e0 == e1 && segIndex0 == segIndex1) return;
-
-	//numTests++;
-	const Coordinate& p00=e0->getCoordinates()->getAt(segIndex0);
-	const Coordinate& p01=e0->getCoordinates()->getAt(segIndex0+1);
-	const Coordinate& p10=e1->getCoordinates()->getAt(segIndex1);
-	const Coordinate& p11=e1->getCoordinates()->getAt(segIndex1+1);
 	li.computeIntersection(p00, p01, p10, p11);
 	if (li.hasIntersection()) {
-		if (   li.isProper()
+		if (li.isProper()
 			|| hasInteriorIntersection(li, p00, p01)
-			|| hasInteriorIntersection(li, p00, p01)) {
-				throw  GEOSException("found non-noded intersection at "+ p00.toString() + "-" + p01.toString()+ " and "+ p10.toString() + "-" + p11.toString());
+			|| hasInteriorIntersection(li, p10, p11))
+		{
+			throw GEOSException(
+				"found non-noded intersection at "
+				+ p00.toString() + "-" + p01.toString()
+				+ " and "
+				+ p10.toString() + "-" + p11.toString());
 		}
 	}
 }
 
-/**
- * @return true if there is an intersection point which is not an
- * endpoint of the segment p0-p1
- */
+/* private */
+void
+NodingValidator::checkEndPtVertexIntersections() const
+{
+	for (SegmentString::NonConstVect::const_iterator
+		it = segStrings.begin(), itEnd = segStrings.end();
+		it != itEnd;
+		++it)
+	{
+		const SegmentString* ss = *it;
+		const CoordinateSequence& pts = *(ss->getCoordinatesRO());
+		checkEndPtVertexIntersections(pts[0], segStrings);
+		checkEndPtVertexIntersections(pts[pts.size() - 1], segStrings);
+	}
+}
+
+/* private */
+void
+NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
+		const SegmentString::NonConstVect& segStrings) const
+{
+	for (SegmentString::NonConstVect::const_iterator
+		it = segStrings.begin(), itEnd = segStrings.end();
+		it != itEnd;
+		++it)
+	{
+		const SegmentString* ss0 = *it;
+		const CoordinateSequence& pts = *(ss0->getCoordinatesRO());
+		for (unsigned int j=1, n=pts.size()-1; j<n; ++j)
+		{
+			if (pts[j].equals(testPt))
+			{
+				stringstream s;
+				s<<"found endpt/interior pt intersection ";
+				s<<"at index "<<j<<" :pt "<<testPt.toString();
+				throw GEOSException(s.str());
+			}
+		}
+	}
+}
+
+ 
+
+ 
+
+/* private */
 bool
 NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
-		const Coordinate& p0, const Coordinate& p1)
+		const Coordinate& p0, const Coordinate& p1) const
 {
 	for (int i=0, n=aLi.getIntersectionNum(); i<n; i++)
 	{
@@ -90,39 +192,15 @@ NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
 	return false;
 }
 
-void
-NodingValidator::checkNoInteriorPointsSame()
-{
-	for (unsigned int i=0; i<segStrings->size(); ++i) {
-		const SegmentString *ss0=(*segStrings)[i];
-		const CoordinateSequence *pts=ss0->getCoordinates();
-		checkNoInteriorPointsSame(pts->getAt(0), segStrings);
-		checkNoInteriorPointsSame(pts->getAt(pts->getSize()-1),
-			segStrings);
-	}
-}
-
-void
-NodingValidator::checkNoInteriorPointsSame(const Coordinate& testPt,
-		const SegmentString::NonConstVect* aSegStrings)
-{
-	unsigned int nSegStrings=segStrings->size();
-	for (unsigned int i=0; i<nSegStrings; ++i) {
-			const SegmentString *ss0=(*segStrings)[i];
-			const CoordinateSequence *pts=ss0->getCoordinates();
-			unsigned int npts=pts->getSize();
-			for (unsigned int j=1; j<npts-1; ++j)
-			{
-				if (pts->getAt(j)==testPt)
-					throw  GEOSException("found bad noding at pt " + testPt.toString());
-			}
-	}
-}
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/15 17:19:18  strk
+ * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
+ * and size() to easy port maintainance.
+ *
  * Revision 1.9  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

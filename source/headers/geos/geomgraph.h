@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -27,6 +27,7 @@
 #include <geos/geomgraphindex.h>
 #include <geos/geosAlgorithm.h>
 #include <geos/platform.h>
+#include <geos/noding.h>
 
 using namespace std;
 
@@ -41,7 +42,6 @@ class EdgeSetIntersector;
 class GeometryGraph;
 class MonotoneChainEdge;
 class Node;
-class NodingValidator;
 class SegmentString;
 class SegmentIntersector;
 
@@ -846,12 +846,19 @@ private:
  */
 class EdgeNodingValidator {
 private:
-	static vector<SegmentString*>* toSegmentStrings(vector<Edge*> *edges);
-	NodingValidator *nv;
+	vector<SegmentString*>& toSegmentStrings(vector<Edge*> *edges);
+	NodingValidator nv;
+	SegmentString::NonConstVect segStr;
 public:
-	EdgeNodingValidator(vector<Edge*> *edges);
-	virtual ~EdgeNodingValidator();
-	void checkValid();
+
+	EdgeNodingValidator(vector<Edge*> *edges)
+		:
+		nv(toSegmentStrings(edges))
+	{}
+
+	~EdgeNodingValidator();
+
+	void checkValid() { nv.checkValid(); }
 };
 
 class Edge: public GraphComponent{
@@ -921,6 +928,10 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/02/15 17:19:18  strk
+ * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
+ * and size() to easy port maintainance.
+ *
  * Revision 1.28  2006/02/04 00:54:57  strk
  * - Doxygen dox updated
  * - LineStringLT struct moved from geomgraph.h to geom.h

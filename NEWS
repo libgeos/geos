@@ -33,6 +33,7 @@ Changes in 3.0.0
 	- New MultiLineString::reverse()
 	- New Geometry::buffer(distance, quadSeg, endCapStyle)
 	- New SnapRounding code
+	- New size() and operator[] interfaces to CoordinateSequence
 
 - Optimizations:
 	- WKT parser speedup

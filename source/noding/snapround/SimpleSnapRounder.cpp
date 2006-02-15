@@ -30,7 +30,7 @@ SimpleSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentStr
 		SegmentString::getNodedSubstrings(inputSegmentStrings)
 	);
 
-	NodingValidator nv(resultSegStrings.get());
+	NodingValidator nv(*(resultSegStrings.get()));
 	try {
 		nv.checkValid();
 	} catch (const std::exception &ex) {
@@ -164,6 +164,10 @@ SimpleSnapRounder::findInteriorIntersections(SegmentString::NonConstVect& segStr
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/15 17:19:18  strk
+ * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
+ * and size() to easy port maintainance.
+ *
  * Revision 1.1  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

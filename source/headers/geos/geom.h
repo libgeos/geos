@@ -392,6 +392,9 @@ public:
 #endif
 	inline Coordinate(double xNew, double yNew);
 	inline bool equals2D(const Coordinate& other) const;
+	inline bool equals(const Coordinate& other) const {
+		return equals2D(other);
+	}
 	inline int compareTo(const Coordinate& other) const;
 	inline bool equals3D(const Coordinate& other) const;
 	string toString() const;
@@ -643,6 +646,10 @@ public:
 	//virtual const Coordinate& getCoordinate(int i) const=0;
 	virtual const Coordinate& getAt(unsigned int i) const=0;
 
+	const Coordinate& operator[] (unsigned int i) const {
+		return getAt(i);
+	}
+
 	/** \brief
 	 * Write Coordinate at position i to given Coordinate.
 	 */
@@ -654,6 +661,8 @@ public:
 	 */
 	//virtual int size() const=0;
 	virtual unsigned int getSize() const=0;
+
+	unsigned int size() const { return getSize(); }
 
 	/** \brief
 	 * Returns a read-only vector with the Coordinates in this collection.
@@ -2900,6 +2909,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.65  2006/02/15 17:19:18  strk
+ * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
+ * and size() to easy port maintainance.
+ *
  * Revision 1.64  2006/02/09 13:44:57  strk
  * Added support for SRID in input WKB, undeprecated Geometry::setSRID
  * and Geometry::getSRID

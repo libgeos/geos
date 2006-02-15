@@ -22,7 +22,7 @@
 #include <set>
 #include <geos/platform.h>
 #include <geos/geom.h>
-#include <geos/geomgraph.h>
+//#include <geos/geomgraph.h>
 #include <geos/geosAlgorithm.h>
 
 using namespace std;
@@ -866,35 +866,61 @@ public:
 	}
 };
 
-/*
+/**
  * Validates that a collection of {@link SegmentString}s is correctly noded.
  * Throws an appropriate exception if an noding error is found.
+ *
+ * Last port: noding/NodingValidator.java rev. 1.6 (JTS-1.7)
  *
  */
 class NodingValidator {
 private:
 	LineIntersector li;
-	const SegmentString::NonConstVect* segStrings;
-	void checkProperIntersections();
-	void checkProperIntersections(const SegmentString *ss0, const SegmentString *ss1);
-	void checkProperIntersections(const SegmentString *e0, int segIndex0,
-		const SegmentString *e1, int segIndex1);
+	const SegmentString::NonConstVect& segStrings;
 
 	/**
-	 * @return true if there is an intersection point which is not an endpoint
-	 *         of the segment p0-p1
+	 * Checks if a segment string contains a segment
+	 * pattern a-b-a (which implies a self-intersection)
 	 */
-	bool hasInteriorIntersection(const LineIntersector& aLi, const Coordinate& p0,
-			const Coordinate& p1);
+	void checkCollapses() const;
 
-	void checkNoInteriorPointsSame();
+	void checkCollapses(const SegmentString& ss) const;
 
-	void checkNoInteriorPointsSame(const Coordinate& testPt,
-			const SegmentString::NonConstVect* segStrings);
+	void checkCollapse(const Coordinate& p0, const Coordinate& p1,
+			const Coordinate& p2) const;
+
+	/**
+	 * Checks all pairs of segments for intersections at an
+	 * interior point of a segment
+	 */
+	void checkInteriorIntersections();
+
+	void checkInteriorIntersections(const SegmentString& ss0,
+			const SegmentString& ss1);
+
+	void checkInteriorIntersections(
+			const SegmentString& e0, unsigned int segIndex0,
+			const SegmentString& e1, unsigned int segIndex1);
+
+	/**
+	 * Checks for intersections between an endpoint of a segment string
+	 * and an interior vertex of another segment string
+	 */
+	void checkEndPtVertexIntersections() const;
+
+	void checkEndPtVertexIntersections(const Coordinate& testPt,
+			const SegmentString::NonConstVect& segStrings) const;
+
+	/**
+	 * @return true if there is an intersection point which is not an
+	 *         endpoint of the segment p0-p1
+	 */
+	bool hasInteriorIntersection(const LineIntersector& aLi,
+			const Coordinate& p0, const Coordinate& p1) const;
 
 public:
 
-	NodingValidator(const SegmentString::NonConstVect* newSegStrings):
+	NodingValidator(const SegmentString::NonConstVect& newSegStrings):
 		segStrings(newSegStrings)
 	{}
 
@@ -981,6 +1007,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/15 17:19:18  strk
+ * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
+ * and size() to easy port maintainance.
+ *
  * Revision 1.13  2006/02/15 14:59:03  strk
  * JTS-1.7 sync for:
  * noding/SegmentNode.cpp
