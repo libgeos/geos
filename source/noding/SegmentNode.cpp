@@ -4,12 +4,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006      Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: noding/SegmentNode.java rev. 1.5 (JTS-1.7)
  *
  **********************************************************************/
 
@@ -18,22 +23,92 @@
 
 namespace geos {
 
-SegmentNode::SegmentNode(const Coordinate *newCoord, int nSegmentIndex, double newDist)
-		:
-		coord(*newCoord),
-		segmentIndex(nSegmentIndex),
-		dist(newDist)
+
+/**
+ * Implements a robust method of comparing the relative position of two
+ * points along the same segment.
+ * The coordinates are assumed to lie "near" the segment.
+ * This means that this algorithm will only return correct results
+ * if the input coordinates
+ * have the same precision and correspond to rounded values
+ * of exact coordinates lying on the segment.
+ *
+ * Last port: noding/SegmentPointComparator.java rev. 1.2 (JTS-1.7)
+ */
+class SegmentPointComparator {
+
+public:
+
+	/**
+	 * Compares two Coordinates for their relative position along a 
+	 * segment lying in the specified Octant.
+	 *
+	 * @return -1 node0 occurs first
+	 * @return 0 the two nodes are equal
+	 * @return 1 node1 occurs first
+	 */
+	static int compare(int octant, const Coordinate& p0,
+			const Coordinate& p1)
+	{
+		// nodes can only be equal if their coordinates are equal
+		if (p0.equals2D(p1)) return 0;
+
+		int xSign = relativeSign(p0.x, p1.x);
+		int ySign = relativeSign(p0.y, p1.y);
+
+		switch (octant) {
+			case 0: return compareValue(xSign, ySign);
+			case 1: return compareValue(ySign, xSign);
+			case 2: return compareValue(ySign, -xSign);
+			case 3: return compareValue(-xSign, ySign);
+			case 4: return compareValue(-xSign, -ySign);
+			case 5: return compareValue(-ySign, -xSign);
+			case 6: return compareValue(-ySign, xSign);
+			case 7: return compareValue(xSign, -ySign);
+		}
+		assert(0); // "invalid octant value"
+		return 0;
+	 
+	}
+
+	static int relativeSign(double x0, double x1)
+	{
+		if (x0 < x1) return -1;
+		if (x0 > x1) return 1;
+		return 0;
+	}
+
+	static int compareValue(int compareSign0, int compareSign1)
+	{
+		if (compareSign0 < 0) return -1;
+		if (compareSign0 > 0) return 1;
+		if (compareSign1 < 0) return -1;
+		if (compareSign1 > 0) return 1;
+		return 0;
+	}
+ 
+};
+
+SegmentNode::SegmentNode(const SegmentString& ss, const Coordinate& nCoord,
+		unsigned int nSegmentIndex, int nSegmentOctant)
+	:
+	segString(ss),
+	segmentOctant(nSegmentOctant),
+	coord(nCoord),
+	segmentIndex(nSegmentIndex)
 {
-	//coord=*newCoord; 
-	//coord=new Coordinate(*newCoord);
-	//segmentIndex=nSegmentIndex;
-	//dist=newDist;
+	isInteriorVar = \
+		!coord.equals2D(segString.getCoordinate(segmentIndex));
 }
 
-//SegmentNode::~SegmentNode()
-//{
-	//delete coord;
-//}
+
+bool
+SegmentNode::isEndPoint(unsigned int maxSegmentIndex) const
+{
+	if (segmentIndex == 0 && ! isInteriorVar) return true;
+	if (segmentIndex == maxSegmentIndex) return true;
+	return false;
+}
 
 /**
  * @return -1 this EdgeIntersection is located before the argument location
@@ -41,35 +116,22 @@ SegmentNode::SegmentNode(const Coordinate *newCoord, int nSegmentIndex, double n
  * @return 1 this EdgeIntersection is located after the argument location
  */
 int
-SegmentNode::compare(int cSegmentIndex, double cDist)
+SegmentNode::compareTo(const SegmentNode& other)
 {
-	if (segmentIndex < cSegmentIndex) return -1;
-	if (segmentIndex > cSegmentIndex) return 1;
-	if (dist<cDist) return -1;
-	if (dist>cDist) return 1;
-	return 0;
-}
+	if (segmentIndex < other.segmentIndex) return -1;
+	if (segmentIndex > other.segmentIndex) return 1;
 
-bool
-SegmentNode::isEndPoint(int maxSegmentIndex)
-{
-	if (segmentIndex == 0 && dist == 0.0) return true;
-	if (segmentIndex == maxSegmentIndex) return true;
-	return false;
-}
+	if (coord.equals2D(other.coord)) return 0;
 
-int
-SegmentNode::compareTo(void* obj)
-{
-	SegmentNode *other=(SegmentNode*) obj;
-	return compare(other->segmentIndex, other->dist);
+	return SegmentPointComparator::compare(segmentOctant, coord,
+			other.coord);
 }
 
 string
 SegmentNode::print()
 {
 	ostringstream s;
-	s<<coord.toString()<<" seg#="<<segmentIndex<<" dist="<<dist;
+	s<<coord.toString()<<" seg#="<<segmentIndex;
 	return s.str();
 }
 
@@ -77,6 +139,12 @@ SegmentNode::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/15 14:59:07  strk
+ * JTS-1.7 sync for:
+ * noding/SegmentNode.cpp
+ * noding/SegmentNodeList.cpp
+ * noding/SegmentString.cpp
+ *
  * Revision 1.8  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

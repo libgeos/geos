@@ -27,7 +27,7 @@ static Profiler *profiler=Profiler::instance();
  * intersections found for a segment of an edge to the edge intersection list.
  */
 void
-SegmentString::addIntersections(LineIntersector *li, int segmentIndex,
+SegmentString::addIntersections(LineIntersector *li, unsigned int segmentIndex,
 		int geomIndex)
 {
 	for (int i=0; i<li->getIntersectionNum(); i++) {
@@ -42,45 +42,30 @@ SegmentString::addIntersections(LineIntersector *li, int segmentIndex,
  * to use the higher of the two possible segmentIndexes
  */
 void
-SegmentString::addIntersection(LineIntersector *li, int segmentIndex,
+SegmentString::addIntersection(LineIntersector *li, unsigned int segmentIndex,
 		int geomIndex, int intIndex)
 {
 	const Coordinate &intPt=li->getIntersection(intIndex);
-	double dist=li->getEdgeDistance(geomIndex, intIndex);
-	addIntersection((Coordinate&)intPt, segmentIndex, dist);
-}
-
-/**
- * Add an EdgeIntersection for intersection intIndex.
- * An intersection that falls exactly on a vertex of the edge is normalized
- * to use the higher of the two possible segmentIndexes
- */
-void
-SegmentString::addIntersection(const Coordinate& intPt, int segmentIndex)
-{
-	double dist=LineIntersector::computeEdgeDistance(intPt,pts->getAt(segmentIndex),pts->getAt(segmentIndex + 1));
-	addIntersection(intPt, segmentIndex, dist);
+	addIntersection(intPt, segmentIndex);
 }
 
 void
 SegmentString::addIntersection(const Coordinate& intPt,
-	int segmentIndex, double dist)
+	unsigned int segmentIndex)
 {
-	int normalizedSegmentIndex = segmentIndex;
-	//Debug.println("edge intpt: " + intPt + " dist: " + dist);
+	unsigned int normalizedSegmentIndex = segmentIndex;
+
 	// normalize the intersection point location
-	int nextSegIndex = normalizedSegmentIndex + 1;
+	unsigned int nextSegIndex = normalizedSegmentIndex + 1;
 	if (nextSegIndex < npts)
 	{
-		const Coordinate &nextPt = pts->getAt(nextSegIndex);
-		//Debug.println("next pt: " + nextPt);
+		const Coordinate& nextPt = pts->getAt(nextSegIndex);
 
 		// Normalize segment index if intPt falls on vertex
-		// The check for point equality is 2D only - Z values are ignored
+		// The check for point equality is 2D only -
+		// Z values are ignored
 		if (intPt.equals2D(nextPt)) {
-			//Debug.println("normalized distance");
 			normalizedSegmentIndex = nextSegIndex;
-			dist = 0.0;
 		}
 	}
 
@@ -88,8 +73,7 @@ SegmentString::addIntersection(const Coordinate& intPt,
 	 * Add the intersection point to edge intersection list.
 	 */
 	//SegmentNode *ei=
-	eiList.add(&intPt, normalizedSegmentIndex, dist);
-	//ei.print(System.out);
+	eiList.add(intPt, normalizedSegmentIndex);
 
 }
 
@@ -121,6 +105,12 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/15 14:59:08  strk
+ * JTS-1.7 sync for:
+ * noding/SegmentNode.cpp
+ * noding/SegmentNodeList.cpp
+ * noding/SegmentString.cpp
+ *
  * Revision 1.19  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

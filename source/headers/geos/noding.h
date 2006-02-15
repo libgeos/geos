@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006      Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -67,58 +68,69 @@ public:
 };
 
 
-/*
+/**
  * Represents an intersection point between two {@link SegmentString}s.
  * Final class.
+ *
+ * Last port: noding/SegmentNode.java rev. 1.5 (JTS-1.7)
  */
-/* final */ class SegmentNode {
+class SegmentNode {
+private:
+	const SegmentString& segString;
+	int segmentOctant;
+	int isInteriorVar;
+
 public:
-	/// the point of intersection
+
+	/// the point of intersection (own copy)
 	Coordinate coord;  
 
 	/// the index of the containing line segment in the parent edge
-	int segmentIndex;  
-	
-	/// the edge distance of this point along the containing line segment
-	double dist;       
+	unsigned int segmentIndex;  
 
 	/// Given coordinate will be copied
-	SegmentNode(const Coordinate *newCoord, int nSegmentIndex, double newDist);
+	SegmentNode(const SegmentString& ss, const Coordinate& nCoord,
+			unsigned int nSegmentIndex, int nSegmentOctant);
 
-	//~SegmentNode();
+	~SegmentNode() {}
+
+	bool isInterior() const { return isInteriorVar; }
+
+	bool isEndPoint(unsigned int maxSegmentIndex) const;
 
 	/**
-	 * @return -1 this EdgeIntersection is located before the argument location
+	 * @return -1 this EdgeIntersection is located before
+	 *            the argument location
 	 * @return 0 this EdgeIntersection is at the argument location
-	 * @return 1 this EdgeIntersection is located after the argument location
+	 * @return 1 this EdgeIntersection is located after the
+	 *           argument location
 	 */
-	int compare(int cSegmentIndex,double cDist);
-
-	bool isEndPoint(int maxSegmentIndex);
-
-	int compareTo(void* obj);
+	int compareTo(const SegmentNode& other);
 
 	string print();
 };
 
 struct SegmentNodeLT {
 	bool operator()(SegmentNode *s1, SegmentNode *s2) const {
-		return s1->compareTo(s2)<0;
+		return s1->compareTo(*s2)<0;
 	}
 };
 
-typedef set<SegmentNode*,SegmentNodeLT>::iterator SegmentNodeListIterator;
-
-/*
+/**
  * A list of the {@link SegmentNode}s present along a
- * noded {@link SegmentString}.
+ * noded SegmentString.
  *
+ * Last port: noding/SegmentNodeList.java rev. 1.7 (JTS-1.7)
  */
 class SegmentNodeList {
 private:
-	set<SegmentNode*,SegmentNodeLT>nodes;
-	const SegmentString *edge;  // the parent edge
-	vector<SegmentNode*> *sortedNodes;
+	set<SegmentNode*,SegmentNodeLT> nodeMap;
+
+	// the parent edge
+	const SegmentString& edge; 
+
+	// UNUSED
+	//vector<SegmentNode*> *sortedNodes;
 
 	// This vector is here to keep track of created splitEdges
 	vector<SegmentString*> splitEdges;
@@ -126,48 +138,109 @@ private:
 	// This vector is here to keep track of created Coordinates
 	vector<CoordinateSequence*> splitCoordLists;
 
-	void checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges);
 	/**
-	* Create a new "split edge" with the section of points between
-	* (and including) the two intersections.
-	* The label for the new edge is the same as the label for the parent edge.
-	*/
+	 * Checks the correctness of the set of split edges corresponding
+	 * to this edge
+	 *
+	 * @param splitEdges the split edges for this edge (in order)
+	 */
+	void checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges);
+
+	/**
+	 * Create a new "split edge" with the section of points between
+	 * (and including) the two intersections.
+	 * The label for the new edge is the same as the label for the
+	 * parent edge.
+	 */
 	SegmentString* createSplitEdge(SegmentNode *ei0, SegmentNode *ei1);
 
+	/**
+	 * Adds nodes for any collapsed edge pairs.
+	 * Collapsed edge pairs can be caused by inserted nodes, or they
+	 * can be pre-existing in the edge vertex list.
+	 * In order to provide the correct fully noded semantics,
+	 * the vertex at the base of a collapsed pair must also be added
+	 * as a node.
+	 */
+	void addCollapsedNodes();
+
+	/**
+	 * Adds nodes for any collapsed edge pairs
+	 * which are pre-existing in the vertex list.
+	 */
+	void findCollapsesFromExistingVertices(
+			vector<unsigned int>& collapsedVertexIndexes);
+
+	/**
+	 * Adds nodes for any collapsed edge pairs caused by inserted nodes
+	 * Collapsed edge pairs occur when the same coordinate is inserted
+	 * as a node both before and after an existing edge vertex.
+	 * To provide the correct fully noded semantics,
+	 * the vertex must be added as a node as well.
+	 */
+	void findCollapsesFromInsertedNodes(
+		vector<unsigned int>& collapsedVertexIndexes);
+
+	bool findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
+		unsigned int& collapsedVertexIndex);
 public:
 
-	SegmentNodeList(const SegmentString *newEdge);
+	typedef set<SegmentNode*,SegmentNodeLT> container;
+	typedef container::iterator iterator;
+	typedef container::const_iterator const_iterator;
 
+
+	SegmentNodeList(const SegmentString* newEdge): edge(*newEdge) {}
+	SegmentNodeList(const SegmentString& newEdge): edge(newEdge) {}
+
+	const SegmentString& getEdge() const { return edge; }
+
+	// TODO: Is this a final class ?
+	// Should remove the virtual in that case
 	virtual ~SegmentNodeList();
 
 	/**
 	 * Adds an intersection into the list, if it isn't already there.
 	 * The input segmentIndex and dist are expected to be normalized.
 	 *
-	 * @return the SegmentIntersection found or added.
+	 * @return the SegmentIntersection found or added. It will be
+	 *	   destroyed at SegmentNodeList destruction time.
 	 *
 	 * @param intPt the intersection Coordinate, will be copied
 	 */
-	SegmentNode* add(const Coordinate *intPt, int segmentIndex, double dist);
+	SegmentNode* add(const Coordinate& intPt, unsigned int segmentIndex);
+
+	SegmentNode* add(const Coordinate *intPt, unsigned int segmentIndex) {
+		return add(*intPt, segmentIndex);
+	}
 
 	/*
 	 * returns the set of SegmentNodes
 	 */
 	//replaces iterator()
-	set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodes; }
+	// TODO: obsolete this function
+	set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodeMap; }
+
+	container::iterator begin() { return nodeMap.begin(); }
+	container::const_iterator begin() const { return nodeMap.begin(); }
+	container::iterator end() { return nodeMap.end(); }
+	container::const_iterator end() const { return nodeMap.end(); }
 
 	/**
-	* Adds entries for the first and last points of the edge to the list
-	*/
+	 * Adds entries for the first and last points of the edge to the list
+	 */
 	void addEndpoints();
 
 	/**
-	* Creates new edges for all the edges that the intersections in this
-	* list split the parent edge into.
-	* Adds the edges to the input list (this is so a single list
-	* can be used to accumulate all split edges for a Geometry).
-	*/
-	void addSplitEdges(vector<SegmentString*> *edgeList);
+	 * Creates new edges for all the edges that the intersections in this
+	 * list split the parent edge into.
+	 * Adds the edges to the input list (this is so a single list
+	 * can be used to accumulate all split edges for a Geometry).
+	 */
+	void addSplitEdges(vector<SegmentString*>& edgeList);
+	void addSplitEdges(vector<SegmentString*>* edgeList) {
+		addSplitEdges(*edgeList);
+	}
 
 	string print();
 };
@@ -176,7 +249,21 @@ public:
 
 #ifndef USE_NEW_SEGMENT_STRING
 
-/* final */ class SegmentString {
+/**
+ * Represents a list of contiguous line segments,
+ * and supports noding the segments.
+ * The line segments are represented by an array of {@link Coordinate}s.
+ * Intended to optimize the noding of contiguous segments by
+ * reducing the number of allocated objects.
+ * SegmentStrings can carry a context object, which is useful
+ * for preserving topological or parentage information.
+ * All noded substrings are initialized with the same context object.
+ *
+ * Final class.
+ *
+ * Last port: noding/SegmentString.java rev. 1.5 (JTS-1.7)
+ */
+class SegmentString {
 public:
 	typedef vector<const SegmentString*> ConstVect;
 	typedef vector<SegmentString *> NonConstVect;
@@ -184,7 +271,7 @@ public:
 private:
 	SegmentNodeList eiList;
 	const CoordinateSequence *pts;
-	int npts;
+	unsigned int npts;
 	const void* context;
 	bool isIsolatedVar;
 public:
@@ -209,12 +296,16 @@ public:
 	const SegmentNodeList& getIntersectionList() const { return getNodeList(); }
 	SegmentNodeList& getIntersectionList() { return getNodeList(); }
 
-	int size() const { return npts; }
+	unsigned int size() const { return npts; }
 
-	const Coordinate& getCoordinate(int i) const { return pts->getAt(i); }
+	const Coordinate& getCoordinate(unsigned int i) const {
+		return pts->getAt(i);
+	}
 
+	/// Return a clone of this SegmentString CoordinateSequence
 	CoordinateSequence* getCoordinates() const { return pts->clone(); }
 
+	/// Return a read-only pointer to this SegmentString CoordinateSequence
 	const CoordinateSequence* getCoordinatesRO() const { return pts; }
 
 	void setIsolated(bool isIsolated) { isIsolatedVar=isIsolated; }
@@ -224,11 +315,25 @@ public:
 	bool isClosed() const { return pts->getAt(0)==pts->getAt(npts-1); }
 
 	/**
+	 * Gets the octant of the segment starting at vertex <code>index</code>.
+	 *
+	 * @param index the index of the vertex starting the segment. 
+	 *              Must not be the last index in the vertex list
+	 * @return the octant of the segment at the vertex
+	 */
+	int getSegmentOctant(unsigned int index) const
+	{
+	  if (index == size() - 1) return -1;
+	  return Octant::octant(getCoordinate(index), getCoordinate(index+1));
+	}
+
+	/**
 	 * Adds EdgeIntersections for one or both
 	 * intersections found for a segment of an edge to the edge
 	 * intersection list.
 	 */
-	void addIntersections(LineIntersector *li,int segmentIndex, int geomIndex);
+	void addIntersections(LineIntersector *li, unsigned int segmentIndex,
+			int geomIndex);
 
 	/**
 	 * Add an SegmentNode for intersection intIndex.
@@ -236,16 +341,16 @@ public:
 	 * of the SegmentString is normalized
 	 * to use the higher of the two possible segmentIndexes
 	 */
-	void addIntersection(LineIntersector *li, int segmentIndex, int geomIndex, int intIndex);
+	void addIntersection(LineIntersector *li, unsigned int segmentIndex,
+			int geomIndex, int intIndex);
 
 	/**
 	 * Add an EdgeIntersection for intersection intIndex.
-	 * An intersection that falls exactly on a vertex of the edge is normalized
+	 * An intersection that falls exactly on a vertex of the
+	 * edge is normalized
 	 * to use the higher of the two possible segmentIndexes
 	 */
-	void addIntersection(const Coordinate& intPt, int segmentIndex);
-
-	void addIntersection(const Coordinate& intPt, int segmentIndex, double dist);
+	void addIntersection(const Coordinate& intPt, unsigned int segmentIndex);
 
 	static void getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
 			SegmentString::NonConstVect* resultEdgeList);
@@ -326,20 +431,6 @@ public:
 	  return pts.front()->equals2D(*(pts.back()));
 	}
 
-
-	/**
-	 * Gets the octant of the segment starting at vertex <code>index</code>.
-	 *
-	 * @param index the index of the vertex starting the segment. 
-	 *              Must not be the last index in the vertex list
-	 * @return the octant of the segment at the vertex
-	 */
-	int getSegmentOctant(unsigned int index)
-	{
-	  if (index == pts.size() - 1) return -1;
-	  return Octant::octant(getCoordinate(index), getCoordinate(index + 1));
-	}
-
 	/**
 	 * Adds EdgeIntersections for one or both
 	 * intersections found for a segment of an edge to the edge
@@ -367,6 +458,20 @@ public:
 		getNodedSubstrings(segStrings, resultEdgelist);
 		return resultEdgelist;
 	}
+
+	/**
+	 * Gets the octant of the segment starting at vertex <code>index</code>.
+	 *
+	 * @param index the index of the vertex starting the segment. 
+	 *              Must not be the last index in the vertex list
+	 * @return the octant of the segment at the vertex
+	 */
+	int getSegmentOctant(unsigned int index)
+	{
+	  if (index == pts.size() - 1) return -1;
+	  return Octant::octant(getCoordinate(index), getCoordinate(index + 1));
+	}
+
 
 	static void getNodedSubstrings(const SegmentString::ConstVect& segStrings,
 			SegmentString::ConstVect* resultEdgeList);
@@ -876,6 +981,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/15 14:59:03  strk
+ * JTS-1.7 sync for:
+ * noding/SegmentNode.cpp
+ * noding/SegmentNodeList.cpp
+ * noding/SegmentString.cpp
+ *
  * Revision 1.12  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

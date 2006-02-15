@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006      Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,8 +12,13 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/SegmentNodeList.java rev. 1.7 (JTS-1.7)
+ *
  **********************************************************************/
 
+#include <cassert>
 #include <geos/noding.h>
 #include <geos/profiler.h>
 
@@ -22,23 +28,11 @@ namespace geos {
 static Profiler *profiler = Profiler::instance();
 #endif
 
-SegmentNodeList::SegmentNodeList(const SegmentString *newEdge)
-{
-#if PROFILE
-	static Profile *prof = profiler->get("SegmentNodeList::SegmentNodeList");
-	prof->start();
-#endif
-	//nodes=new set<SegmentNode*,SegmentNodeLT>();
-	edge=newEdge;
-#if PROFILE
-	prof->stop();
-#endif
-}
 
 SegmentNodeList::~SegmentNodeList()
 {
-	set<SegmentNode *, SegmentNodeLT>::iterator it=nodes.begin();
-	for(; it!=nodes.end(); it++) delete *it;
+	set<SegmentNode *, SegmentNodeLT>::iterator it=nodeMap.begin();
+	for(; it!=nodeMap.end(); it++) delete *it;
 
 	unsigned int i=0;
 
@@ -48,73 +42,158 @@ SegmentNodeList::~SegmentNodeList()
 	for(i=0; i<n; i++) delete splitCoordLists[i];
 }
 
-/**
- * Adds an intersection into the list, if it isn't already there.
- * The input segmentIndex and dist are expected to be normalized.
- * @return the SegmentIntersection found or added
- */
 SegmentNode*
-SegmentNodeList::add(const Coordinate *intPt, int segmentIndex, double dist)
+SegmentNodeList::add(const Coordinate& intPt, unsigned int segmentIndex)
 {
-	SegmentNode *eiNew=new SegmentNode(intPt, segmentIndex, dist);
+	SegmentNode *eiNew=new SegmentNode(edge, intPt, segmentIndex,
+			edge.getSegmentOctant(segmentIndex));
 
-	pair<SegmentNodeListIterator,bool> p = nodes.insert(eiNew);
+	pair<SegmentNodeList::iterator,bool> p = nodeMap.insert(eiNew);
 	if ( p.second ) { // new SegmentNode inserted
 		return eiNew;
 	} else {
+
+		// sanity check 
+		assert(eiNew->coord.equals2D(intPt));
+
 		delete eiNew;
 		return *(p.first);
 	}
 }
 
-/**
- * Adds entries for the first and last points of the edge to the list
- */
 void SegmentNodeList::addEndpoints()
 {
-	int maxSegIndex = edge->size() - 1;
-	add((Coordinate*)&(edge->getCoordinate(0)), 0, 0.0);
-	add((Coordinate*)&(edge->getCoordinate(maxSegIndex)), maxSegIndex, 0.0);
+	int maxSegIndex = edge.size() - 1;
+	add(&(edge.getCoordinate(0)), 0);
+	add(&(edge.getCoordinate(maxSegIndex)), maxSegIndex);
 }
 
-/**
- * Creates new edges for all the edges that the intersections in this
- * list split the parent edge into.
- * Adds the edges to the input list (this is so a single list
- * can be used to accumulate all split edges for a Geometry).
- */
+/* private */
 void
-SegmentNodeList::addSplitEdges(vector<SegmentString*> *edgeList)
+SegmentNodeList::addCollapsedNodes()
+{
+	vector<unsigned int> collapsedVertexIndexes;
+
+	findCollapsesFromInsertedNodes(collapsedVertexIndexes);
+	findCollapsesFromExistingVertices(collapsedVertexIndexes);
+
+	// node the collapses
+	for (vector<unsigned int>::iterator
+		i=collapsedVertexIndexes.begin(),
+			e=collapsedVertexIndexes.end();
+		i != e; ++i)
+	{
+		unsigned int vertexIndex = *i;
+		add(edge.getCoordinate(vertexIndex), vertexIndex);
+	}
+}
+
+
+/* private */
+void
+SegmentNodeList::findCollapsesFromExistingVertices(
+			vector<unsigned int>& collapsedVertexIndexes)
+{
+	for (unsigned int i=0, n=edge.size()-2; i<n; ++i)
+	{
+		const Coordinate& p0 = edge.getCoordinate(i);
+		//const Coordinate& p1 = edge.getCoordinate(i + 1);
+		const Coordinate& p2 = edge.getCoordinate(i + 2);
+		if (p0.equals2D(p2)) {
+			// add base of collapse as node
+			collapsedVertexIndexes.push_back(i + 1);
+		}
+	}
+}
+
+/* private */
+void
+SegmentNodeList::findCollapsesFromInsertedNodes(
+		vector<unsigned int>& collapsedVertexIndexes)
+{
+	unsigned int collapsedVertexIndex;
+
+	// there should always be at least two entries in the list,
+	// since the endpoints are nodes
+	iterator it = begin();
+	SegmentNode* eiPrev = *it;
+	++it;
+	for(iterator itEnd=end(); it!=itEnd; ++it)
+	{
+		SegmentNode *ei=*it;
+      		bool isCollapsed = findCollapseIndex(*eiPrev, *ei,
+				collapsedVertexIndex);
+		if (isCollapsed)
+			collapsedVertexIndexes.push_back(collapsedVertexIndex);
+
+		eiPrev = ei;
+	}
+}
+
+/* private */
+bool
+SegmentNodeList::findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
+		unsigned int& collapsedVertexIndex)
+{
+	// only looking for equal nodes
+	if (! ei0.coord.equals2D(ei1.coord)) return false;
+
+	int numVerticesBetween = ei1.segmentIndex - ei0.segmentIndex;
+	if (! ei1.isInterior()) {
+		numVerticesBetween--;
+	}
+
+	// if there is a single vertex between the two equal nodes,
+	// this is a collapse
+	if (numVerticesBetween == 1) {
+		collapsedVertexIndex = ei0.segmentIndex + 1;
+		return true;
+	}
+	return false;
+}
+
+
+/* public */
+void
+SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 {
 	// testingOnly
-	//vector<SegmentString*> *testingSplitEdges=new vector<SegmentString*>();
-	// ensure that the list has entries for the first and last point of the edge
-	addEndpoints();
+	//vector<SegmentString*> testingSplitEdges;
 
-	set<SegmentNode*,SegmentNodeLT>::iterator it=nodes.begin();
+	// ensure that the list has entries for the first and last
+	// point of the edge
+	addEndpoints();
+	addCollapsedNodes();
+
 	// there should always be at least two entries in the list
+	// since the endpoints are nodes
+	iterator it=begin();
 	SegmentNode *eiPrev=*it;
 	it++;
-	for(;it!=nodes.end();it++) {
+	for(iterator itEnd=end(); it!=itEnd; ++it)
+	{
 		SegmentNode *ei=*it;
 		SegmentString *newEdge=createSplitEdge(eiPrev, ei);
-		edgeList->push_back(newEdge);
-		//testingSplitEdges->push_back(newEdge);
+		edgeList.push_back(newEdge);
+		//testingSplitEdges.push_back(newEdge);
 		eiPrev = ei;
 	}
 	//checkSplitEdgesCorrectness(testingSplitEdges);
 }
 
 void
-SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges)
+SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges)
 {
-	const CoordinateSequence *edgePts=edge->getCoordinates();
-	// check that first and last points of split edges are same as endpoints of edge
-	SegmentString *split0=(*splitEdges)[0];
-	Coordinate pt0=split0->getCoordinate(0);
+	const CoordinateSequence *edgePts=edge.getCoordinatesRO();
+
+	// check that first and last points of split edges
+	// are same as endpoints of edge
+	SegmentString *split0=splitEdges[0];
+	const Coordinate& pt0=split0->getCoordinate(0);
 	if (!(pt0==edgePts->getAt(0)))
-		throw  GEOSException("bad split edge start point at " + pt0.toString());
-	SegmentString *splitn=(*splitEdges)[splitEdges->size()-1];
+		throw GEOSException("bad split edge start point at " + pt0.toString());
+
+	SegmentString *splitn=splitEdges[splitEdges.size()-1];
 	const CoordinateSequence *splitnPts=splitn->getCoordinatesRO();
 	const Coordinate &ptn=splitnPts->getAt(splitnPts->getSize()-1);
 	if (!(ptn==edgePts->getAt(edgePts->getSize()-1)))
@@ -129,34 +208,45 @@ SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*> *splitEdges)
 SegmentString*
 SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 {
-	//Debug.print("\ncreateSplitEdge"); Debug.print(ei0); Debug.print(ei1);
 	int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
-	const Coordinate &lastSegStartPt=edge->getCoordinate(ei1->segmentIndex);
-	// if the last intersection point is not equal to the its segment start pt,
-	// add it to the points list as well.
-	// (This check is needed because the distance metric is not totally reliable!)
+	const Coordinate &lastSegStartPt=edge.getCoordinate(ei1->segmentIndex);
+
+	// if the last intersection point is not equal to the its
+	// segment start pt, add it to the points list as well.
+	// (This check is needed because the distance metric is not
+	// totally reliable!)
+
 	// The check for point equality is 2D only - Z values are ignored
-	bool useIntPt1=ei1->dist > 0.0 || ! ei1->coord.equals2D(lastSegStartPt);
+	bool useIntPt1 = ei1->isInterior() || \
+			! ei1->coord.equals2D(lastSegStartPt);
+
 	if (! useIntPt1) {
 		npts--;
 	}
+
 	CoordinateSequence *pts = new CoordinateArraySequence(npts); 
-	int ipt = 0;
+	unsigned int ipt = 0;
 	pts->setAt(ei0->coord, ipt++);
-	for (int i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; i++) {
-		pts->setAt(edge->getCoordinate(i),ipt++);
+	for (unsigned int i=ei0->segmentIndex+1; i<=ei1->segmentIndex; i++)
+	{
+		pts->setAt(edge.getCoordinate(i),ipt++);
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
-	SegmentString *ret = new SegmentString(pts,edge->getContext());
+
+	SegmentString *ret = new SegmentString(pts,edge.getContext());
 	splitEdges.push_back(ret);
+
+	// Keep track of created CoordinateSequence to release
+	// it at this SegmentNodeList destruction time
 	splitCoordLists.push_back(pts);
+
 	return ret;
 }
 
 string SegmentNodeList::print(){
 	string out="Intersections:";
-	set<SegmentNode*,SegmentNodeLT>::iterator it=nodes.begin();
-	for(;it!=nodes.end();it++) {
+	set<SegmentNode*,SegmentNodeLT>::iterator it=nodeMap.begin();
+	for(;it!=nodeMap.end();it++) {
 		SegmentNode *ei=*it;
 		out.append(ei->print());
 	}
@@ -167,6 +257,12 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/15 14:59:07  strk
+ * JTS-1.7 sync for:
+ * noding/SegmentNode.cpp
+ * noding/SegmentNodeList.cpp
+ * noding/SegmentString.cpp
+ *
  * Revision 1.19  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.
