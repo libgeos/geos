@@ -20,7 +20,7 @@
 
 #include <sstream>
 #include <geos/noding.h>
-#include <util.h>
+#include <geos/util.h>
 
 namespace geos {
 
@@ -197,6 +197,9 @@ NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/16 08:41:40  strk
+ * Fixed include: "util.h" => "geos/util.h"
+ *
  * Revision 1.10  2006/02/15 17:19:18  strk
  * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
  * and size() to easy port maintainance.
