@@ -20,6 +20,7 @@
 #include <geos/platform.h>
 #include <geos/noding.h>
 #include <geos/geom.h>
+#include <cmath>
 #include <vector>
 
 using namespace std;
@@ -258,6 +259,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/16 08:41:01  strk
+ * added <cmath> include for round()
+ *
  * Revision 1.3  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.
