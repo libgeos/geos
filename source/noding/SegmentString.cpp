@@ -18,14 +18,6 @@
 
 namespace geos {
 
-#if PROFILE
-static Profiler *profiler=Profiler::instance();
-#endif
-
-/**
- * Adds EdgeIntersections for one or both
- * intersections found for a segment of an edge to the edge intersection list.
- */
 void
 SegmentString::addIntersections(LineIntersector *li, unsigned int segmentIndex,
 		int geomIndex)
@@ -35,12 +27,6 @@ SegmentString::addIntersections(LineIntersector *li, unsigned int segmentIndex,
 	}
 }
 
-/**
- * Add an SegmentNode for intersection intIndex.
- * An intersection that falls exactly on a vertex
- * of the SegmentString is normalized
- * to use the higher of the two possible segmentIndexes
- */
 void
 SegmentString::addIntersection(LineIntersector *li, unsigned int segmentIndex,
 		int geomIndex, int intIndex)
@@ -105,6 +91,16 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.20  2006/02/15 14:59:08  strk
  * JTS-1.7 sync for:
  * noding/SegmentNode.cpp

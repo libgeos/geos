@@ -184,7 +184,7 @@ SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 void
 SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges)
 {
-	const CoordinateSequence *edgePts=edge.getCoordinatesRO();
+	const CoordinateSequence *edgePts=edge.getCoordinates();
 
 	// check that first and last points of split edges
 	// are same as endpoints of edge
@@ -194,7 +194,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges)
 		throw GEOSException("bad split edge start point at " + pt0.toString());
 
 	SegmentString *splitn=splitEdges[splitEdges.size()-1];
-	const CoordinateSequence *splitnPts=splitn->getCoordinatesRO();
+	const CoordinateSequence *splitnPts=splitn->getCoordinates();
 	const Coordinate &ptn=splitnPts->getAt(splitnPts->getSize()-1);
 	if (!(ptn==edgePts->getAt(edgePts->getSize()-1)))
 		throw  GEOSException("bad split edge end point at " + ptn.toString());
@@ -257,6 +257,16 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.20  2006/02/15 14:59:07  strk
  * JTS-1.7 sync for:
  * noding/SegmentNode.cpp

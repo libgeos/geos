@@ -90,8 +90,8 @@ SimpleSnapRounder::addSnappedNode(HotPixel& hotPix, SegmentString* segStr, int s
 void
 SimpleSnapRounder::computeVertexSnaps(SegmentString* e0, SegmentString* e1)
 {
-	const CoordinateSequence* pts0 = e0->getCoordinatesRO();
-	const CoordinateSequence* pts1 = e1->getCoordinatesRO();
+	const CoordinateSequence* pts0 = e0->getCoordinates();
+	const CoordinateSequence* pts1 = e1->getCoordinates();
 
 	for (unsigned int i0=0, n0=pts0->getSize()-1; i0<n0; i0++)
 	{
@@ -164,6 +164,16 @@ SimpleSnapRounder::findInteriorIntersections(SegmentString::NonConstVect& segStr
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.2  2006/02/15 17:19:18  strk
  * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
  * and size() to easy port maintainance.

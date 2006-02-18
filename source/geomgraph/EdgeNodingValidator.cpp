@@ -29,7 +29,9 @@ EdgeNodingValidator::toSegmentStrings(vector<Edge*> *edges)
 	// convert Edges to SegmentStrings
 	for(unsigned int i=0, n=edges->size(); i<n; i++) {
 		Edge *e=(*edges)[i];
-		segStr.push_back(new SegmentString(e->getCoordinates(),e));
+		CoordinateSequence* cs=e->getCoordinates()->clone();
+		newCoordSeq.push_back(cs);
+		segStr.push_back(new SegmentString(cs, e));
 	}
 	return segStr;
 }
@@ -43,12 +45,25 @@ EdgeNodingValidator::~EdgeNodingValidator()
 	{
 		delete *i;
 	}
+
+	for(unsigned int i=0, n=newCoordSeq.size(); i<n; ++i)
+		delete newCoordSeq[i];
 }
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.4  2006/02/15 17:19:18  strk
  * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
  * and size() to easy port maintainance.

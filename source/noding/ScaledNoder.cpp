@@ -13,21 +13,51 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.1 (JTS-1.7)
+ * Last port: noding/ScaledNoder.java rev. 1.2 (JTS-1.7)
  *
  **********************************************************************/
 
-#include "geos/nodingSnapround.h"
+#include "geos/noding.h"
 
 namespace geos {
 
-// MCIndexSnapRounder::
+/*public*/
+void
+ScaledNoder::filter_rw(Coordinate* c) const
+{
+	c->x = c->x / scaleFactor + offsetX;
+	c->y = c->y / scaleFactor + offsetY;
+}
+
+/*private*/
+void
+ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
+{
+
+	for (SegmentString::NonConstVect::const_iterator
+		i0=segStrings.begin(), i0End=segStrings.end();
+			i0!=i0End; ++i0)
+	{
+		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
+		(*i0)->getCoordinates()->apply_rw(this);
+	}
+}
+
+/*public*/
+SegmentString::NonConstVect*
+ScaledNoder::getNodedSubstrings() const
+{
+	SegmentString::NonConstVect* splitSS = noder.getNodedSubstrings();
+	if ( isScaled ) rescale(*splitSS);
+	return splitSS;
+
+}
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
- * Revision 1.2  2006/02/18 21:08:09  strk
+ * Revision 1.1  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.
  * - SegmentString::getCoordinatesRO() obsoleted.
@@ -36,10 +66,5 @@ namespace geos {
  * - NEW ScaledNoder class
  * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
  * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
- *
- * Revision 1.1  2006/02/14 13:28:26  strk
- * New SnapRounding code ported from JTS-1.7 (not complete yet).
- * Buffer op optimized by using new snaprounding code.
- * Leaks fixed in XMLTester.
  *
  **********************************************************************/

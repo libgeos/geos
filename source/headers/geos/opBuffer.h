@@ -213,6 +213,8 @@ vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
  * of all the noded raw curves and tracing outside contours.
  * The points in the raw curve are rounded to the required precision model.
  *
+ * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.7 
+ *
  */
 class OffsetCurveBuilder {
 public:
@@ -235,17 +237,22 @@ public:
 	 * Lines are assumed to <b>not</b> be closed (the function will not
 	 * fail for closed lines, but will generate superfluous line caps).
 	 *
-	 * @return a List of Coordinate[]
+	 * @param lineList the vector to which CoordinateSequences will
+	 *                 be pushed_back
 	 */
-	vector<CoordinateSequence*>* getLineCurve(const CoordinateSequence *inputPts, double distance);
+	void getLineCurve(const CoordinateSequence* inputPts, double distance,
+		vector<CoordinateSequence*>& lineList);
 
 	/**
 	 * This method handles the degenerate cases of single points and lines,
 	 * as well as rings.
 	 *
-	 * @return a List of Coordinate[]
+	 * @param lineList the vector to which CoordinateSequences will
+	 *                 be pushed_back
 	 */
-	vector<CoordinateSequence*>* getRingCurve(const CoordinateSequence *inputPts, int side, double distance);
+	void getRingCurve(const CoordinateSequence *inputPts, int side,
+		double distance, vector<CoordinateSequence*>& lineList);
+
 
 private:
 
@@ -267,6 +274,14 @@ private:
 	 */
 	double maxCurveSegmentError;
 
+	/// Owned by this object, destroyed by dtor 
+	//
+	/// This actually gets created multiple times
+	/// and each of the old versions is pushed
+	/// to the ptLists vector to ensure all
+	/// created CoordinateSequences are properly 
+	/// destroyed.
+	///
 	CoordinateSequence *ptList;
 
 	double distance;
@@ -337,7 +352,7 @@ void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
 }
 
 
-/*
+/**
  * \class BufferOp opBuffer.h geos/opBuffer.h
  *
  * \brief
@@ -501,11 +516,112 @@ void BufferOp::setEndCapStyle(int s) { endCapStyle=s; }
  * Raw curves need to be noded together and polygonized to form the
  * final buffer area.
  *
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.7 (JTS-1.7)
+ *
  */
 class OffsetCurveSetBuilder {
+
+private:
+
+	// To keep track of newly-created Labels.
+	// Labels will be relesed by object dtor
+	vector<Label*> newLabels;
+
+	const Geometry& inputGeom;
+
+	double distance;
+
+	OffsetCurveBuilder& curveBuilder;
+
+	/// The raw offset curves computed.
+	/// This class holds ownership of vector elements.
+	///
+	vector<SegmentString*> curveList;
+
+	/**
+	 * Creates a SegmentString for a coordinate list which is a raw
+	 * offset curve, and adds it to the list of buffer curves.
+	 * The SegmentString is tagged with a Label giving the topology
+	 * of the curve.
+	 * The curve may be oriented in either direction.
+	 * If the curve is oriented CW, the locations will be:
+	 * - Left: Location.EXTERIOR
+	 * - Right: Location.INTERIOR
+	 */
+	void addCurve(CoordinateSequence *coord, int leftLoc,
+			int rightLoc);
+
+	void add(const Geometry& g);
+
+	void addCollection(const GeometryCollection *gc);
+
+	/**
+	 * Add a Point to the graph.
+	 */
+	void addPoint(const Point *p);
+
+	void addLineString(const LineString *line);
+
+	void addPolygon(const Polygon *p);
+
+	/**
+	 * Add an offset curve for a ring.
+	 * The side and left and right topological location arguments
+	 * assume that the ring is oriented CW.
+	 * If the ring is in the opposite orientation,
+	 * the left and right locations must be interchanged and the side
+	 * flipped.
+	 *
+	 * @param coord the coordinates of the ring (must not contain
+	 * repeated points)
+	 * @param offsetDistance the distance at which to create the buffer
+	 * @param side the side of the ring on which to construct the buffer
+	 *             line
+	 * @param cwLeftLoc the location on the L side of the ring
+	 *                  (if it is CW)
+	 * @param cwRightLoc the location on the R side of the ring
+	 *                   (if it is CW)
+	 */
+	void addPolygonRing(const CoordinateSequence *coord,
+			double offsetDistance, int side, int cwLeftLoc,
+			int cwRightLoc);
+
+	/**
+	 * The ringCoord is assumed to contain no repeated points.
+	 * It may be degenerate (i.e. contain only 1, 2, or 3 points).
+	 * In this case it has no area, and hence has a minimum diameter of 0.
+	 *
+	 * @param ringCoord
+	 * @param offsetDistance
+	 * @return
+	 */
+	bool isErodedCompletely(CoordinateSequence *ringCoord,
+			double bufferDistance);
+
+	/**
+	 * Tests whether a triangular ring would be eroded completely by
+	 * the given buffer distance.
+	 * This is a precise test.  It uses the fact that the inner buffer
+	 * of a triangle converges on the inCentre of the triangle (the
+	 * point equidistant from all sides).  If the buffer distance is
+	 * greater than the distance of the inCentre from a side, the
+	 * triangle will be eroded completely.
+	 *
+	 * This test is important, since it removes a problematic case where
+	 * the buffer distance is slightly larger than the inCentre distance.
+	 * In this case the triangle buffer curve "inverts" with incorrect
+	 * topology, producing an incorrect hole in the buffer.
+	 *
+	 * @param triangleCoord
+	 * @param bufferDistance
+	 * @return
+	 */
+	bool isTriangleErodedCompletely(CoordinateSequence *triangleCoord,
+			double bufferDistance);
+
 public:
-	OffsetCurveSetBuilder(const Geometry *newInputGeom,
-		double newDistance, OffsetCurveBuilder *newCurveBuilder);
+	OffsetCurveSetBuilder(const Geometry& newInputGeom,
+		double newDistance, OffsetCurveBuilder& newCurveBuilder);
 
 	~OffsetCurveSetBuilder();
 
@@ -517,81 +633,11 @@ public:
 	 * @return a Collection of SegmentStrings representing the raw
 	 * buffer curves
 	 */
-	vector<SegmentString*>* getCurves();
+	vector<SegmentString*>& getCurves();
 
-	void addCurves(const vector<CoordinateSequence*> *lineList,
+	void addCurves(const vector<CoordinateSequence*>& lineList,
 		int leftLoc, int rightLoc);
 
-private:
-	vector<Label*> newLabels;
-	//CGAlgorithms cga;
-
-	const Geometry *inputGeom;
-	double distance;
-	OffsetCurveBuilder *curveBuilder;
-	vector<SegmentString*> *curveList;
-	/**
-	* Creates a {@link SegmentString} for a coordinate list which is a raw offset curve,
-	* and adds it to the list of buffer curves.
-	* The SegmentString is tagged with a Label giving the topology of the curve.
-	* The curve may be oriented in either direction.
-	* If the curve is oriented CW, the locations will be:
-	* <br>Left: Location.EXTERIOR
-	* <br>Right: Location.INTERIOR
-	*/
-	void addCurve(const CoordinateSequence *coord, int leftLoc, int rightLoc);
-	void add(const Geometry *g);
-	void addCollection(const GeometryCollection *gc);
-	/**
-	* Add a Point to the graph.
-	*/
-	void addPoint(const Point *p);
-	void addLineString(const LineString *line);
-	void addPolygon(const Polygon *p);
-	/**
-	* Add an offset curve for a ring.
-	* The side and left and right topological location arguments
-	* assume that the ring is oriented CW.
-	* If the ring is in the opposite orientation,
-	* the left and right locations must be interchanged and the side flipped.
-	*
-	* @param coord the coordinates of the ring (must not contain repeated points)
-	* @param offsetDistance the distance at which to create the buffer
-	* @param side the side of the ring on which to construct the buffer line
-	* @param cwLeftLoc the location on the L side of the ring (if it is CW)
-	* @param cwRightLoc the location on the R side of the ring (if it is CW)
-	*/
-	void addPolygonRing(const CoordinateSequence *coord, double offsetDistance, int side, int cwLeftLoc, int cwRightLoc);
-	/**
-	 * The ringCoord is assumed to contain no repeated points.
-	 * It may be degenerate (i.e. contain only 1, 2, or 3 points).
-	 * In this case it has no area, and hence has a minimum diameter of 0.
-	 *
-	 * @param ringCoord
-	 * @param offsetDistance
-	 * @return
-	 */
-	bool isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance);
-	//bool isErodedCompletely(CoordinateSequence *ringCoord, double bufferDistance) { return isErodedCompletely((const CoordinateSequence)ringCoord, bufferDistance) }
-
-	/**
-	* Tests whether a triangular ring would be eroded completely by the given
-	* buffer distance.
-	* This is a precise test.  It uses the fact that the inner buffer of a
-	* triangle converges on the inCentre of the triangle (the point
-	* equidistant from all sides).  If the buffer distance is greater than the
-	* distance of the inCentre from a side, the triangle will be eroded completely.
-	*
-	* This test is important, since it removes a problematic case where
-	* the buffer distance is slightly larger than the inCentre distance.
-	* In this case the triangle buffer curve "inverts" with incorrect topology,
-	* producing an incorrect hole in the buffer.
-	*
-	* @param triangleCoord
-	* @param bufferDistance
-	* @return
-	*/
-	bool isTriangleErodedCompletely(CoordinateSequence *triangleCoord, double bufferDistance);
 };
 
 /*
@@ -738,7 +784,7 @@ private:
 
 	vector<Label *> newLabels;
 
-	void computeNodedEdges(vector<SegmentString*> *bufferSegStrList,
+	void computeNodedEdges(vector<SegmentString*>& bufferSegStrList,
 			const PrecisionModel *precisionModel);
 			// throw(GEOSException);
 
@@ -842,6 +888,16 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.13  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

@@ -270,13 +270,15 @@ public:
 
 private:
 	SegmentNodeList eiList;
-	const CoordinateSequence *pts;
+	//const CoordinateSequence *pts;
+	CoordinateSequence *pts;
 	unsigned int npts;
 	const void* context;
 	bool isIsolatedVar;
 public:
 
-	SegmentString(const CoordinateSequence *newPts, const void* newContext)
+	//SegmentString(const CoordinateSequence *newPts, const void* newContext)
+	SegmentString(CoordinateSequence *newPts, const void* newContext)
 		:
 		eiList(this),
 		pts(newPts),
@@ -302,11 +304,15 @@ public:
 		return pts->getAt(i);
 	}
 
-	/// Return a clone of this SegmentString CoordinateSequence
-	CoordinateSequence* getCoordinates() const { return pts->clone(); }
+	/// Return a pointer to the CoordinateSequence associated
+	/// with this SegmentString.
+	/// Note that the CoordinateSequence is not owned by
+	/// this SegmentString!
+	///
+	CoordinateSequence* getCoordinates() const { return pts; }
 
 	/// Return a read-only pointer to this SegmentString CoordinateSequence
-	const CoordinateSequence* getCoordinatesRO() const { return pts; }
+	//const CoordinateSequence* getCoordinatesRO() const { return pts; }
 
 	void setIsolated(bool isIsolated) { isIsolatedVar=isIsolated; }
 
@@ -779,6 +785,54 @@ public:
 };
 
 /**
+ * Wraps a {@link Noder} and transforms its input
+ * into the integer domain.
+ * This is intended for use with Snap-Rounding noders,
+ * which typically are only intended to work in the integer domain.
+ * Offsets can be provided to increase the number of digits of
+ * available precision.
+ *
+ * Last port: noding/ScaledNoder.java rev. 1.2 (JTS-1.7)
+ */
+class ScaledNoder : public Noder, public CoordinateFilter { // implements Noder
+
+private:
+
+	Noder& noder;
+	double scaleFactor;
+	double offsetX;
+	double offsetY;
+	bool isScaled;
+
+	void rescale(SegmentString::NonConstVect& segStrings) const;
+
+
+public:
+
+	bool isIntegerPrecision() { return (scaleFactor == 1.0); }
+
+	ScaledNoder(Noder& n, double nScaleFactor,
+			double nOffsetX=0.0, double nOffsetY=0.0)
+		:
+		noder(n),
+		scaleFactor(nScaleFactor),
+		offsetX(nOffsetX),
+		offsetY(nOffsetY),
+		isScaled(nScaleFactor!=1.0)
+	{}
+
+	SegmentString::NonConstVect* getNodedSubstrings() const;
+
+	//void computeNodes(SegmentString::NonConstVect& inputSegStr)
+
+	//void filter(Coordinate& c);
+
+	void filter_ro(const Coordinate* c) { assert(0); }
+	void filter_rw(Coordinate* c) const;
+
+};
+
+/**
  * Nodes a set of {@link SegmentStrings} using a index based
  * on {@link MonotoneChain}s and a {@link SpatialIndex}.
  * The {@link SpatialIndex} used should be something that supports
@@ -1007,6 +1061,16 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.14  2006/02/15 17:19:18  strk
  * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
  * and size() to easy port maintainance.

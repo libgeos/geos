@@ -38,7 +38,7 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor,
 }
 
 const Envelope&
-HotPixel::getSafeEnvelope()
+HotPixel::getSafeEnvelope() 
 {
   if (safeEnv.get() == NULL) {
     double safeTolerance = .75 / scaleFactor;
@@ -53,7 +53,7 @@ HotPixel::getSafeEnvelope()
 
 /*private*/
 void
-HotPixel::initCorners(const Coordinate& pt)
+HotPixel::initCorners(const Coordinate& pt) 
 {
 	double tolerance = 0.5;
 	minx = pt.x - tolerance;
@@ -152,6 +152,16 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.1  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

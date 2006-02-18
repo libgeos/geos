@@ -53,7 +53,7 @@ BufferBuilder::depthDelta(Label *label)
 
 BufferBuilder::~BufferBuilder()
 {
-	delete li;
+	delete li; // could be NULL
 	delete intersectionAdder;
 	delete edgeList;
 	for (unsigned int i=0; i<newLabels.size(); i++)
@@ -74,13 +74,13 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	geomFact=g->getFactory();
 	OffsetCurveBuilder curveBuilder(precisionModel, quadrantSegments);
 	curveBuilder.setEndCapStyle(endCapStyle);
-	OffsetCurveSetBuilder curveSetBuilder(g, distance, &curveBuilder);
-	vector<SegmentString*> *bufferSegStrList=curveSetBuilder.getCurves();
+	OffsetCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
+	vector<SegmentString*>& bufferSegStrList=curveSetBuilder.getCurves();
 #if DEBUG
-	cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList->size()<<" curves"<<endl;
+	cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList.size()<<" curves"<<endl;
 #endif
 	// short-circuit test
-	if (bufferSegStrList->size()<=0) {
+	if (bufferSegStrList.size()<=0) {
 		Geometry *emptyGeom=geomFact->createGeometryCollection(NULL);
 		return emptyGeom;
 	}
@@ -169,13 +169,14 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 
 }
 
+/* private */
 void
-BufferBuilder::computeNodedEdges(SegmentString::NonConstVect* bufferSegStrList,
+BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 		const PrecisionModel *precisionModel) // throw(GEOSException)
 {
 	Noder *noder = getNoder(precisionModel);
 
-	noder->computeNodes(bufferSegStrList);
+	noder->computeNodes(&bufferSegStrList);
 
 	SegmentString::NonConstVect* nodedSegStrings = \
 			noder->getNodedSubstrings();
@@ -188,12 +189,17 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect* bufferSegStrList,
 	{
 		SegmentString* segStr = *i;
 		const Label* oldLabel = (Label*)(segStr->getData());
-		Edge* edge = new Edge(segStr->getCoordinates(),
+
+		// we need to clone SegmentString coordinates
+		// as Edge will take ownership of them
+		// TODO: find a way to transfer ownership instead
+		Edge* edge = new Edge(segStr->getCoordinates()->clone(),
 				new Label(*oldLabel));
+
 		insertEdge(edge);
 	}
 
-	if ( nodedSegStrings != bufferSegStrList )
+	if ( nodedSegStrings != &bufferSegStrList )
 	{
 		delete nodedSegStrings;
 	}
@@ -306,6 +312,16 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.34  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

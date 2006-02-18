@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.7 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/opBuffer.h>
@@ -23,138 +27,129 @@
 
 namespace geos {
 
-OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry *newInputGeom, double newDistance, OffsetCurveBuilder *newCurveBuilder):
+OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
+		double newDistance, OffsetCurveBuilder& newCurveBuilder):
 	inputGeom(newInputGeom),
 	distance(newDistance),
 	curveBuilder(newCurveBuilder),
-	curveList(new vector<SegmentString*>())
+	curveList()
 {
 }
 
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 {
 	//delete cga;
-	for (unsigned int i=0; i<curveList->size(); i++)
-		delete (*curveList)[i];
-	delete curveList;
-	for (unsigned int i=0; i<newLabels.size(); i++)
+	for (unsigned int i=0, n=curveList.size(); i<n; ++i)
+		delete curveList[i];
+	for (unsigned int i=0, n=newLabels.size(); i<n; ++i)
 		delete newLabels[i];
 }
 
-/**
- * Computes the set of raw offset curves for the buffer.
- * Each offset curve has an attached {@link Label} indicating
- * its left and right location.
- *
- * @return a Collection of SegmentStrings representing the raw buffer curves
- */
-vector<SegmentString*>* OffsetCurveSetBuilder::getCurves()
+/* public */
+vector<SegmentString*>&
+OffsetCurveSetBuilder::getCurves()
 {
 	add(inputGeom);
 	return curveList;
 }
 
+/*public*/
 void
-OffsetCurveSetBuilder::addCurves(const vector<CoordinateSequence*> *lineList,
+OffsetCurveSetBuilder::addCurves(const vector<CoordinateSequence*>& lineList,
 	int leftLoc, int rightLoc)
 {
-	for (unsigned int i=0;i<lineList->size();i++)
+	for (unsigned int i=0, n=lineList.size(); i<n; ++i)
 	{
-		const CoordinateSequence *coords=(*lineList)[i];
+		CoordinateSequence *coords=lineList[i];
 		addCurve(coords, leftLoc, rightLoc);
 	}
 }
 
-/**
- * Creates a SegmentString for a coordinate list which is a raw offset curve,
- * and adds it to the list of buffer curves.
- * The SegmentString is tagged with a Label giving the topology of the curve.
- * The curve may be oriented in either direction.
- * If the curve is oriented CW, the locations will be:
- * <br>Left: Location.EXTERIOR
- * <br>Right: Location.INTERIOR
- */
+/*private*/
 void
-OffsetCurveSetBuilder::addCurve(const CoordinateSequence *coord,
+OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 	int leftLoc, int rightLoc)
 {
 	// don't add null curves!
 	if (coord->getSize() < 2) return;
 	// add the edge for a coordinate list which is a raw offset curve
 	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
-	SegmentString *e=new SegmentString(coord,newlabel);
+	SegmentString *e=new SegmentString(coord, newlabel);
 	newLabels.push_back(newlabel);
-	curveList->push_back(e);
+	curveList.push_back(e);
 }
 
 
+/*private*/
 void
-OffsetCurveSetBuilder::add(const Geometry *g)
+OffsetCurveSetBuilder::add(const Geometry& g)
 {
-	if (g->isEmpty()) return;
+	if (g.isEmpty()) return;
 
-	const Polygon *poly = dynamic_cast<const Polygon *>(g);
+	const Polygon *poly = dynamic_cast<const Polygon *>(&g);
 	if ( poly ) {
 		addPolygon(poly);
 		return;
 	}
 
-	const LineString *line = dynamic_cast<const LineString *>(g);
+	const LineString *line = dynamic_cast<const LineString *>(&g);
 	if ( line ) {
 		addLineString(line);
 		return;
 	}
 
-	const Point *point = dynamic_cast<const Point *>(g);
+	const Point *point = dynamic_cast<const Point *>(&g);
 	if ( point ) {
 		addPoint(point);
 		return;
 	}
 
-	const GeometryCollection *collection = dynamic_cast<const GeometryCollection *>(g);
+	const GeometryCollection *collection = dynamic_cast<const GeometryCollection *>(&g);
 	if ( collection ) {
 		addCollection(collection);
 		return;
 	}
 
-	string out=typeid(*g).name();
-	throw  UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
+	string out=typeid(g).name();
+	throw  UnsupportedOperationException("GeometryGraph::add(Geometry &): unknown geometry type: "+out);
 }
 
+/*private*/
 void
 OffsetCurveSetBuilder::addCollection(const GeometryCollection *gc)
 {
-	for (int i=0;i<gc->getNumGeometries(); i++) {
+	for (int i=0, n=gc->getNumGeometries(); i<n; i++) {
 		const Geometry *g=gc->getGeometryN(i);
-		add(g);
+		add(*g);
 	}
 }
 
-/**
- * Add a Point to the graph.
- */
+/*private*/
 void
 OffsetCurveSetBuilder::addPoint(const Point *p)
 {
 	if (distance <= 0.0) return;
-	CoordinateSequence *coord=p->getCoordinates();
-	vector<CoordinateSequence*> *lineList=curveBuilder->getLineCurve(coord, distance);
-	delete coord;
+	const CoordinateSequence *coord=p->getCoordinatesRO();
+	vector<CoordinateSequence*> lineList;
+	curveBuilder.getLineCurve(coord, distance, lineList);
+
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
-	delete lineList;
+	//delete lineList;
 }
 
+/*private*/
 void
 OffsetCurveSetBuilder::addLineString(const LineString *line)
 {
 	if (distance <= 0.0) return;
 	CoordinateSequence *coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
-	vector<CoordinateSequence*> *lineList=curveBuilder->getLineCurve(coord, distance);
+	vector<CoordinateSequence*> lineList;
+	curveBuilder.getLineCurve(coord, distance, lineList);
 	delete coord;
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
-	delete lineList;
 }
 
+/*private*/
 void
 OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 {
@@ -214,19 +209,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 	}
 }
 
-/**
- * Add an offset curve for a ring.
- * The side and left and right topological location arguments
- * assume that the ring is oriented CW.
- * If the ring is in the opposite orientation,
- * the left and right locations must be interchanged and the side flipped.
- *
- * @param coord the coordinates of the ring (must not contain repeated points)
- * @param offsetDistance the distance at which to create the buffer
- * @param side the side of the ring on which to construct the buffer line
- * @param cwLeftLoc the location on the L side of the ring (if it is CW)
- * @param cwRightLoc the location on the R side of the ring (if it is CW)
- */
+/* private */
 void
 OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 	double offsetDistance, int side, int cwLeftLoc, int cwRightLoc)
@@ -244,20 +227,13 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 #endif
 		side=Position::opposite(side);
 	}
-	vector<CoordinateSequence*> *lineList=curveBuilder->getRingCurve(coord, side, offsetDistance);
+	vector<CoordinateSequence*> lineList;
+	curveBuilder.getRingCurve(coord, side, offsetDistance, lineList);
 	addCurves(lineList, leftLoc, rightLoc);
-	delete lineList;
+	//delete lineList;
 }
 
-/**
- * The ringCoord is assumed to contain no repeated points->
- * It may be degenerate (i->e-> contain only 1, 2, or 3 points)->
- * In this case it has no area, and hence has a minimum diameter of 0->
- *
- * @param ringCoord
- * @param offsetDistance
- * @return
- */
+/*private*/
 bool
 OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord,
 	double bufferDistance)
@@ -283,7 +259,7 @@ OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord,
 	 * a full topological computation->
 	 *
 	 */
-	LinearRing *ring=inputGeom->getFactory()->createLinearRing(*ringCoord);
+	LinearRing *ring=inputGeom.getFactory()->createLinearRing(*ringCoord);
 	MinimumDiameter md(ring); //=new MinimumDiameter(ring);
 	minDiam=md.getLength();
 	delete ring;
@@ -293,24 +269,7 @@ OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord,
 	return minDiam < (2 * fabs(bufferDistance));
 }
 
-/**
- * Tests whether a triangular ring would be eroded completely by the given
- * buffer distance.
- * This is a precise test.  It uses the fact that the inner buffer of a
- * triangle converges on the inCentre of the triangle (the point
- * equidistant from all sides).  If the buffer distance is greater than the
- * distance of the inCentre from a side, the triangle will be
- * eroded completely
- *
- * This test is important, since it removes a problematic case where
- * the buffer distance is slightly larger than the inCentre distance->
- * In this case the triangle buffer curve "inverts" with incorrect topology,
- * producing an incorrect hole in the buffer
- *
- * @param triangleCoord
- * @param bufferDistance
- * @return
- */
+/*private*/
 bool
 OffsetCurveSetBuilder::isTriangleErodedCompletely(
 	CoordinateSequence *triangleCoord, double bufferDistance)
@@ -330,6 +289,16 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.21  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

@@ -849,6 +849,7 @@ private:
 	vector<SegmentString*>& toSegmentStrings(vector<Edge*> *edges);
 	NodingValidator nv;
 	SegmentString::NonConstVect segStr;
+	vector<CoordinateSequence*>newCoordSeq;
 public:
 
 	EdgeNodingValidator(vector<Edge*> *edges)
@@ -928,6 +929,16 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.29  2006/02/15 17:19:18  strk
  * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
  * and size() to easy port maintainance.

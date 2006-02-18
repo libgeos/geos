@@ -34,6 +34,7 @@ Changes in 3.0.0
 	- New Geometry::buffer(distance, quadSeg, endCapStyle)
 	- New SnapRounding code
 	- New size() and operator[] interfaces to CoordinateSequence
+	- New ScaledNoder class
 
 - Optimizations:
 	- WKT parser speedup
@@ -56,6 +57,11 @@ Changes in 3.0.0
 	- More iterators returning methods and inlining in planargraph.
 	- Obsoleted toInternalGeometry/fromInternalGeometry 
 	- Improved buffering speed and robustness by using Snap Rounding
+
+- Semantic changes
+
+	- SegmentString: getCoordinates() doesn't return a clone
+	  anymore, getCoordinatesRO() obsoleted.
 
 - Correctness:
 	- More const-correct signatures

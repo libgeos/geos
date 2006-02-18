@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.7 
+ *
  **********************************************************************/
 
 #include <geos/opBuffer.h>
@@ -66,19 +70,13 @@ OffsetCurveBuilder::~OffsetCurveBuilder()
 }
 
 
-/**
- * This method handles single points as well as lines.
- * Lines are assumed to <b>not</b> be closed (the function will not
- * fail for closed lines, but will generate superfluous line caps).
- *
- * @return a List of Coordinate[]
- */
-vector<CoordinateSequence*>*
-OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts, double distance)
+/*public*/
+void
+OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
+		double distance, vector<CoordinateSequence*>& lineList)
 {
-	vector<CoordinateSequence*> *lineList=new vector<CoordinateSequence*>();
 	// a zero or negative width buffer of a line/point is empty
-	if (distance<= 0.0) return lineList;
+	if (distance<= 0.0) return;
 	init(distance);
 	if (inputPts->getSize()<= 1) {
 		switch (endCapStyle) {
@@ -93,36 +91,30 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts, double dist
 	} else
 		computeLineBufferCurve(inputPts);
 	CoordinateSequence *lineCoord=getCoordinates();
-	lineList->push_back(lineCoord);
-	return lineList;
+	lineList.push_back(lineCoord);
 }
 
-/**
- * This method handles the degenerate cases of single points and lines,
- * as well as rings.
- *
- * @return a List of Coordinate[]
- */
-vector<CoordinateSequence*>*
-OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts, int side, double distance)
+/*public*/
+void
+OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
+		int side, double distance,
+		vector<CoordinateSequence*>& lineList)
 {
-	vector<CoordinateSequence*>* lineList=new vector<CoordinateSequence*>();
 	init(distance);
 	if (inputPts->getSize()<= 2)
 	{
-		delete lineList;
-		return getLineCurve(inputPts, distance);
+		getLineCurve(inputPts, distance, lineList);
+		return;
 	}
 	// optimize creating ring for for zero distance
 	if (distance==0.0) {
 		ptLists.push_back(ptList);
-		ptList = inputPts->clone();
-		lineList->push_back(ptList);
-		return lineList;
+		ptList = inputPts->clone(); 
+		lineList.push_back(ptList);
+		return;
 	}
 	computeRingBufferCurve(inputPts, side);
-	lineList->push_back(getCoordinates());
-	return lineList;
+	lineList.push_back(getCoordinates()); // this will be ptList
 }
 
 void
@@ -137,7 +129,7 @@ OffsetCurveBuilder::init(double newDistance)
 	ptList=new CoordinateArraySequence();
 }
 
-// returns ptList / is private / might just e avoided !
+// returns ptList / is private / might just be avoided !
 CoordinateSequence*
 OffsetCurveBuilder::getCoordinates()
 {
@@ -473,6 +465,16 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.20  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

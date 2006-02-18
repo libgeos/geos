@@ -253,12 +253,99 @@ public:
 	void computeVertexSnaps(const SegmentString::NonConstVect& edges);
 };
 
+/**
+ * "Snaps" all {@link SegmentString}s in a {@link SpatialIndex} containing
+ * {@link MonotoneChain}s to a given {@link HotPixel}.
+ *
+ * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.2 (JTS-1.7)
+ *
+ *  TODO: finish this
+ */
+class MCIndexPointSnapper {
+
+private:
+
+public:
+ 
+
+	MCIndexPointSnapper() {}
+
+
+	/**
+	 * Snaps (nodes) all interacting segments to this hot pixel.
+	 * The hot pixel may represent a vertex of an edge,
+	 * in which case this routine uses the optimization
+	 * of not noding the vertex itself
+	 *
+	 * @param hotPixel the hot pixel to snap to
+	 * @param parentEdge the edge containing the vertex,
+	 *        if applicable, or <code>null</code>
+	 * @param vertexIndex the index of the vertex, if applicable, or -1
+	 * @return <code>true</code> if a node was added for this pixel
+	 */
+		
+};
+
+/**
+ * Uses Snap Rounding to compute a rounded,
+ * fully noded arrangement from a set of {@link SegmentString}s.
+ * Implements the Snap Rounding technique described in Hobby, Guibas & Marimont,
+ * and Goodrich et al.
+ * Snap Rounding assumes that all vertices lie on a uniform grid
+ * (hence the precision model of the input must be fixed precision,
+ * and all the input vertices must be rounded to that precision).
+ * 
+ * This implementation uses a monotone chains and a spatial index to
+ * speed up the intersection tests.
+ *
+ * This implementation appears to be fully robust using an integer
+ * precision model.
+ *
+ * It will function with non-integer precision models, but the
+ * results are not 100% guaranteed to be correctly noded.
+ *
+ * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.1 (JTS-1.7)
+ *
+ *  TODO: finish this
+ */
+class MCIndexSnapRounder: public Noder { // implments Noder
+
+private:
+
+	// externally owned
+	PrecisionModel& pm;
+
+	LineIntersector li;
+
+	double scaleFactor;
+
+	MCIndexNoder& noder;
+
+
+public:
+
+	
+};
+
+
+
+
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.4  2006/02/16 08:41:01  strk
  * added <cmath> include for round()
  *

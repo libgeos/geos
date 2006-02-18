@@ -97,11 +97,11 @@ using namespace operation::predicate;
  *
  * \section exc_sect Exceptions
  *
- * Internal exceptions are thrown as pointers to geos::GEOSException.
+ * Internal exceptions are thrown as instances geos::GEOSException or
+ * derived classes. GEOSException derives from std::exception.
  *
- * Other standard exceptions are not mapped to this handler, nor
- * does GEOSException inerit from standard exception, so you'll need
- * to catch both if you care (this might change in the future)
+ * Note that prior to version 3.0.0, GEOSException were trown by
+ * pointer, and did not derive from std::exception.
  *
  */ 
 
@@ -806,6 +806,16 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.88  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.87  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

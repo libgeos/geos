@@ -22,8 +22,8 @@ namespace geos {
 void
 SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
 {
-	const CoordinateSequence* pts0 = e0->getCoordinatesRO();
-	const CoordinateSequence* pts1 = e1->getCoordinatesRO();
+	const CoordinateSequence* pts0 = e0->getCoordinates();
+	const CoordinateSequence* pts1 = e1->getCoordinates();
 	for (unsigned int i0=0, n0=pts0->getSize()-1; i0<n0; i0++) {
 		for (unsigned int i1=0, n1=pts1->getSize()-1; i1<n1; i1++) {
 			segInt->processIntersections(e0, i0, e1, i1);
@@ -58,6 +58,16 @@ SimpleNoder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.6  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

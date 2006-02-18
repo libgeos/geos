@@ -54,7 +54,6 @@ class MultiLineString;
 class MultiPoint;
 class MultiPolygon;
 class Point;
-class Point;
 class Polygon;
 struct CoordinateLessThen;
 struct LineStringLT;
@@ -835,6 +834,23 @@ public:
 
 	virtual void apply_rw(const CoordinateFilter *filter)=0; //Abstract
 	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
+
+	/** \brief
+	 * Apply a fiter to each Coordinate of this sequence.
+	 * The filter is expected to provide a .filter(Coordinate&)
+	 * method.
+	 */
+	template <class T>
+	void applyCoordinateFilter(T& f) 
+	{
+		Coordinate c;
+		for(unsigned int i=0, n=size(); i<n; ++i)
+		{
+			getAt(i, c);
+			f.filter(c);
+			setAt(i, c);
+		}
+	}
 
 };
 
@@ -2909,6 +2925,16 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.66  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
  * Revision 1.65  2006/02/15 17:19:18  strk
  * NodingValidator synced with JTS-1.7, added CoordinateSequence::operator[]
  * and size() to easy port maintainance.

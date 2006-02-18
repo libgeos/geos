@@ -13,6 +13,7 @@ libnoding_la_SOURCES = \
 	SegmentNode.cpp \
 	SegmentNodeList.cpp \
 	SegmentString.cpp \
+	ScaledNoder.cpp \
 	SimpleNoder.cpp \
 	Octant.cpp
 
