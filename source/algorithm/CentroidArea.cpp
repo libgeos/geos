@@ -21,6 +21,7 @@
 #include <typeinfo>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 CentroidArea::CentroidArea():
 	areasum2(0)
@@ -146,10 +147,14 @@ CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate
 	return (p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y);
 }
 
+} // namespace geos.algorithm
 } //namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.18  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

@@ -38,6 +38,9 @@
 #endif
 
 using namespace geos;
+using namespace geos::operation::valid;
+using namespace geos::operation::polygonize;
+using namespace geos::operation::linemerge;
 
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 

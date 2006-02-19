@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.4  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -34,6 +37,8 @@
 #include <geos/opDistance.h>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace distance { // geos.operation.distance
 
 /**
 * Constructs a GeometryLocation specifying a point on a geometry, as well as the 
@@ -75,10 +80,11 @@ int GeometryLocation::getSegmentIndex() {
 Coordinate& GeometryLocation::getCoordinate() { 
 	return pt;
 }
-/**
-* Returns whether this GeometryLocation represents a point inside an area geometry.
-*/
+
 bool GeometryLocation::isInsideArea() { 
 	return segIndex == INSIDE_AREA;
 }
-}
+
+} // namespace geos.operation.distance
+} // namespace geos.operation
+} // namespace geos

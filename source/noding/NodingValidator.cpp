@@ -21,8 +21,12 @@
 #include <sstream>
 #include <geos/noding.h>
 #include <geos/util.h>
+#include <geos/geosAlgorithm.h>
+
+using namespace geos::algorithm;
 
 namespace geos {
+namespace noding { // geos.noding
 
 /*public*/
 void
@@ -193,10 +197,14 @@ NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
 }
 
 
+} // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.12  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

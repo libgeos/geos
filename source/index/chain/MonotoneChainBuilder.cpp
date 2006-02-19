@@ -19,6 +19,8 @@
 
 #define DEBUG 0
 
+using namespace geos::geomgraph;
+
 namespace geos {
 
 /* static public */
@@ -99,6 +101,9 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.16  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

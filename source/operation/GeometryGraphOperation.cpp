@@ -15,11 +15,16 @@
  **********************************************************************/
 
 #include <geos/operation.h>
-#include <stdio.h>
+#include <geos/geosAlgorithm.h>
+#include <geos/geomgraph.h>
+
+using namespace geos::algorithm;
+using namespace geos::geomgraph;
 
 namespace geos {
+namespace operation { // geos.operation
 
-CGAlgorithms* GeometryGraphOperation::cga=new CGAlgorithms();
+//CGAlgorithms* GeometryGraphOperation::cga=new CGAlgorithms();
 LineIntersector* GeometryGraphOperation::li=new LineIntersector();
 
 GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0, const Geometry *g1):
@@ -63,11 +68,16 @@ GeometryGraphOperation::~GeometryGraphOperation()
 	}
 }
 
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.18  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

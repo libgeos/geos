@@ -18,6 +18,8 @@
 #include <geos/geomgraphindex.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+namespace index { // geos.geomgraph.index
 
 SweepLineEvent::SweepLineEvent(void* newEdgeSet, double x,
 	SweepLineEvent *newInsertEvent, SweepLineEventOBJ *newObj):
@@ -69,10 +71,15 @@ SweepLineEvent::print()
 	return s.str();
 }
 
+} // namespace geos.geomgraph.index
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.6  2005/11/07 12:31:24  strk
  * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
  * to avoid dynamic allocation of initial header.

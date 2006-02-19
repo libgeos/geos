@@ -21,6 +21,7 @@
 #endif
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 /**
 * Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
@@ -35,10 +36,14 @@ int Position::opposite(int position){
 	return position;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.3  2005/05/20 16:15:41  strk
  * Code cleanups
  *

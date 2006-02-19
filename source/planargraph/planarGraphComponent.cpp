@@ -20,14 +20,17 @@
 #include <geos/planargraph.h>
 
 namespace geos {
-//namespace planargraph { // geos.planargraph
+namespace planargraph { // geos.planargraph
 
 
-//} // namespace geos.planargraph
+} // namespace geos.planargraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/02/01 22:21:29  strk
  * - Added rectangle-based optimizations of intersects() and contains() ops
  * - Inlined all planarGraphComponent class

@@ -23,8 +23,14 @@
 #include <geos/opLinemerge.h>
 #include <geos/util.h>
 #include <geos/geom.h>
+#include <geos/planargraph.h>
+
+using namespace geos::planargraph;
+using namespace geos::planargraph::algorithm;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace linemerge { // geos.operation.linemerge
 
 namespace planargraph {
 
@@ -411,10 +417,15 @@ LineSequencer::reverse(DirectedEdge::NonConstList& seq)
 
  
 
+} // namespace geos.operation.linemerge
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.2  2006/02/09 01:13:24  strk
  * Added missing <limits> include
  *

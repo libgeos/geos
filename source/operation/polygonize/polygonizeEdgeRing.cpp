@@ -15,10 +15,16 @@
  **********************************************************************/
 
 #include <geos/opPolygonize.h>
+#include <geos/planargraph.h>
 
 //#define DEBUG_ALLOC 1
 
+using namespace geos::planargraph;
+using namespace geos::algorithm;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace polygonize { // geos.operation.polygonize
 
 /*
  * Find the innermost enclosing shell polygonizeEdgeRing containing
@@ -63,7 +69,7 @@ polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRing *testEr,
 			tryCoords);
 
 		if (tryEnv->contains(testEnv)
-			&& cga.isPointInRing(testPt, tryCoords))
+			&& CGAlgorithms::isPointInRing(testPt, tryCoords))
 				isContained=true;
 		// check if this new containing ring is smaller than the current minimum ring
 		if (isContained) {
@@ -166,7 +172,7 @@ polygonizeEdgeRing::add(const planarDirectedEdge *de){
 bool
 polygonizeEdgeRing::isHole(){
 	getRingInternal();
-	return cga.isCCW(ring->getCoordinatesRO());
+	return CGAlgorithms::isCCW(ring->getCoordinatesRO());
 }
 
 /**
@@ -292,10 +298,16 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 		}
 	}
 }
-}
+
+} // namespace geos.operation.polygonize
+} // namespace geos.operation
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.11  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

@@ -16,6 +16,8 @@
 #include <geos/opBuffer.h>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace buffer { // geos.operation.buffer
 
 DepthSegment::DepthSegment(const LineSegment &seg, int depth):
 	upwardSeg(seg), leftDepth(depth)
@@ -98,4 +100,6 @@ DepthSegmentLT(DepthSegment *first, DepthSegment *second)
 		return false;
 }
 
+} // namespace geos.operation.buffer
+} // namespace geos.operation
 } // namespace geos

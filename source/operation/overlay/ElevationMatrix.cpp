@@ -20,8 +20,9 @@
 #define DEBUG 0
 #define PARANOIA_LEVEL 0
 
-namespace geos
-{
+namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 ElevationMatrix::ElevationMatrix(const Envelope &newEnv,
 		unsigned int newRows, unsigned int newCols):
@@ -174,10 +175,15 @@ ElevationMatrix::elevate(Geometry *g) const
 	g->apply_rw(&filter);
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.8  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

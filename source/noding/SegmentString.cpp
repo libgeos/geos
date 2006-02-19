@@ -14,9 +14,13 @@
  **********************************************************************/
 
 #include <geos/noding.h>
+#include <geos/geosAlgorithm.h>
 #include <geos/profiler.h>
 
+using namespace geos::algorithm;
+
 namespace geos {
+namespace noding { // geos.noding
 
 void
 SegmentString::addIntersections(LineIntersector *li, unsigned int segmentIndex,
@@ -87,10 +91,14 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 	return resultEdgelist;
 }
 
+} // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.21  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -15,28 +15,14 @@
  **********************************************************************/
 
 #include <geos/opValid.h>
-#include <stdio.h>
+#include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 
+using namespace geos::algorithm;
+
 namespace geos {
-
-SweeplineNestedRingTester::SweeplineNestedRingTester(GeometryGraph *newGraph):
-	cga(new CGAlgorithms()),
-	graph(newGraph),
-	rings(new vector<LinearRing*>()),
-	totalEnv(new Envelope()),
-	sweepLine(new SweepLineIndex()),
-	nestedPt(NULL)
-{
-}
-
-SweeplineNestedRingTester::~SweeplineNestedRingTester()
-{
-	delete rings;
-	delete totalEnv;
-	delete sweepLine;
-	delete cga;
-}
+namespace operation { // geos.operation
+namespace valid { // geos.operation.valid
 
 SweeplineNestedRingTester::OverlapAction::OverlapAction(SweeplineNestedRingTester *p)
 {
@@ -55,18 +41,6 @@ SweeplineNestedRingTester::OverlapAction::overlap(SweepLineInterval *s0, SweepLi
 };
 
 
-Coordinate *
-SweeplineNestedRingTester::getNestedPoint()
-{
-	return nestedPt;
-}
-
-void
-SweeplineNestedRingTester::add(LinearRing *ring)
-{
-	rings->push_back(ring);
-}
-
 bool
 SweeplineNestedRingTester::isNonNested()
 {
@@ -80,8 +54,8 @@ void
 SweeplineNestedRingTester::buildIndex()
 {
 	sweepLine=new SweepLineIndex();
-	for(int i=0;i<(int)rings->size();i++) {
-		LinearRing *ring=(*rings)[i];
+	for(unsigned int i=0, n=rings.size(); i<n; i++) {
+		LinearRing *ring=rings[i];
 		const Envelope *env=ring->getEnvelopeInternal();
 		SweepLineInterval *sweepInt=new SweepLineInterval(env->getMinX(),env->getMaxX(),ring);
 		sweepLine->add(sweepInt);
@@ -99,7 +73,7 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 	const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts, searchRing, graph);
 	Assert::isTrue((innerRingPt!=NULL), "Unable to find a ring point not a node of the search ring");
 
-	bool isInside=cga->isPointInRing(*innerRingPt,searchRingPts);
+	bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
 	if (isInside) {
 		/*
 		 * innerRingPt is const just because the input
@@ -113,10 +87,15 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 	return false;
 }
 
+} // namespace geos.operation.valid
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.12  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

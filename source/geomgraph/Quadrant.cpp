@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -42,6 +45,7 @@
 #include <geos/geomgraph.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 /**
 * Returns the quadrant of a directed line segment (specified as x and y
@@ -128,5 +132,6 @@ bool Quadrant::isInHalfPlane(int quad, int halfPlane){
 bool Quadrant::isNorthern(int quad) {
 	return quad==0 || quad==1;
 }
-}
+} // namespace geos.geomgraph
+} // namespace geos
 

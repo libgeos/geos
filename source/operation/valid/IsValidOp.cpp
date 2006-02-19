@@ -23,7 +23,15 @@
 #include <set>
 #include <geos/util.h>
 
+using namespace std;
+using namespace geos::algorithm;
+using namespace geos::geomgraph;
+using namespace geos::geomgraph::index;
+using namespace geos::operation::relate;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace valid { // geos.operation.valid
 
 /**
  * Find a point from the list of testCoords
@@ -51,19 +59,6 @@ IsValidOp::findPtNotNode(const CoordinateSequence *testCoords,
 	return NULL;
 }
 
-IsValidOp::IsValidOp(const Geometry *geom):
-	parentGeometry(geom),
-	isChecked(false),
-	validErr(NULL),
-	isSelfTouchingRingFormingHoleValid(false)
-
-{
-}
-
-IsValidOp::~IsValidOp()
-{
-	delete validErr;
-}
 
 bool
 IsValidOp::isValid()
@@ -327,7 +322,7 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph)
 void
 IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList &eiList)
 {
-	set<const Coordinate*,CoordLT>nodeSet;
+	set<const Coordinate*,CoordinateLessThen>nodeSet;
 	bool isFirst=true;
 	EdgeIntersectionList::iterator it=eiList.begin();
 	EdgeIntersectionList::iterator end=eiList.end();
@@ -621,10 +616,15 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 	}
 }
 
+} // namespace geos.operation.valid
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.42  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

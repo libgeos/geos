@@ -25,10 +25,17 @@
 #define DEBUG 0
 #endif
 
-namespace geos {
+using namespace std;
+using namespace geos::geomgraph;
+using namespace geos::algorithm;
 
-PolygonBuilder::PolygonBuilder(const GeometryFactory *newGeometryFactory,
-		CGAlgorithms *newCga):
+
+namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
+
+PolygonBuilder::PolygonBuilder(const GeometryFactory *newGeometryFactory)
+	:
 	geometryFactory(newGeometryFactory)
 {
 }
@@ -55,11 +62,11 @@ PolygonBuilder::add(PlanarGraph *graph)
 		dirEdges[i]=(DirectedEdge*)(*ee)[i];
 	}
 
-	map<Coordinate*,Node*,CoordLT> &nodeMap=graph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph->getNodeMap()->nodeMap;
 	vector<Node*> nodes;
 	nodes.reserve(nodeMap.size());
 
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();++it) {
 		Node *node=it->second;
 		nodes.push_back(node);
@@ -349,10 +356,15 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 	return false;
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.25  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

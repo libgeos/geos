@@ -17,6 +17,8 @@
 #include <geos/geomgraphindex.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+namespace index { // geos.geomgraph.index
 
 SimpleEdgeSetIntersector::SimpleEdgeSetIntersector():
 	nOverlaps(0)
@@ -86,10 +88,15 @@ SimpleEdgeSetIntersector::computeIntersects(Edge *e0, Edge *e1,
 	}
 }
 
+} // namespace geos.geomgraph.index
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

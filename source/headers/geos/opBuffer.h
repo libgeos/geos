@@ -27,6 +27,8 @@
 #include <vector>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace buffer { // geos.operation.buffer
 
 class BufferBuilder;
 class BufferOp;
@@ -41,47 +43,45 @@ class SubgraphDepthLocater;
  * \class RightmostEdgeFinder opBuffer.h geos/opBuffer.h
  *
  * \brief
- * A RightmostEdgeFinder find the DirectedEdge in a list which has
+ * A RightmostEdgeFinder find the geomgraph::DirectedEdge in a list which has
  * the highest coordinate, and which is oriented L to R at that point.
  * (I.e. the right side is on the RHS of the edge.)
  */
 class RightmostEdgeFinder {
 private:
-	//CGAlgorithms* cga;
+	//algorithm::CGAlgorithms* cga;
 	int minIndex;
 	Coordinate minCoord;
-	DirectedEdge *minDe;
-	DirectedEdge *orientedDe;
+	geomgraph::DirectedEdge *minDe;
+	geomgraph::DirectedEdge *orientedDe;
 	void findRightmostEdgeAtNode();
 	void findRightmostEdgeAtVertex();
-	void checkForRightmostCoordinate(DirectedEdge *de);
-	int getRightmostSide(DirectedEdge *de, int index);
-	int getRightmostSideOfSegment(DirectedEdge *de, int i);
+	void checkForRightmostCoordinate(geomgraph::DirectedEdge *de);
+	int getRightmostSide(geomgraph::DirectedEdge *de, int index);
+	int getRightmostSideOfSegment(geomgraph::DirectedEdge *de, int i);
 
 public:
 
 	/*
-	 * A RightmostEdgeFinder finds the DirectedEdge with the
+	 * A RightmostEdgeFinder finds the geomgraph::DirectedEdge with the
 	 * rightmost coordinate.
-	 * The DirectedEdge returned is guranteed to have the R of
+	 * The geomgraph::DirectedEdge returned is guranteed to have the R of
 	 * the world on its RHS.
-	 * The CGAlgorithms arg is kept for backward compatibility,
-	 * there's no use for it.
 	 */
-	RightmostEdgeFinder(CGAlgorithms *newCga=NULL);
-	inline DirectedEdge* getEdge();
+	RightmostEdgeFinder();
+	inline geomgraph::DirectedEdge* getEdge();
 	inline Coordinate& getCoordinate();
-	void findEdge(vector<DirectedEdge*>* dirEdgeList);
+	void findEdge(std::vector<geomgraph::DirectedEdge*>* dirEdgeList);
 };
 
 // INLINES
-DirectedEdge* RightmostEdgeFinder::getEdge() { return orientedDe; }
+geomgraph::DirectedEdge* RightmostEdgeFinder::getEdge() { return orientedDe; }
 Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
 
 /*
  * \class BufferSubgraph opBuffer.h geos/opBuffer.h
  *
- * \brief A connected subset of the graph of DirectedEdges and Node.
+ * \brief A connected subset of the graph of DirectedEdges and geomgraph::Node.
  * 
  * Its edges will generate either
  * - a single polygon in the complete buffer, with zero or more holes, or
@@ -91,9 +91,9 @@ class BufferSubgraph {
 private:
 	RightmostEdgeFinder finder;
 
-	vector<DirectedEdge*> dirEdgeList;
+	std::vector<geomgraph::DirectedEdge*> dirEdgeList;
 
-	vector<Node*> nodes;
+	std::vector<geomgraph::Node*> nodes;
 
 	Coordinate *rightMostCoord;
 
@@ -105,14 +105,14 @@ private:
 	 *
 	 * @param node a node known to be in the subgraph
 	 */
-	void addReachable(Node *startNode);
+	void addReachable(geomgraph::Node *startNode);
 
 	/*
 	 * Adds the argument node and all its out edges to the subgraph
 	 * @param node the node to add
 	 * @param nodeStack the current set of nodes being traversed
 	 */
-	void add(Node *node,vector<Node*> *nodeStack);
+	void add(geomgraph::Node *node,std::vector<geomgraph::Node*> *nodeStack);
 
 	void clearVisitedEdges();
 
@@ -122,24 +122,24 @@ private:
 	 * @param startEdge edge to start processing with
 	 */
 	// <FIX> MD - use iteration & queue rather than recursion, for speed and robustness
-	void computeDepths(DirectedEdge *startEdge);
+	void computeDepths(geomgraph::DirectedEdge *startEdge);
 
-	void computeNodeDepth(Node *n);
-	void copySymDepths(DirectedEdge *de);
-	bool contains(set<Node*>&nodes,Node *node);
+	void computeNodeDepth(geomgraph::Node *n);
+	void copySymDepths(geomgraph::DirectedEdge *de);
+	bool contains(set<geomgraph::Node*>&nodes,geomgraph::Node *node);
 
 public:
 
 	/*
-	 * CGAlgorithms arg kept for backward-compatibility.
+	 * algorithm::CGAlgorithms arg kept for backward-compatibility.
 	 * It is unused.
 	 */
-	BufferSubgraph(CGAlgorithms *cga=NULL);
+	BufferSubgraph(algorithm::CGAlgorithms *cga=NULL);
 	~BufferSubgraph();
 
-	inline vector<DirectedEdge*>* getDirectedEdges();
+	inline std::vector<geomgraph::DirectedEdge*>* getDirectedEdges();
 
-	inline vector<Node*>* getNodes();
+	inline std::vector<geomgraph::Node*>* getNodes();
 
 	/*
 	 * Gets the rightmost coordinate in the edges of the subgraph
@@ -153,7 +153,7 @@ public:
 	 *
 	 * @param node a node to start the graph traversal from
 	 */
-	void create(Node *node);
+	void create(geomgraph::Node *node);
 
 	void computeDepth(int outsideDepth);
 
@@ -195,8 +195,8 @@ public:
 
 // INLINES
 Coordinate* BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
-vector<Node*>* BufferSubgraph::getNodes() { return &nodes; }
-vector<DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
+std::vector<geomgraph::Node*>* BufferSubgraph::getNodes() { return &nodes; }
+std::vector<geomgraph::DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
 	return &dirEdgeList;
 }
 
@@ -237,21 +237,21 @@ public:
 	 * Lines are assumed to <b>not</b> be closed (the function will not
 	 * fail for closed lines, but will generate superfluous line caps).
 	 *
-	 * @param lineList the vector to which CoordinateSequences will
+	 * @param lineList the std::vector to which CoordinateSequences will
 	 *                 be pushed_back
 	 */
 	void getLineCurve(const CoordinateSequence* inputPts, double distance,
-		vector<CoordinateSequence*>& lineList);
+		std::vector<CoordinateSequence*>& lineList);
 
 	/**
 	 * This method handles the degenerate cases of single points and lines,
 	 * as well as rings.
 	 *
-	 * @param lineList the vector to which CoordinateSequences will
+	 * @param lineList the std::vector to which CoordinateSequences will
 	 *                 be pushed_back
 	 */
 	void getRingCurve(const CoordinateSequence *inputPts, int side,
-		double distance, vector<CoordinateSequence*>& lineList);
+		double distance, std::vector<CoordinateSequence*>& lineList);
 
 
 private:
@@ -259,8 +259,8 @@ private:
 	static double PI_OVER_2;
 	static double MAX_CLOSING_SEG_LEN;
 //	static final Coordinate[] arrayTypeCoordinate = new Coordinate[0];
-	//CGAlgorithms *cga;
-	LineIntersector *li;
+	//algorithm::CGAlgorithms *cga;
+	algorithm::LineIntersector *li;
 
 	/**
 	 * The angle quantum with which to approximate a fillet curve
@@ -278,7 +278,7 @@ private:
 	//
 	/// This actually gets created multiple times
 	/// and each of the old versions is pushed
-	/// to the ptLists vector to ensure all
+	/// to the ptLists std::vector to ensure all
 	/// created CoordinateSequences are properly 
 	/// destroyed.
 	///
@@ -343,7 +343,7 @@ private:
 	*/
 	void addSquare(const Coordinate &p, double distance);
 private:
-	vector<CoordinateSequence *>ptLists;
+	std::vector<CoordinateSequence *>ptLists;
 };
 
 // INLINES
@@ -525,7 +525,7 @@ private:
 
 	// To keep track of newly-created Labels.
 	// Labels will be relesed by object dtor
-	vector<Label*> newLabels;
+	std::vector<geomgraph::Label*> newLabels;
 
 	const Geometry& inputGeom;
 
@@ -534,14 +534,14 @@ private:
 	OffsetCurveBuilder& curveBuilder;
 
 	/// The raw offset curves computed.
-	/// This class holds ownership of vector elements.
+	/// This class holds ownership of std::vector elements.
 	///
-	vector<SegmentString*> curveList;
+	std::vector<noding::SegmentString*> curveList;
 
 	/**
-	 * Creates a SegmentString for a coordinate list which is a raw
+	 * Creates a noding::SegmentString for a coordinate list which is a raw
 	 * offset curve, and adds it to the list of buffer curves.
-	 * The SegmentString is tagged with a Label giving the topology
+	 * The noding::SegmentString is tagged with a geomgraph::Label giving the topology
 	 * of the curve.
 	 * The curve may be oriented in either direction.
 	 * If the curve is oriented CW, the locations will be:
@@ -627,15 +627,15 @@ public:
 
 	/**
 	 * Computes the set of raw offset curves for the buffer.
-	 * Each offset curve has an attached {@link Label} indicating
+	 * Each offset curve has an attached {@link geomgraph::Label} indicating
 	 * its left and right location.
 	 *
 	 * @return a Collection of SegmentStrings representing the raw
 	 * buffer curves
 	 */
-	vector<SegmentString*>& getCurves();
+	std::vector<noding::SegmentString*>& getCurves();
 
-	void addCurves(const vector<CoordinateSequence*>& lineList,
+	void addCurves(const std::vector<CoordinateSequence*>& lineList,
 		int leftLoc, int rightLoc);
 
 };
@@ -699,13 +699,13 @@ bool DepthSegmentLT(DepthSegment *first, DepthSegment *second);
  */
 class SubgraphDepthLocater {
 public:
-	SubgraphDepthLocater(vector<BufferSubgraph*> *newSubgraphs);
+	SubgraphDepthLocater(std::vector<BufferSubgraph*> *newSubgraphs);
 	~SubgraphDepthLocater();
 	int getDepth(Coordinate &p);
 private:
-	vector<BufferSubgraph*> *subgraphs;
+	std::vector<BufferSubgraph*> *subgraphs;
 	LineSegment seg;
-	//CGAlgorithms *cga;
+	//algorithm::CGAlgorithms *cga;
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line.
 	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
@@ -713,7 +713,7 @@ private:
 	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
 	 * @return a List of DepthSegments intersecting the stabbing line
 	 */
-	vector<DepthSegment*>* findStabbedSegments(Coordinate &stabbingRayLeftPt);
+	std::vector<DepthSegment*>* findStabbedSegments(Coordinate &stabbingRayLeftPt);
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line
 	 * in the list of dirEdges.
@@ -723,7 +723,7 @@ private:
 	 * @param stabbedSegments the current list of DepthSegments
 	 *        intersecting the stabbing line
 	 */
-	void findStabbedSegments(Coordinate &stabbingRayLeftPt,vector<DirectedEdge*> *dirEdges,vector<DepthSegment*> *stabbedSegments);
+	void findStabbedSegments(Coordinate &stabbingRayLeftPt,std::vector<geomgraph::DirectedEdge*> *dirEdges,std::vector<DepthSegment*> *stabbedSegments);
 
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line
@@ -733,7 +733,7 @@ private:
 	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
 	 * @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
 	 */
-	void findStabbedSegments(Coordinate &stabbingRayLeftPt,DirectedEdge *dirEdge,vector<DepthSegment*> *stabbedSegments);
+	void findStabbedSegments(Coordinate &stabbingRayLeftPt,geomgraph::DirectedEdge *dirEdge,std::vector<DepthSegment*> *stabbedSegments);
 };
 
 bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
@@ -764,7 +764,7 @@ private:
 	/**
 	 * Compute the change in depth as an edge is crossed from R to L
 	 */
-	static int depthDelta(Label *label);
+	static int depthDelta(geomgraph::Label *label);
 
 	int quadrantSegments;
 
@@ -772,19 +772,19 @@ private:
 
 	PrecisionModel* workingPrecisionModel;
 
-	LineIntersector* li;
+	algorithm::LineIntersector* li;
 
-	IntersectionAdder* intersectionAdder;
+	noding::IntersectionAdder* intersectionAdder;
 
-	Noder* workingNoder;
+	noding::Noder* workingNoder;
 
 	const GeometryFactory* geomFact;
 
-	EdgeList* edgeList;
+	geomgraph::EdgeList* edgeList;
 
-	vector<Label *> newLabels;
+	std::vector<geomgraph::Label *> newLabels;
 
-	void computeNodedEdges(vector<SegmentString*>& bufferSegStrList,
+	void computeNodedEdges(std::vector<noding::SegmentString*>& bufferSegStrList,
 			const PrecisionModel *precisionModel);
 			// throw(GEOSException);
 
@@ -794,8 +794,8 @@ private:
 	 * If so, the edge is not inserted, but its label is merged
 	 * with the existing edge.
 	 */
-	void insertEdge(Edge *e);
-	vector<BufferSubgraph*>* createSubgraphs(PlanarGraph *graph);
+	void insertEdge(geomgraph::Edge *e);
+	std::vector<BufferSubgraph*>* createSubgraphs(geomgraph::PlanarGraph *graph);
 
 	/**
 	 * Completes the building of the input subgraphs by
@@ -807,18 +807,18 @@ private:
 	 * @param polyBuilder the PolygonBuilder which will build
 	 *        the final polygons
 	 */
-	void buildSubgraphs(vector<BufferSubgraph*> *subgraphList,
-			PolygonBuilder *polyBuilder);
+	void buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,
+			overlay::PolygonBuilder *polyBuilder);
 
 	/// \brief
-	/// Return the externally-set Noder OR a newly created
+	/// Return the externally-set noding::Noder OR a newly created
 	/// one using the given precisionModel.
 	//
-	/// NOTE: if an externally-set Noder is available no
+	/// NOTE: if an externally-set noding::Noder is available no
 	/// check is performed to ensure it will use the
 	/// given PrecisionModel
 	///
-	Noder* getNoder(const PrecisionModel* precisionModel);
+	noding::Noder* getNoder(const PrecisionModel* precisionModel);
 
 
 public:
@@ -834,7 +834,7 @@ public:
 		intersectionAdder(NULL),
 		workingNoder(NULL),
 		geomFact(NULL),
-		edgeList(new EdgeList())
+		edgeList(new geomgraph::EdgeList())
 	{}
 
 	~BufferBuilder();
@@ -865,13 +865,13 @@ public:
 	}
 
 	/**
-	 * Sets the {@link Noder} to use during noding.
+	 * Sets the {@link noding::Noder} to use during noding.
 	 * This allows choosing fast but non-robust noding, or slower
 	 * but robust noding.
 	 *
 	 * @param noder the noder to use
 	 */
-	void setNoder(Noder* newNoder) { workingNoder = newNoder; }
+	void setNoder(noding::Noder* newNoder) { workingNoder = newNoder; }
 
 	void setEndCapStyle(int nEndCapStyle) {
 		endCapStyle=nEndCapStyle;
@@ -882,12 +882,17 @@ public:
 
 };
 
+} // namespace geos.operation.buffer
+} // namespace geos.operation
 } // namespace geos
 
 #endif // ndef GEOS_OPBUFFER_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.14  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

@@ -18,6 +18,7 @@
 #include <cmath>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 /**
  * Computes the factor for the change in depth when moving from one
@@ -231,10 +232,14 @@ DirectedEdge::printEdge()
 	return out;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.7  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

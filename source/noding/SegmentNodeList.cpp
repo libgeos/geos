@@ -23,6 +23,7 @@
 #include <geos/profiler.h>
 
 namespace geos {
+namespace noding { // geos.noding
 
 #if PROFILE
 static Profiler *profiler = Profiler::instance();
@@ -253,10 +254,14 @@ string SegmentNodeList::print(){
 	return out;
 }
 
+} // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.21  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

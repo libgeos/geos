@@ -62,6 +62,7 @@ Changes in 3.0.0
 
 	- SegmentString: getCoordinates() doesn't return a clone
 	  anymore, getCoordinatesRO() obsoleted.
+	- JTS packages mapped to geos:: sub-namespaces
 
 - Correctness:
 	- More const-correct signatures

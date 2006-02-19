@@ -48,7 +48,7 @@ private:
 	/// For purposes of intersection testing,
 	/// don't need to set precision model
 	///
-	LineIntersector li; // Robust
+	algorithm::LineIntersector li; // Robust
 
 	bool hasIntersectionVar;
 

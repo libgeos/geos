@@ -17,7 +17,7 @@
 #include <geos/planargraph.h>
 
 namespace geos {
-//namespace planargraph {
+namespace planargraph {
 
 /**
  * Constructs a NodeMap without any Nodes.
@@ -86,11 +86,14 @@ planarNodeMap::find(const Coordinate& coord)
 		return found->second;
 }
 
-//} //namespace planargraph 
+} //namespace planargraph 
 } //namespace geos 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.8  2006/02/05 17:14:43  strk
  * - New ConnectedSubgraphFinder class.
  * - More iterators returning methods, inlining and cleanups

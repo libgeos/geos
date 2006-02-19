@@ -18,6 +18,8 @@
 #include <algorithm>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+namespace index { // geos.geomgraph.index
 
 SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
 	//events(new vector<SweepLineEvent*>())
@@ -153,11 +155,17 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 	}
 }
 
+} // namespace geos.geomgraph.index
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.8  2005/11/15 10:04:37  strk
+ *
  * Reduced heap allocations (vectors, mostly).
  * Enforced const-correctness, changed some interfaces
  * to use references rather then pointers when appropriate.

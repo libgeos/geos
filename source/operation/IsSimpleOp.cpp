@@ -17,9 +17,18 @@
  **********************************************************************/
 
 #include <geos/operation.h>
+#include <geos/geosAlgorithm.h>
+#include <geos/geomgraph.h>
+#include <geos/geomgraphindex.h>
 #include <set>
 
+using namespace std;
+using namespace geos::algorithm;
+using namespace geos::geomgraph;
+using namespace geos::geomgraph::index;
+
 namespace geos {
+namespace operation { // geos.operation
 
 IsSimpleOp::IsSimpleOp()
 {}
@@ -43,7 +52,7 @@ bool
 IsSimpleOp::isSimple(const MultiPoint *mp)
 {
 	if (mp->isEmpty()) return true;
-	set<const Coordinate*, CoordLT>points;
+	set<const Coordinate*, CoordinateLessThen>points;
 
 	for(int i=0;i<mp->getNumGeometries();i++) {
 		Point *pt=(Point*) mp->getGeometryN(i);
@@ -116,7 +125,7 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 bool
 IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 {
-	map<const Coordinate*,EndpointInfo*,CoordLT>endPoints;
+	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>endPoints;
 	vector<Edge*> *edges=graph.getEdges();
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
@@ -128,7 +137,7 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 		addEndpoint(endPoints,p1,isClosed);
 	}
 
-	map<const Coordinate*,EndpointInfo*,CoordLT>::iterator it=endPoints.begin();
+	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>::iterator it=endPoints.begin();
 	for (; it!=endPoints.end(); it++) {
 		EndpointInfo *eiInfo=it->second;
 		if (eiInfo->isClosed && eiInfo->degree!=2) {
@@ -154,10 +163,10 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 */
 void
 IsSimpleOp::addEndpoint(
-	map<const Coordinate*,EndpointInfo*,CoordLT>&endPoints,
+	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>&endPoints,
 	const Coordinate *p,bool isClosed)
 {
-	map<const Coordinate*,EndpointInfo*,CoordLT>::iterator it=endPoints.find(p);
+	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>::iterator it=endPoints.find(p);
 	EndpointInfo *eiInfo;
 	if (it==endPoints.end()) {
 		eiInfo=NULL;
@@ -185,10 +194,14 @@ EndpointInfo::addEndpoint(bool newIsClosed)
 	isClosed|=newIsClosed;
 }
 
-} //namespace geos
+} // namespace geos.operation
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.20  2006/01/08 15:24:40  strk
  * Changed container-related typedef to class-scoped STL-like typedefs.
  * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;

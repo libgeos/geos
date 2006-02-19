@@ -25,6 +25,7 @@
 #endif
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges):
 	GraphComponent(new Label(0,Location::UNDEF)),
@@ -200,10 +201,14 @@ Node::getZ() const
 	return zvals;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.16  2005/11/29 00:48:35  strk
  * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
  * Restructured iterated access by use of standard ::iterator abstraction

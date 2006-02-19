@@ -24,6 +24,7 @@
 #include <geos/geom.h>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 
 int
@@ -41,7 +42,7 @@ PointLocator::locate(const Coordinate& p, const Geometry *geom)
 	isIn=false;
 	numBoundaries=0;
 	computeLocation(p,geom);
-	if (GeometryGraph::isInBoundary(numBoundaries)) return Location::BOUNDARY;
+	if (geomgraph::GeometryGraph::isInBoundary(numBoundaries)) return Location::BOUNDARY;
 	if (numBoundaries>0 || isIn) return Location::INTERIOR;
 	return Location::EXTERIOR;
 }
@@ -149,10 +150,14 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 	return Location::INTERIOR;
 }
 
+} // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.25  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

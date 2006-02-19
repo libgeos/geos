@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,6 +18,12 @@
 #include <cassert>
 #include <geos/geom.h>
 #include <geos/operation.h>
+#include <geos/geomgraph.h>
+#include <geos/geosAlgorithm.h>
+
+using namespace geos::algorithm;
+using namespace geos::operation;
+using namespace geos::geomgraph;
 
 namespace geos {
 
@@ -114,6 +120,9 @@ MultiLineString::reverse() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.25  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

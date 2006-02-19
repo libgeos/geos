@@ -28,6 +28,7 @@
 using namespace std;
 
 namespace geos {
+namespace noding { // geos.noding
 
 class SegmentString;
 class Octant;
@@ -338,7 +339,7 @@ public:
 	 * intersections found for a segment of an edge to the edge
 	 * intersection list.
 	 */
-	void addIntersections(LineIntersector *li, unsigned int segmentIndex,
+	void addIntersections(algorithm::LineIntersector *li, unsigned int segmentIndex,
 			int geomIndex);
 
 	/**
@@ -347,7 +348,7 @@ public:
 	 * of the SegmentString is normalized
 	 * to use the higher of the two possible segmentIndexes
 	 */
-	void addIntersection(LineIntersector *li, unsigned int segmentIndex,
+	void addIntersection(algorithm::LineIntersector *li, unsigned int segmentIndex,
 			int geomIndex, int intIndex);
 
 	/**
@@ -442,7 +443,7 @@ public:
 	 * intersections found for a segment of an edge to the edge
 	 * intersection list.
 	 */
-	void addIntersections(LineIntersector& li, int segmentIndex,
+	void addIntersections(algorithm::LineIntersector& li, int segmentIndex,
 			int geomIndex);
 
 	/**
@@ -451,7 +452,7 @@ public:
 	 * of the SegmentString is normalized
 	 * to use the higher of the two possible segmentIndexes
 	 */
-	void addIntersection(LineIntersector& li, int segmentIndex,
+	void addIntersection(algorithm::LineIntersector& li, int segmentIndex,
 			int geomIndex, int intIndex);
 
 	void addIntersection(const Coordinate& intPt, int segmentIndex);
@@ -547,7 +548,7 @@ private:
 	// the proper intersection point found
 	const Coordinate* properIntersectionPoint;
 
-	LineIntersector& li;
+	algorithm::LineIntersector& li;
 	bool isSelfIntersection;
 	//bool intersectionFound;
 
@@ -571,7 +572,7 @@ public:
 	// testing only
 	int numTests;
 
-	IntersectionAdder(LineIntersector& newLi)
+	IntersectionAdder(algorithm::LineIntersector& newLi)
 		:
 		hasIntersectionVar(false),
 		hasProper(false),
@@ -585,7 +586,7 @@ public:
 		numTests(0)
 	{}
 
-	LineIntersector& getLineIntersector() { return li; }
+	algorithm::LineIntersector& getLineIntersector() { return li; }
 
 	/**
 	 * @return the proper intersection point, or <code>NULL</code>
@@ -653,7 +654,7 @@ public:
 class IntersectionFinderAdder: public nodingSegmentIntersector {
 
 private:
-	LineIntersector& li;
+	algorithm::LineIntersector& li;
 	vector<Coordinate>& interiorIntersections;
 
 public:
@@ -664,7 +665,7 @@ public:
 	 *
 	 * @param li the LineIntersector to use
 	 */
-	IntersectionFinderAdder(LineIntersector& newLi, vector<Coordinate>& v)
+	IntersectionFinderAdder(algorithm::LineIntersector& newLi, vector<Coordinate>& v)
 		:
 		li(newLi),
 		interiorIntersections(v)
@@ -929,7 +930,7 @@ public:
  */
 class NodingValidator {
 private:
-	LineIntersector li;
+	algorithm::LineIntersector li;
 	const SegmentString::NonConstVect& segStrings;
 
 	/**
@@ -969,7 +970,7 @@ private:
 	 * @return true if there is an intersection point which is not an
 	 *         endpoint of the segment p0-p1
 	 */
-	bool hasInteriorIntersection(const LineIntersector& aLi,
+	bool hasInteriorIntersection(const algorithm::LineIntersector& aLi,
 			const Coordinate& p0, const Coordinate& p1) const;
 
 public:
@@ -1005,7 +1006,7 @@ public:
 private:
 
 	const PrecisionModel *pm;
-	LineIntersector li;
+	algorithm::LineIntersector li;
 	SegmentString::NonConstVect* nodedSegStrings;
 	int maxIter;
 
@@ -1056,11 +1057,16 @@ public:
 	void computeNodes(SegmentString::NonConstVect* inputSegmentStrings); // throw(GEOSException);
 };
 
+} // namespace geos.noding
 } // namespace geos
+
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.15  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

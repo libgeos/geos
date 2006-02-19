@@ -17,6 +17,8 @@
 #include <geos/geomgraphindex.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+namespace index { // geos.geomgraph.index
 
 SweepLineSegment::SweepLineSegment(Edge *newEdge, int newPtIndex):
 	edge(newEdge),
@@ -55,11 +57,17 @@ SweepLineSegment::computeIntersections(SweepLineSegment *ss,
 	si->addIntersections(edge, ptIndex, ss->edge, ss->ptIndex);
 }
 
+} // namespace geos.geomgraph.index
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.3  2005/11/15 10:04:37  strk
+ *
  * Reduced heap allocations (vectors, mostly).
  * Enforced const-correctness, changed some interfaces
  * to use references rather then pointers when appropriate.

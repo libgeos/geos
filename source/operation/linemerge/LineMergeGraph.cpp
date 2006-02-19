@@ -15,8 +15,13 @@
  **********************************************************************/
 
 #include <geos/opLinemerge.h>
+#include <geos/planargraph.h>
+
+using namespace geos::planargraph;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace linemerge { // geos.operation.linemerge
 
 /*
  * Adds an Edge, DirectedEdges, and Nodes for the given LineString
@@ -69,10 +74,15 @@ LineMergeGraph::~LineMergeGraph()
 		delete newDirEdges[i];
 }
 
+} // namespace geos.operation.linemerge
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.8  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

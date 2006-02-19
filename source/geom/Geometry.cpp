@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -30,6 +30,13 @@
 #include <geos/version.h>
 
 #define SHORTCIRCUIT_PREDICATES 1
+
+using namespace geos::algorithm;
+using namespace geos::operation::valid;
+using namespace geos::operation::relate;
+using namespace geos::operation::buffer;
+using namespace geos::operation::overlay;
+using namespace geos::operation::distance;
 
 namespace geos {
 
@@ -806,6 +813,9 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.89  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.88  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

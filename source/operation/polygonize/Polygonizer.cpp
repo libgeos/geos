@@ -20,6 +20,8 @@
 //#define DEBUG 1
 
 namespace geos {
+namespace operation { // geos.operation
+namespace polygonize { // geos.operation.polygonize
 
 Polygonizer::LineStringAdder::LineStringAdder(Polygonizer *p):
 	pol(p)
@@ -265,10 +267,15 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER,
 }
 
 
+} // namespace geos.operation.polygonize
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.9  2005/12/09 10:32:28  strk
  * Cleaned up debugging line left over from previous commit
  *

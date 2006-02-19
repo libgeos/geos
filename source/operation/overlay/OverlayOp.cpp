@@ -18,8 +18,8 @@
  *
  **********************************************************************/
 
+#include <geos/geom.h>
 #include <geos/opOverlay.h>
-#include <stdio.h>
 #include <geos/util.h>
 
 #define DEBUG 0
@@ -27,7 +27,12 @@
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
 
+using namespace geos::geomgraph;
+using namespace geos::algorithm;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 Geometry*
 OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
@@ -186,8 +191,8 @@ OverlayOp::replaceCollapsedEdges()
 void
 OverlayOp::copyPoints(int argIndex)
 {
-	map<Coordinate*,Node*,CoordLT>&nodeMap=arg[argIndex]->getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>&nodeMap=arg[argIndex]->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *graphNode=it->second;
 		Node *newNode=graph.addNode(graphNode->getCoordinate());
@@ -206,7 +211,7 @@ void
 OverlayOp::computeLabelling()
 	//throw(TopologyException *) // and what else ?
 {
-	map<Coordinate*,Node*,CoordLT> &nodeMap=graph.getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
 
 #if DEBUG
 	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList.print()<<endl;
@@ -216,7 +221,7 @@ OverlayOp::computeLabelling()
 	cerr<<"OverlayOp::computeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 #if DEBUG
@@ -247,13 +252,13 @@ OverlayOp::computeLabelling()
 void
 OverlayOp::mergeSymLabels()
 {
-	map<Coordinate*,Node*,CoordLT>&nodeMap=graph.getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>&nodeMap=graph.getNodeMap()->nodeMap;
 
 #if DEBUG
 	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
 #endif
 
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
@@ -271,11 +276,11 @@ OverlayOp::updateNodeLabelling()
 	// The label for a node is updated from the edges incident on it
 	// (Note that a node may have already been labelled
 	// because it is a point in one of the input geometries)
-	map<Coordinate*,Node*,CoordLT> &nodeMap=graph.getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
 #if DEBUG
 	cerr<<"OverlayOp::updateNodeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		Label &lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
@@ -304,11 +309,11 @@ OverlayOp::updateNodeLabelling()
 void
 OverlayOp::labelIncompleteNodes()
 {
-	map<Coordinate*,Node*,CoordLT> &nodeMap=graph.getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
 #if DEBUG
 	cerr<<"OverlayOp::labelIncompleteNodes() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *n=it->second;
 		Label *label=n->getLabel();
@@ -683,7 +688,7 @@ OverlayOp::computeOverlay(int opCode)
 	findResultAreaEdges(opCode);
 	cancelDuplicateResultEdges();
 
-	PolygonBuilder polyBuilder(geomFact,cga);
+	PolygonBuilder polyBuilder(geomFact);
 	
 	// might throw a TopologyException *
 	polyBuilder.add(&graph);
@@ -822,10 +827,15 @@ OverlayOp::computeLabelsFromDepths()
 	}
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.51  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.50  2005/12/07 19:18:23  strk
  * Changed PlanarGraph::addEdges and EdgeList::addAll to take
  * a const vector by reference rather then a non-const vector by

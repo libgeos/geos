@@ -28,9 +28,9 @@
 #include <geos/geomgraph.h>
 #include <geos/geosAlgorithm.h>
 
-using namespace std;
-
 namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 class ElevationMatrix;
 class ElevationMatrixCell;
@@ -95,7 +95,7 @@ private:
 	double cellheight;
 	mutable bool avgElevationComputed;
 	mutable double avgElevation;
-	vector<ElevationMatrixCell>cells;
+	std::vector<ElevationMatrixCell>cells;
 };
 
 /*
@@ -120,7 +120,7 @@ public:
 
 	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode); //throw(TopologyException *);
 
-	static bool isResultOfOp(Label *label,int opCode);
+	static bool isResultOfOp(geomgraph::Label *label,int opCode);
 
 	/*
 	 * This method will handle arguments of Location.NULL correctly
@@ -136,7 +136,7 @@ public:
 	Geometry* getResultGeometry(int funcCode);
 		// throw(TopologyException *);
 
-	PlanarGraph& getGraph();
+	geomgraph::PlanarGraph& getGraph();
 
 	/*
 	 * This method is used to decide if a point node should be included
@@ -169,19 +169,19 @@ protected:
 	 * If so, the edge is not inserted, but its label is merged
 	 * with the existing edge.
 	 */
-	void insertUniqueEdge(Edge *e);
+	void insertUniqueEdge(geomgraph::Edge *e);
 
 private:
-	PointLocator ptLocator;
+	algorithm::PointLocator ptLocator;
 	const GeometryFactory *geomFact;
 	Geometry *resultGeom;
-	PlanarGraph graph;
-	EdgeList edgeList;
-	vector<Polygon*> *resultPolyList;
-	vector<LineString*> *resultLineList;
-	vector<Point*> *resultPointList;
+	geomgraph::PlanarGraph graph;
+	geomgraph::EdgeList edgeList;
+	std::vector<Polygon*> *resultPolyList;
+	std::vector<LineString*> *resultLineList;
+	std::vector<Point*> *resultPointList;
 	void computeOverlay(int opCode); // throw(TopologyException *);
-	void insertUniqueEdges(vector<Edge*> *edges);
+	void insertUniqueEdges(std::vector<geomgraph::Edge*> *edges);
 
 	/*
 	 * If either of the GeometryLocations for the existing label is
@@ -190,7 +190,7 @@ private:
 	 * In this case, convert the label for that Geometry to a Line label
 	 */
 	//Not needed
-	//void checkDimensionalCollapse(Label labelToMerge, Label existingLabel);
+	//void checkDimensionalCollapse(geomgraph::Label labelToMerge, geomgraph::Label existingLabel);
 	/*
 	 * Update the labels for edges according to their depths.
 	 * For each edge, the depths are first normalized.
@@ -261,7 +261,7 @@ private:
 	/*
 	 * Label an isolated node with its relationship to the target geometry.
 	 */
-	void labelIncompleteNode(Node *n,int targetIndex);
+	void labelIncompleteNode(geomgraph::Node *n,int targetIndex);
 
 	/*
 	 * Find all edges whose label indicates that they are in the result
@@ -281,33 +281,33 @@ private:
 	 */
 	void cancelDuplicateResultEdges();
 
-	bool isCovered(const Coordinate& coord,vector<Geometry*> *geomList);
-	bool isCovered(const Coordinate& coord,vector<Polygon*> *geomList);
-	bool isCovered(const Coordinate& coord,vector<LineString*> *geomList);
+	bool isCovered(const Coordinate& coord,std::vector<Geometry*> *geomList);
+	bool isCovered(const Coordinate& coord,std::vector<Polygon*> *geomList);
+	bool isCovered(const Coordinate& coord,std::vector<LineString*> *geomList);
 
 	/*
 	 * Build a Geometry containing all Geometries in the given vectors.
 	 * Takes element's ownership, vector control is left to caller. 
 	 */
-	Geometry* computeGeometry(vector<Point*> *nResultPointList,
-                              vector<LineString*> *nResultLineList,
-                              vector<Polygon*> *nResultPolyList);
+	Geometry* computeGeometry(std::vector<Point*> *nResultPointList,
+                              std::vector<LineString*> *nResultLineList,
+                              std::vector<Polygon*> *nResultPolyList);
 
 	/* Caches for memory management */
-	vector<Edge *>dupEdges;
+	std::vector<geomgraph::Edge *>dupEdges;
 
 	/*
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given Polygon it is on.
 	 */
-	int mergeZ(Node *n, const Polygon *poly) const;
+	int mergeZ(geomgraph::Node *n, const Polygon *poly) const;
 
 	/*
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given LineString it is on.
 	 * @returns 1 if an intersection is found, 0 otherwise.
 	 */
-	int mergeZ(Node *n, const LineString *line) const;
+	int mergeZ(geomgraph::Node *n, const LineString *line) const;
 
 	/*
 	 * Average Z of input geometries
@@ -329,20 +329,20 @@ private:
  *
  * @see com.vividsolutions.jts.operation.overlay.MaximalEdgeRing
  */
-class MinimalEdgeRing: public EdgeRing {
+class MinimalEdgeRing: public geomgraph::EdgeRing {
 public:
 	// CGAlgorithms argument obsoleted
-	MinimalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory,CGAlgorithms *cga=NULL);
+	MinimalEdgeRing(geomgraph::DirectedEdge *start, const GeometryFactory *geometryFactory);
 	//virtual ~MinimalEdgeRing();
-	inline DirectedEdge* getNext(DirectedEdge *de);
-	inline void setEdgeRing(DirectedEdge *de,EdgeRing *er);
+	inline geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de);
+	inline void setEdgeRing(geomgraph::DirectedEdge *de,geomgraph::EdgeRing *er);
 };
 
 // INLINES
-void MinimalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er) {
+void MinimalEdgeRing::setEdgeRing(geomgraph::DirectedEdge *de,geomgraph::EdgeRing *er) {
 	de->setMinEdgeRing(er);
 }
-DirectedEdge* MinimalEdgeRing::getNext(DirectedEdge *de) {
+geomgraph::DirectedEdge* MinimalEdgeRing::getNext(geomgraph::DirectedEdge *de) {
 	return de->getNextMin();
 }
 
@@ -364,17 +364,17 @@ DirectedEdge* MinimalEdgeRing::getNext(DirectedEdge *de) {
  * @see com.vividsolutions.jts.operation.overlay.MinimalEdgeRing
  */
 
-class MaximalEdgeRing: public EdgeRing {
+class MaximalEdgeRing: public geomgraph::EdgeRing {
 
 public:
 
 	// CGAlgorithms arg is obsoleted
-	MaximalEdgeRing(DirectedEdge *start, const GeometryFactory *geometryFactory, CGAlgorithms *cga=NULL);
+	MaximalEdgeRing(geomgraph::DirectedEdge *start, const GeometryFactory *geometryFactory);
 
 	virtual ~MaximalEdgeRing();
-	DirectedEdge* getNext(DirectedEdge *de);
-	void setEdgeRing(DirectedEdge* de,EdgeRing* er);
-	vector<MinimalEdgeRing*>* buildMinimalRings();
+	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de);
+	void setEdgeRing(geomgraph::DirectedEdge* de,geomgraph::EdgeRing* er);
+	std::vector<MinimalEdgeRing*>* buildMinimalRings();
 	void linkDirectedEdgesForMinimalEdgeRings();
 };
 
@@ -399,37 +399,45 @@ private:
 	 *
 	 * @param n the node to test
 	 */
-	void filterCoveredNodeToPoint(const Node *);
+	void filterCoveredNodeToPoint(const geomgraph::Node *);
 
-	vector<Point*> *resultPointList;
+	/// Allocated a construction time, but not owned.
+	/// Make sure you take ownership of it, getting 
+	/// it from build()
+	std::vector<Point*> *resultPointList;
 
 public:
 
 	PointBuilder(OverlayOp *newOp,
-		const GeometryFactory *newGeometryFactory,
-		PointLocator *newPtLocator=NULL);
+			const GeometryFactory *newGeometryFactory,
+			algorithm::PointLocator *newPtLocator=NULL)
+		:
+		op(newOp),
+		geometryFactory(newGeometryFactory),
+		resultPointList(new vector<Point *>())
+	{}
 
 	/*
 	 * @return a list of the Points in the result of the specified
 	 * overlay operation
 	 */
-	vector<Point*>* build(int opCode);
+	std::vector<Point*>* build(int opCode);
 };
 
 /*
- * Forms JTS LineStrings out of a the graph of {@link DirectedEdge}s
+ * Forms JTS LineStrings out of a the graph of {@link geomgraph::DirectedEdge}s
  * created by an {@link OverlayOp}.
  *
  */
 class LineBuilder {
 public:
-	LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, PointLocator *newPtLocator);
+	LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, algorithm::PointLocator *newPtLocator);
 	~LineBuilder();
 
 	/**
 	 * @return a list of the LineStrings in the result of the specified overlay operation
 	 */
-	vector<LineString*>* build(int opCode);
+	std::vector<LineString*>* build(int opCode);
 
 	/**
 	 * Find and mark L edges which are "covered" by the result area (if any).
@@ -438,7 +446,7 @@ public:
 	 * L edges at nodes which do not have A edges can be checked by doing a
 	 * point-in-polygon test with the previously computed result areas.
 	 */
-	void collectLineEdge(DirectedEdge *de,int opCode,vector<Edge*>* edges);
+	void collectLineEdge(geomgraph::DirectedEdge *de,int opCode,std::vector<geomgraph::Edge*>* edges);
 
 	/**
 	 * Collect edges from Area inputs which should be in the result but
@@ -450,23 +458,23 @@ public:
 	 *  -   OR as a result of a dimensional collapse.
 	 * 
 	 */
-	void collectBoundaryTouchEdge(DirectedEdge *de,int opCode,vector<Edge*>* edges);
+	void collectBoundaryTouchEdge(geomgraph::DirectedEdge *de,int opCode,std::vector<geomgraph::Edge*>* edges);
 
 private:
 	OverlayOp *op;
 	const GeometryFactory *geometryFactory;
-	PointLocator *ptLocator;
-	vector<Edge*> lineEdgesList;
-	vector<LineString*>* resultLineList;
+	algorithm::PointLocator *ptLocator;
+	std::vector<geomgraph::Edge*> lineEdgesList;
+	std::vector<LineString*>* resultLineList;
 	void findCoveredLineEdges();
 	void collectLines(int opCode);
 	void buildLines(int opCode);
-	void labelIsolatedLines(vector<Edge*> *edgesList);
+	void labelIsolatedLines(std::vector<geomgraph::Edge*> *edgesList);
 
 	/**
 	 * Label an isolated node with its relationship to the target geometry.
 	 */
-	void labelIsolatedLine(Edge *e,int targetIndex);
+	void labelIsolatedLine(geomgraph::Edge *e,int targetIndex);
 
 	/*
 	 * If the given CoordinateSequence has mixed 3d/2d vertexes
@@ -478,7 +486,7 @@ private:
 };
 
 /*
- * Forms {@link Polygon}s out of a graph of {@link DirectedEdge}s.
+ * Forms {@link Polygon}s out of a graph of {@link geomgraph::DirectedEdge}s.
  * The edges to use are marked as being in the result Area.
  * <p>
  *
@@ -487,7 +495,7 @@ class PolygonBuilder {
 public:
 
 	// CGAlgorithms argument is unused
-	PolygonBuilder(const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga=NULL);
+	PolygonBuilder(const GeometryFactory *newGeometryFactory);
 
 	~PolygonBuilder();
 	/**
@@ -495,29 +503,29 @@ public:
 	* The graph is assumed to contain one or more polygons,
 	* possibly with holes.
 	*/
-	void add(PlanarGraph *graph); // throw(TopologyException *);
+	void add(geomgraph::PlanarGraph *graph); // throw(TopologyException *);
 	/**
 	* Add a set of edges and nodes, which form a graph.
 	* The graph is assumed to contain one or more polygons,
 	* possibly with holes.
 	*/
-	void add(vector<DirectedEdge*> *dirEdges,vector<Node*> *nodes); // throw(TopologyException *);
-  	vector<Geometry*>* getPolygons();
+	void add(std::vector<geomgraph::DirectedEdge*> *dirEdges,std::vector<geomgraph::Node*> *nodes); // throw(TopologyException *);
+  	std::vector<Geometry*>* getPolygons();
 	bool containsPoint(const Coordinate& p);
 private:
 	const GeometryFactory *geometryFactory;
-	vector<EdgeRing*> shellList;
+	std::vector<geomgraph::EdgeRing*> shellList;
 
 	/**
 	 * for all DirectedEdges in result, form them into MaximalEdgeRings
 	 */
-	vector<MaximalEdgeRing*>* buildMaximalEdgeRings(
-		vector<DirectedEdge*> *dirEdges);
+	std::vector<MaximalEdgeRing*>* buildMaximalEdgeRings(
+		std::vector<geomgraph::DirectedEdge*> *dirEdges);
 
-	vector<MaximalEdgeRing*>* buildMinimalEdgeRings(
-		vector<MaximalEdgeRing*> *maxEdgeRings,
-		vector<EdgeRing*> *newShellList,
-		vector<EdgeRing*> *freeHoleList);
+	std::vector<MaximalEdgeRing*>* buildMinimalEdgeRings(
+		std::vector<MaximalEdgeRing*> *maxEdgeRings,
+		std::vector<geomgraph::EdgeRing*> *newShellList,
+		std::vector<geomgraph::EdgeRing*> *freeHoleList);
 	/**
 	 * This method takes a list of MinimalEdgeRings derived from a
 	 * MaximalEdgeRing, and tests whether they form a Polygon. 
@@ -526,10 +534,10 @@ private:
 	 * The other possibility is that they are a series of connected
 	 * holes, in which case no shell is returned.
 	 *
-	 * @return the shell EdgeRing, if there is one
+	 * @return the shell geomgraph::EdgeRing, if there is one
 	 * @return NULL, if all the rings are holes
 	 */
-	EdgeRing* findShell(vector<MinimalEdgeRing*>* minEdgeRings);
+	geomgraph::EdgeRing* findShell(std::vector<MinimalEdgeRing*>* minEdgeRings);
 
 	/**
 	 * This method assigns the holes for a Polygon (formed from a list of
@@ -542,8 +550,8 @@ private:
 	 *    chosen might lie on the shell, which might return an incorrect
 	 *    result from the PIP test
 	 */
-	void placePolygonHoles(EdgeRing *shell,
-		vector<MinimalEdgeRing*> *minEdgeRings);
+	void placePolygonHoles(geomgraph::EdgeRing *shell,
+		std::vector<MinimalEdgeRing*> *minEdgeRings);
 
 	/**
 	 * For all rings in the input list,
@@ -552,9 +560,9 @@ private:
 	 * Due to the way the DirectedEdges were linked,
 	 * a ring is a shell if it is oriented CW, a hole otherwise.
 	 */
-	void sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
-		vector<EdgeRing*> *newShellList,
-		vector<EdgeRing*> *freeHoleList);
+	void sortShellsAndHoles(std::vector<MaximalEdgeRing*> *edgeRings,
+		std::vector<geomgraph::EdgeRing*> *newShellList,
+		std::vector<geomgraph::EdgeRing*> *freeHoleList);
 
 	/**
 	 * This method determines finds a containing shell for all holes
@@ -568,12 +576,12 @@ private:
 	 * parent shell) would have formed part of a MaximalEdgeRing
 	 * and been handled in a previous step).
 	 */
-	void placeFreeHoles(vector<EdgeRing*>* newShellList,
-		vector<EdgeRing*> *freeHoleList);
+	void placeFreeHoles(std::vector<geomgraph::EdgeRing*>* newShellList,
+		std::vector<geomgraph::EdgeRing*> *freeHoleList);
 
 	/**
-	 * Find the innermost enclosing shell EdgeRing containing the
-	 * argument EdgeRing, if any.
+	 * Find the innermost enclosing shell geomgraph::EdgeRing containing the
+	 * argument geomgraph::EdgeRing, if any.
 	 * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
 	 * The algorithm used depends on the fact that:
 	 *
@@ -585,13 +593,13 @@ private:
 	 * (which is guaranteed to be the case if the hole does not touch
 	 * its shell)
 	 *
-	 * @return containing EdgeRing, if there is one
-	 * @return NULL if no containing EdgeRing is found
+	 * @return containing geomgraph::EdgeRing, if there is one
+	 * @return NULL if no containing geomgraph::EdgeRing is found
 	 */
-	EdgeRing* findEdgeRingContaining(EdgeRing *testEr,
-		vector<EdgeRing*> *newShellList);
+	geomgraph::EdgeRing* findEdgeRingContaining(geomgraph::EdgeRing *testEr,
+		std::vector<geomgraph::EdgeRing*> *newShellList);
 
-	vector<Geometry*>* computePolygons(vector<EdgeRing*> *newShellList);
+	std::vector<Geometry*>* computePolygons(std::vector<geomgraph::EdgeRing*> *newShellList);
 
 	/**
 	 * Checks the current set of shells (with their associated holes) to
@@ -602,14 +610,14 @@ private:
 
 
 /*
- * Creates nodes for use in the {@link PlanarGraph}s constructed during
+ * Creates nodes for use in the geomgraph::PlanarGraph constructed during
  * overlay operations.
  *
  */
-class OverlayNodeFactory: public NodeFactory {
+class OverlayNodeFactory: public geomgraph::NodeFactory {
 public:
-	Node* createNode(const Coordinate &coord) const;
-	static const NodeFactory &instance();
+	geomgraph::Node* createNode(const Coordinate &coord) const;
+	static const geomgraph::NodeFactory &instance();
 };
 
 /*
@@ -620,22 +628,35 @@ public:
  */
 class EdgeSetNoder {
 private:
-	LineIntersector *li;
-	vector<Edge*>* inputEdges;
+	algorithm::LineIntersector *li;
+	std::vector<geomgraph::Edge*>* inputEdges;
 public:
-	EdgeSetNoder(LineIntersector *newLi);
-	~EdgeSetNoder();
-	void addEdges(vector<Edge*> *edges);
-	vector<Edge*>* getNodedEdges();
+	EdgeSetNoder(algorithm::LineIntersector *newLi)
+		:
+		li(newLi),
+		inputEdges(new vector<geomgraph::Edge*>())
+	{}
+
+	~EdgeSetNoder() {
+		delete inputEdges; // TODO: avoid heap allocation
+	}
+
+	void addEdges(std::vector<geomgraph::Edge*> *edges);
+	std::vector<geomgraph::Edge*>* getNodedEdges();
 };
 
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.17  2005/12/08 14:14:07  strk
  * ElevationMatrixFilter used for both elevation and Matrix fill,
  * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).

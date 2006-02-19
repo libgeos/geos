@@ -20,6 +20,8 @@
 #include <typeinfo>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace valid { // geos.operation.valid
 
 Coordinate&
 RepeatedPointTester::getCoordinate()
@@ -89,10 +91,15 @@ bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
 	return false;
 }
 
+} // namespace geos.operation.valid
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.14  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

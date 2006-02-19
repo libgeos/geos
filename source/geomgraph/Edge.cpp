@@ -22,6 +22,10 @@
 #endif
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+
+using namespace geos::geomgraph::index;
+using namespace geos::algorithm;
 
 /**
  * Updates an IM from the label for an edge.
@@ -362,10 +366,14 @@ Edge::getEnvelope()
 	return env;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.23  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

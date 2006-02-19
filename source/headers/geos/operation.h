@@ -25,9 +25,10 @@
 #include <geos/geom.h>
 #include <geos/geosAlgorithm.h>
 
-using namespace std;
+//using namespace std;
 
 namespace geos {
+namespace operation { // geos.operation
 
 /*
  * \brief
@@ -41,13 +42,14 @@ public:
 	virtual ~GeometryGraphOperation();
 	const Geometry* getArgGeometry(int i) const;
 protected:
-	static CGAlgorithms *cga;
-	static LineIntersector *li;
+	// to be obsoleted probably, CGAlgorithms is an all-static class
+	//static algorithm::CGAlgorithms *cga;
+	static algorithm::LineIntersector *li;
 	const PrecisionModel* resultPrecisionModel;
 	/*
 	 * The operation args into an array so they can be accessed by index
 	 */
-	vector<GeometryGraph*> arg;  // the arg(s) of the operation
+	std::vector<geomgraph::GeometryGraph*> arg;  // the arg(s) of the operation
 	void setComputationPrecision(const PrecisionModel* pm);
 };
 
@@ -76,18 +78,23 @@ public:
 	bool isSimple(const MultiPoint *mp);
 	bool isSimpleLinearGeometry(const Geometry *geom);
 private:
-	bool hasNonEndpointIntersection(GeometryGraph &graph);
-	bool hasClosedEndpointIntersection(GeometryGraph &graph);
-	void addEndpoint(map<const Coordinate*,EndpointInfo*,CoordLT>&endPoints, const Coordinate *p,bool isClosed);
+	bool hasNonEndpointIntersection(geomgraph::GeometryGraph &graph);
+	bool hasClosedEndpointIntersection(geomgraph::GeometryGraph &graph);
+	void addEndpoint(map<const Coordinate*,EndpointInfo*,CoordinateLessThen>&endPoints, const Coordinate *p,bool isClosed);
 };
 
+} // namespace geos.operation
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

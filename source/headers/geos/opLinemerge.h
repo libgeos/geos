@@ -23,6 +23,8 @@
 #include <cassert>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace linemerge { // geos.operation.linemerge
 
 //using namespace planargraph;
 
@@ -38,7 +40,7 @@ class LineSequencer;
  * An edge of a LineMergeGraph. The <code>marked</code> field indicates
  * whether this Edge has been logically deleted from the graph.
  */
-class LineMergeEdge: public planarEdge {
+class LineMergeEdge: public planargraph::Edge {
 private:
 	const LineString *line;
 public:
@@ -58,10 +60,10 @@ public:
 /*
  * \class LineMergeDirectedEdge opLinemerge.h geos/opLinemerge.h
  * \brief
- * A planarDirectedEdge of a LineMergeGraph. 
+ * A planargraph::DirectedEdge of a LineMergeGraph. 
  *
  */
-class LineMergeDirectedEdge: public planarDirectedEdge {
+class LineMergeDirectedEdge: public planargraph::DirectedEdge {
 public:
 	/**
 	 * Constructs a LineMergeDirectedEdge connecting the <code>from</code>
@@ -76,7 +78,7 @@ public:
 	 *        whether this DirectedEdge's direction is the same as or
 	 *        opposite to that of the parent Edge (if any)
 	 */  
-	LineMergeDirectedEdge(planarNode *from, planarNode *to, const Coordinate& directionPt, bool edgeDirection);
+	LineMergeDirectedEdge(planargraph::Node *from, planargraph::Node *to, const Coordinate& directionPt, bool edgeDirection);
 
 	/**
 	* Returns the directed edge that starts at this directed edge's end point, or null
@@ -120,12 +122,12 @@ public:
 
 /*
  * A planar graph of edges that is analyzed to sew the edges together. The 
- * <code>marked</code> flag on planarEdge
- * and planarNode indicates whether they have been
+ * <code>marked</code> flag on planargraph::Edge
+ * and planargraph::Node indicates whether they have been
  * logically deleted from the graph.
  *
  */
-class LineMergeGraph: public planarPlanarGraph {
+class LineMergeGraph: public planargraph::PlanarGraph {
 public:
 	/**
 	 * Adds an Edge, DirectedEdges, and Nodes for the given
@@ -135,10 +137,10 @@ public:
 
 	~LineMergeGraph();
 private:
-	planarNode* getNode(const Coordinate &coordinate);
-	vector<planarNode*> newNodes;
-	vector<planarEdge*> newEdges;
-	vector<planarDirectedEdge*> newDirEdges;
+	planargraph::Node* getNode(const Coordinate &coordinate);
+	vector<planargraph::Node*> newNodes;
+	vector<planargraph::Edge*> newEdges;
+	vector<planargraph::DirectedEdge*> newDirEdges;
 };
 
 /*
@@ -205,7 +207,7 @@ private:
 	void buildEdgeStringsForIsolatedLoops();
 	void buildEdgeStringsForUnprocessedNodes();
 	void buildEdgeStringsForNonDegree2Nodes();
-	void buildEdgeStringsStartingAt(planarNode *node);
+	void buildEdgeStringsStartingAt(planargraph::Node *node);
 	EdgeString* buildEdgeStringStartingWith(LineMergeDirectedEdge *start);
 };
 
@@ -256,7 +258,7 @@ public:
 class LineSequencer {
 
 private:
-	typedef vector<planarDirectedEdge::NonConstList *> Sequences;
+	typedef vector<planargraph::DirectedEdge::NonConstList *> Sequences;
 
 	LineMergeGraph graph;
 	const GeometryFactory *factory;
@@ -268,7 +270,7 @@ private:
 	void addLine(const LineString *lineString);
 	void computeSequence();
 	Sequences* findSequences();
-	planarDirectedEdge::NonConstList* findSequence(planarSubgraph& graph);
+	planargraph::DirectedEdge::NonConstList* findSequence(planargraph::Subgraph& graph);
 
 	/// return a newly allocated LineString
 	static LineString* reverse(const LineString *line);
@@ -284,11 +286,11 @@ private:
 	 */
 	Geometry* buildSequencedGeometry(const Sequences& sequences);
 
-	static const planarNode* findLowestDegreeNode(const planarSubgraph& graph);
+	static const planargraph::Node* findLowestDegreeNode(const planargraph::Subgraph& graph);
 
-	void addReverseSubpath(const planarDirectedEdge *de,
-		planarDirectedEdge::NonConstList& deList,
-		planarDirectedEdge::NonConstList::iterator lit,
+	void addReverseSubpath(const planargraph::DirectedEdge *de,
+		planargraph::DirectedEdge::NonConstList& deList,
+		planargraph::DirectedEdge::NonConstList::iterator lit,
 		bool expectedClosed);
 	
 	/**
@@ -299,7 +301,7 @@ private:
 	 * @return the dirEdge found, or <code>null</code>
 	 *         if none were unvisited
 	 */
-	static const planarDirectedEdge* findUnvisitedBestOrientedDE(const planarNode* node);
+	static const planargraph::DirectedEdge* findUnvisitedBestOrientedDE(const planargraph::Node* node);
 
 	/**
 	 * Computes a version of the sequence which is optimally
@@ -319,8 +321,8 @@ private:
 	 * @return the oriented sequence, possibly same as input if already
 	 *         oriented
 	 */
-	planarDirectedEdge::NonConstList*
-	orient(planarDirectedEdge::NonConstList* seq);
+	planargraph::DirectedEdge::NonConstList*
+	orient(planargraph::DirectedEdge::NonConstList* seq);
 
 	/**
 	 * Reverse the sequence.
@@ -330,7 +332,7 @@ private:
 	 * @param seq a List of DirectedEdges, in sequential order
 	 * @return the reversed sequence
 	 */
-	planarDirectedEdge::NonConstList* reverse(planarDirectedEdge::NonConstList& seq);
+	planargraph::DirectedEdge::NonConstList* reverse(planargraph::DirectedEdge::NonConstList& seq);
 
 	/**
 	 * Tests whether a complete unique path exists in a graph
@@ -339,7 +341,7 @@ private:
 	 * @param graph the subgraph containing the edges
 	 * @return <code>true</code> if a sequence exists
 	 */
-	bool hasSequence(planarSubgraph& graph);
+	bool hasSequence(planargraph::Subgraph& graph);
 
 public:
 
@@ -417,12 +419,17 @@ public:
 
 };
 
+} // namespace geos.operation.linemerge
+} // namespace geos.operation
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.7  2006/02/08 12:59:55  strk
  * - NEW Geometry::applyComponentFilter() templated method
  * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries

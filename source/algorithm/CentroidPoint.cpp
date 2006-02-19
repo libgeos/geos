@@ -11,25 +11,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.6  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/geosAlgorithm.h>
 #include <geos/platform.h>
 #include <typeinfo>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 CentroidPoint::CentroidPoint() {
 	ptCount=0;
@@ -72,5 +61,23 @@ void CentroidPoint::add(const Coordinate *pt) {
 Coordinate* CentroidPoint::getCentroid() const {
 	return new Coordinate(centSum->x/ptCount,centSum->y/ptCount);
 }
-}
+
+} // namespace geos.algorithm
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ * Revision 1.7  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.6  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

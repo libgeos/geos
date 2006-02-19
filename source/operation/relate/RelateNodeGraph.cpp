@@ -15,8 +15,14 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
+#include <geos/geomgraph.h>
+
+using namespace geos::geomgraph;
+
 
 namespace geos {
+namespace operation { // geos.operation
+namespace relate { // geos.operation.relate
 
 RelateNodeGraph::RelateNodeGraph()
 {
@@ -27,7 +33,7 @@ RelateNodeGraph::~RelateNodeGraph() {
 	delete nodes;
 }
 
-map<Coordinate*,Node*,CoordLT>&
+map<Coordinate*,Node*,CoordinateLessThen>&
 RelateNodeGraph::getNodeMap()
 {
 	return nodes->nodeMap;
@@ -103,8 +109,8 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
 void
 RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex)
 {
-	map<Coordinate*,Node*,CoordLT> &nMap=geomGraph->getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	map<Coordinate*,Node*,CoordinateLessThen> &nMap=geomGraph->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes->addNode(graphNode->getCoordinate());
@@ -122,10 +128,15 @@ RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee)
 	}
 }
 
+} // namespace geos.operation.relate
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.15  2006/01/08 15:24:40  strk
  * Changed container-related typedef to class-scoped STL-like typedefs.
  * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;

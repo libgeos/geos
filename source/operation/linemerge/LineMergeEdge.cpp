@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.4  2005/09/26 11:01:32  strk
  * Const correctness changes in LineMerger package, and a few speedups.
  *
@@ -36,6 +39,8 @@
 #include <geos/opLinemerge.h>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace linemerge { // geos.operation.linemerge
 
 /**
 * Constructs a LineMergeEdge with vertices given by the specified LineString.
@@ -53,4 +58,7 @@ const LineString *
 LineMergeEdge::getLine() const {
 	return line;
 }
-}
+
+} // namespace geos.operation.linemerge
+} // namespace geos.operation
+} // namespace geos

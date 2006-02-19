@@ -35,6 +35,8 @@
 #include <geos/opPolygonize.h>
 
 using namespace geos;
+using namespace geos::operation::polygonize;
+using namespace geos::operation::linemerge;
 
 
 // Prototypes
@@ -1047,6 +1049,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.37  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

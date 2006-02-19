@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.7  2005/04/06 11:09:41  strk
  * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
  *
@@ -32,6 +35,7 @@
 #include <cmath>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 /**
 * <code>RobustDeterminant</code> implements an algorithm to compute the
@@ -284,5 +288,6 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 		}
 	}
 }
-}
+} // namespace geos.algorithm
+} // namespace geos
 

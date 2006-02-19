@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -19,6 +19,9 @@
 #include <typeinfo>
 #include <geos/geosAlgorithm.h>
 #include <geos/operation.h>
+
+using namespace geos::algorithm;
+using namespace geos::operation;
 
 namespace geos {
 
@@ -283,6 +286,9 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.58  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.57  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

@@ -17,11 +17,14 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
+using namespace geos::algorithm;
+
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 EdgeRing::EdgeRing(DirectedEdge *newStart,
-		const GeometryFactory *newGeometryFactory,
-		CGAlgorithms *newCga):
+		const GeometryFactory *newGeometryFactory)
+	:
         startDe(newStart),
         geometryFactory(newGeometryFactory),
         maxNodeDegree(-1),
@@ -240,7 +243,7 @@ EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 	else { // is backward
 		unsigned int startIndex=numEdgePts-1;
 		if (isFirstEdge) startIndex=numEdgePts;
-		//for (int i=startIndex;i>=0;i--) {
+		//for (int i=startIndex;i>=0;i--) 
 		for (unsigned int i=startIndex; i>0; --i)
 		{
 			pts->add(edgePts->getAt(i-1));
@@ -271,10 +274,14 @@ EdgeRing::containsPoint(const Coordinate& p)
 	return true;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.11  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -366,6 +373,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.12  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.11  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

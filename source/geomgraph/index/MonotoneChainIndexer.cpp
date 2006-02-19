@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -69,6 +72,8 @@
 #include <geos/geomgraphindex.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+namespace index { // geos.geomgraph.index
 
 void
 MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts,
@@ -103,5 +108,8 @@ int MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts,int start){
 	}
 	return last-1;
 }
-}
+
+} // namespace geos.geomgraph.index
+} // namespace geos.geomgraph
+} // namespage geos
 

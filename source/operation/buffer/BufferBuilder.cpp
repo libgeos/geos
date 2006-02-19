@@ -27,7 +27,14 @@
 #define DEBUG 0
 #endif
 
+using namespace geos::geomgraph;
+using namespace geos::noding;
+using namespace geos::algorithm;
+using namespace geos::operation::overlay;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace buffer { // geos.operation.buffer
 
 #if PROFILE
 static Profiler *profiler = Profiler::instance();
@@ -308,10 +315,15 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 	}
 }
 
+} // namespace geos.operation.buffer
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.35  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

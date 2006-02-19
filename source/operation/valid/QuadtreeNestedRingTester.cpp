@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,10 +20,16 @@
 
 
 #include <geos/opValid.h>
+#include <geos/geomgraph.h>
 #include <stdio.h>
 #include <geos/util.h>
 
+using namespace geos::geomgraph;
+using namespace geos::algorithm;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace valid { // geos.operation.valid
 
 QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph):
 	graph(newGraph),
@@ -110,10 +116,15 @@ QuadtreeNestedRingTester::buildQuadtree()
 	}
 }
 
+} // namespace geos.operation.valid
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.15  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

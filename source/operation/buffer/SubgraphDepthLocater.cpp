@@ -20,8 +20,14 @@
 #define DEBUG 0
 #endif
 
+using namespace geos::geomgraph;
+using namespace geos::noding;
+using namespace geos::algorithm;
+using namespace geos::operation::overlay;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace buffer { // geos.operation.buffer
 
 SubgraphDepthLocater::SubgraphDepthLocater(vector<BufferSubgraph*> *nsg):
 	subgraphs(nsg)
@@ -255,10 +261,15 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 	}
 }
 
+} // namespace geos.operation.buffer
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.16  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

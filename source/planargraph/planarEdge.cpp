@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.3  2004/10/13 10:03:02  strk
  * Added missing linemerge and polygonize operation.
  * Bug fixes and leaks removal from the newly added modules and
@@ -33,7 +36,7 @@
 #include <geos/planargraph.h>
 
 namespace geos {
-//namespace planargraph {
+namespace planargraph {
 
 /**
 * Constructs an Edge whose DirectedEdges are not yet set. Be sure to call
@@ -108,5 +111,5 @@ planarEdge::getOppositeNode(planarNode *node)
 	return NULL;
 }
 
-//} // namespace planargraph
+} // namespace planargraph
 } // namespace geos

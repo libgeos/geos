@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.7  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -71,6 +74,8 @@
 #include <geos/opLinemerge.h>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace linemerge { // geos.operation.linemerge
 
 /**
  * Constructs an EdgeString with the given factory used to convert
@@ -129,4 +134,6 @@ EdgeString::toLineString()
 	return factory->createLineString(getCoordinates());
 }
 
+} // namespace geos.operation.linemerge
+} // namespace geos.operation
 } // namespace geos

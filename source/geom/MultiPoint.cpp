@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,8 +12,85 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/geom.h>
+#include <geos/operation.h>
+
+using namespace geos::operation;
+
+namespace geos {
+
+/**
+* Constructs a <code>MultiPoint</code>.
+*
+* @param  newPoints
+*	the <code>Point</code>s for this <code>MultiPoint</code>,
+*	or <code>null</code> or an empty array to create the empty
+* 	geometry.
+*	Elements may be empty <code>Point</code>s,
+*	but not <code>null</code>s.
+*
+*	Constructed object will take ownership of
+*	the vector and its elements.
+*/
+MultiPoint::MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *factory): GeometryCollection(newPoints,factory){}
+
+
+MultiPoint::~MultiPoint(){}
+
+int MultiPoint::getDimension() const {
+	return 0;
+}
+
+int MultiPoint::getBoundaryDimension() const {
+	return Dimension::False;
+}
+
+string MultiPoint::getGeometryType() const {
+	return "MultiPoint";
+}
+
+Geometry* MultiPoint::getBoundary() const {
+	return getFactory()->createGeometryCollection(NULL);
+}
+
+bool MultiPoint::isSimple() const {
+	IsSimpleOp iso;
+	return iso.isSimple(this);
+	
+	//Geometry *in = toInternalGeometry(this);
+	//bool issimple = iso.isSimple((MultiPoint *)in);
+	//if ( (MultiPoint *)in != this ) delete(in);
+	//return issimple;
+}
+
+//bool MultiPoint::isValid() const { return true; }
+
+bool
+MultiPoint::equalsExact(const Geometry *other, double tolerance) const
+{
+    if (!isEquivalentClass(other)) {
+      return false;
+    }
+	return GeometryCollection::equalsExact(other,tolerance);
+  }
+
+const Coordinate* MultiPoint::getCoordinateN(int n) const {
+	return ((*geometries)[n])->getCoordinate();
+}
+GeometryTypeId
+MultiPoint::getGeometryTypeId() const {
+	return GEOS_MULTIPOINT;
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.29  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.28  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
@@ -118,74 +196,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/geom.h>
-#include <geos/operation.h>
-
-namespace geos {
-
-/**
-* Constructs a <code>MultiPoint</code>.
-*
-* @param  newPoints
-*	the <code>Point</code>s for this <code>MultiPoint</code>,
-*	or <code>null</code> or an empty array to create the empty
-* 	geometry.
-*	Elements may be empty <code>Point</code>s,
-*	but not <code>null</code>s.
-*
-*	Constructed object will take ownership of
-*	the vector and its elements.
-*/
-MultiPoint::MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *factory): GeometryCollection(newPoints,factory){}
-
-
-MultiPoint::~MultiPoint(){}
-
-int MultiPoint::getDimension() const {
-	return 0;
-}
-
-int MultiPoint::getBoundaryDimension() const {
-	return Dimension::False;
-}
-
-string MultiPoint::getGeometryType() const {
-	return "MultiPoint";
-}
-
-Geometry* MultiPoint::getBoundary() const {
-	return getFactory()->createGeometryCollection(NULL);
-}
-
-bool MultiPoint::isSimple() const {
-	IsSimpleOp iso;
-	return iso.isSimple(this);
-	
-	//Geometry *in = toInternalGeometry(this);
-	//bool issimple = iso.isSimple((MultiPoint *)in);
-	//if ( (MultiPoint *)in != this ) delete(in);
-	//return issimple;
-}
-
-//bool MultiPoint::isValid() const { return true; }
-
-bool
-MultiPoint::equalsExact(const Geometry *other, double tolerance) const
-{
-    if (!isEquivalentClass(other)) {
-      return false;
-    }
-	return GeometryCollection::equalsExact(other,tolerance);
-  }
-
-const Coordinate* MultiPoint::getCoordinateN(int n) const {
-	return ((*geometries)[n])->getCoordinate();
-}
-GeometryTypeId
-MultiPoint::getGeometryTypeId() const {
-	return GEOS_MULTIPOINT;
-}
-}
 

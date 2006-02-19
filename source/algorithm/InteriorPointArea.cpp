@@ -18,6 +18,7 @@
 #include <typeinfo>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 double InteriorPointArea::avg(double a, double b){
 	return (a+b)/2.0;
@@ -142,10 +143,14 @@ InteriorPointArea::centre(const Envelope *envelope) const
 		);
 }
 
+} // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.16  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

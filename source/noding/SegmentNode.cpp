@@ -22,6 +22,7 @@
 #include <geos/noding.h>
 
 namespace geos {
+namespace noding { // geos.noding
 
 
 /**
@@ -135,10 +136,14 @@ SegmentNode::print()
 	return s.str();
 }
 
+} // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.9  2006/02/15 14:59:07  strk
  * JTS-1.7 sync for:
  * noding/SegmentNode.cpp

@@ -12,9 +12,237 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#ifndef GEOS_OPRELATE_H
+#define GEOS_OPRELATE_H
+
+#include <memory>
+#include <string>
+#include <vector>
+#include <geos/platform.h>
+#include <geos/operation.h>
+#include <geos/geomgraph.h>
+#include <geos/geosAlgorithm.h>
+
+namespace geos {
+namespace operation { // geos.operation
+namespace relate { // geos.operation.relate
+
+/*
+ * Represents a node in the topological graph used to compute spatial
+ * relationships.
+ */
+class RelateNode: public geomgraph::Node {
+public:
+	RelateNode(const Coordinate& coord, geomgraph::EdgeEndStar *edges);
+	virtual ~RelateNode();
+	void updateIMFromEdges(IntersectionMatrix *im);
+protected:
+	void computeIM(IntersectionMatrix *im);
+};
+
+/*
+ * Computes the geomgraph::EdgeEnd objects which arise from a noded geomgraph::Edge.
+ */
+class EdgeEndBuilder {
+public:
+	EdgeEndBuilder() {}
+
+	std::vector<geomgraph::EdgeEnd*> *computeEdgeEnds(std::vector<geomgraph::Edge*> *edges);
+	void computeEdgeEnds(geomgraph::Edge *edge,std::vector<geomgraph::EdgeEnd*> *l);
+
+protected:
+
+	void createEdgeEndForPrev(geomgraph::Edge *edge,
+			std::vector<geomgraph::EdgeEnd*> *l,
+			geomgraph::EdgeIntersection *eiCurr,
+			geomgraph::EdgeIntersection *eiPrev);
+
+	void createEdgeEndForNext(geomgraph::Edge *edge,
+			std::vector<geomgraph::EdgeEnd*> *l,
+			geomgraph::EdgeIntersection *eiCurr,
+			geomgraph::EdgeIntersection *eiNext);
+};
+
+/*
+ * Contains all geomgraph::EdgeEnd objectss which start at the same point
+ * and are parallel.
+ */
+class EdgeEndBundle: public geomgraph::EdgeEnd {
+public:
+	EdgeEndBundle(geomgraph::EdgeEnd *e);
+	virtual ~EdgeEndBundle();
+	geomgraph::Label *getLabel();
+//Iterator iterator() //Not needed
+	std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
+	void insert(geomgraph::EdgeEnd *e);
+	void computeLabel() ; 
+	void updateIM(IntersectionMatrix *im);
+	string print();
+protected:
+	std::vector<geomgraph::EdgeEnd*> *edgeEnds;
+	void computeLabelOn(int geomIndex);
+	void computeLabelSides(int geomIndex);
+	void computeLabelSide(int geomIndex,int side);
+};
+
+/*
+ * An ordered list of EdgeEndBundle objects around a RelateNode.
+ * They are maintained in CCW order (starting with the positive x-axis)
+ * around the node
+ * for efficient lookup and topology building.
+ */
+class EdgeEndBundleStar: public geomgraph::EdgeEndStar {
+public:
+
+	EdgeEndBundleStar() {}
+	
+	virtual ~EdgeEndBundleStar();
+	void insert(geomgraph::EdgeEnd *e);
+	void updateIM(IntersectionMatrix *im);
+};
+
+/*
+ * Used by the geomgraph::NodeMap in a RelateNodeGraph to create RelateNode objects.
+ */
+class RelateNodeFactory: public geomgraph::NodeFactory {
+public:
+	geomgraph::Node* createNode(const Coordinate &coord) const;
+	static const geomgraph::NodeFactory &instance();
+private:
+	RelateNodeFactory() {};
+};
+
+/*
+ * Implements the simple graph of Nodes and geomgraph::EdgeEnd which is all that is
+ * required to determine topological relationships between Geometries.
+ * Also supports building a topological graph of a single Geometry, to
+ * allow verification of valid topology.
+ * 
+ * It is <b>not</b> necessary to create a fully linked
+ * PlanarGraph to determine relationships, since it is sufficient
+ * to know how the Geometries interact locally around the nodes.
+ * In fact, this is not even feasible, since it is not possible to compute
+ * exact intersection points, and hence the topology around those nodes
+ * cannot be computed robustly.
+ * The only Nodes that are created are for improper intersections;
+ * that is, nodes which occur at existing vertices of the Geometries.
+ * Proper intersections (e.g. ones which occur between the interior of
+ * line segments)
+ * have their topology determined implicitly, without creating a geomgraph::Node object
+ * to represent them.
+ *
+ */
+class RelateNodeGraph {
+public:
+	RelateNodeGraph();
+	virtual ~RelateNodeGraph();
+//	Iterator getNodeIterator();
+	std::map<Coordinate*,geomgraph::Node*,CoordinateLessThen> &getNodeMap();
+
+	void build(geomgraph::GeometryGraph *geomGraph);
+
+	void computeIntersectionNodes(geomgraph::GeometryGraph *geomGraph,
+			int argIndex);
+
+	void copyNodesAndLabels(geomgraph::GeometryGraph *geomGraph,int argIndex);
+
+	void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*> *ee);
+
+private:
+
+	geomgraph::NodeMap *nodes;
+};
+
+/*
+ * Computes the topological relationship between two Geometries.
+ *
+ * RelateComputer does not need to build a complete graph structure to compute
+ * the IntersectionMatrix.  The relationship between the geometries can
+ * be computed by simply examining the labelling of edges incident on each node.
+ * 
+ * RelateComputer does not currently support arbitrary GeometryCollections.
+ * This is because GeometryCollections can contain overlapping Polygons.
+ * In order to correct compute relate on overlapping Polygons, they
+ * would first need to be noded and merged (if not explicitly, at least
+ * implicitly).
+ *
+ */
+class RelateComputer {
+friend class Unload;
+public:
+	//RelateComputer();
+	virtual ~RelateComputer();
+	RelateComputer(std::vector<geomgraph::GeometryGraph*> *newArg);
+	IntersectionMatrix* computeIM();
+private:
+
+	static const algorithm::LineIntersector* li;
+
+	static const algorithm::PointLocator* ptLocator;
+
+	/// the arg(s) of the operation
+	std::vector<geomgraph::GeometryGraph*> *arg; 
+
+	geomgraph::NodeMap nodes;
+
+	/// this intersection matrix will hold the results compute for the relate
+	IntersectionMatrix *im;
+
+	std::vector<geomgraph::Edge*> isolatedEdges;
+
+	/// the intersection point found (if any)
+	Coordinate invalidPoint;
+
+	void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*> *ee);
+
+	void computeProperIntersectionIM(geomgraph::index::SegmentIntersector *intersector,
+			IntersectionMatrix *imX);
+
+	void copyNodesAndLabels(int argIndex);
+	void computeIntersectionNodes(int argIndex);
+	void labelIntersectionNodes(int argIndex);
+	void computeDisjointIM(IntersectionMatrix *imX);
+	void labelNodeEdges();
+	void updateIM(IntersectionMatrix *imX);
+	void labelIsolatedEdges(int thisIndex,int targetIndex);
+	void labelIsolatedEdge(geomgraph::Edge *e,int targetIndex, const Geometry *target);
+	void labelIsolatedNodes();
+	void labelIsolatedNode(geomgraph::Node *n,int targetIndex);
+};
+
+/*
+ * Implements the relate() operation on Geometry.
+ * 
+ * WARNING: The current implementation of this class will compute a result for
+ * GeometryCollections.  However, the semantics of this operation are
+ * not well-defined and the value returned may not represent
+ * an appropriate notion of relate.
+ */
+class RelateOp: public GeometryGraphOperation {
+public:
+	static IntersectionMatrix* relate(const Geometry *a,const Geometry *b);
+	RelateOp(const Geometry *g0, const Geometry *g1);
+	virtual ~RelateOp();
+	IntersectionMatrix* getIntersectionMatrix();
+private:
+	RelateComputer relateComp;
+};
+
+} // namespace geos.operation.relate
+} // namespace geos.operation
+} // namespace geos
+
+#endif
+
+/**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to
@@ -83,191 +311,4 @@
  *
  *
  **********************************************************************/
-
-
-#ifndef GEOS_OPRELATE_H
-#define GEOS_OPRELATE_H
-
-#include <memory>
-#include <string>
-#include <vector>
-#include <geos/platform.h>
-#include <geos/operation.h>
-#include <geos/geomgraph.h>
-#include <geos/geosAlgorithm.h>
-
-namespace geos {
-
-/*
- * Represents a node in the topological graph used to compute spatial
- * relationships.
- */
-class RelateNode: public Node {
-public:
-	RelateNode(const Coordinate& coord, EdgeEndStar *edges);
-	virtual ~RelateNode();
-	void updateIMFromEdges(IntersectionMatrix *im);
-protected:
-	void computeIM(IntersectionMatrix *im);
-};
-
-/*
- * Computes the EdgeEnd objects which arise from a noded Edge.
- */
-class EdgeEndBuilder {
-public:
-	EdgeEndBuilder();
-	vector<EdgeEnd*> *computeEdgeEnds(vector<Edge*> *edges);
-	void computeEdgeEnds(Edge *edge,vector<EdgeEnd*> *l);
-protected:
-	void createEdgeEndForPrev(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiPrev);
-	void createEdgeEndForNext(Edge *edge,vector<EdgeEnd*> *l,EdgeIntersection *eiCurr,EdgeIntersection *eiNext);
-};
-
-/*
- * Contains all EdgeEnd objectss which start at the same point
- * and are parallel.
- */
-class EdgeEndBundle: public EdgeEnd {
-public:
-	EdgeEndBundle(EdgeEnd *e);
-	virtual ~EdgeEndBundle();
-	Label *getLabel();
-//Iterator iterator() //Not needed
-	vector<EdgeEnd*>* getEdgeEnds();
-	void insert(EdgeEnd *e);
-	void computeLabel() ; 
-	void updateIM(IntersectionMatrix *im);
-	string print();
-protected:
-	vector<EdgeEnd*> *edgeEnds;
-	void computeLabelOn(int geomIndex);
-	void computeLabelSides(int geomIndex);
-	void computeLabelSide(int geomIndex,int side);
-};
-
-/*
- * An ordered list of EdgeEndBundle objects around a RelateNode.
- * They are maintained in CCW order (starting with the positive x-axis)
- * around the node
- * for efficient lookup and topology building.
- */
-class EdgeEndBundleStar: public EdgeEndStar {
-public:
-	EdgeEndBundleStar();
-	virtual ~EdgeEndBundleStar();
-	void insert(EdgeEnd *e);
-	void updateIM(IntersectionMatrix *im);
-};
-
-/*
- * Used by the NodeMap in a RelateNodeGraph to create RelateNode objects.
- */
-class RelateNodeFactory: public NodeFactory {
-public:
-	Node* createNode(const Coordinate &coord) const;
-	static const NodeFactory &instance();
-private:
-	RelateNodeFactory() {};
-};
-
-/*
- * Implements the simple graph of Nodes and EdgeEnd which is all that is
- * required to determine topological relationships between Geometries.
- * Also supports building a topological graph of a single Geometry, to
- * allow verification of valid topology.
- * 
- * It is <b>not</b> necessary to create a fully linked
- * PlanarGraph to determine relationships, since it is sufficient
- * to know how the Geometries interact locally around the nodes.
- * In fact, this is not even feasible, since it is not possible to compute
- * exact intersection points, and hence the topology around those nodes
- * cannot be computed robustly.
- * The only Nodes that are created are for improper intersections;
- * that is, nodes which occur at existing vertices of the Geometries.
- * Proper intersections (e.g. ones which occur between the interior of
- * line segments)
- * have their topology determined implicitly, without creating a Node object
- * to represent them.
- *
- */
-class RelateNodeGraph {
-public:
-	RelateNodeGraph();
-	virtual ~RelateNodeGraph();
-//	Iterator getNodeIterator();
-	map<Coordinate*,Node*,CoordLT> &getNodeMap();
-	void build(GeometryGraph *geomGraph);
-	void computeIntersectionNodes(GeometryGraph *geomGraph,int argIndex);
-	void copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex);
-	void insertEdgeEnds(vector<EdgeEnd*> *ee);
-private:
-	NodeMap *nodes;
-};
-
-/*
- * Computes the topological relationship between two Geometries.
- *
- * RelateComputer does not need to build a complete graph structure to compute
- * the IntersectionMatrix.  The relationship between the geometries can
- * be computed by simply examining the labelling of edges incident on each node.
- * 
- * RelateComputer does not currently support arbitrary GeometryCollections.
- * This is because GeometryCollections can contain overlapping Polygons.
- * In order to correct compute relate on overlapping Polygons, they
- * would first need to be noded and merged (if not explicitly, at least
- * implicitly).
- *
- */
-class RelateComputer {
-friend class Unload;
-public:
-	//RelateComputer();
-	virtual ~RelateComputer();
-	RelateComputer(vector<GeometryGraph*> *newArg);
-	IntersectionMatrix* computeIM();
-private:
-	static const LineIntersector* li;
-	static const PointLocator* ptLocator;
-	vector<GeometryGraph*> *arg;  // the arg(s) of the operation
-	NodeMap nodes;
-	// this intersection matrix will hold the results compute for the relate
-	IntersectionMatrix *im;
-	vector<Edge*> isolatedEdges;
-	// the intersection point found (if any)
-	Coordinate invalidPoint;
-	void insertEdgeEnds(vector<EdgeEnd*> *ee);
-	void computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *imX);
-	void copyNodesAndLabels(int argIndex);
-	void computeIntersectionNodes(int argIndex);
-	void labelIntersectionNodes(int argIndex);
-	void computeDisjointIM(IntersectionMatrix *imX);
-	void labelNodeEdges();
-	void updateIM(IntersectionMatrix *imX);
-	void labelIsolatedEdges(int thisIndex,int targetIndex);
-	void labelIsolatedEdge(Edge *e,int targetIndex, const Geometry *target);
-	void labelIsolatedNodes();
-	void labelIsolatedNode(Node *n,int targetIndex);
-};
-
-/*
- * Implements the relate() operation on Geometry.
- * 
- * WARNING: The current implementation of this class will compute a result for
- * GeometryCollections.  However, the semantics of this operation are
- * not well-defined and the value returned may not represent
- * an appropriate notion of relate.
- */
-class RelateOp: public GeometryGraphOperation {
-public:
-	static IntersectionMatrix* relate(const Geometry *a,const Geometry *b);
-	RelateOp(const Geometry *g0, const Geometry *g1);
-	virtual ~RelateOp();
-	IntersectionMatrix* getIntersectionMatrix();
-private:
-	RelateComputer relateComp;
-};
-}
-
-#endif
 

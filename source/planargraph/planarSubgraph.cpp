@@ -18,7 +18,7 @@
 #include <geos/planargraph.h>
 
 namespace geos {
-//namespace planargraph {
+namespace planargraph {
 
 pair<planarEdge::NonConstSet::iterator, bool>
 planarSubgraph::add(planarEdge *e)
@@ -34,11 +34,14 @@ planarSubgraph::add(planarEdge *e)
 	return p;
 }
 
-//} // namespace planargraph
+} // namespace planargraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.2  2006/02/08 12:59:56  strk
  * - NEW Geometry::applyComponentFilter() templated method
  * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries

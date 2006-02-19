@@ -19,6 +19,7 @@
 #include <cmath>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 /**
  * Returns the index of the direction of the point <code>q</code>
@@ -446,10 +447,14 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 }
 
 
+} // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.27  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

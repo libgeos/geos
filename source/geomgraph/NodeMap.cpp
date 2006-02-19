@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -18,6 +19,7 @@
 #define DEBUG 0
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 NodeMap::NodeMap(const NodeFactory &newNodeFact):
 	nodeFact(newNodeFact)
@@ -140,10 +142,14 @@ NodeMap::print() const
 	return out;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.9  2006/01/08 15:24:40  strk
  * Changed container-related typedef to class-scoped STL-like typedefs.
  * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;

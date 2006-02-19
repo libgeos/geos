@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.12  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -40,6 +43,7 @@
 #include <geos/geosAlgorithm.h>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 NotRepresentableException::NotRepresentableException(){
 	setName("NotRepresentableException");
@@ -50,4 +54,5 @@ NotRepresentableException::NotRepresentableException(string msg){
 	setMessage(msg);
 }
 
+} // namespace geos.algorithm
 } // namespace geos

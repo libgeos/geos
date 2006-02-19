@@ -11,29 +11,16 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.11  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.10  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
-
 #include <geos/opRelate.h>
-#include <stdio.h>
+
+using namespace std;
+using namespace geos::geomgraph;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace relate { // geos.operation.relate
 
 EdgeEndBundle::EdgeEndBundle(EdgeEnd *e):
 	EdgeEnd(e->getEdge(),e->getCoordinate(),
@@ -192,5 +179,28 @@ string EdgeEndBundle::print() {
 	return out;
 }
 
-}
+} // namespace geos.operation.relate
+} // namespace geos.operation
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.12  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ * Revision 1.11  2005/11/14 18:14:04  strk
+ * Reduced heap allocations made by TopologyLocation and Label objects.
+ * Enforced const-correctness on GraphComponent.
+ * Cleanups.
+ *
+ * Revision 1.10  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.9  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

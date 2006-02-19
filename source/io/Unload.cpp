@@ -23,6 +23,10 @@
 #include <geos/planargraph.h>
 #include <geos/profiler.h>
 
+using namespace geos::geomgraph;
+using namespace geos::operation;
+using namespace geos::operation::relate;
+
 namespace geos {
 
 Unload::Unload(void)
@@ -37,7 +41,7 @@ void Unload::Release()
 {
 	delete PlanarGraph::cga;
 	//delete planarDirectedEdge::cga;
-	delete GeometryGraphOperation::cga;
+	//delete GeometryGraphOperation::cga;
 	delete GeometryGraphOperation::li;
 	delete RelateComputer::li;
 	delete RelateComputer::ptLocator;
@@ -50,6 +54,9 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.15  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

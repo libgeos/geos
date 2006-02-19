@@ -24,6 +24,8 @@
 #include <vector>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace distance { // geos.operation.distance
 
 
 /*
@@ -84,18 +86,26 @@ public:
  * and returns them in a list
  */
 class ConnectedElementPointFilter: public GeometryFilter {
-public:
-	/**
-	* Returns a list containing a Coordinate from each Polygon, LineString, and Point
-	* found inside the specified geometry. Thus, if the specified geometry is
-	* not a GeometryCollection, an empty list will be returned.
-	*/
-	static vector<const Coordinate*>* getCoordinates(const Geometry *geom);
-	ConnectedElementPointFilter(vector<const Coordinate*> *newPts);
-	void filter_ro(const Geometry *geom);
-	void filter_rw(Geometry *geom) {};
+
 private:
 	vector<const Coordinate*> *pts;
+
+public:
+	/**
+	 * Returns a list containing a Coordinate from each Polygon, LineString, and Point
+	 * found inside the specified geometry. Thus, if the specified geometry is
+	 * not a GeometryCollection, an empty list will be returned.
+	 */
+	static vector<const Coordinate*>* getCoordinates(const Geometry *geom);
+
+	ConnectedElementPointFilter(vector<const Coordinate*> *newPts)
+		:
+		pts(newPts)
+	{}
+
+	void filter_ro(const Geometry *geom);
+
+	void filter_rw(Geometry *geom) {};
 };
 
 /*
@@ -107,16 +117,23 @@ private:
  */
 class ConnectedElementLocationFilter: public GeometryFilter {
 private:
+
 	vector<GeometryLocation*> *locations;
+
 public:
 	/**
-	* Returns a list containing a point from each Polygon, LineString, and Point
-	* found inside the specified geometry. Thus, if the specified geometry is
-	* not a GeometryCollection, an empty list will be returned. The elements of the list 
-	* are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
-	*/  
+	 * Returns a list containing a point from each Polygon, LineString, and Point
+	 * found inside the specified geometry. Thus, if the specified geometry is
+	 * not a GeometryCollection, an empty list will be returned. The elements of the list 
+	 * are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
+	 */  
 	static vector<GeometryLocation*>* getLocations(const Geometry *geom);
-	ConnectedElementLocationFilter(vector<GeometryLocation*> *newLocations);
+
+	ConnectedElementLocationFilter(vector<GeometryLocation*> *newLocations)
+		:
+		locations(newLocations)
+	{}
+
 	void filter_ro(const Geometry *geom);
 	void filter_rw(Geometry *geom);
 };
@@ -184,7 +201,7 @@ public:
 
 private:
 
-	PointLocator ptLocator;
+	algorithm::PointLocator ptLocator;
 	vector<Geometry const*> geom;
 	vector<Coordinate *> newCoords;
 	vector<GeometryLocation*> *minDistanceLocation;
@@ -227,12 +244,17 @@ private:
 			vector<GeometryLocation*>& locGeom);
 };
 
+} // namespace geos.operation.distance
+} // namespace geos.operation
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

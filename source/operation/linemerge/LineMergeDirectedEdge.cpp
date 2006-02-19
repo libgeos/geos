@@ -15,9 +15,14 @@
  **********************************************************************/
 
 #include <geos/opLinemerge.h>
+#include <geos/planargraph.h>
 #include <geos/util.h>
 
+using namespace geos::planargraph;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace linemerge { // geos.operation.linemerge
 
 LineMergeDirectedEdge::LineMergeDirectedEdge(planarNode *newFrom,
 		planarNode *newTo, const Coordinate& newDirectionPt,
@@ -42,10 +47,15 @@ LineMergeDirectedEdge* LineMergeDirectedEdge::getNext()
 	return (LineMergeDirectedEdge*) getToNode()->getOutEdges()->getEdges()[0];
 }
 
+} // namespace geos.operation.linemerge
+} // namespace geos.operation
 } //namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.4  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

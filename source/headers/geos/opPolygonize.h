@@ -24,6 +24,8 @@
 #include <vector>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace polygonize { // geos.operation.polygonize
 
 //using namespace planargraph;
 
@@ -32,7 +34,7 @@ namespace geos {
  *
  * @version 1.4
  */
-class PolygonizeEdge: public planarEdge {
+class PolygonizeEdge: public planargraph::Edge {
 private:
 	const LineString *line;
 public:
@@ -48,8 +50,8 @@ public:
 class polygonizeEdgeRing {
 private:
 	const GeometryFactory *factory;
-	static CGAlgorithms cga;
-	vector<const planarDirectedEdge*> *deList;
+	//static CGAlgorithms cga;
+	vector<const planargraph::DirectedEdge*> *deList;
 
 	// cache the following data for efficiency
 	LinearRing *ring;
@@ -113,7 +115,7 @@ public:
 	 * Adds a DirectedEdge which is known to form part of this ring.
 	 * @param de the DirectedEdge to add. Ownership to the caller.
 	 */
-	void add(const planarDirectedEdge *de);
+	void add(const planargraph::DirectedEdge *de);
 
 	/*
 	 * Tests whether this ring is a hole.
@@ -173,7 +175,7 @@ public:
  * May be logically deleted from the graph by setting the
  * <code>marked</code> flag.
  */
-class PolygonizeDirectedEdge: public planarDirectedEdge {
+class PolygonizeDirectedEdge: public planargraph::DirectedEdge {
 private:
 	polygonizeEdgeRing *edgeRing;
 	PolygonizeDirectedEdge *next;
@@ -192,7 +194,7 @@ public:
 	 *    whether this DirectedEdge's direction is the same as or
 	 *    opposite to that of the parent Edge (if any)
 	 */
-	PolygonizeDirectedEdge(planarNode *newFrom,planarNode *newTo, const Coordinate& newDirectionPt,bool nEdgeDirection);
+	PolygonizeDirectedEdge(planargraph::Node *newFrom,planargraph::Node *newTo, const Coordinate& newDirectionPt,bool nEdgeDirection);
 
 	/*
 	 * Returns the identifier attached to this directed edge.
@@ -240,13 +242,13 @@ public:
  * has be logically deleted from the graph.
  *
  */
-class PolygonizeGraph: public planarPlanarGraph {
+class PolygonizeGraph: public planargraph::PlanarGraph {
 public:
 	/*
 	 * \brief
 	 * Deletes all edges at a node
 	 */
-	static void deleteAllEdges(planarNode *node);
+	static void deleteAllEdges(planargraph::Node *node);
 
 	/*
 	 * \brief
@@ -297,10 +299,10 @@ public:
 	vector<const LineString*>* deleteDangles();
 
 private:
-	static int getDegreeNonDeleted(planarNode *node);
-	static int getDegree(planarNode *node, long label);
+	static int getDegreeNonDeleted(planargraph::Node *node);
+	static int getDegree(planargraph::Node *node, long label);
 	const GeometryFactory *factory;
-	planarNode* getNode(const Coordinate& pt);
+	planargraph::Node* getNode(const Coordinate& pt);
 	void computeNextCWEdges();
 
 	/*
@@ -324,17 +326,17 @@ private:
 	 * or <code>null</code> if no intersection nodes were found.
 	 * Ownership of returned vector goes to caller.
 	 */
-	static vector<planarNode*>* findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label);
+	static vector<planargraph::Node*>* findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label);
 
 	/*
 	 * @param dirEdges a List of the DirectedEdges in the graph
 	 * @return a List of DirectedEdges, one for each edge ring found
 	 */
-	static vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(vector<planarDirectedEdge*> &dirEdges);
+	static vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(vector<planargraph::DirectedEdge*> &dirEdges);
 
-	static void label(vector<planarDirectedEdge*> &dirEdges, long label);
+	static void label(vector<planargraph::DirectedEdge*> &dirEdges, long label);
 
-	static void computeNextCWEdges(planarNode *node);
+	static void computeNextCWEdges(planargraph::Node *node);
 
 	/**
 	 * \brief
@@ -343,7 +345,7 @@ private:
 	 * This algorithm has the effect of converting maximal edgerings
 	 * into minimal edgerings
 	 */
-	static void computeNextCCWEdges(planarNode *node, long label);
+	static void computeNextCCWEdges(planargraph::Node *node, long label);
 
 	/**
 	 * \brief
@@ -354,14 +356,14 @@ private:
 	 * @param startDE the DirectedEdge to start traversing at
 	 * @return a List of DirectedEdges that form a ring
 	 */
-	static vector<planarDirectedEdge*>* findDirEdgesInRing(PolygonizeDirectedEdge *startDE);
+	static vector<planargraph::DirectedEdge*>* findDirEdgesInRing(PolygonizeDirectedEdge *startDE);
 
 	polygonizeEdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 
 	/* Tese are for memory management */
-	vector<planarEdge *>newEdges;
-	vector<planarDirectedEdge *>newDirEdges;
-	vector<planarNode *>newNodes;
+	vector<planargraph::Edge *>newEdges;
+	vector<planargraph::DirectedEdge *>newDirEdges;
+	vector<planargraph::Node *>newNodes;
 	vector<polygonizeEdgeRing *>newEdgeRings;
 	vector<CoordinateSequence *>newCoords;
 };
@@ -491,11 +493,17 @@ public:
 friend class Polygonizer::LineStringAdder;
 };
 
+} // namespace geos.operation.polygonize
+} // namespace geos.operation
 } // namespace geos
+
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.9  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

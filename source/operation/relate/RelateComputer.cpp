@@ -15,10 +15,17 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
-#include <stdio.h>
+#include <geos/geomgraph.h>
 #include <geos/util.h>
 
+using namespace std;
+using namespace geos::geomgraph;
+using namespace geos::geomgraph::index;
+using namespace geos::algorithm;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace relate { // geos.operation.relate
 
 const LineIntersector* RelateComputer::li=new LineIntersector();
 const PointLocator* RelateComputer::ptLocator=new PointLocator();
@@ -190,8 +197,8 @@ RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,Inte
 void
 RelateComputer::copyNodesAndLabels(int argIndex)
 {
-	map<Coordinate*,Node*,CoordLT>&nMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	map<Coordinate*,Node*,CoordinateLessThen>&nMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes.addNode(graphNode->getCoordinate());
@@ -292,8 +299,8 @@ RelateComputer::computeDisjointIM(IntersectionMatrix *imX)
 void
 RelateComputer::labelNodeEdges()
 {
-	map<Coordinate*,Node*,CoordLT> &nMap=nodes.nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++)
 	{
 		RelateNode *node=(RelateNode*) nodeIt->second;
@@ -317,8 +324,8 @@ RelateComputer::updateIM(IntersectionMatrix *imX)
 		e->GraphComponent::updateIM(imX);
 		//Debug.println(im);
 	}
-	map<Coordinate*,Node*,CoordLT> &nMap=nodes.nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		node->updateIM(imX);
@@ -380,8 +387,8 @@ RelateComputer::labelIsolatedEdge(Edge *e, int targetIndex, const Geometry *targ
 void
 RelateComputer::labelIsolatedNodes()
 {
-	map<Coordinate*,Node*,CoordLT> &nMap=nodes.nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator nodeIt;
+	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *n=nodeIt->second;
 		Label *label=n->getLabel();
@@ -408,10 +415,15 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 	//debugPrintln(n.getLabel());
 }
 
+} // namespace geos.operation.relate
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.25  2006/01/08 15:24:40  strk
  * Changed container-related typedef to class-scoped STL-like typedefs.
  * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;

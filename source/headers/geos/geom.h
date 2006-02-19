@@ -36,7 +36,10 @@ using namespace std;
  */
 namespace geos {
 
-class CGAlgorithms;
+namespace algorithm { // geos.algorithm
+	class CGAlgorithms;
+} // namespace geos.algorithm
+
 class Coordinate;
 class CoordinateArraySequence;
 class CoordinateArraySequenceFactory;
@@ -537,8 +540,17 @@ Coordinate::hashCode(double x)
 }
 
 struct CoordinateLessThen {
-	bool operator()(const Coordinate& a, const Coordinate& b);
-	bool operator()(const Coordinate* a, const Coordinate* b);
+
+	bool operator()(const Coordinate* a, const Coordinate* b) const {
+		if (a->compareTo(*b)<0) return true;
+		else return false;
+	}
+
+	bool operator()(const Coordinate& a, const Coordinate& b) const {
+		if (a.compareTo(b)<0) return true;
+		else return false;
+	}
+
 };
 
 
@@ -2925,6 +2937,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.67  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.66  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

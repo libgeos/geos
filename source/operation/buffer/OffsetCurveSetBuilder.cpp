@@ -25,7 +25,15 @@
 #define DEBUG 0
 #endif
 
+using namespace geos::geomgraph;
+using namespace geos::noding;
+using namespace geos::algorithm;
+using namespace geos::operation::overlay;
+
+
 namespace geos {
+namespace operation { // geos.operation
+namespace buffer { // geos.operation.buffer
 
 OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
 		double newDistance, OffsetCurveBuilder& newCurveBuilder):
@@ -285,10 +293,15 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 }
 
 
+} // namespace geos.operation.buffer
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.22  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

@@ -14,9 +14,15 @@
  *
  **********************************************************************/
 
+#include <geos/geom.h>
+#include <geos/geomgraph.h>
 #include <geos/opOverlay.h>
 
+using namespace geos::geomgraph;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 static const OverlayNodeFactory onf;
 
@@ -32,11 +38,17 @@ OverlayNodeFactory::instance()
 	return onf;
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.8  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

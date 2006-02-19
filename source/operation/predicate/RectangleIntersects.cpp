@@ -22,11 +22,12 @@
 #include <geos/profiler.h>
 #include <geos/geomUtil.h>
 
+using namespace geos::geom::util;
+using namespace geos::algorithm;
+
 namespace geos {
 namespace operation { // geos.operation
 namespace predicate { // geos.operation.predicate
-
-using namespace geos::geom::util;
 
 const int RectangleIntersects::MAXIMUM_SCAN_SEGMENT_COUNT = 200;
 

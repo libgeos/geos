@@ -17,6 +17,7 @@
 #include <geos/geomgraph.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 Label*
 Label::toLineLabel(const Label &label)
@@ -227,10 +228,14 @@ Label::toString() const
 	return buf;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2005/11/15 18:30:59  strk
  * Removed dead code
  *

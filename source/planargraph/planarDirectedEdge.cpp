@@ -20,7 +20,7 @@
 #include <sstream>
 
 namespace geos {
-//namespace planargraph {
+namespace planargraph {
 
 /*
  * Returns a List containing the parent planarEdge (possibly null)
@@ -59,7 +59,7 @@ planarDirectedEdge::planarDirectedEdge(planarNode* newFrom, planarNode* newTo,
 	p1=directionPt;
 	double dx = p1.x - p0.x;
 	double dy = p1.y - p0.y;
-	quadrant = Quadrant::quadrant(dx, dy);
+	quadrant = geomgraph::Quadrant::quadrant(dx, dy);
 	angle=atan2(dy, dx);
 	//Assert.isTrue(! (dx == 0 && dy == 0), "EdgeEnd with identical endpoints found");
 }
@@ -221,12 +221,14 @@ planarDirectedEdge::print() const
 }
 
 
-//} // namespace planargraph
-
+} // namespace planargraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.9  2005/04/06 11:09:41  strk
  * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
  *

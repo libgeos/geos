@@ -20,6 +20,7 @@
 #include "geos/noding.h"
 
 namespace geos {
+namespace noding { // geos.noding
 
 /*private*/
 bool
@@ -97,10 +98,14 @@ IntersectionAdder::processIntersections(
 	}
 }
 
+} // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.1  2006/02/16 08:19:07  strk
  * Missed from last commit
  *

@@ -12,8 +12,49 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/opOverlay.h>
+
+using namespace geos::algorithm;
+using namespace geos::geomgraph;
+using namespace geos::geomgraph::index;
+
+namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
+
+
+void
+EdgeSetNoder::addEdges(vector<Edge*> *edges)
+{
+	inputEdges->insert(inputEdges->end(),edges->begin(),edges->end());
+}
+
+vector<Edge*>*
+EdgeSetNoder::getNodedEdges()
+{
+	EdgeSetIntersector *esi=new SimpleMCSweepLineIntersector();
+	SegmentIntersector *si=new SegmentIntersector(li,true,false);
+	esi->computeIntersections(inputEdges,si,true);
+	//Debug.println("has proper int = " + si.hasProperIntersection());
+	vector<Edge*> *splitEdges=new vector<Edge*>();
+	for(int i=0;i<(int)inputEdges->size();i++) {
+		Edge* e=(*inputEdges)[i];
+		e->getEdgeIntersectionList().addSplitEdges(splitEdges);
+	}
+	return splitEdges;
+}
+
+} // namespace geos.operation.overlay
+} // namespace geos.operation
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.7  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *
@@ -27,37 +68,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/opOverlay.h>
-#include <stdio.h>
-
-namespace geos {
-
-EdgeSetNoder::EdgeSetNoder(LineIntersector *newLi) {
-	li=newLi;
-	inputEdges=new vector<Edge*>();
-}
-
-EdgeSetNoder::~EdgeSetNoder() {
-	delete inputEdges;
-}
-
-void EdgeSetNoder::addEdges(vector<Edge*> *edges){
-	inputEdges->insert(inputEdges->end(),edges->begin(),edges->end());
-}
-
-vector<Edge*>* EdgeSetNoder::getNodedEdges() {
-	EdgeSetIntersector *esi=new SimpleMCSweepLineIntersector();
-	SegmentIntersector *si=new SegmentIntersector(li,true,false);
-	esi->computeIntersections(inputEdges,si,true);
-	//Debug.println("has proper int = " + si.hasProperIntersection());
-	vector<Edge*> *splitEdges=new vector<Edge*>();
-	for(int i=0;i<(int)inputEdges->size();i++) {
-		Edge* e=(*inputEdges)[i];
-		e->getEdgeIntersectionList().addSplitEdges(splitEdges);
-	}
-	return splitEdges;
-}
-}
 

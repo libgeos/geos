@@ -15,12 +15,18 @@
 
 #include <geos/opOverlay.h>
 #include <geos/io.h>
-#include <stdio.h>
 
 #define DEBUG 0
 #define COMPUTE_Z 1
 
+using namespace std;
+using namespace geos::algorithm;
+using namespace geos::geomgraph;
+using namespace geos::geomgraph::index;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 LineBuilder::LineBuilder(OverlayOp *newOp,
 		const GeometryFactory *newGeometryFactory,
@@ -62,9 +68,9 @@ void
 LineBuilder::findCoveredLineEdges()
 {
 // first set covered for all L edges at nodes which have A edges too
-	map<Coordinate*,Node*,CoordLT> &nodeMap=op->getGraph().getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
-	map<Coordinate*,Node*,CoordLT>::iterator endIt=nodeMap.end();
+	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=op->getGraph().getNodeMap()->nodeMap;
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator endIt=nodeMap.end();
 	for ( ; it!=endIt; ++it)
 	{
 		Node *node=it->second;
@@ -272,10 +278,15 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 	e->getLabel()->setLocation(targetIndex,loc);
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.21  2005/12/08 00:03:51  strk
  * LineBuilder::lineEdgesList made a real vector, rather then pointer (private member).
  * Small optimizations in LineBuilder loops, cleanups in LineBuilder class dox.

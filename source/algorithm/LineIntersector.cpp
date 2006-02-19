@@ -34,6 +34,7 @@
 #endif // COMPUTE_Z
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 LineIntersector::LineIntersector(const PrecisionModel* initialPrecisionModel):
 	precisionModel(initialPrecisionModel),
@@ -927,10 +928,14 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 #endif
 }
 
+} // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.30  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

@@ -29,21 +29,23 @@
 #include <geos/platform.h>
 #include <geos/noding.h>
 
-using namespace std;
-
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 // forward decls
+
+namespace index {
+	class MonotoneChainEdge;
+	class EdgeSetIntersector;
+	class SegmentIntersector;
+} // geos.geomgraph.index
+
 class DirectedEdge;
 class Edge;
 class EdgeIntersectionList;
 class EdgeRing;
-class EdgeSetIntersector;
 class GeometryGraph;
-class MonotoneChainEdge;
 class Node;
-class SegmentString;
-class SegmentIntersector;
 
 
 class Position {
@@ -79,7 +81,7 @@ class TopologyLocation {
 public:
 	TopologyLocation();
 	~TopologyLocation();
-	TopologyLocation(const vector<int> &newLocation);
+	TopologyLocation(const std::vector<int> &newLocation);
 
 	/**
 	 * Constructs a TopologyLocation specifying how points on,
@@ -103,13 +105,13 @@ public:
 	void setAllLocationsIfNull(int locValue);
 	void setLocation(unsigned int locIndex, int locValue);
 	void setLocation(int locValue);
-	const vector<int> &getLocations() const;
+	const std::vector<int> &getLocations() const;
 	void setLocations(int on, int left, int right);
 	bool allPositionsEqual(int loc) const;
 	void merge(const TopologyLocation &gl);
 	string toString() const;
 private:
-	vector<int> location;
+	std::vector<int> location;
 };
 
 class Label {
@@ -270,7 +272,6 @@ public:
 	virtual void computeLabel();
 	virtual string print();
 protected:
-//	static CGAlgorithms *cga;
 	Edge* edge;// the parent edge of this edge end
 	Label* label;
 	EdgeEnd(Edge* newEdge);
@@ -323,12 +324,12 @@ public:
 
 	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
 
-	virtual void computeLabelling(vector<GeometryGraph*> *geom);
+	virtual void computeLabelling(std::vector<GeometryGraph*> *geom);
 		// throw(TopologyException *);
 
 	virtual int getLocation(int geomIndex,
 		const Coordinate& p,
-		vector<GeometryGraph*> *geom); 
+		std::vector<GeometryGraph*> *geom); 
 
 	virtual bool isAreaLabelsConsistent();
 
@@ -370,7 +371,7 @@ public:
 	int getOutgoingDegree();
 	int getOutgoingDegree(EdgeRing *er);
 	DirectedEdge* getRightmostEdge();
-	void computeLabelling(vector<GeometryGraph*> *geom); // throw(TopologyException *);
+	void computeLabelling(std::vector<GeometryGraph*> *geom); // throw(TopologyException *);
 	void mergeSymLabels();
 	void updateLabelling(Label *nodeLabel);
 	void linkResultDirectedEdges(); // throw(TopologyException *);
@@ -383,9 +384,9 @@ private:
 	/**
 	 * A list of all outgoing edges in the result, in CCW order
 	 */
-	vector<DirectedEdge*> *resultAreaEdgeList;
+	std::vector<DirectedEdge*> *resultAreaEdgeList;
 	Label label;
-	vector<DirectedEdge*>* getResultAreaEdges();
+	std::vector<DirectedEdge*>* getResultAreaEdges();
 	enum {
 		SCANNING_FOR_INCOMING=1,
 		LINKING_TO_OUTGOING
@@ -410,7 +411,7 @@ public:
 	virtual void setLabelBoundary(int argIndex);
 	virtual int computeMergedLocation(const Label* label2, int eltIndex);
 	virtual string print();
-	virtual const vector<double> &getZ() const;
+	virtual const std::vector<double> &getZ() const;
 	virtual void addZ(double);
 	virtual bool isIncidentEdgeInResult() const;
 
@@ -420,7 +421,7 @@ protected:
 	virtual void computeIM(IntersectionMatrix *im) {};
 
 private:
-	vector<double>zvals;
+	std::vector<double>zvals;
 	double ztot;
 
 };
@@ -467,6 +468,12 @@ public:
 	typedef set<EdgeIntersection *, EdgeIntersectionLessThen> container;
 	typedef container::iterator iterator;
 	typedef container::const_iterator const_iterator;
+
+private:
+	container nodeMap;
+
+public:
+
 	Edge *edge;
 	EdgeIntersectionList(Edge *edge);
 	~EdgeIntersectionList();
@@ -500,13 +507,11 @@ public:
 	 *
 	 * @param edgeList a list of EdgeIntersections
 	 */
-	void addSplitEdges(vector<Edge*> *edgeList);
+	void addSplitEdges(std::vector<Edge*> *edgeList);
 
 	Edge *createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1);
 	string print() const;
 
-private:
-	container nodeMap;
 };
 
 class EdgeList {
@@ -514,8 +519,8 @@ public:
 	EdgeList();
 	virtual ~EdgeList();
 	void add(Edge *e);
-	void addAll(const vector<Edge*> &edgeColl);
-	vector<Edge*> &getEdges();
+	void addAll(const std::vector<Edge*> &edgeColl);
+	std::vector<Edge*> &getEdges();
 	Edge* findEqualEdge(Edge* e);
 	Edge* get(int i);
 	int findEdgeIndex(Edge *e);
@@ -523,7 +528,7 @@ public:
 
 private:
 
-	vector<Edge*> edges;
+	std::vector<Edge*> edges;
 
 	/**
 	 * An index of the edges, for fast lookup.
@@ -537,19 +542,10 @@ private:
 	SpatialIndex* index;
 };
 
-struct CoordLT {
-	bool operator()(Coordinate *s1, Coordinate *s2) const {
-		return s1->compareTo(*s2)<0;
-	}
-	bool operator()(const Coordinate *s1, const Coordinate *s2) const {
-		return s1->compareTo(*s2)<0;
-	}
-};
-
 class NodeMap{
 public:
 
-	typedef map<Coordinate*,Node*,CoordLT> container;
+	typedef map<Coordinate*,Node*,CoordinateLessThen> container;
 	typedef container::iterator iterator;
 	typedef container::const_iterator const_iterator;
 	typedef pair<Coordinate*,Node*> pair;
@@ -567,7 +563,7 @@ public:
 	iterator begin() { return nodeMap.begin(); }
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
-	vector<Node*>* getBoundaryNodes(int geomIndex) const; //returns new obj
+	std::vector<Node*>* getBoundaryNodes(int geomIndex) const; //returns new obj
 	string print() const;
 };
 
@@ -653,8 +649,7 @@ void DirectedEdge::setNextMin(DirectedEdge *nm) { nextMin=nm; }
 class EdgeRing {
 public:
 
-	// CGAlgorithms argument obsoleted, unused.
-	EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFactory, CGAlgorithms *newCga=NULL);
+	EdgeRing(DirectedEdge *newStart, const GeometryFactory *newGeometryFactory);
 
 	virtual ~EdgeRing();
 	bool isIsolated();
@@ -682,22 +677,21 @@ public:
 	void computeRing();
 	virtual DirectedEdge* getNext(DirectedEdge *de)=0;
 	virtual void setEdgeRing(DirectedEdge *de, EdgeRing *er)=0;
-	vector<DirectedEdge*>* getEdges();
+	std::vector<DirectedEdge*>* getEdges();
 	int getMaxNodeDegree();
 	void setInResult();
 	bool containsPoint(const Coordinate& p);
 protected:
 	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
 	const GeometryFactory *geometryFactory;
-	//CGAlgorithms *cga;
 	void computePoints(DirectedEdge *newStart);
 	void mergeLabel(Label *deLabel);
 	void mergeLabel(Label *deLabel, int geomIndex);
 	void addPoints(Edge *edge, bool isForward, bool isFirstEdge);
-	vector<EdgeRing*> holes; // a list of EdgeRings which are holes in this EdgeRing
+	std::vector<EdgeRing*> holes; // a list of EdgeRings which are holes in this EdgeRing
 private:
 	int maxNodeDegree;
-	vector<DirectedEdge*> edges; // the DirectedEdges making up this EdgeRing
+	std::vector<DirectedEdge*> edges; // the DirectedEdges making up this EdgeRing
 	CoordinateSequence* pts;
 	Label* label; // label stores the locations of each geometry on the face surrounded by this ring
 	LinearRing *ring;  // the ring created for this EdgeRing
@@ -731,22 +725,21 @@ private:
  */
 class PlanarGraph {
 public:
-	static CGAlgorithms *cga;
-//	static LineIntersector *li;
-	static void linkResultDirectedEdges(vector<Node*>* allNodes); // throw(TopologyException *);
+	static algorithm::CGAlgorithms *cga;
+	static void linkResultDirectedEdges(std::vector<Node*>* allNodes); // throw(TopologyException *);
 	PlanarGraph(const NodeFactory &nodeFact);
 	PlanarGraph();
 	virtual ~PlanarGraph();
-	virtual vector<Edge*>::iterator getEdgeIterator();
-	virtual vector<EdgeEnd*>* getEdgeEnds();
+	virtual std::vector<Edge*>::iterator getEdgeIterator();
+	virtual std::vector<EdgeEnd*>* getEdgeEnds();
 	virtual bool isBoundaryNode(int geomIndex, const Coordinate& coord);
 	virtual void add(EdgeEnd *e);
 	virtual NodeMap::iterator getNodeIterator();
-	virtual vector<Node*>* getNodes();
+	virtual std::vector<Node*>* getNodes();
 	virtual Node* addNode(Node *node);
 	virtual Node* addNode(const Coordinate& coord);
 	virtual Node* find(Coordinate& coord);
-	virtual void addEdges(const vector<Edge*> &edgesToAdd);
+	virtual void addEdges(const std::vector<Edge*> &edgesToAdd);
 	virtual void linkResultDirectedEdges();
 	virtual void linkAllDirectedEdges();
 	virtual EdgeEnd* findEdgeEnd(Edge *e);
@@ -758,9 +751,9 @@ public:
 	//string debugPrint();
 	//string debugPrintln();
 protected:
-	vector<Edge*> *edges;
+	std::vector<Edge*> *edges;
 	NodeMap *nodes;
-	vector<EdgeEnd*> *edgeEndList;
+	std::vector<EdgeEnd*> *edgeEndList;
 	virtual void insertEdge(Edge *e);
 private:
 	bool matchInSameDirection(const Coordinate& p0, const Coordinate& p1, const Coordinate& ep0, const Coordinate& ep1);
@@ -777,17 +770,17 @@ public:
 	virtual ~GeometryGraph();
 	GeometryGraph(int newArgIndex, const Geometry *newParentGeom);
 	const Geometry* getGeometry();
-	vector<Node*>* getBoundaryNodes();
+	std::vector<Node*>* getBoundaryNodes();
 	CoordinateSequence* getBoundaryPoints();
 	Edge* findEdge(const LineString *line);
-	void computeSplitEdges(vector<Edge*> *edgelist);
+	void computeSplitEdges(std::vector<Edge*> *edgelist);
 	void addEdge(Edge *e);
 	void addPoint(Coordinate& pt);
-	SegmentIntersector* computeSelfNodes(LineIntersector *li,
+	index::SegmentIntersector* computeSelfNodes(algorithm::LineIntersector *li,
 		bool computeRingSelfNodes);
-	SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
-		LineIntersector *li,bool includeProper);
-	vector<Edge*> *getEdges();
+	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
+		algorithm::LineIntersector *li,bool includeProper);
+	std::vector<Edge*> *getEdges();
 	bool hasTooFewPoints();
 	const Coordinate& getInvalidPoint(); 
 
@@ -814,13 +807,13 @@ private:
 	 */
 	int argIndex;
 
-	vector<Node*>* boundaryNodes;
+	std::vector<Node*>* boundaryNodes;
 
 	bool hasTooFewPointsVar;
 
 	Coordinate invalidPoint; 
 
-	EdgeSetIntersector* createEdgeSetIntersector();
+	index::EdgeSetIntersector* createEdgeSetIntersector();
 
 	void add(const Geometry *g); // throw(UnsupportedOperationException *);
 	void addCollection(const GeometryCollection *gc);
@@ -838,21 +831,24 @@ private:
 };
 
 
-/*
+/**
  * Validates that a collection of SegmentStrings is correctly noded.
  * Throws an appropriate exception if an noding error is found.
  *
  * @version 1.4
  */
 class EdgeNodingValidator {
+
 private:
-	vector<SegmentString*>& toSegmentStrings(vector<Edge*> *edges);
-	NodingValidator nv;
-	SegmentString::NonConstVect segStr;
-	vector<CoordinateSequence*>newCoordSeq;
+	std::vector<noding::SegmentString*>& toSegmentStrings(std::vector<Edge*> *edges);
+	noding::NodingValidator nv;
+	noding::SegmentString::NonConstVect segStr;
+	//std::vector<SegmentString*> segStr;
+	std::vector<CoordinateSequence*>newCoordSeq;
+
 public:
 
-	EdgeNodingValidator(vector<Edge*> *edges)
+	EdgeNodingValidator(std::vector<Edge*> *edges)
 		:
 		nv(toSegmentStrings(edges))
 	{}
@@ -888,7 +884,7 @@ public:
 	virtual void setDepthDelta(int newDepthDelta);
 	virtual int getMaximumSegmentIndex() const;
 	virtual EdgeIntersectionList& getEdgeIntersectionList();
-	virtual MonotoneChainEdge* getMonotoneChainEdge();
+	virtual index::MonotoneChainEdge* getMonotoneChainEdge();
 	virtual bool isClosed() const;
 	virtual bool isCollapsed() const;
 	virtual Edge* getCollapsedEdge();
@@ -896,9 +892,9 @@ public:
 		isIsolatedVar=newIsIsolated;
 	}
 	virtual bool isIsolated() const { return isIsolatedVar; }
-	virtual void addIntersections(LineIntersector *li, int segmentIndex,
+	virtual void addIntersections(algorithm::LineIntersector *li, int segmentIndex,
 		int geomIndex);
-	virtual void addIntersection(LineIntersector *li, int segmentIndex,
+	virtual void addIntersection(algorithm::LineIntersector *li, int segmentIndex,
 		int geomIndex, int intIndex);
 	virtual void computeIM(IntersectionMatrix *im);
 	virtual bool isPointwiseEqual(const Edge *e) const;
@@ -911,7 +907,7 @@ private:
 
 	// This is a pointer because a MonotoneChainEdge is
 	// only constructed on demand (often not constructed)
-	MonotoneChainEdge *mce;
+	index::MonotoneChainEdge *mce;
 
 	Envelope *env;
 	bool isIsolatedVar;
@@ -923,12 +919,16 @@ private:
 //Operators
 bool operator==(const Edge &a, const Edge &b);
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 #endif // ifndef GEOS_GEOMGRAPH_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.30  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

@@ -23,6 +23,7 @@
 #endif
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 #if PROFILE
 static Profiler *profiler = Profiler::instance();
@@ -136,10 +137,14 @@ EdgeList::print()
 	return out;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.9  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

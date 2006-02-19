@@ -15,13 +15,14 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
+#include <geos/geomgraph.h>
+
+using namespace std;
+using namespace geos::geomgraph;
 
 namespace geos {
-
-EdgeEndBundleStar::EdgeEndBundleStar():
-	EdgeEndStar()
-{
-}
+namespace operation { // geos.operation
+namespace relate { // geos.operation.relate
 
 EdgeEndBundleStar::~EdgeEndBundleStar()
 {
@@ -74,10 +75,15 @@ EdgeEndBundleStar::updateIM(IntersectionMatrix *im)
 	}
 }
 
+} // namespace geos.operation.relate
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.10  2005/11/29 00:48:35  strk
  * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
  * Restructured iterated access by use of standard ::iterator abstraction

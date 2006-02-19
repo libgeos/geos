@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,7 +18,11 @@
 #include <sstream>
 #include <geos/geom.h>
 #include <geos/geosAlgorithm.h>
+#include <geos/operation.h>
 #include <geos/profiler.h>
+
+using namespace geos::algorithm;
+using namespace geos::operation;
 
 namespace geos {
 
@@ -476,6 +480,9 @@ operator==(const LineSegment a, const LineSegment b)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.23  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

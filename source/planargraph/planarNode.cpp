@@ -17,7 +17,7 @@
 #include <geos/planargraph.h>
 
 namespace geos {
-//namespace planargraph {
+namespace planargraph {
 
 /**
 * Returns all Edges that connect the two nodes (which are assumed to be different).
@@ -29,11 +29,14 @@ planarNode::getEdgesBetween(planarNode *node0, planarNode *node1)
 }
 
 
-//} // namespace planargraph 
+} // namespace planargraph 
 } // namespace geos 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/02/05 17:14:43  strk
  * - New ConnectedSubgraphFinder class.
  * - More iterators returning methods, inlining and cleanups

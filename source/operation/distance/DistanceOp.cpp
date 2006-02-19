@@ -18,8 +18,13 @@
 
 #include <geos/opDistance.h>
 #include <geos/geomUtil.h>
+#include <geos/geosAlgorithm.h>
+
+using namespace geos::algorithm;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace distance { // geos.operation.distance
 
 using namespace geom;
 using namespace geom::util;
@@ -438,10 +443,15 @@ DistanceOp::computeMinDistance(const LineString *line,
 	}
 }
 
+} // namespace geos.operation.distance
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.17  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

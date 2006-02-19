@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.18  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -60,6 +63,7 @@
 #include <stdio.h>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 MCPointInRing::MCSelecter::MCSelecter(const Coordinate& newP,MCPointInRing *prt) {
 	p=newP;
@@ -163,5 +167,7 @@ void MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
 		}
 	}
 }
-}
+
+} // namespace geos.algorithm
+} // namespace geos
 

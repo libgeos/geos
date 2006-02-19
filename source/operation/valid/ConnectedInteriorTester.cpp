@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -22,10 +22,16 @@
 
 #include <geos/opValid.h>
 #include <geos/opOverlay.h>
+#include <geos/geomgraph.h>
 #include <geos/util.h>
 #include <typeinfo>
 
+using namespace geos::geomgraph;
+using namespace geos::operation::overlay;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace valid { // geos.operation.valid
 
 ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph &newGeomGraph):
 	geometryFactory(new GeometryFactory()),
@@ -216,10 +222,15 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings)
 	return false;
 }
 
+} // namespace geos.operation.valid
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.17  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

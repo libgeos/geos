@@ -17,8 +17,9 @@
 #include <geos/geom.h>
 #include <geos/opOverlay.h>
 
-namespace geos
-{
+namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 ElevationMatrixCell::ElevationMatrixCell(): ztot(0)
 {
@@ -74,10 +75,15 @@ ElevationMatrixCell::print() const
 	return ret.str();
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.3  2004/11/29 16:05:33  strk
  * Fixed a bug in LineIntersector::interpolateZ causing NaN values
  * to come out.

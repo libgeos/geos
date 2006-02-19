@@ -47,6 +47,8 @@
 
 using namespace std;
 using namespace geos;
+using namespace geos::operation::polygonize;
+
 //using geos::Polygon; // for mingw providing a Polygon global function
 
 
@@ -742,6 +744,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.3  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

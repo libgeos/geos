@@ -24,6 +24,7 @@
 #include <geos/platform.h>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 /*
  * Computes the (approximate) intersection point between two line segments
@@ -111,10 +112,14 @@ HCoordinate::getCoordinate(Coordinate &ret) const
 	//return new Coordinate(getX(),getY());
 }
 
+} // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.14  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

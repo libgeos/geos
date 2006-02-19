@@ -17,6 +17,7 @@
 #include <geos/geomgraph.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 TopologyLocation::TopologyLocation(const vector<int> &newLocation):
 	location(newLocation.size(), Location::UNDEF)
@@ -199,10 +200,14 @@ TopologyLocation::toString() const
 	return buf;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2005/11/29 15:45:39  strk
  * Fixed signedness of TopologyLocation methods, cleanups.
  *

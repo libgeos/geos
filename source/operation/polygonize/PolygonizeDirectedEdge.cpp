@@ -14,8 +14,13 @@
  **********************************************************************/
 
 #include <geos/opPolygonize.h>
+#include <geos/planargraph.h>
+
+using namespace geos::planargraph;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace polygonize { // geos.operation.polygonize
 
 /**
  * Constructs a directed edge connecting the <code>from</code> node to the
@@ -96,10 +101,15 @@ PolygonizeDirectedEdge::setRing(polygonizeEdgeRing *newEdgeRing)
 	edgeRing=newEdgeRing;
 }
 
-}
+} // namespace geos.operation.polygonize
+} // namespace geos.operation
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.4  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.

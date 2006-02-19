@@ -15,10 +15,15 @@
  **********************************************************************/
 
 #include <geos/opLinemerge.h>
+#include <geos/planargraph.h>
 #include <geos/util.h>
 #include <typeinfo>
 
+using namespace geos::planargraph;
+
 namespace geos {
+namespace operation { // geos.operation
+namespace linemerge { // geos.operation.linemerge
 
 void
 LineMerger::add(vector<Geometry*> *geometries)
@@ -189,10 +194,15 @@ LineMerger::getMergedLineStrings()
 	return mergedLineStrings;
 }
 
+} // namespace geos.operation.linemerge
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.7  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

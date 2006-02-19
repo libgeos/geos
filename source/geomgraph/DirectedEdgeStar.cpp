@@ -20,6 +20,7 @@
 #define DEBUG 0
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 DirectedEdgeStar::DirectedEdgeStar():
 	EdgeEndStar(),
@@ -430,10 +431,14 @@ DirectedEdgeStar::print()
 	return out;
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.10  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

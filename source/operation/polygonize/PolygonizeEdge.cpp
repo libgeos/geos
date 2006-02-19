@@ -17,6 +17,8 @@
 #include <geos/opPolygonize.h>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace polygonize { // geos.operation.polygonize
 
 PolygonizeEdge::PolygonizeEdge(const LineString *newLine) {
 	line=newLine;
@@ -27,10 +29,15 @@ PolygonizeEdge::getLine() {
 	return line;
 }
 
-}
+} // namespace geos.operation.polygonize
+} // namespace geos.operation
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.3  2004/10/19 19:51:14  strk
  * Fixed many leaks and bugs in Polygonizer.
  * Output still bogus.

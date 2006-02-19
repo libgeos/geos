@@ -15,25 +15,18 @@
 
 #include <geos/opOverlay.h>
 #include <geos/io.h>
-#include <stdio.h>
 
 #ifndef DEBUG
 #define DEBUG 0
 #endif
-#ifndef COMPUTE_Z
-#define COMPUTE_Z 0
-#endif
+
+using namespace std;
+using namespace geos::geomgraph;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
-PointBuilder::PointBuilder(OverlayOp *newOp,
-	const GeometryFactory *newGeometryFactory,
-	PointLocator *newPtLocator):
-		op(newOp),
-		geometryFactory(newGeometryFactory),
-		resultPointList(new vector<Point *>())
-{
-}
 
 /*
  * @return a list of the Points in the result of the specified
@@ -57,9 +50,9 @@ PointBuilder::build(int opCode)
 void
 PointBuilder::extractNonCoveredResultNodes(int opCode)
 {
-	map<Coordinate*,Node*,CoordLT> &nodeMap =
+	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap =
 		op->getGraph().getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordLT>::iterator it=nodeMap.begin();
+	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (; it!=nodeMap.end(); ++it)
 	{
 		Node *n=it->second;
@@ -97,10 +90,15 @@ PointBuilder::filterCoveredNodeToPoint(const Node *n)
 	}
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.17  2005/11/15 12:14:05  strk
  * Reduced heap allocations, made use of references when appropriate,
  * small optimizations here and there.

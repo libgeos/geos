@@ -171,6 +171,11 @@ AC_OUTPUT([
 	source/headers/geos/Makefile
 	source/headers/geos/version.h
 	source/index/Makefile
+	source/index/bintree/Makefile
+	source/index/chain/Makefile
+	source/index/quadtree/Makefile
+	source/index/strtree/Makefile
+	source/index/sweepline/Makefile
 	source/io/Makefile
 	source/noding/Makefile
 	source/noding/snapround/Makefile

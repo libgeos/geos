@@ -15,13 +15,20 @@
  **********************************************************************/
 
 #include <geos/opOverlay.h>
-#include <stdio.h>
+
+using namespace std;
+using namespace geos::algorithm;
+using namespace geos::geomgraph;
+using namespace geos::geomgraph::index;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 // CGAlgorithms obsoleted
 MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
-		const GeometryFactory *geometryFactory, CGAlgorithms *cga):
+		const GeometryFactory *geometryFactory)
+	:
 	EdgeRing(start, geometryFactory)
 {
 	computePoints(start);
@@ -77,11 +84,17 @@ MaximalEdgeRing::buildMinimalRings()
 	return minEdgeRings;
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.13  2005/11/18 00:55:29  strk
+ *
  * Fixed a bug in EdgeRing::containsPoint().
  * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
  * usages from PolygonBuilder.

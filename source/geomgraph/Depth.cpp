@@ -19,6 +19,7 @@
 #define DEPTHNULL -1
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 int
 Depth::depthAtLocation(int location)
@@ -158,10 +159,14 @@ Depth::toString() const
 }
 
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.4  2005/11/14 18:14:03  strk
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.

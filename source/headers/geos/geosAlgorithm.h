@@ -27,8 +27,8 @@
 #include <geos/indexChain.h>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
-class Coordinate;
 
 /*
  * \class NotRepresentableException geosAlgorithm.h geos/geosAlgorithm.h
@@ -839,12 +839,16 @@ public:
 	LineString* getDiameter();
 };
 
+} // namespace geos.algorithm
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.21  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

@@ -23,6 +23,7 @@
 #include <typeinfo>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 /**
  * Computes the minimum diameter of a Geometry.
@@ -256,10 +257,14 @@ MinimumDiameter::getNextIndex(const CoordinateSequence *pts,
 	return index;
 }
 
-} //namespace
+} // namespace geos.algorithm
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.11  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

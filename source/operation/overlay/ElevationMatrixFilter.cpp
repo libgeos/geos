@@ -18,8 +18,9 @@
 
 #define DEBUG 0
 
-namespace geos
-{
+namespace geos {
+namespace operation { // geos.operation
+namespace overlay { // geos.operation.overlay
 
 ElevationMatrixFilter::ElevationMatrixFilter(ElevationMatrix &newEm):
 	em(newEm)
@@ -65,10 +66,15 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 	em.add(*c);
 }
 
+} // namespace geos.operation.overlay
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.6  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

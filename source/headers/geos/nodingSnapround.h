@@ -28,6 +28,8 @@ using namespace std;
 #define KEEP_OBSOLETED
 
 namespace geos {
+namespace noding { // geos.noding
+namespace snapround { // geos.noding.snapround
 
 /**
  * Implements a "hot pixel" as used in the Snap Rounding algorithm.
@@ -42,7 +44,7 @@ namespace geos {
  */
 class HotPixel {
 private:
-	LineIntersector& li;
+	algorithm::LineIntersector& li;
 
 	Coordinate pt;
 	const Coordinate& originalPt;
@@ -123,7 +125,7 @@ private:
  
 public:
 
-	HotPixel(const Coordinate& pt, double scaleFact, LineIntersector& li);
+	HotPixel(const Coordinate& pt, double scaleFact, algorithm::LineIntersector& li);
 
 	/// \brief
 	/// Return reference to original Coordinate
@@ -171,14 +173,14 @@ class SimpleSnapRounder: public Noder { // implements NoderIface
 
 private:
 	const PrecisionModel& pm;
-	LineIntersector li;
+	algorithm::LineIntersector li;
 	double scaleFactor;
 	SegmentString::NonConstVect* nodedSegStrings;
 
 	void checkCorrectness(SegmentString::NonConstVect& inputSegmentStrings);
 
 	void snapRound(SegmentString::NonConstVect* segStrings,
-			LineIntersector& li);
+			algorithm::LineIntersector& li);
 
 	/**
 	 * Computes all interior intersections in the vector
@@ -188,11 +190,11 @@ private:
 	 * Does NOT node the segStrings.
 	 *
 	 * @param segStrings a vector of const Coordinates for the intersections
-	 * @param li the LineIntersector to use
+	 * @param li the algorithm::LineIntersector to use
 	 * @param ret the vector to push intersection Coordinates to
 	 */
 	void findInteriorIntersections(SegmentString::NonConstVect& segStrings,
-			LineIntersector& li, vector<Coordinate>& ret);
+			algorithm::LineIntersector& li, vector<Coordinate>& ret);
 
 	/**
 	 * Computes nodes introduced as a result of snapping segments to snap points (hot pixels)
@@ -315,11 +317,11 @@ private:
 	// externally owned
 	PrecisionModel& pm;
 
-	LineIntersector li;
+	algorithm::LineIntersector li;
 
 	double scaleFactor;
 
-	MCIndexNoder& noder;
+	noding::MCIndexNoder& noder;
 
 
 public:
@@ -330,12 +332,17 @@ public:
 
 
 
+} // namespace geos.noding.snapround
+} // namespace geos.noding
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

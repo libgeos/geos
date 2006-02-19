@@ -18,6 +18,7 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 GraphComponent::GraphComponent():
 	label(NULL),
@@ -69,10 +70,14 @@ GraphComponent::updateIM(IntersectionMatrix *im)
 	computeIM(im);
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.4  2005/11/16 15:49:54  strk
  * Reduced gratuitous heap allocations.
  *

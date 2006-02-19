@@ -15,9 +15,13 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
-#include <stdio.h>
+#include <geos/geomgraph.h>
+
+using namespace geos::geomgraph;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace relate { // geos.operation.relate
 
 RelateNode::RelateNode(const Coordinate& coord,EdgeEndStar *edges):
 	Node(coord,edges)
@@ -46,11 +50,17 @@ RelateNode::updateIMFromEdges(IntersectionMatrix *im)
 	((EdgeEndBundleStar*) edges)->updateIM(im);
 }
 
+} // namespace geos.operation.relate
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.9  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

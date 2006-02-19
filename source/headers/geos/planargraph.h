@@ -24,12 +24,10 @@
 #include <string>
 #include <map>
 
-using namespace std;
 
 namespace geos {
-//namespace planargraph {
+namespace planargraph { // geos.planargraph
 
-class ConnectedSubgraphFinder;
 class planarDirectedEdge;
 class planarDirectedEdgeStar;
 class planarEdge;
@@ -39,6 +37,11 @@ class planarNodeMap;
 class planarPlanarGraph;
 class planarSubgraph;
 
+typedef planarEdge Edge;
+typedef planarDirectedEdge DirectedEdge;
+typedef planarNode Node;
+typedef planarPlanarGraph PlanarGraph;
+typedef planarSubgraph Subgraph;
 
 /**
  * \class planarGraphComponent planargraph.h geos/planargraph.h
@@ -146,7 +149,7 @@ private:
 	/**
 	 * \brief The underlying list of outgoing DirectedEdges
 	 */
-	mutable vector<planarDirectedEdge*> outEdges;
+	mutable std::vector<planarDirectedEdge*> outEdges;
 	mutable bool sorted;
 	void sortEdges() const;
 
@@ -172,11 +175,11 @@ public:
 	 * \brief Returns an Iterator over the DirectedEdges,
 	 * in ascending order by angle with the positive x-axis.
 	 */
-	vector<planarDirectedEdge*>::iterator iterator() { return begin(); }
-	vector<planarDirectedEdge*>::iterator begin();
-	vector<planarDirectedEdge*>::iterator end();
-	vector<planarDirectedEdge*>::const_iterator begin() const;
-	vector<planarDirectedEdge*>::const_iterator end() const;
+	std::vector<planarDirectedEdge*>::iterator iterator() { return begin(); }
+	std::vector<planarDirectedEdge*>::iterator begin();
+	std::vector<planarDirectedEdge*>::iterator end();
+	std::vector<planarDirectedEdge*>::const_iterator begin() const;
+	std::vector<planarDirectedEdge*>::const_iterator end() const;
 
 	/**
 	 * \brief Returns the number of edges around the Node associated
@@ -194,7 +197,7 @@ public:
 	 * \brief Returns the DirectedEdges, in ascending order
 	 * by angle with the positive x-axis.
 	 */
-	vector<planarDirectedEdge*>& getEdges();
+	std::vector<planarDirectedEdge*>& getEdges();
 
 	/**
 	 * \brief Returns the zero-based index of the given Edge,
@@ -250,7 +253,7 @@ public:
 	 * \brief Returns all Edges that connect the two nodes (which are
 	 * assumed to be different).
 	 */
-	static vector<planarEdge*>* getEdgesBetween(planarNode *node0,
+	static std::vector<planarEdge*>* getEdgesBetween(planarNode *node0,
 			planarNode *node1);
 
 	/// Constructs a Node with the given location.
@@ -328,13 +331,13 @@ class planarEdge: public planarGraphComponent {
 public:
 	typedef set<const planarEdge *> ConstSet;
 	typedef set<planarEdge *> NonConstSet;
-	typedef vector<planarEdge *> NonConstVect;
-	typedef vector<const planarEdge *> ConstVect;
+	typedef std::vector<planarEdge *> NonConstVect;
+	typedef std::vector<const planarEdge *> ConstVect;
 
 protected:
 
 	/** \brief The two DirectedEdges associated with this Edge */
-	vector<planarDirectedEdge*> dirEdge;
+	std::vector<planarDirectedEdge*> dirEdge;
 
 	/**
 	 * \brief Constructs an Edge whose DirectedEdges are not yet set.
@@ -402,11 +405,11 @@ public:
 
 	typedef list<planarDirectedEdge *> NonConstList;
 	typedef list<const planarDirectedEdge *> ConstList;
-	typedef vector<planarDirectedEdge *> NonConstVect;
+	typedef std::vector<planarDirectedEdge *> NonConstVect;
 
 protected:
 	//static const CGAlgorithms* cga;
-	static CGAlgorithms cga;
+	static algorithm::CGAlgorithms cga;
 	planarEdge* parentEdge;
 	planarNode* from;
 	planarNode* to;
@@ -417,14 +420,14 @@ protected:
 	double angle;
 public:
 
-	typedef vector<const planarDirectedEdge *> ConstVect;
-	typedef vector<planarDirectedEdge *> Vect;
+	typedef std::vector<const planarDirectedEdge *> ConstVect;
+	typedef std::vector<planarDirectedEdge *> Vect;
 
 	/**
 	 * \brief Returns a List containing the parent Edge (possibly null)
 	 * for each of the given DirectedEdges.
 	 */
-	static vector<planarEdge*>* toEdges(vector<planarDirectedEdge*> *dirEdges);
+	static std::vector<planarEdge*>* toEdges(std::vector<planarDirectedEdge*> *dirEdges);
 
 	/**
 	 * \brief Constructs a DirectedEdge connecting the <code>from</code>
@@ -519,7 +522,7 @@ public:
 	 * 
 	 * - first compare the quadrants.
 	 *   If the quadrants are different, it it
-	 *   trivial to determine which vector is "greater".
+	 *   trivial to determine which std::vector is "greater".
 	 * - if the vectors lie in the same quadrant, the robust
 	 *   RobustCGAlgorithms::computeOrientation(Coordinate, Coordinate, Coordinate)
 	 *   function can be used to decide the relative orientation of
@@ -540,7 +543,7 @@ public:
 	 * 
 	 * - first compare the quadrants.
 	 *   If the quadrants are different, it it trivial to determine
-	 *   which vector is "greater".
+	 *   which std::vector is "greater".
 	 * - if the vectors lie in the same quadrant, the robust
 	 *   RobustCGAlgorithms::computeOrientation(Coordinate, Coordinate, Coordinate)
 	 *   function can be used to decide the relative orientation of
@@ -572,9 +575,9 @@ struct planarCoordLT {
  */
 class planarNodeMap {
 public:
-	typedef map<Coordinate,planarNode*, planarCoordLT> container;
+	typedef std::map<Coordinate,planarNode*, planarCoordLT> container;
 private:
-	//map<Coordinate,planarNode*, planarCoordLT>
+	//std::map<Coordinate,planarNode*, planarCoordLT>
 	container nodeMap;
 public:  
 	/**
@@ -582,13 +585,13 @@ public:
 	 */
 	planarNodeMap();
 
-	map<Coordinate,planarNode*,planarCoordLT>& getNodeMap();
+	std::map<Coordinate,planarNode*,planarCoordLT>& getNodeMap();
 
 	virtual ~planarNodeMap();
 
 	/**
 	 * \brief
-	 * Adds a node to the map, replacing any that is already
+	 * Adds a node to the std::map, replacing any that is already
 	 * at that location.
 	 * @return the added node
 	 */
@@ -614,12 +617,12 @@ public:
 	 * sorted in ascending order
 	 * by angle with the positive x-axis.
 	 */
-	//map<Coordinate,planarNode*,planarCoordLT>::iterator iterator() {
+	//std::map<Coordinate,planarNode*,planarCoordLT>::iterator iterator() {
 	container::iterator iterator() {
 		return nodeMap.begin();
 	}
 
-	//map<Coordinate,planarNode*,planarCoordLT>::iterator begin() {
+	//std::map<Coordinate,planarNode*,planarCoordLT>::iterator begin() {
 	container::iterator begin() {
 		return nodeMap.begin();
 	}
@@ -627,7 +630,7 @@ public:
 		return nodeMap.begin();
 	}
 
-	//map<Coordinate,planarNode*,planarCoordLT>::iterator end() {
+	//std::map<Coordinate,planarNode*,planarCoordLT>::iterator end() {
 	container::iterator end() {
 		return nodeMap.end();
 	}
@@ -640,7 +643,7 @@ public:
 	 * Returns the Nodes in this NodeMap, sorted in ascending order
 	 * by angle with the positive x-axis.
 	 */
-	vector<planarNode*>* getNodes();
+	std::vector<planarNode*>* getNodes();
 };
 
 /**
@@ -660,13 +663,13 @@ class planarPlanarGraph {
 
 protected:
 
-	vector<planarEdge*> edges;
-	vector<planarDirectedEdge*> dirEdges;
+	std::vector<planarEdge*> edges;
+	std::vector<planarDirectedEdge*> dirEdges;
 	planarNodeMap nodeMap;
 
 	/**
 	 * \brief
-	 * Adds a node to the map, replacing any that is already at that
+	 * Adds a node to the std::map, replacing any that is already at that
 	 * location.
 	 *
 	 * Only subclasses can add Nodes, to ensure Nodes are
@@ -701,7 +704,7 @@ protected:
 
 public:
 
-	typedef vector<planarEdge *> EdgeContainer;
+	typedef std::vector<planarEdge *> EdgeContainer;
 	typedef EdgeContainer::iterator EdgeIterator;
 
 
@@ -750,7 +753,7 @@ public:
 	 * \brief
 	 * Returns the Nodes in this PlanarGraph.
 	 */  
-	vector<planarNode*>* getNodes() { return nodeMap.getNodes(); }
+	std::vector<planarNode*>* getNodes() { return nodeMap.getNodes(); }
 
 	/**
 	 * \brief
@@ -760,7 +763,7 @@ public:
 	 * @see add(Edge)
 	 * @see add(DirectedEdge)
 	 */
-	vector<planarDirectedEdge*>::iterator dirEdgeIterator() {
+	std::vector<planarDirectedEdge*>::iterator dirEdgeIterator() {
 		return dirEdges.begin();
 	}
 
@@ -771,13 +774,13 @@ public:
 	 *
 	 * @see #add(Edge)
 	 */
-	vector<planarEdge*>::iterator edgeIterator() {
+	std::vector<planarEdge*>::iterator edgeIterator() {
 		return edges.begin();
 	}
-	vector<planarEdge*>::iterator edgeBegin() {
+	std::vector<planarEdge*>::iterator edgeBegin() {
 		return edges.begin();
 	}
-	vector<planarEdge*>::iterator edgeEnd() {
+	std::vector<planarEdge*>::iterator edgeEnd() {
 		return edges.end();
 	}
 
@@ -786,7 +789,7 @@ public:
 	 * Returns the Edges that have been added to this PlanarGraph
 	 * @see #add(Edge)
 	 */
-	vector<planarEdge*>* getEdges() {
+	std::vector<planarEdge*>* getEdges() {
 		return &edges;
 	}
 
@@ -823,7 +826,7 @@ public:
 	 * \brief
 	 * Returns all Nodes with the given number of Edges around it.
 	 */
-	vector<planarNode*>* findNodesOfDegree(int degree);
+	std::vector<planarNode*>* findNodesOfDegree(int degree);
 };
 
 /// A subgraph of a planarPlanarGraph.
@@ -931,6 +934,8 @@ public:
 	
 };
 
+namespace algorithm { // geos.planargraph.algorithm
+
 /**
  * Finds all connected {@link planarSubgraph}s of a planarPlanarGraph.
  * 
@@ -970,22 +975,28 @@ public:
 
 	/// \brief
 	/// Store newly allocated connected planarSubgraphs into the
-	/// given vector
+	/// given std::vector
 	///
 	/// Caller take responsibility in releasing memory associated
 	/// with the subgraphs themself.
 	///
 	///
-	void getConnectedSubgraphs(vector<planarSubgraph *>& dest);
+	void getConnectedSubgraphs(std::vector<planarSubgraph *>& dest);
 
 };
 
-//} // namespace planargraph
+} // namespace geos.planargraph.algorithm
+
+} // namespace geos.planargraph
 } // namespace geos
+
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.11  2006/02/08 12:59:55  strk
  * - NEW Geometry::applyComponentFilter() templated method
  * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries

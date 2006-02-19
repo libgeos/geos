@@ -17,8 +17,13 @@
 
 #include <geos/opPolygonize.h>
 #include <geos/util.h>
+#include <geos/planargraph.h>
+
+using namespace geos::planargraph;
 
 namespace geos {
+namespace operation { // geos.operation
+namespace polygonize { // geos.operation.polygonize
 
 int
 PolygonizeGraph::getDegreeNonDeleted(planarNode *node)
@@ -460,10 +465,15 @@ PolygonizeGraph::deleteDangles()
 	return dangleLines;
 }
 
+} // namespace geos.operation.polygonize
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.13  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.10  2005/04/06 11:09:41  strk
  * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
  *
@@ -34,6 +37,7 @@
 #include <cmath>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 NonRobustLineIntersector::NonRobustLineIntersector(){}
 
@@ -268,5 +272,7 @@ double NonRobustLineIntersector::rParameter(const Coordinate& p1,const Coordinat
 	}
 	return r;
 }
-}
+
+} // namespace geos.algorithm
+} // namespace geos
 

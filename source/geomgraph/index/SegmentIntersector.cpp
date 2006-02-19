@@ -22,6 +22,10 @@
 #define DEBUG 0
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+namespace index { // geos.geomgraph.index
+
+using namespace geos::algorithm;
 
 bool
 SegmentIntersector::isAdjacentSegments(int i1,int i2)
@@ -127,7 +131,7 @@ SegmentIntersector::hasProperInteriorIntersection()
 bool
 SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,int segIndex1)
 {
-//	if (e0->equals(e1)) {
+//	if (e0->equals(e1)) 
 	if (e0==e1) {
 		if (li->getIntersectionNum()==1) {
 			if (isAdjacentSegments(segIndex0,segIndex1))
@@ -234,10 +238,16 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 	}
 	return false;
 }
-}
+
+} // namespace geos.geomgraph.index
+} // namespace geos.geomgraph
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.11  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

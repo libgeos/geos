@@ -21,7 +21,11 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/noding.h>
 
+using namespace std;
+using namespace geos::noding;
+
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 vector<SegmentString*>&
 EdgeNodingValidator::toSegmentStrings(vector<Edge*> *edges)
@@ -50,10 +54,14 @@ EdgeNodingValidator::~EdgeNodingValidator()
 		delete newCoordSeq[i];
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.5  2006/02/18 21:08:09  strk
  * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
  * - SegmentString::getCoordinates() doesn't return a clone anymore.

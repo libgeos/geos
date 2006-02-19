@@ -22,6 +22,9 @@
 #include <cmath>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
+
+using namespace geos::algorithm;
 
 //CGAlgorithms* EdgeEnd::cga=new RobustCGAlgorithms();
 
@@ -137,11 +140,16 @@ EdgeEnd::print()
 	return s.str();
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.8  2005/11/21 16:03:20  strk
+ *
  * Coordinate interface change:
  *         Removed setCoordinate call, use assignment operator
  *         instead. Provided a compile-time switch to

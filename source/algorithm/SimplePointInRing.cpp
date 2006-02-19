@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.15  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -33,6 +36,7 @@
 #include <geos/geosAlgorithm.h>
 
 namespace geos {
+namespace algorithm { // geos.algorithm
 
 SimplePointInRing::SimplePointInRing(LinearRing *ring){
 	pts=ring->getCoordinatesRO();
@@ -45,5 +49,6 @@ bool SimplePointInRing::isInside(const Coordinate& pt){
 	return CGAlgorithms::isPointInRing(pt,pts);
 }
 
-}
+} // namespace geos.algorithm
+} // namespace geos
 

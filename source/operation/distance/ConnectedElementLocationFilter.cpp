@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.4  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -34,6 +37,9 @@
 #include <typeinfo>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace distance { // geos.operation.distance
+
 /**
 * Returns a list containing a point from each Polygon, LineString, and Point
 * found inside the specified geometry. Thus, if the specified geometry is
@@ -46,10 +52,6 @@ vector<GeometryLocation*>* ConnectedElementLocationFilter::getLocations(const Ge
 	geom->apply_ro(c);
 	delete c;
 	return loc;
-}
-
-ConnectedElementLocationFilter::ConnectedElementLocationFilter(vector<GeometryLocation*> *newLocations): locations(newLocations) {
-	//locations=newLocations;
 }
 
 void ConnectedElementLocationFilter::filter_ro(const Geometry *geom){
@@ -70,4 +72,6 @@ void ConnectedElementLocationFilter::filter_rw(Geometry *geom){
 			locations->push_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
 }
 
-}
+} // namespace geos.operation.distance
+} // namespace geos.operation
+} // namespace geos

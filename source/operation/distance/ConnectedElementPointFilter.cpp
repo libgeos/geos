@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.8  2004/07/02 13:28:28  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -32,6 +35,8 @@
 #include <typeinfo>
 
 namespace geos {
+namespace operation { // geos.operation
+namespace distance { // geos.operation.distance
 
 /**
 * Returns a list containing a Coordinate from each Polygon, LineString, and Point
@@ -46,15 +51,14 @@ vector<const Coordinate*>* ConnectedElementPointFilter::getCoordinates(const Geo
 	return points;
 }
 
-ConnectedElementPointFilter::ConnectedElementPointFilter(vector<const Coordinate*> *newPts){
-	pts=newPts;
-}
-
 void ConnectedElementPointFilter::filter_ro(const Geometry *geom) {
 	if ((typeid(*geom)==typeid(Point)) ||
 		(typeid(*geom)==typeid(LineString)) ||
 		(typeid(*geom)==typeid(Polygon)))
 			pts->push_back(geom->getCoordinate());
 }
-}
+
+} // namespace geos.operation.distance
+} // namespace geos.operation
+} // namespace geos
 

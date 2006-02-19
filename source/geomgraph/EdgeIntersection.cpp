@@ -17,6 +17,7 @@
 #include <geos/geomgraph.h>
 
 namespace geos {
+namespace geomgraph { // geos.geomgraph
 
 EdgeIntersection::EdgeIntersection(const Coordinate& newCoord,
 		int newSegmentIndex, double newDist):
@@ -63,11 +64,15 @@ EdgeIntersection::compareTo(const EdgeIntersection *other) const
 	return compare(other->segmentIndex, other->dist);
 }
 
+} // namespace geos.geomgraph
 } // namespace geos
 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.6  2005/12/07 23:36:49  strk
  * standard indentation
  *

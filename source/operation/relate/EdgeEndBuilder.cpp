@@ -17,11 +17,14 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
+#include <geos/geomgraph.h>
+
+using namespace std;
+using namespace geos::geomgraph;
 
 namespace geos {
-
-EdgeEndBuilder::EdgeEndBuilder()
-{}
+namespace operation { // geos.operation
+namespace relate { // geos.operation.relate
 
 vector<EdgeEnd*> *
 EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges)
@@ -124,10 +127,15 @@ EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
 	l->push_back(e);
 }
 
+} // namespace geos.operation.relate
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.14  2006/01/08 15:24:40  strk
  * Changed container-related typedef to class-scoped STL-like typedefs.
  * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;

@@ -18,42 +18,20 @@
 #include <geos/util.h>
 #include <stdio.h>
 
+using namespace geos::algorithm;
+
 namespace geos {
-
-SimpleNestedRingTester::SimpleNestedRingTester(GeometryGraph *newGraph):
-	cga(new CGAlgorithms()),
-	graph(newGraph),
-	rings(new vector<LinearRing*>()),
-	nestedPt(NULL)
-{
-}
-
-SimpleNestedRingTester::~SimpleNestedRingTester(){
-	delete rings;
-	delete cga;
-}
-
-
-void
-SimpleNestedRingTester::add(LinearRing *ring)
-{
-	rings->push_back(ring);
-}
-
-Coordinate *
-SimpleNestedRingTester::getNestedPoint()
-{
-	return nestedPt;
-}
+namespace operation { // geos.operation
+namespace valid { // geos.operation.valid
 
 bool
 SimpleNestedRingTester::isNonNested()
 {
-	for(int i=0;i< (int)rings->size(); i++) {
-		LinearRing* innerRing=(*rings)[i];
+	for(unsigned int i=0, ni=rings.size(); i<ni; i++) {
+		LinearRing* innerRing=rings[i];
 		CoordinateSequence *innerRingPts=innerRing->getCoordinates();
-		for(int j= 0;j<(int)rings->size(); j++) {
-			LinearRing* searchRing=(*rings)[j];
+		for(unsigned int j=0, nj=rings.size(); j<nj; j++) {
+			LinearRing* searchRing=rings[j];
 			CoordinateSequence *searchRingPts=searchRing->getCoordinates();
 			if (innerRing==searchRing)
 				continue;
@@ -62,7 +40,7 @@ SimpleNestedRingTester::isNonNested()
 			const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
 			Assert::isTrue(innerRingPt!=NULL, "Unable to find a ring point not a node of the search ring");
 
-			bool isInside=cga->isPointInRing(*innerRingPt,searchRingPts);
+			bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
 			if (isInside) {
 				/*
 				 * innerRingPt is const just because the input
@@ -78,10 +56,15 @@ SimpleNestedRingTester::isNonNested()
 	return true;
 }
 
+} // namespace geos.operation.valid
+} // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
  * Revision 1.11  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
