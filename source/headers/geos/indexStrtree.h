@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <vector>
+#include <cassert>
 #include <geos/platform.h>
 #include <geos/spatialIndex.h>
 #include <geos/geom.h>
@@ -111,7 +112,9 @@ private:
 public:
 	AbstractNode(int newLevel, int capacity=10);
 	virtual	~AbstractNode();
-	inline std::vector<Boundable*>* getChildBoundables();
+	inline std::vector<Boundable*>* getChildBoundables() {
+		return childBoundables;
+	}
 
 	/**
 	 * Returns a representation of space that encloses this Boundable,
@@ -133,14 +136,8 @@ protected:
 	const void* bounds;
 };
 
-// INLINE funx 
 
-inline std::vector<Boundable*>*
-AbstractNode::getChildBoundables() {
-	return childBoundables;
-}
-
-/*
+/**
  * \class AbstractSTRtree indexStrtree.h geos/indexStrtree.h
  *
  * \brief
@@ -156,6 +153,16 @@ AbstractNode::getChildBoundables() {
  * 
  */
 class AbstractSTRtree {
+
+private:
+	bool built;
+	std::vector<Boundable*> *itemBoundables;
+	virtual AbstractNode* createHigherLevels(std::vector<Boundable*> *boundablesOfALevel, int level);
+	virtual std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input)=0;
+
+	bool remove(const void* searchBounds, AbstractNode& node, void* item);
+	bool removeItem(AbstractNode& node, void* item);
+
 protected:
 	/*
 	 * \class IntersectsOp indexStrtree.h geos/indexStrtree.h
@@ -176,15 +183,32 @@ protected:
 			*/
 			virtual bool intersects(const void* aBounds, const void* bBounds)=0;
 	};
+
 	AbstractNode *root;
+
 	std::vector <AbstractNode *> *nodes;
 	virtual AbstractNode* createNode(int level)=0;
 	virtual std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables, int newLevel);
 	virtual AbstractNode* lastNode(std::vector<Boundable*> *nodes);
 	virtual AbstractNode* getRoot();
+
+	///  Also builds the tree, if necessary.
 	virtual void insert(const void* bounds,void* item);
-	virtual std::vector<void*>* query(const void* searchBounds);
+
+	///  Also builds the tree, if necessary.
+	std::vector<void*>* query(const void* searchBounds);
+
+	///  Also builds the tree, if necessary.
+	void query(const void* searchBounds, ItemVisitor& visitor);
+
+	void query(const void* searchBounds, AbstractNode& node, ItemVisitor& visitor);
+  
+	///  Also builds the tree, if necessary.
+	bool remove(const void* itemEnv, void* item);
+
+
 	virtual std::vector<Boundable*>* boundablesAtLevel(int level);
+
 	int nodeCapacity;
 
 	/**
@@ -195,18 +219,29 @@ protected:
 	 */
 	virtual IntersectsOp *getIntersectsOp()=0;
  
-private:
-	bool built;
-	std::vector<Boundable*> *itemBoundables;
-	virtual AbstractNode* createHigherLevels(std::vector<Boundable*> *boundablesOfALevel, int level);
-	virtual std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input)=0;
+
 public:
-	AbstractSTRtree(int newNodeCapacity);
+
+	/**
+	 * Constructs an AbstractSTRtree with the specified maximum number of child
+	 * nodes that a node may have
+	 */
+	AbstractSTRtree(int newNodeCapacity)
+		:
+		built(false),
+		itemBoundables(new vector<Boundable*>()),
+		nodes(new vector<AbstractNode *>()),
+		nodeCapacity(newNodeCapacity)
+	{
+		assert(newNodeCapacity>1);
+	}
+
 	static bool compareDoubles(double a, double b);
 	virtual ~AbstractSTRtree();
 	virtual void build();
 //	virtual void checkConsistency();
 	virtual int getNodeCapacity();
+
 	virtual void query(const void* searchBounds, AbstractNode* node, std::vector<void*>* matches);
 	virtual void boundablesAtLevel(int level,AbstractNode* top,std::vector<Boundable*> *boundables);
 };
@@ -265,7 +300,7 @@ protected:
 	void* computeBounds();
 };
 
-/*
+/**
  * \class STRtree indexStrtree.h geos/indexStrtree.h
  *
  * \brief
@@ -288,40 +323,55 @@ using AbstractSTRtree::insert;
 using AbstractSTRtree::query;
 
 private:
+	class STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
+		public:
+			bool intersects(const void* aBounds, const void* bBounds);
+	};
+
 	std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables, int newLevel);
+
 	std::vector<Boundable*>* createParentBoundablesFromVerticalSlices(std::vector<std::vector<Boundable*>*>* verticalSlices, int newLevel);
+
+	STRIntersectsOp intersectsOp;
 
 protected:
 	std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input);
 	std::vector<Boundable*>* createParentBoundablesFromVerticalSlice(std::vector<Boundable*> *childBoundables, int newLevel);
 	std::vector<std::vector<Boundable*>*>* verticalSlices(std::vector<Boundable*> *childBoundables, int sliceCount);
 	AbstractNode* createNode(int level);
-	class STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
-		public:
-			bool intersects(const void* aBounds, const void* bBounds);
-	};
-
-private:
-	STRIntersectsOp intersectsOp;
-
-protected:
+	
 	IntersectsOp* getIntersectsOp() {return (IntersectsOp *)&intersectsOp;};
 
 public:
+
 	~STRtree();
+
 	STRtree(int nodeCapacity=10);
+
 	void insert(const Envelope *itemEnv,void* item);
-	std::vector<void*>* query(const Envelope *searchEnv);
+
 	static double centreX(Envelope *e);
-	inline static double avg(double a, double b);
-	inline static double centreY(Envelope *e);
+
+	static double avg(double a, double b) {
+		return (a + b) / 2.0;
+	}
+
+	static double centreY(Envelope *e) {
+		return STRtree::avg(e->getMinY(), e->getMaxY());
+	}
+
+	std::vector<void*>* query(const Envelope *searchEnv) {
+		return AbstractSTRtree::query(searchEnv);
+	}
+
+	void query(const Envelope *searchEnv, ItemVisitor& visitor) {
+		return AbstractSTRtree::query(searchEnv, visitor);
+	}
+
+	bool remove(const Envelope *itemEnv, void* item) {
+		return AbstractSTRtree::remove(itemEnv, item);
+	}
 };
-inline double STRtree::avg(double a, double b) { 
-	return (a + b) / 2.0;
-}
-inline double STRtree::centreY(Envelope *e) {
-	return STRtree::avg(e->getMinY(), e->getMaxY());
-}
 
 
 } // namespace geos.index.strtree
@@ -332,6 +382,10 @@ inline double STRtree::centreY(Envelope *e) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.11  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

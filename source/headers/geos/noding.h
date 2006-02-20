@@ -874,7 +874,7 @@ public:
 	/// Return a reference to this instance's vector of MonotoneChains
 	vector<index::chain::MonotoneChain*>& getMonotoneChains() { return monoChains; }
 
-	SpatialIndex& getIndex() { return index; }
+	index::SpatialIndex& getIndex() { return index; }
 
 	SegmentString::NonConstVect* getNodedSubstrings() const {
 		return SegmentString::getNodedSubstrings(*nodedSegStrings);
@@ -1066,6 +1066,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.17  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

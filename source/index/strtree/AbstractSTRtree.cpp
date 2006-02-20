@@ -19,6 +19,7 @@
 #include <geos/profiler.h>
 #include <algorithm>
 #include <typeinfo>
+#include <cassert>
 
 //#define PROFILE 1
 
@@ -26,18 +27,6 @@ namespace geos {
 namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
-/**
- * Constructs an AbstractSTRtree with the specified maximum number of child
- * nodes that a node may have
- */
-AbstractSTRtree::AbstractSTRtree(int newNodeCapacity):
-	nodes(new vector<AbstractNode *>()),
-	nodeCapacity(newNodeCapacity),
-	built(false),
-	itemBoundables(new vector<Boundable*>())
-{
-	Assert::isTrue(newNodeCapacity>1, "Node capacity must be greater than 1");
-}
 
 AbstractSTRtree::~AbstractSTRtree() {
 	unsigned int ibsize = itemBoundables->size();
@@ -64,7 +53,7 @@ AbstractSTRtree::build()
 	static Profile *prof = Profiler::instance()->get("AbstractSTRtree::build");
 	prof->start();
 #endif
-	Assert::isTrue(!built);
+	assert(!built);
 	root=(itemBoundables->empty()?createNode(0):createHigherLevels(itemBoundables,-1));
 	built=true;
 #if PROFILE
@@ -160,9 +149,7 @@ AbstractSTRtree::insert(const void* bounds,void* item)
 	itemBoundables->push_back(new ItemBoundable(bounds,item));
 }
 
-/**
- *  Also builds the tree, if necessary.
- */
+/*protected*/
 vector<void*>*
 AbstractSTRtree::query(const void* searchBounds)
 {
@@ -175,7 +162,7 @@ AbstractSTRtree::query(const void* searchBounds)
 #endif
 	vector<void*> *matches=new vector<void*>();
 	if (itemBoundables->empty()) {
-		Assert::isTrue(root->getBounds()==NULL);
+		assert(root->getBounds()==NULL);
 		return matches;
 	}
 	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds))
@@ -188,6 +175,126 @@ AbstractSTRtree::query(const void* searchBounds)
 	return matches;
 }
 
+/*protected*/
+void
+AbstractSTRtree::query(const void* searchBounds, ItemVisitor& visitor)
+{
+	if (!built) build();
+
+	if (itemBoundables->empty()) assert(root->getBounds()==NULL);
+	
+	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds))
+	{
+		query(searchBounds, *root, visitor);
+	}
+}
+
+/*protected*/
+void
+AbstractSTRtree::query(const void* searchBounds, AbstractNode& node,
+		ItemVisitor& visitor)
+{
+	vector<Boundable*>& boundables = *(node.getChildBoundables());
+
+	for (vector<Boundable*>::iterator i=boundables.begin(), e=boundables.end();
+			i!=e; i++)
+	{
+		Boundable* childBoundable = *i;
+		if (!getIntersectsOp()->intersects(childBoundable->getBounds(), searchBounds)) {
+			continue;
+		}
+
+		if(AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
+		{
+			query(searchBounds, *an, visitor);
+		}
+		else if (ItemBoundable *ib=dynamic_cast<ItemBoundable *>(childBoundable))
+		{
+			visitor.visitItem(ib->getItem());
+		}
+		else
+		{
+			assert(0); // unsupported childBoundable type
+		}
+	}
+}
+
+/* protected */
+bool
+AbstractSTRtree::remove(const void* searchBounds, void* item)
+{
+	if (!built) build();
+	if (itemBoundables->empty()) {
+		assert(root->getBounds() == NULL);
+	}
+	if (getIntersectsOp()->intersects(root->getBounds(), searchBounds)) {
+		return remove(searchBounds, *root, item);
+	}
+	return false;
+}
+
+/* private */
+bool
+AbstractSTRtree::remove(const void* searchBounds, AbstractNode& node, void* item)
+{
+	// first try removing item from this node
+	if ( removeItem(node, item) ) return true;
+
+	vector<Boundable*>& boundables = *(node.getChildBoundables());
+
+	// next try removing item from lower nodes
+	for (vector<Boundable*>::iterator i=boundables.begin(), e=boundables.end();
+			i!=e; i++)
+	{
+		Boundable* childBoundable = *i;
+		if (!getIntersectsOp()->intersects(childBoundable->getBounds(), searchBounds))
+			continue;
+
+		if (AbstractNode *an=dynamic_cast<AbstractNode*>(childBoundable))
+		{
+			// if found, record child for pruning and exit
+			if ( remove(searchBounds, *an, item) )
+			{
+				if (an->getChildBoundables()->empty()) {
+					boundables.erase(i);
+				}
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/*private*/
+bool
+AbstractSTRtree::removeItem(AbstractNode& node, void* item)
+{
+	vector<Boundable*>& boundables = *(node.getChildBoundables());
+
+	vector<Boundable*>::iterator childToRemove = boundables.end();
+
+	for (vector<Boundable*>::iterator i=boundables.begin(), e=boundables.end();
+			i!=e; i++)
+	{
+		Boundable* childBoundable = *i;
+		if (ItemBoundable *ib=dynamic_cast<ItemBoundable*>(childBoundable))
+		{
+			if ( ib->getItem() == item) childToRemove = i;
+		}
+	}
+	if (childToRemove != boundables.end()) {
+		boundables.erase(childToRemove);
+		return true;
+	}
+	return false;
+}
+
+
+
+
+
+/*public*/
 void
 AbstractSTRtree::query(const void* searchBounds,
 	AbstractNode* node, vector<void*> *matches)
@@ -215,7 +322,7 @@ AbstractSTRtree::query(const void* searchBounds,
 		}
 		else
 		{
-			Assert::shouldNeverReachHere("AbstractSTRtree::query encountered an unsupported childBoundable type");
+			assert(0); // unsupported childBoundable type
 		}
 	}
 }
@@ -261,6 +368,10 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.25  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

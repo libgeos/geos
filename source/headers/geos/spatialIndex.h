@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,8 +12,97 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#ifndef GEOS_INDEX_H
+#define GEOS_INDEX_H
+
+#include <memory>
+#include <geos/platform.h>
+#include <geos/geom.h>
+
+
+namespace geos {
+
+/// Provides classes for various kinds of spatial indexes.
+namespace index {
+
+/**
+ * A visitor for items in an index.
+ *
+ * Last port: index/ItemVisitor.java rev. 1.2 (JTS-1.7)
+ */
+class ItemVisitor {
+public:
+	virtual void visitItem(void *)=0;
+};
+
+/** \brief
+ * The basic insertion and query operations supported by classes
+ * implementing spatial index algorithms.
+ * 
+ * A spatial index typically provides a primary filter for range rectangle queries. A
+ * secondary filter is required to test for exact intersection. Of course, this
+ * secondary filter may consist of other tests besides intersection, such as
+ * testing other kinds of spatial relationships.
+ *
+ * Last port: index/SpatialIndex.java rev. 1.11 (JTS-1.7)
+ *
+ */
+class SpatialIndex {
+public:
+	virtual ~SpatialIndex() {};
+
+	/*
+	 * Adds a spatial item with an extent specified by the given Envelope
+	 * to the index
+	 */
+	virtual void insert(const Envelope *itemEnv, void *item)=0;
+
+	/*
+	 * Queries the index for all items whose extents intersect the given search Envelope
+	 * Note that some kinds of indexes may also return objects which do not in fact
+	 * intersect the query envelope.
+	 *
+	 * @param searchEnv the envelope to query for
+	 * @return a list of the items found by the query
+	 */
+	virtual std::vector<void*>* query(const Envelope *searchEnv)=0;
+
+	/*
+	 * Queries the index for all items whose extents intersect the given search Envelope
+	 * and applies an ItemVisitor to them.
+	 * Note that some kinds of indexes may also return objects which do not in fact
+	 * intersect the query envelope.
+	 *
+	 * @param searchEnv the envelope to query for
+	 * @param visitor a visitor object to apply to the items found
+	 */
+	virtual void query(const Envelope *searchEnv, ItemVisitor& visitor)=0;
+
+	/**
+	 * Removes a single item from the tree.
+	 *
+	 * @param itemEnv the Envelope of the item to remove
+	 * @param item the item to remove
+	 * @return <code>true</code> if the item was found
+	 */
+	virtual bool remove(const Envelope* itemEnv, void* item)=0;
+
+
+};
+
+} // namespace geos.index
+} // namespace geos
+
+#endif
+
+/**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.5  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.
@@ -45,52 +135,4 @@
  *
  *
  **********************************************************************/
-
-
-#ifndef GEOS_INDEX_H
-#define GEOS_INDEX_H
-
-#include <memory>
-#include <geos/platform.h>
-#include <geos/geom.h>
-
-using namespace std;
-
-namespace geos {
-
-/*
- * The basic insertion and query operations supported by classes
- * implementing spatial index algorithms.
- * <p>
- * A spatial index typically provides a primary filter for range rectangle queries. A
- * secondary filter is required to test for exact intersection. Of course, this
- * secondary filter may consist of other tests besides intersection, such as
- * testing other kinds of spatial relationships.
- *
- */
-class SpatialIndex {
-public:
-	virtual ~SpatialIndex() {};
-
-	/*
-	 * Adds a spatial item with an extent specified by the given Envelope
-	 * to the index
-	 */
-	virtual void insert(const Envelope *itemEnv, void *item)=0;
-
-	/*
-	 * Queries the index for all items whose extents intersect the given search Envelope
-	 * Note that some kinds of indexes may also return objects which do not in fact
-	 * intersect the query envelope.
-	 *
-	 * @param searchEnv the envelope to query for
-	 * @return a list of the items found by the query
-	 */
-	virtual vector<void*>* query(const Envelope *searchEnv)=0;
-
-};
-
-} // namespace geos
-
-#endif
 

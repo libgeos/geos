@@ -25,10 +25,6 @@ namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
-/**
-* Returns the index of the subquad that wholly contains the given envelope.
-* If none does, returns -1.
-*/
 int
 QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate *centre)
 {
@@ -161,12 +157,81 @@ QuadTreeNodeBase::toString() const
 	return s.str();
 }
 
+/*public*/
+void
+QuadTreeNodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
+{
+	if (! isSearchMatch(searchEnv)) return;
+
+	// this node may have items as well as subnodes (since items may not
+	// be wholely contained in any single subnode
+	visitItems(searchEnv, visitor);
+
+	for (int i = 0; i < 4; i++) {
+		if (subnode[i] != NULL) {
+			subnode[i]->visit(searchEnv, visitor);
+		}
+	}
+}
+
+/*private*/
+void
+QuadTreeNodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
+{
+	// would be nice to filter items based on search envelope, but can't
+	// until they contain an envelope
+	for (vector<void*>::iterator i=items->begin(), e=items->end();
+			i!=e; i++)
+	{
+		visitor.visitItem(*i);
+	}
+}
+
+/*public*/
+bool
+QuadTreeNodeBase::remove(const Envelope* itemEnv, void* item)
+{
+	// use envelope to restrict nodes scanned
+	if (! isSearchMatch(itemEnv)) return false;
+
+	bool found = false;
+	for (int i = 0; i < 4; i++) {
+		if (subnode[i] != NULL) {
+			found = subnode[i]->remove(itemEnv, item);
+			if (found) {
+				// trim subtree if empty
+				if (subnode[i]->isPrunable())
+				subnode[i] = NULL;
+				break;
+			}
+		}
+	}
+	// if item was found lower down, don't need to search for it here
+	if (found) return found;
+
+	// otherwise, try and remove the item from the list of items
+	// in this node
+	vector<void*>::iterator foundIter = 
+		find(items->begin(), items->end(), item);
+	if ( foundIter != items->end() ) {
+		items->erase(foundIter);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
 } // namespace geos.index.quadtree
 } // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.12  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

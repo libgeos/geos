@@ -184,12 +184,6 @@ STRtree::insert(const Envelope *itemEnv, void* item)
 	AbstractSTRtree::insert(itemEnv, item);
 }
 
-vector<void*>*
-STRtree::query(const Envelope *searchEnv)
-{
-	return AbstractSTRtree::query(searchEnv);
-}
-
 vector<Boundable*> *
 STRtree::sortBoundables(const vector<Boundable*> *input)
 {
@@ -204,6 +198,10 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.23  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

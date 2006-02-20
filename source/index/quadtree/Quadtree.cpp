@@ -25,12 +25,9 @@ namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
-/*
- * Ensure that the envelope for the inserted item has non-zero extents.
- * Use the current minExtent to pad the envelope, if necessary.
- * Can return a new Envelope or the given one.
- */
-Envelope* Quadtree::ensureExtent(const Envelope *itemEnv,double minExtent) {
+Envelope*
+Quadtree::ensureExtent(const Envelope *itemEnv,double minExtent)
+{
 	//The names "ensureExtent" and "minExtent" are misleading -- sounds like
 	//this method ensures that the extents are greater than minExtent.
 	//Perhaps we should rename them to "ensurePositiveExtent" and "defaultExtent".
@@ -54,24 +51,16 @@ Envelope* Quadtree::ensureExtent(const Envelope *itemEnv,double minExtent) {
 	return newEnv;
 }
 
-/**
-* Constructs a Quadtree with zero items.
-*/
-Quadtree::Quadtree(){
-	minExtent=1.0;
-	root=new QuadTreeRoot();
-}
-
-Quadtree::~Quadtree(){
+Quadtree::~Quadtree()
+{
 	for (unsigned int i=0; i<newEnvelopes.size(); i++)
 		delete newEnvelopes[i];
 	delete root;
 }
 
-/**
-* Returns the number of levels in the tree.
-*/
-int Quadtree::depth() {
+int
+Quadtree::depth()
+{
 	//I don't think it's possible for root to be null. Perhaps we should
 	//remove the check. [Jon Aquino]
     //Or make an assertion [Jon Aquino 10/29/2003] 
@@ -79,10 +68,9 @@ int Quadtree::depth() {
 	return 0;
 }
 
-/**
-* Returns the number of items in the tree.
-*/
-int Quadtree::size() {
+int
+Quadtree::size()
+{
 	if (root!=NULL) return root->size();
 	return 0;
 }
@@ -118,16 +106,27 @@ Quadtree::query(const Envelope *searchEnv)
 	return foundItems;
 }
 
-/**
- * Return a list of all items in the Quadtree
- */
-vector<void*>* Quadtree::queryAll() {
+
+/*public*/
+vector<void*>*
+Quadtree::queryAll()
+{
 	vector<void*> *foundItems=new vector<void*>();
 	root->addAllItems(foundItems);
 	return foundItems;
 }
 
-void Quadtree::collectStats(const Envelope *itemEnv){
+/*public*/
+bool
+Quadtree::remove(const Envelope* itemEnv, void* item)
+{
+	Envelope* posEnv = ensureExtent(itemEnv, minExtent);
+	return root->remove(posEnv, item);
+}
+
+void
+Quadtree::collectStats(const Envelope *itemEnv)
+{
 	double delX=itemEnv->getWidth();
 	if (delX<minExtent && delX>0.0)
 		minExtent=delX;
@@ -149,6 +148,10 @@ Quadtree::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.16  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

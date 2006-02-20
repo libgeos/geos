@@ -564,7 +564,7 @@ private:
 	 * of the edge coordinates
 	 *
 	 */
-	SpatialIndex* index;
+	geos::index::SpatialIndex* index;
 };
 
 class NodeMap{
@@ -951,6 +951,10 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.32  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

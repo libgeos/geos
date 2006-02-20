@@ -36,7 +36,7 @@ namespace index { // geos.index
 /// Contains classes that implement a Quadtree spatial index
 namespace quadtree { // geos.index.quadtree
 
-/*
+/**
  * \class IntervalSize indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -85,7 +85,7 @@ private:
 	int64 xBits;
 };
 
-/*
+/**
  * \class QuadTreeKey indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -115,7 +115,7 @@ private:
 
 class QuadTreeNode;
 
-/*
+/**
  * \class QuadTreeNodeBase indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -123,6 +123,10 @@ class QuadTreeNode;
  *
  */
 class QuadTreeNodeBase {
+
+private:
+	void visitItems(const Envelope* searchEnv, ItemVisitor& visitor);
+	
 public:
 	static int getSubnodeIndex(const Envelope *env, const Coordinate *centre);
 	QuadTreeNodeBase();
@@ -135,6 +139,30 @@ public:
 	virtual int size();
 	virtual int nodeCount();
 	virtual string toString() const;
+
+	virtual void visit(const Envelope* searchEnv, ItemVisitor& visitor);
+
+	/**
+	 * Removes a single item from this subtree.
+	 *
+	 * @param searchEnv the envelope containing the item
+	 * @param item the item to remove
+	 * @return <code>true</code> if the item was found and removed
+	 */
+	bool remove(const Envelope* itemEnv, void* item);
+ 
+	bool hasItems() const { return ! items->empty(); }
+
+	bool hasChildren() const {
+		for (int i = 0; i < 4; i++) 
+			if (subnode[i]) return true;
+		return false;
+	}
+
+	bool isPrunable() const {
+		return ! (hasChildren() || hasItems());
+	}
+
 protected:
 	std::vector<void*> *items;
 
@@ -182,7 +210,7 @@ protected:
 	bool isSearchMatch(const Envelope *searchEnv);
 };
 
-/*
+/**
  * \class QuadTreeRoot indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -202,7 +230,7 @@ protected:
 	bool isSearchMatch(const Envelope *searchEnv);
 };
 
-/*
+/**
  * \class Quadtree indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -227,45 +255,11 @@ protected:
  * following the usage of Samet and others.
  */
 class Quadtree: public SpatialIndex {
-public:
-	/**
-	 * \brief
-	 * Ensure that the envelope for the inserted item has non-zero extents.
-	 * Use the current minExtent to pad the envelope, if necessary.
-	 * Can return a new Envelope or the given one (casted to non-const).
-	 */
-	static Envelope* ensureExtent(const Envelope *itemEnv, double minExtent);
-	/**
-	 * \brief
-	 * Constructs a Quadtree with zero items.
-	 */
-	Quadtree();
-
-	virtual ~Quadtree();
-
-	/**
-	 * \brief
-	 * Returns the number of levels in the tree.
-	 */
-	int depth();
-
-	/**
-	 * \brief
-	 * Returns the number of items in the tree.
-	 */
-	int size();
-	
-	void insert(const Envelope *itemEnv, void *item);
-
-	std::vector<void*>* query(const Envelope *searchEnv);
-	std::vector<void*>* queryAll();
-
-	string toString() const;
-
 private:
 	std::vector<Envelope *>newEnvelopes;
 	void collectStats(const Envelope *itemEnv);
 	QuadTreeRoot *root;
+
 	/**
 	 *  Statistics
 	 *
@@ -276,8 +270,51 @@ private:
 	 * Start with a non-zero extent, in case the first feature inserted has
 	 * a zero extent in both directions.  This value may be non-optimal, but
 	 * only one feature will be inserted with this value.
-	 **/
+	 */
 	double minExtent;
+
+public:
+	/**
+	 * \brief
+	 * Ensure that the envelope for the inserted item has non-zero extents.
+	 * Use the current minExtent to pad the envelope, if necessary.
+	 * Can return a new Envelope or the given one (casted to non-const).
+	 */
+	static Envelope* ensureExtent(const Envelope *itemEnv, double minExtent);
+
+	/**
+	 * \brief
+	 * Constructs a Quadtree with zero items.
+	 */
+	Quadtree()
+		:
+		root(new QuadTreeRoot()),
+		minExtent(1.0)
+	{}
+
+	virtual ~Quadtree();
+
+	/// Returns the number of levels in the tree.
+	int depth();
+
+	/// Returns the number of items in the tree.
+	int size();
+	
+	void insert(const Envelope *itemEnv, void *item);
+
+	std::vector<void*>* query(const Envelope *searchEnv);
+
+	void query(const Envelope *searchEnv, ItemVisitor& visitor) {
+		root->visit(searchEnv, visitor);
+	}
+
+	bool remove(const Envelope* itemEnv, void* item);
+
+	/// Return a list of all items in the Quadtree
+	std::vector<void*>* queryAll();
+
+	string toString() const;
+
 };
 
 } // namespace geos.index.quadtree
@@ -288,6 +325,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/20 21:04:37  strk
+ * - namespace geos::index
+ * - SpatialIndex interface synced
+ *
  * Revision 1.10  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup
