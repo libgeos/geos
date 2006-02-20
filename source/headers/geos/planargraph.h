@@ -26,6 +26,8 @@
 
 
 namespace geos {
+
+/// Contains classes to implement a planar graph data structure.
 namespace planargraph { // geos.planargraph
 
 class planarDirectedEdge;
@@ -831,10 +833,10 @@ public:
 
 /// A subgraph of a planarPlanarGraph.
 //
-/// A subgraph may contain any subset of {@link Edges}
+/// A subgraph may contain any subset of geomgraph::Edges
 /// from the parent graph.
-/// It will also automatically contain all {@link DirectedEdge}s
-/// and {@link Node}s associated with those edges.
+/// It will also automatically contain all geomgraph::DirectedEdge
+/// and geomgraph::Node associated with those edges.
 /// No new objects are created when edges are added -
 /// all associated components must already exist in the parent graph.
 ///
@@ -851,9 +853,9 @@ protected:
 
 public:
 	/**
-	 * Creates a new subgraph of the given {@link PlanarGraph}
+	 * Creates a new subgraph of the given PlanarGraph
 	 *
-	 * @param parentGraph the parent graph
+	 * @param parent the parent graph
 	 */
 	planarSubgraph(planarPlanarGraph &parent)
 		:
@@ -994,6 +996,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.12  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,34 +12,13 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.9  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2004/05/07 14:13:02  strk
- * Fixed segfault in ::insert
- *
- * Revision 1.6  2004/05/06 16:30:58  strk
- * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
- * deleted at destruction time. doc/example.cpp runs with no leaks.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexBintree.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace bintree { // geos.index.bintree
 
 /**
 * Ensure that the BinTreeInterval for the inserted item has non-zero extents.
@@ -141,5 +121,36 @@ void Bintree::collectStats(BinTreeInterval *interval) {
 	if (del<minExtent && del>0.0)
 		minExtent=del;
 }
-}
+
+} // namespace geos.index.bintree
+} // namespace geos.index
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.10  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
+ * Revision 1.9  2004/07/13 08:33:52  strk
+ * Added missing virtual destructor to virtual classes.
+ * Fixed implicit unsigned int -> int casts
+ *
+ * Revision 1.8  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.7  2004/05/07 14:13:02  strk
+ * Fixed segfault in ::insert
+ *
+ * Revision 1.6  2004/05/06 16:30:58  strk
+ * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
+ * deleted at destruction time. doc/example.cpp runs with no leaks.
+ *
+ * Revision 1.5  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,21 +12,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.2  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_INDEXSWEEPLINE_H
 #define GEOS_INDEXSWEEPLINE_H
@@ -34,9 +21,25 @@
 #include <vector>
 #include <geos/platform.h>
 
-using namespace std;
 
 namespace geos {
+
+/// Provides classes for various kinds of spatial indexes.
+namespace index { // geos.index
+
+/// \brief
+/// Contains classes which implement a sweepline algorithm
+/// for scanning geometric data structures.
+///
+namespace sweepline { // geos.index.sweepline
+
+// forward declarations
+class indexSweepLineEvent;
+class SweepLineOverlapAction;
+class SweepLineInterval;
+
+// temp typedefs aimed at a closer mapping to JTS
+typedef indexSweepLineEvent SweepLineEvent;
 
 class SweepLineInterval {
 public:
@@ -95,7 +98,7 @@ public:
 	void add(SweepLineInterval *sweepInt);
 	void computeOverlaps(SweepLineOverlapAction *action);
 private:
-    vector<indexSweepLineEvent*> *events;
+	std::vector<indexSweepLineEvent*> *events;
 	bool indexBuilt;
 	// statistics information
 	int nOverlaps;
@@ -109,7 +112,29 @@ private:
 };
 
 bool isleLessThen(indexSweepLineEvent *first,indexSweepLineEvent *second);
-}
+
+} // namespace geos.index.sweepline
+} // namespace geos.index
+} // namespace geos
 
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.3  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.5  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

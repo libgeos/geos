@@ -26,6 +26,7 @@
 using namespace geos::geomgraph;
 using namespace geos::operation;
 using namespace geos::operation::relate;
+using namespace geos::index;
 
 namespace geos {
 
@@ -45,7 +46,7 @@ void Unload::Release()
 	delete GeometryGraphOperation::li;
 	delete RelateComputer::li;
 	delete RelateComputer::ptLocator;
-	delete QuadTreeRoot::origin;
+	delete quadtree::QuadTreeRoot::origin;
 	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
 	delete Profiler::instance();
 }
@@ -54,6 +55,10 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.16  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

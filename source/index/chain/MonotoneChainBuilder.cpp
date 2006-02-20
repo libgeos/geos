@@ -22,6 +22,8 @@
 using namespace geos::geomgraph;
 
 namespace geos {
+namespace index { // geos.index
+namespace chain { // geos.index.chain
 
 /* static public */
 vector<indexMonotoneChain*>*
@@ -97,10 +99,16 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 	return last-1;
 }
 
+} // namespace geos.index.chain
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.17  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

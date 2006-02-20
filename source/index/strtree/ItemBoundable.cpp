@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,8 +12,41 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/indexStrtree.h>
+
+namespace geos {
+namespace index { // geos.index
+namespace strtree { // geos.index.strtree
+
+ItemBoundable::ItemBoundable(const void* newBounds,void* newItem){
+	bounds=newBounds;
+	item=newItem;
+}
+
+ItemBoundable::~ItemBoundable() {
+}
+
+const void*
+ItemBoundable::getBounds() {
+	return bounds;
+}
+
+void* ItemBoundable::getItem() {
+	return item;
+}
+
+} // namespace geos.index.strtree
+} // namespace geos.index
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.7  2004/07/27 16:35:46  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -34,28 +68,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/indexStrtree.h>
-#include <stdio.h>
-
-namespace geos {
-
-ItemBoundable::ItemBoundable(const void* newBounds,void* newItem){
-	bounds=newBounds;
-	item=newItem;
-}
-
-ItemBoundable::~ItemBoundable() {
-}
-
-const void*
-ItemBoundable::getBounds() {
-	return bounds;
-}
-
-void* ItemBoundable::getItem() {
-	return item;
-}
-}
 

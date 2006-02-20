@@ -28,6 +28,8 @@
 
 namespace geos {
 namespace operation { // geos.operation
+
+/// Provides classes for computing buffers of geometries
 namespace buffer { // geos.operation.buffer
 
 class BufferBuilder;
@@ -890,6 +892,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.15  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

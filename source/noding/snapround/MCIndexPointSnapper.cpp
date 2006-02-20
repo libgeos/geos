@@ -19,6 +19,8 @@
 
 #include "geos/nodingSnapround.h"
 
+using namespace geos::index::chain;
+
 namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
@@ -32,6 +34,10 @@ class HotPixelSnapAction: public MonotoneChainSelectAction {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.3  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

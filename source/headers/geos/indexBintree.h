@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,31 +12,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2004/10/26 17:46:18  strk
- * Removed slash-stars in comments to remove annoying compiler warnings.
- *
- * Revision 1.2  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.6  2004/05/06 16:30:58  strk
- * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
- * deleted at destruction time. doc/example.cpp runs with no leaks.
- *
- * Revision 1.5  2004/03/25 02:23:55  ybychkov
- * All "index/" packages upgraded to JTS 1.4
- *
- * Revision 1.4  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #ifndef GEOS_INDEXBINTREE_H
 #define GEOS_INDEXBINTREE_H
@@ -45,9 +22,12 @@
 #include <geos/platform.h>
 #include <geos/geom.h>
 
-using namespace std;
 
 namespace geos {
+namespace index { // geos.index
+
+/// Contains classes that implement a Binary Interval Tree index
+namespace bintree { // geos.index.bintree
 
 /*
  * \class BinTreeInterval indexBintree.h geos/indexBintree.h
@@ -110,15 +90,15 @@ public:
 	static int getSubnodeIndex(BinTreeInterval *interval, double centre);
 	NodeBase();
 	virtual ~NodeBase();
-	virtual vector<void*> *getItems();
+	virtual std::vector<void*> *getItems();
 	virtual void add(void* item);
-	virtual vector<void*>* addAllItems(vector<void*> *newItems);
-	virtual vector<void*>* addAllItemsFromOverlapping(BinTreeInterval *interval,vector<void*> *resultItems);
+	virtual std::vector<void*>* addAllItems(std::vector<void*> *newItems);
+	virtual std::vector<void*>* addAllItemsFromOverlapping(BinTreeInterval *interval,std::vector<void*> *resultItems);
 	virtual int depth();
 	virtual int size();
 	virtual int nodeSize();
 protected:	
-	vector<void*>* items;
+	std::vector<void*>* items;
 	/**
 	* subnodes are numbered as follows:
 	*
@@ -165,11 +145,16 @@ private:
 	static double origin;
 	void insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item);
 public:
-	Root();
-	virtual ~Root();
+
+	Root() {}
+
+	virtual ~Root() {}
+
 	void insert(BinTreeInterval *itemInterval,void* item);
+
 protected:
-	bool isSearchMatch(BinTreeInterval *interval);
+
+	bool isSearchMatch(BinTreeInterval *interval) { return true; }
 };
 
 /*
@@ -199,12 +184,12 @@ public:
 	int size();
 	int nodeSize();
 	void insert(BinTreeInterval *itemInterval,void* item);
-	vector<void*>* iterator();
-	vector<void*>* query(double x);
-	vector<void*>* query(BinTreeInterval *interval);
-	void query(BinTreeInterval *interval,vector<void*> *foundItems);
+	std::vector<void*>* iterator();
+	std::vector<void*>* query(double x);
+	std::vector<void*>* query(BinTreeInterval *interval);
+	void query(BinTreeInterval *interval,std::vector<void*> *foundItems);
 private:
-	vector<BinTreeInterval *>newIntervals;
+	std::vector<BinTreeInterval *>newIntervals;
 	Root *root;
 	/**
 	*  Statistics
@@ -219,6 +204,39 @@ private:
 	double minExtent;
 	void collectStats(BinTreeInterval *interval);
 };
-}
+
+} // namespace geos.index.bintree
+} // namespace geos.index
+} // namespace geos
+
 #endif
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
+ * Revision 1.3  2004/10/26 17:46:18  strk
+ * Removed slash-stars in comments to remove annoying compiler warnings.
+ *
+ * Revision 1.2  2004/07/19 13:19:31  strk
+ * Documentation fixes
+ *
+ * Revision 1.1  2004/07/02 13:20:42  strk
+ * Header files moved under geos/ dir.
+ *
+ * Revision 1.6  2004/05/06 16:30:58  strk
+ * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
+ * deleted at destruction time. doc/example.cpp runs with no leaks.
+ *
+ * Revision 1.5  2004/03/25 02:23:55  ybychkov
+ * All "index/" packages upgraded to JTS 1.4
+ *
+ * Revision 1.4  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

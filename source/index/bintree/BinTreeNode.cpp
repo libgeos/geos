@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,24 +12,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexBintree.h>
 #include <geos/util.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace bintree { // geos.index.bintree
 
 BinTreeNode* BinTreeNode::createNode(BinTreeInterval *itemInterval){
 	Key *key=new Key(itemInterval);
@@ -143,5 +134,25 @@ BinTreeNode* BinTreeNode::createSubnode(int index) {
 	BinTreeNode *node=new BinTreeNode(subInt,level-1);
 	return node;
 }
-}
+
+} // namespace geos.index.bintree
+} // namespace geos.index
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
+ * Revision 1.6  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.5  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

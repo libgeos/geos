@@ -25,8 +25,14 @@
 using namespace std;
 
 namespace geos {
+namespace index { // geos.index
+
+/// Contains classes that implement Monotone Chains
+namespace chain { // geos.index.chain
 
 class indexMonotoneChain;
+
+typedef indexMonotoneChain MonotoneChain;
 
 /**
  *  The action for the internal iterator for performing
@@ -249,12 +255,18 @@ public:
 	static int findChainEnd(const CoordinateSequence *pts, int start);
 };
 
+} // namespace geos.index.chain
+} // namespace geos.index
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.8  2006/02/14 13:28:25  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

@@ -17,6 +17,8 @@
 #include <stdio.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace chain { // geos.index.chain
 
 MonotoneChainSelectAction::MonotoneChainSelectAction() {
 	selectedSegment=new LineSegment();
@@ -36,10 +38,16 @@ void MonotoneChainSelectAction::select(indexMonotoneChain *mc,int start) {
 	select(selectedSegment);
 }
 
+} // namespace geos.index.chain
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.8  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

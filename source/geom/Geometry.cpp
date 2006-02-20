@@ -42,76 +42,6 @@ namespace geos {
 
 using namespace operation::predicate;
 
-/** \mainpage 
- *
- * \section intro_sec Introduction
- *
- * Geometry Engine Open Source is a C++ port of the Java Topology Suite
- * released under the LGPL license.
- * It has interfaces for C++, C and python (though swig).
- *
- * \section getstart_sec Getting Started
- *
- * The recommended low-level interface to the GEOS library
- * is the simplified \ref c_iface. This will ensure stability of the
- * API and the ABI of the library during performance improvements
- * that will likely change classes definitions.
- *
- * If you prefer troubles you can use the \ref cpp_iface.
- */
-
-/** \page c_iface C wrapper interface
- *
- * \section Overview
- *
- * This is the preferred access method for GEOS.
- *
- * It is designed to keep binary compatibility across releases.
- *
- * \section Usage
- *
- * In order to use the C-API of geos you must link your code against
- * libgeos_c.so and include the geos_c.h header file, which also contain
- * function-level documentation.
- *
- */
-
-/** \page cpp_iface C++ interface
- *
- * \section Overview
- *
- * Main class is geos::Geometry, from which all geometry types
- * derive.
- *
- * Construction and destruction of Geometries is done
- * using geos::GeometryFactory.
- *
- * You'll feed it geos::CoordinateSequence
- * for base geometries or vectors of geometries for collections.
- *
- * If you need to construct geometric shaped geometries, you
- * can use geos::GeometricShapeFactory.
- *
- * GEOS version info (as a string) can be obtained using
- * geos::geosversion(). The JTS version this release has been
- * ported from is available throu geos::jtsport().
- *
- * \section io_sect Input / Output
- *
- * For WKT input/output you can use geos::WKTReader and geos::WKTWriter
- *
- * For WKB input/output you can use geos::WKBReader and geos::WKBWriter
- *
- * \section exc_sect Exceptions
- *
- * Internal exceptions are thrown as instances geos::GEOSException or
- * derived classes. GEOSException derives from std::exception.
- *
- * Note that prior to version 3.0.0, GEOSException were trown by
- * pointer, and did not derive from std::exception.
- *
- */ 
-
 
 /*
  * Return current GEOS version 
@@ -813,6 +743,10 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.90  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.89  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

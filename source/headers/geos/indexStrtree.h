@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -22,9 +23,12 @@
 #include <geos/spatialIndex.h>
 #include <geos/geom.h>
 
-using namespace std;
 
 namespace geos {
+namespace index { // geos.index
+
+/// Contains 2-D and 1-D versions of the Sort-Tile-Recursive (STR) tree, a query-only R-tree.
+namespace strtree { // geos.index.strtree
 
 /*
  * \class Boundable indexStrtree.h geos/indexStrtree.h
@@ -102,12 +106,12 @@ private:
  */
 class AbstractNode: public Boundable {
 private:
-	vector<Boundable*> *childBoundables;
+	std::vector<Boundable*> *childBoundables;
 	int level;
 public:
 	AbstractNode(int newLevel, int capacity=10);
 	virtual	~AbstractNode();
-	inline vector<Boundable*>* getChildBoundables();
+	inline std::vector<Boundable*>* getChildBoundables();
 
 	/**
 	 * Returns a representation of space that encloses this Boundable,
@@ -131,7 +135,7 @@ protected:
 
 // INLINE funx 
 
-inline vector<Boundable*>*
+inline std::vector<Boundable*>*
 AbstractNode::getChildBoundables() {
 	return childBoundables;
 }
@@ -173,14 +177,14 @@ protected:
 			virtual bool intersects(const void* aBounds, const void* bBounds)=0;
 	};
 	AbstractNode *root;
-	vector <AbstractNode *> *nodes;
+	std::vector <AbstractNode *> *nodes;
 	virtual AbstractNode* createNode(int level)=0;
-	virtual vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
-	virtual AbstractNode* lastNode(vector<Boundable*> *nodes);
+	virtual std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables, int newLevel);
+	virtual AbstractNode* lastNode(std::vector<Boundable*> *nodes);
 	virtual AbstractNode* getRoot();
 	virtual void insert(const void* bounds,void* item);
-	virtual vector<void*>* query(const void* searchBounds);
-	virtual vector<Boundable*>* boundablesAtLevel(int level);
+	virtual std::vector<void*>* query(const void* searchBounds);
+	virtual std::vector<Boundable*>* boundablesAtLevel(int level);
 	int nodeCapacity;
 
 	/**
@@ -193,9 +197,9 @@ protected:
  
 private:
 	bool built;
-	vector<Boundable*> *itemBoundables;
-	virtual AbstractNode* createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level);
-	virtual vector<Boundable*> *sortBoundables(const vector<Boundable*> *input)=0;
+	std::vector<Boundable*> *itemBoundables;
+	virtual AbstractNode* createHigherLevels(std::vector<Boundable*> *boundablesOfALevel, int level);
+	virtual std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input)=0;
 public:
 	AbstractSTRtree(int newNodeCapacity);
 	static bool compareDoubles(double a, double b);
@@ -203,8 +207,8 @@ public:
 	virtual void build();
 //	virtual void checkConsistency();
 	virtual int getNodeCapacity();
-	virtual void query(const void* searchBounds, AbstractNode* node, vector<void*>* matches);
-	virtual void boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables);
+	virtual void query(const void* searchBounds, AbstractNode* node, std::vector<void*>* matches);
+	virtual void boundablesAtLevel(int level,AbstractNode* top,std::vector<Boundable*> *boundables);
 };
 
 class SIRAbstractNode: public AbstractNode{
@@ -236,18 +240,18 @@ public:
 	SIRtree(int nodeCapacity);
 	virtual ~SIRtree();
 	void insert(double x1,double x2,void* item);
-	vector<void*>* query(double x);
-	vector<void*>* query(double x1, double x2);
+	std::vector<void*>* query(double x);
+	std::vector<void*>* query(double x1, double x2);
 
 protected:
 	class SIRIntersectsOp:public AbstractSTRtree::IntersectsOp {
 		public:
 			bool intersects(const void* aBounds, const void* bBounds);
 	};
-	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables,int newLevel);
+	std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables,int newLevel);
 	AbstractNode* createNode(int level);
 	IntersectsOp* getIntersectsOp() {return intersectsOp;};
-	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
+	std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input);
 
 private:
 	IntersectsOp* intersectsOp;
@@ -284,13 +288,13 @@ using AbstractSTRtree::insert;
 using AbstractSTRtree::query;
 
 private:
-	vector<Boundable*>* createParentBoundables(vector<Boundable*> *childBoundables, int newLevel);
-	vector<Boundable*>* createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*>* verticalSlices, int newLevel);
+	std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables, int newLevel);
+	std::vector<Boundable*>* createParentBoundablesFromVerticalSlices(std::vector<std::vector<Boundable*>*>* verticalSlices, int newLevel);
 
 protected:
-	vector<Boundable*> *sortBoundables(const vector<Boundable*> *input);
-	vector<Boundable*>* createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel);
-	vector<vector<Boundable*>*>* verticalSlices(vector<Boundable*> *childBoundables, int sliceCount);
+	std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input);
+	std::vector<Boundable*>* createParentBoundablesFromVerticalSlice(std::vector<Boundable*> *childBoundables, int newLevel);
+	std::vector<std::vector<Boundable*>*>* verticalSlices(std::vector<Boundable*> *childBoundables, int sliceCount);
 	AbstractNode* createNode(int level);
 	class STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
 		public:
@@ -307,7 +311,7 @@ public:
 	~STRtree();
 	STRtree(int nodeCapacity=10);
 	void insert(const Envelope *itemEnv,void* item);
-	vector<void*>* query(const Envelope *searchEnv);
+	std::vector<void*>* query(const Envelope *searchEnv);
 	static double centreX(Envelope *e);
 	inline static double avg(double a, double b);
 	inline static double centreY(Envelope *e);
@@ -320,12 +324,18 @@ inline double STRtree::centreY(Envelope *e) {
 }
 
 
+} // namespace geos.index.strtree
+} // namespace geos.index
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.10  2005/11/10 15:20:32  strk
  * Made virtual overloads explicit.
  *

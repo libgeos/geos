@@ -30,6 +30,39 @@
 
 namespace geos {
 namespace operation { // geos.operation
+
+/** \brief
+ * Contains classes that perform a topological overlay to compute boolean spatial functions.
+ * 
+ * The Overlay Algorithm is used in spatial analysis methods for computing set-theoretic
+ * operations (boolean combinations) of input {@link Geometry}s. The algorithm for
+ * computing the overlay uses the intersection operations supported by topology graphs.
+ * To compute an overlay it is necessary to explicitly compute the resultant graph formed
+ * by the computed intersections.
+ * 
+ * The algorithm to compute a set-theoretic spatial analysis method has the following steps:
+ * <UL>
+ *   <LI>Build topology graphs of the two input geometries.  For each geometry all
+ *       self-intersection nodes are computed and added to the graph.
+ *   <LI>Compute nodes for all intersections between edges and nodes of the graphs.
+ *   <LI>Compute the labeling for the computed nodes by merging the labels from the input graphs.
+ *   <LI>Compute new edges between the compute intersection nodes.  Label the edges appropriately.
+ *   <LI>Build the resultant graph from the new nodes and edges.
+ *   <LI>Compute the labeling for isolated components of the graph.  Add the
+ *       isolated components to the resultant graph.
+ *   <LI>Compute the result of the boolean combination by selecting the node and edges
+ *       with the appropriate labels. Polygonize areas and sew linear geometries together.
+ * </UL>
+ * 
+ * <h2>Package Specification</h2>
+ * 
+ * <ul>
+ *   <li>Java Topology Suite Technical Specifications
+ *   <li><A HREF="http://www.opengis.org/techno/specs.htm">
+ *       OpenGIS Simple Features Specification for SQL</A>
+ * </ul>
+ * 
+ */
 namespace overlay { // geos.operation.overlay
 
 class ElevationMatrix;
@@ -654,6 +687,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.18  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

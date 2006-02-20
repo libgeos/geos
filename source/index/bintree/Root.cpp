@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,35 +12,24 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.7  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.6  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
-
 
 #include <geos/indexBintree.h>
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
+#include <cassert>
+
+using namespace geos::index::quadtree;  // for IntervalSize
 
 namespace geos {
+namespace index { // geos.index
+namespace bintree { // geos.index.bintree
 
 double Root::origin=0.0;
 
-Root::Root(){}
-Root::~Root(){}
-
-/**
-* Insert an item into the tree this is the root of.
-*/
-void Root::insert(BinTreeInterval *itemInterval,void* item){
+void
+Root::insert(BinTreeInterval *itemInterval,void* item)
+{
 	int index=getSubnodeIndex(itemInterval,origin);
 	// if index is -1, itemEnv must contain the origin.
 	if (index==-1) {
@@ -68,18 +58,16 @@ void Root::insert(BinTreeInterval *itemInterval,void* item){
 	//System.out.println("depth = " + root.depth() + " size = " + root.size());
 }
 
-/**
-* insert an item which is known to be contained in the tree rooted at
-* the given BinTreeNode.  Lower levels of the tree will be created
-* if necessary to hold the item.
-*/
-void Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item) {
-	Assert::isTrue(tree->getInterval()->contains(itemInterval));
+void
+Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item)
+{
+	assert(tree->getInterval()->contains(itemInterval));
+
 	/**
-	* Do NOT create a new node for zero-area intervals - this would lead
-	* to infinite recursion. Instead, use a heuristic of simply returning
-	* the smallest existing node containing the query
-	*/
+	 * Do NOT create a new node for zero-area intervals - this would lead
+	 * to infinite recursion. Instead, use a heuristic of simply returning
+	 * the smallest existing node containing the query
+	 */
 	bool isZeroArea=IntervalSize::isZeroWidth(itemInterval->getMin(),itemInterval->getMax());
 	NodeBase *node;
 	if (isZeroArea)
@@ -89,11 +77,24 @@ void Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void*
 	node->add(item);
 }
 
-/**
-* The root node matches all searches
-*/
-bool Root::isSearchMatch(BinTreeInterval *interval){
-	return true;
-}
-}
+} // namespace geos.index.bintree
+} // namespace geos.index
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.8  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
+ * Revision 1.7  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.6  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 

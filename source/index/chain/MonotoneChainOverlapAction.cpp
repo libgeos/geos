@@ -18,6 +18,8 @@
 #include <stdio.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace chain { // geos.index.chain
 
 MonotoneChainOverlapAction::MonotoneChainOverlapAction() {
 	overlapSeg1=new LineSegment();
@@ -44,10 +46,16 @@ void MonotoneChainOverlapAction::overlap(indexMonotoneChain *mc1,int start1,inde
 	overlap(overlapSeg1,overlapSeg2);
 }
 
+} // namespace geos.index.chain
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.9  2005/02/01 13:44:59  strk
  * More profiling labels.
  *

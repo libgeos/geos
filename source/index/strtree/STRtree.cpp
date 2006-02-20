@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -18,6 +19,8 @@
 #include <geos/profiler.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace strtree { // geos.index.strtree
 
 
 //static bool xComparator(Boundable *a, Boundable *b){
@@ -195,10 +198,16 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 	return output;
 }
 
+} // namespace geos.index.strtree
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.22  2005/02/22 18:21:46  strk
  * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
  * construction costs.

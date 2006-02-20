@@ -22,6 +22,8 @@
 #define DEBUG 0
 #endif
 
+using namespace geos::index::quadtree;
+
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
@@ -142,6 +144,10 @@ EdgeList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.10  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

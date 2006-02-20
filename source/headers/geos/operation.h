@@ -28,6 +28,8 @@
 //using namespace std;
 
 namespace geos {
+
+/// Provides classes for implementing operations on geometries
 namespace operation { // geos.operation
 
 /*
@@ -90,6 +92,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.6  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

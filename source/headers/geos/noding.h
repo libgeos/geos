@@ -28,6 +28,8 @@
 using namespace std;
 
 namespace geos {
+
+/// Classes to compute nodings for arrangements of line segments and line segment sequences.
 namespace noding { // geos.noding
 
 class SegmentString;
@@ -837,8 +839,8 @@ public:
  * Nodes a set of {@link SegmentStrings} using a index based
  * on {@link MonotoneChain}s and a {@link SpatialIndex}.
  * The {@link SpatialIndex} used should be something that supports
- * envelope (range) queries efficiently (such as a {@link Quadtree}
- * or {@link STRtree}.
+ * envelope (range) queries efficiently (such as a index::quadtree::Quadtree
+ * or index::strtree::STRtree.
  *
  * Last port: noding/MCIndexNoder.java rev. 1.4 (JTS-1.7)
  *
@@ -847,8 +849,8 @@ public:
 class MCIndexNoder : public SinglePassNoder {
 
 private:
-	vector<indexMonotoneChain*> monoChains;
-	STRtree index;
+	vector<index::chain::MonotoneChain*> monoChains;
+	index::strtree::STRtree index;
 	int idCounter;
 	SegmentString::NonConstVect* nodedSegStrings;
 	// statistics
@@ -870,7 +872,7 @@ public:
 	~MCIndexNoder();
 
 	/// Return a reference to this instance's vector of MonotoneChains
-	vector<indexMonotoneChain*>& getMonotoneChains() { return monoChains; }
+	vector<index::chain::MonotoneChain*>& getMonotoneChains() { return monoChains; }
 
 	SpatialIndex& getIndex() { return index; }
 
@@ -880,7 +882,7 @@ public:
 
 	void computeNodes(SegmentString::NonConstVect* inputSegmentStrings);
 
-	class SegmentOverlapAction : public MonotoneChainOverlapAction {
+	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
 	private:
 		nodingSegmentIntersector& si;
 	public:
@@ -889,8 +891,8 @@ public:
 			si(newSi)
 		{}
 
-		void overlap(indexMonotoneChain* mc1, int start1,
-				indexMonotoneChain* mc2, int start2);
+		void overlap(index::chain::MonotoneChain* mc1, int start1,
+				index::chain::MonotoneChain* mc2, int start2);
 
 		void overlap(LineSegment* s1, LineSegment* s2) { assert(0); }
 	};
@@ -1064,6 +1066,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.16  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -26,6 +26,7 @@
 
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
+using namespace geos::index::quadtree;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -122,6 +123,10 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.16  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -29,9 +30,11 @@
 #endif
 
 
-using namespace std;
-
 namespace geos {
+namespace index { // geos.index
+
+/// Contains classes that implement a Quadtree spatial index
+namespace quadtree { // geos.index.quadtree
 
 /*
  * \class IntervalSize indexQuadtree.h geos/indexQuadtree.h
@@ -124,16 +127,16 @@ public:
 	static int getSubnodeIndex(const Envelope *env, const Coordinate *centre);
 	QuadTreeNodeBase();
 	virtual ~QuadTreeNodeBase();
-	virtual vector<void*>* getItems();
+	virtual std::vector<void*>* getItems();
 	virtual void add(void* item);
-	virtual vector<void*>* addAllItems(vector<void*> *resultItems);
-	virtual void addAllItemsFromOverlapping(const Envelope *searchEnv,vector<void*> *resultItems);
+	virtual std::vector<void*>* addAllItems(std::vector<void*> *resultItems);
+	virtual void addAllItemsFromOverlapping(const Envelope *searchEnv,std::vector<void*> *resultItems);
 	virtual int depth();
 	virtual int size();
 	virtual int nodeCount();
 	virtual string toString() const;
 protected:
-	vector<void*> *items;
+	std::vector<void*> *items;
 
 	/**
 	 * subquads are numbered as follows:
@@ -254,13 +257,13 @@ public:
 	
 	void insert(const Envelope *itemEnv, void *item);
 
-	vector<void*>* query(const Envelope *searchEnv);
-	vector<void*>* queryAll();
+	std::vector<void*>* query(const Envelope *searchEnv);
+	std::vector<void*>* queryAll();
 
 	string toString() const;
 
 private:
-	vector<Envelope *>newEnvelopes;
+	std::vector<Envelope *>newEnvelopes;
 	void collectStats(const Envelope *itemEnv);
 	QuadTreeRoot *root;
 	/**
@@ -277,11 +280,18 @@ private:
 	double minExtent;
 };
 
+} // namespace geos.index.quadtree
+} // namespace geos.index
 } // namespace geos
+
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.9  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

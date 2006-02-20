@@ -69,9 +69,7 @@ private:
 	string::const_iterator iter;
 };
 
-/**
- * Constant values used by the WKB format
- */
+/// Constant values used by the WKB format
 namespace WKBConstants {
 	const int wkbXDR = 0;
 	const int wkbNDR = 1;
@@ -524,6 +522,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.21  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

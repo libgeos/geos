@@ -16,9 +16,11 @@
 
 #include <geos/opValid.h>
 #include <geos/geosAlgorithm.h>
+#include <geos/indexSweepline.h>
 #include <geos/util.h>
 
 using namespace geos::algorithm;
+using namespace geos::index::sweepline;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -93,6 +95,10 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.13  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -28,9 +28,11 @@
 
 namespace geos {
 namespace operation { // geos.operation
+
+/// Provides classes for testing the validity of geometries.
 namespace valid { // geos.operation.valid
 
-/*
+/**
  * Tests whether any of a set of {@link LinearRing}s are
  * nested inside another ring in the set, using a simple O(n^2)
  * comparison.
@@ -69,7 +71,7 @@ public:
 	bool isNonNested();
 };
 
-/*
+/**
  * Contains information about the nature and location of a {@link Geometry}
  * validation error
  *
@@ -103,7 +105,7 @@ private:
 	Coordinate pt;
 };
 
-/*
+/**
  * Implements the appropriate checks for repeated points
  * (consecutive identical coordinates) as defined in the
  * JTS spec.
@@ -122,7 +124,7 @@ private:
 	bool hasRepeatedPoint(const MultiLineString *gc);
 };
 
-/*
+/**
  * Checks that a {@link geomgraph::GeometryGraph} representing an area
  * (a {@link Polygon} or {@link MultiPolygon} )
  * is consistent with the SFS semantics for area geometries.
@@ -185,10 +187,10 @@ public:
 };
 
 
-/*
+/**
  * Tests whether any of a set of {@link LinearRing}s are
- * nested inside another ring in the set, using a {@link SweepLineIndex}
- * index to speed up the comparisons.
+ * nested inside another ring in the set, using an
+ * index::sweepline::SweepLineIndex to speed up the comparisons.
  *
  */
 class SweeplineNestedRingTester {
@@ -197,7 +199,7 @@ private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
 	std::vector<LinearRing*> rings;
 	Envelope *totalEnv;
-	SweepLineIndex *sweepLine;
+	index::sweepline::SweepLineIndex *sweepLine;
 	Coordinate *nestedPt;
 	void buildIndex();
 
@@ -208,7 +210,7 @@ public:
 		graph(newGraph),
 		rings(),
 		totalEnv(new Envelope()),
-		sweepLine(new SweepLineIndex()),
+		sweepLine(new index::sweepline::SweepLineIndex()),
 		nestedPt(NULL)
 	{}
 
@@ -232,11 +234,12 @@ public:
 
 	bool isNonNested();
 	bool isInside(LinearRing *innerRing,LinearRing *searchRing);
-	class OverlapAction: public SweepLineOverlapAction {
+	class OverlapAction: public index::sweepline::SweepLineOverlapAction {
 	public:
 		bool isNonNested;
 		OverlapAction(SweeplineNestedRingTester *p);
-		void overlap(SweepLineInterval *s0, SweepLineInterval *s1);
+		void overlap(index::sweepline::SweepLineInterval *s0,
+				index::sweepline::SweepLineInterval *s1);
 	private:
 		SweeplineNestedRingTester *parent;
 	};
@@ -265,7 +268,7 @@ private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
 	std::vector<LinearRing*> *rings;
 	Envelope *totalEnv;
-	Quadtree *qt;
+	index::quadtree::Quadtree *qt;
 	Coordinate *nestedPt;
 	void buildQuadtree();
 };
@@ -508,6 +511,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.13  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

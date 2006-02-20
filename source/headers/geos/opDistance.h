@@ -25,6 +25,8 @@
 
 namespace geos {
 namespace operation { // geos.operation
+
+/// Provides classes for computing the distance between geometries
 namespace distance { // geos.operation.distance
 
 
@@ -252,6 +254,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.6  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

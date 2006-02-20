@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -17,6 +18,8 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace strtree { // geos.index.strtree
 
 static bool compareSIRBoundables(Boundable *a, Boundable *b){
 	return AbstractSTRtree::compareDoubles(((Interval*)a->getBounds())->getCentre(),((Interval*)b->getBounds())->getCentre());
@@ -131,10 +134,16 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 	return output;
 }
 
-} //namespace geos
+} // namespace geos.index.strtree
+} // namespace geos.index
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.15  2005/02/15 17:15:13  strk
  * Inlined most Envelope methods, reserved() memory for some vectors when
  * the usage was known a priori.

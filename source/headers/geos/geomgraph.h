@@ -30,6 +30,31 @@
 #include <geos/noding.h>
 
 namespace geos {
+
+/** \brief
+ * Contains classes that implement topology graphs.
+ * 
+ * The Java Topology Suite (JTS) is a Java API that implements a core
+ * set of spatial data operations using an explicit precision model
+ * and robust geometric algorithms. JTS is int ended to be used in the
+ * development of applications that support the validation, cleaning,
+ * integration and querying of spatial datasets.
+ *
+ * JTS attempts to implement the OpenGIS Simple Features Specification (SFS)
+ * as accurately as possible.  In some cases the SFS is unclear or omits a
+ * specification; in this case JTS attempts to choose a reasonable and
+ * consistent alternative.  Differences from and elaborations of the SFS
+ * are documented in this specification.
+ * 
+ * <h2>Package Specification</h2>
+ * 
+ * <ul>
+ *   <li>Java Topology Suite Technical Specifications
+ *   <li><A HREF="http://www.opengis.org/techno/specs.htm">
+ *       OpenGIS Simple Features Specification for SQL</A>
+ * </ul>
+ * 
+ */
 namespace geomgraph { // geos.geomgraph
 
 // forward decls
@@ -926,6 +951,10 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.31  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

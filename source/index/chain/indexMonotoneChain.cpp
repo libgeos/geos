@@ -19,6 +19,8 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace chain { // geos.index.chain
 
 Envelope*
 indexMonotoneChain::getEnvelope()
@@ -130,10 +132,16 @@ indexMonotoneChain::computeOverlaps(int start0, int end0, indexMonotoneChain *mc
 	}
 }
 
+} // namespace geos.index.chain
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.17  2006/02/14 13:28:26  strk
  * New SnapRounding code ported from JTS-1.7 (not complete yet).
  * Buffer op optimized by using new snaprounding code.

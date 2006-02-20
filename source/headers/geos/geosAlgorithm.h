@@ -27,10 +27,52 @@
 #include <geos/indexChain.h>
 
 namespace geos {
+
+/** \brief
+ * Contains classes and interfaces implementing fundamental computational geometry algorithms.
+ * 
+ * <H3>Robustness</H3>
+ * 
+ * Geometrical algorithms involve a combination of combinatorial and numerical computation.  As with
+ * all numerical computation using finite-precision numbers, the algorithms chosen are susceptible to
+ * problems of robustness.  A robustness problem occurs when a numerical calculation produces an
+ * incorrect answer for some inputs due to round-off errors.  Robustness problems are especially
+ * serious in geometric computation, since they can result in errors during topology building.
+ * <P>
+ * There are many approaches to dealing with the problem of robustness in geometrical computation.
+ * Not surprisingly, most robust algorithms are substantially more complex and less performant than
+ * the non-robust versions.  Fortunately, JTS is sensitive to robustness problems in only a few key
+ * functions (such as line intersection and the point-in-polygon test).  There are efficient robust
+ * algorithms available for these functions, and these algorithms are implemented in JTS.
+ * 
+ * <H3>Computational Performance</H3>
+ * 
+ * Runtime performance is an important consideration for a production-quality implementation of
+ * geometric algorithms.  The most computationally intensive algorithm used in JTS is intersection
+ * detection.  JTS methods need to determine both all intersection between the line segments in a
+ * single Geometry (self-intersection) and all intersections between the line segments of two different
+ * Geometries.
+ * <P>
+ * The obvious naive algorithm for intersection detection (comparing every segment with every other)
+ * has unacceptably slow performance.  There is a large literature of faster algorithms for intersection
+ * detection.  Unfortunately, many of them involve substantial code complexity.  JTS tries to balance code
+ * simplicity with performance gains.  It uses some simple techniques to produce substantial performance
+ * gains for common types of input data.
+ * 
+ * 
+ * <h2>Package Specification</h2>
+ * 
+ * <ul>
+ *   <li>Java Topology Suite Technical Specifications
+ *   <li><A HREF="http://www.opengis.org/techno/specs.htm">
+ *       OpenGIS Simple Features Specification for SQL</A>
+ * </ul>
+ * 
+ */
 namespace algorithm { // geos.algorithm
 
 
-/*
+/**
  * \class NotRepresentableException geosAlgorithm.h geos/geosAlgorithm.h
  * \brief
  * Indicates that a HCoordinate has been computed which is
@@ -52,6 +94,12 @@ public:
 	virtual bool isInside(const Coordinate& pt)=0;
 };
 
+/**
+ * \brief
+ * Specifies and implements various fundamental Computational Geometric algorithms.
+ * The algorithms supplied in this class are robust for double-precision floating point.
+ *
+ */
 class CGAlgorithms {
 public:
 	enum {
@@ -181,10 +229,11 @@ private:
 	const CoordinateSequence* pts;
 };
 
-/*
+/** \brief
  * A LineIntersector is an algorithm that can both test whether
  * two line segments intersect and compute the intersection point
  * if they do.
+ *
  * The intersection point may be computed in a precise or non-precise manner.
  * Computing it precisely involves rounding it to an integer.  (This assumes
  * that the input coordinates have been made precise by scaling them to
@@ -416,7 +465,7 @@ public:
 	virtual ~MCPointInRing();
 	bool isInside(const Coordinate& pt);
 	void testLineSegment(Coordinate& p,LineSegment *seg);
-	class MCSelecter: public MonotoneChainSelectAction {
+	class MCSelecter: public index::chain::MonotoneChainSelectAction {
 	using MonotoneChainSelectAction::select;
 	private:
 		Coordinate p;
@@ -427,18 +476,20 @@ public:
 	};
 private:
 	LinearRing *ring;
-	BinTreeInterval *interval;
+	index::bintree::BinTreeInterval *interval;
 	CoordinateSequence *pts;
-	Bintree *tree;
+	index::bintree::Bintree *tree;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
-	void testMonotoneChain(Envelope *rayEnv,MCSelecter *mcSelecter,indexMonotoneChain *mc);
+	void testMonotoneChain(Envelope *rayEnv,
+			MCSelecter *mcSelecter,
+			index::chain::MonotoneChain *mc);
 };
 
 class SIRtreePointInRing: public PointInRing {
 private:
 	LinearRing *ring;
-	SIRtree *sirTree;
+	index::strtree::SIRtree *sirTree;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
 	void testLineSegment(const Coordinate& p,LineSegment *seg);
@@ -846,6 +897,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.22  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

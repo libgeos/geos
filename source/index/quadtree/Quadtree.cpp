@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -21,6 +22,8 @@
 #endif
 
 namespace geos {
+namespace index { // geos.index
+namespace quadtree { // geos.index.quadtree
 
 /*
  * Ensure that the envelope for the inserted item has non-zero extents.
@@ -140,10 +143,16 @@ Quadtree::toString() const
 	return ret;
 }
 
+} // namespace geos.index.quadtree
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.15  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

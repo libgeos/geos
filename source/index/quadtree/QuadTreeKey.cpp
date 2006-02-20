@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -20,6 +21,8 @@
 #endif
 
 namespace geos {
+namespace index { // geos.index
+namespace quadtree { // geos.index.quadtree
 
 int QuadTreeKey::computeQuadLevel(Envelope *env){
 	double dx=env->getWidth();
@@ -94,10 +97,16 @@ QuadTreeKey::computeKey(int level,Envelope *itemEnv)
 	env->init(pt->x,pt->x+quadSize,pt->y,pt->y+quadSize);
 }
 
+} // namespace geos.index.quadtree
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.7  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

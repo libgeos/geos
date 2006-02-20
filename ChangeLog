@@ -1,3 +1,322 @@
+2006-02-19 20:46  strk
+
+	* NEWS, configure.in, capi/geos_c.cpp, doc/example.cpp,
+	  source/algorithm/CGAlgorithms.cpp,
+	  source/algorithm/CentroidArea.cpp,
+	  source/algorithm/CentroidLine.cpp,
+	  source/algorithm/CentroidPoint.cpp,
+	  source/algorithm/ConvexHull.cpp,
+	  source/algorithm/HCoordinate.cpp,
+	  source/algorithm/InteriorPointArea.cpp,
+	  source/algorithm/InteriorPointLine.cpp,
+	  source/algorithm/InteriorPointPoint.cpp,
+	  source/algorithm/LineIntersector.cpp,
+	  source/algorithm/MCPointInRing.cpp,
+	  source/algorithm/MinimumDiameter.cpp,
+	  source/algorithm/NonRobustLineIntersector.cpp,
+	  source/algorithm/NotRepresentableException.cpp,
+	  source/algorithm/PointLocator.cpp,
+	  source/algorithm/RobustDeterminant.cpp,
+	  source/algorithm/RobustLineIntersector.cpp,
+	  source/algorithm/SIRtreePointInRing.cpp,
+	  source/algorithm/SimplePointInAreaLocator.cpp,
+	  source/algorithm/SimplePointInRing.cpp,
+	  source/geom/Coordinate.cpp, source/geom/Geometry.cpp,
+	  source/geom/LineSegment.cpp, source/geom/LineString.cpp,
+	  source/geom/MultiLineString.cpp, source/geom/MultiPoint.cpp,
+	  source/geom/Polygon.cpp, source/geomgraph/Depth.cpp,
+	  source/geomgraph/DirectedEdge.cpp,
+	  source/geomgraph/DirectedEdgeStar.cpp, source/geomgraph/Edge.cpp,
+	  source/geomgraph/EdgeEnd.cpp, source/geomgraph/EdgeEndStar.cpp,
+	  source/geomgraph/EdgeIntersection.cpp,
+	  source/geomgraph/EdgeIntersectionList.cpp,
+	  source/geomgraph/EdgeList.cpp,
+	  source/geomgraph/EdgeNodingValidator.cpp,
+	  source/geomgraph/EdgeRing.cpp,
+	  source/geomgraph/GeometryGraph.cpp,
+	  source/geomgraph/GraphComponent.cpp, source/geomgraph/Label.cpp,
+	  source/geomgraph/Node.cpp, source/geomgraph/NodeFactory.cpp,
+	  source/geomgraph/NodeMap.cpp, source/geomgraph/PlanarGraph.cpp,
+	  source/geomgraph/Position.cpp, source/geomgraph/Quadrant.cpp,
+	  source/geomgraph/TopologyLocation.cpp,
+	  source/geomgraph/index/Makefile.am,
+	  source/geomgraph/index/MonotoneChain.cpp,
+	  source/geomgraph/index/MonotoneChainEdge.cpp,
+	  source/geomgraph/index/MonotoneChainIndexer.cpp,
+	  source/geomgraph/index/SegmentIntersector.cpp,
+	  source/geomgraph/index/SimpleEdgeSetIntersector.cpp,
+	  source/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  source/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  source/geomgraph/index/SweepLineEvent.cpp,
+	  source/geomgraph/index/SweepLineSegment.cpp,
+	  source/headers/geos/geom.h, source/headers/geos/geomgraph.h,
+	  source/headers/geos/geomgraphindex.h,
+	  source/headers/geos/geosAlgorithm.h,
+	  source/headers/geos/noding.h,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/opBuffer.h, source/headers/geos/opDistance.h,
+	  source/headers/geos/opLinemerge.h,
+	  source/headers/geos/opOverlay.h,
+	  source/headers/geos/opPolygonize.h,
+	  source/headers/geos/opPredicate.h,
+	  source/headers/geos/opRelate.h, source/headers/geos/opValid.h,
+	  source/headers/geos/operation.h,
+	  source/headers/geos/planargraph.h, source/index/Makefile.am,
+	  source/index/bintree/.cvsignore,
+	  source/index/bintree/Makefile.am, source/index/chain/.cvsignore,
+	  source/index/chain/Makefile.am,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  source/index/quadtree/.cvsignore,
+	  source/index/quadtree/Makefile.am,
+	  source/index/strtree/.cvsignore,
+	  source/index/strtree/Makefile.am,
+	  source/index/sweepline/.cvsignore,
+	  source/index/sweepline/Makefile.am, source/io/Unload.cpp,
+	  source/noding/IntersectionAdder.cpp,
+	  source/noding/IntersectionFinderAdder.cpp,
+	  source/noding/IteratedNoder.cpp, source/noding/MCIndexNoder.cpp,
+	  source/noding/NodingValidator.cpp, source/noding/Octant.cpp,
+	  source/noding/ScaledNoder.cpp, source/noding/SegmentNode.cpp,
+	  source/noding/SegmentNodeList.cpp,
+	  source/noding/SegmentString.cpp, source/noding/SimpleNoder.cpp,
+	  source/noding/snapround/HotPixel.cpp,
+	  source/noding/snapround/MCIndexPointSnapper.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/noding/snapround/SimpleSnapRounder.cpp,
+	  source/operation/GeometryGraphOperation.cpp,
+	  source/operation/IsSimpleOp.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/BufferOp.cpp,
+	  source/operation/buffer/BufferSubgraph.cpp,
+	  source/operation/buffer/DepthSegment.cpp,
+	  source/operation/buffer/OffsetCurveBuilder.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  source/operation/buffer/RightmostEdgeFinder.cpp,
+	  source/operation/buffer/SubgraphDepthLocater.cpp,
+	  source/operation/distance/ConnectedElementLocationFilter.cpp,
+	  source/operation/distance/ConnectedElementPointFilter.cpp,
+	  source/operation/distance/DistanceOp.cpp,
+	  source/operation/distance/GeometryLocation.cpp,
+	  source/operation/linemerge/EdgeString.cpp,
+	  source/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  source/operation/linemerge/LineMergeEdge.cpp,
+	  source/operation/linemerge/LineMergeGraph.cpp,
+	  source/operation/linemerge/LineMerger.cpp,
+	  source/operation/linemerge/LineSequencer.cpp,
+	  source/operation/overlay/EdgeSetNoder.cpp,
+	  source/operation/overlay/ElevationMatrix.cpp,
+	  source/operation/overlay/ElevationMatrixCell.cpp,
+	  source/operation/overlay/ElevationMatrixFilter.cpp,
+	  source/operation/overlay/LineBuilder.cpp,
+	  source/operation/overlay/MaximalEdgeRing.cpp,
+	  source/operation/overlay/MinimalEdgeRing.cpp,
+	  source/operation/overlay/OverlayNodeFactory.cpp,
+	  source/operation/overlay/OverlayOp.cpp,
+	  source/operation/overlay/PointBuilder.cpp,
+	  source/operation/overlay/PolygonBuilder.cpp,
+	  source/operation/polygonize/PolygonizeDirectedEdge.cpp,
+	  source/operation/polygonize/PolygonizeEdge.cpp,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/polygonize/Polygonizer.cpp,
+	  source/operation/polygonize/polygonizeEdgeRing.cpp,
+	  source/operation/predicate/RectangleIntersects.cpp,
+	  source/operation/relate/EdgeEndBuilder.cpp,
+	  source/operation/relate/EdgeEndBundle.cpp,
+	  source/operation/relate/EdgeEndBundleStar.cpp,
+	  source/operation/relate/RelateComputer.cpp,
+	  source/operation/relate/RelateNode.cpp,
+	  source/operation/relate/RelateNodeFactory.cpp,
+	  source/operation/relate/RelateNodeGraph.cpp,
+	  source/operation/relate/RelateOp.cpp,
+	  source/operation/valid/ConnectedInteriorTester.cpp,
+	  source/operation/valid/ConsistentAreaTester.cpp,
+	  source/operation/valid/IsValidOp.cpp,
+	  source/operation/valid/QuadtreeNestedRingTester.cpp,
+	  source/operation/valid/RepeatedPointTester.cpp,
+	  source/operation/valid/SimpleNestedRingTester.cpp,
+	  source/operation/valid/SweeplineNestedRingTester.cpp,
+	  source/operation/valid/TopologyValidationError.cpp,
+	  source/planargraph/planarDirectedEdge.cpp,
+	  source/planargraph/planarDirectedEdgeStar.cpp,
+	  source/planargraph/planarEdge.cpp,
+	  source/planargraph/planarGraphComponent.cpp,
+	  source/planargraph/planarNode.cpp,
+	  source/planargraph/planarNodeMap.cpp,
+	  source/planargraph/planarPlanarGraph.cpp,
+	  source/planargraph/planarSubgraph.cpp,
+	  source/planargraph/algorithm/ConnectedSubgraphFinder.cpp,
+	  tests/xmltester/XMLTester.cpp: Packages <-> namespaces mapping
+	  for most GEOS internal code (uncomplete, but working). Dir-level
+	  libs for index/ subdirs.
+
+2006-02-18 22:08  strk
+
+	* NEWS, source/geom/Geometry.cpp,
+	  source/geomgraph/EdgeNodingValidator.cpp,
+	  source/headers/geos/geom.h, source/headers/geos/geomgraph.h,
+	  source/headers/geos/noding.h,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/opBuffer.h, source/noding/MCIndexNoder.cpp,
+	  source/noding/Makefile.am, source/noding/NodingValidator.cpp,
+	  source/noding/ScaledNoder.cpp, source/noding/SegmentNodeList.cpp,
+	  source/noding/SegmentString.cpp, source/noding/SimpleNoder.cpp,
+	  source/noding/snapround/HotPixel.cpp,
+	  source/noding/snapround/MCIndexPointSnapper.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/noding/snapround/SimpleSnapRounder.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/OffsetCurveBuilder.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp: - new
+	  CoordinateSequence::applyCoordinateFilter method (slow but
+	  useful) - SegmentString::getCoordinates() doesn't return a clone
+	  anymore.  - SegmentString::getCoordinatesRO() obsoleted.  -
+	  SegmentString constructor does not promises constness of passed
+	  CoordinateSequence anymore.  - NEW ScaledNoder class - Stubs for
+	  MCIndexPointSnapper and  MCIndexSnapRounder - Simplified internal
+	  interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+
+2006-02-16 09:41  strk
+
+	* source/noding/NodingValidator.cpp: Fixed include: "util.h" =>
+	  "geos/util.h"
+
+2006-02-16 09:41  strk
+
+	* source/headers/geos/nodingSnapround.h: added <cmath> include for
+	  round()
+
+2006-02-16 09:19  strk
+
+	* source/noding/IntersectionAdder.cpp: Missed from last commit
+
+2006-02-15 23:48  sgillies
+
+	* capi/geos_c.h.in: added GEOSGeomType
+
+2006-02-15 18:19  strk
+
+	* NEWS, source/geomgraph/EdgeNodingValidator.cpp,
+	  source/headers/geos/geom.h, source/headers/geos/geomgraph.h,
+	  source/headers/geos/noding.h, source/noding/NodingValidator.cpp,
+	  source/noding/snapround/SimpleSnapRounder.cpp: NodingValidator
+	  synced with JTS-1.7, added CoordinateSequence::operator[] and
+	  size() to easy port maintainance.
+
+2006-02-15 15:59  strk
+
+	* source/: headers/geos/noding.h, noding/SegmentNode.cpp,
+	  noding/SegmentNodeList.cpp, noding/SegmentString.cpp: JTS-1.7
+	  sync for: noding/SegmentNode.cpp noding/SegmentNodeList.cpp
+	  noding/SegmentString.cpp
+
+2006-02-14 14:28  strk
+
+	* NEWS, configure.in, source/algorithm/LineIntersector.cpp,
+	  source/headers/geos/geosAlgorithm.h,
+	  source/headers/geos/indexChain.h, source/headers/geos/noding.h,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/opBuffer.h,
+	  source/headers/geos/spatialIndex.h,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  source/index/chain/indexMonotoneChain.cpp,
+	  source/noding/IntersectionFinderAdder.cpp,
+	  source/noding/IteratedNoder.cpp, source/noding/MCIndexNoder.cpp,
+	  source/noding/MCQuadtreeNoder.cpp, source/noding/Makefile.am,
+	  source/noding/Noder.cpp, source/noding/NodingValidator.cpp,
+	  source/noding/Octant.cpp, source/noding/SegmentNode.cpp,
+	  source/noding/SegmentNodeList.cpp,
+	  source/noding/SegmentString.cpp, source/noding/SimpleNoder.cpp,
+	  source/noding/nodingSegmentIntersector.cpp,
+	  source/noding/snapround/.cvsignore,
+	  source/noding/snapround/HotPixel.cpp,
+	  source/noding/snapround/MCIndexPointSnapper.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/noding/snapround/Makefile.am,
+	  source/noding/snapround/SegmentSnapper.cpp,
+	  source/noding/snapround/SimpleSegmentStringsSnapper.cpp,
+	  source/noding/snapround/SimpleSnapRounder.cpp,
+	  source/noding/snapround/SnapRounder.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  tests/xmltester/XMLTester.cpp: New SnapRounding code ported from
+	  JTS-1.7 (not complete yet).  Buffer op optimized by using new
+	  snaprounding code.  Leaks fixed in XMLTester.
+
+2006-02-09 16:52  strk
+
+	* configure.in, capi/geos_c.cpp, capi/geos_c.cpp.bak,
+	  doc/example.cpp, source/algorithm/CGAlgorithms.cpp,
+	  source/algorithm/HCoordinate.cpp,
+	  source/algorithm/LineIntersector.cpp,
+	  source/algorithm/NotRepresentableException.cpp,
+	  source/algorithm/RobustLineIntersector.cpp,
+	  source/examples/CoordinateSequencesExample.cpp,
+	  source/examples/CustomCoordinateSequenceExample.cpp,
+	  source/examples/CustomPointCoordinateSequence.cpp,
+	  source/geom/Dimension.cpp, source/geom/Geometry.cpp,
+	  source/geom/GeometryCollection.cpp,
+	  source/geom/GeometryCollectionIterator.cpp,
+	  source/geom/GeometryComponentFilter.cpp,
+	  source/geom/GeometryFactory.cpp,
+	  source/geom/IntersectionMatrix.cpp, source/geom/LineString.cpp,
+	  source/geom/LinearRing.cpp, source/geom/Location.cpp,
+	  source/geom/Point.cpp, source/geom/Polygon.cpp,
+	  source/geom/PrecisionModel.cpp,
+	  source/geom/TopologyException.cpp,
+	  source/geomgraph/DirectedEdge.cpp,
+	  source/geomgraph/DirectedEdgeStar.cpp,
+	  source/geomgraph/EdgeEndStar.cpp, source/geomgraph/EdgeRing.cpp,
+	  source/geomgraph/GeometryGraph.cpp,
+	  source/geomgraph/Quadrant.cpp,
+	  source/headers/geos/geosAlgorithm.h, source/headers/geos/io.h,
+	  source/headers/geos/opBuffer.h, source/headers/geos/util.h,
+	  source/index/quadtree/DoubleBits.cpp,
+	  source/io/ParseException.cpp, source/io/WKBReader.cpp,
+	  source/io/WKBWriter.cpp, source/io/WKTReader.cpp,
+	  source/io/WKTWriter.cpp, source/noding/IteratedNoder.cpp,
+	  source/noding/NodingValidator.cpp,
+	  source/noding/SegmentNodeList.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/BufferOp.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  source/operation/overlay/ElevationMatrix.cpp,
+	  source/operation/overlay/ElevationMatrixFilter.cpp,
+	  source/operation/valid/IsValidOp.cpp,
+	  source/operation/valid/RepeatedPointTester.cpp,
+	  source/precision/CommonBitsRemover.cpp,
+	  source/precision/EnhancedPrecisionOp.cpp, source/util/Assert.cpp,
+	  source/util/AssertionFailedException.cpp,
+	  source/util/GEOSException.cpp,
+	  source/util/IllegalArgumentException.cpp,
+	  source/util/UnsupportedOperationException.cpp,
+	  tests/xmltester/CTS.cpp, tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/XMLTester.cpp: GEOSException derived from
+	  std::exception; always thrown and cought by const ref.
+
+2006-02-09 16:41  sgillies
+
+	* configure.in: incrementing C API patch level
+
+2006-02-09 15:49  sgillies
+
+	* capi/: geos_c.cpp, geos_c.h.in, geostest.c: added GEOSArea() to
+	  the C API
+
+2006-02-09 14:44  strk
+
+	* source/: geom/Geometry.cpp, headers/geos/geom.h,
+	  io/WKBReader.cpp: Added support for SRID in input WKB,
+	  undeprecated Geometry::setSRID and Geometry::getSRID
+
+2006-02-09 02:47  frank
+
+	* source/io/WKBReader.cpp: Botched last fix.  Hopefully this is
+	  better.
+
+2006-02-09 02:13  strk
+
+	* ChangeLog, source/operation/linemerge/LineSequencer.cpp: Added
+	  missing <limits> include
+
 2006-02-09 01:06  frank
 
 	* ChangeLog, source/io/WKBReader.cpp: Fixed support for consuming

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -17,6 +18,8 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace index { // geos.index
+namespace quadtree { // geos.index.quadtree
 
 double
 DoubleBits::powerOf2(int exp)
@@ -158,10 +161,16 @@ string DoubleBits::toString() {
 	return "";
 }
 
+} // namespace geos.index.quadtree
+} // namespace geos.index
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/20 10:14:18  strk
+ * - namespaces geos::index::*
+ * - Doxygen documentation cleanup
+ *
  * Revision 1.18  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
