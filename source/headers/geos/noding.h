@@ -25,7 +25,6 @@
 //#include <geos/geomgraph.h>
 #include <geos/geosAlgorithm.h>
 
-using namespace std;
 
 namespace geos {
 
@@ -133,13 +132,13 @@ private:
 	const SegmentString& edge; 
 
 	// UNUSED
-	//vector<SegmentNode*> *sortedNodes;
+	//std::vector<SegmentNode*> *sortedNodes;
 
 	// This vector is here to keep track of created splitEdges
-	vector<SegmentString*> splitEdges;
+	std::vector<SegmentString*> splitEdges;
 
 	// This vector is here to keep track of created Coordinates
-	vector<CoordinateSequence*> splitCoordLists;
+	std::vector<CoordinateSequence*> splitCoordLists;
 
 	/**
 	 * Checks the correctness of the set of split edges corresponding
@@ -147,7 +146,7 @@ private:
 	 *
 	 * @param splitEdges the split edges for this edge (in order)
 	 */
-	void checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges);
+	void checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEdges);
 
 	/**
 	 * Create a new "split edge" with the section of points between
@@ -172,7 +171,7 @@ private:
 	 * which are pre-existing in the vertex list.
 	 */
 	void findCollapsesFromExistingVertices(
-			vector<unsigned int>& collapsedVertexIndexes);
+			std::vector<unsigned int>& collapsedVertexIndexes);
 
 	/**
 	 * Adds nodes for any collapsed edge pairs caused by inserted nodes
@@ -182,7 +181,7 @@ private:
 	 * the vertex must be added as a node as well.
 	 */
 	void findCollapsesFromInsertedNodes(
-		vector<unsigned int>& collapsedVertexIndexes);
+		std::vector<unsigned int>& collapsedVertexIndexes);
 
 	bool findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
 		unsigned int& collapsedVertexIndex);
@@ -240,8 +239,8 @@ public:
 	 * Adds the edges to the input list (this is so a single list
 	 * can be used to accumulate all split edges for a Geometry).
 	 */
-	void addSplitEdges(vector<SegmentString*>& edgeList);
-	void addSplitEdges(vector<SegmentString*>* edgeList) {
+	void addSplitEdges(std::vector<SegmentString*>& edgeList);
+	void addSplitEdges(std::vector<SegmentString*>* edgeList) {
 		addSplitEdges(*edgeList);
 	}
 
@@ -268,8 +267,8 @@ public:
  */
 class SegmentString {
 public:
-	typedef vector<const SegmentString*> ConstVect;
-	typedef vector<SegmentString *> NonConstVect;
+	typedef std::vector<const SegmentString*> ConstVect;
+	typedef std::vector<SegmentString *> NonConstVect;
 
 private:
 	SegmentNodeList eiList;
@@ -387,8 +386,8 @@ public:
 class SegmentString {
 
 public:
-	typedef vector<const SegmentString *> ConstVect;
-	typedef vector<SegmentString *> NonConstVect;
+	typedef std::vector<const SegmentString *> ConstVect;
+	typedef std::vector<SegmentString *> NonConstVect;
 
 private:
 
@@ -657,7 +656,7 @@ class IntersectionFinderAdder: public nodingSegmentIntersector {
 
 private:
 	algorithm::LineIntersector& li;
-	vector<Coordinate>& interiorIntersections;
+	std::vector<Coordinate>& interiorIntersections;
 
 public:
 
@@ -667,7 +666,7 @@ public:
 	 *
 	 * @param li the LineIntersector to use
 	 */
-	IntersectionFinderAdder(algorithm::LineIntersector& newLi, vector<Coordinate>& v)
+	IntersectionFinderAdder(algorithm::LineIntersector& newLi, std::vector<Coordinate>& v)
 		:
 		li(newLi),
 		interiorIntersections(v)
@@ -687,7 +686,7 @@ public:
 		SegmentString* e0,  int segIndex0,
 		SegmentString* e1,  int segIndex1);
 
-	vector<Coordinate>& getInteriorIntersections() {
+	std::vector<Coordinate>& getInteriorIntersections() {
 		return interiorIntersections;
 	}
 	
@@ -721,7 +720,7 @@ public:
 	 * Returns a {@link Collection} of fully noded {@link SegmentStrings}.
 	 * The SegmentStrings have the same context as their parent.
 	 *
-	 * @return a newly allocated vector of const SegmentStrings
+	 * @return a newly allocated std::vector of const SegmentStrings
 	 */
 	virtual SegmentString::NonConstVect* getNodedSubstrings() const=0;
 
@@ -765,8 +764,7 @@ public:
 	 *
 	 * @param newSegInt
 	 */
-	virtual void setSegmentIntersector(nodingSegmentIntersector* newSegInt)
-	{
+	virtual void setSegmentIntersector(nodingSegmentIntersector* newSegInt) {
 	  segInt = newSegInt;
 	}
 
@@ -849,7 +847,7 @@ public:
 class MCIndexNoder : public SinglePassNoder {
 
 private:
-	vector<index::chain::MonotoneChain*> monoChains;
+	std::vector<index::chain::MonotoneChain*> monoChains;
 	index::strtree::STRtree index;
 	int idCounter;
 	SegmentString::NonConstVect* nodedSegStrings;
@@ -858,7 +856,7 @@ private:
 
 	void intersectChains();
 
-	void add(const SegmentString* segStr);
+	void add(SegmentString* segStr);
 
 public:
 
@@ -871,8 +869,8 @@ public:
 
 	~MCIndexNoder();
 
-	/// Return a reference to this instance's vector of MonotoneChains
-	vector<index::chain::MonotoneChain*>& getMonotoneChains() { return monoChains; }
+	/// Return a reference to this instance's std::vector of MonotoneChains
+	std::vector<index::chain::MonotoneChain*>& getMonotoneChains() { return monoChains; }
 
 	index::SpatialIndex& getIndex() { return index; }
 
@@ -1066,6 +1064,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.18  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

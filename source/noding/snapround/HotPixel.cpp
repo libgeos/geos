@@ -43,17 +43,17 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor,
 }
 
 const Envelope&
-HotPixel::getSafeEnvelope() 
+HotPixel::getSafeEnvelope() const
 {
-  if (safeEnv.get() == NULL) {
-    double safeTolerance = .75 / scaleFactor;
-    safeEnv = auto_ptr<Envelope>(new Envelope(originalPt.x - safeTolerance,
-			   originalPt.x + safeTolerance,
-			   originalPt.y - safeTolerance,
-			   originalPt.y + safeTolerance
-			   ));
-  }
-  return *safeEnv;
+	if (safeEnv.get() == NULL) {
+		double safeTolerance = .75 / scaleFactor;
+		safeEnv = auto_ptr<Envelope>(new Envelope(originalPt.x - safeTolerance,
+			originalPt.x + safeTolerance,
+			originalPt.y - safeTolerance,
+			originalPt.y + safeTolerance
+			));
+	}
+	return *safeEnv;
 }
 
 /*private*/
@@ -69,18 +69,23 @@ HotPixel::initCorners(const Coordinate& pt)
 }
 
 bool
-HotPixel::intersects(const Coordinate& p0, const Coordinate& p1)
+HotPixel::intersects(const Coordinate& p0,
+		const Coordinate& p1) const
 {
-    if (scaleFactor == 1.0)
-      return intersectsScaled(p0, p1);
+	if (scaleFactor == 1.0) return intersectsScaled(p0, p1);
 
-    copyScaled(p0, p0Scaled);
-    copyScaled(p1, p1Scaled);
-    return intersectsScaled(p0Scaled, p1Scaled);
+	Coordinate p0Scaled;
+	Coordinate p1Scaled;
+
+	copyScaled(p0, p0Scaled);
+	copyScaled(p1, p1Scaled);
+
+	return intersectsScaled(p0Scaled, p1Scaled);
 }
 
 bool
-HotPixel::intersectsScaled(const Coordinate& p0, const Coordinate& p1)
+HotPixel::intersectsScaled(const Coordinate& p0,
+		const Coordinate& p1) const
 {
 
 #define MIN(x,y) (x)<(y)?(x):(y)
@@ -108,7 +113,7 @@ HotPixel::intersectsScaled(const Coordinate& p0, const Coordinate& p1)
 /*private*/
 bool
 HotPixel::intersectsToleranceSquare(const Coordinate& p0,
-			const Coordinate& p1)
+		const Coordinate& p1) const
 {
     bool intersectsLeft = false;
     bool intersectsBottom = false;
@@ -159,6 +164,9 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.3  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

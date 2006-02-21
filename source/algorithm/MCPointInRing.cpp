@@ -22,16 +22,20 @@ using namespace geos::index::bintree;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-MCPointInRing::MCSelecter::MCSelecter(const Coordinate& newP,MCPointInRing *prt) {
+MCPointInRing::MCSelecter::MCSelecter(const Coordinate& newP,MCPointInRing *prt)
+{
 	p=newP;
 	parent=prt;
 }
 
-void MCPointInRing::MCSelecter::select(LineSegment *ls) {
+void
+MCPointInRing::MCSelecter::select(LineSegment *ls)
+{
 	parent->testLineSegment(p,ls);
 }
 
-MCPointInRing::MCPointInRing(LinearRing *newRing) {
+MCPointInRing::MCPointInRing(LinearRing *newRing)
+{
 	ring=newRing;
 	tree=NULL;
 	crossings=0;
@@ -40,13 +44,16 @@ MCPointInRing::MCPointInRing(LinearRing *newRing) {
     buildIndex();
 }
 
-MCPointInRing::~MCPointInRing() {
+MCPointInRing::~MCPointInRing()
+{
 	delete tree;
 	delete interval;
 	delete pts;
 }
 
-void MCPointInRing::buildIndex() {
+void
+MCPointInRing::buildIndex()
+{
 //	Envelope *env=ring->getEnvelopeInternal();
 	tree=new Bintree();
 	pts=CoordinateSequence::removeRepeatedPoints(ring->getCoordinatesRO());
@@ -61,7 +68,9 @@ void MCPointInRing::buildIndex() {
 	delete mcList;
 }
 
-bool MCPointInRing::isInside(const Coordinate& pt) {
+bool
+MCPointInRing::isInside(const Coordinate& pt)
+{
 	crossings=0;
 	// test all segments intersected by ray from pt in positive x direction
 	Envelope *rayEnv=new Envelope(DoubleNegInfinity,DoubleInfinity,pt.y,pt.y);
@@ -90,11 +99,15 @@ bool MCPointInRing::isInside(const Coordinate& pt) {
 }
 
 
-void MCPointInRing::testMonotoneChain(Envelope *rayEnv,MCSelecter *mcSelecter,indexMonotoneChain *mc) {
-	mc->select(rayEnv, mcSelecter);
+void
+MCPointInRing::testMonotoneChain(Envelope *rayEnv,MCSelecter *mcSelecter,indexMonotoneChain *mc)
+{
+	mc->select(*rayEnv, *mcSelecter);
 }
 
-void MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
+void
+MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
+{
 	double xInt;  // x intersection of segment with ray
 	double x1;    // translated coordinates
 	double y1;
@@ -130,6 +143,9 @@ void MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/21 16:53:48  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.20  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

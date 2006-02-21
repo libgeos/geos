@@ -68,22 +68,23 @@ SimpleSnapRounder::computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts)
 		const Coordinate& snapPt = *it;
 		HotPixel hotPixel(snapPt, scaleFactor, li);
 		for (int i=0, n=ss->size(); i<n; ++i) {
-			addSnappedNode(hotPixel, ss, i);
+			addSnappedNode(hotPixel, *ss, i);
 		}
 	}
 }
 
 /* public static */
 bool
-SimpleSnapRounder::addSnappedNode(HotPixel& hotPix, SegmentString* segStr, int segIndex)
+SimpleSnapRounder::addSnappedNode(const HotPixel& hotPix, SegmentString& segStr,
+		unsigned int segIndex)
 {
-	const Coordinate& p0 = segStr->getCoordinate(segIndex);
-	const Coordinate& p1 = segStr->getCoordinate(segIndex + 1);
+	const Coordinate& p0 = segStr.getCoordinate(segIndex);
+	const Coordinate& p1 = segStr.getCoordinate(segIndex + 1);
 
 	if (hotPix.intersects(p0, p1)) {
 		//cerr<<"snapped: "<<snapPt<<endl;
 		//cerr<<"POINT ("<<snapPt.x<<" "<<snapPt.y<<")"<<endl;
-		segStr->addIntersection(hotPix.getCoordinate(), segIndex);
+		segStr.addIntersection(hotPix.getCoordinate(), segIndex);
 
 		return true;
 	}
@@ -110,7 +111,7 @@ SimpleSnapRounder::computeVertexSnaps(SegmentString* e0, SegmentString* e1)
 				continue;
 			}
 //cerr<<"trying "<<p0<<" against "<<pts1->getAt(i1)<<" "<<pts1->getAt(i1 + 1)<<endl;
-			bool isNodeAdded = addSnappedNode(hotPixel, e1, i1);
+			bool isNodeAdded = addSnappedNode(hotPixel, *e1, i1);
 			// if a node is created for a vertex, that vertex must be noded too
 			if (isNodeAdded) {
 				e0->addIntersection(p0, i0);
@@ -171,6 +172,9 @@ SimpleSnapRounder::findInteriorIntersections(SegmentString::NonConstVect& segStr
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.4  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

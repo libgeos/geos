@@ -19,6 +19,7 @@
 
 #include "geos/nodingSnapround.h"
 
+using namespace geos::index;
 using namespace geos::index::chain;
 
 namespace geos {
@@ -26,7 +27,77 @@ namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
 class HotPixelSnapAction: public MonotoneChainSelectAction {
+
+private:
+	const HotPixel& hotPixel;
+	SegmentString* parentEdge;
+	unsigned int vertexIndex;
+	bool isNodeAddedVar;
+
+public:
+
+	HotPixelSnapAction(const HotPixel& nHotPixel,
+			SegmentString* nParentEdge,
+			unsigned int nVertexIndex)
+		:
+		hotPixel(nHotPixel),
+		parentEdge(nParentEdge),
+		vertexIndex(nVertexIndex),
+		isNodeAddedVar(false)
+	{}
+
+	bool isNodeAdded() const { return isNodeAddedVar; }
+
+	void select(MonotoneChain& mc, unsigned int startIndex)
+	{
+		// This is casting away 'constness'!
+		SegmentString& ss = *(static_cast<SegmentString*>(mc.getContext()));
+
+		// don't snap a vertex to itself
+		if ( parentEdge ) {
+			if (&ss == parentEdge && startIndex == vertexIndex) return;
+		}
+		isNodeAddedVar = SimpleSnapRounder::addSnappedNode(hotPixel, ss, startIndex);
+	}
+
+	void select(LineSegment* ls) {}
+
 };
+
+class MCIndexPointSnapperVisitor: public ItemVisitor {
+private:
+	const Envelope& pixelEnv;
+	MonotoneChainSelectAction& action;
+
+public:
+	MCIndexPointSnapperVisitor(const Envelope& nPixelEnv, HotPixelSnapAction& nAction)
+		:
+		pixelEnv(nPixelEnv),
+		action(nAction)
+	{}
+
+	virtual ~MCIndexPointSnapperVisitor() {}
+
+	void visitItem(void* item) {
+		MonotoneChain& testChain = *(static_cast<MonotoneChain*>(item));
+		testChain.select(pixelEnv, action);
+	}
+};
+
+/* public */
+bool
+MCIndexPointSnapper::snap(const HotPixel& hotPixel,
+		SegmentString* parentEdge,
+		unsigned int vertexIndex)
+{
+	const Envelope& pixelEnv = hotPixel.getSafeEnvelope();
+	HotPixelSnapAction hotPixelSnapAction(hotPixel, parentEdge, vertexIndex);
+	MCIndexPointSnapperVisitor visitor(pixelEnv, hotPixelSnapAction);
+
+	index.query(&pixelEnv, visitor);
+
+	return hotPixelSnapAction.isNodeAdded();
+}
  
 } // namespace geos.noding.snapround
 } // namespace geos.noding
@@ -34,6 +105,9 @@ class HotPixelSnapAction: public MonotoneChainSelectAction {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.4  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

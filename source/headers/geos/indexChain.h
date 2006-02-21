@@ -37,6 +37,8 @@ typedef indexMonotoneChain MonotoneChain;
 /**
  *  The action for the internal iterator for performing
  *  Envelope select queries on a MonotoneChain
+ *
+ * Last port: index/chain/MonotoneChainSelectAction.java rev. 1.6 (JTS-1.7)
  */
 class MonotoneChainSelectAction {
 
@@ -50,17 +52,15 @@ public:
 
 	virtual ~MonotoneChainSelectAction();
 
-	/**
-	 * This function can be overridden if the original chain is needed
-	 */
-	virtual void select(indexMonotoneChain *mc, int start);
+	/// This function can be overridden if the original chain is needed
+	virtual void select(indexMonotoneChain& mc, unsigned int start);
 
 	/**
 	 * This is a convenience function which can be overridden to obtain the actual
 	 * line segment which is selected
 	 * @param seg
 	 */
-	virtual void select(LineSegment *newSeg){assert(0);}
+	virtual void select(LineSegment *newSeg)=0;
 
 	// these envelopes are used during the MonotoneChain search process
 	Envelope *tempEnv1;
@@ -144,24 +144,28 @@ public:
  * returned by the query.
  * However, it does mean that the queries are not thread-safe.
  *
- * @version 1.4
+ * Last port: index/chain/MonotoneChain.java rev. 1.13 (JTS-1.7)
  */
 class indexMonotoneChain {
 
 private:
-	void computeSelect(Envelope *searchEnv,int start0,int end0,MonotoneChainSelectAction *mcs);
+	void computeSelect(const Envelope& searchEnv,
+			unsigned int start0,
+			unsigned int end0,
+			MonotoneChainSelectAction& mcs);
+
 	void computeOverlaps(int start0, int end0, indexMonotoneChain *mc,
 			int start1, int end1, MonotoneChainOverlapAction *mco);
 	const CoordinateSequence *pts;
 	int start, end;
 	Envelope *env;
-	const void *context;// user-defined information
+	void *context;// user-defined information
 	int id; // useful for optimizing chain comparisons
 
 public:
 	indexMonotoneChain(const CoordinateSequence *newPts,
 			int nstart, int nend,
-			const void* nContext)
+			void* nContext)
 		:
 		pts(newPts),
 		start(nstart),
@@ -181,7 +185,7 @@ public:
 
 	int getEndIndex() { return end; }
 
-	void getLineSegment(int index,LineSegment *ls);
+	void getLineSegment(unsigned int index, LineSegment *ls);
 
 	/**
 	 * Return the subsequence of coordinates forming this chain.
@@ -193,7 +197,7 @@ public:
 	 * Determine all the line segments in the chain whose envelopes overlap
 	 * the searchEnvelope, and process them
 	 */
-	void select(Envelope *searchEnv,MonotoneChainSelectAction *mcs);
+	void select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs);
 
 	void computeOverlaps(indexMonotoneChain *mc,MonotoneChainOverlapAction *mco);
 
@@ -201,7 +205,7 @@ public:
 
 	inline int getId() { return id; }
 
-	const void* getContext() { return context; }
+	void* getContext() { return context; }
 
 };
 
@@ -225,7 +229,7 @@ public:
 	 */
 	static vector<indexMonotoneChain*>* getChains(
 			const CoordinateSequence *pts,
-			const void* context);
+			void* context);
 
 	/**
 	 * Fill the provided vector with newly-allocated MonotoneChain objects
@@ -233,7 +237,7 @@ public:
 	 * Remember to delete vector elements!
 	 */
 	static void getChains(const CoordinateSequence *pts,
-			const void* context,
+			void* context,
 			vector<indexMonotoneChain*>& mcList);
 
 	static vector<indexMonotoneChain*>* getChains(const CoordinateSequence *pts) {
@@ -263,6 +267,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.9  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

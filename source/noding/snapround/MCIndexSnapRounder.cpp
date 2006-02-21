@@ -17,13 +17,111 @@
  *
  **********************************************************************/
 
+#include <functional>
 #include "geos/nodingSnapround.h"
 
 namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
-// MCIndexSnapRounder::
+/*private*/
+void
+MCIndexSnapRounder::findInteriorIntersections(MCIndexNoder& noder,
+		SegmentString::NonConstVect* segStrings,
+		vector<Coordinate>& intersections)
+{
+	IntersectionFinderAdder intFinderAdder(li, intersections);
+	noder.setSegmentIntersector(&intFinderAdder);
+	noder.computeNodes(segStrings);
+}
+
+/* private */
+void
+MCIndexSnapRounder::computeIntersectionSnaps(vector<Coordinate>& snapPts)
+{
+	for (vector<Coordinate>::iterator
+			it=snapPts.begin(), itEnd=snapPts.end();
+			it!=itEnd;
+			++it)
+	{
+		Coordinate& snapPt = *it;
+		HotPixel hotPixel(snapPt, scaleFactor, li);
+		pointSnapper->snap(hotPixel);
+	}
+}
+
+/*private*/
+void
+MCIndexSnapRounder::computeEdgeVertexSnaps(SegmentString* e)
+{
+	CoordinateSequence& pts0 = *(e->getCoordinates());
+	for (unsigned int i=0, n=pts0.size()-1; i<n; ++i)
+	{
+		HotPixel hotPixel(pts0[i], scaleFactor, li);
+		bool isNodeAdded = pointSnapper->snap(hotPixel, e, i);
+		// if a node is created for a vertex, that vertex must be noded too
+		if (isNodeAdded) {
+			e->addIntersection(pts0[i], i);
+		}
+	}
+}
+
+/*public*/
+void
+MCIndexSnapRounder::computeVertexSnaps(SegmentString::NonConstVect& edges)
+{
+#if 0
+	for (SegmentString::NonConstVect::iterator 
+			it=edges.begin(), itEnd=edges.end();
+			it != itEnd;
+			++it)
+	{
+		computeVertexSnaps(*it);
+	}
+#endif
+	for_each(edges.begin(), edges.end(), bind1st(mem_fun(&MCIndexSnapRounder::computeEdgeVertexSnaps), this));
+}
+
+/*private*/
+void
+MCIndexSnapRounder::snapRound(MCIndexNoder& noder, 
+		SegmentString::NonConstVect* segStrings)
+{
+	vector<Coordinate> intersections;
+ 	findInteriorIntersections(noder, segStrings, intersections);
+	computeIntersectionSnaps(intersections);
+	computeVertexSnaps(*segStrings);
+	
+}
+
+/*public*/
+void
+MCIndexSnapRounder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
+{
+	nodedSegStrings = inputSegmentStrings;
+	MCIndexNoder noder;
+	//pointSnapper.reset(new MCIndexPointSnapper(noder.getMonotoneChains(), noder.getIndex()));
+	pointSnapper.reset(new MCIndexPointSnapper(noder.getIndex()));
+	snapRound(noder, inputSegmentStrings);
+
+	// testing purposes only - remove in final version
+	//checkCorrectness(inputSegmentStrings);
+}
+
+/*private*/
+void
+MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentStrings)
+{
+	SegmentString::NonConstVect resultSegStrings;
+	SegmentString::getNodedSubstrings(inputSegmentStrings, &resultSegStrings);
+	NodingValidator nv(resultSegStrings);
+	try {
+		nv.checkValid();
+	} catch (const exception& ex) {
+		cerr<<ex.what()<<endl;
+	}
+}
+
 
 } // namespace geos.noding.snapround
 } // namespace geos.noding
@@ -31,6 +129,9 @@ namespace snapround { // geos.noding.snapround
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.3  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

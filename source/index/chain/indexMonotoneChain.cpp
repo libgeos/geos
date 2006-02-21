@@ -4,13 +4,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: index/chain/MonotoneChain.java rev. 1.13 (JTS-1.7)
  *
  **********************************************************************/
 
@@ -34,7 +38,7 @@ indexMonotoneChain::getEnvelope()
 }
 
 void
-indexMonotoneChain::getLineSegment(int index, LineSegment *ls)
+indexMonotoneChain::getLineSegment(unsigned int index, LineSegment *ls)
 {
 	ls->p0=pts->getAt(index);
 	ls->p1=pts->getAt(index+1);
@@ -50,30 +54,32 @@ indexMonotoneChain::getCoordinates() {
 }
 
 void
-indexMonotoneChain::select(Envelope *searchEnv, MonotoneChainSelectAction *mcs)
+indexMonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
 {
 	computeSelect(searchEnv,start,end,mcs);
 }
 
 void
-indexMonotoneChain::computeSelect(Envelope *searchEnv, int start0, int end0,
-		MonotoneChainSelectAction *mcs )
+indexMonotoneChain::computeSelect(const Envelope& searchEnv,
+		unsigned int start0, unsigned int end0,
+		MonotoneChainSelectAction& mcs )
 {
 	const Coordinate& p0=pts->getAt(start0);
 	const Coordinate& p1=pts->getAt(end0);
-	mcs->tempEnv1->init(p0,p1);
+	mcs.tempEnv1->init(p0,p1);
+
 	//Debug.println("trying:"+p0+p1+" [ "+start0+","+end0+" ]");
 	// terminating condition for the recursion
 	if(end0-start0==1) {
 		//Debug.println("computeSelect:"+p0+p1);
-		mcs->select(this,start0);
+		mcs.select(*this,start0);
 		return;
 	}
 	// nothing to do if the envelopes don't overlap
-	if (!searchEnv->intersects(mcs->tempEnv1))
+	if (!searchEnv.intersects(mcs.tempEnv1))
 		return;
 	// the chains overlap,so split each in half and iterate (binary search)
-	int mid=(start0+end0)/2;
+	unsigned int mid=(start0+end0)/2;
 	// Assert: mid != start or end (since we checked above for end-start <= 1)
 	// check terminating conditions before recursing
 	if (start0<mid) {
@@ -138,6 +144,9 @@ indexMonotoneChain::computeOverlaps(int start0, int end0, indexMonotoneChain *mc
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.18  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

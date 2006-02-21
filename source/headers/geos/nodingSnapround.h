@@ -25,8 +25,6 @@
 
 using namespace std;
 
-#define KEEP_OBSOLETED
-
 namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
@@ -50,9 +48,6 @@ private:
 	const Coordinate& originalPt;
 	Coordinate ptScaled;
 
-	Coordinate p0Scaled;
-	Coordinate p1Scaled;
-
 	double scaleFactor;
 
 	double minx;
@@ -68,16 +63,16 @@ private:
 	vector<Coordinate> corner;
 
 	// Owned by this class, constructed on demand
-	auto_ptr<Envelope> safeEnv; 
+	mutable auto_ptr<Envelope> safeEnv; 
 
 	void initCorners(const Coordinate& pt);
 
-	double scale(double val) {
+	double scale(double val) const {
 		// Math.round
 		return round(val*scaleFactor);
 	}
 
-	void copyScaled(const Coordinate& p, Coordinate& pScaled) {
+	void copyScaled(const Coordinate& p, Coordinate& pScaled) const {
 		pScaled.x = scale(p.x);
 		pScaled.y = scale(p.y);
 	}
@@ -104,7 +99,7 @@ private:
 	 * @return
 	 */
 	bool intersectsToleranceSquare(const Coordinate& p0,
-			const Coordinate& p1);
+			const Coordinate& p1) const;
  
 
 	/**
@@ -130,19 +125,20 @@ public:
 	/// \brief
 	/// Return reference to original Coordinate
 	/// (the one provided at construction time)
-	const Coordinate& getCoordinate() { return originalPt; }
+	const Coordinate& getCoordinate() const { return originalPt; }
 
 	/**
 	 * Returns a "safe" envelope that is guaranteed to contain
 	 * the hot pixel. Keeps ownership of it.
 	 */
-	const Envelope& getSafeEnvelope();
+	const Envelope& getSafeEnvelope() const;
 
-	bool intersectsScaled(const Coordinate& p0, const Coordinate& p1);
-	bool intersects(const Coordinate& p0, const Coordinate& p1);
+	bool intersectsScaled(const Coordinate& p0,
+			const Coordinate& p1) const;
+
+	bool intersects(const Coordinate& p0,
+			const Coordinate& p1) const;
  
-
-
 
 };
 
@@ -244,7 +240,8 @@ public:
 	 * @param segIndex
 	 * @return <code>true</code> if a node was added
 	 */
-	static bool addSnappedNode(HotPixel& hotPix, SegmentString* segStr, int segIndex);
+	static bool addSnappedNode(const HotPixel& hotPix, SegmentString& segStr,
+			unsigned int segIndex);
 
 	/**
 	 * Computes nodes introduced as a result of
@@ -260,17 +257,20 @@ public:
  * {@link MonotoneChain}s to a given {@link HotPixel}.
  *
  * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.2 (JTS-1.7)
- *
- *  TODO: finish this
  */
 class MCIndexPointSnapper {
 
 private:
 
+	index::SpatialIndex& index;
+
 public:
  
 
-	MCIndexPointSnapper() {}
+	MCIndexPointSnapper(index::SpatialIndex& nIndex)
+		:
+		index(nIndex)
+	{}
 
 
 	/**
@@ -285,6 +285,12 @@ public:
 	 * @param vertexIndex the index of the vertex, if applicable, or -1
 	 * @return <code>true</code> if a node was added for this pixel
 	 */
+	bool snap(const HotPixel& hotPixel, SegmentString* parentEdge,
+			unsigned int vertexIndex);
+
+	bool snap(const HotPixel& hotPixel) {
+		return snap(hotPixel, NULL, 0);
+	}
 		
 };
 
@@ -308,7 +314,6 @@ public:
  *
  * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.1 (JTS-1.7)
  *
- *  TODO: finish this
  */
 class MCIndexSnapRounder: public Noder { // implments Noder
 
@@ -321,12 +326,61 @@ private:
 
 	double scaleFactor;
 
-	noding::MCIndexNoder& noder;
+	SegmentString::NonConstVect* nodedSegStrings;
 
+	auto_ptr<MCIndexPointSnapper> pointSnapper;
+
+	void snapRound(MCIndexNoder& noder, SegmentString::NonConstVect* segStrings);
+
+	
+	/**
+	 * Computes all interior intersections in the collection of SegmentStrings,
+	 * and push their Coordinate to the provided vector.
+	 *
+	 * Does NOT node the segStrings.
+	 *
+	 */
+	void findInteriorIntersections(MCIndexNoder& noder,
+			SegmentString::NonConstVect* segStrings,
+			vector<Coordinate>& intersections);
+
+	/**
+	 * Computes nodes introduced as a result of snapping segments to snap points (hot pixels)
+	 */
+	void computeIntersectionSnaps(vector<Coordinate>& snapPts);
+
+	/**
+	 * Performs a brute-force comparison of every segment in each {@link SegmentString}.
+	 * This has n^2 performance.
+	 */
+	void computeEdgeVertexSnaps(SegmentString* e);
+	
+	void checkCorrectness(SegmentString::NonConstVect& inputSegmentStrings);
 
 public:
 
-	
+	MCIndexSnapRounder(PrecisionModel& nPm)
+		:
+		pm(nPm),
+		li(&nPm),
+		scaleFactor(nPm.getScale()),
+		pointSnapper(0)
+	{}
+
+	SegmentString::NonConstVect* getNodedSubStrings() {
+		return SegmentString::getNodedSubstrings(*nodedSegStrings);
+	}
+
+	void computeNodes(SegmentString::NonConstVect* segStrings);
+ 
+	/**
+	 * Computes nodes introduced as a result of
+	 * snapping segments to vertices of other segments
+	 *
+	 * @param segStrings the list of segment strings to snap together
+	 */
+	void computeVertexSnaps(SegmentString::NonConstVect& edges);
+
 };
 
 
@@ -340,6 +394,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.6  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

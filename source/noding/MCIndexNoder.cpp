@@ -86,7 +86,7 @@ MCIndexNoder::intersectChains()
 
 /*private*/
 void
-MCIndexNoder::add(const SegmentString* segStr)
+MCIndexNoder::add(SegmentString* segStr)
 {
 	vector<indexMonotoneChain*> segChains;
 
@@ -138,6 +138,9 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.4  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

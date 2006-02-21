@@ -28,7 +28,7 @@ namespace chain { // geos.index.chain
 /* static public */
 vector<indexMonotoneChain*>*
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
-		const void* context)
+		void* context)
 {
 	vector<indexMonotoneChain*> *mcList=new vector<indexMonotoneChain*>();
 	getChains(pts, context, *mcList);
@@ -38,7 +38,7 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
-		const void* context,
+		void* context,
 		vector<indexMonotoneChain*>& mcList)
 {
 	vector<int> startIndex;
@@ -105,6 +105,9 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.18  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -14,27 +15,27 @@
  **********************************************************************/
 
 #include <geos/indexChain.h>
-#include <stdio.h>
 
 namespace geos {
 namespace index { // geos.index
 namespace chain { // geos.index.chain
 
-MonotoneChainSelectAction::MonotoneChainSelectAction() {
+MonotoneChainSelectAction::MonotoneChainSelectAction()
+{
 	selectedSegment=new LineSegment();
 	tempEnv1=new Envelope();
 }
 
-MonotoneChainSelectAction::~MonotoneChainSelectAction() {
+MonotoneChainSelectAction::~MonotoneChainSelectAction()
+{
 	delete selectedSegment;
 	delete tempEnv1;
 }
 
-/**
-* This function can be overridden if the original chain is needed
-*/
-void MonotoneChainSelectAction::select(indexMonotoneChain *mc,int start) {
-	mc->getLineSegment(start,selectedSegment);
+void
+MonotoneChainSelectAction::select(indexMonotoneChain& mc, unsigned int start)
+{
+	mc.getLineSegment(start, selectedSegment);
 	select(selectedSegment);
 }
 
@@ -44,6 +45,9 @@ void MonotoneChainSelectAction::select(indexMonotoneChain *mc,int start) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
  * Revision 1.9  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup
