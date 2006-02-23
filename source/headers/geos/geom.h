@@ -2983,22 +2983,30 @@ private:
 };
 
 
-/*
+/**
+ * \brief
  * Represents a planar triangle, and provides methods for calculating various
  * properties of triangles.
  */
 class Triangle {
 public:
-	Coordinate p0,p1,p2;
-	Triangle(const Coordinate& nP0,const Coordinate& nP1,const Coordinate& nP2);
+	Coordinate p0, p1, p2;
+
+	Triangle(const Coordinate& nP0, const Coordinate& nP1, const Coordinate& nP2)
+		:
+		p0(nP0),
+		p1(nP1),
+		p2(nP2)
+	{}
+
 	/**
-	* The inCentre of a triangle is the point which is equidistant
-	* from the sides of the triangle.  This is also the point at which the bisectors
-	* of the angles meet.
-	*
-	* @return the point which is the inCentre of the triangle
-	*/
-	Coordinate* inCentre();
+	 * The inCentre of a triangle is the point which is equidistant
+	 * from the sides of the triangle.  This is also the point at which the bisectors
+	 * of the angles meet.
+	 *
+	 * @param resultPoint the point into which to write the inCentre of the triangle
+	 */
+	void inCentre(Coordinate& resultPoint);
 };
 
 } // namespace geos
@@ -3006,6 +3014,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.69  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.68  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

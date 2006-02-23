@@ -47,36 +47,11 @@ QuadTreeNode::createExpanded(QuadTreeNode *node, const Envelope *addEnv)
 	return largerNode;
 }
 
-// Takes ownership of envelope
-QuadTreeNode::QuadTreeNode(Envelope *nenv, int nlevel)
+/*public*/
+QuadTreeNode*
+QuadTreeNode::getNode(const Envelope *searchEnv)
 {
-	env=nenv;
-	level=nlevel;
-	centre=new Coordinate();
-	centre->x=(env->getMinX()+env->getMaxX())/2;
-	centre->y=(env->getMinY()+env->getMaxY())/2;
-}
-
-QuadTreeNode::~QuadTreeNode(){
-	delete env;
-	delete centre;
-}
-
-Envelope* QuadTreeNode::getEnvelope() {
-	return env;
-}
-
-bool QuadTreeNode::isSearchMatch(const Envelope *searchEnv){
-	return env->intersects(searchEnv);
-}
-
-/**
-* Returns the subquad containing the envelope.
-* Creates the subquad if
-* it does not already exist.
-*/
-QuadTreeNode* QuadTreeNode::getNode(const Envelope *searchEnv){
-	int subnodeIndex=getSubnodeIndex(searchEnv,centre);
+	int subnodeIndex=getSubnodeIndex(searchEnv, centre);
 	// if subquadIndex is -1 searchEnv is not contained in a subquad
 	if (subnodeIndex!=-1) {
 		// create the quad if it does not exist
@@ -88,12 +63,11 @@ QuadTreeNode* QuadTreeNode::getNode(const Envelope *searchEnv){
 	}
 }
 
-/**
-* Returns the smallest <i>existing</i>
-* node containing the envelope.
-*/
-QuadTreeNodeBase* QuadTreeNode::find(const Envelope *searchEnv) {
-	int subnodeIndex=getSubnodeIndex(searchEnv,centre);
+/*public*/
+QuadTreeNodeBase*
+QuadTreeNode::find(const Envelope *searchEnv)
+{
+	int subnodeIndex=getSubnodeIndex(searchEnv, centre);
 	if (subnodeIndex==-1)
 		return this;
 	if (subnode[subnodeIndex]!=NULL) {
@@ -109,7 +83,7 @@ void QuadTreeNode::insertNode(QuadTreeNode* node) {
 	Assert::isTrue(env==NULL || env->contains(node->env));
 	//System.out.println(env);
 	//System.out.println(quad.env);
-	int index=getSubnodeIndex(node->env,centre);
+	int index=getSubnodeIndex(node->env, centre);
 	//System.out.println(index);
 	if (node->level==level-1) {
 		subnode[index]=node;
@@ -144,26 +118,26 @@ QuadTreeNode* QuadTreeNode::createSubnode(int index) {
 	switch (index) {
 		case 0:
 			minx=env->getMinX();
-			maxx=centre->x;
+			maxx=centre.x;
 			miny=env->getMinY();
-			maxy=centre->y;
+			maxy=centre.y;
 			break;
 		case 1:
-			minx=centre->x;
+			minx=centre.x;
 			maxx=env->getMaxX();
 			miny=env->getMinY();
-			maxy=centre->y;
+			maxy=centre.y;
 			break;
 	case 2:
 			minx=env->getMinX();
-			maxx=centre->x;
-			miny=centre->y;
+			maxx=centre.x;
+			miny=centre.y;
 			maxy=env->getMaxY();
 			break;
 	case 3:
-			minx=centre->x;
+			minx=centre.x;
 			maxx=env->getMaxX();
-			miny=centre->y;
+			miny=centre.y;
 			maxy=env->getMaxY();
 			break;
 	}
@@ -176,7 +150,7 @@ string
 QuadTreeNode::toString() const
 {
 	ostringstream os;
-	os <<"L"<<level<<" "<<env->toString()<<" Ctr["<<centre->toString()<<"]";
+	os <<"L"<<level<<" "<<env->toString()<<" Ctr["<<centre.toString()<<"]";
 	os <<" "+QuadTreeNodeBase::toString();
 	return os.str();
 }
@@ -187,6 +161,18 @@ QuadTreeNode::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.11  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

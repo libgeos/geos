@@ -66,16 +66,17 @@ bool
 QuadtreeNestedRingTester::isNonNested()
 {
 	buildQuadtree();
-	for(unsigned int i=0; i<rings->size(); ++i)
+	for(unsigned int i=0, ni=rings->size(); i<ni; ++i)
 	{
 		LinearRing *innerRing=(*rings)[i];
 		const CoordinateSequence *innerRingPts=innerRing->getCoordinatesRO();
 		const Envelope *envi=innerRing->getEnvelopeInternal();
 
-		vector<void*> *results=qt->query(envi);
-		for(unsigned int j=0; j<results->size(); ++j)
+		vector<void*> results;
+		qt->query(envi, results);
+		for(unsigned int j=0, nj=results.size(); j<nj; ++j)
 		{
-			LinearRing *searchRing=(LinearRing*)(*results)[j];
+			LinearRing *searchRing=(LinearRing*)results[j];
 			const CoordinateSequence *searchRingPts=searchRing->getCoordinatesRO();
 
 			if (innerRing==searchRing) continue;
@@ -96,11 +97,9 @@ QuadtreeNestedRingTester::isNonNested()
 				 * we are safe.
 				 */
 				nestedPt=const_cast<Coordinate *>(innerRingPt);
-				delete results;
 				return false;
 			}
 		}
-		delete results;
 	}
 	return true;
 }
@@ -123,6 +122,18 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/23 11:54:21  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.17  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

@@ -88,7 +88,7 @@ RelateComputer::computeIM()
 	 * If a proper intersection was found, we can set a lower bound
 	 * on the IM.
 	 */
-	computeProperIntersectionIM(intersector,im);
+	computeProperIntersectionIM(intersector, im);
 
 	/*
 	 * Now process improper intersections
@@ -421,6 +421,18 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/02/23 11:54:21  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.26  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

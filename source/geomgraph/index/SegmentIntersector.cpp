@@ -33,54 +33,12 @@ SegmentIntersector::isAdjacentSegments(int i1,int i2)
 	return abs(i1-i2)==1;
 }
 
-#if 0
-SegmentIntersector::SegmentIntersector():
-	numTests(0),
-	hasIntersectionVar(false),
-	hasProper(false),
-	hasProperInterior(false),
-	li(NULL),
-	includeProper(false),
-	recordIsolated(false),
-	numIntersections(0),
-	bdyNodes(NULL)
-{
-}
-#endif
-
-SegmentIntersector::~SegmentIntersector()
-{
-	if (bdyNodes!=NULL) {
-		for(unsigned int i=0; i<bdyNodes->size(); ++i)
-		{
-			delete (*bdyNodes)[i];
-		}
-		delete bdyNodes;
-	}
-}
-
-SegmentIntersector::SegmentIntersector(LineIntersector *newLi,
-		bool newIncludeProper, bool newRecordIsolated):
-	numTests(0),
-	hasIntersectionVar(false),
-	hasProper(false),
-	hasProperInterior(false),
-	li(newLi),
-	includeProper(newIncludeProper),
-	recordIsolated(newRecordIsolated),
-	numIntersections(0),
-	bdyNodes(NULL)
-{
-}
-
 void
 SegmentIntersector::setBoundaryNodes(vector<Node*> *bdyNodes0,
 	vector<Node*> *bdyNodes1)
 {
-	if (bdyNodes==NULL)
-		bdyNodes=new vector<vector<Node*>*>(2);
-	(*bdyNodes)[0]=bdyNodes0;
-	(*bdyNodes)[1]=bdyNodes1;
+	bdyNodes[0]=bdyNodes0;
+	bdyNodes[1]=bdyNodes1;
 }
 
 /*
@@ -219,23 +177,29 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 	}
 }
 
+/*private*/
 bool
-SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<vector<Node*>*> *tstBdyNodes)
+SegmentIntersector::isBoundaryPoint(LineIntersector *li,
+		vector<Node*> *tstBdyNodes)
 {
-	if (tstBdyNodes==NULL) return false;
-	if (isBoundaryPoint(li,(*tstBdyNodes)[0])) return true;
-	if (isBoundaryPoint(li,(*tstBdyNodes)[1])) return true;
-	return false;
-}
+	if ( ! tstBdyNodes ) return false;
 
-bool
-SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNodes)
-{
 	for(vector<Node*>::iterator i=tstBdyNodes->begin();i<tstBdyNodes->end();i++) {
 		Node *node=*i;
 		const Coordinate& pt=node->getCoordinate();
 		if (li->isIntersection(pt)) return true;
 	}
+	return false;
+}
+
+
+/*private*/
+bool
+SegmentIntersector::isBoundaryPoint(LineIntersector *li,
+		vector<vector<Node*>*>& tstBdyNodes)
+{
+	if (isBoundaryPoint(li, tstBdyNodes[0])) return true;
+	if (isBoundaryPoint(li, tstBdyNodes[1])) return true;
 	return false;
 }
 
@@ -245,6 +209,18 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,vector<Node*> *tstBdyNod
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.12  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

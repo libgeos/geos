@@ -90,22 +90,20 @@ Quadtree::insert(const Envelope *itemEnv, void* item)
 }
 
 
-vector<void*>*
-Quadtree::query(const Envelope *searchEnv)
+void
+Quadtree::query(const Envelope *searchEnv,
+	vector<void*>& foundItems)
 {
 	/*
 	 * the items that are matched are the items in quads which
 	 * overlap the search envelope
 	 */
-	vector<void*> *foundItems=new vector<void*>();
-	root->addAllItemsFromOverlapping(searchEnv,foundItems);
+	root->addAllItemsFromOverlapping(searchEnv, &foundItems);
 #if DEBUG
 	cerr<<"Quadtree::query returning "<<foundItems->size()<<" items over "<<size()<<" items in index (of depth: "<<depth()<<")"<<endl;
 	cerr<<" Root:\n"<<root->toString()<<endl;
 #endif
-	return foundItems;
 }
-
 
 /*public*/
 vector<void*>*
@@ -148,6 +146,18 @@ Quadtree::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.17  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

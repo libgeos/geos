@@ -11,8 +11,29 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/util.h>
+
+namespace geos {
+
+} // namespace geos
+
+
+/**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/23 11:54:21  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.9  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -28,21 +49,4 @@
  * fixed typo
  *
  **********************************************************************/
-
-
-#include <geos/util.h>
-
-namespace geos {
-
-AssertionFailedException::AssertionFailedException(){
-	GEOSException();
-	setName("AssertionFailedException");
-}
-AssertionFailedException::AssertionFailedException(string msg){
-	setName("AssertionFailedException");
-	setMessage(msg);
-}
-
-} // namespace geos
-
 

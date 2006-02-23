@@ -17,6 +17,7 @@
  *
  **********************************************************************/
 
+#include <functional>
 #include "geos/noding.h"
 
 namespace geos {
@@ -54,11 +55,35 @@ ScaledNoder::getNodedSubstrings() const
 
 }
 
+/*public*/
+void
+ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
+{
+	if (isScaled) rescale(*inputSegStr);
+	noder.computeNodes(inputSegStr);
+}
+
+
+
+
+
 } // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.2  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

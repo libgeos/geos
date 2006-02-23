@@ -365,7 +365,8 @@ void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
  * the Minkowski sum or difference of the geometry
  * with a circle with radius equal to the absolute value of the buffer
  * distance.
- * In the CAD/CAM world buffers are known as </b>offset curves</b>.
+ * In the CAD/CAM world buffers are known as </i>offset curves</i>.
+ * In morphological analysis they are known as <i>erosion</i> and <i>dilation</i>.
  * 
  * Since true buffer curves may contain circular arcs,
  * computed buffer polygons can only be approximations to the true geometry.
@@ -379,8 +380,8 @@ void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
  * - CAP_SQUARE - end caps are squared off at the buffer distance
  *   beyond the line ends
  * 
- * The computation uses an algorithm involving iterated noding and
- * precision reduction to provide a high degree of robustness.
+ * Last port: operation/buffer/BufferOp.java rev. 1.31 (JTS-1.7)
+ *
  */
 class BufferOp {
 
@@ -389,7 +390,7 @@ private:
 
 	static int MAX_PRECISION_DIGITS;
 
-	/*
+	/**
 	 * Compute a reasonable scale factor to limit the precision of
 	 * a given combination of Geometry and buffer distance.
 	 * The scale factor is based on a heuristic.
@@ -406,7 +407,7 @@ private:
 	 *         precision for the buffer computation
 	 */
 	static double precisionScaleFactor(const Geometry *g,
-			double distance,int maxPrecisionDigits);
+			double distance, int maxPrecisionDigits);
 
 	const Geometry *argGeom;
 
@@ -424,7 +425,11 @@ private:
 
 	void bufferOriginalPrecision();
 
-	void bufferFixedPrecision(int precisionDigits);
+	void bufferReducedPrecision(int precisionDigits);
+
+	void bufferReducedPrecision();
+
+	void bufferFixedPrecision(const PrecisionModel& fixedPM);
 
 public:
 
@@ -438,7 +443,7 @@ public:
 	};
 
 	/**
-	 * Comutes the buffer for a geometry for a given buffer distance
+	 * Computes the buffer for a geometry for a given buffer distance
 	 * and accuracy of approximation.
 	 *
 	 * @param g the geometry to buffer
@@ -459,7 +464,13 @@ public:
 	 *
 	 * @param g the geometry to buffer
 	 */
-	BufferOp(const Geometry *g);
+	BufferOp(const Geometry *g)
+		:
+		argGeom(g),
+		quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
+		endCapStyle(BufferOp::CAP_ROUND),
+		resultGeometry(NULL)
+	{}
 
 	/**
 	 * Specifies the end cap style of the generated buffer.
@@ -768,11 +779,19 @@ private:
 	 */
 	static int depthDelta(geomgraph::Label *label);
 
+	/**
+	 * This is a list of owned Edges.
+	 * Edges are created by the private computeNodedEdges
+	 * method. We store them into this vector for cleanup
+	 * at BufferBuilder destruction time.
+	 */
+	std::vector<geomgraph::Edge*> newEdges;
+
 	int quadrantSegments;
 
 	int endCapStyle;
 
-	PrecisionModel* workingPrecisionModel;
+	const PrecisionModel* workingPrecisionModel;
 
 	algorithm::LineIntersector* li;
 
@@ -795,9 +814,14 @@ private:
 	 * exists.
 	 * If so, the edge is not inserted, but its label is merged
 	 * with the existing edge.
+	 *
+	 * The function takes responsability of releasing the Edge parameter
+	 * memory when appropriate.
 	 */
 	void insertEdge(geomgraph::Edge *e);
-	std::vector<BufferSubgraph*>* createSubgraphs(geomgraph::PlanarGraph *graph);
+
+	void createSubgraphs(geomgraph::PlanarGraph *graph,
+			std::vector<BufferSubgraph*>& list);
 
 	/**
 	 * Completes the building of the input subgraphs by
@@ -862,7 +886,7 @@ public:
 	 *
 	 * @param pm the precision model to use
 	 */
-	void setWorkingPrecisionModel(PrecisionModel *pm) {
+	void setWorkingPrecisionModel(const PrecisionModel *pm) {
 		workingPrecisionModel=pm;
 	}
 
@@ -892,6 +916,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.16  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

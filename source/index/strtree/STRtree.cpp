@@ -79,8 +79,10 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 	int minLeafCount=(int) ceil((double)childBoundables->size()/(double)getNodeCapacity());
 
 	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
+
 	vector<vector<Boundable*>*>* verticalSlicesV = verticalSlices(sortedChildBoundables,(int)ceil(sqrt((double)minLeafCount)));
 	delete sortedChildBoundables;
+
 	vector<Boundable*> *ret;
 	ret = createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
 	unsigned int vssize=verticalSlicesV->size();
@@ -89,7 +91,9 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 		vector<Boundable *>*inner = (*verticalSlicesV)[i];
 		delete inner;
 	}
+
 	delete verticalSlicesV;
+
 	return ret;
 }
 
@@ -198,6 +202,18 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.24  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

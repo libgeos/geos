@@ -111,21 +111,6 @@ void SIRtree::insert(double x1, double x2,void* item) {
 	AbstractSTRtree::insert(new Interval(min(x1,x2),max(x1, x2)),item);
 }
 
-/**
-* Returns items whose bounds intersect the given value.
-*/
-vector<void*>* SIRtree::query(double x) {
-	return query(x, x);
-}
-
-/**
-* Returns items whose bounds intersect the given bounds.
-* @param x1 possibly equal to x2
-*/
-vector<void*>* SIRtree::query(double x1, double x2) {
-	return AbstractSTRtree::query(new Interval(min(x1, x2),max(x1, x2)));
-}
-
 vector<Boundable*> *
 SIRtree::sortBoundables(const vector<Boundable*> *input)
 {
@@ -140,6 +125,18 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.16  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

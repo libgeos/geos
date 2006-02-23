@@ -26,19 +26,19 @@ namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 int
-QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate *centre)
+QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
 {
 	int subnodeIndex=-1;
-	if (env->getMinX()>=centre->x) {
-		if (env->getMinY()>=centre->y) subnodeIndex=3;
-		if (env->getMaxY()<=centre->y) subnodeIndex=1;
+	if (env->getMinX()>=centre.x) {
+		if (env->getMinY()>=centre.y) subnodeIndex=3;
+		if (env->getMaxY()<=centre.y) subnodeIndex=1;
 	}
-	if (env->getMaxX()<=centre->x) {
-		if (env->getMinY()>=centre->y) subnodeIndex=2;
-		if (env->getMaxY()<=centre->y) subnodeIndex=0;
+	if (env->getMaxX()<=centre.x) {
+		if (env->getMinY()>=centre.y) subnodeIndex=2;
+		if (env->getMaxY()<=centre.y) subnodeIndex=0;
 	}
 #if DEBUG
-	cerr<<"getSubNodeIndex("<<env->toString()<<", "<<centre->toString()<<") returning "<<subnodeIndex<<endl;
+	cerr<<"getSubNodeIndex("<<env->toString()<<", "<<centre.toString()<<") returning "<<subnodeIndex<<endl;
 #endif
 	return subnodeIndex;
 }
@@ -228,6 +228,18 @@ QuadTreeNodeBase::remove(const Envelope* itemEnv, void* item)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.13  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

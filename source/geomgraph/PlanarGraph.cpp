@@ -25,7 +25,7 @@ using namespace geos::algorithm;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-CGAlgorithms* PlanarGraph::cga=new CGAlgorithms();
+//CGAlgorithms* PlanarGraph::cga=new CGAlgorithms();
 
 /**
  * For nodes in the vector, link the DirectedEdges at the node that are in the result.
@@ -64,9 +64,11 @@ PlanarGraph::~PlanarGraph()
 {
 	delete nodes;
 	int i;
+#if 1 // FIXME: PlanarGraph should *not* own edges!
 	for(i=0;i<(int)edges->size();i++) {
 		delete (*edges)[i];
 	}
+#endif
 	delete edges;
 	for(i=0;i<(int)edgeEndList->size();i++) {
 		delete (*edgeEndList)[i];
@@ -323,6 +325,18 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.20  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

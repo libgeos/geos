@@ -70,15 +70,6 @@ MCIndexSnapRounder::computeEdgeVertexSnaps(SegmentString* e)
 void
 MCIndexSnapRounder::computeVertexSnaps(SegmentString::NonConstVect& edges)
 {
-#if 0
-	for (SegmentString::NonConstVect::iterator 
-			it=edges.begin(), itEnd=edges.end();
-			it != itEnd;
-			++it)
-	{
-		computeVertexSnaps(*it);
-	}
-#endif
 	for_each(edges.begin(), edges.end(), bind1st(mem_fun(&MCIndexSnapRounder::computeEdgeVertexSnaps), this));
 }
 
@@ -100,7 +91,6 @@ MCIndexSnapRounder::computeNodes(SegmentString::NonConstVect* inputSegmentString
 {
 	nodedSegStrings = inputSegmentStrings;
 	MCIndexNoder noder;
-	//pointSnapper.reset(new MCIndexPointSnapper(noder.getMonotoneChains(), noder.getIndex()));
 	pointSnapper.reset(new MCIndexPointSnapper(noder.getIndex()));
 	snapRound(noder, inputSegmentStrings);
 
@@ -129,6 +119,18 @@ MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentSt
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.4  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

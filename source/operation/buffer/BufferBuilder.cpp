@@ -65,6 +65,11 @@ BufferBuilder::~BufferBuilder()
 	delete edgeList;
 	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
+
+	// FIXME: I think it's this object responsibility to delete
+	// created Edges, OR callers must provided a container
+	// for keeping track of them!
+	for (unsigned int i=0; i<newEdges.size(); i++) delete newEdges[i];
 }
 
 Geometry*
@@ -109,33 +114,32 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 
 	Geometry* resultGeom=NULL;
 	vector<Geometry*> *resultPolyList=NULL;
-	vector<BufferSubgraph*> *subgraphList=NULL;
+	vector<BufferSubgraph*> subgraphList;
+
 	try {
 		PlanarGraph graph(OverlayNodeFactory::instance());
 		graph.addEdges(edgeList->getEdges());
-		subgraphList=createSubgraphs(&graph);
+
+		createSubgraphs(&graph, subgraphList);
 #if DEBUG
-	cerr<<"Created "<<subgraphList->size()<<" subgraphs"<<endl;
+	cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<endl;
 #endif
 		PolygonBuilder polyBuilder(geomFact);
-		buildSubgraphs(subgraphList, &polyBuilder);
+		buildSubgraphs(&subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
 #if DEBUG
 	cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<endl;
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (const GEOSException& exc) {
-		for (unsigned int i=0; i<subgraphList->size(); i++)
-			delete (*subgraphList)[i];
-		delete subgraphList;
-		//for (unsigned int i=0; i<resultPolyList->size(); i++)
-		//	delete (*resultPolyList)[i];
-		//delete resultPolyList;
+		for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
+			delete subgraphList[i];
 		throw;
 	} 
-	for (unsigned int i=0; i<subgraphList->size(); i++)
-		delete (*subgraphList)[i];
-	delete subgraphList;
+
+	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
+		delete subgraphList[i];
+
 	return resultGeom;
 }
 
@@ -200,9 +204,11 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 		// we need to clone SegmentString coordinates
 		// as Edge will take ownership of them
 		// TODO: find a way to transfer ownership instead
+		// Who will own the edge ? FIXME: find out and handle that!
 		Edge* edge = new Edge(segStr->getCoordinates()->clone(),
 				new Label(*oldLabel));
 
+		// will take care of the Edge ownership
 		insertEdge(edge);
 	}
 
@@ -214,24 +220,13 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 	if ( noder != workingNoder ) delete noder;
 }
 
-
-/**
- * Inserted edges are checked to see if an identical edge already exists->
- * If so, the edge is not inserted, but its label is merged
- * with the existing edge->
- */
+/*private*/
 void
 BufferBuilder::insertEdge(Edge *e)
 {
 	//<FIX> MD 8 Oct 03  speed up identical edge lookup
 	// fast lookup
-#if PROFILE
-	profiler->start("EdgeList::findEqualEdge()");
-#endif
 	Edge *existingEdge=edgeList->findEqualEdge(e);
-#if PROFILE
-	profiler->stop("EdgeList::findEqualEdge()");
-#endif
 	// If an identical edge already exists, simply update its label
 	if (existingEdge != NULL) {
 		Label *existingLabel=existingEdge->getLabel();
@@ -251,12 +246,22 @@ BufferBuilder::insertEdge(Edge *e)
 		int existingDelta=existingEdge->getDepthDelta();
 		int newDelta=existingDelta + mergeDelta;
 		existingEdge->setDepthDelta(newDelta);
+
+		// we have memory release responsibility 
 		delete e;
+
 	} else {   // no matching existing edge was found
+
 		// add this new edge to the list of edges in this graph
-		//e->setName(name + edges->size());
 		edgeList->add(e);
+
 		e->setDepthDelta(depthDelta(e->getLabel()));
+
+		// FIXME: I think we should have memory release responsibility.
+		// Verify how to do that, as it seems it Edges will be deleted
+		// *at least* by PlanarGraph and who knows who else.
+		//newEdges.push_back(e);
+
 	}
 }
 
@@ -267,28 +272,28 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second) {
 		return false;
 }
 
-vector<BufferSubgraph*>*
-BufferBuilder::createSubgraphs(PlanarGraph *graph)
+/*private*/
+void
+BufferBuilder::createSubgraphs(PlanarGraph *graph, vector<BufferSubgraph*>& subgraphList)
 {
-	vector<BufferSubgraph*> *subgraphList=new vector<BufferSubgraph*>();
-	vector<Node*> *n=graph->getNodes();
-	for (unsigned int i=0;i<n->size();i++) {
-		Node *node=(*n)[i];
+	vector<Node*>* nodes = graph->getNodes();
+	for (unsigned int i=0, n=nodes->size(); i<n; i++) {
+		Node *node=(*nodes)[i];
 		if (!node->isVisited()) {
 			BufferSubgraph *subgraph=new BufferSubgraph();
 			subgraph->create(node);
-			subgraphList->push_back(subgraph);
+			subgraphList.push_back(subgraph);
 		}
 	}
-	delete n;
-	/**
-	* Sort the subgraphs in descending order of their rightmost coordinate->
-	* This ensures that when the Polygons for the subgraphs are built,
-	* subgraphs for shells will have been built before the subgraphs for
-	* any holes they contain->
-	*/
-	sort(subgraphList->begin(),subgraphList->end(),BufferSubgraphGT);
-	return subgraphList;
+	delete nodes;
+
+	/*
+	 * Sort the subgraphs in descending order of their rightmost coordinate
+	 * This ensures that when the Polygons for the subgraphs are built,
+	 * subgraphs for shells will have been built before the subgraphs for
+	 * any holes they contain
+	 */
+	sort(subgraphList.begin(),subgraphList.end(),BufferSubgraphGT);
 }
 
 /**
@@ -321,6 +326,18 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.36  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

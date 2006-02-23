@@ -61,7 +61,8 @@ bool BinTreeNode::isSearchMatch(BinTreeInterval *itemInterval){
 * Creates the node if
 * it does not already exist.
 */
-BinTreeNode* BinTreeNode::getNode(BinTreeInterval *searchInterval){
+BinTreeNode*
+BinTreeNode::getNode(BinTreeInterval *searchInterval){
 	int subnodeIndex=getSubnodeIndex(searchInterval,centre);
 	// if index is -1 searchEnv is not contained in a subnode
 	if (subnodeIndex!=-1) {
@@ -141,6 +142,18 @@ BinTreeNode* BinTreeNode::createSubnode(int index) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.7  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

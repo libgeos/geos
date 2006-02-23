@@ -53,23 +53,24 @@ class SpatialIndex {
 public:
 	virtual ~SpatialIndex() {};
 
-	/*
+	/**
 	 * Adds a spatial item with an extent specified by the given Envelope
 	 * to the index
 	 */
 	virtual void insert(const Envelope *itemEnv, void *item)=0;
 
-	/*
+	/**
 	 * Queries the index for all items whose extents intersect the given search Envelope
 	 * Note that some kinds of indexes may also return objects which do not in fact
 	 * intersect the query envelope.
 	 *
 	 * @param searchEnv the envelope to query for
-	 * @return a list of the items found by the query
+	 * @return a list of the items found by the query in a newly allocated vector
 	 */
-	virtual std::vector<void*>* query(const Envelope *searchEnv)=0;
+	//virtual std::vector<void*>* query(const Envelope *searchEnv)=0;
+	virtual void query(const Envelope* searchEnv, std::vector<void*>&)=0;
 
-	/*
+	/**
 	 * Queries the index for all items whose extents intersect the given search Envelope
 	 * and applies an ItemVisitor to them.
 	 * Note that some kinds of indexes may also return objects which do not in fact
@@ -99,6 +100,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.6  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

@@ -41,20 +41,6 @@ Edge::updateIM(Label *lbl, IntersectionMatrix *im)
 	}
 }
 
-#if 0
-Edge::Edge()
-{
-	//cerr<<"["<<this<<"] Edge()"<<endl;
-	eiList=NULL;
-	isIsolatedVar=true;
-	depth=NULL;
-	depthDelta=0;
-	mce=NULL;
-	pts=NULL;
-	env=NULL;
-}
-#endif
-
 Edge::~Edge()
 {
 	//cerr<<"["<<this<<"] ~Edge()"<<endl;
@@ -63,95 +49,33 @@ Edge::~Edge()
 	delete env;
 }
 
-Edge::Edge(CoordinateSequence* newPts, Label *newLabel):
+Edge::Edge(CoordinateSequence* newPts, Label *newLabel)
+	:
 	GraphComponent(newLabel),
-	pts(newPts),
-	eiList(this),
 	mce(NULL),
 	env(NULL),
 	isIsolatedVar(true),
 	depth(),
-	depthDelta(0)
+	depthDelta(0),
+	pts(newPts),
+	eiList(this)
 {
 }
 
-Edge::Edge(CoordinateSequence* newPts):
+Edge::Edge(CoordinateSequence* newPts)
+	:
 	GraphComponent(),
-	pts(newPts),
-	eiList(this),
 	mce(NULL),
 	env(NULL),
 	isIsolatedVar(true),
-	//depth(new Depth()),
 	depth(),
-	depthDelta(0)
+	depthDelta(0),
+	pts(newPts),
+	eiList(this)
 {
 }
 
-int
-Edge::getNumPoints() const
-{
-	return pts->getSize();
-}
-
-void
-Edge::setName(const string &newName)
-{
-	name=newName;
-}
-
-const CoordinateSequence*
-Edge::getCoordinates() const
-{
-	return pts;
-}
-
-const Coordinate&
-Edge::getCoordinate(int i) const
-{
-	return pts->getAt(i);
-}
-
-const Coordinate&
-Edge::getCoordinate() const
-{
-	return pts->getAt(0);
-}
-
-Depth &
-Edge::getDepth()
-{
-	return depth;
-}
-
-/*
- * The depthDelta is the change in depth as an edge is crossed from R to L
- * @return the change in depth as the edge is crossed from R to L
- */
-int
-Edge::getDepthDelta() const
-{
-	return depthDelta;
-}
-
-void
-Edge::setDepthDelta(int newDepthDelta)
-{
-	depthDelta=newDepthDelta;
-}
-
-int
-Edge::getMaximumSegmentIndex() const
-{
-	return getNumPoints()-1;
-}
-
-EdgeIntersectionList&
-Edge::getEdgeIntersectionList()
-{
-	return eiList;
-}
-
+/*public*/
 MonotoneChainEdge*
 Edge::getMonotoneChainEdge()
 {
@@ -159,16 +83,8 @@ Edge::getMonotoneChainEdge()
 	return mce;
 }
 
-bool
-Edge::isClosed() const
-{
-	return pts->getAt(0)==pts->getAt(getNumPoints()-1);
-}
 
-/*
- * An Edge is collapsed if it is an Area edge and it consists of
- * two segments which are equal and opposite (eg a zero-width V).
- */
+/*public*/
 bool
 Edge::isCollapsed() const
 {
@@ -187,10 +103,7 @@ Edge::getCollapsedEdge()
 	return new Edge(newPts, Label::toLineLabel(*label));
 }
 
-/*
- * Adds EdgeIntersections for one or both
- * intersections found for a segment of an edge to the edge intersection list.
- */
+/*public*/
 void
 Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
 {
@@ -202,11 +115,7 @@ Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
 	}
 }
 
-/*
- * Add an EdgeIntersection for intersection intIndex.
- * An intersection that falls exactly on a vertex of the edge is normalized
- * to use the higher of the two possible segmentIndexes
- */
+/*public*/
 void
 Edge::addIntersection(LineIntersector *li,
 	int segmentIndex, int geomIndex, int intIndex)
@@ -241,41 +150,12 @@ Edge::addIntersection(LineIntersector *li,
 	eiList.add(intPt,normalizedSegmentIndex,dist);
 }
 
-/*
- * Update the IM with the contribution for this component.
- * A component only contributes if it has a labelling for both parent geometries
- */
-void
-Edge::computeIM(IntersectionMatrix *im) 
-{
-	updateIM(label, im);
-}
-
-/*
- * equals is defined to be:
- * 
- * e1 equals e2
- * <b>iff</b>
- * the coordinates of e1 are the same or the reverse of the coordinates in e2
- */
+/*public*/
 bool
-operator==(const Edge &e1, const Edge &e2)
-{
-	return e1.equals(&e2);
-}
-
-/*
- * equals is defined to be:
- * <p>
- * e1 equals e2
- * <b>iff</b>
- * the coordinates of e1 are the same or the reverse of the coordinates in e2
- */
-bool
-Edge::equals(const Edge *e) const
+Edge::equals(const Edge& e) const
 {
 	unsigned int npts1=getNumPoints(); 
-	unsigned int npts2=e->getNumPoints(); 
+	unsigned int npts2=e.getNumPoints(); 
 
 	if (npts1 != npts2 ) return false;
 
@@ -285,8 +165,8 @@ Edge::equals(const Edge *e) const
 	for (unsigned int i=0, iRev=npts1-1; i<npts1; ++i, --iRev)
 	{
 		const Coordinate &e1pi=pts->getAt(i);
-		const Coordinate &e2pi=e->pts->getAt(i);
-		const Coordinate &e2piRev=e->pts->getAt(iRev);
+		const Coordinate &e2pi=e.pts->getAt(i);
+		const Coordinate &e2piRev=e.pts->getAt(iRev);
 
 		if ( !e1pi.equals2D(e2pi) ) isEqualForward=false;
 		if ( !e1pi.equals2D(e2piRev) ) isEqualReverse=false;
@@ -295,9 +175,7 @@ Edge::equals(const Edge *e) const
 	return true;
 }
 
-/*
- * @return true if the coordinate sequences of the Edges are identical
- */
+/*public*/
 bool
 Edge::isPointwiseEqual(const Edge *e) const
 {
@@ -371,6 +249,18 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.24  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

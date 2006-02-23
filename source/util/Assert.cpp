@@ -11,8 +11,57 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/util.h>
+#include <geos/geom.h>
+
+namespace geos {
+
+void
+Assert::isTrue(bool assertion, const string& message)
+{
+	if (!assertion) {
+		if (message.empty()) {
+			throw  AssertionFailedException();
+		} else {
+			throw  AssertionFailedException(message);
+		}
+	}
+}
+
+void
+Assert::equals(const Coordinate& expectedValue,
+		const Coordinate& actualValue, const string& message)
+{
+	if (!(actualValue==expectedValue)) {
+		throw  AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
+			+ actualValue.toString() + (!message.empty() ? ": " + message : ""));
+	}
+}
+
+
+void Assert::shouldNeverReachHere(const string& message) {
+	throw  AssertionFailedException("Should never reach here"
+		+ (!message.empty() ? ": " + message : ""));
+}
+
+}
+
+/**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/23 11:54:21  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.10  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -26,47 +75,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/util.h>
-#include <geos/geom.h>
-
-namespace geos {
-
-void Assert::isTrue(bool assertion) {
-	isTrue(assertion, string());
-}
-
-void Assert::isTrue(bool assertion, string message) {
-	if (!assertion) {
-		if (message.empty()) {
-			throw  AssertionFailedException();
-		} else {
-			throw  AssertionFailedException(message);
-		}
-	}
-}
-
-void Assert::equals(const Coordinate& expectedValue, const Coordinate& actualValue){
-	equals(expectedValue, actualValue, string());
-}
-
-void Assert::equals(const Coordinate& expectedValue, const Coordinate& actualValue, string message){
-	if (!(actualValue==expectedValue)) {
-		throw  AssertionFailedException("Expected " + expectedValue.toString() + " but encountered "
-			+ actualValue.toString() + (!message.empty() ? ": " + message : ""));
-	}
-}
-
-
-void Assert::shouldNeverReachHere() {
-	shouldNeverReachHere(string());
-}
-
-void Assert::shouldNeverReachHere(string message) {
-	throw  AssertionFailedException("Should never reach here"
-		+ (!message.empty() ? ": " + message : ""));
-}
-
-}
 

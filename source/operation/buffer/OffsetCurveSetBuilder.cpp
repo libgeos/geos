@@ -282,13 +282,12 @@ bool
 OffsetCurveSetBuilder::isTriangleErodedCompletely(
 	CoordinateSequence *triangleCoord, double bufferDistance)
 {
-	//Triangle *tri=new Triangle(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
 	Triangle tri(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
 
-	Coordinate *inCentre=tri.inCentre();
-	double distToCentre=CGAlgorithms::distancePointLine(*inCentre, tri.p0, tri.p1);
+	Coordinate inCentre;
+	tri.inCentre(inCentre);
+	double distToCentre=CGAlgorithms::distancePointLine(inCentre, tri.p0, tri.p1);
 	bool ret = distToCentre < fabs(bufferDistance);
-	//delete tri;
 	return ret;
 }
 
@@ -299,6 +298,18 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.23  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

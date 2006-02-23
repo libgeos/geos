@@ -58,10 +58,10 @@ MCIndexNoder::intersectChains()
 	{
 
 		indexMonotoneChain* queryChain = *i;
-		vector<void*>* overlapChains = \
-				index.query(queryChain->getEnvelope());
+		vector<void*> overlapChains;
+		index.query(queryChain->getEnvelope(), overlapChains);
 		for (vector<void*>::iterator
-			j=overlapChains->begin(), jEnd=overlapChains->end();
+			j=overlapChains.begin(), jEnd=overlapChains.end();
 			j != jEnd;
 			++j)
 		{
@@ -79,8 +79,6 @@ MCIndexNoder::intersectChains()
 			}
 
 		}
-
-		delete overlapChains;
 	}
 }
 
@@ -138,6 +136,18 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.5  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

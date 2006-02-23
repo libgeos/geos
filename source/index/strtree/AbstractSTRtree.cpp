@@ -28,7 +28,8 @@ namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
 
-AbstractSTRtree::~AbstractSTRtree() {
+AbstractSTRtree::~AbstractSTRtree()
+{
 	unsigned int ibsize = itemBoundables->size();
 	for (unsigned int i=0; i<ibsize; i++)
 		delete (*itemBoundables)[i];
@@ -37,46 +38,22 @@ AbstractSTRtree::~AbstractSTRtree() {
 	for (unsigned int i=0; i<nsize; i++)
 		delete (*nodes)[i];
 	delete nodes;
-	//delete root;
 }
 
-/**
- * Creates parent nodes, grandparent nodes, and so forth up to the root
- * node, for the data that has been inserted into the tree. Can only be
- * called once, and thus can be called only after all of the data has been
- * inserted into the tree.
- */
+/*public*/
 void
 AbstractSTRtree::build()
 {
-#if PROFILE
-	static Profile *prof = Profiler::instance()->get("AbstractSTRtree::build");
-	prof->start();
-#endif
 	assert(!built);
 	root=(itemBoundables->empty()?createNode(0):createHigherLevels(itemBoundables,-1));
 	built=true;
-#if PROFILE
-	prof->stop();
-#endif
 }
 
-//void AbstractSTRtree::checkConsistency() {
-//	if (!built) {
-//		build();
-//	}
-//	vector<Boundable*>* itemBoundablesInTree=boundablesAtLevel(-1);
-//	Assert::isTrue(itemBoundables->size()==itemBoundablesInTree->size());
-//}
-
-/**
- * Sorts the childBoundables then divides them into groups of size M, where
- * M is the node capacity.
- */
+/*protected*/
 vector<Boundable*>*
 AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
 {
-	Assert::isTrue(!childBoundables->empty());
+	assert(!childBoundables->empty());
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 	parentBoundables->push_back(createNode(newLevel));
 	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
@@ -97,29 +74,11 @@ AbstractSTRtree::createParentBoundables(vector<Boundable*> *childBoundables, int
 	return parentBoundables;
 }
 
-AbstractNode* AbstractSTRtree::lastNode(vector<Boundable*> *nodes) {
-	return (AbstractNode*)(*nodes)[nodes->size()-1];
-}
-
-bool AbstractSTRtree::compareDoubles(double a, double b) {
-	//return a>b?1:(a<b?-1:0);
-	return a < b;
-}
-
-/**
-* Creates the levels higher than the given level
-* 
-* @param boundablesOfALevel
-*            the level to build on
-* @param level
-*            the level of the Boundables, or -1 if the boundables are item
-*            boundables (that is, below level 0)
-* @return the root, which may be a ParentNode or a LeafNode
-*/
+/*private*/
 AbstractNode*
 AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundablesOfALevel, int level)
 {
-	Assert::isTrue(!boundablesOfALevel->empty());
+	assert(!boundablesOfALevel->empty());
 	vector<Boundable*> *parentBoundables=createParentBoundables(boundablesOfALevel,level+1);
 	if (parentBoundables->size()==1) {
 		AbstractNode *ret = (AbstractNode*)(*parentBoundables)[0];
@@ -131,48 +90,27 @@ AbstractSTRtree::createHigherLevels(vector<Boundable*> *boundablesOfALevel, int 
 	return ret;
 }
 
-AbstractNode* AbstractSTRtree::getRoot() {
-	return root;
-}
-
-/**
-* Returns the maximum number of child nodes that a node may have
-*/
-int AbstractSTRtree::getNodeCapacity() {
-	return nodeCapacity;
-}
-
+/*protected*/
 void
 AbstractSTRtree::insert(const void* bounds,void* item)
 {
-	Assert::isTrue(!built,"Cannot insert items into an STR packed R-tree after it has been built.");
+	// Cannot insert items into an STR packed R-tree after it has been built
+	assert(!built);
 	itemBoundables->push_back(new ItemBoundable(bounds,item));
 }
 
 /*protected*/
-vector<void*>*
-AbstractSTRtree::query(const void* searchBounds)
+void
+AbstractSTRtree::query(const void* searchBounds, vector<void*>& matches)
 {
-	if (!built) {
-		build();
-	}
-#if PROFILE
-	static Profile *prof = Profiler::instance()->get("AbstractSTRtree::query(searchBounds)");
-	prof->start();
-#endif
-	vector<void*> *matches=new vector<void*>();
-	if (itemBoundables->empty()) {
-		assert(root->getBounds()==NULL);
-		return matches;
-	}
-	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds))
+	if (!built) build();
+
+	if (itemBoundables->empty()) assert(root->getBounds()==NULL);
+
+	if (getIntersectsOp()->intersects(root->getBounds(), searchBounds))
 	{
-		query(searchBounds,root,matches);
+		query(searchBounds,root, &matches);
 	}
-#if PROFILE
-	prof->stop();
-#endif
-	return matches;
 }
 
 /*protected*/
@@ -327,6 +265,7 @@ AbstractSTRtree::query(const void* searchBounds,
 	}
 }
 
+/*protected*/
 vector<Boundable*>*
 AbstractSTRtree::boundablesAtLevel(int level)
 {
@@ -335,13 +274,12 @@ AbstractSTRtree::boundablesAtLevel(int level)
 	return boundables;
 }
 
-/**
- * @param level -1 to get items
- */
+/*public*/
 void
-AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*> *boundables)
+AbstractSTRtree::boundablesAtLevel(int level, AbstractNode* top,
+		vector<Boundable*> *boundables)
 {
-	Assert::isTrue(level>-2);
+	assert(level>-2);
 	if (top->getLevel()==level) {
 		boundables->push_back(top);
 		return;
@@ -353,7 +291,7 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 		if (typeid(*boundable)==typeid(AbstractNode)) {
 			boundablesAtLevel(level,(AbstractNode*) boundable,boundables);
 		} else {
-			Assert::isTrue(typeid(*boundable)==typeid(ItemBoundable));
+			assert(typeid(*boundable)==typeid(ItemBoundable));
 			if (level==-1) {
 				boundables->push_back(boundable);
 			}
@@ -368,6 +306,18 @@ AbstractSTRtree::boundablesAtLevel(int level,AbstractNode* top,vector<Boundable*
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.26  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

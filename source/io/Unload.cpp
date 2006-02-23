@@ -40,13 +40,13 @@ Unload::~Unload(void)
 
 void Unload::Release()
 {
-	delete PlanarGraph::cga;
+	//delete PlanarGraph::cga;
 	//delete planarDirectedEdge::cga;
 	//delete GeometryGraphOperation::cga;
 	delete GeometryGraphOperation::li;
 	delete RelateComputer::li;
 	delete RelateComputer::ptLocator;
-	delete quadtree::QuadTreeRoot::origin;
+	//delete quadtree::QuadTreeRoot::origin;
 	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
 	delete Profiler::instance();
 }
@@ -55,6 +55,18 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.17  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

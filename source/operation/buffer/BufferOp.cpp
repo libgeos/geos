@@ -12,9 +12,15 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/BufferOp.java rev. 1.31 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/opBuffer.h>
+#include <geos/noding.h>
+#include <geos/nodingSnapround.h>
 #include <geos/precision.h>
 #include <geos/profiler.h>
 
@@ -23,6 +29,9 @@
 #endif
 
 //#define PROFILE 1
+
+using namespace geos::noding;
+using namespace geos::noding::snapround;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -35,19 +44,7 @@ static Profiler *profiler = Profiler::instance();
 int BufferOp::MAX_PRECISION_DIGITS=12;
 
 
-/**
- * Compute a reasonable scale factor to limit the precision of
- * a given combination of Geometry and buffer distance->
- * The scale factor is based on a heuristic->
- *
- * @param g the Geometry being buffered
- * @param distance the buffer distance
- * @param maxPrecisionDigits the mzx # of digits that should be allowed by
- *          the precision determined by the computed scale factor
- *
- * @return a scale factor that allows a reasonable amount of precision
- *         for the buffer computation
- */
+/*private*/
 double
 BufferOp::precisionScaleFactor(const Geometry *g, double distance,
 	int maxPrecisionDigits)
@@ -64,17 +61,7 @@ BufferOp::precisionScaleFactor(const Geometry *g, double distance,
 	return scaleFactor;
 }
 
-/**
- * Comutes the buffer for a geometry for a given buffer distance
- * and accuracy of approximation->
- *
- * @param g the geometry to buffer
- * @param distance the buffer distance
- * @param quadrantSegments the number of segments used to approximate a
- *        quarter circle
- * @return the buffer of the input geometry
- *
- */
+/*public static*/
 Geometry*
 BufferOp::bufferOp(const Geometry *g, double distance,
 		int quadrantSegments,
@@ -86,31 +73,7 @@ BufferOp::bufferOp(const Geometry *g, double distance,
 	return bufOp.getResultGeometry(distance);
 }
 
-/**
- * Initializes a buffer computation for the given geometry
- *
- * @param g the geometry to buffer
- */
-BufferOp::BufferOp(const Geometry *g):
-	argGeom(g),
-	quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
-	endCapStyle(BufferOp::CAP_ROUND),
-	resultGeometry(NULL)
-{
-	//quadrantSegments=OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS;
-	//endCapStyle=BufferOp::CAP_ROUND;
-	//argGeom = g;
-	//resultGeometry=NULL;
-	//saveException=NULL;
-}
-
-/**
- * Returns the buffer computed for a geometry for a given buffer distance->
- *
- * @param g the geometry to buffer
- * @param distance the buffer distance
- * @return the buffer of the input geometry
- */
+/*public*/
 Geometry*
 BufferOp::getResultGeometry(double nDistance)
 {
@@ -119,18 +82,7 @@ BufferOp::getResultGeometry(double nDistance)
 	return resultGeometry;
 }
 
-/*
- * Computes the buffer for a geometry for a given buffer distance
- * and accuracy of approximation
- *
- * @param g the geometry to buffer
- * @param distance the buffer distance
- * @param quadrantSegments the number of segments used to approximate
- *        a quarter circle
- * @return the buffer of the input geometry
- *
- * @deprecated use setQuadrantSegments instead
- */
+/*public*/
 Geometry*
 BufferOp::getResultGeometry(double nDistance, int nQuadrantSegments)
 {
@@ -140,23 +92,33 @@ BufferOp::getResultGeometry(double nDistance, int nQuadrantSegments)
 	return resultGeometry;
 }
 
+/*private*/
 void
 BufferOp::computeGeometry()
 {
 #if DEBUG
 	cerr<<"BufferOp::computeGeometry: trying with original precision"<<endl;
 #endif
-#if PROFILE
-	profiler->start("BufferOp::bufferOriginalPrecision()");
-#endif
+
 	bufferOriginalPrecision();
-#if PROFILE
-	profiler->stop("BufferOp::bufferOriginalPrecision()");
-#endif
+
 	if (resultGeometry!=NULL) return;
 
+	const PrecisionModel& argPM = *(argGeom->getFactory()->getPrecisionModel());
+	if ( argPM.getType() == PrecisionModel::FIXED )
+		bufferFixedPrecision(argPM);
+	else
+		bufferReducedPrecision();
+}
+
+/*private*/
+void
+BufferOp::bufferReducedPrecision()
+{
+
 	// try and compute with decreasing precision
-	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--) 	{
+	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--)
+	{
 #if DEBUG
 		cerr<<"BufferOp::computeGeometry: trying with precDigits "<<precDigits<<endl;
 #endif
@@ -167,8 +129,7 @@ BufferOp::computeGeometry()
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
 		} 
 
-		if (resultGeometry!=NULL)
-		{
+		if (resultGeometry!=NULL) {
 			// debug
 			//if ( saveException ) cerr<<saveException->toString()<<endl;
 			return;
@@ -178,6 +139,7 @@ BufferOp::computeGeometry()
 	throw saveException;
 }
 
+/*private*/
 void
 BufferOp::bufferOriginalPrecision()
 {
@@ -186,38 +148,50 @@ BufferOp::bufferOriginalPrecision()
 	bufBuilder.setEndCapStyle(endCapStyle);
 
 	//cerr<<"computing with original precision"<<endl;
-	try {
+	try
+	{
 		resultGeometry=bufBuilder.buffer(argGeom, distance);
-	} catch (const TopologyException& ex) {
-		//cerr<<ex->toString()<<endl;
+	}
+	catch (const TopologyException& ex)
+	{
+		// don't propagate the exception - it will be detected by
+		// fact that resultGeometry is null
 		saveException=ex;
-		return;
+
+		//cerr<<ex->toString()<<endl;
 	} 
 	//cerr<<"done"<<endl;
 }
 
 void
-BufferOp::bufferFixedPrecision(int precisionDigits)
+BufferOp::bufferReducedPrecision(int precisionDigits)
 {
 	double sizeBasedScaleFactor=precisionScaleFactor(argGeom, distance, precisionDigits);
-	PrecisionModel fixedPM=PrecisionModel(sizeBasedScaleFactor);
-	// don't change the precision model of the Geometry, just reduce the precision
-	SimpleGeometryPrecisionReducer reducer=SimpleGeometryPrecisionReducer(&fixedPM);
-	Geometry* reducedGeom=reducer.reduce(argGeom);
-	//cerr<<"recomputing with precision scale factor="<<sizeBasedScaleFactor<<" (precision digits "<<precisionDigits<<")"<<endl;
+	PrecisionModel fixedPM(sizeBasedScaleFactor);
+	bufferFixedPrecision(fixedPM);
+}
+
+/*private*/
+void
+BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
+{
+	PrecisionModel pm(1.0); // fixed as well
+	MCIndexSnapRounder snapRounder(pm);
+	ScaledNoder noder(snapRounder, fixedPM.getScale());
 
 	BufferBuilder bufBuilder;
 	bufBuilder.setWorkingPrecisionModel(&fixedPM);
+
+	// FIXME: this noder leaks memory, the buffer.xml
+	// test shows that. Note that commenting this out
+	// removes the leak!
+	bufBuilder.setNoder(&noder);
+
 	bufBuilder.setQuadrantSegments(quadrantSegments);
+	bufBuilder.setEndCapStyle(endCapStyle);
 
 	// this may throw an exception, if robustness errors are encountered
-	try {
-		resultGeometry=bufBuilder.buffer(reducedGeom, distance);
-	} catch (...) {
-		delete reducedGeom;
-		throw;
-	}
-	delete reducedGeom;
+	resultGeometry=bufBuilder.buffer(argGeom, distance);
 }
 
 } // namespace geos.operation.buffer
@@ -226,6 +200,18 @@ BufferOp::bufferFixedPrecision(int precisionDigits)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.40  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

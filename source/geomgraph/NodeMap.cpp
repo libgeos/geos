@@ -117,17 +117,15 @@ NodeMap::find(const Coordinate& coord) const
 		return found->second;
 }
 
-vector<Node*>*
-NodeMap::getBoundaryNodes(int geomIndex) const
+void
+NodeMap::getBoundaryNodes(int geomIndex, vector<Node*>&bdyNodes) const
 {
-	vector<Node*>* bdyNodes=new vector<Node*>();
 	NodeMap::const_iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		if (node->getLabel()->getLocation(geomIndex)==Location::BOUNDARY)
-			bdyNodes->push_back(node);
+			bdyNodes.push_back(node);
 	}
-	return bdyNodes;
 }
 
 string
@@ -147,6 +145,18 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.10  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

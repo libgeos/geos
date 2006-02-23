@@ -26,15 +26,12 @@ namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 // the singleton root quad is centred at the origin.
-Coordinate* QuadTreeRoot::origin=new Coordinate(0.0, 0.0);
+//Coordinate* QuadTreeRoot::origin=new Coordinate(0.0, 0.0);
+Coordinate QuadTreeRoot::origin(0.0, 0.0);
 
-QuadTreeRoot::QuadTreeRoot(){}
-QuadTreeRoot::~QuadTreeRoot(){}
-
-/**
-* Insert an item into the quadtree this is the root of.
-*/
-void QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
+/*public*/
+void
+QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
 
 #if DEBUG
 	cerr<<"("<<this<<") insert("<<itemEnv->toString()<<", "<<item<<") called"<<endl;
@@ -79,34 +76,29 @@ void QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
 	//System.out.println(" size = " + size());
 }
 
-/**
- * insert an item which is known to be contained in the tree rooted at
- * the given QuadNode root.  Lower levels of the tree will be created
- * if necessary to hold the item.
- */
+/*private*/
 void
 QuadTreeRoot::insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void *item)
 {
 	Assert::isTrue(tree->getEnvelope()->contains(itemEnv));
+
 	/**
-	* Do NOT create a new quad for zero-area envelopes - this would lead
-	* to infinite recursion. Instead, use a heuristic of simply returning
-	* the smallest existing quad containing the query
-	*/
+	 * Do NOT create a new quad for zero-area envelopes - this would lead
+	 * to infinite recursion. Instead, use a heuristic of simply returning
+	 * the smallest existing quad containing the query
+	 */
 	bool isZeroX=IntervalSize::isZeroWidth(itemEnv->getMinX(),itemEnv->getMaxX());
 	bool isZeroY=IntervalSize::isZeroWidth(itemEnv->getMinX(),itemEnv->getMaxX());
+
 	QuadTreeNodeBase *node;
+
 	if (isZeroX || isZeroY)
 		node=tree->find(itemEnv);
 	else
 		node=tree->getNode(itemEnv);
+
 	node->add(item);
 }
-
-bool QuadTreeRoot::isSearchMatch(const Envelope *searchEnv){
-	return true;
-}
-
 
 } // namespace geos.index.quadtree
 } // namespace geos.index
@@ -114,6 +106,18 @@ bool QuadTreeRoot::isSearchMatch(const Envelope *searchEnv){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.10  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

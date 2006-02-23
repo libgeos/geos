@@ -34,39 +34,86 @@ namespace index { // geos.geomgraph.index
 
 
 class SegmentIntersector{
-public:
-	static bool isAdjacentSegments(int i1,int i2);
-	// testing only
-	int numTests;
-	//SegmentIntersector();
-	virtual ~SegmentIntersector();
-	SegmentIntersector(algorithm::LineIntersector *newLi,bool newIncludeProper,bool newRecordIsolated);
-	void setBoundaryNodes(std::vector<Node*> *bdyNodes0,std::vector<Node*> *bdyNodes1);
-	Coordinate& getProperIntersectionPoint();
-	bool hasIntersection();
-	bool hasProperIntersection();
-	bool hasProperInteriorIntersection();
-	void addIntersections(Edge *e0,int segIndex0,Edge *e1,int segIndex1);
+
 private:
+
 	/**
 	 * These variables keep track of what types of intersections were
 	 * found during ALL edges that have been intersected.
 	 */
 	bool hasIntersectionVar;
+
 	bool hasProper;
+
 	bool hasProperInterior;
+
 	// the proper intersection point found
 	Coordinate properIntersectionPoint;
+
 	algorithm::LineIntersector *li;
+
 	bool includeProper;
+
 	bool recordIsolated;
+
 	//bool isSelfIntersection;
+
 	//bool intersectionFound;
+
 	int numIntersections;
-	std::vector<std::vector<Node*>*> *bdyNodes;
+
+	/// Elements are externally owned
+	std::vector<std::vector<Node*>*> bdyNodes;
+
 	bool isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1, int segIndex1);
-	bool isBoundaryPoint(algorithm::LineIntersector *li,std::vector<std::vector<Node*>*> *tstBdyNodes);
-	bool isBoundaryPoint(algorithm::LineIntersector *li,std::vector<Node*> *tstBdyNodes);
+
+	bool isBoundaryPoint(algorithm::LineIntersector *li,
+			std::vector<std::vector<Node*>*>& tstBdyNodes);
+
+	bool isBoundaryPoint(algorithm::LineIntersector *li,
+			std::vector<Node*> *tstBdyNodes);
+
+public:
+
+	static bool isAdjacentSegments(int i1,int i2);
+
+	// testing only
+	int numTests;
+
+	//SegmentIntersector();
+
+	virtual ~SegmentIntersector() {}
+
+	SegmentIntersector(algorithm::LineIntersector *newLi,
+			bool newIncludeProper, bool newRecordIsolated)
+		:
+		hasIntersectionVar(false),
+		hasProper(false),
+		hasProperInterior(false),
+		li(newLi),
+		includeProper(newIncludeProper),
+		recordIsolated(newRecordIsolated),
+		numIntersections(0),
+		bdyNodes(2),
+		numTests(0)
+	{}
+
+	/// \brief
+	/// Parameters are externally owned.
+	/// Make sure they live for the whole lifetime of this object
+	void setBoundaryNodes(std::vector<Node*> *bdyNodes0,
+			std::vector<Node*> *bdyNodes1);
+
+	Coordinate& getProperIntersectionPoint();
+
+	bool hasIntersection();
+
+	bool hasProperIntersection();
+
+	bool hasProperInteriorIntersection();
+
+	void addIntersections(Edge *e0,int segIndex0,Edge *e1,int segIndex1);
+
 };
 
 /* 
@@ -290,6 +337,18 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -53,34 +53,6 @@ GeometryGraph::determineBoundary(int boundaryCount)
 	return isInBoundary(boundaryCount)?Location::BOUNDARY : Location::INTERIOR;
 }
 
-GeometryGraph::GeometryGraph():
-	PlanarGraph(),
-	parentGeom(NULL),
-	//lineEdgeMap(),
-	useBoundaryDeterminationRule(false),
-	argIndex(-1),
-	boundaryNodes(NULL),
-	hasTooFewPointsVar(false)
-{
-	//lineEdgeMap=new map<const LineString*,Edge*,LineStringLT>();
-}
-
-GeometryGraph::~GeometryGraph()
-{
-	//delete lineEdgeMap;
-}
-
-GeometryGraph::GeometryGraph(int newArgIndex, const Geometry *newParentGeom):
-	PlanarGraph(),
-	parentGeom(newParentGeom),
-	//lineEdgeMap(),
-	useBoundaryDeterminationRule(false),
-	argIndex(newArgIndex),
-	boundaryNodes(NULL),
-	hasTooFewPointsVar(false)
-{
-	if (parentGeom!=NULL) add(parentGeom);
-}
 
 EdgeSetIntersector*
 GeometryGraph::createEdgeSetIntersector()
@@ -97,34 +69,39 @@ GeometryGraph::createEdgeSetIntersector()
 	return new SimpleMCSweepLineIntersector();
 }
 
-const
-Geometry* GeometryGraph::getGeometry()
-{
-	return parentGeom;
-}
-
+/*public*/
 vector<Node*>*
 GeometryGraph::getBoundaryNodes()
 {
-	if (boundaryNodes==NULL)
-		boundaryNodes=nodes->getBoundaryNodes(argIndex);
-	return boundaryNodes;
+	if ( ! boundaryNodes.get() )
+	{
+		boundaryNodes.reset(new vector<Node*>());
+		getBoundaryNodes(*(boundaryNodes.get()));
+	}
+	return boundaryNodes.get();
 }
 
+/*public*/
 CoordinateSequence*
 GeometryGraph::getBoundaryPoints()
 {
-	vector<Node*> *coll=getBoundaryNodes();
-	CoordinateSequence *pts=new CoordinateArraySequence(coll->size());
-	unsigned int i=0;
-	for (vector<Node*>::iterator it=coll->begin(), endIt=coll->end();
-		it!=endIt; ++it)
+
+	if ( ! boundaryPoints.get() ) 
 	{
-		Node *node=*it;
-		pts->setAt(node->getCoordinate(), i++);
+		// Collection will be destroied by GeometryGraph dtor
+		vector<Node*>* coll = getBoundaryNodes();
+		boundaryPoints.reset(new CoordinateArraySequence(coll->size()));
+		unsigned int i=0;
+		for (vector<Node*>::iterator it=coll->begin(), endIt=coll->end();
+			it!=endIt; ++it)
+		{
+			Node *node=*it;
+			boundaryPoints->setAt(node->getCoordinate(), i++);
+		}
 	}
-	delete coll;
-	return pts;
+
+	// We keep ownership of this, will be destroyed by destructor
+	return boundaryPoints.get();
 }
 
 Edge*
@@ -232,7 +209,7 @@ GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 	 */
 	try
 	{
-		if (cga->isCCW(coord)) {
+		if (CGAlgorithms::isCCW(coord)) {
 			left=cwRight;
 			right=cwLeft;
 		}
@@ -312,16 +289,6 @@ GeometryGraph::addPoint(Coordinate& pt)
 	insertPoint(argIndex,pt,Location::INTERIOR);
 }
 
-/*
- * Compute self-nodes, taking advantage of the Geometry type to
- * minimize the number of intersection tests.  (E.g. rings are
- * not tested for self-intersection, since they are assumed to be valid).
- * @param li the LineIntersector to use
- * @param computeRingSelfNodes if <false>, intersection checks are
- *	optimized to not test rings for self-intersection
- * @return the SegmentIntersector used, containing information about
- *	the intersections found
- */
 SegmentIntersector*
 GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 {
@@ -353,6 +320,8 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	cerr<<"GeometryGraph::computeEdgeIntersections call"<<endl;
 #endif
 	SegmentIntersector *si=new SegmentIntersector(li, includeProper, true);
+	newSegmentIntersectors.push_back(si);
+
 	si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
 	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 	esi->computeIntersections(edges, g->edges, si);
@@ -458,6 +427,18 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.19  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -157,8 +157,23 @@ class AbstractSTRtree {
 private:
 	bool built;
 	std::vector<Boundable*> *itemBoundables;
-	virtual AbstractNode* createHigherLevels(std::vector<Boundable*> *boundablesOfALevel, int level);
-	virtual std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input)=0;
+
+	/**
+	 * Creates the levels higher than the given level
+	 * 
+	 * @param boundablesOfALevel
+	 *            the level to build on
+	 * @param level
+	 *            the level of the Boundables, or -1 if the boundables are item
+	 *            boundables (that is, below level 0)
+	 * @return the root, which may be a ParentNode or a LeafNode
+	 */
+	virtual AbstractNode* createHigherLevels(
+			std::vector<Boundable*> *boundablesOfALevel,
+			int level);
+
+	virtual std::vector<Boundable*> *sortBoundables(
+			const std::vector<Boundable*> *input)=0;
 
 	bool remove(const void* searchBounds, AbstractNode& node, void* item);
 	bool removeItem(AbstractNode& node, void* item);
@@ -187,16 +202,40 @@ protected:
 	AbstractNode *root;
 
 	std::vector <AbstractNode *> *nodes;
+
 	virtual AbstractNode* createNode(int level)=0;
-	virtual std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables, int newLevel);
-	virtual AbstractNode* lastNode(std::vector<Boundable*> *nodes);
-	virtual AbstractNode* getRoot();
+
+	/**
+	 * Sorts the childBoundables then divides them into groups of size M, where
+	 * M is the node capacity.
+	 */
+	virtual std::vector<Boundable*>* createParentBoundables(
+			std::vector<Boundable*> *childBoundables,
+			int newLevel);
+
+	virtual AbstractNode* lastNode(std::vector<Boundable*> *nodes) {
+		return (AbstractNode*)(*nodes)[nodes->size()-1];
+	}
+
+	virtual AbstractNode* getRoot() {
+		return root;
+	}
 
 	///  Also builds the tree, if necessary.
 	virtual void insert(const void* bounds,void* item);
 
 	///  Also builds the tree, if necessary.
-	std::vector<void*>* query(const void* searchBounds);
+	void query(const void* searchBounds, std::vector<void*>& foundItems);
+
+#if 0
+	///  Also builds the tree, if necessary.
+	std::vector<void*>* query(const void* searchBounds) {
+		vector<void*>* matches = new vector<void*>();
+		query(searchBounds, *matches);
+		return matches;
+	}
+#endif
+
 
 	///  Also builds the tree, if necessary.
 	void query(const void* searchBounds, ItemVisitor& visitor);
@@ -236,14 +275,32 @@ public:
 		assert(newNodeCapacity>1);
 	}
 
-	static bool compareDoubles(double a, double b);
+	static bool compareDoubles(double a, double b) {
+		return a<b;
+	}
+
 	virtual ~AbstractSTRtree();
+
+	/**
+	 * Creates parent nodes, grandparent nodes, and so forth up to the root
+	 * node, for the data that has been inserted into the tree. Can only be
+	 * called once, and thus can be called only after all of the data has been
+	 * inserted into the tree.
+	 */
 	virtual void build();
-//	virtual void checkConsistency();
-	virtual int getNodeCapacity();
+
+	/**
+	 * Returns the maximum number of child nodes that a node may have
+	 */
+	virtual int getNodeCapacity() { return nodeCapacity; }
 
 	virtual void query(const void* searchBounds, AbstractNode* node, std::vector<void*>* matches);
-	virtual void boundablesAtLevel(int level,AbstractNode* top,std::vector<Boundable*> *boundables);
+
+	/**
+	 * @param level -1 to get items
+	 */
+	virtual void boundablesAtLevel(int level, AbstractNode* top,
+			std::vector<Boundable*> *boundables);
 };
 
 class SIRAbstractNode: public AbstractNode{
@@ -254,7 +311,7 @@ protected:
 	void* computeBounds();
 };
 
-/*
+/**
  * \class SIRtree indexStrtree.h geos/indexStrtree.h
  * \brief One-dimensional version of an STR-packed R-tree.
  *
@@ -275,8 +332,23 @@ public:
 	SIRtree(int nodeCapacity);
 	virtual ~SIRtree();
 	void insert(double x1,double x2,void* item);
-	std::vector<void*>* query(double x);
-	std::vector<void*>* query(double x1, double x2);
+
+	/**
+	 * Returns items whose bounds intersect the given bounds.
+	 * @param x1 possibly equal to x2
+	 */
+	std::vector<void*>* query(double x1, double x2) {
+		std::vector<void*>* results = new vector<void*>();
+		Interval interval(min(x1, x2),max(x1, x2));
+		AbstractSTRtree::query(&interval, *results);
+		return results;
+	}
+
+	/**
+	 * Returns items whose bounds intersect the given value.
+	 */
+	std::vector<void*>* query(double x) { return query(x,x); }
+
 
 protected:
 	class SIRIntersectsOp:public AbstractSTRtree::IntersectsOp {
@@ -360,8 +432,14 @@ public:
 		return STRtree::avg(e->getMinY(), e->getMaxY());
 	}
 
+#if 0
 	std::vector<void*>* query(const Envelope *searchEnv) {
 		return AbstractSTRtree::query(searchEnv);
+	}
+#endif
+
+	void query(const Envelope *searchEnv, std::vector<void*>& matches) {
+		AbstractSTRtree::query(searchEnv, matches);
 	}
 
 	void query(const Envelope *searchEnv, ItemVisitor& visitor) {
@@ -382,6 +460,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.12  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

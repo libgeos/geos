@@ -807,7 +807,6 @@ private:
 
 	void rescale(SegmentString::NonConstVect& segStrings) const;
 
-
 public:
 
 	bool isIntegerPrecision() { return (scaleFactor == 1.0); }
@@ -824,7 +823,7 @@ public:
 
 	SegmentString::NonConstVect* getNodedSubstrings() const;
 
-	//void computeNodes(SegmentString::NonConstVect& inputSegStr)
+	void computeNodes(SegmentString::NonConstVect* inputSegStr);
 
 	//void filter(Coordinate& c);
 
@@ -1064,6 +1063,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.19  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

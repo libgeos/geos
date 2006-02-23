@@ -11,8 +11,43 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/geom.h>
+
+namespace geos {
+
+
+void
+Triangle::inCentre(Coordinate& result)
+{
+	// the lengths of the sides, labelled by their opposite vertex
+	double len0 = p1.distance(p2);
+	double len1 = p0.distance(p2);
+	double len2 = p0.distance(p1);
+	double circum = len0 + len1 + len2;
+	double inCentreX = (len0 * p0.x + len1 * p1.x +len2 * p2.x)  / circum;
+	double inCentreY = (len0 * p0.y + len1 * p1.y +len2 * p2.y)  / circum;
+
+	result = Coordinate(inCentreX, inCentreY);
+}
+
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.3  2004/07/02 13:28:26  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -29,33 +64,3 @@
  *
  **********************************************************************/
 
-
-#include <geos/geom.h>
-#include <stdio.h>
-
-namespace geos {
-
-Triangle::Triangle(const Coordinate& nP0,const Coordinate& nP1,const Coordinate& nP2) {
-	p0=nP0;
-	p1=nP1;
-	p2=nP2;
-}
-
-/**
-* The inCentre of a triangle is the point which is equidistant
-* from the sides of the triangle.  This is also the point at which the bisectors
-* of the angles meet.
-*
-* @return the point which is the inCentre of the triangle
-*/
-Coordinate* Triangle::inCentre() {
-	// the lengths of the sides, labelled by their opposite vertex
-	double len0 = p1.distance(p2);
-	double len1 = p0.distance(p2);
-	double len2 = p0.distance(p1);
-	double circum = len0 + len1 + len2;
-	double inCentreX = (len0 * p0.x + len1 * p1.x +len2 * p2.x)  / circum;
-	double inCentreY = (len0 * p0.y + len1 * p1.y +len2 * p2.y)  / circum;
-	return new Coordinate(inCentreX, inCentreY);
-}
-}

@@ -31,21 +31,7 @@ namespace geomgraph { // geos.geomgraph
 static Profiler *profiler = Profiler::instance();
 #endif
 
-EdgeList::EdgeList():
-	index(new Quadtree())
-{
-	//edges=new vector<Edge*>();
-	//index=new Quadtree();
-}
-
-EdgeList::~EdgeList()
-{
-	//delete edges;
-	delete index;
-}
-/**
- * Insert an edge unless it is already in the list
- */
+/*public*/
 void
 EdgeList::add(Edge *e)
 {
@@ -82,25 +68,25 @@ EdgeList::findEqualEdge(Edge *e)
 	static Profile *prof = profiler->get("EdgeList::findEqualEdge(Edge *e)");
 	prof->start();
 #endif
-	vector<void*> *testEdges=index->query(e->getEnvelope());
+	vector<void*> testEdges;
+	index->query(e->getEnvelope(), testEdges);
 #if PROFILE
 	prof->stop();
 #endif
 
 #if DEBUG
-	cerr<<"EdgeList::findEqualEdge found "<<testEdges->size()<<" overlapping edges"<<endl;
+	cerr << "EdgeList::findEqualEdge found " << testEdges.size() <<
+			" overlapping edges" << endl;
 #endif
 
-	for (unsigned int i=0, s=testEdges->size(); i<s; ++i)
+	for (unsigned int i=0, s=testEdges.size(); i<s; ++i)
 	{
-		Edge* testEdge=(Edge*) (*testEdges)[i];
+		Edge* testEdge=static_cast<Edge*>(testEdges[i]);
 		if (testEdge->equals(e))
 		{
-			delete testEdges;
 			return testEdge;
 		}
 	}
-	delete testEdges;
 	return NULL;
 }
 
@@ -144,6 +130,18 @@ EdgeList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.11  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

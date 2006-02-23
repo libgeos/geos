@@ -36,13 +36,33 @@ namespace geos {
  * Use toString() to get a readable message.
  */
 class GEOSException: public std::exception {
-public:
-	GEOSException();
 
-	GEOSException(string msg);
+protected:
+	string txt;
+	string name;
+
+public:
+	virtual void setName(const string& nname) { name=nname; }
+	virtual void setMessage(const string& msg) { txt=msg; }
+
+	GEOSException()
+	{
+		setName("GEOSException");
+		setMessage("unknown error");
+	}
+
+	GEOSException(const string& msg)
+	{
+		setName("GEOSException");
+		setMessage(msg);
+	}
 
 	/// Create an exception of given type containing given message 
-	GEOSException(string nname,string msg);
+	GEOSException(const string& nname, const string& msg)
+	{
+		setName(nname);
+		setMessage(msg);
+	}
 
 	virtual ~GEOSException() throw() {}
 
@@ -54,20 +74,25 @@ public:
 		return toString().c_str();
 	}
 
-	virtual void setName(string nname);
-	virtual void setMessage(string msg);
-protected:
-	string txt;
-	string name;
 };
 
 /** \class AssertionFailedException util.h geos.h
  * \brief Indicates a bug in GEOS code.
  */
 class AssertionFailedException: public GEOSException {
+
 public:
-	AssertionFailedException();
-	AssertionFailedException(string msg);
+
+	AssertionFailedException()
+		:
+		GEOSException("AssertionFailedException", "")
+	{}
+
+	AssertionFailedException(const string& msg)
+		:
+		GEOSException("AssertionFailedException", msg)
+	{}
+
 	~AssertionFailedException() throw() {}
 };
 
@@ -80,8 +105,16 @@ public:
  */
 class IllegalArgumentException: public GEOSException {
 public:
-	IllegalArgumentException();
-	IllegalArgumentException(string msg);
+	IllegalArgumentException()
+		:
+		GEOSException("IllegalArgumentException", "")
+	{}
+
+	IllegalArgumentException(const string& msg)
+		:
+		GEOSException("IllegalArgumentException", msg)
+	{}
+
 	~IllegalArgumentException() throw() {};
 };
 
@@ -94,13 +127,26 @@ public:
  */
 class TopologyException: public GEOSException {
 public:
-	TopologyException();
-	TopologyException(string msg);
-	TopologyException(string msg,const Coordinate *newPt);
-	~TopologyException() throw() { delete pt; }
-	Coordinate* getCoordinate() { return pt; }
+	TopologyException()
+		:
+		GEOSException("TopologyException", "")
+	{}
+
+	TopologyException(const string& msg)
+		:
+		GEOSException("TopologyException", msg)
+	{}
+
+	TopologyException(const string& msg, const Coordinate *newPt)
+		:
+		GEOSException("TopologyException", msg+" "+newPt->toString()),
+		pt(*newPt)
+	{}
+
+	~TopologyException() throw() {}
+	Coordinate* getCoordinate() { return &pt; }
 private:
-	Coordinate *pt;
+	Coordinate pt;
 };
 
 /**
@@ -113,22 +159,44 @@ private:
  */
 class UnsupportedOperationException: public GEOSException {
 public:
-	UnsupportedOperationException();
-	UnsupportedOperationException(string msg);
+	UnsupportedOperationException()
+		:
+		GEOSException("UnsupportedOperationException", "")
+	{}
+
+	UnsupportedOperationException(const string& msg)
+		:
+		GEOSException("UnsupportedOperationException", msg)
+	{}
+
 	~UnsupportedOperationException() throw() {};
 };
 
 class Coordinate;
 class Assert {
 public:
-	static void isTrue(bool assertion);
-	static void isTrue(bool assertion, string message);
 
-	static void equals(const Coordinate& expectedValue, const Coordinate& actualValue);
-	static void equals(const Coordinate& expectedValue, const Coordinate& actualValue, string message);
+	static void isTrue(bool assertion, const string& message);
 
-	static void shouldNeverReachHere();
-	static void shouldNeverReachHere(string message);
+	static void isTrue(bool assertion) {
+		isTrue(assertion, string());
+	}
+
+
+	static void equals(const Coordinate& expectedValue,
+			const Coordinate& actualValue,
+			const string& message);
+
+	static void equals(const Coordinate& expectedValue,
+			const Coordinate& actualValue)
+	{
+		equals(expectedValue, actualValue, string());
+	}
+
+
+	static void shouldNeverReachHere(const string& message);
+
+	static void shouldNeverReachHere() { shouldNeverReachHere(string()); }
 };
 
 /**
@@ -325,6 +393,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.12  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

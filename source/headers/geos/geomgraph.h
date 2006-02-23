@@ -26,6 +26,7 @@
 #include <geos/geom.h>
 #include <geos/geomgraphindex.h>
 #include <geos/geosAlgorithm.h>
+#include <geos/indexQuadtree.h>
 #include <geos/platform.h>
 #include <geos/noding.h>
 
@@ -540,16 +541,6 @@ public:
 };
 
 class EdgeList {
-public:
-	EdgeList();
-	virtual ~EdgeList();
-	void add(Edge *e);
-	void addAll(const std::vector<Edge*> &edgeColl);
-	std::vector<Edge*> &getEdges();
-	Edge* findEqualEdge(Edge* e);
-	Edge* get(int i);
-	int findEdgeIndex(Edge *e);
-	string print();
 
 private:
 
@@ -565,6 +556,32 @@ private:
 	 *
 	 */
 	geos::index::SpatialIndex* index;
+
+public:
+	EdgeList()
+		:
+		index(new geos::index::quadtree::Quadtree())
+	{}
+
+	virtual ~EdgeList() { delete index; }
+
+	/**
+	 * Insert an edge unless it is already in the list
+	 */
+	void add(Edge *e);
+
+	void addAll(const std::vector<Edge*> &edgeColl);
+
+	std::vector<Edge*> &getEdges();
+
+	Edge* findEqualEdge(Edge* e);
+
+	Edge* get(int i);
+
+	int findEdgeIndex(Edge *e);
+
+	string print();
+
 };
 
 class NodeMap{
@@ -588,7 +605,10 @@ public:
 	iterator begin() { return nodeMap.begin(); }
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
-	std::vector<Node*>* getBoundaryNodes(int geomIndex) const; //returns new obj
+
+	void getBoundaryNodes(int geomIndex,
+		std::vector<Node*>&bdyNodes) const;
+
 	string print() const;
 };
 
@@ -750,109 +770,204 @@ private:
  */
 class PlanarGraph {
 public:
-	static algorithm::CGAlgorithms *cga;
-	static void linkResultDirectedEdges(std::vector<Node*>* allNodes); // throw(TopologyException *);
+	//static algorithm::CGAlgorithms *cga;
+
+	static void linkResultDirectedEdges(std::vector<Node*>* allNodes);
+			// throw(TopologyException);
+
 	PlanarGraph(const NodeFactory &nodeFact);
+
 	PlanarGraph();
+
 	virtual ~PlanarGraph();
+
 	virtual std::vector<Edge*>::iterator getEdgeIterator();
+
 	virtual std::vector<EdgeEnd*>* getEdgeEnds();
+
 	virtual bool isBoundaryNode(int geomIndex, const Coordinate& coord);
+
 	virtual void add(EdgeEnd *e);
+
 	virtual NodeMap::iterator getNodeIterator();
+
 	virtual std::vector<Node*>* getNodes();
+
 	virtual Node* addNode(Node *node);
+
 	virtual Node* addNode(const Coordinate& coord);
+
 	virtual Node* find(Coordinate& coord);
+
 	virtual void addEdges(const std::vector<Edge*> &edgesToAdd);
+
 	virtual void linkResultDirectedEdges();
+
 	virtual void linkAllDirectedEdges();
+
 	virtual EdgeEnd* findEdgeEnd(Edge *e);
+
 	virtual Edge* findEdge(const Coordinate& p0,const Coordinate& p1);
+
 	virtual Edge* findEdgeInSameDirection(const Coordinate& p0,const Coordinate& p1);
+
 	virtual string printEdges();
+
 	virtual NodeMap* getNodeMap();
-	//Not used 
-	//string debugPrint();
-	//string debugPrintln();
+
 protected:
+
 	std::vector<Edge*> *edges;
+
 	NodeMap *nodes;
+
 	std::vector<EdgeEnd*> *edgeEndList;
+
 	virtual void insertEdge(Edge *e);
+
 private:
-	bool matchInSameDirection(const Coordinate& p0, const Coordinate& p1, const Coordinate& ep0, const Coordinate& ep1);
+
+	bool matchInSameDirection(const Coordinate& p0, const Coordinate& p1,
+			const Coordinate& ep0, const Coordinate& ep1);
 };
 
 class GeometryGraph: public PlanarGraph {
 using PlanarGraph::add;
 using PlanarGraph::findEdge;
 
-public:
-	static bool isInBoundary(int boundaryCount);
-	static int determineBoundary(int boundaryCount);
-	GeometryGraph();
-	virtual ~GeometryGraph();
-	GeometryGraph(int newArgIndex, const Geometry *newParentGeom);
-	const Geometry* getGeometry();
-	std::vector<Node*>* getBoundaryNodes();
-	CoordinateSequence* getBoundaryPoints();
-	Edge* findEdge(const LineString *line);
-	void computeSplitEdges(std::vector<Edge*> *edgelist);
-	void addEdge(Edge *e);
-	void addPoint(Coordinate& pt);
-	index::SegmentIntersector* computeSelfNodes(algorithm::LineIntersector *li,
-		bool computeRingSelfNodes);
-	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
-		algorithm::LineIntersector *li,bool includeProper);
-	std::vector<Edge*> *getEdges();
-	bool hasTooFewPoints();
-	const Coordinate& getInvalidPoint(); 
-
 private:
 
-	const Geometry *parentGeom;
+	const Geometry* parentGeom;
 
-	/*
+	/**
 	 * The lineEdgeMap is a map of the linestring components of the
 	 * parentGeometry to the edges which are derived from them.
 	 * This is used to efficiently perform findEdge queries
 	 */
 	map<const LineString*,Edge*,LineStringLT> lineEdgeMap;
 
-	/*
+	/**
 	 * If this flag is true, the Boundary Determination Rule will
 	 * used when deciding whether nodes are in the boundary or not
 	 */
 	bool useBoundaryDeterminationRule;
 
-	/*
+	/**
 	 * the index of this geometry as an argument to a spatial function
 	 * (used for labelling)
 	 */
 	int argIndex;
 
-	std::vector<Node*>* boundaryNodes;
+	/// Cache for fast responses to getBoundaryPoints
+	auto_ptr< CoordinateSequence > boundaryPoints;
+
+	auto_ptr< std::vector<Node*> > boundaryNodes;
 
 	bool hasTooFewPointsVar;
 
 	Coordinate invalidPoint; 
 
+	vector<index::SegmentIntersector*> newSegmentIntersectors;
+
+	/// Allocates a new EdgeSetIntersector. Remember to delete it!
 	index::EdgeSetIntersector* createEdgeSetIntersector();
 
-	void add(const Geometry *g); // throw(UnsupportedOperationException *);
+	void add(const Geometry *g); // throw(UnsupportedOperationException);
+
 	void addCollection(const GeometryCollection *gc);
+
 	void addPoint(const Point *p);
+
 	void addPolygonRing(const LinearRing *lr,int cwLeft,int cwRight);
+
 	void addPolygon(const Polygon *p);
+
 	void addLineString(const LineString *line);
 
 	void insertPoint(int argIndex, const Coordinate& coord,int onLocation);
+
 	void insertBoundaryPoint(int argIndex, const Coordinate& coord);
 
 	void addSelfIntersectionNodes(int argIndex);
+
 	void addSelfIntersectionNode(int argIndex,
 		const Coordinate& coord, int loc);
+
+public:
+
+	static bool isInBoundary(int boundaryCount);
+
+	static int determineBoundary(int boundaryCount);
+
+	GeometryGraph()
+		:
+		PlanarGraph(),
+		parentGeom(NULL),
+		useBoundaryDeterminationRule(false),
+		argIndex(-1),
+		hasTooFewPointsVar(false)
+	{}
+
+	GeometryGraph(int newArgIndex, const Geometry *newParentGeom)
+		:
+		PlanarGraph(),
+		parentGeom(newParentGeom),
+		useBoundaryDeterminationRule(false),
+		argIndex(newArgIndex),
+		hasTooFewPointsVar(false)
+	{
+		if (parentGeom!=NULL) add(parentGeom);
+	}
+
+	virtual ~GeometryGraph() {}
+
+
+	const Geometry* getGeometry() { return parentGeom; }
+
+	/// Returned object is owned by this GeometryGraph
+	std::vector<Node*>* getBoundaryNodes();
+
+	void getBoundaryNodes(std::vector<Node*>&bdyNodes) {
+		nodes->getBoundaryNodes(argIndex, bdyNodes);
+	}
+
+	/// Returned object is owned by this GeometryGraph
+	CoordinateSequence* getBoundaryPoints();
+
+	Edge* findEdge(const LineString *line);
+
+	void computeSplitEdges(std::vector<Edge*> *edgelist);
+
+	void addEdge(Edge *e);
+
+	void addPoint(Coordinate& pt);
+
+	/**
+	 * \brief
+	 * Compute self-nodes, taking advantage of the Geometry type to
+	 * minimize the number of intersection tests.  (E.g. rings are
+	 * not tested for self-intersection, since they are assumed to be valid).
+	 *
+	 * @param li the LineIntersector to use
+	 *
+	 * @param computeRingSelfNodes if <false>, intersection checks are
+	 *	optimized to not test rings for self-intersection
+	 *
+	 * @return the SegmentIntersector used, containing information about
+	 *	the intersections found
+	 */
+	index::SegmentIntersector* computeSelfNodes(algorithm::LineIntersector *li,
+		bool computeRingSelfNodes);
+
+	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
+		algorithm::LineIntersector *li,bool includeProper);
+
+	std::vector<Edge*> *getEdges();
+
+	bool hasTooFewPoints();
+
+	const Coordinate& getInvalidPoint(); 
+
 };
 
 
@@ -885,64 +1000,159 @@ public:
 
 class Edge: public GraphComponent{
 using GraphComponent::updateIM;
-public:
-	static void updateIM(Label *lbl,IntersectionMatrix *im);
-	CoordinateSequence* pts;
-	EdgeIntersectionList eiList;
-	//Edge();
-	Edge(CoordinateSequence* newPts, Label *newLabel);
-	Edge(CoordinateSequence* newPts);
-	virtual ~Edge();
-	virtual int getNumPoints() const;
-	virtual void setName(const string &newName);
-	virtual const CoordinateSequence* getCoordinates() const;
-	virtual const Coordinate& getCoordinate(int i) const;
-	virtual const Coordinate& getCoordinate() const; 
-	virtual Depth &getDepth();
 
-	/**
-	 * The depthDelta is the change in depth as an edge is crossed
-	 * from R to L
+private:
+
+	string name;
+
+	/// Lazily-created, owned by Edge.
+	index::MonotoneChainEdge *mce;
+
+	/// Lazily-created, owned by Edge.
+	Envelope *env;
+
+	bool isIsolatedVar;
+
+	Depth depth;
+
+	int depthDelta;   // the change in area depth from the R to L side of this edge
+
+public:
+
+	static void updateIM(Label *lbl,IntersectionMatrix *im);
+
+	/// Externally-set, owned by Edge. FIXME: refuse ownership
+	CoordinateSequence* pts;
+
+	EdgeIntersectionList eiList;
+
+	//Edge();
+
+	Edge(CoordinateSequence* newPts, Label *newLabel);
+
+	Edge(CoordinateSequence* newPts);
+
+	virtual ~Edge();
+
+	virtual int getNumPoints() const {
+		return pts->getSize();
+	}
+
+	virtual void setName(const string &newName) {
+		name=newName;
+	}
+
+	virtual const CoordinateSequence* getCoordinates() const {
+		return pts;
+	}
+
+	virtual const Coordinate& getCoordinate(int i) const {
+		return pts->getAt(i);
+	}
+
+	virtual const Coordinate& getCoordinate() const {
+		return pts->getAt(0);
+	}
+
+
+	virtual Depth &getDepth() { return depth; }
+
+	/** \brief
+	 * The depthDelta is the change in depth as an edge is crossed from R to L
+	 *
 	 * @return the change in depth as the edge is crossed from R to L
 	 */
-	virtual int getDepthDelta() const;
-	virtual void setDepthDelta(int newDepthDelta);
-	virtual int getMaximumSegmentIndex() const;
-	virtual EdgeIntersectionList& getEdgeIntersectionList();
+	virtual int getDepthDelta() const {
+		return depthDelta;
+	}
+
+	virtual void setDepthDelta(int newDepthDelta) {
+		depthDelta=newDepthDelta;
+	}
+
+	virtual int getMaximumSegmentIndex() const {
+		return getNumPoints()-1;
+	}
+
+	virtual EdgeIntersectionList& getEdgeIntersectionList() {
+		return eiList;
+	}
+
+	/// \brief
+	/// Return this Edge's index::MonotoneChainEdge,
+	/// ownership is retained by this object.
+	///
 	virtual index::MonotoneChainEdge* getMonotoneChainEdge();
-	virtual bool isClosed() const;
+
+	virtual bool isClosed() const {
+		return pts->getAt(0)==pts->getAt(getNumPoints()-1);
+	}
+
+	/** \brief
+	 * An Edge is collapsed if it is an Area edge and it consists of
+	 * two segments which are equal and opposite (eg a zero-width V).
+	 */
 	virtual bool isCollapsed() const;
+
 	virtual Edge* getCollapsedEdge();
+
 	virtual void setIsolated(bool newIsIsolated) {
 		isIsolatedVar=newIsIsolated;
 	}
+
 	virtual bool isIsolated() const { return isIsolatedVar; }
+
+	/** \brief
+	 * Adds EdgeIntersections for one or both
+	 * intersections found for a segment of an edge to the edge intersection list.
+	 */
 	virtual void addIntersections(algorithm::LineIntersector *li, int segmentIndex,
 		int geomIndex);
+
+	/// Add an EdgeIntersection for intersection intIndex.
+	//
+	/// An intersection that falls exactly on a vertex of the edge is normalized
+	/// to use the higher of the two possible segmentIndexes
+	///
 	virtual void addIntersection(algorithm::LineIntersector *li, int segmentIndex,
 		int geomIndex, int intIndex);
-	virtual void computeIM(IntersectionMatrix *im);
+
+	/// Update the IM with the contribution for this component.
+	//
+	/// A component only contributes if it has a labelling for both parent geometries
+	///
+	virtual void computeIM(IntersectionMatrix *im) {
+		updateIM(label, im);
+	}
+
+	/// return true if the coordinate sequences of the Edges are identical
 	virtual bool isPointwiseEqual(const Edge *e) const;
+
 	virtual string print() const;
+
 	virtual string printReverse() const;
-	virtual bool equals(const Edge* e) const;
+
+	/**
+	 * equals is defined to be:
+	 * 
+	 * e1 equals e2
+	 * <b>iff</b>
+	 * the coordinates of e1 are the same or the reverse of the coordinates in e2
+	 */
+	virtual bool equals(const Edge& e) const;
+
+	virtual bool equals(const Edge* e) const {
+		return equals(*e);
+	}
+
 	virtual Envelope* getEnvelope();
-private:
-	string name;
-
-	// This is a pointer because a MonotoneChainEdge is
-	// only constructed on demand (often not constructed)
-	index::MonotoneChainEdge *mce;
-
-	Envelope *env;
-	bool isIsolatedVar;
-	Depth depth;
-	int depthDelta;   // the change in area depth from the R to L side of this edge
 };
 
 
 //Operators
-bool operator==(const Edge &a, const Edge &b);
+inline bool operator==(const Edge &a, const Edge &b) {
+	return a.equals(b);
+}
 
 } // namespace geos.geomgraph
 } // namespace geos
@@ -951,6 +1161,18 @@ bool operator==(const Edge &a, const Edge &b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.33  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

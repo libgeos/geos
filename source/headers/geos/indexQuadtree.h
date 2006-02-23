@@ -128,7 +128,7 @@ private:
 	void visitItems(const Envelope* searchEnv, ItemVisitor& visitor);
 	
 public:
-	static int getSubnodeIndex(const Envelope *env, const Coordinate *centre);
+	static int getSubnodeIndex(const Envelope *env, const Coordinate& centre);
 	QuadTreeNodeBase();
 	virtual ~QuadTreeNodeBase();
 	virtual std::vector<void*>* getItems();
@@ -178,7 +178,7 @@ protected:
 	virtual bool isSearchMatch(const Envelope *searchEnv)=0;
 };
 
-/*
+/**
  * \class QuadTreeNode indexQuadtree.h geos/indexQuadtree.h
  *
  * \brief
@@ -189,25 +189,62 @@ protected:
  *
  */
 class QuadTreeNode: public QuadTreeNodeBase {
-public:
-	static QuadTreeNode* createNode(Envelope *env);
-	static QuadTreeNode* createExpanded(QuadTreeNode *node, const Envelope *addEnv);
-	QuadTreeNode(Envelope *nenv,int nlevel);
-	virtual ~QuadTreeNode();
-	Envelope* getEnvelope();
-	QuadTreeNode* getNode(const Envelope *searchEnv);
-	QuadTreeNodeBase* find(const Envelope *searchEnv);
-	void insertNode(QuadTreeNode *node);
-	string toString() const;
+
 private:
+
 	Envelope *env;
-	Coordinate *centre;
+
+	Coordinate centre;
+
 	int level;
+
 	QuadTreeNode* getSubnode(int index);
+
 	QuadTreeNode* createSubnode(int index);
 
 protected:
-	bool isSearchMatch(const Envelope *searchEnv);
+
+	bool isSearchMatch(const Envelope *searchEnv) {
+		return env->intersects(searchEnv);
+	}
+
+public:
+
+	static QuadTreeNode* createNode(Envelope *env);
+
+	static QuadTreeNode* createExpanded(QuadTreeNode *node, const Envelope *addEnv);
+
+	// Takes ownership of envelope
+	QuadTreeNode(Envelope *nenv, int nlevel)
+		:
+		env(nenv),
+		centre((nenv->getMinX()+nenv->getMaxX())/2,
+			(nenv->getMinY()+nenv->getMaxY())/2),
+		level(nlevel)
+	{
+	}
+
+	virtual ~QuadTreeNode() { delete env; }
+
+	Envelope* getEnvelope() { return env; }
+
+	/**
+	 * Returns the subquad containing the envelope.
+	 * Creates the subquad if
+	 * it does not already exist.
+	 */
+	QuadTreeNode* getNode(const Envelope *searchEnv);
+
+	/**
+	 * Returns the smallest <i>existing</i>
+	 * node containing the envelope.
+	 */
+	QuadTreeNodeBase* find(const Envelope *searchEnv);
+
+	void insertNode(QuadTreeNode *node);
+
+	string toString() const;
+
 };
 
 /**
@@ -219,15 +256,34 @@ protected:
  */
 class QuadTreeRoot: public QuadTreeNodeBase {
 friend class Unload;
+
 private:
-	static Coordinate *origin;
+
+	//static Coordinate *origin;
+	static Coordinate origin;
+
+	/**
+	 * insert an item which is known to be contained in the tree rooted at
+	 * the given QuadNode root.  Lower levels of the tree will be created
+	 * if necessary to hold the item.
+	 */
 	void insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void* item);
+
 public:
-	QuadTreeRoot();
-	virtual ~QuadTreeRoot();
-	void insert(const Envelope *itemEnv,void* item);
+
+	QuadTreeRoot() {}
+
+	virtual ~QuadTreeRoot() {}
+
+	/**
+	 * Insert an item into the quadtree this is the root of.
+	 */
+	void insert(const Envelope *itemEnv, void* item);
+
 protected:
-	bool isSearchMatch(const Envelope *searchEnv);
+
+	bool isSearchMatch(const Envelope *searchEnv) { return true; }
+
 };
 
 /**
@@ -302,7 +358,14 @@ public:
 	
 	void insert(const Envelope *itemEnv, void *item);
 
-	std::vector<void*>* query(const Envelope *searchEnv);
+	void query(const Envelope *searchEnv, std::vector<void*>& ret);
+#if 0
+	std::vector<void*>* query(const Envelope *searchEnv) {
+		vector<void*> *foundItems=new vector<void*>();
+		query(searchEnv, *foundItems);
+		return foundItems;
+	}
+#endif
 
 	void query(const Envelope *searchEnv, ItemVisitor& visitor) {
 		root->visit(searchEnv, visitor);
@@ -325,6 +388,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.11  2006/02/20 21:04:37  strk
  * - namespace geos::index
  * - SpatialIndex interface synced

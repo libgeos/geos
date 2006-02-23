@@ -367,7 +367,7 @@ public:
 		pointSnapper(0)
 	{}
 
-	SegmentString::NonConstVect* getNodedSubStrings() {
+	SegmentString::NonConstVect* getNodedSubstrings() const {
 		return SegmentString::getNodedSubstrings(*nodedSegStrings);
 	}
 
@@ -394,6 +394,18 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
  * Revision 1.7  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *
