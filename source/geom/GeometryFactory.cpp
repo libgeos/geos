@@ -151,13 +151,9 @@ GeometryFactory::createPoint() const {
 	return new Point(NULL, this);
 }
 
-/**
-* Creates a Point using the given Coordinate; a null Coordinate will create
-* an empty Geometry.
-*/
 Point*
 GeometryFactory::createPoint(const Coordinate& coordinate) const {
-	if (coordinate==Coordinate::nullCoord) {
+	if (coordinate==Coordinate::getNull()) {
 		return createPoint();
 	} else {
 		CoordinateSequence *cl=coordinateListFactory->create(new vector<Coordinate>(1, coordinate));
@@ -798,6 +794,12 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.57  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.56  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

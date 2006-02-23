@@ -127,6 +127,7 @@ class MultiPoint;
 class MultiPolygon;
 class Point;
 class Polygon;
+class PrecisionModel;
 struct CoordinateLessThen;
 struct LineStringLT;
 
@@ -281,7 +282,7 @@ public:
 	PrecisionModel(const PrecisionModel &pm);
 
 	/// destructor
-	virtual ~PrecisionModel(void);
+	~PrecisionModel(void) {}
 
 
 	/// The maximum precise value representable in a double.
@@ -437,6 +438,11 @@ private:
 // NON-inline (will let profilers report usages)
 //#define PROFILE_COORDINATE_COPIES 1
 class Coordinate {
+
+private:
+
+	static Coordinate nullCoord;
+
 public:
 	/// A set of const Coordinate pointers
 	typedef set<const Coordinate *, CoordinateLessThen> ConstSet;
@@ -450,164 +456,109 @@ public:
 	/// A vector of Coordinate objects (real object, not pointers)
 	typedef vector<Coordinate> Vect;
 
-	inline void setNull(void);
-	inline static Coordinate& getNull(void);
-	//virtual ~Coordinate(){};
-	inline Coordinate();
-	inline Coordinate(double xNew, double yNew, double zNew);
+	/// x-coordinate
+	double x;
+
+	/// y-coordinate
+	double y;
+
+	/// z-coordinate
+	double z;
+
+	void setNull() {
+		x=DoubleNotANumber;
+		y=DoubleNotANumber;
+		z=DoubleNotANumber;
+	}
+
+	static Coordinate& getNull() {
+		return nullCoord;
+	}
+
+	~Coordinate() {};
+
+	Coordinate(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber)
+		:
+		x(xNew),
+		y(yNew),
+		z(zNew)
+	{}
+
 #ifndef PROFILE_COORDINATE_COPIES
-	inline Coordinate(const Coordinate& c);
+	Coordinate(const Coordinate& c)
+		:
+		x(c.x),
+		y(c.y),
+		z(c.z)
+	{
+	}
 #else
 	Coordinate(const Coordinate& c);
 	Coordinate &operator=(const Coordinate &c);
 #endif
-	inline Coordinate(double xNew, double yNew);
-	inline bool equals2D(const Coordinate& other) const;
-	inline bool equals(const Coordinate& other) const {
+
+	bool equals2D(const Coordinate& other) const {
+		if (x != other.x) return false;
+		if (y != other.y) return false;
+		return true;
+	}
+
+	/// 2D only
+	bool equals(const Coordinate& other) const {
 		return equals2D(other);
 	}
-	inline int compareTo(const Coordinate& other) const;
-	inline bool equals3D(const Coordinate& other) const;
+
+	/// TODO: deprecate this, move logic to CoordinateLessThen instead
+	int compareTo(const Coordinate& other) const {
+		if (x < other.x) return -1;
+		if (x > other.x) return 1;
+		if (y < other.y) return -1;
+		if (y > other.y) return 1;
+		return 0;
+	}
+
+	/// 3D comparison 
+	bool equals3D(const Coordinate& other) const {
+		return (x == other.x) && ( y == other.y) && 
+			((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
+	}
+
 	string toString() const;
-	inline void makePrecise(const PrecisionModel *pm);
-	inline double distance(const Coordinate& p) const;
-	static Coordinate nullCoord;
 
-	inline int hashCode() const;
-	inline static int hashCode(double);
+	/// TODO: obsoleted this, can use PrecisionModel::makePrecise(Coordinate*)
+	/// instead
+	void makePrecise(const PrecisionModel *pm) {
+		x = pm->makePrecise(x);
+		y = pm->makePrecise(y);
+	}
 
+	double distance(const Coordinate& p) const {
+		double dx = x - p.x;
+		double dy = y - p.y;
+		return sqrt(dx * dx + dy * dy);
+	}
 
-	/// x-coordinate
-	double x;
-	/// y-coordinate
-	double y;
-	/// z-coordinate
-	double z;
+	int hashCode() const {
+		//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
+		int result = 17;
+		result = 37 * result + hashCode(x);
+		result = 37 * result + hashCode(y);
+		return result;
+	}
 
-private:
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID=6683108902428366910I64;
-#else
-	static const int64 serialVersionUID=6683108902428366910LL;
-#endif
+	/**
+	 * Returns a hash code for a double value, using the algorithm from
+	 * Joshua Bloch's book <i>Effective Java</i>
+	 */
+	static int hashCode(double d) {
+		int64 f = (int64)(d);
+		return (int)(f^(f>>32));
+	}
+
 
 };
 
-// INLINE FUNCTION FOR Coordinate CLASS
-
-inline void
-Coordinate::setNull()
-{
-		x=DoubleNotANumber;
-		y=DoubleNotANumber;
-		z=DoubleNotANumber;
-}
-
-inline Coordinate&
-Coordinate::getNull()
-{
-	return nullCoord;
-}
-
-inline
-Coordinate::Coordinate()
-{
-	x=0.0;
-	y=0.0;
-	z=DoubleNotANumber;
-}
-
-inline
-Coordinate::Coordinate(double xNew, double yNew, double zNew)
-{
-	x=xNew;
-	y=yNew;
-	z=zNew;
-}
-
-#ifndef PROFILE_COORDINATE_COPIES
-inline
-Coordinate::Coordinate(const Coordinate& c)
-{
-	x=c.x;
-	y=c.y;
-	z=c.z;
-}
-#endif
-
-inline
-Coordinate::Coordinate(double xNew, double yNew)
-{
-	x=xNew;
-	y=yNew;
-	z=DoubleNotANumber;
-}
-
-inline bool
-Coordinate::equals2D(const Coordinate& other) const
-{
-	if (x != other.x) {
-		return false;
-	}
-	if (y != other.y) {
-		return false;
-	}
-	return true;
-}
-
-inline int
-Coordinate::compareTo(const Coordinate& other) const
-{
-	if (x < other.x) return -1;
-	if (x > other.x) return 1;
-	if (y < other.y) return -1;
-	if (y > other.y) return 1;
-	return 0;
-}
-
-inline bool
-Coordinate::equals3D(const Coordinate& other) const
-{
-	return (x == other.x) && ( y == other.y) && 
-		((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
-}
-
-inline void
-Coordinate::makePrecise(const PrecisionModel *precisionModel)
-{
-	x = precisionModel->makePrecise(x);
-	y = precisionModel->makePrecise(y);
-}
-
-inline double
-Coordinate::distance(const Coordinate& p) const
-{
-	double dx = x - p.x;
-	double dy = y - p.y;
-	return sqrt(dx * dx + dy * dy);
-}
-
-inline int
-Coordinate::hashCode() const
-{
-	//Algorithm from Effective Java by Joshua Bloch [Jon Aquino]
-	int result = 17;
-	result = 37 * result + hashCode(x);
-	result = 37 * result + hashCode(y);
-	return result;
-}
-
-/**
- * Returns a hash code for a double value, using the algorithm from
- * Joshua Bloch's book <i>Effective Java</i>
- */
-inline int
-Coordinate::hashCode(double x)
-{
-	int64 f = (int64)(x);
-	return (int)(f^(f>>32));
-}
-
+/// Strict weak ordering Functor for Coordinate
 struct CoordinateLessThen {
 
 	bool operator()(const Coordinate* a, const Coordinate* b) const {
@@ -622,72 +573,6 @@ struct CoordinateLessThen {
 
 };
 
-
-
-//* class CoordinateList geom.h geos.h
-//*
-//* brief A list of Coordinates, which may be set to prevent
-//* repeated coordinates from occuring in the list.
-//
-//class CoordinateList {
-//public:
-//	~CoordinateList(){};
-//
-//	// copy constructor
-//	CoordinateList(const CoordinateList &cl);
-//
-//	// constructor an empty CoordinateList
-//	CoordinateList();
-//
-//	/*
-//	 * Constructs a new list from a vector of Coordinates.
-//	 * Caller can specify if repeated points are to be removed.
-//	 * Default is allowing repeated points.
-//	 * Will take ownership of coords.
-//	 */
-//	CoordinateList(vector<Coordinate> *coords, bool allowRepeted=false);
-//
-//	// Get a reference to the nth Coordinate 
-//	const Coordinate& getCoordinate(int n) const;
-//
-//	/*
-//	 * \brief Add an array of coordinates 
-//	 * @param vc The coordinates
-//	 * @param allowRepeated if set to false, repeated coordinates
-//	 * 	are collapsed
-//	 * @return true (as by general collection contract)
-//	 */
-//	void add(vector<Coordinate>* vc, bool allowRepeated);
-//
-//	/*
-//	 * \brief Add an array of coordinates 
-//	 * @param cl The coordinates
-//	 * @param allowRepeated if set to false, repeated coordinates
-//	 * are collapsed
-//	 * @param direction if false, the array is added in reverse order
-//	 * @return true (as by general collection contract)
-//	 */
-//	void add(CoordinateList *cl,bool allowRepeated,bool direction);
-//
-//	/*
-//	 * \brief Add a coordinate
-//	 * @param c The coordinate to add
-//	 * @param allowRepeated if set to false, repeated coordinates
-//	 * are collapsed
-//	 * @return true (as by general collection contract)
-//	 */
-//	void add(const Coordinate& c,bool allowRepeated);
-//
-//	// Add a Coordinate to the list
-//	void add(const Coordinate& c);
-//
-//	// Get vector
-//	const vector<Coordinate>* toCoordinateArray() const;
-//
-//private:
-//
-//	vector<Coordinate> *vect;
-//};
 
 /**
  * \class CoordinateSequence geom.h geos.h
@@ -2327,11 +2212,27 @@ public:
 
 
 //Operators
-bool operator==(const Coordinate& a, const Coordinate& b);
-bool operator!=(const Coordinate& a, const Coordinate& b);
-bool operator==(const Envelope a, const Envelope b);
-bool operator==(const PrecisionModel a, const PrecisionModel b);
-bool operator==(const LineSegment a, const LineSegment b);
+
+/// Equality operator for Coordinate. 2D only.
+inline bool operator==(const Coordinate& a, const Coordinate& b) {
+	return a.equals2D(b);
+}
+
+/// Inequality operator for Coordinate. 2D only.
+inline bool operator!=(const Coordinate& a, const Coordinate& b) {
+	return ! a.equals2D(b);
+}
+
+/// Checks if two Envelopes are equal (2D only check)
+bool operator==(const Envelope& a, const Envelope& b);
+
+// Equality operator for PrecisionModel, deprecate it ?
+//inline bool operator==(const PrecisionModel& a, const PrecisionModel& b);
+
+/// Checks if two LineSegment are equal (2D only check)
+inline bool operator==(const LineSegment& a, const LineSegment& b) {
+	return a.p0==b.p0 && a.p1==b.p1;
+}
 
 /**
  * \class GeometryCollection geom.h geos.h
@@ -3014,6 +2915,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.70  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.69  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

@@ -47,7 +47,7 @@ TopologyValidationError::TopologyValidationError(int newErrorType,Coordinate new
 
 TopologyValidationError::TopologyValidationError(int newErrorType):
 	errorType(newErrorType),
-	pt(Coordinate::nullCoord)
+	pt(Coordinate::getNull())
 {
 }
 
@@ -73,6 +73,12 @@ string TopologyValidationError::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.11  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

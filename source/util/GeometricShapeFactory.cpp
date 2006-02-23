@@ -219,9 +219,11 @@ LineString* GeometricShapeFactory::createArc(double startAng,double endAng){
 	return line;
 }
 
-GeometricShapeFactory::Dimensions::Dimensions()  {
-	base=Coordinate::nullCoord;
-	centre=Coordinate::nullCoord;
+GeometricShapeFactory::Dimensions::Dimensions()
+	:
+	base(Coordinate::getNull()),
+	centre(Coordinate::getNull())
+{
 }
 
 void GeometricShapeFactory::Dimensions::setBase(const Coordinate& newBase)  {
@@ -245,10 +247,10 @@ void GeometricShapeFactory::Dimensions::setHeight(double nHeight) {
 }
 
 Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
-	if (base!=Coordinate::nullCoord) {
+	if (base!=Coordinate::getNull()) {
 		return new Envelope(base.x, base.x + width, base.y, base.y + height);
 	}
-	if (centre!=Coordinate::nullCoord) {
+	if (centre!=Coordinate::getNull()) {
 		return new Envelope(centre.x - width/2, centre.x + width/2,centre.y - height/2, centre.y + height/2);
 	}
 	return new Envelope(0, width, 0, height);
@@ -258,6 +260,12 @@ Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.10  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

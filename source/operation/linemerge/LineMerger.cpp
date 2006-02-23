@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,10 +14,12 @@
  *
  **********************************************************************/
 
+#include <typeinfo>
+#include <cassert>
+#include <functional>
 #include <geos/opLinemerge.h>
 #include <geos/planargraph.h>
 #include <geos/util.h>
-#include <typeinfo>
 
 using namespace geos::planargraph;
 
@@ -28,7 +30,7 @@ namespace linemerge { // geos.operation.linemerge
 void
 LineMerger::add(vector<Geometry*> *geometries)
 {
-	for(int i=0;i<(int)geometries->size();i++) {
+	for(unsigned int i=0, n=geometries->size(); i<n; i++) {
 		Geometry *geometry=(*geometries)[i];
 		add(geometry);
 	}
@@ -36,42 +38,29 @@ LineMerger::add(vector<Geometry*> *geometries)
 
 LineMerger::LineMerger():
 	mergedLineStrings(NULL),
-	edgeStrings(NULL),
 	factory(NULL)
 {
 }
 
 LineMerger::~LineMerger()
 {
-	if ( edgeStrings )
-	{
-		for (unsigned int i=0; i<edgeStrings->size(); i++)
-			delete (*edgeStrings)[i];
-		delete edgeStrings;
+	for (unsigned int i=0, n=edgeStrings.size(); i<n; ++i) {
+		delete edgeStrings[i];
 	}
 }
 
 
-LMGeometryComponentFilter::LMGeometryComponentFilter(LineMerger *newLm):
-	lm(newLm)
-{
-}
+struct LMGeometryComponentFilter: public GeometryComponentFilter {
+	LineMerger *lm;
 
-void
-LMGeometryComponentFilter::filter_rw(Geometry *geom)
-{
-	if (typeid(*geom)==typeid(LineString)) {
-		lm->add((LineString*)geom);
-	}	
-}
+	LMGeometryComponentFilter(LineMerger *newLm): lm(newLm) {}
 
-void
-LMGeometryComponentFilter::filter_ro(const Geometry *geom)
-{
-	const LineString *ls = dynamic_cast<const LineString *>(geom);
-	if ( ls )
-		lm->add(ls);
-}
+	void filter(const Geometry *geom) {
+		const LineString *ls = dynamic_cast<const LineString *>(geom);
+		if ( ls ) lm->add(ls);
+	}
+};
+
 
 /**
  * Adds a Geometry to be processed. May be called multiple times.
@@ -82,34 +71,29 @@ void
 LineMerger::add(const Geometry *geometry)
 {
 	LMGeometryComponentFilter lmgcf(this);
-	geometry->apply_ro(&lmgcf);
+	geometry->applyComponentFilter(lmgcf);
 }
 
 void
 LineMerger::add(const LineString *lineString)
 {
-	if (factory==NULL) {
-		factory=lineString->getFactory();
-	}
+	if (factory==NULL) factory=lineString->getFactory();
 	graph.addEdge(lineString);
 }
 
 void
 LineMerger::merge()
 {
-	if (mergedLineStrings!=NULL) { 
-		return;
-	}
+	if (mergedLineStrings!=NULL) return;
 
-	edgeStrings=new vector<EdgeString*>();
 	buildEdgeStringsForObviousStartNodes();
 	buildEdgeStringsForIsolatedLoops();
 
-	unsigned numEdgeStrings = edgeStrings->size();
+	unsigned numEdgeStrings = edgeStrings.size();
 	mergedLineStrings=new vector<LineString*>(numEdgeStrings);
 	for (unsigned int i=0; i<numEdgeStrings; ++i)
 	{
-		EdgeString *edgeString=(*edgeStrings)[i];
+		EdgeString *edgeString=edgeStrings[i];
 		(*mergedLineStrings)[i]=edgeString->toLineString();
 	}    
 }
@@ -133,7 +117,7 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 	for (unsigned int i=0; i<nodes->size(); ++i) {
 		planarNode *node=(*nodes)[i];
 		if (!node->isMarked()) { 
-			Assert::isTrue(node->getDegree()==2);
+			assert(node->getDegree()==2);
 			buildEdgeStringsStartingAt(node);
 			node->setMarked(true);
 		}
@@ -167,7 +151,7 @@ LineMerger::buildEdgeStringsStartingAt(planarNode *node)
 		if (directedEdge->getEdge()->isMarked()) {
 			continue;
 		}
-		edgeStrings->push_back(buildEdgeStringStartingWith(directedEdge));
+		edgeStrings.push_back(buildEdgeStringStartingWith(directedEdge));
 	}
 }
 
@@ -200,6 +184,12 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

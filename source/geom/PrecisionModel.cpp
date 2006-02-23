@@ -11,71 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.31  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.30  2005/09/26 12:23:51  strk
- * Initializzation lists in PrecisionModel ctors
- *
- * Revision 1.29  2005/01/28 09:47:51  strk
- * Replaced sprintf uses with ostringstream.
- *
- * Revision 1.28  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.27  2004/07/12 15:42:03  strk
- * Fixed maximumPreciseValue scope
- *
- * Revision 1.26  2004/07/05 14:23:03  strk
- * More documentation cleanups.
- *
- * Revision 1.25  2004/07/03 12:51:37  strk
- * Documentation cleanups for DoxyGen.
- *
- * Revision 1.24  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.23  2004/05/28 18:16:01  ybychkov
- * Changed rounding method to make compilable with VC++
- *
- * Revision 1.22  2004/05/21 13:39:31  strk
- * ::makePrecise make use of nearbyint() now, to be compatible with JTS
- *
- * Revision 1.21  2004/05/19 19:39:05  ybychkov
- * Changed rounding method to make compilable with VC++
- *
- * Revision 1.20  2004/05/17 10:45:58  strk
- * Fixed bogus FIXED coordinate rounding
- *
- * Revision 1.19  2004/04/16 07:42:06  strk
- * PrecisionModel::Type made an enum instead of a Type.
- *
- * Revision 1.18  2004/04/14 09:38:10  strk
- * PrecisionModel(double newScale) missed to set the scale
- *
- * Revision 1.17  2004/03/31 07:50:37  ybychkov
- * "geom" partially upgraded to JTS 1.4
- *
- * Revision 1.16  2003/11/12 17:15:05  strk
- * made sure PrecisionModel scale is never 0
- *
- * Revision 1.15  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.14  2003/10/11 01:56:08  strk
- *
- * Code base padded with 'const' keywords ;)
- *
- * Revision 1.13  2003/10/09 10:10:05  strk
- * Throw an exception if scale is 0. Added Log entry.
- *
  **********************************************************************/
-
 
 #include <sstream>
 #include <geos/geom.h>
@@ -367,26 +303,24 @@ string PrecisionModel::toString() const {
 	return s.str();
 }
 
-PrecisionModel::~PrecisionModel(){}
-
-bool operator==(const PrecisionModel a, const PrecisionModel b) {
+bool operator==(const PrecisionModel& a, const PrecisionModel& b) {
 	return a.isFloating() == b.isFloating() &&
 			a.getScale() == b.getScale();
 }
 
 /**
-*  Compares this {@link PrecisionModel} object with the specified object for order.
-* A PrecisionModel is greater than another if it provides greater precision.
-* The comparison is based on the value returned by the
-* {@link getMaximumSignificantDigits) method.
-* This comparison is not strictly accurate when comparing floating precision models
-* to fixed models; however, it is correct when both models are either floating or fixed.
-*
-*@param  o  the <code>PrecisionModel</code> with which this <code>PrecisionModel</code>
-*      is being compared
-*@return    a negative integer, zero, or a positive integer as this <code>PrecisionModel</code>
-*      is less than, equal to, or greater than the specified <code>PrecisionModel</code>
-*/
+ *  Compares this {@link PrecisionModel} object with the specified object for order.
+ * A PrecisionModel is greater than another if it provides greater precision.
+ * The comparison is based on the value returned by the
+ * {@link getMaximumSignificantDigits) method.
+ * This comparison is not strictly accurate when comparing floating precision models
+ * to fixed models; however, it is correct when both models are either floating or fixed.
+ *
+ *@param  o  the <code>PrecisionModel</code> with which this <code>PrecisionModel</code>
+ *      is being compared
+ *@return    a negative integer, zero, or a positive integer as this <code>PrecisionModel</code>
+ *      is less than, equal to, or greater than the specified <code>PrecisionModel</code>
+ */
 int PrecisionModel::compareTo(const PrecisionModel *other) const {
 	int sigDigits=getMaximumSignificantDigits();
 	int otherSigDigits=other->getMaximumSignificantDigits();
@@ -406,4 +340,23 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 	//return 0;
 }
 }
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.32  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
+ * Revision 1.31  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
+ * Revision 1.30  2005/09/26 12:23:51  strk
+ * Initializzation lists in PrecisionModel ctors
+ *
+ * Revision 1.29  2005/01/28 09:47:51  strk
+ * Replaced sprintf uses with ostringstream.
+ *
+ **********************************************************************/
 

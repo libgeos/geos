@@ -45,28 +45,6 @@ string Coordinate::toString() const {
 	return s.str();
 }
 
-/*
- *  Returns <code>true</code> if <code>a</code> and <code>b</code>
- *  have the same values for x and y.
- *
- *@param  a  a <code>Coordinate</code> with which to do the 3D comparison.
- *@param  b  a <code>Coordinate</code> with which to do the 3D comparison.
- *@return        <code>true</code> if <code>a</code> and <code>b</code>
- *      have the same values for x, y and z.
- */
-bool operator==(const Coordinate& a, const Coordinate& b) {
-	//return a.equals2D(b);
-	if ( a.x != b.x ) return false;
-	if ( a.y != b.y ) return false;
-	return true;
-}
-
-bool operator!=(const Coordinate& a, const Coordinate& b) {
-	if ( a.x != b.x ) return true;
-	if ( a.y != b.y ) return true;
-	return false;
-}
-
 #ifdef PROFILE_COORDINATE_COPIES
 
 Coordinate::Coordinate(const Coordinate& c)
@@ -92,6 +70,12 @@ Coordinate::operator=(const Coordinate &c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.23  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

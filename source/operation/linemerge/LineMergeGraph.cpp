@@ -30,14 +30,14 @@ namespace linemerge { // geos.operation.linemerge
 void
 LineMergeGraph::addEdge(const LineString *lineString)
 {
-	if (lineString->isEmpty())
-	{
-		return;
-	}
+	if (lineString->isEmpty()) return;
 
-	CoordinateSequence *coordinates=CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO());
+	CoordinateSequence *coordinates = 
+		CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO());
+
 	const Coordinate& startCoordinate=coordinates->getAt(0);
 	const Coordinate& endCoordinate=coordinates->getAt(coordinates->getSize()-1);
+
 	planarNode* startNode=getNode(startCoordinate);
 	planarNode* endNode=getNode(endCoordinate);
 	planarDirectedEdge *directedEdge0=new LineMergeDirectedEdge(startNode, endNode,coordinates->getAt(1), true);
@@ -47,7 +47,9 @@ LineMergeGraph::addEdge(const LineString *lineString)
 	planarEdge *edge=new LineMergeEdge(lineString);
 	newEdges.push_back(edge);
 	edge->setDirectedEdges(directedEdge0, directedEdge1);
+
 	add(edge);
+
 	delete coordinates;
 }
 
@@ -80,6 +82,12 @@ LineMergeGraph::~LineMergeGraph()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.9  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

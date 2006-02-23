@@ -462,24 +462,16 @@ LineSegment::intersection(const LineSegment *line) const
 }
 
 
-/*
- *  Returns <code>true</code> if <code>a</code> has the same values of
- *  <code>b</code> for its points.
- *
- * @return  <code>true</code> if <code>other</code> is a
- *          <code>LineSegment</code>
- *          with the same values for the x and y ordinates.
- */
-bool
-operator==(const LineSegment a, const LineSegment b)
-{
-	return a.p0==b.p0 && a.p1==b.p1;
-}
-
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.24  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

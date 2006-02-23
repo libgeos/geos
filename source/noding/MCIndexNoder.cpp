@@ -18,6 +18,7 @@
  **********************************************************************/
 
 #include <cassert>
+#include <functional>
 #include "geos/indexChain.h"
 #include "geos/noding.h"
 
@@ -132,6 +133,12 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.7  2006/02/23 20:05:21  strk
  * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
  * doxygen-friendly comments, miscellaneous cleanups

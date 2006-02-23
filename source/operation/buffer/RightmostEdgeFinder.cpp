@@ -156,7 +156,7 @@ RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index)
 	if (side<0)
 		// reaching here can indicate that segment is horizontal
 		// Assert::shouldNeverReachHere("problem with finding rightmost side of segment");
-		minCoord=Coordinate::nullCoord;
+		minCoord=Coordinate::getNull();
 	checkForRightmostCoordinate(de);
 	return side;
 }
@@ -179,6 +179,12 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.14  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

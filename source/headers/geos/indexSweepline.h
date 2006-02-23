@@ -23,8 +23,6 @@
 
 
 namespace geos {
-
-/// Provides classes for various kinds of spatial indexes.
 namespace index { // geos.index
 
 /// \brief
@@ -121,6 +119,12 @@ bool isleLessThen(indexSweepLineEvent *first,indexSweepLineEvent *second);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.3  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

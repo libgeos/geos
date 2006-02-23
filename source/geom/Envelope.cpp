@@ -466,9 +466,8 @@ Envelope::distance(const Envelope* env) const
 	return sqrt(dx*dx+dy*dy);
 }
 
-// Checks if two Envelopes are equal
 bool
-operator==(const Envelope a, const Envelope b)
+operator==(const Envelope& a, const Envelope& b)
 {
 	if (a.isNull()) {
 		return b.isNull();
@@ -576,6 +575,12 @@ Envelope::expandBy(double deltaX, double deltaY)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.23  2006/02/08 17:18:28  strk
  * - New WKTWriter::toLineString and ::toPoint convenience methods
  * - New IsValidOp::setSelfTouchingRingFormingHoleValid method

@@ -101,7 +101,7 @@ polygonizeEdgeRing::ptNotInList(const CoordinateSequence *testPts,
 		if (isInList(testPt, pts))
 			return testPt;
 	}
-	return Coordinate::nullCoord;
+	return Coordinate::getNull();
 }
 
 /*
@@ -305,6 +305,12 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.12  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

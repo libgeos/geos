@@ -24,12 +24,13 @@
 
 namespace geos {
 namespace operation { // geos.operation
+
+/// Line merging package
 namespace linemerge { // geos.operation.linemerge
 
 //using namespace planargraph;
 
 class EdgeString;
-class LMGeometryComponentFilter;
 class LineMergeDirectedEdge;
 class LineMergeEdge;
 class LineMergeGraph;
@@ -120,15 +121,26 @@ public:
 	LineString* toLineString();
 };
 
-/*
+/**
  * A planar graph of edges that is analyzed to sew the edges together. The 
  * <code>marked</code> flag on planargraph::Edge
  * and planargraph::Node indicates whether they have been
  * logically deleted from the graph.
- *
  */
 class LineMergeGraph: public planargraph::PlanarGraph {
+
+private:
+
+	planargraph::Node* getNode(const Coordinate &coordinate);
+
+	vector<planargraph::Node*> newNodes;
+
+	vector<planargraph::Edge*> newEdges;
+
+	vector<planargraph::DirectedEdge*> newDirEdges;
+
 public:
+
 	/**
 	 * Adds an Edge, DirectedEdges, and Nodes for the given
 	 * LineString representation of an edge. 
@@ -136,15 +148,11 @@ public:
 	void addEdge(const LineString *lineString);
 
 	~LineMergeGraph();
-private:
-	planargraph::Node* getNode(const Coordinate &coordinate);
-	vector<planargraph::Node*> newNodes;
-	vector<planargraph::Edge*> newEdges;
-	vector<planargraph::DirectedEdge*> newDirEdges;
 };
 
-/*
+/**
  * \class LineMerger opLinemerge.h geos/opLinemerge.h
+ *
  * \brief
  * Sews together a set of fully noded LineStrings.
  *
@@ -164,11 +172,36 @@ private:
  *
  */
 class LineMerger {
+
+private:
+
+	LineMergeGraph graph;
+
+	vector<LineString*> *mergedLineStrings;
+
+	vector<EdgeString*> edgeStrings;
+
+	const GeometryFactory *factory;
+
+	void merge();
+
+	void buildEdgeStringsForObviousStartNodes();
+
+	void buildEdgeStringsForIsolatedLoops();
+
+	void buildEdgeStringsForUnprocessedNodes();
+
+	void buildEdgeStringsForNonDegree2Nodes();
+
+	void buildEdgeStringsStartingAt(planargraph::Node *node);
+
+	EdgeString* buildEdgeStringStartingWith(LineMergeDirectedEdge *start);
+
 public:
 	LineMerger();
 	~LineMerger();
 
-	/*
+	/**
 	 * \brief
 	 * Adds a collection of Geometries to be processed.
 	 * May be called multiple times.
@@ -178,7 +211,7 @@ public:
 	 */
 	void add(vector<Geometry*> *geometries);
 
-	/*
+	/**
 	 * \brief
 	 * Adds a Geometry to be processed.
 	 * May be called multiple times.
@@ -188,7 +221,7 @@ public:
 	 */  
 	void add(const Geometry *geometry);
 
-	/*
+	/**
 	 * \brief
 	 * Returns the LineStrings built by the merging process.
 	 */
@@ -196,29 +229,7 @@ public:
 
 	void add(const LineString *lineString);
 
-private:
-
-	LineMergeGraph graph;
-	vector<LineString*> *mergedLineStrings;
-	vector<EdgeString*> *edgeStrings;
-	const GeometryFactory *factory;
-	void merge();
-	void buildEdgeStringsForObviousStartNodes();
-	void buildEdgeStringsForIsolatedLoops();
-	void buildEdgeStringsForUnprocessedNodes();
-	void buildEdgeStringsForNonDegree2Nodes();
-	void buildEdgeStringsStartingAt(planargraph::Node *node);
-	EdgeString* buildEdgeStringStartingWith(LineMergeDirectedEdge *start);
 };
-
-class LMGeometryComponentFilter: public GeometryComponentFilter {
-public:
-	LineMerger *lm;
-	LMGeometryComponentFilter(LineMerger *newLm);
-	virtual void filter_rw(Geometry *geom);
-	virtual void filter_ro(const Geometry *geom);
-};
-
 
 /**
  * Builds a sequence from a set of LineStrings so that
@@ -427,6 +438,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/23 23:17:52  strk
+ * - Coordinate::nullCoordinate made private
+ * - Simplified Coordinate inline definitions
+ * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
+ * - Misc cleanups
+ *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
