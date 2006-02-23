@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -182,9 +182,6 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 	BufferBuilder bufBuilder;
 	bufBuilder.setWorkingPrecisionModel(&fixedPM);
 
-	// FIXME: this noder leaks memory, the buffer.xml
-	// test shows that. Note that commenting this out
-	// removes the leak!
 	bufBuilder.setNoder(&noder);
 
 	bufBuilder.setQuadrantSegments(quadrantSegments);
@@ -200,6 +197,10 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2006/02/23 20:05:21  strk
+ * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
+ * doxygen-friendly comments, miscellaneous cleanups
+ *
  * Revision 1.41  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

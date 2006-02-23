@@ -32,13 +32,8 @@ MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
 {
 	nodedSegStrings = inputSegStrings;
 
-	for (SegmentString::NonConstVect::iterator
-			i=inputSegStrings->begin(), e=inputSegStrings->end();
-			i!=e;
-			++i)
-	{
-		add(*i);
-	}
+	for_each(nodedSegStrings->begin(), nodedSegStrings->end(),
+			bind1st(mem_fun(&MCIndexNoder::add), this));
 
 	intersectChains();
 //cerr<<"MCIndexNoder: # chain overlaps = "<<nOverlaps<<endl;
@@ -49,6 +44,7 @@ void
 MCIndexNoder::intersectChains()
 {
 	assert(segInt);
+
 	SegmentOverlapAction overlapAction(*segInt);
 
 	for (vector<indexMonotoneChain*>::iterator
@@ -136,6 +132,10 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/23 20:05:21  strk
+ * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
+ * doxygen-friendly comments, miscellaneous cleanups
+ *
  * Revision 1.6  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

@@ -294,11 +294,13 @@ public:
 		
 };
 
-/**
+/** \brief
  * Uses Snap Rounding to compute a rounded,
- * fully noded arrangement from a set of {@link SegmentString}s.
+ * fully noded arrangement from a set of SegmentString
+ *
  * Implements the Snap Rounding technique described in Hobby, Guibas & Marimont,
  * and Goodrich et al.
+ *
  * Snap Rounding assumes that all vertices lie on a uniform grid
  * (hence the precision model of the input must be fixed precision,
  * and all the input vertices must be rounded to that precision).
@@ -319,7 +321,7 @@ class MCIndexSnapRounder: public Noder { // implments Noder
 
 private:
 
-	// externally owned
+	/// externally owned
 	PrecisionModel& pm;
 
 	algorithm::LineIntersector li;
@@ -362,7 +364,6 @@ public:
 	MCIndexSnapRounder(PrecisionModel& nPm)
 		:
 		pm(nPm),
-		li(&nPm),
 		scaleFactor(nPm.getScale()),
 		pointSnapper(0)
 	{}
@@ -394,6 +395,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/23 20:05:19  strk
+ * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
+ * doxygen-friendly comments, miscellaneous cleanups
+ *
  * Revision 1.8  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

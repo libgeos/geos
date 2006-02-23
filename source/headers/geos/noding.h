@@ -33,17 +33,22 @@ namespace noding { // geos.noding
 
 class SegmentString;
 class Octant;
+class SegmentIntersector;
 
-/**
- * Methods for computing and working with octants of the Cartesian plane
+/// Temporary typedef for namespace transition
+typedef SegmentIntersector nodingSegmentIntersector;
+
+/** \brief
+ * Methods for computing and working with octants of the Cartesian plane.
+ *
  * Octants are numbered as follows:
- * <pre>
- *  \2|1/
- * 3 \|/ 0
+ * 
+ *   2|1 
+ * 3  |  0
  * ---+--
- * 4 /|\ 7
- *  /5|6\
- * <pre>
+ * 4  |  7
+ *   5|6 
+ *
  * If line segments lie along a coordinate axis, the octant is the lower of the two
  * possible values.
  *
@@ -193,6 +198,7 @@ public:
 
 
 	SegmentNodeList(const SegmentString* newEdge): edge(*newEdge) {}
+
 	SegmentNodeList(const SegmentString& newEdge): edge(newEdge) {}
 
 	const SegmentString& getEdge() const { return edge; }
@@ -203,12 +209,13 @@ public:
 
 	/**
 	 * Adds an intersection into the list, if it isn't already there.
-	 * The input segmentIndex and dist are expected to be normalized.
+	 * The input segmentIndex is expected to be normalized.
 	 *
 	 * @return the SegmentIntersection found or added. It will be
 	 *	   destroyed at SegmentNodeList destruction time.
 	 *
 	 * @param intPt the intersection Coordinate, will be copied
+	 * @param segmentIndex 
 	 */
 	SegmentNode* add(const Coordinate& intPt, unsigned int segmentIndex);
 
@@ -222,6 +229,9 @@ public:
 	//replaces iterator()
 	// TODO: obsolete this function
 	set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodeMap; }
+
+	/// Return the number of nodes in this list
+	unsigned int size() { return nodeMap.size(); }
 
 	container::iterator begin() { return nodeMap.begin(); }
 	container::const_iterator begin() const { return nodeMap.begin(); }
@@ -248,15 +258,17 @@ public:
 };
 
 
-
-#ifndef USE_NEW_SEGMENT_STRING
-
-/**
+/** \brief
  * Represents a list of contiguous line segments,
  * and supports noding the segments.
- * The line segments are represented by an array of {@link Coordinate}s.
- * Intended to optimize the noding of contiguous segments by
+ *
+ * The line segments are represented by a CoordinateSequence.
+ *
+ * TODO:
+ * This should be changed to use a vector of Coordinate,
+ * to optimize the noding of contiguous segments by
  * reducing the number of allocated objects.
+ *
  * SegmentStrings can carry a context object, which is useful
  * for preserving topological or parentage information.
  * All noded substrings are initialized with the same context object.
@@ -272,7 +284,6 @@ public:
 
 private:
 	SegmentNodeList eiList;
-	//const CoordinateSequence *pts;
 	CoordinateSequence *pts;
 	unsigned int npts;
 	const void* context;
@@ -280,6 +291,14 @@ private:
 public:
 
 	//SegmentString(const CoordinateSequence *newPts, const void* newContext)
+
+	/// Construct a SegmentString.
+	//
+	/// @param newPts CoordinateSequence representing the string,
+	/// externally owned
+	///
+	/// @param newContext the context associated to this SegmentString
+	///
 	SegmentString(CoordinateSequence *newPts, const void* newContext)
 		:
 		eiList(this),
@@ -306,14 +325,16 @@ public:
 		return pts->getAt(i);
 	}
 
+	/// \brief
 	/// Return a pointer to the CoordinateSequence associated
 	/// with this SegmentString.
+	//
 	/// Note that the CoordinateSequence is not owned by
 	/// this SegmentString!
 	///
 	CoordinateSequence* getCoordinates() const { return pts; }
 
-	/// Return a read-only pointer to this SegmentString CoordinateSequence
+	// Return a read-only pointer to this SegmentString CoordinateSequence
 	//const CoordinateSequence* getCoordinatesRO() const { return pts; }
 
 	void setIsolated(bool isIsolated) { isIsolatedVar=isIsolated; }
@@ -322,7 +343,7 @@ public:
 	
 	bool isClosed() const { return pts->getAt(0)==pts->getAt(npts-1); }
 
-	/**
+	/** \brief
 	 * Gets the octant of the segment starting at vertex <code>index</code>.
 	 *
 	 * @param index the index of the vertex starting the segment. 
@@ -335,7 +356,7 @@ public:
 	  return Octant::octant(getCoordinate(index), getCoordinate(index+1));
 	}
 
-	/**
+	/** \brief
 	 * Adds EdgeIntersections for one or both
 	 * intersections found for a segment of an edge to the edge
 	 * intersection list.
@@ -343,8 +364,9 @@ public:
 	void addIntersections(algorithm::LineIntersector *li, unsigned int segmentIndex,
 			int geomIndex);
 
-	/**
+	/** \brief
 	 * Add an SegmentNode for intersection intIndex.
+	 *
 	 * An intersection that falls exactly on a vertex
 	 * of the SegmentString is normalized
 	 * to use the higher of the two possible segmentIndexes
@@ -352,8 +374,9 @@ public:
 	void addIntersection(algorithm::LineIntersector *li, unsigned int segmentIndex,
 			int geomIndex, int intIndex);
 
-	/**
+	/** \brief
 	 * Add an EdgeIntersection for intersection intIndex.
+	 *
 	 * An intersection that falls exactly on a vertex of the
 	 * edge is normalized
 	 * to use the higher of the two possible segmentIndexes
@@ -367,141 +390,20 @@ public:
 			const SegmentString::NonConstVect& segStrings);
 };
 
-#else // def USE_NEW_SEGMENT_STRING
-
-/**
- * Represents a list of contiguous line segments,
- * and supports noding the segments.
- * The line segments are represented by an array of {@link Coordinate}s.
- * Intended to optimize the noding of contiguous segments by
- * reducing the number of allocated objects.
- * SegmentStrings can carry a context object, which is useful
- * for preserving topological or parentage information.
- * All noded substrings are initialized with the same context object.
- *
- * Final class.
- *
- * Last port: noding/SegmentString.java rev. 1.5 (JTS-1.7)
- */
-class SegmentString {
-
-public:
-	typedef std::vector<const SegmentString *> ConstVect;
-	typedef std::vector<SegmentString *> NonConstVect;
-
-private:
-
-	SegmentNodeList nodeList;
-	const Coordinate::ConstVect pts;
-	const void* data;
-
-public:
-
-	//SegmentString(const CoordinateSequence *newPts, const void* newContext);
-
-	/**
-	 * Creates a new segment string from a list of vertices.
-	 *
-	 * @param pts the vertices of the segment string
-	 * @param data the user-defined data of this segment string
-	 *             (may be null)
-	 */
-	SegmentString(const Coordinate::ConstVect& newPts,
-			const void* newData):
-		nodeList(this),
-		pts(newPts),
-		data(newData)
-	{
-	}
-
-	~SegmentString() {}
-
-	/**
-	 * Gets the user-defined data for this segment string.
-	 *
-	 * @return the user-defined data
-	 */
-	const void* getData() const { return data; }
-
-	/**
-	 * Sets the user-defined data for this segment string.
-	 *
-	 * @param data an Object containing user-defined data
-	 */
-	void setData(const void* newData) { data = newData; }
-
-	SegmentNodeList& getNodeList() { return nodeList; }
-	unsigned int size() { return pts.size(); }
-	const Coordinate* getCoordinate(unsigned int i) { return pts[i]; }
-	const Coordinate::ConstVect& getCoordinates() { return pts; }
-
-	bool isClosed() {
-	  return pts.front()->equals2D(*(pts.back()));
-	}
-
-	/**
-	 * Adds EdgeIntersections for one or both
-	 * intersections found for a segment of an edge to the edge
-	 * intersection list.
-	 */
-	void addIntersections(algorithm::LineIntersector& li, int segmentIndex,
-			int geomIndex);
-
-	/**
-	 * Add an SegmentNode for intersection intIndex.
-	 * An intersection that falls exactly on a vertex
-	 * of the SegmentString is normalized
-	 * to use the higher of the two possible segmentIndexes
-	 */
-	void addIntersection(algorithm::LineIntersector& li, int segmentIndex,
-			int geomIndex, int intIndex);
-
-	void addIntersection(const Coordinate& intPt, int segmentIndex);
-
-	static SegmentString::ConstVect* getNodedSubstrings(
-			const SegmentString::ConstVect& segStrings)
-	{
-		SegmentString::ConstVect* resultEdgelist = \
-			new SegmentString::ConstVect();
-		getNodedSubstrings(segStrings, resultEdgelist);
-		return resultEdgelist;
-	}
-
-	/**
-	 * Gets the octant of the segment starting at vertex <code>index</code>.
-	 *
-	 * @param index the index of the vertex starting the segment. 
-	 *              Must not be the last index in the vertex list
-	 * @return the octant of the segment at the vertex
-	 */
-	int getSegmentOctant(unsigned int index)
-	{
-	  if (index == pts.size() - 1) return -1;
-	  return Octant::octant(getCoordinate(index), getCoordinate(index + 1));
-	}
-
-
-	static void getNodedSubstrings(const SegmentString::ConstVect& segStrings,
-			SegmentString::ConstVect* resultEdgeList);
-
-};
-
-#endif // def USE_NEW_SEGMENT_STRING
-
 /**
  * \brief
  * Computes the intersections between two line segments in SegmentString
  * and adds them to each string.
  *
- * The {@link nodingSegmentIntersector} is passed to a {@link Noder}.
- * The {@link addIntersections} method is called whenever the {@link Noder}
+ * The SegmentIntersector is passed to a Noder.
+ * The addIntersections method is called whenever the Noder
  * detects that two SegmentStrings <i>might</i> intersect.
  * This class is an example of the <i>Strategy</i> pattern.
  *
  * Last port: noding/SegmentIntersector.java rev. 1.7 (JTS-1.7)
  *
  */
-class nodingSegmentIntersector {
+class SegmentIntersector {
 
 public:
 
@@ -517,15 +419,15 @@ public:
 
 protected:
 
-	nodingSegmentIntersector() {}
-	virtual ~nodingSegmentIntersector() {}
+	SegmentIntersector() {}
+	virtual ~SegmentIntersector() {}
  
 };
 
 /**
  * Computes the intersections between two line segments in SegmentString
  * and adds them to each string.
- * The {@link nodingSegmentIntersector} is passed to a {@link Noder}.
+ * The {@link SegmentIntersector} is passed to a {@link Noder}.
  * The {@link addIntersections} method is called whenever the {@link Noder}
  * detects that two SegmentStrings <i>might</i> intersect.
  * This class is an example of the <i>Strategy</i> pattern.
@@ -533,7 +435,7 @@ protected:
  * Last port: noding/IntersectionAdder.java rev. 1.4 (JTS-1.7)
  *
  */
-class IntersectionAdder: public nodingSegmentIntersector {
+class IntersectionAdder: public SegmentIntersector {
 
 private:
 
@@ -652,7 +554,7 @@ public:
  * Last port: noding/IntersectionFinderAdder.java rev. 1.2 (JTS-1.7)
  *
  */
-class IntersectionFinderAdder: public nodingSegmentIntersector {
+class IntersectionFinderAdder: public SegmentIntersector {
 
 private:
 	algorithm::LineIntersector& li;
@@ -693,8 +595,9 @@ public:
 };
 
 
-/**
+/** \brief
  * Computes all intersections between segments in a set of SegmentString.
+ *
  * Intersections found are represented as {@link SegmentNode}s and added to the
  * {@link SegmentString}s in which they occur.
  * As a final step in the noding a new set of segment strings split
@@ -747,11 +650,12 @@ class SinglePassNoder : public Noder { // implements Noder
 
 protected:
 
-	nodingSegmentIntersector* segInt;
+	/// Externally owned
+	SegmentIntersector* segInt;
 
 public:
 
-	SinglePassNoder(): segInt(NULL) {}
+	SinglePassNoder(SegmentIntersector* nSegInt=NULL): segInt(nSegInt) {}
 
 	virtual ~SinglePassNoder() {}
 
@@ -764,7 +668,7 @@ public:
 	 *
 	 * @param newSegInt
 	 */
-	virtual void setSegmentIntersector(nodingSegmentIntersector* newSegInt) {
+	virtual void setSegmentIntersector(SegmentIntersector* newSegInt) {
 	  segInt = newSegInt;
 	}
 
@@ -832,16 +736,15 @@ public:
 
 };
 
-/**
- * Nodes a set of {@link SegmentStrings} using a index based
- * on {@link MonotoneChain}s and a {@link SpatialIndex}.
+/** \brief
+ * Nodes a set of SegmentString using a index based
+ * on index::chain::MonotoneChain and a index::SpatialIndex.
+ *
  * The {@link SpatialIndex} used should be something that supports
  * envelope (range) queries efficiently (such as a index::quadtree::Quadtree
  * or index::strtree::STRtree.
  *
  * Last port: noding/MCIndexNoder.java rev. 1.4 (JTS-1.7)
- *
- * TODO: finish this
  */
 class MCIndexNoder : public SinglePassNoder {
 
@@ -859,8 +762,9 @@ private:
 
 public:
 
-	MCIndexNoder()
+	MCIndexNoder(SegmentIntersector *nSegInt=NULL)
 		:
+		SinglePassNoder(nSegInt),
 		idCounter(0),
 		nodedSegStrings(NULL),
 		nOverlaps(0)
@@ -881,9 +785,9 @@ public:
 
 	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
 	private:
-		nodingSegmentIntersector& si;
+		SegmentIntersector& si;
 	public:
-		SegmentOverlapAction(nodingSegmentIntersector& newSi)
+		SegmentOverlapAction(SegmentIntersector& newSi)
 			:
 			si(newSi)
 		{}
@@ -897,9 +801,10 @@ public:
 };
 
 
-/**
+/** \brief
  * Nodes a set of {@link SegmentString}s by
  * performing a brute-force comparison of every segment to every other one.
+ *
  * This has n^2 performance, so is too slow for use on large numbers
  * of segments.
  *
@@ -911,7 +816,10 @@ private:
 	virtual void computeIntersects(SegmentString *e0, SegmentString *e1);
 
 public:
-	SimpleNoder(){};
+	SimpleNoder(SegmentIntersector* nSegInt=NULL)
+		:
+		SinglePassNoder(nSegInt)
+	{};
 
 	void computeNodes(SegmentString::NonConstVect* inputSegmentStrings);
 
@@ -1063,6 +971,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/02/23 20:05:19  strk
+ * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
+ * doxygen-friendly comments, miscellaneous cleanups
+ *
  * Revision 1.20  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

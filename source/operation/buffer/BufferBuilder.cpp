@@ -65,11 +65,6 @@ BufferBuilder::~BufferBuilder()
 	delete edgeList;
 	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
-
-	// FIXME: I think it's this object responsibility to delete
-	// created Edges, OR callers must provided a container
-	// for keeping track of them!
-	for (unsigned int i=0; i<newEdges.size(); i++) delete newEdges[i];
 }
 
 Geometry*
@@ -151,7 +146,6 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 	if (workingNoder != NULL) return workingNoder;
 
 	// otherwise use a fast (but non-robust) noder
-	MCIndexNoder* noder = new MCIndexNoder();
 
 	if ( li ) // reuse existing IntersectionAdder and LineIntersector
 	{
@@ -164,7 +158,8 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 		intersectionAdder = new IntersectionAdder(*li);
 	}
 
-	noder->setSegmentIntersector(intersectionAdder);
+	MCIndexNoder* noder = new MCIndexNoder(intersectionAdder);
+
 
 	return noder;
 
@@ -256,12 +251,6 @@ BufferBuilder::insertEdge(Edge *e)
 		edgeList->add(e);
 
 		e->setDepthDelta(depthDelta(e->getLabel()));
-
-		// FIXME: I think we should have memory release responsibility.
-		// Verify how to do that, as it seems it Edges will be deleted
-		// *at least* by PlanarGraph and who knows who else.
-		//newEdges.push_back(e);
-
 	}
 }
 
@@ -326,6 +315,10 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/02/23 20:05:21  strk
+ * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
+ * doxygen-friendly comments, miscellaneous cleanups
+ *
  * Revision 1.37  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

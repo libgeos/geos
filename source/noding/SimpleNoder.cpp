@@ -23,6 +23,8 @@ namespace noding { // geos.noding
 void
 SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
 {
+	assert(segInt); // must provide a segment intersector!
+
 	const CoordinateSequence* pts0 = e0->getCoordinates();
 	const CoordinateSequence* pts1 = e1->getCoordinates();
 	for (unsigned int i0=0, n0=pts0->getSize()-1; i0<n0; i0++) {
@@ -60,6 +62,10 @@ SimpleNoder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/23 20:05:21  strk
+ * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
+ * doxygen-friendly comments, miscellaneous cleanups
+ *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

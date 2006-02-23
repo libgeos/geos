@@ -779,14 +779,6 @@ private:
 	 */
 	static int depthDelta(geomgraph::Label *label);
 
-	/**
-	 * This is a list of owned Edges.
-	 * Edges are created by the private computeNodedEdges
-	 * method. We store them into this vector for cleanup
-	 * at BufferBuilder destruction time.
-	 */
-	std::vector<geomgraph::Edge*> newEdges;
-
 	int quadrantSegments;
 
 	int endCapStyle;
@@ -916,6 +908,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/02/23 20:05:19  strk
+ * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
+ * doxygen-friendly comments, miscellaneous cleanups
+ *
  * Revision 1.17  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder
