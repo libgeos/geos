@@ -29,6 +29,7 @@
 #include <geos/io.h>
 #include <geos/opRelate.h>
 #include <geos/opPolygonize.h>
+#include <geos/opLinemerge.h>
 #include <geos/profiler.h>
 #include "markup/MarkupSTL.h"
 #include <geos/unload.h>
@@ -48,6 +49,7 @@
 using namespace std;
 using namespace geos;
 using namespace geos::operation::polygonize;
+using namespace geos::operation::linemerge;
 
 //using geos::Polygon; // for mingw providing a Polygon global function
 
@@ -339,10 +341,8 @@ XMLTester::parseTest()
 		else if (opName=="isValid")
 		{
 			Geometry *gT=gA;
-			string gTname="A";
 			if ( opArg1 == "B" && gB ) {
 				gT=gB;
-				gTname="B";
 			} 
 
 			if (gT->isValid()) actual_result="true";
@@ -435,11 +435,8 @@ XMLTester::parseTest()
 		else if (opName=="getboundary")
 		{
 			Geometry *gT=gA;
-			string gTname="A";
-			if ( opArg1 == "B" && gB ) {
-				gT=gB;
-				gTname="B";
-			} 
+			if ( opArg1 == "B" && gB ) gT=gB;
+
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
 			Geometry *gRealRes=gT->getBoundary();
@@ -457,11 +454,8 @@ XMLTester::parseTest()
 		else if (opName=="getCentroid")
 		{
 			Geometry *gT=gA;
-			string gTname="A";
-			if ( opArg1 == "B" && gB ) {
-				gT=gB;
-				gTname="B";
-			} 
+			if ( opArg1 == "B" && gB ) gT=gB;
+
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
 			Geometry *gRealRes=gT->getCentroid();
@@ -481,11 +475,8 @@ XMLTester::parseTest()
 		else if (opName=="isSimple")
 		{
 			Geometry *gT=gA;
-			string gTname="A";
-			if ( opArg1 == "B" && gB ) {
-				gT=gB;
-				gTname="B";
-			} 
+			if ( opArg1 == "B" && gB ) gT=gB;
+
 			if (gT->isSimple()) actual_result="true";
 			else actual_result="false";
 
@@ -496,11 +487,8 @@ XMLTester::parseTest()
 		else if (opName=="convexhull")
 		{
 			Geometry *gT=gA;
-			string gTname="A";
-			if ( opArg1 == "B" && gB ) {
-				gT=gB;
-				gTname="B";
-			} 
+			if ( opArg1 == "B" && gB ) gT=gB;
+
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
 			Geometry *gRealRes=gT->convexHull();
@@ -518,11 +506,8 @@ XMLTester::parseTest()
 		else if (opName=="buffer")
 		{
 			Geometry *gT=gA;
-			string gTname="A";
-			if ( opArg1 == "B" && gB ) {
-				gT=gB;
-				gTname="B";
-			} 
+			if ( opArg1 == "B" && gB ) gT=gB;
+
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
 			profile.start();
@@ -604,6 +589,40 @@ XMLTester::parseTest()
 			delete gRes;
 		}
 
+		else if (opName=="Linemerge")
+		{
+			Geometry *gRes=NULL;
+			Geometry *gRealRes=NULL;
+			gRes=r->read(opRes);
+			gRes->normalize();
+
+			Geometry *gT=gA;
+			if ( opArg1 == "B" && gB ) gT=gB;
+
+			try {
+				LineMerger merger;
+				merger.add(gT);
+				vector<geos::LineString *>*lines = merger.getMergedLineStrings();
+				vector<Geometry *>*newgeoms = new vector<Geometry *>(lines->begin(),
+						lines->end());
+				delete lines;
+				gRealRes=factory->createGeometryCollection(newgeoms);
+				gRealRes->normalize();
+			} catch (...) {
+				delete gRealRes;
+				delete gRes;
+				throw;
+			}
+
+			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			actual_result=gRealRes->toString();
+			expected_result=gRes->toString();
+
+			delete gRealRes;
+			delete gRes;
+		}
+
 		else
 		{
 			if ( verbose )
@@ -618,16 +637,14 @@ XMLTester::parseTest()
 		}
 
 	}
-	catch (const GEOSException& ex)
-	{
-		actual_result = ex.toString();
-	}
 	catch (const std::exception &e)
 	{
+		cerr<<"EXEPTION: "<<e.what();
 		actual_result = e.what();
 	}
 	catch (...)
 	{
+		cerr<<"EXEPTION"<<endl;
 		actual_result = "Unknown exception thrown";
 	}
 
@@ -744,6 +761,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/23 20:32:55  strk
+ * Added support for LineMerge tests. Exception printed on stderr.
+ *
  * Revision 1.4  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
