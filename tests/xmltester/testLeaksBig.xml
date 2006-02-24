@@ -183,7 +183,7 @@
   <a>    POLYGON ((0 0, 0 200, 200 200, 200 0, 0 0), 
   (60 180, 20 180, 20 140, 60 140, 60 180))
 	 </a>
-<test><op name="getCentroid" arg1="A" >    POINT (102 98)   </op></test>
+<test><op name="getCentroid" arg1="A" >    POINT (103 98)   </op></test>
 </case>
 
 <case>
@@ -208,7 +208,7 @@
   <a>    GEOMETRYCOLLECTION (POLYGON ((0 200, 20 180, 20 140, 60 140, 200 0, 0 0, 0 200)), 
   POLYGON ((200 200, 0 200, 20 180, 60 180, 60 140, 200 0, 200 200))) 
 	</a>
-<test><op name="getCentroid" arg1="A" >    POINT (102 98)   </op></test>
+<test><op name="getCentroid" arg1="A" >    POINT (103 98)   </op></test>
 </case>
 
 <case>

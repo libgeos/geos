@@ -13,6 +13,7 @@ libutil_la_SOURCES = \
 	UniqueCoordinateArrayFilter.cpp \
 	UnsupportedOperationException.cpp \
 	GeometricShapeFactory.cpp \
+	math.cpp \
 	Profiler.cpp 
 
 libutil_la_LIBADD = 

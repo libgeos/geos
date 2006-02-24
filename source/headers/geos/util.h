@@ -387,12 +387,25 @@ public:
 
 };
 
+namespace util { // geos.util
+
+ 	/// Symmetric Rounding Algorithm
+	double sym_round(double val);
+
+} // namespace geos.util
+
 } // namespace geos
 
 #endif // GEOS_UTIL_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/24 16:20:15  strk
+ * Added Mateusz implementation of round() in a new math.cpp file
+ * named sym_round(). Changed use of rint_vc to sym_round in PrecisionModel.
+ * Moved rint_vc to math.cpp (geos::util namespace), to be renamed
+ * to something more meaningful
+ *
  * Revision 1.13  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

@@ -20,7 +20,6 @@
 #include <geos/platform.h>
 #include <geos/noding.h>
 #include <geos/geom.h>
-#include <cmath>
 #include <vector>
 
 using namespace std;
@@ -69,7 +68,8 @@ private:
 
 	double scale(double val) const {
 		// Math.round
-		return round(val*scaleFactor);
+		//return round(val*scaleFactor);
+		return util::sym_round(val*scaleFactor);
 	}
 
 	void copyScaled(const Coordinate& p, Coordinate& pScaled) const {
@@ -395,6 +395,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/24 16:20:14  strk
+ * Added Mateusz implementation of round() in a new math.cpp file
+ * named sym_round(). Changed use of rint_vc to sym_round in PrecisionModel.
+ * Moved rint_vc to math.cpp (geos::util namespace), to be renamed
+ * to something more meaningful
+ *
  * Revision 1.9  2006/02/23 20:05:19  strk
  * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
  * doxygen-friendly comments, miscellaneous cleanups

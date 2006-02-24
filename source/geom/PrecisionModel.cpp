@@ -21,32 +21,6 @@ namespace geos {
 
 const double PrecisionModel::maximumPreciseValue=9007199254740992.0;
 
-/*
- * \brief Implementation of rint() for Visual C++
- */
-static double
-rint_vc(double val)
-{
-	double n;
-	double f=fabs(modf(val,&n));
-	if (val>=0) {
-		if (f<0.5) {
-			return floor(val);
-		} else if (f>0.5) {
-			return ceil(val);
-		} else {
-			return(floor(n/2)==n/2)?n:n+1.0;
-		}
-	} else {
-		if (f<0.5) {
-			return ceil(val);
-		} else if (f>0.5) {
-			return floor(val);
-		} else {
-			return(floor(n/2)==n/2)?n:n-1.0;
-		}
-	}
-}
 
 
 /**
@@ -61,7 +35,8 @@ double PrecisionModel::makePrecise(double val) const {
 		//double d=val*scale;
 		//double me=((d >= 0.0) ? floor(d+0.5)/scale : - floor(-d+0.5)/scale);
 //		double ret = nearbyint(val*scale)/scale;
-		double ret = rint_vc(val*scale)/scale;
+//		double ret = util::rint_vc(val*scale)/scale;
+		double ret = util::sym_round(val*scale)/scale;
 		return ret;
 	}
 	// modelType == FLOATING - no rounding necessary
@@ -343,6 +318,12 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/02/24 16:20:14  strk
+ * Added Mateusz implementation of round() in a new math.cpp file
+ * named sym_round(). Changed use of rint_vc to sym_round in PrecisionModel.
+ * Moved rint_vc to math.cpp (geos::util namespace), to be renamed
+ * to something more meaningful
+ *
  * Revision 1.32  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions
