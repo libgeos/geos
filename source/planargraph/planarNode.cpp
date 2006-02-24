@@ -28,12 +28,23 @@ planarNode::getEdgesBetween(planarNode *node0, planarNode *node1)
 	return NULL;
 }
 
+std::ostream& operator<<(std::ostream& os, const planarNode& n) {
+	os << "planarNode " << n.pt << " with degree " << n.getDegree();
+	if ( n.isMarked() ) os << " Marked ";
+	if ( n.isVisited() ) os << " Visited ";
+	return os;
+}
 
 } // namespace planargraph 
 } // namespace geos 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/24 15:39:07  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.6  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

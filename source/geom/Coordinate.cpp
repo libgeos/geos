@@ -21,11 +21,6 @@ namespace geos {
 
 	Coordinate Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
 
-/**
- *  Returns a <code>string</code> of the form <I>(x,y,z)</I> .
- *
- *@return    a <code>string</code> of the form <I>(x,y,z)</I>
- */
 string Coordinate::toString() const {
 	ostringstream s;
 	//string result("");
@@ -43,6 +38,11 @@ string Coordinate::toString() const {
 	}
 	//return result;
 	return s.str();
+}
+
+std::ostream& operator<< (std::ostream& os, const Coordinate& c) {
+	os<<c.toString();
+	return os;
 }
 
 #ifdef PROFILE_COORDINATE_COPIES
@@ -70,6 +70,11 @@ Coordinate::operator=(const Coordinate &c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/02/24 15:39:06  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.24  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

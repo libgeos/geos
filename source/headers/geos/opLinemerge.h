@@ -58,7 +58,7 @@ public:
 };
 
 
-/*
+/**
  * \class LineMergeDirectedEdge opLinemerge.h geos/opLinemerge.h
  * \brief
  * A planargraph::DirectedEdge of a LineMergeGraph. 
@@ -438,6 +438,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/24 15:39:07  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.9  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

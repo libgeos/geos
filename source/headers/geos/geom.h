@@ -523,6 +523,7 @@ public:
 			((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
 	}
 
+	///  Returns a string of the form <I>(x,y,z)</I> .
 	string toString() const;
 
 	/// TODO: obsoleted this, can use PrecisionModel::makePrecise(Coordinate*)
@@ -572,6 +573,9 @@ struct CoordinateLessThen {
 	}
 
 };
+
+/// Output function
+std::ostream& operator<< (std::ostream& os, const Coordinate& c);
 
 
 /**
@@ -2915,6 +2919,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.71  2006/02/24 15:39:07  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.70  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

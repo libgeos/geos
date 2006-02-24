@@ -39,10 +39,19 @@ class planarNodeMap;
 class planarPlanarGraph;
 class planarSubgraph;
 
+/// Temporary typedef for namespace transition
 typedef planarEdge Edge;
+
+/// Temporary typedef for namespace transition
 typedef planarDirectedEdge DirectedEdge;
+
+/// Temporary typedef for namespace transition
 typedef planarNode Node;
+
+/// Temporary typedef for namespace transition
 typedef planarPlanarGraph PlanarGraph;
+
+/// Temporary typedef for namespace transition
 typedef planarSubgraph Subgraph;
 
 /**
@@ -71,8 +80,10 @@ class planarGraphComponent {
 
 protected:
 
+	/// Variable holding ''marked'' status
 	bool isMarkedVar;
 
+	/// Variable holding ''visited'' status
 	bool isVisitedVar;
 
 public:
@@ -91,7 +102,7 @@ public:
 	 *
 	 * @return <code>true</code> if the component has been visited
 	 */
-	virtual bool isVisited() { return isVisitedVar; }
+	virtual bool isVisited() const { return isVisitedVar; }
 
 	/** \brief
 	 * Sets the visited flag for this component.
@@ -99,7 +110,7 @@ public:
 	 */
 	virtual void setVisited(bool isVisited) { isVisitedVar=isVisited; }
 
-	/**
+	/** \brief
 	 * Sets the Visited state for the elements of a container,
 	 * from start to end iterator.
 	 *
@@ -114,6 +125,15 @@ public:
 			(*i)->setVisited(visited);
 		}
 	}
+
+	/** \brief
+	 * Sets the Visited state for the values of each map
+	 * container element, from start to end iterator.
+	 *
+	 * @param start the start element
+	 * @param end one past the last element
+	 * @param visited the state to set the visited flag to
+	 */
 	template <typename T>
 	static void setVisitedMap(T start, T end, bool visited) {
 		for(T i=start; i!=end; ++i) {
@@ -126,16 +146,17 @@ public:
 	 * during the processing involving this graph.
 	 * @return <code>true</code> if the component has been marked
 	 */
-	virtual bool isMarked() { return isMarkedVar; }
+	virtual bool isMarked() const { return isMarkedVar; }
 
 	/** \brief
 	 * Sets the marked flag for this component.
 	 * @param isMarked the desired value of the marked flag
 	 */
-	virtual void setMarked(bool isMarked) { isVisitedVar=isMarked; }
+	virtual void setMarked(bool isMarked) { isMarkedVar=isMarked; }
 
 };
 
+/// Strict Weak comparator function for containers
 bool pdeLessThan(planarDirectedEdge *first,planarDirectedEdge * second);
 
 /**
@@ -178,9 +199,16 @@ public:
 	 * in ascending order by angle with the positive x-axis.
 	 */
 	std::vector<planarDirectedEdge*>::iterator iterator() { return begin(); }
+	/// Returns an iterator to first planarDirectedEdge
 	std::vector<planarDirectedEdge*>::iterator begin();
+
+	/// Returns an iterator to one-past last planarDirectedEdge
 	std::vector<planarDirectedEdge*>::iterator end();
+
+	/// Returns an const_iterator to first planarDirectedEdge
 	std::vector<planarDirectedEdge*>::const_iterator begin() const;
+
+	/// Returns an const_iterator to one-past last planarDirectedEdge
 	std::vector<planarDirectedEdge*>::const_iterator end() const;
 
 	/**
@@ -250,6 +278,7 @@ protected:
 	planarDirectedEdgeStar *deStar;
 
 public:
+	friend std::ostream& operator<<(std::ostream& os, const planarNode&);
 
 	/**
 	 * \brief Returns all Edges that connect the two nodes (which are
@@ -264,13 +293,15 @@ public:
 		pt(newPt)
 		{ deStar=new planarDirectedEdgeStar(); }
 
-	/*virtual?*/ ~planarNode() {
+	virtual ~planarNode() {
 		delete deStar;
 	}
 
 	/**
-	 * \brief Constructs a Node with the given location and
+	 * \brief
+	 * Constructs a Node with the given location and
 	 * collection of outgoing planarDirectedEdges.
+	 * Takes ownership of the given planarDirectedEdgeStar!!
 	 */
 	planarNode(Coordinate& newPt, planarDirectedEdgeStar *newDeStar)
 		:
@@ -317,6 +348,9 @@ public:
 
 };
 
+/// Print a planarNode
+std::ostream& operator<<(std::ostream& os, const planarNode& n); 
+
 /**
  * \class planarEdge planargraph.h geos/planargraph.h
  *
@@ -331,9 +365,19 @@ public:
 class planarEdge: public planarGraphComponent {
 
 public:
-	typedef set<const planarEdge *> ConstSet;
-	typedef set<planarEdge *> NonConstSet;
+
+	friend std::ostream& operator<<(std::ostream& os, const planarNode&);
+
+	/// Set of const planarEdges pointers
+	typedef std::set<const planarEdge *> ConstSet;
+
+	/// Set of non-const planarEdges pointers
+	typedef std::set<planarEdge *> NonConstSet;
+
+	/// Vector of non-const planarEdges pointers
 	typedef std::vector<planarEdge *> NonConstVect;
+
+	/// Vector of const planarEdges pointers
 	typedef std::vector<const planarEdge *> ConstVect;
 
 protected:
@@ -349,7 +393,14 @@ protected:
 
 public:
 
-	planarEdge();
+	/** \brief
+	 * Constructs a planarEdge whose planarDirectedEdges are
+	 * not yet set.
+	 *
+	 * Be sure to call
+	 * {@link setDirectedEdges(DirectedEdge, DirectedEdge)}
+	 */
+	planarEdge(): dirEdge() {}
 
 	/**
 	 * \brief Constructs an Edge initialized with the given DirectedEdges.
@@ -357,7 +408,12 @@ public:
 	 * For  each DirectedEdge: sets the Edge, sets the symmetric
 	 * DirectedEdge, and adds this Edge to its from-Node.
 	 */
-	planarEdge(planarDirectedEdge *de0, planarDirectedEdge *de1);
+	planarEdge(planarDirectedEdge *de0, planarDirectedEdge *de1)
+		:
+		dirEdge()
+	{
+		setDirectedEdges(de0, de1);
+	}
 
 	/**
 	 * \brief Initializes this Edge's two DirectedEdges.
@@ -387,6 +443,9 @@ public:
 	 */
 	planarNode* getOppositeNode(planarNode *node);
 };
+
+/// Print a planarEdge
+std::ostream& operator<<(std::ostream& os, const planarEdge& n); 
 
 
 /**
@@ -769,19 +828,25 @@ public:
 		return dirEdges.begin();
 	}
 
-	/**
-	 * \brief
-	 * Returns an Iterator over the Edges in this PlanarGraph,
-	 * in the order in which they were added.
-	 *
-	 * @see #add(Edge)
-	 */
+	/// Alias for edgeBegin()
 	std::vector<planarEdge*>::iterator edgeIterator() {
 		return edges.begin();
 	}
+
+	/// Returns an iterator to first planarEdge in this graph.
+	//
+	/// Edges are stored in the order they were added.
+	/// @see add(planarEdge)
+	///
 	std::vector<planarEdge*>::iterator edgeBegin() {
 		return edges.begin();
 	}
+
+	/// Returns an iterator to one-past last planarEdge in this graph.
+	//
+	/// Edges are stored in the order they were added.
+	/// @see add(planarEdge)
+	///
 	std::vector<planarEdge*>::iterator edgeEnd() {
 		return edges.end();
 	}
@@ -863,7 +928,7 @@ public:
 		{}
 
 	/**
-	 * Gets the {@link PlanarGraph} which this subgraph
+	 * Gets the {@link planarPlanarGraph} which this subgraph
 	 * is part of.
 	 *
 	 * @return the parent PlanarGraph
@@ -871,8 +936,8 @@ public:
 	planarPlanarGraph& getParent() const { return parentGraph; }
 
 	/**
-	 * Adds an {@link Edge} to the subgraph.
-	 * The associated {@link DirectedEdge}s and {@link Node}s
+	 * Adds an {@link planarEdge} to the subgraph.
+	 * The associated {@link planarDirectedEdge}s and {@link planarNode}s
 	 * are also added.
 	 *
 	 * @param e the edge to add
@@ -899,8 +964,8 @@ public:
 
 	
 	/**
-	 * Returns an {@link Iterator} over the {@link Edge}s in this graph,
-	 * in the order in which they were added.
+	 * Returns an {@link Iterator} over the {@link planarEdge}s in this
+	 * graph, in the order in which they were added.
 	 *
 	 * @return an iterator over the edges
 	 *
@@ -927,7 +992,7 @@ public:
 	}
 
 	/**
-	 * Tests whether an {@link Edge} is contained in this subgraph
+	 * Tests whether an {@link planarEdge} is contained in this subgraph
 	 * @param e the edge to test
 	 * @return <code>true</code> if the edge is contained in this subgraph
 	 */
@@ -936,9 +1001,10 @@ public:
 	
 };
 
+/// Planargraph algorithms
 namespace algorithm { // geos.planargraph.algorithm
 
-/**
+/** \brief
  * Finds all connected {@link planarSubgraph}s of a planarPlanarGraph.
  * 
  * <b>Note:</b> uses the <code>isVisited</code> flag on the nodes.
@@ -996,6 +1062,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/02/24 15:39:07  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.13  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

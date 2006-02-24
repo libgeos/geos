@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.5  2006/02/24 15:39:07  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.4  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
@@ -37,23 +42,6 @@
 
 namespace geos {
 namespace planargraph {
-
-/**
-* Constructs an Edge whose DirectedEdges are not yet set. Be sure to call
-* {@link #setDirectedEdges(DirectedEdge, DirectedEdge)}
-*/
-planarEdge::planarEdge(): dirEdge()
-{
-}
-
-/**
-* Constructs an Edge initialized with the given DirectedEdges, and for each
-* DirectedEdge: sets the Edge, sets the symmetric DirectedEdge, and adds
-* this Edge to its from-Node.
-*/
-planarEdge::planarEdge(planarDirectedEdge *de0, planarDirectedEdge *de1){
-	setDirectedEdges(de0, de1);
-}
 
 /*
  * Initializes this Edge's two DirectedEdges, and for each DirectedEdge:
@@ -109,6 +97,13 @@ planarEdge::getOppositeNode(planarNode *node)
 	// node not found
 	// possibly should throw an exception here?
 	return NULL;
+}
+
+std::ostream& operator<<(std::ostream& os, const planarEdge& n) {
+	os << "planarEdge ";
+	if ( n.isMarked() ) os << " Marked ";
+	if ( n.isVisited() ) os << " Visited ";
+	return os;
 }
 
 } // namespace planargraph

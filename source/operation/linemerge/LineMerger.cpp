@@ -23,6 +23,8 @@
 
 using namespace geos::planargraph;
 
+#define DEBUG 0
+
 namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
@@ -113,13 +115,22 @@ LineMerger::buildEdgeStringsForIsolatedLoops()
 void
 LineMerger::buildEdgeStringsForUnprocessedNodes()
 {
+#if DEBUG
+	cerr<<__FUNCTION__<<endl;
+#endif
 	vector<planarNode*> *nodes=graph.getNodes();
 	for (unsigned int i=0; i<nodes->size(); ++i) {
 		planarNode *node=(*nodes)[i];
+#if DEBUG
+		cerr<<"Node "<<i<<": "<<*node<<endl;
+#endif
 		if (!node->isMarked()) { 
 			assert(node->getDegree()==2);
 			buildEdgeStringsStartingAt(node);
 			node->setMarked(true);
+#if DEBUG
+			cerr<<" setMarked(true) : "<<*node<<endl;
+#endif
 		}
 	}
 	delete nodes;
@@ -128,13 +139,22 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 void
 LineMerger::buildEdgeStringsForNonDegree2Nodes()
 {
+#if DEBUG
+	cerr<<__FUNCTION__<<endl;
+#endif
 	vector<planarNode*> *nodes=graph.getNodes();
 	unsigned int size=nodes->size();
 	for (unsigned int i=0; i<size; i++) {
 		planarNode *node=(*nodes)[i];
+#if DEBUG
+		cerr<<"Node "<<i<<": "<<*node<<endl;
+#endif
 		if (node->getDegree()!=2) { 
 			buildEdgeStringsStartingAt(node);
 			node->setMarked(true);
+#if DEBUG
+			cerr<<" setMarked(true) : "<<*node<<endl;
+#endif
 		}
 	}
 	delete nodes;
@@ -184,6 +204,11 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/24 15:39:07  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.9  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

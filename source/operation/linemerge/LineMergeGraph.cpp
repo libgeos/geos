@@ -19,18 +19,20 @@
 
 using namespace geos::planargraph;
 
+#define DEBUG 0
+
 namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
-/*
- * Adds an Edge, DirectedEdges, and Nodes for the given LineString
- * representation of an edge. 
- */
 void
 LineMergeGraph::addEdge(const LineString *lineString)
 {
 	if (lineString->isEmpty()) return;
+
+#if DEBUG
+	cerr<<"Adding LineString "<<lineString->toString()<<endl;
+#endif
 
 	CoordinateSequence *coordinates = 
 		CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO());
@@ -40,15 +42,36 @@ LineMergeGraph::addEdge(const LineString *lineString)
 
 	planarNode* startNode=getNode(startCoordinate);
 	planarNode* endNode=getNode(endCoordinate);
-	planarDirectedEdge *directedEdge0=new LineMergeDirectedEdge(startNode, endNode,coordinates->getAt(1), true);
-	planarDirectedEdge *directedEdge1=new LineMergeDirectedEdge(endNode, startNode,coordinates->getAt(coordinates->getSize()-2),false);
+#if DEBUG
+	cerr<<" startNode: "<<*startNode<<endl;
+	cerr<<" endNode: "<<*endNode<<endl;
+#endif
+
+	planarDirectedEdge *directedEdge0=new LineMergeDirectedEdge(startNode,
+			endNode,coordinates->getAt(1),
+			true);
 	newDirEdges.push_back(directedEdge0);
+
+	planarDirectedEdge *directedEdge1=new LineMergeDirectedEdge(endNode,
+			startNode,coordinates->getAt(coordinates->getSize()-2),
+			false);
 	newDirEdges.push_back(directedEdge1);
+
 	planarEdge *edge=new LineMergeEdge(lineString);
 	newEdges.push_back(edge);
 	edge->setDirectedEdges(directedEdge0, directedEdge1);
 
+#if DEBUG
+	cerr<<" planarEdge: "<<*edge<<endl;
+#endif
+
 	add(edge);
+
+#if DEBUG
+	cerr<<" After addition to the graph:"<<endl;
+	cerr<<"  startNode: "<<*startNode<<endl;
+	cerr<<"  endNode: "<<*endNode<<endl;
+#endif
 
 	delete coordinates;
 }
@@ -82,6 +105,11 @@ LineMergeGraph::~LineMergeGraph()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/24 15:39:07  strk
+ * - operator>> for Coordinate, planarNode and planarEdge
+ * - Fixed bug in planarGraphComponent::setMarked
+ * - Added linemerge.xml test (single test, should grow a bit)
+ *
  * Revision 1.10  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions
