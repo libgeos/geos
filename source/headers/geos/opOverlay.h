@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -131,19 +131,20 @@ private:
 	std::vector<ElevationMatrixCell>cells;
 };
 
-/*
- * Computes the overlay of two Geometry.  The overlay
- * can be used to determine any boolean combination of the geometries.
- */
+/// Computes the overlay of two Geometry. 
+//
+/// The overlay can be used to determine any
+/// boolean combination of the geometries.
+///
 class OverlayOp: public GeometryGraphOperation {
 
 public:
 
-	/*
-	 * The spatial functions supported by this class.
-	 * These operations implement various boolean combinations of
-	 * the resultants of the overlay.
-	 */
+	/// The spatial functions supported by this class.
+	//
+	/// These operations implement various boolean combinations of
+	/// the resultants of the overlay.
+	///
 	enum {
 		INTERSECTION=1,
 		UNION,
@@ -155,13 +156,17 @@ public:
 
 	static bool isResultOfOp(geomgraph::Label *label,int opCode);
 
-	/*
-	 * This method will handle arguments of Location.NULL correctly
-	 *
-	 * @return true if the locations correspond to the opCode
-	 */
+	/// This method will handle arguments of Location.NULL correctly
+	//
+	/// @return true if the locations correspond to the opCode
+	///
 	static bool isResultOfOp(int loc0,int loc1,int opCode);
 
+	/// Construct an OverlayOp with the given Geometry args.
+	// 
+	/// Ownership of passed args will remain to caller, and
+	/// the OverlayOp won't change them in any way.
+	///
 	OverlayOp(const Geometry *g0, const Geometry *g1);
 
 	virtual ~OverlayOp();
@@ -169,9 +174,9 @@ public:
 	Geometry* getResultGeometry(int funcCode);
 		// throw(TopologyException *);
 
-	geomgraph::PlanarGraph& getGraph();
+	geomgraph::PlanarGraph& getGraph() { return graph; }
 
-	/*
+	/** \brief
 	 * This method is used to decide if a point node should be included
 	 * in the result or not.
 	 *
@@ -180,7 +185,7 @@ public:
 	 */
 	bool isCoveredByLA(const Coordinate& coord);
 
-	/*
+	/** \brief
 	 * This method is used to decide if an L edge should be included
 	 * in the result or not.
 	 *
@@ -195,8 +200,9 @@ public:
 
 protected:
 
-	/*
+	/** \brief
 	 * Insert an edge from one of the noded input graphs.
+	 *
 	 * Checks edges that are inserted to see if an
 	 * identical edge already exists.
 	 * If so, the edge is not inserted, but its label is merged
@@ -205,15 +211,25 @@ protected:
 	void insertUniqueEdge(geomgraph::Edge *e);
 
 private:
+
 	algorithm::PointLocator ptLocator;
+
 	const GeometryFactory *geomFact;
+
 	Geometry *resultGeom;
+
 	geomgraph::PlanarGraph graph;
+
 	geomgraph::EdgeList edgeList;
+
 	std::vector<Polygon*> *resultPolyList;
+
 	std::vector<LineString*> *resultLineList;
+
 	std::vector<Point*> *resultPointList;
+
 	void computeOverlay(int opCode); // throw(TopologyException *);
+
 	void insertUniqueEdges(std::vector<geomgraph::Edge*> *edges);
 
 	/*
@@ -224,6 +240,7 @@ private:
 	 */
 	//Not needed
 	//void checkDimensionalCollapse(geomgraph::Label labelToMerge, geomgraph::Label existingLabel);
+
 	/*
 	 * Update the labels for edges according to their depths.
 	 * For each edge, the depths are first normalized.
@@ -314,8 +331,22 @@ private:
 	 */
 	void cancelDuplicateResultEdges();
 
+	/*
+	 * @return true if the coord is located in the interior or boundary of
+	 * a geometry in the list.
+	 */
 	bool isCovered(const Coordinate& coord,std::vector<Geometry*> *geomList);
+
+	/*
+	 * @return true if the coord is located in the interior or boundary of
+	 * a geometry in the list.
+	 */
 	bool isCovered(const Coordinate& coord,std::vector<Polygon*> *geomList);
+
+	/*
+	 * @return true if the coord is located in the interior or boundary of
+	 * a geometry in the list.
+	 */
 	bool isCovered(const Coordinate& coord,std::vector<LineString*> *geomList);
 
 	/*
@@ -687,6 +718,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/27 09:05:33  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.19  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

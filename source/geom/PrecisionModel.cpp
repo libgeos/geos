@@ -203,14 +203,8 @@ double PrecisionModel::getOffsetY() const {
 	return 0;
 }
 
-/*
- *  Sets <code>internal</code> to the precise representation of <code>external</code>.
- *
- * @param external the original coordinate
- * @param internal the coordinate whose values will be changed to the
- *                 precise representation of <code>external</code>
- * @deprecated use makePrecise instead
- */
+#if 0 // deprecated
+
 void PrecisionModel::toInternal (const Coordinate& external, Coordinate* internal) const {
 	if (isFloating()) {
 		internal->x = external.x;
@@ -222,47 +216,23 @@ void PrecisionModel::toInternal (const Coordinate& external, Coordinate* interna
 	internal->z = external.z;
 }
 
-/*
- *  Returns the precise representation of <code>external</code>.
- *
- *@param  external  the original coordinate
- *@return           the coordinate whose values will be changed to the precise
- *      representation of <code>external</code>
- * @deprecated use makePrecise instead
- */
 Coordinate* PrecisionModel::toInternal(const Coordinate& external) const {
 	Coordinate* internal=new Coordinate(external);
 	makePrecise(internal);
 	return internal;
 }
 
-/*
- *  Returns the external representation of <code>internal</code>.
- *
- *@param  internal  the original coordinate
- *@return           the coordinate whose values will be changed to the
- *      external representation of <code>internal</code>
- * @deprecated no longer needed, since internal representation is same as external representation
- */
 Coordinate* PrecisionModel::toExternal(const Coordinate& internal) const {
 	Coordinate* external=new Coordinate(internal);
 	return external;
 }
 
-/*
- * Sets <code>external</code> to the external representation of
- * <code>internal</code>.
- *
- *@param  internal  the original coordinate
- *@param  external  the coordinate whose values will be changed to the
- *      external representation of <code>internal</code>
- * @deprecated no longer needed, since internal representation is same
- * as external representation
- */
 void PrecisionModel::toExternal(const Coordinate& internal, Coordinate* external) const {
 	external->x = internal.x;
 	external->y = internal.y;
 }
+
+#endif // 0
   
 string PrecisionModel::toString() const {
 	ostringstream s;
@@ -318,6 +288,9 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/02/27 09:05:32  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.33  2006/02/24 16:20:14  strk
  * Added Mateusz implementation of round() in a new math.cpp file
  * named sym_round(). Changed use of rint_vc to sym_round in PrecisionModel.

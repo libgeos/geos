@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -36,55 +36,7 @@
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-LineIntersector::LineIntersector(const PrecisionModel* initialPrecisionModel):
-	precisionModel(initialPrecisionModel),
-	result(0)
-	//pa(intPt[0]), pb(intPt[1])
-{
-	//precisionModel=NULL;
-	//result=0;
-}
-
-LineIntersector::~LineIntersector(){}
-
-/**
- * Force computed intersection to be rounded to a given precision model.
- * No getter is provided, because the precision model is not required
- * to be specified.
- * @param precisionModel
- */
-void
-LineIntersector::setPrecisionModel(const PrecisionModel *newPM)
-{
-	precisionModel=newPM;
-}
-
-bool
-LineIntersector::isCollinear() const
-{
-	return result==COLLINEAR;
-}
-
-
-
-/**
- * Computes the "edge distance" of an intersection point p in an edge.
- * The edge distance is a metric of the point along the edge.
- * The metric used is a robust and easy to compute metric function.
- * It is <b>not</b> equivalent to the usual Euclidean metric.
- * It relies on the fact that either the x or the y ordinates of the
- * points in the edge are unique, depending on whether the edge is longer in
- * the horizontal or vertical direction.
- * 
- * NOTE: This function may produce incorrect distances
- *  for inputs where p is not precisely on p1-p2
- * (E.g. p = (139,9) p1 = (139,10), p2 = (280,1) produces distanct
- * 0.0, which is incorrect.
- * 
- * My hypothesis is that the function is safe to use for points which are the
- * result of <b>rounding</b> points which lie on the line,
- * but not safe to use for <b>truncated</b> points.
- */
+/*public static*/
 double
 LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,const Coordinate& p1)
 {
@@ -111,13 +63,11 @@ LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,co
 			dist=max(pdx,pdy);
 		}
 	}
-	Assert::isTrue(!(dist == 0.0 && !(p==p0)), "Bad distance calculation");
+	assert(!(dist == 0.0 && !(p==p0))); // Bad distance calculation
 	return dist;
 }
 
-/*
- * Computes the intersection of the lines p1-p2 and p3-p4
- */
+/*public*/
 void
 LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3,const Coordinate& p4)
 {
@@ -129,6 +79,7 @@ LineIntersector::computeIntersection(const Coordinate& p1,const Coordinate& p2,c
 	//numIntersects++;
 }
 
+/*public*/
 string
 LineIntersector::toString() const
 {
@@ -148,42 +99,7 @@ LineIntersector::toString() const
 	return str;
 }
 
-bool
-LineIntersector::isEndPoint() const
-{
-	return hasIntersection()&&!isProperVar;
-}
-
-/**
- * Returns the number of intersection points found.
- * This will be either 0, 1 or 2.
- */
-int
-LineIntersector::getIntersectionNum() const
-{
-	return result;
-}
-
-/**
- * Returns the intIndex'th intersection point
- *
- * @param intIndex is 0 or 1
- *
- * @return the intIndex'th intersection point
- */
-const Coordinate&
-LineIntersector::getIntersection(int intIndex) const
-{
-#if DEBUG_INTERSECT
-	cerr<<"LineIntersector::getIntersection("<<intIndex<<"): "<<intPt[intIndex].toString()<<endl;
-#endif
-	return intPt[intIndex];
-}
-
-/**
- * @return true if both numbers are positive or if both numbers are negative.
- * Returns false if both numbers are zero.
- */
+/*public static*/
 bool
 LineIntersector::isSameSignAndNonZero(double a,double b)
 {
@@ -193,24 +109,14 @@ LineIntersector::isSameSignAndNonZero(double a,double b)
 	return (a<0 && b<0) || (a>0 && b>0);
 }
 
+/*private*/
 void
 LineIntersector::computeIntLineIndex() {
-//	if (intLineIndex==null) {
-//	intLineIndex=new int[2][2];
 	computeIntLineIndex(0);
 	computeIntLineIndex(1);
-//}
 }
 
-/**
- * Test whether a point is a intersection point of two line segments.
- * Note that if the intersection is a line segment, this method only tests for
- * equality with the endpoints of the intersection segment.
- * It does <b>not</b> return true if
- * the input point is internal to the intersection segment.
- *
- * @return true if the input point is one of the intersection points.
- */
+/*public*/
 bool
 LineIntersector::isIntersection(const Coordinate& pt) const
 {
@@ -222,36 +128,7 @@ LineIntersector::isIntersection(const Coordinate& pt) const
 	return false;
 }
 
-/**
- * Tests whether an intersection is proper.
- * 
- * The intersection between two line segments is considered proper if
- * they intersect in a single point in the interior of both segments
- * (e.g. the intersection is a single point and is not equal to any of the
- * endpoints).
- * 
- * The intersection between a point and a line segment is considered proper
- * if the point lies in the interior of the segment (e.g. is not equal to
- * either of the endpoints).
- *
- * @return true if the intersection is proper
- */
-bool
-LineIntersector::isProper() const
-{
-	return hasIntersection()&&isProperVar;
-}
-
-/**
- * Computes the intIndex'th intersection point in the direction of
- * a specified input line segment
- *
- * @param segmentIndex is 0 or 1
- * @param intIndex is 0 or 1
- *
- * @return the intIndex'th intersection point in the direction of the
- *         specified input line segment
- */
+/*public*/
 const Coordinate&
 LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex)
 {
@@ -260,15 +137,7 @@ LineIntersector::getIntersectionAlongSegment(int segmentIndex,int intIndex)
 	return intPt[intLineIndex[segmentIndex][intIndex]];
 }
 
-/**
- * Computes the index of the intIndex'th intersection point in the direction of
- * a specified input line segment
- *
- * @param segmentIndex is 0 or 1
- * @param intIndex is 0 or 1
- *
- * @return the index of the intersection point along the segment (0 or 1)
- */
+/*public*/
 int
 LineIntersector::getIndexAlongSegment(int segmentIndex,int intIndex)
 {
@@ -276,6 +145,7 @@ LineIntersector::getIndexAlongSegment(int segmentIndex,int intIndex)
 	return intLineIndex[segmentIndex][intIndex];
 }
 
+/*private*/
 void
 LineIntersector::computeIntLineIndex(int segmentIndex)
 {
@@ -290,15 +160,7 @@ LineIntersector::computeIntLineIndex(int segmentIndex)
 	}
 }
 
-/**
- * Computes the "edge distance" of an intersection point along the specified
- * input line segment.
- *
- * @param segmentIndex is 0 or 1
- * @param intIndex is 0 or 1
- *
- * @return the edge distance of the intersection point
- */
+/*public*/
 double
 LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const
 {
@@ -308,13 +170,7 @@ LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const
 	return dist;
 }
 
-/**
- * Tests whether either intersection point is an interior point of one of
- * the input segments.
- *
- * @return <code>true</code> if either intersection point is in the interior
- * of one of the input segments
- */
+/*public*/
 bool
 LineIntersector::isInteriorIntersection()
 {
@@ -323,13 +179,7 @@ LineIntersector::isInteriorIntersection()
 	return false;
 }
 
-/**
- * Tests whether either intersection point is an interior point of the
- * specified input segment.
- *
- * @return <code>true</code> if either intersection point is in the interior
- * of the input segment
- */
+/*public*/
 bool
 LineIntersector::isInteriorIntersection(int inputLineIndex)
 {
@@ -344,6 +194,7 @@ LineIntersector::isInteriorIntersection(int inputLineIndex)
 	return false;
 }
 
+/*public static*/
 double
 LineIntersector::interpolateZ(const Coordinate &p,
 	const Coordinate &p1, const Coordinate &p2)
@@ -411,7 +262,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 }
 
 
-
+/*public*/
 void
 LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2)
 {
@@ -447,8 +298,9 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 	result = DONT_INTERSECT;
 }
 
+/* public static */
 bool
-LineIntersector::hasIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2)
+LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
 {
 	if(Envelope::intersects(p1,p2,p)) {
 		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
@@ -459,6 +311,7 @@ LineIntersector::hasIntersection(const Coordinate& p,const Coordinate& p1,const 
 	return false;
 }
 
+/*private*/
 int
 LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)
 {
@@ -582,6 +435,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 	return DO_INTERSECT;
 }
 
+/*private*/
 int
 LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)
 {
@@ -771,6 +625,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 	return DONT_INTERSECT;
 }
 
+/*private*/
 void
 LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 	const Coordinate& q1, const Coordinate& q2, Coordinate &intPt) const
@@ -845,6 +700,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 }
 
 
+/*private*/
 double
 LineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) const
 {
@@ -864,16 +720,7 @@ LineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) con
 	return x;
 }
 
-/*
- * Test whether a point lies in the envelopes of both input segments.
- * A correctly computed intersection point should return <code>true</code>
- * for this test.
- * Since this test is for debugging purposes only, no attempt is
- * made to optimize the envelope test.
- *
- * @return <code>true</code> if the input point lies within both input
- *	segment envelopes
- */
+/*private*/
 bool
 LineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 {
@@ -882,6 +729,7 @@ LineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 	return env0.contains(intPt) && env1.contains(intPt);
 }
 
+/*private*/
 void
 LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 		Coordinate &n10, Coordinate &n11, Coordinate &normPt) const
@@ -933,6 +781,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/02/27 09:05:32  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.31  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

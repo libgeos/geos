@@ -4,16 +4,21 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/DirectedEdgeStar.java rev. ?? (JTS-1.7)
+ *
  **********************************************************************/
 
+#include <cassert>
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
@@ -22,20 +27,7 @@
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-DirectedEdgeStar::DirectedEdgeStar():
-	EdgeEndStar(),
-	resultAreaEdgeList(NULL)
-{
-}
-
-DirectedEdgeStar::~DirectedEdgeStar()
-{
-	delete resultAreaEdgeList;
-}
-
-/**
- * Insert a directed edge in the list
- */
+/*public*/
 void
 DirectedEdgeStar::insert(EdgeEnd *ee)
 {
@@ -43,12 +35,7 @@ DirectedEdgeStar::insert(EdgeEnd *ee)
 	insertEdgeEnd(de);
 }
 
-Label &
-DirectedEdgeStar::getLabel()
-{
-	return label;
-}
-
+/*public*/
 int
 DirectedEdgeStar::getOutgoingDegree()
 {
@@ -62,6 +49,7 @@ DirectedEdgeStar::getOutgoingDegree()
 	return degree;
 }
 
+/*public*/
 int
 DirectedEdgeStar::getOutgoingDegree(EdgeRing *er)
 {
@@ -75,6 +63,7 @@ DirectedEdgeStar::getOutgoingDegree(EdgeRing *er)
 	return degree;
 }
 
+/*public*/
 DirectedEdge*
 DirectedEdgeStar::getRightmostEdge()
 {
@@ -102,14 +91,11 @@ DirectedEdgeStar::getRightmostEdge()
 		else if (deLast->getDy()!=0)
 			return deLast;
 	}
-	Assert::shouldNeverReachHere("found two horizontal edges incident on node");
+	assert(0); // found two horizontal edges incident on node
 	return NULL;
 }
 
-/**
- * Compute the labelling for all dirEdges in this star, as well
- * as the overall labelling
- */
+/*public*/
 void
 DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
 	//throw(TopologyException *)
@@ -135,10 +121,7 @@ DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
 	}
 }
 
-/**
- * For each dirEdge in the star,
- * merge the label from the sym dirEdge into the label
- */
+/*public*/
 void
 DirectedEdgeStar::mergeSymLabels()
 {
@@ -151,9 +134,7 @@ DirectedEdgeStar::mergeSymLabels()
 	}
 }
 
-/**
- * Update incomplete dirEdge labels from the labelling for the node
- */
+/*public*/
 void
 DirectedEdgeStar::updateLabelling(Label *nodeLabel)
 {
@@ -167,6 +148,7 @@ DirectedEdgeStar::updateLabelling(Label *nodeLabel)
 	}
 }
 
+/*private*/
 vector<DirectedEdge*>*
 DirectedEdgeStar::getResultAreaEdges()
 {
@@ -184,23 +166,7 @@ DirectedEdgeStar::getResultAreaEdges()
 	return resultAreaEdgeList;
 }
 
-/**
- * Traverse the star of DirectedEdges, linking the included edges together.
- * To link two dirEdges, the <next> pointer for an incoming dirEdge
- * is set to the next outgoing edge.
- * 
- * DirEdges are only linked if:
- * 
- * - they belong to an area (i.e. they have sides)
- * - they are marked as being in the result
- * 
- * Edges are linked in CCW order (the order they are stored).
- * This means that rings have their face on the Right
- * (in other words,
- * the topological location of the face is given by the RHS label of the DirectedEdge)
- * 
- * PRECONDITION: No pair of dirEdges are both marked as being in the result
- */
+/*public*/
 void
 DirectedEdgeStar::linkResultDirectedEdges() 
 	// throw(TopologyException *)
@@ -212,9 +178,13 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	DirectedEdge *incoming=NULL;
 	int state=SCANNING_FOR_INCOMING;
 	// link edges in CCW order
-	for (unsigned int i=0; i<resultAreaEdgeList->size(); ++i)
+	for (vector<DirectedEdge*>::iterator
+		i=resultAreaEdgeList->begin(), iEnd=resultAreaEdgeList->end();
+		i != iEnd;
+		++i)
 	{
-        	DirectedEdge *nextOut=(*resultAreaEdgeList)[i];
+        	DirectedEdge *nextOut=*i;
+        	//DirectedEdge *nextOut=(*resultAreaEdgeList)[i];
 
 		// skip de's that we're not interested in
 		if (!nextOut->getLabel()->isArea()) continue;
@@ -241,11 +211,12 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	if (state==LINKING_TO_OUTGOING) {
 		if (firstOut==NULL)
 			throw  TopologyException("no outgoing dirEdge found",&(getCoordinate()));
-		Assert::isTrue(firstOut->isInResult(), "unable to link last incoming dirEdge");
+		assert(firstOut->isInResult()); // unable to link last incoming dirEdge
 		incoming->setNext(firstOut);
 	}
 }
 
+/*public*/
 void
 DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
 {
@@ -279,12 +250,13 @@ DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
 		}
 	}
 	if (state==LINKING_TO_OUTGOING) {
-		Assert::isTrue(firstOut!=NULL, "found null for first outgoing dirEdge");
-		Assert::isTrue(firstOut->getEdgeRing()==er, "unable to link last incoming dirEdge");
+		assert(firstOut!=NULL); // found null for first outgoing dirEdge
+		assert(firstOut->getEdgeRing()==er); // unable to link last incoming dirEdge
 		incoming->setNextMin(firstOut);
 	}
 }
 
+/*public*/
 void
 DirectedEdgeStar::linkAllDirectedEdges()
 {
@@ -309,11 +281,7 @@ DirectedEdgeStar::linkAllDirectedEdges()
 	firstIn->setNext(prevOut);
 }
 
-/**
- * Traverse the star of edges, maintaing the current location in the result
- * area at this node (if any).
- * If any L edges are found in the interior of the result, mark them as covered.
- */
+/*public*/
 void
 DirectedEdgeStar::findCoveredLineEdges()
 {
@@ -370,6 +338,7 @@ DirectedEdgeStar::findCoveredLineEdges()
 	}
 }
 
+/*public*/
 void
 DirectedEdgeStar::computeDepths(DirectedEdge *de)
 {
@@ -389,14 +358,9 @@ DirectedEdgeStar::computeDepths(DirectedEdge *de)
 
 	if (lastDepth!=targetLastDepth)
 		throw  TopologyException("depth mismatch at ",&(de->getCoordinate()));
-//	Assert::isTrue(lastDepth==targetLastDepth, "depth mismatch at " + de->getCoordinate().toString());
 }
 
-/**
- * Compute the DirectedEdge depths for a subsequence of the edge array.
- *
- * @return the last depth assigned (from the R side of the last edge visited)
- */
+/*public*/
 int
 DirectedEdgeStar::computeDepths(EdgeEndStar::iterator startIt,
 	EdgeEndStar::iterator endIt, int startDepth)
@@ -412,6 +376,7 @@ DirectedEdgeStar::computeDepths(EdgeEndStar::iterator startIt,
 	return currDepth;
 }
 
+/*public*/
 string
 DirectedEdgeStar::print()
 {
@@ -436,6 +401,9 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/27 09:05:32  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.11  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

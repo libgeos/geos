@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -24,7 +24,6 @@ using namespace geos::geomgraph;
 namespace geos {
 namespace operation { // geos.operation
 
-//CGAlgorithms* GeometryGraphOperation::cga=new CGAlgorithms();
 LineIntersector* GeometryGraphOperation::li=new LineIntersector();
 
 GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0, const Geometry *g1):
@@ -53,6 +52,7 @@ GeometryGraphOperation::getArgGeometry(int i) const
 	return arg[i]->getGeometry();
 }
 
+/*protected*/
 void
 GeometryGraphOperation::setComputationPrecision(const PrecisionModel* pm)
 {
@@ -73,6 +73,9 @@ GeometryGraphOperation::~GeometryGraphOperation()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/27 09:05:33  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.19  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

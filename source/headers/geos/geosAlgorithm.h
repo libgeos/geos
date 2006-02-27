@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -242,17 +242,44 @@ private:
  */
 class LineIntersector {
 public:	
-	// Return a Z value being the interpolation of Z from p0 and p1 at
-	// the given point p
+
+	/// \brief
+	/// Return a Z value being the interpolation of Z from p0 and p1 at
+	/// the given point p
 	static double interpolateZ(const Coordinate &p, const Coordinate &p0, const Coordinate &p1);
+
+
+	/// Computes the "edge distance" of an intersection point p in an edge.
+	//
+	/// The edge distance is a metric of the point along the edge.
+	/// The metric used is a robust and easy to compute metric function.
+	/// It is <b>not</b> equivalent to the usual Euclidean metric.
+	/// It relies on the fact that either the x or the y ordinates of the
+	/// points in the edge are unique, depending on whether the edge is longer in
+	/// the horizontal or vertical direction.
+	/// 
+	/// NOTE: This function may produce incorrect distances
+	///  for inputs where p is not precisely on p1-p2
+	/// (E.g. p = (139,9) p1 = (139,10), p2 = (280,1) produces distanct
+	/// 0.0, which is incorrect.
+	/// 
+	/// My hypothesis is that the function is safe to use for points which are the
+	/// result of <b>rounding</b> points which lie on the line,
+	/// but not safe to use for <b>truncated</b> points.
+	///
 	static double computeEdgeDistance(const Coordinate& p, const Coordinate& p0, const Coordinate& p1);
+
 	static double nonRobustComputeEdgeDistance(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
 
-	LineIntersector(const PrecisionModel* initialPrecisionModel=NULL);
+	LineIntersector(const PrecisionModel* initialPrecisionModel=NULL)
+		:
+		precisionModel(initialPrecisionModel),
+		result(0)
+	{}
 
-	~LineIntersector();
+	~LineIntersector() {}
 
-	/*
+	/** \brief
 	 * Tests whether either intersection point is an interior point of
 	 * one of the input segments.
 	 *
@@ -261,7 +288,7 @@ public:
 	 */
 	bool isInteriorIntersection();
 
-	/*
+	/** \brief
 	 * Tests whether either intersection point is an interior point
 	 * of the specified input segment.
 	 *
@@ -270,23 +297,26 @@ public:
 	 */
 	bool isInteriorIntersection(int inputLineIndex);
 
-	void setMakePrecise(const PrecisionModel *newPM);
+	/// Force computed intersection to be rounded to a given precision model.
+	//
+	/// No getter is provided, because the precision model is not required
+	/// to be specified.
+	/// @param precisionModel the PrecisionModel to use for rounding
+	///
+	void setPrecisionModel(const PrecisionModel *newPM) {
+		precisionModel=newPM;
+	}
 
-	void setPrecisionModel(const PrecisionModel *newPM);
+	/// Compute the intersection of a point p and the line p1-p2.
+	//
+	/// This function computes the boolean value of the hasIntersection test.
+	/// The actual value of the intersection (if there is one)
+	/// is equal to the value of <code>p</code>.
+	///
+	void computeIntersection(const Coordinate& p, const Coordinate& p1, const Coordinate& p2);
 
-	/*
-	 * Compute the intersection of a point p and the line p1-p2.
-	 * This function computes the boolean value of the hasIntersection test.
-	 * The actual value of the intersection (if there is one)
-	 * is equal to the value of <code>p</code>.
-	 */
-	void computeIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
-
-	/*
-	 * Same as above but doen's compute intersection point. Faster.
-	 */
+	/// Same as above but doen's compute intersection point. Faster.
 	static bool hasIntersection(const Coordinate& p,const Coordinate& p1,const Coordinate& p2);
-
 
 	enum {
 		DONT_INTERSECT,
@@ -294,7 +324,9 @@ public:
 		COLLINEAR
 	};
 
-	void computeIntersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& p3, const Coordinate& p4);
+	/// Computes the intersection of the lines p1-p2 and p3-p4
+	void computeIntersection(const Coordinate& p1, const Coordinate& p2,
+			const Coordinate& p3, const Coordinate& p4);
 
 
 	string toString() const;
@@ -306,16 +338,91 @@ public:
 	 */
 	bool hasIntersection() const { return result!=DONT_INTERSECT; }
 
-	int getIntersectionNum() const;
+	/// Returns the number of intersection points found.
+	//
+	/// This will be either 0, 1 or 2.
+	///
+	int getIntersectionNum() const { return result; }
 
-	const Coordinate& getIntersection(int intIndex) const;
+	
+	/// Returns the intIndex'th intersection point
+	//
+	/// @param intIndex is 0 or 1
+	///
+	/// @return the intIndex'th intersection point
+	///
+	const Coordinate& getIntersection(int intIndex) const {
+		return intPt[intIndex];
+	}
 
+	/// Returns false if both numbers are zero.
+	//
+	/// @return true if both numbers are positive or if both numbers are negative.
+	///
 	static bool isSameSignAndNonZero(double a,double b);
 
+	/** \brief
+	 * Test whether a point is a intersection point of two line segments.
+	 *
+	 * Note that if the intersection is a line segment, this method only tests for
+	 * equality with the endpoints of the intersection segment.
+	 * It does <b>not</b> return true if
+	 * the input point is internal to the intersection segment.
+	 *
+	 * @return true if the input point is one of the intersection points.
+	 */
 	bool isIntersection(const Coordinate& pt) const;
-	bool isProper() const;
+
+	/** \brief
+	 * Tests whether an intersection is proper.
+	 * 
+	 * The intersection between two line segments is considered proper if
+	 * they intersect in a single point in the interior of both segments
+	 * (e.g. the intersection is a single point and is not equal to any of the
+	 * endpoints).
+	 * 
+	 * The intersection between a point and a line segment is considered proper
+	 * if the point lies in the interior of the segment (e.g. is not equal to
+	 * either of the endpoints).
+	 *
+	 * @return true if the intersection is proper
+	 */
+	bool isProper() const {
+		return hasIntersection()&&isProperVar;
+	}
+
+	/** \brief
+	 * Computes the intIndex'th intersection point in the direction of
+	 * a specified input line segment
+	 *
+	 * @param segmentIndex is 0 or 1
+	 * @param intIndex is 0 or 1
+	 *
+	 * @return the intIndex'th intersection point in the direction of the
+	 *         specified input line segment
+	 */
 	const Coordinate& getIntersectionAlongSegment(int segmentIndex,int intIndex);
+
+	/** \brief
+	 * Computes the index of the intIndex'th intersection point in the direction of
+	 * a specified input line segment
+	 *
+	 * @param segmentIndex is 0 or 1
+	 * @param intIndex is 0 or 1
+	 *
+	 * @return the index of the intersection point along the segment (0 or 1)
+	 */
 	int getIndexAlongSegment(int segmentIndex,int intIndex);
+
+	/** \brief
+	 * Computes the "edge distance" of an intersection point along the specified
+	 * input line segment.
+	 *
+	 * @param segmentIndex is 0 or 1
+	 * @param intIndex is 0 or 1
+	 *
+	 * @return the edge distance of the intersection point
+	 */
 	double getEdgeDistance(int geomIndex,int intIndex) const;
 
 private:
@@ -325,10 +432,12 @@ private:
 	 * will be made precise using Coordinate#makePrecise
 	 */
 	const PrecisionModel *precisionModel;
+
 	int result;
+
 	const Coordinate *inputLines[2][2];
 
-	/*
+	/**
 	 * We store real Coordinates here because
 	 * we must compute the Z of intersection point.
 	 */
@@ -343,12 +452,18 @@ private:
 	bool isProperVar;
 	//Coordinate &pa;
 	//Coordinate &pb;
-	bool isCollinear() const;
-	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
-	bool isEndPoint() const;
-	void computeIntLineIndex();
-	void computeIntLineIndex(int segmentIndex);
 
+	bool isCollinear() const { return result==COLLINEAR; }
+
+	int computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2);
+
+	bool isEndPoint() const {
+		return hasIntersection()&&!isProperVar;
+	}
+
+	void computeIntLineIndex();
+
+	void computeIntLineIndex(int segmentIndex);
 
 	int computeCollinearIntersection(const Coordinate& p1,
 		const Coordinate& p2, const Coordinate& q1,
@@ -897,6 +1012,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/27 09:05:33  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.23  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

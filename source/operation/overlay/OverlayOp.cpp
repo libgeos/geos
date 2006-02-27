@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,6 +18,8 @@
  *
  **********************************************************************/
 
+#include <cassert>
+#include <functional>
 #include <geos/geom.h>
 #include <geos/opOverlay.h>
 #include <geos/util.h>
@@ -34,6 +36,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
+/* static public */
 Geometry*
 OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 	// throw(TopologyException *)
@@ -42,6 +45,7 @@ OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 	return gov.getResultGeometry(opCode);
 }
 
+/* static public */
 bool
 OverlayOp::isResultOfOp(Label *label,int opCode)
 {
@@ -51,11 +55,7 @@ OverlayOp::isResultOfOp(Label *label,int opCode)
 }
 
 
-/*
- * This method will handle arguments of Location.NULL correctly
- *
- * @return true if the locations correspond to the opCode
- */
+/* static public */
 bool
 OverlayOp::isResultOfOp(int loc0,int loc1,int opCode)
 {
@@ -75,17 +75,22 @@ OverlayOp::isResultOfOp(int loc0,int loc1,int opCode)
 	return false;
 }
 
-OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1):
+OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1)
+
+	:
+
+	// this builds graphs in arg[0] and arg[1]
 	GeometryGraphOperation(g0, g1),
+
 	/*
 	 * Use factory of primary geometry.
 	 * Note that this does NOT handle mixed-precision arguments
 	 * where the second arg has greater precision than the first.
 	 */
 	geomFact(g0->getFactory()),
+
 	resultGeom(NULL),
 	graph(OverlayNodeFactory::instance()),
-	//edgeList(new EdgeList()),
 	resultPolyList(NULL),
 	resultLineList(NULL),
 	resultPointList(NULL)
@@ -126,31 +131,70 @@ OverlayOp::~OverlayOp()
 #endif
 }
 
+#undef REDUCED_PRECISION_OVERLAY
+
+#ifdef REDUCED_PRECISION_OVERLAY
+
+/*public*/
 Geometry*
 OverlayOp::getResultGeometry(int funcCode)
 	//throw(TopologyException *)
 {
+	int attempt=3;
+	PrecisionModel pm;
+
+	while (!resultGeom && attempt--)
+	{
+		try {
+			computeOverlay(funcCode, &pm); // this can throw TopologyException *
+		}
+		catch (const TopologyException& ex)
+		{
+			cerr<<"Attempt "<<attempt+1<<" exception "<<ex.what()<<endl;
+		}
+	}
+	return resultGeom;
+}
+
+/*private*/
+Geometry*
+OverlayOp::getResultGeometry(int funcCode, const PrecisionModel* pm)
+{
+	if ( pm ) setComputationPrecision(pm);
 	computeOverlay(funcCode); // this can throw TopologyException *
 	return resultGeom;
 }
 
-PlanarGraph&
-OverlayOp::getGraph()
+#else  // ndef REDUCED_PRECISION_OVERLAY
+
+/*public*/
+Geometry*
+OverlayOp::getResultGeometry(int funcCode)
+	//throw(TopologyException *)
 {
-	return graph;
+	computeOverlay(funcCode);
+	return resultGeom;
 }
 
+#endif // ndef REDUCED_PRECISION_OVERLAY
+
+/*private*/
 void
 OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 {
+	for_each(edges->begin(), edges->end(),
+			bind1st(mem_fun(&OverlayOp::insertUniqueEdge), this));
+
+#if 0
 	for(unsigned int i=0; i<edges->size(); ++i) {
 		Edge *e=(*edges)[i];
 		insertUniqueEdge(e);
 	}
+#endif
 
 #if DEBUG
 	cerr<<"OverlayOp::insertUniqueEdges("<<edges->size()<<"): "<<endl;
-	for(int i=0;i<(int)edges->size();i++) {
+	for(unsigned int i=0;i<edges->size();i++) {
 		Edge *e=(*edges)[i];
 		if ( ! e ) cerr <<" NULL"<<endl;
 		cerr <<" "<< e->print() << endl;
@@ -159,10 +203,7 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 
 }
 
-/*
- * If edges which have undergone dimensional collapse are found,
- * replace them with a new edge which is a L edge
- */
+/*private*/
 void
 OverlayOp::replaceCollapsedEdges()
 {
@@ -179,15 +220,7 @@ OverlayOp::replaceCollapsedEdges()
 	}
 }
 
-/*
- * Copy all nodes from an arg geometry into this graph.
- * The node label in the arg geometry overrides any previously computed
- * label for that argIndex.
- * (E.g. a node may be an intersection node with
- * a previously computed label of BOUNDARY,
- * but in the original arg Geometry it is actually
- * in the interior due to the Boundary Determination Rule)
- */
+/*private*/
 void
 OverlayOp::copyPoints(int argIndex)
 {
@@ -200,13 +233,7 @@ OverlayOp::copyPoints(int argIndex)
 	}
 }
 
-/*
- * Compute initial labelling for all DirectedEdges at each node.
- * In this step, DirectedEdges will acquire a complete labelling
- * (i.e. one with labels for both Geometries)
- * only if they
- * are incident on a node which has edges for both Geometries
- */
+/*private*/
 void
 OverlayOp::computeLabelling()
 	//throw(TopologyException *) // and what else ?
@@ -242,13 +269,7 @@ OverlayOp::computeLabelling()
 #endif
 }
 
-/*
- * For nodes which have edges from only one Geometry incident on them,
- * the previous step will have left their dirEdges with no labelling
- * for the other Geometry. 
- * However, the sym dirEdge may have a labelling for the other
- * Geometry, so merge the two labels.
- */
+/*private*/
 void
 OverlayOp::mergeSymLabels()
 {
@@ -269,6 +290,7 @@ OverlayOp::mergeSymLabels()
 	}
 }
 
+/*private*/
 void
 OverlayOp::updateNodeLabelling()
 {
@@ -291,21 +313,7 @@ OverlayOp::updateNodeLabelling()
 	}
 }
 
-/*
- * Incomplete nodes are nodes whose labels are incomplete.
- * (e.g. the location for one Geometry is NULL).
- * These are either isolated nodes,
- * or nodes which have edges from only a single Geometry incident on them.
- *
- * Isolated nodes are found because nodes in one graph which don't intersect
- * nodes in the other are not completely labelled by the initial process
- * of adding nodes to the nodeList.
- * To complete the labelling we need to check for nodes that lie in the
- * interior of edges, and in the interior of areas.
- *
- * When each node labelling is completed, the labelling of the incident
- * edges is updated, to complete their labelling as well.
- */
+/*private*/
 void
 OverlayOp::labelIncompleteNodes()
 {
@@ -329,9 +337,7 @@ OverlayOp::labelIncompleteNodes()
 	}
 }
 
-/*
- * Label an isolated node with its relationship to the target geometry.
- */
+/*private*/
 void
 OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 {
@@ -374,6 +380,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 #endif // COMPUTE_Z
 }
 
+/*static private*/
 double
 OverlayOp::getAverageZ(const Polygon *poly)
 {
@@ -397,9 +404,7 @@ OverlayOp::getAverageZ(const Polygon *poly)
 	else return DoubleNotANumber;
 }
 
-/*
- * This caches result to avoid multiple scans
- */
+/*private*/
 double
 OverlayOp::getAverageZ(int targetIndex)
 {
@@ -415,10 +420,7 @@ OverlayOp::getAverageZ(int targetIndex)
 	return avgz[targetIndex];
 }
 
-/*
- * Merge Z values of node with those of the segment or vertex in
- * the given Polygon it is on.
- */
+/*private*/
 int
 OverlayOp::mergeZ(Node *n, const Polygon *poly) const
 {
@@ -436,11 +438,7 @@ OverlayOp::mergeZ(Node *n, const Polygon *poly) const
 	return 0;
 }
 
-/*
- * Merge Z values of node with those of the segment or vertex in
- * the given LineString it is on.
- * returns 1 if an intersection is found, 0 otherwise.
- */
+/*private*/
 int
 OverlayOp::mergeZ(Node *n, const LineString *line) const
 {
@@ -467,15 +465,7 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	return 0;
 }
 
-/*
- * Find all edges whose label indicates that they are in the result area(s),
- * according to the operation being performed.  Since we want polygon shells
- * to be oriented CW, choose dirEdges with the interior of the result on the
- * RHS.
- * Mark them as being in the result.
- * Interior Area edges are the result of dimensional collapses.
- * They do not form part of the result area boundary.
- */
+/*private*/
 void
 OverlayOp::findResultAreaEdges(int opCode)
 {
@@ -496,10 +486,7 @@ OverlayOp::findResultAreaEdges(int opCode)
 	}
 }
 
-/*
- * If both a dirEdge and its sym are marked as being in the result, cancel
- * them out.
- */
+/*private*/
 void
 OverlayOp::cancelDuplicateResultEdges()
 {
@@ -517,13 +504,7 @@ OverlayOp::cancelDuplicateResultEdges()
 	}
 }
 
-/*
- * This method is used to decide if a point node should be included
- * in the result or not.
- *
- * @return true if the coord point is covered by a result Line or
- *	Area geometry
- */
+/*public*/
 bool
 OverlayOp::isCoveredByLA(const Coordinate& coord)
 {
@@ -532,12 +513,7 @@ OverlayOp::isCoveredByLA(const Coordinate& coord)
 	return false;
 }
 
-/*
- * This method is used to decide if an L edge should be included
- * in the result or not.
- *
- * @return true if the coord point is covered by a result Area geometry
- */
+/*public*/
 bool
 OverlayOp::isCoveredByA(const Coordinate& coord)
 {
@@ -545,10 +521,7 @@ OverlayOp::isCoveredByA(const Coordinate& coord)
 	return false;
 }
 
-/*
- * @return true if the coord is located in the interior or boundary of
- * a geometry in the list.
- */
+/*private*/
 bool
 OverlayOp::isCovered(const Coordinate& coord,vector<Geometry*> *geomList)
 {
@@ -560,10 +533,7 @@ OverlayOp::isCovered(const Coordinate& coord,vector<Geometry*> *geomList)
 	return false;
 }
 
-/*
- * @return true if the coord is located in the interior or boundary of
- * a geometry in the list.
- */
+/*private*/
 bool
 OverlayOp::isCovered(const Coordinate& coord,vector<LineString*> *geomList)
 {
@@ -575,10 +545,7 @@ OverlayOp::isCovered(const Coordinate& coord,vector<LineString*> *geomList)
 	return false;
 }
 
-/*
- * @return true if the coord is located in the interior or boundary of
- * a geometry in the list.
- */
+/*private*/
 bool
 OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList)
 {
@@ -590,14 +557,12 @@ OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList)
 	return false;
 }
 
-/*
- * Build a Geometry containing given elements
- * This function will take ownership of vectors elements.
- */
+/*private*/
 Geometry*
 OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
-                              vector<Polygon*> *nResultPolyList) {
+                              vector<Polygon*> *nResultPolyList)
+{
 	unsigned int i;
 	unsigned int nPoints=nResultPointList->size();
 	unsigned int nLines=nResultLineList->size();
@@ -625,6 +590,7 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 	return g;
 }
 
+/*private*/
 void
 OverlayOp::computeOverlay(int opCode)
 	//throw(TopologyException *)
@@ -716,13 +682,7 @@ OverlayOp::computeOverlay(int opCode)
 	
 }
 
-/*
- * Insert an edge from one of the noded input graphs.
- * Checks edges that are inserted to see if an
- * identical edge already exists.
- * If so, the edge is not inserted, but its label is merged
- * with the existing edge.
- */
+/*protected*/
 void
 OverlayOp::insertUniqueEdge(Edge *e)
 {
@@ -774,16 +734,7 @@ OverlayOp::insertUniqueEdge(Edge *e)
 	}
 }
 
-/*
- * Update the labels for edges according to their depths.
- * For each edge, the depths are first normalized.
- * Then, if the depths for the edge are equal,
- * this edge must have collapsed into a line edge.
- * If the depths are not equal, update the label
- * with the locations corresponding to the depths
- * (i.e. a depth of 0 corresponds to a Location of EXTERIOR,
- * a depth of 1 corresponds to INTERIOR)
- */
+/*private*/
 void
 OverlayOp::computeLabelsFromDepths()
 {
@@ -792,35 +743,38 @@ OverlayOp::computeLabelsFromDepths()
 		Edge *e=edgeList.get(j);
 		Label *lbl=e->getLabel();
 		Depth &depth=e->getDepth();
-		/**
+
+		/*
 		 * Only check edges for which there were duplicates,
 		 * since these are the only ones which might
 		 * be the result of dimensional collapses.
 		 */
-		if (!depth.isNull()) {
-			depth.normalize();
-			for (int i=0;i<2;i++) {
-				if (!lbl->isNull(i) && lbl->isArea() && !depth.isNull(i)) {
-					/**
-					* if the depths are equal, this edge is the result of
-					* the dimensional collapse of two or more edges.
-					* It has the same location on both sides of the edge,
-					* so it has collapsed to a line.
-					*/
-					if (depth.getDelta(i)==0) {
-						lbl->toLine(i);
-					} else {
-						/**
-						* This edge may be the result of a dimensional collapse,
-						* but it still has different locations on both sides.  The
-						* label of the edge must be updated to reflect the resultant
-						* side locations indicated by the depth values.
-						*/
-						Assert::isTrue(!depth.isNull(i,Position::LEFT),"depth of LEFT side has not been initialized");
-						lbl->setLocation(i,Position::LEFT,depth.getLocation(i,Position::LEFT));
-						Assert::isTrue(!depth.isNull(i,Position::RIGHT),"depth of RIGHT side has not been initialized");
-						lbl->setLocation(i,Position::RIGHT,depth.getLocation(i,Position::RIGHT));
-					}
+		if (depth.isNull()) continue;
+
+		depth.normalize();
+		for (int i=0;i<2;i++)
+		{
+			if (!lbl->isNull(i) && lbl->isArea() && !depth.isNull(i))
+			{
+				/*
+				 * if the depths are equal, this edge is the result of
+				 * the dimensional collapse of two or more edges.
+				 * It has the same location on both sides of the edge,
+				 * so it has collapsed to a line.
+				 */
+				if (depth.getDelta(i)==0) {
+					lbl->toLine(i);
+				} else {
+					/*
+					 * This edge may be the result of a dimensional collapse,
+					 * but it still has different locations on both sides.  The
+					 * label of the edge must be updated to reflect the resultant
+					 * side locations indicated by the depth values.
+					 */
+					assert(!depth.isNull(i,Position::LEFT)); // depth of LEFT side has not been initialized
+					lbl->setLocation(i,Position::LEFT,depth.getLocation(i,Position::LEFT));
+					assert(!depth.isNull(i,Position::RIGHT)); // depth of RIGHT side has not been initialized
+					lbl->setLocation(i,Position::RIGHT,depth.getLocation(i,Position::RIGHT));
 				}
 			}
 		}
@@ -833,6 +787,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.52  2006/02/27 09:05:33  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.51  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

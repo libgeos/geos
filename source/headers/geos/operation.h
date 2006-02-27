@@ -32,10 +32,7 @@ namespace geos {
 /// Provides classes for implementing operations on geometries
 namespace operation { // geos.operation
 
-/*
- * \brief
- * The base class for operations that require GeometryGraph
- */
+/// The base class for operations that require GeometryGraph
 class GeometryGraphOperation {
 friend class Unload;
 public:
@@ -43,15 +40,17 @@ public:
 	GeometryGraphOperation(const Geometry *g0);
 	virtual ~GeometryGraphOperation();
 	const Geometry* getArgGeometry(int i) const;
+
 protected:
-	// to be obsoleted probably, CGAlgorithms is an all-static class
-	//static algorithm::CGAlgorithms *cga;
 	static algorithm::LineIntersector *li;
+
 	const PrecisionModel* resultPrecisionModel;
+
 	/*
 	 * The operation args into an array so they can be accessed by index
 	 */
 	std::vector<geomgraph::GeometryGraph*> arg;  // the arg(s) of the operation
+
 	void setComputationPrecision(const PrecisionModel* pm);
 };
 
@@ -92,6 +91,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/27 09:05:33  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.7  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

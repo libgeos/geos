@@ -388,35 +388,116 @@ private:
 
 };
 
+/**
+ * \brief
+ * A DirectedEdgeStar is an ordered list of <b>outgoing</b> DirectedEdges around a node.
+ *
+ * It supports labelling the edges as well as linking the edges to form both
+ * MaximalEdgeRings and MinimalEdgeRings.
+ *
+ * Last port: geomgraph/DirectedEdgeStar.java rev. ?? (JTS-1.7)
+ */
 class DirectedEdgeStar: public EdgeEndStar {
+
 public:
-	DirectedEdgeStar();
-	~DirectedEdgeStar();
+
+	DirectedEdgeStar()
+		:
+		EdgeEndStar(),
+		resultAreaEdgeList(0)
+	{}
+
+	~DirectedEdgeStar() {
+		delete resultAreaEdgeList;
+	}
+
+	/// Insert a directed edge in the list
 	void insert(EdgeEnd *ee);
-	Label &getLabel();
+
+	Label &getLabel() { return label; }
+
 	int getOutgoingDegree();
+
 	int getOutgoingDegree(EdgeRing *er);
+
 	DirectedEdge* getRightmostEdge();
+
+	/** \brief
+	 * Compute the labelling for all dirEdges in this star, as well
+	 * as the overall labelling
+	 */
 	void computeLabelling(std::vector<GeometryGraph*> *geom); // throw(TopologyException *);
+
+	/** \brief
+	 * For each dirEdge in the star,
+	 * merge the label from the sym dirEdge into the label
+	 */
 	void mergeSymLabels();
+
+	/// Update incomplete dirEdge labels from the labelling for the node
 	void updateLabelling(Label *nodeLabel);
+
+
+	/**
+	 * Traverse the star of DirectedEdges, linking the included edges together.
+	 * To link two dirEdges, the <next> pointer for an incoming dirEdge
+	 * is set to the next outgoing edge.
+	 * 
+	 * DirEdges are only linked if:
+	 * 
+	 * - they belong to an area (i.e. they have sides)
+	 * - they are marked as being in the result
+	 * 
+	 * Edges are linked in CCW order (the order they are stored).
+	 * This means that rings have their face on the Right
+	 * (in other words,
+	 * the topological location of the face is given by the RHS label of the DirectedEdge)
+	 * 
+	 * PRECONDITION: No pair of dirEdges are both marked as being in the result
+	 */
 	void linkResultDirectedEdges(); // throw(TopologyException *);
+
 	void linkMinimalDirectedEdges(EdgeRing *er);
+
 	void linkAllDirectedEdges();
+
+	/** \brief
+	 * Traverse the star of edges, maintaing the current location in the result
+	 * area at this node (if any).
+	 *
+	 * If any L edges are found in the interior of the result, mark them as covered.
+	 */
 	void findCoveredLineEdges();
+
+	/** \brief
+	 * Compute the DirectedEdge depths for a subsequence of the edge array.
+	 *
+	 * @return the last depth assigned (from the R side of the last edge visited)
+	 */
 	void computeDepths(DirectedEdge *de);
+
 	string print();
+
 private:
+
 	/**
 	 * A list of all outgoing edges in the result, in CCW order
 	 */
 	std::vector<DirectedEdge*> *resultAreaEdgeList;
+
 	Label label;
+
+	/// \brief
+	/// Returned vector is onwed by DirectedEdgeStar object, but
+	/// lazily created
 	std::vector<DirectedEdge*>* getResultAreaEdges();
+
+	/// States for linResultDirectedEdges
 	enum {
 		SCANNING_FOR_INCOMING=1,
 		LINKING_TO_OUTGOING
 	};
+
 	int computeDepths(EdgeEndStar::iterator startIt,
 		EdgeEndStar::iterator endIt, int startDepth);
 };
@@ -1161,6 +1242,9 @@ inline bool operator==(const Edge &a, const Edge &b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/02/27 09:05:33  strk
+ * Doxygen comments, a few inlines and general cleanups
+ *
  * Revision 1.34  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder
