@@ -395,7 +395,7 @@ private:
  * It supports labelling the edges as well as linking the edges to form both
  * MaximalEdgeRings and MinimalEdgeRings.
  *
- * Last port: geomgraph/DirectedEdgeStar.java rev. ?? (JTS-1.7)
+ * Last port: geomgraph/DirectedEdgeStar.java rev. 1.4 (JTS-1.7)
  */
 class DirectedEdgeStar: public EdgeEndStar {
 
@@ -1242,6 +1242,10 @@ inline bool operator==(const Edge &a, const Edge &b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/02/27 11:53:17  strk
+ * DirectedEdgeStar made more safe trough assert(), use of standard iterator and
+ * dynamic casts substituting static ones.
+ *
  * Revision 1.35  2006/02/27 09:05:33  strk
  * Doxygen comments, a few inlines and general cleanups
  *
