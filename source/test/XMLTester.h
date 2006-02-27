@@ -20,30 +20,23 @@ using namespace geos;
 
 class XMLTester {
 
-public:
-	XMLTester(const char *);
-	~XMLTester();
-	void run();
-	int failed;
-	int succeeded;
-	int caseCount;
-	int testCount;
-
 private:
 	enum {
-		TEST_DESCR=1,
-		GEOM_A_IN=2,
-		GEOM_A_OUT=4,
-		GEOM_B_IN=8,
-		GEOM_B_OUT=16,
-		TEST_OP=32,
-		TEST_RESULT=64,
-		PRED=128
+		SHOW_RUN_INFO=1,
+		SHOW_CASE,
+		SHOW_TEST,
+		SHOW_RESULT,
+		SHOW_GEOMS,
+		SHOW_GEOMS_FULL,
+		PRED
 	};
 
 	void parsePrecisionModel();
 	void parseCase();
 	void parseTest();
+	void runPredicates(const Geometry *a, const Geometry *b);
+	Geometry *parseGeometry(const string &in);
+	static string trimBlanks(const string &in);
 
 	Geometry *gA;
 	Geometry *gB;
@@ -53,9 +46,41 @@ private:
 	GeometryFactory *factory;
 	WKTReader *r;
 	WKTWriter *w;
+	WKBReader *br;
 	CMarkupSTL xml;
 
-	int out;
+	int verbose;
+	int test_predicates;
+
+	int failed;
+	int succeeded;
+	int caseCount;
+	int testCount;
+
+	int testFileCount;
+	int totalTestCount;
+
+	const string *curr_file;
+	string curr_case_desc;
+
+public:
+	XMLTester();
+	~XMLTester();
+	void run(const string &testFile);
+	void resultSummary(ostream &os) const;
+	void resetCounters();
+
+	/*
+	 * Values:
+	 *	0: Show case description, run tests, show result
+	 *	1: Show parsed geometry values
+	 *	2: Run predicates
+	 *
+	 * Return previously set verbosity level
+	 */
+	int setVerbosityLevel(int val);
+
+	int getFailuresCount() { return failed; }
 
 };
 

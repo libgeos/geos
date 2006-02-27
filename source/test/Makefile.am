@@ -6,6 +6,8 @@ noinst_PROGRAMS = SimpleWKTTester
 bin_PROGRAMS = XMLTester
 # CTS
 
+XMLTESTS=testLeaksBig.xml test.xml 
+
 LIBS = $(top_builddir)/source/geom/libgeos.la
 # -lmpatrol -lbfd -lintl -liberty -limagehlp
 
@@ -23,3 +25,6 @@ INCLUDES += -I$(top_srcdir)/source/io/markup
 
 static:
 	$(CXX) $(CXXFLAGS) -I../headers -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../source/geom/.libs/libgeos.a
+
+test: XMLTester
+	./XMLTester $(XMLTESTS)
