@@ -639,7 +639,8 @@ XMLTester::parseTest()
 	}
 	catch (const std::exception &e)
 	{
-		cerr<<"EXEPTION: "<<e.what();
+		cerr<<"EXCEPTION on case "<<caseCount
+			<<" test "<<testCount<<": "<<e.what()<<endl;
 		actual_result = e.what();
 	}
 	catch (...)
@@ -761,6 +762,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/02/27 14:41:38  strk
+ * More verbose handling of exceptions
+ *
  * Revision 1.5  2006/02/23 20:32:55  strk
  * Added support for LineMerge tests. Exception printed on stderr.
  *
