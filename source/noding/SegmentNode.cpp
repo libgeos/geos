@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <sstream>
+#include <iomanip>
 #include <geos/noding.h>
 
 namespace geos {
@@ -67,7 +68,7 @@ public:
 			case 6: return compareValue(-ySign, xSign);
 			case 7: return compareValue(xSign, -ySign);
 		}
-		assert(0); // "invalid octant value"
+		assert(0); // invalid octant value
 		return 0;
 	 
 	}
@@ -127,18 +128,30 @@ SegmentNode::compareTo(const SegmentNode& other)
 	if (segmentIndex < other.segmentIndex) return -1;
 	if (segmentIndex > other.segmentIndex) return 1;
 
-	if (coord.equals2D(other.coord)) return 0;
+#if DEBUG
+	cerr << setprecision(17) << "compareTo: " << *this << ", " << other <<endl;
+#endif
+
+	if (coord.equals2D(other.coord)) {
+
+#if DEBUG
+		cerr << " Coordinates equal!"<<endl;
+#endif
+
+		return 0;
+	}
+
+#if DEBUG
+	cerr << " Coordinates do not equal!"<<endl;
+#endif
 
 	return SegmentPointComparator::compare(segmentOctant, coord,
 			other.coord);
 }
 
-string
-SegmentNode::print() const
+ostream& operator<< (ostream& os, const SegmentNode& n)
 {
-	ostringstream s;
-	s<<coord.toString()<<" seg#="<<segmentIndex;
-	return s.str();
+	return os<<n.coord<<" seg#="<<n.segmentIndex<<" octant#="<<n.segmentOctant<<endl;
 }
 
 } // namespace geos.noding
@@ -146,6 +159,12 @@ SegmentNode::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/02/28 17:44:27  strk
+ * Added a check in SegmentNode::addSplitEdge to prevent attempts
+ * to build SegmentString with less then 2 points.
+ * This is a temporary fix for the buffer.xml assertion failure, temporary
+ * as Martin Davis review would really be needed there.
+ *
  * Revision 1.11  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

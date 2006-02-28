@@ -20,6 +20,7 @@
 
 #include <cassert>
 #include <geos/noding.h>
+#include <geos/nodingSnapround.h>
 #include <geos/opBuffer.h>
 #include <geos/profiler.h>
 
@@ -163,10 +164,17 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 		intersectionAdder = new IntersectionAdder(*li);
 	}
 
-#if 1
 	MCIndexNoder* noder = new MCIndexNoder(intersectionAdder);
-#else
-	Noder noder = new IteratedNoder(pm);
+
+#if 0
+	/* CoordinateArraySequence.cpp:84:
+	 * virtual const geos::Coordinate& geos::CoordinateArraySequence::getAt(unsigned int) const:
+	 * Assertion `pos<vect->size()' failed.
+	 */
+	//Noder* noder = new snapround::SimpleSnapRounder(*pm);
+
+	Noder* noder = new IteratedNoder(pm);
+
 	Noder noder = new SimpleSnapRounder(pm);
 	Noder noder = new MCIndexSnapRounder(pm);
 	Noder noder = new ScaledNoder(
@@ -320,6 +328,12 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2006/02/28 17:44:27  strk
+ * Added a check in SegmentNode::addSplitEdge to prevent attempts
+ * to build SegmentString with less then 2 points.
+ * This is a temporary fix for the buffer.xml assertion failure, temporary
+ * as Martin Davis review would really be needed there.
+ *
  * Revision 1.39  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

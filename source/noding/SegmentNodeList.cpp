@@ -185,6 +185,8 @@ SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 		SegmentNode *ei=*it;
 		assert(ei);
 
+		if ( ! ei->compareTo(*eiPrev) ) continue;
+
 		SegmentString *newEdge=createSplitEdge(eiPrev, ei);
 		edgeList.push_back(newEdge);
 #if DEBUG
@@ -233,14 +235,6 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 
 	unsigned int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
 
-#if DEBUG
-	cerr << __FILE__ << ":" <<__LINE__ << ": " <<__FUNCTION__
-		<< ": npts = " << npts
-		<< " (ei1:" << *ei1
-		<< " - ei0:" << *ei0
-		<< " + 2)" << endl;
-#endif
-
 	const Coordinate &lastSegStartPt=edge.getCoordinate(ei1->segmentIndex);
 
 	// if the last intersection point is not equal to the its
@@ -249,14 +243,15 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	// totally reliable!)
 
 	// The check for point equality is 2D only - Z values are ignored
-	bool useIntPt1 = ei1->isInterior() || \
-			! ei1->coord.equals2D(lastSegStartPt);
+
+	// Added check for npts being == 2 as in that case NOT using second point
+	// would mean creating a SegmentString with a single point
+	// FIXME: check with mbdavis about this, ie: is it a bug in the caller ?
+	//
+	bool useIntPt1 = npts == 2 || (ei1->isInterior() || ! ei1->coord.equals2D(lastSegStartPt));
 
 	if (! useIntPt1) {
 		npts--;
-#if DEBUG
-		cerr<<"npts="<<npts<<"( decremented as !useIntPt1 )"<<endl;
-#endif
 	}
 
 	CoordinateSequence *pts = new CoordinateArraySequence(npts); 
@@ -281,6 +276,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	return ret;
 }
 
+#if 0
 string SegmentNodeList::print(){
 	string out="Intersections:";
 	set<SegmentNode*,SegmentNodeLT>::iterator it=nodeMap.begin();
@@ -290,12 +286,35 @@ string SegmentNodeList::print(){
 	}
 	return out;
 }
+#endif
+
+ostream&
+operator<< (ostream& os, const SegmentNodeList& nlist)
+{
+	os<<"NodeList:";
+	set<SegmentNode*,SegmentNodeLT>::iterator
+		it=nlist.nodeMap.begin(),
+		itEnd=nlist.nodeMap.end();
+
+	for(; it!=itEnd; it++)
+	{
+		SegmentNode *ei=*it;
+		os<<*ei;
+	}
+	return os;
+}
 
 } // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/28 17:44:27  strk
+ * Added a check in SegmentNode::addSplitEdge to prevent attempts
+ * to build SegmentString with less then 2 points.
+ * This is a temporary fix for the buffer.xml assertion failure, temporary
+ * as Martin Davis review would really be needed there.
+ *
  * Revision 1.23  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

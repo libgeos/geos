@@ -15,7 +15,6 @@
 
 #include <geos/geom.h>
 #include <sstream>
-//#include <stdio.h>
 
 namespace geos {
 
@@ -32,7 +31,12 @@ string Coordinate::toString() const {
 }
 
 std::ostream& operator<< (std::ostream& os, const Coordinate& c) {
-	os<<c.toString();
+	//os<<c.toString();
+	if (ISNAN(c.z)) {
+		os<<"("<<c.x<<","<<c.y<<")";
+	} else {
+		os<<"("<<c.x<<","<<c.y<<","<<c.z<<")";
+	}
 	return os;
 }
 
@@ -61,6 +65,12 @@ Coordinate::operator=(const Coordinate &c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/02/28 17:44:26  strk
+ * Added a check in SegmentNode::addSplitEdge to prevent attempts
+ * to build SegmentString with less then 2 points.
+ * This is a temporary fix for the buffer.xml assertion failure, temporary
+ * as Martin Davis review would really be needed there.
+ *
  * Revision 1.26  2006/02/28 14:34:03  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

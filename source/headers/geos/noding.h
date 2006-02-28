@@ -91,6 +91,7 @@ private:
 	bool isInteriorVar;
 
 public:
+	friend ostream& operator<< (ostream& os, const SegmentNode& n);
 
 	/// the point of intersection (own copy)
 	Coordinate coord;  
@@ -132,12 +133,10 @@ public:
 	 */
 	int compareTo(const SegmentNode& other);
 
-	string print() const;
+	//string print() const;
 };
 
-inline ostream& operator<< (ostream& os, const SegmentNode& n) {
-	return os<<n.print();
-}
+ostream& operator<< (ostream& os, const SegmentNode& n);
 
 struct SegmentNodeLT {
 	bool operator()(SegmentNode *s1, SegmentNode *s2) const {
@@ -214,10 +213,11 @@ private:
 		unsigned int& collapsedVertexIndex);
 public:
 
+	friend ostream& operator<< (ostream& os, const SegmentNodeList& l);
+
 	typedef set<SegmentNode*,SegmentNodeLT> container;
 	typedef container::iterator iterator;
 	typedef container::const_iterator const_iterator;
-
 
 	SegmentNodeList(const SegmentString* newEdge): edge(*newEdge) {}
 
@@ -278,9 +278,10 @@ public:
 		addSplitEdges(*edgeList);
 	}
 
-	string print();
+	//string print();
 };
 
+ostream& operator<< (ostream& os, const SegmentNodeList& l);
 
 /** \brief
  * Represents a list of contiguous line segments,
@@ -1032,6 +1033,12 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/28 17:44:27  strk
+ * Added a check in SegmentNode::addSplitEdge to prevent attempts
+ * to build SegmentString with less then 2 points.
+ * This is a temporary fix for the buffer.xml assertion failure, temporary
+ * as Martin Davis review would really be needed there.
+ *
  * Revision 1.23  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *
