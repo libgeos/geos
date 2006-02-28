@@ -186,7 +186,7 @@ Edge::isPointwiseEqual(const Edge *e) const
 	unsigned int enpts=e->getNumPoints();
 	if (npts!=enpts) return false;
 #if DEBUG
-	cerr<<"Edge::isPointwiseEqual scanning "<<e->npts()<<"x"<<npts<<" points"<<endl;
+	cerr<<"Edge::isPointwiseEqual scanning "<<enpts<<"x"<<npts<<" points"<<endl;
 #endif
 	for (unsigned int i=0; i<npts; ++i)
 	{
@@ -249,6 +249,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/02/28 14:05:38  strk
+ * Fixed a bug in a debugging line
+ *
  * Revision 1.25  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder
