@@ -907,10 +907,9 @@ public:
  */
 class IteratedNoder : public Noder { // implements Noder
 
-public:
-	static int MAX_ITER;
-
 private:
+	static const int MAX_ITER = 5;
+
 
 	const PrecisionModel *pm;
 	algorithm::LineIntersector li;
@@ -971,6 +970,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/28 13:08:23  strk
+ * Added missing definition of IteratedNoder::MAX_ITER, moving it to private access level
+ *
  * Revision 1.21  2006/02/23 20:05:19  strk
  * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
  * doxygen-friendly comments, miscellaneous cleanups
