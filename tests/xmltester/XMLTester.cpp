@@ -23,6 +23,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cctype>
 
 #include <geos/util.h>
 #include <geos/geomgraph.h>
@@ -763,6 +764,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/02/28 19:18:04  strk
+ * Added cctype include (bug #34)
+ *
  * Revision 1.7  2006/02/28 15:34:44  strk
  * Fix for VC++ builds (Bug #32)
  *
