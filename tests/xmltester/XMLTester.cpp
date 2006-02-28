@@ -750,18 +750,22 @@ main(int argC, char* argV[])
 	}
 	tester.resultSummary(cout);
 
+	Unload::Release();
+
+	return tester.getFailuresCount();
+
 #ifdef _MSC_VER
 	}
 	DeInitAllocCheck();
 #endif
 
-	Unload::Release();
-
-	return tester.getFailuresCount();
 }
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/02/28 15:34:44  strk
+ * Fix for VC++ builds (Bug #32)
+ *
  * Revision 1.6  2006/02/27 14:41:38  strk
  * More verbose handling of exceptions
  *
