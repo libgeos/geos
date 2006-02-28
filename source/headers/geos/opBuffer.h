@@ -258,9 +258,9 @@ public:
 
 private:
 
-	static const double PI_OVER_2=1.570796326794895;
+	static const double PI_OVER_2; // 1.570796326794895;
 
-	static const double MAX_CLOSING_SEG_LEN=3.0;
+	static const double MAX_CLOSING_SEG_LEN; // 3.0;
 
 	algorithm::LineIntersector *li;
 
@@ -930,6 +930,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/02/28 19:22:20  strk
+ * Fixed in-place definition of static members in OffsetCurveBuilder (bug#33)
+ *
  * Revision 1.19  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

@@ -34,8 +34,8 @@ namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-//double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
-//double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
+const double OffsetCurveBuilder::PI_OVER_2 = 1.570796326794895;
+const double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN = 3.0;
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
 	li(new LineIntersector()),
@@ -501,6 +501,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/02/28 19:22:21  strk
+ * Fixed in-place definition of static members in OffsetCurveBuilder (bug#33)
+ *
  * Revision 1.23  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *
