@@ -1,5 +1,7 @@
 Changes in 2.2.2
 
+- Added GEOSArea(), GEOSLength(), GEOSEnvelope(), and GEOSGeomType() to the
+  C API
 - Cleanups in C-API
 - Support for gcc-4
 
