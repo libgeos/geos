@@ -910,7 +910,7 @@ string CMarkupSTL::x_TextToDoc( const char* szText, bool bAttrib ) const
 	int nLen = strlen( szText );
 	strResult.reserve( nLen + nLen / 10 );
 	char cSource = *pSource;
-	char* pFound;
+	const char* pFound;
 	while ( cSource )
 	{
 		if ( (pFound=strchr(pFind,cSource)) != NULL )
