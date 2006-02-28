@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <cassert>
 #include <geos/platform.h>
 #include <geos/geom.h>
 //#include <geos/geomgraph.h>
@@ -75,17 +76,19 @@ public:
 };
 
 
-/**
- * Represents an intersection point between two {@link SegmentString}s.
- * Final class.
- *
- * Last port: noding/SegmentNode.java rev. 1.5 (JTS-1.7)
- */
+/// Represents an intersection point between two SegmentString.
+//
+/// Final class.
+///
+/// Last port: noding/SegmentNode.java rev. 1.5 (JTS-1.7)
+///
 class SegmentNode {
 private:
 	const SegmentString& segString;
+
 	int segmentOctant;
-	int isInteriorVar;
+
+	bool isInteriorVar;
 
 public:
 
@@ -95,12 +98,27 @@ public:
 	/// the index of the containing line segment in the parent edge
 	unsigned int segmentIndex;  
 
-	/// Given coordinate will be copied
+	/// Construct a node on the given SegmentString
+	//
+	/// @param ss the parent SegmentString 
+	///
+	/// @param coord the coordinate of the intersection, will be copied
+	///
+	/// @param nSegmentIndex the index of the segment on parent SegmentString
+	///        where the Node is located.
+	///
+	/// @param nSegmentOctant
+	///
 	SegmentNode(const SegmentString& ss, const Coordinate& nCoord,
 			unsigned int nSegmentIndex, int nSegmentOctant);
 
 	~SegmentNode() {}
 
+	/// \brief
+	/// Return true if this Node is *internal* (not on the boundary)
+	/// of the corresponding segment. Currently only the *first*
+	/// segment endpoint is checked, actually.
+	///
 	bool isInterior() const { return isInteriorVar; }
 
 	bool isEndPoint(unsigned int maxSegmentIndex) const;
@@ -114,8 +132,12 @@ public:
 	 */
 	int compareTo(const SegmentNode& other);
 
-	string print();
+	string print() const;
 };
+
+inline ostream& operator<< (ostream& os, const SegmentNode& n) {
+	return os<<n.print();
+}
 
 struct SegmentNodeLT {
 	bool operator()(SegmentNode *s1, SegmentNode *s2) const {
@@ -123,8 +145,8 @@ struct SegmentNodeLT {
 	}
 };
 
-/**
- * A list of the {@link SegmentNode}s present along a
+/** \brief
+ * A list of the SegmentNode present along a
  * noded SegmentString.
  *
  * Last port: noding/SegmentNodeList.java rev. 1.7 (JTS-1.7)
@@ -250,7 +272,9 @@ public:
 	 * can be used to accumulate all split edges for a Geometry).
 	 */
 	void addSplitEdges(std::vector<SegmentString*>& edgeList);
+
 	void addSplitEdges(std::vector<SegmentString*>* edgeList) {
+		assert(edgeList);
 		addSplitEdges(*edgeList);
 	}
 
@@ -288,6 +312,12 @@ private:
 	unsigned int npts;
 	const void* context;
 	bool isIsolatedVar;
+
+	void testInvariant() const {
+		assert(pts);
+		assert(pts->size() > 1);
+		assert(pts->size() == npts);
+	}
 public:
 
 	//SegmentString(const CoordinateSequence *newPts, const void* newContext)
@@ -303,25 +333,41 @@ public:
 		:
 		eiList(this),
 		pts(newPts),
-		npts(pts->getSize()),
+		npts(newPts->getSize()),
 		context(newContext),
 		isIsolatedVar(false)
-	{}
+	{
+		testInvariant();
+	}
 
 	~SegmentString() {}
 
-	const void* getContext() const { return getData(); }
-	const void* getData() const { return context; }
+	const void* getContext() const {
+		testInvariant();
+		return getData();
+	}
 
-	const SegmentNodeList& getNodeList() const { return eiList; }
-	SegmentNodeList& getNodeList() { return eiList; }
+	const void* getData() const {
+		testInvariant();
+		return context;
+	}
 
-	const SegmentNodeList& getIntersectionList() const { return getNodeList(); }
-	SegmentNodeList& getIntersectionList() { return getNodeList(); }
+	const SegmentNodeList& getNodeList() const {
+		testInvariant();
+		return eiList;
+	}
+	SegmentNodeList& getNodeList() {
+		testInvariant();
+		return eiList;
+	}
 
-	unsigned int size() const { return npts; }
+	unsigned int size() const {
+		testInvariant();
+		return npts;
+	}
 
 	const Coordinate& getCoordinate(unsigned int i) const {
+		testInvariant();
 		return pts->getAt(i);
 	}
 
@@ -332,16 +378,28 @@ public:
 	/// Note that the CoordinateSequence is not owned by
 	/// this SegmentString!
 	///
-	CoordinateSequence* getCoordinates() const { return pts; }
+	CoordinateSequence* getCoordinates() const {
+		testInvariant();
+		return pts;
+	}
 
 	// Return a read-only pointer to this SegmentString CoordinateSequence
 	//const CoordinateSequence* getCoordinatesRO() const { return pts; }
 
-	void setIsolated(bool isIsolated) { isIsolatedVar=isIsolated; }
+	void setIsolated(bool isIsolated) {
+		isIsolatedVar=isIsolated;
+		testInvariant();
+	}
 
-	bool isIsolated() const { return isIsolatedVar; }
+	bool isIsolated() const {
+		testInvariant();
+		return isIsolatedVar;
+	}
 	
-	bool isClosed() const { return pts->getAt(0)==pts->getAt(npts-1); }
+	bool isClosed() const {
+		testInvariant();
+		return pts->getAt(0)==pts->getAt(npts-1);
+	}
 
 	/** \brief
 	 * Gets the octant of the segment starting at vertex <code>index</code>.
@@ -352,8 +410,9 @@ public:
 	 */
 	int getSegmentOctant(unsigned int index) const
 	{
-	  if (index == size() - 1) return -1;
-	  return Octant::octant(getCoordinate(index), getCoordinate(index+1));
+		testInvariant();
+		if (index == size() - 1) return -1;
+		return Octant::octant(getCoordinate(index), getCoordinate(index+1));
 	}
 
 	/** \brief
@@ -610,8 +669,9 @@ public:
  */
 class Noder {
 public:
-	/**
+	/** \brief
 	 * Computes the noding for a collection of {@link SegmentString}s.
+	 *
 	 * Some Noders may add all these nodes to the input SegmentStrings;
 	 * others may only add some or none at all.
 	 *
@@ -619,11 +679,12 @@ public:
 	 */
 	virtual void computeNodes(SegmentString::NonConstVect* segStrings)=0;
 
-	/**
+	/** \brief
 	 * Returns a {@link Collection} of fully noded {@link SegmentStrings}.
 	 * The SegmentStrings have the same context as their parent.
 	 *
-	 * @return a newly allocated std::vector of const SegmentStrings
+	 * @return a newly allocated std::vector of const SegmentStrings.
+	 *         Caller is responsible to delete it
 	 */
 	virtual SegmentString::NonConstVect* getNodedSubstrings() const=0;
 
@@ -778,6 +839,7 @@ public:
 	index::SpatialIndex& getIndex() { return index; }
 
 	SegmentString::NonConstVect* getNodedSubstrings() const {
+		assert(nodedSegStrings); // must have colled computeNodes before!
 		return SegmentString::getNodedSubstrings(*nodedSegStrings);
 	}
 
@@ -970,6 +1032,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.22  2006/02/28 13:08:23  strk
  * Added missing definition of IteratedNoder::MAX_ITER, moving it to private access level
  *

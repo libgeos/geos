@@ -15,6 +15,7 @@
  **********************************************************************/
 
 #include <geos/geomgraph.h>
+#include <cassert>
 
 //#define DEBUG_INTERSECT 0
 #ifndef DEBUG
@@ -41,6 +42,7 @@ Edge::updateIM(Label *lbl, IntersectionMatrix *im)
 	}
 }
 
+/*public*/
 Edge::~Edge()
 {
 	//cerr<<"["<<this<<"] ~Edge()"<<endl;
@@ -49,6 +51,7 @@ Edge::~Edge()
 	delete env;
 }
 
+/*public*/
 Edge::Edge(CoordinateSequence* newPts, Label *newLabel)
 	:
 	GraphComponent(newLabel),
@@ -60,8 +63,10 @@ Edge::Edge(CoordinateSequence* newPts, Label *newLabel)
 	pts(newPts),
 	eiList(this)
 {
+	testInvariant();
 }
 
+/*public*/
 Edge::Edge(CoordinateSequence* newPts)
 	:
 	GraphComponent(),
@@ -73,12 +78,14 @@ Edge::Edge(CoordinateSequence* newPts)
 	pts(newPts),
 	eiList(this)
 {
+	testInvariant();
 }
 
 /*public*/
 MonotoneChainEdge*
 Edge::getMonotoneChainEdge()
 {
+	testInvariant();
 	if (mce==NULL) mce=new MonotoneChainEdge(this);
 	return mce;
 }
@@ -88,6 +95,7 @@ Edge::getMonotoneChainEdge()
 bool
 Edge::isCollapsed() const
 {
+	testInvariant();
 	if (!label->isArea()) return false;
 	if (getNumPoints()!= 3) return false;
 	if (pts->getAt(0)==pts->getAt(2) ) return true;
@@ -97,6 +105,7 @@ Edge::isCollapsed() const
 Edge*
 Edge::getCollapsedEdge()
 {
+	testInvariant();
 	CoordinateSequence *newPts = new CoordinateArraySequence(2);
 	newPts->setAt(pts->getAt(0),0);
 	newPts->setAt(pts->getAt(1),1);
@@ -113,6 +122,8 @@ Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
 	for (int i=0; i<li->getIntersectionNum();i++) {
 		addIntersection(li,segmentIndex,geomIndex,i);
 	}
+
+	testInvariant();
 }
 
 /*public*/
@@ -148,12 +159,16 @@ Edge::addIntersection(LineIntersector *li,
 	cerr<<"Edge::addIntersection adding to edge intersection list point "<<intPt.toString()<<endl;
 #endif
 	eiList.add(intPt,normalizedSegmentIndex,dist);
+
+	testInvariant();
 }
 
 /*public*/
 bool
 Edge::equals(const Edge& e) const
 {
+	testInvariant();
+
 	unsigned int npts1=getNumPoints(); 
 	unsigned int npts2=e.getNumPoints(); 
 
@@ -179,6 +194,8 @@ Edge::equals(const Edge& e) const
 bool
 Edge::isPointwiseEqual(const Edge *e) const
 {
+	testInvariant();
+
 #if DEBUG > 2
 	cerr<<"Edge::isPointwiseEqual call"<<endl;
 #endif
@@ -200,6 +217,8 @@ Edge::isPointwiseEqual(const Edge *e) const
 string
 Edge::print() const
 {
+	testInvariant();
+
 	string out="edge " + name + ": ";
 	out+="LINESTRING (";
 	unsigned int npts=getNumPoints();
@@ -218,6 +237,7 @@ Edge::print() const
 string
 Edge::printReverse() const
 {
+	testInvariant();
 	string out="edge " + name + ": ";
 	unsigned int npts=getNumPoints();
 	for (unsigned int i=npts; i>0; --i)
@@ -241,6 +261,7 @@ Edge::getEnvelope()
 			env->expandToInclude(pts->getAt(i));
 		}
 	}
+	testInvariant();
 	return env;
 }
 
@@ -249,6 +270,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/02/28 14:34:04  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.26  2006/02/28 14:05:38  strk
  * Fixed a bug in a debugging line
  *

@@ -78,8 +78,17 @@ void
 OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 	int leftLoc, int rightLoc)
 {
+#if DEBUG
+	cerr<<__FUNCTION__<<": coords="<<coord->toString()<<endl;
+#endif
 	// don't add null curves!
-	if (coord->getSize() < 2) return;
+	if (coord->getSize() < 2) {
+#if DEBUG
+		cerr<<" skipped (size<2)"<<endl;
+#endif
+		return;
+	}
+
 	// add the edge for a coordinate list which is a raw offset curve
 	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
 	SegmentString *e=new SegmentString(coord, newlabel);
@@ -150,7 +159,13 @@ void
 OffsetCurveSetBuilder::addLineString(const LineString *line)
 {
 	if (distance <= 0.0) return;
+#if DEBUG
+	cerr<<__FUNCTION__<<": "<<line->toString()<<endl;
+#endif
 	CoordinateSequence *coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
+#if DEBUG
+	cerr<<" After coordinate removal: "<<coord->toString()<<endl;
+#endif
 	vector<CoordinateSequence*> lineList;
 	curveBuilder.getLineCurve(coord, distance, lineList);
 	delete coord;
@@ -298,6 +313,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.24  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

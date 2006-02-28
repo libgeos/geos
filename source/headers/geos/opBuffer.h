@@ -258,19 +258,19 @@ public:
 
 private:
 
-	static double PI_OVER_2;
-	static double MAX_CLOSING_SEG_LEN;
-//	static final Coordinate[] arrayTypeCoordinate = new Coordinate[0];
-	//algorithm::CGAlgorithms *cga;
+	static const double PI_OVER_2=1.570796326794895;
+
+	static const double MAX_CLOSING_SEG_LEN=3.0;
+
 	algorithm::LineIntersector *li;
 
-	/**
+	/** \brief
 	 * The angle quantum with which to approximate a fillet curve
 	 * (based on the input # of quadrant segments)
 	 */
 	double filletAngleQuantum;
 
-	/**
+	/** \brief
 	 * the max error of approximation between a quad segment and
 	 * the true fillet curve
 	 */
@@ -287,64 +287,86 @@ private:
 	CoordinateSequence *ptList;
 
 	double distance;
+
 	const PrecisionModel *precisionModel;
+
 	int endCapStyle;
+
 	int joinStyle;
+
 	Coordinate s0, s1, s2;
+
 	LineSegment *seg0;
+
 	LineSegment *seg1;
+
 	LineSegment *offset0;
+
 	LineSegment *offset1;
+
 	int side;
+
 //	static CoordinateSequence* copyCoordinates(CoordinateSequence *pts);
+
 	void init(double newDistance);
+
 	CoordinateSequence* getCoordinates();
+
 	void computeLineBufferCurve(const CoordinateSequence *inputPts);
+
 	void computeRingBufferCurve(const CoordinateSequence *inputPts, int side);
+
 	void addPt(const Coordinate &pt);
+
 	void closePts();
+
 	void initSideSegments(const Coordinate &nS1, const Coordinate &nS2, int nSide);
+
 	void addNextSegment(const Coordinate &p, bool addStartPoint);
-	/**
-	* Add last offset point
-	*/
+
+	/// Add last offset point
 	void addLastSegment();
+
 	/**
-	* Compute an offset segment for an input segment on a given side and at a given distance.
-	* The offset points are computed in full double precision, for accuracy.
-	*
-	* @param seg the segment to offset
-	* @param side the side of the segment the offset lies on
-	* @param distance the offset distance
-	* @param offset the points computed for the offset segment
-	*/
+	 * Compute an offset segment for an input segment on a given side and at a
+	 * given distance.
+	 * The offset points are computed in full double precision, for accuracy.
+	 *
+	 * @param seg the segment to offset
+	 * @param side the side of the segment the offset lies on
+	 * @param distance the offset distance
+	 * @param offset the points computed for the offset segment
+	 */
 	void computeOffsetSegment(LineSegment *seg, int side, double distance, LineSegment *offset);
-	/**
-	* Add an end cap around point p1, terminating a line segment coming from p0
-	*/
+	/// Add an end cap around point p1, terminating a line segment coming from p0
 	void addLineEndCap(const Coordinate &p0,const Coordinate &p1);
+
 	/**
-	* @param p base point of curve
-	* @param p0 start point of fillet curve
-	* @param p1 endpoint of fillet curve
-	*/
-	void addFillet(const Coordinate &p,const Coordinate &p0,const Coordinate &p1, int direction, double distance);
-	/**
-	* Adds points for a fillet.  The start and end point for the fillet are not added -
-	* the caller must add them if required.
-	*
-	* @param direction is -1 for a CW angle, 1 for a CCW angle
-	*/
-	void addFillet(const Coordinate &p, double startAngle, double endAngle, int direction, double distance);
-	/**
-	* Adds a CW circle around a point
-	*/
+	 * @param p base point of curve
+	 * @param p0 start point of fillet curve
+	 * @param p1 endpoint of fillet curve
+	 */
+	void addFillet(const Coordinate &p, const Coordinate &p0,
+			const Coordinate &p1, int direction, double distance);
+
+	/** \brief
+	 * Adds points for a fillet. 
+	 * The start and end point for the fillet are not added -
+	 * the caller must add them if required.
+	 *
+	 * @param direction is -1 for a CW angle, 1 for a CCW angle
+	 */
+	void addFillet(const Coordinate &p, double startAngle, double endAngle,
+			int direction, double distance);
+
+	/// Adds a CW circle around a point
 	void addCircle(const Coordinate &p, double distance);
-	/**
-	* Adds a CW square around a point
-	*/
+
+	/// Adds a CW square around a point
 	void addSquare(const Coordinate &p, double distance);
+
 private:
+
 	std::vector<CoordinateSequence *>ptLists;
 };
 
@@ -793,7 +815,7 @@ private:
 
 	const GeometryFactory* geomFact;
 
-	geomgraph::EdgeList* edgeList;
+	geomgraph::EdgeList edgeList;
 
 	std::vector<geomgraph::Label *> newLabels;
 
@@ -852,7 +874,7 @@ public:
 		intersectionAdder(NULL),
 		workingNoder(NULL),
 		geomFact(NULL),
-		edgeList(new geomgraph::EdgeList())
+		edgeList()
 	{}
 
 	~BufferBuilder();
@@ -908,6 +930,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.18  2006/02/23 20:05:19  strk
  * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
  * doxygen-friendly comments, miscellaneous cleanups

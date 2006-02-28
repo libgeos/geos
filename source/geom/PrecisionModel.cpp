@@ -43,14 +43,15 @@ double PrecisionModel::makePrecise(double val) const {
 	return val;
 }
 
-/**
-* Rounds given Coordinate to the PrecisionModel grid.
-*/
-void PrecisionModel::makePrecise(Coordinate *coord) const {
-    // optimization for full precision
+/*public*/
+void
+PrecisionModel::makePrecise(Coordinate& coord) const
+{
+	// optimization for full precision 
 	if (modelType==FLOATING) return;
-	coord->x=makePrecise(coord->x);
-	coord->y=makePrecise(coord->y);
+
+	coord.x=makePrecise(coord.x);
+	coord.y=makePrecise(coord.y);
 }
 
 
@@ -288,6 +289,9 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/02/28 14:34:03  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.34  2006/02/27 09:05:32  strk
  * Doxygen comments, a few inlines and general cleanups
  *

@@ -15,6 +15,7 @@
  **********************************************************************/
 
 #include <geos/geomgraphindex.h>
+#include <cassert>
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -38,35 +39,24 @@ namespace index { // geos.geomgraph.index
  * @version 1.1
  */
 
-/*
-MonotoneChainEdge::MonotoneChainEdge():
-	pts(NULL), e(NULL)
-{
-	//env1=new Envelope();
-	//env2=new Envelope();
-	//pts=NULL;
-	//startIndex=new vector<int>();
-}
-*/
-
 MonotoneChainEdge::~MonotoneChainEdge()
 {
-	//delete startIndex;
 }
 
 MonotoneChainEdge::MonotoneChainEdge(Edge *newE):
 	e(newE),
 	pts(newE->getCoordinates())
 {
-	//pts=newE->getCoordinates();
-	//e=newE;
+	assert(e);
 	MonotoneChainIndexer mcb;
 	mcb.getChainStartIndices(pts, startIndex);
+	assert(e);
 }
 
 const CoordinateSequence*
 MonotoneChainEdge::getCoordinates()
 {
+	assert(pts);
 	return pts;
 }
 
@@ -172,6 +162,9 @@ MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/28 14:34:04  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

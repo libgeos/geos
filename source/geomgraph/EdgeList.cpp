@@ -48,12 +48,6 @@ EdgeList::addAll(const vector<Edge*> &edgeColl)
 	}
 }
 
-vector<Edge*> &
-EdgeList::getEdges()
-{
-	return edges;
-}
-
 // <FIX> fast lookup for edges
 /**
  * If there is an edge equal to e already in the list, return it.
@@ -130,6 +124,9 @@ EdgeList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/02/28 14:34:04  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.12  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

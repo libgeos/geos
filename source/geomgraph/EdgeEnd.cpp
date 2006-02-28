@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -28,7 +28,8 @@ using namespace geos::algorithm;
 
 //CGAlgorithms* EdgeEnd::cga=new RobustCGAlgorithms();
 
-EdgeEnd::EdgeEnd():
+EdgeEnd::EdgeEnd()
+	:
 	edge(NULL),
 	label(NULL),
 	node(NULL),
@@ -43,7 +44,8 @@ EdgeEnd::~EdgeEnd()
 	delete label;
 }
 
-EdgeEnd::EdgeEnd(Edge* newEdge):
+EdgeEnd::EdgeEnd(Edge* newEdge)
+	:
 	edge(newEdge),
 	label(NULL),
 	node(NULL),
@@ -145,6 +147,9 @@ EdgeEnd::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/02/28 14:34:04  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.9  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -163,7 +163,7 @@ PlanarGraph::find(Coordinate& coord)
  * will be created.  DirectedEdges are NOT linked by this method.
  */
 void
-PlanarGraph::addEdges(const vector<Edge*> &edgesToAdd)
+PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 {
 	// create all the nodes for the edges
 	for (vector<Edge*>::const_iterator it=edgesToAdd.begin(),
@@ -325,6 +325,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/02/28 14:34:04  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.21  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

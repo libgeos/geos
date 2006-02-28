@@ -23,20 +23,11 @@ namespace geos {
 
 string Coordinate::toString() const {
 	ostringstream s;
-	//string result("");
-	//char buffer[255];
 	if (ISNAN(z)) {
 		s<<"("<<x<<","<<y<<")";
-		//sprintf(buffer,"(%g,%g)",x,y);
-		//result.append(buffer);
-		//result.append("");
 	} else {
 		s<<"("<<x<<","<<y<<","<<z<<")";
-		//sprintf(buffer,"(%g,%g,%g)",x,y,z);
-		//result.append(buffer);
-		//result.append("");
 	}
-	//return result;
 	return s.str();
 }
 
@@ -70,6 +61,9 @@ Coordinate::operator=(const Coordinate &c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/02/28 14:34:03  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.25  2006/02/24 15:39:06  strk
  * - operator>> for Coordinate, planarNode and planarEdge
  * - Fixed bug in planarGraphComponent::setMarked

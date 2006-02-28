@@ -14,12 +14,11 @@
  *
  **********************************************************************/
 
+#include <cassert>
 #include <geos/geom.h>
 #include <geos/util.h>
 
 namespace geos {
-
-#define PARANOIA_LEVEL 1
 
 CoordinateArraySequence::CoordinateArraySequence():
 	vect(new vector<Coordinate>())
@@ -82,40 +81,28 @@ CoordinateArraySequence::getSize() const
 const Coordinate &
 CoordinateArraySequence::getAt(unsigned int pos) const
 {
-#if PARANOIA_LEVEL > 0
-	if (pos<0 || pos>=vect->size()) 
-	throw IllegalArgumentException("Coordinate number out of range");
-#endif
+	assert(pos<vect->size());
 	return (*vect)[pos];
 }
 
 void
 CoordinateArraySequence::getAt(unsigned int pos, Coordinate &c) const
 {
-#if PARANOIA_LEVEL > 0
-	if (pos<0 || pos>=vect->size()) 
-	throw IllegalArgumentException("Coordinate number out of range");
-#endif
+	assert(pos<vect->size());
 	c=(*vect)[pos];
 }
 
 void
 CoordinateArraySequence::setAt(const Coordinate& c, unsigned int pos)
 {
-#if PARANOIA_LEVEL > 0
-	if (pos<0 || pos>=vect->size()) 
-	throw IllegalArgumentException("Coordinate number out of range");
-#endif
+	assert(pos<vect->size());
 	(*vect)[pos]=c;
 }
 
 void
 CoordinateArraySequence::deleteAt(unsigned int pos)
 {
-#if PARANOIA_LEVEL > 0
-	if (pos<0 || pos>=vect->size()) 
-	throw IllegalArgumentException("Coordinate number out of range");
-#endif
+	assert(pos<vect->size());
 	vect->erase(vect->begin()+pos);
 }
 
@@ -152,10 +139,7 @@ double
 CoordinateArraySequence::getOrdinate(unsigned int index, unsigned int ordinateIndex) const
 {
 
-#if PARANOIA_LEVEL > 0
-	if ( index < 0 || index >= vect->size() ) 
-	throw IllegalArgumentException("Coordinate number out of range");
-#endif
+	assert(index<vect->size());
 
 	switch (ordinateIndex)
 	{
@@ -175,10 +159,7 @@ CoordinateArraySequence::setOrdinate(unsigned int index, unsigned int ordinateIn
 	double value)
 {
 
-#if PARANOIA_LEVEL > 0
-	if ( index < 0 || index >= vect->size() ) 
-	throw IllegalArgumentException("Coordinate number out of range");
-#endif
+	assert(index<vect->size());
 
 	switch (ordinateIndex)
 	{
@@ -215,6 +196,9 @@ CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/02/28 14:34:03  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.1  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

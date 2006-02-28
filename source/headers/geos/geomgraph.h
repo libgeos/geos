@@ -641,6 +641,7 @@ private:
 public:
 	EdgeList()
 		:
+		edges(),
 		index(new geos::index::quadtree::Quadtree())
 	{}
 
@@ -653,7 +654,7 @@ public:
 
 	void addAll(const std::vector<Edge*> &edgeColl);
 
-	std::vector<Edge*> &getEdges();
+	std::vector<Edge*> &getEdges() { return edges; }
 
 	Edge* findEqualEdge(Edge* e);
 
@@ -697,7 +698,7 @@ public:
 class DirectedEdge: public EdgeEnd{
 public:
 	static int depthFactor(int currLocation, int nextLocation);
-	DirectedEdge();	
+	//DirectedEdge();	
 	//virtual ~DirectedEdge();	
 	DirectedEdge(Edge *newEdge, bool newIsForward);
 	inline Edge* getEdge();
@@ -1098,6 +1099,10 @@ private:
 
 	int depthDelta;   // the change in area depth from the R to L side of this edge
 
+	void testInvariant() const {
+		assert(pts);
+		assert(pts->size() > 1);
+	}
 public:
 
 	static void updateIM(Label *lbl,IntersectionMatrix *im);
@@ -1124,19 +1129,25 @@ public:
 	}
 
 	virtual const CoordinateSequence* getCoordinates() const {
+		testInvariant();
 		return pts;
 	}
 
 	virtual const Coordinate& getCoordinate(int i) const {
+		testInvariant();
 		return pts->getAt(i);
 	}
 
 	virtual const Coordinate& getCoordinate() const {
+		testInvariant();
 		return pts->getAt(0);
 	}
 
 
-	virtual Depth &getDepth() { return depth; }
+	virtual Depth &getDepth() { 
+		testInvariant();
+		return depth;
+	}
 
 	/** \brief
 	 * The depthDelta is the change in depth as an edge is crossed from R to L
@@ -1144,18 +1155,22 @@ public:
 	 * @return the change in depth as the edge is crossed from R to L
 	 */
 	virtual int getDepthDelta() const {
+		testInvariant();
 		return depthDelta;
 	}
 
 	virtual void setDepthDelta(int newDepthDelta) {
 		depthDelta=newDepthDelta;
+		testInvariant();
 	}
 
 	virtual int getMaximumSegmentIndex() const {
+		testInvariant();
 		return getNumPoints()-1;
 	}
 
 	virtual EdgeIntersectionList& getEdgeIntersectionList() {
+		testInvariant();
 		return eiList;
 	}
 
@@ -1166,6 +1181,7 @@ public:
 	virtual index::MonotoneChainEdge* getMonotoneChainEdge();
 
 	virtual bool isClosed() const {
+		testInvariant();
 		return pts->getAt(0)==pts->getAt(getNumPoints()-1);
 	}
 
@@ -1179,9 +1195,13 @@ public:
 
 	virtual void setIsolated(bool newIsIsolated) {
 		isIsolatedVar=newIsIsolated;
+		testInvariant();
 	}
 
-	virtual bool isIsolated() const { return isIsolatedVar; }
+	virtual bool isIsolated() const {
+		testInvariant();
+		return isIsolatedVar;
+	}
 
 	/** \brief
 	 * Adds EdgeIntersections for one or both
@@ -1204,6 +1224,7 @@ public:
 	///
 	virtual void computeIM(IntersectionMatrix *im) {
 		updateIM(label, im);
+		testInvariant();
 	}
 
 	/// return true if the coordinate sequences of the Edges are identical
@@ -1223,6 +1244,7 @@ public:
 	virtual bool equals(const Edge& e) const;
 
 	virtual bool equals(const Edge* e) const {
+		assert(e);
 		return equals(*e);
 	}
 
@@ -1242,6 +1264,9 @@ inline bool operator==(const Edge &a, const Edge &b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.36  2006/02/27 11:53:17  strk
  * DirectedEdgeStar made more safe trough assert(), use of standard iterator and
  * dynamic casts substituting static ones.

@@ -25,6 +25,10 @@
 namespace geos {
 namespace noding { // geos.noding
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 #if PROFILE
 static Profiler *profiler = Profiler::instance();
 #endif
@@ -158,8 +162,12 @@ SegmentNodeList::findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
 void
 SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 {
+
 	// testingOnly
-	//vector<SegmentString*> testingSplitEdges;
+#if DEBUG
+	cerr<<__FUNCTION__<<" entered"<<endl;
+	vector<SegmentString*> testingSplitEdges;
+#endif
 
 	// ensure that the list has entries for the first and last
 	// point of the edge
@@ -170,46 +178,69 @@ SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 	// since the endpoints are nodes
 	iterator it=begin();
 	SegmentNode *eiPrev=*it;
+	assert(eiPrev);
 	it++;
 	for(iterator itEnd=end(); it!=itEnd; ++it)
 	{
 		SegmentNode *ei=*it;
+		assert(ei);
+
 		SegmentString *newEdge=createSplitEdge(eiPrev, ei);
 		edgeList.push_back(newEdge);
-		//testingSplitEdges.push_back(newEdge);
+#if DEBUG
+		testingSplitEdges.push_back(newEdge);
+#endif
 		eiPrev = ei;
 	}
-	//checkSplitEdgesCorrectness(testingSplitEdges);
+#if DEBUG
+	cerr<<__FUNCTION__<<" finished, now checking correctness"<<endl;
+	checkSplitEdgesCorrectness(testingSplitEdges);
+#endif
 }
 
 void
 SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges)
 {
 	const CoordinateSequence *edgePts=edge.getCoordinates();
+	assert(edgePts);
 
 	// check that first and last points of split edges
 	// are same as endpoints of edge
 	SegmentString *split0=splitEdges[0];
+	assert(split0);
+
 	const Coordinate& pt0=split0->getCoordinate(0);
 	if (!(pt0==edgePts->getAt(0)))
 		throw GEOSException("bad split edge start point at " + pt0.toString());
 
 	SegmentString *splitn=splitEdges[splitEdges.size()-1];
+	assert(splitn);
+
 	const CoordinateSequence *splitnPts=splitn->getCoordinates();
+	assert(splitnPts);
+
 	const Coordinate &ptn=splitnPts->getAt(splitnPts->getSize()-1);
 	if (!(ptn==edgePts->getAt(edgePts->getSize()-1)))
 		throw  GEOSException("bad split edge end point at " + ptn.toString());
 }
 
-/**
- * Create a new "split edge" with the section of points between
- * (and including) the two intersections.
- * The label for the new edge is the same as the label for the parent edge.
- */
+/*private*/
 SegmentString*
 SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 {
-	int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
+	assert(ei0);
+	assert(ei1);
+
+	unsigned int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
+
+#if DEBUG
+	cerr << __FILE__ << ":" <<__LINE__ << ": " <<__FUNCTION__
+		<< ": npts = " << npts
+		<< " (ei1:" << *ei1
+		<< " - ei0:" << *ei0
+		<< " + 2)" << endl;
+#endif
+
 	const Coordinate &lastSegStartPt=edge.getCoordinate(ei1->segmentIndex);
 
 	// if the last intersection point is not equal to the its
@@ -223,6 +254,9 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 
 	if (! useIntPt1) {
 		npts--;
+#if DEBUG
+		cerr<<"npts="<<npts<<"( decremented as !useIntPt1 )"<<endl;
+#endif
 	}
 
 	CoordinateSequence *pts = new CoordinateArraySequence(npts); 
@@ -234,7 +268,10 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 
-	SegmentString *ret = new SegmentString(pts,edge.getContext());
+	SegmentString *ret = new SegmentString(pts, edge.getContext());
+#if DEBUG
+	cerr<<" SegmentString created"<<endl;
+#endif
 	splitEdges.push_back(ret);
 
 	// Keep track of created CoordinateSequence to release
@@ -259,6 +296,9 @@ string SegmentNodeList::print(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.22  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

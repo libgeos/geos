@@ -62,11 +62,12 @@ BufferBuilder::~BufferBuilder()
 {
 	delete li; // could be NULL
 	delete intersectionAdder;
-	delete edgeList;
+	//delete edgeList;
 	for (unsigned int i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
 }
 
+/*public*/
 Geometry*
 BufferBuilder::buffer(const Geometry *g, double distance)
 	// throw(GEOSException *)
@@ -76,13 +77,17 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		precisionModel=g->getPrecisionModel();
 
 	assert(precisionModel);
+	assert(g);
 
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
+
 	OffsetCurveBuilder curveBuilder(precisionModel, quadrantSegments);
 	curveBuilder.setEndCapStyle(endCapStyle);
 	OffsetCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
+
 	vector<SegmentString*>& bufferSegStrList=curveSetBuilder.getCurves();
+
 #if DEBUG
 	cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList.size()<<" curves"<<endl;
 #endif
@@ -113,7 +118,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 
 	try {
 		PlanarGraph graph(OverlayNodeFactory::instance());
-		graph.addEdges(edgeList->getEdges());
+		graph.addEdges(edgeList.getEdges());
 
 		createSubgraphs(&graph, subgraphList);
 #if DEBUG
@@ -158,19 +163,19 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 		intersectionAdder = new IntersectionAdder(*li);
 	}
 
+#if 1
 	MCIndexNoder* noder = new MCIndexNoder(intersectionAdder);
-
+#else
+	Noder noder = new IteratedNoder(pm);
+	Noder noder = new SimpleSnapRounder(pm);
+	Noder noder = new MCIndexSnapRounder(pm);
+	Noder noder = new ScaledNoder(
+		new MCIndexSnapRounder(new PrecisionModel(1.0)),
+			pm.getScale());
+#endif
 
 	return noder;
 
-#if 0
-	Noder noder = new IteratedNoder(precisionModel);
-	Noder noder = new SimpleSnapRounder(precisionModel);
-	Noder noder = new MCIndexSnapRounder(precisionModel);
-	Noder noder = new ScaledNoder(
-		new MCIndexSnapRounder(new PrecisionModel(1.0)),
-			precisionModel.getScale());
-#endif
 
 
 }
@@ -194,7 +199,7 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 		++i)
 	{
 		SegmentString* segStr = *i;
-		const Label* oldLabel = (Label*)(segStr->getData());
+		const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
 		// we need to clone SegmentString coordinates
 		// as Edge will take ownership of them
@@ -221,7 +226,7 @@ BufferBuilder::insertEdge(Edge *e)
 {
 	//<FIX> MD 8 Oct 03  speed up identical edge lookup
 	// fast lookup
-	Edge *existingEdge=edgeList->findEqualEdge(e);
+	Edge *existingEdge=edgeList.findEqualEdge(e);
 	// If an identical edge already exists, simply update its label
 	if (existingEdge != NULL) {
 		Label *existingLabel=existingEdge->getLabel();
@@ -248,7 +253,7 @@ BufferBuilder::insertEdge(Edge *e)
 	} else {   // no matching existing edge was found
 
 		// add this new edge to the list of edges in this graph
-		edgeList->add(e);
+		edgeList.add(e);
 
 		e->setDepthDelta(depthDelta(e->getLabel()));
 	}
@@ -315,6 +320,9 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.38  2006/02/23 20:05:21  strk
  * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
  * doxygen-friendly comments, miscellaneous cleanups

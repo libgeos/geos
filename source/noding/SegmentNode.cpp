@@ -90,6 +90,7 @@ public:
  
 };
 
+/*public*/
 SegmentNode::SegmentNode(const SegmentString& ss, const Coordinate& nCoord,
 		unsigned int nSegmentIndex, int nSegmentOctant)
 	:
@@ -98,8 +99,12 @@ SegmentNode::SegmentNode(const SegmentString& ss, const Coordinate& nCoord,
 	coord(nCoord),
 	segmentIndex(nSegmentIndex)
 {
+	// Number of points in SegmentString is one-more number of segments
+	assert(segmentIndex < segString.size() );
+
 	isInteriorVar = \
 		!coord.equals2D(segString.getCoordinate(segmentIndex));
+
 }
 
 
@@ -129,7 +134,7 @@ SegmentNode::compareTo(const SegmentNode& other)
 }
 
 string
-SegmentNode::print()
+SegmentNode::print() const
 {
 	ostringstream s;
 	s<<coord.toString()<<" seg#="<<segmentIndex;
@@ -141,6 +146,9 @@ SegmentNode::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.10  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

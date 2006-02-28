@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -16,6 +16,7 @@
 
 #include <geos/geomgraph.h>
 #include <cmath>
+#include <cassert>
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -36,6 +37,7 @@ DirectedEdge::depthFactor(int currLocation, int nextLocation)
 	return 0;
 }
 
+#if 0
 DirectedEdge::DirectedEdge():
 	EdgeEnd(),
 	isInResultVar(false),
@@ -51,6 +53,7 @@ DirectedEdge::DirectedEdge():
 	depth[2]=-999;
 
 }
+#endif
 
 DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward):
 	EdgeEnd(newEdge),
@@ -66,6 +69,8 @@ DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward):
 	depth[0]=0;
 	depth[1]=-999;
 	depth[2]=-999;
+
+	assert(newEdge->getNumPoints() >= 2);
 
 	if (isForwardVar) {
 		init(edge->getCoordinate(0), edge->getCoordinate(1));
@@ -237,6 +242,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/28 14:34:04  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -17,20 +17,26 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/profiler.h>
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 using namespace geos::algorithm;
 
 namespace geos {
 namespace noding { // geos.noding
 
+/*public*/
 void
 SegmentString::addIntersections(LineIntersector *li, unsigned int segmentIndex,
 		int geomIndex)
 {
 	for (int i=0; i<li->getIntersectionNum(); i++) {
-		addIntersection(li,segmentIndex, geomIndex, i);
+		addIntersection(li, segmentIndex, geomIndex, i);
 	}
 }
 
+/*public*/
 void
 SegmentString::addIntersection(LineIntersector *li, unsigned int segmentIndex,
 		int geomIndex, int intIndex)
@@ -39,6 +45,7 @@ SegmentString::addIntersection(LineIntersector *li, unsigned int segmentIndex,
 	addIntersection(intPt, segmentIndex);
 }
 
+/*public*/
 void
 SegmentString::addIntersection(const Coordinate& intPt,
 	unsigned int segmentIndex)
@@ -65,6 +72,7 @@ SegmentString::addIntersection(const Coordinate& intPt,
 	//SegmentNode *ei=
 	eiList.add(intPt, normalizedSegmentIndex);
 
+	testInvariant();
 }
 
 /* public static */
@@ -72,11 +80,13 @@ void
 SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
 	SegmentString::NonConstVect *resultEdgeList)
 {
+	assert(resultEdgeList);
 	for ( SegmentString::NonConstVect::const_iterator
 		i=segStrings.begin(), iEnd=segStrings.end();
 		i != iEnd; ++i )
 	{
 		SegmentString* ss = *i;
+		assert(ss);
 		ss->getNodeList().addSplitEdges(resultEdgeList);
 	}
 }
@@ -96,6 +106,9 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.22  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

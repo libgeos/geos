@@ -22,6 +22,8 @@
 #include "geos/indexChain.h"
 #include "geos/noding.h"
 
+#define DEBUG 0
+
 using namespace geos::index::chain;
 
 namespace geos {
@@ -32,6 +34,7 @@ void
 MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
 {
 	nodedSegStrings = inputSegStrings;
+	assert(nodedSegStrings);
 
 	for_each(nodedSegStrings->begin(), nodedSegStrings->end(),
 			bind1st(mem_fun(&MCIndexNoder::add), this));
@@ -55,6 +58,7 @@ MCIndexNoder::intersectChains()
 	{
 
 		indexMonotoneChain* queryChain = *i;
+		assert(queryChain);
 		vector<void*> overlapChains;
 		index.query(queryChain->getEnvelope(), overlapChains);
 		for (vector<void*>::iterator
@@ -62,7 +66,8 @@ MCIndexNoder::intersectChains()
 			j != jEnd;
 			++j)
 		{
-			indexMonotoneChain* testChain = (indexMonotoneChain*)(*j);
+			indexMonotoneChain* testChain = static_cast<indexMonotoneChain*>(*j);
+			assert(testChain);
 
 			/**
 			 * following test makes sure we only compare each
@@ -94,6 +99,8 @@ MCIndexNoder::add(SegmentString* segStr)
 			it!=iEnd; ++it)
 	{
 		indexMonotoneChain* mc = *it;
+		assert(mc);
+
 		mc->setId(idCounter++);
 		index.insert(mc->getEnvelope(), mc);
 
@@ -108,6 +115,7 @@ MCIndexNoder::~MCIndexNoder()
 			i=monoChains.begin(), iEnd=monoChains.end();
 			i!=iEnd; ++i)
 	{
+		assert(*i);
 		delete *i;
 	}
 }
@@ -119,10 +127,12 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 	SegmentString* ss1 = const_cast<SegmentString*>(
 		static_cast<const SegmentString *>(mc1->getContext())
 		);
+	assert(ss1);
 
 	SegmentString* ss2 = const_cast<SegmentString*>(
 		static_cast<const SegmentString *>(mc2->getContext())
 		);
+	assert(ss2);
 
 	si.processIntersections(ss1, start1, ss2, start2);
 }
@@ -133,6 +143,9 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.8  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

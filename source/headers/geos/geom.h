@@ -25,6 +25,7 @@
 #include <map>
 #include <stack>
 #include <set>
+#include <cassert>
 //#include <math.h>
 #include <cmath>
 #include <geos/platform.h>
@@ -295,7 +296,12 @@ public:
 	double makePrecise(double val) const;
 
 	/// Rounds the given Coordinate to the PrecisionModel grid.
-	void makePrecise(Coordinate *coord) const;
+	void makePrecise(Coordinate& coord) const;
+
+	void makePrecise(Coordinate* coord) const {
+		assert(coord);
+		return makePrecise(*coord);
+	}
 
 	/// Tests whether the precision model supports floating point
 	//
@@ -2913,6 +2919,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.73  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.72  2006/02/27 09:05:32  strk
  * Doxygen comments, a few inlines and general cleanups
  *

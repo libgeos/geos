@@ -18,7 +18,12 @@
  *
  **********************************************************************/
 
+#include <cassert>
 #include <geos/opBuffer.h>
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
 
 using namespace geos::geomgraph;
 using namespace geos::noding;
@@ -29,8 +34,8 @@ namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
-double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
+//double OffsetCurveBuilder::PI_OVER_2=1.570796326794895;
+//double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN=3.0;
 
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
 	li(new LineIntersector()),
@@ -84,8 +89,10 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 {
 	// a zero or negative width buffer of a line/point is empty
 	if (distance<= 0.0) return;
+
 	init(distance);
-	if (inputPts->getSize()<= 1) {
+
+	if (inputPts->getSize() < 2) {
 		switch (endCapStyle) {
 			case BufferOp::CAP_ROUND:
 				addCircle(inputPts->getAt(0), distance);
@@ -95,8 +102,9 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 				break;
 			// default is for buffer to be empty (e.g. for a butt line cap);
 		}
-	} else
+	} else {
 		computeLineBufferCurve(inputPts);
+	}
 	CoordinateSequence *lineCoord=getCoordinates();
 	lineList.push_back(lineCoord);
 }
@@ -140,11 +148,17 @@ OffsetCurveBuilder::init(double newDistance)
 CoordinateSequence*
 OffsetCurveBuilder::getCoordinates()
 {
-	// check that points are a ring-add the startpoint again if they
-	// are not
+	// check that points are a ring,
+	// add the startpoint again if they are not
 	if (ptList->getSize()>1) {
 		const Coordinate &start=ptList->getAt(0);
 		const Coordinate &end=ptList->getAt(1);
+#if DEBUG
+		cerr << __FILE__ << ":" << __LINE__
+			<< ":"
+			<< " start:" << start
+			<< " end:" << end << endl;
+#endif
 		if (!(start==end)) addPt(start);
 	}
 	return ptList;
@@ -186,16 +200,29 @@ OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence *inputPts,
 	closePts();
 }
 
+/*private*/
 void
 OffsetCurveBuilder::addPt(const Coordinate &pt)
 {
 	Coordinate bufPt=pt;
-	precisionModel->makePrecise(&bufPt);
+	assert(precisionModel);
+	precisionModel->makePrecise(bufPt);
 
 	// don't add duplicate points
-	//const Coordinate *lastPt=NULL;
-	int last=ptList->getSize()-1;
-	if ( last>=0 && bufPt==ptList->getAt(last) ) return;
+
+	unsigned int npts=ptList->getSize();
+	if ( npts ) {
+		const Coordinate& lastPt=ptList->getAt(npts-1);
+#if DEBUG
+		cerr<<__FUNCTION__<<" lastPt:"<<lastPt<<", currPt:"<<bufPt<<endl;
+#endif
+		if ( bufPt.equals2D(lastPt) ) {
+#if DEBUG
+			cerr<<" they equal!"<<endl;
+#endif
+			return;
+		}
+	}
 
 	ptList->add(bufPt);
 }
@@ -474,6 +501,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/02/28 14:34:05  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
  * Revision 1.22  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
