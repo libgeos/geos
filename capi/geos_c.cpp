@@ -95,6 +95,7 @@ extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
 extern "C" CoordinateSequence GEOS_DLL *GEOSGeom_getCoordSeq(Geometry *g1);
 
 extern "C" int GEOS_DLL GEOSArea(const Geometry *g1, double *area);
+extern "C" int GEOS_DLL GEOSLength(const Geometry *g1, double *length);
 extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
 
@@ -504,7 +505,26 @@ GEOSArea(const Geometry *g, double *area)
 	}
 }
 
+int
+GEOSLength(const Geometry *g, double *length)
+{
+	try {
+		*area = g->getLength();
+		return 1;
+	}
 
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 0;
+	}
+}
 
 Geometry *
 GEOSGeomFromWKT(const char *wkt)
@@ -734,6 +754,34 @@ GEOSGeomTypeId(Geometry *g1)
 //-------------------------------------------------------------------
 // GEOS functions that return geometries
 //-------------------------------------------------------------------
+
+Geometry *
+GEOSEnvelope(Geometry *g1)
+{
+	try
+    {
+        Geometry *g3 = g1->getEnvelope();
+        return g3;
+    }
+    catch (GEOSException *ge)
+    {
+        ERROR_MESSAGE((char *)ge->toString().c_str());
+        delete ge;
+        return NULL;
+    }
+
+    catch (std::exception &e)
+    {
+        ERROR_MESSAGE(e.what());
+        return NULL;
+    }
+
+    catch (...)
+    {
+        ERROR_MESSAGE("Unknown exception thrown");
+        return NULL;
+    }
+}
 
 Geometry *
 GEOSIntersection(Geometry *g1, Geometry *g2)

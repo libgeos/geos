@@ -209,6 +209,7 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeom g);
  *
  ***********************************************************************/
 
+extern GEOSGeom GEOS_DLL GEOSEnvelope(const GEOSGeom g1);
 extern GEOSGeom GEOS_DLL GEOSIntersection(const GEOSGeom g1, const GEOSGeom g2);
 extern GEOSGeom GEOS_DLL GEOSBuffer(const GEOSGeom g1,
 	double width, int quadsegs);
@@ -322,6 +323,7 @@ extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
 
 /* Return 0 on exception, 1 otherwise */
 extern int GEOS_DLL GEOSArea(const GEOSGeom g1, double *area);
+extern int GEOS_DLL GEOSLength(const GEOSGeom g1, double *length);
 extern int GEOS_DLL GEOSDistance(const GEOSGeom g1, const GEOSGeom g2,
 	double *dist);
 

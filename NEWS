@@ -5,6 +5,8 @@ Changes in 3.0.0
    (the documented one) is unchanged.
 
 - New things:
+    - Add GEOSArea(), GEOSLength(), GEOSEnvelope(), GEOSGeomType() to the
+      C API
 	- Added closed ring checks in IsValidOp
 	- Added missing ::clone() methods for Multi* geoms 
 	- Multi-input support in XMLTester 
