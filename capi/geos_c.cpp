@@ -509,7 +509,7 @@ int
 GEOSLength(const Geometry *g, double *length)
 {
 	try {
-		*area = g->getLength();
+		*length = g->getLength();
 		return 1;
 	}
 
