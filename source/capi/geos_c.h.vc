@@ -39,18 +39,18 @@ extern "C" {
 
 #define GEOS_VERSION_MAJOR 2
 #define GEOS_VERSION_MINOR 2
-#define GEOS_VERSION_PATCH 1
+#define GEOS_VERSION_PATCH 2
 #define GEOS_FIRST_INTERFACE GEOS_VERSION_MAJOR 
 #define GEOS_LAST_INTERFACE (GEOS_VERSION_MAJOR+GEOS_VERSION_MINOR)
-#define GEOS_VERSION "2.2.1"
+#define GEOS_VERSION "2.2.2"
 #define GEOS_JTS_PORT "1.4.1"
 
 #define GEOS_CAPI_VERSION_MAJOR 1
 #define GEOS_CAPI_VERSION_MINOR 0
-#define GEOS_CAPI_VERSION_PATCH 1
+#define GEOS_CAPI_VERSION_PATCH 2
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
 #define GEOS_CAPI_LAST_INTERFACE (GEOS_CAPI_VERSION_MAJOR+GEOS_CAPI_VERSION_MINOR)
-#define GEOS_CAPI_VERSION "2.2.1-CAPI-1.0.1"
+#define GEOS_CAPI_VERSION "2.2.2-CAPI-1.0.2"
 
  
 /************************************************************************
@@ -325,6 +325,7 @@ extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
 
 /* Return 0 on exception, 1 otherwise */
 extern int GEOS_DLL GEOSArea(const GEOSGeom g1, double *area);
+extern int GEOS_DLL GEOSLength(const GEOSGeom g1, double *length);
 extern int GEOS_DLL GEOSDistance(const GEOSGeom g1, const GEOSGeom g2,
 	double *dist);
 
