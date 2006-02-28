@@ -71,6 +71,7 @@ extern "C" char GEOS_DLL GEOSOverlaps(const Geometry *g1, const Geometry *g2);
 extern "C" Geometry GEOS_DLL *GEOSpolygonize(Geometry **geoms, unsigned int ngeoms);
 extern "C" char GEOS_DLL GEOSisValid(const Geometry *g1);
 extern "C" char GEOS_DLL GEOSisEmpty(const Geometry *g1);
+extern "C" Geometry GEOS_DLL *GEOSEnvelope(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSIntersection(Geometry *g1,Geometry *g2);
 extern "C" Geometry GEOS_DLL *GEOSBuffer(Geometry *g1,double width,int quadsegs);
 extern "C" Geometry GEOS_DLL *GEOSConvexHull(Geometry *g1);
@@ -91,6 +92,8 @@ extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
 extern "C" CoordinateSequence GEOS_DLL *GEOSGeom_getCoordSeq(Geometry *g1);
 
+extern "C" int GEOS_DLL GEOSArea(const Geometry *g1, double *area);
+extern "C" int GEOS_DLL GEOSLength(const Geometry *g1, double *length);
 extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
 
@@ -525,6 +528,49 @@ GEOSEquals(const Geometry *g1, const Geometry *g2)
 }
 
 int
+GEOSArea(const Geometry *g, double *area)
+{
+	try {
+		*area = g->getArea();
+		return 1;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 0;
+	}
+}
+
+int
+GEOSLength(const Geometry *g, double *length)
+{
+	try {
+		*length = g->getLength();
+		return 1;
+	}
+
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return 0;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 0;
+	}
+}
+
+
+int
 GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
 {
 	try {
@@ -843,6 +889,34 @@ GEOSGeomTypeId(Geometry *g1)
 //-------------------------------------------------------------------
 // GEOS functions that return geometries
 //-------------------------------------------------------------------
+
+Geometry *
+GEOSEnvelope(Geometry *g1)
+{
+	try
+    {
+        Geometry *g3 = g1->getEnvelope();
+        return g3;
+    }
+    catch (GEOSException *ge)
+    {
+        ERROR_MESSAGE((char *)ge->toString().c_str());
+        delete ge;
+        return NULL;
+    }
+
+    catch (std::exception &e)
+    {
+        ERROR_MESSAGE(e.what());
+        return NULL;
+    }
+
+    catch (...)
+    {
+        ERROR_MESSAGE("Unknown exception thrown");
+        return NULL;
+    }
+}
 
 Geometry *
 GEOSIntersection(Geometry *g1, Geometry *g2)
