@@ -530,7 +530,9 @@ XMLTester::parseTest()
 			profile.stop();
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			/// Allow for slightly different representations
+			if (gRes->equalsExact(gRealRes, 0.00000000001)==0) success=1;
+			//if (gRes->compareTo(gRealRes)==0) success=1;
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -773,6 +775,11 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/01 13:06:41  strk
+ * Used FLOATING precision model in buffer.xml test, added expected results,
+ * changed XMLTester.cpp to use a tolerance when comparing expected and obtained
+ * results from buffer operations.
+ *
  * Revision 1.11  2006/03/01 12:12:03  strk
  * Fixed a bug in verbose output preventing geometry arg 'A' from being properly printed
  *
