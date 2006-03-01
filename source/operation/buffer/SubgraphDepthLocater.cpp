@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/SubgraphDepthLocater.java rev. 1.5 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/opBuffer.h>
@@ -29,55 +33,39 @@ namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-SubgraphDepthLocater::SubgraphDepthLocater(vector<BufferSubgraph*> *nsg):
-	subgraphs(nsg)
-{
-	//seg=new LineSegment();
-	//cga=new RobustCGAlgorithms();
-	//subgraphs=newSubgraphs;
-}
-
-SubgraphDepthLocater::~SubgraphDepthLocater(){
-	//delete seg;
-	//delete cga;
-}
-
+/*public*/
 int
 SubgraphDepthLocater::getDepth(Coordinate &p)
 {
-	vector<DepthSegment*> *stabbedSegments=findStabbedSegments(p);
+	vector<DepthSegment*> stabbedSegments;
+	findStabbedSegments(p, stabbedSegments);
+
 	// if no segments on stabbing line subgraph must be outside all others->
-	if ((int)stabbedSegments->size()==0)
-	{
-		delete stabbedSegments;
-		return 0;
-	}
-	sort(stabbedSegments->begin(),stabbedSegments->end(),DepthSegmentLT);
-	DepthSegment *ds=(*stabbedSegments)[0];
+	if (stabbedSegments.size()==0) return 0;
+
+	sort(stabbedSegments.begin(), stabbedSegments.end(), DepthSegmentLT);
+	DepthSegment *ds=stabbedSegments[0];
 	int ret = ds->leftDepth;
 #if DEBUG
 	cerr<<"SubgraphDepthLocater::getDepth("<<p.toString()<<"): "<<ret<<endl;
 #endif
 
-	vector<DepthSegment *>::iterator it;
-	for (it=stabbedSegments->begin(); it != stabbedSegments->end(); it++)
+	for (vector<DepthSegment *>::iterator
+		it=stabbedSegments.begin(), itEnd=stabbedSegments.end();
+		it != itEnd;
+		++it)
+	{
 		delete *it;
-	delete stabbedSegments;
+	}
 
 	return ret;
 }
 
-/**
- * Finds all non-horizontal segments intersecting the stabbing line
- * The stabbing line is the ray to the right of stabbingRayLeftPt
- *
- * @param stabbingRayLeftPt the left-hand origin of the stabbing line
- * @return a List of DepthSegments intersecting the stabbing line
- */
-vector<DepthSegment*>*
-SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt)
+/*private*/
+void
+SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,
+			std::vector<DepthSegment*>& stabbedSegments)
 {
-	vector<DepthSegment*> *stabbedSegments=new vector<DepthSegment*>();
 	unsigned int size = subgraphs->size();
 	for (unsigned int i=0; i<size; ++i)
 	{
@@ -90,24 +78,17 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt)
 			|| stabbingRayLeftPt.y > env->getMaxY() )
 				continue;
 
-		findStabbedSegments(stabbingRayLeftPt, bsg->getDirectedEdges(), stabbedSegments);
+		findStabbedSegments(stabbingRayLeftPt, bsg->getDirectedEdges(),
+			stabbedSegments);
 	}
-	return stabbedSegments;
+	//return stabbedSegments;
 }
 
-/**
- * Finds all non-horizontal segments intersecting the stabbing line
- * in the list of dirEdges.
- * The stabbing line is the ray to the right of stabbingRayLeftPt.
- *
- * @param stabbingRayLeftPt the left-hand origin of the stabbing line
- * @param stabbedSegments the current list of DepthSegments
- * intersecting the stabbing line
- */
+/*private*/
 void
 SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
-	vector<DirectedEdge*> *dirEdges,
-	vector<DepthSegment*> *stabbedSegments)
+	vector<DirectedEdge*>* dirEdges,
+	vector<DepthSegment*>& stabbedSegments)
 {
 
 	/**
@@ -123,18 +104,11 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 	}
 }
 
-/**
- * Finds all non-horizontal segments intersecting the stabbing line
- * in the input dirEdge->
- * The stabbing line is the ray to the right of stabbingRayLeftPt->
- *
- * @param stabbingRayLeftPt the left-hand origin of the stabbing line
- * @param stabbedSegments the current list of DepthSegments
- * intersecting the stabbing line
- */
+/*private*/
 void
 SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
-	DirectedEdge *dirEdge, vector<DepthSegment*> *stabbedSegments)
+	DirectedEdge *dirEdge,
+	vector<DepthSegment*>& stabbedSegments)
 {
 	const CoordinateSequence *pts=dirEdge->getEdge()->getCoordinates();
 
@@ -156,7 +130,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 #endif
 
 #if DEBUG
-	cerr<<" SubgraphDepthLocater::findStabbedSegments: segment "<<i<<" ("<<seg->toString()<<") ";
+	cerr<<" SubgraphDepthLocater::findStabbedSegments: segment "<<i<<" ("<<seg.toString()<<") ";
 #endif
 
 #ifndef SKIP_LS
@@ -256,8 +230,9 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 		seg.p0 = *low;
 		seg.p1 = *high;
 #endif
+
 		DepthSegment *ds=new DepthSegment(seg, depth);
-		stabbedSegments->push_back(ds);
+		stabbedSegments.push_back(ds);
 	}
 }
 
@@ -267,6 +242,10 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/01 17:16:39  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.17  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

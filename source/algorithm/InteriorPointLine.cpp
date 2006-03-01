@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -25,14 +25,19 @@ namespace algorithm { // geos.algorithm
 
 InteriorPointLine::InteriorPointLine(Geometry *g)
 {
-	interiorPoint=NULL;
 	minDistance=DoubleInfinity;
 	Point *p=g->getCentroid();
-	centroid=p->getCoordinate();
-	addInterior(g);
-	if (interiorPoint==NULL)
-		addEndpoints(g);
-	delete p;
+	if ( p ) {
+		const Coordinate* c=p->getCoordinate();
+		if ( c )
+		{
+			centroid=*c;
+			addInterior(g);
+			if (!hasInterior) addEndpoints(g);
+		}
+		delete p;
+	}
+	hasInterior=false;
 }
 
 InteriorPointLine::~InteriorPointLine()
@@ -103,18 +108,22 @@ InteriorPointLine::addEndpoints(const CoordinateSequence *pts)
 void
 InteriorPointLine::add(const Coordinate *point)
 {
-	double dist=point->distance(*centroid);
-	if (dist<minDistance) {
-		delete interiorPoint;
-		interiorPoint=new Coordinate(*point);
+	if ( ! point ) return;
+
+	double dist=point->distance(centroid);
+	if (! hasInterior || dist<minDistance) {
+		interiorPoint=*point;
 		minDistance=dist;
+		hasInterior=true;
 	}
 }
 
-Coordinate*
-InteriorPointLine::getInteriorPoint() const
+bool
+InteriorPointLine::getInteriorPoint(Coordinate& ret) const
 {
-	return interiorPoint;
+	if ( ! hasInterior ) return false;
+	ret=interiorPoint;
+	return true;
 }
 
 } // namespace geos.algorithm
@@ -122,6 +131,10 @@ InteriorPointLine::getInteriorPoint() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/01 17:16:31  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.13  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

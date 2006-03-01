@@ -134,11 +134,13 @@ MinimumDiameter::getDiameter()
 	// return empty linestring if no minimum width calculated
 	if (minWidthPt==NULL)
 		return inputGeom->getFactory()->createLineString(NULL);
-	Coordinate* basePt=minBaseSeg->project(*minWidthPt);
+
+	Coordinate basePt;
+	minBaseSeg->project(*minWidthPt, basePt);
+
 	CoordinateSequence* cl=inputGeom->getFactory()->getCoordinateSequenceFactory()->create(NULL);
-	cl->add(*basePt);
+	cl->add(basePt);
 	cl->add(*minWidthPt);
-	delete basePt;
 	return inputGeom->getFactory()->createLineString(cl);
 }
 
@@ -262,6 +264,10 @@ MinimumDiameter::getNextIndex(const CoordinateSequence *pts,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/01 17:16:32  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.12  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

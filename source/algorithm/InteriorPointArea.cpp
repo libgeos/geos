@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -20,32 +21,42 @@
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-double InteriorPointArea::avg(double a, double b){
-	return (a+b)/2.0;
+// file-statics
+namespace {
+
+double avg(double a, double b){return (a+b)/2.0;}
+
 }
 
-InteriorPointArea::InteriorPointArea(const Geometry *g) {
-	interiorPoint=NULL;
+
+/*public*/
+InteriorPointArea::InteriorPointArea(const Geometry *g)
+{
+	foundInterior=false;
 	maxWidth=0.0;
 	factory=g->getFactory();
 	add(g);
 }
 
-InteriorPointArea::~InteriorPointArea() {
-	//delete factory;
+/*public*/
+InteriorPointArea::~InteriorPointArea()
+{
 }
 
-Coordinate* InteriorPointArea::getInteriorPoint() const {
-	return interiorPoint;
+/*public*/
+bool 
+InteriorPointArea::getInteriorPoint(Coordinate& ret) const
+{
+	if ( ! foundInterior ) return false;
+
+	ret=interiorPoint;
+	return true;
 }
 
-/**
-* Tests the interior vertices (if any)
-* defined by a linear Geometry for the best inside point.
-* If a Geometry is not of dimension 1 it is not tested.
-* @param geom the geometry to add
-*/
-void InteriorPointArea::add(const Geometry *geom) {
+/*public*/
+void
+InteriorPointArea::add(const Geometry *geom)
+{
 	if (typeid(*geom)==typeid(Polygon)) {
 		addPolygon(geom);
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
@@ -59,21 +70,19 @@ void InteriorPointArea::add(const Geometry *geom) {
 	}
 }
 
-/**
-* Finds a reasonable point at which to label a Geometry.
-* @param geometry the geometry to analyze
-* @return the midpoint of the largest intersection between the geometry and
-* a line halfway down its envelope
-*/
-void InteriorPointArea::addPolygon(const Geometry *geometry) {
+/*public*/
+void
+InteriorPointArea::addPolygon(const Geometry *geometry)
+{
 	LineString *bisector=horizontalBisector(geometry);
 	Geometry *intersections=bisector->intersection(geometry);
 	const Geometry *widestIntersection=widestGeometry(intersections);
 	const Envelope *env=widestIntersection->getEnvelopeInternal();
 	double width=env->getWidth();
-	if (interiorPoint==NULL || width>maxWidth) {
-		interiorPoint=centre(env);
+	if (!foundInterior || width>maxWidth) {
+		env->centre(interiorPoint);
 		maxWidth = width;
+		foundInterior=true;
 	}
 	//delete env;
 	delete bisector;
@@ -82,7 +91,9 @@ void InteriorPointArea::addPolygon(const Geometry *geometry) {
 
 //@return if geometry is a collection, the widest sub-geometry; otherwise,
 //the geometry itself
-const Geometry* InteriorPointArea::widestGeometry(const Geometry *geometry) {
+const Geometry*
+InteriorPointArea::widestGeometry(const Geometry *geometry)
+{
 	if ((typeid(*geometry)==typeid(GeometryCollection)) ||
 				(typeid(*geometry)==typeid(MultiPoint)) ||
 				(typeid(*geometry)==typeid(MultiPolygon)) ||
@@ -109,7 +120,9 @@ InteriorPointArea::widestGeometry(const GeometryCollection* gc) {
 	return widestGeometry;
 }
 
-LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
+LineString*
+InteriorPointArea::horizontalBisector(const Geometry *geometry)
+{
 	const Envelope *envelope=geometry->getEnvelopeInternal();
 	// Assert: for areas, minx <> maxx
 	double avgY=avg(envelope->getMinY(),envelope->getMaxY());
@@ -129,25 +142,15 @@ LineString* InteriorPointArea::horizontalBisector(const Geometry *geometry) {
 	return ret;
 }
 
-/**
-* Returns the centre point of the envelope.
-* @param envelope the envelope to analyze
-* @return the centre of the envelope
-*/
-Coordinate*
-InteriorPointArea::centre(const Envelope *envelope) const
-{
-	return new Coordinate(
-		avg(envelope->getMinX(), envelope->getMaxX()),
-		avg(envelope->getMinY(), envelope->getMaxY())
-		);
-}
-
 } // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/01 17:16:31  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.17  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

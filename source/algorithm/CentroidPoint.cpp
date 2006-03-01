@@ -20,27 +20,14 @@
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-CentroidPoint::CentroidPoint() {
-	ptCount=0;
-	centSum=new Coordinate();
-}
 
-CentroidPoint::~CentroidPoint() {
-	delete centSum;
-}
-
-/**
-* Adds the point(s) defined by a Geometry to the centroid total.
-* If the geometry is not of dimension 0 it does not contribute to the centroid.
-* @param geom the geometry to add
-*/
-void CentroidPoint::add(const Geometry *geom) {
+void
+CentroidPoint::add(const Geometry *geom)
+{
 	if (typeid(*geom)==typeid(Point)) {
 		add(geom->getCoordinate());
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
+				(typeid(*geom)==typeid(MultiPoint))) {
 		GeometryCollection *gc=(GeometryCollection*) geom;
 		for(int i=0;i<gc->getNumGeometries();i++) {
 			add(gc->getGeometryN(i));
@@ -48,18 +35,26 @@ void CentroidPoint::add(const Geometry *geom) {
 	}
 }
 
-/**
-* Adds the length defined by an array of coordinates.
-* @param pts an array of {@link Coordinate}s
-*/
-void CentroidPoint::add(const Coordinate *pt) {
+void
+CentroidPoint::add(const Coordinate *pt)
+{
 	ptCount+=1;
-	centSum->x+=pt->x;
-	centSum->y+=pt->y;
+	centSum.x += pt->x;
+	centSum.y += pt->y;
 }
 
-Coordinate* CentroidPoint::getCentroid() const {
-	return new Coordinate(centSum->x/ptCount,centSum->y/ptCount);
+Coordinate*
+CentroidPoint::getCentroid() const
+{
+	return new Coordinate(centSum.x/ptCount, centSum.y/ptCount);
+}
+
+bool
+CentroidPoint::getCentroid(Coordinate& ret) const
+{
+	if ( ptCount == 0.0 ) return false;
+	ret=Coordinate(centSum.x/ptCount, centSum.y/ptCount);
+	return true;
 }
 
 } // namespace geos.algorithm
@@ -67,6 +62,10 @@ Coordinate* CentroidPoint::getCentroid() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/01 17:16:31  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

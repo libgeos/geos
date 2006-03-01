@@ -15,6 +15,8 @@ geos_HEADERS = \
 	indexQuadtree.h \
 	indexStrtree.h \
 	indexSweepline.h \
+	inline.h \
+	LineSegment.inl \
 	noding.h \
 	nodingSnapround.h \
 	io.h \

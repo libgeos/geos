@@ -722,43 +722,60 @@ public:
 
 bool DepthSegmentLT(DepthSegment *first, DepthSegment *second);
 
-/*
+/**
  * \class SubgraphDepthLocater opBuffer.h geos/opBuffer.h
  *
- * \brief Locates a subgraph inside a set of subgraphs,
- *
+ * \brief
+ * Locates a subgraph inside a set of subgraphs,
  * in order to determine the outside depth of the subgraph.
+ *
  * The input subgraphs are assumed to have had depths
  * already calculated for their edges.
  *
+ * Last port: operation/buffer/SubgraphDepthLocater.java rev. 1.5 (JTS-1.7)
  */
 class SubgraphDepthLocater {
+
 public:
-	SubgraphDepthLocater(std::vector<BufferSubgraph*> *newSubgraphs);
-	~SubgraphDepthLocater();
+
+	SubgraphDepthLocater(std::vector<BufferSubgraph*> *newSubgraphs)
+		:
+		subgraphs(newSubgraphs)
+	{}
+
+	~SubgraphDepthLocater() {}
+
 	int getDepth(Coordinate &p);
+
 private:
+
 	std::vector<BufferSubgraph*> *subgraphs;
+
 	LineSegment seg;
-	//algorithm::CGAlgorithms *cga;
+
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line.
 	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
 	 *
 	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	 * @return a List of DepthSegments intersecting the stabbing line
+	 * @param stabbedSegments a vector to which DepthSegments intersecting
+	 *        the stabbing line will be added.
 	 */
-	std::vector<DepthSegment*>* findStabbedSegments(Coordinate &stabbingRayLeftPt);
+	void findStabbedSegments(Coordinate &stabbingRayLeftPt,
+			std::vector<DepthSegment*>& stabbedSegments);
+
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line
 	 * in the list of dirEdges.
 	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
 	 *
 	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	 * @param stabbedSegments the current list of DepthSegments
-	 *        intersecting the stabbing line
+	 * @param stabbedSegments the current vector of DepthSegments
+	 *        intersecting the stabbing line will be added.
 	 */
-	void findStabbedSegments(Coordinate &stabbingRayLeftPt,std::vector<geomgraph::DirectedEdge*> *dirEdges,std::vector<DepthSegment*> *stabbedSegments);
+	void findStabbedSegments(Coordinate &stabbingRayLeftPt,
+			std::vector<geomgraph::DirectedEdge*> *dirEdges,
+			std::vector<DepthSegment*>& stabbedSegments);
 
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line
@@ -766,9 +783,13 @@ private:
 	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
 	 *
 	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	 * @param stabbedSegments the current list of {@link DepthSegments} intersecting the stabbing line
+	 * @param stabbedSegments the current list of DepthSegments intersecting
+	 *        the stabbing line
 	 */
-	void findStabbedSegments(Coordinate &stabbingRayLeftPt,geomgraph::DirectedEdge *dirEdge,std::vector<DepthSegment*> *stabbedSegments);
+	void findStabbedSegments(Coordinate &stabbingRayLeftPt,
+			geomgraph::DirectedEdge *dirEdge,
+			std::vector<DepthSegment*>& stabbedSegments);
+
 };
 
 bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
@@ -930,6 +951,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/01 17:16:39  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.20  2006/02/28 19:22:20  strk
  * Fixed in-place definition of static members in OffsetCurveBuilder (bug#33)
  *

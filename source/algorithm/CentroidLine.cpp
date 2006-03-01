@@ -23,40 +23,27 @@
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-CentroidLine::CentroidLine():
-	totalLength(0.0)
-{
-}
-
-CentroidLine::~CentroidLine()
-{
-}
-
-/**
- * Adds the linestring(s) defined by a Geometry to the centroid total.
- * If the geometry is not linear it does not contribute to the centroid
- * @param geom the geometry to add
- */
+/*public*/
 void
 CentroidLine::add(const Geometry *geom)
 {
-	if (typeid(*geom)==typeid(LineString) || typeid(*geom)==typeid(LinearRing)) {
-		add(((LineString*)geom)->getCoordinatesRO());
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
+	const LineString* ls = dynamic_cast<const LineString*>(geom);
+	if ( ls )
+	{
+		add(ls->getCoordinatesRO());
+		return;
+	}
+
+	const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
+	if (gc)
+	{
+		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
 			add(gc->getGeometryN(i));
 		}
 	}
 }
 
-/**
- * Adds the length defined by an array of coordinates.
- * @param pts an array of {@link Coordinate}s
- */
+/*public*/
 void
 CentroidLine::add(const CoordinateSequence *pts)
 {
@@ -82,11 +69,23 @@ CentroidLine::getCentroid() const
 	return new Coordinate(centSum.x/totalLength, centSum.y/totalLength);
 }
 
+bool
+CentroidLine::getCentroid(Coordinate& c) const
+{
+	if ( totalLength == 0.0 ) return false;
+	c=Coordinate(centSum.x/totalLength, centSum.y/totalLength);
+	return true;
+}
+
 } // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/01 17:16:31  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.13  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

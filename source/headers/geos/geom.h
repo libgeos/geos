@@ -29,6 +29,7 @@
 //#include <math.h>
 #include <cmath>
 #include <geos/platform.h>
+#include <geos/inline.h>
 
 /** \mainpage 
  *
@@ -1901,10 +1902,33 @@ public:
 	 */
 	virtual bool isWithinDistance(const Geometry *geom,double cDistance);
 
-	/// Computes the centroid of this Geometry.
+	/** \brief
+	 * Computes the centroid of this <code>Geometry</code>.
+	 *
+	 * The centroid is equal to the centroid of the set of component
+	 * Geometrys of highest dimension (since the lower-dimension geometries
+	 * contribute zero "weight" to the centroid)
+	 *
+	 * @return a {@link Point} which is the centroid of this Geometry
+	 */
 	virtual Point* getCentroid() const;
 
-	/// Computes an interior point of this Geometry.
+	/// Computes the centroid of this Geometry as a Coordinate
+	//
+	/// Returns false if centroid cannot be computed (EMPTY geometry)
+	///
+	virtual bool getCentroid(Coordinate& ret) const;
+
+	/** \brief
+	 * Computes an interior point of this <code>Geometry</code>.
+	 *
+	 * An interior point is guaranteed to lie in the interior of the Geometry,
+	 * if it possible to calculate such a point exactly. Otherwise,
+	 * the point may lie on the boundary of the geometry.
+	 *
+	 * @return a Point which is in the interior of this Geometry, or
+	 *         null if the geometry doesn't have an interior (empty)
+	 */
 	virtual Point* getInteriorPoint();
 
 	/*
@@ -1971,11 +1995,6 @@ protected:
 private:
 	virtual int getClassSortIndex() const;
 	static GeometryComponentFilter geometryChangedFilter;
-#ifdef INT64_CONST_IS_I64
-    static const int64 serialVersionUID = 8763622679187376702I64;
-#else
-    static const int64 serialVersionUID = 8763622679187376702LL;
-#endif
 	const GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 	void* userData;
@@ -2009,8 +2028,8 @@ public:
 	virtual void filter_rw(Geometry *geom)=0;
 };
 
-/*
- * Represents a line segment defined by two {@link Coordinate}s.
+/**
+ * Represents a line segment defined by two Coordinate.
  * Provides methods to compute various geometric properties
  * and relationships of line segments.
  * 
@@ -2019,44 +2038,45 @@ public:
  * This supports a common pattern of reusing a single LineSegment
  * object as a way of computing segment properties on the
  * segments defined by arrays or lists of {@link Coordinate}s.
- *
  */
 class LineSegment {
 public:
+
+	friend std::ostream& operator<< (std::ostream& o, const LineSegment& l);
 
 	Coordinate p0; /// Segment start
 
 	Coordinate p1; /// Segemnt end
 
-	LineSegment(void);
+	LineSegment();
 
 	LineSegment(const LineSegment &ls);
 
+	/// Constructs a LineSegment with the given start and end Coordinates.
 	LineSegment(const Coordinate& c0, const Coordinate& c1);
 
-	virtual ~LineSegment(void);
+	~LineSegment();
 
-	virtual void setCoordinates(const Coordinate& c0, const Coordinate& c1);
+	void setCoordinates(const Coordinate& c0, const Coordinate& c1);
 
-	virtual const Coordinate& getCoordinate(int i) const;
+	const Coordinate& getCoordinate(unsigned int i) const;
 
-	virtual void setCoordinates(const LineSegment ls);
+	void setCoordinates(const LineSegment& ls);
 
-	virtual double getLength() const;
+	/// Computes the length of the line segment.
+	double getLength() const;
 
-	/**
-	 * Tests whether the segment is horizontal.
-	 *
-	 * @return <code>true</code> if the segment is horizontal
-	 */
-	virtual bool isHorizontal() const;
+	/// Tests whether the segment is horizontal.
+	//
+	/// @return <code>true</code> if the segment is horizontal
+	///
+	bool isHorizontal() const;
 
-	/**
-	 * Tests whether the segment is vertical.
-	 *
-	 * @return <code>true</code> if the segment is vertical
-	 */
-	virtual bool isVertical() const;
+	/// Tests whether the segment is vertical.
+	//
+	/// @return <code>true</code> if the segment is vertical
+	///
+	bool isVertical() const;
 
 	/**
 	 * Determines the orientation of a LineSegment relative to this segment.
@@ -2079,38 +2099,89 @@ public:
 	 * @return 0 if seg has indeterminate orientation relative
 	 *	     to this segment
 	 */
-	virtual int orientationIndex(LineSegment *seg) const;
+	int orientationIndex(const LineSegment& seg) const;
 
-	virtual void reverse();
+	int orientationIndex(const LineSegment* seg) const;
 
-	virtual void normalize();
+	void reverse();
 
-	virtual double angle() const;
+	void normalize();
 
-	virtual double distance(const LineSegment ls) const;
+	double angle() const;
+
+	double distance(const LineSegment ls) const;
 
 	/**
 	 * Computes the distance between this line segment and a point.
 	 */
-	virtual double distance(const Coordinate& p) const;
+	double distance(const Coordinate& p) const;
 
-	/**
+	/** \brief
 	 * Computes the perpendicular distance between the (infinite)
 	 * line defined by this line segment and a point.
 	 */
-	virtual double distancePerpendicular(const Coordinate& p) const;
+	double distancePerpendicular(const Coordinate& p) const;
 
-	virtual double projectionFactor(const Coordinate& p) const;
+	double projectionFactor(const Coordinate& p) const;
 
-	virtual Coordinate* project(const Coordinate& p) const;
+	/** \brief
+	 * Compute the projection of a point onto the line determined
+	 * by this line segment.
+	 * 
+	 * Note that the projected point
+	 * may lie outside the line segment.  If this is the case,
+	 * the projection factor will lie outside the range [0.0, 1.0].
+	 */
+	void project(const Coordinate& p, Coordinate& ret) const;
 
-	virtual LineSegment* project(const LineSegment *seg) const;
+	/** \brief
+	 * Project a line segment onto this line segment and return the resulting
+	 * line segment. 
+	 *
+	 * The returned line segment will be a subset of
+	 * the target line line segment.  This subset may be null, if
+	 * the segments are oriented in such a way that there is no projection.
+	 * 
+	 * Note that the returned line may have zero length (i.e. the same endpoints).
+	 * This can happen for instance if the lines are perpendicular to one another.
+	 *
+	 * @param seg the line segment to project
+	 * @param ret the projected line segment
+	 * @return true if there is an overlap, false otherwise
+	 */
+	bool project(const LineSegment& seg, LineSegment& ret) const;
 
-	virtual Coordinate* closestPoint(const Coordinate& p) const;
+	/// Computes the closest point on this line segment to another point.
+	//
+	/// @param p the point to find the closest point to
+	/// @param ret the Coordinate to which the closest point on the line segment
+	///            to the point p will be written
+	///
+	void closestPoint(const Coordinate& p, Coordinate& ret) const;
 
-	virtual int compareTo(const LineSegment other) const;
+	/** \brief
+	 * Compares this object with the specified object for order.
+	 *
+	 * Uses the standard lexicographic ordering for the points in the LineSegment.
+	 *
+	 * @param  o  the LineSegment with which this LineSegment
+	 *            is being compared
+	 * @return a negative integer, zero, or a positive integer as this
+	 *         LineSegment is less than, equal to, or greater than the
+	 *         specified LineSegment
+	 */
+	int compareTo(const LineSegment& other) const;
 
-	virtual bool equalsTopo(const LineSegment other) const;
+	/** \brief
+	 *  Returns <code>true</code> if <code>other</code> is
+	 *  topologically equal to this LineSegment (e.g. irrespective
+	 *  of orientation).
+	 *
+	 * @param  other  a <code>LineSegment</code> with which to do the comparison.
+	 * @return true if other is a LineSegment
+	 *      with the same values for the x and y ordinates.
+	 */
+	bool equalsTopo(const LineSegment& other) const;
 
 	/**
 	 * Computes the closest points on two line segments.
@@ -2119,7 +2190,9 @@ public:
 	 * the line segments.
 	 * The returned CoordinateList must be deleted by caller
 	 */
-	virtual CoordinateSequence* closestPoints(const LineSegment *line);
+	CoordinateSequence* closestPoints(const LineSegment& line);
+
+	CoordinateSequence* closestPoints(const LineSegment* line);
 
 	/**
 	 * Computes an intersection point between two segments,
@@ -2131,20 +2204,14 @@ public:
 	 * intersection, the LineIntersector class should be used.
 	 *
 	 * @param line
-	 * @return an intersection point, or <code>null</code> if there is none
+	 * @param coord the Coordinate to write the result into
+	 * @return true if an intersection was found, false otherwise
 	 */
-	Coordinate* intersection(const LineSegment *line) const;
-
-	virtual string toString() const;
-
-private:
-#ifdef INT64_CONST_IS_I64
-  static const int64 serialVersionUID=3252005833466256227I64;
-#else
-  static const int64 serialVersionUID=3252005833466256227LL;
-#endif
+	bool intersection(const LineSegment& line, Coordinate& coord) const;
 
 };
+
+std::ostream& operator<< (std::ostream& o, const LineSegment& l);
 
 class IntersectionMatrix {
 public:
@@ -2917,10 +2984,19 @@ public:
 };
 
 } // namespace geos
+
+#ifdef USE_INLINE
+# include "geos/LineSegment.inl"
 #endif
+
+#endif // ndef GEOS_GEOM_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.75  2006/03/01 17:16:38  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.74  2006/02/28 17:44:27  strk
  * Added a check in SegmentNode::addSplitEdge to prevent attempts
  * to build SegmentString with less then 2 points.

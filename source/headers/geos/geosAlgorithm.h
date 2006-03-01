@@ -614,30 +614,79 @@ public:
 };
 
 class CentroidPoint {
+
 private:
+
 	int ptCount;
-	Coordinate* centSum;
+
+	Coordinate centSum;
+
 public:
-	CentroidPoint();
-	virtual ~CentroidPoint();
+
+	CentroidPoint()
+		:
+		ptCount(0),
+		centSum(0.0, 0.0)
+	{}
+
+	~CentroidPoint()
+	{}
+
+	/**
+	 * Adds the point(s) defined by a Geometry to the centroid total.
+	 * If the geometry is not of dimension 0 it does not contribute to the
+	 * centroid.
+	 * @param geom the geometry to add
+	 */
 	void add(const Geometry *geom);
+
 	void add(const Coordinate *pt);
+
 	Coordinate* getCentroid() const;
+
+	/// Return false if centroid could not be computed
+	bool getCentroid(Coordinate& ret) const;
 };
 
 class CentroidLine {
 private:
+
 	Coordinate centSum;
+
 	double totalLength;
+
 public:
-	CentroidLine();
-	~CentroidLine();
+
+	CentroidLine()
+		:
+		centSum(0.0, 0.0),
+		totalLength(0.0)
+	{}
+
+	~CentroidLine() {}
+
+	/** \brief
+	 * Adds the linestring(s) defined by a Geometry to the centroid total.
+	 *
+	 * If the geometry is not linear it does not contribute to the centroid
+	 * @param geom the geometry to add
+	 */
 	void add(const Geometry *geom);
+
+	/** \brief
+	 * Adds the length defined by an array of coordinates.
+	 *
+	 * @param pts an array of {@link Coordinate}s
+	 */
 	void add(const CoordinateSequence *pts);
+
 	Coordinate* getCentroid() const;
+
+	/// return false if centroid could not be computed
+	bool getCentroid(Coordinate& ret) const;
 };
 
-/*
+/**
  * \class CentroidArea geosAlgorithm.h geos/geosAlgorithm.h
  *
  * \brief Computes the centroid of an area geometry.
@@ -652,28 +701,72 @@ public:
  * for further details of the basic approach.
  */
 class CentroidArea {
+
 public:
-	CentroidArea();
-	virtual ~CentroidArea();
+
+	CentroidArea()
+		:
+		basePt(0.0, 0.0),
+		areasum2(0)
+	{}
+
+	~CentroidArea() {}
+
+	/**
+	 * Adds the area defined by a Geometry to the centroid total.
+	 * If the geometry has no area it does not contribute to the centroid.
+	 *
+	 * @param geom the geometry to add
+	 */
 	void add(const Geometry *geom);
+
+	/**
+	 * Adds the area defined by an array of
+	 * coordinates.  The array must be a ring;
+	 * i.e. end with the same coordinate as it starts with.
+	 * @param ring an array of {@link Coordinate}s
+	 */
 	void add(const CoordinateSequence *ring);
+
 	Coordinate* getCentroid() const;
+
+	/// Return false if a centroid couldn't be computed
+	bool getCentroid(Coordinate& ret) const;
+
 private:
-	//CGAlgorithms *cga;
-	Coordinate basePt;// the point all triangles are based at
-	Coordinate triangleCent3;// temporary variable to hold centroid of triangle
-	double areasum2;        /* Partial area sum */
-	Coordinate cg3; // partial centroid sum
+
+	/// the point all triangles are based at
+	Coordinate basePt;
+
+	// temporary variable to hold centroid of triangle
+	Coordinate triangleCent3;
+
+	/// Partial area sum 
+	double areasum2;       
+
+	/// partial centroid sum
+	Coordinate cg3;
+
 	void setBasePoint(const Coordinate &newbasePt);
+
 	void add(const Polygon *poly);
+
 	void addShell(const CoordinateSequence *pts);
+
 	void addHole(const CoordinateSequence *pts);
-	void addTriangle(const Coordinate &p0, const Coordinate &p1, const Coordinate &p2,bool isPositiveArea);
-	static void centroid3(const Coordinate &p1, const Coordinate &p2, const Coordinate &p3, Coordinate &c);
-	static double area2(const Coordinate &p1,const Coordinate &p2,const Coordinate &p3);
+	
+	void addTriangle(const Coordinate &p0, const Coordinate &p1,
+			const Coordinate &p2,bool isPositiveArea);
+
+	static void centroid3(const Coordinate &p1, const Coordinate &p2,
+			const Coordinate &p3, Coordinate &c);
+
+	static double area2(const Coordinate &p1, const Coordinate &p2,
+			const Coordinate &p3);
+
 };
 
-/*
+/**
  * \class InteriorPointPoint geosAlgorithm.h geos/geosAlgorithm.h
  * \brief
  * Computes a point in the interior of an point geometry.
@@ -684,15 +777,32 @@ private:
  */
 class InteriorPointPoint {
 private:
-	const Coordinate* centroid;
+
+	bool hasInterior;
+
+	Coordinate centroid;
+
 	double minDistance;
-	Coordinate *interiorPoint;
+
+	Coordinate interiorPoint;
+
+	/**
+	 * Tests the point(s) defined by a Geometry for the best inside point.
+	 * If a Geometry is not of dimension 0 it is not tested.
+	 * @param geom the geometry to add
+	 */
 	void add(const Geometry *geom);
+
 	void add(const Coordinate *point);
+
 public:
+
 	InteriorPointPoint(const Geometry *g);
-	virtual	~InteriorPointPoint();
-	Coordinate* getInteriorPoint() const;
+
+	~InteriorPointPoint() {}
+
+	bool getInteriorPoint(Coordinate& ret) const;
+
 };
 
 /*
@@ -707,18 +817,35 @@ public:
  */
 class InteriorPointLine {
 public:
+
 	InteriorPointLine(Geometry *g);
-	virtual ~InteriorPointLine();
-	Coordinate* getInteriorPoint() const;
+
+	~InteriorPointLine();
+
+	//Coordinate* getInteriorPoint() const;
+
+	bool getInteriorPoint(Coordinate& ret) const;
+
 private:
-	const Coordinate *centroid;
+
+	bool hasInterior;
+
+	Coordinate centroid;
+
 	double minDistance;
-	Coordinate *interiorPoint;
+
+	Coordinate interiorPoint;
+
 	void addInterior(const Geometry *geom);
+
 	void addInterior(const CoordinateSequence *pts);
+	
 	void addEndpoints(const Geometry *geom);
+
 	void addEndpoints(const CoordinateSequence *pts);
+
 	void add(const Coordinate *point);
+
 };
 
 /*
@@ -739,22 +866,41 @@ private:
  * </b>
  */
 class InteriorPointArea {
+
 private:
-	static double avg(double a, double b);
+
+	bool foundInterior;
+
 	const GeometryFactory *factory;
-	Coordinate *interiorPoint;
+
+	Coordinate interiorPoint;
+
 	double maxWidth;
+
 	void add(const Geometry *geom);
-public:
-	InteriorPointArea(const Geometry *g);
-	virtual ~InteriorPointArea();
-	Coordinate* getInteriorPoint() const;
-	void addPolygon(const Geometry *geometry);
-	Coordinate* centre(const Envelope *envelope) const;
-protected:
+
 	const Geometry *widestGeometry(const Geometry *geometry);
+
 	const Geometry *widestGeometry(const GeometryCollection *gc);
+
 	LineString *horizontalBisector(const Geometry *geometry);
+
+public:
+
+	InteriorPointArea(const Geometry *g);
+
+	~InteriorPointArea();
+
+	bool getInteriorPoint(Coordinate& ret) const;
+
+	/** \brief
+	 * Finds a reasonable point at which to label a Geometry.
+	 *
+	 * @param geometry the geometry to analyze
+	 * @return the midpoint of the largest intersection between the geometry and
+	 * a line halfway down its envelope
+	 */
+	void addPolygon(const Geometry *geometry);
 
 };
 
@@ -1012,6 +1158,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/01 17:16:39  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.24  2006/02/27 09:05:33  strk
  * Doxygen comments, a few inlines and general cleanups
  *

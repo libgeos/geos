@@ -147,15 +147,7 @@ Geometry::isWithinDistance(const Geometry *geom,double cDistance)
 	return true;
 }
 
-/**
- * Computes the centroid of this <code>Geometry</code>.
- * The centroid
- * is equal to the centroid of the set of component Geometrys of highest
- * dimension (since the lower-dimension geometries contribute zero
- * "weight" to the centroid)
- *
- * @return a {@link Point} which is the centroid of this Geometry
- */
+/*public*/
 Point*
 Geometry::getCentroid() const
 {
@@ -183,31 +175,45 @@ Geometry::getCentroid() const
 	return pt;
 }
 
-/**
- * Computes an interior point of this <code>Geometry</code>.
- * An interior point is guaranteed to lie in the interior of the Geometry,
- * if it possible to calculate such a point exactly. Otherwise,
- * the point may lie on the boundary of the geometry.
- *
- * @return a {@link Point} which is in the interior of this Geometry
- */
+bool
+Geometry::getCentroid(Coordinate& ret) const
+{
+	if ( isEmpty() ) { return false; }
+
+	Coordinate centPt;
+
+	int dim=getDimension();
+	if(dim==0) {
+		CentroidPoint cent; 
+		cent.add(this);
+		return cent.getCentroid(centPt);
+	} else if (dim==1) {
+		CentroidLine cent;
+		cent.add(this);
+		return cent.getCentroid(centPt);
+	} else {
+		CentroidArea cent;
+		cent.add(this);
+		return cent.getCentroid(centPt);
+	}
+}
+
 Point*
 Geometry::getInteriorPoint()
 {
-	const Coordinate* interiorPt;
+	Coordinate interiorPt;
 	int dim=getDimension();
 	if (dim==0) {
 		InteriorPointPoint intPt(this);
-		interiorPt=intPt.getInteriorPoint();
+		if ( ! intPt.getInteriorPoint(interiorPt) ) return NULL;
 	} else if (dim==1) {
 		InteriorPointLine intPt(this);
-		interiorPt=intPt.getInteriorPoint();
+		if ( ! intPt.getInteriorPoint(interiorPt) ) return NULL;
 	} else {
 		InteriorPointArea intPt(this);
-		interiorPt=intPt.getInteriorPoint();
+		if ( ! intPt.getInteriorPoint(interiorPt) ) return NULL;
 	}
-	Point *p=createPointFromInternalCoord(interiorPt,this);
-	delete interiorPt;
+	Point *p=createPointFromInternalCoord(&interiorPt, this);
 	return p;
 }
 
@@ -743,6 +749,10 @@ Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *e
 
 /**********************************************************************
  * $Log$
+ * Revision 1.91  2006/03/01 17:16:38  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.90  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

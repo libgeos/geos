@@ -431,11 +431,12 @@ DistanceOp::computeMinDistance(const LineString *line,
         	if (dist < minDistance) {
           		minDistance = dist;
 			LineSegment *seg = new LineSegment(coord0->getAt(i), coord0->getAt(i + 1));
-			Coordinate *segClosestPoint = seg->closestPoint(*coord);
+			Coordinate segClosestPoint;
+			seg->closestPoint(*coord, segClosestPoint);
 			delete seg;
-			newCoords.push_back(segClosestPoint);
+
 			delete locGeom[0];
-			locGeom[0] = new GeometryLocation(line, i, *segClosestPoint);
+			locGeom[0] = new GeometryLocation(line, i, segClosestPoint);
 			delete locGeom[1];
 			locGeom[1] = new GeometryLocation(pt, 0, *coord);
         	}
@@ -449,6 +450,10 @@ DistanceOp::computeMinDistance(const LineString *line,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/01 17:16:39  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.18  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -23,21 +23,7 @@
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-CentroidArea::CentroidArea():
-	areasum2(0)
-{
-}
-
-CentroidArea::~CentroidArea()
-{
-}
-
-/**
- * Adds the area defined by a Geometry to the centroid total.
- * If the geometry has no area it does not contribute to the centroid.
- *
- * @param geom the geometry to add
- */
+/*public*/
 void
 CentroidArea::add(const Geometry *geom)
 {
@@ -53,12 +39,7 @@ CentroidArea::add(const Geometry *geom)
 	}
 }
 
-/**
- * Adds the area defined by an array of
- * coordinates.  The array must be a ring;
- * i.e. end with the same coordinate as it starts with.
- * @param ring an array of {@link Coordinate}s
- */
+/*public*/
 void
 CentroidArea::add(const CoordinateSequence *ring)
 {
@@ -73,6 +54,14 @@ CentroidArea::getCentroid() const
 	cent->x = cg3.x/3.0/areasum2;
 	cent->y = cg3.y/3.0/areasum2;
 	return cent;
+}
+
+bool
+CentroidArea::getCentroid(Coordinate& ret) const
+{
+	if ( areasum2 == 0.0 ) return false;
+	ret=Coordinate(cg3.x/3.0/areasum2, cg3.y/3.0/areasum2);
+	return true;
 }
 
 void
@@ -152,6 +141,10 @@ CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/01 17:16:31  strk
+ * LineSegment class made final and optionally (compile-time) inlined.
+ * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+ *
  * Revision 1.19  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
