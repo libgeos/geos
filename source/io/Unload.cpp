@@ -30,14 +30,7 @@ using namespace geos::index;
 
 namespace geos {
 
-Unload::Unload(void)
-{
-}
-
-Unload::~Unload(void)
-{
-}
-
+/*public static*/
 void Unload::Release()
 {
 	//delete PlanarGraph::cga;
@@ -55,6 +48,9 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/01 10:39:59  strk
+ * ctor and dtor made private and inlined
+ *
  * Revision 1.18  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

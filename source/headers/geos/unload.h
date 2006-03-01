@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/01 10:39:58  strk
+ * ctor and dtor made private and inlined
+ *
  * Revision 1.1  2004/07/02 13:20:42  strk
  * Header files moved under geos/ dir.
  *
@@ -31,9 +34,10 @@ namespace geos {
 
 class Unload
 {
+private:
+	Unload(void) {}
+	~Unload(void) {}
 public:
-	Unload(void);
-	~Unload(void);
 	static void Release();
 };
 
