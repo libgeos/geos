@@ -24,6 +24,7 @@
 #include <fstream>
 #include <sstream>
 #include <cctype>
+#include <functional>
 
 #include <geos/util.h>
 #include <geos/geomgraph.h>
@@ -54,6 +55,13 @@ using namespace geos::operation::linemerge;
 
 //using geos::Polygon; // for mingw providing a Polygon global function
 
+template <int (&F)(int)> unsigned char safe_ctype(unsigned char c) { return F(c); }
+
+void
+tolower(string& str)
+{
+	std::transform(str.begin(), str.end(), str.begin(), safe_ctype<std::tolower>);
+}
 
 XMLTester::XMLTester()
 	:
@@ -301,6 +309,7 @@ XMLTester::parseTest()
 	// trim blanks
 	opRes=trimBlanks(opRes);
 	opName=trimBlanks(opName);
+	tolower(opName);
 
 	string opSig="";
 
@@ -339,10 +348,10 @@ XMLTester::parseTest()
 
 		}
 
-		else if (opName=="isValid")
+		else if (opName=="isvalid")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) {
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) {
 				gT=gB;
 			} 
 
@@ -436,7 +445,7 @@ XMLTester::parseTest()
 		else if (opName=="getboundary")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -452,10 +461,10 @@ XMLTester::parseTest()
 			delete gRealRes;
 		}
 
-		else if (opName=="getCentroid")
+		else if (opName=="getcentroid")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -473,10 +482,10 @@ XMLTester::parseTest()
 			delete gRealRes;
 		}
 
-		else if (opName=="isSimple")
+		else if (opName=="issimple")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			if (gT->isSimple()) actual_result="true";
 			else actual_result="false";
@@ -488,7 +497,7 @@ XMLTester::parseTest()
 		else if (opName=="convexhull")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -507,7 +516,7 @@ XMLTester::parseTest()
 		else if (opName=="buffer")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -530,7 +539,7 @@ XMLTester::parseTest()
 			delete gRes;
 		}
 
-		else if (opName=="getInteriorPoint")
+		else if (opName=="getinteriorpoint")
 		{
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -546,7 +555,7 @@ XMLTester::parseTest()
 			delete gRealRes;
 		}
 
-		else if (opName=="isWithinDistance")
+		else if (opName=="iswithindistance")
 		{
 			float dist=atof(opArg3.c_str());
 			if (gA->isWithinDistance(gB, dist)) {
@@ -559,7 +568,7 @@ XMLTester::parseTest()
 
 		}
 
-		else if (opName=="Polygonize")
+		else if (opName=="polygonize")
 		{
 			Geometry *gRes=NULL;
 			Geometry *gRealRes=NULL;
@@ -590,7 +599,7 @@ XMLTester::parseTest()
 			delete gRes;
 		}
 
-		else if (opName=="Linemerge")
+		else if (opName=="linemerge")
 		{
 			Geometry *gRes=NULL;
 			Geometry *gRealRes=NULL;
@@ -598,7 +607,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			try {
 				LineMerger merger;
@@ -764,6 +773,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/01 09:56:32  strk
+ * Case insensitive operation names and geometry arguments names (a/b)
+ *
  * Revision 1.9  2006/03/01 09:43:44  strk
  * Unrecognized tests always printed (was only printed when verbose before)
  *
