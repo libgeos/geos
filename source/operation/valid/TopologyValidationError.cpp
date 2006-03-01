@@ -24,7 +24,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
-string TopologyValidationError::errMsg[]={
+const char* TopologyValidationError::errMsg[]={
 	"Topology Validation Error",
 	"Repeated Point",
 	"Hole lies outside shell",
@@ -39,31 +39,42 @@ string TopologyValidationError::errMsg[]={
 	"Ring is not closed"
 };
 
-TopologyValidationError::TopologyValidationError(int newErrorType,Coordinate newPt):
+TopologyValidationError::TopologyValidationError(int newErrorType,
+		const Coordinate& newPt)
+	:
 	errorType(newErrorType),
 	pt(newPt)
 {
 }
 
-TopologyValidationError::TopologyValidationError(int newErrorType):
+TopologyValidationError::TopologyValidationError(int newErrorType)
+	:
 	errorType(newErrorType),
 	pt(Coordinate::getNull())
 {
 }
 
-int TopologyValidationError::getErrorType() {
+int
+TopologyValidationError::getErrorType()
+{
 	return errorType;
 }
 
-Coordinate& TopologyValidationError::getCoordinate(){
+Coordinate&
+TopologyValidationError::getCoordinate()
+{
 	return pt;
 }
 
-string TopologyValidationError::getMessage(){
-	return errMsg[errorType];
+string
+TopologyValidationError::getMessage()
+{
+	return string(errMsg[errorType]);
 }
 
-string TopologyValidationError::toString() {
+string
+TopologyValidationError::toString()
+{
 	return (getMessage().append(" at or near point")).append(pt.toString());
 }
 
@@ -73,6 +84,10 @@ string TopologyValidationError::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/01 10:48:55  strk
+ * Changed static TopologyValidationError::errMsg[] from 'string' to 'const char*'
+ * to reduce dynamic memory allocations.
+ *
  * Revision 1.12  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

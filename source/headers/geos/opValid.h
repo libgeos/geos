@@ -93,14 +93,16 @@ public:
 		RING_NOT_CLOSED
 	};
 
-	TopologyValidationError(int newErrorType,Coordinate newPt);
+	TopologyValidationError(int newErrorType, const Coordinate& newPt);
 	TopologyValidationError(int newErrorType);
 	Coordinate& getCoordinate();
 	string getMessage();
 	int getErrorType();
 	string toString();
+
 private:
-	static string errMsg[];
+	// Used const char* to reduce dynamic allocations
+	static const char* errMsg[];
 	int errorType;
 	Coordinate pt;
 };
@@ -511,6 +513,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/01 10:48:54  strk
+ * Changed static TopologyValidationError::errMsg[] from 'string' to 'const char*'
+ * to reduce dynamic memory allocations.
+ *
  * Revision 1.14  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup
