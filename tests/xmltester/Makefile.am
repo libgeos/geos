@@ -2,7 +2,7 @@
 #top_srcdir=@top_srcdir@
 #top_builddir=@top_builddir@
 
-XMLTESTS=testLeaksBig.xml hexwkb.xml test.xml linemerge.xml buffer.xml TestInteriorPoint.xml
+XMLTESTS=testLeaksBig.xml hexwkb.xml test.xml linemerge.xml buffer.xml TestInteriorPoint.xml TestCentroid.xml
 
 noinst_PROGRAMS = SimpleWKTTester
 bin_PROGRAMS = XMLTester
