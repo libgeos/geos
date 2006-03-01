@@ -100,7 +100,9 @@ Quadtree::query(const Envelope *searchEnv,
 	 */
 	root->addAllItemsFromOverlapping(searchEnv, &foundItems);
 #if DEBUG
-	cerr<<"Quadtree::query returning "<<foundItems->size()<<" items over "<<size()<<" items in index (of depth: "<<depth()<<")"<<endl;
+	cerr<<"Quadtree::query returning "<<foundItems.size()
+		<<" items over "<<size()
+		<<" items in index (of depth: "<<depth()<<")"<<endl;
 	cerr<<" Root:\n"<<root->toString()<<endl;
 #endif
 }
@@ -146,6 +148,9 @@ Quadtree::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/01 13:49:45  strk
+ * Fixed debug lines (bug#36)
+ *
  * Revision 1.18  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder
