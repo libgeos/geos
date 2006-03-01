@@ -292,9 +292,8 @@ ostream&
 operator<< (ostream& os, const SegmentNodeList& nlist)
 {
 	os<<"NodeList:";
-	set<SegmentNode*,SegmentNodeLT>::iterator
-		it=nlist.nodeMap.begin(),
-		itEnd=nlist.nodeMap.end();
+	set<SegmentNode*,SegmentNodeLT>::const_iterator it = nlist.nodeMap.begin();
+	set<SegmentNode*,SegmentNodeLT>::const_iterator itEnd = nlist.nodeMap.end();
 
 	for(; it!=itEnd; it++)
 	{
@@ -309,6 +308,9 @@ operator<< (ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/01 16:01:47  strk
+ * Fixed const correctness of operator<<(ostream&, SegmentNodeList&) [bug#37]
+ *
  * Revision 1.24  2006/02/28 17:44:27  strk
  * Added a check in SegmentNode::addSplitEdge to prevent attempts
  * to build SegmentString with less then 2 points.
