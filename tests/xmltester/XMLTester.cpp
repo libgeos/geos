@@ -675,7 +675,7 @@ XMLTester::parseTest()
 
 		string geomOut;
 
-		if ( gB ) {
+		if ( gA ) {
 			geomOut=w->write(gA);
 			cout << "\tGeometry A: " << geomOut << endl;
 		}
@@ -773,6 +773,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/01 12:12:03  strk
+ * Fixed a bug in verbose output preventing geometry arg 'A' from being properly printed
+ *
  * Revision 1.10  2006/03/01 09:56:32  strk
  * Case insensitive operation names and geometry arguments names (a/b)
  *
