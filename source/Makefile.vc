@@ -16,6 +16,9 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.7  2006/03/01 11:47:51  strk
+# Applied patch by Mateusz Loskot (Bug #39)
+#
 # Revision 1.6  2006/01/31 21:42:01  strk
 # Added DepthSegment object
 #
@@ -34,17 +37,35 @@
 # Revision 1.1  2004/12/03 16:25:47  frank
 # New
 #
+!INCLUDE dirlist.mak
 
-CFLAGS = -Iheaders /GX /MD /GR /Zi /nologo
+# Check compiler version given in command line
+# nmake -f makefile.vc MSVC_VER=xxxx
+#
+!IFNDEF MSVC_VER
+!ERROR "You have to specify VC++ version you're using as MSVC_VER=XXXX macro"
+!ENDIF
+
+!IF $(MSVC_VER) == 1400
+MSVC_CPPFLAGS = /EHs /D "_CRT_SECURE_NO_DEPRECATE"
+!ELSE
+MSVC_CPPFLAGS = /GX
+!ENDIF
+
+#CFLAGS = -Iheaders /GX /MD /GR /Zi /nologo
+#CFLAGS = -Iheaders /GX /MD /GR /O1 /D "NDEBUG" /nologo
+CFLAGS = -Iheaders /MD /GR /O2 /D "NDEBUG" /nologo \
+	 $(MSVC_CPPFLAGS)
+
 
 LIBNAME =	geos.lib
 DLLNAME = 	geos.dll
 SLIBNAME =	geos_i.lib
 
-OBJ =	algorithm\CGAlgorithms.obj \
-	algorithm\CentroidArea.obj \
+OBJ = 	algorithm\CentroidArea.obj \
 	algorithm\CentroidLine.obj \
 	algorithm\CentroidPoint.obj \
+	algorithm\CGAlgorithms.obj \
 	algorithm\ConvexHull.obj \
 	algorithm\HCoordinate.obj \
 	algorithm\InteriorPointArea.obj \
@@ -56,14 +77,14 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	algorithm\NotRepresentableException.obj \
 	algorithm\PointLocator.obj \
 	algorithm\RobustDeterminant.obj \
-	algorithm\SIRtreePointInRing.obj \
 	algorithm\SimplePointInAreaLocator.obj \
 	algorithm\SimplePointInRing.obj \
+	algorithm\SIRtreePointInRing.obj \
 	geom\Coordinate.obj \
+	geom\CoordinateArraySequence.obj \
+	geom\CoordinateArraySequenceFactory.obj \
 	geom\CoordinateSequence.obj \
 	geom\CoordinateSequenceFactory.obj \
-	geom\DefaultCoordinateSequence.obj \
-	geom\DefaultCoordinateSequenceFactory.obj \
 	geom\Dimension.obj \
 	geom\Envelope.obj \
 	geom\Geometry.obj \
@@ -72,9 +93,9 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	geom\GeometryComponentFilter.obj \
 	geom\GeometryFactory.obj \
 	geom\IntersectionMatrix.obj \
+	geom\LinearRing.obj \
 	geom\LineSegment.obj \
 	geom\LineString.obj \
-	geom\LinearRing.obj \
 	geom\Location.obj \
 	geom\MultiLineString.obj \
 	geom\MultiPoint.obj \
@@ -88,15 +109,7 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	geom\util\LinearComponentExtracter.obj \
 	geom\util\PointExtracter.obj \
 	geom\util\PolygonExtracter.obj \
-	geomgraph\index\MonotoneChain.obj \
-	geomgraph\index\MonotoneChainEdge.obj \
-	geomgraph\index\MonotoneChainIndexer.obj \
-	geomgraph\index\SegmentIntersector.obj \
-	geomgraph\index\SimpleEdgeSetIntersector.obj \
-	geomgraph\index\SimpleMCSweepLineIntersector.obj \
-	geomgraph\index\SimpleSweepLineIntersector.obj \
-	geomgraph\index\SweepLineEvent.obj \
-	geomgraph\index\SweepLineSegment.obj \
+	geom\util\ShortCircuitedGeometryVisitor.obj \
 	geomgraph\Depth.obj \
 	geomgraph\DirectedEdge.obj \
 	geomgraph\DirectedEdgeStar.obj \
@@ -110,6 +123,14 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	geomgraph\EdgeRing.obj \
 	geomgraph\GeometryGraph.obj \
 	geomgraph\GraphComponent.obj \
+	geomgraph\index\MonotoneChainEdge.obj \
+	geomgraph\index\MonotoneChainIndexer.obj \
+	geomgraph\index\SegmentIntersector.obj \
+	geomgraph\index\SimpleEdgeSetIntersector.obj \
+	geomgraph\index\SimpleMCSweepLineIntersector.obj \
+	geomgraph\index\SimpleSweepLineIntersector.obj \
+	geomgraph\index\SweepLineEvent.obj \
+	geomgraph\index\SweepLineSegment.obj \
 	geomgraph\Label.obj \
 	geomgraph\Node.obj \
 	geomgraph\NodeFactory.obj \
@@ -118,32 +139,32 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	geomgraph\Position.obj \
 	geomgraph\Quadrant.obj \
 	geomgraph\TopologyLocation.obj \
+	index\bintree\Bintree.obj \
 	index\bintree\BinTreeInterval.obj \
 	index\bintree\BinTreeNode.obj \
-	index\bintree\Bintree.obj \
 	index\bintree\Key.obj \
 	index\bintree\NodeBase.obj \
 	index\bintree\Root.obj \
+	index\chain\indexMonotoneChain.obj \
 	index\chain\MonotoneChainBuilder.obj \
 	index\chain\MonotoneChainOverlapAction.obj \
 	index\chain\MonotoneChainSelectAction.obj \
-	index\chain\indexMonotoneChain.obj \
 	index\quadtree\DoubleBits.obj \
 	index\quadtree\IntervalSize.obj \
+	index\quadtree\Quadtree.obj \
 	index\quadtree\QuadTreeKey.obj \
 	index\quadtree\QuadTreeNode.obj \
 	index\quadtree\QuadTreeNodeBase.obj \
 	index\quadtree\QuadTreeRoot.obj \
-	index\quadtree\Quadtree.obj \
 	index\strtree\AbstractNode.obj \
 	index\strtree\AbstractSTRtree.obj \
 	index\strtree\Interval.obj \
 	index\strtree\ItemBoundable.obj \
 	index\strtree\SIRtree.obj \
 	index\strtree\STRtree.obj \
+	index\sweepline\indexSweepLineEvent.obj \
 	index\sweepline\SweepLineIndex.obj \
 	index\sweepline\SweepLineInterval.obj \
-	index\sweepline\indexSweepLineEvent.obj \
 	io\ByteOrderValues.obj \
 	io\ParseException.obj \
 	io\StringTokenizer.obj \
@@ -153,25 +174,25 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	io\WKTReader.obj \
 	io\WKTWriter.obj \
 	io\Writer.obj \
-	io\markup\MarkupSTL.obj \
-	noding\snapround\SegmentSnapper.obj \
-	noding\snapround\SimpleSegmentStringsSnapper.obj \
-	noding\snapround\SnapRounder.obj \
+	noding\IntersectionAdder.obj \
+	noding\IntersectionFinderAdder.obj \
 	noding\IteratedNoder.obj \
-	noding\MCQuadtreeNoder.obj \
-	noding\Noder.obj \
+	noding\MCIndexNoder.obj \
 	noding\NodingValidator.obj \
+	noding\Octant.obj \
+	noding\ScaledNoder.obj \
 	noding\SegmentNode.obj \
 	noding\SegmentNodeList.obj \
 	noding\SegmentString.obj \
 	noding\SimpleNoder.obj \
-	noding\nodingSegmentIntersector.obj \
-	operation\GeometryGraphOperation.obj \
-	operation\IsSimpleOp.obj \
-	operation\buffer\DepthSegment.obj \
+	noding\snapround\HotPixel.obj \
+	noding\snapround\MCIndexPointSnapper.obj \
+	noding\snapround\MCIndexSnapRounder.obj \
+	noding\snapround\SimpleSnapRounder.obj \
 	operation\buffer\BufferBuilder.obj \
 	operation\buffer\BufferOp.obj \
 	operation\buffer\BufferSubgraph.obj \
+	operation\buffer\DepthSegment.obj \
 	operation\buffer\OffsetCurveBuilder.obj \
 	operation\buffer\OffsetCurveSetBuilder.obj \
 	operation\buffer\RightmostEdgeFinder.obj \
@@ -180,11 +201,14 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	operation\distance\ConnectedElementPointFilter.obj \
 	operation\distance\DistanceOp.obj \
 	operation\distance\GeometryLocation.obj \
+	operation\GeometryGraphOperation.obj \
+	operation\IsSimpleOp.obj \
 	operation\linemerge\EdgeString.obj \
 	operation\linemerge\LineMergeDirectedEdge.obj \
 	operation\linemerge\LineMergeEdge.obj \
 	operation\linemerge\LineMergeGraph.obj \
 	operation\linemerge\LineMerger.obj \
+	operation\linemerge\LineSequencer.obj \
 	operation\overlay\EdgeSetNoder.obj \
 	operation\overlay\ElevationMatrix.obj \
 	operation\overlay\ElevationMatrixCell.obj \
@@ -198,9 +222,12 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	operation\overlay\PolygonBuilder.obj \
 	operation\polygonize\PolygonizeDirectedEdge.obj \
 	operation\polygonize\PolygonizeEdge.obj \
+	operation\polygonize\polygonizeEdgeRing.obj \
 	operation\polygonize\PolygonizeGraph.obj \
 	operation\polygonize\Polygonizer.obj \
-	operation\polygonize\polygonizeEdgeRing.obj \
+	operation\predicate\RectangleContains.obj \
+	operation\predicate\RectangleIntersects.obj \
+	operation\predicate\SegmentIntersectionTester.obj \
 	operation\relate\EdgeEndBuilder.obj \
 	operation\relate\EdgeEndBundle.obj \
 	operation\relate\EdgeEndBundleStar.obj \
@@ -217,6 +244,7 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	operation\valid\SimpleNestedRingTester.obj \
 	operation\valid\SweeplineNestedRingTester.obj \
 	operation\valid\TopologyValidationError.obj \
+	planargraph\algorithm\ConnectedSubgraphFinder.obj \
 	planargraph\planarDirectedEdge.obj \
 	planargraph\planarDirectedEdgeStar.obj \
 	planargraph\planarEdge.obj \
@@ -224,6 +252,7 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	planargraph\planarNode.obj \
 	planargraph\planarNodeMap.obj \
 	planargraph\planarPlanarGraph.obj \
+	planargraph\planarSubgraph.obj \
 	precision\CommonBits.obj \
 	precision\CommonBitsOp.obj \
 	precision\CommonBitsRemover.obj \
@@ -232,17 +261,18 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	util\Assert.obj \
 	util\AssertionFailedException.obj \
 	util\CoordinateArrayFiter.obj \
-	util\GEOSException.obj \
 	util\GeometricShapeFactory.obj \
+	util\GEOSException.obj \
 	util\IllegalArgumentException.obj \
+	util\math.obj \
 	util\Profiler.obj \
 	util\UniqueCoordinateArrayFilter.obj \
 	util\UnsupportedOperationException.obj \
-	capi\geos_c.obj
+	..\capi\geos_c.obj
 
 TEST_EXE =	TestSweepLineSpeed.exe
 
-default:	$(LIBNAME) $(DLLNAME) $(TEST_EXE)
+default:	$(LIBNAME) $(DLLNAME)
 
 $(LIBNAME):	headers/geos/platform.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
@@ -261,13 +291,17 @@ headers/geos/platform.h: headers/geos/platform.h.vc
 	$(CC) $(CFLAGS) /c $*.c /Fo$@
 
 clean:
-	del $(OBJ)
 	del $(LIBNAME)
 	del $(SLIBNAME)
 	del $(DLLNAME)
-	del bigtest\*.obj
-	del capi\*.obj
+	del ..\capi\*.obj
 	del *.exe
+	del *.exp
+	del *.ilk
+	del *.pdb
+	for %d in ( $(GEOS_DIRLIST) ) do \
+		del %d\*.obj 
+	
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \
 		bigtest\GeometryTestFactory.obj \
