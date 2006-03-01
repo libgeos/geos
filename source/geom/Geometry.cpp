@@ -152,26 +152,25 @@ Point*
 Geometry::getCentroid() const
 {
 	if ( isEmpty() ) { return NULL; }
-	Coordinate* centPt;
+
+	Coordinate centPt;
+
 	int dim=getDimension();
 	if(dim==0) {
 		CentroidPoint cent; 
 		cent.add(this);
-		centPt=cent.getCentroid();
+		if ( ! cent.getCentroid(centPt) ) return NULL;
 	} else if (dim==1) {
 		CentroidLine cent;
 		cent.add(this);
-		centPt=cent.getCentroid();
+		if ( ! cent.getCentroid(centPt) ) return NULL;
 	} else {
 		CentroidArea cent;
 		cent.add(this);
-		centPt=cent.getCentroid();
+		if ( ! cent.getCentroid(centPt) ) return NULL;
 	}
 
-	if ( ! centPt ) return NULL;
-
-	Point *pt=createPointFromInternalCoord(centPt,this);
-	delete centPt;
+	Point *pt=getFactory()->createPointFromInternalCoord(&centPt,this);
 	return pt;
 }
 
@@ -180,21 +179,19 @@ Geometry::getCentroid(Coordinate& ret) const
 {
 	if ( isEmpty() ) { return false; }
 
-	Coordinate centPt;
-
 	int dim=getDimension();
 	if(dim==0) {
 		CentroidPoint cent; 
 		cent.add(this);
-		return cent.getCentroid(centPt);
+		return cent.getCentroid(ret);
 	} else if (dim==1) {
 		CentroidLine cent;
 		cent.add(this);
-		return cent.getCentroid(centPt);
+		return cent.getCentroid(ret);
 	} else {
 		CentroidArea cent;
 		cent.add(this);
-		return cent.getCentroid(centPt);
+		return cent.getCentroid(ret);
 	}
 }
 
@@ -213,7 +210,7 @@ Geometry::getInteriorPoint()
 		InteriorPointArea intPt(this);
 		if ( ! intPt.getInteriorPoint(interiorPt) ) return NULL;
 	}
-	Point *p=createPointFromInternalCoord(&interiorPt, this);
+	Point *p=getFactory()->createPointFromInternalCoord(&interiorPt, this);
 	return p;
 }
 
@@ -737,18 +734,14 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 	filter->filter_rw(this);
 }
 
-Point*
-Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geometry *exemplar) const
-{
-	Coordinate newcoord = *coord;
-	exemplar->getPrecisionModel()->makePrecise(&newcoord);
-	return exemplar->getFactory()->createPoint(newcoord);
-}
-
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.92  2006/03/01 18:37:07  strk
+ * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
+ * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.
+ *
  * Revision 1.91  2006/03/01 17:16:38  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

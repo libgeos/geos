@@ -18,6 +18,7 @@
 #include <geos/geomUtil.h>
 #include <geos/util.h>
 #include <typeinfo>
+#include <cassert>
 
 namespace geos {
 
@@ -90,7 +91,9 @@ GeometryFactory::~GeometryFactory(){
   
 Point*
 GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
-		const Geometry *exemplar) const {
+		const Geometry *exemplar) const
+{
+	assert(coord);
 	Coordinate newcoord = *coord;
 	exemplar->getPrecisionModel()->makePrecise(&newcoord);
 	return exemplar->getFactory()->createPoint(newcoord);
@@ -794,6 +797,10 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.58  2006/03/01 18:37:08  strk
+ * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
+ * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.
+ *
  * Revision 1.57  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

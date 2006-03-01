@@ -28,8 +28,10 @@ InteriorPointPoint::InteriorPointPoint(const Geometry *g)
 	minDistance=DoubleInfinity;
 	if ( ! g->getCentroid(centroid) ) {
 		hasInterior=false;
+	} else {
+		hasInterior=true;
+		add(g);
 	}
-	add(g);
 }
 
 /*private*/
@@ -53,9 +55,7 @@ InteriorPointPoint::add(const Geometry *geom)
 void
 InteriorPointPoint::add(const Coordinate *point)
 {
-	if ( ! point ) return;
-	if ( ! hasInterior ) return;
-
+	assert ( point ); // we wouldn't been called if this was an empty geom
 	double dist=point->distance(centroid);
 	if (dist<minDistance) {
 		interiorPoint=*point;
@@ -77,6 +77,10 @@ InteriorPointPoint::getInteriorPoint(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/01 18:36:57  strk
+ * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
+ * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.
+ *
  * Revision 1.11  2006/03/01 17:16:31  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

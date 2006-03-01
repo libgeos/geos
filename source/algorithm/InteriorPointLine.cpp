@@ -26,18 +26,12 @@ namespace algorithm { // geos.algorithm
 InteriorPointLine::InteriorPointLine(Geometry *g)
 {
 	minDistance=DoubleInfinity;
-	Point *p=g->getCentroid();
-	if ( p ) {
-		const Coordinate* c=p->getCoordinate();
-		if ( c )
-		{
-			centroid=*c;
-			addInterior(g);
-			if (!hasInterior) addEndpoints(g);
-		}
-		delete p;
-	}
 	hasInterior=false;
+	if ( g->getCentroid(centroid) )
+	{
+		addInterior(g);
+		if (!hasInterior) addEndpoints(g);
+	}
 }
 
 InteriorPointLine::~InteriorPointLine()
@@ -105,10 +99,11 @@ InteriorPointLine::addEndpoints(const CoordinateSequence *pts)
 	add(&(pts->getAt(pts->getSize()-1)));
 }
 
+/*private*/
 void
 InteriorPointLine::add(const Coordinate *point)
 {
-	if ( ! point ) return;
+	assert ( point ); // we should not have been called otherwise
 
 	double dist=point->distance(centroid);
 	if (! hasInterior || dist<minDistance) {
@@ -131,6 +126,10 @@ InteriorPointLine::getInteriorPoint(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/01 18:36:56  strk
+ * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
+ * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.
+ *
  * Revision 1.14  2006/03/01 17:16:31  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

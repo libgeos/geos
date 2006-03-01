@@ -1998,8 +1998,6 @@ private:
 	const GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 	void* userData;
-	Point* createPointFromInternalCoord(const Coordinate* coord,
-			const Geometry *exemplar) const;
 };
 
 struct GeometryGreaterThen {
@@ -2993,6 +2991,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.76  2006/03/01 18:37:08  strk
+ * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
+ * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.
+ *
  * Revision 1.75  2006/03/01 17:16:38  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
