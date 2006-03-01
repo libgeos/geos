@@ -468,6 +468,7 @@ XMLTester::parseTest()
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
+
 			Geometry *gRealRes=gT->getCentroid();
 			if ( gRealRes ) gRealRes->normalize();
 			else gRealRes = factory->createGeometryCollection();
@@ -543,10 +544,15 @@ XMLTester::parseTest()
 
 		else if (opName=="getinteriorpoint")
 		{
+			Geometry *gT=gA;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
-			Geometry *gRealRes=gA->getInteriorPoint();
-			gRealRes->normalize();
+
+			Geometry *gRealRes=gT->getInteriorPoint();
+			if ( gRealRes ) gRealRes->normalize();
+			else gRealRes = factory->createGeometryCollection();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
@@ -775,6 +781,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/01 18:14:07  strk
+ * Handled NULL return from Geometry::getInteriorPoint()
+ *
  * Revision 1.12  2006/03/01 13:06:41  strk
  * Used FLOATING precision model in buffer.xml test, added expected results,
  * changed XMLTester.cpp to use a tolerance when comparing expected and obtained
