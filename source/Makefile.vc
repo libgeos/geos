@@ -16,6 +16,9 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.8  2006/03/01 16:42:47  strk
+# Fixed include name (Bug#41)
+#
 # Revision 1.7  2006/03/01 11:47:51  strk
 # Applied patch by Mateusz Loskot (Bug #39)
 #
@@ -37,7 +40,7 @@
 # Revision 1.1  2004/12/03 16:25:47  frank
 # New
 #
-!INCLUDE dirlist.mak
+!INCLUDE dirlist.mk
 
 # Check compiler version given in command line
 # nmake -f makefile.vc MSVC_VER=xxxx
