@@ -626,13 +626,13 @@ XMLTester::parseTest()
 
 		else
 		{
-			if ( verbose )
+			if ( 1 ) // verbose 
 			{
-				cout << *curr_file <<":";
-				cout << " case" << caseCount << ":";
-				cout << " test" << testCount <<
+				cerr << *curr_file <<":";
+				cerr << " case" << caseCount << ":";
+				cerr << " test" << testCount <<
 					": " << opName << "(" << opSig <<")";
-				cout<<": skipped (unrecognized)."<<endl;
+				cerr<<": skipped (unrecognized)."<<endl;
 			}
 			return;
 		}
@@ -764,6 +764,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/01 09:43:44  strk
+ * Unrecognized tests always printed (was only printed when verbose before)
+ *
  * Revision 1.8  2006/02/28 19:18:04  strk
  * Added cctype include (bug #34)
  *
