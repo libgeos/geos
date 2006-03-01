@@ -919,6 +919,13 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 	}
 	catch (const std::exception &e)
 	{
+#if VERBOSE_EXCEPTIONS
+		ostringstream s(ios_base::binary);
+		s<<"Exception on GEOSUnion with following inputs:"<<endl;
+		s<<"A: "<<g1->toString()<<endl;
+		s<<"B: "<<g2->toString()<<endl;
+		NOTICE_MESSAGE(s.str().c_str());
+#endif // VERBOSE_EXCEPTIONS
 		ERROR_MESSAGE(e.what());
 		return NULL;
 	}
@@ -936,8 +943,9 @@ GEOSPointOnSurface(Geometry *g1)
 {
 	try
 	{
-		Geometry *g3 = g1->getInteriorPoint();
-		return g3;
+		Geometry *ret = g1->getInteriorPoint();
+		if ( ! ret ) return geomFactory->createGeometryCollection();
+		return ret;
 	}
 	catch (const std::exception &e)
 	{
