@@ -27,6 +27,10 @@ struct timezone {
     int tz_dsttime;     /* type of dst correction */
 };
 
+#endif /* _WIN32 */
+
+#if defined(_WIN32) && !defined(_WIN32_WCE)
+
 __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
     FILETIME        ft;
@@ -55,6 +59,53 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
         }
         tz->tz_minuteswest = _timezone / 60;
         tz->tz_dsttime = _daylight;
+    }
+
+    return 0;
+}
+
+#elif defined(_WIN32_WCE)
+
+__inline int gettimeofday(struct timeval *tv, struct timezone *tz)
+{
+	SYSTEMTIME      st;
+    FILETIME        ft;
+    LARGE_INTEGER   li;
+    TIME_ZONE_INFORMATION tzi;
+    __int64         t;
+    static int      tzflag;
+
+    if (tv)
+    {
+		GetSystemTime(&st);
+		SystemTimeToFileTime(&st, &ft);
+        li.LowPart  = ft.dwLowDateTime;
+        li.HighPart = ft.dwHighDateTime;
+        t  = li.QuadPart;       /* In 100-nanosecond intervals */
+        t -= EPOCHFILETIME;     /* Offset to the Epoch time */
+        t /= 10;                /* In microseconds */
+        tv->tv_sec  = (long)(t / 1000000);
+        tv->tv_usec = (long)(t % 1000000);
+    }
+
+    if (tz)
+    {   
+        GetTimeZoneInformation(&tzi);
+		
+        tz->tz_minuteswest = tzi.Bias;
+		if (tzi.StandardDate.wMonth != 0)
+        {
+			tz->tz_minuteswest += tzi.StandardBias * 60;
+        }
+
+        if (tzi.DaylightDate.wMonth != 0)
+        {
+            tz->tz_dsttime = 1;
+        }
+        else
+        {
+            tz->tz_dsttime = 0;
+        }
     }
 
     return 0;
