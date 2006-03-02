@@ -25,6 +25,7 @@
 #include <sstream>
 #include <cctype>
 #include <functional>
+#include <cassert>
 
 #include <geos/util.h>
 #include <geos/geomgraph.h>
@@ -344,14 +345,14 @@ XMLTester::parseTest()
 		if (opName=="relate")
 		{
 			IntersectionMatrix *im=gA->relate(gB);
+			assert(im);
 
 			if (im->matches(opArg3)) actual_result="true";
 			else actual_result="false";
 
 			if (actual_result==opRes) success=1;
-			
+				
 			delete im;
-
 		}
 
 		else if (opName=="isvalid")
@@ -787,6 +788,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/02 11:03:23  strk
+ * Added assertion in relate test handler
+ *
  * Revision 1.14  2006/03/02 10:25:30  strk
  * Added support for FLOATING_SINGLE precisionmodel in XML tests
  *
