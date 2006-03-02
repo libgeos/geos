@@ -2214,13 +2214,13 @@ std::ostream& operator<< (std::ostream& o, const LineSegment& l);
 class IntersectionMatrix {
 public:
 	IntersectionMatrix();
-	IntersectionMatrix(string elements);
+	IntersectionMatrix(const string& elements);
 	IntersectionMatrix(const IntersectionMatrix &im);
 	static bool matches(int actualDimensionValue, char requiredDimensionSymbol);
 	static bool matches(const string& actualDimensionSymbols, const string& requiredDimensionSymbols);
 	void add(IntersectionMatrix *im);
 	void set(int row, int column, int dimensionValue);
-	void set(string dimensionSymbols);
+	void set(const string& dimensionSymbols);
 	void setAtLeast(int row, int column, int minimumDimensionValue);
 	void setAtLeastIfValid(int row, int column, int minimumDimensionValue);
 	void setAtLeast(string minimumDimensionSymbols);
@@ -2234,7 +2234,7 @@ public:
 	bool isContains();
 	bool isEquals(int dimensionOfGeometryA, int dimensionOfGeometryB);
 	bool isOverlaps(int dimensionOfGeometryA, int dimensionOfGeometryB);
-	bool matches(string requiredDimensionSymbols);
+	bool matches(const string& requiredDimensionSymbols);
 	IntersectionMatrix* transpose();
 	string toString();
 private:
@@ -2991,6 +2991,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.77  2006/03/02 11:00:27  strk
+ * Changed IntersectionMatrix funx taking strings to take const string& instead
+ *
  * Revision 1.76  2006/03/01 18:37:08  strk
  * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
  * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.

@@ -14,6 +14,7 @@
  *
  **********************************************************************/
 
+#include <cassert>
 #include <sstream>
 #include <geos/geom.h>
 #include <geos/util.h>
@@ -26,7 +27,7 @@ IntersectionMatrix::IntersectionMatrix()
 	setAll(Dimension::False);
 }
 
-IntersectionMatrix::IntersectionMatrix(string elements)
+IntersectionMatrix::IntersectionMatrix(const string& elements)
 {
 	setAll(Dimension::False);
 	set(elements);
@@ -119,7 +120,7 @@ IntersectionMatrix::set(int row, int column, int dimensionValue)
 }
 
 void
-IntersectionMatrix::set(string dimensionSymbols)
+IntersectionMatrix::set(const string& dimensionSymbols)
 {
 	unsigned int limit = dimensionSymbols.length();
 
@@ -294,14 +295,15 @@ IntersectionMatrix::isOverlaps(int dimensionOfGeometryA,
 	return false;
 }
 
+/*public*/
 bool
-IntersectionMatrix::matches(string requiredDimensionSymbols)
+IntersectionMatrix::matches(const string& requiredDimensionSymbols)
 {
 	if (requiredDimensionSymbols.length() != 9) {
 		ostringstream s;
-		s<<"IllegalArgumentException: Should be length 9: "<<
-			requiredDimensionSymbols<<endl;
-		throw  IllegalArgumentException(s.str());
+		s << "IllegalArgumentException: Should be length 9, is "
+			<< "[" << requiredDimensionSymbols << "] instead" << endl;
+		throw IllegalArgumentException(s.str());
 	}
 	for (int ai = 0; ai < 3; ai++) {
 		for (int bi = 0; bi < 3; bi++) {
@@ -345,6 +347,9 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/02 11:00:26  strk
+ * Changed IntersectionMatrix funx taking strings to take const string& instead
+ *
  * Revision 1.15  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
