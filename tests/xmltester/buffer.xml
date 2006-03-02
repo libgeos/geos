@@ -1,6 +1,6 @@
 <run>
   <!--precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/-->
-  <precisionModel FLOATING />
+  <precisionModel type="FLOATING" />
 <case><desc>Case #</desc>
 <a>
 POINT (100 100)

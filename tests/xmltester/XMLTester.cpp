@@ -139,16 +139,22 @@ XMLTester::resetCounters()
 void
 XMLTester::parsePrecisionModel()
 {
-	string precisionModel;
 
 	/* This does not seem to work... */
-	//precisionModel=xml.GetChildAttrib("type");
+	string type=xml.GetChildAttrib("type");
 	string scaleStr=xml.GetChildAttrib("scale");
 
 	if ( pm ) delete pm;
 
 	if ( scaleStr == "" ) {
-		pm=new PrecisionModel();
+		if ( type == "FLOATING_SINGLE" )
+		{
+			pm=new PrecisionModel(PrecisionModel::FLOATING_SINGLE);
+		}
+		else
+		{
+			pm=new PrecisionModel();
+		}
 	} else {
 		char* stopstring;
 		//string scaleStr=xml.GetChildAttrib("scale");
@@ -781,6 +787,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/02 10:25:30  strk
+ * Added support for FLOATING_SINGLE precisionmodel in XML tests
+ *
  * Revision 1.13  2006/03/01 18:14:07  strk
  * Handled NULL return from Geometry::getInteriorPoint()
  *
