@@ -42,7 +42,8 @@ public:
 	const Geometry* getArgGeometry(int i) const;
 
 protected:
-	static algorithm::LineIntersector *li;
+
+	algorithm::LineIntersector li;
 
 	const PrecisionModel* resultPrecisionModel;
 
@@ -91,6 +92,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/02 14:34:32  strk
+ * GeometryGraphOperation::li made a non-static member, and not more a pointer
+ *
  * Revision 1.8  2006/02/27 09:05:33  strk
  * Doxygen comments, a few inlines and general cleanups
  *

@@ -24,7 +24,7 @@ using namespace geos::geomgraph;
 namespace geos {
 namespace operation { // geos.operation
 
-LineIntersector* GeometryGraphOperation::li=new LineIntersector();
+//LineIntersector* GeometryGraphOperation::li=new LineIntersector();
 
 GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0, const Geometry *g1):
 	arg(2)
@@ -57,7 +57,7 @@ void
 GeometryGraphOperation::setComputationPrecision(const PrecisionModel* pm)
 {
     resultPrecisionModel=pm;
-    li->setPrecisionModel(resultPrecisionModel);
+    li.setPrecisionModel(resultPrecisionModel);
 }
 
 GeometryGraphOperation::~GeometryGraphOperation()
@@ -73,6 +73,9 @@ GeometryGraphOperation::~GeometryGraphOperation()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/02 14:34:43  strk
+ * GeometryGraphOperation::li made a non-static member, and not more a pointer
+ *
  * Revision 1.20  2006/02/27 09:05:33  strk
  * Doxygen comments, a few inlines and general cleanups
  *

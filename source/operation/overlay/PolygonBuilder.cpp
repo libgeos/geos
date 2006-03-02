@@ -54,14 +54,18 @@ void
 PolygonBuilder::add(PlanarGraph *graph)
 	//throw(TopologyException *)
 {
-	vector<EdgeEnd*> *ee=graph->getEdgeEnds();
+	vector<EdgeEnd*>* eeptr=graph->getEdgeEnds();
+	assert(eeptr);
+	vector<EdgeEnd*>& ee = *eeptr;
 
-	unsigned int eeSize=ee->size();
+	unsigned int eeSize=ee.size();
 	vector<DirectedEdge*> dirEdges(eeSize);
 
 	for(unsigned int i=0; i<eeSize; ++i)
 	{
-		dirEdges[i]=(DirectedEdge*)(*ee)[i];
+		DirectedEdge* de = dynamic_cast<DirectedEdge*>(ee[i]);
+		assert(de);
+		dirEdges[i]=de;
 	}
 
 	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph->getNodeMap()->nodeMap;
@@ -86,9 +90,10 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 	vector<Node*>::iterator nodeit=nodes->begin();
 	for(;nodeit!=nodes->end();++nodeit) {
 		Node *node=*nodeit;
-		// This might throw a TopologyException
 		DirectedEdgeStar* des = dynamic_cast<DirectedEdgeStar*>(node->getEdges());
 		assert(des);
+
+		// This might throw a TopologyException
 		des->linkResultDirectedEdges();
 	}
 
@@ -120,7 +125,8 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 	cerr<<"PolygonBuilder::buildMaximalEdgeRings got "<<dirEdges->size()<<" dirEdges"<<endl;
 #endif
 	vector<MaximalEdgeRing*> *maxEdgeRings=new vector<MaximalEdgeRing*>();
-	for(int i=0;i<(int)dirEdges->size();i++) {
+	for(unsigned int i=0, n=dirEdges->size(); i<n; i++)
+	{
 		DirectedEdge *de=(*dirEdges)[i];
 #if GEOS_DEBUG
 	cerr<<"  dirEdge "<<i<<" inResult:"<<de->isInResult()<<" isArea:"<<de->getLabel()->isArea()<<endl;
@@ -366,6 +372,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/02 14:34:43  strk
+ * GeometryGraphOperation::li made a non-static member, and not more a pointer
+ *
  * Revision 1.27  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

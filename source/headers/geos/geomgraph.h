@@ -1041,6 +1041,14 @@ public:
 	index::SegmentIntersector* computeSelfNodes(algorithm::LineIntersector *li,
 		bool computeRingSelfNodes);
 
+	// Quick inline calling the function above, the above should probably
+	// be deprecated.
+	index::SegmentIntersector* computeSelfNodes(algorithm::LineIntersector& li,
+		bool computeRingSelfNodes)
+	{
+		return computeSelfNodes(&li, computeRingSelfNodes);
+	}
+
 	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
 		algorithm::LineIntersector *li,bool includeProper);
 
@@ -1264,6 +1272,9 @@ inline bool operator==(const Edge &a, const Edge &b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/03/02 14:34:30  strk
+ * GeometryGraphOperation::li made a non-static member, and not more a pointer
+ *
  * Revision 1.37  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

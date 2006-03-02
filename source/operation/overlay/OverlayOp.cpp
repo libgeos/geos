@@ -27,6 +27,7 @@
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
+
 #define COMPUTE_Z 1
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
@@ -613,7 +614,7 @@ OverlayOp::computeOverlay(int opCode)
 #endif
 
 	// compute intersections between edges of the two input geometries
-	delete arg[0]->computeEdgeIntersections(arg[1],li,true);
+	delete arg[0]->computeEdgeIntersections(arg[1], &li,true);
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed EdgeIntersections"<<endl;
@@ -789,6 +790,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.55  2006/03/02 14:34:43  strk
+ * GeometryGraphOperation::li made a non-static member, and not more a pointer
+ *
  * Revision 1.54  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

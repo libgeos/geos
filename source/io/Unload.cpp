@@ -15,18 +15,18 @@
 
 #include <geos/unload.h>
 #include <geos/opValid.h>
-#include <geos/geomgraph.h>
-#include <geos/operation.h>
+//#include <geos/geomgraph.h>
+//#include <geos/operation.h>
 #include <geos/opRelate.h>
-#include <geos/indexQuadtree.h>
-#include <geos/opBuffer.h>
-#include <geos/planargraph.h>
+//#include <geos/indexQuadtree.h>
+//#include <geos/opBuffer.h>
+//#include <geos/planargraph.h>
 #include <geos/profiler.h>
 
-using namespace geos::geomgraph;
-using namespace geos::operation;
+//using namespace geos::geomgraph;
+//using namespace geos::operation;
 using namespace geos::operation::relate;
-using namespace geos::index;
+//using namespace geos::index;
 
 namespace geos {
 
@@ -36,7 +36,7 @@ void Unload::Release()
 	//delete PlanarGraph::cga;
 	//delete planarDirectedEdge::cga;
 	//delete GeometryGraphOperation::cga;
-	delete GeometryGraphOperation::li;
+	//delete GeometryGraphOperation::li;
 	delete RelateComputer::li;
 	delete RelateComputer::ptLocator;
 	//delete quadtree::QuadTreeRoot::origin;
@@ -48,6 +48,9 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/02 14:34:43  strk
+ * GeometryGraphOperation::li made a non-static member, and not more a pointer
+ *
  * Revision 1.19  2006/03/01 10:39:59  strk
  * ctor and dtor made private and inlined
  *
