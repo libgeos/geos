@@ -1187,7 +1187,7 @@ GEOSGetCentroid(Geometry *g)
 Geometry *
 GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 {
-#ifdef DEBUG
+#ifdef GEOS_DEBUG
 	char buf[256];
 	sprintf(buf, "PostGIS2GEOS_collection: requested type %d, ngeoms: %d",
 			type, ngeoms);
@@ -1244,7 +1244,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	vector<Geometry *> *geoms = new vector<Geometry *>(ngeoms);
 	for (i=0; i<ngeoms; i++) (*geoms)[i] = g[i];
 
-#if DEBUG
+#if GEOS_DEBUG
 	ERROR_MESSAGE("geometry vector constructed");
 #endif
 
@@ -1252,19 +1252,19 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 		// Polygonize
 		Polygonizer plgnzr;
 		plgnzr.add(geoms);
-#if DEBUG
+#if GEOS_DEBUG
 	ERROR_MESSAGE("geometry vector added to polygonizer");
 #endif
 
 		vector<Polygon *>*polys = plgnzr.getPolygons();
 
-#if DEBUG
+#if GEOS_DEBUG
 	ERROR_MESSAGE("output polygons got");
 #endif
 
 		delete geoms;
 
-#if DEBUG
+#if GEOS_DEBUG
 	ERROR_MESSAGE("geometry vector deleted");
 #endif
 
@@ -1302,7 +1302,7 @@ GEOSLineMerge(Geometry *g)
 
                 vector<LineString *>*lines = lmrgr.getMergedLineStrings();
 
-#if DEBUG
+#if GEOS_DEBUG
         ERROR_MESSAGE("output lines got");
 #endif
 
