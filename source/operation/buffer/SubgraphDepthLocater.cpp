@@ -114,6 +114,11 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 // It seems that LineSegment is *very* slow... undef this
 // to see yourself
+// LineSegment has been refactored to be mostly inline, still
+// it makes copies of the given coordinates, while the 'non-LineSemgent'
+// based code below uses pointers instead. I'll kip the SKIP_LS
+// defined until LineSegment switches to Coordinate pointers instead.
+//
 #define SKIP_LS 1
 
 	int n = pts->getSize()-1;
@@ -121,16 +126,16 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 #ifndef SKIP_LS
 		seg.p0=pts->getAt(i);
 		seg.p1=pts->getAt(i + 1);
-#else
+#if DEBUG
+		cerr << " SubgraphDepthLocater::findStabbedSegments: segment " << i
+			<< " (" << seg << ") ";
+#endif
 
+#else
 		const Coordinate *low=&(pts->getAt(i));
 		const Coordinate *high=&(pts->getAt(i+1));
 		const Coordinate *swap=NULL;
 
-#endif
-
-#if DEBUG
-	cerr<<" SubgraphDepthLocater::findStabbedSegments: segment "<<i<<" ("<<seg.toString()<<") ";
 #endif
 
 #ifndef SKIP_LS
@@ -139,7 +144,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 		{
 			seg.reverse();
 #if DEBUG
-			cerr<<" reverse ("<<seg.toString()<<") ";
+			cerr << " reverse (" << seg << ") ";
 #endif
 		}
 #else
@@ -242,6 +247,9 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/02 09:46:04  strk
+ * cleaned up debugging lines
+ *
  * Revision 1.18  2006/03/01 17:16:39  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
