@@ -24,7 +24,9 @@
 #include <geos/opOverlay.h>
 #include <geos/util.h>
 
+#ifndef DEBUG
 #define DEBUG 0
+#endif
 #define COMPUTE_Z 1
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
@@ -252,7 +254,7 @@ OverlayOp::computeLabelling()
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 #if DEBUG
-		cerr<<"     "<<node->print()<<" has "<<node->getEdges()->getEdges()->size()<<" edgeEnds"<<endl;
+		cerr<<"     "<<node->print()<<" has "<<node->getEdges()->getEdges().size()<<" edgeEnds"<<endl;
 #endif
 		node->getEdges()->computeLabelling(&arg);
 	}
@@ -276,7 +278,7 @@ OverlayOp::mergeSymLabels()
 	map<Coordinate*,Node*,CoordinateLessThen>&nodeMap=graph.getNodeMap()->nodeMap;
 
 #if DEBUG
-	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap->size()<<" nodes from map:"<<endl;
+	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
@@ -787,6 +789,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2006/03/02 09:51:36  strk
+ * Fixes in DEBUG lines (bug#42)
+ *
  * Revision 1.52  2006/02/27 09:05:33  strk
  * Doxygen comments, a few inlines and general cleanups
  *
