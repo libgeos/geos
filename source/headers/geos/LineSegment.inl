@@ -107,7 +107,7 @@ LineSegment::closestPoints(const LineSegment* line)
 
 INLINE ostream&
 operator<< (ostream& o, const LineSegment& l) {
-	return o<<"LINESTRING("<<l.p0.x<<" "<<l.p0.y<<","<<l.p1.x<<" "<<l.p1.y<<")";
+	return o<<"LINESEGMENT("<<l.p0.x<<" "<<l.p0.y<<","<<l.p1.x<<" "<<l.p1.y<<")";
 }
 
 
