@@ -29,12 +29,12 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet, double x,
 		insertEvent(newInsertEvent),
 		deleteEventIndex(0)
 {
-	if(insertEvent!=NULL) eventType=DELETE;
-	else eventType=INSERT;
+	if(insertEvent!=NULL) eventType=DELETE_EVENT;
+	else eventType=INSERT_EVENT;
 }
 
 SweepLineEvent::~SweepLineEvent(){
-	if (eventType==DELETE) {
+	if (eventType==DELETE_EVENT) {
 		delete insertEvent;
 		delete obj; 
 	}
@@ -64,7 +64,7 @@ SweepLineEvent::print()
 
 	s<<"SweepLineEvent:";
 	s<<" xValue="<<xValue<<" deleteEventIndex="<<deleteEventIndex;
-	s<<( (eventType==INSERT) ? " INSERT" : " DELETE" );
+	s<<( (eventType==INSERT_EVENT) ? " INSERT_EVENT" : " DELETE_EVENT" );
 	s<<endl<<"\tinsertEvent=";
 	if (insertEvent) s<<insertEvent->print();
 	else s<<"NULL";
@@ -77,6 +77,9 @@ SweepLineEvent::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/02 14:53:40  strk
+ * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
+ *
  * Revision 1.7  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

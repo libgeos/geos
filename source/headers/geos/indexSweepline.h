@@ -59,8 +59,8 @@ public:
 class indexSweepLineEvent {
 public:
 	enum {
-		INSERT = 1,
-		DELETE
+		INSERT_EVENT = 1,
+		DELETE_EVENT
 	};
 	indexSweepLineEvent(double x,indexSweepLineEvent *newInsertEvent,SweepLineInterval *newSweepInt);
 	bool isInsert();
@@ -80,7 +80,7 @@ public:
 private:
 	double xValue;
 	int eventType;
-	indexSweepLineEvent *insertEvent; // null if this is an INSERT event
+	indexSweepLineEvent *insertEvent; // null if this is an INSERT_EVENT event
 	int deleteEventIndex;
 	SweepLineInterval *sweepInt;
 };
@@ -119,6 +119,9 @@ bool isleLessThen(indexSweepLineEvent *first,indexSweepLineEvent *second);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/02 14:53:44  strk
+ * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
+ *
  * Revision 1.4  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

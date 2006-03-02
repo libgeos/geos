@@ -24,9 +24,9 @@ namespace sweepline { // geos.index.sweepline
 indexSweepLineEvent::indexSweepLineEvent(double x,indexSweepLineEvent *newInsertEvent,SweepLineInterval *newSweepInt) {
 	xValue = x;
 	insertEvent=newInsertEvent;
-	eventType=indexSweepLineEvent::INSERT;
+	eventType=indexSweepLineEvent::INSERT_EVENT;
 	if (insertEvent!=NULL)
-		eventType=indexSweepLineEvent::DELETE;
+		eventType=indexSweepLineEvent::DELETE_EVENT;
 	sweepInt=newSweepInt;
 }
 
@@ -77,6 +77,9 @@ int indexSweepLineEvent::compareTo(void *o) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/02 14:53:44  strk
+ * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
+ *
  * Revision 1.7  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

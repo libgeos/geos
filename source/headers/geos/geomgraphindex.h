@@ -168,8 +168,8 @@ class SweepLineEvent{
 friend class SweepLineEventLessThen;
 public:
 	enum {
-		INSERT=1,
-		DELETE
+		INSERT_EVENT = 1,
+		DELETE_EVENT
 	};
 	SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInsertEvent,SweepLineEventOBJ *newObj);
 	virtual ~SweepLineEvent();
@@ -189,7 +189,7 @@ protected:
 private:
 	double xValue;
 	int eventType;
-	SweepLineEvent *insertEvent; // null if this is an INSERT event
+	SweepLineEvent *insertEvent; // null if this is an INSERT_EVENT event
 	int deleteEventIndex;
 };
 
@@ -337,6 +337,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/02 14:53:44  strk
+ * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
+ *
  * Revision 1.9  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder
