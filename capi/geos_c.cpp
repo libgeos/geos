@@ -4,7 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -15,6 +15,7 @@
  *
  ***********************************************************************/
 
+// This should go away
 #include <stdio.h>
 
 #include <string>
@@ -100,7 +101,7 @@ extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
 
 extern "C" const char GEOS_DLL *GEOSversion();
-extern "C" char GEOS_DLL *GEOSjtsport();
+extern "C" const char GEOS_DLL *GEOSjtsport();
 extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
 extern "C" char GEOS_DLL *GEOSGeomType(Geometry *g1);
 extern "C" int GEOS_DLL GEOSGeomTypeId(Geometry *g1);
@@ -1352,12 +1353,13 @@ GEOSversion()
 	return GEOS_CAPI_VERSION;
 }
 
-char *
+const char *
 GEOSjtsport()
 {
-	string version = jtsport();
-	char *res = strdup(version.c_str());
-	return res;
+	//string version = jtsport();
+	//char *res = strdup(version.c_str());
+	//return res;
+	return GEOS_JTS_PORT;
 }
 
 
