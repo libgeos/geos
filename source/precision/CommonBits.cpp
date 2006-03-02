@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,42 +12,24 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/precision.h>
 
 namespace geos {
-/**
-* Computes the bit pattern for the sign and exponent of a
-* double-precision number.
-* @param num
-* @return the bit pattern for the sign and exponent
-*/
-int64 CommonBits::signExpBits(int64 num){
+namespace precision { // geos.precision
+
+/*static public*/
+int64
+CommonBits::signExpBits(int64 num)
+{
 	return num >> 52;
 }
 
-/**
-* This computes the number of common most-significant bits in the mantissas
-* of two double-precision numbers.
-* It does not count the hidden bit, which is always 1.
-* It does not determine whether the numbers have the same exponent - if they do
-* not, the value computed by this function is meaningless.
-* @param db
-* @return the number of common most-significant mantissa bits
-*/
-int CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2) {
+/*static public*/
+int
+CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2)
+{
 	int count = 0;
 	for (int i = 52; i >= 0; i--){
 		if (getBit(num1, i) != getBit(num2, i))
@@ -56,37 +39,35 @@ int CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2) {
 	return 52;
 }
 
-/**
-* Zeroes the lower n bits of a bitstring.
-* @param bits the bitstring to alter
-* @param i the number of bits to zero
-* @return the zeroed bitstring
-*/
-int64 CommonBits::zeroLowerBits(int64 bits, int nBits){
+/*static public*/
+int64
+CommonBits::zeroLowerBits(int64 bits, int nBits)
+{
 	int64 invMask = (1<< nBits)-1;
 	int64 mask = ~ invMask;
 	int64 zeroed = bits & mask;
 	return zeroed;
 }
 
-/**
-* Extracts the i'th bit of a bitstring.
-* @param bits the bitstring to extract from
-* @param i the bit to extract
-* @return the value of the extracted bit
-*/
-int CommonBits::getBit(int64 bits, int i){
+/*static public*/
+int
+CommonBits::getBit(int64 bits, int i)
+{
 	int64 mask = (1 << i);
 	return (bits & mask) != 0 ? 1 : 0;
 }
 
+/*public*/
 CommonBits::CommonBits() {
 	isFirst = true;
 	commonMantissaBitsCount = 53;
 	commonBits = 0;
 }
 
-void CommonBits::add(double num) {
+/*public*/
+void
+CommonBits::add(double num)
+{
 	int64 numBits=(int64)num;
 	if (isFirst) {
 		commonBits = numBits;
@@ -106,9 +87,13 @@ void CommonBits::add(double num) {
 	//    System.out.println(toString(commonBits));
 }
 
-double CommonBits::getCommon(){
+/*public*/
+double
+CommonBits::getCommon()
+{
 	return (double)commonBits;
 }
+
 ///**
 //* A representation of the Double bits formatted for easy readability
 //*/
@@ -125,4 +110,21 @@ double CommonBits::getCommon(){
 //return str;
 //}
 
-}
+} // namespace geos.precision
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.3  2006/03/02 16:21:26  strk
+ * geos::precision namespace added
+ *
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/04/10 22:41:25  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

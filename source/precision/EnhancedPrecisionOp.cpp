@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,26 +12,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.3  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
-
 
 #include <geos/precision.h>
 #include <geos/util.h>
 
 namespace geos {
+namespace precision { // geos.precision
+
 /**
 * Computes the set-theoretic intersection of two {@link Geometry}s, using enhanced precision->
 * @param geom0 the first Geometry
@@ -185,4 +174,24 @@ Geometry* EnhancedPrecisionOp::buffer(Geometry *geom, double distance){
 	}
 }
 
-}
+} // namespace geos.precision
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2006/03/02 16:21:26  strk
+ * geos::precision namespace added
+ *
+ * Revision 1.3  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
+ * Revision 1.2  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.1  2004/04/10 22:41:25  ybychkov
+ * "precision" upgraded to JTS 1.4
+ *
+ *
+ **********************************************************************/
+

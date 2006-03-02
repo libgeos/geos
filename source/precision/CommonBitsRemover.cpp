@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -17,6 +18,7 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace precision { // geos.precision
 
 
 CommonBitsRemover::CommonBitsRemover()
@@ -135,10 +137,14 @@ CommonCoordinateFilter::filter_ro(const Coordinate *coord)
 	commonBitsY->add(coord->y);
 }
 
+} // namespace geos.precision
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/02 16:21:26  strk
+ * geos::precision namespace added
+ *
  * Revision 1.4  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

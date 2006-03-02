@@ -63,14 +63,14 @@ PlanarGraph::PlanarGraph():
 PlanarGraph::~PlanarGraph()
 {
 	delete nodes;
-	int i;
 #if 1 // FIXME: PlanarGraph should *not* own edges!
-	for(i=0;i<(int)edges->size();i++) {
+	for(size_t i=0, n=edges->size(); i<n; i++) {
 		delete (*edges)[i];
 	}
 #endif
 	delete edges;
-	for(i=0;i<(int)edgeEndList->size();i++) {
+
+	for(size_t i=0, n=edgeEndList->size(); i<n; i++) {
 		delete (*edgeEndList)[i];
 	}
 	delete edgeEndList;
@@ -325,6 +325,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/02 16:21:26  strk
+ * geos::precision namespace added
+ *
  * Revision 1.23  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

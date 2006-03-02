@@ -21,7 +21,7 @@
 #include <geos/platform.h>
 #include <vector>
 
-using namespace std;
+//using namespace std;
 
 namespace geos {
 namespace geom { // geos.geom
@@ -342,6 +342,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/02 16:21:26  strk
+ * geos::precision namespace added
+ *
  * Revision 1.6  2006/02/01 22:21:29  strk
  * - Added rectangle-based optimizations of intersects() and contains() ops
  * - Inlined all planarGraphComponent class
