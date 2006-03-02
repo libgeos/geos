@@ -16,7 +16,9 @@
 #include <geos/geom.h>
 #include <geos/opOverlay.h>
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 namespace geos {
 namespace operation { // geos.operation
@@ -34,7 +36,7 @@ ElevationMatrixFilter::~ElevationMatrixFilter()
 void
 ElevationMatrixFilter::filter_rw(Coordinate *c) const
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"ElevationMatrixFilter::filter_rw("<<c->toString()<<") called"
 		<<endl;
 #endif
@@ -48,7 +50,7 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 		const ElevationMatrixCell &emc = em.getCell(*c);
 		c->z = emc.getAvg();
 		if ( ISNAN(c->z) ) c->z = avgElevation;
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"  z set to "<<c->z<<endl;
 #endif
 	} catch (const IllegalArgumentException& ex) {
@@ -59,7 +61,7 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 void
 ElevationMatrixFilter::filter_ro(const Coordinate *c)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"ElevationMatrixFilter::filter_ro("<<c->toString()<<") called"
 		<<endl;
 #endif
@@ -72,6 +74,9 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.7  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

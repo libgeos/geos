@@ -18,11 +18,13 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/opOverlay.h>
 #include <geos/util.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace std;
@@ -85,7 +87,9 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 	for(;nodeit!=nodes->end();++nodeit) {
 		Node *node=*nodeit;
 		// This might throw a TopologyException
-		((DirectedEdgeStar*) node->getEdges())->linkResultDirectedEdges();
+		DirectedEdgeStar* des = dynamic_cast<DirectedEdgeStar*>(node->getEdges());
+		assert(des);
+		des->linkResultDirectedEdges();
 	}
 
 	vector<MaximalEdgeRing*>* maxEdgeRings=buildMaximalEdgeRings(dirEdges);
@@ -112,13 +116,13 @@ PolygonBuilder::getPolygons()
 vector<MaximalEdgeRing*> *
 PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PolygonBuilder::buildMaximalEdgeRings got "<<dirEdges->size()<<" dirEdges"<<endl;
 #endif
 	vector<MaximalEdgeRing*> *maxEdgeRings=new vector<MaximalEdgeRing*>();
 	for(int i=0;i<(int)dirEdges->size();i++) {
 		DirectedEdge *de=(*dirEdges)[i];
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"  dirEdge "<<i<<" inResult:"<<de->isInResult()<<" isArea:"<<de->getLabel()->isArea()<<endl;
 #endif
 		if (de->isInResult() && de->getLabel()->isArea()) {
@@ -131,7 +135,7 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 			}
 		}
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"  reeturning "<<maxEdgeRings->size()<<" maxEdgeRings"<<endl;
 #endif
 	return maxEdgeRings;
@@ -144,7 +148,7 @@ PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
 	vector<MaximalEdgeRing*> *edgeRings=new vector<MaximalEdgeRing*>();
 	for(int i=0;i<(int)maxEdgeRings->size();i++) {
 		MaximalEdgeRing *er=(*maxEdgeRings)[i];
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"buildMinimalEdgeRings: maxEdgeRing "<<i<<" has "<<er->getMaxNodeDegree()<<" maxNodeDegree"<<endl;
 #endif
 		if (er->getMaxNodeDegree()>2) {
@@ -184,7 +188,7 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 {
 	int shellCount=0;
 	EdgeRing *shell=NULL;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PolygonBuilder::findShell got "<<minEdgeRings->size()<<" minEdgeRings"<<endl;
 #endif
 	for(int i=0;i<(int)minEdgeRings->size();i++) {
@@ -328,7 +332,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 vector<Geometry*>*
 PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PolygonBuilder::computePolygons: got "<<newShellList->size()<<" shells"<<endl;
 #endif
 	vector<Geometry*> *resultPolyList=new vector<Geometry*>();
@@ -362,6 +366,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.26  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

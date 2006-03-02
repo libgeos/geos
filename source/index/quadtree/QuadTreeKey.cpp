@@ -16,8 +16,8 @@
 
 #include <geos/indexQuadtree.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -29,7 +29,7 @@ int QuadTreeKey::computeQuadLevel(Envelope *env){
 	double dy=env->getHeight();
 	double dMax=dx>dy?dx:dy;
 	int level=DoubleBits::exponent(dMax)+1;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Maxdelta:"<<dMax<<" exponent:"<<(level-1)<<endl;
 #endif
 	return level;
@@ -78,7 +78,7 @@ void QuadTreeKey::computeKey(Envelope *itemEnv) {
 		level+=1;
 		computeKey(level,itemEnv);
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"QuadTreeKey::computeKey:"<<endl;
 	cerr<<" itemEnv: "<<itemEnv->toString()<<endl;
 	cerr<<"  keyEnv: "<<env->toString()<<endl;
@@ -103,6 +103,9 @@ QuadTreeKey::computeKey(int level,Envelope *itemEnv)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.8  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

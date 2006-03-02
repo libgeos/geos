@@ -21,8 +21,8 @@
 #include <geos/opBuffer.h>
 #include <typeinfo>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::geomgraph;
@@ -78,12 +78,12 @@ void
 OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 	int leftLoc, int rightLoc)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<__FUNCTION__<<": coords="<<coord->toString()<<endl;
 #endif
 	// don't add null curves!
 	if (coord->getSize() < 2) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" skipped (size<2)"<<endl;
 #endif
 		return;
@@ -159,11 +159,11 @@ void
 OffsetCurveSetBuilder::addLineString(const LineString *line)
 {
 	if (distance <= 0.0) return;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<__FUNCTION__<<": "<<line->toString()<<endl;
 #endif
 	CoordinateSequence *coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" After coordinate removal: "<<coord->toString()<<endl;
 #endif
 	vector<CoordinateSequence*> lineList;
@@ -239,13 +239,13 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 {
 	int leftLoc=cwLeftLoc;
 	int rightLoc=cwRightLoc;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<CGAlgorithms::isCCW(coord)<<endl;
 #endif
 	if (CGAlgorithms::isCCW(coord)) {
 		leftLoc=cwRightLoc;
 		rightLoc=cwLeftLoc;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" side "<<side<<" becomes "<<Position::opposite(side)<<endl;
 #endif
 		side=Position::opposite(side);
@@ -313,6 +313,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.25  2006/02/28 14:34:05  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

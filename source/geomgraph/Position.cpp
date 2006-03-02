@@ -16,8 +16,8 @@
 
 #include <geos/geomgraph.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -30,7 +30,7 @@ namespace geomgraph { // geos.geomgraph
 int Position::opposite(int position){
 	if (position==LEFT) return RIGHT;
 	if (position==RIGHT) return LEFT;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Position::opposite: position is neither LEFT ("<<LEFT<<") nor RIGHT ("<<RIGHT<<") but "<<position<<endl;
 #endif
 	return position;
@@ -41,6 +41,9 @@ int Position::opposite(int position){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.4  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

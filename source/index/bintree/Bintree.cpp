@@ -78,7 +78,7 @@ void Bintree::insert(BinTreeInterval *itemInterval,void* item){
 		newIntervals.push_back(insertInterval);
 	//int oldSize=size();
 	root->insert(insertInterval,item);
-	/* DEBUG
+	/* GEOS_DEBUG
 	int newSize=size();
 	System.out.println("BinTree: size="+newSize+"   node size="+nodeSize());
 	if (newSize <= oldSize) {
@@ -128,6 +128,9 @@ void Bintree::collectStats(BinTreeInterval *interval) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.10  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

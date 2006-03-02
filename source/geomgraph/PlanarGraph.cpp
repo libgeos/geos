@@ -16,8 +16,8 @@
 
 #include <geos/geomgraph.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::algorithm;
@@ -134,7 +134,7 @@ PlanarGraph::getNodes()
 Node*
 PlanarGraph::addNode(Node *node)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PlanarGraph::addNode(Node * "<<node->print()<<")"<<endl;
 #endif
 	return nodes->addNode(node);
@@ -143,7 +143,7 @@ PlanarGraph::addNode(Node *node)
 Node*
 PlanarGraph::addNode(const Coordinate& coord)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PlanarGraph::addNode(Coordinate& "<<coord.toString()<<")"<<endl;
 #endif
 	return nodes->addNode(coord);
@@ -188,7 +188,7 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 void
 PlanarGraph::linkResultDirectedEdges()
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PlanarGraph::linkResultDirectedEdges called"<<endl;
 #endif
 	NodeMap::iterator nodeit=nodes->nodeMap.begin();
@@ -206,7 +206,7 @@ PlanarGraph::linkResultDirectedEdges()
 void
 PlanarGraph::linkAllDirectedEdges()
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PlanarGraph::linkAllDirectedEdges called"<<endl;
 #endif
 	NodeMap::iterator nodeit=nodes->nodeMap.begin();
@@ -325,6 +325,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.22  2006/02/28 14:34:04  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

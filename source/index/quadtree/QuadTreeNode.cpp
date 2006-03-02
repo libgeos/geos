@@ -18,8 +18,8 @@
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -38,7 +38,7 @@ QuadTreeNode::createExpanded(QuadTreeNode *node, const Envelope *addEnv)
 {
 	Envelope *expandEnv=new Envelope(*addEnv);
 	if (node!=NULL) expandEnv->expandToInclude(node->env);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"QuadTreeNode::createExpanded computed "<<expandEnv->toString()<<endl;
 #endif
 	QuadTreeNode *largerNode=createNode(expandEnv);
@@ -161,6 +161,9 @@ QuadTreeNode::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.12  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

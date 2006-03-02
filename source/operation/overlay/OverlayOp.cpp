@@ -24,8 +24,8 @@
 #include <geos/opOverlay.h>
 #include <geos/util.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 #define COMPUTE_Z 1
 #define USE_ELEVATION_MATRIX 1
@@ -113,7 +113,7 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1)
 	elevationMatrix = new ElevationMatrix(env, 3, 3);
 	elevationMatrix->add(g0);
 	elevationMatrix->add(g1);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<elevationMatrix->print()<<endl;
 #endif
 #endif // USE_ELEVATION_MATRIX
@@ -194,14 +194,14 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 	}
 #endif
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::insertUniqueEdges("<<edges->size()<<"): "<<endl;
 	for(unsigned int i=0;i<edges->size();i++) {
 		Edge *e=(*edges)[i];
 		if ( ! e ) cerr <<" NULL"<<endl;
 		cerr <<" "<< e->print() << endl;
 	}
-#endif // DEBUG
+#endif // GEOS_DEBUG
 
 }
 
@@ -242,31 +242,31 @@ OverlayOp::computeLabelling()
 {
 	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList.print()<<endl;
 #endif
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::computeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"     "<<node->print()<<" has "<<node->getEdges()->getEdges().size()<<" edgeEnds"<<endl;
 #endif
 		node->getEdges()->computeLabelling(&arg);
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::computeLabelling(): after edge labelling: "<<edgeList.print()<<endl;
 #endif
 	mergeSymLabels();
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::computeLabelling(): after labels sym merging: "<<edgeList.print()<<endl;
 #endif
 	updateNodeLabelling();
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::computeLabelling(): after node labeling update: "<<edgeList.print()<<endl;
 #endif
 }
@@ -277,7 +277,7 @@ OverlayOp::mergeSymLabels()
 {
 	map<Coordinate*,Node*,CoordinateLessThen>&nodeMap=graph.getNodeMap()->nodeMap;
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 
@@ -285,7 +285,7 @@ OverlayOp::mergeSymLabels()
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
 		((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"     "<<node->print()<<endl;
 #endif
 		//node.print(System.out);
@@ -301,7 +301,7 @@ OverlayOp::updateNodeLabelling()
 	// (Note that a node may have already been labelled
 	// because it is a point in one of the input geometries)
 	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::updateNodeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
@@ -309,7 +309,7 @@ OverlayOp::updateNodeLabelling()
 		Node *node=it->second;
 		Label &lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
 		node->getLabel()->merge(lbl);
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"     "<<node->print()<<endl;
 #endif
 	}
@@ -320,7 +320,7 @@ void
 OverlayOp::labelIncompleteNodes()
 {
 	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::labelIncompleteNodes() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
@@ -343,14 +343,14 @@ OverlayOp::labelIncompleteNodes()
 void
 OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::labelIncompleteNode("<<n->print()<<", "<<targetIndex<<")"<<endl;
 #endif
 	const Geometry *targetGeom = arg[targetIndex]->getGeometry();
 	int loc=ptLocator.locate(n->getCoordinate(), targetGeom);
 	n->getLabel()->setLocation(targetIndex,loc);
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"   after location set: "<<n->print()<<endl;
 #endif
 
@@ -608,14 +608,14 @@ OverlayOp::computeOverlay(int opCode)
 	delete arg[0]->computeSelfNodes(li,false);
 	delete arg[1]->computeSelfNodes(li,false);
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed SelfNodes"<<endl;
 #endif
 
 	// compute intersections between edges of the two input geometries
 	delete arg[0]->computeEdgeIntersections(arg[1],li,true);
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed EdgeIntersections"<<endl;
 	cerr<<"OverlayOp::computeOverlay: li: "<<li->toString()<<endl;
 #endif
@@ -689,7 +689,7 @@ void
 OverlayOp::insertUniqueEdge(Edge *e)
 {
 	//Debug.println(e);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OverlayOp::insertUniqueEdge("<<e->print()<<")"<<endl;
 #endif
 
@@ -699,7 +699,7 @@ OverlayOp::insertUniqueEdge(Edge *e)
 
 	// If an identical edge already exists, simply update its label
 	if (existingEdge) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"  found identical edge, should merge Z"<<endl;
 #endif
 		Label *existingLabel=existingEdge->getLabel();
@@ -726,7 +726,7 @@ OverlayOp::insertUniqueEdge(Edge *e)
 		//Debug.print("existing edge: "); Debug.println(existingEdge);
 		dupEdges.push_back(e);
 	} else {  // no matching existing edge was found
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"  no matching existing edge"<<endl;
 #endif
 		// add this new edge to the list of edges in this graph
@@ -789,6 +789,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.54  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.53  2006/03/02 09:51:36  strk
  * Fixes in DEBUG lines (bug#42)
  *

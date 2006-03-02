@@ -24,8 +24,8 @@
 #include <geos/precision.h>
 #include <geos/profiler.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 //#define PROFILE 1
@@ -96,7 +96,7 @@ BufferOp::getResultGeometry(double nDistance, int nQuadrantSegments)
 void
 BufferOp::computeGeometry()
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"BufferOp::computeGeometry: trying with original precision"<<endl;
 #endif
 
@@ -119,7 +119,7 @@ BufferOp::bufferReducedPrecision()
 	// try and compute with decreasing precision
 	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--)
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"BufferOp::computeGeometry: trying with precDigits "<<precDigits<<endl;
 #endif
 		try {
@@ -197,6 +197,9 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.42  2006/02/23 20:05:21  strk
  * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
  * doxygen-friendly comments, miscellaneous cleanups

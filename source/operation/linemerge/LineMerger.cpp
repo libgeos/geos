@@ -23,7 +23,9 @@
 
 using namespace geos::planargraph;
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 namespace geos {
 namespace operation { // geos.operation
@@ -115,20 +117,20 @@ LineMerger::buildEdgeStringsForIsolatedLoops()
 void
 LineMerger::buildEdgeStringsForUnprocessedNodes()
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<__FUNCTION__<<endl;
 #endif
 	vector<planarNode*> *nodes=graph.getNodes();
 	for (unsigned int i=0; i<nodes->size(); ++i) {
 		planarNode *node=(*nodes)[i];
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
 #endif
 		if (!node->isMarked()) { 
 			assert(node->getDegree()==2);
 			buildEdgeStringsStartingAt(node);
 			node->setMarked(true);
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<" setMarked(true) : "<<*node<<endl;
 #endif
 		}
@@ -139,20 +141,20 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 void
 LineMerger::buildEdgeStringsForNonDegree2Nodes()
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<__FUNCTION__<<endl;
 #endif
 	vector<planarNode*> *nodes=graph.getNodes();
 	unsigned int size=nodes->size();
 	for (unsigned int i=0; i<size; i++) {
 		planarNode *node=(*nodes)[i];
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
 #endif
 		if (node->getDegree()!=2) { 
 			buildEdgeStringsStartingAt(node);
 			node->setMarked(true);
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<" setMarked(true) : "<<*node<<endl;
 #endif
 		}
@@ -204,6 +206,9 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.10  2006/02/24 15:39:07  strk
  * - operator>> for Coordinate, planarNode and planarEdge
  * - Fixed bug in planarGraphComponent::setMarked

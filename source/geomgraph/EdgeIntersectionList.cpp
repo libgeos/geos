@@ -20,8 +20,8 @@
 
 #include <geos/geomgraph.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -112,9 +112,9 @@ Edge *
 EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 	EdgeIntersection *ei1)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] EdgeIntersectionList::createSplitEdge()"<<endl;
-#endif // DEBUG
+#endif // GEOS_DEBUG
 	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
 
 	const Coordinate& lastSegStartPt=edge->pts->getAt(ei1->segmentIndex);
@@ -128,9 +128,9 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 
 	if (!useIntPt1) --npts;
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"    npts:"<<npts<<endl;
-#endif // DEBUG
+#endif // GEOS_DEBUG
 
 	vector<Coordinate> *vc=new vector<Coordinate>();
 	vc->reserve(npts);
@@ -175,6 +175,9 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.19  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

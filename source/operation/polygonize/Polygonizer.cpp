@@ -17,7 +17,9 @@
 #include <geos/opPolygonize.h>
 #include <typeinfo>
 
-//#define DEBUG 1
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 namespace geos {
 namespace operation { // geos.operation
@@ -188,20 +190,20 @@ Polygonizer::polygonize()
 	dangles=graph->deleteDangles();
 	cutEdges=graph->deleteCutEdges();
 	vector<polygonizeEdgeRing*> *edgeRingList=graph->getEdgeRings();
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Polygonizer::polygonize(): "<<edgeRingList->size()<<" edgeRings in graph"<<endl;
 #endif
 	vector<polygonizeEdgeRing*> *validEdgeRingList=new vector<polygonizeEdgeRing*>();
 	invalidRingLines=new vector<LineString*>();
 	findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"                           "<<validEdgeRingList->size()<<" valid"<<endl;
 	cerr<<"                           "<<invalidRingLines->size()<<" invalid"<<endl;
 #endif
 	delete edgeRingList;
 
 	findShellsAndHoles(validEdgeRingList);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"                           "<<holeList->size()<<" holes"<<endl;
 	cerr<<"                           "<<shellList->size()<<" shells"<<endl;
 #endif
@@ -273,6 +275,9 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.10  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

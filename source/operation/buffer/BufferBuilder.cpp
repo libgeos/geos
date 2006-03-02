@@ -24,8 +24,8 @@
 #include <geos/opBuffer.h>
 #include <geos/profiler.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::geomgraph;
@@ -89,7 +89,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 
 	vector<SegmentString*>& bufferSegStrList=curveSetBuilder.getCurves();
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList.size()<<" curves"<<endl;
 #endif
 	// short-circuit test
@@ -98,7 +98,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		return emptyGeom;
 	}
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"BufferBuilder::buffer computing NodedEdges"<<endl;
 #endif
 #if PROFILE
@@ -109,7 +109,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 #if PROFILE
 	prof->stop();
 #endif
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"BufferBuilder::buffer finished computing NodedEdges"<<endl;
 #endif
 
@@ -122,13 +122,13 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		graph.addEdges(edgeList.getEdges());
 
 		createSubgraphs(&graph, subgraphList);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<endl;
 #endif
 		PolygonBuilder polyBuilder(geomFact);
 		buildSubgraphs(&subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<endl;
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
@@ -328,6 +328,9 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.40  2006/02/28 17:44:27  strk
  * Added a check in SegmentNode::addSplitEdge to prevent attempts
  * to build SegmentString with less then 2 points.

@@ -17,8 +17,8 @@
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -82,7 +82,7 @@ Quadtree::insert(const Envelope *itemEnv, void* item)
 	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
 	if ( insertEnv != itemEnv ) newEnvelopes.push_back(insertEnv);
 	root->insert(insertEnv,item);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Quadtree::insert("<<itemEnv->toString()<<", "<<item<<")"<<endl;
 	cerr<<"       insertEnv:"<<insertEnv->toString()<<endl;
 	cerr<<"       tree:"<<endl<<root->toString()<<endl;
@@ -99,7 +99,7 @@ Quadtree::query(const Envelope *searchEnv,
 	 * overlap the search envelope
 	 */
 	root->addAllItemsFromOverlapping(searchEnv, &foundItems);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Quadtree::query returning "<<foundItems.size()
 		<<" items over "<<size()
 		<<" items in index (of depth: "<<depth()<<")"<<endl;
@@ -148,6 +148,9 @@ Quadtree::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.19  2006/03/01 13:49:45  strk
  * Fixed debug lines (bug#36)
  *

@@ -16,7 +16,9 @@
 #include <geos/opOverlay.h>
 #include <geos/io.h>
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 #define COMPUTE_Z 1
 
 using namespace std;
@@ -174,7 +176,7 @@ void
 LineBuilder::propagateZ(CoordinateSequence *cs)
 {
 	unsigned int i;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"LineBuilder::propagateZ() called"<<endl;
 #endif
 
@@ -185,13 +187,13 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 		if ( !ISNAN(cs->getAt(i).z) ) v3d.push_back(i);
 	}
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"  found "<<v3d.size()<<" 3d vertexes"<<endl;
 #endif
 	
 	if ( v3d.size() == 0 )
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"  nothing to do"<<endl;
 #endif
 		return;
@@ -284,6 +286,9 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.22  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

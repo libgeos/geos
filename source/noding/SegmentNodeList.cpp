@@ -25,8 +25,8 @@
 namespace geos {
 namespace noding { // geos.noding
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 #if PROFILE
@@ -164,7 +164,7 @@ SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 {
 
 	// testingOnly
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<__FUNCTION__<<" entered"<<endl;
 	vector<SegmentString*> testingSplitEdges;
 #endif
@@ -189,12 +189,12 @@ SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 
 		SegmentString *newEdge=createSplitEdge(eiPrev, ei);
 		edgeList.push_back(newEdge);
-#if DEBUG
+#if GEOS_DEBUG
 		testingSplitEdges.push_back(newEdge);
 #endif
 		eiPrev = ei;
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<__FUNCTION__<<" finished, now checking correctness"<<endl;
 	checkSplitEdgesCorrectness(testingSplitEdges);
 #endif
@@ -264,7 +264,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 
 	SegmentString *ret = new SegmentString(pts, edge.getContext());
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" SegmentString created"<<endl;
 #endif
 	splitEdges.push_back(ret);
@@ -308,6 +308,9 @@ operator<< (ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.25  2006/03/01 16:01:47  strk
  * Fixed const correctness of operator<<(ostream&, SegmentNodeList&) [bug#37]
  *

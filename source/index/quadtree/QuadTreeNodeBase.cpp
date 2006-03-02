@@ -17,8 +17,8 @@
 #include <sstream>
 #include <geos/indexQuadtree.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -37,7 +37,7 @@ QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
 		if (env->getMinY()>=centre.y) subnodeIndex=2;
 		if (env->getMaxY()<=centre.y) subnodeIndex=0;
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"getSubNodeIndex("<<env->toString()<<", "<<centre.toString()<<") returning "<<subnodeIndex<<endl;
 #endif
 	return subnodeIndex;
@@ -69,8 +69,8 @@ vector<void*>* QuadTreeNodeBase::getItems() {
 
 void QuadTreeNodeBase::add(void* item) {
 	items->push_back(item);
-	//DEBUG itemCount++;
-	//DEBUG System.out.print(itemCount);
+	//GEOS_DEBUG itemCount++;
+	//GEOS_DEBUG System.out.print(itemCount);
 }
 
 vector<void*>*
@@ -228,6 +228,9 @@ QuadTreeNodeBase::remove(const Envelope* itemEnv, void* item)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.14  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

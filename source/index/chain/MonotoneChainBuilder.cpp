@@ -17,7 +17,9 @@
 #include <geos/geomgraph.h>
 #include <stdio.h>
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 using namespace geos::geomgraph;
 
@@ -93,7 +95,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 		if (quad!=chainQuad) break;
 		last++;
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"MonotoneChainBuilder::findChainEnd() returning"<<endl;
 #endif
 	return last-1;
@@ -105,6 +107,9 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.19  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

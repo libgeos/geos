@@ -16,8 +16,8 @@
 #include <geos/opOverlay.h>
 #include <geos/io.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace std;
@@ -96,6 +96,9 @@ PointBuilder::filterCoveredNodeToPoint(const Node *n)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.18  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

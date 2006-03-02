@@ -17,8 +17,8 @@
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -33,13 +33,13 @@ Coordinate QuadTreeRoot::origin(0.0, 0.0);
 void
 QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"("<<this<<") insert("<<itemEnv->toString()<<", "<<item<<") called"<<endl;
 #endif
 	int index=getSubnodeIndex(itemEnv,origin);
 	// if index is -1, itemEnv must cross the X or Y axis.
 	if (index==-1) {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"  -1 subnode index"<<endl;
 #endif
 		add(item);
@@ -52,7 +52,7 @@ QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
 	 */
 	QuadTreeNode *node=subnode[index];
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"("<<this<<") subnode["<<index<<"] @ "<<node<<endl;
 #endif
 
@@ -106,6 +106,9 @@ QuadTreeRoot::insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.11  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

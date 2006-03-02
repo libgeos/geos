@@ -27,7 +27,9 @@
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
 
-//#define DEBUG 1
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
@@ -199,13 +201,13 @@ double
 LineIntersector::interpolateZ(const Coordinate &p,
 	const Coordinate &p1, const Coordinate &p2)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"LineIntersector::interpolateZ("<<p.toString()<<", "<<p1.toString()<<", "<<p2.toString()<<")"<<endl;
 #endif
 
 	if ( ISNAN(p1.z) )
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p1 do not have a Z"<<endl;
 #endif
 		return p2.z; // might be DoubleNotANumber again
@@ -213,7 +215,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 	if ( ISNAN(p2.z) )
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p2 do not have a Z"<<endl;
 #endif
 		return p1.z; // might be DoubleNotANumber again
@@ -221,14 +223,14 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 	if (p==p1)
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p==p1, returning "<<p1.z<<endl;
 #endif
 		return p1.z;
 	}
 	if (p==p2)
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p==p2, returning "<<p2.z<<endl;
 #endif
 		return p2.z;
@@ -238,7 +240,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	double zgap = p2.z - p1.z;
 	if ( ! zgap )
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" no zgap, returning "<<p2.z<<endl;
 #endif
 		return p2.z;
@@ -253,7 +255,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	double zoff = zgap*fract;
 	//double interpolated = p1.z < p2.z ? p1.z+zoff : p1.z-zoff;
 	double interpolated = p1.z+zoff;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" zgap:"<<zgap<<" seglen:"<<seglen<<" pdist:"<<pdist
 		<<" fract:"<<fract<<" z:"<<interpolated<<endl;
 #endif
@@ -279,7 +281,7 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 			}
 #if COMPUTE_Z
 			intPt[0]=p;
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<"RobustIntersector::computeIntersection(Coordinate,Coordinate,Coordinate) calling interpolateZ"<<endl;
 #endif
 			double z = interpolateZ(p, p1, p2);
@@ -315,17 +317,17 @@ LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, cons
 int
 LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"LineIntersector::computeIntersect called"<<endl;
 	cerr<<" p1:"<<p1.toString()<<" p2:"<<p2.toString()<<" q1:"<<q1.toString()<<" q2:"<<q2.toString()<<endl;
-#endif // DEBUG
+#endif // GEOS_DEBUG
 
 	isProperVar=false;
 
 	// first try a fast test to see if the envelopes of the lines intersect
 	if (!Envelope::intersects(p1,p2,q1,q2))
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" DONT_INTERSECT"<<endl;
 #endif
 		return DONT_INTERSECT;
@@ -339,7 +341,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 
 	if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0)) 
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" DONT_INTERSECT"<<endl;
 #endif
 		return DONT_INTERSECT;
@@ -349,7 +351,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 	int Qp2=CGAlgorithms::orientationIndex(q1,q2,p2);
 
 	if ((Qp1>0 && Qp2>0)||(Qp1<0 && Qp2<0)) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" DONT_INTERSECT"<<endl;
 #endif
 		return DONT_INTERSECT;
@@ -357,7 +359,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 
 	bool collinear=Pq1==0 && Pq2==0 && Qp1==0 && Qp2==0;
 	if (collinear) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" computingCollinearIntersection"<<endl;
 #endif
 		return computeCollinearIntersection(p1,p2,q1,q2);
@@ -420,18 +422,18 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 #endif
 		}
 #if COMPUTE_Z
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"LineIntersector::computeIntersect: z:"<<z<<" hits:"<<hits<<endl;
-#endif // DEBUG
+#endif // GEOS_DEBUG
 		if ( hits ) intPt[0].z = z/hits;
 #endif // COMPUTE_Z
 	} else {
 		isProperVar=true;
 		intersection(p1, p2, q1, q2, intPt[0]);
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" DO_INTERSECT; intPt[0]:"<<intPt[0].toString()<<endl;
-#endif // DEBUG
+#endif // GEOS_DEBUG
 	return DO_INTERSECT;
 }
 
@@ -448,10 +450,10 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 	double q2z;
 #endif // COMPUTE_Z
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"LineIntersector::computeCollinearIntersection called"<<endl;
 	cerr<<" p1:"<<p1.toString()<<" p2:"<<p2.toString()<<" q1:"<<q1.toString()<<" q2:"<<q2.toString()<<endl;
-#endif // DEBUG
+#endif // GEOS_DEBUG
 
 	bool p1q1p2=Envelope::intersects(p1,p2,q1);
 	bool p1q2p2=Envelope::intersects(p1,p2,q2);
@@ -459,7 +461,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 	bool q1p2q2=Envelope::intersects(q1,q2,p2);
 
 	if (p1q1p2 && p1q2p2) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p1q1p2 && p1q2p2"<<endl;
 #endif
 		intPt[0]=q1;
@@ -480,14 +482,14 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
 		return COLLINEAR;
 	}
 	if (q1p1q2 && q1p2q2) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" q1p1q2 && q1p2q2"<<endl;
 #endif
 		intPt[0]=p1;
@@ -511,7 +513,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		return COLLINEAR;
 	}
 	if (p1q1p2 && q1p1q2) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p1q1p2 && q1p1q2"<<endl;
 #endif
 		intPt[0]=q1;
@@ -532,14 +534,14 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
 		return (q1==p1) && !p1q2p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q1p2 && q1p2q2) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p1q1p2 && q1p2q2"<<endl;
 #endif
 		intPt[0]=q1;
@@ -560,14 +562,14 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
 		return (q1==p2) && !p1q2p2 && !q1p1q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q2p2 && q1p1q2) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p1q2p2 && q1p1q2"<<endl;
 #endif
 		intPt[0]=q2;
@@ -588,14 +590,14 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
 		return (q2==p1) && !p1q1p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
 	}
 	if (p1q2p2 && q1p2q2) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" p1q2p2 && q1p2q2"<<endl;
 #endif
 		intPt[0]=q2;
@@ -616,7 +618,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
@@ -639,7 +641,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 	//normalize(&n1, &n2, &n3, &n4, &normPt);
 	normalizeToEnvCentre(n1, n2, n3, n4, normPt);
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2,intPt) called:"<<endl;
 	cerr<<" p1"<<p1.toString()<<endl;
 	cerr<<" p2"<<p2.toString()<<endl;
@@ -654,7 +656,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 
 	try {
 		HCoordinate::intersection(n1,n2,n3,n4,intPt);
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" HCoordinate found intersection h:"<<intPt.toString()<<endl;
 #endif
 
@@ -676,7 +678,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
  * int point = (2097408.2633752143,1144595.8008114607)
  */
 
-#if DEBUG
+#if GEOS_DEBUG
 	if (!((LineIntersector *)this)->isInSegmentEnvelopes(intPt))
 	{
 		cerr<<"Intersection outside segment envelopes: "<<
@@ -781,6 +783,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/03/02 12:11:58  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.32  2006/02/27 09:05:32  strk
  * Doxygen comments, a few inlines and general cleanups
  *

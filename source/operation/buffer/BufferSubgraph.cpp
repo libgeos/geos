@@ -16,8 +16,8 @@
 
 #include <geos/opBuffer.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::geomgraph;
@@ -117,7 +117,7 @@ BufferSubgraph::computeDepth(int outsideDepth)
 	clearVisitedEdges();
 	// find an outside edge to assign depth to
 	DirectedEdge *de=finder.getEdge();
-#if DEBUG
+#if GEOS_DEBUG
 cerr<<"outside depth: "<<outsideDepth<<endl;
 #endif
 	//Node *n=de->getNode();
@@ -169,7 +169,7 @@ BufferSubgraph::copySymDepths(DirectedEdge *de)
 	DirectedEdge *sym=de->getSym();
 	sym->setDepth(Position::LEFT, de->getDepth(Position::RIGHT));
 	sym->setDepth(Position::RIGHT, de->getDepth(Position::LEFT));
-#if DEBUG
+#if GEOS_DEBUG
 cerr<<"copySymDepths: "<<de->getDepth(Position::LEFT)<<", "<<de->getDepth(Position::RIGHT)<<endl;
 #endif
 }
@@ -185,7 +185,7 @@ cerr<<"copySymDepths: "<<de->getDepth(Position::LEFT)<<", "<<de->getDepth(Positi
 void
 BufferSubgraph::findResultEdges()
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"BufferSubgraph::findResultEdges got "<<dirEdgeList.size()<<" edges"<<endl;
 #endif
 	for(unsigned int i=0; i<dirEdgeList.size(); ++i)
@@ -200,14 +200,14 @@ BufferSubgraph::findResultEdges()
 		 * count as "outside".
 		 */
 		// <FIX> - handle negative depths
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" dirEdge "<<i<<": depth right:"<<de->getDepth(Position::RIGHT)<<endl;
 #endif
 		if ( de->getDepth(Position::RIGHT)>=1
 			&&  de->getDepth(Position::LEFT)<=0
 			&& !de->isInteriorAreaEdge()) {
 					de->setInResult(true);
-#if DEBUG
+#if GEOS_DEBUG
 					cerr<<"   in result"<<endl;
 #endif
 		}
@@ -321,6 +321,9 @@ BufferSubgraph::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.21  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

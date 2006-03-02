@@ -21,8 +21,8 @@
 #include <cassert>
 #include <geos/opBuffer.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::geomgraph;
@@ -153,7 +153,7 @@ OffsetCurveBuilder::getCoordinates()
 	if (ptList->getSize()>1) {
 		const Coordinate &start=ptList->getAt(0);
 		const Coordinate &end=ptList->getAt(1);
-#if DEBUG
+#if GEOS_DEBUG
 		cerr << __FILE__ << ":" << __LINE__
 			<< ":"
 			<< " start:" << start
@@ -213,11 +213,11 @@ OffsetCurveBuilder::addPt(const Coordinate &pt)
 	unsigned int npts=ptList->getSize();
 	if ( npts ) {
 		const Coordinate& lastPt=ptList->getAt(npts-1);
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<__FUNCTION__<<" lastPt:"<<lastPt<<", currPt:"<<bufPt<<endl;
 #endif
 		if ( bufPt.equals2D(lastPt) ) {
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<" they equal!"<<endl;
 #endif
 			return;
@@ -501,6 +501,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.24  2006/02/28 19:22:21  strk
  * Fixed in-place definition of static members in OffsetCurveBuilder (bug#33)
  *

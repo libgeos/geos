@@ -22,8 +22,8 @@
 #include <geos/noding.h>
 #include <geos/profiler.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -85,6 +85,9 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.16  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

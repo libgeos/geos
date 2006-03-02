@@ -17,7 +17,9 @@
 #include <geos/geom.h>
 #include <geos/opOverlay.h>
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 #define PARANOIA_LEVEL 0
 
 namespace geos {
@@ -45,9 +47,9 @@ ElevationMatrix::~ElevationMatrix()
 void
 ElevationMatrix::add(const Geometry *geom)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"ElevationMatrix::add(Geometry *) called"<<endl;
-#endif // DEBUG
+#endif // GEOS_DEBUG
 
 #if PARANOIA_LEVEL > 0
 	Assert::isTrue(!avgElevationComputed, "Cannot add Geometries to an ElevationMatrix after it's average elevation has been computed");
@@ -181,6 +183,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.9  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -16,7 +16,9 @@
 
 #include <geos/geomgraph.h>
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -24,7 +26,7 @@ namespace geomgraph { // geos.geomgraph
 NodeMap::NodeMap(const NodeFactory &newNodeFact):
 	nodeFact(newNodeFact)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] NodeMap::NodeMap"<<endl;
 #endif
 }
@@ -40,12 +42,12 @@ NodeMap::~NodeMap()
 Node*
 NodeMap::addNode(const Coordinate& coord)
 {
-#if DEBUG
+#if GEOS_DEBUG
         cerr<<"["<<this<<"] NodeMap::addNode("<<coord.toString()<<")";
 #endif
         Node *node=find(coord);
         if (node==NULL) {
-#if DEBUG
+#if GEOS_DEBUG
                 cerr<<" is new"<<endl;
 #endif
                 node=nodeFact.createNode(coord);
@@ -53,7 +55,7 @@ NodeMap::addNode(const Coordinate& coord)
         }
         else
         {
-#if DEBUG
+#if GEOS_DEBUG
                 cerr<<" already found ("<<node->getCoordinate().toString()<<") - adding Z"<<endl;
 #endif
                 node->addZ(coord.z);
@@ -66,19 +68,19 @@ NodeMap::addNode(const Coordinate& coord)
 Node*
 NodeMap::addNode(Node *n)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] NodeMap::addNode("<<n->print()<<")";
 #endif
 	Coordinate *c=const_cast<Coordinate *>(&n->getCoordinate());
 	Node *node=find(*c);
 	if (node==NULL) {
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" is new"<<endl;
 #endif
 		nodeMap[c]=n;
 		return n;
 	}
-#if DEBUG
+#if GEOS_DEBUG
 	else
 	{
 		cerr<<" found already, merging label"<<endl;
@@ -88,7 +90,7 @@ NodeMap::addNode(Node *n)
 			node->addZ(zvals[i]);
 		}
 	}
-#endif // DEBUG
+#endif // GEOS_DEBUG
 	node->mergeLabel(n);
 	return node;
 }
@@ -145,6 +147,9 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.11  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

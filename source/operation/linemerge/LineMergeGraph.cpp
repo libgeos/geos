@@ -19,7 +19,9 @@
 
 using namespace geos::planargraph;
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 namespace geos {
 namespace operation { // geos.operation
@@ -30,7 +32,7 @@ LineMergeGraph::addEdge(const LineString *lineString)
 {
 	if (lineString->isEmpty()) return;
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Adding LineString "<<lineString->toString()<<endl;
 #endif
 
@@ -42,7 +44,7 @@ LineMergeGraph::addEdge(const LineString *lineString)
 
 	planarNode* startNode=getNode(startCoordinate);
 	planarNode* endNode=getNode(endCoordinate);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" startNode: "<<*startNode<<endl;
 	cerr<<" endNode: "<<*endNode<<endl;
 #endif
@@ -61,13 +63,13 @@ LineMergeGraph::addEdge(const LineString *lineString)
 	newEdges.push_back(edge);
 	edge->setDirectedEdges(directedEdge0, directedEdge1);
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" planarEdge: "<<*edge<<endl;
 #endif
 
 	add(edge);
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" After addition to the graph:"<<endl;
 	cerr<<"  startNode: "<<*startNode<<endl;
 	cerr<<"  endNode: "<<*endNode<<endl;
@@ -105,6 +107,9 @@ LineMergeGraph::~LineMergeGraph()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.11  2006/02/24 15:39:07  strk
  * - operator>> for Coordinate, planarNode and planarEdge
  * - Fixed bug in planarGraphComponent::setMarked

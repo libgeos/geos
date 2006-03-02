@@ -18,8 +18,8 @@
 #include <cassert>
 
 //#define DEBUG_INTERSECT 0
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 namespace geos {
@@ -116,7 +116,7 @@ Edge::getCollapsedEdge()
 void
 Edge::addIntersections(LineIntersector *li, int segmentIndex, int geomIndex)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] Edge::addIntersections("<<li->toString()<<", "<<segmentIndex<<", "<<geomIndex<<") called"<<endl;
 #endif
 	for (int i=0; i<li->getIntersectionNum();i++) {
@@ -131,7 +131,7 @@ void
 Edge::addIntersection(LineIntersector *li,
 	int segmentIndex, int geomIndex, int intIndex)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] Edge::addIntersection("<<li->toString()<<", "<<segmentIndex<<", "<<geomIndex<<", "<<intIndex<<") called"<<endl;
 #endif
 	const Coordinate& intPt=li->getIntersection(intIndex);
@@ -155,7 +155,7 @@ Edge::addIntersection(LineIntersector *li,
 	/*
 	 * Add the intersection point to edge intersection list.
 	 */
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Edge::addIntersection adding to edge intersection list point "<<intPt.toString()<<endl;
 #endif
 	eiList.add(intPt,normalizedSegmentIndex,dist);
@@ -196,13 +196,13 @@ Edge::isPointwiseEqual(const Edge *e) const
 {
 	testInvariant();
 
-#if DEBUG > 2
+#if GEOS_DEBUG > 2
 	cerr<<"Edge::isPointwiseEqual call"<<endl;
 #endif
 	unsigned int npts=getNumPoints();
 	unsigned int enpts=e->getNumPoints();
 	if (npts!=enpts) return false;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"Edge::isPointwiseEqual scanning "<<enpts<<"x"<<npts<<" points"<<endl;
 #endif
 	for (unsigned int i=0; i<npts; ++i)
@@ -270,6 +270,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.27  2006/02/28 14:34:04  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

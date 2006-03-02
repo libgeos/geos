@@ -17,8 +17,8 @@
 #include <geos/geomgraph.h>
 //#include "../headers/util.h"
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
@@ -33,7 +33,7 @@ Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges):
 	edges(newEdges)
 
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] Node::Node("<<newCoord.toString()<<")"<<endl;
 #endif
 
@@ -54,7 +54,7 @@ Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges):
 
 Node::~Node()
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] Node::~Node()"<<endl;
 #endif
 	delete edges;
@@ -94,7 +94,7 @@ Node::isIncidentEdgeInResult() const
 void
 Node::add(EdgeEnd *e)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] Node::add("<<e->print()<<")"<<endl;
 #endif
 	// Assert: start pt of e is equal to node point
@@ -170,19 +170,19 @@ Node::print()
 void
 Node::addZ(double z)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] Node::addZ("<<z<<")";
 #endif
 	if ( ISNAN(z) )
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" skipped"<<endl;
 #endif
 		return;
 	}
 	for (unsigned int i=0; i<zvals.size(); i++) if ( zvals[i] == z )
 	{
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<" already stored"<<endl;
 #endif
 		return;
@@ -190,7 +190,7 @@ Node::addZ(double z)
 	zvals.push_back(z);
 	ztot+=z;
 	coord.z=ztot/zvals.size();
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" added "<<z<<": ["<<ztot<<"/"<<zvals.size()<<"="<<coord.z<<"]"<<endl;
 #endif
 }
@@ -206,6 +206,9 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.17  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

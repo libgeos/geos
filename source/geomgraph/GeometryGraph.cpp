@@ -18,8 +18,8 @@
 #include <typeinfo>
 #include <geos/util.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::geomgraph::index;
@@ -113,14 +113,14 @@ GeometryGraph::findEdge(const LineString *line)
 void
 GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"["<<this<<"] GeometryGraph::computeSplitEdges() scanning "<<edges->size()<<" local and "<<edgelist->size()<<" provided edges"<<endl;
 #endif
 	for (vector<Edge*>::iterator i=edges->begin(), endIt=edges->end();
 		i!=endIt; ++i)
 	{
 		Edge *e=*i;
-#if DEBUG
+#if GEOS_DEBUG
 		cerr<<"   "<<e->print()<<" adding split edges from arg"<<endl;
 #endif
 		e->eiList.addSplitEdges(edgelist);
@@ -316,7 +316,7 @@ SegmentIntersector*
 GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	LineIntersector *li, bool includeProper)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"GeometryGraph::computeEdgeIntersections call"<<endl;
 #endif
 	SegmentIntersector *si=new SegmentIntersector(li, includeProper, true);
@@ -325,7 +325,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
 	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 	esi->computeIntersections(edges, g->edges, si);
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"GeometryGraph::computeEdgeIntersections returns"<<endl;
 #endif
 	return si;
@@ -335,7 +335,7 @@ void
 GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
 	int onLocation)
 {
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"GeometryGraph::insertPoint("<<coord.toString()<<" called"<<endl;
 #endif
 	Node *n=nodes->addNode(coord);
@@ -427,6 +427,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.20  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

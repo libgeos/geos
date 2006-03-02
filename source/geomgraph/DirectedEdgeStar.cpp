@@ -22,7 +22,9 @@
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -415,6 +417,9 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.13  2006/02/27 11:53:17  strk
  * DirectedEdgeStar made more safe trough assert(), use of standard iterator and
  * dynamic casts substituting static ones.

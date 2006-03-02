@@ -18,8 +18,11 @@
 #include <geos/geomgraphindex.h>
 #include <cmath>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
 #define DEBUG_INTERSECT 0
-#define DEBUG 0
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -116,7 +119,7 @@ void
 SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segIndex1)
 {
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"SegmentIntersector::addIntersections() called"<<endl;
 #endif
 
@@ -149,7 +152,7 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 		// only intersection.
 		if (!isTrivialIntersection(e0,segIndex0,e1,segIndex1))
 		{
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<"SegmentIntersector::addIntersections(): has !TrivialIntersection"<<endl;
 #endif // DEBUG_INTERSECT
 			hasIntersectionVar=true;
@@ -157,14 +160,14 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 				//Debug.println(li);
 				e0->addIntersections(li,segIndex0,0);
 				e1->addIntersections(li,segIndex1,1);
-#if DEBUG
+#if GEOS_DEBUG
 				cerr<<"SegmentIntersector::addIntersections(): includeProper || !li->isProper()"<<endl;
 #endif // DEBUG_INTERSECT
 			}
 			if (li->isProper())
 			{
 				properIntersectionPoint=li->getIntersection(0);
-#if DEBUG
+#if GEOS_DEBUG
 				cerr<<"SegmentIntersector::addIntersections(): properIntersectionPoint: "<<properIntersectionPoint.toString()<<endl;
 #endif // DEBUG_INTERSECT
 				hasProper=true;
@@ -209,6 +212,9 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.13  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

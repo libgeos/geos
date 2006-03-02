@@ -18,8 +18,8 @@
 #include <geos/indexQuadtree.h>
 #include <geos/profiler.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::index::quadtree;
@@ -68,7 +68,7 @@ EdgeList::findEqualEdge(Edge *e)
 	prof->stop();
 #endif
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr << "EdgeList::findEqualEdge found " << testEdges.size() <<
 			" overlapping edges" << endl;
 #endif
@@ -124,6 +124,9 @@ EdgeList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.13  2006/02/28 14:34:04  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

@@ -20,8 +20,8 @@
 
 #include <geos/opBuffer.h>
 
-#ifndef DEBUG
-#define DEBUG 0
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
 #endif
 
 using namespace geos::geomgraph;
@@ -46,7 +46,7 @@ SubgraphDepthLocater::getDepth(Coordinate &p)
 	sort(stabbedSegments.begin(), stabbedSegments.end(), DepthSegmentLT);
 	DepthSegment *ds=stabbedSegments[0];
 	int ret = ds->leftDepth;
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<"SubgraphDepthLocater::getDepth("<<p.toString()<<"): "<<ret<<endl;
 #endif
 
@@ -126,7 +126,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 #ifndef SKIP_LS
 		seg.p0=pts->getAt(i);
 		seg.p1=pts->getAt(i + 1);
-#if DEBUG
+#if GEOS_DEBUG
 		cerr << " SubgraphDepthLocater::findStabbedSegments: segment " << i
 			<< " (" << seg << ") ";
 #endif
@@ -143,7 +143,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 		//if (seg.p0.y > seg.p1.y)
 		{
 			seg.reverse();
-#if DEBUG
+#if GEOS_DEBUG
 			cerr << " reverse (" << seg << ") ";
 #endif
 		}
@@ -165,7 +165,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 #endif
 		if (maxx < stabbingRayLeftPt.x)
 		{
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<" segment is left to stabbing line, skipping "<<endl;
 #endif
 			continue;
@@ -179,7 +179,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 		if (low->y == high->y)
 #endif
 		{
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<" segment is horizontal, skipping "<<endl;
 #endif
 			continue;
@@ -194,7 +194,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 			stabbingRayLeftPt.y > high->y)
 #endif
 		{
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<" segment above or below stabbing line, skipping "<<endl;
 #endif
 			continue;
@@ -208,7 +208,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 #endif
 				stabbingRayLeftPt)==CGAlgorithms::RIGHT)
 		{
-#if DEBUG
+#if GEOS_DEBUG
 			cerr<<" stabbing ray right of segment, skipping"<<endl;
 #endif
 			continue;
@@ -227,7 +227,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 			dirEdge->getDepth(Position::LEFT);
 #endif
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr<<" depth: "<<depth<<endl;
 #endif
 
@@ -247,6 +247,9 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.19  2006/03/02 09:46:04  strk
  * cleaned up debugging lines
  *

@@ -18,6 +18,10 @@
  *
  **********************************************************************/
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
 #include <sstream>
 #include <iomanip>
 #include <geos/noding.h>
@@ -128,20 +132,20 @@ SegmentNode::compareTo(const SegmentNode& other)
 	if (segmentIndex < other.segmentIndex) return -1;
 	if (segmentIndex > other.segmentIndex) return 1;
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr << setprecision(17) << "compareTo: " << *this << ", " << other <<endl;
 #endif
 
 	if (coord.equals2D(other.coord)) {
 
-#if DEBUG
+#if GEOS_DEBUG
 		cerr << " Coordinates equal!"<<endl;
 #endif
 
 		return 0;
 	}
 
-#if DEBUG
+#if GEOS_DEBUG
 	cerr << " Coordinates do not equal!"<<endl;
 #endif
 
@@ -159,6 +163,9 @@ ostream& operator<< (ostream& os, const SegmentNode& n)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
  * Revision 1.12  2006/02/28 17:44:27  strk
  * Added a check in SegmentNode::addSplitEdge to prevent attempts
  * to build SegmentString with less then 2 points.
