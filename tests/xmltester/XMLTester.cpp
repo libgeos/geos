@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -788,6 +789,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/02 16:22:04  strk
+ * Updated copyright notice
+ *
  * Revision 1.15  2006/03/02 11:03:23  strk
  * Added assertion in relate test handler
  *
