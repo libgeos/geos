@@ -16,9 +16,10 @@
 
 #include <geos/opRelate.h>
 #include <geos/geomgraph.h>
+#include <vector>
 
+using namespace std;
 using namespace geos::geomgraph;
-
 
 namespace geos {
 namespace operation { // geos.operation
@@ -134,6 +135,9 @@ RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.16  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

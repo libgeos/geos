@@ -14,13 +14,13 @@
  *
  **********************************************************************/
 
-
-#include <sstream>
 #include <geos/geom.h>
 #include <geos/geosAlgorithm.h>
 #include <geos/operation.h>
 #include <geos/profiler.h>
+#include <sstream>
 
+using namespace std;
 using namespace geos::algorithm;
 using namespace geos::operation;
 
@@ -271,6 +271,9 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.26  2006/03/01 17:16:38  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

@@ -14,8 +14,11 @@
  **********************************************************************/
 
 #include <geos/io.h>
+#include <ostream>
 
 #undef DEBUG_WKB_WRITER 
+
+using namespace std;
 
 namespace geos {
 

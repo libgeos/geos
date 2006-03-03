@@ -16,6 +16,9 @@
 
 #include <geos/geomgraphindex.h>
 #include <algorithm>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -161,6 +164,9 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.9  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

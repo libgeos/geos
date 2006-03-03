@@ -17,15 +17,15 @@
 #ifndef GEOS_NODING_H
 #define GEOS_NODING_H
 
-#include <string>
-#include <vector>
-#include <set>
-#include <cassert>
+
 #include <geos/platform.h>
 #include <geos/geom.h>
-//#include <geos/geomgraph.h>
 #include <geos/geosAlgorithm.h>
-
+#include <cassert>
+#include <ostream>
+#include <set>
+#include <string>
+#include <vector>
 
 namespace geos {
 
@@ -91,7 +91,7 @@ private:
 	bool isInteriorVar;
 
 public:
-	friend ostream& operator<< (ostream& os, const SegmentNode& n);
+	friend std::ostream& operator<< (std::ostream& os, const SegmentNode& n);
 
 	/// the point of intersection (own copy)
 	Coordinate coord;  
@@ -136,7 +136,7 @@ public:
 	//string print() const;
 };
 
-ostream& operator<< (ostream& os, const SegmentNode& n);
+std::ostream& operator<< (std::ostream& os, const SegmentNode& n);
 
 struct SegmentNodeLT {
 	bool operator()(SegmentNode *s1, SegmentNode *s2) const {
@@ -152,7 +152,7 @@ struct SegmentNodeLT {
  */
 class SegmentNodeList {
 private:
-	set<SegmentNode*,SegmentNodeLT> nodeMap;
+	std::set<SegmentNode*,SegmentNodeLT> nodeMap;
 
 	// the parent edge
 	const SegmentString& edge; 
@@ -213,9 +213,9 @@ private:
 		unsigned int& collapsedVertexIndex);
 public:
 
-	friend ostream& operator<< (ostream& os, const SegmentNodeList& l);
+	friend std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 
-	typedef set<SegmentNode*,SegmentNodeLT> container;
+	typedef std::set<SegmentNode*,SegmentNodeLT> container;
 	typedef container::iterator iterator;
 	typedef container::const_iterator const_iterator;
 
@@ -250,7 +250,7 @@ public:
 	 */
 	//replaces iterator()
 	// TODO: obsolete this function
-	set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodeMap; }
+	std::set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodeMap; }
 
 	/// Return the number of nodes in this list
 	unsigned int size() { return nodeMap.size(); }
@@ -281,7 +281,7 @@ public:
 	//string print();
 };
 
-ostream& operator<< (ostream& os, const SegmentNodeList& l);
+std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 
 /** \brief
  * Represents a list of contiguous line segments,
@@ -1033,6 +1033,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.24  2006/02/28 17:44:27  strk
  * Added a check in SegmentNode::addSplitEdge to prevent attempts
  * to build SegmentString with less then 2 points.

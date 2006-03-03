@@ -20,9 +20,8 @@
 #include <geos/platform.h>
 #include <geos/noding.h>
 #include <geos/geom.h>
+#include <memory>
 #include <vector>
-
-using namespace std;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -59,10 +58,10 @@ private:
 	 *  10
 	 *  23
 	 */
-	vector<Coordinate> corner;
+	std::vector<Coordinate> corner;
 
 	// Owned by this class, constructed on demand
-	mutable auto_ptr<Envelope> safeEnv; 
+	mutable std::auto_ptr<Envelope> safeEnv; 
 
 	void initCorners(const Coordinate& pt);
 
@@ -190,16 +189,16 @@ private:
 	 * @param ret the vector to push intersection Coordinates to
 	 */
 	void findInteriorIntersections(SegmentString::NonConstVect& segStrings,
-			algorithm::LineIntersector& li, vector<Coordinate>& ret);
+			algorithm::LineIntersector& li, std::vector<Coordinate>& ret);
 
 	/**
 	 * Computes nodes introduced as a result of snapping segments to snap points (hot pixels)
 	 * @param li
 	 */
 	void computeSnaps(const SegmentString::NonConstVect& segStrings,
-			vector<Coordinate>& snapPts);
+		std::vector<Coordinate>& snapPts);
 
-	void computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts);
+	void computeSnaps(SegmentString* ss, std::vector<Coordinate>& snapPts);
 
 	/**
 	 * Performs a brute-force comparison of every segment in each {@link SegmentString}.
@@ -330,7 +329,7 @@ private:
 
 	SegmentString::NonConstVect* nodedSegStrings;
 
-	auto_ptr<MCIndexPointSnapper> pointSnapper;
+	std::auto_ptr<MCIndexPointSnapper> pointSnapper;
 
 	void snapRound(MCIndexNoder& noder, SegmentString::NonConstVect* segStrings);
 
@@ -344,12 +343,12 @@ private:
 	 */
 	void findInteriorIntersections(MCIndexNoder& noder,
 			SegmentString::NonConstVect* segStrings,
-			vector<Coordinate>& intersections);
+			std::vector<Coordinate>& intersections);
 
 	/**
 	 * Computes nodes introduced as a result of snapping segments to snap points (hot pixels)
 	 */
-	void computeIntersectionSnaps(vector<Coordinate>& snapPts);
+	void computeIntersectionSnaps(std::vector<Coordinate>& snapPts);
 
 	/**
 	 * Performs a brute-force comparison of every segment in each {@link SegmentString}.
@@ -395,6 +394,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/02/24 16:20:14  strk
  * Added Mateusz implementation of round() in a new math.cpp file
  * named sym_round(). Changed use of rint_vc to sym_round in PrecisionModel.

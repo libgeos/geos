@@ -17,8 +17,11 @@
  *
  **********************************************************************/
 
-#include <functional>
 #include "geos/nodingSnapround.h"
+#include <functional>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -119,6 +122,9 @@ MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentSt
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.5  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

@@ -14,13 +14,13 @@
  **********************************************************************/
 
 #include <geos/util.h>
+#include <string>
 
 namespace geos {
 
-string
-GEOSException::toString() const
+std::string GEOSException::toString() const
 {
-	string result(name);
+	std::string result(name);
 	result+=": ";
 	result+=txt;
 	return result;
@@ -30,6 +30,9 @@ GEOSException::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.8  2006/02/23 11:54:21  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

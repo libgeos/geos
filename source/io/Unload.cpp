@@ -28,6 +28,8 @@
 using namespace geos::operation::relate;
 //using namespace geos::index;
 
+using namespace std;
+
 namespace geos {
 
 /*public static*/
@@ -48,6 +50,9 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.20  2006/03/02 14:34:43  strk
  * GeometryGraphOperation::li made a non-static member, and not more a pointer
  *

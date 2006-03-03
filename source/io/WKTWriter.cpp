@@ -16,10 +16,13 @@
 #include <geos/io.h>
 #include <geos/util.h>
 #include <typeinfo>
-#include <stdio.h> // should avoid this
+#include <cstdio> // should avoid this
+#include <string>
 #include <sstream>
 
 #define PRINT_Z 0
+
+using namespace std;
 
 namespace geos {
 
@@ -367,6 +370,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.24  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

@@ -16,8 +16,6 @@
 
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <typeinfo>
-#include <algorithm>
 #include <geos/geosAlgorithm.h>
 #include <geos/operation.h>
 #include <geos/opRelate.h>
@@ -29,8 +27,14 @@
 #include <geos/io.h>
 #include <geos/version.h>
 
+#include <algorithm>
+#include <string>
+#include <typeinfo>
+#include <vector>
+
 #define SHORTCIRCUIT_PREDICATES 1
 
+using namespace std;
 using namespace geos::algorithm;
 using namespace geos::operation::valid;
 using namespace geos::operation::relate;
@@ -738,6 +742,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.93  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.92  2006/03/01 18:37:07  strk
  * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
  * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.

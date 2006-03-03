@@ -15,6 +15,9 @@
 
 #include <geos/geom.h>
 #include <sstream>
+#include <string>
+
+using namespace std;
 
 namespace geos {
 
@@ -65,6 +68,9 @@ Coordinate::operator=(const Coordinate &c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.27  2006/02/28 17:44:26  strk
  * Added a check in SegmentNode::addSplitEdge to prevent attempts
  * to build SegmentString with less then 2 points.

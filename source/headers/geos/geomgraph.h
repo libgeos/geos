@@ -18,17 +18,18 @@
 #ifndef GEOS_GEOMGRAPH_H
 #define GEOS_GEOMGRAPH_H
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <map>
-#include <set>
 #include <geos/geom.h>
 #include <geos/geomgraphindex.h>
 #include <geos/geosAlgorithm.h>
 #include <geos/indexQuadtree.h>
 #include <geos/platform.h>
 #include <geos/noding.h>
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <utility> // std::pair
+#include <vector>
 
 namespace geos {
 
@@ -135,7 +136,7 @@ public:
 	void setLocations(int on, int left, int right);
 	bool allPositionsEqual(int loc) const;
 	void merge(const TopologyLocation &gl);
-	string toString() const;
+	std::string toString() const;
 private:
 	std::vector<int> location;
 };
@@ -168,7 +169,7 @@ public:
 	bool isEqualOnSide(const Label &lbl, int side) const;
 	bool allPositionsEqual(int geomIndex, int loc) const;
 	void toLine(int geomIndex);
-	string toString() const;
+	std::string toString() const;
 protected:
 	TopologyLocation elt[2];
 };
@@ -188,7 +189,7 @@ public:
 	int getDelta(int geomIndex) const;
 	void normalize();
 	void add(const Label& lbl);
-	string toString() const;
+	std::string toString() const;
 private:
 	enum {
 		DEPTHNULL=-1 //Replaces NULL
@@ -296,7 +297,7 @@ public:
 	virtual int compareTo(const EdgeEnd *e) const;
 	virtual int compareDirection(const EdgeEnd *e) const;
 	virtual void computeLabel();
-	virtual string print();
+	virtual std::string print();
 protected:
 	Edge* edge;// the parent edge of this edge end
 	Label* label;
@@ -325,7 +326,7 @@ struct EdgeEndLT {
 class EdgeEndStar {
 public:
 
-	typedef set<EdgeEnd *, EdgeEndLT> container;
+	typedef std::set<EdgeEnd *, EdgeEndLT> container;
 
 	typedef container::iterator iterator;
 	typedef container::reverse_iterator reverse_iterator;
@@ -367,7 +368,7 @@ public:
 		return edgeMap.find(eSearch);
 	}
 
-	virtual string print();
+	virtual std::string print();
 
 protected:
 
@@ -476,7 +477,7 @@ public:
 	 */
 	void computeDepths(DirectedEdge *de);
 
-	string print();
+	std::string print();
 
 private:
 
@@ -517,7 +518,7 @@ public:
 	virtual void setLabel(int argIndex, int onLocation);
 	virtual void setLabelBoundary(int argIndex);
 	virtual int computeMergedLocation(const Label* label2, int eltIndex);
-	virtual string print();
+	virtual std::string print();
 	virtual const std::vector<double> &getZ() const;
 	virtual void addZ(double);
 	virtual bool isIncidentEdgeInResult() const;
@@ -550,7 +551,7 @@ public:
 	virtual ~EdgeIntersection();
 	int compare(int newSegmentIndex, double newDist) const;
 	bool isEndPoint(int maxSegmentIndex);
-	string print() const;
+	std::string print() const;
 	int compareTo(const EdgeIntersection *) const;
 };
 
@@ -572,7 +573,7 @@ struct EdgeIntersectionLessThen {
  */
 class EdgeIntersectionList{
 public:
-	typedef set<EdgeIntersection *, EdgeIntersectionLessThen> container;
+	typedef std::set<EdgeIntersection *, EdgeIntersectionLessThen> container;
 	typedef container::iterator iterator;
 	typedef container::const_iterator const_iterator;
 
@@ -617,7 +618,7 @@ public:
 	void addSplitEdges(std::vector<Edge*> *edgeList);
 
 	Edge *createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1);
-	string print() const;
+	std::string print() const;
 
 };
 
@@ -662,17 +663,17 @@ public:
 
 	int findEdgeIndex(Edge *e);
 
-	string print();
+	std::string print();
 
 };
 
 class NodeMap{
 public:
 
-	typedef map<Coordinate*,Node*,CoordinateLessThen> container;
+	typedef std::map<Coordinate*,Node*,CoordinateLessThen> container;
 	typedef container::iterator iterator;
 	typedef container::const_iterator const_iterator;
-	typedef pair<Coordinate*,Node*> pair;
+	typedef std::pair<Coordinate*,Node*> pair;
 
 	container nodeMap;
 	const NodeFactory &nodeFact;
@@ -691,7 +692,7 @@ public:
 	void getBoundaryNodes(int geomIndex,
 		std::vector<Node*>&bdyNodes) const;
 
-	string print() const;
+	std::string print() const;
 };
 
 
@@ -733,8 +734,8 @@ public:
 	bool isInteriorAreaEdge();
 	void setEdgeDepths(int position, int newDepth);
 	void OLDsetEdgeDepths(int position, int newDepth);
-	string print();
-	string printEdge();
+	std::string print();
+	std::string printEdge();
 protected:
 	bool isForwardVar;
 
@@ -893,7 +894,7 @@ public:
 
 	virtual Edge* findEdgeInSameDirection(const Coordinate& p0,const Coordinate& p1);
 
-	virtual string printEdges();
+	virtual std::string printEdges();
 
 	virtual NodeMap* getNodeMap();
 
@@ -926,7 +927,7 @@ private:
 	 * parentGeometry to the edges which are derived from them.
 	 * This is used to efficiently perform findEdge queries
 	 */
-	map<const LineString*,Edge*,LineStringLT> lineEdgeMap;
+	std::map<const LineString*,Edge*,LineStringLT> lineEdgeMap;
 
 	/**
 	 * If this flag is true, the Boundary Determination Rule will
@@ -941,15 +942,15 @@ private:
 	int argIndex;
 
 	/// Cache for fast responses to getBoundaryPoints
-	auto_ptr< CoordinateSequence > boundaryPoints;
+	std::auto_ptr< CoordinateSequence > boundaryPoints;
 
-	auto_ptr< std::vector<Node*> > boundaryNodes;
+	std::auto_ptr< std::vector<Node*> > boundaryNodes;
 
 	bool hasTooFewPointsVar;
 
 	Coordinate invalidPoint; 
 
-	vector<index::SegmentIntersector*> newSegmentIntersectors;
+	std::vector<index::SegmentIntersector*> newSegmentIntersectors;
 
 	/// Allocates a new EdgeSetIntersector. Remember to delete it!
 	index::EdgeSetIntersector* createEdgeSetIntersector();
@@ -1093,7 +1094,7 @@ using GraphComponent::updateIM;
 
 private:
 
-	string name;
+	std::string name;
 
 	/// Lazily-created, owned by Edge.
 	index::MonotoneChainEdge *mce;
@@ -1132,7 +1133,7 @@ public:
 		return pts->getSize();
 	}
 
-	virtual void setName(const string &newName) {
+	virtual void setName(const std::string &newName) {
 		name=newName;
 	}
 
@@ -1238,9 +1239,9 @@ public:
 	/// return true if the coordinate sequences of the Edges are identical
 	virtual bool isPointwiseEqual(const Edge *e) const;
 
-	virtual string print() const;
+	virtual std::string print() const;
 
-	virtual string printReverse() const;
+	virtual std::string printReverse() const;
 
 	/**
 	 * equals is defined to be:
@@ -1272,6 +1273,9 @@ inline bool operator==(const Edge &a, const Edge &b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.38  2006/03/02 14:34:30  strk
  * GeometryGraphOperation::li made a non-static member, and not more a pointer
  *

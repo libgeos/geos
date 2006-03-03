@@ -17,13 +17,13 @@
 #ifndef GEOS_OPBUFFER_H
 #define GEOS_OPBUFFER_H
 
-#include <memory>
 #include <geos/platform.h>
 #include <geos/operation.h>
 #include <geos/opOverlay.h>
 #include <geos/geomgraph.h>
 #include <geos/noding.h>
 #include <geos/geom.h>
+#include <set>
 #include <vector>
 
 namespace geos {
@@ -128,7 +128,7 @@ private:
 
 	void computeNodeDepth(geomgraph::Node *n);
 	void copySymDepths(geomgraph::DirectedEdge *de);
-	bool contains(set<geomgraph::Node*>&nodes,geomgraph::Node *node);
+	bool contains(std::set<geomgraph::Node*>&nodes,geomgraph::Node *node);
 
 public:
 
@@ -951,6 +951,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.21  2006/03/01 17:16:39  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

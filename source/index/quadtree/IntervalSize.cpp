@@ -15,6 +15,9 @@
  **********************************************************************/
 
 #include <geos/indexQuadtree.h>
+#include <algorithm>
+
+using namespace std;
 
 namespace geos {
 namespace index { // geos.index
@@ -35,6 +38,9 @@ bool IntervalSize::isZeroWidth(double mn,double mx){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.7  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

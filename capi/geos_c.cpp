@@ -16,12 +16,13 @@
  ***********************************************************************/
 
 // This should go away
-#include <stdio.h>
-
-#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
+#include <string>
 
 #include <geos.h>
 #include <geos/opValid.h>
@@ -346,7 +347,7 @@ GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat)
 {
 	try {
 		bool result;
-		string s = pat;
+		std::string s = pat;
 		result = g1->relate(g2,s);
 		return result;
 	}
@@ -372,14 +373,14 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 
 		IntersectionMatrix *im = g1->relate(g2);
 
-		string s;
+		std::string s;
 		char *result;
 		if (im == NULL)
 				return NULL;
 
 		s= im->toString();
-		result = (char*) malloc( s.length() + 1);
-		strcpy(result, s.c_str() );
+		result = (char*) std::malloc( s.length() + 1);
+		std::strcpy(result, s.c_str() );
 		delete im;
 
 		return result;
@@ -416,7 +417,7 @@ GEOSisValid(const Geometry *g1)
 		{
 			TopologyValidationError *err = ivo.getValidationError();
 			if ( err ) {
-				string errmsg = err->getMessage();
+				std::string errmsg = err->getMessage();
 				NOTICE_MESSAGE((char *)errmsg.c_str());
 			}
 		}
@@ -533,7 +534,7 @@ GEOSGeomFromWKT(const char *wkt)
 	try
 	{
 		WKTReader r(geomFactory);
-		const string wktstring = string(wkt);
+		const std::string wktstring = std::string(wkt);
 		Geometry *g = r.read(wktstring);
 		return g;
 	}
@@ -555,12 +556,11 @@ GEOSGeomToWKT(const Geometry *g1)
 {
 	try
 	{
-		string s = g1->toString();
-
+		std::string s = g1->toString();
 
 		char *result;
-		result = (char*) malloc( s.length() + 1);
-		strcpy(result, s.c_str() );
+		result = (char*) std::malloc( s.length() + 1);
+		std::strcpy(result, s.c_str() );
 		return result;
 	}
 	catch (const std::exception &e)
@@ -583,13 +583,13 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 	try
 	{
 		WKBWriter w(WKBOutputDims);
-		ostringstream s(ios_base::binary);
+		std::ostringstream s(std::ios_base::binary);
 		w.write(*g, s);
-		string wkbstring = s.str();
+		std::string wkbstring = s.str();
 		size_t len = wkbstring.length();
 
 		char *result;
-		result = (char*) malloc(len);
+		result = (char*) std::malloc(len);
 		memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
@@ -612,12 +612,12 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 {
 	try
 	{
-		string wkbstring = string(wkb, size); // make it binary !
+		std::string wkbstring = std::string(wkb, size); // make it binary !
 		WKBReader r(*geomFactory);
-		istringstream s(ios_base::binary);
+		std::istringstream s(std::ios_base::binary);
 		s.str(wkbstring);
 
-		s.seekg(0, ios::beg); // rewind reader pointer
+		s.seekg(0, std::ios::beg); // rewind reader pointer
 		Geometry *g = r.read(s);
 		return g;
 	}
@@ -707,12 +707,11 @@ GEOSGeomType(Geometry *g1)
 {
 	try
 	{
-		string s = g1->getGeometryType();
-
+		std::string s = g1->getGeometryType();
 
 		char *result;
-		result = (char*) malloc( s.length() + 1);
-		strcpy(result, s.c_str() );
+		result = (char*) std::malloc( s.length() + 1);
+		std::strcpy(result, s.c_str() );
 		return result;
 	}
 	catch (const std::exception &e)
@@ -1197,7 +1196,7 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 	try
 	{
 		Geometry *g;
-		vector<Geometry *> *vgeoms=new vector<Geometry *>(geoms, geoms+ngeoms);
+		std::vector<Geometry *> *vgeoms = new std::vector<Geometry *>(geoms, geoms+ngeoms);
 
 		switch (type)
 		{
@@ -1241,7 +1240,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	Geometry *out = NULL;
 
 	// construct vector
-	vector<Geometry *> *geoms = new vector<Geometry *>(ngeoms);
+	std::vector<Geometry *> *geoms = new std::vector<Geometry *>(ngeoms);
 	for (i=0; i<ngeoms; i++) (*geoms)[i] = g[i];
 
 #if GEOS_DEBUG
@@ -1256,7 +1255,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	ERROR_MESSAGE("geometry vector added to polygonizer");
 #endif
 
-		vector<Polygon *>*polys = plgnzr.getPolygons();
+		std::vector<Polygon *>*polys = plgnzr.getPolygons();
 
 #if GEOS_DEBUG
 	ERROR_MESSAGE("output polygons got");
@@ -1268,7 +1267,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	ERROR_MESSAGE("geometry vector deleted");
 #endif
 
-		geoms = new vector<Geometry *>(polys->size());
+		geoms = new std::vector<Geometry *>(polys->size());
 		for (i=0; i<polys->size(); i++) (*geoms)[i] = (*polys)[i];
 		delete polys;
 		out = geomFactory->createGeometryCollection(geoms);
@@ -1300,13 +1299,13 @@ GEOSLineMerge(Geometry *g)
 
                 lmrgr.add(g);
 
-                vector<LineString *>*lines = lmrgr.getMergedLineStrings();
+                std::vector<LineString *>*lines = lmrgr.getMergedLineStrings();
 
 #if GEOS_DEBUG
         ERROR_MESSAGE("output lines got");
 #endif
 
-                vector<Geometry *>*geoms = new vector<Geometry *>(lines->size());
+                std::vector<Geometry *>*geoms = new std::vector<Geometry *>(lines->size());
                 for (i=0; i<lines->size(); i++) (*geoms)[i] = (*lines)[i];
                 delete lines;
                 out = geomFactory->buildGeometry(geoms);
@@ -1650,7 +1649,7 @@ GEOSGeom_createPolygon(Geometry *shell, Geometry **holes,
 {
 	try
 	{
-		vector<Geometry *> *vholes=new vector<Geometry *>(holes, holes+nholes);
+		std::vector<Geometry *> *vholes = new std::vector<Geometry *>(holes, holes+nholes);
 		LinearRing *nshell = dynamic_cast<LinearRing *>(shell);
 		if ( ! nshell )
 		{

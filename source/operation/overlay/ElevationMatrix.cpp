@@ -13,14 +13,17 @@
  *
  **********************************************************************/
 
-#include <sstream>
 #include <geos/geom.h>
 #include <geos/opOverlay.h>
+#include <sstream>
+#include <string>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 #define PARANOIA_LEVEL 0
+
+using namespace std;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -183,6 +186,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

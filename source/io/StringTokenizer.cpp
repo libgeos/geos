@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.12  2005/04/14 11:49:02  strk
  * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
  *
@@ -37,8 +40,10 @@
  *
  **********************************************************************/
 
-
 #include <geos/io.h>
+#include <string>
+
+using namespace std;
 
 namespace geos {
 

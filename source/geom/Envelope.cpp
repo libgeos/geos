@@ -14,8 +14,11 @@
  *
  **********************************************************************/
 
-#include <sstream>
 #include <geos/geom.h>
+#include <algorithm>
+#include <sstream>
+
+using namespace std;
 
 namespace geos {
 
@@ -575,6 +578,9 @@ Envelope::expandBy(double deltaX, double deltaY)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.24  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

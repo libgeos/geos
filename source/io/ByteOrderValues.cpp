@@ -17,7 +17,6 @@
  *
  **********************************************************************/
 
-
 #include <geos/io.h>
 #include <geos/util.h>
 
@@ -149,6 +148,9 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.4  2006/01/21 16:08:30  strk
  * Fixed integer conversion bug (ported from JTS-1.7).
  * Added last port information.

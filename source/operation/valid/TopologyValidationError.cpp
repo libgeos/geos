@@ -19,6 +19,9 @@
  **********************************************************************/
 
 #include <geos/opValid.h>
+#include <string>
+
+using namespace std;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -84,6 +87,9 @@ TopologyValidationError::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.13  2006/03/01 10:48:55  strk
  * Changed static TopologyValidationError::errMsg[] from 'string' to 'const char*'
  * to reduce dynamic memory allocations.

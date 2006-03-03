@@ -14,9 +14,12 @@
  *
  **********************************************************************/
 
-#include <cassert>
 #include <geos/geom.h>
 #include <geos/util.h>
+#include <cassert>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 
@@ -196,6 +199,9 @@ CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.2  2006/02/28 14:34:03  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

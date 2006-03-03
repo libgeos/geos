@@ -21,6 +21,7 @@
 #include <geos/nodingSnapround.h>
 #include <geos/geosAlgorithm.h>
 
+using namespace std;
 using namespace geos::algorithm;
 
 namespace geos {
@@ -172,6 +173,9 @@ SimpleSnapRounder::findInteriorIntersections(SegmentString::NonConstVect& segStr
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.5  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

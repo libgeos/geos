@@ -14,13 +14,14 @@
  *
  **********************************************************************/
 
-#include <typeinfo>
-#include <cassert>
-#include <functional>
 #include <geos/opLinemerge.h>
 #include <geos/planargraph.h>
 #include <geos/util.h>
+#include <cassert>
+#include <functional>
+#include <vector>
 
+using namespace std;
 using namespace geos::planargraph;
 
 #ifndef GEOS_DEBUG
@@ -206,6 +207,9 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.11  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

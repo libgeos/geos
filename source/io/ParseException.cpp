@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.11  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -33,9 +36,11 @@
  *
  **********************************************************************/
 
-
-#include <sstream>
 #include <geos/io.h>
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 namespace geos {
 

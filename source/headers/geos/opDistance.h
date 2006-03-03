@@ -17,10 +17,10 @@
 #ifndef GEOS_OPDISTANCE_H
 #define GEOS_OPDISTANCE_H
 
-#include <memory>
 #include <geos/platform.h>
 #include <geos/operation.h>
 #include <geos/geom.h>
+#include <memory>
 #include <vector>
 
 namespace geos {
@@ -90,7 +90,7 @@ public:
 class ConnectedElementPointFilter: public GeometryFilter {
 
 private:
-	vector<const Coordinate*> *pts;
+	std::vector<const Coordinate*> *pts;
 
 public:
 	/**
@@ -98,9 +98,9 @@ public:
 	 * found inside the specified geometry. Thus, if the specified geometry is
 	 * not a GeometryCollection, an empty list will be returned.
 	 */
-	static vector<const Coordinate*>* getCoordinates(const Geometry *geom);
+	static std::vector<const Coordinate*>* getCoordinates(const Geometry *geom);
 
-	ConnectedElementPointFilter(vector<const Coordinate*> *newPts)
+	ConnectedElementPointFilter(std::vector<const Coordinate*> *newPts)
 		:
 		pts(newPts)
 	{}
@@ -120,7 +120,7 @@ public:
 class ConnectedElementLocationFilter: public GeometryFilter {
 private:
 
-	vector<GeometryLocation*> *locations;
+	std::vector<GeometryLocation*> *locations;
 
 public:
 	/**
@@ -129,9 +129,9 @@ public:
 	 * not a GeometryCollection, an empty list will be returned. The elements of the list 
 	 * are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
 	 */  
-	static vector<GeometryLocation*>* getLocations(const Geometry *geom);
+	static std::vector<GeometryLocation*>* getLocations(const Geometry *geom);
 
-	ConnectedElementLocationFilter(vector<GeometryLocation*> *newLocations)
+	ConnectedElementLocationFilter(std::vector<GeometryLocation*> *newLocations)
 		:
 		locations(newLocations)
 	{}
@@ -199,51 +199,51 @@ public:
 	*
 	* @return a pair of {@link GeometryLocation}s for the closest points
 	*/
-	vector<GeometryLocation*>* closestLocations();
+	std::vector<GeometryLocation*>* closestLocations();
 
 private:
 
 	algorithm::PointLocator ptLocator;
-	vector<Geometry const*> geom;
-	vector<Coordinate *> newCoords;
-	vector<GeometryLocation*> *minDistanceLocation;
+	std::vector<Geometry const*> geom;
+	std::vector<Coordinate *> newCoords;
+	std::vector<GeometryLocation*> *minDistanceLocation;
 	double minDistance;
 	void updateMinDistance(double dist);
-	void updateMinDistance(vector<GeometryLocation*> *locGeom, bool flip);
+	void updateMinDistance(std::vector<GeometryLocation*> *locGeom, bool flip);
 	void computeMinDistance();
 	void computeContainmentDistance();
 
-	void computeInside(vector<GeometryLocation*> *locs,
+	void computeInside(std::vector<GeometryLocation*> *locs,
 			const Polygon::ConstVect& polys,
-			vector<GeometryLocation*> *locPtPoly);
+			std::vector<GeometryLocation*> *locPtPoly);
 
 	void computeInside(GeometryLocation *ptLoc,
 			const Polygon *poly,
-			vector<GeometryLocation*> *locPtPoly);
+			std::vector<GeometryLocation*> *locPtPoly);
 
 	void computeLineDistance();
 
 	void computeMinDistanceLines(
 			const LineString::ConstVect& lines0,
 			const LineString::ConstVect& lines1,
-			vector<GeometryLocation*>& locGeom);
+			std::vector<GeometryLocation*>& locGeom);
 
 	void computeMinDistancePoints(
 			const Point::ConstVect& points0,
 			const Point::ConstVect& points1,
-			vector<GeometryLocation*>& locGeom);
+			std::vector<GeometryLocation*>& locGeom);
 
 	void computeMinDistanceLinesPoints(
 			const LineString::ConstVect& lines0,
 			const Point::ConstVect& points1,
-			vector<GeometryLocation*>& locGeom);
+			std::vector<GeometryLocation*>& locGeom);
 
 	void computeMinDistance(const LineString *line0,
 			const LineString *line1,
-			vector<GeometryLocation*>& locGeom);
+			std::vector<GeometryLocation*>& locGeom);
 
 	void computeMinDistance(const LineString *line, const Point *pt,
-			vector<GeometryLocation*>& locGeom);
+			std::vector<GeometryLocation*>& locGeom);
 };
 
 } // namespace geos.operation.distance
@@ -254,6 +254,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.7  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

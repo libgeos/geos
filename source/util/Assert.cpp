@@ -15,6 +15,9 @@
 
 #include <geos/util.h>
 #include <geos/geom.h>
+#include <string>
+
+using std::string;
 
 namespace geos {
 
@@ -50,6 +53,9 @@ void Assert::shouldNeverReachHere(const string& message) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.11  2006/02/23 11:54:21  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

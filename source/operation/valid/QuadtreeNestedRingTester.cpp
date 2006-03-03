@@ -21,9 +21,10 @@
 
 #include <geos/opValid.h>
 #include <geos/geomgraph.h>
-#include <stdio.h>
 #include <geos/util.h>
+#include <vector>
 
+using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
 using namespace geos::index::quadtree;
@@ -122,6 +123,9 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.18  2006/02/23 11:54:21  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

@@ -16,13 +16,11 @@
 #ifndef GEOS_INDEXCHAIN_H
 #define GEOS_INDEXCHAIN_H
 
+#include <geos/platform.h>
+#include <geos/geom.h>
 #include <cassert>
 #include <memory>
 #include <vector>
-#include <geos/platform.h>
-#include <geos/geom.h>
-
-using namespace std;
 
 namespace geos {
 namespace index { // geos.index
@@ -227,7 +225,7 @@ public:
 	 * MonotoneChain objects for the given CoordinateSequence.
 	 * Remember to deep-delete the result.
 	 */
-	static vector<indexMonotoneChain*>* getChains(
+	static std::vector<indexMonotoneChain*>* getChains(
 			const CoordinateSequence *pts,
 			void* context);
 
@@ -238,9 +236,9 @@ public:
 	 */
 	static void getChains(const CoordinateSequence *pts,
 			void* context,
-			vector<indexMonotoneChain*>& mcList);
+			std::vector<indexMonotoneChain*>& mcList);
 
-	static vector<indexMonotoneChain*>* getChains(const CoordinateSequence *pts) {
+	static std::vector<indexMonotoneChain*>* getChains(const CoordinateSequence *pts) {
 		return getChains(pts, NULL);
 	}
 
@@ -251,7 +249,7 @@ public:
 	 * for use as a sentinel.
 	 */
 	static void getChainStartIndices(const CoordinateSequence *pts,
-			vector<int>& startIndexList);
+			std::vector<int>& startIndexList);
 
 	/**
 	 * @return the index of the last point in the monotone chain starting at <code>start</code>.
@@ -267,6 +265,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

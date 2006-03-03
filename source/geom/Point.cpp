@@ -16,6 +16,9 @@
 
 #include <geos/geom.h>
 #include <geos/util.h>
+#include <string>
+
+using namespace std;
 
 namespace geos {
 
@@ -208,6 +211,9 @@ Point::getGeometryTypeId() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.39  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.38  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

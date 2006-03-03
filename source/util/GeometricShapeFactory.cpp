@@ -15,10 +15,13 @@
 
 #include <geos/geom.h>
 #include <geos/util.h>
+#include <vector>
 
 #ifndef M_PI
 #define M_PI        3.14159265358979323846
 #endif
+
+using namespace std;
 
 namespace geos {
 
@@ -260,6 +263,9 @@ Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.11  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

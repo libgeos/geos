@@ -19,8 +19,9 @@
  **********************************************************************/
 
 #include <geos/precision.h>
-#include <typeinfo>
+#include <vector>
 
+using namespace std;
 using namespace geos::geom::util;
 
 namespace geos {
@@ -132,6 +133,9 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.11  2006/03/02 16:21:26  strk
  * geos::precision namespace added
  *

@@ -123,7 +123,7 @@ public:
 	void insert(geomgraph::EdgeEnd *e);
 	void computeLabel() ; 
 	void updateIM(IntersectionMatrix *im);
-	string print();
+	std::string print();
 protected:
 	std::vector<geomgraph::EdgeEnd*> *edgeEnds;
 	void computeLabelOn(int geomIndex);
@@ -282,6 +282,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.7  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

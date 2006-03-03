@@ -14,6 +14,12 @@
  **********************************************************************/
 
 #include <geos/profiler.h>
+#include <iostream>
+#include <map>
+#include <string>
+#include <utility>
+
+using namespace std;
 
 namespace geos {
 
@@ -162,6 +168,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.6  2005/02/01 14:18:04  strk
  * Made profiler start/stop inline
  *

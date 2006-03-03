@@ -18,11 +18,12 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <functional>
 #include <geos/geom.h>
 #include <geos/opOverlay.h>
 #include <geos/util.h>
+#include <cassert>
+#include <functional>
+#include <vector>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -32,6 +33,7 @@
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
 
+using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
 
@@ -790,6 +792,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.56  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.55  2006/03/02 14:34:43  strk
  * GeometryGraphOperation::li made a non-static member, and not more a pointer
  *

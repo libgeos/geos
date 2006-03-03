@@ -17,7 +17,6 @@
 #ifndef GEOS_ALGORITHM_H
 #define GEOS_ALGORITHM_H
 
-#include <memory>
 #include <geos/geom.h>
 #include <geos/util.h>
 #include <geos/platform.h>
@@ -25,6 +24,8 @@
 #include <geos/indexStrtree.h>
 #include <geos/indexStrtree.h>
 #include <geos/indexChain.h>
+#include <memory>
+#include <string>
 
 namespace geos {
 
@@ -84,7 +85,7 @@ namespace algorithm { // geos.algorithm
 class NotRepresentableException: public GEOSException {
 public:
 	NotRepresentableException();
-	NotRepresentableException(string msg);
+	NotRepresentableException(std::string msg);
 	~NotRepresentableException() throw() {}
 };
 
@@ -328,8 +329,7 @@ public:
 	void computeIntersection(const Coordinate& p1, const Coordinate& p2,
 			const Coordinate& p3, const Coordinate& p4);
 
-
-	string toString() const;
+	std::string toString() const;
 
 	/**
 	 * Tests whether the input geometries intersect.
@@ -1158,6 +1158,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.25  2006/03/01 17:16:39  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

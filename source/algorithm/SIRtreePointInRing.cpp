@@ -18,7 +18,9 @@
 
 #include <geos/geosAlgorithm.h>
 #include <geos/indexStrtree.h>
+#include <vector>
 
+using namespace std;
 using namespace geos::index::strtree;
 
 namespace geos {
@@ -110,6 +112,9 @@ SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.14  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

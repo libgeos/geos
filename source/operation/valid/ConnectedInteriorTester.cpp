@@ -19,13 +19,13 @@
  *
  **********************************************************************/
 
-
 #include <geos/opValid.h>
 #include <geos/opOverlay.h>
 #include <geos/geomgraph.h>
 #include <geos/util.h>
-#include <typeinfo>
+#include <vector>
 
+using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::operation::overlay;
 
@@ -228,6 +228,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.18  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

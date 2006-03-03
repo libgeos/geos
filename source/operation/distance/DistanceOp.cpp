@@ -19,7 +19,9 @@
 #include <geos/opDistance.h>
 #include <geos/geomUtil.h>
 #include <geos/geosAlgorithm.h>
+#include <vector>
 
+using namespace std;
 using namespace geos::algorithm;
 
 namespace geos {
@@ -450,6 +452,9 @@ DistanceOp::computeMinDistance(const LineString *line,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.19  2006/03/01 17:16:39  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

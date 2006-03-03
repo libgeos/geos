@@ -18,9 +18,12 @@
  *
  **********************************************************************/
 
-#include <cassert>
 #include <geos/noding.h>
 #include <geos/profiler.h>
+#include <cassert>
+#include <set>
+
+using namespace std;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -308,6 +311,9 @@ operator<< (ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.26  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

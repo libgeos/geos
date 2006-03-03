@@ -17,15 +17,13 @@
 #ifndef GEOS_OPERATION_H
 #define GEOS_OPERATION_H
 
-#include <memory>
-#include <vector>
-#include <map>
 #include <geos/platform.h>
 #include <geos/geomgraph.h>
 #include <geos/geom.h>
 #include <geos/geosAlgorithm.h>
-
-//using namespace std;
+#include <memory>
+#include <map>
+#include <vector>
 
 namespace geos {
 
@@ -82,7 +80,7 @@ public:
 private:
 	bool hasNonEndpointIntersection(geomgraph::GeometryGraph &graph);
 	bool hasClosedEndpointIntersection(geomgraph::GeometryGraph &graph);
-	void addEndpoint(map<const Coordinate*,EndpointInfo*,CoordinateLessThen>&endPoints, const Coordinate *p,bool isClosed);
+	void addEndpoint(std::map<const Coordinate*,EndpointInfo*,CoordinateLessThen>&endPoints, const Coordinate *p,bool isClosed);
 };
 
 } // namespace geos.operation
@@ -92,6 +90,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.9  2006/03/02 14:34:32  strk
  * GeometryGraphOperation::li made a non-static member, and not more a pointer
  *

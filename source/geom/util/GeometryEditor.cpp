@@ -15,7 +15,9 @@
 
 #include <geos/geomUtil.h>
 #include <geos/util.h>
-#include <typeinfo>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace geom { // geos.geom
@@ -173,6 +175,9 @@ CoordinateOperation::edit(const Geometry *geometry, const GeometryFactory *facto
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.13  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

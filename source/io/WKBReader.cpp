@@ -14,9 +14,10 @@
  **********************************************************************/
 
 #include <geos/io.h>
+#include <ostream>
+#include <string>
 
-//#define DEBUG_WKB_READER 1
-//#define DEBUG_HEX_READER 1
+using namespace std;
 
 namespace geos {
 

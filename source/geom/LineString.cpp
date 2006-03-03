@@ -15,11 +15,12 @@
  **********************************************************************/
 
 #include <geos/geom.h>
-#include <algorithm>
-#include <typeinfo>
 #include <geos/geosAlgorithm.h>
 #include <geos/operation.h>
+#include <algorithm>
+#include <typeinfo>
 
+using namespace std;
 using namespace geos::algorithm;
 using namespace geos::operation;
 
@@ -286,6 +287,9 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.59  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.58  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

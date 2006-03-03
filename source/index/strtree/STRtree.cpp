@@ -17,6 +17,9 @@
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
 #include <geos/profiler.h>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace index { // geos.index
@@ -202,6 +205,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.25  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

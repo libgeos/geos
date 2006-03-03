@@ -16,6 +16,9 @@
 
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace index { // geos.index
@@ -27,7 +30,7 @@ namespace strtree { // geos.index.strtree
  * the root node will have the highest level
  */
 AbstractNode::AbstractNode(int newLevel, int capacity) {
-	childBoundables=new vector<Boundable*>();
+	childBoundables=new std::vector<Boundable*>();
 	childBoundables->reserve(capacity);
 	bounds=NULL;
 	level=newLevel;
@@ -77,6 +80,9 @@ void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

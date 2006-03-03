@@ -15,6 +15,9 @@
 
 
 #include <geos/planargraph.h>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace planargraph {
@@ -88,6 +91,9 @@ ConnectedSubgraphFinder::addEdges(planarNode* node,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.3  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

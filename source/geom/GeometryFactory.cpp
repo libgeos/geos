@@ -17,8 +17,11 @@
 #include <geos/geom.h>
 #include <geos/geomUtil.h>
 #include <geos/util.h>
-#include <typeinfo>
 #include <cassert>
+#include <vector>
+#include <typeinfo>
+
+using namespace std;
 
 namespace geos {
 
@@ -797,6 +800,9 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.59  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.58  2006/03/01 18:37:08  strk
  * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
  * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.

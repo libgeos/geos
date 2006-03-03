@@ -96,9 +96,9 @@ public:
 	TopologyValidationError(int newErrorType, const Coordinate& newPt);
 	TopologyValidationError(int newErrorType);
 	Coordinate& getCoordinate();
-	string getMessage();
+	std::string getMessage();
 	int getErrorType();
-	string toString();
+	std::string toString();
 
 private:
 	// Used const char* to reduce dynamic allocations
@@ -513,6 +513,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.15  2006/03/01 10:48:54  strk
  * Changed static TopologyValidationError::errMsg[] from 'string' to 'const char*'
  * to reduce dynamic memory allocations.

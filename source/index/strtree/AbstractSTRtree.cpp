@@ -18,10 +18,13 @@
 #include <geos/util.h>
 #include <geos/profiler.h>
 #include <algorithm>
+#include <vector>
 #include <typeinfo>
 #include <cassert>
 
 //#define PROFILE 1
+
+using namespace std;
 
 namespace geos {
 namespace index { // geos.index
@@ -306,6 +309,9 @@ AbstractSTRtree::boundablesAtLevel(int level, AbstractNode* top,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.27  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

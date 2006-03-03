@@ -17,12 +17,13 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_H
 #define GEOS_GEOMGRAPH_INDEX_H
 
-#include <memory>
 #include <geos/geomgraph.h>
 #include <geos/geom.h>
-#include <vector>
 #include <geos/geosAlgorithm.h>
 #include <geos/platform.h>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -182,7 +183,7 @@ public:
 	}
 	SweepLineEventOBJ* getObject() const { return obj; }
 	int compareTo(SweepLineEvent *sle);
-	string print();
+	std::string print();
 	void* edgeSet;    // used for red-blue intersection detection
 protected:
 	SweepLineEventOBJ* obj;
@@ -337,6 +338,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/03/02 14:53:44  strk
  * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
  *

@@ -15,7 +15,9 @@
  **********************************************************************/
 
 #include <geos/geosAlgorithm.h>
+#include <vector>
 
+using namespace std;
 using namespace geos::index::chain;
 using namespace geos::index::bintree;
 
@@ -143,6 +145,9 @@ MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.21  2006/02/21 16:53:48  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

@@ -15,6 +15,9 @@
  **********************************************************************/
 
 #include <geos/planargraph.h>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace planargraph {
@@ -175,6 +178,9 @@ planarDirectedEdgeStar::getNextEdge(planarDirectedEdge *dirEdge)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

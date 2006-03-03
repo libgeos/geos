@@ -14,13 +14,13 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <cassert>
 #include <geos/geom.h>
 #include <geos/operation.h>
 #include <geos/geomgraph.h>
 #include <geos/geosAlgorithm.h>
+#include <vector>
 
+using namespace std;
 using namespace geos::algorithm;
 using namespace geos::operation;
 using namespace geos::geomgraph;
@@ -118,6 +118,9 @@ MultiLineString::reverse() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.27  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

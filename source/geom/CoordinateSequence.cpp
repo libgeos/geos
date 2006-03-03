@@ -15,7 +15,11 @@
 
 #include <geos/geom.h>
 #include <geos/profiler.h>
-#include <stdio.h>
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 
@@ -224,6 +228,9 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.13  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

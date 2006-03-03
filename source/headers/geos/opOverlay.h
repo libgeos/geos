@@ -14,19 +14,18 @@
  *
  **********************************************************************/
 
-
 #ifndef GEOS_OPOVERLAY_H
 #define GEOS_OPOVERLAY_H
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <set>
-#include <map>
 #include <geos/platform.h>
 #include <geos/operation.h>
 #include <geos/geomgraph.h>
 #include <geos/geosAlgorithm.h>
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
 
 namespace geos {
 namespace operation { // geos.operation
@@ -77,9 +76,9 @@ public:
 	void add(double z);
 	double getAvg(void) const;
 	double getTotal(void) const;
-	string print() const;
+	std::string print() const;
 private:
-	set<double>zvals;
+	std::set<double>zvals;
 	double ztot;
 };
 
@@ -116,7 +115,7 @@ public:
 	double getAvgElevation() const;
 	ElevationMatrixCell &getCell(const Coordinate &c);
 	const ElevationMatrixCell &getCell(const Coordinate &c) const;
-	string print() const;
+	std::string print() const;
 private:
 	ElevationMatrixFilter filter;
 	//void add(const CoordinateSequence *cs);
@@ -478,7 +477,7 @@ public:
 		:
 		op(newOp),
 		geometryFactory(newGeometryFactory),
-		resultPointList(new vector<Point *>())
+		resultPointList(new std::vector<Point *>())
 	{}
 
 	/*
@@ -698,7 +697,7 @@ public:
 	EdgeSetNoder(algorithm::LineIntersector *newLi)
 		:
 		li(newLi),
-		inputEdges(new vector<geomgraph::Edge*>())
+		inputEdges(new std::vector<geomgraph::Edge*>())
 	{}
 
 	~EdgeSetNoder() {
@@ -718,6 +717,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.20  2006/02/27 09:05:33  strk
  * Doxygen comments, a few inlines and general cleanups
  *

@@ -16,7 +16,10 @@
 
 #include <geos/geosAlgorithm.h>
 #include <geos/platform.h>
+#include <vector>
 #include <typeinfo>
+
+using namespace std;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -147,6 +150,9 @@ InteriorPointArea::horizontalBisector(const Geometry *geometry)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.18  2006/03/01 17:16:31  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

@@ -17,11 +17,12 @@
 #ifndef GEOS_INDEXQUADTREE_H
 #define GEOS_INDEXQUADTREE_H
 
-#include <memory>
-#include <vector>
 #include <geos/platform.h>
 #include <geos/geom.h>
 #include <geos/spatialIndex.h>
+#include <memory>
+#include <string>
+#include <vector>
 
 #if __STDC_IEC_559__
 #define ASSUME_IEEE_DOUBLE 1
@@ -68,7 +69,7 @@ public:
 	static double powerOf2(int exp);
 	static int exponent(double d);
 	static double truncateToPowerOfTwo(double d);
-	static string toBinaryString(double d);
+	static std::string toBinaryString(double d);
 	static double maximumCommonMantissa(double d1, double d2);
 	DoubleBits(double nx);
 	double getDouble();
@@ -77,7 +78,7 @@ public:
 	void zeroLowerBits(int nBits);
 	int getBit(int i);
 	int numCommonMantissaBits(DoubleBits *db);
-	string toString();
+	std::string toString();
 private:
 	double x;
 //	long long xBits;
@@ -138,7 +139,7 @@ public:
 	virtual int depth();
 	virtual int size();
 	virtual int nodeCount();
-	virtual string toString() const;
+	virtual std::string toString() const;
 
 	virtual void visit(const Envelope* searchEnv, ItemVisitor& visitor);
 
@@ -243,7 +244,7 @@ public:
 
 	void insertNode(QuadTreeNode *node);
 
-	string toString() const;
+	std::string toString() const;
 
 };
 
@@ -376,7 +377,7 @@ public:
 	/// Return a list of all items in the Quadtree
 	std::vector<void*>* queryAll();
 
-	string toString() const;
+	std::string toString() const;
 
 };
 
@@ -388,6 +389,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.12  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

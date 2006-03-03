@@ -19,7 +19,9 @@
 #include <geos/opOverlay.h>
 #include <geos/geomgraph.h>
 #include <geos/geosAlgorithm.h>
+#include <memory>
 
+using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geomgraph::index;
@@ -119,6 +121,9 @@ bool ConsistentAreaTester::hasDuplicateRings() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.11  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

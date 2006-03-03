@@ -14,6 +14,10 @@
  **********************************************************************/
 
 #include <geos/geom.h>
+#include <string>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 
@@ -31,7 +35,9 @@ namespace geos {
 *	Constructed object will take ownership of
 *	the vector and its elements.
 */
-MultiPolygon::MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *factory): GeometryCollection(newPolys,factory){}
+MultiPolygon::MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *factory)
+	: GeometryCollection(newPolys,factory)
+{}
 
 MultiPolygon::~MultiPolygon(){}
 
@@ -98,6 +104,9 @@ MultiPolygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.24  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

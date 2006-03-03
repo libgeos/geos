@@ -16,6 +16,9 @@
 
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
+#include <vector>
+
+using namespace std;
 
 namespace geos {
 namespace index { // geos.index
@@ -125,6 +128,9 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.17  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

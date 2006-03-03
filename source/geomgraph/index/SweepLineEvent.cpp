@@ -14,8 +14,10 @@
  *
  **********************************************************************/
 
-#include <sstream>
 #include <geos/geomgraphindex.h>
+#include <sstream>
+
+using namespace std;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -77,6 +79,9 @@ SweepLineEvent::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.8  2006/03/02 14:53:40  strk
  * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
  *

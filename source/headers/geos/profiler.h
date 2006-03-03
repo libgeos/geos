@@ -16,21 +16,19 @@
 #ifndef GEOS_PROFILER_H
 #define GEOS_PROFILER_H
 
-#include <memory>
-#include <vector>
-#include <map>
-#include <iostream>
-#include <string>
 #ifndef _MSC_VER
 #  include <sys/time.h>
 #endif
 #include <geos/timeval.h>
+#include <map>
+#include <memory>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #ifndef PROFILE
 #define PROFILE 0
 #endif
-
-using namespace std;
 
 namespace geos {
 
@@ -43,7 +41,7 @@ namespace geos {
 class Profile {
 public:
 	/** \brief Create a named profile */
-	Profile(string name);
+	Profile(std::string name);
 
 	/** \brief Destructor */
 	~Profile();
@@ -87,7 +85,7 @@ public:
 	unsigned int getNumTimings() const;
 
 	/** \brief Profile name */
-	string name;
+	std::string name;
 
 
 private:
@@ -96,7 +94,7 @@ private:
 	struct timeval starttime, stoptime;
 
 	/* \brief actual times */
-	vector<double> timings;
+	std::vector<double> timings;
 
 	/* \brief total time */
 	double totaltime;
@@ -137,33 +135,36 @@ public:
 	 * Start timer for named task. The task is
 	 * created if does not exist.
 	 */
-	void start(string name);
+	void start(std::string name);
 
 	/**
 	 * \brief
 	 * Stop timer for named task. 
 	 * Elapsed time is registered in the given task.
 	 */
-	void stop(string name);
+	void stop(std::string name);
 
 	/** \brief get Profile of named task */
-	Profile *get(string name);
+	Profile *get(std::string name);
 
-	map<string, Profile *> profs;
+	std::map<std::string, Profile *> profs;
 };
 
 
 /** \brief Return a string representing the Profile */
-ostream& operator<< (ostream& os, const Profile&);
+std::ostream& operator<< (std::ostream& os, const Profile&);
 
 /** \brief Return a string representing the Profiler */
-ostream& operator<< (ostream& os, const Profiler&);
+std::ostream& operator<< (std::ostream& os, const Profiler&);
 
 }
 #endif // ndef GEOS_PROFILER_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.5  2005/02/01 14:18:04  strk
  * Made profiler start/stop inline
  *

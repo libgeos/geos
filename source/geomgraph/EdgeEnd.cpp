@@ -14,12 +14,14 @@
  *
  **********************************************************************/
 
-
-#include <sstream>
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 #include <typeinfo>
 #include <cmath>
+#include <sstream>
+#include <string>
+
+using namespace std;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -147,6 +149,9 @@ EdgeEnd::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/02/28 14:34:04  strk
  * Added many assertions and debugging output hunting for a bug in BufferOp
  *

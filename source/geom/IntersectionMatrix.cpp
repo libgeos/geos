@@ -14,10 +14,11 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <sstream>
 #include <geos/geom.h>
 #include <geos/util.h>
+#include <sstream>
+
+using namespace std;
 
 namespace geos {
 
@@ -347,6 +348,9 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.16  2006/03/02 11:00:26  strk
  * Changed IntersectionMatrix funx taking strings to take const string& instead
  *

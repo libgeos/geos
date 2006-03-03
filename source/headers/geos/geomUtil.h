@@ -21,8 +21,6 @@
 #include <geos/platform.h>
 #include <vector>
 
-//using namespace std;
-
 namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
@@ -342,6 +340,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.7  2006/03/02 16:21:26  strk
  * geos::precision namespace added
  *

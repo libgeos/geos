@@ -17,13 +17,11 @@
 #ifndef GEOS_UTIL_H
 #define GEOS_UTIL_H
 
-#include <memory>
-#include <string>
 #include <geos/platform.h>
 #include <geos/geom.h>
+#include <memory>
+#include <string>
 #include <vector>
-
-using namespace std;
 
 namespace geos {
 
@@ -38,12 +36,12 @@ namespace geos {
 class GEOSException: public std::exception {
 
 protected:
-	string txt;
-	string name;
+	std::string txt;
+	std::string name;
 
 public:
-	virtual void setName(const string& nname) { name=nname; }
-	virtual void setMessage(const string& msg) { txt=msg; }
+	virtual void setName(const std::string& nname) { name=nname; }
+	virtual void setMessage(const std::string& msg) { txt=msg; }
 
 	GEOSException()
 	{
@@ -51,14 +49,14 @@ public:
 		setMessage("unknown error");
 	}
 
-	GEOSException(const string& msg)
+	GEOSException(const std::string& msg)
 	{
 		setName("GEOSException");
 		setMessage(msg);
 	}
 
 	/// Create an exception of given type containing given message 
-	GEOSException(const string& nname, const string& msg)
+	GEOSException(const std::string& nname, const std::string& msg)
 	{
 		setName(nname);
 		setMessage(msg);
@@ -67,7 +65,7 @@ public:
 	virtual ~GEOSException() throw() {}
 
 	/// Returns exception message
-	virtual string toString() const;
+	virtual std::string toString() const;
 
 	/// Implement std::exception.what()
 	virtual const char* what() const throw() {
@@ -88,7 +86,7 @@ public:
 		GEOSException("AssertionFailedException", "")
 	{}
 
-	AssertionFailedException(const string& msg)
+	AssertionFailedException(const std::string& msg)
 		:
 		GEOSException("AssertionFailedException", msg)
 	{}
@@ -106,13 +104,11 @@ public:
 class IllegalArgumentException: public GEOSException {
 public:
 	IllegalArgumentException()
-		:
-		GEOSException("IllegalArgumentException", "")
+		: GEOSException("IllegalArgumentException", "")
 	{}
 
-	IllegalArgumentException(const string& msg)
-		:
-		GEOSException("IllegalArgumentException", msg)
+	IllegalArgumentException(const std::string& msg)
+		: GEOSException("IllegalArgumentException", msg)
 	{}
 
 	~IllegalArgumentException() throw() {};
@@ -132,14 +128,13 @@ public:
 		GEOSException("TopologyException", "")
 	{}
 
-	TopologyException(const string& msg)
+	TopologyException(const std::string& msg)
 		:
 		GEOSException("TopologyException", msg)
 	{}
 
-	TopologyException(const string& msg, const Coordinate *newPt)
-		:
-		GEOSException("TopologyException", msg+" "+newPt->toString()),
+	TopologyException(const std::string& msg, const Coordinate *newPt)
+		: GEOSException("TopologyException", msg+" "+newPt->toString()),
 		pt(*newPt)
 	{}
 
@@ -164,7 +159,7 @@ public:
 		GEOSException("UnsupportedOperationException", "")
 	{}
 
-	UnsupportedOperationException(const string& msg)
+	UnsupportedOperationException(const std::string& msg)
 		:
 		GEOSException("UnsupportedOperationException", msg)
 	{}
@@ -176,27 +171,27 @@ class Coordinate;
 class Assert {
 public:
 
-	static void isTrue(bool assertion, const string& message);
+	static void isTrue(bool assertion, const std::string& message);
 
 	static void isTrue(bool assertion) {
-		isTrue(assertion, string());
+		isTrue(assertion, std::string());
 	}
 
 
 	static void equals(const Coordinate& expectedValue,
 			const Coordinate& actualValue,
-			const string& message);
+			const std::string& message);
 
 	static void equals(const Coordinate& expectedValue,
 			const Coordinate& actualValue)
 	{
-		equals(expectedValue, actualValue, string());
+		equals(expectedValue, actualValue, std::string());
 	}
 
 
-	static void shouldNeverReachHere(const string& message);
+	static void shouldNeverReachHere(const std::string& message);
 
-	static void shouldNeverReachHere() { shouldNeverReachHere(string()); }
+	static void shouldNeverReachHere() { shouldNeverReachHere(std::string()); }
 };
 
 /**
@@ -400,6 +395,9 @@ namespace util { // geos.util
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.14  2006/02/24 16:20:15  strk
  * Added Mateusz implementation of round() in a new math.cpp file
  * named sym_round(). Changed use of rint_vc to sym_round in PrecisionModel.

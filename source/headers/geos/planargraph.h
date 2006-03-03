@@ -19,11 +19,12 @@
 
 #include <geos/platform.h>
 #include <geos/geosAlgorithm.h>
-#include <vector>
 #include <list>
-#include <string>
 #include <map>
-
+#include <stack>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace geos {
 
@@ -464,8 +465,8 @@ class planarDirectedEdge: public planarGraphComponent {
 
 public:
 
-	typedef list<planarDirectedEdge *> NonConstList;
-	typedef list<const planarDirectedEdge *> ConstList;
+	typedef std::list<planarDirectedEdge *> NonConstList;
+	typedef std::list<const planarDirectedEdge *> ConstList;
 	typedef std::vector<planarDirectedEdge *> NonConstVect;
 
 protected:
@@ -618,7 +619,7 @@ public:
 	 * Prints a detailed string representation of this DirectedEdge
 	 * to the given PrintStream.
 	 */
-	string print() const;
+	std::string print() const;
 
 };
 
@@ -948,7 +949,7 @@ public:
 	 *	   the planarEdge has been inserted now or was
 	 *	   already in the set.
 	 */
-	pair<planarEdge::NonConstSet::iterator, bool> add(planarEdge *e);
+	std::pair<planarEdge::NonConstSet::iterator, bool> add(planarEdge *e);
 
 	/**
 	 * Returns an iterator over the planarDirectedEdge in this graph,
@@ -1031,7 +1032,7 @@ private:
 	 * @param node the node to add
 	 * @param nodeStack the current set of nodes being traversed
 	 */
-	void addEdges(planarNode* node, stack<planarNode *>& nodeStack,
+	void addEdges(planarNode* node, std::stack<planarNode *>& nodeStack,
 			planarSubgraph* subgraph);
 
 public:
@@ -1062,6 +1063,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.14  2006/02/24 15:39:07  strk
  * - operator>> for Coordinate, planarNode and planarEdge
  * - Fixed bug in planarGraphComponent::setMarked

@@ -17,17 +17,14 @@
 #ifndef GEOS_IO_H
 #define GEOS_IO_H
 
+#include <geos/platform.h>
+#include <geos/geom.h>
+#include <geos/util.h>
 #include <memory>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include <geos/platform.h>
-#include <geos/geom.h>
-#include <geos/util.h>
-
-
-using namespace std;
 
 namespace geos {
 
@@ -41,9 +38,9 @@ typedef unsigned char byte;
 class ParseException: public GEOSException {
 public:
 	ParseException();
-	ParseException(string msg);
-	ParseException(string msg, string var);
-	ParseException(string msg, double num);
+	ParseException(std::string msg);
+	ParseException(std::string msg, std::string var);
+	ParseException(std::string msg, double num);
 	~ParseException() throw() {};
 };
 
@@ -56,17 +53,17 @@ public:
 		TT_WORD
 	};
 	//StringTokenizer();
-	StringTokenizer(const string& txt);
+	StringTokenizer(const std::string& txt);
 	~StringTokenizer() {};
 	int nextToken();
 	int peekNextToken();
 	double getNVal();
-	string getSVal();
+	std::string getSVal();
 private:
-	const string &str;
-	string stok;
+	const std::string &str;
+	std::string stok;
 	double ntok;
-	string::const_iterator iter;
+	std::string::const_iterator iter;
 };
 
 /// Constant values used by the WKB format
@@ -103,17 +100,17 @@ public:
 	~WKTReader() {};
 
 	/// Parse a WKT string returning a Geometry
-	Geometry* read(const string &wellKnownText);
+	Geometry* read(const std::string &wellKnownText);
 
 //	Geometry* read(Reader reader);	//Not implemented yet
 
 protected:
 	CoordinateSequence* getCoordinates(StringTokenizer *tokenizer);
 	double getNextNumber(StringTokenizer *tokenizer);
-	string getNextEmptyOrOpener(StringTokenizer *tokenizer);
-	string getNextCloserOrComma(StringTokenizer *tokenizer);
-	string getNextCloser(StringTokenizer *tokenizer);
-	string getNextWord(StringTokenizer *tokenizer);
+	std::string getNextEmptyOrOpener(StringTokenizer *tokenizer);
+	std::string getNextCloserOrComma(StringTokenizer *tokenizer);
+	std::string getNextCloser(StringTokenizer *tokenizer);
+	std::string getNextWord(StringTokenizer *tokenizer);
 	Geometry* readGeometryTaggedText(StringTokenizer *tokenizer);
 	Point* readPointText(StringTokenizer *tokenizer);
 	LineString* readLineStringText(StringTokenizer *tokenizer);
@@ -159,10 +156,10 @@ class Writer {
 public:
 	Writer();
 	~Writer();
-	void write(string txt);
-	string toString();
+	void write(std::string txt);
+	std::string toString();
 private:
-	string str;
+	std::string str;
 };
 
 /**
@@ -195,12 +192,12 @@ public:
 	//static string stringOfChar(char ch, int count);
 
 	/// Returns WKT string for the given Geometry
-	string write(const Geometry *geometry);
+	std::string write(const Geometry *geometry);
 
 	// Send Geometry's WKT to the given Writer
 	void write(const Geometry *geometry, Writer *writer);
 
-	string writeFormatted(const Geometry *geometry);
+	std::string writeFormatted(const Geometry *geometry);
 
 	void writeFormatted(const Geometry *geometry, Writer *writer);
 
@@ -211,7 +208,7 @@ public:
 	 *
 	 * @return the WKT
 	 */
-	static string toLineString(const CoordinateSequence& seq); 
+	static std::string toLineString(const CoordinateSequence& seq); 
 
 	/**
 	 * Generates the WKT for a 2-point <code>LineString</code>.
@@ -221,7 +218,7 @@ public:
 	 *
 	 * @return the WKT
 	 */
-	static string toLineString(const Coordinate& p0, const Coordinate& p1);
+	static std::string toLineString(const Coordinate& p0, const Coordinate& p1);
 
 	/**
 	 * Generates the WKT for a <code>Point</code>.
@@ -230,11 +227,11 @@ public:
 	 *
 	 * @return the WKT
 	 */
-	static string toPoint(const Coordinate& p0);
+	static std::string toPoint(const Coordinate& p0);
  
 
 protected:
-	string formatter;
+	std::string formatter;
 	void appendGeometryTaggedText(const Geometry *geometry, int level, Writer *writer);
 	void appendPointTaggedText(const Coordinate* coordinate, int level, Writer *writer, const PrecisionModel* precisionModel);
 	void appendLineStringTaggedText(const LineString *lineString, int level, Writer *writer);
@@ -246,7 +243,7 @@ protected:
 	void appendGeometryCollectionTaggedText(const GeometryCollection *geometryCollection, int level,Writer *writer);
 	void appendPointText(const Coordinate* coordinate, int level, Writer *writer, const PrecisionModel* precisionModel);
 	void appendCoordinate(const Coordinate* coordinate, Writer *writer, const PrecisionModel* precisionModel);
-	string writeNumber(double d);
+	std::string writeNumber(double d);
 	void appendLineStringText(const LineString *lineString, int level, bool doIndent, Writer *writer);
 	void appendPolygonText(const Polygon *polygon, int level, bool indentFirst, Writer *writer);
 	void appendMultiPointText(const MultiPoint *multiPoint, int level, Writer *writer);
@@ -258,7 +255,7 @@ private:
 		INDENT = 2
 	};
 //	static const int INDENT = 2;
-	static string createFormatter(const PrecisionModel* precisionModel);
+	static std::string createFormatter(const PrecisionModel* precisionModel);
 	bool isFormatted;
 	int level;
 	void writeFormatted(const Geometry *geometry, bool isFormatted, Writer *writer);
@@ -276,7 +273,7 @@ class ByteOrderDataInStream {
 
 public:
 
-	ByteOrderDataInStream(istream *s=NULL):
+	ByteOrderDataInStream(std::istream *s=NULL):
 		byteOrder(getMachineByteOrder()),
 		stream(s) {}
 	~ByteOrderDataInStream() {}
@@ -285,7 +282,7 @@ public:
 	 * Allows a single ByteOrderDataInStreamT to be reused
 	 * on multiple istream.
 	 */
-	void setInStream(istream *s) { stream=s; }
+	void setInStream(std::istream *s) { stream=s; }
 	void setOrder(int order) { byteOrder=order; }
 
 	byte readByte() // throws ParseException
@@ -322,7 +319,7 @@ public:
 
 private:
 	int byteOrder;
-	istream *stream;
+	std::istream *stream;
 
 	// buffers to hold primitive datatypes
 	byte buf[8];
@@ -359,7 +356,7 @@ public:
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	Geometry *read(istream &is);
+	Geometry *read(std::istream &is);
 		// throws IOException, ParseException
 
 	/**
@@ -370,7 +367,7 @@ public:
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	Geometry *readHEX(istream &is);
+	Geometry *readHEX(std::istream &is);
 		// throws IOException, ParseException
 
 	/**
@@ -379,11 +376,11 @@ public:
 	 * @param is is the stream to read from
 	 * @param os is the stream to write to
 	 */
-	static ostream &printHEX(istream &is, ostream &os);
+	static std::ostream &printHEX(std::istream &is, std::ostream &os);
  
 private:
 
-	static string BAD_GEOM_TYPE_MSG;
+	static std::string BAD_GEOM_TYPE_MSG;
 
 	const GeometryFactory &factory;
 
@@ -392,7 +389,7 @@ private:
 
 	ByteOrderDataInStream dis;
 
-	vector<double> ordValues;
+	std::vector<double> ordValues;
 
 	Geometry *readGeometry();
 		// throws IOException, ParseException
@@ -463,7 +460,7 @@ public:
 	 * @param os the output stream
 	 * @throws IOException
 	 */
-	void write(const Geometry &g, ostream &os);
+	void write(const Geometry &g, std::ostream &os);
 		// throws IOException, ParseException
 
 	/**
@@ -473,7 +470,7 @@ public:
 	 * @param os the output stream
 	 * @throws IOException
 	 */
-	void writeHEX(const Geometry &g, ostream &os);
+	void writeHEX(const Geometry &g, std::ostream &os);
 		// throws IOException, ParseException
 
 private:
@@ -482,7 +479,7 @@ private:
 
 	int byteOrder;
 
-	ostream *outStream;
+	std::ostream *outStream;
 
 	byte buf[8];
 
@@ -522,6 +519,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.22  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

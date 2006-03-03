@@ -26,6 +26,8 @@
 
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
+#include <string>
+
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -34,6 +36,8 @@
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
 #endif // COMPUTE_Z
+
+using namespace std;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -783,6 +787,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.33  2006/03/02 12:11:58  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

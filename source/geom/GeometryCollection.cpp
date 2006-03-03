@@ -18,7 +18,10 @@
 #include <geos/util.h>
 #include <geos/geosAlgorithm.h>
 #include <algorithm>
+#include <vector>
 #include <typeinfo>
+
+using namespace std;
 
 namespace geos {
 
@@ -324,6 +327,9 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.52  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.51  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *

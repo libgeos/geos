@@ -16,7 +16,9 @@
 
 #include <geos/opBuffer.h>
 #include <geos/util.h>
+#include <vector>
 
+using namespace std;
 
 using namespace geos::geomgraph;
 using namespace geos::noding;
@@ -179,6 +181,9 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.15  2006/02/23 23:17:52  strk
  * - Coordinate::nullCoordinate made private
  * - Simplified Coordinate inline definitions

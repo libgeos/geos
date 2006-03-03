@@ -16,6 +16,9 @@
 
 #include <geos/indexBintree.h>
 #include <geos/indexChain.h>
+#include <vector>
+
+using namespace std;
 
 using namespace geos::index::chain;
 
@@ -120,6 +123,9 @@ int NodeBase::nodeSize() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.9  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

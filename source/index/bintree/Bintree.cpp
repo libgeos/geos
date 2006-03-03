@@ -15,10 +15,13 @@
  **********************************************************************/
 
 #include <geos/indexBintree.h>
+#include <vector>
 
 namespace geos {
 namespace index { // geos.index
 namespace bintree { // geos.index.bintree
+
+using namespace std;
 
 /**
 * Ensure that the BinTreeInterval for the inserted item has non-zero extents.
@@ -128,6 +131,9 @@ void Bintree::collectStats(BinTreeInterval *interval) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.11  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

@@ -17,13 +17,13 @@
 #ifndef GEOS_INDEXSTRTREE_H
 #define GEOS_INDEXSTRTREE_H
 
-#include <memory>
-#include <vector>
-#include <cassert>
 #include <geos/platform.h>
 #include <geos/spatialIndex.h>
 #include <geos/geom.h>
-
+#include <algorithm>
+#include <memory>
+#include <vector>
+#include <cassert>
 
 namespace geos {
 namespace index { // geos.index
@@ -268,8 +268,8 @@ public:
 	AbstractSTRtree(int newNodeCapacity)
 		:
 		built(false),
-		itemBoundables(new vector<Boundable*>()),
-		nodes(new vector<AbstractNode *>()),
+			itemBoundables(new std::vector<Boundable*>()),
+		nodes(new std::vector<AbstractNode *>()),
 		nodeCapacity(newNodeCapacity)
 	{
 		assert(newNodeCapacity>1);
@@ -338,8 +338,8 @@ public:
 	 * @param x1 possibly equal to x2
 	 */
 	std::vector<void*>* query(double x1, double x2) {
-		std::vector<void*>* results = new vector<void*>();
-		Interval interval(min(x1, x2),max(x1, x2));
+		std::vector<void*>* results = new std::vector<void*>();
+		Interval interval(std::min(x1, x2), std::max(x1, x2));
 		AbstractSTRtree::query(&interval, *results);
 		return results;
 	}
@@ -460,6 +460,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.13  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

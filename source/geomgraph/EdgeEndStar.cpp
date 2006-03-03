@@ -16,11 +16,14 @@
 
 #include <geos/geomgraph.h>
 #include <geos/util.h>
+#include <string>
+#include <vector>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
+using namespace std;
 using namespace geos::algorithm;
 
 namespace geos {
@@ -308,6 +311,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.15  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

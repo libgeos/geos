@@ -26,12 +26,11 @@
 #include <stack>
 #include <set>
 #include <cassert>
-//#include <math.h>
 #include <cmath>
 #include <geos/platform.h>
 #include <geos/inline.h>
 
-/** \mainpage 
+/** \mainpage t
  *
  * \section intro_sec Introduction
  *
@@ -40,7 +39,7 @@
  * It has interfaces for C++, C and python (though swig).
  *
  * \section getstart_sec Getting Started
- *
+ *	
  * The recommended low-level interface to the GEOS library
  * is the simplified \ref c_iface. This will ensure stability of the
  * API and the ABI of the library during performance improvements
@@ -101,9 +100,6 @@
  *
  */ 
 
-
-using namespace std;
-
 /// Basic namespace for all GEOS functionalities.
 namespace geos {
 
@@ -134,14 +130,14 @@ struct CoordinateLessThen;
 struct LineStringLT;
 
 /// Return current GEOS version
-string geosversion();
+std::string geosversion();
 
 /**
  * \brief
  * Return the version of JTS this GEOS
  * release has been ported from.
  */
-string jtsport();
+std::string jtsport();
 
 /// Geometry types
 enum GeometryTypeId {
@@ -387,7 +383,7 @@ public:
 	 */
 	//void toExternal(const Coordinate& internal, Coordinate* external) const;
 
-	string toString() const;
+	std::string toString() const;
 
 	/// Compares this PrecisionModel object with the specified object for order.
 	//
@@ -446,16 +442,16 @@ private:
 
 public:
 	/// A set of const Coordinate pointers
-	typedef set<const Coordinate *, CoordinateLessThen> ConstSet;
+	typedef std::set<const Coordinate *, CoordinateLessThen> ConstSet;
 
 	/// A vector of const Coordinate pointers
-	typedef vector<const Coordinate *> ConstVect;
+	typedef std::vector<const Coordinate *> ConstVect;
 
 	/// A stack of const Coordinate pointers
-	typedef stack<const Coordinate *> ConstStack;
+	typedef std::stack<const Coordinate *> ConstStack;
 
 	/// A vector of Coordinate objects (real object, not pointers)
-	typedef vector<Coordinate> Vect;
+	typedef std::vector<Coordinate> Vect;
 
 	/// x-coordinate
 	double x;
@@ -525,7 +521,7 @@ public:
 	}
 
 	///  Returns a string of the form <I>(x,y,z)</I> .
-	string toString() const;
+	std::string toString() const;
 
 	/// TODO: obsoleted this, can use PrecisionModel::makePrecise(Coordinate*)
 	/// instead
@@ -645,7 +641,7 @@ public:
 	 * array of Coordinates, this method will incur a performance penalty
 	 * because the array needs to be built from scratch.
 	 */
-	virtual	const vector<Coordinate>* toVector() const=0;
+	virtual	const std::vector<Coordinate>* toVector() const=0;
 
 	/**
 	 * \brief Add an array of coordinates 
@@ -654,7 +650,7 @@ public:
 	 * 	are collapsed
 	 * @return true (as by general collection contract)
 	 */
-	void add(const vector<Coordinate>* vc, bool allowRepeated);
+	void add(const std::vector<Coordinate>* vc, bool allowRepeated);
 
 	/* This is here for backward compatibility.. */
 	void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
@@ -697,10 +693,10 @@ public:
 	virtual	void deleteAt(unsigned int pos)=0;
 
 	/// Get a string rapresentation of CoordinateSequence
-	virtual	string toString() const=0;
+	virtual	std::string toString() const=0;
 
 	/// Substitute Coordinate list with a copy of the given vector
-	virtual	void setPoints(const vector<Coordinate> &v)=0;
+	virtual	void setPoints(const std::vector<Coordinate> &v)=0;
 	
 	/// Returns true if contains any two consecutive points 
 	bool hasRepeatedPoints() const;
@@ -851,13 +847,13 @@ public:
 
 	//int size() const;
 	unsigned int getSize() const;
-	const vector<Coordinate>* toVector() const;
+	const std::vector<Coordinate>* toVector() const;
 
 	/// Construct an empty sequence
 	CoordinateArraySequence();
 
 	/// Construct sequence taking ownership of given Coordinate vector
-	CoordinateArraySequence(vector<Coordinate> *coords);
+	CoordinateArraySequence(std::vector<Coordinate> *coords);
 
 	/// Construct sequence allocating space for n coordinates
 	CoordinateArraySequence(unsigned int n);
@@ -868,8 +864,8 @@ public:
 	void add(const Coordinate& c);
 	void setAt(const Coordinate& c, unsigned int pos);
 	void deleteAt(unsigned int pos);
-	string toString() const;
-	void setPoints(const vector<Coordinate> &v);
+	std::string toString() const;
+	void setPoints(const std::vector<Coordinate> &v);
 
 	double getOrdinate(unsigned int index, unsigned int ordinateIndex) const;
 	void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value);
@@ -879,7 +875,7 @@ public:
 	void apply_ro(CoordinateFilter *filter) const; 
 
 private:
-	vector<Coordinate> *vect;
+	std::vector<Coordinate> *vect;
 };
 
 /**
@@ -901,7 +897,7 @@ public:
 	 * Note that a NULL value is allowed as coordinates, and will
 	 * create an empty CoordinateSequence.
 	 */
-	virtual CoordinateSequence *create(vector<Coordinate> *coordinates) const=0;
+	virtual CoordinateSequence *create(std::vector<Coordinate> *coordinates) const=0;
 
 	/** \brief
 	 * Creates a CoordinateSequence of the specified size and dimension.
@@ -934,12 +930,12 @@ public:
 	 * Returns a CoordinateArraySequence based on the given vector
 	 * (the vector is not copied - callers give up ownership).
 	 */
-	CoordinateSequence *create(vector<Coordinate> *coords) const
+	CoordinateSequence *create(std::vector<Coordinate> *coords) const
 	{
 		return new CoordinateArraySequence(coords);
 	}
 
-	CoordinateSequence *create(vector<Coordinate> *coords, int dims) const
+	CoordinateSequence *create(std::vector<Coordinate> *coords, int dims) const
 	{
 		return new CoordinateArraySequence(coords);
 	}
@@ -1065,7 +1061,7 @@ public:
 	Envelope(const Coordinate& p1, const Coordinate& p2);
 	Envelope(const Coordinate& p);
 	Envelope(const Envelope &env);
-	Envelope(const string &str);
+	Envelope(const std::string &str);
 	~Envelope(void);
 
 	static bool intersects(const Coordinate& p1, const Coordinate& p2,
@@ -1202,12 +1198,12 @@ public:
 	}
 
 	bool equals(const Envelope* other) const;
-	string toString(void) const;
+	std::string toString(void) const;
 	double distance(const Envelope* env) const;
 	int hashCode() const;
 
 private:
-	vector<string> split(const string &str, const string &delimiters = " ");
+	std::vector<std::string> split(const std::string &str, const std::string &delimiters = " ");
 	static double distance(double x0,double y0,double x1,double y1);
 	double minx;	/// the minimum x-coordinate
 	double maxx;	/// the maximum x-coordinate
@@ -1347,32 +1343,32 @@ public:
 
 	/// Construct a GeometryCollection taking ownership of given arguments
 	GeometryCollection* createGeometryCollection(
-			vector<Geometry *> *newGeoms) const;
+			std::vector<Geometry *> *newGeoms) const;
 
 	/// Constructs a GeometryCollection with a deep-copy of args
 	GeometryCollection* createGeometryCollection(
-			const vector<Geometry *> &newGeoms) const;
+			const std::vector<Geometry *> &newGeoms) const;
 
 	/// Construct an EMPTY MultiLineString 
 	MultiLineString* createMultiLineString() const;
 
 	/// Construct a MultiLineString taking ownership of given arguments
 	MultiLineString* createMultiLineString(
-			vector<Geometry *> *newLines) const;
+			std::vector<Geometry *> *newLines) const;
 
 	/// Construct a MultiLineString with a deep-copy of given arguments
 	MultiLineString* createMultiLineString(
-			const vector<Geometry *> &fromLines) const;
+			const std::vector<Geometry *> &fromLines) const;
 
 	/// Construct an EMPTY MultiPolygon 
 	MultiPolygon* createMultiPolygon() const;
 
 	/// Construct a MultiPolygon taking ownership of given arguments
-	MultiPolygon* createMultiPolygon(vector<Geometry *> *newPolys) const;
+	MultiPolygon* createMultiPolygon(std::vector<Geometry *> *newPolys) const;
 
 	/// Construct a MultiPolygon with a deep-copy of given arguments
 	MultiPolygon* createMultiPolygon(
-			const vector<Geometry *> &fromPolys) const;
+			const std::vector<Geometry *> &fromPolys) const;
 
 	/// Construct an EMPTY LinearRing 
 	LinearRing* createLinearRing() const;
@@ -1388,11 +1384,11 @@ public:
 	MultiPoint* createMultiPoint() const;
 
 	/// Construct a MultiPoint taking ownership of given arguments
-	MultiPoint* createMultiPoint(vector<Geometry *> *newPoints) const;
+	MultiPoint* createMultiPoint(std::vector<Geometry *> *newPoints) const;
 
 	/// Construct a MultiPoint with a deep-copy of given arguments
 	MultiPoint* createMultiPoint(
-			const vector<Geometry *> &fromPoints) const;
+			const std::vector<Geometry *> &fromPoints) const;
 
 	/// \brief
 	/// Construct a MultiPoint containing a Point geometry
@@ -1405,11 +1401,11 @@ public:
 
 	/// Construct a Polygon taking ownership of given arguments
 	Polygon* createPolygon(LinearRing *shell,
-			vector<Geometry *> *holes) const;
+			std::vector<Geometry *> *holes) const;
 
 	/// Construct a Polygon with a deep-copy of given arguments
 	Polygon* createPolygon(const LinearRing &shell,
-			const vector<Geometry *> &holes) const;
+			const std::vector<Geometry *> &holes) const;
 
 	/// Construct an EMPTY LineString 
 	LineString* createLineString() const;
@@ -1424,12 +1420,12 @@ public:
 	/// \brief
 	/// Construct the most suitable Geometry using the
 	/// given Geometries; will take ownership of arguments.
-	Geometry* buildGeometry(vector<Geometry *> *geoms) const;
+	Geometry* buildGeometry(std::vector<Geometry *> *geoms) const;
 
 	/// \brief
 	/// Construct the most suitable Geometry using the given Geometries;
 	/// will use a deep-copy of arguments.
-	Geometry* buildGeometry(const vector<Geometry *> &geoms) const;
+	Geometry* buildGeometry(const std::vector<Geometry *> &geoms) const;
 	
 	int getSRID() const {return SRID;};
 
@@ -1545,10 +1541,10 @@ friend class Unload;
 public:
 
 	/// A vector of const Geometry pointers
-	typedef vector<const Geometry *> ConstVect;
+	typedef std::vector<const Geometry *> ConstVect;
 
 	/// A vector of non-const Geometry pointers
-	typedef vector<Geometry *> NonConstVect;
+	typedef std::vector<Geometry *> NonConstVect;
 
 	Geometry(const Geometry &geom);
 
@@ -1646,7 +1642,7 @@ public:
 	virtual bool isSimple() const=0; //Abstract
 
 	/// Return a string representation of this Geometry type
-	virtual string getGeometryType() const=0; //Abstract
+	virtual std::string getGeometryType() const=0; //Abstract
 
 	/// Return an integer representation of this Geometry type
 	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
@@ -1747,9 +1743,9 @@ public:
 	 * Features Specification.
 	 */
 	virtual bool relate(const Geometry *g,
-			const string& intersectionPattern) const;
+			const std::string& intersectionPattern) const;
 
-	bool relate(const Geometry& g, const string& intersectionPattern) const
+	bool relate(const Geometry& g, const std::string& intersectionPattern) const
 	{
 		return relate(&g, intersectionPattern);
 	}
@@ -1768,9 +1764,9 @@ public:
 	virtual bool equals(const Geometry *g) const;
 
 	/// Returns the Well-known Text representation of this Geometry.
-	virtual string toString() const;
+	virtual std::string toString() const;
 
-	virtual string toText() const;
+	virtual std::string toText() const;
 	
 	/// Returns a buffer region around this Geometry having the given width.
 	virtual Geometry* buffer(double distance) const;
@@ -1949,13 +1945,13 @@ protected:
 	mutable Envelope* envelope;
 	
 	/// Returns true if the array contains any non-empty Geometrys.
-	static bool hasNonEmptyElements(const vector<Geometry *>* geometries);
+	static bool hasNonEmptyElements(const std::vector<Geometry *>* geometries);
 
 	/// Returns true if the CoordinateSequence contains any null elements.
 	static bool hasNullElements(const CoordinateSequence* list);
 
 	/// Returns true if the vector contains any null elements.
-	static bool hasNullElements(const vector<Geometry *>* lrs);
+	static bool hasNullElements(const std::vector<Geometry *>* lrs);
 
 //	static void reversePointOrder(CoordinateSequence* coordinates);
 //	static Coordinate& minCoordinate(CoordinateSequence* coordinates);
@@ -1977,8 +1973,8 @@ protected:
 
 	virtual Envelope* computeEnvelopeInternal() const=0; //Abstract
 	virtual int compareToSameClass(const Geometry *geom) const=0; //Abstract
-	int compare(vector<Coordinate> a, vector<Coordinate> b) const;
-	int compare(vector<Geometry *> a, vector<Geometry *> b) const;
+	int compare(std::vector<Coordinate> a, std::vector<Coordinate> b) const;
+	int compare(std::vector<Geometry *> a, std::vector<Geometry *> b) const;
 	bool equal(const Coordinate& a, const Coordinate& b,
 			double tolerance) const;
 	int SRID;
@@ -2214,16 +2210,16 @@ std::ostream& operator<< (std::ostream& o, const LineSegment& l);
 class IntersectionMatrix {
 public:
 	IntersectionMatrix();
-	IntersectionMatrix(const string& elements);
+	IntersectionMatrix(const std::string& elements);
 	IntersectionMatrix(const IntersectionMatrix &im);
 	static bool matches(int actualDimensionValue, char requiredDimensionSymbol);
-	static bool matches(const string& actualDimensionSymbols, const string& requiredDimensionSymbols);
+	static bool matches(const std::string& actualDimensionSymbols, const std::string& requiredDimensionSymbols);
 	void add(IntersectionMatrix *im);
 	void set(int row, int column, int dimensionValue);
-	void set(const string& dimensionSymbols);
+	void set(const std::string& dimensionSymbols);
 	void setAtLeast(int row, int column, int minimumDimensionValue);
 	void setAtLeastIfValid(int row, int column, int minimumDimensionValue);
-	void setAtLeast(string minimumDimensionSymbols);
+	void setAtLeast(std::string minimumDimensionSymbols);
 	void setAll(int dimensionValue);
 	int get(int row, int column);
 	bool isDisjoint();
@@ -2234,9 +2230,9 @@ public:
 	bool isContains();
 	bool isEquals(int dimensionOfGeometryA, int dimensionOfGeometryB);
 	bool isOverlaps(int dimensionOfGeometryA, int dimensionOfGeometryB);
-	bool matches(const string& requiredDimensionSymbols);
+	bool matches(const std::string& requiredDimensionSymbols);
 	IntersectionMatrix* transpose();
-	string toString();
+	std::string toString();
 private:
 	int matrix[3][3];
 };
@@ -2342,7 +2338,7 @@ public:
 	 *
 	 * @param newFactory the GeometryFactory used to create this geometry
 	 */
-	GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
+	GeometryCollection(std::vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const {
 		return new GeometryCollection(*this);
@@ -2384,7 +2380,7 @@ public:
 	virtual int getBoundaryDimension() const;
 
 	virtual int getNumPoints() const;
-	virtual string getGeometryType() const;
+	virtual std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
 	virtual bool equalsExact(const Geometry *other, double tolerance=0) const;
@@ -2407,7 +2403,7 @@ public:
 	/// Returns a pointer to the nth Geometry int this collection
 	virtual const Geometry* getGeometryN(int n) const;
 protected:
-	vector<Geometry *>* geometries;
+	std::vector<Geometry *>* geometries;
 	virtual Envelope* computeEnvelopeInternal() const;
 	virtual int compareToSameClass(const Geometry *gc) const;
 private:
@@ -2443,7 +2439,7 @@ class Point : public Geometry{
 public:
 
 	/// A vector of const Point pointers
-	typedef vector<const Point *> ConstVect;
+	typedef std::vector<const Point *> ConstVect;
 
 
 	/**
@@ -2484,7 +2480,7 @@ public:
 	double getX() const;
 	double getY() const;
 	const Coordinate* getCoordinate() const;
-	string getGeometryType() const;
+	std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(const CoordinateFilter *filter);
@@ -2518,7 +2514,7 @@ class LineString: public Geometry {
 public:
 
 	/// A vector of const LineString pointers
-	typedef vector<const LineString *> ConstVect;
+	typedef std::vector<const LineString *> ConstVect;
 
 	LineString(const LineString &ls);
 
@@ -2558,7 +2554,7 @@ public:
 	virtual Point* getEndPoint() const;
 	virtual bool isClosed() const;
 	virtual bool isRing() const;
-	virtual string getGeometryType() const;
+	virtual std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	virtual bool isSimple() const;
 	virtual bool isCoordinate(Coordinate& pt) const;
@@ -2637,7 +2633,7 @@ public:
 	virtual Geometry *clone() const { return new LinearRing(*this); }
 	virtual ~LinearRing();
 	bool isSimple() const;
-	string getGeometryType() const;
+	std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
 	void setPoints(CoordinateSequence* cl);
@@ -2669,7 +2665,7 @@ class Polygon: public Geometry{
 public:
 
 	/// A vector of const Polygon pointers
-	typedef vector<const Polygon *> ConstVect;
+	typedef std::vector<const Polygon *> ConstVect;
 
 	Polygon(const Polygon &p);
 	virtual ~Polygon();
@@ -2692,7 +2688,7 @@ public:
 	 *
 	 * Polygon will take ownership of Shell and Holes LinearRings 
 	 */
-	Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
+	Polygon(LinearRing *newShell, std::vector<Geometry *> *newHoles,
 		const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const { return new Polygon(*this); }
@@ -2725,7 +2721,7 @@ public:
 	/// Get nth interior ring (hole)
 	const LineString* getInteriorRingN(int n) const;
 
-	string getGeometryType() const;
+	std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
 	void apply_rw(const CoordinateFilter *filter);
@@ -2751,7 +2747,7 @@ public:
 protected:
 
 	LinearRing *shell;
-	vector<Geometry *> *holes; //Actually vector<LinearRing *>
+	std::vector<Geometry *> *holes; //Actually vector<LinearRing *>
 	Envelope* computeEnvelopeInternal() const;
 
 private:
@@ -2789,7 +2785,7 @@ public:
 	 *	Caller must keep the factory alive for the life-time
 	 *	of the constructed MultiPoint.
 	 */
-	MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
+	MultiPoint(std::vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
 
 	virtual ~MultiPoint();
 
@@ -2802,7 +2798,7 @@ public:
 	/// Returns an EMPTY Geometry
 	Geometry* getBoundary() const;
 
-	string getGeometryType() const;
+	std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	//bool isValid() const;
 	bool isSimple() const;
@@ -2847,7 +2843,7 @@ public:
 	 *	of the constructed MultiLineString.
 	 * 	
 	 */
-	MultiLineString(vector<Geometry *> *newLines,
+	MultiLineString(std::vector<Geometry *> *newLines,
 			const GeometryFactory *newFactory);
 
 	virtual ~MultiLineString();
@@ -2865,7 +2861,7 @@ public:
 	/// Returns a (possibly empty) MultiPoint 
 	Geometry* getBoundary() const;
 
-	string getGeometryType() const;
+	std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
 	bool isSimple() const;
@@ -2921,7 +2917,7 @@ public:
 	 *	Caller must keep the factory alive for the life-time
 	 *	of the constructed MultiPolygon.
 	 */
-	MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
+	MultiPolygon(std::vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
 	virtual ~MultiPolygon();
 
@@ -2938,7 +2934,7 @@ public:
 	 */
 	Geometry* getBoundary() const;
 
-	string getGeometryType() const;
+	std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isSimple() const;
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
@@ -2991,6 +2987,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.78  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.77  2006/03/02 11:00:27  strk
  * Changed IntersectionMatrix funx taking strings to take const string& instead
  *

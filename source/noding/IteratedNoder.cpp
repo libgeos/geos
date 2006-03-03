@@ -18,13 +18,16 @@
  *
  **********************************************************************/
 
-#include <sstream>
 #include <geos/noding.h>
 #include <geos/profiler.h>
+#include <sstream>
+#include <vector>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
+
+using namespace std;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -85,6 +88,9 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.17  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

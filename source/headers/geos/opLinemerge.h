@@ -19,6 +19,7 @@
 #include <geos/platform.h>
 #include <geos/planargraph.h>
 #include <geos/geom.h>
+#include <memory>
 #include <vector>
 #include <cassert>
 
@@ -97,7 +98,7 @@ public:
 class EdgeString {
 private:
 	const GeometryFactory *factory;
-	vector<LineMergeDirectedEdge*> *directedEdges;
+	std::vector<LineMergeDirectedEdge*> *directedEdges;
 	CoordinateSequence *coordinates;
 	CoordinateSequence* getCoordinates();
 public:
@@ -133,11 +134,11 @@ private:
 
 	planargraph::Node* getNode(const Coordinate &coordinate);
 
-	vector<planargraph::Node*> newNodes;
+	std::vector<planargraph::Node*> newNodes;
 
-	vector<planargraph::Edge*> newEdges;
+	std::vector<planargraph::Edge*> newEdges;
 
-	vector<planargraph::DirectedEdge*> newDirEdges;
+	std::vector<planargraph::DirectedEdge*> newDirEdges;
 
 public:
 
@@ -177,9 +178,9 @@ private:
 
 	LineMergeGraph graph;
 
-	vector<LineString*> *mergedLineStrings;
+	std::vector<LineString*> *mergedLineStrings;
 
-	vector<EdgeString*> edgeStrings;
+	std::vector<EdgeString*> edgeStrings;
 
 	const GeometryFactory *factory;
 
@@ -209,7 +210,7 @@ public:
 	 * Any dimension of Geometry may be added; the constituent
 	 * linework will be extracted.
 	 */
-	void add(vector<Geometry*> *geometries);
+	void add(std::vector<Geometry*> *geometries);
 
 	/**
 	 * \brief
@@ -225,7 +226,7 @@ public:
 	 * \brief
 	 * Returns the LineStrings built by the merging process.
 	 */
-	vector<LineString*>* getMergedLineStrings();
+	std::vector<LineString*>* getMergedLineStrings();
 
 	void add(const LineString *lineString);
 
@@ -269,13 +270,13 @@ public:
 class LineSequencer {
 
 private:
-	typedef vector<planargraph::DirectedEdge::NonConstList *> Sequences;
+	typedef std::vector<planargraph::DirectedEdge::NonConstList *> Sequences;
 
 	LineMergeGraph graph;
 	const GeometryFactory *factory;
 	unsigned int lineCount;
 	bool isRun;
-	auto_ptr<Geometry> sequencedGeometry;
+	std::auto_ptr<Geometry> sequencedGeometry;
 	bool isSequenceableVar;
 
 	void addLine(const LineString *lineString);
@@ -438,6 +439,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/02/24 15:39:07  strk
  * - operator>> for Coordinate, planarNode and planarEdge
  * - Fixed bug in planarGraphComponent::setMarked

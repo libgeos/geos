@@ -20,13 +20,14 @@
 #include <crtdbg.h>
 #endif
 
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cctype>
-#include <functional>
 #include <cassert>
+#include <cctype>
+#include <cstdlib>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 #include <geos/util.h>
 #include <geos/geomgraph.h>
@@ -50,7 +51,6 @@
 #include "Stackwalker.h"
 #endif
 
-using namespace std;
 using namespace geos;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
@@ -60,7 +60,7 @@ using namespace geos::operation::linemerge;
 template <int (&F)(int)> unsigned char safe_ctype(unsigned char c) { return F(c); }
 
 void
-tolower(string& str)
+tolower(std::string& str)
 {
 	std::transform(str.begin(), str.end(), str.begin(), safe_ctype<std::tolower>);
 }
@@ -99,7 +99,7 @@ XMLTester::setVerbosityLevel(int value)
 
 
 void
-XMLTester::run(const string &source)
+XMLTester::run(const std::string &source)
 {
 	curr_file=&source;
 
@@ -117,18 +117,18 @@ XMLTester::run(const string &source)
 		try {
 			parseCase();
 		} catch (const GEOSException& exc) {
-			cerr<<exc.toString()<<endl;
+			std::cerr<<exc.toString()<<std::endl;
 		}
 	}
 }
 
 void 
-XMLTester::resultSummary(ostream &os) const
+XMLTester::resultSummary(std::ostream &os) const
 {
-	os<<"Files: "<<testFileCount<<endl;
-	os<<"Tests: "<<totalTestCount<<endl;
-	os<<"Failed: "<<failed<<endl;
-	os<<"Succeeded: "<<succeeded<<endl;
+	os<<"Files: "<<testFileCount<<std::endl;
+	os<<"Tests: "<<totalTestCount<<std::endl;
+	os<<"Failed: "<<failed<<std::endl;
+	os<<"Succeeded: "<<succeeded<<std::endl;
 }
 
 void 
@@ -143,8 +143,8 @@ XMLTester::parsePrecisionModel()
 {
 
 	/* This does not seem to work... */
-	string type=xml.GetChildAttrib("type");
-	string scaleStr=xml.GetChildAttrib("scale");
+	std::string type=xml.GetChildAttrib("type");
+	std::string scaleStr=xml.GetChildAttrib("scale");
 
 	if ( pm ) delete pm;
 
@@ -160,8 +160,8 @@ XMLTester::parsePrecisionModel()
 	} else {
 		char* stopstring;
 		//string scaleStr=xml.GetChildAttrib("scale");
-		string offsetXStr=xml.GetChildAttrib("offsetx");
-		string offsetYStr=xml.GetChildAttrib("offsety");
+		std::string offsetXStr=xml.GetChildAttrib("offsetx");
+		std::string offsetYStr=xml.GetChildAttrib("offsety");
 
 		double scale=strtod(scaleStr.c_str(),&stopstring);
 		double offsetX=strtod(offsetXStr.c_str(),&stopstring);
@@ -171,7 +171,7 @@ XMLTester::parsePrecisionModel()
 
 	if (verbose)
 	{
-		cout << *curr_file <<": run: Precision Model: " << pm->toString() <<endl;
+		std::cout << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
 	}
 
 	if ( factory ) delete factory;
@@ -191,9 +191,9 @@ XMLTester::parsePrecisionModel()
  * Parse WKT or HEXWKB
  */
 Geometry *
-XMLTester::parseGeometry(const string &in)
+XMLTester::parseGeometry(const std::string &in)
 {
-	stringstream is(in, ios_base::in);
+	std::stringstream is(in, std::ios_base::in);
 	char first_char;
 
 	// Remove leading spaces
@@ -224,23 +224,23 @@ XMLTester::parseGeometry(const string &in)
 	}
 }
 
-string 
-XMLTester::trimBlanks(const string &in)
+std::string 
+XMLTester::trimBlanks(const std::string &in)
 {
-	string out;
-	string::size_type pos = in.find_first_not_of(" \t\n\r");
-	if (pos!=string::npos) out=in.substr(pos);
+	std::string out;
+	std::string::size_type pos = in.find_first_not_of(" \t\n\r");
+	if (pos!=std::string::npos) out=in.substr(pos);
 	pos = out.find_last_not_of(" \t\n\r");
-	if (pos!=string::npos) out=out.substr(0, pos+1);
+	if (pos!=std::string::npos) out=out.substr(0, pos+1);
 	return out;
 }
 
 void
 XMLTester::parseCase()
 {
-	string geomAin;
-	string geomBin;
-	string thrownException;
+	std::string geomAin;
+	std::string geomBin;
+	std::string thrownException;
 
 	gA=NULL;
 	gB=NULL;
@@ -274,9 +274,9 @@ XMLTester::parseCase()
 
 	if ( thrownException != "" )
 	{
-		cout << *curr_file <<":";
-		cout << " case" << caseCount << ":";
-		cout << " skipped ("<<thrownException<<")."<<endl;
+		std::cout << *curr_file <<":";
+		std::cout << " case" << caseCount << ":";
+		std::cout << " skipped ("<<thrownException<<")."<<std::endl;
 		return;
 	}
 
@@ -296,11 +296,11 @@ void
 XMLTester::parseTest()
 {
 	int success=0; // no success by default
-	string opName;
-	string opArg1;
-	string opArg2;
-	string opArg3;
-	string opRes;
+	std::string opName;
+	std::string opArg1;
+	std::string opArg2;
+	std::string opArg3;
+	std::string opRes;
 	//string opSig;
 
 	++testCount;
@@ -319,7 +319,7 @@ XMLTester::parseTest()
 	opName=trimBlanks(opName);
 	tolower(opName);
 
-	string opSig="";
+	std::string opSig="";
 
 	if ( opArg1 != "" ) opSig=opArg1;
 	if ( opArg2 != "" ) {
@@ -332,11 +332,11 @@ XMLTester::parseTest()
 	}
 
 
-	string actual_result="NONE";
+	std::string actual_result="NONE";
 
 	// expected_result will be modified by specific tests
 	// if needed (geometry normalization, for example)
-	string expected_result=opRes;
+	std::string expected_result=opRes;
 
 	try
 	{
@@ -593,8 +593,8 @@ XMLTester::parseTest()
 			try {
 				Polygonizer plgnzr;
 				plgnzr.add(gA);
-				vector<geos::Polygon *>*polys = plgnzr.getPolygons();
-				vector<Geometry *>*newgeoms = new vector<Geometry *>;
+				std::vector<geos::Polygon *>*polys = plgnzr.getPolygons();
+				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>;
 				for (unsigned int i=0; i<polys->size(); i++)
 					newgeoms->push_back((*polys)[i]);
 				delete polys;
@@ -628,8 +628,8 @@ XMLTester::parseTest()
 			try {
 				LineMerger merger;
 				merger.add(gT);
-				vector<geos::LineString *>*lines = merger.getMergedLineStrings();
-				vector<Geometry *>*newgeoms = new vector<Geometry *>(lines->begin(),
+				std::vector<geos::LineString *>*lines = merger.getMergedLineStrings();
+				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>(lines->begin(),
 						lines->end());
 				delete lines;
 				gRealRes=factory->createGeometryCollection(newgeoms);
@@ -653,11 +653,11 @@ XMLTester::parseTest()
 		{
 			if ( 1 ) // verbose 
 			{
-				cerr << *curr_file <<":";
-				cerr << " case" << caseCount << ":";
-				cerr << " test" << testCount <<
-					": " << opName << "(" << opSig <<")";
-				cerr<<": skipped (unrecognized)."<<endl;
+				std::cerr << *curr_file << ":";
+				std::cerr << " case" << caseCount << ":";
+				std::cerr << " test" << testCount << ": "
+						  << opName << "(" << opSig << ")";
+				std::cerr << ": skipped (unrecognized)." << std::endl;
 			}
 			return;
 		}
@@ -665,13 +665,14 @@ XMLTester::parseTest()
 	}
 	catch (const std::exception &e)
 	{
-		cerr<<"EXCEPTION on case "<<caseCount
-			<<" test "<<testCount<<": "<<e.what()<<endl;
+		std::cerr<<"EXCEPTION on case "<<caseCount
+			<<" test "<<testCount<<": "<<e.what()
+			<<std::endl;
 		actual_result = e.what();
 	}
 	catch (...)
 	{
-		cerr<<"EXEPTION"<<endl;
+		std::cerr<<"EXEPTION"<<std::endl;
 		actual_result = "Unknown exception thrown";
 	}
 
@@ -681,29 +682,29 @@ XMLTester::parseTest()
 	if ((!success && verbose) || verbose > 1)
 	{
 
-		cout << *curr_file <<":";
-		cout << " case" << caseCount << ":";
-		cout << " test" << testCount << 
-			": " << opName << "(" << opSig <<")";
-		cout << ": " << (success?"ok.":"failed.")<<endl;
+		std::cout << *curr_file <<":";
+		std::cout << " case" << caseCount << ":";
+		std::cout << " test" << testCount << ": "
+			<< opName << "(" << opSig <<")";
+		std::cout << ": " << (success?"ok.":"failed.")<<std::endl;
 
-		cout << "\tDescription: " << curr_case_desc << endl;
+		std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
-		string geomOut;
+		std::string geomOut;
 
 		if ( gA ) {
 			geomOut=w->write(gA);
-			cout << "\tGeometry A: " << geomOut << endl;
+			std::cout << "\tGeometry A: " << geomOut << std::endl;
 		}
 
 		if ( gB ) {
 			geomOut=w->write(gB);
-			cout << "\tGeometry B: " << geomOut << endl;
+			std::cout << "\tGeometry B: " << geomOut << std::endl;
 		}
 
-		cout << "\tExpected result: "<<expected_result<<endl;
-		cout << "\tObtained result: "<<actual_result<<endl;
-		cout <<endl;
+		std::cout << "\tExpected result: "<<expected_result<<std::endl;
+		std::cout << "\tObtained result: "<<actual_result<<std::endl;
+		std::cout <<std::endl;
 
 
 	}
@@ -718,14 +719,14 @@ XMLTester::parseTest()
 void
 XMLTester::runPredicates(const Geometry *gA, const Geometry *gB)
 {
-	cout << "\t    Equals:\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
-	cout << "\t  Disjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;
-	cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << endl;
-	cout << "\t   Touches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << endl;
-	cout << "\t   Crosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << endl;
-	cout << "\t    Within:\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << endl;
-	cout << "\t  Contains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << endl;
-	cout << "\t  Overlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << endl;
+	std::cout << "\t    Equals:\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << std::endl;
+	std::cout << "\t  Disjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << std::endl;
+	std::cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << std::endl;
+	std::cout << "\t   Touches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << std::endl;
+	std::cout << "\t   Crosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << std::endl;
+	std::cout << "\t    Within:\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << std::endl;
+	std::cout << "\t  Contains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << std::endl;
+	std::cout << "\t  Overlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << std::endl;
 }
 
 XMLTester::~XMLTester()
@@ -739,10 +740,10 @@ XMLTester::~XMLTester()
 
 
 static void
-usage(char *me, int exitcode, ostream &os)
+usage(char *me, int exitcode, std::ostream &os)
 {
-	os<<"Usage: "<<me<<" [-v] <test> [<test> ...]"<<endl;
-	os<<" Multiple -v increments verbosity"<<endl;
+	os<<"Usage: "<<me<<" [-v] <test> [<test> ...]"<<std::endl;
+	os<<" Multiple -v increments verbosity"<<std::endl;
 	exit(exitcode);
 }
 
@@ -756,7 +757,7 @@ main(int argC, char* argV[])
 	{
 #endif
 
-	if ( argC < 2 ) usage(argV[0], 1, cerr);
+	if ( argC < 2 ) usage(argV[0], 1, std::cerr);
 
 	XMLTester tester;
 	tester.setVerbosityLevel(verbose);
@@ -771,10 +772,10 @@ main(int argC, char* argV[])
 			continue;
 		}
 
-		string source = argV[i];
+		std::string source = argV[i];
 		tester.run(source);
 	}
-	tester.resultSummary(cout);
+	tester.resultSummary(std::cout);
 
 	Unload::Release();
 
@@ -789,6 +790,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.16  2006/03/02 16:22:04  strk
  * Updated copyright notice
  *

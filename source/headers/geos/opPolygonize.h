@@ -51,12 +51,12 @@ class polygonizeEdgeRing {
 private:
 	const GeometryFactory *factory;
 	//static CGAlgorithms cga;
-	vector<const planargraph::DirectedEdge*> *deList;
+	std::vector<const planargraph::DirectedEdge*> *deList;
 
 	// cache the following data for efficiency
 	LinearRing *ring;
 	CoordinateSequence *ringPts;
-	vector<Geometry*> *holes;
+	std::vector<Geometry*> *holes;
 
 	/*
 	 * Computes the list of coordinates which are contained in this ring.
@@ -85,7 +85,7 @@ public:
 	 * @return containing polygonizeEdgeRing, if there is one
 	 * @return null if no containing polygonizeEdgeRing is found
 	 */
-	static polygonizeEdgeRing* findEdgeRingContaining(polygonizeEdgeRing *testEr, vector<polygonizeEdgeRing*> *shellList);
+	static polygonizeEdgeRing* findEdgeRingContaining(polygonizeEdgeRing *testEr, std::vector<polygonizeEdgeRing*> *shellList);
 
 	/*
 	 * \brief
@@ -276,7 +276,7 @@ public:
 	 * @return a list of the EdgeRing found by the
 	 * 	polygonization process.
 	 */
-	vector<polygonizeEdgeRing*>* getEdgeRings();
+	std::vector<polygonizeEdgeRing*>* getEdgeRings();
 
 	/*
 	 * \brief
@@ -284,7 +284,7 @@ public:
 	 *
 	 * @return a list of the LineString forming the removed cut edges
 	 */
-	vector<const LineString*>* deleteCutEdges();
+	std::vector<const LineString*>* deleteCutEdges();
 
 	/*
 	 * Marks all edges from the graph which are "dangles".
@@ -296,7 +296,7 @@ public:
 	 *
 	 * @return a List containing the LineStrings that formed dangles
 	 */
-	vector<const LineString*>* deleteDangles();
+	std::vector<const LineString*>* deleteDangles();
 
 private:
 	static int getDegreeNonDeleted(planargraph::Node *node);
@@ -313,7 +313,7 @@ private:
 	 * @param ringEdges
 	 * 	the list of start edges for the edgeRings to convert.
 	 */
-	void convertMaximalToMinimalEdgeRings(vector<PolygonizeDirectedEdge*> *ringEdges);
+	void convertMaximalToMinimalEdgeRings(std::vector<PolygonizeDirectedEdge*> *ringEdges);
 
 	/*
 	 * \brief
@@ -326,15 +326,15 @@ private:
 	 * or <code>null</code> if no intersection nodes were found.
 	 * Ownership of returned vector goes to caller.
 	 */
-	static vector<planargraph::Node*>* findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label);
+	static std::vector<planargraph::Node*>* findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label);
 
 	/*
 	 * @param dirEdges a List of the DirectedEdges in the graph
 	 * @return a List of DirectedEdges, one for each edge ring found
 	 */
-	static vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(vector<planargraph::DirectedEdge*> &dirEdges);
+	static std::vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(std::vector<planargraph::DirectedEdge*> &dirEdges);
 
-	static void label(vector<planargraph::DirectedEdge*> &dirEdges, long label);
+	static void label(std::vector<planargraph::DirectedEdge*> &dirEdges, long label);
 
 	static void computeNextCWEdges(planargraph::Node *node);
 
@@ -356,16 +356,16 @@ private:
 	 * @param startDE the DirectedEdge to start traversing at
 	 * @return a List of DirectedEdges that form a ring
 	 */
-	static vector<planargraph::DirectedEdge*>* findDirEdgesInRing(PolygonizeDirectedEdge *startDE);
+	static std::vector<planargraph::DirectedEdge*>* findDirEdgesInRing(PolygonizeDirectedEdge *startDE);
 
 	polygonizeEdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 
 	/* Tese are for memory management */
-	vector<planargraph::Edge *>newEdges;
-	vector<planargraph::DirectedEdge *>newDirEdges;
-	vector<planargraph::Node *>newNodes;
-	vector<polygonizeEdgeRing *>newEdgeRings;
-	vector<CoordinateSequence *>newCoords;
+	std::vector<planargraph::Edge *>newEdges;
+	std::vector<planargraph::DirectedEdge *>newDirEdges;
+	std::vector<planargraph::Node *>newNodes;
+	std::vector<polygonizeEdgeRing *>newEdgeRings;
+	std::vector<CoordinateSequence *>newCoords;
 };
 
 /*
@@ -412,21 +412,21 @@ private:
 	* Perform the polygonization, if it has not already been carried out.
 	*/
 	void polygonize();
-	void findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<polygonizeEdgeRing*> *validEdgeRingList, vector<LineString*> *invalidRingList);
-	void findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList);
-	static void assignHolesToShells(vector<polygonizeEdgeRing*> *holeList,vector<polygonizeEdgeRing*> *shellList);
-	static void assignHoleToShell(polygonizeEdgeRing *holeER,vector<polygonizeEdgeRing*> *shellList);
+	void findValidRings(std::vector<polygonizeEdgeRing*> *edgeRingList, std::vector<polygonizeEdgeRing*> *validEdgeRingList, std::vector<LineString*> *invalidRingList);
+	void findShellsAndHoles(std::vector<polygonizeEdgeRing*> *edgeRingList);
+	static void assignHolesToShells(std::vector<polygonizeEdgeRing*> *holeList, std::vector<polygonizeEdgeRing*> *shellList);
+	static void assignHoleToShell(polygonizeEdgeRing *holeER, std::vector<polygonizeEdgeRing*> *shellList);
 protected:
 	PolygonizeGraph *graph;
 
 	// initialize with empty collections, in case nothing is computed
-	vector<const LineString*> *dangles;
-	vector<const LineString*> *cutEdges;
-	vector<LineString*> *invalidRingLines;
+	std::vector<const LineString*> *dangles;
+	std::vector<const LineString*> *cutEdges;
+	std::vector<LineString*> *invalidRingLines;
 
-	vector<polygonizeEdgeRing*> *holeList;
-	vector<polygonizeEdgeRing*> *shellList;
-	vector<Polygon*> *polyList;
+	std::vector<polygonizeEdgeRing*> *holeList;
+	std::vector<polygonizeEdgeRing*> *shellList;
+	std::vector<Polygon*> *polyList;
 
 public:
 
@@ -446,7 +446,7 @@ public:
 	 *
 	 * @param geomList a list of Geometry with linework to be polygonized
 	 */
-	void add(vector<Geometry*> *geomList);
+	void add(std::vector<Geometry*> *geomList);
 
 	/**
 	 * Add a geometry to the linework to be polygonized.
@@ -464,20 +464,20 @@ public:
 	 * calls will return NULL.
 	 * @return a collection of Polygons
 	 */
-	vector<Polygon*>* getPolygons();
+	std::vector<Polygon*>* getPolygons();
 
 	/**
 	 * Get the list of dangling lines found during polygonization.
 	 * @return a collection of the input LineStrings which are dangles
 	 */
-	vector<const LineString*>* getDangles();
+	std::vector<const LineString*>* getDangles();
 
 
 	/**
 	 * Get the list of cut edges found during polygonization.
 	 * @return a collection of the input LineStrings which are cut edges
 	 */
-	vector<const LineString*>* getCutEdges();
+	std::vector<const LineString*>* getCutEdges();
 
 	/*
 	 * Get the list of lines forming invalid rings found during
@@ -487,7 +487,7 @@ public:
 	 * @return a collection of LineStrings which form
 	 * invalid rings
 	 */
-	vector<LineString*>* getInvalidRingLines();
+	std::vector<LineString*>* getInvalidRingLines();
 
 // This seems to be needed by    GCC 2.95.4
 friend class Polygonizer::LineStringAdder;
@@ -501,6 +501,9 @@ friend class Polygonizer::LineStringAdder;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
  * Revision 1.10  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
