@@ -18,7 +18,16 @@
 
 #include <geos/geosAlgorithm.h>
 #include <geos/platform.h>
+#include <geos/geom.h> // for CoordinateSequence
 #include <typeinfo>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -29,6 +38,9 @@ InteriorPointLine::InteriorPointLine(Geometry *g)
 	hasInterior=false;
 	if ( g->getCentroid(centroid) )
 	{
+#if GEOS_DEBUG
+		std::cerr << "Centroid: " << centroid << std::endl;
+#endif
 		addInterior(g);
 		if (!hasInterior) addEndpoints(g);
 	}
@@ -38,7 +50,8 @@ InteriorPointLine::~InteriorPointLine()
 {
 }
 
-/**
+/* private
+ *
  * Tests the interior vertices (if any)
  * defined by a linear Geometry for the best inside point.
  * If a Geometry is not of dimension 1 it is not tested.
@@ -47,14 +60,16 @@ InteriorPointLine::~InteriorPointLine()
 void
 InteriorPointLine::addInterior(const Geometry *geom)
 {
-	if (typeid(*geom)==typeid(LineString)) {
-		addInterior(((LineString *)geom)->getCoordinatesRO());
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
+	const LineString *ls = dynamic_cast<const LineString*>(geom);
+	if ( ls ) {
+		addInterior(ls->getCoordinatesRO());
+		return;
+	}
+
+	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
+	if ( gc )
+	{
+		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
 			addInterior(gc->getGeometryN(i));
 		}
 	}
@@ -66,11 +81,12 @@ InteriorPointLine::addInterior(const CoordinateSequence *pts)
 	unsigned int n=pts->getSize()-1;
 	for(unsigned int i=1; i<n; ++i)
 	{
-		add(&(pts->getAt(i)));
+		add(pts->getAt(i));
 	}
 }
 
-/**
+/* private
+ *
  * Tests the endpoint vertices
  * defined by a linear Geometry for the best inside point.
  * If a Geometry is not of dimension 1 it is not tested.
@@ -79,14 +95,16 @@ InteriorPointLine::addInterior(const CoordinateSequence *pts)
 void
 InteriorPointLine::addEndpoints(const Geometry *geom)
 {
-	if (typeid(*geom)==typeid(LineString)) {
-		addEndpoints(((LineString*)geom)->getCoordinatesRO());
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
+	const LineString *ls = dynamic_cast<const LineString*>(geom);
+	if ( ls ) {
+		addEndpoints(ls->getCoordinatesRO());
+		return;
+	}
+
+	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
+	if ( gc )
+	{
+		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
 			addEndpoints(gc->getGeometryN(i));
 		}
 	}
@@ -95,19 +113,24 @@ InteriorPointLine::addEndpoints(const Geometry *geom)
 void
 InteriorPointLine::addEndpoints(const CoordinateSequence *pts)
 {
-	add(&(pts->getAt(0)));
-	add(&(pts->getAt(pts->getSize()-1)));
+	add(pts->getAt(0));
+	add(pts->getAt(pts->getSize()-1));
 }
 
 /*private*/
 void
-InteriorPointLine::add(const Coordinate *point)
+InteriorPointLine::add(const Coordinate& point)
 {
-	assert ( point ); // we should not have been called otherwise
 
-	double dist=point->distance(centroid);
-	if (! hasInterior || dist<minDistance) {
-		interiorPoint=*point;
+	double dist=point.distance(centroid);
+#if GEOS_DEBUG
+	std::cerr << "point " << point << " dist " << dist << ", minDistance " << minDistance << std::endl;
+#endif
+	if (!hasInterior || dist<minDistance) {
+		interiorPoint=point;
+#if GEOS_DEBUG
+		std::cerr << " is new InteriorPoint" << std::endl;
+#endif
 		minDistance=dist;
 		hasInterior=true;
 	}
@@ -126,6 +149,9 @@ InteriorPointLine::getInteriorPoint(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/03 13:50:15  strk
+ * Cleaned up InteriorPointLine class
+ *
  * Revision 1.15  2006/03/01 18:36:56  strk
  * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
  * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.

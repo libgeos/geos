@@ -808,6 +808,9 @@ public:
 	 * Apply a fiter to each Coordinate of this sequence.
 	 * The filter is expected to provide a .filter(Coordinate&)
 	 * method.
+	 *
+	 * TODO: accept a Functor instead, will be more flexible.
+	 *       actually, define iterators on Geometry
 	 */
 	template <class T>
 	void applyCoordinateFilter(T& f) 
@@ -2987,6 +2990,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.79  2006/03/03 13:50:16  strk
+ * Cleaned up InteriorPointLine class
+ *
  * Revision 1.78  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

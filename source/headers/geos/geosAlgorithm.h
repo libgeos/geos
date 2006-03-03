@@ -805,8 +805,9 @@ public:
 
 };
 
-/*
+/** \brief
  * Computes a point in the interior of an linear geometry.
+ *
  * <h2>Algorithm</h2>
  * <ul>
  * <li>Find an interior vertex which is closest to
@@ -844,7 +845,7 @@ private:
 
 	void addEndpoints(const CoordinateSequence *pts);
 
-	void add(const Coordinate *point);
+	void add(const Coordinate& point);
 
 };
 
@@ -1158,6 +1159,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/03 13:50:16  strk
+ * Cleaned up InteriorPointLine class
+ *
  * Revision 1.26  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
