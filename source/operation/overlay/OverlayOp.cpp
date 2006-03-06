@@ -18,13 +18,13 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/opOverlay.h>
-#include <geos/util.h>
 #include <cassert>
 #include <functional>
 #include <vector>
-#include <precision.h>
+#include <geos/geom.h>
+#include <geos/opOverlay.h>
+#include <geos/util.h>
+#include <geos/precision.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -867,6 +867,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.59  2006/03/06 12:11:48  strk
+ * precision.h => geos/precision.h (#48)
+ *
  * Revision 1.58  2006/03/06 11:17:08  strk
  * precision reducing overlayOp made compile-time optional
  *
