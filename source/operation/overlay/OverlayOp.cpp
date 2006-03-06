@@ -34,6 +34,12 @@
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
 
+// Define this to have OverlayOp::overlayOp
+// automatically try with reduced precisions
+// on topology exceptions
+//
+#define TRY_REDUCED_GEOMS 1
+
 using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
@@ -98,9 +104,12 @@ OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 	// throw(TopologyException *)
 {
 	OverlayOp gov(geom0, geom1);
+#ifdef TRY_REDUCED_GEOMS
 	try
 	{
+#endif
 		return gov.getResultGeometry(opCode);
+#ifdef TRY_REDUCED_GEOMS
 	}
 	catch (const TopologyException& ex)
 	{
@@ -113,6 +122,7 @@ OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 		}
 		return reducedOverlayOp(geom0, geom1, opCode);
 	}
+#endif
 }
 
 /* static public */
@@ -857,6 +867,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.58  2006/03/06 11:17:08  strk
+ * precision reducing overlayOp made compile-time optional
+ *
  * Revision 1.57  2006/03/03 14:01:12  strk
  * Experimental precision-reducing overlayOp
  *
