@@ -35,8 +35,8 @@ private:
 	void parseCase();
 	void parseTest();
 	void runPredicates(const Geometry *a, const Geometry *b);
-	Geometry *parseGeometry(const string &in);
-	static string trimBlanks(const string &in);
+	Geometry *parseGeometry(const std::string &in);
+	static std::string trimBlanks(const std::string &in);
 
 	Geometry *gA;
 	Geometry *gB;
@@ -56,18 +56,24 @@ private:
 	int succeeded;
 	int caseCount;
 	int testCount;
+	std::string opSignature;
 
 	int testFileCount;
 	int totalTestCount;
 
-	const string *curr_file;
-	string curr_case_desc;
+	const std::string *curr_file;
+	std::string curr_case_desc;
+
+	bool testValidOutput;
+	bool testValidInput;
+
+	void testValid(const Geometry* g, const std::string& label);
 
 public:
 	XMLTester();
 	~XMLTester();
-	void run(const string &testFile);
-	void resultSummary(ostream &os) const;
+	void run(const std::string &testFile);
+	void resultSummary(std::ostream &os) const;
 	void resetCounters();
 
 	/*
@@ -81,6 +87,9 @@ public:
 	int setVerbosityLevel(int val);
 
 	int getFailuresCount() { return failed; }
+
+	void testOutputValidity(bool val) { testValidOutput=val; }
+	void testInputValidity(bool val) { testValidInput=val; }
 
 };
 

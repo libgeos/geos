@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -19,10 +20,14 @@
 #include <crtdbg.h>
 #endif
 
-#include <string>
-#include <iostream>
+#include <cassert>
+#include <cctype>
+#include <cstdlib>
 #include <fstream>
+#include <functional>
+#include <iostream>
 #include <sstream>
+#include <string>
 
 #include <geos/util.h>
 #include <geos/geomgraph.h>
@@ -31,8 +36,9 @@
 #include <geos/opPolygonize.h>
 #include <geos/opLinemerge.h>
 #include <geos/profiler.h>
-#include "MarkupSTL.h"
+#include <../io/markup/MarkupSTL.h>
 #include <geos/unload.h>
+#include <geos/opValid.h>
 #include "XMLTester.h"
 
 //#include "util.h"
@@ -46,13 +52,19 @@
 #include "Stackwalker.h"
 #endif
 
-using namespace std;
 using namespace geos;
 //using namespace geos::operation::polygonize;
 //using namespace geos::operation::linemerge;
 
 //using geos::Polygon; // for mingw providing a Polygon global function
 
+template <int (&F)(int)> unsigned char safe_ctype(unsigned char c) { return F(c); }
+
+void
+tolower(std::string& str)
+{
+	std::transform(str.begin(), str.end(), str.begin(), safe_ctype<std::tolower>);
+}
 
 XMLTester::XMLTester()
 	:
@@ -71,7 +83,9 @@ XMLTester::XMLTester()
 	testCount(0),
 	testFileCount(0),
 	totalTestCount(0),
-	curr_file(NULL)
+	curr_file(NULL),
+	testValidOutput(false),
+	testValidInput(false)
 {
 	setVerbosityLevel(0);
 }
@@ -88,7 +102,7 @@ XMLTester::setVerbosityLevel(int value)
 
 
 void
-XMLTester::run(const string &source)
+XMLTester::run(const std::string &source)
 {
 	curr_file=&source;
 
@@ -106,19 +120,19 @@ XMLTester::run(const string &source)
 		try {
 			parseCase();
 		} catch (GEOSException* exc) {
-			cerr<<exc->toString()<<endl;
+			std::cerr << exc->toString() << std::endl;
 			delete exc;
 		}
 	}
 }
 
 void 
-XMLTester::resultSummary(ostream &os) const
+XMLTester::resultSummary(std::ostream &os) const
 {
-	os<<"Files: "<<testFileCount<<endl;
-	os<<"Tests: "<<totalTestCount<<endl;
-	os<<"Failed: "<<failed<<endl;
-	os<<"Succeeded: "<<succeeded<<endl;
+	os<<"Files: "<<testFileCount<<std::endl;
+	os<<"Tests: "<<totalTestCount<<std::endl;
+	os<<"Failed: "<<failed<<std::endl;
+	os<<"Succeeded: "<<succeeded<<std::endl;
 }
 
 void 
@@ -131,21 +145,27 @@ XMLTester::resetCounters()
 void
 XMLTester::parsePrecisionModel()
 {
-	string precisionModel;
 
 	/* This does not seem to work... */
-	//precisionModel=xml.GetChildAttrib("type");
-	string scaleStr=xml.GetChildAttrib("scale");
+	std::string type=xml.GetChildAttrib("type");
+	std::string scaleStr=xml.GetChildAttrib("scale");
 
 	if ( pm ) delete pm;
 
 	if ( scaleStr == "" ) {
-		pm=new PrecisionModel();
+		if ( type == "FLOATING_SINGLE" )
+		{
+			pm=new PrecisionModel(PrecisionModel::FLOATING_SINGLE);
+		}
+		else
+		{
+			pm=new PrecisionModel();
+		}
 	} else {
 		char* stopstring;
 		//string scaleStr=xml.GetChildAttrib("scale");
-		string offsetXStr=xml.GetChildAttrib("offsetx");
-		string offsetYStr=xml.GetChildAttrib("offsety");
+		std::string offsetXStr=xml.GetChildAttrib("offsetx");
+		std::string offsetYStr=xml.GetChildAttrib("offsety");
 
 		double scale=strtod(scaleStr.c_str(),&stopstring);
 		double offsetX=strtod(offsetXStr.c_str(),&stopstring);
@@ -155,7 +175,7 @@ XMLTester::parsePrecisionModel()
 
 	if (verbose)
 	{
-		cout << *curr_file <<": run: Precision Model: " << pm->toString() <<endl;
+		std::cout << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
 	}
 
 	if ( factory ) delete factory;
@@ -171,60 +191,60 @@ XMLTester::parsePrecisionModel()
 	br=new WKBReader(*factory);
 }
 
+
+void
+XMLTester::testValid(const Geometry* g, const std::string& label)
+{
+	IsValidOp ivo(g);
+	bool result;
+	result = ivo.isValid();
+	if ( result == 0 )
+	{
+		TopologyValidationError *err = ivo.getValidationError();
+		if ( err ) {
+			//std::string errmsg = err->getMessage();
+			//NOTICE_MESSAGE(err->getMessage().c_str());
+			std::cerr << *curr_file << ":"
+			          << " case" << caseCount << ":"
+			          << " test" << testCount << ": "
+				  << opSignature << ": " 
+			          << " invalid geometry (" << label 
+			          << "): " << err->getMessage() << std::endl;
+		}
+	}
+	//return result;
+}
+
 /**
  * Parse WKT or HEXWKB
  */
 Geometry *
-XMLTester::parseGeometry(const string &in)
+XMLTester::parseGeometry(const std::string &in)
 {
-	stringstream is(in, ios_base::in);
-	char first_char;
+	Geometry* ret = r->read(in);
 
-	// Remove leading spaces
-	while (is.get(first_char) && std::isspace(first_char));
-	is.unget();
+	if ( testValidInput ) testValid(ret, "parsed");
 
-	switch (first_char)
-	{
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-		case 'A':
-		case 'B':
-		case 'C':
-		case 'D':
-		case 'E':
-		case 'F':
-			cerr<<"HEX reading not supported"<<endl; // return br->readHEX(is);
-		default:
-			return r->read(in);
-	}
+	return ret;
 }
 
-string 
-XMLTester::trimBlanks(const string &in)
+std::string 
+XMLTester::trimBlanks(const std::string &in)
 {
-	string out;
-	string::size_type pos = in.find_first_not_of(" \t\n\r");
-	if (pos!=string::npos) out=in.substr(pos);
+	std::string out;
+	std::string::size_type pos = in.find_first_not_of(" \t\n\r");
+	if (pos!=std::string::npos) out=in.substr(pos);
 	pos = out.find_last_not_of(" \t\n\r");
-	if (pos!=string::npos) out=out.substr(0, pos+1);
+	if (pos!=std::string::npos) out=out.substr(0, pos+1);
 	return out;
 }
 
 void
 XMLTester::parseCase()
 {
-	string geomAin;
-	string geomBin;
-	string thrownException;
+	std::string geomAin;
+	std::string geomBin;
+	std::string thrownException;
 
 	gA=NULL;
 	gB=NULL;
@@ -259,9 +279,9 @@ XMLTester::parseCase()
 
 	if ( thrownException != "" )
 	{
-		cout << *curr_file <<":";
-		cout << " case" << caseCount << ":";
-		cout << " skipped ("<<thrownException<<")."<<endl;
+		std::cout << *curr_file <<":";
+		std::cout << " case" << caseCount << ":";
+		std::cout << " skipped ("<<thrownException<<")."<<std::endl;
 		return;
 	}
 
@@ -281,11 +301,11 @@ void
 XMLTester::parseTest()
 {
 	int success=0; // no success by default
-	string opName;
-	string opArg1;
-	string opArg2;
-	string opArg3;
-	string opRes;
+	std::string opName;
+	std::string opArg1;
+	std::string opArg2;
+	std::string opArg3;
+	std::string opRes;
 	//string opSig;
 
 	++testCount;
@@ -302,8 +322,9 @@ XMLTester::parseTest()
 	// trim blanks
 	opRes=trimBlanks(opRes);
 	opName=trimBlanks(opName);
+	tolower(opName);
 
-	string opSig="";
+	std::string opSig="";
 
 	if ( opArg1 != "" ) opSig=opArg1;
 	if ( opArg2 != "" ) {
@@ -315,12 +336,13 @@ XMLTester::parseTest()
 		opSig += opArg3;
 	}
 
+	opSignature = opName + "(" + opSig + ")";
 
-	string actual_result="NONE";
+	std::string actual_result="NONE";
 
 	// expected_result will be modified by specific tests
 	// if needed (geometry normalization, for example)
-	string expected_result=opRes;
+	std::string expected_result=opRes;
 
 	try
 	{
@@ -330,20 +352,20 @@ XMLTester::parseTest()
 		if (opName=="relate")
 		{
 			IntersectionMatrix *im=gA->relate(gB);
+			assert(im);
 
 			if (im->matches(opArg3)) actual_result="true";
 			else actual_result="false";
 
 			if (actual_result==opRes) success=1;
-			
+				
 			delete im;
-
 		}
 
-		else if (opName=="isValid")
+		else if (opName=="isvalid")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) {
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) {
 				gT=gB;
 			} 
 
@@ -371,6 +393,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -386,6 +410,8 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -403,6 +429,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -418,6 +446,8 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -437,7 +467,7 @@ XMLTester::parseTest()
 		else if (opName=="getboundary")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -446,6 +476,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -453,13 +485,14 @@ XMLTester::parseTest()
 			delete gRealRes;
 		}
 
-		else if (opName=="getCentroid")
+		else if (opName=="getcentroid")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
+
 			Geometry *gRealRes=gT->getCentroid();
 			if ( gRealRes ) gRealRes->normalize();
 			else gRealRes = factory->createGeometryCollection();
@@ -467,6 +500,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -474,10 +509,10 @@ XMLTester::parseTest()
 			delete gRealRes;
 		}
 
-		else if (opName=="isSimple")
+		else if (opName=="issimple")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			if (gT->isSimple()) actual_result="true";
 			else actual_result="false";
@@ -489,7 +524,7 @@ XMLTester::parseTest()
 		else if (opName=="convexhull")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -497,6 +532,8 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -508,7 +545,7 @@ XMLTester::parseTest()
 		else if (opName=="buffer")
 		{
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
@@ -522,7 +559,11 @@ XMLTester::parseTest()
 			profile.stop();
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			/// Allow for slightly different representations
+			if (gRes->equalsExact(gRealRes, 0.00000000000001)==true) success=1;
+			//if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -531,14 +572,21 @@ XMLTester::parseTest()
 			delete gRes;
 		}
 
-		else if (opName=="getInteriorPoint")
+		else if (opName=="getinteriorpoint")
 		{
+			Geometry *gT=gA;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+
 			Geometry *gRes=r->read(opRes);
 			gRes->normalize();
-			Geometry *gRealRes=gA->getInteriorPoint();
-			gRealRes->normalize();
+
+			Geometry *gRealRes=gT->getInteriorPoint();
+			if ( gRealRes ) gRealRes->normalize();
+			else gRealRes = factory->createGeometryCollection();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -547,7 +595,7 @@ XMLTester::parseTest()
 			delete gRealRes;
 		}
 
-		else if (opName=="isWithinDistance")
+		else if (opName=="iswithindistance")
 		{
 			float dist=atof(opArg3.c_str());
 			if (gA->isWithinDistance(gB, dist)) {
@@ -560,7 +608,7 @@ XMLTester::parseTest()
 
 		}
 
-		else if (opName=="Polygonize")
+		else if (opName=="polygonize")
 		{
 			Geometry *gRes=NULL;
 			Geometry *gRealRes=NULL;
@@ -569,8 +617,8 @@ XMLTester::parseTest()
 			try {
 				Polygonizer plgnzr;
 				plgnzr.add(gA);
-				vector<geos::Polygon *>*polys = plgnzr.getPolygons();
-				vector<Geometry *>*newgeoms = new vector<Geometry *>;
+				std::vector<geos::Polygon *>*polys = plgnzr.getPolygons();
+				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>;
 				for (unsigned int i=0; i<polys->size(); i++)
 					newgeoms->push_back((*polys)[i]);
 				delete polys;
@@ -584,6 +632,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -591,7 +641,7 @@ XMLTester::parseTest()
 			delete gRes;
 		}
 
-		else if (opName=="Linemerge")
+		else if (opName=="linemerge")
 		{
 			Geometry *gRes=NULL;
 			Geometry *gRealRes=NULL;
@@ -599,13 +649,13 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			Geometry *gT=gA;
-			if ( opArg1 == "B" && gB ) gT=gB;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			try {
 				LineMerger merger;
 				merger.add(gT);
-				vector<geos::LineString *>*lines = merger.getMergedLineStrings();
-				vector<Geometry *>*newgeoms = new vector<Geometry *>(lines->begin(),
+				std::vector<geos::LineString *>*lines = merger.getMergedLineStrings();
+				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>(lines->begin(),
 						lines->end());
 				delete lines;
 				gRealRes=factory->createGeometryCollection(newgeoms);
@@ -618,6 +668,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -627,13 +679,13 @@ XMLTester::parseTest()
 
 		else
 		{
-			if ( verbose )
+			if ( 1 ) // verbose 
 			{
-				cout << *curr_file <<":";
-				cout << " case" << caseCount << ":";
-				cout << " test" << testCount <<
-					": " << opName << "(" << opSig <<")";
-				cout<<": skipped (unrecognized)."<<endl;
+				std::cerr << *curr_file << ":";
+				std::cerr << " case" << caseCount << ":";
+				std::cerr << " test" << testCount << ": "
+						  << opName << "(" << opSig << ")";
+				std::cerr << ": skipped (unrecognized)." << std::endl;
 			}
 			return;
 		}
@@ -641,14 +693,14 @@ XMLTester::parseTest()
 	}
 	catch (const std::exception &e)
 	{
-		string msg = e.what();
-		cerr<<"EXCEPTION on case "<<caseCount
-			<<" test "<<testCount<<": "<<msg<<endl;
-		actual_result = msg;
+		std::cerr<<"EXCEPTION on case "<<caseCount
+			<<" test "<<testCount<<": "<<e.what()
+			<<std::endl;
+		actual_result = e.what();
 	}
 	catch (...)
 	{
-		cerr<<"EXEPTION"<<endl;
+		std::cerr<<"EXEPTION"<<std::endl;
 		actual_result = "Unknown exception thrown";
 	}
 
@@ -658,29 +710,29 @@ XMLTester::parseTest()
 	if ((!success && verbose) || verbose > 1)
 	{
 
-		cout << *curr_file <<":";
-		cout << " case" << caseCount << ":";
-		cout << " test" << testCount << 
-			": " << opName << "(" << opSig <<")";
-		cout << ": " << (success?"ok.":"failed.")<<endl;
+		std::cout << *curr_file <<":";
+		std::cout << " case" << caseCount << ":";
+		std::cout << " test" << testCount << ": "
+			<< opName << "(" << opSig <<")";
+		std::cout << ": " << (success?"ok.":"failed.")<<std::endl;
 
-		cout << "\tDescription: " << curr_case_desc << endl;
+		std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
-		string geomOut;
+		std::string geomOut;
 
-		if ( gB ) {
+		if ( gA ) {
 			geomOut=w->write(gA);
-			cout << "\tGeometry A: " << geomOut << endl;
+			std::cout << "\tGeometry A: " << geomOut << std::endl;
 		}
 
 		if ( gB ) {
 			geomOut=w->write(gB);
-			cout << "\tGeometry B: " << geomOut << endl;
+			std::cout << "\tGeometry B: " << geomOut << std::endl;
 		}
 
-		cout << "\tExpected result: "<<expected_result<<endl;
-		cout << "\tObtained result: "<<actual_result<<endl;
-		cout <<endl;
+		std::cout << "\tExpected result: "<<expected_result<<std::endl;
+		std::cout << "\tObtained result: "<<actual_result<<std::endl;
+		std::cout <<std::endl;
 
 
 	}
@@ -695,14 +747,14 @@ XMLTester::parseTest()
 void
 XMLTester::runPredicates(const Geometry *gA, const Geometry *gB)
 {
-	cout << "\t    Equals:\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << endl;
-	cout << "\t  Disjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << endl;
-	cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << endl;
-	cout << "\t   Touches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << endl;
-	cout << "\t   Crosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << endl;
-	cout << "\t    Within:\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << endl;
-	cout << "\t  Contains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << endl;
-	cout << "\t  Overlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << endl;
+	std::cout << "\t    Equals:\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << std::endl;
+	std::cout << "\t  Disjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << std::endl;
+	std::cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << std::endl;
+	std::cout << "\t   Touches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << std::endl;
+	std::cout << "\t   Crosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << std::endl;
+	std::cout << "\t    Within:\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << std::endl;
+	std::cout << "\t  Contains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << std::endl;
+	std::cout << "\t  Overlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << std::endl;
 }
 
 XMLTester::~XMLTester()
@@ -716,10 +768,12 @@ XMLTester::~XMLTester()
 
 
 static void
-usage(char *me, int exitcode, ostream &os)
+usage(char *me, int exitcode, std::ostream &os)
 {
-	os<<"Usage: "<<me<<" [-v] <test> [<test> ...]"<<endl;
-	os<<" Multiple -v increments verbosity"<<endl;
+	os << "Usage: " << me
+		<< " [-v] [--test-valid-output] [--test-valid-input] <test> [<test> ...]"
+		<< std::endl;
+	os << " Multiple -v increments verbosity" << std::endl;
 	exit(exitcode);
 }
 
@@ -733,7 +787,7 @@ main(int argC, char* argV[])
 	{
 #endif
 
-	if ( argC < 2 ) usage(argV[0], 1, cerr);
+	if ( argC < 2 ) usage(argV[0], 1, std::cerr);
 
 	XMLTester tester;
 	tester.setVerbosityLevel(verbose);
@@ -747,25 +801,221 @@ main(int argC, char* argV[])
 			tester.setVerbosityLevel(verbose);
 			continue;
 		}
+		if ( ! strcmp(argV[i], "--test-valid-output" ) )
+		{
+			tester.testOutputValidity(true);
+			continue;
+		}
+		if ( ! strcmp(argV[i], "--test-valid-input" ) )
+		{
+			tester.testInputValidity(true);
+			continue;
+		}
 
-		string source = argV[i];
+		std::string source = argV[i];
 		tester.run(source);
 	}
-	tester.resultSummary(cout);
+	tester.resultSummary(std::cout);
+
+	Unload::Release();
+
+	return tester.getFailuresCount();
 
 #ifdef _MSC_VER
 	}
 	DeInitAllocCheck();
 #endif
 
-	Unload::Release();
-
-	return tester.getFailuresCount();
 }
 
 /**********************************************************************
  * $Log$
- * Revision 1.48.2.4.2.1  2006/02/27 17:15:59  strk
- * Back ported changes in XMLTester and new buffer.xml 'pseudo-test'
+ * Revision 1.48.2.4.2.2  2006/03/06 14:54:19  strk
+ * Back ported fix for Polygon::equalExact and XMLTester improvements
+ *
+ * Revision 1.19  2006/03/06 13:26:58  strk
+ * Fixed equalsExact check, and also reduced tolerance
+ *
+ * Revision 1.18  2006/03/06 11:05:13  strk
+ * Added input and output validity test facilities
+ *
+ * Revision 1.17  2006/03/03 10:46:22  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
+ * Revision 1.16  2006/03/02 16:22:04  strk
+ * Updated copyright notice
+ *
+ * Revision 1.15  2006/03/02 11:03:23  strk
+ * Added assertion in relate test handler
+ *
+ * Revision 1.14  2006/03/02 10:25:30  strk
+ * Added support for FLOATING_SINGLE precisionmodel in XML tests
+ *
+ * Revision 1.13  2006/03/01 18:14:07  strk
+ * Handled NULL return from Geometry::getInteriorPoint()
+ *
+ * Revision 1.12  2006/03/01 13:06:41  strk
+ * Used FLOATING precision model in buffer.xml test, added expected results,
+ * changed XMLTester.cpp to use a tolerance when comparing expected and obtained
+ * results from buffer operations.
+ *
+ * Revision 1.11  2006/03/01 12:12:03  strk
+ * Fixed a bug in verbose output preventing geometry arg 'A' from being properly printed
+ *
+ * Revision 1.10  2006/03/01 09:56:32  strk
+ * Case insensitive operation names and geometry arguments names (a/b)
+ *
+ * Revision 1.9  2006/03/01 09:43:44  strk
+ * Unrecognized tests always printed (was only printed when verbose before)
+ *
+ * Revision 1.8  2006/02/28 19:18:04  strk
+ * Added cctype include (bug #34)
+ *
+ * Revision 1.7  2006/02/28 15:34:44  strk
+ * Fix for VC++ builds (Bug #32)
+ *
+ * Revision 1.6  2006/02/27 14:41:38  strk
+ * More verbose handling of exceptions
+ *
+ * Revision 1.5  2006/02/23 20:32:55  strk
+ * Added support for LineMerge tests. Exception printed on stderr.
+ *
+ * Revision 1.4  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ * Revision 1.3  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
+ * Revision 1.2  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ *
+ * Revision 1.1  2006/01/31 19:07:35  strk
+ * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+ * - Moved GetNumGeometries() and GetGeometryN() interfaces
+ *   from GeometryCollection to Geometry class.
+ * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
+ * - Reworked automake scripts to produce a static lib for each subdir and
+ *   then link all subsystem's libs togheter
+ * - Moved C-API in it's own top-level dir capi/
+ * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
+ * - Fixed PointLocator handling of LinearRings
+ * - Changed CoordinateArrayFilter to reduce memory copies
+ * - Changed UniqueCoordinateArrayFilter to reduce memory copies
+ * - Added CGAlgorithms::isPointInRing() version working with
+ *   Coordinate::ConstVect type (faster!)
+ * - Ported JTS-1.7 version of ConvexHull with big attention to
+ *   memory usage optimizations.
+ * - Improved XMLTester output and user interface
+ * - geos::geom::util namespace used for geom/util stuff
+ * - Improved memory use in geos::geom::util::PolygonExtractor
+ * - New ShortCircuitedGeometryVisitor class
+ * - New operation/predicate package
+ *
+ * Revision 1.60  2006/01/18 17:49:58  strk
+ * Reworked XMLTester to be quiet by default. Use -v switch to make it verbose.
+ *
+ * Revision 1.59  2006/01/18 12:54:48  strk
+ * Added HEXWKB support in XMLTester. Added a simple test in HEXWKB form
+ * and a 'test' rule running the locally-available tests and showing
+ * result summay.
+ *
+ * Revision 1.58  2005/11/25 12:22:42  strk
+ * Made XMLTester able to run multiple test files and keep overall
+ * counters.
+ *
+ * Revision 1.57  2005/06/28 16:52:09  strk
+ * Added number of points count as a debugging aid
+ *
+ * Revision 1.56  2005/06/21 12:22:19  strk
+ * XMLTester code cleanups
+ *
+ * Revision 1.55  2005/06/14 11:57:03  strk
+ * Added workaround for mingw Polygon name clash
+ *
+ * Revision 1.54  2005/06/10 13:24:50  strk
+ * Added use declaration to make MingW build work
+ *
+ * Revision 1.53  2005/02/18 08:20:24  strk
+ * Added support for point-per-quadrant argument in buffer tests (using arg2).
+ *
+ * Revision 1.52  2005/01/03 16:06:27  strk
+ * Changed polygonize op to return a GeometryCollection
+ *
+ * Revision 1.51  2005/01/03 15:56:21  strk
+ * Fixed memory leaks just introduced for Polygonizer test case.
+ *
+ * Revision 1.50  2005/01/03 15:49:30  strk
+ * Added Polygonize test handling
+ *
+ * Revision 1.49  2004/12/30 13:32:30  strk
+ * Handled NULL result from getCentroid()
+ *
+ * Revision 1.48  2004/12/08 13:54:44  strk
+ * gcc warnings checked and fixed, general cleanups.
+ *
+ * Revision 1.47  2004/11/04 19:08:07  strk
+ * Cleanups, initializers list, profiling.
+ *
+ * Revision 1.46  2004/11/02 09:38:33  strk
+ * Added timer for buffer test.
+ *
+ * Revision 1.45  2004/09/13 12:39:49  strk
+ * Added missing newline at end of output
+ *
+ * Revision 1.44  2004/07/07 09:38:12  strk
+ * Dropped WKTWriter::stringOfChars (implemented by std::string).
+ * Dropped WKTWriter default constructor (internally created GeometryFactory).
+ * Updated XMLTester to respect the changes.
+ * Main documentation page made nicer.
+ *
+ * Revision 1.43  2004/07/02 13:28:29  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.42  2004/05/27 08:40:13  strk
+ * Fixed a memleak in buffer test.
+ *
+ * Revision 1.41  2004/05/18 13:49:18  strk
+ * Output made more neat (geometry B is not printed if not existent).
+ * Added support for buffer tests.
+ *
+ * Revision 1.40  2004/05/17 12:53:52  strk
+ * Expected result string trimmed for blanks
+ *
+ * Revision 1.39  2004/05/14 07:19:59  strk
+ * Changed the algorythm for finding precisionModel type (current way did
+ * not work): now if you specify a scale precisionModel will be FIXED,
+ * otherwise it will be FLOATING.
+ *
+ * Revision 1.38  2004/05/07 13:23:51  strk
+ * Memory leaks fixed.
+ *
+ * Revision 1.37  2004/03/19 09:48:46  ybychkov
+ * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
+ *
+ * Revision 1.36  2003/11/12 17:10:01  strk
+ * added missing initialization
+ *
+ * Revision 1.35  2003/11/12 15:02:12  strk
+ * more cleanup on exception
+ *
+ * Revision 1.34  2003/11/07 01:23:43  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ * Revision 1.33  2003/10/17 05:51:21  ybychkov
+ * Fixed a small memory leak.
+ *
+ * Revision 1.32  2003/10/16 13:01:31  strk
+ * Added call to Unload::Release()
+ *
+ * Revision 1.31  2003/10/16 12:09:48  strk
+ * bug fixed in exception handling
+ *
+ * Revision 1.30  2003/10/16 08:48:06  strk
+ * Exceptions handled
  *
  **********************************************************************/
+

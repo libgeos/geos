@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -17,6 +17,10 @@
 #include <geos/geom.h>
 #include <typeinfo>
 #include <geos/geosAlgorithm.h>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 namespace geos {
 
@@ -172,25 +176,29 @@ Envelope* Polygon::computeEnvelopeInternal() const {
 }
 
 bool Polygon::equalsExact(const Geometry *other, double tolerance) const {
-	if (!isEquivalentClass(other)) {
-		return false;
-	}
 	const Polygon* otherPolygon=dynamic_cast<const Polygon*>(other);
-	if (typeid(*(otherPolygon->shell))!=typeid(Geometry)) {
+	if ( ! otherPolygon ) return false;
+
+	if (!shell->equalsExact(otherPolygon->shell, tolerance)) {
 		return false;
 	}
-	Geometry* otherPolygonShell=dynamic_cast<Geometry *>(otherPolygon->shell);
-	if (!shell->equalsExact(otherPolygonShell, tolerance)) {
+
+	size_t nholes = holes->size();
+
+	if (nholes != otherPolygon->holes->size()) {
 		return false;
 	}
-	if (holes->size()!=otherPolygon->holes->size()) {
-		return false;
-	}
-	for (unsigned int i = 0; i < holes->size(); i++) {
-		if (!((LinearRing *)(*holes)[i])->equalsExact((*(otherPolygon->holes))[i],tolerance)) {
+
+	for (size_t i=0; i<nholes; i++)
+	{
+		const Geometry* hole=(*holes)[i];
+		const Geometry* otherhole=(*(otherPolygon->holes))[i];
+		if (!hole->equalsExact(otherhole, tolerance))
+		{
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -314,6 +322,9 @@ Polygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45.2.1.2.1  2006/03/06 14:54:19  strk
+ * Back ported fix for Polygon::equalExact and XMLTester improvements
+ *
  * Revision 1.45.2.1  2005/05/24 07:29:36  strk
  * Fixed polygon::getBoundary() to never return (MULTI)LinearRings.
  *
@@ -342,4 +353,3 @@ Polygon::getGeometryTypeId() const {
  * Added DefaultCoordinateSequenceFactory::instance() function.
  *
  **********************************************************************/
-

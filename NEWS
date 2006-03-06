@@ -4,6 +4,8 @@ Changes in 2.2.2
   C API
 - Cleanups in C-API
 - Support for gcc-4
+- Fixed Polygon::equalsExact
+- Improved XMLTester
 
 Changes in 2.2.1
 
