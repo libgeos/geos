@@ -14,8 +14,10 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
 #include <vector>
+#include <cassert>
+
+#include <geos/geomgraph.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -217,7 +219,7 @@ PlanarGraph::linkAllDirectedEdges()
 		Node *node=nodeit->second;
 		EdgeEndStar *ees=node->getEdges();
 		DirectedEdgeStar *des=dynamic_cast<DirectedEdgeStar *>(ees);
-		Assert::isTrue(des!=NULL, "Unespected non-DirectedEdgeStar in node");
+		assert(des!=NULL); // Unespected non-DirectedEdgeStar in node
 		des->linkAllDirectedEdges();
 	}
 }
@@ -327,6 +329,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.25  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

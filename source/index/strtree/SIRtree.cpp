@@ -14,9 +14,11 @@
  *
  **********************************************************************/
 
+#include <vector>
+#include <cassert>
+
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
-#include <vector>
 
 using namespace std;
 
@@ -33,7 +35,7 @@ static bool compareSIRBoundables(Boundable *a, Boundable *b){
 * M is the node capacity.
 */
 vector<Boundable*>* SIRtree::createParentBoundables(vector<Boundable*> *childBoundables,int newLevel) {
-	Assert::isTrue(!childBoundables->empty());
+	assert(!childBoundables->empty());
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 	parentBoundables->push_back(createNode(newLevel));
 
@@ -128,6 +130,9 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.18  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

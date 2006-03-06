@@ -19,10 +19,12 @@
  **********************************************************************/
 
 
+#include <vector>
+#include <cassert>
+
 #include <geos/opValid.h>
 #include <geos/geomgraph.h>
 #include <geos/util.h>
-#include <vector>
 
 using namespace std;
 using namespace geos::geomgraph;
@@ -86,8 +88,11 @@ QuadtreeNestedRingTester::isNonNested()
 			const Envelope *e2=searchRing->getEnvelopeInternal();
 			if (!e1->intersects(e2)) continue;
 
-			const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts, searchRing, graph);
-			Assert::isTrue((innerRingPt!=NULL), "Unable to find a ring point not a node of the search ring");
+			const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts,
+					searchRing, graph);
+
+			// Unable to find a ring point not a node of the search ring
+			assert(innerRingPt!=NULL);
 
 			bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
 			if (isInside) {
@@ -123,6 +128,9 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.19  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

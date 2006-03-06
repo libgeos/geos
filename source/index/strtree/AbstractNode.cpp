@@ -14,9 +14,11 @@
  *
  **********************************************************************/
 
+#include <vector>
+#include <cassert>
+
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
-#include <vector>
 
 using namespace std;
 
@@ -70,7 +72,7 @@ int AbstractNode::getLevel() {
  * (wrapped in an ItemBoundable)
  */
 void AbstractNode::addChildBoundable(Boundable *childBoundable) {
-	Assert::isTrue(bounds==NULL);
+	assert(bounds==NULL);
 	childBoundables->push_back(childBoundable);
 }
 
@@ -80,6 +82,9 @@ void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.11  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

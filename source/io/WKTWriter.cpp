@@ -14,12 +14,14 @@
  *
  **********************************************************************/
 
-#include <geos/io.h>
-#include <geos/util.h>
 #include <typeinfo>
 #include <cstdio> // should avoid this
 #include <string>
 #include <sstream>
+#include <cassert>
+
+#include <geos/io.h>
+#include <geos/util.h>
 
 #define PRINT_Z 0
 
@@ -166,8 +168,7 @@ void WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level, Wr
 	} else if (typeid(*geometry)==typeid(GeometryCollection)) {
 		appendGeometryCollectionTaggedText((GeometryCollection*)geometry, level, writer);
 	} else {
-//		Assert.shouldNeverReachHere("Unsupported Geometry implementation:" + geometry->getClass());
-		Assert::shouldNeverReachHere("Unsupported Geometry implementation");
+		assert(0); // Unsupported Geometry implementation
 	}
 }
 
@@ -373,6 +374,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.26  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

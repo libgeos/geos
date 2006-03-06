@@ -23,11 +23,15 @@
 #include <vector>
 
 namespace geos {
-
+namespace util { // geos.util
+} // namespace geos.util
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.9  2006/01/31 19:07:34  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

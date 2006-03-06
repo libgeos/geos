@@ -14,6 +14,8 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
 
@@ -80,7 +82,7 @@ QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
 void
 QuadTreeRoot::insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void *item)
 {
-	Assert::isTrue(tree->getEnvelope()->contains(itemEnv));
+	assert(tree->getEnvelope()->contains(itemEnv));
 
 	/**
 	 * Do NOT create a new quad for zero-area envelopes - this would lead
@@ -106,6 +108,9 @@ QuadTreeRoot::insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.12  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

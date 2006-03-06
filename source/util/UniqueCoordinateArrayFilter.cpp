@@ -17,21 +17,15 @@
 #include <geos/geom.h>
 
 namespace geos {
-
-
-#if 0
-void UniqueCoordinateArrayFilter::filter_ro(const Coordinate *coord) {
-	if (CoordinateSequence::indexOf(coord,list)==-1) {
-		list->add(*coord);
-	}
-}
-#endif
-
-
+namespace io {
+} // namespace geos.io
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/06 19:40:48  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.9  2006/01/31 19:07:35  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

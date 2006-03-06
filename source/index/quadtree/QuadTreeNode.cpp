@@ -14,10 +14,12 @@
  *
  **********************************************************************/
 
-#include <geos/indexQuadtree.h>
-#include <geos/util.h>
 #include <string>
 #include <sstream>
+#include <cassert>
+
+#include <geos/indexQuadtree.h>
+#include <geos/util.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -83,7 +85,7 @@ QuadTreeNode::find(const Envelope *searchEnv)
 }
 
 void QuadTreeNode::insertNode(QuadTreeNode* node) {
-	Assert::isTrue(env==NULL || env->contains(node->env));
+	assert(env==NULL || env->contains(node->env));
 	//System.out.println(env);
 	//System.out.println(quad.env);
 	int index=getSubnodeIndex(node->env, centre);
@@ -164,6 +166,9 @@ QuadTreeNode::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.14  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,8 +18,9 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
+#include <cassert>
 #include <typeinfo>
+#include <geos/geosAlgorithm.h>
 #include <geos/geomgraph.h>
 #include <geos/geom.h>
 
@@ -78,11 +79,14 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry *geom)
 	}
 	else if (const GeometryCollection *col=dynamic_cast<const GeometryCollection *>(geom))
 	{
-		GeometryCollectionIterator geomi(col);
-		while (geomi.hasNext()) {
-			const Geometry *g2=geomi.next();
-			if (g2!=geom) computeLocation(p,g2);
-				// is this check really needed ?
+		for (GeometryCollection::const_iterator
+				it=col->begin(), endIt=col->end();
+				it != endIt;
+				++it)
+		{
+			const Geometry *g2=*it;
+			assert (g2!=geom); // is this check really needed ?
+			computeLocation(p, g2);
 		}
 	}
 
@@ -133,7 +137,7 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 	if (poly->isEmpty()) return Location::EXTERIOR;
 
 	const LinearRing *shell=dynamic_cast<const LinearRing *>(poly->getExteriorRing());
-	Assert::isTrue(shell);
+	assert(shell);
 
 	int shellLoc=locateInPolygonRing(p, shell);
 	if (shellLoc==Location::EXTERIOR) return Location::EXTERIOR;
@@ -155,6 +159,9 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.26  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

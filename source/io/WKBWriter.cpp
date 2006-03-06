@@ -13,8 +13,10 @@
  *
  **********************************************************************/
 
-#include <geos/io.h>
 #include <ostream>
+#include <cassert>
+
+#include <geos/io.h>
 
 #undef DEBUG_WKB_WRITER 
 
@@ -27,7 +29,7 @@ WKBWriter::WKBWriter(int dims, int bo):
 		outputDimension(dims), byteOrder(bo), outStream(NULL)
 {
 	if ( dims < 2 || dims > 3 )
-		throw  IllegalArgumentException("WKB output dimension must be 2 or 3");
+		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
 }
 
 void
@@ -73,15 +75,15 @@ WKBWriter::write(const Geometry &g, ostream &os)
 				(GeometryCollection &)g,
 				WKBConstants::wkbGeometryCollection);
 		default:
-			Assert::shouldNeverReachHere("Unknown Geometry type");
+			assert(0); // Unknown Geometry type
 	}
 }
 
 void
 WKBWriter::writePoint(const Point &g) 
 {
-	if (g.isEmpty()) throw 
-IllegalArgumentException("Empty Points cannot be represented in WKB");
+	if (g.isEmpty()) throw
+		util::IllegalArgumentException("Empty Points cannot be represented in WKB");
 
 	writeByteOrder();
 	writeGeometryType(WKBConstants::wkbPoint);

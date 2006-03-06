@@ -18,12 +18,14 @@
  *
  **********************************************************************/
 
-#include <geos/noding.h>
-#include <geos/profiler.h>
 #include <cassert>
 #include <set>
 
-using namespace std;
+#include <geos/noding.h>
+#include <geos/profiler.h>
+#include <geos/util.h>
+
+//using namespace std;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -39,7 +41,7 @@ static Profiler *profiler = Profiler::instance();
 
 SegmentNodeList::~SegmentNodeList()
 {
-	set<SegmentNode *, SegmentNodeLT>::iterator it=nodeMap.begin();
+	std::set<SegmentNode *, SegmentNodeLT>::iterator it=nodeMap.begin();
 	for(; it!=nodeMap.end(); it++) delete *it;
 
 	unsigned int i=0;
@@ -56,7 +58,7 @@ SegmentNodeList::add(const Coordinate& intPt, unsigned int segmentIndex)
 	SegmentNode *eiNew=new SegmentNode(edge, intPt, segmentIndex,
 			edge.getSegmentOctant(segmentIndex));
 
-	pair<SegmentNodeList::iterator,bool> p = nodeMap.insert(eiNew);
+	std::pair<SegmentNodeList::iterator,bool> p = nodeMap.insert(eiNew);
 	if ( p.second ) { // new SegmentNode inserted
 		return eiNew;
 	} else {
@@ -80,13 +82,13 @@ void SegmentNodeList::addEndpoints()
 void
 SegmentNodeList::addCollapsedNodes()
 {
-	vector<unsigned int> collapsedVertexIndexes;
+	std::vector<unsigned int> collapsedVertexIndexes;
 
 	findCollapsesFromInsertedNodes(collapsedVertexIndexes);
 	findCollapsesFromExistingVertices(collapsedVertexIndexes);
 
 	// node the collapses
-	for (vector<unsigned int>::iterator
+	for (std::vector<unsigned int>::iterator
 		i=collapsedVertexIndexes.begin(),
 			e=collapsedVertexIndexes.end();
 		i != e; ++i)
@@ -100,7 +102,7 @@ SegmentNodeList::addCollapsedNodes()
 /* private */
 void
 SegmentNodeList::findCollapsesFromExistingVertices(
-			vector<unsigned int>& collapsedVertexIndexes)
+			std::vector<unsigned int>& collapsedVertexIndexes)
 {
 	for (unsigned int i=0, n=edge.size()-2; i<n; ++i)
 	{
@@ -117,7 +119,7 @@ SegmentNodeList::findCollapsesFromExistingVertices(
 /* private */
 void
 SegmentNodeList::findCollapsesFromInsertedNodes(
-		vector<unsigned int>& collapsedVertexIndexes)
+		std::vector<unsigned int>& collapsedVertexIndexes)
 {
 	unsigned int collapsedVertexIndex;
 
@@ -163,13 +165,13 @@ SegmentNodeList::findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
 
 /* public */
 void
-SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
+SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 {
 
 	// testingOnly
 #if GEOS_DEBUG
 	cerr<<__FUNCTION__<<" entered"<<endl;
-	vector<SegmentString*> testingSplitEdges;
+	std::vector<SegmentString*> testingSplitEdges;
 #endif
 
 	// ensure that the list has entries for the first and last
@@ -204,7 +206,7 @@ SegmentNodeList::addSplitEdges(vector<SegmentString*>& edgeList)
 }
 
 void
-SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges)
+SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEdges)
 {
 	const CoordinateSequence *edgePts=edge.getCoordinates();
 	assert(edgePts);
@@ -216,7 +218,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges)
 
 	const Coordinate& pt0=split0->getCoordinate(0);
 	if (!(pt0==edgePts->getAt(0)))
-		throw GEOSException("bad split edge start point at " + pt0.toString());
+		throw util::GEOSException("bad split edge start point at " + pt0.toString());
 
 	SegmentString *splitn=splitEdges[splitEdges.size()-1];
 	assert(splitn);
@@ -226,7 +228,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(vector<SegmentString*>& splitEdges)
 
 	const Coordinate &ptn=splitnPts->getAt(splitnPts->getSize()-1);
 	if (!(ptn==edgePts->getAt(edgePts->getSize()-1)))
-		throw  GEOSException("bad split edge end point at " + ptn.toString());
+		throw util::GEOSException("bad split edge end point at " + ptn.toString());
 }
 
 /*private*/
@@ -282,7 +284,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 #if 0
 string SegmentNodeList::print(){
 	string out="Intersections:";
-	set<SegmentNode*,SegmentNodeLT>::iterator it=nodeMap.begin();
+	std::set<SegmentNode*,SegmentNodeLT>::iterator it=nodeMap.begin();
 	for(;it!=nodeMap.end();it++) {
 		SegmentNode *ei=*it;
 		out.append(ei->print());
@@ -291,12 +293,13 @@ string SegmentNodeList::print(){
 }
 #endif
 
-ostream&
-operator<< (ostream& os, const SegmentNodeList& nlist)
+std::ostream&
+operator<< (std::ostream& os, const SegmentNodeList& nlist)
 {
 	os<<"NodeList:";
-	set<SegmentNode*,SegmentNodeLT>::const_iterator it = nlist.nodeMap.begin();
-	set<SegmentNode*,SegmentNodeLT>::const_iterator itEnd = nlist.nodeMap.end();
+	std::set<SegmentNode*,SegmentNodeLT>::const_iterator
+			it = nlist.nodeMap.begin(),
+			itEnd = nlist.nodeMap.end();
 
 	for(; it!=itEnd; it++)
 	{
@@ -311,6 +314,9 @@ operator<< (ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.27  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

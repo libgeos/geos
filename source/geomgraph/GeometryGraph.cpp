@@ -158,7 +158,7 @@ GeometryGraph::add(const Geometry *g)
 		addCollection((GeometryCollection*) g);
 	else {
 		string out=typeid(*g).name();
-		throw  UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
+		throw util::UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);
 	}
 }
 
@@ -261,7 +261,7 @@ GeometryGraph::addLineString(const LineString *line)
 	 * This allows for the case that the node already exists and is
 	 * a boundary point.
 	 */
-	Assert::isTrue(coord->getSize()>= 2,"found LineString with single point");
+	assert(coord->size() >= 2); // found LineString with single point
 	insertBoundaryPoint(argIndex, coord->getAt(0));
 	insertBoundaryPoint(argIndex, coord->getAt(coord->getSize()-1));
 }
@@ -428,6 +428,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.22  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

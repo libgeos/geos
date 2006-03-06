@@ -14,11 +14,13 @@
  *
  **********************************************************************/
 
+#include <vector>
+#include <cassert>
+
 #include <geos/opBuffer.h>
 #include <geos/util.h>
-#include <vector>
 
-using namespace std;
+//using namespace std;
 
 using namespace geos::geomgraph;
 using namespace geos::noding;
@@ -41,7 +43,7 @@ RightmostEdgeFinder::RightmostEdgeFinder()
 }
 
 void
-RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList)
+RightmostEdgeFinder::findEdge(std::vector<DirectedEdge*>* dirEdgeList)
 {
 	/**
 	 * Check all forward DirectedEdges only.  This is still general,
@@ -60,8 +62,8 @@ RightmostEdgeFinder::findEdge(vector<DirectedEdge*>* dirEdgeList)
 	 * If the rightmost point is a node, we need to identify which of
 	 * the incident edges is rightmost.
 	 */
-	Assert::isTrue(minIndex!=0 || minCoord==minDe->getCoordinate(),
-		"inconsistency in rightmost processing");
+	assert(minIndex!=0 || minCoord==minDe->getCoordinate());
+	// inconsistency in rightmost processing
 
 	if (minIndex==0 ) {
 		findRightmostEdgeAtNode();
@@ -105,8 +107,8 @@ RightmostEdgeFinder::findRightmostEdgeAtVertex()
 	 */
 
 	const CoordinateSequence *pts=minDe->getEdge()->getCoordinates();
-	Assert::isTrue(minIndex>0 && minIndex<(int)pts->getSize(),
-		"rightmost point expected to be interior vertex of edge");
+	assert(minIndex>0 && minIndex<(int)pts->getSize()); 
+		// rightmost point expected to be interior vertex of edge
 
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
@@ -181,6 +183,9 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.16  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -16,12 +16,17 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace util { // geos.util
 
+} // namespace geos.util
 } // namespace geos
 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.10  2006/02/23 11:54:21  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

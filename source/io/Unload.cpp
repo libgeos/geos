@@ -22,7 +22,7 @@
 //#include <geos/indexQuadtree.h>
 //#include <geos/opBuffer.h>
 //#include <geos/planargraph.h>
-#include <geos/profiler.h>
+//#include <geos/profiler.h>
 
 //using namespace geos::geomgraph;
 //using namespace geos::operation;
@@ -45,7 +45,7 @@ void Unload::Release()
 	delete RelateComputer::ptLocator;
 	//delete quadtree::QuadTreeRoot::origin;
 	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
-	delete Profiler::instance();
+	//delete Profiler::instance();
 }
 
 } // namespace geos.io
@@ -53,6 +53,9 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.22  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

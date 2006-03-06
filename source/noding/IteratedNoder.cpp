@@ -18,10 +18,12 @@
  *
  **********************************************************************/
 
-#include <geos/noding.h>
-#include <geos/profiler.h>
 #include <sstream>
 #include <vector>
+
+#include <geos/noding.h>
+#include <geos/util.h> // for TopologyException
+#include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -74,7 +76,7 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 			stringstream s;
 			s<<"Iterated noding failed to converge after "<<
                                     nodingIterationCount<<" iterations";
-			throw TopologyException(s.str());
+			throw util::TopologyException(s.str());
 		}
 		lastNodesCreated = nodesCreated;
 
@@ -88,6 +90,9 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.18  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

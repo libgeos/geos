@@ -14,14 +14,16 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
 #include <typeinfo>
 #include <cmath>
 #include <sstream>
 #include <string>
+#include <cassert>
 
-using namespace std;
+#include <geos/geomgraph.h>
+#include <geos/util.h>
+
+//using namespace std;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -89,7 +91,9 @@ EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
 	dx=p1.x-p0.x;
 	dy=p1.y-p0.y;
 	quadrant=Quadrant::quadrant(dx,dy);
-	Assert::isTrue(!(dx == 0 && dy == 0), "EdgeEnd with identical endpoints found");
+
+	// "EdgeEnd with identical endpoints found");
+	assert(!(dx == 0 && dy == 0));
 }
 
 Edge* EdgeEnd::getEdge() {return edge;}
@@ -127,10 +131,10 @@ EdgeEnd::computeLabel()
 	// subclasses should override this if they are using labels
 }
 
-string
+std::string
 EdgeEnd::print()
 {
-	ostringstream s;
+	std::ostringstream s;
 
 	s<<"EdgeEnd: ";
 	s<<p0.toString();
@@ -149,6 +153,9 @@ EdgeEnd::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.11  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

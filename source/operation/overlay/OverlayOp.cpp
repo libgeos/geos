@@ -85,7 +85,7 @@ reducedOverlayOp(const Geometry* g0, const Geometry* g1, int opCode)
 
 		try {
 			ret=gov.getResultGeometry(opCode);
-		} catch (const TopologyException& ex) {
+		} catch (const util::TopologyException& ex) {
 			if ( precision == 1 ) throw ex;
 			//cerr << "Reduced precision (" << precision << "): " << ex.what() << endl;
 		}
@@ -111,7 +111,7 @@ OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 		return gov.getResultGeometry(opCode);
 #ifdef TRY_REDUCED_GEOMS
 	}
-	catch (const TopologyException& ex)
+	catch (const util::TopologyException& ex)
 	{
 		//cerr << "Original precision: " << ex.what() << endl;
 		if ( gov.resultPrecisionModel->getType() == PrecisionModel::FIXED &&
@@ -228,7 +228,7 @@ OverlayOp::getResultGeometry(int funcCode)
 		try {
 			computeOverlay(funcCode, &pm); // this can throw TopologyException *
 		}
-		catch (const TopologyException& ex)
+		catch (const util::TopologyException& ex)
 		{
 			cerr<<"Attempt "<<attempt+1<<" exception "<<ex.what()<<endl;
 		}
@@ -492,8 +492,8 @@ OverlayOp::getAverageZ(int targetIndex)
 
 	const Geometry *targetGeom = arg[targetIndex]->getGeometry();
 
-	Assert::isTrue(targetGeom->getGeometryTypeId() == GEOS_POLYGON, 
-		"OverlayOp::getAverageZ(int) called with a ! polygon");
+	// OverlayOp::getAverageZ(int) called with a ! polygon
+	assert(targetGeom->getGeometryTypeId() == GEOS_POLYGON);
 
 	avgz[targetIndex] = getAverageZ((const Polygon *)targetGeom);
 	avgzcomputed[targetIndex] = true;
@@ -867,6 +867,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.60  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.59  2006/03/06 12:11:48  strk
  * precision.h => geos/precision.h (#48)
  *

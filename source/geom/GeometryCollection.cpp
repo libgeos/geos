@@ -21,6 +21,10 @@
 #include <vector>
 #include <typeinfo>
 
+#ifndef USE_INLINE
+# include <geos/geom/GeometryCollection.inl>
+#endif
+
 using namespace std;
 
 namespace geos {
@@ -62,7 +66,7 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const Geome
 		return;
 	}
 	if (hasNullElements(newGeoms)) {
-		throw  IllegalArgumentException("geometries must not contain null elements\n");
+		throw  util::IllegalArgumentException("geometries must not contain null elements\n");
 		return;
 	}
 	geometries=newGeoms;
@@ -155,14 +159,14 @@ GeometryCollection::getGeometryType() const
 bool
 GeometryCollection::isSimple() const
 {
-	throw  IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
+	throw util::IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
 	return false;
 }
 
 Geometry*
 GeometryCollection::getBoundary() const
 {
-	throw  IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
+	throw util::IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
 	return NULL;
 }
 
@@ -327,6 +331,9 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.52  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

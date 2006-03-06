@@ -25,7 +25,7 @@ using namespace geos::algorithm;
 using namespace geos::operation;
 
 #ifndef USE_INLINE
-# include <geos/LineSegment.inl>
+# include <geos/geom/LineSegment.inl>
 #endif
 
 namespace geos {
@@ -271,6 +271,9 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.27  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

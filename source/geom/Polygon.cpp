@@ -69,7 +69,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
 			delete newShell;
 			delete newHoles;
-			throw  IllegalArgumentException("shell is empty but holes are not");
+			throw util::IllegalArgumentException("shell is empty but holes are not");
 		}
 		shell=newShell;
 	}
@@ -83,11 +83,11 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		if (hasNullElements(newHoles)) {
 			delete newShell;
 			delete newHoles;
-			throw  IllegalArgumentException("holes must not contain null elements");
+			throw util::IllegalArgumentException("holes must not contain null elements");
 		}
 		for (unsigned int i=0; i<newHoles->size(); i++)
 			if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
-				throw  IllegalArgumentException("holes must be LinearRings");
+				throw util::IllegalArgumentException("holes must be LinearRings");
 		holes=newHoles;
 	}
 }
@@ -434,6 +434,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.58  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.57  2006/03/06 13:27:57  strk
  * Cleaned up equalsExact
  *

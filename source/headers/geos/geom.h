@@ -2303,8 +2303,16 @@ inline bool operator==(const LineSegment& a, const LineSegment& b) {
  * represented by GeometryCollection subclasses MultiPoint,
  * MultiLineString, MultiPolygon.
  */
-class GeometryCollection : public Geometry{
+class GeometryCollection : public Geometry {
+
 public:
+
+	typedef std::vector<Geometry *>::const_iterator const_iterator;
+	typedef std::vector<Geometry *>::iterator iterator;
+
+	const_iterator begin() const;
+	const_iterator end() const;
+
 	GeometryCollection(const GeometryCollection &gc);
 
 	/** \brief
@@ -2395,27 +2403,12 @@ public:
 	virtual int getNumGeometries() const;
 	/// Returns a pointer to the nth Geometry int this collection
 	virtual const Geometry* getGeometryN(int n) const;
+
 protected:
 	std::vector<Geometry *>* geometries;
 	virtual Envelope* computeEnvelopeInternal() const;
 	virtual int compareToSameClass(const Geometry *gc) const;
-};
 
-class GeometryCollectionIterator {
-public:
-	GeometryCollectionIterator();
-	GeometryCollectionIterator(const GeometryCollectionIterator &gci);
-	GeometryCollectionIterator(const GeometryCollection *newParent);
-	virtual ~GeometryCollectionIterator();
-	bool hasNext() const;
-	const Geometry *next();
-	void remove(); //Not implemented
-private:
-	const GeometryCollection* parent;
-	bool atStart;
-	int max;
-	int index;
-	GeometryCollectionIterator* subcollectionIterator;
 };
 
 /**
@@ -2928,13 +2921,17 @@ public:
 } // namespace geos
 
 #ifdef USE_INLINE
-# include "geos/LineSegment.inl"
+# include "geos/geom/LineSegment.inl"
+# include "geos/geom/GeometryCollection.inl"
 #endif
 
 #endif // ndef GEOS_GEOM_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.81  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.80  2006/03/06 11:34:31  strk
  * Dropped unused/unmaintained/platform-problematic serial version info for classes (#47)
  *

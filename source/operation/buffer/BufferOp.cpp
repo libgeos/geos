@@ -31,7 +31,7 @@
 
 //#define PROFILE 1
 
-using namespace std;
+//using namespace std;
 using namespace geos::noding;
 using namespace geos::noding::snapround;
 
@@ -52,7 +52,7 @@ BufferOp::precisionScaleFactor(const Geometry *g, double distance,
 	int maxPrecisionDigits)
 {
 	const Envelope *env=g->getEnvelopeInternal();
-	double envSize=max(env->getHeight(), env->getWidth());
+	double envSize=std::max(env->getHeight(), env->getWidth());
 	double expandByDistance=distance > 0.0 ? distance : 0.0;
 	double bufEnvSize=envSize + 2 * expandByDistance;
 	// the smallest power of 10 greater than the buffer envelope
@@ -99,7 +99,7 @@ void
 BufferOp::computeGeometry()
 {
 #if GEOS_DEBUG
-	cerr<<"BufferOp::computeGeometry: trying with original precision"<<endl;
+	std::cerr<<"BufferOp::computeGeometry: trying with original precision"<<std::endl;
 #endif
 
 	bufferOriginalPrecision();
@@ -122,18 +122,18 @@ BufferOp::bufferReducedPrecision()
 	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--)
 	{
 #if GEOS_DEBUG
-		cerr<<"BufferOp::computeGeometry: trying with precDigits "<<precDigits<<endl;
+		std::cerr<<"BufferOp::computeGeometry: trying with precDigits "<<precDigits<<std::endl;
 #endif
 		try {
 			bufferFixedPrecision(precDigits);
-		} catch (const TopologyException& ex) {
+		} catch (const util::TopologyException& ex) {
 			saveException=ex;
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
 		} 
 
 		if (resultGeometry!=NULL) {
 			// debug
-			//if ( saveException ) cerr<<saveException->toString()<<endl;
+			//if ( saveException ) std::cerr<<saveException->toString()<<std::endl;
 			return;
 		}
 	}
@@ -149,20 +149,20 @@ BufferOp::bufferOriginalPrecision()
 	bufBuilder.setQuadrantSegments(quadrantSegments);
 	bufBuilder.setEndCapStyle(endCapStyle);
 
-	//cerr<<"computing with original precision"<<endl;
+	//std::cerr<<"computing with original precision"<<std::endl;
 	try
 	{
 		resultGeometry=bufBuilder.buffer(argGeom, distance);
 	}
-	catch (const TopologyException& ex)
+	catch (const util::TopologyException& ex)
 	{
 		// don't propagate the exception - it will be detected by
 		// fact that resultGeometry is null
 		saveException=ex;
 
-		//cerr<<ex->toString()<<endl;
+		//std::cerr<<ex->toString()<<std::endl;
 	} 
-	//cerr<<"done"<<endl;
+	//std::cerr<<"done"<<std::endl;
 }
 
 void
@@ -199,6 +199,9 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.44  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

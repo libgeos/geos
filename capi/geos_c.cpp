@@ -764,28 +764,21 @@ Geometry *
 GEOSEnvelope(Geometry *g1)
 {
 	try
-    {
-        Geometry *g3 = g1->getEnvelope();
-        return g3;
-    }
-    catch (GEOSException *ge)
-    {
-        ERROR_MESSAGE((char *)ge->toString().c_str());
-        delete ge;
-        return NULL;
-    }
+	{
+		Geometry *g3 = g1->getEnvelope();
+		return g3;
+	}
+	catch (std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
 
-    catch (std::exception &e)
-    {
-        ERROR_MESSAGE(e.what());
-        return NULL;
-    }
-
-    catch (...)
-    {
-        ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
-    }
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
 }
 
 Geometry *

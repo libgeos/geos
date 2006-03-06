@@ -54,9 +54,9 @@ ElevationMatrix::add(const Geometry *geom)
 	cerr<<"ElevationMatrix::add(Geometry *) called"<<endl;
 #endif // GEOS_DEBUG
 
-#if PARANOIA_LEVEL > 0
-	Assert::isTrue(!avgElevationComputed, "Cannot add Geometries to an ElevationMatrix after it's average elevation has been computed");
-#endif
+	// Cannot add Geometries to an ElevationMatrix after it's average
+	// elevation has been computed
+	assert(!avgElevationComputed);
 
 	//ElevationMatrixFilter filter(this);
 	geom->apply_ro(&filter);
@@ -82,7 +82,7 @@ ElevationMatrix::add(const Coordinate &c)
 	try {
 		ElevationMatrixCell &emc = getCell(c);
 		emc.add(c);
-	} catch (const IllegalArgumentException& exp) {
+	} catch (const util::IllegalArgumentException& exp) {
 		// coordinate do not overlap matrix
 		cerr<<"ElevationMatrix::add("<<c.toString()<<"): Coordinate does not overlap grid extent: "<<exp.toString()<<endl;
 		return;
@@ -114,7 +114,7 @@ ElevationMatrix::getCell(const Coordinate &c)
 	{
 		ostringstream s;
 		s<<"ElevationMatrix::getCell got a Coordinate out of grid extent ("<<env.toString()<<") - cols:"<<cols<<" rows:"<<rows;
-		throw  IllegalArgumentException(s.str());
+		throw util::IllegalArgumentException(s.str());
 	}
 
 	return cells[celloffset];
@@ -186,6 +186,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.11  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

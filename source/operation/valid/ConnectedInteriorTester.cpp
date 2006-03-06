@@ -19,11 +19,13 @@
  *
  **********************************************************************/
 
+#include <vector>
+#include <cassert>
+
 #include <geos/opValid.h>
 #include <geos/opOverlay.h>
 #include <geos/geomgraph.h>
 #include <geos/util.h>
-#include <vector>
 
 using namespace std;
 using namespace geos::geomgraph;
@@ -66,7 +68,7 @@ bool
 ConnectedInteriorTester::isInteriorsConnected()
 {
 	// node the edges, in case holes touch the shell
-	vector<Edge*> splitEdges;
+	std::vector<Edge*> splitEdges;
 	geomGraph.computeSplitEdges(&splitEdges);
 
 	// polygonize the edges
@@ -74,7 +76,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 	graph.addEdges(splitEdges);
 	setAllEdgesInResult(graph);
 	graph.linkAllDirectedEdges();
-	vector<EdgeRing*> *edgeRings=buildEdgeRings(graph.getEdgeEnds());
+	std::vector<EdgeRing*> *edgeRings=buildEdgeRings(graph.getEdgeEnds());
 
 	/**
 	 * Mark all the edges for the edgeRings corresponding to the shells
@@ -102,10 +104,10 @@ ConnectedInteriorTester::isInteriorsConnected()
 void
 ConnectedInteriorTester::setAllEdgesInResult(PlanarGraph &graph)
 {
-	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
+	std::vector<EdgeEnd*> *ee=graph.getEdgeEnds();
 	for(unsigned int i=0; i<ee->size(); ++i) {
 		DirectedEdge *de=dynamic_cast<DirectedEdge*>((*ee)[i]);
-		Assert::isTrue( de != NULL, "Unexpected non DirectedEdge in graphEdgeEnds");
+		assert( de != NULL ); // Unexpected non DirectedEdge in graphEdgeEnds
 		de->setInResult(true);
 	}
 }
@@ -113,10 +115,10 @@ ConnectedInteriorTester::setAllEdgesInResult(PlanarGraph &graph)
 /**
  * for all DirectedEdges in result, form them into EdgeRings
  */
-vector<EdgeRing*>*
-ConnectedInteriorTester::buildEdgeRings(vector<EdgeEnd*> *dirEdges)
+std::vector<EdgeRing*>*
+ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 {
-	vector<EdgeRing*> *edgeRings=new vector<EdgeRing*>();
+	std::vector<EdgeRing*> *edgeRings=new std::vector<EdgeRing*>();
 	for(unsigned int i=0; i<dirEdges->size(); ++i)
 	{
 		DirectedEdge *de=(DirectedEdge*)(*dirEdges)[i];
@@ -168,7 +170,7 @@ ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph &
 	} else if (de->getSym()->getLabel()->getLocation(0,Position::RIGHT)==Location::INTERIOR) {
 		intDe=de->getSym();
 	}
-	Assert::isTrue(intDe!=NULL, "unable to find dirEdge with Interior on RHS");
+	assert(intDe!=NULL); // unable to find dirEdge with Interior on RHS
 	visitLinkedDirectedEdges(intDe);
 }
 
@@ -180,7 +182,9 @@ ConnectedInteriorTester::visitLinkedDirectedEdges(DirectedEdge *start)
 	DirectedEdge *de=start;
 	//Debug.println(de);
 	do {
-		Assert::isTrue(de!=NULL, "ConnectedInteriorTester::visitLinkedDirectedEdges() found null Directed Edge");
+		// found null Directed Edge
+		assert(de!=NULL);
+
 		de->setVisited(true);
 		de=de->getNext();
 		//Debug.println(de);
@@ -198,19 +202,25 @@ ConnectedInteriorTester::visitLinkedDirectedEdges(DirectedEdge *start)
  * @return true if there is an unvisited edge in a non-hole ring
  */
 bool
-ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings)
+ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings)
 {
-	for(int i=0;i<(int)edgeRings->size();i++) {
-		EdgeRing *er=(*edgeRings)[i];
+	for(std::vector<EdgeRing*>::iterator it=edgeRings->begin(), itEnd=edgeRings->end();
+		it != itEnd;
+		++it)
+	{
+		EdgeRing *er=*it;
 		if (er->isHole()) continue;
-		vector<DirectedEdge*> *edges=er->getEdges();
+		std::vector<DirectedEdge*> *edges=er->getEdges();
 		DirectedEdge *de=(*edges)[0];
 		// don't check CW rings which are holes
 		if (de->getLabel()->getLocation(0,Position::RIGHT)!=Location::INTERIOR) continue;
 		// must have a CW ring which surrounds the INT of the area, so check all
 		// edges have been visited
-		for(int j=0; j<(int)edges->size();j++) {
-			de=(*edges)[j];
+		for(std::vector<DirectedEdge*>::iterator jt=edges->begin(), jtEnd=edges->end();
+			jt != jtEnd;
+			++jt)
+		{
+			de=*jt;
 			//Debug.print("visted? "); Debug.println(de);
 			if (!de->isVisited()) {
 				//Debug.print("not visited "); Debug.println(de);
@@ -228,6 +238,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(vector<EdgeRing*> *edgeRings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.19  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

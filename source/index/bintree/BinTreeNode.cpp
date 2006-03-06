@@ -14,6 +14,8 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/indexBintree.h>
 #include <geos/util.h>
 
@@ -93,7 +95,7 @@ NodeBase* BinTreeNode::find(BinTreeInterval *searchInterval){
 }
 
 void BinTreeNode::insert(BinTreeNode *node) {
-	Assert::isTrue(interval==NULL || interval->contains(node->interval));
+	assert(interval==NULL || interval->contains(node->interval));
 	int index=getSubnodeIndex(node->interval,centre);
 	if (node->level==level-1) {
 		subnode[index]=node;
@@ -142,6 +144,9 @@ BinTreeNode* BinTreeNode::createSubnode(int index) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.8  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

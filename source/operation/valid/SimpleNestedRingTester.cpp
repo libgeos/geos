@@ -38,7 +38,8 @@ SimpleNestedRingTester::isNonNested()
 			if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
 				continue;
 			const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts,searchRing,graph);
-			Assert::isTrue(innerRingPt!=NULL, "Unable to find a ring point not a node of the search ring");
+			// Unable to find a ring point not a node of the search ring
+			assert(innerRingPt!=NULL);
 
 			bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
 			if (isInside) {
@@ -62,6 +63,9 @@ SimpleNestedRingTester::isNonNested()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.12  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

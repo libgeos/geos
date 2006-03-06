@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.12  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
@@ -60,7 +63,7 @@ char Location::toLocationSymbol(int locationValue) {
 		default:
 			ostringstream s;
 			s<<"Unknown location value: "<<locationValue;
-			throw  IllegalArgumentException(s.str());
+			throw util::IllegalArgumentException(s.str());
 	}
 }
 }

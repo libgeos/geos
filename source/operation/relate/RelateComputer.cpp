@@ -14,11 +14,13 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/opRelate.h>
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
-using namespace std;
+//using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::geomgraph::index;
 using namespace geos::algorithm;
@@ -30,11 +32,11 @@ namespace relate { // geos.operation.relate
 const LineIntersector* RelateComputer::li=new LineIntersector();
 const PointLocator* RelateComputer::ptLocator=new PointLocator();
 
-RelateComputer::RelateComputer(vector<GeometryGraph*> *newArg):
+RelateComputer::RelateComputer(std::vector<GeometryGraph*> *newArg):
 	arg(newArg),
 	nodes(RelateNodeFactory::instance()),
 	im(new IntersectionMatrix())
-	//isolatedEdges(new vector<Edge*>())
+	//isolatedEdges(new std::vector<Edge*>())
 {
 }
 
@@ -99,9 +101,9 @@ RelateComputer::computeIM()
 	 */
 	// build EdgeEnds for all intersections
 	EdgeEndBuilder eeBuilder;
-	vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds((*arg)[0]->getEdges());
+	std::vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds((*arg)[0]->getEdges());
 	insertEdgeEnds(ee0);
-	vector<EdgeEnd*> *ee1=eeBuilder.computeEdgeEnds((*arg)[1]->getEdges());
+	std::vector<EdgeEnd*> *ee1=eeBuilder.computeEdgeEnds((*arg)[1]->getEdges());
 	insertEdgeEnds(ee1);
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
@@ -133,9 +135,9 @@ RelateComputer::computeIM()
 }
 
 void
-RelateComputer::insertEdgeEnds(vector<EdgeEnd*> *ee)
+RelateComputer::insertEdgeEnds(std::vector<EdgeEnd*> *ee)
 {
-	for(vector<EdgeEnd*>::iterator i=ee->begin();i<ee->end();i++) {
+	for(std::vector<EdgeEnd*>::iterator i=ee->begin();i<ee->end();i++) {
 		EdgeEnd *e=*i;
 		nodes.add(e);
 	}
@@ -197,9 +199,11 @@ RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,Inte
 void
 RelateComputer::copyNodesAndLabels(int argIndex)
 {
-	map<Coordinate*,Node*,CoordinateLessThen>&nMap=(*arg)[argIndex]->getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
+	const NodeMap* nm = (*arg)[argIndex]->getNodeMap();
+	NodeMap::const_iterator nodeIt=nm->begin(), nodeEnd=nm->end();
+
+	for( ; nodeIt!=nodeEnd; nodeIt++)
+	{
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes.addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
@@ -219,8 +223,8 @@ RelateComputer::copyNodesAndLabels(int argIndex)
 void
 RelateComputer::computeIntersectionNodes(int argIndex)
 {
-	vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
-	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++)
+	std::vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
+	for(std::vector<Edge*>::iterator i=edges->begin();i<edges->end();i++)
 	{
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
@@ -254,8 +258,8 @@ RelateComputer::computeIntersectionNodes(int argIndex)
 void
 RelateComputer::labelIntersectionNodes(int argIndex)
 {
-	vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
-	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
+	std::vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
+	for(std::vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
@@ -299,8 +303,8 @@ RelateComputer::computeDisjointIM(IntersectionMatrix *imX)
 void
 RelateComputer::labelNodeEdges()
 {
-	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
+	std::map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
+	std::map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++)
 	{
 		RelateNode *node=(RelateNode*) nodeIt->second;
@@ -317,15 +321,15 @@ void
 RelateComputer::updateIM(IntersectionMatrix *imX)
 {
 	//Debug.println(im);
-	vector<Edge *>::iterator ei=isolatedEdges.begin();
+	std::vector<Edge *>::iterator ei=isolatedEdges.begin();
 	for ( ; ei<isolatedEdges.end(); ++ei)
 	{
 		Edge *e=*ei;
 		e->GraphComponent::updateIM(imX);
 		//Debug.println(im);
 	}
-	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
+	std::map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
+	std::map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		RelateNode *node=(RelateNode*) nodeIt->second;
 		node->updateIM(imX);
@@ -344,8 +348,8 @@ RelateComputer::updateIM(IntersectionMatrix *imX)
 * not be isolated)
 */
 void RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex) {
-	vector<Edge*> *edges=(*arg)[thisIndex]->getEdges();
-	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
+	std::vector<Edge*> *edges=(*arg)[thisIndex]->getEdges();
+	for(std::vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
 		if (e->isIsolated()) {
 			labelIsolatedEdge(e,targetIndex,(*arg)[targetIndex]->getGeometry());
@@ -387,13 +391,13 @@ RelateComputer::labelIsolatedEdge(Edge *e, int targetIndex, const Geometry *targ
 void
 RelateComputer::labelIsolatedNodes()
 {
-	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodes.nodeMap;
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
+	NodeMap::iterator nodeIt=nodes.begin(), nodeEnd=nodes.end();
+	for( ; nodeIt!=nodeEnd; nodeIt++)
+	{
 		Node *n=nodeIt->second;
 		Label *label=n->getLabel();
 		// isolated nodes should always have at least one geometry in their label
-		Assert::isTrue(label->getGeometryCount()>0,"node with empty label found");
+		assert(label->getGeometryCount()>0); // node with empty label found
 		if (n->isIsolated()) {
 			if (label->isNull(0))
 				labelIsolatedNode(n,0);
@@ -421,6 +425,9 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.27  2006/02/23 11:54:21  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

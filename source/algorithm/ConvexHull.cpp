@@ -462,7 +462,7 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 
 	const Coordinate *last = original[npts-1];
 
-	Assert::equals(*(original[0]), *last);
+	util::Assert::equals(*(original[0]), *last);
 
 	const Coordinate *prev = NULL;
 	for (unsigned int i=0; i<npts-1; ++i)
@@ -534,6 +534,9 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.17  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

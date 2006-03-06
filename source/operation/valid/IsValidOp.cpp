@@ -108,7 +108,7 @@ IsValidOp::checkValid(const Geometry *g)
 	else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
 	else if ((gc=dynamic_cast<const GeometryCollection *>(g)))
 		checkValid(gc);
-	else throw  UnsupportedOperationException();
+	else throw util::UnsupportedOperationException();
 }
 
 /*
@@ -539,7 +539,7 @@ IsValidOp::checkShellInsideHole(const LinearRing *shell, const LinearRing *hole,
 		if (insideShell) return holePt;
 		return NULL;
 	}
-	Assert::shouldNeverReachHere("points in shell and hole appear to be equal");
+	assert(0); // points in shell and hole appear to be equal
 	return NULL;
 }
 
@@ -622,6 +622,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.44  2006/03/06 12:47:52  strk
  * TopologyValidationError error names (enum) renamed to avoid conflicts.
  *

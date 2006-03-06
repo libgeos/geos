@@ -14,6 +14,8 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/geomgraph.h>
 #include <geos/util.h>
 
@@ -66,7 +68,7 @@ GraphComponent::setCovered(bool isCovered)
 void
 GraphComponent::updateIM(IntersectionMatrix *im)
 {
-	Assert::isTrue(label->getGeometryCount() >= 2, "found partial label");
+	assert(label->getGeometryCount() >= 2); // found partial label
 	computeIM(im);
 }
 
@@ -75,6 +77,9 @@ GraphComponent::updateIM(IntersectionMatrix *im)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.5  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

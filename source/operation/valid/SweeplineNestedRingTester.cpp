@@ -73,7 +73,9 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 	if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
 		return false;
 	const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts, searchRing, graph);
-	Assert::isTrue((innerRingPt!=NULL), "Unable to find a ring point not a node of the search ring");
+
+	// Unable to find a ring point not a node of the search ring
+	assert(innerRingPt!=NULL);
 
 	bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
 	if (isInside) {
@@ -95,6 +97,9 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.14  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

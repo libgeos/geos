@@ -14,10 +14,12 @@
  *
  **********************************************************************/
 
+#include <vector>
+#include <cassert>
+
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
 #include <geos/profiler.h>
-#include <vector>
 
 using namespace std;
 
@@ -78,7 +80,7 @@ STRtree::STRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 vector<Boundable*>*
 STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
 {
-	Assert::isTrue(!childBoundables->empty());
+	assert(!childBoundables->empty());
 	int minLeafCount=(int) ceil((double)childBoundables->size()/(double)getNodeCapacity());
 
 	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
@@ -103,7 +105,7 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 vector<Boundable*>*
 STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *verticalSlices, int newLevel)
 {
-	Assert::isTrue(verticalSlices->size()>0);
+	assert(verticalSlices->size()>0);
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 
 	unsigned int vssize=verticalSlices->size();
@@ -205,6 +207,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.26  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

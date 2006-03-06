@@ -29,7 +29,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+//using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::noding;
 using namespace geos::algorithm;
@@ -89,10 +89,10 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	curveBuilder.setEndCapStyle(endCapStyle);
 	OffsetCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
 
-	vector<SegmentString*>& bufferSegStrList=curveSetBuilder.getCurves();
+	std::vector<SegmentString*>& bufferSegStrList=curveSetBuilder.getCurves();
 
 #if GEOS_DEBUG
-	cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList.size()<<" curves"<<endl;
+	std::cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList.size()<<" curves"<<std::endl;
 #endif
 	// short-circuit test
 	if (bufferSegStrList.size()<=0) {
@@ -101,7 +101,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	}
 
 #if GEOS_DEBUG
-	cerr<<"BufferBuilder::buffer computing NodedEdges"<<endl;
+	std::cerr<<"BufferBuilder::buffer computing NodedEdges"<<std::endl;
 #endif
 #if PROFILE
 	static Profile *prof=profiler->get("BufferBuilder::computeNodedEdges()");
@@ -112,12 +112,12 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	prof->stop();
 #endif
 #if GEOS_DEBUG
-	cerr<<"BufferBuilder::buffer finished computing NodedEdges"<<endl;
+	std::cerr<<"BufferBuilder::buffer finished computing NodedEdges"<<std::endl;
 #endif
 
 	Geometry* resultGeom=NULL;
-	vector<Geometry*> *resultPolyList=NULL;
-	vector<BufferSubgraph*> subgraphList;
+	std::vector<Geometry*> *resultPolyList=NULL;
+	std::vector<BufferSubgraph*> subgraphList;
 
 	try {
 		PlanarGraph graph(OverlayNodeFactory::instance());
@@ -125,16 +125,16 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 
 		createSubgraphs(&graph, subgraphList);
 #if GEOS_DEBUG
-	cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<endl;
+	std::cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<std::endl;
 #endif
 		PolygonBuilder polyBuilder(geomFact);
 		buildSubgraphs(&subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
 #if GEOS_DEBUG
-	cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<endl;
+	std::cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<std::endl;
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
-	} catch (const GEOSException& exc) {
+	} catch (const util::GEOSException& exc) {
 		for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
 			delete subgraphList[i];
 		throw;
@@ -278,9 +278,9 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second) {
 
 /*private*/
 void
-BufferBuilder::createSubgraphs(PlanarGraph *graph, vector<BufferSubgraph*>& subgraphList)
+BufferBuilder::createSubgraphs(PlanarGraph *graph, std::vector<BufferSubgraph*>& subgraphList)
 {
-	vector<Node*>* nodes = graph->getNodes();
+	std::vector<Node*>* nodes = graph->getNodes();
 	for (unsigned int i=0, n=nodes->size(); i<n; i++) {
 		Node *node=(*nodes)[i];
 		if (!node->isVisited()) {
@@ -309,9 +309,9 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph, vector<BufferSubgraph*>& subg
 * @param polyBuilder the PolygonBuilder which will build the final polygons
 */
 void
-BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder)
+BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder)
 {
-	vector<BufferSubgraph*> processedGraphs;
+	std::vector<BufferSubgraph*> processedGraphs;
 	for (unsigned int i=0;i<subgraphList->size();i++) {
 		BufferSubgraph *subgraph=(*subgraphList)[i];
 		Coordinate *p=subgraph->getRightmostCoordinate();
@@ -330,6 +330,9 @@ BufferBuilder::buildSubgraphs(vector<BufferSubgraph*> *subgraphList,PolygonBuild
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.42  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

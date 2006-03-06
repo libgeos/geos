@@ -25,7 +25,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+//using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::noding;
 using namespace geos::algorithm;
@@ -54,7 +54,7 @@ OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 }
 
 /* public */
-vector<SegmentString*>&
+std::vector<SegmentString*>&
 OffsetCurveSetBuilder::getCurves()
 {
 	add(inputGeom);
@@ -63,7 +63,7 @@ OffsetCurveSetBuilder::getCurves()
 
 /*public*/
 void
-OffsetCurveSetBuilder::addCurves(const vector<CoordinateSequence*>& lineList,
+OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
 	int leftLoc, int rightLoc)
 {
 	for (unsigned int i=0, n=lineList.size(); i<n; ++i)
@@ -79,12 +79,12 @@ OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 	int leftLoc, int rightLoc)
 {
 #if GEOS_DEBUG
-	cerr<<__FUNCTION__<<": coords="<<coord->toString()<<endl;
+	std::cerr<<__FUNCTION__<<": coords="<<coord->toString()<<std::endl;
 #endif
 	// don't add null curves!
 	if (coord->getSize() < 2) {
 #if GEOS_DEBUG
-		cerr<<" skipped (size<2)"<<endl;
+		std::cerr<<" skipped (size<2)"<<std::endl;
 #endif
 		return;
 	}
@@ -127,8 +127,8 @@ OffsetCurveSetBuilder::add(const Geometry& g)
 		return;
 	}
 
-	string out=typeid(g).name();
-	throw  UnsupportedOperationException("GeometryGraph::add(Geometry &): unknown geometry type: "+out);
+	std::string out=typeid(g).name();
+	throw util::UnsupportedOperationException("GeometryGraph::add(Geometry &): unknown geometry type: "+out);
 }
 
 /*private*/
@@ -147,7 +147,7 @@ OffsetCurveSetBuilder::addPoint(const Point *p)
 {
 	if (distance <= 0.0) return;
 	const CoordinateSequence *coord=p->getCoordinatesRO();
-	vector<CoordinateSequence*> lineList;
+	std::vector<CoordinateSequence*> lineList;
 	curveBuilder.getLineCurve(coord, distance, lineList);
 
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
@@ -160,13 +160,13 @@ OffsetCurveSetBuilder::addLineString(const LineString *line)
 {
 	if (distance <= 0.0) return;
 #if GEOS_DEBUG
-	cerr<<__FUNCTION__<<": "<<line->toString()<<endl;
+	std::cerr<<__FUNCTION__<<": "<<line->toString()<<std::endl;
 #endif
 	CoordinateSequence *coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
 #if GEOS_DEBUG
-	cerr<<" After coordinate removal: "<<coord->toString()<<endl;
+	std::cerr<<" After coordinate removal: "<<coord->toString()<<std::endl;
 #endif
-	vector<CoordinateSequence*> lineList;
+	std::vector<CoordinateSequence*> lineList;
 	curveBuilder.getLineCurve(coord, distance, lineList);
 	delete coord;
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
@@ -240,17 +240,17 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 	int leftLoc=cwLeftLoc;
 	int rightLoc=cwRightLoc;
 #if GEOS_DEBUG
-	cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<CGAlgorithms::isCCW(coord)<<endl;
+	std::cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<CGAlgorithms::isCCW(coord)<<std::endl;
 #endif
 	if (CGAlgorithms::isCCW(coord)) {
 		leftLoc=cwRightLoc;
 		rightLoc=cwLeftLoc;
 #if GEOS_DEBUG
-	cerr<<" side "<<side<<" becomes "<<Position::opposite(side)<<endl;
+	std::cerr<<" side "<<side<<" becomes "<<Position::opposite(side)<<std::endl;
 #endif
 		side=Position::opposite(side);
 	}
-	vector<CoordinateSequence*> lineList;
+	std::vector<CoordinateSequence*> lineList;
 	curveBuilder.getRingCurve(coord, side, offsetDistance, lineList);
 	addCurves(lineList, leftLoc, rightLoc);
 	//delete lineList;
@@ -313,6 +313,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.27  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

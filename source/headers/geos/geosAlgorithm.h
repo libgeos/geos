@@ -82,7 +82,7 @@ namespace algorithm { // geos.algorithm
  * @version 1.4
  * @see HCoordinate
  */
-class NotRepresentableException: public GEOSException {
+class NotRepresentableException: public util::GEOSException {
 public:
 	NotRepresentableException();
 	NotRepresentableException(std::string msg);
@@ -932,7 +932,7 @@ private:
 
 	void extractCoordinates(const Geometry *geom)
 	{
-		UniqueCoordinateArrayFilter filter(inputPts);
+		util::UniqueCoordinateArrayFilter filter(inputPts);
 		geom->apply_ro(&filter);
 	}
 
@@ -1159,6 +1159,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.27  2006/03/03 13:50:16  strk
  * Cleaned up InteriorPointLine class
  *

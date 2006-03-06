@@ -18,17 +18,18 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
 #include <cassert>
 #include <string>
 #include <vector>
+
+#include <geos/geomgraph.h>
+#include <geos/util.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
+//using namespace std;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -108,7 +109,7 @@ DirectedEdgeStar::getRightmostEdge()
 
 /*public*/
 void
-DirectedEdgeStar::computeLabelling(vector<GeometryGraph*> *geom)
+DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 	//throw(TopologyException *)
 {
 	// this call can throw a TopologyException 
@@ -162,12 +163,12 @@ DirectedEdgeStar::updateLabelling(Label *nodeLabel)
 }
 
 /*private*/
-vector<DirectedEdge*>*
+std::vector<DirectedEdge*>*
 DirectedEdgeStar::getResultAreaEdges()
 {
 	if (resultAreaEdgeList!=NULL) return resultAreaEdgeList;
 
-	resultAreaEdgeList=new vector<DirectedEdge*>();
+	resultAreaEdgeList=new std::vector<DirectedEdge*>();
 
 	EdgeEndStar::iterator endIt=end();
 	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
@@ -192,7 +193,7 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	DirectedEdge *incoming=NULL;
 	int state=SCANNING_FOR_INCOMING;
 	// link edges in CCW order
-	for (vector<DirectedEdge*>::iterator
+	for (std::vector<DirectedEdge*>::iterator
 		i=resultAreaEdgeList->begin(), iEnd=resultAreaEdgeList->end();
 		i != iEnd;
 		++i)
@@ -222,7 +223,7 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	}
 	if (state==LINKING_TO_OUTGOING) {
 		if (firstOut==NULL)
-			throw  TopologyException("no outgoing dirEdge found",&(getCoordinate()));
+			throw util::TopologyException("no outgoing dirEdge found",&(getCoordinate()));
 		assert(firstOut->isInResult()); // unable to link last incoming dirEdge
 		incoming->setNext(firstOut);
 	}
@@ -238,7 +239,7 @@ DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
 	int state=SCANNING_FOR_INCOMING;
 
 	// link edges in CW order
-	for (vector<DirectedEdge*>::reverse_iterator
+	for (std::vector<DirectedEdge*>::reverse_iterator
 		i=resultAreaEdgeList->rbegin(), iEnd=resultAreaEdgeList->rend();
 		i != iEnd;
 		++i)
@@ -375,7 +376,7 @@ DirectedEdgeStar::computeDepths(DirectedEdge *de)
 	int lastDepth=computeDepths(begin(), edgeIterator, nextDepth);
 
 	if (lastDepth!=targetLastDepth)
-		throw  TopologyException("depth mismatch at ",&(de->getCoordinate()));
+		throw util::TopologyException("depth mismatch at ",&(de->getCoordinate()));
 }
 
 /*public*/
@@ -396,10 +397,10 @@ DirectedEdgeStar::computeDepths(EdgeEndStar::iterator startIt,
 }
 
 /*public*/
-string
+std::string
 DirectedEdgeStar::print()
 {
-	string out="DirectedEdgeStar: " + getCoordinate().toString();
+	std::string out="DirectedEdgeStar: " + getCoordinate().toString();
 
 	EdgeEndStar::iterator endIt=end();
 	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
@@ -421,6 +422,9 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.15  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

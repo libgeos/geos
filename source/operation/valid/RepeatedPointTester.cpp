@@ -41,7 +41,7 @@ RepeatedPointTester::hasRepeatedPoint(const Geometry *g)
 	else if (typeid(*g)==typeid(MultiPolygon)) return hasRepeatedPoint((MultiPolygon*)g);
 	else if (typeid(*g)==typeid(MultiLineString)) return hasRepeatedPoint((MultiLineString*)g);
 	else if (typeid(*g)==typeid(GeometryCollection)) return hasRepeatedPoint((GeometryCollection*)g);
-	else  throw  UnsupportedOperationException(typeid(*g).name());
+	else  throw util::UnsupportedOperationException(typeid(*g).name());
 }
 
 bool
@@ -97,6 +97,9 @@ bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.15  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

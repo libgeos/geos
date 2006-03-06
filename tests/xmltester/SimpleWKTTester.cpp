@@ -53,8 +53,8 @@ int main(int argc, char** argv)
 		out.close();
 		cout << "End of Testing" << endl;
 
-	} catch (const GEOSException& ge) {
-		cout << ge.toString() << endl;
+	} catch (const util::GEOSException& ge) {
+		cout << ge.what() << endl;
 	}
 
 	return 0;
@@ -62,6 +62,9 @@ int main(int argc, char** argv)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/06 19:40:48  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.3  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

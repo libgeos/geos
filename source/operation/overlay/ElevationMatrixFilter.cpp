@@ -53,7 +53,7 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 #if GEOS_DEBUG
 		cerr<<"  z set to "<<c->z<<endl;
 #endif
-	} catch (const IllegalArgumentException& ex) {
+	} catch (const util::IllegalArgumentException& ex) {
 		c->z = avgElevation;
 	}
 }
@@ -74,6 +74,9 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.8  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

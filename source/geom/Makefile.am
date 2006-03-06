@@ -6,6 +6,8 @@ noinst_LTLIBRARIES = libgeom.la
 
 INCLUDES = -I$(top_srcdir)/source/headers 
 
+# GeometryCollectionIterator.cpp 
+
 libgeom_la_SOURCES = \
 	Coordinate.cpp \
 	CoordinateSequence.cpp \
@@ -16,7 +18,6 @@ libgeom_la_SOURCES = \
 	Envelope.cpp \
 	Geometry.cpp \
 	GeometryCollection.cpp \
-	GeometryCollectionIterator.cpp \
 	GeometryComponentFilter.cpp \
 	GeometryFactory.cpp \
 	IntersectionMatrix.cpp \

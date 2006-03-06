@@ -59,7 +59,7 @@ LineString::LineString(CoordinateSequence *newCoords, const GeometryFactory *fac
 		return;
 	}
 	if (newCoords->getSize()==1) {
-		throw  IllegalArgumentException("point array must contain 0 or >1 elements\n");
+		throw util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
 	points=newCoords;
 }
@@ -287,6 +287,9 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.60  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.59  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

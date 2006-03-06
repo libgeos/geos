@@ -14,9 +14,11 @@
  *
  **********************************************************************/
 
+#include <string>
+#include <cassert>
+
 #include <geos/io.h>
 #include <geos/util.h>
-#include <string>
 
 using namespace std;
 
@@ -115,7 +117,7 @@ double WKTReader::getNextNumber(StringTokenizer *tokenizer) {
 		case ',':
 			throw  ParseException("Expected number but encountered ','");
 	}
-	Assert::shouldNeverReachHere("Encountered unexpected StreamTokenizer type");
+	assert(0); // Encountered unexpected StreamTokenizer type
 	return 0;
 }
 
@@ -161,7 +163,7 @@ string WKTReader::getNextWord(StringTokenizer *tokenizer) {
 		case ',':
 			return ",";
 	}
-	Assert::shouldNeverReachHere("Encountered unexpected StreamTokenizer type");
+	assert(0); // Encountered unexpected StreamTokenizer type
 	return "";
 }
 
@@ -320,6 +322,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.35  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

@@ -151,12 +151,12 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 	DirectedEdge *de=newStart;
 	bool isFirstEdge=true;
 	do {
-		Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
+		assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
 		if (de->getEdgeRing()==this)
-			throw  TopologyException("Directed Edge visited twice during ring-building at ",&(de->getCoordinate()));
+			throw util::TopologyException("Directed Edge visited twice during ring-building at ",&(de->getCoordinate()));
 		edges.push_back(de);
 		Label *deLabel=de->getLabel();
-		Assert::isTrue(deLabel->isArea());
+		assert(deLabel->isArea());
 		mergeLabel(deLabel);
 		addPoints(de->getEdge(),de->isForward(),isFirstEdge);
 		isFirstEdge=false;
@@ -227,7 +227,8 @@ EdgeRing::mergeLabel(Label *deLabel, int geomIndex)
 void
 EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 {
-	Assert::isTrue(ring==NULL, "EdgeRing::addPoints: can't add points after LinearRing construction");
+	// EdgeRing::addPoints: can't add points after LinearRing construction
+	assert(ring==NULL);
 
 	const CoordinateSequence* edgePts=edge->getCoordinates();
 
@@ -281,6 +282,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.13  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
@@ -378,6 +382,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.14  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.13  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

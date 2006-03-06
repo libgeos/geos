@@ -31,6 +31,7 @@
 #endif
 
 namespace geos {
+namespace util {
 
 
 /*
@@ -157,11 +158,16 @@ std::ostream& operator<< (std::ostream& os, const Profile&);
 /** \brief Return a string representing the Profiler */
 std::ostream& operator<< (std::ostream& os, const Profiler&);
 
-}
+} // namespace geos::util
+} // namespace geos
+
 #endif // ndef GEOS_PROFILER_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.6  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

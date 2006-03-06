@@ -17,10 +17,12 @@
  *
  **********************************************************************/
 
-#include "geos/noding.h"
 #include <sstream>
 
-using namespace std;
+#include "geos/noding.h"
+#include "geos/util.h"
+
+//using namespace std;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -31,9 +33,9 @@ Octant::octant(double dx, double dy)
 {
 	if (dx == 0.0 && dy == 0.0)
 	{
-		ostringstream s;
+		std::ostringstream s;
       		s<<"Cannot compute the octant for point ( "<<dx<<", "<<dy<<" )";
-      		throw IllegalArgumentException(s.str());
+      		throw util::IllegalArgumentException(s.str());
 	}
 
     double adx = fabs(dx);
@@ -79,9 +81,9 @@ Octant::octant(const Coordinate& p0, const Coordinate& p1)
 
 	if (dx == 0.0 && dy == 0.0)
 	{
-		ostringstream s;
+		std::ostringstream s;
       		s<<"Cannot compute the octant for "<<"two identical points "<<p0.toString();
-      		throw IllegalArgumentException(s.str());
+      		throw util::IllegalArgumentException(s.str());
 	}
 
 	return octant(dx, dy);
@@ -92,6 +94,9 @@ Octant::octant(const Coordinate& p0, const Coordinate& p1)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.3  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

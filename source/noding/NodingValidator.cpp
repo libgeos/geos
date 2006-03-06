@@ -18,10 +18,11 @@
  *
  **********************************************************************/
 
+#include <sstream>
+
 #include <geos/noding.h>
 #include <geos/util.h>
 #include <geos/geosAlgorithm.h>
-#include <sstream>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -69,7 +70,7 @@ NodingValidator::checkCollapse(const Coordinate& p0,
 		const Coordinate& p1, const Coordinate& p2) const
 {
 	if (p0.equals2D(p2))
-		throw GEOSException("found non-noded collapse at " +
+		throw util::GEOSException("found non-noded collapse at " +
 			p0.toString() + ", " +
 			p1.toString() + ", " +
 			p2.toString());
@@ -129,7 +130,7 @@ NodingValidator::checkInteriorIntersections(
 			|| hasInteriorIntersection(li, p00, p01)
 			|| hasInteriorIntersection(li, p10, p11))
 		{
-			throw GEOSException(
+			throw util::GEOSException(
 				"found non-noded intersection at "
 				+ p00.toString() + "-" + p01.toString()
 				+ " and "
@@ -172,8 +173,8 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
 			{
 				stringstream s;
 				s<<"found endpt/interior pt intersection ";
-				s<<"at index "<<j<<" :pt "<<testPt.toString();
-				throw GEOSException(s.str());
+				s<<"at index "<<j<<" :pt "<<testPt;
+				throw util::GEOSException(s.str());
 			}
 		}
 	}
@@ -203,6 +204,9 @@ NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.14  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

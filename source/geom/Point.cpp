@@ -42,7 +42,7 @@ Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory):
 	}        
 	if (newCoords->getSize() != 1)
 	{
-		throw  IllegalArgumentException("Point coordinate list must contain a single element");
+		throw util::IllegalArgumentException("Point coordinate list must contain a single element");
 	}
 	coordinates=newCoords;
 }
@@ -94,7 +94,7 @@ double
 Point::getX() const
 {
 	if (isEmpty()) {
-		throw  UnsupportedOperationException("getX called on empty Point\n");
+		throw util::UnsupportedOperationException("getX called on empty Point\n");
 	}
 	return getCoordinate()->x;
 }
@@ -103,7 +103,7 @@ double
 Point::getY() const
 {
 	if (isEmpty()) {
-		throw  UnsupportedOperationException("getY called on empty Point\n");
+		throw util::UnsupportedOperationException("getY called on empty Point\n");
 	}
 	return getCoordinate()->y;
 }
@@ -211,6 +211,9 @@ Point::getGeometryTypeId() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.40  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.39  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

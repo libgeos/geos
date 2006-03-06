@@ -16,7 +16,8 @@ geos_HEADERS = \
 	indexStrtree.h \
 	indexSweepline.h \
 	inline.h \
-	LineSegment.inl \
+	geom/LineSegment.inl \
+	geom/GeometryCollection.inl \
 	noding.h \
 	nodingSnapround.h \
 	io.h \

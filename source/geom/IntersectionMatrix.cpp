@@ -304,7 +304,7 @@ IntersectionMatrix::matches(const string& requiredDimensionSymbols)
 		ostringstream s;
 		s << "IllegalArgumentException: Should be length 9, is "
 			<< "[" << requiredDimensionSymbols << "] instead" << endl;
-		throw IllegalArgumentException(s.str());
+		throw util::IllegalArgumentException(s.str());
 	}
 	for (int ai = 0; ai < 3; ai++) {
 		for (int bi = 0; bi < 3; bi++) {
@@ -348,6 +348,9 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.17  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

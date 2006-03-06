@@ -14,10 +14,12 @@
  *
  **********************************************************************/
 
-#include <geos/indexStrtree.h>
-#include <geos/util.h>
 #include <algorithm>
 #include <typeinfo>
+#include <cassert>
+
+#include <geos/indexStrtree.h>
+#include <geos/util.h>
 
 using namespace std;
 
@@ -25,31 +27,40 @@ namespace geos {
 namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
-Interval::Interval(Interval *other) {
+Interval::Interval(Interval *other)
+{
 	Interval(other->imin,other->imax);
 }
 
-Interval::Interval(double newMin,double newMax) {
-	Assert::isTrue(newMin<=newMax);
+Interval::Interval(double newMin,double newMax)
+{
+	assert(newMin<=newMax);
 	imin=newMin;
 	imax=newMax;
 }
 
-double Interval::getCentre() {
+double
+Interval::getCentre()
+{
 	return (imin+imax)/2;
 }
 
-Interval* Interval::expandToInclude(Interval *other) {
+Interval*
+Interval::expandToInclude(Interval *other)
+{
 	imax=max(imax,other->imax);
 	imin=min(imin,other->imin);
 	return this;
 }
 
-bool Interval::intersects(Interval *other) {
+bool
+Interval::intersects(Interval *other)
+{
 	return !(other->imin>imax || other->imax<imin);
 }
 
-bool Interval::equals(void *o) {
+bool
+Interval::equals(void *o) {
 	if (typeid(o)!=typeid(Interval)) {
 		return false;
 	}
@@ -63,6 +74,9 @@ bool Interval::equals(void *o) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.9  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

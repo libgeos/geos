@@ -14,12 +14,14 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
 #include <cmath>
 #include <cassert>
 #include <string>
 
-using namespace std;
+#include <geos/geomgraph.h>
+#include <geos/util.h>
+
+//using namespace std;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -93,7 +95,7 @@ DirectedEdge::setDepth(int position, int newDepth)
 {
 	if (depth[position]!=-999) {
 		if (depth[position]!=newDepth)
-			throw  TopologyException("assigned depths do not match", &getCoordinate());
+			throw util::TopologyException("assigned depths do not match", &getCoordinate());
 			//Assert.isTrue(depth[position] == depthVal, "assigned depths do not match at " + getCoordinate());
 	}
 	depth[position]=newDepth;
@@ -213,10 +215,10 @@ DirectedEdge::OLDsetEdgeDepths(int position, int newDepth)
 	setDepth(oppositePos,oppositeDepth);
 }
 
-string
+std::string
 DirectedEdge::print()
 {
-	string out=EdgeEnd::print();
+	std::string out=EdgeEnd::print();
 	out+=" ";
 	out+=depth[Position::LEFT];
 	out+="/";
@@ -228,10 +230,10 @@ DirectedEdge::print()
 	return out;
 }
 
-string
+std::string
 DirectedEdge::printEdge()
 {
-	string out=print();
+	std::string out=print();
 	out+=" ";
 	if (isForwardVar)
 		out+=edge->print();
@@ -245,6 +247,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.10  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

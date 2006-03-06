@@ -18,7 +18,6 @@
 #define GEOS_IO_H
 
 #include <geos/platform.h>
-//#include <geos/geom.h>
 #include <geos/util.h>
 #include <memory>
 #include <iostream>
@@ -61,7 +60,7 @@ typedef unsigned char byte;
  * \class ParseException io.h geos.h
  * \brief Notifies a parsing error
  */
-class ParseException: public GEOSException {
+class ParseException: public util::GEOSException {
 public:
 	ParseException();
 	ParseException(std::string msg);
@@ -546,6 +545,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.24  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

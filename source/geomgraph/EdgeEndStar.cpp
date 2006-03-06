@@ -23,8 +23,8 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
-using namespace geos::algorithm;
+//using namespace std;
+//using namespace geos::algorithm;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -63,7 +63,7 @@ EdgeEndStar::getNextCW(EdgeEnd *ee)
 }
 
 void
-EdgeEndStar::computeLabelling(vector<GeometryGraph*> *geom)
+EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 	//throw(TopologyException *)
 {
 	computeEdgeEndLabels();
@@ -160,12 +160,13 @@ EdgeEndStar::computeEdgeEndLabels()
 
 int
 EdgeEndStar::getLocation(int geomIndex,
-	const Coordinate& p, vector<GeometryGraph*> *geom)
+	const Coordinate& p, std::vector<GeometryGraph*> *geom)
 {
 	// compute location only on demand
 	if (ptInAreaLocation[geomIndex]==Location::UNDEF)
 	{
-        	ptInAreaLocation[geomIndex]=SimplePointInAreaLocator::locate(p,(*geom)[geomIndex]->getGeometry());
+        	ptInAreaLocation[geomIndex]=algorithm::SimplePointInAreaLocator::locate(p,
+				(*geom)[geomIndex]->getGeometry());
 	}
 	return ptInAreaLocation[geomIndex];
 }
@@ -192,7 +193,10 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 
 	Label *startLabel=(*it)->getLabel();
 	int startLoc=startLabel->getLocation(geomIndex, Position::LEFT);
-	Assert::isTrue(startLoc!=Location::UNDEF, "Found unlabelled area edge");
+
+	// Found unlabelled area edge
+	assert(startLoc!=Location::UNDEF);
+
 	int currLoc=startLoc;
 
 	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
@@ -200,7 +204,10 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 		EdgeEnd *e=*it;
 		Label *eLabel=e->getLabel();
 		// we assume that we are only checking a area
-		Assert::isTrue(eLabel->isArea(geomIndex), "Found non-area edge");
+
+		// Found non-area edge
+		assert(eLabel->isArea(geomIndex));
+
 		int leftLoc=eLabel->getLocation(geomIndex,Position::LEFT);
 		int rightLoc=eLabel->getLocation(geomIndex,Position::RIGHT);
 		// check that edge is really a boundary between inside and outside!
@@ -208,7 +215,7 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 			return false;
 		}
 		// check side location conflict
-		//Assert.isTrue(rightLoc == currLoc, "side location conflict " + locStr);
+		//assert(rightLoc == currLoc); // "side location conflict " + locStr);
 		if (rightLoc!=currLoc) {
 			return false;
 		}
@@ -265,9 +272,10 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 			// location to propagate
 			if (rightLoc!=Location::UNDEF) {
 				if (rightLoc!=currLoc)
-					throw  TopologyException("side location conflict",&(e->getCoordinate()));
+					throw util::TopologyException("side location conflict",&(e->getCoordinate()));
 				if (leftLoc==Location::UNDEF) {
-					Assert::shouldNeverReachHere("found single null side (at " + (e->getCoordinate()).toString() + ")");
+					// found single null side at e->getCoordinate()
+					assert(0);
 				}
 				currLoc=leftLoc;
 			} else {
@@ -282,9 +290,10 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 				 * Assign both sides to be the current
 				 * location.
 				 */
-				Assert::isTrue(label->getLocation(geomIndex,
-					Position::LEFT)==Location::UNDEF,
-					"found single null side");
+				// found single null side
+				assert(label->getLocation(geomIndex,
+					Position::LEFT)==Location::UNDEF);
+
 				label->setLocation(geomIndex,Position::RIGHT,
 					currLoc);
 				label->setLocation(geomIndex,Position::LEFT,
@@ -294,10 +303,10 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	}
 }
 
-string
+std::string
 EdgeEndStar::print()
 {
-	string out="EdgeEndStar:   " + getCoordinate().toString()+"\n";
+	std::string out="EdgeEndStar:   " + getCoordinate().toString()+"\n";
 	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
 	{
 		EdgeEnd *e=*it;
@@ -311,6 +320,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.16  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -24,6 +24,7 @@
 using namespace std;
 
 namespace geos {
+namespace util { // geos.util
 
 /*
  * Create a shape factory which will create shapes using the given
@@ -259,10 +260,14 @@ Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
 	return new Envelope(0, width, 0, height);
 }
 
+} // namespace geos.util
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/06 19:40:48  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.12  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

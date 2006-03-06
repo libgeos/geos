@@ -17,13 +17,14 @@
  *
  **********************************************************************/
 
+#include <cassert>
+#include <limits>
+#include <vector>
+
 #include <geos/opLinemerge.h>
 #include <geos/util.h>
 #include <geos/geom.h>
 #include <geos/planargraph.h>
-#include <cassert>
-#include <limits>
-#include <vector>
 
 using namespace std;
 using namespace geos::planargraph;
@@ -175,12 +176,12 @@ LineSequencer::computeSequence()
 
 	unsigned int finalLineCount = sequencedGeometry->getNumGeometries();
 
-	Assert::isTrue(lineCount == finalLineCount,
-			"Lines were missing from result");
+	// Lines were missing from result
+	assert(lineCount == finalLineCount);
 
-	Assert::isTrue(dynamic_cast<LineString *>(sequencedGeometry.get())
-		|| dynamic_cast<MultiLineString *>(sequencedGeometry.get()),
-		"Result is not lineal");
+	// Result is not linear
+	assert(dynamic_cast<LineString *>(sequencedGeometry.get())
+		|| dynamic_cast<MultiLineString *>(sequencedGeometry.get())); 
 }
 
 /*private*/
@@ -424,6 +425,9 @@ LineSequencer::reverse(DirectedEdge::NonConstList& seq)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.4  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -119,8 +119,8 @@ XMLTester::run(const std::string &source)
 	while (xml.FindChildElem("case")) {
 		try {
 			parseCase();
-		} catch (const GEOSException& exc) {
-			std::cerr<<exc.toString()<<std::endl;
+		} catch (const std::exception& exc) {
+			std::cerr<<exc.what()<<std::endl;
 		}
 	}
 }
@@ -297,9 +297,6 @@ XMLTester::parseCase()
 			gB=parseGeometry(geomBin);
 		}
 	}
-	catch (const GEOSException& ex) {
-		thrownException = ex.toString();
-	}
 	catch (const std::exception &e) {
 		thrownException = e.what();
 	}
@@ -377,7 +374,7 @@ XMLTester::parseTest()
 	try
 	{
 
-		Profile profile("op");
+		util::Profile profile("op");
 
 		if (opName=="relate")
 		{
@@ -860,6 +857,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/06 19:40:48  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.20  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

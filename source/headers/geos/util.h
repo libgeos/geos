@@ -24,6 +24,7 @@
 #include <vector>
 
 namespace geos {
+namespace util { // geos.util
 
 /**
  * \class GEOSException util.h geos.h
@@ -167,7 +168,6 @@ public:
 	~UnsupportedOperationException() throw() {};
 };
 
-class Coordinate;
 class Assert {
 public:
 
@@ -201,7 +201,7 @@ public:
  *
  * Last port: util/CoordinateArrayFilter.java rev. 1.15
  */
-class CoordinateArrayFilter:public CoordinateFilter {
+class CoordinateArrayFilter: public CoordinateFilter {
 private:
 	Coordinate::ConstVect &pts; // target vector reference
 public:
@@ -382,19 +382,19 @@ public:
 
 };
 
-namespace util { // geos.util
-
- 	/// Symmetric Rounding Algorithm
-	double sym_round(double val);
+/// Symmetric Rounding Algorithm
+double sym_round(double val);
 
 } // namespace geos.util
-
 } // namespace geos
 
 #endif // GEOS_UTIL_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.15  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

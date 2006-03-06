@@ -14,6 +14,8 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/precision.h>
 #include <geos/util.h>
 
@@ -109,7 +111,7 @@ CommonCoordinateFilter::~CommonCoordinateFilter()
 void
 CommonCoordinateFilter::filter_rw(Coordinate *coord) const
 {
-	throw  UnsupportedOperationException("CommonCoordinateFilter is a read-only filter");
+	assert(0); // CommonCoordinateFilter is a read-only filter
 }
 
 Coordinate*
@@ -142,6 +144,9 @@ CommonCoordinateFilter::filter_ro(const Coordinate *coord)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.5  2006/03/02 16:21:26  strk
  * geos::precision namespace added
  *

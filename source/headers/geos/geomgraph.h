@@ -684,8 +684,12 @@ public:
 	Node* addNode(Node *n);
 	void add(EdgeEnd *e);
 	Node *find(const Coordinate& coord) const;
+
 	const_iterator begin() const { return nodeMap.begin(); }
+	const_iterator end() const { return nodeMap.end(); }
 	iterator begin() { return nodeMap.begin(); }
+	iterator end() { return nodeMap.end(); }
+
 	//Collection values(); //Doesn't work yet. Use iterator.
 	//vector instead of Collection
 
@@ -1273,6 +1277,9 @@ inline bool operator==(const Edge &a, const Edge &b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.39  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

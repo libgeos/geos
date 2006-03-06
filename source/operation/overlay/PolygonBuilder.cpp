@@ -18,9 +18,10 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/opOverlay.h>
 #include <geos/util.h>
-#include <cassert>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -206,7 +207,7 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 			i--;
 		}
 	}
-	Assert::isTrue(shellCount <= 1, "found two shells in MinimalEdgeRing list");
+	assert(shellCount <= 1); // found two shells in MinimalEdgeRing list
 	return shell;
 }
 
@@ -270,15 +271,19 @@ PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
  * and been handled in a previous step).
  */
 void
-PolygonBuilder::placeFreeHoles(vector<EdgeRing*>* newShellList,
-	vector<EdgeRing*> *freeHoleList)
+PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>* newShellList,
+	std::vector<EdgeRing*> *freeHoleList)
 {
-	for(int i=0;i<(int)freeHoleList->size();i++) {
-		EdgeRing *hole=(*freeHoleList)[i];
+	for(std::vector<EdgeRing*>::iterator
+			it=freeHoleList->begin(), itEnd=freeHoleList->end();
+			it != itEnd;
+			++it)
+	{
+		EdgeRing *hole=*it;
 		// only place this hole if it doesn't yet have a shell
 		if (hole->getShell()==NULL) {
-			EdgeRing *shell=findEdgeRingContaining(hole,newShellList);
-			Assert::isTrue(shell!=NULL, "unable to assign hole to a shell");
+			EdgeRing *shell=findEdgeRingContaining(hole, newShellList);
+			assert(shell!=NULL); // unable to assign hole to a shell
 			hole->setShell(shell);
 		}
 	}
@@ -371,6 +376,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.29  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

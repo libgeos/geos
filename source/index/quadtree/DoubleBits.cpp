@@ -29,7 +29,7 @@ double
 DoubleBits::powerOf2(int exp)
 {
 	if (exp>1023 || exp<-1022)
-		throw  IllegalArgumentException("Exponent out of bounds");
+		throw util::IllegalArgumentException("Exponent out of bounds");
 #if ASSUME_IEEE_DOUBLE
 	int64 expBias=exp+EXPONENT_BIAS;
 	int64 bits=expBias << 52;
@@ -171,6 +171,9 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.20  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

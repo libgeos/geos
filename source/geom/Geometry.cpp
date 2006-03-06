@@ -14,6 +14,12 @@
  *
  **********************************************************************/
 
+#include <algorithm>
+#include <string>
+#include <typeinfo>
+#include <vector>
+#include <cassert>
+
 #include <geos/geom.h>
 #include <geos/util.h>
 #include <geos/geosAlgorithm.h>
@@ -26,11 +32,6 @@
 #include <geos/opPredicate.h>
 #include <geos/io.h>
 #include <geos/version.h>
-
-#include <algorithm>
-#include <string>
-#include <typeinfo>
-#include <vector>
 
 #define SHORTCIRCUIT_PREDICATES 1
 
@@ -574,7 +575,7 @@ Geometry::checkNotGeometryCollection(const Geometry *g)
 	//throw(IllegalArgumentException *)
 {
 	if ((typeid(*g)==typeid(GeometryCollection))) {
-		throw  IllegalArgumentException("This method does not support GeometryCollection arguments\n");
+		throw  util::IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 	}
 }
 
@@ -592,11 +593,14 @@ Geometry::getClassSortIndex() const
 	else if ( typeid(*this) == typeid(MultiPolygon)       ) return 6;
 	else if ( typeid(*this) == typeid(GeometryCollection) ) return 7;
 
+	assert(0); // unsupported class
+#if 0
 	string str="Class not supported: ";
 	str.append(typeid(*this).name());
 	str.append("");
 	Assert::shouldNeverReachHere(str);
 	return -1;
+#endif
 }
 
 int
@@ -742,6 +746,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.95  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.94  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

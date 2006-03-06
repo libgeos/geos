@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,8 +12,82 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/geosAlgorithm.h>
+#include <typeinfo>
+
+namespace geos {
+namespace algorithm { // geos.algorithm
+
+/**
+ * locate is the main location function.  It handles both single-element
+ * and multi-element Geometries.  The algorithm for multi-element Geometries
+ * is more complex, since it has to take into account the boundaryDetermination rule
+ */
+int
+SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry *geom)
+{
+	if (geom->isEmpty()) return Location::EXTERIOR;
+	if (containsPoint(p,geom))
+		return Location::INTERIOR;
+	return Location::EXTERIOR;
+}
+
+bool
+SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry *geom)
+{
+	if (const Polygon *poly = dynamic_cast<const Polygon*>(geom))
+	{
+		return containsPointInPolygon(p, poly);
+	}
+	
+	if (const GeometryCollection *col = dynamic_cast<const GeometryCollection*>(geom))
+	{
+		for (GeometryCollection::const_iterator
+				it=col->begin(), endIt=col->end();
+				it != endIt;
+				++it)
+		{
+			const Geometry *g2=*it;
+			assert (g2!=geom); 
+			if (containsPoint(p,g2)) return true;
+		}
+	}
+	return false;
+}
+
+bool
+SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p, const Polygon *poly)
+{
+	if (poly->isEmpty()) return false;
+	const LineString *shell=poly->getExteriorRing();
+	const CoordinateSequence *cl;
+	cl = shell->getCoordinatesRO();
+	if (!CGAlgorithms::isPointInRing(p,cl)) {
+		return false;
+	}
+
+	// now test if the point lies in or on the holes
+	for(unsigned int i=0, n=poly->getNumInteriorRing(); i<n; i++)
+	{
+		const LineString *hole = poly->getInteriorRingN(i);
+		cl = hole->getCoordinatesRO();
+		if (CGAlgorithms::isPointInRing(p,cl)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+} // namespace geos.algorithm
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.18  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
@@ -56,63 +131,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/geosAlgorithm.h>
-#include <typeinfo>
-
-namespace geos {
-namespace algorithm { // geos.algorithm
-
-/**
-* locate is the main location function.  It handles both single-element
-* and multi-element Geometries.  The algorithm for multi-element Geometries
-* is more complex, since it has to take into account the boundaryDetermination rule
-*/
-int SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry *geom){
-	if (geom->isEmpty()) return Location::EXTERIOR;
-	if (containsPoint(p,geom))
-		return Location::INTERIOR;
-	return Location::EXTERIOR;
-}
-
-bool SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry *geom) {
-	if (typeid(*geom)==typeid(Polygon)) {
-		return containsPointInPolygon(p,(Polygon*)geom);
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-			   (typeid(*geom)==typeid(MultiPoint)) ||
-			   (typeid(*geom)==typeid(MultiLineString)) ||
-			   (typeid(*geom)==typeid(MultiPolygon))) {
-		GeometryCollectionIterator geomi((GeometryCollection*)geom);
-		while (geomi.hasNext()) {
-			const Geometry *g2=geomi.next();
-			if (g2!=geom)
-				if (containsPoint(p,g2))
-					return true;
-		}
-	}
-	return false;
-}
-
-bool SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p,const Polygon *poly) {
-	if (poly->isEmpty()) return false;
-	const LineString *shell=poly->getExteriorRing();
-	const CoordinateSequence *cl;
-	cl = shell->getCoordinatesRO();
-	if (!CGAlgorithms::isPointInRing(p,cl)) {
-		return false;
-	}
-
-	// now test if the point lies in or on the holes
-	for(int i=0;i<poly->getNumInteriorRing();i++) {
-		LinearRing *hole=(LinearRing*)poly->getInteriorRingN(i);
-		cl = hole->getCoordinatesRO();
-		if (CGAlgorithms::isPointInRing(p,cl)) {
-			return false;
-		}
-	}
-	return true;
-}
-} // namespace geos.algorithm
-} // namespace geos
 

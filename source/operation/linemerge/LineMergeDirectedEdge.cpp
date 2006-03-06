@@ -14,6 +14,8 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/opLinemerge.h>
 #include <geos/planargraph.h>
 #include <geos/util.h>
@@ -35,7 +37,8 @@ LineMergeDirectedEdge::LineMergeDirectedEdge(planarNode *newFrom,
  * or null if there are zero or multiple directed edges starting there.  
  * @return
  */
-LineMergeDirectedEdge* LineMergeDirectedEdge::getNext()
+LineMergeDirectedEdge*
+LineMergeDirectedEdge::getNext()
 {
 	if (getToNode()->getDegree()!=2) {
 		return NULL;
@@ -43,8 +46,12 @@ LineMergeDirectedEdge* LineMergeDirectedEdge::getNext()
 	if (getToNode()->getOutEdges()->getEdges()[0]==getSym()) {
 		return (LineMergeDirectedEdge*) getToNode()->getOutEdges()->getEdges()[1];
 	}
-	Assert::isTrue(getToNode()->getOutEdges()->getEdges()[1]==getSym());
-	return (LineMergeDirectedEdge*) getToNode()->getOutEdges()->getEdges()[0];
+	assert(getToNode()->getOutEdges()->getEdges()[1]==getSym());
+
+	LineMergeDirectedEdge* nextedge = dynamic_cast<LineMergeDirectedEdge*>(getToNode()->getOutEdges()->getEdges()[0]);
+	assert(nextedge);
+
+	return nextedge;
 }
 
 } // namespace geos.operation.linemerge
@@ -53,6 +60,9 @@ LineMergeDirectedEdge* LineMergeDirectedEdge::getNext()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/06 19:40:47  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
  * Revision 1.5  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
