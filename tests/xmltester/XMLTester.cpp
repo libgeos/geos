@@ -590,7 +590,7 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			/// Allow for slightly different representations
-			if (gRes->equalsExact(gRealRes, 0.00000000001)==0) success=1;
+			if (gRes->equalsExact(gRealRes, 0.00000000000001)==true) success=1;
 			//if (gRes->compareTo(gRealRes)==0) success=1;
 
 			if ( testValidOutput ) testValid(gRes, "result");
@@ -860,6 +860,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/06 13:26:58  strk
+ * Fixed equalsExact check, and also reduced tolerance
+ *
  * Revision 1.18  2006/03/06 11:05:13  strk
  * Added input and output validity test facilities
  *
