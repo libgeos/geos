@@ -29,6 +29,11 @@
 #include <geos/opPolygonize.h>
 #include <geos/opLinemerge.h>
 
+/// Define this if you want operations triggering Exceptions to
+/// be printed (will use the NOTIFY channel - only implemented for GEOSUnion so far)
+///
+#undef VERBOSE_EXCEPTIONS
+
 #ifndef GEOS_CAPI_VERSION
 #  define GEOS_CAPI_VERSION "3.0.0-CAPI-1.0.0"
 #endif
@@ -920,10 +925,10 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 	catch (const std::exception &e)
 	{
 #if VERBOSE_EXCEPTIONS
-		ostringstream s(ios_base::binary);
-		s<<"Exception on GEOSUnion with following inputs:"<<endl;
-		s<<"A: "<<g1->toString()<<endl;
-		s<<"B: "<<g2->toString()<<endl;
+		std::ostringstream s; 
+		s << "Exception on GEOSUnion with following inputs:" << std::endl;
+		s << "A: "<<g1->toString() << std::endl;
+		s << "B: "<<g2->toString() << std::endl;
 		NOTICE_MESSAGE(s.str().c_str());
 #endif // VERBOSE_EXCEPTIONS
 		ERROR_MESSAGE(e.what());
