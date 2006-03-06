@@ -422,8 +422,8 @@ GEOSisValid(const Geometry *g1)
 		{
 			TopologyValidationError *err = ivo.getValidationError();
 			if ( err ) {
-				std::string errmsg = err->getMessage();
-				NOTICE_MESSAGE((char *)errmsg.c_str());
+				std::string errmsg = err->toString();
+				NOTICE_MESSAGE(errmsg.c_str());
 			}
 		}
 		return result;
