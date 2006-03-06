@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/06 19:43:20  strk
+ * Fixed Unload class definition namespace (geos::io)
+ *
  * Revision 1.2  2006/03/01 10:39:58  strk
  * ctor and dtor made private and inlined
  *
@@ -31,6 +34,7 @@
 #define GEOS_UNLOAD_H
 //xie add for realse static memory 2003,10,06
 namespace geos {
+namespace io {
 
 class Unload
 {
@@ -41,5 +45,6 @@ public:
 	static void Release();
 };
 
+}
 }
 #endif
