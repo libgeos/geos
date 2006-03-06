@@ -56,12 +56,18 @@ private:
 	int succeeded;
 	int caseCount;
 	int testCount;
+	std::string opSignature;
 
 	int testFileCount;
 	int totalTestCount;
 
 	const std::string *curr_file;
 	std::string curr_case_desc;
+
+	bool testValidOutput;
+	bool testValidInput;
+
+	void testValid(const Geometry* g, const std::string& label);
 
 public:
 	XMLTester();
@@ -81,6 +87,9 @@ public:
 	int setVerbosityLevel(int val);
 
 	int getFailuresCount() { return failed; }
+
+	void testOutputValidity(bool val) { testValidOutput=val; }
+	void testInputValidity(bool val) { testValidInput=val; }
 
 };
 

@@ -38,6 +38,7 @@
 #include <geos/profiler.h>
 #include "markup/MarkupSTL.h"
 #include <geos/unload.h>
+#include <geos/opValid.h>
 #include "XMLTester.h"
 
 //#include "util.h"
@@ -82,7 +83,9 @@ XMLTester::XMLTester()
 	testCount(0),
 	testFileCount(0),
 	totalTestCount(0),
-	curr_file(NULL)
+	curr_file(NULL),
+	testValidOutput(false),
+	testValidInput(false)
 {
 	setVerbosityLevel(0);
 }
@@ -187,6 +190,30 @@ XMLTester::parsePrecisionModel()
 	br=new WKBReader(*factory);
 }
 
+
+void
+XMLTester::testValid(const Geometry* g, const std::string& label)
+{
+	operation::valid::IsValidOp ivo(g);
+	bool result;
+	result = ivo.isValid();
+	if ( result == 0 )
+	{
+		operation::valid::TopologyValidationError *err = ivo.getValidationError();
+		if ( err ) {
+			//std::string errmsg = err->getMessage();
+			//NOTICE_MESSAGE(err->getMessage().c_str());
+			std::cerr << *curr_file << ":"
+			          << " case" << caseCount << ":"
+			          << " test" << testCount << ": "
+				  << opSignature << ": " 
+			          << " invalid geometry (" << label 
+			          << "): " << err->getMessage() << std::endl;
+		}
+	}
+	//return result;
+}
+
 /**
  * Parse WKT or HEXWKB
  */
@@ -199,6 +226,8 @@ XMLTester::parseGeometry(const std::string &in)
 	// Remove leading spaces
 	while (is.get(first_char) && std::isspace(first_char));
 	is.unget();
+
+	Geometry* ret;
 
 	switch (first_char)
 	{
@@ -218,10 +247,16 @@ XMLTester::parseGeometry(const std::string &in)
 		case 'D':
 		case 'E':
 		case 'F':
-			return br->readHEX(is);
+			ret = br->readHEX(is);
+			break;
 		default:
-			return r->read(in);
+			ret = r->read(in);
+			break;
 	}
+
+	if ( testValidInput ) testValid(ret, "parsed");
+
+	return ret;
 }
 
 std::string 
@@ -331,6 +366,7 @@ XMLTester::parseTest()
 		opSig += opArg3;
 	}
 
+	opSignature = opName + "(" + opSig + ")";
 
 	std::string actual_result="NONE";
 
@@ -387,6 +423,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -402,6 +440,8 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -419,6 +459,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -434,6 +476,8 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -462,6 +506,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -483,6 +529,8 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -515,6 +563,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -543,6 +593,8 @@ XMLTester::parseTest()
 			if (gRes->equalsExact(gRealRes, 0.00000000001)==0) success=1;
 			//if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -563,6 +615,8 @@ XMLTester::parseTest()
 			else gRealRes = factory->createGeometryCollection();
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -608,6 +662,8 @@ XMLTester::parseTest()
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
 
+			if ( testValidOutput ) testValid(gRes, "result");
+
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
 
@@ -641,6 +697,8 @@ XMLTester::parseTest()
 			}
 
 			if (gRes->compareTo(gRealRes)==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes, "result");
 
 			actual_result=gRealRes->toString();
 			expected_result=gRes->toString();
@@ -742,8 +800,10 @@ XMLTester::~XMLTester()
 static void
 usage(char *me, int exitcode, std::ostream &os)
 {
-	os<<"Usage: "<<me<<" [-v] <test> [<test> ...]"<<std::endl;
-	os<<" Multiple -v increments verbosity"<<std::endl;
+	os << "Usage: " << me
+		<< " [-v] [--test-valid-output] [--test-valid-input] <test> [<test> ...]"
+		<< std::endl;
+	os << " Multiple -v increments verbosity" << std::endl;
 	exit(exitcode);
 }
 
@@ -771,6 +831,16 @@ main(int argC, char* argV[])
 			tester.setVerbosityLevel(verbose);
 			continue;
 		}
+		if ( ! strcmp(argV[i], "--test-valid-output" ) )
+		{
+			tester.testOutputValidity(true);
+			continue;
+		}
+		if ( ! strcmp(argV[i], "--test-valid-input" ) )
+		{
+			tester.testInputValidity(true);
+			continue;
+		}
 
 		std::string source = argV[i];
 		tester.run(source);
@@ -790,6 +860,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/06 11:05:13  strk
+ * Added input and output validity test facilities
+ *
  * Revision 1.17  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
