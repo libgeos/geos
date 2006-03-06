@@ -1212,11 +1212,6 @@ private:
 	double maxx;	/// the maximum x-coordinate
 	double miny;	/// the minimum y-coordinate
 	double maxy;	/// the maximum y-coordinate
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID=5873921885273102420I64;
-#else        
-	static const int64 serialVersionUID=5873921885273102420LL;
-#endif        
 };
 
 inline double Envelope::getMaxY() const { return maxy; }
@@ -1447,11 +1442,6 @@ public:
 private:
 	const PrecisionModel* precisionModel;
 	int SRID;
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = -6820524753094095635I64;
-#else
-	static const int64 serialVersionUID = -6820524753094095635LL;
-#endif        
 	const CoordinateSequenceFactory *coordinateListFactory;
 };
 
@@ -2409,12 +2399,6 @@ protected:
 	std::vector<Geometry *>* geometries;
 	virtual Envelope* computeEnvelopeInternal() const;
 	virtual int compareToSameClass(const Geometry *gc) const;
-private:
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = -5694727726395021467I64;
-#else
-	static const int64 serialVersionUID = -5694727726395021467LL;
-#endif        
 };
 
 class GeometryCollectionIterator {
@@ -2502,11 +2486,6 @@ private:
 	*  The <code>Coordinate</code> wrapped by this <code>Point</code>.
 	*/
 	CoordinateSequence *coordinates;
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = 4902022702746614570I64;
-#else        
-	static const int64 serialVersionUID = 4902022702746614570LL;
-#endif        
 };
 
 /**
@@ -2589,12 +2568,6 @@ public:
 protected:
 	virtual Envelope* computeEnvelopeInternal() const;
 	CoordinateSequence* points;
-private:
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = 3110669828065365560I64;
-#else
-	static const int64 serialVersionUID = 3110669828065365560LL;
-#endif        
 };
 
 struct LineStringLT {
@@ -2641,11 +2614,6 @@ public:
 	bool isClosed() const;
 	void setPoints(CoordinateSequence* cl);
 private:
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = -4261142084085851829I64;
-#else
-	static const int64 serialVersionUID = -4261142084085851829LL;
-#endif        
 	void validateConstruction();
 };
 
@@ -2756,11 +2724,6 @@ protected:
 private:
 
 	void normalize(LinearRing *ring, bool clockwise);
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = -3494792200821764533I64;
-#else
-	static const int64 serialVersionUID = -3494792200821764533LL;
-#endif        
 };
 
 /**
@@ -2812,12 +2775,6 @@ public:
 
 protected:
 	const Coordinate* getCoordinateN(int n) const;
-private:
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = -8048474874175355449I64;
-#else
-	static const int64 serialVersionUID = -8048474874175355449LL;
-#endif        
 };
 
 /**
@@ -2883,12 +2840,6 @@ public:
 	 */
 	MultiLineString* reverse() const;
 
-private:
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = 8166665132445433741I64;
-#else
-	static const int64 serialVersionUID = 8166665132445433741LL;
-#endif        
 };
 
 /**
@@ -2945,12 +2896,6 @@ public:
 	MultiPolygon(const MultiPoint &mp): GeometryCollection(mp) {}
 	Geometry *clone() const { return new MultiPolygon(*this); };
 
-private:
-#ifdef INT64_CONST_IS_I64
-	static const int64 serialVersionUID = -551033529766975875I64;
-#else
-	static const int64 serialVersionUID = -551033529766975875LL;
-#endif        
 };
 
 
@@ -2990,6 +2935,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.80  2006/03/06 11:34:31  strk
+ * Dropped unused/unmaintained/platform-problematic serial version info for classes (#47)
+ *
  * Revision 1.79  2006/03/03 13:50:16  strk
  * Cleaned up InteriorPointLine class
  *
