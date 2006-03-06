@@ -258,7 +258,7 @@ IsValidOp::checkTooFewPoints(GeometryGraph *graph)
 {
 	if (graph->hasTooFewPoints()) {
 		validErr=new TopologyValidationError(
-			TopologyValidationError::TOO_FEW_POINTS,
+			TopologyValidationError::eTooFewPoints,
 			graph->getInvalidPoint());
 		return;
 	}
@@ -281,7 +281,7 @@ IsValidOp::checkConsistentArea(GeometryGraph *graph)
 	if (!isValidArea)
 	{
 		validErr=new TopologyValidationError(
-			TopologyValidationError::SELF_INTERSECTION,
+			TopologyValidationError::eSelfIntersection,
 			cat.getInvalidPoint());
 		return;
 	}
@@ -289,7 +289,7 @@ IsValidOp::checkConsistentArea(GeometryGraph *graph)
 	if (cat.hasDuplicateRings())
 	{
 		validErr=new TopologyValidationError(
-			TopologyValidationError::DUPLICATE_RINGS,
+			TopologyValidationError::eDuplicatedRings,
 			cat.getInvalidPoint());
 	}
 }
@@ -335,7 +335,7 @@ IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList &eiList)
 		}
 		if (nodeSet.find(&ei->coord)!=nodeSet.end()) {
 			validErr=new TopologyValidationError(
-				TopologyValidationError::RING_SELF_INTERSECTION,
+				TopologyValidationError::eRingSelfIntersection,
 				ei->coord);
 			return;
 		} else {
@@ -381,7 +381,7 @@ IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph)
 		bool outside = !pir.isInside(*holePt);
 		if (outside) {
 			validErr=new TopologyValidationError(
-				TopologyValidationError::HOLE_OUTSIDE_SHELL,
+				TopologyValidationError::eHoleOutsideShell,
 				*holePt);
 			return;
 		}
@@ -418,7 +418,7 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 	if (!isNonNested)
 	{
 		validErr=new TopologyValidationError(
-			TopologyValidationError::NESTED_HOLES,
+			TopologyValidationError::eNestedHoles,
 			*(nestedTester.getNestedPoint()));
 	}
 }
@@ -485,7 +485,7 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	int nholes = p->getNumInteriorRing();
 	if (nholes<=0) {
 		validErr=new TopologyValidationError(
-			TopologyValidationError::NESTED_SHELLS,
+			TopologyValidationError::eNestedHoles,
 			*shellPt);
 		return;
 	}
@@ -504,7 +504,7 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 		if (badNestedPt==NULL) return;
 	}
 	validErr=new TopologyValidationError(
-		TopologyValidationError::NESTED_SHELLS, *badNestedPt
+		TopologyValidationError::eNestedShells, *badNestedPt
 	);
 }
 
@@ -550,7 +550,7 @@ IsValidOp::checkConnectedInteriors(GeometryGraph &graph)
 	if (!cit.isInteriorsConnected())
 	{
 		validErr=new TopologyValidationError(
-			TopologyValidationError::DISCONNECTED_INTERIOR,
+			TopologyValidationError::eDisconnectedInterior,
 			cit.getCoordinate());
 	}
 }
@@ -565,7 +565,7 @@ IsValidOp::checkInvalidCoordinates(const CoordinateSequence *cs)
 		if (! isValid(cs->getAt(i)) )
 		{
 			validErr = new TopologyValidationError(
-				TopologyValidationError::INVALID_COORDINATE,
+				TopologyValidationError::eInvalidCoordinate,
 				cs->getAt(i));
 			return;
 
@@ -611,7 +611,7 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 	if ( ! ring->isClosed() )
 	{
 		validErr = new TopologyValidationError(
-			TopologyValidationError::RING_NOT_CLOSED,
+			TopologyValidationError::eRingNotClosed,
 				ring->getCoordinateN(0));
 	}
 }
@@ -622,6 +622,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.44  2006/03/06 12:47:52  strk
+ * TopologyValidationError error names (enum) renamed to avoid conflicts.
+ *
  * Revision 1.43  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

@@ -78,19 +78,20 @@ public:
  */
 class TopologyValidationError {
 public:
-	enum {
-		ERROR,
-		REPEATED_POINT,
-		HOLE_OUTSIDE_SHELL,
-		NESTED_HOLES,
-		DISCONNECTED_INTERIOR,
-		SELF_INTERSECTION,
-		RING_SELF_INTERSECTION,
-		NESTED_SHELLS,
-		DUPLICATE_RINGS,
-		TOO_FEW_POINTS,
-		INVALID_COORDINATE,
-		RING_NOT_CLOSED
+
+	enum errorEnum {
+		eError,
+		eRepeatedPoint,
+		eHoleOutsideShell,
+		eNestedHoles,
+		eDisconnectedInterior,
+		eSelfIntersection,
+		eRingSelfIntersection,
+		eNestedShells,
+		eDuplicatedRings,
+		eTooFewPoints,
+		eInvalidCoordinate,
+		eRingNotClosed
 	};
 
 	TopologyValidationError(int newErrorType, const Coordinate& newPt);
@@ -513,6 +514,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/06 12:47:49  strk
+ * TopologyValidationError error names (enum) renamed to avoid conflicts.
+ *
  * Revision 1.16  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
