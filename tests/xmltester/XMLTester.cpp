@@ -844,7 +844,7 @@ main(int argC, char* argV[])
 	}
 	tester.resultSummary(std::cout);
 
-	Unload::Release();
+	io::Unload::Release();
 
 	return tester.getFailuresCount();
 
@@ -857,6 +857,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/06 21:27:40  strk
+ * Cascading fixed after Unload definition moved to geos::io namespace
+ *
  * Revision 1.21  2006/03/06 19:40:48  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

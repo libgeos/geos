@@ -26,7 +26,13 @@
 #include <geos/geosAlgorithm.h>
 
 namespace geos {
+
+namespace io {
+class Unload;
+}
+
 namespace operation { // geos.operation
+
 
 /** \brief
  * Contains classes to implement the computation of the spatial relationships of <CODE>Geometry</CODE>s.
@@ -214,7 +220,7 @@ private:
  *
  */
 class RelateComputer {
-friend class Unload;
+friend class io::Unload;
 public:
 	//RelateComputer();
 	virtual ~RelateComputer();
@@ -282,6 +288,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/06 21:27:40  strk
+ * Cascading fixed after Unload definition moved to geos::io namespace
+ *
  * Revision 1.8  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

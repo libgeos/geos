@@ -1044,13 +1044,16 @@ main()
 	// This is not really needed but to make
 	// memory checker like valgrind quiet
 	// about static heap-allocated data.
-	Unload::Release();
+	io::Unload::Release();
 
 	exit(0);
 }
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2006/03/06 21:27:39  strk
+ * Cascading fixed after Unload definition moved to geos::io namespace
+ *
  * Revision 1.41  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

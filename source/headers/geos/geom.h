@@ -107,6 +107,10 @@ namespace algorithm { // geos.algorithm
 	class CGAlgorithms;
 } // namespace geos.algorithm
 
+namespace io { // geos.io
+	class Unload;
+} // namespace geos.io
+
 class Coordinate;
 class CoordinateArraySequence;
 class CoordinateArraySequenceFactory;
@@ -201,7 +205,7 @@ enum GeometryTypeId {
  * JTS methods currently do not handle inputs with different precision models.
  */
 class PrecisionModel {
-friend class Unload;
+friend class io::Unload;
 
 public:
 
@@ -1530,7 +1534,7 @@ private:
  *
  */
 class Geometry{
-friend class Unload;
+friend class io::Unload;
 public:
 
 	/// A vector of const Geometry pointers
@@ -2929,6 +2933,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.82  2006/03/06 21:27:40  strk
+ * Cascading fixed after Unload definition moved to geos::io namespace
+ *
  * Revision 1.81  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
