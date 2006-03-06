@@ -18,6 +18,10 @@
 #include <geos/geosAlgorithm.h>
 #include <vector>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
 using namespace std;
 using namespace geos::algorithm;
 
@@ -212,25 +216,29 @@ Polygon::computeEnvelopeInternal() const
 bool
 Polygon::equalsExact(const Geometry *other, double tolerance) const
 {
-	if (!isEquivalentClass(other)) {
-		return false;
-	}
 	const Polygon* otherPolygon=dynamic_cast<const Polygon*>(other);
-	if (typeid(*(otherPolygon->shell))!=typeid(Geometry)) {
+	if ( ! otherPolygon ) return false;
+
+	if (!shell->equalsExact(otherPolygon->shell, tolerance)) {
 		return false;
 	}
-	Geometry* otherPolygonShell=dynamic_cast<Geometry *>(otherPolygon->shell);
-	if (!shell->equalsExact(otherPolygonShell, tolerance)) {
+
+	size_t nholes = holes->size();
+
+	if (nholes != otherPolygon->holes->size()) {
 		return false;
 	}
-	if (holes->size()!=otherPolygon->holes->size()) {
-		return false;
-	}
-	for (unsigned int i = 0; i < holes->size(); i++) {
-		if (!((LinearRing *)(*holes)[i])->equalsExact((*(otherPolygon->holes))[i],tolerance)) {
+
+	for (size_t i=0; i<nholes; i++)
+	{
+		const Geometry* hole=(*holes)[i];
+		const Geometry* otherhole=(*(otherPolygon->holes))[i];
+		if (!hole->equalsExact(otherhole, tolerance))
+		{
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -426,6 +434,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.57  2006/03/06 13:27:57  strk
+ * Cleaned up equalsExact
+ *
  * Revision 1.56  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
