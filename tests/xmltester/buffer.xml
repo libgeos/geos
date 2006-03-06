@@ -256,7 +256,7 @@ MULTIPOLYGON ((( 708258.754920656 2402197.91172757, 708257.029447455 2402206.569
 </op>
 </test>
 </case>
-<case><desc>Case #</desc>
+<case><desc>Invalid output</desc>
 <a>
 GEOMETRYCOLLECTION (POLYGON ((0 10, 10 0, 10 10, 0 10), (4 8, 8 4, 8 8, 4 8)), LINESTRING (6 6, 20 20))
 </a>

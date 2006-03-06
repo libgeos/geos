@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -21,6 +21,7 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace io { // geos.io
 
 int ByteOrderValues::ENDIAN_BIG = 1;
 int ByteOrderValues::ENDIAN_LITTLE = 2;
@@ -144,10 +145,14 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 	putLong(longValue, buf, byteOrder);
 }
 
+} // namespace geos.io
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
  * Revision 1.5  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

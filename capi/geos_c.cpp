@@ -538,7 +538,7 @@ GEOSGeomFromWKT(const char *wkt)
 {
 	try
 	{
-		WKTReader r(geomFactory);
+		io::WKTReader r(geomFactory);
 		const std::string wktstring = std::string(wkt);
 		Geometry *g = r.read(wktstring);
 		return g;
@@ -587,7 +587,7 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 {
 	try
 	{
-		WKBWriter w(WKBOutputDims);
+		io::WKBWriter w(WKBOutputDims);
 		std::ostringstream s(std::ios_base::binary);
 		w.write(*g, s);
 		std::string wkbstring = s.str();
@@ -618,7 +618,7 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 	try
 	{
 		std::string wkbstring = std::string(wkb, size); // make it binary !
-		WKBReader r(*geomFactory);
+		io::WKBReader r(*geomFactory);
 		std::istringstream s(std::ios_base::binary);
 		s.str(wkbstring);
 

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -20,6 +21,7 @@
 using namespace std;
 
 namespace geos {
+namespace io { // geos.io
 
 //WKTReader::WKTReader(){
 //	geometryFactory=new GeometryFactory();
@@ -312,10 +314,15 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 	//delete geoms;
 	return ret;
 }
-}
+
+} // namespace geos.io
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
  * Revision 1.34  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

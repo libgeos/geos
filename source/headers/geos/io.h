@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,7 +18,7 @@
 #define GEOS_IO_H
 
 #include <geos/platform.h>
-#include <geos/geom.h>
+//#include <geos/geom.h>
 #include <geos/util.h>
 #include <memory>
 #include <iostream>
@@ -27,6 +27,32 @@
 #include <string>
 
 namespace geos {
+
+class Geometry;
+
+/// Contains the interfaces for converting JTS objects to and from other formats.
+//
+/// The Java Topology Suite (JTS) is a Java API that implements a core
+/// set of spatial data operations usin g an explicit precision model
+/// and robust geometric algorithms. JTS is intended to be used in the
+/// devel opment of applications that support the validation, cleaning,
+/// integration and querying of spatial data sets.
+///
+/// JTS attempts to implement the OpenGIS Simple Features Specification
+/// (SFS) as accurately as possible.  In some cases the SFS is unclear
+/// or omits a specification; in this case JTS attempts to choose a reaso
+/// nable and consistent alternative.  Differences from and elaborations
+/// of the SFS are documented in this specification.
+///
+/// <h2>Package Specification</h2>
+///
+/// <ul>
+/// <li>Java Topology Suite Technical Specifications
+/// <li><A HREF="http://www.opengis.org/techno/specs.htm">
+///   OpenGIS Simple Features Specification for SQL</A>
+/// </ul>
+///
+namespace io { // geos.io
 
 /// An unsigned char
 typedef unsigned char byte;
@@ -513,12 +539,16 @@ private:
 };
 
 
+} // namespace geos.io
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
  * Revision 1.23  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

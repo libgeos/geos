@@ -4,39 +4,13 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
- *
- **********************************************************************
- * $Log$
- * Revision 1.13  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.12  2005/04/14 11:49:02  strk
- * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
- *
- * Revision 1.11  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.10  2004/05/17 12:37:50  strk
- * Added carriage returns and tabs in set of blanks chars
- *
- * Revision 1.9  2004/05/07 14:15:08  strk
- * fixed peekNextToken to avoid incrementing string pointer
- *
- * Revision 1.8  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 
@@ -46,6 +20,7 @@
 using namespace std;
 
 namespace geos {
+namespace io { // geos.io
 
 //StringTokenizer::StringTokenizer(){
 	//str="";
@@ -157,5 +132,38 @@ double StringTokenizer::getNVal(){
 string StringTokenizer::getSVal(){
 	return stok;
 }
-}
 
+} // namespace geos.io
+} // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.14  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
+ * Revision 1.13  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
+ * Revision 1.12  2005/04/14 11:49:02  strk
+ * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
+ *
+ * Revision 1.11  2004/07/02 13:28:27  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.10  2004/05/17 12:37:50  strk
+ * Added carriage returns and tabs in set of blanks chars
+ *
+ * Revision 1.9  2004/05/07 14:15:08  strk
+ * fixed peekNextToken to avoid incrementing string pointer
+ *
+ * Revision 1.8  2004/03/18 10:42:44  ybychkov
+ * "IO" and "Util" upgraded to JTS 1.4
+ * "Geometry" partially upgraded.
+ *
+ * Revision 1.7  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/

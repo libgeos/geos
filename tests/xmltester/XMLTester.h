@@ -44,9 +44,9 @@ private:
 	PrecisionModel *pm;
 
 	GeometryFactory *factory;
-	WKTReader *r;
-	WKTWriter *w;
-	WKBReader *br;
+	io::WKTReader *r;
+	io::WKTWriter *w;
+	io::WKBReader *br;
 	CMarkupSTL xml;
 
 	int verbose;

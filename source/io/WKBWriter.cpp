@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -21,6 +21,7 @@
 using namespace std;
 
 namespace geos {
+namespace io { // geos.io
 
 WKBWriter::WKBWriter(int dims, int bo):
 		outputDimension(dims), byteOrder(bo), outStream(NULL)
@@ -176,5 +177,6 @@ WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx,
 }
 
 
+} // namespace geos.io
 } // namespace geos
 

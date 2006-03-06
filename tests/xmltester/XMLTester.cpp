@@ -181,13 +181,13 @@ XMLTester::parsePrecisionModel()
 	factory = new GeometryFactory(pm);
 
 	if ( r ) delete r;
-	r=new WKTReader(factory);
+	r=new io::WKTReader(factory);
 
 	if ( w ) delete w;
-	w=new WKTWriter();
+	w=new io::WKTWriter();
 
 	if ( br ) delete br;
-	br=new WKBReader(*factory);
+	br=new io::WKBReader(*factory);
 }
 
 
@@ -860,6 +860,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
  * Revision 1.19  2006/03/06 13:26:58  strk
  * Fixed equalsExact check, and also reduced tolerance
  *

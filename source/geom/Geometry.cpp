@@ -428,7 +428,7 @@ Geometry::toString() const
 string
 Geometry::toText() const
 {
-	WKTWriter writer;
+	io::WKTWriter writer;
 	return writer.write(this);
 }
 
@@ -742,6 +742,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.94  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
  * Revision 1.93  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

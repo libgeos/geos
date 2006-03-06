@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,8 +12,59 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+// CTS.cpp : Testing class
+//
+
+#include <iostream>
+#include <fstream>
+
+#include <geos/io.h>
+
+using namespace std;
+using namespace geos;
+
+int main(int argc, char** argv)
+{
+    
+	try {
+		ofstream out("WKTOut");
+		ifstream in("WKTIn");
+		string instr;
+		string outstr;
+		io::WKTReader *r = new io::WKTReader(new GeometryFactory(new PrecisionModel(),10));
+		io::WKTWriter *w = new io::WKTWriter();
+		Geometry *g;
+
+		cout << "Start Testing:" << endl;
+		while(!in.eof()) {
+			&getline(in,instr);
+			if (instr!="") {
+				g=r->read(instr);
+				outstr=w->write(g);
+				out << "----------" << endl;
+				out << instr << endl;
+				out << outstr << endl;
+				out << "----------" << endl << endl;
+			}
+		}
+		out.flush();
+		out.close();
+		cout << "End of Testing" << endl;
+
+	} catch (const GEOSException& ge) {
+		cout << ge.toString() << endl;
+	}
+
+	return 0;
+}
+
+/**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
  * Revision 1.2  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -48,51 +100,4 @@
  *
  *
  **********************************************************************/
-
-
-// CTS.cpp : Testing class
-//
-
-#include <iostream>
-#include <fstream>
-
-#include <geos/io.h>
-
-using namespace std;
-using namespace geos;
-
-int main(int argc, char** argv)
-{
-    
-	try {
-		ofstream out("WKTOut");
-		ifstream in("WKTIn");
-		string instr;
-		string outstr;
-		WKTReader *r = new WKTReader(new GeometryFactory(new PrecisionModel(),10));
-		WKTWriter *w=new WKTWriter();
-		Geometry *g;
-
-		cout << "Start Testing:" << endl;
-		while(!in.eof()) {
-			&getline(in,instr);
-			if (instr!="") {
-				g=r->read(instr);
-				outstr=w->write(g);
-				out << "----------" << endl;
-				out << instr << endl;
-				out << outstr << endl;
-				out << "----------" << endl << endl;
-			}
-		}
-		out.flush();
-		out.close();
-		cout << "End of Testing" << endl;
-
-	} catch (const GEOSException& ge) {
-		cout << ge.toString() << endl;
-	}
-
-	return 0;
-}
 

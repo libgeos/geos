@@ -64,8 +64,8 @@ GeometryFactory *global_factory;
 void WKBtest(vector<Geometry*>*geoms)
 {
 	stringstream s(ios_base::binary|ios_base::in|ios_base::out);
-	WKBReader wkbReader(*global_factory);
-	WKBWriter wkbWriter;
+	io::WKBReader wkbReader(*global_factory);
+	io::WKBWriter wkbWriter;
 	Geometry *gout;
 
 #if DEBUG_STREAM_STATE
@@ -146,11 +146,11 @@ void WKBtest(vector<Geometry*>*geoms)
 		if ( failed ) cout<<"{"<<i<<"} (WKB) ";
 		else cout<<"["<<i<<"] (WKB) ";
 
-		WKBReader::printHEX(s, cout);
+		io::WKBReader::printHEX(s, cout);
 		cout<<endl;
 
 		if ( failed ) {
-			WKTWriter wkt;
+			io::WKTWriter wkt;
 			cout<<"  IN: "<<wkt.write(gin)<<endl;
 			cout<<" OUT: "<<wkt.write(gout)<<endl;
 		}
@@ -172,7 +172,7 @@ wkt_print_geoms(vector<Geometry *> *geoms)
 	WKBtest(geoms); // test WKB parser
 
 	// WKT-print given geometries
-	WKTWriter *wkt = new WKTWriter();
+	io::WKTWriter *wkt = new io::WKTWriter();
 	for (unsigned int i=0; i<geoms->size(); i++) {
 		const Geometry *g = (*geoms)[i];
 		string tmp=wkt->write(g);
@@ -1051,6 +1051,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2006/03/06 15:23:14  strk
+ * geos::io namespace
+ *
  * Revision 1.39  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
