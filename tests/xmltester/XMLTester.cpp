@@ -92,6 +92,7 @@ XMLTester::XMLTester()
 	r(0),
 	w(0),
 	br(0),
+	bw(0),
 	test_predicates(0),
 	failed(0),
 	succeeded(0),
@@ -102,7 +103,8 @@ XMLTester::XMLTester()
 	curr_file(NULL),
 	testValidOutput(false),
 	testValidInput(false),
-	sqlOutput(false)
+	sqlOutput(false),
+	HEXWKB_output(false)
 {
 	setVerbosityLevel(0);
 }
@@ -117,6 +119,69 @@ XMLTester::setVerbosityLevel(int value)
 	return old_value;
 }
 
+/*private*/
+void
+XMLTester::printTest(bool success, const std::string& expected_result, const std::string& actual_result)
+{
+	if ( sqlOutput )
+	{
+		std::cout << "INSERT INTO \"" << normalize(*curr_file) << "\" VALUES ("
+		          << caseCount << ", "
+		          << testCount << ", "
+		          << "'" << opSignature << "', "
+		          << "'" << curr_case_desc << "', ";
+
+		std::string geomOut;
+
+		if ( gA ) {
+			std::cout << "'" << printGeom(gA) << "', ";
+		} else {
+			std::cout << "NULL, ";
+		}
+
+		if ( gB ) {
+			std::cout << "'" << printGeom(gB) << "', ";
+		} else {
+			std::cout << "NULL, ";
+		}
+
+		std::cout << "'" << expected_result << "', "
+		          << "'" << actual_result << "', ";
+
+		if ( success ) std::cout << "'t'";
+		else std::cout << "'f'";
+
+		std::cout << ");" << std::endl;
+	}
+
+	else
+	{
+		std::cout << *curr_file <<":";
+		std::cout << " case" << caseCount << ":";
+		std::cout << " test" << testCount << ": "
+			<< opSignature; 
+		std::cout << ": " << (success?"ok.":"failed.")<<std::endl;
+
+		std::cout << "\tDescription: " << curr_case_desc << std::endl;
+
+
+		if ( gA ) {
+			std::cout << "\tGeometry A: ";
+			printGeom(std::cout, gA);
+			std::cout << std::endl;
+		}
+
+		if ( gB ) {
+			std::cout << "\tGeometry B: ";
+			printGeom(std::cout, gB);
+			std::cout << std::endl;
+		}
+
+		std::cout << "\tExpected result: "<<expected_result<<std::endl;
+		std::cout << "\tObtained result: "<<actual_result<<std::endl;
+		std::cout <<std::endl;
+	}
+}
 
 void
 XMLTester::run(const std::string &source)
@@ -214,6 +279,9 @@ XMLTester::parsePrecisionModel()
 
 	if ( br ) delete br;
 	br=new io::WKBReader(*factory);
+
+	if ( bw ) delete bw;
+	bw=new io::WKBWriter();
 }
 
 
@@ -242,7 +310,7 @@ XMLTester::testValid(const Geometry* g, const std::string& label)
  * Parse WKT or HEXWKB
  */
 Geometry *
-XMLTester::parseGeometry(const std::string &in)
+XMLTester::parseGeometry(const std::string &in, const char* label)
 {
 	std::stringstream is(in, std::ios_base::in);
 	char first_char;
@@ -278,7 +346,9 @@ XMLTester::parseGeometry(const std::string &in)
 			break;
 	}
 
-	if ( testValidInput ) testValid(ret, "parsed");
+	if ( testValidInput ) testValid(ret, std::string(label));
+
+	//ret->normalize();
 
 	return ret;
 }
@@ -312,13 +382,13 @@ XMLTester::parseCase()
 		xml.FindChildElem("a");
 		geomAin=xml.GetChildData();
 		geomAin=trimBlanks(geomAin);
-		gA=parseGeometry(geomAin);
+		gA=parseGeometry(geomAin, "Geometry A");
 
 		if ( xml.FindChildElem("b") )
 		{
 			geomBin=xml.GetChildData();
 			geomBin=trimBlanks(geomBin);
-			gB=parseGeometry(geomBin);
+			gB=parseGeometry(geomBin, "Geometry B");
 		}
 	}
 	catch (const std::exception &e) {
@@ -346,6 +416,30 @@ XMLTester::parseCase()
 	xml.OutOfElem();
 	delete gA;
 	delete gB;
+}
+
+/*private*/
+void
+XMLTester::printGeom(std::ostream& os, Geometry *g)
+{
+	os << printGeom(g);
+}
+
+std::string
+XMLTester::printGeom(Geometry *g)
+{
+	if ( HEXWKB_output )
+	{
+		std::stringstream s(std::ios_base::binary|std::ios_base::in|std::ios_base::out);
+		bw->write(*g, s);
+		std::stringstream s2;
+		br->printHEX(s, s2);
+		return s2.str();
+	}
+	else
+	{
+		return w->write(g);
+	}
 }
 
 void
@@ -431,8 +525,9 @@ XMLTester::parseTest()
 		{
 			Geometry *gRes=NULL;
 			Geometry *gRealRes=NULL;
-			gRes=r->read(opRes);
+			gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
+
 			try {
 				gRealRes=gA->intersection(gB);
 				gRealRes->normalize();
@@ -446,8 +541,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -455,7 +550,7 @@ XMLTester::parseTest()
 
 		else if (opName=="union")
 		{
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
 			Geometry *gRealRes=gA->Union(gB);
 			gRealRes->normalize();
@@ -464,8 +559,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -473,8 +568,9 @@ XMLTester::parseTest()
 
 		else if (opName=="difference")
 		{
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
+
 			Geometry *gRealRes=gA->difference(gB);
 			gRealRes->normalize();
 
@@ -482,8 +578,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -491,8 +587,9 @@ XMLTester::parseTest()
 
 		else if (opName=="symdifference")
 		{
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
+
 			Geometry *gRealRes=gA->symDifference(gB);
 			gRealRes->normalize();
 
@@ -500,8 +597,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -520,8 +617,9 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
+
 			Geometry *gRealRes=gT->getBoundary();
 			gRealRes->normalize();
 
@@ -529,8 +627,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -541,7 +639,7 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
 
 			Geometry *gRealRes=gT->getCentroid();
@@ -553,8 +651,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -577,8 +675,9 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
+
 			Geometry *gRealRes=gT->convexHull();
 			gRealRes->normalize();
 
@@ -586,8 +685,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -598,8 +697,9 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
+
 			profile.start();
 			Geometry *gRealRes;
 			if ( opArg2 != "" ) {
@@ -616,8 +716,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRealRes;
 			delete gRes;
@@ -628,7 +728,7 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=r->read(opRes);
+			Geometry *gRes=parseGeometry(opRes, "expected");
 			gRes->normalize();
 
 			Geometry *gRealRes=gT->getInteriorPoint();
@@ -639,8 +739,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRes;
 			delete gRealRes;
@@ -685,8 +785,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRealRes;
 			delete gRes;
@@ -721,8 +821,8 @@ XMLTester::parseTest()
 
 			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=gRealRes->toString();
-			expected_result=gRes->toString();
+			actual_result=printGeom(gRealRes);
+			expected_result=printGeom(gRes);
 
 			delete gRealRes;
 			delete gRes;
@@ -760,62 +860,7 @@ XMLTester::parseTest()
 
 	if ((!success && verbose) || verbose > 1)
 	{
-		std::cout << *curr_file <<":";
-		std::cout << " case" << caseCount << ":";
-		std::cout << " test" << testCount << ": "
-			<< opName << "(" << opSig <<")";
-		std::cout << ": " << (success?"ok.":"failed.")<<std::endl;
-
-		std::cout << "\tDescription: " << curr_case_desc << std::endl;
-
-		std::string geomOut;
-
-		if ( gA ) {
-			geomOut=w->write(gA);
-			std::cout << "\tGeometry A: " << geomOut << std::endl;
-		}
-
-		if ( gB ) {
-			geomOut=w->write(gB);
-			std::cout << "\tGeometry B: " << geomOut << std::endl;
-		}
-
-		std::cout << "\tExpected result: "<<expected_result<<std::endl;
-		std::cout << "\tObtained result: "<<actual_result<<std::endl;
-		std::cout <<std::endl;
-	}
-
-	if ( sqlOutput )
-	{
-		std::cout << "INSERT INTO \"" << normalize(*curr_file) << "\" VALUES ("
-		          << caseCount << ", "
-		          << testCount << ", "
-		          << "'" << opName << "(" << opSig <<")', "
-		          << "'" << curr_case_desc << "', ";
-
-		std::string geomOut;
-
-		if ( gA ) {
-			geomOut=w->write(gA);
-			std::cout << "'" << geomOut << "', ";
-		} else {
-			std::cout << "NULL, ";
-		}
-
-		if ( gB ) {
-			geomOut=w->write(gB);
-			std::cout << "'" << geomOut << "', ";
-		} else {
-			std::cout << "NULL, ";
-		}
-
-		std::cout << "'" << expected_result << "', "
-		          << "'" << actual_result << "', ";
-
-		if ( success ) std::cout << "'t'";
-		else std::cout << "'f'";
-
-		std::cout << ");" << std::endl;
+		printTest(success, expected_result, actual_result);
 	}
 
 	if (test_predicates && gB && gA) {
@@ -857,7 +902,8 @@ usage(char *me, int exitcode, std::ostream &os)
 	   << "(multiple -v increment verbosity)" << std::endl
 	   << "--test-valid-output  Test output validity" << std::endl
 	   << "--test-valid-input   Test input validity" << std::endl
-	   << "--sql-output         Produce SQL output" << std::endl;
+	   << "--sql-output         Produce SQL output" << std::endl
+	   << "--wkb-output         Print Geometries as HEXWKB" << std::endl;
 
 	exit(exitcode);
 }
@@ -898,6 +944,12 @@ main(int argC, char* argV[])
 			tester.setSQLOutput(sql_output);
 			continue;
 		}
+		if ( ! strcmp(argV[i], "--wkb-output" ) )
+		{
+			sql_output = true;
+			tester.setHEXWKBOutput(sql_output);
+			continue;
+		}
 		if ( ! strcmp(argV[i], "--test-valid-input" ) )
 		{
 			tester.testInputValidity(true);
@@ -923,6 +975,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/07 12:41:21  strk
+ * Added --wkb-output and made --sql-output compatible with -v
+ *
  * Revision 1.25  2006/03/07 11:22:35  strk
  * table name for sqlOutput normalized
  *

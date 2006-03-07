@@ -35,8 +35,11 @@ private:
 	void parseCase();
 	void parseTest();
 	void runPredicates(const Geometry *a, const Geometry *b);
-	Geometry *parseGeometry(const std::string &in);
+	Geometry *parseGeometry(const std::string &in, const char* label="parsed");
 	static std::string trimBlanks(const std::string &in);
+	void printGeom(std::ostream& os, Geometry *g);
+	std::string printGeom(Geometry *g);
+	void printTest(bool success, const std::string& expected_result, const std::string& actual_result);
 
 	Geometry *gA;
 	Geometry *gB;
@@ -47,6 +50,7 @@ private:
 	io::WKTReader *r;
 	io::WKTWriter *w;
 	io::WKBReader *br;
+	io::WKBWriter *bw;
 	CMarkupSTL xml;
 
 	int verbose;
@@ -67,6 +71,7 @@ private:
 	bool testValidOutput;
 	bool testValidInput;
 	bool sqlOutput;
+	bool HEXWKB_output;
 
 	void testValid(const Geometry* g, const std::string& label);
 
@@ -92,6 +97,7 @@ public:
 	void testOutputValidity(bool val) { testValidOutput=val; }
 	void testInputValidity(bool val) { testValidInput=val; }
 	void setSQLOutput(bool val) { sqlOutput=val; }
+	void setHEXWKBOutput(bool val) { HEXWKB_output=val; }
 
 };
 
