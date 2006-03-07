@@ -66,6 +66,7 @@ private:
 
 	bool testValidOutput;
 	bool testValidInput;
+	bool sqlOutput;
 
 	void testValid(const Geometry* g, const std::string& label);
 
@@ -90,6 +91,7 @@ public:
 
 	void testOutputValidity(bool val) { testValidOutput=val; }
 	void testInputValidity(bool val) { testValidInput=val; }
+	void setSQLOutput(bool val) { sqlOutput=val; }
 
 };
 

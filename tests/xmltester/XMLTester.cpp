@@ -85,7 +85,8 @@ XMLTester::XMLTester()
 	totalTestCount(0),
 	curr_file(NULL),
 	testValidOutput(false),
-	testValidInput(false)
+	testValidInput(false),
+	sqlOutput(false)
 {
 	setVerbosityLevel(0);
 }
@@ -105,6 +106,15 @@ void
 XMLTester::run(const std::string &source)
 {
 	curr_file=&source;
+
+	if ( sqlOutput )
+	{
+		std::cout << "CREATE TABLE \"" << *curr_file << "\"" 
+		          << "( caseno integer, testno integer, " 
+			  << " operation varchar, description varchar, "
+			  << " a geometry, b geometry, expected geometry, "
+			  << " obtained geometry, result bool );" << std::endl;
+	}
 
 	++testFileCount;
 
@@ -201,8 +211,6 @@ XMLTester::testValid(const Geometry* g, const std::string& label)
 	{
 		operation::valid::TopologyValidationError *err = ivo.getValidationError();
 		if ( err ) {
-			//std::string errmsg = err->getMessage();
-			//NOTICE_MESSAGE(err->getMessage().c_str());
 			std::cerr << *curr_file << ":"
 			          << " case" << caseCount << ":"
 			          << " test" << testCount << ": "
@@ -736,7 +744,6 @@ XMLTester::parseTest()
 
 	if ((!success && verbose) || verbose > 1)
 	{
-
 		std::cout << *curr_file <<":";
 		std::cout << " case" << caseCount << ":";
 		std::cout << " test" << testCount << ": "
@@ -760,8 +767,39 @@ XMLTester::parseTest()
 		std::cout << "\tExpected result: "<<expected_result<<std::endl;
 		std::cout << "\tObtained result: "<<actual_result<<std::endl;
 		std::cout <<std::endl;
+	}
 
+	if ( sqlOutput )
+	{
+		std::cout << "INSERT INTO \"" <<*curr_file << "\" VALUES ("
+		          << caseCount << ", "
+		          << testCount << ", "
+		          << "'" << opName << "(" << opSig <<")', "
+		          << "'" << curr_case_desc << "', ";
 
+		std::string geomOut;
+
+		if ( gA ) {
+			geomOut=w->write(gA);
+			std::cout << "'" << geomOut << "', ";
+		} else {
+			std::cout << "NULL, ";
+		}
+
+		if ( gB ) {
+			geomOut=w->write(gB);
+			std::cout << "'" << geomOut << "', ";
+		} else {
+			std::cout << "NULL, ";
+		}
+
+		std::cout << "'" << expected_result << "', "
+		          << "'" << actual_result << "', ";
+
+		if ( success ) std::cout << "'t'";
+		else std::cout << "'f'";
+
+		std::cout << ");" << std::endl;
 	}
 
 	if (test_predicates && gB && gA) {
@@ -797,10 +835,14 @@ XMLTester::~XMLTester()
 static void
 usage(char *me, int exitcode, std::ostream &os)
 {
-	os << "Usage: " << me
-		<< " [-v] [--test-valid-output] [--test-valid-input] <test> [<test> ...]"
-		<< std::endl;
-	os << " Multiple -v increments verbosity" << std::endl;
+	os << "Usage: " << me << " [options] <test> [<test> ...]" << std::endl;
+	os << "Options: " << std::endl;
+	os << " -v                  Verbose mode "
+	   << "(multiple -v increment verbosity)" << std::endl
+	   << "--test-valid-output  Test output validity" << std::endl
+	   << "--test-valid-input   Test input validity" << std::endl
+	   << "--sql-output         Produce SQL output" << std::endl;
+
 	exit(exitcode);
 }
 
@@ -808,6 +850,7 @@ int
 main(int argC, char* argV[])
 {
 	int verbose=0;
+	bool sql_output=false;
 
 #ifdef _MSC_VER
 	InitAllocCheck();
@@ -833,6 +876,12 @@ main(int argC, char* argV[])
 			tester.testOutputValidity(true);
 			continue;
 		}
+		if ( ! strcmp(argV[i], "--sql-output" ) )
+		{
+			sql_output = true;
+			tester.setSQLOutput(sql_output);
+			continue;
+		}
 		if ( ! strcmp(argV[i], "--test-valid-input" ) )
 		{
 			tester.testInputValidity(true);
@@ -842,7 +891,8 @@ main(int argC, char* argV[])
 		std::string source = argV[i];
 		tester.run(source);
 	}
-	tester.resultSummary(std::cout);
+
+	if ( ! sql_output ) tester.resultSummary(std::cout);
 
 	io::Unload::Release();
 
@@ -857,6 +907,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/07 11:06:17  strk
+ * Added --sql-output switch for debugging
+ *
  * Revision 1.23  2006/03/07 10:46:51  strk
  * verbose validity errors
  *
