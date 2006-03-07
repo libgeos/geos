@@ -258,11 +258,11 @@ public:
 
 private:
 
-	static const double PI_OVER_2; // 1.570796326794895;
+	static const double PI_OVER_2 = 1.570796326794895;
 
-	static const double MAX_CLOSING_SEG_LEN; // 3.0;
+	static const double MAX_CLOSING_SEG_LEN = 3.0;
 
-	algorithm::LineIntersector *li;
+	algorithm::LineIntersector li;
 
 	/** \brief
 	 * The angle quantum with which to approximate a fillet curve
@@ -296,13 +296,13 @@ private:
 
 	Coordinate s0, s1, s2;
 
-	LineSegment *seg0;
+	LineSegment seg0;
 
-	LineSegment *seg1;
+	LineSegment seg1;
 
-	LineSegment *offset0;
+	LineSegment offset0;
 
-	LineSegment *offset1;
+	LineSegment offset1;
 
 	int side;
 
@@ -337,7 +337,9 @@ private:
 	 * @param distance the offset distance
 	 * @param offset the points computed for the offset segment
 	 */
-	void computeOffsetSegment(LineSegment *seg, int side, double distance, LineSegment *offset);
+	void computeOffsetSegment(const LineSegment& seg, int side, double distance,
+			LineSegment& offset);
+
 	/// Add an end cap around point p1, terminating a line segment coming from p0
 	void addLineEndCap(const Coordinate &p0,const Coordinate &p1);
 
@@ -364,8 +366,6 @@ private:
 
 	/// Adds a CW square around a point
 	void addSquare(const Coordinate &p, double distance);
-
-private:
 
 	std::vector<CoordinateSequence *>ptLists;
 };
@@ -951,6 +951,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/07 14:20:14  strk
+ * Big deal of heap allocations reduction
+ *
  * Revision 1.23  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

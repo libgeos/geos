@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.7 
+ * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.8  
  *
  **********************************************************************/
 
@@ -36,49 +36,44 @@ namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-const double OffsetCurveBuilder::PI_OVER_2 = 1.570796326794895;
-const double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN = 3.0;
+/*public*/
+//const double OffsetCurveBuilder::PI_OVER_2 = 1.570796326794895;
+/*public*/
+//const double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN = 3.0;
 
+/*public*/
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel):
-	li(new LineIntersector()),
 	maxCurveSegmentError(0.0),
 	ptList(new CoordinateArraySequence()),
 	distance(0.0),
 	precisionModel(newPrecisionModel),
-	endCapStyle(BufferOp::CAP_ROUND),
-	seg0(new LineSegment()),
-	seg1(new LineSegment()),
-	offset0(new LineSegment()),
-	offset1(new LineSegment())
+	endCapStyle(BufferOp::CAP_ROUND)
 {
 	int limitedQuadSegs=DEFAULT_QUADRANT_SEGMENTS<1 ? 1 : DEFAULT_QUADRANT_SEGMENTS;
 	filletAngleQuantum=3.14159265358979 / 2.0 / limitedQuadSegs;
 }
 
+/*public*/
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		int quadrantSegments):
-	li(new LineIntersector()),
 	maxCurveSegmentError(0.0),
 	ptList(new CoordinateArraySequence()),
 	distance(0.0),
 	precisionModel(newPrecisionModel),
-	endCapStyle(BufferOp::CAP_ROUND),
-	seg0(new LineSegment()),
-	seg1(new LineSegment()),
-	offset0(new LineSegment()),
-	offset1(new LineSegment())
+	endCapStyle(BufferOp::CAP_ROUND)
 {
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=3.14159265358979  / 2.0 / limitedQuadSegs;
 }
 
+/*public*/
 OffsetCurveBuilder::~OffsetCurveBuilder()
 {
-	delete li;
-	delete seg0;
-	delete seg1;
-	delete offset0;
-	delete offset1;
+	//delete li;
+	//delete seg0;
+	//delete seg1;
+	//delete offset0;
+	//delete offset1;
 	delete ptList;
 	for (unsigned int i=0; i<ptLists.size(); i++) delete ptLists[i];
 }
@@ -134,6 +129,7 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 	lineList.push_back(getCoordinates()); // this will be ptList
 }
 
+/*private*/
 void
 OffsetCurveBuilder::init(double newDistance)
 {
@@ -146,10 +142,11 @@ OffsetCurveBuilder::init(double newDistance)
 	ptList=new CoordinateArraySequence();
 }
 
-// returns ptList / is private / might just be avoided !
+/*private*/
 CoordinateSequence*
 OffsetCurveBuilder::getCoordinates()
 {
+#if 1
 	// check that points are a ring,
 	// add the startpoint again if they are not
 	if (ptList->getSize()>1) {
@@ -163,9 +160,11 @@ OffsetCurveBuilder::getCoordinates()
 #endif
 		if (!(start==end)) addPt(start);
 	}
+#endif
 	return ptList;
 }
 
+/*private*/
 void
 OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence *inputPts)
 {
@@ -189,6 +188,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence *inputPts)
 	closePts();
 }
 
+/*private*/
 void
 OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence *inputPts,
 	int side)
@@ -229,6 +229,7 @@ OffsetCurveBuilder::addPt(const Coordinate &pt)
 	ptList->add(bufPt);
 }
 
+/*private*/
 void
 OffsetCurveBuilder::closePts()
 {
@@ -245,16 +246,18 @@ OffsetCurveBuilder::closePts()
 	ptList->add(startPt);
 }
 
+/*private*/
 void
 OffsetCurveBuilder::initSideSegments(const Coordinate &nS1, const Coordinate &nS2, int nSide)
 {
 	s1=nS1;
 	s2=nS2;
 	side=nSide;
-	seg1->setCoordinates(s1, s2);
+	seg1.setCoordinates(s1, s2);
 	computeOffsetSegment(seg1, side, distance, offset1);
 }
 
+/*private*/
 void
 OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 {
@@ -262,9 +265,9 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 	s0=s1;
 	s1=s2;
 	s2=p;
-	seg0->setCoordinates(s0, s1);
+	seg0.setCoordinates(s0, s1);
 	computeOffsetSegment(seg0, side, distance, offset0);
-	seg1->setCoordinates(s1, s2);
+	seg1.setCoordinates(s1, s2);
 	computeOffsetSegment(seg1, side, distance, offset1);
 
 	// do nothing if points are equal
@@ -275,8 +278,8 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 						||(orientation==CGAlgorithms::COUNTERCLOCKWISE 
 						&& side==Position::RIGHT);
 	if (orientation==0) { // lines are collinear
-		li->computeIntersection(s0,s1,s1,s2);
-		int numInt=li->getIntersectionNum();
+		li.computeIntersection(s0,s1,s1,s2);
+		int numInt=li.getIntersectionNum();
 		/**
 		* if numInt is<2, the lines are parallel and in the same direction.
 		* In this case the point can be ignored, since the offset lines will also be
@@ -290,21 +293,20 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 			* (Polygons can never have two consecutive segments which are parallel but reversed,
 			* because that would be a self intersection.
 			*/
-			addFillet(s1, offset0->p1, offset1->p0, CGAlgorithms::CLOCKWISE, distance);
+			addFillet(s1, offset0.p1, offset1.p0, CGAlgorithms::CLOCKWISE, distance);
 		}
 	} else if (outsideTurn) {
 		// add a fillet to connect the endpoints of the offset segments
-		if (addStartPoint) addPt(offset0->p1);
+		if (addStartPoint) addPt(offset0.p1);
 		// TESTING-comment out to produce beveled joins
-		addFillet(s1, offset0->p1, offset1->p0, orientation, distance);
-		addPt(offset1->p0);
+		addFillet(s1, offset0.p1, offset1.p0, orientation, distance);
+		addPt(offset1.p0);
 	} else { // inside turn
-		/**
-		* add intersection point of offset segments (if any)
-		*/
-		li->computeIntersection( offset0->p0, offset0->p1,offset1->p0, offset1->p1);
-		if (li->hasIntersection()) {
-			addPt(li->getIntersection(0));
+
+		// add intersection point of offset segments (if any)
+		li.computeIntersection( offset0.p0, offset0.p1, offset1.p0, offset1.p1);
+		if (li.hasIntersection()) {
+			addPt(li.getIntersection(0));
 		} else {
 			/**
 			* If no intersection, it means the angle is so small and/or the offset so large
@@ -320,65 +322,52 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 			* If the offset points are very close, don't add a joining curve
 			* but simply use one of the offset points
 			*/
-			if (offset0->p1.distance(offset1->p0)<distance / 1000.0) {
-				addPt(offset0->p1);
+			if (offset0.p1.distance(offset1.p0)<distance / 1000.0) {
+				addPt(offset0.p1);
 			} else {
 				// add endpoint of this segment offset
-				addPt(offset0->p1);
+				addPt(offset0.p1);
 				// <FIX> MD-add in centre point of corner, to make sure offset closer lines have correct topology
 				addPt(s1);
-				addPt(offset1->p0);
+				addPt(offset1.p0);
 			}
 		}
 	}
 }
 
-/**
- * Add last offset point
- */
+/*private*/
 void
 OffsetCurveBuilder::addLastSegment()
 {
-	addPt(offset1->p1);
+	addPt(offset1.p1);
 }
 
-/**
- * Compute an offset segment for an input segment on a given side and at
- * a given distance.
- * The offset points are computed in full double precision, for accuracy.
- *
- * @param seg the segment to offset
- * @param side the side of the segment the offset lies on
- * @param distance the offset distance
- * @param offset the points computed for the offset segment
- */
+/*private*/
 void
-OffsetCurveBuilder::computeOffsetSegment(LineSegment *seg, int side,
-	double distance, LineSegment *offset)
+OffsetCurveBuilder::computeOffsetSegment(const LineSegment& seg, int side,
+	double distance, LineSegment& offset)
 {
 	int sideSign=side==Position::LEFT ? 1 : -1;
-	double dx=seg->p1.x-seg->p0.x;
-	double dy=seg->p1.y-seg->p0.y;
+	double dx=seg.p1.x-seg.p0.x;
+	double dy=seg.p1.y-seg.p0.y;
 	double len=sqrt(dx*dx+dy*dy);
 	// u is the vector that is the length of the offset, in the direction of the segment
 	double ux=sideSign*distance*dx / len;
 	double uy=sideSign*distance*dy / len;
-	offset->p0.x=seg->p0.x-uy;
-	offset->p0.y=seg->p0.y+ux;
-	offset->p1.x=seg->p1.x-uy;
-	offset->p1.y=seg->p1.y+ux;
+	offset.p0.x=seg.p0.x-uy;
+	offset.p0.y=seg.p0.y+ux;
+	offset.p1.x=seg.p1.x-uy;
+	offset.p1.y=seg.p1.y+ux;
 }
 
-/**
- * Add an end cap around point p1, terminating a line segment coming from p0
- */
+/*private*/
 void
 OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 {
-	LineSegment *seg=new LineSegment(p0, p1);
-	LineSegment *offsetL=new LineSegment();
+	LineSegment seg(p0, p1);
+	LineSegment offsetL;
 	computeOffsetSegment(seg, Position::LEFT, distance, offsetL);
-	LineSegment *offsetR=new LineSegment();
+	LineSegment offsetR;
 	computeOffsetSegment(seg, Position::RIGHT, distance, offsetR);
 	double dx=p1.x-p0.x;
 	double dy=p1.y-p0.y;
@@ -386,39 +375,31 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 	switch (endCapStyle) {
 		case BufferOp::CAP_ROUND:
 			// add offset seg points with a fillet between them
-			addPt(offsetL->p1);
+			addPt(offsetL.p1);
 			addFillet(p1, angle+PI_OVER_2,angle-PI_OVER_2, CGAlgorithms::CLOCKWISE, distance);
-			addPt(offsetR->p1);
+			addPt(offsetR.p1);
 			break;
 		case BufferOp::CAP_BUTT:
 			// only offset segment points are added
-			addPt(offsetL->p1);
-			addPt(offsetR->p1);
+			addPt(offsetL.p1);
+			addPt(offsetR.p1);
 			break;
 		case BufferOp::CAP_SQUARE:
 			// add a square defined by extensions of the offset segment endpoints
-			Coordinate *squareCapSideOffset=new Coordinate();
-			squareCapSideOffset->x=fabs(distance)*cos(angle);
-			squareCapSideOffset->y=fabs(distance)*sin(angle);
-			Coordinate *squareCapLOffset=new Coordinate(offsetL->p1.x+squareCapSideOffset->x, offsetL->p1.y+squareCapSideOffset->y);
-			Coordinate *squareCapROffset=new Coordinate(offsetR->p1.x+squareCapSideOffset->x, offsetR->p1.y+squareCapSideOffset->y);
-			addPt(*squareCapLOffset);
-			addPt(*squareCapROffset);
-			delete squareCapSideOffset;
-			delete squareCapLOffset;
-			delete squareCapROffset;
+			Coordinate squareCapSideOffset;
+			squareCapSideOffset.x=fabs(distance)*cos(angle);
+			squareCapSideOffset.y=fabs(distance)*sin(angle);
+			Coordinate squareCapLOffset(offsetL.p1.x+squareCapSideOffset.x,
+					offsetL.p1.y+squareCapSideOffset.y);
+			Coordinate squareCapROffset(offsetR.p1.x+squareCapSideOffset.x,
+					offsetR.p1.y+squareCapSideOffset.y);
+			addPt(squareCapLOffset);
+			addPt(squareCapROffset);
 			break;
 	}
-	delete seg;
-	delete offsetL;
-	delete offsetR;
 }
 
-/**
- * @param p base point of curve
- * @param p0 start point of fillet curve
- * @param p1 endpoint of fillet curve
- */
+/*private*/
 void
 OffsetCurveBuilder::addFillet(const Coordinate &p, const Coordinate &p0,
 	const Coordinate &p1, int direction, double distance)
@@ -439,13 +420,7 @@ OffsetCurveBuilder::addFillet(const Coordinate &p, const Coordinate &p0,
 	addPt(p1);
 }
 
-/**
- * Adds points for a fillet.
- * The start and end point for the fillet are not added,
- * the caller must add them if required.
- *
- * @param direction is -1 for a CW angle, 1 for a CCW angle
- */
+/*private*/
 void
 OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle,
 	double endAngle, int direction, double distance)
@@ -470,9 +445,7 @@ OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle,
 }
 
 
-/**
- * Adds a CW circle around a point
- */
+/*private*/
 void
 OffsetCurveBuilder::addCircle(const Coordinate &p, double distance)
 {
@@ -483,18 +456,16 @@ OffsetCurveBuilder::addCircle(const Coordinate &p, double distance)
 	addFillet(p, 0.0, 2.0*3.1415926535, -1, distance);
 }
 
-/**
- * Adds a CW square around a point
- */
+/*private*/
 void
 OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 {
 	// add start point
-	addPt(*(new Coordinate(p.x+distance, p.y+distance)));
-	addPt(*(new Coordinate(p.x+distance, p.y-distance)));
-	addPt(*(new Coordinate(p.x-distance, p.y-distance)));
-	addPt(*(new Coordinate(p.x-distance, p.y+distance)));
-	addPt(*(new Coordinate(p.x+distance, p.y+distance)));
+	addPt(Coordinate(p.x+distance, p.y+distance));
+	addPt(Coordinate(p.x+distance, p.y-distance));
+	addPt(Coordinate(p.x-distance, p.y-distance));
+	addPt(Coordinate(p.x-distance, p.y+distance));
+	addPt(Coordinate(p.x+distance, p.y+distance));
 }
 
 } // namespace geos.operation.buffer
@@ -503,6 +474,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/07 14:20:15  strk
+ * Big deal of heap allocations reduction
+ *
  * Revision 1.26  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
