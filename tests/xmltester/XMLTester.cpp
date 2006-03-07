@@ -265,7 +265,7 @@ XMLTester::parsePrecisionModel()
 
 	if (verbose)
 	{
-		std::cout << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
+		std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
 	}
 
 	if ( factory ) delete factory;
@@ -890,6 +890,7 @@ XMLTester::~XMLTester()
 	delete r; r=NULL;
 	delete w; w=NULL;
 	delete br; br=NULL;
+	delete bw; bw=NULL;
 }
 
 
@@ -961,6 +962,7 @@ main(int argC, char* argV[])
 	}
 
 	if ( ! sql_output ) tester.resultSummary(std::cout);
+	else tester.resultSummary(std::cerr);
 
 	io::Unload::Release();
 
@@ -975,6 +977,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/07 14:21:17  strk
+ * Leak plugged, tweeked output to be nice with --sql-output
+ *
  * Revision 1.26  2006/03/07 12:41:21  strk
  * Added --wkb-output and made --sql-output compatible with -v
  *
