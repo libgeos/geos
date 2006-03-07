@@ -24,8 +24,6 @@ using namespace std;
 namespace geos {
 namespace util { // geos.util
 
-static Profiler *internal_profiler = new Profiler();
-
 Profile::Profile(string newname)
 {
 	name = newname;
@@ -139,7 +137,8 @@ Profiler::get(string name)
 Profiler *
 Profiler::instance()
 {
-	return internal_profiler;
+	static Profiler internal_profiler;
+	return &internal_profiler;
 }
 
 
@@ -170,6 +169,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/07 14:18:34  strk
+ * Profiler singleton implemented with a function-static Profiler instance
+ *
  * Revision 1.8  2006/03/06 19:40:48  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
