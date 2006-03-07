@@ -208,7 +208,7 @@ XMLTester::testValid(const Geometry* g, const std::string& label)
 			          << " test" << testCount << ": "
 				  << opSignature << ": " 
 			          << " invalid geometry (" << label 
-			          << "): " << err->getMessage() << std::endl;
+			          << "): " << err->toString() << std::endl;
 		}
 	}
 	//return result;
@@ -857,6 +857,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/07 10:46:51  strk
+ * verbose validity errors
+ *
  * Revision 1.22  2006/03/06 21:27:40  strk
  * Cascading fixed after Unload definition moved to geos::io namespace
  *
