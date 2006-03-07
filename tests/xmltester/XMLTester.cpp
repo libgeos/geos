@@ -66,6 +66,22 @@ tolower(std::string& str)
 	std::transform(str.begin(), str.end(), str.begin(), safe_ctype<std::tolower>);
 }
 
+std::string
+normalize(const std::string& str)
+{
+	std::string newstring;
+	for (std::string::const_iterator i=str.begin(), e=str.end(); i!=e; ++i)
+	{
+		if ( *i == '.' ) {
+			newstring += '_';
+		} else {
+			newstring += *i;
+		}
+	}
+	tolower(newstring);
+	return newstring;
+}
+
 XMLTester::XMLTester()
 	:
 	gA(0),
@@ -109,7 +125,7 @@ XMLTester::run(const std::string &source)
 
 	if ( sqlOutput )
 	{
-		std::cout << "CREATE TABLE \"" << *curr_file << "\"" 
+		std::cout << "CREATE TABLE \"" << normalize(*curr_file) << "\"" 
 		          << "( caseno integer, testno integer, " 
 			  << " operation varchar, description varchar, "
 			  << " a geometry, b geometry, expected geometry, "
@@ -771,7 +787,7 @@ XMLTester::parseTest()
 
 	if ( sqlOutput )
 	{
-		std::cout << "INSERT INTO \"" <<*curr_file << "\" VALUES ("
+		std::cout << "INSERT INTO \"" << normalize(*curr_file) << "\" VALUES ("
 		          << caseCount << ", "
 		          << testCount << ", "
 		          << "'" << opName << "(" << opSig <<")', "
@@ -907,6 +923,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/07 11:22:35  strk
+ * table name for sqlOutput normalized
+ *
  * Revision 1.24  2006/03/07 11:06:17  strk
  * Added --sql-output switch for debugging
  *
