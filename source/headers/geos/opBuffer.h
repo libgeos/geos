@@ -268,9 +268,9 @@ public:
 
 private:
 
-	static const double PI = 3.14159265358979;
+	static const double PI; //  3.14159265358979
 
-	static const double MAX_CLOSING_SEG_LEN = 3.0;
+	static const double MAX_CLOSING_SEG_LEN; // 3.0
 
 	algorithm::LineIntersector li;
 
@@ -961,6 +961,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/09 17:40:28  strk
+ * Fixed bug#33 (hopefully)
+ *
  * Revision 1.25  2006/03/09 16:46:48  strk
  * geos::geom namespace definition, first pass at headers split
  *

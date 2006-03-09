@@ -39,6 +39,10 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /*public*/
+const double OffsetCurveBuilder::PI = 3.14159265358979;
+const double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN = 3.0;
+
+/*public*/
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		int quadrantSegments):
 	maxCurveSegmentError(0.0),
@@ -459,6 +463,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/09 17:40:24  strk
+ * Fixed bug#33 (hopefully)
+ *
  * Revision 1.28  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
