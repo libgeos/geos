@@ -17,11 +17,16 @@
 #include <geos/opLinemerge.h>
 #include <geos/planargraph.h>
 
-using namespace geos::planargraph;
-
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
+using namespace std;
+using namespace geos::planargraph;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -107,6 +112,9 @@ LineMergeGraph::~LineMergeGraph()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/09 15:47:19  strk
+ * Fixed debugging lines
+ *
  * Revision 1.12  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *
