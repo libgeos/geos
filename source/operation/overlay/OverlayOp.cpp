@@ -25,6 +25,9 @@
 #include <geos/opOverlay.h>
 #include <geos/util.h>
 #include <geos/precision.h>
+//#include <geos/geomgraph/GeometryGraph.h>
+//#include <geos/noding/SegmentIntersector.h>
+#include <geos/geomgraphindex.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -695,7 +698,7 @@ OverlayOp::computeOverlay(int opCode)
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed EdgeIntersections"<<endl;
-	cerr<<"OverlayOp::computeOverlay: li: "<<li->toString()<<endl;
+	cerr<<"OverlayOp::computeOverlay: li: "<<li.toString()<<endl;
 #endif
 
 
@@ -867,6 +870,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.61  2006/03/09 15:50:27  strk
+ * Fixed debugging lines, added missing header
+ *
  * Revision 1.60  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
