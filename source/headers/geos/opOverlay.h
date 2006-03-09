@@ -401,9 +401,11 @@ private:
 
 };
 
-/*
+/** \brief
  * A ring of {@link Edge}s with the property that no node
- * has degree greater than 2.  These are the form of rings required
+ * has degree greater than 2. 
+ *
+ * These are the form of rings required
  * to represent polygons under the OGC SFS spatial data model.
  *
  * @see com.vividsolutions.jts.operation.overlay.MaximalEdgeRing
@@ -430,8 +432,9 @@ geomgraph::DirectedEdge* MinimalEdgeRing::getNext(geomgraph::DirectedEdge *de) {
 	return de->getNextMin();
 }
 
-/*
+/** \brief
  * A ring of {@link edges} which may contain nodes of degree > 2.
+ *
  * A MaximalEdgeRing may represent two different spatial entities:
  * <ul>
  * <li>a single polygon possibly containing inversions (if the ring is oriented CW)
@@ -461,7 +464,17 @@ public:
 
 	void setEdgeRing(geomgraph::DirectedEdge* de, geomgraph::EdgeRing* er);
 
+	/// \brief
+	/// This function returns a newly allocated vector of
+	/// pointers to newly allocated MinimalEdgeRing objects.
+	///
 	std::vector<MinimalEdgeRing*>* buildMinimalRings();
+
+	/// \brief
+	/// This function pushes pointers to newly allocated  MinimalEdgeRing
+	/// objects to the provided vector.
+	///
+	void buildMinimalRings(std::vector<MinimalEdgeRing*>& minEdgeRings);
 
 	void linkDirectedEdgesForMinimalEdgeRings();
 };
@@ -749,6 +762,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/09 18:18:32  strk
+ * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
+ * Applied patch to IsValid operation from JTS-1.7.1
+ *
  * Revision 1.22  2006/03/09 16:46:48  strk
  * geos::geom namespace definition, first pass at headers split
  *

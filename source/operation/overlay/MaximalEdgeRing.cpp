@@ -69,22 +69,27 @@ MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings()
 	} while (de!=startDe);
 }
 
-// This function returns a newly allocated vector of
-// pointers to newly allocated MinimalEdgeRing objects.
-//
+/*public*/
 vector<MinimalEdgeRing*>*
 MaximalEdgeRing::buildMinimalRings()
 {
 	vector<MinimalEdgeRing*> *minEdgeRings=new vector<MinimalEdgeRing*>;
+	buildMinimalRings(*minEdgeRings);
+	return minEdgeRings;
+}
+
+/*public*/
+void
+MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
+{
 	DirectedEdge *de=startDe;
 	do {
 		if(de->getMinEdgeRing()==NULL) {
 			MinimalEdgeRing *minEr=new MinimalEdgeRing(de,geometryFactory);
-			minEdgeRings->push_back(minEr);
+			minEdgeRings.push_back(minEr);
 		}
 		de=de->getNext();
 	} while(de!=startDe);
-	return minEdgeRings;
 }
 
 } // namespace geos.operation.overlay
@@ -93,6 +98,10 @@ MaximalEdgeRing::buildMinimalRings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/09 18:18:39  strk
+ * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
+ * Applied patch to IsValid operation from JTS-1.7.1
+ *
  * Revision 1.15  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

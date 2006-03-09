@@ -278,10 +278,12 @@ private:
 	void buildQuadtree();
 };
 
-/*
+/** \brief
  * This class tests that the interior of an area Geometry
  * (Polygon or MultiPolygon)
- * is connected.  An area Geometry is invalid if the interior is disconnected.
+ * is connected. 
+ *
+ * An area Geometry is invalid if the interior is disconnected.
  * This can happen if:
  * 
  * - one or more holes either form a chain touching the shell at two places
@@ -309,8 +311,14 @@ private:
 	/// the disconnected interior
 	geom::Coordinate disconnectedRingcoord;
 
-	void setAllEdgesInResult(geomgraph::PlanarGraph &graph);
+	void setInteriorEdgesInResult(geomgraph::PlanarGraph &graph);
 
+	
+	/**
+	 * Form DirectedEdges in graph into Minimal EdgeRings.
+	 * (Minimal Edgerings must be used, because only they are guaranteed to provide
+	 * a correct isHole computation)
+	 */
 	std::vector<geomgraph::EdgeRing*>* buildEdgeRings(
 			std::vector<geomgraph::EdgeEnd*> *dirEdges);
 
@@ -516,6 +524,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/09 18:18:33  strk
+ * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
+ * Applied patch to IsValid operation from JTS-1.7.1
+ *
  * Revision 1.18  2006/03/09 16:46:48  strk
  * geos::geom namespace definition, first pass at headers split
  *

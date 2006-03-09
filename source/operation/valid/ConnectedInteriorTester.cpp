@@ -13,6 +13,11 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
+ *
+ * Last port: operation/valid/ConnectedInteriorTester.java rev. 1.14
+ *
+ **********************************************************************
+ * 
  * TODO:
  *
  *  Remove heap allocation of GeometryFactory (might use a singleton)
@@ -64,6 +69,7 @@ ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence *coord, con
 	return Coordinate::getNull();
 }
 
+/*public*/
 bool
 ConnectedInteriorTester::isInteriorsConnected()
 {
@@ -71,11 +77,13 @@ ConnectedInteriorTester::isInteriorsConnected()
 	std::vector<Edge*> splitEdges;
 	geomGraph.computeSplitEdges(&splitEdges);
 
-	// polygonize the edges
+	// form the edges into rings
 	PlanarGraph graph(OverlayNodeFactory::instance());
+
 	graph.addEdges(splitEdges);
-	setAllEdgesInResult(graph);
-	graph.linkAllDirectedEdges();
+	setInteriorEdgesInResult(graph);
+	//graph.linkAllDirectedEdges();
+	graph.linkResultDirectedEdges();
 	std::vector<EdgeRing*> *edgeRings=buildEdgeRings(graph.getEdgeEnds());
 
 	/**
@@ -102,32 +110,41 @@ ConnectedInteriorTester::isInteriorsConnected()
 }
 
 void
-ConnectedInteriorTester::setAllEdgesInResult(PlanarGraph &graph)
+ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph &graph)
 {
 	std::vector<EdgeEnd*> *ee=graph.getEdgeEnds();
-	for(unsigned int i=0; i<ee->size(); ++i) {
+	for(unsigned int i=0, n=ee->size(); i<n; ++i)
+	{
 		DirectedEdge *de=dynamic_cast<DirectedEdge*>((*ee)[i]);
 		assert( de != NULL ); // Unexpected non DirectedEdge in graphEdgeEnds
-		de->setInResult(true);
+		if ( de->getLabel()->getLocation(0, Position::RIGHT) == Location::INTERIOR)
+		{
+			de->setInResult(true);
+		}
 	}
 }
 
-/**
- * for all DirectedEdges in result, form them into EdgeRings
- */
+/*private*/
 std::vector<EdgeRing*>*
 ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 {
-	std::vector<EdgeRing*> *edgeRings=new std::vector<EdgeRing*>();
-	for(unsigned int i=0; i<dirEdges->size(); ++i)
+	std::vector<MinimalEdgeRing*> minEdgeRings;
+	for(unsigned int i=0, n=dirEdges->size(); i<n; ++i)
 	{
 		DirectedEdge *de=(DirectedEdge*)(*dirEdges)[i];
 		// if this edge has not yet been processed
-		if(de->getEdgeRing()==NULL) {
-			EdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
-			edgeRings->push_back(er);
+		if(de->isInResult() && de->getEdgeRing()==NULL)
+		{
+			//EdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
+			//edgeRings->push_back(er);
+
+			MaximalEdgeRing* er = new MaximalEdgeRing(de, geometryFactory);
+			er->linkDirectedEdgesForMinimalEdgeRings();
+			er->buildMinimalRings(minEdgeRings);
 		}
 	}
+	std::vector<EdgeRing*> *edgeRings=new std::vector<EdgeRing*>();
+	edgeRings->assign(minEdgeRings.begin(),minEdgeRings.end());
 	return edgeRings;
 }
 
@@ -238,6 +255,10 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/09 18:18:39  strk
+ * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
+ * Applied patch to IsValid operation from JTS-1.7.1
+ *
  * Revision 1.20  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
