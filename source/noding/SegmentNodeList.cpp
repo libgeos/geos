@@ -25,14 +25,18 @@
 #include <geos/profiler.h>
 #include <geos/util.h>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
 //using namespace std;
 
 namespace geos {
 namespace noding { // geos.noding
-
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
 
 #if PROFILE
 static Profiler *profiler = Profiler::instance();
@@ -170,7 +174,7 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 
 	// testingOnly
 #if GEOS_DEBUG
-	cerr<<__FUNCTION__<<" entered"<<endl;
+	std::cerr<<__FUNCTION__<<" entered"<<std::endl;
 	std::vector<SegmentString*> testingSplitEdges;
 #endif
 
@@ -200,7 +204,7 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 		eiPrev = ei;
 	}
 #if GEOS_DEBUG
-	cerr<<__FUNCTION__<<" finished, now checking correctness"<<endl;
+	std::cerr<<__FUNCTION__<<" finished, now checking correctness"<<std::endl;
 	checkSplitEdgesCorrectness(testingSplitEdges);
 #endif
 }
@@ -270,7 +274,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 
 	SegmentString *ret = new SegmentString(pts, edge.getContext());
 #if GEOS_DEBUG
-	cerr<<" SegmentString created"<<endl;
+	std::cerr<<" SegmentString created"<<std::endl;
 #endif
 	splitEdges.push_back(ret);
 
@@ -314,6 +318,9 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/09 15:39:25  strk
+ * Fixed debugging lines
+ *
  * Revision 1.28  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

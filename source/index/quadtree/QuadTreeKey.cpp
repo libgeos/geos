@@ -20,6 +20,10 @@
 #define GEOS_DEBUG 0
 #endif
 
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
@@ -30,7 +34,7 @@ int QuadTreeKey::computeQuadLevel(Envelope *env){
 	double dMax=dx>dy?dx:dy;
 	int level=DoubleBits::exponent(dMax)+1;
 #if GEOS_DEBUG
-	cerr<<"Maxdelta:"<<dMax<<" exponent:"<<(level-1)<<endl;
+	std::cerr<<"Maxdelta:"<<dMax<<" exponent:"<<(level-1)<<std::endl;
 #endif
 	return level;
 }
@@ -79,10 +83,10 @@ void QuadTreeKey::computeKey(Envelope *itemEnv) {
 		computeKey(level,itemEnv);
 	}
 #if GEOS_DEBUG
-	cerr<<"QuadTreeKey::computeKey:"<<endl;
-	cerr<<" itemEnv: "<<itemEnv->toString()<<endl;
-	cerr<<"  keyEnv: "<<env->toString()<<endl;
-	cerr<<"  keyLvl: "<<level<<endl;
+	std::cerr<<"QuadTreeKey::computeKey:"<<std::endl;
+	std::cerr<<" itemEnv: "<<itemEnv->toString()<<std::endl;
+	std::cerr<<"  keyEnv: "<<env->toString()<<std::endl;
+	std::cerr<<"  keyLvl: "<<level<<std::endl;
 
 #endif
 }
@@ -103,6 +107,9 @@ QuadTreeKey::computeKey(int level,Envelope *itemEnv)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/09 15:34:57  strk
+ * Fixed debugging lines
+ *
  * Revision 1.9  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

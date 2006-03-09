@@ -23,6 +23,10 @@
 #define GEOS_DEBUG 0
 #endif
 
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
@@ -36,13 +40,13 @@ void
 QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
 
 #if GEOS_DEBUG
-	cerr<<"("<<this<<") insert("<<itemEnv->toString()<<", "<<item<<") called"<<endl;
+	std::cerr<<"("<<this<<") insert("<<itemEnv->toString()<<", "<<item<<") called"<<std::endl;
 #endif
 	int index=getSubnodeIndex(itemEnv,origin);
 	// if index is -1, itemEnv must cross the X or Y axis.
 	if (index==-1) {
 #if GEOS_DEBUG
-	cerr<<"  -1 subnode index"<<endl;
+	std::cerr<<"  -1 subnode index"<<std::endl;
 #endif
 		add(item);
 		return;
@@ -55,7 +59,7 @@ QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
 	QuadTreeNode *node=subnode[index];
 
 #if GEOS_DEBUG
-	cerr<<"("<<this<<") subnode["<<index<<"] @ "<<node<<endl;
+	std::cerr<<"("<<this<<") subnode["<<index<<"] @ "<<node<<std::endl;
 #endif
 
 	/*
@@ -108,6 +112,9 @@ QuadTreeRoot::insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/09 15:36:25  strk
+ * Fixed debugging lines
+ *
  * Revision 1.13  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
