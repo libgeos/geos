@@ -9,6 +9,8 @@ geostest_SOURCES = geostest.c
 geostest_LDADD = libgeos_c.la
 geostest_INCLUDES = -I.
 
+INCLUDES = -I$(top_srcdir)/source/headers
+
 capidir = $(includedir)
 
 nodist_capi_HEADERS = \
