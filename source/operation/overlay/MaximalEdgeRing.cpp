@@ -15,6 +15,9 @@
  **********************************************************************/
 
 #include <geos/opOverlay.h>
+//#include <geos/geomgraph/EdgeRing.h>
+//#include <geos/geomgraph/DirectedEdge.h>
+//#include <geos/geomgraphindex.h>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -90,6 +93,9 @@ MaximalEdgeRing::buildMinimalRings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.14  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

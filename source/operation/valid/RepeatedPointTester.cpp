@@ -15,9 +15,10 @@
  *
  **********************************************************************/
 
-#include <geos/opValid.h>
-#include <stdio.h>
 #include <typeinfo>
+
+#include <geos/opValid.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 namespace geos {
 namespace operation { // geos.operation
@@ -97,6 +98,9 @@ bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.16  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

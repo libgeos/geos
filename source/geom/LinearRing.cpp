@@ -11,8 +11,80 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <string>
+
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/util/IllegalArgumentException.h>
+
+using namespace std;
+
+namespace geos {
+namespace geom { // geos::geom
+
+LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
+
+/**
+*  Constructs a <code>LinearRing</code> with the given points.
+*
+*@param  points          points forming a closed and simple linestring, or
+*      <code>null</code> or an empty array to create the empty geometry.
+*      This array must not contain <code>null</code> elements.
+*	The created LinearRing will take ownership of points.
+*
+*/
+LinearRing::LinearRing(CoordinateSequence* newCoords, const GeometryFactory *newFactory): LineString(newCoords,newFactory) {
+	validateConstruction();	
+}
+
+
+void LinearRing::validateConstruction() {
+	if (!LineString::isEmpty() && !LineString::isClosed()) {
+		throw util::IllegalArgumentException("points must form a closed linestring");
+    }
+	if (!points->isEmpty() && (points->getSize()>=1 && points->getSize()<=3)) {
+		throw util::IllegalArgumentException("Number of points must be 0 or >3");
+	}
+}
+
+
+		
+// superclass LineString will delete internal CoordinateSequence
+LinearRing::~LinearRing(){
+}
+
+bool LinearRing::isSimple() const {
+	return true;
+}
+string LinearRing::getGeometryType() const {
+	return "LinearRing";
+}
+bool LinearRing::isClosed() const {
+	return true;
+}
+
+void LinearRing::setPoints(CoordinateSequence* cl){
+	const vector<Coordinate> *v=cl->toVector();
+	points->setPoints(*(v));
+	//delete v;
+}
+
+GeometryTypeId
+LinearRing::getGeometryTypeId() const {
+	return GEOS_LINEARRING;
+}
+
+} // namespace geos::geom
+} // namespace geos
+
+/**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.29  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
@@ -109,65 +181,4 @@
  * fixed spurious typos
  *
  **********************************************************************/
-
-#include <geos/geom.h>
-#include <geos/util.h>
-#include <string>
-
-using namespace std;
-
-namespace geos {
-
-LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
-
-/**
-*  Constructs a <code>LinearRing</code> with the given points.
-*
-*@param  points          points forming a closed and simple linestring, or
-*      <code>null</code> or an empty array to create the empty geometry.
-*      This array must not contain <code>null</code> elements.
-*	The created LinearRing will take ownership of points.
-*
-*/
-LinearRing::LinearRing(CoordinateSequence* newCoords, const GeometryFactory *newFactory): LineString(newCoords,newFactory) {
-	validateConstruction();	
-}
-
-
-void LinearRing::validateConstruction() {
-	if (!LineString::isEmpty() && !LineString::isClosed()) {
-		throw util::IllegalArgumentException("points must form a closed linestring");
-    }
-	if (!points->isEmpty() && (points->getSize()>=1 && points->getSize()<=3)) {
-		throw util::IllegalArgumentException("Number of points must be 0 or >3");
-	}
-}
-
-
-		
-// superclass LineString will delete internal CoordinateSequence
-LinearRing::~LinearRing(){
-}
-
-bool LinearRing::isSimple() const {
-	return true;
-}
-string LinearRing::getGeometryType() const {
-	return "LinearRing";
-}
-bool LinearRing::isClosed() const {
-	return true;
-}
-
-void LinearRing::setPoints(CoordinateSequence* cl){
-	const vector<Coordinate> *v=cl->toVector();
-	points->setPoints(*(v));
-	//delete v;
-}
-
-GeometryTypeId
-LinearRing::getGeometryTypeId() const {
-	return GEOS_LINEARRING;
-}
-}
 

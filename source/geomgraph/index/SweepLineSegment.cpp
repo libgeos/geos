@@ -15,6 +15,10 @@
  **********************************************************************/
 
 #include <geos/geomgraphindex.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geomgraph/Edge.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -63,6 +67,9 @@ SweepLineSegment::computeIntersections(SweepLineSegment *ss,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.4  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

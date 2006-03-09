@@ -13,11 +13,14 @@
  *
  **********************************************************************/
 
-#include <geos/util.h>
-#include <geos/geom.h>
 #include <string>
 
+#include <geos/util/Assert.h>
+#include <geos/util/AssertionFailedException.h>
+#include <geos/geom/Coordinate.h>
+
 using std::string;
+using namespace geos::geom;
 
 namespace geos {
 namespace util { // geos.util
@@ -55,6 +58,9 @@ void Assert::shouldNeverReachHere(const string& message) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.13  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

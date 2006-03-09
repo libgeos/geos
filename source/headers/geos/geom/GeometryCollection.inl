@@ -20,6 +20,7 @@
 #include <geos/geom.h>
 
 namespace geos {
+namespace geom { // geos::geom
 
 INLINE GeometryCollection::const_iterator
 GeometryCollection::begin() const
@@ -34,6 +35,7 @@ GeometryCollection::end() const
 }
 
 
+} // namespace geos::geom
 } // namespace geos
 
 #endif // GEOS_GEOMETRYCOLLECTION_INL

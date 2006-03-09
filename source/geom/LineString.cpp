@@ -14,17 +14,34 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/geosAlgorithm.h>
-#include <geos/operation.h>
 #include <algorithm>
 #include <typeinfo>
 
+//#include <geos/geom.h>
+//#include <geos/geosAlgorithm.h>
+
+#include <geos/util/IllegalArgumentException.h> 
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/operation/IsSimpleOp.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateFilter.h>
+#include <geos/geom/Dimension.h>
+#include <geos/geom/GeometryFilter.h>
+#include <geos/geom/GeometryComponentFilter.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/MultiPoint.h> // for getBoundary
+#include <geos/geom/Envelope.h>
+
 using namespace std;
 using namespace geos::algorithm;
-using namespace geos::operation;
+//using namespace geos::operation;
 
 namespace geos {
+namespace geom { // geos::geom
 
 //LineString::LineString(){}
 
@@ -135,13 +152,13 @@ string LineString::getGeometryType() const {
 }
 
 bool LineString::isSimple() const {
-	IsSimpleOp iso;
+	operation::IsSimpleOp iso;
 	return iso.isSimple(this); 
 }
 
 Geometry* LineString::getBoundary() const {
 	if (isEmpty()) {
-		return getFactory()->createGeometryCollection(NULL);
+		return getFactory()->createEmptyGeometry();
 	}
 	if (isClosed()) {
 		return getFactory()->createMultiPoint();
@@ -283,10 +300,14 @@ LineString::getGeometryTypeId() const {
 	return GEOS_LINESTRING;
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.61  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.60  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

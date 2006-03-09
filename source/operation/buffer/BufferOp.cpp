@@ -169,6 +169,7 @@ void
 BufferOp::bufferReducedPrecision(int precisionDigits)
 {
 	double sizeBasedScaleFactor=precisionScaleFactor(argGeom, distance, precisionDigits);
+	assert(sizeBasedScaleFactor>0);
 	PrecisionModel fixedPM(sizeBasedScaleFactor);
 	bufferFixedPrecision(fixedPM);
 }
@@ -199,6 +200,9 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.46  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.45  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

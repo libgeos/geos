@@ -20,11 +20,16 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
 #include <memory>
+//#include <geos/geosAlgorithm.h>
+
+#include <geos/algorithm/HCoordinate.h>
+#include <geos/algorithm/NotRepresentableException.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/platform.h>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -120,6 +125,9 @@ HCoordinate::getCoordinate(Coordinate &ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.16  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

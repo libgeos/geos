@@ -14,9 +14,11 @@
  *
  **********************************************************************/
 
+#include <vector>
+
 #include <geos/geomgraph.h>
 #include <geos/util.h>
-#include <vector>
+#include <geos/algorithm/CGAlgorithms.h>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -282,6 +284,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.14  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
@@ -382,6 +387,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.15  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.14  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

@@ -14,18 +14,36 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/geosAlgorithm.h>
 #include <vector>
+#include <cmath> // for fabs
+#include <cassert> 
+
+//#include <geos/geom.h>
+//#include <geos/geosAlgorithm.h>
+
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/MultiLineString.h> // for getBoundary()
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Dimension.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFilter.h>
+#include <geos/geom/GeometryComponentFilter.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 using namespace std;
-using namespace geos::algorithm;
+//using namespace geos::algorithm;
 
 namespace geos {
+namespace geom { // geos::geom
 
 Polygon::Polygon(const Polygon &p):
 	Geometry(p.getFactory())
@@ -141,7 +159,7 @@ Polygon::getNumPoints() const
 int
 Polygon::getDimension() const
 {
-	return 2;
+	return Dimension::A; // area
 }
 
 int
@@ -191,7 +209,7 @@ Geometry*
 Polygon::getBoundary() const
 {
 	if (isEmpty()) {
-		return getFactory()->createGeometryCollection(NULL);
+		return getFactory()->createEmptyGeometry();
 	}
 	if ( ! holes->size() )
 	{
@@ -312,7 +330,7 @@ Polygon::normalize(LinearRing *ring, bool clockwise)
 	const Coordinate* minCoordinate=CoordinateSequence::minCoordinate(uniqueCoordinates);
 	CoordinateSequence::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-	if (CGAlgorithms::isCCW(uniqueCoordinates)==clockwise) {
+	if (algorithm::CGAlgorithms::isCCW(uniqueCoordinates)==clockwise) {
 		CoordinateSequence::reverse(uniqueCoordinates);
 	}
 	ring->setPoints(uniqueCoordinates);
@@ -334,12 +352,12 @@ double
 Polygon::getArea() const
 {
 	double area=0.0;
-	area+=fabs(CGAlgorithms::signedArea(shell->getCoordinatesRO()));
+	area+=fabs(algorithm::CGAlgorithms::signedArea(shell->getCoordinatesRO()));
 	for(unsigned int i=0; i<holes->size(); ++i)
 	{
 		LinearRing *lr = static_cast<LinearRing *>((*holes)[i]);
 		const CoordinateSequence *h=lr->getCoordinatesRO();
-        	area-=fabs(CGAlgorithms::signedArea(h));
+        	area-=fabs(algorithm::CGAlgorithms::signedArea(h));
 	}
 	return area;
 }
@@ -430,10 +448,14 @@ Polygon::isRectangle() const
 	return true;
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.59  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.58  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

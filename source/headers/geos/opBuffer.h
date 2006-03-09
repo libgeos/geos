@@ -23,8 +23,16 @@
 #include <geos/geomgraph.h>
 #include <geos/noding.h>
 #include <geos/geom.h>
+#include <geos/util/TopologyException.h>
 #include <set>
 #include <vector>
+
+// Forward declarations
+namespace geos {
+	namespace algorithm {
+		class CGAlgorithms;
+	}
+}
 
 namespace geos {
 namespace operation { // geos.operation
@@ -53,7 +61,7 @@ class RightmostEdgeFinder {
 private:
 	//algorithm::CGAlgorithms* cga;
 	int minIndex;
-	Coordinate minCoord;
+	geom::Coordinate minCoord;
 	geomgraph::DirectedEdge *minDe;
 	geomgraph::DirectedEdge *orientedDe;
 	void findRightmostEdgeAtNode();
@@ -72,13 +80,13 @@ public:
 	 */
 	RightmostEdgeFinder();
 	inline geomgraph::DirectedEdge* getEdge();
-	inline Coordinate& getCoordinate();
+	inline geom::Coordinate& getCoordinate();
 	void findEdge(std::vector<geomgraph::DirectedEdge*>* dirEdgeList);
 };
 
 // INLINES
 geomgraph::DirectedEdge* RightmostEdgeFinder::getEdge() { return orientedDe; }
-Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
+geom::Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
 
 /*
  * \class BufferSubgraph opBuffer.h geos/opBuffer.h
@@ -97,9 +105,9 @@ private:
 
 	std::vector<geomgraph::Node*> nodes;
 
-	Coordinate *rightMostCoord;
+	geom::Coordinate *rightMostCoord;
 
-	Envelope *env;
+	geom::Envelope *env;
 
 	/*
 	 * Adds all nodes and edges reachable from this node to the subgraph.
@@ -146,7 +154,7 @@ public:
 	/*
 	 * Gets the rightmost coordinate in the edges of the subgraph
 	 */
-	inline Coordinate* getRightmostCoordinate();
+	inline geom::Coordinate* getRightmostCoordinate();
 
 	/*
 	 * Creates the subgraph consisting of all edges reachable from
@@ -192,11 +200,11 @@ public:
 	 *
 	 * @return the envelope of the graph.
 	 */
-	Envelope *getEnvelope();
+	geom::Envelope *getEnvelope();
 };
 
 // INLINES
-Coordinate* BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
+geom::Coordinate* BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
 std::vector<geomgraph::Node*>* BufferSubgraph::getNodes() { return &nodes; }
 std::vector<geomgraph::DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
 	return &dirEdgeList;
@@ -229,10 +237,12 @@ public:
 	 */
 	static const int DEFAULT_QUADRANT_SEGMENTS=8;
 
-	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel);
+	OffsetCurveBuilder(const geom::PrecisionModel *newPrecisionModel,
+			int quadrantSegments=DEFAULT_QUADRANT_SEGMENTS);
+
 	~OffsetCurveBuilder();
-	OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,int quadrantSegments);
-	inline void setEndCapStyle(int newEndCapStyle);
+
+	void setEndCapStyle(int newEndCapStyle);
 
 	/**
 	 * This method handles single points as well as lines.
@@ -242,8 +252,8 @@ public:
 	 * @param lineList the std::vector to which CoordinateSequences will
 	 *                 be pushed_back
 	 */
-	void getLineCurve(const CoordinateSequence* inputPts, double distance,
-		std::vector<CoordinateSequence*>& lineList);
+	void getLineCurve(const geom::CoordinateSequence* inputPts, double distance,
+		std::vector<geom::CoordinateSequence*>& lineList);
 
 	/**
 	 * This method handles the degenerate cases of single points and lines,
@@ -252,13 +262,13 @@ public:
 	 * @param lineList the std::vector to which CoordinateSequences will
 	 *                 be pushed_back
 	 */
-	void getRingCurve(const CoordinateSequence *inputPts, int side,
-		double distance, std::vector<CoordinateSequence*>& lineList);
+	void getRingCurve(const geom::CoordinateSequence *inputPts, int side,
+		double distance, std::vector<geom::CoordinateSequence*>& lineList);
 
 
 private:
 
-	static const double PI_OVER_2 = 1.570796326794895;
+	static const double PI = 3.14159265358979;
 
 	static const double MAX_CLOSING_SEG_LEN = 3.0;
 
@@ -284,45 +294,45 @@ private:
 	/// created CoordinateSequences are properly 
 	/// destroyed.
 	///
-	CoordinateSequence *ptList;
+	geom::CoordinateSequence *ptList;
 
 	double distance;
 
-	const PrecisionModel *precisionModel;
+	const geom::PrecisionModel *precisionModel;
 
 	int endCapStyle;
 
 	int joinStyle;
 
-	Coordinate s0, s1, s2;
+	geom::Coordinate s0, s1, s2;
 
-	LineSegment seg0;
+	geom::LineSegment seg0;
 
-	LineSegment seg1;
+	geom::LineSegment seg1;
 
-	LineSegment offset0;
+	geom::LineSegment offset0;
 
-	LineSegment offset1;
+	geom::LineSegment offset1;
 
 	int side;
 
-//	static CoordinateSequence* copyCoordinates(CoordinateSequence *pts);
+//	static geom::CoordinateSequence* copyCoordinates(geom::CoordinateSequence *pts);
 
 	void init(double newDistance);
 
-	CoordinateSequence* getCoordinates();
+	geom::CoordinateSequence* getCoordinates();
 
-	void computeLineBufferCurve(const CoordinateSequence *inputPts);
+	void computeLineBufferCurve(const geom::CoordinateSequence& inputPts);
 
-	void computeRingBufferCurve(const CoordinateSequence *inputPts, int side);
+	void computeRingBufferCurve(const geom::CoordinateSequence& inputPts, int side);
 
-	void addPt(const Coordinate &pt);
+	void addPt(const geom::Coordinate &pt);
 
 	void closePts();
 
-	void initSideSegments(const Coordinate &nS1, const Coordinate &nS2, int nSide);
+	void initSideSegments(const geom::Coordinate &nS1, const geom::Coordinate &nS2, int nSide);
 
-	void addNextSegment(const Coordinate &p, bool addStartPoint);
+	void addNextSegment(const geom::Coordinate &p, bool addStartPoint);
 
 	/// Add last offset point
 	void addLastSegment();
@@ -337,19 +347,19 @@ private:
 	 * @param distance the offset distance
 	 * @param offset the points computed for the offset segment
 	 */
-	void computeOffsetSegment(const LineSegment& seg, int side, double distance,
-			LineSegment& offset);
+	void computeOffsetSegment(const geom::LineSegment& seg, int side, double distance,
+			geom::LineSegment& offset);
 
 	/// Add an end cap around point p1, terminating a line segment coming from p0
-	void addLineEndCap(const Coordinate &p0,const Coordinate &p1);
+	void addLineEndCap(const geom::Coordinate &p0,const geom::Coordinate &p1);
 
 	/**
 	 * @param p base point of curve
 	 * @param p0 start point of fillet curve
 	 * @param p1 endpoint of fillet curve
 	 */
-	void addFillet(const Coordinate &p, const Coordinate &p0,
-			const Coordinate &p1, int direction, double distance);
+	void addFillet(const geom::Coordinate &p, const geom::Coordinate &p0,
+			const geom::Coordinate &p1, int direction, double distance);
 
 	/** \brief
 	 * Adds points for a fillet. 
@@ -358,20 +368,20 @@ private:
 	 *
 	 * @param direction is -1 for a CW angle, 1 for a CCW angle
 	 */
-	void addFillet(const Coordinate &p, double startAngle, double endAngle,
+	void addFillet(const geom::Coordinate &p, double startAngle, double endAngle,
 			int direction, double distance);
 
 	/// Adds a CW circle around a point
-	void addCircle(const Coordinate &p, double distance);
+	void addCircle(const geom::Coordinate &p, double distance);
 
 	/// Adds a CW square around a point
-	void addSquare(const Coordinate &p, double distance);
+	void addSquare(const geom::Coordinate &p, double distance);
 
-	std::vector<CoordinateSequence *>ptLists;
+	std::vector<geom::CoordinateSequence *>ptLists;
 };
 
 // INLINES
-void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
+inline void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
 	endCapStyle=newEndCapStyle;
 }
 
@@ -428,10 +438,10 @@ private:
 	 * @return a scale factor that allows a reasonable amount of
 	 *         precision for the buffer computation
 	 */
-	static double precisionScaleFactor(const Geometry *g,
+	static double precisionScaleFactor(const geom::Geometry *g,
 			double distance, int maxPrecisionDigits);
 
-	const Geometry *argGeom;
+	const geom::Geometry *argGeom;
 
 	util::TopologyException saveException;
 
@@ -441,7 +451,7 @@ private:
 
 	int endCapStyle;
 
-	Geometry* resultGeometry;
+	geom::Geometry* resultGeometry;
 
 	void computeGeometry();
 
@@ -451,7 +461,7 @@ private:
 
 	void bufferReducedPrecision();
 
-	void bufferFixedPrecision(const PrecisionModel& fixedPM);
+	void bufferFixedPrecision(const geom::PrecisionModel& fixedPM);
 
 public:
 
@@ -475,7 +485,7 @@ public:
 	 * @return the buffer of the input geometry
 	 *
 	 */
-	static Geometry* bufferOp(const Geometry *g,
+	static geom::Geometry* bufferOp(const geom::Geometry *g,
 		double distance,
 		int quadrantSegments=
 			OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS,
@@ -486,7 +496,7 @@ public:
 	 *
 	 * @param g the geometry to buffer
 	 */
-	BufferOp(const Geometry *g)
+	BufferOp(const geom::Geometry *g)
 		:
 		argGeom(g),
 		quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
@@ -520,7 +530,7 @@ public:
 	 * @param distance the buffer distance
 	 * @return the buffer of the input geometry
 	 */
-	Geometry* getResultGeometry(double nDistance);
+	geom::Geometry* getResultGeometry(double nDistance);
 
 	/**
 	 * Comutes the buffer for a geometry for a given buffer distance
@@ -534,7 +544,7 @@ public:
 	 *
 	 * @deprecated use setQuadrantSegments instead
 	 */
-	Geometry* getResultGeometry(double nDistance, int nQuadrantSegments);
+	geom::Geometry* getResultGeometry(double nDistance, int nQuadrantSegments);
 };
 
 // BufferOp inlines
@@ -562,7 +572,7 @@ private:
 	// Labels will be relesed by object dtor
 	std::vector<geomgraph::Label*> newLabels;
 
-	const Geometry& inputGeom;
+	const geom::Geometry& inputGeom;
 
 	double distance;
 
@@ -583,21 +593,21 @@ private:
 	 * - Left: Location.EXTERIOR
 	 * - Right: Location.INTERIOR
 	 */
-	void addCurve(CoordinateSequence *coord, int leftLoc,
+	void addCurve(geom::CoordinateSequence *coord, int leftLoc,
 			int rightLoc);
 
-	void add(const Geometry& g);
+	void add(const geom::Geometry& g);
 
-	void addCollection(const GeometryCollection *gc);
+	void addCollection(const geom::GeometryCollection *gc);
 
 	/**
 	 * Add a Point to the graph.
 	 */
-	void addPoint(const Point *p);
+	void addPoint(const geom::Point *p);
 
-	void addLineString(const LineString *line);
+	void addLineString(const geom::LineString *line);
 
-	void addPolygon(const Polygon *p);
+	void addPolygon(const geom::Polygon *p);
 
 	/**
 	 * Add an offset curve for a ring.
@@ -617,7 +627,7 @@ private:
 	 * @param cwRightLoc the location on the R side of the ring
 	 *                   (if it is CW)
 	 */
-	void addPolygonRing(const CoordinateSequence *coord,
+	void addPolygonRing(const geom::CoordinateSequence *coord,
 			double offsetDistance, int side, int cwLeftLoc,
 			int cwRightLoc);
 
@@ -630,7 +640,7 @@ private:
 	 * @param offsetDistance
 	 * @return
 	 */
-	bool isErodedCompletely(CoordinateSequence *ringCoord,
+	bool isErodedCompletely(geom::CoordinateSequence *ringCoord,
 			double bufferDistance);
 
 	/**
@@ -651,11 +661,11 @@ private:
 	 * @param bufferDistance
 	 * @return
 	 */
-	bool isTriangleErodedCompletely(CoordinateSequence *triangleCoord,
+	bool isTriangleErodedCompletely(geom::CoordinateSequence *triangleCoord,
 			double bufferDistance);
 
 public:
-	OffsetCurveSetBuilder(const Geometry& newInputGeom,
+	OffsetCurveSetBuilder(const geom::Geometry& newInputGeom,
 		double newDistance, OffsetCurveBuilder& newCurveBuilder);
 
 	~OffsetCurveSetBuilder();
@@ -670,7 +680,7 @@ public:
 	 */
 	std::vector<noding::SegmentString*>& getCurves();
 
-	void addCurves(const std::vector<CoordinateSequence*>& lineList,
+	void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
 		int leftLoc, int rightLoc);
 
 };
@@ -684,7 +694,7 @@ public:
  */
 class DepthSegment {
 private:
-	LineSegment upwardSeg;
+	geom::LineSegment upwardSeg;
 
 	/**
 	 * Compare two collinear segments for left-most ordering.
@@ -698,11 +708,11 @@ private:
 	 * @param seg1 a segment to compare
 	 * @return
 	 */
-	int compareX(LineSegment *seg0, LineSegment *seg1);
+	int compareX(geom::LineSegment *seg0, geom::LineSegment *seg1);
 
 public:
 	int leftDepth;
-	DepthSegment(const LineSegment &seg, int depth);
+	DepthSegment(const geom::LineSegment &seg, int depth);
 	~DepthSegment();
 
 	/**
@@ -745,13 +755,13 @@ public:
 
 	~SubgraphDepthLocater() {}
 
-	int getDepth(Coordinate &p);
+	int getDepth(geom::Coordinate &p);
 
 private:
 
 	std::vector<BufferSubgraph*> *subgraphs;
 
-	LineSegment seg;
+	geom::LineSegment seg;
 
 	/**
 	 * Finds all non-horizontal segments intersecting the stabbing line.
@@ -761,7 +771,7 @@ private:
 	 * @param stabbedSegments a vector to which DepthSegments intersecting
 	 *        the stabbing line will be added.
 	 */
-	void findStabbedSegments(Coordinate &stabbingRayLeftPt,
+	void findStabbedSegments(geom::Coordinate &stabbingRayLeftPt,
 			std::vector<DepthSegment*>& stabbedSegments);
 
 	/**
@@ -773,7 +783,7 @@ private:
 	 * @param stabbedSegments the current vector of DepthSegments
 	 *        intersecting the stabbing line will be added.
 	 */
-	void findStabbedSegments(Coordinate &stabbingRayLeftPt,
+	void findStabbedSegments(geom::Coordinate &stabbingRayLeftPt,
 			std::vector<geomgraph::DirectedEdge*> *dirEdges,
 			std::vector<DepthSegment*>& stabbedSegments);
 
@@ -786,7 +796,7 @@ private:
 	 * @param stabbedSegments the current list of DepthSegments intersecting
 	 *        the stabbing line
 	 */
-	void findStabbedSegments(Coordinate &stabbingRayLeftPt,
+	void findStabbedSegments(geom::Coordinate &stabbingRayLeftPt,
 			geomgraph::DirectedEdge *dirEdge,
 			std::vector<DepthSegment*>& stabbedSegments);
 
@@ -826,7 +836,7 @@ private:
 
 	int endCapStyle;
 
-	const PrecisionModel* workingPrecisionModel;
+	const geom::PrecisionModel* workingPrecisionModel;
 
 	algorithm::LineIntersector* li;
 
@@ -834,14 +844,14 @@ private:
 
 	noding::Noder* workingNoder;
 
-	const GeometryFactory* geomFact;
+	const geom::GeometryFactory* geomFact;
 
 	geomgraph::EdgeList edgeList;
 
 	std::vector<geomgraph::Label *> newLabels;
 
 	void computeNodedEdges(std::vector<noding::SegmentString*>& bufferSegStrList,
-			const PrecisionModel *precisionModel);
+			const geom::PrecisionModel *precisionModel);
 			// throw(GEOSException);
 
 	/**
@@ -879,7 +889,7 @@ private:
 	/// check is performed to ensure it will use the
 	/// given PrecisionModel
 	///
-	noding::Noder* getNoder(const PrecisionModel* precisionModel);
+	noding::Noder* getNoder(const geom::PrecisionModel* precisionModel);
 
 
 public:
@@ -921,7 +931,7 @@ public:
 	 *
 	 * @param pm the precision model to use
 	 */
-	void setWorkingPrecisionModel(const PrecisionModel *pm) {
+	void setWorkingPrecisionModel(const geom::PrecisionModel *pm) {
 		workingPrecisionModel=pm;
 	}
 
@@ -938,7 +948,7 @@ public:
 		endCapStyle=nEndCapStyle;
 	}
 
-	Geometry* buffer(const Geometry *g, double distance);
+	geom::Geometry* buffer(const geom::Geometry *g, double distance);
 		// throw (GEOSException);
 
 };
@@ -951,6 +961,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.24  2006/03/07 14:20:14  strk
  * Big deal of heap allocations reduction
  *
@@ -1022,114 +1035,6 @@ public:
  * - New Geometry::buffer(distance, quadSeg, endCapStyle)
  * - Obsoleted toInternalGeometry/fromInternalGeometry
  * - More const-correctness in Buffer "package"
- *
- * Revision 1.10  2005/11/08 20:12:44  strk
- * Memory overhead reductions in buffer operations.
- *
- * Revision 1.9  2005/06/30 18:31:48  strk
- * Ported SubgraphDepthLocator optimizations from JTS code
- *
- * Revision 1.8  2005/05/19 10:29:28  strk
- * Removed some CGAlgorithms instances substituting them with direct calls
- * to the static functions. Interfaces accepting CGAlgorithms pointers kept
- * for backward compatibility but modified to make the argument optional.
- * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
- * Inlined some smaller functions encountered during bug hunting.
- * Updated Copyright notices in the touched files.
- *
- * Revision 1.7  2005/02/04 18:49:48  strk
- * Changed ::computeDepths to use a set instead of a vector for checking
- * visited Edges.
- *
- * Revision 1.6  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.5  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.4  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.3  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.2  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added DefaultCoordinateSequenceFactory::instance() function.
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.22  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.21  2004/06/30 20:59:13  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.20  2004/05/27 08:37:16  strk
- * Fixed a bug preventing OffsetCurveBuilder point list from being reset.
- *
- * Revision 1.19  2004/05/26 09:49:03  strk
- * PlanarGraph made local to ::buffer instead of Class private.
- *
- * Revision 1.18  2004/05/07 07:57:27  strk
- * Added missing EdgeNodingValidator to build scripts.
- * Changed SegmentString constructor back to its original form
- * (takes const void *), implemented local tracking of "contexts"
- * in caller objects for proper destruction.
- *
- * Revision 1.17  2004/05/05 16:57:48  strk
- * Rewritten static cga allocation to avoid copy constructor calls.
- *
- * Revision 1.16  2004/05/05 10:54:48  strk
- * Removed some private static heap explicit allocation, less cleanup done by
- * the unloader.
- *
- * Revision 1.15  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.14  2004/04/30 09:15:28  strk
- * Enlarged exception specifications to allow for AssertionFailedException.
- * Added missing initializers.
- *
- * Revision 1.13  2004/04/23 00:02:18  strk
- * const-correctness changes
- *
- * Revision 1.12  2004/04/20 10:58:04  strk
- * More memory leaks removed.
- *
- * Revision 1.11  2004/04/19 15:14:45  strk
- * Added missing virtual destructor in SpatialIndex class.
- * Memory leaks fixes. Const and throw specifications added.
- *
- * Revision 1.10  2004/04/19 12:51:01  strk
- * Memory leaks fixes. Throw specifications added.
- *
- * Revision 1.9  2004/04/15 14:00:30  strk
- * Added new cleanup to Unload::Release
- *
- * Revision 1.8  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- * Revision 1.7  2004/03/01 22:04:59  strk
- * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
- *
- * Revision 1.6  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.5  2003/11/06 18:46:34  strk
- * Added throw specification for BufferOp's ::buildSubgraphs() 
- * and ::computeBuffer()
  *
  **********************************************************************/
 

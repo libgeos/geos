@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,11 +14,16 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraphindex.h>
 #include <cassert>
 #include <vector>
 
+#include <geos/geomgraphindex.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -165,6 +170,9 @@ MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.10  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -14,9 +14,15 @@
  **********************************************************************/
 
 #include <sstream>
-#include <geos/geomgraph.h>
+
+//#include <geos/geomgraph.h>
+#include <geos/geomgraph/Quadrant.h>
+#include <geos/util/IllegalArgumentException.h>
+
+#include <geos/geom/Coordinate.h>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -112,6 +118,9 @@ bool Quadrant::isNorthern(int quad) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.8  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

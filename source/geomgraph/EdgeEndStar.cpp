@@ -14,10 +14,19 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
+#include <cassert>
 #include <string>
 #include <vector>
+
+//#include <geos/geomgraph.h>
+//#include <geos/util.h>
+#include <geos/util/TopologyException.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/algorithm/SimplePointInAreaLocator.h>
+#include <geos/geom/Location.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geomgraph/GeometryGraph.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -25,6 +34,7 @@
 
 //using namespace std;
 //using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -320,6 +330,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.17  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

@@ -14,8 +14,10 @@
  *
  **********************************************************************/
 
-#include <geos/opOverlay.h>
 #include <vector>
+
+#include <geos/opOverlay.h>
+#include <geos/geomgraphindex.h>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -54,6 +56,9 @@ EdgeSetNoder::getNodedEdges()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.9  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

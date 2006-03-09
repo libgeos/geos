@@ -14,13 +14,20 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Coordinate.h>
+
 #include <algorithm>
 #include <sstream>
+
+#ifndef USE_INLINE
+# include <geos/geom/Envelope.inl>
+#endif
 
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 /**
  * Test the point q to see whether it intersects the Envelope defined by p1-p2
@@ -572,12 +579,14 @@ Envelope::expandBy(double deltaX, double deltaY)
 
 
 
-
-
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.25  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

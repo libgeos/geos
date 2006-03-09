@@ -14,80 +14,91 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/geomUtil.h>
-#include <geos/util.h>
 #include <cassert>
 #include <vector>
 #include <typeinfo>
 
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/Envelope.h>
+#include <geos/util/IllegalArgumentException.h>
+
+#ifndef USE_INLINE
+# include <geos/geom/GeometryFactory.inl>
+#endif
+
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
-/**
- * Constructs a GeometryFactory that generates Geometries having a floating
- * PrecisionModel and a spatial-reference ID of 0.
- */
-GeometryFactory::GeometryFactory() {
+//namespace { 
+//	class gfCoordinateOperation: public CoordinateOperation {
+//	using CoordinateOperation::edit;
+//	public:
+//		virtual CoordinateSequence* edit(const CoordinateSequence *coordinates,
+//				const Geometry *geometry);
+//	};
+//}
+
+
+
+/*public*/
+GeometryFactory::GeometryFactory()
+{
 	precisionModel=new PrecisionModel();
 	SRID=0;
 	coordinateListFactory=CoordinateArraySequenceFactory::instance();
 }
 
-/**
- * Constructs a GeometryFactory that generates Geometries having the given
- * PrecisionModel, spatial-reference ID, and CoordinateSequence implementation.
- */
-GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateSequenceFactory *nCoordinateSequenceFactory) {
+/*public*/
+GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateSequenceFactory *nCoordinateSequenceFactory)
+{
 	precisionModel=new PrecisionModel(*pm);
 	coordinateListFactory=nCoordinateSequenceFactory;
 	SRID=newSRID;
 }
 
-/**
- * Constructs a GeometryFactory that generates Geometries having the given
- * CoordinateSequence implementation, a double-precision floating
- * PrecisionModel and a spatial-reference ID of 0.
- */
-GeometryFactory::GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory) {
+/*public*/
+GeometryFactory::GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory)
+{
 	precisionModel=new PrecisionModel();
 	SRID=0;
 	coordinateListFactory=nCoordinateSequenceFactory;
 }
 
-/**
-* Constructs a GeometryFactory that generates Geometries having the given
-* {@link PrecisionModel} and the default CoordinateSequence
-* implementation.
-*
-* @param precisionModel the PrecisionModel to use
-*/
+/*public*/
 GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
 	precisionModel=new PrecisionModel(*pm);
 	SRID=0;
 	coordinateListFactory=CoordinateArraySequenceFactory::instance();
 }
 
-/**
- * Constructs a GeometryFactory that generates Geometries having the given
- * PrecisionModel and spatial-reference ID, and the default
- * CoordinateSequence implementation.
- *
- * @param precisionModel the PrecisionModel to use
- * @param SRID the SRID to use
- */
+/*public*/
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID){
     precisionModel=new PrecisionModel(*pm);
     SRID=newSRID;
 	coordinateListFactory=CoordinateArraySequenceFactory::instance();
 }
 
+/*public*/
 GeometryFactory::GeometryFactory(const GeometryFactory &gf){
     precisionModel=new PrecisionModel(*(gf.precisionModel));
     SRID=gf.SRID;
     coordinateListFactory=gf.coordinateListFactory;
 }
+
 GeometryFactory::~GeometryFactory(){
 	delete precisionModel;
 }
@@ -141,17 +152,10 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 	return p;
 }
 
-/**
- * Returns the PrecisionModel that Geometries created by this factory
- * will be associated with.
- */
 const PrecisionModel* GeometryFactory::getPrecisionModel() const {
 	return precisionModel;
 }
 
-/**
- * Creates the EMPTY Point
- */
 Point*
 GeometryFactory::createPoint() const {
 	return new Point(NULL, this);
@@ -169,29 +173,12 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const {
 	}
 }
 
-/**
- * Creates a Point using the given CoordinateSequence (must have 1 element)
- *
- * @param  newCoords
- *	contains the single coordinate on which to base this
- *	<code>Point</code> or <code>null</code> to create
- *	the empty geometry.
- *
- *	If not null the created Point will take ownership of newCoords.
- */  
 Point*
 GeometryFactory::createPoint(CoordinateSequence *newCoords) const
 {
 	return new Point(newCoords,this);
 }
 
-/**
- * Creates a Point using the given CoordinateSequence (must have 1 element)
- *
- * @param  fromCoords
- *	contains the single coordinate on which to base this
- *	<code>Point</code>. 
- */
 Point*
 GeometryFactory::createPoint(const CoordinateSequence &fromCoords) const
 {
@@ -207,28 +194,12 @@ GeometryFactory::createPoint(const CoordinateSequence &fromCoords) const
 
 }
 
-/**
- * Construct an EMPTY MultiLineString
- */
 MultiLineString*
 GeometryFactory::createMultiLineString() const
 {
 	return new MultiLineString(NULL,this);
 }
 
-/**
- * Constructs a <code>MultiLineString</code>.
- *
- * @param  newLines
- *	the <code>LineStrings</code>s for this
- *	<code>MultiLineString</code>, or <code>null</code>
- *	or an empty array to create the empty geometry.
- *	Elements may be empty <code>LineString</code>s,
- *	but not <code>null</code>s.
- *
- *	Constructed object will take ownership of
- *	the vector and its elements.
- */
 MultiLineString*
 GeometryFactory::createMultiLineString(vector<Geometry *> *newLines)
 	const
@@ -236,19 +207,6 @@ GeometryFactory::createMultiLineString(vector<Geometry *> *newLines)
 	return new MultiLineString(newLines,this);
 }
 
-/**
- * Constructs a <code>MultiLineString</code>.
- *
- * @param  fromLines
- *	the <code>LineStrings</code>s for this
- *	<code>MultiLineString</code>, or an empty array
- *	to create the empty geometry.
- *	Elements may be empty <code>LineString</code>s,
- *	but not <code>null</code>s.
- *
- *	Constructed object will copy 
- *	the vector and its elements.
- */
 MultiLineString*
 GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	const
@@ -257,7 +215,7 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	for (unsigned int i=0; i<fromLines.size(); i++)
 	{
 		const LineString *line = dynamic_cast<const LineString *>(fromLines[i]);
-		if ( ! line ) throw util::IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
+		if ( ! line ) throw geos::util::IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
 		(*newGeoms)[i] = new LineString(*line);
 	}
 	MultiLineString *g = NULL;
@@ -273,48 +231,24 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	return g;
 }
 
-/**
- * Constructs an EMPTY <code>GeometryCollection</code>.
- */
 GeometryCollection*
 GeometryFactory::createGeometryCollection() const
 {
 	return new GeometryCollection(NULL,this);
 }
 
-/**
- * Constructs a GeometryCollection.
- *
- * @param newGeoms
- *	The <code>Geometry</code>s for this
- *	<code>GeometryCollection</code>,
- *	or <code>null</code> or an empty array to
- *	create the empty geometry.
- *	Elements may be empty <code>Geometry</code>s,
- *	but not <code>null</code>s.
- *
- *	If construction succeed the created object will take
- *	ownership of newGeoms vector and elements.
- *
- *	If construction	fails "IllegalArgumentException *"
- *	is thrown and it is your responsibility to delete newGeoms
- *	vector and content.
- */
+Geometry*
+GeometryFactory::createEmptyGeometry() const
+{
+	return new GeometryCollection(NULL,this);
+}
+
 GeometryCollection*
 GeometryFactory::createGeometryCollection(vector<Geometry *> *newGeoms) const
 {
 	return new GeometryCollection(newGeoms,this);
 }
 
-/**
- * @param fromGeoms
- *            the <code>Geometry</code>s for this
- *	     <code>GeometryCollection</code>,
- *	     Elements may be empty <code>Geometry</code>s,
- *            but not <code>null</code>s.
- *	     
- *            fromGeoms vector and elements will be copied. 
- */
 GeometryCollection*
 GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) const
 {
@@ -335,49 +269,18 @@ GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) c
 	return g;
 }
 
-/*
- * Create an EMPTY MultiPolygon
- */
 MultiPolygon*
 GeometryFactory::createMultiPolygon() const
 {
 	return new MultiPolygon(NULL,this);
 }
 
-/**
- * @param newPolys
- *	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
- *	or <code>null</code> or an empty array to create the empty
- *	geometry. Elements may be empty <code>Polygon</code>s, but
- *	not <code>null</code>s.
- *	The polygons must conform to the assertions specified in the
- *	<A HREF="http://www.opengis.org/techno/specs.htm">
- *	OpenGIS Simple Features Specification for SQL
- *	</A>.
- *
- *	Constructed object will take ownership of
- *	the vector and its elements.
- */
 MultiPolygon*
 GeometryFactory::createMultiPolygon(vector<Geometry *> *newPolys) const
 {
 	return new MultiPolygon(newPolys,this);
 }
 
-/**
- * @param fromPolys
- *	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
- *	or an empty array to create the empty geometry.
- *	Elements may be empty <code>Polygon</code>s, but
- *	not <code>null</code>s.
- *	The polygons must conform to the assertions specified in the
- *	<A HREF="http://www.opengis.org/techno/specs.htm">
- *	OpenGIS Simple Features Specification for SQL
- *	</A>.
- *
- *	Constructed object will copy 
- *	the vector and its elements.
- */
 MultiPolygon*
 GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 {
@@ -398,40 +301,20 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 	}
 	return g;
 }
- 
-/**
- * Creates an EMPTY LinearRing 
- */
+
+
 LinearRing*
 GeometryFactory::createLinearRing() const
 {
 	return new LinearRing(NULL,this);
 }
 
-/**
- * Creates a LinearRing using the given CoordinateSequence;
- * a null or empty CoordinateSequence will
- * create an empty LinearRing. The points must form a closed and simple
- * linestring. Consecutive points must not be equal.
- *
- * @param newCoords a CoordinateSequence possibly empty, or null.
- *
- * LinearRing will take ownership of coordinates.
- * 
- */
 LinearRing*
 GeometryFactory::createLinearRing(CoordinateSequence* newCoords) const
 {
 	return new LinearRing(newCoords,this);
 }
 
-/*
- * Creates a LinearRing using a copy of the given CoordinateSequence.
- * An empty CoordinateSequence will create an empty LinearRing.
- * The points must form a closed and simple
- * linestring. Consecutive points must not be equal.
- * @param fromCoords a CoordinateSequence possibly empty.
- */
 LinearRing*
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
@@ -442,37 +325,12 @@ GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 	return g;
 }
 
-/**
- * Constructs a <code>MultiPoint</code>.
- *
- * @param  newPoints
- *	the <code>Point</code>s for this <code>MultiPoint</code>,
- *	or <code>null</code> or an empty array to create the empty
- * 	geometry.
- *	Elements may be empty <code>Point</code>s,
- *	but not <code>null</code>s.
- *
- *	Constructed object will take ownership of
- *	the vector and its elements.
- */
 MultiPoint*
 GeometryFactory::createMultiPoint(vector<Geometry *> *newPoints) const
 {
 	return new MultiPoint(newPoints,this);
 }
 
-/**
- * Constructs a <code>MultiPoint</code>.
- *
- * @param  fromPoints
- *	the <code>Point</code>s for this <code>MultiPoint</code>,
- *	or an empty array to create the empty geometry.
- *	Elements may be empty <code>Point</code>s,
- *	but not <code>null</code>s.
- *
- *	Constructed object will copy 
- *	the vector and its elements.
- */
 MultiPoint*
 GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 {
@@ -495,19 +353,12 @@ GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 	return g;
 }
 
-/**
- * Creates an EMPTY MultiPoint 
- */
 MultiPoint*
 GeometryFactory::createMultiPoint() const
 {
 	return new MultiPoint(NULL, this);
 }
 
-/**
- * Creates a MultiPoint using the given CoordinateSequence.
- * @param fromCoords a CoordinateSequence used for Points construction.
- */
 MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 {
@@ -529,28 +380,12 @@ GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 	return mp;
 }
 
-/**
- * Constructs an EMPTY Polygon
- */
 Polygon*
 GeometryFactory::createPolygon() const
 {
 	return new Polygon(NULL, NULL, this);
 }
 
-/**
- * Constructs a <code>Polygon</code> with the given exterior boundary and
- * interior boundaries.
- *
- * @param shell
- *            the outer boundary of the new <code>Polygon</code>, or
- *            <code>null</code> or an empty <code>LinearRing</code> if
- *            the empty geometry is to be created.
- * @param holes
- *            the inner boundaries of the new <code>Polygon</code>, or
- *            <code>null</code> or empty <code>LinearRing</code> s if
- *            the empty geometry is to be created.
- */
 Polygon*
 GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes)
 	const
@@ -558,16 +393,6 @@ GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes)
 	return new Polygon(shell, holes, this);
 }
 
-/**
- * Constructs a <code>Polygon</code> with the given exterior boundary and
- * interior boundaries.
- *
- * @param shell
- *            the outer boundary of the new <code>Polygon</code>
- * @param holes
- *            the inner boundaries of the new <code>Polygon</code>
- *            Note that these must be LinearRings
- */
 Polygon*
 GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *> &holes)
 	const
@@ -591,25 +416,12 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 	return g;
 }
 
-/**
- * Constructs an EMPTY LineString
- */
 LineString *
 GeometryFactory::createLineString() const
 {
 	return new LineString(NULL, this);
 }
 
-/**
- * Constructs a <code>LineString</code> taking ownership of the
- * given CoordinateSequence.
- *
- * @param newCoords the list of coordinates making up the linestring,
- *	or <code>null</code> to create the empty geometry.
- *	Consecutive points may not be equal. Created object will
- *	take ownership of CoordinateSequence.
- *
- */  
 LineString*
 GeometryFactory::createLineString(CoordinateSequence *newCoords)
 	const
@@ -617,13 +429,6 @@ GeometryFactory::createLineString(CoordinateSequence *newCoords)
 	return new LineString(newCoords, this);
 }
 
-/**
- * Constructs a <code>LineString</code> copying the
- * given CoordinateSequence.
- *
- * @param fromCoords the list of coordinates making up the linestring.
- *	Consecutive points may not be equal.
- */  
 LineString*
 GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 	const
@@ -635,37 +440,6 @@ GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 	return g;
 }
 
-/**
-*  Build an appropriate <code>Geometry</code>, <code>MultiGeometry</code>, or
-*  <code>GeometryCollection</code> to contain the <code>Geometry</code>s in
-*  it.
-*
-*  For example:
-*
-*    - If <code>geomList</code> contains a single <code>Polygon</code>,
-*      the <code>Polygon</code> is returned.
-*    - If <code>geomList</code> contains several <code>Polygon</code>s, a
-*      <code>MultiPolygon</code> is returned.
-*    - If <code>geomList</code> contains some <code>Polygon</code>s and
-*      some <code>LineString</code>s, a <code>GeometryCollection</code> is
-*      returned.
-*    - If <code>geomList</code> is empty, an empty
-*      <code>GeometryCollection</code> is returned
-*    .
-*
-* Note that this method does not "flatten" Geometries in the input,
-* and hence if any MultiGeometries are contained in the input a
-* GeometryCollection containing them will be returned.
-*
-* @param  newGeoms  the <code>Geometry</code>s to combine
-*
-* @return
-*	A <code>Geometry</code> of the "smallest", "most type-specific"
-*	class that can contain the elements of <code>geomList</code>.
-*
-* NOTE: the returned Geometry will take ownership of the
-* 	given vector AND its elements 
-*/
 Geometry*
 GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 {
@@ -717,12 +491,6 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 	return geom0;
 }
 
-/**
- * This function does the same thing of the omonimouse function
- * taking vector pointer instead of reference. 
- * The difference is that this version will copy needed data
- * leaving ownership to the caller.
- */
 Geometry*
 GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 {
@@ -770,10 +538,6 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 }
 
 
-/**
- * @return a clone of g based on a CoordinateSequence created by this
- * GeometryFactory's CoordinateSequenceFactory
- */
 Geometry*
 GeometryFactory::createGeometry(const Geometry *g) const
 {
@@ -787,19 +551,20 @@ GeometryFactory::createGeometry(const Geometry *g) const
 	//return ret;
 }
 
-/**
- * Destroy a Geometry, or release it.
- */
 void
 GeometryFactory::destroyGeometry(Geometry *g) const
 {
 	delete g;
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.61  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.60  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

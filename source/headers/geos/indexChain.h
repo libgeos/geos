@@ -42,7 +42,7 @@ class MonotoneChainSelectAction {
 
 protected:
 
-	LineSegment *selectedSegment;
+	geom::LineSegment *selectedSegment;
 
 public:
 
@@ -58,10 +58,10 @@ public:
 	 * line segment which is selected
 	 * @param seg
 	 */
-	virtual void select(LineSegment *newSeg)=0;
+	virtual void select(geom::LineSegment *newSeg)=0;
 
 	// these envelopes are used during the MonotoneChain search process
-	Envelope *tempEnv1;
+	geom::Envelope *tempEnv1;
 };
 
 /**
@@ -72,8 +72,8 @@ class MonotoneChainOverlapAction {
 
 protected:
 
-	LineSegment *overlapSeg1;
-	LineSegment *overlapSeg2;
+	geom::LineSegment *overlapSeg1;
+	geom::LineSegment *overlapSeg2;
 
 public:
 
@@ -96,11 +96,11 @@ public:
 	 * @param seg1
 	 * @param seg2
 	 */
-	virtual void overlap(LineSegment *newSeg1,LineSegment *newSeg2){assert(0);}
+	virtual void overlap(geom::LineSegment *newSeg1, geom::LineSegment *newSeg2){assert(0);}
 
 	// these envelopes are used during the MonotoneChain search process
-	Envelope *tempEnv1;
-	Envelope *tempEnv2;
+	geom::Envelope *tempEnv1;
+	geom::Envelope *tempEnv2;
 };
 
 
@@ -147,21 +147,21 @@ public:
 class indexMonotoneChain {
 
 private:
-	void computeSelect(const Envelope& searchEnv,
+	void computeSelect(const geom::Envelope& searchEnv,
 			unsigned int start0,
 			unsigned int end0,
 			MonotoneChainSelectAction& mcs);
 
 	void computeOverlaps(int start0, int end0, indexMonotoneChain *mc,
 			int start1, int end1, MonotoneChainOverlapAction *mco);
-	const CoordinateSequence *pts;
+	const geom::CoordinateSequence *pts;
 	int start, end;
-	Envelope *env;
+	geom::Envelope *env;
 	void *context;// user-defined information
 	int id; // useful for optimizing chain comparisons
 
 public:
-	indexMonotoneChain(const CoordinateSequence *newPts,
+	indexMonotoneChain(const geom::CoordinateSequence *newPts,
 			int nstart, int nend,
 			void* nContext)
 		:
@@ -177,25 +177,25 @@ public:
 		delete env;
 	}
 
-	Envelope* getEnvelope();
+	geom::Envelope* getEnvelope();
 
 	int getStartIndex() { return start; }
 
 	int getEndIndex() { return end; }
 
-	void getLineSegment(unsigned int index, LineSegment *ls);
+	void getLineSegment(unsigned int index, geom::LineSegment *ls);
 
 	/**
 	 * Return the subsequence of coordinates forming this chain.
 	 * Allocates a new CoordinateSequence to hold the Coordinates
 	 */
-	CoordinateSequence* getCoordinates();
+	geom::CoordinateSequence* getCoordinates();
 
 	/**
 	 * Determine all the line segments in the chain whose envelopes overlap
 	 * the searchEnvelope, and process them
 	 */
-	void select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs);
+	void select(const geom::Envelope& searchEnv, MonotoneChainSelectAction& mcs);
 
 	void computeOverlaps(indexMonotoneChain *mc,MonotoneChainOverlapAction *mco);
 
@@ -226,7 +226,7 @@ public:
 	 * Remember to deep-delete the result.
 	 */
 	static std::vector<indexMonotoneChain*>* getChains(
-			const CoordinateSequence *pts,
+			const geom::CoordinateSequence *pts,
 			void* context);
 
 	/**
@@ -234,11 +234,11 @@ public:
 	 * for the given CoordinateSequence.
 	 * Remember to delete vector elements!
 	 */
-	static void getChains(const CoordinateSequence *pts,
+	static void getChains(const geom::CoordinateSequence *pts,
 			void* context,
 			std::vector<indexMonotoneChain*>& mcList);
 
-	static std::vector<indexMonotoneChain*>* getChains(const CoordinateSequence *pts) {
+	static std::vector<indexMonotoneChain*>* getChains(const geom::CoordinateSequence *pts) {
 		return getChains(pts, NULL);
 	}
 
@@ -248,13 +248,13 @@ public:
 	 * The last entry in the array points to the end point of the point array,
 	 * for use as a sentinel.
 	 */
-	static void getChainStartIndices(const CoordinateSequence *pts,
+	static void getChainStartIndices(const geom::CoordinateSequence *pts,
 			std::vector<int>& startIndexList);
 
 	/**
 	 * @return the index of the last point in the monotone chain starting at <code>start</code>.
 	 */
-	static int findChainEnd(const CoordinateSequence *pts, int start);
+	static int findChainEnd(const geom::CoordinateSequence *pts, int start);
 };
 
 } // namespace geos.index.chain
@@ -265,6 +265,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.11  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -29,6 +29,7 @@
 #include <sstream>
 #include <string>
 
+#include <geos/geom.h>
 #include <geos/util.h>
 #include <geos/geomgraph.h>
 #include <geos/io.h>
@@ -711,7 +712,7 @@ XMLTester::parseTest()
 			gRealRes->normalize();
 
 			/// Allow for slightly different representations
-			if (gRes->equalsExact(gRealRes, 0.00000000000001)==true) success=1;
+			if (gRes->equalsExact(gRealRes, 0.00000000001)==true) success=1;
 			//if (gRes->compareTo(gRealRes)==0) success=1;
 
 			if ( testValidOutput ) testValid(gRes, "result");
@@ -768,7 +769,7 @@ XMLTester::parseTest()
 			try {
 				Polygonizer plgnzr;
 				plgnzr.add(gA);
-				std::vector<geos::Polygon *>*polys = plgnzr.getPolygons();
+				std::vector<Polygon *>*polys = plgnzr.getPolygons();
 				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>;
 				for (unsigned int i=0; i<polys->size(); i++)
 					newgeoms->push_back((*polys)[i]);
@@ -805,7 +806,7 @@ XMLTester::parseTest()
 			try {
 				LineMerger merger;
 				merger.add(gT);
-				std::vector<geos::LineString *>*lines = merger.getMergedLineStrings();
+				std::vector<LineString *>*lines = merger.getMergedLineStrings();
 				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>(lines->begin(),
 						lines->end());
 				delete lines;
@@ -977,6 +978,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.27  2006/03/07 14:21:17  strk
  * Leak plugged, tweeked output to be nice with --sql-output
  *

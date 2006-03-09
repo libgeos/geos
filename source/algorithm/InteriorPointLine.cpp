@@ -16,10 +16,14 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
-#include <geos/geom.h> // for CoordinateSequence
-#include <typeinfo>
+//#include <typeinfo>
+
+#include <geos/algorithm/InteriorPointLine.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -28,6 +32,8 @@
 #ifdef GEOS_DEBUG
 #include <iostream>
 #endif
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -149,6 +155,9 @@ InteriorPointLine::getInteriorPoint(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.16  2006/03/03 13:50:15  strk
  * Cleaned up InteriorPointLine class
  *

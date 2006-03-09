@@ -18,8 +18,10 @@
  *
  **********************************************************************/
 
-#include <geos/opBuffer.h>
 #include <vector>
+
+#include <geos/opBuffer.h>
+#include <geos/algorithm/CGAlgorithms.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -249,6 +251,9 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.21  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -21,6 +21,10 @@
 #define GEOS_DEBUG 0
 #endif
 
+#ifndef USE_INLINE
+# include "geos/noding/SegmentString.inl"
+#endif
+
 using namespace geos::algorithm;
 
 namespace geos {
@@ -106,6 +110,9 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.25  2006/03/02 12:12:00  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

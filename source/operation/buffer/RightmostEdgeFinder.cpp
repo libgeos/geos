@@ -18,6 +18,7 @@
 #include <cassert>
 
 #include <geos/opBuffer.h>
+#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util.h>
 
 //using namespace std;
@@ -183,6 +184,9 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.17  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

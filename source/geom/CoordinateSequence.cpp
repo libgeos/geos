@@ -15,6 +15,7 @@
 
 #include <geos/geom.h>
 #include <geos/profiler.h>
+#include <geos/geom/Envelope.h>
 #include <cstdio>
 #include <algorithm>
 #include <vector>
@@ -22,6 +23,7 @@
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 #if PROFILE
 static Profiler *profiler = Profiler::instance();
@@ -224,10 +226,14 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 	for (int i=0; i<size; i++) env.expandToInclude(getAt(i));
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.14  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

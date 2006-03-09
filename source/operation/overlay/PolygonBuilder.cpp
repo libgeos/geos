@@ -22,6 +22,7 @@
 
 #include <geos/opOverlay.h>
 #include <geos/util.h>
+#include <geos/algorithm/CGAlgorithms.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -376,6 +377,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.30  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

@@ -13,8 +13,9 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
 #include <geos/opOverlay.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/Coordinate.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -24,6 +25,7 @@
 #include <iostream>
 #endif
 
+using namespace geos::geom;
 using namespace std; // for GEOS_DEBUG
 
 namespace geos {
@@ -80,6 +82,9 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.10  2006/03/09 15:58:43  strk
  * Fixed debugging lines
  *

@@ -29,5 +29,8 @@
 #include <geos/io.h>
 #include <geos/unload.h>
 
+/// Basic namespace for all GEOS functionalities.
+namespace geos {
+}
 
 #endif

@@ -57,7 +57,7 @@ public:
 	 * Adds a spatial item with an extent specified by the given Envelope
 	 * to the index
 	 */
-	virtual void insert(const Envelope *itemEnv, void *item)=0;
+	virtual void insert(const geom::Envelope *itemEnv, void *item)=0;
 
 	/**
 	 * Queries the index for all items whose extents intersect the given search Envelope
@@ -67,8 +67,8 @@ public:
 	 * @param searchEnv the envelope to query for
 	 * @return a list of the items found by the query in a newly allocated vector
 	 */
-	//virtual std::vector<void*>* query(const Envelope *searchEnv)=0;
-	virtual void query(const Envelope* searchEnv, std::vector<void*>&)=0;
+	//virtual std::vector<void*>* query(const geom::Envelope *searchEnv)=0;
+	virtual void query(const geom::Envelope* searchEnv, std::vector<void*>&)=0;
 
 	/**
 	 * Queries the index for all items whose extents intersect the given search Envelope
@@ -79,7 +79,7 @@ public:
 	 * @param searchEnv the envelope to query for
 	 * @param visitor a visitor object to apply to the items found
 	 */
-	virtual void query(const Envelope *searchEnv, ItemVisitor& visitor)=0;
+	virtual void query(const geom::Envelope *searchEnv, ItemVisitor& visitor)=0;
 
 	/**
 	 * Removes a single item from the tree.
@@ -88,7 +88,7 @@ public:
 	 * @param item the item to remove
 	 * @return <code>true</code> if the item was found
 	 */
-	virtual bool remove(const Envelope* itemEnv, void* item)=0;
+	virtual bool remove(const geom::Envelope* itemEnv, void* item)=0;
 
 
 };
@@ -100,6 +100,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.7  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

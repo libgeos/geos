@@ -24,13 +24,27 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/util.h>
 #include <string>
+#include <cmath> // for fabs()
+#include <cassert> 
+
+//#include <geos/geosAlgorithm.h>
+//#include <geos/util.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/HCoordinate.h>
+#include <geos/algorithm/NotRepresentableException.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/Envelope.h>
 
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
 #endif
 
 #ifndef COMPUTE_Z
@@ -38,6 +52,8 @@
 #endif // COMPUTE_Z
 
 using namespace std;
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -665,7 +681,8 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 #endif
 
 	} catch (const NotRepresentableException& e) {
-		util::Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e.toString());
+		// Coordinate for intersection is not calculable e.toString()
+		assert(0); 
     	}
 
 	intPt.x+=normPt.x;
@@ -787,6 +804,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.35  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

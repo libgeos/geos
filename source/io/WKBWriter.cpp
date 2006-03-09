@@ -17,6 +17,7 @@
 #include <cassert>
 
 #include <geos/io.h>
+#include <geos/geom.h>
 
 #undef DEBUG_WKB_WRITER 
 

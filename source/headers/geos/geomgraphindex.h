@@ -17,21 +17,34 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_H
 #define GEOS_GEOMGRAPH_INDEX_H
 
-#include <geos/geomgraph.h>
-#include <geos/geom.h>
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
 #include <memory>
 #include <string>
 #include <vector>
 
+//#include <geos/geomgraph.h>
+//#include <geos/geom.h>
+//#include <geos/geosAlgorithm.h>
+#include <geos/platform.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Envelope.h>
+
+// Forward declarations
 namespace geos {
-namespace geomgraph { // geos.geomgraph
+	namespace geom {
+		class CoordinateSequence;
+	}
+	namespace algorithm {
+		class LineIntersector;
+	}
+	namespace geomgraph {
+		class Node;
+		class Edge;
+	}
+}
 
-class Node;
-class Edge;
-
-namespace index { // geos.geomgraph.index
+namespace geos {
+namespace geomgraph { // geos::geomgraph
+namespace index { // geos::geomgraph::index
 
 
 class SegmentIntersector{
@@ -49,7 +62,7 @@ private:
 	bool hasProperInterior;
 
 	// the proper intersection point found
-	Coordinate properIntersectionPoint;
+	geom::Coordinate properIntersectionPoint;
 
 	algorithm::LineIntersector *li;
 
@@ -105,7 +118,7 @@ public:
 	void setBoundaryNodes(std::vector<Node*> *bdyNodes0,
 			std::vector<Node*> *bdyNodes1);
 
-	Coordinate& getProperIntersectionPoint();
+	geom::Coordinate& getProperIntersectionPoint();
 
 	bool hasIntersection();
 
@@ -159,7 +172,7 @@ public:
 	void computeIntersections(SweepLineSegment *ss,SegmentIntersector *si);
 protected:
 	Edge *edge;
-	const CoordinateSequence* pts;
+	const geom::CoordinateSequence* pts;
 	int ptIndex;
 };
 
@@ -209,9 +222,9 @@ class MonotoneChainIndexer{
 public:
 //	public static int[] toIntArray(List list); //Not needed
 	MonotoneChainIndexer(){};
-	void getChainStartIndices(const CoordinateSequence*, std::vector<int>&);
+	void getChainStartIndices(const geom::CoordinateSequence*, std::vector<int>&);
 private:
-	int findChainEnd(const CoordinateSequence* pts,int start);
+	int findChainEnd(const geom::CoordinateSequence* pts,int start);
 };
 
 class MonotoneChainEdge{
@@ -219,7 +232,7 @@ public:
 	//MonotoneChainEdge();
 	~MonotoneChainEdge();
 	MonotoneChainEdge(Edge *newE);
-	const CoordinateSequence* getCoordinates();
+	const geom::CoordinateSequence* getCoordinates();
 	std::vector<int>& getStartIndexes();
 	double getMinX(int chainIndex);
 	double getMaxX(int chainIndex);
@@ -233,13 +246,13 @@ public:
 
 protected:
 	Edge *e;
-	const CoordinateSequence* pts; // cache a reference to the coord array, for efficiency
+	const geom::CoordinateSequence* pts; // cache a reference to the coord array, for efficiency
 	// the lists of start/end indexes of the monotone chains.
 	// Includes the end point of the edge as a sentinel
 	std::vector<int> startIndex;
 	// these envelopes are created once and reused
-	Envelope env1;
-	Envelope env2;
+	geom::Envelope env1;
+	geom::Envelope env2;
 private:
 	void computeIntersectsForChain(int start0, int end0,
 		const MonotoneChainEdge &mce,
@@ -338,6 +351,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.11  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

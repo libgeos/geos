@@ -23,7 +23,7 @@
 #include <geos/geom.h>
 #include <geos/util.h>
 #include <geos/geosAlgorithm.h>
-#include <geos/operation.h>
+//#include <geos/operation.h>
 #include <geos/opRelate.h>
 #include <geos/opValid.h>
 #include <geos/opDistance.h>
@@ -32,8 +32,13 @@
 #include <geos/opPredicate.h>
 #include <geos/io.h>
 #include <geos/version.h>
+#include <geos/geom/GeometryFactory.h>
 
 #define SHORTCIRCUIT_PREDICATES 1
+
+#ifndef USE_INLINE
+# include <geos/geom/Geometry.inl>
+#endif
 
 using namespace std;
 using namespace geos::algorithm;
@@ -42,10 +47,10 @@ using namespace geos::operation::relate;
 using namespace geos::operation::buffer;
 using namespace geos::operation::overlay;
 using namespace geos::operation::distance;
+using namespace geos::operation::predicate;
 
 namespace geos {
-
-using namespace operation::predicate;
+namespace geom { // geos::geom
 
 
 /*
@@ -742,10 +747,14 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 	filter->filter_rw(this);
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.96  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.95  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

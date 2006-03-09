@@ -14,10 +14,21 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
 #include <vector>
 
+//#include <geos/geosAlgorithm.h>
+#include <geos/platform.h>
+#include <geos/indexBintree.h>
+#include <geos/indexChain.h>
+#include <geos/algorithm/MCPointInRing.h>
+#include <geos/algorithm/RobustDeterminant.h>
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Envelope.h>
+
 using namespace std;
+using namespace geos::geom;
 using namespace geos::index::chain;
 using namespace geos::index::bintree;
 
@@ -145,6 +156,9 @@ MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.22  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

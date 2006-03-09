@@ -18,8 +18,12 @@
  *
  **********************************************************************/
 
-#include <geos/opBuffer.h>
 #include <vector>
+
+#include <geos/opBuffer.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/MinimumDiameter.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -313,6 +317,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.28  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

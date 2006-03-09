@@ -29,6 +29,7 @@ using namespace geos::operation;
 #endif
 
 namespace geos {
+namespace geom { // geos::geom
 
 
 /**
@@ -267,10 +268,14 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 }
 
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.28  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

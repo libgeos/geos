@@ -21,9 +21,13 @@
 #include <fstream>
 
 #include <geos/io.h>
+#include <geos/geom.h>
+#include <geos/util/GEOSException.h>
 
 using namespace std;
-using namespace geos;
+using namespace geos::io;
+using namespace geos::geom;
+using namespace geos::util;
 
 int main(int argc, char** argv)
 {
@@ -33,8 +37,8 @@ int main(int argc, char** argv)
 		ifstream in("WKTIn");
 		string instr;
 		string outstr;
-		io::WKTReader *r = new io::WKTReader(new GeometryFactory(new PrecisionModel(),10));
-		io::WKTWriter *w = new io::WKTWriter();
+		WKTReader *r = new WKTReader(new GeometryFactory(new PrecisionModel(),10));
+		WKTWriter *w = new WKTWriter();
 		Geometry *g;
 
 		cout << "Start Testing:" << endl;
@@ -53,7 +57,7 @@ int main(int argc, char** argv)
 		out.close();
 		cout << "End of Testing" << endl;
 
-	} catch (const util::GEOSException& ge) {
+	} catch (const GEOSException& ge) {
 		cout << ge.what() << endl;
 	}
 
@@ -62,6 +66,9 @@ int main(int argc, char** argv)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.4  2006/03/06 19:40:48  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

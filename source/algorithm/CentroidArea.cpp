@@ -16,9 +16,20 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
 #include <typeinfo>
+
+//#include <geos/geosAlgorithm.h>
+//#include <geos/platform.h>
+#include <geos/algorithm/CentroidArea.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -141,6 +152,9 @@ CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.20  2006/03/01 17:16:31  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

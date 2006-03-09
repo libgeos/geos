@@ -13,9 +13,11 @@
  *
  **********************************************************************/
 
-#include <geos/io.h>
 #include <ostream>
 #include <string>
+
+#include <geos/io.h>
+#include <geos/geom.h>
 
 using namespace std;
 

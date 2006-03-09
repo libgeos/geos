@@ -1,0 +1,70 @@
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#ifndef GEOS_GEOM_COORDINATEFILTER_H
+#define GEOS_GEOM_COORDINATEFILTER_H
+
+#include <geos/inline.h>
+
+namespace geos {
+namespace geom { // geos::geom
+
+class Coordinate;
+
+/*
+ * <code>Geometry</code> classes support the concept of applying a
+ * coordinate filter to every coordinate in the <code>Geometry</code>. A
+ * coordinate filter can either record information about each coordinate or
+ * change the coordinate in some way. Coordinate filters implement the
+ * interface <code>CoordinateFilter</code>. (<code>CoordinateFilter</code> is
+ * an example of the Gang-of-Four Visitor pattern). Coordinate filters can be
+ * used to implement such things as coordinate transformations, centroid and
+ * envelope computation, and many other functions.
+ *
+ */
+class CoordinateFilter {
+public:
+   virtual ~CoordinateFilter() {}
+
+   /**
+    * Performs an operation on <code>coord</code>.
+    *
+    * @param  coord  a <code>Coordinate</code> to which the filter is applied.
+    */
+   virtual void filter_rw(Coordinate* coord) const=0;
+
+   /**
+    * Performs an operation with <code>coord</code>.
+    *
+    * @param  coord  a <code>Coordinate</code> to which the filter is applied.
+    */
+   virtual void filter_ro(const Coordinate* coord)=0;
+};
+
+} // namespace geos::geom
+} // namespace geos
+
+//#ifdef USE_INLINE
+//# include "geos/geom/CoordinateFilter.inl"
+//#endif
+
+#endif // ndef GEOS_GEOM_COORDINATEFILTER_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.1  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ **********************************************************************/

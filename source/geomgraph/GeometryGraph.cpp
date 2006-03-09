@@ -14,9 +14,34 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
 #include <vector>
+#include <memory> // auto_ptr
+
+//#include <geos/geomgraph.h>
+//#include <geos/util.h>
+
+#include <geos/algorithm/CGAlgorithms.h>
+
+#include <geos/util/UnsupportedOperationException.h>
+
+#include <geos/geomgraphindex.h> // for Intersectors..
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Position.h>
+
+#include <geos/geom/CoordinateArraySequence.h> 
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Location.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/GeometryCollection.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -25,6 +50,7 @@
 using namespace std;
 using namespace geos::geomgraph::index;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -428,6 +454,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.23  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

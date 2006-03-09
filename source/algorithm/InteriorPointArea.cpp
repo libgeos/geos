@@ -14,12 +14,24 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
 #include <vector>
 #include <typeinfo>
 
+//#include <geos/geosAlgorithm.h>
+//#include <geos/platform.h>
+
+#include <geos/algorithm/InteriorPointArea.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -27,7 +39,7 @@ namespace algorithm { // geos.algorithm
 // file-statics
 namespace {
 
-double avg(double a, double b){return (a+b)/2.0;}
+  double avg(double a, double b){return (a+b)/2.0;}
 
 }
 
@@ -60,14 +72,16 @@ InteriorPointArea::getInteriorPoint(Coordinate& ret) const
 void
 InteriorPointArea::add(const Geometry *geom)
 {
-	if (typeid(*geom)==typeid(Polygon)) {
+	const Polygon *poly = dynamic_cast<const Polygon*>(geom);
+	if ( poly ) {
 		addPolygon(geom);
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
+		return;
+	}
+
+	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
+	if ( gc )
+	{
+		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
 			add(gc->getGeometryN(i));
 		}
 	}
@@ -97,11 +111,9 @@ InteriorPointArea::addPolygon(const Geometry *geometry)
 const Geometry*
 InteriorPointArea::widestGeometry(const Geometry *geometry)
 {
-	if ((typeid(*geometry)==typeid(GeometryCollection)) ||
-				(typeid(*geometry)==typeid(MultiPoint)) ||
-				(typeid(*geometry)==typeid(MultiPolygon)) ||
-				(typeid(*geometry)==typeid(MultiLineString))) {
-		return widestGeometry((GeometryCollection*) geometry);
+	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geometry);
+	if ( gc ) {
+		return widestGeometry(gc);
 	} else {
 		return geometry;
 	}
@@ -150,6 +162,9 @@ InteriorPointArea::horizontalBisector(const Geometry *geometry)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.19  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

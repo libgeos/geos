@@ -14,9 +14,11 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraphindex.h>
 #include <algorithm>
 #include <vector>
+
+#include <geos/geomgraphindex.h>
+#include <geos/geomgraph/Edge.h>
 
 using namespace std;
 
@@ -164,6 +166,9 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.10  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

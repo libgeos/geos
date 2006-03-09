@@ -15,8 +15,24 @@
 
 #include <vector>
 #include <cassert>
-#include <geos/geomUtil.h>
-#include <geos/util.h>
+#include <typeinfo>
+
+//#include <geos/geomUtil.h>
+//#include <geos/util.h> // to be removed when util.h is finished
+#include <geos/geom/util/GeometryEditor.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/util/GeometryEditorOperation.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 using namespace std;
 
@@ -44,8 +60,8 @@ GeometryEditor::GeometryEditor(const GeometryFactory *newFactory){
 
 /**
  * Edit the input {@link Geometry} with the given edit operation.
- * Clients will create subclasses of {@link GeometryEditorOperation} or
- * {@link CoordinateOperation} to perform required modifications.
+ * Clients will create subclasses of GeometryEditorOperation or
+ * CoordinateOperation to perform required modifications.
  *
  * @param geometry the Geometry to edit
  * @param operation the edit operation to carry out
@@ -141,41 +157,15 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 	}
 }
 
-/**
- * Return a newly created geometry 
- */
-Geometry*
-CoordinateOperation::edit(const Geometry *geometry, const GeometryFactory *factory)
-{
-
-	const LinearRing *ring = dynamic_cast<const LinearRing *>(geometry);
-	if (ring) {
-		const CoordinateSequence *coords = ring->getCoordinatesRO();
-		CoordinateSequence *newCoords = edit(coords,geometry);
-		return factory->createLinearRing(newCoords);
-	}
-	const LineString *line = dynamic_cast<const LineString *>(geometry);
-	if (line) {
-		const CoordinateSequence *coords = line->getCoordinatesRO();
-		CoordinateSequence *newCoords = edit(coords,geometry);
-		return factory->createLineString(newCoords);
-	}
-	if (typeid(*geometry)==typeid(Point)) {
-		CoordinateSequence *coords = geometry->getCoordinates();
-		CoordinateSequence *newCoords = edit(coords,geometry);
-		delete coords;
-		return factory->createPoint(newCoords);
-	}
-
-	return geometry->clone();
-}
-
 } // namespace geos.geom.util
 } // namespace geos.geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.15  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

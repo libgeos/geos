@@ -18,11 +18,27 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
-#include <geos/util.h>
 #include <typeinfo>
 #include <algorithm>
+
+//#include <geos/geosAlgorithm.h>
+//#include <geos/util.h>
+//#include <geos/platform.h>
+#include <geos/algorithm/ConvexHull.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+
+#ifndef USE_INLINE
+# include "geos/algorithm/ConvexHull.inl"
+#endif
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -204,7 +220,7 @@ ConvexHull::getConvexHull()
 	unsigned int nInputPts=inputPts.size();
 
 	if (nInputPts==0) // Return an empty geometry
-		return geomFactory->createGeometryCollection(NULL);
+		return geomFactory->createEmptyGeometry();
 
 	if (nInputPts==1) // Return a Point 
 	{
@@ -462,7 +478,9 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 
 	const Coordinate *last = original[npts-1];
 
-	util::Assert::equals(*(original[0]), *last);
+	//util::Assert::equals(*(original[0]), *last);
+	assert(last);
+	assert(original[0]->equals2D(*last));
 
 	const Coordinate *prev = NULL;
 	for (unsigned int i=0; i<npts-1; ++i)
@@ -534,6 +552,9 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.18  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

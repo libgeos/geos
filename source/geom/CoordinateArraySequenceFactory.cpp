@@ -14,10 +14,15 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <stdio.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateArraySequenceFactory.h>
+
+#ifndef USE_INLINE
+# include "geos/geom/CoordinateArraySequenceFactory.inl"
+#endif
 
 namespace geos {
+namespace geom { // geos::geom
 
 static CoordinateArraySequenceFactory defaultCoordinateSequenceFactory;
 
@@ -27,10 +32,14 @@ CoordinateArraySequenceFactory::instance()
 	return &defaultCoordinateSequenceFactory;
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.1  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces

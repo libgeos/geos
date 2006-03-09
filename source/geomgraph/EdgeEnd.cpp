@@ -20,10 +20,16 @@
 #include <string>
 #include <cassert>
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
+//#include <geos/geomgraph.h>
+//#include <geos/util.h>
+#include <geos/geomgraph/EdgeEnd.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Coordinate.h>
 
 //using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -153,6 +159,9 @@ EdgeEnd::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.12  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

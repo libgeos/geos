@@ -14,10 +14,21 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
 #include <typeinfo>
 #include <cassert>
+
+//#include <geos/geosAlgorithm.h>
+//#include <geos/platform.h>
+
+#include <geos/algorithm/InteriorPointPoint.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/CoordinateSequence.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -38,14 +49,16 @@ InteriorPointPoint::InteriorPointPoint(const Geometry *g)
 void
 InteriorPointPoint::add(const Geometry *geom)
 {
-	if (typeid(*geom)==typeid(Point)) {
-		add(geom->getCoordinate());
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint)) ||
-				(typeid(*geom)==typeid(MultiPolygon)) ||
-				(typeid(*geom)==typeid(MultiLineString))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
+	const Point *po = dynamic_cast<const Point*>(geom);
+	if ( po ) {
+		add(po->getCoordinate());
+		return;
+	}
+
+	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
+	if ( gc )
+	{
+		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
 			add(gc->getGeometryN(i));
 		}
 	}
@@ -77,6 +90,9 @@ InteriorPointPoint::getInteriorPoint(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.12  2006/03/01 18:36:57  strk
  * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
  * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.

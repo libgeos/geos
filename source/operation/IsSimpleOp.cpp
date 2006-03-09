@@ -16,11 +16,12 @@
  *
  **********************************************************************/
 
+#include <set>
+
 #include <geos/operation.h>
 #include <geos/geosAlgorithm.h>
 #include <geos/geomgraph.h>
 #include <geos/geomgraphindex.h>
-#include <set>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -194,11 +195,14 @@ EndpointInfo::addEndpoint(bool newIsClosed)
 	isClosed|=newIsClosed;
 }
 
-} // namespace geos.operation
+} // namespace geos::operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.21  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

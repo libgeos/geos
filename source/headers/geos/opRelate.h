@@ -23,6 +23,7 @@
 #include <geos/platform.h>
 #include <geos/operation.h>
 #include <geos/geomgraph.h>
+#include <geos/geomgraph/NodeMap.h>
 #include <geos/geosAlgorithm.h>
 
 namespace geos {
@@ -85,11 +86,11 @@ namespace relate { // geos.operation.relate
  */
 class RelateNode: public geomgraph::Node {
 public:
-	RelateNode(const Coordinate& coord, geomgraph::EdgeEndStar *edges);
+	RelateNode(const geom::Coordinate& coord, geomgraph::EdgeEndStar *edges);
 	virtual ~RelateNode();
-	void updateIMFromEdges(IntersectionMatrix *im);
+	void updateIMFromEdges(geom::IntersectionMatrix *im);
 protected:
-	void computeIM(IntersectionMatrix *im);
+	void computeIM(geom::IntersectionMatrix *im);
 };
 
 /*
@@ -128,7 +129,7 @@ public:
 	std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
 	void insert(geomgraph::EdgeEnd *e);
 	void computeLabel() ; 
-	void updateIM(IntersectionMatrix *im);
+	void updateIM(geom::IntersectionMatrix *im);
 	std::string print();
 protected:
 	std::vector<geomgraph::EdgeEnd*> *edgeEnds;
@@ -150,7 +151,7 @@ public:
 	
 	virtual ~EdgeEndBundleStar();
 	void insert(geomgraph::EdgeEnd *e);
-	void updateIM(IntersectionMatrix *im);
+	void updateIM(geom::IntersectionMatrix *im);
 };
 
 /*
@@ -158,7 +159,7 @@ public:
  */
 class RelateNodeFactory: public geomgraph::NodeFactory {
 public:
-	geomgraph::Node* createNode(const Coordinate &coord) const;
+	geomgraph::Node* createNode(const geom::Coordinate &coord) const;
 	static const geomgraph::NodeFactory &instance();
 private:
 	RelateNodeFactory() {};
@@ -189,7 +190,7 @@ public:
 	RelateNodeGraph();
 	virtual ~RelateNodeGraph();
 //	Iterator getNodeIterator();
-	std::map<Coordinate*,geomgraph::Node*,CoordinateLessThen> &getNodeMap();
+	std::map<geom::Coordinate*,geomgraph::Node*,geom::CoordinateLessThen> &getNodeMap();
 
 	void build(geomgraph::GeometryGraph *geomGraph);
 
@@ -225,7 +226,7 @@ public:
 	//RelateComputer();
 	virtual ~RelateComputer();
 	RelateComputer(std::vector<geomgraph::GeometryGraph*> *newArg);
-	IntersectionMatrix* computeIM();
+	geom::IntersectionMatrix* computeIM();
 private:
 
 	static const algorithm::LineIntersector* li;
@@ -238,26 +239,26 @@ private:
 	geomgraph::NodeMap nodes;
 
 	/// this intersection matrix will hold the results compute for the relate
-	IntersectionMatrix *im;
+	geom::IntersectionMatrix *im;
 
 	std::vector<geomgraph::Edge*> isolatedEdges;
 
 	/// the intersection point found (if any)
-	Coordinate invalidPoint;
+	geom::Coordinate invalidPoint;
 
 	void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*> *ee);
 
 	void computeProperIntersectionIM(geomgraph::index::SegmentIntersector *intersector,
-			IntersectionMatrix *imX);
+			geom::IntersectionMatrix *imX);
 
 	void copyNodesAndLabels(int argIndex);
 	void computeIntersectionNodes(int argIndex);
 	void labelIntersectionNodes(int argIndex);
-	void computeDisjointIM(IntersectionMatrix *imX);
+	void computeDisjointIM(geom::IntersectionMatrix *imX);
 	void labelNodeEdges();
-	void updateIM(IntersectionMatrix *imX);
+	void updateIM(geom::IntersectionMatrix *imX);
 	void labelIsolatedEdges(int thisIndex,int targetIndex);
-	void labelIsolatedEdge(geomgraph::Edge *e,int targetIndex, const Geometry *target);
+	void labelIsolatedEdge(geomgraph::Edge *e,int targetIndex, const geom::Geometry *target);
 	void labelIsolatedNodes();
 	void labelIsolatedNode(geomgraph::Node *n,int targetIndex);
 };
@@ -272,10 +273,10 @@ private:
  */
 class RelateOp: public GeometryGraphOperation {
 public:
-	static IntersectionMatrix* relate(const Geometry *a,const Geometry *b);
-	RelateOp(const Geometry *g0, const Geometry *g1);
+	static geom::IntersectionMatrix* relate(const geom::Geometry *a,const geom::Geometry *b);
+	RelateOp(const geom::Geometry *g0, const geom::Geometry *g1);
 	virtual ~RelateOp();
-	IntersectionMatrix* getIntersectionMatrix();
+	geom::IntersectionMatrix* getIntersectionMatrix();
 private:
 	RelateComputer relateComp;
 };
@@ -288,6 +289,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.9  2006/03/06 21:27:40  strk
  * Cascading fixed after Unload definition moved to geos::io namespace
  *

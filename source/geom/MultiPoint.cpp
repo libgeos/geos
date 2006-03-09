@@ -14,15 +14,21 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/operation.h>
 #include <vector>
+
+//#include <geos/geom.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/GeometryFactory.h>
+//#include <geos/operation.h>
+#include <geos/operation/IsSimpleOp.h>
+#include <geos/geom/Dimension.h>
 
 using namespace std;
 
-using namespace geos::operation;
+//using namespace geos::operation;
 
 namespace geos {
+namespace geom { // geos::geom
 
 /**
 * Constructs a <code>MultiPoint</code>.
@@ -59,7 +65,7 @@ Geometry* MultiPoint::getBoundary() const {
 }
 
 bool MultiPoint::isSimple() const {
-	IsSimpleOp iso;
+	operation::IsSimpleOp iso;
 	return iso.isSimple(this);
 	
 	//Geometry *in = toInternalGeometry(this);
@@ -87,10 +93,14 @@ MultiPoint::getGeometryTypeId() const {
 	return GEOS_MULTIPOINT;
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.30  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

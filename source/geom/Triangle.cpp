@@ -16,6 +16,7 @@
 #include <geos/geom.h>
 
 namespace geos {
+namespace geom { // geos::geom
 
 
 void
@@ -32,10 +33,14 @@ Triangle::inCentre(Coordinate& result)
 	result = Coordinate(inCentreX, inCentreY);
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.4  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder

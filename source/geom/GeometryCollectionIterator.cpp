@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.13  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -33,6 +36,7 @@
 #include <typeinfo>
 
 namespace geos {
+namespace geom { // geos::geom
 
 GeometryCollectionIterator::GeometryCollectionIterator(){
 	parent=NULL;
@@ -117,5 +121,7 @@ void GeometryCollectionIterator::remove() {
 GeometryCollectionIterator::~GeometryCollectionIterator(){
 	delete subcollectionIterator;
 }
+
+} // namespace geos::geom
 }
 

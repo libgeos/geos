@@ -18,9 +18,14 @@
 #include <sstream>
 #include <string>
 
+#ifndef USE_INLINE
+# include <geos/geom/PrecisionModel.inl>
+#endif
+
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 const double PrecisionModel::maximumPreciseValue=9007199254740992.0;
 
@@ -29,7 +34,8 @@ const double PrecisionModel::maximumPreciseValue=9007199254740992.0;
 /**
 * Rounds an numeric value to the PrecisionModel grid.
 */
-double PrecisionModel::makePrecise(double val) const {
+double
+PrecisionModel::makePrecise(double val) const {
 	if (modelType==FLOATING_SINGLE) {
 		float floatSingleVal = (float) val;
 		return (double) floatSingleVal;
@@ -261,7 +267,7 @@ bool operator==(const PrecisionModel& a, const PrecisionModel& b) {
  *  Compares this {@link PrecisionModel} object with the specified object for order.
  * A PrecisionModel is greater than another if it provides greater precision.
  * The comparison is based on the value returned by the
- * {@link getMaximumSignificantDigits) method.
+ * getMaximumSignificantDigits method.
  * This comparison is not strictly accurate when comparing floating precision models
  * to fixed models; however, it is correct when both models are either floating or fixed.
  *
@@ -288,10 +294,15 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 	//Assert::shouldNeverReachHere("Unknown Precision Model type encountered");
 	//return 0;
 }
-}
+
+} // namespace geos::geom
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.37  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

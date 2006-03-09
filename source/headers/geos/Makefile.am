@@ -1,3 +1,11 @@
+SUBDIRS = \
+	algorithm \
+	geomgraph \
+	geom \
+	noding \
+	operation \
+	util 
+
 #geosdir = $(prefix)/include/geos
 geosdir = $(includedir)/geos
 

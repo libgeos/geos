@@ -14,12 +14,16 @@
  **********************************************************************/
 
 #include <sstream>
-#include <geos/geom.h>
-#include <geos/util.h>
+//#include <geos/geom.h>
+//#include <geos/util.h>
+
+#include <geos/geom/Dimension.h>
+#include <geos/util/IllegalArgumentException.h>
 
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 /**
  *  Converts the dimension value to a dimension symbol, for example, <code>TRUE => 'T'</code>.
@@ -81,10 +85,14 @@ int Dimension::toDimensionValue(char dimensionSymbol) {
 	}
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.13  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

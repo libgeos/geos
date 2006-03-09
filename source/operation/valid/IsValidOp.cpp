@@ -18,10 +18,13 @@
  *
  **********************************************************************/
 
-#include <geos/opValid.h>
 #include <typeinfo>
 #include <set>
-#include <geos/util.h>
+
+#include <geos/opValid.h>
+//#include <geos/util.h>
+#include <geos/util/UnsupportedOperationException.h>
+#include <geos/geomgraphindex.h> // for geomgraph::index::SegmentIntersector
 
 using namespace std;
 using namespace geos::algorithm;
@@ -622,6 +625,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.46  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.45  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

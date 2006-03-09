@@ -14,8 +14,20 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
 #include <typeinfo>
+#include <cassert>
+
+//#include <geos/geosAlgorithm.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/SimplePointInAreaLocator.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Location.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LineString.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -85,6 +97,9 @@ SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p, const Poly
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/09 16:46:46  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.19  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

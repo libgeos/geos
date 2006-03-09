@@ -18,10 +18,21 @@
 #include <cassert>
 #include <string>
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
+//#include <geos/geomgraph.h>
+//#include <geos/util.h>
+#include <geos/util/TopologyException.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geom/Location.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Position.h>
 
 //using namespace std;
+using namespace geos::geom;
+
+#ifndef USE_INLINE
+# include "geos/geomgraph/DirectedEdge.inl"
+#endif
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -247,6 +258,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.11  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

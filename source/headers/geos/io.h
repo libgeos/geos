@@ -25,9 +25,30 @@
 #include <sstream>
 #include <string>
 
+// Forward declarations
+namespace geos {
+	namespace geom { 
+		class Coordinate;
+		class CoordinateSequence;
+		class Geometry;
+		class Point;
+		class LinearRing;
+		class LineString;
+		class Polygon;
+		class MultiPoint;
+		class MultiLineString;
+		class MultiPolygon;
+		class GeometryCollection;
+		class GeometryFactory;
+		class PrecisionModel;
+	}
+}
+
+// this headers needs to be splitted, anyway
+using namespace geos::geom;
+
 namespace geos {
 
-class Geometry;
 
 /// Contains the interfaces for converting JTS objects to and from other formats.
 //
@@ -120,14 +141,14 @@ public:
 	 * so be sure you'll keep the factory alive for the
 	 * whole WKTReader and created Geometry life.
 	 */
-	WKTReader(const GeometryFactory *gf);
+	WKTReader(const geom::GeometryFactory *gf);
 
 	~WKTReader() {};
 
 	/// Parse a WKT string returning a Geometry
 	Geometry* read(const std::string &wellKnownText);
 
-//	Geometry* read(Reader reader);	//Not implemented yet
+//	Geometry* read(Reader& reader);	//Not implemented yet
 
 protected:
 	CoordinateSequence* getCoordinates(StringTokenizer *tokenizer);
@@ -545,6 +566,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.25  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

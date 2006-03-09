@@ -19,7 +19,8 @@
 
 #include <geos/platform.h>
 #include <geos/spatialIndex.h>
-#include <geos/geom.h>
+//#include <geos/geom.h>
+#include <geos/geom/Envelope.h>
 #include <algorithm>
 #include <memory>
 #include <vector>
@@ -420,33 +421,33 @@ public:
 
 	STRtree(int nodeCapacity=10);
 
-	void insert(const Envelope *itemEnv,void* item);
+	void insert(const geom::Envelope *itemEnv,void* item);
 
-	static double centreX(Envelope *e);
+	static double centreX(geom::Envelope *e);
 
 	static double avg(double a, double b) {
 		return (a + b) / 2.0;
 	}
 
-	static double centreY(Envelope *e) {
+	static double centreY(geom::Envelope *e) {
 		return STRtree::avg(e->getMinY(), e->getMaxY());
 	}
 
 #if 0
-	std::vector<void*>* query(const Envelope *searchEnv) {
+	std::vector<void*>* query(const geom::Envelope *searchEnv) {
 		return AbstractSTRtree::query(searchEnv);
 	}
 #endif
 
-	void query(const Envelope *searchEnv, std::vector<void*>& matches) {
+	void query(const geom::Envelope *searchEnv, std::vector<void*>& matches) {
 		AbstractSTRtree::query(searchEnv, matches);
 	}
 
-	void query(const Envelope *searchEnv, ItemVisitor& visitor) {
+	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) {
 		return AbstractSTRtree::query(searchEnv, visitor);
 	}
 
-	bool remove(const Envelope *itemEnv, void* item) {
+	bool remove(const geom::Envelope *itemEnv, void* item) {
 		return AbstractSTRtree::remove(itemEnv, item);
 	}
 };
@@ -460,6 +461,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.14  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -17,9 +17,14 @@
 #include <sstream>
 #include <string>
 
+#ifndef USE_INLINE
+# include <geos/geom/Coordinate.inl>
+#endif
+
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 	Coordinate Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
 
@@ -43,31 +48,15 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c) {
 	return os;
 }
 
-#ifdef PROFILE_COORDINATE_COPIES
 
-Coordinate::Coordinate(const Coordinate& c)
-{
-	x=c.x;
-	y=c.y;
-	z=c.z;
-}
-
-Coordinate &
-Coordinate::operator=(const Coordinate &c)
-{
-	//if ( this == &c ) return *this;
-	x=c.x;
-	y=c.y;
-	z=c.z;
-	return *this;
-}
-
-#endif // PROFILE_COORDINATE_COPIES
-
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.28  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

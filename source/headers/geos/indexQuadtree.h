@@ -17,18 +17,32 @@
 #ifndef GEOS_INDEXQUADTREE_H
 #define GEOS_INDEXQUADTREE_H
 
-#include <geos/platform.h>
-#include <geos/geom.h>
-#include <geos/spatialIndex.h>
 #include <memory>
 #include <string>
 #include <vector>
+
+#include <geos/platform.h>
+//#include <geos/geom.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/spatialIndex.h>
 
 #if __STDC_IEC_559__
 #define ASSUME_IEEE_DOUBLE 1
 #else
 #define ASSUME_IEEE_DOUBLE 0
 #endif
+
+// Forward declarations
+namespace geos {
+	namespace geom {
+		//class CoordinateSequence;
+		class Envelope;
+	}
+	namespace geomgraph {
+		class Node;
+		class Edge;
+	}
+}
 
 
 namespace geos {
@@ -97,21 +111,21 @@ private:
  */
 class QuadTreeKey {
 public:
-	static int computeQuadLevel(Envelope *env);
-	QuadTreeKey(Envelope *itemEnv);
+	static int computeQuadLevel(geom::Envelope *env);
+	QuadTreeKey(geom::Envelope *itemEnv);
 	virtual ~QuadTreeKey();
-	Coordinate* getPoint();
+	geom::Coordinate* getPoint();
 	int getLevel();
-	Envelope* getEnvelope();
-	Coordinate* getCentre();
-	void computeKey(Envelope *itemEnv);
+	geom::Envelope* getEnvelope();
+	geom::Coordinate* getCentre();
+	void computeKey(geom::Envelope *itemEnv);
 private:	
 	// the fields which make up the key
-	Coordinate *pt;
+	geom::Coordinate *pt;
 	int level;
 	// auxiliary data which is derived from the key for use in computation
-	Envelope *env;
-	void computeKey(int level,Envelope *itemEnv);
+	geom::Envelope *env;
+	void computeKey(int level,geom::Envelope *itemEnv);
 };
 
 class QuadTreeNode;
@@ -126,22 +140,22 @@ class QuadTreeNode;
 class QuadTreeNodeBase {
 
 private:
-	void visitItems(const Envelope* searchEnv, ItemVisitor& visitor);
+	void visitItems(const geom::Envelope* searchEnv, ItemVisitor& visitor);
 	
 public:
-	static int getSubnodeIndex(const Envelope *env, const Coordinate& centre);
+	static int getSubnodeIndex(const geom::Envelope *env, const geom::Coordinate& centre);
 	QuadTreeNodeBase();
 	virtual ~QuadTreeNodeBase();
 	virtual std::vector<void*>* getItems();
 	virtual void add(void* item);
 	virtual std::vector<void*>* addAllItems(std::vector<void*> *resultItems);
-	virtual void addAllItemsFromOverlapping(const Envelope *searchEnv,std::vector<void*> *resultItems);
+	virtual void addAllItemsFromOverlapping(const geom::Envelope *searchEnv,std::vector<void*> *resultItems);
 	virtual int depth();
 	virtual int size();
 	virtual int nodeCount();
 	virtual std::string toString() const;
 
-	virtual void visit(const Envelope* searchEnv, ItemVisitor& visitor);
+	virtual void visit(const geom::Envelope* searchEnv, ItemVisitor& visitor);
 
 	/**
 	 * Removes a single item from this subtree.
@@ -150,7 +164,7 @@ public:
 	 * @param item the item to remove
 	 * @return <code>true</code> if the item was found and removed
 	 */
-	bool remove(const Envelope* itemEnv, void* item);
+	bool remove(const geom::Envelope* itemEnv, void* item);
  
 	bool hasItems() const { return ! items->empty(); }
 
@@ -176,7 +190,7 @@ protected:
 	 * </pre>
 	 */
 	QuadTreeNode* subnode[4];
-	virtual bool isSearchMatch(const Envelope *searchEnv)=0;
+	virtual bool isSearchMatch(const geom::Envelope *searchEnv)=0;
 };
 
 /**
@@ -193,9 +207,9 @@ class QuadTreeNode: public QuadTreeNodeBase {
 
 private:
 
-	Envelope *env;
+	geom::Envelope *env;
 
-	Coordinate centre;
+	geom::Coordinate centre;
 
 	int level;
 
@@ -205,18 +219,18 @@ private:
 
 protected:
 
-	bool isSearchMatch(const Envelope *searchEnv) {
+	bool isSearchMatch(const geom::Envelope *searchEnv) {
 		return env->intersects(searchEnv);
 	}
 
 public:
 
-	static QuadTreeNode* createNode(Envelope *env);
+	static QuadTreeNode* createNode(geom::Envelope *env);
 
-	static QuadTreeNode* createExpanded(QuadTreeNode *node, const Envelope *addEnv);
+	static QuadTreeNode* createExpanded(QuadTreeNode *node, const geom::Envelope *addEnv);
 
 	// Takes ownership of envelope
-	QuadTreeNode(Envelope *nenv, int nlevel)
+	QuadTreeNode(geom::Envelope *nenv, int nlevel)
 		:
 		env(nenv),
 		centre((nenv->getMinX()+nenv->getMaxX())/2,
@@ -227,20 +241,20 @@ public:
 
 	virtual ~QuadTreeNode() { delete env; }
 
-	Envelope* getEnvelope() { return env; }
+	geom::Envelope* getEnvelope() { return env; }
 
 	/**
 	 * Returns the subquad containing the envelope.
 	 * Creates the subquad if
 	 * it does not already exist.
 	 */
-	QuadTreeNode* getNode(const Envelope *searchEnv);
+	QuadTreeNode* getNode(const geom::Envelope *searchEnv);
 
 	/**
 	 * Returns the smallest <i>existing</i>
 	 * node containing the envelope.
 	 */
-	QuadTreeNodeBase* find(const Envelope *searchEnv);
+	QuadTreeNodeBase* find(const geom::Envelope *searchEnv);
 
 	void insertNode(QuadTreeNode *node);
 
@@ -260,15 +274,15 @@ friend class Unload;
 
 private:
 
-	//static Coordinate *origin;
-	static Coordinate origin;
+	//static geom::Coordinate *origin;
+	static geom::Coordinate origin;
 
 	/**
 	 * insert an item which is known to be contained in the tree rooted at
 	 * the given QuadNode root.  Lower levels of the tree will be created
 	 * if necessary to hold the item.
 	 */
-	void insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void* item);
+	void insertContained(QuadTreeNode *tree, const geom::Envelope *itemEnv, void* item);
 
 public:
 
@@ -279,11 +293,11 @@ public:
 	/**
 	 * Insert an item into the quadtree this is the root of.
 	 */
-	void insert(const Envelope *itemEnv, void* item);
+	void insert(const geom::Envelope *itemEnv, void* item);
 
 protected:
 
-	bool isSearchMatch(const Envelope *searchEnv) { return true; }
+	bool isSearchMatch(const geom::Envelope *searchEnv) { return true; }
 
 };
 
@@ -313,8 +327,8 @@ protected:
  */
 class Quadtree: public SpatialIndex {
 private:
-	std::vector<Envelope *>newEnvelopes;
-	void collectStats(const Envelope *itemEnv);
+	std::vector<geom::Envelope *>newEnvelopes;
+	void collectStats(const geom::Envelope *itemEnv);
 	QuadTreeRoot *root;
 
 	/**
@@ -337,7 +351,7 @@ public:
 	 * Use the current minExtent to pad the envelope, if necessary.
 	 * Can return a new Envelope or the given one (casted to non-const).
 	 */
-	static Envelope* ensureExtent(const Envelope *itemEnv, double minExtent);
+	static geom::Envelope* ensureExtent(const geom::Envelope *itemEnv, double minExtent);
 
 	/**
 	 * \brief
@@ -357,22 +371,22 @@ public:
 	/// Returns the number of items in the tree.
 	int size();
 	
-	void insert(const Envelope *itemEnv, void *item);
+	void insert(const geom::Envelope *itemEnv, void *item);
 
-	void query(const Envelope *searchEnv, std::vector<void*>& ret);
+	void query(const geom::Envelope *searchEnv, std::vector<void*>& ret);
 #if 0
-	std::vector<void*>* query(const Envelope *searchEnv) {
+	std::vector<void*>* query(const geom::Envelope *searchEnv) {
 		vector<void*> *foundItems=new vector<void*>();
 		query(searchEnv, *foundItems);
 		return foundItems;
 	}
 #endif
 
-	void query(const Envelope *searchEnv, ItemVisitor& visitor) {
+	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) {
 		root->visit(searchEnv, visitor);
 	}
 
-	bool remove(const Envelope* itemEnv, void* item);
+	bool remove(const geom::Envelope* itemEnv, void* item);
 
 	/// Return a list of all items in the Quadtree
 	std::vector<void*>* queryAll();
@@ -389,6 +403,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.13  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

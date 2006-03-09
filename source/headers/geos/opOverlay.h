@@ -17,15 +17,25 @@
 #ifndef GEOS_OPOVERLAY_H
 #define GEOS_OPOVERLAY_H
 
-#include <geos/platform.h>
-#include <geos/operation.h>
-#include <geos/geomgraph.h>
-#include <geos/geosAlgorithm.h>
-#include <map>
-#include <memory>
-#include <set>
 #include <string>
 #include <vector>
+
+#include <geos/platform.h>
+//#include <geos/operation.h>
+#include <geos/geomgraph.h>
+//#include <geos/geosAlgorithm.h>
+
+#include <geos/operation/GeometryGraphOperation.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/PlanarGraph.h>
+#include <geos/geomgraph/NodeFactory.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeRing.h> // for MaximalEdgeRing inheritance
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/EdgeList.h>
+#include <geos/algorithm/PointLocator.h>
+#include <geos/algorithm/LineIntersector.h>
 
 namespace geos {
 namespace operation { // geos.operation
@@ -72,7 +82,7 @@ class ElevationMatrixCell {
 public:
 	ElevationMatrixCell();
 	~ElevationMatrixCell();
-	void add(const Coordinate &c);
+	void add(const geom::Coordinate &c);
 	void add(double z);
 	double getAvg(void) const;
 	double getTotal(void) const;
@@ -88,13 +98,13 @@ private:
  * values to the matrix.
  * filter_rw is used to actually elevate Geometries.
  */
-class ElevationMatrixFilter: public CoordinateFilter
+class ElevationMatrixFilter: public geom::CoordinateFilter
 {
 public:
 	ElevationMatrixFilter(ElevationMatrix &em);
 	~ElevationMatrixFilter();
-	void filter_rw(Coordinate *c) const;
-	void filter_ro(const Coordinate *c);
+	void filter_rw(geom::Coordinate *c) const;
+	void filter_ro(const geom::Coordinate *c);
 private:
 	ElevationMatrix &em;
 	double avgElevation;
@@ -106,21 +116,21 @@ private:
 class ElevationMatrix {
 friend class ElevationMatrixFilter;
 public:
-	ElevationMatrix(const Envelope &extent, unsigned int rows,
+	ElevationMatrix(const geom::Envelope &extent, unsigned int rows,
 		unsigned int cols);
 	~ElevationMatrix();
-	void add(const Geometry *geom);
-	void elevate(Geometry *geom) const;
+	void add(const geom::Geometry *geom);
+	void elevate(geom::Geometry *geom) const;
 	// set Z value for each cell w/out one
 	double getAvgElevation() const;
-	ElevationMatrixCell &getCell(const Coordinate &c);
-	const ElevationMatrixCell &getCell(const Coordinate &c) const;
+	ElevationMatrixCell &getCell(const geom::Coordinate &c);
+	const ElevationMatrixCell &getCell(const geom::Coordinate &c) const;
 	std::string print() const;
 private:
 	ElevationMatrixFilter filter;
-	//void add(const CoordinateSequence *cs);
-	void add(const Coordinate &c);
-	Envelope env;
+	//void add(const geom::CoordinateSequence *cs);
+	void add(const geom::Coordinate &c);
+	geom::Envelope env;
 	unsigned int cols;
 	unsigned int rows;
 	double cellwidth;
@@ -151,9 +161,11 @@ public:
 		SYMDIFFERENCE
 	};
 
-	static Geometry* overlayOp(const Geometry *geom0, const Geometry *geom1,int opCode); //throw(TopologyException *);
+	static geom::Geometry* overlayOp(const geom::Geometry *geom0,
+			const geom::Geometry *geom1,
+			int opCode); //throw(TopologyException *);
 
-	static bool isResultOfOp(geomgraph::Label *label,int opCode);
+	static bool isResultOfOp(geomgraph::Label *label, int opCode);
 
 	/// This method will handle arguments of Location.NULL correctly
 	//
@@ -166,11 +178,11 @@ public:
 	/// Ownership of passed args will remain to caller, and
 	/// the OverlayOp won't change them in any way.
 	///
-	OverlayOp(const Geometry *g0, const Geometry *g1);
+	OverlayOp(const geom::Geometry *g0, const geom::Geometry *g1);
 
-	virtual ~OverlayOp();
+	virtual ~OverlayOp(); // FIXME: virtual ?
 
-	Geometry* getResultGeometry(int funcCode);
+	geom::Geometry* getResultGeometry(int funcCode);
 		// throw(TopologyException *);
 
 	geomgraph::PlanarGraph& getGraph() { return graph; }
@@ -182,7 +194,7 @@ public:
 	 * @return true if the coord point is covered by a result Line
 	 * or Area geometry
 	 */
-	bool isCoveredByLA(const Coordinate& coord);
+	bool isCoveredByLA(const geom::Coordinate& coord);
 
 	/** \brief
 	 * This method is used to decide if an L edge should be included
@@ -190,7 +202,7 @@ public:
 	 *
 	 * @return true if the coord point is covered by a result Area geometry
 	 */
-	bool isCoveredByA(const Coordinate& coord);
+	bool isCoveredByA(const geom::Coordinate& coord);
 
 	/*
 	 * @return true if the coord is located in the interior or boundary of
@@ -213,19 +225,19 @@ private:
 
 	algorithm::PointLocator ptLocator;
 
-	const GeometryFactory *geomFact;
+	const geom::GeometryFactory *geomFact;
 
-	Geometry *resultGeom;
+	geom::Geometry *resultGeom;
 
 	geomgraph::PlanarGraph graph;
 
 	geomgraph::EdgeList edgeList;
 
-	std::vector<Polygon*> *resultPolyList;
+	std::vector<geom::Polygon*> *resultPolyList;
 
-	std::vector<LineString*> *resultLineList;
+	std::vector<geom::LineString*> *resultLineList;
 
-	std::vector<Point*> *resultPointList;
+	std::vector<geom::Point*> *resultPointList;
 
 	void computeOverlay(int opCode); // throw(TopologyException *);
 
@@ -334,27 +346,31 @@ private:
 	 * @return true if the coord is located in the interior or boundary of
 	 * a geometry in the list.
 	 */
-	bool isCovered(const Coordinate& coord,std::vector<Geometry*> *geomList);
+	bool isCovered(const geom::Coordinate& coord,
+			std::vector<geom::Geometry*> *geomList);
 
 	/*
 	 * @return true if the coord is located in the interior or boundary of
 	 * a geometry in the list.
 	 */
-	bool isCovered(const Coordinate& coord,std::vector<Polygon*> *geomList);
+	bool isCovered(const geom::Coordinate& coord,
+			std::vector<geom::Polygon*> *geomList);
 
 	/*
 	 * @return true if the coord is located in the interior or boundary of
 	 * a geometry in the list.
 	 */
-	bool isCovered(const Coordinate& coord,std::vector<LineString*> *geomList);
+	bool isCovered(const geom::Coordinate& coord,
+			std::vector<geom::LineString*> *geomList);
 
 	/*
 	 * Build a Geometry containing all Geometries in the given vectors.
 	 * Takes element's ownership, vector control is left to caller. 
 	 */
-	Geometry* computeGeometry(std::vector<Point*> *nResultPointList,
-                              std::vector<LineString*> *nResultLineList,
-                              std::vector<Polygon*> *nResultPolyList);
+	geom::Geometry* computeGeometry(
+				std::vector<geom::Point*> *nResultPointList,
+                              std::vector<geom::LineString*> *nResultLineList,
+                              std::vector<geom::Polygon*> *nResultPolyList);
 
 	/* Caches for memory management */
 	std::vector<geomgraph::Edge *>dupEdges;
@@ -363,14 +379,14 @@ private:
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given Polygon it is on.
 	 */
-	int mergeZ(geomgraph::Node *n, const Polygon *poly) const;
+	int mergeZ(geomgraph::Node *n, const geom::Polygon *poly) const;
 
 	/*
 	 * Merge Z values of node with those of the segment or vertex in
 	 * the given LineString it is on.
 	 * @returns 1 if an intersection is found, 0 otherwise.
 	 */
-	int mergeZ(geomgraph::Node *n, const LineString *line) const;
+	int mergeZ(geomgraph::Node *n, const geom::LineString *line) const;
 
 	/*
 	 * Average Z of input geometries
@@ -379,7 +395,7 @@ private:
 	bool avgzcomputed[2];
 
 	double getAverageZ(int targetIndex);
-	static double getAverageZ(const Polygon *poly);
+	static double getAverageZ(const geom::Polygon *poly);
 
 	ElevationMatrix *elevationMatrix;
 
@@ -395,14 +411,19 @@ private:
 class MinimalEdgeRing: public geomgraph::EdgeRing {
 public:
 	// CGAlgorithms argument obsoleted
-	MinimalEdgeRing(geomgraph::DirectedEdge *start, const GeometryFactory *geometryFactory);
+
+	MinimalEdgeRing(geomgraph::DirectedEdge *start, const geom::GeometryFactory *geometryFactory);
+
 	//virtual ~MinimalEdgeRing();
+
 	inline geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de);
-	inline void setEdgeRing(geomgraph::DirectedEdge *de,geomgraph::EdgeRing *er);
+
+	inline void setEdgeRing(geomgraph::DirectedEdge *de,
+			geomgraph::EdgeRing *er);
 };
 
 // INLINES
-void MinimalEdgeRing::setEdgeRing(geomgraph::DirectedEdge *de,geomgraph::EdgeRing *er) {
+void MinimalEdgeRing::setEdgeRing(geomgraph::DirectedEdge *de, geomgraph::EdgeRing *er) {
 	de->setMinEdgeRing(er);
 }
 geomgraph::DirectedEdge* MinimalEdgeRing::getNext(geomgraph::DirectedEdge *de) {
@@ -432,12 +453,16 @@ class MaximalEdgeRing: public geomgraph::EdgeRing {
 public:
 
 	// CGAlgorithms arg is obsoleted
-	MaximalEdgeRing(geomgraph::DirectedEdge *start, const GeometryFactory *geometryFactory);
+	MaximalEdgeRing(geomgraph::DirectedEdge *start, const geom::GeometryFactory *geometryFactory);
 
 	virtual ~MaximalEdgeRing();
+
 	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de);
-	void setEdgeRing(geomgraph::DirectedEdge* de,geomgraph::EdgeRing* er);
+
+	void setEdgeRing(geomgraph::DirectedEdge* de, geomgraph::EdgeRing* er);
+
 	std::vector<MinimalEdgeRing*>* buildMinimalRings();
+
 	void linkDirectedEdgesForMinimalEdgeRings();
 };
 
@@ -448,7 +473,7 @@ class PointBuilder {
 private:
 
 	OverlayOp *op;
-	const GeometryFactory *geometryFactory;
+	const geom::GeometryFactory *geometryFactory;
 	void extractNonCoveredResultNodes(int opCode);
 
 	/*
@@ -467,24 +492,24 @@ private:
 	/// Allocated a construction time, but not owned.
 	/// Make sure you take ownership of it, getting 
 	/// it from build()
-	std::vector<Point*> *resultPointList;
+	std::vector<geom::Point*> *resultPointList;
 
 public:
 
 	PointBuilder(OverlayOp *newOp,
-			const GeometryFactory *newGeometryFactory,
+			const geom::GeometryFactory *newGeometryFactory,
 			algorithm::PointLocator *newPtLocator=NULL)
 		:
 		op(newOp),
 		geometryFactory(newGeometryFactory),
-		resultPointList(new std::vector<Point *>())
+		resultPointList(new std::vector<geom::Point *>())
 	{}
 
 	/*
 	 * @return a list of the Points in the result of the specified
 	 * overlay operation
 	 */
-	std::vector<Point*>* build(int opCode);
+	std::vector<geom::Point*>* build(int opCode);
 };
 
 /*
@@ -494,13 +519,13 @@ public:
  */
 class LineBuilder {
 public:
-	LineBuilder(OverlayOp *newOp, const GeometryFactory *newGeometryFactory, algorithm::PointLocator *newPtLocator);
+	LineBuilder(OverlayOp *newOp, const geom::GeometryFactory *newGeometryFactory, algorithm::PointLocator *newPtLocator);
 	~LineBuilder();
 
 	/**
 	 * @return a list of the LineStrings in the result of the specified overlay operation
 	 */
-	std::vector<LineString*>* build(int opCode);
+	std::vector<geom::LineString*>* build(int opCode);
 
 	/**
 	 * Find and mark L edges which are "covered" by the result area (if any).
@@ -525,10 +550,10 @@ public:
 
 private:
 	OverlayOp *op;
-	const GeometryFactory *geometryFactory;
+	const geom::GeometryFactory *geometryFactory;
 	algorithm::PointLocator *ptLocator;
 	std::vector<geomgraph::Edge*> lineEdgesList;
-	std::vector<LineString*>* resultLineList;
+	std::vector<geom::LineString*>* resultLineList;
 	void findCoveredLineEdges();
 	void collectLines(int opCode);
 	void buildLines(int opCode);
@@ -545,7 +570,7 @@ private:
 	 * The Z value is interpolated between 3d vertexes and copied
 	 * from a 3d vertex to the end.
 	 */
-	void propagateZ(CoordinateSequence *cs);
+	void propagateZ(geom::CoordinateSequence *cs);
 };
 
 /*
@@ -558,25 +583,32 @@ class PolygonBuilder {
 public:
 
 	// CGAlgorithms argument is unused
-	PolygonBuilder(const GeometryFactory *newGeometryFactory);
+	PolygonBuilder(const geom::GeometryFactory *newGeometryFactory);
 
 	~PolygonBuilder();
+
 	/**
-	* Add a complete graph.
-	* The graph is assumed to contain one or more polygons,
-	* possibly with holes.
-	*/
+	 * Add a complete graph.
+	 * The graph is assumed to contain one or more polygons,
+	 * possibly with holes.
+	 */
 	void add(geomgraph::PlanarGraph *graph); // throw(TopologyException *);
+
 	/**
-	* Add a set of edges and nodes, which form a graph.
-	* The graph is assumed to contain one or more polygons,
-	* possibly with holes.
-	*/
+	 * Add a set of edges and nodes, which form a graph.
+	 * The graph is assumed to contain one or more polygons,
+	 * possibly with holes.
+	 */
 	void add(std::vector<geomgraph::DirectedEdge*> *dirEdges,std::vector<geomgraph::Node*> *nodes); // throw(TopologyException *);
-  	std::vector<Geometry*>* getPolygons();
-	bool containsPoint(const Coordinate& p);
+
+  	std::vector<geom::Geometry*>* getPolygons();
+
+	bool containsPoint(const geom::Coordinate& p);
+
 private:
-	const GeometryFactory *geometryFactory;
+
+	const geom::GeometryFactory *geometryFactory;
+
 	std::vector<geomgraph::EdgeRing*> shellList;
 
 	/**
@@ -662,7 +694,7 @@ private:
 	geomgraph::EdgeRing* findEdgeRingContaining(geomgraph::EdgeRing *testEr,
 		std::vector<geomgraph::EdgeRing*> *newShellList);
 
-	std::vector<Geometry*>* computePolygons(std::vector<geomgraph::EdgeRing*> *newShellList);
+	std::vector<geom::Geometry*>* computePolygons(std::vector<geomgraph::EdgeRing*> *newShellList);
 
 	/**
 	 * Checks the current set of shells (with their associated holes) to
@@ -679,7 +711,7 @@ private:
  */
 class OverlayNodeFactory: public geomgraph::NodeFactory {
 public:
-	geomgraph::Node* createNode(const Coordinate &coord) const;
+	geomgraph::Node* createNode(const geom::Coordinate &coord) const;
 	static const geomgraph::NodeFactory &instance();
 };
 
@@ -717,6 +749,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.21  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -169,6 +169,13 @@ AC_OUTPUT([
 	source/geomgraph/index/Makefile
 	source/headers/Makefile
 	source/headers/geos/Makefile
+	source/headers/geos/geom/Makefile
+	source/headers/geos/geom/util/Makefile
+	source/headers/geos/geomgraph/Makefile
+	source/headers/geos/noding/Makefile
+	source/headers/geos/operation/Makefile
+	source/headers/geos/util/Makefile
+	source/headers/geos/algorithm/Makefile
 	source/headers/geos/version.h
 	source/index/Makefile
 	source/index/bintree/Makefile

@@ -22,6 +22,7 @@
 
 using namespace std;
 using namespace geos::index::strtree;
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -112,6 +113,9 @@ SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/09 16:46:46  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.15  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

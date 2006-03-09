@@ -22,6 +22,7 @@
 
 #include <geos/io.h>
 #include <geos/util.h>
+#include <geos/geom.h>
 
 #define PRINT_Z 0
 
@@ -374,6 +375,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.27  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

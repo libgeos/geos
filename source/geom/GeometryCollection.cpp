@@ -14,12 +14,18 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/util.h>
-#include <geos/geosAlgorithm.h>
 #include <algorithm>
 #include <vector>
-#include <typeinfo>
+
+#include <geos/geom/GeometryCollection.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequenceFactory.h>
+#include <geos/geom/Dimension.h>
+#include <geos/geom/GeometryFilter.h>
+#include <geos/geom/GeometryComponentFilter.h>
+#include <geos/geom/Envelope.h>
 
 #ifndef USE_INLINE
 # include <geos/geom/GeometryCollection.inl>
@@ -28,6 +34,7 @@
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 	Geometry(gc.getFactory())
@@ -327,10 +334,14 @@ GeometryCollection::getGeometryTypeId() const
 	return GEOS_GEOMETRYCOLLECTION;
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.54  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.53  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

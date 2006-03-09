@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.1  2004/07/08 19:38:56  strk
  * renamed from *List* equivalents
  *
@@ -31,7 +34,8 @@
 #include <geos/geom.h>
 
 namespace geos {
+namespace geom { // geos::geom
 
-
+} // namespace geos::geom
 }
 

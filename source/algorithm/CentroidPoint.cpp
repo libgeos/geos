@@ -13,9 +13,18 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
-#include <geos/platform.h>
 #include <typeinfo>
+
+//#include <geos/geosAlgorithm.h>
+//#include <geos/platform.h>
+#include <geos/algorithm/CentroidPoint.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/Point.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -62,6 +71,9 @@ CentroidPoint::getCentroid(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.9  2006/03/01 17:16:31  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

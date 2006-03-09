@@ -19,6 +19,7 @@
 #include <geos/util.h>
 
 namespace geos {
+namespace geom { // geos::geom
 
 void GeometryComponentFilter::filter_rw(Geometry *geom) {
 	geom->geometryChangedAction();
@@ -29,11 +30,14 @@ void GeometryComponentFilter::filter_ro(const Geometry *geom) {
 }
 
 
-
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.8  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

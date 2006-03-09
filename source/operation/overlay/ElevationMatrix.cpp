@@ -13,10 +13,15 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/opOverlay.h>
+#include <iostream>
 #include <sstream>
 #include <string>
+
+#include <geos/opOverlay.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -24,6 +29,7 @@
 #define PARANOIA_LEVEL 0
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -186,6 +192,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.12  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
@@ -203,31 +212,5 @@ ElevationMatrix::elevate(Geometry *g) const
  *
  * Revision 1.7  2005/12/11 10:41:56  strk
  * Fixed premature initialization of average Z value in ElevationMatrixFilter
- *
- * Revision 1.6  2005/12/08 14:14:07  strk
- * ElevationMatrixFilter used for both elevation and Matrix fill,
- * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
- * Changed CoordinateFilter::filter_rw to be a const method: updated
- * all apply_rw() methods to take a const CoordinateFilter.
- *
- * Revision 1.5  2004/12/08 13:54:44  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.4  2004/11/29 16:05:33  strk
- * Fixed a bug in LineIntersector::interpolateZ causing NaN values
- * to come out.
- * Handled dimensional collapses in ElevationMatrix.
- * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
- * dispendious isnan() and finite() calls.
- *
- * Revision 1.3  2004/11/26 09:22:50  strk
- * Added FINITE(x) macro and its use.
- * Made input geoms average Z computation optional in OverlayOp.
- *
- * Revision 1.2  2004/11/24 12:29:36  strk
- * Handled boundary cases in ::getCell
- *
- * Revision 1.1  2004/11/23 16:22:49  strk
- * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
  *
  **********************************************************************/

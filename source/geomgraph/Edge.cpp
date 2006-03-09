@@ -14,9 +14,11 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
 #include <cassert>
 #include <string>
+
+#include <geos/geomgraph.h>
+#include <geos/geomgraphindex.h> // for MonotoneChainEdge
 
 //#define DEBUG_INTERSECT 0
 #ifndef GEOS_DEBUG
@@ -273,6 +275,9 @@ Edge::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.29  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

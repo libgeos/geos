@@ -14,17 +14,20 @@
  *
  **********************************************************************/
 
+#include <memory> // auto_ptr
+
 #include <geos/opValid.h>
 #include <geos/opRelate.h>
 #include <geos/opOverlay.h>
 #include <geos/geomgraph.h>
-#include <geos/geosAlgorithm.h>
-#include <memory>
+//#include <geos/geosAlgorithm.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geomgraphindex.h> // for geomgraph::index::SegmentIntersector
 
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
-using namespace geos::geomgraph::index;
+//using namespace geos::geomgraph::index;
 using namespace geos::operation::overlay;
 using namespace geos::operation::relate;
 
@@ -52,7 +55,7 @@ bool ConsistentAreaTester::isNodeConsistentArea() {
      * To fully check validity, it is necessary to
      * compute ALL intersections, including self-intersections within a single edge.
      */
-	auto_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(li,true));
+	auto_ptr<geomgraph::index::SegmentIntersector> intersector(geomGraph->computeSelfNodes(li,true));
 	if (intersector->hasProperIntersection()) {
 		invalidPoint=intersector->getProperIntersectionPoint();
 		return false;
@@ -121,6 +124,9 @@ bool ConsistentAreaTester::hasDuplicateRings() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.12  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

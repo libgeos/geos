@@ -13,13 +13,25 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
+#include <cassert>
 #include <string>
 #include <vector>
+
+//#include <geos/geom.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/GeometryFactory.h>
+
+#ifndef USE_INLINE
+# include "geos/geom/MultiPolygon.inl"
+#endif
 
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 /**
 * @param newPolys
@@ -63,7 +75,8 @@ Geometry* MultiPolygon::getBoundary() const {
 	}
 	vector<Geometry *>* allRings=new vector<Geometry *>();
 	for (unsigned int i = 0; i < geometries->size(); i++) {
-		Polygon *pg=(Polygon *) (*geometries)[i];
+		Polygon *pg=dynamic_cast<Polygon *>((*geometries)[i]);
+		assert(pg);
 		Geometry *g=pg->getBoundary();
 		LineString *ls=dynamic_cast<LineString *>(g);
 		if ( ls )
@@ -100,10 +113,14 @@ MultiPolygon::getGeometryTypeId() const {
 	return GEOS_MULTIPOLYGON;
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.25  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

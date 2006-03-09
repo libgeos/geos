@@ -15,8 +15,14 @@
  **********************************************************************/
 
 
-#include <geos/geomgraphindex.h>
 #include <vector>
+
+#include <geos/geomgraphindex.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -25,6 +31,7 @@
 #define DEBUG_INTERSECT 0
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -214,6 +221,9 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.15  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

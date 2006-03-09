@@ -20,6 +20,8 @@
 #include <geos/io.h>
 #include <geos/util.h>
 
+#include <geos/geom.h>
+
 using namespace std;
 
 namespace geos {
@@ -322,6 +324,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.36  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

@@ -19,8 +19,20 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
 #include <typeinfo>
+
+//#include <geos/geosAlgorithm.h>
+#include <geos/algorithm/MinimumDiameter.h>
+#include <geos/algorithm/ConvexHull.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -264,6 +276,9 @@ MinimumDiameter::getNextIndex(const CoordinateSequence *pts,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.13  2006/03/01 17:16:32  strk
  * LineSegment class made final and optionally (compile-time) inlined.
  * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.

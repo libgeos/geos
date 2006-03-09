@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.24  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -56,6 +59,7 @@
 #include <stdio.h>
 
 namespace geos {
+namespace geom { // geos::geom
 
 bool CoordinateList::CoordinateList() {
 	vect = new vector<Coordinate>();
@@ -250,5 +254,7 @@ CoordinateList* CoordinateList::removeRepeatedPoints(const CoordinateList *cl){
 	return cl;
 #endif
 }
-}
+
+} // namespace geos::geom
+} // namespace geos
 

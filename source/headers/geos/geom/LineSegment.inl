@@ -20,6 +20,7 @@
 #include <geos/geosAlgorithm.h>
 
 namespace geos {
+namespace geom { // geos::geom
 
 INLINE
 LineSegment::LineSegment(const LineSegment& ls)
@@ -106,12 +107,19 @@ LineSegment::closestPoints(const LineSegment* line)
 }
 
 INLINE ostream&
-operator<< (ostream& o, const LineSegment& l) {
+operator<< (ostream& o, const LineSegment& l)
+{
 	return o<<"LINESEGMENT("<<l.p0.x<<" "<<l.p0.y<<","<<l.p1.x<<" "<<l.p1.y<<")";
 }
 
+INLINE bool
+operator==(const LineSegment& a, const LineSegment& b)
+{
+	return a.p0==b.p0 && a.p1==b.p1;
+}
 
 
+} // namespace geos::geom
 } // namespace geos
 
 #endif // GEOS_LINESEGMENT_INL

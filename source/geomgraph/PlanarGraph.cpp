@@ -15,9 +15,28 @@
  **********************************************************************/
 
 #include <vector>
+#include <string>
 #include <cassert>
 
-#include <geos/geomgraph.h>
+//#include <geos/geom.h>
+//#include <geos/geomgraph.h>
+
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Location.h>
+
+#include <geos/geomgraph/PlanarGraph.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/NodeFactory.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/geomgraph/NodeMap.h>
+#include <geos/geomgraph/Quadrant.h>
+
+#include <geos/algorithm/CGAlgorithms.h>
+
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -25,6 +44,7 @@
 
 using namespace std;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -329,6 +349,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.26  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

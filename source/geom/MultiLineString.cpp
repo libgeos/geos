@@ -14,18 +14,28 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/operation.h>
-#include <geos/geomgraph.h>
-#include <geos/geosAlgorithm.h>
 #include <vector>
+
+#include <geos/operation/IsSimpleOp.h>
+//#include <geos/geosAlgorithm.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Dimension.h>
+
+#ifndef USE_INLINE
+# include "geos/geom/MultiLineString.inl"
+#endif
 
 using namespace std;
 using namespace geos::algorithm;
-using namespace geos::operation;
+//using namespace geos::operation;
 using namespace geos::geomgraph;
 
 namespace geos {
+namespace geom { // geos::geom
 
 /**
 * Constructs a <code>MultiLineString</code>.
@@ -72,7 +82,7 @@ bool MultiLineString::isClosed() const {
 }
 
 bool MultiLineString::isSimple() const {
-	IsSimpleOp iso;
+	operation::IsSimpleOp iso;
 	return iso.isSimple(this);
 }
 
@@ -114,10 +124,14 @@ MultiLineString::reverse() const
 	return getFactory()->createMultiLineString(revLines);
 }
 
+} // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.28  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

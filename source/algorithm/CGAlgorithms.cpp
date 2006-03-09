@@ -14,12 +14,20 @@
  *
  **********************************************************************/
 
-#include <geos/geosAlgorithm.h>
 #include <algorithm>
 #include <cstdio>
 #include <cmath>
 
+//#include <geos/geosAlgorithm.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/RobustDeterminant.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Coordinate.h>
+
 using namespace std;
+
+using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -459,6 +467,9 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/09 16:46:45  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.29  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

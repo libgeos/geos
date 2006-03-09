@@ -21,10 +21,12 @@
 #include <string>
 #include <vector>
 #include <map>
+
 #include <geos/platform.h>
 #include <geos/opRelate.h>
 #include <geos/indexSweepline.h>
 #include <geos/indexQuadtree.h>
+#include <geos/geomgraph/PlanarGraph.h>
 
 namespace geos {
 namespace operation { // geos.operation
@@ -41,8 +43,8 @@ namespace valid { // geos.operation.valid
 class SimpleNestedRingTester {
 private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
-	std::vector<LinearRing*> rings;
-	Coordinate *nestedPt;
+	std::vector<geom::LinearRing*> rings;
+	geom::Coordinate *nestedPt;
 public:
 	SimpleNestedRingTester(geomgraph::GeometryGraph *newGraph)
 		:
@@ -54,7 +56,7 @@ public:
 	~SimpleNestedRingTester() {
 	}
 
-	void add(LinearRing *ring) {
+	void add(geom::LinearRing *ring) {
 		rings.push_back(ring);
 	}
 
@@ -64,7 +66,7 @@ public:
 	 * previously added. If you destroy them, this
 	 * will point to an invalid memory address.
 	 */
-	Coordinate *getNestedPoint() {
+	geom::Coordinate *getNestedPoint() {
 		return nestedPt;
 	}
 
@@ -94,9 +96,9 @@ public:
 		eRingNotClosed
 	};
 
-	TopologyValidationError(int newErrorType, const Coordinate& newPt);
+	TopologyValidationError(int newErrorType, const geom::Coordinate& newPt);
 	TopologyValidationError(int newErrorType);
-	Coordinate& getCoordinate();
+	geom::Coordinate& getCoordinate();
 	std::string getMessage();
 	int getErrorType();
 	std::string toString();
@@ -105,7 +107,7 @@ private:
 	// Used const char* to reduce dynamic allocations
 	static const char* errMsg[];
 	int errorType;
-	Coordinate pt;
+	geom::Coordinate pt;
 };
 
 /**
@@ -116,15 +118,15 @@ private:
 class RepeatedPointTester {
 public:
 	RepeatedPointTester() {};
-	Coordinate& getCoordinate();
-	bool hasRepeatedPoint(const Geometry *g);
-	bool hasRepeatedPoint(const CoordinateSequence *coord);
+	geom::Coordinate& getCoordinate();
+	bool hasRepeatedPoint(const geom::Geometry *g);
+	bool hasRepeatedPoint(const geom::CoordinateSequence *coord);
 private:
-	Coordinate repeatedCoord;
-	bool hasRepeatedPoint(const Polygon *p);
-	bool hasRepeatedPoint(const GeometryCollection *gc);
-	bool hasRepeatedPoint(const MultiPolygon *gc);
-	bool hasRepeatedPoint(const MultiLineString *gc);
+	geom::Coordinate repeatedCoord;
+	bool hasRepeatedPoint(const geom::Polygon *p);
+	bool hasRepeatedPoint(const geom::GeometryCollection *gc);
+	bool hasRepeatedPoint(const geom::MultiPolygon *gc);
+	bool hasRepeatedPoint(const geom::MultiLineString *gc);
 };
 
 /**
@@ -150,7 +152,7 @@ private:
 	relate::RelateNodeGraph *nodeGraph;
 
 	/// the intersection point found (if any)
-	Coordinate invalidPoint;
+	geom::Coordinate invalidPoint;
 
 	/**
 	 * Check all nodes to see if their labels are consistent.
@@ -167,7 +169,7 @@ public:
 	/**
 	 * @return the intersection point, or <code>null</code> if none was found
 	 */
-	Coordinate& getInvalidPoint();
+	geom::Coordinate& getInvalidPoint();
 
 	bool isNodeConsistentArea();
 
@@ -200,10 +202,10 @@ class SweeplineNestedRingTester {
 
 private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
-	std::vector<LinearRing*> rings;
-	Envelope *totalEnv;
+	std::vector<geom::LinearRing*> rings;
+	geom::Envelope *totalEnv;
 	index::sweepline::SweepLineIndex *sweepLine;
-	Coordinate *nestedPt;
+	geom::Coordinate *nestedPt;
 	void buildIndex();
 
 public:
@@ -212,7 +214,7 @@ public:
 		:
 		graph(newGraph),
 		rings(),
-		totalEnv(new Envelope()),
+		totalEnv(new geom::Envelope()),
 		sweepLine(new index::sweepline::SweepLineIndex()),
 		nestedPt(NULL)
 	{}
@@ -229,14 +231,14 @@ public:
 	 * previously added. If you destroy them, this
 	 * will point to an invalid memory address.
 	 */
-	Coordinate *getNestedPoint() { return nestedPt; }
+	geom::Coordinate *getNestedPoint() { return nestedPt; }
 
-	void add(LinearRing* ring) {
+	void add(geom::LinearRing* ring) {
 		rings.push_back(ring);
 	}
 
 	bool isNonNested();
-	bool isInside(LinearRing *innerRing,LinearRing *searchRing);
+	bool isInside(geom::LinearRing *innerRing,geom::LinearRing *searchRing);
 	class OverlapAction: public index::sweepline::SweepLineOverlapAction {
 	public:
 		bool isNonNested;
@@ -264,15 +266,15 @@ public:
 	 * previously added. If you destroy them, this
 	 * will point to an invalid memory address.
 	 */
-	Coordinate *getNestedPoint();
-	void add(LinearRing *ring);
+	geom::Coordinate *getNestedPoint();
+	void add(geom::LinearRing *ring);
 	bool isNonNested();
 private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
-	std::vector<LinearRing*> *rings;
-	Envelope *totalEnv;
+	std::vector<geom::LinearRing*> *rings;
+	geom::Envelope *totalEnv;
 	index::quadtree::Quadtree *qt;
-	Coordinate *nestedPt;
+	geom::Coordinate *nestedPt;
 	void buildQuadtree();
 };
 
@@ -292,20 +294,20 @@ class ConnectedInteriorTester {
 public:
 	ConnectedInteriorTester(geomgraph::GeometryGraph &newGeomGraph);
 	~ConnectedInteriorTester();
-	Coordinate& getCoordinate();
+	geom::Coordinate& getCoordinate();
 	bool isInteriorsConnected();
-	static const Coordinate& findDifferentPoint(const CoordinateSequence *coord, const Coordinate& pt);
+	static const geom::Coordinate& findDifferentPoint(const geom::CoordinateSequence *coord, const geom::Coordinate& pt);
 
 private:
 
-	GeometryFactory *geometryFactory;
+	geom::GeometryFactory *geometryFactory;
 
 	geomgraph::GeometryGraph &geomGraph;
 
 	/// Save a coordinate for any disconnected interior found
 	/// the coordinate will be somewhere on the ring surrounding
 	/// the disconnected interior
-	Coordinate disconnectedRingcoord;
+	geom::Coordinate disconnectedRingcoord;
 
 	void setAllEdgesInResult(geomgraph::PlanarGraph &graph);
 
@@ -316,9 +318,9 @@ private:
 	 * Mark all the edges for the edgeRings corresponding to the shells
 	 * of the input polygons.  Note only ONE ring gets marked for each shell.
 	 */
-	void visitShellInteriors(const Geometry *g, geomgraph::PlanarGraph &graph);
+	void visitShellInteriors(const geom::Geometry *g, geomgraph::PlanarGraph &graph);
 
-	void visitInteriorRing(const LineString *ring, geomgraph::PlanarGraph &graph);
+	void visitInteriorRing(const geom::LineString *ring, geomgraph::PlanarGraph &graph);
 
 	/**
 	 * Check if any shell ring has an unvisited edge.
@@ -345,16 +347,16 @@ protected:
 class IsValidOp {
 friend class Unload;
 private:
-	const Geometry *parentGeometry;  // the base Geometry to be validated
+	const geom::Geometry *parentGeometry;  // the base Geometry to be validated
 	bool isChecked;
 	TopologyValidationError* validErr;
-	void checkValid(const Geometry *g);
-	void checkValid(const Point *g);
-	void checkValid(const LinearRing *g);
-	void checkValid(const LineString *g);
-	void checkValid(const Polygon *g);
-	void checkValid(const MultiPolygon *g);
-	void checkValid(const GeometryCollection *gc);
+	void checkValid(const geom::Geometry *g);
+	void checkValid(const geom::Point *g);
+	void checkValid(const geom::LinearRing *g);
+	void checkValid(const geom::LineString *g);
+	void checkValid(const geom::Polygon *g);
+	void checkValid(const geom::MultiPolygon *g);
+	void checkValid(const geom::GeometryCollection *gc);
 	void checkConsistentArea(geomgraph::GeometryGraph *graph);
 	void checkNoSelfIntersectingRings(geomgraph::GeometryGraph *graph);
 
@@ -378,7 +380,7 @@ private:
 	 * @param p the polygon to be tested for hole inclusion
 	 * @param graph a geomgraph::GeometryGraph incorporating the polygon
 	 */
-	void checkHolesInShell(const Polygon *p, geomgraph::GeometryGraph *graph);
+	void checkHolesInShell(const geom::Polygon *p, geomgraph::GeometryGraph *graph);
 
 	/**
 	 * Tests that no hole is nested inside another hole.
@@ -392,7 +394,7 @@ private:
 	 *    (checked by <code>checkRelateConsistency</code>)
 	 * 
 	 */
-	void checkHolesNotNested(const Polygon *p, geomgraph::GeometryGraph *graph);
+	void checkHolesNotNested(const geom::Polygon *p, geomgraph::GeometryGraph *graph);
 
 	/*
 	 * Tests that no element polygon is wholly in the interior of another
@@ -407,7 +409,7 @@ private:
 	 * This routine relies on the fact that while polygon shells may touch at
 	 * one or more vertices, they cannot touch at ALL vertices.
 	 */
-	void checkShellsNotNested(const MultiPolygon *mp, geomgraph::GeometryGraph *graph);
+	void checkShellsNotNested(const geom::MultiPolygon *mp, geomgraph::GeometryGraph *graph);
 
 	/**
 	 * Check if a shell is incorrectly nested within a polygon.  This is the case
@@ -418,22 +420,22 @@ private:
 	 * E.g. they cannot partially overlap (this has been previously checked by
 	 * <code>checkRelateConsistency</code>
 	 */
-	void checkShellNotNested(const LinearRing *shell, const Polygon *p, geomgraph::GeometryGraph *graph);
+	void checkShellNotNested(const geom::LinearRing *shell, const geom::Polygon *p, geomgraph::GeometryGraph *graph);
 
 	/**
 	 * This routine checks to see if a shell is properly contained in a hole.
 	 */
-	const Coordinate *checkShellInsideHole(const LinearRing *shell, const LinearRing *hole, geomgraph::GeometryGraph *graph);
+	const geom::Coordinate *checkShellInsideHole(const geom::LinearRing *shell, const geom::LinearRing *hole, geomgraph::GeometryGraph *graph);
 
 	void checkConnectedInteriors(geomgraph::GeometryGraph &graph);
 
-	void checkInvalidCoordinates(const CoordinateSequence *cs);
+	void checkInvalidCoordinates(const geom::CoordinateSequence *cs);
 
-	void checkInvalidCoordinates(const Polygon *poly);
+	void checkInvalidCoordinates(const geom::Polygon *poly);
 
-	void checkClosedRings(const Polygon *poly);
+	void checkClosedRings(const geom::Polygon *poly);
 
-	void checkClosedRing(const LinearRing *ring);
+	void checkClosedRing(const geom::LinearRing *ring);
 
 	bool isSelfTouchingRingFormingHoleValid;
 
@@ -444,9 +446,9 @@ public:
 	 *
 	 * @return the point found, or NULL if none found
 	 */
-	static const Coordinate *findPtNotNode(
-			const CoordinateSequence *testCoords,
-			const LinearRing *searchRing, geomgraph::GeometryGraph *graph);
+	static const geom::Coordinate *findPtNotNode(
+			const geom::CoordinateSequence *testCoords,
+			const geom::LinearRing *searchRing, geomgraph::GeometryGraph *graph);
 
 	/**
 	 * Checks whether a coordinate is valid for processing.
@@ -456,9 +458,9 @@ public:
 	 * @param coord the coordinate to validate
 	 * @return <code>true</code> if the coordinate is valid
 	 */
-	static bool isValid(const Coordinate &coord);
+	static bool isValid(const geom::Coordinate &coord);
 
-	IsValidOp(const Geometry *geom)
+	IsValidOp(const geom::Geometry *geom)
 		:
 		parentGeometry(geom),
 		isChecked(false),
@@ -514,6 +516,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.17  2006/03/06 12:47:49  strk
  * TopologyValidationError error names (enum) renamed to avoid conflicts.
  *

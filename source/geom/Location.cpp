@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.13  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
@@ -43,6 +46,7 @@
 using namespace std;
 
 namespace geos {
+namespace geom { // geos::geom
 
 /**
  *  Converts the location value to a location symbol, for example, <code>EXTERIOR => 'e'</code>.
@@ -66,5 +70,7 @@ char Location::toLocationSymbol(int locationValue) {
 			throw util::IllegalArgumentException(s.str());
 	}
 }
+
+} // namespace geos::geom
 }
 

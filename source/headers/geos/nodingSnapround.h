@@ -23,6 +23,8 @@
 #include <memory>
 #include <vector>
 
+#include <geos/util/math.h>
+
 namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
@@ -394,6 +396,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/09 16:46:48  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
  * Revision 1.11  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
