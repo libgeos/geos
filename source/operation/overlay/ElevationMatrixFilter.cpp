@@ -20,6 +20,12 @@
 #define GEOS_DEBUG 0
 #endif
 
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
+using namespace std; // for GEOS_DEBUG
+
 namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
@@ -74,6 +80,9 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/09 15:58:43  strk
+ * Fixed debugging lines
+ *
  * Revision 1.9  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
