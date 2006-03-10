@@ -17,7 +17,8 @@
 #include <vector>
 
 #include <geos/geomgraph.h>
-#include <geos/util.h>
+#include <geos/util/Assert.h>
+#include <geos/util/TopologyException.h>
 #include <geos/algorithm/CGAlgorithms.h>
 
 using namespace std;
@@ -153,7 +154,8 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 	DirectedEdge *de=newStart;
 	bool isFirstEdge=true;
 	do {
-		assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
+		util::Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
+		//assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
 		if (de->getEdgeRing()==this)
 			throw util::TopologyException("Directed Edge visited twice during ring-building at ",&(de->getCoordinate()));
 		edges.push_back(de);
@@ -284,6 +286,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/10 13:07:32  strk
+ * fine-tuned includes, reverted Assert=>assert due to user-input based failure
+ *
  * Revision 1.15  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
@@ -387,6 +392,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.16  2006/03/10 13:07:32  strk
+ * fine-tuned includes, reverted Assert=>assert due to user-input based failure
+ *
  * Revision 1.15  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
