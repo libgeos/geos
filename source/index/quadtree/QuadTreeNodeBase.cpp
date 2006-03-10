@@ -14,9 +14,11 @@
  *
  **********************************************************************/
 
-#include <geos/indexQuadtree.h>
 #include <sstream>
 #include <vector>
+#include <algorithm>
+
+#include <geos/indexQuadtree.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -230,6 +232,9 @@ QuadTreeNodeBase::remove(const Envelope* itemEnv, void* item)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/10 11:41:49  strk
+ * Added missing <algorithm> include (bug#56)
+ *
  * Revision 1.16  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
