@@ -1,4 +1,5 @@
 SUBDIRS = \
 	xmltester	\
-	bigtest
+	bigtest		\
+	unit
 

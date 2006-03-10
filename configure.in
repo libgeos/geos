@@ -149,6 +149,18 @@ fi
 AM_CONDITIONAL(ENABLE_RUBY, [ test x"$use_ruby" = xtrue ])
 
 
+dnl --------------------------------------------------------------------
+dnl - check for boost 
+dnl --------------------------------------------------------------------
+
+AX_BOOST(1.33.1)
+if test x"$BOOST_UNIT_TEST_FRAMEWORK_LIB" != x; then
+	use_boost_utf=yes
+else
+	use_boost_utf=no
+fi
+AM_CONDITIONAL(ENABLE_BOOST_UTF, [ test x"$use_boost_utf" = xtrue ])
+
 dnl things to substitute in output ----------------------------------------
 AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE JTS_PORT CAPI_VERSION CAPI_VERSION_MAJOR CAPI_VERSION_MINOR CAPI_VERSION_PATCH CAPI_INTERFACE_CURRENT CAPI_INTERFACE_REVISION CAPI_INTERFACE_AGE)
 
@@ -207,12 +219,14 @@ AC_OUTPUT([
 	tests/Makefile
 	tests/bigtest/Makefile
 	tests/xmltester/Makefile
+	tests/unit/Makefile
 	tools/Makefile
 	tools/geos-config
 	])
 
 
 echo "---------------------------------------"
+echo "Boost UTF: $use_boost_utf"
 echo "Swig: $use_swig"
 echo "Python: $use_python"
 echo "Ruby: $use_ruby"
