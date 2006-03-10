@@ -48,7 +48,7 @@ EnhancedPrecisionOp::intersection(Geometry *geom0, Geometry *geom1)
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& ex2) {
+	} catch (const util::GEOSException& /* ex2 */) {
 		throw originalEx;
 	}
 }
@@ -81,7 +81,7 @@ EnhancedPrecisionOp::Union(Geometry *geom0, Geometry *geom1)
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& ex2) {
+	} catch (const util::GEOSException& /* ex2 */) {
 		throw originalEx;
 	}
 }
@@ -114,7 +114,7 @@ EnhancedPrecisionOp::difference(Geometry *geom0, Geometry *geom1)
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& ex2) {
+	} catch (const util::GEOSException& /* ex2 */) {
 		throw originalEx;
 	}
 }
@@ -147,7 +147,7 @@ EnhancedPrecisionOp::symDifference(Geometry *geom0, Geometry *geom1)
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& ex2) {
+	} catch (const util::GEOSException& /* ex2 */) {
 		throw originalEx;
 	}
 }
@@ -183,7 +183,7 @@ EnhancedPrecisionOp::buffer(Geometry *geom, double distance)
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& ex2) {
+	} catch (const util::GEOSException& /* ex2 */) {
 		throw originalEx;
 	}
 }
@@ -193,6 +193,9 @@ EnhancedPrecisionOp::buffer(Geometry *geom, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/10 10:44:53  strk
+ * Unreferenced exception objects cleanup (#52)
+ *
  * Revision 1.5  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

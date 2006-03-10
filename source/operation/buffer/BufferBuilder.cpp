@@ -134,7 +134,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	std::cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<std::endl;
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
-	} catch (const util::GEOSException& exc) {
+	} catch (const util::GEOSException& /* exc */) {
 		for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
 			delete subgraphList[i];
 		throw;
@@ -330,6 +330,9 @@ BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,Polygon
 
 /**********************************************************************
  * $Log$
+ * Revision 1.44  2006/03/10 10:44:53  strk
+ * Unreferenced exception objects cleanup (#52)
+ *
  * Revision 1.43  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

@@ -61,7 +61,7 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 #if GEOS_DEBUG
 		cerr<<"  z set to "<<c->z<<endl;
 #endif
-	} catch (const util::IllegalArgumentException& ex) {
+	} catch (const util::IllegalArgumentException& /* ex */) {
 		c->z = avgElevation;
 	}
 }
@@ -82,6 +82,9 @@ ElevationMatrixFilter::filter_ro(const Coordinate *c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/10 10:44:53  strk
+ * Unreferenced exception objects cleanup (#52)
+ *
  * Revision 1.11  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
