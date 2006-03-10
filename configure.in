@@ -153,13 +153,13 @@ dnl --------------------------------------------------------------------
 dnl - check for boost 
 dnl --------------------------------------------------------------------
 
-AX_BOOST(1.33.1)
-if test x"$BOOST_UNIT_TEST_FRAMEWORK_LIB" != x; then
+AX_BOOST(1.32)
+if test "x$ax_cv_boost_unit_test_framework" = "xyes"; then
 	use_boost_utf=yes
 else
 	use_boost_utf=no
 fi
-AM_CONDITIONAL(ENABLE_BOOST_UTF, [ test x"$use_boost_utf" = xtrue ])
+AM_CONDITIONAL(ENABLE_BOOST_UTF, [test "x$use_boot_utf" = "xyes"])
 
 dnl things to substitute in output ----------------------------------------
 AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE JTS_PORT CAPI_VERSION CAPI_VERSION_MAJOR CAPI_VERSION_MINOR CAPI_VERSION_PATCH CAPI_INTERFACE_CURRENT CAPI_INTERFACE_REVISION CAPI_INTERFACE_AGE)
