@@ -86,9 +86,12 @@ ConnectedInteriorTester::isInteriorsConnected()
 	graph.linkResultDirectedEdges();
 	std::vector<EdgeRing*> *edgeRings=buildEdgeRings(graph.getEdgeEnds());
 
-	/**
+	/*
 	 * Mark all the edges for the edgeRings corresponding to the shells
-	 * of the input polygons.  Note only ONE ring gets marked for each shell.
+	 * of the input polygons. 
+	 * 
+	 * Only ONE ring gets marked for each shell - if there are others which remain unmarked
+	 * this indicates a disconnected interior.
 	 */
 	visitShellInteriors(geomGraph.getGeometry(), graph);
 
@@ -226,13 +229,22 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 		++it)
 	{
 		EdgeRing *er=*it;
+
+		// don't check hole rings
 		if (er->isHole()) continue;
+
 		std::vector<DirectedEdge*> *edges=er->getEdges();
 		DirectedEdge *de=(*edges)[0];
+
 		// don't check CW rings which are holes
+		// (MD - this check may now be irrelevant - 2006-03-09)
 		if (de->getLabel()->getLocation(0,Position::RIGHT)!=Location::INTERIOR) continue;
-		// must have a CW ring which surrounds the INT of the area, so check all
-		// edges have been visited
+
+		/*
+		 * the edgeRing is CW ring which surrounds the INT of the area, so check all
+		 * edges have been visited.  If any are unvisited, this is a disconnected part
+		 * of the interior
+		 */
 		for(std::vector<DirectedEdge*>::iterator jt=edges->begin(), jtEnd=edges->end();
 			jt != jtEnd;
 			++jt)
@@ -255,6 +267,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/10 11:09:37  strk
+ * Comments cleanup
+ *
  * Revision 1.21  2006/03/09 18:18:39  strk
  * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
  * Applied patch to IsValid operation from JTS-1.7.1
