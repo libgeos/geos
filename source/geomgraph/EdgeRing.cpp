@@ -154,8 +154,10 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 	DirectedEdge *de=newStart;
 	bool isFirstEdge=true;
 	do {
-		util::Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
+		//util::Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
 		//assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
+		if(de==NULL)
+			throw util::TopologyException("EdgeRing::computePoints: found null Directed Edge");
 		if (de->getEdgeRing()==this)
 			throw util::TopologyException("Directed Edge visited twice during ring-building at ",&(de->getCoordinate()));
 		edges.push_back(de);
@@ -286,6 +288,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/10 15:50:26  strk
+ * Changed 'found null Directed Edge' from an Assertion to a TopologyException, to give 'precision-reducing' overlay operation a chance to handle it (it seems to work)
+ *
  * Revision 1.16  2006/03/10 13:07:32  strk
  * fine-tuned includes, reverted Assert=>assert due to user-input based failure
  *
@@ -392,6 +397,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.17  2006/03/10 15:50:26  strk
+ * Changed 'found null Directed Edge' from an Assertion to a TopologyException, to give 'precision-reducing' overlay operation a chance to handle it (it seems to work)
+ *
  * Revision 1.16  2006/03/10 13:07:32  strk
  * fine-tuned includes, reverted Assert=>assert due to user-input based failure
  *
