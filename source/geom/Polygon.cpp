@@ -17,6 +17,7 @@
 #include <vector>
 #include <cmath> // for fabs
 #include <cassert> 
+#include <algorithm> 
 
 //#include <geos/geom.h>
 //#include <geos/geosAlgorithm.h>
@@ -453,6 +454,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.60  2006/03/10 10:34:58  strk
+ * Added missing <algorithm> include (#54)
+ *
  * Revision 1.59  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
