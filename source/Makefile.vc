@@ -16,6 +16,9 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.9  2006/03/10 10:48:28  strk
+# Bug #58 - Patch to makefile.vc after big refactoring commit
+#
 # Revision 1.8  2006/03/01 16:42:47  strk
 # Fixed include name (Bug#41)
 #
@@ -58,6 +61,7 @@ MSVC_CPPFLAGS = /GX
 #CFLAGS = -Iheaders /GX /MD /GR /Zi /nologo
 #CFLAGS = -Iheaders /GX /MD /GR /O1 /D "NDEBUG" /nologo
 CFLAGS = -Iheaders /MD /GR /O2 /D "NDEBUG" /nologo \
+     	 /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
 	 $(MSVC_CPPFLAGS)
 
 
@@ -92,7 +96,6 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geom\Envelope.obj \
 	geom\Geometry.obj \
 	geom\GeometryCollection.obj \
-	geom\GeometryCollectionIterator.obj \
 	geom\GeometryComponentFilter.obj \
 	geom\GeometryFactory.obj \
 	geom\IntersectionMatrix.obj \
@@ -108,6 +111,7 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geom\PrecisionModel.obj \
 	geom\TopologyException.obj \
 	geom\Triangle.obj \
+	geom\util\CoordinateOperation.obj \
 	geom\util\GeometryEditor.obj \
 	geom\util\LinearComponentExtracter.obj \
 	geom\util\PointExtracter.obj \
@@ -126,14 +130,6 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geomgraph\EdgeRing.obj \
 	geomgraph\GeometryGraph.obj \
 	geomgraph\GraphComponent.obj \
-	geomgraph\index\MonotoneChainEdge.obj \
-	geomgraph\index\MonotoneChainIndexer.obj \
-	geomgraph\index\SegmentIntersector.obj \
-	geomgraph\index\SimpleEdgeSetIntersector.obj \
-	geomgraph\index\SimpleMCSweepLineIntersector.obj \
-	geomgraph\index\SimpleSweepLineIntersector.obj \
-	geomgraph\index\SweepLineEvent.obj \
-	geomgraph\index\SweepLineSegment.obj \
 	geomgraph\Label.obj \
 	geomgraph\Node.obj \
 	geomgraph\NodeFactory.obj \
@@ -142,6 +138,14 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geomgraph\Position.obj \
 	geomgraph\Quadrant.obj \
 	geomgraph\TopologyLocation.obj \
+	geomgraph\index\MonotoneChainEdge.obj \
+	geomgraph\index\MonotoneChainIndexer.obj \
+	geomgraph\index\SegmentIntersector.obj \
+	geomgraph\index\SimpleEdgeSetIntersector.obj \
+	geomgraph\index\SimpleMCSweepLineIntersector.obj \
+	geomgraph\index\SimpleSweepLineIntersector.obj \
+	geomgraph\index\SweepLineEvent.obj \
+	geomgraph\index\SweepLineSegment.obj \
 	index\bintree\Bintree.obj \
 	index\bintree\BinTreeInterval.obj \
 	index\bintree\BinTreeNode.obj \
