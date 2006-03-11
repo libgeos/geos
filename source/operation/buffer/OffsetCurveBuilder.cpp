@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.8  
+ * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.9
  *
  **********************************************************************/
 
@@ -130,12 +130,11 @@ OffsetCurveBuilder::init(double newDistance)
 CoordinateSequence*
 OffsetCurveBuilder::getCoordinates()
 {
-#if 1 // mbdavis says this is obsoleted code, but I get IllegalArgumentException thrown w/out
 	// check that points are a ring,
 	// add the startpoint again if they are not
 	if (ptList->getSize()>1) {
 		const Coordinate &start=ptList->getAt(0);
-		const Coordinate &end=ptList->getAt(1);
+		const Coordinate &end=ptList->getAt(ptList->getSize()-1);
 #if GEOS_DEBUG
 		cerr << __FILE__ << ":" << __LINE__
 			<< ":"
@@ -144,7 +143,6 @@ OffsetCurveBuilder::getCoordinates()
 #endif
 		if (!(start==end)) addPt(start);
 	}
-#endif
 	return ptList;
 }
 
@@ -463,6 +461,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/11 16:58:41  strk
+ * Fixed bug in OffsetCurveBuilder::getCoordinates.
+ *
  * Revision 1.29  2006/03/09 17:40:24  strk
  * Fixed bug#33 (hopefully)
  *

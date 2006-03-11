@@ -223,7 +223,7 @@ std::vector<geomgraph::DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
  * of all the noded raw curves and tracing outside contours.
  * The points in the raw curve are rounded to the required precision model.
  *
- * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.7 
+ * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.9
  *
  */
 class OffsetCurveBuilder {
@@ -961,6 +961,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/11 16:58:38  strk
+ * Fixed bug in OffsetCurveBuilder::getCoordinates.
+ *
  * Revision 1.26  2006/03/09 17:40:28  strk
  * Fixed bug#33 (hopefully)
  *
