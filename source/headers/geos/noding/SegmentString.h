@@ -22,6 +22,13 @@
 
 #include <geos/inline.h>
 
+// Forward declarations
+namespace geos {
+	namespace algorithm {
+		class LineIntersector;
+	}
+}
+
 namespace geos {
 namespace noding { // geos.noding
 
@@ -157,6 +164,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/13 21:14:24  strk
+ * Added missing forward declarations
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
