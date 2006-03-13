@@ -23,15 +23,19 @@ namespace geom { // geos::geom
 
 class Coordinate;
 
-/*
+/**
  * <code>Geometry</code> classes support the concept of applying a
- * coordinate filter to every coordinate in the <code>Geometry</code>. A
- * coordinate filter can either record information about each coordinate or
+ * coordinate filter to every coordinate in the <code>Geometry</code>.
+ *
+ * A  coordinate filter can either record information about each coordinate or
  * change the coordinate in some way. Coordinate filters implement the
  * interface <code>CoordinateFilter</code>. (<code>CoordinateFilter</code> is
  * an example of the Gang-of-Four Visitor pattern). Coordinate filters can be
  * used to implement such things as coordinate transformations, centroid and
  * envelope computation, and many other functions.
+ *
+ * TODO: provide geom::CoordinateInspector and geom::CoordinateMutator instead
+ * of having the two versions of filter_rw and filter_ro
  *
  */
 class CoordinateFilter {
@@ -64,6 +68,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/13 21:13:54  strk
+ * Added comment about possible refactoring
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
