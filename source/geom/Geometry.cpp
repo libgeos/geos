@@ -20,7 +20,8 @@
 #include <vector>
 #include <cassert>
 
-#include <geos/geom.h>
+//#include <geos/geom.h>
+#include <geos/geom/Geometry.h>
 #include <geos/util.h>
 #include <geos/geosAlgorithm.h>
 //#include <geos/operation.h>
@@ -752,6 +753,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.97  2006/03/13 21:54:56  strk
+ * Streamlined headers inclusion.
+ *
  * Revision 1.96  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

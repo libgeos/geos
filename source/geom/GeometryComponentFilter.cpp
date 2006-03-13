@@ -15,8 +15,11 @@
  **********************************************************************/
 
 #include <cassert>
-#include <geos/geom.h>
-#include <geos/util.h>
+
+//#include <geos/geom.h>
+#include <geos/geom/GeometryComponentFilter.h>
+#include <geos/geom/Geometry.h>
+//#include <geos/util.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -35,6 +38,9 @@ void GeometryComponentFilter::filter_ro(const Geometry *geom) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/13 21:54:56  strk
+ * Streamlined headers inclusion.
+ *
  * Revision 1.9  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

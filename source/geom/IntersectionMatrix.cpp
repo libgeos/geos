@@ -14,9 +14,14 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/util.h>
 #include <sstream>
+
+//#include <geos/geom.h>
+//#include <geos/util.h>
+#include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/Dimension.h>
+#include <geos/geom/Location.h>
+#include <geos/util/IllegalArgumentException.h>
 
 using namespace std;
 
@@ -350,6 +355,9 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/13 21:54:56  strk
+ * Streamlined headers inclusion.
+ *
  * Revision 1.19  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

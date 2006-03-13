@@ -13,12 +13,17 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/profiler.h>
-#include <geos/geom/Envelope.h>
 #include <cstdio>
 #include <algorithm>
 #include <vector>
+
+//#include <geos/geom.h>
+#include <geos/profiler.h>
+#include <geos/geom/CoordinateSequence.h>
+// FIXME: we should probably not be using CoordinateArraySequenceFactory
+#include <geos/geom/CoordinateArraySequenceFactory.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Envelope.h>
 
 using namespace std;
 
@@ -48,6 +53,7 @@ CoordinateSequence::hasRepeatedPoints() const
 CoordinateSequence *
 CoordinateSequence::atLeastNCoordinatesOrNothing(unsigned int n, CoordinateSequence *c)
 {
+	// FIXME: return NULL rather then empty coordinate array
 	return c->getSize()>=n?c:CoordinateArraySequenceFactory::instance()->create(NULL);
 }      
 
@@ -231,6 +237,9 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/13 21:54:56  strk
+ * Streamlined headers inclusion.
+ *
  * Revision 1.15  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

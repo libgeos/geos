@@ -11,8 +11,21 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
+ **********************************************************************/
+
+#include <geos/geom/CoordinateSequenceFactory.h>
+
+namespace geos {
+namespace geom { // geos::geom
+
+} // namespace geos::geom
+}
+
+/**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/13 21:54:56  strk
+ * Streamlined headers inclusion.
+ *
  * Revision 1.2  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
@@ -29,13 +42,4 @@
  *
  *
  **********************************************************************/
-
-
-#include <geos/geom.h>
-
-namespace geos {
-namespace geom { // geos::geom
-
-} // namespace geos::geom
-}
 

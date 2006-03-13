@@ -14,15 +14,23 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/geosAlgorithm.h>
-#include <geos/operation.h>
-#include <geos/profiler.h>
 #include <sstream>
 
+//#include <geos/geom.h>
+//#include <geos/geosAlgorithm.h>
+//#include <geos/operation.h>
+#include <geos/profiler.h>
+
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/LineIntersector.h>
+
 using namespace std;
-using namespace geos::algorithm;
-using namespace geos::operation;
+//using namespace geos::geom;
+//using namespace geos::algorithm;
+//using namespace geos::operation;
 
 #ifndef USE_INLINE
 # include <geos/geom/LineSegment.inl>
@@ -69,7 +77,7 @@ LineSegment::angle() const
 double
 LineSegment::distance(const LineSegment ls) const
 {
-	return CGAlgorithms::distanceLineLine(p0, p1, ls.p0, ls.p1);
+	return algorithm::CGAlgorithms::distanceLineLine(p0, p1, ls.p0, ls.p1);
 }
 
 /**
@@ -78,7 +86,7 @@ LineSegment::distance(const LineSegment ls) const
 double
 LineSegment::distance(const Coordinate& p) const
 {
-	return CGAlgorithms::distancePointLine(p, p0, p1);
+	return algorithm::CGAlgorithms::distancePointLine(p, p0, p1);
 }
 
 /**
@@ -179,8 +187,8 @@ LineSegment::equalsTopo(const LineSegment& other) const
 int
 LineSegment::orientationIndex(const LineSegment& seg) const
 {
-	int orient0 = CGAlgorithms::orientationIndex(p0, p1, seg.p0);
-	int orient1 = CGAlgorithms::orientationIndex(p0, p1, seg.p1);
+	int orient0 = algorithm::CGAlgorithms::orientationIndex(p0, p1, seg.p0);
+	int orient1 = algorithm::CGAlgorithms::orientationIndex(p0, p1, seg.p1);
 	// this handles the case where the points are L or collinear
 	if (orient0 >= 0 && orient1 >= 0)
 		return max(orient0, orient1);
@@ -258,7 +266,7 @@ LineSegment::closestPoints(const LineSegment& line)
 bool
 LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 {
-	LineIntersector li;
+	algorithm::LineIntersector li;
 	li.computeIntersection(p0, p1, line.p0, line.p1);
 	if (li.hasIntersection()) {
 		ret=li.getIntersection(0);
@@ -273,6 +281,9 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/13 21:54:56  strk
+ * Streamlined headers inclusion.
+ *
  * Revision 1.29  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

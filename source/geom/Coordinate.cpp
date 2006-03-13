@@ -13,9 +13,10 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
 #include <sstream>
 #include <string>
+
+#include <geos/geom/Coordinate.h>
 
 #ifndef USE_INLINE
 # include <geos/geom/Coordinate.inl>
@@ -54,6 +55,9 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/13 21:54:56  strk
+ * Streamlined headers inclusion.
+ *
  * Revision 1.29  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
