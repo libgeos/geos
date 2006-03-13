@@ -18,9 +18,16 @@
 
 #include <iostream> // for ostream
 
-#include <geos/geom/Coordinate.h>
+#include <geos/geom/Coordinate.h> // for composition
 
 #include <geos/inline.h>
+
+// Forward declarations
+namespace geos {
+	namespace geom {
+		class CoordinateSequence;
+	}
+}
 
 namespace geos {
 namespace geom { // geos::geom
@@ -225,6 +232,9 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/13 22:33:09  strk
+ * Added missing forward declarations
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
