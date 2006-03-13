@@ -47,7 +47,7 @@ namespace noding { // geos.noding
  *
  * Last port: noding/ScaledNoder.java rev. 1.2 (JTS-1.7)
  */
-class ScaledNoder : public Noder, public geom::CoordinateFilter { // implements Noder
+class ScaledNoder : public Noder { // , public geom::CoordinateFilter { // implements Noder
 
 private:
 
@@ -58,6 +58,13 @@ private:
 	bool isScaled;
 
 	void rescale(std::vector<SegmentString*>& segStrings) const;
+	void scale(std::vector<SegmentString*>& segStrings) const;
+
+	class Scaler;
+	class ReScaler;
+
+	friend class ScaledNoder::Scaler;
+	friend class ScaledNoder::ReScaler;
 
 public:
 
@@ -96,6 +103,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/13 21:19:51  strk
+ * Fixed bug in ScaledNoder scaling mechanism (hugly code, due to CoordinateSequence visitor pattern design). Tests are still failing so this possibly needs some other fix. Streamlined includes by implementation file.
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

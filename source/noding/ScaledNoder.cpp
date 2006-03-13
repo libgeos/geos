@@ -18,32 +18,72 @@
  **********************************************************************/
 
 #include <functional>
-#include "geos/noding.h"
+#include <vector>
+#include <cassert>
+
+//#include "geos/noding.h"
+#include "geos/geom/Coordinate.h"
+#include "geos/geom/CoordinateSequence.h" // for apply
+#include "geos/noding/ScaledNoder.h"
+#include "geos/noding/SegmentString.h"
+#include "geos/util/math.h"
+
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
 
-/*public*/
-void
-ScaledNoder::filter_rw(Coordinate* c) const
-{
-	c->x = c->x / scaleFactor + offsetX;
-	c->y = c->y / scaleFactor + offsetY;
-}
+class ScaledNoder::Scaler: public geom::CoordinateFilter {
+public:
+	const ScaledNoder& sn;
+	Scaler(const ScaledNoder&n): sn(n) {}
+	void filter_ro(const geom::Coordinate* c) { assert(0); }
+	void filter_rw(geom::Coordinate* c) const {
+		c->x = util::sym_round( ( c->x - sn.offsetX ) *  sn.scaleFactor );
+		c->y = util::sym_round( ( c->y - sn.offsetY ) *  sn.scaleFactor );
+	}
+};
+
+class ScaledNoder::ReScaler: public geom::CoordinateFilter {
+public:
+	const ScaledNoder& sn;
+	ReScaler(const ScaledNoder&n): sn(n) {}
+	void filter_ro(const geom::Coordinate* c) { assert(0); }
+	void filter_rw(geom::Coordinate* c) const {
+		c->x = c->x / sn.scaleFactor + sn.offsetX;
+		c->y = c->y / sn.scaleFactor + sn.offsetY;
+	}
+};
 
 /*private*/
 void
 ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
 {
-
+	ReScaler rescaler(*this);
 	for (SegmentString::NonConstVect::const_iterator
 		i0=segStrings.begin(), i0End=segStrings.end();
 			i0!=i0End; ++i0)
 	{
 		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
-		(*i0)->getCoordinates()->apply_rw(this);
+		(*i0)->getCoordinates()->apply_rw(&rescaler);
 	}
 }
+
+
+/*private*/
+void
+ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
+{
+	Scaler scaler(*this);
+	for (SegmentString::NonConstVect::const_iterator
+		i0=segStrings.begin(), i0End=segStrings.end();
+			i0!=i0End; ++i0)
+	{
+		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
+		(*i0)->getCoordinates()->apply_rw(&scaler);
+	}
+}
+
 
 /*public*/
 SegmentString::NonConstVect*
@@ -59,7 +99,7 @@ ScaledNoder::getNodedSubstrings() const
 void
 ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 {
-	if (isScaled) rescale(*inputSegStr);
+	if (isScaled) scale(*inputSegStr);
 	noder.computeNodes(inputSegStr);
 }
 
@@ -72,6 +112,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/13 21:19:51  strk
+ * Fixed bug in ScaledNoder scaling mechanism (hugly code, due to CoordinateSequence visitor pattern design). Tests are still failing so this possibly needs some other fix. Streamlined includes by implementation file.
+ *
  * Revision 1.3  2006/02/23 11:54:20  strk
  * - MCIndexPointSnapper
  * - MCIndexSnapRounder
