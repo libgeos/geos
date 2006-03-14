@@ -17,11 +17,25 @@
  *
  **********************************************************************/
 
-#include "geos/nodingSnapround.h"
 #include <functional>
 #include <vector>
 
+#include <geos/noding/MCIndexNoder.h>
+#include <geos/noding/snapround/MCIndexSnapRounder.h>
+#include <geos/noding/snapround/HotPixel.h>
+#include <geos/noding/IntersectionFinderAdder.h>
+#include <geos/noding/NodingValidator.h>
+#include <geos/geom/Coordinate.h>
+
+#include <geos/inline.h>
+
+
+#ifndef USE_INLINE
+# include <geos/noding/snapround/MCIndexSnapRounder.inl>
+#endif
+
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -122,6 +136,9 @@ MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentSt
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.6  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

@@ -14,10 +14,15 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
 #include <string>
 
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/TopologyLocation.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geom/Location.h>
+
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -236,6 +241,9 @@ Label::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/14 12:55:55  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.7  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

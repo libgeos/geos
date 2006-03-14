@@ -29,7 +29,8 @@
 #include <geos/opValid.h>
 #include <geos/opDistance.h>
 #include <geos/opOverlay.h>
-#include <geos/opBuffer.h>
+//#include <geos/opBuffer.h>
+#include <geos/operation/buffer/BufferOp.h>
 #include <geos/opPredicate.h>
 #include <geos/io.h>
 #include <geos/version.h>
@@ -753,6 +754,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.98  2006/03/14 12:55:55  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.97  2006/03/13 21:54:56  strk
  * Streamlined headers inclusion.
  *

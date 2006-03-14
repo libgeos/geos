@@ -1,4 +1,4 @@
-SUBDIRS = 
+SUBDIRS = index
 
 geosdir = $(includedir)/geos/geomgraph
 

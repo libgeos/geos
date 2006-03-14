@@ -20,12 +20,14 @@
 
 #include <algorithm>
 
-#include <geos/noding.h>
-#include <geos/nodingSnapround.h>
+//#include <geos/nodingSnapround.h>
 #include <geos/precision.h>
 #include <geos/profiler.h>
-#include <geos/opBuffer.h>
 #include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/BufferBuilder.h>
+#include <geos/noding/ScaledNoder.h>
+#include <geos/noding/snapround/MCIndexSnapRounder.h>
+#include <geos/noding/snapround/MCIndexPointSnapper.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -202,6 +204,9 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.47  2006/03/14 00:36:31  strk
  * Reduced 'buffer' headers inclusion
  *

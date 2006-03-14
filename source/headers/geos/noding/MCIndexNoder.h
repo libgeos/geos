@@ -80,12 +80,9 @@ public:
 	/// Return a reference to this instance's std::vector of MonotoneChains
 	std::vector<index::chain::MonotoneChain*>& getMonotoneChains() { return monoChains; }
 
-	index::SpatialIndex& getIndex() { return index; }
+	index::SpatialIndex& getIndex();
 
-	std::vector<SegmentString*>* getNodedSubstrings() const {
-		assert(nodedSegStrings); // must have colled computeNodes before!
-		return SegmentString::getNodedSubstrings(*nodedSegStrings);
-	}
+	std::vector<SegmentString*>* getNodedSubstrings() const;
 
 	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
 
@@ -109,14 +106,17 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-//#ifdef USE_INLINE
-//# include "geos/noding/MCIndexNoder.inl"
-//#endif
+#ifdef USE_INLINE
+# include <geos/noding/MCIndexNoder.inl>
+#endif
 
 #endif // GEOS_NODING_MCINDEXNODER_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

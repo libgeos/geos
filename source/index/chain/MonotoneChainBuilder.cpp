@@ -13,10 +13,12 @@
  *
  **********************************************************************/
 
-#include <geos/indexChain.h>
-#include <geos/geomgraph.h>
 #include <cstdio>
 #include <vector>
+
+#include <geos/indexChain.h> // FIXME: split
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geomgraph/Quadrant.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -109,6 +111,9 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.21  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

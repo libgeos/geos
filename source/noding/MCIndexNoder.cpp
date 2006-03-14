@@ -19,11 +19,20 @@
 
 #include <cassert>
 #include <functional>
-#include "geos/indexChain.h"
-#include "geos/noding.h"
+#include <algorithm>
+
+#include "geos/indexChain.h" // FIXME: split
+//#include "geos/noding.h"
+#include "geos/noding/SegmentIntersector.h"
+#include "geos/noding/MCIndexNoder.h"
+#include "geos/noding/SegmentString.h"
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
+#endif
+
+#ifndef USE_INLINE
+# include <geos/noding/MCIndexNoder.inl>
 #endif
 
 using namespace std;
@@ -146,6 +155,9 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.11  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

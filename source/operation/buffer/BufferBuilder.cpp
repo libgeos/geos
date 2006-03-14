@@ -21,9 +21,6 @@
 #include <cassert>
 #include <vector>
 
-//#include <geos/noding.h>
-//#include <geos/nodingSnapround.h>
-//#include <geos/opBuffer.h>
 #include <geos/opOverlay.h> // FIXME: reduce inclusion
 
 #include <geos/profiler.h>
@@ -130,7 +127,8 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	prof->stop();
 #endif
 #if GEOS_DEBUG
-	std::cerr<<"BufferBuilder::buffer finished computing NodedEdges"<<std::endl;
+	std::cerr << "BufferBuilder::buffer finished computing NodedEdges: "
+		<< std::endl << edgeList << std::endl;
 #endif
 
 	Geometry* resultGeom=NULL;
@@ -348,6 +346,9 @@ BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,Polygon
 
 /**********************************************************************
  * $Log$
+ * Revision 1.46  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.45  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *

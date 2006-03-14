@@ -1,4 +1,4 @@
-SUBDIRS = 
+SUBDIRS = snapround
 
 geosdir = $(includedir)/geos/noding
 
@@ -9,6 +9,7 @@ geos_HEADERS = \
 	IntersectionFinderAdder.h	\
 	IteratedNoder.h	\
 	MCIndexNoder.h	\
+	MCIndexNoder.inl	\
 	Noder.h	\
 	NodingValidator.h	\
 	Octant.h	\

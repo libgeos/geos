@@ -17,10 +17,19 @@
  *
  **********************************************************************/
 
-#include "geos/nodingSnapround.h"
+//#include "geos/nodingSnapround.h"
+#include <geos/indexChain.h> // FIXME: split
+#include <geos/noding/snapround/MCIndexPointSnapper.h>
+#include <geos/noding/snapround/HotPixel.h>
+#include <geos/noding/snapround/SimpleSnapRounder.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/spatialIndex.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geomgraph/index/MonotoneChain.h>
 
 using namespace geos::index;
 using namespace geos::index::chain;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -105,6 +114,9 @@ MCIndexPointSnapper::snap(const HotPixel& hotPixel,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.5  2006/02/21 16:53:49  strk
  * MCIndexPointSnapper, MCIndexSnapRounder
  *

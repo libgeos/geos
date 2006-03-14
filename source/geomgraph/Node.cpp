@@ -14,8 +14,15 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
 #include <string>
+
+#include <geos/geom/Coordinate.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geom/Location.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -25,6 +32,7 @@
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -208,6 +216,9 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/14 12:55:55  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.19  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

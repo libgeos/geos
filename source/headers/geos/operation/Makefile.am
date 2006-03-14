@@ -1,4 +1,4 @@
-SUBDIRS = 
+SUBDIRS = buffer
 
 geosdir = $(includedir)/geos/operation
 

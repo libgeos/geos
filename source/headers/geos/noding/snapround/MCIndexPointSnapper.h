@@ -1,0 +1,97 @@
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2006      Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#ifndef GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
+#define GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
+
+#include <geos/inline.h>
+
+// Forward declarations
+namespace geos {
+	namespace index {
+		class SpatialIndex;
+	}
+	namespace noding {
+		class SegmentString;
+		namespace snapround {
+			class HotPixel;
+		}
+	}
+}
+
+namespace geos {
+namespace noding { // geos::noding
+namespace snapround { // geos::noding::snapround
+
+/** \brief
+ * "Snaps" all {@link SegmentString}s in a {@link SpatialIndex} containing
+ * {@link MonotoneChain}s to a given {@link HotPixel}.
+ *
+ * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.2 (JTS-1.7)
+ */
+class MCIndexPointSnapper {
+
+private:
+
+	index::SpatialIndex& index;
+
+public:
+ 
+
+	MCIndexPointSnapper(index::SpatialIndex& nIndex)
+		:
+		index(nIndex)
+	{}
+
+
+	/**
+	 * Snaps (nodes) all interacting segments to this hot pixel.
+	 * The hot pixel may represent a vertex of an edge,
+	 * in which case this routine uses the optimization
+	 * of not noding the vertex itself
+	 *
+	 * @param hotPixel the hot pixel to snap to
+	 * @param parentEdge the edge containing the vertex,
+	 *        if applicable, or <code>null</code>
+	 * @param vertexIndex the index of the vertex, if applicable, or -1
+	 * @return <code>true</code> if a node was added for this pixel
+	 */
+	bool snap(const HotPixel& hotPixel, SegmentString* parentEdge,
+			unsigned int vertexIndex);
+
+	bool snap(const HotPixel& hotPixel) {
+		return snap(hotPixel, NULL, 0);
+	}
+		
+};
+
+
+} // namespace geos::noding::snapround
+} // namespace geos::noding
+} // namespace geos
+
+//#ifdef USE_INLINE
+//# include "geos/noding/snapround/MCIndexPointSnapper.inl"
+//#endif
+
+#endif // GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.1  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
+ **********************************************************************/
+

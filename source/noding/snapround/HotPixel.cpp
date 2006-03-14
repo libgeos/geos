@@ -17,13 +17,20 @@
  *
  **********************************************************************/
 
-#include <geos/nodingSnapround.h>
-#include <geos/geosAlgorithm.h>
 #include <cassert>
 #include <memory>
 
+#include <geos/noding/snapround/HotPixel.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/Coordinate.h>
+
+#ifndef USE_INLINE
+# include "geos/noding/snapround/HotPixel.inl"
+#endif
+
 using namespace std;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -166,6 +173,9 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.5  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

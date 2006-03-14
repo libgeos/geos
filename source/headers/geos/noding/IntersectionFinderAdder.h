@@ -21,7 +21,8 @@
 
 #include <geos/inline.h>
 
-#include <geos/geom/Coordinate.h>
+#include <geos/geom/Coordinate.h> // for use in vector
+#include <geos/noding/SegmentIntersector.h> // for inheritance
 
 // Forward declarations
 namespace geos {
@@ -97,6 +98,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
