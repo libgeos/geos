@@ -13,11 +13,14 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
-#include <geos/indexQuadtree.h>
-#include <geos/profiler.h>
 #include <string>
+#include <sstream>
 #include <vector>
+
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeList.h>
+#include <geos/indexQuadtree.h> // FIXME: split this
+#include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -110,6 +113,10 @@ EdgeList::findEdgeIndex(Edge *e)
 string
 EdgeList::print()
 {
+	ostringstream ss;
+	ss << *this;
+	return ss.str();
+#if 0
 	string out="EdgeList( ";
 	for(unsigned int j=0, s=edges.size(); j<s; ++j)
 	{
@@ -119,6 +126,19 @@ EdgeList::print()
 	}
 	out+=")  ";
 	return out;
+#endif
+}
+
+std::ostream&
+operator<< (std::ostream&os, const EdgeList& el)
+{
+	os << "EdgeList: " << std::endl;
+	for(unsigned int j=0, s=el.edges.size(); j<s; ++j)
+	{
+       		Edge *e=el.edges[j];
+		os << "  " << *e << std::endl; 
+	}
+	return os;
 }
 
 } // namespace geos.geomgraph
@@ -126,6 +146,9 @@ EdgeList::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/14 11:03:14  strk
+ * Added operator<< for Edge and EdgeList
+ *
  * Revision 1.15  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *
@@ -181,36 +204,5 @@ EdgeList::print()
  * a const vector by reference rather then a non-const vector by
  * pointer.
  * Optimized polygon vector allocations in OverlayOp::computeOverlay.
- *
- * Revision 1.7  2005/02/01 13:44:59  strk
- * More profiling labels.
- *
- * Revision 1.6  2004/11/22 11:34:49  strk
- * More debugging lines and comments/indentation cleanups
- *
- * Revision 1.5  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.4  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.14  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/

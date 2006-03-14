@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include <geos/indexQuadtree.h> // for inlined ctor
 
@@ -56,6 +57,8 @@ private:
 	geos::index::SpatialIndex* index;
 
 public:
+	friend std::ostream& operator<< (std::ostream& os, const EdgeList& el);
+
 	EdgeList()
 		:
 		edges(),
@@ -83,6 +86,8 @@ public:
 
 };
 
+std::ostream& operator<< (std::ostream& os, const EdgeList& el);
+
 
 } // namespace geos.geomgraph
 } // namespace geos
@@ -95,6 +100,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/14 11:03:15  strk
+ * Added operator<< for Edge and EdgeList
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

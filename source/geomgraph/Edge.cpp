@@ -16,6 +16,7 @@
 
 #include <cassert>
 #include <string>
+#include <sstream>
 
 #include <geos/geomgraph.h>
 #include <geos/geomgraphindex.h> // for MonotoneChainEdge
@@ -224,6 +225,11 @@ Edge::print() const
 {
 	testInvariant();
 
+	std::stringstream ss;
+	ss << *this;
+	return ss.str();
+
+#if 0
 	string out="edge " + name + ": ";
 	out+="LINESTRING (";
 	unsigned int npts=getNumPoints();
@@ -237,8 +243,10 @@ Edge::print() const
 	out+=" ";
 	out+=depthDelta;
 	return out;
+#endif // 0
 }
   
+// Dunno how to implemente this in terms of operator<<
 string
 Edge::printReverse() const
 {
@@ -270,11 +278,30 @@ Edge::getEnvelope()
 	return env;
 }
 
+std::ostream&
+operator<< (std::ostream&os, const Edge& e)
+{
+	os << "EDGE";
+	if ( e.name != "" ) os << " name:" << e.name;
+
+	os << " label:" << e.label->toString()
+	   << " depthDelta:" << e.depthDelta
+	   << ":" << std::endl
+	   << "  LINESTRING ("
+	   //<< *(e.pts) << std::endl;
+	   << e.pts->toString() << std::endl;
+
+	return os;
+}
+
 } // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/14 11:03:14  strk
+ * Added operator<< for Edge and EdgeList
+ *
  * Revision 1.30  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

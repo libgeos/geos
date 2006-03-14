@@ -75,7 +75,10 @@ private:
 		assert(pts);
 		assert(pts->size() > 1);
 	}
+
 public:
+
+	friend std::ostream& operator<< (std::ostream& os, const Edge& el);
 
 	static void updateIM(Label *lbl,geom::IntersectionMatrix *im);
 
@@ -229,6 +232,8 @@ inline bool operator==(const Edge &a, const Edge &b) {
 	return a.equals(b);
 }
 
+std::ostream& operator<< (std::ostream& os, const Edge& el);
+
 
 } // namespace geos.geomgraph
 } // namespace geos
@@ -241,6 +246,9 @@ inline bool operator==(const Edge &a, const Edge &b) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/14 11:03:14  strk
+ * Added operator<< for Edge and EdgeList
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
