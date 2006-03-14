@@ -24,7 +24,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 
 #ifndef GEOS_DEBUG
-#define GEOS_DEBUG 1
+#define GEOS_DEBUG 0
 #endif
 
 using namespace std;
@@ -330,6 +330,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/03/14 16:55:33  strk
+ * oops, GEOS_DEBUG default to 0
+ *
  * Revision 1.33  2006/03/14 16:55:01  strk
  * comments cleanup
  *
