@@ -12,7 +12,13 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/overlay/MaximalEdgeRing.java rev. 1.13
+ *
  **********************************************************************/
+
+#include <cassert>
 
 #include <geos/opOverlay.h>
 //#include <geos/geomgraph/EdgeRing.h>
@@ -28,6 +34,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
+/*public*/
 // CGAlgorithms obsoleted
 MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
 		const GeometryFactory *geometryFactory)
@@ -38,34 +45,41 @@ MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
 	computeRing();
 }
 
+/*public*/
 MaximalEdgeRing::~MaximalEdgeRing()
 {
 }
 
+/*public*/
 DirectedEdge*
 MaximalEdgeRing::getNext(DirectedEdge *de)
 {
 	return de->getNext();
 }
 
+/*public*/
 void
 MaximalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er)
 {
 	de->setEdgeRing(er);
 }
 
-/**
- * For all nodes in this EdgeRing,
- * link the DirectedEdges at the node to form minimalEdgeRings
- */
+/*public*/
 void
 MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings()
 {
 	DirectedEdge* de=startDe;
 	do {
 		Node* node=de->getNode();
-		((DirectedEdgeStar*) node->getEdges())->linkMinimalDirectedEdges(this);
+		EdgeEndStar* ees = node->getEdges();
+
+		assert(dynamic_cast<DirectedEdgeStar*>(ees));
+		DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+
+		des->linkMinimalDirectedEdges(this);
+
 		de=de->getNext();
+
 	} while (de!=startDe);
 }
 
@@ -98,6 +112,9 @@ MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/14 17:08:04  strk
+ * comments cleanup, integrity checks
+ *
  * Revision 1.16  2006/03/09 18:18:39  strk
  * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
  * Applied patch to IsValid operation from JTS-1.7.1

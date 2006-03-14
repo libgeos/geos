@@ -476,6 +476,10 @@ public:
 	///
 	void buildMinimalRings(std::vector<MinimalEdgeRing*>& minEdgeRings);
 
+	/// \brief
+	/// For all nodes in this EdgeRing,
+	/// link the DirectedEdges at the node to form minimalEdgeRings
+	///
 	void linkDirectedEdgesForMinimalEdgeRings();
 };
 
@@ -769,6 +773,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/14 17:08:04  strk
+ * comments cleanup, integrity checks
+ *
  * Revision 1.24  2006/03/14 16:55:01  strk
  * comments cleanup
  *
