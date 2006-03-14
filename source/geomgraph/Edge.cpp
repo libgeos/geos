@@ -251,7 +251,7 @@ Edge::printReverse() const
 		if (i<npts) os << ", ";
 		os << pts->getAt(i-1).toString();
 	}
-	os << ")" << std::endl;
+	os << ")";
 
 	return os.str();
 }
@@ -283,8 +283,8 @@ operator<< (std::ostream&os, const Edge& e)
 	   << " depthDelta:" << e.depthDelta
 	   << ":" << std::endl
 	   << "  LINESTRING"
-	   //<< *(e.pts) << std::endl;
-	   << e.pts->toString() << std::endl;
+	   //<< *(e.pts); 
+	   << e.pts->toString();
 
 	return os;
 }
@@ -294,6 +294,9 @@ operator<< (std::ostream&os, const Edge& e)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/03/14 16:53:31  strk
+ * removed endline from printing funx
+ *
  * Revision 1.32  2006/03/14 15:31:39  strk
  * Cleaned up toString funx (more WKT friendly)
  *
