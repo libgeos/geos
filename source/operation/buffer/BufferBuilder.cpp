@@ -18,18 +18,36 @@
  *
  **********************************************************************/
 
-#include <geos/noding.h>
-#include <geos/nodingSnapround.h>
-#include <geos/opBuffer.h>
-#include <geos/profiler.h>
 #include <cassert>
 #include <vector>
+
+//#include <geos/noding.h>
+//#include <geos/nodingSnapround.h>
+//#include <geos/opBuffer.h>
+#include <geos/opOverlay.h> // FIXME: reduce inclusion
+
+#include <geos/profiler.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/operation/buffer/BufferBuilder.h>
+#include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/operation/buffer/OffsetCurveSetBuilder.h>
+#include <geos/operation/buffer/BufferSubgraph.h>
+#include <geos/operation/buffer/SubgraphDepthLocater.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/noding/IntersectionAdder.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/noding/MCIndexNoder.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/util/GEOSException.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 //using namespace std;
+using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::noding;
 using namespace geos::algorithm;
@@ -330,6 +348,9 @@ BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,Polygon
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2006/03/14 00:19:40  strk
+ * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
+ *
  * Revision 1.44  2006/03/10 10:44:53  strk
  * Unreferenced exception objects cleanup (#52)
  *
@@ -485,90 +506,6 @@ BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,Polygon
  *
  * Revision 1.24  2004/11/04 19:08:07  strk
  * Cleanups, initializers list, profiling.
- *
- * Revision 1.23  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.22  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.21  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.20  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.19  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.18  2004/06/15 20:10:31  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.17  2004/06/15 20:01:58  strk
- * Empty geometry creation call made using NULL instead of newly created empty vector (will be faster)
- *
- * Revision 1.16  2004/05/26 13:12:58  strk
- * Removed try/catch block from ::buildSubgraphs
- *
- * Revision 1.15  2004/05/26 09:49:03  strk
- * PlanarGraph made local to ::buffer instead of Class private.
- *
- * Revision 1.14  2004/05/05 16:57:48  strk
- * Rewritten static cga allocation to avoid copy constructor calls.
- *
- * Revision 1.13  2004/05/05 16:36:46  strk
- * Avoid use of copy c'tors on local objects initializzation
- *
- * Revision 1.12  2004/05/05 13:08:01  strk
- * Leaks fixed, explicit allocations/deallocations reduced.
- *
- * Revision 1.11  2004/05/05 10:54:48  strk
- * Removed some private static heap explicit allocation, less cleanup done by
- * the unloader.
- *
- * Revision 1.10  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.9  2004/05/03 17:15:38  strk
- * leaks on exception fixed.
- *
- * Revision 1.8  2004/05/03 10:43:43  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.7  2004/04/30 09:15:28  strk
- * Enlarged exception specifications to allow for AssertionFailedException.
- * Added missing initializers.
- *
- * Revision 1.6  2004/04/23 00:02:18  strk
- * const-correctness changes
- *
- * Revision 1.5  2004/04/20 10:58:04  strk
- * More memory leaks removed.
- *
- * Revision 1.4  2004/04/19 15:14:46  strk
- * Added missing virtual destructor in SpatialIndex class.
- * Memory leaks fixes. Const and throw specifications added.
- *
- * Revision 1.3  2004/04/19 12:51:01  strk
- * Memory leaks fixes. Throw specifications added.
- *
- * Revision 1.2  2004/04/14 08:38:52  strk
- * BufferBuilder constructor missed to initialize workingPrecisionModel
- *
- * Revision 1.1  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
  *
  **********************************************************************/
 

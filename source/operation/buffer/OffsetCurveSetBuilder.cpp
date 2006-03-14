@@ -20,20 +20,34 @@
 
 #include <vector>
 
-#include <geos/opBuffer.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/util/UnsupportedOperationException.h>
+#include <geos/operation/buffer/OffsetCurveSetBuilder.h>
+#include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/Location.h>
+#include <geos/geom/Triangle.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/noding/SegmentString.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
-//using namespace std;
-using namespace geos::geomgraph;
-using namespace geos::noding;
-using namespace geos::algorithm;
-using namespace geos::operation::overlay;
+//using namespace geos::operation::overlay;
+using namespace geos::geom;
+using namespace geos::noding; // SegmentString
+using namespace geos::geomgraph; // Label, Position
+using namespace geos::algorithm; // CGAlgorithms
 
 namespace geos {
 namespace operation { // geos.operation
@@ -189,6 +203,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 		offsetSide = Position::RIGHT;
 	}
 
+	// FIXME: avoid the C-style cast
 	const LinearRing *shell=(const LinearRing *)p->getExteriorRing();
 	CoordinateSequence *shellCoord = CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
 
@@ -317,6 +332,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/14 00:19:40  strk
+ * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
+ *
  * Revision 1.29  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

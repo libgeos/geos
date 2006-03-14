@@ -20,8 +20,14 @@
 
 #include <vector>
 
-#include <geos/opBuffer.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/opOverlay.h> // FIXME: split this
+#include <geos/operation/buffer/SubgraphDepthLocater.h>
+#include <geos/operation/buffer/BufferSubgraph.h>
+#include <geos/operation/buffer/DepthSegment.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -29,9 +35,9 @@
 
 using namespace std;
 using namespace geos::geomgraph;
-using namespace geos::noding;
 using namespace geos::algorithm;
-using namespace geos::operation::overlay;
+using namespace geos::operation::overlay; // PolygonBuilder
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -251,6 +257,9 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/14 00:19:40  strk
+ * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
+ *
  * Revision 1.22  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

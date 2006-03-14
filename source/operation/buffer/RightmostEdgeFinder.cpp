@@ -17,16 +17,17 @@
 #include <vector>
 #include <cassert>
 
-#include <geos/opBuffer.h>
 #include <geos/algorithm/CGAlgorithms.h>
-#include <geos/util.h>
+#include <geos/operation/buffer/RightmostEdgeFinder.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/Edge.h>
 
-//using namespace std;
-
-using namespace geos::geomgraph;
-using namespace geos::noding;
-using namespace geos::algorithm;
-using namespace geos::operation::overlay;
+using namespace geos::algorithm; // CGAlgorithms
+using namespace geos::geom;
+using namespace geos::geomgraph; // DirectedEdge, Position
 
 namespace geos {
 namespace operation { // geos.operation
@@ -184,6 +185,9 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/14 00:19:40  strk
+ * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
+ *
  * Revision 1.18  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

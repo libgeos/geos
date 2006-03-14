@@ -17,7 +17,12 @@
 #include <cassert>
 #include <vector>
 
-#include <geos/opBuffer.h>
+#include <geos/opOverlay.h> // FIXME: reduce this include
+
+#include <geos/operation/buffer/BufferSubgraph.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/DirectedEdge.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -28,6 +33,7 @@ using namespace geos::geomgraph;
 using namespace geos::noding;
 using namespace geos::algorithm;
 using namespace geos::operation::overlay;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -325,6 +331,9 @@ BufferSubgraph::getEnvelope()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/14 00:19:40  strk
+ * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
+ *
  * Revision 1.24  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

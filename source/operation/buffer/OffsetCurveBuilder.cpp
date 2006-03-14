@@ -21,8 +21,14 @@
 #include <cassert>
 #include <vector>
 
-#include <geos/opBuffer.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/operation/buffer/BufferOp.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/PrecisionModel.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -30,9 +36,8 @@
 
 using namespace std;
 using namespace geos::geomgraph;
-using namespace geos::noding;
 using namespace geos::algorithm;
-using namespace geos::operation::overlay;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -461,6 +466,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/14 00:19:40  strk
+ * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
+ *
  * Revision 1.30  2006/03/11 16:58:41  strk
  * Fixed bug in OffsetCurveBuilder::getCoordinates.
  *

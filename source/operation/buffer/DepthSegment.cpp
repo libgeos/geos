@@ -13,7 +13,10 @@
  *
  **********************************************************************/
 
-#include <geos/opBuffer.h>
+#include <geos/operation/buffer/DepthSegment.h>
+#include <geos/geom/LineSegment.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
