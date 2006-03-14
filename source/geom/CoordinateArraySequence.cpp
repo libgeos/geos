@@ -120,16 +120,16 @@ CoordinateArraySequence::deleteAt(unsigned int pos)
 string
 CoordinateArraySequence::toString() const
 {
-	string result("");
+	string result("(");
 	if (getSize()>0) {
 		//char buffer[100];
-		for (unsigned int i=0; i<vect->size(); i++) {
+		for (unsigned int i=0, n=vect->size(); i<n; i++)
+		{
 			Coordinate& c=(*vect)[i];
-			//sprintf(buffer,"(%g,%g,%g) ",c.x,c.y,c.z);
-			//result.append(buffer);
+			if ( i ) result.append(", ");
 			result.append(c.toString());
 		}
-		result.append("");
+		result.append(")");
 	}
 	return result;
 }
@@ -208,6 +208,9 @@ CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/14 15:32:24  strk
+ * Cleaned up toString funx (more WKT friendly)
+ *
  * Revision 1.4  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

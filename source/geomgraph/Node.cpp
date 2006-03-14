@@ -173,7 +173,9 @@ Node::computeMergedLocation(const Label* label2, int eltIndex)
 string
 Node::print()
 {
-	string out="node "+coord.toString()+" lbl: "+label->toString();
+	string out = "Node:\n";
+	out += " POINT("+coord.toString()+"); \n";
+	out += "  lbl: "+label->toString();
 	return out;
 }
 
@@ -216,6 +218,9 @@ Node::getZ() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/14 15:31:39  strk
+ * Cleaned up toString funx (more WKT friendly)
+ *
  * Revision 1.20  2006/03/14 12:55:55  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *

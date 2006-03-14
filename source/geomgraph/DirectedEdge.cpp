@@ -244,12 +244,12 @@ DirectedEdge::print()
 std::string
 DirectedEdge::printEdge()
 {
-	std::string out=print();
-	out+=" ";
+	//std::string out=print();
+	std::string out("");
 	if (isForwardVar)
-		out+=edge->print();
+		out += edge->print();
 	else
-		out+=edge->printReverse();
+		out += edge->printReverse();
 	return out;
 }
 
@@ -258,6 +258,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/14 15:31:39  strk
+ * Cleaned up toString funx (more WKT friendly)
+ *
  * Revision 1.12  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
@@ -280,32 +283,6 @@ DirectedEdge::printEdge()
  * Reduced heap allocations made by TopologyLocation and Label objects.
  * Enforced const-correctness on GraphComponent.
  * Cleanups.
- *
- * Revision 1.5  2005/07/11 10:27:13  strk
- * Fixed initializzazion lists
- *
- * Revision 1.4  2005/05/19 10:29:28  strk
- * Removed some CGAlgorithms instances substituting them with direct calls
- * to the static functions. Interfaces accepting CGAlgorithms pointers kept
- * for backward compatibility but modified to make the argument optional.
- * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
- * Inlined some smaller functions encountered during bug hunting.
- * Updated Copyright notices in the touched files.
- *
- * Revision 1.3  2005/04/06 11:09:41  strk
- * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

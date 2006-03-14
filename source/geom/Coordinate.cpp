@@ -27,24 +27,21 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-	Coordinate Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
+Coordinate Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
 
-string Coordinate::toString() const {
+string Coordinate::toString() const
+{
 	ostringstream s;
-	if (ISNAN(z)) {
-		s<<"("<<x<<","<<y<<")";
-	} else {
-		s<<"("<<x<<","<<y<<","<<z<<")";
-	}
+	s<<*this;
 	return s.str();
 }
 
-std::ostream& operator<< (std::ostream& os, const Coordinate& c) {
-	//os<<c.toString();
+std::ostream& operator<< (std::ostream& os, const Coordinate& c)
+{
 	if (ISNAN(c.z)) {
-		os<<"("<<c.x<<","<<c.y<<")";
+		os << c.x << " " << c.y;
 	} else {
-		os<<"("<<c.x<<","<<c.y<<","<<c.z<<")";
+		os << c.x << " " << c.y << " " << c.z;
 	}
 	return os;
 }
@@ -55,6 +52,9 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/14 15:32:24  strk
+ * Cleaned up toString funx (more WKT friendly)
+ *
  * Revision 1.30  2006/03/13 21:54:56  strk
  * Streamlined headers inclusion.
  *

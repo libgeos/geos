@@ -228,22 +228,6 @@ Edge::print() const
 	std::stringstream ss;
 	ss << *this;
 	return ss.str();
-
-#if 0
-	string out="edge " + name + ": ";
-	out+="LINESTRING (";
-	unsigned int npts=getNumPoints();
-	for (unsigned int i=0; i<npts; ++i)
-	{
-		if (i>0) out+=",";
-		out+=pts->getAt(i).toString();
-	}
-	out+=")  ";
-	out+=label->toString();
-	out+=" ";
-	out+=depthDelta;
-	return out;
-#endif // 0
 }
   
 // Dunno how to implemente this in terms of operator<<
@@ -251,14 +235,25 @@ string
 Edge::printReverse() const
 {
 	testInvariant();
-	string out="edge " + name + ": ";
+
+	stringstream os;
+
+	os << "EDGE (rev)";
+	if ( name != "" ) os << " name:" << name;
+
+	os << " label:" << label->toString()
+	   << " depthDelta:" << depthDelta
+	   << ":" << std::endl
+	   << "  LINESTRING(";
 	unsigned int npts=getNumPoints();
 	for (unsigned int i=npts; i>0; --i)
 	{
-		out+=pts->getAt(i-1).toString() + " ";
+		if (i<npts) os << ", ";
+		os << pts->getAt(i-1).toString();
 	}
-	out+="\n";
-	return out;
+	os << ")" << std::endl;
+
+	return os.str();
 }
 
 Envelope*
@@ -287,7 +282,7 @@ operator<< (std::ostream&os, const Edge& e)
 	os << " label:" << e.label->toString()
 	   << " depthDelta:" << e.depthDelta
 	   << ":" << std::endl
-	   << "  LINESTRING ("
+	   << "  LINESTRING"
 	   //<< *(e.pts) << std::endl;
 	   << e.pts->toString() << std::endl;
 
@@ -299,6 +294,9 @@ operator<< (std::ostream&os, const Edge& e)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/03/14 15:31:39  strk
+ * Cleaned up toString funx (more WKT friendly)
+ *
  * Revision 1.31  2006/03/14 11:03:14  strk
  * Added operator<< for Edge and EdgeList
  *
