@@ -325,12 +325,33 @@ BufferSubgraph::getEnvelope()
 	return env;
 }
 
+std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
+{
+	os << "BufferSubgraph[" << &bs << "] "
+	   << bs.nodes.size() << " nodes, "
+	   << bs.dirEdgeList.size() << " directed edges" << std::endl;
+
+	for (unsigned int i=0, n=bs.nodes.size(); i<n; i++)
+		os << "  Node " << i << ": " << bs.nodes[i]->print() << std::endl;
+
+	for (unsigned int i=0, n=bs.dirEdgeList.size(); i<n; i++)
+	{
+		os << "  DirEdge " << i << ": "
+		   << bs.dirEdgeList[i]->printEdge() << std::endl;
+	}
+
+	return os;
+}
+
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/14 14:16:52  strk
+ * operator<< for BufferSubgraph, more debugging calls
+ *
  * Revision 1.25  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *

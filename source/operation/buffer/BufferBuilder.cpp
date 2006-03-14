@@ -107,7 +107,8 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	std::vector<SegmentString*>& bufferSegStrList=curveSetBuilder.getCurves();
 
 #if GEOS_DEBUG
-	std::cerr<<"OffsetCurveSetBuilder got "<<bufferSegStrList.size()<<" curves"<<std::endl;
+	std::cerr << "OffsetCurveSetBuilder got " << bufferSegStrList.size()
+	          << " curves" << std::endl;
 #endif
 	// short-circuit test
 	if (bufferSegStrList.size()<=0) {
@@ -142,12 +143,17 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		createSubgraphs(&graph, subgraphList);
 #if GEOS_DEBUG
 	std::cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<std::endl;
+	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
+		std::cerr << *(subgraphList[i]) << std::endl;
 #endif
 		PolygonBuilder polyBuilder(geomFact);
 		buildSubgraphs(&subgraphList, &polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
 #if GEOS_DEBUG
-	std::cerr<<"PolygonBuilder got "<<resultPolyList->size()<<" polygons"<<std::endl;
+	std::cerr << "PolygonBuilder got " << resultPolyList->size()
+	          << " polygons" << std::endl;
+	for (unsigned int i=0, n=resultPolyList->size(); i<n; i++)
+		std::cerr << (*resultPolyList)[i]->toString() << std::endl;
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (const util::GEOSException& /* exc */) {
@@ -313,25 +319,20 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph, std::vector<BufferSubgraph*>&
 	 * subgraphs for shells will have been built before the subgraphs for
 	 * any holes they contain
 	 */
-	sort(subgraphList.begin(),subgraphList.end(),BufferSubgraphGT);
+	sort(subgraphList.begin(), subgraphList.end(), BufferSubgraphGT);
 }
 
-/**
-* Completes the building of the input subgraphs by depth-labelling them,
-* and adds them to the PolygonBuilder->
-* The subgraph list must be sorted in rightmost-coordinate order->
-*
-* @param subgraphList the subgraphs to build
-* @param polyBuilder the PolygonBuilder which will build the final polygons
-*/
+/*private*/
 void
-BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,PolygonBuilder *polyBuilder)
+BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,
+		PolygonBuilder *polyBuilder)
 {
 	std::vector<BufferSubgraph*> processedGraphs;
-	for (unsigned int i=0;i<subgraphList->size();i++) {
+	for (unsigned int i=0, n=subgraphList->size(); i<n; i++)
+	{
 		BufferSubgraph *subgraph=(*subgraphList)[i];
 		Coordinate *p=subgraph->getRightmostCoordinate();
-		SubgraphDepthLocater locater=SubgraphDepthLocater(&processedGraphs);
+		SubgraphDepthLocater locater(&processedGraphs);
 		int outsideDepth=locater.getDepth(*p);
 		subgraph->computeDepth(outsideDepth);
 		subgraph->findResultEdges();
@@ -346,6 +347,9 @@ BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,Polygon
 
 /**********************************************************************
  * $Log$
+ * Revision 1.47  2006/03/14 14:16:52  strk
+ * operator<< for BufferSubgraph, more debugging calls
+ *
  * Revision 1.46  2006/03/14 12:55:56  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *

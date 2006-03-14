@@ -21,7 +21,6 @@
 #include <cassert>
 
 #include <geos/opOverlay.h>
-#include <geos/util.h>
 #include <geos/algorithm/CGAlgorithms.h>
 
 #ifndef GEOS_DEBUG
@@ -130,7 +129,10 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 	{
 		DirectedEdge *de=(*dirEdges)[i];
 #if GEOS_DEBUG
-	cerr<<"  dirEdge "<<i<<" inResult:"<<de->isInResult()<<" isArea:"<<de->getLabel()->isArea()<<endl;
+	cerr << "  dirEdge " << i << endl
+	     << de->print() << endl
+	     << " inResult:" << de->isInResult()
+	     << " isArea:" << de->getLabel()->isArea() << endl;
 #endif
 		if (de->isInResult() && de->getLabel()->isArea()) {
 			// if this edge has not yet been processed
@@ -143,7 +145,7 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 		}
 	}
 #if GEOS_DEBUG
-	cerr<<"  reeturning "<<maxEdgeRings->size()<<" maxEdgeRings"<<endl;
+	cerr<<"  returning "<<maxEdgeRings->size()<<" maxEdgeRings"<<endl;
 #endif
 	return maxEdgeRings;
 }
@@ -377,6 +379,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/03/14 14:16:52  strk
+ * operator<< for BufferSubgraph, more debugging calls
+ *
  * Revision 1.31  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

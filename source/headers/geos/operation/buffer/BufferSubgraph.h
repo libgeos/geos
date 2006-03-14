@@ -92,6 +92,8 @@ private:
 
 public:
 
+	friend std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs);
+
 	/*
 	 * algorithm::CGAlgorithms arg kept for backward-compatibility.
 	 * It is unused.
@@ -99,14 +101,14 @@ public:
 	BufferSubgraph(algorithm::CGAlgorithms *cga=NULL);
 	~BufferSubgraph();
 
-	inline std::vector<geomgraph::DirectedEdge*>* getDirectedEdges();
+	std::vector<geomgraph::DirectedEdge*>* getDirectedEdges();
 
-	inline std::vector<geomgraph::Node*>* getNodes();
+	std::vector<geomgraph::Node*>* getNodes();
 
 	/** \brief
 	 * Gets the rightmost coordinate in the edges of the subgraph
 	 */
-	inline geom::Coordinate* getRightmostCoordinate();
+	geom::Coordinate* getRightmostCoordinate();
 
 	/** \brief
 	 * Creates the subgraph consisting of all edges reachable from
@@ -158,10 +160,17 @@ public:
 	geom::Envelope *getEnvelope();
 };
 
+std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs);
+
 // INLINES
-geom::Coordinate* BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
-std::vector<geomgraph::Node*>* BufferSubgraph::getNodes() { return &nodes; }
-std::vector<geomgraph::DirectedEdge*>* BufferSubgraph::getDirectedEdges() {
+inline geom::Coordinate*
+BufferSubgraph::getRightmostCoordinate() {return rightMostCoord;}
+
+inline std::vector<geomgraph::Node*>*
+BufferSubgraph::getNodes() { return &nodes; }
+
+inline std::vector<geomgraph::DirectedEdge*>*
+BufferSubgraph::getDirectedEdges() {
 	return &dirEdgeList;
 }
 
@@ -175,6 +184,9 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/14 14:16:52  strk
+ * operator<< for BufferSubgraph, more debugging calls
+ *
  * Revision 1.1  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *
