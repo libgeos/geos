@@ -24,7 +24,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 
 #ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
+#define GEOS_DEBUG 1
 #endif
 
 using namespace std;
@@ -50,6 +50,7 @@ PolygonBuilder::~PolygonBuilder()
 	}
 }
 
+/*public*/
 void
 PolygonBuilder::add(PlanarGraph *graph)
 	//throw(TopologyException *)
@@ -78,9 +79,10 @@ PolygonBuilder::add(PlanarGraph *graph)
 		nodes.push_back(node);
 	}
 
-	add(&dirEdges,&nodes); // might throw a TopologyException *
+	add(&dirEdges, &nodes); // might throw a TopologyException *
 }
 
+/*public*/
 void
 PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 	//throw(TopologyException *)
@@ -107,6 +109,7 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 	//Assert: every hole on freeHoleList has a shell assigned to it
 }
 
+/*public*/
 vector<Geometry*>*
 PolygonBuilder::getPolygons()
 {
@@ -115,9 +118,7 @@ PolygonBuilder::getPolygons()
 }
 
 
-/**
- * for all DirectedEdges in result, form them into MaximalEdgeRings
- */
+/*private*/
 vector<MaximalEdgeRing*> *
 PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 {
@@ -130,7 +131,7 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 		DirectedEdge *de=(*dirEdges)[i];
 #if GEOS_DEBUG
 	cerr << "  dirEdge " << i << endl
-	     << de->print() << endl
+	     << de->printEdge() << endl
 	     << " inResult:" << de->isInResult()
 	     << " isArea:" << de->getLabel()->isArea() << endl;
 #endif
@@ -150,6 +151,7 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 	return maxEdgeRings;
 }
 
+/*private*/
 vector<MaximalEdgeRing*> *
 PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
 	vector<EdgeRing*> *newShellList, vector<EdgeRing*> *freeHoleList)
@@ -182,16 +184,7 @@ PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
 	return edgeRings;
 }
 
-/**
- * This method takes a list of MinimalEdgeRings derived from a MaximalEdgeRing,
- * and tests whether they form a Polygon.  This is the case if there is
- * a single shell in the list.  In this case the shell is returned.
- * The other possibility is that they are a series of connected holes,
- * in which case no shell is returned.
- *
- * @return the shell EdgeRing, if there is one
- * @return null, if all the rings are holes
- */
+/*private*/
 EdgeRing*
 PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 {
@@ -214,17 +207,7 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 	return shell;
 }
 
-/**
- * This method assigns the holes for a Polygon (formed from a list of
- * MinimalEdgeRings) to its shell.
- * Determining the holes for a MinimalEdgeRing polygon serves two purposes:
- * <ul>
- * <li>it is faster than using a point-in-polygon check later on.
- * <li>it ensures correctness, since if the PIP test was used the point
- * chosen might lie on the shell, which might return an incorrect result from the
- * PIP test
- * </ul>
- */
+/*private*/
 void
 PolygonBuilder::placePolygonHoles(EdgeRing *shell,
 	vector<MinimalEdgeRing*> *minEdgeRings)
@@ -239,18 +222,13 @@ PolygonBuilder::placePolygonHoles(EdgeRing *shell,
 	}
 }
 
-/**
- * For all rings in the input list,
- * determine whether the ring is a shell or a hole
- * and add it to the appropriate list.
- * Due to the way the DirectedEdges were linked,
- * a ring is a shell if it is oriented CW, a hole otherwise.
- */
+/*private*/
 void
 PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
 	vector<EdgeRing*> *newShellList, vector<EdgeRing*> *freeHoleList)
 {
-	for(int i=0;i<(int)edgeRings->size();i++) {
+	for(unsigned int i=0, n=edgeRings->size(); i<n; i++)
+	{
 		EdgeRing *er=(*edgeRings)[i];
 		//er->setInResult();
 		if (er->isHole() ) {
@@ -261,18 +239,7 @@ PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
 	}
 }
 
-/**
- * This method determines finds a containing shell for all holes
- * which have not yet been assigned to a shell.
- * These "free" holes should
- * all be <b>properly</b> contained in their parent shells, so it is safe
- * to use the
- * <code>findEdgeRingContaining</code> method.
- * (This is the case because any holes which are NOT
- * properly contained (i.e. are connected to their
- * parent shell) would have formed part of a MaximalEdgeRing
- * and been handled in a previous step).
- */
+/*private*/
 void
 PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>* newShellList,
 	std::vector<EdgeRing*> *freeHoleList)
@@ -292,21 +259,7 @@ PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>* newShellList,
 	}
 }
 
-/**
- * Find the innermost enclosing shell EdgeRing containing the argument
- * EdgeRing, if any.
- * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
- * The algorithm used depends on the fact that:
- * <br>
- *  ring A contains ring B iff envelope(ring A) contains envelope(ring B)
- * <br>
- * This routine is only safe to use if the chosen point of the hole
- * is known to be properly contained in a shell
- * (which is guaranteed to be the case if the hole does not touch its shell)
- *
- * @return containing EdgeRing, if there is one
- * @return null if no containing EdgeRing is found
- */
+/*private*/
 EdgeRing*
 PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 	vector<EdgeRing*> *newShellList)
@@ -342,6 +295,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 	return minShell;
 }
 
+/*private*/
 vector<Geometry*>*
 PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList)
 {
@@ -358,10 +312,7 @@ PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList)
 	return resultPolyList;
 }
 
-/**
- * Checks the current set of shells (with their associated holes) to
- * see if any of them contain the point.
- */
+/*public*/
 bool
 PolygonBuilder::containsPoint(const Coordinate& p)
 {
@@ -379,6 +330,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/03/14 16:55:01  strk
+ * comments cleanup
+ *
  * Revision 1.32  2006/03/14 14:16:52  strk
  * operator<< for BufferSubgraph, more debugging calls
  *

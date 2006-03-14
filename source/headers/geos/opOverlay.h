@@ -612,10 +612,16 @@ public:
 	 * The graph is assumed to contain one or more polygons,
 	 * possibly with holes.
 	 */
-	void add(std::vector<geomgraph::DirectedEdge*> *dirEdges,std::vector<geomgraph::Node*> *nodes); // throw(TopologyException *);
+	void add(std::vector<geomgraph::DirectedEdge*> *dirEdges,
+			std::vector<geomgraph::Node*> *nodes);
+			// throw(TopologyException *);
 
   	std::vector<geom::Geometry*>* getPolygons();
 
+	/** \brief
+	 * Checks the current set of shells (with their associated holes) to
+	 * see if any of them contain the point.
+	 */
 	bool containsPoint(const geom::Coordinate& p);
 
 private:
@@ -707,7 +713,8 @@ private:
 	geomgraph::EdgeRing* findEdgeRingContaining(geomgraph::EdgeRing *testEr,
 		std::vector<geomgraph::EdgeRing*> *newShellList);
 
-	std::vector<geom::Geometry*>* computePolygons(std::vector<geomgraph::EdgeRing*> *newShellList);
+	std::vector<geom::Geometry*>* computePolygons(
+			std::vector<geomgraph::EdgeRing*> *newShellList);
 
 	/**
 	 * Checks the current set of shells (with their associated holes) to
@@ -762,6 +769,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/14 16:55:01  strk
+ * comments cleanup
+ *
  * Revision 1.23  2006/03/09 18:18:32  strk
  * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
  * Applied patch to IsValid operation from JTS-1.7.1
