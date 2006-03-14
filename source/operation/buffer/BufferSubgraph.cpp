@@ -336,7 +336,7 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 	for (unsigned int i=0, n=bs.dirEdgeList.size(); i<n; i++)
 	{
-		os << "  DirEdge " << i << ": "
+		os << "  DirEdge " << i << ": " << std::endl
 		   << bs.dirEdgeList[i]->printEdge() << std::endl;
 	}
 
@@ -349,6 +349,9 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/14 17:10:14  strk
+ * cleanups
+ *
  * Revision 1.26  2006/03/14 14:16:52  strk
  * operator<< for BufferSubgraph, more debugging calls
  *
@@ -374,57 +377,6 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
  *
  * Revision 1.19  2005/11/08 20:12:44  strk
  * Memory overhead reductions in buffer operations.
- *
- * Revision 1.18  2005/06/30 18:31:48  strk
- * Ported SubgraphDepthLocator optimizations from JTS code
- *
- * Revision 1.17  2005/05/23 15:13:00  strk
- * Added debugging output
- *
- * Revision 1.16  2005/05/22 17:45:27  strk
- * Fixed initialization list order
- *
- * Revision 1.15  2005/05/20 16:15:41  strk
- * Code cleanups
- *
- * Revision 1.14  2005/05/19 10:29:28  strk
- * Removed some CGAlgorithms instances substituting them with direct calls
- * to the static functions. Interfaces accepting CGAlgorithms pointers kept
- * for backward compatibility but modified to make the argument optional.
- * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
- * Inlined some smaller functions encountered during bug hunting.
- * Updated Copyright notices in the touched files.
- *
- * Revision 1.13  2005/02/04 18:49:48  strk
- * Changed ::computeDepths to use a set instead of a vector for checking
- * visited Edges.
- *
- * Revision 1.12  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.11  2004/07/07 07:52:13  strk
- * Removed note about required speedup in BufferSubgraph.
- * I've made tests with 'sets' and there is actually a big slow down..
- *
- * Revision 1.10  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2004/05/19 12:50:53  strk
- * Removed all try/catch blocks transforming stack allocated-vectors to auto-heap-allocations
- *
- * Revision 1.8  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.7  2004/05/03 17:15:38  strk
- * leaks on exception fixed.
- *
- * Revision 1.6  2004/04/16 12:48:07  strk
- * Leak fixes.
- *
- * Revision 1.5  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
  *
  **********************************************************************/
 
