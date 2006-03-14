@@ -147,7 +147,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		std::cerr << *(subgraphList[i]) << std::endl;
 #endif
 		PolygonBuilder polyBuilder(geomFact);
-		buildSubgraphs(&subgraphList, &polyBuilder);
+		buildSubgraphs(subgraphList, polyBuilder);
 		resultPolyList=polyBuilder.getPolygons();
 #if GEOS_DEBUG
 	std::cerr << "PolygonBuilder got " << resultPolyList->size()
@@ -302,16 +302,16 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second) {
 void
 BufferBuilder::createSubgraphs(PlanarGraph *graph, std::vector<BufferSubgraph*>& subgraphList)
 {
-	std::vector<Node*>* nodes = graph->getNodes();
-	for (unsigned int i=0, n=nodes->size(); i<n; i++) {
-		Node *node=(*nodes)[i];
+	std::vector<Node*> nodes;
+	graph->getNodes(nodes);
+	for (unsigned int i=0, n=nodes.size(); i<n; i++) {
+		Node *node=nodes[i];
 		if (!node->isVisited()) {
 			BufferSubgraph *subgraph=new BufferSubgraph();
 			subgraph->create(node);
 			subgraphList.push_back(subgraph);
 		}
 	}
-	delete nodes;
 
 	/*
 	 * Sort the subgraphs in descending order of their rightmost coordinate
@@ -324,20 +324,20 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph, std::vector<BufferSubgraph*>&
 
 /*private*/
 void
-BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,
-		PolygonBuilder *polyBuilder)
+BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
+		PolygonBuilder& polyBuilder)
 {
 	std::vector<BufferSubgraph*> processedGraphs;
-	for (unsigned int i=0, n=subgraphList->size(); i<n; i++)
+	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
 	{
-		BufferSubgraph *subgraph=(*subgraphList)[i];
+		BufferSubgraph *subgraph=subgraphList[i];
 		Coordinate *p=subgraph->getRightmostCoordinate();
 		SubgraphDepthLocater locater(&processedGraphs);
 		int outsideDepth=locater.getDepth(*p);
 		subgraph->computeDepth(outsideDepth);
 		subgraph->findResultEdges();
 		processedGraphs.push_back(subgraph);
-		polyBuilder->add(subgraph->getDirectedEdges(), subgraph->getNodes());
+		polyBuilder.add(subgraph->getDirectedEdges(), subgraph->getNodes());
 	}
 }
 
@@ -347,6 +347,9 @@ BufferBuilder::buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.48  2006/03/14 16:08:21  strk
+ * changed buildSubgraphs signature to use refs rather then pointers, made it const-correct. Reduced heap allocations in createSubgraphs()
+ *
  * Revision 1.47  2006/03/14 14:16:52  strk
  * operator<< for BufferSubgraph, more debugging calls
  *

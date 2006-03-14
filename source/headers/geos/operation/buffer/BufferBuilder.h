@@ -130,8 +130,8 @@ private:
 	 * @param polyBuilder the PolygonBuilder which will build
 	 *        the final polygons
 	 */
-	void buildSubgraphs(std::vector<BufferSubgraph*> *subgraphList,
-			overlay::PolygonBuilder *polyBuilder);
+	void buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
+			overlay::PolygonBuilder& polyBuilder);
 
 	/// \brief
 	/// Return the externally-set noding::Noder OR a newly created
@@ -213,6 +213,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/14 16:08:21  strk
+ * changed buildSubgraphs signature to use refs rather then pointers, made it const-correct. Reduced heap allocations in createSubgraphs()
+ *
  * Revision 1.1  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *
