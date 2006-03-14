@@ -18,12 +18,14 @@
  *
  **********************************************************************/
 
-#include <geos/opBuffer.h>
+#include <algorithm>
+
 #include <geos/noding.h>
 #include <geos/nodingSnapround.h>
 #include <geos/precision.h>
 #include <geos/profiler.h>
-#include <algorithm>
+#include <geos/opBuffer.h>
+#include <geos/operation/buffer/BufferOp.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -200,6 +202,9 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.47  2006/03/14 00:36:31  strk
+ * Reduced 'buffer' headers inclusion
+ *
  * Revision 1.46  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
