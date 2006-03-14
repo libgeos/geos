@@ -153,6 +153,16 @@ PlanarGraph::getNodes()
 	return values;
 }
 
+void
+PlanarGraph::getNodes(vector<Node*>& values)
+{
+	NodeMap::iterator it=nodes->nodeMap.begin();
+	while(it!=nodes->nodeMap.end()) {
+		values.push_back(it->second);
+		it++;
+	}
+}
+
 // arg cannot be const, NodeMap::addNode will
 // occasionally label-merge first arg.
 Node*
@@ -349,6 +359,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/14 15:46:53  strk
+ * Added PlanarGraph::getNodes(vector&) func, to reduce useless heap allocations
+ *
  * Revision 1.27  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
