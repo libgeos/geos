@@ -35,6 +35,7 @@ namespace geos {
 	namespace geomgraph {
 		class DirectedEdge;
 		class Label;
+		class Edge;
 	}
 }
 
@@ -106,6 +107,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 17:17:41  strk
+ * Added missing forward declarations
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

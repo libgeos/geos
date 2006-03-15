@@ -23,7 +23,7 @@
 namespace geos {
 	namespace geomgraph {
 		namespace index {
-			class SweepLineEventObj;
+			class SweepLineEventOBJ;
 		}
 	}
 }
@@ -32,7 +32,7 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-class SweepLineEventLessThen; // needed ??
+//class SweepLineEventLessThen; // needed ??
 
 class SweepLineEvent{
 friend class SweepLineEventLessThen;
@@ -106,6 +106,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 17:17:42  strk
+ * Added missing forward declarations
+ *
  * Revision 1.1  2006/03/14 12:55:56  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *
