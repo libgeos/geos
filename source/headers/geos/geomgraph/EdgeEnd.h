@@ -39,34 +39,64 @@ namespace geomgraph { // geos.geomgraph
 class EdgeEnd {
 friend class Unload;
 public:
+
 	EdgeEnd();
+
 	virtual ~EdgeEnd();
+
 	EdgeEnd(Edge* newEdge, const geom::Coordinate& newP0,
 		const geom::Coordinate& newP1);
+
 	EdgeEnd(Edge* newEdge, const geom::Coordinate& newP0,
 		const geom::Coordinate& newP1, Label* newLabel);
+
 	virtual Edge* getEdge();
+
 	virtual Label* getLabel();
+
 	virtual geom::Coordinate& getCoordinate();
+
 	virtual geom::Coordinate& getDirectedCoordinate();
+
 	virtual int getQuadrant();
+
 	virtual double getDx();
+
 	virtual double getDy();
+
 	virtual void setNode(Node* newNode);
+
 	virtual Node* getNode();
+
 	virtual int compareTo(const EdgeEnd *e) const;
+
 	virtual int compareDirection(const EdgeEnd *e) const;
+
 	virtual void computeLabel();
+
 	virtual std::string print();
+
 protected:
+
 	Edge* edge;// the parent edge of this edge end
+
 	Label* label;
+
 	EdgeEnd(Edge* newEdge);
+
 	virtual void init(const geom::Coordinate& newP0, const geom::Coordinate& newP1);
+
 private:
-	Node* node;          // the node this edge end originates at
-	geom::Coordinate p0,p1;  // points of initial line segment
-	double dx, dy;      // the direction vector for this edge from its starting point
+
+	/// the node this edge end originates at
+	Node* node;         
+
+	/// points of initial line segment. FIXME: do we need a copy here ?
+	geom::Coordinate p0,p1; 
+
+	/// the direction vector for this edge from its starting point
+	double dx, dy;     
+
 	int quadrant;
 };
 
@@ -87,6 +117,9 @@ struct EdgeEndLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 15:27:24  strk
+ * cleanups
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
