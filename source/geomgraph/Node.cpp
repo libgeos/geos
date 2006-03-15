@@ -15,6 +15,7 @@
  **********************************************************************/
 
 #include <string>
+#include <sstream>
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geomgraph/Node.h>
@@ -173,10 +174,9 @@ Node::computeMergedLocation(const Label* label2, int eltIndex)
 string
 Node::print()
 {
-	string out = "Node:\n";
-	out += " POINT("+coord.toString()+"); \n";
-	out += "  lbl: "+label->toString();
-	return out;
+	ostringstream ss;
+	ss<<*this;
+	return ss.str();
 }
 
 void
@@ -213,11 +213,22 @@ Node::getZ() const
 	return zvals;
 }
 
+std::ostream& operator<< (std::ostream& os, const Node& node)
+{
+	os << "Node["<<&node<<"]" << std::endl
+	   << "  POINT(" << node.coord << ")" << std::endl
+	   << "  lbl: "+node.label->toString();
+	return os;
+}
+
 } // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/15 16:27:54  strk
+ * operator<< for Node class
+ *
  * Revision 1.21  2006/03/14 15:31:39  strk
  * Cleaned up toString funx (more WKT friendly)
  *

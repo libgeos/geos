@@ -46,32 +46,56 @@ class Node: public GraphComponent {
 using GraphComponent::setLabel;
 
 public:
+
+	friend std::ostream& operator<< (std::ostream& os, const Node& node);
+
 	Node(const geom::Coordinate& newCoord, EdgeEndStar* newEdges);
+
 	virtual ~Node();
+
 	virtual const geom::Coordinate& getCoordinate() const;
+
 	virtual EdgeEndStar* getEdges();
+
 	virtual bool isIsolated() const;
+
 	virtual void add(EdgeEnd *e);
+
 	virtual void mergeLabel(const Node* n);
+
 	virtual void mergeLabel(const Label* label2);
+
 	virtual void setLabel(int argIndex, int onLocation);
+
 	virtual void setLabelBoundary(int argIndex);
+
 	virtual int computeMergedLocation(const Label* label2, int eltIndex);
+
 	virtual std::string print();
+
 	virtual const std::vector<double> &getZ() const;
+
 	virtual void addZ(double);
+
 	virtual bool isIncidentEdgeInResult() const;
 
 protected:
+
 	geom::Coordinate coord;
+
 	EdgeEndStar* edges;
+
 	virtual void computeIM(geom::IntersectionMatrix *im) {};
 
 private:
+
 	std::vector<double>zvals;
+
 	double ztot;
 
 };
+
+std::ostream& operator<< (std::ostream& os, const Node& node);
 
 } // namespace geos.geomgraph
 } // namespace geos
@@ -84,6 +108,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 16:27:54  strk
+ * operator<< for Node class
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
