@@ -68,7 +68,7 @@ private:
 	 */
 	void addReachable(geomgraph::Node *startNode);
 
-	///  Adds the argument node and all its out edges to the subgraph
+	/// Adds the argument node and all its out edges to the subgraph
 	//
 	/// @param node the node to add
 	/// @param nodeStack the current set of nodes being traversed
@@ -87,18 +87,21 @@ private:
 	void computeDepths(geomgraph::DirectedEdge *startEdge);
 
 	void computeNodeDepth(geomgraph::Node *n);
+
 	void copySymDepths(geomgraph::DirectedEdge *de);
+
 	bool contains(std::set<geomgraph::Node*>& nodes, geomgraph::Node *node);
 
 public:
 
 	friend std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs);
 
-	/*
+	/** \brief
 	 * algorithm::CGAlgorithms arg kept for backward-compatibility.
 	 * It is unused.
 	 */
 	BufferSubgraph(algorithm::CGAlgorithms *cga=NULL);
+
 	~BufferSubgraph();
 
 	std::vector<geomgraph::DirectedEdge*>* getDirectedEdges();
@@ -184,6 +187,9 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/15 11:45:06  strk
+ * doxygen comments
+ *
  * Revision 1.2  2006/03/14 14:16:52  strk
  * operator<< for BufferSubgraph, more debugging calls
  *
