@@ -4,13 +4,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: geom/Polygon.java rev. 1.47
  *
  **********************************************************************/
 
@@ -101,6 +105,13 @@ public:
 	Geometry* getBoundary() const;
 
 	bool isEmpty() const;
+
+	/** \brief
+	 * Tests if a valid polygon is simple.
+	 * This method always returns true, since a valid polygon is always simple
+	 *
+	 * @return <code>true</code>
+	 */
 	bool isSimple() const;
 	
 	/// Returns the exterior ring (shell)
@@ -157,6 +168,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 09:12:45  strk
+ * isSimple doc
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
