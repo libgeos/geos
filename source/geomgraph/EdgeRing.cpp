@@ -15,14 +15,28 @@
  **********************************************************************/
 
 #include <vector>
+#include <cassert>
 
-#include <geos/geomgraph.h>
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/geomgraph/EdgeRing.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Location.h>
+#include <geos/geom/Envelope.h>
 
 using namespace std;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -186,7 +200,10 @@ EdgeRing::computeMaxNodeDegree()
 	DirectedEdge *de=startDe;
 	do {
 		Node *node=de->getNode();
-		int degree=((DirectedEdgeStar*) node->getEdges())->getOutgoingDegree(this);
+		EdgeEndStar* ees = node->getEdges();
+		assert(dynamic_cast<DirectedEdgeStar*>(ees));
+		DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+		int degree=des->getOutgoingDegree(this);
 		if (degree>maxNodeDegree) maxNodeDegree=degree;
 		de=getNext(de);
 	} while (de!=startDe);
@@ -198,7 +215,7 @@ EdgeRing::setInResult()
 {
 	DirectedEdge *de=startDe;
 	do {
-		(de->getEdge())->setInResult(true);
+		de->getEdge()->setInResult(true);
 		de=de->getNext();
 	} while (de!=startDe);
 }
@@ -289,6 +306,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.18  2006/03/15 15:26:58  strk
  * Cleanups
  *
@@ -401,6 +421,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.19  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.18  2006/03/15 15:26:58  strk
  * Cleanups
  *

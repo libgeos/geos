@@ -16,8 +16,10 @@
 
 #include <cassert>
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
+#include <geos/geomgraph/GraphComponent.h>
+#include <geos/geomgraph/Label.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -77,6 +79,9 @@ GraphComponent::updateIM(IntersectionMatrix *im)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.6  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

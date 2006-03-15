@@ -18,16 +18,25 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
 #include <string>
 #include <vector>
+#include <set>
 #include <utility> // std::pair
+
+#include <geos/geomgraph/EdgeIntersectionList.h>
+#include <geos/geomgraph/EdgeIntersection.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h> // shouldn't be using this
+#include <geos/geom/Coordinate.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -180,6 +189,9 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.21  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

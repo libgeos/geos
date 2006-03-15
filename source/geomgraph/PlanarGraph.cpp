@@ -18,9 +18,6 @@
 #include <string>
 #include <cassert>
 
-//#include <geos/geom.h>
-//#include <geos/geomgraph.h>
-
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Location.h>
@@ -359,6 +356,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.28  2006/03/14 15:46:53  strk
  * Added PlanarGraph::getNodes(vector&) func, to reduce useless heap allocations
  *

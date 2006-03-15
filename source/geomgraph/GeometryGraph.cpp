@@ -17,19 +17,19 @@
 #include <vector>
 #include <memory> // auto_ptr
 
-//#include <geos/geomgraph.h>
-//#include <geos/util.h>
 
 #include <geos/algorithm/CGAlgorithms.h>
 
 #include <geos/util/UnsupportedOperationException.h>
 
-#include <geos/geomgraphindex.h> // for Intersectors..
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
+
+#include <geos/geomgraph/index/SimpleMCSweepLineIntersector.h> 
+#include <geos/geomgraph/index/SegmentIntersector.h> 
 
 #include <geos/geom/CoordinateArraySequence.h> 
 #include <geos/geom/CoordinateSequence.h>
@@ -454,6 +454,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.24  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

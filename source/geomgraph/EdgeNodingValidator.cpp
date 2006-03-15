@@ -16,13 +16,16 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
-#include <geos/geom.h>
-#include <geos/geosAlgorithm.h>
-#include <geos/noding.h>
+#include <vector>
+
+#include <geos/geomgraph/EdgeNodingValidator.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/geom/CoordinateSequence.h>
 
 using namespace std;
 using namespace geos::noding;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -59,6 +62,9 @@ EdgeNodingValidator::~EdgeNodingValidator()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.6  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

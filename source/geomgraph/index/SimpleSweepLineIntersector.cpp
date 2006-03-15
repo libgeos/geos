@@ -17,7 +17,9 @@
 #include <vector>
 #include <algorithm>
 
-#include <geos/geomgraphindex.h>
+#include <geos/geomgraph/index/SimpleSweepLineIntersector.h>
+#include <geos/geomgraph/index/SweepLineEvent.h>
+#include <geos/geomgraph/index/SweepLineSegment.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geomgraph/Edge.h>
 
@@ -162,6 +164,9 @@ SimpleSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/15 17:16:31  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.11  2006/03/10 10:37:00  strk
  * Added missing <algorithm> include (#55)
  *

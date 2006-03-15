@@ -18,8 +18,6 @@
 #include <cassert>
 #include <string>
 
-//#include <geos/geomgraph.h>
-//#include <geos/util.h>
 #include <geos/util/TopologyException.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/DirectedEdge.h>
@@ -211,6 +209,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.14  2006/03/15 15:26:58  strk
  * Cleanups
  *

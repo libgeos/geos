@@ -22,14 +22,23 @@
 #include <string>
 #include <vector>
 
-#include <geos/geomgraph.h>
-#include <geos/util.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/EdgeEnd.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/EdgeRing.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geomgraph/Quadrant.h>
+#include <geos/geom/Location.h>
+#include <geos/util/TopologyException.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 //using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -422,6 +431,9 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.16  2006/03/06 19:40:46  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

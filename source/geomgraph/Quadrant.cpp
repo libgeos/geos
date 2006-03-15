@@ -15,7 +15,6 @@
 
 #include <sstream>
 
-//#include <geos/geomgraph.h>
 #include <geos/geomgraph/Quadrant.h>
 #include <geos/util/IllegalArgumentException.h>
 
@@ -118,6 +117,9 @@ bool Quadrant::isNorthern(int quad) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.9  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

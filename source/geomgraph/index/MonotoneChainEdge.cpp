@@ -17,8 +17,10 @@
 #include <cassert>
 #include <vector>
 
-#include <geos/geomgraphindex.h>
 #include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/index/MonotoneChainEdge.h>
+#include <geos/geomgraph/index/MonotoneChainIndexer.h>
+#include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
@@ -170,6 +172,9 @@ MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/15 17:16:31  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.11  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

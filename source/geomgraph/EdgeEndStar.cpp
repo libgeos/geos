@@ -18,8 +18,6 @@
 #include <string>
 #include <vector>
 
-//#include <geos/geomgraph.h>
-//#include <geos/util.h>
 #include <geos/util/TopologyException.h>
 #include <geos/geomgraph/EdgeEndStar.h>
 #include <geos/algorithm/SimplePointInAreaLocator.h>
@@ -330,6 +328,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.18  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

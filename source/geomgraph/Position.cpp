@@ -14,7 +14,7 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
+#include <geos/geomgraph/Position.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -45,6 +45,9 @@ int Position::opposite(int position){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.6  2006/03/09 16:01:59  strk
  * Fixed debugging lines
  *

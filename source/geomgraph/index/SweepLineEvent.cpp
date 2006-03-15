@@ -14,8 +14,10 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraphindex.h>
 #include <sstream>
+
+#include <geos/geomgraph/index/SweepLineEvent.h>
+#include <geos/geomgraph/index/SweepLineEventObj.h>
 
 using namespace std;
 
@@ -79,6 +81,9 @@ SweepLineEvent::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/15 17:16:31  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.9  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

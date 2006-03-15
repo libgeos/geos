@@ -18,8 +18,15 @@
 #include <string>
 #include <sstream>
 
-#include <geos/geomgraph.h>
-#include <geos/geomgraphindex.h> // for MonotoneChainEdge
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Position.h> 
+#include <geos/geomgraph/Label.h> 
+#include <geos/geomgraph/index/MonotoneChainEdge.h> 
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h> // FIXME: shouldn't use
+#include <geos/geom/Coordinate.h>
 
 //#define DEBUG_INTERSECT 0
 #ifndef GEOS_DEBUG
@@ -27,6 +34,7 @@
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -294,6 +302,9 @@ operator<< (std::ostream&os, const Edge& e)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.33  2006/03/14 16:53:31  strk
  * removed endline from printing funx
  *

@@ -20,15 +20,12 @@
 #include <string>
 #include <cassert>
 
-//#include <geos/geomgraph.h>
-//#include <geos/util.h>
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Quadrant.h>
 #include <geos/geom/Coordinate.h>
 
-//using namespace std;
 using namespace geos::geom;
 
 namespace geos {
@@ -159,6 +156,9 @@ EdgeEnd::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.13  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

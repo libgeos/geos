@@ -14,7 +14,10 @@
  *
  **********************************************************************/
 
-#include <geos/geomgraph.h>
+#include <geos/geomgraph/NodeFactory.h>
+#include <geos/geomgraph/Node.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -38,6 +41,9 @@ NodeFactory::instance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
  * Revision 1.4  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
