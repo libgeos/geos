@@ -21,11 +21,12 @@
 #include <geos/inline.h>
 
 #include <geos/noding/SinglePassNoder.h>
+#include <geos/noding/SegmentString.h> // for inlined (FIXME)
 
 // Forward declarations
 namespace geos {
 	namespace noding {
-		class SegmentString;
+		//class SegmentString;
 	}
 }
 
@@ -71,6 +72,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 09:51:49  strk
+ * streamlined header usage
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
