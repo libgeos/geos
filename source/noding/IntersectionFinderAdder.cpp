@@ -17,7 +17,14 @@
  *
  **********************************************************************/
 
-#include "geos/noding.h"
+#include <vector>
+
+#include <geos/noding/IntersectionFinderAdder.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/Coordinate.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -57,6 +64,9 @@ IntersectionFinderAdder::processIntersections(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.2  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

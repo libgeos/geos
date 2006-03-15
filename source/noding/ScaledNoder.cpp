@@ -21,7 +21,6 @@
 #include <vector>
 #include <cassert>
 
-//#include "geos/noding.h"
 #include "geos/geom/Coordinate.h"
 #include "geos/geom/CoordinateSequence.h" // for apply
 #include "geos/noding/ScaledNoder.h"
@@ -112,6 +111,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.4  2006/03/13 21:19:51  strk
  * Fixed bug in ScaledNoder scaling mechanism (hugly code, due to CoordinateSequence visitor pattern design). Tests are still failing so this possibly needs some other fix. Streamlined includes by implementation file.
  *

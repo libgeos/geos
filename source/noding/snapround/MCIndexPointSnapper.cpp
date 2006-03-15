@@ -17,7 +17,6 @@
  *
  **********************************************************************/
 
-//#include "geos/nodingSnapround.h"
 #include <geos/indexChain.h> // FIXME: split
 #include <geos/noding/snapround/MCIndexPointSnapper.h>
 #include <geos/noding/snapround/HotPixel.h>
@@ -114,6 +113,9 @@ MCIndexPointSnapper::snap(const HotPixel& hotPixel,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/15 09:51:13  strk
+ * streamlined headers usage
+ *
  * Revision 1.6  2006/03/14 12:55:56  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *

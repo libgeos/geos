@@ -21,9 +21,13 @@
 #include <cassert>
 #include <set>
 
-#include <geos/noding.h>
 #include <geos/profiler.h>
-#include <geos/util.h>
+#include <geos/util/GEOSException.h>
+#include <geos/noding/SegmentNodeList.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h> // FIXME: should we really be using this ?
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -34,6 +38,7 @@
 #endif
 
 //using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -318,6 +323,9 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.29  2006/03/09 15:39:25  strk
  * Fixed debugging lines
  *

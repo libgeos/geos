@@ -19,10 +19,12 @@
 
 #include <sstream>
 
-#include "geos/noding.h"
-#include "geos/util.h"
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/noding/Octant.h>
+#include <geos/geom/Coordinate.h>
 
 //using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -94,6 +96,9 @@ Octant::octant(const Coordinate& p0, const Coordinate& p1)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.4  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

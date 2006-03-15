@@ -13,8 +13,11 @@
  *
  **********************************************************************/
 
-#include <geos/noding.h>
-#include <geos/geosAlgorithm.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/noding/SegmentNodeList.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
@@ -26,6 +29,7 @@
 #endif
 
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -110,6 +114,9 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.26  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

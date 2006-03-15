@@ -22,11 +22,16 @@
 #define GEOS_DEBUG 0
 #endif
 
-#include <geos/noding.h>
+#include <iostream>
 #include <sstream>
 #include <iomanip>
 
+#include <geos/noding/SegmentNode.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/geom/Coordinate.h>
+
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -165,6 +170,9 @@ ostream& operator<< (ostream& os, const SegmentNode& n)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.14  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

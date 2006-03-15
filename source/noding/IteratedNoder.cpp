@@ -21,15 +21,19 @@
 #include <sstream>
 #include <vector>
 
-#include <geos/noding.h>
-#include <geos/util.h> // for TopologyException
 #include <geos/profiler.h>
+#include <geos/util/TopologyException.h> 
+#include <geos/noding/IteratedNoder.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/noding/MCIndexNoder.h>
+#include <geos/noding/IntersectionAdder.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -90,6 +94,9 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.19  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

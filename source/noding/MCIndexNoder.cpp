@@ -22,7 +22,6 @@
 #include <algorithm>
 
 #include "geos/indexChain.h" // FIXME: split
-//#include "geos/noding.h"
 #include "geos/noding/SegmentIntersector.h"
 #include "geos/noding/MCIndexNoder.h"
 #include "geos/noding/SegmentString.h"
@@ -155,6 +154,9 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.12  2006/03/14 12:55:56  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *

@@ -17,12 +17,24 @@
  *
  **********************************************************************/
 
-#include <geos/noding.h>
-#include <geos/nodingSnapround.h>
-#include <geos/geosAlgorithm.h>
+#include <vector>
+#include <exception>
+#include <iostream>
+
+#include <geos/noding/snapround/SimpleSnapRounder.h>
+#include <geos/noding/snapround/HotPixel.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/noding/NodingValidator.h>
+#include <geos/noding/MCIndexNoder.h>
+#include <geos/noding/IntersectionFinderAdder.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/LineIntersector.h>
 
 using namespace std;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -173,6 +185,9 @@ SimpleSnapRounder::findInteriorIntersections(SegmentString::NonConstVect& segStr
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/15 09:51:13  strk
+ * streamlined headers usage
+ *
  * Revision 1.6  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

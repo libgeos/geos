@@ -14,7 +14,12 @@
  *
  **********************************************************************/
 
-#include <geos/noding.h>
+#include <geos/noding/SimpleNoder.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/noding/SegmentIntersector.h>
+#include <geos/geom/CoordinateSequence.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -62,6 +67,9 @@ SimpleNoder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.9  2006/02/23 20:05:21  strk
  * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
  * doxygen-friendly comments, miscellaneous cleanups

@@ -19,13 +19,18 @@
  **********************************************************************/
 
 #include <sstream>
+#include <vector>
 
-#include <geos/noding.h>
-#include <geos/util.h>
-#include <geos/geosAlgorithm.h>
+#include <geos/util/GEOSException.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/noding/NodingValidator.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 
 using namespace std;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
@@ -204,6 +209,9 @@ NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/15 09:51:12  strk
+ * streamlined headers usage
+ *
  * Revision 1.15  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
