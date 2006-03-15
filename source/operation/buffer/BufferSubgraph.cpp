@@ -12,10 +12,15 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/BufferSubgraph.java rev. 1.17
+ *
  **********************************************************************/
 
 #include <cassert>
 #include <vector>
+#include <list>
 
 #include <geos/opOverlay.h> // FIXME: reduce this include
 
@@ -51,12 +56,7 @@ BufferSubgraph::~BufferSubgraph()
 	delete env;
 }
 
-/**
- * Creates the subgraph consisting of all edges reachable from this node.
- * Finds the edges in the graph and the rightmost coordinate.
- *
- * @param node a node to start the graph traversal from
- */
+/*public*/
 void
 BufferSubgraph::create(Node *node)
 {
@@ -65,12 +65,7 @@ BufferSubgraph::create(Node *node)
 	rightMostCoord=&(finder.getCoordinate());
 }
 
-/**
- * Adds all nodes and edges reachable from this node to the subgraph.
- * Uses an explicit stack to avoid a large depth of recursion.
- *
- * @param node a node known to be in the subgraph
- */
+/*private*/
 void
 BufferSubgraph::addReachable(Node *startNode)
 {
@@ -83,11 +78,7 @@ BufferSubgraph::addReachable(Node *startNode)
 	}
 }
 
-/**
- * Adds the argument node and all its out edges to the subgraph
- * @param node the node to add
- * @param nodeStack the current set of nodes being traversed
- */
+/*private*/
 void
 BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 {
@@ -111,6 +102,7 @@ BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 	}
 }
 
+/*private*/
 void
 BufferSubgraph::clearVisitedEdges()
 {
@@ -121,6 +113,7 @@ BufferSubgraph::clearVisitedEdges()
 	}
 }
 
+/*public*/
 void
 BufferSubgraph::computeDepth(int outsideDepth)
 {
@@ -132,9 +125,11 @@ cerr<<"outside depth: "<<outsideDepth<<endl;
 #endif
 	//Node *n=de->getNode();
 	//Label *label=de->getLabel();
+
 	// right side of line returned by finder is on the outside
 	de->setEdgeDepths(Position::RIGHT, outsideDepth);
 	copySymDepths(de);
+
 	//computeNodeDepth(n, de);
 	computeDepths(de);
 }
@@ -173,25 +168,21 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	}
 }
 
+/*private*/
 void
 BufferSubgraph::copySymDepths(DirectedEdge *de)
 {
+#if GEOS_DEBUG
+	cerr << "copySymDepths: " << de->getDepth(Position::LEFT)
+	     << ", " << de->getDepth(Position::RIGHT)
+	     << endl;
+#endif
 	DirectedEdge *sym=de->getSym();
 	sym->setDepth(Position::LEFT, de->getDepth(Position::RIGHT));
 	sym->setDepth(Position::RIGHT, de->getDepth(Position::LEFT));
-#if GEOS_DEBUG
-cerr<<"copySymDepths: "<<de->getDepth(Position::LEFT)<<", "<<de->getDepth(Position::RIGHT)<<endl;
-#endif
 }
 
-/**
- * Find all edges whose depths indicates that they are in the result area(s).
- * Since we want polygon shells to be
- * oriented CW, choose dirEdges with the interior of the result on the RHS.
- * Mark them as being in the result.
- * Interior Area edges are the result of dimensional collapses.
- * They do not form part of the result area boundary.
- */
+/*public*/
 void
 BufferSubgraph::findResultEdges()
 {
@@ -211,30 +202,23 @@ BufferSubgraph::findResultEdges()
 		 */
 		// <FIX> - handle negative depths
 #if GEOS_DEBUG
-		cerr<<" dirEdge "<<i<<": depth right:"<<de->getDepth(Position::RIGHT)<<endl;
+		cerr << " dirEdge "<<i<<": " << de->printEdge() << endl
+		     << "         depth right: " << de->getDepth(Position::RIGHT) << endl
+		     << "          depth left: " << de->getDepth(Position::LEFT) << endl
+		     << "    interiorAreaEdge: " << de->isInteriorAreaEdge()<<endl;
 #endif
 		if ( de->getDepth(Position::RIGHT)>=1
 			&&  de->getDepth(Position::LEFT)<=0
 			&& !de->isInteriorAreaEdge()) {
 					de->setInResult(true);
 #if GEOS_DEBUG
-					cerr<<"   in result"<<endl;
+					cerr<<"   IN RESULT"<<endl;
 #endif
 		}
 	}
 }
 
-/**
- * BufferSubgraphs are compared on the x-value of their rightmost Coordinate.
- * This defines a partial ordering on the graphs such that:
- * 
- * g1 >= g2 <==> Ring(g2) does not contain Ring(g1)
- * 
- * where Polygon(g) is the buffer polygon that is built from g.
- * 
- * This relationship is used to sort the BufferSubgraphs so that shells are
- * guaranteed to be built before holes.
- */
+/*public*/
 int
 BufferSubgraph::compareTo(BufferSubgraph *graph)
 {
@@ -247,19 +231,12 @@ BufferSubgraph::compareTo(BufferSubgraph *graph)
 	return 0;
 }
 
-/**
- * Compute depths for all dirEdges via breadth-first traversal of
- * nodes in graph.
- *
- * @param startEdge edge to start processing with
- */
-// <FIX> MD - use iteration & queue rather than recursion, for speed and robustness
+/*private*/
 void
 BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 {
-	//vector<Node*> nodesVisited; //Used to be a HashSet
-	set<Node *>nodesVisited;
-	vector<Node*> nodeQueue;
+	set<Node *> nodesVisited; 
+	list<Node*> nodeQueue; // Used to be a vector
 	Node *startNode=startEdge->getNode();
 	nodeQueue.push_back(startNode);
 	//nodesVisited.push_back(startNode);
@@ -269,8 +246,10 @@ BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 	while (! nodeQueue.empty())
 	{
 		//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
-		Node *n=nodeQueue[0];
-		nodeQueue.erase(nodeQueue.begin());
+		Node *n=nodeQueue.front(); // [0];
+		//nodeQueue.erase(nodeQueue.begin());
+		nodeQueue.pop_front(); 
+
 		nodesVisited.insert(n);
 
 		// compute depths around node, starting at this edge since it has depths assigned
@@ -298,6 +277,7 @@ BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 	}
 }
 
+/*private*/
 bool
 BufferSubgraph::contains(set<Node*>&nodeSet, Node *node)
 {
@@ -306,6 +286,7 @@ BufferSubgraph::contains(set<Node*>&nodeSet, Node *node)
 	return false;
 }
 
+/*public*/
 Envelope *
 BufferSubgraph::getEnvelope()
 {
@@ -349,6 +330,9 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/15 11:39:45  strk
+ * comments cleanup, changed computeDepths to use a list<> rather then a vector (performance related)
+ *
  * Revision 1.27  2006/03/14 17:10:14  strk
  * cleanups
  *
