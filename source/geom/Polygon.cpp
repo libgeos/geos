@@ -12,15 +12,16 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/Polygon.java rev. 1.47
+ *
  **********************************************************************/
 
 #include <vector>
 #include <cmath> // for fabs
 #include <cassert> 
 #include <algorithm> 
-
-//#include <geos/geom.h>
-//#include <geos/geosAlgorithm.h>
 
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -454,6 +455,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.61  2006/03/15 09:13:36  strk
+ * updated port info
+ *
  * Revision 1.60  2006/03/10 10:34:58  strk
  * Added missing <algorithm> include (#54)
  *
