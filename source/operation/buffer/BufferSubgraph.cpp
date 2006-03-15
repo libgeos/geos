@@ -313,7 +313,7 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 	   << bs.dirEdgeList.size() << " directed edges" << std::endl;
 
 	for (unsigned int i=0, n=bs.nodes.size(); i<n; i++)
-		os << "  Node " << i << ": " << bs.nodes[i]->print() << std::endl;
+		os << "  Node " << i << ": " << *(bs.nodes[i]) << std::endl;
 
 	for (unsigned int i=0, n=bs.dirEdgeList.size(); i<n; i++)
 	{
@@ -330,6 +330,9 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/15 17:33:39  strk
+ * Changed operator<< to use operator<< for Nodes
+ *
  * Revision 1.28  2006/03/15 11:39:45  strk
  * comments cleanup, changed computeDepths to use a list<> rather then a vector (performance related)
  *
