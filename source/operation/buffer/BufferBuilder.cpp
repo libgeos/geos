@@ -20,6 +20,7 @@
 
 #include <cassert>
 #include <vector>
+#include <iomanip>
 
 #include <geos/opOverlay.h> // FIXME: reduce inclusion
 
@@ -127,11 +128,9 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 #if PROFILE
 	prof->stop();
 #endif
-#if GEOS_DEBUG
-	std::cerr << "BufferBuilder::buffer finished computing NodedEdges ";
+
 #if GEOS_DEBUG > 1
 	std::cerr << std::endl << edgeList << std::endl;
-#endif
 #endif
 
 	Geometry* resultGeom=NULL;
@@ -147,7 +146,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	std::cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<std::endl;
 #if GEOS_DEBUG > 1
 	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
-		std::cerr << *(subgraphList[i]) << std::endl;
+		std::cerr << std::setprecision(10) << *(subgraphList[i]) << std::endl;
 #endif
 #endif
 		PolygonBuilder polyBuilder(geomFact);
@@ -378,6 +377,9 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.51  2006/03/15 18:57:10  strk
+ * cleanups in DEBUG lines
+ *
  * Revision 1.50  2006/03/15 13:03:01  strk
  * removed leftover debugging line
  *
