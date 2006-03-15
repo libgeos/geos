@@ -37,12 +37,7 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
- * Computes the factor for the change in depth when moving from one
- * location to another.
- * E.g. if crossing from the INTERIOR to the EXTERIOR the depth decreases,
- * so the factor is -1
- */
+/* public static */
 int
 DirectedEdge::depthFactor(int currLocation, int nextLocation)
 {
@@ -98,9 +93,7 @@ DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward):
 }
 
 
-
-
-
+/*public*/
 void
 DirectedEdge::setDepth(int position, int newDepth)
 {
@@ -112,6 +105,7 @@ DirectedEdge::setDepth(int position, int newDepth)
 	depth[position]=newDepth;
 }
 
+/*public*/
 int
 DirectedEdge::getDepthDelta()
 {
@@ -120,11 +114,7 @@ DirectedEdge::getDepthDelta()
 	return depthDelta;
 }
 
-/**
- * setVisitedEdge marks both DirectedEdges attached to a given Edge.
- * This is used for edges corresponding to lines, which will only
- * appear oriented in a single direction in the result.
- */
+/*public*/
 void
 DirectedEdge::setVisitedEdge(bool newIsVisited)
 {
@@ -133,15 +123,7 @@ DirectedEdge::setVisitedEdge(bool newIsVisited)
 }
 
 
-
-
-/**
- * This edge is a line edge if
- * <ul>
- * <li> at least one of the labels is a line label
- * <li> any labels which are not line labels have all Locations = EXTERIOR
- * </ul>
- */
+/*public*/
 bool
 DirectedEdge::isLineEdge()
 {
@@ -151,14 +133,7 @@ DirectedEdge::isLineEdge()
 	return isLine && isExteriorIfArea0 && isExteriorIfArea1;
 }
 
-/**
- * This is an interior Area edge if
- * 
- * - its label is an Area label for both Geometries
- * - and for each Geometry both sides are in the interior.
- *
- * @return true if this is an interior Area edge
- */
+/*public*/
 bool
 DirectedEdge::isInteriorAreaEdge()
 {
@@ -173,9 +148,7 @@ DirectedEdge::isInteriorAreaEdge()
 	return isInteriorAreaEdge;
 }
 
-/**
- * Compute the label in the appropriate orientation for this DirEdge
- */
+/*private*/
 void
 DirectedEdge::computeDirectedLabel()
 {
@@ -185,11 +158,7 @@ DirectedEdge::computeDirectedLabel()
 		label->flip();
 }
 
-/**
- * Set both edge depths.  One depth for a given side is provided. 
- * The other is computed depending on the Location transition and the
- * depthDelta of the edge.
- */
+/*public*/
 void
 DirectedEdge::setEdgeDepths(int position, int newDepth)
 {
@@ -208,24 +177,7 @@ DirectedEdge::setEdgeDepths(int position, int newDepth)
 	setDepth(oppositePos,oppositeDepth);
 }
 
-/**
- * Set both edge depths.  One depth for a given side is provided. 
- * The other is computed depending on the Location transition and
- * the depthDelta of the edge.
- */
-void
-DirectedEdge::OLDsetEdgeDepths(int position, int newDepth)
-{
-	int depthDelta=getEdge()->getDepthDelta();
-	int loc=label->getLocation(0, position);
-	int oppositePos=Position::opposite(position);
-	int oppositeLoc=label->getLocation(0, oppositePos);
-	int delta=abs(depthDelta)*DirectedEdge::depthFactor(loc,oppositeLoc);
-	int oppositeDepth=newDepth + delta;
-	setDepth(position, newDepth);
-	setDepth(oppositePos,oppositeDepth);
-}
-
+/*public*/
 std::string
 DirectedEdge::print()
 {
@@ -241,6 +193,7 @@ DirectedEdge::print()
 	return out;
 }
 
+/*public*/
 std::string
 DirectedEdge::printEdge()
 {
@@ -258,6 +211,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/15 15:26:58  strk
+ * Cleanups
+ *
  * Revision 1.13  2006/03/14 15:31:39  strk
  * Cleaned up toString funx (more WKT friendly)
  *

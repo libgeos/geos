@@ -116,6 +116,7 @@ EdgeRing::addHole(EdgeRing *edgeRing)
 	holes.push_back(edgeRing);
 }
 
+/*public*/
 Polygon*
 EdgeRing::toPolygon(const GeometryFactory* geometryFactory)
 {
@@ -288,6 +289,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/15 15:26:58  strk
+ * Cleanups
+ *
  * Revision 1.17  2006/03/10 15:50:26  strk
  * Changed 'found null Directed Edge' from an Assertion to a TopologyException, to give 'precision-reducing' overlay operation a chance to handle it (it seems to work)
  *
@@ -397,6 +401,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.18  2006/03/15 15:26:58  strk
+ * Cleanups
+ *
  * Revision 1.17  2006/03/10 15:50:26  strk
  * Changed 'found null Directed Edge' from an Assertion to a TopologyException, to give 'precision-reducing' overlay operation a chance to handle it (it seems to work)
  *
