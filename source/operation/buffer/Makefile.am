@@ -8,7 +8,6 @@ libopbuffer_la_SOURCES = \
 	BufferBuilder.cpp \
 	BufferOp.cpp \
 	BufferSubgraph.cpp \
-	DepthSegment.cpp \
 	OffsetCurveBuilder.cpp \
 	OffsetCurveSetBuilder.cpp \
 	RightmostEdgeFinder.cpp \
