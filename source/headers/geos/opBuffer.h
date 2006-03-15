@@ -30,7 +30,6 @@ namespace buffer {
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/buffer/OffsetCurveSetBuilder.h>
-#include <geos/operation/buffer/DepthSegment.h>
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
 #include <geos/operation/buffer/RightmostEdgeFinder.h>
