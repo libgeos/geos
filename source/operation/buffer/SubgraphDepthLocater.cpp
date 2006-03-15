@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <vector>
+#include <cassert>
 
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/opOverlay.h> // FIXME: split this
@@ -43,17 +44,16 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /*
- * \class DepthSegment opBuffer.h geos/opBuffer.h
- *
- * \brief
  * A segment from a directed edge which has been assigned a depth value
  * for its sides.
  */
 class DepthSegment {
+
 private:
+
 	geom::LineSegment& upwardSeg;
 
-	/**
+	/*
 	 * Compare two collinear segments for left-most ordering.
 	 * If segs are vertical, use vertical ordering for comparison.
 	 * If segs are equal, return 0.
@@ -65,12 +65,25 @@ private:
 	 * @param seg1 a segment to compare
 	 * @return
 	 */
-	int compareX(geom::LineSegment *seg0, geom::LineSegment *seg1);
+	static int compareX(const geom::LineSegment *seg0, const geom::LineSegment *seg1) 
+	{
+		int compare0=seg0->p0.compareTo(seg1->p0);
+		if (compare0!=0) return compare0;
+		return seg0->p1.compareTo(seg1->p1);
+	}
 
 public:
+
 	int leftDepth;
-	DepthSegment(geom::LineSegment &seg, int depth);
-	~DepthSegment();
+
+	DepthSegment(geom::LineSegment &seg, int depth)
+		:
+		upwardSeg(seg),
+		leftDepth(depth)
+	{
+		// input seg is assumed to be normalized
+		//upwardSeg.normalize();
+	}
 
 	/**
 	 * Defines a comparision operation on DepthSegments
@@ -84,108 +97,60 @@ public:
 	 * @param obj
 	 * @return
 	 */
-	int compareTo(DepthSegment *);
+	int compareTo(const DepthSegment& other) const
+	{
+		/**
+		 * try and compute a determinate orientation for the segments.
+		 * Test returns 1 if other is left of this (i.e. this > other)
+		 */
+		int orientIndex=upwardSeg.orientationIndex(&(other.upwardSeg));
+
+		/**
+		 * If comparison between this and other is indeterminate,
+		 * try the opposite call order.
+		 * orientationIndex value is 1 if this is left of other,
+		 * so have to flip sign to get proper comparison value of
+		 * -1 if this is leftmost
+		 */
+		if (orientIndex==0)
+			orientIndex=-1 * other.upwardSeg.orientationIndex(&upwardSeg);
+
+		// if orientation is determinate, return it
+		if (orientIndex != 0)
+			return orientIndex;
+
+		// otherwise, segs must be collinear - sort based on minimum X value
+		return compareX(&upwardSeg, &(other.upwardSeg));
+	}
 };
 
-bool DepthSegmentLT(DepthSegment *first, DepthSegment *second);
-
-DepthSegment::DepthSegment(LineSegment &seg, int depth):
-	upwardSeg(seg), leftDepth(depth)
-{
-	// input seg is assumed to be normalized
-	//upwardSeg.normalize();
-}
-
-DepthSegment::~DepthSegment()
-{
-}
-
-/**
- * Defines a comparision operation on DepthSegments
- * which orders them left to right
- *
- * <pre>
- * DS1 < DS2   if   DS1->seg is left of DS2->seg
- * DS1 > DS2   if   DS1->seg is right of DS2->seg
- * </pre>
- *
- * @param obj
- * @return
- */
-int
-DepthSegment::compareTo(DepthSegment *other)
-{
-	/**
-	 * try and compute a determinate orientation for the segments->
-	 * Test returns 1 if other is left of this (i->e-> this > other)
-	 */
-	int orientIndex=upwardSeg.orientationIndex(&(other->upwardSeg));
-
-	/**
-	 * If comparison between this and other is indeterminate,
-	 * try the opposite call order->
-	 * orientationIndex value is 1 if this is left of other,
-	 * so have to flip sign to get proper comparison value of
-	 * -1 if this is leftmost
-	 */
-	if (orientIndex==0)
-		orientIndex=-1 * other->upwardSeg.orientationIndex(&upwardSeg);
-
-	// if orientation is determinate, return it
-	if (orientIndex != 0)
-		return orientIndex;
-
-	// otherwise, segs must be collinear - sort based on minimum X value
-	return compareX(&upwardSeg, &(other->upwardSeg));
-}
-
-/**
- * Compare two collinear segments for left-most ordering.
- * If segs are vertical, use vertical ordering for comparison.
- * If segs are equal, return 0.
- * Segments are assumed to be directed so that the second
- * coordinate is >= to the first
- * (e->g-> up and to the right)
- *
- * @param seg0 a segment to compare
- * @param seg1 a segment to compare
- * @return
- */
-int
-DepthSegment::compareX(LineSegment *seg0, LineSegment *seg1)
-{
-	int compare0=seg0->p0.compareTo(seg1->p0);
-	if (compare0!=0)
-		return compare0;
-	return seg0->p1.compareTo(seg1->p1);
-
-}
-
-bool
-DepthSegmentLT(DepthSegment *first, DepthSegment *second)
-{
-	if (first->compareTo(second)<0)
-		return true;
-	else
-		return false;
-}
+struct DepthSegmentLessThen {
+	bool operator() (const DepthSegment* first, const DepthSegment* second)
+	{
+		assert(first);
+		assert(second);
+		if (first->compareTo(*second)<0) return true;
+		else return false;
+	}
+};
 
 
 
 /*public*/
 int
-SubgraphDepthLocater::getDepth(Coordinate &p)
+SubgraphDepthLocater::getDepth(const Coordinate& p)
 {
 	vector<DepthSegment*> stabbedSegments;
 	findStabbedSegments(p, stabbedSegments);
 
-	// if no segments on stabbing line subgraph must be outside all others->
+	// if no segments on stabbing line subgraph must be outside all others
 	if (stabbedSegments.size()==0) return 0;
 
-	sort(stabbedSegments.begin(), stabbedSegments.end(), DepthSegmentLT);
+	sort(stabbedSegments.begin(), stabbedSegments.end(), DepthSegmentLessThen());
 
 	DepthSegment *ds=stabbedSegments[0];
 	int ret = ds->leftDepth;
+
 #if GEOS_DEBUG
 	cerr<<"SubgraphDepthLocater::getDepth("<<p.toString()<<"): "<<ret<<endl;
 #endif
@@ -203,7 +168,7 @@ SubgraphDepthLocater::getDepth(Coordinate &p)
 
 /*private*/
 void
-SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,
+SubgraphDepthLocater::findStabbedSegments(const Coordinate &stabbingRayLeftPt,
 			std::vector<DepthSegment*>& stabbedSegments)
 {
 	unsigned int size = subgraphs->size();
@@ -226,7 +191,8 @@ SubgraphDepthLocater::findStabbedSegments(Coordinate &stabbingRayLeftPt,
 
 /*private*/
 void
-SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
+SubgraphDepthLocater::findStabbedSegments(
+	const Coordinate &stabbingRayLeftPt,
 	vector<DirectedEdge*>* dirEdges,
 	vector<DepthSegment*>& stabbedSegments)
 {
@@ -246,7 +212,8 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 /*private*/
 void
-SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
+SubgraphDepthLocater::findStabbedSegments(
+	const Coordinate &stabbingRayLeftPt,
 	DirectedEdge *dirEdge,
 	vector<DepthSegment*>& stabbedSegments)
 {
@@ -334,7 +301,7 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 			stabbingRayLeftPt.y > high->y)
 #endif
 		{
-#if GEOS_DEBUG
+#if GEOS_DEBUG 
 			cerr<<" segment above or below stabbing line, skipping "<<endl;
 #endif
 			continue;
@@ -387,6 +354,9 @@ SubgraphDepthLocater::findStabbedSegments( Coordinate &stabbingRayLeftPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/15 15:50:12  strk
+ * const correctness, cleanups
+ *
  * Revision 1.24  2006/03/15 12:52:56  strk
  * DepthSegment class moved inside SubgraphDepthLocator implementaion
  * as it was private to this file in JTS. Also, changed to reduce

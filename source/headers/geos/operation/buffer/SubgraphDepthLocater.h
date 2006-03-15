@@ -63,7 +63,7 @@ public:
 
 	~SubgraphDepthLocater() {}
 
-	int getDepth(geom::Coordinate &p);
+	int getDepth(const geom::Coordinate &p);
 
 private:
 
@@ -79,7 +79,7 @@ private:
 	 * @param stabbedSegments a vector to which DepthSegments intersecting
 	 *        the stabbing line will be added.
 	 */
-	void findStabbedSegments(geom::Coordinate &stabbingRayLeftPt,
+	void findStabbedSegments(const geom::Coordinate &stabbingRayLeftPt,
 			std::vector<DepthSegment*>& stabbedSegments);
 
 	/**
@@ -91,7 +91,7 @@ private:
 	 * @param stabbedSegments the current vector of DepthSegments
 	 *        intersecting the stabbing line will be added.
 	 */
-	void findStabbedSegments(geom::Coordinate &stabbingRayLeftPt,
+	void findStabbedSegments(const geom::Coordinate &stabbingRayLeftPt,
 			std::vector<geomgraph::DirectedEdge*> *dirEdges,
 			std::vector<DepthSegment*>& stabbedSegments);
 
@@ -104,7 +104,7 @@ private:
 	 * @param stabbedSegments the current list of DepthSegments intersecting
 	 *        the stabbing line
 	 */
-	void findStabbedSegments(geom::Coordinate &stabbingRayLeftPt,
+	void findStabbedSegments(const geom::Coordinate &stabbingRayLeftPt,
 			geomgraph::DirectedEdge *dirEdge,
 			std::vector<DepthSegment*>& stabbedSegments);
 
@@ -119,6 +119,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 15:50:11  strk
+ * const correctness, cleanups
+ *
  * Revision 1.1  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *
