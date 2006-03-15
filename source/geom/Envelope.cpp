@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <cmath>
 
 #ifndef USE_INLINE
 # include <geos/geom/Envelope.inl>
@@ -584,6 +585,9 @@ Envelope::expandBy(double deltaX, double deltaY)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.26  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

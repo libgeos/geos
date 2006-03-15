@@ -17,6 +17,7 @@
 #include <geos/util.h>
 #include <sstream>
 #include <string>
+#include <cmath>
 
 #ifndef USE_INLINE
 # include <geos/geom/PrecisionModel.inl>
@@ -300,6 +301,9 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.38  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

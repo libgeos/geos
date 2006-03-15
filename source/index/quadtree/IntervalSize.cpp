@@ -16,6 +16,7 @@
 
 #include <geos/indexQuadtree.h>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -38,6 +39,9 @@ bool IntervalSize::isZeroWidth(double mn,double mx){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.8  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

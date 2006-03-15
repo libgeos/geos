@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <cassert>
+#include <cmath>
 
 #include <geos/indexStrtree.h>
 #include <geos/util.h>
@@ -207,6 +208,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.27  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

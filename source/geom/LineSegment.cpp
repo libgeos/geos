@@ -15,6 +15,7 @@
  **********************************************************************/
 
 #include <sstream>
+#include <cmath>
 
 //#include <geos/geom.h>
 //#include <geos/geosAlgorithm.h>
@@ -281,6 +282,9 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.30  2006/03/13 21:54:56  strk
  * Streamlined headers inclusion.
  *

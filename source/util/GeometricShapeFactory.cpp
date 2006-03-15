@@ -16,6 +16,7 @@
 #include <geos/geom.h>
 #include <geos/util.h>
 #include <vector>
+#include <cmath>
 
 #ifndef M_PI
 #define M_PI        3.14159265358979323846
@@ -265,6 +266,9 @@ Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.13  2006/03/06 19:40:48  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

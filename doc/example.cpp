@@ -35,6 +35,11 @@
 #include <geos/opLinemerge.h>
 #include <geos/opPolygonize.h>
 
+#ifndef M_PI
+#define M_PI       3.14159265358979323846
+#endif
+
+
 using namespace std;
 using namespace geos;
 using namespace geos::operation::polygonize;
@@ -1051,6 +1056,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2006/03/15 18:44:51  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.42  2006/03/06 21:27:39  strk
  * Cascading fixed after Unload definition moved to geos::io namespace
  *

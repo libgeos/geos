@@ -15,6 +15,7 @@
  **********************************************************************/
 
 #include <geos/indexQuadtree.h>
+#include <cmath>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -107,6 +108,9 @@ QuadTreeKey::computeKey(int level,Envelope *itemEnv)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.10  2006/03/09 15:34:57  strk
  * Fixed debugging lines
  *

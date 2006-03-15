@@ -16,6 +16,7 @@
 
 #include <geos/indexBintree.h>
 #include <geos/indexQuadtree.h>
+#include <cmath>
 
 using namespace geos::index::quadtree;  // for DoubleBits
 
@@ -82,6 +83,9 @@ void Key::computeInterval(int level,BinTreeInterval *itemInterval){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/15 18:44:52  strk
+ * Bug #60 - Missing <cmath> header in some files
+ *
  * Revision 1.8  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup
