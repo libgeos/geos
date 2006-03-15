@@ -8,7 +8,6 @@ geos_HEADERS = \
 	BufferBuilder.h	\
 	BufferOp.h	\
 	BufferSubgraph.h	\
-	DepthSegment.h	\
 	OffsetCurveBuilder.h	\
 	OffsetCurveSetBuilder.h	\
 	RightmostEdgeFinder.h	\
