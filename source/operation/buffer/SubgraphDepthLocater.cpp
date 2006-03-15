@@ -186,7 +186,6 @@ SubgraphDepthLocater::findStabbedSegments(const Coordinate &stabbingRayLeftPt,
 		findStabbedSegments(stabbingRayLeftPt, bsg->getDirectedEdges(),
 			stabbedSegments);
 	}
-	//return stabbedSegments;
 }
 
 /*private*/
@@ -201,11 +200,10 @@ SubgraphDepthLocater::findStabbedSegments(
 	 * Check all forward DirectedEdges only. This is still general,
 	 * because each Edge has a forward DirectedEdge.
 	 */
-	for (unsigned int i=0; i<dirEdges->size(); ++i)
+	for (unsigned int i=0, n=dirEdges->size(); i<n; ++i)
 	{
 		DirectedEdge *de=(*dirEdges)[i];
-		if (!de->isForward())
-			continue;
+		if (!de->isForward()) continue;
 		findStabbedSegments(stabbingRayLeftPt, de, stabbedSegments);
 	}
 }
@@ -354,6 +352,9 @@ SubgraphDepthLocater::findStabbedSegments(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/15 18:57:39  strk
+ * small cleanup
+ *
  * Revision 1.25  2006/03/15 15:50:12  strk
  * const correctness, cleanups
  *
