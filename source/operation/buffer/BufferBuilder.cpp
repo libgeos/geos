@@ -128,8 +128,10 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	prof->stop();
 #endif
 #if GEOS_DEBUG
-	std::cerr << "BufferBuilder::buffer finished computing NodedEdges: "
-		<< std::endl << edgeList << std::endl;
+	std::cerr << "BufferBuilder::buffer finished computing NodedEdges ";
+#if GEOS_DEBUG > 1
+	std::cerr << std::endl << edgeList << std::endl;
+#endif
 #endif
 
 	Geometry* resultGeom=NULL;
@@ -143,8 +145,10 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		createSubgraphs(&graph, subgraphList);
 #if GEOS_DEBUG
 	std::cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<std::endl;
+#if GEOS_DEBUG > 1
 	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
 		std::cerr << *(subgraphList[i]) << std::endl;
+#endif
 #endif
 		PolygonBuilder polyBuilder(geomFact);
 		buildSubgraphs(subgraphList, polyBuilder);
@@ -152,8 +156,10 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 #if GEOS_DEBUG
 	std::cerr << "PolygonBuilder got " << resultPolyList->size()
 	          << " polygons" << std::endl;
+#if GEOS_DEBUG > 1
 	for (unsigned int i=0, n=resultPolyList->size(); i<n; i++)
 		std::cerr << (*resultPolyList)[i]->toString() << std::endl;
+#endif
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (const util::GEOSException& /* exc */) {
@@ -207,8 +213,6 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 #endif
 
 	return noder;
-
-
 
 }
 
@@ -327,16 +331,42 @@ void
 BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 		PolygonBuilder& polyBuilder)
 {
+
+#if GEOS_DEBUG
+	std::cerr << __FUNCTION__ << " got " << subgraphList.size() << " subgraphs" << std::endl;
+#endif
 	std::vector<BufferSubgraph*> processedGraphs;
 	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
 	{
 		BufferSubgraph *subgraph=subgraphList[i];
 		Coordinate *p=subgraph->getRightmostCoordinate();
+#if GEOS_DEBUG
+		std::cerr << " " << i << ") Subgraph[" << subgraph << "]" << std::endl;
+		std::cerr << "  rightmost Coordinate " << *p;
+#endif
 		SubgraphDepthLocater locater(&processedGraphs);
+#if GEOS_DEBUG
+		std::cerr << " after SubgraphDepthLocater processedGraphs contain "
+		          << processedGraphs.size()
+		          << " elements" << std::endl;
+#endif
 		int outsideDepth=locater.getDepth(*p);
+#if GEOS_DEBUG
+		std::cerr << " Depth of rightmost coordinate: " << outsideDepth << std::endl;
+#endif
 		subgraph->computeDepth(outsideDepth);
+		std::cerr << "Calling findResultEdges() on " << typeid(*subgraph).name() << std::endl;
 		subgraph->findResultEdges();
+#if GEOS_DEBUG
+		std::cerr << " after computeDepth and findResultEdges subgraph contain:" << std::endl
+		          << "   " << subgraph->getDirectedEdges()->size() << " DirecteEdges " << std::endl
+		          << "   " << subgraph->getNodes()->size() << " Nodes " << std::endl;
+#endif
 		processedGraphs.push_back(subgraph);
+#if GEOS_DEBUG
+		std::cerr << " added " << subgraph << " to processedGraphs, new size is "
+		          << processedGraphs.size() << std::endl;
+#endif
 		polyBuilder.add(subgraph->getDirectedEdges(), subgraph->getNodes());
 	}
 }
@@ -347,6 +377,9 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.49  2006/03/15 11:42:54  strk
+ * more debugging lines, with two levels of debugging handled
+ *
  * Revision 1.48  2006/03/14 16:08:21  strk
  * changed buildSubgraphs signature to use refs rather then pointers, made it const-correct. Reduced heap allocations in createSubgraphs()
  *
