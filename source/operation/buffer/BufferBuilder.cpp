@@ -340,6 +340,8 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 	{
 		BufferSubgraph *subgraph=subgraphList[i];
 		Coordinate *p=subgraph->getRightmostCoordinate();
+		assert(p);
+
 #if GEOS_DEBUG
 		std::cerr << " " << i << ") Subgraph[" << subgraph << "]" << std::endl;
 		std::cerr << "  rightmost Coordinate " << *p;
@@ -355,7 +357,6 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 		std::cerr << " Depth of rightmost coordinate: " << outsideDepth << std::endl;
 #endif
 		subgraph->computeDepth(outsideDepth);
-		std::cerr << "Calling findResultEdges() on " << typeid(*subgraph).name() << std::endl;
 		subgraph->findResultEdges();
 #if GEOS_DEBUG
 		std::cerr << " after computeDepth and findResultEdges subgraph contain:" << std::endl
@@ -377,6 +378,9 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.50  2006/03/15 13:03:01  strk
+ * removed leftover debugging line
+ *
  * Revision 1.49  2006/03/15 11:42:54  strk
  * more debugging lines, with two levels of debugging handled
  *
