@@ -27,7 +27,7 @@ namespace geos {
 		class MultiPoint;
 		class Geometry;
 		class Coordinate;
-		class CoordinateLessThen;
+		struct CoordinateLessThen;
 	}
 	namespace geomgraph {
 		class GeometryGraph;
@@ -72,6 +72,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/15 18:59:33  strk
+ * Bug #62: 'struct' CoordinateLessThen in forward declaration
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
