@@ -62,6 +62,10 @@ PolygonBuilder::add(PlanarGraph *graph)
 	unsigned int eeSize=ee.size();
 	vector<DirectedEdge*> dirEdges(eeSize);
 
+#if GEOS_DEBUG 
+	cerr << __FUNCTION__ << ": PlanarGraph has " << eeSize << " EdgeEnds" << endl;
+#endif
+
 	for(unsigned int i=0; i<eeSize; ++i)
 	{
 		DirectedEdge* de = dynamic_cast<DirectedEdge*>(ee[i]);
@@ -99,9 +103,34 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 		des->linkResultDirectedEdges();
 	}
 
+#if GEOS_DEBUG > 1
+	cerr << "CREATE TABLE diredges (g geometry);" << endl;
+	for (unsigned int i=0, n=dirEdges->size(); i<n; i++)
+	{
+		DirectedEdge* de = (*dirEdges)[i];
+		Edge* e = de->getEdge();
+		const CoordinateSequence* pts = e->getCoordinates();
+		cerr << "INSERT INTO diredges VALUES ('LINESTRING"
+		     << pts->toString() << "');" << endl;
+	}
+#endif
 	vector<MaximalEdgeRing*>* maxEdgeRings=buildMaximalEdgeRings(dirEdges);
+#if GEOS_DEBUG > 1
+	cerr << "CREATE TABLE maxedgerings (g geometry);" << endl;
+	for (unsigned int i=0, n=maxEdgeRings->size(); i<n; i++)
+	{
+		EdgeRing* er = (*maxEdgeRings)[i];
+		Polygon* poly = er->toPolygon(geometryFactory);
+		cerr << "INSERT INTO maxedgerings VALUES ('"
+		     << poly->toString() << "');" << endl;
+		delete poly;
+	}
+#endif
+
 	vector<EdgeRing*> freeHoleList;
-	vector<MaximalEdgeRing*> *edgeRings=buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
+	vector<MaximalEdgeRing*> *edgeRings=
+		buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
+
 	sortShellsAndHoles(edgeRings,&shellList,&freeHoleList);
 	placeFreeHoles(&shellList, &freeHoleList);
 	delete maxEdgeRings;
@@ -330,6 +359,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/03/15 11:44:04  strk
+ * debug blocks, dumping SQL when GEOS_DEBUG > 1
+ *
  * Revision 1.34  2006/03/14 16:55:33  strk
  * oops, GEOS_DEBUG default to 0
  *
