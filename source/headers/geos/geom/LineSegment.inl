@@ -54,6 +54,26 @@ LineSegment::distancePerpendicular(const Coordinate& p) const
 	return algorithm::CGAlgorithms::distancePointLinePerpendicular(p, p0, p1);
 }
 
+INLINE double
+LineSegment::distance(const LineSegment& ls) const
+{
+	return algorithm::CGAlgorithms::distanceLineLine(p0, p1, ls.p0, ls.p1);
+}
+
+/*public*/
+INLINE double
+LineSegment::distance(const Coordinate& p) const
+{
+	return algorithm::CGAlgorithms::distancePointLine(p, p0, p1);
+}
+
+INLINE void
+LineSegment::normalize()
+{
+	if (p1.compareTo(p0)<0) reverse();
+}
+
+
 INLINE void
 LineSegment::setCoordinates(const Coordinate& c0, const Coordinate& c1)
 {
@@ -61,7 +81,15 @@ LineSegment::setCoordinates(const Coordinate& c0, const Coordinate& c1)
 }
 
 INLINE const Coordinate&
-LineSegment::getCoordinate(unsigned int i) const
+LineSegment::operator[](unsigned int i) const
+{
+	if (i==0) return p0;
+	assert(i==1);
+	return p1;
+}
+
+INLINE Coordinate&
+LineSegment::operator[](unsigned int i) 
 {
 	if (i==0) return p0;
 	assert(i==1);
@@ -104,6 +132,12 @@ LineSegment::closestPoints(const LineSegment* line)
 {
 	assert(line);
 	return closestPoints(*line);
+}
+
+INLINE double
+LineSegment::angle() const
+{
+	return atan2(p1.y-p0.y,p1.x-p0.x);
 }
 
 INLINE ostream&

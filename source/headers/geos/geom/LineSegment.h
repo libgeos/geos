@@ -63,7 +63,11 @@ public:
 
 	void setCoordinates(const Coordinate& c0, const Coordinate& c1);
 
-	const Coordinate& getCoordinate(unsigned int i) const;
+	// obsoleted, use operator[] instead
+	//const Coordinate& getCoordinate(unsigned int i) const;
+
+	const Coordinate& operator[](unsigned int i) const;
+	Coordinate& operator[](unsigned int i);
 
 	void setCoordinates(const LineSegment& ls);
 
@@ -107,17 +111,23 @@ public:
 
 	int orientationIndex(const LineSegment* seg) const;
 
+	/// Reverses the direction of the line segment.
 	void reverse();
 
+	/// Puts the line segment into a normalized form.
+	//
+	/// This is useful for using line segments in maps and indexes when
+	/// topological equality rather than exact equality is desired.
+	///
 	void normalize();
 
+	/// @return the angle this segment makes with the x-axis (in radians)
 	double angle() const;
 
-	double distance(const LineSegment ls) const;
+	/// Computes the distance between this line segment and another one.
+	double distance(const LineSegment& ls) const;
 
-	/**
-	 * Computes the distance between this line segment and a point.
-	 */
+	/// Computes the distance between this line segment and a point.
 	double distance(const Coordinate& p) const;
 
 	/** \brief
@@ -126,6 +136,12 @@ public:
 	 */
 	double distancePerpendicular(const Coordinate& p) const;
 
+	/**
+	 * Compute the projection factor for the projection of the point p
+	 * onto this LineSegment.  The projection factor is the constant k
+	 * by which the vector for this segment must be multiplied to
+	 * equal the vector for the projection of p.
+	 */
 	double projectionFactor(const Coordinate& p) const;
 
 	/** \brief
@@ -232,6 +248,9 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/16 13:28:22  strk
+ * obsoleted getCoordinate(), replaced by operator[]
+ *
  * Revision 1.2  2006/03/13 22:33:09  strk
  * Added missing forward declarations
  *

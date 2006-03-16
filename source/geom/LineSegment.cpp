@@ -41,61 +41,17 @@ namespace geos {
 namespace geom { // geos::geom
 
 
-/**
- * Reverses the direction of the line segment.
- */
+/*public*/
 void
 LineSegment::reverse()
 {
+	// TODO: use std::swap<>
 	Coordinate temp=p0;
 	p0=p1;
 	p1=temp;
 }
 
-/**
- * Puts the line segment into a normalized form.
- * This is useful for using line segments in maps and indexes when
- * topological equality rather than exact equality is desired.
- */
-void
-LineSegment::normalize()
-{
-	if (p1.compareTo(p0)<0) reverse();
-}
-
-/**
- * @return the angle this segment makes with the x-axis (in radians)
- */
-double
-LineSegment::angle() const
-{
-	return atan2(p1.y-p0.y,p1.x-p0.x);
-}
-
-/**
- * Computes the distance between this line segment and another one.
- */
-double
-LineSegment::distance(const LineSegment ls) const
-{
-	return algorithm::CGAlgorithms::distanceLineLine(p0, p1, ls.p0, ls.p1);
-}
-
-/**
- * Computes the distance between this line segment and another one.
- */
-double
-LineSegment::distance(const Coordinate& p) const
-{
-	return algorithm::CGAlgorithms::distancePointLine(p, p0, p1);
-}
-
-/**
- * Compute the projection factor for the projection of the point p
- * onto this LineSegment.  The projection factor is the constant k
- * by which the vector for this segment must be multiplied to
- * equal the vector for the projection of p.
- */
+/*public*/
 double
 LineSegment::projectionFactor(const Coordinate& p) const
 {
@@ -282,6 +238,9 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/03/16 13:28:21  strk
+ * obsoleted getCoordinate(), replaced by operator[]
+ *
  * Revision 1.31  2006/03/15 18:44:52  strk
  * Bug #60 - Missing <cmath> header in some files
  *
