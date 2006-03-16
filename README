@@ -15,6 +15,12 @@ Win32 Visual Studio Builds:
 	source\makefile.vc
 
 
+TESTING
+=======
+
+- Run 'make check'
+- cd tests/xmltester; make test (to be included in 'make check' rule) 
+
 CLIENT APPLICATIONS
 ===================
 
