@@ -680,7 +680,7 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 		cerr<<" HCoordinate found intersection h:"<<intPt.toString()<<endl;
 #endif
 
-	} catch (const NotRepresentableException& e) {
+	} catch (const NotRepresentableException& /* e */) {
 		// Coordinate for intersection is not calculable e.toString()
 		assert(0); 
     	}
@@ -804,6 +804,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2006/03/16 10:38:14  strk
+ * Bug #63 - Remove unreferenced local variable warning
+ *
  * Revision 1.36  2006/03/09 16:46:45  strk
  * geos::geom namespace definition, first pass at headers split
  *
