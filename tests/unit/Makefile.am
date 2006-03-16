@@ -12,5 +12,6 @@ geos_unit_LDADD = $(top_builddir)/source/libgeos.la
 geos_unit_SOURCES = \
 	geos_unit.cpp \
 	geom/Envelope.cpp \
+	geom/LineSegment.cpp \
 	geom/Geometry/isRectangle.cpp 
 
