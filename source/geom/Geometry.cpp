@@ -598,9 +598,12 @@ Geometry::getClassSortIndex() const
 	else if ( typeid(*this) == typeid(MultiLineString)    ) return 4;
 	else if ( typeid(*this) == typeid(Polygon)            ) return 5;
 	else if ( typeid(*this) == typeid(MultiPolygon)       ) return 6;
-	else if ( typeid(*this) == typeid(GeometryCollection) ) return 7;
+	else 
+	{
+		assert(typeid(*this) == typeid(GeometryCollection)); // unsupported class
+		return 7;
+	}
 
-	assert(0); // unsupported class
 #if 0
 	string str="Class not supported: ";
 	str.append(typeid(*this).name());
@@ -754,6 +757,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.99  2006/03/16 10:42:43  strk
+ * Bug #64 - Not all control paths return a value in geos::geom::Geometry::getClassSortIndex
+ *
  * Revision 1.98  2006/03/14 12:55:55  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *
