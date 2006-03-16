@@ -1,0 +1,13 @@
+<run>
+<precisionModel scale=1.0 offsetx=0.0 offsety=0.0/>
+<case><desc>Case #</desc>
+<a>
+MULTILINESTRING((0 0, 10 0), (10 0, 20 0))
+</a>
+<test>
+<op name="Linemerge" arg1="A">
+GEOMETRYCOLLECTION ( LINESTRING(0 0, 10 0, 20 0) )
+</op>
+</test>
+</case>
+</run>
