@@ -21,7 +21,7 @@ void usage()
 {
     std::cout << "Usage: <geos_tut> [regression] | [list] | [ group] [test]" << std::endl;
     std::cout << "       List all groups: geos_tut list" << std::endl;
-    std::cout << "       Run all tests: geos_tut regression" << std::endl;
+    std::cout << "       Run all tests: geos_tut" << std::endl;
     std::cout << "       Run one group: geos_tut <group name>" << std::endl;
     std::cout << "       Run one test: geos_tut <group name> 3" << std::endl;
     std::cout << "\nGEOS homepage: http://geos.refractions.net" << std::endl;
@@ -32,10 +32,11 @@ int main(int argc,const char* argv[])
 {
     tut::reporter visi;
 
+    std::cout << argc << std::endl;
     std::cout << "GEOS Test Suite Application" << std::endl;
     std::cout << "===========================" << std::endl;
 
-    if( argc < 2 || argc > 3 )
+    if ( (argc == 2 && std::string(argv[1]) == "--help") || argc > 3 )
     {
         usage();
         return 0;
@@ -45,11 +46,11 @@ int main(int argc,const char* argv[])
 
     try
     {
-        if( argc == 1 || (argc == 2 && std::string(argv[1]) == "regression") )
+        if ( argc == 1 )
         {
             tut::runner.get().run_tests();
         }
-        else if( argc == 2 && std::string(argv[1]) == "list" )
+        else if ( argc == 2 && std::string(argv[1]) == "list" )
         {
             tut::groupnames gl = tut::runner.get().list_groups();
             tut::groupnames::const_iterator b = gl.begin();
@@ -59,13 +60,13 @@ int main(int argc,const char* argv[])
 
             std::cout << "Registered " << d << " test groups:\n" << std::endl;
             
-            while( b != e )
+            while ( b != e )
             {
                 std::cout << "  " << *b << std::endl;
                 ++b;
             }
         }
-        else if( argc == 2 && std::string(argv[1]) != "regression" )
+        else if ( argc == 2 && std::string(argv[1]) != "list" )
         {
             tut::runner.get().run_tests(argv[1]);
         }
