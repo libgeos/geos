@@ -13,8 +13,21 @@
  *
  **********************************************************************/
 
-#include <geos/opOverlay.h>
-#include <geos/io.h>
+#include <map>
+#include <vector>
+#include <cassert>
+
+#include <geos/operation/overlay/LineBuilder.h>
+#include <geos/operation/overlay/OverlayOp.h>
+
+#include <geos/algorithm/PointLocator.h>
+
+#include <geos/geom/GeometryFactory.h>
+
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -24,7 +37,7 @@
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
-using namespace geos::geomgraph::index;
+//using namespace geos::geomgraph::index;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -77,7 +90,10 @@ LineBuilder::findCoveredLineEdges()
 	{
 		Node *node=it->second;
 		//node.print(System.out);
-		((DirectedEdgeStar*)node->getEdges())->findCoveredLineEdges();
+		assert(dynamic_cast<DirectedEdgeStar*>(node->getEdges()));
+		DirectedEdgeStar* des=static_cast<DirectedEdgeStar*>(node->getEdges());
+		des->findCoveredLineEdges();
+		//((DirectedEdgeStar*)node->getEdges())->findCoveredLineEdges();
 	}
 
 	/*
@@ -87,7 +103,8 @@ LineBuilder::findCoveredLineEdges()
 	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
 	for(unsigned int i=0, s=ee->size(); i<s; ++i)
 	{
-		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
+		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
+		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
 		Edge *e=de->getEdge();
 		if (de->isLineEdge() && !e->isCoveredSet()) {
 			bool isCovered=op->isCoveredByA(de->getCoordinate());
@@ -102,7 +119,8 @@ LineBuilder::collectLines(int opCode)
 	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
 	for(unsigned int i=0, s=ee->size(); i<s; ++i)
 	{
-		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
+		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
+		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
 		collectLineEdge(de, opCode, &lineEdgesList);
 		collectBoundaryTouchEdge(de, opCode, &lineEdgesList);
 	}
@@ -274,7 +292,7 @@ LineBuilder::labelIsolatedLines(vector<Edge*> *edgesList)
  * Label an isolated node with its relationship to the target geometry.
  */
 void
-LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
+LineBuilder::labelIsolatedLine(Edge *e, int targetIndex)
 {
 	int loc=ptLocator->locate(e->getCoordinate(),op->getArgGeometry(targetIndex));
 	e->getLabel()->setLocation(targetIndex,loc);
@@ -286,6 +304,9 @@ LineBuilder::labelIsolatedLine(Edge *e,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.23  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *

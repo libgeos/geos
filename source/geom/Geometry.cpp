@@ -28,7 +28,8 @@
 #include <geos/opRelate.h>
 #include <geos/opValid.h>
 #include <geos/opDistance.h>
-#include <geos/opOverlay.h>
+//#include <geos/opOverlay.h>
+#include <geos/operation/overlay/OverlayOp.h>
 //#include <geos/opBuffer.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/opPredicate.h>
@@ -757,6 +758,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.100  2006/03/17 13:24:58  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.99  2006/03/16 10:42:43  strk
  * Bug #64 - Not all control paths return a value in geos::geom::Geometry::getClassSortIndex
  *

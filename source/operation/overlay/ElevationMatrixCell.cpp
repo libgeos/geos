@@ -13,12 +13,16 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/opOverlay.h>
 #include <sstream>
 #include <string>
+#include <vector>
+
+#include <geos/operation/overlay/ElevationMatrixCell.h>
+#include <geos/platform.h> // ISNAN
+#include <geos/geom/Coordinate.h>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -84,6 +88,9 @@ ElevationMatrixCell::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.5  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

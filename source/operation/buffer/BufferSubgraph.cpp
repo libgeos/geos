@@ -22,12 +22,17 @@
 #include <vector>
 #include <list>
 
-#include <geos/opOverlay.h> // FIXME: reduce this include
-
 #include <geos/operation/buffer/BufferSubgraph.h>
+
 #include <geos/geom/Envelope.h>
+#include <geos/geom/CoordinateSequence.h>
+
 #include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/Position.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -35,9 +40,8 @@
 
 using namespace std;
 using namespace geos::geomgraph;
-using namespace geos::noding;
 using namespace geos::algorithm;
-using namespace geos::operation::overlay;
+using namespace geos::operation;
 using namespace geos::geom;
 
 namespace geos {
@@ -330,6 +334,9 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.29  2006/03/15 17:33:39  strk
  * Changed operator<< to use operator<< for Nodes
  *

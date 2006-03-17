@@ -13,8 +13,15 @@
  *
  **********************************************************************/
 
-#include <geos/opOverlay.h>
-#include <geos/io.h>
+#include <vector>
+#include <cassert>
+
+#include <geos/operation/overlay/PointBuilder.h>
+#include <geos/operation/overlay/OverlayOp.h>
+
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/Label.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -22,6 +29,7 @@
 
 using namespace std;
 using namespace geos::geomgraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -96,6 +104,9 @@ PointBuilder::filterCoveredNodeToPoint(const Node *n)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.19  2006/03/02 12:12:01  strk
  * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
  *
@@ -115,32 +126,6 @@ PointBuilder::filterCoveredNodeToPoint(const Node *n)
  * Revision 1.14  2005/02/05 05:44:47  strk
  * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
  * lots of other Coordinate copies.
- *
- * Revision 1.13  2004/11/17 15:09:08  strk
- * Changed COMPUTE_Z defaults to be more conservative
- *
- * Revision 1.12  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.11  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.10  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.9  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2004/06/30 20:59:13  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

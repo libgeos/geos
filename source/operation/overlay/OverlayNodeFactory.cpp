@@ -14,9 +14,9 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/geomgraph.h>
-#include <geos/opOverlay.h>
+#include <geos/operation/overlay/OverlayNodeFactory.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
 
 using namespace geos::geomgraph;
 
@@ -27,7 +27,7 @@ namespace overlay { // geos.operation.overlay
 static const OverlayNodeFactory onf;
 
 Node*
-OverlayNodeFactory::createNode(const Coordinate &coord) const
+OverlayNodeFactory::createNode(const geom::Coordinate &coord) const
 {
 	return new Node(coord, new DirectedEdgeStar());
 }
@@ -44,6 +44,9 @@ OverlayNodeFactory::instance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.9  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

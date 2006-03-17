@@ -16,8 +16,10 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cassert>
 
-#include <geos/opOverlay.h>
+#include <geos/operation/overlay/ElevationMatrix.h>
+
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Coordinate.h>
@@ -34,6 +36,49 @@ using namespace geos::geom;
 namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
+
+ElevationMatrixFilter::ElevationMatrixFilter(ElevationMatrix &newEm):
+	em(newEm)
+{ }
+
+ElevationMatrixFilter::~ElevationMatrixFilter()
+{ }
+
+void
+ElevationMatrixFilter::filter_rw(Coordinate *c) const
+{
+#if GEOS_DEBUG
+	cerr<<"ElevationMatrixFilter::filter_rw("<<c->toString()<<") called"
+		<<endl;
+#endif
+
+	// already has a Z value, nothing to do
+	if ( ! ISNAN(c->z) ) return;
+
+	double avgElevation = em.getAvgElevation();
+
+	try {
+		const ElevationMatrixCell &emc = em.getCell(*c);
+		c->z = emc.getAvg();
+		if ( ISNAN(c->z) ) c->z = avgElevation;
+#if GEOS_DEBUG
+		cerr<<"  z set to "<<c->z<<endl;
+#endif
+	} catch (const util::IllegalArgumentException& /* ex */) {
+		c->z = avgElevation;
+	}
+}
+
+void
+ElevationMatrixFilter::filter_ro(const Coordinate *c)
+{
+#if GEOS_DEBUG
+	cerr<<"ElevationMatrixFilter::filter_ro("<<c->toString()<<") called"
+		<<endl;
+#endif
+	em.add(*c);
+}
+
 
 ElevationMatrix::ElevationMatrix(const Envelope &newEnv,
 		unsigned int newRows, unsigned int newCols):
@@ -192,6 +237,9 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.13  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

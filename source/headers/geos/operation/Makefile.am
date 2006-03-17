@@ -1,4 +1,6 @@
-SUBDIRS = buffer
+SUBDIRS = \
+	buffer \
+	overlay
 
 geosdir = $(includedir)/geos/operation
 

@@ -21,13 +21,35 @@
 #include <cassert>
 #include <functional>
 #include <vector>
-#include <geos/geom.h>
-#include <geos/opOverlay.h>
-#include <geos/util.h>
+
+#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlay/ElevationMatrix.h>
+#include <geos/operation/overlay/OverlayNodeFactory.h>
+#include <geos/operation/overlay/PolygonBuilder.h>
+#include <geos/operation/overlay/LineBuilder.h>
+#include <geos/operation/overlay/PointBuilder.h>
+
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Point.h>
+
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/Position.h>
+
+#include <geos/geomgraph/index/SegmentIntersector.h>
+
+#include <geos/util/TopologyException.h>
+
 #include <geos/precision.h>
-//#include <geos/geomgraph/GeometryGraph.h>
-//#include <geos/noding/SegmentIntersector.h>
-#include <geos/geomgraphindex.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -44,6 +66,7 @@
 #define TRY_REDUCED_GEOMS 1
 
 using namespace std;
+using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
 
@@ -365,7 +388,10 @@ OverlayOp::mergeSymLabels()
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
-		((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
+		EdgeEndStar* ees=node->getEdges();
+		assert(dynamic_cast<DirectedEdgeStar*>(ees));
+		static_cast<DirectedEdgeStar*>(ees)->mergeSymLabels();
+		//((DirectedEdgeStar*)node->getEdges())->mergeSymLabels();
 #if GEOS_DEBUG
 		cerr<<"     "<<node->print()<<endl;
 #endif
@@ -870,6 +896,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.62  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.61  2006/03/09 15:50:27  strk
  * Fixed debugging lines, added missing header
  *

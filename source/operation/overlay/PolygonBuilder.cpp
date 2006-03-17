@@ -18,9 +18,19 @@
  *
  **********************************************************************/
 
+#include <vector>
 #include <cassert>
 
-#include <geos/opOverlay.h>
+#include <geos/operation/overlay/PolygonBuilder.h>
+#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlay/MaximalEdgeRing.h>
+#include <geos/operation/overlay/MinimalEdgeRing.h>
+
+#include <geos/geomgraph/Node.h>
+#include <geos/geomgraph/DirectedEdgeStar.h>
+
+#include <geos/geom/GeometryFactory.h>
+
 #include <geos/algorithm/CGAlgorithms.h>
 
 #ifndef GEOS_DEBUG
@@ -30,6 +40,7 @@
 using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 
 namespace geos {
@@ -68,8 +79,8 @@ PolygonBuilder::add(PlanarGraph *graph)
 
 	for(unsigned int i=0; i<eeSize; ++i)
 	{
-		DirectedEdge* de = dynamic_cast<DirectedEdge*>(ee[i]);
-		assert(de);
+		assert(dynamic_cast<DirectedEdge*>(ee[i]));
+		DirectedEdge* de = static_cast<DirectedEdge*>(ee[i]);
 		dirEdges[i]=de;
 	}
 
@@ -359,6 +370,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.35  2006/03/15 11:44:04  strk
  * debug blocks, dumping SQL when GEOS_DEBUG > 1
  *

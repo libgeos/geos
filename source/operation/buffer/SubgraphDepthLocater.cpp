@@ -21,13 +21,17 @@
 #include <vector>
 #include <cassert>
 
-#include <geos/algorithm/CGAlgorithms.h>
-#include <geos/opOverlay.h> // FIXME: split this
-#include <geos/operation/buffer/SubgraphDepthLocater.h>
 #include <geos/operation/buffer/BufferSubgraph.h>
-#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/operation/buffer/SubgraphDepthLocater.h>
+
+#include <geos/algorithm/CGAlgorithms.h>
+
 #include <geos/geom/Envelope.h>
 #include <geos/geom/CoordinateSequence.h>
+
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Position.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -36,7 +40,6 @@
 using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
-using namespace geos::operation::overlay; // PolygonBuilder
 using namespace geos::geom;
 
 namespace geos {
@@ -352,6 +355,9 @@ SubgraphDepthLocater::findStabbedSegments(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.26  2006/03/15 18:57:39  strk
  * small cleanup
  *

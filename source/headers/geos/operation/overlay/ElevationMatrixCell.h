@@ -4,8 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,33 +13,47 @@
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/MinimalEdgeRing.h>
-#include <geos/geomgraph/EdgeRing.h>
+#ifndef GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H
+#define GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H
 
+#include <set>
+
+// Forward declarations
 namespace geos {
-namespace operation { // geos.operation
-namespace overlay { // geos.operation.overlay
-
-MinimalEdgeRing::MinimalEdgeRing(geomgraph::DirectedEdge *start,
-		const geom::GeometryFactory *geometryFactory)
-	:
-	geomgraph::EdgeRing(start, geometryFactory)
-{
-	computePoints(start);
-	computeRing();
+	namespace geom {
+		class Coordinate;
+	}
 }
 
-} // namespace geos.operation.overlay
-} // namespace geos.operation
+namespace geos {
+namespace operation { // geos::operation
+namespace overlay { // geos::operation::overlay
+
+
+class ElevationMatrixCell {
+public:
+	ElevationMatrixCell();
+	~ElevationMatrixCell();
+	void add(const geom::Coordinate &c);
+	void add(double z);
+	double getAvg(void) const;
+	double getTotal(void) const;
+	std::string print() const;
+private:
+	std::set<double>zvals;
+	double ztot;
+};
+
+} // namespace geos::operation::overlay
+} // namespace geos::operation
 } // namespace geos
+
+#endif // ndef GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H
 
 /**********************************************************************
  * $Log$
- * Revision 1.13  2006/03/17 13:24:59  strk
+ * Revision 1.1  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- * Revision 1.12  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
  **********************************************************************/
 

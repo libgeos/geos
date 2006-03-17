@@ -1,0 +1,92 @@
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2006 Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#ifndef GEOS_OP_OVERLAY_MINIMALEDGERING_H
+#define GEOS_OP_OVERLAY_MINIMALEDGERING_H
+
+#include <vector>
+
+#include <geos/geomgraph/EdgeRing.h> // for inheritance
+#include <geos/geomgraph/DirectedEdge.h> // for inlines
+
+// Forward declarations
+namespace geos {
+	namespace geom {
+		class GeometryFactory;
+	}
+	namespace geomgraph {
+		class DirectedEdge;
+		class EdgeRing;
+	}
+}
+
+namespace geos {
+namespace operation { // geos::operation
+namespace overlay { // geos::operation::overlay
+
+/** \brief
+ * A ring of {@link Edge}s with the property that no node
+ * has degree greater than 2. 
+ *
+ * These are the form of rings required
+ * to represent polygons under the OGC SFS spatial data model.
+ *
+ * @see operation::overlay::MaximalEdgeRing
+ *
+ */
+class MinimalEdgeRing: public geomgraph::EdgeRing {
+
+public:
+
+	// CGAlgorithms argument obsoleted
+	MinimalEdgeRing(geomgraph::DirectedEdge *start,
+		const geom::GeometryFactory *geometryFactory);
+
+	//virtual ~MinimalEdgeRing();
+
+	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de);
+
+	void setEdgeRing(geomgraph::DirectedEdge *de,
+			geomgraph::EdgeRing *er);
+};
+
+// INLINES
+
+inline void
+MinimalEdgeRing::setEdgeRing(geomgraph::DirectedEdge *de, geomgraph::EdgeRing *er)
+{
+	de->setMinEdgeRing(er);
+}
+
+inline geomgraph::DirectedEdge*
+MinimalEdgeRing::getNext(geomgraph::DirectedEdge *de)
+{
+	return de->getNextMin();
+}
+
+
+} // namespace geos::operation::overlay
+} // namespace geos::operation
+} // namespace geos
+
+#endif // ndef GEOS_OP_OVERLAY_MINIMALEDGERING_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.1  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
+ **********************************************************************/
+

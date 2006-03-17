@@ -16,8 +16,11 @@
 
 #include <vector>
 
-#include <geos/opOverlay.h>
-#include <geos/geomgraphindex.h>
+#include <geos/operation/overlay/EdgeSetNoder.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/index/EdgeSetIntersector.h>
+#include <geos/geomgraph/index/SimpleMCSweepLineIntersector.h>
+#include <geos/geomgraph/index/SegmentIntersector.h>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -56,6 +59,9 @@ EdgeSetNoder::getNodedEdges()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
  * Revision 1.10  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

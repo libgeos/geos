@@ -14,8 +14,7 @@ libopoverlay_la_SOURCES = \
 	PointBuilder.cpp \
 	PolygonBuilder.cpp \
 	ElevationMatrix.cpp \
-	ElevationMatrixCell.cpp \
-	ElevationMatrixFilter.cpp 
+	ElevationMatrixCell.cpp 
 
 libopoverlay_la_LIBADD = 
 
