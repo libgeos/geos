@@ -18,7 +18,7 @@
 #include <geos/opValid.h>
 //#include <geos/geomgraph.h>
 //#include <geos/operation.h>
-#include <geos/opRelate.h>
+//#include <geos/opRelate.h>
 //#include <geos/indexQuadtree.h>
 //#include <geos/opBuffer.h>
 //#include <geos/planargraph.h>
@@ -26,7 +26,7 @@
 
 //using namespace geos::geomgraph;
 //using namespace geos::operation;
-using namespace geos::operation::relate;
+//using namespace geos::operation::relate;
 //using namespace geos::index;
 
 using namespace std;
@@ -41,8 +41,8 @@ void Unload::Release()
 	//delete planarDirectedEdge::cga;
 	//delete GeometryGraphOperation::cga;
 	//delete GeometryGraphOperation::li;
-	delete RelateComputer::li;
-	delete RelateComputer::ptLocator;
+	//delete RelateComputer::li;
+	//delete RelateComputer::ptLocator;
 	//delete quadtree::QuadTreeRoot::origin;
 	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
 	//delete Profiler::instance();
@@ -53,6 +53,11 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/17 16:48:55  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
+ *
  * Revision 1.23  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

@@ -33,9 +33,6 @@ namespace geos {
 namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
-const LineIntersector* RelateComputer::li=new LineIntersector();
-const PointLocator* RelateComputer::ptLocator=new PointLocator();
-
 RelateComputer::RelateComputer(std::vector<GeometryGraph*> *newArg):
 	arg(newArg),
 	nodes(RelateNodeFactory::instance()),
@@ -65,11 +62,11 @@ RelateComputer::computeIM()
 		return im;
 	}
 
-	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes((LineIntersector*)li,false);
-	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes((LineIntersector*)li,false);
+	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes(&li,false);
+	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes(&li,false);
 
 	// compute intersections between edges of the two input geometries
-	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1],(LineIntersector*)li,false);
+	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1], &li,false);
 	computeIntersectionNodes(0);
 	computeIntersectionNodes(1);
 
@@ -375,7 +372,7 @@ RelateComputer::labelIsolatedEdge(Edge *e, int targetIndex, const Geometry *targ
 		// since edge is not in boundary, may not need the full generality of PointLocator?
 		// Possibly should use ptInArea locator instead?  We probably know here
 		// that the edge does not touch the bdy of the target Geometry
-		int loc=((PointLocator*) ptLocator)->locate(e->getCoordinate(),target);
+		int loc=ptLocator.locate(e->getCoordinate(), target);
 		e->getLabel()->setAllLocations(targetIndex,loc);
 	} else {
 		e->getLabel()->setAllLocations(targetIndex,Location::EXTERIOR);
@@ -417,8 +414,8 @@ RelateComputer::labelIsolatedNodes()
 void
 RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 {
-	int loc=((PointLocator*) ptLocator)->locate(n->getCoordinate(),
-                                                (*arg)[targetIndex]->getGeometry());
+	int loc=ptLocator.locate(n->getCoordinate(),
+			(*arg)[targetIndex]->getGeometry());
 	n->getLabel()->setAllLocations(targetIndex,loc);
 	//debugPrintln(n.getLabel());
 }
@@ -429,6 +426,11 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/17 16:48:55  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
+ *
  * Revision 1.29  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

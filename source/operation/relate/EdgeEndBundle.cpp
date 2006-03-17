@@ -13,10 +13,19 @@
  *
  **********************************************************************/
 
+#include <vector>
+
 #include <geos/opRelate.h>
+#include <geos/geom/Location.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/EdgeEnd.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/Position.h>
 
 using namespace std;
 using namespace geos::geomgraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -32,7 +41,7 @@ EdgeEndBundle::EdgeEndBundle(EdgeEnd *e):
 }
 
 EdgeEndBundle::~EdgeEndBundle(){
-	for(int i=0;i<(int)edgeEnds->size();i++) {
+	for(unsigned int i=0, n=edgeEnds->size(); i<n; i++) {
 		delete (*edgeEnds)[i];
 	}
 	delete edgeEnds;
@@ -65,7 +74,10 @@ void EdgeEndBundle::computeLabel() {
 	// create the label.  If any of the edges belong to areas,
 	// the label must be an area label
 	bool isArea=false;
-	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
+
+	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin(), itEnd=edgeEnds->end();
+			it != itEnd; it++)
+	{
 		EdgeEnd *e=*it;
 		if (e->getLabel()->isArea()) isArea=true;
 	}
@@ -185,6 +197,11 @@ string EdgeEndBundle::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/17 16:48:55  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
+ *
  * Revision 1.12  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

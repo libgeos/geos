@@ -20,19 +20,46 @@
 #include <memory>
 #include <string>
 #include <vector>
+
 #include <geos/platform.h>
 #include <geos/operation.h>
-#include <geos/geomgraph.h>
 #include <geos/geomgraph/NodeMap.h>
-#include <geos/geosAlgorithm.h>
+#include <geos/geomgraph/Node.h> // for RelateNode inheritance
+#include <geos/geomgraph/EdgeEnd.h> // for EdgeEndBundle inheritance
+#include <geos/geomgraph/EdgeEndStar.h> // for EdgeEndBundleStar inheritance
+#include <geos/geomgraph/NodeFactory.h> // for RelateNodeFactory inheritance
+#include <geos/algorithm/PointLocator.h> // for RelateComputer composition
+#include <geos/algorithm/LineIntersector.h> // for RelateComputer composition
 
+//#include <geos/geosAlgorithm.h>
+//#include <geos/geomgraph.h>
+
+// Forward declarations
 namespace geos {
-
-namespace io {
-class Unload;
+	namespace algorithm {
+		//class PointLocator;
+	}
+	namespace geom {
+		class IntersectionMatrix;
+	}
+	namespace geomgraph {
+		class Node;
+		class EdgeEndStar;
+		class Edge;
+		class EdgeRing;
+		class EdgeIntersection;
+		namespace index {
+			class SegmentIntersector;
+		}
+	}
+	namespace io {
+		class Unload;
+	}
 }
 
-namespace operation { // geos.operation
+
+namespace geos {
+namespace operation { // geos::operation
 
 
 /** \brief
@@ -229,9 +256,9 @@ public:
 	geom::IntersectionMatrix* computeIM();
 private:
 
-	static const algorithm::LineIntersector* li;
+	algorithm::LineIntersector li;
 
-	static const algorithm::PointLocator* ptLocator;
+	algorithm::PointLocator ptLocator;
 
 	/// the arg(s) of the operation
 	std::vector<geomgraph::GeometryGraph*> *arg; 
@@ -281,98 +308,18 @@ private:
 	RelateComputer relateComp;
 };
 
-} // namespace geos.operation.relate
-} // namespace geos.operation
+} // namespace geos:operation:relate
+} // namespace geos:operation
 } // namespace geos
 
 #endif
 
 /**********************************************************************
  * $Log$
- * Revision 1.10  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.9  2006/03/06 21:27:40  strk
- * Cascading fixed after Unload definition moved to geos::io namespace
- *
- * Revision 1.8  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.7  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.6  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.5  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.4  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.3  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.2  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.15  2004/03/29 06:59:24  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.14  2004/03/19 09:48:46  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.13  2004/03/01 22:04:59  strk
- * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
- *
- * Revision 1.12  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.11  2006/03/17 16:48:54  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
  *
  **********************************************************************/
 

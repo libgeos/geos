@@ -22,11 +22,18 @@
 #include <vector>
 #include <map>
 
-#include <geos/platform.h>
 #include <geos/opRelate.h>
 #include <geos/indexSweepline.h>
 #include <geos/indexQuadtree.h>
 #include <geos/geomgraph/PlanarGraph.h>
+
+// Forward declarations
+namespace geos {
+	namespace geomgraph {
+		class DirectedEdge;
+		class EdgeIntersectionList;
+	}
+}
 
 namespace geos {
 namespace operation { // geos.operation
@@ -524,6 +531,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/17 16:48:54  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
+ *
  * Revision 1.19  2006/03/09 18:18:33  strk
  * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
  * Applied patch to IsValid operation from JTS-1.7.1

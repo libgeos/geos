@@ -26,13 +26,30 @@
 
 #include <vector>
 #include <cassert>
+#include <typeinfo>
 
-#include <geos/opValid.h>
-#include <geos/opOverlay.h>
-#include <geos/geomgraph.h>
-#include <geos/util.h>
+#include <geos/opValid.h> // FIXME: split this
+
+#include <geos/operation/overlay/MaximalEdgeRing.h>
+#include <geos/operation/overlay/MinimalEdgeRing.h>
+#include <geos/operation/overlay/OverlayNodeFactory.h>
+
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Location.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/PlanarGraph.h>
+#include <geos/geomgraph/EdgeRing.h>
+#include <geos/geomgraph/DirectedEdge.h>
+#include <geos/geomgraph/Position.h>
+#include <geos/geomgraph/Label.h>
 
 using namespace std;
+using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::operation::overlay;
 
@@ -78,7 +95,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 	geomGraph.computeSplitEdges(&splitEdges);
 
 	// form the edges into rings
-	PlanarGraph graph(OverlayNodeFactory::instance());
+	PlanarGraph graph(operation::overlay::OverlayNodeFactory::instance());
 
 	graph.addEdges(splitEdges);
 	setInteriorEdgesInResult(graph);
@@ -118,8 +135,9 @@ ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph &graph)
 	std::vector<EdgeEnd*> *ee=graph.getEdgeEnds();
 	for(unsigned int i=0, n=ee->size(); i<n; ++i)
 	{
-		DirectedEdge *de=dynamic_cast<DirectedEdge*>((*ee)[i]);
-		assert( de != NULL ); // Unexpected non DirectedEdge in graphEdgeEnds
+		// Unexpected non DirectedEdge in graphEdgeEnds
+		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
+		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
 		if ( de->getLabel()->getLocation(0, Position::RIGHT) == Location::INTERIOR)
 		{
 			de->setInResult(true);
@@ -134,7 +152,8 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 	std::vector<MinimalEdgeRing*> minEdgeRings;
 	for(unsigned int i=0, n=dirEdges->size(); i<n; ++i)
 	{
-		DirectedEdge *de=(DirectedEdge*)(*dirEdges)[i];
+		assert(dynamic_cast<DirectedEdge*>((*dirEdges)[i]));
+		DirectedEdge *de=static_cast<DirectedEdge*>((*dirEdges)[i]);
 		// if this edge has not yet been processed
 		if(de->isInResult() && de->getEdgeRing()==NULL)
 		{
@@ -147,7 +166,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 		}
 	}
 	std::vector<EdgeRing*> *edgeRings=new std::vector<EdgeRing*>();
-	edgeRings->assign(minEdgeRings.begin(),minEdgeRings.end());
+	edgeRings->assign(minEdgeRings.begin(), minEdgeRings.end());
 	return edgeRings;
 }
 
@@ -158,14 +177,15 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 void
 ConnectedInteriorTester::visitShellInteriors(const Geometry *g, PlanarGraph &graph)
 {
-	if (typeid(*g)==typeid(Polygon)) {
-		const Polygon *p=(Polygon*) g;
+	if (const Polygon* p=dynamic_cast<const Polygon*>(g))
+	{
 		visitInteriorRing(p->getExteriorRing(), graph);
 	}
-	if (typeid(*g)==typeid(MultiPolygon)) {
-		const MultiPolygon *mp=(MultiPolygon*) g;
-		for(int i=0; i<(int)mp->getNumGeometries();i++) {
-			const Polygon *p=(Polygon*)mp->getGeometryN(i);
+
+	if (const MultiPolygon* mp=dynamic_cast<const MultiPolygon*>(g))
+	{
+		for (unsigned int i=0, n=mp->getNumGeometries(); i<n; i++) {
+			const Polygon *p=static_cast<const Polygon*>(mp->getGeometryN(i));
 			visitInteriorRing(p->getExteriorRing(), graph);
 		}
 	}
@@ -183,7 +203,7 @@ ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph &
 	 */
     	const Coordinate& pt1=findDifferentPoint(pts, pt0);
 	Edge *e=graph.findEdgeInSameDirection(pt0, pt1);
-	DirectedEdge *de=(DirectedEdge*) graph.findEdgeEnd(e);
+	DirectedEdge *de=static_cast<DirectedEdge*>(graph.findEdgeEnd(e));
 	DirectedEdge *intDe=NULL;
 	if (de->getLabel()->getLocation(0,Position::RIGHT)==Location::INTERIOR) {
 		intDe=de;
@@ -267,113 +287,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
- * Revision 1.22  2006/03/10 11:09:37  strk
- * Comments cleanup
- *
- * Revision 1.21  2006/03/09 18:18:39  strk
- * Added memory-friendly MaximalEdgeRing::buildMinimalRings() implementation.
- * Applied patch to IsValid operation from JTS-1.7.1
- *
- * Revision 1.20  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.19  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.18  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.17  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.16  2005/12/07 19:18:23  strk
- * Changed PlanarGraph::addEdges and EdgeList::addAll to take
- * a const vector by reference rather then a non-const vector by
- * pointer.
- * Optimized polygon vector allocations in OverlayOp::computeOverlay.
- *
- * Revision 1.15  2005/11/25 11:31:21  strk
- * Removed all CoordinateSequence::getSize() calls embedded in for loops.
- *
- * Revision 1.14  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.13  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.12  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.11  2004/03/29 06:59:25  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.9  2003/10/20 14:02:14  strk
- * more explicit exception thrown on null Directed Edge detection
- *
- * Revision 1.8  2003/10/15 11:24:28  strk
- * Use getCoordinatesRO() introduced.
+ * Revision 1.23  2006/03/17 16:48:55  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
  *
  **********************************************************************/

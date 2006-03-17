@@ -14,9 +14,10 @@
  *
  **********************************************************************/
 
+#include <cassert>
+
 #include <geos/opValid.h>
-#include <geos/util.h>
-#include <stdio.h>
+#include <geos/algorithm/CGAlgorithms.h>
 
 using namespace geos::algorithm;
 
@@ -63,6 +64,11 @@ SimpleNestedRingTester::isNonNested()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/17 16:48:56  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
+ *
  * Revision 1.13  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

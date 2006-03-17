@@ -24,7 +24,11 @@
 #include <geos/opValid.h>
 //#include <geos/util.h>
 #include <geos/util/UnsupportedOperationException.h>
-#include <geos/geomgraphindex.h> // for geomgraph::index::SegmentIntersector
+#include <geos/geomgraph/index/SegmentIntersector.h> 
+#include <geos/geomgraph/GeometryGraph.h> 
+#include <geos/geomgraph/Edge.h> 
+#include <geos/algorithm/MCPointInRing.h> 
+#include <geos/algorithm/CGAlgorithms.h> 
 
 using namespace std;
 using namespace geos::algorithm;
@@ -625,6 +629,11 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.47  2006/03/17 16:48:55  strk
+ * LineIntersector and PointLocator made complete components of RelateComputer
+ * (were statics const pointers before). Reduced inclusions from opRelate.h
+ * and opValid.h, updated .cpp files to allow build.
+ *
  * Revision 1.46  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
