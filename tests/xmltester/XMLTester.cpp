@@ -68,18 +68,21 @@ tolower(std::string& str)
 }
 
 std::string
-normalize(const std::string& str)
+normalize_filename(const std::string& str)
 {
 	std::string newstring;
-	for (std::string::const_iterator i=str.begin(), e=str.end(); i!=e; ++i)
+
+	std::string::size_type last_slash = str.find_last_of('/', str.size());
+	if ( last_slash == std::string::npos ) newstring = str;
+	else newstring = str.substr(last_slash+1);
+	
+	for (std::string::iterator i=newstring.begin(), e=newstring.end(); i!=e; ++i)
 	{
-		if ( *i == '.' ) {
-			newstring += '_';
-		} else {
-			newstring += *i;
-		}
+		if ( *i == '.' ) *i = '_';
 	}
+
 	tolower(newstring);
+
 	return newstring;
 }
 
@@ -126,7 +129,7 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
 {
 	if ( sqlOutput )
 	{
-		std::cout << "INSERT INTO \"" << normalize(*curr_file) << "\" VALUES ("
+		std::cout << "INSERT INTO \"" << normalize_filename(*curr_file) << "\" VALUES ("
 		          << caseCount << ", "
 		          << testCount << ", "
 		          << "'" << opSignature << "', "
@@ -191,7 +194,7 @@ XMLTester::run(const std::string &source)
 
 	if ( sqlOutput )
 	{
-		std::cout << "CREATE TABLE \"" << normalize(*curr_file) << "\"" 
+		std::cout << "CREATE TABLE \"" << normalize_filename(*curr_file) << "\"" 
 		          << "( caseno integer, testno integer, " 
 			  << " operation varchar, description varchar, "
 			  << " a geometry, b geometry, expected geometry, "
@@ -978,6 +981,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/17 14:56:39  strk
+ * Fixed filename normalizer for sql output
+ *
  * Revision 1.28  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
