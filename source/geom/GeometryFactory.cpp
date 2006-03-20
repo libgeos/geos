@@ -34,6 +34,14 @@
 #include <geos/geom/Envelope.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
 #ifndef USE_INLINE
 # include <geos/geom/GeometryFactory.inl>
 #endif
@@ -57,6 +65,9 @@ namespace geom { // geos::geom
 /*public*/
 GeometryFactory::GeometryFactory()
 {
+#if GEOS_DEBUG
+	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory()" << std::endl;
+#endif
 	precisionModel=new PrecisionModel();
 	SRID=0;
 	coordinateListFactory=CoordinateArraySequenceFactory::instance();
@@ -100,6 +111,9 @@ GeometryFactory::GeometryFactory(const GeometryFactory &gf){
 }
 
 GeometryFactory::~GeometryFactory(){
+#if GEOS_DEBUG
+	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::~GeometryFactory()" << std::endl;
+#endif
 	delete precisionModel;
 }
   
@@ -562,6 +576,9 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.62  2006/03/20 10:11:50  strk
+ * Bug #67 - Debugging helpers in GeometryFactory class
+ *
  * Revision 1.61  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *
