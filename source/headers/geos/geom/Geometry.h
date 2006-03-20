@@ -18,6 +18,7 @@
 #define GEOS_GEOM_GEOMETRY_H
 
 #include <string>
+#include <iostream>
 #include <vector>
 
 #include <geos/platform.h>
@@ -149,8 +150,9 @@ enum GeometryTypeId {
  *
  */
 class Geometry {
-friend class io::Unload;
 public:
+	friend class io::Unload;
+	friend std::ostream& operator<< (std::ostream& os, const Geometry& geom);
 
 	/// A vector of const Geometry pointers
 	typedef std::vector<const Geometry *> ConstVect;
@@ -606,6 +608,12 @@ private:
 	void* userData;
 };
 
+/// \brief
+/// Write the Well-known Binary representation of this Geometry
+/// as an HEX string to the given output stream
+///
+std::ostream& operator<< (std::ostream& os, const Geometry& geom);
+
 struct GeometryGreaterThen {
 	bool operator()(const Geometry *first, const Geometry *second);
 };
@@ -633,6 +641,9 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/20 12:03:25  strk
+ * Added operator<< for Geometry, writing HEXWKB
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

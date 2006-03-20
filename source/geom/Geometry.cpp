@@ -434,6 +434,14 @@ Geometry::toString() const
 	return toText();
 }
 
+std::ostream&
+operator<< (std::ostream& os, const Geometry& geom)
+{
+	io::WKBWriter writer;
+	writer.writeHEX(geom, os);
+	return os;
+}
+
 string
 Geometry::toText() const
 {
@@ -758,6 +766,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.101  2006/03/20 12:03:25  strk
+ * Added operator<< for Geometry, writing HEXWKB
+ *
  * Revision 1.100  2006/03/17 13:24:58  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *
