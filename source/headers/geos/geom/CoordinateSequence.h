@@ -17,7 +17,7 @@
 #define GEOS_GEOM_COORDINATESEQUENCE_H
 
 #include <vector>
-#include <iostream>
+#include <iosfwd> // ostream
 
 #include <geos/platform.h>
 #include <geos/inline.h>
@@ -299,6 +299,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/20 17:27:03  strk
+ * Bug #72 - Missing <vector> header
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
