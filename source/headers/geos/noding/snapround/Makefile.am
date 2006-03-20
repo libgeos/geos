@@ -1,6 +1,6 @@
 SUBDIRS = 
 
-geosdir = $(includedir)/geos/noding
+geosdir = $(includedir)/geos/noding/snapround
 
 EXTRA_DIST = 
 

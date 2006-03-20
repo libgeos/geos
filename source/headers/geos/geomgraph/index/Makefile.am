@@ -1,6 +1,6 @@
 SUBDIRS = 
 
-geosdir = $(includedir)/geos/geomgraph
+geosdir = $(includedir)/geos/geomgraph/index
 
 EXTRA_DIST = 
 

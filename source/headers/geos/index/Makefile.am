@@ -1,6 +1,6 @@
 SUBDIRS = 
 
-geosdir = $(includedir)/geos/operation
+geosdir = $(includedir)/geos/index
 
 EXTRA_DIST = 
 
