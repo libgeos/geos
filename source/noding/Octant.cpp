@@ -17,6 +17,7 @@
  *
  **********************************************************************/
 
+#include <cmath>
 #include <sstream>
 
 #include <geos/util/IllegalArgumentException.h>
@@ -96,6 +97,9 @@ Octant::octant(const Coordinate& p0, const Coordinate& p1)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/20 11:42:28  strk
+ * Added missing <cmath> include
+ *
  * Revision 1.5  2006/03/15 09:51:12  strk
  * streamlined headers usage
  *

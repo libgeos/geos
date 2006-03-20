@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include <cmath>
 #include <vector>
 
 #include <geos/algorithm/CGAlgorithms.h>
@@ -332,6 +333,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/20 11:42:29  strk
+ * Added missing <cmath> include
+ *
  * Revision 1.30  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *
