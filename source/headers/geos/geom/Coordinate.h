@@ -26,8 +26,7 @@
 namespace geos {
 namespace geom { // geos.geom
 
-class CoordinateLessThen;
-//class PrecisionModel;
+struct CoordinateLessThen;
 
 /**
  * \class Coordinate geom.h geos.h
@@ -152,6 +151,9 @@ bool operator!=(const Coordinate& a, const Coordinate& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/20 10:12:45  strk
+ * Bug #70 - Small fix in fwd decl. of CoordinateLessThen
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
