@@ -64,9 +64,10 @@ public:
 	void setShell(EdgeRing *newShell);
 	void addHole(EdgeRing *edgeRing);
 
-	/*
+	/**
 	 * Return a Polygon copying coordinates from this
-	 * EdgeRing and its holes.
+	 * EdgeRing and its holes. Caller must remember
+	 * to delete the result
 	 */
 	geom::Polygon* toPolygon(const geom::GeometryFactory* geometryFactory);
 
@@ -107,6 +108,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/20 12:32:57  strk
+ * Added note about responsibility of return from ::toPolygon
+ *
  * Revision 1.2  2006/03/15 17:17:41  strk
  * Added missing forward declarations
  *
