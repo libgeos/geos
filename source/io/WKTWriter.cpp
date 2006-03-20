@@ -20,7 +20,8 @@
 #include <sstream>
 #include <cassert>
 
-#include <geos/io.h>
+#include <geos/io/WKTWriter.h>
+#include <geos/io/Writer.h>
 #include <geos/util.h>
 #include <geos/geom.h>
 
@@ -375,6 +376,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
  * Revision 1.28  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

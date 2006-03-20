@@ -14,7 +14,7 @@
  *
  **********************************************************************/
 
-#include <geos/io.h>
+#include <geos/io/StringTokenizer.h>
 #include <string>
 
 using namespace std;
@@ -138,6 +138,9 @@ string StringTokenizer::getSVal(){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
  * Revision 1.14  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

@@ -14,13 +14,25 @@
  *
  **********************************************************************/
 
+#include <geos/io/WKTReader.h>
+#include <geos/io/StringTokenizer.h>
+#include <geos/io/ParseException.h>
+#include <geos/geom.h>
+#include <geos/util.h>
 #include <string>
 #include <cassert>
 
-#include <geos/io.h>
-#include <geos/util.h>
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
-#include <geos/geom.h>
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
+#ifndef USE_INLINE
+#include <geos/io/WKTReader.inl>
+#endif
 
 using namespace std;
 
@@ -32,15 +44,7 @@ namespace io { // geos.io
 //	precisionModel=geometryFactory->getPrecisionModel();
 //}
 
-WKTReader::WKTReader(const GeometryFactory *gf){
-	geometryFactory=gf;
-	precisionModel=gf->getPrecisionModel();
-}
-
-//WKTReader::~WKTReader(){ }
-
-Geometry *
-WKTReader::read(const string &wellKnownText)
+Geometry * WKTReader::read(const string &wellKnownText)
 {
 	auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
 	StringTokenizer *st=tokenizer.release();
@@ -324,6 +328,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
  * Revision 1.37  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

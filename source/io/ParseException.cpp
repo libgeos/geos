@@ -14,7 +14,7 @@
  *
  **********************************************************************/
 
-#include <geos/io.h>
+#include <geos/io/ParseException.h>
 #include <sstream>
 #include <string>
 
@@ -48,6 +48,9 @@ ParseException::ParseException(string msg, double num){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
  * Revision 1.13  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

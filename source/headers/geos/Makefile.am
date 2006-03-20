@@ -5,9 +5,9 @@ SUBDIRS = \
 	noding \
 	operation \
 	index \
+	io \
 	util 
 
-#geosdir = $(prefix)/include/geos
 geosdir = $(includedir)/geos
 
 EXTRA_DIST = platform.h.vc

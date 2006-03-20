@@ -13,11 +13,15 @@
  *
  **********************************************************************/
 
-#include <ostream>
-#include <string>
-
-#include <geos/io.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBConstants.h>
+#include <geos/io/ParseException.h>
 #include <geos/geom.h>
+
+#include <iomanip>
+#include <ostream>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -199,7 +203,7 @@ Geometry *
 WKBReader::readGeometry()
 {
 	// determine byte order
-	byte byteOrder = dis.readByte();
+	unsigned char byteOrder = dis.readByte();
 
 #if DEBUG_WKB_READER
 	cout<<"WKB byteOrder: "<<(int)byteOrder<<endl;

@@ -20,6 +20,7 @@
 
 #include <cassert>
 #include <vector>
+#include <iostream>
 #include <list>
 
 #include <geos/operation/buffer/BufferSubgraph.h>
@@ -334,6 +335,9 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
  * Revision 1.30  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

@@ -24,8 +24,11 @@
 #include <sstream>
 #include <string>
 
-#include <geos.h>
-#include <geos/opValid.h>
+#include <geos.h> // TODO: split me
+#include <geos/io/WKTReader.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/operation/valid/IsValidOp.h>
 #include <geos/opPolygonize.h>
 #include <geos/opLinemerge.h>
 

@@ -17,7 +17,8 @@
  *
  **********************************************************************/
 
-#include <geos/io.h>
+#include <geos/io/ByteOrderValues.h>
+#include <geos/platform.h>
 #include <geos/util.h>
 
 namespace geos {
@@ -27,7 +28,7 @@ int ByteOrderValues::ENDIAN_BIG = 1;
 int ByteOrderValues::ENDIAN_LITTLE = 2;
 
 int
-ByteOrderValues::getInt(const byte *buf, int byteOrder)
+ByteOrderValues::getInt(const unsigned char *buf, int byteOrder)
 {
 	if ( byteOrder == ENDIAN_BIG )
 	{
@@ -46,26 +47,26 @@ ByteOrderValues::getInt(const byte *buf, int byteOrder)
 }
 
 void
-ByteOrderValues::putInt(int intValue, byte *buf, int byteOrder)
+ByteOrderValues::putInt(int intValue, unsigned char *buf, int byteOrder)
 {
 	if ( byteOrder == ENDIAN_BIG )
 	{
-		buf[0] = (byte)(intValue >> 24);
-		buf[1] = (byte)(intValue >> 16);
-		buf[2] = (byte)(intValue >> 8);
-		buf[3] = (byte) intValue;
+		buf[0] = (unsigned char)(intValue >> 24);
+		buf[1] = (unsigned char)(intValue >> 16);
+		buf[2] = (unsigned char)(intValue >> 8);
+		buf[3] = (unsigned char) intValue;
 	}
 	else // ENDIAN_LITTLE
 	{
-		buf[3] = (byte)(intValue >> 24);
-		buf[2] = (byte)(intValue >> 16);
-		buf[1] = (byte)(intValue >> 8);
-		buf[0] = (byte) intValue;
+		buf[3] = (unsigned char)(intValue >> 24);
+		buf[2] = (unsigned char)(intValue >> 16);
+		buf[1] = (unsigned char)(intValue >> 8);
+		buf[0] = (unsigned char) intValue;
 	}
 }
 
 int64
-ByteOrderValues::getLong(const byte *buf, int byteOrder)
+ByteOrderValues::getLong(const unsigned char *buf, int byteOrder)
 {
 	if ( byteOrder == ENDIAN_BIG )
 	{
@@ -94,34 +95,34 @@ ByteOrderValues::getLong(const byte *buf, int byteOrder)
 }
 
 void
-ByteOrderValues::putLong(int64 longValue, byte *buf, int byteOrder)
+ByteOrderValues::putLong(int64 longValue, unsigned char *buf, int byteOrder)
 {
 	if ( byteOrder == ENDIAN_BIG )
 	{
-		buf[7] = (byte)(longValue >> 56);
-		buf[6] = (byte)(longValue >> 48);
-		buf[5] = (byte)(longValue >> 40);
-		buf[4] = (byte)(longValue >> 32);
-		buf[3] = (byte)(longValue >> 24);
-		buf[2] = (byte)(longValue >> 16);
-		buf[1] = (byte)(longValue >> 8);
-		buf[0] = (byte) longValue;
+		buf[7] = (unsigned char)(longValue >> 56);
+		buf[6] = (unsigned char)(longValue >> 48);
+		buf[5] = (unsigned char)(longValue >> 40);
+		buf[4] = (unsigned char)(longValue >> 32);
+		buf[3] = (unsigned char)(longValue >> 24);
+		buf[2] = (unsigned char)(longValue >> 16);
+		buf[1] = (unsigned char)(longValue >> 8);
+		buf[0] = (unsigned char) longValue;
 	}
 	else // ENDIAN_LITTLE
 	{
-		buf[0] = (byte)(longValue >> 56);
-		buf[1] = (byte)(longValue >> 48);
-		buf[2] = (byte)(longValue >> 40);
-		buf[3] = (byte)(longValue >> 32);
-		buf[4] = (byte)(longValue >> 24);
-		buf[5] = (byte)(longValue >> 16);
-		buf[6] = (byte)(longValue >> 8);
-		buf[7] = (byte) longValue;
+		buf[0] = (unsigned char)(longValue >> 56);
+		buf[1] = (unsigned char)(longValue >> 48);
+		buf[2] = (unsigned char)(longValue >> 40);
+		buf[3] = (unsigned char)(longValue >> 32);
+		buf[4] = (unsigned char)(longValue >> 24);
+		buf[5] = (unsigned char)(longValue >> 16);
+		buf[6] = (unsigned char)(longValue >> 8);
+		buf[7] = (unsigned char) longValue;
 	}
 }
 
 double
-ByteOrderValues::getDouble(const byte *buf, int byteOrder)
+ByteOrderValues::getDouble(const unsigned char *buf, int byteOrder)
 {
 	int64 longValue = getLong(buf, byteOrder);
 	double ret;
@@ -130,7 +131,7 @@ ByteOrderValues::getDouble(const byte *buf, int byteOrder)
 }
 
 void
-ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
+ByteOrderValues::putDouble(double doubleValue, unsigned char *buf, int byteOrder)
 {
 	int64 longValue;
 	memcpy(&longValue, &doubleValue, sizeof(double));
@@ -150,6 +151,9 @@ ByteOrderValues::putDouble(double doubleValue, byte *buf, int byteOrder)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
  * Revision 1.6  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

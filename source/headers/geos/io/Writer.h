@@ -1,0 +1,45 @@
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#ifndef GEOS_IO_WRITER_H
+#define GEOS_IO_WRITER_H
+
+#include <string>
+
+namespace geos {
+namespace io {
+
+class Writer {
+public:
+	Writer();
+	~Writer();
+	void write(std::string txt);
+	std::string toString();
+private:
+	std::string str;
+};
+
+} // namespace geos::io
+} // namespace geos
+
+#endif // #ifndef GEOS_IO_WRITER_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.1  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
+ **********************************************************************/

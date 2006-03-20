@@ -14,7 +14,7 @@
  *
  **********************************************************************/
 
-#include <geos/io.h>
+#include <geos/io/Writer.h>
 #include <string>
 
 using namespace std;
@@ -41,6 +41,9 @@ string Writer::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/20 18:18:15  strk
+ * io.h header split
+ *
  * Revision 1.10  2006/03/06 15:23:14  strk
  * geos::io namespace
  *

@@ -13,18 +13,22 @@
  *
  **********************************************************************/
 
-#include <ostream>
-#include <cassert>
-
-#include <geos/io.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBConstants.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/geom.h>
 
-#undef DEBUG_WKB_WRITER 
+#include <ostream>
+#include <sstream>
+#include <cassert>
+
+#undef DEBUG_WKB_WRITER
 
 using namespace std;
 
 namespace geos {
-namespace io { // geos.io
+	namespace io { // geos.io
 
 WKBWriter::WKBWriter(int dims, int bo):
 		outputDimension(dims), byteOrder(bo), outStream(NULL)
