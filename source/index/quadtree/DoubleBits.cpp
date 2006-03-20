@@ -19,6 +19,10 @@
 #include <string>
 #include <vector>
 
+#if ! ASSUME_IEEE_DOUBLE
+#include <cmath>
+#endif
+
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
@@ -171,6 +175,9 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/20 17:40:38  strk
+ * <cmath> included when appropriate
+ *
  * Revision 1.21  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *
