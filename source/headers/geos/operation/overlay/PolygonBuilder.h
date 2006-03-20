@@ -134,24 +134,25 @@ private:
 		std::vector<geomgraph::EdgeRing*> *newShellList,
 		std::vector<geomgraph::EdgeRing*> *freeHoleList);
 
-	/**
+	/** \brief
 	 * This method determines finds a containing shell for all holes
 	 * which have not yet been assigned to a shell.
-	 * These "free" holes should
-	 * all be <b>properly</b> contained in their parent shells, so it
-	 * is safe to use the
+	 *
+	 * These "free" holes should all be <b>properly</b> contained in
+	 * their parent shells, so it is safe to use the
 	 * <code>findEdgeRingContaining</code> method.
-	 * (This is the case because any holes which are NOT
+	 * This is the case because any holes which are NOT
 	 * properly contained (i.e. are connected to their
 	 * parent shell) would have formed part of a MaximalEdgeRing
-	 * and been handled in a previous step).
+	 * and been handled in a previous step.
 	 */
-	void placeFreeHoles(std::vector<geomgraph::EdgeRing*>* newShellList,
-		std::vector<geomgraph::EdgeRing*> *freeHoleList);
+	void placeFreeHoles(std::vector<geomgraph::EdgeRing*>& newShellList,
+		std::vector<geomgraph::EdgeRing*>& freeHoleList);
 
-	/**
+	/** \brief
 	 * Find the innermost enclosing shell geomgraph::EdgeRing containing the
 	 * argument geomgraph::EdgeRing, if any.
+	 *
 	 * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
 	 * The algorithm used depends on the fact that:
 	 *
@@ -167,10 +168,10 @@ private:
 	 * @return NULL if no containing geomgraph::EdgeRing is found
 	 */
 	geomgraph::EdgeRing* findEdgeRingContaining(geomgraph::EdgeRing *testEr,
-		std::vector<geomgraph::EdgeRing*> *newShellList);
+		std::vector<geomgraph::EdgeRing*>& newShellList);
 
 	std::vector<geom::Geometry*>* computePolygons(
-			std::vector<geomgraph::EdgeRing*> *newShellList);
+			std::vector<geomgraph::EdgeRing*>& newShellList);
 
 	/**
 	 * Checks the current set of shells (with their associated holes) to
@@ -189,6 +190,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/20 12:33:45  strk
+ * Simplified some privat methods to use refs instead of pointers, added
+ * debugging section for failiures of holes/shells associations
+ *
  * Revision 1.1  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

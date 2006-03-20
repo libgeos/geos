@@ -143,7 +143,7 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 		buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
 
 	sortShellsAndHoles(edgeRings,&shellList,&freeHoleList);
-	placeFreeHoles(&shellList, &freeHoleList);
+	placeFreeHoles(shellList, freeHoleList);
 	delete maxEdgeRings;
 	delete edgeRings;
 	//Assert: every hole on freeHoleList has a shell assigned to it
@@ -153,7 +153,7 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 vector<Geometry*>*
 PolygonBuilder::getPolygons()
 {
-	vector<Geometry*> *resultPolyList=computePolygons(&shellList);
+	vector<Geometry*> *resultPolyList=computePolygons(shellList);
 	return resultPolyList;
 }
 
@@ -281,11 +281,11 @@ PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
 
 /*private*/
 void
-PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>* newShellList,
-	std::vector<EdgeRing*> *freeHoleList)
+PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>& newShellList,
+	std::vector<EdgeRing*>& freeHoleList)
 {
 	for(std::vector<EdgeRing*>::iterator
-			it=freeHoleList->begin(), itEnd=freeHoleList->end();
+			it=freeHoleList.begin(), itEnd=freeHoleList.end();
 			it != itEnd;
 			++it)
 	{
@@ -293,7 +293,31 @@ PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>* newShellList,
 		// only place this hole if it doesn't yet have a shell
 		if (hole->getShell()==NULL) {
 			EdgeRing *shell=findEdgeRingContaining(hole, newShellList);
+#if GEOS_DEBUG
+			if ( shell == NULL )
+			{
+				Geometry* geom;
+				std::cerr << "CREATE TABLE shells (g geometry);" << std::endl;
+				std::cerr << "CREATE TABLE hole (g geometry);" << std::endl;
+				for (std::vector<EdgeRing*>::iterator rIt=newShellList.begin(),
+					rEnd=newShellList.end(); rIt!=rEnd; rIt++)
+				{
+					geom = (*rIt)->toPolygon(geometryFactory);
+					std::cerr << "INSERT INTO shells VALUES ('"
+					          << *geom
+					          << "');" << std::endl;
+					delete geom;
+				}
+				geom = hole->toPolygon(geometryFactory);
+				std::cerr << "INSERT INTO hole VALUES ('"
+				          << *geom
+				          << "');" << std::endl;
+				delete geom;
+				assert(0);
+			}
+#else
 			assert(shell!=NULL); // unable to assign hole to a shell
+#endif
 			hole->setShell(shell);
 		}
 	}
@@ -302,16 +326,17 @@ PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>* newShellList,
 /*private*/
 EdgeRing*
 PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
-	vector<EdgeRing*> *newShellList)
+	vector<EdgeRing*>& newShellList)
 {
 	LinearRing *testRing=testEr->getLinearRing();
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
 	const Coordinate& testPt=testRing->getCoordinateN(0);
 	EdgeRing *minShell=NULL;
 	const Envelope *minEnv=NULL;
-	for(int i=0;i<(int)newShellList->size();i++) {
+	for(unsigned int i=0, n=newShellList.size(); i<n; i++)
+	{
 		LinearRing *lr=NULL;
-		EdgeRing *tryShell=(*newShellList)[i];
+		EdgeRing *tryShell=newShellList[i];
 		LinearRing *tryRing=tryShell->getLinearRing();
 		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
 		if (minShell!=NULL) {
@@ -337,15 +362,17 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 
 /*private*/
 vector<Geometry*>*
-PolygonBuilder::computePolygons(vector<EdgeRing*> *newShellList)
+PolygonBuilder::computePolygons(vector<EdgeRing*>& newShellList)
 {
 #if GEOS_DEBUG
-	cerr<<"PolygonBuilder::computePolygons: got "<<newShellList->size()<<" shells"<<endl;
+	cerr<<"PolygonBuilder::computePolygons: got "<<newShellList.size()<<" shells"<<endl;
 #endif
 	vector<Geometry*> *resultPolyList=new vector<Geometry*>();
+
 	// add Polygons for all shells
-	for(int i=0;i<(int)newShellList->size();i++) {
-		EdgeRing *er=(*newShellList)[i];
+	for(unsigned int i=0, n=newShellList.size(); i<n; i++)
+	{
+		EdgeRing *er=newShellList[i];
 		Polygon *poly=er->toPolygon(geometryFactory);
 		resultPolyList->push_back(poly);
 	}
@@ -370,6 +397,10 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2006/03/20 12:33:45  strk
+ * Simplified some privat methods to use refs instead of pointers, added
+ * debugging section for failiures of holes/shells associations
+ *
  * Revision 1.36  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *
