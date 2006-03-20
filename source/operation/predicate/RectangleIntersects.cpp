@@ -126,9 +126,9 @@ protected:
 
 	void visit(const Geometry &geom)
 	{
-		const Polygon *poly;
+		const geom::Polygon *poly;
 
-		if ( !(poly=dynamic_cast<const Polygon *>(&geom)) ) {
+		if ( !(poly=dynamic_cast<const geom::Polygon *>(&geom)) ) {
 			return;
 		}
 
@@ -162,7 +162,7 @@ protected:
 
 public:
 
-	ContainsPointVisitor(const Polygon &rect)
+	ContainsPointVisitor(const geom::Polygon &rect)
 		:
 		rectEnv(*(rect.getEnvelopeInternal())),
 		containsPointVar(false),
@@ -181,7 +181,7 @@ class LineIntersectsVisitor: public ShortCircuitedGeometryVisitor
 {
 private:
 
-	const Polygon& rectangle;
+	const geom::Polygon& rectangle;
 	const Envelope& rectEnv;
 	bool intersectsVar;
 	const CoordinateSequence &rectSeq;
@@ -225,7 +225,7 @@ protected:
 
 public:
 
-	LineIntersectsVisitor(const Polygon &rect)
+	LineIntersectsVisitor(const geom::Polygon &rect)
 		:
 		rectangle(rect),
 		rectEnv(*(rect.getEnvelopeInternal())),

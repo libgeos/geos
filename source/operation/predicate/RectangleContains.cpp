@@ -46,7 +46,7 @@ bool
 RectangleContains::isContainedInBoundary(const Geometry& geom)
 {
 	// polygons can never be wholely contained in the boundary
-	if (dynamic_cast<const Polygon *>(&geom)) return false;
+	if (dynamic_cast<const geom::Polygon *>(&geom)) return false;
 	if (const Point *p=dynamic_cast<const Point *>(&geom))
 		return isPointContainedInBoundary(*p);
 	if (const LineString *l=dynamic_cast<const LineString *>(&geom))
