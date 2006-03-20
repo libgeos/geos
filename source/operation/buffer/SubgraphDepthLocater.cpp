@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <cassert>
+#include <algorithm>
 
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
@@ -355,6 +356,9 @@ SubgraphDepthLocater::findStabbedSegments(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/20 10:13:15  strk
+ * Bug #71 - Missing <algorithm>
+ *
  * Revision 1.27  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *
