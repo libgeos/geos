@@ -33,6 +33,8 @@
 
 #include <geos/algorithm/CGAlgorithms.h>
 
+#include <geos/util/TopologyException.h>
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
@@ -293,9 +295,9 @@ PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>& newShellList,
 		// only place this hole if it doesn't yet have a shell
 		if (hole->getShell()==NULL) {
 			EdgeRing *shell=findEdgeRingContaining(hole, newShellList);
-#if GEOS_DEBUG
 			if ( shell == NULL )
 			{
+#if GEOS_DEBUG
 				Geometry* geom;
 				std::cerr << "CREATE TABLE shells (g geometry);" << std::endl;
 				std::cerr << "CREATE TABLE hole (g geometry);" << std::endl;
@@ -313,11 +315,11 @@ PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>& newShellList,
 				          << *geom
 				          << "');" << std::endl;
 				delete geom;
-				assert(0);
-			}
-#else
-			assert(shell!=NULL); // unable to assign hole to a shell
 #endif
+				//assert(shell!=NULL); // unable to assign hole to a shell
+				throw util::TopologyException("unable to assign hole to a shell");
+			}
+
 			hole->setShell(shell);
 		}
 	}
@@ -397,6 +399,10 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/03/20 13:20:29  strk
+ * Changed assertion to TopologyException for the "orphaned" hole case
+ * in order to allow for reduced precision ops to catch the case.
+ *
  * Revision 1.37  2006/03/20 12:33:45  strk
  * Simplified some privat methods to use refs instead of pointers, added
  * debugging section for failiures of holes/shells associations
