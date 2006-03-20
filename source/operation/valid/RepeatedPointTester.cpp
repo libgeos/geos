@@ -15,10 +15,22 @@
  *
  **********************************************************************/
 
+#include <geos/operation/valid/RepeatedPointTester.h>
+#include <geos/util/UnsupportedOperationException.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/GeometryCollection.h>
+
 #include <typeinfo>
 
-#include <geos/opValid.h>
-#include <geos/util/UnsupportedOperationException.h>
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -37,7 +49,8 @@ RepeatedPointTester::hasRepeatedPoint(const Geometry *g)
 	if (typeid(*g)==typeid(Point)) return false;
 	else if (typeid(*g)==typeid(MultiPoint)) return false;
 	// LineString also handles LinearRings
-	else if (typeid(*g)==typeid(LineString)) return hasRepeatedPoint(((LineString*)g)->getCoordinates());
+	else if (typeid(*g)==typeid(LineString)) return hasRepeatedPoint(((LineString*)g)->getCoordinatesRO());
+	else if (typeid(*g)==typeid(LinearRing)) return hasRepeatedPoint(((LineString*)g)->getCoordinatesRO());
 	else if (typeid(*g)==typeid(Polygon)) return hasRepeatedPoint((Polygon*)g);
 	else if (typeid(*g)==typeid(MultiPolygon)) return hasRepeatedPoint((MultiPolygon*)g);
 	else if (typeid(*g)==typeid(MultiLineString)) return hasRepeatedPoint((MultiLineString*)g);
@@ -98,6 +111,9 @@ bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.17  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

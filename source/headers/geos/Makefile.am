@@ -4,6 +4,7 @@ SUBDIRS = \
 	geom \
 	noding \
 	operation \
+	index \
 	util 
 
 #geosdir = $(prefix)/include/geos

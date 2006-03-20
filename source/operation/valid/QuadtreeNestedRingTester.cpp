@@ -19,18 +19,19 @@
  **********************************************************************/
 
 
-#include <vector>
-#include <cassert>
-
-#include <geos/opValid.h>
-
-//#include <geos/indexQuadtree.h>
+#include <geos/operation/valid/QuadtreeNestedRingTester.h>
+#include <geos/operation/valid/IsValidOp.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/indexQuadtree.h> // TODO: split me
+
+#include <vector>
+#include <cassert>
 
 using namespace std;
 using namespace geos::geomgraph;
+using namespace geos::geom;
 using namespace geos::algorithm;
 using namespace geos::index::quadtree;
 
@@ -131,6 +132,9 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.21  2006/03/17 16:48:55  strk
  * LineIntersector and PointLocator made complete components of RelateComputer
  * (were statics const pointers before). Reduced inclusions from opRelate.h

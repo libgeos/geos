@@ -18,11 +18,13 @@
 #include <cassert>
 #include <cmath>
 
+//#include <geos/profiler.h>
+//#include <geos/util.h>
 #include <geos/indexStrtree.h>
-#include <geos/util.h>
-#include <geos/profiler.h>
+#include <geos/geom/Envelope.h>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace index { // geos.index
@@ -208,6 +210,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.28  2006/03/15 18:44:52  strk
  * Bug #60 - Missing <cmath> header in some files
  *

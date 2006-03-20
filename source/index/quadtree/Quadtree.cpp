@@ -14,22 +14,25 @@
  *
  **********************************************************************/
 
+#include <vector>
+
 #include <geos/indexQuadtree.h>
 #include <geos/util.h>
-#include <vector>
+#include <geos/geom/Envelope.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 Envelope*
-Quadtree::ensureExtent(const Envelope *itemEnv,double minExtent)
+Quadtree::ensureExtent(const Envelope *itemEnv, double minExtent)
 {
 	//The names "ensureExtent" and "minExtent" are misleading -- sounds like
 	//this method ensures that the extents are greater than minExtent.
@@ -151,6 +154,9 @@ Quadtree::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.21  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

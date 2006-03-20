@@ -15,21 +15,8 @@
  **********************************************************************/
 
 #include <geos/unload.h>
-#include <geos/opValid.h>
-//#include <geos/geomgraph.h>
-//#include <geos/operation.h>
-//#include <geos/opRelate.h>
-//#include <geos/indexQuadtree.h>
-//#include <geos/opBuffer.h>
-//#include <geos/planargraph.h>
-//#include <geos/profiler.h>
-
-//using namespace geos::geomgraph;
-//using namespace geos::operation;
-//using namespace geos::operation::relate;
-//using namespace geos::index;
-
-using namespace std;
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
 
 namespace geos {
 namespace io { // geos.io
@@ -37,15 +24,7 @@ namespace io { // geos.io
 /*public static*/
 void Unload::Release()
 {
-	//delete PlanarGraph::cga;
-	//delete planarDirectedEdge::cga;
-	//delete GeometryGraphOperation::cga;
-	//delete GeometryGraphOperation::li;
-	//delete RelateComputer::li;
-	//delete RelateComputer::ptLocator;
-	//delete quadtree::QuadTreeRoot::origin;
-	delete Geometry::INTERNAL_GEOMETRY_FACTORY;
-	//delete Profiler::instance();
+	delete geom::Geometry::INTERNAL_GEOMETRY_FACTORY;
 }
 
 } // namespace geos.io
@@ -53,6 +32,9 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.24  2006/03/17 16:48:55  strk
  * LineIntersector and PointLocator made complete components of RelateComputer
  * (were statics const pointers before). Reduced inclusions from opRelate.h

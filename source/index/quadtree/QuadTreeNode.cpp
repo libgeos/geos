@@ -18,20 +18,23 @@
 #include <sstream>
 #include <cassert>
 
-#include <geos/indexQuadtree.h>
-#include <geos/util.h>
+#include <geos/indexQuadtree.h> // FIXME: split
+#include <geos/geom/Envelope.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
-QuadTreeNode* QuadTreeNode::createNode(Envelope *env) {
+QuadTreeNode*
+QuadTreeNode::createNode(Envelope *env)
+{
 	QuadTreeKey* key=new QuadTreeKey(env);
 	QuadTreeNode *node=new QuadTreeNode(new Envelope(*(key->getEnvelope())),key->getLevel());
 	delete key;
@@ -166,6 +169,9 @@ QuadTreeNode::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.15  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

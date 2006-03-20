@@ -18,10 +18,13 @@
  *
  **********************************************************************/
 
-#include <geos/opValid.h>
+#include <geos/operation/valid/TopologyValidationError.h>
+#include <geos/geom/Coordinate.h>
+
 #include <string>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -87,6 +90,9 @@ TopologyValidationError::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.14  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

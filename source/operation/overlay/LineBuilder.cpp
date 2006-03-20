@@ -37,7 +37,7 @@
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
-//using namespace geos::geomgraph::index;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -304,6 +304,9 @@ LineBuilder::labelIsolatedLine(Edge *e, int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.24  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

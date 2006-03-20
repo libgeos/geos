@@ -18,22 +18,20 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <cassert>
-
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/MaximalEdgeRing.h>
 #include <geos/operation/overlay/MinimalEdgeRing.h>
-
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
-
 #include <geos/geom/GeometryFactory.h>
-
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Polygon.h>
 #include <geos/algorithm/CGAlgorithms.h>
-
 #include <geos/util/TopologyException.h>
+
+#include <vector>
+#include <cassert>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -399,6 +397,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.38  2006/03/20 13:20:29  strk
  * Changed assertion to TopologyException for the "orphaned" hole case
  * in order to allow for reduced precision ops to catch the case.

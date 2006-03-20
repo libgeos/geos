@@ -15,11 +15,18 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
-#include <geos/geomgraph.h>
+#include <geos/geomgraph/NodeMap.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/EdgeIntersectionList.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/Label.h>
+
 #include <vector>
+#include <map>
 
 using namespace std;
 using namespace geos::geomgraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -45,14 +52,16 @@ RelateNodeGraph::build(GeometryGraph *geomGraph)
 {
 	// compute nodes for intersections between previously noded edges
 	computeIntersectionNodes(geomGraph,0);
+
 	/**
-	* Copy the labelling for the nodes in the parent Geometry.  These override
-	* any labels determined by intersections.
-	*/
+	 * Copy the labelling for the nodes in the parent Geometry.  These override
+	 * any labels determined by intersections.
+	 */
 	copyNodesAndLabels(geomGraph,0);
+
 	/**
-	* Build EdgeEnds for all intersections.
-	*/
+	 * Build EdgeEnds for all intersections.
+	 */
 	EdgeEndBuilder *eeBuilder=new EdgeEndBuilder();
 	vector<EdgeEnd*> *eeList=eeBuilder->computeEdgeEnds(geomGraph->getEdges());
 	insertEdgeEnds(eeList);
@@ -135,6 +144,9 @@ RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.17  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

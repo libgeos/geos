@@ -14,26 +14,24 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEX_H
-#define GEOS_INDEX_H
+#ifndef GEOS_INDEX_ITEMVISITOR_H
+#define GEOS_INDEX_ITEMVISITOR_H
 
 namespace geos {
-
-/// Provides classes for various kinds of spatial indexes.
 namespace index {
+
+/** \brief
+ * A visitor for items in an index.
+ *
+ * Last port: index/ItemVisitor.java rev. 1.2 (JTS-1.7)
+ */
+class ItemVisitor {
+public:
+	virtual void visitItem(void *)=0;
+};
 
 } // namespace geos.index
 } // namespace geos
 
-#include <geos/index/SpatialIndex.h>
-#include <geos/index/ItemVisitor.h>
-
-#endif // GEOS_INDEX_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.9  2006/03/20 16:57:43  strk
- * spatialindex.h and opValid.h headers split
- *
- **********************************************************************/
+#endif // GEOS_INDEX_ITEMVISITOR_H
 

@@ -14,8 +14,10 @@
  *
  **********************************************************************/
 
-#include <geos/indexQuadtree.h>
 #include <cmath>
+
+#include <geos/indexQuadtree.h>
+#include <geos/geom/Envelope.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -25,11 +27,15 @@
 #include <iostream>
 #endif
 
+using namespace geos::geom;
+
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
-int QuadTreeKey::computeQuadLevel(Envelope *env){
+int
+QuadTreeKey::computeQuadLevel(Envelope *env)
+{
 	double dx=env->getWidth();
 	double dy=env->getHeight();
 	double dMax=dx>dy?dx:dy;
@@ -108,6 +114,9 @@ QuadTreeKey::computeKey(int level,Envelope *itemEnv)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.11  2006/03/15 18:44:52  strk
  * Bug #60 - Missing <cmath> header in some files
  *

@@ -18,13 +18,17 @@
 #include <vector>
 #include <algorithm>
 
-#include <geos/indexQuadtree.h>
+#include <geos/indexQuadtree.h> // FIXME: split
+#include <geos/index/ItemVisitor.h> 
+#include <geos/geom/Envelope.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 using namespace std;
+using namespace geos::geom;
+
 namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
@@ -232,6 +236,9 @@ QuadTreeNodeBase::remove(const Envelope* itemEnv, void* item)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.17  2006/03/10 11:41:49  strk
  * Added missing <algorithm> include (bug#56)
  *

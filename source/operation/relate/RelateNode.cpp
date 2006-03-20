@@ -15,15 +15,20 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
-#include <geos/geomgraph.h>
+#include <geos/geom/IntersectionMatrix.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Node.h>
+
+#include <cassert>
 
 using namespace geos::geomgraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
-RelateNode::RelateNode(const Coordinate& coord,EdgeEndStar *edges):
+RelateNode::RelateNode(const Coordinate& coord, EdgeEndStar *edges):
 	Node(coord,edges)
 {}
 
@@ -47,7 +52,10 @@ RelateNode::computeIM(IntersectionMatrix *im)
 void
 RelateNode::updateIMFromEdges(IntersectionMatrix *im)
 {
-	((EdgeEndBundleStar*) edges)->updateIM(im);
+	assert(dynamic_cast<EdgeEndBundleStar*>(edges));
+	EdgeEndBundleStar* eebs=static_cast<EdgeEndBundleStar*>(edges);
+
+	eebs->updateIM(im);
 }
 
 } // namespace geos.operation.relate
@@ -56,6 +64,9 @@ RelateNode::updateIMFromEdges(IntersectionMatrix *im)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.10  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

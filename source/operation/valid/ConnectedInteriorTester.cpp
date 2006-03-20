@@ -24,29 +24,28 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <cassert>
-#include <typeinfo>
-
-#include <geos/opValid.h> // FIXME: split this
-
+#include <geos/operation/valid/ConnectedInteriorTester.h> 
 #include <geos/operation/overlay/MaximalEdgeRing.h>
 #include <geos/operation/overlay/MinimalEdgeRing.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
-
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/LineString.h>
-
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/Label.h>
+
+#include <vector>
+#include <cassert>
+#include <typeinfo>
 
 using namespace std;
 using namespace geos::geom;
@@ -287,6 +286,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.23  2006/03/17 16:48:55  strk
  * LineIntersector and PointLocator made complete components of RelateComputer
  * (were statics const pointers before). Reduced inclusions from opRelate.h

@@ -18,13 +18,22 @@
 #include <vector>
 
 #include <geos/opRelate.h>
-#include <geos/geomgraph.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/PointLocator.h>
-#include <geos/geomgraphindex.h>
-//#include <geos/util.h>
+#include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeIntersectionList.h>
+#include <geos/geomgraph/EdgeIntersection.h>
 
-//using namespace std;
+#include <vector>
+#include <cassert>
+
+using namespace geos::geom;
 using namespace geos::geomgraph;
 using namespace geos::geomgraph::index;
 using namespace geos::algorithm;
@@ -37,14 +46,11 @@ RelateComputer::RelateComputer(std::vector<GeometryGraph*> *newArg):
 	arg(newArg),
 	nodes(RelateNodeFactory::instance()),
 	im(new IntersectionMatrix())
-	//isolatedEdges(new std::vector<Edge*>())
 {
 }
 
 RelateComputer::~RelateComputer()
 {
-	//delete nodes;
-	//delete isolatedEdges;
 }
 
 IntersectionMatrix*
@@ -207,7 +213,8 @@ RelateComputer::copyNodesAndLabels(int argIndex)
 	{
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes.addNode(graphNode->getCoordinate());
-		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
+		newNode->setLabel(argIndex,
+				graphNode->getLabel()->getLocation(argIndex));
 		//node.print(System.out);
 	}
 }
@@ -235,7 +242,8 @@ RelateComputer::computeIntersectionNodes(int argIndex)
 		for( ; it!=end; ++it)
 		{
 			EdgeIntersection *ei=*it;
-			RelateNode *n=(RelateNode*) nodes.addNode(ei->coord);
+			assert(dynamic_cast<RelateNode*>(nodes.addNode(ei->coord)));
+			RelateNode *n=static_cast<RelateNode*>(nodes.addNode(ei->coord));
 			if (eLoc==Location::BOUNDARY)
 			{
 				n->setLabelBoundary(argIndex);
@@ -426,6 +434,9 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.30  2006/03/17 16:48:55  strk
  * LineIntersector and PointLocator made complete components of RelateComputer
  * (were statics const pointers before). Reduced inclusions from opRelate.h

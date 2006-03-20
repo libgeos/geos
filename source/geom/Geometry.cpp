@@ -20,19 +20,15 @@
 #include <vector>
 #include <cassert>
 
-//#include <geos/geom.h>
 #include <geos/geom/Geometry.h>
 #include <geos/util.h>
 #include <geos/geosAlgorithm.h>
-//#include <geos/operation.h>
 #include <geos/opRelate.h>
-#include <geos/opValid.h>
 #include <geos/opDistance.h>
-//#include <geos/opOverlay.h>
-#include <geos/operation/overlay/OverlayOp.h>
-//#include <geos/opBuffer.h>
-#include <geos/operation/buffer/BufferOp.h>
 #include <geos/opPredicate.h>
+#include <geos/operation/valid/IsValidOp.h>
+#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/buffer/BufferOp.h>
 #include <geos/io.h>
 #include <geos/version.h>
 #include <geos/geom/GeometryFactory.h>
@@ -766,6 +762,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.102  2006/03/20 16:57:43  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.101  2006/03/20 12:03:25  strk
  * Added operator<< for Geometry, writing HEXWKB
  *

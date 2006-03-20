@@ -17,7 +17,9 @@
 #include <cassert>
 
 #include <geos/indexQuadtree.h>
-#include <geos/util.h>
+//#include <geos/util.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Envelope.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -26,6 +28,8 @@
 #ifdef GEOS_DEBUG
 #include <iostream>
 #endif
+
+using namespace geos::geom;
 
 namespace geos {
 namespace index { // geos.index
@@ -37,7 +41,8 @@ Coordinate QuadTreeRoot::origin(0.0, 0.0);
 
 /*public*/
 void
-QuadTreeRoot::insert(const Envelope *itemEnv,void* item){
+QuadTreeRoot::insert(const Envelope *itemEnv, void* item)
+{
 
 #if GEOS_DEBUG
 	std::cerr<<"("<<this<<") insert("<<itemEnv->toString()<<", "<<item<<") called"<<std::endl;
@@ -112,6 +117,9 @@ QuadTreeRoot::insertContained(QuadTreeNode *tree, const Envelope *itemEnv, void 
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.14  2006/03/09 15:36:25  strk
  * Fixed debugging lines
  *

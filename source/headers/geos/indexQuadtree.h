@@ -22,9 +22,9 @@
 #include <vector>
 
 #include <geos/platform.h>
-//#include <geos/geom.h>
+#include <geos/geom/Envelope.h> // for QuadTreeNode inlines
 #include <geos/geom/Coordinate.h>
-#include <geos/spatialIndex.h>
+#include <geos/index/SpatialIndex.h> // for inheritance
 
 #if __STDC_IEC_559__
 #define ASSUME_IEEE_DOUBLE 1
@@ -41,6 +41,9 @@ namespace geos {
 	namespace geomgraph {
 		class Node;
 		class Edge;
+	}
+	namespace index {
+		class ItemVisitor;
 	}
 }
 
@@ -403,6 +406,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/20 16:57:43  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.14  2006/03/09 16:46:48  strk
  * geos::geom namespace definition, first pass at headers split
  *

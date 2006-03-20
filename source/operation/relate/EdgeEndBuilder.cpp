@@ -17,10 +17,17 @@
  **********************************************************************/
 
 #include <geos/opRelate.h>
-#include <geos/geomgraph.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeEnd.h>
+#include <geos/geomgraph/EdgeIntersectionList.h>
+#include <geos/geomgraph/Label.h>
+
+#include <vector>
 
 using namespace std;
 using namespace geos::geomgraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -133,6 +140,9 @@ EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.15  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

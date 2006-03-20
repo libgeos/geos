@@ -14,30 +14,22 @@
  *
  **********************************************************************/
 
-#include <memory> // auto_ptr
-#include <cassert> // auto_ptr
-
-#include <geos/opValid.h> // FIXME: split
-
+#include <geos/operation/valid/ConsistentAreaTester.h> 
 #include <geos/algorithm/LineIntersector.h>
-
 #include <geos/geomgraph/GeometryGraph.h> 
 #include <geos/geomgraph/EdgeEnd.h> 
 #include <geos/geomgraph/Edge.h> 
 #include <geos/geomgraph/index/SegmentIntersector.h> 
-
 #include <geos/geom/Coordinate.h> 
-
 #include <geos/opRelate.h> // FIXME: split
-// #include <geos/operation/relate/RelateNode.h>
-// #include <geos/operation/relate/RelateNodeGraph.h>
+
+#include <memory> // auto_ptr
+#include <cassert> // auto_ptr
 
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
-//using namespace geos::geomgraph::index;
-//using namespace geos::operation::overlay;
-//using namespace geos::operation::relate;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -54,15 +46,19 @@ ConsistentAreaTester::~ConsistentAreaTester(){
 	delete li;
 }
 
-Coordinate& ConsistentAreaTester::getInvalidPoint(){
+Coordinate&
+ConsistentAreaTester::getInvalidPoint()
+{
 	return invalidPoint;
 }
 
-bool ConsistentAreaTester::isNodeConsistentArea() {
-    /**
-     * To fully check validity, it is necessary to
-     * compute ALL intersections, including self-intersections within a single edge.
-     */
+bool
+ConsistentAreaTester::isNodeConsistentArea()
+{
+	/**
+	 * To fully check validity, it is necessary to
+	 * compute ALL intersections, including self-intersections within a single edge.
+	 */
 	auto_ptr<geomgraph::index::SegmentIntersector> intersector(geomGraph->computeSelfNodes(li,true));
 	if (intersector->hasProperIntersection()) {
 		invalidPoint=intersector->getProperIntersectionPoint();
@@ -118,6 +114,9 @@ bool ConsistentAreaTester::hasDuplicateRings() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
  * Revision 1.14  2006/03/17 16:48:55  strk
  * LineIntersector and PointLocator made complete components of RelateComputer
  * (were statics const pointers before). Reduced inclusions from opRelate.h
