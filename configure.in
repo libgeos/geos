@@ -195,6 +195,7 @@ AC_OUTPUT([
 	source/headers/geos/operation/buffer/Makefile
 	source/headers/geos/operation/overlay/Makefile
 	source/headers/geos/operation/valid/Makefile
+	source/headers/geos/operation/relate/Makefile
 	source/headers/geos/util/Makefile
 	source/headers/geos/algorithm/Makefile
 	source/headers/geos/version.h

@@ -14,24 +14,30 @@
  *
  **********************************************************************/
 
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/algorithm/CentroidPoint.h>
+#include <geos/algorithm/CentroidLine.h>
+#include <geos/algorithm/CentroidArea.h>
+#include <geos/algorithm/InteriorPointPoint.h>
+#include <geos/algorithm/InteriorPointLine.h>
+#include <geos/algorithm/InteriorPointArea.h>
+#include <geos/opDistance.h>
+#include <geos/opPredicate.h>
+#include <geos/operation/relate/RelateOp.h>
+#include <geos/operation/valid/IsValidOp.h>
+#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/buffer/BufferOp.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/io/WKTWriter.h>
+#include <geos/version.h>
+
 #include <algorithm>
 #include <string>
 #include <typeinfo>
 #include <vector>
 #include <cassert>
-
-#include <geos/geom/Geometry.h>
-#include <geos/util.h>
-#include <geos/geosAlgorithm.h>
-#include <geos/opRelate.h>
-#include <geos/opDistance.h>
-#include <geos/opPredicate.h>
-#include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/overlay/OverlayOp.h>
-#include <geos/operation/buffer/BufferOp.h>
-#include <geos/io.h>
-#include <geos/version.h>
-#include <geos/geom/GeometryFactory.h>
 
 #define SHORTCIRCUIT_PREDICATES 1
 
@@ -762,6 +768,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.103  2006/03/21 13:11:28  strk
+ * opRelate.h header split
+ *
  * Revision 1.102  2006/03/20 16:57:43  strk
  * spatialindex.h and opValid.h headers split
  *

@@ -14,10 +14,10 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <vector>
-
-#include <geos/opRelate.h>
+#include <geos/operation/relate/RelateComputer.h>
+#include <geos/operation/relate/RelateNodeFactory.h>
+#include <geos/operation/relate/RelateNode.h>
+#include <geos/operation/relate/EdgeEndBuilder.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/IntersectionMatrix.h>
@@ -27,6 +27,8 @@
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/EdgeIntersectionList.h>
 #include <geos/geomgraph/EdgeIntersection.h>
 
@@ -316,7 +318,8 @@ RelateComputer::labelNodeEdges()
 	std::map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++)
 	{
-		RelateNode *node=(RelateNode*) nodeIt->second;
+		assert(dynamic_cast<RelateNode*>(nodeIt->second));
+		RelateNode *node=static_cast<RelateNode*>(nodeIt->second);
 		node->getEdges()->computeLabelling(arg);
 		//Debug.print(node.getEdges());
 		//node.print(System.out);
@@ -434,6 +437,9 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/03/21 13:11:29  strk
+ * opRelate.h header split
+ *
  * Revision 1.31  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *
@@ -447,104 +453,6 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
  *
  * Revision 1.28  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.27  2006/02/23 11:54:21  strk
- * - MCIndexPointSnapper
- * - MCIndexSnapRounder
- * - SnapRounding BufferOp
- * - ScaledNoder
- * - GEOSException hierarchy cleanups
- * - SpatialIndex memory-friendly query interface
- * - GeometryGraph::getBoundaryNodes memory-friendly
- * - NodeMap::getBoundaryNodes memory-friendly
- * - Cleanups in geomgraph::Edge
- * - Added an XML test for snaprounding buffer (shows leaks, working on it)
- *
- * Revision 1.26  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.25  2006/01/08 15:24:40  strk
- * Changed container-related typedef to class-scoped STL-like typedefs.
- * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
- * defined M_PI when undef as suggested by Charlie Savage.
- * Removed <stdio.h> include from GeometricShapeFactory.cpp.
- *
- * Revision 1.24  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.23  2005/11/16 15:49:54  strk
- * Reduced gratuitous heap allocations.
- *
- * Revision 1.22  2005/11/07 12:31:24  strk
- * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
- * to avoid dynamic allocation of initial header.
- * Inlined short SweepLineEvent methods.
- *
- * Revision 1.21  2005/06/24 11:09:43  strk
- * Dropped RobustLineIntersector, made LineIntersector a concrete class.
- * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
- * to avoid computing intersection point (Z) when it's not necessary.
- *
- * Revision 1.20  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.19  2004/08/04 08:26:02  strk
- * comments lift, stack allocation reduced
- *
- * Revision 1.18  2004/07/27 16:35:47  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.17  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.16  2004/03/29 06:59:25  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.15  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

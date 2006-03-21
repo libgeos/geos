@@ -18,13 +18,16 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geomgraph/GeometryGraph.h> 
 #include <geos/geomgraph/EdgeEnd.h> 
+#include <geos/geomgraph/EdgeEndStar.h> 
 #include <geos/geomgraph/Edge.h> 
 #include <geos/geomgraph/index/SegmentIntersector.h> 
 #include <geos/geom/Coordinate.h> 
-#include <geos/opRelate.h> // FIXME: split
+#include <geos/operation/relate/RelateNodeGraph.h> 
+#include <geos/operation/relate/RelateNode.h> 
+#include <geos/operation/relate/EdgeEndBundle.h> 
 
 #include <memory> // auto_ptr
-#include <cassert> // auto_ptr
+#include <cassert> 
 
 using namespace std;
 using namespace geos::algorithm;
@@ -114,6 +117,9 @@ bool ConsistentAreaTester::hasDuplicateRings() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/21 13:11:29  strk
+ * opRelate.h header split
+ *
  * Revision 1.15  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

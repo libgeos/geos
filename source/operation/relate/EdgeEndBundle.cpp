@@ -13,15 +13,15 @@
  *
  **********************************************************************/
 
-#include <vector>
-
-#include <geos/opRelate.h>
+#include <geos/operation/relate/EdgeEndBundle.h>
 #include <geos/geom/Location.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/Position.h>
+
+#include <vector>
 
 using namespace std;
 using namespace geos::geomgraph;
@@ -197,6 +197,9 @@ string EdgeEndBundle::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/21 13:11:29  strk
+ * opRelate.h header split
+ *
  * Revision 1.13  2006/03/17 16:48:55  strk
  * LineIntersector and PointLocator made complete components of RelateComputer
  * (were statics const pointers before). Reduced inclusions from opRelate.h
@@ -204,20 +207,6 @@ string EdgeEndBundle::print() {
  *
  * Revision 1.12  2006/02/19 19:46:50  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.11  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.10  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

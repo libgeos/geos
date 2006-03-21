@@ -1,7 +1,8 @@
 SUBDIRS = \
 	buffer \
 	overlay \
-	valid
+	valid \
+	relate
 
 geosdir = $(includedir)/geos/operation
 
