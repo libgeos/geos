@@ -1,5 +1,6 @@
 SUBDIRS = \
-	sweepline
+	sweepline \
+	strtree
 
 geosdir = $(includedir)/geos/index
 

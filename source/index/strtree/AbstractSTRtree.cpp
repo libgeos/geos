@@ -14,15 +14,15 @@
  *
  **********************************************************************/
 
-#include <geos/indexStrtree.h>
-#include <geos/util.h>
-#include <geos/profiler.h>
+#include <geos/index/strtree/AbstractSTRtree.h>
+#include <geos/index/strtree/AbstractNode.h>
+#include <geos/index/strtree/ItemBoundable.h>
+#include <geos/index/ItemVisitor.h>
+
 #include <algorithm>
 #include <vector>
 #include <typeinfo>
 #include <cassert>
-
-//#define PROFILE 1
 
 using namespace std;
 
@@ -309,6 +309,9 @@ AbstractSTRtree::boundablesAtLevel(int level, AbstractNode* top,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/21 10:47:34  strk
+ * indexStrtree.h split
+ *
  * Revision 1.28  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

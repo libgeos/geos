@@ -14,12 +14,12 @@
  *
  **********************************************************************/
 
+#include <geos/index/strtree/Interval.h>
+//#include <geos/util.h>
+
 #include <algorithm>
 #include <typeinfo>
 #include <cassert>
-
-#include <geos/indexStrtree.h>
-#include <geos/util.h>
 
 using namespace std;
 
@@ -74,6 +74,9 @@ Interval::equals(void *o) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/21 10:47:34  strk
+ * indexStrtree.h split
+ *
  * Revision 1.10  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

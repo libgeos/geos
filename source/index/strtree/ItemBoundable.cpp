@@ -14,7 +14,7 @@
  *
  **********************************************************************/
 
-#include <geos/indexStrtree.h>
+#include <geos/index/strtree/ItemBoundable.h>
 
 namespace geos {
 namespace index { // geos.index
@@ -43,6 +43,9 @@ void* ItemBoundable::getItem() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/21 10:47:34  strk
+ * indexStrtree.h split
+ *
  * Revision 1.8  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

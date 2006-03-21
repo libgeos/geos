@@ -14,11 +14,10 @@
  *
  **********************************************************************/
 
+#include <geos/index/strtree/AbstractNode.h>
+
 #include <vector>
 #include <cassert>
-
-#include <geos/indexStrtree.h>
-#include <geos/util.h>
 
 using namespace std;
 
@@ -82,39 +81,11 @@ void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/21 10:47:34  strk
+ * indexStrtree.h split
+ *
  * Revision 1.12  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.11  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.10  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.9  2005/02/15 17:15:13  strk
- * Inlined most Envelope methods, reserved() memory for some vectors when
- * the usage was known a priori.
- *
- * Revision 1.8  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.7  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2004/03/25 02:23:55  ybychkov
- * All "index/" packages upgraded to JTS 1.4
- *
- * Revision 1.4  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

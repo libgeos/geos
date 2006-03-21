@@ -14,11 +14,13 @@
  *
  **********************************************************************/
 
+#include <geos/index/strtree/SIRtree.h>
+#include <geos/index/strtree/AbstractNode.h>
+//#include <geos/util.h>
+
 #include <vector>
 #include <cassert>
-
-#include <geos/indexStrtree.h>
-#include <geos/util.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -80,30 +82,41 @@ SIRtree::~SIRtree() {
 	delete intersectsOp;
 }
 
-SIRAbstractNode::SIRAbstractNode(int level, int capacity):
-	AbstractNode(level, capacity)
-{}
 
-SIRAbstractNode::~SIRAbstractNode()
-{
-	delete (Interval *)bounds;
-}
+class SIRAbstractNode: public AbstractNode {
+public:
+	SIRAbstractNode(int level, int capacity)
+		:
+		AbstractNode(level, capacity)
+	{}
 
-void* SIRAbstractNode::computeBounds() {
-	Interval* bounds=NULL;
-	vector<Boundable*> *b=getChildBoundables();
-	for(unsigned int i=0;i<b->size();i++) {
-		Boundable* childBoundable=(*b)[i];
-		if (bounds==NULL) {
-			bounds=new Interval((Interval*)childBoundable->getBounds());
-		} else {
-			bounds->expandToInclude((Interval*)childBoundable->getBounds());
-		}
+	~SIRAbstractNode()
+	{
+		delete (Interval *)bounds;
 	}
-	return bounds;
-}
 
-AbstractNode* SIRtree::createNode(int level) {
+protected:
+
+	void* computeBounds()
+	{
+		Interval* bounds=NULL;
+		vector<Boundable*> *b=getChildBoundables();
+		for(unsigned int i=0;i<b->size();i++) {
+			Boundable* childBoundable=(*b)[i];
+			if (bounds==NULL) {
+				bounds=new Interval((Interval*)childBoundable->getBounds());
+			} else {
+				bounds->expandToInclude((Interval*)childBoundable->getBounds());
+			}
+		}
+		return bounds;
+	}
+
+};
+
+AbstractNode*
+SIRtree::createNode(int level)
+{
 	AbstractNode *an = new SIRAbstractNode(level, nodeCapacity);
 	nodes->push_back(an);
 	return an;
@@ -130,6 +143,9 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/21 10:47:34  strk
+ * indexStrtree.h split
+ *
  * Revision 1.19  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

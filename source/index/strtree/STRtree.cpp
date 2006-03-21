@@ -14,14 +14,12 @@
  *
  **********************************************************************/
 
+#include <geos/index/strtree/STRtree.h>
+#include <geos/geom/Envelope.h>
+
 #include <vector>
 #include <cassert>
 #include <cmath>
-
-//#include <geos/profiler.h>
-//#include <geos/util.h>
-#include <geos/indexStrtree.h>
-#include <geos/geom/Envelope.h>
 
 using namespace std;
 using namespace geos::geom;
@@ -156,30 +154,36 @@ STRtree::verticalSlices(vector<Boundable*>* childBoundables, int sliceCount)
 	return slices;
 }
 
-STRAbstractNode::STRAbstractNode(int level, int cpcty):
-	AbstractNode(level, cpcty)
-{
-}
+class STRAbstractNode: public AbstractNode{
+public:
 
-STRAbstractNode::~STRAbstractNode()
-{
-	delete (Envelope *)bounds;
-}
+	STRAbstractNode(int level, int capacity)
+		:
+		AbstractNode(level, capacity)
+	{}
 
-void *
-STRAbstractNode::computeBounds()
-{
-	Envelope* bounds=NULL;
-	vector<Boundable*> *b=getChildBoundables();
-	unsigned int bsize=b->size();
-
-	if ( bsize ) bounds=new Envelope(*(Envelope*)(*b)[0]->getBounds());
-	for(unsigned int i=1; i<bsize; i++) {
-		Boundable* childBoundable=(*b)[i];
-		bounds->expandToInclude((Envelope*)childBoundable->getBounds());
+	~STRAbstractNode()
+	{
+		delete (Envelope *)bounds;
 	}
-	return bounds;
-}
+
+protected:
+
+	void* computeBounds()
+	{
+		Envelope* bounds=NULL;
+		vector<Boundable*> *b=getChildBoundables();
+		unsigned int bsize=b->size();
+
+		if ( bsize ) bounds=new Envelope(*(Envelope*)(*b)[0]->getBounds());
+		for(unsigned int i=1; i<bsize; i++) {
+			Boundable* childBoundable=(*b)[i];
+			bounds->expandToInclude((Envelope*)childBoundable->getBounds());
+		}
+		return bounds;
+	}
+
+};
 
 AbstractNode*
 STRtree::createNode(int level)
@@ -210,6 +214,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/21 10:47:34  strk
+ * indexStrtree.h split
+ *
  * Revision 1.29  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *
