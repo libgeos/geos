@@ -17,37 +17,28 @@
  *
  **********************************************************************/
 
+#include <geos/opLinemerge.h>
+//#include <geos/util.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/LineString.h>
+#include <geos/planargraph/Node.h>
+#include <geos/planargraph/DirectedEdge.h>
+#include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
+
 #include <cassert>
 #include <limits>
 #include <vector>
 
-#include <geos/opLinemerge.h>
-#include <geos/util.h>
-#include <geos/geom.h>
-#include <geos/planargraph.h>
-
 using namespace std;
-using namespace geos::planargraph;
-using namespace geos::planargraph::algorithm;
+//using namespace geos::planargraph;
+//using namespace geos::planargraph::algorithm;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
-
-namespace planargraph {
-
-	typedef planarNode Node;
-	typedef planarNodeMap NodeMap;
-	typedef planarPlanarGraph PlanarGraph;
-	typedef planarDirectedEdge DirectedEdge;
-	typedef planarDirectedEdgeStar DirectedEdgeStar;
-	typedef planarGraphComponent GraphComponent;
-	typedef planarSubgraph Subgraph;
-
-} // namespace planargraph
-
-using namespace planargraph;
-
 
 /* static */
 bool
@@ -108,15 +99,15 @@ LineSequencer::isSequenced(const Geometry* geom)
 
 /* private */
 bool
-LineSequencer::hasSequence(Subgraph& graph)
+LineSequencer::hasSequence(planargraph::Subgraph& graph)
 {
 	int oddDegreeCount = 0;
-	for (NodeMap::container::const_iterator
+	for (planargraph::NodeMap::container::const_iterator
 		it=graph.nodeBegin(), endIt=graph.nodeEnd();
 		it!=endIt;
 		++it)
 	{
-		Node* node = it->second;
+		planargraph::Node* node = it->second;
 		if (node->getDegree() % 2 == 1)
 		oddDegreeCount++;
 	}
@@ -129,17 +120,17 @@ LineSequencer::Sequences*
 LineSequencer::findSequences()
 {
 	Sequences *sequences = new Sequences();
-	ConnectedSubgraphFinder csFinder(graph);
-	vector<Subgraph*>subgraphs;
+	planargraph::algorithm::ConnectedSubgraphFinder csFinder(graph);
+	vector<planargraph::Subgraph*>subgraphs;
 	csFinder.getConnectedSubgraphs(subgraphs);
-	for (vector<Subgraph*>::const_iterator
+	for (vector<planargraph::Subgraph*>::const_iterator
 		it=subgraphs.begin(), endIt=subgraphs.end();
 		it!=endIt;
 		++it )
 	{
-		Subgraph* subgraph = *it;
+		planargraph::Subgraph* subgraph = *it;
 		if (hasSequence(*subgraph)) {
-			DirectedEdge::NonConstList* seq=findSequence(*subgraph);
+			planargraph::DirectedEdge::NonConstList* seq=findSequence(*subgraph);
 			sequences->push_back(seq);
 		}
 		else {
@@ -195,11 +186,11 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 		i1 != i1End;
 		++i1)
 	{
-		planarDirectedEdge::NonConstList& seq = *(*i1);
-		for(planarDirectedEdge::NonConstList::iterator i2=seq.begin(),
+		planargraph::DirectedEdge::NonConstList& seq = *(*i1);
+		for(planargraph::DirectedEdge::NonConstList::iterator i2=seq.begin(),
 			i2End=seq.end(); i2 != i2End; ++i2)
 		{
-			const planarDirectedEdge* de = *i2;
+			const planargraph::DirectedEdge* de = *i2;
 			LineMergeEdge* e = dynamic_cast<LineMergeEdge* >(de->getEdge());
 			assert(e);
 			const LineString* line = e->getLine();
@@ -238,17 +229,17 @@ LineSequencer::reverse(const LineString *line)
 }
 
 /*private static*/
-const planarNode*
-LineSequencer::findLowestDegreeNode(const planarSubgraph& graph)
+const planargraph::Node*
+LineSequencer::findLowestDegreeNode(const planargraph::Subgraph& graph)
 {
 	int minDegree = numeric_limits<int>::max(); 
-	const planarNode* minDegreeNode = NULL;
-	for (planarNodeMap::container::const_iterator
+	const planargraph::Node* minDegreeNode = NULL;
+	for (planargraph::NodeMap::container::const_iterator
 		it = graph.nodeBegin(), itEnd = graph.nodeEnd();
 		it != itEnd;
 		++it )
 	{
-		const planarNode* node = (*it).second;
+		const planargraph::Node* node = (*it).second;
 		if (minDegreeNode == NULL || node->getDegree() < minDegree)
 		{
 			minDegree = node->getDegree();
@@ -259,9 +250,12 @@ LineSequencer::findLowestDegreeNode(const planarSubgraph& graph)
 }
 
 /*private static*/
-const DirectedEdge*
-LineSequencer::findUnvisitedBestOrientedDE(const Node* node)
+const planargraph::DirectedEdge*
+LineSequencer::findUnvisitedBestOrientedDE(const planargraph::Node* node)
 {
+	using planargraph::DirectedEdge;
+	using planargraph::DirectedEdgeStar;
+
 	const DirectedEdge* wellOrientedDE = NULL;
 	const DirectedEdge* unvisitedDE = NULL;
 	const DirectedEdgeStar* des=node->getOutEdges();
@@ -270,7 +264,7 @@ LineSequencer::findUnvisitedBestOrientedDE(const Node* node)
 		i!=e;
 		++i)
 	{
-		DirectedEdge* de = *i;
+		planargraph::DirectedEdge* de = *i;
 		if (! de->getEdge()->isVisited()) {
 			unvisitedDE = de;
 			if (de->getEdgeDirection()) wellOrientedDE = de;
@@ -284,11 +278,14 @@ LineSequencer::findUnvisitedBestOrientedDE(const Node* node)
 
 /*private*/
 void
-LineSequencer::addReverseSubpath(const DirectedEdge *de,
-		DirectedEdge::NonConstList& deList,
-		DirectedEdge::NonConstList::iterator lit,
+LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
+		planargraph::DirectedEdge::NonConstList& deList,
+		planargraph::DirectedEdge::NonConstList::iterator lit,
 		bool expectedClosed)
 {
+	using planargraph::Node;
+	using planargraph::DirectedEdge;
+
 	// trace an unvisited path *backwards* from this de
 	Node* endNode = de->getToNode();
 
@@ -312,9 +309,13 @@ LineSequencer::addReverseSubpath(const DirectedEdge *de,
 }
 
 /*private*/
-DirectedEdge::NonConstList* 
-LineSequencer::findSequence(Subgraph& graph)
+planargraph::DirectedEdge::NonConstList* 
+LineSequencer::findSequence(planargraph::Subgraph& graph)
 {
+	using planargraph::DirectedEdge;
+	using planargraph::Node;
+	using planargraph::GraphComponent;
+
 	GraphComponent::setVisited(graph.edgeBegin(),
 			graph.edgeEnd(), false);
 
@@ -347,9 +348,11 @@ LineSequencer::findSequence(Subgraph& graph)
 }
 
 /* private */
-DirectedEdge::NonConstList* 
-LineSequencer::orient(DirectedEdge::NonConstList* seq) 
+planargraph::DirectedEdge::NonConstList* 
+LineSequencer::orient(planargraph::DirectedEdge::NonConstList* seq) 
 {
+	using namespace geos::planargraph;
+
 	const DirectedEdge* startEdge = seq->front();
 	const DirectedEdge* endEdge = seq->back();
 	Node* startNode = startEdge->getFromNode();
@@ -405,9 +408,11 @@ LineSequencer::orient(DirectedEdge::NonConstList* seq)
 }
 
 /* private */
-DirectedEdge::NonConstList* 
-LineSequencer::reverse(DirectedEdge::NonConstList& seq)
+planargraph::DirectedEdge::NonConstList* 
+LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 {
+	using namespace geos::planargraph;
+
 	DirectedEdge::NonConstList* newSeq = new DirectedEdge::NonConstList();
 	DirectedEdge::NonConstList::iterator it=seq.begin(), itEnd=seq.end();
 	for (; it!=itEnd; ++it) {
@@ -425,29 +430,7 @@ LineSequencer::reverse(DirectedEdge::NonConstList& seq)
 
 /**********************************************************************
  * $Log$
- * Revision 1.5  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.4  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.3  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.2  2006/02/09 01:13:24  strk
- * Added missing <limits> include
- *
- * Revision 1.1  2006/02/08 12:59:56  strk
- * - NEW Geometry::applyComponentFilter() templated method
- * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
- *   to return unsigned int.
- * - Changed planarNode::getDegree() to return unsigned int.
- * - Added Geometry::NonConstVect typedef
- * - NEW LineSequencer class
- * - Changed planarDirectedEdgeStar::outEdges from protected to private
- * - added static templated setVisitedMap to change Visited flag
- *   for all values in a map
- * - Added const versions of some planarDirectedEdgeStar methods.
- * - Added containers typedefs for planarDirectedEdgeStar
+ * Revision 1.6  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
  **********************************************************************/

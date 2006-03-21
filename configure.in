@@ -198,6 +198,8 @@ AC_OUTPUT([
 	source/headers/geos/operation/valid/Makefile
 	source/headers/geos/operation/relate/Makefile
 	source/headers/geos/operation/predicate/Makefile
+	source/headers/geos/planargraph/Makefile
+	source/headers/geos/planargraph/algorithm/Makefile
 	source/headers/geos/util/Makefile
 	source/headers/geos/algorithm/Makefile
 	source/headers/geos/version.h

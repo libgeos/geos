@@ -15,7 +15,9 @@
  **********************************************************************/
 
 #include <geos/opPolygonize.h>
-#include <geos/planargraph.h>
+#include <geos/planargraph/DirectedEdge.h>
+#include <geos/geom/CoordinateSequence.h>
+
 #include <vector>
 
 //#define DEBUG_ALLOC 1
@@ -23,6 +25,7 @@
 using namespace std;
 using namespace geos::planargraph;
 using namespace geos::algorithm;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -133,7 +136,7 @@ polygonizeEdgeRing::polygonizeEdgeRing(const GeometryFactory *newFactory)
 	cerr<<"["<<this<<"] polygonizeEdgeRing(factory)"<<endl;
 #endif // DEBUG_ALLOC
 
-	deList=new vector<const planarDirectedEdge*>();
+	deList=new vector<const DirectedEdge*>();
 	// cache the following data for efficiency
 	ring=NULL;
 	ringPts=NULL;
@@ -157,11 +160,11 @@ polygonizeEdgeRing::~polygonizeEdgeRing()
 }
 
 /*
- * Adds a planarDirectedEdge which is known to form part of this ring.
- * @param de the planarDirectedEdge to add.
+ * Adds a DirectedEdge which is known to form part of this ring.
+ * @param de the DirectedEdge to add.
  */
 void
-polygonizeEdgeRing::add(const planarDirectedEdge *de){
+polygonizeEdgeRing::add(const DirectedEdge *de){
 	deList->push_back(de);
 }
 
@@ -228,7 +231,7 @@ polygonizeEdgeRing::getCoordinates()
 	{
 		ringPts=factory->getCoordinateSequenceFactory()->create(NULL);
 		for (int i=0;i<(int)deList->size();i++) {
-			const planarDirectedEdge *de=(*deList)[i];
+			const DirectedEdge *de=(*deList)[i];
 			PolygonizeEdge *edge=(PolygonizeEdge*) de->getEdge();
 			addEdge(edge->getLine()->getCoordinatesRO(),
 				de->getEdgeDirection(), ringPts);
@@ -307,81 +310,7 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
- * Revision 1.14  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.13  2006/02/23 23:17:52  strk
- * - Coordinate::nullCoordinate made private
- * - Simplified Coordinate inline definitions
- * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
- * - Misc cleanups
- *
- * Revision 1.12  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.11  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.10  2005/11/25 11:31:21  strk
- * Removed all CoordinateSequence::getSize() calls embedded in for loops.
- *
- * Revision 1.9  2005/06/17 15:08:07  strk
- * Polygonizer segfault fix
- *
- * Revision 1.8  2004/10/27 13:57:07  strk
- * Added some debugging lines (disabled by default)
- *
- * Revision 1.7  2004/10/26 16:09:21  strk
- * Some more intentation and envelope equality check fix.
- *
- * Revision 1.6  2004/10/19 19:51:14  strk
- * Fixed many leaks and bugs in Polygonizer.
- * Output still bogus.
- *
- * Revision 1.5  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.4  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.1  2004/04/08 04:53:56  ybychkov
- * "operation/polygonize" ported from JTS 1.4
- *
+ * Revision 1.15  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
  **********************************************************************/

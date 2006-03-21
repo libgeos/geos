@@ -14,12 +14,15 @@
  *
  **********************************************************************/
 
-#include <geos/operation.h>
-#include <geos/geosAlgorithm.h>
-#include <geos/geomgraph.h>
+#include <geos/operation/GeometryGraphOperation.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/PrecisionModel.h>
 
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -73,6 +76,9 @@ GeometryGraphOperation::~GeometryGraphOperation()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
+ *
  * Revision 1.21  2006/03/02 14:34:43  strk
  * GeometryGraphOperation::li made a non-static member, and not more a pointer
  *

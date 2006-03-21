@@ -14,9 +14,10 @@
  **********************************************************************/
 
 #include <geos/opPolygonize.h>
-#include <geos/planargraph.h>
+#include <geos/planargraph/DirectedEdge.h>
 
 using namespace geos::planargraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -34,9 +35,11 @@ namespace polygonize { // geos.operation.polygonize
  *        whether this DirectedEdge's direction is the same as or
  *        opposite to that of the parent Edge (if any)
  */
-PolygonizeDirectedEdge::PolygonizeDirectedEdge(planarNode *newFrom,
-	planarNode *newTo, const Coordinate& newDirectionPt,
-	bool nEdgeDirection): planarDirectedEdge(newFrom, newTo,
+PolygonizeDirectedEdge::PolygonizeDirectedEdge(Node *newFrom,
+		Node *newTo, const Coordinate& newDirectionPt,
+		bool nEdgeDirection)
+	:
+	DirectedEdge(newFrom, newTo,
 		newDirectionPt, nEdgeDirection)
 {
 	edgeRing=NULL;
@@ -107,6 +110,9 @@ PolygonizeDirectedEdge::setRing(polygonizeEdgeRing *newEdgeRing)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
+ *
  * Revision 1.5  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *

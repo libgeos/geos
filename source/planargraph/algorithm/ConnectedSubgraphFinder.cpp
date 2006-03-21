@@ -14,8 +14,15 @@
  **********************************************************************/
 
 
-#include <geos/planargraph.h>
+#include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
+#include <geos/planargraph/Subgraph.h>
+#include <geos/planargraph/Edge.h>
+#include <geos/planargraph/Node.h>
+#include <geos/planargraph/DirectedEdge.h>
+#include <geos/planargraph/DirectedEdgeStar.h>
+
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -24,18 +31,18 @@ namespace planargraph {
 namespace algorithm {
 
 void
-ConnectedSubgraphFinder::getConnectedSubgraphs(vector<planarSubgraph *>& subgraphs)
+ConnectedSubgraphFinder::getConnectedSubgraphs(vector<Subgraph *>& subgraphs)
 {
-	planarGraphComponent::setVisitedMap(graph.nodeBegin(),
+	GraphComponent::setVisitedMap(graph.nodeBegin(),
 			graph.nodeEnd(), false);
 
-	for (planarPlanarGraph::EdgeIterator
+	for (PlanarGraph::EdgeIterator
 			it=graph.edgeBegin(),
 			itEnd=graph.edgeEnd();
 			it!=itEnd; ++it)
 	{
-		planarEdge *e = *it;
-		planarNode *node = e->getDirEdge(0)->getFromNode();
+		Edge *e = *it;
+		Node *node = e->getDirEdge(0)->getFromNode();
 		if (! node->isVisited()) {
 			subgraphs.push_back(findSubgraph(node));
 		}
@@ -44,24 +51,24 @@ ConnectedSubgraphFinder::getConnectedSubgraphs(vector<planarSubgraph *>& subgrap
 }
 
 /*private*/
-planarSubgraph* 
-ConnectedSubgraphFinder::findSubgraph(planarNode* node)
+Subgraph* 
+ConnectedSubgraphFinder::findSubgraph(Node* node)
 {
-	planarSubgraph* subgraph = new planarSubgraph(graph);
+	Subgraph* subgraph = new Subgraph(graph);
 	addReachable(node, subgraph);
 	return subgraph;
 }
 
 /*private*/
 void
-ConnectedSubgraphFinder::addReachable(planarNode* startNode,
-		planarSubgraph* subgraph)
+ConnectedSubgraphFinder::addReachable(Node* startNode,
+		Subgraph* subgraph)
 {
-	stack<planarNode *> nodeStack;
+	stack<Node *> nodeStack;
 	nodeStack.push(startNode);
 	while ( !nodeStack.empty() )
 	{
-		planarNode* node = nodeStack.top();
+		Node* node = nodeStack.top();
 		nodeStack.pop();
 		addEdges(node, nodeStack, subgraph);
 	}
@@ -69,17 +76,17 @@ ConnectedSubgraphFinder::addReachable(planarNode* startNode,
 
 /*private*/
 void
-ConnectedSubgraphFinder::addEdges(planarNode* node,
-		stack<planarNode *>& nodeStack, planarSubgraph* subgraph)
+ConnectedSubgraphFinder::addEdges(Node* node,
+		stack<Node *>& nodeStack, Subgraph* subgraph)
 {
 	node->setVisited(true);
-	planarDirectedEdgeStar *des=node->getOutEdges();
-	for (planarDirectedEdge::Vect::iterator i=des->begin(), iEnd=des->end();
+	DirectedEdgeStar *des=node->getOutEdges();
+	for (DirectedEdge::Vect::iterator i=des->begin(), iEnd=des->end();
 			i!=iEnd; ++i)
 	{
-		planarDirectedEdge *de=*i;
+		DirectedEdge *de=*i;
 		subgraph->add(de->getEdge());
-		planarNode *toNode = de->getToNode();
+		Node *toNode = de->getToNode();
 		if ( ! toNode->isVisited() ) nodeStack.push(toNode);
 	}
 }
@@ -91,29 +98,7 @@ ConnectedSubgraphFinder::addEdges(planarNode* node,
 
 /**********************************************************************
  * $Log$
- * Revision 1.4  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.3  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.2  2006/02/08 12:59:56  strk
- * - NEW Geometry::applyComponentFilter() templated method
- * - Changed Geometry::getGeometryN() to take unsigned int and getNumGeometries
- *   to return unsigned int.
- * - Changed planarNode::getDegree() to return unsigned int.
- * - Added Geometry::NonConstVect typedef
- * - NEW LineSequencer class
- * - Changed planarDirectedEdgeStar::outEdges from protected to private
- * - added static templated setVisitedMap to change Visited flag
- *   for all values in a map
- * - Added const versions of some planarDirectedEdgeStar methods.
- * - Added containers typedefs for planarDirectedEdgeStar
- *
- * Revision 1.1  2006/02/05 17:14:43  strk
- * - New ConnectedSubgraphFinder class.
- * - More iterators returning methods, inlining and cleanups
- *   in planargraph.
- *
+ * Revision 1.5  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
  **********************************************************************/

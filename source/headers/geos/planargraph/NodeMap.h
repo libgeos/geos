@@ -1,0 +1,124 @@
+/**********************************************************************
+ * $Id$
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005-2006 Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#ifndef GEOS_PLANARGRAPH_NODEMAP_H
+#define GEOS_PLANARGRAPH_NODEMAP_H
+
+#include <geos/geom/Coordinate.h> // for use in container
+
+#include <map>
+#include <vector>
+
+// Forward declarations
+namespace geos {
+	namespace planargraph { 
+		class DirectedEdgeStar;
+		class DirectedEdge;
+		class Edge;
+		class Node;
+	}
+}
+
+namespace geos {
+namespace planargraph { // geos.planargraph
+
+/**
+ * \brief
+ * A map of Node, indexed by the coordinate of the node.
+ *
+ */
+class NodeMap {
+public:
+	typedef std::map<geom::Coordinate, Node*, geom::CoordinateLessThen> container;
+private:
+	container nodeMap;
+public:  
+	/**
+	 * \brief Constructs a NodeMap without any Nodes.
+	 */
+	NodeMap();
+
+	container& getNodeMap();
+
+	virtual ~NodeMap();
+
+	/**
+	 * \brief
+	 * Adds a node to the std::map, replacing any that is already
+	 * at that location.
+	 * @return the added node
+	 */
+	Node* add(Node *n);
+
+	/**
+	 * \brief
+	 * Removes the Node at the given location, and returns it
+	 * (or null if no Node was there).
+	 */
+	Node* remove(geom::Coordinate& pt);
+
+	/**
+	 * \brief
+	 * Returns the Node at the given location,
+	 * or null if no Node was there.
+	 */
+	Node* find(const geom::Coordinate& coord);
+
+	/**
+	 * \brief
+	 * Returns an Iterator over the Nodes in this NodeMap,
+	 * sorted in ascending order
+	 * by angle with the positive x-axis.
+	 */
+	container::iterator iterator() {
+		return nodeMap.begin();
+	}
+
+	container::iterator begin() {
+		return nodeMap.begin();
+	}
+	container::const_iterator begin() const {
+		return nodeMap.begin();
+	}
+
+	container::iterator end() {
+		return nodeMap.end();
+	}
+	container::const_iterator end() const {
+		return nodeMap.end();
+	}
+
+	/**
+	 * \brief
+	 * Returns the Nodes in this NodeMap, sorted in ascending order
+	 * by angle with the positive x-axis.
+	 */
+	std::vector<Node*>* getNodes();
+};
+
+
+} // namespace geos::planargraph
+} // namespace geos
+
+#endif // GEOS_PLANARGRAPH_NODEMAP_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.1  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
+ *
+ **********************************************************************/
+

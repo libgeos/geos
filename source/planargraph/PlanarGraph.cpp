@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
@@ -14,8 +14,14 @@
  *
  **********************************************************************/
 
-#include <geos/planargraph.h>
+#include <geos/planargraph/PlanarGraph.h>
+#include <geos/planargraph/Edge.h>
+#include <geos/planargraph/NodeMap.h>
+#include <geos/planargraph/Node.h>
+#include <geos/planargraph/DirectedEdge.h>
+
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -31,7 +37,7 @@ namespace planargraph {
  * the right class.
  */
 void
-planarPlanarGraph::add(planarEdge *edge)
+PlanarGraph::add(Edge *edge)
 {
 	edges.push_back(edge);
 	add(edge->getDirEdge(0));
@@ -46,7 +52,7 @@ planarPlanarGraph::add(planarEdge *edge)
  * Node to zero.
  */
 void
-planarPlanarGraph::remove(planarEdge *edge)
+PlanarGraph::remove(Edge *edge)
 {
 	remove(edge->getDirEdge(0));
 	remove(edge->getDirEdge(1));
@@ -66,9 +72,9 @@ planarPlanarGraph::remove(planarEdge *edge)
  * zero.
  */
 void
-planarPlanarGraph::remove(planarDirectedEdge *de)
+PlanarGraph::remove(DirectedEdge *de)
 {
-	planarDirectedEdge *sym = de->getSym();
+	DirectedEdge *sym = de->getSym();
 	if (sym!=NULL) sym->setSym(NULL);
 	de->getFromNode()->getOutEdges()->remove(de);
 	for(unsigned int i=0; i<dirEdges.size(); ++i) {
@@ -84,13 +90,13 @@ planarPlanarGraph::remove(planarDirectedEdge *de)
  * DirectedEdges and Edges.
  */
 void
-planarPlanarGraph::remove(planarNode *node)
+PlanarGraph::remove(Node *node)
 {
 	// unhook all directed edges
-	vector<planarDirectedEdge*> &outEdges=node->getOutEdges()->getEdges();
+	vector<DirectedEdge*> &outEdges=node->getOutEdges()->getEdges();
 	for(unsigned int i=0; i<outEdges.size(); ++i) {
-		planarDirectedEdge *de =outEdges[i];
-		planarDirectedEdge *sym = de->getSym();
+		DirectedEdge *de =outEdges[i];
+		DirectedEdge *sym = de->getSym();
 		// remove the diredge that points to this node
 		if (sym!=NULL) remove(sym);
 		// remove this diredge from the graph collection
@@ -100,7 +106,7 @@ planarPlanarGraph::remove(planarNode *node)
 				--j;
 			}
 		}
-		planarEdge *edge=de->getEdge();
+		Edge *edge=de->getEdge();
 		if (edge!=NULL) {
 			for(unsigned int k=0; k<edges.size(); ++k) {
 				if(edges[k]==edge) {
@@ -119,14 +125,14 @@ planarPlanarGraph::remove(planarNode *node)
  * Returns all Nodes with the given number of Edges around it.
  * The return value is a newly allocated vector of existing nodes
  */
-vector<planarNode*>*
-planarPlanarGraph::findNodesOfDegree(int degree)
+vector<Node*>*
+PlanarGraph::findNodesOfDegree(int degree)
 {
-	vector<planarNode*> *nodesFound=new vector<planarNode*>();
-	map<Coordinate,planarNode*,planarCoordLT> &nm=nodeMap.getNodeMap();
-	map<Coordinate,planarNode*,planarCoordLT>::iterator it=nm.begin();
+	vector<Node*> *nodesFound=new vector<Node*>();
+	NodeMap::container &nm=nodeMap.getNodeMap();
+	NodeMap::container::iterator it=nm.begin();
 	for ( ; it!=nm.end(); ++it) {
-		planarNode *node=it->second;
+		Node *node=it->second;
 		if (node->getDegree()==degree)
 			nodesFound->push_back(node);
 	}
@@ -138,37 +144,8 @@ planarPlanarGraph::findNodesOfDegree(int degree)
 
 /**********************************************************************
  * $Log$
- * Revision 1.7  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.6  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.5  2006/02/05 17:14:43  strk
- * - New ConnectedSubgraphFinder class.
- * - More iterators returning methods, inlining and cleanups
- *   in planargraph.
- *
- * Revision 1.4  2005/11/15 12:14:05  strk
- * Reduced heap allocations, made use of references when appropriate,
- * small optimizations here and there.
- *
- * Revision 1.3  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/07 06:55:50  ybychkov
- * "operation/linemerge" ported from JTS 1.4
- *
- * Revision 1.1  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
+ * Revision 1.3  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
  **********************************************************************/
 

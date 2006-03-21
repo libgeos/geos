@@ -17,19 +17,24 @@
 #include <cassert>
 
 #include <geos/opLinemerge.h>
-#include <geos/planargraph.h>
-#include <geos/util.h>
+#include <geos/planargraph/DirectedEdge.h>
+//#include <geos/util.h>
 
-using namespace geos::planargraph;
+//using namespace geos::planargraph;
+//using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
-LineMergeDirectedEdge::LineMergeDirectedEdge(planarNode *newFrom,
-		planarNode *newTo, const Coordinate& newDirectionPt,
-		bool nEdgeDirection):
-	planarDirectedEdge(newFrom,newTo,newDirectionPt,nEdgeDirection)
+LineMergeDirectedEdge::LineMergeDirectedEdge(
+		planargraph::Node *newFrom,
+		planargraph::Node *newTo,
+		const Coordinate& newDirectionPt,
+		bool nEdgeDirection)
+	:
+	planargraph::DirectedEdge(newFrom, newTo,
+			newDirectionPt, nEdgeDirection)
 {}
 
 /**
@@ -60,29 +65,8 @@ LineMergeDirectedEdge::getNext()
 
 /**********************************************************************
  * $Log$
- * Revision 1.6  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.5  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.4  2005/11/15 12:14:05  strk
- * Reduced heap allocations, made use of references when appropriate,
- * small optimizations here and there.
- *
- * Revision 1.3  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.2  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/07 06:55:50  ybychkov
- * "operation/linemerge" ported from JTS 1.4
- *
+ * Revision 1.7  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
  **********************************************************************/
 

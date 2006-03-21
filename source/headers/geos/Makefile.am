@@ -4,6 +4,7 @@ SUBDIRS = \
 	geom \
 	noding \
 	operation \
+	planargraph \
 	index \
 	io \
 	util 

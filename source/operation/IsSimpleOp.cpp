@@ -16,17 +16,27 @@
  *
  **********************************************************************/
 
-#include <set>
+#include <geos/operation/IsSimpleOp.h>
+#include <geos/operation/EndpointInfo.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeIntersection.h>
+#include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Coordinate.h>
 
-#include <geos/operation.h>
-#include <geos/geosAlgorithm.h>
-#include <geos/geomgraph.h>
-#include <geos/geomgraphindex.h>
+#include <set>
+#include <cassert>
 
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geomgraph::index;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -53,10 +63,12 @@ bool
 IsSimpleOp::isSimple(const MultiPoint *mp)
 {
 	if (mp->isEmpty()) return true;
-	set<const Coordinate*, CoordinateLessThen>points;
+	set<const Coordinate*, CoordinateLessThen> points;
 
-	for(int i=0;i<mp->getNumGeometries();i++) {
-		Point *pt=(Point*) mp->getGeometryN(i);
+	for (unsigned int i=0, n=mp->getNumGeometries(); i<n; i++)
+	{
+		assert(dynamic_cast<const Point*>(mp->getGeometryN(i)));
+		const Point *pt=static_cast<const Point*>(mp->getGeometryN(i));
 		const Coordinate *p=pt->getCoordinate();
 		if (points.find(p) != points.end()) {
 			return false;
@@ -126,7 +138,7 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 bool
 IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 {
-	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>endPoints;
+	map<const Coordinate*,EndpointInfo*,CoordinateLessThen> endPoints;
 	vector<Edge*> *edges=graph.getEdges();
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
@@ -200,6 +212,9 @@ EndpointInfo::addEndpoint(bool newIsClosed)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
+ *
  * Revision 1.22  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

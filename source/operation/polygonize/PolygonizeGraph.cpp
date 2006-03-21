@@ -18,8 +18,9 @@
 #include <vector>
 
 #include <geos/opPolygonize.h>
-#include <geos/util.h>
-#include <geos/planargraph.h>
+#include <geos/planargraph/Node.h>
+#include <geos/planargraph/DirectedEdgeStar.h>
+#include <geos/planargraph/DirectedEdge.h>
 
 //using namespace std;
 using namespace geos::planargraph;
@@ -29,9 +30,9 @@ namespace operation { // geos.operation
 namespace polygonize { // geos.operation.polygonize
 
 int
-PolygonizeGraph::getDegreeNonDeleted(planarNode *node)
+PolygonizeGraph::getDegreeNonDeleted(Node *node)
 {
-	std::vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
+	std::vector<DirectedEdge*> &edges=node->getOutEdges()->getEdges();
 	int degree=0;
 	for(unsigned int i=0; i<edges.size(); ++i) {
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
@@ -41,9 +42,9 @@ PolygonizeGraph::getDegreeNonDeleted(planarNode *node)
 }
 
 int
-PolygonizeGraph::getDegree(planarNode *node, long label)
+PolygonizeGraph::getDegree(Node *node, long label)
 {
-	std::vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
+	std::vector<DirectedEdge*> &edges=node->getOutEdges()->getEdges();
 	int degree=0;
 	for(unsigned int i=0; i<edges.size(); ++i)
 	{
@@ -57,9 +58,9 @@ PolygonizeGraph::getDegree(planarNode *node, long label)
  * Deletes all edges at a node
  */
 void
-PolygonizeGraph::deleteAllEdges(planarNode *node)
+PolygonizeGraph::deleteAllEdges(Node *node)
 {
-	std::vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
+	std::vector<DirectedEdge*> &edges=node->getOutEdges()->getEdges();
 	for(unsigned int i=0; i<edges.size(); ++i) {
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
 		de->setMarked(true);
@@ -117,13 +118,13 @@ PolygonizeGraph::addEdge(const LineString *line)
 
 	const Coordinate& startPt=linePts->getAt(0);
 	const Coordinate& endPt=linePts->getAt(linePts->getSize()-1);
-	planarNode *nStart=getNode(startPt);
-	planarNode *nEnd=getNode(endPt);
-	planarDirectedEdge *de0=new PolygonizeDirectedEdge(nStart, nEnd, linePts->getAt(1), true);
+	Node *nStart=getNode(startPt);
+	Node *nEnd=getNode(endPt);
+	DirectedEdge *de0=new PolygonizeDirectedEdge(nStart, nEnd, linePts->getAt(1), true);
 	newDirEdges.push_back(de0);
-	planarDirectedEdge *de1=new PolygonizeDirectedEdge(nEnd, nStart, linePts->getAt(linePts->getSize()-2), false);
+	DirectedEdge *de1=new PolygonizeDirectedEdge(nEnd, nStart, linePts->getAt(linePts->getSize()-2), false);
 	newDirEdges.push_back(de1);
-	planarEdge *edge=new PolygonizeEdge(line);
+	Edge *edge=new PolygonizeEdge(line);
 	newEdges.push_back(edge);
 	edge->setDirectedEdges(de0, de1);
 	add(edge);
@@ -131,12 +132,12 @@ PolygonizeGraph::addEdge(const LineString *line)
 	newCoords.push_back(linePts);
 }
 
-planarNode *
+Node *
 PolygonizeGraph::getNode(const Coordinate& pt)
 {
-	planarNode *node=findNode(pt);
+	Node *node=findNode(pt);
 	if (node==NULL) {
-		node=new planarNode(pt);
+		node=new Node(pt);
 		newNodes.push_back(node);
 		// ensure node is only added once to graph
 		add(node);
@@ -147,10 +148,10 @@ PolygonizeGraph::getNode(const Coordinate& pt)
 void
 PolygonizeGraph::computeNextCWEdges()
 {
-	std::vector<planarNode*> *pns=getNodes();
+	std::vector<Node*> *pns=getNodes();
 	// set the next pointers for the edges around each node
 	for(int i=0;i<(int)pns->size();i++) {
-		planarNode *node=(*pns)[i];
+		Node *node=(*pns)[i];
 		computeNextCWEdges(node);
 	}
 	delete pns;
@@ -169,16 +170,16 @@ PolygonizeGraph::convertMaximalToMinimalEdgeRings(std::vector<PolygonizeDirected
 	{
 		PolygonizeDirectedEdge *de=(*ringEdges)[i];
 		long label=de->getLabel();
-		std::vector<planarNode*> *intNodes=findIntersectionNodes(de, label);
+		std::vector<Node*> *intNodes=findIntersectionNodes(de, label);
 		if (intNodes==NULL) continue;
 
 		// flip the next pointers on the intersection nodes to
 		// create minimal edge rings
-		//std::vector<planarNode*> *pns=getNodes();
+		//std::vector<Node*> *pns=getNodes();
 
 		// set the next pointers for the edges around each node
 		for(int j=0;j<(int)intNodes->size();j++) {
-			planarNode *node=(*intNodes)[j];
+			Node *node=(*intNodes)[j];
 			computeNextCCWEdges(node, label);
 		}
 
@@ -194,16 +195,16 @@ PolygonizeGraph::convertMaximalToMinimalEdgeRings(std::vector<PolygonizeDirected
  * or <code>NULL</code> if no intersection nodes were found.
  * Ownership of returned object goes to caller.
  */
-std::vector<planarNode*>*
+std::vector<Node*>*
 PolygonizeGraph::findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label)
 {
 	PolygonizeDirectedEdge *de=startDE;
-	std::vector<planarNode*> *intNodes=NULL;
+	std::vector<Node*> *intNodes=NULL;
 	do {
-		planarNode *node=de->getFromNode();
+		Node *node=de->getFromNode();
 		if (getDegree(node, label) > 1) {
 			if (intNodes==NULL)
-				intNodes=new std::vector<planarNode*>();
+				intNodes=new std::vector<Node*>();
 			intNodes->push_back(node);
 		}
 		de=de->getNext();
@@ -250,7 +251,7 @@ PolygonizeGraph::getEdgeRings()
 * @return a List of DirectedEdges, one for each edge ring found
 */
 std::vector<PolygonizeDirectedEdge*>*
-PolygonizeGraph::findLabeledEdgeRings(std::vector<planarDirectedEdge*> &dirEdges)
+PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*> &dirEdges)
 {
 	std::vector<PolygonizeDirectedEdge*> *edgeRingStarts=new std::vector<PolygonizeDirectedEdge*>();
 	// label the edge rings formed
@@ -261,7 +262,7 @@ PolygonizeGraph::findLabeledEdgeRings(std::vector<planarDirectedEdge*> &dirEdges
 		if (de->isMarked()) continue;
 		if (de->getLabel() >= 0) continue;
 		edgeRingStarts->push_back(de);
-		std::vector<planarDirectedEdge*> *edges=findDirEdgesInRing(de);
+		std::vector<DirectedEdge*> *edges=findDirEdgesInRing(de);
 		label(*edges, currLabel);
 		delete edges;
 		++currLabel;
@@ -302,7 +303,7 @@ PolygonizeGraph::deleteCutEdges()
 }
 
 void
-PolygonizeGraph::label(std::vector<planarDirectedEdge*> &dirEdges, long label)
+PolygonizeGraph::label(std::vector<DirectedEdge*> &dirEdges, long label)
 {
 	for(unsigned int i=0; i<dirEdges.size(); ++i)
 	{
@@ -312,14 +313,14 @@ PolygonizeGraph::label(std::vector<planarDirectedEdge*> &dirEdges, long label)
 }
 
 void
-PolygonizeGraph::computeNextCWEdges(planarNode *node)
+PolygonizeGraph::computeNextCWEdges(Node *node)
 {
-	planarDirectedEdgeStar *deStar=node->getOutEdges();
+	DirectedEdgeStar *deStar=node->getOutEdges();
 	PolygonizeDirectedEdge *startDE=NULL;
 	PolygonizeDirectedEdge *prevDE=NULL;
 
 	// the edges are stored in CCW order around the star
-	std::vector<planarDirectedEdge*> &pde=deStar->getEdges();
+	std::vector<DirectedEdge*> &pde=deStar->getEdges();
 	for(unsigned int i=0; i<pde.size(); ++i) {
 		PolygonizeDirectedEdge *outDE=(PolygonizeDirectedEdge*)pde[i];
 		if (outDE->isMarked()) continue;
@@ -344,14 +345,14 @@ PolygonizeGraph::computeNextCWEdges(planarNode *node)
  * minimal edgerings
  */
 void
-PolygonizeGraph::computeNextCCWEdges(planarNode *node, long label)
+PolygonizeGraph::computeNextCCWEdges(Node *node, long label)
 {
-	planarDirectedEdgeStar *deStar=node->getOutEdges();
+	DirectedEdgeStar *deStar=node->getOutEdges();
 	PolygonizeDirectedEdge *firstOutDE=NULL;
 	PolygonizeDirectedEdge *prevInDE=NULL;
 
 	// the edges are stored in CCW order around the star
-	std::vector<planarDirectedEdge*> &edges=deStar->getEdges();
+	std::vector<DirectedEdge*> &edges=deStar->getEdges();
 
 	/*
 	 * Must use a SIGNED int here to allow for beak condition
@@ -392,11 +393,11 @@ PolygonizeGraph::computeNextCCWEdges(planarNode *node, long label)
  * @param startDE the DirectedEdge to start traversing at
  * @return a List of DirectedEdges that form a ring
  */
-std::vector<planarDirectedEdge*>*
+std::vector<DirectedEdge*>*
 PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE)
 {
 	PolygonizeDirectedEdge *de=startDE;
-	std::vector<planarDirectedEdge*> *edges=new std::vector<planarDirectedEdge*>();
+	std::vector<DirectedEdge*> *edges=new std::vector<DirectedEdge*>();
 	do {
 		edges->push_back(de);
 		de=de->getNext();
@@ -436,18 +437,18 @@ PolygonizeGraph::findEdgeRing(PolygonizeDirectedEdge *startDE)
 std::vector<const LineString*>*
 PolygonizeGraph::deleteDangles()
 {
-	std::vector<planarNode*> *nodesToRemove=findNodesOfDegree(1);
+	std::vector<Node*> *nodesToRemove=findNodesOfDegree(1);
 	std::vector<const LineString*> *dangleLines=new std::vector<const LineString*>();
-	std::vector<planarNode*> nodeStack;
+	std::vector<Node*> nodeStack;
 	for(int i=0;i<(int)nodesToRemove->size();i++) {
 		nodeStack.push_back((*nodesToRemove)[i]);
 	}
 	delete nodesToRemove;
 	while (!nodeStack.empty()) {
-		planarNode *node=nodeStack[nodeStack.size()-1];
+		Node *node=nodeStack[nodeStack.size()-1];
 		nodeStack.pop_back();
 		deleteAllEdges(node);
-		std::vector<planarDirectedEdge*> &nodeOutEdges=node->getOutEdges()->getEdges();
+		std::vector<DirectedEdge*> &nodeOutEdges=node->getOutEdges()->getEdges();
 		for(unsigned int j=0; j<nodeOutEdges.size(); ++j)
 		{
 			PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)nodeOutEdges[j];
@@ -459,7 +460,7 @@ PolygonizeGraph::deleteDangles()
 			// save the line as a dangle
 			PolygonizeEdge *e=(PolygonizeEdge*) de->getEdge();
 			dangleLines->push_back(e->getLine());
-			planarNode *toNode=de->getToNode();
+			Node *toNode=de->getToNode();
 			// add the toNode to the list to be processed, if it is now a dangle
 			if (getDegreeNonDeleted(toNode)==1)
 				nodeStack.push_back(toNode);
@@ -474,6 +475,9 @@ PolygonizeGraph::deleteDangles()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
+ *
  * Revision 1.16  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

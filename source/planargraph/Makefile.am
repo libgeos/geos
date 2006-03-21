@@ -5,14 +5,13 @@ noinst_LTLIBRARIES = libplanargraph.la
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libplanargraph_la_SOURCES = \
-	planarDirectedEdge.cpp \
-	planarDirectedEdgeStar.cpp \
-	planarEdge.cpp \
-	planarGraphComponent.cpp \
-	planarNode.cpp \
-	planarNodeMap.cpp \
-	planarPlanarGraph.cpp \
-	planarSubgraph.cpp \
+	DirectedEdge.cpp \
+	DirectedEdgeStar.cpp \
+	Edge.cpp \
+	Node.cpp \
+	NodeMap.cpp \
+	PlanarGraph.cpp \
+	Subgraph.cpp \
 	algorithm/ConnectedSubgraphFinder.cpp
 
 libplanargraph_la_LIBADD = 

@@ -15,8 +15,9 @@
  **********************************************************************/
 
 #include <geos/opLinemerge.h>
-#include <geos/planargraph.h>
-#include <geos/util.h>
+#include <geos/planargraph/DirectedEdge.h>
+//#include <geos/util.h>
+
 #include <cassert>
 #include <functional>
 #include <vector>
@@ -121,9 +122,9 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 #if GEOS_DEBUG
 	cerr<<__FUNCTION__<<endl;
 #endif
-	vector<planarNode*> *nodes=graph.getNodes();
+	vector<Node*> *nodes=graph.getNodes();
 	for (unsigned int i=0; i<nodes->size(); ++i) {
-		planarNode *node=(*nodes)[i];
+		Node *node=(*nodes)[i];
 #if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
 #endif
@@ -145,10 +146,10 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 #if GEOS_DEBUG
 	cerr<<__FUNCTION__<<endl;
 #endif
-	vector<planarNode*> *nodes=graph.getNodes();
+	vector<Node*> *nodes=graph.getNodes();
 	unsigned int size=nodes->size();
 	for (unsigned int i=0; i<size; i++) {
-		planarNode *node=(*nodes)[i];
+		Node *node=(*nodes)[i];
 #if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
 #endif
@@ -164,9 +165,9 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 }
 
 void
-LineMerger::buildEdgeStringsStartingAt(planarNode *node)
+LineMerger::buildEdgeStringsStartingAt(Node *node)
 {
-	vector<planarDirectedEdge*> &edges=node->getOutEdges()->getEdges();
+	vector<planargraph::DirectedEdge*> &edges=node->getOutEdges()->getEdges();
 	unsigned int size = edges.size();
 	for (unsigned int i=0; i<size; i++)
 	{
@@ -207,52 +208,8 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
- * Revision 1.12  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.11  2006/03/02 12:12:01  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.10  2006/02/24 15:39:07  strk
- * - operator>> for Coordinate, planarNode and planarEdge
- * - Fixed bug in planarGraphComponent::setMarked
- * - Added linemerge.xml test (single test, should grow a bit)
- *
- * Revision 1.9  2006/02/23 23:17:52  strk
- * - Coordinate::nullCoordinate made private
- * - Simplified Coordinate inline definitions
- * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
- * - Misc cleanups
- *
- * Revision 1.8  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.7  2005/11/15 12:14:05  strk
- * Reduced heap allocations, made use of references when appropriate,
- * small optimizations here and there.
- *
- * Revision 1.6  2005/09/26 11:01:32  strk
- * Const correctness changes in LineMerger package, and a few speedups.
- *
- * Revision 1.5  2005/09/23 17:20:13  strk
- * Made LineMerger graph be a real object (rather then a pointer to it)
- *
- * Revision 1.4  2004/12/08 13:54:44  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.3  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.2  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/07 06:55:50  ybychkov
- * "operation/linemerge" ported from JTS 1.4
- *
+ * Revision 1.13  2006/03/21 21:42:54  strk
+ * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
  **********************************************************************/
  
