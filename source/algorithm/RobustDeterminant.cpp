@@ -275,23 +275,14 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/21 11:12:23  strk
+ * Cleanups: headers inclusion and Log section
+ *
  * Revision 1.9  2006/03/21 10:46:03  strk
  * streamlined header inclusion, put original copyright on top
  *
  * Revision 1.8  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.7  2005/04/06 11:09:41  strk
- * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
- *
- * Revision 1.6  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

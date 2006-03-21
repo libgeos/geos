@@ -14,12 +14,6 @@
  *
  **********************************************************************/
 
-#include <typeinfo>
-#include <cassert>
-
-//#include <geos/geosAlgorithm.h>
-//#include <geos/platform.h>
-
 #include <geos/algorithm/InteriorPointPoint.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
@@ -27,6 +21,9 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/CoordinateSequence.h>
+
+#include <typeinfo>
+#include <cassert>
 
 using namespace geos::geom;
 
@@ -90,28 +87,10 @@ InteriorPointPoint::getInteriorPoint(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/21 11:12:23  strk
+ * Cleanups: headers inclusion and Log section
+ *
  * Revision 1.13  2006/03/09 16:46:45  strk
  * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.12  2006/03/01 18:36:57  strk
- * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
- * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.
- *
- * Revision 1.11  2006/03/01 17:16:31  strk
- * LineSegment class made final and optionally (compile-time) inlined.
- * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
- *
- * Revision 1.10  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.9  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 

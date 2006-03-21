@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/21 11:12:23  strk
+ * Cleanups: headers inclusion and Log section
+ *
  * Revision 1.11  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
@@ -33,7 +36,8 @@
 
 #include <geos/geosAlgorithm.h>
 #include <geos/util.h>
-#include <stdio.h>
+
+//#include <stdio.h>
 #include <cmath>
 
 namespace geos {

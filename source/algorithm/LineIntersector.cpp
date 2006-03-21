@@ -24,12 +24,6 @@
  *
  **********************************************************************/
 
-#include <string>
-#include <cmath> // for fabs()
-#include <cassert> 
-
-//#include <geos/geosAlgorithm.h>
-//#include <geos/util.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/HCoordinate.h>
@@ -37,6 +31,10 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
+
+#include <string>
+#include <cmath> // for fabs()
+#include <cassert> 
 
 
 #ifndef GEOS_DEBUG
@@ -804,155 +802,12 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/03/21 11:12:23  strk
+ * Cleanups: headers inclusion and Log section
+ *
  * Revision 1.37  2006/03/16 10:38:14  strk
  * Bug #63 - Remove unreferenced local variable warning
  *
  * Revision 1.36  2006/03/09 16:46:45  strk
  * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.35  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.34  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.33  2006/03/02 12:11:58  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.32  2006/02/27 09:05:32  strk
- * Doxygen comments, a few inlines and general cleanups
- *
- * Revision 1.31  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.30  2006/02/14 13:28:25  strk
- * New SnapRounding code ported from JTS-1.7 (not complete yet).
- * Buffer op optimized by using new snaprounding code.
- * Leaks fixed in XMLTester.
- *
- * Revision 1.29  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.28  2006/01/30 21:59:18  frank
- * yikes!  comment out debug define again
- *
- * Revision 1.27  2006/01/30 21:58:38  frank
- * fixed up some debug messages
- *
- * Revision 1.26  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.25  2005/11/15 18:30:59  strk
- * Removed dead code
- *
- * Revision 1.24  2005/06/24 11:09:42  strk
- * Dropped RobustLineIntersector, made LineIntersector a concrete class.
- * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
- * to avoid computing intersection point (Z) when it's not necessary.
- *
- * Revision 1.33  2005/05/09 10:35:20  strk
- * Ported JTS robustness patches made by Martin on suggestions by Kevin.
- *
- * Revision 1.32  2005/02/15 17:15:13  strk
- * Inlined most Envelope methods, reserved() memory for some vectors when
- * the usage was known a priori.
- *
- * Revision 1.31  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.30  2005/01/18 17:09:53  strk
- * Fixed interpolateZ call using final intersection point instead of HCoordinate.
- *
- * Revision 1.29  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.28  2004/11/29 16:05:33  strk
- * Fixed a bug in LineIntersector::interpolateZ causing NaN values
- * to come out.
- * Handled dimensional collapses in ElevationMatrix.
- * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
- * dispendious isnan() and finite() calls.
- *
- * Revision 1.27  2004/11/26 09:53:48  strk
- * Added more FINITE calls, and added inf and -inf to FINITE checks
- *
- * Revision 1.26  2004/11/23 19:53:06  strk
- * Had LineIntersector compute Z by interpolation.
- *
- * Revision 1.25  2004/11/22 13:02:40  strk
- * Fixed a bug in Collinear intersection Z computation
- *
- * Revision 1.24  2004/11/22 11:34:16  strk
- * Added Z computation for CollinearIntersections
- *
- * Revision 1.23  2004/11/20 15:40:49  strk
- * Added Z computation in point-segment intersection.
- *
- * Revision 1.22  2004/11/17 15:09:08  strk
- * Changed COMPUTE_Z defaults to be more conservative
- *
- * Revision 1.21  2004/11/17 08:41:42  strk
- * Fixed a bug in Z computation and removed debugging output by default.
- *
- * Revision 1.20  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.19  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.18  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.17  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.16  2004/03/25 02:23:55  ybychkov
- * All "index/" packages upgraded to JTS 1.4
- *
- * Revision 1.15  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.14  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/

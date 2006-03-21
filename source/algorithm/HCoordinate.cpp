@@ -20,13 +20,12 @@
  *
  **********************************************************************/
 
-#include <memory>
-//#include <geos/geosAlgorithm.h>
-
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/platform.h>
+
+#include <memory>
 
 using namespace std;
 using namespace geos::geom;
@@ -125,74 +124,10 @@ HCoordinate::getCoordinate(Coordinate &ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/21 11:12:23  strk
+ * Cleanups: headers inclusion and Log section
+ *
  * Revision 1.17  2006/03/09 16:46:45  strk
  * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.16  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.15  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.14  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.13  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.12  2004/11/29 16:05:33  strk
- * Fixed a bug in LineIntersector::interpolateZ causing NaN values
- * to come out.
- * Handled dimensional collapses in ElevationMatrix.
- * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
- * dispendious isnan() and finite() calls.
- *
- * Revision 1.11  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.10  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.9  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 

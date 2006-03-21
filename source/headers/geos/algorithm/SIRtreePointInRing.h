@@ -17,10 +17,9 @@
 #ifndef GEOS_ALGORITHM_SIRTREEPOINTINRING_H
 #define GEOS_ALGORITHM_SIRTREEPOINTINRING_H
 
-#include <vector>
+#include <geos/algorithm/PointInRing.h> // for inheritance
 
-// FIXME: to be changed to <geos/index/strtree/SIRtree.h>
-#include <geos/indexStrtree.h>
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -28,6 +27,11 @@ namespace geos {
 		class Coordinate;
 		class LineSegment;
 		class LinearRing;
+	}
+	namespace index {
+		namespace strtree {
+			class SIRtree;
+		}
 	}
 }
 
@@ -56,6 +60,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/21 11:12:23  strk
+ * Cleanups: headers inclusion and Log section
+ *
  * Revision 1.1  2006/03/09 16:46:48  strk
  * geos::geom namespace definition, first pass at headers split
  *

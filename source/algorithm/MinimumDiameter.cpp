@@ -19,9 +19,6 @@
  *
  **********************************************************************/
 
-#include <typeinfo>
-
-//#include <geos/geosAlgorithm.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/ConvexHull.h>
 #include <geos/geom/Geometry.h>
@@ -31,6 +28,8 @@
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+
+#include <typeinfo>
 
 using namespace geos::geom;
 
@@ -276,74 +275,10 @@ MinimumDiameter::getNextIndex(const CoordinateSequence *pts,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/21 11:12:23  strk
+ * Cleanups: headers inclusion and Log section
+ *
  * Revision 1.14  2006/03/09 16:46:45  strk
  * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.13  2006/03/01 17:16:32  strk
- * LineSegment class made final and optionally (compile-time) inlined.
- * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
- *
- * Revision 1.12  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.11  2006/01/31 19:07:33  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.10  2005/11/29 15:16:44  strk
- * Fixed sign-related warnings and signatures.
- *
- * Revision 1.9  2005/11/24 23:09:15  strk
- * CoordinateSequence indexes switched from int to the more
- * the correct unsigned int. Optimizations here and there
- * to avoid calling getSize() in loops.
- * Update of all callers is not complete yet.
- *
- * Revision 1.8  2004/11/04 19:08:06  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.7  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.6  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2004/05/05 13:08:01  strk
- * Leaks fixed, explicit allocations/deallocations reduced.
- *
- * Revision 1.4  2004/04/20 13:24:15  strk
- * More leaks removed.
- *
- * Revision 1.3  2004/04/20 12:47:57  strk
- * MinimumDiameter leaks plugged.
- *
- * Revision 1.2  2004/04/20 10:14:20  strk
- * Memory leaks removed.
- *
- * Revision 1.1  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
 
