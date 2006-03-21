@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -12,52 +13,33 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
- * $Log$
- * Revision 1.8  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
  *
- * Revision 1.7  2005/04/06 11:09:41  strk
- * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ * RobustDeterminant implements an algorithm to compute the
+ * sign of a 2x2 determinant for double precision values robustly.
+ * It is a direct translation of code developed by Olivier Devillers.
+ * 
+ * The original code carries the following copyright notice:
  *
- * Revision 1.6  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
+ *************************************************************************
+ * Author : Olivier Devillers
+ * Olivier.Devillers@sophia.inria.fr
+ * http:/www.inria.fr:/prisme/personnel/devillers/anglais/determinant.html
+ **************************************************************************
  *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
+ **************************************************************************
+ *              Copyright (c) 1995  by  INRIA Prisme Project
+ *                  BP 93 06902 Sophia Antipolis Cedex, France.
+ *                           All rights reserved
+ **************************************************************************
+ */
 
+#include <geos/algorithm/RobustDeterminant.h>
 
-#include <geos/geosAlgorithm.h>
 #include <cmath>
 
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-/**
-* <code>RobustDeterminant</code> implements an algorithm to compute the
-* sign of a 2x2 determinant for double precision values robustly.
-* It is a direct translation of code developed by Olivier Devillers.
-* <p>
-* The original code carries the following copyright notice:
-*
-* <pre>
-*************************************************************************
-* Author : Olivier Devillers
-* Olivier.Devillers@sophia.inria.fr
-* http:/www.inria.fr:/prisme/personnel/devillers/anglais/determinant.html
-**************************************************************************
-*
-**************************************************************************
-*              Copyright (c) 1995  by  INRIA Prisme Project
-*                  BP 93 06902 Sophia Antipolis Cedex, France.
-*                           All rights reserved
-**************************************************************************
-* </pre>
-*/
 
 int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	// returns -1 if the determinant is negative,
@@ -290,4 +272,26 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 }
 } // namespace geos.algorithm
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.9  2006/03/21 10:46:03  strk
+ * streamlined header inclusion, put original copyright on top
+ *
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ * Revision 1.7  2005/04/06 11:09:41  strk
+ * Applied patch from Jon Schlueter (math.h => cmath; ieeefp.h in "C" block)
+ *
+ * Revision 1.6  2004/07/02 13:28:26  strk
+ * Fixed all #include lines to reflect headers layout change.
+ * Added client application build tips in README.
+ *
+ * Revision 1.5  2003/11/07 01:23:42  pramsey
+ * Add standard CVS headers licence notices and copyrights to all cpp and h
+ * files.
+ *
+ *
+ **********************************************************************/
 
