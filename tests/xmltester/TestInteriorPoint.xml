@@ -18,7 +18,7 @@
   <desc>L - linestring with single segment</desc>
   <a>    LINESTRING (0 0, 7 14)
 	</a>
-<test><op name="getInteriorPoint" arg1="A" >   POINT (7 14)   </op></test>
+<test><op name="getInteriorPoint" arg1="A" >   POINT (0 0)   </op></test>
 </case>
 
 <case>
