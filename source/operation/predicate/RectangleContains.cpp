@@ -17,16 +17,20 @@
  *
  **********************************************************************/
 
-#include <geos/opPredicate.h>
-#include <geos/geom.h>
-#include <geos/profiler.h>
-#include <geos/geomUtil.h>
+#include <geos/operation/predicate/RectangleContains.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace predicate { // geos.operation.predicate
-
-using namespace geos::geom::util;
 
 bool
 RectangleContains::contains(const Geometry& geom)

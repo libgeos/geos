@@ -17,13 +17,21 @@
  *
  **********************************************************************/
 
-#include <geos/opPredicate.h>
-#include <geos/geom.h>
-#include <geos/profiler.h>
-#include <geos/geomUtil.h>
+#include <geos/operation/predicate/RectangleIntersects.h>
+#include <geos/operation/predicate/SegmentIntersectionTester.h>
 
-using namespace geos::geom::util;
-using namespace geos::algorithm;
+/// for EnvelopeIntersectsVisitor inheritance
+#include <geos/geom/util/ShortCircuitedGeometryVisitor.h>
+#include <geos/geom/util/LinearComponentExtracter.h>
+
+#include <geos/geom/Envelope.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/IntersectionMatrix.h>
+
+#include <geos/algorithm/SimplePointInAreaLocator.h>
+
+//using namespace geos::geom::util;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -36,11 +44,11 @@ const int RectangleIntersects::MAXIMUM_SCAN_SEGMENT_COUNT = 200;
 // EnvelopeIntersectsVisitor
 //----------------------------------------------------------------
 
-class EnvelopeIntersectsVisitor: public ShortCircuitedGeometryVisitor
+class EnvelopeIntersectsVisitor: public geom::util::ShortCircuitedGeometryVisitor
 {
 private:
 
-	const Envelope &rectEnv;
+	const geom::Envelope &rectEnv;
 	bool intersectsVar;
 
 protected:
@@ -52,9 +60,9 @@ protected:
 	 * @return <code>true</code> if an intersection must occur
 	 * <code>false</code> if no conclusion can be made
 	 */
-	void visit(const Geometry &element)
+	void visit(const geom::Geometry &element)
 	{
-		const Envelope &elementEnv = *(element.getEnvelopeInternal());
+		const geom::Envelope &elementEnv = *(element.getEnvelopeInternal());
 
 		// disjoint
 		if ( ! rectEnv.intersects(elementEnv) ) {
@@ -96,7 +104,7 @@ protected:
 
 public:
 
-	EnvelopeIntersectsVisitor(const Envelope &env)
+	EnvelopeIntersectsVisitor(const geom::Envelope &env)
 		:
 		rectEnv(env),
 		intersectsVar(false)
@@ -114,25 +122,27 @@ public:
  * Tests whether it can be concluded
  * that a geometry contains a corner point of a rectangle.
  */
-class ContainsPointVisitor: public ShortCircuitedGeometryVisitor
+class ContainsPointVisitor: public geom::util::ShortCircuitedGeometryVisitor
 {
 private:
 
-	const Envelope &rectEnv;
+	const geom::Envelope &rectEnv;
 	bool containsPointVar;
-	const CoordinateSequence &rectSeq;
+	const geom::CoordinateSequence &rectSeq;
 
 protected:
 
-	void visit(const Geometry &geom)
+	void visit(const geom::Geometry &geom)
 	{
+		using geos::algorithm::SimplePointInAreaLocator;
+
 		const geom::Polygon *poly;
 
 		if ( !(poly=dynamic_cast<const geom::Polygon *>(&geom)) ) {
 			return;
 		}
 
-		const Envelope &elementEnv = *(geom.getEnvelopeInternal());
+		const geom::Envelope &elementEnv = *(geom.getEnvelopeInternal());
 
 		if ( !rectEnv.intersects(elementEnv) ) {
 			return;
@@ -142,7 +152,7 @@ protected:
 		for (int i=0; i<4; i++)
 		{
 
-			const Coordinate &rectPt=rectSeq.getAt(i);
+			const geom::Coordinate &rectPt=rectSeq.getAt(i);
 
 			if ( !elementEnv.contains(rectPt) ) {
 				continue;
@@ -177,20 +187,22 @@ public:
 // LineIntersectsVisitor
 //----------------------------------------------------------------
 
-class LineIntersectsVisitor: public ShortCircuitedGeometryVisitor
+class LineIntersectsVisitor: public geom::util::ShortCircuitedGeometryVisitor
 {
 private:
 
 	const geom::Polygon& rectangle;
-	const Envelope& rectEnv;
+	const geom::Envelope& rectEnv;
 	bool intersectsVar;
-	const CoordinateSequence &rectSeq;
+	const geom::CoordinateSequence &rectSeq;
 
-	void computeSegmentIntersection(const Geometry &geom)
+	void computeSegmentIntersection(const geom::Geometry &geom)
 	{
+		using geos::geom::util::LinearComponentExtracter;
+
 		// check segment intersection
 		// get all lines from geom (e.g. if it's a multi-ring polygon)
-		LineString::ConstVect lines;
+		geom::LineString::ConstVect lines;
 		LinearComponentExtracter::getLines(geom, lines);
 		SegmentIntersectionTester si;
 		if ( si.hasIntersectionWithLineStrings(rectSeq, lines) )
@@ -202,9 +214,9 @@ private:
 
 protected:
 
-	void visit(const Geometry &geom)
+	void visit(const geom::Geometry &geom)
 	{
-		const Envelope &elementEnv = *(geom.getEnvelopeInternal());
+		const geom::Envelope &elementEnv = *(geom.getEnvelopeInternal());
 		if (! rectEnv.intersects(elementEnv) ) {
 			return;
 		}
@@ -248,7 +260,7 @@ public:
 //----------------------------------------------------------------
 
 bool
-RectangleIntersects::intersects(const Geometry& geom)
+RectangleIntersects::intersects(const geom::Geometry& geom)
 {
 	if (!rectEnv.intersects(geom.getEnvelopeInternal()))
 		return false;

@@ -23,8 +23,10 @@
 #include <geos/algorithm/InteriorPointPoint.h>
 #include <geos/algorithm/InteriorPointLine.h>
 #include <geos/algorithm/InteriorPointArea.h>
+#include <geos/algorithm/ConvexHull.h>
 #include <geos/opDistance.h>
-#include <geos/opPredicate.h>
+#include <geos/operation/predicate/RectangleContains.h>
+#include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
@@ -52,7 +54,7 @@ using namespace geos::operation::relate;
 using namespace geos::operation::buffer;
 using namespace geos::operation::overlay;
 using namespace geos::operation::distance;
-using namespace geos::operation::predicate;
+using namespace geos::operation;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -329,10 +331,10 @@ Geometry::intersects(const Geometry *g) const
 
 	// optimization for rectangle arguments
 	if (isRectangle()) {
-		return RectangleIntersects::intersects((Polygon&)*this, *g);
+		return predicate::RectangleIntersects::intersects((Polygon&)*this, *g);
 	}
 	if (g->isRectangle()) {
-		return RectangleIntersects::intersects((const Polygon&)*g, *this);
+		return predicate::RectangleIntersects::intersects((const Polygon&)*g, *this);
 	}
 
 	IntersectionMatrix *im=relate(g);
@@ -372,10 +374,10 @@ Geometry::contains(const Geometry *g) const
 
 	// optimization for rectangle arguments
 	if (isRectangle()) {
-		return RectangleContains::contains((Polygon&)*this, *g);
+		return predicate::RectangleContains::contains((Polygon&)*this, *g);
 	}
 	if (g->isRectangle()) {
-		return RectangleContains::contains((const Polygon&)*g, *this);
+		return predicate::RectangleContains::contains((const Polygon&)*g, *this);
 	}
 
 	IntersectionMatrix *im=relate(g);
@@ -768,6 +770,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.104  2006/03/21 17:11:56  strk
+ * opPredicate.h header split
+ *
  * Revision 1.103  2006/03/21 13:11:28  strk
  * opRelate.h header split
  *

@@ -18,8 +18,12 @@
  *
  **********************************************************************/
 
-#include <geos/opPredicate.h>
-#include <geos/profiler.h>
+#include <geos/operation/predicate/SegmentIntersectionTester.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/algorithm/LineIntersector.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace operation {
