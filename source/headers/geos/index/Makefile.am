@@ -1,4 +1,5 @@
-SUBDIRS = 
+SUBDIRS = \
+	sweepline
 
 geosdir = $(includedir)/geos/index
 

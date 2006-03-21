@@ -14,47 +14,63 @@
  *
  **********************************************************************/
 
-#include <geos/indexSweepline.h>
-#include <stdio.h>
+#include <geos/index/sweepline/SweepLineEvent.h>
 
 namespace geos {
 namespace index { // geos.index
 namespace sweepline { // geos.index.sweepline
 
-indexSweepLineEvent::indexSweepLineEvent(double x,indexSweepLineEvent *newInsertEvent,SweepLineInterval *newSweepInt) {
-	xValue = x;
-	insertEvent=newInsertEvent;
-	eventType=indexSweepLineEvent::INSERT_EVENT;
-	if (insertEvent!=NULL)
-		eventType=indexSweepLineEvent::DELETE_EVENT;
-	sweepInt=newSweepInt;
+SweepLineEvent::SweepLineEvent(double x, SweepLineEvent *newInsertEvent,
+		SweepLineInterval *newSweepInt)
+	:
+	xValue(x),
+	eventType(SweepLineEvent::INSERT_EVENT),
+	insertEvent(newInsertEvent),
+	sweepInt(newSweepInt)
+{
+	if (insertEvent!=0)
+		eventType=SweepLineEvent::DELETE_EVENT;
 }
 
-bool indexSweepLineEvent::isInsert() {
-	return insertEvent==NULL;
+bool
+SweepLineEvent::isInsert()
+{
+	return insertEvent==0;
 }
 
-bool indexSweepLineEvent::isDelete() {
-	return insertEvent!=NULL;
+bool
+SweepLineEvent::isDelete()
+{
+	return insertEvent!=0;
 }
 
-indexSweepLineEvent* indexSweepLineEvent::getInsertEvent() {
+SweepLineEvent*
+SweepLineEvent::getInsertEvent()
+{
 	return insertEvent;
 }
 
-int indexSweepLineEvent::getDeleteEventIndex() {
+int
+SweepLineEvent::getDeleteEventIndex()
+{
 	return deleteEventIndex;
 }
 
-void indexSweepLineEvent::setDeleteEventIndex(int newDeleteEventIndex) {
+void
+SweepLineEvent::setDeleteEventIndex(int newDeleteEventIndex)
+{
 	deleteEventIndex=newDeleteEventIndex;
 }
 
-SweepLineInterval* indexSweepLineEvent::getInterval() {
+SweepLineInterval*
+SweepLineEvent::getInterval()
+{
 	return sweepInt;
 }
 
-int indexSweepLineEvent::compareTo(indexSweepLineEvent *pe) {
+int
+SweepLineEvent::compareTo(const SweepLineEvent *pe) const
+{
 	if (xValue<pe->xValue) return -1;
 	if (xValue>pe->xValue) return 1;
 	if (eventType<pe->eventType) return -1;
@@ -62,14 +78,28 @@ int indexSweepLineEvent::compareTo(indexSweepLineEvent *pe) {
 	return 0;
 }
 
-int indexSweepLineEvent::compareTo(void *o) {
-	indexSweepLineEvent *pe=(indexSweepLineEvent*) o;
+#if 0
+int
+SweepLineEvent::compareTo(void *o) const
+{
+	SweepLineEvent *pe=(SweepLineEvent*) o;
 	if (xValue<pe->xValue) return -1;
 	if (xValue>pe->xValue) return 1;
 	if (eventType<pe->eventType) return -1;
 	if (eventType>pe->eventType) return 1;
 	return 0;
 }
+#endif // 0
+
+bool
+SweepLineEventLessThen::operator() (const SweepLineEvent *first, const SweepLineEvent *second) const
+{
+	if (first->compareTo(second)<0)
+		return true;
+	else
+		return false;
+}
+
 
 } // namespace geos.index.sweepline
 } // namespace geos.index
@@ -77,6 +107,9 @@ int indexSweepLineEvent::compareTo(void *o) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.1  2006/03/21 10:01:30  strk
+ * indexSweepline.h header split
+ *
  * Revision 1.8  2006/03/02 14:53:44  strk
  * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
  *

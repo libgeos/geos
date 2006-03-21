@@ -5,7 +5,6 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,32 +13,33 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_INDEXSWEEPLINE_H
-#define GEOS_INDEXSWEEPLINE_H
+#ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H
+#define GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H
 
 namespace geos {
 namespace index { // geos.index
+namespace sweepline { // geos:index:sweepline
 
-/// \brief
-/// Contains classes which implement a sweepline algorithm
-/// for scanning geometric data structures.
-///
-namespace sweepline { // geos.index.sweepline
+class SweepLineInterval {
+public:
+	SweepLineInterval(double newMin, double newMax, void* newItem=0);
+	double getMin();
+	double getMax();
+	void* getItem();
+private:
+	double min, max;
+	void* item;
+};
 
-} // namespace geos.index.sweepline
-} // namespace geos.index
+} // namespace geos:index:sweepline
+} // namespace geos:index
 } // namespace geos
 
-#include <geos/index/sweepline/SweepLineEvent.h>
-#include <geos/index/sweepline/SweepLineIndex.h>
-#include <geos/index/sweepline/SweepLineInterval.h>
-#include <geos/index/sweepline/SweepLineOverlapAction.h>
-
-#endif
+#endif // GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H
 
 /**********************************************************************
  * $Log$
- * Revision 1.6  2006/03/21 10:01:30  strk
+ * Revision 1.1  2006/03/21 10:01:30  strk
  * indexSweepline.h header split
  *
  **********************************************************************/

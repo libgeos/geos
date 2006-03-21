@@ -14,30 +14,34 @@
  *
  **********************************************************************/
 
-#include <geos/indexSweepline.h>
-#include <stdio.h>
+#include <geos/index/sweepline/SweepLineInterval.h>
 
 namespace geos {
 namespace index { // geos.index
 namespace sweepline { // geos.index.sweepline
 
-SweepLineInterval::SweepLineInterval(double newMin, double newMax) {
-	SweepLineInterval(newMin,newMax,NULL);
-}
-
-SweepLineInterval::SweepLineInterval(double newMin, double newMax, void* newItem){
+SweepLineInterval::SweepLineInterval(double newMin, double newMax, void* newItem)
+{
 	min=newMin<newMax?newMin:newMax;
 	max=newMax>newMin?newMax:newMin;
 	item=newItem;
 }
 
-double SweepLineInterval::getMin() {
+double
+SweepLineInterval::getMin()
+{
 	return min;
 }
-double SweepLineInterval::getMax() {
+
+double
+SweepLineInterval::getMax()
+{
 	return max;
 }
-void* SweepLineInterval::getItem() {
+
+void*
+SweepLineInterval::getItem()
+{
 	return item;
 }
 
@@ -47,6 +51,9 @@ void* SweepLineInterval::getItem() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/21 10:01:30  strk
+ * indexSweepline.h header split
+ *
  * Revision 1.7  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

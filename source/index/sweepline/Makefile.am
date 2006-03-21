@@ -4,7 +4,7 @@ noinst_LTLIBRARIES = libindexsweepline.la
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libindexsweepline_la_SOURCES = \
-	indexSweepLineEvent.cpp \
+	SweepLineEvent.cpp \
 	SweepLineIndex.cpp \
 	SweepLineInterval.cpp 
 
