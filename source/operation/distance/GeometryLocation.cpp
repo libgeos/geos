@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,30 +12,11 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.5  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.4  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/04/13 12:29:21  strk
- * GeometryLocation const-correctness.
- *
- * Revision 1.2  2004/04/13 10:05:51  strk
- * GeometryLocation constructor made const-correct.
- * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
- *
- * Revision 1.1  2004/04/05 06:35:14  ybychkov
- * "operation/distance" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
 
+#include <geos/operation/distance/GeometryLocation.h>
 
-#include <geos/opDistance.h>
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -44,7 +26,8 @@ namespace distance { // geos.operation.distance
 * Constructs a GeometryLocation specifying a point on a geometry, as well as the 
 * segment that the point is on (or INSIDE_AREA if the point is not on a segment).
 */
-GeometryLocation::GeometryLocation(const Geometry *newComponent, int newSegIndex, const Coordinate &newPt){
+GeometryLocation::GeometryLocation(const Geometry *newComponent, int newSegIndex, const Coordinate &newPt)
+{
 	component = newComponent;
 	segIndex = newSegIndex;
 	pt = newPt;
@@ -53,7 +36,8 @@ GeometryLocation::GeometryLocation(const Geometry *newComponent, int newSegIndex
 /**
 * Constructs a GeometryLocation specifying a point inside an area geometry.
 */  
-GeometryLocation::GeometryLocation(const Geometry *newComponent, const Coordinate &newPt){
+GeometryLocation::GeometryLocation(const Geometry *newComponent, const Coordinate &newPt)
+{
 	component = newComponent;
 	segIndex = INSIDE_AREA;
 	pt = newPt;
@@ -71,13 +55,17 @@ const Geometry* GeometryLocation::getGeometryComponent() {
 *
 * @return the segment index for the location, or INSIDE_AREA
 */
-int GeometryLocation::getSegmentIndex() { 
+int
+GeometryLocation::getSegmentIndex()
+{ 
 	return segIndex;
 }
 /**
 * Returns the location.
 */
-Coordinate& GeometryLocation::getCoordinate() { 
+Coordinate&
+GeometryLocation::getCoordinate()
+{ 
 	return pt;
 }
 
@@ -88,3 +76,11 @@ bool GeometryLocation::isInsideArea() {
 } // namespace geos.operation.distance
 } // namespace geos.operation
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.6  2006/03/21 17:55:01  strk
+ * opDistance.h header split
+ *
+ **********************************************************************/
+

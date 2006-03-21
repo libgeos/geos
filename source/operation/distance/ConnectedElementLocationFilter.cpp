@@ -11,55 +11,39 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.6  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.5  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.4  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/05/14 14:47:39  strk
- * Added LinearRing support
- *
- * Revision 1.2  2004/05/14 13:42:46  strk
- * DistanceOp bug removed, cascading errors fixed.
- *
- * Revision 1.1  2004/04/05 06:35:14  ybychkov
- * "operation/distance" upgraded to JTS 1.4
- *
- *
  **********************************************************************/
 
+#include <geos/operation/distance/ConnectedElementLocationFilter.h>
+#include <geos/operation/distance/GeometryLocation.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Polygon.h>
 
-#include <geos/opDistance.h>
 #include <vector>
+#include <typeinfo>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace distance { // geos.operation.distance
 
-/**
-* Returns a list containing a point from each Polygon, LineString, and Point
-* found inside the specified geometry. Thus, if the specified geometry is
-* not a GeometryCollection, an empty list will be returned. The elements of the list 
-* are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
-*/  
-vector<GeometryLocation*>* ConnectedElementLocationFilter::getLocations(const Geometry *geom) {
+/*public*/
+vector<GeometryLocation*>*
+ConnectedElementLocationFilter::getLocations(const Geometry *geom)
+{
 	vector<GeometryLocation*> *loc=new vector<GeometryLocation*>();
-	ConnectedElementLocationFilter *c = new ConnectedElementLocationFilter(loc);
-	geom->apply_ro(c);
-	delete c;
+	ConnectedElementLocationFilter c(loc);
+	geom->apply_ro(&c);
 	return loc;
 }
 
-void ConnectedElementLocationFilter::filter_ro(const Geometry *geom){
+void
+ConnectedElementLocationFilter::filter_ro(const Geometry *geom)
+{
 	if ((typeid(*geom)==typeid(Point)) ||
 		(typeid(*geom)==typeid(LineString)) ||
 		(typeid(*geom)==typeid(LinearRing)) ||
@@ -80,3 +64,17 @@ void ConnectedElementLocationFilter::filter_rw(Geometry *geom){
 } // namespace geos.operation.distance
 } // namespace geos.operation
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.7  2006/03/21 17:55:01  strk
+ * opDistance.h header split
+ *
+ * Revision 1.6  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
+ * Revision 1.5  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ **********************************************************************/
+

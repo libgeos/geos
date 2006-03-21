@@ -24,13 +24,13 @@
 #include <geos/algorithm/InteriorPointLine.h>
 #include <geos/algorithm/InteriorPointArea.h>
 #include <geos/algorithm/ConvexHull.h>
-#include <geos/opDistance.h>
 #include <geos/operation/predicate/RectangleContains.h>
 #include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/distance/DistanceOp.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/version.h>
@@ -770,6 +770,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.105  2006/03/21 17:55:01  strk
+ * opDistance.h header split
+ *
  * Revision 1.104  2006/03/21 17:11:56  strk
  * opPredicate.h header split
  *

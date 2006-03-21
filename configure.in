@@ -193,6 +193,7 @@ AC_OUTPUT([
 	source/headers/geos/noding/snapround/Makefile
 	source/headers/geos/operation/Makefile
 	source/headers/geos/operation/buffer/Makefile
+	source/headers/geos/operation/distance/Makefile
 	source/headers/geos/operation/overlay/Makefile
 	source/headers/geos/operation/valid/Makefile
 	source/headers/geos/operation/relate/Makefile

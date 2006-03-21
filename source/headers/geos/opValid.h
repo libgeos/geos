@@ -37,11 +37,3 @@ namespace valid { // geos.operation.valid
 #include <geos/operation/valid/TopologyValidationError.h>
 
 #endif
-
-/**********************************************************************
- * $Log$
- * Revision 1.21  2006/03/20 16:57:43  strk
- * spatialindex.h and opValid.h headers split
- *
- **********************************************************************/
-

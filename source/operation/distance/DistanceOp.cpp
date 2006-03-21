@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -16,41 +16,50 @@
  *
  **********************************************************************/
 
-#include <geos/opDistance.h>
-#include <geos/geomUtil.h>
-#include <geos/geosAlgorithm.h>
+#include <geos/operation/distance/DistanceOp.h>
+#include <geos/operation/distance/GeometryLocation.h>
+#include <geos/operation/distance/ConnectedElementLocationFilter.h>
+//#include <geos/geomUtil.h>
+//#include <geos/geosAlgorithm.h>
+#include <geos/algorithm/PointLocator.h> 
+#include <geos/algorithm/CGAlgorithms.h> 
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/util/PolygonExtracter.h>
+#include <geos/geom/util/LinearComponentExtracter.h>
+#include <geos/geom/util/PointExtracter.h>
+
 #include <vector>
 
 using namespace std;
-using namespace geos::algorithm;
+using namespace geos::geom;
+//using namespace geos::algorithm;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace distance { // geos.operation.distance
 
 using namespace geom;
-using namespace geom::util;
+//using namespace geom::util;
 
-/**
-* Compute the distance between the closest points of two geometries.
-* @param g0 a {@link Geometry}
-* @param g1 another {@link Geometry}
-* @return the distance between the geometries
-*/
-double DistanceOp::distance(const Geometry *g0, const Geometry *g1) {
+/*public static*/
+double
+DistanceOp::distance(const Geometry *g0, const Geometry *g1)
+{
 	DistanceOp distOp(g0,g1);
 	return distOp.distance();
 }
 
-/**
-* Compute the the closest points of two geometries.
-* The points are presented in the same order as the input Geometries.
-*
-* @param g0 a {@link Geometry}
-* @param g1 another {@link Geometry}
-* @return the closest points in the geometries
-*/
-CoordinateSequence* DistanceOp::closestPoints(Geometry *g0,Geometry *g1){
+/*public static*/
+CoordinateSequence*
+DistanceOp::closestPoints(Geometry *g0,Geometry *g1)
+{
 	DistanceOp distOp(g0,g1);
 	return distOp.closestPoints();
 }
@@ -64,7 +73,8 @@ DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
 	minDistanceLocation=NULL;
 }
 
-DistanceOp::~DistanceOp(){
+DistanceOp::~DistanceOp()
+{
 	unsigned int i;
 	for (i=0; i<newCoords.size(); i++) delete newCoords[i];
 	if ( minDistanceLocation )
@@ -82,7 +92,9 @@ DistanceOp::~DistanceOp(){
 *
 * @return the distance between the geometries
 */
-double DistanceOp::distance() {
+double
+DistanceOp::distance()
+{
 	computeMinDistance();
 	return minDistance;
 }
@@ -94,7 +106,9 @@ double DistanceOp::distance() {
 *
 * @return a pair of Coordinate s of the closest points
 */
-CoordinateSequence* DistanceOp::closestPoints() {
+CoordinateSequence*
+DistanceOp::closestPoints()
+{
 	computeMinDistance();
 	CoordinateSequence* closestPts=new CoordinateArraySequence();
 	closestPts->add((*minDistanceLocation)[0]->getCoordinate());
@@ -147,8 +161,8 @@ DistanceOp::computeContainmentDistance()
 	Polygon::ConstVect polys0;
 	Polygon::ConstVect polys1;
 
-	PolygonExtracter::getPolygons(*(geom[0]), polys0);
-	PolygonExtracter::getPolygons(*(geom[1]), polys1);
+	util::PolygonExtracter::getPolygons(*(geom[0]), polys0);
+	util::PolygonExtracter::getPolygons(*(geom[1]), polys1);
 	
 
 	vector<GeometryLocation*> *locPtPoly = new vector<GeometryLocation*>(2);
@@ -251,13 +265,13 @@ DistanceOp::computeLineDistance()
 	 */
 	LineString::ConstVect lines0;
 	LineString::ConstVect lines1;
-	LinearComponentExtracter::getLines(*(geom[0]), lines0);
-	LinearComponentExtracter::getLines(*(geom[1]), lines1);
+	util::LinearComponentExtracter::getLines(*(geom[0]), lines0);
+	util::LinearComponentExtracter::getLines(*(geom[1]), lines1);
 
 	Point::ConstVect pts0;
 	Point::ConstVect pts1;
-	PointExtracter::getPoints(*(geom[0]), pts0);
-	PointExtracter::getPoints(*(geom[1]), pts1);
+	util::PointExtracter::getPoints(*(geom[0]), pts0);
+	util::PointExtracter::getPoints(*(geom[1]), pts1);
 
 	// bail whenever minDistance goes to zero, since it can't get any less
 	computeMinDistanceLines(lines0, lines1, locGeom);
@@ -365,6 +379,8 @@ DistanceOp::computeMinDistance(
 		const LineString *line1,
 		vector<GeometryLocation*>& locGeom)
 {
+	using geos::algorithm::CGAlgorithms;
+
 	const Envelope *env0=line0->getEnvelopeInternal();
 	const Envelope *env1=line1->getEnvelopeInternal();
 	if (env0->distance(env1)>minDistance) {
@@ -385,11 +401,9 @@ DistanceOp::computeMinDistance(
 				coord1->getAt(j),coord1->getAt(j+1));
 			if (dist < minDistance) {
 				minDistance = dist;
-				LineSegment *seg0 = new LineSegment(coord0->getAt(i), coord0->getAt(i + 1));
-				LineSegment *seg1 = new LineSegment(coord1->getAt(j), coord1->getAt(j + 1));
-				CoordinateSequence* closestPt = seg0->closestPoints(seg1);
-				delete seg0;
-				delete seg1;
+				LineSegment seg0(coord0->getAt(i), coord0->getAt(i + 1));
+				LineSegment seg1(coord1->getAt(j), coord1->getAt(j + 1));
+				CoordinateSequence* closestPt = seg0.closestPoints(seg1);
 				Coordinate *c1 = new Coordinate(closestPt->getAt(0));
 				Coordinate *c2 = new Coordinate(closestPt->getAt(1));
 				newCoords.push_back(c1);
@@ -414,28 +428,27 @@ DistanceOp::computeMinDistance(const LineString *line,
 		const Point *pt,
 		vector<GeometryLocation*>& locGeom)
 {
+	using geos::algorithm::CGAlgorithms;
+
 	const Envelope *env0=line->getEnvelopeInternal();
 	const Envelope *env1=pt->getEnvelopeInternal();
 	if (env0->distance(env1)>minDistance) {
 		return;
 	}
-	//delete env0;
-	//delete env1;
 	const CoordinateSequence *coord0=line->getCoordinatesRO();
 	Coordinate *coord=new Coordinate(*(pt->getCoordinate()));
 	newCoords.push_back(coord);
-	// brute force approach!
 
+	// brute force approach!
 	unsigned int npts0=coord0->getSize();
 	for(unsigned int i=0; i<npts0-1; ++i)
 	{
 		double dist=CGAlgorithms::distancePointLine(*coord,coord0->getAt(i),coord0->getAt(i+1));
         	if (dist < minDistance) {
           		minDistance = dist;
-			LineSegment *seg = new LineSegment(coord0->getAt(i), coord0->getAt(i + 1));
+			LineSegment seg(coord0->getAt(i), coord0->getAt(i + 1));
 			Coordinate segClosestPoint;
-			seg->closestPoint(*coord, segClosestPoint);
-			delete seg;
+			seg.closestPoint(*coord, segClosestPoint);
 
 			delete locGeom[0];
 			locGeom[0] = new GeometryLocation(line, i, segClosestPoint);
@@ -452,79 +465,10 @@ DistanceOp::computeMinDistance(const LineString *line,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/21 17:55:01  strk
+ * opDistance.h header split
+ *
  * Revision 1.20  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.19  2006/03/01 17:16:39  strk
- * LineSegment class made final and optionally (compile-time) inlined.
- * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
- *
- * Revision 1.18  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.17  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.16  2005/11/25 11:31:21  strk
- * Removed all CoordinateSequence::getSize() calls embedded in for loops.
- *
- * Revision 1.15  2004/07/27 16:35:47  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.14  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.13  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.12  2004/07/02 13:28:28  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.11  2004/05/14 13:42:46  strk
- * DistanceOp bug removed, cascading errors fixed.
- *
- * Revision 1.10  2004/04/14 10:56:38  strk
- * Uncommented initializzazion and destruction of DistanceOp::minDistanceLocation
- *
- * Revision 1.9  2004/04/13 10:05:51  strk
- * GeometryLocation constructor made const-correct.
- * Fixed erroneus down-casting in DistanceOp::computeMinDistancePoints.
- *
- * Revision 1.8  2004/04/05 06:35:14  ybychkov
- * "operation/distance" upgraded to JTS 1.4
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.6  2003/10/16 08:50:00  strk
- * Memory leak fixes. Improved performance by mean of more calls to 
- * new getCoordinatesRO() when applicable.
- *
  **********************************************************************/
 
