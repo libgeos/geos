@@ -16,16 +16,14 @@
 #ifndef GEOS_NODING_MCINDEXNODER_H
 #define GEOS_NODING_MCINDEXNODER_H
 
-#include <vector>
-#include <iostream>
-
 #include <geos/inline.h>
 
-// FIXME: The following two includes must be splitted!!
-#include <geos/indexStrtree.h>
-#include <geos/indexChain.h> // for MonotoneChainOverlapAction inheritance
-
+#include <geos/index/chain/MonotoneChainOverlapAction.h> // for inheritance
 #include <geos/noding/SinglePassNoder.h> // for inheritance
+#include <geos/index/strtree/STRtree.h> // for composition
+
+#include <vector>
+#include <iostream>
 
 // Forward declarations
 namespace geos {
@@ -114,6 +112,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/22 18:12:31  strk
+ * indexChain.h header split.
+ *
  * Revision 1.2  2006/03/14 12:55:56  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *

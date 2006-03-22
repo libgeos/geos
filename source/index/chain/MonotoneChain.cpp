@@ -18,16 +18,21 @@
  *
  **********************************************************************/
 
-#include <geos/indexChain.h>
-#include <stdio.h>
-#include <geos/util.h>
+#include <geos/index/chain/MonotoneChain.h>
+#include <geos/index/chain/MonotoneChainSelectAction.h>
+#include <geos/index/chain/MonotoneChainOverlapAction.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/Envelope.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 Envelope*
-indexMonotoneChain::getEnvelope()
+MonotoneChain::getEnvelope()
 {
 	if (env==NULL) {
 		const Coordinate& p0=pts->getAt(start);
@@ -38,7 +43,7 @@ indexMonotoneChain::getEnvelope()
 }
 
 void
-indexMonotoneChain::getLineSegment(unsigned int index, LineSegment *ls)
+MonotoneChain::getLineSegment(unsigned int index, LineSegment *ls)
 {
 	ls->p0=pts->getAt(index);
 	ls->p1=pts->getAt(index+1);
@@ -49,18 +54,18 @@ indexMonotoneChain::getLineSegment(unsigned int index, LineSegment *ls)
  * Allocates a new array to hold the Coordinates
  */
 CoordinateSequence*
-indexMonotoneChain::getCoordinates() {
+MonotoneChain::getCoordinates() {
 	return pts->clone();
 }
 
 void
-indexMonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
+MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
 {
 	computeSelect(searchEnv,start,end,mcs);
 }
 
 void
-indexMonotoneChain::computeSelect(const Envelope& searchEnv,
+MonotoneChain::computeSelect(const Envelope& searchEnv,
 		unsigned int start0, unsigned int end0,
 		MonotoneChainSelectAction& mcs )
 {
@@ -91,13 +96,13 @@ indexMonotoneChain::computeSelect(const Envelope& searchEnv,
 }
 
 void
-indexMonotoneChain::computeOverlaps(indexMonotoneChain *mc, MonotoneChainOverlapAction *mco)
+MonotoneChain::computeOverlaps(MonotoneChain *mc, MonotoneChainOverlapAction *mco)
 {
 	computeOverlaps(start,end,mc,mc->start,mc->end,mco);
 }
 
 void
-indexMonotoneChain::computeOverlaps(int start0, int end0, indexMonotoneChain *mc,
+MonotoneChain::computeOverlaps(int start0, int end0, MonotoneChain *mc,
 		int start1, int end1, MonotoneChainOverlapAction *mco)
 {
 	//Debug.println("computeIntersectsForChain:"+p00+p01+p10+p11);
@@ -144,74 +149,8 @@ indexMonotoneChain::computeOverlaps(int start0, int end0, indexMonotoneChain *mc
 
 /**********************************************************************
  * $Log$
- * Revision 1.19  2006/02/21 16:53:49  strk
- * MCIndexPointSnapper, MCIndexSnapRounder
- *
- * Revision 1.18  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.17  2006/02/14 13:28:26  strk
- * New SnapRounding code ported from JTS-1.7 (not complete yet).
- * Buffer op optimized by using new snaprounding code.
- * Leaks fixed in XMLTester.
- *
- * Revision 1.16  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.15  2005/02/15 17:15:13  strk
- * Inlined most Envelope methods, reserved() memory for some vectors when
- * the usage was known a priori.
- *
- * Revision 1.14  2005/02/01 16:06:53  strk
- * Small optimizations.
- *
- * Revision 1.13  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.12  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.11  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.10  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.9  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.8  2004/03/25 02:23:55  ybychkov
- * All "index/" packages upgraded to JTS 1.4
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.1  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
  *
  **********************************************************************/
 

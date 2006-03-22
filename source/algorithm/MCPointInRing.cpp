@@ -14,7 +14,6 @@
  *
  **********************************************************************/
 
-//#include <geos/platform.h>
 #include <geos/algorithm/MCPointInRing.h>
 #include <geos/algorithm/RobustDeterminant.h>
 #include <geos/index/bintree/Bintree.h>
@@ -23,13 +22,14 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
-#include <geos/indexChain.h> // FIXME: split
+#include <geos/index/chain/MonotoneChain.h> 
+#include <geos/index/chain/MonotoneChainBuilder.h> 
 
 #include <vector>
 
 using namespace std;
 using namespace geos::geom;
-using namespace geos::index::chain;
+using namespace geos::index;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
@@ -67,12 +67,14 @@ MCPointInRing::~MCPointInRing()
 void
 MCPointInRing::buildIndex()
 {
+	//using namespace geos::index;
+
 //	Envelope *env=ring->getEnvelopeInternal();
-	tree=new index::bintree::Bintree();
+	tree=new bintree::Bintree();
 	pts=CoordinateSequence::removeRepeatedPoints(ring->getCoordinatesRO());
-	vector<indexMonotoneChain*> *mcList=MonotoneChainBuilder::getChains(pts);
+	vector<chain::MonotoneChain*> *mcList=chain::MonotoneChainBuilder::getChains(pts);
 	for(int i=0;i<(int)mcList->size();i++) {
-		indexMonotoneChain *mc=(*mcList)[i];
+		chain::MonotoneChain *mc=(*mcList)[i];
 		Envelope *mcEnv=mc->getEnvelope();
 		interval->min=mcEnv->getMinY();
 		interval->max=mcEnv->getMaxY();
@@ -93,14 +95,14 @@ MCPointInRing::isInside(const Coordinate& pt)
 	//System.out.println("query size=" + segs.size());
 	MCSelecter *mcSelecter=new MCSelecter(pt,this);
 	for(int i=0;i<(int)segs->size();i++) {
-		indexMonotoneChain *mc=(indexMonotoneChain*) (*segs)[i];
+		chain::MonotoneChain *mc=(chain::MonotoneChain*) (*segs)[i];
 		testMonotoneChain(rayEnv,mcSelecter,mc);
 	}
 	/*
 	*  p is inside if number of crossings is odd.
 	*/
 //	for(int i=0;i<(int)segs->size();i++) {
-//		delete (indexMonotoneChain*) (*segs)[i];
+//		delete (chain::MonotoneChain*) (*segs)[i];
 //	}
 	delete segs;
 	delete rayEnv;
@@ -113,7 +115,9 @@ MCPointInRing::isInside(const Coordinate& pt)
 
 
 void
-MCPointInRing::testMonotoneChain(Envelope *rayEnv,MCSelecter *mcSelecter,indexMonotoneChain *mc)
+MCPointInRing::testMonotoneChain(Envelope *rayEnv,
+		MCSelecter *mcSelecter,
+		chain::MonotoneChain *mc)
 {
 	mc->select(*rayEnv, *mcSelecter);
 }
@@ -156,6 +160,9 @@ MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/22 18:12:31  strk
+ * indexChain.h header split.
+ *
  * Revision 1.25  2006/03/22 16:01:33  strk
  * indexBintree.h header split, classes renamed to match JTS
  *

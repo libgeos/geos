@@ -26,6 +26,7 @@
 #include <geos/noding/IntersectionFinderAdder.h>
 #include <geos/noding/NodingValidator.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #include <geos/inline.h>
 
@@ -136,6 +137,9 @@ MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentSt
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
+ *
  * Revision 1.7  2006/03/14 12:55:56  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *

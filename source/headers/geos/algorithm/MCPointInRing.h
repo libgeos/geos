@@ -17,13 +17,11 @@
 #ifndef GEOS_ALGORITHM_MCPOINTINRING_H
 #define GEOS_ALGORITHM_MCPOINTINRING_H
 
+#include <geos/index/chain/MonotoneChainSelectAction.h> // for inheritance
+#include <geos/algorithm/PointInRing.h> // for inheritance
+#include <geos/geom/Coordinate.h> // for composition
+
 #include <vector>
-
-// FIXME: to be changed to geos/index/chain/MonotoneChainSelectAction
-#include <geos/indexChain.h>
-
-#include <geos/geom/Coordinate.h>
-#include <geos/algorithm/PointInRing.h>
 
 // Forward declarations
 namespace geos {
@@ -40,9 +38,7 @@ namespace geos {
 			class Interval;
 		}
 		namespace chain {
-			// when indexChain include is dropped
-			// we'll need this
-			//class MonotoneChain;
+			class MonotoneChain;
 		}
 	}
 }
@@ -86,6 +82,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/22 18:12:31  strk
+ * indexChain.h header split.
+ *
  * Revision 1.2  2006/03/22 16:01:33  strk
  * indexBintree.h header split, classes renamed to match JTS
  *

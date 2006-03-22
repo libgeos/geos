@@ -17,24 +17,23 @@
  *
  **********************************************************************/
 
-#include <geos/indexChain.h> // FIXME: split
 #include <geos/noding/snapround/MCIndexPointSnapper.h>
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/spatialIndex.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geomgraph/index/MonotoneChain.h>
+#include <geos/index/chain/MonotoneChainSelectAction.h> 
+#include <geos/index/chain/MonotoneChain.h> 
 
 using namespace geos::index;
-using namespace geos::index::chain;
 using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
-class HotPixelSnapAction: public MonotoneChainSelectAction {
+class HotPixelSnapAction: public index::chain::MonotoneChainSelectAction {
 
 private:
 	const HotPixel& hotPixel;
@@ -56,7 +55,7 @@ public:
 
 	bool isNodeAdded() const { return isNodeAddedVar; }
 
-	void select(MonotoneChain& mc, unsigned int startIndex)
+	void select(chain::MonotoneChain& mc, unsigned int startIndex)
 	{
 		// This is casting away 'constness'!
 		SegmentString& ss = *(static_cast<SegmentString*>(mc.getContext()));
@@ -75,7 +74,7 @@ public:
 class MCIndexPointSnapperVisitor: public ItemVisitor {
 private:
 	const Envelope& pixelEnv;
-	MonotoneChainSelectAction& action;
+	chain::MonotoneChainSelectAction& action;
 
 public:
 	MCIndexPointSnapperVisitor(const Envelope& nPixelEnv, HotPixelSnapAction& nAction)
@@ -87,7 +86,8 @@ public:
 	virtual ~MCIndexPointSnapperVisitor() {}
 
 	void visitItem(void* item) {
-		MonotoneChain& testChain = *(static_cast<MonotoneChain*>(item));
+		chain::MonotoneChain& testChain =
+			*(static_cast<chain::MonotoneChain*>(item));
 		testChain.select(pixelEnv, action);
 	}
 };
@@ -113,6 +113,9 @@ MCIndexPointSnapper::snap(const HotPixel& hotPixel,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
+ *
  * Revision 1.7  2006/03/15 09:51:13  strk
  * streamlined headers usage
  *

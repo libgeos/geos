@@ -17,6 +17,7 @@
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h> // should we really be using this?
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/profiler.h>
@@ -231,6 +232,9 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/03/22 18:12:31  strk
+ * indexChain.h header split.
+ *
  * Revision 1.33  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

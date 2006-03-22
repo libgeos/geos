@@ -29,6 +29,13 @@
 #include <geos/algorithm/MCPointInRing.h> 
 #include <geos/algorithm/CGAlgorithms.h> 
 #include <geos/algorithm/LineIntersector.h> 
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/GeometryCollection.h>
 
 #include <typeinfo>
 #include <set>
@@ -36,6 +43,7 @@
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geomgraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -630,6 +638,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.49  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
+ *
  * Revision 1.48  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

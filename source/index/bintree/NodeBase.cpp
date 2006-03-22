@@ -17,7 +17,7 @@
 #include <geos/index/bintree/NodeBase.h>
 #include <geos/index/bintree/Interval.h>
 #include <geos/index/bintree/Node.h>
-#include <geos/indexChain.h> // FIXME: split
+#include <geos/index/chain/MonotoneChain.h> // FIXME: split
 
 #include <vector>
 
@@ -51,7 +51,7 @@ NodeBase::NodeBase()
 
 NodeBase::~NodeBase() {
 	for(int i=0;i<(int)items->size();i++) {
-		delete (indexMonotoneChain*)(*items)[i];
+		delete (MonotoneChain*)(*items)[i];
 	}
 	delete items;
 	delete subnode[0];
@@ -139,6 +139,9 @@ NodeBase::nodeSize()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/03/22 18:12:31  strk
+ * indexChain.h header split.
+ *
  * Revision 1.11  2006/03/22 16:01:33  strk
  * indexBintree.h header split, classes renamed to match JTS
  *

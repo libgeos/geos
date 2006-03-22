@@ -18,38 +18,32 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <vector>
-#include <iomanip>
-
-//#include <geos/opOverlay.h> // FIXME: reduce inclusion
-
 #include <geos/operation/overlay/PolygonBuilder.h> 
 #include <geos/operation/overlay/OverlayNodeFactory.h> 
-
-#include <geos/profiler.h>
-
 #include <geos/geom/GeometryFactory.h>
-
+#include <geos/geom/Location.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/buffer/OffsetCurveSetBuilder.h>
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
-
 #include <geos/algorithm/LineIntersector.h>
-
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
-
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
-
 #include <geos/util/GEOSException.h>
+#include <geos/profiler.h>
+
+#include <cassert>
+#include <vector>
+#include <iomanip>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -388,6 +382,9 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.53  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
+ *
  * Revision 1.52  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

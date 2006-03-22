@@ -14,7 +14,11 @@
  *
  **********************************************************************/
 
-#include <geos/indexChain.h>
+#include <geos/index/chain/MonotoneChainSelectAction.h>
+#include <geos/index/chain/MonotoneChain.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/LineSegment.h>
+
 
 namespace geos {
 namespace index { // geos.index
@@ -22,8 +26,8 @@ namespace chain { // geos.index.chain
 
 MonotoneChainSelectAction::MonotoneChainSelectAction()
 {
-	selectedSegment=new LineSegment();
-	tempEnv1=new Envelope();
+	selectedSegment=new geom::LineSegment();
+	tempEnv1=new geom::Envelope();
 }
 
 MonotoneChainSelectAction::~MonotoneChainSelectAction()
@@ -33,7 +37,7 @@ MonotoneChainSelectAction::~MonotoneChainSelectAction()
 }
 
 void
-MonotoneChainSelectAction::select(indexMonotoneChain& mc, unsigned int start)
+MonotoneChainSelectAction::select(MonotoneChain& mc, unsigned int start)
 {
 	mc.getLineSegment(start, selectedSegment);
 	select(selectedSegment);
@@ -45,26 +49,8 @@ MonotoneChainSelectAction::select(indexMonotoneChain& mc, unsigned int start)
 
 /**********************************************************************
  * $Log$
- * Revision 1.10  2006/02/21 16:53:49  strk
- * MCIndexPointSnapper, MCIndexSnapRounder
- *
- * Revision 1.9  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.8  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.7  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.6  2004/03/25 02:23:55  ybychkov
- * All "index/" packages upgraded to JTS 1.4
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
+ * Revision 1.11  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
  *
  **********************************************************************/
 

@@ -1,7 +1,9 @@
 SUBDIRS = \
 	sweepline \
 	strtree \
-	quadtree
+	quadtree \
+	bintree \
+	chain
 
 geosdir = $(includedir)/geos/index
 

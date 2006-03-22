@@ -17,14 +17,15 @@
  *
  **********************************************************************/
 
+#include <geos/noding/MCIndexNoder.h>
+#include <geos/noding/SegmentIntersector.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/index/chain/MonotoneChain.h> 
+#include <geos/index/chain/MonotoneChainBuilder.h> 
+
 #include <cassert>
 #include <functional>
 #include <algorithm>
-
-#include "geos/indexChain.h" // FIXME: split
-#include "geos/noding/SegmentIntersector.h"
-#include "geos/noding/MCIndexNoder.h"
-#include "geos/noding/SegmentString.h"
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -62,13 +63,13 @@ MCIndexNoder::intersectChains()
 
 	SegmentOverlapAction overlapAction(*segInt);
 
-	for (vector<indexMonotoneChain*>::iterator
+	for (vector<MonotoneChain*>::iterator
 			i=monoChains.begin(), iEnd=monoChains.end();
 			i != iEnd;
 			++i)
 	{
 
-		indexMonotoneChain* queryChain = *i;
+		MonotoneChain* queryChain = *i;
 		assert(queryChain);
 		vector<void*> overlapChains;
 		index.query(queryChain->getEnvelope(), overlapChains);
@@ -77,7 +78,7 @@ MCIndexNoder::intersectChains()
 			j != jEnd;
 			++j)
 		{
-			indexMonotoneChain* testChain = static_cast<indexMonotoneChain*>(*j);
+			MonotoneChain* testChain = static_cast<MonotoneChain*>(*j);
 			assert(testChain);
 
 			/**
@@ -99,30 +100,30 @@ MCIndexNoder::intersectChains()
 void
 MCIndexNoder::add(SegmentString* segStr)
 {
-	vector<indexMonotoneChain*> segChains;
+	vector<MonotoneChain*> segChains;
 
-	// segChains will contain nelwy allocated indexMonotoneChain objects
+	// segChains will contain nelwy allocated MonotoneChain objects
 	MonotoneChainBuilder::getChains(segStr->getCoordinates(),
 			segStr, segChains);
 
-	for(vector<indexMonotoneChain*>::iterator
+	for(vector<MonotoneChain*>::iterator
 			it=segChains.begin(), iEnd=segChains.end();
 			it!=iEnd; ++it)
 	{
-		indexMonotoneChain* mc = *it;
+		MonotoneChain* mc = *it;
 		assert(mc);
 
 		mc->setId(idCounter++);
 		index.insert(mc->getEnvelope(), mc);
 
-		// indexMonotoneChain objects deletion delegated to destructor
+		// MonotoneChain objects deletion delegated to destructor
 		monoChains.push_back(mc);
 	}
 }
 
 MCIndexNoder::~MCIndexNoder()
 {
-	for(vector<indexMonotoneChain*>::iterator
+	for(vector<MonotoneChain*>::iterator
 			i=monoChains.begin(), iEnd=monoChains.end();
 			i!=iEnd; ++i)
 	{
@@ -132,8 +133,8 @@ MCIndexNoder::~MCIndexNoder()
 }
 
 void
-MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
-		indexMonotoneChain* mc2, int start2)
+MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain* mc1, int start1,
+		MonotoneChain* mc2, int start2)
 {
 	SegmentString* ss1 = const_cast<SegmentString*>(
 		static_cast<const SegmentString *>(mc1->getContext())
@@ -154,6 +155,9 @@ MCIndexNoder::SegmentOverlapAction::overlap(indexMonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
+ *
  * Revision 1.13  2006/03/15 09:51:12  strk
  * streamlined headers usage
  *

@@ -72,7 +72,7 @@ public:
 			unsigned int vertexIndex);
 
 	bool snap(const HotPixel& hotPixel) {
-		return snap(hotPixel, NULL, 0);
+		return snap(hotPixel, 0, 0);
 	}
 		
 };
@@ -90,6 +90,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/22 18:12:31  strk
+ * indexChain.h header split.
+ *
  * Revision 1.1  2006/03/14 12:55:56  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *
