@@ -17,15 +17,17 @@
  *
  **********************************************************************/
 
-#include <geos/opLinemerge.h>
-//#include <geos/util.h>
-#include <geos/geom/Coordinate.h>
+#include <geos/operation/linemerge/LineSequencer.h>
+#include <geos/operation/linemerge/LineMergeEdge.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
 #include <geos/planargraph/Node.h>
 #include <geos/planargraph/DirectedEdge.h>
+#include <geos/planargraph/Subgraph.h>
 #include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
 
 #include <cassert>
@@ -34,6 +36,7 @@
 
 using namespace std;
 //using namespace geos::planargraph;
+using namespace geos::geom;
 //using namespace geos::planargraph::algorithm;
 
 namespace geos {
@@ -191,8 +194,8 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 			i2End=seq.end(); i2 != i2End; ++i2)
 		{
 			const planargraph::DirectedEdge* de = *i2;
-			LineMergeEdge* e = dynamic_cast<LineMergeEdge* >(de->getEdge());
-			assert(e);
+			assert(dynamic_cast<LineMergeEdge* >(de->getEdge()));
+			LineMergeEdge* e = static_cast<LineMergeEdge* >(de->getEdge());
 			const LineString* line = e->getLine();
 
 			// lineToAdd will be a *copy* of input things
@@ -430,6 +433,9 @@ LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/22 10:13:54  strk
+ * opLinemerge.h split
+ *
  * Revision 1.6  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005 R-2006efractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,8 +14,15 @@
  *
  **********************************************************************/
 
-#include <geos/opLinemerge.h>
+#include <geos/operation/linemerge/LineMergeGraph.h>
+#include <geos/operation/linemerge/LineMergeEdge.h>
+#include <geos/operation/linemerge/LineMergeDirectedEdge.h>
 #include <geos/planargraph/DirectedEdge.h>
+#include <geos/planargraph/Node.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LineString.h>
+
+#include <vector>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -113,6 +120,9 @@ LineMergeGraph::~LineMergeGraph()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/22 10:13:54  strk
+ * opLinemerge.h split
+ *
  * Revision 1.14  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

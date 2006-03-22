@@ -14,9 +14,14 @@
  *
  **********************************************************************/
 
-#include <geos/opLinemerge.h>
+#include <geos/operation/linemerge/LineMerger.h>
+#include <geos/operation/linemerge/LineMergeDirectedEdge.h>
+#include <geos/operation/linemerge/EdgeString.h>
 #include <geos/planargraph/DirectedEdge.h>
-//#include <geos/util.h>
+#include <geos/planargraph/Edge.h>
+#include <geos/planargraph/Node.h>
+#include <geos/geom/GeometryComponentFilter.h>
+#include <geos/geom/LineString.h>
 
 #include <cassert>
 #include <functional>
@@ -24,6 +29,7 @@
 
 using namespace std;
 using namespace geos::planargraph;
+using namespace geos::geom;
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -171,7 +177,9 @@ LineMerger::buildEdgeStringsStartingAt(Node *node)
 	unsigned int size = edges.size();
 	for (unsigned int i=0; i<size; i++)
 	{
-		LineMergeDirectedEdge *directedEdge=(LineMergeDirectedEdge*) edges[i];
+		assert(dynamic_cast<LineMergeDirectedEdge*>(edges[i]));
+		LineMergeDirectedEdge *directedEdge=\
+			static_cast<LineMergeDirectedEdge*> (edges[i]);
 		if (directedEdge->getEdge()->isMarked()) {
 			continue;
 		}
@@ -208,6 +216,9 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/03/22 10:13:54  strk
+ * opLinemerge.h split
+ *
  * Revision 1.13  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

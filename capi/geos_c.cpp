@@ -15,6 +15,14 @@
  *
  ***********************************************************************/
 
+#include <geos/geom.h> // TODO: split me
+#include <geos/io/WKTReader.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/operation/valid/IsValidOp.h>
+#include <geos/opPolygonize.h>
+#include <geos/operation/linemerge/LineMerger.h>
+
 // This should go away
 #include <cstdio>
 #include <cstdlib>
@@ -23,14 +31,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-
-#include <geos.h> // TODO: split me
-#include <geos/io/WKTReader.h>
-#include <geos/io/WKBReader.h>
-#include <geos/io/WKBWriter.h>
-#include <geos/operation/valid/IsValidOp.h>
-#include <geos/opPolygonize.h>
-#include <geos/opLinemerge.h>
 
 /// Define this if you want operations triggering Exceptions to
 /// be printed (will use the NOTIFY channel - only implemented for GEOSUnion so far)

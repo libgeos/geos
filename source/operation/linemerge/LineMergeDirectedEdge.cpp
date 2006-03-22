@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,14 +14,14 @@
  *
  **********************************************************************/
 
+#include <geos/operation/linemerge/LineMergeDirectedEdge.h>
+#include <geos/planargraph/DirectedEdge.h>
+#include <geos/planargraph/Node.h>
+
 #include <cassert>
 
-#include <geos/opLinemerge.h>
-#include <geos/planargraph/DirectedEdge.h>
-//#include <geos/util.h>
-
 //using namespace geos::planargraph;
-//using namespace geos::geom;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -65,6 +65,9 @@ LineMergeDirectedEdge::getNext()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/22 10:13:54  strk
+ * opLinemerge.h split
+ *
  * Revision 1.7  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
