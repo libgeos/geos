@@ -170,6 +170,9 @@ Node::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.1  2006/03/22 14:28:53  strk
+ * Filenames renamed to match class names (matching JTS)
+ *
  * Revision 1.17  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
  *

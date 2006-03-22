@@ -7,8 +7,8 @@ libindexquadtree_la_SOURCES = \
 	DoubleBits.cpp \
 	IntervalSize.cpp \
 	Quadtree.cpp \
-	QuadTreeKey.cpp \
-	QuadTreeNode.cpp \
-	QuadTreeNodeBase.cpp \
-	QuadTreeRoot.cpp 
+	Key.cpp \
+	Node.cpp \
+	NodeBase.cpp \
+	Root.cpp 
 
