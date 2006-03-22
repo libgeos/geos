@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,16 +14,22 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <vector>
-
-#include <geos/opPolygonize.h>
+#include <geos/operation/polygonize/PolygonizeGraph.h>
+#include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
+#include <geos/operation/polygonize/PolygonizeEdge.h>
+#include <geos/operation/polygonize/EdgeRing.h>
 #include <geos/planargraph/Node.h>
 #include <geos/planargraph/DirectedEdgeStar.h>
 #include <geos/planargraph/DirectedEdge.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LineString.h>
+
+#include <cassert>
+#include <vector>
 
 //using namespace std;
 using namespace geos::planargraph;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -122,7 +128,8 @@ PolygonizeGraph::addEdge(const LineString *line)
 	Node *nEnd=getNode(endPt);
 	DirectedEdge *de0=new PolygonizeDirectedEdge(nStart, nEnd, linePts->getAt(1), true);
 	newDirEdges.push_back(de0);
-	DirectedEdge *de1=new PolygonizeDirectedEdge(nEnd, nStart, linePts->getAt(linePts->getSize()-2), false);
+	DirectedEdge *de1=new PolygonizeDirectedEdge(nEnd, nStart,
+			linePts->getAt(linePts->getSize()-2), false);
 	newDirEdges.push_back(de1);
 	Edge *edge=new PolygonizeEdge(line);
 	newEdges.push_back(edge);
@@ -218,7 +225,7 @@ PolygonizeGraph::findIntersectionNodes(PolygonizeDirectedEdge *startDE, long lab
  * Computes the EdgeRings formed by the edges in this graph.
  * @return a list of the EdgeRing found by the polygonization process.
  */
-std::vector<polygonizeEdgeRing*>*
+std::vector<EdgeRing*>*
 PolygonizeGraph::getEdgeRings()
 {
 	// maybe could optimize this, since most of these pointers should
@@ -233,13 +240,13 @@ PolygonizeGraph::getEdgeRings()
 	delete maximalRings;
 
 	// find all edgerings
-	std::vector<polygonizeEdgeRing*> *edgeRingList=new std::vector<polygonizeEdgeRing*>();
+	std::vector<EdgeRing*> *edgeRingList=new std::vector<EdgeRing*>();
 	for(unsigned int i=0; i<dirEdges.size(); ++i)
 	{
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
 		if (de->isMarked()) continue;
 		if (de->isInRing()) continue;
-		polygonizeEdgeRing *er=findEdgeRing(de);
+		EdgeRing *er=findEdgeRing(de);
 		edgeRingList->push_back(er);
 	}
 	return edgeRingList;
@@ -407,12 +414,12 @@ PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE)
 	return edges;
 }
 
-polygonizeEdgeRing *
+EdgeRing *
 PolygonizeGraph::findEdgeRing(PolygonizeDirectedEdge *startDE)
 {
 	PolygonizeDirectedEdge *de=startDE;
-	polygonizeEdgeRing *er=new polygonizeEdgeRing(factory);
-	// Now, when will we delete those polygonizeEdgeRings ?
+	EdgeRing *er=new EdgeRing(factory);
+	// Now, when will we delete those EdgeRings ?
 	newEdgeRings.push_back(er);
 	do {
 		er->add(de);
@@ -475,6 +482,9 @@ PolygonizeGraph::deleteDangles()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/22 11:19:06  strk
+ * opPolygonize.h headers split.
+ *
  * Revision 1.17  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

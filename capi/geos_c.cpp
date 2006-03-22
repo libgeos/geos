@@ -15,12 +15,24 @@
  *
  ***********************************************************************/
 
-#include <geos/geom.h> // TODO: split me
+#include <geos/geom/Geometry.h> 
+#include <geos/geom/GeometryCollection.h> 
+#include <geos/geom/Polygon.h> 
+#include <geos/geom/Point.h> 
+#include <geos/geom/MultiPoint.h> 
+#include <geos/geom/MultiLineString.h> 
+#include <geos/geom/MultiPolygon.h> 
+#include <geos/geom/LinearRing.h> 
+#include <geos/geom/LineString.h> 
+#include <geos/geom/PrecisionModel.h> 
+#include <geos/geom/GeometryFactory.h> 
+#include <geos/geom/CoordinateSequenceFactory.h> 
+#include <geos/geom/IntersectionMatrix.h> 
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/operation/valid/IsValidOp.h>
-#include <geos/opPolygonize.h>
+#include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
 
 // This should go away
@@ -48,6 +60,7 @@
 #endif
 
 using namespace geos;
+using namespace geos::geom;
 using namespace geos::operation::valid;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;

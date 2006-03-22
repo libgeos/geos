@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -14,7 +15,9 @@
  **********************************************************************/
 
 
-#include <geos/opPolygonize.h>
+#include <geos/operation/polygonize/PolygonizeEdge.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -35,19 +38,7 @@ PolygonizeEdge::getLine() {
 
 /**********************************************************************
  * $Log$
- * Revision 1.4  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.3  2004/10/19 19:51:14  strk
- * Fixed many leaks and bugs in Polygonizer.
- * Output still bogus.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/08 04:53:56  ybychkov
- * "operation/polygonize" ported from JTS 1.4
- *
+ * Revision 1.5  2006/03/22 11:19:06  strk
+ * opPolygonize.h headers split.
  *
  **********************************************************************/

@@ -14,11 +14,19 @@
  *
  **********************************************************************/
 
-#include <geos/opPolygonize.h>
+#include <geos/operation/polygonize/EdgeRing.h>
+#include <geos/operation/polygonize/PolygonizeEdge.h>
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/algorithm/CGAlgorithms.h>
 
 #include <vector>
+#include <cassert>
 
 //#define DEBUG_ALLOC 1
 
@@ -32,8 +40,8 @@ namespace operation { // geos.operation
 namespace polygonize { // geos.operation.polygonize
 
 /*
- * Find the innermost enclosing shell polygonizeEdgeRing containing
- * the argument polygonizeEdgeRing, if any.
+ * Find the innermost enclosing shell EdgeRing containing
+ * the argument EdgeRing, if any.
  * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
  * The algorithm used depends on the fact that:
  * 
@@ -43,21 +51,21 @@ namespace polygonize { // geos.operation.polygonize
  * is known to be properly contained in a shell
  * (which is guaranteed to be the case if the hole does not touch its shell)
  *
- * @return containing polygonizeEdgeRing, if there is one
- * @return null if no containing polygonizeEdgeRing is found
+ * @return containing EdgeRing, if there is one
+ * @return null if no containing EdgeRing is found
  */
-polygonizeEdgeRing *
-polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRing *testEr,
-	vector<polygonizeEdgeRing*> *shellList)
+EdgeRing *
+EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
+	vector<EdgeRing*> *shellList)
 {
 	LinearRing *testRing=testEr->getRingInternal();
 	if ( ! testRing ) return NULL;
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
 	Coordinate testPt=testRing->getCoordinateN(0);
-	polygonizeEdgeRing *minShell=NULL;
+	EdgeRing *minShell=NULL;
 	const Envelope *minEnv=NULL;
 	for(int i=0;i<(int)shellList->size();i++) {
-		polygonizeEdgeRing *tryShell=(*shellList)[i];
+		EdgeRing *tryShell=(*shellList)[i];
 		LinearRing *tryRing=tryShell->getRingInternal();
 		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
 		if (minShell!=NULL) minEnv=minShell->getRingInternal()->getEnvelopeInternal();
@@ -96,7 +104,7 @@ polygonizeEdgeRing::findEdgeRingContaining(polygonizeEdgeRing *testEr,
  * or <code>nullCoord</code>
  */
 const Coordinate&
-polygonizeEdgeRing::ptNotInList(const CoordinateSequence *testPts,
+EdgeRing::ptNotInList(const CoordinateSequence *testPts,
 	const CoordinateSequence *pts)
 {
 	unsigned int npts=testPts->getSize();
@@ -118,7 +126,7 @@ polygonizeEdgeRing::ptNotInList(const CoordinateSequence *testPts,
  * @return <code>true</code> if the point is in the array
  */
 bool
-polygonizeEdgeRing::isInList(const Coordinate& pt,
+EdgeRing::isInList(const Coordinate& pt,
 	const CoordinateSequence *pts)
 {
 	unsigned int npts=pts->getSize();
@@ -130,10 +138,10 @@ polygonizeEdgeRing::isInList(const Coordinate& pt,
 	return true;
 }
 
-polygonizeEdgeRing::polygonizeEdgeRing(const GeometryFactory *newFactory)
+EdgeRing::EdgeRing(const GeometryFactory *newFactory)
 {
 #ifdef DEBUG_ALLOC
-	cerr<<"["<<this<<"] polygonizeEdgeRing(factory)"<<endl;
+	cerr<<"["<<this<<"] EdgeRing(factory)"<<endl;
 #endif // DEBUG_ALLOC
 
 	deList=new vector<const DirectedEdge*>();
@@ -144,10 +152,10 @@ polygonizeEdgeRing::polygonizeEdgeRing(const GeometryFactory *newFactory)
 	factory=newFactory;
 }
 
-polygonizeEdgeRing::~polygonizeEdgeRing()
+EdgeRing::~EdgeRing()
 {
 #ifdef DEBUG_ALLOC
-	cerr<<"["<<this<<"] ~polygonizeEdgeRing()"<<endl;
+	cerr<<"["<<this<<"] ~EdgeRing()"<<endl;
 #endif // DEBUG_ALLOC
 	delete deList;
 	if ( holes )
@@ -164,7 +172,7 @@ polygonizeEdgeRing::~polygonizeEdgeRing()
  * @param de the DirectedEdge to add.
  */
 void
-polygonizeEdgeRing::add(const DirectedEdge *de){
+EdgeRing::add(const DirectedEdge *de){
 	deList->push_back(de);
 }
 
@@ -175,7 +183,7 @@ polygonizeEdgeRing::add(const DirectedEdge *de){
  * @return <code>true</code> if this ring is a hole
  */
 bool
-polygonizeEdgeRing::isHole(){
+EdgeRing::isHole(){
 	getRingInternal();
 	return CGAlgorithms::isCCW(ring->getCoordinatesRO());
 }
@@ -185,7 +193,7 @@ polygonizeEdgeRing::isHole(){
  * @param hole the {@link LinearRing} forming the hole.
  */
 void
-polygonizeEdgeRing::addHole(LinearRing *hole)
+EdgeRing::addHole(LinearRing *hole)
 {
 	if (holes==NULL)
 		holes=new vector<Geometry*>();
@@ -200,7 +208,7 @@ polygonizeEdgeRing::addHole(LinearRing *hole)
  * @return the Polygon formed by this ring and its holes.
  */
 Polygon*
-polygonizeEdgeRing::getPolygon()
+EdgeRing::getPolygon()
 {
 	Polygon *poly=factory->createPolygon(ring, holes);
 	ring=NULL;
@@ -212,7 +220,7 @@ polygonizeEdgeRing::getPolygon()
  * Tests if the LinearRing formed by this edge ring is topologically valid.
  */
 bool
-polygonizeEdgeRing::isValid()
+EdgeRing::isValid()
 {
 	if ( ! getRingInternal() ) return false; // computes cached ring
 	return ring->isValid();
@@ -225,14 +233,15 @@ polygonizeEdgeRing::isValid()
  * @return a CoordinateSequence for this ring
  */
 CoordinateSequence*
-polygonizeEdgeRing::getCoordinates()
+EdgeRing::getCoordinates()
 {
 	if (ringPts==NULL)
 	{
 		ringPts=factory->getCoordinateSequenceFactory()->create(NULL);
 		for (int i=0;i<(int)deList->size();i++) {
 			const DirectedEdge *de=(*deList)[i];
-			PolygonizeEdge *edge=(PolygonizeEdge*) de->getEdge();
+			assert(dynamic_cast<PolygonizeEdge*>(de->getEdge()));
+			PolygonizeEdge *edge=static_cast<PolygonizeEdge*>(de->getEdge());
 			addEdge(edge->getLine()->getCoordinatesRO(),
 				de->getEdgeDirection(), ringPts);
 		}
@@ -248,7 +257,7 @@ polygonizeEdgeRing::getCoordinates()
  * @return a LineString containing the coordinates in this ring
  */
 LineString*
-polygonizeEdgeRing::getLineString()
+EdgeRing::getLineString()
 {
 	getCoordinates();
 	return factory->createLineString(*ringPts);
@@ -260,7 +269,7 @@ polygonizeEdgeRing::getLineString()
  * standard output.
  */
 LinearRing *
-polygonizeEdgeRing::getRingInternal()
+EdgeRing::getRingInternal()
 {
 	if (ring!=NULL) return ring;
 
@@ -280,7 +289,7 @@ polygonizeEdgeRing::getRingInternal()
  * Caller gets ownership of ring.
  */
 LinearRing *
-polygonizeEdgeRing::getRingOwnership()
+EdgeRing::getRingOwnership()
 {
 	LinearRing *ret = getRingInternal();
 	ring = NULL;
@@ -288,7 +297,7 @@ polygonizeEdgeRing::getRingOwnership()
 }
 
 void
-polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
+EdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 	CoordinateSequence *coordList)
 {
 	unsigned int npts=coords->getSize();
@@ -310,7 +319,7 @@ polygonizeEdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
- * Revision 1.15  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
+ * Revision 1.16  2006/03/22 11:19:06  strk
+ * opPolygonize.h headers split.
  *
  **********************************************************************/

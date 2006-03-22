@@ -44,9 +44,17 @@ public:
 		GEOSException("TopologyException", msg)
 	{}
 
+	// DANGEROUS! if Coordinate is NULL we'll die
 	TopologyException(const std::string& msg, const geom::Coordinate *newPt)
-		: GEOSException("TopologyException", msg+" "+newPt->toString()),
+		:
+		GEOSException("TopologyException", msg+" "+newPt->toString()),
 		pt(*newPt)
+	{}
+
+	TopologyException(const std::string& msg, const geom::Coordinate& newPt)
+		:
+		GEOSException("TopologyException", msg+" "+newPt.toString()),
+		pt(newPt)
 	{}
 
 	~TopologyException() throw() {}
@@ -63,6 +71,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/22 11:19:06  strk
+ * opPolygonize.h headers split.
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

@@ -13,7 +13,7 @@
  *
  **********************************************************************/
 
-#include <geos/opPolygonize.h>
+#include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
 #include <geos/planargraph/DirectedEdge.h>
 
 using namespace geos::planargraph;
@@ -99,7 +99,7 @@ PolygonizeDirectedEdge::isInRing() const
  * a member of.
  */
 void
-PolygonizeDirectedEdge::setRing(polygonizeEdgeRing *newEdgeRing)
+PolygonizeDirectedEdge::setRing(EdgeRing *newEdgeRing)
 {
 	edgeRing=newEdgeRing;
 }
@@ -110,29 +110,8 @@ PolygonizeDirectedEdge::setRing(polygonizeEdgeRing *newEdgeRing)
 
 /**********************************************************************
  * $Log$
- * Revision 1.6  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- * Revision 1.5  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.4  2004/10/19 19:51:14  strk
- * Fixed many leaks and bugs in Polygonizer.
- * Output still bogus.
- *
- * Revision 1.3  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/08 04:53:56  ybychkov
- * "operation/polygonize" ported from JTS 1.4
- *
+ * Revision 1.7  2006/03/22 11:19:06  strk
+ * opPolygonize.h headers split.
  *
  **********************************************************************/
 

@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +14,13 @@
  *
  **********************************************************************/
 
-#include <geos/opPolygonize.h>
+#include <geos/operation/polygonize/Polygonizer.h>
+#include <geos/operation/polygonize/PolygonizeGraph.h>
+#include <geos/operation/polygonize/EdgeRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Polygon.h>
+
 #include <vector>
 
 #ifndef GEOS_DEBUG
@@ -22,6 +28,7 @@
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -191,11 +198,11 @@ Polygonizer::polygonize()
 
 	dangles=graph->deleteDangles();
 	cutEdges=graph->deleteCutEdges();
-	vector<polygonizeEdgeRing*> *edgeRingList=graph->getEdgeRings();
+	vector<EdgeRing*> *edgeRingList=graph->getEdgeRings();
 #if GEOS_DEBUG
 	cerr<<"Polygonizer::polygonize(): "<<edgeRingList->size()<<" edgeRings in graph"<<endl;
 #endif
-	vector<polygonizeEdgeRing*> *validEdgeRingList=new vector<polygonizeEdgeRing*>();
+	vector<EdgeRing*> *validEdgeRingList=new vector<EdgeRing*>();
 	invalidRingLines=new vector<LineString*>();
 	findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
 #if GEOS_DEBUG
@@ -214,18 +221,18 @@ Polygonizer::polygonize()
 
 	for (unsigned int i=0, n=shellList->size(); i<n; ++i)
 	{
-		polygonizeEdgeRing *er=(*shellList)[i];
+		EdgeRing *er=(*shellList)[i];
 		polyList->push_back(er->getPolygon());
 	}
 	delete validEdgeRingList;
 }
 
 void
-Polygonizer::findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<polygonizeEdgeRing*> *validEdgeRingList, vector<LineString*> *invalidRingList)
+Polygonizer::findValidRings(vector<EdgeRing*> *edgeRingList, vector<EdgeRing*> *validEdgeRingList, vector<LineString*> *invalidRingList)
 {
 	for (unsigned int i=0, n=edgeRingList->size(); i<n; ++i)
 	{
-		polygonizeEdgeRing *er=(*edgeRingList)[i];
+		EdgeRing *er=(*edgeRingList)[i];
 		if (er->isValid())
 			validEdgeRingList->push_back(er);
 		else
@@ -236,13 +243,13 @@ Polygonizer::findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<po
 }
 
 void
-Polygonizer::findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList)
+Polygonizer::findShellsAndHoles(vector<EdgeRing*> *edgeRingList)
 {
-	holeList=new vector<polygonizeEdgeRing*>();
-	shellList=new vector<polygonizeEdgeRing*>();
+	holeList=new vector<EdgeRing*>();
+	shellList=new vector<EdgeRing*>();
 	for (unsigned int i=0, n=edgeRingList->size(); i<n; ++i)
 	{
-		polygonizeEdgeRing *er=(*edgeRingList)[i];
+		EdgeRing *er=(*edgeRingList)[i];
 		if (er->isHole())
 			holeList->push_back(er);
 		else
@@ -251,20 +258,20 @@ Polygonizer::findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList)
 }
 
 void
-Polygonizer::assignHolesToShells(vector<polygonizeEdgeRing*> *holeList,vector<polygonizeEdgeRing*> *shellList)
+Polygonizer::assignHolesToShells(vector<EdgeRing*> *holeList,vector<EdgeRing*> *shellList)
 {
 	for (unsigned int i=0, n=holeList->size(); i<n; ++i)
 	{
-		polygonizeEdgeRing *holeER=(*holeList)[i];
+		EdgeRing *holeER=(*holeList)[i];
 		assignHoleToShell(holeER,shellList);
 	}
 }
 
 void
-Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER,
-		vector<polygonizeEdgeRing*> *shellList)
+Polygonizer::assignHoleToShell(EdgeRing *holeER,
+		vector<EdgeRing*> *shellList)
 {
-	polygonizeEdgeRing *shell=polygonizeEdgeRing::findEdgeRingContaining(holeER, shellList);
+	EdgeRing *shell=EdgeRing::findEdgeRingContaining(holeER, shellList);
 
 	if (shell!=NULL)
 		shell->addHole(holeER->getRingOwnership());
@@ -277,6 +284,9 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/03/22 11:19:06  strk
+ * opPolygonize.h headers split.
+ *
  * Revision 1.12  2006/03/03 10:46:22  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
  *

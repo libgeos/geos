@@ -4,7 +4,9 @@ SUBDIRS = \
 	valid \
 	relate \
 	predicate \
-	distance
+	distance \
+	linemerge \
+	polygonize
 
 geosdir = $(includedir)/geos/operation
 
