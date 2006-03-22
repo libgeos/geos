@@ -15,16 +15,18 @@
  **********************************************************************/
 
 #include <geos/indexBintree.h>
-#include <geos/indexQuadtree.h>
-#include <cmath>
+#include <geos/index/quadtree/DoubleBits.h>
 
-using namespace geos::index::quadtree;  // for DoubleBits
+#include <cmath>
 
 namespace geos {
 namespace index { // geos.index
 namespace bintree { // geos.index.bintree
 
-int Key::computeLevel(BinTreeInterval *newInterval) {
+int
+Key::computeLevel(BinTreeInterval *newInterval)
+{
+	using geos::index::quadtree::DoubleBits;
 	double dx=newInterval->getWidth();
 	//int level = BinaryPower.exponent(dx) + 1;
 	int level=DoubleBits::exponent(dx)+1;
@@ -70,7 +72,11 @@ void Key::computeKey(BinTreeInterval *itemInterval) {
 	}
 }
 
-void Key::computeInterval(int level,BinTreeInterval *itemInterval){
+void
+Key::computeInterval(int level,BinTreeInterval *itemInterval)
+{
+	using geos::index::quadtree::DoubleBits;
+
 	double size=DoubleBits::powerOf2(level);
 	//double size = pow2.power(level);
 	pt=floor(itemInterval->getMin()/size)*size;
@@ -83,6 +89,9 @@ void Key::computeInterval(int level,BinTreeInterval *itemInterval){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
+ *
  * Revision 1.9  2006/03/15 18:44:52  strk
  * Bug #60 - Missing <cmath> header in some files
  *

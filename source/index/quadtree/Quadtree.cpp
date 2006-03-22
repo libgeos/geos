@@ -14,11 +14,10 @@
  *
  **********************************************************************/
 
-#include <vector>
-
-#include <geos/indexQuadtree.h>
-#include <geos/util.h>
+#include <geos/index/quadtree/Quadtree.h>
 #include <geos/geom/Envelope.h>
+
+#include <vector>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -154,6 +153,9 @@ Quadtree::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
+ *
  * Revision 1.22  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

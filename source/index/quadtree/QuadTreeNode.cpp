@@ -14,12 +14,13 @@
  *
  **********************************************************************/
 
+#include <geos/index/quadtree/Node.h> 
+#include <geos/index/quadtree/Key.h> 
+#include <geos/geom/Envelope.h>
+
 #include <string>
 #include <sstream>
 #include <cassert>
-
-#include <geos/indexQuadtree.h> // FIXME: split
-#include <geos/geom/Envelope.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -32,38 +33,38 @@ namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
-QuadTreeNode*
-QuadTreeNode::createNode(Envelope *env)
+Node*
+Node::createNode(Envelope *env)
 {
-	QuadTreeKey* key=new QuadTreeKey(env);
-	QuadTreeNode *node=new QuadTreeNode(new Envelope(*(key->getEnvelope())),key->getLevel());
+	Key* key=new Key(env);
+	Node *node=new Node(new Envelope(*(key->getEnvelope())),key->getLevel());
 	delete key;
 	return node;
 }
 
-QuadTreeNode*
-QuadTreeNode::createExpanded(QuadTreeNode *node, const Envelope *addEnv)
+Node*
+Node::createExpanded(Node *node, const Envelope *addEnv)
 {
 	Envelope *expandEnv=new Envelope(*addEnv);
 	if (node!=NULL) expandEnv->expandToInclude(node->env);
 #if GEOS_DEBUG
-	cerr<<"QuadTreeNode::createExpanded computed "<<expandEnv->toString()<<endl;
+	cerr<<"Node::createExpanded computed "<<expandEnv->toString()<<endl;
 #endif
-	QuadTreeNode *largerNode=createNode(expandEnv);
+	Node *largerNode=createNode(expandEnv);
 	if (node!=NULL) largerNode->insertNode(node);
 	delete expandEnv;
 	return largerNode;
 }
 
 /*public*/
-QuadTreeNode*
-QuadTreeNode::getNode(const Envelope *searchEnv)
+Node*
+Node::getNode(const Envelope *searchEnv)
 {
 	int subnodeIndex=getSubnodeIndex(searchEnv, centre);
 	// if subquadIndex is -1 searchEnv is not contained in a subquad
 	if (subnodeIndex!=-1) {
 		// create the quad if it does not exist
-		QuadTreeNode *node=getSubnode(subnodeIndex);
+		Node *node=getSubnode(subnodeIndex);
 		// recursively search the found/created quad
 		return node->getNode(searchEnv);
 	} else {
@@ -72,22 +73,22 @@ QuadTreeNode::getNode(const Envelope *searchEnv)
 }
 
 /*public*/
-QuadTreeNodeBase*
-QuadTreeNode::find(const Envelope *searchEnv)
+NodeBase*
+Node::find(const Envelope *searchEnv)
 {
 	int subnodeIndex=getSubnodeIndex(searchEnv, centre);
 	if (subnodeIndex==-1)
 		return this;
 	if (subnode[subnodeIndex]!=NULL) {
 		// query lies in subquad, so search it
-		QuadTreeNode *node=subnode[subnodeIndex];
+		Node *node=subnode[subnodeIndex];
 		return node->find(searchEnv);
 	}
 	// no existing subquad, so return this one anyway
 	return this;
 }
 
-void QuadTreeNode::insertNode(QuadTreeNode* node) {
+void Node::insertNode(Node* node) {
 	assert(env==NULL || env->contains(node->env));
 	//System.out.println(env);
 	//System.out.println(quad.env);
@@ -99,7 +100,7 @@ void QuadTreeNode::insertNode(QuadTreeNode* node) {
 	} else {
 		// the quad is not a direct child, so make a new child quad to contain it
 		// and recursively insert the quad
-		QuadTreeNode *childNode=createSubnode(index);
+		Node *childNode=createSubnode(index);
 		childNode->insertNode(node);
 		subnode[index]=childNode;
 	}
@@ -109,14 +110,14 @@ void QuadTreeNode::insertNode(QuadTreeNode* node) {
 * get the subquad for the index.
 * If it doesn't exist, create it
 */
-QuadTreeNode* QuadTreeNode::getSubnode(int index){
+Node* Node::getSubnode(int index){
 	if (subnode[index]==NULL) {
 		subnode[index]=createSubnode(index);
 	}
 	return subnode[index];
 }
 
-QuadTreeNode* QuadTreeNode::createSubnode(int index) {
+Node* Node::createSubnode(int index) {
 	// create a new subquad in the appropriate quadrant
 	double minx=0.0;
 	double maxx=0.0;
@@ -150,16 +151,16 @@ QuadTreeNode* QuadTreeNode::createSubnode(int index) {
 			break;
 	}
 	Envelope *sqEnv=new Envelope(minx,maxx,miny,maxy);
-	QuadTreeNode *node=new QuadTreeNode(sqEnv,level-1);
+	Node *node=new Node(sqEnv,level-1);
 	return node;
 }
 
 string
-QuadTreeNode::toString() const
+Node::toString() const
 {
 	ostringstream os;
 	os <<"L"<<level<<" "<<env->toString()<<" Ctr["<<centre.toString()<<"]";
-	os <<" "+QuadTreeNodeBase::toString();
+	os <<" "+NodeBase::toString();
 	return os.str();
 }
 
@@ -169,57 +170,8 @@ QuadTreeNode::toString() const
 
 /**********************************************************************
  * $Log$
- * Revision 1.16  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.15  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.14  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.13  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.12  2006/02/23 11:54:20  strk
- * - MCIndexPointSnapper
- * - MCIndexSnapRounder
- * - SnapRounding BufferOp
- * - ScaledNoder
- * - GEOSException hierarchy cleanups
- * - SpatialIndex memory-friendly query interface
- * - GeometryGraph::getBoundaryNodes memory-friendly
- * - NodeMap::getBoundaryNodes memory-friendly
- * - Cleanups in geomgraph::Edge
- * - Added an XML test for snaprounding buffer (shows leaks, working on it)
- *
- * Revision 1.11  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.10  2004/11/19 16:15:55  strk
- * Completely removed sprintf usage, substituted by stringstream.
- *
- * Revision 1.9  2004/11/19 16:09:53  strk
- * Added <stdio.h> include for sprintf recognition.
- *
- * Revision 1.8  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.7  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
+ * Revision 1.17  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
  *
  **********************************************************************/
 

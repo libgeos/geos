@@ -19,7 +19,6 @@
 
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/EdgeList.h>
-#include <geos/indexQuadtree.h> // FIXME: split this
 #include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
@@ -146,6 +145,9 @@ operator<< (std::ostream&os, const EdgeList& el)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/22 12:22:49  strk
+ * indexQuadtree.h split
+ *
  * Revision 1.16  2006/03/14 11:03:14  strk
  * Added operator<< for Edge and EdgeList
  *

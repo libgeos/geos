@@ -15,8 +15,8 @@
  **********************************************************************/
 
 #include <geos/indexBintree.h>
-#include <geos/indexQuadtree.h>
-#include <geos/util.h>
+#include <geos/index/quadtree/IntervalSize.h>
+
 #include <cassert>
 
 using namespace geos::index::quadtree;  // for IntervalSize
@@ -83,6 +83,9 @@ Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
+ *
  * Revision 1.8  2006/02/20 10:14:18  strk
  * - namespaces geos::index::*
  * - Doxygen documentation cleanup

@@ -14,13 +14,15 @@
  *
  **********************************************************************/
 
+#include <geos/index/quadtree/NodeBase.h> 
+#include <geos/index/quadtree/Node.h> 
+#include <geos/index/ItemVisitor.h> 
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Coordinate.h>
+
 #include <sstream>
 #include <vector>
 #include <algorithm>
-
-#include <geos/indexQuadtree.h> // FIXME: split
-#include <geos/index/ItemVisitor.h> 
-#include <geos/geom/Envelope.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -34,7 +36,7 @@ namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 int
-QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
+NodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
 {
 	int subnodeIndex=-1;
 	if (env->getMinX()>=centre.x) {
@@ -51,7 +53,7 @@ QuadTreeNodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
 	return subnodeIndex;
 }
 
-QuadTreeNodeBase::QuadTreeNodeBase() {
+NodeBase::NodeBase() {
 	items=new vector<void*>();
 	subnode[0]=NULL;
 	subnode[1]=NULL;
@@ -59,7 +61,7 @@ QuadTreeNodeBase::QuadTreeNodeBase() {
 	subnode[3]=NULL;
 }
 
-QuadTreeNodeBase::~QuadTreeNodeBase() {
+NodeBase::~NodeBase() {
 	delete subnode[0];
 	delete subnode[1];
 	delete subnode[2];
@@ -71,18 +73,18 @@ QuadTreeNodeBase::~QuadTreeNodeBase() {
 	delete items;
 }
 
-vector<void*>* QuadTreeNodeBase::getItems() {
+vector<void*>* NodeBase::getItems() {
 	return items;
 }
 
-void QuadTreeNodeBase::add(void* item) {
+void NodeBase::add(void* item) {
 	items->push_back(item);
 	//GEOS_DEBUG itemCount++;
 	//GEOS_DEBUG System.out.print(itemCount);
 }
 
 vector<void*>*
-QuadTreeNodeBase::addAllItems(vector<void*> *resultItems)
+NodeBase::addAllItems(vector<void*> *resultItems)
 {
 	//<<TODO:ASSERT?>> Can we assert that this node cannot have both items
 	//and subnodes? [Jon Aquino]
@@ -96,7 +98,7 @@ QuadTreeNodeBase::addAllItems(vector<void*> *resultItems)
 }
 
 void
-QuadTreeNodeBase::addAllItemsFromOverlapping(const Envelope *searchEnv, vector<void*> *resultItems)
+NodeBase::addAllItemsFromOverlapping(const Envelope *searchEnv, vector<void*> *resultItems)
 {
 	if (!isSearchMatch(searchEnv))
 		return;
@@ -113,7 +115,7 @@ QuadTreeNodeBase::addAllItemsFromOverlapping(const Envelope *searchEnv, vector<v
 
 //<<TODO:RENAME?>> In Samet's terminology, I think what we're returning here is
 //actually level+1 rather than depth. (See p. 4 of his book) [Jon Aquino]
-int QuadTreeNodeBase::depth() {
+int NodeBase::depth() {
 	int maxSubDepth=0;
 	for(int i=0;i<4;i++) {
 		if (subnode[i]!=NULL) {
@@ -126,7 +128,7 @@ int QuadTreeNodeBase::depth() {
 }
 
 //<<TODO:RENAME?>> "size" is a bit generic. How about "itemCount"? [Jon Aquino]
-int QuadTreeNodeBase::size() {
+int NodeBase::size() {
 	int subSize=0;
 	for(int i=0;i<4;i++) {
 		if (subnode[i]!=NULL) {
@@ -140,7 +142,7 @@ int QuadTreeNodeBase::size() {
 //get and set an attribute that might be thought of as a variable V should be
 //named getV and setV" (6.8.3). Perhaps this and other methods should be
 //renamed to "get..."? [Jon Aquino]
-int QuadTreeNodeBase::nodeCount() {
+int NodeBase::nodeCount() {
 	int subSize=0;
 	for(int i=0;i<4;i++) {
 		if (subnode[i]!=NULL) {
@@ -151,7 +153,7 @@ int QuadTreeNodeBase::nodeCount() {
 }
 
 string
-QuadTreeNodeBase::toString() const
+NodeBase::toString() const
 {
 	ostringstream s;
 	s<<"ITEMS:"<<items->size()<<endl;
@@ -167,7 +169,7 @@ QuadTreeNodeBase::toString() const
 
 /*public*/
 void
-QuadTreeNodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
+NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 {
 	if (! isSearchMatch(searchEnv)) return;
 
@@ -184,7 +186,7 @@ QuadTreeNodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 
 /*private*/
 void
-QuadTreeNodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
+NodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
 {
 	// would be nice to filter items based on search envelope, but can't
 	// until they contain an envelope
@@ -197,7 +199,7 @@ QuadTreeNodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
 
 /*public*/
 bool
-QuadTreeNodeBase::remove(const Envelope* itemEnv, void* item)
+NodeBase::remove(const Envelope* itemEnv, void* item)
 {
 	// use envelope to restrict nodes scanned
 	if (! isSearchMatch(itemEnv)) return false;
@@ -236,59 +238,8 @@ QuadTreeNodeBase::remove(const Envelope* itemEnv, void* item)
 
 /**********************************************************************
  * $Log$
- * Revision 1.18  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.17  2006/03/10 11:41:49  strk
- * Added missing <algorithm> include (bug#56)
- *
- * Revision 1.16  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.15  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.14  2006/02/23 11:54:20  strk
- * - MCIndexPointSnapper
- * - MCIndexSnapRounder
- * - SnapRounding BufferOp
- * - ScaledNoder
- * - GEOSException hierarchy cleanups
- * - SpatialIndex memory-friendly query interface
- * - GeometryGraph::getBoundaryNodes memory-friendly
- * - NodeMap::getBoundaryNodes memory-friendly
- * - Cleanups in geomgraph::Edge
- * - Added an XML test for snaprounding buffer (shows leaks, working on it)
- *
- * Revision 1.13  2006/02/20 21:04:37  strk
- * - namespace geos::index
- * - SpatialIndex interface synced
- *
- * Revision 1.12  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.11  2005/01/28 09:47:51  strk
- * Replaced sprintf uses with ostringstream.
- *
- * Revision 1.10  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.9  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.19  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
  *
  **********************************************************************/
 

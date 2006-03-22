@@ -186,8 +186,9 @@ AC_OUTPUT([
 	source/headers/geos/geomgraph/Makefile
 	source/headers/geos/geomgraph/index/Makefile
 	source/headers/geos/index/Makefile
-	source/headers/geos/index/sweepline/Makefile
+	source/headers/geos/index/quadtree/Makefile
 	source/headers/geos/index/strtree/Makefile
+	source/headers/geos/index/sweepline/Makefile
 	source/headers/geos/io/Makefile
 	source/headers/geos/noding/Makefile
 	source/headers/geos/noding/snapround/Makefile

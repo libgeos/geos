@@ -14,7 +14,9 @@
  *
  **********************************************************************/
 
-#include <geos/indexQuadtree.h>
+#include <geos/index/quadtree/IntervalSize.h>
+#include <geos/index/quadtree/DoubleBits.h>
+
 #include <algorithm>
 #include <cmath>
 
@@ -39,6 +41,9 @@ bool IntervalSize::isZeroWidth(double mn,double mx){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
+ *
  * Revision 1.9  2006/03/15 18:44:52  strk
  * Bug #60 - Missing <cmath> header in some files
  *

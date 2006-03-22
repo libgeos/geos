@@ -24,7 +24,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/LinearRing.h>
-#include <geos/indexQuadtree.h> // TODO: split me
+#include <geos/index/quadtree/Quadtree.h> 
 
 #include <vector>
 #include <cassert>
@@ -132,6 +132,9 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
+ *
  * Revision 1.22  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

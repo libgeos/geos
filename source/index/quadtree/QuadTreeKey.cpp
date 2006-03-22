@@ -14,10 +14,12 @@
  *
  **********************************************************************/
 
-#include <cmath>
-
-#include <geos/indexQuadtree.h>
+#include <geos/index/quadtree/Key.h>
+#include <geos/index/quadtree/DoubleBits.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Coordinate.h>
+
+#include <cmath>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -34,7 +36,7 @@ namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 int
-QuadTreeKey::computeQuadLevel(Envelope *env)
+Key::computeQuadLevel(Envelope *env)
 {
 	double dx=env->getWidth();
 	double dy=env->getHeight();
@@ -46,31 +48,31 @@ QuadTreeKey::computeQuadLevel(Envelope *env)
 	return level;
 }
 
-QuadTreeKey::QuadTreeKey(Envelope *itemEnv){
+Key::Key(Envelope *itemEnv){
 	pt=new Coordinate();
 	level=0;
 	env=NULL;
 	computeKey(itemEnv);
 }
 
-QuadTreeKey::~QuadTreeKey(){
+Key::~Key(){
 	delete pt;
 	delete env;
 }
 
-Coordinate* QuadTreeKey::getPoint() {
+Coordinate* Key::getPoint() {
 	return pt;
 }
 
-int QuadTreeKey::getLevel() {
+int Key::getLevel() {
 	return level;
 }
 
-Envelope* QuadTreeKey::getEnvelope() {
+Envelope* Key::getEnvelope() {
 	return env;
 }
 
-Coordinate* QuadTreeKey::getCentre() {
+Coordinate* Key::getCentre() {
 	return new Coordinate(
 					(env->getMinX()+env->getMaxX())/2,
 					(env->getMinY()+env->getMaxY())/2);
@@ -80,7 +82,7 @@ Coordinate* QuadTreeKey::getCentre() {
  * return a square envelope containing the argument envelope,
  * whose extent is a power of two and which is based at a power of 2
  */
-void QuadTreeKey::computeKey(Envelope *itemEnv) {
+void Key::computeKey(Envelope *itemEnv) {
 	level=computeQuadLevel(itemEnv);
 	env=new Envelope();
 	computeKey(level,itemEnv);
@@ -90,7 +92,7 @@ void QuadTreeKey::computeKey(Envelope *itemEnv) {
 		computeKey(level,itemEnv);
 	}
 #if GEOS_DEBUG
-	std::cerr<<"QuadTreeKey::computeKey:"<<std::endl;
+	std::cerr<<"Key::computeKey:"<<std::endl;
 	std::cerr<<" itemEnv: "<<itemEnv->toString()<<std::endl;
 	std::cerr<<"  keyEnv: "<<env->toString()<<std::endl;
 	std::cerr<<"  keyLvl: "<<level<<std::endl;
@@ -99,7 +101,7 @@ void QuadTreeKey::computeKey(Envelope *itemEnv) {
 }
 
 void
-QuadTreeKey::computeKey(int level,Envelope *itemEnv)
+Key::computeKey(int level,Envelope *itemEnv)
 {
 	double quadSize=DoubleBits::powerOf2(level);
 	//double quadSize=pow2.power(level);
@@ -114,34 +116,7 @@ QuadTreeKey::computeKey(int level,Envelope *itemEnv)
 
 /**********************************************************************
  * $Log$
- * Revision 1.12  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.11  2006/03/15 18:44:52  strk
- * Bug #60 - Missing <cmath> header in some files
- *
- * Revision 1.10  2006/03/09 15:34:57  strk
- * Fixed debugging lines
- *
- * Revision 1.9  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.8  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.7  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.13  2006/03/22 12:22:50  strk
+ * indexQuadtree.h split
  *
  **********************************************************************/
