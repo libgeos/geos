@@ -16,33 +16,43 @@
 #ifndef GEOS_IO_WKTREADER_INL
 #define GEOS_IO_WKTREADER_INL
 
-namespace geos {
-	namespace io {
+#include <geos/geom/GeometryFactory.h>
 
-INLINE WKTReader::WKTReader(const GeometryFactory *gf)
+namespace geos {
+namespace io {
+
+INLINE
+WKTReader::WKTReader(const geom::GeometryFactory *gf)
+	:
+	geometryFactory(gf),
+	precisionModel(gf->getPrecisionModel())
 {
 #if GEOS_DEBUG
     std::cout << "\nGEOS_DEBUG: WKTReader::WKTReader(const GeometryFactory *gf)\n";
 #endif
-
-	geometryFactory=gf;
-	precisionModel=gf->getPrecisionModel();
 }
 
-INLINE WKTReader::~WKTReader()
+INLINE
+WKTReader::~WKTReader()
 {
 #if GEOS_DEBUG
     std::cout << "\nGEOS_DEBUG: WKTReader::~WKTReader()\n";
 #endif
 }
 
-	} // namespace io
+} // namespace io
 } // namespace geos
 
 #endif // #ifndef GEOS_IO_WKTREADER_INL
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/22 16:58:35  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.1  2006/03/20 18:18:15  strk
  * io.h header split
  *

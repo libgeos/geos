@@ -13,7 +13,6 @@
  *
  **********************************************************************/
 
-//#include <geos/geom.h>
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
 
@@ -40,37 +39,13 @@ Triangle::inCentre(Coordinate& result)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.6  2006/03/13 21:54:56  strk
  * Streamlined headers inclusion.
- *
- * Revision 1.5  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.4  2006/02/23 11:54:20  strk
- * - MCIndexPointSnapper
- * - MCIndexSnapRounder
- * - SnapRounding BufferOp
- * - ScaledNoder
- * - GEOSException hierarchy cleanups
- * - SpatialIndex memory-friendly query interface
- * - GeometryGraph::getBoundaryNodes memory-friendly
- * - NodeMap::getBoundaryNodes memory-friendly
- * - Cleanups in geomgraph::Edge
- * - Added an XML test for snaprounding buffer (shows leaks, working on it)
- *
- * Revision 1.3  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.1  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- *
  **********************************************************************/
 

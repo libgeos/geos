@@ -18,10 +18,15 @@
 
 #include <geos/inline.h>
 
+#include <string>
+
 // Forward declarations
 namespace geos {
 	namespace io {
 		class Unload;
+	}
+	namespace geom {
+		class Coordinate;
 	}
 }
 
@@ -291,6 +296,12 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/22 16:58:35  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

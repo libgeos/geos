@@ -13,8 +13,13 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/util.h>
+#include <geos/util/GeometricShapeFactory.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/Envelope.h>
+
 #include <vector>
 #include <cmath>
 
@@ -23,6 +28,7 @@
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace util { // geos.util
@@ -266,82 +272,11 @@ Envelope* GeometricShapeFactory::Dimensions::getEnvelope() {
 
 /**********************************************************************
  * $Log$
- * Revision 1.14  2006/03/15 18:44:52  strk
- * Bug #60 - Missing <cmath> header in some files
- *
- * Revision 1.13  2006/03/06 19:40:48  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.12  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.11  2006/02/23 23:17:52  strk
- * - Coordinate::nullCoordinate made private
- * - Simplified Coordinate inline definitions
- * - LMGeometryComponentFilter definition moved to LineMerger.cpp file
- * - Misc cleanups
- *
- * Revision 1.10  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.9  2006/01/08 15:24:40  strk
- * Changed container-related typedef to class-scoped STL-like typedefs.
- * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
- * defined M_PI when undef as suggested by Charlie Savage.
- * Removed <stdio.h> include from GeometricShapeFactory.cpp.
- *
- * Revision 1.8  2004/12/08 13:54:44  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.7  2004/07/16 10:28:41  strk
- * Dimesions object allocated on the heap
- *
- * Revision 1.6  2004/07/15 13:40:44  strk
- * Memory leaks fixed, CoordinateSequence use made JTS - compatible.
- *
- * Revision 1.5  2004/07/14 21:19:35  strk
- * GeometricShapeFactory first pass of bug fixes
- *
- * Revision 1.4  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.1  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
+ * Revision 1.15  2006/03/22 16:58:35  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
  *
  **********************************************************************/
 

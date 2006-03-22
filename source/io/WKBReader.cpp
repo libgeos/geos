@@ -16,7 +16,18 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBConstants.h>
 #include <geos/io/ParseException.h>
-#include <geos/geom.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/PrecisionModel.h>
 
 #include <iomanip>
 #include <ostream>
@@ -24,6 +35,7 @@
 #include <string>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace io { // geos.io

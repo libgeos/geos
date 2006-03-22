@@ -14,11 +14,6 @@
  *
  **********************************************************************/
 
-#include <string>
-
-//#include <geos/geom.h>
-//#include <geos/util.h>
-
 #include <geos/util/UnsupportedOperationException.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
@@ -32,6 +27,8 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
+
+#include <string>
 
 using namespace std;
 
@@ -228,6 +225,12 @@ Point::getGeometryTypeId() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.42  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.41  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

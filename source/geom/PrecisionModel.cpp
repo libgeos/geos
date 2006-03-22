@@ -13,8 +13,11 @@
  *
  **********************************************************************/
 
-#include <geos/geom.h>
-#include <geos/util.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/util/math.h>
+
 #include <sstream>
 #include <string>
 #include <cmath>
@@ -33,8 +36,8 @@ const double PrecisionModel::maximumPreciseValue=9007199254740992.0;
 
 
 /**
-* Rounds an numeric value to the PrecisionModel grid.
-*/
+ * Rounds an numeric value to the PrecisionModel grid.
+ */
 double
 PrecisionModel::makePrecise(double val) const {
 	if (modelType==FLOATING_SINGLE) {
@@ -76,12 +79,12 @@ PrecisionModel::PrecisionModel(): modelType(FLOATING), scale(1.0)
 }
 
 /**
-* Creates a <code>PrecisionModel</code> that specifies
-* an explicit precision model type.
-* If the model type is FIXED the scale factor will default to 1.
-*
-* @param modelType the type of the precision model
-*/
+ * Creates a <code>PrecisionModel</code> that specifies
+ * an explicit precision model type.
+ * If the model type is FIXED the scale factor will default to 1.
+ *
+ * @param modelType the type of the precision model
+ */
 PrecisionModel::PrecisionModel(Type nModelType): modelType(nModelType)
 {
 	//modelType=nModelType;
@@ -135,21 +138,25 @@ PrecisionModel::PrecisionModel(const PrecisionModel &pm):
 }
 
 /**
-* Tests whether the precision model supports floating point
-* @return <code>true</code> if the precision model supports floating point
-*/
-bool PrecisionModel::isFloating() const {
+ * Tests whether the precision model supports floating point
+ * @return <code>true</code> if the precision model supports floating point
+ */
+bool
+PrecisionModel::isFloating() const
+{
 	return (modelType == FLOATING || modelType == FLOATING_SINGLE);
 }
 
 /**
-* Returns the maximum number of significant digits provided by this
-* precision model.
-* Intended for use by routines which need to print out precise values.
-*
-* @return the maximum number of decimal places provided by this precision model
-*/
-int PrecisionModel::getMaximumSignificantDigits() const {
+ * Returns the maximum number of significant digits provided by this
+ * precision model.
+ * Intended for use by routines which need to print out precise values.
+ *
+ * @return the maximum number of decimal places provided by this precision model
+ */
+int
+PrecisionModel::getMaximumSignificantDigits() const
+{
 	int maxSigDigits = 16;
 	if (modelType == FLOATING) {
 		maxSigDigits = 16;
@@ -162,33 +169,39 @@ int PrecisionModel::getMaximumSignificantDigits() const {
 }
 
 /**
-* Gets the type of this PrecisionModel
-* @return the type of this PrecisionModel
-*/
-PrecisionModel::Type PrecisionModel::getType() const {
+ * Gets the type of this PrecisionModel
+ * @return the type of this PrecisionModel
+ */
+PrecisionModel::Type PrecisionModel::getType() const
+{
 	return modelType;
 }
 
 /**
-*  Returns the multiplying factor used to obtain a precise coordinate.
-* This method is private because PrecisionModel is intended to
-* be an immutable (value) type.
-*
-*@return    the amount by which to multiply a coordinate after subtracting
-*      the offset
-*/
-double PrecisionModel::getScale() const {
+ *  Returns the multiplying factor used to obtain a precise coordinate.
+ * This method is private because PrecisionModel is intended to
+ * be an immutable (value) type.
+ *
+ *@return    the amount by which to multiply a coordinate after subtracting
+ *      the offset
+ */
+double
+PrecisionModel::getScale() const
+{
 	return scale;
 }
 
 /**
-*  Sets the multiplying factor used to obtain a precise coordinate.
-* This method is private because PrecisionModel is intended to
-* be an immutable (value) type.
-*
-*/
-void PrecisionModel::setScale(double newScale) {
-	if ( newScale == 0 ) throw util::IllegalArgumentException("PrecisionModel scale cannot be 0"); 
+ *  Sets the multiplying factor used to obtain a precise coordinate.
+ * This method is private because PrecisionModel is intended to
+ * be an immutable (value) type.
+ *
+ */
+void
+PrecisionModel::setScale(double newScale)
+{
+	if ( newScale == 0 )
+		throw util::IllegalArgumentException("PrecisionModel scale cannot be 0"); 
 	scale=fabs(newScale);
 }
 
@@ -301,6 +314,12 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.39  2006/03/15 18:44:52  strk
  * Bug #60 - Missing <cmath> header in some files
  *

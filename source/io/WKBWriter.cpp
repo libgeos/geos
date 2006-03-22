@@ -17,7 +17,16 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBConstants.h>
 #include <geos/util/IllegalArgumentException.h>
-#include <geos/geom.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/PrecisionModel.h>
 
 #include <ostream>
 #include <sstream>
@@ -26,6 +35,7 @@
 #undef DEBUG_WKB_WRITER
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 	namespace io { // geos.io

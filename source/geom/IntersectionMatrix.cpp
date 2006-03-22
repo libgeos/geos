@@ -14,14 +14,12 @@
  *
  **********************************************************************/
 
-#include <sstream>
-
-//#include <geos/geom.h>
-//#include <geos/util.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Location.h>
 #include <geos/util/IllegalArgumentException.h>
+
+#include <sstream>
 
 using namespace std;
 
@@ -355,6 +353,12 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.20  2006/03/13 21:54:56  strk
  * Streamlined headers inclusion.
  *

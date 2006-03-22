@@ -14,12 +14,6 @@
  *
  **********************************************************************/
 
-#include <algorithm>
-#include <typeinfo>
-
-//#include <geos/geom.h>
-//#include <geos/geosAlgorithm.h>
-
 #include <geos/util/IllegalArgumentException.h> 
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/operation/IsSimpleOp.h>
@@ -36,14 +30,14 @@
 #include <geos/geom/MultiPoint.h> // for getBoundary
 #include <geos/geom/Envelope.h>
 
+#include <algorithm>
+#include <typeinfo>
+
 using namespace std;
 using namespace geos::algorithm;
-//using namespace geos::operation;
 
 namespace geos {
 namespace geom { // geos::geom
-
-//LineString::LineString(){}
 
 LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
 	points=ls.points->clone();
@@ -305,6 +299,12 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.62  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.61  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

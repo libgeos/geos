@@ -17,10 +17,11 @@
 #ifndef GEOS_IO_WKTWRITER_H
 #define GEOS_IO_WKTWRITER_H
 
+#include <string>
+
 // Forward declarations
 namespace geos {
 	namespace geom {
-
 		class Coordinate;
 		class CoordinateSequence;
 		class Geometry;
@@ -33,16 +34,11 @@ namespace geos {
 		class MultiLineString;
 		class MultiPolygon;
 		class PrecisionModel;
-
-	} // namespace geom
-
+	} 
 	namespace io {
-
 		class Writer;
-
-	} // namespace io
-
-} // namespace geos
+	} 
+} 
 
 
 namespace geos {
@@ -155,6 +151,12 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/22 16:58:35  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.1  2006/03/20 18:18:15  strk
  * io.h header split
  *

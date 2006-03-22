@@ -14,14 +14,12 @@
  *
  **********************************************************************/
 
-#include <vector>
-
-//#include <geos/geom.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/GeometryFactory.h>
-//#include <geos/operation.h>
 #include <geos/operation/IsSimpleOp.h>
 #include <geos/geom/Dimension.h>
+
+#include <vector>
 
 using namespace std;
 
@@ -98,6 +96,12 @@ MultiPoint::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.31  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

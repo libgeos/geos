@@ -18,8 +18,11 @@
  **********************************************************************/
 
 
-#include <geos/geom.h>
-#include <geos/geomUtil.h>
+#include <geos/geom/util/ShortCircuitedGeometryVisitor.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace geom { // geos.geom

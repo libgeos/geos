@@ -91,7 +91,9 @@ protected:
 private:
 	const geom::GeometryFactory *geometryFactory;
 	const geom::PrecisionModel *precisionModel;
-	geom::Coordinate* getPreciseCoordinate(io::StringTokenizer *tokenizer);
+
+	void getPreciseCoordinate(io::StringTokenizer *tokenizer, geom::Coordinate&);
+
 	bool isNumberNext(io::StringTokenizer *tokenizer);
 };
 
@@ -106,6 +108,12 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/22 16:58:35  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.1  2006/03/20 18:18:15  strk
  * io.h header split
  *

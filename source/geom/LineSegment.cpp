@@ -14,24 +14,17 @@
  *
  **********************************************************************/
 
-#include <sstream>
-#include <cmath>
-
-//#include <geos/geom.h>
-//#include <geos/geosAlgorithm.h>
-//#include <geos/operation.h>
-#include <geos/profiler.h>
-
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/profiler.h>
+
+#include <sstream>
+#include <cmath>
 
 using namespace std;
-//using namespace geos::geom;
-//using namespace geos::algorithm;
-//using namespace geos::operation;
 
 #ifndef USE_INLINE
 # include <geos/geom/LineSegment.inl>
@@ -238,6 +231,12 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.32  2006/03/16 13:28:21  strk
  * obsoleted getCoordinate(), replaced by operator[]
  *

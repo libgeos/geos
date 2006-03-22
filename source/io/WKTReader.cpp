@@ -17,8 +17,19 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/StringTokenizer.h>
 #include <geos/io/ParseException.h>
-#include <geos/geom.h>
-#include <geos/util.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/PrecisionModel.h>
+
 #include <string>
 #include <cassert>
 
@@ -35,77 +46,70 @@
 #endif
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace io { // geos.io
 
-//WKTReader::WKTReader(){
-//	geometryFactory=new GeometryFactory();
-//	precisionModel=geometryFactory->getPrecisionModel();
-//}
-
-Geometry * WKTReader::read(const string &wellKnownText)
+Geometry *
+WKTReader::read(const string &wellKnownText)
 {
-	auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
-	StringTokenizer *st=tokenizer.release();
+	//auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
+	StringTokenizer tokenizer(wellKnownText);
 	Geometry *g=NULL;
-	try {
-		g=readGeometryTaggedText(st);
-	}
-	catch (...) {
-		delete st;
-		throw;
-	}
-	delete st;
+	g=readGeometryTaggedText(&tokenizer);
 	return g;
 }
 
-CoordinateSequence* WKTReader::getCoordinates(StringTokenizer *tokenizer) {
+CoordinateSequence*
+WKTReader::getCoordinates(StringTokenizer *tokenizer)
+{
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return new CoordinateArraySequence(); 
+		return geometryFactory->getCoordinateSequenceFactory()->create(NULL);
+		//new CoordinateArraySequence(); 
 	}
-	CoordinateSequence *coordinates = new CoordinateArraySequence();
-	Coordinate *coord = getPreciseCoordinate(tokenizer);
-	coordinates->add(*coord);
-	delete coord; coord=NULL;
+	CoordinateSequence *coordinates = \
+		geometryFactory->getCoordinateSequenceFactory()->create(NULL);
+	Coordinate coord;
+	getPreciseCoordinate(tokenizer, coord);
+	coordinates->add(coord);
 	try {
 		nextToken=getNextCloserOrComma(tokenizer);
 		while (nextToken==",") {
-			coord = getPreciseCoordinate(tokenizer);
-			coordinates->add(*coord);
-			delete coord; coord=NULL;
+			getPreciseCoordinate(tokenizer, coord);
+			coordinates->add(coord);
 			nextToken=getNextCloserOrComma(tokenizer);
 		}
 	} catch (...) {
-		delete coord;
 		delete coordinates;
 		throw;
 	}
 	return coordinates;
 }
 
-Coordinate* WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer) {
-	Coordinate *coord=new Coordinate();
-	try {
-		coord->x=getNextNumber(tokenizer);
-		coord->y=getNextNumber(tokenizer);
-		if (isNumberNext(tokenizer)) {
-			coord->z=getNextNumber(tokenizer);
-		}
-		precisionModel->makePrecise(coord);
-	} catch (...) {
-		delete coord;
-		throw;
+void
+WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer, Coordinate& coord)
+{
+	coord.x=getNextNumber(tokenizer);
+	coord.y=getNextNumber(tokenizer);
+	if (isNumberNext(tokenizer)) {
+		coord.z=getNextNumber(tokenizer);
+	} else {
+		coord.z=DoubleNotANumber;
 	}
-	return coord;
+	precisionModel->makePrecise(coord);
 }
 
-bool WKTReader::isNumberNext(StringTokenizer *tokenizer) {
+bool
+WKTReader::isNumberNext(StringTokenizer *tokenizer)
+{
 	return tokenizer->peekNextToken()==StringTokenizer::TT_NUMBER;
 }
 
-double WKTReader::getNextNumber(StringTokenizer *tokenizer) {
+double
+WKTReader::getNextNumber(StringTokenizer *tokenizer)
+{
 	int type=tokenizer->nextToken();
 	switch(type){
 		case StringTokenizer::TT_EOF:
@@ -127,7 +131,9 @@ double WKTReader::getNextNumber(StringTokenizer *tokenizer) {
 	return 0;
 }
 
-string WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer) {
+string
+WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer)
+{
 	string nextWord=getNextWord(tokenizer);
 	if (nextWord=="EMPTY" || nextWord=="(") {
 		return nextWord;
@@ -135,7 +141,9 @@ string WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer) {
 	throw  ParseException("Expected 'EMPTY' or '(' but encountered ",nextWord);
 }
 
-string WKTReader::getNextCloserOrComma(StringTokenizer *tokenizer) {
+string
+WKTReader::getNextCloserOrComma(StringTokenizer *tokenizer)
+{
 	string nextWord=getNextWord(tokenizer);
 	if (nextWord=="," || nextWord==")") {
 		return nextWord;
@@ -143,7 +151,9 @@ string WKTReader::getNextCloserOrComma(StringTokenizer *tokenizer) {
 	throw  ParseException("Expected ')' or ',' but encountered",nextWord);
 }
 
-string WKTReader::getNextCloser(StringTokenizer *tokenizer) {
+string
+WKTReader::getNextCloser(StringTokenizer *tokenizer)
+{
 	string nextWord=getNextWord(tokenizer);
 	if (nextWord==")") {
 		return nextWord;
@@ -151,7 +161,9 @@ string WKTReader::getNextCloser(StringTokenizer *tokenizer) {
 	throw  ParseException("Expected ')' but encountered",nextWord);
 }
 
-string WKTReader::getNextWord(StringTokenizer *tokenizer) {
+string
+WKTReader::getNextWord(StringTokenizer *tokenizer)
+{
 	int type=tokenizer->nextToken();
 	switch(type){
 		case StringTokenizer::TT_EOF:
@@ -169,11 +181,14 @@ string WKTReader::getNextWord(StringTokenizer *tokenizer) {
 		case ',':
 			return ",";
 	}
-	assert(0); // Encountered unexpected StreamTokenizer type
+	assert(0);
+	//throw  ParseException("Encountered unexpected StreamTokenizer type");
 	return "";
 }
 
-Geometry* WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer) {
+Geometry*
+WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer)
+{
 	string type = getNextWord(tokenizer);
 	if (type=="POINT") {
 		return readPointText(tokenizer);
@@ -195,21 +210,19 @@ Geometry* WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer) {
 	throw  ParseException("Unknown type",type);
 }
 
-Point* WKTReader::readPointText(StringTokenizer *tokenizer) {
+Point*
+WKTReader::readPointText(StringTokenizer *tokenizer)
+{
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createPoint(Coordinate::getNull());
 	}
-	Coordinate *coord = getPreciseCoordinate(tokenizer);
-	Point *pt=geometryFactory->createPoint(*coord);
-	delete coord;
-	try {
-		getNextCloser(tokenizer);
-	} catch (...) {
-		delete pt;
-		throw;
-	}
-	return pt;
+
+	Coordinate coord;
+	getPreciseCoordinate(tokenizer, coord);
+	getNextCloser(tokenizer);
+
+	return geometryFactory->createPoint(coord);
 }
 
 LineString* WKTReader::readLineStringText(StringTokenizer *tokenizer) {
@@ -328,112 +341,10 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
- * Revision 1.38  2006/03/20 18:18:15  strk
- * io.h header split
- *
- * Revision 1.37  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.36  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.35  2006/03/06 15:23:14  strk
- * geos::io namespace
- *
- * Revision 1.34  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.33  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.32  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.31  2005/04/14 11:49:02  strk
- * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
- *
- * Revision 1.30  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.29  2004/10/21 17:13:59  strk
- * Fixed bug introduced by previous patch.
- *
- * Revision 1.28  2004/10/21 07:03:31  strk
- * Removed leak in ::readPolygonText reported by Carlos A. Rueda
- *
- * Revision 1.27  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.26  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.25  2004/07/05 10:50:21  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.24  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.23  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.22  2004/06/15 20:30:00  strk
- * fixed a typo
- *
- * Revision 1.21  2004/06/15 20:16:19  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.20  2004/05/14 12:10:54  strk
- * avoided leaks on malformed LinearRing
- *
- * Revision 1.19  2004/05/07 13:23:51  strk
- * Memory leaks fixed.
- *
- * Revision 1.18  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.17  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.16  2003/10/15 08:52:55  strk
- * Memory leaks fixed.
+ * Revision 1.39  2006/03/22 16:58:35  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
  *
  **********************************************************************/

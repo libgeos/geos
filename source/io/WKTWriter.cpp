@@ -14,20 +14,29 @@
  *
  **********************************************************************/
 
+#include <geos/io/WKTWriter.h>
+#include <geos/io/Writer.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/PrecisionModel.h>
+
 #include <typeinfo>
 #include <cstdio> // should avoid this
 #include <string>
 #include <sstream>
 #include <cassert>
 
-#include <geos/io/WKTWriter.h>
-#include <geos/io/Writer.h>
-#include <geos/util.h>
-#include <geos/geom.h>
-
 #define PRINT_Z 0
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace io { // geos.io
@@ -102,7 +111,7 @@ WKTWriter::createFormatter(const PrecisionModel* precisionModel)
 {
 	// the default number of decimal places is 16, which is sufficient
 	// to accomodate the maximum precision of a double.
-    int decimalPlaces = precisionModel->getMaximumSignificantDigits();
+	int decimalPlaces = precisionModel->getMaximumSignificantDigits();
 	string fmt="%.";
 	char buffer[255];
 	sprintf(buffer,"%i",decimalPlaces);
@@ -376,6 +385,12 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/22 16:58:35  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.29  2006/03/20 18:18:15  strk
  * io.h header split
  *

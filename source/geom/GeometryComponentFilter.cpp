@@ -16,10 +16,8 @@
 
 #include <cassert>
 
-//#include <geos/geom.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/Geometry.h>
-//#include <geos/util.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -38,26 +36,11 @@ void GeometryComponentFilter::filter_ro(const Geometry *geom) {
 
 /**********************************************************************
  * $Log$
- * Revision 1.10  2006/03/13 21:54:56  strk
- * Streamlined headers inclusion.
- *
- * Revision 1.9  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.8  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.7  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.6  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.11  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
  *
  **********************************************************************/
 

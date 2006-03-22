@@ -14,17 +14,14 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <algorithm>
-#include <vector>
-
-//#include <geos/geom.h>
-//#include <geos/util.h>
-
 #include <geos/geom/Envelope.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
+
+#include <cassert>
+#include <algorithm>
+#include <vector>
 
 using namespace std;
 
@@ -208,39 +205,11 @@ CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 
 /**********************************************************************
  * $Log$
- * Revision 1.5  2006/03/14 15:32:24  strk
- * Cleaned up toString funx (more WKT friendly)
- *
- * Revision 1.4  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.3  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.2  2006/02/28 14:34:03  strk
- * Added many assertions and debugging output hunting for a bug in BufferOp
- *
- * Revision 1.1  2006/01/31 19:07:33  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
+ * Revision 1.6  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
  *
  **********************************************************************/
 

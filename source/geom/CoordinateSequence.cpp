@@ -13,17 +13,16 @@
  *
  **********************************************************************/
 
-#include <cstdio>
-#include <algorithm>
-#include <vector>
-
-//#include <geos/geom.h>
 #include <geos/profiler.h>
 #include <geos/geom/CoordinateSequence.h>
 // FIXME: we should probably not be using CoordinateArraySequenceFactory
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
+
+#include <cstdio>
+#include <algorithm>
+#include <vector>
 
 using namespace std;
 
@@ -237,6 +236,12 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/22 16:58:34  strk
+ * Removed (almost) all inclusions of geom.h.
+ * Removed obsoleted .cpp files.
+ * Fixed a bug in WKTReader not using the provided CoordinateSequence
+ * implementation, optimized out some memory allocations.
+ *
  * Revision 1.16  2006/03/13 21:54:56  strk
  * Streamlined headers inclusion.
  *
