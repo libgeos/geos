@@ -14,7 +14,8 @@
  *
  **********************************************************************/
 
-#include <geos/indexBintree.h>
+#include <geos/index/bintree/Key.h>
+#include <geos/index/bintree/Interval.h>
 #include <geos/index/quadtree/DoubleBits.h>
 
 #include <cmath>
@@ -24,7 +25,7 @@ namespace index { // geos.index
 namespace bintree { // geos.index.bintree
 
 int
-Key::computeLevel(BinTreeInterval *newInterval)
+Key::computeLevel(Interval *newInterval)
 {
 	using geos::index::quadtree::DoubleBits;
 	double dx=newInterval->getWidth();
@@ -33,37 +34,47 @@ Key::computeLevel(BinTreeInterval *newInterval)
 	return level;
 }
 
-Key::Key(BinTreeInterval *newInterval){
+Key::Key(Interval *newInterval)
+{
 	interval=NULL;
 	pt=0.0;
 	level=0;
 	computeKey(newInterval);
 }
 
-Key::~Key(){
+Key::~Key()
+{
 	delete interval;
 }
 
-double Key::getPoint() {
+double
+Key::getPoint()
+{
 	return pt;
 }
 
-int Key::getLevel() {
+int
+Key::getLevel()
+{
 	return level;
 }
 
-BinTreeInterval* Key::getInterval() {
+Interval*
+Key::getInterval()
+{
 	return interval;
 }
 
 /**
-* return a square envelope containing the argument envelope,
-* whose extent is a power of two and which is based at a power of 2
-*/
-void Key::computeKey(BinTreeInterval *itemInterval) {
+ * return a square envelope containing the argument envelope,
+ * whose extent is a power of two and which is based at a power of 2
+ */
+void
+Key::computeKey(Interval *itemInterval)
+{
 	level=computeLevel(itemInterval);
 	delete interval;
-	interval=new BinTreeInterval();
+	interval=new Interval();
 	computeInterval(level,itemInterval);
 	// MD - would be nice to have a non-iterative form of this algorithm
 	while (!interval->contains(itemInterval)) {
@@ -73,7 +84,7 @@ void Key::computeKey(BinTreeInterval *itemInterval) {
 }
 
 void
-Key::computeInterval(int level,BinTreeInterval *itemInterval)
+Key::computeInterval(int level, Interval *itemInterval)
 {
 	using geos::index::quadtree::DoubleBits;
 
@@ -89,24 +100,10 @@ Key::computeInterval(int level,BinTreeInterval *itemInterval)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
+ *
  * Revision 1.10  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
- *
- * Revision 1.9  2006/03/15 18:44:52  strk
- * Bug #60 - Missing <cmath> header in some files
- *
- * Revision 1.8  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.7  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.6  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 

@@ -5,8 +5,8 @@ INCLUDES = -I$(top_srcdir)/source/headers
 
 libindexbintree_la_SOURCES = \
 	Bintree.cpp \
-	BinTreeInterval.cpp \
-	BinTreeNode.cpp \
+	Interval.cpp \
+	Node.cpp \
 	Key.cpp \
 	NodeBase.cpp \
 	Root.cpp 

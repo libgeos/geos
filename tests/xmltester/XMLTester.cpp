@@ -31,7 +31,7 @@
 
 #include <geos/geom.h>
 #include <geos/util.h>
-#include <geos/geomgraph.h>
+//#include <geos/geomgraph.h>
 #include <geos/io.h>
 #include <geos/opRelate.h>
 #include <geos/opPolygonize.h>
@@ -41,12 +41,6 @@
 #include <geos/unload.h>
 #include <geos/opValid.h>
 #include "XMLTester.h"
-
-//#include "util.h"
-//#include "geomgraph.h"
-//#include "io.h"
-//#include "opRelate.h"
-//#include "MarkupSTL.h"
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -981,219 +975,10 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
+ *
  * Revision 1.29  2006/03/17 14:56:39  strk
  * Fixed filename normalizer for sql output
- *
- * Revision 1.28  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.27  2006/03/07 14:21:17  strk
- * Leak plugged, tweeked output to be nice with --sql-output
- *
- * Revision 1.26  2006/03/07 12:41:21  strk
- * Added --wkb-output and made --sql-output compatible with -v
- *
- * Revision 1.25  2006/03/07 11:22:35  strk
- * table name for sqlOutput normalized
- *
- * Revision 1.24  2006/03/07 11:06:17  strk
- * Added --sql-output switch for debugging
- *
- * Revision 1.23  2006/03/07 10:46:51  strk
- * verbose validity errors
- *
- * Revision 1.22  2006/03/06 21:27:40  strk
- * Cascading fixed after Unload definition moved to geos::io namespace
- *
- * Revision 1.21  2006/03/06 19:40:48  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.20  2006/03/06 15:23:14  strk
- * geos::io namespace
- *
- * Revision 1.19  2006/03/06 13:26:58  strk
- * Fixed equalsExact check, and also reduced tolerance
- *
- * Revision 1.18  2006/03/06 11:05:13  strk
- * Added input and output validity test facilities
- *
- * Revision 1.17  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.16  2006/03/02 16:22:04  strk
- * Updated copyright notice
- *
- * Revision 1.15  2006/03/02 11:03:23  strk
- * Added assertion in relate test handler
- *
- * Revision 1.14  2006/03/02 10:25:30  strk
- * Added support for FLOATING_SINGLE precisionmodel in XML tests
- *
- * Revision 1.13  2006/03/01 18:14:07  strk
- * Handled NULL return from Geometry::getInteriorPoint()
- *
- * Revision 1.12  2006/03/01 13:06:41  strk
- * Used FLOATING precision model in buffer.xml test, added expected results,
- * changed XMLTester.cpp to use a tolerance when comparing expected and obtained
- * results from buffer operations.
- *
- * Revision 1.11  2006/03/01 12:12:03  strk
- * Fixed a bug in verbose output preventing geometry arg 'A' from being properly printed
- *
- * Revision 1.10  2006/03/01 09:56:32  strk
- * Case insensitive operation names and geometry arguments names (a/b)
- *
- * Revision 1.9  2006/03/01 09:43:44  strk
- * Unrecognized tests always printed (was only printed when verbose before)
- *
- * Revision 1.8  2006/02/28 19:18:04  strk
- * Added cctype include (bug #34)
- *
- * Revision 1.7  2006/02/28 15:34:44  strk
- * Fix for VC++ builds (Bug #32)
- *
- * Revision 1.6  2006/02/27 14:41:38  strk
- * More verbose handling of exceptions
- *
- * Revision 1.5  2006/02/23 20:32:55  strk
- * Added support for LineMerge tests. Exception printed on stderr.
- *
- * Revision 1.4  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.3  2006/02/14 13:28:26  strk
- * New SnapRounding code ported from JTS-1.7 (not complete yet).
- * Buffer op optimized by using new snaprounding code.
- * Leaks fixed in XMLTester.
- *
- * Revision 1.2  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.1  2006/01/31 19:07:35  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.60  2006/01/18 17:49:58  strk
- * Reworked XMLTester to be quiet by default. Use -v switch to make it verbose.
- *
- * Revision 1.59  2006/01/18 12:54:48  strk
- * Added HEXWKB support in XMLTester. Added a simple test in HEXWKB form
- * and a 'test' rule running the locally-available tests and showing
- * result summay.
- *
- * Revision 1.58  2005/11/25 12:22:42  strk
- * Made XMLTester able to run multiple test files and keep overall
- * counters.
- *
- * Revision 1.57  2005/06/28 16:52:09  strk
- * Added number of points count as a debugging aid
- *
- * Revision 1.56  2005/06/21 12:22:19  strk
- * XMLTester code cleanups
- *
- * Revision 1.55  2005/06/14 11:57:03  strk
- * Added workaround for mingw Polygon name clash
- *
- * Revision 1.54  2005/06/10 13:24:50  strk
- * Added use declaration to make MingW build work
- *
- * Revision 1.53  2005/02/18 08:20:24  strk
- * Added support for point-per-quadrant argument in buffer tests (using arg2).
- *
- * Revision 1.52  2005/01/03 16:06:27  strk
- * Changed polygonize op to return a GeometryCollection
- *
- * Revision 1.51  2005/01/03 15:56:21  strk
- * Fixed memory leaks just introduced for Polygonizer test case.
- *
- * Revision 1.50  2005/01/03 15:49:30  strk
- * Added Polygonize test handling
- *
- * Revision 1.49  2004/12/30 13:32:30  strk
- * Handled NULL result from getCentroid()
- *
- * Revision 1.48  2004/12/08 13:54:44  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.47  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.46  2004/11/02 09:38:33  strk
- * Added timer for buffer test.
- *
- * Revision 1.45  2004/09/13 12:39:49  strk
- * Added missing newline at end of output
- *
- * Revision 1.44  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.43  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.42  2004/05/27 08:40:13  strk
- * Fixed a memleak in buffer test.
- *
- * Revision 1.41  2004/05/18 13:49:18  strk
- * Output made more neat (geometry B is not printed if not existent).
- * Added support for buffer tests.
- *
- * Revision 1.40  2004/05/17 12:53:52  strk
- * Expected result string trimmed for blanks
- *
- * Revision 1.39  2004/05/14 07:19:59  strk
- * Changed the algorythm for finding precisionModel type (current way did
- * not work): now if you specify a scale precisionModel will be FIXED,
- * otherwise it will be FLOATING.
- *
- * Revision 1.38  2004/05/07 13:23:51  strk
- * Memory leaks fixed.
- *
- * Revision 1.37  2004/03/19 09:48:46  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.36  2003/11/12 17:10:01  strk
- * added missing initialization
- *
- * Revision 1.35  2003/11/12 15:02:12  strk
- * more cleanup on exception
- *
- * Revision 1.34  2003/11/07 01:23:43  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.33  2003/10/17 05:51:21  ybychkov
- * Fixed a small memory leak.
- *
- * Revision 1.32  2003/10/16 13:01:31  strk
- * Added call to Unload::Release()
- *
- * Revision 1.31  2003/10/16 12:09:48  strk
- * bug fixed in exception handling
- *
- * Revision 1.30  2003/10/16 08:48:06  strk
- * Exceptions handled
- *
  **********************************************************************/
 

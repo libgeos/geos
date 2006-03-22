@@ -37,7 +37,7 @@ namespace geos {
 	namespace index {
 		namespace bintree {
 			class Bintree;
-			class BinTreeInterval;
+			class Interval;
 		}
 		namespace chain {
 			// when indexChain include is dropped
@@ -69,7 +69,7 @@ public:
 
 private:
 	geom::LinearRing *ring;
-	index::bintree::BinTreeInterval *interval;
+	index::bintree::Interval *interval;
 	geom::CoordinateSequence *pts;
 	index::bintree::Bintree *tree;
 	int crossings;  // number of segment/ray crossings
@@ -86,6 +86,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
+ *
  * Revision 1.1  2006/03/09 16:46:48  strk
  * geos::geom namespace definition, first pass at headers split
  *

@@ -14,7 +14,9 @@
  *
  **********************************************************************/
 
-#include <geos/indexBintree.h>
+#include <geos/index/bintree/Bintree.h>
+#include <geos/index/bintree/Root.h>
+#include <geos/index/bintree/Interval.h>
 #include <vector>
 
 namespace geos {
@@ -24,63 +26,76 @@ namespace bintree { // geos.index.bintree
 using namespace std;
 
 /**
-* Ensure that the BinTreeInterval for the inserted item has non-zero extents.
+* Ensure that the Interval for the inserted item has non-zero extents.
 * Use the current minExtent to pad it, if necessary
 */
-BinTreeInterval* Bintree::ensureExtent(BinTreeInterval *itemInterval,double minExtent){
+Interval*
+Bintree::ensureExtent(Interval *itemInterval, double minExtent)
+{
 	double min=itemInterval->getMin();
 	double max=itemInterval->getMax();
 	// has a non-zero extent
-	if (min!=max) return new BinTreeInterval(itemInterval);
+	if (min!=max) return new Interval(itemInterval);
 	// pad extent
 	if (min==max) {
 		min=min-minExtent/2.0;
 		max=min+minExtent/2.0;
 	}
 //	delete itemInterval;
-	return new BinTreeInterval(min, max);
+	return new Interval(min, max);
 }
 
 
 
-Bintree::Bintree() {
+Bintree::Bintree()
+{
 	minExtent=1.0;
 	root=new Root();
 }
 
-Bintree::~Bintree() {
+Bintree::~Bintree()
+{
 	for (unsigned int i=0; i<newIntervals.size(); i++)
 		delete newIntervals[i];
 	delete root;
 }
 
-int Bintree::depth(){
+int
+Bintree::depth()
+{
 	if (root!=NULL) return root->depth();
 	return 0;
 }
 
-int Bintree::size() {
+int
+Bintree::size()
+{
 	if (root!=NULL) return root->size();
 	return 0;
 }
 
 /**
-* Compute the total number of nodes in the tree
-*
-* @return the number of nodes in the tree
-*/
-int Bintree::nodeSize(){
+ * Compute the total number of nodes in the tree
+ *
+ * @return the number of nodes in the tree
+ */
+int
+Bintree::nodeSize()
+{
 	if (root!=NULL) return root->nodeSize();
 	return 0;
 }
 
-void Bintree::insert(BinTreeInterval *itemInterval,void* item){
+void
+Bintree::insert(Interval *itemInterval,void* item)
+{
 	collectStats(itemInterval);
-	BinTreeInterval *insertInterval=ensureExtent(itemInterval,minExtent);
+	Interval *insertInterval=ensureExtent(itemInterval,minExtent);
 	if ( insertInterval != itemInterval )
 		newIntervals.push_back(insertInterval);
 	//int oldSize=size();
 	root->insert(insertInterval,item);
+
 	/* GEOS_DEBUG
 	int newSize=size();
 	System.out.println("BinTree: size="+newSize+"   node size="+nodeSize());
@@ -99,13 +114,13 @@ vector<void*>* Bintree::iterator() {
 }
 
 vector<void*>* Bintree::query(double x) {
-	return query(new BinTreeInterval(x, x));
+	return query(new Interval(x, x));
 }
 
 /**
 * min and max may be the same value
 */
-vector<void*>* Bintree::query(BinTreeInterval *interval) {
+vector<void*>* Bintree::query(Interval *interval) {
 	/**
 	* the items that are matched are all items in intervals
 	* which overlap the query interval
@@ -115,11 +130,15 @@ vector<void*>* Bintree::query(BinTreeInterval *interval) {
 	return foundItems;
 }
 
-void Bintree::query(BinTreeInterval *interval,vector<void*> *foundItems) {
+void
+Bintree::query(Interval *interval,vector<void*> *foundItems)
+{
 	root->addAllItemsFromOverlapping(interval,foundItems);
 }
 
-void Bintree::collectStats(BinTreeInterval *interval) {
+void
+Bintree::collectStats(Interval *interval)
+{
 	double del=interval->getWidth();
 	if (del<minExtent && del>0.0)
 		minExtent=del;
@@ -131,35 +150,8 @@ void Bintree::collectStats(BinTreeInterval *interval) {
 
 /**********************************************************************
  * $Log$
- * Revision 1.12  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.11  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.10  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.9  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2004/05/07 14:13:02  strk
- * Fixed segfault in ::insert
- *
- * Revision 1.6  2004/05/06 16:30:58  strk
- * Kept track of newly allocated objects by ensureExtent for Bintree and Quadtree,
- * deleted at destruction time. doc/example.cpp runs with no leaks.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.13  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
  *
  **********************************************************************/
 

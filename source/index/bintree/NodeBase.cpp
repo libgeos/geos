@@ -14,8 +14,11 @@
  *
  **********************************************************************/
 
-#include <geos/indexBintree.h>
-#include <geos/indexChain.h>
+#include <geos/index/bintree/NodeBase.h>
+#include <geos/index/bintree/Interval.h>
+#include <geos/index/bintree/Node.h>
+#include <geos/indexChain.h> // FIXME: split
+
 #include <vector>
 
 using namespace std;
@@ -27,17 +30,20 @@ namespace index { // geos.index
 namespace bintree { // geos.index.bintree
 
 /**
-* Returns the index of the subnode that wholely contains the given interval.
-* If none does, returns -1.
-*/
-int NodeBase::getSubnodeIndex(BinTreeInterval *interval, double centre) {
+ * Returns the index of the subnode that wholely contains the given interval.
+ * If none does, returns -1.
+ */
+int
+NodeBase::getSubnodeIndex(Interval *interval, double centre)
+{
 	int subnodeIndex=-1;
 	if (interval->min>=centre) subnodeIndex=1;
 	if (interval->max<=centre) subnodeIndex=0;
 	return subnodeIndex;
 }
 
-NodeBase::NodeBase() {
+NodeBase::NodeBase()
+{
 	items=new vector<void*>();
 	subnode[0]=NULL;
 	subnode[1]=NULL;
@@ -54,7 +60,9 @@ NodeBase::~NodeBase() {
 	subnode[1]=NULL;
 }
 
-vector<void*>* NodeBase::getItems() {
+vector<void*>*
+NodeBase::getItems()
+{
 	return items;
 }
 
@@ -72,7 +80,9 @@ vector<void*>* NodeBase::addAllItems(vector<void*> *newItems) {
 	return items;
 }
 
-vector<void*>* NodeBase::addAllItemsFromOverlapping(BinTreeInterval *interval,vector<void*> *resultItems){
+vector<void*>*
+NodeBase::addAllItemsFromOverlapping(Interval *interval,vector<void*> *resultItems)
+{
 	if (!isSearchMatch(interval))
 		return items;
 	resultItems->insert(resultItems->end(),items->begin(),items->end());
@@ -84,7 +94,9 @@ vector<void*>* NodeBase::addAllItemsFromOverlapping(BinTreeInterval *interval,ve
 	return items;
 }
 
-int NodeBase::depth() {
+int
+NodeBase::depth()
+{
 	int maxSubDepth=0;
 	for (int i=0;i<2;i++) {
 		if (subnode[i]!=NULL) {
@@ -96,7 +108,9 @@ int NodeBase::depth() {
 	return maxSubDepth+1;
 }
 
-int NodeBase::size() {
+int
+NodeBase::size()
+{
 	int subSize=0;
 	for (int i=0;i<2;i++) {
 		if (subnode[i]!=NULL) {
@@ -106,7 +120,9 @@ int NodeBase::size() {
 	return subSize+(int)items->size();
 }
 
-int NodeBase::nodeSize() {
+int
+NodeBase::nodeSize()
+{
 	int subSize=0;
 	for (int i=0;i<2;i++) {
 		if (subnode[i]!=NULL) {
@@ -123,21 +139,8 @@ int NodeBase::nodeSize() {
 
 /**********************************************************************
  * $Log$
- * Revision 1.10  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.9  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.11  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
  *
  **********************************************************************/
 

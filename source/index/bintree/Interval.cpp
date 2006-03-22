@@ -14,29 +14,35 @@
  *
  **********************************************************************/
 
-#include <geos/indexBintree.h>
+#include <geos/index/bintree/Interval.h>
 
 namespace geos {
 namespace index { // geos.index
 namespace bintree { // geos.index.bintree
 
-BinTreeInterval::BinTreeInterval(){
+Interval::Interval()
+{
 	min=0.0;
 	max=0.0;
 }
 
-BinTreeInterval::BinTreeInterval(double nmin, double nmax){
+Interval::Interval(double nmin, double nmax)
+{
 	init(nmin, nmax);
 }
 
-BinTreeInterval::~BinTreeInterval(){
+Interval::~Interval()
+{
 }
 
-BinTreeInterval::BinTreeInterval(BinTreeInterval* interval){
+Interval::Interval(Interval* interval)
+{
 	init(interval->min, interval->max);
 }
 
-void BinTreeInterval::init(double nmin, double nmax) {
+void
+Interval::init(double nmin, double nmax)
+{
 	min=nmin;
 	max=nmax;
 	if (min>max) {
@@ -45,41 +51,59 @@ void BinTreeInterval::init(double nmin, double nmax) {
 	}
 }
  
-double BinTreeInterval::getMin() {
+double
+Interval::getMin()
+{
 	return min;
 }
 
-double BinTreeInterval::getMax() {
+double
+Interval::getMax()
+{
 	return max;
 }
 
-double BinTreeInterval::getWidth() {
+double
+Interval::getWidth()
+{
 	return max-min;
 }
  
-void BinTreeInterval::expandToInclude(BinTreeInterval *interval) {
+void
+Interval::expandToInclude(Interval *interval)
+{
 	if (interval->max>max) max=interval->max;
 	if (interval->min<min) min=interval->min;
 }
  
-bool BinTreeInterval::overlaps(BinTreeInterval *interval) {
+bool
+Interval::overlaps(Interval *interval)
+{
 	return overlaps(interval->min,interval->max);
 }
  
-bool BinTreeInterval::overlaps(double nmin, double nmax){
+bool
+Interval::overlaps(double nmin, double nmax)
+{
 	if (min>nmax || max<nmin) return false;
 	return true;
 }
  
-bool BinTreeInterval::contains(BinTreeInterval *interval){
+bool
+Interval::contains(Interval *interval)
+{
 	return contains(interval->min,interval->max);
 }
 
-bool BinTreeInterval::contains(double nmin, double nmax){
+bool
+Interval::contains(double nmin, double nmax)
+{
 	return (nmin>=min && nmax<=max);
 }
 
-bool BinTreeInterval::contains(double p) {
+bool
+Interval::contains(double p)
+{
 	return (p>=min && p<=max);
 }
 
@@ -89,18 +113,8 @@ bool BinTreeInterval::contains(double p) {
 
 /**********************************************************************
  * $Log$
- * Revision 1.7  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.3  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
  *
  **********************************************************************/
 

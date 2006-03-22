@@ -14,27 +14,28 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
-#include <geos/indexBintree.h>
-#include <geos/indexChain.h>
+//#include <geos/platform.h>
 #include <geos/algorithm/MCPointInRing.h>
 #include <geos/algorithm/RobustDeterminant.h>
+#include <geos/index/bintree/Bintree.h>
+#include <geos/index/bintree/Interval.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
+#include <geos/indexChain.h> // FIXME: split
 
 #include <vector>
 
 using namespace std;
 using namespace geos::geom;
 using namespace geos::index::chain;
-using namespace geos::index::bintree;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-MCPointInRing::MCSelecter::MCSelecter(const Coordinate& newP,MCPointInRing *prt)
+MCPointInRing::MCSelecter::MCSelecter(const Coordinate& newP,
+		MCPointInRing *prt)
 {
 	p=newP;
 	parent=prt;
@@ -52,7 +53,7 @@ MCPointInRing::MCPointInRing(LinearRing *newRing)
 	tree=NULL;
 	crossings=0;
 	pts=NULL;
-	interval=new BinTreeInterval();
+	interval=new index::bintree::Interval();
     buildIndex();
 }
 
@@ -67,7 +68,7 @@ void
 MCPointInRing::buildIndex()
 {
 //	Envelope *env=ring->getEnvelopeInternal();
-	tree=new Bintree();
+	tree=new index::bintree::Bintree();
 	pts=CoordinateSequence::removeRepeatedPoints(ring->getCoordinatesRO());
 	vector<indexMonotoneChain*> *mcList=MonotoneChainBuilder::getChains(pts);
 	for(int i=0;i<(int)mcList->size();i++) {
@@ -155,6 +156,9 @@ MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
+ *
  * Revision 1.24  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *

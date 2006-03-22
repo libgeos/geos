@@ -14,12 +14,12 @@
  *
  **********************************************************************/
 
-#include <geos/indexBintree.h>
+#include <geos/index/bintree/Root.h>
+#include <geos/index/bintree/Node.h>
+#include <geos/index/bintree/Interval.h>
 #include <geos/index/quadtree/IntervalSize.h>
 
 #include <cassert>
-
-using namespace geos::index::quadtree;  // for IntervalSize
 
 namespace geos {
 namespace index { // geos.index
@@ -28,7 +28,7 @@ namespace bintree { // geos.index.bintree
 double Root::origin=0.0;
 
 void
-Root::insert(BinTreeInterval *itemInterval,void* item)
+Root::insert(Interval *itemInterval,void* item)
 {
 	int index=getSubnodeIndex(itemInterval,origin);
 	// if index is -1, itemEnv must contain the origin.
@@ -36,17 +36,20 @@ Root::insert(BinTreeInterval *itemInterval,void* item)
 		add(item);
 		return;
 	}
+
 	/**
-	* the item must be contained in one interval, so insert it into the
-	* tree for that interval (which may not yet exist)
-	*/
-	BinTreeNode *node=subnode[index];
+	 * the item must be contained in one interval, so insert it into the
+	 * tree for that interval (which may not yet exist)
+	 */
+	Node *node=subnode[index];
+
 	/**
-	*  If the subnode doesn't exist or this item is not contained in it,
-	*  have to expand the tree upward to contain the item.
-	*/
-	if (node==NULL || !node->getInterval()->contains(itemInterval)) {
-		BinTreeNode* largerNode=BinTreeNode::createExpanded(node,itemInterval);
+	 *  If the subnode doesn't exist or this item is not contained in it,
+	 *  have to expand the tree upward to contain the item.
+	 */
+	if (node==NULL || !node->getInterval()->contains(itemInterval))
+	{
+		Node* largerNode=Node::createExpanded(node,itemInterval);
 //		delete subnode[index];
 		subnode[index]=largerNode;
 	}
@@ -59,8 +62,10 @@ Root::insert(BinTreeInterval *itemInterval,void* item)
 }
 
 void
-Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item)
+Root::insertContained(Node *tree, Interval *itemInterval, void* item)
 {
+	using geos::index::quadtree::IntervalSize;  
+
 	assert(tree->getInterval()->contains(itemInterval));
 
 	/**
@@ -68,7 +73,8 @@ Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item
 	 * to infinite recursion. Instead, use a heuristic of simply returning
 	 * the smallest existing node containing the query
 	 */
-	bool isZeroArea=IntervalSize::isZeroWidth(itemInterval->getMin(),itemInterval->getMax());
+	bool isZeroArea=IntervalSize::isZeroWidth(itemInterval->getMin(),
+			itemInterval->getMax());
 	NodeBase *node;
 	if (isZeroArea)
 		node=tree->find(itemInterval);
@@ -83,6 +89,9 @@ Root::insertContained(BinTreeNode *tree,BinTreeInterval *itemInterval,void* item
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/03/22 16:01:33  strk
+ * indexBintree.h header split, classes renamed to match JTS
+ *
  * Revision 1.9  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
  *
