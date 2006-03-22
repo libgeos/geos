@@ -18,22 +18,21 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <vector>
-#include <iostream>
-#include <list>
-
 #include <geos/operation/buffer/BufferSubgraph.h>
-
+#include <geos/util/TopologyException.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/CoordinateSequence.h>
-
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
 #include <geos/geomgraph/EdgeEndStar.h>
 #include <geos/geomgraph/Position.h>
+
+#include <cassert>
+#include <vector>
+#include <iostream>
+#include <list>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -94,7 +93,8 @@ BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 	EdgeEndStar::iterator endIt=ees->end();
 	for( ; it!=endIt; ++it)
 	{
-		DirectedEdge *de=(DirectedEdge*) (*it);
+		assert(dynamic_cast<DirectedEdge*>(*it));
+		DirectedEdge *de=static_cast<DirectedEdge*>(*it);
 		dirEdgeList.push_back(de);
 		DirectedEdge *sym=de->getSym();
 		Node *symNode=sym->getNode();
@@ -146,14 +146,16 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	// find a visited dirEdge to start at
 	DirectedEdge *startEdge=NULL;
 
-	DirectedEdgeStar *ees=(DirectedEdgeStar *)n->getEdges();
+	assert(dynamic_cast<DirectedEdgeStar *>(n->getEdges()));
+	DirectedEdgeStar *ees=static_cast<DirectedEdgeStar *>(n->getEdges());
 
 	EdgeEndStar::iterator endIt=ees->end();
 
 	EdgeEndStar::iterator it=ees->begin();
 	for(; it!=endIt; ++it)
 	{
-		DirectedEdge *de=(DirectedEdge*)*it;
+		assert(dynamic_cast<DirectedEdge*>(*it));
+		DirectedEdge *de=static_cast<DirectedEdge*>(*it);
 		if (de->isVisited() || de->getSym()->isVisited()) {
 			startEdge=de;
 			break;
@@ -161,13 +163,21 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	}
 	// MD - testing  Result: breaks algorithm
 	//if (startEdge==null) return;
-	assert(startEdge!=NULL); // unable to find edge to compute depths at n->getCoordinate()
+	//assert(startEdge!=NULL);
+	if (startEdge==NULL)
+	{
+		throw util::TopologyException(
+			"unable to find edge to compute depths",
+			n->getCoordinate());
+	}
+
 	ees->computeDepths(startEdge);
 
 	// copy depths to sym edges
 	for(it=ees->begin(); it!=endIt; ++it)
 	{
-		DirectedEdge *de=(DirectedEdge*) (*it);
+		assert(dynamic_cast<DirectedEdge*>(*it));
+		DirectedEdge *de=static_cast<DirectedEdge*>(*it);
 		de->setVisited(true);
 		copySymDepths(de);
 	}
@@ -267,7 +277,8 @@ BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 		EdgeEndStar::iterator it=ees->begin();
 		for(; it!=endIt; ++it)
 		{
-			DirectedEdge *de=(DirectedEdge*) (*it);
+			assert(dynamic_cast<DirectedEdge*>(*it));
+			DirectedEdge *de=static_cast<DirectedEdge*>(*it);
 			DirectedEdge *sym=de->getSym();
 			if (sym->isVisited()) continue;
 			Node *adjNode=sym->getNode();
@@ -335,46 +346,8 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
- * Revision 1.31  2006/03/20 18:18:15  strk
- * io.h header split
- *
- * Revision 1.30  2006/03/17 13:24:59  strk
- * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- * Revision 1.29  2006/03/15 17:33:39  strk
- * Changed operator<< to use operator<< for Nodes
- *
- * Revision 1.28  2006/03/15 11:39:45  strk
- * comments cleanup, changed computeDepths to use a list<> rather then a vector (performance related)
- *
- * Revision 1.27  2006/03/14 17:10:14  strk
- * cleanups
- *
- * Revision 1.26  2006/03/14 14:16:52  strk
- * operator<< for BufferSubgraph, more debugging calls
- *
- * Revision 1.25  2006/03/14 00:19:40  strk
- * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
- *
- * Revision 1.24  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.23  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.22  2006/03/02 12:12:01  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.21  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.20  2005/11/29 00:48:35  strk
- * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
- * Restructured iterated access by use of standard ::iterator abstraction
- * with scoped typedefs.
- *
- * Revision 1.19  2005/11/08 20:12:44  strk
- * Memory overhead reductions in buffer operations.
+ * Revision 1.32  2006/03/22 11:18:39  strk
+ * Changed back 'unable to find edge to compute depths' from assertion to TopologyException
  *
  **********************************************************************/
 
