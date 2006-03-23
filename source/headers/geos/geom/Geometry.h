@@ -17,12 +17,12 @@
 #ifndef GEOS_GEOM_GEOMETRY_H
 #define GEOS_GEOM_GEOMETRY_H
 
+#include <geos/platform.h>
+#include <geos/inline.h>
+
 #include <string>
 #include <iostream>
 #include <vector>
-
-#include <geos/platform.h>
-#include <geos/inline.h>
 
 // Forward declarations
 namespace geos {
@@ -641,6 +641,9 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.3  2006/03/23 12:12:01  strk
  * Fixes to allow build with -DUSE_INLINE
  *

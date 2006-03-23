@@ -18,10 +18,6 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <string>
-#include <vector>
-
 #include <geos/geomgraph/DirectedEdgeStar.h>
 #include <geos/geomgraph/EdgeEndStar.h>
 #include <geos/geomgraph/EdgeEnd.h>
@@ -32,6 +28,10 @@
 #include <geos/geomgraph/Quadrant.h>
 #include <geos/geom/Location.h>
 #include <geos/util/TopologyException.h>
+
+#include <cassert>
+#include <string>
+#include <vector>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -232,7 +232,10 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	}
 	if (state==LINKING_TO_OUTGOING) {
 		if (firstOut==NULL)
-			throw util::TopologyException("no outgoing dirEdge found",&(getCoordinate()));
+		{
+			throw util::TopologyException("no outgoing dirEdge found",
+					getCoordinate());
+		}
 		assert(firstOut->isInResult()); // unable to link last incoming dirEdge
 		incoming->setNext(firstOut);
 	}
@@ -385,7 +388,7 @@ DirectedEdgeStar::computeDepths(DirectedEdge *de)
 	int lastDepth=computeDepths(begin(), edgeIterator, nextDepth);
 
 	if (lastDepth!=targetLastDepth)
-		throw util::TopologyException("depth mismatch at ",&(de->getCoordinate()));
+		throw util::TopologyException("depth mismatch at ", de->getCoordinate());
 }
 
 /*public*/
@@ -431,105 +434,10 @@ DirectedEdgeStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.17  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
- *
- * Revision 1.16  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.15  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.14  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.13  2006/02/27 11:53:17  strk
- * DirectedEdgeStar made more safe trough assert(), use of standard iterator and
- * dynamic casts substituting static ones.
- *
- * Revision 1.12  2006/02/27 09:05:32  strk
- * Doxygen comments, a few inlines and general cleanups
- *
- * Revision 1.11  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.10  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.9  2005/12/07 20:51:20  strk
- * minor cleanups
- *
- * Revision 1.8  2005/11/29 00:48:35  strk
- * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
- * Restructured iterated access by use of standard ::iterator abstraction
- * with scoped typedefs.
- *
- * Revision 1.7  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.6  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.5  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.4  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.2  2004/04/21 14:14:28  strk
- * Fixed bug in computeDepths
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.17  2003/11/12 15:43:38  strk
- * Added some more throw specifications
- *
- * Revision 1.16  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 

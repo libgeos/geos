@@ -18,17 +18,12 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <functional>
-#include <vector>
-
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/ElevationMatrix.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/LineBuilder.h>
 #include <geos/operation/overlay/PointBuilder.h>
-
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
@@ -36,7 +31,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/PrecisionModel.h>
-
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/Node.h>
@@ -45,13 +39,13 @@
 #include <geos/geomgraph/DirectedEdgeStar.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/Position.h>
-
 #include <geos/geomgraph/index/SegmentIntersector.h>
-
 #include <geos/util/TopologyException.h>
-
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
 
+#include <cassert>
+#include <functional>
+#include <vector>
 #include <memory> // for auto_ptr
 
 #ifndef GEOS_DEBUG
@@ -899,6 +893,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.64  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.63  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *

@@ -55,7 +55,8 @@ public:
 	DirectedEdgeStar()
 		:
 		EdgeEndStar(),
-		resultAreaEdgeList(0)
+		resultAreaEdgeList(0),
+		label()
 	{}
 
 	~DirectedEdgeStar() {
@@ -165,6 +166,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.2  2006/03/15 17:17:41  strk
  * Added missing forward declarations
  *

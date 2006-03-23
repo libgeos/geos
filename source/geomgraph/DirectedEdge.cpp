@@ -14,10 +14,6 @@
  *
  **********************************************************************/
 
-#include <cmath>
-#include <cassert>
-#include <string>
-
 #include <geos/util/TopologyException.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/DirectedEdge.h>
@@ -25,7 +21,10 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
 
-//using namespace std;
+#include <cmath>
+#include <cassert>
+#include <string>
+
 using namespace geos::geom;
 
 #ifndef USE_INLINE
@@ -97,7 +96,7 @@ DirectedEdge::setDepth(int position, int newDepth)
 {
 	if (depth[position]!=-999) {
 		if (depth[position]!=newDepth)
-			throw util::TopologyException("assigned depths do not match", &getCoordinate());
+			throw util::TopologyException("assigned depths do not match", getCoordinate());
 			//Assert.isTrue(depth[position] == depthVal, "assigned depths do not match at " + getCoordinate());
 	}
 	depth[position]=newDepth;
@@ -209,6 +208,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.15  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *

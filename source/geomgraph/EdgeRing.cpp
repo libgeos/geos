@@ -172,9 +172,14 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 		//util::Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
 		//assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
 		if(de==NULL)
-			throw util::TopologyException("EdgeRing::computePoints: found null Directed Edge");
+			throw util::TopologyException(
+				"EdgeRing::computePoints: found null Directed Edge");
+
 		if (de->getEdgeRing()==this)
-			throw util::TopologyException("Directed Edge visited twice during ring-building at ",&(de->getCoordinate()));
+			throw util::TopologyException(
+				"Directed Edge visited twice during ring-building",
+				de->getCoordinate());
+
 		edges.push_back(de);
 		Label *deLabel=de->getLabel();
 		assert(deLabel->isArea());
@@ -306,6 +311,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.19  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *
@@ -421,6 +429,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.20  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.19  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *

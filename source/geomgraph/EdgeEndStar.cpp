@@ -280,7 +280,8 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 			// location to propagate
 			if (rightLoc!=Location::UNDEF) {
 				if (rightLoc!=currLoc)
-					throw util::TopologyException("side location conflict",&(e->getCoordinate()));
+					throw util::TopologyException("side location conflict",
+						e->getCoordinate());
 				if (leftLoc==Location::UNDEF) {
 					// found single null side at e->getCoordinate()
 					assert(0);
@@ -328,6 +329,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.19  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *

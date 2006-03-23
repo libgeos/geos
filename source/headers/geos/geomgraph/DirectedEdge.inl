@@ -58,7 +58,7 @@ INLINE bool
 DirectedEdge::isForward() { return isForwardVar; }
 
 INLINE void
-DirectedEdge::setSym(DirectedEdge *de){ sym=de; }
+DirectedEdge::setSym(DirectedEdge *de) { sym=de; }
 
 INLINE DirectedEdge*
 DirectedEdge::getNext() { return next; }

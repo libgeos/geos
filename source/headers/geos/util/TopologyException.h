@@ -17,10 +17,10 @@
 #ifndef GEOS_UTIL_TOPOLOGYEXCEPTION_H
 #define GEOS_UTIL_TOPOLOGYEXCEPTION_H
 
-#include <string>
-
 #include <geos/util/GEOSException.h>
 #include <geos/geom/Coordinate.h> // to be removed when .inl is available
+
+#include <cassert>
 
 namespace geos {
 namespace util { // geos.util
@@ -44,13 +44,6 @@ public:
 		GEOSException("TopologyException", msg)
 	{}
 
-	// DANGEROUS! if Coordinate is NULL we'll die
-	TopologyException(const std::string& msg, const geom::Coordinate *newPt)
-		:
-		GEOSException("TopologyException", msg+" "+newPt->toString()),
-		pt(*newPt)
-	{}
-
 	TopologyException(const std::string& msg, const geom::Coordinate& newPt)
 		:
 		GEOSException("TopologyException", msg+" "+newPt.toString()),
@@ -58,7 +51,7 @@ public:
 	{}
 
 	~TopologyException() throw() {}
-	geom::Coordinate* getCoordinate() { return &pt; }
+	geom::Coordinate& getCoordinate() { return pt; }
 private:
 	geom::Coordinate pt;
 };
@@ -71,6 +64,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.2  2006/03/22 11:19:06  strk
  * opPolygonize.h headers split.
  *

@@ -29,7 +29,8 @@ namespace geom { // geos::geom
 
 Coordinate Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
 
-string Coordinate::toString() const
+string
+Coordinate::toString() const
 {
 	ostringstream s;
 	s<<*this;
@@ -52,6 +53,9 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/03/23 15:10:28  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
  * Revision 1.31  2006/03/14 15:32:24  strk
  * Cleaned up toString funx (more WKT friendly)
  *
