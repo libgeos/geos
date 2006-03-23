@@ -19,6 +19,8 @@
 #include <cassert>
 #include <geos/geosAlgorithm.h>
 
+#include <iostream>
+
 namespace geos {
 namespace geom { // geos::geom
 
@@ -140,8 +142,8 @@ LineSegment::angle() const
 	return atan2(p1.y-p0.y,p1.x-p0.x);
 }
 
-INLINE ostream&
-operator<< (ostream& o, const LineSegment& l)
+INLINE std::ostream&
+operator<< (std::ostream& o, const LineSegment& l)
 {
 	return o<<"LINESEGMENT("<<l.p0.x<<" "<<l.p0.y<<","<<l.p1.x<<" "<<l.p1.y<<")";
 }

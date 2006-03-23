@@ -14,16 +14,16 @@
  *
  **********************************************************************/
 
-#include <vector>
-
 #include <geos/operation/IsSimpleOp.h>
-//#include <geos/geosAlgorithm.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
+
+#include <vector>
+#include <cassert>
 
 #ifndef USE_INLINE
 # include "geos/geom/MultiLineString.inl"
@@ -129,6 +129,9 @@ MultiLineString::reverse() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/03/23 12:12:00  strk
+ * Fixes to allow build with -DUSE_INLINE
+ *
  * Revision 1.29  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

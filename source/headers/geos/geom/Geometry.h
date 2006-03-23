@@ -601,7 +601,7 @@ protected:
 	virtual bool isRectangle() const { return false; }
 
 private:
-	virtual int getClassSortIndex() const;
+	int getClassSortIndex() const;
 	static GeometryComponentFilter geometryChangedFilter;
 	const GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
@@ -641,6 +641,9 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/23 12:12:01  strk
+ * Fixes to allow build with -DUSE_INLINE
+ *
  * Revision 1.2  2006/03/20 12:03:25  strk
  * Added operator<< for Geometry, writing HEXWKB
  *

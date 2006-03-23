@@ -16,8 +16,9 @@
 #ifndef GEOS_GEOMETRYCOLLECTION_INL
 #define GEOS_GEOMETRYCOLLECTION_INL
 
-#include <cassert>
-#include <geos/geom.h>
+#include <geos/geom/GeometryCollection.h>
+
+#include <vector>
 
 namespace geos {
 namespace geom { // geos::geom

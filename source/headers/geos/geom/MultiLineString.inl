@@ -16,10 +16,10 @@
 #ifndef GEOS_GEOM_MULTILINESTRING_INL
 #define GEOS_GEOM_MULTILINESTRING_INL
 
-#include <cassert>
-//#include <geos/geom.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPoint.h>
+
+//#include <cassert>
 
 namespace geos {
 namespace geom { // geos::geom

@@ -157,12 +157,13 @@ void DistanceOp::computeMinDistance() {
 void
 DistanceOp::computeContainmentDistance()
 {
+	using geom::util::PolygonExtracter;
 
 	Polygon::ConstVect polys0;
 	Polygon::ConstVect polys1;
 
-	util::PolygonExtracter::getPolygons(*(geom[0]), polys0);
-	util::PolygonExtracter::getPolygons(*(geom[1]), polys1);
+	PolygonExtracter::getPolygons(*(geom[0]), polys0);
+	PolygonExtracter::getPolygons(*(geom[1]), polys1);
 	
 
 	vector<GeometryLocation*> *locPtPoly = new vector<GeometryLocation*>(2);
@@ -256,6 +257,9 @@ DistanceOp::computeInside(GeometryLocation *ptLoc,
 void
 DistanceOp::computeLineDistance()
 {
+	using geom::util::LinearComponentExtracter;
+	using geom::util::PointExtracter;
+
 	vector<GeometryLocation*> locGeom(2);
 
 	/**
@@ -265,13 +269,13 @@ DistanceOp::computeLineDistance()
 	 */
 	LineString::ConstVect lines0;
 	LineString::ConstVect lines1;
-	util::LinearComponentExtracter::getLines(*(geom[0]), lines0);
-	util::LinearComponentExtracter::getLines(*(geom[1]), lines1);
+	LinearComponentExtracter::getLines(*(geom[0]), lines0);
+	LinearComponentExtracter::getLines(*(geom[1]), lines1);
 
 	Point::ConstVect pts0;
 	Point::ConstVect pts1;
-	util::PointExtracter::getPoints(*(geom[0]), pts0);
-	util::PointExtracter::getPoints(*(geom[1]), pts1);
+	PointExtracter::getPoints(*(geom[0]), pts0);
+	PointExtracter::getPoints(*(geom[1]), pts1);
 
 	// bail whenever minDistance goes to zero, since it can't get any less
 	computeMinDistanceLines(lines0, lines1, locGeom);
@@ -465,6 +469,9 @@ DistanceOp::computeMinDistance(const LineString *line,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/23 12:12:01  strk
+ * Fixes to allow build with -DUSE_INLINE
+ *
  * Revision 1.21  2006/03/21 17:55:01  strk
  * opDistance.h header split
  *

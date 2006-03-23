@@ -16,8 +16,7 @@
 #ifndef GEOS_GEOM_GEOMETRY_INL
 #define GEOS_GEOM_GEOMETRY_INL
 
-#include <cassert>
-#include <geos/geom.h>
+#include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 
 namespace geos {

@@ -17,10 +17,11 @@
 #ifndef GEOS_GEOS_GEOMETRYCOLLECTION_H
 #define GEOS_GEOS_GEOMETRYCOLLECTION_H
 
+#include <geos/geom/Geometry.h> // for inheritance
+//#include <geos/platform.h>
+
 #include <string>
 #include <vector>
-#include <geos/platform.h>
-#include <geos/geom/Geometry.h>
 
 #include <geos/inline.h>
 
@@ -163,6 +164,9 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/23 12:12:01  strk
+ * Fixes to allow build with -DUSE_INLINE
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

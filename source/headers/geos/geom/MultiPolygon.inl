@@ -16,10 +16,8 @@
 #ifndef GEOS_GEOM_MULTIPOLYGON_INL
 #define GEOS_GEOM_MULTIPOLYGON_INL
 
-#include <cassert>
-//#include <geos/geom.h>
-#include <geos/geom/MultiLineString.h>
-#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/GeometryCollection.h>
 
 namespace geos {
 namespace geom { // geos::geom

@@ -17,6 +17,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiLineString.h>
 #include <geos/geom/GeometryFactory.h>
 
 #include <cassert>
@@ -117,6 +118,9 @@ MultiPolygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/23 12:12:00  strk
+ * Fixes to allow build with -DUSE_INLINE
+ *
  * Revision 1.27  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

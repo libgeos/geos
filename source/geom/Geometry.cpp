@@ -16,6 +16,17 @@
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryComponentFilter.h>
+#include <geos/geom/GeometryFilter.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
+#include <geos/geom/IntersectionMatrix.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/algorithm/CentroidPoint.h>
 #include <geos/algorithm/CentroidLine.h>
@@ -770,6 +781,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.106  2006/03/23 12:12:00  strk
+ * Fixes to allow build with -DUSE_INLINE
+ *
  * Revision 1.105  2006/03/21 17:55:01  strk
  * opDistance.h header split
  *
