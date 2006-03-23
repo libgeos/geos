@@ -14,8 +14,12 @@
  *
  **********************************************************************/
 
-#include <geos/precision.h>
-#include <geos/util.h>
+#include <geos/precision/EnhancedPrecisionOp.h>
+#include <geos/precision/CommonBitsOp.h>
+#include <geos/geom/Geometry.h>
+#include <geos/util/GEOSException.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace precision { // geos.precision
@@ -193,25 +197,8 @@ EnhancedPrecisionOp::buffer(Geometry *geom, double distance)
 
 /**********************************************************************
  * $Log$
- * Revision 1.6  2006/03/10 10:44:53  strk
- * Unreferenced exception objects cleanup (#52)
- *
- * Revision 1.5  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.4  2006/03/02 16:21:26  strk
- * geos::precision namespace added
- *
- * Revision 1.3  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
+ * Revision 1.7  2006/03/23 09:17:19  strk
+ * precision.h header split, minor optimizations
  *
  **********************************************************************/
 

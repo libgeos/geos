@@ -14,7 +14,8 @@
  *
  **********************************************************************/
 
-#include <geos/precision.h>
+#include <geos/platform.h> // for int64
+#include <geos/precision/CommonBits.h>
 
 namespace geos {
 namespace precision { // geos.precision
@@ -115,16 +116,8 @@ CommonBits::getCommon()
 
 /**********************************************************************
  * $Log$
- * Revision 1.3  2006/03/02 16:21:26  strk
- * geos::precision namespace added
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
+ * Revision 1.4  2006/03/23 09:17:19  strk
+ * precision.h header split, minor optimizations
  *
  **********************************************************************/
 

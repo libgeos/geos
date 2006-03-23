@@ -20,11 +20,13 @@
 
 #include <algorithm>
 
-//#include <geos/nodingSnapround.h>
-#include <geos/precision.h>
 #include <geos/profiler.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferBuilder.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/PrecisionModel.h>
+
 #include <geos/noding/ScaledNoder.h>
 
 #include <geos/noding/snapround/MCIndexSnapRounder.h>
@@ -38,14 +40,15 @@
 
 
 
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
 
 //#define PROFILE 1
 
-//using namespace std;
 using namespace geos::noding;
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -60,7 +63,8 @@ int BufferOp::MAX_PRECISION_DIGITS=12;
 
 /*private*/
 double
-BufferOp::precisionScaleFactor(const Geometry *g, double distance,
+BufferOp::precisionScaleFactor(const Geometry *g,
+	double distance,
 	int maxPrecisionDigits)
 {
 	const Envelope *env=g->getEnvelopeInternal();
@@ -232,83 +236,11 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.50  2006/03/23 09:17:19  strk
+ * precision.h header split, minor optimizations
+ *
  * Revision 1.49  2006/03/15 18:56:30  strk
  * Temporary hack to avoid snapround:: Noders (still using ScaledNoder wrapper)
  * to allow for buffer_snapround.xml test to succeed
- *
- * Revision 1.48  2006/03/14 12:55:56  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- * Revision 1.47  2006/03/14 00:36:31  strk
- * Reduced 'buffer' headers inclusion
- *
- * Revision 1.46  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.45  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.44  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.43  2006/03/02 12:12:01  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.42  2006/02/23 20:05:21  strk
- * Fixed bug in MCIndexNoder constructor making memory checker go crazy, more
- * doxygen-friendly comments, miscellaneous cleanups
- *
- * Revision 1.41  2006/02/23 11:54:20  strk
- * - MCIndexPointSnapper
- * - MCIndexSnapRounder
- * - SnapRounding BufferOp
- * - ScaledNoder
- * - GEOSException hierarchy cleanups
- * - SpatialIndex memory-friendly query interface
- * - GeometryGraph::getBoundaryNodes memory-friendly
- * - NodeMap::getBoundaryNodes memory-friendly
- * - Cleanups in geomgraph::Edge
- * - Added an XML test for snaprounding buffer (shows leaks, working on it)
- *
- * Revision 1.40  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.39  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.38  2006/02/08 17:18:28  strk
- * - New WKTWriter::toLineString and ::toPoint convenience methods
- * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
- * - New Envelope::centre()
- * - New Envelope::intersection(Envelope)
- * - New Envelope::expandBy(distance, [ydistance])
- * - New LineString::reverse()
- * - New MultiLineString::reverse()
- * - New Geometry::buffer(distance, quadSeg, endCapStyle)
- * - Obsoleted toInternalGeometry/fromInternalGeometry
- * - More const-correctness in Buffer "package"
- *
- * Revision 1.37  2005/07/11 10:27:14  strk
- * Fixed initializzazion lists
- *
- * Revision 1.36  2005/05/19 10:29:28  strk
- * Removed some CGAlgorithms instances substituting them with direct calls
- * to the static functions. Interfaces accepting CGAlgorithms pointers kept
- * for backward compatibility but modified to make the argument optional.
- * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
- * Inlined some smaller functions encountered during bug hunting.
- * Updated Copyright notices in the touched files.
- *
- * Revision 1.35  2004/11/08 15:58:13  strk
- * More performance tuning.
- *
- * Revision 1.34  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.33  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
  **********************************************************************/
 

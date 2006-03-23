@@ -5,6 +5,7 @@ SUBDIRS = \
 	noding \
 	operation \
 	planargraph \
+	precision \
 	index \
 	io \
 	util 
@@ -26,8 +27,6 @@ geos_HEADERS = \
 	indexStrtree.h \
 	indexSweepline.h \
 	inline.h \
-	geom/LineSegment.inl \
-	geom/GeometryCollection.inl \
 	noding.h \
 	nodingSnapround.h \
 	io.h \

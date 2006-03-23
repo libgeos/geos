@@ -14,10 +14,15 @@
  *
  **********************************************************************/
 
-#include <geos/precision.h>
+#include <geos/precision/CommonBitsOp.h>
+#include <geos/precision/CommonBitsRemover.h>
+#include <geos/geom/Geometry.h>
+
+#include <vector>
 #include <string>
 
 using namespace std;
+using namespace geos::geom;
 
 namespace geos {
 namespace precision { // geos.precision
@@ -113,22 +118,8 @@ CommonBitsOp::removeCommonBits(Geometry* geom0, Geometry* geom1)
 
 /**********************************************************************
  * $Log$
- * Revision 1.5  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.4  2006/03/02 16:21:26  strk
- * geos::precision namespace added
- *
- * Revision 1.3  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/05/03 17:15:38  strk
- * leaks on exception fixed.
- *
- * Revision 1.1  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
+ * Revision 1.6  2006/03/23 09:17:19  strk
+ * precision.h header split, minor optimizations
  *
  **********************************************************************/
 

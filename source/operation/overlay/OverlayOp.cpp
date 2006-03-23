@@ -35,6 +35,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
+#include <geos/geom/PrecisionModel.h>
 
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Edge.h>
@@ -49,7 +50,9 @@
 
 #include <geos/util/TopologyException.h>
 
-#include <geos/precision.h>
+#include <geos/precision/SimpleGeometryPrecisionReducer.h>
+
+#include <memory> // for auto_ptr
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -896,6 +899,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.63  2006/03/23 09:17:19  strk
+ * precision.h header split, minor optimizations
+ *
  * Revision 1.62  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

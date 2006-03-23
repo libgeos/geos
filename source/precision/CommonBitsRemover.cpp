@@ -14,13 +14,68 @@
  *
  **********************************************************************/
 
+#include <geos/precision/CommonBitsRemover.h>
+#include <geos/precision/CommonBits.h>
+// for CommonCoordinateFilter inheritance
+#include <geos/geom/CoordinateFilter.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+
 #include <cassert>
 
-#include <geos/precision.h>
-#include <geos/util.h>
+using namespace geos::geom;
 
 namespace geos {
 namespace precision { // geos.precision
+
+class Translater: public geom::CoordinateFilter {
+
+private:
+
+	geom::Coordinate trans;
+
+public:
+
+	Translater(geom::Coordinate &newTrans)
+		:
+		trans(newTrans)
+	{}
+
+	void filter_ro(const geom::Coordinate *coord){}; //Not used
+
+	void filter_rw(geom::Coordinate *coord) const
+	{
+		coord->x += trans.x;
+		coord->y += trans.y;
+	}
+};
+
+
+class CommonCoordinateFilter: public geom::CoordinateFilter {
+private:
+	CommonBits commonBitsX;
+	CommonBits commonBitsY;
+public:
+
+	void filter_rw(geom::Coordinate *coord) const
+	{
+		// CommonCoordinateFilter is a read-only filter
+		assert(0);
+	}
+
+	void filter_ro(const geom::Coordinate *coord)
+	{
+		commonBitsX.add(coord->x);
+		commonBitsY.add(coord->y);
+	}
+
+	void getCommonCoordinate(geom::Coordinate& c)
+	{
+		c=Coordinate(commonBitsX.getCommon(),
+			commonBitsY.getCommon());
+	}
+
+};
 
 
 CommonBitsRemover::CommonBitsRemover()
@@ -45,7 +100,7 @@ void
 CommonBitsRemover::add(Geometry *geom)
 {
 	geom->apply_rw(ccFilter);
-	commonCoord=*(ccFilter->getCommonCoordinate());
+	ccFilter->getCommonCoordinate(commonCoord);
 }
 
 /**
@@ -96,54 +151,14 @@ CommonBitsRemover::addCommonBits(Geometry *geom)
 	delete trans;
 }
 
-CommonCoordinateFilter::CommonCoordinateFilter()
-{
-	commonBitsX=new CommonBits();
-	commonBitsY=new CommonBits();
-}
-
-CommonCoordinateFilter::~CommonCoordinateFilter()
-{
-	delete commonBitsX;
-	delete commonBitsY;
-}
-
-void
-CommonCoordinateFilter::filter_rw(Coordinate *coord) const
-{
-	assert(0); // CommonCoordinateFilter is a read-only filter
-}
-
-Coordinate*
-CommonCoordinateFilter::getCommonCoordinate()
-{
-	return new Coordinate(commonBitsX->getCommon(),commonBitsY->getCommon());
-}
-
-Translater::Translater(Coordinate &newTrans):
-	trans(newTrans)
-{
-}
-
-void
-Translater::filter_rw(Coordinate *coord) const
-{
-	coord->x+=trans.x;
-	coord->y+=trans.y;
-}
-
-void
-CommonCoordinateFilter::filter_ro(const Coordinate *coord)
-{
-	commonBitsX->add(coord->x);
-	commonBitsY->add(coord->y);
-}
-
 } // namespace geos.precision
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/23 09:17:19  strk
+ * precision.h header split, minor optimizations
+ *
  * Revision 1.6  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

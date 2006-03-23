@@ -18,66 +18,37 @@
  *
  **********************************************************************/
 
-#include <geos/precision.h>
+#include <geos/precision/SimpleGeometryPrecisionReducer.h>
+#include <geos/geom/util/GeometryEditor.h>
+#include <geos/geom/util/CoordinateOperation.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+
 #include <vector>
 
 using namespace std;
+using namespace geos::geom;
 using namespace geos::geom::util;
 
 namespace geos {
 namespace precision { // geos.precision
 
-SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(PrecisionModel *pm){
-	removeCollapsed = true;
-	//changePrecisionModel = false;
-	newPrecisionModel = pm;
-}
+class PrecisionReducerCoordinateOperation: public geom::util::CoordinateOperation {
+using CoordinateOperation::edit;
+private:
+	SimpleGeometryPrecisionReducer *sgpr;
+public:
+	PrecisionReducerCoordinateOperation(SimpleGeometryPrecisionReducer *newSgpr);
+	CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *geom);
+};
 
-/**
-* Sets whether the reduction will result in collapsed components
-* being removed completely, or simply being collapsed to an (invalid)
-* Geometry of the same type.
-*
-* @param removeCollapsed if <code>true</code> collapsed components will be removed
-*/
-void SimpleGeometryPrecisionReducer::setRemoveCollapsedComponents(bool nRemoveCollapsed){
-	removeCollapsed=nRemoveCollapsed;
-}
-
-/*
-* Sets whether the PrecisionModel of the new reduced Geometry
-* will be changed to be the PrecisionModel supplied to
-* specify the reduction.  The default is to not change the precision model.
-* Caller will need to take care of deletion of the newly created
-* GeometryFactory if nChangePrecisionModel is set to true (see Geometry::getFactory())
-*
-* @param changePrecisionModel if <code>true</code> the precision model of the created Geometry will be the
-* the precisionModel supplied in the constructor.
-*/
-//void SimpleGeometryPrecisionReducer::setChangePrecisionModel(bool nChangePrecisionModel){
-//	changePrecisionModel=nChangePrecisionModel;
-//}
-
-PrecisionModel* SimpleGeometryPrecisionReducer::getPrecisionModel() {
-	return newPrecisionModel;
-}
-
-bool
-SimpleGeometryPrecisionReducer::getRemoveCollapsed()
+PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(SimpleGeometryPrecisionReducer *newSgpr)
 {
-	return removeCollapsed;
-}
-
-Geometry*
-SimpleGeometryPrecisionReducer::reduce(const Geometry *geom)
-{
-	GeometryEditor geomEdit;
-	PrecisionReducerCoordinateOperation prco(this);
-	Geometry *g=geomEdit.edit(geom, &prco);
-	return g;
-}
-
-PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(SimpleGeometryPrecisionReducer *newSgpr) {
 	sgpr=newSgpr;
 }
 
@@ -128,74 +99,59 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 	return noRepeatedCoords;
 }
 
+
+//---------------------------------------------------------------
+
+
+SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(
+		PrecisionModel *pm)
+{
+	removeCollapsed = true;
+	//changePrecisionModel = false;
+	newPrecisionModel = pm;
+}
+
+/**
+ * Sets whether the reduction will result in collapsed components
+ * being removed completely, or simply being collapsed to an (invalid)
+ * Geometry of the same type.
+ *
+ * @param removeCollapsed if <code>true</code> collapsed components will be removed
+ */
+void
+SimpleGeometryPrecisionReducer::setRemoveCollapsedComponents(bool nRemoveCollapsed)
+{
+	removeCollapsed=nRemoveCollapsed;
+}
+
+PrecisionModel*
+SimpleGeometryPrecisionReducer::getPrecisionModel()
+{
+	return newPrecisionModel;
+}
+
+bool
+SimpleGeometryPrecisionReducer::getRemoveCollapsed()
+{
+	return removeCollapsed;
+}
+
+Geometry*
+SimpleGeometryPrecisionReducer::reduce(const Geometry *geom)
+{
+	GeometryEditor geomEdit;
+	PrecisionReducerCoordinateOperation prco(this);
+	Geometry *g=geomEdit.edit(geom, &prco);
+	return g;
+}
+
 } // namespace geos.precision
 } // namespace geos
 
 /**********************************************************************
  * $Log$
- * Revision 1.12  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.11  2006/03/02 16:21:26  strk
- * geos::precision namespace added
- *
- * Revision 1.10  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.9  2005/11/25 11:40:21  strk
- * Another getSize in for loop, another int-unsigned int warning
- *
- * Revision 1.8  2004/09/21 09:47:36  strk
- * fixed a mis-initialization bug in ::reduce
- *
- * Revision 1.7  2004/07/08 19:34:50  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.6  2004/07/06 17:58:22  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.5  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.4  2004/05/03 17:15:38  strk
- * leaks on exception fixed.
- *
- * Revision 1.3  2004/04/20 10:14:20  strk
- * Memory leaks removed.
- *
- * Revision 1.2  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.1  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
+ * Revision 1.13  2006/03/23 09:17:19  strk
+ * precision.h header split, minor optimizations
  *
  **********************************************************************/
 
