@@ -230,12 +230,6 @@ AC_OUTPUT([
 	source/planargraph/Makefile
 	source/precision/Makefile
 	source/util/Makefile
-	swig/Makefile
-	swig/python/Makefile
-	swig/python/tests/Makefile
-	swig/python/tests/cases/Makefile
-	swig/ruby/Makefile
-	swig/ruby/test/Makefile
 	tests/Makefile
 	tests/bigtest/Makefile
 	tests/xmltester/Makefile
@@ -243,6 +237,13 @@ AC_OUTPUT([
 	tools/Makefile
 	tools/geos-config
 	])
+
+#swig/Makefile
+#swig/python/Makefile
+#swig/python/tests/Makefile
+#swig/python/tests/cases/Makefile
+#swig/ruby/Makefile
+#swig/ruby/test/Makefile
 
 
 echo "---------------------------------------"

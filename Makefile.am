@@ -2,9 +2,10 @@ SUBDIRS = \
 	source	\
 	macros	\
 	tools	\
-	swig	\
 	tests	\
 	capi	\
 	doc
+
+# swig	
 
 EXTRA_DIST = acsite.m4
