@@ -18,11 +18,6 @@
  *
  **********************************************************************/
 
-#include <string>
-#include <vector>
-#include <set>
-#include <utility> // std::pair
-
 #include <geos/geomgraph/EdgeIntersectionList.h>
 #include <geos/geomgraph/EdgeIntersection.h>
 #include <geos/geomgraph/Edge.h>
@@ -31,8 +26,17 @@
 #include <geos/geom/CoordinateArraySequence.h> // shouldn't be using this
 #include <geos/geom/Coordinate.h>
 
+#include <string>
+#include <vector>
+#include <set>
+#include <utility> // std::pair
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
+#endif
+
+#if GEOS_DEBUG || GEOS_DEBUG_INTERSECT
+#include <iostream>
 #endif
 
 using namespace std;
@@ -189,6 +193,9 @@ EdgeIntersectionList::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/23 13:31:56  strk
+ * Fixed to allow build with GEOS_DEBUG
+ *
  * Revision 1.22  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *

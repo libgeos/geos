@@ -28,9 +28,13 @@
 #include <geos/geom/CoordinateArraySequence.h> // FIXME: shouldn't use
 #include <geos/geom/Coordinate.h>
 
-//#define DEBUG_INTERSECT 0
+//#define GEOS_DEBUG_INTERSECT 0
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
+#endif
+
+#if GEOS_DEBUG || GEOS_DEBUG_INTERSECT
+#include <iostream>
 #endif
 
 using namespace std;
@@ -302,6 +306,9 @@ operator<< (std::ostream&os, const Edge& e)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/03/23 13:31:56  strk
+ * Fixed to allow build with GEOS_DEBUG
+ *
  * Revision 1.34  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *

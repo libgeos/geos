@@ -30,6 +30,10 @@
 
 #define DEBUG_INTERSECT 0
 
+#if GEOS_DEBUG || DEBUG_INTERSECT
+#include <iostream>
+#endif
+
 using namespace std;
 using namespace geos::geom;
 
@@ -221,6 +225,9 @@ SegmentIntersector::isBoundaryPoint(LineIntersector *li,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/23 13:31:58  strk
+ * Fixed to allow build with GEOS_DEBUG
+ *
  * Revision 1.17  2006/03/15 17:16:31  strk
  * streamlined headers inclusion
  *

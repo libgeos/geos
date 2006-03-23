@@ -25,6 +25,10 @@
 #define GEOS_DEBUG 0
 #endif
 
+#if GEOS_DEBUG
+#include <iostream>
+#endif
+
 using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::geom;
@@ -102,7 +106,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 		last++;
 	}
 #if GEOS_DEBUG
-	cerr<<"MonotoneChainBuilder::findChainEnd() returning"<<endl;
+	std::cerr<<"MonotoneChainBuilder::findChainEnd() returning"<<std::endl;
 #endif
 	return last-1;
 }
@@ -113,6 +117,9 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/23 13:31:58  strk
+ * Fixed to allow build with GEOS_DEBUG
+ *
  * Revision 1.23  2006/03/22 18:12:32  strk
  * indexChain.h header split.
  *

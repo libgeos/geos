@@ -28,6 +28,10 @@
 #define GEOS_DEBUG 0
 #endif
 
+#if GEOS_DEBUG
+#include <iostream>
+#endif
+
 using namespace std;
 using namespace geos::geom;
 
@@ -238,6 +242,9 @@ NodeBase::remove(const Envelope* itemEnv, void* item)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/23 13:31:58  strk
+ * Fixed to allow build with GEOS_DEBUG
+ *
  * Revision 1.1  2006/03/22 14:28:53  strk
  * Filenames renamed to match class names (matching JTS)
  *
