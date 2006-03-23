@@ -4,7 +4,7 @@ geosdir = $(includedir)/geos/operation/relate
 
 EXTRA_DIST = 
 
-geos_HEADERS = 
+geos_HEADERS = \
 	EdgeEndBuilder.h	\
 	EdgeEndBundle.h	\
 	EdgeEndBundleStar.h	\

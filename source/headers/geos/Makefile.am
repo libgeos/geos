@@ -38,6 +38,7 @@ geos_HEADERS = \
 	opValid.h \
 	opDistance.h \
 	opPolygonize.h \
+	opPredicate.h \
 	precision.h \
 	operation.h \
 	spatialIndex.h \
@@ -47,6 +48,5 @@ geos_HEADERS = \
 	timeval.h
 
 nodist_geos_HEADERS = \
-	version.h \
 	platform.h \
-	opPredicate.h
+	version.h 
