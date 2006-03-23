@@ -4,7 +4,7 @@ geosdir = $(includedir)/geos/operation/predicate
 
 EXTRA_DIST = 
 
-geos_HEADERS = 
+geos_HEADERS = \
 	RectangleContains.h	\
 	RectangleIntersects.h	\
 	SegmentIntersectionTester.h
