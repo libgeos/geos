@@ -26,6 +26,8 @@
 #include <geos/index/chain/MonotoneChainSelectAction.h> 
 #include <geos/index/chain/MonotoneChain.h> 
 
+#include <algorithm>
+
 using namespace geos::index;
 using namespace geos::geom;
 
@@ -113,6 +115,9 @@ MCIndexPointSnapper::snap(const HotPixel& hotPixel,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/24 09:25:02  strk
+ * Bugs #77 and #76: missing <algorithm>
+ *
  * Revision 1.8  2006/03/22 18:12:32  strk
  * indexChain.h header split.
  *

@@ -44,6 +44,7 @@
 #include <cassert>
 #include <vector>
 #include <iomanip>
+#include <algorithm>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -382,6 +383,9 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.54  2006/03/24 09:25:02  strk
+ * Bugs #77 and #76: missing <algorithm>
+ *
  * Revision 1.53  2006/03/22 18:12:32  strk
  * indexChain.h header split.
  *
