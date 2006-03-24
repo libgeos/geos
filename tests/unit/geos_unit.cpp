@@ -19,11 +19,11 @@ namespace tut
 
 void usage()
 {
-    std::cout << "Usage: <geos_tut> [regression] | [list] | [ group] [test]" << std::endl;
-    std::cout << "       List all groups: geos_tut list" << std::endl;
-    std::cout << "       Run all tests: geos_tut" << std::endl;
-    std::cout << "       Run one group: geos_tut <group name>" << std::endl;
-    std::cout << "       Run one test: geos_tut <group name> 3" << std::endl;
+    std::cout << "Usage: <geos_tut> [list] | [ group] [test]" << std::endl;
+    std::cout << "       List all groups: geos_unit list" << std::endl;
+    std::cout << "       Run all tests: geos_unit" << std::endl;
+    std::cout << "       Run one group: geos_unit <group name>" << std::endl;
+    std::cout << "       Run one test: geos_unit <group name> 3" << std::endl;
     std::cout << "\nGEOS homepage: http://geos.refractions.net" << std::endl;
 
 }
@@ -32,9 +32,9 @@ int main(int argc,const char* argv[])
 {
     tut::reporter visi;
 
-    std::cout << argc << std::endl;
-    std::cout << "GEOS Test Suite Application" << std::endl;
-    std::cout << "===========================" << std::endl;
+    std::cout << "===========================\n"
+			  << "GEOS Test Suite Application\n"
+			  << "===========================\n";
 
     if ( (argc == 2 && std::string(argv[1]) == "--help") || argc > 3 )
     {
