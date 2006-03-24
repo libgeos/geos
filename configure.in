@@ -77,13 +77,13 @@ AC_ARG_ENABLE(inline, [  --disable-inline    Disable inlining],
 	[enable_inline=true]
 )
 
-AC_ARG_ENABLE(cassert, [  --enable-cassert   Enable assertion checking],
+AC_ARG_ENABLE(cassert, [  --disable-cassert   Disable assertion checking],
 	[case "${enableval}" in
 		yes) enable_cassert=true ;;
 		no)  enable_cassert=false ;;
 		*) AC_MSG_ERROR(bad value ${enableval} for --enable-cassert);;
 	esac],
-	[enable_cassert=false]
+	[enable_cassert=true]
 )
 
 INLINE_FLAGS=
