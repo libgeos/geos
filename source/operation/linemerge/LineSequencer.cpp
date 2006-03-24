@@ -29,6 +29,7 @@
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/Subgraph.h>
 #include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
+#include <geos/util/Assert.h>
 
 #include <cassert>
 #include <limits>
@@ -304,7 +305,8 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
 	if ( expectedClosed ) {
 		// the path should end at the toNode of this de,
 		// otherwise we have an error
-		assert(fromNode == endNode);
+		util::Assert::isTrue(fromNode == endNode, "path not contiguos");
+		//assert(fromNode == endNode);
 	}
 
 }
@@ -431,6 +433,9 @@ LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/24 11:04:44  strk
+ * Changed assert() with Assert::isTrue in addReverseSubpath
+ *
  * Revision 1.8  2006/03/24 10:44:07  strk
  * Fixed to build with -DNDEBUG
  *
