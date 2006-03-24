@@ -54,7 +54,7 @@
 
 #define SHORTCIRCUIT_PREDICATES 1
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/geom/Geometry.inl>
 #endif
 
@@ -781,8 +781,11 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.107  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.106  2006/03/23 12:12:00  strk
- * Fixes to allow build with -DUSE_INLINE
+ * Fixes to allow build with -DGEOS_INLINE
  *
  * Revision 1.105  2006/03/21 17:55:01  strk
  * opDistance.h header split

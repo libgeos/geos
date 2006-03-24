@@ -24,7 +24,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include "geos/noding/SegmentString.inl"
 #endif
 
@@ -114,6 +114,9 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.27  2006/03/15 09:51:12  strk
  * streamlined headers usage
  *

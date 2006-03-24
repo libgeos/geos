@@ -158,7 +158,7 @@ private:
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef USE_INLINE
+//#ifdef GEOS_INLINE
 //# include "geos/geomgraph/DirectedEdgeEndStar.inl"
 //#endif
 
@@ -166,6 +166,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.3  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *

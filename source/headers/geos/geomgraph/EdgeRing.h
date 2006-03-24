@@ -100,7 +100,7 @@ private:
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef USE_INLINE
+//#ifdef GEOS_INLINE
 //# include "geos/geomgraph/EdgeRing.inl"
 //#endif
 
@@ -108,6 +108,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.3  2006/03/20 12:32:57  strk
  * Added note about responsibility of return from ::toPolygon
  *

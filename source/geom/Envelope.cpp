@@ -21,7 +21,7 @@
 #include <sstream>
 #include <cmath>
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/geom/Envelope.inl>
 #endif
 
@@ -585,6 +585,9 @@ Envelope::expandBy(double deltaX, double deltaY)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.27  2006/03/15 18:44:52  strk
  * Bug #60 - Missing <cmath> header in some files
  *

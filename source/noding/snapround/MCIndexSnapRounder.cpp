@@ -31,7 +31,7 @@
 #include <geos/inline.h>
 
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/noding/snapround/MCIndexSnapRounder.inl>
 #endif
 
@@ -137,6 +137,9 @@ MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentSt
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.8  2006/03/22 18:12:32  strk
  * indexChain.h header split.
  *

@@ -1,6 +1,9 @@
+- CORRECTNESS:
+	- hunt for a possible uninitialized memory bug
+	  (robustness.xml tests act differently when
+	   built with or w/out USE_INLINE)
+
 - BUILD SPEEDUP:
-	- finish splitting headers
-	- tune includes in .cpp and .inl files (after headers split)
 	- build a single library rather then one for each dir
 
 - WKB tester in doc/examples.cpp should do point-by-point comparison.

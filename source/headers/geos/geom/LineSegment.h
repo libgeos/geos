@@ -240,7 +240,7 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 } // namespace geos::geom
 } // namespace geos
 
-#ifdef USE_INLINE
+#ifdef GEOS_INLINE
 # include "geos/geom/LineSegment.inl"
 #endif
 
@@ -248,6 +248,9 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.3  2006/03/16 13:28:22  strk
  * obsoleted getCoordinate(), replaced by operator[]
  *

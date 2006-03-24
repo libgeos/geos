@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include "geos/geom/MultiPolygon.inl"
 #endif
 
@@ -118,8 +118,11 @@ MultiPolygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.28  2006/03/23 12:12:00  strk
- * Fixes to allow build with -DUSE_INLINE
+ * Fixes to allow build with -DGEOS_INLINE
  *
  * Revision 1.27  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.

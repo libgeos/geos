@@ -42,7 +42,7 @@
 #include <iostream>
 #endif
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/geom/GeometryFactory.inl>
 #endif
 
@@ -576,6 +576,9 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.63  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.62  2006/03/20 10:11:50  strk
  * Bug #67 - Debugging helpers in GeometryFactory class
  *

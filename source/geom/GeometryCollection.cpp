@@ -27,7 +27,7 @@
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/Envelope.h>
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/geom/GeometryCollection.inl>
 #endif
 
@@ -339,6 +339,9 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.55  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.54  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

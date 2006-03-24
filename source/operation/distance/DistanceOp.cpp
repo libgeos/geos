@@ -469,8 +469,11 @@ DistanceOp::computeMinDistance(const LineString *line,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.22  2006/03/23 12:12:01  strk
- * Fixes to allow build with -DUSE_INLINE
+ * Fixes to allow build with -DGEOS_INLINE
  *
  * Revision 1.21  2006/03/21 17:55:01  strk
  * opDistance.h header split

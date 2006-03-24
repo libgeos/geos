@@ -31,7 +31,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/noding/MCIndexNoder.inl>
 #endif
 
@@ -155,6 +155,9 @@ MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain* mc1, int start1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.14  2006/03/22 18:12:32  strk
  * indexChain.h header split.
  *

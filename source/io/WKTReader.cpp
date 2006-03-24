@@ -41,7 +41,7 @@
 #include <iostream>
 #endif
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 #include <geos/io/WKTReader.inl>
 #endif
 
@@ -341,6 +341,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.39  2006/03/22 16:58:35  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

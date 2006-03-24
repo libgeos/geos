@@ -31,7 +31,7 @@
 #include <typeinfo>
 #include <algorithm>
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include "geos/algorithm/ConvexHull.inl"
 #endif
 
@@ -549,6 +549,9 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.20  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *

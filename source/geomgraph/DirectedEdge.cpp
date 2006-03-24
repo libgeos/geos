@@ -27,7 +27,7 @@
 
 using namespace geos::geom;
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include "geos/geomgraph/DirectedEdge.inl"
 #endif
 
@@ -208,6 +208,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.16  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *

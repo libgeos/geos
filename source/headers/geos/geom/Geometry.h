@@ -633,7 +633,7 @@ std::string jtsport();
 } // namespace geos::geom
 } // namespace geos
 
-#ifdef USE_INLINE
+#ifdef GEOS_INLINE
 # include <geos/geom/Geometry.inl>
 #endif
 
@@ -641,11 +641,14 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.4  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *
  * Revision 1.3  2006/03/23 12:12:01  strk
- * Fixes to allow build with -DUSE_INLINE
+ * Fixes to allow build with -DGEOS_INLINE
  *
  * Revision 1.2  2006/03/20 12:03:25  strk
  * Added operator<< for Geometry, writing HEXWKB

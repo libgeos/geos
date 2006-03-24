@@ -16,7 +16,7 @@
 #ifndef GEOS_INLINE_H
 #define GEOS_INLINE_H
 
-#ifdef USE_INLINE
+#ifdef GEOS_INLINE
 # define INLINE inline
 #else
 # define INLINE

@@ -238,7 +238,7 @@ std::ostream& operator<< (std::ostream& os, const Edge& el);
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef USE_INLINE
+//#ifdef GEOS_INLINE
 //# include "geos/geomgraph/Edge.inl"
 //#endif
 
@@ -246,6 +246,9 @@ std::ostream& operator<< (std::ostream& os, const Edge& el);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.2  2006/03/14 11:03:14  strk
  * Added operator<< for Edge and EdgeList
  *

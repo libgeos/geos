@@ -22,7 +22,7 @@
 #include <string>
 #include <cmath>
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/geom/PrecisionModel.inl>
 #endif
 
@@ -314,6 +314,9 @@ int PrecisionModel::compareTo(const PrecisionModel *other) const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.40  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

@@ -17,7 +17,7 @@
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include "geos/geom/CoordinateArraySequenceFactory.inl"
 #endif
 
@@ -37,6 +37,9 @@ CoordinateArraySequenceFactory::instance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.2  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

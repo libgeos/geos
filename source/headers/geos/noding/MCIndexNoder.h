@@ -104,7 +104,7 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-#ifdef USE_INLINE
+#ifdef GEOS_INLINE
 # include <geos/noding/MCIndexNoder.inl>
 #endif
 
@@ -112,6 +112,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.3  2006/03/22 18:12:31  strk
  * indexChain.h header split.
  *

@@ -64,7 +64,7 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-//#ifdef USE_INLINE
+//#ifdef GEOS_INLINE
 //# include "geos/noding/SimpleNoder.inl"
 //#endif
 
@@ -72,6 +72,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.2  2006/03/15 09:51:49  strk
  * streamlined header usage
  *

@@ -95,7 +95,7 @@ public:
 } // namespace geos
 
 
-//#ifdef USE_INLINE
+//#ifdef GEOS_INLINE
 //# include "geos/noding/ScaledNoder.inl"
 //#endif
 
@@ -103,6 +103,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.2  2006/03/13 21:19:51  strk
  * Fixed bug in ScaledNoder scaling mechanism (hugly code, due to CoordinateSequence visitor pattern design). Tests are still failing so this possibly needs some other fix. Streamlined includes by implementation file.
  *

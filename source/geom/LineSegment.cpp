@@ -27,7 +27,7 @@
 
 using namespace std;
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/geom/LineSegment.inl>
 #endif
 
@@ -232,6 +232,9 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.34  2006/03/22 18:12:31  strk
  * indexChain.h header split.
  *

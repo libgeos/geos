@@ -18,7 +18,7 @@
 
 #include <geos/geom/Coordinate.h>
 
-#ifndef USE_INLINE
+#ifndef GEOS_INLINE
 # include <geos/geom/Coordinate.inl>
 #endif
 
@@ -53,6 +53,9 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.32  2006/03/23 15:10:28  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *

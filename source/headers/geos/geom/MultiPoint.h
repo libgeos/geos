@@ -88,7 +88,7 @@ protected:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef USE_INLINE
+//#ifdef GEOS_INLINE
 //# include "geos/geom/MultiPoint.inl"
 //#endif
 
@@ -96,6 +96,9 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
