@@ -168,10 +168,8 @@ LineSequencer::computeSequence()
 	sequencedGeometry = auto_ptr<Geometry>(buildSequencedGeometry(*sequences));
 	isSequenceableVar = true;
 
-	unsigned int finalLineCount = sequencedGeometry->getNumGeometries();
-
 	// Lines were missing from result
-	assert(lineCount == finalLineCount);
+	assert(lineCount == sequencedGeometry->getNumGeometries());
 
 	// Result is not linear
 	assert(dynamic_cast<LineString *>(sequencedGeometry.get())
@@ -433,6 +431,9 @@ LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/03/24 10:44:07  strk
+ * Fixed to build with -DNDEBUG
+ *
  * Revision 1.7  2006/03/22 10:13:54  strk
  * opLinemerge.h split
  *
