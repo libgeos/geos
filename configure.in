@@ -67,6 +67,36 @@ AC_STRUCT_TM
 AC_TYPE_SIZE_T
 AC_C_CONST
 
+
+AC_ARG_ENABLE(inline, [  --disable-inline    Disable inlining],
+	[case "${enableval}" in
+		yes) enable_inline=true ;;
+		no)  enable_inline=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-inline);;
+	esac],
+	[enable_inline=true]
+)
+
+AC_ARG_ENABLE(cassert, [  --enable-cassert   Enable assertion checking],
+	[case "${enableval}" in
+		yes) enable_cassert=true ;;
+		no)  enable_cassert=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-cassert);;
+	esac],
+	[enable_cassert=false]
+)
+
+INLINE_FLAGS=
+AC_SUBST(INLINE_FLAGS)
+if test x"$enable_inline" = xtrue; then
+	INLINE_FLAGS="-DGEOS_INLINE"
+	CXXFLAGS="$CXXFLAGS $INLINE_FLAGS"
+fi
+
+if test x"$enable_cassert" = xfalse; then
+	CXXFLAGS="$CXXFLAGS -DNDEBUG"
+fi
+
 dnl --------------------------------------------------------------------
 dnl - check for swig 
 dnl --------------------------------------------------------------------

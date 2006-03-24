@@ -6,6 +6,9 @@
 - BUILD SPEEDUP:
 	- build a single library rather then one for each dir
 
+- BUILD CORRECTNESS:
+	- include <geos/config.h> from all .cpp files
+
 - WKB tester in doc/examples.cpp should do point-by-point comparison.
 
 - Implement Safe's idea of a compile-time enabled 2d-only

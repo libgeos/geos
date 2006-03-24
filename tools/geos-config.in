@@ -32,7 +32,7 @@ case $1 in
     echo @VERSION@
      ;;
     --cflags)
-    echo -I@prefix@/include 
+    echo -I@prefix@/include @INLINE_FLAGS@
       ;;
     --libs)
       echo -L@prefix@/lib -lgeos
