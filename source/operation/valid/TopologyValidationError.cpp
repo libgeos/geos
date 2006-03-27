@@ -81,7 +81,7 @@ TopologyValidationError::getMessage()
 string
 TopologyValidationError::toString()
 {
-	return (getMessage().append(" at or near point")).append(pt.toString());
+	return getMessage().append(" at or near point ").append(pt.toString());
 }
 
 } // namespace geos.operation.valid
@@ -90,6 +90,9 @@ TopologyValidationError::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/03/27 10:36:51  strk
+ * added missing space in exception message
+ *
  * Revision 1.15  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *
