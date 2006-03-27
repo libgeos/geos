@@ -76,7 +76,10 @@ Changes in 3.0.0
 	- More const-correctness in Buffer "package"
 
 - Layout changes:
-	- geos::geom::util namespace used for geom/util stuff
+	- Namespaces mapping JTS packages
+	- Renamed classes after JTS names (namespaces use made this possible
+	  w/out name clashes)
+	- Splitted headers, for build speedup and possible API reduction.
 	- Moved source/bigtest and source/test to tests/bigtest
 	  and test/xmltester
 	- Moved C-API in it's own top-level dir capi/
