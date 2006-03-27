@@ -273,7 +273,6 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 	std::vector<CoordinateSequence*> lineList;
 	curveBuilder.getRingCurve(coord, side, offsetDistance, lineList);
 	addCurves(lineList, leftLoc, rightLoc);
-	//delete lineList;
 }
 
 /*private*/
@@ -333,6 +332,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/03/27 17:04:18  strk
+ * Cleanups and explicit initializations
+ *
  * Revision 1.32  2006/03/22 11:18:39  strk
  * Changed back 'unable to find edge to compute depths' from assertion to TopologyException
  *

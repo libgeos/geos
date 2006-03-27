@@ -126,7 +126,7 @@ private:
 
 	int endCapStyle;
 
-	int joinStyle;
+	//int joinStyle;
 
 	geom::Coordinate s0, s1, s2;
 
@@ -201,7 +201,7 @@ private:
 	/// Adds a CW square around a point
 	void addSquare(const geom::Coordinate &p, double distance);
 
-	std::vector<geom::CoordinateSequence *>ptLists;
+	std::vector<geom::CoordinateSequence *> ptLists;
 };
 
 // INLINES
@@ -218,6 +218,9 @@ inline void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/27 17:04:17  strk
+ * Cleanups and explicit initializations
+ *
  * Revision 1.1  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *

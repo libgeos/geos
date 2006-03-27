@@ -50,12 +50,23 @@ const double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN = 3.0;
 
 /*public*/
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
-		int quadrantSegments):
-	maxCurveSegmentError(0.0),
-	ptList(new CoordinateArraySequence()),
-	distance(0.0),
-	precisionModel(newPrecisionModel),
-	endCapStyle(BufferOp::CAP_ROUND)
+		int quadrantSegments)
+		:
+		li(),
+		maxCurveSegmentError(0.0),
+		ptList(new CoordinateArraySequence()),
+		distance(0.0),
+		precisionModel(newPrecisionModel),
+		endCapStyle(BufferOp::CAP_ROUND),
+		s0(),
+		s1(),
+		s2(),
+		seg0(),
+		seg1(),
+		offset0(),
+		offset1(),
+		side(0),
+		ptLists()
 {
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=PI / 2.0 / limitedQuadSegs;
@@ -467,6 +478,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/03/27 17:04:18  strk
+ * Cleanups and explicit initializations
+ *
  * Revision 1.32  2006/03/20 11:42:29  strk
  * Added missing <cmath> include
  *
