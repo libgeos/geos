@@ -16,10 +16,11 @@
 #ifndef GEOS_GEOM_COORDINATE_INL
 #define GEOS_GEOM_COORDINATE_INL
 
-#include <cassert>
-#include <cmath>
 #include <geos/geom/Coordinate.h>
 //#include <geos/geom/PrecisionModel.h> // we need it for makePrecise, possibly to be obsoleted
+
+#include <cassert>
+#include <cmath>
 
 namespace geos {
 namespace geom { // geos::geom
