@@ -85,6 +85,9 @@ private:
 	 * Form DirectedEdges in graph into Minimal EdgeRings.
 	 * (Minimal Edgerings must be used, because only they are guaranteed to provide
 	 * a correct isHole computation)
+	 *
+	 * The returned vector and its contents are allocated on the
+	 * heap; deletion responsibility is left to caller.
 	 */
 	std::vector<geomgraph::EdgeRing*>* buildEdgeRings(
 			std::vector<geomgraph::EdgeEnd*> *dirEdges);
@@ -123,6 +126,9 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/27 14:20:46  strk
+ * Added paranoid assertion checking and a note in header about responsibility of return from buildMaximalEdgeRings()
+ *
  * Revision 1.1  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

@@ -100,7 +100,10 @@ ConnectedInteriorTester::isInteriorsConnected()
 	setInteriorEdgesInResult(graph);
 	//graph.linkAllDirectedEdges();
 	graph.linkResultDirectedEdges();
-	std::vector<EdgeRing*> *edgeRings=buildEdgeRings(graph.getEdgeEnds());
+
+	// Someone has to delete the returned vector and its contents
+	std::vector<EdgeRing*>* edgeRings=buildEdgeRings(graph.getEdgeEnds());
+	assert(edgeRings);
 
 	/*
 	 * Mark all the edges for the edgeRings corresponding to the shells
@@ -111,7 +114,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 	 */
 	visitShellInteriors(geomGraph.getGeometry(), graph);
 
-	/**
+	/*
 	 * If there are any unvisited shell edges
 	 * (i.e. a ring which is not a hole and which has the interior
 	 * of the parent area on the RHS)
@@ -120,11 +123,15 @@ ConnectedInteriorTester::isInteriorsConnected()
 	 */
 	bool res=!hasUnvisitedShellEdge(edgeRings);
 
-	for(unsigned int i=0; i<edgeRings->size(); ++i)
+	assert(edgeRings);
+	// Release memory allocated by buildEdgeRings
+	for(unsigned int i=0, n=edgeRings->size(); i<n; ++i)
 	{
+		assert((*edgeRings)[i]);
 		delete (*edgeRings)[i];
 	}
 	delete edgeRings;
+
 	return res;
 }
 
@@ -230,16 +237,7 @@ ConnectedInteriorTester::visitLinkedDirectedEdges(DirectedEdge *start)
 	} while (de!=startDe);
 }
 
-/**
- * Check if any shell ring has an unvisited edge.
- * A shell ring is a ring which is not a hole and which has the interior
- * of the parent area on the RHS.
- * (Note that there may be non-hole rings with the interior on the LHS,
- * since the interior of holes will also be polygonized into CW rings
- * by the linkAllDirectedEdges() step)
- *
- * @return true if there is an unvisited edge in a non-hole ring
- */
+/*private*/
 bool
 ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings)
 {
@@ -253,7 +251,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 		if (er->isHole()) continue;
 
 		std::vector<DirectedEdge*> *edges=er->getEdges();
+		assert(edges);
 		DirectedEdge *de=(*edges)[0];
+		assert(de);
 
 		// don't check CW rings which are holes
 		// (MD - this check may now be irrelevant - 2006-03-09)
@@ -269,6 +269,7 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 			++jt)
 		{
 			de=*jt;
+			assert(de);
 			//Debug.print("visted? "); Debug.println(de);
 			if (!de->isVisited()) {
 				//Debug.print("not visited "); Debug.println(de);
@@ -286,6 +287,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/03/27 14:20:46  strk
+ * Added paranoid assertion checking and a note in header about responsibility of return from buildMaximalEdgeRings()
+ *
  * Revision 1.24  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *
