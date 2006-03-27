@@ -263,7 +263,7 @@ extern char GEOS_DLL GEOSHasZ(const GEOSGeom g1);
  *
  ***********************************************************************/
 
-/* Return NULL on exception */
+/* Return NULL on exception, result must be freed by caller. */
 extern char GEOS_DLL *GEOSGeomType(const GEOSGeom g1);
 
 /* Return -1 on exception */
