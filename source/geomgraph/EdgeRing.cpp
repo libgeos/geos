@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,9 +13,6 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
-
-#include <vector>
-#include <cassert>
 
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
@@ -34,6 +31,17 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/Envelope.h>
 
+#include <vector>
+#include <cassert>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#if GEOS_DEBUG
+#include <iostream>
+#endif
+
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -46,7 +54,9 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,
 	:
         startDe(newStart),
         geometryFactory(newGeometryFactory),
+	holes(),
         maxNodeDegree(-1),
+	edges(),
 	pts(newGeometryFactory->getCoordinateSequenceFactory()->create(NULL)),
         label(new Label(Location::UNDEF)),
         ring(NULL),
@@ -59,7 +69,9 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,
 	 */
 	//computePoints(start);
 	//computeRing();
-
+#if GEOS_DEBUG
+	cerr << "EdgeRing[" << this << "] ctor" << endl;
+#endif
 }
 
 EdgeRing::~EdgeRing()
@@ -74,9 +86,14 @@ EdgeRing::~EdgeRing()
 	else delete ring;
 
 	delete label;
+
 	for(unsigned int i=0;i<holes.size(); ++i) {
 		delete holes[i];
 	}
+
+#if GEOS_DEBUG
+	cerr << "EdgeRing[" << this << "] dtor" << endl;
+#endif
 }
 
 bool
@@ -311,6 +328,10 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/03/27 16:02:33  strk
+ * Added INL file for MinimalEdgeRing, added many debugging blocks,
+ * fixed memory leak in ConnectedInteriorTester (bug #59)
+ *
  * Revision 1.20  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *
@@ -429,6 +450,10 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.21  2006/03/27 16:02:33  strk
+ * Added INL file for MinimalEdgeRing, added many debugging blocks,
+ * fixed memory leak in ConnectedInteriorTester (bug #59)
+ *
  * Revision 1.20  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *

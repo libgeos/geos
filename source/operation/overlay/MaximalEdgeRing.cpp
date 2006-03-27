@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,17 +18,24 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <vector>
-
 #include <geos/operation/overlay/MaximalEdgeRing.h>
 #include <geos/operation/overlay/MinimalEdgeRing.h>
-
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/EdgeEndStar.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
+
+#include <cassert>
+#include <vector>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#if GEOS_DEBUG
+#include <iostream>
+#endif
 
 using namespace std;
 using namespace geos::geomgraph;
@@ -47,11 +54,17 @@ MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
 {
 	computePoints(start);
 	computeRing();
+#if GEOS_DEBUG
+	cerr << "MaximalEdgeRing[" << this << "] ctor" << endl;
+#endif
 }
 
 /*public*/
 MaximalEdgeRing::~MaximalEdgeRing()
 {
+#if GEOS_DEBUG
+	cerr << "MaximalEdgeRing[" << this << "] dtor" << endl;
+#endif
 }
 
 /*public*/
@@ -103,7 +116,7 @@ MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
 	DirectedEdge *de=startDe;
 	do {
 		if(de->getMinEdgeRing()==NULL) {
-			MinimalEdgeRing *minEr=new MinimalEdgeRing(de,geometryFactory);
+			MinimalEdgeRing *minEr=new MinimalEdgeRing(de, geometryFactory);
 			minEdgeRings.push_back(minEr);
 		}
 		de=de->getNext();
@@ -116,6 +129,10 @@ MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/03/27 16:02:34  strk
+ * Added INL file for MinimalEdgeRing, added many debugging blocks,
+ * fixed memory leak in ConnectedInteriorTester (bug #59)
+ *
  * Revision 1.18  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

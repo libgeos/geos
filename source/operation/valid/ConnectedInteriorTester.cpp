@@ -47,6 +47,14 @@
 #include <cassert>
 #include <typeinfo>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#if GEOS_DEBUG
+#include <iostream>
+#endif
+
 using namespace std;
 using namespace geos::geom;
 using namespace geos::geomgraph;
@@ -105,6 +113,10 @@ ConnectedInteriorTester::isInteriorsConnected()
 	std::vector<EdgeRing*>* edgeRings=buildEdgeRings(graph.getEdgeEnds());
 	assert(edgeRings);
 
+#if GEOS_DEBUG
+	cerr << "buildEdgeRings constructed " << edgeRings->size() << " edgeRings." << endl;
+#endif
+
 	/*
 	 * Mark all the edges for the edgeRings corresponding to the shells
 	 * of the input polygons. 
@@ -113,6 +125,10 @@ ConnectedInteriorTester::isInteriorsConnected()
 	 * this indicates a disconnected interior.
 	 */
 	visitShellInteriors(geomGraph.getGeometry(), graph);
+
+#if GEOS_DEBUG
+	cerr << "after visitShellInteriors edgeRings are " << edgeRings->size() << " edgeRings." << endl;
+#endif
 
 	/*
 	 * If there are any unvisited shell edges
@@ -124,11 +140,18 @@ ConnectedInteriorTester::isInteriorsConnected()
 	bool res=!hasUnvisitedShellEdge(edgeRings);
 
 	assert(edgeRings);
+#if GEOS_DEBUG
+	cerr << "releasing " << edgeRings->size() << " edgeRings." << endl;
+#endif
 	// Release memory allocated by buildEdgeRings
 	for(unsigned int i=0, n=edgeRings->size(); i<n; ++i)
 	{
-		assert((*edgeRings)[i]);
-		delete (*edgeRings)[i];
+		EdgeRing* er = (*edgeRings)[i];
+		assert(er);
+		delete er;
+#if GEOS_DEBUG
+	cerr << "releasing edgeRing at " << er << endl;
+#endif
 	}
 	delete edgeRings;
 
@@ -166,7 +189,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 			//EdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
 			//edgeRings->push_back(er);
 
-			MaximalEdgeRing* er = new MaximalEdgeRing(de, geometryFactory);
+			auto_ptr<MaximalEdgeRing> er(new MaximalEdgeRing(de, geometryFactory));
 			er->linkDirectedEdgesForMinimalEdgeRings();
 			er->buildMinimalRings(minEdgeRings);
 		}
@@ -241,11 +264,18 @@ ConnectedInteriorTester::visitLinkedDirectedEdges(DirectedEdge *start)
 bool
 ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings)
 {
-	for(std::vector<EdgeRing*>::iterator it=edgeRings->begin(), itEnd=edgeRings->end();
+
+#if GEOS_DEBUG
+	cerr << "hasUnvisitedShellEdge called with " << edgeRings->size() << " edgeRings." << endl;
+#endif
+
+	for(std::vector<EdgeRing*>::iterator
+		it=edgeRings->begin(), itEnd=edgeRings->end();
 		it != itEnd;
 		++it)
 	{
 		EdgeRing *er=*it;
+		assert(er);
 
 		// don't check hole rings
 		if (er->isHole()) continue;
@@ -257,14 +287,16 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 		// don't check CW rings which are holes
 		// (MD - this check may now be irrelevant - 2006-03-09)
-		if (de->getLabel()->getLocation(0,Position::RIGHT)!=Location::INTERIOR) continue;
+		assert(de->getLabel());
+		if (de->getLabel()->getLocation(0, Position::RIGHT) != Location::INTERIOR) continue;
 
 		/*
 		 * the edgeRing is CW ring which surrounds the INT of the area, so check all
 		 * edges have been visited.  If any are unvisited, this is a disconnected part
 		 * of the interior
 		 */
-		for(std::vector<DirectedEdge*>::iterator jt=edges->begin(), jtEnd=edges->end();
+		for(std::vector<DirectedEdge*>::iterator
+			jt=edges->begin(), jtEnd=edges->end();
 			jt != jtEnd;
 			++jt)
 		{
@@ -287,6 +319,10 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/27 16:02:34  strk
+ * Added INL file for MinimalEdgeRing, added many debugging blocks,
+ * fixed memory leak in ConnectedInteriorTester (bug #59)
+ *
  * Revision 1.25  2006/03/27 14:20:46  strk
  * Added paranoid assertion checking and a note in header about responsibility of return from buildMaximalEdgeRings()
  *

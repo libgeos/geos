@@ -48,7 +48,9 @@ public:
 	EdgeRing(DirectedEdge *newStart, const geom::GeometryFactory *newGeometryFactory);
 
 	virtual ~EdgeRing();
+
 	bool isIsolated();
+
 	bool isHole();
 
 	/*
@@ -59,9 +61,13 @@ public:
 	geom::LinearRing* getLinearRing();
 
 	Label* getLabel();
+
 	bool isShell();
+
 	EdgeRing *getShell();
+
 	void setShell(EdgeRing *newShell);
+
 	void addHole(EdgeRing *edgeRing);
 
 	/**
@@ -72,28 +78,54 @@ public:
 	geom::Polygon* toPolygon(const geom::GeometryFactory* geometryFactory);
 
 	void computeRing();
+
 	virtual DirectedEdge* getNext(DirectedEdge *de)=0;
+
 	virtual void setEdgeRing(DirectedEdge *de, EdgeRing *er)=0;
+
 	std::vector<DirectedEdge*>* getEdges();
+
 	int getMaxNodeDegree();
+
 	void setInResult();
+
 	bool containsPoint(const geom::Coordinate& p);
+
 protected:
+
 	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
+
 	const geom::GeometryFactory *geometryFactory;
+
 	void computePoints(DirectedEdge *newStart);
+
 	void mergeLabel(Label *deLabel);
+
 	void mergeLabel(Label *deLabel, int geomIndex);
+
 	void addPoints(Edge *edge, bool isForward, bool isFirstEdge);
-	std::vector<EdgeRing*> holes; // a list of EdgeRings which are holes in this EdgeRing
+
+	/// a list of EdgeRings which are holes in this EdgeRing
+	std::vector<EdgeRing*> holes;
+
 private:
+
 	int maxNodeDegree;
-	std::vector<DirectedEdge*> edges; // the DirectedEdges making up this EdgeRing
+
+	/// the DirectedEdges making up this EdgeRing
+	std::vector<DirectedEdge*> edges;
+
 	geom::CoordinateSequence* pts;
+
 	Label* label; // label stores the locations of each geometry on the face surrounded by this ring
+
 	geom::LinearRing *ring;  // the ring created for this EdgeRing
+
 	bool isHoleVar;
-	EdgeRing *shell;   // if non-null, the ring is a hole and this EdgeRing is its containing shell
+
+	/// if non-null, the ring is a hole and this EdgeRing is its containing shell
+	EdgeRing *shell;  
+
 	void computeMaxNodeDegree();
 };
 
@@ -108,6 +140,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/27 16:02:34  strk
+ * Added INL file for MinimalEdgeRing, added many debugging blocks,
+ * fixed memory leak in ConnectedInteriorTester (bug #59)
+ *
  * Revision 1.4  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

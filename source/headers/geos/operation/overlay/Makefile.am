@@ -11,6 +11,7 @@ geos_HEADERS = \
 	LineBuilder.h	\
 	MaximalEdgeRing.h	\
 	MinimalEdgeRing.h	\
+	MinimalEdgeRing.inl	\
 	OverlayNodeFactory.h	\
 	OverlayOp.h	\
 	PointBuilder.h	\

@@ -27,7 +27,7 @@ namespace geos {
 	}
 	namespace geomgraph {
 		class DirectedEdge;
-		class EdgeRing;
+		//class EdgeRing;
 	}
 	namespace operation {
 		namespace overlay {
@@ -44,13 +44,13 @@ namespace overlay { // geos::operation::overlay
  * A ring of {@link edges} which may contain nodes of degree > 2.
  *
  * A MaximalEdgeRing may represent two different spatial entities:
- * <ul>
- * <li>a single polygon possibly containing inversions (if the ring is oriented CW)
- * <li>a single hole possibly containing exversions (if the ring is oriented CCW)
- * </ul>
+ * 
+ * - a single polygon possibly containing inversions (if the ring is oriented CW)
+ * - a single hole possibly containing exversions (if the ring is oriented CCW)
+ * 
  * If the MaximalEdgeRing represents a polygon,
  * the interior of the polygon is strongly connected.
- * <p>
+ * 
  * These are the form of rings used to define polygons under some spatial data models.
  * However, under the OGC SFS model, {@link MinimalEdgeRings} are required.
  * A MaximalEdgeRing can be converted to a list of MinimalEdgeRings using the
@@ -63,7 +63,8 @@ class MaximalEdgeRing: public geomgraph::EdgeRing {
 public:
 
 	// CGAlgorithms arg is obsoleted
-	MaximalEdgeRing(geomgraph::DirectedEdge *start, const geom::GeometryFactory *geometryFactory);
+	MaximalEdgeRing(geomgraph::DirectedEdge *start,
+		const geom::GeometryFactory *geometryFactory);
 
 	virtual ~MaximalEdgeRing();
 
@@ -99,6 +100,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/27 16:02:34  strk
+ * Added INL file for MinimalEdgeRing, added many debugging blocks,
+ * fixed memory leak in ConnectedInteriorTester (bug #59)
+ *
  * Revision 1.1  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *
