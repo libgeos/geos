@@ -126,8 +126,9 @@ CoordinateArraySequence::toString() const
 			if ( i ) result.append(", ");
 			result.append(c.toString());
 		}
-		result.append(")");
 	}
+	result.append(")");
+
 	return result;
 }
 
@@ -205,6 +206,9 @@ CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/03/27 09:00:50  strk
+ * Bug #79 - Small fix in CoordinateArraySequence::toString()
+ *
  * Revision 1.6  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.
