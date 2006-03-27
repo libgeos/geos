@@ -38,15 +38,17 @@ namespace geos {
 namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
-ConsistentAreaTester::ConsistentAreaTester(GeometryGraph *newGeomGraph){
-	geomGraph=newGeomGraph;
-	nodeGraph=new relate::RelateNodeGraph();
-	li=new LineIntersector();
+ConsistentAreaTester::ConsistentAreaTester(GeometryGraph *newGeomGraph)
+	:
+	li(),
+	geomGraph(newGeomGraph),
+	nodeGraph(),
+	invalidPoint()
+{
 }
 
-ConsistentAreaTester::~ConsistentAreaTester(){
-	delete nodeGraph;
-	delete li;
+ConsistentAreaTester::~ConsistentAreaTester()
+{
 }
 
 Coordinate&
@@ -58,25 +60,26 @@ ConsistentAreaTester::getInvalidPoint()
 bool
 ConsistentAreaTester::isNodeConsistentArea()
 {
+	using geomgraph::index::SegmentIntersector;
+
 	/**
 	 * To fully check validity, it is necessary to
 	 * compute ALL intersections, including self-intersections within a single edge.
 	 */
-	auto_ptr<geomgraph::index::SegmentIntersector> intersector(geomGraph->computeSelfNodes(li,true));
+	auto_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true));
 	if (intersector->hasProperIntersection()) {
 		invalidPoint=intersector->getProperIntersectionPoint();
 		return false;
 	}
-	nodeGraph->build(geomGraph);
+	nodeGraph.build(geomGraph);
 	return isNodeEdgeAreaLabelsConsistent();
 }
 
-/**
-* Check all nodes to see if their labels are consistent.
-* If any are not, return false
-*/
-bool ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent() {
-	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodeGraph->getNodeMap();
+/*private*/
+bool
+ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent()
+{
+	map<Coordinate*,Node*,CoordinateLessThen>& nMap=nodeGraph.getNodeMap();
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		relate::RelateNode *node=static_cast<relate::RelateNode*>(nodeIt->second);
@@ -89,8 +92,10 @@ bool ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent() {
 }
 
 /*public*/
-bool ConsistentAreaTester::hasDuplicateRings() {
-	map<Coordinate*,Node*,CoordinateLessThen> &nMap=nodeGraph->getNodeMap();
+bool
+ConsistentAreaTester::hasDuplicateRings()
+{
+	map<Coordinate*,Node*,CoordinateLessThen>& nMap=nodeGraph.getNodeMap();
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin(); nodeIt!=nMap.end(); ++nodeIt)
 	{
@@ -117,6 +122,10 @@ bool ConsistentAreaTester::hasDuplicateRings() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/03/27 10:37:59  strk
+ * Reduced heap allocations and probability of error by making LineIntersector
+ * and RelateNodeGraph part of ConsistentAreaTester class .
+ *
  * Revision 1.16  2006/03/21 13:11:29  strk
  * opRelate.h header split
  *

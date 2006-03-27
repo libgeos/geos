@@ -18,6 +18,8 @@
 #define GEOS_OP_CONSISTENTAREATESTER_H
 
 #include <geos/geom/Coordinate.h> // for composition
+#include <geos/algorithm/LineIntersector.h> // for composition
+#include <geos/operation/relate/RelateNodeGraph.h> // for composition
 
 // Forward declarations
 namespace geos {
@@ -44,22 +46,23 @@ namespace valid { // geos::operation::valid
  * is consistent with the SFS semantics for area geometries.
  *
  * Checks include:
- * <ul>
- * <li>testing for rings which self-intersect (both properly
- * and at nodes)
- * <li>testing for duplicate rings
- * </ul>
+ * 
+ * - testing for rings which self-intersect (both properly
+ *   and at nodes)
+ * - testing for duplicate rings
+ * 
  * If an inconsistency if found the location of the problem
  * is recorded.
  */
 class ConsistentAreaTester {
 private:
 
-	algorithm::LineIntersector *li;
+	algorithm::LineIntersector li;
 
+	/// Not owned
 	geomgraph::GeometryGraph *geomGraph;
 
-	relate::RelateNodeGraph *nodeGraph;
+	relate::RelateNodeGraph nodeGraph;
 
 	/// the intersection point found (if any)
 	geom::Coordinate invalidPoint;
@@ -72,6 +75,7 @@ private:
 
 public:
 
+	/// Caller keeps responsibility for GeometryGraph deletion
 	ConsistentAreaTester(geomgraph::GeometryGraph *newGeomGraph);
 
 	~ConsistentAreaTester();
@@ -111,6 +115,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/27 10:37:58  strk
+ * Reduced heap allocations and probability of error by making LineIntersector
+ * and RelateNodeGraph part of ConsistentAreaTester class .
+ *
  * Revision 1.1  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *
