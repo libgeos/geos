@@ -18,6 +18,7 @@
 
 #include <geos/geom/Coordinate.h>
 //#include <geos/geom/PrecisionModel.h> // we need it for makePrecise, possibly to be obsoleted
+#include <geos/platform.h> // for DoubleNotANumber
 
 #include <cassert>
 #include <cmath>

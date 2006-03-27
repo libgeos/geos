@@ -20,7 +20,7 @@
 #include <stack>
 #include <vector> // for typedefs
 
-#include <geos/platform.h>
+#include <geos/platform.h> // for DoubleNotANumber
 #include <geos/inline.h>
 
 namespace geos {
@@ -151,6 +151,9 @@ bool operator!=(const Coordinate& a, const Coordinate& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/27 15:57:39  strk
+ * Commented need for platform.h include
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
