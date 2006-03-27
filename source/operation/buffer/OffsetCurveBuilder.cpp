@@ -121,9 +121,9 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 	}
 	// optimize creating ring for for zero distance
 	if (distance==0.0) {
-		//ptLists.push_back(ptList);
-		//ptList = inputPts->clone(); 
-		lineList.push_back(inputPts->clone());
+		ptLists.push_back(ptList);
+		ptList = inputPts->clone(); 
+		lineList.push_back(ptList);
 		return;
 	}
 	computeRingBufferCurve(*inputPts, side);
@@ -478,6 +478,9 @@ OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/03/27 17:59:00  strk
+ * Fixed small leak.
+ *
  * Revision 1.33  2006/03/27 17:04:18  strk
  * Cleanups and explicit initializations
  *
