@@ -13,10 +13,11 @@
  *
  **********************************************************************/
 
+#include <geos/geom/Coordinate.h>
+#include <geos/platform.h> // for ISNAN
+
 #include <sstream>
 #include <string>
-
-#include <geos/geom/Coordinate.h>
 
 #ifndef GEOS_INLINE
 # include <geos/geom/Coordinate.inl>
@@ -53,6 +54,9 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/03/27 15:56:21  strk
+ * Added missing platform.h include (for ISNAN macro)
+ *
  * Revision 1.33  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
