@@ -16,10 +16,10 @@
 #ifndef GEOS_LINESEGMENT_INL
 #define GEOS_LINESEGMENT_INL
 
-#include <cassert>
-#include <geos/geosAlgorithm.h>
+#include <geos/algorithm/CGAlgorithms.h>
 
-#include <iostream>
+#include <cassert>
+#include <cmath> // for atan2
 
 namespace geos {
 namespace geom { // geos::geom

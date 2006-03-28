@@ -16,11 +16,11 @@
 #ifndef GEOS_GEOM_LINESEGMENT_H
 #define GEOS_GEOM_LINESEGMENT_H
 
-#include <iostream> // for ostream
-
 #include <geos/geom/Coordinate.h> // for composition
 
 #include <geos/inline.h>
+
+#include <iostream> // for ostream
 
 // Forward declarations
 namespace geos {
@@ -42,6 +42,8 @@ namespace geom { // geos::geom
  * This supports a common pattern of reusing a single LineSegment
  * object as a way of computing segment properties on the
  * segments defined by arrays or lists of {@link Coordinate}s.
+ *
+ * TODO: have this class keep pointers rather then real Coordinates ?
  */
 class LineSegment {
 public:
@@ -248,6 +250,9 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/28 09:14:12  strk
+ * Headers inclusion fix.
+ *
  * Revision 1.4  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
