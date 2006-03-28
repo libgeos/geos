@@ -13,5 +13,6 @@ geos_unit_SOURCES = \
 	geos_unit.cpp \
 	geom/Envelope.cpp \
 	geom/LineSegment.cpp \
+	io/WKBReader.cpp \
 	geom/Geometry/isRectangle.cpp 
 
