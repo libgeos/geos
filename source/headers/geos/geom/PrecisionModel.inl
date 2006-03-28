@@ -16,8 +16,8 @@
 #ifndef GEOS_GEOM_PRECISIONMODEL_INL
 #define GEOS_GEOM_PRECISIONMODEL_INL
 
-#include <cassert>
 #include <geos/geom/PrecisionModel.h>
+#include <cassert>
 
 namespace geos {
 namespace geom { // geos::geom

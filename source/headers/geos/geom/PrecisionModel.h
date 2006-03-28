@@ -178,11 +178,15 @@ public:
 	///
 	bool isFloating() const;
 
-	/// Returns the maximum number of significant digits provided by this precision model.
+	/// \brief
+	/// Returns the maximum number of significant digits provided by
+	/// this precision model.
 	//
-	/// Intended for use by routines which need to print out precise values.
+	/// Intended for use by routines which need to print out precise
+	/// values.
 	///
-	/// @return the maximum number of decimal places provided by this precision model
+	/// @return the maximum number of decimal places provided by this
+	/// precision model
 	///
 	int getMaximumSignificantDigits() const;
 
@@ -212,7 +216,8 @@ public:
 	double getOffsetY() const;
 
 	/** \brief
-	 *  Sets <code>internal</code> to the precise representation of <code>external</code>.
+	 *  Sets <code>internal</code> to the precise representation of
+	 * <code>external</code>.
 	 *
 	 * @param external the original coordinate
 	 * @param internal the coordinate whose values will be changed to the
@@ -256,14 +261,18 @@ public:
 
 	std::string toString() const;
 
-	/// Compares this PrecisionModel object with the specified object for order.
+	/// \brief
+	/// Compares this PrecisionModel object with the specified object
+	/// for order.
 	//
-	/// A PrecisionModel is greater than another if it provides greater precision.
+	/// A PrecisionModel is greater than another if it provides greater
+	/// precision.
 	/// The comparison is based on the value returned by the
 	/// getMaximumSignificantDigits method.
 	/// This comparison is not strictly accurate when comparing floating
 	/// precision models to fixed models;
-	/// however, it is correct when both models are either floating or fixed.
+	/// however, it is correct when both models are either floating or
+	/// fixed.
 	///
 	/// @param other the PrecisionModel with which this PrecisionModel
 	///      is being compared
@@ -296,6 +305,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/28 08:57:37  strk
+ * Comments cleanup, system headers included after project headers
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
