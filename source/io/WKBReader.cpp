@@ -46,26 +46,17 @@ string WKBReader::BAD_GEOM_TYPE_MSG = "bad geometry type encountered in ";
 ostream &
 WKBReader::printHEX(istream &is, ostream &os)
 {
-	ios_base::fmtflags fl = os.flags(); // take note of output stream flags
-
-	// Set hex,uppercase,fill and width output stream flags
-	os.setf(ios::uppercase);
-	os.setf(ios::hex, ios::basefield);
-	os.fill('0');
-
-	long pos = is.tellg(); // take note of input stream get pointer
-	is.seekg(0, ios::beg); // rewind input stream
+	char hex[] = "0123456789ABCDEF";
 
 	char each=0;
 	while(is.read(&each, 1))
 	{
-		os << setw(2) <<
-			static_cast<int>(static_cast<unsigned char>(each));
+		const unsigned char c=each;
+		int low = (c & 0x0F);
+		int high = (c >> 4);
+		os << hex[high] << hex[low];
 	}
 
-	is.clear(); // clear input stream eof flag
-	is.seekg(pos); // reset input stream position
-	os.setf(fl);  // reset output stream status
 	return os;
 }
 
