@@ -15,6 +15,7 @@
 
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBConstants.h>
+#include <geos/io/ByteOrderValues.h>
 #include <geos/io/ParseException.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
