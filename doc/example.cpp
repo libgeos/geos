@@ -39,6 +39,14 @@
 #define M_PI       3.14159265358979323846
 #endif
 
+// Set to 0 to skip section
+#define GEOMETRIC_SHAPES 1
+#define RELATIONAL_OPERATORS 1
+#define COMBINATIONS 1
+#define UNARY_OPERATIONS 1
+#define LINEMERGE 1
+#define POLYGONIZE 1
+
 
 using namespace std;
 using namespace geos;
@@ -387,12 +395,14 @@ void do_all()
 
 	// Read function bodies to see the magic behind them
 	geoms->push_back(create_point(150, 350));
+	geoms->push_back(create_square_linearring(0,0,100));
 	geoms->push_back(create_ushaped_linestring(60,60,100));
 	geoms->push_back(create_square_linearring(0,0,100));
 	geoms->push_back(create_square_polygon(0,200,300));
 	geoms->push_back(create_square_polygon(0,250,300));
 	geoms->push_back(create_simple_collection(geoms));
 
+#if GEOMETRIC_SHAPES
 	// These ones use a GeometricShapeFactory
 	geoms->push_back(create_circle(0, 0, 10));
 	geoms->push_back(create_ellipse(0, 0, 8, 12));
@@ -400,11 +410,14 @@ void do_all()
 	geoms->push_back(create_rectangle(-5, -5, 10, 20)); // a rectangle
 	// The upper-right quarter of a vertical ellipse
 	geoms->push_back(create_arc(0, 0, 10, 20, 0, M_PI/2));
+#endif
 
 	// Print all geoms.
 	cout<<"--------HERE ARE THE BASE GEOMS ----------"<<endl;
 	wkt_print_geoms(geoms);
 
+
+#if UNARY_OPERATIONS
 
 ////////////////////////////////////////////////////////////////////////
 // UNARY OPERATIONS
@@ -475,6 +488,10 @@ void do_all()
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
+
+#endif // UNARY_OPERATIONS
+
+#if RELATIONAL_OPERATORS
 
 ////////////////////////////////////////////////////////////////////////
 // RELATIONAL OPERATORS
@@ -823,6 +840,10 @@ cout<<"-------------------------------------------------------------------------
 		cout<<endl;
 	}
 
+#endif // RELATIONAL_OPERATORS
+
+#if COMBINATIONS
+
 ////////////////////////////////////////////////////////////////////////
 // COMBINATIONS
 ////////////////////////////////////////////////////////////////////////
@@ -965,6 +986,10 @@ cout<<"-------------------------------------------------------------------------
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
+
+#endif // COMBINATIONS
+
+#if LINEMERGE
 	
 	/////////////////////////////////////////////
 	// LINEMERGE
@@ -986,6 +1011,10 @@ cout<<"-------------------------------------------------------------------------
 	}
 	delete newgeoms;
 
+#endif // LINEMERGE
+
+#if POLYGONIZE
+
 	/////////////////////////////////////////////
 	// POLYGONIZE
 	/////////////////////////////////////////////
@@ -1005,6 +1034,8 @@ cout<<"-------------------------------------------------------------------------
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
+
+#endif // POLYGONIZE
 
 	/////////////////////////////////////////////
 	// CLEANUP
@@ -1056,6 +1087,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.44  2006/03/28 15:19:22  strk
+ * Added macros for sections skip (useful in debugging)
+ *
  * Revision 1.43  2006/03/15 18:44:51  strk
  * Bug #60 - Missing <cmath> header in some files
  *
