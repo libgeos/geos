@@ -59,6 +59,12 @@ public:
 	 * Constructs a GeometryFactory that generates Geometries having
 	 * the given PrecisionModel, spatial-reference ID, and
 	 * CoordinateSequence implementation.
+	 *
+	 * NOTES:
+	 * (1) the given PrecisionModel is COPIED
+	 * (2) the CoordinateSequenceFactory is NOT COPIED
+	 *     and must be available for the whole lifetime
+	 *     of the GeometryFactory
 	 */
 	GeometryFactory(const PrecisionModel *pm, int newSRID,
 		CoordinateSequenceFactory *nCoordinateSequenceFactory);
@@ -281,6 +287,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/28 16:33:14  strk
+ * Added note about args responsibility in GeometryFactory constructor
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
