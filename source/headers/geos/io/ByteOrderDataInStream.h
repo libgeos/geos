@@ -17,11 +17,12 @@
 #ifndef GEOS_IO_BYTEORDERDATAINSTREAM_H
 #define GEOS_IO_BYTEORDERDATAINSTREAM_H
 
-#include <geos/platform.h>
-#include <geos/io/ParseException.h>
-#include <geos/io/ByteOrderValues.h>
-#include <iostream> // ostream, istream (due to inlines)
-//#include <iosfwd> // ostream, istream (if we remove inlines)
+//#include <geos/platform.h>
+//#include <geos/io/ParseException.h>
+//#include <geos/io/ByteOrderValues.h>
+#include <geos/inline.h>
+
+#include <iosfwd> // ostream, istream (if we remove inlines)
 
 namespace geos {
 namespace io {
@@ -37,49 +38,25 @@ class ByteOrderDataInStream {
 
 public:
 
-	ByteOrderDataInStream(std::istream *s=NULL)
-		: byteOrder(getMachineByteOrder()), stream(s)
-	{}
-	~ByteOrderDataInStream() {}
+	ByteOrderDataInStream(std::istream *s=NULL);
+
+	~ByteOrderDataInStream();
 
 	/**
-	 * Allows a single ByteOrderDataInStreamT to be reused
+	 * Allows a single ByteOrderDataInStream to be reused
 	 * on multiple istream.
 	 */
-	void setInStream(std::istream *s) { stream=s; }
-	void setOrder(int order) { byteOrder=order; }
+	void setInStream(std::istream *s);
 
-	unsigned char readByte() // throws ParseException
-	{
-		stream->read(reinterpret_cast<char *>(buf), 1);
-		if ( stream->eof() )
-			throw  ParseException("Unexpected EOF parsing WKB");
-		return buf[0];
-	}
+	void setOrder(int order);
 
-	int readInt() // throws ParseException
-	{
-		stream->read(reinterpret_cast<char *>(buf), 4);
-		if ( stream->eof() )
-			throw  ParseException("Unexpected EOF parsing WKB");
-		return ByteOrderValues::getInt(buf, byteOrder);
-	}
+	unsigned char readByte(); // throws ParseException
 
-	long readLong() // throws ParseException
-	{
-		stream->read(reinterpret_cast<char *>(buf), 8);
-		if ( stream->eof() )
-			throw  ParseException("Unexpected EOF parsing WKB");
-		return ByteOrderValues::getLong(buf, byteOrder);
-	}
+	int readInt(); // throws ParseException
 
-	double readDouble() // throws ParseException
-	{
-		stream->read(reinterpret_cast<char *>(buf), 8);
-		if ( stream->eof() )
-			throw  ParseException("Unexpected EOF parsing WKB");
-		return ByteOrderValues::getDouble(buf, byteOrder);
-	}
+	long readLong(); // throws ParseException
+
+	double readDouble(); // throws ParseException
 
 private:
 	int byteOrder;
@@ -93,10 +70,18 @@ private:
 } // namespace io
 } // namespace geos
 
+#ifdef GEOS_INLINE
+#include <geos/io/ByteOrderDataInStream.inl>
+#endif
+
 #endif // #ifndef GEOS_IO_BYTEORDERDATAINSTREAM_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/28 11:26:13  strk
+ * ByteOrderDataInStream inlines moved to .inl file, updated
+ * implementation files includes.
+ *
  * Revision 1.1  2006/03/20 18:18:14  strk
  * io.h header split
  *

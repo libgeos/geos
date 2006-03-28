@@ -17,7 +17,7 @@
 #ifndef GEOS_IO_WKBWRITER_H
 #define GEOS_IO_WKBWRITER_H
 
-#include <geos/platform.h>
+#include <geos/platform.h> // for getMachineByteOrder
 #include <iosfwd>
 
 // Forward declarations
@@ -136,6 +136,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/28 11:26:13  strk
+ * ByteOrderDataInStream inlines moved to .inl file, updated
+ * implementation files includes.
+ *
  * Revision 1.1  2006/03/20 18:18:14  strk
  * io.h header split
  *
