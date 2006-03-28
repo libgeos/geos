@@ -16,6 +16,7 @@
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBConstants.h>
+#include <geos/io/ByteOrderValues.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
@@ -50,14 +51,14 @@ WKBWriter::WKBWriter(int dims, int bo):
 void
 WKBWriter::writeHEX(const Geometry &g, ostream &os) 
 {
-  // setup input/output stream
-  stringstream stream;
+	// setup input/output stream
+	stringstream stream;
   
-  // write the geometry in wkb format
-  this->write(g, stream);
+	// write the geometry in wkb format
+	this->write(g, stream);
 
-  // convert to HEX
-  WKBReader::printHEX(stream, os);
+	// convert to HEX
+	WKBReader::printHEX(stream, os);
 }
 
 void
@@ -102,7 +103,10 @@ WKBWriter::writePoint(const Point &g)
 
 	writeByteOrder();
 	writeGeometryType(WKBConstants::wkbPoint);
-	writeCoordinateSequence(*(g.getCoordinatesRO()), false);
+
+	const CoordinateSequence* cs=g.getCoordinatesRO();
+	assert(cs);
+	writeCoordinateSequence(*cs, false);
 }
 
 void
@@ -110,7 +114,9 @@ WKBWriter::writeLineString(const LineString &g)
 {
 	writeByteOrder();
 	writeGeometryType(WKBConstants::wkbLineString);
-	writeCoordinateSequence(*(g.getCoordinatesRO()), true);
+	const CoordinateSequence* cs=g.getCoordinatesRO();
+	assert(cs);
+	writeCoordinateSequence(*cs, true);
 }
 
 void
@@ -120,12 +126,24 @@ WKBWriter::writePolygon(const Polygon &g)
 	writeGeometryType(WKBConstants::wkbPolygon);
 	int nholes = g.getNumInteriorRing();
 	writeInt(nholes+1);
-	writeCoordinateSequence(*(g.getExteriorRing()->getCoordinatesRO()),
-		true);
+
+	const LineString* ls = g.getExteriorRing();
+	assert(ls);
+
+	const CoordinateSequence* cs=ls->getCoordinatesRO();
+	assert(cs);
+
+	writeCoordinateSequence(*cs, true);
 	for (int i=0; i<nholes; i++)
-		writeCoordinateSequence(
-			*(g.getInteriorRingN(i)->getCoordinatesRO()),
-			true);
+	{
+		ls = g.getInteriorRingN(i);
+		assert(ls);
+
+		cs = ls->getCoordinatesRO();
+		assert(cs);
+
+		writeCoordinateSequence(*cs, true);
+	}
 }
 
 void
@@ -136,13 +154,21 @@ WKBWriter::writeGeometryCollection(const GeometryCollection &g,
 	writeGeometryType(wkbtype);
 	int ngeoms = g.getNumGeometries();
 	writeInt(ngeoms);
+
+	assert(outStream);
 	for (int i=0; i<ngeoms; i++)
-		write(*(g.getGeometryN(i)), *outStream);
+	{
+		const Geometry* elem = g.getGeometryN(i);
+		assert(elem);
+
+		write(*elem, *outStream);
+	}
 }
 
 void
 WKBWriter::writeByteOrder() 
 {
+	assert(outStream);
 	outStream->write(reinterpret_cast<char*>(&byteOrder), 1);
 }
 
@@ -180,6 +206,8 @@ WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx,
 #if DEBUG_WKB_WRITER
 	cout<<"writeCoordinate: X:"<<cs.getX(idx)<<" Y:"<<cs.getY(idx)<<endl;
 #endif
+	assert(outStream);
+
 	ByteOrderValues::putDouble(cs.getX(idx), buf, byteOrder);
 	outStream->write(reinterpret_cast<char *>(buf), 8);
 	ByteOrderValues::putDouble(cs.getY(idx), buf, byteOrder);
