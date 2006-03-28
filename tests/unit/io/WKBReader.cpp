@@ -59,7 +59,7 @@ namespace tut
 		std::stringstream sout;
 		wkbwriter.writeHEX(*gWKB, sout);
 
-		ensure_equals(sin.str(), sout.str());
+		ensure_equals(sout.str(), sin.str());
 
 	}
 
@@ -78,7 +78,7 @@ namespace tut
 		std::stringstream sout;
 		wkbwriter.writeHEX(*gWKB, sout);
 
-		ensure_equals(sin.str(), sout.str());
+		ensure_equals(sout.str(), sin.str());
 
 	}
 
@@ -97,7 +97,7 @@ namespace tut
 		std::stringstream sout;
 		wkbwriter.writeHEX(*gWKB, sout);
 
-		ensure_equals(sin.str(), sout.str());
+		ensure_equals(sout.str(), sin.str());
 	}
 
 	// 4 - Read a multipoint
@@ -115,7 +115,7 @@ namespace tut
 		std::stringstream sout;
 		wkbwriter.writeHEX(*gWKB, sout);
 
-		ensure_equals(sin.str(), sout.str());
+		ensure_equals(sout.str(), sin.str());
 	}
 
 	// 5 - Read a multilinestring
@@ -133,7 +133,7 @@ namespace tut
 		std::stringstream sout;
 		wkbwriter.writeHEX(*gWKB, sout);
 
-		ensure_equals(sin.str(), sout.str());
+		ensure_equals(sout.str(), sin.str());
 	}
 
 	// 6 - Read a multipolygon
@@ -151,7 +151,7 @@ namespace tut
 		std::stringstream sout;
 		wkbwriter.writeHEX(*gWKB, sout);
 
-		ensure_equals(sin.str(), sout.str());
+		ensure_equals(sout.str(), sin.str());
 	}
 
 	// 7 - Read a collection 
@@ -169,7 +169,7 @@ namespace tut
 		std::stringstream sout;
 		wkbwriter.writeHEX(*gWKB, sout);
 
-		ensure_equals(sin.str(), sout.str());
+		ensure_equals(sout.str(), sin.str());
 	}
 
 
