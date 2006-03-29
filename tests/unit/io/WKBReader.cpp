@@ -32,11 +32,15 @@ namespace tut
 	group test_wkbreader_group("geos::io::WKBReader");
 
 
-	geos::geom::PrecisionModel pm(1.0);
-	geos::geom::GeometryFactory gf(&pm);
-	geos::io::WKBReader wkbreader(gf);
-	geos::io::WKBWriter wkbwriter(2); // 2D only
-        geos::io::WKTReader wktreader(&gf);
+	// These are static to avoid namespace pollution
+	// The struct test_*_data above is probably there
+	// for the same reason...
+	//
+	static geos::geom::PrecisionModel pm(1.0);
+	static geos::geom::GeometryFactory gf(&pm);
+	static geos::io::WKBReader wkbreader(gf);
+	static geos::io::WKBWriter wkbwriter(2); // 2D only
+        static geos::io::WKTReader wktreader(&gf);
 
 	typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
 
