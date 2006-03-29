@@ -41,8 +41,8 @@ namespace valid { // geos.operation.valid
 
 QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph):
 	graph(newGraph),
-	rings(new vector<LinearRing*>()),
-	totalEnv(new Envelope()),
+	rings(),
+	totalEnv(),
 	qt(NULL),
 	nestedPt(NULL)
 {
@@ -50,8 +50,8 @@ QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph):
 
 QuadtreeNestedRingTester::~QuadtreeNestedRingTester()
 {
-	delete rings;
-	delete totalEnv;
+	//delete rings;
+	//delete totalEnv;
 	delete qt;
 }
 
@@ -62,20 +62,20 @@ QuadtreeNestedRingTester::getNestedPoint()
 }
 
 void
-QuadtreeNestedRingTester::add(LinearRing *ring)
+QuadtreeNestedRingTester::add(const LinearRing *ring)
 {
-	rings->push_back(ring);
+	rings.push_back(ring);
 	const Envelope *envi=ring->getEnvelopeInternal();
-	totalEnv->expandToInclude(envi);
+	totalEnv.expandToInclude(envi);
 }
 
 bool
 QuadtreeNestedRingTester::isNonNested()
 {
 	buildQuadtree();
-	for(unsigned int i=0, ni=rings->size(); i<ni; ++i)
+	for(unsigned int i=0, ni=rings.size(); i<ni; ++i)
 	{
-		LinearRing *innerRing=(*rings)[i];
+		const LinearRing *innerRing=rings[i];
 		const CoordinateSequence *innerRingPts=innerRing->getCoordinatesRO();
 		const Envelope *envi=innerRing->getEnvelopeInternal();
 
@@ -118,11 +118,12 @@ void
 QuadtreeNestedRingTester::buildQuadtree()
 {
 	qt=new Quadtree();
-	for(unsigned int i=0; i<rings->size(); ++i)
+	for(unsigned int i=0, n=rings.size(); i<n; ++i)
 	{
-		LinearRing *ring=(*rings)[i];
+		const LinearRing *ring=rings[i];
 		const Envelope *env=ring->getEnvelopeInternal();
-		qt->insert(env,ring);
+
+		qt->insert(env, (void*)ring);
 	}
 }
 
@@ -132,6 +133,9 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/03/29 11:48:53  strk
+ * Removed useless heap allocations in construction, enforced const correctness
+ *
  * Revision 1.23  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
  *
