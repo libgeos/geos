@@ -66,7 +66,8 @@ namespace valid { // geos.operation.valid
 
 ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph &newGeomGraph):
 	geometryFactory(new GeometryFactory()),
-	geomGraph(newGeomGraph)
+	geomGraph(newGeomGraph),
+	disconnectedRingcoord()
 {
 }
 
@@ -82,8 +83,10 @@ ConnectedInteriorTester::getCoordinate()
 }
 
 const Coordinate&
-ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence *coord, const Coordinate& pt)
+ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence *coord,
+		const Coordinate& pt)
 {
+	assert(coord);
 	unsigned int npts=coord->getSize();
 	for(unsigned int i=0; i<npts; ++i)
 	{
@@ -97,6 +100,7 @@ ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence *coord, con
 bool
 ConnectedInteriorTester::isInteriorsConnected()
 {
+
 	// node the edges, in case holes touch the shell
 	std::vector<Edge*> splitEdges;
 	geomGraph.computeSplitEdges(&splitEdges);
@@ -106,7 +110,6 @@ ConnectedInteriorTester::isInteriorsConnected()
 
 	graph.addEdges(splitEdges);
 	setInteriorEdgesInResult(graph);
-	//graph.linkAllDirectedEdges();
 	graph.linkResultDirectedEdges();
 
 	// Someone has to delete the returned vector and its contents
@@ -121,8 +124,8 @@ ConnectedInteriorTester::isInteriorsConnected()
 	 * Mark all the edges for the edgeRings corresponding to the shells
 	 * of the input polygons. 
 	 * 
-	 * Only ONE ring gets marked for each shell - if there are others which remain unmarked
-	 * this indicates a disconnected interior.
+	 * Only ONE ring gets marked for each shell - if there are others
+	 * which remain unmarked this indicates a disconnected interior.
 	 */
 	visitShellInteriors(geomGraph.getGeometry(), graph);
 
@@ -190,6 +193,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 			//edgeRings->push_back(er);
 
 			auto_ptr<MaximalEdgeRing> er(new MaximalEdgeRing(de, geometryFactory));
+			//MaximalEdgeRing* er=new MaximalEdgeRing(de, geometryFactory);
 			er->linkDirectedEdgesForMinimalEdgeRings();
 			er->buildMinimalRings(minEdgeRings);
 		}
@@ -280,9 +284,8 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 		// don't check hole rings
 		if (er->isHole()) continue;
 
-		std::vector<DirectedEdge*> *edges=er->getEdges();
-		assert(edges);
-		DirectedEdge *de=(*edges)[0];
+		std::vector<DirectedEdge*>& edges=er->getEdges();
+		DirectedEdge *de=edges[0];
 		assert(de);
 
 		// don't check CW rings which are holes
@@ -291,12 +294,13 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 		if (de->getLabel()->getLocation(0, Position::RIGHT) != Location::INTERIOR) continue;
 
 		/*
-		 * the edgeRing is CW ring which surrounds the INT of the area, so check all
-		 * edges have been visited.  If any are unvisited, this is a disconnected part
+		 * the edgeRing is CW ring which surrounds the INT
+		 * of the area, so check all edges have been visited. 
+		 * If any are unvisited, this is a disconnected part
 		 * of the interior
 		 */
 		for(std::vector<DirectedEdge*>::iterator
-			jt=edges->begin(), jtEnd=edges->end();
+			jt=edges.begin(), jtEnd=edges.end();
 			jt != jtEnd;
 			++jt)
 		{
@@ -319,6 +323,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/29 13:53:59  strk
+ * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
+ *
  * Revision 1.26  2006/03/27 16:02:34  strk
  * Added INL file for MinimalEdgeRing, added many debugging blocks,
  * fixed memory leak in ConnectedInteriorTester (bug #59)

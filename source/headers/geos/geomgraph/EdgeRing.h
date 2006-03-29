@@ -18,10 +18,13 @@
 #ifndef GEOS_GEOMGRAPH_EDGERING_H
 #define GEOS_GEOMGRAPH_EDGERING_H
 
-#include <vector>
-
+#include <geos/geomgraph/Label.h> // for composition
 
 #include <geos/inline.h>
+
+#include <vector>
+#include <cassert> // for testInvariant
+
 
 // Forward declarations
 namespace geos {
@@ -34,7 +37,7 @@ namespace geos {
 	}
 	namespace geomgraph {
 		class DirectedEdge;
-		class Label;
+		//class Label;
 		class Edge;
 	}
 }
@@ -45,7 +48,8 @@ namespace geomgraph { // geos.geomgraph
 class EdgeRing {
 public:
 
-	EdgeRing(DirectedEdge *newStart, const geom::GeometryFactory *newGeometryFactory);
+	EdgeRing(DirectedEdge *newStart,
+			const geom::GeometryFactory *newGeometryFactory);
 
 	virtual ~EdgeRing();
 
@@ -60,7 +64,7 @@ public:
 	 */
 	geom::LinearRing* getLinearRing();
 
-	Label* getLabel();
+	Label& getLabel();
 
 	bool isShell();
 
@@ -77,18 +81,30 @@ public:
 	 */
 	geom::Polygon* toPolygon(const geom::GeometryFactory* geometryFactory);
 
+	/**
+	 * Compute a LinearRing from the point list previously collected.
+	 * Test if the ring is a hole (i.e. if it is CCW) and set the hole
+	 * flag accordingly.
+	 */
 	void computeRing();
 
 	virtual DirectedEdge* getNext(DirectedEdge *de)=0;
 
 	virtual void setEdgeRing(DirectedEdge *de, EdgeRing *er)=0;
 
-	std::vector<DirectedEdge*>* getEdges();
+	/**
+	 * Returns the list of DirectedEdges that make up this EdgeRing
+	 */
+	std::vector<DirectedEdge*>& getEdges();
 
 	int getMaxNodeDegree();
 
 	void setInResult();
 
+	/**
+	 * This method will use the computed ring.
+	 * It will also check any holes, if they have been assigned.
+	 */
 	bool containsPoint(const geom::Coordinate& p);
 
 protected:
@@ -99,9 +115,21 @@ protected:
 
 	void computePoints(DirectedEdge *newStart);
 
-	void mergeLabel(Label *deLabel);
+	void mergeLabel(Label& deLabel);
 
-	void mergeLabel(Label *deLabel, int geomIndex);
+	/** \brief
+	 * Merge the RHS label from a DirectedEdge into the label for
+	 * this EdgeRing.
+	 *
+	 * The DirectedEdge label may be null. 
+	 * This is acceptable - it results from a node which is NOT
+	 * an intersection node between the Geometries
+	 * (e.g. the end node of a LinearRing). 
+	 * In this case the DirectedEdge label does not contribute any
+	 * information to the overall labelling, and is
+	 * simply skipped.
+	 */
+	void mergeLabel(Label& deLabel, int geomIndex);
 
 	void addPoints(Edge *edge, bool isForward, bool isFirstEdge);
 
@@ -117,7 +145,9 @@ private:
 
 	geom::CoordinateSequence* pts;
 
-	Label* label; // label stores the locations of each geometry on the face surrounded by this ring
+	// label stores the locations of each geometry on the
+	// face surrounded by this ring
+	Label label;
 
 	geom::LinearRing *ring;  // the ring created for this EdgeRing
 
@@ -127,6 +157,24 @@ private:
 	EdgeRing *shell;  
 
 	void computeMaxNodeDegree();
+
+	void testInvariant()
+	{
+#ifndef NDEBUG
+		if ( ! shell )
+		{
+			for (std::vector<EdgeRing*>::const_iterator
+				it=holes.begin(), itEnd=holes.end();
+				it != itEnd;
+				++it)
+			{
+				EdgeRing* hole=*it;
+				assert(hole);
+				assert(hole->getShell()==this);
+			}
+		}
+#endif // ndef NDEBUG
+	}
 };
 
 } // namespace geos.geomgraph
@@ -140,6 +188,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/29 13:53:59  strk
+ * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
+ *
  * Revision 1.5  2006/03/27 16:02:34  strk
  * Added INL file for MinimalEdgeRing, added many debugging blocks,
  * fixed memory leak in ConnectedInteriorTester (bug #59)

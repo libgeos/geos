@@ -58,7 +58,7 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,
         maxNodeDegree(-1),
 	edges(),
 	pts(newGeometryFactory->getCoordinateSequenceFactory()->create(NULL)),
-        label(new Label(Location::UNDEF)),
+        label(Location::UNDEF), // new Label(Location::UNDEF)),
         ring(NULL),
         isHoleVar(false),
         shell(NULL)
@@ -72,20 +72,27 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,
 #if GEOS_DEBUG
 	cerr << "EdgeRing[" << this << "] ctor" << endl;
 #endif
+	testInvariant();
 }
 
 EdgeRing::~EdgeRing()
 {
+	testInvariant();
+
 	/*
 	 * If we constructed a ring, we did by transferring
 	 * ownership of the CoordinateSequence, so it will be
 	 * destroyed by `ring' dtor and we must not destroy
 	 * it twice.
 	 */
-	if ( ring == NULL ) delete pts;
-	else delete ring;
-
-	delete label;
+	if ( ring == NULL )
+	{
+		delete pts;
+	}
+	else 
+	{
+		delete ring;
+	}
 
 	for(unsigned int i=0;i<holes.size(); ++i) {
 		delete holes[i];
@@ -99,12 +106,20 @@ EdgeRing::~EdgeRing()
 bool
 EdgeRing::isIsolated()
 {
-	return (label->getGeometryCount()==1);
+	testInvariant();
+	return (label.getGeometryCount()==1);
 }
 
 bool
 EdgeRing::isHole()
 {
+	testInvariant();
+
+	// We can't tell if this is an hole
+	// unless we computed the ring
+	// see computeRing()
+	assert(ring);
+
 	return isHoleVar;
 }
 
@@ -112,25 +127,29 @@ EdgeRing::isHole()
 LinearRing*
 EdgeRing::getLinearRing()
 {
+	testInvariant();
 //	return new LinearRing(*ring);
 	return ring;
 }
 
-Label*
+Label&
 EdgeRing::getLabel()
 {
+	testInvariant();
 	return label;
 }
 
 bool
 EdgeRing::isShell()
 {
-	return shell==NULL;
+	testInvariant();
+	return (shell==NULL);
 }
 
 EdgeRing*
 EdgeRing::getShell()
 {
+	testInvariant();
 	return shell;
 }
 
@@ -139,46 +158,62 @@ EdgeRing::setShell(EdgeRing *newShell)
 {
 	shell=newShell;
 	if (shell!=NULL) shell->addHole(this);
+	testInvariant();
 }
 
 void
 EdgeRing::addHole(EdgeRing *edgeRing)
 {
 	holes.push_back(edgeRing);
+	testInvariant();
 }
 
 /*public*/
 Polygon*
 EdgeRing::toPolygon(const GeometryFactory* geometryFactory)
 {
+	testInvariant();
+
 	unsigned int nholes=holes.size();
 	vector<Geometry *> *holeLR=new vector<Geometry *>(nholes);
 	for (unsigned int i=0; i<nholes; ++i)
 	{
-		LinearRing *hole=new LinearRing(*(holes[i]->getLinearRing()));
-        	(*holeLR)[i]=(hole);
+		Geometry *hole=holes[i]->getLinearRing()->clone();
+        	(*holeLR)[i]=hole;
 	}
+
+	// We don't use "clone" here because
+	// GeometryFactory::createPolygon really
+	// wants a LinearRing
+	//
 	LinearRing *shellLR=new LinearRing(*(getLinearRing()));
 	return geometryFactory->createPolygon(shellLR, holeLR);
 }
 
+/*public*/
 void
 EdgeRing::computeRing()
 {
+	testInvariant();
+
 	if (ring!=NULL) return;   // don't compute more than once
 	ring=geometryFactory->createLinearRing(pts);
 	isHoleVar=CGAlgorithms::isCCW(pts);
+
+	testInvariant();
+
 }
 
-/**
- * Returns the list of DirectedEdges that make up this EdgeRing
- */
-vector<DirectedEdge*>*
+/*public*/
+vector<DirectedEdge*>&
 EdgeRing::getEdges()
 {
-	return &edges;
+	testInvariant();
+
+	return edges;
 }
 
+/*protected*/
 void
 EdgeRing::computePoints(DirectedEdge *newStart)
 {
@@ -199,22 +234,31 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 
 		edges.push_back(de);
 		Label *deLabel=de->getLabel();
+		assert(deLabel);
 		assert(deLabel->isArea());
-		mergeLabel(deLabel);
+		mergeLabel(*deLabel);
 		addPoints(de->getEdge(),de->isForward(),isFirstEdge);
 		isFirstEdge=false;
 		setEdgeRing(de,this);
 		de=getNext(de);
 	} while (de!=startDe);
+
+	testInvariant();
+
 }
 
+/*public*/
 int
 EdgeRing::getMaxNodeDegree()
 {
+
+	testInvariant();
+
 	if (maxNodeDegree<0) computeMaxNodeDegree();
 	return maxNodeDegree;
 }
 
+/*private*/
 void
 EdgeRing::computeMaxNodeDegree()
 {
@@ -230,8 +274,12 @@ EdgeRing::computeMaxNodeDegree()
 		de=getNext(de);
 	} while (de!=startDe);
 	maxNodeDegree *= 2;
+
+	testInvariant();
+
 }
 
+/*public*/
 void
 EdgeRing::setInResult()
 {
@@ -240,45 +288,54 @@ EdgeRing::setInResult()
 		de->getEdge()->setInResult(true);
 		de=de->getNext();
 	} while (de!=startDe);
+
+	testInvariant();
+
 }
 
+/*protected*/
 void
-EdgeRing::mergeLabel(Label *deLabel)
+EdgeRing::mergeLabel(Label& deLabel)
 {
 	mergeLabel(deLabel, 0);
 	mergeLabel(deLabel, 1);
+
+	testInvariant();
+
 }
 
-/**
- * Merge the RHS label from a DirectedEdge into the label for this EdgeRing.
- * The DirectedEdge label may be null.  This is acceptable - it results
- * from a node which is NOT an intersection node between the Geometries
- * (e.g. the end node of a LinearRing).  In this case the DirectedEdge label
- * does not contribute any information to the overall labelling, and is
- * simply skipped.
- */
+/*protected*/
 void
-EdgeRing::mergeLabel(Label *deLabel, int geomIndex)
+EdgeRing::mergeLabel(Label& deLabel, int geomIndex)
 {
-	int loc=deLabel->getLocation(geomIndex,Position::RIGHT);
+
+	testInvariant();
+
+	int loc=deLabel.getLocation(geomIndex, Position::RIGHT);
 	// no information to be had from this label
 	if (loc==Location::UNDEF) return;
+
 	// if there is no current RHS value, set it
-	if (label->getLocation(geomIndex)==Location::UNDEF) {
-		label->setLocation(geomIndex,loc);
+	if (label.getLocation(geomIndex)==Location::UNDEF) {
+		label.setLocation(geomIndex,loc);
 		return;
 	}
 }
 
+/*protected*/
 void
 EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 {
 	// EdgeRing::addPoints: can't add points after LinearRing construction
 	assert(ring==NULL);
 
+	assert(edge);
 	const CoordinateSequence* edgePts=edge->getCoordinates();
 
+	assert(edgePts);
 	unsigned int numEdgePts=edgePts->getSize();
+
+	assert(pts);
 
 	if (isForward) {
 		unsigned int startIndex=1;
@@ -298,23 +355,31 @@ EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 			pts->add(edgePts->getAt(i-1));
 		}
 	}
+
+	testInvariant();
+
 }
 
-/**
- * This method will use the computed ring.
- * It will also check any holes, if they have been assigned.
- */
+/*public*/
 bool
 EdgeRing::containsPoint(const Coordinate& p)
 {
+
+	testInvariant();
+
+	assert(ring);
+
 	const Envelope* env=ring->getEnvelopeInternal();
+	assert(env);
 	if ( ! env->contains(p) ) return false;
+
 	if ( ! CGAlgorithms::isPointInRing(p, ring->getCoordinatesRO()) )
 		return false;
 
 	for (vector<EdgeRing*>::iterator i=holes.begin(); i<holes.end(); ++i)
 	{
 		EdgeRing *hole=*i;
+		assert(hole);
 		if (hole->containsPoint(p))
 		{
 			return false;
@@ -328,6 +393,9 @@ EdgeRing::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/03/29 13:53:56  strk
+ * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
+ *
  * Revision 1.21  2006/03/27 16:02:33  strk
  * Added INL file for MinimalEdgeRing, added many debugging blocks,
  * fixed memory leak in ConnectedInteriorTester (bug #59)
@@ -450,6 +518,9 @@ EdgeRing::containsPoint(const Coordinate& p)
  * Revision 1.19  2003/10/15 16:39:03  strk
  * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
  * $Log$
+ * Revision 1.22  2006/03/29 13:53:56  strk
+ * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
+ *
  * Revision 1.21  2006/03/27 16:02:33  strk
  * Added INL file for MinimalEdgeRing, added many debugging blocks,
  * fixed memory leak in ConnectedInteriorTester (bug #59)

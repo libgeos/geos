@@ -67,14 +67,26 @@ private:
 	void checkValid(const geom::MultiPolygon *g);
 	void checkValid(const geom::GeometryCollection *gc);
 	void checkConsistentArea(geomgraph::GeometryGraph *graph);
+
+
+	/**
+	 * Check that there is no ring which self-intersects
+	 * (except of course at its endpoints).
+	 * This is required by OGC topology rules (but not by other models
+	 * such as ESRI SDE, which allow inverted shells and exverted holes).
+	 *
+	 * @param graph the topology graph of the geometry
+	 */
 	void checkNoSelfIntersectingRings(geomgraph::GeometryGraph *graph);
 
 	/**
 	 * check that a ring does not self-intersect, except at its endpoints.
-	 * Algorithm is to count the number of times each node along edge occurs.
+	 * Algorithm is to count the number of times each node along edge
+	 * occurs.
 	 * If any occur more than once, that must be a self-intersection.
 	 */
-	void checkNoSelfIntersectingRing(geomgraph::EdgeIntersectionList &eiList);
+	void checkNoSelfIntersectingRing(
+			geomgraph::EdgeIntersectionList &eiList);
 
 	void checkTooFewPoints(geomgraph::GeometryGraph *graph);
 
@@ -89,7 +101,8 @@ private:
 	 * @param p the polygon to be tested for hole inclusion
 	 * @param graph a geomgraph::GeometryGraph incorporating the polygon
 	 */
-	void checkHolesInShell(const geom::Polygon *p, geomgraph::GeometryGraph *graph);
+	void checkHolesInShell(const geom::Polygon *p,
+			geomgraph::GeometryGraph *graph);
 
 	/**
 	 * Tests that no hole is nested inside another hole.
@@ -103,9 +116,10 @@ private:
 	 *    (checked by <code>checkRelateConsistency</code>)
 	 * 
 	 */
-	void checkHolesNotNested(const geom::Polygon *p, geomgraph::GeometryGraph *graph);
+	void checkHolesNotNested(const geom::Polygon *p,
+			geomgraph::GeometryGraph *graph);
 
-	/*
+	/**
 	 * Tests that no element polygon is wholly in the interior of another
 	 * element polygon.
 	 * 
@@ -115,28 +129,40 @@ private:
 	 * - shells do not touch along an edge
 	 * - no duplicate rings exist
 	 *
-	 * This routine relies on the fact that while polygon shells may touch at
-	 * one or more vertices, they cannot touch at ALL vertices.
+	 * This routine relies on the fact that while polygon shells
+	 * may touch at one or more vertices, they cannot touch at
+	 * ALL vertices.
 	 */
-	void checkShellsNotNested(const geom::MultiPolygon *mp, geomgraph::GeometryGraph *graph);
+	void checkShellsNotNested(const geom::MultiPolygon *mp,
+			geomgraph::GeometryGraph *graph);
 
 	/**
-	 * Check if a shell is incorrectly nested within a polygon.  This is the case
-	 * if the shell is inside the polygon shell, but not inside a polygon hole.
+	 * Check if a shell is incorrectly nested within a polygon. 
+	 * This is the case if the shell is inside the polygon shell,
+	 * but not inside a polygon hole.
 	 * (If the shell is inside a polygon hole, the nesting is valid.)
 	 * 
-	 * The algorithm used relies on the fact that the rings must be properly contained.
-	 * E.g. they cannot partially overlap (this has been previously checked by
-	 * <code>checkRelateConsistency</code>
+	 * The algorithm used relies on the fact that the rings must be
+	 * properly contained.
+	 * E.g. they cannot partially overlap (this has been previously
+	 * checked by <code>checkRelateConsistency</code>
 	 */
 	void checkShellNotNested(const geom::LinearRing *shell,
 			const geom::Polygon *p,
 			geomgraph::GeometryGraph *graph);
 
 	/**
-	 * This routine checks to see if a shell is properly contained in a hole.
+	 * This routine checks to see if a shell is properly contained
+	 * in a hole.
+	 * It assumes that the edges of the shell and hole do not
+	 * properly intersect.
+	 *
+	 * @return <code>null</code> if the shell is properly contained, or
+	 *   a Coordinate which is not inside the hole if it is not
+	 *
 	 */
-	const geom::Coordinate *checkShellInsideHole(const geom::LinearRing *shell,
+	const geom::Coordinate *checkShellInsideHole(
+			const geom::LinearRing *shell,
 			const geom::LinearRing *hole,
 			geomgraph::GeometryGraph *graph);
 
@@ -231,6 +257,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/03/29 13:53:59  strk
+ * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
+ *
  * Revision 1.1  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

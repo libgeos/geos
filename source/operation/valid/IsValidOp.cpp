@@ -39,6 +39,7 @@
 
 #include <typeinfo>
 #include <set>
+#include <cassert>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -311,13 +312,7 @@ IsValidOp::checkConsistentArea(GeometryGraph *graph)
 }
 
 
-/**
- * Check that there is no ring which self-intersects (except of course at its endpoints).
- * This is required by OGC topology rules (but not by other models
- * such as ESRI SDE, which allow inverted shells and exverted holes).
- *
- * @param graph the topology graph of the geometry
- */
+/*private*/
 void
 IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph)
 {
@@ -330,11 +325,7 @@ IsValidOp::checkNoSelfIntersectingRings(GeometryGraph *graph)
 	}
 }
 
-/**
- * check that a ring does not self-intersect, except at its endpoints.
- * Algorithm is to count the number of times each node along edge occurs.
- * If any occur more than once, that must be a self-intersection.
- */
+/*private*/
 void
 IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList &eiList)
 {
@@ -360,21 +351,14 @@ IsValidOp::checkNoSelfIntersectingRing(EdgeIntersectionList &eiList)
 	}
 }
 
-/**
- * Test that each hole is inside the polygon shell.
- * This routine assumes that the holes have previously been tested
- * to ensure that all vertices lie on the shell or inside it.
- * A simple test of a single point in the hole can be used,
- * provide the point is chosen such that it does not lie on the
- * boundary of the shell.
- *
- * @param p the polygon to be tested for hole inclusion
- * @param graph a GeometryGraph incorporating the polygon
- */
+/*private*/
 void
-IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph)
+IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 {
-	LinearRing *shell=(LinearRing*) p->getExteriorRing();
+	assert(dynamic_cast<const LinearRing*>(p->getExteriorRing()));
+
+	const LinearRing *shell=static_cast<const LinearRing*>(
+			p->getExteriorRing());
 
 	//SimplePointInRing pir(shell);
 	//SIRtreePointInRing pir(shell);
@@ -383,9 +367,14 @@ IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph)
 	int nholes = p->getNumInteriorRing();
 	for(int i=0; i<nholes; ++i)
 	{
-		const LinearRing *hole=(const LinearRing*) p->getInteriorRingN(i);
+		assert(dynamic_cast<const LinearRing*>(
+				p->getInteriorRingN(i)));
 
-		const Coordinate *holePt=findPtNotNode(hole->getCoordinatesRO(), shell, graph);
+		const LinearRing *hole=static_cast<const LinearRing*>(
+				p->getInteriorRingN(i));
+
+		const Coordinate *holePt=findPtNotNode(
+				hole->getCoordinatesRO(), shell, graph);
 
 		/**
 		 * If no non-node hole vertex can be found, the hole must
@@ -404,18 +393,7 @@ IsValidOp::checkHolesInShell(const Polygon *p,GeometryGraph *graph)
 	}
 }
 
-/**
- * Tests that no hole is nested inside another hole.
- * This routine assumes that the holes are disjoint.
- * To ensure this, holes have previously been tested
- * to ensure that:
- * 
- *  - they do not partially overlap
- *    (checked by <code>checkRelateConsistency</code>)
- *  - they are not identical
- *    (checked by <code>checkRelateConsistency</code>)
- * 
- */
+/*private*/
 void
 IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 {
@@ -426,7 +404,12 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 	int nholes=p->getNumInteriorRing();
 	for(int i=0; i<nholes; ++i)
 	{
-		LinearRing *innerHole=(LinearRing*) p->getInteriorRingN(i);
+		assert(dynamic_cast<const LinearRing*>(
+				p->getInteriorRingN(i)));
+
+		const LinearRing *innerHole=static_cast<const LinearRing*>(
+				p->getInteriorRingN(i));
+
 		nestedTester.add(innerHole);
 	}
 
@@ -439,47 +422,38 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 	}
 }
 
-/*
- * Tests that no element polygon is wholly in the interior of another
- * element polygon.
- * 
- * Preconditions:
- * 
- * - shells do not partially overlap
- * - shells do not touch along an edge
- * - no duplicate rings exist
- *
- * This routine relies on the fact that while polygon shells may touch at
- * one or more vertices, they cannot touch at ALL vertices.
- */
+/*private*/
 void
 IsValidOp::checkShellsNotNested(const MultiPolygon *mp, GeometryGraph *graph)
 {
 	int ngeoms = mp->getNumGeometries();
 	for(int i=0; i<ngeoms; ++i)
 	{
-		const Polygon *p=(const Polygon *)mp->getGeometryN(i);
-		const LinearRing *shell=(const LinearRing*) p->getExteriorRing();
+		assert(dynamic_cast<const Polygon *>(mp->getGeometryN(i)));
+		const Polygon *p=static_cast<const Polygon *>(
+				mp->getGeometryN(i));
+
+		assert(dynamic_cast<const LinearRing*>(p->getExteriorRing()));
+		const LinearRing *shell=static_cast<const LinearRing*>(
+				p->getExteriorRing());
 
 		for(int j=0; j<ngeoms; ++j)
 		{
 			if (i==j) continue;
-			const Polygon *p2=(const Polygon*) mp->getGeometryN(j);
+
+			assert(dynamic_cast<const Polygon *>(
+					mp->getGeometryN(j)));
+			const Polygon *p2=static_cast<const Polygon *>(
+					mp->getGeometryN(j));
+
 			checkShellNotNested(shell, p2, graph);
+
 			if (validErr!=NULL) return;
 		}
 	}
 }
 
-/**
- * Check if a shell is incorrectly nested within a polygon.  This is the case
- * if the shell is inside the polygon shell, but not inside a polygon hole.
- * (If the shell is inside a polygon hole, the nesting is valid.)
- * 
- * The algorithm used relies on the fact that the rings must be properly contained.
- * E.g. they cannot partially overlap (this has been previously checked by
- * <code>checkRelateConsistency</code>
- */
+/*private*/
 void
 IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	GeometryGraph *graph)
@@ -487,11 +461,15 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	const CoordinateSequence *shellPts=shell->getCoordinatesRO();
 
 	// test if shell is inside polygon shell
-	const LinearRing *polyShell=(const LinearRing*) p->getExteriorRing();
+	assert(dynamic_cast<const LinearRing*>(
+			p->getExteriorRing()));
+	const LinearRing *polyShell=static_cast<const LinearRing*>(
+			p->getExteriorRing());
 	const CoordinateSequence *polyPts=polyShell->getCoordinatesRO();
 	const Coordinate *shellPt=findPtNotNode(shellPts,polyShell,graph);
 
-	// if no point could be found, we can assume that the shell is outside the polygon
+	// if no point could be found, we can assume that the shell
+	// is outside the polygon
 	if (shellPt==NULL) return;
 
 	bool insidePolyShell=CGAlgorithms::isPointInRing(*shellPt, polyPts);
@@ -515,7 +493,10 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	 */
 	const Coordinate *badNestedPt=NULL;
 	for(int i=0; i<nholes; ++i) {
-		const LinearRing *hole=(const LinearRing*) p->getInteriorRingN(i);
+		assert(dynamic_cast<const LinearRing*>(
+				p->getInteriorRingN(i)));
+		const LinearRing *hole=static_cast<const LinearRing*>(
+				p->getInteriorRingN(i));
 		badNestedPt = checkShellInsideHole(shell, hole, graph);
 		if (badNestedPt==NULL) return;
 	}
@@ -524,32 +505,30 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	);
 }
 
-/*
- * This routine checks to see if a shell is properly contained in a hole.
- * It assumes that the edges of the shell and hole do not
- * properly intersect.
- *
- * @return <code>null</code> if the shell is properly contained, or
- *   a Coordinate which is not inside the hole if it is not
- *
- */
+/*private*/
 const Coordinate *
-IsValidOp::checkShellInsideHole(const LinearRing *shell, const LinearRing *hole,
-	GeometryGraph *graph)
+IsValidOp::checkShellInsideHole(const LinearRing *shell,
+		const LinearRing *hole,
+		GeometryGraph *graph)
 {
 	const CoordinateSequence *shellPts=shell->getCoordinatesRO();
 	const CoordinateSequence *holePts=hole->getCoordinatesRO();
 
-	// TODO: improve performance of this - by sorting pointlists for instance?
+	// TODO: improve performance of this - by sorting pointlists
+	// for instance?
 	const Coordinate *shellPt=findPtNotNode(shellPts, hole, graph);
-	// if point is on shell but not hole, check that the shell is inside the hole
+
+	// if point is on shell but not hole, check that the shell is
+	// inside the hole
 	if (shellPt) {
 		bool insideHole=CGAlgorithms::isPointInRing(*shellPt, holePts);
 		if (!insideHole) return shellPt;
 	}
 
 	const Coordinate *holePt=findPtNotNode(holePts, shell, graph);
-	// if point is on hole but not shell, check that the hole is outside the shell
+
+	// if point is on hole but not shell, check that the hole is
+	// outside the shell
 	if (holePt) {
 		bool insideShell=CGAlgorithms::isPointInRing(*holePt, shellPts);
 		if (insideShell) return holePt;
@@ -559,6 +538,7 @@ IsValidOp::checkShellInsideHole(const LinearRing *shell, const LinearRing *hole,
 	return NULL;
 }
 
+/*private*/
 void
 IsValidOp::checkConnectedInteriors(GeometryGraph &graph)
 {
@@ -572,6 +552,7 @@ IsValidOp::checkConnectedInteriors(GeometryGraph &graph)
 }
 
 
+/*private*/
 void
 IsValidOp::checkInvalidCoordinates(const CoordinateSequence *cs)
 {
@@ -589,6 +570,7 @@ IsValidOp::checkInvalidCoordinates(const CoordinateSequence *cs)
 	}
 }
 
+/*private*/
 void
 IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 {
@@ -605,6 +587,7 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 	}
 }
 
+/*private*/
 void
 IsValidOp::checkClosedRings(const Polygon *poly)
 {
@@ -621,6 +604,7 @@ IsValidOp::checkClosedRings(const Polygon *poly)
 	}
 }
 
+/*private*/
 void
 IsValidOp::checkClosedRing(const LinearRing *ring)
 {
@@ -638,6 +622,9 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.50  2006/03/29 13:53:59  strk
+ * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
+ *
  * Revision 1.49  2006/03/22 18:12:32  strk
  * indexChain.h header split.
  *
