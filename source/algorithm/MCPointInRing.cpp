@@ -47,20 +47,20 @@ MCPointInRing::MCSelecter::select(LineSegment *ls)
 	parent->testLineSegment(p,ls);
 }
 
-MCPointInRing::MCPointInRing(LinearRing *newRing)
+MCPointInRing::MCPointInRing(const LinearRing *newRing)
+	:
+	ring(newRing),
+	interval(),
+	pts(NULL),
+	tree(NULL),
+	crossings(0)
 {
-	ring=newRing;
-	tree=NULL;
-	crossings=0;
-	pts=NULL;
-	interval=new index::bintree::Interval();
-    buildIndex();
+	buildIndex();
 }
 
 MCPointInRing::~MCPointInRing()
 {
 	delete tree;
-	delete interval;
 	delete pts;
 }
 
@@ -76,9 +76,9 @@ MCPointInRing::buildIndex()
 	for(int i=0;i<(int)mcList->size();i++) {
 		chain::MonotoneChain *mc=(*mcList)[i];
 		Envelope *mcEnv=mc->getEnvelope();
-		interval->min=mcEnv->getMinY();
-		interval->max=mcEnv->getMaxY();
-		tree->insert(interval,mc);
+		interval.min=mcEnv->getMinY();
+		interval.max=mcEnv->getMaxY();
+		tree->insert(&interval,mc);
 	}
 	delete mcList;
 }
@@ -89,9 +89,9 @@ MCPointInRing::isInside(const Coordinate& pt)
 	crossings=0;
 	// test all segments intersected by ray from pt in positive x direction
 	Envelope *rayEnv=new Envelope(DoubleNegInfinity,DoubleInfinity,pt.y,pt.y);
-	interval->min=pt.y;
-	interval->max=pt.y;
-	vector<void*> *segs=tree->query(interval);
+	interval.min=pt.y;
+	interval.max=pt.y;
+	vector<void*> *segs=tree->query(&interval);
 	//System.out.println("query size=" + segs.size());
 	MCSelecter *mcSelecter=new MCSelecter(pt,this);
 	for(int i=0;i<(int)segs->size();i++) {
@@ -160,6 +160,9 @@ MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/03/29 11:52:00  strk
+ * const correctness, useless heap allocations removal
+ *
  * Revision 1.26  2006/03/22 18:12:31  strk
  * indexChain.h header split.
  *

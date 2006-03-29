@@ -20,6 +20,7 @@
 #include <geos/index/chain/MonotoneChainSelectAction.h> // for inheritance
 #include <geos/algorithm/PointInRing.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for composition
+#include <geos/index/bintree/Interval.h> // for composition
 
 #include <vector>
 
@@ -48,8 +49,8 @@ namespace algorithm { // geos::algorithm
 
 class MCPointInRing: public PointInRing {
 public:
-	MCPointInRing(geom::LinearRing *newRing);
-	virtual ~MCPointInRing();
+	MCPointInRing(const geom::LinearRing *newRing);
+	~MCPointInRing();
 	bool isInside(const geom::Coordinate& pt);
 	void testLineSegment(geom::Coordinate& p, geom::LineSegment *seg);
 
@@ -64,8 +65,8 @@ public:
 	};
 
 private:
-	geom::LinearRing *ring;
-	index::bintree::Interval *interval;
+	const geom::LinearRing *ring;
+	index::bintree::Interval interval;
 	geom::CoordinateSequence *pts;
 	index::bintree::Bintree *tree;
 	int crossings;  // number of segment/ray crossings
@@ -82,6 +83,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/29 11:52:00  strk
+ * const correctness, useless heap allocations removal
+ *
  * Revision 1.3  2006/03/22 18:12:31  strk
  * indexChain.h header split.
  *
