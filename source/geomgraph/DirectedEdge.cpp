@@ -21,6 +21,8 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
 
+#include <geos/inline.h>
+
 #include <cmath>
 #include <cassert>
 #include <string>
@@ -208,6 +210,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/03/29 15:23:49  strk
+ * Moved GeometryGraph inlines from .h to .inl file
+ *
  * Revision 1.17  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

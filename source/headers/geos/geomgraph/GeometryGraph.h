@@ -96,7 +96,8 @@ private:
 	/// Allocates a new EdgeSetIntersector. Remember to delete it!
 	index::EdgeSetIntersector* createEdgeSetIntersector();
 
-	void add(const geom::Geometry *g); // throw(UnsupportedOperationException);
+	void add(const geom::Geometry *g);
+		// throw(UnsupportedOperationException);
 
 	void addCollection(const geom::GeometryCollection *gc);
 
@@ -125,37 +126,19 @@ public:
 
 	static int determineBoundary(int boundaryCount);
 
-	GeometryGraph()
-		:
-		PlanarGraph(),
-		parentGeom(NULL),
-		useBoundaryDeterminationRule(false),
-		argIndex(-1),
-		hasTooFewPointsVar(false)
-	{}
+	GeometryGraph();
 
-	GeometryGraph(int newArgIndex, const geom::Geometry *newParentGeom)
-		:
-		PlanarGraph(),
-		parentGeom(newParentGeom),
-		useBoundaryDeterminationRule(false),
-		argIndex(newArgIndex),
-		hasTooFewPointsVar(false)
-	{
-		if (parentGeom!=NULL) add(parentGeom);
-	}
+	GeometryGraph(int newArgIndex, const geom::Geometry *newParentGeom);
 
-	virtual ~GeometryGraph() {}
+	virtual ~GeometryGraph();
 
 
-	const geom::Geometry* getGeometry() { return parentGeom; }
+	const geom::Geometry* getGeometry();
 
 	/// Returned object is owned by this GeometryGraph
 	std::vector<Node*>* getBoundaryNodes();
 
-	void getBoundaryNodes(std::vector<Node*>&bdyNodes) {
-		nodes->getBoundaryNodes(argIndex, bdyNodes);
-	}
+	void getBoundaryNodes(std::vector<Node*>&bdyNodes);
 
 	/// Returned object is owned by this GeometryGraph
 	geom::CoordinateSequence* getBoundaryPoints();
@@ -172,7 +155,8 @@ public:
 	 * \brief
 	 * Compute self-nodes, taking advantage of the Geometry type to
 	 * minimize the number of intersection tests.  (E.g. rings are
-	 * not tested for self-intersection, since they are assumed to be valid).
+	 * not tested for self-intersection, since
+	 * they are assumed to be valid).
 	 *
 	 * @param li the LineIntersector to use
 	 *
@@ -182,16 +166,15 @@ public:
 	 * @return the SegmentIntersector used, containing information about
 	 *	the intersections found
 	 */
-	index::SegmentIntersector* computeSelfNodes(algorithm::LineIntersector *li,
-		bool computeRingSelfNodes);
+	index::SegmentIntersector* computeSelfNodes(
+			algorithm::LineIntersector *li,
+			bool computeRingSelfNodes);
 
 	// Quick inline calling the function above, the above should probably
 	// be deprecated.
-	index::SegmentIntersector* computeSelfNodes(algorithm::LineIntersector& li,
-		bool computeRingSelfNodes)
-	{
-		return computeSelfNodes(&li, computeRingSelfNodes);
-	}
+	index::SegmentIntersector* computeSelfNodes(
+			algorithm::LineIntersector& li,
+			bool computeRingSelfNodes);
 
 	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
 		algorithm::LineIntersector *li, bool includeProper);
@@ -208,14 +191,17 @@ public:
 } // namespace geos.geomgraph
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/GeometryGraph.inl"
-//#endif
+#ifdef GEOS_INLINE
+# include "geos/geomgraph/GeometryGraph.inl"
+#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_GEOMETRYGRAPH_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/29 15:23:49  strk
+ * Moved GeometryGraph inlines from .h to .inl file
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

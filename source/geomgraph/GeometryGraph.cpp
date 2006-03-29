@@ -17,7 +17,6 @@
 #include <vector>
 #include <memory> // auto_ptr
 
-
 #include <geos/algorithm/CGAlgorithms.h>
 
 #include <geos/util/UnsupportedOperationException.h>
@@ -43,8 +42,14 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/GeometryCollection.h>
 
+#include <geos/inline.h>
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
+#endif
+
+#ifndef GEOS_INLINE
+# include "geos/geomgraph/GeometryGraph.inl"
 #endif
 
 using namespace std;
@@ -454,6 +459,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/03/29 15:23:49  strk
+ * Moved GeometryGraph inlines from .h to .inl file
+ *
  * Revision 1.25  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *

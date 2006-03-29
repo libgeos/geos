@@ -18,6 +18,7 @@ geos_HEADERS = \
 	EdgeNodingValidator.h	\
 	EdgeRing.h	\
 	GeometryGraph.h	\
+	GeometryGraph.inl	\
 	GraphComponent.h	\
 	Label.h	\
 	Node.h	\
