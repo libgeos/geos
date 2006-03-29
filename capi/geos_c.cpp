@@ -516,7 +516,7 @@ GEOSArea(const Geometry *g, double *area)
 		return 1;
 	}
 
-	catch (std::exception &e)
+	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE(e.what());
 		return 0;
@@ -537,7 +537,7 @@ GEOSLength(const Geometry *g, double *length)
 		return 1;
 	}
 
-	catch (std::exception &e)
+	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE(e.what());
 		return 0;
@@ -785,7 +785,7 @@ GEOSEnvelope(Geometry *g1)
 		Geometry *g3 = g1->getEnvelope();
 		return g3;
 	}
-	catch (std::exception &e)
+	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE(e.what());
 		return NULL;
