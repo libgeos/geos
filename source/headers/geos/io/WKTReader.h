@@ -24,6 +24,9 @@
 
 // Forward declarations
 namespace geos {
+	namespace io {
+		class StringTokenizer;
+	}
 	namespace geom {
 
 		class Coordinate;
@@ -37,15 +40,12 @@ namespace geos {
 		class MultiLineString;
 		class MultiPolygon;
 		class PrecisionModel;
-
-	} // namespace geom
-} // namespace geos
+	} 
+} 
 
 
 namespace geos {
 namespace io {
-
-class StringTokenizer;
 
 /**
  * \class WKTReader io.h geos.h
@@ -108,6 +108,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/03/30 09:26:36  strk
+ * minor cleanup
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
