@@ -67,6 +67,8 @@ Changes in 3.0.0
 	- JTS packages mapped to geos:: sub-namespaces
 	- Geometry::getInteriorPoint() returns NULL if called
 	  against an EMPTY geom
+	- LineString::get{Start,End}Point return NULL for
+	  EMPTY geoms
 
 - Correctness:
 	- More const-correct signatures
@@ -74,6 +76,8 @@ Changes in 3.0.0
 	- Changed index-related funx signatures to use unsigned int
 	  rather then int
 	- More const-correctness in Buffer "package"
+	- Bugfix in LineString::getCoordinate() failing to return
+	  NULL from getCoordinat() when empty.
 
 - Layout changes:
 	- Namespaces mapping JTS packages

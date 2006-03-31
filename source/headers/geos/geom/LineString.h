@@ -50,7 +50,9 @@ public:
 	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
 
 	virtual ~LineString();
+
 	virtual Geometry *clone() const { return new LineString(*this); }
+
 	virtual CoordinateSequence* getCoordinates() const;
 
 	/// Returns a read-only pointer to internal CoordinateSequence
@@ -76,31 +78,64 @@ public:
 	virtual Geometry* getBoundary() const;
 
 	virtual bool isEmpty() const;
+
 	virtual int getNumPoints() const;
+
 	virtual Point* getPointN(int n) const;
+
+	/// \brief
+	/// Return the start point of the LineString
+	/// or NULL if this is an EMPTY LineString.
+	///
 	virtual Point* getStartPoint() const;
+
+	/// \brief
+	/// Return the end point of the LineString
+	/// or NULL if this is an EMPTY LineString.
+	///
 	virtual Point* getEndPoint() const;
+
 	virtual bool isClosed() const;
+
 	virtual bool isRing() const;
+
 	virtual std::string getGeometryType() const;
+
 	virtual GeometryTypeId getGeometryTypeId() const;
+
 	virtual bool isSimple() const;
+
 	virtual bool isCoordinate(Coordinate& pt) const;
+
 	virtual bool equalsExact(const Geometry *other, double tolerance=0)
 		const;
+
 	virtual void apply_rw(const CoordinateFilter *filter);
+
 	virtual void apply_ro(CoordinateFilter *filter) const;
+
 	virtual void apply_rw(GeometryFilter *filter);
+
 	virtual void apply_ro(GeometryFilter *filter) const;
+
 	virtual void apply_rw(GeometryComponentFilter *filter);
+
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
 
-	/// Normalize a LineString.  
+	/** \brief
+	 * Normalizes a LineString. 
+	 *
+	 * A normalized linestring
+	 * has the first point which is not equal to it's reflected point
+	 * less than the reflected point.
+	 */
 	virtual void normalize();
 
 	//was protected
 	virtual int compareToSameClass(const Geometry *ls) const;
+
 	virtual const Coordinate* getCoordinate() const;
+
 	virtual double getLength() const;
 
 	/**
@@ -112,7 +147,9 @@ public:
   	LineString* reverse() const;
 
 protected:
+
 	virtual Envelope* computeEnvelopeInternal() const;
+
 	CoordinateSequence* points;
 };
 
@@ -134,6 +171,11 @@ struct LineStringLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/03/31 16:55:17  strk
+ * Added many assertions checking in LineString implementation.
+ * Changed ::getCoordinate() to return NULL on empty geom.
+ * Changed ::get{Start,End}Point() to return NULL on empty geom.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

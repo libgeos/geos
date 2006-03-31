@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <typeinfo>
+#include <cassert>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -39,7 +40,10 @@ using namespace geos::algorithm;
 namespace geos {
 namespace geom { // geos::geom
 
-LineString::LineString(const LineString &ls): Geometry(ls.getFactory()) {
+LineString::LineString(const LineString &ls)
+	:
+	Geometry(ls.getFactory())
+{
 	points=ls.points->clone();
 }
 
@@ -63,7 +67,10 @@ LineString::reverse() const
  * @param factory the GeometryFactory used to create this Geometry.
  *
  */  
-LineString::LineString(CoordinateSequence *newCoords, const GeometryFactory *factory): Geometry(factory)
+LineString::LineString(CoordinateSequence *newCoords,
+		const GeometryFactory *factory)
+	:
+	Geometry(factory)
 {
 	if (newCoords==NULL) {
 		points=factory->getCoordinateSequenceFactory()->create(NULL);
@@ -76,81 +83,118 @@ LineString::LineString(CoordinateSequence *newCoords, const GeometryFactory *fac
 }
 
 
-LineString::~LineString(){
+LineString::~LineString()
+{
 	delete points;
 }
 
-CoordinateSequence* LineString::getCoordinates() const {
+CoordinateSequence*
+LineString::getCoordinates() const
+{
+	assert(points);
 	return points->clone();
 	//return points;
 }
 
-const CoordinateSequence* LineString::getCoordinatesRO() const {
+const CoordinateSequence*
+LineString::getCoordinatesRO() const
+{
 	return points;
 }
 
-const Coordinate& LineString::getCoordinateN(int n) const {
+const Coordinate&
+LineString::getCoordinateN(int n) const
+{
+	assert(points);
 	return points->getAt(n);
 }
 
-int LineString::getDimension() const {
+int
+LineString::getDimension() const
+{
 	return 1;
 }
 
-int LineString::getBoundaryDimension() const {
+int
+LineString::getBoundaryDimension() const
+{
 	if (isClosed()) {
 		return Dimension::False;
 	}
 	return 0;
 }
 
-bool LineString::isEmpty() const {
+bool
+LineString::isEmpty() const
+{
+	assert(points);
 	return points->getSize()==0;
 }
 
-int LineString::getNumPoints() const {
+int
+LineString::getNumPoints() const
+{
+	assert(points);
 	return points->getSize();
 }
 
-Point* LineString::getPointN(int n) const {
+Point*
+LineString::getPointN(int n) const
+{
 	return getFactory()->createPoint(points->getAt(n));
 }
 
-Point* LineString::getStartPoint() const {
+Point*
+LineString::getStartPoint() const
+{
 	if (isEmpty()) {
-		return new Point(NULL,NULL);
+		return NULL;
+		//return new Point(NULL,NULL);
 	}
 	return getPointN(0);
 }
 
-Point* LineString::getEndPoint() const {
+Point*
+LineString::getEndPoint() const
+{
 	if (isEmpty()) {
-		return new Point(NULL,NULL);
+		return NULL;
+		//return new Point(NULL,NULL);
 	}
 	return getPointN(getNumPoints() - 1);
 }
 
-bool LineString::isClosed() const {
+bool
+LineString::isClosed() const
+{
 	if (isEmpty()) {
 		return false;
 	}
 	return getCoordinateN(0).equals2D(getCoordinateN(getNumPoints()-1));
 }
 
-bool LineString::isRing() const {
+bool
+LineString::isRing() const
+{
 	return isClosed() && isSimple();
 }
 
-string LineString::getGeometryType() const {
+string
+LineString::getGeometryType() const
+{
 	return "LineString";
 }
 
-bool LineString::isSimple() const {
+bool
+LineString::isSimple() const
+{
 	operation::IsSimpleOp iso;
 	return iso.isSimple(this); 
 }
 
-Geometry* LineString::getBoundary() const {
+Geometry*
+LineString::getBoundary() const
+{
 	if (isEmpty()) {
 		return getFactory()->createEmptyGeometry();
 	}
@@ -161,13 +205,13 @@ Geometry* LineString::getBoundary() const {
 	pts->push_back(getStartPoint());
 	pts->push_back(getEndPoint());
 	MultiPoint *mp = getFactory()->createMultiPoint(pts);
-	//delete (*pts)[0];
-	//delete (*pts)[1];
-	//delete pts;
 	return mp;
 }
 
-bool LineString::isCoordinate(Coordinate& pt) const {
+bool
+LineString::isCoordinate(Coordinate& pt) const
+{
+	assert(points);
 	int npts=points->getSize();
 	for (int i = 0; i<npts; i++) {
 		if (points->getAt(i)==pt) {
@@ -177,11 +221,16 @@ bool LineString::isCoordinate(Coordinate& pt) const {
 	return false;
 }
 
-Envelope* LineString::computeEnvelopeInternal() const {
+Envelope*
+LineString::computeEnvelopeInternal() const
+{
 	if (isEmpty()) {
+		// Should return NULL instead ?
 		return new Envelope();
 	}
-	const Coordinate &c=points->getAt(0);
+
+	assert(points);
+	const Coordinate& c=points->getAt(0);
 	double minx = c.x;
 	double miny = c.y;
 	double maxx = c.x;
@@ -194,14 +243,20 @@ Envelope* LineString::computeEnvelopeInternal() const {
 		miny = miny < c.y ? miny : c.y;
 		maxy = maxy > c.y ? maxy : c.y;
 	}
+
+	// Shouldn't we be caching Envelopes ?? --strk;
 	return new Envelope(minx, maxx, miny, maxy);
 }
 
-bool LineString::equalsExact(const Geometry *other, double tolerance) const {
+bool
+LineString::equalsExact(const Geometry *other, double tolerance) const
+{
 	if (!isEquivalentClass(other)) {
 		return false;
 	}
+
 	const LineString *otherLineString=dynamic_cast<const LineString*>(other);
+	assert(otherLineString);
 	unsigned int npts=points->getSize();
 	if (npts!=otherLineString->points->getSize()) {
 		return false;
@@ -217,29 +272,34 @@ bool LineString::equalsExact(const Geometry *other, double tolerance) const {
 void
 LineString::apply_rw(const CoordinateFilter *filter)
 {
+	assert(points);
 	points->apply_rw(filter);
 }
 
 void
 LineString::apply_ro(CoordinateFilter *filter) const
 {
+	assert(points);
 	points->apply_ro(filter);
 }
 
-void LineString::apply_rw(GeometryFilter *filter) {
+void LineString::apply_rw(GeometryFilter *filter)
+{
+	assert(filter);
 	filter->filter_rw(this);
 }
 
-void LineString::apply_ro(GeometryFilter *filter) const {
+void LineString::apply_ro(GeometryFilter *filter) const
+{
+	assert(filter);
 	filter->filter_ro(this);
 }
 
-/**
-* Normalizes a LineString.  A normalized linestring
-* has the first point which is not equal to it's reflected point
-* less than the reflected point.
-*/
-void LineString::normalize() {
+/*public*/
+void
+LineString::normalize()
+{
+	assert(points);
 	int npts=points->getSize();
 	int n=npts/2;
 	for (int i=0; i<n; i++) {
@@ -254,8 +314,10 @@ void LineString::normalize() {
 }
 
 int
-LineString::compareToSameClass(const Geometry *ls) const {
-	LineString *line=(LineString*)ls;
+LineString::compareToSameClass(const Geometry *ls) const
+{
+	assert(dynamic_cast<const LineString*>(ls));
+	const LineString *line=static_cast<const LineString*>(ls);
 	// MD - optimized implementation
 	int mynpts=points->getSize();
 	int othnpts=line->points->getSize();
@@ -269,28 +331,36 @@ LineString::compareToSameClass(const Geometry *ls) const {
 	return 0;
 }
 
-const Coordinate* LineString::getCoordinate() const
+const Coordinate*
+LineString::getCoordinate() const
 {
-	// should use auto_ptr here or return NULL or throw an exception !
-	// 	--strk;
-	if (isEmpty()) return(new Coordinate());
+	if (isEmpty()) return NULL; 
 	return &(points->getAt(0));
 }
 
-double LineString::getLength() const {
+double
+LineString::getLength() const
+{
 	return CGAlgorithms::length(points);
 }
 
-void LineString::apply_rw(GeometryComponentFilter *filter) {
+void
+LineString::apply_rw(GeometryComponentFilter *filter)
+{
+	assert(filter);
 	filter->filter_rw(this);
 }
 
-void LineString::apply_ro(GeometryComponentFilter *filter) const {
+void
+LineString::apply_ro(GeometryComponentFilter *filter) const
+{
+	assert(filter);
 	filter->filter_ro(this);
 }
 
 GeometryTypeId
-LineString::getGeometryTypeId() const {
+LineString::getGeometryTypeId() const
+{
 	return GEOS_LINESTRING;
 }
 
@@ -299,6 +369,11 @@ LineString::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.63  2006/03/31 16:55:17  strk
+ * Added many assertions checking in LineString implementation.
+ * Changed ::getCoordinate() to return NULL on empty geom.
+ * Changed ::get{Start,End}Point() to return NULL on empty geom.
+ *
  * Revision 1.62  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.
