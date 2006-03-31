@@ -95,11 +95,15 @@ GeometryComponentFilter Geometry::geometryChangedFilter;
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
 Geometry::Geometry(const GeometryFactory *newFactory)
+	:
+	envelope(NULL),
+	factory(newFactory),
+	userData(NULL)
 {
-	factory=newFactory; 
+	if ( factory == NULL ) {
+		factory = INTERNAL_GEOMETRY_FACTORY;
+	} 
 	SRID=factory->getSRID();
-	envelope=NULL;
-	userData=NULL;
 }
 
 Geometry::Geometry(const Geometry &geom)
@@ -781,6 +785,10 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.108  2006/03/31 11:03:39  strk
+ * Fixed NULL-GeometryFactory constructor to use INTERNAL_GEOMETRY_FACTORY
+ * (should fix bug #81)
+ *
  * Revision 1.107  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
