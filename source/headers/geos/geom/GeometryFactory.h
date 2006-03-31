@@ -113,7 +113,10 @@ public:
 	Point* createPointFromInternalCoord(const Coordinate* coord,
 			const Geometry *exemplar) const;
 
-	/// Envelope to Geometry converter
+	/// Converts an Envelope to a Geometry.
+	//
+	/// Returned Geometry can be a Point, a Polygon or an EMPTY geom.
+	///
 	Geometry* toGeometry(const Envelope* envelope) const;
 
 	/// \brief
@@ -287,6 +290,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/03/31 17:51:26  strk
+ * A few assertion checking, comments cleanup, use of initialization lists
+ * in constructors, handled NULL parameters.
+ *
  * Revision 1.4  2006/03/28 16:33:14  strk
  * Added note about args responsibility in GeometryFactory constructor
  *

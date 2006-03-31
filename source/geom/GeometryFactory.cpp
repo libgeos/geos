@@ -64,52 +64,85 @@ namespace geom { // geos::geom
 
 /*public*/
 GeometryFactory::GeometryFactory()
+	:
+	precisionModel(new PrecisionModel()),
+	SRID(0),
+	coordinateListFactory(CoordinateArraySequenceFactory::instance())
 {
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory()" << std::endl;
 #endif
-	precisionModel=new PrecisionModel();
-	SRID=0;
-	coordinateListFactory=CoordinateArraySequenceFactory::instance();
 }
 
 /*public*/
-GeometryFactory::GeometryFactory(const PrecisionModel *pm, int newSRID,CoordinateSequenceFactory *nCoordinateSequenceFactory)
+GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
+		CoordinateSequenceFactory* nCoordinateSequenceFactory)
+	:
+	SRID(newSRID)
 {
-	precisionModel=new PrecisionModel(*pm);
-	coordinateListFactory=nCoordinateSequenceFactory;
-	SRID=newSRID;
+	if ( ! pm ) {
+		precisionModel=new PrecisionModel();
+	} else {
+		precisionModel=new PrecisionModel(*pm);
+	}
+
+	if ( ! nCoordinateSequenceFactory ) {
+		coordinateListFactory=CoordinateArraySequenceFactory::instance();
+	} else {
+		coordinateListFactory=nCoordinateSequenceFactory;
+	}
 }
 
 /*public*/
-GeometryFactory::GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory)
+GeometryFactory::GeometryFactory(
+		CoordinateSequenceFactory* nCoordinateSequenceFactory)
+	:
+	precisionModel(new PrecisionModel()),
+	SRID(0)
 {
-	precisionModel=new PrecisionModel();
-	SRID=0;
-	coordinateListFactory=nCoordinateSequenceFactory;
+	if ( ! nCoordinateSequenceFactory ) {
+		coordinateListFactory=CoordinateArraySequenceFactory::instance();
+	} else {
+		coordinateListFactory=nCoordinateSequenceFactory;
+	}
 }
 
 /*public*/
-GeometryFactory::GeometryFactory(const PrecisionModel *pm) {
-	precisionModel=new PrecisionModel(*pm);
-	SRID=0;
-	coordinateListFactory=CoordinateArraySequenceFactory::instance();
+GeometryFactory::GeometryFactory(const PrecisionModel *pm)
+	:
+	SRID(0),
+	coordinateListFactory(CoordinateArraySequenceFactory::instance())
+{
+	if ( ! pm ) {
+		precisionModel=new PrecisionModel();
+	} else {
+		precisionModel=new PrecisionModel(*pm);
+	}
 }
 
 /*public*/
-GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID){
-    precisionModel=new PrecisionModel(*pm);
-    SRID=newSRID;
-	coordinateListFactory=CoordinateArraySequenceFactory::instance();
+GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
+	:
+	SRID(newSRID),
+	coordinateListFactory(CoordinateArraySequenceFactory::instance())
+{
+	if ( ! pm ) {
+		precisionModel=new PrecisionModel();
+	} else {
+		precisionModel=new PrecisionModel(*pm);
+	}
 }
 
 /*public*/
-GeometryFactory::GeometryFactory(const GeometryFactory &gf){
-    precisionModel=new PrecisionModel(*(gf.precisionModel));
-    SRID=gf.SRID;
-    coordinateListFactory=gf.coordinateListFactory;
+GeometryFactory::GeometryFactory(const GeometryFactory &gf)
+{
+	assert(gf.precisionModel);
+	precisionModel=new PrecisionModel(*(gf.precisionModel));
+	SRID=gf.SRID;
+	coordinateListFactory=gf.coordinateListFactory;
 }
 
+/*public*/
 GeometryFactory::~GeometryFactory(){
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::~GeometryFactory()" << std::endl;
@@ -117,6 +150,7 @@ GeometryFactory::~GeometryFactory(){
 	delete precisionModel;
 }
   
+/*public*/
 Point*
 GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
 		const Geometry *exemplar) const
@@ -128,10 +162,7 @@ GeometryFactory::createPointFromInternalCoord(const Coordinate* coord,
 }
 
 
-/**
- * Converts an Envelope to a Geometry.
- * Returned Geometry can be a Point, a Polygon or an EMPTY geom.
- */
+/*public*/
 Geometry*
 GeometryFactory::toGeometry(const Envelope* envelope) const
 {
@@ -166,17 +197,24 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 	return p;
 }
 
-const PrecisionModel* GeometryFactory::getPrecisionModel() const {
+/*public*/
+const PrecisionModel*
+GeometryFactory::getPrecisionModel() const
+{
 	return precisionModel;
 }
 
+/*public*/
 Point*
-GeometryFactory::createPoint() const {
+GeometryFactory::createPoint() const
+{
 	return new Point(NULL, this);
 }
 
+/*public*/
 Point*
-GeometryFactory::createPoint(const Coordinate& coordinate) const {
+GeometryFactory::createPoint(const Coordinate& coordinate) const
+{
 	if (coordinate==Coordinate::getNull()) {
 		return createPoint();
 	} else {
@@ -187,12 +225,14 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const {
 	}
 }
 
+/*public*/
 Point*
 GeometryFactory::createPoint(CoordinateSequence *newCoords) const
 {
 	return new Point(newCoords,this);
 }
 
+/*public*/
 Point*
 GeometryFactory::createPoint(const CoordinateSequence &fromCoords) const
 {
@@ -208,12 +248,14 @@ GeometryFactory::createPoint(const CoordinateSequence &fromCoords) const
 
 }
 
+/*public*/
 MultiLineString*
 GeometryFactory::createMultiLineString() const
 {
 	return new MultiLineString(NULL,this);
 }
 
+/*public*/
 MultiLineString*
 GeometryFactory::createMultiLineString(vector<Geometry *> *newLines)
 	const
@@ -221,6 +263,7 @@ GeometryFactory::createMultiLineString(vector<Geometry *> *newLines)
 	return new MultiLineString(newLines,this);
 }
 
+/*public*/
 MultiLineString*
 GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	const
@@ -245,24 +288,28 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	return g;
 }
 
+/*public*/
 GeometryCollection*
 GeometryFactory::createGeometryCollection() const
 {
 	return new GeometryCollection(NULL,this);
 }
 
+/*public*/
 Geometry*
 GeometryFactory::createEmptyGeometry() const
 {
 	return new GeometryCollection(NULL,this);
 }
 
+/*public*/
 GeometryCollection*
 GeometryFactory::createGeometryCollection(vector<Geometry *> *newGeoms) const
 {
 	return new GeometryCollection(newGeoms,this);
 }
 
+/*public*/
 GeometryCollection*
 GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) const
 {
@@ -283,18 +330,21 @@ GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) c
 	return g;
 }
 
+/*public*/
 MultiPolygon*
 GeometryFactory::createMultiPolygon() const
 {
 	return new MultiPolygon(NULL,this);
 }
 
+/*public*/
 MultiPolygon*
 GeometryFactory::createMultiPolygon(vector<Geometry *> *newPolys) const
 {
 	return new MultiPolygon(newPolys,this);
 }
 
+/*public*/
 MultiPolygon*
 GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 {
@@ -316,19 +366,21 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 	return g;
 }
 
-
+/*public*/
 LinearRing*
 GeometryFactory::createLinearRing() const
 {
 	return new LinearRing(NULL,this);
 }
 
+/*public*/
 LinearRing*
 GeometryFactory::createLinearRing(CoordinateSequence* newCoords) const
 {
 	return new LinearRing(newCoords,this);
 }
 
+/*public*/
 LinearRing*
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
@@ -339,12 +391,14 @@ GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 	return g;
 }
 
+/*public*/
 MultiPoint*
 GeometryFactory::createMultiPoint(vector<Geometry *> *newPoints) const
 {
 	return new MultiPoint(newPoints,this);
 }
 
+/*public*/
 MultiPoint*
 GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 {
@@ -367,12 +421,14 @@ GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 	return g;
 }
 
+/*public*/
 MultiPoint*
 GeometryFactory::createMultiPoint() const
 {
 	return new MultiPoint(NULL, this);
 }
 
+/*public*/
 MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 {
@@ -394,12 +450,14 @@ GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 	return mp;
 }
 
+/*public*/
 Polygon*
 GeometryFactory::createPolygon() const
 {
 	return new Polygon(NULL, NULL, this);
 }
 
+/*public*/
 Polygon*
 GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes)
 	const
@@ -407,6 +465,7 @@ GeometryFactory::createPolygon(LinearRing *shell, vector<Geometry *> *holes)
 	return new Polygon(shell, holes, this);
 }
 
+/*public*/
 Polygon*
 GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *> &holes)
 	const
@@ -430,12 +489,14 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 	return g;
 }
 
+/*public*/
 LineString *
 GeometryFactory::createLineString() const
 {
 	return new LineString(NULL, this);
 }
 
+/*public*/
 LineString*
 GeometryFactory::createLineString(CoordinateSequence *newCoords)
 	const
@@ -443,6 +504,7 @@ GeometryFactory::createLineString(CoordinateSequence *newCoords)
 	return new LineString(newCoords, this);
 }
 
+/*public*/
 LineString*
 GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 	const
@@ -454,6 +516,7 @@ GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 	return g;
 }
 
+/*public*/
 Geometry*
 GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 {
@@ -505,6 +568,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 	return geom0;
 }
 
+/*public*/
 Geometry*
 GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 {
@@ -551,7 +615,7 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 	return geom0->clone();
 }
 
-
+/*public*/
 Geometry*
 GeometryFactory::createGeometry(const Geometry *g) const
 {
@@ -565,6 +629,7 @@ GeometryFactory::createGeometry(const Geometry *g) const
 	//return ret;
 }
 
+/*public*/
 void
 GeometryFactory::destroyGeometry(Geometry *g) const
 {
@@ -576,6 +641,10 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.64  2006/03/31 17:51:24  strk
+ * A few assertion checking, comments cleanup, use of initialization lists
+ * in constructors, handled NULL parameters.
+ *
  * Revision 1.63  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
@@ -603,149 +672,6 @@ GeometryFactory::destroyGeometry(Geometry *g) const
  *
  * Revision 1.56  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.55  2006/01/31 19:07:33  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.54  2005/11/24 23:09:15  strk
- * CoordinateSequence indexes switched from int to the more
- * the correct unsigned int. Optimizations here and there
- * to avoid calling getSize() in loops.
- * Update of all callers is not complete yet.
- *
- * Revision 1.53  2005/06/22 00:46:38  strk
- * Fixed bugus handling of collections in ::buildGeometry
- *
- * Revision 1.52  2005/06/17 14:58:51  strk
- * Fixed segfault in LinearRing and LineString constructors
- *
- * Revision 1.51  2004/12/30 10:14:09  strk
- * input checking and class promoting in createMultiLineString()
- *
- * Revision 1.50  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.49  2004/07/19 13:19:30  strk
- * Documentation fixes
- *
- * Revision 1.48  2004/07/13 08:33:52  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.47  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.46  2004/07/05 19:40:48  strk
- * Added GeometryFactory::destroyGeometry(Geometry *)
- *
- * Revision 1.45  2004/07/05 14:23:03  strk
- * More documentation cleanups.
- *
- * Revision 1.44  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.43  2004/07/03 12:51:37  strk
- * Documentation cleanups for DoxyGen.
- *
- * Revision 1.42  2004/07/02 14:27:32  strk
- * Added deep-copy / take-ownerhship for Point type.
- *
- * Revision 1.41  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.40  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.39  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateSequence argument.
- * Fixed memory leaks associated with this and MultiGeometry constructors.
- * Other associated fixes.
- *
- * Revision 1.38  2004/06/15 21:35:32  strk
- * fixed buildGeometry to always return a newly allocated geometry
- *
- * Revision 1.37  2004/06/15 20:07:51  strk
- * GeometryCollections constructors make a deep copy of Geometry vector argument.
- *
- * Revision 1.36  2004/05/07 09:05:13  strk
- * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateSequence.
- *
- * Revision 1.35  2004/04/20 08:52:01  strk
- * GeometryFactory and Geometry const correctness.
- * Memory leaks removed from SimpleGeometryPrecisionReducer
- * and GeometryFactory.
- *
- * Revision 1.34  2004/04/16 08:35:52  strk
- * Memory leaks fixed and const correctness applied for Point class.
- *
- * Revision 1.33  2004/04/14 12:28:43  strk
- * shouldNeverReachHere exceptions made more verbose
- *
- * Revision 1.32  2004/04/14 07:29:43  strk
- * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
- *
- * Revision 1.31  2004/04/04 06:29:11  ybychkov
- * "planargraph" and "geom/utill" upgraded to JTS 1.4
- *
- * Revision 1.30  2004/04/01 10:44:33  ybychkov
- * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
- *
- * Revision 1.29  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.28  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- *
- * Revision 1.27  2003/10/14 15:58:51  strk
- * Useless vector<Geometry *> leaking allocations removed
- *
- * Revision 1.26  2003/10/11 01:56:08  strk
- *
- * Code base padded with 'const' keywords ;)
- *
- * Revision 1.25  2003/10/09 15:35:13  strk
- * added 'const' keyword to GeometryFactory constructor, Log on top of geom.h
- *
- * Revision 1.24  2003/10/09 10:14:06  strk
- * just a style change in top Log comment.
  *
  **********************************************************************/
 
