@@ -237,7 +237,10 @@ public:
 	 */
 	const PrecisionModel* getPrecisionModel() const;
 
-	/// Returns a vertex of this Geometry.
+	/// \brief
+	/// Returns a vertex of this Geometry,
+	/// or NULL if this is the empty geometry
+	///
 	virtual const Coordinate* getCoordinate() const=0; //Abstract
 
 	/**
@@ -641,6 +644,9 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/03/31 16:53:53  strk
+ * Added comment about possible NULL return from getCoordinate()
+ *
  * Revision 1.5  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
