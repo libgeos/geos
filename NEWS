@@ -6,6 +6,7 @@ Changes in 2.2.2
 - Support for gcc-4
 - Fixed Polygon::equalsExact
 - Improved XMLTester
+- Fixed bug in NULL-factory Geometry constructor
 
 Changes in 2.2.1
 

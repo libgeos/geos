@@ -128,8 +128,14 @@ GeometryComponentFilter Geometry::geometryChangedFilter;
 
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
-Geometry::Geometry(const GeometryFactory *newFactory) {
-	factory=newFactory; //new GeometryFactory(*fromFactory);
+Geometry::Geometry(const GeometryFactory *newFactory)
+	:
+	factory(newFactory)
+{
+	if ( factory == NULL )
+	{
+		factory = INTERNAL_GEOMETRY_FACTORY;
+	}
 	SRID=factory->getSRID();
 	//envelope=new Envelope();
 	envelope=NULL;
@@ -930,6 +936,9 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.72.2.5.2.2  2006/03/31 11:09:41  strk
+ * Back-ported patch for bug #81
+ *
  * Revision 1.72.2.5.2.1  2005/11/30 12:33:23  strk
  * Updated Doxygen doc to reccommend use of the C API.
  *
