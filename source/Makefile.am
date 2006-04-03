@@ -9,6 +9,7 @@ SUBDIRS = \
 	planargraph \
 	geomgraph \
 	precision \
+	simplify \
 	util
 
 EXTRA_DIST = Makefile.vc
@@ -31,4 +32,5 @@ libgeos_la_LIBADD = \
 	operation/liboperation.la \
 	planargraph/libplanargraph.la \
 	precision/libprecision.la \
+	simplify/libsimplify.la \
 	util/libutil.la  

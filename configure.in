@@ -236,6 +236,7 @@ AC_OUTPUT([
 	source/headers/geos/planargraph/Makefile
 	source/headers/geos/planargraph/algorithm/Makefile
 	source/headers/geos/precision/Makefile
+	source/headers/geos/simplify/Makefile
 	source/headers/geos/util/Makefile
 	source/headers/geos/algorithm/Makefile
 	source/headers/geos/version.h
@@ -258,6 +259,7 @@ AC_OUTPUT([
 	source/operation/relate/Makefile
 	source/operation/valid/Makefile
 	source/planargraph/Makefile
+	source/simplify/Makefile
 	source/precision/Makefile
 	source/util/Makefile
 	tests/Makefile

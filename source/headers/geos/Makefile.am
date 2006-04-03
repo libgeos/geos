@@ -1,13 +1,14 @@
 SUBDIRS = \
 	algorithm \
-	geomgraph \
 	geom \
+	geomgraph \
+	index \
+	io \
 	noding \
 	operation \
 	planargraph \
 	precision \
-	index \
-	io \
+	simplify \
 	util 
 
 geosdir = $(includedir)/geos
