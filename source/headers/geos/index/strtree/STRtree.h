@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/strtree/STRtree.java rev. 1.11
+ *
  **********************************************************************/
 
 #ifndef GEOS_INDEX_STRTREE_STRTREE_H
@@ -62,6 +66,13 @@ private:
 			bool intersects(const void* aBounds, const void* bBounds);
 	};
 
+	/**
+	 * Creates the parent level for the given child level. First, orders the items
+	 * by the x-values of the midpoints, and groups them into vertical slices.
+	 * For each slice, orders the items by the y-values of the midpoints, and
+	 * group them into runs of size M (the node capacity). For each run, creates
+	 * a new (parent) node.
+	 */
 	std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables, int newLevel);
 
 	std::vector<Boundable*>* createParentBoundablesFromVerticalSlices(std::vector<std::vector<Boundable*>*>* verticalSlices, int newLevel);
@@ -77,6 +88,11 @@ protected:
 			std::vector<Boundable*> *childBoundables,
 			int newLevel);
 
+	/**
+	 * @param childBoundables Must be sorted by the x-value of
+	 *        the envelope midpoints
+	 * @return
+	 */
 	std::vector<std::vector<Boundable*>*>* verticalSlices(
 			std::vector<Boundable*> *childBoundables,
 			int sliceCount);
@@ -91,11 +107,15 @@ public:
 
 	~STRtree();
 
+	/**
+	 * Constructs an STRtree with the given maximum number of child nodes that
+	 * a node may have
+	 */
 	STRtree(int nodeCapacity=10);
 
 	void insert(const geom::Envelope *itemEnv,void* item);
 
-	static double centreX(geom::Envelope *e);
+	//static double centreX(const geom::Envelope *e);
 
 	static double avg(double a, double b) {
 		return (a + b) / 2.0;
@@ -104,12 +124,6 @@ public:
 	static double centreY(geom::Envelope *e) {
 		return STRtree::avg(e->getMinY(), e->getMaxY());
 	}
-
-#if 0
-	std::vector<void*>* query(const geom::Envelope *searchEnv) {
-		return AbstractSTRtree::query(searchEnv);
-	}
-#endif
 
 	void query(const geom::Envelope *searchEnv, std::vector<void*>& matches) {
 		AbstractSTRtree::query(searchEnv, matches);
@@ -132,6 +146,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/03 08:43:09  strk
+ * Added port info, minor cleanups
+ *
  * Revision 1.1  2006/03/21 10:47:34  strk
  * indexStrtree.h split
  *

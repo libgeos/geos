@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/strtree/STRtree.java rev. 1.11
+ *
  **********************************************************************/
 
 #include <geos/index/strtree/STRtree.h>
@@ -38,23 +42,24 @@ static bool yComparator(Boundable *a, Boundable *b){
 	return STRtree::centreY((Envelope*)a->getBounds()) < STRtree::centreY((Envelope*)b->getBounds());
 }
 
-/**
- * Constructs an STRtree with the given maximum number of child nodes that
- * a node may have
- */
+/*public*/
 STRtree::STRtree(int nodeCapacity): AbstractSTRtree(nodeCapacity)
 { 
-	//intersectsOp(new STRIntersectsOp())
 }
 
+/*public*/
 STRtree::~STRtree()
 { 
-	//delete intersectsOp;
 }
 
-double STRtree::centreX(Envelope *e) {
+#if 0
+/*public static*/
+double
+STRtree::centreX(const Envelope *e)
+{
 	return STRtree::avg(e->getMinX(),e->getMaxX());
 }
+#endif // 0
 
 //double STRtree::avg(double a, double b) { 
 //	return (a + b) / 2.0;
@@ -71,13 +76,7 @@ STRtree::STRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 	return ((Envelope*)aBounds)->intersects((Envelope*)bBounds);
 }
 
-/**
- * Creates the parent level for the given child level. First, orders the items
- * by the x-values of the midpoints, and groups them into vertical slices.
- * For each slice, orders the items by the y-values of the midpoints, and
- * group them into runs of size M (the node capacity). For each run, creates
- * a new (parent) node.
- */
+/*private*/
 vector<Boundable*>*
 STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
 {
@@ -103,6 +102,7 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 	return ret;
 }
 
+/*private*/
 vector<Boundable*>*
 STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *verticalSlices, int newLevel)
 {
@@ -118,17 +118,14 @@ STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *v
 	return parentBoundables;
 }
 
+/*protected*/
 vector<Boundable*>*
 STRtree::createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel)
 {
 	return AbstractSTRtree::createParentBoundables(childBoundables, newLevel);
 }
 
-/**
- * @param childBoundables Must be sorted by the x-value of
- *        the envelope midpoints
- * @return
- */
+/*protected*/
 vector<vector<Boundable*>*>*
 STRtree::verticalSlices(vector<Boundable*>* childBoundables, int sliceCount)
 {
@@ -185,6 +182,7 @@ protected:
 
 };
 
+/*protected*/
 AbstractNode*
 STRtree::createNode(int level)
 {
@@ -193,6 +191,7 @@ STRtree::createNode(int level)
 	return an;
 }
 
+/*public*/
 void
 STRtree::insert(const Envelope *itemEnv, void* item)
 {
@@ -200,6 +199,7 @@ STRtree::insert(const Envelope *itemEnv, void* item)
 	AbstractSTRtree::insert(itemEnv, item);
 }
 
+/*protected*/
 vector<Boundable*> *
 STRtree::sortBoundables(const vector<Boundable*> *input)
 {
@@ -214,6 +214,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/04/03 08:43:09  strk
+ * Added port info, minor cleanups
+ *
  * Revision 1.30  2006/03/21 10:47:34  strk
  * indexStrtree.h split
  *
@@ -228,62 +231,6 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
  *
  * Revision 1.26  2006/03/03 10:46:21  strk
  * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.25  2006/02/23 11:54:20  strk
- * - MCIndexPointSnapper
- * - MCIndexSnapRounder
- * - SnapRounding BufferOp
- * - ScaledNoder
- * - GEOSException hierarchy cleanups
- * - SpatialIndex memory-friendly query interface
- * - GeometryGraph::getBoundaryNodes memory-friendly
- * - NodeMap::getBoundaryNodes memory-friendly
- * - Cleanups in geomgraph::Edge
- * - Added an XML test for snaprounding buffer (shows leaks, working on it)
- *
- * Revision 1.24  2006/02/20 21:04:37  strk
- * - namespace geos::index
- * - SpatialIndex interface synced
- *
- * Revision 1.23  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.22  2005/02/22 18:21:46  strk
- * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
- * construction costs.
- *
- * Revision 1.21  2005/02/22 15:16:30  strk
- * STRtree::avg() and STRtree::centreY() inlined.
- *
- * Revision 1.20  2005/02/15 17:15:13  strk
- * Inlined most Envelope methods, reserved() memory for some vectors when
- * the usage was known a priori.
- *
- * Revision 1.19  2005/01/31 15:41:03  strk
- * Small optimizations.
- *
- * Revision 1.18  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.17  2004/11/08 18:33:47  strk
- * Just another small improvement.
- *
- * Revision 1.16  2004/11/08 15:58:13  strk
- * More performance tuning.
- *
- * Revision 1.15  2004/11/04 19:08:07  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.14  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.13  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
  *
  **********************************************************************/
 
