@@ -12,14 +12,18 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/GeometryGraphOperation.java rev. 1.14 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OPERATION_GEOMETRYGRAPHOPERATION_H
 #define GEOS_OPERATION_GEOMETRYGRAPHOPERATION_H
 
-#include <vector>
-
 #include <geos/algorithm/LineIntersector.h> // for composition
+
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -38,12 +42,17 @@ namespace operation { // geos.operation
 
 /// The base class for operations that require GeometryGraph
 class GeometryGraphOperation {
-friend class Unload;
+
 public:
-	GeometryGraphOperation(const geom::Geometry *g0,const geom::Geometry *g1);
+
+	GeometryGraphOperation(const geom::Geometry *g0,
+			const geom::Geometry *g1);
+
 	GeometryGraphOperation(const geom::Geometry *g0);
+
 	virtual ~GeometryGraphOperation();
-	const geom::Geometry* getArgGeometry(int i) const;
+
+	const geom::Geometry* getArgGeometry(unsigned int i) const;
 
 protected:
 
@@ -51,10 +60,10 @@ protected:
 
 	const geom::PrecisionModel* resultPrecisionModel;
 
-	/*
+	/** \brief
 	 * The operation args into an array so they can be accessed by index
 	 */
-	std::vector<geomgraph::GeometryGraph*> arg;  // the arg(s) of the operation
+	std::vector<geomgraph::GeometryGraph*> arg; 
 
 	void setComputationPrecision(const geom::PrecisionModel* pm);
 };
@@ -66,6 +75,12 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/03 15:54:33  strk
+ * - getArgGeometry() parameter type changed from 'int' to 'unsigned int'
+ * - Added port informations
+ * - minor assertions checking
+ * - minor cleanups
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
