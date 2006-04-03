@@ -24,6 +24,7 @@
 #include <vector>
 #include <cassert>
 #include <cmath>
+#include <algorithm> // std::sort
 
 using namespace std;
 using namespace geos::geom;
@@ -214,6 +215,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/04/03 10:44:19  strk
+ * Added missing headers
+ *
  * Revision 1.31  2006/04/03 08:43:09  strk
  * Added port info, minor cleanups
  *

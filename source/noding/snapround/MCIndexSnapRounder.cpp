@@ -17,9 +17,6 @@
  *
  **********************************************************************/
 
-#include <functional>
-#include <vector>
-
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/snapround/MCIndexSnapRounder.h>
 #include <geos/noding/snapround/HotPixel.h>
@@ -29,6 +26,10 @@
 #include <geos/geom/CoordinateSequence.h>
 
 #include <geos/inline.h>
+
+#include <functional> // std::mem_fun, std::bind1st
+#include <algorithm> // std::for_each 
+#include <vector>
 
 
 #ifndef GEOS_INLINE
@@ -137,6 +138,9 @@ MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentSt
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/04/03 10:44:19  strk
+ * Added missing headers
+ *
  * Revision 1.9  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
