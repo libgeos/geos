@@ -224,7 +224,7 @@ public:
 	 *                 precise representation of <code>external</code>
 	 * @deprecated use makePrecise instead
 	 */
-	void toInternal(const Coordinate& external, Coordinate* internal) const;
+	//void toInternal(const Coordinate& external, Coordinate* internal) const;
 
 	/*
 	 *  Returns the precise representation of <code>external</code>.
@@ -305,6 +305,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/03 14:07:32  strk
+ * Commented out obsoleted toInternal() method
+ *
  * Revision 1.4  2006/03/28 08:57:37  strk
  * Comments cleanup, system headers included after project headers
  *
