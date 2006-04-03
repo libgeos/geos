@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/Quadtree.java rev. 1.14
+ *
  **********************************************************************/
 
 #ifndef GEOS_IDX_QUADTREE_QUADTREE_H
@@ -87,6 +91,7 @@ public:
 	/**
 	 * \brief
 	 * Ensure that the envelope for the inserted item has non-zero extents.
+	 *
 	 * Use the current minExtent to pad the envelope, if necessary.
 	 * Can return a new Envelope or the given one (casted to non-const).
 	 */
@@ -103,7 +108,7 @@ public:
 		minExtent(1.0)
 	{}
 
-	virtual ~Quadtree();
+	~Quadtree();
 
 	/// Returns the number of levels in the tree.
 	int depth();
@@ -114,18 +119,22 @@ public:
 	void insert(const geom::Envelope *itemEnv, void *item);
 
 	void query(const geom::Envelope *searchEnv, std::vector<void*>& ret);
-#if 0
-	std::vector<void*>* query(const geom::Envelope *searchEnv) {
-		vector<void*> *foundItems=new vector<void*>();
-		query(searchEnv, *foundItems);
-		return foundItems;
-	}
-#endif
 
 	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) {
+		/*
+		 * the items that are matched are the items in quads which
+		 * overlap the search envelope
+		 */
 		root->visit(searchEnv, visitor);
 	}
 
+	/**
+	 * Removes a single item from the tree.
+	 *
+	 * @param itemEnv the Envelope of the item to remove
+	 * @param item the item to remove
+	 * @return <code>true</code> if the item was found
+	 */
 	bool remove(const geom::Envelope* itemEnv, void* item);
 
 	/// Return a list of all items in the Quadtree
@@ -144,6 +153,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/03 08:29:30  strk
+ * Added port info, cleaned up log message, minor assertion checking.
+ *
  * Revision 1.1  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
  *
