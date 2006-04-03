@@ -241,6 +241,9 @@ Label::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/04/03 17:05:22  strk
+ * Assertion checking, port info, cleanups
+ *
  * Revision 1.8  2006/03/14 12:55:55  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *
@@ -249,30 +252,6 @@ Label::toString() const
  *
  * Revision 1.6  2006/02/19 19:46:49  strk
  * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.5  2005/11/15 18:30:59  strk
- * Removed dead code
- *
- * Revision 1.4  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.3  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

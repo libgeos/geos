@@ -80,6 +80,7 @@ DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward):
 	depth[1]=-999;
 	depth[2]=-999;
 
+	assert(newEdge);
 	assert(newEdge->getNumPoints() >= 2);
 
 	if (isForwardVar) {
@@ -118,6 +119,7 @@ void
 DirectedEdge::setVisitedEdge(bool newIsVisited)
 {
 	setVisited(newIsVisited);
+	assert(sym);
 	sym->setVisited(newIsVisited);
 }
 
@@ -126,6 +128,7 @@ DirectedEdge::setVisitedEdge(bool newIsVisited)
 bool
 DirectedEdge::isLineEdge()
 {
+	assert(label);
 	bool isLine=label->isLine(0) || label->isLine(1);
 	bool isExteriorIfArea0=!label->isArea(0) || label->allPositionsEqual(0,Location::EXTERIOR);
 	bool isExteriorIfArea1=!label->isArea(1) || label->allPositionsEqual(1,Location::EXTERIOR);
@@ -137,6 +140,7 @@ bool
 DirectedEdge::isInteriorAreaEdge()
 {
 	bool isInteriorAreaEdge=true;
+	assert(label);
 	for (int i=0; i<2; i++) {
 		if (!(label->isArea(i)
 			&& label->getLocation(i,Position::LEFT )==Location::INTERIOR
@@ -152,6 +156,8 @@ void
 DirectedEdge::computeDirectedLabel()
 {
 	delete label;
+	assert(edge);
+	assert(edge->getLabel());
 	label=new Label(*(edge->getLabel()));
 	if (!isForwardVar)
 		label->flip();
@@ -210,6 +216,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/04/03 17:05:22  strk
+ * Assertion checking, port info, cleanups
+ *
  * Revision 1.18  2006/03/29 15:23:49  strk
  * Moved GeometryGraph inlines from .h to .inl file
  *
@@ -245,11 +254,5 @@ DirectedEdge::printEdge()
  *
  * Revision 1.7  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.6  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
  **********************************************************************/
 

@@ -12,17 +12,20 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/EdgeEnd.java rev. 1.5 (JTS-1.7)
+ *
  **********************************************************************/
 
 
 #ifndef GEOS_GEOMGRAPH_EDGEEND_H
 #define GEOS_GEOMGRAPH_EDGEEND_H
 
-#include <string>
-
 #include <geos/geom/Coordinate.h>  // for p0,p1
-
 #include <geos/inline.h>
+
+#include <string>
 
 // Forward declarations
 namespace geos {
@@ -36,19 +39,34 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/** \brief
+ * Models the end of an edge incident on a node.
+ *
+ * EdgeEnds have a direction
+ * determined by the direction of the ray from the initial
+ * point to the next point.
+ * EdgeEnds are comparable under the ordering
+ * "a has a greater angle with the x-axis than b".
+ * This ordering is used to sort EdgeEnds around a node.
+ */
 class EdgeEnd {
-friend class Unload;
+
 public:
 
 	EdgeEnd();
 
 	virtual ~EdgeEnd();
 
+	/**
+	 * NOTES:
+	 *  - takes ownership of given Label (if any)
+	 *  - keeps a pointer to given Edge, make sure it's
+	 *    not deleted before the EdgeEnd.
+	 *  - copies given Coordinates (maybe we should avoid that)
+	 */
 	EdgeEnd(Edge* newEdge, const geom::Coordinate& newP0,
-		const geom::Coordinate& newP1);
-
-	EdgeEnd(Edge* newEdge, const geom::Coordinate& newP0,
-		const geom::Coordinate& newP1, Label* newLabel);
+			const geom::Coordinate& newP1,
+			Label* newLabel=NULL);
 
 	virtual Edge* getEdge();
 
@@ -70,6 +88,22 @@ public:
 
 	virtual int compareTo(const EdgeEnd *e) const;
 
+	/**
+	 * Implements the total order relation:
+	 * 
+	 *    a has a greater angle with the positive x-axis than b
+	 * 
+	 * Using the obvious algorithm of simply computing the angle
+	 * is not robust, since the angle calculation is obviously
+	 * susceptible to roundoff.
+	 * A robust algorithm is:
+	 * - first compare the quadrant.  If the quadrants
+	 *   are different, it it trivial to determine which vector
+	 *   is "greater".
+	 * - if the vectors lie in the same quadrant, the
+	 *   computeOrientation function can be used to decide
+	 *   the relative orientation of the vectors.
+	 */
 	virtual int compareDirection(const EdgeEnd *e) const;
 
 	virtual void computeLabel();
@@ -84,7 +118,8 @@ protected:
 
 	EdgeEnd(Edge* newEdge);
 
-	virtual void init(const geom::Coordinate& newP0, const geom::Coordinate& newP1);
+	virtual void init(const geom::Coordinate& newP0,
+			const geom::Coordinate& newP1);
 
 private:
 
@@ -92,7 +127,7 @@ private:
 	Node* node;         
 
 	/// points of initial line segment. FIXME: do we need a copy here ?
-	geom::Coordinate p0,p1; 
+	geom::Coordinate p0, p1; 
 
 	/// the direction vector for this edge from its starting point
 	double dx, dy;     
@@ -117,6 +152,9 @@ struct EdgeEndLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/03 17:05:22  strk
+ * Assertion checking, port info, cleanups
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
