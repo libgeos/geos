@@ -104,11 +104,14 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 
 
 SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(
-		PrecisionModel *pm)
+		const PrecisionModel *pm)
+	:
+	newPrecisionModel(pm),
+	removeCollapsed(true)
 {
-	removeCollapsed = true;
+	//removeCollapsed = true;
 	//changePrecisionModel = false;
-	newPrecisionModel = pm;
+	//newPrecisionModel = pm;
 }
 
 /**
@@ -124,7 +127,7 @@ SimpleGeometryPrecisionReducer::setRemoveCollapsedComponents(bool nRemoveCollaps
 	removeCollapsed=nRemoveCollapsed;
 }
 
-PrecisionModel*
+const PrecisionModel*
 SimpleGeometryPrecisionReducer::getPrecisionModel()
 {
 	return newPrecisionModel;
@@ -150,6 +153,9 @@ SimpleGeometryPrecisionReducer::reduce(const Geometry *geom)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/04/03 13:56:54  strk
+ * Made externally-owned PrecisionModel  const
+ *
  * Revision 1.13  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *

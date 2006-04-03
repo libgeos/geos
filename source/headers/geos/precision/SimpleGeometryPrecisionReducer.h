@@ -45,7 +45,7 @@ class SimpleGeometryPrecisionReducer {
 
 private:
 
-	geom::PrecisionModel *newPrecisionModel;
+	const geom::PrecisionModel *newPrecisionModel;
 
 	bool removeCollapsed;
 
@@ -53,7 +53,7 @@ private:
 
 public:
 
-	SimpleGeometryPrecisionReducer(geom::PrecisionModel *pm);
+	SimpleGeometryPrecisionReducer(const geom::PrecisionModel *pm);
 
 	/**
 	 * Sets whether the reduction will result in collapsed components
@@ -77,7 +77,7 @@ public:
 	 */
 	//void setChangePrecisionModel(bool nChangePrecisionModel);
 
-	geom::PrecisionModel* getPrecisionModel();
+	const geom::PrecisionModel* getPrecisionModel();
 
 	bool getRemoveCollapsed();
 	geom::Geometry* reduce(const geom::Geometry *geom);
@@ -90,6 +90,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/03 13:56:55  strk
+ * Made externally-owned PrecisionModel  const
+ *
  * Revision 1.1  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *
