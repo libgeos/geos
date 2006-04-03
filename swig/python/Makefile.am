@@ -36,7 +36,7 @@ _geos_la_LIBADD = $(top_builddir)/source/geom/libgeos.la $(PYTHON_LDFLAGS)
 
 if ENABLE_SWIG
 
-geos_wrap.cxx: ../geos.i
+geos_wrap.cxx: ../geos.i python.i
 	$(SWIG) $(SWIG_PYTHON_OPT) -o $@ $<
 
 else # ! ENABLE_SWIG

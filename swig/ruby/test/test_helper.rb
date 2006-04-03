@@ -23,7 +23,7 @@ class GeosTestHelper
   
   def create_ushaped_linestring(xoffset, yoffset, side)
     # We will use a coordinate list to build the linestring
-    cl = Geos::DefaultCoordinateSequence.new()
+    cl = Geos::CoordinateArraySequence.new()
     cl.add(Geos::Coordinate.new(xoffset, yoffset))
     cl.add(Geos::Coordinate.new(xoffset, yoffset+side))
     cl.add(Geos::Coordinate.new(xoffset+side, yoffset+side))
@@ -42,7 +42,7 @@ class GeosTestHelper
   # representing a square with the given origin and side 
   def create_square_linearring(xoffset, yoffset, side)
     # We will use a coordinate list to build the linearring
-    cl = Geos::DefaultCoordinateSequence.new()
+    cl = Geos::CoordinateArraySequence.new()
     cl.add(Geos::Coordinate.new(xoffset, yoffset))
     cl.add(Geos::Coordinate.new(xoffset, yoffset+side))
     cl.add(Geos::Coordinate.new(xoffset+side, yoffset+side))

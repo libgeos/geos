@@ -7,7 +7,7 @@
  * Updated 2005 Charlie Savage, cfis@interserv.com
  *
  * Interface for a SWIG generated geos module.  Depends on 
- * SWIG 1.3.28 and higher.
+ * SWIG 1.3.29 and higher.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -17,17 +17,17 @@
  * ========================================================================= */
  
 %module geos
+%include "attribute.i"
+%include "exception.i"
 %include "std_string.i"
 %include "std_vector.i"
-%include "exception.i"
+%include "std_except.i"
+%include "factory.i"
 
 %{ 
 #include "geos.h"
-#include "geos/planargraph.h"
-#include "geos/opLinemerge.h"
-#include "geos/opPolygonize.h"
+#include <sstream>
 %}
-
 
 /* ================= Shadowed Methods ============== */
 
@@ -46,21 +46,26 @@
    something else.  This can be done in each language module
    as it is loaded below.*/
 
-%ignore geos::GeometryFactory::buildGeometry(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createGeometryCollection(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createLinearRing(CoordinateSequence *) const;
-%ignore geos::GeometryFactory::createLineString(CoordinateSequence *) const;
-%ignore geos::GeometryFactory::createMultiLineString(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createMultiPoint(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createMultiPolygon(vector<Geometry * > *) const;
-%ignore geos::GeometryFactory::createPoint(CoordinateSequence *) const;
-%ignore geos::GeometryFactory::createPolygon(LinearRing *,vector<Geometry * > *) const;
 
-/* For scripting languages the CoordinateSequence::add method is ambigious
-   since there are two overloaded versions that are the same except
-   a const declaration.  However, one of them is available only for 
-   backwards compatibility so hide that one.*/
-%ignore geos::CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction);
+namespace geos {
+namespace geom {
+	%ignore GeometryFactory::buildGeometry(vector<Geometry * > *) const;
+	%ignore GeometryFactory::createGeometryCollection(vector<Geometry * > *) const;
+	%ignore GeometryFactory::createLinearRing(CoordinateSequence *) const;
+	%ignore GeometryFactory::createLineString(CoordinateSequence *) const;
+	%ignore GeometryFactory::createMultiLineString(vector<Geometry * > *) const;
+	%ignore GeometryFactory::createMultiPoint(vector<Geometry * > *) const;
+	%ignore GeometryFactory::createMultiPolygon(vector<Geometry * > *) const;
+	%ignore GeometryFactory::createPoint(CoordinateSequence *) const;
+	%ignore GeometryFactory::createPolygon(LinearRing *,vector<Geometry * > *) const;
+
+	/* For scripting languages the CoordinateSequence::add method is ambigious
+		 since there are two overloaded versions that are the same except
+		 a const declaration.  However, one of them is available only for 
+		 backwards compatibility so hide that one.*/
+	%ignore CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction);
+} /* End geom namespace */
+} /* End geos namespace */
 
 
 /* ================= Typemaps ============== */
@@ -120,113 +125,164 @@
 
 
 #ifdef SWIGPYTHON
-%include ../python/python.i
+	%include ../python/python.i
 #endif
 
 #ifdef SWIGRUBY
-%include ../ruby/ruby.i
+	%include ../ruby/ruby.i
 #endif
 
 
 /* ================= Ownership Rules ============== */
 
-/* These disown definitions are not correct in all cases - 
-   needs to be fixed */
-%apply SWIGTYPE *DISOWN { geos::CoordinateSequence * };
-%apply SWIGTYPE *DISOWN { geos::LinearRing * };
-%apply SWIGTYPE *DISOWN { std::vector<geos::Geometry * > * };
-%apply SWIGTYPE *DISOWN { std::vector<geos::Coordinate> * };
+namespace geos {
+	/* These disown definitions are not correct in all cases - 
+		 needs to be fixed */
+	%apply SWIGTYPE *DISOWN { geom::CoordinateSequence * };
+	%apply SWIGTYPE *DISOWN { geom::LinearRing * };
+	%apply SWIGTYPE *DISOWN { std::vector<geos::Geometry * > * };
+	%apply SWIGTYPE *DISOWN { std::vector<geos::Coordinate> * };
 
 
-// These methods create new objects
-%newobject *::clone;
-%newobject *::getCoordinates;
-%newobject geos::WKBReader::read;
-%newobject geos::WKBReader::read_hex;
-%newobject geos::WKTReader::read;
-%newobject geos::DefaultCoordinateSequenceFactory::create;
-%newobject geos::GeometryFactory::createPointFromInternalCoord;
-%newobject geos::GeometryFactory::toGeometry;
-%newobject geos::GeometryFactory::createPoint;
-%newobject geos::GeometryFactory::createGeometryCollection;
-%newobject geos::GeometryFactory::createMultiLineString;
-%newobject geos::GeometryFactory::createMultiPolygon;
-%newobject geos::GeometryFactory::createLinearRing;
-%newobject geos::GeometryFactory::createMultiPoint;
-%newobject geos::GeometryFactory::createPolygon;
-%newobject geos::GeometryFactory::createLineString;
-%newobject geos::GeometryFactory::buildGeometry;
-%newobject geos::GeometryFactory::createGeometry;
-%newobject geos::GeometricShapeFactory::getEnvelope;
+	// These methods create new objects
+	%newobject *::clone;
+	%newobject *::getCoordinates;
 
-/* ================= Exception Handling  ============== */
+	%newobject geom::CoordinateArraySequence::create;
+	%newobject geom::GeometryFactory::createPointFromInternalCoord;
+	%newobject geom::GeometryFactory::toGeometry;
+	%newobject geom::GeometryFactory::createPoint;
+	%newobject geom::GeometryFactory::createGeometryCollection;
+	%newobject geom::GeometryFactory::createMultiLineString;
+	%newobject geom::GeometryFactory::createMultiPolygon;
+	%newobject geom::GeometryFactory::createLinearRing;
+	%newobject geom::GeometryFactory::createMultiPoint;
+	%newobject geom::GeometryFactory::createPolygon;
+	%newobject geom::GeometryFactory::createLineString;
+	%newobject geom::GeometryFactory::buildGeometry;
+	%newobject geom::GeometryFactory::createGeometry;
+	%newobject geom::GeometricShapeFactory::getEnvelope;
 
-/* Mark these classes as exception classes */
-%exceptionclass geos::GEOSException;
+	%newobject io::WKBReader::read;
+	%newobject io::WKBReader::readHEX;
+	%newobject io::WKTReader::read;
 
-/* These are all subclasses of GEOSException */
-%exceptionclass geos::AssertionFailedException;
-%exceptionclass geos::IllegalArgumentException;
-%exceptionclass geos::ParseException;
-%exceptionclass geos::TopologyException;
-%exceptionclass geos::UnsupportedOperationException;
+	/* Surface methods that return Geometry* so that they
+		 return the actual geometry object (point, linestring, etc.)
+		 instead of a generic geometry object.  Make sure the checks
+		 go from child class to parent class so we get the right one.*/
+	%factory(geom::Geometry * io::WKTReader::read, 
+		       geom::Point, 
+					 geom::LinearRing, geom::LineString,
+					 geom::Polygon, 
+					 geom::MultiPoint, geom::MultiLineString,
+					 geom::MultiPolygon, geom::GeometryCollection);
 
-/* This exception class is not surfaced to SWIG 
-%exceptionclass geos::NotRepresentableException;*/
+	%factory(geom::Geometry * io::WKBReader::read,
+		       geom::Point, 
+					 geom::LinearRing, geom::LineString,
+					 geom::Polygon, 
+					 geom::MultiPoint, geom::MultiLineString,
+					 geom::MultiPolygon, geom::GeometryCollection);
 
-/* Setup up generalized exception handling.  Note that GEOS throws
-   classes that are allocated on the heap so we need to catch them
-   by pointer and are responsible for freeing them.  To do this
-   we'll just pass the object along the scripting language (wrapped
-   of course) and make it responsbile for freeing the object via the
-   use of the SWIG_POINTER_OWN flag.*/
+	%factory(geom::Geometry * io::WKBReader::readHEX,
+		       geom::Point, 
+					 geom::LinearRing, geom::LineString,
+					 geom::Polygon, 
+					 geom::MultiPoint, geom::MultiLineString,
+					 geom::MultiPolygon, geom::GeometryCollection);
 
-%exception {
-    try {
-        $action
-    }
-  catch (geos::AssertionFailedException *e) {
-			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__AssertionFailedException, SWIG_POINTER_OWN), "geos::AssertionFailedException", SWIGTYPE_p_geos__AssertionFailedException);
-  }
-  catch (geos::IllegalArgumentException *e) {
-			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__IllegalArgumentException, SWIG_POINTER_OWN), "geos::IllegalArgumentException", SWIGTYPE_p_geos__IllegalArgumentException);
-  }
-  catch (geos::ParseException *e) {
-			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__ParseException, SWIG_POINTER_OWN), "geos::ParseException", SWIGTYPE_p_geos__ParseException);
-  }
-  catch (geos::TopologyException *e) {
-			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__TopologyException, SWIG_POINTER_OWN), "geos::TopologyException", SWIGTYPE_p_geos__TopologyException);
-  }
-  catch (geos::UnsupportedOperationException *e) {
-			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__UnsupportedOperationException, SWIG_POINTER_OWN), "geos::UnsupportedOperationException", SWIGTYPE_p_geos__UnsupportedOperationException);
-  }
-    catch (geos::GEOSException *e) {
-			%raise(SWIG_NewPointerObj(e, SWIGTYPE_p_geos__GEOSException, SWIG_POINTER_OWN), "geos::GEOSException", SWIGTYPE_p_geos__GEOSException);
-  }
-  catch (...) {
-      SWIG_exception(SWIG_RuntimeError, "Unknown exception took place in the method: $symname.");
-    }
-}
+	%newobject Geometry::fromWKT;
+	%factory(geom::Geometry * io::Geometry::fromWKT,
+		       geom::Point, 
+					 geom::LinearRing, geom::LineString,
+					 geom::Polygon, 
+					 geom::MultiPoint, geom::MultiLineString,
+					 geom::MultiPolygon, geom::GeometryCollection);
 
+	%newobject Geometry::fromHEX;
+	%factory(geom::Geometry * io::Geometry::fromHEX,
+		       geom::Point, 
+					 geom::LinearRing, geom::LineString,
+					 geom::Polygon, 
+					 geom::MultiPoint, geom::MultiLineString,
+					 geom::MultiPolygon, geom::GeometryCollection);
 
-/* =============  Classes to ignore (why are these ignored? ======= */
-%ignore geos::LineMergeDirectedEdge;
-%ignore geos::PolygonizeEdge;
-%ignore geos::polygonizeEdgeRing;
-%ignore geos::PolygonizeDirectedEdge;
-%ignore geos::PolygonizeGraph;
+	%factory(geom::Geometry * geom::Geometry::downcast,
+		       geom::Point, 
+					 geom::LinearRing, geom::LineString,
+					 geom::Polygon, 
+					 geom::MultiPoint, geom::MultiLineString,
+					 geom::MultiPolygon, geom::GeometryCollection);
+
+	/* ================= Operators  ============== */
+	/* Ignore these for now - if we don't SWIG will create
+		 names with the same methods, which doesn't work out very well.
+
+		 std::ostream& operator<<(std::ostream& os, const planarNode& n); 
+		 std::ostream& operator<<(std::ostream& os, const planarEdge& n); 
+		 std::ostream& operator<<(std::ostream& os, const planarNode& n); 
+		 std::ostream& operator<< (std::ostream& os, const Coordinate& c);
+		 std::ostream& operator<< (std::ostream& o, const LineSegment& l);
+		 std::ostream& operator<< (std::ostream& os, const Coordinate& c); */
+	%ignore operator<<;
+} /* End geos namespace */
 
 
 /* =============  Define Attributes ============ */
-%include <attribute.i>
-%attribute(geos::Point, double, x, getX);
-%attribute(geos::Point, double, y, getY);
+/* Need to fully qualify the class names for some reason. */
+%attribute(geos::geom::Point, double, x, getX);
+%attribute(geos::geom::Point, double, y, getY);
+%attribute(geos::geom::Geometry, double, srid, getSRID, setSRID);
 
 
-/* ===========  Headers To Wrap  ================ */
-%include "../../source/headers/geos/geom.h"
-%include "../../source/headers/geos/planargraph.h"
-%include "../../source/headers/geos/util.h"
-%include "../../source/headers/geos/io.h"
-%include "../../source/headers/geos/opLinemerge.h"
-%include "../../source/headers/geos/opPolygonize.h"
+
+/* GEOS 3 throws and catches exceptions by reference, thus allowing us
+	 to signficantly clean up the code. */
+
+/* Mark these classes as exception classes */
+%exceptionclass geos::util::GEOSException;
+
+/* These are all subclasses of GEOSException */
+%exceptionclass geos::util::AssertionFailedException;
+%exceptionclass geos::util::IllegalArgumentException;
+%exceptionclass geos::io::ParseException;
+%exceptionclass geos::util::TopologyException;
+%exceptionclass geos::util::UnsupportedOperationException;
+
+/* Setup up generalized exception handling.  Note that GEOS 3.0.0 
+	 and above throw and catch exceptions be reference.  In earlier
+	 versions it threw objects allocated on the heap.*/
+%catches(geos::util::AssertionFailedException,
+				 geos::util::IllegalArgumentException, geos::io::ParseException;
+				 geos::util::TopologyException, geos::util::UnsupportedOperationException, 
+				 geos::util::GEOSException);
+
+
+/* Now tell SWIG what headers to process */
+%include "../source/headers/geos/geom/geometry.h"
+%include "../source/headers/geos/geom/GeometryFactory.h"
+%include "../source/headers/geos/geom/PrecisionModel.h"
+%include "../source/headers/geos/geom/CoordinateSequenceFactory.h"
+%include "../source/headers/geos/geom/Coordinate.h"
+%include "../source/headers/geos/geom/CoordinateSequence.h"
+%include "../source/headers/geos/geom/CoordinateArraySequence.h"
+
+%include "../source/headers/geos/geom/Envelope.h"
+
+%include "../source/headers/geos/geom/Point.h"
+%include "../source/headers/geos/geom/LineString.h"
+%include "../source/headers/geos/geom/LinearRing.h"
+%include "../source/headers/geos/geom/Polygon.h"
+%include "../source/headers/geos/geom/GeometryCollection.h"
+%include "../source/headers/geos/geom/MultiPoint.h"
+%include "../source/headers/geos/geom/MultiLineString.h"
+%include "../source/headers/geos/geom/MultiPolygon.h"
+
+%include "../source/headers/geos/io/WKBReader.h"
+%include "../source/headers/geos/io/WKBWriter.h"
+%include "../source/headers/geos/io/WKTReader.h"
+%include "../source/headers/geos/io/WKTWriter.h"
+
+%include "../source/headers/geos/util/GEOSException.h"
+%include "../source/headers/geos/util/GeometricShapeFactory.h"
