@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.6.4.1  2006/04/03 11:05:05  strk
+ * Back-ported DELETE=>DELETE_ENVENT and INSERT=>INSERT_EVENT
+ * labels rename for SweepLineEvent classes.
+ *
  * Revision 1.6  2004/07/02 13:28:27  strk
  * Fixed all #include lines to reflect headers layout change.
  * Added client application build tips in README.
@@ -33,9 +37,9 @@ namespace geos {
 indexSweepLineEvent::indexSweepLineEvent(double x,indexSweepLineEvent *newInsertEvent,SweepLineInterval *newSweepInt) {
 	xValue = x;
 	insertEvent=newInsertEvent;
-	eventType=indexSweepLineEvent::INSERT;
+	eventType=indexSweepLineEvent::INSERT_EVENT;
 	if (insertEvent!=NULL)
-		eventType=indexSweepLineEvent::DELETE;
+		eventType=indexSweepLineEvent::DELETE_EVENT;
 	sweepInt=newSweepInt;
 }
 

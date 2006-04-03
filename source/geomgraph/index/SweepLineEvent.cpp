@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2.2.1.2.1  2006/04/03 11:05:05  strk
+ * Back-ported DELETE=>DELETE_ENVENT and INSERT=>INSERT_EVENT
+ * labels rename for SweepLineEvent classes.
+ *
  * Revision 1.2.2.1  2005/05/23 18:41:51  strk
  * Replaced sprintf uses with ostringstream
  *
@@ -48,15 +52,15 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet,double x,SweepLineEvent *newInse
 	edgeSet=newEdgeSet;
 	xValue=x;
 	insertEvent=newInsertEvent;
-	eventType=INSERT;
+	eventType=INSERT_EVENT;
 	if(insertEvent!=NULL)
-		eventType=DELETE;
+		eventType=DELETE_EVENT;
 	obj=newObj;
 	deleteEventIndex=0;
 }
 
 SweepLineEvent::~SweepLineEvent(){
-	if (eventType==DELETE) {
+	if (eventType==DELETE_EVENT) {
 		delete insertEvent;
 		delete obj; 
 	}
@@ -105,7 +109,7 @@ string SweepLineEvent::print() {
 
 	s<<"SweepLineEvent:";
 	s<<" xValue="<<xValue<<" deleteEventIndex="<<deleteEventIndex;
-	s<<( (eventType==INSERT) ? " INSERT" : " DELETE" );
+	s<<( (eventType==INSERT_EVENT) ? " INSERT_EVENT" : " DELETE_EVENT" );
 	s<<endl<<"\tinsertEvent=";
 	if (insertEvent) s<<insertEvent->print();
 	else s<<"NULL";

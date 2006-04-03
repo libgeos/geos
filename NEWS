@@ -7,6 +7,8 @@ Changes in 2.2.2
 - Fixed Polygon::equalsExact
 - Improved XMLTester
 - Fixed bug in NULL-factory Geometry constructor
+- Enumerated SweepLineEvent's DELETE and INSERT labels
+  renamed to DELETE_EVENT and INSERT_EVENT.
 
 Changes in 2.2.1
 
