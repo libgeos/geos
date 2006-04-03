@@ -4,14 +4,16 @@ noinst_LTLIBRARIES = libutil.la
 
 INCLUDES = -I$(top_srcdir)/source/headers 
 
+## full inlined
+# UnsupportedOperationException.cpp 
+# IllegalArgumentException.cpp 
+# AssertionFailedException.cpp 
+
 libutil_la_SOURCES = \
 	Assert.cpp \
-	AssertionFailedException.cpp \
 	CoordinateArrayFiter.cpp \
 	GEOSException.cpp \
-	IllegalArgumentException.cpp \
 	UniqueCoordinateArrayFilter.cpp \
-	UnsupportedOperationException.cpp \
 	GeometricShapeFactory.cpp \
 	math.cpp \
 	Profiler.cpp 

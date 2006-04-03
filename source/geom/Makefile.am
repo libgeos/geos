@@ -6,10 +6,12 @@ noinst_LTLIBRARIES = libgeom.la
 
 INCLUDES = -I$(top_srcdir)/source/headers 
 
+## full inlined
+# CoordinateSequenceFactory.cpp 
+
 libgeom_la_SOURCES = \
 	Coordinate.cpp \
 	CoordinateSequence.cpp \
-	CoordinateSequenceFactory.cpp \
 	CoordinateArraySequence.cpp \
 	CoordinateArraySequenceFactory.cpp \
 	Dimension.cpp \
