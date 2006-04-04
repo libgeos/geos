@@ -16,13 +16,13 @@
 #ifndef GEOS_GEOM_COORDINATESEQUENCE_H
 #define GEOS_GEOM_COORDINATESEQUENCE_H
 
-#include <vector>
-#include <iosfwd> // ostream
-
 #include <geos/platform.h>
 #include <geos/inline.h>
 
 #include <geos/geom/Coordinate.h> // for applyCoordinateFilter
+
+#include <vector>
+#include <iosfwd> // ostream
 
 // Forward declarations
 namespace geos {
@@ -282,7 +282,7 @@ public:
 		{
 			getAt(i, c);
 			f.filter(c);
-			setAt(i, c);
+			setAt(c, i);
 		}
 	}
 
@@ -299,6 +299,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/04 09:53:45  strk
+ * Fixed applyCoordinateFilter() templated function body
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
