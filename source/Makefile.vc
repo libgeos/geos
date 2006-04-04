@@ -16,6 +16,10 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.10  2006/04/04 01:28:44  hobu
+# remove objects that no longer exist
+# default to MSVC_VER=1310
+#
 # Revision 1.9  2006/03/10 10:48:28  strk
 # Bug #58 - Patch to makefile.vc after big refactoring commit
 #
@@ -49,7 +53,8 @@
 # nmake -f makefile.vc MSVC_VER=xxxx
 #
 !IFNDEF MSVC_VER
-!ERROR "You have to specify VC++ version you're using as MSVC_VER=XXXX macro"
+#assume msvc 7.1
+MSVC_VER=1310
 !ENDIF
 
 !IF $(MSVC_VER) == 1400
@@ -109,7 +114,6 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geom\Point.obj \
 	geom\Polygon.obj \
 	geom\PrecisionModel.obj \
-	geom\TopologyException.obj \
 	geom\Triangle.obj \
 	geom\util\CoordinateOperation.obj \
 	geom\util\GeometryEditor.obj \
@@ -147,29 +151,21 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geomgraph\index\SweepLineEvent.obj \
 	geomgraph\index\SweepLineSegment.obj \
 	index\bintree\Bintree.obj \
-	index\bintree\BinTreeInterval.obj \
-	index\bintree\BinTreeNode.obj \
 	index\bintree\Key.obj \
 	index\bintree\NodeBase.obj \
 	index\bintree\Root.obj \
-	index\chain\indexMonotoneChain.obj \
 	index\chain\MonotoneChainBuilder.obj \
 	index\chain\MonotoneChainOverlapAction.obj \
 	index\chain\MonotoneChainSelectAction.obj \
 	index\quadtree\DoubleBits.obj \
 	index\quadtree\IntervalSize.obj \
 	index\quadtree\Quadtree.obj \
-	index\quadtree\QuadTreeKey.obj \
-	index\quadtree\QuadTreeNode.obj \
-	index\quadtree\QuadTreeNodeBase.obj \
-	index\quadtree\QuadTreeRoot.obj \
 	index\strtree\AbstractNode.obj \
 	index\strtree\AbstractSTRtree.obj \
 	index\strtree\Interval.obj \
 	index\strtree\ItemBoundable.obj \
 	index\strtree\SIRtree.obj \
 	index\strtree\STRtree.obj \
-	index\sweepline\indexSweepLineEvent.obj \
 	index\sweepline\SweepLineIndex.obj \
 	index\sweepline\SweepLineInterval.obj \
 	io\ByteOrderValues.obj \
@@ -199,7 +195,6 @@ OBJ = 	algorithm\CentroidArea.obj \
 	operation\buffer\BufferBuilder.obj \
 	operation\buffer\BufferOp.obj \
 	operation\buffer\BufferSubgraph.obj \
-	operation\buffer\DepthSegment.obj \
 	operation\buffer\OffsetCurveBuilder.obj \
 	operation\buffer\OffsetCurveSetBuilder.obj \
 	operation\buffer\RightmostEdgeFinder.obj \
@@ -219,7 +214,6 @@ OBJ = 	algorithm\CentroidArea.obj \
 	operation\overlay\EdgeSetNoder.obj \
 	operation\overlay\ElevationMatrix.obj \
 	operation\overlay\ElevationMatrixCell.obj \
-	operation\overlay\ElevationMatrixFilter.obj \
 	operation\overlay\LineBuilder.obj \
 	operation\overlay\MaximalEdgeRing.obj \
 	operation\overlay\MinimalEdgeRing.obj \
@@ -252,14 +246,6 @@ OBJ = 	algorithm\CentroidArea.obj \
 	operation\valid\SweeplineNestedRingTester.obj \
 	operation\valid\TopologyValidationError.obj \
 	planargraph\algorithm\ConnectedSubgraphFinder.obj \
-	planargraph\planarDirectedEdge.obj \
-	planargraph\planarDirectedEdgeStar.obj \
-	planargraph\planarEdge.obj \
-	planargraph\planarGraphComponent.obj \
-	planargraph\planarNode.obj \
-	planargraph\planarNodeMap.obj \
-	planargraph\planarPlanarGraph.obj \
-	planargraph\planarSubgraph.obj \
 	precision\CommonBits.obj \
 	precision\CommonBitsOp.obj \
 	precision\CommonBitsRemover.obj \
