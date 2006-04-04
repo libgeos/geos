@@ -26,6 +26,7 @@
 #include <geos/platform.h>
 
 #include <memory>
+#include <cmath> // for finite()
 
 using namespace std;
 using namespace geos::geom;
@@ -47,19 +48,18 @@ void
 HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	const Coordinate &q1, const Coordinate &q2, Coordinate &ret)
 {
-#if 1
-	auto_ptr<HCoordinate> intHCoord(new HCoordinate(
-		HCoordinate(HCoordinate(p1),HCoordinate(p2)),
-		HCoordinate(HCoordinate(q1),HCoordinate(q2))
-	));
-#else
-	HCoordinate intHCoord(
-		HCoordinate(HCoordinate(p1),HCoordinate(p2)),
-		HCoordinate(HCoordinate(q1),HCoordinate(q2))
-	);
-#endif
+        HCoordinate hc1p1(p1);
+        HCoordinate hc1p2(p2);
+        HCoordinate hc1(hc1p1, hc1p2);
 
-	intHCoord->getCoordinate(ret);
+        HCoordinate hc2q1(q1);
+        HCoordinate hc2q2(q2);
+        HCoordinate hc2(hc2q1, hc2q2);
+
+        HCoordinate intHCoord(hc1,hc2);
+
+        intHCoord.getCoordinate(ret);
+
 }
 
 HCoordinate::HCoordinate()
@@ -94,7 +94,9 @@ double
 HCoordinate::getX() const
 {
 	double a = x/w;
-	if (!FINITE(a))
+
+	// finite() also checks for NaN
+	if ( ! finite(a) )
 	{
 		throw  NotRepresentableException();
 	}
@@ -105,7 +107,9 @@ double
 HCoordinate::getY() const
 {
 	double a = y/w;
-	if (!FINITE(a))
+
+	// finite() also checks for NaN
+	if ( ! finite(a) )
 	{
 		throw  NotRepresentableException();
 	}
@@ -124,6 +128,11 @@ HCoordinate::getCoordinate(Coordinate &ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/04/04 11:28:12  strk
+ * NotRepresentable condition detected using finite() from <cmath>
+ * rather then using FINITE() macro. Made ::intersection() body
+ * more readable.
+ *
  * Revision 1.18  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *
