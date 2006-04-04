@@ -14,9 +14,7 @@
  *
  **********************************************************************
  *
- * Represents a homogeneous coordinate in a 2-D coordinate space.
- * HCoordinate are used as a clean way
- * of computing intersections between line segments.
+ * Last port: algorithm/HCoordinate.java rev. 1.17 (JTS-1.7)
  *
  **********************************************************************/
 
@@ -34,62 +32,62 @@ using namespace geos::geom;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-/*
- * Computes the (approximate) intersection point between two line segments
- * using homogeneous coordinates.
- * 
- * Note that this algorithm is
- * not numerically stable; i.e. it can produce intersection points which
- * lie outside the envelope of the line segments themselves.  In order
- * to increase the precision of the calculation input points should be
- * normalized before passing them to this routine.
- */
+/*public static*/
 void
 HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	const Coordinate &q1, const Coordinate &q2, Coordinate &ret)
 {
         HCoordinate hc1p1(p1);
         HCoordinate hc1p2(p2);
-        HCoordinate hc1(hc1p1, hc1p2);
+        HCoordinate l1(hc1p1, hc1p2);
 
         HCoordinate hc2q1(q1);
         HCoordinate hc2q2(q2);
-        HCoordinate hc2(hc2q1, hc2q2);
+        HCoordinate l2(hc2q1, hc2q2);
 
-        HCoordinate intHCoord(hc1,hc2);
+        HCoordinate intHCoord(l1, l2);
 
         intHCoord.getCoordinate(ret);
 
 }
 
+/*public*/
 HCoordinate::HCoordinate()
+	:
+	x(0.0),
+	y(0.0),
+	w(1.0)
 {
-	x = 0.0;
-	y = 0.0;
-	w = 1.0;
 }
 
+/*public*/
 HCoordinate::HCoordinate(double _x, double _y, double _w)
+	:
+	x(_x),
+	y(_y),
+	w(_w)
 {
-	x = _x;
-	y = _y;
-	w = _w;
 }
 
+/*public*/
 HCoordinate::HCoordinate(const Coordinate& p)
+	:
+	x(p.x),
+	y(p.y),
+	w(1.0)
 {
-	x = p.x;
-	y = p.y;
-	w = 1.0;
 }
 
+/*public*/
 HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
+	:
+	x( p1.y*p2.w - p2.y*p1.w ),
+	y( p2.x*p1.w - p1.x*p2.w ),
+	w( p1.x*p2.y - p2.x*p1.y )
 {
-	x = p1.y*p2.w - p2.y*p1.w;
-	y = p2.x*p1.w - p1.x*p2.w;
-	w = p1.x*p2.y - p2.x*p1.y;
 }
 
+/*public*/
 double
 HCoordinate::getX() const
 {
@@ -103,6 +101,7 @@ HCoordinate::getX() const
 	return a;
 }
 
+/*public*/
 double
 HCoordinate::getY() const
 {
@@ -116,11 +115,11 @@ HCoordinate::getY() const
 	return a;
 }
 
+/*public*/
 void
 HCoordinate::getCoordinate(Coordinate &ret) const
 {
-	ret=Coordinate(getX(),getY());
-	//return new Coordinate(getX(),getY());
+	ret=Coordinate(getX(), getY());
 }
 
 } // namespace geos.algorithm
@@ -128,6 +127,9 @@ HCoordinate::getCoordinate(Coordinate &ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/04/04 11:37:00  strk
+ * Port information + initialization lists in ctors
+ *
  * Revision 1.19  2006/04/04 11:28:12  strk
  * NotRepresentable condition detected using finite() from <cmath>
  * rather then using FINITE() macro. Made ::intersection() body
