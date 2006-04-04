@@ -1,12 +1,15 @@
 prefix=@prefix@
 top_srcdir=@top_srcdir@
 GEOS_CAPI_VERSION="@VERSION@-CAPI-@CAPI_VERSION@"
+GEOS_JTS_PORT="@JTS_PORT@"
 
 noinst_PROGRAMS = geostest 
 
 geostest_SOURCES = geostest.c
 geostest_LDADD = libgeos_c.la
 geostest_INCLUDES = -I.
+
+INCLUDES = -I$(top_srcdir)/source/headers
 
 capidir = $(includedir)
 
@@ -21,7 +24,7 @@ DIR_SOURCES = \
 	geos_c.cpp 
 
 libgeos_c_la_SOURCES = $(DIR_SOURCES)
-libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)'
+libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
 
 
 libgeos_c_la_LDFLAGS = \
