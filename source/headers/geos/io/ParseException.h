@@ -28,12 +28,21 @@ namespace io {
  */
 class ParseException : public util::GEOSException
 {
+
 public:
+
 	ParseException();
-	ParseException(std::string msg);
-	ParseException(std::string msg, std::string var);
-	ParseException(std::string msg, double num);
+
+	ParseException(const std::string& msg);
+
+	ParseException(const std::string& msg, const std::string& var);
+
+	ParseException(const std::string& msg, double num);
+
 	~ParseException() throw() {};
+
+private:
+	static std::string stringify(double num);
 };
 
 } // namespace io
@@ -43,6 +52,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.1  2006/03/20 18:18:14  strk
  * io.h header split
  *

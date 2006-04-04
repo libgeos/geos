@@ -456,7 +456,7 @@ void do_all()
 			newgeoms->push_back(g2);
 		}
 		catch (const util::GEOSException& exc) {
-			cerr <<"GEOS Exception: geometry "<<i<<"->buffer(10): "<<exc.toString()<<"\n";
+			cerr <<"GEOS Exception: geometry "<<i<<"->buffer(10): "<<exc.what()<<"\n";
 		}
 	}
 
@@ -524,8 +524,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -554,8 +554,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -584,8 +584,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -614,8 +614,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -644,8 +644,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -674,8 +674,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -704,8 +704,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -741,8 +741,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -771,8 +771,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -802,8 +802,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -833,8 +833,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr<<exc.toString()<<endl;
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 		cout<<endl;
@@ -871,8 +871,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 	}
@@ -906,8 +906,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 	}
@@ -939,8 +939,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 	}
@@ -972,8 +972,8 @@ cout<<"-------------------------------------------------------------------------
 			catch (const util::IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
-			catch (const util::GEOSException& exc) {
-				cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
+			catch (const std::exception& exc) {
+				cerr<<exc.what()<<endl;
 			}
 		}
 	}
@@ -1062,7 +1062,7 @@ main()
 	// one, so this is a catch-all 
 	catch (const util::GEOSException& exc)
 	{
-		cerr <<"GEOS Exception: "<<exc.toString()<<"\n";
+		cerr <<"GEOS Exception: "<<exc.what()<<"\n";
 		exit(1);
 	}
 	catch (const exception &e)
@@ -1087,6 +1087,10 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.44  2006/03/28 15:19:22  strk
  * Added macros for sections skip (useful in debugging)
  *

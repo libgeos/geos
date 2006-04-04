@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.2  2006/02/09 15:52:47  strk
  * GEOSException derived from std::exception; always thrown and cought by const ref.
  *
@@ -91,7 +95,7 @@ int main(int argc, char** argv) {
 
 	cout << "End" << endl;
 	} catch (const GEOSException& ge) {
-		cout << ge->toString() << endl;
+		cout << ge.what() << endl;
 
 	}
 

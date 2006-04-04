@@ -17,58 +17,40 @@
 #ifndef GEOS_UTIL_GEOSEXCEPTION_H
 #define GEOS_UTIL_GEOSEXCEPTION_H
 
-#include <exception>
+#include <stdexcept>
 #include <string>
 
 namespace geos {
 namespace util { // geos.util
 
 /**
- * \class GEOSException util.h geos.h
  *
  * \brief Base class for all GEOS exceptions.
  *
  * Exceptions are thrown as pointers to this type.
  * Use toString() to get a readable message.
  */
-class GEOSException: public std::exception {
-
-protected:
-	std::string txt;
-	std::string name;
+class GEOSException: public std::runtime_error {
 
 public:
-	virtual void setName(const std::string& nname) { name=nname; }
-	virtual void setMessage(const std::string& msg) { txt=msg; }
 
 	GEOSException()
-	{
-		setName("GEOSException");
-		setMessage("unknown error");
-	}
+		:
+		std::runtime_error("Unknown error")
+	{}
 
-	GEOSException(const std::string& msg)
-	{
-		setName("GEOSException");
-		setMessage(msg);
-	}
+	GEOSException(std::string const& msg)
+		:
+		std::runtime_error(msg)
+	{}
 
-	/// Create an exception of given type containing given message 
-	GEOSException(const std::string& nname, const std::string& msg)
-	{
-		setName(nname);
-		setMessage(msg);
-	}
+	GEOSException(std::string const& name, std::string const& msg)
+		:
+		std::runtime_error(name+" "+msg)
+	{}
 
-	virtual ~GEOSException() throw() {}
-
-	/// Returns exception message
-	virtual std::string toString() const;
-
-	/// Implement std::exception.what()
-	virtual const char* what() const throw() {
-		return toString().c_str();
-	}
+	virtual ~GEOSException() throw()
+	{}
 
 };
 
@@ -79,6 +61,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

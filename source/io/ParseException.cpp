@@ -23,24 +23,36 @@ using namespace std;
 namespace geos {
 namespace io { // geos.io
 
-ParseException::ParseException(){
-	GEOSException();
-	setName("ParseException");
+ParseException::ParseException()
+	:
+	GEOSException("ParseException", "")
+{
 }
 
-ParseException::ParseException(string msg){
-	setName("ParseException");
-	setMessage(msg);
+ParseException::ParseException(const string& msg)
+	:
+	GEOSException("ParseException", msg)
+{
 }
-ParseException::ParseException(string msg, string var){
-	setName("ParseException");
-	setMessage(msg+": '"+var+"'");
+
+ParseException::ParseException(const string& msg, const string& var)
+	:
+	GEOSException("ParseException", msg+": '"+var+"'")
+{
 }
-ParseException::ParseException(string msg, double num){
-	setName("ParseException");
-	ostringstream s;
-	s<<msg<<": "<<num;
-	setMessage(s.str());
+
+ParseException::ParseException(const string& msg, double num)
+	:
+	GEOSException("ParseException", msg+": '"+stringify(num)+"'")
+{
+}
+
+string
+ParseException::stringify(double num)
+{
+	stringstream ss;
+	ss<<num;
+	return ss.str();
 }
 
 } // namespace geos.io
@@ -48,6 +60,10 @@ ParseException::ParseException(string msg, double num){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.14  2006/03/20 18:18:15  strk
  * io.h header split
  *

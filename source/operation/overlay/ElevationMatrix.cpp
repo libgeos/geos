@@ -135,7 +135,9 @@ ElevationMatrix::add(const Coordinate &c)
 		emc.add(c);
 	} catch (const util::IllegalArgumentException& exp) {
 		// coordinate do not overlap matrix
-		cerr<<"ElevationMatrix::add("<<c.toString()<<"): Coordinate does not overlap grid extent: "<<exp.toString()<<endl;
+		cerr << "ElevationMatrix::add(" << c.toString()
+		     << "): Coordinate does not overlap grid extent: "
+		     << exp.what() << endl;
 		return;
 	}
 }
@@ -237,6 +239,10 @@ ElevationMatrix::elevate(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.14  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

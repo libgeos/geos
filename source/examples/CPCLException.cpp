@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.6  2006/01/31 19:07:33  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -57,13 +61,15 @@
 
 using namespace geos;
 
-CPCLException::CPCLException(){
-	GEOSException();
-	setName("CPCLException");
+CPCLException::CPCLException()
+	:
+	GEOSException("CPCLException", "")
+{
 }
-CPCLException::CPCLException(string msg){
-	setName("CPCLException");
-	setMessage(msg);
+
+CPCLException::CPCLException(const string& msg)
+	GEOSException("CPCLException", msg)
+{
 }
 
 CPCLException::~CPCLException(){}

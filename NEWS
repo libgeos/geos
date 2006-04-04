@@ -2,11 +2,11 @@ Changes in 3.0.0
 
    These are mostly ABI breaking changes.
    In few cases the API also changed, but the most external one
-   (the documented one) is unchanged.
+   (the documented one) should be unchanged.
 
 - New things:
-    - Add GEOSArea(), GEOSLength(), GEOSEnvelope(), GEOSGeomType() to the
-      C API
+	- Add GEOSArea(), GEOSLength(), GEOSEnvelope(), GEOSGeomType()
+	  to the C API
 	- Added closed ring checks in IsValidOp
 	- Added missing ::clone() methods for Multi* geoms 
 	- Multi-input support in XMLTester 
@@ -69,6 +69,8 @@ Changes in 3.0.0
 	  against an EMPTY geom
 	- LineString::get{Start,End}Point return NULL for
 	  EMPTY geoms
+	- GEOSException is now derived by std::runtim_exception
+	  and thrown by const reference.
 
 - Correctness:
 	- More const-correct signatures

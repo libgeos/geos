@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.1  2004/07/08 19:41:27  strk
  * renamed to reflect JTS API.
  *
@@ -72,7 +76,7 @@ private:
 class CPCLException: public GEOSException {
 public:
 	CPCLException();
-	CPCLException(string msg);
+	CPCLException(const string& msg);
 	~CPCLException();
 };
 

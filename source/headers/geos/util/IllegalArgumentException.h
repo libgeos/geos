@@ -24,7 +24,7 @@
 namespace geos {
 namespace util { // geos::util
 
-/** \class IllegalArgumentException util.h geos.h
+/** 
  * \brief Indicates one or more legal arguments.
  *
  * This exception is thrown - for example - when
@@ -34,11 +34,13 @@ namespace util { // geos::util
 class IllegalArgumentException: public GEOSException {
 public:
 	IllegalArgumentException()
-		: GEOSException("IllegalArgumentException", "")
+		:
+		GEOSException("IllegalArgumentException", "")
 	{}
 
 	IllegalArgumentException(const std::string& msg)
-		: GEOSException("IllegalArgumentException", msg)
+		:
+		GEOSException("IllegalArgumentException", msg)
 	{}
 
 	~IllegalArgumentException() throw() {};
@@ -52,6 +54,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/04 08:16:46  strk
+ * Changed GEOSException hierarchy to be derived from std::runtime_exception.
+ * Removed the GEOSException::toString redundant method (use ::what() instead)
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
