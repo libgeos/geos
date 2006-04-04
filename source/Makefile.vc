@@ -16,6 +16,9 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.11  2006/04/04 01:54:31  hobu
+# Add in changes/missing from previous rearranging.
+#
 # Revision 1.10  2006/04/04 01:28:44  hobu
 # remove objects that no longer exist
 # default to MSVC_VER=1310
@@ -151,14 +154,21 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geomgraph\index\SweepLineEvent.obj \
 	geomgraph\index\SweepLineSegment.obj \
 	index\bintree\Bintree.obj \
+	index\bintree\Interval.obj \
 	index\bintree\Key.obj \
+	index\bintree\Node.obj \
 	index\bintree\NodeBase.obj \
 	index\bintree\Root.obj \
+	index\chain\MonotoneChain.obj \
 	index\chain\MonotoneChainBuilder.obj \
 	index\chain\MonotoneChainOverlapAction.obj \
 	index\chain\MonotoneChainSelectAction.obj \
 	index\quadtree\DoubleBits.obj \
 	index\quadtree\IntervalSize.obj \
+	index\quadtree\Key.obj \
+	index\quadtree\Node.obj \
+	index\quadtree\NodeBase.obj \
+	index\quadtree\Root.obj \
 	index\quadtree\Quadtree.obj \
 	index\strtree\AbstractNode.obj \
 	index\strtree\AbstractSTRtree.obj \
@@ -166,8 +176,10 @@ OBJ = 	algorithm\CentroidArea.obj \
 	index\strtree\ItemBoundable.obj \
 	index\strtree\SIRtree.obj \
 	index\strtree\STRtree.obj \
+	index\sweepline\SweepLineEvent.obj \
 	index\sweepline\SweepLineIndex.obj \
 	index\sweepline\SweepLineInterval.obj \
+	io\ByteOrderDataInStream.obj \
 	io\ByteOrderValues.obj \
 	io\ParseException.obj \
 	io\StringTokenizer.obj \
@@ -245,12 +257,20 @@ OBJ = 	algorithm\CentroidArea.obj \
 	operation\valid\SimpleNestedRingTester.obj \
 	operation\valid\SweeplineNestedRingTester.obj \
 	operation\valid\TopologyValidationError.obj \
+	planargraph\DirectedEdge.obj \
+	planargraph\DirectedEdgeStar.obj \
+	planargraph\Edge.obj \
+	planargraph\Node.obj \
+	planargraph\NodeMap.obj \
+	planargraph\PlanarGraph.obj \
+	planargraph\Subgraph.obj \
 	planargraph\algorithm\ConnectedSubgraphFinder.obj \
 	precision\CommonBits.obj \
 	precision\CommonBitsOp.obj \
 	precision\CommonBitsRemover.obj \
 	precision\EnhancedPrecisionOp.obj \
 	precision\SimpleGeometryPrecisionReducer.obj \
+	simplify\DouglasPeuckerLineSimplifier.obj \
 	util\Assert.obj \
 	util\AssertionFailedException.obj \
 	util\CoordinateArrayFiter.obj \
