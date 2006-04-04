@@ -12,11 +12,11 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/EdgeEndStar.java rev. 1.4 (JTS-1.7)
+ *
  **********************************************************************/
-
-#include <cassert>
-#include <string>
-#include <vector>
 
 #include <geos/util/TopologyException.h>
 #include <geos/geomgraph/EdgeEndStar.h>
@@ -25,6 +25,10 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/GeometryGraph.h>
+
+#include <cassert>
+#include <string>
+#include <vector>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -37,18 +41,16 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-EdgeEndStar::EdgeEndStar():
-	//edgeMap(new set<EdgeEnd*,EdgeEndLT>()),
+/*public*/
+EdgeEndStar::EdgeEndStar()
+	:
 	edgeMap()
-	//edgeList(NULL)
 {
 	ptInAreaLocation[0]=Location::UNDEF;
 	ptInAreaLocation[1]=Location::UNDEF;
 }
 
-/**
- * @return the coordinate for the node this star is based at
- */
+/*public*/
 Coordinate&
 EdgeEndStar::getCoordinate()
 {
@@ -57,9 +59,11 @@ EdgeEndStar::getCoordinate()
 
 	EdgeEndStar::iterator it=begin();
 	EdgeEnd *e=*it;
+	assert(e);
 	return e->getCoordinate();
 }
 
+/*public*/
 EdgeEnd*
 EdgeEndStar::getNextCW(EdgeEnd *ee)
 {
@@ -70,6 +74,7 @@ EdgeEndStar::getNextCW(EdgeEnd *ee)
 	return *it;
 }
 
+/*public*/
 void
 EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 	//throw(TopologyException *)
@@ -127,7 +132,9 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		EdgeEnd *e=*it;
+		assert(e);
 		Label *label=e->getLabel();
+		assert(label);
 		for(int geomi=0; geomi<2; geomi++)
 		{
 			if (label->isLine(geomi) && label->getLocation(geomi)==Location::BOUNDARY)
@@ -138,7 +145,9 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
 	{
 		EdgeEnd *e=*it;
+		assert(e);
 		Label *label=e->getLabel();
+		assert(label);
 		for(int geomi=0; geomi<2; ++geomi)
 		{
 			if (label->isAnyNull(geomi)) {
@@ -155,6 +164,7 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 	}
 }
 
+/*private*/
 void
 EdgeEndStar::computeEdgeEndLabels()
 {
@@ -162,10 +172,12 @@ EdgeEndStar::computeEdgeEndLabels()
 	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
 	{
 		EdgeEnd *e=*it;
+		assert(e);
 		e->computeLabel();
 	}
 }
 
+/*public*/
 int
 EdgeEndStar::getLocation(int geomIndex,
 	const Coordinate& p, std::vector<GeometryGraph*> *geom)
@@ -179,6 +191,7 @@ EdgeEndStar::getLocation(int geomIndex,
 	return ptInAreaLocation[geomIndex];
 }
 
+/*public*/
 bool
 EdgeEndStar::isAreaLabelsConsistent()
 {
@@ -186,6 +199,7 @@ EdgeEndStar::isAreaLabelsConsistent()
 	return checkAreaLabelsConsistent(0);
 }
 
+/*private*/
 bool
 EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 {
@@ -199,6 +213,7 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 	// initialize startLoc to location of last L side (if any)
 	EdgeEndStar::reverse_iterator it=rbegin();
 
+	assert(*it);
 	Label *startLabel=(*it)->getLabel();
 	int startLoc=startLabel->getLocation(geomIndex, Position::LEFT);
 
@@ -207,17 +222,20 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 
 	int currLoc=startLoc;
 
-	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
+	for (EdgeEndStar::iterator it=begin(), itEnd=end(); it!=itEnd; ++it)
 	{
 		EdgeEnd *e=*it;
+		assert(e);
 		Label *eLabel=e->getLabel();
+		assert(eLabel);
+
 		// we assume that we are only checking a area
 
 		// Found non-area edge
 		assert(eLabel->isArea(geomIndex));
 
-		int leftLoc=eLabel->getLocation(geomIndex,Position::LEFT);
-		int rightLoc=eLabel->getLocation(geomIndex,Position::RIGHT);
+		int leftLoc=eLabel->getLocation(geomIndex, Position::LEFT);
+		int rightLoc=eLabel->getLocation(geomIndex, Position::RIGHT);
 		// check that edge is really a boundary between inside and outside!
 		if (leftLoc==rightLoc) {
 			return false;
@@ -232,6 +250,7 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 	return true;
 }
 
+/*public*/
 void
 EdgeEndStar::propagateSideLabels(int geomIndex)
 	//throw(TopologyException *)
@@ -249,7 +268,9 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	for (EdgeEndStar::iterator it=beginIt; it!=endIt; ++it)
 	{
 		EdgeEnd *e=*it;
+		assert(e);
 		Label *label=e->getLabel();
+		assert(label);
 		if (label->isArea(geomIndex) &&
 			label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
 			startLoc=label->getLocation(geomIndex,Position::LEFT);
@@ -262,7 +283,9 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	for (it=beginIt; it!=endIt; ++it)
 	{
 		EdgeEnd *e=*it;
+		assert(e);
 		Label *label=e->getLabel();
+		assert(label);
 		// set null ON values to be in current location
 		if (label->getLocation(geomIndex,Position::ON)==Location::UNDEF)
 			label->setLocation(geomIndex,Position::ON,currLoc);
@@ -312,13 +335,15 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	}
 }
 
+/*public*/
 std::string
 EdgeEndStar::print()
 {
 	std::string out="EdgeEndStar:   " + getCoordinate().toString()+"\n";
-	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
+	for (EdgeEndStar::iterator it=begin(), itEnd=end(); it!=itEnd; ++it)
 	{
 		EdgeEnd *e=*it;
+		assert(e);
 		out+=e->print();
 	}
 	return out;
@@ -329,6 +354,9 @@ EdgeEndStar::print()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/04/04 13:35:55  strk
+ * Port info, assertion checking, indentation
+ *
  * Revision 1.20  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *
