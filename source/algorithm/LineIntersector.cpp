@@ -32,6 +32,9 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
 
+//#include <geos/util/Assert.h> // changed to TopologyException
+#include <geos/util/TopologyException.h> 
+
 #include <string>
 #include <cmath> // for fabs()
 #include <cassert> 
@@ -679,8 +682,10 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 #endif
 
 	} catch (const NotRepresentableException& /* e */) {
-		// Coordinate for intersection is not calculable e.toString()
-		assert(0); 
+		// JTS uses an Assertion here
+		throw util::TopologyException("Coordinate for intersection is not calculable");
+		//util::Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
+		//assert(0); 
     	}
 
 	intPt.x+=normPt.x;
@@ -698,7 +703,8 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
  */
 
 #if GEOS_DEBUG
-	if (!((LineIntersector *)this)->isInSegmentEnvelopes(intPt))
+	//if (!((LineIntersector *)this)->isInSegmentEnvelopes(intPt))
+	if (! isInSegmentEnvelopes(intPt))
 	{
 		cerr<<"Intersection outside segment envelopes: "<<
 			intPt.toString();
@@ -802,6 +808,10 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.39  2006/04/04 12:39:08  strk
+ * Changed NotRepresentableCoordinate exception handler to throw
+ * a TopologyException. This allows further handling.
+ *
  * Revision 1.38  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *
