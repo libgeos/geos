@@ -34,7 +34,7 @@
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
-#include <geos/platform.h> // for GEOS_JTS_PORT (shouldn't be in version.h instead?)
+#include <geos/version.h> 
 
 // This should go away
 #include <cstdio>
