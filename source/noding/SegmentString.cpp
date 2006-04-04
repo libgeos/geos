@@ -13,6 +13,7 @@
  *
  **********************************************************************/
 
+#include <cassert>
 #include <geos/noding.h>
 
 namespace geos {
@@ -26,6 +27,7 @@ SegmentString::SegmentString(const CoordinateSequence *newPts, const void* newCo
 	isIsolatedVar=false;
 	pts=newPts;
 	context=newContext;
+	assert(pts->getSize() > 1);
 }
 
 SegmentString::~SegmentString() {
@@ -159,6 +161,18 @@ SegmentString::addIntersection(Coordinate& intPt,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11.4.1  2006/04/04 09:50:17  strk
+ * - Updates memory handling, you can now run the equivalent of
+ *   example.cpp in python / ruby without causing segmentation faults
+ * - Updates methods like WKBReader.read so that they return the
+ *   appropriate geometry type (point, line, etc.) as opposed to
+ *   Geos::Geometry.
+ * - Limits the exposed api. Only exposes geom.h, version.h,
+ *   util.h, io.h
+ * - Exposes WKBReader.read/write and WKTReader.read/write and                                                                WKBWriter.read/write and WKTWriter.read/write which were not
+ *   previously available from scripting languages
+ * - Adds Ruby support, with test cases
+ *
  * Revision 1.11  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -37,6 +37,6 @@ class TestGeosEnvelope < Test::Unit::TestCase
     envelope = Geos::Envelope.new(5, 10, 6, 11)
     string = envelope.to_s
 
-    assert_equal("<Geos::Envelope Env[5:10,6:11]>", string)
+    assert_equal("<Envelope Env[5:10,6:11]>", string)
   end
 end
