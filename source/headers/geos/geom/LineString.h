@@ -17,15 +17,16 @@
 #ifndef GEOS_GEOS_LINESTRING_H
 #define GEOS_GEOS_LINESTRING_H
 
+#include <geos/platform.h> // do we need this ?
+#include <geos/geom/Geometry.h> // for inheritance
+
 #include <string>
 #include <vector>
-#include <geos/platform.h>
-#include <geos/geom/Geometry.h>
 
 #include <geos/inline.h>
 
 namespace geos {
-	namespace geom { // geos::geom
+	namespace geom {
 		class Coordinate;
 		class CoordinateArraySequence;
 	}
@@ -46,7 +47,9 @@ public:
 
 	LineString(const LineString &ls);
 
-	/// Constructs a LineString taking ownership the given CoordinateSequence.
+	/// \brief
+	/// Constructs a LineString taking ownership the
+	/// given CoordinateSequence.
 	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
 
 	virtual ~LineString();
@@ -171,6 +174,10 @@ struct LineStringLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/05 10:25:21  strk
+ * Fixed LineString constructor to ensure deletion of CoordinateSequence
+ * argument on exception throw
+ *
  * Revision 1.3  2006/03/31 16:55:17  strk
  * Added many assertions checking in LineString implementation.
  * Changed ::getCoordinate() to return NULL on empty geom.

@@ -50,8 +50,10 @@ LineString::LineString(const LineString &ls)
 LineString*
 LineString::reverse() const
 {
+	assert(points);
 	CoordinateSequence* seq = points->clone();
 	CoordinateSequence::reverse(seq);
+	assert(getFactory());
 	return getFactory()->createLineString(seq);
 }
 
@@ -70,16 +72,18 @@ LineString::reverse() const
 LineString::LineString(CoordinateSequence *newCoords,
 		const GeometryFactory *factory)
 	:
-	Geometry(factory)
+	Geometry(factory),
+	points(newCoords)
 {
-	if (newCoords==NULL) {
+	if (points==NULL) {
 		points=factory->getCoordinateSequenceFactory()->create(NULL);
 		return;
 	}
-	if (newCoords->getSize()==1) {
+
+	if (points->size()==1)
+	{
 		throw util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
-	points=newCoords;
 }
 
 
@@ -141,6 +145,8 @@ LineString::getNumPoints() const
 Point*
 LineString::getPointN(int n) const
 {
+	assert(getFactory());
+	assert(points);
 	return getFactory()->createPoint(points->getAt(n));
 }
 
@@ -221,11 +227,15 @@ LineString::isCoordinate(Coordinate& pt) const
 	return false;
 }
 
+/*protected*/
 Envelope*
 LineString::computeEnvelopeInternal() const
 {
 	if (isEmpty()) {
-		// Should return NULL instead ?
+		// We don't return NULL here
+		// as it would indicate "unknown"
+		// envelope. In this case we
+		// *know* the envelope is EMPTY.
 		return new Envelope();
 	}
 
@@ -244,7 +254,9 @@ LineString::computeEnvelopeInternal() const
 		maxy = maxy > c.y ? maxy : c.y;
 	}
 
-	// Shouldn't we be caching Envelopes ?? --strk;
+	// caller expects a newly allocated Envelope.
+	// this function won't be called twice, unless
+	// cached Envelope is invalidated (set to NULL)
 	return new Envelope(minx, maxx, miny, maxy);
 }
 
@@ -369,6 +381,10 @@ LineString::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.64  2006/04/05 10:25:20  strk
+ * Fixed LineString constructor to ensure deletion of CoordinateSequence
+ * argument on exception throw
+ *
  * Revision 1.63  2006/03/31 16:55:17  strk
  * Added many assertions checking in LineString implementation.
  * Changed ::getCoordinate() to return NULL on empty geom.
