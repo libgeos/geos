@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.9.4.1  2006/04/05 08:59:05  strk
+ * fixed small bug in corner case handling (tagged as 'testing only' in JTS)
+ *
  * Revision 1.9  2004/07/08 19:34:49  strk
  * Mirrored JTS interface of CoordinateSequence, factory and
  * default implementations.
@@ -146,11 +149,14 @@ int RightmostEdgeFinder::getRightmostSide(DirectedEdge *de, int index){
 	int side=getRightmostSideOfSegment(de,index);
 	if (side<0)
 		side=getRightmostSideOfSegment(de,index-1);
-	if (side<0)
+
+	if (side<0) {
 		// reaching here can indicate that segment is horizontal
 		// Assert::shouldNeverReachHere("problem with finding rightmost side of segment");
+		// testing only
 		minCoord=Coordinate::nullCoord;
-	checkForRightmostCoordinate(de);
+		checkForRightmostCoordinate(de);
+	}
 	return side;
 }
 
