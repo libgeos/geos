@@ -30,27 +30,34 @@ namespace util { // geos.util
  * Exceptions are thrown as pointers to this type.
  * Use toString() to get a readable message.
  */
-class GEOSException: public std::runtime_error {
+class GEOSException: public std::exception {
+
+	std::string _msg;
 
 public:
 
 	GEOSException()
 		:
-		std::runtime_error("Unknown error")
+		_msg("Unknown error")
 	{}
 
 	GEOSException(std::string const& msg)
 		:
-		std::runtime_error(msg)
+		_msg(msg)
 	{}
 
 	GEOSException(std::string const& name, std::string const& msg)
 		:
-		std::runtime_error(name+" "+msg)
+		_msg(name+" "+msg)
 	{}
 
 	virtual ~GEOSException() throw()
 	{}
+
+	const char* what() const throw()
+	{
+		return _msg.c_str();
+	}
 
 };
 
@@ -61,6 +68,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/05 09:34:20  strk
+ * GEOSException derived from std::exception again, hopefully the correct way now
+ *
  * Revision 1.2  2006/04/04 08:16:46  strk
  * Changed GEOSException hierarchy to be derived from std::runtime_exception.
  * Removed the GEOSException::toString redundant method (use ::what() instead)
