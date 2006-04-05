@@ -23,18 +23,23 @@
 namespace geos {
 namespace geom { // geos::geom
 
+/*public*/
 INLINE double
 Envelope::getMaxY() const { return maxy; }
 
+/*public*/
 INLINE double
 Envelope::getMaxX() const { return maxx; }
 
+/*public*/
 INLINE double
 Envelope::getMinY() const { return miny; }
 
+/*public*/
 INLINE double
 Envelope::getMinX() const { return minx; }
 
+/*public*/
 INLINE bool
 Envelope::intersects(const Coordinate& other) const
 {
@@ -42,18 +47,21 @@ Envelope::intersects(const Coordinate& other) const
 		other.y <= maxy && other.y >= miny);
 }
 
+/*public*/
 INLINE bool
 Envelope::intersects(const Envelope& other) const
 {
-		return intersects(&other);
+	return intersects(&other);
 }
 
+/*public*/
 INLINE bool
 Envelope::isNull(void) const
 {
 	return maxx < minx;
 }
 
+/*public*/
 INLINE bool
 Envelope::intersects(const Envelope* other) const
 {
@@ -65,6 +73,7 @@ Envelope::intersects(const Envelope* other) const
 			 other->maxy < miny);
 }
 
+/*public*/
 INLINE bool
 Envelope::intersects(double x, double y) const
 {

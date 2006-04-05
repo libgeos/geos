@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/Envelope.java rev. 1.41 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_ENVELOPE_H
@@ -44,31 +48,145 @@ class Coordinate;
  *
  */
 class Envelope {
+
 public:
+
+	/** \brief
+	 * Creates a null <code>Envelope</code>.
+	 */
 	Envelope(void);
+
+	/** \brief
+	 * Creates an <code>Envelope</code> for a region defined by
+	 * maximum and minimum values.
+	 *
+	 * @param  x1  the first x-value
+	 * @param  x2  the second x-value
+	 * @param  y1  the first y-value
+	 * @param  y2  the second y-value
+	 */
 	Envelope(double x1, double x2, double y1, double y2);
+
+	/** \brief
+	 * Creates an <code>Envelope</code> for a region defined by
+	 * two Coordinates.
+	 *
+	 * @param  p1  the first Coordinate
+	 * @param  p2  the second Coordinate
+	 */
 	Envelope(const Coordinate& p1, const Coordinate& p2);
+
+	/** \brief
+	 * Creates an Envelope for a region defined by a single Coordinate.
+	 *
+	 * @param  p  the Coordinate
+	 */
 	Envelope(const Coordinate& p);
+
+	/// Copy constructor
 	Envelope(const Envelope &env);
+
+	/// Assignment operator
+	Envelope& operator=(const Envelope& e);
+
+	/** \brief
+	 *  Create an <code>Envelope</code> from an Envelope 
+	 *  string representation produced by Envelope.toString()
+	 */
 	Envelope(const std::string &str);
+
 	~Envelope(void);
 
+	/** \brief
+	 * Test the point q to see whether it intersects the
+	 * Envelope defined by p1-p2
+	 *
+	 * @param p1 one extremal point of the envelope
+	 * @param p2 another extremal point of the envelope
+	 * @param q the point to test for intersection
+	 * @return <code>true</code> if q intersects the envelope p1-p2
+	 */
 	static bool intersects(const Coordinate& p1, const Coordinate& p2,
 			const Coordinate& q);
 
+	/** \brief
+	 * Test the envelope defined by p1-p2 for intersection
+	 * with the envelope defined by q1-q2
+	 *
+	 * @param p1 one extremal point of the envelope P
+	 * @param p2 another extremal point of the envelope P
+	 * @param q1 one extremal point of the envelope Q
+	 * @param q2 another extremal point of the envelope Q
+	 *
+	 * @return <code>true</code> if Q intersects P
+	 */
 	static bool intersects(const Coordinate& p1, const Coordinate& p2,
 			const Coordinate& q1, const Coordinate& q2);
 
+	/** \brief
+	 *  Initialize to a null <code>Envelope</code>.
+	 */
 	void init(void);
+
+	/** \brief
+	 * Initialize an <code>Envelope</code> for a region defined by
+	 * maximum and minimum values.
+	 *
+	 * @param  x1  the first x-value
+	 * @param  x2  the second x-value
+	 * @param  y1  the first y-value
+	 * @param  y2  the second y-value
+	 */
 	void init(double x1, double x2, double y1, double y2);
+
+	/** \brief
+	 * Initialize an <code>Envelope</code> to a region defined
+	 * by two Coordinates.
+	 *
+	 * @param  p1  the first Coordinate
+	 * @param  p2  the second Coordinate
+	 */
 	void init(const Coordinate& p1, const Coordinate& p2);
+
+	/** \brief
+	 * Initialize an <code>Envelope</code> to a region defined
+	 * by a single Coordinate.
+	 *
+	 * @param  p  the Coordinate
+	 */
 	void init(const Coordinate& p);
-	void init(Envelope env);
+
+	// use assignment operator instead
+	//void init(Envelope env);
+
+	/** \brief
+	 * Makes this <code>Envelope</code> a "null" envelope,
+	 * that is, the envelope of the empty geometry.
+	 */
 	void setToNull(void);
 
+	/** \brief
+	 * Returns <code>true</code> if this <code>Envelope</code>
+	 * is a "null" envelope.
+	 *
+	 * @return <code>true</code> if this <code>Envelope</code>
+	 *         is uninitialized or is the envelope of the
+	 *         empty geometry.
+	 */
 	bool isNull(void) const;
 
+	/** \brief
+	 * Returns the difference between the maximum and minimum x values.
+	 *
+	 * @return  max x - min x, or 0 if this is a null Envelope
+	 */
 	double getWidth(void) const;
+
+	/** \brief
+	 * Returns the difference between the maximum and minimum y values.
+	 *
+	 * @return max y - min y, or 0 if this is a null Envelope
+	 */
 	double getHeight(void) const;
 
 	/**
@@ -116,7 +234,7 @@ public:
 	 */
 	bool intersection(const Envelope& env, Envelope& result);
 
-	/**
+	/** \brief
 	 * Translates this envelope by given amounts in the X and Y direction.
 	 *
 	 * @param transX the amount to translate along the X axis
@@ -124,7 +242,7 @@ public:
 	 */
 	void translate(double transX, double transY);
 
-	/**
+	/** \brief
 	 * Expands this envelope by a given distance in all directions.
 	 * Both positive and negative distances are supported.
 	 *
@@ -135,7 +253,7 @@ public:
 	 */
 	void expandBy(double deltaX, double deltaY);
 
-	/**
+	/** \brief
 	 * Expands this envelope by a given distance in all directions.
 	 * Both positive and negative distances are supported.
 	 *
@@ -144,12 +262,77 @@ public:
 	 */
 	void expandBy(double distance) { expandBy(distance, distance); }
 
+
+	/** \brief
+	 * Enlarges the boundary of the Envelope so that it contains
+	 *  p. Does nothing if p is already on or within the boundaries.
+	 *
+	 * @param  p  the Coordinate to include
+	 */
 	void expandToInclude(const Coordinate& p);
+
+	/** \brief
+	 * Enlarges the boundary of the Envelope so that it contains
+	 * (x,y). Does nothing if (x,y) is already on or within the boundaries.
+	 *
+	 * @param  x  the value to lower the minimum x
+	 *            to or to raise the maximum x to
+	 * @param  y  the value to lower the minimum y
+	 *            to or to raise the maximum y to
+	 */
 	void expandToInclude(double x, double y);
+
+	/** \brief
+	 * Enlarges the boundary of the Envelope so that it contains
+	 * <code>other</code>. Does nothing if other is wholly on or
+	 * within the boundaries.
+	 *
+	 * @param  other  the <code>Envelope</code> to merge with
+	 */
 	void expandToInclude(const Envelope* other);
+
+	/** \brief
+	 * Returns <code>true</code> if the given point lies in
+	 * or on the envelope.
+	 *
+	 * @param  p  the point which this <code>Envelope</code> is
+	 *      being checked for containing
+	 * @return    <code>true</code> if the point lies in the interior or
+	 *      on the boundary of this <code>Envelope</code>.
+	 */
 	bool contains(const Coordinate& p) const;
+
+	/** \brief
+	 * Returns <code>true</code> if the given point lies in
+	 * or on the envelope.
+	 *
+	 * @param  x  the x-coordinate of the point which this
+	 *            <code>Envelope</code> is
+	 *            being checked for containing
+	 *
+	 * @param  y  the y-coordinate of the point which this
+	 *            <code>Envelope</code> is being checked for containing
+	 *
+	 * @return    <code>true</code> if <code>(x, y)</code> lies in
+	 *            the interior or on the boundary of this
+	 *            <code>Envelope</code>.
+	 */
 	bool contains(double x, double y) const;
+
+	/** \brief
+	 * Returns <code>true</code> if the <code>Envelope other</code>
+	 * lies wholely inside this <code>Envelope</code> (inclusive of
+	 * the boundary).
+	 *
+	 * @param  other  the <code>Envelope</code> which this
+	 *                    <code>Envelope</code> is being checked
+	 *                    for containing
+	 *
+	 * @return        <code>true</code> if <code>other</code>
+	 *                is contained in this <code>Envelope</code>
+	 */
 	bool contains(const Envelope* other) const;
+
 	bool contains(const Envelope& other) const { return contains(&other); }
 
 	/**
@@ -184,18 +367,62 @@ public:
 
 	bool intersects(const Envelope& other) const;
 
+	/** \brief
+	 * Returns <code>true</code> if the <code>Envelope other</code>
+	 * spatially equals this <code>Envelope</code>.
+	 *
+	 * @param  other the <code>Envelope</code> which this
+	 *               <code>Envelope</code> is being checked for equality
+	 *
+	 * @return <code>true</code> if this and <code>other</code>
+	 *         Envelope objs are spatially equal
+	 */
 	bool equals(const Envelope* other) const;
+
+	/** \brief
+	 * Returns a <code>string</code> of the form
+	 * <I>Env[minx:maxx,miny:maxy]</I> .
+	 *
+	 * @return a <code>string</code> of the form
+	 *         <I>Env[minx:maxx,miny:maxy]</I>
+	 */
 	std::string toString(void) const;
+
+	/** \brief
+	 * Computes the distance between this and another
+	 * <code>Envelope</code>.
+	 *
+	 * The distance between overlapping Envelopes is 0.  Otherwise, the
+	 * distance is the Euclidean distance between the closest points.
+	 */
 	double distance(const Envelope* env) const;
+
 	int hashCode() const;
 
 private:
-	std::vector<std::string> split(const std::string &str, const std::string &delimiters = " ");
+
+	/** \brief
+	 * Splits a string into parts based on the supplied delimiters.
+	 *
+	 * This is a generic function that really belongs in a utility
+	 * file somewhere 
+	 */
+	std::vector<std::string> split(const std::string &str,
+			const std::string &delimiters = " ");
+
 	static double distance(double x0,double y0,double x1,double y1);
-	double minx;	/// the minimum x-coordinate
-	double maxx;	/// the maximum x-coordinate
-	double miny;	/// the minimum y-coordinate
-	double maxy;	/// the maximum y-coordinate
+
+	/// the minimum x-coordinate
+	double minx;
+
+	/// the maximum x-coordinate
+	double maxx;
+
+	/// the minimum y-coordinate
+	double miny;
+
+	/// the maximum y-coordinate
+	double maxy;
 };
 
 /// Checks if two Envelopes are equal (2D only check)
@@ -212,6 +439,11 @@ bool operator==(const Envelope& a, const Envelope& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/05 14:04:25  strk
+ * Fixed copy ctor to support "Null" Envelope copies.
+ * Drop init(Envelope&) method.
+ * Port info and various cleanups.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
