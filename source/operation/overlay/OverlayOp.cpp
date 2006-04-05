@@ -234,42 +234,6 @@ OverlayOp::~OverlayOp()
 #endif
 }
 
-#undef REDUCED_PRECISION_OVERLAY
-
-#ifdef REDUCED_PRECISION_OVERLAY
-
-/*public*/
-Geometry*
-OverlayOp::getResultGeometry(int funcCode)
-	//throw(TopologyException *)
-{
-	int attempt=3;
-	PrecisionModel pm;
-
-	while (!resultGeom && attempt--)
-	{
-		try {
-			computeOverlay(funcCode, &pm); // this can throw TopologyException *
-		}
-		catch (const util::TopologyException& ex)
-		{
-			cerr<<"Attempt "<<attempt+1<<" exception "<<ex.what()<<endl;
-		}
-	}
-	return resultGeom;
-}
-
-/*private*/
-Geometry*
-OverlayOp::getResultGeometry(int funcCode, const PrecisionModel* pm)
-{
-	if ( pm ) setComputationPrecision(pm);
-	computeOverlay(funcCode); // this can throw TopologyException *
-	return resultGeom;
-}
-
-#else  // ndef REDUCED_PRECISION_OVERLAY
-
 /*public*/
 Geometry*
 OverlayOp::getResultGeometry(int funcCode)
@@ -279,21 +243,12 @@ OverlayOp::getResultGeometry(int funcCode)
 	return resultGeom;
 }
 
-#endif // ndef REDUCED_PRECISION_OVERLAY
-
 /*private*/
 void
 OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 {
 	for_each(edges->begin(), edges->end(),
 			bind1st(mem_fun(&OverlayOp::insertUniqueEdge), this));
-
-#if 0
-	for(unsigned int i=0; i<edges->size(); ++i) {
-		Edge *e=(*edges)[i];
-		insertUniqueEdge(e);
-	}
-#endif
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::insertUniqueEdges("<<edges->size()<<"): "<<endl;
@@ -893,6 +848,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.65  2006/04/05 15:59:14  strk
+ * Removed dead code
+ *
  * Revision 1.64  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
  *
