@@ -107,6 +107,27 @@ public:
 	 */
 	bool containsPoint(const geom::Coordinate& p);
 
+	void testInvariant()
+	{
+#ifndef NDEBUG
+		// If this is not an hole, check that
+		// each hole is not null and 
+		// has 'this' as it's shell
+		if ( ! shell )
+		{
+			for (std::vector<EdgeRing*>::const_iterator
+				it=holes.begin(), itEnd=holes.end();
+				it != itEnd;
+				++it)
+			{
+				EdgeRing* hole=*it;
+				assert(hole);
+				assert(hole->getShell()==this);
+			}
+		}
+#endif // ndef NDEBUG
+	}
+
 protected:
 
 	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
@@ -158,23 +179,6 @@ private:
 
 	void computeMaxNodeDegree();
 
-	void testInvariant()
-	{
-#ifndef NDEBUG
-		if ( ! shell )
-		{
-			for (std::vector<EdgeRing*>::const_iterator
-				it=holes.begin(), itEnd=holes.end();
-				it != itEnd;
-				++it)
-			{
-				EdgeRing* hole=*it;
-				assert(hole);
-				assert(hole->getShell()==this);
-			}
-		}
-#endif // ndef NDEBUG
-	}
 };
 
 } // namespace geos.geomgraph
@@ -188,6 +192,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/04/05 18:28:42  strk
+ * Moved testInvariant() methods from private to public, added
+ * some comments about them.
+ *
  * Revision 1.6  2006/03/29 13:53:59  strk
  * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
  *

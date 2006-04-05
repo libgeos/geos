@@ -71,12 +71,13 @@ private:
 
 	int depthDelta;   // the change in area depth from the R to L side of this edge
 
+public:
+
 	void testInvariant() const {
 		assert(pts);
 		assert(pts->size() > 1);
 	}
 
-public:
 
 	friend std::ostream& operator<< (std::ostream& os, const Edge& el);
 
@@ -246,6 +247,10 @@ std::ostream& operator<< (std::ostream& os, const Edge& el);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/05 18:28:42  strk
+ * Moved testInvariant() methods from private to public, added
+ * some comments about them.
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
