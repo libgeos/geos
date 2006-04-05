@@ -46,7 +46,7 @@ bool CMarkupSTL::SetDoc( const char* szDoc )
 	// Starting size of position array: 1 element per 64 bytes of document
 	// Tight fit when parsing small doc, only 0 to 2 reallocs when parsing large doc
 	// Start at 8 when creating new document
-	int nStartSize = m_strDoc.size() / 64 + 8;
+	unsigned int nStartSize = m_strDoc.size() / 64 + 8;
 	if ( m_aPos.size() < nStartSize )
 		m_aPos.resize( nStartSize );
 
@@ -315,7 +315,7 @@ int CMarkupSTL::x_GetFreePos()
 	//
 	// This returns the index of the next unused ElemPos in the array
 	//
-	if ( m_iPosFree == m_aPos.size() )
+	if ( (unsigned)m_iPosFree == m_aPos.size() )
 		m_aPos.resize( m_iPosFree + m_iPosFree / 2 );
 	++m_iPosFree;
 	return m_iPosFree - 1;
@@ -553,7 +553,7 @@ string CMarkupSTL::x_GetToken( const CMarkupSTL::TokenPos& token ) const
 	if ( token.nL > token.nR )
 		return "";
 	return m_strDoc.substr( token.nL,
-		token.nR - token.nL + ((token.nR<m_strDoc.size())? 1:0) );
+		token.nR - token.nL + (((unsigned)token.nR<m_strDoc.size())? 1:0) );
 }
 
 int CMarkupSTL::x_FindElem( int iPosParent, int iPos, const char* szPath )
@@ -746,7 +746,7 @@ string CMarkupSTL::x_GetAttrib( int iPos, const char* szAttrib ) const
 	TokenPos token( m_strDoc.c_str() );
 	token.nNext = m_aPos[iPos].nStartL + 1;
 	if ( szAttrib && x_FindAttrib( token, szAttrib ) )
-		return x_TextFromDoc( token.nL, token.nR - ((token.nR<m_strDoc.size())?0:1) );
+		return x_TextFromDoc( token.nL, token.nR - (((unsigned)token.nR<m_strDoc.size())?0:1) );
 	return "";
 }
 
@@ -881,7 +881,7 @@ string CMarkupSTL::x_GetData( int iPos ) const
 				&& strncmp( &token.szDoc[token.nL+1], "![CDATA[", 8 ) == 0 )
 		{
 			int nEndCDATA = m_strDoc.find( "]]>", token.nNext );
-			if ( nEndCDATA != string::npos && nEndCDATA < m_aPos[iPos].nEndL )
+			if ( (unsigned int)nEndCDATA != string::npos && nEndCDATA < m_aPos[iPos].nEndL )
 			{
 				return m_strDoc.substr( token.nL+9, nEndCDATA-token.nL-9 );
 			}

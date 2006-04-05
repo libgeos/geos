@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/05 14:33:38  strk
+ * Removed annoying warnings from external source
+ *
  * Revision 1.1  2006/01/31 19:07:35  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -54,7 +57,10 @@
 #if !defined(AFX_MARKUPSTL_H__948A2705_9E68_11D2_A0BF_00105A27C570__INCLUDED_)
 #define AFX_MARKUPSTL_H__948A2705_9E68_11D2_A0BF_00105A27C570__INCLUDED_
 
+#ifdef _MSC_VER
+// Anyone knows what's the use for this ?
 #pragma warning(disable:4786)
+#endif
 
 #include <string>
 #include <map>
@@ -108,7 +114,7 @@ public:
 		MNT_PROCESSING_INSTRUCTION	= 16, // 0x10
 		MNT_COMMENT					= 32, // 0x20
 		MNT_DOCUMENT_TYPE			= 64, // 0x40
-		MNT_EXCLUDE_WHITESPACE		= 123,// 0x7b
+		MNT_EXCLUDE_WHITESPACE		= 123 // 0x7b
 	};
 
 	// Create
