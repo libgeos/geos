@@ -11,14 +11,18 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/RightmostEdgeFinder.java rev. 1.13 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
 #define GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
 
-#include <vector>
-
 #include <geos/geom/Coordinate.h> // for composition
+
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -40,15 +44,25 @@ namespace buffer { // geos.operation.buffer
  * (I.e. the right side is on the RHS of the edge.)
  */
 class RightmostEdgeFinder {
+
 private:
+
 	int minIndex;
+
 	geom::Coordinate minCoord;
+
 	geomgraph::DirectedEdge *minDe;
+
 	geomgraph::DirectedEdge *orientedDe;
+
 	void findRightmostEdgeAtNode();
+
 	void findRightmostEdgeAtVertex();
+
 	void checkForRightmostCoordinate(geomgraph::DirectedEdge *de);
+
 	int getRightmostSide(geomgraph::DirectedEdge *de, int index);
+
 	int getRightmostSideOfSegment(geomgraph::DirectedEdge *de, int i);
 
 public:
@@ -81,6 +95,10 @@ geom::Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/05 09:20:25  strk
+ * Added port informations and many assertion checking.
+ * Fixed bug in getRightmostSide() method ( a "testing-only" corner case )
+ *
  * Revision 1.1  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *
