@@ -26,6 +26,7 @@
 #include <cmath>
 #include <cassert>
 #include <string>
+#include <sstream>
 
 using namespace geos::geom;
 
@@ -186,16 +187,20 @@ DirectedEdge::setEdgeDepths(int position, int newDepth)
 std::string
 DirectedEdge::print()
 {
-	std::string out=EdgeEnd::print();
-	out+=" ";
-	out+=depth[Position::LEFT];
-	out+="/";
-	out+=depth[Position::RIGHT];
-	out+=" (";
-	out+=getDepthDelta();
-	out+=")";
-	if (isInResultVar) out+=" inResult";
-	return out;
+	std::stringstream ss;
+	ss << EdgeEnd::print();
+	ss << " "
+	   << depth[Position::LEFT]
+	   << "/"
+	   << depth[Position::RIGHT]
+	   << " ("
+	   << getDepthDelta()
+	   << ")";
+	if (isInResultVar)
+	{
+		ss << " inResult";
+	}
+	return ss.str();
 }
 
 /*public*/
@@ -216,6 +221,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/04/06 07:52:42  strk
+ * Fixed bug in ::print() function
+ *
  * Revision 1.19  2006/04/03 17:05:22  strk
  * Assertion checking, port info, cleanups
  *
