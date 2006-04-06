@@ -213,7 +213,7 @@ operator<< (std::ostream& os, const EdgeEnd& ee)
 	os << " ";
 	os << ee.quadrant << ":" << atan2(ee.dy, ee.dx);
 	os << "  ";
-	os << ee.label;
+	os << *(ee.label);
 
 	return os;
 }
@@ -224,6 +224,9 @@ operator<< (std::ostream& os, const EdgeEnd& ee)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/04/06 12:47:31  strk
+ * Fixed output function
+ *
  * Revision 1.16  2006/04/06 09:39:55  strk
  * Added operator<<
  *
