@@ -9,6 +9,7 @@
 #include <tut_reporter.h>
 // STL
 #include <iostream>
+#include <iomanip>
 // GEOS
 #include <geos/unload.h>
 
@@ -19,28 +20,47 @@ namespace tut
 
 void usage()
 {
-    std::cout << "Usage: <geos_tut> [list] | [ group] [test]" << std::endl;
-    std::cout << "       List all groups: geos_unit list" << std::endl;
-    std::cout << "       Run all tests: geos_unit" << std::endl;
-    std::cout << "       Run one group: geos_unit <group name>" << std::endl;
-    std::cout << "       Run one test: geos_unit <group name> 3" << std::endl;
-    std::cout << "\nGEOS homepage: http://geos.refractions.net" << std::endl;
+	using std::cout;
+	using std::endl;
 
+	const std::string module("geos_unit");
+
+	//[list] | [ group] [test]
+	cout << "Usage: " << module << " [OPTION] [TARGET]\n"
+		<< endl
+		<< "Targets:\n"
+		<< "  <none>                          run all tests in all groups\n"
+		<< "  <group name>                    run all tests from given group\n"
+		<< "  <group name> <test nr>          run single test with given number from given group\n"
+		<< endl
+		<< "Options:\n"
+		<< "  --list                          list all registered test groups\n"
+		<< "  --verbose                       run unit tests verbosely; displays non-error information\n"
+		<< "  --version                       print version information and exit\n"
+		<< "  --help                          print this message and exit\n"
+		<< endl
+		<< "Examples:\n"
+		<< "  " << module << " -v\n"
+		<< "  " << module << " list\n"
+		<< "  " << module << " geos::geom::Envelope\n"
+		<< "  " << module << " geos::geom::Envelope 2\n"
+		<< endl
+		<< "GEOS homepage: http://geos.refractions.net" << endl;
 }
 
-int main(int argc,const char* argv[])
+int main(int argc, const char* argv[])
 {
     tut::reporter visi;
-
-    std::cout << "===========================\n"
-			  << "GEOS Test Suite Application\n"
-			  << "===========================\n";
 
     if ( (argc == 2 && std::string(argv[1]) == "--help") || argc > 3 )
     {
         usage();
         return 0;
     }
+
+    std::cout << "===============================\n"
+			  << "  GEOS Test Suite Application\n"
+			  << "===============================\n";
 
     tut::runner.get().set_callback(&visi);
 
@@ -50,7 +70,7 @@ int main(int argc,const char* argv[])
         {
             tut::runner.get().run_tests();
         }
-        else if ( argc == 2 && std::string(argv[1]) == "list" )
+        else if ( argc == 2 && std::string(argv[1]) == "--list" )
         {
             tut::groupnames gl = tut::runner.get().list_groups();
             tut::groupnames::const_iterator b = gl.begin();
@@ -66,7 +86,7 @@ int main(int argc,const char* argv[])
                 ++b;
             }
         }
-        else if ( argc == 2 && std::string(argv[1]) != "list" )
+        else if ( argc == 2 && std::string(argv[1]) != "--list" )
         {
             tut::runner.get().run_tests(argv[1]);
         }
