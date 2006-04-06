@@ -23,6 +23,9 @@ namespace util { // geos::util
 /// Symmetric Rounding Algorithm
 double sym_round(double val);
 
+/// Equivalent to Java Math.rint()
+double rint_vc(double val);
+
 } // namespace geos.util
 } // namespace geos
 
@@ -31,6 +34,9 @@ double sym_round(double val);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/06 21:30:36  strk
+ * Added missing rint_vc() forward declaration
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *
