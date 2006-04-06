@@ -16,6 +16,7 @@
 
 #include <geos/util/TopologyException.h>
 #include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/EdgeRing.h> // for printing
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geom/Location.h>
 #include <geos/geomgraph/Label.h>
@@ -200,6 +201,12 @@ DirectedEdge::print()
 	{
 		ss << " inResult";
 	}
+	ss << " EdgeRing: " << edgeRing;
+	if ( edgeRing )
+	{
+		EdgeRing* er = edgeRing;
+		ss << " (" << *er << ")";
+	}
 	return ss.str();
 }
 
@@ -221,6 +228,9 @@ DirectedEdge::printEdge()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/04/06 12:58:09  strk
+ * Added printing of EdgeRing if available
+ *
  * Revision 1.20  2006/04/06 07:52:42  strk
  * Fixed bug in ::print() function
  *
