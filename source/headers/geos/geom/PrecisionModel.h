@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/PrecisionModel.java rev. 1.51 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PRECISIONMODEL_H
@@ -163,7 +167,16 @@ public:
 	////
 	static const double maximumPreciseValue;
 
-	/// Rounds a numeric value to the PrecisionModel grid.
+	/** \brief
+	 * Rounds a numeric value to the PrecisionModel grid.
+	 *
+	 * Asymmetric Arithmetic Rounding is used, to provide
+	 * uniform rounding behaviour no matter where the number is
+	 * on the number line.
+	 * 
+	 * <b>Note:</b> Java's <code>Math#rint</code> uses the "Banker's Rounding" algorithm,
+	 * which is not suitable for precision operations elsewhere in JTS.
+	 */
 	double makePrecise(double val) const;
 
 	/// Rounds the given Coordinate to the PrecisionModel grid.
@@ -284,11 +297,20 @@ public:
 
 private:
 
+	/** \brief
+	 * Sets the multiplying factor used to obtain a precise coordinate.
+	 *
+	 * This method is private because PrecisionModel is intended to
+	 * be an immutable (value) type.
+	 *
+	 */
 	void setScale(double newScale);
+			// throw IllegalArgumentException
 
 	Type modelType;
 
 	double scale;
+
 };
 
 // Equality operator for PrecisionModel, deprecate it ?
@@ -305,6 +327,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/04/06 12:34:07  strk
+ * Port info, more debugging lines, doxygen comments
+ *
  * Revision 1.5  2006/04/03 14:07:32  strk
  * Commented out obsoleted toInternal() method
  *
