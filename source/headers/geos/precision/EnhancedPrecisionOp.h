@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: precision/EnhancedPrecisionOp.java rev. 1.9 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_PRECISION_ENHANCEDPRECISIONOP_H
@@ -46,8 +50,9 @@ public:
 	 * @return the Geometry representing the set-theoretic
 	 * intersection of the input Geometries.
 	 */
-	static geom::Geometry* intersection(geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	static geom::Geometry* intersection(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the set-theoretic union of two Geometrys,
@@ -57,8 +62,9 @@ public:
 	 * @return the Geometry representing the set-theoretic
 	 * union of the input Geometries.
 	 */
-	static geom::Geometry* Union(geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	static geom::Geometry* Union(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the set-theoretic difference of two Geometrys,
@@ -68,8 +74,9 @@ public:
 	 * @return the Geometry representing the set-theoretic
 	 * difference of the input Geometries.
 	 */
-	static geom::Geometry* difference(geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	static geom::Geometry* difference(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the set-theoretic symmetric difference of two
@@ -79,8 +86,9 @@ public:
 	 * @return the Geometry representing the set-theoretic symmetric
 	 * difference of the input Geometries.
 	 */
-	static geom::Geometry* symDifference(geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	static geom::Geometry* symDifference(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the buffer of a Geometry, using enhanced precision.
@@ -91,7 +99,9 @@ public:
 	 * @param distance the buffer distance
 	 * @return the Geometry representing the buffer of the input Geometry.
 	 */
-	static geom::Geometry* buffer(geom::Geometry *geom, double distance);
+	static geom::Geometry* buffer(
+			const geom::Geometry *geom,
+			double distance);
 };
 
 
@@ -102,6 +112,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/06 14:36:52  strk
+ * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
+ *
  * Revision 1.1  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *

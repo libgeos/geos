@@ -97,9 +97,9 @@ CommonBitsRemover::~CommonBitsRemover()
  * @param geom a Geometry to test for common bits
  */
 void
-CommonBitsRemover::add(Geometry *geom)
+CommonBitsRemover::add(const Geometry *geom)
 {
-	geom->apply_rw(ccFilter);
+	geom->apply_ro(ccFilter);
 	ccFilter->getCommonCoordinate(commonCoord);
 }
 
@@ -124,14 +124,14 @@ CommonBitsRemover::removeCommonBits(Geometry *geom)
 {
 	if (commonCoord.x == 0.0 && commonCoord.y == 0.0)
 		return geom;
-	Coordinate *invCoord=new Coordinate(commonCoord.x,commonCoord.y);
-	invCoord->x=-invCoord->x;
-	invCoord->y=-invCoord->y;
-	Translater *trans=new Translater(*invCoord);
-	delete invCoord;
-	geom->apply_rw(trans);
+
+	Coordinate invCoord(commonCoord);
+	invCoord.x = -invCoord.x;
+	invCoord.y = -invCoord.y;
+	Translater trans(invCoord);
+	geom->apply_rw(&trans);
 	geom->geometryChanged();
-	delete trans;
+
 	return geom;
 }
 
@@ -145,10 +145,9 @@ CommonBitsRemover::removeCommonBits(Geometry *geom)
 void
 CommonBitsRemover::addCommonBits(Geometry *geom)
 {
-	Translater *trans=new Translater(commonCoord);
-	geom->apply_rw(trans);
+	Translater trans(commonCoord);
+	geom->apply_rw(&trans);
 	geom->geometryChanged();
-	delete trans;
 }
 
 } // namespace geos.precision
@@ -156,6 +155,9 @@ CommonBitsRemover::addCommonBits(Geometry *geom)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/04/06 14:36:51  strk
+ * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
+ *
  * Revision 1.7  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *

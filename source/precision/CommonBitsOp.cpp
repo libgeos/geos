@@ -20,6 +20,8 @@
 
 #include <vector>
 #include <string>
+#include <memory>
+#include <cassert>
 
 using namespace std;
 using namespace geos::geom;
@@ -29,60 +31,76 @@ namespace precision { // geos.precision
 
 /*public*/
 CommonBitsOp::CommonBitsOp()
+	:
+	returnToOriginalPrecision(true)
+
 {
-	returnToOriginalPrecision=true;
 }
 
 /*public*/
 CommonBitsOp::CommonBitsOp(bool nReturnToOriginalPrecision)
+	:
+	returnToOriginalPrecision(nReturnToOriginalPrecision)
 {
-	returnToOriginalPrecision=nReturnToOriginalPrecision;
 }
 
 /*public*/
 Geometry*
-CommonBitsOp::intersection(Geometry* geom0, Geometry* geom1)
+CommonBitsOp::intersection(
+		const Geometry* geom0,
+		const Geometry* geom1)
 {
-	vector<Geometry*> *geom=removeCommonBits(geom0, geom1);
-	return computeResultPrecision(((*geom)[0])->intersection((*geom)[1]));
+	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
+	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
+	return computeResultPrecision(rgeom0->intersection(rgeom1.get()));
 }
 
 /*public*/
 Geometry*
-CommonBitsOp::Union(Geometry* geom0, Geometry* geom1)
+CommonBitsOp::Union(
+		const Geometry* geom0,
+		const Geometry* geom1)
 {
-	vector<Geometry*> *geom=removeCommonBits(geom0, geom1);
-	return computeResultPrecision(((*geom)[0])->Union((*geom)[1]));
+	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
+	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
+	return computeResultPrecision(rgeom0->Union(rgeom1.get()));
 }
 
 /*public*/
 Geometry*
-CommonBitsOp::difference(Geometry* geom0, Geometry* geom1)
+CommonBitsOp::difference(
+		const Geometry* geom0,
+		const Geometry* geom1)
 {
-	vector<Geometry*> *geom=removeCommonBits(geom0, geom1);
-	return computeResultPrecision(((*geom)[0])->difference((*geom)[1]));
+	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
+	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
+	return computeResultPrecision(rgeom0->difference(rgeom1.get()));
 }
 
 /*public*/
 Geometry*
-CommonBitsOp::symDifference(Geometry* geom0, Geometry* geom1)
+CommonBitsOp::symDifference(
+		const Geometry* geom0,
+		const Geometry* geom1)
 {
-	vector<Geometry*> *geom=removeCommonBits(geom0, geom1);
-	return computeResultPrecision(((*geom)[0])->symDifference((*geom)[1]));
+	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
+	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
+	return computeResultPrecision(rgeom0->symDifference(rgeom1.get()));
 }
 
 /*public*/
 Geometry*
-CommonBitsOp::buffer(Geometry* geom0, double distance)
+CommonBitsOp::buffer(const Geometry* geom0, double distance)
 {
-	Geometry *geom=removeCommonBits(geom0);
-	return computeResultPrecision(geom->buffer(distance));
+	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
+	return computeResultPrecision(rgeom0->buffer(distance));
 }
 
 /*public*/
 Geometry*
 CommonBitsOp::computeResultPrecision(Geometry* result)
 {
+	assert(cbr.get());
 	if (returnToOriginalPrecision)
 		cbr->addCommonBits(result);
 	return result;
@@ -90,27 +108,15 @@ CommonBitsOp::computeResultPrecision(Geometry* result)
 
 /*private*/
 Geometry*
-CommonBitsOp::removeCommonBits(Geometry* geom0)
+CommonBitsOp::removeCommonBits(const Geometry* geom0)
 {
-	cbr=new CommonBitsRemover();
+	cbr.reset(new CommonBitsRemover());
 	cbr->add(geom0);
-	Geometry* geom=cbr->removeCommonBits(geom0->clone());
-	delete cbr;
-	return geom;
-}
 
-/*private*/
-vector<Geometry*>*
-CommonBitsOp::removeCommonBits(Geometry* geom0, Geometry* geom1)
-{
-	cbr=new CommonBitsRemover();
-	cbr->add(geom0);
-	cbr->add(geom1);
-	vector<Geometry*> *gv=new vector<Geometry*>();
-	gv->push_back(cbr->removeCommonBits(geom0->clone()));
-	gv->push_back(cbr->removeCommonBits(geom1->clone()));
-	delete cbr;
-	return gv;
+	const Coordinate& commonCoord = cbr->getCommonCoordinate();
+	cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << endl;
+	Geometry* geom=cbr->removeCommonBits(geom0->clone());
+	return geom;
 }
 
 } // namespace geos.precision
@@ -118,6 +124,9 @@ CommonBitsOp::removeCommonBits(Geometry* geom0, Geometry* geom1)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/04/06 14:36:51  strk
+ * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
+ *
  * Revision 1.6  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *

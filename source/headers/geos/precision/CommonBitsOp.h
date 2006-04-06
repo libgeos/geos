@@ -16,14 +16,17 @@
 #ifndef GEOS_PRECISION_COMMONBITSOP_H
 #define GEOS_PRECISION_COMMONBITSOP_H
 
+#include <geos/precision/CommonBitsRemover.h> // for auto_ptr composition
+
 #include <vector>
+#include <memory>
 
 namespace geos {
 	namespace geom {
 		class Geometry;
 	}
 	namespace precision {
-		class CommonBitsRemover;
+		//class CommonBitsRemover;
 	}
 }
 
@@ -45,28 +48,17 @@ private:
 
 	bool returnToOriginalPrecision;
 
-	CommonBitsRemover *cbr;
+	std::auto_ptr<CommonBitsRemover> cbr;
 
-	/**
+	/** \brief
 	 * Computes a copy of the input Geometry with the calculated
 	 * common bits removed from each coordinate.
+	 *
 	 * @param geom0 the Geometry to remove common bits from
 	 * @return a copy of the input Geometry with common bits removed
+	 *         (caller takes responsibility of its deletion)
 	 */
-	geom::Geometry* removeCommonBits(geom::Geometry *geom0);
-
-	/**
-	 * Computes a copy of each input Geometry with the calculated
-	 * common bits
-	 * removed from each coordinate.
-	 * @param geom0 a Geometry to remove common bits from
-	 * @param geom1 a Geometry to remove common bits from
-	 * @return an array containing copies
-	 * of the input Geometry's with common bits removed
-	 */
-	std::vector<geom::Geometry*>* removeCommonBits(
-			geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	geom::Geometry* removeCommonBits(const geom::Geometry *geom0);
 
 public:
 
@@ -91,8 +83,9 @@ public:
 	 * @return the Geometry representing the set-theoretic
 	 *  intersection of the input Geometries.
 	 */
-	geom::Geometry* intersection(geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	geom::Geometry* intersection(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the set-theoretic union of two Geometry,
@@ -102,7 +95,9 @@ public:
 	 * @return the Geometry representing the set-theoretic union
 	 * of the input Geometries.
 	 */
-	geom::Geometry* Union(geom::Geometry *geom0, geom::Geometry *geom1);
+	geom::Geometry* Union(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the set-theoretic difference of two Geometry,
@@ -112,8 +107,9 @@ public:
 	 * @return the Geometry representing the set-theoretic difference
 	 * of the input Geometries.
 	 */
-	geom::Geometry* difference(geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	geom::Geometry* difference(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the set-theoretic symmetric difference of two geometries,
@@ -123,8 +119,9 @@ public:
 	 * @return the Geometry representing the set-theoretic symmetric
 	 * difference of the input Geometries.
 	 */
-	geom::Geometry* symDifference(geom::Geometry *geom0,
-			geom::Geometry *geom1);
+	geom::Geometry* symDifference(
+			const geom::Geometry *geom0,
+			const geom::Geometry *geom1);
 
 	/**
 	 * Computes the buffer a geometry,
@@ -133,7 +130,9 @@ public:
 	 * @param distance the buffer distance
 	 * @return the Geometry representing the buffer of the input Geometry.
 	 */
-	geom::Geometry* buffer(geom::Geometry *geom0, double distance);
+	geom::Geometry* buffer(
+			const geom::Geometry *geom0,
+			double distance);
 
 	/**
 	 * If required, returning the result to the orginal precision
@@ -146,7 +145,8 @@ public:
 	 * @param result the result Geometry to modify
 	 * @return the result Geometry with the required precision
 	 */
-	geom::Geometry* computeResultPrecision(geom::Geometry *result);
+	geom::Geometry* computeResultPrecision(
+			geom::Geometry *result);
 };
 
 
@@ -157,6 +157,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/06 14:36:52  strk
+ * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
+ *
  * Revision 1.1  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *

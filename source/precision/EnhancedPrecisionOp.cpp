@@ -12,182 +12,227 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: precision/EnhancedPrecisionOp.java rev. 1.9 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/precision/EnhancedPrecisionOp.h>
 #include <geos/precision/CommonBitsOp.h>
+#include <geos/precision/CommonBitsRemover.h> // for auto_ptr composition
 #include <geos/geom/Geometry.h>
 #include <geos/util/GEOSException.h>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 1
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
 
 using namespace geos::geom;
 
 namespace geos {
 namespace precision { // geos.precision
 
-/**
- * Computes the set-theoretic intersection of two {@link Geometry}s, using enhanced precision->
- * @param geom0 the first Geometry
- * @param geom1 the second Geometry
- * @return the Geometry representing the set-theoretic intersection of the input Geometries->
- */
+/*public static*/
 Geometry*
-EnhancedPrecisionOp::intersection(Geometry *geom0, Geometry *geom1)
+EnhancedPrecisionOp::intersection(
+		const Geometry *geom0,
+		const Geometry *geom1)
 {
 	util::GEOSException originalEx;
-	try {
+
+	try
+	{
 		Geometry *result = geom0->intersection(geom1);
 		return result;
-	} catch (const util::GEOSException& ex) {
+	}
+	catch (const util::GEOSException& ex)
+	{
 		originalEx = ex;
 	}
+
 	/*
-	* If we are here, the original op encountered a precision problem
-	* (or some other problem)->  Retry the operation with
-	* enhanced precision to see if it succeeds
-	*/
-	try {
-		CommonBitsOp *cbo = new CommonBitsOp(true);
-		Geometry *resultEP = cbo->intersection(geom0, geom1);
-		delete cbo; // check that result is a valid geometry after the reshift to orginal precision
+	 * If we are here, the original op encountered a precision problem
+	 * (or some other problem). Retry the operation with
+	 * enhanced precision to see if it succeeds
+	 */
+	try
+	{
+		CommonBitsOp cbo(true);
+		Geometry *resultEP = cbo.intersection(geom0, geom1);
+
+		// check that result is a valid geometry after
+		// the reshift to orginal precision
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& /* ex2 */) {
+	}
+	catch (const util::GEOSException& /* ex2 */)
+	{
 		throw originalEx;
 	}
 }
 
-/**
- * Computes the set-theoretic union of two {@link Geometry}s, using enhanced precision->
- * @param geom0 the first Geometry
- * @param geom1 the second Geometry
- * @return the Geometry representing the set-theoretic union of the input Geometries->
- */
+/*public static*/
 Geometry*
-EnhancedPrecisionOp::Union(Geometry *geom0, Geometry *geom1)
+EnhancedPrecisionOp::Union(
+		const Geometry *geom0,
+		const Geometry *geom1)
 {
 	util::GEOSException originalEx;
-	try {
+	try
+	{
 		Geometry* result = geom0->Union(geom1);
 		return result;
-	}catch (const util::GEOSException& ex) {
+	}
+	catch (const util::GEOSException& ex)
+	{
 		originalEx = ex;
 	}
+
 	/*
-	* If we are here, the original op encountered a precision problem
-	* (or some other problem)->  Retry the operation with
-	* enhanced precision to see if it succeeds
-	*/
-	try {
-		CommonBitsOp *cbo = new CommonBitsOp(true);
-		Geometry *resultEP = cbo->Union(geom0, geom1);
-		delete cbo; // check that result is a valid geometry after the reshift to orginal precision
+	 * If we are here, the original op encountered a precision problem
+	 * (or some other problem)->  Retry the operation with
+	 * enhanced precision to see if it succeeds
+	 */
+	try
+	{
+		CommonBitsOp cbo(true);
+		Geometry *resultEP = cbo.Union(geom0, geom1);
+
+		// check that result is a valid geometry after
+		// the reshift to orginal precision
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& /* ex2 */) {
+	}
+	catch (const util::GEOSException& /* ex2 */)
+	{
 		throw originalEx;
 	}
 }
 
-/**
- * Computes the set-theoretic difference of two {@link Geometry}s, using enhanced precision->
- * @param geom0 the first Geometry
- * @param geom1 the second Geometry
- * @return the Geometry representing the set-theoretic difference of the input Geometries->
- */
+/*public static*/
 Geometry*
-EnhancedPrecisionOp::difference(Geometry *geom0, Geometry *geom1)
+EnhancedPrecisionOp::difference(
+		const Geometry *geom0,
+		const Geometry *geom1)
 {
 	util::GEOSException originalEx;
-	try {
+
+	try
+	{
 		Geometry *result = geom0->difference(geom1);
 		return result;
-	} catch (const util::GEOSException& ex) {
+	}
+	catch (const util::GEOSException& ex)
+	{
 		originalEx = ex;
 	}
+
+#if GEOS_DEBUG
+	std::cerr << "Original precision failed, let's try with reduced"
+	          << std::endl;
+#endif
+
 	/*
 	 * If we are here, the original op encountered a precision problem
-	 * (or some other problem)->  Retry the operation with
+	 * (or some other problem).  Retry the operation with
 	 * enhanced precision to see if it succeeds
 	 */
-	try {
-		CommonBitsOp *cbo = new CommonBitsOp(true);
-		Geometry *resultEP = cbo->difference(geom0, geom1);
-		delete cbo; // check that result is a valid geometry after the reshift to orginal precision
+	try
+	{
+		CommonBitsOp cbo(true);
+		Geometry *resultEP = cbo.difference(geom0, geom1);
+
+		// check that result is a valid geometry after
+		// the reshift to orginal precision
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& /* ex2 */) {
+	}
+	catch (const util::GEOSException& /* ex2 */)
+	{
 		throw originalEx;
 	}
 }
 
-/**
- * Computes the set-theoretic symmetric difference of two {@link Geometry}s, using enhanced precision
- * @param geom0 the first Geometry
- * @param geom1 the second Geometry
- * @return the Geometry representing the set-theoretic symmetric difference of the input Geometries
- */
+/*public static*/
 Geometry*
-EnhancedPrecisionOp::symDifference(Geometry *geom0, Geometry *geom1)
+EnhancedPrecisionOp::symDifference(
+		const Geometry *geom0,
+		const Geometry *geom1)
 {
 	util::GEOSException originalEx;
-	try {
+	try
+	{
 		Geometry *result = geom0->symDifference(geom1);
 		return result;
-	} catch (const util::GEOSException& ex) {
+	}
+	catch (const util::GEOSException& ex)
+	{
 		originalEx = ex;
 	}
+
 	/*
-	* If we are here, the original op encountered a precision problem
-	* (or some other problem)->  Retry the operation with
-	* enhanced precision to see if it succeeds
-	*/
-	try {
-		CommonBitsOp *cbo = new CommonBitsOp(true);
-		Geometry* resultEP = cbo->symDifference(geom0, geom1);
-		delete cbo; // check that result is a valid geometry after the reshift to orginal precision
+	 * If we are here, the original op encountered a precision problem
+	 * (or some other problem).  Retry the operation with
+	 * enhanced precision to see if it succeeds
+	 */
+	try
+	{
+		CommonBitsOp cbo(true);
+		Geometry* resultEP = cbo.symDifference(geom0, geom1);
+		
+		// check that result is a valid geometry after
+		// the reshift to orginal precision
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& /* ex2 */) {
+	}
+	catch (const util::GEOSException& /* ex2 */)
+	{
 		throw originalEx;
 	}
 }
 
-/**
- * Computes the buffer of a {@link Geometry}, using enhanced precision
- * This method should no longer be necessary, since the buffer algorithm
- * now is highly robust
- *
- * @param geom0 the first Geometry
- * @param distance the buffer distance
- * @return the Geometry representing the buffer of the input Geometry
- */
+/*public static*/
 Geometry*
-EnhancedPrecisionOp::buffer(Geometry *geom, double distance)
+EnhancedPrecisionOp::buffer(const Geometry *geom, double distance)
 {
 	util::GEOSException originalEx;
-	try {
+	try
+	{
 		Geometry *result = geom->buffer(distance);
 		return result;
-	} catch (const util::GEOSException& ex)	{
+	}
+	catch (const util::GEOSException& ex)
+	{
 		originalEx = ex;
 	}
+
 	/*
 	 * If we are here, the original op encountered a precision problem
 	 * (or some other problem)->  Retry the operation with
 	 * enhanced precision to see if it succeeds
 	 */
-	try {
-		CommonBitsOp *cbo = new CommonBitsOp(true);
-		Geometry *resultEP = cbo->buffer(geom, distance);
-		delete cbo; // check that result is a valid geometry after the reshift to orginal precision
+	try
+	{
+		CommonBitsOp cbo(true);
+		Geometry *resultEP = cbo.buffer(geom, distance);
+
+		// check that result is a valid geometry
+		// after the reshift to orginal precision
 		if (! resultEP->isValid())
 			throw originalEx;
 		return resultEP;
-	} catch (const util::GEOSException& /* ex2 */) {
+	}
+	catch (const util::GEOSException& /* ex2 */)
+	{
 		throw originalEx;
 	}
 }
@@ -197,6 +242,9 @@ EnhancedPrecisionOp::buffer(Geometry *geom, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/04/06 14:36:51  strk
+ * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
+ *
  * Revision 1.7  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *
