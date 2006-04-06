@@ -14,6 +14,7 @@ geos_unit_SOURCES = \
 	geom/Envelope.cpp \
 	geom/LineSegment.cpp \
 	io/WKBReader.cpp \
+	index/quadtree/DoubleBitsTest.cpp \
 	algorithm/PointLocator.cpp \
 	geom/Geometry/isRectangle.cpp 
 
