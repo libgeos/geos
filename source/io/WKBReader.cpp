@@ -458,7 +458,7 @@ WKBReader::readCoordinateSequence(int size)
 void
 WKBReader::readCoordinate()
 {
-	static const PrecisionModel &pm = *factory.getPrecisionModel();
+	const PrecisionModel &pm = *factory.getPrecisionModel();
 	for (unsigned int i=0; i<inputDimension; ++i)
 	{
 		if ( i <= 1 ) ordValues[i] = pm.makePrecise(dis.readDouble());
