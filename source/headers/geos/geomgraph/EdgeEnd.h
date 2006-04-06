@@ -53,6 +53,8 @@ class EdgeEnd {
 
 public:
 
+	friend std::ostream& operator<< (std::ostream&, const EdgeEnd&);
+
 	EdgeEnd();
 
 	virtual ~EdgeEnd();
@@ -135,6 +137,8 @@ private:
 	int quadrant;
 };
 
+std::ostream& operator<< (std::ostream&, const EdgeEnd&);
+
 struct EdgeEndLT {
 	bool operator()(const EdgeEnd *s1, const EdgeEnd *s2) const {
 		return s1->compareTo(s2)<0;
@@ -152,6 +156,9 @@ struct EdgeEndLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/06 09:39:56  strk
+ * Added operator<<
+ *
  * Revision 1.4  2006/04/03 17:05:22  strk
  * Assertion checking, port info, cleanups
  *

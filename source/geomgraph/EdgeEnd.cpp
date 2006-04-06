@@ -27,6 +27,7 @@
 #include <typeinfo>
 #include <cmath>
 #include <sstream>
+#include <iostream>
 #include <string>
 #include <cassert>
 
@@ -197,23 +198,35 @@ EdgeEnd::print()
 {
 	std::ostringstream s;
 
-	s << "EdgeEnd: ";
-	s << p0;
-	s << " - ";
-	s << p1;
-	s << " ";
-	s << quadrant << ":" << atan2(dy,dx);
-	s << "  ";
-	s << label->toString();
+	s<<*this;
 
 	return s.str();
 }
+
+std::ostream&
+operator<< (std::ostream& os, const EdgeEnd& ee)
+{
+	os << "EdgeEnd: ";
+	os << ee.p0;
+	os << " - ";
+	os << ee.p1;
+	os << " ";
+	os << ee.quadrant << ":" << atan2(ee.dy, ee.dx);
+	os << "  ";
+	os << ee.label;
+
+	return os;
+}
+
 
 } // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/04/06 09:39:55  strk
+ * Added operator<<
+ *
  * Revision 1.15  2006/04/03 17:05:22  strk
  * Assertion checking, port info, cleanups
  *
