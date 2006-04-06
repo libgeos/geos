@@ -20,7 +20,9 @@
  * 
  * TODO:
  *
- *  Remove heap allocation of GeometryFactory (might use a singleton)
+ *  - Remove heap allocation of GeometryFactory (might use a singleton)
+ *  - Track MaximalEdgeRing references: we might be deleting them 
+ *    leaving dangling refs around.
  *
  **********************************************************************/
 
@@ -150,6 +152,9 @@ ConnectedInteriorTester::isInteriorsConnected()
 	for(unsigned int i=0, n=edgeRings->size(); i<n; ++i)
 	{
 		EdgeRing* er = (*edgeRings)[i];
+#if GEOS_DEBUG
+		cerr<<*er<<endl;
+#endif
 		assert(er);
 		delete er;
 #if GEOS_DEBUG
@@ -157,6 +162,16 @@ ConnectedInteriorTester::isInteriorsConnected()
 #endif
 	}
 	delete edgeRings;
+
+	// Release memory allocated by MaximalEdgeRings
+	// There should be no more references to this object
+	// how to check this ? boost::shared_ptr<> comes to mind.
+	//
+	for (unsigned int i=0, n=maximalEdgeRings.size(); i<n; i++)
+	{
+		delete maximalEdgeRings[i];
+	}
+	maximalEdgeRings.clear();
 
 	return res;
 }
@@ -181,19 +196,30 @@ ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph &graph)
 std::vector<EdgeRing*>*
 ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 {
+#if GEOS_DEBUG
+	cerr << __FUNCTION__ << " got " << dirEdges->size() << " EdgeEnd vector" << endl;
+#endif
 	std::vector<MinimalEdgeRing*> minEdgeRings;
 	for(unsigned int i=0, n=dirEdges->size(); i<n; ++i)
 	{
 		assert(dynamic_cast<DirectedEdge*>((*dirEdges)[i]));
 		DirectedEdge *de=static_cast<DirectedEdge*>((*dirEdges)[i]);
+
+#if GEOS_DEBUG
+		cerr << "DirectedEdge " << i << ": " << de->print() << endl;
+#endif
+
 		// if this edge has not yet been processed
 		if(de->isInResult() && de->getEdgeRing()==NULL)
 		{
 			//EdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
 			//edgeRings->push_back(er);
 
-			auto_ptr<MaximalEdgeRing> er(new MaximalEdgeRing(de, geometryFactory));
-			//MaximalEdgeRing* er=new MaximalEdgeRing(de, geometryFactory);
+			MaximalEdgeRing* er=new MaximalEdgeRing(de, geometryFactory);
+			// We track MaximalEdgeRings allocations
+			// using the private maximalEdgeRings vector
+			maximalEdgeRings.push_back(er);
+
 			er->linkDirectedEdgesForMinimalEdgeRings();
 			er->buildMinimalRings(minEdgeRings);
 		}
@@ -323,6 +349,11 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/04/06 12:45:28  strk
+ * Delayed deletion of newly allocated MaximalEdgeRings.
+ * Existing 'valid' operation tests don't should instability with
+ * this patch.
+ *
  * Revision 1.27  2006/03/29 13:53:59  strk
  * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
  *
