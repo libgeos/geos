@@ -664,15 +664,15 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 
 #if GEOS_DEBUG
 	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2,intPt) called:"<<endl;
-	cerr<<" p1"<<p1.toString()<<endl;
-	cerr<<" p2"<<p2.toString()<<endl;
-	cerr<<" q1"<<q1.toString()<<endl;
-	cerr<<" q2"<<q2.toString()<<endl;
+	cerr<<" p1:"<<p1.toString()<<endl;
+	cerr<<" p2:"<<p2.toString()<<endl;
+	cerr<<" q1:"<<q1.toString()<<endl;
+	cerr<<" q2:"<<q2.toString()<<endl;
 
-	cerr<<" n1"<<n1.toString()<<endl;
-	cerr<<" n2"<<n2.toString()<<endl;
-	cerr<<" n3"<<n3.toString()<<endl;
-	cerr<<" n4"<<n4.toString()<<endl;
+	cerr<<" n1:"<<n1.toString()<<endl;
+	cerr<<" n2:"<<n2.toString()<<endl;
+	cerr<<" n3:"<<n3.toString()<<endl;
+	cerr<<" n4:"<<n4.toString()<<endl;
 #endif
 
 	try {
@@ -749,7 +749,7 @@ LineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) con
 
 /*private*/
 bool
-LineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
+LineIntersector::isInSegmentEnvelopes(const Coordinate& intPt) const
 {
 	Envelope env0(*inputLines[0][0], *inputLines[0][1]);
 	Envelope env1(*inputLines[1][0], *inputLines[1][1]);
@@ -808,6 +808,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2006/04/06 21:31:40  strk
+ * Const correctness for debugging function
+ *
  * Revision 1.39  2006/04/04 12:39:08  strk
  * Changed NotRepresentableCoordinate exception handler to throw
  * a TopologyException. This allows further handling.
