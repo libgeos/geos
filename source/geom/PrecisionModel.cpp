@@ -50,8 +50,6 @@ PrecisionModel::makePrecise(double val) const
 	cerr<<"PrecisionModel["<<this<<"]::makePrecise called"<<endl;
 #endif
 
-	if ( isFloating() ) assert(scale==666);
-
 	if (modelType==FLOATING_SINGLE) {
 		float floatSingleVal = (float) val;
 		return (double) floatSingleVal;
@@ -84,8 +82,7 @@ PrecisionModel::makePrecise(Coordinate& coord) const
 PrecisionModel::PrecisionModel()
 	:
 	modelType(FLOATING),
-	scale(666), // was 1.0
-	modelType_backup(modelType)
+	scale(1.0)
 {
 #if GEOS_DEBUG
 	cerr<<"PrecisionModel["<<this<<"] ctor()"<<endl;
@@ -97,8 +94,7 @@ PrecisionModel::PrecisionModel()
 /*public*/
 PrecisionModel::PrecisionModel(Type nModelType)
 	:
-	modelType(nModelType),
-	modelType_backup(modelType)
+	modelType(nModelType)
 {
 #if GEOS_DEBUG
 	cerr<<"PrecisionModel["<<this<<"] ctor(Type)"<<endl;
@@ -106,9 +102,8 @@ PrecisionModel::PrecisionModel(Type nModelType)
 	//modelType=nModelType;
 	if (modelType==FIXED){
 		setScale(1.0);
-	} else {
-		setScale(666); // arbitrary number for invariant testing
 	}
+	//else setScale(666); // arbitrary number for invariant testing
 }
 
 
@@ -142,8 +137,7 @@ PrecisionModel::PrecisionModel(double newScale)
 PrecisionModel::PrecisionModel(const PrecisionModel &pm)
 	:
 	modelType(pm.modelType),
-	scale(pm.scale),
-	modelType_backup(pm.modelType_backup)
+	scale(pm.scale)
 {
 #if GEOS_DEBUG
 	cerr<<"PrecisionModel["<<this<<"] ctor(pm["<< &pm <<"])"<<endl;
@@ -233,6 +227,9 @@ PrecisionModel::compareTo(const PrecisionModel *other) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2006/04/06 12:36:52  strk
+ * removed spurious lines from previous commi
+ *
  * Revision 1.42  2006/04/06 12:34:07  strk
  * Port info, more debugging lines, doxygen comments
  *
