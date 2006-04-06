@@ -14,10 +14,6 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <vector>
-#include <typeinfo>
-
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -33,6 +29,10 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
 #include <geos/util/IllegalArgumentException.h>
+
+#include <cassert>
+#include <vector>
+#include <typeinfo>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -71,6 +71,7 @@ GeometryFactory::GeometryFactory()
 {
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory()" << std::endl;
+	std::cerr << " \ create PrecisionModel["<<precisionModel<<"]" << std::endl;
 #endif
 }
 
@@ -80,6 +81,9 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
 	:
 	SRID(newSRID)
 {
+#if GEOS_DEBUG
+	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(PrecisionModel["<<pm<<"], SRID)" << std::endl;
+#endif
 	if ( ! pm ) {
 		precisionModel=new PrecisionModel();
 	} else {
@@ -100,6 +104,9 @@ GeometryFactory::GeometryFactory(
 	precisionModel(new PrecisionModel()),
 	SRID(0)
 {
+#if GEOS_DEBUG
+	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(CoordinateSequenceFactory["<<nCoordinateSequenceFactory<<"])" << std::endl;
+#endif
 	if ( ! nCoordinateSequenceFactory ) {
 		coordinateListFactory=CoordinateArraySequenceFactory::instance();
 	} else {
@@ -113,6 +120,9 @@ GeometryFactory::GeometryFactory(const PrecisionModel *pm)
 	SRID(0),
 	coordinateListFactory(CoordinateArraySequenceFactory::instance())
 {
+#if GEOS_DEBUG
+	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(PrecisionModel["<<pm<<"])" << std::endl;
+#endif
 	if ( ! pm ) {
 		precisionModel=new PrecisionModel();
 	} else {
@@ -126,6 +136,9 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
 	SRID(newSRID),
 	coordinateListFactory(CoordinateArraySequenceFactory::instance())
 {
+#if GEOS_DEBUG
+	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(PrecisionModel["<<pm<<"], SRID)" << std::endl;
+#endif
 	if ( ! pm ) {
 		precisionModel=new PrecisionModel();
 	} else {
@@ -641,6 +654,9 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.65  2006/04/06 12:33:04  strk
+ * More debugging lines
+ *
  * Revision 1.64  2006/03/31 17:51:24  strk
  * A few assertion checking, comments cleanup, use of initialization lists
  * in constructors, handled NULL parameters.
