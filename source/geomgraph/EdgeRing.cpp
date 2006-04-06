@@ -33,6 +33,7 @@
 
 #include <vector>
 #include <cassert>
+#include <iostream> // for operator<<
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -388,11 +389,23 @@ EdgeRing::containsPoint(const Coordinate& p)
 	return true;
 }
 
+std::ostream& operator<< (std::ostream& os, const EdgeRing& er)
+{
+	os << "EdgeRing[" << &er << "]: "
+	   << std::endl
+	   << "Points: " << er.pts
+	   << std::endl;
+	return os;
+}
+
 } // namespace geos.geomgraph
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/04/06 09:41:55  strk
+ * Added operator<<, added pts!=NULL assertion in testInvariant() function
+ *
  * Revision 1.22  2006/03/29 13:53:56  strk
  * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
  *
@@ -402,238 +415,6 @@ EdgeRing::containsPoint(const Coordinate& p)
  *
  * Revision 1.20  2006/03/23 15:10:29  strk
  * Dropped by-pointer TopologyException constructor, various small cleanups
- *
- * Revision 1.19  2006/03/15 17:16:29  strk
- * streamlined headers inclusion
- *
- * Revision 1.18  2006/03/15 15:26:58  strk
- * Cleanups
- *
- * Revision 1.17  2006/03/10 15:50:26  strk
- * Changed 'found null Directed Edge' from an Assertion to a TopologyException, to give 'precision-reducing' overlay operation a chance to handle it (it seems to work)
- *
- * Revision 1.16  2006/03/10 13:07:32  strk
- * fine-tuned includes, reverted Assert=>assert due to user-input based failure
- *
- * Revision 1.15  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.14  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.13  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.12  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.11  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.10  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.9  2005/11/24 23:09:15  strk
- * CoordinateSequence indexes switched from int to the more
- * the correct unsigned int. Optimizations here and there
- * to avoid calling getSize() in loops.
- * Update of all callers is not complete yet.
- *
- * Revision 1.8  2005/11/18 00:55:29  strk
- *
- * Fixed a bug in EdgeRing::containsPoint().
- * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
- * usages from PolygonBuilder.
- * Removed CoordinateSequence copy in EdgeRing (ownership is transferred
- * to its LinearRing).
- * Removed heap allocations for EdgeRing containers.
- * Initialization lists and cleanups.
- *
- * Revision 1.7  2005/05/19 10:29:28  strk
- * Removed some CGAlgorithms instances substituting them with direct calls
- * to the static functions. Interfaces accepting CGAlgorithms pointers kept
- * for backward compatibility but modified to make the argument optional.
- * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
- * Inlined some smaller functions encountered during bug hunting.
- * Updated Copyright notices in the touched files.
- *
- * Revision 1.6  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.5  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.4  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.2  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.22  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.21  2003/11/06 17:59:03  strk
- * Memory leaks fixed in ::containsPoint()
- *
- * Revision 1.20  2003/10/20 14:02:14  strk
- * more explicit exception thrown on null Directed Edge detection
- *
- * Revision 1.19  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- * $Log$
- * Revision 1.22  2006/03/29 13:53:56  strk
- * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
- *
- * Revision 1.21  2006/03/27 16:02:33  strk
- * Added INL file for MinimalEdgeRing, added many debugging blocks,
- * fixed memory leak in ConnectedInteriorTester (bug #59)
- *
- * Revision 1.20  2006/03/23 15:10:29  strk
- * Dropped by-pointer TopologyException constructor, various small cleanups
- *
- * Revision 1.19  2006/03/15 17:16:29  strk
- * streamlined headers inclusion
- *
- * Revision 1.18  2006/03/15 15:26:58  strk
- * Cleanups
- *
- * Revision 1.17  2006/03/10 15:50:26  strk
- * Changed 'found null Directed Edge' from an Assertion to a TopologyException, to give 'precision-reducing' overlay operation a chance to handle it (it seems to work)
- *
- * Revision 1.16  2006/03/10 13:07:32  strk
- * fine-tuned includes, reverted Assert=>assert due to user-input based failure
- *
- * Revision 1.15  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.14  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.13  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.12  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.11  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.10  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.9  2005/11/24 23:09:15  strk
- * CoordinateSequence indexes switched from int to the more
- * the correct unsigned int. Optimizations here and there
- * to avoid calling getSize() in loops.
- * Update of all callers is not complete yet.
- *
- * Revision 1.8  2005/11/18 00:55:29  strk
- *
- * Fixed a bug in EdgeRing::containsPoint().
- * Changed EdgeRing::getLinearRing() to avoid LinearRing copy and updated
- * usages from PolygonBuilder.
- * Removed CoordinateSequence copy in EdgeRing (ownership is transferred
- * to its LinearRing).
- * Removed heap allocations for EdgeRing containers.
- * Initialization lists and cleanups.
- *
- * Revision 1.7  2005/05/19 10:29:28  strk
- * Removed some CGAlgorithms instances substituting them with direct calls
- * to the static functions. Interfaces accepting CGAlgorithms pointers kept
- * for backward compatibility but modified to make the argument optional.
- * Fixed a small memory leak in OffsetCurveBuilder::getRingCurve.
- * Inlined some smaller functions encountered during bug hunting.
- * Updated Copyright notices in the touched files.
- *
- * Revision 1.6  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.5  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.4  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.3  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.2  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.22  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

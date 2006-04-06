@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <cassert> // for testInvariant
+#include <iosfwd> // for operator<<
 
 
 // Forward declarations
@@ -46,7 +47,9 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 class EdgeRing {
+
 public:
+	friend std::ostream& operator<< (std::ostream& os, const EdgeRing& er);
 
 	EdgeRing(DirectedEdge *newStart,
 			const geom::GeometryFactory *newGeometryFactory);
@@ -109,6 +112,9 @@ public:
 
 	void testInvariant()
 	{
+		// pts are never NULL
+		assert(pts);
+
 #ifndef NDEBUG
 		// If this is not an hole, check that
 		// each hole is not null and 
@@ -181,6 +187,8 @@ private:
 
 };
 
+std::ostream& operator<< (std::ostream& os, const EdgeRing& er);
+
 } // namespace geos.geomgraph
 } // namespace geos
 
@@ -192,6 +200,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/04/06 09:41:55  strk
+ * Added operator<<, added pts!=NULL assertion in testInvariant() function
+ *
  * Revision 1.7  2006/04/05 18:28:42  strk
  * Moved testInvariant() methods from private to public, added
  * some comments about them.
