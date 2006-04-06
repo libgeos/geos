@@ -12,13 +12,20 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/TopologyLocation.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
-
-#include <vector>
 
 #include <geos/geomgraph/TopologyLocation.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/Location.h>
+
+#include <vector>
+#include <sstream>
+#include <iostream>
+#include <cassert>
 
 using namespace std;
 using namespace geos::geom;
@@ -26,27 +33,23 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/*public*/
 TopologyLocation::TopologyLocation(const vector<int> &newLocation):
 	location(newLocation.size(), Location::UNDEF)
 {
 }
 
+/*public*/
 TopologyLocation::TopologyLocation()
 {
 }
 
+/*public*/
 TopologyLocation::~TopologyLocation()
 {
 }
 
-/**
- * Constructs a TopologyLocation specifying how points on, to the
- * left of, and to the right of some GraphComponent relate to some
- * Geometry. Possible values for the
- * parameters are Location.NULL, Location.EXTERIOR, Location.BOUNDARY, 
- * and Location.INTERIOR.
- * @see Location
- */
+/*public*/
 TopologyLocation::TopologyLocation(int on, int left, int right):
 	location(3)
 {
@@ -55,28 +58,30 @@ TopologyLocation::TopologyLocation(int on, int left, int right):
 	location[Position::RIGHT]=right;
 }
 
+/*public*/
 TopologyLocation::TopologyLocation(int on):
 	location(1, on)
 {
 	//(*location)[Position::ON]=on;
 }
 
+/*public*/
 TopologyLocation::TopologyLocation(const TopologyLocation &gl):
 	location(gl.location)
 {
 	//location=new vector<int>(gl->location->begin(),gl->location->end());
 }
 
+/*public*/
 int
 TopologyLocation::get(unsigned int posIndex) const
 {
+	// should be an assert() instead ?
 	if (posIndex<location.size()) return location[posIndex];
 	return Location::UNDEF;
 }
 
-/**
- * @return true if all locations are NULL
- */
+/*public*/
 bool
 TopologyLocation::isNull() const
 {
@@ -86,9 +91,7 @@ TopologyLocation::isNull() const
 	return true;
 }
 
-/**
- * @return true if any locations are NULL
- */
+/*public*/
 bool
 TopologyLocation::isAnyNull() const
 {
@@ -98,24 +101,28 @@ TopologyLocation::isAnyNull() const
 	return false;
 }
 
+/*public*/
 bool
 TopologyLocation::isEqualOnSide(const TopologyLocation &le, int locIndex) const
 {
 	return location[locIndex]==le.location[locIndex];
 }
 
+/*public*/
 bool
 TopologyLocation::isArea() const
 {
 	return location.size()>1;
 }
 
+/*public*/
 bool
 TopologyLocation::isLine() const
 {
 	return location.size()==1;
 }
 
+/*public*/
 void
 TopologyLocation::flip()
 {
@@ -125,6 +132,7 @@ TopologyLocation::flip()
 	location[Position::RIGHT] = temp;
 }
 
+/*public*/
 void
 TopologyLocation::setAllLocations(int locValue)
 {
@@ -133,6 +141,7 @@ TopologyLocation::setAllLocations(int locValue)
 	}
 }
 
+/*public*/
 void
 TopologyLocation::setAllLocationsIfNull(int locValue)
 {
@@ -141,32 +150,38 @@ TopologyLocation::setAllLocationsIfNull(int locValue)
 	}
 }
 
+/*public*/
 void
 TopologyLocation::setLocation(unsigned int locIndex, int locValue)
 {
 	location[locIndex]=locValue;
 }
 
+/*public*/
 void
 TopologyLocation::setLocation(int locValue)
 {
 	setLocation(Position::ON, locValue);
 }
 
+/*public*/
 const vector<int> &
 TopologyLocation::getLocations() const
 {
 	return location;
 }
 
+/*public*/
 void
 TopologyLocation::setLocations(int on, int left, int right)
 {
+	assert(location.size() >= 3);
 	location[Position::ON]=on;
 	location[Position::LEFT]=left;
 	location[Position::RIGHT]=right;
 }
 
+/*public*/
 bool
 TopologyLocation::allPositionsEqual(int loc) const
 {
@@ -176,10 +191,7 @@ TopologyLocation::allPositionsEqual(int loc) const
 	return true;
 }
 
-/**
- * merge updates only the NULL attributes of this object
- * with the attributes of another.
- */
+/*public*/
 void
 TopologyLocation::merge(const TopologyLocation &gl)
 {
@@ -200,11 +212,17 @@ TopologyLocation::merge(const TopologyLocation &gl)
 string
 TopologyLocation::toString() const
 {
-	string buf="";
-	if (location.size()>1) buf+=Location::toLocationSymbol(location[Position::LEFT]);
-	buf+=Location::toLocationSymbol(location[Position::ON]);
-	if (location.size()>1) buf+=Location::toLocationSymbol(location[Position::RIGHT]);
-	return buf;
+	stringstream ss;
+	ss << *this;
+	return ss.str();
+}
+
+std::ostream& operator<< (std::ostream& os, const TopologyLocation& tl)
+{
+	if (tl.location.size()>1) os << Location::toLocationSymbol(tl.location[Position::LEFT]);
+	os << Location::toLocationSymbol(tl.location[Position::ON]);
+	if (tl.location.size()>1) os << Location::toLocationSymbol(tl.location[Position::RIGHT]);
+	return os;
 }
 
 } // namespace geos.geomgraph
@@ -212,6 +230,9 @@ TopologyLocation::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/04/06 09:01:10  strk
+ * Doxygen comments, port info, operator<<, assertion checking
+ *
  * Revision 1.8  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *
