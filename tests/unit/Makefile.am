@@ -11,10 +11,24 @@ geos_unit_LDADD = $(top_builddir)/source/libgeos.la
 
 geos_unit_SOURCES = \
 	geos_unit.cpp \
-	geom/Envelope.cpp \
-	geom/LineSegment.cpp \
-	io/WKBReader.cpp \
+	algorithm/PointLocatorTest.cpp \
+	geom/CoordinateArraySequenceFactoryTest.cpp \
+	geom/CoordinateArraySequenceTest.cpp \
+	geom/CoordinateTest.cpp \
+	geom/DimensionTest.cpp \
+	geom/EnvelopeTest.cpp \
+	geom/GeometryFactoryTest.cpp \
+	geom/LineSegmentTest.cpp \
+	geom/LineStringTest.cpp \
+	geom/LinearRingTest.cpp \
+	geom/LocationTest.cpp \
+	geom/MultiLineStringTest.cpp \
+	geom/MultiPointTest.cpp \
+	geom/MultiPolygonTest.cpp \
+	geom/PointTest.cpp \
+	geom/PolygonTest.cpp \
+	geom/TriangleTest.cpp \	
+	geom/Geometry/isRectangleTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
-	algorithm/PointLocator.cpp \
-	geom/Geometry/isRectangle.cpp 
+	io/WKBReaderTest.cpp
 

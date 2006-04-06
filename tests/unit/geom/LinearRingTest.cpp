@@ -1,0 +1,434 @@
+// $Id$
+// 
+// Test Suite for geos::geom::LinearRing class.
+
+// TUT
+#include <tut.h>
+// GEOS
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/Dimension.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/io/WKTReader.h>
+#include <geos/util/IllegalArgumentException.h>
+// STL
+#include <cmath>
+
+namespace tut
+{
+	//
+	// Test Group
+	//
+
+	// Common data used by tests
+	struct test_linearring_data
+	{
+		// Typedefs used as short names by test cases
+		typedef geos::geom::Geometry* GeometryPtr;
+		typedef geos::geom::Geometry const* GeometryCPtr;
+
+		typedef geos::geom::Coordinate* CoordinatePtr;
+		typedef geos::geom::Coordinate const* CoordinateCPtr;
+
+		typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
+		typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
+
+		typedef geos::geom::LinearRing* LinearRingPtr;
+		typedef geos::geom::LinearRing const* LinearRingCPtr;
+
+		geos::geom::PrecisionModel pm_;
+		geos::geom::GeometryFactory factory_;
+		geos::io::WKTReader reader_;
+
+		geos::geom::LinearRing empty_ring_;
+		LinearRingPtr ring_;
+		const int ring_size_;
+
+		test_linearring_data()
+			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
+			empty_ring_(new geos::geom::CoordinateArraySequence(), &factory_),
+			ring_size_(7)
+		{
+			// Create non-empty LinearRing
+			GeometryPtr geo = 0;
+			geo = reader_.read("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)");
+			ring_ = static_cast<LinearRingPtr>(geo);
+		}
+
+		~test_linearring_data()
+		{
+			factory_.destroyGeometry(ring_);
+		}
+	};
+
+	typedef test_group<test_linearring_data> group;
+	typedef group::object object;
+
+	group test_linearring_group("geos::geom::LinearRing");
+
+	//
+	// Test Cases
+	//
+
+	// Test of user's constructor to create non-empty LinearRing
+	template<>
+	template<>
+	void object::test<1>()
+	{
+		using geos::geom::Coordinate;
+
+		// Non-empty sequence of coordiantes
+		const int size = 7;
+		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
+		ensure( "sequence is null pointer.", coords != 0 );
+
+		coords->add(Coordinate(0, 10));
+		coords->add(Coordinate(5, 5));
+		coords->add(Coordinate(10, 5));
+		coords->add(Coordinate(15, 10));
+		coords->add(Coordinate(10, 15));
+		coords->add(Coordinate(5, 15));
+		coords->add(Coordinate(0, 10));
+
+		ensure_equals( coords->size(), size );
+
+		try
+		{
+			// Create non-empty linearring instance
+			geos::geom::LinearRing ring(coords, &factory_);
+			ensure( !ring.isEmpty() );
+			ensure( ring.isClosed() );
+			ensure( ring.isRing() );
+			ensure( ring.isSimple() );
+
+			ensure( ring.isValid() );
+		}
+		catch (geos::util::IllegalArgumentException const& e)
+		{
+			fail(e.what());
+		}
+	}
+
+	// Test of copy contructor
+	template<>
+	template<>
+	void object::test<2>()
+	{
+		geos::geom::LinearRing copy(empty_ring_);
+
+		ensure( copy.isEmpty() );
+	}
+
+	// Test of isEmpty() for empty LinearRing
+	template<>
+	template<>
+	void object::test<3>()
+	{
+		ensure( empty_ring_.isEmpty() );
+	}
+
+	// Test of isClosed() for empty LinearRing
+	template<>
+	template<>
+	void object::test<4>()
+	{
+		ensure( empty_ring_.isClosed() );
+	}
+
+	// Test of isRing() for empty LinearRing
+	template<>
+	template<>
+	void object::test<5>()
+	{
+		ensure( empty_ring_.isRing() );
+	}
+
+	// Test of isSimple() for empty LinearRing
+	template<>
+	template<>
+	void object::test<6>()
+	{
+		ensure( empty_ring_.isSimple() );
+	}
+
+	// Test of isValid() for empty LinearRing
+	template<>
+	template<>
+	void object::test<7>()
+	{
+		ensure( empty_ring_.isValid() );
+	}
+
+
+	// Test of getEnvelope() for empty LinearRing
+	template<>
+	template<>
+	void object::test<8>()
+	{
+		GeometryPtr envelope = empty_ring_.getEnvelope();	
+		ensure( envelope != 0 );
+		ensure( envelope->isEmpty() );
+		factory_.destroyGeometry(envelope);
+	}
+
+	// Test of getBoundary() for empty LinearRing
+	template<>
+	template<>
+	void object::test<9>()
+	{
+		GeometryPtr boundary = empty_ring_.getBoundary();	
+		ensure( boundary != 0 );
+		ensure( boundary->isEmpty() );
+		factory_.destroyGeometry(boundary);
+	}
+
+	// Test of convexHull() for empty LinearRing
+	template<>
+	template<>
+	void object::test<10>()
+	{
+		GeometryPtr hull = empty_ring_.convexHull();	
+		ensure( hull != 0 );
+		ensure( hull->isEmpty() );
+		factory_.destroyGeometry(hull);
+	}
+
+	// Test of getGeometryTypeId() for empty LinearRing
+	template<>
+	template<>
+	void object::test<11>()
+	{
+		ensure_equals( empty_ring_.getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
+	}
+
+	// Test of getDimension() for empty LinearRing
+	template<>
+	template<>
+	void object::test<12>()
+	{
+		ensure_equals( empty_ring_.getDimension(), geos::geom::Dimension::L );
+	}
+
+	// Test of getBoundaryDimension() for empty LinearRing
+	template<>
+	template<>
+	void object::test<13>()
+	{
+		ensure_equals( empty_ring_.getBoundaryDimension(), geos::geom::Dimension::False );
+	}	
+
+	// Test of getNumPoints() for empty LinearRing
+	template<>
+	template<>
+	void object::test<14>()
+	{
+		ensure_equals( empty_ring_.getNumPoints(), 0 );
+	}
+
+	// Test of getLength() for empty LinearRing
+	template<>
+	template<>
+	void object::test<15>()
+	{
+		ensure_equals( empty_ring_.getLength(), 0 );
+	}
+
+	// Test of getArea() for empty LinearRing
+	template<>
+	template<>
+	void object::test<16>()
+	{
+		ensure_equals( empty_ring_.getArea(), 0 );
+	}
+
+    // Test of isEmpty() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<17>()
+	{
+		ensure(ring_ != 0);
+		ensure( !ring_->isEmpty() );
+	}
+
+    // Test of isClosed() and isRing() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<18>()
+	{
+		ensure(ring_ != 0);
+		ensure( ring_->isClosed() );
+		ensure( ring_->isRing() );		
+	}
+
+    // Test of getEnvelope() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<19>()
+	{
+		ensure(ring_ != 0);
+
+		GeometryPtr envelope = ring_->getEnvelope();	
+		ensure( envelope != 0 );
+		ensure( !envelope->isEmpty() );
+		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
+
+		// FREE MEMORY
+		factory_.destroyGeometry(envelope);
+	}
+
+	// Test of getBoundary() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<20>()
+	{
+		ensure(ring_ != 0);
+
+		GeometryPtr boundary = ring_->getBoundary();	
+		ensure( boundary != 0 );
+
+		// OGC 05-126, Version: 1.1.0, Chapter 6.1.6 Curve
+		ensure( "[OGC] The boundary of a closed Curve must be empty.", boundary->isEmpty() );
+
+		// FREE MEMORY
+		factory_.destroyGeometry(boundary);
+	}
+
+	// Test of convexHull() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<21>()
+	{
+		ensure(ring_ != 0);
+
+		GeometryPtr hull = ring_->convexHull();	
+		ensure( hull != 0 );
+		ensure( !hull->isEmpty() );
+		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
+		ensure_equals( hull->getDimension(), geos::geom::Dimension::A );
+
+		// FREE MEMORY
+		factory_.destroyGeometry(hull);
+	}
+
+	// Test of getGeometryTypeId() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<22>()
+	{
+		ensure(ring_ != 0);
+		ensure_equals( ring_->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
+	}
+
+	// Test of getDimension() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<23>()
+	{
+		ensure(ring_ != 0);
+		ensure_equals( ring_->getDimension(), geos::geom::Dimension::L );
+	}
+
+	// Test of getBoundaryDimension() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<24>()
+	{
+		ensure(ring_ != 0);
+		ensure_equals( ring_->getBoundaryDimension(), geos::geom::Dimension::False );
+	}
+
+	// Test of getNumPoints() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<25>()
+	{
+		ensure(ring_ != 0);
+		ensure_equals( ring_->getNumPoints(), ring_size_ );
+	}
+
+	// Test of getLength() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<26>()
+	{
+		ensure(ring_ != 0);
+		ensure_not_equals( ring_->getLength(), 0 );
+
+		const double tolerance = 0.0001;
+		const double expected = 38.284271247461902;
+		const double diff = std::fabs(ring_->getLength() - expected);
+		ensure( diff <= tolerance );
+	}
+
+	// Test of getArea() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<27>()
+	{
+		ensure(ring_ != 0);
+		ensure_equals( ring_->getArea(), 0 );
+	}
+
+	// Test of exception thrown when constructing non-empty and non-closed LinearRing
+    template<>
+	template<>
+	void object::test<28>()
+	{
+		try
+		{
+			GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10)");
+			ensure(geo != 0);
+
+			// FREE TESTED LINEARRING
+			factory_.destroyGeometry(geo);
+
+			fail("IllegalArgumentException expected.");
+		}
+		catch (geos::util::IllegalArgumentException const& e)
+		{
+			const char* msg = e.what(); // ok 
+			ensure( msg != 0 );
+		}
+	}
+
+	// TTest of exception thrown when constructing a self-intersecting LinearRing
+	template<>
+	template<>
+	void object::test<29>()
+	{
+		try
+		{
+			// Construc LinearRing self-intersecting in point (5,5)
+			GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10, 15 5, 5 5, 0 10)");
+			ensure(geo != 0);
+
+			LinearRingPtr ring = static_cast<LinearRingPtr>(geo);
+			ensure(ring != 0);
+
+			ensure( !ring->isValid() );
+
+			// FREE TESTED LINEARRING
+			factory_.destroyGeometry(geo);
+
+			fail("IllegalArgumentException expected.");
+		}
+		catch (geos::util::IllegalArgumentException const& e)
+		{
+			const char* msg = e.what(); // ok 
+			ensure( msg != 0 );
+		}
+	}
+	
+	// Test of getGeometryType() for non-empty LinearRing
+    template<>
+    template<>
+    void object::test<30>()
+	{
+		ensure( ring_ != 0 );
+
+		const std::string type("LinearRing");
+		ensure_equals( ring_->getGeometryType(), type );
+	}
+} // namespace tut
