@@ -78,6 +78,9 @@ private:
 	/// the disconnected interior
 	geom::Coordinate disconnectedRingcoord;
 
+	/// Used to track MaximalEdgeRings allocations
+	std::vector<geomgraph::EdgeRing*> maximalEdgeRings;
+
 	void setInteriorEdgesInResult(geomgraph::PlanarGraph &graph);
 
 	
@@ -126,6 +129,9 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/06 12:48:36  strk
+ * Added private vector to keep track of allocated MaximalEdgeRings objects
+ *
  * Revision 1.2  2006/03/27 14:20:46  strk
  * Added paranoid assertion checking and a note in header about responsibility of return from buildMaximalEdgeRings()
  *
