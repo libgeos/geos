@@ -66,7 +66,7 @@ public:
 	 */
 	geom::Coordinate& getCommonCoordinate();
 
-	/**
+	/** \brief
 	 * Removes the common coordinate bits from a Geometry.
 	 * The coordinates of the Geometry are changed.
 	 *
@@ -76,14 +76,14 @@ public:
 	 */
 	geom::Geometry* removeCommonBits(geom::Geometry *geom);
 
-	/**
+	/** \brief
 	 * Adds the common coordinate bits back into a Geometry.
 	 * The coordinates of the Geometry are changed.
 	 *
 	 * @param geom the Geometry to which to add the common coordinate bits
 	 * @return the shifted Geometry
 	 */
-	void addCommonBits(geom::Geometry *geom);
+	geom::Geometry* addCommonBits(geom::Geometry *geom);
 };
 
 } // namespace geos.precision
@@ -93,6 +93,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/07 08:30:30  strk
+ * made addCommonBits/removeCommonBits interface consistent, doxygen comments
+ *
  * Revision 1.2  2006/04/06 14:36:52  strk
  * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
  *
