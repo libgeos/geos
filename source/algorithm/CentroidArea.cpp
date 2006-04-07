@@ -42,7 +42,8 @@ CentroidArea::add(const Geometry *geom)
 	}
 	else if(const GeometryCollection *gc=dynamic_cast<const GeometryCollection*>(geom)) 
 	{
-		for(int i=0;i<gc->getNumGeometries();i++) {
+		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+		{
 			add(gc->getGeometryN(i));
 		}
 	}
@@ -150,6 +151,10 @@ CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/04/07 09:54:28  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.22  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *

@@ -36,7 +36,8 @@ CentroidPoint::add(const Geometry *geom)
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint))) {
 		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(int i=0;i<gc->getNumGeometries();i++) {
+		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+		{
 			add(gc->getGeometryN(i));
 		}
 	}
@@ -69,6 +70,10 @@ CentroidPoint::getCentroid(Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/04/07 09:54:29  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.11  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *

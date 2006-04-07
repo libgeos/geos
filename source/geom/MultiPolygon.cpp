@@ -86,7 +86,8 @@ Geometry* MultiPolygon::getBoundary() const {
 		else
 		{
 			GeometryCollection* rings=(GeometryCollection*)g;
-			for (int j = 0; j < rings->getNumGeometries(); j++)
+			for (unsigned int j=0, jn=rings->getNumGeometries();
+					j<jn; ++j)
 			{
 				allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
 			}
@@ -118,6 +119,10 @@ MultiPolygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.29  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

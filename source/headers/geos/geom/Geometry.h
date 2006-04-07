@@ -264,7 +264,7 @@ public:
 
 	/// Returns the number of geometries in this collection
 	/// (or 1 if this is not a collection)
-	virtual int getNumGeometries() const { return 1; }
+	virtual unsigned int getNumGeometries() const { return 1; }
 
 	/// Returns a pointer to the nth Geometry int this collection
 	/// (or self if this is not a collection)
@@ -644,6 +644,10 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.6  2006/03/31 16:53:53  strk
  * Added comment about possible NULL return from getCoordinate()
  *

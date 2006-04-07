@@ -134,10 +134,10 @@ GeometryCollection::getBoundaryDimension() const
 	return dimension;
 }
 
-int
+unsigned int
 GeometryCollection::getNumGeometries() const
 {
-	return (int)geometries->size();
+	return geometries->size();
 }
 
 const Geometry*
@@ -339,6 +339,10 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.56  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.55  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

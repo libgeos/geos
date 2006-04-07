@@ -306,12 +306,16 @@ void WKTWriter::appendMultiPointText(const MultiPoint *multiPoint, int level, Wr
 		writer->write("EMPTY");
 	} else {
 		writer->write("(");
-		for (int i=0; i<multiPoint->getNumGeometries(); i++) {
-			if (i > 0) {
+		for (unsigned int i=0, n=multiPoint->getNumGeometries();
+				i<n; i++)
+		{
+			if (i > 0)
+			{
 				writer->write(", ");
 			}
-			appendCoordinate(((Point* )multiPoint->getGeometryN(i))->getCoordinate(), writer,
-							  multiPoint->getPrecisionModel());
+			appendCoordinate(
+				((Point* )multiPoint->getGeometryN(i))->getCoordinate(),
+				writer, multiPoint->getPrecisionModel());
 		}
 		writer->write(")");
 	}
@@ -325,7 +329,9 @@ void WKTWriter::appendMultiLineStringText(const MultiLineString *multiLineString
 		int level2=level;
 		bool doIndent=indentFirst;
 		writer->write("(");
-		for (int i=0; i<multiLineString->getNumGeometries();i++) {
+		for (unsigned int i=0, n=multiLineString->getNumGeometries();
+				i<n; i++)
+		{
 			if (i>0) {
 				writer->write(", ");
 				level2=level+1;
@@ -344,7 +350,9 @@ void WKTWriter::appendMultiPolygonText(const MultiPolygon *multiPolygon, int lev
 		int level2=level;
 		bool doIndent=false;
 		writer->write("(");
-		for (int i=0; i<multiPolygon->getNumGeometries();i++) {
+		for (unsigned int i=0, n=multiPolygon->getNumGeometries();
+				i < n; i++)
+		{
 			if (i>0) {
 				writer->write(", ");
 				level2=level+1;
@@ -356,13 +364,20 @@ void WKTWriter::appendMultiPolygonText(const MultiPolygon *multiPolygon, int lev
 	}
 }
 
-void WKTWriter::appendGeometryCollectionText(const GeometryCollection *geometryCollection, int level, Writer *writer) {
+void
+WKTWriter::appendGeometryCollectionText(
+		const GeometryCollection *geometryCollection,
+		int level,
+		Writer *writer)
+{
 	if (geometryCollection->isEmpty()) {
 		writer->write("EMPTY");
 	} else {
 		int level2=level;
 		writer->write("(");
-		for (int i=0; i<geometryCollection->getNumGeometries();i++) {
+		for (unsigned int i=0, n=geometryCollection->getNumGeometries();
+				i < n ; ++i)
+		{
 			if (i>0) {
 				writer->write(", ");
 				level2=level+1;
@@ -385,6 +400,10 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.30  2006/03/22 16:58:35  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

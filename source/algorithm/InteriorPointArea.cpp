@@ -122,7 +122,10 @@ InteriorPointArea::widestGeometry(const GeometryCollection* gc) {
 		return gc;
 	}
 	const Geometry* widestGeometry=gc->getGeometryN(0);
-	for(int i=1;i<gc->getNumGeometries();i++) { //Start at 1
+
+	//Start at 1
+	for(unsigned int i=1, n=gc->getNumGeometries(); i<n; i++)
+	{
 		const Envelope *env1(gc->getGeometryN(i)->getEnvelopeInternal());
 		const Envelope *env2(widestGeometry->getEnvelopeInternal());
 		if (env1->getWidth()>env2->getWidth()) {
@@ -159,6 +162,10 @@ InteriorPointArea::horizontalBisector(const Geometry *geometry)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/04/07 09:54:29  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.21  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *

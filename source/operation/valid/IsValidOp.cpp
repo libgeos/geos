@@ -208,10 +208,10 @@ IsValidOp::checkValid(const Polygon *g)
 void
 IsValidOp::checkValid(const MultiPolygon *g)
 {
-	int ngeoms = g->getNumGeometries();
+	unsigned int ngeoms = g->getNumGeometries();
 	vector<const Polygon *>polys(ngeoms);
 
-	for (int i=0; i<ngeoms; ++i)
+	for (unsigned int i=0; i<ngeoms; ++i)
 	{
 		const Polygon *p = (const Polygon *)g->getGeometryN(i);
 
@@ -238,14 +238,14 @@ IsValidOp::checkValid(const MultiPolygon *g)
 		if (validErr!=NULL) return;
 	}
 
-	for(int i=0; i<ngeoms; ++i)
+	for(unsigned int i=0; i<ngeoms; ++i)
 	{
 		const Polygon *p=polys[i]; 
 		checkHolesInShell(p, &graph);
 		if (validErr!=NULL) return;
 	}
 
-	for(int i=0; i<ngeoms; ++i)
+	for(unsigned int i=0; i<ngeoms; ++i)
 	{
 		const Polygon *p=polys[i];
 		checkHolesNotNested(p, &graph);
@@ -261,8 +261,7 @@ IsValidOp::checkValid(const MultiPolygon *g)
 void
 IsValidOp::checkValid(const GeometryCollection *gc)
 {
-	int ngeoms = gc->getNumGeometries();
-	for(int i=0; i<ngeoms; ++i)
+	for(unsigned int i=0, ngeoms=gc->getNumGeometries(); i<ngeoms; ++i)
 	{
 		const Geometry *g=gc->getGeometryN(i);
 		checkValid(g);
@@ -426,8 +425,7 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 void
 IsValidOp::checkShellsNotNested(const MultiPolygon *mp, GeometryGraph *graph)
 {
-	int ngeoms = mp->getNumGeometries();
-	for(int i=0; i<ngeoms; ++i)
+	for(unsigned int i=0, ngeoms = mp->getNumGeometries(); i<ngeoms; ++i)
 	{
 		assert(dynamic_cast<const Polygon *>(mp->getGeometryN(i)));
 		const Polygon *p=static_cast<const Polygon *>(
@@ -437,7 +435,7 @@ IsValidOp::checkShellsNotNested(const MultiPolygon *mp, GeometryGraph *graph)
 		const LinearRing *shell=static_cast<const LinearRing*>(
 				p->getExteriorRing());
 
-		for(int j=0; j<ngeoms; ++j)
+		for(unsigned int j=0; j<ngeoms; ++j)
 		{
 			if (i==j) continue;
 
@@ -622,6 +620,10 @@ IsValidOp::checkClosedRing(const LinearRing *ring)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.51  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.50  2006/03/29 13:53:59  strk
  * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
  *

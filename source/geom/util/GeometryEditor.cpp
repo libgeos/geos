@@ -129,7 +129,8 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 {
 	GeometryCollection *newCollection = (GeometryCollection*) operation->edit(collection,factory);
 	vector<Geometry*> *geometries = new vector<Geometry*>();
-	for (int i = 0; i < newCollection->getNumGeometries(); i++) {
+	for (unsigned int i=0, n=newCollection->getNumGeometries(); i<n; i++)
+	{
 		Geometry *geometry = edit(newCollection->getGeometryN(i),
 			operation);
 		if (geometry->isEmpty()) {
@@ -163,6 +164,10 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.16  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

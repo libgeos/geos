@@ -532,7 +532,7 @@ Geometry::Union(const Geometry *other) const
 	{
 //cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
 		const GeometryCollection *coll;
-		int ngeoms, i;
+		unsigned int ngeoms, i;
 		vector<Geometry *> *v = new vector<Geometry *>();
 
 		if ( (coll = dynamic_cast<const GeometryCollection *>(this)) )
@@ -785,6 +785,10 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.109  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.108  2006/03/31 11:03:39  strk
  * Fixed NULL-GeometryFactory constructor to use INTERNAL_GEOMETRY_FACTORY
  * (should fix bug #81)

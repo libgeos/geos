@@ -81,24 +81,33 @@ bool RepeatedPointTester::hasRepeatedPoint(const Polygon *p){
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(const GeometryCollection *gc){
-	for(int i = 0; i<gc->getNumGeometries(); i++) {
+bool
+RepeatedPointTester::hasRepeatedPoint(const GeometryCollection *gc)
+{
+	for(unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+	{
 		const Geometry *g=gc->getGeometryN(i);
 		if (hasRepeatedPoint(g)) return true;
 	}
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(const MultiPolygon *gc){
-	for(int i = 0; i<gc->getNumGeometries(); i++) {
+bool
+RepeatedPointTester::hasRepeatedPoint(const MultiPolygon *gc)
+{
+	for(unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+	{
 		const Geometry *g=gc->getGeometryN(i);
 		if (hasRepeatedPoint(g)) return true;
 	}
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
-	for(int i = 0; i<gc->getNumGeometries(); i++) {
+bool
+RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc)
+{
+	for(unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+	{
 		const Geometry *g=gc->getGeometryN(i);
 		if (hasRepeatedPoint(g)) return true;
 	}
@@ -111,6 +120,10 @@ bool RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc){
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.18  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

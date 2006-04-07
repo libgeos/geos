@@ -123,32 +123,50 @@ public:
 	virtual int getBoundaryDimension() const;
 
 	virtual int getNumPoints() const;
+
 	virtual std::string getGeometryType() const;
+
 	virtual GeometryTypeId getGeometryTypeId() const;
+
 	virtual bool isSimple() const;
-	virtual bool equalsExact(const Geometry *other, double tolerance=0) const;
+
+	virtual bool equalsExact(const Geometry *other,
+			double tolerance=0) const;
 
 	virtual void apply_ro(CoordinateFilter *filter) const;
+
 	virtual void apply_rw(const CoordinateFilter *filter);
+
 	virtual void apply_ro(GeometryFilter *filter) const;
+
 	virtual void apply_rw(GeometryFilter *filter);
+
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
+
 	virtual void apply_rw(GeometryComponentFilter *filter);
 
 	virtual void normalize();
+
 	virtual const Coordinate* getCoordinate() const;
+
 	/// Returns the total area of this collection
 	virtual double getArea() const;
+
 	/// Returns the total length of this collection
 	virtual double getLength() const;
+
 	/// Returns the number of geometries in this collection
-	virtual int getNumGeometries() const;
+	virtual unsigned int getNumGeometries() const;
+
 	/// Returns a pointer to the nth Geometry int this collection
 	virtual const Geometry* getGeometryN(int n) const;
 
 protected:
+
 	std::vector<Geometry *>* geometries;
+
 	virtual Envelope* computeEnvelopeInternal() const;
+
 	virtual int compareToSameClass(const Geometry *gc) const;
 
 };
@@ -164,6 +182,10 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

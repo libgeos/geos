@@ -73,7 +73,7 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry *geom)
 	}
 	else if (const MultiLineString *mls=dynamic_cast<const MultiLineString *>(geom))
 	{
-		for(int i=0, n=mls->getNumGeometries(); i<n; ++i)
+		for(unsigned int i=0, n=mls->getNumGeometries(); i<n; ++i)
 		{
 			const LineString *l=dynamic_cast<const LineString *>(mls->getGeometryN(i));
 			updateLocationInfo(locate(p,l));
@@ -81,7 +81,7 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry *geom)
 	}
 	else if (const MultiPolygon *mpo=dynamic_cast<const MultiPolygon *>(geom))
 	{
-		for(int i=0, n=mpo->getNumGeometries(); i<n; ++i)
+		for(unsigned int i=0, n=mpo->getNumGeometries(); i<n; ++i)
 		{
 			const Polygon *po=dynamic_cast<const Polygon *>(mpo->getGeometryN(i));
 			updateLocationInfo(locate(p, po));
@@ -169,6 +169,10 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/04/07 09:54:29  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.29  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *

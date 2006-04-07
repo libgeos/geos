@@ -196,7 +196,8 @@ GeometryGraph::add(const Geometry *g)
 void
 GeometryGraph::addCollection(const GeometryCollection *gc)
 {
-	for (int i=0;i<gc->getNumGeometries();i++) {
+	for (unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+	{
 		const Geometry *g=gc->getGeometryN(i);
 		add(g);
 	}
@@ -459,6 +460,10 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
  * Revision 1.26  2006/03/29 15:23:49  strk
  * Moved GeometryGraph inlines from .h to .inl file
  *
