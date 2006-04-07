@@ -4,18 +4,19 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/Node.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
-
-#include <string>
-#include <sstream>
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geomgraph/Node.h>
@@ -24,6 +25,9 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geom/Location.h>
+
+#include <string>
+#include <sstream>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -38,7 +42,9 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges):
+/*public*/
+Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges)
+	:
 	GraphComponent(new Label(0,Location::UNDEF)),
 	coord(newCoord),
 	edges(newEdges)
@@ -61,42 +67,61 @@ Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges):
 		}
 	}
 #endif // COMPUTE_Z
+
+	testInvariant();
 }
 
+/*public*/
 Node::~Node()
 {
+	testInvariant();
 #if GEOS_DEBUG
 	cerr<<"["<<this<<"] Node::~Node()"<<endl;
 #endif
 	delete edges;
 }
 
+/*public*/
 const Coordinate&
 Node::getCoordinate() const
 {
+	testInvariant();
 	return coord;
 }
 
+/*public*/
 EdgeEndStar *
 Node::getEdges()
 {
+	testInvariant();
+
 	return edges;
 }
 
+/*public*/
 bool
 Node::isIsolated() const
 {
+	testInvariant();
+
 	return (label->getGeometryCount()==1);
 }
 
+/*public*/
 bool
 Node::isIncidentEdgeInResult() const
 {
+	testInvariant();
+
+	if (!edges) return false;
+
 	EdgeEndStar::iterator it=edges->begin();
 	EdgeEndStar::iterator endIt=edges->end();
 	for ( ; it!=endIt; ++it)
 	{
-		DirectedEdge *de = (DirectedEdge *)(*it);
+		assert(*it);
+		assert(dynamic_cast<DirectedEdge *>(*it));
+		DirectedEdge *de = static_cast<DirectedEdge *>(*it);
 		if ( de->getEdge()->isInResult() ) return true;
 	}
 	return false;
@@ -105,35 +130,49 @@ Node::isIncidentEdgeInResult() const
 void
 Node::add(EdgeEnd *e)
 {
+	assert(e);
 #if GEOS_DEBUG
 	cerr<<"["<<this<<"] Node::add("<<e->print()<<")"<<endl;
 #endif
 	// Assert: start pt of e is equal to node point
-	if (edges==NULL) return;
+	assert(e->getCoordinate().equals2D(coord));
+
+	// It seems it's legal for edges to be NULL
+	// we'd not be honouring the promise of adding
+	// an EdgeEnd in this case, though ...
+	assert(edges);
+	//if (edges==NULL) return;
 
 	edges->insert(e);
 	e->setNode(this);
 #if COMPUTE_Z
 	addZ(e->getCoordinate().z);
 #endif
+	testInvariant();
 }
 
+/*public*/
 void
-Node::mergeLabel(const Node* n)
+Node::mergeLabel(const Node& n)
 {
-	mergeLabel(n->label);
+	assert(n.label);
+	mergeLabel(*(n.label));
+	testInvariant();
 }
 
+/*public*/
 void
-Node::mergeLabel(const Label* label2)
+Node::mergeLabel(const Label& label2)
 {
 	for (int i=0; i<2; i++) {
-		int loc=computeMergedLocation(label2, i);
+		int loc=computeMergedLocation(&label2, i);
 		int thisLoc=label->getLocation(i);
 		if (thisLoc==Location::UNDEF) label->setLocation(i,loc);
 	}
+	testInvariant();
 }
 
+/*public*/
 void
 Node::setLabel(int argIndex, int onLocation)
 {
@@ -141,8 +180,11 @@ Node::setLabel(int argIndex, int onLocation)
 		label=new Label(argIndex, onLocation);
 	} else
 		label->setLocation(argIndex, onLocation);
+
+	testInvariant();
 }
 
+/*public*/
 void
 Node::setLabelBoundary(int argIndex)
 {
@@ -157,8 +199,11 @@ Node::setLabelBoundary(int argIndex)
 		default: newLoc=Location::BOUNDARY;  break;
 	}
 	label->setLocation(argIndex, newLoc);
+
+	testInvariant();
 }
 
+/*public*/
 int
 Node::computeMergedLocation(const Label* label2, int eltIndex)
 {
@@ -168,17 +213,24 @@ Node::computeMergedLocation(const Label* label2, int eltIndex)
 		int nLoc=label2->getLocation(eltIndex);
 		if (loc!=Location::BOUNDARY) loc=nLoc;
 	}
+
+	testInvariant();
+
 	return loc;
 }
 
+/*public*/
 string
 Node::print()
 {
+	testInvariant();
+
 	ostringstream ss;
 	ss<<*this;
 	return ss.str();
 }
 
+/*public*/
 void
 Node::addZ(double z)
 {
@@ -207,6 +259,7 @@ Node::addZ(double z)
 #endif
 }
 
+/*public*/
 const vector<double>&
 Node::getZ() const
 {
@@ -226,6 +279,10 @@ std::ostream& operator<< (std::ostream& os, const Node& node)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/04/07 16:01:51  strk
+ * Port info, doxygen comments, testInvariant(), many assertionss, handling of
+ * the NULL EdgeEndStar member
+ *
  * Revision 1.22  2006/03/15 16:27:54  strk
  * operator<< for Node class
  *
@@ -248,100 +305,6 @@ std::ostream& operator<< (std::ostream& os, const Node& node)
  * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
  * Restructured iterated access by use of standard ::iterator abstraction
  * with scoped typedefs.
- *
- * Revision 1.15  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.14  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.13  2005/11/09 13:44:28  strk
- * Cleanups in Node and NodeMap.
- * Optimization of EdgeIntersectionLessThen.
- *
- * Revision 1.12  2005/06/28 00:04:48  strk
- * improved ::isIncidentEdgeInResult() method
- *
- * Revision 1.11  2005/06/25 10:20:39  strk
- * OverlayOp speedup (JTS port)
- *
- * Revision 1.10  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.9  2004/11/29 16:05:33  strk
- * Fixed a bug in LineIntersector::interpolateZ causing NaN values
- * to come out.
- * Handled dimensional collapses in ElevationMatrix.
- * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
- * dispendious isnan() and finite() calls.
- *
- * Revision 1.8  2004/11/26 09:53:48  strk
- * Added more FINITE calls, and added inf and -inf to FINITE checks
- *
- * Revision 1.7  2004/11/20 15:41:18  strk
- * Added management of vector of composing Z values.
- *
- * Revision 1.6  2004/11/19 10:10:23  strk
- * COMPUTE_Z re-enabled by default
- *
- * Revision 1.5  2004/11/17 15:09:08  strk
- * Changed COMPUTE_Z defaults to be more conservative
- *
- * Revision 1.4  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.3  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.12  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
  *
  **********************************************************************/
 

@@ -12,18 +12,28 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/Node.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
 
 
 #ifndef GEOS_GEOMGRAPH_NODE_H
 #define GEOS_GEOMGRAPH_NODE_H
 
-#include <string>
-
 #include <geos/geomgraph/GraphComponent.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for member
 
+#ifndef NDEBUG
+#include <geos/geomgraph/EdgeEndStar.h>
+#include <geos/geomgraph/EdgeEnd.h>
+#endif // ndef NDEBUG
+
 #include <geos/inline.h>
+
+#include <cassert>
+#include <string>
 
 // Forward declarations
 namespace geos {
@@ -59,16 +69,38 @@ public:
 
 	virtual bool isIsolated() const;
 
+	/** \brief
+	 * Add the edge to the list of edges at this node
+	 */
 	virtual void add(EdgeEnd *e);
 
-	virtual void mergeLabel(const Node* n);
+	virtual void mergeLabel(const Node& n);
 
-	virtual void mergeLabel(const Label* label2);
+	/** \brief
+	 * To merge labels for two nodes,
+	 * the merged location for each LabelElement is computed.
+	 *
+	 * The location for the corresponding node LabelElement is set
+	 * to the result, as long as the location is non-null.
+	 */
+	virtual void mergeLabel(const Label& label2);
 
 	virtual void setLabel(int argIndex, int onLocation);
 
+	/** \brief
+	 * Updates the label of a node to BOUNDARY,
+	 * obeying the mod-2 boundaryDetermination rule.
+	 */
 	virtual void setLabelBoundary(int argIndex);
 
+	/**
+	 * The location for a given eltIndex for a node will be one
+	 * of { null, INTERIOR, BOUNDARY }.
+	 * A node may be on both the boundary and the interior of a geometry;
+	 * in this case, the rule is that the node is considered to be
+	 * in the boundary.
+	 * The merged location is the maximum of the two input values.
+	 */
 	virtual int computeMergedLocation(const Label* label2, int eltIndex);
 
 	virtual std::string print();
@@ -77,14 +109,30 @@ public:
 
 	virtual void addZ(double);
 
+	/** \brief
+	 * Tests whether any incident edge is flagged as
+	 * being in the result.
+	 *
+	 * This test can be used to determine if the node is in the result,
+	 * since if any incident edge is in the result, the node must be in
+	 * the result as well.
+	 *
+	 * @return <code>true</code> if any indicident edge in the in
+	 *         the result
+	 */
 	virtual bool isIncidentEdgeInResult() const;
 
 protected:
+
+	void testInvariant() const;
 
 	geom::Coordinate coord;
 
 	EdgeEndStar* edges;
 
+	/** \brief
+	 * Basic nodes do not compute IMs
+	 */
 	virtual void computeIM(geom::IntersectionMatrix *im) {};
 
 private:
@@ -97,6 +145,39 @@ private:
 
 std::ostream& operator<< (std::ostream& os, const Node& node);
 
+inline void
+Node::testInvariant() const
+{
+#ifndef NDEBUG
+	if (edges)
+	{
+		// Each EdgeEnd in the star has this Node's 
+		// coordinate as first coordinate
+		for (EdgeEndStar::iterator
+				it=edges->begin(), itEnd=edges->end();
+				it != itEnd; it++) 
+		{
+			EdgeEnd* e=*it;
+			assert(e);
+			assert(e->getCoordinate().equals2D(coord));
+		}
+	}
+
+	// ztot is the sum of doubnle sin zvals vector
+	double ztot_check=0.0;
+	for (std::vector<double>::const_iterator 
+			i = zvals.begin(), e = zvals.end();
+			i != e;
+			i++)
+	{
+		ztot_check += *i;
+	}
+	assert(ztot_check == ztot);
+
+#endif
+}
+
+
 } // namespace geos.geomgraph
 } // namespace geos
 
@@ -108,6 +189,10 @@ std::ostream& operator<< (std::ostream& os, const Node& node);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/07 16:01:51  strk
+ * Port info, doxygen comments, testInvariant(), many assertionss, handling of
+ * the NULL EdgeEndStar member
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
