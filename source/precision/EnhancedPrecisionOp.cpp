@@ -25,7 +25,7 @@
 #include <geos/util/GEOSException.h>
 
 #ifndef GEOS_DEBUG
-#define GEOS_DEBUG 1
+#define GEOS_DEBUG 0
 #endif
 
 #ifdef GEOS_DEBUG
@@ -68,11 +68,21 @@ EnhancedPrecisionOp::intersection(
 		// check that result is a valid geometry after
 		// the reshift to orginal precision
 		if (! resultEP->isValid())
+		{
+#if GEOS_DEBUG
+			std::cerr << "Reduced operation result is invalid"
+			          << std::endl;
+#endif
 			throw originalEx;
+		}
 		return resultEP;
 	}
-	catch (const util::GEOSException& /* ex2 */)
+	catch (const util::GEOSException& ex2 )
 	{
+#if GEOS_DEBUG
+		std::cerr << "Reduced operation exception: "
+		          << ex2.what() << std::endl;
+#endif
 		throw originalEx;
 	}
 }
@@ -133,11 +143,6 @@ EnhancedPrecisionOp::difference(
 	{
 		originalEx = ex;
 	}
-
-#if GEOS_DEBUG
-	std::cerr << "Original precision failed, let's try with reduced"
-	          << std::endl;
-#endif
 
 	/*
 	 * If we are here, the original op encountered a precision problem
@@ -242,6 +247,9 @@ EnhancedPrecisionOp::buffer(const Geometry *geom, double distance)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/04/07 08:31:37  strk
+ * Debugging lines
+ *
  * Revision 1.8  2006/04/06 14:36:51  strk
  * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
  *
