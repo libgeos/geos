@@ -23,6 +23,14 @@
 #include <memory>
 #include <cassert>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
 using namespace std;
 using namespace geos::geom;
 
@@ -35,6 +43,10 @@ CommonBitsOp::CommonBitsOp()
 	returnToOriginalPrecision(true)
 
 {
+#if GEOS_DEBUG
+	std::cerr << "CommonBitsOp[" << this
+	          << "]::CommonBitsOp()" << std::endl;
+#endif
 }
 
 /*public*/
@@ -42,6 +54,12 @@ CommonBitsOp::CommonBitsOp(bool nReturnToOriginalPrecision)
 	:
 	returnToOriginalPrecision(nReturnToOriginalPrecision)
 {
+#if GEOS_DEBUG
+	std::cerr << "CommonBitsOp[" << this
+	          << "]::CommonBitsOp(bool " 
+		  << nReturnToOriginalPrecision << ")"
+		  << std::endl;
+#endif
 }
 
 /*public*/
@@ -113,8 +131,11 @@ CommonBitsOp::removeCommonBits(const Geometry* geom0)
 	cbr.reset(new CommonBitsRemover());
 	cbr->add(geom0);
 
+#if GEOS_DEBUG
 	const Coordinate& commonCoord = cbr->getCommonCoordinate();
 	cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << endl;
+#endif
+
 	Geometry* geom=cbr->removeCommonBits(geom0->clone());
 	return geom;
 }
@@ -124,6 +145,9 @@ CommonBitsOp::removeCommonBits(const Geometry* geom0)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/04/07 08:27:12  strk
+ * debugging blocks
+ *
  * Revision 1.7  2006/04/06 14:36:51  strk
  * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
  *
