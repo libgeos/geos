@@ -21,39 +21,38 @@ namespace tut
     // Test Group
     //
 
-	// Common data used by tests
+    // Common data used by tests
     struct test_point_data
+    {
+	typedef geos::geom::Coordinate* CoordinatePtr;
+	typedef geos::geom::Coordinate const* CoordinateCPtr;
+
+	typedef geos::geom::Geometry* GeometryPtr;
+	typedef geos::geom::Geometry const* GeometryCPtr;
+
+	typedef geos::geom::Point* PointPtr;
+	typedef geos::geom::Point const* PointCPtr;
+
+	geos::geom::PrecisionModel pm_;
+	geos::geom::GeometryFactory factory_;
+	geos::io::WKTReader reader_;
+	geos::geom::Point empty_point_;
+	PointPtr point_;
+
+	test_point_data()
+	    : pm_(1000), factory_(&pm_, 0), reader_(&factory_), empty_point_(NULL, &factory_)
 	{
-		typedef geos::geom::Coordinate* CoordinatePtr;
-		typedef geos::geom::Coordinate const* CoordinateCPtr;
-
-		typedef geos::geom::Geometry* GeometryPtr;
-		typedef geos::geom::Geometry const* GeometryCPtr;
-
-		typedef geos::geom::Point* PointPtr;
-		typedef geos::geom::Point const* PointCPtr;
-
-		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory factory_;
-		geos::io::WKTReader reader_;
-
-		geos::geom::Point empty_point_;
-		PointPtr point_;
-
-		test_point_data()
-			: pm_(1000), factory_(&pm_, 0), reader_(&factory_), empty_point_(NULL, &factory_)
-		{
-			// Create non-empty LinearRing
-			GeometryPtr geo = 0;
-			geo = reader_.read("POINT(1.234 5.678)");
-			point_ = static_cast<PointPtr>(geo);
-		}
-		
-		~test_point_data()
-		{
-			factory_.destroyGeometry(point_);
-		}
-	};
+	    // Create non-empty LinearRing
+	    GeometryPtr geo = 0;
+	    geo = reader_.read("POINT(1.234 5.678)");
+	    point_ = static_cast<PointPtr>(geo);
+	}
+	
+	~test_point_data()
+	{
+	    factory_.destroyGeometry(point_);
+	}
+    };
 
     typedef test_group<test_point_data> group;
     typedef group::object object;
@@ -452,12 +451,11 @@ namespace tut
 	template<>
 	void object::test<37>()
 	{
-		// TODO - mloskot - it is (and all Point tests) a beutiful place to use smart pointer
 		GeometryPtr p1 = reader_.read("POINT(1.2324 5.678)");
 		GeometryPtr p2 = reader_.read("POINT(1.2325 5.678)");
 
 		// WARNING! If test fails, memory leaks occur.
-		ensure( "JTS version of this test returns true.", p1->equals(p2) );
+		ensure( !p1->equals(p2) );
 		
 		// FREE MEMORY
 		factory_.destroyGeometry(p1);
@@ -478,6 +476,34 @@ namespace tut
 		// FREE MEMORY
 		factory_.destroyGeometry(p1);
 		factory_.destroyGeometry(p2);
+	}
+
+	// Test of equals() for non-empty Points with negative coordiantes
+	template<>
+	template<>
+	void object::test<39>()
+	{
+		GeometryPtr pLo = reader_.read("POINT(-1.233 5.678)");
+		GeometryPtr pHi = reader_.read("POINT(-1.232 5.678)");
+
+		GeometryPtr p1 = reader_.read("POINT(-1.2326 5.678)");
+		GeometryPtr p2 = reader_.read("POINT(-1.2325 5.678)");
+		GeometryPtr p3 = reader_.read("POINT(-1.2324 5.678)");
+
+		std::cout << p1->toString() << "\n" << p2->toString() << "\n";
+		ensure( !p1->equals(p2) );
+		ensure( p3->equals(p2) );
+
+		ensure( p1->equals(pLo) );
+		ensure( p2->equals(pHi) );
+		ensure( p3->equals(pHi) );
+
+		// FREE MEMORY
+		factory_.destroyGeometry(pLo);
+		factory_.destroyGeometry(pHi);
+		factory_.destroyGeometry(p1);
+		factory_.destroyGeometry(p2);
+		factory_.destroyGeometry(p3);
 	}
 
 } // namespace tut

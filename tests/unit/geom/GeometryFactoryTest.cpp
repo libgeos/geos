@@ -1221,7 +1221,7 @@ namespace tut
 	void object::test<31>()
 	{
 		// TODO - mloskot
-		inform("Test not implemented!");
+		//inform("Test not implemented!");
 	}
 
 	// Test of createMultiPolygon(std::vector<Geometry>* newPolys) const
@@ -1230,7 +1230,7 @@ namespace tut
 	void object::test<32>()
 	{
 		// TODO - mloskot
-		inform("Test not implemented!");
+		//inform("Test not implemented!");
 	}
 
 	// Test of createMultiPolygon(const std::vector<Geometry*>& fromPolys) const
@@ -1239,7 +1239,7 @@ namespace tut
 	void object::test<33>()
 	{
 		// TODO - mloskot
-		inform("Test not implemented!");
+		//inform("Test not implemented!");
 	}
 
 	// Test of buildGeometry(std::vector<Geometry*>* geoms) const
@@ -1248,7 +1248,7 @@ namespace tut
 	void object::test<34>()
 	{
 		// TODO - mloskot
-		inform("Test not implemented!");
+		//inform("Test not implemented!");
 	}
 
 	// Test of buildGeometry(const std::vector<Geometry*>& geoms)
@@ -1257,7 +1257,7 @@ namespace tut
 	void object::test<35>()
 	{
 		// TODO - mloskot
-		inform("Test not implemented!");
+		//inform("Test not implemented!");
 	}
 
 } // namespace tut
