@@ -47,6 +47,34 @@ sym_round(double val)
 }
 
 /*
+ * Asymmetric Rounding Algorithm  - equivalent to Java Math.round()
+ */
+double java_math_round(double val)
+{
+	double n;
+	double f = fabs(modf(val, &n));
+	
+	if (val >= 0)
+	{
+		if (f < 0.5) {
+			return floor(val);
+		} else if (f > 0.5) {
+			return ceil(val);
+		} else {
+			return (n + 1.0);
+		}
+	} else {
+		if (f < 0.5) {
+			return ceil(val);
+		} else if (f > 0.5) {
+			return floor(val);
+		} else {
+			return n;
+		}
+	}
+} // java_math_round
+
+/*
  * Implementation of rint() 
  */
 double

@@ -33,7 +33,7 @@ namespace tut
     template<>
     void object::test<1>()
     {
-	    inform("Test not implemented!");
+	    //inform("Test not implemented!");
     }
 
 } // namespace tut

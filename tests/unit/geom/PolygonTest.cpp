@@ -169,7 +169,7 @@ namespace tut
 	template<>
 	void object::test<5>()
 	{
-		inform("Test is waiting for Bug #87 resolution.");
+		//inform("Test is waiting for Bug #87 resolution.");
 
 		// TODO - mloskot - is empty valid or not?
 		//ensure( !ring.isValid() );
@@ -181,7 +181,7 @@ namespace tut
 	template<>
 	void object::test<6>()
 	{
-		inform( "Test waiting for resolution of getEnvelope() issue." );
+		//inform( "Test waiting for resolution of getEnvelope() issue." );
 		//http://geos.refractions.net/pipermail/geos-devel/2006-April/002123.html
 
 		//EnvelopeCPtr envelope = empty_poly_.getEnvelopeInternal();

@@ -490,7 +490,6 @@ namespace tut
 		GeometryPtr p2 = reader_.read("POINT(-1.2325 5.678)");
 		GeometryPtr p3 = reader_.read("POINT(-1.2324 5.678)");
 
-		std::cout << p1->toString() << "\n" << p2->toString() << "\n";
 		ensure( !p1->equals(p2) );
 		ensure( p3->equals(p2) );
 

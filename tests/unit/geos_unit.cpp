@@ -105,5 +105,10 @@ int main(int argc, const char* argv[])
 
     // XXX - mloskot - this should be removed in future!
     geos::io::Unload::Release();
-    return 0;
-}
+
+	// Check failures number and signal them the World
+	return (visi.get_failures_count() ? 1 : 0);
+	
+} // main
+
+

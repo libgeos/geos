@@ -57,9 +57,12 @@ PrecisionModel::makePrecise(double val) const
 	if (modelType == FIXED) {
 		//double d=val*scale;
 		//double me=((d >= 0.0) ? floor(d+0.5)/scale : - floor(-d+0.5)/scale);
-//		double ret = nearbyint(val*scale)/scale;
-//		double ret = util::rint_vc(val*scale)/scale;
-		double ret = util::sym_round(val*scale)/scale;
+		//double ret = nearbyint(val*scale)/scale;
+		//double ret = util::rint_vc(val*scale)/scale;
+		//double ret = util::sym_round(val*scale)/scale;
+
+		// Use Asymmetric Rounding Algorithm, as in Java's Math.Round()
+		double ret = util::java_math_round(val*scale)/scale;
 		return ret;
 	}
 	// modelType == FLOATING - no rounding necessary
@@ -227,6 +230,9 @@ PrecisionModel::compareTo(const PrecisionModel *other) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.44  2006/04/07 12:37:51  mloskot
+ * Added java_math_round() function for Asymmetric Arithmetic Rounding. Small fixes in Unit Tests.
+ *
  * Revision 1.43  2006/04/06 12:36:52  strk
  * removed spurious lines from previous commi
  *

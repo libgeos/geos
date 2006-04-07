@@ -209,6 +209,11 @@ namespace tut
 			return not_passed.size() == 0;
 		}
 
+		int get_failures_count() const
+		{
+			return failures_count;
+		}
+
 	private:
 		void init()
 		{

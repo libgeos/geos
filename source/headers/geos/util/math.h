@@ -23,6 +23,9 @@ namespace util { // geos::util
 /// Symmetric Rounding Algorithm
 double sym_round(double val);
 
+/// Asymmetric Rounding Algorithm
+double java_math_round(double val);
+
 /// Equivalent to Java Math.rint()
 double rint_vc(double val);
 
@@ -34,6 +37,9 @@ double rint_vc(double val);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/07 12:37:53  mloskot
+ * Added java_math_round() function for Asymmetric Arithmetic Rounding. Small fixes in Unit Tests.
+ *
  * Revision 1.2  2006/04/06 21:30:36  strk
  * Added missing rint_vc() forward declaration
  *
