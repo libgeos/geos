@@ -28,7 +28,7 @@ namespace geom { // geos::geom
 ///
 class Dimension {
 public:
-	enum {
+	enum DimensionType {
 		DONTCARE=-3,	/// Dimension value for any dimension (= {FALSE, TRUE}).
 		True,			/// Dimension value of non-empty geometries (= {P, L, A}).
 		False,			/// Dimension value of the empty geometry (-1).
@@ -57,6 +57,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/07 05:44:32  mloskot
+ * Added name for anonymous enum in Dimension class (bug). Added missing new-line at the end of source files. Removed CR from line ends.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
