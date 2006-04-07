@@ -38,6 +38,8 @@ namespace
 		case tut::test_result::term: 
 			os << '[' << tr.test << "=T]";
 			break;
+		case tut::test_result::inform: 
+			break; // do nothing
 		}
 
 		return os;
@@ -119,12 +121,12 @@ namespace tut
 			}
 		}
 
-		void group_started()
+		void group_started(const std::string& name)
 		{
 			ok_group_count = 0;
 		}
 
-		void group_completed()
+		void group_completed(const std::string& name)
 		{
 			os << " " << ok_group_count << std::endl;
 		}
