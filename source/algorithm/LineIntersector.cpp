@@ -702,16 +702,16 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
  * int point = (2097408.2633752143,1144595.8008114607)
  */
 
-#if GEOS_DEBUG
+//#if GEOS_DEBUG
 	//if (!((LineIntersector *)this)->isInSegmentEnvelopes(intPt))
 	if (! isInSegmentEnvelopes(intPt))
 	{
 		cerr<<"Intersection outside segment envelopes: "<<
 			intPt.toString();
 	}
-#endif
+//#endif
  
-	if (precisionModel!=NULL) precisionModel->makePrecise(&intPt);
+	if (precisionModel!=NULL) precisionModel->makePrecise(intPt);
 
 
 #if COMPUTE_Z
@@ -808,6 +808,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2006/04/07 09:12:57  strk
+ * kept isInSegmentEnvelopes() check even when not debugging
+ *
  * Revision 1.40  2006/04/06 21:31:40  strk
  * Const correctness for debugging function
  *
