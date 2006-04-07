@@ -20,15 +20,6 @@
 #include <crtdbg.h>
 #endif
 
-#include <cassert>
-#include <cctype>
-#include <cstdlib>
-#include <fstream>
-#include <functional>
-#include <iostream>
-#include <sstream>
-#include <string>
-
 #include <geos/geom.h>
 #include <geos/util.h>
 //#include <geos/geomgraph.h>
@@ -41,6 +32,16 @@
 #include <geos/unload.h>
 #include <geos/opValid.h>
 #include "XMLTester.h"
+
+#include <cassert>
+#include <cctype>
+#include <cstdlib>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <memory>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -87,10 +88,10 @@ XMLTester::XMLTester()
 	gT(0),
 	pm(0),
 	factory(0),
-	r(0),
-	w(0),
-	br(0),
-	bw(0),
+	wktreader(0),
+	wktwriter(0),
+	wkbreader(0),
+	wkbwriter(0),
 	test_predicates(0),
 	failed(0),
 	succeeded(0),
@@ -238,16 +239,14 @@ XMLTester::parsePrecisionModel()
 	std::string type=xml.GetChildAttrib("type");
 	std::string scaleStr=xml.GetChildAttrib("scale");
 
-	if ( pm ) delete pm;
-
 	if ( scaleStr == "" ) {
 		if ( type == "FLOATING_SINGLE" )
 		{
-			pm=new PrecisionModel(PrecisionModel::FLOATING_SINGLE);
+			pm.reset(new PrecisionModel(PrecisionModel::FLOATING_SINGLE));
 		}
 		else
 		{
-			pm=new PrecisionModel();
+			pm.reset(new PrecisionModel());
 		}
 	} else {
 		char* stopstring;
@@ -258,7 +257,7 @@ XMLTester::parsePrecisionModel()
 		double scale=strtod(scaleStr.c_str(),&stopstring);
 		double offsetX=strtod(offsetXStr.c_str(),&stopstring);
 		double offsetY=strtod(offsetYStr.c_str(),&stopstring);
-		pm=new PrecisionModel(scale,offsetX,offsetY);
+		pm.reset(new PrecisionModel(scale,offsetX,offsetY));
 	}
 
 	if (verbose)
@@ -266,20 +265,11 @@ XMLTester::parsePrecisionModel()
 		std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
 	}
 
-	if ( factory ) delete factory;
-	factory = new GeometryFactory(pm);
-
-	if ( r ) delete r;
-	r=new io::WKTReader(factory);
-
-	if ( w ) delete w;
-	w=new io::WKTWriter();
-
-	if ( br ) delete br;
-	br=new io::WKBReader(*factory);
-
-	if ( bw ) delete bw;
-	bw=new io::WKBWriter();
+	factory.reset(new GeometryFactory(pm.get()));
+	wktreader.reset(new io::WKTReader(factory.get()));
+	wktwriter.reset(new io::WKTWriter());
+	wkbreader.reset(new io::WKBReader(*factory));
+	wkbwriter.reset(new io::WKBWriter());
 }
 
 
@@ -337,10 +327,10 @@ XMLTester::parseGeometry(const std::string &in, const char* label)
 		case 'D':
 		case 'E':
 		case 'F':
-			ret = br->readHEX(is);
+			ret = wkbreader->readHEX(is);
 			break;
 		default:
-			ret = r->read(in);
+			ret = wktreader->read(in);
 			break;
 	}
 
@@ -429,20 +419,22 @@ XMLTester::printGeom(Geometry *g)
 	if ( HEXWKB_output )
 	{
 		std::stringstream s(std::ios_base::binary|std::ios_base::in|std::ios_base::out);
-		bw->write(*g, s);
+		wkbwriter->write(*g, s);
 		std::stringstream s2;
-		br->printHEX(s, s2);
+		wkbreader->printHEX(s, s2);
 		return s2.str();
 	}
 	else
 	{
-		return w->write(g);
+		return wktwriter->write(g);
 	}
 }
 
 void
 XMLTester::parseTest()
 {
+	typedef std::auto_ptr< Geometry > GeomAutoPtr;
+
 	int success=0; // no success by default
 	std::string opName;
 	std::string opArg1;
@@ -494,15 +486,13 @@ XMLTester::parseTest()
 
 		if (opName=="relate")
 		{
-			IntersectionMatrix *im=gA->relate(gB);
-			assert(im);
+			std::auto_ptr<IntersectionMatrix> im(gA->relate(gB));
+			assert(im.get());
 
 			if (im->matches(opArg3)) actual_result="true";
 			else actual_result="false";
 
 			if (actual_result==opRes) success=1;
-				
-			delete im;
 		}
 
 		else if (opName=="isvalid")
@@ -521,85 +511,69 @@ XMLTester::parseTest()
 
 		else if (opName=="intersection")
 		{
-			Geometry *gRes=NULL;
-			Geometry *gRealRes=NULL;
-			gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			try {
-				gRealRes=gA->intersection(gB);
-				gRealRes->normalize();
-			} catch (...) {
-				delete gRealRes;
-				delete gRes;
-				throw;
-			}
+			GeomAutoPtr gRealRes(gA->intersection(gB));
+			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 
-			delete gRes;
-			delete gRealRes;
 		}
 
 		else if (opName=="union")
 		{
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
-			Geometry *gRealRes=gA->Union(gB);
+
+			GeomAutoPtr gRealRes(gA->Union(gB));
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
-
-			delete gRes;
-			delete gRealRes;
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 		}
 
 		else if (opName=="difference")
 		{
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			Geometry *gRealRes=gA->difference(gB);
+			GeomAutoPtr gRealRes(gA->difference(gB));
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 
-			delete gRes;
-			delete gRealRes;
 		}
 
 		else if (opName=="symdifference")
 		{
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			Geometry *gRealRes=gA->symDifference(gB);
+			GeomAutoPtr gRealRes(gA->symDifference(gB));
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 
-			delete gRes;
-			delete gRealRes;
 		}
 
 		else if (opName=="intersects")
@@ -615,21 +589,19 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			Geometry *gRealRes=gT->getBoundary();
+			GeomAutoPtr gRealRes(gT->getBoundary());
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 
-			delete gRes;
-			delete gRealRes;
 		}
 
 		else if (opName=="getcentroid")
@@ -637,23 +609,22 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			Geometry *gRealRes=gT->getCentroid();
-			if ( gRealRes ) gRealRes->normalize();
-			else gRealRes = factory->createGeometryCollection();
+			GeomAutoPtr gRealRes(gT->getCentroid());
+
+			if ( gRealRes.get() ) gRealRes->normalize();
+			else gRealRes.reset(factory->createGeometryCollection());
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 
-			delete gRes;
-			delete gRealRes;
 		}
 
 		else if (opName=="issimple")
@@ -673,21 +644,19 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			Geometry *gRealRes=gT->convexHull();
+			GeomAutoPtr gRealRes(gT->convexHull());
 			gRealRes->normalize();
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 
-			delete gRes;
-			delete gRealRes;
 		}
 
 		else if (opName=="buffer")
@@ -695,30 +664,29 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
 			profile.start();
-			Geometry *gRealRes;
+
+			GeomAutoPtr gRealRes;
 			if ( opArg2 != "" ) {
-				gRealRes=gT->buffer(atof(opArg3.c_str()), atoi(opArg2.c_str()));
+				gRealRes.reset(gT->buffer(atof(opArg3.c_str()), atoi(opArg2.c_str())));
 			} else {
-				gRealRes=gT->buffer(atof(opArg3.c_str()));
+				gRealRes.reset(gT->buffer(atof(opArg3.c_str())));
 			}
 			profile.stop();
 			gRealRes->normalize();
 
 			/// Allow for slightly different representations
-			if (gRes->equalsExact(gRealRes, 0.00000000001)==true) success=1;
-			//if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->equalsExact(gRealRes.get(),
+					0.00000000001)==true) success=1;
+			//if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
-
-			delete gRealRes;
-			delete gRes;
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 		}
 
 		else if (opName=="getinteriorpoint")
@@ -726,22 +694,20 @@ XMLTester::parseTest()
 			Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			Geometry *gRes=parseGeometry(opRes, "expected");
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			Geometry *gRealRes=gT->getInteriorPoint();
-			if ( gRealRes ) gRealRes->normalize();
-			else gRealRes = factory->createGeometryCollection();
+			GeomAutoPtr gRealRes(gT->getInteriorPoint());
+			if ( gRealRes.get() ) gRealRes->normalize();
+			else gRealRes.reset(factory->createGeometryCollection());
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
 
-			delete gRes;
-			delete gRealRes;
 		}
 
 		else if (opName=="iswithindistance")
@@ -759,71 +725,59 @@ XMLTester::parseTest()
 
 		else if (opName=="polygonize")
 		{
-			Geometry *gRes=NULL;
-			Geometry *gRealRes=NULL;
-			gRes=r->read(opRes);
+
+			GeomAutoPtr gRes(wktreader->read(opRes));
 			gRes->normalize();
-			try {
-				Polygonizer plgnzr;
-				plgnzr.add(gA);
-				std::vector<Polygon *>*polys = plgnzr.getPolygons();
-				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>;
-				for (unsigned int i=0; i<polys->size(); i++)
-					newgeoms->push_back((*polys)[i]);
-				delete polys;
-				gRealRes=factory->createGeometryCollection(newgeoms);
-				gRealRes->normalize();
-			} catch (...) {
-				delete gRealRes;
-				delete gRes;
-				throw;
-			}
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			Polygonizer plgnzr;
+			plgnzr.add(gA);
 
-			if ( testValidOutput ) testValid(gRes, "result");
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			std::vector<Polygon *>*polys = plgnzr.getPolygons();
+			std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>;
+			for (unsigned int i=0; i<polys->size(); i++)
+				newgeoms->push_back((*polys)[i]);
+			delete polys;
 
-			delete gRealRes;
-			delete gRes;
+			GeomAutoPtr gRealRes(factory->createGeometryCollection(newgeoms));
+			gRealRes->normalize();
+
+
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
+
+			if ( testValidOutput ) testValid(gRes.get(), "result");
+
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
+
 		}
 
 		else if (opName=="linemerge")
 		{
-			Geometry *gRes=NULL;
-			Geometry *gRealRes=NULL;
-			gRes=r->read(opRes);
+			GeomAutoPtr gRes(wktreader->read(opRes));
 			gRes->normalize();
 
 			Geometry *gT=gA;
+
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-			try {
-				LineMerger merger;
-				merger.add(gT);
-				std::vector<LineString *>*lines = merger.getMergedLineStrings();
-				std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>(lines->begin(),
-						lines->end());
-				delete lines;
-				gRealRes=factory->createGeometryCollection(newgeoms);
-				gRealRes->normalize();
-			} catch (...) {
-				delete gRealRes;
-				delete gRes;
-				throw;
-			}
+			LineMerger merger;
+			merger.add(gT);
+			std::vector<LineString *>*lines = merger.getMergedLineStrings();
+			std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>(lines->begin(),
+					lines->end());
+			delete lines;
 
-			if (gRes->compareTo(gRealRes)==0) success=1;
+			GeomAutoPtr gRealRes(factory->createGeometryCollection(newgeoms));
+			gRealRes->normalize();
 
-			if ( testValidOutput ) testValid(gRes, "result");
+			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			actual_result=printGeom(gRealRes);
-			expected_result=printGeom(gRes);
+			if ( testValidOutput ) testValid(gRes.get(), "result");
 
-			delete gRealRes;
-			delete gRes;
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
+
 		}
 
 		else
@@ -883,12 +837,6 @@ XMLTester::runPredicates(const Geometry *gA, const Geometry *gB)
 
 XMLTester::~XMLTester()
 {
-	delete pm;
-	delete factory;
-	delete r; r=NULL;
-	delete w; w=NULL;
-	delete br; br=NULL;
-	delete bw; bw=NULL;
 }
 
 
@@ -975,6 +923,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/04/07 13:26:38  strk
+ * Use of auto_ptr<> to prevent confusing leaks in tester
+ *
  * Revision 1.30  2006/03/22 16:01:33  strk
  * indexBintree.h header split, classes renamed to match JTS
  *

@@ -44,13 +44,13 @@ private:
 	Geometry *gA;
 	Geometry *gB;
 	Geometry *gT;
-	PrecisionModel *pm;
 
-	GeometryFactory *factory;
-	io::WKTReader *r;
-	io::WKTWriter *w;
-	io::WKBReader *br;
-	io::WKBWriter *bw;
+	std::auto_ptr<PrecisionModel> pm;
+	std::auto_ptr<GeometryFactory> factory;
+	std::auto_ptr<io::WKTReader> wktreader;
+	std::auto_ptr<io::WKTWriter> wktwriter;
+	std::auto_ptr<io::WKBReader> wkbreader;
+	std::auto_ptr<io::WKBWriter> wkbwriter;
 	CMarkupSTL xml;
 
 	int verbose;
