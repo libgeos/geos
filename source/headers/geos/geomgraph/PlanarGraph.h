@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/PlanarGraph.java rev. 1.4 (JTS-1.7)
+ *
  **********************************************************************/
 
 
@@ -70,7 +74,17 @@ namespace geomgraph { // geos.geomgraph
 class PlanarGraph {
 public:
 
-	static void linkResultDirectedEdges(std::vector<Node*>* allNodes);
+	/** \brief
+	 * For nodes in the vector, link the DirectedEdges at the node
+	 * that are in the result.
+	 *
+	 * This allows clients to link only a subset of nodes in the graph,
+	 * for efficiency (because they know that only a subset is of
+	 * interest).
+	 */
+	static void linkResultDirectedEdges(
+			std::vector<Node*>::iterator start,
+			std::vector<Node*>::iterator end);
 			// throw(TopologyException);
 
 	PlanarGraph(const NodeFactory &nodeFact);
@@ -89,27 +103,52 @@ public:
 
 	virtual NodeMap::iterator getNodeIterator();
 
-	virtual std::vector<Node*>* getNodes();
-
 	virtual void getNodes(std::vector<Node*>&);
 
 	virtual Node* addNode(Node *node);
 
 	virtual Node* addNode(const geom::Coordinate& coord);
 
+	/** \brief
+	 * @return the node if found; null otherwise
+	 */
 	virtual Node* find(geom::Coordinate& coord);
 
+	/** \brief
+	 * Add a set of edges to the graph.  For each edge two DirectedEdges
+	 * will be created.  DirectedEdges are NOT linked by this method.
+	 */
 	virtual void addEdges(const std::vector<Edge*> &edgesToAdd);
 
 	virtual void linkResultDirectedEdges();
 
 	virtual void linkAllDirectedEdges();
 
+	/** \brief
+	 * Returns the EdgeEnd which has edge e as its base edge
+	 * (MD 18 Feb 2002 - this should return a pair of edges)
+	 *
+	 * @return the edge, if found
+	 *    <code>null</code> if the edge was not found
+	 */
 	virtual EdgeEnd* findEdgeEnd(Edge *e);
 
+	/** \brief
+	 * Returns the edge whose first two coordinates are p0 and p1
+	 *
+	 * @return the edge, if found
+	 *    <code>null</code> if the edge was not found
+	 */
 	virtual Edge* findEdge(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
 
+	/** \brief
+	 * Returns the edge which starts at p0 and whose first segment is
+	 * parallel to p1
+	 *
+	 * @return the edge, if found
+	 *    <code>null</code> if the edge was not found
+	 */
 	virtual Edge* findEdgeInSameDirection(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
 
@@ -129,6 +168,13 @@ protected:
 
 private:
 
+	/** \brief
+	 * The coordinate pairs match if they define line segments
+	 * lying in the same direction.
+	 *
+	 * E.g. the segments are parallel and in the same quadrant
+	 * (as opposed to parallel and opposite!).
+	 */
 	bool matchInSameDirection(const geom::Coordinate& p0,
 			const geom::Coordinate& p1,
 			const geom::Coordinate& ep0,
@@ -148,6 +194,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/07 16:52:20  strk
+ * Port info, doxygen comments, assertion checking
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
