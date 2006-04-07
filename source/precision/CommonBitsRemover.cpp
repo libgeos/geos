@@ -23,6 +23,14 @@
 
 #include <cassert>
 
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
+
 using namespace geos::geom;
 
 namespace geos {
@@ -41,7 +49,7 @@ public:
 		trans(newTrans)
 	{}
 
-	void filter_ro(const geom::Coordinate *coord){}; //Not used
+	void filter_ro(const geom::Coordinate *coord){ assert(0); }; //Not used
 
 	void filter_rw(geom::Coordinate *coord) const
 	{
@@ -128,9 +136,14 @@ CommonBitsRemover::removeCommonBits(Geometry *geom)
 	Coordinate invCoord(commonCoord);
 	invCoord.x = -invCoord.x;
 	invCoord.y = -invCoord.y;
+
 	Translater trans(invCoord);
 	geom->apply_rw(&trans);
 	geom->geometryChanged();
+
+#if GEOS_DEBUG
+	std::cerr << "CommonBits removed: " << *geom << std::endl;
+#endif
 
 	return geom;
 }
@@ -142,12 +155,23 @@ CommonBitsRemover::removeCommonBits(Geometry *geom)
  * @param geom the Geometry to which to add the common coordinate bits
  * @return the shifted Geometry
  */
-void
+Geometry*
 CommonBitsRemover::addCommonBits(Geometry *geom)
 {
+#if GEOS_DEBUG
+	std::cerr << "CommonBits before add: " << *geom << std::endl;
+#endif
+
 	Translater trans(commonCoord);
+
 	geom->apply_rw(&trans);
 	geom->geometryChanged();
+
+#if GEOS_DEBUG
+	std::cerr << "CommonBits added: " << *geom << std::endl;
+#endif
+
+	return geom;
 }
 
 } // namespace geos.precision
@@ -155,6 +179,9 @@ CommonBitsRemover::addCommonBits(Geometry *geom)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/04/07 08:28:25  strk
+ * debugging lines, assertions
+ *
  * Revision 1.8  2006/04/06 14:36:51  strk
  * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
  *
@@ -166,23 +193,6 @@ CommonBitsRemover::addCommonBits(Geometry *geom)
  *
  * Revision 1.5  2006/03/02 16:21:26  strk
  * geos::precision namespace added
- *
- * Revision 1.4  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.3  2005/12/08 14:14:07  strk
- * ElevationMatrixFilter used for both elevation and Matrix fill,
- * thus removing CoordinateSequence copy in ElevetaionMatrix::add(Geometry *).
- * Changed CoordinateFilter::filter_rw to be a const method: updated
- * all apply_rw() methods to take a const CoordinateFilter.
- *
- * Revision 1.2  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/04/10 22:41:25  ybychkov
- * "precision" upgraded to JTS 1.4
- *
  *
  **********************************************************************/
 
