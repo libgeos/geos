@@ -570,11 +570,8 @@ namespace tut
 		bool isCentroid = poly_->getCentroid(coordCentr);
 		ensure( isCentroid );
 
-		// TODO
-		inform("[TODO] Check Polygon::getCentroid() functions.");
-		
 		// Comparison of two centroids
-		ensure_equals( coordCentr, pointCentr );
+		ensure_equals( "Check Polygon::getCentroid() functions.", coordCentr, pointCentr );
 	}
 
 
