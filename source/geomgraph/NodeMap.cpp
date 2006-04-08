@@ -14,8 +14,6 @@
  *
  **********************************************************************/
 
-#include <vector>
-
 #include <geos/geomgraph/NodeMap.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/NodeFactory.h>
@@ -23,6 +21,9 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>
+
+#include <vector>
+#include <cassert>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -34,7 +35,8 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-NodeMap::NodeMap(const NodeFactory &newNodeFact):
+NodeMap::NodeMap(const NodeFactory &newNodeFact)
+	:
 	nodeFact(newNodeFact)
 {
 #if GEOS_DEBUG
@@ -79,6 +81,8 @@ NodeMap::addNode(const Coordinate& coord)
 Node*
 NodeMap::addNode(Node *n)
 {
+	assert(n);
+
 #if GEOS_DEBUG
 	cerr<<"["<<this<<"] NodeMap::addNode("<<n->print()<<")";
 #endif
@@ -102,7 +106,8 @@ NodeMap::addNode(Node *n)
 		}
 	}
 #endif // GEOS_DEBUG
-	node->mergeLabel(n);
+
+	node->mergeLabel(*n);
 	return node;
 }
 
@@ -158,6 +163,9 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/04/08 13:00:47  strk
+ * assertion checking, mergeLabel() call fix (bug#91)
+ *
  * Revision 1.14  2006/03/14 12:55:55  strk
  * Headers split: geomgraphindex.h, nodingSnapround.h
  *
