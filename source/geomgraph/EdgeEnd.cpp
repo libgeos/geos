@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <geos/geomgraph/EdgeEnd.h>
+#include <geos/geomgraph/Node.h> // for assertions 
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Quadrant.h>
@@ -150,6 +151,7 @@ void
 EdgeEnd::setNode(Node* newNode)
 {
 	node=newNode;
+	assert(node->getCoordinate().equals2D(p0));
 }
 
 /*public*/
@@ -224,6 +226,9 @@ operator<< (std::ostream& os, const EdgeEnd& ee)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/04/08 13:05:49  strk
+ * Added assertion
+ *
  * Revision 1.17  2006/04/06 12:47:31  strk
  * Fixed output function
  *
