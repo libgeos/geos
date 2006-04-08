@@ -1,3 +1,34 @@
+// $Id$
+// 
+// TUT: C++ Unit Test Framework
+// http://tut-framework.sourceforge.net/
+//
+// NOTE: This file is included to GEOS source tree and may include some
+// changes comparing to the official version of TUT.
+//
+// The TUT License
+//
+// Copyright 2002-2006 Vladimir Dyuzhev.
+// 
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+// 
+// Redistributions of source code must retain the above copyright notice,
+// this list of conditions and the following disclaimer.
+// Redistributions in binary form must reproduce the above copyright notice,
+// this list of conditions and the following disclaimer in the documentation
+// and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+// INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+// AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR
+// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+// OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+// GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
 #ifndef TUT_RESTARTABLE_H_GUARD
 #define TUT_RESTARTABLE_H_GUARD
 
@@ -287,7 +318,8 @@ namespace tut
       std::ofstream ojournal(jrn_.c_str(),std::ios::app);
       util::serialize(ojournal,tr);
       ojournal << std::flush;
-      if( !ojournal.good() ) throw std::runtime_error("unable to register test result in file "+jrn_);
+      if( !ojournal.good() )
+		  throw std::runtime_error("unable to register test result in file "+jrn_);
     }
 
     /**
@@ -298,7 +330,8 @@ namespace tut
       // last executed test pos
       std::ofstream olog(log_.c_str());
       olog << util::escape(grp) << std::endl << test << std::endl << std::flush;
-      if( !olog.good() ) throw std::runtime_error("unable to register execution in file "+log_);
+      if( !olog.good() )
+		  throw std::runtime_error("unable to register execution in file "+log_);
     }
 
     /**

@@ -1,3 +1,12 @@
+// $Id$
+// 
+// TUT: C++ Unit Test Framework
+// http://tut-framework.sourceforge.net/
+//
+// NOTE: This file is a customized version of the official tut_reporter.h.
+// The TUT's version of tut_reporter.h file is only a sample of
+// how to write TUT visualizer.
+//
 #ifndef TUT_REPORTER
 #define TUT_REPORTER
 
@@ -44,7 +53,7 @@ namespace
 
 		return os;
 	}
-}
+} // namespace
 
 namespace tut
 {
@@ -99,7 +108,8 @@ namespace tut
 			}
 
 			// Treat inform test results as passed
-			if( tr.result == tut::test_result::ok || tr.result == tut::test_result::inform )
+			if( tr.result == tut::test_result::ok
+				|| tr.result == tut::test_result::inform )
 			{
 				ok_group_count++;
 				ok_count++;
@@ -143,7 +153,9 @@ namespace tut
 					tut::test_result tr = *i;
 
 					os << std::endl;
-					os << "---> " << "group: " << tr.group << ", test: test<" << tr.test << ">" << std::endl;
+					os << "---> " << "group: " << tr.group
+						<< ", test: test<" << tr.test
+						<< ">" << std::endl;
 					os << "     problem: ";
 
 					switch(tr.result)
@@ -164,7 +176,8 @@ namespace tut
 						os << "would be terminated" << std::endl; 
 						break;
 					case test_result::warn: 
-						os << "test passed, but cleanup code (destructor) raised an exception" << std::endl;
+						os << "test passed, but cleanup code (destructor) \
+								raised an exception" << std::endl;
 						break;
 					case test_result::inform: 
 						os << "test sends neutral information message" << std::endl; 
@@ -177,11 +190,13 @@ namespace tut
 					{
 						if( tr.result == test_result::fail )
 						{
-							os << "     failed assertion: \"" << tr.message << "\"" << std::endl;
+							os << "     failed assertion: \""
+								<< tr.message << "\"" << std::endl;
 						}
 						else
 						{
-							os << "     message: \"" << tr.message << "\"" << std::endl;
+							os << "     message: \""
+								<< tr.message << "\"" << std::endl;
 						}
 					}
 
@@ -230,6 +245,8 @@ namespace tut
 			not_passed.clear();
 		}    
 	};
-};
 
-#endif
+} // namespace tut
+
+#endif // #ifndef TUT_REPORTER
+
