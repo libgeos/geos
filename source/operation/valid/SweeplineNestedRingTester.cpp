@@ -45,7 +45,7 @@ SweeplineNestedRingTester::OverlapAction::overlap(SweepLineInterval *s0, SweepLi
 	if (innerRing==searchRing) return;
 	if (parent->isInside(innerRing, searchRing))
 		isNonNested=false;
-};
+}
 
 
 bool
@@ -102,6 +102,9 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/04/09 04:09:43  mloskot
+ * Removed redundant semicolon reported by g++ -pedantic.
+ *
  * Revision 1.16  2006/03/21 10:01:30  strk
  * indexSweepline.h header split
  *
