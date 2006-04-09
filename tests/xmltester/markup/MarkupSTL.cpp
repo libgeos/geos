@@ -72,7 +72,7 @@ bool CMarkupSTL::SetDoc( const char* szDoc )
 
 	ResetPos();
 	return bWellFormed;
-};
+}
 
 bool CMarkupSTL::IsWellFormed()
 {
