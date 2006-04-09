@@ -20,12 +20,16 @@
 #include <geos/util/IllegalArgumentException.h>
 
 #include <sstream>
+#include <cassert>
 
 using namespace std;
 
 namespace geos {
 namespace geom { // geos::geom
 
+const int IntersectionMatrix::firstDim = 3;
+const int IntersectionMatrix::secondDim = 3;
+	
 IntersectionMatrix::IntersectionMatrix()
 {
 	//matrix = new int[3][3];
@@ -38,17 +42,17 @@ IntersectionMatrix::IntersectionMatrix(const string& elements)
 	set(elements);
 }
 
-IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix &im)
+IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix& other)
 {
-	matrix[Location::INTERIOR][Location::INTERIOR] = im.matrix[Location::INTERIOR][Location::INTERIOR];
-	matrix[Location::INTERIOR][Location::BOUNDARY] = im.matrix[Location::INTERIOR][Location::BOUNDARY];
-	matrix[Location::INTERIOR][Location::EXTERIOR] = im.matrix[Location::INTERIOR][Location::EXTERIOR];
-	matrix[Location::BOUNDARY][Location::INTERIOR] = im.matrix[Location::BOUNDARY][Location::INTERIOR];
-	matrix[Location::BOUNDARY][Location::BOUNDARY] = im.matrix[Location::BOUNDARY][Location::BOUNDARY];
-	matrix[Location::BOUNDARY][Location::EXTERIOR] = im.matrix[Location::BOUNDARY][Location::EXTERIOR];
-	matrix[Location::EXTERIOR][Location::INTERIOR] = im.matrix[Location::EXTERIOR][Location::INTERIOR];
-	matrix[Location::EXTERIOR][Location::BOUNDARY] = im.matrix[Location::EXTERIOR][Location::BOUNDARY];
-	matrix[Location::EXTERIOR][Location::EXTERIOR] = im.matrix[Location::EXTERIOR][Location::EXTERIOR];
+	matrix[Location::INTERIOR][Location::INTERIOR] = other.matrix[Location::INTERIOR][Location::INTERIOR];
+	matrix[Location::INTERIOR][Location::BOUNDARY] = other.matrix[Location::INTERIOR][Location::BOUNDARY];
+	matrix[Location::INTERIOR][Location::EXTERIOR] = other.matrix[Location::INTERIOR][Location::EXTERIOR];
+	matrix[Location::BOUNDARY][Location::INTERIOR] = other.matrix[Location::BOUNDARY][Location::INTERIOR];
+	matrix[Location::BOUNDARY][Location::BOUNDARY] = other.matrix[Location::BOUNDARY][Location::BOUNDARY];
+	matrix[Location::BOUNDARY][Location::EXTERIOR] = other.matrix[Location::BOUNDARY][Location::EXTERIOR];
+	matrix[Location::EXTERIOR][Location::INTERIOR] = other.matrix[Location::EXTERIOR][Location::INTERIOR];
+	matrix[Location::EXTERIOR][Location::BOUNDARY] = other.matrix[Location::EXTERIOR][Location::BOUNDARY];
+	matrix[Location::EXTERIOR][Location::EXTERIOR] = other.matrix[Location::EXTERIOR][Location::EXTERIOR];
 }
 
 /**
@@ -59,15 +63,33 @@ IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix &im)
  * @param im the matrix to add
  */
 void
-IntersectionMatrix::add(IntersectionMatrix *im)
+IntersectionMatrix::add(IntersectionMatrix* other)
 {
-	for(int i=0;i<3;i++) {
-		for(int j=0;j<3;j++) {
-			setAtLeast(i,j,im->get(i,j));
+	for(int i = 0; i < firstDim; i++) {
+		for(int j = 0; j < secondDim; j++) {
+			setAtLeast(i, j, other->get(i, j));
 		}
 	}
 }
 
+bool
+IntersectionMatrix::matches(const string& requiredDimensionSymbols)
+{
+	if (requiredDimensionSymbols.length() != 9) {
+		ostringstream s;
+		s << "IllegalArgumentException: Should be length 9, is "
+				<< "[" << requiredDimensionSymbols << "] instead" << endl;
+		throw util::IllegalArgumentException(s.str());
+	}
+	for (int ai = 0; ai < firstDim; ai++) {
+		for (int bi = 0; bi < secondDim; bi++) {
+			if (!matches(matrix[ai][bi],requiredDimensionSymbols[3*ai+bi])) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
 
 bool
 IntersectionMatrix::matches(int actualDimensionValue,
@@ -115,13 +137,17 @@ IntersectionMatrix::matches(const string& actualDimensionSymbols,
 {
 	IntersectionMatrix m(actualDimensionSymbols);
 	bool result=m.matches(requiredDimensionSymbols);
+	
 	return result;
 }
 
 void
-IntersectionMatrix::set(int row, int column, int dimensionValue)
+IntersectionMatrix::set(int row, int col, int dimensionValue)
 {
-	matrix[row][column] = dimensionValue;
+	assert( row >= 0 && row < firstDim );
+	assert( col >= 0 && col < secondDim );
+		
+	matrix[row][col] = dimensionValue;
 }
 
 void
@@ -131,40 +157,45 @@ IntersectionMatrix::set(const string& dimensionSymbols)
 
 	for (unsigned int i = 0; i < limit; i++)
 	{
-		int row = i / 3;
-		int col = i % 3;
+		int row = i / firstDim;
+		int col = i % secondDim;
 		matrix[row][col] = Dimension::toDimensionValue(dimensionSymbols[i]);
 	}
 }
 
 void
-IntersectionMatrix::setAtLeast(int row, int column, int minimumDimensionValue)
+IntersectionMatrix::setAtLeast(int row, int col, int minimumDimensionValue)
 {
-	if (matrix[row][column] < minimumDimensionValue)
+	assert( row >= 0 && row < firstDim );
+	assert( col >= 0 && col < secondDim );
+	
+	if (matrix[row][col] < minimumDimensionValue)
 	{
-		matrix[row][column] = minimumDimensionValue;
+		matrix[row][col] = minimumDimensionValue;
 	}
 }
 
 void
-IntersectionMatrix::setAtLeastIfValid(int row, int column,
-	int minimumDimensionValue)
+IntersectionMatrix::setAtLeastIfValid(int row, int col, int minimumDimensionValue)
 {
-	if (row >= 0 && column >= 0) {
-		setAtLeast(row, column, minimumDimensionValue);
+	assert( row >= 0 && row < firstDim );
+	assert( col >= 0 && col < secondDim );
+	
+	if (row >= 0 && col >= 0)
+	{
+		setAtLeast(row, col, minimumDimensionValue);
 	}
 }
 
 void
 IntersectionMatrix::setAtLeast(string minimumDimensionSymbols)
 {
-
 	unsigned int limit = minimumDimensionSymbols.length();
 
 	for (unsigned int i = 0; i < limit; i++)
 	{
-		int row = i / 3;
-		int col = i % 3;
+		int row = i / firstDim;
+		int col = i % secondDim;
 		setAtLeast(row, col, Dimension::toDimensionValue(minimumDimensionSymbols[i]));
 	}
 }
@@ -172,17 +203,20 @@ IntersectionMatrix::setAtLeast(string minimumDimensionSymbols)
 void
 IntersectionMatrix::setAll(int dimensionValue)
 {
-	for (int ai = 0; ai < 3; ai++) {
-		for (int bi = 0; bi < 3; bi++) {
+	for (int ai = 0; ai < firstDim; ai++) {
+		for (int bi = 0; bi < secondDim; bi++) {
 			matrix[ai][bi] = dimensionValue;
 		}
 	}
 }
 
 int
-IntersectionMatrix::get(int row, int column)
+IntersectionMatrix::get(int row, int col)
 {
-	return matrix[row][column];
+	assert( row >= 0 && row < firstDim );
+	assert( col >= 0 && col < secondDim );
+	
+	return matrix[row][col];
 }
 
 bool
@@ -205,8 +239,7 @@ IntersectionMatrix::isIntersects()
 }
 
 bool
-IntersectionMatrix::isTouches(int dimensionOfGeometryA,
-	int dimensionOfGeometryB)
+IntersectionMatrix::isTouches(int dimensionOfGeometryA, int dimensionOfGeometryB)
 {
 	if (dimensionOfGeometryA > dimensionOfGeometryB)
 	{
@@ -232,8 +265,7 @@ IntersectionMatrix::isTouches(int dimensionOfGeometryA,
 }
 
 bool
-IntersectionMatrix::isCrosses(int dimensionOfGeometryA,
-	int dimensionOfGeometryB)
+IntersectionMatrix::isCrosses(int dimensionOfGeometryA, int dimensionOfGeometryB)
 {
 	if ((dimensionOfGeometryA==Dimension::P && dimensionOfGeometryB==Dimension::L) ||
 		(dimensionOfGeometryA==Dimension::P && dimensionOfGeometryB==Dimension::A) ||
@@ -283,8 +315,7 @@ IntersectionMatrix::isEquals(int dimensionOfGeometryA, int dimensionOfGeometryB)
 }
 
 bool
-IntersectionMatrix::isOverlaps(int dimensionOfGeometryA,
-	int dimensionOfGeometryB)
+IntersectionMatrix::isOverlaps(int dimensionOfGeometryA, int dimensionOfGeometryB)
 {
 	if ((dimensionOfGeometryA==Dimension::P && dimensionOfGeometryB==Dimension::P) ||
 		(dimensionOfGeometryA==Dimension::A && dimensionOfGeometryB==Dimension::A)) {
@@ -300,30 +331,11 @@ IntersectionMatrix::isOverlaps(int dimensionOfGeometryA,
 	return false;
 }
 
-/*public*/
-bool
-IntersectionMatrix::matches(const string& requiredDimensionSymbols)
-{
-	if (requiredDimensionSymbols.length() != 9) {
-		ostringstream s;
-		s << "IllegalArgumentException: Should be length 9, is "
-			<< "[" << requiredDimensionSymbols << "] instead" << endl;
-		throw util::IllegalArgumentException(s.str());
-	}
-	for (int ai = 0; ai < 3; ai++) {
-		for (int bi = 0; bi < 3; bi++) {
-			if (!matches(matrix[ai][bi],requiredDimensionSymbols[3*ai+bi])) {
-				return false;
-			}
-		}
-	}
-	return true;
-}
 
 //Not sure
 IntersectionMatrix*
 IntersectionMatrix::transpose()
-{
+{		
 	int temp = matrix[1][0];
 	matrix[1][0] = matrix[0][1];
 	matrix[0][1] = temp;
@@ -340,9 +352,9 @@ string
 IntersectionMatrix::toString()
 {
 	string result("");
-	for (int ai = 0; ai < 3; ai++) {
-		for (int bi = 0; bi < 3; bi++) {
-			result+=Dimension::toDimensionSymbol(matrix[ai][bi]);
+	for (int ai = 0; ai < firstDim; ai++) {
+		for (int bi = 0; bi < secondDim; bi++) {
+			result += Dimension::toDimensionSymbol(matrix[ai][bi]);
 		}
 	}
 	return result;
@@ -353,6 +365,9 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/04/09 01:41:48  mloskot
+ * Added comments for doxygen based on JTS docs. Added row/col dimension consts. Added asserts in functions to check if given row/col is in range.
+ *
  * Revision 1.21  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.
