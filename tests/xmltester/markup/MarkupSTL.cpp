@@ -1,3 +1,5 @@
+// $Id$
+//
 // MarkupSTL.cpp: implementation of the CMarkupSTL class.
 //
 // Markup Release 6.3
