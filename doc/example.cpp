@@ -321,7 +321,7 @@ create_circle(double centerX, double centerY, double radius)
 	//	shapefactory.setHeight(radius);
 	//	shapefactory.setWidth(radius);
 	return shapefactory.createCircle();
-};
+}
 
 //
 // This function uses GeometricShapeFactory to render
@@ -335,7 +335,7 @@ create_ellipse(double centerX, double centerY, double width, double height)
 	shapefactory.setHeight(height);
 	shapefactory.setWidth(width);
 	return shapefactory.createCircle();
-};
+}
 
 //
 // This function uses GeometricShapeFactory to render
@@ -352,7 +352,7 @@ create_rectangle(double llX, double llY, double width, double height)
 	shapefactory.setNumPoints(4); // we don't need more then 4 points for a rectangle...
 	// can use setSize for a square
 	return shapefactory.createRectangle();
-};
+}
 
 //
 // This function uses GeometricShapeFactory to render
@@ -369,7 +369,7 @@ create_arc(double llX, double llY, double width, double height, double startang,
 	// shapefactory.setNumPoints(100); // the default (100 pts)
 	// can use setSize for a square
 	return shapefactory.createArc(startang, endang);
-};
+}
 
 // Start reading here
 void do_all()
@@ -1087,6 +1087,9 @@ main()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.46  2006/04/09 11:07:54  mloskot
+ * Small fixes in doc/example.cpp.
+ *
  * Revision 1.45  2006/04/04 08:16:46  strk
  * Changed GEOSException hierarchy to be derived from std::runtime_exception.
  * Removed the GEOSException::toString redundant method (use ::what() instead)
