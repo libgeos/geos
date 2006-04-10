@@ -16,9 +16,10 @@
 #ifndef GEOS_NODINGMCINDEXNODER_INL
 #define GEOS_NODINGMCINDEXNODER_INL
 
-#include <cassert>
-
+#include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/SegmentString.h>
+
+#include <cassert>
 
 namespace geos {
 namespace noding { // geos::noding

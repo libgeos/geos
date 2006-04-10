@@ -16,10 +16,12 @@
 #ifndef GEOS_NODING_SEGMENTSTRING_INL
 #define GEOS_NODING_SEGMENTSTRING_INL
 
-#include <cassert>
+#include <geos/noding/SegmentString.h>
 #include <geos/noding/Octant.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
+
+#include <cassert>
 
 namespace geos {
 namespace noding { // geos.noding

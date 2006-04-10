@@ -17,6 +17,8 @@
  *
  **********************************************************************/
 
+#include <geos/inline.h>
+
 #ifndef GEOS_INLINE
 #include <geos/io/ByteOrderDataInStream.inl>
 #endif

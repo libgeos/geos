@@ -265,14 +265,17 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 void
 OverlayOp::replaceCollapsedEdges()
 {
-	vector<Edge*> &edges=edgeList.getEdges();
+	vector<Edge*>& edges=edgeList.getEdges();
 
 	for(unsigned int i=0, nedges=edges.size(); i<nedges; ++i)
 	{
 		Edge *e=edges[i];
+		assert(e);
 		if (e->isCollapsed()) {
 			//Debug.print(e);
 			edges[i]=e->getCollapsedEdge();
+
+			// should we keep this alive some more ?
 			delete e;
 		} 
 	}
@@ -285,8 +288,12 @@ OverlayOp::copyPoints(int argIndex)
 	map<Coordinate*,Node*,CoordinateLessThen>&nodeMap=arg[argIndex]->getNodeMap()->nodeMap;
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
-		Node *graphNode=it->second;
-		Node *newNode=graph.addNode(graphNode->getCoordinate());
+		Node* graphNode=it->second;
+		assert(graphNode);
+
+		Node* newNode=graph.addNode(graphNode->getCoordinate());
+		assert(newNode);
+
 		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
 	}
 }
@@ -624,7 +631,6 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList)
 {
-	unsigned int i;
 	unsigned int nPoints=nResultPointList->size();
 	unsigned int nLines=nResultLineList->size();
 	unsigned int nPolys=nResultPolyList->size();
@@ -633,19 +639,18 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 	geomList->reserve(nPoints+nLines+nPolys);
 
 	// element geometries of the result are always in the order P,L,A
-	for(i=0; i<nPoints; ++i) {
-		Point *pt=(*nResultPointList)[i];
-		geomList->push_back(pt);
-	}
-	for(i=0; i<nLines; ++i) {
-		LineString *ls=(*nResultLineList)[i];
-		geomList->push_back(ls);
-	}
-	for(i=0; i<nPolys; ++i) {
-		Polygon *q=(*nResultPolyList)[i];
-		geomList->push_back(q);
-	}
+	geomList->insert(geomList->end(),
+			nResultPointList->begin(),
+			nResultPointList->end());
 
+	geomList->insert(geomList->end(),
+			nResultLineList->begin(),
+			nResultLineList->end());
+
+	geomList->insert(geomList->end(),
+			nResultPolyList->begin(),
+			nResultPolyList->end());
+			
 	// build the most specific geometry possible
 	Geometry *g=geomFact->buildGeometry(geomList);
 	return g;
@@ -848,6 +853,11 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.66  2006/04/10 12:05:35  strk
+ * Added inline-replicator implementation files to make sure
+ * functions in .inl files are still available out-of-line.
+ * A side effect is this should fix MingW build.
+ *
  * Revision 1.65  2006/04/05 15:59:14  strk
  * Removed dead code
  *

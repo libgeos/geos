@@ -16,11 +16,12 @@
 #ifndef GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_INL
 #define GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_INL
 
-#include <memory>
-
-#include <geos/noding/SegmentString.h>
+#include <geos/noding/snapround/MCIndexSnapRounder.h>
 #include <geos/noding/snapround/MCIndexPointSnapper.h>
+#include <geos/noding/SegmentString.h>
 #include <geos/geom/PrecisionModel.h>
+
+#include <memory>
 
 namespace geos {
 namespace noding { // geos::noding

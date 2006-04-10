@@ -21,15 +21,16 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/profiler.h>
+#include <geos/inline.h>
 
 #include <sstream>
 #include <cmath>
 
-using namespace std;
-
 #ifndef GEOS_INLINE
 # include <geos/geom/LineSegment.inl>
 #endif
+
+using namespace std;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -232,6 +233,11 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/04/10 12:05:35  strk
+ * Added inline-replicator implementation files to make sure
+ * functions in .inl files are still available out-of-line.
+ * A side effect is this should fix MingW build.
+ *
  * Revision 1.35  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

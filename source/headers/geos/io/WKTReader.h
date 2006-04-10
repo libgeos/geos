@@ -17,7 +17,6 @@
 #ifndef GEOS_IO_WKTREADER_H
 #define GEOS_IO_WKTREADER_H
 
-#include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <string>
@@ -108,6 +107,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/10 12:05:35  strk
+ * Added inline-replicator implementation files to make sure
+ * functions in .inl files are still available out-of-line.
+ * A side effect is this should fix MingW build.
+ *
  * Revision 1.4  2006/03/30 09:26:36  strk
  * minor cleanup
  *

@@ -16,6 +16,7 @@
 #ifndef GEOS_IO_WKTREADER_INL
 #define GEOS_IO_WKTREADER_INL
 
+#include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryFactory.h>
 
 namespace geos {
@@ -47,6 +48,11 @@ WKTReader::~WKTReader()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/10 12:05:35  strk
+ * Added inline-replicator implementation files to make sure
+ * functions in .inl files are still available out-of-line.
+ * A side effect is this should fix MingW build.
+ *
  * Revision 1.2  2006/03/22 16:58:35  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

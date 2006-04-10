@@ -16,6 +16,7 @@
 #ifndef GEOS_NODING_SNAPROUND_HOTPIXEL_INL
 #define GEOS_NODING_SNAPROUND_HOTPIXEL_INL
 
+#include <geos/noding/snapround/HotPixel.h>
 #include <geos/util/math.h>
 #include <geos/geom/Coordinate.h>
 

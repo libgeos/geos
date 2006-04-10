@@ -16,6 +16,7 @@
 #ifndef GEOS_LINESEGMENT_INL
 #define GEOS_LINESEGMENT_INL
 
+#include <geos/geom/LineSegment.h> 
 #include <geos/algorithm/CGAlgorithms.h>
 
 #include <cassert>

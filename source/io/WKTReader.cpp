@@ -29,6 +29,7 @@
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/inline.h>
 
 #include <string>
 #include <cassert>
@@ -341,6 +342,11 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.41  2006/04/10 12:05:35  strk
+ * Added inline-replicator implementation files to make sure
+ * functions in .inl files are still available out-of-line.
+ * A side effect is this should fix MingW build.
+ *
  * Revision 1.40  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
