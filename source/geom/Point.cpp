@@ -135,13 +135,16 @@ Point::getBoundary() const
 	return getFactory()->createGeometryCollection(NULL);
 }
 
-Envelope *
+Envelope::AutoPtr
 Point::computeEnvelopeInternal() const
 {
 	if (isEmpty()) {
-		return new Envelope();
+		return Envelope::AutoPtr(new Envelope());
 	}
-	return new Envelope(getCoordinate()->x, getCoordinate()->x, getCoordinate()->y, getCoordinate()->y);
+
+	return Envelope::AutoPtr(new Envelope(getCoordinate()->x,
+			getCoordinate()->x, getCoordinate()->y,
+			getCoordinate()->y));
 }
 
 void
@@ -228,6 +231,10 @@ Point::getCoordinatesRO() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.44  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.43  2006/04/10 17:35:44  strk
  * Changed LineString::points and Point::coordinates to be wrapped
  * in an auto_ptr<>. This should close bugs #86 and #89

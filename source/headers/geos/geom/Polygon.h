@@ -25,8 +25,11 @@
 #include <vector>
 #include <geos/platform.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
 
 #include <geos/inline.h>
+
+#include <memory> // for auto_ptr
 
 // Forward declarations
 namespace geos {
@@ -149,8 +152,10 @@ public:
 protected:
 
 	LinearRing *shell;
+
 	std::vector<Geometry *> *holes; //Actually vector<LinearRing *>
-	Envelope* computeEnvelopeInternal() const;
+
+	Envelope::AutoPtr computeEnvelopeInternal() const;
 
 private:
 
@@ -168,6 +173,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

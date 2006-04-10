@@ -19,10 +19,12 @@
 
 #include <geos/platform.h>
 #include <geos/inline.h>
+#include <geos/geom/Envelope.h>
 
 #include <string>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -549,7 +551,7 @@ public:
 	 */
 	virtual void geometryChanged();
 
-	/*
+	/**
 	 * \brief
 	 * Notifies this Geometry that its Coordinates have been changed
 	 * by an external party.
@@ -557,7 +559,7 @@ public:
 	void geometryChangedAction();
 
 protected:
-	mutable Envelope* envelope;
+	mutable std::auto_ptr<Envelope> envelope;
 	
 	/// Returns true if the array contains any non-empty Geometrys.
 	static bool hasNonEmptyElements(const std::vector<Geometry *>* geometries);
@@ -586,10 +588,14 @@ protected:
 
 	//virtual void checkEqualPrecisionModel(Geometry *other);
 
-	virtual Envelope* computeEnvelopeInternal() const=0; //Abstract
+	virtual Envelope::AutoPtr computeEnvelopeInternal() const=0; //Abstract
+
 	virtual int compareToSameClass(const Geometry *geom) const=0; //Abstract
+
 	int compare(std::vector<Coordinate> a, std::vector<Coordinate> b) const;
+
 	int compare(std::vector<Geometry *> a, std::vector<Geometry *> b) const;
+
 	bool equal(const Coordinate& a, const Coordinate& b,
 			double tolerance) const;
 	int SRID;
@@ -644,6 +650,10 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.7  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

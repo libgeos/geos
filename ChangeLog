@@ -13,6 +13,9 @@
 	  GEOS_INLINE builds. Fixed libtool problems on OSX,MingW,Cygwin.
 	* source/geom/LineString.cpp, source/geom/Point.cpp:
 	  changed CoordinateSequence member to be an auto_ptr<>
+	* source/: geom/Geometry.cpp, headers/geos/geom/Geometry.h:
+	  computeEnvelopeInternal() changed to return auto_ptr<Envelope>.
+	  envelope member changed to be of type auto_ptr<>
 
 	
 2006-04-10 11:21  mloskot

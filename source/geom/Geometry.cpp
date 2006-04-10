@@ -93,6 +93,7 @@ jtsport()
 
 GeometryComponentFilter Geometry::geometryChangedFilter;
 
+// REMOVE THIS, use GeometryFactory::getDefaultInstance() directly
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=GeometryFactory::getDefaultInstance();
 
 Geometry::Geometry(const GeometryFactory *newFactory)
@@ -108,11 +109,19 @@ Geometry::Geometry(const GeometryFactory *newFactory)
 }
 
 Geometry::Geometry(const Geometry &geom)
+	:
+	factory(geom.factory),
+	SRID(geom.getSRID()),
+	userData(NULL)
 {
-	factory=geom.factory; 
-	envelope=new Envelope(*(geom.envelope));
-	SRID=geom.getSRID();
-	userData=NULL;
+	if ( geom.envelope.get() )
+	{
+		envelope.reset(new Envelope(*(geom.envelope)));
+	}
+	//factory=geom.factory; 
+	//envelope(new Envelope(*(geom.envelope.get())));
+	//SRID=geom.getSRID();
+	//userData=NULL;
 }
 
 bool
@@ -264,8 +273,8 @@ Geometry::geometryChanged()
 void
 Geometry::geometryChangedAction()
 {
-	delete envelope;
-	envelope=NULL;
+	//delete envelope;
+	envelope.reset(NULL);
 }
 
 bool
@@ -283,10 +292,10 @@ Geometry::getEnvelope() const
 const Envelope *
 Geometry::getEnvelopeInternal() const
 {
-	if (!envelope) {
+	if (!envelope.get()) {
 		envelope = computeEnvelopeInternal();
 	}
-	return envelope;
+	return envelope.get();
 }
 
 bool
@@ -483,22 +492,6 @@ Geometry::buffer(double distance, int quadrantSegments, int endCapStyle) const
 {
 	return BufferOp::bufferOp(this, distance, quadrantSegments, endCapStyle);
 }
-
-
-
-#if 0 // Obsoleted
-Geometry*
-Geometry::toInternalGeometry(const Geometry *g) const {
-	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) { return (Geometry*)g; }
-	return INTERNAL_GEOMETRY_FACTORY->createGeometry(g);
-}
-Geometry*
-Geometry::fromInternalGeometry(const Geometry* g) const
-{
-	if (CoordinateArraySequenceFactory::instance()==factory->getCoordinateSequenceFactory()) { return (Geometry*)g; }
-	return getFactory()->createGeometry(g);
-}
-#endif // 0
 
 Geometry*
 Geometry::convexHull() const
@@ -730,7 +723,7 @@ Geometry::getLength() const
 
 Geometry::~Geometry()
 {
-	delete envelope;
+	//delete envelope;
 }
 
 bool
@@ -783,6 +776,10 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.113  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.112  2006/04/10 15:05:15  strk
  * Fixed a bug introduced by previous commit in getCentroid()
  *

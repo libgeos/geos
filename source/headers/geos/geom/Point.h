@@ -20,6 +20,7 @@
 #include <geos/platform.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h> // for proper use of auto_ptr<>
+#include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
 
 #include <geos/inline.h>
 
@@ -103,7 +104,7 @@ public:
 
 protected:
 
-	Envelope* computeEnvelopeInternal() const;
+	Envelope::AutoPtr computeEnvelopeInternal() const;
 
 	int compareToSameClass(const Geometry *p) const;
 
@@ -126,6 +127,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.3  2006/04/10 17:35:44  strk
  * Changed LineString::points and Point::coordinates to be wrapped
  * in an auto_ptr<>. This should close bugs #86 and #89

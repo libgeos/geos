@@ -18,11 +18,6 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <cmath> // for fabs
-#include <cassert> 
-#include <algorithm> 
-
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
@@ -36,6 +31,12 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
+
+#include <vector>
+#include <cmath> // for fabs
+#include <cassert> 
+#include <algorithm> 
+#include <memory>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -227,10 +228,10 @@ Polygon::getBoundary() const
 	return ret;
 }
 
-Envelope*
+Envelope::AutoPtr
 Polygon::computeEnvelopeInternal() const
 {
-	return new Envelope(*(shell->getEnvelopeInternal()));
+	return Envelope::AutoPtr(new Envelope(*(shell->getEnvelopeInternal())));
 }
 
 bool
@@ -455,6 +456,10 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.62  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.61  2006/03/15 09:13:36  strk
  * updated port info
  *

@@ -20,10 +20,11 @@
 #ifndef GEOS_GEOM_ENVELOPE_H
 #define GEOS_GEOM_ENVELOPE_H
 
+#include <geos/inline.h>
+
 #include <string>
 #include <vector>
-
-#include <geos/inline.h>
+#include <memory>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -50,6 +51,8 @@ class Coordinate;
 class Envelope {
 
 public:
+
+	typedef std::auto_ptr<Envelope> AutoPtr;
 
 	/** \brief
 	 * Creates a null <code>Envelope</code>.
@@ -439,6 +442,10 @@ bool operator==(const Envelope& a, const Envelope& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.3  2006/04/05 14:04:25  strk
  * Fixed copy ctor to support "Null" Envelope copies.
  * Drop init(Envelope&) method.

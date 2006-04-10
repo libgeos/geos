@@ -20,6 +20,7 @@
 #include <geos/platform.h> // do we need this ?
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of auto_ptr<>
+#include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
 
 #include <string>
 #include <vector>
@@ -153,7 +154,7 @@ public:
 
 protected:
 
-	virtual Envelope* computeEnvelopeInternal() const;
+	Envelope::AutoPtr computeEnvelopeInternal() const;
 
 	std::auto_ptr<CoordinateSequence> points;
 };
@@ -176,6 +177,10 @@ struct LineStringLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.5  2006/04/10 17:35:44  strk
  * Changed LineString::points and Point::coordinates to be wrapped
  * in an auto_ptr<>. This should close bugs #86 and #89

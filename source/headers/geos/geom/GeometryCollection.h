@@ -19,11 +19,13 @@
 
 #include <geos/geom/Geometry.h> // for inheritance
 //#include <geos/platform.h>
+#include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
+
+#include <geos/inline.h>
 
 #include <string>
 #include <vector>
-
-#include <geos/inline.h>
+#include <memory> // for auto_ptr
 
 // Forward declarations
 namespace geos {
@@ -165,7 +167,7 @@ protected:
 
 	std::vector<Geometry *>* geometries;
 
-	virtual Envelope* computeEnvelopeInternal() const;
+	virtual Envelope::AutoPtr computeEnvelopeInternal() const;
 
 	virtual int compareToSameClass(const Geometry *gc) const;
 
@@ -182,6 +184,10 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.4  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

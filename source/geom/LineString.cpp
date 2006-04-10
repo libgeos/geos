@@ -230,7 +230,7 @@ LineString::isCoordinate(Coordinate& pt) const
 }
 
 /*protected*/
-Envelope*
+Envelope::AutoPtr
 LineString::computeEnvelopeInternal() const
 {
 	if (isEmpty()) {
@@ -238,7 +238,7 @@ LineString::computeEnvelopeInternal() const
 		// as it would indicate "unknown"
 		// envelope. In this case we
 		// *know* the envelope is EMPTY.
-		return new Envelope();
+		return Envelope::AutoPtr(new Envelope());
 	}
 
 	assert(points.get());
@@ -259,7 +259,7 @@ LineString::computeEnvelopeInternal() const
 	// caller expects a newly allocated Envelope.
 	// this function won't be called twice, unless
 	// cached Envelope is invalidated (set to NULL)
-	return new Envelope(minx, maxx, miny, maxy);
+	return Envelope::AutoPtr(new Envelope(minx, maxx, miny, maxy));
 }
 
 bool
@@ -383,6 +383,10 @@ LineString::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.66  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.65  2006/04/10 17:35:44  strk
  * Changed LineString::points and Point::coordinates to be wrapped
  * in an auto_ptr<>. This should close bugs #86 and #89

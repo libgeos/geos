@@ -14,9 +14,6 @@
  *
  **********************************************************************/
 
-#include <algorithm>
-#include <vector>
-
 #include <geos/geom/GeometryCollection.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -30,6 +27,10 @@
 #ifndef GEOS_INLINE
 # include <geos/geom/GeometryCollection.inl>
 #endif
+
+#include <algorithm>
+#include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -244,12 +245,11 @@ GeometryCollection::normalize()
 	sort(geometries->begin(), geometries->end(), GeometryGreaterThen());
 }
 
-Envelope*
+Envelope::AutoPtr
 GeometryCollection::computeEnvelopeInternal() const
 {
-	Envelope* envelope=new Envelope();
+	Envelope::AutoPtr envelope(new Envelope());
 	for (unsigned int i=0; i<geometries->size(); i++) {
-		//Envelope *env=new Envelope(*((*geometries)[i]->getEnvelopeInternal()));
 		const Envelope *env=(*geometries)[i]->getEnvelopeInternal();
 		envelope->expandToInclude(env);
 	}
@@ -339,6 +339,10 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.57  2006/04/10 18:15:09  strk
+ * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
+ * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
+ *
  * Revision 1.56  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'
