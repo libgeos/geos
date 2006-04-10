@@ -34,6 +34,17 @@ WKTReader::WKTReader(const geom::GeometryFactory *gf)
 }
 
 INLINE
+WKTReader::WKTReader()
+	:
+	geometryFactory(geom::GeometryFactory::getDefaultInstance()),
+	precisionModel(geometryFactory->getPrecisionModel())
+{
+#if GEOS_DEBUG
+    std::cout << "\nGEOS_DEBUG: WKTReader::WKTReader()\n";
+#endif
+}
+
+INLINE
 WKTReader::~WKTReader()
 {
 #if GEOS_DEBUG
@@ -48,6 +59,9 @@ WKTReader::~WKTReader()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/10 13:40:14  strk
+ * Added default ctor for WKTReader (using GeometryFactory's default instance)
+ *
  * Revision 1.3  2006/04/10 12:05:35  strk
  * Added inline-replicator implementation files to make sure
  * functions in .inl files are still available out-of-line.

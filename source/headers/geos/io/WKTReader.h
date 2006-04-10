@@ -64,6 +64,12 @@ public:
 	 */
 	WKTReader(const geom::GeometryFactory *gf);
 
+	/**
+	 * \brief Inizialize parser with default GeometryFactory.
+	 *
+	 */
+	WKTReader();
+
 	~WKTReader();
 
 	/// Parse a WKT string returning a Geometry
@@ -107,6 +113,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/04/10 13:40:14  strk
+ * Added default ctor for WKTReader (using GeometryFactory's default instance)
+ *
  * Revision 1.5  2006/04/10 12:05:35  strk
  * Added inline-replicator implementation files to make sure
  * functions in .inl files are still available out-of-line.
