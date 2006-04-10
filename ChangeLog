@@ -1,3 +1,2984 @@
+2006-04-10 Sandro Santilli <strk@refractions.net
+
+	* tools/geos-config.in: Removed INLINE flags from geos-config
+	  --libs
+	* source/: headers/geos/geom/GeometryFactory.h,
+	  geom/GeometryFactory.cpp: Added defaultInstance() method
+	* source/geom/Geometry.cpp: made INTERNAL_GEOMETRY_FACTORY 
+	  initialized using GeometryFactory::defaultInstance(),
+	  fixed missing rounring in getCentroid(Coordinate&) function.
+	* source/io/Unload.cpp: removed last deletion in Release.
+	  The class is now useless.
+	* source/inlines.cpp: inlines functions provider for
+	  GEOS_INLINE builds. Fixed libtool problems on OSX,MingW,Cygwin.
+	
+2006-04-10 11:21  mloskot
+
+	* source/headers/geos/util/UniqueCoordinateArrayFilter.h,
+	  tests/unit/Makefile.am,
+	  tests/unit/geom/CoordinateArraySequenceFactoryTest.cpp,
+	  tests/unit/geom/CoordinateArraySequenceTest.cpp,
+	  tests/unit/geom/GeometryFactoryTest.cpp,
+	  tests/unit/geom/LineStringTest.cpp,
+	  tests/unit/geom/LinearRingTest.cpp,
+	  tests/unit/geom/MultiPointTest.cpp,
+	  tests/unit/util/UniqueCoordinateArrayFilterTest.cpp: Added new
+	  test for UniqueCoordinateArrayFilter class. Small fixes related
+	  to signed/unsigned comparison.
+
+2006-04-09 13:07  mloskot
+
+	* doc/example.cpp: Small fixes in doc/example.cpp.
+
+2006-04-09 06:56  mloskot
+
+	* tests/xmltester/markup/MarkupSTL.cpp: Removed redundant
+	  semicolons from xmltester sources.
+
+2006-04-09 06:26  mloskot
+
+	* tests/xmltester/markup/MarkupSTL.cpp: Removed redundant semicolon
+	  reported by g++ -pedantic.
+
+2006-04-09 06:09  mloskot
+
+	* source/operation/valid/SweeplineNestedRingTester.cpp: Removed
+	  redundant semicolon reported by g++ -pedantic.
+
+2006-04-09 03:48  mloskot
+
+	* tests/unit/: Makefile.am, geom/IntersectionMatrixTest.cpp: Added
+	  Unit Test for IntersectionMatrix class.
+
+2006-04-09 03:46  mloskot
+
+	* source/headers/geos/geom/IntersectionMatrix.h: [SORRY] Added
+	  comments for doxygen based on JTS docs. Added row/col dimension
+	  consts. Added asserts in functions to check if given row/col is
+	  in range.
+
+2006-04-09 03:41  mloskot
+
+	* source/geom/IntersectionMatrix.cpp: Added comments for doxygen
+	  based on JTS docs. Added row/col dimension consts. Added asserts
+	  in functions to check if given row/col is in range.
+
+2006-04-08 17:57  mloskot
+
+	* tests/tut/: tut.h, tut_reporter.h, tut_restartable.h: Added
+	  copyright notice to TUT files. Small cleaning.
+
+2006-04-08 15:05  strk
+
+	* source/geomgraph/EdgeEnd.cpp: Added assertion
+
+2006-04-08 15:00  strk
+
+	* source/geomgraph/NodeMap.cpp: assertion checking, mergeLabel()
+	  call fix (bug#91)
+
+2006-04-07 18:52  strk
+
+	* source/: geomgraph/PlanarGraph.cpp,
+	  headers/geos/geomgraph/PlanarGraph.h: Port info, doxygen
+	  comments, assertion checking
+
+2006-04-07 18:01  strk
+
+	* source/: geomgraph/Node.cpp, headers/geos/geomgraph/Node.h: Port
+	  info, doxygen comments, testInvariant(), many assertionss,
+	  handling of the NULL EdgeEndStar member
+
+2006-04-07 15:26  strk
+
+	* tests/xmltester/: XMLTester.cpp, XMLTester.h: Use of auto_ptr<>
+	  to prevent confusing leaks in tester
+
+2006-04-07 15:14  mloskot
+
+	* tests/tut/tut_reporter.h: Fixed annoying warnings from TUT.
+
+2006-04-07 15:01  mloskot
+
+	* tests/unit/geos_unit.cpp: Fixed line-ends to LF.
+
+2006-04-07 14:55  mloskot
+
+	* tests/unit/geom/PolygonTest.cpp: Uncommented test nr 38 in
+	  PolygonTest.cpp.
+
+2006-04-07 14:37  mloskot
+
+	* source/geom/PrecisionModel.cpp, source/headers/geos/util/math.h,
+	  source/util/math.cpp, tests/tut/tut_reporter.h,
+	  tests/unit/geos_unit.cpp,
+	  tests/unit/geom/MultiLineStringTest.cpp,
+	  tests/unit/geom/MultiPolygonTest.cpp,
+	  tests/unit/geom/PointTest.cpp, tests/unit/geom/PolygonTest.cpp:
+	  Added java_math_round() function for Asymmetric Arithmetic
+	  Rounding. Small fixes in Unit Tests.
+
+2006-04-07 12:42  mloskot
+
+	* tests/unit/geom/: GeometryFactoryTest.cpp, PointTest.cpp: Added
+	  test nr 29 to PointTest (JTS conformance). Removed inform() calls
+	  from GeometryFactoryTest.
+
+2006-04-07 11:54  strk
+
+	* source/: algorithm/CentroidArea.cpp, algorithm/CentroidPoint.cpp,
+	  algorithm/InteriorPointArea.cpp, algorithm/PointLocator.cpp,
+	  geom/Geometry.cpp, geom/GeometryCollection.cpp,
+	  geom/MultiPolygon.cpp, geom/util/GeometryEditor.cpp,
+	  geomgraph/GeometryGraph.cpp, headers/geos/geom/Geometry.h,
+	  headers/geos/geom/GeometryCollection.h, io/WKTWriter.cpp,
+	  operation/valid/IsValidOp.cpp,
+	  operation/valid/RepeatedPointTester.cpp:
+	  Geometry::getNumGeometries() changed to return 'unsigned int'
+	  rather then 'int'
+
+2006-04-07 11:12  strk
+
+	* source/algorithm/LineIntersector.cpp: kept isInSegmentEnvelopes()
+	  check even when not debugging
+
+2006-04-07 10:31  strk
+
+	* source/precision/EnhancedPrecisionOp.cpp: Debugging lines
+
+2006-04-07 10:30  strk
+
+	* source/headers/geos/precision/CommonBitsRemover.h: made
+	  addCommonBits/removeCommonBits interface consistent, doxygen
+	  comments
+
+2006-04-07 10:28  strk
+
+	* source/precision/CommonBitsRemover.cpp: debugging lines,
+	  assertions
+
+2006-04-07 10:27  strk
+
+	* source/precision/CommonBitsOp.cpp: debugging blocks
+
+2006-04-07 09:21  mloskot
+
+	* tests/unit/: Makefile.am, geom/CoordinateTest.cpp: Add new-line
+	  at the EOF some files.
+
+2006-04-07 07:55  mloskot
+
+	* .cvsignore: Added new objects to .cvsignore.
+
+2006-04-07 07:44  mloskot
+
+	* source/headers/geos/geom/Dimension.h,
+	  tests/unit/geom/CoordinateArraySequenceFactoryTest.cpp,
+	  tests/unit/geom/CoordinateArraySequenceTest.cpp,
+	  tests/unit/geom/CoordinateTest.cpp,
+	  tests/unit/geom/DimensionTest.cpp,
+	  tests/unit/geom/EnvelopeTest.cpp,
+	  tests/unit/geom/GeometryFactoryTest.cpp,
+	  tests/unit/geom/LineSegmentTest.cpp,
+	  tests/unit/geom/LineStringTest.cpp,
+	  tests/unit/geom/LinearRingTest.cpp,
+	  tests/unit/geom/LocationTest.cpp,
+	  tests/unit/geom/MultiLineStringTest.cpp,
+	  tests/unit/geom/MultiPointTest.cpp,
+	  tests/unit/geom/MultiPolygonTest.cpp,
+	  tests/unit/geom/PointTest.cpp, tests/unit/geom/PolygonTest.cpp,
+	  tests/unit/geom/TriangleTest.cpp: Added name for anonymous enum
+	  in Dimension class (bug). Added missing new-line at the end of
+	  source files. Removed CR from line ends.
+
+2006-04-07 02:05  mloskot
+
+	* tests/unit/geom/Geometry/isRectangleTest.cpp: Adding missing
+	  isRectangleTest.cpp
+
+2006-04-07 01:50  mloskot
+
+	* tests/unit/: Makefile.am,
+	  geom/CoordinateArraySequenceFactoryTest.cpp,
+	  geom/CoordinateArraySequenceTest.cpp, geom/CoordinateTest.cpp,
+	  geom/DimensionTest.cpp, geom/EnvelopeTest.cpp,
+	  geom/GeometryFactoryTest.cpp, geom/LineSegmentTest.cpp,
+	  geom/LineStringTest.cpp, geom/LinearRingTest.cpp,
+	  geom/LocationTest.cpp, geom/MultiLineStringTest.cpp,
+	  geom/MultiPointTest.cpp, geom/MultiPolygonTest.cpp,
+	  geom/PointTest.cpp, geom/PolygonTest.cpp, geom/TriangleTest.cpp,
+	  io/WKBReaderTest.cpp: Adding new Unit Tests.
+
+2006-04-07 01:35  strk
+
+	* AUTHORS: Added Mateusz Loskot
+
+2006-04-07 01:31  mloskot
+
+	* tests/unit/algorithm/PointLocatorTest.cpp: [UT Files Renaming]
+	  Add PointLocatorTest.cpp
+
+2006-04-07 01:28  mloskot
+
+	* tests/unit/io/WKBReader.cpp: [UT Files Renaming] Remove 'io'
+	  tests.
+
+2006-04-07 01:26  mloskot
+
+	* tests/unit/geom/: Envelope.cpp, LineSegment.cpp,
+	  Geometry/isRectangle.cpp: [UT Files Renaming] Remove 'geom'
+	  tests.
+
+2006-04-07 01:25  mloskot
+
+	* tests/unit/algorithm/PointLocator.cpp: [UT Files Renaming] Remove
+	  file PointLocator.cpp
+
+2006-04-07 01:20  mloskot
+
+	* tests/unit/geos_unit.cpp: New version of Unit Test runner. Now,
+	  it's more GNU style compatible
+
+2006-04-07 00:30  mloskot
+
+	* tests/tut/: tut.h, tut_reporter.h: Add inform() target in tut.h
+	  and new callbacks in tut_reporter.h
+
+2006-04-06 23:31  strk
+
+	* source/: algorithm/LineIntersector.cpp,
+	  headers/geos/algorithm/LineIntersector.h: Const correctness for
+	  debugging function
+
+2006-04-06 23:30  strk
+
+	* source/headers/geos/util/math.h: Added missing rint_vc() forward
+	  declaration
+
+2006-04-06 19:33  strk
+
+	* tests/unit/: Makefile.am, index/quadtree/DoubleBitsTest.cpp:
+	  Added unit test for DoubleBits
+
+2006-04-06 16:36  strk
+
+	* source/: precision/CommonBitsOp.cpp,
+	  precision/CommonBitsRemover.cpp,
+	  precision/EnhancedPrecisionOp.cpp,
+	  headers/geos/precision/CommonBitsOp.h,
+	  headers/geos/precision/CommonBitsRemover.h,
+	  headers/geos/precision/EnhancedPrecisionOp.h: Cleanup in
+	  geos::precision namespace (leaks plugged, auto_ptr use, ...)
+
+2006-04-06 14:58  strk
+
+	* source/geomgraph/DirectedEdge.cpp: Added printing of EdgeRing if
+	  available
+
+2006-04-06 14:48  strk
+
+	* source/headers/geos/operation/valid/ConnectedInteriorTester.h:
+	  Added private vector to keep track of allocated MaximalEdgeRings
+	  objects
+
+2006-04-06 14:47  strk
+
+	* source/geomgraph/EdgeEnd.cpp: Fixed output function
+
+2006-04-06 14:45  strk
+
+	* source/operation/valid/ConnectedInteriorTester.cpp: Delayed
+	  deletion of newly allocated MaximalEdgeRings.  Existing 'valid'
+	  operation tests don't should instability with this patch.
+
+2006-04-06 14:36  strk
+
+	* source/geom/PrecisionModel.cpp: removed spurious lines from
+	  previous commi
+
+2006-04-06 14:34  strk
+
+	* source/: geom/PrecisionModel.cpp,
+	  headers/geos/geom/PrecisionModel.h,
+	  headers/geos/geom/PrecisionModel.inl: Port info, more debugging
+	  lines, doxygen comments
+
+2006-04-06 14:33  strk
+
+	* source/geom/GeometryFactory.cpp: More debugging lines
+
+2006-04-06 14:29  strk
+
+	* source/io/WKBReader.cpp: Fixed bogus static PrecisionModel
+	  variable in ::readCoordinate().
+
+2006-04-06 11:41  strk
+
+	* source/: geomgraph/EdgeRing.cpp,
+	  headers/geos/geomgraph/EdgeRing.h: Added operator<<, added
+	  pts!=NULL assertion in testInvariant() function
+
+2006-04-06 11:39  strk
+
+	* source/: geomgraph/EdgeEnd.cpp, headers/geos/geomgraph/EdgeEnd.h:
+	  Added operator<<
+
+2006-04-06 11:01  strk
+
+	* source/: geomgraph/TopologyLocation.cpp,
+	  headers/geos/geomgraph/TopologyLocation.h, geomgraph/Label.cpp,
+	  headers/geos/geomgraph/Label.h: Doxygen comments, port info,
+	  operator<<, assertion checking
+
+2006-04-06 09:52  strk
+
+	* source/geomgraph/DirectedEdge.cpp: Fixed bug in ::print()
+	  function
+
+2006-04-05 20:28  strk
+
+	* source/headers/geos/geomgraph/: Edge.h, EdgeRing.h: Moved
+	  testInvariant() methods from private to public, added some
+	  comments about them.
+
+2006-04-05 17:59  strk
+
+	* source/operation/overlay/OverlayOp.cpp: Removed dead code
+
+2006-04-05 16:33  strk
+
+	* tests/xmltester/markup/: MarkupSTL.cpp, MarkupSTL.h: Removed
+	  annoying warnings from external source
+
+2006-04-05 16:04  strk
+
+	* source/: geom/Envelope.cpp, headers/geos/geom/Envelope.h,
+	  headers/geos/geom/Envelope.inl: Fixed copy ctor to support "Null"
+	  Envelope copies.  Drop init(Envelope&) method.  Port info and
+	  various cleanups.
+
+2006-04-05 12:25  strk
+
+	* source/: geom/LineString.cpp, headers/geos/geom/LineString.h:
+	  Fixed LineString constructor to ensure deletion of
+	  CoordinateSequence argument on exception throw
+
+2006-04-05 11:34  strk
+
+	* source/headers/geos/util/GEOSException.h: GEOSException derived
+	  from std::exception again, hopefully the correct way now
+
+2006-04-05 11:20  strk
+
+	* source/: headers/geos/operation/buffer/RightmostEdgeFinder.h,
+	  operation/buffer/RightmostEdgeFinder.cpp: Added port informations
+	  and many assertion checking.	Fixed bug in getRightmostSide()
+	  method ( a "testing-only" corner case )
+
+2006-04-04 18:07  strk
+
+	* source/geomgraph/DirectedEdgeStar.cpp: More assertion checking,
+	  less overhead when built with NDEBUG defined
+
+2006-04-04 15:35  strk
+
+	* source/: geomgraph/EdgeEndStar.cpp,
+	  headers/geos/geomgraph/EdgeEndStar.h: Port info, assertion
+	  checking, indentation
+
+2006-04-04 14:39  strk
+
+	* source/algorithm/LineIntersector.cpp: Changed
+	  NotRepresentableCoordinate exception handler to throw a
+	  TopologyException. This allows further handling.
+
+2006-04-04 13:37  strk
+
+	* source/: algorithm/HCoordinate.cpp,
+	  headers/geos/algorithm/HCoordinate.h: Port information +
+	  initialization lists in ctors
+
+2006-04-04 13:28  strk
+
+	* source/algorithm/HCoordinate.cpp: NotRepresentable condition
+	  detected using finite() from <cmath> rather then using FINITE()
+	  macro. Made ::intersection() body more readable.
+
+2006-04-04 11:53  strk
+
+	* source/headers/geos/geom/CoordinateSequence.h: Fixed
+	  applyCoordinateFilter() templated function body
+
+2006-04-04 10:16  strk
+
+	* NEWS, doc/example.cpp,
+	  source/algorithm/NotRepresentableException.cpp,
+	  source/examples/CPCLException.cpp,
+	  source/examples/CustomCoordinateSequenceExample.cpp,
+	  source/examples/CustomCoordinateSequenceExample.h,
+	  source/headers/geos/io/ParseException.h,
+	  source/headers/geos/util/GEOSException.h,
+	  source/headers/geos/util/IllegalArgumentException.h,
+	  source/io/ParseException.cpp,
+	  source/operation/overlay/ElevationMatrix.cpp,
+	  source/util/GEOSException.cpp: Changed GEOSException hierarchy to
+	  be derived from std::runtime_exception.  Removed the
+	  GEOSException::toString redundant method (use ::what() instead)
+
+2006-04-04 03:54  hobu
+
+	* source/Makefile.vc: Add in changes/missing from previous
+	  rearranging.
+
+2006-04-04 03:29  hobu
+
+	* capi/geos_c.cpp: GEOS_JTS_PORT is in version.h not platform.h
+
+2006-04-04 03:28  hobu
+
+	* source/Makefile.vc: remove objects that no longer exist default
+	  to MSVC_VER=1310
+
+2006-04-03 19:05  strk
+
+	* source/: geomgraph/DirectedEdge.cpp, geomgraph/EdgeEnd.cpp,
+	  geomgraph/Label.cpp, headers/geos/geomgraph/EdgeEnd.h: Assertion
+	  checking, port info, cleanups
+
+2006-04-03 17:54  strk
+
+	* source/: headers/geos/operation/GeometryGraphOperation.h,
+	  operation/GeometryGraphOperation.cpp: - getArgGeometry()
+	  parameter type changed from 'int' to 'unsigned int' - Added port
+	  informations - minor assertions checking - minor cleanups
+
+2006-04-03 16:07  strk
+
+	* source/headers/geos/geom/PrecisionModel.h: Commented out
+	  obsoleted toInternal() method
+
+2006-04-03 15:58  strk
+
+	* macros/ac_pkg_swig.m4, macros/ac_python_devel.m4, swig/geos.i,
+	  swig/python/Makefile.am, swig/python/python.i, swig/ruby/ruby.i,
+	  swig/ruby/test/geos_tests.rb, swig/ruby/test/test_helper.rb:
+	  Applied patch by Charlie Savage: - Fixes up the SWIG bindings to
+	  use the new GEOS namespaces - Fixes a bug in the Python m4 macro
+	  - Adds the -modern flag for SWIG when compiling a Python
+	  extension
+
+2006-04-03 15:56  strk
+
+	* source/: precision/SimpleGeometryPrecisionReducer.cpp,
+	  headers/geos/precision/SimpleGeometryPrecisionReducer.h: Made
+	  externally-owned PrecisionModel  const
+
+2006-04-03 12:56  strk
+
+	* source/: geom/CoordinateSequenceFactory.cpp, geom/Makefile.am,
+	  geom/util/LinearComponentExtracter.cpp, geom/util/Makefile.am,
+	  geom/util/PointExtracter.cpp, geom/util/PolygonExtracter.cpp,
+	  util/AssertionFailedException.cpp,
+	  util/IllegalArgumentException.cpp, util/Makefile.am,
+	  util/UnsupportedOperationException.cpp: Removed implementation
+	  files build spec for fully-inlined classes
+
+2006-04-03 12:44  strk
+
+	* source/: index/strtree/STRtree.cpp,
+	  noding/snapround/MCIndexSnapRounder.cpp: Added missing headers
+
+2006-04-03 12:16  strk
+
+	* configure.in, source/Makefile.am,
+	  source/headers/geos/Makefile.am,
+	  source/headers/geos/simplify/.cvsignore,
+	  source/headers/geos/simplify/DouglasPeuckerLineSimplifier.h,
+	  source/headers/geos/simplify/Makefile.am,
+	  source/simplify/.cvsignore,
+	  source/simplify/DouglasPeuckerLineSimplifier.cpp,
+	  source/simplify/Makefile.am: DouglasPeuckerLineSimplifier class
+	  port
+
+2006-04-03 10:43  strk
+
+	* source/: headers/geos/index/strtree/STRtree.h,
+	  index/strtree/STRtree.cpp: Added port info, minor cleanups
+
+2006-04-03 10:29  strk
+
+	* source/: headers/geos/index/quadtree/Quadtree.h,
+	  index/quadtree/Quadtree.cpp: Added port info, cleaned up log
+	  message, minor assertion checking.
+
+2006-03-31 19:51  strk
+
+	* source/: geom/GeometryFactory.cpp,
+	  headers/geos/geom/GeometryFactory.h: A few assertion checking,
+	  comments cleanup, use of initialization lists in constructors,
+	  handled NULL parameters.
+
+2006-03-31 18:55  strk
+
+	* NEWS, source/geom/LineString.cpp,
+	  source/headers/geos/geom/LineString.h: Added many assertions
+	  checking in LineString implementation.  Changed ::getCoordinate()
+	  to return NULL on empty geom.  Changed ::get{Start,End}Point() to
+	  return NULL on empty geom.
+
+2006-03-31 18:53  strk
+
+	* source/headers/geos/geom/Geometry.h: Added comment about possible
+	  NULL return from getCoordinate()
+
+2006-03-31 13:03  strk
+
+	* source/geom/Geometry.cpp: Fixed NULL-GeometryFactory constructor
+	  to use INTERNAL_GEOMETRY_FACTORY (should fix bug #81)
+
+2006-03-30 11:26  strk
+
+	* source/headers/geos/io/WKTReader.h: minor cleanup
+
+2006-03-29 17:48  strk
+
+	* capi/geos_c.cpp: Added missing 'const' in catch std::exception
+	  statements
+
+2006-03-29 17:23  strk
+
+	* source/: geomgraph/DirectedEdge.cpp, geomgraph/GeometryGraph.cpp,
+	  headers/geos/geomgraph/GeometryGraph.h,
+	  headers/geos/geomgraph/GeometryGraph.inl,
+	  headers/geos/geomgraph/Makefile.am: Moved GeometryGraph inlines
+	  from .h to .inl file
+
+2006-03-29 16:34  strk
+
+	* tests/xmltester/TestValid.xml: Sync'ed testfile with JTS head
+
+2006-03-29 16:31  strk
+
+	* tests/unit/: Makefile.am, algorithm/PointLocator.cpp,
+	  io/WKBReader.cpp: Added PointLocator unit test
+
+2006-03-29 15:53  strk
+
+	* source/: geomgraph/EdgeRing.cpp,
+	  headers/geos/geomgraph/EdgeRing.h,
+	  headers/geos/operation/valid/IsValidOp.h,
+	  operation/valid/ConnectedInteriorTester.cpp,
+	  operation/valid/IsValidOp.cpp: EdgeRing equipped with Invariant
+	  testing function and lots of exceptional assertions. Removed
+	  useless heap allocations, and pointers usages.
+
+2006-03-29 13:52  strk
+
+	* source/: algorithm/MCPointInRing.cpp,
+	  headers/geos/algorithm/MCPointInRing.h: const correctness,
+	  useless heap allocations removal
+
+2006-03-29 13:48  strk
+
+	* source/: headers/geos/operation/valid/QuadtreeNestedRingTester.h,
+	  operation/valid/QuadtreeNestedRingTester.cpp: Removed useless
+	  heap allocations in construction, enforced const correctness
+
+2006-03-28 18:49  strk
+
+	* source/io/WKBReader.cpp: Reintroduced rewind of input parameter
+	  in printHEX() [dropped by prev commit]
+
+2006-03-28 18:33  strk
+
+	* source/headers/geos/geom/GeometryFactory.h: Added note about args
+	  responsibility in GeometryFactory constructor
+
+2006-03-28 18:11  strk
+
+	* tests/unit/io/WKBReader.cpp: swapped assert_equals() args to get
+	  obtained/expected the right way.
+
+2006-03-28 17:27  strk
+
+	* source/io/WKBReader.cpp: Simplified printHEX() implementation
+
+2006-03-28 17:19  strk
+
+	* doc/example.cpp: Added macros for sections skip (useful in
+	  debugging)
+
+2006-03-28 16:45  strk
+
+	* tests/unit/: Makefile.am, io/WKBReader.cpp: Added simple test for
+	  WKB reader.
+
+2006-03-28 16:02  strk
+
+	* source/io/WKBReader.cpp: added missing header for non-inlined
+	  builds
+
+2006-03-28 16:01  strk
+
+	* source/io/ByteOrderDataInStream.cpp: forgot to add in previous
+	  commit
+
+2006-03-28 13:26  strk
+
+	* source/: headers/geos/io/ByteOrderDataInStream.h,
+	  headers/geos/io/ByteOrderDataInStream.inl,
+	  headers/geos/io/Makefile.am, headers/geos/io/WKBWriter.h,
+	  io/Makefile.am: ByteOrderDataInStream inlines moved to .inl file,
+	  updated implementation files includes.
+
+2006-03-28 13:25  strk
+
+	* source/io/WKBWriter.cpp: Assertion checking
+
+2006-03-28 11:14  strk
+
+	* source/headers/geos/geom/: LineSegment.h, LineSegment.inl:
+	  Headers inclusion fix.
+
+2006-03-28 10:57  strk
+
+	* source/headers/geos/geom/: PrecisionModel.h, PrecisionModel.inl:
+	  Comments cleanup, system headers included after project headers
+
+2006-03-28 10:40  strk
+
+	* configure.in: C-API lib version bumped to 1.1.1 (release 2.2.2
+	  will ship 1.1.0)
+
+2006-03-27 19:59  strk
+
+	* source/operation/buffer/OffsetCurveBuilder.cpp: Fixed small leak.
+
+2006-03-27 19:04  strk
+
+	* source/: headers/geos/operation/buffer/OffsetCurveBuilder.h,
+	  operation/buffer/OffsetCurveBuilder.cpp,
+	  operation/buffer/OffsetCurveSetBuilder.cpp: Cleanups and explicit
+	  initializations
+
+2006-03-27 18:02  strk
+
+	* source/: geomgraph/EdgeRing.cpp,
+	  headers/geos/geomgraph/EdgeRing.h,
+	  headers/geos/operation/overlay/Makefile.am,
+	  headers/geos/operation/overlay/MaximalEdgeRing.h,
+	  headers/geos/operation/overlay/MinimalEdgeRing.h,
+	  headers/geos/operation/overlay/MinimalEdgeRing.inl,
+	  operation/overlay/MaximalEdgeRing.cpp,
+	  operation/overlay/MinimalEdgeRing.cpp,
+	  operation/valid/ConnectedInteriorTester.cpp: Added INL file for
+	  MinimalEdgeRing, added many debugging blocks, fixed memory leak
+	  in ConnectedInteriorTester (bug #59)
+
+2006-03-27 17:57  strk
+
+	* source/headers/geos/geom/: Coordinate.h, Coordinate.inl:
+	  Commented need for platform.h include
+
+2006-03-27 17:56  strk
+
+	* source/geom/Coordinate.cpp: Added missing platform.h include (for
+	  ISNAN macro)
+
+2006-03-27 16:20  strk
+
+	* source/: headers/geos/operation/valid/ConnectedInteriorTester.h,
+	  operation/valid/ConnectedInteriorTester.cpp: Added paranoid
+	  assertion checking and a note in header about responsibility of
+	  return from buildMaximalEdgeRings()
+
+2006-03-27 12:37  strk
+
+	* source/: headers/geos/operation/valid/ConsistentAreaTester.h,
+	  operation/valid/ConsistentAreaTester.cpp: Reduced heap
+	  allocations and probability of error by making LineIntersector
+	  and RelateNodeGraph part of ConsistentAreaTester class .
+
+2006-03-27 12:36  strk
+
+	* source/operation/valid/TopologyValidationError.cpp: added missing
+	  space in exception message
+
+2006-03-27 12:34  strk
+
+	* source/headers/geos/geom/Coordinate.inl: moved external includes
+	  after internal ones
+
+2006-03-27 11:50  strk
+
+	* tests/xmltester/: Makefile.am, TestValid2-big.xml: Added final
+	  isValid test from JTS (floating version)
+
+2006-03-27 11:48  strk
+
+	* tests/xmltester/: Makefile.am, TestValid2.xml, testLeaksBig.xml:
+	  Extracted TestValid2.xml from testLeaksBig.xml (target file is
+	  taken from JTS source tree)
+
+2006-03-27 11:45  strk
+
+	* tests/xmltester/: Makefile.am, TestValid.xml, testLeaksBig.xml:
+	  Added TestValid.xml test, taken from JTS source tree, already
+	  present in testLeaksBig (from which tests were removed)
+
+2006-03-27 11:28  strk
+
+	* NEWS: added namespaces use and headers split
+
+2006-03-27 11:04  strk
+
+	* capi/geos_c.h.in: Added note about responsibility of return from
+	  GEOSGeomType()
+
+2006-03-27 11:00  strk
+
+	* source/geom/CoordinateArraySequence.cpp: Bug #79 - Small fix in
+	  CoordinateArraySequence::toString()
+
+2006-03-24 12:42  strk
+
+	* configure.in: reverted default of assertion checking
+
+2006-03-24 12:11  strk
+
+	* TODO, configure.in, tools/geos-config.in: Inlining enabled by
+	  default, assertion checking disabled by default.  Added
+	  --enable-cassert and --disable-inline configure switches.  Had
+	  geos-config --cflags output appropriate inline flag if required
+	  (-DGEOS_INLINE)
+
+2006-03-24 12:04  strk
+
+	* source/operation/linemerge/LineSequencer.cpp: Changed assert()
+	  with Assert::isTrue in addReverseSubpath
+
+2006-03-24 11:44  strk
+
+	* source/operation/linemerge/LineSequencer.cpp: Fixed to build with
+	  -DNDEBUG
+
+2006-03-24 10:52  strk
+
+	* TODO, capi/geos_c.cpp.bak, source/algorithm/ConvexHull.cpp,
+	  source/geom/Coordinate.cpp,
+	  source/geom/CoordinateArraySequenceFactory.cpp,
+	  source/geom/Envelope.cpp, source/geom/Geometry.cpp,
+	  source/geom/GeometryCollection.cpp,
+	  source/geom/GeometryFactory.cpp, source/geom/LineSegment.cpp,
+	  source/geom/MultiLineString.cpp, source/geom/MultiPolygon.cpp,
+	  source/geom/PrecisionModel.cpp,
+	  source/geomgraph/DirectedEdge.cpp, source/headers/geos/inline.h,
+	  source/headers/geos/algorithm/ConvexHull.h,
+	  source/headers/geos/geom/Coordinate.h,
+	  source/headers/geos/geom/CoordinateArraySequence.h,
+	  source/headers/geos/geom/CoordinateArraySequenceFactory.h,
+	  source/headers/geos/geom/CoordinateFilter.h,
+	  source/headers/geos/geom/CoordinateSequence.h,
+	  source/headers/geos/geom/CoordinateSequenceFactory.h,
+	  source/headers/geos/geom/Dimension.h,
+	  source/headers/geos/geom/Envelope.h,
+	  source/headers/geos/geom/Geometry.h,
+	  source/headers/geos/geom/GeometryCollection.h,
+	  source/headers/geos/geom/GeometryComponentFilter.h,
+	  source/headers/geos/geom/GeometryFactory.h,
+	  source/headers/geos/geom/GeometryFilter.h,
+	  source/headers/geos/geom/IntersectionMatrix.h,
+	  source/headers/geos/geom/LineSegment.h,
+	  source/headers/geos/geom/LineString.h,
+	  source/headers/geos/geom/LinearRing.h,
+	  source/headers/geos/geom/Location.h,
+	  source/headers/geos/geom/MultiLineString.h,
+	  source/headers/geos/geom/MultiPoint.h,
+	  source/headers/geos/geom/MultiPolygon.h,
+	  source/headers/geos/geom/Point.h,
+	  source/headers/geos/geom/Polygon.h,
+	  source/headers/geos/geom/PrecisionModel.h,
+	  source/headers/geos/geom/Triangle.h,
+	  source/headers/geos/geom/util/CoordinateOperation.h,
+	  source/headers/geos/geom/util/GeometryEditor.h,
+	  source/headers/geos/geom/util/GeometryEditorOperation.h,
+	  source/headers/geos/geom/util/ShortCircuitedGeometryVisitor.h,
+	  source/headers/geos/geomgraph/Depth.h,
+	  source/headers/geos/geomgraph/DirectedEdge.h,
+	  source/headers/geos/geomgraph/DirectedEdgeStar.h,
+	  source/headers/geos/geomgraph/Edge.h,
+	  source/headers/geos/geomgraph/EdgeEnd.h,
+	  source/headers/geos/geomgraph/EdgeEndStar.h,
+	  source/headers/geos/geomgraph/EdgeIntersection.h,
+	  source/headers/geos/geomgraph/EdgeIntersectionList.h,
+	  source/headers/geos/geomgraph/EdgeList.h,
+	  source/headers/geos/geomgraph/EdgeNodingValidator.h,
+	  source/headers/geos/geomgraph/EdgeRing.h,
+	  source/headers/geos/geomgraph/GeometryGraph.h,
+	  source/headers/geos/geomgraph/GraphComponent.h,
+	  source/headers/geos/geomgraph/Label.h,
+	  source/headers/geos/geomgraph/Node.h,
+	  source/headers/geos/geomgraph/NodeFactory.h,
+	  source/headers/geos/geomgraph/NodeMap.h,
+	  source/headers/geos/geomgraph/PlanarGraph.h,
+	  source/headers/geos/geomgraph/Position.h,
+	  source/headers/geos/geomgraph/Quadrant.h,
+	  source/headers/geos/geomgraph/TopologyLocation.h,
+	  source/headers/geos/io/WKTReader.h,
+	  source/headers/geos/noding/IntersectionAdder.h,
+	  source/headers/geos/noding/IntersectionFinderAdder.h,
+	  source/headers/geos/noding/IteratedNoder.h,
+	  source/headers/geos/noding/MCIndexNoder.h,
+	  source/headers/geos/noding/Noder.h,
+	  source/headers/geos/noding/NodingValidator.h,
+	  source/headers/geos/noding/Octant.h,
+	  source/headers/geos/noding/ScaledNoder.h,
+	  source/headers/geos/noding/SegmentIntersector.h,
+	  source/headers/geos/noding/SegmentNode.h,
+	  source/headers/geos/noding/SegmentNodeList.h,
+	  source/headers/geos/noding/SegmentString.h,
+	  source/headers/geos/noding/SimpleNoder.h,
+	  source/headers/geos/noding/SinglePassNoder.h,
+	  source/headers/geos/noding/snapround/HotPixel.h,
+	  source/headers/geos/noding/snapround/MCIndexPointSnapper.h,
+	  source/headers/geos/noding/snapround/MCIndexSnapRounder.h,
+	  source/headers/geos/noding/snapround/SimpleSnapRounder.h,
+	  source/io/WKTReader.cpp, source/noding/MCIndexNoder.cpp,
+	  source/noding/SegmentString.cpp,
+	  source/noding/snapround/HotPixel.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/operation/distance/DistanceOp.cpp: USE_INLINE =>
+	  GEOS_INLINE
+
+2006-03-24 10:26  strk
+
+	* capi/geos_c.cpp: Bug #77 - Missing platform.h
+
+2006-03-24 10:25  strk
+
+	* source/: noding/snapround/MCIndexPointSnapper.cpp,
+	  operation/buffer/BufferBuilder.cpp: Bugs #77 and #76: missing
+	  <algorithm>
+
+2006-03-24 10:23  strk
+
+	* tests/unit/geos_unit.cpp: Bug #78 - Small fixes and cleaning
+
+2006-03-23 16:10  strk
+
+	* source/: geom/Coordinate.cpp, geomgraph/DirectedEdge.cpp,
+	  geomgraph/DirectedEdgeStar.cpp, geomgraph/EdgeEndStar.cpp,
+	  geomgraph/EdgeRing.cpp, headers/geos/geom/Geometry.h,
+	  headers/geos/geomgraph/DirectedEdge.inl,
+	  headers/geos/geomgraph/DirectedEdgeStar.h,
+	  headers/geos/util/TopologyException.h,
+	  operation/overlay/OverlayOp.cpp: Dropped by-pointer
+	  TopologyException constructor, various small cleanups
+
+2006-03-23 14:31  strk
+
+	* source/: geomgraph/Edge.cpp, geomgraph/EdgeIntersectionList.cpp,
+	  geomgraph/index/SegmentIntersector.cpp,
+	  index/chain/MonotoneChainBuilder.cpp, index/quadtree/Node.cpp,
+	  index/quadtree/NodeBase.cpp, index/quadtree/Quadtree.cpp: Fixed
+	  to allow build with GEOS_DEBUG
+
+2006-03-23 13:12  strk
+
+	* source/: geom/Geometry.cpp, geom/MultiLineString.cpp,
+	  geom/MultiPolygon.cpp, headers/geos/geom/Geometry.h,
+	  headers/geos/geom/Geometry.inl,
+	  headers/geos/geom/GeometryCollection.h,
+	  headers/geos/geom/GeometryCollection.inl,
+	  headers/geos/geom/LineSegment.inl,
+	  headers/geos/geom/MultiLineString.h,
+	  headers/geos/geom/MultiLineString.inl,
+	  headers/geos/geom/MultiPolygon.inl,
+	  operation/distance/DistanceOp.cpp: Fixes to allow build with
+	  -DUSE_INLINE
+
+2006-03-23 11:55  strk
+
+	* Makefile.am, configure.in: Temporarly excluded 'swig' extension
+	  from distribution, to allow for successufull 'dist' rule and
+	  distributed testing.
+
+2006-03-23 11:41  strk
+
+	* source/headers/geos/: Makefile.am, operation/relate/Makefile.am:
+	  Fixed automake files
+
+2006-03-23 11:09  strk
+
+	* source/headers/geos/operation/predicate/Makefile.am: Fixed
+	  missing backslash
+
+2006-03-23 10:17  strk
+
+	* configure.in, source/headers/geos/Makefile.am,
+	  source/headers/geos/precision.h,
+	  source/headers/geos/precision/.cvsignore,
+	  source/headers/geos/precision/CommonBits.h,
+	  source/headers/geos/precision/CommonBitsOp.h,
+	  source/headers/geos/precision/CommonBitsRemover.h,
+	  source/headers/geos/precision/EnhancedPrecisionOp.h,
+	  source/headers/geos/precision/Makefile.am,
+	  source/headers/geos/precision/SimpleGeometryPrecisionReducer.h,
+	  source/operation/buffer/BufferOp.cpp,
+	  source/operation/overlay/OverlayOp.cpp,
+	  source/precision/CommonBits.cpp,
+	  source/precision/CommonBitsOp.cpp,
+	  source/precision/CommonBitsRemover.cpp,
+	  source/precision/EnhancedPrecisionOp.cpp,
+	  source/precision/SimpleGeometryPrecisionReducer.cpp: precision.h
+	  header split, minor optimizations
+
+2006-03-22 19:12  strk
+
+	* configure.in, source/algorithm/MCPointInRing.cpp,
+	  source/geom/LineSegment.cpp, source/headers/geos/indexChain.h,
+	  source/headers/geos/algorithm/MCPointInRing.h,
+	  source/headers/geos/index/Makefile.am,
+	  source/headers/geos/index/chain/.cvsignore,
+	  source/headers/geos/index/chain/Makefile.am,
+	  source/headers/geos/index/chain/MonotoneChain.h,
+	  source/headers/geos/index/chain/MonotoneChainBuilder.h,
+	  source/headers/geos/index/chain/MonotoneChainOverlapAction.h,
+	  source/headers/geos/index/chain/MonotoneChainSelectAction.h,
+	  source/headers/geos/noding/MCIndexNoder.h,
+	  source/headers/geos/noding/snapround/MCIndexPointSnapper.h,
+	  source/index/bintree/NodeBase.cpp,
+	  source/index/chain/Makefile.am,
+	  source/index/chain/MonotoneChain.cpp,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  source/index/chain/MonotoneChainOverlapAction.cpp,
+	  source/index/chain/MonotoneChainSelectAction.cpp,
+	  source/index/chain/indexMonotoneChain.cpp,
+	  source/noding/MCIndexNoder.cpp,
+	  source/noding/snapround/MCIndexPointSnapper.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/valid/IsValidOp.cpp: indexChain.h header split.
+
+2006-03-22 17:59  strk
+
+	* source/headers/geos/geosAlgorithm.h: cleaned up
+
+2006-03-22 17:58  strk
+
+	* source/: geom/CoordinateArraySequence.cpp,
+	  geom/CoordinateList.cpp, geom/CoordinateSequence.cpp,
+	  geom/Dimension.cpp, geom/GeometryCollectionIterator.cpp,
+	  geom/GeometryComponentFilter.cpp, geom/IntersectionMatrix.cpp,
+	  geom/LineSegment.cpp, geom/LineString.cpp, geom/Location.cpp,
+	  geom/Makefile.am, geom/MultiPoint.cpp, geom/MultiPolygon.cpp,
+	  geom/Point.cpp, geom/PrecisionModel.cpp,
+	  geom/TopologyException.cpp, geom/Triangle.cpp,
+	  geom/util/ShortCircuitedGeometryVisitor.cpp,
+	  headers/geos/geom/PrecisionModel.h, headers/geos/io/WKTReader.h,
+	  headers/geos/io/WKTReader.inl, headers/geos/io/WKTWriter.h,
+	  io/WKBReader.cpp, io/WKBWriter.cpp, io/WKTReader.cpp,
+	  io/WKTWriter.cpp, util/CoordinateArrayFiter.cpp,
+	  util/GeometricShapeFactory.cpp,
+	  util/UniqueCoordinateArrayFilter.cpp: Removed (almost) all
+	  inclusions of geom.h.  Removed obsoleted .cpp files.	Fixed a bug
+	  in WKTReader not using the provided CoordinateSequence
+	  implementation, optimized out some memory allocations.
+
+2006-03-22 17:01  strk
+
+	* configure.in, source/algorithm/MCPointInRing.cpp,
+	  source/headers/geos/indexBintree.h,
+	  source/headers/geos/algorithm/MCPointInRing.h,
+	  source/headers/geos/index/bintree/.cvsignore,
+	  source/headers/geos/index/bintree/Bintree.h,
+	  source/headers/geos/index/bintree/Interval.h,
+	  source/headers/geos/index/bintree/Key.h,
+	  source/headers/geos/index/bintree/Makefile.am,
+	  source/headers/geos/index/bintree/Node.h,
+	  source/headers/geos/index/bintree/NodeBase.h,
+	  source/headers/geos/index/bintree/Root.h,
+	  source/index/bintree/BinTreeInterval.cpp,
+	  source/index/bintree/BinTreeNode.cpp,
+	  source/index/bintree/Bintree.cpp,
+	  source/index/bintree/Interval.cpp, source/index/bintree/Key.cpp,
+	  source/index/bintree/Makefile.am, source/index/bintree/Node.cpp,
+	  source/index/bintree/NodeBase.cpp, source/index/bintree/Root.cpp,
+	  tests/xmltester/XMLTester.cpp: indexBintree.h header split,
+	  classes renamed to match JTS
+
+2006-03-22 15:28  strk
+
+	* source/index/quadtree/: Key.cpp, Makefile.am, Node.cpp,
+	  NodeBase.cpp, QuadTreeKey.cpp, QuadTreeNode.cpp,
+	  QuadTreeNodeBase.cpp, QuadTreeRoot.cpp, Root.cpp: Filenames
+	  renamed to match class names (matching JTS)
+
+2006-03-22 13:22  strk
+
+	* configure.in, source/geomgraph/EdgeList.cpp,
+	  source/headers/geos/indexQuadtree.h,
+	  source/headers/geos/index/Makefile.am,
+	  source/headers/geos/index/quadtree/.cvsignore,
+	  source/headers/geos/index/quadtree/DoubleBits.h,
+	  source/headers/geos/index/quadtree/IntervalSize.h,
+	  source/headers/geos/index/quadtree/Key.h,
+	  source/headers/geos/index/quadtree/Makefile.am,
+	  source/headers/geos/index/quadtree/Node.h,
+	  source/headers/geos/index/quadtree/NodeBase.h,
+	  source/headers/geos/index/quadtree/Quadtree.h,
+	  source/headers/geos/index/quadtree/Root.h,
+	  source/index/bintree/Key.cpp, source/index/bintree/Root.cpp,
+	  source/index/quadtree/DoubleBits.cpp,
+	  source/index/quadtree/IntervalSize.cpp,
+	  source/index/quadtree/QuadTreeKey.cpp,
+	  source/index/quadtree/QuadTreeNode.cpp,
+	  source/index/quadtree/QuadTreeNodeBase.cpp,
+	  source/index/quadtree/QuadTreeRoot.cpp,
+	  source/index/quadtree/Quadtree.cpp,
+	  source/operation/valid/QuadtreeNestedRingTester.cpp:
+	  indexQuadtree.h split
+
+2006-03-22 12:19  strk
+
+	* configure.in, capi/geos_c.cpp,
+	  source/headers/geos/opPolygonize.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/headers/geos/operation/polygonize/.cvsignore,
+	  source/headers/geos/operation/polygonize/EdgeRing.h,
+	  source/headers/geos/operation/polygonize/Makefile.am,
+	  source/headers/geos/operation/polygonize/PolygonizeDirectedEdge.h,
+	  source/headers/geos/operation/polygonize/PolygonizeEdge.h,
+	  source/headers/geos/operation/polygonize/PolygonizeGraph.h,
+	  source/headers/geos/operation/polygonize/Polygonizer.h,
+	  source/headers/geos/util/TopologyException.h,
+	  source/operation/polygonize/PolygonizeDirectedEdge.cpp,
+	  source/operation/polygonize/PolygonizeEdge.cpp,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/polygonize/Polygonizer.cpp,
+	  source/operation/polygonize/polygonizeEdgeRing.cpp:
+	  opPolygonize.h headers split.
+
+2006-03-22 12:18  strk
+
+	* source/operation/buffer/: BufferSubgraph.cpp,
+	  OffsetCurveSetBuilder.cpp: Changed back 'unable to find edge to
+	  compute depths' from assertion to TopologyException
+
+2006-03-22 11:13  strk
+
+	* configure.in, capi/geos_c.cpp, source/headers/geos/opLinemerge.h,
+	  source/headers/geos/operation/linemerge/.cvsignore,
+	  source/headers/geos/operation/linemerge/EdgeString.h,
+	  source/headers/geos/operation/linemerge/LineMergeDirectedEdge.h,
+	  source/headers/geos/operation/linemerge/LineMergeEdge.h,
+	  source/headers/geos/operation/linemerge/LineMergeGraph.h,
+	  source/headers/geos/operation/linemerge/LineMerger.h,
+	  source/headers/geos/operation/linemerge/LineSequencer.h,
+	  source/headers/geos/operation/linemerge/Makefile.am,
+	  source/operation/linemerge/EdgeString.cpp,
+	  source/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  source/operation/linemerge/LineMergeEdge.cpp,
+	  source/operation/linemerge/LineMergeGraph.cpp,
+	  source/operation/linemerge/LineMerger.cpp,
+	  source/operation/linemerge/LineSequencer.cpp: opLinemerge.h split
+
+2006-03-21 22:42  strk
+
+	* configure.in, source/headers/geos/Makefile.am,
+	  source/headers/geos/planargraph.h,
+	  source/headers/geos/planargraph/.cvsignore,
+	  source/headers/geos/planargraph/DirectedEdge.h,
+	  source/headers/geos/planargraph/DirectedEdgeStar.h,
+	  source/headers/geos/planargraph/Edge.h,
+	  source/headers/geos/planargraph/GraphComponent.h,
+	  source/headers/geos/planargraph/Makefile.am,
+	  source/headers/geos/planargraph/Node.h,
+	  source/headers/geos/planargraph/NodeMap.h,
+	  source/headers/geos/planargraph/PlanarGraph.h,
+	  source/headers/geos/planargraph/Subgraph.h,
+	  source/headers/geos/planargraph/algorithm/.cvsignore,
+	  source/headers/geos/planargraph/algorithm/ConnectedSubgraphFinder.h,
+	  source/headers/geos/planargraph/algorithm/Makefile.am,
+	  source/operation/GeometryGraphOperation.cpp,
+	  source/operation/IsSimpleOp.cpp,
+	  source/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  source/operation/linemerge/LineMergeGraph.cpp,
+	  source/operation/linemerge/LineMerger.cpp,
+	  source/operation/linemerge/LineSequencer.cpp,
+	  source/operation/polygonize/PolygonizeDirectedEdge.cpp,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/polygonize/polygonizeEdgeRing.cpp,
+	  source/planargraph/DirectedEdge.cpp,
+	  source/planargraph/DirectedEdgeStar.cpp,
+	  source/planargraph/Edge.cpp, source/planargraph/Makefile.am,
+	  source/planargraph/Node.cpp, source/planargraph/NodeMap.cpp,
+	  source/planargraph/PlanarGraph.cpp,
+	  source/planargraph/Subgraph.cpp,
+	  source/planargraph/planarDirectedEdge.cpp,
+	  source/planargraph/planarDirectedEdgeStar.cpp,
+	  source/planargraph/planarEdge.cpp,
+	  source/planargraph/planarGraphComponent.cpp,
+	  source/planargraph/planarNode.cpp,
+	  source/planargraph/planarNodeMap.cpp,
+	  source/planargraph/planarPlanarGraph.cpp,
+	  source/planargraph/planarSubgraph.cpp,
+	  source/planargraph/algorithm/ConnectedSubgraphFinder.cpp:
+	  planargraph.h header split, planargraph:: classes renamed to
+	  match JTS symbols
+
+2006-03-21 18:55  strk
+
+	* configure.in, source/geom/Geometry.cpp,
+	  source/headers/geos/opDistance.h,
+	  source/headers/geos/opOverlay.h, source/headers/geos/opRelate.h,
+	  source/headers/geos/opValid.h, source/headers/geos/operation.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/headers/geos/operation/distance/.cvsignore,
+	  source/headers/geos/operation/distance/ConnectedElementLocationFilter.h,
+	  source/headers/geos/operation/distance/ConnectedElementPointFilter.h,
+	  source/headers/geos/operation/distance/DistanceOp.h,
+	  source/headers/geos/operation/distance/GeometryLocation.h,
+	  source/headers/geos/operation/distance/Makefile.am,
+	  source/operation/distance/ConnectedElementLocationFilter.cpp,
+	  source/operation/distance/ConnectedElementPointFilter.cpp,
+	  source/operation/distance/DistanceOp.cpp,
+	  source/operation/distance/GeometryLocation.cpp: opDistance.h
+	  header split
+
+2006-03-21 18:11  strk
+
+	* configure.in, source/geom/Geometry.cpp,
+	  source/headers/geos/opPredicate.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/headers/geos/operation/predicate/.cvsignore,
+	  source/headers/geos/operation/predicate/Makefile.am,
+	  source/headers/geos/operation/predicate/RectangleContains.h,
+	  source/headers/geos/operation/predicate/RectangleIntersects.h,
+	  source/headers/geos/operation/predicate/SegmentIntersectionTester.h,
+	  source/operation/predicate/RectangleContains.cpp,
+	  source/operation/predicate/RectangleIntersects.cpp,
+	  source/operation/predicate/SegmentIntersectionTester.cpp:
+	  opPredicate.h header split
+
+2006-03-21 14:11  strk
+
+	* configure.in, source/geom/Geometry.cpp,
+	  source/headers/geos/opRelate.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/headers/geos/operation/relate/.cvsignore,
+	  source/headers/geos/operation/relate/EdgeEndBuilder.h,
+	  source/headers/geos/operation/relate/EdgeEndBundle.h,
+	  source/headers/geos/operation/relate/EdgeEndBundleStar.h,
+	  source/headers/geos/operation/relate/Makefile.am,
+	  source/headers/geos/operation/relate/RelateComputer.h,
+	  source/headers/geos/operation/relate/RelateNode.h,
+	  source/headers/geos/operation/relate/RelateNodeFactory.h,
+	  source/headers/geos/operation/relate/RelateNodeGraph.h,
+	  source/headers/geos/operation/relate/RelateOp.h,
+	  source/operation/relate/EdgeEndBuilder.cpp,
+	  source/operation/relate/EdgeEndBundle.cpp,
+	  source/operation/relate/EdgeEndBundleStar.cpp,
+	  source/operation/relate/RelateComputer.cpp,
+	  source/operation/relate/RelateNode.cpp,
+	  source/operation/relate/RelateNodeFactory.cpp,
+	  source/operation/relate/RelateNodeGraph.cpp,
+	  source/operation/relate/RelateOp.cpp,
+	  source/operation/valid/ConsistentAreaTester.cpp: opRelate.h
+	  header split
+
+2006-03-21 12:20  strk
+
+	* tests/xmltester/TestInteriorPoint.xml: Changed expected result to
+	  the obtained one :) We're not cheating, it's a 2-vertex
+	  linestring for which an InteriorPoint is requested, both vertexes
+	  are correct answer (equidistant from centroid).
+
+2006-03-21 12:12  strk
+
+	* source/: algorithm/CGAlgorithms.cpp, algorithm/CentroidArea.cpp,
+	  algorithm/CentroidLine.cpp, algorithm/CentroidPoint.cpp,
+	  algorithm/ConvexHull.cpp, algorithm/HCoordinate.cpp,
+	  algorithm/InteriorPointArea.cpp, algorithm/InteriorPointLine.cpp,
+	  algorithm/InteriorPointPoint.cpp, algorithm/LineIntersector.cpp,
+	  algorithm/MCPointInRing.cpp, algorithm/MinimumDiameter.cpp,
+	  algorithm/NonRobustLineIntersector.cpp,
+	  algorithm/NotRepresentableException.cpp,
+	  algorithm/PointLocator.cpp, algorithm/RobustDeterminant.cpp,
+	  algorithm/RobustLineIntersector.cpp,
+	  algorithm/SIRtreePointInRing.cpp,
+	  algorithm/SimplePointInAreaLocator.cpp,
+	  algorithm/SimplePointInRing.cpp,
+	  headers/geos/algorithm/SIRtreePointInRing.h: Cleanups: headers
+	  inclusion and Log section
+
+2006-03-21 11:47  strk
+
+	* configure.in, source/headers/geos/indexStrtree.h,
+	  source/headers/geos/index/Makefile.am,
+	  source/headers/geos/index/strtree/.cvsignore,
+	  source/headers/geos/index/strtree/AbstractNode.h,
+	  source/headers/geos/index/strtree/AbstractSTRtree.h,
+	  source/headers/geos/index/strtree/Boundable.h,
+	  source/headers/geos/index/strtree/Interval.h,
+	  source/headers/geos/index/strtree/ItemBoundable.h,
+	  source/headers/geos/index/strtree/Makefile.am,
+	  source/headers/geos/index/strtree/SIRtree.h,
+	  source/headers/geos/index/strtree/STRtree.h,
+	  source/index/strtree/AbstractNode.cpp,
+	  source/index/strtree/AbstractSTRtree.cpp,
+	  source/index/strtree/Interval.cpp,
+	  source/index/strtree/ItemBoundable.cpp,
+	  source/index/strtree/SIRtree.cpp,
+	  source/index/strtree/STRtree.cpp: indexStrtree.h split
+
+2006-03-21 11:46  strk
+
+	* source/algorithm/RobustDeterminant.cpp: streamlined header
+	  inclusion, put original copyright on top
+
+2006-03-21 11:01  strk
+
+	* configure.in, source/headers/geos/indexSweepline.h,
+	  source/headers/geos/index/Makefile.am,
+	  source/headers/geos/index/sweepline/.cvsignore,
+	  source/headers/geos/index/sweepline/Makefile.am,
+	  source/headers/geos/index/sweepline/SweepLineEvent.h,
+	  source/headers/geos/index/sweepline/SweepLineIndex.h,
+	  source/headers/geos/index/sweepline/SweepLineInterval.h,
+	  source/headers/geos/index/sweepline/SweepLineOverlapAction.h,
+	  source/index/sweepline/Makefile.am,
+	  source/index/sweepline/SweepLineEvent.cpp,
+	  source/index/sweepline/SweepLineIndex.cpp,
+	  source/index/sweepline/SweepLineInterval.cpp,
+	  source/index/sweepline/indexSweepLineEvent.cpp,
+	  source/operation/valid/SweeplineNestedRingTester.cpp:
+	  indexSweepline.h header split
+
+2006-03-20 19:18  strk
+
+	* configure.in, capi/geos_c.cpp, source/headers/geos/Makefile.am,
+	  source/headers/geos/io.h, source/headers/geos/io/.cvsignore,
+	  source/headers/geos/io/ByteOrderDataInStream.h,
+	  source/headers/geos/io/ByteOrderValues.h,
+	  source/headers/geos/io/Makefile.am,
+	  source/headers/geos/io/ParseException.h,
+	  source/headers/geos/io/StringTokenizer.h,
+	  source/headers/geos/io/WKBConstants.h,
+	  source/headers/geos/io/WKBReader.h,
+	  source/headers/geos/io/WKBWriter.h,
+	  source/headers/geos/io/WKTReader.h,
+	  source/headers/geos/io/WKTReader.inl,
+	  source/headers/geos/io/WKTWriter.h,
+	  source/headers/geos/io/Writer.h, source/io/ByteOrderValues.cpp,
+	  source/io/ParseException.cpp, source/io/StringTokenizer.cpp,
+	  source/io/WKBReader.cpp, source/io/WKBWriter.cpp,
+	  source/io/WKTReader.cpp, source/io/WKTWriter.cpp,
+	  source/io/Writer.cpp, source/operation/buffer/BufferSubgraph.cpp:
+	  io.h header split
+
+2006-03-20 18:40  strk
+
+	* source/index/quadtree/DoubleBits.cpp: <cmath> included when
+	  appropriate
+
+2006-03-20 18:27  strk
+
+	* source/headers/geos/geom/: CoordinateSequence.h,
+	  GeometryFactory.h: Bug #72 - Missing <vector> header
+
+2006-03-20 18:17  strk
+
+	* source/headers/geos/: noding/snapround/Makefile.am,
+	  geomgraph/index/Makefile.am: Fixed geosdir
+
+2006-03-20 18:14  strk
+
+	* source/headers/geos/: index/Makefile.am,
+	  operation/valid/Makefile.am, operation/buffer/Makefile.am,
+	  operation/overlay/Makefile.am: Fixed geosdir
+
+2006-03-20 17:57  strk
+
+	* configure.in, source/geom/Geometry.cpp,
+	  source/headers/geos/Makefile.am,
+	  source/headers/geos/indexQuadtree.h,
+	  source/headers/geos/opValid.h,
+	  source/headers/geos/spatialIndex.h,
+	  source/headers/geos/index/.cvsignore,
+	  source/headers/geos/index/ItemVisitor.h,
+	  source/headers/geos/index/Makefile.am,
+	  source/headers/geos/index/SpatialIndex.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/headers/geos/operation/valid/.cvsignore,
+	  source/headers/geos/operation/valid/ConnectedInteriorTester.h,
+	  source/headers/geos/operation/valid/ConsistentAreaTester.h,
+	  source/headers/geos/operation/valid/IsValidOp.h,
+	  source/headers/geos/operation/valid/Makefile.am,
+	  source/headers/geos/operation/valid/QuadtreeNestedRingTester.h,
+	  source/headers/geos/operation/valid/RepeatedPointTester.h,
+	  source/headers/geos/operation/valid/SimpleNestedRingTester.h,
+	  source/headers/geos/operation/valid/SweeplineNestedRingTester.h,
+	  source/headers/geos/operation/valid/TopologyValidationError.h,
+	  source/index/quadtree/QuadTreeKey.cpp,
+	  source/index/quadtree/QuadTreeNode.cpp,
+	  source/index/quadtree/QuadTreeNodeBase.cpp,
+	  source/index/quadtree/QuadTreeRoot.cpp,
+	  source/index/quadtree/Quadtree.cpp,
+	  source/index/strtree/STRtree.cpp, source/io/Unload.cpp,
+	  source/operation/overlay/LineBuilder.cpp,
+	  source/operation/overlay/PolygonBuilder.cpp,
+	  source/operation/relate/EdgeEndBuilder.cpp,
+	  source/operation/relate/EdgeEndBundleStar.cpp,
+	  source/operation/relate/RelateComputer.cpp,
+	  source/operation/relate/RelateNode.cpp,
+	  source/operation/relate/RelateNodeFactory.cpp,
+	  source/operation/relate/RelateNodeGraph.cpp,
+	  source/operation/valid/ConnectedInteriorTester.cpp,
+	  source/operation/valid/ConsistentAreaTester.cpp,
+	  source/operation/valid/IsValidOp.cpp,
+	  source/operation/valid/QuadtreeNestedRingTester.cpp,
+	  source/operation/valid/RepeatedPointTester.cpp,
+	  source/operation/valid/SimpleNestedRingTester.cpp,
+	  source/operation/valid/TopologyValidationError.cpp:
+	  spatialindex.h and opValid.h headers split
+
+2006-03-20 17:08  strk
+
+	* macros/ac_python_devel.m4: redirected find stderr to /dev/null
+
+2006-03-20 14:20  strk
+
+	* source/operation/overlay/PolygonBuilder.cpp: Changed assertion to
+	  TopologyException for the "orphaned" hole case in order to allow
+	  for reduced precision ops to catch the case.
+
+2006-03-20 13:33  strk
+
+	* source/: headers/geos/operation/overlay/PolygonBuilder.h,
+	  operation/overlay/PolygonBuilder.cpp: Simplified some privat
+	  methods to use refs instead of pointers, added debugging section
+	  for failiures of holes/shells associations
+
+2006-03-20 13:32  strk
+
+	* source/headers/geos/geomgraph/EdgeRing.h: Added note about
+	  responsibility of return from ::toPolygon
+
+2006-03-20 13:03  strk
+
+	* source/: geom/Geometry.cpp, headers/geos/geom/Geometry.h: Added
+	  operator<< for Geometry, writing HEXWKB
+
+2006-03-20 12:42  strk
+
+	* source/: noding/Octant.cpp,
+	  operation/buffer/OffsetCurveBuilder.cpp,
+	  operation/buffer/OffsetCurveSetBuilder.cpp: Added missing <cmath>
+	  include
+
+2006-03-20 11:42  strk
+
+	* source/operation/predicate/: RectangleContains.cpp,
+	  RectangleIntersects.cpp: Bug #61 - Disambiguated geom::Polygon
+	  use
+
+2006-03-20 11:14  strk
+
+	* source/headers/geos/timeval.h: Bug #69 - Check for macro
+	  WIN32_LEAN_AND_MEAN
+
+2006-03-20 11:13  strk
+
+	* source/operation/buffer/SubgraphDepthLocater.cpp: Bug #71 -
+	  Missing <algorithm>
+
+2006-03-20 11:12  strk
+
+	* source/headers/geos/geom/Coordinate.h: Bug #70 - Small fix in fwd
+	  decl. of CoordinateLessThen
+
+2006-03-20 11:11  strk
+
+	* source/geom/GeometryFactory.cpp: Bug #67 - Debugging helpers in
+	  GeometryFactory class
+
+2006-03-17 17:48  strk
+
+	* source/: headers/geos/opRelate.h, headers/geos/opValid.h,
+	  io/Unload.cpp, operation/relate/EdgeEndBundle.cpp,
+	  operation/relate/RelateComputer.cpp,
+	  operation/relate/RelateOp.cpp,
+	  operation/valid/ConnectedInteriorTester.cpp,
+	  operation/valid/ConsistentAreaTester.cpp,
+	  operation/valid/IsValidOp.cpp,
+	  operation/valid/QuadtreeNestedRingTester.cpp,
+	  operation/valid/SimpleNestedRingTester.cpp: LineIntersector and
+	  PointLocator made complete components of RelateComputer (were
+	  statics const pointers before). Reduced inclusions from
+	  opRelate.h and opValid.h, updated .cpp files to allow build.
+
+2006-03-17 15:56  strk
+
+	* tests/xmltester/XMLTester.cpp: Fixed filename normalizer for sql
+	  output
+
+2006-03-17 14:24  strk
+
+	* configure.in, source/geom/Geometry.cpp,
+	  source/headers/geos/opOverlay.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/headers/geos/operation/overlay/.cvsignore,
+	  source/headers/geos/operation/overlay/EdgeSetNoder.h,
+	  source/headers/geos/operation/overlay/ElevationMatrix.h,
+	  source/headers/geos/operation/overlay/ElevationMatrixCell.h,
+	  source/headers/geos/operation/overlay/LineBuilder.h,
+	  source/headers/geos/operation/overlay/Makefile.am,
+	  source/headers/geos/operation/overlay/MaximalEdgeRing.h,
+	  source/headers/geos/operation/overlay/MinimalEdgeRing.h,
+	  source/headers/geos/operation/overlay/OverlayNodeFactory.h,
+	  source/headers/geos/operation/overlay/OverlayOp.h,
+	  source/headers/geos/operation/overlay/PointBuilder.h,
+	  source/headers/geos/operation/overlay/PolygonBuilder.h,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/BufferSubgraph.cpp,
+	  source/operation/buffer/SubgraphDepthLocater.cpp,
+	  source/operation/overlay/EdgeSetNoder.cpp,
+	  source/operation/overlay/ElevationMatrix.cpp,
+	  source/operation/overlay/ElevationMatrixCell.cpp,
+	  source/operation/overlay/ElevationMatrixFilter.cpp,
+	  source/operation/overlay/LineBuilder.cpp,
+	  source/operation/overlay/Makefile.am,
+	  source/operation/overlay/MaximalEdgeRing.cpp,
+	  source/operation/overlay/MinimalEdgeRing.cpp,
+	  source/operation/overlay/OverlayNodeFactory.cpp,
+	  source/operation/overlay/OverlayOp.cpp,
+	  source/operation/overlay/PointBuilder.cpp,
+	  source/operation/overlay/PolygonBuilder.cpp: opOverlay.h header
+	  splitted. Reduced header inclusions in operation/overlay
+	  implementation files. ElevationMatrixFilter code moved from own
+	  file to ElevationMatrix.cpp (ideally a class-private).
+
+2006-03-16 14:30  strk
+
+	* tests/xmltester/linemerge.xml: Added missing testfile
+
+2006-03-16 14:29  strk
+
+	* tests/unit/: Makefile.am, geom/LineSegment.cpp: new unit test for
+	  LineSegment (adding tests would be helpful)
+
+2006-03-16 14:28  strk
+
+	* source/: geom/LineSegment.cpp, headers/geos/geom/LineSegment.h,
+	  headers/geos/geom/LineSegment.inl: obsoleted getCoordinate(),
+	  replaced by operator[]
+
+2006-03-16 14:27  strk
+
+	* README: Added notes about testing
+
+2006-03-16 11:47  strk
+
+	* tests/: tut/tut.h, tut/tut_reporter.h, tut/tut_restartable.h,
+	  unit/geos_unit.cpp, unit/geom/Envelope.cpp,
+	  unit/geom/Geometry/isRectangle.cpp: Bug #65 - Command line
+	  changes and EOL fixes Unit Test
+
+2006-03-16 11:42  strk
+
+	* source/geom/Geometry.cpp: Bug #64 - Not all control paths return
+	  a value in geos::geom::Geometry::getClassSortIndex
+
+2006-03-16 11:38  strk
+
+	* source/algorithm/LineIntersector.cpp: Bug #63 - Remove
+	  unreferenced local variable warning
+
+2006-03-16 10:37  strk
+
+	* tests/: tut/tut.h, tut/tut_reporter.h, tut/tut_restartable.h,
+	  unit/Makefile.am, unit/envelope_class_test.cpp,
+	  unit/geos_unit.cpp, unit/geom/Envelope.cpp,
+	  unit/geom/Geometry/isRectangle.cpp: Initial unit tests
+
+2006-03-15 19:59  strk
+
+	* source/headers/geos/operation/IsSimpleOp.h: Bug #62: 'struct'
+	  CoordinateLessThen in forward declaration
+
+2006-03-15 19:57  strk
+
+	* source/operation/buffer/SubgraphDepthLocater.cpp: small cleanup
+
+2006-03-15 19:57  strk
+
+	* source/operation/buffer/BufferBuilder.cpp: cleanups in DEBUG
+	  lines
+
+2006-03-15 19:56  strk
+
+	* source/operation/buffer/BufferOp.cpp: Temporary hack to avoid
+	  snapround:: Noders (still using ScaledNoder wrapper) to allow for
+	  buffer_snapround.xml test to succeed
+
+2006-03-15 19:55  strk
+
+	* tests/xmltester/buffer_snapround.xml: Added xml testfile showing
+	  bug in snapround:: noders
+
+2006-03-15 19:44  strk
+
+	* doc/example.cpp, source/geom/Envelope.cpp,
+	  source/geom/LineSegment.cpp, source/geom/PrecisionModel.cpp,
+	  source/headers/geos/geom/Coordinate.inl,
+	  source/index/bintree/Key.cpp,
+	  source/index/quadtree/IntervalSize.cpp,
+	  source/index/quadtree/QuadTreeKey.cpp,
+	  source/index/strtree/STRtree.cpp,
+	  source/util/GeometricShapeFactory.cpp: Bug #60 - Missing <cmath>
+	  header in some files
+
+2006-03-15 18:33  strk
+
+	* source/operation/buffer/BufferSubgraph.cpp: Changed operator<< to
+	  use operator<< for Nodes
+
+2006-03-15 18:17  strk
+
+	* source/headers/geos/geomgraph/: DirectedEdgeStar.h, EdgeRing.h,
+	  index/SweepLineEvent.h: Added missing forward declarations
+
+2006-03-15 18:16  strk
+
+	* source/geomgraph/: Depth.cpp, DirectedEdge.cpp,
+	  DirectedEdgeStar.cpp, Edge.cpp, EdgeEnd.cpp, EdgeEndStar.cpp,
+	  EdgeIntersection.cpp, EdgeIntersectionList.cpp,
+	  EdgeNodingValidator.cpp, EdgeRing.cpp, GeometryGraph.cpp,
+	  GraphComponent.cpp, NodeFactory.cpp, PlanarGraph.cpp,
+	  Position.cpp, Quadrant.cpp, TopologyLocation.cpp,
+	  index/MonotoneChainEdge.cpp, index/MonotoneChainIndexer.cpp,
+	  index/SegmentIntersector.cpp, index/SimpleEdgeSetIntersector.cpp,
+	  index/SimpleMCSweepLineIntersector.cpp,
+	  index/SimpleSweepLineIntersector.cpp, index/SweepLineEvent.cpp,
+	  index/SweepLineSegment.cpp: streamlined headers inclusion
+
+2006-03-15 17:27  strk
+
+	* source/: geomgraph/Node.cpp, headers/geos/geomgraph/Node.h:
+	  operator<< for Node class
+
+2006-03-15 16:50  strk
+
+	* source/: headers/geos/operation/buffer/SubgraphDepthLocater.h,
+	  operation/buffer/SubgraphDepthLocater.cpp: const correctness,
+	  cleanups
+
+2006-03-15 16:27  strk
+
+	* source/headers/geos/geomgraph/: DirectedEdge.h, EdgeEnd.h:
+	  cleanups
+
+2006-03-15 16:26  strk
+
+	* source/geomgraph/: DirectedEdge.cpp, EdgeRing.cpp: Cleanups
+
+2006-03-15 14:03  strk
+
+	* source/operation/buffer/BufferBuilder.cpp: removed leftover
+	  debugging line
+
+2006-03-15 13:54  strk
+
+	* source/headers/geos/opBuffer.h: Removed DepthSegment.h include
+
+2006-03-15 13:54  strk
+
+	* source/headers/geos/operation/buffer/: DepthSegment.h,
+	  Makefile.am: Removed public DepthSegment definition (moved inside
+	  SubgraphDepthLocater implementation)
+
+2006-03-15 13:52  strk
+
+	* source/operation/buffer/: DepthSegment.cpp, Makefile.am,
+	  SubgraphDepthLocater.cpp: DepthSegment class moved inside
+	  SubgraphDepthLocator implementaion as it was private to this file
+	  in JTS. Also, changed to reduce copies of LineSegment copies.
+
+2006-03-15 12:45  strk
+
+	* source/headers/geos/operation/buffer/BufferSubgraph.h: doxygen
+	  comments
+
+2006-03-15 12:44  strk
+
+	* source/operation/overlay/PolygonBuilder.cpp: debug blocks,
+	  dumping SQL when GEOS_DEBUG > 1
+
+2006-03-15 12:42  strk
+
+	* source/operation/buffer/BufferBuilder.cpp: more debugging lines,
+	  with two levels of debugging handled
+
+2006-03-15 12:39  strk
+
+	* source/operation/buffer/BufferSubgraph.cpp: comments cleanup,
+	  changed computeDepths to use a list<> rather then a vector
+	  (performance related)
+
+2006-03-15 11:40  strk
+
+	* doc/Doxyfile.in: Fixed to allow doxygen runs from external
+	  builddir
+
+2006-03-15 10:51  strk
+
+	* source/headers/geos/noding/: SegmentString.inl, SimpleNoder.h:
+	  streamlined header usage
+
+2006-03-15 10:51  strk
+
+	* source/noding/: IntersectionAdder.cpp,
+	  IntersectionFinderAdder.cpp, IteratedNoder.cpp, MCIndexNoder.cpp,
+	  NodingValidator.cpp, Octant.cpp, ScaledNoder.cpp,
+	  SegmentNode.cpp, SegmentNodeList.cpp, SegmentString.cpp,
+	  SimpleNoder.cpp, snapround/MCIndexPointSnapper.cpp,
+	  snapround/SimpleSnapRounder.cpp: streamlined headers usage
+
+2006-03-15 10:13  strk
+
+	* source/geom/Polygon.cpp: updated port info
+
+2006-03-15 10:12  strk
+
+	* source/headers/geos/geom/Polygon.h: isSimple doc
+
+2006-03-14 18:46  strk
+
+	* source/headers/geos/util/Assert.h: Removed unrequired include
+
+2006-03-14 18:10  strk
+
+	* source/operation/buffer/BufferSubgraph.cpp: cleanups
+
+2006-03-14 18:08  strk
+
+	* source/: headers/geos/opOverlay.h,
+	  operation/overlay/MaximalEdgeRing.cpp: comments cleanup,
+	  integrity checks
+
+2006-03-14 17:55  strk
+
+	* source/operation/overlay/PolygonBuilder.cpp: oops, GEOS_DEBUG
+	  default to 0
+
+2006-03-14 17:55  strk
+
+	* source/: headers/geos/opOverlay.h,
+	  operation/overlay/PolygonBuilder.cpp: comments cleanup
+
+2006-03-14 17:53  strk
+
+	* source/geomgraph/Edge.cpp: removed endline from printing funx
+
+2006-03-14 17:08  strk
+
+	* source/: headers/geos/operation/buffer/BufferBuilder.h,
+	  operation/buffer/BufferBuilder.cpp: changed buildSubgraphs
+	  signature to use refs rather then pointers, made it
+	  const-correct. Reduced heap allocations in createSubgraphs()
+
+2006-03-14 16:46  strk
+
+	* source/: geomgraph/PlanarGraph.cpp,
+	  headers/geos/geomgraph/PlanarGraph.h: Added
+	  PlanarGraph::getNodes(vector&) func, to reduce useless heap
+	  allocations
+
+2006-03-14 16:31  strk
+
+	* source/: geomgraph/DirectedEdge.cpp, geomgraph/Edge.cpp,
+	  geomgraph/Node.cpp, geom/Coordinate.cpp,
+	  geom/CoordinateArraySequence.cpp: Cleaned up toString funx (more
+	  WKT friendly)
+
+2006-03-14 15:16  strk
+
+	* source/: headers/geos/operation/buffer/BufferSubgraph.h,
+	  operation/buffer/BufferBuilder.cpp,
+	  operation/buffer/BufferSubgraph.cpp,
+	  operation/overlay/PolygonBuilder.cpp: operator<< for
+	  BufferSubgraph, more debugging calls
+
+2006-03-14 13:55  strk
+
+	* configure.in, source/geom/Geometry.cpp,
+	  source/geomgraph/Label.cpp, source/geomgraph/Node.cpp,
+	  source/geomgraph/NodeMap.cpp,
+	  source/headers/geos/geomgraphindex.h,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/geomgraph/Makefile.am,
+	  source/headers/geos/geomgraph/index/.cvsignore,
+	  source/headers/geos/geomgraph/index/EdgeSetIntersector.h,
+	  source/headers/geos/geomgraph/index/Makefile.am,
+	  source/headers/geos/geomgraph/index/MonotoneChain.h,
+	  source/headers/geos/geomgraph/index/MonotoneChainEdge.h,
+	  source/headers/geos/geomgraph/index/MonotoneChainIndexer.h,
+	  source/headers/geos/geomgraph/index/SegmentIntersector.h,
+	  source/headers/geos/geomgraph/index/SimpleEdgeSetIntersector.h,
+	  source/headers/geos/geomgraph/index/SimpleMCSweepLineIntersector.h,
+	  source/headers/geos/geomgraph/index/SimpleSweepLineIntersector.h,
+	  source/headers/geos/geomgraph/index/SweepLineEvent.h,
+	  source/headers/geos/geomgraph/index/SweepLineEventObj.h,
+	  source/headers/geos/geomgraph/index/SweepLineSegment.h,
+	  source/headers/geos/noding/IntersectionFinderAdder.h,
+	  source/headers/geos/noding/MCIndexNoder.h,
+	  source/headers/geos/noding/MCIndexNoder.inl,
+	  source/headers/geos/noding/Makefile.am,
+	  source/headers/geos/noding/snapround/.cvsignore,
+	  source/headers/geos/noding/snapround/HotPixel.h,
+	  source/headers/geos/noding/snapround/HotPixel.inl,
+	  source/headers/geos/noding/snapround/MCIndexPointSnapper.h,
+	  source/headers/geos/noding/snapround/MCIndexSnapRounder.h,
+	  source/headers/geos/noding/snapround/MCIndexSnapRounder.inl,
+	  source/headers/geos/noding/snapround/Makefile.am,
+	  source/headers/geos/noding/snapround/SimpleSnapRounder.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  source/noding/MCIndexNoder.cpp,
+	  source/noding/snapround/HotPixel.cpp,
+	  source/noding/snapround/MCIndexPointSnapper.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/BufferOp.cpp: Headers split:
+	  geomgraphindex.h, nodingSnapround.h
+
+2006-03-14 12:03  strk
+
+	* source/: geomgraph/Edge.cpp, geomgraph/EdgeList.cpp,
+	  headers/geos/geomgraph/Edge.h, headers/geos/geomgraph/EdgeList.h:
+	  Added operator<< for Edge and EdgeList
+
+2006-03-14 01:37  strk
+
+	* source/headers/geos/operation/buffer/Makefile.am: Fixed include
+	  filenames
+
+2006-03-14 01:36  strk
+
+	* source/operation/buffer/BufferOp.cpp: Reduced 'buffer' headers
+	  inclusion
+
+2006-03-14 01:19  strk
+
+	* source/: headers/geos/opBuffer.h,
+	  headers/geos/operation/buffer/.cvsignore,
+	  headers/geos/operation/buffer/BufferBuilder.h,
+	  headers/geos/operation/buffer/BufferOp.h,
+	  headers/geos/operation/buffer/BufferSubgraph.h,
+	  headers/geos/operation/buffer/DepthSegment.h,
+	  headers/geos/operation/buffer/Makefile.am,
+	  headers/geos/operation/buffer/OffsetCurveBuilder.h,
+	  headers/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  headers/geos/operation/buffer/RightmostEdgeFinder.h,
+	  headers/geos/operation/buffer/SubgraphDepthLocater.h,
+	  operation/buffer/BufferBuilder.cpp,
+	  operation/buffer/BufferSubgraph.cpp,
+	  operation/buffer/DepthSegment.cpp,
+	  operation/buffer/OffsetCurveBuilder.cpp,
+	  operation/buffer/OffsetCurveSetBuilder.cpp,
+	  operation/buffer/RightmostEdgeFinder.cpp,
+	  operation/buffer/SubgraphDepthLocater.cpp: opBuffer.h split,
+	  streamlined headers in some (not all) files in operation/buffer/
+
+2006-03-13 23:33  strk
+
+	* source/headers/geos/geom/LineSegment.h: Added missing forward
+	  declarations
+
+2006-03-13 22:54  strk
+
+	* source/geom/: Coordinate.cpp, CoordinateSequence.cpp,
+	  CoordinateSequenceFactory.cpp, Geometry.cpp,
+	  GeometryComponentFilter.cpp, IntersectionMatrix.cpp,
+	  LineSegment.cpp, Triangle.cpp: Streamlined headers inclusion.
+
+2006-03-13 22:19  strk
+
+	* source/: headers/geos/noding/ScaledNoder.h,
+	  noding/ScaledNoder.cpp: Fixed bug in ScaledNoder scaling
+	  mechanism (hugly code, due to CoordinateSequence visitor pattern
+	  design). Tests are still failing so this possibly needs some
+	  other fix. Streamlined includes by implementation file.
+
+2006-03-13 22:14  strk
+
+	* source/headers/geos/noding/SegmentString.h: Added missing forward
+	  declarations
+
+2006-03-13 22:13  strk
+
+	* source/headers/geos/geom/CoordinateFilter.h: Added comment about
+	  possible refactoring
+
+2006-03-11 17:58  strk
+
+	* source/: headers/geos/opBuffer.h,
+	  operation/buffer/OffsetCurveBuilder.cpp: Fixed bug in
+	  OffsetCurveBuilder::getCoordinates.
+
+2006-03-10 16:50  strk
+
+	* source/geomgraph/EdgeRing.cpp: Changed 'found null Directed Edge'
+	  from an Assertion to a TopologyException, to give
+	  'precision-reducing' overlay operation a chance to handle it (it
+	  seems to work)
+
+2006-03-10 14:07  strk
+
+	* source/geomgraph/EdgeRing.cpp: fine-tuned includes, reverted
+	  Assert=>assert due to user-input based failure
+
+2006-03-10 13:50  strk
+
+	* configure.in, tests/unit/Makefile.am,
+	  tests/unit/envelope_class_test.cpp: boost detection code fix,
+	  first UTF source for testing purposes
+
+2006-03-10 13:43  strk
+
+	* TODO: updated
+
+2006-03-10 13:09  strk
+
+	* configure.in: Update configure script to work with new boost.m4
+	  file
+
+2006-03-10 12:49  strk
+
+	* macros/boost.m4: Updated boost detection macro
+
+2006-03-10 12:41  strk
+
+	* source/index/quadtree/QuadTreeNodeBase.cpp: Added missing
+	  <algorithm> include (bug#56)
+
+2006-03-10 12:10  strk
+
+	* configure.in, macros/boost.m4, tests/Makefile.am,
+	  tests/unit/.cvsignore, tests/unit/Makefile.am: Initial boost
+	  detection code
+
+2006-03-10 12:09  strk
+
+	* source/operation/valid/ConnectedInteriorTester.cpp: Comments
+	  cleanup
+
+2006-03-10 11:48  strk
+
+	* source/Makefile.vc: Bug #58 - Patch to makefile.vc after big
+	  refactoring commit
+
+2006-03-10 11:44  strk
+
+	* source/: operation/buffer/BufferBuilder.cpp,
+	  operation/overlay/ElevationMatrixFilter.cpp,
+	  precision/EnhancedPrecisionOp.cpp: Unreferenced exception objects
+	  cleanup (#52)
+
+2006-03-10 11:37  strk
+
+	* source/geomgraph/index/SimpleSweepLineIntersector.cpp: Added
+	  missing <algorithm> include (#55)
+
+2006-03-10 11:34  strk
+
+	* source/geom/Polygon.cpp: Added missing <algorithm> include (#54)
+
+2006-03-09 19:22  strk
+
+	* tests/xmltester/: Makefile.am, TestIsValid.xml: Added isvalid
+	  test for latest validop patch
+
+2006-03-09 19:18  strk
+
+	* source/: headers/geos/opOverlay.h, headers/geos/opValid.h,
+	  operation/overlay/MaximalEdgeRing.cpp,
+	  operation/valid/ConnectedInteriorTester.cpp: Added
+	  memory-friendly MaximalEdgeRing::buildMinimalRings()
+	  implementation.  Applied patch to IsValid operation from
+	  JTS-1.7.1
+
+2006-03-09 18:40  strk
+
+	* source/: operation/buffer/OffsetCurveBuilder.cpp,
+	  headers/geos/opBuffer.h: Fixed bug#33 (hopefully)
+
+2006-03-09 17:46  strk
+
+	* configure.in, source/algorithm/CGAlgorithms.cpp,
+	  source/algorithm/CentroidArea.cpp,
+	  source/algorithm/CentroidLine.cpp,
+	  source/algorithm/CentroidPoint.cpp,
+	  source/algorithm/ConvexHull.cpp,
+	  source/algorithm/HCoordinate.cpp,
+	  source/algorithm/InteriorPointArea.cpp,
+	  source/algorithm/InteriorPointLine.cpp,
+	  source/algorithm/InteriorPointPoint.cpp,
+	  source/algorithm/LineIntersector.cpp,
+	  source/algorithm/MCPointInRing.cpp,
+	  source/algorithm/MinimumDiameter.cpp,
+	  source/algorithm/NotRepresentableException.cpp,
+	  source/algorithm/PointLocator.cpp,
+	  source/algorithm/SIRtreePointInRing.cpp,
+	  source/algorithm/SimplePointInAreaLocator.cpp,
+	  source/algorithm/SimplePointInRing.cpp,
+	  source/geom/Coordinate.cpp,
+	  source/geom/CoordinateArraySequence.cpp,
+	  source/geom/CoordinateArraySequenceFactory.cpp,
+	  source/geom/CoordinateList.cpp,
+	  source/geom/CoordinateSequence.cpp,
+	  source/geom/CoordinateSequenceFactory.cpp,
+	  source/geom/Dimension.cpp, source/geom/Envelope.cpp,
+	  source/geom/Geometry.cpp, source/geom/GeometryCollection.cpp,
+	  source/geom/GeometryCollectionIterator.cpp,
+	  source/geom/GeometryComponentFilter.cpp,
+	  source/geom/GeometryFactory.cpp,
+	  source/geom/IntersectionMatrix.cpp, source/geom/LineSegment.cpp,
+	  source/geom/LineString.cpp, source/geom/LinearRing.cpp,
+	  source/geom/Location.cpp, source/geom/MultiLineString.cpp,
+	  source/geom/MultiPoint.cpp, source/geom/MultiPolygon.cpp,
+	  source/geom/Point.cpp, source/geom/Polygon.cpp,
+	  source/geom/PrecisionModel.cpp,
+	  source/geom/TopologyException.cpp, source/geom/Triangle.cpp,
+	  source/geom/util/CoordinateOperation.cpp,
+	  source/geom/util/GeometryEditor.cpp,
+	  source/geom/util/Makefile.am, source/geomgraph/DirectedEdge.cpp,
+	  source/geomgraph/Edge.cpp, source/geomgraph/EdgeEnd.cpp,
+	  source/geomgraph/EdgeEndStar.cpp, source/geomgraph/EdgeRing.cpp,
+	  source/geomgraph/GeometryGraph.cpp,
+	  source/geomgraph/PlanarGraph.cpp, source/geomgraph/Quadrant.cpp,
+	  source/geomgraph/index/MonotoneChainEdge.cpp,
+	  source/geomgraph/index/MonotoneChainIndexer.cpp,
+	  source/geomgraph/index/SegmentIntersector.cpp,
+	  source/geomgraph/index/SimpleEdgeSetIntersector.cpp,
+	  source/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  source/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  source/geomgraph/index/SweepLineSegment.cpp,
+	  source/headers/geos.h, source/headers/geos/Makefile.am,
+	  source/headers/geos/geom.h, source/headers/geos/geomUtil.h,
+	  source/headers/geos/geomgraph.h,
+	  source/headers/geos/geomgraphindex.h,
+	  source/headers/geos/geosAlgorithm.h,
+	  source/headers/geos/indexChain.h,
+	  source/headers/geos/indexQuadtree.h,
+	  source/headers/geos/indexStrtree.h, source/headers/geos/io.h,
+	  source/headers/geos/noding.h,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/opBuffer.h, source/headers/geos/opDistance.h,
+	  source/headers/geos/opOverlay.h, source/headers/geos/opRelate.h,
+	  source/headers/geos/opValid.h, source/headers/geos/operation.h,
+	  source/headers/geos/spatialIndex.h, source/headers/geos/util.h,
+	  source/headers/geos/algorithm/.cvsignore,
+	  source/headers/geos/algorithm/CGAlgorithms.h,
+	  source/headers/geos/algorithm/CentroidArea.h,
+	  source/headers/geos/algorithm/CentroidLine.h,
+	  source/headers/geos/algorithm/CentroidPoint.h,
+	  source/headers/geos/algorithm/ConvexHull.h,
+	  source/headers/geos/algorithm/ConvexHull.inl,
+	  source/headers/geos/algorithm/HCoordinate.h,
+	  source/headers/geos/algorithm/InteriorPointArea.h,
+	  source/headers/geos/algorithm/InteriorPointLine.h,
+	  source/headers/geos/algorithm/InteriorPointPoint.h,
+	  source/headers/geos/algorithm/LineIntersector.h,
+	  source/headers/geos/algorithm/MCPointInRing.h,
+	  source/headers/geos/algorithm/Makefile.am,
+	  source/headers/geos/algorithm/MinimumDiameter.h,
+	  source/headers/geos/algorithm/NotRepresentableException.h,
+	  source/headers/geos/algorithm/PointInRing.h,
+	  source/headers/geos/algorithm/PointLocator.h,
+	  source/headers/geos/algorithm/RobustDeterminant.h,
+	  source/headers/geos/algorithm/SIRtreePointInRing.h,
+	  source/headers/geos/algorithm/SimplePointInAreaLocator.h,
+	  source/headers/geos/algorithm/SimplePointInRing.h,
+	  source/headers/geos/geom/.cvsignore,
+	  source/headers/geos/geom/Coordinate.h,
+	  source/headers/geos/geom/Coordinate.inl,
+	  source/headers/geos/geom/CoordinateArraySequence.h,
+	  source/headers/geos/geom/CoordinateArraySequenceFactory.h,
+	  source/headers/geos/geom/CoordinateArraySequenceFactory.inl,
+	  source/headers/geos/geom/CoordinateFilter.h,
+	  source/headers/geos/geom/CoordinateSequence.h,
+	  source/headers/geos/geom/CoordinateSequenceFactory.h,
+	  source/headers/geos/geom/Dimension.h,
+	  source/headers/geos/geom/Envelope.h,
+	  source/headers/geos/geom/Envelope.inl,
+	  source/headers/geos/geom/Geometry.h,
+	  source/headers/geos/geom/Geometry.inl,
+	  source/headers/geos/geom/GeometryCollection.h,
+	  source/headers/geos/geom/GeometryCollection.inl,
+	  source/headers/geos/geom/GeometryComponentFilter.h,
+	  source/headers/geos/geom/GeometryFactory.h,
+	  source/headers/geos/geom/GeometryFactory.inl,
+	  source/headers/geos/geom/GeometryFilter.h,
+	  source/headers/geos/geom/IntersectionMatrix.h,
+	  source/headers/geos/geom/LineSegment.h,
+	  source/headers/geos/geom/LineSegment.inl,
+	  source/headers/geos/geom/LineString.h,
+	  source/headers/geos/geom/LinearRing.h,
+	  source/headers/geos/geom/Location.h,
+	  source/headers/geos/geom/Makefile.am,
+	  source/headers/geos/geom/MultiLineString.h,
+	  source/headers/geos/geom/MultiLineString.inl,
+	  source/headers/geos/geom/MultiPoint.h,
+	  source/headers/geos/geom/MultiPolygon.h,
+	  source/headers/geos/geom/MultiPolygon.inl,
+	  source/headers/geos/geom/Point.h,
+	  source/headers/geos/geom/Polygon.h,
+	  source/headers/geos/geom/PrecisionModel.h,
+	  source/headers/geos/geom/PrecisionModel.inl,
+	  source/headers/geos/geom/Triangle.h,
+	  source/headers/geos/geom/util/.cvsignore,
+	  source/headers/geos/geom/util/CoordinateOperation.h,
+	  source/headers/geos/geom/util/GeometryEditor.h,
+	  source/headers/geos/geom/util/GeometryEditorOperation.h,
+	  source/headers/geos/geom/util/LinearComponentExtracter.h,
+	  source/headers/geos/geom/util/Makefile.am,
+	  source/headers/geos/geom/util/PointExtracter.h,
+	  source/headers/geos/geom/util/PolygonExtracter.h,
+	  source/headers/geos/geom/util/ShortCircuitedGeometryVisitor.h,
+	  source/headers/geos/geomgraph/.cvsignore,
+	  source/headers/geos/geomgraph/Depth.h,
+	  source/headers/geos/geomgraph/DirectedEdge.h,
+	  source/headers/geos/geomgraph/DirectedEdge.inl,
+	  source/headers/geos/geomgraph/DirectedEdgeStar.h,
+	  source/headers/geos/geomgraph/Edge.h,
+	  source/headers/geos/geomgraph/EdgeEnd.h,
+	  source/headers/geos/geomgraph/EdgeEndStar.h,
+	  source/headers/geos/geomgraph/EdgeIntersection.h,
+	  source/headers/geos/geomgraph/EdgeIntersectionList.h,
+	  source/headers/geos/geomgraph/EdgeList.h,
+	  source/headers/geos/geomgraph/EdgeNodingValidator.h,
+	  source/headers/geos/geomgraph/EdgeRing.h,
+	  source/headers/geos/geomgraph/GeometryGraph.h,
+	  source/headers/geos/geomgraph/GraphComponent.h,
+	  source/headers/geos/geomgraph/Label.h,
+	  source/headers/geos/geomgraph/Makefile.am,
+	  source/headers/geos/geomgraph/Node.h,
+	  source/headers/geos/geomgraph/NodeFactory.h,
+	  source/headers/geos/geomgraph/NodeMap.h,
+	  source/headers/geos/geomgraph/PlanarGraph.h,
+	  source/headers/geos/geomgraph/Position.h,
+	  source/headers/geos/geomgraph/Quadrant.h,
+	  source/headers/geos/geomgraph/TopologyLocation.h,
+	  source/headers/geos/noding/.cvsignore,
+	  source/headers/geos/noding/IntersectionAdder.h,
+	  source/headers/geos/noding/IntersectionFinderAdder.h,
+	  source/headers/geos/noding/IteratedNoder.h,
+	  source/headers/geos/noding/MCIndexNoder.h,
+	  source/headers/geos/noding/Makefile.am,
+	  source/headers/geos/noding/Noder.h,
+	  source/headers/geos/noding/NodingValidator.h,
+	  source/headers/geos/noding/Octant.h,
+	  source/headers/geos/noding/ScaledNoder.h,
+	  source/headers/geos/noding/SegmentIntersector.h,
+	  source/headers/geos/noding/SegmentNode.h,
+	  source/headers/geos/noding/SegmentNodeList.h,
+	  source/headers/geos/noding/SegmentString.h,
+	  source/headers/geos/noding/SegmentString.inl,
+	  source/headers/geos/noding/SimpleNoder.h,
+	  source/headers/geos/noding/SinglePassNoder.h,
+	  source/headers/geos/operation/.cvsignore,
+	  source/headers/geos/operation/EndpointInfo.h,
+	  source/headers/geos/operation/GeometryGraphOperation.h,
+	  source/headers/geos/operation/IsSimpleOp.h,
+	  source/headers/geos/operation/Makefile.am,
+	  source/headers/geos/util/.cvsignore,
+	  source/headers/geos/util/Assert.h,
+	  source/headers/geos/util/AssertionFailedException.h,
+	  source/headers/geos/util/CoordinateArrayFilter.h,
+	  source/headers/geos/util/GEOSException.h,
+	  source/headers/geos/util/GeometricShapeFactory.h,
+	  source/headers/geos/util/IllegalArgumentException.h,
+	  source/headers/geos/util/Makefile.am,
+	  source/headers/geos/util/TopologyException.h,
+	  source/headers/geos/util/UniqueCoordinateArrayFilter.h,
+	  source/headers/geos/util/UnsupportedOperationException.h,
+	  source/headers/geos/util/math.h, source/io/WKBReader.cpp,
+	  source/io/WKBWriter.cpp, source/io/WKTReader.cpp,
+	  source/io/WKTWriter.cpp, source/noding/SegmentString.cpp,
+	  source/operation/IsSimpleOp.cpp,
+	  source/operation/buffer/BufferOp.cpp,
+	  source/operation/buffer/OffsetCurveBuilder.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  source/operation/buffer/RightmostEdgeFinder.cpp,
+	  source/operation/buffer/SubgraphDepthLocater.cpp,
+	  source/operation/overlay/EdgeSetNoder.cpp,
+	  source/operation/overlay/ElevationMatrix.cpp,
+	  source/operation/overlay/ElevationMatrixFilter.cpp,
+	  source/operation/overlay/MaximalEdgeRing.cpp,
+	  source/operation/overlay/PolygonBuilder.cpp,
+	  source/operation/relate/RelateComputer.cpp,
+	  source/operation/valid/ConsistentAreaTester.cpp,
+	  source/operation/valid/IsValidOp.cpp,
+	  source/operation/valid/RepeatedPointTester.cpp,
+	  source/util/Assert.cpp, tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/XMLTester.cpp, tests/xmltester/buffer.xml:
+	  geos::geom namespace definition, first pass at headers split
+
+2006-03-09 17:18  strk
+
+	* tests/xmltester/Makefile.am: Fixed to allow tests from external
+	  build tree (thanks Norman:)
+
+2006-03-09 17:01  strk
+
+	* source/geomgraph/Position.cpp: Fixed debugging lines
+
+2006-03-09 16:58  strk
+
+	* source/operation/overlay/ElevationMatrixFilter.cpp: Fixed
+	  debugging lines
+
+2006-03-09 16:50  strk
+
+	* source/operation/overlay/OverlayOp.cpp: Fixed debugging lines,
+	  added missing header
+
+2006-03-09 16:47  strk
+
+	* source/operation/linemerge/LineMergeGraph.cpp: Fixed debugging
+	  lines
+
+2006-03-09 16:39  strk
+
+	* source/noding/SegmentNodeList.cpp: Fixed debugging lines
+
+2006-03-09 16:34  strk
+
+	* source/index/quadtree/: QuadTreeKey.cpp, QuadTreeRoot.cpp: Fixed
+	  debugging lines
+
+2006-03-09 15:48  strk
+
+	* capi/Makefile.am: Added missing INCLUDES line
+
+2006-03-07 15:21  strk
+
+	* tests/xmltester/XMLTester.cpp: Leak plugged, tweeked output to be
+	  nice with --sql-output
+
+2006-03-07 15:20  strk
+
+	* source/: headers/geos/opBuffer.h,
+	  operation/buffer/OffsetCurveBuilder.cpp: Big deal of heap
+	  allocations reduction
+
+2006-03-07 15:18  strk
+
+	* source/util/Profiler.cpp: Profiler singleton implemented with a
+	  function-static Profiler instance
+
+2006-03-07 13:42  strk
+
+	* tests/xmltester/buffer.xml: addedvalidity test for a case with
+	  invalid input
+
+2006-03-07 13:41  strk
+
+	* tests/xmltester/: XMLTester.cpp, XMLTester.h: Added --wkb-output
+	  and made --sql-output compatible with -v
+
+2006-03-07 12:22  strk
+
+	* tests/xmltester/XMLTester.cpp: table name for sqlOutput
+	  normalized
+
+2006-03-07 12:06  strk
+
+	* tests/xmltester/: XMLTester.cpp, XMLTester.h: Added --sql-output
+	  switch for debugging
+
+2006-03-07 11:46  strk
+
+	* tests/xmltester/XMLTester.cpp: verbose validity errors
+
+2006-03-06 22:27  strk
+
+	* doc/example.cpp, source/headers/geos/geom.h,
+	  source/headers/geos/opRelate.h, tests/xmltester/XMLTester.cpp:
+	  Cascading fixed after Unload definition moved to geos::io
+	  namespace
+
+2006-03-06 20:43  strk
+
+	* source/headers/geos/unload.h: Fixed Unload class definition
+	  namespace (geos::io)
+
+2006-03-06 20:40  strk
+
+	* capi/geos_c.cpp, doc/example.cpp,
+	  source/algorithm/ConvexHull.cpp,
+	  source/algorithm/LineIntersector.cpp,
+	  source/algorithm/PointLocator.cpp,
+	  source/algorithm/SimplePointInAreaLocator.cpp,
+	  source/geom/Dimension.cpp, source/geom/Geometry.cpp,
+	  source/geom/GeometryCollection.cpp,
+	  source/geom/GeometryComponentFilter.cpp,
+	  source/geom/GeometryFactory.cpp,
+	  source/geom/IntersectionMatrix.cpp, source/geom/LineSegment.cpp,
+	  source/geom/LineString.cpp, source/geom/LinearRing.cpp,
+	  source/geom/Location.cpp, source/geom/Makefile.am,
+	  source/geom/Point.cpp, source/geom/Polygon.cpp,
+	  source/geom/PrecisionModel.cpp,
+	  source/geom/util/GeometryEditor.cpp,
+	  source/geomgraph/DirectedEdge.cpp,
+	  source/geomgraph/DirectedEdgeStar.cpp,
+	  source/geomgraph/EdgeEnd.cpp, source/geomgraph/EdgeEndStar.cpp,
+	  source/geomgraph/EdgeRing.cpp,
+	  source/geomgraph/GeometryGraph.cpp,
+	  source/geomgraph/GraphComponent.cpp,
+	  source/geomgraph/PlanarGraph.cpp, source/geomgraph/Quadrant.cpp,
+	  source/headers/geos/LineSegment.inl,
+	  source/headers/geos/Makefile.am, source/headers/geos/geom.h,
+	  source/headers/geos/geomgraph.h,
+	  source/headers/geos/geosAlgorithm.h, source/headers/geos/io.h,
+	  source/headers/geos/opBuffer.h, source/headers/geos/profiler.h,
+	  source/headers/geos/util.h,
+	  source/headers/geos/geom/GeometryCollection.inl,
+	  source/headers/geos/geom/LineSegment.inl,
+	  source/index/bintree/BinTreeNode.cpp,
+	  source/index/quadtree/DoubleBits.cpp,
+	  source/index/quadtree/QuadTreeNode.cpp,
+	  source/index/quadtree/QuadTreeRoot.cpp,
+	  source/index/strtree/AbstractNode.cpp,
+	  source/index/strtree/Interval.cpp,
+	  source/index/strtree/SIRtree.cpp,
+	  source/index/strtree/STRtree.cpp, source/io/Unload.cpp,
+	  source/io/WKBWriter.cpp, source/io/WKTReader.cpp,
+	  source/io/WKTWriter.cpp, source/noding/IteratedNoder.cpp,
+	  source/noding/NodingValidator.cpp, source/noding/Octant.cpp,
+	  source/noding/SegmentNodeList.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/BufferOp.cpp,
+	  source/operation/buffer/BufferSubgraph.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  source/operation/buffer/RightmostEdgeFinder.cpp,
+	  source/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  source/operation/linemerge/LineSequencer.cpp,
+	  source/operation/overlay/ElevationMatrix.cpp,
+	  source/operation/overlay/ElevationMatrixFilter.cpp,
+	  source/operation/overlay/OverlayOp.cpp,
+	  source/operation/overlay/PolygonBuilder.cpp,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/relate/RelateComputer.cpp,
+	  source/operation/valid/ConnectedInteriorTester.cpp,
+	  source/operation/valid/IsValidOp.cpp,
+	  source/operation/valid/QuadtreeNestedRingTester.cpp,
+	  source/operation/valid/RepeatedPointTester.cpp,
+	  source/operation/valid/SimpleNestedRingTester.cpp,
+	  source/operation/valid/SweeplineNestedRingTester.cpp,
+	  source/precision/CommonBitsRemover.cpp,
+	  source/precision/EnhancedPrecisionOp.cpp, source/util/Assert.cpp,
+	  source/util/AssertionFailedException.cpp,
+	  source/util/CoordinateArrayFiter.cpp,
+	  source/util/GEOSException.cpp,
+	  source/util/GeometricShapeFactory.cpp,
+	  source/util/IllegalArgumentException.cpp,
+	  source/util/Profiler.cpp,
+	  source/util/UniqueCoordinateArrayFilter.cpp,
+	  source/util/UnsupportedOperationException.cpp,
+	  tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/XMLTester.cpp: geos::util namespace. New
+	  GeometryCollection::iterator interface, many cleanups.
+
+2006-03-06 16:23  strk
+
+	* capi/geos_c.cpp, doc/example.cpp, source/geom/Geometry.cpp,
+	  source/headers/geos/io.h, source/io/ByteOrderValues.cpp,
+	  source/io/ParseException.cpp, source/io/StringTokenizer.cpp,
+	  source/io/Unload.cpp, source/io/WKBReader.cpp,
+	  source/io/WKBWriter.cpp, source/io/WKTReader.cpp,
+	  source/io/WKTWriter.cpp, source/io/Writer.cpp,
+	  tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/XMLTester.cpp, tests/xmltester/XMLTester.h,
+	  tests/xmltester/buffer.xml: geos::io namespace
+
+2006-03-06 15:30  strk
+
+	* capi/geos_c.cpp: Validity error include Coordinate
+
+2006-03-06 14:27  strk
+
+	* source/geom/Polygon.cpp: Cleaned up equalsExact
+
+2006-03-06 14:26  strk
+
+	* tests/xmltester/XMLTester.cpp: Fixed equalsExact check, and also
+	  reduced tolerance
+
+2006-03-06 13:47  strk
+
+	* source/: headers/geos/opValid.h, operation/valid/IsValidOp.cpp:
+	  TopologyValidationError error names (enum) renamed to avoid
+	  conflicts.
+
+2006-03-06 13:16  strk
+
+	* tests/xmltester/robustness.xml: Added second case for Union
+
+2006-03-06 13:11  strk
+
+	* source/operation/overlay/OverlayOp.cpp: precision.h =>
+	  geos/precision.h (#48)
+
+2006-03-06 12:39  strk
+
+	* tests/xmltester/robustness.xml: Added test extracted from data
+	  provided by Guillaume Sueur
+
+2006-03-06 12:34  strk
+
+	* source/headers/geos/geom.h: Dropped
+	  unused/unmaintained/platform-problematic serial version info for
+	  classes (#47)
+
+2006-03-06 12:17  strk
+
+	* capi/geos_c.cpp: added a compile-time option to get
+	  VERBOSE_EXCEPTION (print args on exceptions)
+
+2006-03-06 12:17  strk
+
+	* source/operation/overlay/OverlayOp.cpp: precision reducing
+	  overlayOp made compile-time optional
+
+2006-03-06 12:05  strk
+
+	* tests/xmltester/: XMLTester.cpp, XMLTester.h: Added input and
+	  output validity test facilities
+
+2006-03-03 15:01  strk
+
+	* source/operation/overlay/OverlayOp.cpp: Experimental
+	  precision-reducing overlayOp
+
+2006-03-03 14:50  strk
+
+	* source/: algorithm/InteriorPointLine.cpp, headers/geos/geom.h,
+	  headers/geos/geosAlgorithm.h: Cleaned up InteriorPointLine class
+
+2006-03-03 11:46  strk
+
+	* capi/geos_c.cpp, doc/example.cpp,
+	  source/algorithm/CGAlgorithms.cpp,
+	  source/algorithm/HCoordinate.cpp,
+	  source/algorithm/InteriorPointArea.cpp,
+	  source/algorithm/LineIntersector.cpp,
+	  source/algorithm/MCPointInRing.cpp,
+	  source/algorithm/NotRepresentableException.cpp,
+	  source/algorithm/SIRtreePointInRing.cpp,
+	  source/geom/Coordinate.cpp,
+	  source/geom/CoordinateArraySequence.cpp,
+	  source/geom/CoordinateSequence.cpp, source/geom/Dimension.cpp,
+	  source/geom/Envelope.cpp, source/geom/Geometry.cpp,
+	  source/geom/GeometryCollection.cpp,
+	  source/geom/GeometryFactory.cpp,
+	  source/geom/IntersectionMatrix.cpp, source/geom/LineSegment.cpp,
+	  source/geom/LineString.cpp, source/geom/LinearRing.cpp,
+	  source/geom/Location.cpp, source/geom/MultiLineString.cpp,
+	  source/geom/MultiPoint.cpp, source/geom/MultiPolygon.cpp,
+	  source/geom/Point.cpp, source/geom/Polygon.cpp,
+	  source/geom/PrecisionModel.cpp,
+	  source/geom/TopologyException.cpp,
+	  source/geom/util/GeometryEditor.cpp, source/geomgraph/Depth.cpp,
+	  source/geomgraph/DirectedEdge.cpp,
+	  source/geomgraph/DirectedEdgeStar.cpp, source/geomgraph/Edge.cpp,
+	  source/geomgraph/EdgeEnd.cpp, source/geomgraph/EdgeEndStar.cpp,
+	  source/geomgraph/EdgeIntersection.cpp,
+	  source/geomgraph/EdgeIntersectionList.cpp,
+	  source/geomgraph/EdgeList.cpp, source/geomgraph/EdgeRing.cpp,
+	  source/geomgraph/GeometryGraph.cpp, source/geomgraph/Label.cpp,
+	  source/geomgraph/Node.cpp, source/geomgraph/NodeMap.cpp,
+	  source/geomgraph/PlanarGraph.cpp, source/geomgraph/Quadrant.cpp,
+	  source/geomgraph/TopologyLocation.cpp,
+	  source/geomgraph/index/MonotoneChainEdge.cpp,
+	  source/geomgraph/index/MonotoneChainIndexer.cpp,
+	  source/geomgraph/index/SegmentIntersector.cpp,
+	  source/geomgraph/index/SimpleEdgeSetIntersector.cpp,
+	  source/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  source/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  source/geomgraph/index/SweepLineEvent.cpp,
+	  source/headers/geos/geom.h, source/headers/geos/geomUtil.h,
+	  source/headers/geos/geomgraph.h,
+	  source/headers/geos/geomgraphindex.h,
+	  source/headers/geos/geosAlgorithm.h,
+	  source/headers/geos/indexChain.h,
+	  source/headers/geos/indexQuadtree.h,
+	  source/headers/geos/indexStrtree.h, source/headers/geos/io.h,
+	  source/headers/geos/noding.h,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/opBuffer.h, source/headers/geos/opDistance.h,
+	  source/headers/geos/opLinemerge.h,
+	  source/headers/geos/opOverlay.h,
+	  source/headers/geos/opPolygonize.h,
+	  source/headers/geos/opRelate.h, source/headers/geos/opValid.h,
+	  source/headers/geos/operation.h,
+	  source/headers/geos/planargraph.h,
+	  source/headers/geos/profiler.h, source/headers/geos/util.h,
+	  source/index/bintree/Bintree.cpp,
+	  source/index/bintree/NodeBase.cpp,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  source/index/quadtree/DoubleBits.cpp,
+	  source/index/quadtree/IntervalSize.cpp,
+	  source/index/quadtree/QuadTreeNode.cpp,
+	  source/index/quadtree/QuadTreeNodeBase.cpp,
+	  source/index/quadtree/Quadtree.cpp,
+	  source/index/strtree/AbstractNode.cpp,
+	  source/index/strtree/AbstractSTRtree.cpp,
+	  source/index/strtree/Interval.cpp,
+	  source/index/strtree/SIRtree.cpp,
+	  source/index/strtree/STRtree.cpp, source/io/ByteOrderValues.cpp,
+	  source/io/ParseException.cpp, source/io/StringTokenizer.cpp,
+	  source/io/Unload.cpp, source/io/WKBReader.cpp,
+	  source/io/WKBWriter.cpp, source/io/WKTReader.cpp,
+	  source/io/WKTWriter.cpp, source/io/Writer.cpp,
+	  source/noding/IteratedNoder.cpp, source/noding/MCIndexNoder.cpp,
+	  source/noding/NodingValidator.cpp, source/noding/Octant.cpp,
+	  source/noding/SegmentNode.cpp, source/noding/SegmentNodeList.cpp,
+	  source/noding/snapround/HotPixel.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/noding/snapround/SimpleSnapRounder.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/BufferOp.cpp,
+	  source/operation/buffer/BufferSubgraph.cpp,
+	  source/operation/buffer/OffsetCurveBuilder.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  source/operation/buffer/RightmostEdgeFinder.cpp,
+	  source/operation/buffer/SubgraphDepthLocater.cpp,
+	  source/operation/distance/ConnectedElementLocationFilter.cpp,
+	  source/operation/distance/ConnectedElementPointFilter.cpp,
+	  source/operation/distance/DistanceOp.cpp,
+	  source/operation/linemerge/EdgeString.cpp,
+	  source/operation/linemerge/LineMerger.cpp,
+	  source/operation/linemerge/LineSequencer.cpp,
+	  source/operation/overlay/EdgeSetNoder.cpp,
+	  source/operation/overlay/ElevationMatrix.cpp,
+	  source/operation/overlay/ElevationMatrixCell.cpp,
+	  source/operation/overlay/OverlayOp.cpp,
+	  source/operation/overlay/PolygonBuilder.cpp,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/polygonize/Polygonizer.cpp,
+	  source/operation/polygonize/polygonizeEdgeRing.cpp,
+	  source/operation/relate/RelateNodeGraph.cpp,
+	  source/operation/valid/ConnectedInteriorTester.cpp,
+	  source/operation/valid/ConsistentAreaTester.cpp,
+	  source/operation/valid/QuadtreeNestedRingTester.cpp,
+	  source/operation/valid/TopologyValidationError.cpp,
+	  source/planargraph/planarDirectedEdge.cpp,
+	  source/planargraph/planarDirectedEdgeStar.cpp,
+	  source/planargraph/planarNode.cpp,
+	  source/planargraph/planarNodeMap.cpp,
+	  source/planargraph/planarPlanarGraph.cpp,
+	  source/planargraph/planarSubgraph.cpp,
+	  source/planargraph/algorithm/ConnectedSubgraphFinder.cpp,
+	  source/precision/CommonBitsOp.cpp,
+	  source/precision/SimpleGeometryPrecisionReducer.cpp,
+	  source/util/Assert.cpp, source/util/GEOSException.cpp,
+	  source/util/GeometricShapeFactory.cpp, source/util/Profiler.cpp,
+	  tests/xmltester/XMLTester.cpp, tests/xmltester/XMLTester.h:
+	  Removed 'using namespace' from headers, added missing headers in
+	  .cpp files, removed useless includes in headers (bug#46)
+
+2006-03-02 19:17  strk
+
+	* tests/xmltester/: Makefile.am, robustness.xml: Added robustness
+	  testcases
+
+2006-03-02 17:22  strk
+
+	* tests/xmltester/XMLTester.cpp: Updated copyright notice
+
+2006-03-02 17:21  strk
+
+	* source/: geomgraph/PlanarGraph.cpp, headers/geos/geomUtil.h,
+	  headers/geos/precision.h, precision/CommonBits.cpp,
+	  precision/CommonBitsOp.cpp, precision/CommonBitsRemover.cpp,
+	  precision/EnhancedPrecisionOp.cpp,
+	  precision/SimpleGeometryPrecisionReducer.cpp: geos::precision
+	  namespace added
+
+2006-03-02 15:53  strk
+
+	* source/: geomgraph/index/SweepLineEvent.cpp,
+	  headers/geos/geomgraphindex.h, headers/geos/indexSweepline.h,
+	  index/sweepline/indexSweepLineEvent.cpp:
+	  SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
+
+2006-03-02 15:34  strk
+
+	* source/: headers/geos/geomgraph.h, headers/geos/operation.h,
+	  io/Unload.cpp, operation/GeometryGraphOperation.cpp,
+	  operation/overlay/OverlayOp.cpp,
+	  operation/overlay/PolygonBuilder.cpp: GeometryGraphOperation::li
+	  made a non-static member, and not more a pointer
+
+2006-03-02 15:21  strk
+
+	* capi/geos_c.cpp: DEBUG => GEOS_DEBUG [#44]
+
+2006-03-02 13:11  strk
+
+	* source/: algorithm/LineIntersector.cpp,
+	  geomgraph/DirectedEdgeStar.cpp, geomgraph/Edge.cpp,
+	  geomgraph/EdgeEndStar.cpp, geomgraph/EdgeIntersectionList.cpp,
+	  geomgraph/EdgeList.cpp, geomgraph/GeometryGraph.cpp,
+	  geomgraph/Node.cpp, geomgraph/NodeMap.cpp,
+	  geomgraph/PlanarGraph.cpp, geomgraph/Position.cpp,
+	  geomgraph/index/SegmentIntersector.cpp,
+	  index/bintree/Bintree.cpp, index/chain/MonotoneChainBuilder.cpp,
+	  index/quadtree/QuadTreeKey.cpp, index/quadtree/QuadTreeNode.cpp,
+	  index/quadtree/QuadTreeNodeBase.cpp,
+	  index/quadtree/QuadTreeRoot.cpp, index/quadtree/Quadtree.cpp,
+	  noding/IteratedNoder.cpp, noding/MCIndexNoder.cpp,
+	  noding/SegmentNode.cpp, noding/SegmentNodeList.cpp,
+	  noding/SegmentString.cpp, operation/buffer/BufferBuilder.cpp,
+	  operation/buffer/BufferOp.cpp,
+	  operation/buffer/BufferSubgraph.cpp,
+	  operation/buffer/OffsetCurveBuilder.cpp,
+	  operation/buffer/OffsetCurveSetBuilder.cpp,
+	  operation/buffer/SubgraphDepthLocater.cpp,
+	  operation/linemerge/LineMergeGraph.cpp,
+	  operation/linemerge/LineMerger.cpp,
+	  operation/overlay/ElevationMatrix.cpp,
+	  operation/overlay/ElevationMatrixFilter.cpp,
+	  operation/overlay/LineBuilder.cpp,
+	  operation/overlay/OverlayOp.cpp,
+	  operation/overlay/PointBuilder.cpp,
+	  operation/overlay/PolygonBuilder.cpp,
+	  operation/polygonize/Polygonizer.cpp: Renamed DEBUG macros to
+	  GEOS_DEBUG, all wrapped in #ifndef block to allow global override
+	  (bug#43)
+
+2006-03-02 12:03  strk
+
+	* tests/xmltester/XMLTester.cpp: Added assertion in relate test
+	  handler
+
+2006-03-02 12:00  strk
+
+	* source/: geom/IntersectionMatrix.cpp, headers/geos/geom.h:
+	  Changed IntersectionMatrix funx taking strings to take const
+	  string& instead
+
+2006-03-02 11:25  strk
+
+	* tests/xmltester/: XMLTester.cpp, buffer.xml: Added support for
+	  FLOATING_SINGLE precisionmodel in XML tests
+
+2006-03-02 11:03  strk
+
+	* capi/: Makefile.am, geos_c.cpp: Removed use of strdup, changed
+	  GEOSjtsport() to return const char* instead of char* (is not
+	  advertised in headerfile, so no compatibility problems)
+
+2006-03-02 10:51  strk
+
+	* source/operation/overlay/OverlayOp.cpp: Fixes in DEBUG lines
+	  (bug#42)
+
+2006-03-02 10:49  strk
+
+	* source/headers/geos/LineSegment.inl: Changed LineSegment output
+	  to use 'LINESEGMENT' label rather then 'LINESTRING'
+
+2006-03-02 10:49  strk
+
+	* source/headers/geos/timeval.h: WINCE implmentation of
+	  gettimeofday (bug#40)
+
+2006-03-02 10:46  strk
+
+	* source/operation/buffer/SubgraphDepthLocater.cpp: cleaned up
+	  debugging lines
+
+2006-03-01 19:44  strk
+
+	* NEWS: added note about getInteriorPoint() possibly returning NULL
+
+2006-03-01 19:43  strk
+
+	* capi/geos_c.cpp: Handled new NULL return from
+	  Geometry::getInteriorPoint()
+
+2006-03-01 19:36  strk
+
+	* source/: algorithm/InteriorPointLine.cpp,
+	  algorithm/InteriorPointPoint.cpp, geom/Geometry.cpp,
+	  geom/GeometryFactory.cpp, headers/geos/geom.h:
+	  Geometry::createPointFromInternalCoord dropped (it's a
+	  duplication of GeometryFactory::createPointFromInternalCoord).
+	  Fixed bugs in InteriorPoint* and getCentroid() inserted by
+	  previous commits.
+
+2006-03-01 19:19  strk
+
+	* tests/xmltester/: Makefile.am, TestCentroid.xml,
+	  testLeaksBig.xml: getCentroid() test moved from testLeaksBig.xml
+	  to TestCentroid.xml (synced with JTS-1.7)
+
+2006-03-01 19:15  strk
+
+	* tests/xmltester/: Makefile.am, TestInteriorPoint.xml,
+	  testLeaksBig.xml: Extracted getInteriorPoint() tests out of
+	  testLeaksBig.xml and into TestInteriorPoint.xml (synced with
+	  JTS-1.7).
+
+2006-03-01 19:14  strk
+
+	* tests/xmltester/XMLTester.cpp: Handled NULL return from
+	  Geometry::getInteriorPoint()
+
+2006-03-01 18:16  strk
+
+	* source/: algorithm/CentroidArea.cpp, algorithm/CentroidLine.cpp,
+	  algorithm/CentroidPoint.cpp, algorithm/InteriorPointArea.cpp,
+	  algorithm/InteriorPointLine.cpp,
+	  algorithm/InteriorPointPoint.cpp, algorithm/MinimumDiameter.cpp,
+	  geom/Geometry.cpp, geom/LineSegment.cpp,
+	  headers/geos/LineSegment.inl, headers/geos/Makefile.am,
+	  headers/geos/geom.h, headers/geos/geosAlgorithm.h,
+	  headers/geos/inline.h, headers/geos/opBuffer.h,
+	  operation/buffer/SubgraphDepthLocater.cpp,
+	  operation/distance/DistanceOp.cpp: LineSegment class made final
+	  and optionally (compile-time) inlined.  Reduced heap allocations
+	  in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
+
+2006-03-01 17:42  strk
+
+	* source/Makefile.vc: Fixed include name (Bug#41)
+
+2006-03-01 17:01  strk
+
+	* source/noding/SegmentNodeList.cpp: Fixed const correctness of
+	  operator<<(ostream&, SegmentNodeList&) [bug#37]
+
+2006-03-01 14:49  strk
+
+	* source/index/quadtree/Quadtree.cpp: Fixed debug lines (bug#36)
+
+2006-03-01 14:48  strk
+
+	* tests/xmltester/Stackwalker.cpp: Fixed missing type specifier
+	  (bug#35)
+
+2006-03-01 14:06  strk
+
+	* tests/xmltester/: Makefile.am, XMLTester.cpp, buffer.xml: Used
+	  FLOATING precision model in buffer.xml test, added expected
+	  results, changed XMLTester.cpp to use a tolerance when comparing
+	  expected and obtained results from buffer operations.
+
+2006-03-01 13:12  strk
+
+	* tests/xmltester/XMLTester.cpp: Fixed a bug in verbose output
+	  preventing geometry arg 'A' from being properly printed
+
+2006-03-01 12:47  strk
+
+	* source/Makefile.vc: Applied patch by Mateusz Loskot (Bug #39)
+
+2006-03-01 11:48  strk
+
+	* source/: headers/geos/opValid.h,
+	  operation/valid/TopologyValidationError.cpp: Changed static
+	  TopologyValidationError::errMsg[] from 'string' to 'const char*'
+	  to reduce dynamic memory allocations.
+
+2006-03-01 11:39  strk
+
+	* source/: headers/geos/unload.h, io/Unload.cpp: ctor and dtor made
+	  private and inlined
+
+2006-03-01 10:56  strk
+
+	* tests/xmltester/XMLTester.cpp: Case insensitive operation names
+	  and geometry arguments names (a/b)
+
+2006-03-01 10:43  strk
+
+	* tests/xmltester/XMLTester.cpp: Unrecognized tests always printed
+	  (was only printed when verbose before)
+
+2006-03-01 09:52  strk
+
+	* source/dirlist.mk: File to be included by Makefile.vc
+
+2006-02-28 20:22  strk
+
+	* source/: headers/geos/opBuffer.h,
+	  operation/buffer/OffsetCurveBuilder.cpp: Fixed in-place
+	  definition of static members in OffsetCurveBuilder (bug#33)
+
+2006-02-28 20:18  strk
+
+	* tests/xmltester/XMLTester.cpp: Added cctype include (bug #34)
+
+2006-02-28 18:44  strk
+
+	* source/: geom/Coordinate.cpp, headers/geos/geom.h,
+	  headers/geos/noding.h, noding/SegmentNode.cpp,
+	  noding/SegmentNodeList.cpp, noding/SegmentString.cpp,
+	  operation/buffer/BufferBuilder.cpp: Added a check in
+	  SegmentNode::addSplitEdge to prevent attempts to build
+	  SegmentString with less then 2 points.  This is a temporary fix
+	  for the buffer.xml assertion failure, temporary as Martin Davis
+	  review would really be needed there.
+
+2006-02-28 16:34  strk
+
+	* tests/xmltester/XMLTester.cpp: Fix for VC++ builds (Bug #32)
+
+2006-02-28 15:34  strk
+
+	* source/geom/Coordinate.cpp,
+	  source/geom/CoordinateArraySequence.cpp,
+	  source/geom/PrecisionModel.cpp,
+	  source/geomgraph/DirectedEdge.cpp, source/geomgraph/Edge.cpp,
+	  source/geomgraph/EdgeEnd.cpp, source/geomgraph/EdgeList.cpp,
+	  source/geomgraph/PlanarGraph.cpp,
+	  source/geomgraph/index/MonotoneChainEdge.cpp,
+	  source/headers/geos/geom.h, source/headers/geos/geomgraph.h,
+	  source/headers/geos/noding.h, source/headers/geos/opBuffer.h,
+	  source/noding/MCIndexNoder.cpp, source/noding/SegmentNode.cpp,
+	  source/noding/SegmentNodeList.cpp,
+	  source/noding/SegmentString.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/OffsetCurveBuilder.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  tests/xmltester/buffer.xml: Added many assertions and debugging
+	  output hunting for a bug in BufferOp
+
+2006-02-28 15:05  strk
+
+	* source/geomgraph/Edge.cpp: Fixed a bug in a debugging line
+
+2006-02-28 14:08  strk
+
+	* source/headers/geos/noding.h: Added missing definition of
+	  IteratedNoder::MAX_ITER, moving it to private access level
+
+2006-02-28 12:15  strk
+
+	* tests/xmltester/markup/MarkupSTL.cpp: Fixed strchr use (Bug #30)
+
+2006-02-28 12:11  strk
+
+	* capi/geos_c.cpp: Fixed typo in GEOSLenght function
+
+2006-02-28 06:03  sgillies
+
+	* NEWS, capi/geos_c.cpp, capi/geos_c.h.in: added GEOSLength(),
+	  GEOSEnvelope() to the C API
+
+2006-02-27 15:41  strk
+
+	* tests/xmltester/XMLTester.cpp: More verbose handling of
+	  exceptions
+
+2006-02-27 12:53  strk
+
+	* source/: geomgraph/DirectedEdgeStar.cpp,
+	  headers/geos/geomgraph.h: DirectedEdgeStar made more safe trough
+	  assert(), use of standard iterator and dynamic casts substituting
+	  static ones.
+
+2006-02-27 10:05  strk
+
+	* source/: algorithm/LineIntersector.cpp, geom/PrecisionModel.cpp,
+	  geomgraph/DirectedEdgeStar.cpp, headers/geos/geom.h,
+	  headers/geos/geomgraph.h, headers/geos/geosAlgorithm.h,
+	  headers/geos/opOverlay.h, headers/geos/operation.h,
+	  operation/GeometryGraphOperation.cpp,
+	  operation/overlay/OverlayOp.cpp: Doxygen comments, a few inlines
+	  and general cleanups
+
+2006-02-24 17:20  strk
+
+	* source/geom/PrecisionModel.cpp,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/util.h, source/util/Makefile.am,
+	  source/util/math.cpp, tests/xmltester/testLeaksBig.xml: Added
+	  Mateusz implementation of round() in a new math.cpp file named
+	  sym_round(). Changed use of rint_vc to sym_round in
+	  PrecisionModel.  Moved rint_vc to math.cpp (geos::util
+	  namespace), to be renamed to something more meaningful
+
+2006-02-24 16:39  strk
+
+	* source/geom/Coordinate.cpp, source/headers/geos/geom.h,
+	  source/headers/geos/opLinemerge.h,
+	  source/headers/geos/planargraph.h,
+	  source/operation/linemerge/LineMergeGraph.cpp,
+	  source/operation/linemerge/LineMerger.cpp,
+	  source/planargraph/planarEdge.cpp,
+	  source/planargraph/planarNode.cpp, tests/xmltester/Makefile.am: -
+	  operator>> for Coordinate, planarNode and planarEdge - Fixed bug
+	  in planarGraphComponent::setMarked - Added linemerge.xml test
+	  (single test, should grow a bit)
+
+2006-02-24 13:19  strk
+
+	* doc/Doxyfile.in: Fixed typo in config file
+
+2006-02-24 00:17  strk
+
+	* source/: geom/Coordinate.cpp, geom/Envelope.cpp,
+	  geom/GeometryFactory.cpp, geom/LineSegment.cpp,
+	  geom/PrecisionModel.cpp, headers/geos/geom.h,
+	  headers/geos/indexSweepline.h, headers/geos/opLinemerge.h,
+	  noding/MCIndexNoder.cpp,
+	  operation/buffer/RightmostEdgeFinder.cpp,
+	  operation/linemerge/LineMergeGraph.cpp,
+	  operation/linemerge/LineMerger.cpp,
+	  operation/polygonize/polygonizeEdgeRing.cpp,
+	  operation/valid/TopologyValidationError.cpp,
+	  planargraph/planarDirectedEdgeStar.cpp,
+	  util/GeometricShapeFactory.cpp: - Coordinate::nullCoordinate made
+	  private - Simplified Coordinate inline definitions -
+	  LMGeometryComponentFilter definition moved to LineMerger.cpp file
+	  - Misc cleanups
+
+2006-02-23 21:32  strk
+
+	* tests/xmltester/XMLTester.cpp: Added support for LineMerge tests.
+	  Exception printed on stderr.
+
+2006-02-23 21:05  strk
+
+	* source/: headers/geos/noding.h, headers/geos/nodingSnapround.h,
+	  headers/geos/opBuffer.h, noding/MCIndexNoder.cpp,
+	  noding/SimpleNoder.cpp, operation/buffer/BufferBuilder.cpp,
+	  operation/buffer/BufferOp.cpp: Fixed bug in MCIndexNoder
+	  constructor making memory checker go crazy, more doxygen-friendly
+	  comments, miscellaneous cleanups
+
+2006-02-23 21:03  strk
+
+	* doc/Doxyfile.in: updated to also show undocumented methods
+
+2006-02-23 12:54  strk
+
+	* source/geom/MultiLineString.cpp,
+	  source/geom/TopologyException.cpp, source/geom/Triangle.cpp,
+	  source/geomgraph/Edge.cpp, source/geomgraph/EdgeList.cpp,
+	  source/geomgraph/GeometryGraph.cpp, source/geomgraph/NodeMap.cpp,
+	  source/geomgraph/PlanarGraph.cpp,
+	  source/geomgraph/index/SegmentIntersector.cpp,
+	  source/headers/geos/geom.h, source/headers/geos/geomgraph.h,
+	  source/headers/geos/geomgraphindex.h,
+	  source/headers/geos/indexQuadtree.h,
+	  source/headers/geos/indexStrtree.h, source/headers/geos/noding.h,
+	  source/headers/geos/nodingSnapround.h,
+	  source/headers/geos/opBuffer.h,
+	  source/headers/geos/spatialIndex.h, source/headers/geos/util.h,
+	  source/index/bintree/BinTreeNode.cpp,
+	  source/index/quadtree/QuadTreeNode.cpp,
+	  source/index/quadtree/QuadTreeNodeBase.cpp,
+	  source/index/quadtree/QuadTreeRoot.cpp,
+	  source/index/quadtree/Quadtree.cpp,
+	  source/index/strtree/AbstractSTRtree.cpp,
+	  source/index/strtree/SIRtree.cpp,
+	  source/index/strtree/STRtree.cpp, source/io/Unload.cpp,
+	  source/noding/MCIndexNoder.cpp, source/noding/ScaledNoder.cpp,
+	  source/noding/snapround/MCIndexSnapRounder.cpp,
+	  source/operation/buffer/BufferBuilder.cpp,
+	  source/operation/buffer/BufferOp.cpp,
+	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  source/operation/relate/RelateComputer.cpp,
+	  source/operation/valid/QuadtreeNestedRingTester.cpp,
+	  source/util/Assert.cpp, source/util/AssertionFailedException.cpp,
+	  source/util/GEOSException.cpp,
+	  source/util/IllegalArgumentException.cpp,
+	  source/util/Makefile.am,
+	  source/util/UnsupportedOperationException.cpp,
+	  tests/xmltester/buffer.xml: - MCIndexPointSnapper -
+	  MCIndexSnapRounder - SnapRounding BufferOp - ScaledNoder -
+	  GEOSException hierarchy cleanups - SpatialIndex memory-friendly
+	  query interface - GeometryGraph::getBoundaryNodes memory-friendly
+	  - NodeMap::getBoundaryNodes memory-friendly - Cleanups in
+	  geomgraph::Edge - Added an XML test for snaprounding buffer
+	  (shows leaks, working on it)
+
+2006-02-21 17:53  strk
+
+	* source/: algorithm/MCPointInRing.cpp, headers/geos/indexChain.h,
+	  headers/geos/noding.h, headers/geos/nodingSnapround.h,
+	  index/chain/MonotoneChainBuilder.cpp,
+	  index/chain/MonotoneChainSelectAction.cpp,
+	  index/chain/indexMonotoneChain.cpp, noding/MCIndexNoder.cpp,
+	  noding/snapround/HotPixel.cpp,
+	  noding/snapround/MCIndexPointSnapper.cpp,
+	  noding/snapround/MCIndexSnapRounder.cpp,
+	  noding/snapround/SimpleSnapRounder.cpp: MCIndexPointSnapper,
+	  MCIndexSnapRounder
+
+2006-02-20 22:04  strk
+
+	* source/: headers/geos/geomgraph.h, headers/geos/indexQuadtree.h,
+	  headers/geos/indexStrtree.h, headers/geos/noding.h,
+	  headers/geos/spatialIndex.h, index/quadtree/QuadTreeNodeBase.cpp,
+	  index/quadtree/Quadtree.cpp, index/strtree/AbstractSTRtree.cpp,
+	  index/strtree/STRtree.cpp: - namespace geos::index - SpatialIndex
+	  interface synced
+
+2006-02-20 11:14  strk
+
+	* ChangeLog, doc/Doxyfile.in, source/algorithm/MCPointInRing.cpp,
+	  source/algorithm/SIRtreePointInRing.cpp,
+	  source/geom/Geometry.cpp, source/geomgraph/EdgeList.cpp,
+	  source/headers/geos/geom.h, source/headers/geos/geomgraph.h,
+	  source/headers/geos/geosAlgorithm.h,
+	  source/headers/geos/indexBintree.h,
+	  source/headers/geos/indexChain.h,
+	  source/headers/geos/indexQuadtree.h,
+	  source/headers/geos/indexStrtree.h,
+	  source/headers/geos/indexSweepline.h, source/headers/geos/io.h,
+	  source/headers/geos/noding.h, source/headers/geos/opBuffer.h,
+	  source/headers/geos/opDistance.h,
+	  source/headers/geos/opOverlay.h, source/headers/geos/opRelate.h,
+	  source/headers/geos/opValid.h, source/headers/geos/operation.h,
+	  source/headers/geos/planargraph.h,
+	  source/index/bintree/BinTreeInterval.cpp,
+	  source/index/bintree/BinTreeNode.cpp,
+	  source/index/bintree/Bintree.cpp, source/index/bintree/Key.cpp,
+	  source/index/bintree/NodeBase.cpp, source/index/bintree/Root.cpp,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  source/index/chain/MonotoneChainOverlapAction.cpp,
+	  source/index/chain/MonotoneChainSelectAction.cpp,
+	  source/index/chain/indexMonotoneChain.cpp,
+	  source/index/quadtree/DoubleBits.cpp,
+	  source/index/quadtree/IntervalSize.cpp,
+	  source/index/quadtree/QuadTreeKey.cpp,
+	  source/index/quadtree/QuadTreeNode.cpp,
+	  source/index/quadtree/QuadTreeNodeBase.cpp,
+	  source/index/quadtree/QuadTreeRoot.cpp,
+	  source/index/quadtree/Quadtree.cpp,
+	  source/index/strtree/AbstractNode.cpp,
+	  source/index/strtree/AbstractSTRtree.cpp,
+	  source/index/strtree/Interval.cpp,
+	  source/index/strtree/ItemBoundable.cpp,
+	  source/index/strtree/SIRtree.cpp,
+	  source/index/strtree/STRtree.cpp,
+	  source/index/sweepline/SweepLineIndex.cpp,
+	  source/index/sweepline/SweepLineInterval.cpp,
+	  source/index/sweepline/indexSweepLineEvent.cpp,
+	  source/io/Unload.cpp, source/noding/MCIndexNoder.cpp,
+	  source/noding/snapround/MCIndexPointSnapper.cpp,
+	  source/operation/valid/QuadtreeNestedRingTester.cpp,
+	  source/operation/valid/SweeplineNestedRingTester.cpp: -
+	  namespaces geos::index::* - Doxygen documentation cleanup
+
 2006-02-19 20:46  strk
 
 	* NEWS, configure.in, capi/geos_c.cpp, doc/example.cpp,
@@ -691,11 +3672,6 @@
 	  swig/ruby/Makefile.am: Added initial conditional build of python
 	  and ruby wrappers
 
-2006-01-16 12:08  strk
-
-	* NEWS, source/headers/geos/geom.h: Removed invalid full
-	  qualification of in-class-declaration methods.
-
 2006-01-16 00:01  strk
 
 	* NEWS, configure.in, swig/Makefile.am, swig/geos.i,
@@ -724,11 +3700,6 @@
 2006-01-12 12:44  strk
 
 	* NEWS: synced after 2.2.1 release
-
-2006-01-12 12:40  strk
-
-	* NEWS: Removed references to GEOS_FIRST_INTERFACE and
-	  GEOS_LAST_INTERFACE.	Fixed GEOSHasZ() to use the FINITE() macro.
 
 2006-01-08 16:24  strk
 
@@ -768,10 +3739,6 @@
 	  binary-incompatible with previous.  Removed GEOS_FIRST_INTERFACE
 	  and GEOS_LAST_INTERFACE defines from geos/version.h.
 
-2005-12-12 02:13  strk
-
-	* NEWS: set version to 2.2.1
-
 2005-12-11 11:41  strk
 
 	* source/operation/overlay/: ElevationMatrix.cpp,
@@ -793,14 +3760,10 @@
 	  plugged in CAPI::GEOSHasZ() and in invalid input to
 	  PolygonizeGraph (again)
 
-2005-12-09 11:38  strk
-
-	* configure.in: Version set to 2.2.1
-
 2005-12-09 11:32  strk
 
-	* source/operation/polygonize/: Polygonizer.cpp: Cleaned up
-	  debugging line left over from previous commit
+	* source/operation/polygonize/Polygonizer.cpp: Cleaned up debugging
+	  line left over from previous commit
 
 2005-12-09 11:03  strk
 
@@ -908,36 +3871,13 @@
 	  acsite.m4 to distribution.  Added macros and flags required to
 	  build on mingw arch.
 
-2005-12-06 11:05  strk
-
-	* NEWS, configure.in: Set version to 2.2.1, updated NEWS
-
-2005-12-06 11:00  strk
-
-	* Makefile.am, configure.in, source/geom/Makefile.am: Added
-	  acsite.m4 in distribution package.  Added flags and macros
-	  required to allow mingw builds.
-
 2005-11-30 17:03  strk
 
-	* NEWS: Set version to 2.2.0
-
-2005-11-30 17:03  strk
-
-	* tools/: geos-config.in: Added --ldflags
+	* tools/geos-config.in: Added --ldflags
 
 2005-11-30 17:00  strk
 
 	* README: Updated with C-API usage
-
-2005-11-30 13:33  strk
-
-	* source/geom/Geometry.cpp: Updated Doxygen doc to reccommend use
-	  of the C API.
-
-2005-11-30 12:28  strk
-
-	* doc/example.cpp: Backported from HEAD, to test WKB io
 
 2005-11-30 12:27  strk
 
@@ -947,43 +3887,9 @@
 
 	* doc/example.cpp: includes cleanup
 
-2005-11-30 12:18  strk
-
-	* source/: geom/Envelope.cpp, headers/geos/opOverlay.h: Fixed
-	  doxygen warnings
-
 2005-11-30 00:01  strk
 
 	* NEWS: updated moving some items to 2.2.0
-
-2005-11-29 19:13  strk
-
-	* source/io/: ByteOrderValues.cpp, WKBReader.cpp, WKBWriter.cpp:
-	  Forgot to add these as well
-
-2005-11-29 18:52  strk
-
-	* source/headers/geos/geom.h: undef PROFILE_COORDINATE_COPIES (was
-	  introduced by previous commit, to easy profiling)
-
-2005-11-29 18:51  strk
-
-	* source/: geom/Coordinate.cpp, headers/geos/geom.h: Forgot to add
-	  the capi/ dir
-
-2005-11-29 17:58  strk
-
-	* NEWS, configure.in, source/Makefile.am,
-	  source/geom/DefaultCoordinateSequence.cpp,
-	  source/geom/DefaultCoordinateSequenceFactory.cpp,
-	  source/geom/Makefile.am, source/geom/Point.cpp,
-	  source/geom/PointCoordinateSequence.cpp,
-	  source/geom/PointCoordinateSequenceFactory.cpp,
-	  source/headers/geos/geom.h, source/headers/geos/io.h,
-	  source/headers/geos/platform.h.in,
-	  source/operation/buffer/BufferSubgraph.cpp: Back-ported WKB IO
-	  and C api.  Added required higher dimensional interfaces for
-	  CoordinateSequence
 
 2005-11-29 16:45  strk
 
@@ -1185,11 +4091,6 @@
 	  heap allocations for EdgeRing containers.  Initialization lists
 	  and cleanups.
 
-2005-11-17 11:49  strk
-
-	* NEWS, source/geomgraph/EdgeRing.cpp: Removed a useless
-	  CoordinateSequence copy in EdgeRing.
-
 2005-11-16 23:21  strk
 
 	* source/: geomgraph/EdgeEnd.cpp, geomgraph/EdgeIntersection.cpp,
@@ -1215,13 +4116,6 @@
 	* source/: algorithm/LineIntersector.cpp, geomgraph/Label.cpp,
 	  geomgraph/TopologyLocation.cpp, headers/geos/geomgraph.h,
 	  headers/geos/geosAlgorithm.h: Removed dead code
-
-2005-11-15 13:20  strk
-
-	* source/operation/overlay/: OverlayOp.cpp, PolygonBuilder.cpp:
-	  Removed useless CoordinateSequence copy in
-	  PolygonBuilder::findEdgeRingContaining.  Reduced heap allocations
-	  in OverlayOp::computeOverlay
 
 2005-11-15 13:14  strk
 
@@ -1272,11 +4166,6 @@
 	  operation/relate/EdgeEndBundle.cpp: Reduced heap allocations made
 	  by TopologyLocation and Label objects.  Enforced
 	  const-correctness on GraphComponent.	Cleanups.
-
-2005-11-11 13:05  strk
-
-	* source/geom/Geometry.cpp: wrapped boolean expression in
-	  parentesis, as suggested by compiler
 
 2005-11-10 17:26  strk
 
@@ -1349,11 +4238,6 @@
 	  version to 2.2.0.  Cleaned up Doxygen warnings.  Inlined more
 	  Envelope methods.  Dropped deprecated Envelope::overlaps methods.
 
-2005-11-08 10:08  strk
-
-	* source/: geom/Geometry.cpp, headers/geos/geom.h: Cleaned up a
-	  couple of Doxygen warnings
-
 2005-11-07 19:07  strk
 
 	* configure.in: Removed VisualStudio knowledge from configure
@@ -1416,12 +4300,6 @@
 	  OverlayOp::insertUniqueEdge() from JTS-1.7 (rev 1.23) Updated
 	  NEWS file.
 
-2005-11-04 09:26  strk
-
-	* NEWS, configure.in, source/operation/overlay/OverlayOp.cpp:
-	  Ported OverlayOp::insertUniqueEdge() speedup from JTS-1.7
-	  (rev.1.23).  Switched version to 2.1.5, updated NEWS file.
-
 2005-11-03 22:28  strk
 
 	* source/geomgraph/index/: SimpleMCSweepLineIntersector.cpp,
@@ -1442,7 +4320,7 @@
 
 2005-11-01 10:40  strk
 
-	* source/operation/valid/: IsValidOp.cpp: Replaced finite() with
+	* source/operation/valid/IsValidOp.cpp: Replaced finite() with
 	  FINITE() calls.
 
 2005-10-27 16:05  strk
@@ -1593,11 +4471,6 @@
 	  source/io/WKBReader.cpp, source/io/WKBWriter.cpp: Reworked WKB
 	  I/O to avoid use of templates and make better use of STL
 
-2005-08-22 15:37  strk
-
-	* NEWS, configure.in: Set version to 2.1.4, added it's section in
-	  the NEWS file
-
 2005-08-22 15:34  strk
 
 	* NEWS: Added 2.1.4 section
@@ -1652,10 +4525,6 @@
 
 	* source/geom/Geometry.cpp: removed useless assignment
 
-2005-07-04 12:01  strk
-
-	* NEWS: Fixed version to 2.1.3
-
 2005-06-30 20:31  strk
 
 	* source/: headers/geos/opBuffer.h,
@@ -1667,21 +4536,11 @@
 
 	* source/operation/buffer/SubgraphDepthLocater.cpp: Fixed a bug
 	  introduced by LineSegment skip - made LineSegment skip a
-	  compile-time option
-
-2005-06-28 23:13  strk
-
-	* source/operation/buffer/SubgraphDepthLocater.cpp: Fixed a bug
-	  introduced by LineSegment skip - made LineSegment skip a
 	  compile-time optione
 
 2005-06-28 13:22  strk
 
 	* NEWS: Added DepthSegmentLT bugfix
-
-2005-06-28 13:21  strk
-
-	* ChangeLog: Removed ChangeLog from repository
 
 2005-06-28 03:07  strk
 
@@ -1691,23 +4550,13 @@
 
 2005-06-28 02:04  strk
 
-	* source/geomgraph/: Node.cpp: improved ::isIncidentEdgeInResult()
+	* source/geomgraph/Node.cpp: improved ::isIncidentEdgeInResult()
 	  method
 
 2005-06-27 23:58  strk
 
 	* source/operation/buffer/SubgraphDepthLocater.cpp: Bugfix in
 	  DepthSegmentLT as suggested by Graeme Hiebert
-
-2005-06-27 23:55  strk
-
-	* source/operation/buffer/SubgraphDepthLocater.cpp: Bug fix in
-	  DepthSegmentLT comparator as suggested by Graeme Hiebert
-
-2005-06-27 23:29  strk
-
-	* NEWS, source/operation/buffer/SubgraphDepthLocater.cpp: Reduced
-	  Coordinate copies due to LineSegment overuse
 
 2005-06-27 23:24  strk
 
@@ -1718,12 +4567,6 @@
 
 	* NEWS, source/operation/buffer/SubgraphDepthLocater.cpp: Reduced
 	  Coordinate copies due to LineSegment overuse
-
-2005-06-26 11:40  strk
-
-	* NEWS, source/geomgraph/Node.cpp, source/headers/geos/geomgraph.h,
-	  source/operation/overlay/PointBuilder.cpp: Backport of OverlayOp
-	  performance improvements
 
 2005-06-25 12:20  strk
 
@@ -1762,25 +4605,10 @@
 	  source/headers/geos/geom.h: Inlined and added missing ::clone()
 	  for Geometry subclasses
 
-2005-06-23 13:24  strk
-
-	* NEWS: been more specific about changes
-
 2005-06-23 13:23  strk
 
 	* NEWS, source/algorithm/CGAlgorithms.cpp: performance improvement
 	  for CGAlgorithms::isOnLine()
-
-2005-06-23 13:20  strk
-
-	* NEWS, source/algorithm/CGAlgorithms.cpp,
-	  source/geom/CoordinateSequence.cpp: Minor performance
-	  improvements
-
-2005-06-23 12:53  strk
-
-	* NEWS, source/algorithm/CGAlgorithms.cpp: Removed useless
-	  Coordinate copy in CGAlgorithms::isPointInRing()
 
 2005-06-22 02:46  strk
 
@@ -1788,7 +4616,7 @@
 
 2005-06-22 02:46  strk
 
-	* source/geom/: GeometryFactory.cpp: Fixed bugus handling of
+	* source/geom/GeometryFactory.cpp: Fixed bugus handling of
 	  collections in ::buildGeometry
 
 2005-06-21 14:22  strk
@@ -1804,18 +4632,6 @@
 	* .cvsignore, ltmain.sh: Removed ltmain.sh from repository, will be
 	  created by autogen.sh
 
-2005-06-17 17:15  strk
-
-	* .cvsignore: Added ltmain.sh
-
-2005-06-17 17:12  strk
-
-	* configure.in: Bumbed version to 2.1.3 (not to release yet)
-
-2005-06-17 17:11  strk
-
-	* ltmain.sh: Removed ltmain.sh, will be recreated by autogen.sh
-
 2005-06-17 17:07  strk
 
 	* NEWS, source/operation/polygonize/Polygonizer.cpp,
@@ -1824,8 +4640,8 @@
 
 2005-06-17 16:58  strk
 
-	* source/geom/: GeometryFactory.cpp: Fixed segfault in LinearRing
-	  and LineString constructors
+	* source/geom/GeometryFactory.cpp: Fixed segfault in LinearRing and
+	  LineString constructors
 
 2005-06-14 13:57  strk
 
@@ -1856,158 +4672,13 @@
 
 	* CHANGES: Filled in section from 2.0.0 to 2.1.1
 
-2005-05-24 10:40  strk
-
-	* CHANGES: Filled 2.1.1 section
-
-2005-05-24 10:31  strk
-
-	* CHANGES: Filled in 2.1.0 section
-
-2005-05-24 10:27  strk
-
-	* CHANGES, NEWS: Moved changes from NEWS to CHANGES file.
-
 2005-05-24 09:48  strk
 
 	* CHANGES: Initial import
-
-2005-05-24 09:48  strk
-
-	* CHANGES: Back-porting finished, removed date reference.
-
-2005-05-24 09:39  strk
-
-	* CHANGES, source/geom/util/GeometryEditor.cpp: Segfault fix in
-	  GeometryEditor::editPolygon(), CoordinateSequence copy reduction
-
-2005-05-24 09:31  strk
-
-	* CHANGES, source/geom/GeometryFactory.cpp: Input checking and
-	  promoting in GeometryFactory::createMultiLineString()
-
-2005-05-24 09:29  strk
-
-	* CHANGES, source/geom/Polygon.cpp: Fixed polygon::getBoundary() to
-	  never return (MULTI)LinearRings.
-
-2005-05-24 09:26  strk
-
-	* CHANGES, source/geom/Geometry.cpp: back-ported segfault fix in
-	  EMPTYGEOM::getCentroid()
-
-2005-05-23 21:01  strk
-
-	* CHANGES, source/algorithm/LineIntersector.cpp: Back-ported fix in
-	  Z interpolation
-
-2005-05-23 20:41  strk
-
-	* CHANGES, source/examples/CustomPointCoordinateSequence.cpp,
-	  source/geom/Coordinate.cpp,
-	  source/geom/DefaultCoordinateSequence.cpp,
-	  source/geom/Dimension.cpp, source/geom/Envelope.cpp,
-	  source/geom/IntersectionMatrix.cpp, source/geom/LineSegment.cpp,
-	  source/geom/Location.cpp,
-	  source/geom/PointCoordinateSequence.cpp,
-	  source/geom/PrecisionModel.cpp, source/geomgraph/Depth.cpp,
-	  source/geomgraph/EdgeEnd.cpp,
-	  source/geomgraph/EdgeIntersection.cpp,
-	  source/geomgraph/Quadrant.cpp,
-	  source/geomgraph/index/SweepLineEvent.cpp,
-	  source/index/quadtree/QuadTreeNodeBase.cpp,
-	  source/io/ParseException.cpp, source/noding/SegmentNode.cpp,
-	  source/planargraph/planarDirectedEdge.cpp: Replaced sprintf uses
-	  with ostringstream
-
-2005-05-23 20:30  strk
-
-	* CHANGES, source/geom/Makefile.am, source/headers/Makefile.am,
-	  source/headers/geos/Makefile.am: Back-ported patch by Curtis
-	  Barrett handling --includedir and --libdir params for configure.
-
-2005-05-23 20:16  strk
-
-	* source/headers/geos/: geom.h, io.h, operation.h: more math.h to
-	  cmath conversions
-
-2005-05-23 19:53  strk
-
-	* CHANGES: Added support for point-per-quadrant argument in buffer
-	  tests (using arg2) and for Polygonize tests.
-
-2005-05-23 19:29  strk
-
-	* CHANGES, source/algorithm/CGAlgorithms.cpp: Removed useless
-	  Coordinate copies in CGAlgorithms::isOnLine()
-
-2005-05-23 19:23  strk
-
-	* CHANGES, source/headers/geos/opPolygonize.h: Commented out
-	  Polygonizer::LineStringAdder friendship
-
-2005-05-23 19:10  strk
-
-	* CHANGES, source/algorithm/CGAlgorithms.cpp,
-	  source/algorithm/LineIntersector.cpp,
-	  source/algorithm/NonRobustLineIntersector.cpp,
-	  source/algorithm/RobustDeterminant.cpp,
-	  source/geomgraph/DirectedEdge.cpp, source/geomgraph/EdgeEnd.cpp,
-	  source/geomgraph/index/SegmentIntersector.cpp,
-	  source/headers/geos/platform.h.in,
-	  source/noding/snapround/SegmentSnapper.cpp,
-	  source/planargraph/planarDirectedEdge.cpp: Stricter C++ syntax
-	  (math.h=>cmath, ieeefp.h in "C" block)
-
-2005-05-23 18:57  strk
-
-	* CHANGES: Added IsValid throw removal
-
-2005-05-23 18:57  strk
-
-	* source/operation/valid/IsValidOp.cpp: Backported fix avoiding
-	  throws
 
 2005-05-23 18:42  strk
 
 	* source/geom/Point.cpp: Added Refractions copyright
-
-2005-05-23 18:41  strk
-
-	* CHANGES, source/operation/overlay/OverlayOp.cpp: Back-ported
-	  removal of useless Coordinate copies in mergeZ() - patch by Safe
-	  Software
-
-2005-05-23 18:39  strk
-
-	* CHANGES: Initial import
-
-2005-05-23 18:39  strk
-
-	* source/algorithm/RobustLineIntersector.cpp: Ported JTS robustness
-	  patch for RobustLineIntersector
-
-2005-05-23 18:39  strk
-
-	* source/headers/geos/geosAlgorithm.h: log lines moved at bottom
-	  file, added Refractions copyright
-
-2005-05-23 18:03  strk
-
-	* source/operation/buffer/OffsetCurveBuilder.cpp: back-ported
-	  memleak plug in getRingCurve()
-
-2005-05-23 18:02  strk
-
-	* source/geom/Point.cpp: Backported segfault fix in isEmpty
-
-2005-05-23 18:02  strk
-
-	* configure.in: version bumper to 2.1.2
-
-2005-05-23 17:22  strk
-
-	* source/geom/LineSegment.cpp: Back-ported bugfix in ::reverse
 
 2005-05-23 17:13  strk
 
@@ -7045,12 +9716,6 @@
 	  IntersectionMatrix.cpp, LineSegment.cpp, LineString.cpp,
 	  LinearRing.cpp, Location.cpp, Point.cpp, PrecisionModel.cpp,
 	  geom.h, operation.h, platform.h: 'geom' package 70% done
-
-2002-06-07 19:47  pramsey
-
-	* CTS.cpp, Coordinate.cpp, CoordinateList.cpp, Dimension.cpp,
-	  Envelope.cpp, LineSegment.cpp, Location.cpp, geom.h, platform.h:
-	  Imported Sources
 
 2002-06-07 19:47  pramsey
 
