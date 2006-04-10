@@ -16,6 +16,7 @@
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/PrecisionModel.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/GeometryFilter.h>
@@ -183,48 +184,40 @@ Geometry::isWithinDistance(const Geometry *geom,double cDistance)
 Point*
 Geometry::getCentroid() const
 {
-	if ( isEmpty() ) { return NULL; }
-
 	Coordinate centPt;
+	if ( ! getCentroid(centPt) ) return NULL;
 
-	int dim=getDimension();
-	if(dim==0) {
-		CentroidPoint cent; 
-		cent.add(this);
-		if ( ! cent.getCentroid(centPt) ) return NULL;
-	} else if (dim==1) {
-		CentroidLine cent;
-		cent.add(this);
-		if ( ! cent.getCentroid(centPt) ) return NULL;
-	} else {
-		CentroidArea cent;
-		cent.add(this);
-		if ( ! cent.getCentroid(centPt) ) return NULL;
-	}
-
-	Point *pt=getFactory()->createPointFromInternalCoord(&centPt,this);
+	// We don't use createPointFromInternalCoord here
+	// because ::getCentroid() takes care about rounding
+	Point *pt=getFactory()->createPoint(centPt);
 	return pt;
 }
 
+/*public*/
 bool
 Geometry::getCentroid(Coordinate& ret) const
 {
 	if ( isEmpty() ) { return false; }
 
+	Coordinate c;
+
 	int dim=getDimension();
 	if(dim==0) {
 		CentroidPoint cent; 
 		cent.add(this);
-		return cent.getCentroid(ret);
+		cent.getCentroid(c);
 	} else if (dim==1) {
 		CentroidLine cent;
 		cent.add(this);
-		return cent.getCentroid(ret);
+		cent.getCentroid(c);
 	} else {
 		CentroidArea cent;
 		cent.add(this);
-		return cent.getCentroid(ret);
+		cent.getCentroid(c);
 	}
+
+	getPrecisionModel()->makePrecise(c);
+	ret=c;
 }
 
 Point*
@@ -785,6 +778,10 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.111  2006/04/10 14:18:51  strk
+ * Fixed getCentroid(Coordinate&) to round using PrecisionModel
+ * all unit tests succeed.
+ *
  * Revision 1.110  2006/04/10 13:09:47  strk
  * Added GeometryFactory::defaultInstance()
  * Made Geometry::INTERNAL_GEOMETRY_FACTORY an alias for it
