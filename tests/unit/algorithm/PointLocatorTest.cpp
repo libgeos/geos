@@ -10,7 +10,7 @@
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
-//#include <geos/geom/Geometry.h>
+#include <geos/geom/Geometry.h> // required for use in auto_ptr
 #include <geos/geom/Coordinate.h>
 #include <sstream>
 #include <memory>
