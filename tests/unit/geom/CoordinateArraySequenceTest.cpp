@@ -38,15 +38,17 @@ namespace tut
     template<>
     void object::test<1>()
     {
+		const size_t size = 0;
         geos::geom::CoordinateArraySequence sequence;
     
         ensure( sequence.isEmpty() );
-        ensure_equals( sequence.getSize(), 0 );
-		ensure_equals( sequence.size(), 0 );
+        ensure_equals( sequence.getSize(), size );
+		ensure_equals( sequence.size(), size );
 
 		ensure_equals( sequence.toString(), std::string("()") );
-
-		ensure_equals( sequence.getDimension(), 3);
+		
+		const size_t dim = 3;
+		ensure_equals( sequence.getDimension() , dim);
     }
 
     // Test of overriden constructor
@@ -54,7 +56,7 @@ namespace tut
     template<>
     void object::test<2>()
     {
-		const int size = 3;
+		const size_t size = 3;
         geos::geom::CoordinateArraySequence sequence(size);
     
         ensure( !sequence.isEmpty() );
@@ -65,7 +67,8 @@ namespace tut
 
 		ensure("Every coodinate in the default sequence should be same.", sequence.hasRepeatedPoints() );
 
-		ensure_equals( sequence.getDimension(), 3);
+		const size_t dim = 3;
+		ensure_equals( sequence.getDimension(), dim );
     }
 
     // Test of overriden constructor taking vector of coordiantes
@@ -75,7 +78,7 @@ namespace tut
     {
 		using geos::geom::Coordinate;
 		
-		const int size = 3;
+		const size_t size = 3;
 		const double a = 0;
 		const double b = 5.0;
 		const double c = 10.0;
@@ -105,33 +108,35 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Create empty sequence
+		const size_t sizeEmpty = 0;
         geos::geom::CoordinateArraySequence empty_original;
       
 		ensure( empty_original.isEmpty() );
-		ensure_equals( empty_original.size(), 0 );
+		ensure_equals( empty_original.size(), sizeEmpty );
 		ensure_equals( empty_original.toString(), std::string("()") );
 
 		// Create copy of empty sequence
 		geos::geom::CoordinateArraySequence empty_copy(empty_original);
 
 		ensure( empty_copy.isEmpty() );
-		ensure_equals( empty_copy.size(), 0 );
+		ensure_equals( empty_copy.size(), sizeEmpty );
 		ensure_equals( empty_copy.toString(), std::string("()") );
 
 		// Create non-empty sequence
+		const size_t sizeNonEmpty = 2;
 		std::vector<Coordinate>* col = new std::vector<Coordinate>();
 		col->push_back(Coordinate(1, 2, 3));
 		col->push_back(Coordinate(5, 10, 15));
 		geos::geom::CoordinateArraySequence non_empty_original(col);
 		
 		ensure( !non_empty_original.isEmpty() );
-		ensure_equals( non_empty_original.size(), 2 );
+		ensure_equals( non_empty_original.size(), sizeNonEmpty );
 
 		// Create copy of non-empty sequence
 		geos::geom::CoordinateArraySequence non_empty_copy(non_empty_original);
 
 		ensure( !non_empty_copy.isEmpty() );
-		ensure_equals( non_empty_copy.size(), 2 );
+		ensure_equals( non_empty_copy.size(), sizeNonEmpty );
 
 		// Compare non-empty original and copy using equality operators
 		ensure_equals( non_empty_original.getAt(0), non_empty_copy.getAt(0) );
@@ -150,10 +155,12 @@ namespace tut
 		std::vector<Coordinate>* col = new std::vector<Coordinate>();
 		col->push_back(Coordinate(1, 2));
 		col->push_back(Coordinate(5, 10));
+		
+		const size_t size = 2;
 		geos::geom::CoordinateArraySequence sequence(col);
 		
 		ensure( !sequence.isEmpty() );
-		ensure_equals( sequence.size(), 2 );
+		ensure_equals( sequence.size(), size );
 
 		ensure_equals( sequence.getX(0), 1 );
 		ensure_equals( sequence.getY(0), 2 );
@@ -172,11 +179,12 @@ namespace tut
 		std::vector<Coordinate>* col = new std::vector<Coordinate>();
 		col->push_back(Coordinate(1, 2, 3));
 		col->push_back(Coordinate(5, 10, 15));
+		
+		const size_t size = 2;
 		geos::geom::CoordinateArraySequence sequence(col);
 		
 		ensure( !sequence.isEmpty() );
-		ensure_equals( sequence.size(), 2 );
-
+		ensure_equals( sequence.size(), size );
 		ensure_not_equals( sequence.getAt(0), sequence.getAt(1) );
 
 		// First version of getAt()
@@ -209,23 +217,28 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Create empty sequence to fill with coordinates
+		const size_t size = 0;
 		geos::geom::CoordinateArraySequence sequence;
 		
 		ensure( sequence.isEmpty() );
-		ensure_equals( sequence.size(), 0 );
+		ensure_equals( sequence.size(), size );
 
 		// Add coordinates
 		Coordinate tmp(1, 2, 3);		
 		sequence.add(tmp); // insert copy of tmp
+		const size_t sizeOne = 1;
 
 		ensure( !sequence.isEmpty() );
-		ensure_equals( sequence.size(), 1 );
+		ensure_equals( sequence.size(), sizeOne );
 
 		tmp.x = 5;
 		tmp.y = 10;
 		tmp.z = 15;
 		sequence.add(tmp); // insert copy of tmp
-		ensure_equals( sequence.size(), 2 );
+		const size_t sizeTwo = 2;
+		
+		ensure( !sequence.isEmpty() );
+		ensure_equals( sequence.size(), sizeTwo );
 
 		ensure( !sequence.hasRepeatedPoints() );
 
@@ -247,8 +260,8 @@ namespace tut
     {
 		using geos::geom::Coordinate;
 
-		const int size = 2;
 		// Create sequence with 2 default coordinates
+		const size_t size = 2;
 		geos::geom::CoordinateArraySequence sequence(size);
 		
 		ensure( !sequence.isEmpty() );
@@ -286,16 +299,18 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Create sequence with only 1 default coordinate
+		const size_t sizeOne = 1;
 		geos::geom::CoordinateArraySequence sequence(1);
 		
 		ensure( !sequence.isEmpty() );
-		ensure_equals( sequence.size(), 1 );
+		ensure_equals( sequence.size(), sizeOne );
 
 		// Delete the only coordinate in the sequence
 		sequence.deleteAt(0);
-
+		const size_t sizeZero = 0;
+		
 		ensure( sequence.isEmpty() );
-		ensure_equals( sequence.size(), 0 );
+		ensure_equals( sequence.size(), sizeZero );
 
 		// Add new 3 coordinates
 		Coordinate first(1, 2, 3);
@@ -304,15 +319,17 @@ namespace tut
 		sequence.add(second);
 		Coordinate third(9, 18, 27);
 		sequence.add(third);
-		
+		const size_t sizeThree = 3;
+				
 		ensure( !sequence.isEmpty() );
-		ensure_equals( sequence.size(), 3 );
+		ensure_equals( sequence.size(), sizeThree );
 
 		// Delete coordinate in the middle of sequence - the second one.
 		sequence.deleteAt(1); // (5, 10, 15)
+		const size_t sizeTwo = 2;
 
 		ensure( !sequence.isEmpty() );
-		ensure_equals( sequence.size(), 2 );
+		ensure_equals( sequence.size(), sizeTwo );
 		
 		ensure_not_equals( sequence.getAt(0), sequence.getAt(1) );
 		ensure_equals( sequence.getAt(0), first );
@@ -328,19 +345,21 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Create empty sequence
+		const size_t size = 0;
 		geos::geom::CoordinateArraySequence sequence;
 		
 		ensure( sequence.isEmpty() );
-		ensure_equals( sequence.size(), 0 );
+		ensure_equals( sequence.size(), size );
 
 		// Create collection of points
+		const std::vector<Coordinate>::size_type sizeCol = 3;
 		std::vector<Coordinate> col;
 		col.push_back(Coordinate(1, 2, 3));
 		col.push_back(Coordinate(5, 10, 15));
 		col.push_back(Coordinate(9, 18, 27));
 
 		ensure( "std::vector bug assumed!", !col.empty() );
-		ensure_equals( "std::vector bug assumed!", col.size(), 3 );
+		ensure_equals( "std::vector bug assumed!", col.size(), sizeCol );
 
 		// Use setPoints()
 		sequence.setPoints(col);

@@ -80,11 +80,12 @@ namespace tut
 
 			ensure( 0 != col);
 
+			const size_t size0 = 0;
 			CoordianteSequencePtr sequence = factory->create(col);
 
 			ensure( 0 != sequence);
 			ensure( sequence->isEmpty() );
-			ensure_equals( sequence->size(), 0 );
+			ensure_equals( sequence->size(), size0 );
 
 			// FREE MEMORY
 			delete sequence;
@@ -114,11 +115,12 @@ namespace tut
 			col->push_back(Coordinate(1, 2, 3));
 			col->push_back(Coordinate(5, 10, 15));
 
+			const size_t size2 = 2;
 			CoordianteSequencePtr sequence = factory->create(col);
 
 			ensure( 0 != sequence);
 			ensure( !sequence->isEmpty() );
-			ensure_equals( sequence->size(), 2 );
+			ensure_equals( sequence->size(), size2 );
 			ensure_not_equals( sequence->getAt(0), sequence->getAt(1) );
 
 			// FREE MEMORY
@@ -143,15 +145,15 @@ namespace tut
 
 			ensure( 0 != factory );
 
-			const int size = 1000;
-			CoordianteSequencePtr sequence = factory->create(size, 3);
+			const size_t size1000 = 1000;
+			CoordianteSequencePtr sequence = factory->create(size1000, 3);
 
 			ensure( 0 != sequence);
 			ensure( !sequence->isEmpty() );
-			ensure_equals( sequence->size(), size );
+			ensure_equals( sequence->size(), size1000 );
 			ensure( sequence->hasRepeatedPoints() );
-			ensure_equals( sequence->getAt(0), sequence->getAt(size - 1) );
-			ensure_equals( sequence->getAt(0), sequence->getAt(size / 2) );
+			ensure_equals( sequence->getAt(0), sequence->getAt(size1000 - 1) );
+			ensure_equals( sequence->getAt(0), sequence->getAt(size1000 / 2) );
 			
 			// FREE MEMORY
 			delete sequence;

@@ -29,5 +29,6 @@ geos_unit_SOURCES = geos_unit.cpp algorithm/PointLocatorTest.cpp \
 					geom/TriangleTest.cpp \
 					geom/Geometry/isRectangleTest.cpp \
 					index/quadtree/DoubleBitsTest.cpp \
-					io/WKBReaderTest.cpp
+					io/WKBReaderTest.cpp \
+					util/UniqueCoordinateArrayFilterTest.cpp
 

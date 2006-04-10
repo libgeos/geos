@@ -503,7 +503,7 @@ namespace tut
 	template<>
 	void object::test<13>()
 	{
-		const int size = 5;
+		const size_t size = 5;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
 		ensure( coords != 0 );
 		ensure_equals( coords->getSize(), size );

@@ -44,25 +44,41 @@ public:
 	/**
 	 * Constructs a CoordinateArrayFilter.
 	 *
-	 * @param  target   The destination set. 
+	 * @param target The destination set. 
 	 */
 	UniqueCoordinateArrayFilter(geom::Coordinate::ConstVect &target)
-		:
-		pts(target)
-		{}
+		: pts(target)
+	{}
 
+	/**
+	 * Destructor.
+	 * Virtual dctor promises appropriate behaviour when someone will
+	 * delete a derived-class object via a base-class pointer.
+	 * http://www.parashift.com/c++-faq-lite/virtual-functions.html#faq-20.7
+	 */
 	virtual ~UniqueCoordinateArrayFilter() {}
 
+	/**
+	 * Performs a filtering operation with or on coord in "read-only" mode.
+	 * @param coord The "read-only" Coordinate to which
+	 * 				the filter is applied.
+	 */
 	virtual void filter_ro(const geom::Coordinate *coord)
 	{
 		if ( uniqPts.insert(coord).second )
+		{
 			pts.push_back(coord);
+		}
 	}
 
+	/**
+	 * Performs a filtering operation with or on coord in "read-write" mode.
+	 * @param coord The Coordinate to which the filter is applied.
+	 */
 	virtual void filter_rw(geom::Coordinate *coord) const
 	{
 		// UniqueCoordinateArrayFilter is a read-only filter
-		assert(0); 
+		assert(false); 
 	}
 };
 
@@ -73,6 +89,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/10 09:21:23  mloskot
+ * Added new test for UniqueCoordinateArrayFilter class. Small fixes related to signed/unsigned comparison.
+ *
  * Revision 1.1  2006/03/09 16:46:49  strk
  * geos::geom namespace definition, first pass at headers split
  *

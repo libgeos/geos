@@ -89,7 +89,7 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Non-empty sequence of coordiantes
-		const int size = 3;
+		const size_t size3 = 3;
 
 		CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
 		ensure( "sequence is null pointer.", pseq != 0 );
@@ -98,7 +98,7 @@ namespace tut
 		pseq->add(Coordinate(5, 5, 5));
 		pseq->add(Coordinate(10, 10, 10));
 
-		ensure_equals( pseq->size(), size );
+		ensure_equals( pseq->size(), size3 );
 
 		// Create non-empty linstring instance
 		geos::geom::LineString ls(pseq, &factory_);
@@ -129,7 +129,7 @@ namespace tut
 		ensure_equals( ls.getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( ls.getDimension(), geos::geom::Dimension::L );
 		ensure_equals( ls.getBoundaryDimension(), geos::geom::Dimension::P );
-		ensure_equals( ls.getNumPoints(), size );
+		ensure_equals( ls.getNumPoints(), size3 );
 		ensure_equals( ls.getArea(), 0 );
 		ensure_not_equals( ls.getLength(), 0 );
 	}

@@ -80,7 +80,7 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Non-empty sequence of coordiantes
-		const int size = 7;
+		const size_t size7 = 7;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
 		ensure( "sequence is null pointer.", coords != 0 );
 
@@ -92,7 +92,7 @@ namespace tut
 		coords->add(Coordinate(5, 15));
 		coords->add(Coordinate(0, 10));
 
-		ensure_equals( coords->size(), size );
+		ensure_equals( coords->size(), size7 );
 
 		try
 		{
@@ -102,8 +102,8 @@ namespace tut
 			ensure( ring.isClosed() );
 			ensure( ring.isRing() );
 			ensure( ring.isSimple() );
-
 			ensure( ring.isValid() );
+			//ensure_equals( rint.getNumPoints(), 7 );
 		}
 		catch (geos::util::IllegalArgumentException const& e)
 		{

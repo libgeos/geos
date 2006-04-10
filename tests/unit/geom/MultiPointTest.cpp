@@ -70,13 +70,15 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
+		const size_t size0 = 0;
 		geos::geom::MultiPoint mp(NULL, &factory_);
+		
 		ensure( mp.isEmpty() );
 		ensure( mp.isSimple() );
 		ensure( mp.isValid() );
 		ensure( mp.getCentroid() == 0 );
-		ensure_equals( mp.getNumPoints(), 0 );
-		ensure_equals( mp.getNumGeometries(), 0 );
+		ensure_equals( mp.getNumPoints(), size0 );
+		ensure_equals( mp.getNumGeometries(), size0 );
 	}
 
 	// Test of copy constructor
@@ -84,13 +86,15 @@ namespace tut
 	template<>
 	void object::test<2>()
 	{
-		geos::geom::MultiPoint copy(empty_mp_);;
+		const size_t size0 = 0;
+		geos::geom::MultiPoint copy(empty_mp_);
+		
 		ensure( copy.isEmpty() );
 		ensure( copy.isSimple() );
 		ensure( copy.isValid() );
 		ensure( copy.getCentroid() == 0 );
-		ensure_equals( copy.getNumPoints(), 0 );
-		ensure_equals( copy.getNumGeometries(), 0 );
+		ensure_equals( copy.getNumPoints(), size0 );
+		ensure_equals( copy.getNumGeometries(), size0 );
 	}
 
 	// Test of empty MultiPoint constructed by WKTReader
@@ -98,6 +102,7 @@ namespace tut
 	template<>
 	void object::test<3>()
 	{
+		const size_t size0 = 0;
 		GeometryPtr geo = reader_.read("MULTIPOINT EMPTY");
 		MultiPointPtr mp = static_cast<MultiPointPtr>(geo);
 
@@ -105,8 +110,8 @@ namespace tut
 		ensure( mp->isSimple() );
 		ensure( mp->isValid() );
 		ensure( mp->getCentroid() == 0 );
-		ensure_equals( mp->getNumPoints(), 0 );
-		ensure_equals( mp->getNumGeometries(), 0 );
+		ensure_equals( mp->getNumPoints(), size0 );
+		ensure_equals( mp->getNumGeometries(), size0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(geo);
