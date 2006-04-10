@@ -13,12 +13,13 @@
  *
  **********************************************************************/
 
-#include <string>
-
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util/IllegalArgumentException.h>
+
+#include <string>
+#include <memory>
 
 using namespace std;
 
@@ -27,21 +28,19 @@ namespace geom { // geos::geom
 
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
 
-/**
-*  Constructs a <code>LinearRing</code> with the given points.
-*
-*@param  points          points forming a closed and simple linestring, or
-*      <code>null</code> or an empty array to create the empty geometry.
-*      This array must not contain <code>null</code> elements.
-*	The created LinearRing will take ownership of points.
-*
-*/
-LinearRing::LinearRing(CoordinateSequence* newCoords, const GeometryFactory *newFactory): LineString(newCoords,newFactory) {
+/*public*/
+LinearRing::LinearRing(CoordinateSequence* newCoords,
+		const GeometryFactory *newFactory)
+	:
+	LineString(newCoords, newFactory)
+{
 	validateConstruction();	
 }
 
 
-void LinearRing::validateConstruction() {
+void
+LinearRing::validateConstruction()
+{
 	if (!LineString::isEmpty() && !LineString::isClosed()) {
 		throw util::IllegalArgumentException("points must form a closed linestring");
     }
@@ -82,6 +81,10 @@ LinearRing::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/04/10 17:35:44  strk
+ * Changed LineString::points and Point::coordinates to be wrapped
+ * in an auto_ptr<>. This should close bugs #86 and #89
+ *
  * Revision 1.30  2006/03/09 16:46:47  strk
  * geos::geom namespace definition, first pass at headers split
  *

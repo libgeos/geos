@@ -54,7 +54,8 @@ public:
 	 * \brief Constructs a <code>LinearRing</code> with the given points.
 	 *
 	 * @param  points  points forming a closed and simple linestring, or
-	 *      <code>null</code> or an empty array to create the empty geometry.
+	 *      <code>null</code> or an empty array to create the empty
+	 *      geometry.
 	 *      This array must not contain <code>null</code> elements.
 	 *	If not null LinearRing will take ownership of points.
 	 *
@@ -86,6 +87,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/10 17:35:44  strk
+ * Changed LineString::points and Point::coordinates to be wrapped
+ * in an auto_ptr<>. This should close bugs #86 and #89
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

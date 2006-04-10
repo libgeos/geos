@@ -112,7 +112,7 @@ namespace tut
 		catch (geos::util::IllegalArgumentException const& e)
 		{
 			// TODO - mloskot - Bug #89: Possible memory leaks caused by Point constructor
-			delete coords;
+			//delete coords;
 
 			const char* msg = e.what(); // ok 
 			ensure( msg != 0 );

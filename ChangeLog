@@ -11,6 +11,9 @@
 	  The class is now useless.
 	* source/inlines.cpp: inlines functions provider for
 	  GEOS_INLINE builds. Fixed libtool problems on OSX,MingW,Cygwin.
+	* source/geom/LineString.cpp, source/geom/Point.cpp:
+	  changed CoordinateSequence member to be an auto_ptr<>
+
 	
 2006-04-10 11:21  mloskot
 

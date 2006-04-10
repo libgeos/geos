@@ -29,6 +29,7 @@
 #include <geos/geom/GeometryFactory.h>
 
 #include <string>
+#include <memory>
 
 using namespace std;
 
@@ -36,33 +37,28 @@ namespace geos {
 namespace geom { // geos::geom
 
 
-/**
- * Creates a Point using the given CoordinateSequence (must have 1 element)
- *
- * @param  newCoords
- *	contains the single coordinate on which to base this
- *	<code>Point</code> or <code>null</code> to create
- *	the empty geometry.
- *
- *	If not null the created Point will take ownership of newCoords.
- */  
-Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory):
-	Geometry(factory)
+/*public*/
+Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
+	:
+	Geometry(factory),
+	coordinates(newCoords)
 {
-	if (newCoords==NULL) {
-		coordinates=factory->getCoordinateSequenceFactory()->create(NULL);
+	if (coordinates.get()==NULL) {
+		coordinates.reset(factory->getCoordinateSequenceFactory()->create(NULL));
 		return;
 	}        
-	if (newCoords->getSize() != 1)
+	if (coordinates->getSize() != 1)
 	{
 		throw util::IllegalArgumentException("Point coordinate list must contain a single element");
 	}
-	coordinates=newCoords;
 }
 
-Point::Point(const Point &p): Geometry(p.getFactory())
+/*public*/
+Point::Point(const Point &p)
+	:
+	Geometry(p.getFactory()),
+	coordinates(p.coordinates->clone())
 {
-	coordinates=p.coordinates->clone();
 }
 
 CoordinateSequence *
@@ -210,7 +206,7 @@ Point::compareToSameClass(const Geometry *point) const
 
 Point::~Point()
 {
-	delete coordinates;
+	//delete coordinates;
 }
 
 GeometryTypeId
@@ -219,12 +215,23 @@ Point::getGeometryTypeId() const
 	return GEOS_POINT;
 }
 
+/*public*/
+const CoordinateSequence*
+Point::getCoordinatesRO() const
+{
+	return coordinates.get();
+}
+
 } // namespace geos::geom
 } // namesapce geos
 
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.43  2006/04/10 17:35:44  strk
+ * Changed LineString::points and Point::coordinates to be wrapped
+ * in an auto_ptr<>. This should close bugs #86 and #89
+ *
  * Revision 1.42  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

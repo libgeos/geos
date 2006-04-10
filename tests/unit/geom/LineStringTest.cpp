@@ -156,7 +156,7 @@ namespace tut
 		{
 			// TODO - mloskot - is waiting for "exception-safety" and bugs resolution
 			// If removed, memory 3 leaks occur
-			delete pseq;
+			//delete pseq;
 
 			const char* msg = e.what(); // OK
 			ensure( msg != 0 );
