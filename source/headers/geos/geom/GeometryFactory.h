@@ -105,6 +105,15 @@ public:
 	 */
 	GeometryFactory(const GeometryFactory &gf);
 
+	/**
+	 * \brief 
+	 * Return a pointer to the default GeometryFactory.
+	 * This is a global shared object instantiated
+	 * using default constructor.
+	 */
+	static const GeometryFactory*
+	getDefaultInstance();
+
 	/// Destructor
 	virtual ~GeometryFactory();
 
@@ -290,6 +299,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/04/10 13:09:49  strk
+ * Added GeometryFactory::defaultInstance()
+ * Made Geometry::INTERNAL_GEOMETRY_FACTORY an alias for it
+ * removed last deletion from Unload::Release class
+ *
  * Revision 1.5  2006/03/31 17:51:26  strk
  * A few assertion checking, comments cleanup, use of initialization lists
  * in constructors, handled NULL parameters.

@@ -649,11 +649,24 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 	delete g;
 }
 
+/*public static*/
+const GeometryFactory*
+GeometryFactory::getDefaultInstance() 
+{
+	static GeometryFactory defInstance;
+	return &defInstance;
+}
+
 } // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.66  2006/04/10 13:09:47  strk
+ * Added GeometryFactory::defaultInstance()
+ * Made Geometry::INTERNAL_GEOMETRY_FACTORY an alias for it
+ * removed last deletion from Unload::Release class
+ *
  * Revision 1.65  2006/04/06 12:33:04  strk
  * More debugging lines
  *

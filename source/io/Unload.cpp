@@ -24,7 +24,7 @@ namespace io { // geos.io
 /*public static*/
 void Unload::Release()
 {
-	delete geom::Geometry::INTERNAL_GEOMETRY_FACTORY;
+	//delete geom::Geometry::INTERNAL_GEOMETRY_FACTORY;
 }
 
 } // namespace geos.io
@@ -32,6 +32,11 @@ void Unload::Release()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/04/10 13:09:49  strk
+ * Added GeometryFactory::defaultInstance()
+ * Made Geometry::INTERNAL_GEOMETRY_FACTORY an alias for it
+ * removed last deletion from Unload::Release class
+ *
  * Revision 1.25  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

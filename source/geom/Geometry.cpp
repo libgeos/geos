@@ -92,7 +92,7 @@ jtsport()
 
 GeometryComponentFilter Geometry::geometryChangedFilter;
 
-const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
+const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=GeometryFactory::getDefaultInstance();
 
 Geometry::Geometry(const GeometryFactory *newFactory)
 	:
@@ -785,6 +785,11 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.110  2006/04/10 13:09:47  strk
+ * Added GeometryFactory::defaultInstance()
+ * Made Geometry::INTERNAL_GEOMETRY_FACTORY an alias for it
+ * removed last deletion from Unload::Release class
+ *
  * Revision 1.109  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'
