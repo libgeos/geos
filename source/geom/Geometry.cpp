@@ -205,19 +205,24 @@ Geometry::getCentroid(Coordinate& ret) const
 	if(dim==0) {
 		CentroidPoint cent; 
 		cent.add(this);
-		cent.getCentroid(c);
+		if ( ! cent.getCentroid(c) )
+				return false;
 	} else if (dim==1) {
 		CentroidLine cent;
 		cent.add(this);
-		cent.getCentroid(c);
+		if ( ! cent.getCentroid(c) ) 
+			return false;
 	} else {
 		CentroidArea cent;
 		cent.add(this);
-		cent.getCentroid(c);
+		if ( ! cent.getCentroid(c) )
+			return false;
 	}
 
 	getPrecisionModel()->makePrecise(c);
 	ret=c;
+
+	return true;
 }
 
 Point*
@@ -778,6 +783,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.112  2006/04/10 15:05:15  strk
+ * Fixed a bug introduced by previous commit in getCentroid()
+ *
  * Revision 1.111  2006/04/10 14:18:51  strk
  * Fixed getCentroid(Coordinate&) to round using PrecisionModel
  * all unit tests succeed.
