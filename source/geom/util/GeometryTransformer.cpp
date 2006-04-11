@@ -30,12 +30,18 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/GeometryCollection.h>
-//#include <geos/geom/util/GeometryEditorOperation.h>
-//#include <geos/util/UnsupportedOperationException.h>
 #include <geos/util/IllegalArgumentException.h>
 
 #include <typeinfo>
 #include <cassert>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
 
 using namespace std;
 
@@ -64,6 +70,10 @@ auto_ptr<Geometry>
 GeometryTransformer::transform(const Geometry* nInputGeom)
 {
 	using geos::util::IllegalArgumentException;
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transform(Geometry " << nInputGeom << ");" << std::endl;
+#endif
 
 	inputGeom = nInputGeom;
 	factory = inputGeom->getFactory();
@@ -101,8 +111,13 @@ GeometryTransformer::createCoordinateSequence(
 std::auto_ptr<CoordinateSequence>
 GeometryTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
-		const Geometry* /*parent*/)
+		const Geometry* parent)
 {
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformCoordinates(CoordinateSequence " << coords <<", Geometry " << parent << ");" << std::endl;
+#endif
+
 	return std::auto_ptr<CoordinateSequence>(coords->clone());
 }
 
@@ -111,7 +126,12 @@ GeometryTransformer::transformPoint(
 		const Point* geom,
 		const Geometry* parent)
 {
-	auto_ptr<CoordinateSequence> cs(transformCoordinates(
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformPoint(Point " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
+	CoordinateSequence::AutoPtr cs(transformCoordinates(
 		geom->getCoordinatesRO(), geom));
 
 	return Geometry::AutoPtr(factory->createPoint(cs.release()));
@@ -122,6 +142,11 @@ GeometryTransformer::transformMultiPoint(
 		const MultiPoint* geom,
 		const Geometry* parent)
 {
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformMultiPoint(MultiPoint " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
 	vector<Geometry*>* transGeomList = new vector<Geometry*>();
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
@@ -147,7 +172,12 @@ GeometryTransformer::transformLinearRing(
 		const LinearRing* geom,
 		const Geometry* parent)
 {
-	auto_ptr<CoordinateSequence> seq(transformCoordinates(
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformLinearRing(LinearRing " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
+	CoordinateSequence::AutoPtr seq(transformCoordinates(
 		geom->getCoordinatesRO(), geom));
 
 	unsigned int seqSize = seq->size();
@@ -167,6 +197,11 @@ GeometryTransformer::transformLineString(
 		const LineString* geom,
 		const Geometry* parent)
 {
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformLineString(LineString " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
 	// should check for 1-point sequences and downgrade them to points
 	return factory->createLineString(
 		transformCoordinates(geom->getCoordinatesRO(), geom));
@@ -177,6 +212,11 @@ GeometryTransformer::transformMultiLineString(
 		const MultiLineString* geom,
 		const Geometry* parent)
 {
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformMultiLineString(MultiLineString " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
 	vector<Geometry*>* transGeomList = new vector<Geometry*>();
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
@@ -202,6 +242,11 @@ GeometryTransformer::transformPolygon(
 		const Polygon* geom,
 		const Geometry* parent)
 {
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformPolygon(Polygon " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
 	bool isAllValidLinearRings = true;
 
 	assert(dynamic_cast<const LinearRing*>(geom->getExteriorRing()));
@@ -269,6 +314,11 @@ GeometryTransformer::transformMultiPolygon(
 		const MultiPolygon* geom,
 		const Geometry* parent)
 {
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformMultiPolygon(MultiPolygon " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
 	vector<Geometry*>* transGeomList = new vector<Geometry*>();
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
@@ -294,6 +344,11 @@ GeometryTransformer::transformGeometryCollection(
 		const GeometryCollection* geom,
 		const Geometry* parent)
 {
+
+#if GEOS_DEBUG
+	std::cerr << "GeometryTransformer::transformGeometryCollection(GeometryCollection " << geom <<", Geometry " << parent << ");" << std::endl;
+#endif
+
 	vector<Geometry*>* transGeomList = new vector<Geometry*>();
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
@@ -326,6 +381,9 @@ GeometryTransformer::transformGeometryCollection(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/11 16:04:34  strk
+ * geos::simplify::DouglasPeukerSimplifier class + unit test
+ *
  * Revision 1.1  2006/04/11 12:21:48  strk
  * GeometryTransformer class ported
  *

@@ -1,8 +1,7 @@
 2006-04-11 Sandro Santilli <strk@refractions.net
 
-	* source/headers/geos/geom/util/GeometryTransformer.h,
-	  source/geom/util/GeometryTransformer.cpp:
-	  new class.
+	* geos::simplify::DouglasPeukerSimplifier class
+	* geos::geom::util::GeometryTransformer class
 	* source/headers/geos/geom/CoordinateSequence.h:
 	  added AutoPtr typdef
 	* source/headers/geos/geom/: LineString.h, LinearRing.h,

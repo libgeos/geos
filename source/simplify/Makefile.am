@@ -5,7 +5,8 @@ noinst_LTLIBRARIES = libsimplify.la
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libsimplify_la_SOURCES = \
-	DouglasPeuckerLineSimplifier.cpp
+	DouglasPeuckerLineSimplifier.cpp \
+	DouglasPeuckerSimplifier.cpp
 
 libsimplify_la_LIBADD = 
 
