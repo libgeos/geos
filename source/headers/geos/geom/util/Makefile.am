@@ -7,6 +7,7 @@ EXTRA_DIST =
 geos_HEADERS = \
 	CoordinateOperation.h	\
 	GeometryEditor.h	\
+	GeometryTransformer.h	\
 	GeometryEditorOperation.h	\
 	LinearComponentExtracter.h	\
 	PointExtracter.h	\

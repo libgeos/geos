@@ -10,6 +10,7 @@ INCLUDES = -I$(top_srcdir)/source/headers
 
 libgeomutil_la_SOURCES = \
 	GeometryEditor.cpp \
+	GeometryTransformer.cpp \
 	CoordinateOperation.cpp \
 	ShortCircuitedGeometryVisitor.cpp
 
