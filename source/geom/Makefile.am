@@ -17,6 +17,7 @@ libgeom_la_SOURCES = \
 	Dimension.cpp \
 	Envelope.cpp \
 	Geometry.cpp \
+	GeometryList.cpp \
 	GeometryCollection.cpp \
 	GeometryComponentFilter.cpp \
 	GeometryFactory.cpp \

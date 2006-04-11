@@ -18,6 +18,7 @@ geos_HEADERS = \
 	Envelope.inl	\
 	Geometry.h	\
 	Geometry.inl	\
+	GeometryList.h	\
 	GeometryCollection.h	\
 	GeometryCollection.inl	\
 	GeometryComponentFilter.h	\
