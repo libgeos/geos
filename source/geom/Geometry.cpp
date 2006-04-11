@@ -110,8 +110,8 @@ Geometry::Geometry(const GeometryFactory *newFactory)
 
 Geometry::Geometry(const Geometry &geom)
 	:
-	factory(geom.factory),
 	SRID(geom.getSRID()),
+	factory(geom.factory),
 	userData(NULL)
 {
 	if ( geom.envelope.get() )
@@ -776,6 +776,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.114  2006/04/11 09:29:42  strk
+ * Fixed initialization list (removed compiler warning)
+ *
  * Revision 1.113  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
