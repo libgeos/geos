@@ -17,6 +17,9 @@
  *
  **********************************************************************/
 
+#ifndef GEOS_GEOM_GEOMETRYLIST_H
+#define GEOS_GEOM_GEOMETRYLIST_H
+
 #include <geos/geom/Geometry.h> // for auto_ptr
 
 #include <memory> // for auto_ptr
@@ -70,8 +73,13 @@ private:
 } // namespace geos.geom
 } // namespace geos
 
+#endif // GEOS_GEOM_GEOMETRYLIST_H
+
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/11 09:53:44  strk
+ * Added missing duplicated include sentinel
+ *
  * Revision 1.1  2006/04/11 09:41:26  strk
  * Initial implementation of a GeometryList class, to be used to manage
  * lists of Geometry pointers.
