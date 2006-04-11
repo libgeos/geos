@@ -162,6 +162,9 @@ public:
 	/// A vector of non-const Geometry pointers
 	typedef std::vector<Geometry *> NonConstVect;
 
+	/// An auto_ptr of Geometry
+	typedef std::auto_ptr<Geometry> AutoPtr;
+
 	Geometry(const Geometry &geom);
 
 	/** \brief
@@ -650,6 +653,9 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/04/11 09:31:47  strk
+ * Added Geometry::AutoPtr typedef
+ *
  * Revision 1.8  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
