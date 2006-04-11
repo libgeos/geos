@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <iosfwd> // ostream
+#include <memory> // for auto_ptr typedef
 
 // Forward declarations
 namespace geos {
@@ -57,7 +58,11 @@ namespace geom { // geos::geom
  * 
  */
 class CoordinateSequence {
+
 public:
+
+	typedef std::auto_ptr<CoordinateSequence> AutoPtr;
+
 	friend std::ostream& operator<< (std::ostream& os, const Coordinate& c);
 
 	virtual ~CoordinateSequence(){};
@@ -299,6 +304,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/11 11:55:22  strk
+ * Added CoordinateSequence::AutoPtr typedef
+ *
  * Revision 1.4  2006/04/04 09:53:45  strk
  * Fixed applyCoordinateFilter() templated function body
  *
