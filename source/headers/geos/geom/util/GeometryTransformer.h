@@ -109,10 +109,10 @@ protected:
 	 *
 	 * [final]
 	 */
-	std::auto_ptr<CoordinateSequence> createCoordinateSequence(
+	CoordinateSequence::AutoPtr createCoordinateSequence(
 			std::auto_ptr< std::vector<Coordinate> > coords);
 
-	virtual std::auto_ptr<CoordinateSequence> transformCoordinates(
+	virtual CoordinateSequence::AutoPtr transformCoordinates(
 			const CoordinateSequence* coords,
 			const Geometry* parent);
 
@@ -191,6 +191,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/11 12:56:06  strk
+ * used typedef for auto_ptr<CoordinateSequence>
+ *
  * Revision 1.1  2006/04/11 12:21:49  strk
  * GeometryTransformer class ported
  *
