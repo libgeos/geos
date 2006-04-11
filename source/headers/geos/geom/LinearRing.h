@@ -62,7 +62,12 @@ public:
 	 * @param newFactory the GeometryFactory used to create this geometry
 	 *
 	 */
-	LinearRing(CoordinateSequence* points, const GeometryFactory *newFactory);
+	LinearRing(CoordinateSequence* points,
+			const GeometryFactory *newFactory);
+
+	/// Hopefully cleaner version of the above
+	LinearRing(CoordinateSequence::AutoPtr points,
+			const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const { return new LinearRing(*this); }
 	virtual ~LinearRing();
@@ -87,6 +92,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/11 11:16:25  strk
+ * Added LineString and LinearRing constructors by auto_ptr
+ *
  * Revision 1.3  2006/04/10 17:35:44  strk
  * Changed LineString::points and Point::coordinates to be wrapped
  * in an auto_ptr<>. This should close bugs #86 and #89

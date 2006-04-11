@@ -55,9 +55,13 @@ public:
 	/// given CoordinateSequence.
 	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
 
+	/// Hopefully cleaner version of the above
+	LineString(CoordinateSequence::AutoPtr pts,
+			const GeometryFactory *newFactory);
+
 	virtual ~LineString();
 
-	virtual Geometry *clone() const { return new LineString(*this); }
+	virtual Geometry *clone() const;
 
 	virtual CoordinateSequence* getCoordinates() const;
 
@@ -156,7 +160,12 @@ protected:
 
 	Envelope::AutoPtr computeEnvelopeInternal() const;
 
-	std::auto_ptr<CoordinateSequence> points;
+	CoordinateSequence::AutoPtr points;
+
+private:
+
+	void validateConstruction();
+
 };
 
 struct LineStringLT {
@@ -165,6 +174,11 @@ struct LineStringLT {
 	}
 };
 
+
+inline Geometry*
+LineString::clone() const {
+	return new LineString(*this);
+}
 
 } // namespace geos::geom
 } // namespace geos
@@ -177,6 +191,9 @@ struct LineStringLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/04/11 11:16:25  strk
+ * Added LineString and LinearRing constructors by auto_ptr
+ *
  * Revision 1.6  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>

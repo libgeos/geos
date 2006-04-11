@@ -394,6 +394,13 @@ GeometryFactory::createLinearRing(CoordinateSequence* newCoords) const
 }
 
 /*public*/
+Geometry::AutoPtr
+GeometryFactory::createLinearRing(CoordinateSequence::AutoPtr newCoords) const
+{
+	return Geometry::AutoPtr(new LinearRing(newCoords, this));
+}
+
+/*public*/
 LinearRing*
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
@@ -515,6 +522,14 @@ GeometryFactory::createLineString(CoordinateSequence *newCoords)
 	const
 {
 	return new LineString(newCoords, this);
+}
+
+/*public*/
+Geometry::AutoPtr
+GeometryFactory::createLineString(CoordinateSequence::AutoPtr newCoords)
+	const
+{
+	return Geometry::AutoPtr(new LineString(newCoords, this));
 }
 
 /*public*/
@@ -662,6 +677,9 @@ GeometryFactory::getDefaultInstance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.67  2006/04/11 11:16:25  strk
+ * Added LineString and LinearRing constructors by auto_ptr
+ *
  * Revision 1.66  2006/04/10 13:09:47  strk
  * Added GeometryFactory::defaultInstance()
  * Made Geometry::INTERNAL_GEOMETRY_FACTORY an alias for it

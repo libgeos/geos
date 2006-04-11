@@ -26,10 +26,20 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
+/*public*/
 LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
 
 /*public*/
 LinearRing::LinearRing(CoordinateSequence* newCoords,
+		const GeometryFactory *newFactory)
+	:
+	LineString(newCoords, newFactory)
+{
+	validateConstruction();	
+}
+
+/*public*/
+LinearRing::LinearRing(CoordinateSequence::AutoPtr newCoords,
 		const GeometryFactory *newFactory)
 	:
 	LineString(newCoords, newFactory)
@@ -81,6 +91,9 @@ LinearRing::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/04/11 11:16:25  strk
+ * Added LineString and LinearRing constructors by auto_ptr
+ *
  * Revision 1.31  2006/04/10 17:35:44  strk
  * Changed LineString::points and Point::coordinates to be wrapped
  * in an auto_ptr<>. This should close bugs #86 and #89

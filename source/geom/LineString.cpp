@@ -60,25 +60,13 @@ LineString::reverse() const
 }
 
 
-/**
- * Constructs a <code>LineString</code> taking ownership of the
- * given CoordinateSequence.
- *
- * @param newCoords the list of coordinates making up the linestring,
- *	or <code>null</code> to create the empty geometry.
- *	Consecutive points may not be equal.
- *
- * @param factory the GeometryFactory used to create this Geometry.
- *
- */  
-LineString::LineString(CoordinateSequence *newCoords,
-		const GeometryFactory *factory)
-	:
-	Geometry(factory),
-	points(newCoords)
+/*private*/
+void
+LineString::validateConstruction()
 {
-	if (points.get()==NULL) {
-		points.reset(factory->getCoordinateSequenceFactory()->create(NULL));
+	if (points.get()==NULL)
+	{
+		points.reset(getFactory()->getCoordinateSequenceFactory()->create(NULL));
 		return;
 	}
 
@@ -86,6 +74,26 @@ LineString::LineString(CoordinateSequence *newCoords,
 	{
 		throw util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
 	}
+}
+
+/*public*/
+LineString::LineString(CoordinateSequence *newCoords,
+		const GeometryFactory *factory)
+	:
+	Geometry(factory),
+	points(newCoords)
+{
+	validateConstruction();
+}
+
+/*public*/
+LineString::LineString(CoordinateSequence::AutoPtr newCoords,
+		const GeometryFactory *factory)
+	:
+	Geometry(factory),
+	points(newCoords)
+{
+	validateConstruction();
 }
 
 
@@ -383,6 +391,9 @@ LineString::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.67  2006/04/11 11:16:25  strk
+ * Added LineString and LinearRing constructors by auto_ptr
+ *
  * Revision 1.66  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>

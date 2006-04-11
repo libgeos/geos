@@ -1,3 +1,14 @@
+2006-04-11 Sandro Santilli <strk@refractions.net
+
+	* source/headers/geos/geom/CoordinateSequence.h:
+	  added AutoPtr typdef
+	* source/headers/geos/geom/: LineString.h, LinearRing.h,
+	  source/geom/: LineString.cpp, LinearRing.cpp:
+	  added constructors by auto_ptr
+	* source/headers/geos/geom/GeometryFactory.h,
+	  source/geom/GeometryFactory.cpp:
+	  added LineString and LinearRing constructors by auto_ptr
+
 2006-04-10 Sandro Santilli <strk@refractions.net
 
 	* tools/geos-config.in: Removed INLINE flags from geos-config
