@@ -706,8 +706,8 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 	//if (!((LineIntersector *)this)->isInSegmentEnvelopes(intPt))
 	if (! isInSegmentEnvelopes(intPt))
 	{
-		cerr<<"Intersection outside segment envelopes: "<<
-			intPt.toString();
+		cerr << "Intersection outside segment envelopes: "
+		     << intPt.toString() << endl;
 	}
 //#endif
  
@@ -808,6 +808,9 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2006/04/12 11:57:11  strk
+ * Fixed debugging line
+ *
  * Revision 1.41  2006/04/07 09:12:57  strk
  * kept isInSegmentEnvelopes() check even when not debugging
  *
