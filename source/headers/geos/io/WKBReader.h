@@ -68,6 +68,9 @@ public:
 
 	WKBReader(geom::GeometryFactory const& f): factory(f) {};
 
+	/// Inizialize parser with default GeometryFactory.
+	WKBReader();
+
 	/**
 	 * \brief Reads a Geometry from an istream.
 	 *
@@ -153,6 +156,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/12 10:57:19  strk
+ * Added WKBReader default ctor using default GeometryFactory instance
+ *
  * Revision 1.1  2006/03/20 18:18:14  strk
  * io.h header split
  *

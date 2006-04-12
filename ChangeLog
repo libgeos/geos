@@ -1,4 +1,9 @@
-2006-04-11 Sandro Santilli <strk@refractions.net
+2006-04-12 Sandro Santilli <strk@refractions.net>
+
+	* geos::io::WKBReader: added default constructor
+	  using default GeometryFactory
+
+2006-04-11 Sandro Santilli <strk@refractions.net>
 
 	* geos::simplify::DouglasPeukerSimplifier class
 	* geos::geom::util::GeometryTransformer class
@@ -11,7 +16,7 @@
 	  source/geom/GeometryFactory.cpp:
 	  added LineString and LinearRing constructors by auto_ptr
 
-2006-04-10 Sandro Santilli <strk@refractions.net
+2006-04-10 Sandro Santilli <strk@refractions.net>
 
 	* tools/geos-config.in: Removed INLINE flags from geos-config
 	  --libs
