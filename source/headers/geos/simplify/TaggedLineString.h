@@ -76,6 +76,8 @@ public:
 
 	std::vector<TaggedLineSegment*>& getSegments();
 
+	const std::vector<TaggedLineSegment*>& getSegments() const;
+
 	void addToResult(std::auto_ptr<TaggedLineSegment> seg);
 
 	std::auto_ptr<geom::Geometry> asLineString() const;
@@ -114,6 +116,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/12 15:20:37  strk
+ * LineSegmentIndex class
+ *
  * Revision 1.1  2006/04/12 14:22:12  strk
  * Initial implementation of TaggedLineSegment and TaggedLineString classes
  *

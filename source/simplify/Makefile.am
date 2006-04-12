@@ -9,7 +9,8 @@ libsimplify_la_SOURCES = \
 	DouglasPeuckerLineSimplifier.cpp \
 	DouglasPeuckerSimplifier.cpp \
 	TaggedLineSegment.cpp \
-	TaggedLineString.cpp
+	TaggedLineString.cpp \
+	LineSegmentIndex.cpp
 
 libsimplify_la_LIBADD = 
 

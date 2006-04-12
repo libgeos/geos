@@ -8,6 +8,7 @@ geos_HEADERS = \
 	DouglasPeuckerLineSimplifier.h \
 	DouglasPeuckerSimplifier.h \
 	TaggedLineSegment.h \
-	TaggedLineString.h
+	TaggedLineString.h \
+	LineSegmentIndex.h
 
-nodist_geos_HEADERS = 
+noinst_HEADERS = 

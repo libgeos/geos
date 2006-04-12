@@ -154,6 +154,13 @@ TaggedLineString::getSegments()
 }
 
 /*public*/
+const vector<TaggedLineSegment*>&
+TaggedLineString::getSegments() const
+{
+	return segs;
+}
+
+/*public*/
 auto_ptr<Geometry>
 TaggedLineString::asLineString() const
 {
@@ -194,6 +201,9 @@ TaggedLineString::operator=(const TaggedLineString&)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/12 15:20:37  strk
+ * LineSegmentIndex class
+ *
  * Revision 1.1  2006/04/12 14:22:12  strk
  * Initial implementation of TaggedLineSegment and TaggedLineString classes
  *
