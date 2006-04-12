@@ -1,5 +1,7 @@
 2006-04-12 Sandro Santilli <strk@refractions.net>
 
+	* geos::simplify:TaggedLineSegment class
+	* geos::simplify:TaggedLineString class
 	* geos::io::WKBReader: added default constructor
 	  using default GeometryFactory, fixed exception
 	  constructors.
