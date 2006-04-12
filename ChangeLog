@@ -1,5 +1,7 @@
 2006-04-12 Sandro Santilli <strk@refractions.net>
 
+	* headers/geos/simplify/Makefile.am: only install
+	  DouglasPeuckerSimplifier.h header
 	* geos::geom::LineSegment class made polymorphic to
 	  allow derivation of TaggedLineSegment
 	* geos::simplify::TaggedLineStringSimplifier class
