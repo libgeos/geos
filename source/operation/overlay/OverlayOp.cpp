@@ -43,9 +43,14 @@
 #include <geos/util/TopologyException.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
 
+// only used if TRY_REDUCED_GEOMS && USE_COMMONBITS_OP
+#include <geos/precision/CommonBitsOp.h>
+#include <geos/util/IllegalArgumentException.h>
+
 #include <cassert>
 #include <functional>
 #include <vector>
+#include <sstream>
 #include <memory> // for auto_ptr
 
 #ifndef GEOS_DEBUG
@@ -61,6 +66,11 @@
 // on topology exceptions
 //
 #define TRY_REDUCED_GEOMS 1
+
+// Define this to use CommonBitsOp for
+// precision reduction (only effective
+// if TRY_REDUCED_GEOMS is also defined)
+//#define USE_COMMONBITS_OP 1
 
 using namespace std;
 using namespace geos::geom;
@@ -83,6 +93,8 @@ namespace {
  * Possible problems:
  *	- If the input is invalid, this could be a very costly operation,
  * 	  as precision reduction will hardly fix the invalidity.
+ *	- Precision reduction could make the geometries invalid, by
+ *        introducing self-intersections.
  *
  *
  * Possible optimization include:
@@ -92,6 +104,26 @@ namespace {
 Geometry*
 reducedOverlayOp(const Geometry* g0, const Geometry* g1, int opCode)
 {
+
+#if USE_COMMONBITS_OP
+	precision::CommonBitsOp cbo(true);
+
+	switch (opCode)
+	{
+		case OverlayOp::INTERSECTION:
+			return cbo.intersection(g0, g1);
+		case OverlayOp::UNION:
+			return cbo.Union(g0, g1);
+		case OverlayOp::DIFFERENCE:
+			return cbo.difference(g0, g1);
+		case OverlayOp::SYMDIFFERENCE:
+			return cbo.symDifference(g0, g1);
+		default:
+			stringstream s;
+			s << "Unsupported operation code: " << opCode;
+			throw util::IllegalArgumentException(s.str());
+	}
+#else
 	int maxPrecision=25;
 	Geometry* ret=NULL;
 
@@ -117,6 +149,7 @@ reducedOverlayOp(const Geometry* g0, const Geometry* g1, int opCode)
 	}
 
 	return ret;
+#endif
 }
 
 } // unnamed (module-statics)
@@ -136,7 +169,7 @@ OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 	}
 	catch (const util::TopologyException& ex)
 	{
-		//cerr << "Original precision: " << ex.what() << endl;
+		cerr << "Original precision: " << ex.what() << endl;
 		if ( gov.resultPrecisionModel->getType() == PrecisionModel::FIXED &&
 			gov.resultPrecisionModel->getScale() == 1 )
 		{
@@ -853,6 +886,10 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.67  2006/04/12 12:20:44  strk
+ * Added support for use of CommonBitsOp in reduced precision attempts
+ * (compile-time option)
+ *
  * Revision 1.66  2006/04/10 12:05:35  strk
  * Added inline-replicator implementation files to make sure
  * functions in .inl files are still available out-of-line.
