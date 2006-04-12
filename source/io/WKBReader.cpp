@@ -35,6 +35,8 @@
 #include <sstream>
 #include <string>
 
+//#define DEBUG_WKB_READER 1
+
 using namespace std;
 using namespace geos::geom;
 
@@ -286,8 +288,9 @@ WKBReader::readGeometry()
 			result = readGeometryCollection();
 			break;
 		default:
-			throw  ParseException("Unknown WKB type " +
-					geometryType);
+			stringstream err;
+			err << "Unknown WKB type " << geometryType;
+			throw  ParseException(err.str());
 	}
 
 	result->setSRID(SRID);
@@ -365,8 +368,11 @@ WKBReader::readMultiPoint()
 		{
 			Geometry *g = readGeometry();
 			if (!dynamic_cast<Point *>(g))
-				throw  ParseException(BAD_GEOM_TYPE_MSG+
-					" MultiPoint");
+			{
+				stringstream err;
+				err << BAD_GEOM_TYPE_MSG << " MultiPoint";
+				throw ParseException(err.str());
+			}
 			(*geoms)[i] = g;
 		}
 	} catch (...) {
@@ -389,8 +395,11 @@ WKBReader::readMultiLineString()
 		{
 			Geometry *g = readGeometry();
 			if (!dynamic_cast<LineString *>(g))
-				throw  ParseException(BAD_GEOM_TYPE_MSG+
-					" LineString");
+			{
+				stringstream err;
+				err << BAD_GEOM_TYPE_MSG << " LineString";
+				throw  ParseException(err.str());
+			}
 			(*geoms)[i] = g;
 		}
 	} catch (...) {
@@ -413,8 +422,11 @@ WKBReader::readMultiPolygon()
 		{
 			Geometry *g = readGeometry();
 			if (!dynamic_cast<Polygon *>(g))
-				throw  ParseException(BAD_GEOM_TYPE_MSG+
-					" Polygon");
+			{
+				stringstream err;
+				err << BAD_GEOM_TYPE_MSG << " Polygon";
+				throw  ParseException(err.str());
+			}
 			(*geoms)[i] = g;
 		}
 	} catch (...) {
