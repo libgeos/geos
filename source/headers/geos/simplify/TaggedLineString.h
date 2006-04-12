@@ -17,7 +17,9 @@
  *
  **********************************************************************
  *
- * NOTES: 
+ * NOTES: This class can be optimized to work with vector<Coordinate*>
+ *        rather then with CoordinateSequence. Also, LineSegment should
+ *        be replaced with a class not copying Coordinates.
  *
  **********************************************************************/
 
@@ -116,6 +118,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/12 17:19:57  strk
+ * Ported TaggedLineStringSimplifier class, made LineSegment class
+ * polymorphic to fix derivation of TaggedLineSegment
+ *
  * Revision 1.2  2006/04/12 15:20:37  strk
  * LineSegmentIndex class
  *

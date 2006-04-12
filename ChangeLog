@@ -1,5 +1,8 @@
 2006-04-12 Sandro Santilli <strk@refractions.net>
 
+	* geos::geom::LineSegment class made polymorphic to
+	  allow derivation of TaggedLineSegment
+	* geos::simplify::TaggedLineStringSimplifier class
 	* geos::simplify:LineSegmentIndex class
 	* geos::simplify:TaggedLineSegment class
 	* geos::simplify:TaggedLineString class

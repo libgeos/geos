@@ -61,7 +61,7 @@ public:
 	/// Constructs a LineSegment with the given start and end Coordinates.
 	LineSegment(const Coordinate& c0, const Coordinate& c1);
 
-	~LineSegment();
+	virtual ~LineSegment();
 
 	void setCoordinates(const Coordinate& c0, const Coordinate& c1);
 
@@ -250,6 +250,10 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/04/12 17:19:56  strk
+ * Ported TaggedLineStringSimplifier class, made LineSegment class
+ * polymorphic to fix derivation of TaggedLineSegment
+ *
  * Revision 1.5  2006/03/28 09:14:12  strk
  * Headers inclusion fix.
  *

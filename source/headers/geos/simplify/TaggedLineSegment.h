@@ -64,9 +64,11 @@ public:
 	TaggedLineSegment(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
 
+	TaggedLineSegment(const TaggedLineSegment& ls);
+
 	const geom::Geometry* getParent() const;
 
-	unsigned int getIndex();
+	unsigned int getIndex() const;
 
 private:
 
@@ -85,6 +87,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/12 17:19:57  strk
+ * Ported TaggedLineStringSimplifier class, made LineSegment class
+ * polymorphic to fix derivation of TaggedLineSegment
+ *
  * Revision 1.1  2006/04/12 14:22:12  strk
  * Initial implementation of TaggedLineSegment and TaggedLineString classes
  *
