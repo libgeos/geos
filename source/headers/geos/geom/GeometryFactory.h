@@ -16,19 +16,20 @@
 #ifndef GEOS_GEOM_GEOMETRYFACTORY_H
 #define GEOS_GEOM_GEOMETRYFACTORY_H
 
-#include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/Geometry.h>
+//#include <geos/geom/CoordinateSequence.h>
+//#include <geos/geom/Geometry.h>
 #include <geos/inline.h>
 
 #include <vector>
+#include <memory>
 
 namespace geos {
 	namespace geom { 
 		class CoordinateSequenceFactory;
 		class Coordinate;
-		//class CoordinateSequence;
+		class CoordinateSequence;
 		class Envelope;
-		//class Geometry;
+		class Geometry;
 		class GeometryCollection;
 		class LineString;
 		class LinearRing;
@@ -189,8 +190,8 @@ public:
 	/// Construct a LinearRing taking ownership of given arguments
 	LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
 
-	Geometry::AutoPtr createLinearRing(
-			CoordinateSequence::AutoPtr newCoords) const;
+	std::auto_ptr<Geometry> createLinearRing(
+			std::auto_ptr<CoordinateSequence> newCoords) const;
 
 	/// Construct a LinearRing with a deep-copy of given arguments
 	LinearRing* createLinearRing(
@@ -229,8 +230,8 @@ public:
 	/// Construct a LineString taking ownership of given argument
 	LineString* createLineString(CoordinateSequence* coordinates) const;
 
-	Geometry::AutoPtr createLineString(
-			CoordinateSequence::AutoPtr coordinates) const;
+	std::auto_ptr<Geometry> createLineString(
+			std::auto_ptr<CoordinateSequence> coordinates) const;
 
 	/// Construct a LineString with a deep-copy of given argument
 	LineString* createLineString(
@@ -308,6 +309,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/04/12 11:39:34  strk
+ * Removed Geometry.h and CoordinateSequence.h includes.
+ * The former created a circular dependency.
+ *
  * Revision 1.7  2006/04/11 11:16:25  strk
  * Added LineString and LinearRing constructors by auto_ptr
  *
