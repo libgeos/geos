@@ -163,9 +163,6 @@ do_all(char *inputfile)
 	printf("Input (WKT): %s\n", ptr); 
 	free(ptr);
 
-#if 0
-
-
 	/* WKB output */
 	uptr = GEOSGeomToWKB_buf(g1, &size);
 	printf("Input (WKB): "); printHEX(stdout, uptr, size); putchar('\n');
@@ -316,7 +313,8 @@ do_all(char *inputfile)
 	/* Area */
 	if ( GEOSArea(g1, &area) ) printf("Area 1: %g\n", area);
 	if ( GEOSArea(g2, &area) ) printf("Area 2: %g\n", area);
-#endif
+
+	GEOSGeom_destroy(g2);
 
 	/* Simplify */
 	g3 = GEOSSimplify(g1, 0.5);
@@ -332,9 +330,7 @@ do_all(char *inputfile)
 	free(ptr);
 	GEOSGeom_destroy(g3);
 
-	GEOSGeom_destroy(g3);
 	GEOSGeom_destroy(g1);
-	GEOSGeom_destroy(g2);
 
 	return 0;
 }
