@@ -1,11 +1,16 @@
 2006-04-13 Sandro Santilli <strk@refractions.net>
 
+	* capi/ (geostest.c, geos_c.cpp, geos_h.in): added GEOSSimplify()
+	and GEOSTopologyPreserveSimplify() interfaces.
+	Removed compiler warnings.
+	* geos/source/simplify/DouglasPeuckerSimplifier.cpp:
+	fixed bug in MultiPolygon handling of DPTransformer
 	* tests/units/io/WKBReaderTest.cpp: forced NDR output
-	  for WKBWriter tests, removed CRs endings.
+	for WKBWriter tests, removed CRs endings.
 	* geos::simplify::TopologyPreservingSimplifier class
 	* geos::simplify::TaggedLinesSimplifier class
 	* source/geom/GeometryComponentFilter.cpp: filter_ro
-	  re-enabled.
+	re-enabled.
 
 2006-04-12 Sandro Santilli <strk@refractions.net>
 

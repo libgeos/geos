@@ -142,6 +142,7 @@ do_all(char *inputfile)
         static char wkt[MAXWKTLEN];
 	FILE *input;
 	char *ptr;
+	unsigned char* uptr;
 	size_t size;
 	double dist, area;
 
@@ -162,12 +163,15 @@ do_all(char *inputfile)
 	printf("Input (WKT): %s\n", ptr); 
 	free(ptr);
 
+#if 0
+
+
 	/* WKB output */
-	ptr = GEOSGeomToWKB_buf(g1, &size);
-	printf("Input (WKB): "); printHEX(stdout, ptr, size); putchar('\n');
+	uptr = GEOSGeomToWKB_buf(g1, &size);
+	printf("Input (WKB): "); printHEX(stdout, uptr, size); putchar('\n');
 
 	/* WKB input */
-	g2 = GEOSGeomFromWKB_buf(ptr, size); free(ptr);
+	g2 = GEOSGeomFromWKB_buf(uptr, size); free(uptr);
 	if ( ! GEOSEquals(g1, g2) ) log_and_exit("Round WKB conversion failed");
 	GEOSGeom_destroy(g2);
 
@@ -309,10 +313,26 @@ do_all(char *inputfile)
 	/* Distance */
 	if ( GEOSDistance(g1, g2, &dist) ) printf("Distance: %g\n", dist);
 
-    /* Area */
-    if ( GEOSArea(g1, &area) ) printf("Area 1: %g\n", area);
-    if ( GEOSArea(g2, &area) ) printf("Area 2: %g\n", area);
+	/* Area */
+	if ( GEOSArea(g1, &area) ) printf("Area 1: %g\n", area);
+	if ( GEOSArea(g2, &area) ) printf("Area 2: %g\n", area);
+#endif
+
+	/* Simplify */
+	g3 = GEOSSimplify(g1, 0.5);
+	ptr = GEOSGeomToWKT(g3);
+	printf("Simplify: %s\n", ptr); 
+	free(ptr);
+	GEOSGeom_destroy(g3);
     
+	/* Topology Preserve Simplify */
+	g3 = GEOSTopologyPreserveSimplify(g1, 0.5);
+	ptr = GEOSGeomToWKT(g3);
+	printf("Simplify: %s\n", ptr); 
+	free(ptr);
+	GEOSGeom_destroy(g3);
+
+	GEOSGeom_destroy(g3);
 	GEOSGeom_destroy(g1);
 	GEOSGeom_destroy(g2);
 

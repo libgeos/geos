@@ -31,6 +31,8 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/simplify/DouglasPeuckerSimplifier.h>
+#include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
@@ -44,6 +46,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <memory>
 
 /// Define this if you want operations triggering Exceptions to
 /// be printed (will use the NOTIFY channel - only implemented for GEOSUnion so far)
@@ -122,6 +125,9 @@ extern "C" int GEOS_DLL GEOSArea(const Geometry *g1, double *area);
 extern "C" int GEOS_DLL GEOSLength(const Geometry *g1, double *length);
 extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
 	double *dist);
+
+extern "C" Geometry GEOS_DLL *GEOSSimplify(Geometry *g1, double tolerance);
+extern "C" Geometry GEOS_DLL *GEOSTopologyPreserveSimplify(Geometry *g1, double tolerance);
 
 extern "C" const char GEOS_DLL *GEOSversion();
 extern "C" const char GEOS_DLL *GEOSjtsport();
@@ -1747,5 +1753,53 @@ GEOSGeom_getDimensions(const Geometry *g)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
 		return 0;
+	}
+}
+
+Geometry *
+GEOSSimplify(Geometry *g1, double tolerance)
+{
+	using namespace geos::simplify;
+
+	try
+	{
+		Geometry::AutoPtr g(DouglasPeuckerSimplifier::simplify(
+				g1, tolerance));
+		return g.release();
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSTopologyPreserveSimplify(Geometry *g1, double tolerance)
+{
+	using namespace geos::simplify;
+
+	try
+	{
+		Geometry::AutoPtr g(TopologyPreservingSimplifier::simplify(
+				g1, tolerance));
+		return g.release();
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE(e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
 }

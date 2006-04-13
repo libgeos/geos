@@ -225,6 +225,9 @@ extern char GEOS_DLL *GEOSRelate(const GEOSGeom g1, const GEOSGeom g2);
 extern GEOSGeom GEOS_DLL GEOSPolygonize(const GEOSGeom geoms[],
 	unsigned int ngeoms);
 extern GEOSGeom GEOS_DLL GEOSLineMerge(const GEOSGeom g);
+extern GEOSGeom GEOS_DLL GEOSSimplify(const GEOSGeom g1, double tolerance);
+extern GEOSGeom GEOS_DLL GEOSTopologyPreserveSimplify(const GEOSGeom g1,
+	double tolerance);
 
 /************************************************************************
  *
