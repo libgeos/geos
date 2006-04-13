@@ -95,7 +95,7 @@ CommonBitsOp::difference(
 	auto_ptr<Geometry> rgeom0;
 	auto_ptr<Geometry> rgeom1;
 	removeCommonBits(geom0, geom1, rgeom0, rgeom1);
-	return computeResultPrecision(rgeom0->difference(rgeom1.get());
+	return computeResultPrecision(rgeom0->difference(rgeom1.get()));
 }
 
 /*public*/
@@ -173,6 +173,9 @@ CommonBitsOp::removeCommonBits(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/04/13 23:28:26  strk
+ * "always build before commit" (forgot a closing paren)
+ *
  * Revision 1.9  2006/04/13 23:23:52  strk
  * fixed bug in binary ops failing to consistently reduce operands.
  *
