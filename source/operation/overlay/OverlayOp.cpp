@@ -65,7 +65,7 @@
 // automatically try with reduced precisions
 // on topology exceptions
 //
-#define TRY_REDUCED_GEOMS 1
+//#define TRY_REDUCED_GEOMS 1
 
 using namespace std;
 using namespace geos::geom;
@@ -887,6 +887,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.69  2006/04/13 23:57:34  strk
+ * Disables reduced precision overlayOp (is broken)
+ *
  * Revision 1.68  2006/04/13 23:42:43  strk
  * Plugged CommonBitsOp attempts in overlay op, before brute force precision
  * reduction (this is likely going to change)
