@@ -183,24 +183,16 @@ TaggedLineString::addToResult(auto_ptr<TaggedLineSegment> seg)
 	segs.push_back(seg.release());
 }
 
-/*private*/
-TaggedLineString::TaggedLineString(const TaggedLineString&)
-{
-	assert(0);
-}
-
-/*private*/
-TaggedLineString&
-TaggedLineString::operator=(const TaggedLineString&)
-{
-	assert(0);
-}
-
 } // namespace geos::simplify
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/13 09:21:46  mloskot
+ * Removed definition of copy ctor and assignment operator for TaggedLineString class.
+ * According to following rule: Declaring, but not defining, private copy operations has
+ * the effect of "turning off" copying for the class.
+ *
  * Revision 1.2  2006/04/12 15:20:37  strk
  * LineSegmentIndex class
  *

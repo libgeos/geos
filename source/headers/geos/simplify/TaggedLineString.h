@@ -103,10 +103,8 @@ private:
 	static CoordVectPtr extractCoordinates(
 			const std::vector<TaggedLineSegment*>& segs);
 
-	// This object is uncopiable 
+	// Copying is turned off
 	TaggedLineString(const TaggedLineString&);
-
-	// This object is uncopiable 
 	TaggedLineString& operator= (const TaggedLineString&);
 
 };
@@ -118,6 +116,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/13 09:21:45  mloskot
+ * Removed definition of copy ctor and assignment operator for TaggedLineString class.
+ * According to following rule: Declaring, but not defining, private copy operations has
+ * the effect of "turning off" copying for the class.
+ *
  * Revision 1.3  2006/04/12 17:19:57  strk
  * Ported TaggedLineStringSimplifier class, made LineSegment class
  * polymorphic to fix derivation of TaggedLineSegment
