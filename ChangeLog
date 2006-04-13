@@ -1,5 +1,9 @@
+
 2006-04-13 Sandro Santilli <strk@refractions.net>
 
+	* geos::precision::CommonBitsOp: fixed bug
+	in binary ops failing to translate both operands
+	consistently.
 	* capi/ (geostest.c, geos_c.cpp, geos_h.in): added GEOSSimplify()
 	and GEOSTopologyPreserveSimplify() interfaces.
 	Removed compiler warnings. Had libgeos_c use default

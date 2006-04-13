@@ -60,6 +60,16 @@ private:
 	 */
 	geom::Geometry* removeCommonBits(const geom::Geometry *geom0);
 
+	/** \brief
+	 *
+	 */
+	void removeCommonBits(
+			const geom::Geometry* geom0,
+			const geom::Geometry* geom1,
+			std::auto_ptr<geom::Geometry>& rgeom0,
+			std::auto_ptr<geom::Geometry>& rgeom1);
+
+
 public:
 
 	/**
@@ -157,6 +167,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/13 23:23:52  strk
+ * fixed bug in binary ops failing to consistently reduce operands.
+ *
  * Revision 1.2  2006/04/06 14:36:52  strk
  * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
  *

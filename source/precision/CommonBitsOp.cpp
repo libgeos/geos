@@ -68,8 +68,9 @@ CommonBitsOp::intersection(
 		const Geometry* geom0,
 		const Geometry* geom1)
 {
-	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
-	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
+	auto_ptr<Geometry> rgeom0;
+	auto_ptr<Geometry> rgeom1;
+	removeCommonBits(geom0, geom1, rgeom0, rgeom1);
 	return computeResultPrecision(rgeom0->intersection(rgeom1.get()));
 }
 
@@ -79,8 +80,9 @@ CommonBitsOp::Union(
 		const Geometry* geom0,
 		const Geometry* geom1)
 {
-	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
-	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
+	auto_ptr<Geometry> rgeom0;
+	auto_ptr<Geometry> rgeom1;
+	removeCommonBits(geom0, geom1, rgeom0, rgeom1);
 	return computeResultPrecision(rgeom0->Union(rgeom1.get()));
 }
 
@@ -90,9 +92,10 @@ CommonBitsOp::difference(
 		const Geometry* geom0,
 		const Geometry* geom1)
 {
-	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
-	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
-	return computeResultPrecision(rgeom0->difference(rgeom1.get()));
+	auto_ptr<Geometry> rgeom0;
+	auto_ptr<Geometry> rgeom1;
+	removeCommonBits(geom0, geom1, rgeom0, rgeom1);
+	return computeResultPrecision(rgeom0->difference(rgeom1.get());
 }
 
 /*public*/
@@ -101,8 +104,9 @@ CommonBitsOp::symDifference(
 		const Geometry* geom0,
 		const Geometry* geom1)
 {
-	auto_ptr<Geometry> rgeom0(removeCommonBits(geom0));
-	auto_ptr<Geometry> rgeom1(removeCommonBits(geom1));
+	auto_ptr<Geometry> rgeom0;
+	auto_ptr<Geometry> rgeom1;
+	removeCommonBits(geom0, geom1, rgeom0, rgeom1);
 	return computeResultPrecision(rgeom0->symDifference(rgeom1.get()));
 }
 
@@ -140,11 +144,38 @@ CommonBitsOp::removeCommonBits(const Geometry* geom0)
 	return geom;
 }
 
+/*private*/
+void
+CommonBitsOp::removeCommonBits(
+		const geom::Geometry* geom0,
+		const geom::Geometry* geom1,
+		std::auto_ptr<geom::Geometry>& rgeom0,
+		std::auto_ptr<geom::Geometry>& rgeom1)
+	
+{
+	cbr.reset(new CommonBitsRemover());
+
+	cbr->add(geom0);
+	cbr->add(geom1);
+
+#if GEOS_DEBUG
+	const Coordinate& commonCoord = cbr->getCommonCoordinate();
+	cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << endl;
+#endif
+
+	rgeom0.reset(cbr->removeCommonBits(geom0->clone()));
+	rgeom1.reset(cbr->removeCommonBits(geom1->clone()));
+
+}
+
 } // namespace geos.precision
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/04/13 23:23:52  strk
+ * fixed bug in binary ops failing to consistently reduce operands.
+ *
  * Revision 1.8  2006/04/07 08:27:12  strk
  * debugging blocks
  *
