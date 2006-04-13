@@ -180,7 +180,10 @@ extern "C" Geometry GEOS_DLL *GEOSGeom_clone(Geometry *);
 
 //## GLOBALS ################################################
 
-static GeometryFactory *geomFactory = NULL;
+// NOTE: SRID will have to be changed after geometry creation
+static const GeometryFactory *geomFactory = 
+	GeometryFactory::getDefaultInstance();
+
 static GEOSMessageHandler NOTICE_MESSAGE;
 static GEOSMessageHandler ERROR_MESSAGE;
 static int WKBOutputDims = 2;
@@ -188,11 +191,6 @@ static int WKBOutputDims = 2;
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
 {
-	if (geomFactory == NULL)
-	{
-		// NOTE: SRID will have to be changed after geometry creation
-		geomFactory = new GeometryFactory( new PrecisionModel(), -1);
-	}
 	NOTICE_MESSAGE = nf;
 	ERROR_MESSAGE = ef;
 }
@@ -200,7 +198,8 @@ initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
 void
 finishGEOS ()
 {
-	delete geomFactory;
+	// Nothing to do
+	//delete geomFactory;
 }
 
 //-----------------------------------------------------------
