@@ -27,7 +27,6 @@
 namespace geos {
 	namespace geom {
 		class Coordinate;
-		//class CoordinateSequence;
 	}
 }
 
@@ -91,6 +90,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 10:39:12  strk
+ * Initial implementation of TaggedLinesSimplifier class
+ *
  * Revision 1.1  2006/04/03 10:16:11  strk
  * DouglasPeuckerLineSimplifier class port
  *

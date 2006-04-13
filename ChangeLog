@@ -1,3 +1,7 @@
+2006-04-13 Sandro Santilli <strk@refractions.net>
+
+	* geos::simplify::TaggedLinesSimplifier class
+
 2006-04-12 Sandro Santilli <strk@refractions.net>
 
 	* headers/geos/simplify/Makefile.am: only install

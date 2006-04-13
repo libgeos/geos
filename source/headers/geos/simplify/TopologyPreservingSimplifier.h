@@ -13,17 +13,21 @@
  *
  **********************************************************************
  *
- * Last port: simplify/DouglasPeuckerSimplifier.java rev. 1.5 (JTS-1.7)
+ * Last port: simplify/TopologyPreservingSimplifier.java rev. 1.4 (JTS-1.7)
  *
  **********************************************************************/
 
-#ifndef _GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H_
-#define _GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H_ 
+#ifndef _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_
+#define _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_ 
 
 #include <memory> // for auto_ptr
+#include <map> 
 
 // Forward declarations
 namespace geos {
+	namespace simplify {
+		class TaggedLineString;
+	}
 	namespace geom {
 		class Geometry;
 	}
@@ -32,22 +36,26 @@ namespace geos {
 namespace geos {
 namespace simplify { // geos::simplify
 
-
 /** \brief
- * Simplifies a Geometry using the standard Douglas-Peucker algorithm.
  *
- * Ensures that any polygonal geometries returned are valid.
- * Simple lines are not guaranteed to remain simple after simplification.
+ * Simplifies a geometry, ensuring that
+ * the result is a valid geometry having the
+ * same dimension and number of components as the input.
+ *
+ * The simplification uses a maximum distance difference algorithm
+ * similar to the one used in the Douglas-Peucker algorithm.
  * 
- * Note that in general D-P does not preserve topology -
- * e.g. polygons can be split, collapse to lines or disappear
- * holes can be created or disappear,
- * and lines can cross.
- * To simplify geometry while preserving topology use TopologyPreservingSimplifier.
- * (However, using D-P is significantly faster).
+ * In particular, if the input is an areal geometry
+ * ( Polygon or MultiPolygon )
+ * 
+ *  -  The result has the same number of shells and holes (rings) as the input,
+ *     in the same order
+ *  -  The result rings touch at <b>no more</b> than the number of touching point in the input
+ *     (although they may touch at fewer points)
  *
  */
-class DouglasPeuckerSimplifier {
+class TopologyPreservingSimplifier
+{
 
 public:
 
@@ -55,7 +63,7 @@ public:
 			const geom::Geometry* geom,
 			double tolerance);
 
-	DouglasPeuckerSimplifier(const geom::Geometry* geom);
+	TopologyPreservingSimplifier(const geom::Geometry* geom);
 
 	/** \brief
 	 * Sets the distance tolerance for the simplification.
@@ -71,26 +79,28 @@ public:
 
 	std::auto_ptr<geom::Geometry> getResultGeometry();
 
-
 private:
+
+	// Comparison is by pointer value
+	typedef std::map<geom::Geometry*, TaggedLineString*> LinesMap;
 
 	const geom::Geometry* inputGeom;
 
-	double distanceTolerance;
+	std::auto_ptr<TaggedLinesSimplifier> lineSimplifier;
+
+	LinesMap linestringMap;
 };
+
 
 
 } // namespace geos::simplify
 } // namespace geos
 
-#endif // _GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H_ 
+#endif // _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_ 
 
 /**********************************************************************
  * $Log$
- * Revision 1.2  2006/04/13 10:39:12  strk
+ * Revision 1.1  2006/04/13 10:39:12  strk
  * Initial implementation of TaggedLinesSimplifier class
- *
- * Revision 1.1  2006/04/11 16:04:34  strk
- * geos::simplify::DouglasPeukerSimplifier class + unit test
  *
  **********************************************************************/

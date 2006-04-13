@@ -34,12 +34,8 @@ namespace geos {
 		class LineIntersector;
 	}
 	namespace geom {
-		//class Coordinate;
 		class CoordinateSequence;
 		class LineSegment;
-		//class Geometry;
-		//class LineString;
-		//class LinearRing;
 	}
 	namespace simplify {
 		class TaggedLineSegment;
@@ -80,8 +76,10 @@ public:
 
 private:
 
+	// externally owned
 	LineSegmentIndex* inputIndex;
 
+	// externally owned
 	LineSegmentIndex* outputIndex;
 
 	std::auto_ptr<algorithm::LineIntersector> li;
@@ -156,6 +154,9 @@ TaggedLineStringSimplifier::setDistanceTolerance(double d)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 10:39:12  strk
+ * Initial implementation of TaggedLinesSimplifier class
+ *
  * Revision 1.1  2006/04/12 17:19:57  strk
  * Ported TaggedLineStringSimplifier class, made LineSegment class
  * polymorphic to fix derivation of TaggedLineSegment

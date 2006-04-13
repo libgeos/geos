@@ -5,11 +5,13 @@ geosdir = $(includedir)/geos/simplify
 EXTRA_DIST = 
 
 geos_HEADERS = \
-	DouglasPeuckerSimplifier.h 
+	DouglasPeuckerSimplifier.h \
+	TopologyPreservingSimplifier.h
 
 noinst_HEADERS = \
 	DouglasPeuckerLineSimplifier.h \
+	LineSegmentIndex.h \
 	TaggedLineSegment.h \
 	TaggedLineString.h \
-	LineSegmentIndex.h \
-	TaggedLineStringSimplifier.h
+	TaggedLineStringSimplifier.h \
+	TaggedLinesSimplifier.h 
