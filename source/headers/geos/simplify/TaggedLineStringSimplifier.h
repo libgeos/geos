@@ -91,20 +91,20 @@ private:
 
 	double distanceTolerance;
 
-	void simplifySection(unsigned int i, unsigned int j,
-			unsigned int depth);
+	void simplifySection(size_t i, size_t j,
+			size_t depth);
 
-	static unsigned int findFarthestPoint(
+	static size_t findFurthestPoint(
 			const geom::CoordinateSequence* pts,
-			unsigned int i, unsigned int j,
+			size_t i, size_t j,
 			double& maxDistance);
 
 	bool hasBadIntersection(const TaggedLineString* parentLine,
-                       const std::vector<unsigned int>& sectionIndex,
+                       const std::vector<size_t>& sectionIndex,
                        const geom::LineSegment& candidateSeg);
 
 	bool hasBadInputIntersection(const TaggedLineString* parentLine,
-                       const std::vector<unsigned int>& sectionIndex,
+                       const std::vector<size_t>& sectionIndex,
                        const geom::LineSegment& candidateSeg);
 
 	bool hasBadOutputIntersection(const geom::LineSegment& candidateSeg);
@@ -113,7 +113,7 @@ private:
 			const geom::LineSegment& seg1) const;
 
 	std::auto_ptr<TaggedLineSegment> flatten(
-			unsigned int start, unsigned int end);
+			size_t start, size_t end);
 
 	/** \brief
 	 * Tests whether a segment is in a section of a TaggedLineString
@@ -125,7 +125,7 @@ private:
 	 */
 	static bool isInLineSection(
 		const TaggedLineString* parentLine,
-		const std::vector<unsigned int>& sectionIndex,
+		const std::vector<size_t>& sectionIndex,
 		const TaggedLineSegment* seg);
 
 	/** \brief
@@ -136,8 +136,9 @@ private:
 	 * @param sectionStartIndex
 	 * @param sectionEndIndex
 	 */
-	void remove(TaggedLineString* line, unsigned int start,
-			unsigned int end);
+	void remove(const TaggedLineString* line,
+			size_t start,
+			size_t end);
  
 };
 
@@ -154,6 +155,9 @@ TaggedLineStringSimplifier::setDistanceTolerance(double d)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/13 21:52:34  strk
+ * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
+ *
  * Revision 1.2  2006/04/13 10:39:12  strk
  * Initial implementation of TaggedLinesSimplifier class
  *

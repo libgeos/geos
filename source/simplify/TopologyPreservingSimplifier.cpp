@@ -27,7 +27,7 @@
 #include <geos/geom/util/GeometryTransformer.h>
 // for LineStringMapBuilderFilter inheritance
 #include <geos/geom/GeometryComponentFilter.h>
-#include <geos/geom/Geometry.h>
+#include <geos/geom/Geometry.h> // for auto_ptr dtor
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -35,6 +35,7 @@
 #include <memory> // for auto_ptr
 #include <map>
 #include <cassert>
+#include <iostream>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -88,12 +89,25 @@ LineStringTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
 		const Geometry* parent)
 {
+#if GEOS_DEBUG
+	std::cerr << __FUNCTION__ << ": parent: " << parent
+	          << std::endl;
+#endif
 	if ( dynamic_cast<const LineString*>(parent) )
 	{
 		LinesMap::iterator it = linestringMap.find(parent);
 		assert( it != linestringMap.end() );
 		
 		TaggedLineString* taggedLine = it->second;
+#if GEOS_DEBUG
+		std::cerr << "LineStringTransformer[" << this << "] "
+		     << " getting result Coordinates from "
+		     << " TaggedLineString[" << taggedLine << "]"
+		     << std::endl;
+#endif
+
+		assert(taggedLine);
+		assert(taggedLine->getParent() == parent);
 
 		return taggedLine->getResultCoordinates();
 	}
@@ -214,6 +228,14 @@ TopologyPreservingSimplifier::getResultGeometry()
 		LineStringMapBuilderFilter lsmbf(linestringMap);
 		inputGeom->apply_ro(&lsmbf);
 
+#if GEOS_DEBUG
+	std::cerr << "LineStringMapBuilderFilter applied, "
+	          << " lineStringMap contains "
+	          << linestringMap.size() << " elements"
+	          << std::endl;
+#endif
+
+
 		for (LinesMap::iterator
 			it=linestringMap.begin(), itEnd=linestringMap.end();
 			it != itEnd;
@@ -222,8 +244,18 @@ TopologyPreservingSimplifier::getResultGeometry()
 			lineSimplifier->simplifyLine(it->second); 
 		}
 
+#if GEOS_DEBUG
+	std::cerr << "all TaggedLineString simplified"
+	          << std::endl;
+#endif
+
 		LineStringTransformer trans(linestringMap);
 		result = trans.transform(inputGeom);
+
+#if GEOS_DEBUG
+	std::cerr << "inputGeom transformed"
+	          << std::endl;
+#endif
 
 	} catch (...) {
 		for (LinesMap::iterator
@@ -247,6 +279,11 @@ TopologyPreservingSimplifier::getResultGeometry()
 		delete it->second;
 	}
 
+#if GEOS_DEBUG
+	std::cerr << "returning result"
+	          << std::endl;
+#endif
+
 	return result;
 }
 
@@ -255,6 +292,9 @@ TopologyPreservingSimplifier::getResultGeometry()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/13 21:52:35  strk
+ * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
+ *
  * Revision 1.3  2006/04/13 16:04:10  strk
  * Made TopologyPreservingSimplifier implementation successfully build
  *

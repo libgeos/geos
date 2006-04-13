@@ -55,6 +55,11 @@ TaggedLineString::TaggedLineString(const geom::LineString* nParentLine,
 /*public*/
 TaggedLineString::~TaggedLineString()
 {
+#if GEOS_DEBUG
+	cerr << "TaggedLineString[" << this << "] destructor"
+	     << endl;
+#endif
+
 	for (unsigned int i=0, n=segs.size(); i<n; i++)
 		delete segs[i];
 
@@ -66,10 +71,17 @@ TaggedLineString::~TaggedLineString()
 void
 TaggedLineString::init()
 {
+	assert(parentLine);
 	const CoordinateSequence* pts = parentLine->getCoordinatesRO();
+
+#if GEOS_DEBUG
+	cerr << "TaggedLineString[" << this << "] pts.size() " << pts->size()
+	     << endl;
+#endif
+
 	segs.reserve(pts->size()-1);
 
-	for (unsigned int i=0, n=pts->size()-1; i<n; i++)
+	for (size_t i=0, n=pts->size()-1; i<n; i++)
 	{
 		TaggedLineSegment* seg = new TaggedLineSegment(
 				pts->getAt(i),
@@ -78,6 +90,13 @@ TaggedLineString::init()
 
 		segs.push_back(seg);
 	}
+
+#if GEOS_DEBUG
+	cerr << "TaggedLineString[" << this << "] segs.size " << segs.size()
+	    << endl;
+	cerr << "TaggedLineString[" << this << "] resultSegs.size " << resultSegs.size()
+	    << endl;
+#endif
 }
 
 /*public*/
@@ -98,6 +117,7 @@ TaggedLineString::getParent() const
 const CoordinateSequence*
 TaggedLineString::getParentCoordinates() const
 {
+	assert(parentLine);
 	return parentLine->getCoordinatesRO();
 }
 
@@ -105,9 +125,23 @@ TaggedLineString::getParentCoordinates() const
 CoordinateSequence::AutoPtr
 TaggedLineString::getResultCoordinates() const
 {
+
+#if GEOS_DEBUG
+	cerr << __FUNCTION__ << " resultSegs.size: "
+	     << resultSegs.size() << endl;
+#endif
+
 	CoordVectPtr pts = extractCoordinates(resultSegs);
+
+#if GEOS_DEBUG
+	cerr << __FUNCTION__ << " extracted Coords.size: "
+	     << pts->size() << endl;
+#endif
+
+
 	CoordVect* v = pts.release();
 	return CoordinateSequence::AutoPtr(parentLine->getFactory()->getCoordinateSequenceFactory()->create(v));
+
 }
 
 /*private static*/
@@ -117,16 +151,23 @@ TaggedLineString::extractCoordinates(
 {
 	CoordVectPtr pts(new CoordVect());
 
-	unsigned int i, n;
+#if GEOS_DEBUG
+	cerr << __FUNCTION__ << " segs.size: " << segs.size() << endl;
+#endif
 
-	for (i=0, n=segs.size(); i<n; i++)
+	size_t i=0, size=segs.size();
+
+	assert(size);
+
+	for (; i<size; i++)
 	{
 		TaggedLineSegment* seg = segs[i];
+		assert(seg);
 		pts->push_back(seg->p0);
 	}
 
 	// add last point
-	pts->push_back(segs[i]->p1);
+	pts->push_back(segs[size-1]->p1);
 
 	return pts;
 }
@@ -147,9 +188,17 @@ TaggedLineString::getSegment(unsigned int i)
 }
 
 /*public*/
+const TaggedLineSegment*
+TaggedLineString::getSegment(unsigned int i) const
+{
+	return segs[i];
+}
+
+/*public*/
 vector<TaggedLineSegment*>&
 TaggedLineString::getSegments()
 {
+	assert(0);
 	return segs;
 }
 
@@ -180,7 +229,17 @@ TaggedLineString::asLinearRing() const
 void
 TaggedLineString::addToResult(auto_ptr<TaggedLineSegment> seg)
 {
-	segs.push_back(seg.release());
+#if GEOS_DEBUG
+	cerr << "TaggedLineString[" << this << "] adding "
+	     << " seg " << seg.get() << " to result"
+	     << endl;
+#endif
+	resultSegs.push_back(seg.release());
+#if GEOS_DEBUG
+	cerr << "TaggedLineString[" << this << "] adding "
+	     << " seg " << seg.get() << " to result"
+	     << endl;
+#endif
 }
 
 } // namespace geos::simplify
@@ -188,6 +247,9 @@ TaggedLineString::addToResult(auto_ptr<TaggedLineSegment> seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/13 21:52:35  strk
+ * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
+ *
  * Revision 1.3  2006/04/13 09:21:46  mloskot
  * Removed definition of copy ctor and assignment operator for TaggedLineString class.
  * According to following rule: Declaring, but not defining, private copy operations has

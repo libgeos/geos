@@ -63,23 +63,47 @@ TaggedLineStringSimplifier::TaggedLineStringSimplifier(
 void
 TaggedLineStringSimplifier::simplify(TaggedLineString* nLine)
 {
-	line = line;
+	assert(nLine);
+	line = nLine;
+
 	linePts = line->getParentCoordinates();
+	assert(linePts);
+
+#if GEOS_DEBUG
+	std::cerr << "TaggedLineStringSimplifier[" << this << "] "
+	     << " TaggedLineString[" << line << "] "
+	     << " has " << linePts->size() << " coords in input"
+	     << std::endl;
+#endif
+
 	simplifySection(0, linePts->size() - 1, 0);
+
 }
 
 
 /*private*/
 void
-TaggedLineStringSimplifier::simplifySection(unsigned int i,
-		unsigned int j, unsigned int depth)
+TaggedLineStringSimplifier::simplifySection(size_t i,
+		size_t j, size_t depth)
 {
 	depth += 1;
 
-	vector<unsigned int> sectionIndex(2);
+#if GEOS_DEBUG
+	std::cerr << "TaggedLineStringSimplifier[" << this << "] "
+	          << " simplifying section " << i << "-" << j
+	          << std::endl;
+#endif
+
+	vector<size_t> sectionIndex(2);
 
 	if((i+1) == j)
 	{
+
+#if GEOS_DEBUG
+		std::cerr << "single segment, no flattening" 
+		          << std::endl;
+#endif
+
 		auto_ptr<TaggedLineSegment> newSeg(new
 			TaggedLineSegment(*(line->getSegment(i))));
 
@@ -100,7 +124,7 @@ TaggedLineStringSimplifier::simplifySection(unsigned int i,
 	 */
 	if (line->getResultSize() < line->getMinimumSize())
 	{
-		unsigned int worstCaseSize = depth + 1;
+		size_t worstCaseSize = depth + 1;
 		if (worstCaseSize < line->getMinimumSize())
 			isValidToSimplify = false;
 	}
@@ -108,7 +132,13 @@ TaggedLineStringSimplifier::simplifySection(unsigned int i,
 	double distance;
 
 	// pass distance by ref
-	int furthestPtIndex = findFarthestPoint(linePts, i, j, distance);
+	size_t furthestPtIndex = findFurthestPoint(linePts, i, j, distance);
+
+#if GEOS_DEBUG
+	std::cerr << "furthest point " << furthestPtIndex 
+	          << " at distance " << distance
+	          << std::endl;
+#endif
 
 	// flattening must be less than distanceTolerance
 	if ( distance > distanceTolerance ) isValidToSimplify = false;
@@ -122,8 +152,18 @@ TaggedLineStringSimplifier::simplifySection(unsigned int i,
 	if (hasBadIntersection(line, sectionIndex, candidateSeg))
 			isValidToSimplify = false;
 
-	if (isValidToSimplify) {
+	if (isValidToSimplify)
+	{
+
 		auto_ptr<TaggedLineSegment> newSeg = flatten(i, j);
+
+#if GEOS_DEBUG
+		std::cerr << "isValidToSimplify, adding seg " 
+			  << newSeg->p0 << ", " << newSeg->p1
+			  << " to TaggedLineSegment["<<line<<"] result "
+			  << std::endl;
+#endif
+
 		line->addToResult(newSeg);
 		return;
 	}
@@ -136,7 +176,7 @@ TaggedLineStringSimplifier::simplifySection(unsigned int i,
 
 /*private*/
 auto_ptr<TaggedLineSegment>
-TaggedLineStringSimplifier::flatten(unsigned int start, unsigned int end)
+TaggedLineStringSimplifier::flatten(size_t start, size_t end)
 {
 	// make a new segment for the simplified geometry
 	const Coordinate& p0 = linePts->getAt(start);
@@ -152,7 +192,7 @@ TaggedLineStringSimplifier::flatten(unsigned int start, unsigned int end)
 bool
 TaggedLineStringSimplifier::hasBadIntersection(
 		const TaggedLineString* parentLine,
-		const vector<unsigned int>& sectionIndex,
+		const vector<size_t>& sectionIndex,
 		const LineSegment& candidateSeg)
 {
 	if (hasBadOutputIntersection(candidateSeg))
@@ -202,7 +242,7 @@ TaggedLineStringSimplifier::hasInteriorIntersection(
 bool
 TaggedLineStringSimplifier::hasBadInputIntersection(
 		const TaggedLineString* parentLine,
-		const vector<unsigned int>& sectionIndex,
+		const vector<size_t>& sectionIndex,
 		const LineSegment& candidateSeg)
 {
 	auto_ptr< vector<LineSegment*> > querySegs =
@@ -238,14 +278,14 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
 bool
 TaggedLineStringSimplifier::isInLineSection(
 		const TaggedLineString* line,
-		const vector<unsigned int>& sectionIndex,
+		const vector<size_t>& sectionIndex,
 		const TaggedLineSegment* seg)
 {
 	// not in this line
 	if (seg->getParent() != line->getParent())
 		return false;
 
-	unsigned int segIndex = seg->getIndex();
+	size_t segIndex = seg->getIndex();
 	if (segIndex >= sectionIndex[0] && segIndex < sectionIndex[1])
 		return true;
 
@@ -254,34 +294,48 @@ TaggedLineStringSimplifier::isInLineSection(
 
 /*private*/
 void
-TaggedLineStringSimplifier::remove(TaggedLineString* line,
-		unsigned int start,
-		unsigned int end)
+TaggedLineStringSimplifier::remove(const TaggedLineString* line,
+		size_t start,
+		size_t end)
 {
-	assert(end < line->getSegments().size() );
+	assert(end <= line->getSegments().size() );
 	assert(start < end); // I'm not sure this should always be true
 
-	for (unsigned int i = start; i < end; i++)
+	for (size_t i = start; i < end; i++)
 	{
-		TaggedLineSegment* seg = line->getSegment(i);
+		const TaggedLineSegment* seg = line->getSegment(i);
 		inputIndex->remove(seg);
 	}
 }
 
 /*private static*/
-unsigned int
-TaggedLineStringSimplifier::findFarthestPoint(
+size_t
+TaggedLineStringSimplifier::findFurthestPoint(
 		const geom::CoordinateSequence* pts,
-		unsigned int i, unsigned int j,
+		size_t i, size_t j,
 		double& maxDistance)
 {
 	LineSegment seg(pts->getAt(i), pts->getAt(j));
+#if GEOS_DEBUG
+	std::cerr << __FUNCTION__ << "segment " << seg
+	          << std::endl;
+#endif
 	double maxDist = -1.0;
-	unsigned int maxIndex = i;
-	for (unsigned int k = i + 1; k < j; k++) {
+	size_t maxIndex = i;
+	for (size_t k = i + 1; k < j; k++)
+	{
 		const Coordinate& midPt = pts->getAt(k);
 		double distance = seg.distance(midPt);
+#if GEOS_DEBUG
+		std::cerr << "dist to " << midPt 
+			  << ": " << distance
+			  << std::endl;
+#endif
 		if (distance > maxDist) {
+#if GEOS_DEBUG
+			std::cerr << "this is max"
+				  << std::endl;
+#endif
 			maxDist = distance;
 			maxIndex = k;
 		}
@@ -296,6 +350,9 @@ TaggedLineStringSimplifier::findFarthestPoint(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 21:52:35  strk
+ * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
+ *
  * Revision 1.1  2006/04/12 17:19:57  strk
  * Ported TaggedLineStringSimplifier class, made LineSegment class
  * polymorphic to fix derivation of TaggedLineSegment

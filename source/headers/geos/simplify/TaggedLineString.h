@@ -81,6 +81,8 @@ public:
 
 	TaggedLineSegment* getSegment(unsigned int);
 
+	const TaggedLineSegment* getSegment(unsigned int) const;
+
 	std::vector<TaggedLineSegment*>& getSegments();
 
 	const std::vector<TaggedLineSegment*>& getSegments() const;
@@ -121,6 +123,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/04/13 21:52:34  strk
+ * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
+ *
  * Revision 1.5  2006/04/13 16:04:10  strk
  * Made TopologyPreservingSimplifier implementation successfully build
  *
