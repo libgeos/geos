@@ -144,7 +144,7 @@ DPTransformer::transformMultiPolygon(
 #if GEOS_DEBUG
 	std::cerr << "DPTransformer::transformMultiPolygon(MultiPolygon " << geom << ", Geometry " << parent << ");" << std::endl;
 #endif
-	Geometry::AutoPtr roughGeom(transformMultiPolygon(geom, parent));
+	Geometry::AutoPtr roughGeom(GeometryTransformer::transformMultiPolygon(geom, parent));
         return createValidArea(roughGeom.get());
 }
 
@@ -193,6 +193,9 @@ DouglasPeuckerSimplifier::getResultGeometry()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 16:44:49  strk
+ * Fixed a bug in DPTransformer handling of MultiPolygons
+ *
  * Revision 1.1  2006/04/11 16:04:34  strk
  * geos::simplify::DouglasPeukerSimplifier class + unit test
  *
