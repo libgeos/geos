@@ -67,11 +67,11 @@ private:
 
 	std::auto_ptr<index::quadtree::Quadtree> index;
 
-	LineSegmentIndex(const LineSegmentIndex&);
-
-	LineSegmentIndex& operator=(const LineSegmentIndex&);
-
 	std::vector<geom::Envelope*> newEnvelopes;
+	
+	// Copying is turned off
+	LineSegmentIndex(const LineSegmentIndex&);
+	LineSegmentIndex& operator=(const LineSegmentIndex&);
 };
 
 } // namespace geos::simplify
@@ -81,6 +81,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 09:28:09  mloskot
+ * Removed definition of copy ctor and assignment operator for LineSegmentString class.
+ *
  * Revision 1.1  2006/04/12 15:20:37  strk
  * LineSegmentIndex class
  *

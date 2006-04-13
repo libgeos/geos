@@ -167,24 +167,14 @@ LineSegmentIndex::query(const LineSegment* querySeg) const
 	return itemsFound;
 }
 
-/*private*/
-LineSegmentIndex::LineSegmentIndex(const LineSegmentIndex&)
-{
-	assert(0);
-}
-
-/*private*/
-LineSegmentIndex&
-LineSegmentIndex::operator=(const LineSegmentIndex&)
-{
-	assert(0);
-}
-
 } // namespace geos::simplify
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 09:28:09  mloskot
+ * Removed definition of copy ctor and assignment operator for LineSegmentString class.
+ *
  * Revision 1.1  2006/04/12 15:20:37  strk
  * LineSegmentIndex class
  *
