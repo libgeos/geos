@@ -17,7 +17,11 @@
  *
  **********************************************************************
  *
- * NOTES: 
+ * NOTES: changed from JTS design adding a private
+ *        TaggedLineStringSimplifier member and a
+ *        public simplifyLine(TaggedLineString*) method.
+ *        This reduced overhead in usage from
+ *        TopologyPreservingSimplifier class.
  *
  **********************************************************************/
 
@@ -32,6 +36,7 @@ namespace geos {
 	namespace simplify {
 		class LineSegmentIndex;
 		class TaggedLineString;
+		class TaggedLineStringSimplifier;
 	}
 }
 
@@ -70,13 +75,15 @@ public:
 		std::vector<TaggedLineString*>::iterator begin,
 		std::vector<TaggedLineString*>::iterator end);
 
+	void simplifyLine(TaggedLineString* line);
+
 private:
 
 	std::auto_ptr<LineSegmentIndex> inputIndex;
 
 	std::auto_ptr<LineSegmentIndex> outputIndex;
 
-	double distanceTolerance;
+	std::auto_ptr<TaggedLineStringSimplifier> taggedlineSimplifier;
 
 };
 
@@ -88,6 +95,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 14:25:17  strk
+ * TopologyPreservingSimplifier initial port
+ *
  * Revision 1.1  2006/04/13 10:39:12  strk
  * Initial implementation of TaggedLinesSimplifier class
  *

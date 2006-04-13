@@ -67,8 +67,9 @@ namespace util { // geos.geom.util
  * 
  * A typically usage would be a transformation that may transform Polygons into
  * Polygons, LineStrings
- * or Points.  This class would likely need to override the {@link transformMultiPolygon}
- * method to ensure that if input Polygons change type the result is a GeometryCollection,
+ * or Points.  This class would likely need to override the
+ * {@link transformMultiPolygon} method to ensure that if input Polygons
+ * change type the result is a GeometryCollection,
  * not a MultiPolygon
  * 
  * The default behaviour of this class is to simply recursively transform
@@ -191,6 +192,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/13 14:25:17  strk
+ * TopologyPreservingSimplifier initial port
+ *
  * Revision 1.2  2006/04/11 12:56:06  strk
  * used typedef for auto_ptr<CoordinateSequence>
  *

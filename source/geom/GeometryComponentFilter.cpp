@@ -26,8 +26,9 @@ void GeometryComponentFilter::filter_rw(Geometry *geom) {
 	geom->geometryChangedAction();
 }
 
-void GeometryComponentFilter::filter_ro(const Geometry *geom) {
-	assert(0); // GeometryComponentFilter only sets a geometry-changed flag, cannot be read-only
+void GeometryComponentFilter::filter_ro(const Geometry *geom)
+{
+	//assert(0);
 }
 
 
@@ -36,6 +37,9 @@ void GeometryComponentFilter::filter_ro(const Geometry *geom) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/04/13 14:25:17  strk
+ * TopologyPreservingSimplifier initial port
+ *
  * Revision 1.11  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

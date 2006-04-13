@@ -81,14 +81,10 @@ public:
 
 private:
 
-	// Comparison is by pointer value
-	typedef std::map<geom::Geometry*, TaggedLineString*> LinesMap;
-
 	const geom::Geometry* inputGeom;
 
 	std::auto_ptr<TaggedLinesSimplifier> lineSimplifier;
 
-	LinesMap linestringMap;
 };
 
 
@@ -100,7 +96,7 @@ private:
 
 /**********************************************************************
  * $Log$
- * Revision 1.1  2006/04/13 10:39:12  strk
- * Initial implementation of TaggedLinesSimplifier class
+ * Revision 1.2  2006/04/13 14:25:17  strk
+ * TopologyPreservingSimplifier initial port
  *
  **********************************************************************/

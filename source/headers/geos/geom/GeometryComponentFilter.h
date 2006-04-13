@@ -50,7 +50,7 @@ public:
 	 * is applied.
 	 */
 	virtual void filter_rw(Geometry *geom);
-	virtual void filter_ro(const Geometry *geom); // Unsupported
+	virtual void filter_ro(const Geometry *geom);
 };
 
 } // namespace geos::geom
@@ -64,6 +64,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/13 14:25:17  strk
+ * TopologyPreservingSimplifier initial port
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

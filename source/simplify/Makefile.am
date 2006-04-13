@@ -5,8 +5,6 @@ noinst_LTLIBRARIES = libsimplify.la
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 
-# TopologyPreservingSimplifier.cpp
-
 libsimplify_la_SOURCES = \
 	DouglasPeuckerLineSimplifier.cpp \
 	DouglasPeuckerSimplifier.cpp \
@@ -15,6 +13,8 @@ libsimplify_la_SOURCES = \
 	TaggedLineString.cpp \
 	TaggedLineStringSimplifier.cpp \
 	TaggedLinesSimplifier.cpp  
+	TopologyPreservingSimplifier.cpp
+
 
 libsimplify_la_LIBADD = 
 

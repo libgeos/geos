@@ -1,6 +1,9 @@
 2006-04-13 Sandro Santilli <strk@refractions.net>
 
+	* geos::simplify::TopologyPreservingSimplifier class
 	* geos::simplify::TaggedLinesSimplifier class
+	* source/geom/GeometryComponentFilter.cpp: filter_ro
+	  re-enabled.
 
 2006-04-12 Sandro Santilli <strk@refractions.net>
 

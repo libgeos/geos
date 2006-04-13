@@ -23,6 +23,7 @@
 #include <geos/algorithm/LineIntersector.h>
 
 #include <cassert>
+#include <algorithm>
 #include <memory>
 
 #ifndef GEOS_DEBUG
@@ -44,7 +45,8 @@ TaggedLinesSimplifier::TaggedLinesSimplifier()
 	:
 	inputIndex(new LineSegmentIndex()),
 	outputIndex(new LineSegmentIndex()),
-	distanceTolerance(0.0)
+	taggedlineSimplifier(new TaggedLineStringSimplifier(inputIndex.get(),
+		outputIndex.get()))
 {
 }
 
@@ -52,7 +54,14 @@ TaggedLinesSimplifier::TaggedLinesSimplifier()
 void
 TaggedLinesSimplifier::setDistanceTolerance(double d)
 {
-	distanceTolerance=d;
+	taggedlineSimplifier->setDistanceTolerance(d);
+}
+
+/*public*/
+void
+TaggedLinesSimplifier::simplifyLine(TaggedLineString* tls)
+{
+	taggedlineSimplifier->simplify(tls);
 }
 
 /*public*/
@@ -61,17 +70,8 @@ TaggedLinesSimplifier::simplify(
 		std::vector<TaggedLineString*>::iterator begin,
 		std::vector<TaggedLineString*>::iterator end)
 {
-	for ( std::vector<TaggedLineString*>::iterator
-		it=begin;
-		it != end;
-		++it )
-	{
-		TaggedLineStringSimplifier tlss(inputIndex.get(),
-				outputIndex.get());
-		tlss.setDistanceTolerance(distanceTolerance);
-		assert(*it);
-		tlss.simplify(*it);
-	}
+	for_each(begin, end, bind1st(
+		mem_fun(&TaggedLinesSimplifier::simplifyLine), this));
 }
 
 
@@ -80,6 +80,9 @@ TaggedLinesSimplifier::simplify(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/13 14:25:17  strk
+ * TopologyPreservingSimplifier initial port
+ *
  * Revision 1.1  2006/04/13 10:39:12  strk
  * Initial implementation of TaggedLinesSimplifier class
  *
