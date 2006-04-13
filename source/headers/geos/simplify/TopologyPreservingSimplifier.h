@@ -15,6 +15,10 @@
  *
  * Last port: simplify/TopologyPreservingSimplifier.java rev. 1.4 (JTS-1.7)
  *
+ **********************************************************************
+ *
+ * NOTES:
+ *
  **********************************************************************/
 
 #ifndef _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_
@@ -26,7 +30,7 @@
 // Forward declarations
 namespace geos {
 	namespace simplify {
-		class TaggedLineString;
+		class TaggedLinesSimplifier;
 	}
 	namespace geom {
 		class Geometry;
@@ -96,6 +100,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/13 16:04:10  strk
+ * Made TopologyPreservingSimplifier implementation successfully build
+ *
  * Revision 1.2  2006/04/13 14:25:17  strk
  * TopologyPreservingSimplifier initial port
  *

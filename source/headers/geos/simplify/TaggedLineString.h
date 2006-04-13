@@ -47,6 +47,11 @@ namespace geos {
 namespace simplify { // geos::simplify
 
 
+/** \brief
+ *
+ * Contains and owns a list of TaggedLineSegments
+ *
+ */
 class TaggedLineString {
 
 public:
@@ -116,6 +121,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/13 16:04:10  strk
+ * Made TopologyPreservingSimplifier implementation successfully build
+ *
  * Revision 1.4  2006/04/13 09:21:45  mloskot
  * Removed definition of copy ctor and assignment operator for TaggedLineString class.
  * According to following rule: Declaring, but not defining, private copy operations has

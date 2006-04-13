@@ -12,7 +12,7 @@ libsimplify_la_SOURCES = \
 	TaggedLineSegment.cpp \
 	TaggedLineString.cpp \
 	TaggedLineStringSimplifier.cpp \
-	TaggedLinesSimplifier.cpp  
+	TaggedLinesSimplifier.cpp \
 	TopologyPreservingSimplifier.cpp
 
 

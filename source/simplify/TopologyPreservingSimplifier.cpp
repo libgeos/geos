@@ -19,12 +19,21 @@
 
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/simplify/TaggedLinesSimplifier.h>
+#include <geos/simplify/LineSegmentIndex.h> // for auto_ptr dtor
+#include <geos/simplify/TaggedLineString.h>
+#include <geos/simplify/TaggedLineStringSimplifier.h> // for auto_ptr dtor
+#include <geos/algorithm/LineIntersector.h> // for auto_ptr dtor
 // for LineStringTransformer inheritance
 #include <geos/geom/util/GeometryTransformer.h>
 // for LineStringMapBuilderFilter inheritance
 #include <geos/geom/GeometryComponentFilter.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <memory> // for auto_ptr
+#include <map>
 #include <cassert>
 
 #ifndef GEOS_DEBUG
@@ -40,7 +49,7 @@ using namespace geos::geom;
 namespace geos {
 namespace simplify { // geos::simplify
 
-typedef std::map<const geom::Geometry*, TaggedLineString> LinesMap;
+typedef std::map<const geom::Geometry*, TaggedLineString* > LinesMap;
 
 
 namespace { // module-statics
@@ -60,14 +69,14 @@ protected:
 
 private:
 
-	LineStringTransformer(TopologyPreservingSimplifier& simp);
+	LineStringTransformer(LinesMap& simp);
 
 	LinesMap& linestringMap;
 
-}
+};
 
 /*private*/
-LineStringTransformer(LinesMap& nMap)
+LineStringTransformer::LineStringTransformer(LinesMap& nMap)
 	:
 	linestringMap(nMap)
 {
@@ -75,18 +84,18 @@ LineStringTransformer(LinesMap& nMap)
 
 /*protected*/
 CoordinateSequence::AutoPtr
-LineStringTrasnformer::transformCoordinates(
+LineStringTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
-		const Geometry* parent);
+		const Geometry* parent)
 {
 	if ( dynamic_cast<const LineString*>(parent) )
 	{
 		LinesMap::iterator it = linestringMap.find(parent);
 		assert( it != linestringMap.end() );
 		
-		TaggedLineString& taggedLine = it->second;
+		TaggedLineString* taggedLine = it->second;
 
-		return taggedLine.getResultCoordinates();
+		return taggedLine->getResultCoordinates();
 	}
 
 	// for anything else (e.g. points) just copy the coordinates
@@ -95,25 +104,69 @@ LineStringTrasnformer::transformCoordinates(
 
 //----------------------------------------------------------------------
 
+/*
+ * This class populates the given LineString=>TaggedLineString map
+ * with newly created TaggedLineString objects.
+ * Users must take care of deleting the map's values (elem.second).
+ * Would be nice if auto_ptr<> worked in a container, but it doesn't :(
+ *
+ */
 class LineStringMapBuilderFilter: public geom::GeometryComponentFilter
 {
 
 public:
 
-	void filter_ro(const Geometry* geom)
-	{
-		if ( const LinearRing* lr=dynamic_cast<const LinearRing*>(
-				parent) )
-		{
-			TaggedLineString taggedLine(lr, 4);
-			linestringMap.put(geom, taggedLine);
-      }
-      else if (geom instanceof LineString) {
-        TaggedLineString taggedLine = new TaggedLineString((LineString) geom, 2);
-        linestringMap.put(geom, taggedLine);
-      }
-	}
+	friend class TopologyPreservingSimplifier;
+
+	void filter_ro(const Geometry* geom);
+
+
+private:
+
+	LinesMap& linestringMap;
+
+	LineStringMapBuilderFilter(LinesMap& nMap);
 };
+
+/*private*/
+LineStringMapBuilderFilter::LineStringMapBuilderFilter(LinesMap& nMap)
+	:
+	linestringMap(nMap)
+{
+}
+
+/*public*/
+void
+LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
+{
+	TaggedLineString* taggedLine;
+
+	if ( const LinearRing* lr =
+			dynamic_cast<const LinearRing*>(geom) )
+	{
+		taggedLine = new TaggedLineString(lr, 4);
+
+	}
+	else if ( const LineString* ls = 
+			dynamic_cast<const LineString*>(geom) )
+	{
+		taggedLine = new TaggedLineString(ls, 2);
+	}
+	else
+	{
+		return;
+	}
+
+	// Duplicated Geometry pointers shouldn't happen
+	if ( ! linestringMap.insert(std::make_pair(geom, taggedLine)).second )
+	{
+		std::cerr << __FILE__ << ":" << __LINE__ 
+		     << "Duplicated Geometry components detected"
+		     << std::endl;
+
+		delete taggedLine;
+	}
+}
 
 
 } // end of module-statics
@@ -125,7 +178,7 @@ TopologyPreservingSimplifier::simplify(
 		double tolerance)
 {
 	TopologyPreservingSimplifier tss(geom);
-        tss.setDistanceTolerance(distanceTolerance);
+        tss.setDistanceTolerance(tolerance);
 	return tss.getResultGeometry();
 }
 
@@ -138,6 +191,7 @@ TopologyPreservingSimplifier::TopologyPreservingSimplifier(const Geometry* geom)
 }
 
 /*public*/
+void
 TopologyPreservingSimplifier::setDistanceTolerance(double d)
 {
 	using geos::util::IllegalArgumentException;
@@ -154,20 +208,44 @@ TopologyPreservingSimplifier::getResultGeometry()
 {
 	LinesMap linestringMap;
 
-	LineStringMapBuilderFilter lsmbf(linestringMap);
-	inputGeom->apply_ro(lsmbf);
+	std::auto_ptr<geom::Geometry> result;
 
-	for (LinesMap::iterator
-		it=linestringMap.begin(), itEnd=linestringMap.end();
-		it != itEnd;
-		++it)
-	{
-		lineSimplifier->simplifyLine(&(it->second)); 
+	try {
+		LineStringMapBuilderFilter lsmbf(linestringMap);
+		inputGeom->apply_ro(&lsmbf);
+
+		for (LinesMap::iterator
+			it=linestringMap.begin(), itEnd=linestringMap.end();
+			it != itEnd;
+			++it)
+		{
+			lineSimplifier->simplifyLine(it->second); 
+		}
+
+		LineStringTransformer trans(linestringMap);
+		result = trans.transform(inputGeom);
+
+	} catch (...) {
+		for (LinesMap::iterator
+				it = linestringMap.begin(),
+				itEnd = linestringMap.end();
+				it != itEnd;
+				++it)
+		{
+			delete it->second;
+		}
+
+		throw;
 	}
 
-
-	LineStringTransformer trans(linestringMap);
-	Geometry result = trans.transform(inputGeom);
+	for (LinesMap::iterator
+			it = linestringMap.begin(),
+			itEnd = linestringMap.end();
+			it != itEnd;
+			++it)
+	{
+		delete it->second;
+	}
 
 	return result;
 }
@@ -177,6 +255,9 @@ TopologyPreservingSimplifier::getResultGeometry()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/13 16:04:10  strk
+ * Made TopologyPreservingSimplifier implementation successfully build
+ *
  * Revision 1.2  2006/04/13 14:25:17  strk
  * TopologyPreservingSimplifier initial port
  *
