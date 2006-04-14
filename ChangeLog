@@ -1,5 +1,7 @@
 2006-04-14 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/overlay/OverlayOp.cpp: removed
+	precision reduction code (use BinaryOp for that)
 	* tests/xmltester/XMLTester.cpp: binary ops
 	invoked using the new BinaryOp template function.
 	* source/headers/geos/geom/BinaryOp.h: new template

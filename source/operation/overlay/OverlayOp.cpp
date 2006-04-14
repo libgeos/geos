@@ -43,10 +43,6 @@
 #include <geos/util/TopologyException.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
 
-// only used if TRY_REDUCED_GEOMS && USE_COMMONBITS_OP
-#include <geos/precision/CommonBitsOp.h>
-#include <geos/util/IllegalArgumentException.h>
-
 #include <cassert>
 #include <functional>
 #include <vector>
@@ -61,12 +57,6 @@
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
 
-// Define this to have OverlayOp::overlayOp
-// automatically try with reduced precisions
-// on topology exceptions
-//
-//#define TRY_REDUCED_GEOMS 1
-
 using namespace std;
 using namespace geos::geom;
 using namespace geos::geomgraph;
@@ -76,110 +66,13 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
-// module-statics
-namespace {
-
-/**
- * If an exception it catched during result computation, try reducing precision
- *
- * So far I haven't seen any case in which more then a single iteration 
- * is required to make things work (but I haven't many tests).
- *
- * Possible problems:
- *	- If the input is invalid, this could be a very costly operation,
- * 	  as precision reduction will hardly fix the invalidity.
- *	- Precision reduction could make the geometries invalid, by
- *        introducing self-intersections.
- *
- *
- * Possible optimization include:
- *	- only reducing one geometry each iteration (swapping reduced geom)
- *	- decrementing the precision by more then 1 unit each iteration
- */
-Geometry*
-reducedOverlayOp(const Geometry* g0, const Geometry* g1, int opCode)
-{
-
-	try {
-		cerr << "Trying with CommonBitsOp " << endl;
-
-		precision::CommonBitsOp cbo(true);
-
-		switch (opCode)
-		{
-			case OverlayOp::INTERSECTION:
-				return cbo.intersection(g0, g1);
-			case OverlayOp::UNION:
-				return cbo.Union(g0, g1);
-			case OverlayOp::DIFFERENCE:
-				return cbo.difference(g0, g1);
-			case OverlayOp::SYMDIFFERENCE:
-				return cbo.symDifference(g0, g1);
-			default:
-				stringstream s;
-				s << "Unsupported operation code: " << opCode;
-				throw util::IllegalArgumentException(s.str());
-		}
-	} catch (const util::TopologyException& ex) {
-		cerr << "CommonBitsOp failed: " << ex.what()
-		     << ", trying other reductions"
-		     << endl;
-	}
-
-	int maxPrecision=25;
-	Geometry* ret=NULL;
-
-	for (int precision=maxPrecision; precision; --precision)
-	{
-		auto_ptr<PrecisionModel> pm(new PrecisionModel(precision));
-		cerr << "Trying with precision " << precision << endl;
-
-		precision::SimpleGeometryPrecisionReducer reducer(pm.get());
-		auto_ptr<Geometry> redGeom0(reducer.reduce(g0));
-		auto_ptr<Geometry> redGeom1(reducer.reduce(g1));
-
-		OverlayOp gov(redGeom0.get(), redGeom1.get());
-
-		try {
-			ret=gov.getResultGeometry(opCode);
-		} catch (const util::TopologyException& ex) {
-			if ( precision == 1 ) throw ex;
-			//cerr << "Reduced precision (" << precision << "): " << ex.what() << endl;
-		}
-
-		if ( ret ) return ret;
-	}
-
-	return ret;
-}
-
-} // unnamed (module-statics)
-
 /* static public */
 Geometry*
 OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 	// throw(TopologyException *)
 {
 	OverlayOp gov(geom0, geom1);
-#ifdef TRY_REDUCED_GEOMS
-	try
-	{
-#endif
-		return gov.getResultGeometry(opCode);
-#ifdef TRY_REDUCED_GEOMS
-	}
-	catch (const util::TopologyException& ex)
-	{
-		cerr << "Original precision: " << ex.what() << endl;
-		if ( gov.resultPrecisionModel->getType() == PrecisionModel::FIXED &&
-			gov.resultPrecisionModel->getScale() == 1 )
-		{
-			// Already the smallest scale :(
-			throw ex;
-		}
-		return reducedOverlayOp(geom0, geom1, opCode);
-	}
-#endif
+	return gov.getResultGeometry(opCode);
 }
 
 /* static public */
@@ -887,6 +780,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.70  2006/04/14 15:19:12  strk
+ * removed precision reduction code (use BinaryOp for that)
+ *
  * Revision 1.69  2006/04/13 23:57:34  strk
  * Disables reduced precision overlayOp (is broken)
  *
