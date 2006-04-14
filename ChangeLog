@@ -1,5 +1,8 @@
 2006-04-14 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/operation/overlay/OverlayOp.h:
+	added overlayOp() adapter to generalize use of
+	OverlayOp::overlayOp()
 	* algorithm::HCoordinate: added output operator
 	and debugging blocks.
 

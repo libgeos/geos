@@ -316,6 +316,23 @@ private:
 
 };
 
+/** \brief
+ * OverlayOp::overlayOp Adapter for use with geom::BinaryOp
+ */
+struct overlayOp {
+
+        int opCode;
+
+        overlayOp(int i)
+                :
+                opCode(i)
+        {}
+
+        Geometry* operator() (const Geometry* g0, const Geometry* g1) {
+                return OverlayOp::overlayOp(g0, g1, opCode);
+        }
+
+};
 
 } // namespace geos::operation::overlay
 } // namespace geos::operation
@@ -325,6 +342,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/04/14 14:35:47  strk
+ * Added overlayOp() adapter for use in templates expecting binary ops
+ *
  * Revision 1.1  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *
