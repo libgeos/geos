@@ -1,10 +1,8 @@
-- CORRECTNESS:
-	- hunt for a possible uninitialized memory bug
-	  (robustness.xml tests act differently when
-	   built with or w/out USE_INLINE)
 
-- BUILD SPEEDUP:
-	- build a single library rather then one for each dir
+- Fix bug in WKBwriter (endian specification is overlooked)
+  see BuildBot
+
+- DoubleBits misregards BYTE_ENDIAN, must check it.
 
 - BUILD CORRECTNESS:
 	- include <geos/config.h> from all .cpp files
@@ -16,14 +14,6 @@
 
 - WKB extension with LINEARRIN ?
 
-- DoubleBits misregards BYTE_ENDIAN, must check it.
-
-- Have IsValidOp handle all possible exceptions thrown by
-  GeometryGraph constructor (currently only with Polygon this
-  is true).
-
-- Add distinct binary predicates test support in XMLTester
-
 - Check how to disable GEOS_VERSION define on command line
   (or make GEOS_VERSION define in version.h optional)
   not a major problems, just makes the compiler issue some warninigs.
@@ -31,4 +21,5 @@
 - Check GeometryEditor behaviour (modify passed geom or create a new one ?)
   [not documented]
 
-- Remove all explicit heap allocations for private static members.
+- Add distinct binary predicates test support in XMLTester
+
