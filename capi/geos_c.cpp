@@ -36,6 +36,8 @@
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
+#include <geos/operation/overlay/OverlayOp.h>
+#include <geos/geom/BinaryOp.h>
 #include <geos/version.h> 
 
 // This should go away
@@ -68,8 +70,11 @@ using namespace geos::geom;
 using namespace geos::operation::valid;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
+using namespace geos::operation::overlay;
 
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
+
+typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
 //## PROTOTYPES #############################################
 
@@ -808,8 +813,10 @@ GEOSIntersection(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		Geometry *g3 = g1->intersection(g2);
-		return g3;
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::INTERSECTION));
+		return g3.release();
+		//Geometry *g3 = g1->intersection(g2);
+		//return g3;
 	}
 	catch (const std::exception &e)
 	{
@@ -871,8 +878,10 @@ GEOSDifference(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		Geometry *g3 = g1->difference(g2);
-		return g3;
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::DIFFERENCE));
+		return g3.release();
+		//Geometry *g3 = g1->difference(g2);
+		//return g3;
 	}
 	catch (const std::exception &e)
 	{
@@ -913,8 +922,10 @@ GEOSSymDifference(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		Geometry *g3 = g1->symDifference(g2);
-		return g3;
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::SYMDIFFERENCE));
+		return g3.release();
+		//Geometry *g3 = g1->symDifference(g2);
+		//return g3;
 	}
 	catch (const std::exception &e)
 	{
@@ -934,8 +945,10 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		Geometry *g3 = g1->Union(g2);
-		return g3;
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::UNION));
+		return g3.release();
+		//Geometry *g3 = g1->Union(g2);
+		//return g3;
 	}
 	catch (const std::exception &e)
 	{
