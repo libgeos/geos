@@ -21,6 +21,8 @@
 #ifndef GEOS_ALGORITHM_HCOORDINATE_H
 #define GEOS_ALGORITHM_HCOORDINATE_H
 
+#include <iosfwd>
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -39,7 +41,10 @@ namespace algorithm { // geos::algorithm
  * of computing intersections between line segments.
  */
 class HCoordinate {
+
 public:
+
+	friend std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
 
 	/** \brief
 	 * Computes the (approximate) intersection point between two line segments
@@ -72,6 +77,8 @@ public:
 
 };
 
+std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
+
 } // namespace geos::algorithm
 } // namespace geos
 
@@ -79,6 +86,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/14 09:02:16  strk
+ * Hadded output operator and debugging prints for HCoordinate.
+ *
  * Revision 1.2  2006/04/04 11:37:01  strk
  * Port information + initialization lists in ctors
  *

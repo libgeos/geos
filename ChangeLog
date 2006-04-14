@@ -1,3 +1,7 @@
+2006-04-14 Sandro Santilli <strk@refractions.net>
+
+	* algorithm::HCoordinate: added output operator
+	and debugging blocks.
 
 2006-04-13 Sandro Santilli <strk@refractions.net>
 

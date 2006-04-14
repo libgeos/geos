@@ -25,6 +25,12 @@
 
 #include <memory>
 #include <cmath> // for finite()
+#include <iostream>
+#include <iomanip>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 using namespace std;
 using namespace geos::geom;
@@ -37,15 +43,64 @@ void
 HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	const Coordinate &q1, const Coordinate &q2, Coordinate &ret)
 {
+
+#if GEOS_DEBUG
+	cerr << __FUNCTION__ << ":" << endl
+	     << setprecision(10)
+	     << " p1: " << p1 << endl
+	     << " p2: " << p2 << endl
+	     << " q1: " << q1 << endl
+	     << " q2: " << q2 << endl;
+#endif
+
         HCoordinate hc1p1(p1);
+
+#if GEOS_DEBUG
+	cerr << "HCoordinate(p1): "
+	     << hc1p1 << endl;
+#endif
+
         HCoordinate hc1p2(p2);
+
+#if GEOS_DEBUG
+	cerr << "HCoordinate(p2): "
+	     << hc1p2 << endl;
+#endif
+
         HCoordinate l1(hc1p1, hc1p2);
 
+#if GEOS_DEBUG
+	cerr << "L1 - HCoordinate(HCp1, HCp2): "
+	     << l1 << endl;
+#endif
+
         HCoordinate hc2q1(q1);
+
+#if GEOS_DEBUG
+	cerr << "HCoordinate(q1): "
+	     << hc2q1 << endl;
+#endif
+
         HCoordinate hc2q2(q2);
+
+#if GEOS_DEBUG
+	cerr << "HCoordinate(q2): "
+	     << hc2q2 << endl;
+#endif
+
         HCoordinate l2(hc2q1, hc2q2);
 
+#if GEOS_DEBUG
+	cerr << "L2 - HCoordinate(HCq1, HCq2): "
+	     << l2 << endl;
+#endif
+
         HCoordinate intHCoord(l1, l2);
+
+#if GEOS_DEBUG
+	cerr << "HCoordinate(L1, L2): "
+	     << intHCoord << endl;
+#endif
 
         intHCoord.getCoordinate(ret);
 
@@ -122,11 +177,20 @@ HCoordinate::getCoordinate(Coordinate &ret) const
 	ret=Coordinate(getX(), getY());
 }
 
+std::ostream& operator<< (std::ostream& o, const HCoordinate& c)
+{
+	return o << "(" << c.x << ", "
+	         << c.y << ") [w: " << c.w << "]";
+}
+
 } // namespace geos.algorithm
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/04/14 09:02:16  strk
+ * Hadded output operator and debugging prints for HCoordinate.
+ *
  * Revision 1.20  2006/04/04 11:37:00  strk
  * Port information + initialization lists in ctors
  *
