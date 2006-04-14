@@ -32,7 +32,6 @@ namespace geos {
 		class Polygon;
 		class LineString;
 		class Point;
-		//class PrecisionModel;
 	}
 	namespace geomgraph {
 		class Label;
@@ -328,7 +327,9 @@ struct overlayOp {
                 opCode(i)
         {}
 
-        Geometry* operator() (const Geometry* g0, const Geometry* g1) {
+        geom::Geometry* operator() (const geom::Geometry* g0,
+			const geom::Geometry* g1)
+	{
                 return OverlayOp::overlayOp(g0, g1, opCode);
         }
 
@@ -342,6 +343,9 @@ struct overlayOp {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/14 15:04:36  strk
+ * fixed missing namespace qualification in overlay::overlayOp
+ *
  * Revision 1.2  2006/04/14 14:35:47  strk
  * Added overlayOp() adapter for use in templates expecting binary ops
  *
