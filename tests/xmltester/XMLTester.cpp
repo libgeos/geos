@@ -21,6 +21,8 @@
 #endif
 
 #include <geos/geom.h>
+#include <geos/geom/BinaryOp.h>
+#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/util.h>
 //#include <geos/geomgraph.h>
 #include <geos/io.h>
@@ -42,6 +44,7 @@
 #include <sstream>
 #include <string>
 #include <memory>
+#include <functional>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -433,6 +436,8 @@ XMLTester::printGeom(Geometry *g)
 void
 XMLTester::parseTest()
 {
+	using namespace operation::overlay;
+
 	typedef std::auto_ptr< Geometry > GeomAutoPtr;
 
 	int success=0; // no success by default
@@ -511,10 +516,12 @@ XMLTester::parseTest()
 
 		else if (opName=="intersection")
 		{
+
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			GeomAutoPtr gRealRes(gA->intersection(gB));
+			//GeomAutoPtr gRealRes(gA->intersection(gB));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::INTERSECTION));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -531,7 +538,8 @@ XMLTester::parseTest()
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			GeomAutoPtr gRealRes(gA->Union(gB));
+			//GeomAutoPtr gRealRes(gA->Union(gB));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::UNION));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -544,10 +552,13 @@ XMLTester::parseTest()
 
 		else if (opName=="difference")
 		{
+
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			GeomAutoPtr gRealRes(gA->difference(gB));
+			//GeomAutoPtr gRealRes(gA->difference(gB));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::DIFFERENCE));
+			
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -564,7 +575,8 @@ XMLTester::parseTest()
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			GeomAutoPtr gRealRes(gA->symDifference(gB));
+			//GeomAutoPtr gRealRes(gA->symDifference(gB));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::SYMDIFFERENCE));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -923,6 +935,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/04/14 14:57:15  strk
+ * XMLTester binary ops invoked using the new BinaryOp template function.
+ *
  * Revision 1.31  2006/04/07 13:26:38  strk
  * Use of auto_ptr<> to prevent confusing leaks in tester
  *

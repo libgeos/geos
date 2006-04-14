@@ -1,5 +1,7 @@
 2006-04-14 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/XMLTester.cpp: binary ops
+	invoked using the new BinaryOp template function.
 	* source/headers/geos/geom/BinaryOp.h: new template
 	function implementing various heuristics aimed at
 	making binary geometry ops work around robustness issues.
