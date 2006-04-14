@@ -5,6 +5,7 @@ geosdir = $(includedir)/geos/geom
 EXTRA_DIST = 
 
 geos_HEADERS = \
+	BinaryOp.h	\
 	Coordinate.h	\
 	Coordinate.inl	\
 	CoordinateArraySequence.h	\
