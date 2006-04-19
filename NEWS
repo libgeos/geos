@@ -5,10 +5,10 @@ Changes in 3.0.0
    (the documented one) should be unchanged.
 
 - New things:
-	- Add GEOSArea(), GEOSLength(), GEOSEnvelope(), GEOSGeomType()
+	- Added overlay::overlayOp() adapter class
+	- Added GEOSSImplify() and GEOSTopologyPreserveSimplify()
 	  to the C API
 	- Added closed ring checks in IsValidOp
-	- Added missing ::clone() methods for Multi* geoms 
 	- Multi-input support in XMLTester 
 	- HEXWKB I/O
 	- Envelope(string) ctor
@@ -98,6 +98,7 @@ Changes in 3.0.0
 	  result of overlaying polygons containing touching holes (#13)
 	- Fixed integer conversion bug
 	- Fixed PointLocator handling of LinearRings
+	- Added missing ::clone() methods for Multi* geoms 
 
 
 - (Partial) Detailed list of changes:
