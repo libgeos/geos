@@ -1,5 +1,7 @@
 2006-04-20 Sandro Santilli <strk@refractions.net>
 
+	* headers/geos/geom/BinaryOp.h: added debugging
+	output.
 	* geos::algorithm::HCoordinate: switched to
 	use of 'long double' types for improved precision.
 	added compile time define to force storage of

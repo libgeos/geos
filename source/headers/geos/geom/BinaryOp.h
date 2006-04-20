@@ -75,13 +75,16 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	{
 		origException=ex;
 #if GEOS_DEBUG_BINARYOP
-		std::cerr << "Orginal: " << ex.what() << std::endl;
+		std::cerr << "Original exception: " << ex.what() << std::endl;
 #endif
 	}
 
 	// Try removing common bits
 	try
 	{
+#if GEOS_DEBUG_BINARYOP
+		std::cerr << "Trying with Common bits remover." << std::endl;
+#endif
 		precision::CommonBitsRemover cbr;
 
 		cbr.add(g0);
