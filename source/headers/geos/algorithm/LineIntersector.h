@@ -270,8 +270,19 @@ private:
 		const geom::Coordinate& p2, const geom::Coordinate& q1,
 		const geom::Coordinate& q2);
 
-	void intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-		const geom::Coordinate& q1, const geom::Coordinate& q2,
+	/** \brief
+	 * This method computes the actual value of the intersection point.
+	 *
+	 * To obtain the maximum precision from the intersection calculation,
+	 * the coordinates are normalized by subtracting the minimum
+	 * ordinate values (in absolute value).  This has the effect of
+	 * removing common significant digits from the calculation to
+	 * maintain more bits of precision.
+	 */
+	void intersection(const geom::Coordinate& p1,
+		const geom::Coordinate& p2,
+		const geom::Coordinate& q1,
+		const geom::Coordinate& q2,
 		geom::Coordinate &ret) const;
 
 	double smallestInAbsValue(double x1, double x2,
@@ -289,7 +300,7 @@ private:
 	 */
 	bool isInSegmentEnvelopes(const geom::Coordinate& intPt) const;
 
-	/**
+	/** \brief
 	 * Normalize the supplied coordinates to
 	 * so that the midpoint of their intersection envelope
 	 * lies at the origin.
@@ -301,7 +312,8 @@ private:
 	 * @param normPt
 	 */
 	void normalizeToEnvCentre(geom::Coordinate &n00, geom::Coordinate &n01,
-		geom::Coordinate &n10, geom::Coordinate &n11, geom::Coordinate &normPt) const;
+		geom::Coordinate &n10, geom::Coordinate &n11,
+		geom::Coordinate &normPt) const;
 };
 
 } // namespace geos::algorithm
@@ -312,6 +324,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/20 14:16:25  strk
+ * Added some more doxygen comments
+ *
  * Revision 1.2  2006/04/06 21:31:40  strk
  * Const correctness for debugging function
  *
