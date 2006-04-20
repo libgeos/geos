@@ -59,19 +59,19 @@ public:
 	static void intersection(const geom::Coordinate &p1, const geom::Coordinate &p2,
 		const geom::Coordinate &q1, const geom::Coordinate &q2, geom::Coordinate &ret);
 
-	double x,y,w;
+	long double x,y,w;
 
 	HCoordinate();
 
-	HCoordinate(double _x, double _y, double _w);
+	HCoordinate(long double _x, long double _y, long double _w);
 
 	HCoordinate(const geom::Coordinate& p);
 
 	HCoordinate(const HCoordinate &p1, const HCoordinate &p2);
 
-	double getX() const;
+	long double getX() const;
 
-	double getY() const;
+	long double getY() const;
 
 	void getCoordinate(geom::Coordinate &ret) const;
 
@@ -86,6 +86,9 @@ std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/20 14:27:40  strk
+ * HCoordinate class changed to use long double types internally, in order to improve computation precision
+ *
  * Revision 1.3  2006/04/14 09:02:16  strk
  * Hadded output operator and debugging prints for HCoordinate.
  *

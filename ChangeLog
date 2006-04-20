@@ -1,9 +1,12 @@
 2006-04-20 Sandro Santilli <strk@refractions.net>
 
-	* source/algorithm/HCoordinate.cpp: added compile
-	time define to force storage of intermediate computation
-	values to variables (in order to make the -ffloat-store
-	gcc switch effective).
+	* geos::algorithm::HCoordinate: switched to
+	use of 'long double' types for improved precision.
+	added compile time define to force storage of
+	intermediate computation values to variables (in
+	order to make the -ffloat-store gcc switch effective).
+	* source/headers/geos/algorithm/LineIntersector.h:
+	added some doxygen comments.
 
 2006-04-14 Sandro Santilli <strk@refractions.net>
 

@@ -33,7 +33,7 @@
 #endif
 
 // Define to make -ffloat-store be effective for this class
-//#define STORE_INTERMEDIATE_COMPUTATION_VALUES
+//#define STORE_INTERMEDIATE_COMPUTATION_VALUES 1
 
 using namespace std;
 using namespace geos::geom;
@@ -119,7 +119,7 @@ HCoordinate::HCoordinate()
 }
 
 /*public*/
-HCoordinate::HCoordinate(double _x, double _y, double _w)
+HCoordinate::HCoordinate(long double _x, long double _y, long double _w)
 	:
 	x(_x),
 	y(_y),
@@ -151,16 +151,16 @@ HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 
 HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 {
-        double xf1 = p1.y*p2.w;
-        double xf2 = p2.y*p1.w;
+        long double xf1 = p1.y*p2.w;
+        long double xf2 = p2.y*p1.w;
         x = xf1 - xf2;
 
-        double yf1 = p2.x*p1.w;
-        double yf2 = p1.x*p2.w;
+        long double yf1 = p2.x*p1.w;
+        long double yf2 = p1.x*p2.w;
         y = yf1 - yf2;
 
-        double wf1 = p1.x*p2.y;
-        double wf2 = p2.x*p1.y;
+        long double wf1 = p1.x*p2.y;
+        long double wf2 = p2.x*p1.y;
         w = wf1 - wf2;
 
 #if GEOS_DEBUG
@@ -179,10 +179,10 @@ HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 #endif // def STORE_INTERMEDIATE_COMPUTATION_VALUES
 
 /*public*/
-double
+long double
 HCoordinate::getX() const
 {
-	double a = x/w;
+	long double a = x/w;
 
 	// finite() also checks for NaN
 	if ( ! finite(a) )
@@ -193,10 +193,10 @@ HCoordinate::getX() const
 }
 
 /*public*/
-double
+long double
 HCoordinate::getY() const
 {
-	double a = y/w;
+	long double a = y/w;
 
 	// finite() also checks for NaN
 	if ( ! finite(a) )
@@ -224,6 +224,9 @@ std::ostream& operator<< (std::ostream& o, const HCoordinate& c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/04/20 14:27:40  strk
+ * HCoordinate class changed to use long double types internally, in order to improve computation precision
+ *
  * Revision 1.22  2006/04/20 11:11:57  strk
  * source/algorithm/HCoordinate.cpp: added compile time define to force storage of intermediate computation values to variables (in order to make the -ffloat-store gcc switch effective). Disabled by default.
  *
