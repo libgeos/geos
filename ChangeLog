@@ -1,3 +1,10 @@
+2006-04-20 Sandro Santilli <strk@refractions.net>
+
+	* source/algorithm/HCoordinate.cpp: added compile
+	time define to force storage of intermediate computation
+	values to variables (in order to make the -ffloat-store
+	gcc switch effective).
+
 2006-04-14 Sandro Santilli <strk@refractions.net>
 
 	* capi/geos_c.cpp: binary ops invoked using the

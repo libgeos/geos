@@ -32,6 +32,9 @@
 #define GEOS_DEBUG 0
 #endif
 
+// Define to make -ffloat-store be effective for this class
+//#define STORE_INTERMEDIATE_COMPUTATION_VALUES
+
 using namespace std;
 using namespace geos::geom;
 
@@ -46,7 +49,7 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 
 #if GEOS_DEBUG
 	cerr << __FUNCTION__ << ":" << endl
-	     << setprecision(10)
+	     << setprecision(20)
 	     << " p1: " << p1 << endl
 	     << " p2: " << p2 << endl
 	     << " q1: " << q1 << endl
@@ -134,6 +137,8 @@ HCoordinate::HCoordinate(const Coordinate& p)
 }
 
 /*public*/
+#ifndef STORE_INTERMEDIATE_COMPUTATION_VALUES
+
 HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 	:
 	x( p1.y*p2.w - p2.y*p1.w ),
@@ -141,6 +146,37 @@ HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 	w( p1.x*p2.y - p2.x*p1.y )
 {
 }
+
+#else // def STORE_INTERMEDIATE_COMPUTATION_VALUES
+
+HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
+{
+        double xf1 = p1.y*p2.w;
+        double xf2 = p2.y*p1.w;
+        x = xf1 - xf2;
+
+        double yf1 = p2.x*p1.w;
+        double yf2 = p1.x*p2.w;
+        y = yf1 - yf2;
+
+        double wf1 = p1.x*p2.y;
+        double wf2 = p2.x*p1.y;
+        w = wf1 - wf2;
+
+#if GEOS_DEBUG
+        cerr
+             << " xf1: " << xf1 << endl
+             << " xf2: " << xf2 << endl
+             << " yf1: " << yf1 << endl
+             << " yf2: " << yf2 << endl
+             << " wf1: " << wf1 << endl
+             << " wf2: " << wf2 << endl
+             << "   x: " << x << endl
+             << "   y: " << y << endl
+             << "   w: " << w << endl;
+#endif // def GEOS_DEBUG
+}
+#endif // def STORE_INTERMEDIATE_COMPUTATION_VALUES
 
 /*public*/
 double
@@ -188,6 +224,9 @@ std::ostream& operator<< (std::ostream& o, const HCoordinate& c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/04/20 11:11:57  strk
+ * source/algorithm/HCoordinate.cpp: added compile time define to force storage of intermediate computation values to variables (in order to make the -ffloat-store gcc switch effective). Disabled by default.
+ *
  * Revision 1.21  2006/04/14 09:02:16  strk
  * Hadded output operator and debugging prints for HCoordinate.
  *
