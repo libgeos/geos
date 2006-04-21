@@ -97,15 +97,14 @@ PrecisionModel::PrecisionModel()
 /*public*/
 PrecisionModel::PrecisionModel(Type nModelType)
 	:
-	modelType(nModelType)
+	modelType(nModelType),
+	scale(1.0)
 {
 #if GEOS_DEBUG
 	cerr<<"PrecisionModel["<<this<<"] ctor(Type)"<<endl;
 #endif
 	//modelType=nModelType;
-	if (modelType==FIXED){
-		setScale(1.0);
-	}
+	//if (modelType==FIXED) setScale(1.0);
 	//else setScale(666); // arbitrary number for invariant testing
 }
 
@@ -230,6 +229,9 @@ PrecisionModel::compareTo(const PrecisionModel *other) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.45  2006/04/21 17:04:09  strk
+ * Fixed constructor by type to always initialize scale factor
+ *
  * Revision 1.44  2006/04/07 12:37:51  mloskot
  * Added java_math_round() function for Asymmetric Arithmetic Rounding. Small fixes in Unit Tests.
  *
