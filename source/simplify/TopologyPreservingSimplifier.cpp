@@ -62,15 +62,23 @@ public:
 
 	friend class TopologyPreservingSimplifier;
 
+	/**
+	 * User's constructor.
+	 * @param nMap - reference to LinesMap instance.
+	 *
+	 * \todo XXX - mloskot: I temporarily moved this ctor to public section,
+	 * becuase GEOS did not compile at all:
+	 * http://logs.qgis.org/postgis/%23postgis.2006-04-21.log
+	 */
+	LineStringTransformer(LinesMap& simp);
+	
 protected:
 
 	CoordinateSequence::AutoPtr transformCoordinates(
 			const CoordinateSequence* coords,
 			const Geometry* parent);
-
-private:
-
-	LineStringTransformer(LinesMap& simp);
+	
+private:	
 
 	LinesMap& linestringMap;
 
@@ -124,6 +132,9 @@ LineStringTransformer::transformCoordinates(
  * Users must take care of deleting the map's values (elem.second).
  * Would be nice if auto_ptr<> worked in a container, but it doesn't :(
  *
+ * mloskot: So, let's write our own "shared smart pointer" or better ask
+ * PCS about using Boost's shared_ptr.
+ *
  */
 class LineStringMapBuilderFilter: public geom::GeometryComponentFilter
 {
@@ -135,11 +146,20 @@ public:
 	void filter_ro(const Geometry* geom);
 
 
+	/**
+	 * User's constructor.
+	 * @param nMap - reference to LinesMap instance.
+	 *
+	 * \todo XXX - mloskot: I temporarily moved this ctor to public section,
+	 * becuase GEOS did not compile at all:
+	 * http://logs.qgis.org/postgis/%23postgis.2006-04-21.log
+	 */
+	LineStringMapBuilderFilter(LinesMap& nMap);
+
 private:
 
 	LinesMap& linestringMap;
 
-	LineStringMapBuilderFilter(LinesMap& nMap);
 };
 
 /*private*/
@@ -292,6 +312,9 @@ TopologyPreservingSimplifier::getResultGeometry()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/22 17:16:31  mloskot
+ * Temporar fix of Bug #100. This report requires deeper analysis!.
+ *
  * Revision 1.4  2006/04/13 21:52:35  strk
  * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
  *
