@@ -19,6 +19,7 @@ config.guess
 autom4te.cache
 libtool
 ltmain.sh
-debug
+*debug*
+*optimized*
 *.kdev*
 *tags*
