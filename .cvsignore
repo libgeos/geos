@@ -23,3 +23,6 @@ ltmain.sh
 *optimized*
 *.kdev*
 *tags*
+geos_unit
+*.swp
+*~
