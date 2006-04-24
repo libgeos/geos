@@ -60,15 +60,9 @@ class LineStringTransformer: public geom::util::GeometryTransformer
 
 public:
 
-	friend class TopologyPreservingSimplifier;
-
 	/**
 	 * User's constructor.
 	 * @param nMap - reference to LinesMap instance.
-	 *
-	 * \todo XXX - mloskot: I temporarily moved this ctor to public section,
-	 * becuase GEOS did not compile at all:
-	 * http://logs.qgis.org/postgis/%23postgis.2006-04-21.log
 	 */
 	LineStringTransformer(LinesMap& simp);
 	
@@ -84,7 +78,7 @@ private:
 
 };
 
-/*private*/
+/*public*/
 LineStringTransformer::LineStringTransformer(LinesMap& nMap)
 	:
 	linestringMap(nMap)
@@ -149,10 +143,6 @@ public:
 	/**
 	 * User's constructor.
 	 * @param nMap - reference to LinesMap instance.
-	 *
-	 * \todo XXX - mloskot: I temporarily moved this ctor to public section,
-	 * becuase GEOS did not compile at all:
-	 * http://logs.qgis.org/postgis/%23postgis.2006-04-21.log
 	 */
 	LineStringMapBuilderFilter(LinesMap& nMap);
 
@@ -162,7 +152,7 @@ private:
 
 };
 
-/*private*/
+/*public*/
 LineStringMapBuilderFilter::LineStringMapBuilderFilter(LinesMap& nMap)
 	:
 	linestringMap(nMap)
@@ -312,6 +302,9 @@ TopologyPreservingSimplifier::getResultGeometry()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/04/24 15:47:35  strk
+ * Public constructors change made permanent
+ *
  * Revision 1.5  2006/04/22 17:16:31  mloskot
  * Temporar fix of Bug #100. This report requires deeper analysis!.
  *
