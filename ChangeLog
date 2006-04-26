@@ -3,6 +3,11 @@
 	* tools/geos-config.in: fixed library path
 	to use layout detected by autoconf
 
+2006-04-22 Mateusz Loskot <mateusz@loskot.net>
+
+	* source/simplify/TopologyPreservingSimplifier.cpp:
+	helper classes ctors made public (Bug #100)
+
 2006-04-21 Sandro Santilli <strk@refractions.net>
 
 	* source/geom/PrecisionModel.cpp: fixed
