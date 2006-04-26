@@ -11,6 +11,7 @@ Changes in 2.2.2
 - New Ruby bindings
 - Enumerated SweepLineEvent's DELETE and INSERT labels
   renamed to DELETE_EVENT and INSERT_EVENT.
+- Fixed geos-config to use system-specific libs path
 
 Changes in 2.2.1
 
