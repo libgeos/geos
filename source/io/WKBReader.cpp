@@ -107,25 +107,25 @@ WKBReader::readGeometry()
 	switch (geometryType) {
 		case WKBConstants::wkbPoint :
 			result = readPoint();
-            break;
+			break;
 		case WKBConstants::wkbLineString :
 			result = readLineString();
-            break;
+			break;
 		case WKBConstants::wkbPolygon :
 			result = readPolygon();
-            break;
+			break;
 		case WKBConstants::wkbMultiPoint :
 			result = readMultiPoint();
-            break;
+			break;
 		case WKBConstants::wkbMultiLineString :
 			result = readMultiLineString();
-            break;
+			break;
 		case WKBConstants::wkbMultiPolygon :
 			result = readMultiPolygon();
-            break;
+			break;
 		case WKBConstants::wkbGeometryCollection :
 			result = readGeometryCollection();
-            break;
+			break;
 
 		default:
 			throw new ParseException("Unknown WKB type " + 
