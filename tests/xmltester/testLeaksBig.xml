@@ -11,7 +11,7 @@
 
 <case>
   <desc>mP - MultiPoint</desc>
-  <a>MULTIPOINT(10 10, 20 20)</a>
+  <a>MULTIPOINT((10 10), (20 20))</a>
 <test>
   <op name="getboundary" arg1="A">GEOMETRYCOLLECTION EMPTY</op>
 </test>
@@ -62,7 +62,7 @@
   <desc>mL - 4 lines with common endpoint</desc>
   <a>MULTILINESTRING(  (10 10, 20 20),   (20 20, 30 20),   (20 20, 30 30),   (20 20, 30 40))</a>
 <test>
-  <op name="getboundary" arg1="A">MULTIPOINT(10 10, 30 20, 30 30, 30 40)</op>
+  <op name="getboundary" arg1="A">MULTIPOINT((10 10), (30 20), (30 30), (30 40))</op>
 </test>
 </case>
 

@@ -15,6 +15,7 @@
  **********************************************************************/
 
 #include <geos/io/StringTokenizer.h>
+
 #include <string>
 
 using namespace std;
@@ -22,20 +23,17 @@ using namespace std;
 namespace geos {
 namespace io { // geos.io
 
-//StringTokenizer::StringTokenizer(){
-	//str="";
-	//stok="";
-	//ntok=0.0;
-//}
-StringTokenizer::StringTokenizer(const string &txt): str(txt) {
-	//str=txt;
+/*public*/
+StringTokenizer::StringTokenizer(const string &txt)
+	:
+	str(txt)
+{
 	stok="";
 	ntok=0.0;
 	iter=str.begin();
 }
 
-//StringTokenizer::~StringTokenizer(){}
-
+/*public*/
 int
 StringTokenizer::nextToken()
 {
@@ -86,15 +84,18 @@ StringTokenizer::nextToken()
 	}
 }
 
+/*public*/
 int
 StringTokenizer::peekNextToken()
 {
+
 	string::size_type pos;
 	string tok="";
 	if (iter==str.end())
 		return StringTokenizer::TT_EOF;
 
 	pos=str.find_first_not_of(" \r\n\t", iter-str.begin());
+
 	if (pos==string::npos) return StringTokenizer::TT_EOF;
 	switch(str[pos]) {
 		case '(':
@@ -102,7 +103,12 @@ StringTokenizer::peekNextToken()
 		case ',':
 			return str[pos];
 	}
+
+	// It's either a Number or a Word, let's
+	// see when it ends
+
 	pos=str.find_first_of("\n\r\t() ,", iter-str.begin());
+
 	if (pos==string::npos) {
 		if (iter!=str.end()) {
 			tok.assign(iter,str.end());
@@ -110,8 +116,9 @@ StringTokenizer::peekNextToken()
 			return StringTokenizer::TT_EOF;
 		}
 	} else {
-		tok.assign(iter,str.end());
+		tok.assign(iter, str.begin()+pos); //str.end());
 	}
+
 	char *stopstring;
 	double dbl=strtod(tok.c_str(),&stopstring);
 	if (*stopstring=='\0') {
@@ -125,11 +132,17 @@ StringTokenizer::peekNextToken()
 	}
 }
 
-double StringTokenizer::getNVal(){
+/*public*/
+double
+StringTokenizer::getNVal()
+{
 	return ntok;
 }
 
-string StringTokenizer::getSVal(){
+/*public*/
+string
+StringTokenizer::getSVal()
+{
 	return stok;
 }
 
@@ -138,35 +151,7 @@ string StringTokenizer::getSVal(){
 
 /**********************************************************************
  * $Log$
- * Revision 1.15  2006/03/20 18:18:15  strk
- * io.h header split
- *
- * Revision 1.14  2006/03/06 15:23:14  strk
- * geos::io namespace
- *
- * Revision 1.13  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.12  2005/04/14 11:49:02  strk
- * Applied slightly modified patch by Cheng Shan to speedup WKT parsing.
- *
- * Revision 1.11  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.10  2004/05/17 12:37:50  strk
- * Added carriage returns and tabs in set of blanks chars
- *
- * Revision 1.9  2004/05/07 14:15:08  strk
- * fixed peekNextToken to avoid incrementing string pointer
- *
- * Revision 1.8  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
+ * Revision 1.16  2006/04/26 16:35:40  strk
+ * Had WKTReader accept correct form for MultiPoint
  *
  **********************************************************************/

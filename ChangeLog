@@ -1,3 +1,12 @@
+2006-04-26 Sandro Santilli <strk@refractions.net>
+
+	* source/io/StringTokenizer.cpp: fixed bug in peekNextToken()
+	function failing read numbers correctly.
+	* source/io/WKTReader.cpp: fixed MultiPoint reader
+	to accept the correct format: "MULTIPOINT((0 0), (1 1))"
+	* tests/xmltester/testLeaksBig.xml: changed some MULTIPOINT
+	WKTs to test acceptance.
+
 2006-04-26 Silke Reimer <Silke.Reimer@intevation.de>
 
 	* tools/geos-config.in: fixed library path
