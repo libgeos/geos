@@ -163,6 +163,7 @@ Node::testInvariant() const
 		}
 	}
 
+#if 0 // We can't rely on numerical stability with FP computations
 	// ztot is the sum of doubnle sin zvals vector
 	double ztot_check=0.0;
 	for (std::vector<double>::const_iterator 
@@ -173,6 +174,7 @@ Node::testInvariant() const
 		ztot_check += *i;
 	}
 	assert(ztot_check == ztot);
+#endif // 0
 
 #endif
 }
@@ -189,6 +191,9 @@ Node::testInvariant() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/27 15:15:06  strk
+ * Z check removed from invariant tester to avoid aborts due to differences in FP computations.
+ *
  * Revision 1.4  2006/04/07 16:01:51  strk
  * Port info, doxygen comments, testInvariant(), many assertionss, handling of
  * the NULL EdgeEndStar member

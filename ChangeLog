@@ -5,6 +5,11 @@
 	* source/geomgraph/NodeMap.cpp: (addNode): always use the Node
 	Coordinate as a key in the map to reduce likeliness of
 	a premature deletion.
+	* source/geomgraph/PlanarGraph.cpp: use output ops when
+	available, for debugging lines
+	* source/headers/geos/geomgraph/Node.h: Z check removed
+	from invariant tester to avoid aborts due to differences
+	in FP computations.
 
 2006-04-26 Sandro Santilli <strk@refractions.net>
 
