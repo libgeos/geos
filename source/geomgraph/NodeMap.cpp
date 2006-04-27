@@ -64,7 +64,10 @@ NodeMap::addNode(const Coordinate& coord)
                 cerr<<" is new"<<endl;
 #endif
                 node=nodeFact.createNode(coord);
-                nodeMap[const_cast<Coordinate *>(&coord)]=node;
+		Coordinate* c = const_cast<Coordinate *>(
+			&(node->getCoordinate()));
+                nodeMap[c]=node;
+                //nodeMap[const_cast<Coordinate *>(&coord)]=node;
         }
         else
         {
@@ -163,6 +166,9 @@ NodeMap::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/04/27 15:06:24  strk
+ * (addNode): always use the Node Coordinate as a key in the map to reduce likeliness of a premature deletion.
+ *
  * Revision 1.15  2006/04/08 13:00:47  strk
  * assertion checking, mergeLabel() call fix (bug#91)
  *

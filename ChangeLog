@@ -1,3 +1,11 @@
+2006-04-27 Sandro Santilli <strk@refractions.net>
+
+	* source/geomgraph/Node.cpp: standard algorithm used in addZ()
+	for vector seek.
+	* source/geomgraph/NodeMap.cpp: (addNode): always use the Node
+	Coordinate as a key in the map to reduce likeliness of
+	a premature deletion.
+
 2006-04-26 Sandro Santilli <strk@refractions.net>
 
 	* source/io/StringTokenizer.cpp: fixed bug in peekNextToken()
