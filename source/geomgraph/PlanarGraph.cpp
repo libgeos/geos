@@ -189,7 +189,8 @@ PlanarGraph::addNode(Node *node)
 {
 	assert(nodes);
 #if GEOS_DEBUG
-	cerr<<"PlanarGraph::addNode(Node * "<<node->print()<<")"<<endl;
+	cerr << "PlanarGraph::addNode(Node * " << *node 
+		<< ")" << endl;
 #endif
 	return nodes->addNode(node);
 }
@@ -199,7 +200,8 @@ Node*
 PlanarGraph::addNode(const Coordinate& coord)
 {
 #if GEOS_DEBUG
-	cerr<<"PlanarGraph::addNode(Coordinate& "<<coord.toString()<<")"<<endl;
+	cerr << "PlanarGraph::addNode(Coordinate& "
+		<< coord << ")" << endl;
 #endif
 	return nodes->addNode(coord);
 }
@@ -397,6 +399,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/04/27 15:07:15  strk
+ * use output operators in debugging lines
+ *
  * Revision 1.30  2006/04/07 16:52:20  strk
  * Port info, doxygen comments, assertion checking
  *
