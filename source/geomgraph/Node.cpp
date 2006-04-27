@@ -28,6 +28,8 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -244,7 +246,7 @@ Node::addZ(double z)
 #endif
 		return;
 	}
-	for (unsigned int i=0; i<zvals.size(); i++) if ( zvals[i] == z )
+	if ( find(zvals.begin(), zvals.end(), z) != zvals.end() )
 	{
 #if GEOS_DEBUG
 		cerr<<" already stored"<<endl;
@@ -279,6 +281,9 @@ std::ostream& operator<< (std::ostream& os, const Node& node)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/04/27 15:03:48  strk
+ * standard algorithm used in addZ() for vector seek
+ *
  * Revision 1.23  2006/04/07 16:01:51  strk
  * Port info, doxygen comments, testInvariant(), many assertionss, handling of
  * the NULL EdgeEndStar member
