@@ -1991,6 +1991,7 @@ public:
 	virtual GeometryTypeId getGeometryTypeId() const;
 	bool isClosed() const;
 	void setPoints(CoordinateSequence* cl);
+    Geometry* clone() const;
 private:
 #ifdef INT64_CONST_IS_I64
 	static const int64 serialVersionUID = -4261142084085851829I64;
@@ -2469,6 +2470,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34.2.2.2.5  2006/04/28 18:39:57  sgillies
+ * Add LinearRing::clone (bug 102)
+ *
  * Revision 1.34.2.2.2.4  2006/01/16 11:08:38  strk
  * Removed invalid full qualification of in-class-declaration methods.
  *
