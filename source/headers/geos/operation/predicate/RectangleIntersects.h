@@ -57,7 +57,7 @@ public:
 	 * Must be determined empirically.  Should err on the
 	 * safe side by making value smaller rather than larger.
 	 */
-	static const int MAXIMUM_SCAN_SEGMENT_COUNT;
+	static const size_t MAXIMUM_SCAN_SEGMENT_COUNT;
 
 	/** \brief
 	 * Create a new intersects computer for a rectangle.

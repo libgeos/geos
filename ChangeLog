@@ -18,6 +18,10 @@
 	constructions use GeometryFactory, which has been made
 	friend of all Geometry derivates. getNumPoints() changed
 	to return size_t.
+	* source/headers/geos/operation/predicate/RectangleIntersects.h,
+	source/operation/predicate/RectangleIntersects.cpp,
+	source/io/WKTWriter.cpp: removed warnings related to change
+	in getNumPoints() return type.
 
 2006-04-27 Sandro Santilli <strk@refractions.net>
 

@@ -274,7 +274,8 @@ void WKTWriter::appendLineStringText(const LineString *lineString, int level, bo
 	} else {
 		if (doIndent) indent(level, writer);
 		writer->write("(");
-		for(int i=0;i<lineString->getNumPoints();i++) {
+		for(size_t i=0, n=lineString->getNumPoints(); i<n; ++i)
+		{
 			if (i>0) {
 				writer->write(", ");
 				if (i%10==0) indent(level + 2, writer);
@@ -400,6 +401,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/04/28 11:12:31  strk
+ * removed warnings related to change in getNumPoints() return type.
+ *
  * Revision 1.31  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

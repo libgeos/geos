@@ -37,7 +37,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace predicate { // geos.operation.predicate
 
-const int RectangleIntersects::MAXIMUM_SCAN_SEGMENT_COUNT = 200;
+const size_t RectangleIntersects::MAXIMUM_SCAN_SEGMENT_COUNT = 200;
 
 
 //----------------------------------------------------------------
