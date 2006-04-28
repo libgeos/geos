@@ -71,6 +71,8 @@ Changes in 3.0.0
 	  EMPTY geoms
 	- GEOSException is now derived by std::runtim_exception
 	  and thrown by const reference.
+	- Geometry constructors made protected, to force use
+	  of a GeometryFactory.
 
 - Correctness:
 	- More const-correct signatures
