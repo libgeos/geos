@@ -1,3 +1,9 @@
+2006-04-28 Sandro Santilli <strk@refractions.net>
+
+	* tests/unit/geom/: LineStringTest.cpp, MultiPointTest.cpp,
+	PointTest.cpp, PolygonTest.cpp: only construct Geoms using
+	GeometryFactory.
+
 2006-04-27 Sandro Santilli <strk@refractions.net>
 
 	* source/geomgraph/Node.cpp: standard algorithm used in addZ()

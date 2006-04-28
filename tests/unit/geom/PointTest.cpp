@@ -28,21 +28,23 @@ namespace tut
 	typedef geos::geom::Coordinate const* CoordinateCPtr;
 
 	typedef geos::geom::Geometry* GeometryPtr;
+	typedef std::auto_ptr<geos::geom::Geometry> GeometryAutoPtr;
 	typedef geos::geom::Geometry const* GeometryCPtr;
 
 	typedef geos::geom::Point* PointPtr;
+	typedef std::auto_ptr<geos::geom::Point> PointAutoPtr;
 	typedef geos::geom::Point const* PointCPtr;
 
 	geos::geom::PrecisionModel pm_;
 	geos::geom::GeometryFactory factory_;
 	geos::io::WKTReader reader_;
-	geos::geom::Point empty_point_;
+	PointAutoPtr empty_point_;
 	PointPtr point_;
 
 	test_point_data()
-	    : pm_(1000), factory_(&pm_, 0), reader_(&factory_), empty_point_(NULL, &factory_)
+	    : pm_(1000), factory_(&pm_, 0), reader_(&factory_), empty_point_(factory_.createPoint())
 	{
-	    // Create non-empty LinearRing
+	    // Create non-empty Point
 	    GeometryPtr geo = 0;
 	    geo = reader_.read("POINT(1.234 5.678)");
 	    point_ = static_cast<PointPtr>(geo);
@@ -68,8 +70,8 @@ namespace tut
     template<>
     void object::test<1>()
     {
-		geos::geom::Point point(NULL, &factory_);
-		ensure( point.isEmpty() );
+		PointAutoPtr point(factory_.createPoint());
+		ensure( point->isEmpty() );
     }
 
     // Test of user's constructor to build non-empty Point
@@ -84,8 +86,8 @@ namespace tut
 		ensure( coords != 0 );
 		coords->add(Coordinate(1.234, 5.678));
 
-		geos::geom::Point point(coords, &factory_);
-		ensure( !point.isEmpty() );
+		PointAutoPtr point(factory_.createPoint(coords));
+		ensure( !point->isEmpty() );
     }
 
     // Test of user's constructor throwing IllegalArgumentException
@@ -105,7 +107,7 @@ namespace tut
 			coords->add(Coordinate(1.234, 5.678));
 			coords->add(Coordinate(4.321, 8.765));
 
-			geos::geom::Point point(coords, &factory_);
+			PointAutoPtr point(factory_.createPoint(coords));
 
 			fail("IllegalArgumentException expected.");
 		}
@@ -124,8 +126,8 @@ namespace tut
 	template<>
 	void object::test<4>()
 	{
-		geos::geom::Point copy(empty_point_);
-		ensure( copy.isEmpty() );
+		GeometryAutoPtr copy(empty_point_->clone());
+		ensure( copy->isEmpty() );
 	}
 
 	// Test of isEmpty() for empty Point
@@ -133,7 +135,7 @@ namespace tut
 	template<>
 	void object::test<5>()
 	{
-		ensure( empty_point_.isEmpty() );
+		ensure( empty_point_->isEmpty() );
 	}
 
 	// Test of isSimple() for empty Point
@@ -141,7 +143,7 @@ namespace tut
 	template<>
 	void object::test<6>()
 	{
-		ensure( empty_point_.isSimple() );
+		ensure( empty_point_->isSimple() );
 	}
 
 	// Test of isValid() for empty Point
@@ -149,7 +151,7 @@ namespace tut
 	template<>
 	void object::test<7>()
 	{
-		ensure( empty_point_.isValid() );
+		ensure( empty_point_->isValid() );
 	}
 
 	// Test of getEnvelope() for empty Point
@@ -157,7 +159,7 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		GeometryPtr envelope = empty_point_.getEnvelope();	
+		GeometryPtr envelope = empty_point_->getEnvelope();	
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
 		factory_.destroyGeometry(envelope);
@@ -168,7 +170,7 @@ namespace tut
 	template<>
 	void object::test<9>()
 	{
-		GeometryPtr boundary = empty_point_.getBoundary();	
+		GeometryPtr boundary = empty_point_->getBoundary();	
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
 		factory_.destroyGeometry(boundary);
@@ -179,7 +181,7 @@ namespace tut
 	template<>
 	void object::test<10>()
 	{
-		GeometryPtr hull = empty_point_.convexHull();	
+		GeometryPtr hull = empty_point_->convexHull();	
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
 		factory_.destroyGeometry(hull);
@@ -190,7 +192,7 @@ namespace tut
 	template<>
 	void object::test<11>()
 	{
-		ensure_equals( empty_point_.getGeometryTypeId(), geos::geom::GEOS_POINT );
+		ensure_equals( empty_point_->getGeometryTypeId(), geos::geom::GEOS_POINT );
 	}
 
 	// Test of getGeometryType() for empty Polygon
@@ -199,7 +201,7 @@ namespace tut
 	void object::test<12>()
 	{
 		const std::string type("Point");
-		ensure_equals( empty_point_.getGeometryType(), type );
+		ensure_equals( empty_point_->getGeometryType(), type );
 	}
 
 	// Test of getDimension() for empty Point
@@ -207,7 +209,7 @@ namespace tut
 	template<>
 	void object::test<13>()
 	{
-		ensure_equals( empty_point_.getDimension(), geos::geom::Dimension::P );
+		ensure_equals( empty_point_->getDimension(), geos::geom::Dimension::P );
 	}
 
 	// Test of getBoundaryDimension() for empty Point
@@ -215,7 +217,7 @@ namespace tut
 	template<>
 	void object::test<14>()
 	{
-		ensure_equals( empty_point_.getBoundaryDimension(), geos::geom::Dimension::False );
+		ensure_equals( empty_point_->getBoundaryDimension(), geos::geom::Dimension::False );
 	}	
 
 	// Test of getNumPoints() for empty Point
@@ -223,7 +225,7 @@ namespace tut
 	template<>
 	void object::test<15>()
 	{
-		ensure_equals( empty_point_.getNumPoints(), 0 );
+		ensure_equals( empty_point_->getNumPoints(), (size_t)0 );
 	}
 
 	// Test of getLength() for empty Point
@@ -231,7 +233,7 @@ namespace tut
 	template<>
 	void object::test<16>()
 	{
-		ensure_equals( empty_point_.getLength(), 0 );
+		ensure_equals( empty_point_->getLength(), 0 );
 	}
 
 	// Test of getArea() for empty Point
@@ -239,7 +241,7 @@ namespace tut
 	template<>
 	void object::test<17>()
 	{
-		ensure_equals( empty_point_.getArea(), 0 );
+		ensure_equals( empty_point_->getArea(), 0 );
 	}
 
 	// Test of isEmpty() for non-empty Point
@@ -329,7 +331,7 @@ namespace tut
 	template<>
 	void object::test<27>()
 	{
-		ensure_equals( empty_point_.getBoundaryDimension(), geos::geom::Dimension::False );
+		ensure_equals( empty_point_->getBoundaryDimension(), geos::geom::Dimension::False );
 	}	
 
 	// Test of getNumPoints() for non-empty Point
@@ -337,7 +339,7 @@ namespace tut
 	template<>
 	void object::test<28>()
 	{
-		ensure_equals( point_->getNumPoints(), 1 );
+		ensure_equals( point_->getNumPoints(), (size_t)1 );
 	}
 
 	// Test of getLength() for non-empty Point
@@ -361,9 +363,9 @@ namespace tut
 	template<>
 	void object::test<31>()
 	{
-		geos::geom::Point copy(empty_point_);
-		GeometryCPtr geo = &copy;
-		ensure( !empty_point_.equals(geo) );
+		GeometryAutoPtr geo(empty_point_->clone());
+
+		ensure( !empty_point_->equals(geo.get()) );
 	}
 
 	// Test of equals() for non-empty Point (1.234,5.678)

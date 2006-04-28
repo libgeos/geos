@@ -31,18 +31,21 @@ namespace tut
 		typedef geos::geom::Point const* PointCPtr;
 
 		typedef geos::geom::MultiPoint* MultiPointPtr;
+		typedef std::auto_ptr<geos::geom::MultiPoint> MultiPointAutoPtr;
 		typedef geos::geom::MultiPoint const* MultiPointCPtr;
 
 		geos::geom::PrecisionModel pm_;
 		geos::geom::GeometryFactory factory_;
 		geos::io::WKTReader reader_;
 
-		geos::geom::MultiPoint empty_mp_;
+		MultiPointAutoPtr empty_mp_;
 		MultiPointPtr mp_;
 		const int mp_size_;
 
 		test_multipoint_data()
-			: pm_(1.0), factory_(&pm_, 0), reader_(&factory_), empty_mp_(NULL, &factory_), mp_size_(5)
+			:
+			pm_(1.0), factory_(&pm_, 0), reader_(&factory_),
+			empty_mp_(factory_.createMultiPoint()), mp_size_(5)
 		{
 			// Create non-empty MultiPoint
 			GeometryPtr geo = 0;
@@ -71,14 +74,14 @@ namespace tut
 	void object::test<1>()
 	{
 		const size_t size0 = 0;
-		geos::geom::MultiPoint mp(NULL, &factory_);
+		MultiPointAutoPtr mp(factory_.createMultiPoint());
 		
-		ensure( mp.isEmpty() );
-		ensure( mp.isSimple() );
-		ensure( mp.isValid() );
-		ensure( mp.getCentroid() == 0 );
-		ensure_equals( mp.getNumPoints(), size0 );
-		ensure_equals( mp.getNumGeometries(), size0 );
+		ensure( mp->isEmpty() );
+		ensure( mp->isSimple() );
+		ensure( mp->isValid() );
+		ensure( mp->getCentroid() == 0 );
+		ensure_equals( mp->getNumPoints(), size0 );
+		ensure_equals( mp->getNumGeometries(), size0 );
 	}
 
 	// Test of copy constructor
@@ -87,14 +90,15 @@ namespace tut
 	void object::test<2>()
 	{
 		const size_t size0 = 0;
-		geos::geom::MultiPoint copy(empty_mp_);
+		MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone()));
+		ensure( copy.get() );
 		
-		ensure( copy.isEmpty() );
-		ensure( copy.isSimple() );
-		ensure( copy.isValid() );
-		ensure( copy.getCentroid() == 0 );
-		ensure_equals( copy.getNumPoints(), size0 );
-		ensure_equals( copy.getNumGeometries(), size0 );
+		ensure( copy->isEmpty() );
+		ensure( copy->isSimple() );
+		ensure( copy->isValid() );
+		ensure( copy->getCentroid() == 0 );
+		ensure_equals( copy->getNumPoints(), size0 );
+		ensure_equals( copy->getNumGeometries(), size0 );
 	}
 
 	// Test of empty MultiPoint constructed by WKTReader
@@ -122,7 +126,7 @@ namespace tut
 	template<>
 	void object::test<4>()
 	{
-		ensure( empty_mp_.isEmpty() );
+		ensure( empty_mp_->isEmpty() );
 	}
 
 	// Test of isSimple() for empty MultiPoint
@@ -130,7 +134,7 @@ namespace tut
 	template<>
 	void object::test<5>()
 	{
-		ensure( empty_mp_.isSimple() );
+		ensure( empty_mp_->isSimple() );
 	}
 
 	// Test of isValid() for empty MultiPoint
@@ -138,7 +142,7 @@ namespace tut
 	template<>
 	void object::test<6>()
 	{
-		ensure( empty_mp_.isValid() );
+		ensure( empty_mp_->isValid() );
 	}
 
 	// Test of getEnvelope() for empty MultiPoint
@@ -146,7 +150,7 @@ namespace tut
 	template<>
 	void object::test<7>()
 	{
-		GeometryPtr envelope = empty_mp_.getEnvelope();	
+		GeometryPtr envelope = empty_mp_->getEnvelope();	
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
 		factory_.destroyGeometry(envelope);
@@ -157,7 +161,7 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		GeometryPtr boundary = empty_mp_.getBoundary();	
+		GeometryPtr boundary = empty_mp_->getBoundary();	
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
 		factory_.destroyGeometry(boundary);
@@ -168,7 +172,7 @@ namespace tut
 	template<>
 	void object::test<9>()
 	{
-		GeometryPtr hull = empty_mp_.convexHull();	
+		GeometryPtr hull = empty_mp_->convexHull();	
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
 		factory_.destroyGeometry(hull);
@@ -179,7 +183,7 @@ namespace tut
 	template<>
 	void object::test<10>()
 	{
-		ensure_equals( empty_mp_.getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
+		ensure_equals( empty_mp_->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 	}
 
 	// Test of getGeometryType() for empty MultiPoint
@@ -188,7 +192,7 @@ namespace tut
 	void object::test<11>()
 	{
 		const std::string type("MultiPoint");
-		ensure_equals( empty_mp_.getGeometryType(), type );
+		ensure_equals( empty_mp_->getGeometryType(), type );
 	}
 
 	// Test of getDimension() for empty MultiPoint
@@ -196,7 +200,7 @@ namespace tut
 	template<>
 	void object::test<12>()
 	{
-		ensure_equals( empty_mp_.getDimension(), geos::geom::Dimension::P );
+		ensure_equals( empty_mp_->getDimension(), geos::geom::Dimension::P );
 	}
 
 	// Test of getBoundaryDimension() for empty MultiPoint
@@ -204,7 +208,7 @@ namespace tut
 	template<>
 	void object::test<13>()
 	{
-		ensure_equals( empty_mp_.getBoundaryDimension(), geos::geom::Dimension::False );
+		ensure_equals( empty_mp_->getBoundaryDimension(), geos::geom::Dimension::False );
 	}	
 
 	// Test of getNumPoints() for empty MultiPoint
@@ -212,7 +216,7 @@ namespace tut
 	template<>
 	void object::test<14>()
 	{
-		ensure_equals( empty_mp_.getNumPoints(), 0 );
+		ensure_equals( empty_mp_->getNumPoints(), 0 );
 	}
 
 	// Test of getLength() for empty MultiPoint
@@ -220,7 +224,7 @@ namespace tut
 	template<>
 	void object::test<15>()
 	{
-		ensure_equals( empty_mp_.getLength(), 0 );
+		ensure_equals( empty_mp_->getLength(), 0 );
 	}
 
 	// Test of getArea() for empty MultiPoint
@@ -228,7 +232,7 @@ namespace tut
 	template<>
 	void object::test<16>()
 	{
-		ensure_equals( empty_mp_.getArea(), 0 );
+		ensure_equals( empty_mp_->getArea(), 0 );
 	}
 
 	// Test of isEmpty() for non-empty LinearRing
