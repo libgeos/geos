@@ -194,23 +194,38 @@ Polygon::getGeometryType() const
 }
 
 // Returns a newly allocated Geometry object
+/*public*/
 Geometry*
 Polygon::getBoundary() const
 {
+	/*
+	 * We will make sure that what we
+	 * return is composed of LineString,
+	 * not LinearRings
+	 */
+
+	const GeometryFactory* gf = getFactory();
+
 	if (isEmpty()) {
-		return getFactory()->createEmptyGeometry();
+		return gf->createEmptyGeometry();
 	}
+
 	if ( ! holes->size() )
 	{
-		//return new LineString(*shell);
-		return shell->clone();
+		return gf->createLineString(*shell).release();
 	}
 
 	vector<Geometry *> *rings = new vector<Geometry *>(holes->size()+1);
-	(*rings)[0]=shell->clone(); // new LineString(*shell);
+
+	//(*rings)[0]=shell->clone(); // new LineString(*shell);
+	(*rings)[0] = gf->createLineString(*shell).release();
 	for (unsigned int i=0; i<holes->size(); i++) {
 		//(*rings)[i + 1] = new LineString((const LineString &)*(*holes)[i]);
-		(*rings)[i + 1] = (*holes)[i]->clone();
+		assert( dynamic_cast<LineString *>( (*holes)[i] ) );
+		LineString* hole = static_cast<LineString *>( (*holes)[i] );
+		assert(hole);
+		LineString* ls = gf->createLineString( *hole ).release();
+		(*rings)[i + 1] = ls;
 	}
 	MultiLineString *ret = getFactory()->createMultiLineString(rings);
 	return ret;
@@ -444,6 +459,10 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.64  2006/04/28 11:56:52  strk
+ * * source/geom/GeometryFactory.cpp, source/headers/geos/geom/GeometryFactory.h: added LineString copy constructor.
+ * * source/geom/Polygon.cpp: fixed getBoundary method to always return a geometry composed by LineStrings (not LinearRings)
+ *
  * Revision 1.63  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return

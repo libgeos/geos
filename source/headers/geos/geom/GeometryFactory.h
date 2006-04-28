@@ -227,6 +227,9 @@ public:
 	/// Construct an EMPTY LineString 
 	LineString* createLineString() const;
 
+	/// Copy a LineString
+	std::auto_ptr<LineString> createLineString(const LineString& ls) const;
+
 	/// Construct a LineString taking ownership of given argument
 	LineString* createLineString(CoordinateSequence* coordinates) const;
 
@@ -309,6 +312,10 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/04/28 11:56:52  strk
+ * * source/geom/GeometryFactory.cpp, source/headers/geos/geom/GeometryFactory.h: added LineString copy constructor.
+ * * source/geom/Polygon.cpp: fixed getBoundary method to always return a geometry composed by LineStrings (not LinearRings)
+ *
  * Revision 1.8  2006/04/12 11:39:34  strk
  * Removed Geometry.h and CoordinateSequence.h includes.
  * The former created a circular dependency.

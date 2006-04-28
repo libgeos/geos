@@ -22,6 +22,11 @@
 	source/operation/predicate/RectangleIntersects.cpp,
 	source/io/WKTWriter.cpp: removed warnings related to change
 	in getNumPoints() return type.
+	* source/geom/GeometryFactory.cpp,
+	source/headers/geos/geom/GeometryFactory.h: added LineString
+	copy constructor
+	* source/geom/Polygon.cpp: fixed getBoundary method to
+	always return a geometry composed by LineStrings (not LinearRings)
 
 2006-04-27 Sandro Santilli <strk@refractions.net>
 

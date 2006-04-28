@@ -517,6 +517,13 @@ GeometryFactory::createLineString() const
 }
 
 /*public*/
+std::auto_ptr<LineString>
+GeometryFactory::createLineString(const LineString& ls) const
+{
+	return std::auto_ptr<LineString>(new LineString(ls));
+}
+
+/*public*/
 LineString*
 GeometryFactory::createLineString(CoordinateSequence *newCoords)
 	const
@@ -677,6 +684,10 @@ GeometryFactory::getDefaultInstance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.68  2006/04/28 11:56:52  strk
+ * * source/geom/GeometryFactory.cpp, source/headers/geos/geom/GeometryFactory.h: added LineString copy constructor.
+ * * source/geom/Polygon.cpp: fixed getBoundary method to always return a geometry composed by LineStrings (not LinearRings)
+ *
  * Revision 1.67  2006/04/11 11:16:25  strk
  * Added LineString and LinearRing constructors by auto_ptr
  *
