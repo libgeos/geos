@@ -3,6 +3,21 @@
 	* tests/unit/geom/: LineStringTest.cpp, MultiPointTest.cpp,
 	PointTest.cpp, PolygonTest.cpp: only construct Geoms using
 	GeometryFactory.
+	* source/geom/GeometryCollection.cpp, source/geom/LineString.cpp,
+	source/geom/MultiLineString.cpp, source/geom/MultiPoint.cpp,
+	source/geom/MultiPolygon.cpp, source/geom/Point.cpp,
+	source/geom/Polygon.cpp, source/headers/geos/geom/Geometry.h,
+	source/headers/geos/geom/GeometryCollection.h,
+	source/headers/geos/geom/LineString.h,
+	source/headers/geos/geom/MultiLineString.h,
+	source/headers/geos/geom/MultiPoint.h,
+	source/headers/geos/geom/MultiPolygon.h,
+	source/headers/geos/geom/Point.h,
+	source/headers/geos/geom/Polygon.h:
+	Geometry constructors made protected, to ensure all
+	constructions use GeometryFactory, which has been made
+	friend of all Geometry derivates. getNumPoints() changed
+	to return size_t.
 
 2006-04-27 Sandro Santilli <strk@refractions.net>
 

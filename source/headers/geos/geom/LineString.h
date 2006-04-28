@@ -43,21 +43,13 @@ namespace geom { // geos::geom
  * \brief Basic implementation of LineString.
  */
 class LineString: public Geometry {
+
 public:
+
+	friend class GeometryFactory;
 
 	/// A vector of const LineString pointers
 	typedef std::vector<const LineString *> ConstVect;
-
-	LineString(const LineString &ls);
-
-	/// \brief
-	/// Constructs a LineString taking ownership the
-	/// given CoordinateSequence.
-	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
-
-	/// Hopefully cleaner version of the above
-	LineString(CoordinateSequence::AutoPtr pts,
-			const GeometryFactory *newFactory);
 
 	virtual ~LineString();
 
@@ -89,7 +81,7 @@ public:
 
 	virtual bool isEmpty() const;
 
-	virtual int getNumPoints() const;
+	virtual size_t getNumPoints() const;
 
 	virtual Point* getPointN(int n) const;
 
@@ -158,6 +150,17 @@ public:
 
 protected:
 
+	LineString(const LineString &ls);
+
+	/// \brief
+	/// Constructs a LineString taking ownership the
+	/// given CoordinateSequence.
+	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
+
+	/// Hopefully cleaner version of the above
+	LineString(CoordinateSequence::AutoPtr pts,
+			const GeometryFactory *newFactory);
+
 	Envelope::AutoPtr computeEnvelopeInternal() const;
 
 	CoordinateSequence::AutoPtr points;
@@ -191,6 +194,11 @@ LineString::clone() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.7  2006/04/11 11:16:25  strk
  * Added LineString and LinearRing constructors by auto_ptr
  *

@@ -37,7 +37,7 @@ namespace geos {
 namespace geom { // geos::geom
 
 
-/*public*/
+/*protected*/
 Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
 	:
 	Geometry(factory),
@@ -53,7 +53,7 @@ Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
 	}
 }
 
-/*public*/
+/*protected*/
 Point::Point(const Point &p)
 	:
 	Geometry(p.getFactory()),
@@ -67,7 +67,7 @@ Point::getCoordinates() const
 	return coordinates->clone();
 }
 
-int
+size_t
 Point::getNumPoints() const
 {
 	return isEmpty() ? 0 : 1;
@@ -231,6 +231,11 @@ Point::getCoordinatesRO() const
 /**********************************************************************
  *
  * $Log$
+ * Revision 1.45  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.44  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>

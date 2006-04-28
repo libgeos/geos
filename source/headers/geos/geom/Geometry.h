@@ -152,8 +152,11 @@ enum GeometryTypeId {
  *
  */
 class Geometry {
+
 public:
-	friend class io::Unload;
+
+	friend class GeometryFactory;
+
 	friend std::ostream& operator<< (std::ostream& os, const Geometry& geom);
 
 	/// A vector of const Geometry pointers
@@ -165,21 +168,12 @@ public:
 	/// An auto_ptr of Geometry
 	typedef std::auto_ptr<Geometry> AutoPtr;
 
-	Geometry(const Geometry &geom);
-
-	/** \brief
-	 * Construct a geometry with the given GeometryFactory.
-	 * Will keep a reference to the factory, so don't
-	 * delete it until al Geometry objects referring to
-	 * it are deleted.
-	 */
-	Geometry(const GeometryFactory *factory);
-
-	/** Destroy Geometry and all components */
-	virtual ~Geometry();
-
 	/// Make a deep-copy of this Geometry
 	virtual Geometry* clone() const=0;
+
+	/// Destroy Geometry and all components
+	virtual ~Geometry();
+
 
 	/**
 	 * \brief
@@ -256,7 +250,7 @@ public:
 	virtual CoordinateSequence* getCoordinates() const=0; //Abstract
 
 	/// Returns the count of this Geometrys vertices.
-	virtual int getNumPoints() const=0; //Abstract
+	virtual size_t getNumPoints() const=0; //Abstract
 
 	/// Returns false if the Geometry not simple.
 	virtual bool isSimple() const=0; //Abstract
@@ -612,6 +606,16 @@ protected:
 	/// Polygon overrides to check for actual rectangle
 	virtual bool isRectangle() const { return false; }
 
+	Geometry(const Geometry &geom);
+
+	/** \brief
+	 * Construct a geometry with the given GeometryFactory.
+	 * Will keep a reference to the factory, so don't
+	 * delete it until al Geometry objects referring to
+	 * it are deleted.
+	 */
+	Geometry(const GeometryFactory *factory);
+
 private:
 	int getClassSortIndex() const;
 	static GeometryComponentFilter geometryChangedFilter;
@@ -653,6 +657,11 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.9  2006/04/11 09:31:47  strk
  * Added Geometry::AutoPtr typedef
  *

@@ -47,33 +47,23 @@ namespace geom { // geos::geom
  * \brief Basic implementation of Point.
  */
 class Point : public Geometry {
+
 public:
+
+	friend class GeometryFactory;
 
 	/// A vector of const Point pointers
 	typedef std::vector<const Point *> ConstVect;
 
-
-	/**
-	 * \brief
-	 * Creates a Point taking ownership of the given CoordinateSequence
-	 * (must have 1 element)
-	 *
-	 * @param  newCoords
-	 *	contains the single coordinate on which to base this
-	 *	<code>Point</code> or <code>null</code> to create
-	 *	the empty geometry.
-	 *
-	 * @param newFactory the GeometryFactory used to create this geometry
-	 */  
-	Point(CoordinateSequence *newCoords, const GeometryFactory *newFactory);
-
-	Point(const Point &p); 
 	virtual ~Point();
+
 	Geometry *clone() const { return new Point(*this); }
+
 	CoordinateSequence* getCoordinates(void) const;
+
 	const CoordinateSequence* getCoordinatesRO() const;
 
-	int getNumPoints() const;
+	size_t getNumPoints() const;
 	bool isEmpty() const;
 	bool isSimple() const;
 	//bool isValid() const;
@@ -104,6 +94,22 @@ public:
 
 protected:
 
+	/**
+	 * \brief
+	 * Creates a Point taking ownership of the given CoordinateSequence
+	 * (must have 1 element)
+	 *
+	 * @param  newCoords
+	 *	contains the single coordinate on which to base this
+	 *	<code>Point</code> or <code>null</code> to create
+	 *	the empty geometry.
+	 *
+	 * @param newFactory the GeometryFactory used to create this geometry
+	 */  
+	Point(CoordinateSequence *newCoords, const GeometryFactory *newFactory);
+
+	Point(const Point &p); 
+
 	Envelope::AutoPtr computeEnvelopeInternal() const;
 
 	int compareToSameClass(const Geometry *p) const;
@@ -127,6 +133,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.4  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>

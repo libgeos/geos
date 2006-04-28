@@ -28,20 +28,12 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-/**
-* Constructs a <code>MultiPoint</code>.
-*
-* @param  newPoints
-*	the <code>Point</code>s for this <code>MultiPoint</code>,
-*	or <code>null</code> or an empty array to create the empty
-* 	geometry.
-*	Elements may be empty <code>Point</code>s,
-*	but not <code>null</code>s.
-*
-*	Constructed object will take ownership of
-*	the vector and its elements.
-*/
-MultiPoint::MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *factory): GeometryCollection(newPoints,factory){}
+/*protected*/
+MultiPoint::MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *factory)
+	:
+	GeometryCollection(newPoints,factory)
+{
+}
 
 
 MultiPoint::~MultiPoint(){}
@@ -96,6 +88,11 @@ MultiPoint::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.32  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

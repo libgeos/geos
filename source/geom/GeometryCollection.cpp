@@ -37,7 +37,9 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-GeometryCollection::GeometryCollection(const GeometryCollection &gc):
+/*protected*/
+GeometryCollection::GeometryCollection(const GeometryCollection &gc)
+	:
 	Geometry(gc.getFactory())
 {
 	unsigned int ngeoms=gc.geometries->size();
@@ -49,23 +51,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc):
 	}
 }
 
-/**
- * @param newGeoms
- *	the <code>Geometry</code>s for this
- *	<code>GeometryCollection</code>,
- *	or <code>null</code> or an empty array to
- *	create the empty geometry.
- *	Elements may be empty <code>Geometry</code>s,
- *	but not <code>null</code>s.
- *
- *	If construction succeed the created object will take
- *	ownership of newGeoms vector and elements.
- *
- *	If construction	fails "IllegalArgumentException *"
- *	is thrown and it is your responsibility to delete newGeoms
- *	vector and content.
- *
- */
+/*protected*/
 GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *factory):
 	Geometry(factory)
 {
@@ -147,11 +133,11 @@ GeometryCollection::getGeometryN(int n) const
 	return (*geometries)[n];
 }
 
-int
+size_t
 GeometryCollection::getNumPoints() const
 {
-	int numPoints = 0;
-	for (unsigned int i=0; i<geometries->size(); ++i)
+	size_t numPoints = 0;
+	for (size_t i=0, n=geometries->size(); i<n; ++i)
 	{
 		numPoints +=(*geometries)[i]->getNumPoints();
 	}
@@ -339,6 +325,11 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.58  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.57  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>

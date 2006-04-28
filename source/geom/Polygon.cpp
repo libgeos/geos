@@ -48,7 +48,9 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-Polygon::Polygon(const Polygon &p):
+/*protected*/
+Polygon::Polygon(const Polygon &p)
+	:
 	Geometry(p.getFactory())
 {
 	shell=new LinearRing(*p.shell);
@@ -61,23 +63,7 @@ Polygon::Polygon(const Polygon &p):
 	}
 }
 
-/*
- * Constructs a <code>Polygon</code> with the given exterior
- * and interior boundaries.
- *
- * @param  shell     the outer boundary of the new <code>Polygon</code>,
- *                   or <code>null</code> or an empty
- *                   <code>LinearRing</code> if the empty geometry
- *                   is to be created.
- *
- * @param  holes     the <code>LinearRings</code> defining the inner
- *                   boundaries of the new <code>Polygon</code>, or
- *                   <code>null</code> or empty <code>LinearRing</code>s
- *                   if the empty  geometry is to be created.
- *
- * Polygon will take ownership of Shell and Holes LinearRings
- *
- */
+/*protected*/
 Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		const GeometryFactory *newFactory):
 	Geometry(newFactory)
@@ -149,10 +135,10 @@ Polygon::getCoordinates() const
 	return getFactory()->getCoordinateSequenceFactory()->create(cl);
 }
 
-int
+size_t
 Polygon::getNumPoints() const
 {
-	int numPoints = shell->getNumPoints();
+	size_t numPoints = shell->getNumPoints();
 	for (unsigned int i = 0; i < holes->size(); i++) {
 		numPoints += ((LinearRing *)(*holes)[i])->getNumPoints();
 	}
@@ -216,13 +202,15 @@ Polygon::getBoundary() const
 	}
 	if ( ! holes->size() )
 	{
-		return new LineString(*shell);
+		//return new LineString(*shell);
+		return shell->clone();
 	}
 
 	vector<Geometry *> *rings = new vector<Geometry *>(holes->size()+1);
-	(*rings)[0]=new LineString(*shell);
+	(*rings)[0]=shell->clone(); // new LineString(*shell);
 	for (unsigned int i=0; i<holes->size(); i++) {
-		(*rings)[i + 1] = new LineString((const LineString &)*(*holes)[i]);
+		//(*rings)[i + 1] = new LineString((const LineString &)*(*holes)[i]);
+		(*rings)[i + 1] = (*holes)[i]->clone();
 	}
 	MultiLineString *ret = getFactory()->createMultiLineString(rings);
 	return ret;
@@ -456,6 +444,11 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.63  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.62  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>

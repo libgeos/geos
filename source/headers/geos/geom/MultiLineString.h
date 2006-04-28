@@ -38,7 +38,50 @@ namespace geom { // geos::geom
 
 /// Basic implementation of MultiLineString objects.
 class MultiLineString: public GeometryCollection {
+
 public:
+
+	friend class GeometryFactory;
+
+	virtual ~MultiLineString();
+
+	/// Returns line dimension (1)
+	int getDimension() const;
+
+	/**
+	 * \brief
+	 * Returns Dimension::False if all LineStrings in the collection
+	 * are closed, 0 otherwise.
+	 */
+	int getBoundaryDimension() const;
+
+	/// Returns a (possibly empty) MultiPoint 
+	Geometry* getBoundary() const;
+
+	std::string getGeometryType() const;
+
+	virtual GeometryTypeId getGeometryTypeId() const;
+
+	bool isClosed() const;
+
+	bool isSimple() const;
+
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
+
+	Geometry *clone() const;
+
+	/**
+	 * Creates a MultiLineString in the reverse
+	 * order to this object.
+	 * Both the order of the component LineStrings
+	 * and the order of their coordinate sequences
+	 * are reversed.
+	 *
+	 * @return a MultiLineString in the reverse order
+	 */
+	MultiLineString* reverse() const;
+
+protected:
 
 	/**
 	 * \brief Constructs a <code>MultiLineString</code>.
@@ -62,42 +105,7 @@ public:
 	MultiLineString(std::vector<Geometry *> *newLines,
 			const GeometryFactory *newFactory);
 
-	virtual ~MultiLineString();
-
-	/// Returns line dimension (1)
-	int getDimension() const;
-
-	/**
-	 * \brief
-	 * Returns Dimension::False if all LineStrings in the collection
-	 * are closed, 0 otherwise.
-	 */
-	int getBoundaryDimension() const;
-
-	/// Returns a (possibly empty) MultiPoint 
-	Geometry* getBoundary() const;
-
-	std::string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const;
-	bool isClosed() const;
-	bool isSimple() const;
-	bool equalsExact(const Geometry *other, double tolerance=0) const;
-
 	MultiLineString(const MultiLineString &mp);
-
-	Geometry *clone() const;
-
-	/**
-	 * Creates a MultiLineString in the reverse
-	 * order to this object.
-	 * Both the order of the component LineStrings
-	 * and the order of their coordinate sequences
-	 * are reversed.
-	 *
-	 * @return a MultiLineString in the reverse order
-	 */
-	MultiLineString* reverse() const;
-
 };
 
 } // namespace geos::geom
@@ -111,6 +119,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

@@ -33,20 +33,7 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-/**
-* @param newPolys
-*	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-*	or <code>null</code> or an empty array to create the empty
-*	geometry. Elements may be empty <code>Polygon</code>s, but
-*	not <code>null</code>s.
-*	The polygons must conform to the assertions specified in the
-*	<A HREF="http://www.opengis.org/techno/specs.htm">
-*	OpenGIS Simple Features Specification for SQL
-*	</A>.
-*
-*	Constructed object will take ownership of
-*	the vector and its elements.
-*/
+/*protected*/
 MultiPolygon::MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *factory)
 	: GeometryCollection(newPolys,factory)
 {}
@@ -89,7 +76,8 @@ Geometry* MultiPolygon::getBoundary() const {
 			for (unsigned int j=0, jn=rings->getNumGeometries();
 					j<jn; ++j)
 			{
-				allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
+				//allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
+				allRings->push_back(rings->getGeometryN(j)->clone());
 			}
 			delete g;
 		}
@@ -119,6 +107,11 @@ MultiPolygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.30  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

@@ -42,6 +42,35 @@ class MultiPolygon: public GeometryCollection {
 
 public:
 
+	friend class GeometryFactory;
+
+	virtual ~MultiPolygon();
+
+	/// Returns surface dimension (2)
+	int getDimension() const;
+
+	/// Returns 1 (MultiPolygon boundary is MultiLineString)
+	int getBoundaryDimension() const;
+
+	/**
+	 * \brief
+	 * Returns a MultiLineString composed of one LineString for
+	 * each of the composing Polygon's shells and holes.
+	 */
+	Geometry* getBoundary() const;
+
+	std::string getGeometryType() const;
+
+	virtual GeometryTypeId getGeometryTypeId() const;
+
+	bool isSimple() const;
+
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
+
+	Geometry *clone() const;
+
+protected:
+
 	/**
 	 * \brief Construct a MultiPolygon
 	 *
@@ -65,28 +94,8 @@ public:
 	 */
 	MultiPolygon(std::vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
-	virtual ~MultiPolygon();
-
-	/// Returns surface dimension (2)
-	int getDimension() const;
-
-	/// Returns 1 (MultiPolygon boundary is MultiLineString)
-	int getBoundaryDimension() const;
-
-	/**
-	 * \brief
-	 * Returns a MultiLineString composed of one LineString for
-	 * each of the composing Polygon's shells and holes.
-	 */
-	Geometry* getBoundary() const;
-
-	std::string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const;
-	bool isSimple() const;
-	bool equalsExact(const Geometry *other, double tolerance=0) const;
-
 	MultiPolygon(const MultiPolygon &mp);
-	Geometry *clone() const;
+
 
 };
 
@@ -102,6 +111,11 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

@@ -39,7 +39,35 @@ namespace geom { // geos::geom
  * \brief  Models a collection of Point objects.
  */
 class MultiPoint: public GeometryCollection {
+
 public:
+
+	friend class GeometryFactory;
+
+	virtual ~MultiPoint();
+
+	/// Returns point dimension (0)
+	int getDimension() const;
+
+	/// Returns Dimension::False (Point has no boundary)
+	int getBoundaryDimension() const;
+
+	/// Returns an EMPTY Geometry
+	Geometry* getBoundary() const;
+
+	std::string getGeometryType() const;
+
+	virtual GeometryTypeId getGeometryTypeId() const;
+
+	//bool isValid() const;
+
+	bool isSimple() const;
+
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
+
+	Geometry *clone() const { return new MultiPoint(*this); };
+
+protected:
 
 	/**
 	 * \brief Constructs a <code>MultiPoint</code>.
@@ -61,27 +89,8 @@ public:
 	 */
 	MultiPoint(std::vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
 
-	virtual ~MultiPoint();
-
-	/// Returns point dimension (0)
-	int getDimension() const;
-
-	/// Returns Dimension::False (Point has no boundary)
-	int getBoundaryDimension() const;
-
-	/// Returns an EMPTY Geometry
-	Geometry* getBoundary() const;
-
-	std::string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const;
-	//bool isValid() const;
-	bool isSimple() const;
-	bool equalsExact(const Geometry *other, double tolerance=0) const;
-
 	MultiPoint(const MultiPoint &mp): GeometryCollection(mp) {}
-	Geometry *clone() const { return new MultiPoint(*this); };
 
-protected:
 	const Coordinate* getCoordinateN(int n) const;
 };
 
@@ -96,6 +105,11 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

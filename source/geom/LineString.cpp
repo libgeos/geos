@@ -41,6 +41,7 @@ using namespace geos::algorithm;
 namespace geos {
 namespace geom { // geos::geom
 
+/*protected*/
 LineString::LineString(const LineString &ls)
 	:
 	Geometry(ls.getFactory()),
@@ -76,7 +77,7 @@ LineString::validateConstruction()
 	}
 }
 
-/*public*/
+/*protected*/
 LineString::LineString(CoordinateSequence *newCoords,
 		const GeometryFactory *factory)
 	:
@@ -145,7 +146,7 @@ LineString::isEmpty() const
 	return points->getSize()==0;
 }
 
-int
+size_t
 LineString::getNumPoints() const
 {
 	assert(points.get());
@@ -391,6 +392,11 @@ LineString::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.68  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.67  2006/04/11 11:16:25  strk
  * Added LineString and LinearRing constructors by auto_ptr
  *

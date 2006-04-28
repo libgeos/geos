@@ -37,20 +37,13 @@ using namespace geos::geomgraph;
 namespace geos {
 namespace geom { // geos::geom
 
-/**
-* Constructs a <code>MultiLineString</code>.
-*
-* @param  newLines
-*	the <code>LineStrings</code>s for this
-*	<code>MultiLineString</code>, or <code>null</code>
-*	or an empty array to create the empty geometry.
-*	Elements may be empty <code>LineString</code>s,
-*	but not <code>null</code>s.
-*
-*	Constructed object will take ownership of
-*	the vector and its elements.
-*/
-MultiLineString::MultiLineString(vector<Geometry *> *newLines, const GeometryFactory *factory): GeometryCollection(newLines,factory){}
+/*protected*/
+MultiLineString::MultiLineString(vector<Geometry *> *newLines,
+		const GeometryFactory *factory)
+	:
+	GeometryCollection(newLines,factory)
+{
+}
 
 MultiLineString::~MultiLineString(){}
 
@@ -129,6 +122,11 @@ MultiLineString::reverse() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.31  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

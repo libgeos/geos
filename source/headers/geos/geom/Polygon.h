@@ -60,38 +60,21 @@ namespace geom { // geos::geom
  *
  */
 class Polygon: public Geometry{
+
 public:
+
+	friend class GeometryFactory;
 
 	/// A vector of const Polygon pointers
 	typedef std::vector<const Polygon *> ConstVect;
 
-	Polygon(const Polygon &p);
 	virtual ~Polygon();
 
-	/**
-	 * Constructs a <code>Polygon</code> with the given exterior 
-	 * and interior boundaries.
-	 *
-	 * @param  newShell  the outer boundary of the new Polygon,
-	 *                   or <code>null</code> or an empty
-	 *		     LinearRing if the empty geometry
-	 *                   is to be created.
-	 *
-	 * @param  newHoles  the LinearRings defining the inner
-	 *                   boundaries of the new Polygon, or
-	 *                   null or empty LinearRing 
-	 *                   if the empty  geometry is to be created.
-	 *
-	 * @param newFactory the GeometryFactory used to create this geometry
-	 *
-	 * Polygon will take ownership of Shell and Holes LinearRings 
-	 */
-	Polygon(LinearRing *newShell, std::vector<Geometry *> *newHoles,
-		const GeometryFactory *newFactory);
-
 	virtual Geometry *clone() const { return new Polygon(*this); }
+
 	CoordinateSequence* getCoordinates() const;
-	int getNumPoints() const;
+
+	size_t getNumPoints() const;
 
 	/// Returns surface dimension (2)
 	int getDimension() const;
@@ -135,8 +118,11 @@ public:
 	void apply_ro(GeometryFilter *filter) const;
 
 	Geometry* convexHull() const;
+
 	void normalize();
+
 	int compareToSameClass(const Geometry *p) const; //was protected
+
 	const Coordinate* getCoordinate() const;
 
 	double getArea() const;
@@ -145,11 +131,36 @@ public:
 	double getLength() const;
 
 	void apply_rw(GeometryComponentFilter *filter);
+
 	void apply_ro(GeometryComponentFilter *filter) const;
 
 	bool isRectangle() const;
 
 protected:
+
+
+	Polygon(const Polygon &p);
+
+	/**
+	 * Constructs a <code>Polygon</code> with the given exterior 
+	 * and interior boundaries.
+	 *
+	 * @param  newShell  the outer boundary of the new Polygon,
+	 *                   or <code>null</code> or an empty
+	 *		     LinearRing if the empty geometry
+	 *                   is to be created.
+	 *
+	 * @param  newHoles  the LinearRings defining the inner
+	 *                   boundaries of the new Polygon, or
+	 *                   null or empty LinearRing 
+	 *                   if the empty  geometry is to be created.
+	 *
+	 * @param newFactory the GeometryFactory used to create this geometry
+	 *
+	 * Polygon will take ownership of Shell and Holes LinearRings 
+	 */
+	Polygon(LinearRing *newShell, std::vector<Geometry *> *newHoles,
+		const GeometryFactory *newFactory);
 
 	LinearRing *shell;
 
@@ -173,6 +184,11 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/04/28 10:55:39  strk
+ * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
+ * which has been made friend of all Geometry derivates. getNumPoints() changed to return
+ * size_t.
+ *
  * Revision 1.4  2006/04/10 18:15:09  strk
  * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
  * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
