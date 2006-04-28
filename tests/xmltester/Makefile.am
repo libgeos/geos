@@ -28,3 +28,6 @@ static:
 
 test: XMLTester
 	./XMLTester $(XMLTESTS) 
+
+verbose-test: XMLTester
+	./XMLTester -v $(XMLTESTS) 
