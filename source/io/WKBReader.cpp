@@ -68,7 +68,9 @@ WKBReader::readGeometry()
 	// default is machine endian
 	if (byteOrder == WKBConstants::wkbNDR)
 		dis.setOrder(ByteOrderValues::ENDIAN_LITTLE);
-
+    else if (byteOrder == WKBConstants::wkbXDR)
+		dis.setOrder(ByteOrderValues::ENDIAN_BIG);
+        
 	int typeInt = dis.readInt();
 	int geometryType = typeInt & 0xff;
 
