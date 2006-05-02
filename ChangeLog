@@ -1,3 +1,8 @@
+2006-05-02 Sandro Santilli <strk@refractions.net>
+
+	* source/operation/polygonize/: polygonizeEdgeRing.cpp
+	renamed to EdgeRing.cpp, to follow JTS naming.
+
 2006-05-02 Jeffrey J. Early <jearly@alum.ups.edu>
 
 	* source/io/WKBReader.cpp: fixed reads of XDR WKB.
