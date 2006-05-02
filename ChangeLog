@@ -1,5 +1,7 @@
 2006-05-02 Sandro Santilli <strk@refractions.net>
 
+	* source/noding/ScaledNoder.cpp: use java_math_round instead
+	of sym_round.
 	* source/headers/geos/operation/polygonize/Makefile.am:
 	do not install EdgeRing.h header.
 	* source/operation/polygonize/: polygonizeEdgeRing.cpp

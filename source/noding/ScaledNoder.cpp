@@ -38,8 +38,8 @@ public:
 	Scaler(const ScaledNoder&n): sn(n) {}
 	void filter_ro(const geom::Coordinate* c) { assert(0); }
 	void filter_rw(geom::Coordinate* c) const {
-		c->x = util::sym_round( ( c->x - sn.offsetX ) *  sn.scaleFactor );
-		c->y = util::sym_round( ( c->y - sn.offsetY ) *  sn.scaleFactor );
+		c->x = util::java_math_round( ( c->x - sn.offsetX ) *  sn.scaleFactor );
+		c->y = util::java_math_round( ( c->y - sn.offsetY ) *  sn.scaleFactor );
 	}
 };
 
@@ -111,6 +111,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/05/02 16:22:18  strk
+ * * source/noding/ScaledNoder.cpp: use java_math_round instead of sym_round.
+ *
  * Revision 1.5  2006/03/15 09:51:12  strk
  * streamlined headers usage
  *
