@@ -1,3 +1,7 @@
+2006-05-02 Jeffrey J. Early <jearly@alum.ups.edu>
+
+	* source/io/WKBReader.cpp: fixed reads of XDR WKB.
+
 2006-04-28 Sandro Santilli <strk@refractions.net>
 
 	* tests/unit/geom/: LineStringTest.cpp, MultiPointTest.cpp,
