@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/CGAlgorithms.java rev. 1.34 (JTS-1.7.1)
+ *
  **********************************************************************/
 
 #include <geos/algorithm/CGAlgorithms.h>
@@ -31,19 +35,7 @@ using namespace geos::geom;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-/**
- * Returns the index of the direction of the point <code>q</code>
- * relative to a
- * vector specified by <code>p1-p2</code>.
- *
- * @param p1 the origin point of the vector
- * @param p2 the final point of the vector
- * @param q the point to compute the direction to
- *
- * @return 1 if q is counter-clockwise (left) from p1-p2
- * @return -1 if q is clockwise (right) from p1-p2
- * @return 0 if q is collinear with p1-p2
- */
+/*public static*/
 int
 CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q)
 {
@@ -57,18 +49,7 @@ CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const C
 	return RobustDeterminant::signOfDet2x2(dx1,dy1,dx2,dy2);
 }
 
-/**
- * Test whether a point lies inside a ring.
- * The ring may be oriented in either direction.
- * If the point lies on the ring boundary the result of this method is unspecified.
- *
- * This algorithm does not attempt to first check the point against the envelope
- * of the ring.
- *
- * @param p point to check for ring inclusion
- * @param ring assumed to have first point identical to last point
- * @return <code>true</code> if p is inside ring
- */
+/*public static*/
 bool
 CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 {
@@ -116,6 +97,7 @@ CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 	return false;
 }
 
+/*public static*/
 bool
 CGAlgorithms::isPointInRing(const Coordinate& p,
 		const Coordinate::ConstVect& ring)
@@ -163,13 +145,7 @@ CGAlgorithms::isPointInRing(const Coordinate& p,
 	return false;
 }
 
-/**
- * Test whether a point lies on a linestring.
- *
- * @return true true if
- * the point is a vertex of the line or lies in the interior of a line
- * segment in the linestring
- */
+/*public static*/
 bool
 CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 {
@@ -188,18 +164,7 @@ CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 	return false;
 }
 
-/*
- * Computes whether a ring defined by an array of Coordinate is
- * oriented counter-clockwise.
- * 
- *  - The list of points is assumed to have the first and last points equal.
- *  - This will handle coordinate lists which contain repeated points.
- *  - If the ring is invalid, the answer returned may not be correct.
- * 
- *
- * @param ring an array of coordinates forming a ring
- * @return <code>true</code> if the ring is oriented counter-clockwise.
- */
+/*public static*/
 bool
 CGAlgorithms::isCCW(const CoordinateSequence* ring)
 {
@@ -207,38 +172,42 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 	unsigned int nPts=ring->getSize()-1;
 
 	// find highest point
-	const Coordinate *hip=&ring->getAt(0);
-	int hii=0;
+	const Coordinate *hiPt=&ring->getAt(0);
+	int hiIndex=0;
 	for (unsigned int i=1; i<=nPts; ++i)
 	{
 		const Coordinate *p=&ring->getAt(i);
-		if (p->y > hip->y) {
-			hip = p;
-			hii = i;
+		if (p->y > hiPt->y) {
+			hiPt = p;
+			hiIndex = i;
 		}
 	}
 
 	// find distinct point before highest point
-	int iPrev = hii;
+	int iPrev = hiIndex;
 	do {
 		iPrev = iPrev - 1;
 		if (iPrev < 0) iPrev = nPts;
-	} while (ring->getAt(iPrev)==*hip && iPrev!=hii);
+	} while (ring->getAt(iPrev)==*hiPt && iPrev!=hiIndex);
 
 	// find distinct point after highest point
-	int iNext = hii;
+	int iNext = hiIndex;
 	do {
 		iNext = (iNext + 1) % nPts;
-	} while (ring->getAt(iNext)==*hip && iNext != hii);
+	} while (ring->getAt(iNext)==*hiPt && iNext != hiIndex);
 
 	const Coordinate *prev=&ring->getAt(iPrev);
 	const Coordinate *next=&ring->getAt(iNext);
 
 	/*
-	 * this will catch all cases where there are not 3 distinct points,
-	 * including the case where the input array has fewer than 4 elements
+	 * This check catches cases where the ring contains an A-B-A
+	 * configuration of points.
+	 * This can happen if the ring does not contain 3 distinct points
+	 * (including the case where the input array has fewer than 4 elements),
+	 * or it contains coincident line segments.
 	 */
-	if (*prev==*hip || *next==*hip || *prev==*next)
+	if ( prev->equals2D(*hiPt) || next->equals2D(*hiPt) ||
+		prev->equals2D(*next) )
 	{
 		return false;
 		// MD - don't bother throwing exception,
@@ -246,7 +215,7 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 		//throw  IllegalArgumentException("degenerate ring (does not contain 3 distinct points)");
 	}
 
-	int disc = computeOrientation(*prev, *hip, *next);
+	int disc = computeOrientation(*prev, *hiPt, *next);
 
 	/**
 	 *  If disc is exactly 0, lines are collinear. 
@@ -271,31 +240,15 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 	return isCCW;
 }
 
-/**
- * Computes the orientation of a point q to the directed line segment p1-p2.
- * The orientation of a point relative to a directed line segment indicates
- * which way you turn to get to q after travelling from p1 to p2.
- *
- * @return 1 if q is counter-clockwise from p1-p2
- * @return -1 if q is clockwise from p1-p2
- * @return 0 if q is collinear with p1-p2
- */
+/*public static*/
 int
-CGAlgorithms::computeOrientation(const Coordinate& p1, const Coordinate& p2, const Coordinate& q)
+CGAlgorithms::computeOrientation(const Coordinate& p1, const Coordinate& p2,
+		const Coordinate& q)
 {
 	return orientationIndex(p1,p2,q);
 }
 
-/**
- * Computes the distance from a point p to a line segment AB
- *
- * Note: NON-ROBUST!
- *
- * @param p the point to compute the distance for
- * @param A one point of the line
- * @param B another point of the line (must be different to A)
- * @return the distance from p to line segment AB
- */
+/*public static*/
 double
 CGAlgorithms::distancePointLine(const Coordinate& p, const Coordinate& A,
 		const Coordinate& B)
@@ -330,15 +283,7 @@ CGAlgorithms::distancePointLine(const Coordinate& p, const Coordinate& A,
 	return fabs(s)*sqrt(((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y)));
 }
 
-/**
- * Computes the perpendicular distance from a point p
- * to the (infinite) line containing the points AB
- *
- * @param p the point to compute the distance for
- * @param A one point of the line
- * @param B another point of the line (must be different to A)
- * @return the distance from p to line AB
- */
+/*public static*/
 double
 CGAlgorithms::distancePointLinePerpendicular(const Coordinate& p,const Coordinate& A,const Coordinate& B)
 {
@@ -357,16 +302,7 @@ CGAlgorithms::distancePointLinePerpendicular(const Coordinate& p,const Coordinat
     return fabs(s)*sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
 }
 
-/**
- * Computes the distance from a line segment AB to a line segment CD
- *
- * Note: NON-ROBUST!
- *
- * @param A a point of one line
- * @param B the second point of  (must be different to A)
- * @param C one point of the line
- * @param D another point of the line (must be different to A)
- */
+/*public static*/
 double
 CGAlgorithms::distanceLineLine(const Coordinate& A, const Coordinate& B,
 		const Coordinate& C, const Coordinate& D)
@@ -418,10 +354,7 @@ limiting conditions:
 	return 0.0; //intersection exists
 }
 
-/**
- * Returns the signed area for a ring.  The area is positive if
- * the ring is oriented CW.
- */
+/*public static*/
 double
 CGAlgorithms::signedArea(const CoordinateSequence* ring)
 {
@@ -441,9 +374,7 @@ CGAlgorithms::signedArea(const CoordinateSequence* ring)
 	return -sum/2.0;
 }
 
-/**
- * Returns the length of a list of line segments.
- */
+/*public static*/
 double
 CGAlgorithms::length(const CoordinateSequence* pts)
 {
@@ -466,6 +397,9 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/05/02 14:51:53  strk
+ * Added port info and fixed doxygen comments for CGAlgorithms class
+ *
  * Revision 1.31  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *
