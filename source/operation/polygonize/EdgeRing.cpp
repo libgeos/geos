@@ -4,13 +4,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: operation/polygonize/EdgeRing.java rev. 1.6
  *
  **********************************************************************/
 
@@ -39,21 +43,7 @@ namespace geos {
 namespace operation { // geos.operation
 namespace polygonize { // geos.operation.polygonize
 
-/*
- * Find the innermost enclosing shell EdgeRing containing
- * the argument EdgeRing, if any.
- * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
- * The algorithm used depends on the fact that:
- * 
- * ring A contains ring B iff envelope(ring A) contains envelope(ring B)
- * 
- * This routine is only safe to use if the chosen point of the hole
- * is known to be properly contained in a shell
- * (which is guaranteed to be the case if the hole does not touch its shell)
- *
- * @return containing EdgeRing, if there is one
- * @return null if no containing EdgeRing is found
- */
+/*public*/
 EdgeRing *
 EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
 	vector<EdgeRing*> *shellList)
@@ -94,15 +84,7 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
 	return minShell;
 }
 
-/*
- * Finds a point in a list of points which is not contained in another
- * list of points
- * @param testPts the CoordinateSequence to test
- * @param pts the CoordinateSequence to test the input points against
- * @return a Coordinate from <code>testPts</code> which is not
- * in <code>pts</code>, 
- * or <code>nullCoord</code>
- */
+/*public static*/
 const Coordinate&
 EdgeRing::ptNotInList(const CoordinateSequence *testPts,
 	const CoordinateSequence *pts)
@@ -117,14 +99,7 @@ EdgeRing::ptNotInList(const CoordinateSequence *testPts,
 	return Coordinate::getNull();
 }
 
-/*
- * Tests whether a given point is in an array of points.
- * Uses a value-based test.
- *
- * @param pt a Coordinate for the test point
- * @param pts a CoordinateSequence to test pt against
- * @return <code>true</code> if the point is in the array
- */
+/*public static*/
 bool
 EdgeRing::isInList(const Coordinate& pt,
 	const CoordinateSequence *pts)
@@ -138,6 +113,7 @@ EdgeRing::isInList(const Coordinate& pt,
 	return true;
 }
 
+/*public*/
 EdgeRing::EdgeRing(const GeometryFactory *newFactory)
 {
 #ifdef DEBUG_ALLOC
@@ -167,31 +143,20 @@ EdgeRing::~EdgeRing()
 	delete ringPts;
 }
 
-/*
- * Adds a DirectedEdge which is known to form part of this ring.
- * @param de the DirectedEdge to add.
- */
+/*public*/
 void
 EdgeRing::add(const DirectedEdge *de){
 	deList->push_back(de);
 }
 
-/**
- * Tests whether this ring is a hole.
- * Due to the way the edges in the polyongization graph are linked,
- * a ring is a hole if it is oriented counter-clockwise.
- * @return <code>true</code> if this ring is a hole
- */
+/*public*/
 bool
 EdgeRing::isHole(){
 	getRingInternal();
 	return CGAlgorithms::isCCW(ring->getCoordinatesRO());
 }
 
-/**
- * Adds a hole to the polygon formed by this ring.
- * @param hole the {@link LinearRing} forming the hole.
- */
+/*public*/
 void
 EdgeRing::addHole(LinearRing *hole)
 {
@@ -200,13 +165,7 @@ EdgeRing::addHole(LinearRing *hole)
 	holes->push_back((Geometry *)hole);
 }
 
-/*
- * Computes the Polygon formed by this ring and any contained holes.
- * LinearRings ownership is transferred to returned polygon.
- * Subsequent calls to the function will return NULL.
- *
- * @return the Polygon formed by this ring and its holes.
- */
+/*public*/
 Polygon*
 EdgeRing::getPolygon()
 {
@@ -216,9 +175,7 @@ EdgeRing::getPolygon()
 	return poly;
 }
 
-/*
- * Tests if the LinearRing formed by this edge ring is topologically valid.
- */
+/*public*/
 bool
 EdgeRing::isValid()
 {
@@ -226,12 +183,7 @@ EdgeRing::isValid()
 	return ring->isValid();
 }
 
-/*
- * Computes the list of coordinates which are contained in this ring.
- * The coordinatea are computed once only and cached.
- *
- * @return a CoordinateSequence for this ring
- */
+/*private*/
 CoordinateSequence*
 EdgeRing::getCoordinates()
 {
@@ -249,13 +201,7 @@ EdgeRing::getCoordinates()
 	return ringPts;
 }
 
-/*
- * Gets the coordinates for this ring as a LineString.
- * Used to return the coordinates in this ring
- * as a valid geometry, when it has been detected that the ring
- * is topologically invalid.
- * @return a LineString containing the coordinates in this ring
- */
+/*public*/
 LineString*
 EdgeRing::getLineString()
 {
@@ -263,11 +209,7 @@ EdgeRing::getLineString()
 	return factory->createLineString(*ringPts);
 }
 
-/*
- * Returns this ring as a LinearRing, or null if an Exception occurs while
- * creating it (such as a topology problem). Details of problems are written to
- * standard output.
- */
+/*public*/
 LinearRing *
 EdgeRing::getRingInternal()
 {
@@ -282,12 +224,7 @@ EdgeRing::getRingInternal()
 	return ring;
 }
 
-/*
- * Returns this ring as a LinearRing, or null if an Exception occurs while
- * creating it (such as a topology problem). Details of problems are written to
- * standard output.
- * Caller gets ownership of ring.
- */
+/*public*/
 LinearRing *
 EdgeRing::getRingOwnership()
 {
@@ -296,6 +233,7 @@ EdgeRing::getRingOwnership()
 	return ret;
 }
 
+/*private*/
 void
 EdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 	CoordinateSequence *coordList)
@@ -319,6 +257,10 @@ EdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/05/02 14:32:49  strk
+ * Added port info for polygonize/EdgeRing class, polygonize/EdgeRing.h header
+ * not installed.
+ *
  * Revision 1.1  2006/05/02 14:22:30  strk
  * * source/operation/polygonize/: polygonizeEdgeRing.cpp renamed to EdgeRing.cpp, to follow JTS naming.
  *

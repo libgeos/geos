@@ -1,5 +1,7 @@
 2006-05-02 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/operation/polygonize/Makefile.am:
+	do not install EdgeRing.h header.
 	* source/operation/polygonize/: polygonizeEdgeRing.cpp
 	renamed to EdgeRing.cpp, to follow JTS naming.
 

@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/polygonize/EdgeRing.java rev. 1.6
+ *
  **********************************************************************/
 
 
@@ -54,7 +58,7 @@ private:
 	geom::CoordinateSequence *ringPts;
 	std::vector<geom::Geometry*> *holes;
 
-	/*
+	/** \brief
 	 * Computes the list of coordinates which are contained in this ring.
 	 * The coordinatea are computed once only and cached.
 	 *
@@ -87,7 +91,7 @@ public:
 			EdgeRing *testEr,
 			std::vector<EdgeRing*> *shellList);
 
-	/*
+	/**
 	 * \brief
 	 * Finds a point in a list of points which is not contained in
 	 * another list of points.
@@ -101,7 +105,7 @@ public:
 			const geom::CoordinateSequence *testPts,
 			const geom::CoordinateSequence *pts);
 
-	/*
+	/** \brief
 	 * Tests whether a given point is in an array of points.
 	 * Uses a value-based test.
 	 *
@@ -116,41 +120,48 @@ public:
 
 	~EdgeRing();
 
-	/*
+	/** \brief
 	 * Adds a DirectedEdge which is known to form part of this ring.
+	 *
 	 * @param de the DirectedEdge to add. Ownership to the caller.
 	 */
 	void add(const planargraph::DirectedEdge *de);
 
-	/*
+	/** \brief
 	 * Tests whether this ring is a hole.
+	 *
 	 * Due to the way the edges in the polyongization graph are linked,
 	 * a ring is a hole if it is oriented counter-clockwise.
 	 * @return <code>true</code> if this ring is a hole
 	 */
 	bool isHole();
 
-	/*
+	/** \brief
 	 * Adds a hole to the polygon formed by this ring.
+	 *
 	 * @param hole the LinearRing forming the hole.
 	 */
 	void addHole(geom::LinearRing *hole);
 
-	/*
+	/** \brief
 	 * Computes the Polygon formed by this ring and any contained holes.
+	 *
+	 * LinearRings ownership is transferred to returned polygon.
+	 * Subsequent calls to the function will return NULL.
 	 *
 	 * @return the Polygon formed by this ring and its holes.
 	 */
 	geom::Polygon* getPolygon();
 
-	/*
+	/** \brief
 	 * Tests if the LinearRing ring formed by this edge ring
 	 * is topologically valid.
 	 */
 	bool isValid();
 
-	/*
+	/** \brief
 	 * Gets the coordinates for this ring as a LineString.
+	 *
 	 * Used to return the coordinates in this ring
 	 * as a valid geometry, when it has been detected that the ring
 	 * is topologically invalid.
@@ -158,17 +169,21 @@ public:
 	 */
 	geom::LineString* getLineString();
 
-	/*
+	/** \brief
 	 * Returns this ring as a LinearRing, or null if an Exception
 	 * occurs while creating it (such as a topology problem).
+	 *
 	 * Ownership of ring is retained by the object.
 	 * Details of problems are written to standard output.
 	 */
 	geom::LinearRing* getRingInternal();
 
-	/*
-	 * Returns this ring as a LinearRing taking ownership
-	 * of it. 
+	/** \brief
+	 * Returns this ring as a LinearRing, or null if an Exception
+	 * occurs while creating it (such as a topology problem).
+	 *
+	 * Details of problems are written to standard output.
+	 * Caller gets ownership of ring.
 	 */
 	geom::LinearRing* getRingOwnership();
 };
@@ -181,6 +196,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/05/02 14:32:49  strk
+ * Added port info for polygonize/EdgeRing class, polygonize/EdgeRing.h header
+ * not installed.
+ *
  * Revision 1.1  2006/03/22 11:19:06  strk
  * opPolygonize.h headers split.
  *
