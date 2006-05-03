@@ -51,6 +51,11 @@ RightmostEdgeFinder::RightmostEdgeFinder()
 void
 RightmostEdgeFinder::findEdge(std::vector<DirectedEdge*>* dirEdgeList)
 {
+
+#ifndef NDEBUG
+	size_t checked=0;
+#endif
+
 	/*
 	 * Check all forward DirectedEdges only.  This is still general,
 	 * because each edge has a forward DirectedEdge.
@@ -62,7 +67,16 @@ RightmostEdgeFinder::findEdge(std::vector<DirectedEdge*>* dirEdgeList)
 		assert(de);
 		if (!de->isForward()) continue;
 		checkForRightmostCoordinate(de);
+#ifndef NDEBUG
+		++checked;
+#endif
 	}
+
+#ifndef NDEBUG
+	assert(checked>0);
+	assert(minIndex>=0);
+	assert(minDe);
+#endif
 
 	/*
 	 * If the rightmost point is a node, we need to identify which of
@@ -246,6 +260,9 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/05/03 15:05:36  strk
+ * Assertions checking
+ *
  * Revision 1.20  2006/04/05 09:20:25  strk
  * Added port informations and many assertion checking.
  * Fixed bug in getRightmostSide() method ( a "testing-only" corner case )
