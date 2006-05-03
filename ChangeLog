@@ -9,6 +9,9 @@
 	* source/noding/ScaledNoder.cpp,
 	source/headers/geos/noding/ScaledNoder.h: ported JTS
 	bugfix in scale method.
+	* source/headers/geos/opBuffer.h,
+	source/headers/geos/operation/buffer/Makefile.am:
+	reduced set of installed headers.
 
 2006-05-02 Sandro Santilli <strk@refractions.net>
 
