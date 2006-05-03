@@ -66,7 +66,7 @@ SimpleSnapRounder::computeNodes(
 	snapRound(inputSegmentStrings, li);
 
 	// testing purposes only - remove in final version
-	//checkCorrectness(*inputSegmentStrings);
+	checkCorrectness(*inputSegmentStrings);
 }
 
 
@@ -222,6 +222,9 @@ SimpleSnapRounder::findInteriorIntersections(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/05/03 17:54:58  strk
+ * Uncommented correctness checker
+ *
  * Revision 1.9  2006/05/03 15:49:16  strk
  * fixed bug in SimpleSnapRounder::computeSnaps, trying to access out-of-bound vector element.
  *
