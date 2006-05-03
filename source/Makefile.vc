@@ -16,6 +16,10 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.13  2006/05/03 16:21:18  hobu
+# Build the C API and shared lib separate from the normal lib
+# Add missing files
+#
 # Revision 1.12  2006/05/03 15:49:12  hobu
 # add additional files and change names where necessary
 #
@@ -78,6 +82,8 @@ CFLAGS = -Iheaders /MD /GR /O2 /D "NDEBUG" /nologo \
 
 LIBNAME =	geos.lib
 DLLNAME = 	geos.dll
+CDLLNAME =  geos_c.dll
+CLIBNAME =  geos_c_i.lib
 SLIBNAME =	geos_i.lib
 
 OBJ = 	algorithm\CentroidArea.obj \
@@ -292,25 +298,32 @@ OBJ = 	algorithm\CentroidArea.obj \
 	util\Profiler.obj \
 	util\UniqueCoordinateArrayFilter.obj \
 	util\UnsupportedOperationException.obj \
-	..\capi\geos_c.obj
+	..\capi\geos_c.obj \
+	inlines.obj
 
 TEST_EXE =	TestSweepLineSpeed.exe
 
-default:	$(LIBNAME) $(DLLNAME)
+default:	$(LIBNAME) $(DLLNAME) $(CDLLNAME)
 
-$(LIBNAME):	headers/geos/platform.h $(OBJ)
+$(LIBNAME):	headers/geos/platform.h headers/geos/version.h capi/geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
 	lib /out:$(LIBNAME) $(OBJ)
 
 $(DLLNAME):	$(OBJ)
 	link /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
 
+$(CDLLNAME): ..\capi\geos_c.obj $(DLLNAME)
+	link /dll /debug ..\capi\geos_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
+  
 headers/geos/platform.h: headers/geos/platform.h.vc
 	copy headers\geos\platform.h.vc headers\geos\platform.h
 
 headers/geos/version.h: headers/geos/version.h.vc
     copy headers\geos\version.h.vc headers\geos\version.h
-    
+
+capi/geos_c.h: ../capi/geos_c.h.vc
+	copy ..\capi\geos_c.h.vc ..\capi\geos_c.h
+   
 .cpp.obj:
 	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
@@ -338,5 +351,5 @@ TestSweepLineSpeed.exe:	$(LIBNAME) \
 		bigtest\GeometryTestFactory.obj \
 		$(LIBNAME)
 
-geostest.exe: $(DLLNAME) capi\geostest.obj
-	link /debug capi\geostest.obj $(SLIBNAME)
+geostest.exe: $(DLLNAME) ..\capi\geostest.obj
+	link /debug ..\capi\geostest.obj $(SLIBNAME)
