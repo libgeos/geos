@@ -26,13 +26,16 @@ namespace buffer {
 } // namespace geos.operation
 } // namespace geos
 
-#include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
+
+// This is needed for enum values
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
-#include <geos/operation/buffer/OffsetCurveSetBuilder.h>
-#include <geos/operation/buffer/BufferSubgraph.h>
-#include <geos/operation/buffer/SubgraphDepthLocater.h>
-#include <geos/operation/buffer/RightmostEdgeFinder.h>
+
+//#include <geos/operation/buffer/BufferBuilder.h>
+//#include <geos/operation/buffer/OffsetCurveSetBuilder.h>
+//#include <geos/operation/buffer/BufferSubgraph.h>
+//#include <geos/operation/buffer/SubgraphDepthLocater.h>
+//#include <geos/operation/buffer/RightmostEdgeFinder.h>
 
 #endif // ndef GEOS_OPBUFFER_H
 
