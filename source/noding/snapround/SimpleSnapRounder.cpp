@@ -98,6 +98,9 @@ SimpleSnapRounder::computeSnaps(const SegmentString::NonConstVect& segStrings,
 			i!=iEnd; ++i)
 	{
 		SegmentString* ss = *i;
+
+		ss->testInvariant();
+
 		computeSnaps(ss, snapPts);
 	}
 }
@@ -112,7 +115,7 @@ SimpleSnapRounder::computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts)
 	{
 		const Coordinate& snapPt = *it;
 		HotPixel hotPixel(snapPt, scaleFactor, li);
-		for (int i=0, n=ss->size(); i<n; ++i) {
+		for (int i=0, n=ss->size()-1; i<n; ++i) {
 			addSnappedNode(hotPixel, *ss, i);
 		}
 	}
@@ -219,6 +222,9 @@ SimpleSnapRounder::findInteriorIntersections(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/05/03 15:49:16  strk
+ * fixed bug in SimpleSnapRounder::computeSnaps, trying to access out-of-bound vector element.
+ *
  * Revision 1.8  2006/05/03 15:02:49  strk
  * moved some implementations from header to .cpp file (taken out of inline)
  *

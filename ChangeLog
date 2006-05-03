@@ -5,6 +5,9 @@
 
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
+	* source/noding/snapround/SimpleSnapRounder.cpp: fixed
+	bug in computeSnaps, trying to access out-of-bound vector
+	element.
 	* configure.in: updated JTS_PORT to 1.7.1
 	* source/headers/geos/noding/SegmentString.{h,inl}:
 	testInvariant() moved from private to public access
