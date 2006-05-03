@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/ScaledNoder.java rev. 1.2 (JTS-1.7)
+ * Last port: noding/ScaledNoder.java rev. 1.3 (JTS-1.7.1)
  *
  **********************************************************************/
 
@@ -79,7 +79,7 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 			i0!=i0End; ++i0)
 	{
 		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
-		(*i0)->getCoordinates()->apply_rw(&scaler);
+		(*i0)->getCoordinates()->removeRepeatedPoints().apply_rw(&scaler);
 	}
 }
 
@@ -111,6 +111,10 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/05/03 09:14:22  strk
+ * * source/operation/buffer/OffsetCurveSetBuilder.cpp: used auto_ptr to protect leaks of CoordinateSequence
+ * * source/noding/ScaledNoder.cpp, source/headers/geos/noding/ScaledNoder.h: ported JTS bugfix in scale method.
+ *
  * Revision 1.6  2006/05/02 16:22:18  strk
  * * source/noding/ScaledNoder.cpp: use java_math_round instead of sym_round.
  *

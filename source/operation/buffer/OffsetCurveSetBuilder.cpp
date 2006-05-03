@@ -18,9 +18,6 @@
  *
  **********************************************************************/
 
-#include <cmath>
-#include <vector>
-
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/util/UnsupportedOperationException.h>
@@ -39,6 +36,10 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/noding/SegmentString.h>
+
+#include <cmath>
+#include <vector>
+#include <memory>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -181,13 +182,12 @@ OffsetCurveSetBuilder::addLineString(const LineString *line)
 #if GEOS_DEBUG
 	std::cerr<<__FUNCTION__<<": "<<line->toString()<<std::endl;
 #endif
-	CoordinateSequence *coord=CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
+	std::auto_ptr<CoordinateSequence> coord(CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO()));
 #if GEOS_DEBUG
 	std::cerr<<" After coordinate removal: "<<coord->toString()<<std::endl;
 #endif
 	std::vector<CoordinateSequence*> lineList;
-	curveBuilder.getLineCurve(coord, distance, lineList);
-	delete coord;
+	curveBuilder.getLineCurve(coord.get(), distance, lineList);
 	addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
 }
 
@@ -332,6 +332,10 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/05/03 09:14:22  strk
+ * * source/operation/buffer/OffsetCurveSetBuilder.cpp: used auto_ptr to protect leaks of CoordinateSequence
+ * * source/noding/ScaledNoder.cpp, source/headers/geos/noding/ScaledNoder.h: ported JTS bugfix in scale method.
+ *
  * Revision 1.33  2006/03/27 17:04:18  strk
  * Cleanups and explicit initializations
  *

@@ -4,6 +4,11 @@
 	source/headers/geos/geom/CoordinateArraySequence.h,
 	source/geom/CoordinateArraySequence.cpp: added new
 	non-static removeRepeatedPoints() mutator.
+	* source/operation/buffer/OffsetCurveSetBuilder.cpp:
+	used auto_ptr to protect leaks of CoordinateSequence
+	* source/noding/ScaledNoder.cpp,
+	source/headers/geos/noding/ScaledNoder.h: ported JTS
+	bugfix in scale method.
 
 2006-05-02 Sandro Santilli <strk@refractions.net>
 

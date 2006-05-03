@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/ScaledNoder.java rev. 1.3 (JTS-1.7.1)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SCALEDNODER_H
@@ -103,6 +107,10 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/03 09:14:22  strk
+ * * source/operation/buffer/OffsetCurveSetBuilder.cpp: used auto_ptr to protect leaks of CoordinateSequence
+ * * source/noding/ScaledNoder.cpp, source/headers/geos/noding/ScaledNoder.h: ported JTS bugfix in scale method.
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
