@@ -64,9 +64,6 @@ namespace snapround { // geos::noding::snapround
  *
  * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.2 (JTS-1.7)
  *
- * TODO: remove Noder inheritance (that's an interface)
- * TODO: finish me
- *
  */
 class SimpleSnapRounder: public Noder { // implements NoderIface
 
@@ -95,8 +92,9 @@ private:
 	void findInteriorIntersections(std::vector<SegmentString*>& segStrings,
 			algorithm::LineIntersector& li, std::vector<geom::Coordinate>& ret);
 
-	/**
-	 * Computes nodes introduced as a result of snapping segments to snap points (hot pixels)
+	/** \brief
+	 * Computes nodes introduced as a result of snapping segments to
+	 * snap points (hot pixels)
 	 * @param li
 	 */
 	void computeSnaps(const std::vector<SegmentString*>& segStrings,
@@ -104,33 +102,20 @@ private:
 
 	void computeSnaps(SegmentString* ss, std::vector<geom::Coordinate>& snapPts);
 
-	/**
-	 * Performs a brute-force comparison of every segment in each {@link SegmentString}.
+	/** \brief
+	 * Performs a brute-force comparison of every segment in each
+	 * {@link SegmentString}.
 	 * This has n^2 performance.
 	 */
 	void computeVertexSnaps(SegmentString* e0, SegmentString* e1);
 
 public:
 
-	SimpleSnapRounder(const geom::PrecisionModel& newPm):
-		pm(newPm),
-		li(&newPm),
-		scaleFactor(newPm.getScale())
-	{
-	}
+	SimpleSnapRounder(const geom::PrecisionModel& newPm);
 
-	std::vector<SegmentString*>* getNodedSubstrings() const {
-		return nodedSegStrings;
-	}
+	std::vector<SegmentString*>* getNodedSubstrings() const;
 
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings)
-	{
-		nodedSegStrings = inputSegmentStrings;
-		snapRound(inputSegmentStrings, li);
-
-		// testing purposes only - remove in final version
-		checkCorrectness(*inputSegmentStrings);
-	}
+	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
 
 	void add(const SegmentString* segStr);
 
@@ -143,7 +128,8 @@ public:
 	 * @param segIndex
 	 * @return <code>true</code> if a node was added
 	 */
-	static bool addSnappedNode(const HotPixel& hotPix, SegmentString& segStr,
+	static bool addSnappedNode(const HotPixel& hotPix,
+			SegmentString& segStr,
 			unsigned int segIndex);
 
 	/**
@@ -167,6 +153,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/05/03 15:02:49  strk
+ * moved some implementations from header to .cpp file (taken out of inline)
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

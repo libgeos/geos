@@ -17,10 +17,6 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <exception>
-#include <iostream>
-
 #include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/noding/SegmentString.h>
@@ -32,6 +28,11 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 
+#include <vector>
+#include <exception>
+#include <iostream>
+#include <cassert>
+
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -40,9 +41,39 @@ namespace geos {
 namespace noding { // geos.noding
 namespace snapround { // geos.noding.snapround
 
+/*public*/
+SimpleSnapRounder::SimpleSnapRounder(const geom::PrecisionModel& newPm)
+	:
+	pm(newPm),
+	li(&newPm),
+	scaleFactor(newPm.getScale())
+{
+}
+
+/*public*/
+std::vector<SegmentString*>*
+SimpleSnapRounder::getNodedSubstrings() const
+{
+	return nodedSegStrings;
+}
+
+/*public*/
+void
+SimpleSnapRounder::computeNodes(
+		std::vector<SegmentString*>* inputSegmentStrings)
+{
+	nodedSegStrings = inputSegmentStrings;
+	snapRound(inputSegmentStrings, li);
+
+	// testing purposes only - remove in final version
+	//checkCorrectness(*inputSegmentStrings);
+}
+
+
 /*private*/
 void
-SimpleSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentStrings)
+SimpleSnapRounder::checkCorrectness(
+		SegmentString::NonConstVect& inputSegmentStrings)
 {
 	auto_ptr<SegmentString::NonConstVect> resultSegStrings(
 		SegmentString::getNodedSubstrings(inputSegmentStrings)
@@ -75,8 +106,9 @@ SimpleSnapRounder::computeSnaps(const SegmentString::NonConstVect& segStrings,
 void
 SimpleSnapRounder::computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts)
 {
-	for (vector<Coordinate>::iterator it=snapPts.begin(), itEnd=snapPts.end();
-			it!=itEnd; ++it)
+	for (vector<Coordinate>::iterator
+		it=snapPts.begin(), itEnd=snapPts.end();
+		it!=itEnd; ++it)
 	{
 		const Coordinate& snapPt = *it;
 		HotPixel hotPixel(snapPt, scaleFactor, li);
@@ -88,8 +120,8 @@ SimpleSnapRounder::computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts)
 
 /* public static */
 bool
-SimpleSnapRounder::addSnappedNode(const HotPixel& hotPix, SegmentString& segStr,
-		unsigned int segIndex)
+SimpleSnapRounder::addSnappedNode(const HotPixel& hotPix,
+		SegmentString& segStr, unsigned int segIndex)
 {
 	const Coordinate& p0 = segStr.getCoordinate(segIndex);
 	const Coordinate& p1 = segStr.getCoordinate(segIndex + 1);
@@ -159,7 +191,8 @@ void
 SimpleSnapRounder::snapRound(SegmentString::NonConstVect* segStrings,
 		LineIntersector& li)
 {
-//TODO: finish me
+	assert(segStrings);
+
 	vector<Coordinate> intersections;
 	findInteriorIntersections(*segStrings, li, intersections);
 	computeSnaps(*segStrings, intersections);
@@ -168,14 +201,15 @@ SimpleSnapRounder::snapRound(SegmentString::NonConstVect* segStrings,
 
 /*private*/
 void
-SimpleSnapRounder::findInteriorIntersections(SegmentString::NonConstVect& segStrings,
+SimpleSnapRounder::findInteriorIntersections(
+	SegmentString::NonConstVect& segStrings,
 	LineIntersector& li, vector<Coordinate>& ret)
 {
 	IntersectionFinderAdder intFinderAdder(li, ret);
 	MCIndexNoder noder;
 	noder.setSegmentIntersector(&intFinderAdder);
 	noder.computeNodes(&segStrings);
-	intFinderAdder.getInteriorIntersections();
+	//intFinderAdder.getInteriorIntersections();
 }
 
 
@@ -185,6 +219,9 @@ SimpleSnapRounder::findInteriorIntersections(SegmentString::NonConstVect& segStr
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/03 15:02:49  strk
+ * moved some implementations from header to .cpp file (taken out of inline)
+ *
  * Revision 1.7  2006/03/15 09:51:13  strk
  * streamlined headers usage
  *
