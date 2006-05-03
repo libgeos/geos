@@ -17,9 +17,6 @@
  *
  **********************************************************************/
 
-#include <cassert>
-#include <memory>
-
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
@@ -27,6 +24,9 @@
 #ifndef GEOS_INLINE
 # include "geos/noding/snapround/HotPixel.inl"
 #endif
+
+#include <cassert>
+#include <memory>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -173,6 +173,9 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/03 17:51:24  strk
+ * system headers included after package headers
+ *
  * Revision 1.7  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
