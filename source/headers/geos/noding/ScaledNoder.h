@@ -50,7 +50,6 @@ namespace noding { // geos.noding
  * Offsets can be provided to increase the number of digits of
  * available precision.
  *
- * Last port: noding/ScaledNoder.java rev. 1.2 (JTS-1.7)
  */
 class ScaledNoder : public Noder { // , public geom::CoordinateFilter { // implements Noder
 
@@ -108,6 +107,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/05/03 15:04:33  strk
+ * removed reduntant port info
+ *
  * Revision 1.5  2006/05/03 15:00:42  strk
  * Fixed scale() function to remove repeated points *after* rounding. Added brief doxygen class description.
  *
