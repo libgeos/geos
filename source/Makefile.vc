@@ -16,6 +16,9 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.12  2006/05/03 15:49:12  hobu
+# add additional files and change names where necessary
+#
 # Revision 1.11  2006/04/04 01:54:31  hobu
 # Add in changes/missing from previous rearranging.
 #
@@ -120,6 +123,7 @@ OBJ = 	algorithm\CentroidArea.obj \
 	geom\Triangle.obj \
 	geom\util\CoordinateOperation.obj \
 	geom\util\GeometryEditor.obj \
+	geom\util\GeometryTransformer.obj \
 	geom\util\LinearComponentExtracter.obj \
 	geom\util\PointExtracter.obj \
 	geom\util\PolygonExtracter.obj \
@@ -235,7 +239,7 @@ OBJ = 	algorithm\CentroidArea.obj \
 	operation\overlay\PolygonBuilder.obj \
 	operation\polygonize\PolygonizeDirectedEdge.obj \
 	operation\polygonize\PolygonizeEdge.obj \
-	operation\polygonize\polygonizeEdgeRing.obj \
+	operation\polygonize\EdgeRing.obj \
 	operation\polygonize\PolygonizeGraph.obj \
 	operation\polygonize\Polygonizer.obj \
 	operation\predicate\RectangleContains.obj \
@@ -271,6 +275,13 @@ OBJ = 	algorithm\CentroidArea.obj \
 	precision\EnhancedPrecisionOp.obj \
 	precision\SimpleGeometryPrecisionReducer.obj \
 	simplify\DouglasPeuckerLineSimplifier.obj \
+	simplify\DouglasPeuckerSimplifier.obj \
+	simplify\LineSegmentIndex.obj \
+	simplify\TaggedLineSegment.obj \
+	simplify\TaggedLinesSimplifier.obj \
+	simplify\TaggedLineString.obj \
+	simplify\TaggedLineStringSimplifier.obj \
+	simplify\TopologyPreservingSimplifier.obj \
 	util\Assert.obj \
 	util\AssertionFailedException.obj \
 	util\CoordinateArrayFiter.obj \
@@ -297,6 +308,9 @@ $(DLLNAME):	$(OBJ)
 headers/geos/platform.h: headers/geos/platform.h.vc
 	copy headers\geos\platform.h.vc headers\geos\platform.h
 
+headers/geos/version.h: headers/geos/version.h.vc
+    copy headers\geos\version.h.vc headers\geos\version.h
+    
 .cpp.obj:
 	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
