@@ -17,15 +17,23 @@
  *
  **********************************************************************/
 
-#include <functional>
-#include <vector>
-#include <cassert>
-
 #include "geos/geom/Coordinate.h"
 #include "geos/geom/CoordinateSequence.h" // for apply
 #include "geos/noding/ScaledNoder.h"
 #include "geos/noding/SegmentString.h"
 #include "geos/util/math.h"
+
+#include <functional>
+#include <vector>
+#include <cassert>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#ifdef GEOS_DEBUG
+#include <iostream>
+#endif
 
 using namespace geos::geom;
 
@@ -35,7 +43,15 @@ namespace noding { // geos.noding
 class ScaledNoder::Scaler: public geom::CoordinateFilter {
 public:
 	const ScaledNoder& sn;
-	Scaler(const ScaledNoder&n): sn(n) {}
+	Scaler(const ScaledNoder&n): sn(n)
+	{
+#ifdef GEOS_DEBUG
+		std::cerr << "Scaler: offsetX,Y: " << sn.offsetX << ","
+			<< sn.offsetY << " scaleFactor: " << sn.scaleFactor
+			<< std::endl;
+#endif
+	}
+
 	void filter_ro(const geom::Coordinate* c) { assert(0); }
 
 	void filter_rw(geom::Coordinate* c) const {
@@ -47,7 +63,15 @@ public:
 class ScaledNoder::ReScaler: public geom::CoordinateFilter {
 public:
 	const ScaledNoder& sn;
-	ReScaler(const ScaledNoder&n): sn(n) {}
+	ReScaler(const ScaledNoder&n): sn(n)
+	{
+#ifdef GEOS_DEBUG
+		std::cerr << "ReScaler: offsetX,Y: " << sn.offsetX << ","
+			<< sn.offsetY << " scaleFactor: " << sn.scaleFactor
+			<< std::endl;
+#endif
+	}
+
 	void filter_ro(const geom::Coordinate* c) { assert(0); }
 	void filter_rw(geom::Coordinate* c) const {
 		c->x = c->x / sn.scaleFactor + sn.offsetX;
@@ -64,8 +88,11 @@ ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
 		i0=segStrings.begin(), i0End=segStrings.end();
 			i0!=i0End; ++i0)
 	{
-		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
-		(*i0)->getCoordinates()->apply_rw(&rescaler);
+
+		SegmentString* ss=*i0;
+
+		ss->getCoordinates()->apply_rw(&rescaler);
+
 	}
 }
 
@@ -79,10 +106,15 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 		i0=segStrings.begin(), i0End=segStrings.end();
 			i0!=i0End; ++i0)
 	{
-		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
-		CoordinateSequence* cs=(*i0)->getCoordinates();
+		SegmentString* ss=*i0;
+
+		ss->testInvariant();
+
+		CoordinateSequence* cs=ss->getCoordinates();
 		cs->apply_rw(&scaler);
 		cs->removeRepeatedPoints();
+
+		ss->testInvariant();
 	}
 }
 
@@ -114,6 +146,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/05/03 15:40:14  strk
+ * test SegmentString invariant before and after scaling
+ *
  * Revision 1.9  2006/05/03 15:12:35  strk
  * Oops, uninitialized value fix
  *
