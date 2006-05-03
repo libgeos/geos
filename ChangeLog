@@ -1,5 +1,6 @@
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
+	* configure.in: updated JTS_PORT to 1.7.1
 	* source/headers/geos/noding/SegmentString.{h,inl}:
 	testInvariant() moved from private to public access
 	level, and ensured to be inlined.
