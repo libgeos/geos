@@ -19,7 +19,12 @@
 
 namespace geos {
 namespace noding { // geos.noding
+
+/// \brief
+/// Contains classes to implement the Snap Rounding algorithm for
+// noding linestrings.
 namespace snapround { // geos.noding.snapround
+
 } // namespace geos.noding.snapround
 } // namespace geos.noding
 } // namespace geos
