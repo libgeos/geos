@@ -1,0 +1,11 @@
+#ifndef _GEOS_VERSION_H
+#define _GEOS_VERSION_H
+
+#define GEOS_VERSION_MAJOR 3
+#define GEOS_VERSION_MINOR 0
+#define GEOS_VERSION_PATCH 0cvs
+#define GEOS_VERSION "3.0.0cvs"
+#define GEOS_JTS_PORT "1.7.1"
+
+
+#endif // _GEOS_VERSION_H
