@@ -1,3 +1,7 @@
+2006-05-03 Howard Butler <hobu@hobu.net>
+    * source/headers/version.h.vc: Maintain a version.h.vc 
+    until we come up with a better solution
+
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
 	* configure.in: updated JTS_PORT to 1.7.1
