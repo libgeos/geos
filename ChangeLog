@@ -6,6 +6,9 @@
 
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
+	* source/geom/CoordinateSequence.cpp,
+	source/headers/geos/geom/CoordinateSequence.h:
+	added operator<< for CoordinateSequence
 	* source/headers/geos/noding/snapround/HotPixel.h: doxygen
 	comments.
 	* source/headers/geos/nodingSnapround.h: doxygen brief

@@ -231,11 +231,28 @@ CoordinateSequence::expandEnvelope(Envelope &env) const
 	for (int i=0; i<size; i++) env.expandToInclude(getAt(i));
 }
 
+std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs)
+{
+	os << "(";
+	for (size_t i=0, n=cs.size(); i<n; ++i)
+	{
+		const Coordinate& c = cs[i];
+		if ( i ) os << ", ";
+		os << c;
+	}
+	os << ")";
+
+	return os;
+}
+
 } // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/05/03 19:47:27  strk
+ * added operator<< for CoordinateSequence
+ *
  * Revision 1.17  2006/03/22 16:58:34  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

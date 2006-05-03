@@ -63,7 +63,8 @@ public:
 
 	typedef std::auto_ptr<CoordinateSequence> AutoPtr;
 
-	friend std::ostream& operator<< (std::ostream& os, const Coordinate& c);
+	friend std::ostream& operator<< (std::ostream& os,
+		const CoordinateSequence& cs);
 
 	virtual ~CoordinateSequence(){};
 
@@ -305,6 +306,8 @@ public:
 
 };
 
+std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
+
 } // namespace geos::geom
 } // namespace geos
 
@@ -316,6 +319,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/05/03 19:47:27  strk
+ * added operator<< for CoordinateSequence
+ *
  * Revision 1.6  2006/05/03 08:58:34  strk
  * added new non-static CoordinateSequence::removeRepeatedPoints() mutator.
  *
