@@ -1,5 +1,7 @@
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/noding/snapround/HotPixel.inl:
+	changed sym_round() to java_math_round()
 	* source/operation/buffer/RightmostEdgeFinder.cpp: more
 	assertion checking
 	* source/operation/buffer/BufferOp.cpp: fixed

@@ -29,7 +29,7 @@ HotPixel::scale(double val) const
 {
 	// Math.round
 	//return round(val*scaleFactor);
-	return util::sym_round(val*scaleFactor);
+	return util::java_math_round(val*scaleFactor);
 }
 
 INLINE void
