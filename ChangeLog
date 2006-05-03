@@ -6,6 +6,8 @@
 
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/noding/snapround/HotPixel.h: doxygen
+	comments.
 	* source/headers/geos/nodingSnapround.h: doxygen brief
 	* source/noding/snapround/SimpleSnapRounder.cpp: fixed
 	bug in computeSnaps, trying to access out-of-bound vector

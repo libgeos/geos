@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/snapround/HotPixel.java rev. 1.2 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SNAPROUND_HOTPIXEL_H
@@ -35,19 +39,21 @@ namespace geos {
 namespace noding { // geos::noding
 namespace snapround { // geos::noding::snapround
 
-/**
+/** \brief
  * Implements a "hot pixel" as used in the Snap Rounding algorithm.
+ *
  * A hot pixel contains the interior of the tolerance square and
  * the boundary
  * <b>minus</b> the top and right segments.
- * <p>
+ * 
  * The hot pixel operations are all computed in the integer domain
  * to avoid rounding problems.
  *
- * @version 1.7
  */
 class HotPixel {
+
 private:
+
 	algorithm::LineIntersector& li;
 
 	geom::Coordinate pt;
@@ -61,39 +67,42 @@ private:
 	double miny;
 	double maxy;
 
-	/**
-	 * The corners of the hot pixel, in the order:
-	 *  10
-	 *  23
+	/** \brief
+	 * The corners of the hot pixel
+	 * 
+	 * In the order:
+	 *  1 0
+	 *  2 3
 	 */
 	std::vector<geom::Coordinate> corner;
 
-	// Owned by this class, constructed on demand
+	/// Owned by this class, constructed on demand
 	mutable std::auto_ptr<geom::Envelope> safeEnv; 
 
 	void initCorners(const geom::Coordinate& pt);
 
 	double scale(double val) const;
 
-	void copyScaled(const geom::Coordinate& p, geom::Coordinate& pScaled) const;
+	void copyScaled(const geom::Coordinate& p,
+			geom::Coordinate& pScaled) const;
 
-	/**
+	/** \brief
 	 * Tests whether the segment p0-p1 intersects the hot pixel
 	 * tolerance square.
+	 *
 	 * Because the tolerance square point set is partially open (along the
 	 * top and right) the test needs to be more sophisticated than
 	 * simply checking for any intersection.  However, it
 	 * can take advantage of the fact that because the hot pixel edges
 	 * do not lie on the coordinate grid.  It is sufficient to check
 	 * if there is at least one of:
-	 * <ul>
-	 * <li>a proper intersection with the segment and any hot pixel edge
-	 * <li>an intersection between the segment and both the left
-	 *     and bottom edges
-	 * <li>an intersection between a segment endpoint and the hot
-	 *     pixel coordinate
-	 * </ul>
-	 *
+	 * 
+	 * - a proper intersection with the segment and any hot pixel edge
+	 * - an intersection between the segment and both the left
+	 *   and bottom edges
+	 * - an intersection between a segment endpoint and the hot
+	 *   pixel coordinate
+	 * 
 	 * @param p0
 	 * @param p1
 	 * @return
@@ -102,9 +111,10 @@ private:
 			const geom::Coordinate& p1) const;
  
 
-	/**
+	/** \brief
 	 * Test whether the given segment intersects
 	 * the closure of this hot pixel.
+	 *
 	 * This is NOT the test used in the standard snap-rounding
 	 * algorithm, which uses the partially closed tolerance square
 	 * instead.
@@ -129,7 +139,7 @@ public:
 	/// (the one provided at construction time)
 	const geom::Coordinate& getCoordinate() const { return originalPt; }
 
-	/**
+	/** \brief
 	 * Returns a "safe" envelope that is guaranteed to contain
 	 * the hot pixel. Keeps ownership of it.
 	 */
@@ -158,6 +168,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/05/03 17:50:49  strk
+ * Doxygen comments
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
