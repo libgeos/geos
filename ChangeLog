@@ -2,6 +2,7 @@
 
 	* source/headers/version.h.vc: Maintain a version.h.vc 
 	until we come up with a better solution
+	* source/makefile.vc: Add missing stuff
 
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
