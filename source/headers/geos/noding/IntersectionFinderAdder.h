@@ -60,8 +60,10 @@ public:
 	 * and stores them in the provided Coordinate array
 	 *
 	 * @param li the LineIntersector to use
+	 * @param v  the Vector to push interior intersections to
 	 */
-	IntersectionFinderAdder(algorithm::LineIntersector& newLi, std::vector<geom::Coordinate>& v)
+	IntersectionFinderAdder(algorithm::LineIntersector& newLi,
+			std::vector<geom::Coordinate>& v)
 		:
 		li(newLi),
 		interiorIntersections(v)
@@ -98,6 +100,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/03 15:06:30  strk
+ * Better doxygen comment
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
