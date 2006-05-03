@@ -68,8 +68,6 @@ public:
 
 	void testInvariant() const;
 
-	//SegmentString(const geom::CoordinateSequence *newPts, const void* newContext)
-
 	/// Construct a SegmentString.
 	//
 	/// @param newPts CoordinateSequence representing the string,
@@ -112,7 +110,8 @@ public:
 	bool isClosed() const;
 
 	/** \brief
-	 * Gets the octant of the segment starting at vertex <code>index</code>.
+	 * Gets the octant of the segment starting at vertex
+	 * <code>index</code>.
 	 *
 	 * @param index the index of the vertex starting the segment. 
 	 *              Must not be the last index in the vertex list
@@ -125,8 +124,8 @@ public:
 	 * intersections found for a segment of an edge to the edge
 	 * intersection list.
 	 */
-	void addIntersections(algorithm::LineIntersector *li, unsigned int segmentIndex,
-			int geomIndex);
+	void addIntersections(algorithm::LineIntersector *li,
+			unsigned int segmentIndex, int geomIndex);
 
 	/** \brief
 	 * Add an SegmentNode for intersection intIndex.
@@ -135,7 +134,8 @@ public:
 	 * of the SegmentString is normalized
 	 * to use the higher of the two possible segmentIndexes
 	 */
-	void addIntersection(algorithm::LineIntersector *li, unsigned int segmentIndex,
+	void addIntersection(algorithm::LineIntersector *li,
+			unsigned int segmentIndex,
 			int geomIndex, int intIndex);
 
 	/** \brief
@@ -145,9 +145,11 @@ public:
 	 * edge is normalized
 	 * to use the higher of the two possible segmentIndexes
 	 */
-	void addIntersection(const geom::Coordinate& intPt, unsigned int segmentIndex);
+	void addIntersection(const geom::Coordinate& intPt,
+			unsigned int segmentIndex);
 
-	static void getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
+	static void getNodedSubstrings(
+			const SegmentString::NonConstVect& segStrings,
 			SegmentString::NonConstVect* resultEdgeList);
 
 	static SegmentString::NonConstVect* getNodedSubstrings(
@@ -174,6 +176,9 @@ SegmentString::testInvariant() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/05/03 16:19:39  strk
+ * fit in 80 columns
+ *
  * Revision 1.4  2006/05/03 15:26:02  strk
  * testInvariant made public and always inlined
  *
