@@ -37,9 +37,10 @@ public:
 	const ScaledNoder& sn;
 	Scaler(const ScaledNoder&n): sn(n) {}
 	void filter_ro(const geom::Coordinate* c) { assert(0); }
+
 	void filter_rw(geom::Coordinate* c) const {
-		c->x = util::java_math_round( ( c->x - sn.offsetX ) *  sn.scaleFactor );
-		c->y = util::java_math_round( ( c->y - sn.offsetY ) *  sn.scaleFactor );
+		c->x = util::java_math_round( ( c->x - sn.offsetX ) * sn.scaleFactor );
+		c->y = util::java_math_round( ( c->y - sn.offsetY ) * sn.scaleFactor );
 	}
 };
 
@@ -79,7 +80,9 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 			i0!=i0End; ++i0)
 	{
 		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
-		(*i0)->getCoordinates()->removeRepeatedPoints().apply_rw(&scaler);
+		CoordinateSequence* cs;
+		cs->apply_rw(&scaler);
+		cs->removeRepeatedPoints();
 	}
 }
 
@@ -111,6 +114,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/03 15:00:43  strk
+ * Fixed scale() function to remove repeated points *after* rounding. Added brief doxygen class description.
+ *
  * Revision 1.7  2006/05/03 09:14:22  strk
  * * source/operation/buffer/OffsetCurveSetBuilder.cpp: used auto_ptr to protect leaks of CoordinateSequence
  * * source/noding/ScaledNoder.cpp, source/headers/geos/noding/ScaledNoder.h: ported JTS bugfix in scale method.

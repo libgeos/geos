@@ -41,9 +41,10 @@ namespace geos {
 namespace geos {
 namespace noding { // geos.noding
 
-/**
+/** \brief
  * Wraps a {@link Noder} and transforms its input
  * into the integer domain.
+ *
  * This is intended for use with Snap-Rounding noders,
  * which typically are only intended to work in the integer domain.
  * Offsets can be provided to increase the number of digits of
@@ -107,6 +108,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/05/03 15:00:42  strk
+ * Fixed scale() function to remove repeated points *after* rounding. Added brief doxygen class description.
+ *
  * Revision 1.4  2006/05/03 09:14:22  strk
  * * source/operation/buffer/OffsetCurveSetBuilder.cpp: used auto_ptr to protect leaks of CoordinateSequence
  * * source/noding/ScaledNoder.cpp, source/headers/geos/noding/ScaledNoder.h: ported JTS bugfix in scale method.
