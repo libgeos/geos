@@ -211,7 +211,7 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 	snapround::SimpleSnapRounder inoder(pm); // fail
 #else
 
-	algorithm::LineIntersector li(&pm);
+	algorithm::LineIntersector li(&fixedPM);
 	IntersectionAdder ia(li);
 	MCIndexNoder inoder(&ia); // This works fine (but does not snapround)
 #endif
@@ -236,6 +236,9 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.51  2006/05/03 10:26:56  strk
+ * Fixed misuse of precision model in noder (bufferFixedPrecision)
+ *
  * Revision 1.50  2006/03/23 09:17:19  strk
  * precision.h header split, minor optimizations
  *

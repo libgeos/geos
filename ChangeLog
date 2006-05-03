@@ -1,5 +1,7 @@
 2006-05-03 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/buffer/BufferOp.cpp: fixed
+	misuse of MCIndexNoder in bufferFixedPrecision.
 	* source/headers/geos/geom/CoordinateSequence.h,
 	source/headers/geos/geom/CoordinateArraySequence.h,
 	source/geom/CoordinateArraySequence.cpp: added new
