@@ -80,7 +80,7 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 			i0!=i0End; ++i0)
 	{
 		//(*i0)->getCoordinates()->applyCoordinateFilter(*this);
-		CoordinateSequence* cs;
+		CoordinateSequence* cs=(*i0)->getCoordinates();
 		cs->apply_rw(&scaler);
 		cs->removeRepeatedPoints();
 	}
@@ -114,6 +114,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/05/03 15:12:35  strk
+ * Oops, uninitialized value fix
+ *
  * Revision 1.8  2006/05/03 15:00:43  strk
  * Fixed scale() function to remove repeated points *after* rounding. Added brief doxygen class description.
  *
