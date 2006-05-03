@@ -18,21 +18,12 @@
 
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/Octant.h>
-#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 
 #include <cassert>
 
 namespace geos {
 namespace noding { // geos.noding
-
-INLINE void
-SegmentString::testInvariant() const
-{
-	assert(pts);
-	assert(pts->size() > 1);
-	assert(pts->size() == npts);
-}
 
 INLINE
 SegmentString::SegmentString(geom::CoordinateSequence *newPts, const void* newContext)

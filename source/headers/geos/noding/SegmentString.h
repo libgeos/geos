@@ -16,11 +16,12 @@
 #ifndef GEOS_NODING_SEGMENTSTRING_H
 #define GEOS_NODING_SEGMENTSTRING_H
 
-#include <vector>
-
 #include <geos/noding/SegmentNodeList.h>
+#include <geos/geom/CoordinateSequence.h> // for testInvariant
 
 #include <geos/inline.h>
+
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -63,9 +64,9 @@ private:
 	const void* context;
 	bool isIsolatedVar;
 
-	void testInvariant() const;
-
 public:
+
+	void testInvariant() const;
 
 	//SegmentString(const geom::CoordinateSequence *newPts, const void* newContext)
 
@@ -153,6 +154,15 @@ public:
 			const SegmentString::NonConstVect& segStrings);
 };
 
+inline void
+SegmentString::testInvariant() const
+{
+	assert(pts);
+	assert(pts->size() > 1);
+	assert(pts->size() == npts);
+}
+
+
 } // namespace geos.noding
 } // namespace geos
 
@@ -164,6 +174,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/03 15:26:02  strk
+ * testInvariant made public and always inlined
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
