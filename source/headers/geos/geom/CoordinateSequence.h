@@ -172,8 +172,20 @@ public:
 	const Coordinate* minCoordinate() const;
 
 
-	/// Returns a new CoordinateSequence being a copy of the input with any consecutive equal Coordinate removed.
-	static CoordinateSequence* removeRepeatedPoints(const CoordinateSequence *cl);
+	/// \brief
+	/// Returns a new CoordinateSequence being a copy of the input
+	/// with any consecutive equal Coordinate removed.
+	///
+	/// Equality test is 2D based
+	///
+	static CoordinateSequence* removeRepeatedPoints(
+			const CoordinateSequence *cl);
+
+	/// Remove consecutive equal Coordinates from the sequence
+	//
+	/// Equality test is 2D based. Returns a reference to self.
+	///
+	virtual CoordinateSequence& removeRepeatedPoints()=0;
 
 	/**
 	* \brief Returns true if given CoordinateSequence contains
@@ -304,6 +316,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/05/03 08:58:34  strk
+ * added new non-static CoordinateSequence::removeRepeatedPoints() mutator.
+ *
  * Revision 1.5  2006/04/11 11:55:22  strk
  * Added CoordinateSequence::AutoPtr typedef
  *

@@ -201,11 +201,26 @@ CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 	}
 }
 
+CoordinateSequence&
+CoordinateArraySequence::removeRepeatedPoints()
+{
+	// We use == operator, which is 2D only
+	vector<Coordinate>::iterator new_end = \
+		std::unique(vect->begin(), vect->end());
+	
+	vect->erase(new_end, vect->end());
+
+	return *this;
+}
+
 } // namespace geos::geom
 } //namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/03 08:58:34  strk
+ * added new non-static CoordinateSequence::removeRepeatedPoints() mutator.
+ *
  * Revision 1.7  2006/03/27 09:00:50  strk
  * Bug #79 - Small fix in CoordinateArraySequence::toString()
  *

@@ -1,3 +1,10 @@
+2006-05-03 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/geom/CoordinateSequence.h,
+	source/headers/geos/geom/CoordinateArraySequence.h,
+	source/geom/CoordinateArraySequence.cpp: added new
+	non-static removeRepeatedPoints() mutator.
+
 2006-05-02 Sandro Santilli <strk@refractions.net>
 
 	* source/noding/ScaledNoder.cpp: use java_math_round instead

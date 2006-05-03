@@ -64,18 +64,32 @@ public:
 	~CoordinateArraySequence();
 
 	bool isEmpty() const;
+
 	void add(const Coordinate& c);
+
 	void setAt(const Coordinate& c, unsigned int pos);
+
 	void deleteAt(unsigned int pos);
+
 	std::string toString() const;
+
 	void setPoints(const std::vector<Coordinate> &v);
 
-	double getOrdinate(unsigned int index, unsigned int ordinateIndex) const;
-	void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value);
+	double getOrdinate(unsigned int index,
+			unsigned int ordinateIndex) const;
+
+	void setOrdinate(unsigned int index, unsigned int ordinateIndex,
+			double value);
+
 	void expandEnvelope(Envelope &env) const;
+
 	unsigned int getDimension() const { return 3; }
+
 	void apply_rw(const CoordinateFilter *filter); 
+
 	void apply_ro(CoordinateFilter *filter) const; 
+
+	virtual CoordinateSequence& removeRepeatedPoints();
 
 private:
 	std::vector<Coordinate> *vect;
@@ -95,6 +109,9 @@ typedef CoordinateArraySequence DefaultCoordinateSequence;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/05/03 08:58:34  strk
+ * added new non-static CoordinateSequence::removeRepeatedPoints() mutator.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
