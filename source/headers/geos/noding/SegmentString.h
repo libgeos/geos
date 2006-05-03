@@ -100,6 +100,10 @@ public:
 	///
 	geom::CoordinateSequence* getCoordinates() const;
 
+	/// \brief
+	/// Set new CoordinateSequence for this SegmentString
+	void setCoordinates(geom::CoordinateSequence* cs);
+
 	// Return a read-only pointer to this SegmentString CoordinateSequence
 	//const CoordinateSequence* getCoordinatesRO() const { return pts; }
 
@@ -176,6 +180,9 @@ SegmentString::testInvariant() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/05/03 18:04:49  strk
+ * added SegmentString::setCoordinates() interface
+ *
  * Revision 1.5  2006/05/03 16:19:39  strk
  * fit in 80 columns
  *

@@ -15,7 +15,8 @@
 	* configure.in: updated JTS_PORT to 1.7.1
 	* source/headers/geos/noding/SegmentString.{h,inl}:
 	testInvariant() moved from private to public access
-	level, and ensured to be inlined.
+	level, and ensured to be inlined; added setCoordinates()
+	interface
 	* source/headers/geos/noding/snapround/HotPixel.inl:
 	changed sym_round() to java_math_round()
 	* source/operation/buffer/RightmostEdgeFinder.cpp: more
