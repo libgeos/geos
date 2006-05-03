@@ -34,7 +34,7 @@
 	used auto_ptr to protect leaks of CoordinateSequence
 	* source/noding/ScaledNoder.cpp,
 	source/headers/geos/noding/ScaledNoder.h: ported JTS
-	bugfix in scale method.
+	bugfix in scale method, added SQL debugging output.
 	* source/headers/geos/opBuffer.h,
 	source/headers/geos/operation/buffer/Makefile.am:
 	reduced set of installed headers.

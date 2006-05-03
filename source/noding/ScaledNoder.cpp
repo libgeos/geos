@@ -17,11 +17,11 @@
  *
  **********************************************************************/
 
-#include "geos/geom/Coordinate.h"
-#include "geos/geom/CoordinateSequence.h" // for apply
-#include "geos/noding/ScaledNoder.h"
-#include "geos/noding/SegmentString.h"
-#include "geos/util/math.h"
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h> // for apply and delete
+#include <geos/noding/ScaledNoder.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/util/math.h>
 
 #include <functional>
 #include <vector>
@@ -33,12 +33,43 @@
 
 #ifdef GEOS_DEBUG
 #include <iostream>
+#include <string>
 #endif
 
 using namespace geos::geom;
 
+
+
 namespace geos {
 namespace noding { // geos.noding
+
+namespace {
+
+#if GEOS_DEBUG > 1
+void
+sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
+{
+	std::cerr << "CREATE TABLE \"" << table
+		<< "\" (id integer, geom geometry);" << std::endl;
+
+	std::cerr << "COPY \"" << table
+		<< "\" FROM stdin;" << std::endl;
+
+	for (size_t i=0, n=ssv.size(); i<n; i++)
+	{
+		SegmentString* ss=ssv[i];
+		geom::CoordinateSequence* cs = ss->getCoordinates();
+		assert(cs);
+
+		std::cerr << i << '\t' << "LINESTRING"
+			<< *cs
+			<< std::endl;
+	}
+	std::cerr << "\\." << std::endl;
+}
+#endif // GEOS_DEBUG > 1
+
+} // anonym namespace 
 
 class ScaledNoder::Scaler: public geom::CoordinateFilter {
 public:
@@ -110,11 +141,24 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 
 		ss->testInvariant();
 
-		CoordinateSequence* cs=ss->getCoordinates();
+		CoordinateSequence* cs=ss->getCoordinates()->clone();
+		newCoordSeq.push_back(cs);
+
 		cs->apply_rw(&scaler);
 		cs->removeRepeatedPoints();
 
-		ss->testInvariant();
+		ss->setCoordinates(cs);
+	}
+}
+
+ScaledNoder::~ScaledNoder()
+{
+	for (std::vector<geom::CoordinateSequence*>::const_iterator
+		it=newCoordSeq.begin(), end=newCoordSeq.end();
+		it != end;
+		++it)
+	{
+		delete *it;
 	}
 }
 
@@ -124,7 +168,17 @@ SegmentString::NonConstVect*
 ScaledNoder::getNodedSubstrings() const
 {
 	SegmentString::NonConstVect* splitSS = noder.getNodedSubstrings();
+
+#if GEOS_DEBUG > 1
+	sqlPrint("nodedSegStr", *splitSS);
+#endif
+
 	if ( isScaled ) rescale(*splitSS);
+
+#if GEOS_DEBUG > 1
+	sqlPrint("scaledNodedSegStr", *splitSS);
+#endif
+
 	return splitSS;
 
 }
@@ -133,7 +187,17 @@ ScaledNoder::getNodedSubstrings() const
 void
 ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 {
+
+#if GEOS_DEBUG > 1
+	sqlPrint("inputSegStr", *inputSegStr);
+#endif
+
 	if (isScaled) scale(*inputSegStr);
+
+#if GEOS_DEBUG > 1
+	sqlPrint("scaledInputSegStr", *inputSegStr);
+#endif
+
 	noder.computeNodes(inputSegStr);
 }
 
@@ -146,6 +210,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/05/03 20:05:18  strk
+ * Added SQL debugging output
+ *
  * Revision 1.10  2006/05/03 15:40:14  strk
  * test SegmentString invariant before and after scaling
  *
