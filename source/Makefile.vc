@@ -16,6 +16,9 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.14  2006/05/03 16:22:40  hobu
+# tweak clean target
+#
 # Revision 1.13  2006/05/03 16:21:18  hobu
 # Build the C API and shared lib separate from the normal lib
 # Add missing files
@@ -334,6 +337,8 @@ clean:
 	del $(LIBNAME)
 	del $(SLIBNAME)
 	del $(DLLNAME)
+	del $(SLIBNAME)
+	del $(CLIBNAME)
 	del ..\capi\*.obj
 	del *.exe
 	del *.exp
