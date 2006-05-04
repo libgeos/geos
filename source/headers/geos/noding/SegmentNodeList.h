@@ -147,7 +147,7 @@ public:
 	std::set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodeMap; }
 
 	/// Return the number of nodes in this list
-	unsigned int size() { return nodeMap.size(); }
+	unsigned int size() const { return nodeMap.size(); }
 
 	container::iterator begin() { return nodeMap.begin(); }
 	container::const_iterator begin() const { return nodeMap.begin(); }
@@ -188,6 +188,9 @@ std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/05/04 07:41:56  strk
+ * const-correct size() method for SegmentNodeList
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

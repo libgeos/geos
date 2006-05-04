@@ -1,3 +1,8 @@
+2006-05-04 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/noding/SegmentNodeList.h:
+	const-correct size() method.
+
 2006-05-03 Howard Butler <hobu@hobu.net>
 
 	* source/headers/version.h.vc: Maintain a version.h.vc 
