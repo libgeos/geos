@@ -29,10 +29,12 @@ INLINE
 SegmentString::SegmentString(geom::CoordinateSequence *newPts, const void* newContext)
 		:
 		eiList(this),
+		pts(newPts),
+		npts(pts->size()),
 		context(newContext),
 		isIsolatedVar(false)
 {
-	setCoordinates(newPts);
+	testInvariant();
 }
 
 INLINE
@@ -84,14 +86,6 @@ SegmentString::getCoordinates() const
 {
 	testInvariant();
 	return pts;
-}
-
-INLINE void
-SegmentString::setCoordinates(geom::CoordinateSequence* cs)
-{
-	pts=cs;
-	npts=pts->size();
-	testInvariant();
 }
 
 INLINE void

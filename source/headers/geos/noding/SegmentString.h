@@ -103,10 +103,6 @@ public:
 	///
 	geom::CoordinateSequence* getCoordinates() const;
 
-	/// \brief
-	/// Set new CoordinateSequence for this SegmentString
-	void setCoordinates(geom::CoordinateSequence* cs);
-
 	// Return a read-only pointer to this SegmentString CoordinateSequence
 	//const CoordinateSequence* getCoordinatesRO() const { return pts; }
 
@@ -184,6 +180,10 @@ std::ostream& operator<< (std::ostream& os, const SegmentString& ss);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/04 08:29:07  strk
+ * * source/noding/ScaledNoder.cpp: removed use of SegmentString::setCoordinates().
+ * * source/headers/geos/noding/SegmentStrign.{h,inl}: removed new setCoordinates() interface.
+ *
  * Revision 1.7  2006/05/04 07:43:44  strk
  * output operator for SegmentString class
  *

@@ -1,5 +1,9 @@
 2006-05-04 Sandro Santilli <strk@refractions.net>
 
+	* source/noding/ScaledNoder.cpp: removed use
+	of SegmentString::setCoordinates().
+	* source/headers/geos/noding/SegmentStrign.{h,inl}:
+	removed new setCoordinates() interface.
 	* source/headers/geos/noding/SegmentNodeList.h:
 	const-correct size() method.
 	* source/headers/geos/noding/SegmentString.h,
