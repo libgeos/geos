@@ -41,8 +41,10 @@ class DirectedEdge: public EdgeEnd {
 public:
 
 	/** \brief
-	 * Computes the factor for the change in depth when moving from one location to another.
-	 * E.g. if crossing from the INTERIOR to the EXTERIOR the depth decreases, so the factor is -1
+	 * Computes the factor for the change in depth when moving from
+	 * one location to another.
+	 * E.g. if crossing from the INTERIOR to the EXTERIOR the depth
+	 * decreases, so the factor is -1
 	 */
 	static int depthFactor(int currLocation, int nextLocation);
 
@@ -83,9 +85,10 @@ public:
 	void setVisitedEdge(bool newIsVisited);
 
 
-	/**
+	/** \brief
 	 * Each Edge gives rise to a pair of symmetric DirectedEdges,
 	 * in opposite directions.
+	 *
 	 * @return the DirectedEdge for the same Edge but in the
 	 *         opposite direction
 	 */
@@ -103,18 +106,20 @@ public:
 
 	void setNextMin(DirectedEdge *newNextMin);
 
-	/**
+	/** \brief
+	 * Tells wheter this edge is a Line
+	 *
 	 * This edge is a line edge if
-	 * 
 	 * - at least one of the labels is a line label
 	 * - any labels which are not line labels have all Locations = EXTERIOR
 	 * 
 	 */
 	bool isLineEdge();
 
-	/**
+	/** \brief
+	 * Tells wheter this edge is an Area
+	 *
 	 * This is an interior Area edge if
-	 * 
 	 * - its label is an Area label for both Geometries
 	 * - and for each Geometry both sides are in the interior.
 	 *
@@ -122,8 +127,10 @@ public:
 	 */
 	bool isInteriorAreaEdge();
 
-	/**
-	 * Set both edge depths.  One depth for a given side is provided. 
+	/** \brief
+	 * Set both edge depths. 
+	 *
+	 * One depth for a given side is provided. 
 	 * The other is computed depending on the Location transition and the
 	 * depthDelta of the edge.
 	 */
@@ -143,17 +150,22 @@ private:
 
 	bool isVisitedVar;
 
-	DirectedEdge *sym; // the symmetric edge
+	/// the symmetric edge
+	DirectedEdge *sym;
 
-	DirectedEdge *next;  // the next edge in the edge ring for the polygon containing this edge
+	/// the next edge in the edge ring for the polygon containing this edge
+	DirectedEdge *next; 
 
-	DirectedEdge *nextMin;  // the next edge in the MinimalEdgeRing that contains this edge
+	/// the next edge in the MinimalEdgeRing that contains this edge
+	DirectedEdge *nextMin; 
 
-	EdgeRing *edgeRing;  // the EdgeRing that this edge is part of
+	/// the EdgeRing that this edge is part of
+	EdgeRing *edgeRing; 
 
-	EdgeRing *minEdgeRing;  // the MinimalEdgeRing that this edge is part of
+	/// the MinimalEdgeRing that this edge is part of
+	EdgeRing *minEdgeRing; 
 
-	/**
+	/** \brief
 	 * The depth of each side (position) of this edge.
 	 * The 0 element of the array is never used.
 	 */
@@ -174,6 +186,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/04 13:38:13  strk
+ * doxygen comments cleanup
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
