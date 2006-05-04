@@ -57,6 +57,9 @@ public:
 	typedef std::vector<const SegmentString*> ConstVect;
 	typedef std::vector<SegmentString *> NonConstVect;
 
+	friend std::ostream& operator<< (std::ostream& os,
+			const SegmentString& ss);
+
 private:
 	SegmentNodeList eiList;
 	geom::CoordinateSequence *pts;
@@ -168,6 +171,7 @@ SegmentString::testInvariant() const
 	assert(pts->size() == npts);
 }
 
+std::ostream& operator<< (std::ostream& os, const SegmentString& ss);
 
 } // namespace geos.noding
 } // namespace geos
@@ -180,6 +184,9 @@ SegmentString::testInvariant() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/05/04 07:43:44  strk
+ * output operator for SegmentString class
+ *
  * Revision 1.6  2006/05/03 18:04:49  strk
  * added SegmentString::setCoordinates() interface
  *

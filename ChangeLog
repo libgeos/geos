@@ -2,6 +2,9 @@
 
 	* source/headers/geos/noding/SegmentNodeList.h:
 	const-correct size() method.
+	* source/headers/geos/noding/SegmentString.h,
+	source/noding/SegmentString.cpp: output operator. 
+
 
 2006-05-03 Howard Butler <hobu@hobu.net>
 

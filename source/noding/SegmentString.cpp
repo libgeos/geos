@@ -28,6 +28,8 @@
 # include "geos/noding/SegmentString.inl"
 #endif
 
+#include <iostream>
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 
@@ -109,11 +111,23 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 	return resultEdgelist;
 }
 
+std::ostream& operator<< (std::ostream& os, const SegmentString& ss)
+{
+	os << "SegmentString: " << std::endl;
+	os << " LINESTRING" << *(ss.pts) << ";" << std::endl;
+	os << " Nodes: " << ss.eiList.size() << std::endl;
+
+	return os;
+}
+
 } // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/05/04 07:43:44  strk
+ * output operator for SegmentString class
+ *
  * Revision 1.28  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
