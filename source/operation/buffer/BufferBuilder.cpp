@@ -45,9 +45,14 @@
 #include <vector>
 #include <iomanip>
 #include <algorithm>
+#include <iostream>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
+#endif
+
+#ifndef JTS_DEBUG 
+#define JTS_DEBUG 0
 #endif
 
 //using namespace std;
@@ -126,13 +131,29 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 #if GEOS_DEBUG
 	std::cerr<<"BufferBuilder::buffer computing NodedEdges"<<std::endl;
 #endif
-#if PROFILE
-	static Profile *prof=profiler->get("BufferBuilder::computeNodedEdges()");
-	prof->start();
+
+#if JTS_DEBUG
+std::cerr << "before noding: SegStr # " << bufferSegStrList.size() << std::endl;
+for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
+{
+ 	SegmentString* segStr = bufferSegStrList[i];
+	std::cerr << "SegStr " << i << ": pts # " << segStr->size()
+		<< " nodes # " << segStr->getNodeList().size()
+		<< std::endl;
+}
 #endif
+
 	computeNodedEdges(bufferSegStrList, precisionModel);
-#if PROFILE
-	prof->stop();
+
+#if JTS_DEBUG
+std::cerr << "after noding: SegStr # " << bufferSegStrList.size() << std::endl;
+for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
+{
+ 	SegmentString* segStr = bufferSegStrList[i];
+	std::cerr << "SegStr " << i << ": pts # " << segStr->size()
+		<< " nodes # " << segStr->getNodeList().size()
+		<< std::endl;
+}
 #endif
 
 #if GEOS_DEBUG > 1
@@ -383,6 +404,9 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.55  2006/05/04 09:16:58  strk
+ * Added JTS debugging, for comparison with JTS
+ *
  * Revision 1.54  2006/03/24 09:25:02  strk
  * Bugs #77 and #76: missing <algorithm>
  *
