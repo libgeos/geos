@@ -86,8 +86,8 @@ public:
 	void filter_ro(const geom::Coordinate* c) { assert(0); }
 
 	void filter_rw(geom::Coordinate* c) const {
-		c->x = util::java_math_round( ( c->x - sn.offsetX ) * sn.scaleFactor );
-		c->y = util::java_math_round( ( c->y - sn.offsetY ) * sn.scaleFactor );
+		c->x = util::round( ( c->x - sn.offsetX ) * sn.scaleFactor );
+		c->y = util::round( ( c->y - sn.offsetY ) * sn.scaleFactor );
 	}
 };
 
@@ -209,6 +209,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/05/04 14:05:31  strk
+ * * source/headers/geos/util/math.h: provided an util::round() method being an inline proxy to call appropriate default rounding function for the whole GEOS codebase. Currently pointing at util::java_math_round() being the last being used.
+ *
  * Revision 1.12  2006/05/04 08:30:02  strk
  * removed use of SegmentString::setCoordinates() [dropped]
  *

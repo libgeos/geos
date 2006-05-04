@@ -1,5 +1,10 @@
 2006-05-04 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/util/math.h: provided an util::round()
+	method being an inline proxy to call appropriate default
+	rounding function for the whole GEOS codebase. Currently
+	pointing at util::java_math_round() being the last being
+	used. All users updated.
 	* source/headers/geos/geomgraph/NodeMap.h: added invariant
 	tester, fixed comment about ownership of NodeFactory.
 	* source/headers/geos/operation/buffer/OffsetCurveSetBuilder.h:

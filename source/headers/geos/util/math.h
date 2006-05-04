@@ -29,6 +29,15 @@ double java_math_round(double val);
 /// Equivalent to Java Math.rint()
 double rint_vc(double val);
 
+/// Default rounding method for GEOS
+//
+/// Always use this rounding method, to easy
+/// easy switching between different rounding
+/// method for the whole codebase
+inline double round(double val) {
+	return java_math_round(val);
+}
+
 } // namespace geos.util
 } // namespace geos
 
@@ -37,6 +46,9 @@ double rint_vc(double val);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/04 14:05:31  strk
+ * * source/headers/geos/util/math.h: provided an util::round() method being an inline proxy to call appropriate default rounding function for the whole GEOS codebase. Currently pointing at util::java_math_round() being the last being used.
+ *
  * Revision 1.3  2006/04/07 12:37:53  mloskot
  * Added java_math_round() function for Asymmetric Arithmetic Rounding. Small fixes in Unit Tests.
  *

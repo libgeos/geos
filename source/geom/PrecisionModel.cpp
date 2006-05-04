@@ -55,14 +55,8 @@ PrecisionModel::makePrecise(double val) const
 		return (double) floatSingleVal;
 	}
 	if (modelType == FIXED) {
-		//double d=val*scale;
-		//double me=((d >= 0.0) ? floor(d+0.5)/scale : - floor(-d+0.5)/scale);
-		//double ret = nearbyint(val*scale)/scale;
-		//double ret = util::rint_vc(val*scale)/scale;
-		//double ret = util::sym_round(val*scale)/scale;
-
-		// Use Asymmetric Rounding Algorithm, as in Java's Math.Round()
-		double ret = util::java_math_round(val*scale)/scale;
+		// Use whatever happens to be the default rounding method
+		double ret = util::round(val*scale)/scale;
 		return ret;
 	}
 	// modelType == FLOATING - no rounding necessary
@@ -229,6 +223,9 @@ PrecisionModel::compareTo(const PrecisionModel *other) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.46  2006/05/04 14:05:31  strk
+ * * source/headers/geos/util/math.h: provided an util::round() method being an inline proxy to call appropriate default rounding function for the whole GEOS codebase. Currently pointing at util::java_math_round() being the last being used.
+ *
  * Revision 1.45  2006/04/21 17:04:09  strk
  * Fixed constructor by type to always initialize scale factor
  *
