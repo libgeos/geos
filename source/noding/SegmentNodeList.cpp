@@ -290,22 +290,11 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	return ret;
 }
 
-#if 0
-string SegmentNodeList::print(){
-	string out="Intersections:";
-	std::set<SegmentNode*,SegmentNodeLT>::iterator it=nodeMap.begin();
-	for(;it!=nodeMap.end();it++) {
-		SegmentNode *ei=*it;
-		out.append(ei->print());
-	}
-	return out;
-}
-#endif
-
 std::ostream&
 operator<< (std::ostream& os, const SegmentNodeList& nlist)
 {
-	os<<"NodeList:";
+	os << "Intersections: (" << nlist.nodeMap.size() << "):" << std::endl;
+
 	std::set<SegmentNode*,SegmentNodeLT>::const_iterator
 			it = nlist.nodeMap.begin(),
 			itEnd = nlist.nodeMap.end();
@@ -313,7 +302,7 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 	for(; it!=itEnd; it++)
 	{
 		SegmentNode *ei=*it;
-		os<<*ei;
+		os << " " << *ei;
 	}
 	return os;
 }
@@ -323,6 +312,9 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/05/04 08:35:15  strk
+ * noding/SegmentNodeList.cpp: cleanups, changed output operator to be more similar to JTS
+ *
  * Revision 1.30  2006/03/15 09:51:12  strk
  * streamlined headers usage
  *
@@ -346,124 +338,6 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
  * to build SegmentString with less then 2 points.
  * This is a temporary fix for the buffer.xml assertion failure, temporary
  * as Martin Davis review would really be needed there.
- *
- * Revision 1.23  2006/02/28 14:34:05  strk
- * Added many assertions and debugging output hunting for a bug in BufferOp
- *
- * Revision 1.22  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.21  2006/02/18 21:08:09  strk
- * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
- * - SegmentString::getCoordinates() doesn't return a clone anymore.
- * - SegmentString::getCoordinatesRO() obsoleted.
- * - SegmentString constructor does not promises constness of passed
- *   CoordinateSequence anymore.
- * - NEW ScaledNoder class
- * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
- * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
- *
- * Revision 1.20  2006/02/15 14:59:07  strk
- * JTS-1.7 sync for:
- * noding/SegmentNode.cpp
- * noding/SegmentNodeList.cpp
- * noding/SegmentString.cpp
- *
- * Revision 1.19  2006/02/14 13:28:26  strk
- * New SnapRounding code ported from JTS-1.7 (not complete yet).
- * Buffer op optimized by using new snaprounding code.
- * Leaks fixed in XMLTester.
- *
- * Revision 1.18  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.17  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.16  2005/11/07 18:05:28  strk
- * Reduced set<> lookups
- *
- * Revision 1.15  2005/02/22 18:21:46  strk
- * Changed SegmentNode to contain a *real* Coordinate (not a pointer) to reduce
- * construction costs.
- *
- * Revision 1.14  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.13  2005/02/01 14:18:36  strk
- * More profiler labels
- *
- * Revision 1.12  2005/02/01 13:44:59  strk
- * More profiling labels.
- *
- * Revision 1.11  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.10  2004/07/13 08:33:53  strk
- * Added missing virtual destructor to virtual classes.
- * Fixed implicit unsigned int -> int casts
- *
- * Revision 1.9  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.6  2004/06/16 13:13:25  strk
- * Changed interface of SegmentString, now copying CoordinateSequence argument.
- * Fixed memory leaks associated with this and MultiGeometry constructors.
- * Other associated fixes.
- *
- * Revision 1.5  2004/05/27 10:27:03  strk
- * Memory leaks fixed.
- *
- * Revision 1.4  2004/05/06 15:54:15  strk
- * SegmentNodeList keeps track of created splitEdges for later destruction.
- * SegmentString constructor copies given Label.
- * Buffer operation does no more leaks for doc/example.cpp
- *
- * Revision 1.3  2004/05/03 22:56:44  strk
- * leaks fixed, exception specification omitted.
- *
- * Revision 1.2  2004/05/03 20:49:20  strk
- * Some more leaks fixed
- *
- * Revision 1.1  2004/03/26 07:48:30  ybychkov
- * "noding" package ported (JTS 1.4)
- *
  *
  **********************************************************************/
 

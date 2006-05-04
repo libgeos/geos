@@ -1,5 +1,7 @@
 2006-05-04 Sandro Santilli <strk@refractions.net>
 
+	* source/noding/SegmentNodeList.cpp: cleanups,
+	changed output operator to be more similar to JTS
 	* source/noding/ScaledNoder.cpp: removed use
 	of SegmentString::setCoordinates().
 	* source/headers/geos/noding/SegmentStrign.{h,inl}:
