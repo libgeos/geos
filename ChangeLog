@@ -1,5 +1,7 @@
 2006-05-04 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geomgraph/NodeMap.h: added invariant
+	tester, fixed comment about ownership of NodeFactory.
 	* source/headers/geos/operation/buffer/OffsetCurveSetBuilder.h:
 	doxygen comments.
 	* headers/geos/geom/CoordinateSequence.h: added
