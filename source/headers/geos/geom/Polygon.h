@@ -26,6 +26,7 @@
 #include <geos/platform.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
+#include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
 
@@ -77,7 +78,7 @@ public:
 	size_t getNumPoints() const;
 
 	/// Returns surface dimension (2)
-	int getDimension() const;
+	Dimension::DimensionType getDimension() const;
 
 	/// Returns 1 (Polygon boundary is a MultiLineString)
 	int getBoundaryDimension() const;
@@ -184,6 +185,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.5  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return

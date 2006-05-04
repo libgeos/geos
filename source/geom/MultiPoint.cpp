@@ -38,8 +38,9 @@ MultiPoint::MultiPoint(vector<Geometry *> *newPoints, const GeometryFactory *fac
 
 MultiPoint::~MultiPoint(){}
 
-int MultiPoint::getDimension() const {
-	return 0;
+Dimension::DimensionType
+MultiPoint::getDimension() const {
+	return Dimension::P; // point
 }
 
 int MultiPoint::getBoundaryDimension() const {
@@ -88,6 +89,9 @@ MultiPoint::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.33  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return

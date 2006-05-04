@@ -145,7 +145,7 @@ Polygon::getNumPoints() const
 	return numPoints;
 }
 
-int
+Dimension::DimensionType
 Polygon::getDimension() const
 {
 	return Dimension::A; // area
@@ -459,6 +459,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.65  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.64  2006/04/28 11:56:52  strk
  * * source/geom/GeometryFactory.cpp, source/headers/geos/geom/GeometryFactory.h: added LineString copy constructor.
  * * source/geom/Polygon.cpp: fixed getBoundary method to always return a geometry composed by LineStrings (not LinearRings)

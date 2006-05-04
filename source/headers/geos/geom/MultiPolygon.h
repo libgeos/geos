@@ -21,6 +21,7 @@
 #include <vector>
 #include <geos/platform.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
 
@@ -47,7 +48,7 @@ public:
 	virtual ~MultiPolygon();
 
 	/// Returns surface dimension (2)
-	int getDimension() const;
+	Dimension::DimensionType getDimension() const;
 
 	/// Returns 1 (MultiPolygon boundary is MultiLineString)
 	int getBoundaryDimension() const;
@@ -111,6 +112,9 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.3  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return

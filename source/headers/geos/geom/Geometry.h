@@ -20,6 +20,7 @@
 #include <geos/platform.h>
 #include <geos/inline.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <string>
 #include <iostream>
@@ -284,7 +285,7 @@ public:
 	virtual bool isEmpty() const=0; //Abstract
 
 	/// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
-	virtual int getDimension() const=0; //Abstract
+	virtual Dimension::DimensionType getDimension() const=0; //Abstract
 
 	/**
 	 * \brief
@@ -657,6 +658,9 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.10  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return

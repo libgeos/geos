@@ -124,10 +124,10 @@ LineString::getCoordinateN(int n) const
 	return points->getAt(n);
 }
 
-int
+Dimension::DimensionType
 LineString::getDimension() const
 {
-	return 1; // change to Dimension::L
+	return Dimension::L; // line
 }
 
 int
@@ -392,6 +392,9 @@ LineString::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.69  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.68  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return

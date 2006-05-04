@@ -1,5 +1,20 @@
 2006-05-04 Sandro Santilli <strk@refractions.net>
 
+        * source/geom/GeometryCollection.cpp, source/geom/LineString.cpp,
+        source/geom/MultiLineString.cpp, source/geom/MultiPoint.cpp,
+        source/geom/MultiPolygon.cpp, source/geom/Point.cpp,
+        source/geom/Polygon.cpp, source/headers/geos/geom/Dimension.h,
+        source/headers/geos/geom/Geometry.h,
+        source/headers/geos/geom/GeometryCollection.h,
+        source/headers/geos/geom/LineString.h,
+        source/headers/geos/geom/MultiLineString.h,
+        source/headers/geos/geom/MultiPoint.h,
+        source/headers/geos/geom/MultiPolygon.h,
+        source/headers/geos/geom/Point.h,
+        source/headers/geos/geom/Polygon.h,
+        source/operation/buffer/BufferOp.cpp: updated all
+	Geometry::getDimension() methods to return
+	Dimension::DimensionType (closes bug#93)
 	* source/headers/geos/util/math.h: provided an util::round()
 	method being an inline proxy to call appropriate default
 	rounding function for the whole GEOS codebase. Currently

@@ -29,13 +29,25 @@ namespace geom { // geos::geom
 class Dimension {
 public:
 	enum DimensionType {
-		DONTCARE=-3,	/// Dimension value for any dimension (= {FALSE, TRUE}).
-		True,			/// Dimension value of non-empty geometries (= {P, L, A}).
-		False,			/// Dimension value of the empty geometry (-1).
-		P,				/// Dimension value of a point (0).
-		L,				/// Dimension value of a curve (1).
-		A				/// Dimension value of a surface (2).
+		/// Dimension value for any dimension (= {FALSE, TRUE}).
+		DONTCARE=-3,
+
+		/// Dimension value of non-empty geometries (= {P, L, A}).
+		True=-2,
+
+		/// Dimension value of the empty geometry (-1).
+		False=-1,
+
+		/// Dimension value of a point (0).
+		P=0,
+
+		/// Dimension value of a curve (1).
+		L=1,
+
+		/// Dimension value of a surface (2).
+		A=2
 	};
+
 	//static const int P = 0;			/// Dimension value of a point (0).
 	//static const int L = 1;			/// Dimension value of a curve (1).
 	//static const int A = 2;			/// Dimension value of a surface (2).
@@ -43,7 +55,9 @@ public:
 	//static const int True = -2;		/// Dimension value of non-empty geometries (= {P, L, A}).
 	//static const int DONTCARE = -3;	/// Dimension value for any dimension (= {FALSE, TRUE}).
 	static char toDimensionSymbol(int dimensionValue);
+
 	static int toDimensionValue(char dimensionSymbol);
+
 };
 
 } // namespace geos::geom
@@ -57,6 +71,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.3  2006/04/07 05:44:32  mloskot
  * Added name for anonymous enum in Dimension class (bug). Added missing new-line at the end of source files. Removed CR from line ends.
  *

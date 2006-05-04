@@ -47,8 +47,9 @@ MultiLineString::MultiLineString(vector<Geometry *> *newLines,
 
 MultiLineString::~MultiLineString(){}
 
-int MultiLineString::getDimension() const {
-	return 1;
+Dimension::DimensionType
+MultiLineString::getDimension() const {
+	return Dimension::L; // line
 }
 
 int MultiLineString::getBoundaryDimension() const {
@@ -122,6 +123,9 @@ MultiLineString::reverse() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.32  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return

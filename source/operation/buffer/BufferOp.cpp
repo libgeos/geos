@@ -58,7 +58,7 @@ namespace buffer { // geos.operation.buffer
 static Profiler *profiler = Profiler::instance();
 #endif
 
-int BufferOp::MAX_PRECISION_DIGITS=12;
+int BufferOp::MAX_PRECISION_DIGITS=25;
 
 
 /*private*/
@@ -236,6 +236,9 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.52  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.51  2006/05/03 10:26:56  strk
  * Fixed misuse of precision model in noder (bufferFixedPrecision)
  *

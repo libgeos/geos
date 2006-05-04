@@ -19,6 +19,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Dimension.h>
 
 #include <cassert>
 #include <string>
@@ -40,8 +41,9 @@ MultiPolygon::MultiPolygon(vector<Geometry *> *newPolys, const GeometryFactory *
 
 MultiPolygon::~MultiPolygon(){}
 
-int MultiPolygon::getDimension() const {
-	return 2;
+Dimension::DimensionType
+MultiPolygon::getDimension() const {
+	return Dimension::A; // area
 }
 
 int MultiPolygon::getBoundaryDimension() const {
@@ -107,6 +109,9 @@ MultiPolygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/05/04 15:49:39  strk
+ * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
+ *
  * Revision 1.31  2006/04/28 10:55:39  strk
  * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
  * which has been made friend of all Geometry derivates. getNumPoints() changed to return
