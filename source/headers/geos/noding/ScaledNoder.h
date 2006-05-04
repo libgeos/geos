@@ -32,6 +32,7 @@
 namespace geos {
 	namespace geom {
 		class Coordinate;
+		class CoordinateSequence;
 	}
 	namespace noding {
 		class SegmentString;
@@ -56,19 +57,28 @@ class ScaledNoder : public Noder { // , public geom::CoordinateFilter { // imple
 private:
 
 	Noder& noder;
+
 	double scaleFactor;
+
 	double offsetX;
+
 	double offsetY;
+
 	bool isScaled;
 
 	void rescale(std::vector<SegmentString*>& segStrings) const;
+
 	void scale(std::vector<SegmentString*>& segStrings) const;
 
 	class Scaler;
+
 	class ReScaler;
 
 	friend class ScaledNoder::Scaler;
+
 	friend class ScaledNoder::ReScaler;
+
+	mutable std::vector<geom::CoordinateSequence*> newCoordSeq;
 
 public:
 
@@ -84,6 +94,8 @@ public:
 		isScaled(nScaleFactor!=1.0)
 	{}
 
+	~ScaledNoder();
+
 	std::vector<SegmentString*>* getNodedSubstrings() const;
 
 	void computeNodes(std::vector<SegmentString*>* inputSegStr);
@@ -91,6 +103,7 @@ public:
 	//void filter(Coordinate& c);
 
 	void filter_ro(const geom::Coordinate* c) { assert(0); }
+
 	void filter_rw(geom::Coordinate* c) const;
 
 };
@@ -107,6 +120,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/05/04 06:36:00  strk
+ * Extended definition to take new CoordinateSequence tracking into account
+ *
  * Revision 1.6  2006/05/03 15:04:33  strk
  * removed reduntant port info
  *
