@@ -149,7 +149,7 @@ PlanarGraph::insertEdge(Edge *e)
 
 /*public*/
 void
-PlanarGraph::add(EdgeEnd *e)
+PlanarGraph::add(EdgeEnd* e)
 {
 
 	assert(e);
@@ -226,7 +226,9 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 		assert(e);
 		edges->push_back(e);
 
-		// Who's going to delete these new DirectedEdges ?
+		// PlanarGraph destructor will delete all DirectedEdges 
+		// in edgeEndList, which is where these are added
+		// by the ::add(EdgeEnd) call
 		DirectedEdge *de1=new DirectedEdge(e, true);
 		DirectedEdge *de2=new DirectedEdge(e, false);
 
@@ -399,6 +401,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/05/04 12:17:27  strk
+ * Added comment about management of newly created DirectedEdges
+ *
  * Revision 1.31  2006/04/27 15:07:15  strk
  * use output operators in debugging lines
  *
