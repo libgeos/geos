@@ -141,13 +141,12 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 
 		ss->testInvariant();
 
-		CoordinateSequence* cs=ss->getCoordinates()->clone();
-		newCoordSeq.push_back(cs);
+		CoordinateSequence* cs=ss->getCoordinates();
 
 		cs->apply_rw(&scaler);
 		cs->removeRepeatedPoints();
 
-		ss->setCoordinates(cs);
+		ss->testInvariant();
 	}
 }
 
@@ -210,6 +209,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/05/04 08:30:02  strk
+ * removed use of SegmentString::setCoordinates() [dropped]
+ *
  * Revision 1.11  2006/05/03 20:05:18  strk
  * Added SQL debugging output
  *
