@@ -75,14 +75,28 @@ public:
 	 * the world on its RHS.
 	 */
 	RightmostEdgeFinder();
-	inline geomgraph::DirectedEdge* getEdge();
-	inline geom::Coordinate& getCoordinate();
+
+	geomgraph::DirectedEdge* getEdge();
+
+	geom::Coordinate& getCoordinate();
+
+	/// Note that only Forward DirectedEdges will be checked
 	void findEdge(std::vector<geomgraph::DirectedEdge*>* dirEdgeList);
 };
 
-// INLINES
-geomgraph::DirectedEdge* RightmostEdgeFinder::getEdge() { return orientedDe; }
-geom::Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
+/*public*/
+inline geomgraph::DirectedEdge*
+RightmostEdgeFinder::getEdge()
+{
+	return orientedDe;
+}
+
+/*public*/
+inline geom::Coordinate&
+RightmostEdgeFinder::getCoordinate()
+{
+	return minCoord;
+}
 
 
 
@@ -95,6 +109,9 @@ geom::Coordinate& RightmostEdgeFinder::getCoordinate() { return minCoord; }
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/05/04 12:19:59  strk
+ * Added note about findEdge() only scanning for forward DirectedEdges
+ *
  * Revision 1.2  2006/04/05 09:20:25  strk
  * Added port informations and many assertion checking.
  * Fixed bug in getRightmostSide() method ( a "testing-only" corner case )
