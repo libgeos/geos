@@ -65,8 +65,16 @@ void
 BufferSubgraph::create(Node *node)
 {
 	addReachable(node);
+
+	// We are assuming that dirEdgeList 
+	// contains *at leas* ONE forward DirectedEdge
 	finder.findEdge(&dirEdgeList);
+
 	rightMostCoord=&(finder.getCoordinate());
+
+	// this is what happen if no forward DirectedEdge
+	// is passed to the RightmostEdgeFinder
+	assert(rightMostCoord);
 }
 
 /*private*/
@@ -111,7 +119,7 @@ BufferSubgraph::add(Node *node, vector<Node*> *nodeStack)
 void
 BufferSubgraph::clearVisitedEdges()
 {
-	for(unsigned int i=0; i<dirEdgeList.size(); ++i)
+	for(size_t i=0, n=dirEdgeList.size(); i<n; ++i)
 	{
 		DirectedEdge *de=dirEdgeList[i];
 		de->setVisited(false);
@@ -204,7 +212,7 @@ BufferSubgraph::findResultEdges()
 #if GEOS_DEBUG
 	cerr<<"BufferSubgraph::findResultEdges got "<<dirEdgeList.size()<<" edges"<<endl;
 #endif
-	for(unsigned int i=0; i<dirEdgeList.size(); ++i)
+	for(size_t i=0, n=dirEdgeList.size(); i<n; ++i)
 	{
 		DirectedEdge *de=dirEdgeList[i];
 
@@ -237,6 +245,7 @@ BufferSubgraph::findResultEdges()
 int
 BufferSubgraph::compareTo(BufferSubgraph *graph)
 {
+	assert(rightMostCoord);
 	if (rightMostCoord->x<graph->rightMostCoord->x) {
 		return -1;
 	}
@@ -346,6 +355,9 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/05/04 12:33:32  strk
+ * Added some comments about RightmostEdgeFinder only considering forward DirectedEdge
+ *
  * Revision 1.32  2006/03/22 11:18:39  strk
  * Changed back 'unable to find edge to compute depths' from assertion to TopologyException
  *
