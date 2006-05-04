@@ -1,5 +1,7 @@
 2006-05-04 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/operation/buffer/OffsetCurveSetBuilder.h:
+	doxygen comments.
 	* headers/geos/geom/CoordinateSequence.h: added
 	comment about the toVector() method.
 	* source/noding/SegmentNodeList.cpp: cleanups,

@@ -158,13 +158,17 @@ private:
 			double bufferDistance);
 
 public:
+
+	/// Constructor
 	OffsetCurveSetBuilder(const geom::Geometry& newInputGeom,
 		double newDistance, OffsetCurveBuilder& newCurveBuilder);
 
+	/// Destructor
 	~OffsetCurveSetBuilder();
 
-	/**
+	/** \brief
 	 * Computes the set of raw offset curves for the buffer.
+	 *
 	 * Each offset curve has an attached {@link geomgraph::Label} indicating
 	 * its left and right location.
 	 *
@@ -173,6 +177,7 @@ public:
 	 */
 	std::vector<noding::SegmentString*>& getCurves();
 
+	/// Add raw curves for a set of CoordinateSequences
 	void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
 		int leftLoc, int rightLoc);
 
@@ -188,6 +193,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/05/04 10:15:20  strk
+ * Doxygen comments
+ *
  * Revision 1.1  2006/03/14 00:19:40  strk
  * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
  *
