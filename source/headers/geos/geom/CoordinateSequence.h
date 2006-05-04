@@ -108,6 +108,15 @@ public:
 	 * Note that if this implementation does not store its data as an
 	 * array of Coordinates, this method will incur a performance penalty
 	 * because the array needs to be built from scratch.
+	 *
+	 * This method is a port of the toCoordinateArray() method of JTS.
+	 * It is not much used as memory management requires us to 
+	 * know wheter we should or not delete the returned object
+	 * in a consistent way. Our options are: use shared_ptr<Coordinate>
+	 * or always keep ownerhips of an eventual newly created vector.
+	 * We opted for the second, so the returned object is a const, to
+	 * also ensure that returning an internal pointer doesn't make
+	 * the object mutable.
 	 */
 	virtual	const std::vector<Coordinate>* toVector() const=0;
 
@@ -319,6 +328,9 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/04 08:42:12  strk
+ * Added note about the CoordinateSequence::toVector() method.
+ *
  * Revision 1.7  2006/05/03 19:47:27  strk
  * added operator<< for CoordinateSequence
  *
