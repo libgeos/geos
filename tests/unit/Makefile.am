@@ -31,6 +31,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	geom/Geometry/isRectangleTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
+	noding/SegmentStringTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp
 

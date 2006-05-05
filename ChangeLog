@@ -1,5 +1,8 @@
 2006-05-05 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/Makefile.am,
+	tests/unit/noding/SegmentStringTest.cpp:
+	SegmentString unit test.
 	* source/headers/geos/noding/SegmentString.h,
 	source/headers/geos/noding/SegmentString.inl,
 	source/noding/SegmentNodeList.cpp: SegmentString::getContext()
