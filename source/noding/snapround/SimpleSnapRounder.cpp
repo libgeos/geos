@@ -66,6 +66,7 @@ SimpleSnapRounder::computeNodes(
 	snapRound(inputSegmentStrings, li);
 
 	// testing purposes only - remove in final version
+	assert(nodedSegStrings == inputSegmentStrings);
 	checkCorrectness(*inputSegmentStrings);
 }
 
@@ -83,7 +84,8 @@ SimpleSnapRounder::checkCorrectness(
 	try {
 		nv.checkValid();
 	} catch (const std::exception &ex) {
-		std::cerr<<ex.what();
+		std::cerr << ex.what() << std::endl;
+		throw;
 	}
  
 }
@@ -222,6 +224,10 @@ SimpleSnapRounder::findInteriorIntersections(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/05/05 15:40:39  strk
+ * Had nodind validation error throw an exception for SimpleSnapRounder
+ * and MCIndexSnapRounder
+ *
  * Revision 1.10  2006/05/03 17:54:58  strk
  * Uncommented correctness checker
  *

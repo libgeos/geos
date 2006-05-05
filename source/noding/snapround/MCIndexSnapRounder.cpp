@@ -110,24 +110,30 @@ MCIndexSnapRounder::computeNodes(SegmentString::NonConstVect* inputSegmentString
 {
 	nodedSegStrings = inputSegmentStrings;
 	MCIndexNoder noder;
+	pointSnapper.release(); // let it leak
 	pointSnapper.reset(new MCIndexPointSnapper(noder.getIndex()));
 	snapRound(noder, inputSegmentStrings);
 
 	// testing purposes only - remove in final version
-	//checkCorrectness(inputSegmentStrings);
+	assert(nodedSegStrings == inputSegmentStrings);
+	checkCorrectness(*inputSegmentStrings);
 }
 
 /*private*/
 void
-MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentStrings)
+MCIndexSnapRounder::checkCorrectness(
+	SegmentString::NonConstVect& inputSegmentStrings)
 {
-	SegmentString::NonConstVect resultSegStrings;
-	SegmentString::getNodedSubstrings(inputSegmentStrings, &resultSegStrings);
-	NodingValidator nv(resultSegStrings);
+	auto_ptr<SegmentString::NonConstVect> resultSegStrings(
+		SegmentString::getNodedSubstrings(inputSegmentStrings)
+	);
+
+	NodingValidator nv(*(resultSegStrings.get()));
 	try {
 		nv.checkValid();
-	} catch (const exception& ex) {
-		cerr<<ex.what()<<endl;
+	} catch (const std::exception &ex) {
+		std::cerr << ex.what() << std::endl;
+		throw;
 	}
 }
 
@@ -138,6 +144,10 @@ MCIndexSnapRounder::checkCorrectness(SegmentString::NonConstVect& inputSegmentSt
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/05/05 15:40:39  strk
+ * Had nodind validation error throw an exception for SimpleSnapRounder
+ * and MCIndexSnapRounder
+ *
  * Revision 1.10  2006/04/03 10:44:19  strk
  * Added missing headers
  *
