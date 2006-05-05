@@ -17,7 +17,6 @@
 #define GEOS_NODING_SEGMENTSTRING_INL
 
 #include <geos/noding/SegmentString.h>
-#include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 
 #include <cassert>
@@ -28,7 +27,7 @@ namespace noding { // geos.noding
 INLINE
 SegmentString::SegmentString(geom::CoordinateSequence *newPts, const void* newContext)
 		:
-		eiList(this),
+		nodeList(this),
 		pts(newPts),
 		npts(pts->size()),
 		context(newContext),
@@ -51,14 +50,14 @@ INLINE const SegmentNodeList&
 SegmentString::getNodeList() const
 {
 	testInvariant();
-	return eiList;
+	return nodeList;
 }
 
 INLINE SegmentNodeList&
 SegmentString::getNodeList()
 {
 	testInvariant();
-	return eiList;
+	return nodeList;
 }
 
 INLINE unsigned int
@@ -102,15 +101,6 @@ SegmentString::isClosed() const
 	testInvariant();
 	return pts->getAt(0)==pts->getAt(npts-1);
 }
-
-INLINE int
-SegmentString::getSegmentOctant(unsigned int index) const
-{
-	testInvariant();
-	if (index == size() - 1) return -1;
-	return Octant::octant(getCoordinate(index), getCoordinate(index+1));
-}
-
 
 } // namespace geos.noding
 } // namespace geos

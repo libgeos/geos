@@ -18,7 +18,9 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/profiler.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/noding/Octant.h>
+//#include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -29,6 +31,7 @@
 #endif
 
 #include <iostream>
+#include <sstream>
 
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -62,9 +65,14 @@ SegmentString::addIntersection(const Coordinate& intPt,
 {
 	unsigned int normalizedSegmentIndex = segmentIndex;
 
+	if ( segmentIndex > size()-2 )
+	{
+		throw util::IllegalArgumentException("SegmentString::addIntersection: SegmentIndex out of range");
+	}
+
 	// normalize the intersection point location
 	unsigned int nextSegIndex = normalizedSegmentIndex + 1;
-	if (nextSegIndex < npts)
+	if (nextSegIndex < size())
 	{
 		const Coordinate& nextPt = pts->getAt(nextSegIndex);
 
@@ -76,11 +84,13 @@ SegmentString::addIntersection(const Coordinate& intPt,
 		}
 	}
 
-	/**
-	 * Add the intersection point to edge intersection list.
+	/*
+	 * Add the intersection point to edge intersection list
+	 * (unless the node is already known)
 	 */
 	//SegmentNode *ei=
-	eiList.add(intPt, normalizedSegmentIndex);
+	nodeList.add(intPt, normalizedSegmentIndex);
+
 
 	testInvariant();
 }
@@ -111,20 +121,34 @@ SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
 	return resultEdgelist;
 }
 
+/*public*/
+int
+SegmentString::getSegmentOctant(unsigned int index) const
+{
+	testInvariant();
+	if (index >= size() - 1) return -1;
+	return Octant::octant(getCoordinate(index), getCoordinate(index+1));
+}
+
+
 std::ostream& operator<< (std::ostream& os, const SegmentString& ss)
 {
 	os << "SegmentString: " << std::endl;
 	os << " LINESTRING" << *(ss.pts) << ";" << std::endl;
-	os << " Nodes: " << ss.eiList.size() << std::endl;
+	os << " Nodes: " << ss.nodeList.size() << std::endl;
 
 	return os;
 }
+
 
 } // namespace geos.noding
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/05/05 14:25:05  strk
+ * moved getSegmentOctant out of .inl into .cpp, renamed private eiList to nodeList as in JTS, added more assertion checking and fixed doxygen comments
+ *
  * Revision 1.29  2006/05/04 07:43:44  strk
  * output operator for SegmentString class
  *

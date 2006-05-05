@@ -61,7 +61,7 @@ public:
 			const SegmentString& ss);
 
 private:
-	SegmentNodeList eiList;
+	SegmentNodeList nodeList;
 	geom::CoordinateSequence *pts;
 	unsigned int npts;
 	const void* context;
@@ -123,7 +123,7 @@ public:
 	int getSegmentOctant(unsigned int index) const;
 
 	/** \brief
-	 * Adds EdgeIntersections for one or both
+	 * Add {SegmentNode}s for one or both
 	 * intersections found for a segment of an edge to the edge
 	 * intersection list.
 	 */
@@ -142,7 +142,7 @@ public:
 			int geomIndex, int intIndex);
 
 	/** \brief
-	 * Add an EdgeIntersection for intersection intIndex.
+	 * Add an SegmentNode for intersection intIndex.
 	 *
 	 * An intersection that falls exactly on a vertex of the
 	 * edge is normalized
@@ -180,6 +180,9 @@ std::ostream& operator<< (std::ostream& os, const SegmentString& ss);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/05/05 14:25:05  strk
+ * moved getSegmentOctant out of .inl into .cpp, renamed private eiList to nodeList as in JTS, added more assertion checking and fixed doxygen comments
+ *
  * Revision 1.9  2006/05/05 10:19:06  strk
  * droppped SegmentString::getContext(), new name is getData() to reflect change in JTS
  *
