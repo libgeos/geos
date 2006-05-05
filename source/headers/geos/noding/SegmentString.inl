@@ -41,12 +41,6 @@ INLINE
 SegmentString::~SegmentString() {}
 
 INLINE const void*
-SegmentString::getContext() const
-{
-	return getData();
-}
-
-INLINE const void*
 SegmentString::getData() const
 {
 	testInvariant();

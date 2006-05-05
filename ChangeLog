@@ -1,5 +1,9 @@
 2006-05-05 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/noding/SegmentString.h,
+	source/headers/geos/noding/SegmentString.inl,
+	source/noding/SegmentNodeList.cpp: SegmentString::getContext()
+	dropped, new name is getData() to reflect change in JTS
 	* source/headers/geos/geom.h: fixed namespace
 	qualification in doxygen page about C++ interface.
 

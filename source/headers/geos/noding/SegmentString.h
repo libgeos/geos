@@ -82,7 +82,7 @@ public:
 
 	~SegmentString();
 
-	const void* getContext() const;
+	//const void* getContext() const { return getData(); }
 
 	const void* getData() const;
 
@@ -180,6 +180,9 @@ std::ostream& operator<< (std::ostream& os, const SegmentString& ss);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/05/05 10:19:06  strk
+ * droppped SegmentString::getContext(), new name is getData() to reflect change in JTS
+ *
  * Revision 1.8  2006/05/04 08:29:07  strk
  * * source/noding/ScaledNoder.cpp: removed use of SegmentString::setCoordinates().
  * * source/headers/geos/noding/SegmentStrign.{h,inl}: removed new setCoordinates() interface.

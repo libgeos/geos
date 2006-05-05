@@ -277,7 +277,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 
-	SegmentString *ret = new SegmentString(pts, edge.getContext());
+	SegmentString *ret = new SegmentString(pts, edge.getData());
 #if GEOS_DEBUG
 	std::cerr<<" SegmentString created"<<std::endl;
 #endif
@@ -312,6 +312,9 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.32  2006/05/05 10:19:06  strk
+ * droppped SegmentString::getContext(), new name is getData() to reflect change in JTS
+ *
  * Revision 1.31  2006/05/04 08:35:15  strk
  * noding/SegmentNodeList.cpp: cleanups, changed output operator to be more similar to JTS
  *
