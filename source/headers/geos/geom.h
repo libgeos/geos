@@ -59,27 +59,27 @@
  * derive.
  *
  * Construction and destruction of Geometries is done
- * using geos::GeometryFactory.
+ * using geos::geom::GeometryFactory.
  *
- * You'll feed it geos::CoordinateSequence
+ * You'll feed it geos::geom::CoordinateSequence
  * for base geometries or vectors of geometries for collections.
  *
  * If you need to construct geometric shaped geometries, you
- * can use geos::GeometricShapeFactory.
+ * can use geos::geom::GeometricShapeFactory.
  *
  * GEOS version info (as a string) can be obtained using
- * geos::geosversion(). The JTS version this release has been
- * ported from is available throu geos::jtsport().
+ * geos::geom::geosversion(). The JTS version this release has been
+ * ported from is available throu geos::geom::jtsport().
  *
  * \section io_sect Input / Output
  *
- * For WKT input/output you can use geos::WKTReader and geos::WKTWriter
+ * For WKT input/output you can use geos::io::WKTReader and geos::io::WKTWriter
  *
- * For WKB input/output you can use geos::WKBReader and geos::WKBWriter
+ * For WKB input/output you can use geos::io::WKBReader and geos::io::WKBWriter
  *
  * \section exc_sect Exceptions
  *
- * Internal exceptions are thrown as instances geos::GEOSException or
+ * Internal exceptions are thrown as instances geos::util::GEOSException or
  * derived classes. GEOSException derives from std::exception.
  *
  * Note that prior to version 3.0.0, GEOSException were trown by

@@ -1,3 +1,8 @@
+2006-05-05 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/geom.h: fixed namespace
+	qualification in doxygen page about C++ interface.
+
 2006-05-04 Sandro Santilli <strk@refractions.net>
 
         * source/geom/GeometryCollection.cpp, source/geom/LineString.cpp,
