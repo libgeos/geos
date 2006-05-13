@@ -2,3 +2,4 @@
 .libs
 Makefile
 Makefile.in
+geos_unit
