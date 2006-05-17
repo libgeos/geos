@@ -3,7 +3,7 @@
 	* source/geom/IntersectionMatrix.cpp,
 	source/headers/geos/geom/IntersectionMatrix.h,
 	tests/unit/geom/IntersectionMatrixTest.cpp:
-	doxygen comments fixup; const correctness ensured;
+	doxygen comments fixup; port info; const correctness;
 	added isCovers() and isCoveredBy() public methods
 	and associated tests.
 

@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/IntersectionMatrix.java rev. 1.18
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_INTERSECTIONMATRIX_H
@@ -333,8 +337,8 @@ public:
    	 * <code>*TF**F***</code> or <code>**FT*F***</code>
 	 * or <code>**F*TF***</code>
 	 * 
-	 * @return <code>true</code> if the first Geometry covers the
-	 * second
+	 * @return <code>true</code> if the first Geometry is covered by
+	 * the second
 	 */
 	bool isCoveredBy() const;
 
@@ -384,6 +388,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/05/17 17:24:17  strk
+ * Added port info, fixed isCoveredBy() comment.
+ *
  * Revision 1.4  2006/05/17 17:20:10  strk
  * added isCovers() and isCoveredBy() public methods to IntersectionMatrix and associated tests.
  *

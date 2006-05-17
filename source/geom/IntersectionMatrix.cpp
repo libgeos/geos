@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/IntersectionMatrix.java rev. 1.18
+ *
  **********************************************************************/
 
 #include <geos/geom/IntersectionMatrix.h>
@@ -429,6 +433,9 @@ IntersectionMatrix::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/05/17 17:24:17  strk
+ * Added port info, fixed isCoveredBy() comment.
+ *
  * Revision 1.23  2006/05/17 17:20:10  strk
  * added isCovers() and isCoveredBy() public methods to IntersectionMatrix and associated tests.
  *
