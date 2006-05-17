@@ -30,18 +30,21 @@ namespace geom { // geos::geom
 const int IntersectionMatrix::firstDim = 3;
 const int IntersectionMatrix::secondDim = 3;
 	
+/*public*/
 IntersectionMatrix::IntersectionMatrix()
 {
 	//matrix = new int[3][3];
 	setAll(Dimension::False);
 }
 
+/*public*/
 IntersectionMatrix::IntersectionMatrix(const string& elements)
 {
 	setAll(Dimension::False);
 	set(elements);
 }
 
+/*public*/
 IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix& other)
 {
 	matrix[Location::INTERIOR][Location::INTERIOR] = other.matrix[Location::INTERIOR][Location::INTERIOR];
@@ -55,13 +58,7 @@ IntersectionMatrix::IntersectionMatrix(const IntersectionMatrix& other)
 	matrix[Location::EXTERIOR][Location::EXTERIOR] = other.matrix[Location::EXTERIOR][Location::EXTERIOR];
 }
 
-/**
- * Adds one matrix to another.
- * Addition is defined by taking the maximum dimension value of each position
- * in the summand matrices.
- *
- * @param im the matrix to add
- */
+/*public*/
 void
 IntersectionMatrix::add(IntersectionMatrix* other)
 {
@@ -72,8 +69,9 @@ IntersectionMatrix::add(IntersectionMatrix* other)
 	}
 }
 
+/*public*/
 bool
-IntersectionMatrix::matches(const string& requiredDimensionSymbols)
+IntersectionMatrix::matches(const string& requiredDimensionSymbols) const
 {
 	if (requiredDimensionSymbols.length() != 9) {
 		ostringstream s;
@@ -91,6 +89,7 @@ IntersectionMatrix::matches(const string& requiredDimensionSymbols)
 	return true;
 }
 
+/*public static*/
 bool
 IntersectionMatrix::matches(int actualDimensionValue,
 	char requiredDimensionSymbol)
@@ -131,6 +130,7 @@ IntersectionMatrix::matches(int actualDimensionValue,
 	return false;
 }
 
+/*public static*/
 bool
 IntersectionMatrix::matches(const string& actualDimensionSymbols,
 	const string& requiredDimensionSymbols)
@@ -141,6 +141,7 @@ IntersectionMatrix::matches(const string& actualDimensionSymbols,
 	return result;
 }
 
+/*public*/
 void
 IntersectionMatrix::set(int row, int col, int dimensionValue)
 {
@@ -150,6 +151,7 @@ IntersectionMatrix::set(int row, int col, int dimensionValue)
 	matrix[row][col] = dimensionValue;
 }
 
+/*public*/
 void
 IntersectionMatrix::set(const string& dimensionSymbols)
 {
@@ -163,6 +165,7 @@ IntersectionMatrix::set(const string& dimensionSymbols)
 	}
 }
 
+/*public*/
 void
 IntersectionMatrix::setAtLeast(int row, int col, int minimumDimensionValue)
 {
@@ -175,6 +178,7 @@ IntersectionMatrix::setAtLeast(int row, int col, int minimumDimensionValue)
 	}
 }
 
+/*public*/
 void
 IntersectionMatrix::setAtLeastIfValid(int row, int col, int minimumDimensionValue)
 {
@@ -187,6 +191,7 @@ IntersectionMatrix::setAtLeastIfValid(int row, int col, int minimumDimensionValu
 	}
 }
 
+/*public*/
 void
 IntersectionMatrix::setAtLeast(string minimumDimensionSymbols)
 {
@@ -200,6 +205,7 @@ IntersectionMatrix::setAtLeast(string minimumDimensionSymbols)
 	}
 }
 
+/*public*/
 void
 IntersectionMatrix::setAll(int dimensionValue)
 {
@@ -210,8 +216,9 @@ IntersectionMatrix::setAll(int dimensionValue)
 	}
 }
 
+/*public*/
 int
-IntersectionMatrix::get(int row, int col)
+IntersectionMatrix::get(int row, int col) const
 {
 	assert( row >= 0 && row < firstDim );
 	assert( col >= 0 && col < secondDim );
@@ -219,8 +226,9 @@ IntersectionMatrix::get(int row, int col)
 	return matrix[row][col];
 }
 
+/*public*/
 bool
-IntersectionMatrix::isDisjoint()
+IntersectionMatrix::isDisjoint() const
 {
 	return
 		matrix[Location::INTERIOR][Location::INTERIOR]==Dimension::False
@@ -232,14 +240,17 @@ IntersectionMatrix::isDisjoint()
 		matrix[Location::BOUNDARY][Location::BOUNDARY]==Dimension::False;
 }
 
+/*public*/
 bool
-IntersectionMatrix::isIntersects()
+IntersectionMatrix::isIntersects() const
 {
 	return !isDisjoint();
 }
 
+/*public*/
 bool
-IntersectionMatrix::isTouches(int dimensionOfGeometryA, int dimensionOfGeometryB)
+IntersectionMatrix::isTouches(int dimensionOfGeometryA,
+		int dimensionOfGeometryB) const
 {
 	if (dimensionOfGeometryA > dimensionOfGeometryB)
 	{
@@ -264,8 +275,10 @@ IntersectionMatrix::isTouches(int dimensionOfGeometryA, int dimensionOfGeometryB
 	return false;
 }
 
+/*public*/
 bool
-IntersectionMatrix::isCrosses(int dimensionOfGeometryA, int dimensionOfGeometryB)
+IntersectionMatrix::isCrosses(int dimensionOfGeometryA,
+		int dimensionOfGeometryB) const
 {
 	if ((dimensionOfGeometryA==Dimension::P && dimensionOfGeometryB==Dimension::L) ||
 		(dimensionOfGeometryA==Dimension::P && dimensionOfGeometryB==Dimension::A) ||
@@ -285,24 +298,28 @@ IntersectionMatrix::isCrosses(int dimensionOfGeometryA, int dimensionOfGeometryB
 	return false;
 }
 
+/*public*/
 bool
-IntersectionMatrix::isWithin()
+IntersectionMatrix::isWithin() const
 {
 	return matches(matrix[Location::INTERIOR][Location::INTERIOR], 'T') &&
 		   matrix[Location::INTERIOR][Location::EXTERIOR]==Dimension::False &&
 		   matrix[Location::BOUNDARY][Location::EXTERIOR]==Dimension::False;
 }
 
+/*public*/
 bool
-IntersectionMatrix::isContains()
+IntersectionMatrix::isContains() const
 {
 	return matches(matrix[Location::INTERIOR][Location::INTERIOR], 'T') &&
 		   matrix[Location::EXTERIOR][Location::INTERIOR]==Dimension::False &&
 		   matrix[Location::EXTERIOR][Location::BOUNDARY]==Dimension::False;
 }
 
+/*public*/
 bool
-IntersectionMatrix::isEquals(int dimensionOfGeometryA, int dimensionOfGeometryB)
+IntersectionMatrix::isEquals(int dimensionOfGeometryA,
+		int dimensionOfGeometryB) const
 {
 	if (dimensionOfGeometryA != dimensionOfGeometryB) {
 		return false;
@@ -314,8 +331,10 @@ IntersectionMatrix::isEquals(int dimensionOfGeometryA, int dimensionOfGeometryB)
 		   matrix[Location::BOUNDARY][Location::EXTERIOR]==Dimension::False;
 }
 
+/*public*/
 bool
-IntersectionMatrix::isOverlaps(int dimensionOfGeometryA, int dimensionOfGeometryB)
+IntersectionMatrix::isOverlaps(int dimensionOfGeometryA,
+		int dimensionOfGeometryB) const
 {
 	if ((dimensionOfGeometryA==Dimension::P && dimensionOfGeometryB==Dimension::P) ||
 		(dimensionOfGeometryA==Dimension::A && dimensionOfGeometryB==Dimension::A)) {
@@ -331,6 +350,50 @@ IntersectionMatrix::isOverlaps(int dimensionOfGeometryA, int dimensionOfGeometry
 	return false;
 }
 
+/*public*/
+bool
+IntersectionMatrix::isCovers() const
+{
+	bool hasPointInCommon =
+		matches(matrix[Location::INTERIOR][Location::INTERIOR], 'T')
+		||
+		matches(matrix[Location::INTERIOR][Location::BOUNDARY], 'T')
+		||
+		matches(matrix[Location::BOUNDARY][Location::INTERIOR], 'T')
+		||
+		matches(matrix[Location::BOUNDARY][Location::BOUNDARY], 'T');
+
+	return hasPointInCommon
+		&&
+		matrix[Location::EXTERIOR][Location::INTERIOR] ==
+			Dimension::False
+		&&
+		matrix[Location::EXTERIOR][Location::BOUNDARY] ==
+			Dimension::False;
+}
+
+/*public*/
+bool
+IntersectionMatrix::isCoveredBy() const
+{
+	bool hasPointInCommon =
+		matches(matrix[Location::INTERIOR][Location::INTERIOR], 'T')
+		||
+		matches(matrix[Location::INTERIOR][Location::BOUNDARY], 'T')
+		||
+		matches(matrix[Location::BOUNDARY][Location::INTERIOR], 'T')
+		||
+		matches(matrix[Location::BOUNDARY][Location::BOUNDARY], 'T');
+
+	return
+		hasPointInCommon
+		&&
+		matrix[Location::INTERIOR][Location::EXTERIOR] ==
+			Dimension::False
+		&&
+		matrix[Location::BOUNDARY][Location::EXTERIOR] ==
+			Dimension::False;
+}
 
 //Not sure
 IntersectionMatrix*
@@ -348,8 +411,9 @@ IntersectionMatrix::transpose()
 	return this;
 }
 
+/*public*/
 string
-IntersectionMatrix::toString()
+IntersectionMatrix::toString() const
 {
 	string result("");
 	for (int ai = 0; ai < firstDim; ai++) {
@@ -365,6 +429,9 @@ IntersectionMatrix::toString()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.23  2006/05/17 17:20:10  strk
+ * added isCovers() and isCoveredBy() public methods to IntersectionMatrix and associated tests.
+ *
  * Revision 1.22  2006/04/09 01:41:48  mloskot
  * Added comments for doxygen based on JTS docs. Added row/col dimension consts. Added asserts in functions to check if given row/col is in range.
  *

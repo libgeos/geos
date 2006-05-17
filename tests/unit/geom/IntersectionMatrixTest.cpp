@@ -505,5 +505,31 @@ namespace tut
 		ensure_equals( "FFFFFFFFF", im_.toString() );
 	}
 
+	// Test of isCovers()
+    template<>
+    template<>
+	void object::test<28>()
+	{
+		using geos::geom::IntersectionMatrix;
+
+		ensure( IntersectionMatrix("T*****FF*").isCovers() );
+		ensure( IntersectionMatrix("*T****FF*").isCovers() );
+		ensure( IntersectionMatrix("***T**FF*").isCovers() );
+		ensure( IntersectionMatrix("****T*FF*").isCovers() );
+	}
+
+	// Test of isCoveredBy()
+    template<>
+    template<>
+	void object::test<29>()
+	{
+		using geos::geom::IntersectionMatrix;
+
+		ensure( IntersectionMatrix("T*F**F***").isCoveredBy() );
+		ensure( IntersectionMatrix("*TF**F***").isCoveredBy() );
+		ensure( IntersectionMatrix("**FT*F***").isCoveredBy() );
+		ensure( IntersectionMatrix("**F*TF***").isCoveredBy() );
+	}
+
 } // namespace tut
 
