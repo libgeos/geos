@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -21,6 +22,58 @@
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
 #endif // COMPUTE_Z
+
+namespace { // module-statics
+
+using namespace geos;
+
+void
+normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
+                Coordinate &n10, Coordinate &n11, Coordinate &normPt) 
+{
+        double minX0 = n00.x < n01.x ? n00.x : n01.x;
+        double minY0 = n00.y < n01.y ? n00.y : n01.y;
+        double maxX0 = n00.x > n01.x ? n00.x : n01.x;
+        double maxY0 = n00.y > n01.y ? n00.y : n01.y;
+
+        double minX1 = n10.x < n11.x ? n10.x : n11.x;
+        double minY1 = n10.y < n11.y ? n10.y : n11.y;
+        double maxX1 = n10.x > n11.x ? n10.x : n11.x;
+        double maxY1 = n10.y > n11.y ? n10.y : n11.y;
+
+        double intMinX = minX0 > minX1 ? minX0 : minX1;
+        double intMaxX = maxX0 < maxX1 ? maxX0 : maxX1;
+        double intMinY = minY0 > minY1 ? minY0 : minY1;
+        double intMaxY = maxY0 < maxY1 ? maxY0 : maxY1;
+
+        double intMidX = (intMinX + intMaxX) / 2.0;
+        double intMidY = (intMinY + intMaxY) / 2.0;
+
+        normPt.x = intMidX;
+        normPt.y = intMidY;
+
+        n00.x -= normPt.x;    n00.y -= normPt.y;
+        n01.x -= normPt.x;    n01.y -= normPt.y;
+        n10.x -= normPt.x;    n10.y -= normPt.y;
+        n11.x -= normPt.x;    n11.y -= normPt.y;
+
+#if COMPUTE_Z
+        double minZ0 = n00.z < n01.z ? n00.z : n01.z;
+        double minZ1 = n10.z < n11.z ? n10.z : n11.z;
+        double maxZ0 = n00.z > n01.z ? n00.z : n01.z;
+        double maxZ1 = n10.z > n11.z ? n10.z : n11.z;
+        double intMinZ = minZ0 > minZ1 ? minZ0 : minZ1;
+        double intMaxZ = maxZ0 < maxZ1 ? maxZ0 : maxZ1;
+        double intMidZ = (intMinZ + intMaxZ) / 2.0;
+        normPt.z = intMidZ;
+        n00.z -= normPt.z;
+        n01.z -= normPt.z;
+        n10.z -= normPt.z;
+        n11.z -= normPt.z;
+#endif
+}
+
+} // module-statics
 
 namespace geos {
 
@@ -385,47 +438,52 @@ RobustLineIntersector::computeCollinearIntersection(const Coordinate& p1,const C
 Coordinate*
 RobustLineIntersector::intersection(const Coordinate& p1,const Coordinate& p2,const Coordinate& q1,const Coordinate& q2) const
 {
-	Coordinate *n1=new Coordinate(p1);
-	Coordinate *n2=new Coordinate(p2);
-	Coordinate *n3=new Coordinate(q1);
-	Coordinate *n4=new Coordinate(q2);
-	Coordinate *normPt=new Coordinate();
-	normalize(n1, n2, n3, n4, normPt);
-	Coordinate intPt;
-	try {
-		Coordinate *h=HCoordinate::intersection(*n1,*n2,*n3,*n4);
-		intPt.setCoordinate(*h);
-#if COMPUTE_Z
-		double ztot = 0;
-		double zvals = 0;
-		double zp = interpolateZ(intPt, p1, p2);
-		double zq = interpolateZ(intPt, q1, q2);
-		if ( !ISNAN(zp)) { ztot += zp; zvals++; }
-		if ( !ISNAN(zq)) { ztot += zq; zvals++; }
-		if ( zvals ) intPt.z = ztot/zvals;
-#endif // COMPUTE_Z
-		delete h;
-	} catch (NotRepresentableException *e) {
-		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
-    }
-	intPt.x+=normPt->x;
-	intPt.y+=normPt->y;
-	if (precisionModel!=NULL) {
-		precisionModel->makePrecise(&intPt);
-	}
-	delete n1;
-	delete n2;
-	delete n3;
-	delete n4;
-	delete normPt;
-    /**
-     * MD - after fairly extensive testing
-     * it appears that the computed intPt always lies in the segment envelopes
-     */
-    //if (! isInSegmentEnvelopes(intPt))
-    //    System.out.println("outside segment envelopes: " + intPt);
+	Coordinate n1=p1;
+	Coordinate n2=p2;
+	Coordinate n3=q1;
+	Coordinate n4=q2;
+	Coordinate normPt;
 
-	return new Coordinate(intPt);
+	//normalize(n1, n2, n3, n4, normPt);
+	normalizeToEnvCentre(n1, n2, n3, n4, normPt);
+
+	Coordinate *intPt=NULL;
+
+	try {
+		intPt=HCoordinate::intersection(n1,n2,n3,n4);
+	} catch (NotRepresentableException *e) {
+		delete intPt;
+		Assert::shouldNeverReachHere("Coordinate for intersection is not calculable"+e->toString());
+	}
+
+	intPt->x += normPt.x;
+	intPt->y += normPt.y;
+
+/**
+ *
+ * MD - May 4 2005 - This is still a problem.  Here is a failure case:
+ *
+ * LINESTRING (2089426.5233462777 1180182.3877339689,
+ *             2085646.6891757075 1195618.7333999649)
+ * LINESTRING (1889281.8148903656 1997547.0560044837,
+ *             2259977.3672235999 483675.17050843034)
+ * int point = (2097408.2633752143,1144595.8008114607)
+ */
+
+	if (precisionModel!=NULL) precisionModel->makePrecise(intPt);
+
+
+#if COMPUTE_Z
+	double ztot = 0;
+	double zvals = 0;
+	double zp = interpolateZ(*intPt, p1, p2);
+	double zq = interpolateZ(*intPt, q1, q2);
+	if ( !ISNAN(zp)) { ztot += zp; zvals++; }
+	if ( !ISNAN(zq)) { ztot += zq; zvals++; }
+	if ( zvals ) intPt->z = ztot/zvals;
+#endif // COMPUTE_Z
+
+	return intPt;
 }
 
 
@@ -494,6 +552,9 @@ RobustLineIntersector::isInSegmentEnvelopes(const Coordinate& intPt)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29.2.1  2005/05/23 16:39:37  strk
+ * Ported JTS robustness patch for RobustLineIntersector
+ *
  * Revision 1.29  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

@@ -18,3 +18,4 @@ config.sub
 config.guess
 autom4te.cache
 libtool
+ltmain.sh

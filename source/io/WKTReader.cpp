@@ -16,6 +16,7 @@
 
 #include <geos/io.h>
 #include <geos/util.h>
+#include <sstream>
 
 namespace geos {
 
@@ -213,11 +214,103 @@ LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
 	return ret;
 }
 
+#if 0
 MultiPoint* WKTReader::readMultiPointText(StringTokenizer *tokenizer) {
 	CoordinateSequence *coords = getCoordinates(tokenizer);
 	MultiPoint *ret = geometryFactory->createMultiPoint(*coords);
 	delete coords;
 	return ret;
+}
+#endif
+
+MultiPoint*
+WKTReader::readMultiPointText(StringTokenizer *tokenizer)
+{
+	string nextToken=getNextEmptyOrOpener(tokenizer);
+	if (nextToken=="EMPTY") {
+		return geometryFactory->createMultiPoint();
+	}
+
+	int tok = tokenizer->peekNextToken();
+
+	if ( tok == StringTokenizer::TT_NUMBER )
+	{
+		// Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
+		const CoordinateSequenceFactory* csf = \
+			geometryFactory->getCoordinateSequenceFactory();
+		CoordinateSequence *coords = csf->create(NULL);
+		try {
+			do {
+				Coordinate* coord=getPreciseCoordinate(tokenizer);
+				coords->add(*coord);
+				delete coord;
+				nextToken=getNextCloserOrComma(tokenizer);
+			} while(nextToken == ",");
+
+			MultiPoint *ret = geometryFactory->createMultiPoint(*coords);
+			delete coords;
+			return ret;
+		} catch (...) {
+			delete coords;
+			throw;
+		}
+	}
+
+	else if ( tok == '(' )
+	{
+		// Try to parse correct form "MULTIPOINT((0 0), (1 1))"
+		vector<Geometry *> *points=new vector<Geometry *>();
+		try {
+			do {
+				Point *point=readPointText(tokenizer);
+				points->push_back(point);
+				nextToken=getNextCloserOrComma(tokenizer);
+			} while(nextToken == ",");
+			return geometryFactory->createMultiPoint(points);
+		} catch (...) {
+			// clean up 
+			for (size_t i=0; i<points->size(); i++)
+			{
+				delete (*points)[i];
+			}
+			delete points;
+			throw;
+		}
+	}
+
+	else 
+	{
+		stringstream err;
+		err << "Unexpected token: ";
+		switch (tok)
+		{
+			case StringTokenizer::TT_WORD:
+				err << "WORD " << tokenizer->getSVal();
+				break;
+			case StringTokenizer::TT_NUMBER:
+				err << "NUMBER " << tokenizer->getNVal();
+				break;
+			case StringTokenizer::TT_EOF:
+			case StringTokenizer::TT_EOL:
+				err << "EOF or EOL";
+				break;
+			case '(':
+				err << "(";
+				break;
+			case ')':
+				err << ")";
+				break;
+			case ',':
+				err << ",";
+				break;
+			default:
+				err << "??";
+				break;
+		}
+		err << endl;
+		throw new ParseException(err.str());
+		return NULL;
+	}
 }
 
 Polygon*
@@ -314,6 +407,9 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30.4.1  2006/04/26 16:29:43  strk
+ * Fixed WKTReader to accept the correct WKT for MultiPoints
+ *
  * Revision 1.30  2004/12/08 13:54:43  strk
  * gcc warnings checked and fixed, general cleanups.
  *

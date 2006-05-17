@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,11 +21,14 @@
 
 namespace geos {
 
-Polygonizer::LineStringAdder::LineStringAdder(Polygonizer *p) {
-	pol=p;
+Polygonizer::LineStringAdder::LineStringAdder(Polygonizer *p):
+	pol(p)
+{
 }
 
-void Polygonizer::LineStringAdder::filter_rw(Geometry *g) {
+void
+Polygonizer::LineStringAdder::filter_rw(Geometry *g)
+{
 	LineString *ls = dynamic_cast<LineString *>(g);
 	if ( ls ) pol->add(ls);
 }
@@ -34,15 +38,16 @@ void Polygonizer::LineStringAdder::filter_rw(Geometry *g) {
  * Create a polygonizer with the same GeometryFactory
  * as the input Geometry
  */
-Polygonizer::Polygonizer() {
-	lineStringAdder=new Polygonizer::LineStringAdder(this);
-	graph=NULL;
-	dangles=NULL;
-	cutEdges=NULL;
-	invalidRingLines=NULL;
-	holeList=NULL;
-	shellList=NULL;
-	polyList=NULL;
+Polygonizer::Polygonizer():
+	lineStringAdder(new Polygonizer::LineStringAdder(this)),
+	graph(NULL),
+	dangles(NULL),
+	cutEdges(NULL),
+	invalidRingLines(NULL),
+	holeList(NULL),
+	shellList(NULL),
+	polyList(NULL)
+{
 }
 
 Polygonizer::~Polygonizer()
@@ -56,13 +61,13 @@ Polygonizer::~Polygonizer()
 	delete shellList;
 	if ( invalidRingLines )
 	{
-		for (unsigned int i=0; i<invalidRingLines->size(); i++)
+		for (unsigned int i=0, n=invalidRingLines->size(); i<n; ++i)
 			delete (*invalidRingLines)[i];
 		delete invalidRingLines;
 	}
 	if ( polyList )
 	{
-		for (unsigned int i=0; i<polyList->size(); i++)
+		for (unsigned int i=0, n=polyList->size(); i<n; ++i)
 			delete (*polyList)[i];
 		delete polyList;
 	}
@@ -76,8 +81,11 @@ Polygonizer::~Polygonizer()
  *
  * @param geomList a list of {@link Geometry}s with linework to be polygonized
  */
-void Polygonizer::add(vector<Geometry*> *geomList){
-	for(int i=0;i<(int)geomList->size();i++) {
+void
+Polygonizer::add(vector<Geometry*> *geomList)
+{
+	for(unsigned int i=0, n=geomList->size(); i<n; ++i)
+	{
 		Geometry *geometry=(*geomList)[i];
 		add(geometry);
 	}
@@ -91,7 +99,9 @@ void Polygonizer::add(vector<Geometry*> *geomList){
  *
  * @param g a Geometry with linework to be polygonized
  */
-void Polygonizer::add(Geometry *g) {
+void
+Polygonizer::add(Geometry *g)
+{
 	g->apply_rw(lineStringAdder);
 }
 
@@ -100,7 +110,9 @@ void Polygonizer::add(Geometry *g) {
  *
  * @param line the LineString to add
  */
-void Polygonizer::add(LineString *line){
+void
+Polygonizer::add(LineString *line)
+{
 	// create a new graph using the factory from the input Geometry
 	if (graph==NULL)
 		graph=new PolygonizeGraph(line->getFactory());
@@ -125,7 +137,8 @@ Polygonizer::getPolygons()
  * @return a collection of dangles LineStrings from input.
  */
 vector<const LineString*>*
-Polygonizer::getDangles(){
+Polygonizer::getDangles()
+{
 	polygonize();
 	return dangles;
 }
@@ -135,7 +148,8 @@ Polygonizer::getDangles(){
  * @return a collection of the input {@LineStrings} which are cut edges
  */
 vector<const LineString*>*
-Polygonizer::getCutEdges() {
+Polygonizer::getCutEdges()
+{
 	polygonize();
 	return cutEdges;
 }
@@ -192,7 +206,8 @@ Polygonizer::polygonize()
 
 	assignHolesToShells(holeList, shellList);
 
-	for (int i=0;i<(int)shellList->size();i++) {
+	for (unsigned int i=0, n=shellList->size(); i<n; ++i)
+	{
 		polygonizeEdgeRing *er=(*shellList)[i];
 		polyList->push_back(er->getPolygon());
 	}
@@ -202,7 +217,8 @@ Polygonizer::polygonize()
 void
 Polygonizer::findValidRings(vector<polygonizeEdgeRing*> *edgeRingList, vector<polygonizeEdgeRing*> *validEdgeRingList, vector<LineString*> *invalidRingList)
 {
-	for (int i=0;i<(int)edgeRingList->size();i++) {
+	for (unsigned int i=0, n=edgeRingList->size(); i<n; ++i)
+	{
 		polygonizeEdgeRing *er=(*edgeRingList)[i];
 		if (er->isValid())
 			validEdgeRingList->push_back(er);
@@ -218,7 +234,8 @@ Polygonizer::findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList)
 {
 	holeList=new vector<polygonizeEdgeRing*>();
 	shellList=new vector<polygonizeEdgeRing*>();
-	for (int i=0;i<(int)edgeRingList->size();i++) {
+	for (unsigned int i=0, n=edgeRingList->size(); i<n; ++i)
+	{
 		polygonizeEdgeRing *er=(*edgeRingList)[i];
 		if (er->isHole())
 			holeList->push_back(er);
@@ -230,14 +247,16 @@ Polygonizer::findShellsAndHoles(vector<polygonizeEdgeRing*> *edgeRingList)
 void
 Polygonizer::assignHolesToShells(vector<polygonizeEdgeRing*> *holeList,vector<polygonizeEdgeRing*> *shellList)
 {
-	for (int i=0;i<(int)holeList->size();i++) {
+	for (unsigned int i=0, n=holeList->size(); i<n; ++i)
+	{
 		polygonizeEdgeRing *holeER=(*holeList)[i];
 		assignHoleToShell(holeER,shellList);
 	}
 }
 
 void
-Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER, vector<polygonizeEdgeRing*> *shellList)
+Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER,
+		vector<polygonizeEdgeRing*> *shellList)
 {
 	polygonizeEdgeRing *shell=polygonizeEdgeRing::findEdgeRingContaining(holeER, shellList);
 
@@ -246,10 +265,20 @@ Polygonizer::assignHoleToShell(polygonizeEdgeRing *holeER, vector<polygonizeEdge
 }
 
 
-}
+} // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6.2.1.2.2  2005/12/09 10:32:49  strk
+ * Cleaned up debugging line left over from previous commit
+ *
+ * Revision 1.6.2.1.2.1  2005/12/09 10:04:52  strk
+ * Fixed a bug making PolygonizeGraph choking on invalid LineStrings.
+ * Minor optimizations in Polygonizer loops.
+ *
+ * Revision 1.6.2.1  2005/06/17 15:07:48  strk
+ * Polygonizer segfault fix
+ *
  * Revision 1.6  2004/12/08 13:54:44  strk
  * gcc warnings checked and fixed, general cleanups.
  *

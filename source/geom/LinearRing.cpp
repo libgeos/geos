@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.23.4.1  2006/04/28 18:39:57  sgillies
+ * Add LinearRing::clone (bug 102)
+ *
  * Revision 1.23  2004/12/03 22:52:56  strk
  * enforced const return of CoordinateSequence::toVector() method to derivate classes.
  *
@@ -130,5 +133,11 @@ GeometryTypeId
 LinearRing::getGeometryTypeId() const {
 	return GEOS_LINEARRING;
 }
+
+Geometry* LinearRing::clone() const {
+	return new LinearRing(*this);
+}
+
+
 }
 

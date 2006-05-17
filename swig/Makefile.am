@@ -1,4 +1,4 @@
-SUBDIRS = python
+SUBDIRS = python ruby
 
 EXTRA_DIST = \
 	README.txt \

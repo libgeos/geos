@@ -13,6 +13,11 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.18.2.1  2005/11/15 12:20:46  strk
+ * Removed useless CoordinateSequence copy in
+ * PolygonBuilder::findEdgeRingContaining.
+ * Reduced heap allocations in OverlayOp::computeOverlay
+ *
  * Revision 1.18  2004/07/27 16:35:47  strk
  * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
  * This should reduce object copies as once computed the envelope of a
@@ -297,11 +302,10 @@ EdgeRing* PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,vector<EdgeRin
 			minEnv=lr->getEnvelopeInternal();
 		}
 		bool isContained=false;
-		CoordinateSequence *rcl = tryRing->getCoordinates();
+		const CoordinateSequence *rcl = tryRing->getCoordinatesRO();
 		if (tryEnv->contains(testEnv)
 			&& cga->isPointInRing(testPt,rcl))
 				isContained=true;
-		delete rcl;
 		// check if this new containing ring is smaller than the current minimum ring
 		if (isContained) {
 			if (minShell==NULL
