@@ -428,11 +428,20 @@ IntersectionMatrix::toString() const
 	return result;
 }
 
+std::ostream&
+operator<< (std::ostream&os, const IntersectionMatrix& im)
+{
+	return os << im.toString();
+}
+
 } // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/05/17 17:41:10  strk
+ * Added output operator + test
+ *
  * Revision 1.24  2006/05/17 17:24:17  strk
  * Added port info, fixed isCoveredBy() comment.
  *

@@ -10,6 +10,7 @@
 // STL
 #include <memory> 
 #include <string>
+#include <sstream>
 
 namespace tut
 {
@@ -496,13 +497,19 @@ namespace tut
 		ensure_equals( "012*TF012", input.toString() );
 	}
 
-	// Test of toString()
+	// Test of toString() and output operator
     template<>
     template<>
 	void object::test<27>()
 	{
 		ensure_not_equals( "0*01T12F2", im_.toString() );
 		ensure_equals( "FFFFFFFFF", im_.toString() );
+
+		std::stringstream ss;
+		ss << im_;
+
+		ensure_not_equals( "0*01T12F2", ss.str() );
+		ensure_equals( "FFFFFFFFF", ss.str() );
 	}
 
 	// Test of isCovers()

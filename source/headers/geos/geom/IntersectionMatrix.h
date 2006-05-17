@@ -358,10 +358,6 @@ public:
 	 * 
 	 * @return the nine dimension symbols of this IntersectionMatrix
 	 * in row-major order.
-	 * 
-	 * \todo I'd suggest to think about adding out-stream operator
-	 * function (operator<<) what is more native and intuitive solution
-	 * in C++, instead of toString().
 	 */
 	std::string toString() const;
 
@@ -376,6 +372,8 @@ private:
 	
 }; // class IntersectionMatrix
 
+std::ostream& operator<< (std::ostream&os, const IntersectionMatrix& im);
+
 
 } // namespace geos::geom
 } // namespace geos
@@ -388,6 +386,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/05/17 17:41:10  strk
+ * Added output operator + test
+ *
  * Revision 1.5  2006/05/17 17:24:17  strk
  * Added port info, fixed isCoveredBy() comment.
  *
