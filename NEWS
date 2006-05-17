@@ -14,6 +14,7 @@ Changes in 2.2.2
 - Fixed geos-config to use system-specific libs path
 - Accept correct WKT format for MultiPoints
 - SRID support in (E)WKB reader.
+- Support builds with win32 SDK
 
 Changes in 2.2.1
 
