@@ -21,7 +21,7 @@
  * const Geometry pointers, applying a binary operator to them
  * and returning a result Geometry in an auto_ptr<>.
  *
- * The BinaryOp is expected to take two const Geometry pointers
+ * The binary operator is expected to take two const Geometry pointers
  * and return a newly allocated Geometry pointer, possibly throwing
  * a TopologyException to signal it couldn't succeed due to robustness
  * issues.
