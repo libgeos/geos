@@ -1,0 +1,14 @@
+
+# DATE when to start  
+DATEPREV="2005-12-11" # 2.2.1 release
+#DATEPREV="2005-08-23" # 2.1.4 release
+
+VER_MAJ=2
+VER_MIN=2
+VER_MIC=2
+VER="${VER_MAJ}.${VER_MIN}.${VER_MIC}"
+FILE="ChangeLog-${VER}"
+
+cvs2cl -l "-d>${DATEPREV}" -F "branch-${VER_MAJ}-${VER_MIN}" --stdout > ${FILE}
+
+echo "ChangeLog for release $VER is in $FILE"
