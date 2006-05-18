@@ -29,6 +29,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	geom/PolygonTest.cpp \
 	geom/TriangleTest.cpp \
 	geom/Geometry/isRectangleTest.cpp \
+	geom/Geometry/coversTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
 	noding/SegmentStringTest.cpp \

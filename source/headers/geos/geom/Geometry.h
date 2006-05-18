@@ -378,6 +378,76 @@ public:
 	 */
 	virtual bool equals(const Geometry *g) const;
 
+	/** \brief
+	 * Returns <code>true</code> if this geometry covers the
+	 * specified geometry.
+	 * 
+	 * The <code>covers</code> predicate has the following
+	 * equivalent definitions:
+	 * 
+	 * - Every point of the other geometry is a point of this geometry.
+	 * - The DE-9IM Intersection Matrix for the two geometries is
+	 *    <code>T*****FF*</code>
+	 *    or <code>*T****FF*</code>
+	 *    or <code>***T**FF*</code>
+	 *    or <code>****T*FF*</code>
+	 * - <code>g.coveredBy(this)</code>
+	 *   (<code>covers</code> is the inverse of <code>coverdBy</code>)
+	 * 
+	 * Note the difference between <code>covers</code> and
+	 * <code>contains</code>
+	 * - <code>covers</code> is a more inclusive relation.
+	 * In particular, unlike <code>contains</code> it does not
+	 * distinguish between points in the boundary and in the interior
+	 * of geometries.
+	 * For most situations, <code>covers</code> should be used in
+	 * preference to <code>contains</code>.
+	 * As an added benefit, <code>covers</code> is more amenable to
+	 * optimization, and hence should be more performant.
+	 *
+	 * @param  g 
+	 *         the <code>Geometry</code> with which to compare this
+	 *         <code>Geometry</code>
+	 * 
+	 * @return <code>true</code> if this <code>Geometry</code>
+	 * covers <code>g</code>
+	 *
+	 * @see Geometry::contains
+	 * @see Geometry::coveredBy
+	 */
+	bool covers(const Geometry* g) const;
+
+	/** \brief
+	 * Returns <code>true</code> if this geometry is covered by the
+	 * specified geometry.
+	 * 
+	 * - Every point of this geometry is a point of the other geometry.
+	 * - The DE-9IM Intersection Matrix for the two geometries is
+	 *       <code>T*F**F***</code>
+	 *    or <code>*TF**F***</code>
+	 *    or <code>**FT*F***</code>
+	 *    or <code>**F*TF***</code>
+	 * - <code>g.covers(this)</code>
+	 *   (<code>coveredBy</code> is the inverse of <code>covers</code>)
+	 * 
+	 * Note the difference between <code>coveredBy</code> and
+	 * <code>within</code>
+	 * - <code>coveredBy</code> is a more inclusive relation.
+	 *
+	 * @param  g 
+	 *         the <code>Geometry</code> with which to compare this
+	 *         <code>Geometry</code>
+	 * @return <code>true</code> if this <code>Geometry</code> is
+	 *         covered by <code>g</code>
+	 *
+	 * @see Geometry::within
+	 * @see Geometry::covers
+	 */
+	bool coveredBy(const Geometry* g) const {
+	  return g->covers(this);
+	}
+
+
 	/// Returns the Well-known Text representation of this Geometry.
 	virtual std::string toString() const;
 
@@ -658,6 +728,14 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/05/18 08:56:50  strk
+ *         * source/geom/Geometry.cpp,
+ *         source/headers/geos/geom/Geometry.h: added
+ *         covers() and isCoveredBy() predicates.
+ *         * tests/unit/Makefile.am,
+ *         tests/unit/geom/Geometry/coversTest.cpp:
+ *         added test for covers() predicates.
+ *
  * Revision 1.11  2006/05/04 15:49:39  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

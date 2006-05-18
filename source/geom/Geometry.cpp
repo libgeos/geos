@@ -52,6 +52,7 @@
 #include <typeinfo>
 #include <vector>
 #include <cassert>
+#include <memory>
 
 #define SHORTCIRCUIT_PREDICATES 1
 
@@ -364,6 +365,25 @@ Geometry::intersects(const Geometry *g) const
 	delete im;
 	return res;
 }
+
+/*public*/
+bool
+Geometry::covers(const Geometry* g) const
+{
+#ifdef SHORTCIRCUIT_PREDICATES
+	// short-circuit test
+	if (! getEnvelopeInternal()->contains(g->getEnvelopeInternal()))
+		return false;
+#endif
+	// optimization for rectangle arguments
+	if (isRectangle()) {
+		return getEnvelopeInternal()->contains(g->getEnvelopeInternal());
+	}
+
+	auto_ptr<IntersectionMatrix> im(relate(g));
+	return im->isCovers();
+}
+
 
 bool
 Geometry::crosses(const Geometry *g) const
@@ -776,6 +796,14 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.115  2006/05/18 08:56:50  strk
+ *         * source/geom/Geometry.cpp,
+ *         source/headers/geos/geom/Geometry.h: added
+ *         covers() and isCoveredBy() predicates.
+ *         * tests/unit/Makefile.am,
+ *         tests/unit/geom/Geometry/coversTest.cpp:
+ *         added test for covers() predicates.
+ *
  * Revision 1.114  2006/04/11 09:29:42  strk
  * Fixed initialization list (removed compiler warning)
  *
