@@ -1,5 +1,7 @@
 2006-05-18 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom.h: fixed doxygen
+	header for mainpage.
 	* source/headers/geos/geom/BinaryOp.h:
 	added compile-time defines to avoid 
 	precision-reduction and simplify based

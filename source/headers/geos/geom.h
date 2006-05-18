@@ -17,7 +17,7 @@
 #ifndef GEOS_GEOM_H
 #define GEOS_GEOM_H
 
-/** \mainpage t
+/** \mainpage GEOS - Geometry Engine Open Source
  *
  * \section intro_sec Introduction
  *
