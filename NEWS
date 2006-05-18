@@ -5,8 +5,9 @@ Changes in 3.0.0
    (the documented one) should be unchanged.
 
 - New things:
+	- Added covers() and coveredBy() predicates to Geometry class
 	- Added overlay::overlayOp() adapter class
-	- Added GEOSSImplify() and GEOSTopologyPreserveSimplify()
+	- Added GEOSSimplify() and GEOSTopologyPreserveSimplify()
 	  to the C API
 	- Added closed ring checks in IsValidOp
 	- Multi-input support in XMLTester 
