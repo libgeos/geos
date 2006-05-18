@@ -37,6 +37,11 @@
  *
  * If none of the step succeeds the original exception is thrown.
  *
+ * Note that you can skip Grid snapping and Simplify policies
+ * by a compile-time define when building geos.
+ * See USE_TP_SIMPLIFY_POLICY and USE_PRECISION_REDUCTION_POLICY
+ * macros below.
+ *
  *
  **********************************************************************/
 
@@ -51,6 +56,23 @@
 
 #define GEOS_DEBUG_BINARYOP 1
 
+/*
+ * Define this to use PrecisionReduction policy
+ * in an attempt at by-passing binary operation
+ * robustness problems (handles TopologyExceptions)
+ */
+#ifndef USE_PRECISION_REDUCTION_POLICY
+# define USE_PRECISION_REDUCTION_POLICY 1
+#endif
+
+/*
+ * Define this to use TopologyPreserving simplification policy
+ * in an attempt at by-passing binary operation
+ * robustness problems (handles TopologyExceptions)
+ */
+#ifndef USE_TP_SIMPLIFY_POLICY 
+# define USE_TP_SIMPLIFY_POLICY 1
+#endif
 
 namespace geos {
 namespace geom { // geos::geom
@@ -79,6 +101,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #endif
 	}
 
+
 	// Try removing common bits
 	try
 	{
@@ -105,6 +128,10 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		std::cerr << "CBR: " << ex.what() << std::endl;
 #endif
 	}
+
+// {
+#if USE_PRECISION_REDUCTION_POLICY
+
 
 	// Try reducing precision
 	try
@@ -145,6 +172,12 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		std::cerr << "Reduced: " << ex.what() << std::endl;
 #endif
 	}
+
+#endif
+// USE_PRECISION_REDUCTION_POLICY }
+
+// {
+#if USE_TP_SIMPLIFY_POLICY 
 
 	// Try simplifying
 	try
@@ -187,8 +220,12 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "Simplified: " << ex.what() << std::endl;
 #endif
-		throw origException;
 	}
+
+#endif
+// USE_TP_SIMPLIFY_POLICY }
+
+	throw origException;
 }
 
 } // namespace geos::geom

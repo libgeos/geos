@@ -1,5 +1,9 @@
 2006-05-18 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/BinaryOp.h:
+	added compile-time defines to avoid 
+	precision-reduction and simplify based
+	policies (defaults to enabled).
 	* source/geom/Geometry.cpp,
 	source/headers/geos/geom/Geometry.h: added
 	covers() and coveredBy() predicates.
