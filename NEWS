@@ -5,6 +5,10 @@ Changes in 3.0.0
    (the documented one) should be unchanged.
 
 - New things:
+	- Added geom::BinaryOp class performing a binary operation
+	  using different heuristics to reduce probability of robustness
+	  issues. Both C-API and XMLTester now use this class for
+	  binary operations.
 	- Added covers() and coveredBy() predicates to Geometry class
 	- Added overlay::overlayOp() adapter class
 	- Added GEOSSimplify() and GEOSTopologyPreserveSimplify()
