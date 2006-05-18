@@ -2,10 +2,10 @@
 
 	* source/geom/Geometry.cpp,
 	source/headers/geos/geom/Geometry.h: added
-	covers() and isCoveredBy() predicates.
+	covers() and coveredBy() predicates.
 	* tests/unit/Makefile.am,
 	tests/unit/geom/Geometry/coversTest.cpp:
-	added test for covers() predicates.
+	added test for the new predicates.
 
 2006-05-17 Sandro Santilli <strk@refractions.net>
 

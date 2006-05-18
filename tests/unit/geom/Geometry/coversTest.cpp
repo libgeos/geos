@@ -51,6 +51,7 @@ void object::test<1>()
 	));
 
 	ensure( g1->covers(g2.get()) );
+	ensure( g2->coveredBy(g1.get()) );
 
 }
 
@@ -67,6 +68,7 @@ void object::test<2>()
 	));
 
 	ensure( g1->covers(g2.get()) );
+	ensure( g2->coveredBy(g1.get()) );
 	ensure( ! g1->contains(g2.get()) );
 
 }
@@ -84,6 +86,7 @@ void object::test<3>()
 	));
 
 	ensure( g1->covers(g2.get()) );
+	ensure( g2->coveredBy(g1.get()) );
 	ensure( ! g1->contains(g2.get()) );
 
 	g2.reset(reader.read(
@@ -91,6 +94,7 @@ void object::test<3>()
 	));
 
 	ensure( g1->covers(g2.get()) );
+	ensure( g2->coveredBy(g1.get()) );
 	ensure( g1->contains(g2.get()) );
 
 }
