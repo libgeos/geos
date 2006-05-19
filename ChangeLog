@@ -1,5 +1,9 @@
 2006-05-19 Sandro Santilli <strk@refractions.net>
 
+	* source/simplify/TopologyPreservingSimplifier.cpp:
+	removed friend specification in
+	TopologyPreservingSimplifier helper class
+	(no more needed)
 	* tests/unit/geom/Geometry/coversTest.cpp:
 	keep tests in 'tut' namespace.
 	* tests/xmltester/XMLTester.cpp: report

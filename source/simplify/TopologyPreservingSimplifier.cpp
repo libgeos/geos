@@ -135,7 +135,8 @@ class LineStringMapBuilderFilter: public geom::GeometryComponentFilter
 
 public:
 
-	friend class TopologyPreservingSimplifier;
+	// no more needed
+	//friend class TopologyPreservingSimplifier;
 
 	void filter_ro(const Geometry* geom);
 
@@ -302,6 +303,12 @@ TopologyPreservingSimplifier::getResultGeometry()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/05/19 17:44:29  strk
+ *         * source/simplify/TopologyPreservingSimplifier.cpp:
+ *         removed friend specification in
+ *         TopologyPreservingSimplifier helper class
+ *         (no more needed)
+ *
  * Revision 1.6  2006/04/24 15:47:35  strk
  * Public constructors change made permanent
  *
