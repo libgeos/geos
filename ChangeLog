@@ -1,3 +1,8 @@
+2006-05-19 Sandro Santilli <strk@refractions.net>
+
+	* tests/xmltester/XMLTester.cpp: report
+	error on load of requested tests.
+
 2006-05-18 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom.h: fixed doxygen

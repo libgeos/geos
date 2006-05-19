@@ -203,7 +203,10 @@ XMLTester::run(const std::string &source)
 
 	caseCount=0;
 
-	xml.Load(source.c_str());
+	if ( ! xml.Load(source.c_str()) )
+	{
+		std::cerr << "Error loading " << source << std::endl;
+	}
 
 	xml.ResetPos();
 	xml.FindElem("run");
@@ -935,6 +938,10 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/05/19 16:38:22  strk
+ *         * tests/xmltester/XMLTester.cpp: report
+ *         error on load of requested tests.
+ *
  * Revision 1.32  2006/04/14 14:57:15  strk
  * XMLTester binary ops invoked using the new BinaryOp template function.
  *
