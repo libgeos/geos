@@ -1,6 +1,6 @@
 // $Id$
 // 
-// Test Suite for Geometry::isRectangle() function
+// Test Suite for Geometry's covers() and coveredBy() functions
 
 // TUT
 #include <tut.h>
@@ -12,7 +12,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/io/WKTReader.h>
 
-using namespace tut;
+namespace tut {
 
 //
 // Test Group
@@ -32,7 +32,7 @@ struct test_contains_data
 typedef test_group<test_contains_data> group;
 typedef group::object object;
 
-group test_contains_data("geos::geom::Geometry::contains");
+group test_contains_data("geos::geom::Geometry::covers");
 
 //
 // Test Cases
@@ -100,4 +100,5 @@ void object::test<3>()
 }
 
 
+} // namespace tut
 

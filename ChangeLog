@@ -1,5 +1,7 @@
 2006-05-19 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/geom/Geometry/coversTest.cpp:
+	keep tests in 'tut' namespace.
 	* tests/xmltester/XMLTester.cpp: report
 	error on load of requested tests.
 
