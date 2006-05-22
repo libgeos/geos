@@ -48,7 +48,7 @@ public:
 
 	GEOSException(std::string const& name, std::string const& msg)
 		:
-		_msg(name+" "+msg)
+		_msg(name+": "+msg)
 	{}
 
 	virtual ~GEOSException() throw()
@@ -68,6 +68,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/22 15:08:01  strk
+ * Print colon after exception name (as it has always been)
+ *
  * Revision 1.3  2006/04/05 09:34:20  strk
  * GEOSException derived from std::exception again, hopefully the correct way now
  *
