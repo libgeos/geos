@@ -32,6 +32,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	geom/Geometry/coversTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
+	io/ByteOrderValuesTest.cpp \
 	noding/SegmentStringTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp

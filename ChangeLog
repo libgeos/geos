@@ -1,5 +1,7 @@
 2006-05-23 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/Makefile.am, tests/unit/io/ByteOrderValuesTest.cpp:
+	unit test for ByteOrderValues class.
 	* source/io/WKBWriter.cpp: fixed bug in ::writeInt
 	missing to honour the requested byte order.
 	* tests/unit/io/WKBReaderTest.cpp: cleaned up
