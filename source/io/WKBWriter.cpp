@@ -168,8 +168,17 @@ WKBWriter::writeGeometryCollection(const GeometryCollection &g,
 void
 WKBWriter::writeByteOrder() 
 {
+	if (byteOrder == ByteOrderValues::ENDIAN_LITTLE)
+	{
+		buf[0] = WKBConstants::wkbNDR;
+	}
+	else
+	{
+		buf[0] = WKBConstants::wkbXDR;
+	}
+
 	assert(outStream);
-	outStream->write(reinterpret_cast<char*>(&byteOrder), 1);
+	outStream->write(reinterpret_cast<char*>(buf), 1);
 }
 
 void

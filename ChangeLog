@@ -5,7 +5,8 @@
 	* tests/unit/Makefile.am, tests/unit/io/ByteOrderValuesTest.cpp:
 	unit test for ByteOrderValues class.
 	* source/io/WKBWriter.cpp: fixed bug in ::writeInt
-	missing to honour the requested byte order.
+	missing to honour the requested byte order and
+	::writeByteOrder failing to consider machine byte order.
 	* tests/unit/io/WKBReaderTest.cpp: cleaned up
 	and added both XDR and NDR tests.
 	* source/io/ByteOrderValues.cpp: changed
