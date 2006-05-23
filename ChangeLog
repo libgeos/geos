@@ -1,5 +1,7 @@
 2006-05-23 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/io/WKBReaderTest.cpp: cleaned up
+	and added both XDR and NDR tests.
 	* source/io/ByteOrderValues.cpp: changed
 	ENDIAN_BIG and ENDIAN_LITTLE values to match
 	WKBConstants::XDR and WKBConstants::NDR respectively.
