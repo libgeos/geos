@@ -107,19 +107,6 @@ ByteOrderValues::putLong(int64 longValue, unsigned char *buf, int byteOrder)
 {
 	if ( byteOrder == ENDIAN_BIG )
 	{
-		buf[7] = (unsigned char)(longValue >> 56);
-		buf[6] = (unsigned char)(longValue >> 48);
-		buf[5] = (unsigned char)(longValue >> 40);
-		buf[4] = (unsigned char)(longValue >> 32);
-		buf[3] = (unsigned char)(longValue >> 24);
-		buf[2] = (unsigned char)(longValue >> 16);
-		buf[1] = (unsigned char)(longValue >> 8);
-		buf[0] = (unsigned char) longValue;
-	}
-	else // ENDIAN_LITTLE
-	{
-		assert(byteOrder == ENDIAN_LITTLE);
-
 		buf[0] = (unsigned char)(longValue >> 56);
 		buf[1] = (unsigned char)(longValue >> 48);
 		buf[2] = (unsigned char)(longValue >> 40);
@@ -128,6 +115,19 @@ ByteOrderValues::putLong(int64 longValue, unsigned char *buf, int byteOrder)
 		buf[5] = (unsigned char)(longValue >> 16);
 		buf[6] = (unsigned char)(longValue >> 8);
 		buf[7] = (unsigned char) longValue;
+	}
+	else // ENDIAN_LITTLE
+	{
+		assert(byteOrder == ENDIAN_LITTLE);
+
+		buf[0] = (unsigned char) longValue;
+		buf[1] = (unsigned char)(longValue >> 8);
+		buf[2] = (unsigned char)(longValue >> 16);
+		buf[3] = (unsigned char)(longValue >> 24);
+		buf[4] = (unsigned char)(longValue >> 32);
+		buf[5] = (unsigned char)(longValue >> 40);
+		buf[6] = (unsigned char)(longValue >> 48);
+		buf[7] = (unsigned char)(longValue >> 56);
 	}
 }
 
@@ -161,6 +161,9 @@ ByteOrderValues::putDouble(double doubleValue, unsigned char *buf, int byteOrder
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/05/23 12:33:41  strk
+ * * source/io/ByteOrderValues.cpp: fixed bug in putLong() also affecting putDouble()
+ *
  * Revision 1.8  2006/05/23 09:24:35  strk
  * * source/io/ByteOrderValues.cpp: changed ENDIAN_BIG and ENDIAN_LITTLE values to match WKBConstants::XDR and WKBConstants::NDR respectively.
  * * source/headers/geos/io/WKBConstants.h: added comments about meaning of XDR/NDR.

@@ -1,5 +1,7 @@
 2006-05-23 Sandro Santilli <strk@refractions.net>
 
+	* source/io/ByteOrderValues.cpp: fixed bug in putLong()
+	also affecting putDouble()
 	* tests/unit/Makefile.am, tests/unit/io/ByteOrderValuesTest.cpp:
 	unit test for ByteOrderValues class.
 	* source/io/WKBWriter.cpp: fixed bug in ::writeInt
