@@ -28,7 +28,7 @@ namespace tut
     typedef test_group<test_coordinate_data> group;
     typedef group::object object;
 
-    group test_coordinate_group("geos::geom::Coordiante");
+    group test_coordinate_group("geos::geom::Coordinate");
 
     //
     // Test Cases
