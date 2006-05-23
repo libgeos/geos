@@ -105,6 +105,48 @@ namespace tut
 		ensure_equals("getDouble little endian", out, in);
 	}
 
+	// 3 - Read/write a long
+	template<>
+	template<>
+	void object::test<3>()
+	{         
+		using geos::io::ByteOrderValues;
+
+		unsigned char buf[8];
+		long in = 2;
+		long out;
+
+		ByteOrderValues::putLong(in, buf,
+				ByteOrderValues::ENDIAN_BIG);
+		ensure("putLong big endian[0]", buf[0] == 0);
+		ensure("putLong big endian[1]", buf[1] == 0);
+		ensure("putLong big endian[2]", buf[2] == 0);
+		ensure("putLong big endian[3]", buf[3] == 0);
+		ensure("putLong big endian[4]", buf[4] == 0);
+		ensure("putLong big endian[5]", buf[5] == 0);
+		ensure("putLong big endian[6]", buf[6] == 0);
+		ensure("putLong big endian[7]", buf[7] == 2);
+
+		out = ByteOrderValues::getLong(buf,
+				ByteOrderValues::ENDIAN_BIG);
+		ensure_equals("getLong big endian", out, in);
+
+		ByteOrderValues::putLong(in, buf,
+				ByteOrderValues::ENDIAN_LITTLE);
+		ensure("putLong little endian[0]", buf[0] == 2);
+		ensure("putLong little endian[1]", buf[1] == 0);
+		ensure("putLong little endian[2]", buf[2] == 0);
+		ensure("putLong little endian[3]", buf[3] == 0);
+		ensure("putLong little endian[4]", buf[4] == 0);
+		ensure("putLong little endian[5]", buf[5] == 0);
+		ensure("putLong little endian[6]", buf[6] == 0);
+		ensure("putLong little endian[7]", buf[7] == 0);
+
+		out = ByteOrderValues::getLong(buf,
+				ByteOrderValues::ENDIAN_LITTLE);
+		ensure_equals("getLong little endian", out, in);
+	}
+
 
 } // namespace tut
 
