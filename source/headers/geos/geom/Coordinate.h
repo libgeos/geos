@@ -16,12 +16,13 @@
 #ifndef GEOS_GEOM_COORDINATE_H
 #define GEOS_GEOM_COORDINATE_H
 
+#include <geos/platform.h> // for DoubleNotANumber
+#include <geos/inline.h>
+
 #include <set>
 #include <stack>
 #include <vector> // for typedefs
-
-#include <geos/platform.h> // for DoubleNotANumber
-#include <geos/inline.h>
+#include <string>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -151,6 +152,9 @@ bool operator!=(const Coordinate& a, const Coordinate& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/05/23 15:06:07  strk
+ * * source/headers/geos/geom/Coordinate.h: added missing <string> include.
+ *
  * Revision 1.4  2006/03/27 15:57:39  strk
  * Commented need for platform.h include
  *

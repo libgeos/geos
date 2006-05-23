@@ -1,5 +1,7 @@
 2006-05-23 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/Coordinate.h: added
+	missing <string> include.
 	* source/headers/geos/config.h: removed file which
 	is not supposed to be in the repository.
 	* source/headers/geos/index/quadtree/DoubleBits.h,
