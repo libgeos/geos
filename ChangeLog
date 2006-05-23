@@ -1,5 +1,8 @@
 2006-05-23 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/index/quadtree/DoubleBits.h,
+	source/index/quadtree/DoubleBits.cpp: const correctness
+	and documentation.
 	* source/io/ByteOrderValues.cpp: fixed bug in putLong()
 	also affecting putDouble()
 	* tests/unit/Makefile.am, tests/unit/io/ByteOrderValuesTest.cpp:

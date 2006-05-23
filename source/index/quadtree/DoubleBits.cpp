@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/DoubleBits.java rev. 1.7 (JTS-1.7.1)
+ *
  **********************************************************************/
 
 #include <geos/index/quadtree/DoubleBits.h>
@@ -78,11 +82,12 @@ DoubleBits::maximumCommonMantissa(double d1, double d2)
 	DoubleBits db1(d1);
 	DoubleBits db2(d2);
 	if (db1.getExponent() != db2.getExponent()) return 0.0;
-	int maxCommon=db1.numCommonMantissaBits(&db2);
+	int maxCommon=db1.numCommonMantissaBits(db2);
 	db1.zeroLowerBits(64-(12+maxCommon));
 	return db1.getDouble();
 }
 
+/*public*/
 DoubleBits::DoubleBits(double nx)
 {
 #if ASSUME_IEEE_DOUBLE
@@ -91,18 +96,16 @@ DoubleBits::DoubleBits(double nx)
 	x = nx;
 }
 
-double DoubleBits::getDouble()
+/*public*/
+double
+DoubleBits::getDouble() const
 {
 	return x;
 }
 
-/**
- * Determines the exponent for the number
- *
- * @return
- */
+/*public*/
 int64
-DoubleBits::biasedExponent()
+DoubleBits::biasedExponent() const
 {
 	int64 signExp=xBits>>52;
 	int64 exp=signExp&0x07ff;
@@ -110,13 +113,9 @@ DoubleBits::biasedExponent()
 	return exp;
 }
 
-/*
- * Determines the exponent for the number
- *
- * @return
- */
+/*public*/
 int
-DoubleBits::getExponent()
+DoubleBits::getExponent() const
 {
 #if ASSUME_IEEE_DOUBLE
 	return biasedExponent()-EXPONENT_BIAS;
@@ -125,6 +124,7 @@ DoubleBits::getExponent()
 #endif
 }
 
+/*public*/
 void
 DoubleBits::zeroLowerBits(int nBits)
 {
@@ -133,35 +133,31 @@ DoubleBits::zeroLowerBits(int nBits)
 	xBits&=mask;
 }
 
+/*public*/
 int
-DoubleBits::getBit(int i)
+DoubleBits::getBit(int i) const
 {
 	long mask=(1L<<i);
 	return (xBits&mask)!=0?1:0;
 }
 
-/**
- * This computes the number of common most-significant bits in the mantissa.
- * It does not count the hidden bit, which is always 1.
- * It does not determine whether the numbers have the same exponent - if they do
- * not, the value computed by this function is meaningless.
- * @param db
- * @return the number of common most-significant mantissa bits
- */
-int DoubleBits::numCommonMantissaBits(DoubleBits *db) {
+/*public*/
+int
+DoubleBits::numCommonMantissaBits(const DoubleBits& db) const
+{
 	for (int i=0;i<52;i++) {
 		//int bitIndex=i+12;
-		if (getBit(i)!=db->getBit(i))
+		if (getBit(i)!=db.getBit(i))
 			return i;
 	}
 	return 52;
 }
 
-/**
- * A representation of the Double bits formatted for easy readability
- * @return
- */
-string DoubleBits::toString() {
+/*public*/
+string
+DoubleBits::toString() const
+{
+	return "FIXME: unimplemented DoubleBits::toString()";
 	//String numStr = Long.toBinaryString(xBits);
 //// 64 zeroes!
 //String zero64 = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -181,6 +177,9 @@ string DoubleBits::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/05/23 14:29:33  strk
+ * * source/headers/geos/index/quadtree/DoubleBits.h, source/index/quadtree/DoubleBits.cpp: const correctness and documentation.
+ *
  * Revision 1.23  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
  *

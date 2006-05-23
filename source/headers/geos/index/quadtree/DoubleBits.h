@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/DoubleBits.java rev. 1.7 (JTS-1.7.1)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IDX_QUADTREE_DOUBLEBITS_H
@@ -24,26 +28,70 @@ namespace geos {
 namespace index { // geos::index
 namespace quadtree { // geos::index::quadtree
 
+
+/** \brief
+ * DoubleBits manipulates Double numbers
+ * by using bit manipulation and bit-field extraction.
+ *
+ * For some operations (such as determining the exponent)
+ * this is more accurate than using mathematical operations
+ * (which suffer from round-off error).
+ * 
+ * The algorithms and constants in this class
+ * apply only to IEEE-754 double-precision floating point format.
+ *
+ */
 class DoubleBits {
+
 public:
+
 	static const int EXPONENT_BIAS=1023;
+
 	static double powerOf2(int exp);
+
 	static int exponent(double d);
+
 	static double truncateToPowerOfTwo(double d);
+
 	static std::string toBinaryString(double d);
+
 	static double maximumCommonMantissa(double d1, double d2);
+
 	DoubleBits(double nx);
-	double getDouble();
-	int64 biasedExponent();
-	int getExponent();
+
+	double getDouble() const;
+
+	/// Determines the exponent for the number
+	int64 biasedExponent() const;
+
+	/// Determines the exponent for the number
+	int getExponent() const;
+
 	void zeroLowerBits(int nBits);
-	int getBit(int i);
-	int numCommonMantissaBits(DoubleBits *db);
-	std::string toString();
+
+	int getBit(int i) const;
+
+	/** \brief
+	 * This computes the number of common most-significant bits in
+	 * the mantissa.
+	 *
+	 * It does not count the hidden bit, which is always 1.
+	 * It does not determine whether the numbers have the same exponent;
+	 * if they do not, the value computed by this function is meaningless.
+	 *
+	 * @param db
+	 *
+	 * @return the number of common most-significant mantissa bits
+	 */
+	int numCommonMantissaBits(const DoubleBits& db) const;
+
+	/// A representation of the Double bits formatted for easy readability
+	std::string toString() const;
+
 private:
+
 	double x;
-//	long long xBits;
-//	long xBits;
+
 	int64 xBits;
 };
 
@@ -55,6 +103,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/05/23 14:29:33  strk
+ * * source/headers/geos/index/quadtree/DoubleBits.h, source/index/quadtree/DoubleBits.cpp: const correctness and documentation.
+ *
  * Revision 1.1  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
  *
