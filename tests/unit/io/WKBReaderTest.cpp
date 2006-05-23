@@ -1,10 +1,10 @@
 // $Id$
 // 
 // Test Suite for geos::io::WKBReader 
-// Uses geos::io::WKTReader to check correctness 
-// Uses geos::io::WKBWriter to check correctness 
+// Uses geos::io::WKTReader to check correctness.
+// Uses geos::io::WKBWriter to check correctness.
 // Currently only tests 2D geoms of all (7) types.
-// Currently only tests NDR WKB 
+// Tests NDR and XDR input and output .
 
 // TUT
 #include <tut.h>
