@@ -1,5 +1,7 @@
 2006-05-23 Sandro Santilli <strk@refractions.net>
 
+	* source/io/WKBWriter.cpp: fixed bug in ::writeInt
+	missing to honour the requested byte order.
 	* tests/unit/io/WKBReaderTest.cpp: cleaned up
 	and added both XDR and NDR tests.
 	* source/io/ByteOrderValues.cpp: changed

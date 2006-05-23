@@ -184,7 +184,9 @@ WKBWriter::writeGeometryType(int typeId)
 void
 WKBWriter::writeInt(int val) 
 {
-	outStream->write(reinterpret_cast<char *>(&val), 4);
+	ByteOrderValues::putInt(val, buf, byteOrder);
+	outStream->write(reinterpret_cast<char *>(buf), 4);
+	//outStream->write(reinterpret_cast<char *>(&val), 4);
 }
 
 void
