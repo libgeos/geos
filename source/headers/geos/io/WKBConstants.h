@@ -22,8 +22,13 @@ namespace io {
 
 /// Constant values used by the WKB format
 namespace WKBConstants {
+
+	/// Big Endian
 	const int wkbXDR = 0;
+
+	/// Little Endian 
 	const int wkbNDR = 1;
+
 	const int wkbPoint = 1;
 	const int wkbLineString = 2;
 	const int wkbPolygon = 3;
@@ -40,6 +45,10 @@ namespace WKBConstants {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/05/23 09:24:37  strk
+ * * source/io/ByteOrderValues.cpp: changed ENDIAN_BIG and ENDIAN_LITTLE values to match WKBConstants::XDR and WKBConstants::NDR respectively.
+ * * source/headers/geos/io/WKBConstants.h: added comments about meaning of XDR/NDR.
+ *
  * Revision 1.1  2006/03/20 18:18:14  strk
  * io.h header split
  *

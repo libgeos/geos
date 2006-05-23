@@ -21,11 +21,13 @@
 #include <geos/platform.h>
 #include <geos/util.h>
 
+#include <cassert>
+
 namespace geos {
 namespace io { // geos.io
 
-int ByteOrderValues::ENDIAN_BIG = 1;
-int ByteOrderValues::ENDIAN_LITTLE = 2;
+int ByteOrderValues::ENDIAN_BIG = 0;
+int ByteOrderValues::ENDIAN_LITTLE = 1;
 
 int
 ByteOrderValues::getInt(const unsigned char *buf, int byteOrder)
@@ -39,6 +41,8 @@ ByteOrderValues::getInt(const unsigned char *buf, int byteOrder)
 	}
 	else // ENDIAN_LITTLE
 	{
+		assert(byteOrder == ENDIAN_LITTLE);
+
 		return  ((int) (buf[3]&0xff) <<24) |
 			((int) (buf[2]&0xff) <<16) |
 			((int) (buf[1]&0xff) <<8) |
@@ -58,6 +62,8 @@ ByteOrderValues::putInt(int intValue, unsigned char *buf, int byteOrder)
 	}
 	else // ENDIAN_LITTLE
 	{
+		assert(byteOrder == ENDIAN_LITTLE);
+
 		buf[3] = (unsigned char)(intValue >> 24);
 		buf[2] = (unsigned char)(intValue >> 16);
 		buf[1] = (unsigned char)(intValue >> 8);
@@ -82,6 +88,8 @@ ByteOrderValues::getLong(const unsigned char *buf, int byteOrder)
 	}
 	else // ENDIAN_LITTLE
 	{
+		assert(byteOrder == ENDIAN_LITTLE);
+
 		return
 			(int64) (buf[7]) << 56
 			| (int64) (buf[6] & 0xff) << 48
@@ -110,6 +118,8 @@ ByteOrderValues::putLong(int64 longValue, unsigned char *buf, int byteOrder)
 	}
 	else // ENDIAN_LITTLE
 	{
+		assert(byteOrder == ENDIAN_LITTLE);
+
 		buf[0] = (unsigned char)(longValue >> 56);
 		buf[1] = (unsigned char)(longValue >> 48);
 		buf[2] = (unsigned char)(longValue >> 40);
@@ -151,6 +161,10 @@ ByteOrderValues::putDouble(double doubleValue, unsigned char *buf, int byteOrder
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/23 09:24:35  strk
+ * * source/io/ByteOrderValues.cpp: changed ENDIAN_BIG and ENDIAN_LITTLE values to match WKBConstants::XDR and WKBConstants::NDR respectively.
+ * * source/headers/geos/io/WKBConstants.h: added comments about meaning of XDR/NDR.
+ *
  * Revision 1.7  2006/03/20 18:18:15  strk
  * io.h header split
  *
