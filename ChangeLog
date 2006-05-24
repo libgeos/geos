@@ -1,3 +1,10 @@
+2006-05-24 Mateusz Loskot <mateusz@loskot.net>
+
+	* tests/unit/simplify/TopologyPreservingSimplifierTest.cpp:
+	added new test.
+	* tests/unit/utility.h: added helper library for Unit Tests
+	with 'utility' namespace.
+
 2006-05-24 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/simplify/TaggedLinesSimplifier.h,
