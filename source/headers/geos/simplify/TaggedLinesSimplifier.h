@@ -18,10 +18,9 @@
  **********************************************************************
  *
  * NOTES: changed from JTS design adding a private
- *        TaggedLineStringSimplifier member and a
- *        public simplifyLine(TaggedLineString*) method.
- *        This reduced overhead in usage from
- *        TopologyPreservingSimplifier class.
+ *        TaggedLineStringSimplifier member and making
+ *        simplify(collection) method become a templated
+ *        function.
  *
  **********************************************************************/
 
@@ -30,6 +29,7 @@
 
 #include <vector>
 #include <memory>
+#include <cassert>
 
 // Forward declarations
 namespace geos {
@@ -64,20 +64,40 @@ public:
 	void setDistanceTolerance(double tolerance);
 
 	/**
-	 * Simplify a vector of {@link TaggedLineString}s
+	 * Simplify a set of {@link TaggedLineString}s
+	 *
+	 * @param iterator_type
+	 * 	an iterator, must support assignment, increment,
+	 *      inequality and dereference operators.
+	 *	Dereference operator must return a TaggedLineString*
 	 *
 	 * @param begin iterator to the first element 
-	 *              in the vector to be simplified.
+	 *              to be simplified.
 	 * @param end an iterator to one-past-last element
-	 *            in the vector to be simplified.
+	 *            to be simplified.
 	 */
+	template <class iterator_type>
 	void simplify(
-		std::vector<TaggedLineString*>::iterator begin,
-		std::vector<TaggedLineString*>::iterator end);
+		iterator_type begin,
+		iterator_type end)
+	{
+		// add lines to the index
+		for (iterator_type it=begin; it != end; ++it) {
+			assert(*it);
+			inputIndex->add(*(*it));
+		}
 
-	void simplifyLine(TaggedLineString* line);
+		// Simplify lines
+		for (iterator_type it=begin; it != end; ++it) {
+			assert(*it);
+			simplify(*(*it));
+		}
+	}
+
 
 private:
+
+	void simplify(TaggedLineString& line);
 
 	std::auto_ptr<LineSegmentIndex> inputIndex;
 
@@ -95,6 +115,15 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/05/24 11:41:23  strk
+ *         * source/headers/geos/simplify/TaggedLinesSimplifier.h,
+ *         source/simplify/TaggedLinesSimplifier.cpp,
+ *         source/simplify/TopologyPreservingSimplifier.cpp:
+ *         fixed bug in TopologyPreservingSimplifier failing to
+ *         detect intersections, refactored TaggedLinesSimplifier
+ *         class to more closely match JTS and use templated
+ *         functions.
+ *
  * Revision 1.2  2006/04/13 14:25:17  strk
  * TopologyPreservingSimplifier initial port
  *

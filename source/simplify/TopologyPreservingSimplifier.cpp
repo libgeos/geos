@@ -78,6 +78,63 @@ private:
 
 };
 
+/*
+ * helper class to transform a map iterator so to return value_type
+ * on dereference.
+ * TODO: generalize this to be a "ValueIterator" with specializations
+ *       for std::map and std::vector
+ */
+class LinesMapValueIterator {
+
+	LinesMap::iterator _iter;
+
+public:
+
+	LinesMapValueIterator(LinesMap::iterator iter)
+		:
+		_iter(iter)
+	{
+	}
+
+	// copy ctor
+	LinesMapValueIterator(const LinesMapValueIterator& o)
+		:
+		_iter(o._iter)
+	{
+	}
+
+	// assignment
+	LinesMapValueIterator& operator=(const LinesMapValueIterator& o)
+	{
+		_iter=o._iter;
+		return *this;
+	}
+
+	// postfix++
+	void operator++(int)
+	{
+		_iter++;
+	}
+
+	// ++suffix
+	void operator++()
+	{
+		++_iter;
+	}
+
+	// inequality operator
+	bool operator!=(const LinesMapValueIterator& other) const
+	{
+		return _iter != other._iter;
+	}
+
+	TaggedLineString* operator*()
+	{
+		return _iter->second;
+	}
+};
+
+
 /*public*/
 LineStringTransformer::LineStringTransformer(LinesMap& nMap)
 	:
@@ -227,6 +284,7 @@ TopologyPreservingSimplifier::setDistanceTolerance(double d)
 	lineSimplifier->setDistanceTolerance(d);
 }
 
+
 /*public*/
 std::auto_ptr<geom::Geometry> 
 TopologyPreservingSimplifier::getResultGeometry()
@@ -246,14 +304,10 @@ TopologyPreservingSimplifier::getResultGeometry()
 	          << std::endl;
 #endif
 
+		LinesMapValueIterator begin(linestringMap.begin());
+		LinesMapValueIterator end(linestringMap.end());
+		lineSimplifier->simplify(begin, end);
 
-		for (LinesMap::iterator
-			it=linestringMap.begin(), itEnd=linestringMap.end();
-			it != itEnd;
-			++it)
-		{
-			lineSimplifier->simplifyLine(it->second); 
-		}
 
 #if GEOS_DEBUG
 	std::cerr << "all TaggedLineString simplified"
@@ -303,6 +357,15 @@ TopologyPreservingSimplifier::getResultGeometry()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/05/24 11:41:23  strk
+ *         * source/headers/geos/simplify/TaggedLinesSimplifier.h,
+ *         source/simplify/TaggedLinesSimplifier.cpp,
+ *         source/simplify/TopologyPreservingSimplifier.cpp:
+ *         fixed bug in TopologyPreservingSimplifier failing to
+ *         detect intersections, refactored TaggedLinesSimplifier
+ *         class to more closely match JTS and use templated
+ *         functions.
+ *
  * Revision 1.7  2006/05/19 17:44:29  strk
  *         * source/simplify/TopologyPreservingSimplifier.cpp:
  *         removed friend specification in

@@ -1,5 +1,12 @@
 2006-05-24 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/simplify/TaggedLinesSimplifier.h,
+	source/simplify/TaggedLinesSimplifier.cpp,
+	source/simplify/TopologyPreservingSimplifier.cpp:
+	fixed bug in TopologyPreservingSimplifier failing to
+	detect intersections, refactored TaggedLinesSimplifier
+	class to more closely match JTS and use templated
+	functions.
 	* capi/geos_c.h.in: #include <stddef.h> to get size_t
 	definition (only #ifndef __cplusplus)
 
