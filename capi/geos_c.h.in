@@ -27,6 +27,10 @@
  *
  ***********************************************************************/
 
+#ifndef __cplusplus
+# include <stddef.h> /* for size_t definition */
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

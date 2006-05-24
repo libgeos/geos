@@ -1,3 +1,8 @@
+2006-05-24 Sandro Santilli <strk@refractions.net>
+
+	* capi/geos_c.h.in: #include <stddef.h> to get size_t
+	definition (only #ifndef __cplusplus)
+
 2006-05-23 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/Coordinate.h: added
