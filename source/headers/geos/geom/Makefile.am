@@ -4,6 +4,9 @@ geosdir = $(includedir)/geos/geom
 
 EXTRA_DIST = 
 
+# Notes:
+# GeometryComponentFilter.h needed by Polygonizer.h
+
 geos_HEADERS = \
 	BinaryOp.h	\
 	Coordinate.h	\

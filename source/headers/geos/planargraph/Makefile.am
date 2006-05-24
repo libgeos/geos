@@ -4,6 +4,11 @@ geosdir = $(includedir)/geos/planargraph
 
 EXTRA_DIST = 
 
+# Notes:
+#
+#  PlanarGraph.h is needed by LineMergeGraph.h (needed by LineMerger.h)
+#                for inheritance
+#
 geos_HEADERS = \
 	DirectedEdge.h	\
 	DirectedEdgeStar.h	\

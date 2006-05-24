@@ -26,12 +26,12 @@ namespace linemerge { // geos::operation::linemerge
 } // namespace geos::operation
 } // namespace geos
 
-#include <geos/operation/linemerge/EdgeString.h>
-#include <geos/operation/linemerge/LineMergeDirectedEdge.h>
-#include <geos/operation/linemerge/LineMergeEdge.h>
-#include <geos/operation/linemerge/LineMergeGraph.h>
+//#include <geos/operation/linemerge/EdgeString.h>
+//#include <geos/operation/linemerge/LineMergeDirectedEdge.h>
+//#include <geos/operation/linemerge/LineMergeEdge.h>
+//#include <geos/operation/linemerge/LineMergeGraph.h>
 #include <geos/operation/linemerge/LineMerger.h>
-#include <geos/operation/linemerge/LineSequencer.h>
+//#include <geos/operation/linemerge/LineSequencer.h>
 
 #endif
 

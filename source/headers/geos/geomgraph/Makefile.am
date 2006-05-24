@@ -4,6 +4,13 @@ geosdir = $(includedir)/geos/geomgraph
 
 EXTRA_DIST = 
 
+# Notes:
+#
+# EdgeList.h is needed by OverlayOp.h for composition
+# PlanarGraph.h is needed by OverlayOp.h for inlines
+# NodeMap.h needed by RelateComputer.h needed by RelateOp.h
+#
+
 geos_HEADERS = \
 	Depth.h	\
 	DirectedEdge.h	\

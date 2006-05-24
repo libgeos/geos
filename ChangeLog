@@ -7,6 +7,19 @@
 
 2006-05-24 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/opLinemerge.h,
+	source/headers/geos/algorithm/Makefile.am,
+	source/headers/geos/geom/Makefile.am,
+	source/headers/geos/geomgraph/Makefile.am,
+	source/headers/geos/operation/Makefile.am,
+	source/headers/geos/operation/distance/Makefile.am,
+	source/headers/geos/operation/linemerge/Makefile.am,
+	source/headers/geos/operation/overlay/Makefile.am,
+	source/headers/geos/operation/overlay/OverlayOp.h,
+	source/headers/geos/operation/polygonize/Makefile.am,
+	source/headers/geos/operation/relate/Makefile.am,
+	source/headers/geos/planargraph/Makefile.am:
+	reduced number of installed headers.
 	* source/headers/geos/simplify/TaggedLinesSimplifier.h,
 	source/simplify/TaggedLinesSimplifier.cpp,
 	source/simplify/TopologyPreservingSimplifier.cpp:

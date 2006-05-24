@@ -16,12 +16,12 @@
 #ifndef GEOS_OP_OVERLAY_OVERLAYOP_H
 #define GEOS_OP_OVERLAY_OVERLAYOP_H
 
-#include <vector>
-
 #include <geos/operation/GeometryGraphOperation.h> // for inheritance
 #include <geos/geomgraph/EdgeList.h> // for composition
 #include <geos/algorithm/PointLocator.h> // for composition
 #include <geos/geomgraph/PlanarGraph.h> // for inline (GeometryGraph->PlanarGraph)
+
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -343,6 +343,9 @@ struct overlayOp {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/24 15:17:44  strk
+ * Reduced number of installed headers in geos/operation/ subdir
+ *
  * Revision 1.3  2006/04/14 15:04:36  strk
  * fixed missing namespace qualification in overlay::overlayOp
  *
