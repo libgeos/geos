@@ -7,6 +7,10 @@
 
 2006-05-24 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/simplify/TaggedLinesSimplifier.h:
+	added LineSegmentIndex.h include so that every
+	use of the templated simplify() function get all the
+	required definitions.
 	* source/headers/geos/opLinemerge.h,
 	source/headers/geos/algorithm/Makefile.am,
 	source/headers/geos/geom/Makefile.am,

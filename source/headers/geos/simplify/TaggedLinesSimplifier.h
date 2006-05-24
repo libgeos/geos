@@ -31,10 +31,12 @@
 #include <memory>
 #include <cassert>
 
+#include <geos/simplify/LineSegmentIndex.h> // for templated function body
+
 // Forward declarations
 namespace geos {
 	namespace simplify {
-		class LineSegmentIndex;
+		//class LineSegmentIndex;
 		class TaggedLineString;
 		class TaggedLineStringSimplifier;
 	}
@@ -115,6 +117,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/05/24 15:32:11  strk
+ * * source/headers/geos/simplify/TaggedLinesSimplifier.h: added LineSegmentIndex.h include so that every use of the templated simplify() function get all the required definitions.
+ *
  * Revision 1.3  2006/05/24 11:41:23  strk
  *         * source/headers/geos/simplify/TaggedLinesSimplifier.h,
  *         source/simplify/TaggedLinesSimplifier.cpp,
