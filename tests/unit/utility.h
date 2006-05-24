@@ -101,10 +101,11 @@ inline bool isSameStructure(geos::geom::GeometryCollection* lhs,
     if (lhs->getNumGeometries() != rhs->getNumGeometries())
         return false;
 
-    for (int i = 0; i < lhs->getNumGeometries(); i++)
+    for (unsigned int i = 0, n = lhs->getNumGeometries(); i < n; ++i)
     {
         // Dirty, but necessary!
         // isSameStructure promises to not to try to change geometries
+	// @@ why doesn't you take const pointers ?
         Geometry* g1 = const_cast<Geometry*>(lhs->getGeometryN(i));
         Geometry* g2 = const_cast<Geometry*>(rhs->getGeometryN(i));
         if (!isSameStructure(g1, g2))
@@ -112,6 +113,8 @@ inline bool isSameStructure(geos::geom::GeometryCollection* lhs,
             return false;
         }
     }
+
+    return true;
 }
 
 } // namespace unit

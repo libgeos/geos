@@ -1,3 +1,9 @@
+2006-05-24 Sandro Santilli <strk@refractions.net>
+
+	* tests/unit/utility.h: fixed missing return from
+	isSameStructure's specialization on GeometryCollection,
+	also fixed a signed/unsigned mismatch warning there.
+
 2006-05-24 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/simplify/TopologyPreservingSimplifierTest.cpp:
