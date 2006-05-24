@@ -120,6 +120,7 @@ DoubleBits::getExponent() const
 #if ASSUME_IEEE_DOUBLE
 	return biasedExponent()-EXPONENT_BIAS;
 #else
+	if ( x <= 0 ) return 0; // EDOM || ERANGE
 	return (int)((log(x)/log(2.0))+(x<1?-0.9:0.00000000001));
 #endif
 }
@@ -177,6 +178,9 @@ DoubleBits::toString() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/05/24 16:29:11  strk
+ * * source/index/quadtree/DoubleBits.cpp: handled negative or zero values in getExponent().
+ *
  * Revision 1.24  2006/05/23 14:29:33  strk
  * * source/headers/geos/index/quadtree/DoubleBits.h, source/index/quadtree/DoubleBits.cpp: const correctness and documentation.
  *
