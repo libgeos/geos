@@ -35,5 +35,6 @@ geos_unit_SOURCES = geos_unit.cpp \
 	io/ByteOrderValuesTest.cpp \
 	noding/SegmentStringTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
+	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp
 
