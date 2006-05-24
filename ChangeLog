@@ -7,6 +7,10 @@
 
 2006-05-24 Sandro Santilli <strk@refractions.net>
 
+	* source/util/Makefile.am, source/util/CoordinateArrayFiter.cpp,
+	source/util/GEOSException.cpp,
+	source/util/UniqueCoordinateArrayFilter.cpp:
+	removed empty implementation files.
 	* source/headers/geos/simplify/TaggedLinesSimplifier.h:
 	added LineSegmentIndex.h include so that every
 	use of the templated simplify() function get all the

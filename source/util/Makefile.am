@@ -8,12 +8,11 @@ INCLUDES = -I$(top_srcdir)/source/headers
 # UnsupportedOperationException.cpp 
 # IllegalArgumentException.cpp 
 # AssertionFailedException.cpp 
+# GEOSException.cpp 
+# UniqueCoordinateArrayFilter.cpp 
 
 libutil_la_SOURCES = \
 	Assert.cpp \
-	CoordinateArrayFiter.cpp \
-	GEOSException.cpp \
-	UniqueCoordinateArrayFilter.cpp \
 	GeometricShapeFactory.cpp \
 	math.cpp \
 	Profiler.cpp 
