@@ -42,6 +42,7 @@ Changes in 3.0.0
 	- New SnapRounding code
 	- New size() and operator[] interfaces to CoordinateSequence
 	- New ScaledNoder class
+	- New unit tests (make check rule)
 
 - Optimizations:
 	- WKT parser speedup
