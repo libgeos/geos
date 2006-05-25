@@ -33,12 +33,14 @@
 #define TUT_H_GUARD
 
 #include <iostream>
+#include <iomanip>
 #include <map>
 #include <vector>
 #include <string>
 #include <sstream>
 #include <stdexcept>
 #include <typeinfo>
+#include <cmath>
 
 #if defined(TUT_USE_SEH)
 #include <windows.h>
@@ -543,6 +545,28 @@ namespace tut
 			ss << (msg?msg:"") << (msg?": ":"")
 				<< "expected " << expected
 				<< " actual " << actual;
+			throw failure(ss.str().c_str());
+		}
+	}
+
+    // ensure_equals specialization for double
+    template <>
+	void ensure_equals<double, double>(const char* msg, const double& actual,const double& expected)
+	{
+        // XXX - mloskot to strk - is this well defined comparison?
+
+        const double precision = 0.001;
+
+        if ( std::fabs(actual - expected) > precision )
+		{
+			std::stringstream ss;
+			ss << (msg?msg:"") << (msg?": ":"")
+                << std::scientific
+                << std::showpoint
+                << std::setprecision(16)
+				<< "expected " << expected
+				<< " actual " << actual
+                << " with precision " << precision;
 			throw failure(ss.str().c_str());
 		}
 	}
