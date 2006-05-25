@@ -109,7 +109,8 @@ namespace tut
 		
 		// Expected: ~4.2426406871192857
 		abc.inCentre(center);
-		ensure_equals( center.x, 6.0 );
+		// 1e-16 fails sometimes
+		ensure( fabs(center.x - 6.0) < 1e-15 );
 		ensure( center.y > 4.2 );
 		ensure( center.y < 4.3 );
 		ensure_equals( center.z, DoubleNotANumber );

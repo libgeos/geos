@@ -1,3 +1,8 @@
+2006-05-25 Sandro Santilli <strk@refractions.net>
+
+	* tests/unit/geom/TriangleTest.cpp: take floating-point
+	rounding error into account.
+
 2006-05-24 Sandro Santilli <strk@refractions.net>
 
 	* source/index/quadtree/DoubleBits.cpp: handled negative
