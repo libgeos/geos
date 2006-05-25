@@ -40,6 +40,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <typeinfo>
+#include <limits>
 #include <cmath>
 
 #if defined(TUT_USE_SEH)
@@ -553,11 +554,10 @@ namespace tut
     template <>
 	void ensure_equals<double, double>(const char* msg, const double& actual,const double& expected)
 	{
-        // XXX - mloskot to strk - is this well defined comparison?
+        const double epsilon = std::numeric_limits<double>::epsilon(); 
+        const double diff = actual - expected;
 
-        const double precision = 0.001;
-
-        if ( std::fabs(actual - expected) > precision )
+        if ( !((diff <= epsilon) && (diff >= -epsilon )) )
 		{
 			std::stringstream ss;
 			ss << (msg?msg:"") << (msg?": ":"")
@@ -566,7 +566,7 @@ namespace tut
                 << std::setprecision(16)
 				<< "expected " << expected
 				<< " actual " << actual
-                << " with precision " << precision;
+                << " with precision " << epsilon;
 			throw failure(ss.str().c_str());
 		}
 	}
