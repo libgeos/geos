@@ -31,7 +31,7 @@ namespace strtree { // geos.index.strtree
 #include <geos/index/strtree/AbstractSTRtree.h>
 #include <geos/index/strtree/Boundable.h>
 #include <geos/index/strtree/Interval.h>
-#include <geos/index/strtree/ItemBoundable.h>
+//#include <geos/index/strtree/ItemBoundable.h>
 #include <geos/index/strtree/SIRtree.h>
 #include <geos/index/strtree/STRtree.h>
 
@@ -39,6 +39,9 @@ namespace strtree { // geos.index.strtree
 
 /**********************************************************************
  * $Log$
+ * Revision 1.17  2006/06/01 10:28:46  strk
+ * Reduced number of installed headers for the geos::index namespace
+ *
  * Revision 1.16  2006/03/21 10:47:34  strk
  * indexStrtree.h split
  *

@@ -27,10 +27,10 @@ namespace quadtree { // geos.index.quadtree
 } // namespace geos.index
 } // namespace geos
 
-#include <geos/index/quadtree/DoubleBits.h>
-#include <geos/index/quadtree/IntervalSize.h>
-#include <geos/index/quadtree/Key.h>
-#include <geos/index/quadtree/Node.h>
+//#include <geos/index/quadtree/DoubleBits.h>
+//#include <geos/index/quadtree/IntervalSize.h>
+//#include <geos/index/quadtree/Key.h>
+//#include <geos/index/quadtree/Node.h>
 #include <geos/index/quadtree/NodeBase.h>
 #include <geos/index/quadtree/Quadtree.h>
 #include <geos/index/quadtree/Root.h>

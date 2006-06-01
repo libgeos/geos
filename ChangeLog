@@ -1,3 +1,19 @@
+2006-06-01 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/indexBintree.h,
+	source/headers/geos/indexChain.h,
+	source/headers/geos/indexQuadtree.h,
+	source/headers/geos/indexStrtree.h,
+	source/headers/geos/indexSweepline.h,
+	source/headers/geos/index/bintree/Makefile.am,
+	source/headers/geos/index/chain/Makefile.am,
+	source/headers/geos/index/quadtree/Makefile.am,
+	source/headers/geos/index/strtree/Makefile.am,
+	source/headers/geos/index/sweepline/Makefile.am,
+	source/headers/geos/operation/valid/SweeplineNestedRingTester.h,
+	source/operation/valid/Makefile.am:
+	Reduced number of installed headers.
+
 2006-05-25 Sandro Santilli <strk@refractions.net>
 
 	* tests/unit/geom/TriangleTest.cpp: take floating-point

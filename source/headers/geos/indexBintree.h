@@ -29,9 +29,9 @@ namespace bintree { // geos.index.bintree
 
 #include <geos/index/bintree/Bintree.h>
 #include <geos/index/bintree/Interval.h>
-#include <geos/index/bintree/Key.h>
-#include <geos/index/bintree/Node.h>
-#include <geos/index/bintree/NodeBase.h>
-#include <geos/index/bintree/Root.h>
+//#include <geos/index/bintree/Key.h>
+//#include <geos/index/bintree/Node.h>
+//#include <geos/index/bintree/NodeBase.h>
+//#include <geos/index/bintree/Root.h>
 
 #endif

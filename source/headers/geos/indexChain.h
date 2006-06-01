@@ -27,7 +27,7 @@ namespace chain { // geos.index.chain
 } // namespace geos
 
 #include <geos/index/chain/MonotoneChain.h>
-#include <geos/index/chain/MonotoneChainBuilder.h>
+//#include <geos/index/chain/MonotoneChainBuilder.h>
 #include <geos/index/chain/MonotoneChainOverlapAction.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h>
 

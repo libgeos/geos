@@ -30,15 +30,18 @@ namespace sweepline { // geos.index.sweepline
 } // namespace geos.index
 } // namespace geos
 
-#include <geos/index/sweepline/SweepLineEvent.h>
+//#include <geos/index/sweepline/SweepLineEvent.h>
 #include <geos/index/sweepline/SweepLineIndex.h>
-#include <geos/index/sweepline/SweepLineInterval.h>
-#include <geos/index/sweepline/SweepLineOverlapAction.h>
+//#include <geos/index/sweepline/SweepLineInterval.h>
+//#include <geos/index/sweepline/SweepLineOverlapAction.h>
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/06/01 10:28:46  strk
+ * Reduced number of installed headers for the geos::index namespace
+ *
  * Revision 1.6  2006/03/21 10:01:30  strk
  * indexSweepline.h header split
  *

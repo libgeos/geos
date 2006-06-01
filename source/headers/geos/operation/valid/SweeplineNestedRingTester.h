@@ -20,7 +20,9 @@
 #include <vector>
 
 #include <geos/geom/Envelope.h> // for inline
-#include <geos/indexSweepline.h> // for inline and inheritance 
+//#include <geos/indexSweepline.h> // for inline and inheritance 
+#include <geos/index/sweepline/SweepLineOverlapAction.h> // for inheritance
+#include <geos/index/sweepline/SweepLineIndex.h> // for inlines
 
 // Forward declarations
 namespace geos {
@@ -109,6 +111,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/01 10:28:47  strk
+ * Reduced number of installed headers for the geos::index namespace
+ *
  * Revision 1.1  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

@@ -4,12 +4,17 @@ geosdir = $(includedir)/geos/index/bintree
 
 EXTRA_DIST = 
 
-geos_HEADERS = \
-	Bintree.h	\
-	Interval.h	\
-	Key.h	\
-	Node.h	\
-	NodeBase.h	\
-	Root.h
 
-nodist_geos_HEADERS = 
+# NOTES:
+#
+# Interval.h is needed by algorithm/MCPointInRing.h for composition
+
+geos_HEADERS =		\
+	Bintree.h	\
+	Interval.h
+
+nodist_geos_HEADERS =	\
+	Key.h		\
+	NodeBase.h	\
+	Node.h		\
+	Root.h
