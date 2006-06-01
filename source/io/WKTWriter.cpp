@@ -185,7 +185,8 @@ void WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level, Wr
 
 void
 WKTWriter::appendPointTaggedText(const Coordinate* coordinate, int level,
-		Writer *writer, const PrecisionModel* precisionModel) {
+		Writer *writer, const PrecisionModel* precisionModel)
+{
 	writer->write("POINT ");
 	appendPointText(coordinate, level, writer, precisionModel);
 }
@@ -401,6 +402,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/06/01 11:49:36  strk
+ * Reduced installed headers form geomgraph namespace
+ *
  * Revision 1.32  2006/04/28 11:12:31  strk
  * removed warnings related to change in getNumPoints() return type.
  *

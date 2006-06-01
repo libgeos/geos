@@ -4,18 +4,24 @@ geosdir = $(includedir)/geos/io
 
 EXTRA_DIST = 
 
-geos_HEADERS = \
-	ByteOrderDataInStream.h	\
-	ByteOrderDataInStream.inl	\
-	ByteOrderValues.h	\
-	ParseException.h	\
-	StringTokenizer.h	\
-	WKBConstants.h	\
-	WKBReader.h	\
-	WKBWriter.h	\
-	WKTReader.h	\
-	WKTReader.inl	\
-	WKTWriter.h	\
-	Writer.h
+# NOTES:
+# ByteOrderDataInStream.{h,inl} needed by WKBReader.h for composition
+# ByteOrderValues.h needed by ByteOrderDataInStream.inl for inlines
+# ParseException.h needed by ByteOrderDataInStream.inl for inlines
+# WKBConstants.h is worth exposing
 
-nodist_geos_HEADERS = 
+geos_HEADERS = \
+	ByteOrderDataInStream.h		\
+	ByteOrderDataInStream.inl	\
+	ByteOrderValues.h		\
+	ParseException.h		\
+	WKBConstants.h			\
+	WKBReader.h			\
+	WKBWriter.h			\
+	WKTReader.h			\
+	WKTReader.inl			\
+	WKTWriter.h			
+
+nodist_geos_HEADERS = 		\
+	StringTokenizer.h	\
+	Writer.h

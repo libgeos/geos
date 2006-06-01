@@ -18,7 +18,8 @@
 #define GEOS_IO_WKBREADER_H
 
 #include <geos/geom/GeometryFactory.h>
-#include <geos/io/ByteOrderDataInStream.h>
+#include <geos/io/ByteOrderDataInStream.h> // for composition
+
 #include <iosfwd> // ostream, istream
 #include <vector>
 
@@ -156,6 +157,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/01 11:49:36  strk
+ * Reduced installed headers form geomgraph namespace
+ *
  * Revision 1.2  2006/04/12 10:57:19  strk
  * Added WKBReader default ctor using default GeometryFactory instance
  *

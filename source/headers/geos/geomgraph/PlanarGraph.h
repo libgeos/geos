@@ -28,7 +28,7 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geomgraph/PlanarGraph.h>
-#include <geos/geomgraph/NodeMap.h>
+#include <geos/geomgraph/NodeMap.h> // for typedefs
 
 #include <geos/inline.h>
 
@@ -194,6 +194,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/06/01 11:49:36  strk
+ * Reduced installed headers form geomgraph namespace
+ *
  * Revision 1.4  2006/04/07 16:52:20  strk
  * Port info, doxygen comments, assertion checking
  *

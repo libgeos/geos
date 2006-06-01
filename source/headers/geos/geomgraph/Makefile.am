@@ -4,36 +4,59 @@ geosdir = $(includedir)/geos/geomgraph
 
 EXTRA_DIST = 
 
-# Notes:
+# NOTES:
 #
 # EdgeList.h is needed by OverlayOp.h for composition
+#
 # PlanarGraph.h is needed by OverlayOp.h for inlines
+#
+# Depth.h needed by Edge.h
+#
+# EdgeRing.h needed by operation/overlay/{Minimal,Maximal}EdgeRing.h
+#	for inheritance, but they are NOT installed
+#
+# Node.h needed by NodeMap.h for invariant testing
+#
 # NodeMap.h needed by RelateComputer.h needed by RelateOp.h
+#	also needed by PlanarGraph.h for typedefs
+#
+# NodeFactory.h needed by operation/overlay/OverlayNodeFactory.h
+#      and operation/relate/RelateNodeFactory.h for inheritance.
+#      Both NOT installed
+#
+# GraphComponent.h needed by Node.h and Edge.h for inheritance
+#
+# EdgeEnd.h needed by Node.h for invariant tester
+#
+# EdgeEndStar.h needed by Node.h for invariant tester
+#
+# Depth.h needed by Edge.h for composition, which is NOT installed
+#
 #
 
-geos_HEADERS = \
-	Depth.h	\
-	DirectedEdge.h	\
-	DirectedEdge.inl	\
-	DirectedEdgeStar.h	\
-	Edge.h	\
-	EdgeEnd.h	\
-	EdgeEndStar.h	\
-	EdgeIntersection.h	\
-	EdgeIntersectionList.h	\
-	EdgeList.h	\
-	EdgeNodingValidator.h	\
-	EdgeRing.h	\
-	GeometryGraph.h	\
+geos_HEADERS = 			\
+	EdgeEnd.h		\
+	EdgeEndStar.h		\
+	EdgeList.h		\
+	GeometryGraph.h		\
 	GeometryGraph.inl	\
 	GraphComponent.h	\
-	Label.h	\
-	Node.h	\
-	NodeFactory.h	\
-	NodeMap.h	\
-	PlanarGraph.h	\
-	Position.h	\
-	Quadrant.h	\
-	TopologyLocation.h
+	Node.h			\
+	NodeMap.h		\
+	PlanarGraph.h
 
-nodist_geos_HEADERS = 
+nodist_geos_HEADERS = 		\
+	Depth.h			\
+	DirectedEdge.h		\
+	DirectedEdge.inl	\
+	DirectedEdgeStar.h	\
+	Edge.h			\
+	EdgeIntersection.h	\
+	EdgeIntersectionList.h	\
+	EdgeNodingValidator.h	\
+	EdgeRing.h		\
+	Label.h			\
+	NodeFactory.h		\
+	Position.h		\
+	Quadrant.h		\
+	TopologyLocation.h

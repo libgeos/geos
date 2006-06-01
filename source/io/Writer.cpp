@@ -22,17 +22,24 @@ using namespace std;
 namespace geos {
 namespace io { // geos.io
 
-Writer::Writer(){
+Writer::Writer()
+{
 	str="";
 }
 
-Writer::~Writer(){}
+Writer::~Writer()
+{
+}
 
-void Writer::write(string txt){
+void
+Writer::write(string txt)
+{
 	str+=txt;
 }
 
-string Writer::toString() {
+string
+Writer::toString()
+{
 	return str;
 }
 
@@ -41,6 +48,9 @@ string Writer::toString() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/06/01 11:49:36  strk
+ * Reduced installed headers form geomgraph namespace
+ *
  * Revision 1.11  2006/03/20 18:18:15  strk
  * io.h header split
  *

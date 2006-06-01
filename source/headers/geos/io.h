@@ -49,18 +49,21 @@ namespace io { // geos.io
 #include <geos/io/ByteOrderDataInStream.h>
 #include <geos/io/ByteOrderValues.h>
 #include <geos/io/ParseException.h>
-#include <geos/io/StringTokenizer.h>
+//#include <geos/io/StringTokenizer.h>
 #include <geos/io/WKBConstants.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
-#include <geos/io/Writer.h>
+//#include <geos/io/Writer.h>
 
 #endif
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/06/01 11:49:36  strk
+ * Reduced installed headers form geomgraph namespace
+ *
  * Revision 1.27  2006/03/20 18:18:14  strk
  * io.h header split
  *

@@ -27,13 +27,13 @@ namespace valid { // geos.operation.valid
 } // namespace geos.operation
 } // namespace geos
 
-#include <geos/operation/valid/ConnectedInteriorTester.h>
-#include <geos/operation/valid/ConsistentAreaTester.h>
+//#include <geos/operation/valid/ConnectedInteriorTester.h>
+//#include <geos/operation/valid/ConsistentAreaTester.h>
 #include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/valid/QuadtreeNestedRingTester.h>
-#include <geos/operation/valid/RepeatedPointTester.h>
-#include <geos/operation/valid/SimpleNestedRingTester.h>
-#include <geos/operation/valid/SweeplineNestedRingTester.h>
+//#include <geos/operation/valid/QuadtreeNestedRingTester.h>
+//#include <geos/operation/valid/RepeatedPointTester.h>
+//#include <geos/operation/valid/SimpleNestedRingTester.h>
+//#include <geos/operation/valid/SweeplineNestedRingTester.h>
 #include <geos/operation/valid/TopologyValidationError.h>
 
 #endif

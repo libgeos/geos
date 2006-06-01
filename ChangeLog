@@ -1,16 +1,32 @@
 2006-06-01 Sandro Santilli <strk@refractions.net>
 
-	* source/headers/geos/indexBintree.h,
-	source/headers/geos/indexChain.h,
-	source/headers/geos/indexQuadtree.h,
-	source/headers/geos/indexStrtree.h,
-	source/headers/geos/indexSweepline.h,
+	* source/headers/geos/geomgraph.h,
+	source/headers/geos/geomgraph/Makefile.am,
+	source/headers/geos/geomgraph/Node.h,
+	source/headers/geos/geomgraph/PlanarGraph.h,
 	source/headers/geos/index/bintree/Makefile.am,
 	source/headers/geos/index/chain/Makefile.am,
 	source/headers/geos/index/quadtree/Makefile.am,
 	source/headers/geos/index/strtree/Makefile.am,
 	source/headers/geos/index/sweepline/Makefile.am,
+	source/headers/geos/indexBintree.h,
+	source/headers/geos/indexChain.h,
+	source/headers/geos/indexQuadtree.h,
+	source/headers/geos/indexStrtree.h,
+	source/headers/geos/indexSweepline.h,
+	source/headers/geos/io.h,
+	source/headers/geos/io/Makefile.am,
+	source/headers/geos/io/WKBReader.h,
+	source/headers/geos/opValid.h,
+	source/headers/geos/operation/buffer/Makefile.am,
+	source/headers/geos/operation/distance/Makefile.am,
+	source/headers/geos/operation/predicate/Makefile.am,
+	source/headers/geos/operation/valid/Makefile.am,
 	source/headers/geos/operation/valid/SweeplineNestedRingTester.h,
+	source/headers/geos/precision.h,
+	source/headers/geos/precision/Makefile.am,
+	source/io/WKTWriter.cpp,
+	source/io/Writer.cpp
 	source/operation/valid/Makefile.am:
 	Reduced number of installed headers.
 

@@ -4,6 +4,8 @@ geosdir = $(includedir)/geos/operation/distance
 
 EXTRA_DIST = 
 
+# NOTES:
+
 geos_HEADERS = \
 	DistanceOp.h	
 

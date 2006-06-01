@@ -54,32 +54,35 @@ namespace geomgraph { // geos.geomgraph
 } // namespace geos.geomgraph
 } // namespace geos
 
-#include <geos/geomgraph/Depth.h>
-#include <geos/geomgraph/DirectedEdge.h>
-#include <geos/geomgraph/DirectedEdgeStar.h>
-#include <geos/geomgraph/Edge.h>
+//#include <geos/geomgraph/Depth.h>
+//#include <geos/geomgraph/DirectedEdge.h>
+//#include <geos/geomgraph/DirectedEdgeStar.h>
+//#include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/geomgraph/EdgeEndStar.h>
-#include <geos/geomgraph/EdgeIntersection.h>
-#include <geos/geomgraph/EdgeIntersectionList.h>
+//#include <geos/geomgraph/EdgeIntersection.h>
+//#include <geos/geomgraph/EdgeIntersectionList.h>
 #include <geos/geomgraph/EdgeList.h>
-#include <geos/geomgraph/EdgeNodingValidator.h>
-#include <geos/geomgraph/EdgeRing.h>
+//#include <geos/geomgraph/EdgeNodingValidator.h>
+//#include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/GraphComponent.h>
-#include <geos/geomgraph/Label.h>
+//#include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Node.h>
-#include <geos/geomgraph/NodeFactory.h>
+//#include <geos/geomgraph/NodeFactory.h>
 #include <geos/geomgraph/NodeMap.h>
 #include <geos/geomgraph/PlanarGraph.h>
-#include <geos/geomgraph/Position.h>
-#include <geos/geomgraph/Quadrant.h>
-#include <geos/geomgraph/TopologyLocation.h>
+//#include <geos/geomgraph/Position.h>
+//#include <geos/geomgraph/Quadrant.h>
+//#include <geos/geomgraph/TopologyLocation.h>
 
 #endif // ifndef GEOS_GEOMGRAPH_H
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2006/06/01 11:49:35  strk
+ * Reduced installed headers form geomgraph namespace
+ *
  * Revision 1.41  2006/03/09 16:46:48  strk
  * geos::geom namespace definition, first pass at headers split
  *

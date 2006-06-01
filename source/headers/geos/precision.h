@@ -25,9 +25,9 @@ namespace precision { // geos.precision
 } // namespace geos.precision
 } // namespace geos
 
-#include <geos/precision/CommonBits.h>
+//#include <geos/precision/CommonBits.h>
 #include <geos/precision/CommonBitsOp.h>
-#include <geos/precision/CommonBitsRemover.h>
+//#include <geos/precision/CommonBitsRemover.h>
 #include <geos/precision/EnhancedPrecisionOp.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
 

@@ -26,8 +26,8 @@
 #include <geos/geom/Coordinate.h> // for member
 
 #ifndef NDEBUG
-#include <geos/geomgraph/EdgeEndStar.h>
-#include <geos/geomgraph/EdgeEnd.h>
+#include <geos/geomgraph/EdgeEndStar.h> // for testInvariant
+#include <geos/geomgraph/EdgeEnd.h> // for testInvariant
 #endif // ndef NDEBUG
 
 #include <geos/inline.h>
@@ -191,6 +191,9 @@ Node::testInvariant() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/06/01 11:49:36  strk
+ * Reduced installed headers form geomgraph namespace
+ *
  * Revision 1.5  2006/04/27 15:15:06  strk
  * Z check removed from invariant tester to avoid aborts due to differences in FP computations.
  *
