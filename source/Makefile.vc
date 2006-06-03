@@ -16,6 +16,9 @@
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 #
 # $Log$
+# Revision 1.15  2006/06/03 22:31:22  hobu
+# update to track latest removals
+#
 # Revision 1.14  2006/05/03 16:22:40  hobu
 # tweak clean target
 #
@@ -293,13 +296,10 @@ OBJ = 	algorithm\CentroidArea.obj \
 	simplify\TopologyPreservingSimplifier.obj \
 	util\Assert.obj \
 	util\AssertionFailedException.obj \
-	util\CoordinateArrayFiter.obj \
 	util\GeometricShapeFactory.obj \
-	util\GEOSException.obj \
 	util\IllegalArgumentException.obj \
 	util\math.obj \
 	util\Profiler.obj \
-	util\UniqueCoordinateArrayFilter.obj \
 	util\UnsupportedOperationException.obj \
 	..\capi\geos_c.obj \
 	inlines.obj
