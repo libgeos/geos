@@ -85,7 +85,7 @@ DouglasPeuckerLineSimplifier::simplifySection(
 {
 	if ( (i+1) == j ) return;
 
-	geom::LineSegment seg(pts[i], pts[j]);
+	geos::geom::LineSegment seg(pts[i], pts[j]);
 	double maxDistance = -1.0;
 
 	unsigned int maxIndex = i;
@@ -115,6 +115,9 @@ DouglasPeuckerLineSimplifier::simplifySection(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/03 22:29:39  hobu
+ * Use a fully qualified namespace for LineSegment because we're inside of geos::simplify at the time
+ *
  * Revision 1.1  2006/04/03 10:16:11  strk
  * DouglasPeuckerLineSimplifier class port
  *
