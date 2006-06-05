@@ -1,17 +1,16 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/operation/overlay
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # Notes:
 # 
-#
+
+geosdir = $(includedir)/geos/operation/overlay
 
 geos_HEADERS = \
 	OverlayOp.h
 
-nodist_geos_HEADERS =  \
+noinst_HEADERS =  \
 	EdgeSetNoder.h		\
 	ElevationMatrix.h	\
 	ElevationMatrixCell.h	\

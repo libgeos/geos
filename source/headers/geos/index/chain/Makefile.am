@@ -1,7 +1,5 @@
 SUBDIRS = 
 
-geosdir = $(includedir)/geos/index/chain
-
 EXTRA_DIST = 
 
 # NOTES:
@@ -12,10 +10,12 @@ EXTRA_DIST =
 #		for inheritance
 #
 
+geosdir = $(includedir)/geos/index/chain
+
 geos_HEADERS = \
 	MonotoneChain.h	\
 	MonotoneChainOverlapAction.h	\
 	MonotoneChainSelectAction.h
 
-nodist_geos_HEADERS = \
+noinst_HEADERS = \
 	MonotoneChainBuilder.h

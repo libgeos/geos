@@ -21,35 +21,38 @@ namespace geos {
 namespace operation { 
 
 /** \brief
- * Contains classes that perform a topological overlay to compute boolean spatial functions.
+ * Contains classes that perform a topological overlay to compute boolean
+ * spatial functions.
  * 
- * The Overlay Algorithm is used in spatial analysis methods for computing set-theoretic
- * operations (boolean combinations) of input {@link Geometry}s. The algorithm for
- * computing the overlay uses the intersection operations supported by topology graphs.
- * To compute an overlay it is necessary to explicitly compute the resultant graph formed
- * by the computed intersections.
+ * The Overlay Algorithm is used in spatial analysis methods for computing
+ * set-theoretic operations (boolean combinations) of input {@link Geometry}s.
+ * The algorithm for computing the overlay uses the intersection operations
+ * supported by topology graphs.
+ * To compute an overlay it is necessary to explicitly compute the resultant
+ * graph formed by the computed intersections.
  * 
- * The algorithm to compute a set-theoretic spatial analysis method has the following steps:
- * <UL>
- *   <LI>Build topology graphs of the two input geometries.  For each geometry all
- *       self-intersection nodes are computed and added to the graph.
- *   <LI>Compute nodes for all intersections between edges and nodes of the graphs.
- *   <LI>Compute the labeling for the computed nodes by merging the labels from the input graphs.
- *   <LI>Compute new edges between the compute intersection nodes.  Label the edges appropriately.
- *   <LI>Build the resultant graph from the new nodes and edges.
- *   <LI>Compute the labeling for isolated components of the graph.  Add the
- *       isolated components to the resultant graph.
- *   <LI>Compute the result of the boolean combination by selecting the node and edges
- *       with the appropriate labels. Polygonize areas and sew linear geometries together.
- * </UL>
+ * The algorithm to compute a set-theoretic spatial analysis method has the
+ * following steps:
+ * 
+ *  - Build topology graphs of the two input geometries.  For each geometry all
+ *    self-intersection nodes are computed and added to the graph.
+ *  - Compute nodes for all intersections between edges and nodes of the graphs.
+ *  - Compute the labeling for the computed nodes by merging the labels from
+ *    the input graphs.
+ *  - Compute new edges between the compute intersection nodes. 
+ *    Label the edges appropriately.
+ *  - Build the resultant graph from the new nodes and edges.
+ *  - Compute the labeling for isolated components of the graph.  Add the
+ *    isolated components to the resultant graph.
+ *  - Compute the result of the boolean combination by selecting the node
+ *    and edges with the appropriate labels. Polygonize areas and sew linear
+ *    geometries together.
  * 
  * <h2>Package Specification</h2>
  * 
- * <ul>
- *   <li>Java Topology Suite Technical Specifications
- *   <li><A HREF="http://www.opengis.org/techno/specs.htm">
- *       OpenGIS Simple Features Specification for SQL</A>
- * </ul>
+ * - Java Topology Suite Technical Specifications
+ * - <A HREF="http://www.opengis.org/techno/specs.htm">
+ *   OpenGIS Simple Features Specification for SQL</A>
  * 
  */
 namespace overlay { // geos.operation.overlay
@@ -59,14 +62,14 @@ namespace overlay { // geos.operation.overlay
 } // namespace geos
 
 #include <geos/operation/overlay/OverlayOp.h>
-#include <geos/operation/overlay/PolygonBuilder.h>
-#include <geos/operation/overlay/PointBuilder.h>
-#include <geos/operation/overlay/LineBuilder.h>
-#include <geos/operation/overlay/MinimalEdgeRing.h>
-#include <geos/operation/overlay/MaximalEdgeRing.h>
-#include <geos/operation/overlay/OverlayNodeFactory.h>
-#include <geos/operation/overlay/EdgeSetNoder.h>
-#include <geos/operation/overlay/ElevationMatrix.h>
+//#include <geos/operation/overlay/PolygonBuilder.h>
+//#include <geos/operation/overlay/PointBuilder.h>
+//#include <geos/operation/overlay/LineBuilder.h>
+//#include <geos/operation/overlay/MinimalEdgeRing.h>
+//#include <geos/operation/overlay/MaximalEdgeRing.h>
+//#include <geos/operation/overlay/OverlayNodeFactory.h>
+//#include <geos/operation/overlay/EdgeSetNoder.h>
+//#include <geos/operation/overlay/ElevationMatrix.h>
 
 #endif
 

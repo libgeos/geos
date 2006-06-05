@@ -71,13 +71,13 @@ namespace relate { // geos.operation.relate
 } // namespace geos
 
 
-#include <geos/operation/relate/EdgeEndBuilder.h>
-#include <geos/operation/relate/EdgeEndBundle.h>
-#include <geos/operation/relate/EdgeEndBundleStar.h>
+//#include <geos/operation/relate/EdgeEndBuilder.h>
+//#include <geos/operation/relate/EdgeEndBundle.h>
+//#include <geos/operation/relate/EdgeEndBundleStar.h>
 #include <geos/operation/relate/RelateComputer.h>
-#include <geos/operation/relate/RelateNode.h>
-#include <geos/operation/relate/RelateNodeFactory.h>
-#include <geos/operation/relate/RelateNodeGraph.h>
+//#include <geos/operation/relate/RelateNode.h>
+//#include <geos/operation/relate/RelateNodeFactory.h>
+//#include <geos/operation/relate/RelateNodeGraph.h>
 #include <geos/operation/relate/RelateOp.h>
 
 #endif

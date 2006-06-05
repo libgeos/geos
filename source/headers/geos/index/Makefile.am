@@ -5,12 +5,12 @@ SUBDIRS = \
 	bintree \
 	chain
 
-geosdir = $(includedir)/geos/index
-
 EXTRA_DIST = 
+
+geosdir = $(includedir)/geos/index
 
 geos_HEADERS = \
 	ItemVisitor.h \
 	SpatialIndex.h 
 
-nodist_geos_HEADERS = 
+noinst_HEADERS = 

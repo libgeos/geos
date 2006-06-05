@@ -1,16 +1,16 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/operation/linemerge
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # Notes: LineMergeGraph is required by LineMerger.h for composition
+
+geosdir = $(includedir)/geos/operation/linemerge
 
 geos_HEADERS = \
 	LineMerger.h	\
 	LineMergeGraph.h
 
-nodist_geos_HEADERS = 
+noinst_HEADERS = 
 	EdgeString.h	\
 	LineMergeDirectedEdge.h	\
 	LineMergeEdge.h	\

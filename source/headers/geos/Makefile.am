@@ -11,43 +11,45 @@ SUBDIRS = \
 	simplify \
 	util 
 
-geosdir = $(includedir)/geos
-
 EXTRA_DIST = platform.h.vc
 
-geos_HEADERS = \
-	geom.h \
-	geomUtil.h \
-	geosAlgorithm.h \
-	geomgraph.h \
-	geomgraphindex.h \
-	planargraph.h \
-	indexBintree.h \
-	indexChain.h \
-	indexQuadtree.h \
-	indexStrtree.h \
-	indexSweepline.h \
-	inline.h \
-	noding.h \
-	nodingSnapround.h \
-	io.h \
-	opLinemerge.h \
-	opBuffer.h \
-	operation.h \
-	opOverlay.h \
-	opRelate.h \
-	opValid.h \
-	opDistance.h \
-	opPolygonize.h \
-	opPredicate.h \
-	precision.h \
-	operation.h \
-	spatialIndex.h \
-	unload.h \
-	util.h \
-	profiler.h \
-	timeval.h
+geosdir = $(includedir)/geos
 
-nodist_geos_HEADERS = \
-	platform.h \
-	version.h 
+geos_HEADERS = 			\
+	geom.h 			\
+	geomUtil.h 		\
+	geomgraph.h 		\
+	geomgraphindex.h 	\
+	geosAlgorithm.h 	\
+	indexBintree.h 		\
+	indexChain.h 		\
+	indexQuadtree.h 	\
+	indexStrtree.h 		\
+	indexSweepline.h 	\
+	inline.h 		\
+	io.h 			\
+	noding.h 		\
+	nodingSnapround.h 	\
+	opBuffer.h 		\
+	opDistance.h 		\
+	opLinemerge.h 		\
+	opOverlay.h 		\
+	opPolygonize.h 		\
+	opPredicate.h 		\
+	opRelate.h 		\
+	opValid.h 		\
+	operation.h 		\
+	operation.h 		\
+	planargraph.h 		\
+	precision.h 		\
+	spatialIndex.h 		\
+	timeval.h		\
+	unload.h 		\
+	util.h 		
+
+nodist_geos_HEADERS =		\
+	platform.h 		\
+	version.h
+
+noinst_HEADERS =		\
+	profiler.h 

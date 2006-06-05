@@ -29,15 +29,15 @@ namespace algorithm { // geos::planargraph::algorithm
 } // namespace geos::planargraph
 } // namespace geos
 
-#include <geos/planargraph/GraphComponent.h>
-#include <geos/planargraph/DirectedEdgeStar.h>
-#include <geos/planargraph/Node.h>
-#include <geos/planargraph/Edge.h>
-#include <geos/planargraph/DirectedEdge.h>
+//#include <geos/planargraph/GraphComponent.h>
+//#include <geos/planargraph/DirectedEdgeStar.h>
+//#include <geos/planargraph/Node.h>
+//#include <geos/planargraph/Edge.h>
+//#include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/NodeMap.h>
 #include <geos/planargraph/PlanarGraph.h>
-#include <geos/planargraph/Subgraph.h>
-#include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
+//#include <geos/planargraph/Subgraph.h>
+//#include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
 
 #endif
 

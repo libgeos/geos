@@ -1,11 +1,11 @@
 SUBDIRS = util
 
-geosdir = $(includedir)/geos/geom
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # Notes:
 # GeometryComponentFilter.h needed by Polygonizer.h
+
+geosdir = $(includedir)/geos/geom
 
 geos_HEADERS = \
 	BinaryOp.h	\
@@ -46,4 +46,4 @@ geos_HEADERS = \
 	PrecisionModel.inl	\
 	Triangle.h
 
-nodist_geos_HEADERS = 
+#noinst_HEADERS = 

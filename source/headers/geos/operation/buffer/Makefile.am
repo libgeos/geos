@@ -1,17 +1,17 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/operation/buffer
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # NOTES:
 # OffsetCurveBuilder.h needed bu BufferOp.h for enum values
+
+geosdir = $(includedir)/geos/operation/buffer
 
 geos_HEADERS = \
 	BufferOp.h	\
 	OffsetCurveBuilder.h
 
-nodist_geos_HEADERS = \
+noinst_HEADERS = \
 	BufferBuilder.h	\
 	BufferSubgraph.h	\
 	OffsetCurveSetBuilder.h	\

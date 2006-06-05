@@ -24,8 +24,8 @@ namespace predicate {
 } // namespace operation
 } // namespace geos
 
-#include <geos/operation/predicate/RectangleContains.h>
-#include <geos/operation/predicate/RectangleIntersects.h>
-#include <geos/operation/predicate/SegmentIntersectionTester.h>
+//#include <geos/operation/predicate/RectangleContains.h>
+//#include <geos/operation/predicate/RectangleIntersects.h>
+//#include <geos/operation/predicate/SegmentIntersectionTester.h>
 
 #endif // ifndef GEOS_OPPREDICATE_H

@@ -1,8 +1,6 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/precision
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # NOTES:
 # CommonBitsOp.h is worth keeping for now
@@ -10,11 +8,13 @@ EXTRA_DIST =
 # CommonBitsRemover.h needed by geom/BinaryOp.h
 # SimpleGeometryPrecisionReducer.h needed by geom/BinaryOp.h
 
+geosdir = $(includedir)/geos/precision
+
 geos_HEADERS = \
 	CommonBitsOp.h	\
 	CommonBitsRemover.h	\
 	EnhancedPrecisionOp.h	\
 	SimpleGeometryPrecisionReducer.h
 
-nodist_geos_HEADERS = 	\
+noinst_HEADERS = 	\
 	CommonBits.h

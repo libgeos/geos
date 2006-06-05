@@ -29,10 +29,10 @@ namespace snapround { // geos.noding.snapround
 } // namespace geos.noding
 } // namespace geos
 
-#include <geos/noding/snapround/HotPixel.h>
-#include <geos/noding/snapround/SimpleSnapRounder.h>
-#include <geos/noding/snapround/MCIndexSnapRounder.h>
-#include <geos/noding/snapround/MCIndexPointSnapper.h>
+//#include <geos/noding/snapround/HotPixel.h>
+//#include <geos/noding/snapround/SimpleSnapRounder.h>
+//#include <geos/noding/snapround/MCIndexSnapRounder.h>
+//#include <geos/noding/snapround/MCIndexPointSnapper.h>
 
 #endif
 

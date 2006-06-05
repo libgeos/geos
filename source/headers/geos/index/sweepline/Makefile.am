@@ -1,7 +1,5 @@
 SUBDIRS = 
 
-geosdir = $(includedir)/geos/index/sweepline
-
 EXTRA_DIST = 
 
 # NOTES:
@@ -9,10 +7,12 @@ EXTRA_DIST =
 # SweepLineOverlapAction.h needed by operation/valid/SweeplineNestedRingTester.h
 #	for inheritance (but that header is not installed)
 
+geosdir = $(includedir)/geos/index/sweepline
+
 geos_HEADERS =				\
 	SweepLineOverlapAction.h
 
-nodist_geos_HEADERS =			\
+noinst_HEADERS =			\
 	SweepLineEvent.h		\
 	SweepLineIndex.h 		\
 	SweepLineInterval.h

@@ -1,8 +1,6 @@
 SUBDIRS = index
 
-geosdir = $(includedir)/geos/geomgraph
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # NOTES:
 #
@@ -34,6 +32,8 @@ EXTRA_DIST =
 #
 #
 
+geosdir = $(includedir)/geos/geomgraph
+
 geos_HEADERS = 			\
 	EdgeEnd.h		\
 	EdgeEndStar.h		\
@@ -45,7 +45,7 @@ geos_HEADERS = 			\
 	NodeMap.h		\
 	PlanarGraph.h
 
-nodist_geos_HEADERS = 		\
+noinst_HEADERS = 		\
 	Depth.h			\
 	DirectedEdge.h		\
 	DirectedEdge.inl	\

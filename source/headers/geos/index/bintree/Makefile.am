@@ -1,7 +1,5 @@
 SUBDIRS = 
 
-geosdir = $(includedir)/geos/index/bintree
-
 EXTRA_DIST = 
 
 
@@ -9,11 +7,13 @@ EXTRA_DIST =
 #
 # Interval.h is needed by algorithm/MCPointInRing.h for composition
 
+geosdir = $(includedir)/geos/index/bintree
+
 geos_HEADERS =		\
 	Bintree.h	\
 	Interval.h
 
-nodist_geos_HEADERS =	\
+noinst_HEADERS =	\
 	Key.h		\
 	NodeBase.h	\
 	Node.h		\

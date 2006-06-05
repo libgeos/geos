@@ -1,8 +1,8 @@
-SUBDIRS = 
+#SUBDIRS = 
+
+#EXTRA_DIST = 
 
 geosdir = $(includedir)/geos/geom/util
-
-EXTRA_DIST = 
 
 geos_HEADERS = \
 	CoordinateOperation.h	\
@@ -14,4 +14,4 @@ geos_HEADERS = \
 	PolygonExtracter.h	\
 	ShortCircuitedGeometryVisitor.h
 
-nodist_geos_HEADERS = 
+#noinst_HEADERS = 

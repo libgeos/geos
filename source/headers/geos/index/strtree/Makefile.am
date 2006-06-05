@@ -1,7 +1,5 @@
 SUBDIRS = 
 
-geosdir = $(includedir)/geos/index/strtree
-
 EXTRA_DIST = 
 
 # NOTES:
@@ -12,6 +10,8 @@ EXTRA_DIST =
 # Boundable.h needed by ItemBoundable.h and AbstractNode.h for inheritance
 # AbstractNode.h needed by AbstractSTRtree.h for inlines
 
+geosdir = $(includedir)/geos/index/strtree
+
 geos_HEADERS = \
 	AbstractNode.h	\
 	AbstractSTRtree.h	\
@@ -20,5 +20,5 @@ geos_HEADERS = \
 	SIRtree.h	\
 	STRtree.h
 
-nodist_geos_HEADERS = \
+noinst_HEADERS = \
 	ItemBoundable.h	

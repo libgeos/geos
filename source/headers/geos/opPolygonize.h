@@ -25,10 +25,10 @@ namespace polygonize { // geos.operation.polygonize
 } // namespace geos.operation
 } // namespace geos
 
-// #include <geos/operation/polygonize/EdgeRing.h>
-#include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
-#include <geos/operation/polygonize/PolygonizeEdge.h>
-#include <geos/operation/polygonize/PolygonizeGraph.h>
+//#include <geos/operation/polygonize/EdgeRing.h>
+//#include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
+//#include <geos/operation/polygonize/PolygonizeEdge.h>
+//#include <geos/operation/polygonize/PolygonizeGraph.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 
 #endif

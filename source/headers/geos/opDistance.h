@@ -27,10 +27,10 @@ namespace distance { // geos.operation.distance
 } // namespace geos.operation
 } // namespace geos
 
-#include <geos/operation/distance/ConnectedElementLocationFilter.h>
-#include <geos/operation/distance/ConnectedElementPointFilter.h>
+//#include <geos/operation/distance/ConnectedElementLocationFilter.h>
+//#include <geos/operation/distance/ConnectedElementPointFilter.h>
 #include <geos/operation/distance/DistanceOp.h>
-#include <geos/operation/distance/GeometryLocation.h>
+//#include <geos/operation/distance/GeometryLocation.h>
 
 #endif
 

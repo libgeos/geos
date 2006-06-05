@@ -1,15 +1,15 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/operation/distance
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # NOTES:
+
+geosdir = $(includedir)/geos/operation/distance
 
 geos_HEADERS = \
 	DistanceOp.h	
 
-nodist_geos_HEADERS = \
+noinst_HEADERS = \
 	ConnectedElementLocationFilter.h	\
 	ConnectedElementPointFilter.h		\
 	GeometryLocation.h

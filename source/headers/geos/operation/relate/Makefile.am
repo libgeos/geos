@@ -1,17 +1,17 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/operation/relate
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # Notes:
 # RelateComputer.h needed by RelateOp.h
+
+geosdir = $(includedir)/geos/operation/relate
 
 geos_HEADERS =			\
 	RelateComputer.h	\
 	RelateOp.h
 
-nodist_geos_HEADERS =		\
+noinst_HEADERS =		\
 	EdgeEndBuilder.h	\
 	EdgeEndBundle.h		\
 	EdgeEndBundleStar.h	\

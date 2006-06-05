@@ -1,16 +1,11 @@
 SUBDIRS = snapround
 
-geosdir = $(includedir)/geos/noding
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # NOTES:
 #
 
-geos_HEADERS = 
-
-
-nodist_geos_HEADERS = 			\
+noinst_HEADERS = 			\
 	IntersectionAdder.h		\
 	IntersectionFinderAdder.h	\
 	IteratedNoder.h			\
@@ -27,3 +22,7 @@ nodist_geos_HEADERS = 			\
 	SegmentString.inl		\
 	SimpleNoder.h			\
 	SinglePassNoder.h
+
+#geosdir = $(includedir)/geos/noding
+
+#geos_HEADERS = 

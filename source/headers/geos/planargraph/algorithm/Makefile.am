@@ -1,10 +1,9 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/planargraph/algorithm
+#EXTRA_DIST = 
 
-EXTRA_DIST = 
+#geosdir = $(includedir)/geos/planargraph/algorithm
+#geos_HEADERS = 
 
-geos_HEADERS = \
+noinst_HEADERS = 			\
 	ConnectedSubgraphFinder.h
-
-nodist_geos_HEADERS = 

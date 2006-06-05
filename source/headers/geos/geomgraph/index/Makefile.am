@@ -1,8 +1,8 @@
-SUBDIRS = 
+#SUBDIRS = 
+
+#EXTRA_DIST = 
 
 geosdir = $(includedir)/geos/geomgraph/index
-
-EXTRA_DIST = 
 
 geos_HEADERS = \
 	EdgeSetIntersector.h	\
@@ -17,4 +17,4 @@ geos_HEADERS = \
 	SweepLineEventObj.h	\
 	SweepLineSegment.h
 
-nodist_geos_HEADERS = 
+#noinst_HEADERS = 

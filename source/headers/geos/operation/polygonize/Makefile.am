@@ -1,16 +1,16 @@
-SUBDIRS = 
+#SUBDIRS = 
 
-geosdir = $(includedir)/geos/operation/polygonize
-
-EXTRA_DIST = 
+#EXTRA_DIST = 
 
 # Notes:
 #
 
+geosdir = $(includedir)/geos/operation/polygonize
+
 geos_HEADERS = \
 	Polygonizer.h
 
-nodist_geos_HEADERS = \
+noinst_HEADERS = \
 	EdgeRing.h			\
 	PolygonizeDirectedEdge.h	\
 	PolygonizeEdge.h		\
