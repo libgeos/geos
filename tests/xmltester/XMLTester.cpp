@@ -524,7 +524,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->intersection(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::INTERSECTION));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -542,7 +542,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->Union(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::UNION));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -560,7 +560,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->difference(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::DIFFERENCE));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE));
 			
 			gRealRes->normalize();
 
@@ -579,7 +579,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->symDifference(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::SYMDIFFERENCE));
+			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -938,6 +938,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.33  2006/05/19 16:38:22  strk
  *         * tests/xmltester/XMLTester.cpp: report
  *         error on load of requested tests.

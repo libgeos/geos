@@ -22,20 +22,20 @@
 #ifndef GEOS_NODING_H
 #define GEOS_NODING_H
 
-#include <geos/noding/IntersectionAdder.h>
-#include <geos/noding/IntersectionFinderAdder.h>
-#include <geos/noding/IteratedNoder.h>
-#include <geos/noding/MCIndexNoder.h>
-#include <geos/noding/Noder.h>
-#include <geos/noding/NodingValidator.h>
-#include <geos/noding/Octant.h>
-#include <geos/noding/ScaledNoder.h>
-#include <geos/noding/SegmentIntersector.h>
-#include <geos/noding/SegmentNode.h>
-#include <geos/noding/SegmentNodeList.h>
-#include <geos/noding/SegmentString.h>
-#include <geos/noding/SimpleNoder.h>
-#include <geos/noding/SinglePassNoder.h>
+//#include <geos/noding/IntersectionAdder.h>
+//#include <geos/noding/IntersectionFinderAdder.h>
+//#include <geos/noding/IteratedNoder.h>
+//#include <geos/noding/MCIndexNoder.h>
+//#include <geos/noding/Noder.h>
+//#include <geos/noding/NodingValidator.h>
+//#include <geos/noding/Octant.h>
+//#include <geos/noding/ScaledNoder.h>
+//#include <geos/noding/SegmentIntersector.h>
+//#include <geos/noding/SegmentNode.h>
+//#include <geos/noding/SegmentNodeList.h>
+//#include <geos/noding/SegmentString.h>
+//#include <geos/noding/SimpleNoder.h>
+//#include <geos/noding/SinglePassNoder.h>
 
 namespace geos {
 

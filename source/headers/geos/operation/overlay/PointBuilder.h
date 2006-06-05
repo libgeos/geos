@@ -16,9 +16,10 @@
 #ifndef GEOS_OP_OVERLAY_POINTBUILDER_H
 #define GEOS_OP_OVERLAY_POINTBUILDER_H
 
-#include <vector>
-
 #include <geos/geom/GeometryFactory.h> // for inlines
+#include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
+
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -51,7 +52,7 @@ private:
 
 	OverlayOp *op;
 	const geom::GeometryFactory *geometryFactory;
-	void extractNonCoveredResultNodes(int opCode);
+	void extractNonCoveredResultNodes(OverlayOp::OpCode opCode);
 
 	/*
 	 * Converts non-covered nodes to Point objects and adds them to
@@ -82,11 +83,11 @@ public:
 		resultPointList(new std::vector<geom::Point *>())
 	{}
 
-	/*
+	/**
 	 * @return a list of the Points in the result of the specified
 	 * overlay operation
 	 */
-	std::vector<geom::Point*>* build(int opCode);
+	std::vector<geom::Point*>* build(OverlayOp::OpCode opCode);
 };
 
 
@@ -98,6 +99,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.1  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

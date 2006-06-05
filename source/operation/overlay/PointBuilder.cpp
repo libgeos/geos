@@ -13,15 +13,15 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <cassert>
-
 #include <geos/operation/overlay/PointBuilder.h>
 #include <geos/operation/overlay/OverlayOp.h>
 
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/EdgeEndStar.h>
 #include <geos/geomgraph/Label.h>
+
+#include <vector>
+#include <cassert>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -41,7 +41,7 @@ namespace overlay { // geos.operation.overlay
  * overlay operation
  */
 vector<Point*>*
-PointBuilder::build(int opCode)
+PointBuilder::build(OverlayOp::OpCode opCode)
 {
 	extractNonCoveredResultNodes(opCode);
 	return resultPointList;
@@ -56,7 +56,7 @@ PointBuilder::build(int opCode)
  * @param opCode the overlay operation
  */
 void
-PointBuilder::extractNonCoveredResultNodes(int opCode)
+PointBuilder::extractNonCoveredResultNodes(OverlayOp::OpCode opCode)
 {
 	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap =
 		op->getGraph().getNodeMap()->nodeMap;
@@ -73,7 +73,7 @@ PointBuilder::extractNonCoveredResultNodes(int opCode)
 		if (n->isIncidentEdgeInResult()) continue;
 
 		if ( n->getEdges()->getDegree() == 0 ||
-			opCode == OverlayOp::INTERSECTION )
+			opCode == OverlayOp::opINTERSECTION )
 		{
 
 			/**
@@ -104,6 +104,9 @@ PointBuilder::filterCoveredNodeToPoint(const Node *n)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.20  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

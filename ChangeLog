@@ -1,3 +1,19 @@
+2006-06-05 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/operation/overlay/OverlayOp.h,
+	capi/geos_c.cpp, source/geom/Geometry.cpp,
+	source/headers/geos/operation/overlay/LineBuilder.h,
+	source/headers/geos/operation/overlay/PointBuilder.h,
+	source/operation/overlay/LineBuilder.cpp,
+	source/operation/overlay/OverlayOp.cpp,
+	source/operation/overlay/PointBuilder.cpp,
+	tests/xmltester/XMLTester.cpp: given OverlayOp funx code
+	enum a name and renamed values to have a lowercase prefix.
+	updated references.
+	* source/headers/geos/noding/Makefile.am,
+	source/headers/geos/noding.h: drop all of noding headers
+	from installed header set.
+
 2006-06-01 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geomgraph.h,

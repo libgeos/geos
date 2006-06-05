@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_LINEBUILDER_H
 #define GEOS_OP_OVERLAY_LINEBUILDER_H
 
+#include <geos/operation/overlay/OverlayOp.h> // for OverlayOp::OpCode enum 
+
 #include <vector>
 
 // Forward declarations
@@ -61,7 +63,7 @@ public:
 	/**
 	 * @return a list of the LineStrings in the result of the specified overlay operation
 	 */
-	std::vector<geom::LineString*>* build(int opCode);
+	std::vector<geom::LineString*>* build(OverlayOp::OpCode opCode);
 
 	/**
 	 * Find and mark L edges which are "covered" by the result area (if any).
@@ -71,7 +73,7 @@ public:
 	 * point-in-polygon test with the previously computed result areas.
 	 */
 	void collectLineEdge(geomgraph::DirectedEdge *de,
-			int opCode,
+			OverlayOp::OpCode opCode,
 			std::vector<geomgraph::Edge*>* edges);
 
 	/**
@@ -85,7 +87,7 @@ public:
 	 * 
 	 */
 	void collectBoundaryTouchEdge(geomgraph::DirectedEdge *de,
-			int opCode,
+			OverlayOp::OpCode opCode,
 			std::vector<geomgraph::Edge*>* edges);
 
 private:
@@ -95,8 +97,8 @@ private:
 	std::vector<geomgraph::Edge*> lineEdgesList;
 	std::vector<geom::LineString*>* resultLineList;
 	void findCoveredLineEdges();
-	void collectLines(int opCode);
-	void buildLines(int opCode);
+	void collectLines(OverlayOp::OpCode opCode);
+	void buildLines(OverlayOp::OpCode opCode);
 	void labelIsolatedLines(std::vector<geomgraph::Edge*> *edgesList);
 
 	/**
@@ -122,6 +124,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.1  2006/03/17 13:24:59  strk
  * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
  *

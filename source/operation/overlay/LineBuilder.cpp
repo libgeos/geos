@@ -63,7 +63,7 @@ LineBuilder::~LineBuilder()
  *         specified overlay operation
  */
 vector<LineString*>*
-LineBuilder::build(int opCode)
+LineBuilder::build(OverlayOp::OpCode opCode)
 {
 	findCoveredLineEdges();
 	collectLines(opCode);
@@ -114,7 +114,7 @@ LineBuilder::findCoveredLineEdges()
 }
 
 void
-LineBuilder::collectLines(int opCode)
+LineBuilder::collectLines(OverlayOp::OpCode opCode)
 {
 	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
 	for(unsigned int i=0, s=ee->size(); i<s; ++i)
@@ -127,13 +127,17 @@ LineBuilder::collectLines(int opCode)
 }
 
 void
-LineBuilder::collectLineEdge(DirectedEdge *de,int opCode,vector<Edge*> *edges)
+LineBuilder::collectLineEdge(DirectedEdge *de, OverlayOp::OpCode opCode,
+		vector<Edge*> *edges)
 {
 	Label *label=de->getLabel();
 	Edge *e=de->getEdge();
 	// include L edges which are in the result
 	if (de->isLineEdge()) {
-		if (!de->isVisited() && OverlayOp::isResultOfOp(label,opCode) && !e->isCovered()) {
+		if (!de->isVisited()
+			&& OverlayOp::isResultOfOp(label,opCode)
+			&& !e->isCovered())
+		{
 			//Debug.println("de: "+de.getLabel());
 			//Debug.println("edge: "+e.getLabel());
 			edges->push_back(e);
@@ -151,7 +155,8 @@ LineBuilder::collectLineEdge(DirectedEdge *de,int opCode,vector<Edge*> *edges)
  *  - OR as a result of a dimensional collapse.
  */
 void
-LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,int opCode,vector<Edge*> *edges)
+LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,
+		OverlayOp::OpCode opCode, vector<Edge*> *edges)
 {
 	Label *label=de->getLabel();
 	// this smells like a bit of a hack, but it seems to work...
@@ -159,15 +164,16 @@ LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,int opCode,vector<Edge*> 
 		&& !de->isInteriorAreaEdge()  // added to handle dimensional collapses
 		&& !de->getEdge()->isInResult()
 		&& !de->isVisited()
-		&& OverlayOp::isResultOfOp(label,opCode)
-		&& opCode==OverlayOp::INTERSECTION) {
+		&& OverlayOp::isResultOfOp(label, opCode)
+		&& opCode==OverlayOp::opINTERSECTION)
+	{
 			edges->push_back(de->getEdge());
 			de->setVisitedEdge(true);
 	}
 }
 
 void
-LineBuilder::buildLines(int opCode)
+LineBuilder::buildLines(OverlayOp::OpCode opCode)
 {
 	// need to simplify lines?
 	for(unsigned int i=0, s=lineEdgesList.size(); i<s; ++i)
@@ -304,6 +310,9 @@ LineBuilder::labelIsolatedLine(Edge *e, int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.25  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

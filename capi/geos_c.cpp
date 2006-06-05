@@ -813,7 +813,7 @@ GEOSIntersection(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::INTERSECTION));
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opINTERSECTION));
 		return g3.release();
 		//Geometry *g3 = g1->intersection(g2);
 		//return g3;
@@ -878,7 +878,7 @@ GEOSDifference(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::DIFFERENCE));
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opDIFFERENCE));
 		return g3.release();
 		//Geometry *g3 = g1->difference(g2);
 		//return g3;
@@ -922,7 +922,7 @@ GEOSSymDifference(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::SYMDIFFERENCE));
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opSYMDIFFERENCE));
 		return g3.release();
 		//Geometry *g3 = g1->symDifference(g2);
 		//return g3;
@@ -945,7 +945,7 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 {
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::UNION));
+		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opUNION));
 		return g3.release();
 		//Geometry *g3 = g1->Union(g2);
 		//return g3;

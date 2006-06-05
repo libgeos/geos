@@ -100,6 +100,8 @@ Changes in 3.0.0
 	- Reworked automake scripts to produce a static lib for each subdir
 	  and then link all subsystem's libs togheter
 	- Renamed DefaultCoordinateSequence to CoordinateArraySequence.
+	- Renamed OverlayOp opcodes by prepending the 'op' prefix, and
+	  given the enum a name (OpCode) for type-safety.
 
 - Bug fixes:
 	- Fixed bug causing redundant linestrings to be returned in the

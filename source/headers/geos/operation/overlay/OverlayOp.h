@@ -63,24 +63,25 @@ public:
 	/// These operations implement various boolean combinations of
 	/// the resultants of the overlay.
 	///
-	enum {
-		INTERSECTION=1,
-		UNION,
-		DIFFERENCE,
-		SYMDIFFERENCE
+	enum OpCode {
+		opINTERSECTION=1,
+		opUNION,
+		opDIFFERENCE,
+		opSYMDIFFERENCE
 	};
 
 	static geom::Geometry* overlayOp(const geom::Geometry *geom0,
 			const geom::Geometry *geom1,
-			int opCode); //throw(TopologyException *);
+			OpCode opCode);
+		//throw(TopologyException *);
 
-	static bool isResultOfOp(geomgraph::Label *label, int opCode);
+	static bool isResultOfOp(geomgraph::Label *label, OpCode opCode);
 
 	/// This method will handle arguments of Location.NULL correctly
 	//
 	/// @return true if the locations correspond to the opCode
 	///
-	static bool isResultOfOp(int loc0,int loc1,int opCode);
+	static bool isResultOfOp(int loc0, int loc1, OpCode opCode);
 
 	/// Construct an OverlayOp with the given Geometry args.
 	// 
@@ -91,7 +92,7 @@ public:
 
 	virtual ~OverlayOp(); // FIXME: virtual ?
 
-	geom::Geometry* getResultGeometry(int funcCode);
+	geom::Geometry* getResultGeometry(OpCode funcCode);
 		// throw(TopologyException *);
 
 	geomgraph::PlanarGraph& getGraph() { return graph; }
@@ -148,7 +149,7 @@ private:
 
 	std::vector<geom::Point*> *resultPointList;
 
-	void computeOverlay(int opCode); // throw(TopologyException *);
+	void computeOverlay(OpCode opCode); // throw(TopologyException *);
 
 	void insertUniqueEdges(std::vector<geomgraph::Edge*> *edges);
 
@@ -248,7 +249,7 @@ private:
 	 * Interior Area edges are the result of dimensional collapses.
 	 * They do not form part of the result area boundary.
 	 */
-	void findResultAreaEdges(int opCode);
+	void findResultAreaEdges(OpCode opCode);
 
 	/**
 	 * If both a dirEdge and its sym are marked as being in the result,
@@ -320,11 +321,11 @@ private:
  */
 struct overlayOp {
 
-        int opCode;
+        OverlayOp::OpCode opCode;
 
-        overlayOp(int i)
+        overlayOp(OverlayOp::OpCode code)
                 :
-                opCode(i)
+                opCode(code)
         {}
 
         geom::Geometry* operator() (const geom::Geometry* g0,
@@ -343,6 +344,9 @@ struct overlayOp {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.4  2006/05/24 15:17:44  strk
  * Reduced number of installed headers in geos/operation/ subdir
  *

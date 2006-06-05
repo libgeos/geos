@@ -68,7 +68,8 @@ namespace overlay { // geos.operation.overlay
 
 /* static public */
 Geometry*
-OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
+OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1,
+		OverlayOp::OpCode opCode)
 	// throw(TopologyException *)
 {
 	OverlayOp gov(geom0, geom1);
@@ -77,28 +78,28 @@ OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1, int opCode)
 
 /* static public */
 bool
-OverlayOp::isResultOfOp(Label *label,int opCode)
+OverlayOp::isResultOfOp(Label *label, OverlayOp::OpCode opCode)
 {
 	int loc0=label->getLocation(0);
 	int loc1=label->getLocation(1);
-	return isResultOfOp(loc0,loc1,opCode);
+	return isResultOfOp(loc0, loc1, opCode);
 }
 
 
 /* static public */
 bool
-OverlayOp::isResultOfOp(int loc0,int loc1,int opCode)
+OverlayOp::isResultOfOp(int loc0, int loc1, OverlayOp::OpCode opCode)
 {
 	if (loc0==Location::BOUNDARY) loc0=Location::INTERIOR;
 	if (loc1==Location::BOUNDARY) loc1=Location::INTERIOR;
 	switch (opCode) {
-		case INTERSECTION:
+		case opINTERSECTION:
 			return loc0==Location::INTERIOR && loc1==Location::INTERIOR;
-		case UNION:
+		case opUNION:
 			return loc0==Location::INTERIOR || loc1==Location::INTERIOR;
-		case DIFFERENCE:
+		case opDIFFERENCE:
 			return loc0==Location::INTERIOR && loc1!=Location::INTERIOR;
-		case SYMDIFFERENCE:
+		case opSYMDIFFERENCE:
 			return (loc0==Location::INTERIOR && loc1!=Location::INTERIOR) 
 				|| (loc0!=Location::INTERIOR && loc1==Location::INTERIOR);
 	}
@@ -163,7 +164,7 @@ OverlayOp::~OverlayOp()
 
 /*public*/
 Geometry*
-OverlayOp::getResultGeometry(int funcCode)
+OverlayOp::getResultGeometry(OverlayOp::OpCode funcCode)
 	//throw(TopologyException *)
 {
 	computeOverlay(funcCode);
@@ -440,8 +441,8 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	const CoordinateSequence *pts = line->getCoordinatesRO();
 	const Coordinate &p = n->getCoordinate();
 	LineIntersector li;
-	unsigned int size = pts->getSize();
-	for(unsigned int i=1; i<size; ++i) {
+	//size_t size = pts->getSize();
+	for(size_t i=1, size=pts->size(); i<size; ++i) {
 		const Coordinate &p0=pts->getAt(i-1);
 		const Coordinate &p1=pts->getAt(i);	
 		li.computeIntersection(p, p0, p1);
@@ -462,18 +463,19 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 
 /*private*/
 void
-OverlayOp::findResultAreaEdges(int opCode)
+OverlayOp::findResultAreaEdges(OverlayOp::OpCode opCode)
 {
 	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
-	for(unsigned int i=0;i<ee->size();i++) {
+	//for(unsigned int i=0;i<ee->size();i++) {
+	for(size_t i=0, e=ee->size(); i<e; ++i) {
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		// mark all dirEdges with the appropriate label
 		Label *label=de->getLabel();
 		if (label->isArea()
 			&& !de->isInteriorAreaEdge()
 			&& isResultOfOp(label->getLocation(0,Position::RIGHT),
-							label->getLocation(1,Position::RIGHT),
-							opCode)
+					label->getLocation(1,Position::RIGHT),
+					opCode)
 			) {
 				de->setInResult(true);
 				//Debug.print("in result "); Debug.println(de);
@@ -585,7 +587,7 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 
 /*private*/
 void
-OverlayOp::computeOverlay(int opCode)
+OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	//throw(TopologyException *)
 {
 
@@ -780,6 +782,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.71  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.70  2006/04/14 15:19:12  strk
  * removed precision reduction code (use BinaryOp for that)
  *

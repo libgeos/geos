@@ -524,7 +524,7 @@ Geometry::intersection(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return OverlayOp::overlayOp(this, other, OverlayOp::INTERSECTION);
+	return OverlayOp::overlayOp(this, other, OverlayOp::opINTERSECTION);
 }
 
 Geometry*
@@ -569,7 +569,7 @@ Geometry::Union(const Geometry *other) const
 	}
 #endif
 
-	return OverlayOp::overlayOp(this, other, OverlayOp::UNION);
+	return OverlayOp::overlayOp(this, other, OverlayOp::opUNION);
 }
 
 Geometry*
@@ -578,7 +578,7 @@ Geometry::difference(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return OverlayOp::overlayOp(this, other, OverlayOp::DIFFERENCE);
+	return OverlayOp::overlayOp(this, other, OverlayOp::opDIFFERENCE);
 }
 
 Geometry*
@@ -586,7 +586,7 @@ Geometry::symDifference(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
-	return OverlayOp::overlayOp(this, other, OverlayOp::SYMDIFFERENCE);
+	return OverlayOp::overlayOp(this, other, OverlayOp::opSYMDIFFERENCE);
 }
 
 int
@@ -796,6 +796,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.116  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
  * Revision 1.115  2006/05/18 08:56:50  strk
  *         * source/geom/Geometry.cpp,
  *         source/headers/geos/geom/Geometry.h: added
