@@ -8,6 +8,8 @@
 	swig/ruby/test/Makefile.am: swig removed from automatic
 	build process.
 	* configure.in: removed check for boost availability.
+	* configure.in: enforce -Wall -ansi -pedantic -Wno-long-long
+	to C and CXX flags.
 
 2006-06-07 Sandro Santilli <strk@refractions.net>
 

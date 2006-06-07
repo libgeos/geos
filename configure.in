@@ -67,6 +67,10 @@ AC_STRUCT_TM
 AC_TYPE_SIZE_T
 AC_C_CONST
 
+dnl --------------------------------------------------------------------
+dnl - Check for inline and cassert settings
+dnl --------------------------------------------------------------------
+
 
 AC_ARG_ENABLE(inline, [  --disable-inline    Disable inlining],
 	[case "${enableval}" in
@@ -96,6 +100,17 @@ fi
 if test x"$enable_cassert" = xfalse; then
 	CXXFLAGS="$CXXFLAGS -DNDEBUG"
 fi
+
+dnl --------------------------------------------------------------------
+dnl - Append default C++ and C flags 
+dnl --------------------------------------------------------------------
+
+# Set default CXXFLAGS and CFLAGS if not set by the user
+# -pedantic: ISO does not support long long
+# we add -Wno-long-long to avoid those messages
+CXXFLAGS="${CXXFLAGS} -Wall -ansi -pedantic -Wno-long-long"
+CFLAGS="${CFLAGS} -Wall -ansi -pedantic -Wno-long-long"
+
 
 dnl --------------------------------------------------------------------
 dnl - check for swig 
