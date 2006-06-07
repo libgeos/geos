@@ -1,6 +1,6 @@
 #geos_tests.rb runs the full Ruby geos test suite
 
-TESTS = 			\
+RUBY_TESTS = 			\
 	example.rb		\
 	geos_tests.rb		\
 	test_combinations.rb	\
@@ -11,7 +11,7 @@ TESTS = 			\
 	test_relations.rb	\
 	test_simple.rb
 
-EXTRA_DIST = $(TESTS)
+EXTRA_DIST = $(RUBY_TESTS)
 
 test:
-	$(RUBY) $(TESTS)
+	$(RUBY) $(RUBY_TESTS)
