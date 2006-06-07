@@ -1,3 +1,8 @@
+2006-06-07 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/geom/Makefile.am: removed
+	Triangle.h from installed header set.
+
 2006-06-05 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/Makefile.am,
