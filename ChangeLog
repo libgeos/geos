@@ -1,3 +1,9 @@
+2006-06-07 Mateusz Loskot <mateusz@loskot.net>
+
+	* tests/unit/Makefile.am,
+	tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp:
+	Added new test: CGAlgorithms/isPointInRingTest.cpp.
+
 2006-06-07 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/Makefile.am,

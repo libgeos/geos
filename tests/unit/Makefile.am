@@ -11,7 +11,7 @@ geos_unit_LDADD = $(top_builddir)/source/libgeos.la
 
 geos_unit_SOURCES = geos_unit.cpp \
 	algorithm/PointLocatorTest.cpp \
-	algorithm/CGAlgorithms/isPointInRing.cpp \
+	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateTest.cpp \
