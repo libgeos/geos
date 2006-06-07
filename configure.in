@@ -101,29 +101,29 @@ dnl --------------------------------------------------------------------
 dnl - check for swig 
 dnl --------------------------------------------------------------------
 
-AC_ARG_ENABLE(swig, [  --disable-swig    Disable build of swig wrappers],
-	[case "${enableval}" in
-		yes) use_swig=true ;;
-		no)  use_swig=false ;;
-		*) AC_MSG_ERROR(bad value ${enableval} for --enable-swig) ;;
-	esac],
-	[use_swig=true]
-)
-
-if test x"$use_swig" = xtrue; then
-	AC_PROG_SWIG(1.3.28)
-	if test x"$SWIG" = x; then
-		use_swig=false
-	fi
-fi
-
-if test x"$use_swig" = xtrue; then
-	SWIG_ENABLE_CXX
-fi
-
-
-AM_CONDITIONAL(ENABLE_SWIG, [ test x"$use_swig" = xtrue ])
-AC_SUBST(SWIG)
+dnl -- AC_ARG_ENABLE(swig, [  --disable-swig    Disable build of swig wrappers],
+dnl -- 	[case "${enableval}" in
+dnl -- 		yes) use_swig=true ;;
+dnl -- 		no)  use_swig=false ;;
+dnl -- 		*) AC_MSG_ERROR(bad value ${enableval} for --enable-swig) ;;
+dnl -- 	esac],
+dnl -- 	[use_swig=true]
+dnl -- )
+dnl -- 
+dnl -- if test x"$use_swig" = xtrue; then
+dnl -- 	AC_PROG_SWIG(1.3.28)
+dnl -- 	if test x"$SWIG" = x; then
+dnl -- 		use_swig=false
+dnl -- 	fi
+dnl -- fi
+dnl -- 
+dnl -- if test x"$use_swig" = xtrue; then
+dnl -- 	SWIG_ENABLE_CXX
+dnl -- fi
+dnl -- 
+dnl -- 
+dnl -- AM_CONDITIONAL(ENABLE_SWIG, [ test x"$use_swig" = xtrue ])
+dnl -- AC_SUBST(SWIG)
 
 dnl --------------------------------------------------------------------
 dnl - check for python 
@@ -183,13 +183,13 @@ dnl --------------------------------------------------------------------
 dnl - check for boost 
 dnl --------------------------------------------------------------------
 
-AX_BOOST(1.32)
-if test "x$ax_cv_boost_unit_test_framework" = "xyes"; then
-	use_boost_utf=yes
-else
-	use_boost_utf=no
-fi
-AM_CONDITIONAL(ENABLE_BOOST_UTF, [test "x$use_boost_utf" = "xyes"])
+dnl -- AX_BOOST(1.32)
+dnl -- if test "x$ax_cv_boost_unit_test_framework" = "xyes"; then
+dnl -- 	use_boost_utf=yes
+dnl -- else
+dnl -- 	use_boost_utf=no
+dnl -- fi
+dnl -- AM_CONDITIONAL(ENABLE_BOOST_UTF, [test "x$use_boost_utf" = "xyes"])
 
 dnl things to substitute in output ----------------------------------------
 AC_SUBST(VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH INTERFACE_CURRENT INTERFACE_REVISION INTERFACE_AGE JTS_PORT CAPI_VERSION CAPI_VERSION_MAJOR CAPI_VERSION_MINOR CAPI_VERSION_PATCH CAPI_INTERFACE_CURRENT CAPI_INTERFACE_REVISION CAPI_INTERFACE_AGE)
@@ -211,16 +211,17 @@ AC_OUTPUT([
 	source/geomgraph/index/Makefile
 	source/headers/Makefile
 	source/headers/geos/Makefile
+	source/headers/geos/algorithm/Makefile
 	source/headers/geos/geom/Makefile
 	source/headers/geos/geom/util/Makefile
 	source/headers/geos/geomgraph/Makefile
 	source/headers/geos/geomgraph/index/Makefile
 	source/headers/geos/index/Makefile
+	source/headers/geos/index/bintree/Makefile
+	source/headers/geos/index/chain/Makefile
 	source/headers/geos/index/quadtree/Makefile
 	source/headers/geos/index/strtree/Makefile
 	source/headers/geos/index/sweepline/Makefile
-	source/headers/geos/index/bintree/Makefile
-	source/headers/geos/index/chain/Makefile
 	source/headers/geos/io/Makefile
 	source/headers/geos/noding/Makefile
 	source/headers/geos/noding/snapround/Makefile
@@ -238,7 +239,6 @@ AC_OUTPUT([
 	source/headers/geos/precision/Makefile
 	source/headers/geos/simplify/Makefile
 	source/headers/geos/util/Makefile
-	source/headers/geos/algorithm/Makefile
 	source/headers/geos/version.h
 	source/index/Makefile
 	source/index/bintree/Makefile
@@ -259,29 +259,29 @@ AC_OUTPUT([
 	source/operation/relate/Makefile
 	source/operation/valid/Makefile
 	source/planargraph/Makefile
-	source/simplify/Makefile
 	source/precision/Makefile
+	source/simplify/Makefile
 	source/util/Makefile
+	swig/Makefile
+	swig/python/Makefile
+	swig/python/tests/Makefile
+	swig/python/tests/cases/Makefile
+	swig/ruby/Makefile
+	swig/ruby/test/Makefile
 	tests/Makefile
 	tests/bigtest/Makefile
-	tests/xmltester/Makefile
 	tests/unit/Makefile
+	tests/xmltester/Makefile
 	tools/Makefile
 	tools/geos-config
 	])
 
-#swig/Makefile
-#swig/python/Makefile
-#swig/python/tests/Makefile
-#swig/python/tests/cases/Makefile
-#swig/ruby/Makefile
-#swig/ruby/test/Makefile
 
 
-echo "---------------------------------------"
-echo "Boost UTF: $use_boost_utf"
-echo "Swig: $use_swig"
-echo "Python: $use_python"
-echo "Ruby: $use_ruby"
-echo "---------------------------------------"
+dnl -- echo "---------------------------------------"
+dnl -- echo "Boost UTF: $use_boost_utf"
+dnl -- echo "Swig: $use_swig"
+dnl -- echo "Python: $use_python"
+dnl -- echo "Ruby: $use_ruby"
+dnl -- echo "---------------------------------------"
 

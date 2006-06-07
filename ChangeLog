@@ -3,6 +3,11 @@
 	* tests/unit/Makefile.am,
 	tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp:
 	Added new test: CGAlgorithms/isPointInRingTest.cpp.
+	* Makefile.am, configure.in,
+	swig/python/Makefile.am, swig/ruby/Makefile.am,
+	swig/ruby/test/Makefile.am: swig removed from automatic
+	build process.
+	* configure.in: removed check for boost availability.
 
 2006-06-07 Sandro Santilli <strk@refractions.net>
 

@@ -1,11 +1,10 @@
-SUBDIRS = \
-	source	\
-	macros	\
-	tools	\
-	tests	\
+SUBDIRS = 	\
 	capi	\
-	doc
-
-# swig	
+	doc	\
+	macros	\
+	source	\
+	swig	\
+	tests	\
+	tools
 
 EXTRA_DIST = acsite.m4
