@@ -139,7 +139,7 @@ namespace geom { // geos::geom
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Location.h>
-#include <geos/geom/Triangle.h>
+//#include <geos/geom/Triangle.h>
 
 // FIXME: to be removed, temporarly
 // set to allow a quick successful build
