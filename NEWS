@@ -88,6 +88,7 @@ Changes in 3.0.0
 	- More const-correctness in Buffer "package"
 	- Bugfix in LineString::getCoordinate() failing to return
 	  NULL from getCoordinat() when empty.
+	- Use unsigned int for indexes and sizes.
 
 - Layout changes:
 	- Namespaces mapping JTS packages

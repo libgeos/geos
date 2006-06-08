@@ -1,5 +1,9 @@
 2006-06-08 Sandro Santilli <strk@refractions.net>
 
+	* source/algorithm/CentroidArea.cpp, source/geom/Polygon.cpp,
+	source/geom/util/GeometryEditor.cpp,
+	source/headers/geos/geom/Polygon.h, source/io/WKTWriter.cpp:
+	getNumInteriorRing() return size_t, interiorRingN() takes size_t.
 	* tests/unit/geom/CoordinateArraySequenceTest.cpp:
 	fix signed/unsigned comparison warning.
 	* tests/xmltester/markup/MarkupSTL.cpp: removed use of

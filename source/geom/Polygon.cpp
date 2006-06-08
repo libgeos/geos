@@ -175,14 +175,14 @@ Polygon::getExteriorRing() const
 	return shell;
 }
 
-int
+size_t
 Polygon::getNumInteriorRing() const
 {
-	return (int)holes->size();
+	return holes->size();
 }
 
-const
-LineString* Polygon::getInteriorRingN(int n) const
+const LineString*
+Polygon::getInteriorRingN(size_t n) const
 {
 	return (LineString *) (*holes)[n];
 }
@@ -459,6 +459,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.66  2006/06/08 17:58:57  strk
+ * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
+ *
  * Revision 1.65  2006/05/04 15:49:39  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

@@ -13,12 +13,6 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <cassert>
-#include <typeinfo>
-
-//#include <geos/geomUtil.h>
-//#include <geos/util.h> // to be removed when util.h is finished
 #include <geos/geom/util/GeometryEditor.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -33,6 +27,10 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/util/GeometryEditorOperation.h>
 #include <geos/util/UnsupportedOperationException.h>
+
+#include <vector>
+#include <cassert>
+#include <typeinfo>
 
 using namespace std;
 
@@ -113,9 +111,17 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
 	}
 
 	vector<Geometry*> *holes=new vector<Geometry*>;
-	for (int i=0;i<newPolygon->getNumInteriorRing(); i++) {
-		LinearRing *hole =(LinearRing*) edit(newPolygon->getInteriorRingN(i),operation);
-		if (hole->isEmpty()) {
+	for (size_t i=0, n=newPolygon->getNumInteriorRing(); i<n; ++i)
+	{
+
+		Geometry *hole_geom = edit(newPolygon->getInteriorRingN(i),
+			operation);
+
+		assert(dynamic_cast<LinearRing*>(hole_geom));
+		LinearRing *hole = static_cast<LinearRing*>(hole_geom);
+
+		if (hole->isEmpty())
+		{
 			continue;
 		}
 		holes->push_back(hole);
@@ -164,6 +170,9 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/06/08 17:58:57  strk
+ * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
+ *
  * Revision 1.17  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

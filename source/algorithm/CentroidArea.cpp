@@ -84,7 +84,8 @@ void
 CentroidArea::add(const Polygon *poly)
 {
 	addShell(poly->getExteriorRing()->getCoordinatesRO());
-	for(int i=0;i<poly->getNumInteriorRing();i++) {
+	for(size_t i=0, n=poly->getNumInteriorRing(); i<n; ++i)
+	{
 		addHole(poly->getInteriorRingN(i)->getCoordinatesRO());
 	}
 }
@@ -151,6 +152,9 @@ CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/06/08 17:58:57  strk
+ * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
+ *
  * Revision 1.23  2006/04/07 09:54:28  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

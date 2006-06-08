@@ -294,7 +294,8 @@ void WKTWriter::appendPolygonText(const Polygon *polygon, int level, bool indent
 		if (indentFirst) indent(level, writer);
 		writer->write("(");
 		appendLineStringText(polygon->getExteriorRing(), level, false, writer);
-		for (int i=0; i<polygon->getNumInteriorRing(); i++) {
+		for (size_t i=0, n=polygon->getNumInteriorRing(); i<n; ++i)
+		{
 			writer->write(", ");
 			const LineString *ls=polygon->getInteriorRingN(i);
 			appendLineStringText(ls, level + 1, true, writer);
@@ -402,6 +403,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/06/08 17:58:57  strk
+ * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
+ *
  * Revision 1.33  2006/06/01 11:49:36  strk
  * Reduced installed headers form geomgraph namespace
  *
