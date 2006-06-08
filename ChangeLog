@@ -1,5 +1,7 @@
 2006-06-08 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/geom/GeometryFactoryTest.cpp: fixed
+	compiler warnings about signed/unsigned comparisons.
 	* source/algorithm/CentroidArea.cpp, source/geom/Polygon.cpp,
 	source/geom/util/GeometryEditor.cpp,
 	source/headers/geos/geom/Polygon.h, source/io/WKTWriter.cpp:

@@ -290,9 +290,9 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 0 );		
-		ensure_equals( pt->getLength(), 0 );
-		ensure_equals( pt->getArea(), 0 );
+		ensure_equals( pt->getNumPoints(), 0u );	
+		ensure_equals( pt->getLength(), 0.0 );
+		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(pt);
@@ -343,9 +343,9 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 1 );		
-		ensure_equals( pt->getLength(), 0 );
-		ensure_equals( pt->getArea(), 0 );
+		ensure_equals( pt->getNumPoints(), 1u );	
+		ensure_equals( pt->getLength(), 0.0 );
+		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(pt);
@@ -401,9 +401,9 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 1 );		
-		ensure_equals( pt->getLength(), 0 );
-		ensure_equals( pt->getArea(), 0 );
+		ensure_equals( pt->getNumPoints(), 1u );	
+		ensure_equals( pt->getLength(), 0.0 );
+		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(pt);
@@ -457,9 +457,9 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 1 );		
-		ensure_equals( pt->getLength(), 0 );
-		ensure_equals( pt->getArea(), 0 );
+		ensure_equals( pt->getNumPoints(), 1u );	
+		ensure_equals( pt->getLength(), 0.0 );
+		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(pt);
@@ -490,9 +490,9 @@ namespace tut
 		ensure_equals( lr->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
 		ensure_equals( lr->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( lr->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( lr->getNumPoints(), 0 );
-		ensure_equals( lr->getLength(), 0 );
-		ensure_equals( lr->getArea(), 0 );
+		ensure_equals( lr->getNumPoints(), 0u );
+		ensure_equals( lr->getLength(), 0.0 );
+		ensure_equals( lr->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(lr);
@@ -521,8 +521,8 @@ namespace tut
 		ensure_equals( lr->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( lr->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( lr->getNumPoints(), size );
-		ensure_equals( lr->getLength(), 0 );
-		ensure_equals( lr->getArea(), 0 );
+		ensure_equals( lr->getLength(), 0.0 );
+		ensure_equals( lr->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(lr);	
@@ -533,7 +533,7 @@ namespace tut
 	template<>
 	void object::test<14>()
 	{
-		const int size = 5;
+		const size_t size = 5;
 		geos::geom::CoordinateArraySequence coords(size);
 		ensure_equals( coords.getSize(), size );
 
@@ -547,8 +547,8 @@ namespace tut
 		ensure_equals( lr->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( lr->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( lr->getNumPoints(), size );
-		ensure_equals( lr->getLength(), 0 );
-		ensure_equals( lr->getArea(), 0 );
+		ensure_equals( lr->getLength(), 0.0 );
+		ensure_equals( lr->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(lr);
@@ -590,9 +590,9 @@ namespace tut
 		ensure_equals( line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( line->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( line->getBoundaryDimension(), geos::geom::Dimension::P ); // empty linestring
-		ensure_equals( line->getNumPoints(), 0 );		
-		ensure_equals( line->getLength(), 0 );
-		ensure_equals( line->getArea(), 0 );
+		ensure_equals( line->getNumPoints(), 0u );
+		ensure_equals( line->getLength(), 0.0 );
+		ensure_equals( line->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(line);
@@ -603,7 +603,7 @@ namespace tut
 	template<>
 	void object::test<16>()
 	{
-		const int size = 5;
+		const size_t size = 5;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
 		ensure( coords != 0 );
 		ensure_equals( coords->getSize(), size );
@@ -621,8 +621,8 @@ namespace tut
 		ensure_equals( line->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( line->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( line->getNumPoints(), size );
-		ensure_equals( line->getLength(), 0 );
-		ensure_equals( line->getArea(), 0 );
+		ensure_equals( line->getLength(), 0.0 );
+		ensure_equals( line->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(line);	
@@ -633,7 +633,7 @@ namespace tut
 	template<>
 	void object::test<17>()
 	{
-		const int size = 5;
+		const size_t size = 5;
 		geos::geom::CoordinateArraySequence coords(size);
 		ensure_equals( coords.getSize(), size );
 
@@ -647,8 +647,8 @@ namespace tut
 		ensure_equals( line->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( line->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( line->getNumPoints(), size );
-		ensure_equals( line->getLength(), 0 );
-		ensure_equals( line->getArea(), 0 );
+		ensure_equals( line->getLength(), 0.0 );
+		ensure_equals( line->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(line);
@@ -691,9 +691,9 @@ namespace tut
 		ensure_equals( poly->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
 		ensure_equals( poly->getDimension(), geos::geom::Dimension::A );
 		ensure_equals( poly->getBoundaryDimension(), geos::geom::Dimension::L );
-		ensure_equals( poly->getNumPoints(), 0 );
-		ensure_equals( poly->getLength(), 0 );
-		ensure_equals( poly->getArea(), 0 );
+		ensure_equals( poly->getNumPoints(), 0u );
+		ensure_equals( poly->getLength(), 0.0 );
+		ensure_equals( poly->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(poly);
@@ -705,7 +705,7 @@ namespace tut
 	void object::test<19>()
 	{
 		using geos::geom::Coordinate;
-		const int size = 7;
+		const size_t size = 7;
 
 		// Create sequence of coordiantes
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
@@ -728,8 +728,8 @@ namespace tut
 		ensure_equals( exterior->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( exterior->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( exterior->getNumPoints(), size );
-		ensure_equals( exterior->getArea(), 0 );
-		ensure_not_equals( exterior->getLength(), 0 );
+		ensure_equals( exterior->getArea(), 0.0 );
+		ensure_not_equals( exterior->getLength(), 0.0 );
 
 		// Create polygon
 		PolygonPtr poly = factory_.createPolygon(exterior, 0);
@@ -740,8 +740,8 @@ namespace tut
 		ensure_equals( poly->getDimension(), geos::geom::Dimension::A );
 		ensure_equals( poly->getBoundaryDimension(), geos::geom::Dimension::L );
 		ensure_equals( poly->getNumPoints(), size );
-		ensure_not_equals( poly->getArea(), 0 );
-		ensure_not_equals( poly->getLength(), 0 );
+		ensure_not_equals( poly->getArea(), 0.0 );
+		ensure_not_equals( poly->getLength(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(poly);	
@@ -753,8 +753,8 @@ namespace tut
 	void object::test<20>()
 	{
 		using geos::geom::Coordinate;
-		const int exteriorSize = 7;
-		const int interiorSize = 5;
+		const size_t exteriorSize = 7;
+		const size_t interiorSize = 5;
 
 		// Create sequence of coordiantes
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(exteriorSize);
@@ -777,8 +777,8 @@ namespace tut
 		ensure_equals( exterior->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( exterior->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( exterior->getNumPoints(), exteriorSize );
-		ensure_equals( exterior->getArea(), 0 );
-		ensure_not_equals( exterior->getLength(), 0 );
+		ensure_equals( exterior->getArea(), 0.0 );
+		ensure_not_equals( exterior->getLength(), 0.0 );
 
 		// Create collection of holes
 		GeometryPtr geo = reader_.read(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
@@ -801,11 +801,11 @@ namespace tut
 		ensure_equals( poly->getDimension(), geos::geom::Dimension::A );
 		ensure_equals( poly->getBoundaryDimension(), geos::geom::Dimension::L );
 		ensure_equals( poly->getNumPoints(), exteriorSize + interiorSize );
-		ensure_not_equals( poly->getArea(), 0 );
-		ensure_not_equals( poly->getLength(), 0 );
+		ensure_not_equals( poly->getArea(), 0.0 );
+		ensure_not_equals( poly->getLength(), 0.0 );
 
-		ensure_equals( poly->getNumGeometries(), 1 );
-		ensure_equals( poly->getNumInteriorRing(), 1 );
+		ensure_equals( poly->getNumGeometries(), 1u );
+		ensure_equals( poly->getNumInteriorRing(), 1u );
 
 		// FREE MEMORY
 		std::vector<GeometryPtr>::const_iterator it;
@@ -845,9 +845,9 @@ namespace tut
 		ensure_equals( col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION );
 		ensure_equals( col->getDimension(), geos::geom::Dimension::False );
 		ensure_equals( col->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( col->getNumPoints(), 0 );		
-		ensure_equals( col->getLength(), 0 );
-		ensure_equals( col->getArea(), 0 );
+		ensure_equals( col->getNumPoints(), 0u );
+		ensure_equals( col->getLength(), 0.0 );
+		ensure_equals( col->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(col);
@@ -875,7 +875,7 @@ namespace tut
 		coords->setAt(Coordinate(0, 0), 0);
 		coords->setAt(Coordinate(5, 5), 1);
 		coords->setAt(Coordinate(10, 5), 2);
-		ensure_equals( coords->getSize(), 3 );
+		ensure_equals( coords->getSize(), 3u );
 		GeometryPtr line = factory_.createLineString(coords);
 		vec->push_back(line);
 
@@ -883,7 +883,7 @@ namespace tut
 		GeometryColPtr col = factory_.createGeometryCollection(vec);
 		ensure( coords != 0 );
 		ensure_equals( col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION );
-		ensure_equals( col->getNumGeometries(), 2 );
+		ensure_equals( col->getNumGeometries(), 2u );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(col);
@@ -894,7 +894,7 @@ namespace tut
 	template<>
 	void object::test<23>()
 	{
-		const int size = 3;
+		const size_t size = 3;
 		geos::geom::Coordinate coord(x_, y_, z_);
 
 		std::vector<GeometryPtr> vec;
@@ -965,9 +965,9 @@ namespace tut
 		ensure_equals( mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 		ensure_equals( mp->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( mp->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( mp->getNumPoints(), 0 );
-		ensure_equals( mp->getLength(), 0 );
-		ensure_equals( mp->getArea(), 0 );
+		ensure_equals( mp->getNumPoints(), 0u );
+		ensure_equals( mp->getLength(), 0.0 );
+		ensure_equals( mp->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(mp);
@@ -978,7 +978,7 @@ namespace tut
 	template<>
 	void object::test<25>()
 	{
-		const int size = 3;
+		const size_t size = 3;
 		geos::geom::Coordinate coord(x_, y_, z_);
 
 		std::vector<GeometryPtr>* vec = new std::vector<GeometryPtr>();
@@ -1019,7 +1019,7 @@ namespace tut
 	template<>
 	void object::test<26>()
 	{
-		const int size = 3;
+		const size_t size = 3;
 		geos::geom::Coordinate coord(x_, y_, z_);
 
 		std::vector<GeometryPtr> vec;
@@ -1063,7 +1063,7 @@ namespace tut
 	void object::test<27>()
 	{
 		using geos::geom::Coordinate;
-		const int size = 3;
+		const size_t size = 3;
 
 		// Add collection of coordinates
 		geos::geom::CoordinateArraySequence coords(size);
@@ -1118,9 +1118,9 @@ namespace tut
 		ensure_equals( mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING );
 		ensure_equals( mls->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( mls->getBoundaryDimension(), geos::geom::Dimension::P );
-		ensure_equals( mls->getNumPoints(), 0 );
-		ensure_equals( mls->getLength(), 0 );
-		ensure_equals( mls->getArea(), 0 );
+		ensure_equals( mls->getNumPoints(), 0u );
+		ensure_equals( mls->getLength(), 0.0 );
+		ensure_equals( mls->getArea(), 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(mls);
@@ -1133,12 +1133,12 @@ namespace tut
 	{
 		using geos::geom::Coordinate;
 		
-		const int size = 5;
-		const int lineSize = 2;
+		const size_t size = 5;
+		const size_t lineSize = 2;
 
 		std::vector<GeometryPtr>* lines = new std::vector<GeometryPtr>();
 
-		for (int i = 0; i < size; ++i)
+		for (size_t i = 0; i < size; ++i)
 		{
 			const int factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
@@ -1175,12 +1175,12 @@ namespace tut
 	{
 		using geos::geom::Coordinate;
 		
-		const int size = 5;
-		const int lineSize = 2;
+		const size_t size = 5;
+		const size_t lineSize = 2;
 
 		std::vector<GeometryPtr> lines;
 
-		for (int i = 0; i < size; ++i)
+		for (size_t i = 0; i < size; ++i)
 		{
 			const int factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
