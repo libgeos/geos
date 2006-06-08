@@ -2,7 +2,11 @@
 #top_srcdir=@top_srcdir@
 #top_builddir=@top_builddir@
 
-XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/robustness.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml
+TESTS = testrunner
+
+SAFE_XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml
+
+XMLTESTS=$(SAFE_XMLTESTS) $(srcdir)/robustness.xml 
 
 noinst_PROGRAMS = SimpleWKTTester
 bin_PROGRAMS = XMLTester
@@ -28,6 +32,9 @@ static:
 
 test: XMLTester
 	./XMLTester $(XMLTESTS) 
+
+testrunner: testrunner.sh
+	sh $(srcdir)/testrunner.sh $< $(SAFE_XMLTESTS)
 
 verbose-test: XMLTester
 	./XMLTester -v $(XMLTESTS) 

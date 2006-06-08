@@ -1,5 +1,7 @@
 2006-06-08 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/Makefile.am, tests/xmltester/testrunner.sh:
+	added XML tests run to the 'make check' rule.
 	* source/headers/geos/geom/CoordinateSequenceFactory.h,
 	source/headers/geos/geom/GeometryComponentFilter.h,
 	source/headers/geos/geom/GeometryFilter.h,
