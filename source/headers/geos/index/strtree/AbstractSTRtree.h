@@ -84,13 +84,17 @@ protected:
 	class IntersectsOp {
 		public:
 			/**
-			 * For STRtrees, the bounds will be Envelopes; for SIRtrees, Intervals;
-			 * for other subclasses of AbstractSTRtree, some other class.
+			 * For STRtrees, the bounds will be Envelopes; for
+			 * SIRtrees, Intervals; for other subclasses of
+			 * AbstractSTRtree, some other class.
 			 * @param aBounds the bounds of one spatial object
 			 * @param bBounds the bounds of another spatial object
 			 * @return whether the two bounds intersect
 			 */
-			virtual bool intersects(const void* aBounds, const void* bBounds)=0;
+			virtual bool intersects(const void* aBounds,
+					const void* bBounds)=0;
+
+			virtual ~IntersectsOp() {}
 	};
 
 	AbstractNode *root;
@@ -206,6 +210,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/08 11:20:24  strk
+ * Added missing virtual destructor to abstract classes.
+ *
  * Revision 1.1  2006/03/21 10:47:34  strk
  * indexStrtree.h split
  *

@@ -28,6 +28,8 @@ namespace index {
 class ItemVisitor {
 public:
 	virtual void visitItem(void *)=0;
+
+	virtual ~ItemVisitor() {}
 };
 
 } // namespace geos.index

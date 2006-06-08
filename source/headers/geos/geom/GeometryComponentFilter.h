@@ -51,6 +51,8 @@ public:
 	 */
 	virtual void filter_rw(Geometry *geom);
 	virtual void filter_ro(const Geometry *geom);
+
+	virtual ~GeometryComponentFilter() {}
 };
 
 } // namespace geos::geom
@@ -64,6 +66,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/08 11:20:24  strk
+ * Added missing virtual destructor to abstract classes.
+ *
  * Revision 1.3  2006/04/13 14:25:17  strk
  * TopologyPreservingSimplifier initial port
  *

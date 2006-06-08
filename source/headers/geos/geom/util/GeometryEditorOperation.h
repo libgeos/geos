@@ -51,6 +51,8 @@ public:
 	 */
 	virtual Geometry* edit(const Geometry *geometry,
 			const GeometryFactory *factory)=0;
+
+	virtual ~GeometryEditorOperation() {}
 };
 
 } // namespace geos.geom.util
@@ -65,6 +67,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/08 11:20:24  strk
+ * Added missing virtual destructor to abstract classes.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

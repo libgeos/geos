@@ -32,6 +32,8 @@ namespace sweepline { // geos:index:sweepline
 class SweepLineOverlapAction {
 public:
 	virtual void overlap(SweepLineInterval *s0,SweepLineInterval *s1)=0;
+
+	virtual ~SweepLineOverlapAction() {}
 };
 
 
@@ -43,6 +45,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/08 11:20:24  strk
+ * Added missing virtual destructor to abstract classes.
+ *
  * Revision 1.1  2006/03/21 10:01:30  strk
  * indexSweepline.h header split
  *

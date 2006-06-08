@@ -50,7 +50,8 @@ public:
 	 * Note that a NULL value is allowed as coordinates, and will
 	 * create an empty CoordinateSequence.
 	 */
-	virtual CoordinateSequence *create(std::vector<Coordinate> *coordinates) const=0;
+	virtual CoordinateSequence *create(
+			std::vector<Coordinate> *coordinates) const=0;
 
 	/** \brief
 	 * Creates a CoordinateSequence of the specified size and dimension.
@@ -61,8 +62,10 @@ public:
 	 * @param dimension the dimension of the coordinates in the sequence
 	 * 	(if user-specifiable, otherwise ignored)
 	 */
-	virtual CoordinateSequence *create(unsigned int size, unsigned int dimension)
-		const=0;
+	virtual CoordinateSequence *create(unsigned int size,
+			unsigned int dimension) const=0;
+
+	virtual ~CoordinateSequenceFactory() {}
 };
 
 } // namespace geos::geom
@@ -76,6 +79,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/08 11:20:24  strk
+ * Added missing virtual destructor to abstract classes.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

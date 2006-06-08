@@ -1,3 +1,17 @@
+2006-06-08 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/geom/CoordinateSequenceFactory.h,
+	source/headers/geos/geom/GeometryComponentFilter.h,
+	source/headers/geos/geom/GeometryFilter.h,
+	source/headers/geos/geom/util/CoordinateOperation.h,
+	source/headers/geos/geom/util/GeometryEditorOperation.h,
+	source/headers/geos/geom/util/ShortCircuitedGeometryVisitor.h,
+	source/headers/geos/geomgraph/NodeFactory.h,
+	source/headers/geos/index/ItemVisitor.h,
+	source/headers/geos/index/strtree/AbstractSTRtree.h,
+	source/headers/geos/index/sweepline/SweepLineOverlapAction.h:
+	Added missing virtual destructor to abstract classes.
+
 2006-06-07 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/Makefile.am,

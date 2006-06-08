@@ -58,6 +58,9 @@ public:
 	 */
 	virtual CoordinateSequence* edit(const CoordinateSequence* coordinates,
 			const Geometry *geometry)=0;
+
+
+	virtual ~CoordinateOperation() {}
 };
 
 
@@ -74,6 +77,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/08 11:20:24  strk
+ * Added missing virtual destructor to abstract classes.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *
