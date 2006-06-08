@@ -34,7 +34,7 @@ test: XMLTester
 	./XMLTester $(XMLTESTS) 
 
 testrunner: testrunner.sh
-	sh $(srcdir)/testrunner.sh $< $(SAFE_XMLTESTS)
+	sh $(srcdir)/testrunner.sh $@ $(SAFE_XMLTESTS)
 
 verbose-test: XMLTester
 	./XMLTester -v $(XMLTESTS) 
