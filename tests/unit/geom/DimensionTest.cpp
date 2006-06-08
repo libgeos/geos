@@ -51,8 +51,6 @@ namespace tut
     {
 		// Just compile-time test
 		geos::geom::Dimension dim;
-		dim;
-		ensure( true );
     }
 
     // Test of toDimensionSymbol()
