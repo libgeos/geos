@@ -96,15 +96,17 @@ bool CMarkupSTL::Load( const char* szFileName )
 		fseek( fp, 0L, SEEK_SET );
 
 		// Load string
-		allocator<char> mem;
-		allocator<char>::pointer pBuffer = mem.allocate(nFileLen+1, NULL);
+		char *pBuffer = new char[nFileLen+1];
+		//allocator<char> mem;
+		//allocator<char>::pointer pBuffer = mem.allocate(nFileLen+1, NULL);
 		if ( fread( pBuffer, nFileLen, 1, fp ) == 1 )
 		{
 			pBuffer[nFileLen] = '\0';
 			bResult = SetDoc( pBuffer );
 		}
 		fclose(fp);
-		mem.deallocate(pBuffer,1);
+		//mem.deallocate(pBuffer,1);
+		delete [] pBuffer;
 	}
 	if ( ! bResult )
 		SetDoc(NULL);

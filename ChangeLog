@@ -1,5 +1,8 @@
 2006-06-08 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/markup/MarkupSTL.cpp: removed use of
+	allocator<char>, which brings in some incompatibilities
+	with libstdc++ 6.0.7 (gcc 4.0.2).
 	* tests/xmltester/Makefile.am, tests/xmltester/testrunner.sh:
 	added XML tests run to the 'make check' rule.
 	* source/headers/geos/geom/CoordinateSequenceFactory.h,
