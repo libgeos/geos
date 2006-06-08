@@ -1,5 +1,7 @@
 2006-06-08 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/geom/CoordinateArraySequenceTest.cpp:
+	fix signed/unsigned comparison warning.
 	* tests/xmltester/markup/MarkupSTL.cpp: removed use of
 	allocator<char>, which brings in some incompatibilities
 	with libstdc++ 6.0.7 (gcc 4.0.2).

@@ -403,10 +403,10 @@ namespace tut
 
 		sequence.add(c);
 
-		ensure_equals( sequence.size(), 6 );
+		ensure_equals( sequence.size(), 6u );
 		sequence.removeRepeatedPoints();
 
-		ensure_equals( sequence.size(), 3 );
+		ensure_equals( sequence.size(), 3u );
 	}
 
 } // namespace tut
