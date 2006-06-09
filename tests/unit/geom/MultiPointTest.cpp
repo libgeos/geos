@@ -40,7 +40,7 @@ namespace tut
 
 		MultiPointAutoPtr empty_mp_;
 		MultiPointPtr mp_;
-		const int mp_size_;
+		const size_t mp_size_;
 
 		test_multipoint_data()
 			:
@@ -216,7 +216,7 @@ namespace tut
 	template<>
 	void object::test<14>()
 	{
-		ensure_equals( empty_mp_->getNumPoints(), 0 );
+		ensure_equals( empty_mp_->getNumPoints(), 0u );
 	}
 
 	// Test of getLength() for empty MultiPoint
@@ -224,7 +224,7 @@ namespace tut
 	template<>
 	void object::test<15>()
 	{
-		ensure_equals( empty_mp_->getLength(), 0 );
+		ensure_equals( empty_mp_->getLength(), 0.0 );
 	}
 
 	// Test of getArea() for empty MultiPoint
@@ -232,7 +232,7 @@ namespace tut
 	template<>
 	void object::test<16>()
 	{
-		ensure_equals( empty_mp_->getArea(), 0 );
+		ensure_equals( empty_mp_->getArea(), 0.0 );
 	}
 
 	// Test of isEmpty() for non-empty LinearRing
@@ -347,7 +347,7 @@ namespace tut
 	void object::test<26>()
 	{
 		ensure(mp_ != 0);
-		ensure_equals( mp_->getLength(), 0 );
+		ensure_equals( mp_->getLength(), 0.0 );
 	}
 
 	// Test of getArea() for non-empty LinearRing
@@ -356,7 +356,7 @@ namespace tut
 	void object::test<27>()
 	{
 		ensure(mp_ != 0);
-		ensure_equals( mp_->getArea(), 0 );
+		ensure_equals( mp_->getArea(), 0.0 );
 	}
 
 	// Test of ParseException thrown when constructing MultiPoint from invalind WKT

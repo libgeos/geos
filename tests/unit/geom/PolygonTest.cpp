@@ -60,7 +60,7 @@ namespace tut
 
 		PolygonAutoPtr empty_poly_;
 		PolygonPtr poly_;
-		const int poly_size_;
+		const size_t poly_size_;
 
 		test_polygon_data() 
 			: pm_(1), factory_(&pm_, 0), reader_(&factory_),
@@ -96,7 +96,7 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Create non-empty Coordiantes sequence for Exterior LinearRing
-		const int size = 7;
+		const size_t size = 7;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence();
 		ensure( "sequence is null pointer.", coords != 0 );
 
@@ -131,8 +131,8 @@ namespace tut
 			ensure( poly->isSimple() );
 			ensure( poly->isValid() );
 
-			ensure_equals( poly->getNumGeometries(), 1 );
-			ensure_equals( poly->getNumInteriorRing(), 0 );
+			ensure_equals( poly->getNumGeometries(), 1u );
+			ensure_equals( poly->getNumInteriorRing(), 0u );
 			ensure_equals( poly->getNumPoints(), size );
 		}
 		catch (geos::util::IllegalArgumentException const& e)
@@ -244,7 +244,7 @@ namespace tut
 	template<>
 	void object::test<12>()
 	{
-		ensure_equals( empty_poly_->getNumPoints(), 0 );
+		ensure_equals( empty_poly_->getNumPoints(), 0u );
 	}
 
 	// Test of getLength() for empty Polygon
@@ -252,7 +252,7 @@ namespace tut
 	template<>
 	void object::test<13>()
 	{
-		ensure_equals( empty_poly_->getLength(), 0 );
+		ensure_equals( empty_poly_->getLength(), 0.0 );
 	}
 
 	// Test of getArea() for empty Polygon
@@ -260,7 +260,7 @@ namespace tut
 	template<>
 	void object::test<14>()
 	{
-		ensure_equals( empty_poly_->getArea(), 0 );
+		ensure_equals( empty_poly_->getArea(), 0.0 );
 	}
     
     // Test of isEmpty() for non-empty Polygon
@@ -364,7 +364,7 @@ namespace tut
     void object::test<24>()
 	{
 		ensure( poly_ != 0 );
-		ensure_not_equals( poly_->getLength(), 0 );
+		ensure_not_equals( poly_->getLength(), 0.0 );
 
 		const double tolerance = 0.0001;
 		const double expected = 38.284271247461902;
@@ -378,7 +378,7 @@ namespace tut
     void object::test<25>()
 	{
 		ensure( poly_ != 0 );
-		ensure_not_equals( poly_->getArea(), 0 );
+		ensure_not_equals( poly_->getArea(), 0.0 );
 	}
 	
 	// Test of getCoordinates() for non-empty Polygon
@@ -431,7 +431,7 @@ namespace tut
     void object::test<29>()
 	{
 		ensure( poly_ != 0 );
-		ensure_equals( poly_->getNumInteriorRing(), 0 );
+		ensure_equals( poly_->getNumInteriorRing(), 0u );
 	}
 
 	// Test of getInteriorRingN() for non-empty Polygon with interior rings
@@ -439,7 +439,7 @@ namespace tut
     template<>
     void object::test<30>()
 	{
-		const int holesNum = 1;
+		const size_t holesNum = 1;
 
 		GeometryPtr geo = 0;
 		geo = reader_.read("POLYGON ((0 0, 100 0, 100 100, 0 100, 0 0), (1 1, 1 10, 10 10, 10 1, 1 1) )");
@@ -486,7 +486,7 @@ namespace tut
 		ensure_equals( coords->getSize(), poly_size_ );
 
 		// Check first and last coordinates
-		const int lastPos = poly_size_ - 1;
+		const size_t lastPos = poly_size_ - 1;
 		ensure_equals( coords->getAt(0), coords->getAt(lastPos) );
 
 		// Check coordinate	from the middle of ring

@@ -44,7 +44,7 @@ namespace tut
 
 		geos::geom::LinearRing empty_ring_;
 		LinearRingPtr ring_;
-		const int ring_size_;
+		const size_t ring_size_;
 
 		test_linearring_data()
 			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
@@ -103,7 +103,7 @@ namespace tut
 			ensure( ring.isRing() );
 			ensure( ring.isSimple() );
 			ensure( ring.isValid() );
-			//ensure_equals( rint.getNumPoints(), 7 );
+			//ensure_equals( rint.getNumPoints(), 7u );
 		}
 		catch (geos::util::IllegalArgumentException const& e)
 		{
@@ -224,7 +224,7 @@ namespace tut
 	template<>
 	void object::test<14>()
 	{
-		ensure_equals( empty_ring_.getNumPoints(), 0 );
+		ensure_equals( empty_ring_.getNumPoints(), 0u );
 	}
 
 	// Test of getLength() for empty LinearRing
@@ -232,7 +232,7 @@ namespace tut
 	template<>
 	void object::test<15>()
 	{
-		ensure_equals( empty_ring_.getLength(), 0 );
+		ensure_equals( empty_ring_.getLength(), 0.0 );
 	}
 
 	// Test of getArea() for empty LinearRing
@@ -240,7 +240,7 @@ namespace tut
 	template<>
 	void object::test<16>()
 	{
-		ensure_equals( empty_ring_.getArea(), 0 );
+		ensure_equals( empty_ring_.getArea(), 0.0 );
 	}
 
     // Test of isEmpty() for non-empty LinearRing
@@ -354,7 +354,7 @@ namespace tut
     void object::test<26>()
 	{
 		ensure(ring_ != 0);
-		ensure_not_equals( ring_->getLength(), 0 );
+		ensure_not_equals( ring_->getLength(), 0.0 );
 
 		const double tolerance = 0.0001;
 		const double expected = 38.284271247461902;
@@ -368,7 +368,7 @@ namespace tut
     void object::test<27>()
 	{
 		ensure(ring_ != 0);
-		ensure_equals( ring_->getArea(), 0 );
+		ensure_equals( ring_->getArea(), 0.0 );
 	}
 
 	// Test of exception thrown when constructing non-empty and non-closed LinearRing
@@ -400,7 +400,7 @@ namespace tut
 	{
 		try
 		{
-			// Construc LinearRing self-intersecting in point (5,5)
+			// Construct LinearRing self-intersecting in point (5,5)
 			GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10, 15 5, 5 5, 0 10)");
 			ensure(geo != 0);
 
