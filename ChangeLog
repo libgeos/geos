@@ -1,3 +1,8 @@
+2006-06-08 Mateusz Loskot <mateusz@loskot.net>
+
+        * tests/unit/geom/DimensionTest.cpp (1.3): Fixed no-effect
+	warning in test<1> from DimensionTest.cpp.
+
 2006-06-08 Sandro Santilli <strk@refractions.net>
 
 	* tests/unit/geom/GeometryFactoryTest.cpp: fixed
