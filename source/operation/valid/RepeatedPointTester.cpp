@@ -72,11 +72,20 @@ RepeatedPointTester::hasRepeatedPoint(const CoordinateSequence *coord)
 	return false;
 }
 
-bool RepeatedPointTester::hasRepeatedPoint(const Polygon *p){
-	if (hasRepeatedPoint(p->getExteriorRing()->getCoordinates())) return true;
-	for(int i=0; i<p->getNumInteriorRing(); i++)
+bool
+RepeatedPointTester::hasRepeatedPoint(const Polygon *p)
+{
+	if (hasRepeatedPoint(p->getExteriorRing()->getCoordinates()))
 	{
-		if (hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinates())) return true;
+		return true;
+	}
+
+	for(size_t i=0, n=p->getNumInteriorRing(); i<n; ++i)
+	{
+		if (hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinates()))
+		{
+			return true;
+		}
 	}
 	return false;
 }
@@ -120,6 +129,9 @@ RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/06/09 07:42:13  strk
+ * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
+ *
  * Revision 1.19  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

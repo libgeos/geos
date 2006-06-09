@@ -14,9 +14,6 @@
  *
  **********************************************************************/
 
-#include <vector>
-#include <memory> // auto_ptr
-
 #include <geos/algorithm/CGAlgorithms.h>
 
 #include <geos/util/UnsupportedOperationException.h>
@@ -43,6 +40,10 @@
 #include <geos/geom/GeometryCollection.h>
 
 #include <geos/inline.h>
+
+#include <vector>
+#include <memory> // auto_ptr
+#include <cassert>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -262,12 +263,22 @@ GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 void
 GeometryGraph::addPolygon(const Polygon *p)
 {
-	addPolygonRing((LinearRing*) p->getExteriorRing(),Location::EXTERIOR,Location::INTERIOR);
-	for (int i=0;i<p->getNumInteriorRing();i++) {
+	const LineString* ls;
+	const LinearRing* lr;
+
+	ls = p->getExteriorRing();
+	assert(dynamic_cast<const LinearRing*>(ls));
+	lr = static_cast<const LinearRing*>(ls);
+	addPolygonRing(lr, Location::EXTERIOR, Location::INTERIOR);
+	for (size_t i=0, n=p->getNumInteriorRing(); i<n; ++i)
+	{
 		// Holes are topologically labelled opposite to the shell, since
 		// the interior of the polygon lies on their opposite side
 		// (on the left, if the hole is oriented CW)
-		addPolygonRing((LinearRing*) p->getInteriorRingN(i),Location::INTERIOR,Location::EXTERIOR);
+		ls = p->getInteriorRingN(i);
+		assert(dynamic_cast<const LinearRing*>(ls));
+		lr = static_cast<const LinearRing*>(ls);
+		addPolygonRing(lr, Location::INTERIOR, Location::EXTERIOR);
 	}
 }
 
@@ -460,6 +471,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/06/09 07:42:13  strk
+ * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
+ *
  * Revision 1.27  2006/04/07 09:54:30  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

@@ -422,12 +422,12 @@ OverlayOp::mergeZ(Node *n, const Polygon *poly) const
 {
 	const LineString *ls;
 	int found = 0;
-	ls = (const LineString *)poly->getExteriorRing();
+	ls = poly->getExteriorRing();
 	found = mergeZ(n, ls);
 	if ( found ) return 1;
-	for (int i=0; i<poly->getNumInteriorRing(); i++)
+	for (size_t i=0, nr=poly->getNumInteriorRing(); i<nr; ++i)
 	{
-		ls = (const LineString *)poly->getInteriorRingN(i);
+		ls = poly->getInteriorRingN(i);
 		found = mergeZ(n, ls);
 		if ( found ) return 1;
 	}
@@ -466,7 +466,6 @@ void
 OverlayOp::findResultAreaEdges(OverlayOp::OpCode opCode)
 {
 	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
-	//for(unsigned int i=0;i<ee->size();i++) {
 	for(size_t i=0, e=ee->size(); i<e; ++i) {
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		// mark all dirEdges with the appropriate label
@@ -490,8 +489,9 @@ OverlayOp::cancelDuplicateResultEdges()
 	// remove any dirEdges whose sym is also included
 	// (they "cancel each other out")
 	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
-	for(int i=0;i<(int)ee->size();i++) {
-		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
+	for(size_t i=0, eesize=ee->size(); i<eesize; ++i)
+	{
+		DirectedEdge *de=static_cast<DirectedEdge*>( (*ee)[i] );
 		DirectedEdge *sym=de->getSym();
 		if (de->isInResult() && sym->isInResult()) {
 			de->setInResult(false);
@@ -782,6 +782,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.72  2006/06/09 07:42:13  strk
+ * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
+ *
  * Revision 1.71  2006/06/05 15:36:34  strk
  * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
  *
