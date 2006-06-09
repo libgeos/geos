@@ -73,12 +73,12 @@ namespace tut
 	cs->add(c0);
 	cs->add(c1);
 
-	ensure_equals(cs->size(), 2);
+	ensure_equals(cs->size(), 2u);
 
 	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
 	ensure(ss.get());
 
-	ensure_equals(ss->size(), 2);
+	ensure_equals(ss->size(), 2u);
 
 	ensure_equals(ss->getData(), (void*)0);
 
@@ -101,7 +101,7 @@ namespace tut
 	}
 	ensure(octant_failed);
 
-	ensure_equals(ss->getNodeList().size(), 0);
+	ensure_equals(ss->getNodeList().size(), 0u);
 
 	ss->testInvariant();
     }
@@ -121,12 +121,12 @@ namespace tut
 	cs->add(c0);
 	cs->add(c1);
 
-	ensure_equals(cs->size(), 2);
+	ensure_equals(cs->size(), 2u);
 
 	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
 	ensure(ss.get());
 
-	ensure_equals(ss->size(), 2);
+	ensure_equals(ss->size(), 2u);
 
 	ensure_equals(ss->getData(), (void*)0);
 
@@ -142,7 +142,7 @@ namespace tut
 
 	ensure_equals(ss->getSegmentOctant(0), 0);
 
-	ensure_equals(ss->getNodeList().size(), 0);
+	ensure_equals(ss->getNodeList().size(), 0u);
 
 	ss->testInvariant();
     }
@@ -165,12 +165,12 @@ namespace tut
 	cs->add(c2);
 	cs->add(c0);
 
-	ensure_equals(cs->size(), 4);
+	ensure_equals(cs->size(), 4u);
 
 	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
 	ensure(ss.get());
 
-	ensure_equals(ss->size(), 4);
+	ensure_equals(ss->size(), 4u);
 
 	ensure_equals(ss->getData(), (void*)0);
 
@@ -194,7 +194,7 @@ namespace tut
 
 	ensure_equals(ss->getSegmentOctant(0), 0);
 
-	ensure_equals(ss->getNodeList().size(), 0);
+	ensure_equals(ss->getNodeList().size(), 0u);
 
 	ss->testInvariant();
     }
@@ -214,25 +214,25 @@ namespace tut
 
 	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
 
-	ensure_equals(ss->getNodeList().size(), 0);
+	ensure_equals(ss->getNodeList().size(), 0u);
 
 	// the intersection is invalid, but SegmentString trusts us
 	ss->addIntersection(p0, 0);
-	ensure_equals(ss->getNodeList().size(), 1);
+	ensure_equals(ss->getNodeList().size(), 1u);
 
 	// This node is already present, so shouldn't be
 	// accepted as a new one
 	ss->addIntersection(p0, 0);
-	ensure_equals(ss->getNodeList().size(), 1);
+	ensure_equals(ss->getNodeList().size(), 1u);
 
 	ss->addIntersection(p1, 0);
-	ensure_equals(ss->getNodeList().size(), 2);
+	ensure_equals(ss->getNodeList().size(), 2u);
 
 	ss->addIntersection(p1, 0);
-	ensure_equals(ss->getNodeList().size(), 2);
+	ensure_equals(ss->getNodeList().size(), 2u);
 
 	ss->addIntersection(p0, 0);
-	ensure_equals(ss->getNodeList().size(), 2);
+	ensure_equals(ss->getNodeList().size(), 2u);
 
     }
 

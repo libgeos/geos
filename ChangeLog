@@ -3,7 +3,8 @@
 	* tests/unit/geom/LineStringTest.cpp,
 	tests/unit/geom/LinearRingTest.cpp,
 	tests/unit/geom/MultiPointTest.cpp,
-	tests/unit/geom/PolygonTest.cpp:
+	tests/unit/geom/PolygonTest.cpp,
+	tests/unit/noding/SegmentStringTest.cpp:
 	removed signed/unsigned comparison warnings.
 	* source/geomgraph/GeometryGraph.cpp,
 	source/operation/buffer/OffsetCurveSetBuilder.cpp,
