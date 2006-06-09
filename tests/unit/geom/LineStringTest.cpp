@@ -131,8 +131,8 @@ namespace tut
 		ensure_equals( ls->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( ls->getBoundaryDimension(), geos::geom::Dimension::P );
 		ensure_equals( ls->getNumPoints(), size3 );
-		ensure_equals( ls->getArea(), 0 );
-		ensure_not_equals( ls->getLength(), 0 );
+		ensure_equals( ls->getArea(), 0.0 );
+		ensure_not_equals( ls->getLength(), 0.0 );
 	}
 
 	// Test of incomplete LineString user's constructor throwing the IllegalArgumentException
@@ -147,7 +147,7 @@ namespace tut
 			pseq = new geos::geom::CoordinateArraySequence();
 			ensure( "sequence is null pointer.", pseq != 0 );
 			pseq->add(geos::geom::Coordinate(0, 0, 0));
-			ensure_equals( pseq->size(), 1 );
+			ensure_equals( pseq->size(), 1u );
 
 			// Create incomplete linstring
 			LineStringAutoPtr ls(factory_.createLineString(pseq));
@@ -172,7 +172,7 @@ namespace tut
 		using geos::geom::Coordinate;
 
 		// Non-empty sequence of coordiantes
-		const int size = 3;
+		const size_t size = 3;
 
 		CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
 		ensure( "sequence is null pointer.", pseq != 0 );
@@ -218,8 +218,8 @@ namespace tut
 		ensure_equals( copy->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( copy->getBoundaryDimension(), geos::geom::Dimension::P );
 		ensure_equals( copy->getNumPoints(), size );
-		ensure_equals( copy->getArea(), 0 );
-		ensure_not_equals( copy->getLength(), 0 );
+		ensure_equals( copy->getArea(), 0.0 );
+		ensure_not_equals( copy->getLength(), 0.0 );
 	}
 
     // Test of isClosed() and isRing() for empty linestring
@@ -296,7 +296,7 @@ namespace tut
     template<>
     void object::test<12>()
 	{
-		ensure_equals( empty_line_->getNumPoints(), 0 );
+		ensure_equals( empty_line_->getNumPoints(), 0u );
 	}
 
 	// Test of getLength() for empty linestring
@@ -304,7 +304,7 @@ namespace tut
     template<>
     void object::test<13>()
 	{
-		ensure_equals( empty_line_->getLength(), 0 );
+		ensure_equals( empty_line_->getLength(), 0.0 );
 	}
 
 	// Test of getArea() for empty linestring
@@ -312,7 +312,7 @@ namespace tut
     template<>
     void object::test<14>()
 	{
-		ensure_equals( empty_line_->getArea(), 0 );
+		ensure_equals( empty_line_->getArea(), 0.0 );
 	}
 
     // Test of isClosed() and isRing() for non-empty linestring
@@ -447,7 +447,7 @@ namespace tut
     template<>
     void object::test<22>()
 	{
-		const int size = 4;
+		const size_t size = 4;
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
 		ensure( geo != 0 );
 
@@ -467,7 +467,7 @@ namespace tut
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 10 10, 20 0)");
 		ensure( geo != 0 );
 
-		ensure_not_equals( geo->getLength(), 0 );
+		ensure_not_equals( geo->getLength(), 0.0 );
 
 		const double diff = std::fabs(geo->getLength() - expected);
 		ensure( diff <= tolerance );
@@ -484,7 +484,7 @@ namespace tut
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 10 10, 20 0)");
 		ensure( geo != 0 );
 
-		ensure_equals( geo->getArea(), 0 );
+		ensure_equals( geo->getArea(), 0.0 );
 
 		// FREE TESTED LINESTRING
 		factory_.destroyGeometry(geo);
