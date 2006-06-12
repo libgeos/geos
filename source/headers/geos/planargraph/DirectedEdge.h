@@ -66,10 +66,27 @@ public:
 	typedef std::vector<DirectedEdge *> Vect;
 
 	/**
-	 * \brief Returns a List containing the parent Edge (possibly null)
+	 * \brief
+	 * Returns a List containing the parent Edge (possibly null)
 	 * for each of the given DirectedEdges.
+	 *
+	 * NOTE: ownership of the returned vector is left to
+	 * the caller, see the equivalent function taking a vector
+	 * reference to avoid this.
 	 */
-	static std::vector<Edge*>* toEdges(std::vector<DirectedEdge*> *dirEdges);
+	static std::vector<Edge*>* toEdges(
+		std::vector<DirectedEdge*>& dirEdges);
+
+	/**
+	 * \brief
+	 * Add parent Edge (possibly null) of each of the given DirectedEdges
+	 * to the given parentEdges vector.
+	 *
+	 * NOTE: parents are pushed to the parentEdges vector, make sure 
+	 * it is empty if index-based corrispondence is important.
+	 */
+	static void toEdges( std::vector<DirectedEdge*>& dirEdges,
+			std::vector<Edge*>& parentEdges);
 
 	/**
 	 * \brief Constructs a DirectedEdge connecting the <code>from</code>
@@ -217,6 +234,9 @@ bool pdeLessThan(DirectedEdge *first, DirectedEdge * second);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 15:46:08  strk
+ * provided a memory friendly version of toEdges() method.
+ *
  * Revision 1.1  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

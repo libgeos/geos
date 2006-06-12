@@ -29,13 +29,21 @@ namespace geos {
 namespace planargraph {
 
 /*public*/
+void
+DirectedEdge::toEdges(vector<DirectedEdge*>& dirEdges, vector<Edge*>& edges)
+{
+	for (size_t i=0, n=dirEdges.size(); i<n; ++i)
+	{
+		edges.push_back(dirEdges[i]->parentEdge);
+	}
+}
+
+/*public*/
 vector<Edge*>*
-DirectedEdge::toEdges(vector<DirectedEdge*> *dirEdges) 
+DirectedEdge::toEdges(vector<DirectedEdge*>& dirEdges) 
 {
 	vector<Edge*> *edges=new vector<Edge*>();
-	for (int i=0;i<(int)dirEdges->size();i++) {
-		edges->push_back((*dirEdges)[i]->parentEdge);
-	}
+	toEdges(dirEdges, *edges);
 	return edges;
 }
 
@@ -170,6 +178,9 @@ DirectedEdge::print() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 15:46:09  strk
+ * provided a memory friendly version of toEdges() method.
+ *
  * Revision 1.1  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
