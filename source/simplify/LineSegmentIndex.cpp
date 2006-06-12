@@ -61,6 +61,7 @@ public:
 
 	LineSegmentVisitor(const LineSegment* s)
 		:
+		ItemVisitor(),
 		querySeg(s),
 		items(new vector<LineSegment*>())
 	{}
@@ -72,6 +73,7 @@ public:
 
 	LineSegmentVisitor(const LineSegmentVisitor& o)
 		:
+		ItemVisitor(),
 		querySeg(o.querySeg),
 		items(new vector<LineSegment*>(*(o.items.get())))
 	{
@@ -172,6 +174,9 @@ LineSegmentIndex::query(const LineSegment* querySeg) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 17:18:56  strk
+ * LineSegmentIndex: explicitly initialized parent class in constructors.
+ *
  * Revision 1.3  2006/06/12 11:29:24  strk
  * unsigned int => size_t
  *

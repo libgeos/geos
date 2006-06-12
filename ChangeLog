@@ -1,5 +1,7 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* source/simplify/LineSegmentIndex.cpp: explicitly initialized
+	parent class in constructors.
 	* source/headers/geos/index/quadtree/Root.h,
 	source/headers/geos/operation/distance/ConnectedElementPointFilter.h,
 	source/headers/geos/operation/polygonize/Polygonizer.h:
