@@ -71,7 +71,7 @@ private:
 		Polygonizer *pol;
 		LineStringAdder(Polygonizer *p);
 		void filter_rw(geom::Geometry *g);
-		void filter_ro(const geom::Geometry *g){};
+		//void filter_ro(const geom::Geometry * /*g*/){};
 	};
 
 	// default factory
@@ -191,6 +191,9 @@ friend class Polygonizer::LineStringAdder;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 17:15:29  strk
+ * Removed unused parameters warning
+ *
  * Revision 1.1  2006/03/22 11:19:06  strk
  * opPolygonize.h headers split.
  *

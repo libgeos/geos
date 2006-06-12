@@ -59,7 +59,7 @@ public:
 
 	void filter_ro(const geom::Geometry *geom);
 
-	void filter_rw(geom::Geometry *geom) {};
+	//void filter_rw(geom::Geometry * /*geom*/) {};
 };
 
 
@@ -71,6 +71,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 17:15:29  strk
+ * Removed unused parameters warning
+ *
  * Revision 1.1  2006/03/21 17:55:01  strk
  * opDistance.h header split
  *

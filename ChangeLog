@@ -1,5 +1,9 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/index/quadtree/Root.h,
+	source/headers/geos/operation/distance/ConnectedElementPointFilter.h,
+	source/headers/geos/operation/polygonize/Polygonizer.h:
+	Removed unused parameter warnings.
 	* source/headers/geos/geom/GeometryFilter.h:
 	added assert(0) version of filter_ro() and filter_rw()
 	to allow implementations to only defined the required

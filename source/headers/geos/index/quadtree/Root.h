@@ -69,7 +69,7 @@ public:
 
 protected:
 
-	bool isSearchMatch(const geom::Envelope *searchEnv) { return true; }
+	bool isSearchMatch(const geom::Envelope* /* searchEnv */) { return true; }
 
 };
 
@@ -81,6 +81,9 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 17:15:29  strk
+ * Removed unused parameters warning
+ *
  * Revision 1.1  2006/03/22 12:22:50  strk
  * indexQuadtree.h split
  *
