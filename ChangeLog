@@ -1,5 +1,8 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/io/WKTWriter.h,
+	source/io/WKTWriter.cpp: fixed compiler warnings,
+	fixed some methods to omit unused parameters.
 	* source/geom/CoordinateSequence.cpp,
 	source/headers/geos/geom/CoordinateSequence.h,
 	tests/unit/geom/CoordinateArraySequenceTest.cpp:

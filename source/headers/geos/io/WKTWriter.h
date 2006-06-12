@@ -113,34 +113,94 @@ public:
  
 
 protected:
+
 	std::string formatter;
+
 	void appendGeometryTaggedText(const geom::Geometry *geometry, int level, Writer *writer);
-	void appendPointTaggedText(const geom::Coordinate* coordinate, int level, Writer *writer, const geom::PrecisionModel* precisionModel);
-	void appendLineStringTaggedText(const geom::LineString *lineString, int level, Writer *writer);
-	void appendLinearRingTaggedText(const geom::LinearRing *lineString, int level, Writer *writer);
-	void appendPolygonTaggedText(const geom::Polygon *polygon, int level, Writer *writer);
-	void appendMultiPointTaggedText(const geom::MultiPoint *multipoint, int level, Writer *writer);
-	void appendMultiLineStringTaggedText(const geom::MultiLineString *multiLineString, int level,Writer *writer);
-	void appendMultiPolygonTaggedText(const geom::MultiPolygon *multiPolygon, int level, Writer *writer);
-	void appendGeometryCollectionTaggedText(const geom::GeometryCollection *geometryCollection, int level,Writer *writer);
-	void appendPointText(const geom::Coordinate* coordinate, int level, Writer *writer, const geom::PrecisionModel* precisionModel);
-	void appendCoordinate(const geom::Coordinate* coordinate, Writer *writer, const geom::PrecisionModel* precisionModel);
+
+	void appendPointTaggedText(
+			const geom::Coordinate* coordinate,
+			int level, Writer *writer);
+
+	void appendLineStringTaggedText(
+			const geom::LineString *lineString,
+			int level, Writer *writer);
+
+	void appendLinearRingTaggedText(
+			const geom::LinearRing *lineString,
+			int level, Writer *writer);
+
+	void appendPolygonTaggedText(
+			const geom::Polygon *polygon,
+			int level, Writer *writer);
+
+	void appendMultiPointTaggedText(
+			const geom::MultiPoint *multipoint,
+			int level, Writer *writer);
+
+	void appendMultiLineStringTaggedText(
+			const geom::MultiLineString *multiLineString,
+			int level,Writer *writer);
+
+	void appendMultiPolygonTaggedText(
+			const geom::MultiPolygon *multiPolygon,
+			int level, Writer *writer);
+
+	void appendGeometryCollectionTaggedText(
+			const geom::GeometryCollection *geometryCollection,
+			int level,Writer *writer);
+
+	void appendPointText(const geom::Coordinate* coordinate, int level,
+			Writer *writer);
+
+	void appendCoordinate(const geom::Coordinate* coordinate,
+			Writer *writer);
+
 	std::string writeNumber(double d);
-	void appendLineStringText(const geom::LineString *lineString, int level, bool doIndent, Writer *writer);
-	void appendPolygonText(const geom::Polygon *polygon, int level, bool indentFirst, Writer *writer);
-	void appendMultiPointText(const geom::MultiPoint *multiPoint, int level, Writer *writer);
-	void appendMultiLineStringText(const geom::MultiLineString *multiLineString, int level, bool indentFirst,Writer *writer);
-	void appendMultiPolygonText(const geom::MultiPolygon *multiPolygon, int level, Writer *writer);
-	void appendGeometryCollectionText(const geom::GeometryCollection *geometryCollection, int level,Writer *writer);
+
+	void appendLineStringText(
+			const geom::LineString *lineString,
+			int level, bool doIndent, Writer *writer);
+
+	void appendPolygonText(
+			const geom::Polygon *polygon,
+			int level, bool indentFirst, Writer *writer);
+
+	void appendMultiPointText(
+			const geom::MultiPoint *multiPoint,
+			int level, Writer *writer);
+
+	void appendMultiLineStringText(
+			const geom::MultiLineString *multiLineString,
+			int level, bool indentFirst,Writer *writer);
+
+	void appendMultiPolygonText(
+			const geom::MultiPolygon *multiPolygon,
+			int level, Writer *writer);
+
+	void appendGeometryCollectionText(
+			const geom::GeometryCollection *geometryCollection,
+			int level,Writer *writer);
+
 private:
+
 	enum {
 		INDENT = 2
 	};
+
 //	static const int INDENT = 2;
-	static std::string createFormatter(const geom::PrecisionModel* precisionModel);
+
+	static std::string createFormatter(
+			const geom::PrecisionModel* precisionModel);
+
 	bool isFormatted;
+
 	int level;
-	void writeFormatted(const geom::Geometry *geometry, bool isFormatted, Writer *writer);
+
+	void writeFormatted(
+			const geom::Geometry *geometry,
+			bool isFormatted, Writer *writer);
+
 	void indent(int level, Writer *writer);
 };
 
@@ -151,6 +211,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 16:55:53  strk
+ * fixed compiler warnings, fixed some methods to omit unused parameters.
+ *
  * Revision 1.2  2006/03/22 16:58:35  strk
  * Removed (almost) all inclusions of geom.h.
  * Removed obsoleted .cpp files.

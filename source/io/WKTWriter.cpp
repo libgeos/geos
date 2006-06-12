@@ -157,11 +157,14 @@ void WKTWriter::writeFormatted(const Geometry *geometry, bool isFormatted, Write
 	appendGeometryTaggedText(geometry, 0, writer);
 }
 
-void WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level, Writer *writer) {
+void
+WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
+		Writer *writer)
+{
 	indent(level, writer);
 	if (typeid(*geometry)==typeid(Point)) {
 		Point* point=(Point*)geometry;
-		appendPointTaggedText(point->getCoordinate(),level,writer,point->getPrecisionModel());
+		appendPointTaggedText(point->getCoordinate(),level,writer);
 	} else if (typeid(*geometry)==typeid(LinearRing)) {
 		appendLinearRingTaggedText((LinearRing*) geometry, level, writer);
 	} else if (typeid(*geometry)==typeid(LineString)) {
@@ -183,15 +186,19 @@ void WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level, Wr
 	}
 }
 
+/*protected*/
 void
 WKTWriter::appendPointTaggedText(const Coordinate* coordinate, int level,
-		Writer *writer, const PrecisionModel* precisionModel)
+		Writer *writer)
 {
 	writer->write("POINT ");
-	appendPointText(coordinate, level, writer, precisionModel);
+	appendPointText(coordinate, level, writer);
 }
 
-void WKTWriter::appendLineStringTaggedText(const LineString *lineString, int level, Writer *writer) {
+void
+WKTWriter::appendLineStringTaggedText(const LineString *lineString, int level,
+		Writer *writer)
+{
 	writer->write("LINESTRING ");
 	appendLineStringText(lineString, level, false, writer);
 }
@@ -234,20 +241,22 @@ void WKTWriter::appendGeometryCollectionTaggedText(const GeometryCollection *geo
 }
 
 void
-WKTWriter::appendPointText(const Coordinate* coordinate, int level,
-		Writer *writer,const PrecisionModel* precisionModel) {
+WKTWriter::appendPointText(const Coordinate* coordinate, int /*level*/,
+		Writer *writer)
+{
 	if (coordinate==NULL) {
 		writer->write("EMPTY");
 	} else {
 		writer->write("(");
-		appendCoordinate(coordinate, writer, precisionModel);
+		appendCoordinate(coordinate, writer);
 		writer->write(")");
 	}
 }
 
-void WKTWriter::appendCoordinate(const Coordinate* coordinate, Writer *writer, const PrecisionModel* precisionModel) {
-//	Coordinate* externalCoordinate=new Coordinate();
-//	precisionModel->toExternal(*coordinate, externalCoordinate);
+void
+WKTWriter::appendCoordinate(const Coordinate* coordinate,
+		Writer *writer)
+{
 	string out="";
 	out+=writeNumber(coordinate->x);
 	out+=" ";
@@ -257,7 +266,6 @@ void WKTWriter::appendCoordinate(const Coordinate* coordinate, Writer *writer, c
 	out+=writeNumber(coordinate->z);
 #endif
 	writer->write(out);
-//	delete externalCoordinate;
 }
 
 string WKTWriter::writeNumber(double d) {
@@ -269,7 +277,10 @@ string WKTWriter::writeNumber(double d) {
 	return out;
 }
 
-void WKTWriter::appendLineStringText(const LineString *lineString, int level, bool doIndent, Writer *writer) {
+void
+WKTWriter::appendLineStringText(const LineString *lineString, int level,
+		bool doIndent, Writer *writer)
+{
 	if (lineString->isEmpty()) {
 		writer->write("EMPTY");
 	} else {
@@ -281,13 +292,16 @@ void WKTWriter::appendLineStringText(const LineString *lineString, int level, bo
 				writer->write(", ");
 				if (i%10==0) indent(level + 2, writer);
 			}
-			appendCoordinate(&(lineString->getCoordinateN(i)), writer, lineString->getPrecisionModel());
+			appendCoordinate(&(lineString->getCoordinateN(i)), writer);
 		}
 		writer->write(")");
 	}
 }
 
-void WKTWriter::appendPolygonText(const Polygon *polygon, int level, bool indentFirst, Writer *writer) {
+void
+WKTWriter::appendPolygonText(const Polygon *polygon, int /*level*/,
+		bool indentFirst, Writer *writer)
+{
 	if (polygon->isEmpty()) {
 		writer->write("EMPTY");
 	} else {
@@ -304,7 +318,10 @@ void WKTWriter::appendPolygonText(const Polygon *polygon, int level, bool indent
 	}
 }
 
-void WKTWriter::appendMultiPointText(const MultiPoint *multiPoint, int level, Writer *writer) {
+void
+WKTWriter::appendMultiPointText(const MultiPoint *multiPoint,
+		int /*level*/, Writer *writer)
+{
 	if (multiPoint->isEmpty()) {
 		writer->write("EMPTY");
 	} else {
@@ -318,7 +335,7 @@ void WKTWriter::appendMultiPointText(const MultiPoint *multiPoint, int level, Wr
 			}
 			appendCoordinate(
 				((Point* )multiPoint->getGeometryN(i))->getCoordinate(),
-				writer, multiPoint->getPrecisionModel());
+				writer);
 		}
 		writer->write(")");
 	}
@@ -403,6 +420,9 @@ void WKTWriter::indent(int level, Writer *writer) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/06/12 16:55:53  strk
+ * fixed compiler warnings, fixed some methods to omit unused parameters.
+ *
  * Revision 1.34  2006/06/08 17:58:57  strk
  * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
  *
