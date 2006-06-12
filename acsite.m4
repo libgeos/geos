@@ -10,7 +10,11 @@ AC_DEFUN([PGAC_TYPE_64BIT_INT],
 define([Ac_cachevar], [translit([pgac_cv_type_$1_64], [ *], [_p])])dnl
 AC_CACHE_CHECK([whether $1 is 64 bits], [Ac_cachevar],
 [AC_TRY_RUN(
-[typedef $1 int64;
+[
+
+#include <stdint.h>
+
+typedef $1 int64;
 
 /*
  * These are globals to discourage the compiler from folding all the

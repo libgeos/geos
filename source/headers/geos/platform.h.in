@@ -1,6 +1,9 @@
 #ifndef GEOS_PLATFORM_H
 #define GEOS_PLATFORM_H
 
+/* Set to 1 if you have `int64_t' type */
+#undef HAVE_INT64_T_64
+
 /* Set to 1 if `long int' is 64 bits */
 #undef HAVE_LONG_INT_64
 
@@ -17,6 +20,13 @@ extern "C"
 }
 #endif
 
+#ifdef HAVE_INT64_T_64
+extern "C"
+{
+#include <stdint.h>
+}
+#endif
+
 
 //Defines NaN for intel platforms
 //Don't forget to define infinities
@@ -27,14 +37,18 @@ extern "C"
 #define FINITE(x) ( (x) != DoubleNotANumber && (x) != DoubleInfinity && (x) != DoubleNegInfinity )
 #define ISNAN(x) ( (x) == DoubleNotANumber )
 
-#ifdef HAVE_LONG_LONG_INT_64
- typedef long long int int64;
+#ifdef HAVE_INT64_T_64
+  typedef int64_t int64;
 #else
- typedef long int int64;
-#ifndef HAVE_LONG_INT_64
-#define INT64_IS_REALLY32 1
-#warning "Could not find 64bit integer definition!"
-#endif
+# ifdef HAVE_LONG_LONG_INT_64
+   typedef long long int int64;
+# else
+   typedef long int int64;
+#  ifndef HAVE_LONG_INT_64
+#   define INT64_IS_REALLY32 1
+#   warning "Could not find 64bit integer definition!"
+#  endif
+# endif
 #endif
 
 inline int getMachineByteOrder() {

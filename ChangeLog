@@ -1,5 +1,7 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* acsite.m4, configure.in, source/headers/geos/platform.h.in:
+	Check for int64_t type for int64 typedef.
 	* source/algorithm/ConvexHull.cpp,
 	source/algorithm/PointLocator.cpp,
 	source/algorithm/SimplePointInAreaLocator.cpp,

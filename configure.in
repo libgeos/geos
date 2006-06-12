@@ -44,9 +44,12 @@ AC_ISC_POSIX
 dnl types checks ------------------------------------------------------
 
 dnl Find a working 64bit integer
-PGAC_TYPE_64BIT_INT([long int])
-if test x"$HAVE_LONG_INT_64" = x"no" ; then
-  PGAC_TYPE_64BIT_INT([long long int])
+PGAC_TYPE_64BIT_INT([int64_t])
+if test x"$HAVE_INT64_T_64" = x"no" ; then
+  PGAC_TYPE_64BIT_INT([long int])
+  if test x"$HAVE_LONG_INT_64" = x"no" ; then
+    PGAC_TYPE_64BIT_INT([long long int])
+  fi
 fi
 
 dnl function checks ------------------------------------------------------
