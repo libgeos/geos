@@ -154,7 +154,7 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 	if (shellLoc==Location::BOUNDARY) return Location::BOUNDARY;
 
 	// now test if the point lies in or on the holes
-	for(int i=0, n=poly->getNumInteriorRing(); i<n; ++i)
+	for(size_t i=0, n=poly->getNumInteriorRing(); i<n; ++i)
 	{
 		const LinearRing *hole=dynamic_cast<const LinearRing *>(poly->getInteriorRingN(i));
 		int holeLoc=locateInPolygonRing(p,hole);
@@ -169,6 +169,9 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.31  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.30  2006/04/07 09:54:29  strk
  * Geometry::getNumGeometries() changed to return 'unsigned int'
  * rather then 'int'

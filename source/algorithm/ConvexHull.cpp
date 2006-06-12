@@ -103,10 +103,10 @@ ConvexHull::toCoordinateSequence(Coordinate::ConstVect &cv)
 	// the CoordinateSequenceFactory
 	Coordinate::Vect *vect=new Coordinate::Vect();
 
-	unsigned int n=cv.size();
+	size_t n=cv.size();
 	vect->reserve(n); // avoid multiple reallocs
 
-	for (unsigned int i=0; i<n; ++i)
+	for (size_t i=0; i<n; ++i)
 	{
 		vect->push_back(*(cv[i])); // Coordinate copy
 	}
@@ -123,7 +123,7 @@ ConvexHull::computeOctPts(const Coordinate::ConstVect &inputPts,
 	// Initialize all slots with first input coordinate
 	pts = Coordinate::ConstVect(8, inputPts[0]);
 
-	for (unsigned int i=1, n=inputPts.size(); i<n; ++i)
+	for (size_t i=1, n=inputPts.size(); i<n; ++i)
 	{
 		if (inputPts[i]->x < pts[0]->x) {
 			pts[0] = inputPts[i];
@@ -199,7 +199,7 @@ ConvexHull::reduce(Coordinate::ConstVect &pts)
 	 *
 	 * @@TIP: there should be a std::algo for this
 	 */
-	for (unsigned int i=0, n=pts.size(); i<n; ++i)
+	for (size_t i=0, n=pts.size(); i<n; ++i)
 	{
 		if ( !CGAlgorithms::isPointInRing(*(pts[i]), polyPts) )
 		{
@@ -214,7 +214,7 @@ ConvexHull::reduce(Coordinate::ConstVect &pts)
 Geometry*
 ConvexHull::getConvexHull()
 {
-	unsigned int nInputPts=inputPts.size();
+	size_t nInputPts=inputPts.size();
 
 	if (nInputPts==0) // Return an empty geometry
 		return geomFactory->createEmptyGeometry();
@@ -256,7 +256,7 @@ ConvexHull::preSort(Coordinate::ConstVect &pts)
 	// find the lowest point in the set. If two or more points have
 	// the same minimum y coordinate choose the one with the minimum x.
 	// This focal point is put in array location pts[0].
-	for(unsigned int i=1, n=pts.size(); i<n; ++i)
+	for(size_t i=1, n=pts.size(); i<n; ++i)
 	{
 		const Coordinate *p0=pts[0]; // this will change
 		const Coordinate *pi=pts[i];
@@ -281,7 +281,7 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 	ps.push_back(c[1]);
 	ps.push_back(c[2]);
 
-	for(unsigned int i=3, n=c.size(); i<n; ++i)
+	for(size_t i=3, n=c.size(); i<n; ++i)
 	{
 		const Coordinate *p = ps.back(); ps.pop_back();
 		while (CGAlgorithms::computeOrientation(*(ps.back()),
@@ -307,8 +307,8 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 //	// find the lowest point in the set. If two or more points have
 //	// the same minimum y coordinate choose the one with the minimu x.
 //	// This focal point is put in array location pts[0].
-//	unsigned int npts=pts->getSize();
-//	for(unsigned int i=1; i<npts; ++i)
+//	size_t npts=pts->getSize();
+//	for(size_t i=1; i<npts; ++i)
 //	{
 //		const Coordinate &p0=pts->getAt(0); // this will change
 //		const Coordinate &pi=pts->getAt(i);
@@ -338,8 +338,8 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 //	ps->push_back(c->getAt(2));
 //
 //	p=&(c->getAt(2));
-//	unsigned int npts=c->getSize();
-//	for(unsigned int i=3; i<npts; ++i)
+//	size_t npts=c->getSize();
+//	for(size_t i=3; i<npts; ++i)
 //	{
 //		p=&(ps->back());
 //		ps->pop_back();
@@ -365,12 +365,12 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 //	const Coordinate &p0=p->getAt(0); // the pivot point
 //
 //	Coordinate t;
-//	unsigned int npts=p->getSize();
-//	for(unsigned int i=1; i<npts-1; ++i)
+//	size_t npts=p->getSize();
+//	for(size_t i=1; i<npts-1; ++i)
 //	{
-//		unsigned int min=i;
+//		size_t min=i;
 //
-//		for(unsigned int j=i+1; j<npts; ++j)
+//		for(size_t j=i+1; j<npts; ++j)
 //		{
 //			const Coordinate &pj=p->getAt(j);
 //
@@ -428,8 +428,8 @@ ConvexHull::isBetween(const Coordinate &c1, const Coordinate &c2, const Coordina
 //	bigQuad.northmost=bigQuad.southmost=
 //		bigQuad.westmost=bigQuad.eastmost=pts->getAt(0);
 //
-//	unsigned int npts=pts->getSize();
-//	for (unsigned int i=1; i<npts; ++i)
+//	size_t npts=pts->getSize();
+//	for (size_t i=1; i<npts; ++i)
 //	{
 //		const Coordinate &pi=pts->getAt(i);
 //
@@ -471,7 +471,7 @@ void
 ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 		Coordinate::ConstVect &cleaned)
 {
-	unsigned int npts=original.size();
+	size_t npts=original.size();
 
 	const Coordinate *last = original[npts-1];
 
@@ -480,7 +480,7 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 	assert(original[0]->equals2D(*last));
 
 	const Coordinate *prev = NULL;
-	for (unsigned int i=0; i<npts-1; ++i)
+	for (size_t i=0; i<npts-1; ++i)
 	{
 		const Coordinate *curr = original[i];
 		const Coordinate *next = original[i+1];
@@ -512,13 +512,13 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 //{
 //	Assert::equals(original->getAt(0),original->getAt(original->getSize()-1));
 //
-//	unsigned int npts=original->getSize();
+//	size_t npts=original->getSize();
 //
 //	vector<Coordinate> *newPts=new vector<Coordinate>;
 //	newPts->reserve(npts);
 //
 //	const Coordinate *previousDistinctCoordinate=NULL;
-//	for(unsigned int i=0; i<npts-1; ++i)
+//	for(size_t i=0; i<npts-1; ++i)
 //	{
 //		const Coordinate &currentCoordinate=original->getAt(i);
 //		const Coordinate &nextCoordinate=original->getAt(i+1);
@@ -549,6 +549,9 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.21  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

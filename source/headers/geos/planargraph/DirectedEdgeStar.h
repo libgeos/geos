@@ -84,7 +84,7 @@ public:
 	 * \brief Returns the number of edges around the Node associated
 	 * with this DirectedEdgeStar.
 	 */
-	int getDegree() const { return outEdges.size(); }
+	size_t getDegree() const { return outEdges.size(); }
 
 	/**
 	 * \brief Returns the coordinate for the node at wich this
@@ -134,6 +134,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.1  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

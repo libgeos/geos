@@ -121,20 +121,19 @@ PlanarGraph::remove(Node *node)
 	//nodes.remove(node);
 }
 
-/*
- * Returns all Nodes with the given number of Edges around it.
- * The return value is a newly allocated vector of existing nodes
- */
+/*public*/
 vector<Node*>*
-PlanarGraph::findNodesOfDegree(int degree)
+PlanarGraph::findNodesOfDegree(size_t degree)
 {
 	vector<Node*> *nodesFound=new vector<Node*>();
 	NodeMap::container &nm=nodeMap.getNodeMap();
-	NodeMap::container::iterator it=nm.begin();
-	for ( ; it!=nm.end(); ++it) {
+//	NodeMap::container::iterator it=nm.begin();
+//	for ( ; it!=nm.end(); ++it) 
+	for (NodeMap::container::iterator it=nm.begin(), itEnd=nm.end();
+			it!=itEnd; ++it)
+	{
 		Node *node=it->second;
-		if (node->getDegree()==degree)
-			nodesFound->push_back(node);
+		if (node->getDegree()==degree) nodesFound->push_back(node);
 	}
 	return nodesFound;
 }
@@ -144,6 +143,9 @@ PlanarGraph::findNodesOfDegree(int degree)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.3  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

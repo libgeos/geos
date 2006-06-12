@@ -154,7 +154,7 @@ LineString::getNumPoints() const
 }
 
 Point*
-LineString::getPointN(int n) const
+LineString::getPointN(size_t n) const
 {
 	assert(getFactory());
 	assert(points.get());
@@ -392,6 +392,9 @@ LineString::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.71  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.70  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *

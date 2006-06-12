@@ -106,7 +106,7 @@ public:
 	/**
 	 * \brief Returns the number of edges around this Node.
 	 */
-	int getDegree() const {
+	size_t getDegree() const {
 		return deStar->getDegree();
 	}
 
@@ -135,6 +135,9 @@ std::ostream& operator<<(std::ostream& os, const Node& n);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.1  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

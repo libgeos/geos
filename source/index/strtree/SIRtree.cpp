@@ -59,20 +59,15 @@ SIRtree::SIRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 	return ((Interval*)aBounds)->intersects((Interval*)bBounds);
 }
 
-/**
-* Constructs an SIRtree with the default node capacity.
-*/
+/*public*/
 SIRtree::SIRtree():
 	AbstractSTRtree(10),
 	intersectsOp(new SIRIntersectsOp())
 {
 }
 
-/**
-* Constructs an SIRtree with the given maximum number of child nodes that
-* a node may have
-*/
-SIRtree::SIRtree(int nodeCapacity):
+/*public*/
+SIRtree::SIRtree(size_t nodeCapacity):
 	AbstractSTRtree(nodeCapacity),
 	intersectsOp(new SIRIntersectsOp())
 {
@@ -143,6 +138,9 @@ SIRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.20  2006/03/21 10:47:34  strk
  * indexStrtree.h split
  *

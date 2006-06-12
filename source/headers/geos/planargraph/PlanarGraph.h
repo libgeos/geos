@@ -220,8 +220,9 @@ public:
 	/**
 	 * \brief
 	 * Returns all Nodes with the given number of Edges around it.
+ 	 * The return value is a newly allocated vector of existing nodes
 	 */
-	std::vector<Node*>* findNodesOfDegree(int degree);
+	std::vector<Node*>* findNodesOfDegree(size_t degree);
 };
 
 } // namespace geos::planargraph
@@ -231,6 +232,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.1  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *

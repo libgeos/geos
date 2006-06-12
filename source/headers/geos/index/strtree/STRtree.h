@@ -95,7 +95,7 @@ protected:
 	 */
 	std::vector<std::vector<Boundable*>*>* verticalSlices(
 			std::vector<Boundable*> *childBoundables,
-			int sliceCount);
+			size_t sliceCount);
 
 	AbstractNode* createNode(int level);
 	
@@ -111,7 +111,7 @@ public:
 	 * Constructs an STRtree with the given maximum number of child nodes that
 	 * a node may have
 	 */
-	STRtree(int nodeCapacity=10);
+	STRtree(size_t nodeCapacity=10);
 
 	void insert(const geom::Envelope *itemEnv,void* item);
 
@@ -146,6 +146,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.2  2006/04/03 08:43:09  strk
  * Added port info, minor cleanups
  *

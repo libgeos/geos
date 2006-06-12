@@ -1,5 +1,20 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* source/algorithm/ConvexHull.cpp, source/algorithm/PointLocator.cpp,
+	source/geom/Envelope.cpp, source/geom/LineString.cpp,
+	source/headers/geos/geom/LineString.h,
+	source/headers/geos/geomgraph/EdgeEndStar.h,
+	source/headers/geos/index/strtree/AbstractSTRtree.h,
+	source/headers/geos/index/strtree/SIRtree.h,
+	source/headers/geos/index/strtree/STRtree.h,
+	source/headers/geos/planargraph/DirectedEdgeStar.h,
+	source/headers/geos/planargraph/Node.h,
+	source/headers/geos/planargraph/PlanarGraph.h,
+	source/index/strtree/AbstractSTRtree.cpp,
+	source/index/strtree/SIRtree.cpp, source/index/strtree/STRtree.cpp,
+	source/operation/linemerge/LineSequencer.cpp,
+	source/planargraph/PlanarGraph.cpp:
+	unsigned int => size_t
 	* tests/xmltester/XMLTester.cpp: don't print test file
 	precision model if verbosity level < 2.
 	* NEWS, capi/geos_c.h.in, source/algorithm/CGAlgorithms.cpp,

@@ -146,7 +146,8 @@ protected:
 
 	virtual std::vector<Boundable*>* boundablesAtLevel(int level);
 
-	int nodeCapacity;
+	// @@ should be size_t, probably
+	size_t nodeCapacity;
 
 	/**
 	 * @return a test for intersection between two bounds,
@@ -163,7 +164,7 @@ public:
 	 * Constructs an AbstractSTRtree with the specified maximum number of child
 	 * nodes that a node may have
 	 */
-	AbstractSTRtree(int newNodeCapacity)
+	AbstractSTRtree(size_t newNodeCapacity)
 		:
 		built(false),
 			itemBoundables(new std::vector<Boundable*>()),
@@ -190,7 +191,7 @@ public:
 	/**
 	 * Returns the maximum number of child nodes that a node may have
 	 */
-	virtual int getNodeCapacity() { return nodeCapacity; }
+	virtual size_t getNodeCapacity() { return nodeCapacity; }
 
 	virtual void query(const void* searchBounds, AbstractNode* node, std::vector<void*>* matches);
 
@@ -210,6 +211,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.2  2006/06/08 11:20:24  strk
  * Added missing virtual destructor to abstract classes.
  *

@@ -234,7 +234,7 @@ LineSequencer::reverse(const LineString *line)
 const planargraph::Node*
 LineSequencer::findLowestDegreeNode(const planargraph::Subgraph& graph)
 {
-	int minDegree = numeric_limits<int>::max(); 
+	size_t minDegree = numeric_limits<size_t>::max(); 
 	const planargraph::Node* minDegreeNode = NULL;
 	for (planargraph::NodeMap::container::const_iterator
 		it = graph.nodeBegin(), itEnd = graph.nodeEnd();
@@ -433,6 +433,9 @@ LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.9  2006/03/24 11:04:44  strk
  * Changed assert() with Assert::isTrue in addReverseSubpath
  *

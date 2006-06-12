@@ -84,7 +84,7 @@ public:
 
 	virtual size_t getNumPoints() const;
 
-	virtual Point* getPointN(int n) const;
+	virtual Point* getPointN(size_t n) const;
 
 	/// \brief
 	/// Return the start point of the LineString
@@ -195,6 +195,9 @@ LineString::clone() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.9  2006/05/04 15:49:39  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

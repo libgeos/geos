@@ -42,9 +42,16 @@ using AbstractSTRtree::query;
 
 public:
 
+	/** \brief
+	 * Constructs an SIRtree with the default node capacity.
+	 */
 	SIRtree();
 
-	SIRtree(int nodeCapacity);
+	/** \brief
+	 * Constructs an SIRtree with the given maximum number of child nodes
+	 * that a node may have
+	 */
+	SIRtree(size_t nodeCapacity);
 
 	virtual ~SIRtree();
 
@@ -98,6 +105,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.1  2006/03/21 10:47:34  strk
  * indexStrtree.h split
  *

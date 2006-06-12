@@ -44,7 +44,7 @@ static bool yComparator(Boundable *a, Boundable *b){
 }
 
 /*public*/
-STRtree::STRtree(int nodeCapacity): AbstractSTRtree(nodeCapacity)
+STRtree::STRtree(size_t nodeCapacity): AbstractSTRtree(nodeCapacity)
 { 
 }
 
@@ -91,8 +91,7 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 
 	vector<Boundable*> *ret;
 	ret = createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
-	unsigned int vssize=verticalSlicesV->size();
-	for (unsigned int i=0; i<vssize; i++)
+	for (size_t i=0, vssize=verticalSlicesV->size(); i<vssize; ++i)
 	{
 		vector<Boundable *>*inner = (*verticalSlicesV)[i];
 		delete inner;
@@ -110,10 +109,16 @@ STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *v
 	assert(verticalSlices->size()>0);
 	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
 
-	unsigned int vssize=verticalSlices->size();
-	for (unsigned int i = 0; i<vssize; i++) {
-		vector<Boundable*> *toAdd=createParentBoundablesFromVerticalSlice((*verticalSlices)[i], newLevel);
-		parentBoundables->insert(parentBoundables->end(),toAdd->begin(),toAdd->end());
+	for (size_t i=0, vssize=verticalSlices->size(); i<vssize; ++i)
+	{
+		vector<Boundable*> *toAdd =
+			createParentBoundablesFromVerticalSlice(
+				(*verticalSlices)[i], newLevel);
+
+		parentBoundables->insert(
+				parentBoundables->end(),
+				toAdd->begin(),
+				toAdd->end());
 		delete toAdd;
 	}
 	return parentBoundables;
@@ -128,25 +133,24 @@ STRtree::createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBounda
 
 /*protected*/
 vector<vector<Boundable*>*>*
-STRtree::verticalSlices(vector<Boundable*>* childBoundables, int sliceCount)
+STRtree::verticalSlices(vector<Boundable*>* childBoundables, size_t sliceCount)
 {
-	int sliceCapacity = (int) ceil((double)childBoundables->size() / (double) sliceCount);
+	size_t sliceCapacity = (size_t) ceil((double)childBoundables->size() / (double) sliceCount);
 	vector<vector<Boundable*>*>* slices = new vector<vector<Boundable*>*>(sliceCount);
 
-	unsigned int i=0;
-	unsigned int nchilds=childBoundables->size();
+	size_t i=0, nchilds=childBoundables->size();
 
-
-	for (int j=0; j<sliceCount; j++) {
+	for (size_t j=0; j<sliceCount; j++)
+	{
 		(*slices)[j]=new vector<Boundable*>();
 		(*slices)[j]->reserve(sliceCapacity);
-		int boundablesAddedToSlice = 0;
+		size_t boundablesAddedToSlice = 0;
 		while (i<nchilds && boundablesAddedToSlice<sliceCapacity)
 		{
 			Boundable *childBoundable=(*childBoundables)[i];
-			i++;
+			++i;
 			(*slices)[j]->push_back(childBoundable);
-			boundablesAddedToSlice++;
+			++boundablesAddedToSlice;
 		}
 	}
 	return slices;
@@ -215,6 +219,9 @@ STRtree::sortBoundables(const vector<Boundable*> *input)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.32  2006/04/03 10:44:19  strk
  * Added missing headers
  *

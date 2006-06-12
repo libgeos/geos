@@ -77,7 +77,7 @@ public:
 	 */
 	virtual geom::Coordinate& getCoordinate();
 
-	virtual unsigned int getDegree();
+	virtual size_t getDegree();
 
 	virtual iterator begin();
 
@@ -136,7 +136,7 @@ private:
 
 };
 
-inline unsigned int
+inline size_t
 EdgeEndStar::getDegree()
 {
 	return edgeMap.size();
@@ -190,6 +190,9 @@ EdgeEndStar::find(EdgeEnd *eSearch)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.3  2006/04/04 13:35:55  strk
  * Port info, assertion checking, indentation
  *

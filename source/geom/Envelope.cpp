@@ -134,7 +134,7 @@ Envelope::Envelope(const string &str)
   // Env[7.2:2.3,7.1:8.2]
 
   // extract out the values between the [ and ] characters
-  int index = str.find("[");
+  string::size_type index = str.find("[");
   string coordString = str.substr(index + 1, str.size() - 1 - 1);
 
   // now split apart the string on : and , characters
@@ -486,6 +486,9 @@ Envelope::operator=(const Envelope& e)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
  * Revision 1.29  2006/04/05 14:04:25  strk
  * Fixed copy ctor to support "Null" Envelope copies.
  * Drop init(Envelope&) method.
