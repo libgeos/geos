@@ -1,5 +1,10 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* source/planargraph/Node.cpp: implemented missing
+	getEdgesBetween() method (untested).
+	* source/headers/geos/planargraph/DirectedEdge.h,
+	source/planargraph/DirectedEdge.cpp:
+	provided a memory friendly version of toEdges() method.
 	* source/geom/CoordinateArraySequence.cpp: explicitly invoked
 	CoordinateSequence (copy) ctor - suggested by GCC warning.
 	* source/headers/geos/geom/CoordinateSequence.h: added default

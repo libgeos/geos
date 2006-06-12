@@ -14,22 +14,43 @@
  **********************************************************************/
 
 #include <geos/planargraph/Node.h>
+#include <geos/planargraph/DirectedEdge.h>
 
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 namespace geos {
 namespace planargraph {
 
-/**
-* Returns all Edges that connect the two nodes (which are assumed to be different).
-*/
+/* static public */
+/* UNUSED */
 vector<Edge*>*
 Node::getEdgesBetween(Node *node0, Node *node1)
 {
-	return NULL;
+	std::vector<Edge*> edges0;
+	DirectedEdge::toEdges(node0->getOutEdges()->getEdges(), edges0);
+
+	std::vector<Edge*> edges1;
+	DirectedEdge::toEdges(node1->getOutEdges()->getEdges(), edges1);
+
+	// Sort edge lists (needed for set_intersection below
+	std::sort( edges0.begin(), edges0.end() );
+	std::sort( edges1.begin(), edges1.end() );
+
+	std::vector<Edge*>* commonEdges = new std::vector<Edge*>();
+
+	// Intersect the two sets
+	std::set_intersection(
+		edges0.begin(), edges0.end(),
+		edges1.begin(), edges1.end(),
+		commonEdges->end()
+		);
+
+	return commonEdges;
+
 }
 
 std::ostream& operator<<(std::ostream& os, const Node& n) {
@@ -44,6 +65,9 @@ std::ostream& operator<<(std::ostream& os, const Node& n) {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 15:47:08  strk
+ * implemented missing getEdgesBetween() method (untested).
+ *
  * Revision 1.1  2006/03/21 21:42:54  strk
  * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
  *
