@@ -136,17 +136,22 @@ public:
 	void add(const std::vector<Coordinate>* vc, bool allowRepeated);
 
 	/* This is here for backward compatibility.. */
-	void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
+	//void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
 
-	/**
-	 * \brief Add an array of coordinates 
-	 * @param cl The coordinates
-	 * @param allowRepeated if set to false, repeated coordinates
-	 * are collapsed
-	 * @param direction if false, the array is added in reverse order
-	 * @return true (as by general collection contract)
+	/** \brief
+	 *  Add an array of coordinates 
+	 *
+	 *  @param cl The coordinates
+	 *
+	 *  @param allowRepeated
+	 * 	if set to false, repeated coordinates are collapsed
+	 *
+	 *  @param direction if false, the array is added in reverse order
+	 *
+	 *  @return true (as by general collection contract)
 	 */
-	void add(const CoordinateSequence *cl,bool allowRepeated,bool direction);
+	void add(const CoordinateSequence *cl, bool allowRepeated,
+			bool direction);
 
 	/**
 	 * \brief Add a coordinate
@@ -155,7 +160,7 @@ public:
 	 * are collapsed
 	 * @return true (as by general collection contract)
 	 */
-	void add(const Coordinate& c,bool allowRepeated);
+	void add(const Coordinate& c, bool allowRepeated);
 
 	/// Returns <code>true</code> it list contains no coordinates.
 	virtual	bool isEmpty() const=0;
@@ -203,33 +208,41 @@ public:
 	///
 	virtual CoordinateSequence& removeRepeatedPoints()=0;
 
-	/**
-	* \brief Returns true if given CoordinateSequence contains
-	* any two consecutive Coordinate 
-	*/
+	/** \brief
+	 *  Returns true if given CoordinateSequence contains
+	 *  any two consecutive Coordinate 
+	 */
 	static bool hasRepeatedPoints(const CoordinateSequence *cl);
 
-	/**
-	* \brief Returns either the given CoordinateSequence if its length
-	* is greater than the given amount, or an empty CoordinateSequence.
-	*/
-	static CoordinateSequence* atLeastNCoordinatesOrNothing(size_t n, CoordinateSequence *c);
+	/** \brief
+	 *  Returns either the given CoordinateSequence if its length
+	 *  is greater than the given amount, or an empty CoordinateSequence.
+	 */
+	static CoordinateSequence* atLeastNCoordinatesOrNothing(size_t n,
+			CoordinateSequence *c);
 
-	/**
-	 * \brief Returns lower-left Coordinate in given CoordinateSequence.
-	 * This is actually the Coordinate with lower X (and Y if needed)
-	 * ordinate.
+	/** \brief
+	 *  Returns lower-left Coordinate in given CoordinateSequence.
+	 *  This is actually the Coordinate with lower X (and Y if needed)
+	 *  ordinate.
 	 */
 	static const Coordinate* minCoordinate(CoordinateSequence *cl);
 
 	/// Return position of a Coordinate, or -1 if not found
-	static int indexOf(const Coordinate *coordinate, const CoordinateSequence *cl);
+	//
+	/// FIXME: return size_t, using numeric_limits<size_t>::max
+	/// as 'not found' value.
+	///
+	static int indexOf(const Coordinate *coordinate,
+			const CoordinateSequence *cl);
+
 	/**
-	* \brief
-	* Returns true if the two arrays are identical, both null,
-	* or pointwise equal 
-	*/
-	static bool equals(CoordinateSequence *cl1, CoordinateSequence *cl2);
+	 * \brief
+	 * Returns true if the two arrays are identical, both null,
+	 * or pointwise equal 
+	 */
+	static bool equals(const CoordinateSequence *cl1,
+			const CoordinateSequence *cl2);
 
 	/// Scroll given CoordinateSequence so to start with given Coordinate.
 	static void scroll(CoordinateSequence *cl, const Coordinate *firstCoordinate);
@@ -334,6 +347,9 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.11  2006/06/12 16:36:22  strk
+ * indentation, notes about things to be fixed.
+ *
  * Revision 1.10  2006/06/12 15:06:30  strk
  * Added default ctor and copy ctor (protected)
  *

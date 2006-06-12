@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -23,6 +24,7 @@
 #include <cstdio>
 #include <algorithm>
 #include <vector>
+#include <cassert>
 
 using namespace std;
 
@@ -50,15 +52,24 @@ CoordinateSequence::hasRepeatedPoints() const
  * given amount, or an empty coordinate array.
  */
 CoordinateSequence *
-CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n, CoordinateSequence *c)
+CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n,
+		CoordinateSequence *c)
 {
-	// FIXME: return NULL rather then empty coordinate array
-	return c->getSize()>=n?c:CoordinateArraySequenceFactory::instance()->create(NULL);
+	if ( c->getSize() >= n )
+	{
+		return c;
+	}
+	else
+	{
+		// FIXME: return NULL rather then empty coordinate array
+		return CoordinateArraySequenceFactory::instance()->create(NULL);
+	}
 }      
 
 
 bool
-CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl) {
+CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl)
+{
 	int size=cl->getSize();
 	for(int i=1;i<size; i++) {
 		if (cl->getAt(i-1)==cl->getAt(i)) {
@@ -68,7 +79,9 @@ CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl) {
 	return false;
 }
 
-const Coordinate* CoordinateSequence::minCoordinate() const {
+const Coordinate*
+CoordinateSequence::minCoordinate() const
+{
 	const Coordinate* minCoord=NULL;
 	int size=getSize();
 	for(int i=0; i<size; i++) {
@@ -93,20 +106,25 @@ CoordinateSequence::minCoordinate(CoordinateSequence *cl)
 }
 
 int
-CoordinateSequence::indexOf(const Coordinate *coordinate, const CoordinateSequence *cl)
+CoordinateSequence::indexOf(const Coordinate *coordinate,
+		const CoordinateSequence *cl)
 {
-	int size=cl->getSize();
-	for (int i=0; i<size; i++) {
-		if ((*coordinate)==cl->getAt(i)) {
-			return i;
+	size_t size=cl->getSize();
+	for (size_t i=0; i<size; ++i)
+	{
+		if ((*coordinate)==cl->getAt(i))
+		{
+			return i; // FIXME: what if we overflow the int ?
 		}
 	}
 	return -1;
 }
 
 void
-CoordinateSequence::scroll(CoordinateSequence* cl,const Coordinate* firstCoordinate)
+CoordinateSequence::scroll(CoordinateSequence* cl,
+		const Coordinate* firstCoordinate)
 {
+	// FIXME: use a standard algorithm instead
 	int i, j=0;
 	int ind=indexOf(firstCoordinate,cl);
 	if (ind<1) return; // not found or already first
@@ -121,7 +139,11 @@ CoordinateSequence::scroll(CoordinateSequence* cl,const Coordinate* firstCoordin
 	cl->setPoints(v);
 }
 
-void CoordinateSequence::reverse(CoordinateSequence *cl){
+void
+CoordinateSequence::reverse(CoordinateSequence *cl)
+{
+
+	// FIXME: use a standard algorithm
 	int last=cl->getSize()-1;
 	int mid=last/2;
 	for(int i=0;i<=mid;i++) {
@@ -131,7 +153,12 @@ void CoordinateSequence::reverse(CoordinateSequence *cl){
 	}
 }
 
-bool CoordinateSequence::equals(CoordinateSequence *cl1, CoordinateSequence *cl2){
+bool
+CoordinateSequence::equals(const CoordinateSequence *cl1,
+		const CoordinateSequence *cl2)
+{
+	// FIXME: use std::equals()
+
 	if (cl1==cl2) return true;
 	if (cl1==NULL||cl2==NULL) return false;
 	size_t npts1=cl1->getSize();
@@ -142,23 +169,21 @@ bool CoordinateSequence::equals(CoordinateSequence *cl1, CoordinateSequence *cl2
 	return true;
 }
 
-/** Add an array of coordinates
-* @param vc The coordinates
-* @param allowRepeated if set to false, repeated coordinates are collapsed
-* @return true (as by general collection contract)
-*/
-void CoordinateSequence::add(const vector<Coordinate>* vc,bool allowRepeated) {
-	for(int i=0;i<(int)vc->size();i++) {
-		add((*vc)[i],allowRepeated);
+/*public*/
+void
+CoordinateSequence::add(const vector<Coordinate>* vc, bool allowRepeated)
+{
+	assert(vc);
+	for(size_t i=0; i<vc->size(); ++i)
+	{
+		add((*vc)[i], allowRepeated);
 	}
 }
 
-/** Add a coordinate
-* @param c The coordinate to add
-* @param allowRepeated if set to false, repeated coordinates are collapsed
-* @return true (as by general collection contract)
-*/
-void CoordinateSequence::add(const Coordinate& c,bool allowRepeated) {
+/*public*/
+void
+CoordinateSequence::add(const Coordinate& c, bool allowRepeated)
+{
 	if (!allowRepeated) {
 		int npts=getSize();
 		if (npts>=1) {
@@ -170,22 +195,20 @@ void CoordinateSequence::add(const Coordinate& c,bool allowRepeated) {
 }
 
 /* Here for backward compatibility */
-void
-CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction)
-{
-	add((const CoordinateSequence *)cl,allowRepeated,direction);
-}
+//void
+//CoordinateSequence::add(CoordinateSequence *cl, bool allowRepeated,
+//		bool direction)
+//{
+//	add(cl, allowRepeated, direction);
+//}
 
-/**
- * Add an array of coordinates
- * @param cl The coordinates
- * @param allowRepeated if set to false, repeated coordinates are collapsed
- * @param direction if false, the array is added in reverse order
- * @return true (as by general collection contract)
- */
+/*public*/
 void
-CoordinateSequence::add(const CoordinateSequence *cl,bool allowRepeated,bool direction)
+CoordinateSequence::add(const CoordinateSequence *cl,
+		bool allowRepeated, bool direction)
 {
+	// FIXME:  don't rely on negative values for 'j' (the reverse case)
+
 	int npts=cl->getSize();
 	if (direction) {
 		for (int i=0; i<npts; i++) {
@@ -199,11 +222,7 @@ CoordinateSequence::add(const CoordinateSequence *cl,bool allowRepeated,bool dir
 }
 
 
-/**
- * This function allocates space for a CoordinateSequence object
- * being a copy of the input one with consecutive equal points
- * removed.
- */
+/*public static*/
 CoordinateSequence*
 CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 {
@@ -250,94 +269,14 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.20  2006/06/12 16:36:22  strk
+ * indentation, notes about things to be fixed.
+ *
  * Revision 1.19  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *
  * Revision 1.18  2006/05/03 19:47:27  strk
  * added operator<< for CoordinateSequence
- *
- * Revision 1.17  2006/03/22 16:58:34  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- * Revision 1.16  2006/03/13 21:54:56  strk
- * Streamlined headers inclusion.
- *
- * Revision 1.15  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.14  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.13  2006/01/31 19:07:33  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.12  2005/12/07 21:55:44  strk
- * Optimized memory allocations in ::removeRepeatedPoints
- *
- * Revision 1.11  2005/11/29 14:39:08  strk
- * More signed/unsigned fixes
- *
- * Revision 1.10  2005/11/24 23:09:15  strk
- * CoordinateSequence indexes switched from int to the more
- * the correct unsigned int. Optimizations here and there
- * to avoid calling getSize() in loops.
- * Update of all callers is not complete yet.
- *
- * Revision 1.9  2005/04/29 11:52:40  strk
- * Added new JTS interfaces for CoordinateSequence and factories,
- * removed example implementations to reduce maintainance costs.
- * Added first implementation of WKBWriter, made ByteOrderDataInStream
- * a template class.
- *
- * Revision 1.8  2005/02/22 17:10:47  strk
- * Reduced CoordinateSequence::getSize() calls.
- *
- * Revision 1.7  2005/02/03 09:17:07  strk
- * more profiling label
- *
- * Revision 1.6  2004/12/03 22:52:56  strk
- * enforced const return of CoordinateSequence::toVector() method to derivate classes.
- *
- * Revision 1.5  2004/11/04 19:08:06  strk
- * Cleanups, initializers list, profiling.
- *
- * Revision 1.4  2004/10/13 10:03:02  strk
- * Added missing linemerge and polygonize operation.
- * Bug fixes and leaks removal from the newly added modules and
- * planargraph (used by them).
- * Some comments and indentation changes.
- *
- * Revision 1.3  2004/09/23 21:36:22  strk
- * Fixed a bug in ::reverse (thanks to Elliott Edwards)
- *
- * Revision 1.2  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.1  2004/07/08 19:38:56  strk
- * renamed from *List* equivalents
  *
  **********************************************************************/
 
