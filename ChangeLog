@@ -1,6 +1,8 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
-	NEWS, capi/geos_c.h.in, source/algorithm/CGAlgorithms.cpp,
+	* tests/xmltester/XMLTester.cpp: don't print test file
+	precision model if verbosity level < 2.
+	* NEWS, capi/geos_c.h.in, source/algorithm/CGAlgorithms.cpp,
 	source/geom/CoordinateArraySequence.cpp,
 	source/geom/CoordinateSequence.cpp, source/geom/Geometry.cpp,
 	source/geom/GeometryCollection.cpp, source/geom/GeometryFactory.cpp,

@@ -266,7 +266,7 @@ XMLTester::parsePrecisionModel()
 		pm.reset(new PrecisionModel(scale,offsetX,offsetY));
 	}
 
-	if (verbose)
+	if (verbose > 1)
 	{
 		std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
 	}
@@ -938,6 +938,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/06/12 10:39:29  strk
+ * don't print test file precision model if verbosity level < 2.
+ *
  * Revision 1.34  2006/06/05 15:36:34  strk
  * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
  *
