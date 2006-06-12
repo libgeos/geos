@@ -29,7 +29,7 @@ using namespace geos::io;
 using namespace geos::geom;
 using namespace geos::util;
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     
 	try {
@@ -66,6 +66,9 @@ int main(int argc, char** argv)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/06/12 16:59:04  strk
+ * Removed unused parameter warnings
+ *
  * Revision 1.6  2006/06/09 08:28:38  strk
  * Removed compiler warning
  *

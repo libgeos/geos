@@ -13,6 +13,9 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2  2006/06/12 16:57:51  strk
+ * Removed unused parameter warnings
+ *
  * Revision 1.1  2006/01/31 19:07:35  strk
  * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
  * - Moved GetNumGeometries() and GetGeometryN() interfaces
@@ -84,7 +87,7 @@ void run(int nPts, GeometryFactory *fact) {
 //	cout << "n Pts: " << nPts << "   Executed in " << totalTime << endl;
 }
 
-int main(int argC, char* argV[]) {
+int main(int /* argC */, char* /* argV[] */) {
 
 	GeometryFactory *fact=new GeometryFactory();
 
