@@ -1,5 +1,9 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* source/geom/CoordinateArraySequence.cpp: explicitly invoked
+	CoordinateSequence (copy) ctor - suggested by GCC warning.
+	* source/headers/geos/geom/CoordinateSequence.h: added default
+	ctor and copy ctor ( protected ).
 	* acsite.m4, configure.in, source/headers/geos/platform.h.in:
 	Check for int64_t type for int64 typedef.
 	* source/algorithm/ConvexHull.cpp,

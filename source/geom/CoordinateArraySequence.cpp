@@ -45,8 +45,10 @@ CoordinateArraySequence::CoordinateArraySequence(
 }
 
 CoordinateArraySequence::CoordinateArraySequence(
-	const CoordinateArraySequence &c):
-		vect(new vector<Coordinate>(*(c.vect)))
+	const CoordinateArraySequence &c)
+	:
+	CoordinateSequence(c),
+	vect(new vector<Coordinate>(*(c.vect)))
 {
 }
 
@@ -218,6 +220,9 @@ CoordinateArraySequence::removeRepeatedPoints()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 15:07:47  strk
+ * explicitly invoked CoordinateSequence (copy) ctor - suggested by GCC warning.
+ *
  * Revision 1.9  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *
