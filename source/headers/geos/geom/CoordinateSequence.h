@@ -59,6 +59,12 @@ namespace geom { // geos::geom
  */
 class CoordinateSequence {
 
+protected:
+
+	CoordinateSequence() {}
+
+	CoordinateSequence(const CoordinateSequence&) {}
+
 public:
 
 	typedef std::auto_ptr<CoordinateSequence> AutoPtr;
@@ -66,7 +72,7 @@ public:
 	friend std::ostream& operator<< (std::ostream& os,
 		const CoordinateSequence& cs);
 
-	virtual ~CoordinateSequence(){};
+	virtual ~CoordinateSequence() {}
 
 	/** \brief
 	 * Returns a deep copy of this collection.
@@ -328,6 +334,9 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 15:06:30  strk
+ * Added default ctor and copy ctor (protected)
+ *
  * Revision 1.9  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *
