@@ -51,11 +51,15 @@ protected:
 	DirectedEdgeStar *deStar;
 
 public:
-	friend std::ostream& operator<<(std::ostream& os, const Node&);
 
-	/**
-	 * \brief Returns all Edges that connect the two nodes (which are
+	friend std::ostream& operator << (std::ostream& os, const Node&);
+
+	/** \brief
+	 * Returns all Edges that connect the two nodes (which are
 	 * assumed to be different).
+	 *
+	 * Note: returned vector is newly allocated, ownership to 
+	 * the caller.
 	 */
 	static std::vector<Edge*>* getEdgesBetween(Node *node0,
 			Node *node1);
@@ -135,6 +139,9 @@ std::ostream& operator<<(std::ostream& os, const Node& n);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 16:57:26  strk
+ * Added note about ownership of return from getEdgesBetween()
+ *
  * Revision 1.2  2006/06/12 10:49:43  strk
  * unsigned int => size_t
  *
