@@ -50,7 +50,7 @@ CoordinateSequence::hasRepeatedPoints() const
  * given amount, or an empty coordinate array.
  */
 CoordinateSequence *
-CoordinateSequence::atLeastNCoordinatesOrNothing(unsigned int n, CoordinateSequence *c)
+CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n, CoordinateSequence *c)
 {
 	// FIXME: return NULL rather then empty coordinate array
 	return c->getSize()>=n?c:CoordinateArraySequenceFactory::instance()->create(NULL);
@@ -134,9 +134,9 @@ void CoordinateSequence::reverse(CoordinateSequence *cl){
 bool CoordinateSequence::equals(CoordinateSequence *cl1, CoordinateSequence *cl2){
 	if (cl1==cl2) return true;
 	if (cl1==NULL||cl2==NULL) return false;
-	unsigned int npts1=cl1->getSize();
+	size_t npts1=cl1->getSize();
 	if (npts1!=cl2->getSize()) return false;
-	for (unsigned int i=0; i<npts1; i++) {
+	for (size_t i=0; i<npts1; i++) {
 		if (!(cl1->getAt(i)==cl2->getAt(i))) return false;
 	}
 	return true;
@@ -250,6 +250,9 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.18  2006/05/03 19:47:27  strk
  * added operator<< for CoordinateSequence
  *

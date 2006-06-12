@@ -282,7 +282,7 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	const
 {
 	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromLines.size());
-	for (unsigned int i=0; i<fromLines.size(); i++)
+	for (size_t i=0; i<fromLines.size(); i++)
 	{
 		const LineString *line = dynamic_cast<const LineString *>(fromLines[i]);
 		if ( ! line ) throw geos::util::IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
@@ -292,7 +292,7 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 	try {
 		g = new MultiLineString(newGeoms,this);
 	} catch (...) {
-		for (unsigned int i=0; i<newGeoms->size(); i++) {
+		for (size_t i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -327,14 +327,14 @@ GeometryCollection*
 GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) const
 {
 	vector<Geometry *> *newGeoms = new vector<Geometry *>(fromGeoms.size());
-	for (unsigned int i=0; i<fromGeoms.size(); i++) {
+	for (size_t i=0; i<fromGeoms.size(); i++) {
 		(*newGeoms)[i] = fromGeoms[i]->clone();
 	}
 	GeometryCollection *g = NULL;
 	try {
 		g = new GeometryCollection(newGeoms,this);
 	} catch (...) {
-		for (unsigned int i=0; i<newGeoms->size(); i++) {
+		for (size_t i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -362,7 +362,7 @@ MultiPolygon*
 GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 {
 	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromPolys.size());
-	for (unsigned int i=0; i<fromPolys.size(); i++)
+	for (size_t i=0; i<fromPolys.size(); i++)
 	{
 		(*newGeoms)[i] = fromPolys[i]->clone();
 	}
@@ -370,7 +370,7 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 	try {
 		g = new MultiPolygon(newGeoms,this);
 	} catch (...) {
-		for (unsigned int i=0; i<newGeoms->size(); i++) {
+		for (size_t i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -423,7 +423,7 @@ MultiPoint*
 GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 {
 	vector<Geometry *>*newGeoms = new vector<Geometry *>(fromPoints.size());
-	for (unsigned int i=0; i<fromPoints.size(); i++)
+	for (size_t i=0; i<fromPoints.size(); i++)
 	{
 		(*newGeoms)[i] = fromPoints[i]->clone();
 	}
@@ -432,7 +432,7 @@ GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 	try {
 		g = new MultiPoint(newGeoms,this);
 	} catch (...) {
-		for (unsigned int i=0; i<newGeoms->size(); i++) {
+		for (size_t i=0; i<newGeoms->size(); i++) {
 			delete (*newGeoms)[i];
 		}
 		delete newGeoms;
@@ -452,10 +452,10 @@ GeometryFactory::createMultiPoint() const
 MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 {
-	unsigned int npts=fromCoords.getSize();
+	size_t npts=fromCoords.getSize();
 	vector<Geometry *> *pts=new vector<Geometry *>;
 	pts->reserve(npts);
-	for (unsigned int i=0; i<npts; ++i) {
+	for (size_t i=0; i<npts; ++i) {
 		Point *pt=createPoint(fromCoords.getAt(i));
 		pts->push_back(pt);
 	}
@@ -463,7 +463,7 @@ GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 	try {
 		mp = createMultiPoint(pts);
 	} catch (...) {
-		for (unsigned int i=0; i<npts; ++i) delete (*pts)[i];
+		for (size_t i=0; i<npts; ++i) delete (*pts)[i];
 		delete pts;
 		throw;
 	}
@@ -492,7 +492,7 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 {
 	LinearRing *newRing = (LinearRing *)shell.clone();
 	vector<Geometry *>*newHoles = new vector<Geometry *>(holes.size());
-	for (unsigned int i=0; i<holes.size(); i++)
+	for (size_t i=0; i<holes.size(); i++)
 	{
 		(*newHoles)[i] = holes[i]->clone();
 	}
@@ -501,7 +501,7 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 		g = new Polygon(newRing, newHoles, this);
 	} catch (...) {
 		delete newRing;
-		for (unsigned int i=0; i<holes.size(); i++)
+		for (size_t i=0; i<holes.size(); i++)
 			delete (*newHoles)[i];
 		delete newHoles;
 		throw;
@@ -558,7 +558,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
 	bool isCollection=newGeoms->size()>1;
-	unsigned int i;
+	size_t i;
     
 	for (i=0; i<newGeoms->size(); i++) {
 		string partClass(typeid(*(*newGeoms)[i]).name());
@@ -610,7 +610,7 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
 	bool isCollection=fromGeoms.size()>1;
-	unsigned int i;
+	size_t i;
     
 	for (i=0; i<fromGeoms.size(); i++) {
 		string partClass(typeid(*fromGeoms[i]).name());
@@ -684,6 +684,9 @@ GeometryFactory::getDefaultInstance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.69  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.68  2006/04/28 11:56:52  strk
  * * source/geom/GeometryFactory.cpp, source/headers/geos/geom/GeometryFactory.h: added LineString copy constructor.
  * * source/geom/Polygon.cpp: fixed getBoundary method to always return a geometry composed by LineStrings (not LinearRings)

@@ -66,10 +66,10 @@ public:
 	void setCoordinates(const Coordinate& c0, const Coordinate& c1);
 
 	// obsoleted, use operator[] instead
-	//const Coordinate& getCoordinate(unsigned int i) const;
+	//const Coordinate& getCoordinate(size_t i) const;
 
-	const Coordinate& operator[](unsigned int i) const;
-	Coordinate& operator[](unsigned int i);
+	const Coordinate& operator[](size_t i) const;
+	Coordinate& operator[](size_t i);
 
 	void setCoordinates(const LineSegment& ls);
 
@@ -250,6 +250,9 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.6  2006/04/12 17:19:56  strk
  * Ported TaggedLineStringSimplifier class, made LineSegment class
  * polymorphic to fix derivation of TaggedLineSegment

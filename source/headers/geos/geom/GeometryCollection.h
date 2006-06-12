@@ -136,10 +136,10 @@ public:
 	virtual double getLength() const;
 
 	/// Returns the number of geometries in this collection
-	virtual unsigned int getNumGeometries() const;
+	virtual size_t getNumGeometries() const;
 
 	/// Returns a pointer to the nth Geometry int this collection
-	virtual const Geometry* getGeometryN(int n) const;
+	virtual const Geometry* getGeometryN(size_t n) const;
 
 protected:
 
@@ -191,6 +191,9 @@ protected:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.7  2006/05/04 15:49:39  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

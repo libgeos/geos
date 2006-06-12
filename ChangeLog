@@ -1,3 +1,23 @@
+2006-06-12 Sandro Santilli <strk@refractions.net>
+
+	NEWS, capi/geos_c.h.in, source/algorithm/CGAlgorithms.cpp,
+	source/geom/CoordinateArraySequence.cpp,
+	source/geom/CoordinateSequence.cpp, source/geom/Geometry.cpp,
+	source/geom/GeometryCollection.cpp, source/geom/GeometryFactory.cpp,
+	source/geom/IntersectionMatrix.cpp, source/geom/LineString.cpp,
+	source/geom/LinearRing.cpp, source/geom/MultiLineString.cpp,
+	source/geom/MultiPolygon.cpp, source/geom/Polygon.cpp,
+	source/headers/geos/geom/CoordinateArraySequence.h,
+	source/headers/geos/geom/CoordinateArraySequenceFactory.h,
+	source/headers/geos/geom/CoordinateSequence.h,
+	source/headers/geos/geom/CoordinateSequenceFactory.h,
+	source/headers/geos/geom/Geometry.h,
+	source/headers/geos/geom/GeometryCollection.h,
+	source/headers/geos/geom/LineSegment.h,
+	source/headers/geos/util/UniqueCoordinateArrayFilter.h:
+	Fixed getGeometryN() to take size_t rather then int,
+	changed unsigned int parameters to size_t.
+
 2006-06-09 Sandro Santilli <strk@refractions.net>
 
 	* tests/unit/geom/LineStringTest.cpp,

@@ -83,7 +83,7 @@ Changes in 3.0.0
 - Correctness:
 	- More const-correct signatures
 	- Stronger methods typing (removed some void * args).
-	- Changed index-related funx signatures to use unsigned int
+	- Changed index-related funx signatures to use size_t
 	  rather then int
 	- More const-correctness in Buffer "package"
 	- Bugfix in LineString::getCoordinate() failing to return

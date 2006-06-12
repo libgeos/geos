@@ -63,7 +63,7 @@ Geometry* MultiPolygon::getBoundary() const {
 		return getFactory()->createGeometryCollection(NULL);
 	}
 	vector<Geometry *>* allRings=new vector<Geometry *>();
-	for (unsigned int i = 0; i < geometries->size(); i++) {
+	for (size_t i = 0; i < geometries->size(); i++) {
 		Polygon *pg=dynamic_cast<Polygon *>((*geometries)[i]);
 		assert(pg);
 		Geometry *g=pg->getBoundary();
@@ -75,7 +75,7 @@ Geometry* MultiPolygon::getBoundary() const {
 		else
 		{
 			GeometryCollection* rings=(GeometryCollection*)g;
-			for (unsigned int j=0, jn=rings->getNumGeometries();
+			for (size_t j=0, jn=rings->getNumGeometries();
 					j<jn; ++j)
 			{
 				//allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
@@ -109,6 +109,9 @@ MultiPolygon::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.32  2006/05/04 15:49:39  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

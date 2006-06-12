@@ -125,7 +125,7 @@ extern unsigned char GEOS_DLL *GEOSGeomToWKB_buf(const GEOSGeom g, size_t *size)
  * of ``dims'' dimensions.
  * Return NULL on exception.
  */
-extern GEOSCoordSeq GEOS_DLL GEOSCoordSeq_create(unsigned int size, unsigned int dims);
+extern GEOSCoordSeq GEOS_DLL GEOSCoordSeq_create(size_t size, size_t dims);
 
 /*
  * Clone a Coordinate Sequence.
@@ -143,35 +143,35 @@ extern void GEOS_DLL GEOSCoordSeq_destroy(GEOSCoordSeq s);
  * Return 0 on exception.
  */
 extern int GEOS_DLL GEOSCoordSeq_setX(GEOSCoordSeq s,
-	unsigned int idx, double val);
+	size_t idx, double val);
 extern int GEOS_DLL GEOSCoordSeq_setY(GEOSCoordSeq s,
-	unsigned int idx, double val);
+	size_t idx, double val);
 extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSeq s,
-	unsigned int idx, double val);
+	size_t idx, double val);
 extern int GEOS_DLL GEOSCoordSeq_setOrdinate(GEOSCoordSeq s,
-	unsigned int idx, unsigned int dim, double val);
+	size_t idx, size_t dim, double val);
 
 /*
  * Get ordinate values from a Coordinate Sequence.
  * Return 0 on exception.
  */
 extern int GEOS_DLL GEOSCoordSeq_getX(const GEOSCoordSeq s,
-	unsigned int idx, double *val);
+	size_t idx, double *val);
 extern int GEOS_DLL GEOSCoordSeq_getY(const GEOSCoordSeq s,
-	unsigned int idx, double *val);
+	size_t idx, double *val);
 extern int GEOS_DLL GEOSCoordSeq_getZ(const GEOSCoordSeq s,
-	unsigned int idx, double *val);
+	size_t idx, double *val);
 extern int GEOS_DLL GEOSCoordSeq_getOrdinate(const GEOSCoordSeq s,
-	unsigned int idx, unsigned int dim, double *val);
+	size_t idx, size_t dim, double *val);
 
 /*
  * Get size and dimensions info from a Coordinate Sequence.
  * Return 0 on exception.
  */
 extern int GEOS_DLL GEOSCoordSeq_getSize(const GEOSCoordSeq s,
-	unsigned int *size);
+	size_t *size);
 extern int GEOS_DLL GEOSCoordSeq_getDimensions(const GEOSCoordSeq s,
-	unsigned int *dims);
+	size_t *dims);
 
 
 /************************************************************************
@@ -192,9 +192,9 @@ extern GEOSGeom GEOS_DLL GEOSGeom_createLineString(GEOSCoordSeq s);
  * objects become ownership of the returned GEOSGeom.
  */
 extern GEOSGeom GEOS_DLL GEOSGeom_createPolygon(GEOSGeom shell,
-	GEOSGeom *holes, unsigned int nholes);
+	GEOSGeom *holes, size_t nholes);
 extern GEOSGeom GEOS_DLL GEOSGeom_createCollection(int type,
-	GEOSGeom *geoms, unsigned int ngeoms);
+	GEOSGeom *geoms, size_t ngeoms);
 
 extern GEOSGeom GEOS_DLL GEOSGeom_clone(const GEOSGeom g);
 
@@ -227,7 +227,7 @@ extern GEOSGeom GEOS_DLL GEOSPointOnSurface(const GEOSGeom g1);
 extern GEOSGeom GEOS_DLL GEOSGetCentroid(const GEOSGeom g);
 extern char GEOS_DLL *GEOSRelate(const GEOSGeom g1, const GEOSGeom g2);
 extern GEOSGeom GEOS_DLL GEOSPolygonize(const GEOSGeom geoms[],
-	unsigned int ngeoms);
+	size_t ngeoms);
 extern GEOSGeom GEOS_DLL GEOSLineMerge(const GEOSGeom g);
 extern GEOSGeom GEOS_DLL GEOSSimplify(const GEOSGeom g1, double tolerance);
 extern GEOSGeom GEOS_DLL GEOSTopologyPreserveSimplify(const GEOSGeom g1,
@@ -282,24 +282,24 @@ extern int GEOS_DLL GEOSGetSRID(const GEOSGeom g1);
 extern void GEOS_DLL GEOSSetSRID(GEOSGeom g, int SRID);
 
 /* Return -1 on exception */
-extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
+extern size_t GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
 
 /*
  * Return NULL on exception, Geometry must be a Collection.
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
  */
-extern const GEOSGeom GEOS_DLL GEOSGetGeometryN(const GEOSGeom g, int n);
+extern const GEOSGeom GEOS_DLL GEOSGetGeometryN(const GEOSGeom g, size_t n);
 
 /* Return -1 on exception */
-extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeom g1);
+extern size_t GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeom g1);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
  */
-extern const GEOSGeom GEOS_DLL GEOSGetInteriorRingN(const GEOSGeom g, int n);
+extern const GEOSGeom GEOS_DLL GEOSGetInteriorRingN(const GEOSGeom g, size_t n);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.
@@ -309,7 +309,7 @@ extern const GEOSGeom GEOS_DLL GEOSGetInteriorRingN(const GEOSGeom g, int n);
 extern const GEOSGeom GEOS_DLL GEOSGetExteriorRing(const GEOSGeom g);
 
 /* Return -1 on exception */
-extern int GEOS_DLL GEOSGetNumCoordinates(const GEOSGeom g1);
+extern size_t GEOS_DLL GEOSGetNumCoordinates(const GEOSGeom g1);
 
 /*
  * Return NULL on exception.
@@ -320,7 +320,7 @@ extern const GEOSCoordSeq GEOS_DLL GEOSGeom_getCoordSeq(const GEOSGeom g);
 /*
  * Return 0 on exception (or empty geometry)
  */
-extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
+extern size_t GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
 
 /************************************************************************
  *

@@ -42,10 +42,10 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc)
 	:
 	Geometry(gc.getFactory())
 {
-	unsigned int ngeoms=gc.geometries->size();
+	size_t ngeoms=gc.geometries->size();
 
 	geometries=new vector<Geometry *>(ngeoms);
-	for(unsigned int i=0; i<ngeoms; ++i)
+	for(size_t i=0; i<ngeoms; ++i)
 	{
 		(*geometries)[i]=(*gc.geometries)[i]->clone();
 	}
@@ -78,10 +78,10 @@ GeometryCollection::getCoordinates() const
 	vector<Coordinate> *coordinates = new vector<Coordinate>(getNumPoints());
 
 	int k = -1;
-	for (unsigned int i=0; i<geometries->size(); ++i) {
+	for (size_t i=0; i<geometries->size(); ++i) {
 		CoordinateSequence* childCoordinates=(*geometries)[i]->getCoordinates();
-		unsigned int npts=childCoordinates->getSize();
-		for (unsigned int j=0; j<npts; ++j) {
+		size_t npts=childCoordinates->getSize();
+		for (size_t j=0; j<npts; ++j) {
 			k++;
 			(*coordinates)[k] = childCoordinates->getAt(j);
 		}
@@ -93,7 +93,7 @@ GeometryCollection::getCoordinates() const
 bool
 GeometryCollection::isEmpty() const
 {
-	for (unsigned int i=0; i<geometries->size(); ++i) {
+	for (size_t i=0; i<geometries->size(); ++i) {
 		if (!(*geometries)[i]->isEmpty()) {
 			return false;
 		}
@@ -116,20 +116,20 @@ int
 GeometryCollection::getBoundaryDimension() const
 {
 	int dimension=Dimension::False;
-	for(unsigned int i=0; i<geometries->size(); ++i) {
+	for(size_t i=0; i<geometries->size(); ++i) {
 		dimension=max(dimension,(*geometries)[i]->getBoundaryDimension());
 	}
 	return dimension;
 }
 
-unsigned int
+size_t
 GeometryCollection::getNumGeometries() const
 {
 	return geometries->size();
 }
 
 const Geometry*
-GeometryCollection::getGeometryN(int n) const
+GeometryCollection::getGeometryN(size_t n) const
 {
 	return (*geometries)[n];
 }
@@ -176,7 +176,7 @@ GeometryCollection::equalsExact(const Geometry *other, double tolerance) const
 	if (geometries->size()!=otherCollection->geometries->size()) {
 		return false;
 	}
-	for (unsigned int i=0; i<geometries->size(); ++i) {
+	for (size_t i=0; i<geometries->size(); ++i) {
 		if (!((*geometries)[i]->equalsExact((*(otherCollection->geometries))[i],tolerance)))
 		{
 			return false;
@@ -188,7 +188,7 @@ GeometryCollection::equalsExact(const Geometry *other, double tolerance) const
 void
 GeometryCollection::apply_rw(const CoordinateFilter *filter)
 {
-	for (unsigned int i=0; i<geometries->size(); ++i)
+	for (size_t i=0; i<geometries->size(); ++i)
 	{
 		(*geometries)[i]->apply_rw(filter);
 	}
@@ -197,7 +197,7 @@ GeometryCollection::apply_rw(const CoordinateFilter *filter)
 void
 GeometryCollection::apply_ro(CoordinateFilter *filter) const
 {
-	for (unsigned int i=0; i<geometries->size(); ++i)
+	for (size_t i=0; i<geometries->size(); ++i)
 	{
 		(*geometries)[i]->apply_ro(filter);
 	}
@@ -207,7 +207,7 @@ void
 GeometryCollection::apply_ro(GeometryFilter *filter) const
 {
 	filter->filter_ro(this);
-	for(unsigned int i=0; i<geometries->size(); ++i)
+	for(size_t i=0; i<geometries->size(); ++i)
 	{
 		(*geometries)[i]->apply_ro(filter);
 	}
@@ -217,7 +217,7 @@ void
 GeometryCollection::apply_rw(GeometryFilter *filter)
 {
 	filter->filter_rw(this);
-	for(unsigned int i=0; i<geometries->size(); ++i)
+	for(size_t i=0; i<geometries->size(); ++i)
 	{
 		(*geometries)[i]->apply_rw(filter);
 	}
@@ -226,7 +226,7 @@ GeometryCollection::apply_rw(GeometryFilter *filter)
 void
 GeometryCollection::normalize()
 {
-	for (unsigned int i=0; i<geometries->size(); ++i) {
+	for (size_t i=0; i<geometries->size(); ++i) {
 		(*geometries)[i]->normalize();
 	}
 	sort(geometries->begin(), geometries->end(), GeometryGreaterThen());
@@ -236,7 +236,7 @@ Envelope::AutoPtr
 GeometryCollection::computeEnvelopeInternal() const
 {
 	Envelope::AutoPtr envelope(new Envelope());
-	for (unsigned int i=0; i<geometries->size(); i++) {
+	for (size_t i=0; i<geometries->size(); i++) {
 		const Envelope *env=(*geometries)[i]->getEnvelopeInternal();
 		envelope->expandToInclude(env);
 	}
@@ -265,7 +265,7 @@ double
 GeometryCollection::getArea() const
 {
 	double area=0.0;
-	for(unsigned int i=0; i<geometries->size(); ++i)
+	for(size_t i=0; i<geometries->size(); ++i)
 	{
         	area+=(*geometries)[i]->getArea();
 	}
@@ -279,7 +279,7 @@ double
 GeometryCollection::getLength() const
 {
 	double sum=0.0;
-	for(unsigned int i=0; i<geometries->size(); ++i)
+	for(size_t i=0; i<geometries->size(); ++i)
 	{
         	sum+=(*geometries)[i]->getLength();
 	}
@@ -290,7 +290,7 @@ void
 GeometryCollection::apply_rw(GeometryComponentFilter *filter)
 {
 	filter->filter_rw(this);
-	for(unsigned int i=0; i<geometries->size(); ++i)
+	for(size_t i=0; i<geometries->size(); ++i)
 	{
         	(*geometries)[i]->apply_rw(filter);
 	}
@@ -300,7 +300,7 @@ void
 GeometryCollection::apply_ro(GeometryComponentFilter *filter) const
 {
 	filter->filter_ro(this);
-	for(unsigned int i=0; i<geometries->size(); ++i)
+	for(size_t i=0; i<geometries->size(); ++i)
 	{
 		(*geometries)[i]->apply_ro(filter);
 	}
@@ -308,7 +308,7 @@ GeometryCollection::apply_ro(GeometryComponentFilter *filter) const
 
 GeometryCollection::~GeometryCollection()
 {
-	for(unsigned int i=0; i<geometries->size(); ++i)
+	for(size_t i=0; i<geometries->size(); ++i)
 	{
 		delete (*geometries)[i];
 	}
@@ -326,6 +326,9 @@ GeometryCollection::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.60  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.59  2006/05/04 15:49:38  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

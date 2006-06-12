@@ -280,11 +280,11 @@ LineString::equalsExact(const Geometry *other, double tolerance) const
 
 	const LineString *otherLineString=dynamic_cast<const LineString*>(other);
 	assert(otherLineString);
-	unsigned int npts=points->getSize();
+	size_t npts=points->getSize();
 	if (npts!=otherLineString->points->getSize()) {
 		return false;
 	}
-	for (unsigned int i=0; i<npts; ++i) {
+	for (size_t i=0; i<npts; ++i) {
 		if (!equal(points->getAt(i),otherLineString->points->getAt(i),tolerance)) {
 			return false;
 		}
@@ -392,6 +392,9 @@ LineString::getGeometryTypeId() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.70  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.69  2006/05/04 15:49:39  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

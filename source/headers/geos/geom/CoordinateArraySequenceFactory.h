@@ -51,8 +51,8 @@ public:
 
 	CoordinateSequence *create(std::vector<Coordinate> *coords, int dims) const;
 
-   	/** @see CoordinateSequenceFactory::create(unsigned int, int) */
-	CoordinateSequence *create(unsigned int size, unsigned int dimension=3) const;
+   	/** @see CoordinateSequenceFactory::create(size_t, int) */
+	CoordinateSequence *create(size_t size, size_t dimension=3) const;
 
 	/** \brief
 	 * Returns the singleton instance of CoordinateArraySequenceFactory
@@ -74,6 +74,9 @@ typedef CoordinateArraySequenceFactory DefaultCoordinateSequenceFactory;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

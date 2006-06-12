@@ -159,9 +159,9 @@ IntersectionMatrix::set(int row, int col, int dimensionValue)
 void
 IntersectionMatrix::set(const string& dimensionSymbols)
 {
-	unsigned int limit = dimensionSymbols.length();
+	size_t limit = dimensionSymbols.length();
 
-	for (unsigned int i = 0; i < limit; i++)
+	for (size_t i = 0; i < limit; i++)
 	{
 		int row = i / firstDim;
 		int col = i % secondDim;
@@ -199,9 +199,9 @@ IntersectionMatrix::setAtLeastIfValid(int row, int col, int minimumDimensionValu
 void
 IntersectionMatrix::setAtLeast(string minimumDimensionSymbols)
 {
-	unsigned int limit = minimumDimensionSymbols.length();
+	size_t limit = minimumDimensionSymbols.length();
 
-	for (unsigned int i = 0; i < limit; i++)
+	for (size_t i = 0; i < limit; i++)
 	{
 		int row = i / firstDim;
 		int col = i % secondDim;
@@ -439,6 +439,9 @@ operator<< (std::ostream&os, const IntersectionMatrix& im)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.26  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.25  2006/05/17 17:41:10  strk
  * Added output operator + test
  *

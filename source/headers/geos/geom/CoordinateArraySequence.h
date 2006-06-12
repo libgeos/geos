@@ -43,13 +43,13 @@ public:
 	CoordinateSequence *clone() const;
 
 	//const Coordinate& getCoordinate(int pos) const;
-	const Coordinate& getAt(unsigned int pos) const;
+	const Coordinate& getAt(size_t pos) const;
 
 	/// Copy Coordinate at position i to Coordinate c
-	virtual void getAt(unsigned int i, Coordinate& c) const;
+	virtual void getAt(size_t i, Coordinate& c) const;
 
 	//int size() const;
-	unsigned int getSize() const;
+	size_t getSize() const;
 	const std::vector<Coordinate>* toVector() const;
 
 	/// Construct an empty sequence
@@ -59,7 +59,7 @@ public:
 	CoordinateArraySequence(std::vector<Coordinate> *coords);
 
 	/// Construct sequence allocating space for n coordinates
-	CoordinateArraySequence(unsigned int n);
+	CoordinateArraySequence(size_t n);
 
 	~CoordinateArraySequence();
 
@@ -67,23 +67,23 @@ public:
 
 	void add(const Coordinate& c);
 
-	void setAt(const Coordinate& c, unsigned int pos);
+	void setAt(const Coordinate& c, size_t pos);
 
-	void deleteAt(unsigned int pos);
+	void deleteAt(size_t pos);
 
 	std::string toString() const;
 
 	void setPoints(const std::vector<Coordinate> &v);
 
-	double getOrdinate(unsigned int index,
-			unsigned int ordinateIndex) const;
+	double getOrdinate(size_t index,
+			size_t ordinateIndex) const;
 
-	void setOrdinate(unsigned int index, unsigned int ordinateIndex,
+	void setOrdinate(size_t index, size_t ordinateIndex,
 			double value);
 
 	void expandEnvelope(Envelope &env) const;
 
-	unsigned int getDimension() const { return 3; }
+	size_t getDimension() const { return 3; }
 
 	void apply_rw(const CoordinateFilter *filter); 
 
@@ -109,6 +109,9 @@ typedef CoordinateArraySequence DefaultCoordinateSequence;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.3  2006/05/03 08:58:34  strk
  * added new non-static CoordinateSequence::removeRepeatedPoints() mutator.
  *

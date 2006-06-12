@@ -62,8 +62,8 @@ public:
 	 * @param dimension the dimension of the coordinates in the sequence
 	 * 	(if user-specifiable, otherwise ignored)
 	 */
-	virtual CoordinateSequence *create(unsigned int size,
-			unsigned int dimension) const=0;
+	virtual CoordinateSequence *create(size_t size,
+			size_t dimension) const=0;
 
 	virtual ~CoordinateSequenceFactory() {}
 };
@@ -79,6 +79,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.3  2006/06/08 11:20:24  strk
  * Added missing virtual destructor to abstract classes.
  *

@@ -64,8 +64,8 @@ CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 	 * For each segment l = (i-1, i), see if it crosses ray from
 	 * test point in positive x direction.
 	 */
-	unsigned int nPts=ring->getSize();
-	for(unsigned int i=1; i<nPts; i++)
+	size_t nPts=ring->getSize();
+	for(size_t i=1; i<nPts; i++)
 	{
 		const Coordinate &p1=ring->getAt(i);
 		const Coordinate &p2=ring->getAt(i-1);
@@ -113,7 +113,7 @@ CGAlgorithms::isPointInRing(const Coordinate& p,
 	 * For each segment l = (i-1, i), see if it crosses ray from
 	 * test point in positive x direction.
 	 */
-	for(unsigned int i=1, nPts=ring.size(); i<nPts; ++i)
+	for(size_t i=1, nPts=ring.size(); i<nPts; ++i)
 	{
 		const Coordinate *p1=ring[i];
 		const Coordinate *p2=ring[i-1];
@@ -150,11 +150,11 @@ bool
 CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 {
 	//LineIntersector lineIntersector;
-	unsigned int ptsize = pt->getSize();
+	size_t ptsize = pt->getSize();
 	if ( ptsize == 0 ) return false;
 
 	const Coordinate *pp=&(pt->getAt(0));
-	for(unsigned int i=1; i<ptsize; ++i)
+	for(size_t i=1; i<ptsize; ++i)
 	{
 		const Coordinate &p1=pt->getAt(i);	
 		if ( LineIntersector::hasIntersection(p, *pp, p1) )
@@ -169,12 +169,12 @@ bool
 CGAlgorithms::isCCW(const CoordinateSequence* ring)
 {
 	// # of points without closing endpoint
-	unsigned int nPts=ring->getSize()-1;
+	size_t nPts=ring->getSize()-1;
 
 	// find highest point
 	const Coordinate *hiPt=&ring->getAt(0);
 	int hiIndex=0;
-	for (unsigned int i=1; i<=nPts; ++i)
+	for (size_t i=1; i<=nPts; ++i)
 	{
 		const Coordinate *p=&ring->getAt(i);
 		if (p->y > hiPt->y) {
@@ -358,12 +358,12 @@ limiting conditions:
 double
 CGAlgorithms::signedArea(const CoordinateSequence* ring)
 {
-	unsigned int npts=ring->getSize();
+	size_t npts=ring->getSize();
 
 	if (npts<3) return 0.0;
 
 	double sum=0.0;
-	for (unsigned int i=0; i<npts-1; ++i)
+	for (size_t i=0; i<npts-1; ++i)
 	{
 		double bx=ring->getAt(i).x;
 		double by=ring->getAt(i).y;
@@ -378,13 +378,13 @@ CGAlgorithms::signedArea(const CoordinateSequence* ring)
 double
 CGAlgorithms::length(const CoordinateSequence* pts)
 {
-	unsigned int npts=pts->getSize();
+	size_t npts=pts->getSize();
 
 	if (npts<1) return 0.0;
 
 	double sum=0.0;
 
-	for(unsigned int i=1; i<npts; ++i)
+	for(size_t i=1; i<npts; ++i)
 	{
 		sum+=pts->getAt(i).distance(pts->getAt(i - 1));
 	}
@@ -397,6 +397,9 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.32  2006/05/02 14:51:53  strk
  * Added port info and fixed doxygen comments for CGAlgorithms class
  *

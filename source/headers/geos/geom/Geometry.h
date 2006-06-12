@@ -264,11 +264,11 @@ public:
 
 	/// Returns the number of geometries in this collection
 	/// (or 1 if this is not a collection)
-	virtual unsigned int getNumGeometries() const { return 1; }
+	virtual size_t getNumGeometries() const { return 1; }
 
 	/// Returns a pointer to the nth Geometry int this collection
 	/// (or self if this is not a collection)
-	virtual const Geometry* getGeometryN(int n) const { return this; }
+	virtual const Geometry* getGeometryN(size_t /*n*/) const { return this; }
 
 	/**
 	 * \brief Tests the validity of this <code>Geometry</code>.
@@ -556,7 +556,7 @@ public:
 	template <class T>
 	void applyComponentFilter(T& f) const
 	{
-		for(unsigned int i=0, n=getNumGeometries(); i<n; ++i)
+		for(size_t i=0, n=getNumGeometries(); i<n; ++i)
 			f.filter(getGeometryN(i));
 	}
 
@@ -728,6 +728,9 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.12  2006/05/18 08:56:50  strk
  *         * source/geom/Geometry.cpp,
  *         source/headers/geos/geom/Geometry.h: added

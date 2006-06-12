@@ -128,7 +128,7 @@ Geometry::Geometry(const Geometry &geom)
 bool
 Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries) 
 {
-	for (unsigned int i=0; i<geometries->size(); i++) {
+	for (size_t i=0; i<geometries->size(); i++) {
 		if (!(*geometries)[i]->isEmpty()) {
 			return true;
 		}
@@ -139,8 +139,8 @@ Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries)
 bool
 Geometry::hasNullElements(const CoordinateSequence* list) 
 {
-	unsigned int npts=list->getSize();
-	for (unsigned int i=0; i<npts; ++i) {
+	size_t npts=list->getSize();
+	for (size_t i=0; i<npts; ++i) {
 		if (list->getAt(i)==Coordinate::getNull()) {
 			return true;
 		}
@@ -151,8 +151,8 @@ Geometry::hasNullElements(const CoordinateSequence* list)
 bool
 Geometry::hasNullElements(const vector<Geometry *>* lrs) 
 {
-	unsigned int n=lrs->size();
-	for (unsigned int i=0; i<n; ++i) {
+	size_t n=lrs->size();
+	for (size_t i=0; i<n; ++i) {
 		if ((*lrs)[i]==NULL) {
 			return true;
 		}
@@ -543,7 +543,7 @@ Geometry::Union(const Geometry *other) const
 	{
 //cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
 		const GeometryCollection *coll;
-		unsigned int ngeoms, i;
+		size_t ngeoms, i;
 		vector<Geometry *> *v = new vector<Geometry *>();
 
 		if ( (coll = dynamic_cast<const GeometryCollection *>(this)) )
@@ -655,8 +655,8 @@ Geometry::getClassSortIndex() const
 int
 Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
 {
-	unsigned int i=0;
-	unsigned int j=0;
+	size_t i=0;
+	size_t j=0;
 	while (i<a.size() && j<b.size()) {
 		Coordinate& aCoord=a[i];
 		Coordinate& bCoord=b[j];
@@ -679,8 +679,8 @@ Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
 int
 Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const
 {
-	unsigned int i=0;
-	unsigned int j=0;
+	size_t i=0;
+	size_t j=0;
 	while (i<a.size() && j<b.size()) {
 		Geometry *aGeom=a[i];
 		Geometry *bGeom=b[j];
@@ -796,6 +796,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.117  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.116  2006/06/05 15:36:34  strk
  * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
  *

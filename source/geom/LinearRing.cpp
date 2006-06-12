@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -91,6 +92,9 @@ LinearRing::getGeometryTypeId() const {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.32  2006/04/11 11:16:25  strk
  * Added LineString and LinearRing constructors by auto_ptr
  *

@@ -80,25 +80,25 @@ public:
 	 * Coordinate or merely a copy depends on the implementation.
 	 */
 	//virtual const Coordinate& getCoordinate(int i) const=0;
-	virtual const Coordinate& getAt(unsigned int i) const=0;
+	virtual const Coordinate& getAt(size_t i) const=0;
 
-	const Coordinate& operator[] (unsigned int i) const {
+	const Coordinate& operator[] (size_t i) const {
 		return getAt(i);
 	}
 
 	/** \brief
 	 * Write Coordinate at position i to given Coordinate.
 	 */
-	virtual void getAt(unsigned int i, Coordinate& c) const=0;
+	virtual void getAt(size_t i, Coordinate& c) const=0;
 
 	/** \brief
 	 * Returns the number of Coordinates (actual or otherwise, as
 	 * this implementation may not store its data in Coordinate objects).
 	 */
 	//virtual int size() const=0;
-	virtual unsigned int getSize() const=0;
+	virtual size_t getSize() const=0;
 
-	unsigned int size() const { return getSize(); }
+	size_t size() const { return getSize(); }
 
 	/** \brief
 	 * Returns a read-only vector with the Coordinates in this collection.
@@ -161,13 +161,13 @@ public:
 	//virtual int getSize() const=0;
 
 	/// Get a reference to Coordinate at position pos
-	//virtual	const Coordinate& getAt(unsigned int pos) const=0;
+	//virtual	const Coordinate& getAt(size_t pos) const=0;
 
 	/// Copy Coordinate c to position pos
-	virtual	void setAt(const Coordinate& c, unsigned int pos)=0;
+	virtual	void setAt(const Coordinate& c, size_t pos)=0;
 
 	/// Delete Coordinate at position pos (list will shrink).
-	virtual	void deleteAt(unsigned int pos)=0;
+	virtual	void deleteAt(size_t pos)=0;
 
 	/// Get a string rapresentation of CoordinateSequence
 	virtual	std::string toString() const=0;
@@ -207,7 +207,7 @@ public:
 	* \brief Returns either the given CoordinateSequence if its length
 	* is greater than the given amount, or an empty CoordinateSequence.
 	*/
-	static CoordinateSequence* atLeastNCoordinatesOrNothing(unsigned int n, CoordinateSequence *c);
+	static CoordinateSequence* atLeastNCoordinatesOrNothing(size_t n, CoordinateSequence *c);
 
 	/**
 	 * \brief Returns lower-left Coordinate in given CoordinateSequence.
@@ -240,7 +240,7 @@ public:
 	 *
 	 * @return the dimension of the sequence.
 	 */
-	virtual unsigned int getDimension() const=0;
+	virtual size_t getDimension() const=0;
 
 	/**
 	 * Returns the ordinate of a coordinate in this sequence.
@@ -252,7 +252,7 @@ public:
 	 * @param ordinateIndex the ordinate index in the coordinate
 	 * 	   (in range [0, dimension-1])
 	 */
-	virtual double getOrdinate(unsigned int index, unsigned int ordinateIndex) const=0;
+	virtual double getOrdinate(size_t index, size_t ordinateIndex) const=0;
 
 	/**
 	 * Returns ordinate X (0) of the specified coordinate.
@@ -260,7 +260,7 @@ public:
 	 * @param index
 	 * @return the value of the X ordinate in the index'th coordinate
 	 */
-	virtual double getX(unsigned int index) const { return getOrdinate(index, X); }
+	virtual double getX(size_t index) const { return getOrdinate(index, X); }
 
 	/**
 	 * Returns ordinate Y (1) of the specified coordinate.
@@ -268,7 +268,7 @@ public:
 	 * @param index
 	 * @return the value of the Y ordinate in the index'th coordinate
 	 */
-	virtual double getY(unsigned int index) const { return getOrdinate(index, Y); }
+	virtual double getY(size_t index) const { return getOrdinate(index, Y); }
 
 
 	/**
@@ -279,7 +279,7 @@ public:
 	 * 		(in range [0, dimension-1])
 	 * @param value  the new ordinate value
 	 */
-	virtual void setOrdinate(unsigned int index, unsigned int ordinateIndex, double value)=0;
+	virtual void setOrdinate(size_t index, size_t ordinateIndex, double value)=0;
 
 	/**
 	 * Expands the given Envelope to include the coordinates in the
@@ -305,7 +305,7 @@ public:
 	void applyCoordinateFilter(T& f) 
 	{
 		Coordinate c;
-		for(unsigned int i=0, n=size(); i<n; ++i)
+		for(size_t i=0, n=size(); i<n; ++i)
 		{
 			getAt(i, c);
 			f.filter(c);
@@ -328,6 +328,9 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.8  2006/05/04 08:42:12  strk
  * Added note about the CoordinateSequence::toVector() method.
  *

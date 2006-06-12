@@ -75,7 +75,7 @@ public:
 	 * Performs a filtering operation with or on coord in "read-write" mode.
 	 * @param coord The Coordinate to which the filter is applied.
 	 */
-	virtual void filter_rw(geom::Coordinate *coord) const
+	virtual void filter_rw(geom::Coordinate * /*coord*/) const
 	{
 		// UniqueCoordinateArrayFilter is a read-only filter
 		assert(false); 
@@ -89,6 +89,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.2  2006/04/10 09:21:23  mloskot
  * Added new test for UniqueCoordinateArrayFilter class. Small fixes related to signed/unsigned comparison.
  *

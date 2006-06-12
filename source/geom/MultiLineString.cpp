@@ -67,7 +67,7 @@ bool MultiLineString::isClosed() const {
 	if (isEmpty()) {
 		return false;
 	}
-	for (unsigned int i = 0; i < geometries->size(); i++) {
+	for (size_t i = 0; i < geometries->size(); i++) {
 		if (!((LineString *)(*geometries)[i])->isClosed()) {
 			return false;
 		}
@@ -107,9 +107,9 @@ MultiLineString::getGeometryTypeId() const {
 MultiLineString*
 MultiLineString::reverse() const
 {
-	unsigned int nLines = geometries->size();
+	size_t nLines = geometries->size();
 	Geometry::NonConstVect *revLines = new Geometry::NonConstVect(nLines);
-	for (unsigned int i=0; i<nLines; ++i)
+	for (size_t i=0; i<nLines; ++i)
 	{
 		assert(dynamic_cast<LineString*>((*geometries)[i]));
 		LineString *iLS = static_cast<LineString*>((*geometries)[i]);
@@ -123,6 +123,9 @@ MultiLineString::reverse() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.33  2006/05/04 15:49:39  strk
  * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
  *

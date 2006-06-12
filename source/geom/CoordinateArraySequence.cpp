@@ -33,7 +33,7 @@ CoordinateArraySequence::CoordinateArraySequence():
 {
 }
 
-CoordinateArraySequence::CoordinateArraySequence(unsigned int n):
+CoordinateArraySequence::CoordinateArraySequence(size_t n):
 	vect(new vector<Coordinate>(n))
 {
 }
@@ -80,35 +80,35 @@ CoordinateArraySequence::add(const Coordinate& c)
 	vect->push_back(c);
 }
 
-unsigned int
+size_t
 CoordinateArraySequence::getSize() const
 {
 	return vect->size();
 }
 
 const Coordinate &
-CoordinateArraySequence::getAt(unsigned int pos) const
+CoordinateArraySequence::getAt(size_t pos) const
 {
 	assert(pos<vect->size());
 	return (*vect)[pos];
 }
 
 void
-CoordinateArraySequence::getAt(unsigned int pos, Coordinate &c) const
+CoordinateArraySequence::getAt(size_t pos, Coordinate &c) const
 {
 	assert(pos<vect->size());
 	c=(*vect)[pos];
 }
 
 void
-CoordinateArraySequence::setAt(const Coordinate& c, unsigned int pos)
+CoordinateArraySequence::setAt(const Coordinate& c, size_t pos)
 {
 	assert(pos<vect->size());
 	(*vect)[pos]=c;
 }
 
 void
-CoordinateArraySequence::deleteAt(unsigned int pos)
+CoordinateArraySequence::deleteAt(size_t pos)
 {
 	assert(pos<vect->size());
 	vect->erase(vect->begin()+pos);
@@ -120,7 +120,7 @@ CoordinateArraySequence::toString() const
 	string result("(");
 	if (getSize()>0) {
 		//char buffer[100];
-		for (unsigned int i=0, n=vect->size(); i<n; i++)
+		for (size_t i=0, n=vect->size(); i<n; i++)
 		{
 			Coordinate& c=(*vect)[i];
 			if ( i ) result.append(", ");
@@ -140,12 +140,12 @@ CoordinateArraySequence::~CoordinateArraySequence()
 void
 CoordinateArraySequence::expandEnvelope(Envelope &env) const
 {
-	unsigned int size = vect->size();
-	for (unsigned int i=0; i<size; i++) env.expandToInclude((*vect)[i]);
+	size_t size = vect->size();
+	for (size_t i=0; i<size; i++) env.expandToInclude((*vect)[i]);
 }
 
 double
-CoordinateArraySequence::getOrdinate(unsigned int index, unsigned int ordinateIndex) const
+CoordinateArraySequence::getOrdinate(size_t index, size_t ordinateIndex) const
 {
 
 	assert(index<vect->size());
@@ -164,7 +164,7 @@ CoordinateArraySequence::getOrdinate(unsigned int index, unsigned int ordinateIn
 }
 
 void
-CoordinateArraySequence::setOrdinate(unsigned int index, unsigned int ordinateIndex,
+CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 	double value)
 {
 
@@ -218,6 +218,9 @@ CoordinateArraySequence::removeRepeatedPoints()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.8  2006/05/03 08:58:34  strk
  * added new non-static CoordinateSequence::removeRepeatedPoints() mutator.
  *

@@ -54,9 +54,9 @@ Polygon::Polygon(const Polygon &p)
 	Geometry(p.getFactory())
 {
 	shell=new LinearRing(*p.shell);
-	unsigned int nholes=p.holes->size();
+	size_t nholes=p.holes->size();
 	holes=new vector<Geometry *>(nholes);
-	for(unsigned int i=0; i<nholes; ++i)
+	for(size_t i=0; i<nholes; ++i)
 	{
 		LinearRing *h=new LinearRing(* (LinearRing*)(*p.holes)[i]);
 		(*holes)[i]=h;
@@ -92,7 +92,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 			delete newHoles;
 			throw util::IllegalArgumentException("holes must not contain null elements");
 		}
-		for (unsigned int i=0; i<newHoles->size(); i++)
+		for (size_t i=0; i<newHoles->size(); i++)
 			if ( (*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING)
 				throw util::IllegalArgumentException("holes must be LinearRings");
 		holes=newHoles;
@@ -106,8 +106,8 @@ Polygon::getCoordinates() const
 		return getFactory()->getCoordinateSequenceFactory()->create(NULL);
 	}
 
-	unsigned int i, j, npts;
-	unsigned int nholes=holes->size();
+	size_t i, j, npts;
+	size_t nholes=holes->size();
 
 	vector<Coordinate> *cl = new vector<Coordinate>;
 
@@ -139,7 +139,7 @@ size_t
 Polygon::getNumPoints() const
 {
 	size_t numPoints = shell->getNumPoints();
-	for (unsigned int i = 0; i < holes->size(); i++) {
+	for (size_t i = 0; i < holes->size(); i++) {
 		numPoints += ((LinearRing *)(*holes)[i])->getNumPoints();
 	}
 	return numPoints;
@@ -219,7 +219,7 @@ Polygon::getBoundary() const
 
 	//(*rings)[0]=shell->clone(); // new LineString(*shell);
 	(*rings)[0] = gf->createLineString(*shell).release();
-	for (unsigned int i=0; i<holes->size(); i++) {
+	for (size_t i=0; i<holes->size(); i++) {
 		//(*rings)[i + 1] = new LineString((const LineString &)*(*holes)[i]);
 		assert( dynamic_cast<LineString *>( (*holes)[i] ) );
 		LineString* hole = static_cast<LineString *>( (*holes)[i] );
@@ -270,7 +270,7 @@ void
 Polygon::apply_ro(CoordinateFilter *filter) const
 {
 	shell->apply_ro(filter);
-	for (unsigned int i = 0; i < holes->size(); ++i)
+	for (size_t i = 0; i < holes->size(); ++i)
 	{
 		((LinearRing *)(*holes)[i])->apply_ro(filter);
 	}
@@ -280,7 +280,7 @@ void
 Polygon::apply_rw(const CoordinateFilter *filter)
 {
 	shell->apply_rw(filter);
-	for (unsigned int i = 0; i < holes->size(); ++i)
+	for (size_t i = 0; i < holes->size(); ++i)
 	{
 		((LinearRing *)(*holes)[i])->apply_rw(filter);
 	}
@@ -308,7 +308,7 @@ void
 Polygon::normalize()
 {
 	normalize(shell, true);
-	for (unsigned int i = 0; i < holes->size(); ++i)
+	for (size_t i = 0; i < holes->size(); ++i)
 	{
 		normalize((LinearRing *)(*holes)[i], false);
 	}
@@ -359,7 +359,7 @@ Polygon::getArea() const
 {
 	double area=0.0;
 	area+=fabs(algorithm::CGAlgorithms::signedArea(shell->getCoordinatesRO()));
-	for(unsigned int i=0; i<holes->size(); ++i)
+	for(size_t i=0; i<holes->size(); ++i)
 	{
 		LinearRing *lr = static_cast<LinearRing *>((*holes)[i]);
 		const CoordinateSequence *h=lr->getCoordinatesRO();
@@ -378,7 +378,7 @@ Polygon::getLength() const
 {
 	double len=0.0;
 	len+=shell->getLength();
-	for(unsigned int i=0; i<holes->size(); ++i)
+	for(size_t i=0; i<holes->size(); ++i)
 	{
 		len+=(*holes)[i]->getLength();
 	}
@@ -390,7 +390,7 @@ Polygon::apply_ro(GeometryComponentFilter *filter) const
 {
 	filter->filter_ro(this);
 	shell->apply_ro(filter);
-	for(unsigned int i=0; i<holes->size(); ++i)
+	for(size_t i=0; i<holes->size(); ++i)
 	{
         	(*holes)[i]->apply_ro(filter);
 	}
@@ -401,7 +401,7 @@ Polygon::apply_rw(GeometryComponentFilter *filter)
 {
 	filter->filter_rw(this);
 	shell->apply_rw(filter);
-	for(unsigned int i=0; i<holes->size(); ++i)
+	for(size_t i=0; i<holes->size(); ++i)
 	{
         	(*holes)[i]->apply_rw(filter);
 	}
@@ -410,7 +410,7 @@ Polygon::apply_rw(GeometryComponentFilter *filter)
 Polygon::~Polygon()
 {
 	delete shell;
-	for(unsigned int i=0; i<holes->size(); ++i)
+	for(size_t i=0; i<holes->size(); ++i)
 		delete (*holes)[i];
 	delete holes;
 }
@@ -459,6 +459,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.67  2006/06/12 10:10:39  strk
+ * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
+ *
  * Revision 1.66  2006/06/08 17:58:57  strk
  * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
  *
