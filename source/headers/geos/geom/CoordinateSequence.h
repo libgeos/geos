@@ -72,6 +72,14 @@ public:
 	friend std::ostream& operator<< (std::ostream& os,
 		const CoordinateSequence& cs);
 
+	friend bool operator== (
+		const CoordinateSequence& seq1,
+		const CoordinateSequence& seq2);
+
+	friend bool operator!= (
+		const CoordinateSequence& seq1,
+		const CoordinateSequence& seq2);
+
 	virtual ~CoordinateSequence() {}
 
 	/** \brief
@@ -336,6 +344,10 @@ public:
 
 std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
 
+bool operator== (const CoordinateSequence& s1, const CoordinateSequence& s2);
+
+bool operator!= (const CoordinateSequence& s1, const CoordinateSequence& s2);
+
 } // namespace geos::geom
 } // namespace geos
 
@@ -347,6 +359,9 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.12  2006/06/12 16:51:23  strk
+ * Added equality and inequality operators and tests
+ *
  * Revision 1.11  2006/06/12 16:36:22  strk
  * indentation, notes about things to be fixed.
  *

@@ -409,4 +409,52 @@ namespace tut
 		ensure_equals( sequence.size(), 3u );
 	}
 
+	// Test of equality and inequality operators
+	template<>
+	template<>
+	void object::test<12>()
+	{
+		using geos::geom::Coordinate;
+		using geos::geom::CoordinateArraySequence;
+		using geos::geom::CoordinateSequence;
+
+		Coordinate c1(1, 2, 3);
+		Coordinate c2(5, 10, 15);
+		Coordinate c3(6, 9, 10);
+
+		CoordinateArraySequence sequence1;
+		CoordinateArraySequence sequence2;
+
+		sequence1.add(c1);
+		sequence1.add(c2);
+		sequence1.add(c3);
+
+		sequence2.add(c1);
+		sequence2.add(c2);
+		sequence2.add(c3);
+
+		ensure_equals( sequence1, sequence2 );
+		ensure_equals( sequence2, sequence1 );
+
+		// Add a new coordinate to sequence2
+		sequence2.add(c3);
+
+		ensure_not_equals( sequence1, sequence2 );
+		ensure_not_equals( sequence2, sequence1 );
+
+		// Add a new coordinate to sequence1
+		sequence1.add(c3);
+
+		ensure_equals( sequence1, sequence2 );
+		ensure_equals( sequence2, sequence1 );
+
+		// Add a new coordinate to sequence1
+		sequence1.add(c3);
+		sequence2.add(c2);
+
+		ensure_not_equals( sequence1, sequence2 );
+		ensure_not_equals( sequence2, sequence1 );
+
+	}
+
 } // namespace tut

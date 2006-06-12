@@ -264,11 +264,24 @@ std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs)
 	return os;
 }
 
+bool operator== ( const CoordinateSequence& s1, const CoordinateSequence& s2)
+{
+	return CoordinateSequence::equals(&s1, &s2);
+}
+
+bool operator!= ( const CoordinateSequence& s1, const CoordinateSequence& s2)
+{
+	return ! CoordinateSequence::equals(&s1, &s2);
+}
+
 } // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.21  2006/06/12 16:51:23  strk
+ * Added equality and inequality operators and tests
+ *
  * Revision 1.20  2006/06/12 16:36:22  strk
  * indentation, notes about things to be fixed.
  *

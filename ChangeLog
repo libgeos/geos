@@ -1,8 +1,10 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
 	* source/geom/CoordinateSequence.cpp,
-	source/headers/geos/geom/CoordinateSequence.h:
-	indentation fixes, notes about things to be fixed.
+	source/headers/geos/geom/CoordinateSequence.h,
+	tests/unit/geom/CoordinateArraySequenceTest.cpp:
+	Added equality and inequality operators and tests +
+	indentation fixes and notes about things to be fixed.
 	* source/planargraph/Node.cpp: implemented missing
 	getEdgesBetween() method (untested).
 	* source/headers/geos/planargraph/DirectedEdge.h,
