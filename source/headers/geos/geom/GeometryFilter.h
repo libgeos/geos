@@ -17,12 +17,13 @@
 #ifndef GEOS_GEOM_GEOMETRYFILTER_H
 #define GEOS_GEOM_GEOMETRYFILTER_H
 
-#include <string>
-#include <vector>
-
 //#include <geos/platform.h>
 
 #include <geos/inline.h>
+
+#include <string>
+#include <vector>
+#include <cassert>
 
 namespace geos {
 	namespace geom { // geos::geom
@@ -52,9 +53,13 @@ public:
 	 *
 	 * @param  geom  a <code>Geometry</code> to which the filter
 	 *         is applied.
+	 *
+	 * NOTE: this are not pure abstract to allow read-only
+	 * or read-write-only filters to avoid defining a fake
+	 * version of the not-implemented kind.
 	 */
-	virtual void filter_ro(const Geometry *geom)=0;
-	virtual void filter_rw(Geometry *geom)=0;
+	virtual void filter_ro(const Geometry * /*geom*/) { assert(0); }
+	virtual void filter_rw(Geometry * /*geom*/) { assert(0); }
 
 	virtual ~GeometryFilter() {}
 };
@@ -70,6 +75,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 17:14:11  strk
+ * added assert(0) version of filter_ro() and filter_rw() to allow implementations to only defined the required one.
+ *
  * Revision 1.3  2006/06/08 11:20:24  strk
  * Added missing virtual destructor to abstract classes.
  *

@@ -1,5 +1,12 @@
 2006-06-12 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/GeometryFilter.h:
+	added assert(0) version of filter_ro() and filter_rw()
+	to allow implementations to only defined the required
+	one.
+	* source/headers/geos/operation/polygonize/Polyginzer.h,
+	source/headers/geos/index/quadtree/Root.h:
+	Removed unused parameter warnings.
 	* source/headers/geos/io/WKTWriter.h,
 	source/io/WKTWriter.cpp: fixed compiler warnings,
 	fixed some methods to omit unused parameters.
