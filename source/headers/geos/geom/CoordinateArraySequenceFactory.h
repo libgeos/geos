@@ -49,7 +49,7 @@ public:
 	 */
 	CoordinateSequence *create(std::vector<Coordinate> *coords) const;
 
-	CoordinateSequence *create(std::vector<Coordinate> *coords, int dims) const;
+	CoordinateSequence *create(std::vector<Coordinate> *coords, size_t dims) const;
 
    	/** @see CoordinateSequenceFactory::create(size_t, int) */
 	CoordinateSequence *create(size_t size, size_t dimension=3) const;
@@ -74,6 +74,9 @@ typedef CoordinateArraySequenceFactory DefaultCoordinateSequenceFactory;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.3  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *

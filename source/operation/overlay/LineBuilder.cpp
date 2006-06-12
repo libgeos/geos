@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -101,7 +102,7 @@ LineBuilder::findCoveredLineEdges()
 	 * use a point-in-poly test to determine whether they are covered
 	 */
 	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
-	for(unsigned int i=0, s=ee->size(); i<s; ++i)
+	for(size_t i=0, s=ee->size(); i<s; ++i)
 	{
 		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
 		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
@@ -117,7 +118,7 @@ void
 LineBuilder::collectLines(OverlayOp::OpCode opCode)
 {
 	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
-	for(unsigned int i=0, s=ee->size(); i<s; ++i)
+	for(size_t i=0, s=ee->size(); i<s; ++i)
 	{
 		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
 		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
@@ -176,7 +177,7 @@ void
 LineBuilder::buildLines(OverlayOp::OpCode opCode)
 {
 	// need to simplify lines?
-	for(unsigned int i=0, s=lineEdgesList.size(); i<s; ++i)
+	for(size_t i=0, s=lineEdgesList.size(); i<s; ++i)
 	{
 		Edge *e=lineEdgesList[i];
 		//Label *label=e->getLabel();
@@ -199,13 +200,13 @@ LineBuilder::buildLines(OverlayOp::OpCode opCode)
 void
 LineBuilder::propagateZ(CoordinateSequence *cs)
 {
-	unsigned int i;
+	size_t i;
 #if GEOS_DEBUG
 	cerr<<"LineBuilder::propagateZ() called"<<endl;
 #endif
 
 	vector<int>v3d; // vertex 3d
-	unsigned int cssize = cs->getSize();
+	size_t cssize = cs->getSize();
 	for (i=0; i<cssize; i++)
 	{
 		if ( !ISNAN(cs->getAt(i).z) ) v3d.push_back(i);
@@ -238,7 +239,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 	}
 
 	// interpolate inbetweens
-	unsigned int prev=v3d[0];
+	size_t prev=v3d[0];
 	for (i=1; i<v3d.size(); i++)
 	{
 		int curr=v3d[i];
@@ -265,7 +266,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 	if ( prev < cssize-1 )
 	{
 		double z = cs->getAt(prev).z;
-		for (unsigned int j=prev+1; j<cssize; j++)
+		for (size_t j=prev+1; j<cssize; j++)
 		{
 			buf = cs->getAt(j);
 			buf.z = z;
@@ -280,7 +281,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 void
 LineBuilder::labelIsolatedLines(vector<Edge*> *edgesList)
 {
-	for(unsigned int i=0, s=edgesList->size(); i<s; ++i)
+	for(size_t i=0, s=edgesList->size(); i<s; ++i)
 	{
 		Edge *e=(*edgesList)[i];
 		Label *label=e->getLabel();
@@ -310,6 +311,9 @@ LineBuilder::labelIsolatedLine(Edge *e, int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.27  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.26  2006/06/05 15:36:34  strk
  * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
  *

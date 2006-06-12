@@ -112,7 +112,7 @@ LineSegmentIndex::LineSegmentIndex()
 /*public*/
 LineSegmentIndex::~LineSegmentIndex()
 {
-	for (unsigned int i=0, n=newEnvelopes.size(); i<n; ++i)
+	for (size_t i=0, n=newEnvelopes.size(); i<n; ++i)
 	{
 		delete newEnvelopes[i];
 	}
@@ -123,7 +123,7 @@ void
 LineSegmentIndex::add(const TaggedLineString& line)
 {
 	const vector<TaggedLineSegment*>& segs = line.getSegments();
-	for (unsigned int i=0, n=segs.size(); i<n; ++i)
+	for (size_t i=0, n=segs.size(); i<n; ++i)
 	{
 		const LineSegment* seg = segs[i];
 		add(seg);
@@ -172,6 +172,9 @@ LineSegmentIndex::query(const LineSegment* querySeg) const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.2  2006/04/13 09:28:09  mloskot
  * Removed definition of copy ctor and assignment operator for LineSegmentString class.
  *

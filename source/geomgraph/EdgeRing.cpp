@@ -95,7 +95,8 @@ EdgeRing::~EdgeRing()
 		delete ring;
 	}
 
-	for(unsigned int i=0;i<holes.size(); ++i) {
+	for(size_t i=0, n=holes.size(); i<n; ++i)
+	{
 		delete holes[i];
 	}
 
@@ -175,9 +176,9 @@ EdgeRing::toPolygon(const GeometryFactory* geometryFactory)
 {
 	testInvariant();
 
-	unsigned int nholes=holes.size();
+	size_t nholes=holes.size();
 	vector<Geometry *> *holeLR=new vector<Geometry *>(nholes);
-	for (unsigned int i=0; i<nholes; ++i)
+	for (size_t i=0; i<nholes; ++i)
 	{
 		Geometry *hole=holes[i]->getLinearRing()->clone();
         	(*holeLR)[i]=hole;
@@ -334,24 +335,24 @@ EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 	const CoordinateSequence* edgePts=edge->getCoordinates();
 
 	assert(edgePts);
-	unsigned int numEdgePts=edgePts->getSize();
+	size_t numEdgePts=edgePts->getSize();
 
 	assert(pts);
 
 	if (isForward) {
-		unsigned int startIndex=1;
+		size_t startIndex=1;
 		if (isFirstEdge) startIndex=0;
-		for (unsigned int i=startIndex; i<numEdgePts; ++i)
+		for (size_t i=startIndex; i<numEdgePts; ++i)
 		{
 			pts->add(edgePts->getAt(i));
 		}
 	}
 	
 	else { // is backward
-		unsigned int startIndex=numEdgePts-1;
+		size_t startIndex=numEdgePts-1;
 		if (isFirstEdge) startIndex=numEdgePts;
 		//for (int i=startIndex;i>=0;i--) 
-		for (unsigned int i=startIndex; i>0; --i)
+		for (size_t i=startIndex; i>0; --i)
 		{
 			pts->add(edgePts->getAt(i-1));
 		}
@@ -403,6 +404,9 @@ std::ostream& operator<< (std::ostream& os, const EdgeRing& er)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.23  2006/04/06 09:41:55  strk
  * Added operator<<, added pts!=NULL assertion in testInvariant() function
  *

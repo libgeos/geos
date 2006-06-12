@@ -32,10 +32,10 @@ namespace valid { // geos.operation.valid
 bool
 SimpleNestedRingTester::isNonNested()
 {
-	for(unsigned int i=0, ni=rings.size(); i<ni; i++) {
+	for(size_t i=0, ni=rings.size(); i<ni; i++) {
 		LinearRing* innerRing=rings[i];
 		CoordinateSequence *innerRingPts=innerRing->getCoordinates();
-		for(unsigned int j=0, nj=rings.size(); j<nj; j++) {
+		for(size_t j=0, nj=rings.size(); j<nj; j++) {
 			LinearRing* searchRing=rings[j];
 			CoordinateSequence *searchRingPts=searchRing->getCoordinates();
 			if (innerRing==searchRing)
@@ -68,6 +68,9 @@ SimpleNestedRingTester::isNonNested()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.16  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.15  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

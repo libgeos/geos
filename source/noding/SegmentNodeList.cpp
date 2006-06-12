@@ -51,18 +51,24 @@ static Profiler *profiler = Profiler::instance();
 SegmentNodeList::~SegmentNodeList()
 {
 	std::set<SegmentNode *, SegmentNodeLT>::iterator it=nodeMap.begin();
-	for(; it!=nodeMap.end(); it++) delete *it;
+	for(; it!=nodeMap.end(); it++)
+	{
+		delete *it;
+	}
 
-	unsigned int i=0;
+	for(size_t i=0, n=splitEdges.size(); i<n; ++i)
+	{
+		delete splitEdges[i];
+	}
 
-	for(; i<splitEdges.size(); i++) delete splitEdges[i];
-
-	unsigned int n=splitCoordLists.size();
-	for(i=0; i<n; i++) delete splitCoordLists[i];
+	for(size_t i=0, n=splitCoordLists.size(); i<n; ++i)
+	{
+		delete splitCoordLists[i];
+	}
 }
 
 SegmentNode*
-SegmentNodeList::add(const Coordinate& intPt, unsigned int segmentIndex)
+SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
 {
 	SegmentNode *eiNew=new SegmentNode(edge, intPt, segmentIndex,
 			edge.getSegmentOctant(segmentIndex));
@@ -91,18 +97,18 @@ void SegmentNodeList::addEndpoints()
 void
 SegmentNodeList::addCollapsedNodes()
 {
-	std::vector<unsigned int> collapsedVertexIndexes;
+	std::vector<size_t> collapsedVertexIndexes;
 
 	findCollapsesFromInsertedNodes(collapsedVertexIndexes);
 	findCollapsesFromExistingVertices(collapsedVertexIndexes);
 
 	// node the collapses
-	for (std::vector<unsigned int>::iterator
+	for (std::vector<size_t>::iterator
 		i=collapsedVertexIndexes.begin(),
 			e=collapsedVertexIndexes.end();
 		i != e; ++i)
 	{
-		unsigned int vertexIndex = *i;
+		size_t vertexIndex = *i;
 		add(edge.getCoordinate(vertexIndex), vertexIndex);
 	}
 }
@@ -111,9 +117,9 @@ SegmentNodeList::addCollapsedNodes()
 /* private */
 void
 SegmentNodeList::findCollapsesFromExistingVertices(
-			std::vector<unsigned int>& collapsedVertexIndexes)
+			std::vector<size_t>& collapsedVertexIndexes)
 {
-	for (unsigned int i=0, n=edge.size()-2; i<n; ++i)
+	for (size_t i=0, n=edge.size()-2; i<n; ++i)
 	{
 		const Coordinate& p0 = edge.getCoordinate(i);
 		//const Coordinate& p1 = edge.getCoordinate(i + 1);
@@ -128,9 +134,9 @@ SegmentNodeList::findCollapsesFromExistingVertices(
 /* private */
 void
 SegmentNodeList::findCollapsesFromInsertedNodes(
-		std::vector<unsigned int>& collapsedVertexIndexes)
+		std::vector<size_t>& collapsedVertexIndexes)
 {
-	unsigned int collapsedVertexIndex;
+	size_t collapsedVertexIndex;
 
 	// there should always be at least two entries in the list,
 	// since the endpoints are nodes
@@ -152,7 +158,7 @@ SegmentNodeList::findCollapsesFromInsertedNodes(
 /* private */
 bool
 SegmentNodeList::findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
-		unsigned int& collapsedVertexIndex)
+		size_t& collapsedVertexIndex)
 {
 	// only looking for equal nodes
 	if (! ei0.coord.equals2D(ei1.coord)) return false;
@@ -247,7 +253,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	assert(ei0);
 	assert(ei1);
 
-	unsigned int npts = ei1->segmentIndex - ei0->segmentIndex + 2;
+	size_t npts = ei1->segmentIndex - ei0->segmentIndex + 2;
 
 	const Coordinate &lastSegStartPt=edge.getCoordinate(ei1->segmentIndex);
 
@@ -269,9 +275,9 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 
 	CoordinateSequence *pts = new CoordinateArraySequence(npts); 
-	unsigned int ipt = 0;
+	size_t ipt = 0;
 	pts->setAt(ei0->coord, ipt++);
-	for (unsigned int i=ei0->segmentIndex+1; i<=ei1->segmentIndex; i++)
+	for (size_t i=ei0->segmentIndex+1; i<=ei1->segmentIndex; i++)
 	{
 		pts->setAt(edge.getCoordinate(i),ipt++);
 	}
@@ -312,6 +318,9 @@ operator<< (std::ostream& os, const SegmentNodeList& nlist)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.32  2006/05/05 10:19:06  strk
  * droppped SegmentString::getContext(), new name is getData() to reflect change in JTS
  *

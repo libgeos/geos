@@ -96,11 +96,11 @@ void
 MonotoneChainEdge::computeIntersects(const MonotoneChainEdge &mce,
 	SegmentIntersector &si)
 {
-	unsigned int I=startIndex.size()-1;
-	unsigned int J=mce.startIndex.size()-1;
-	for(unsigned int i=0; i<I; ++i)
+	size_t I=startIndex.size()-1;
+	size_t J=mce.startIndex.size()-1;
+	for(size_t i=0; i<I; ++i)
 	{
-		for(unsigned int j=0; j<J; ++j)
+		for(size_t j=0; j<J; ++j)
 		{
 			computeIntersectsForChain(i,mce,j,si);
 		}
@@ -172,6 +172,9 @@ MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.12  2006/03/15 17:16:31  strk
  * streamlined headers inclusion
  *

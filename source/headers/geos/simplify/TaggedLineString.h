@@ -65,11 +65,11 @@ public:
 	typedef std::auto_ptr<geom::CoordinateSequence> CoordSeqPtr;
 
 	TaggedLineString(const geom::LineString* nParentLine,
-			unsigned int minimumSize=2);
+			size_t minimumSize=2);
 
 	~TaggedLineString();
 
-	unsigned int getMinimumSize() const;
+	size_t getMinimumSize() const;
 
 	const geom::LineString* getParent() const;
 
@@ -77,11 +77,11 @@ public:
 
 	CoordSeqPtr getResultCoordinates() const;
 
-	unsigned int getResultSize() const;
+	size_t getResultSize() const;
 
-	TaggedLineSegment* getSegment(unsigned int);
+	TaggedLineSegment* getSegment(size_t);
 
-	const TaggedLineSegment* getSegment(unsigned int) const;
+	const TaggedLineSegment* getSegment(size_t) const;
 
 	std::vector<TaggedLineSegment*>& getSegments();
 
@@ -103,7 +103,7 @@ private:
 	// TaggedLineSegments owned by this object
 	std::vector<TaggedLineSegment*> resultSegs;
 
-	unsigned int minimumSize;
+	size_t minimumSize;
 
 	void init();
 
@@ -123,6 +123,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.7  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.6  2006/04/13 21:52:34  strk
  * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
  *

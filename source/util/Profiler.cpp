@@ -85,7 +85,7 @@ Profile::getTot() const
 	return totaltime;
 }
 
-unsigned int
+size_t
 Profile::getNumTimings() const
 {
 	return timings.size();
@@ -169,6 +169,9 @@ operator<< (ostream &os, const Profiler &prof)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.9  2006/03/07 14:18:34  strk
  * Profiler singleton implemented with a function-static Profiler instance
  *

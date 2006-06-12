@@ -44,7 +44,7 @@ namespace simplify { // geos::simplify
 
 /*public*/
 TaggedLineString::TaggedLineString(const geom::LineString* nParentLine,
-			unsigned int nMinimumSize)
+			size_t nMinimumSize)
 	:
 	parentLine(nParentLine),
 	minimumSize(nMinimumSize)
@@ -60,10 +60,10 @@ TaggedLineString::~TaggedLineString()
 	     << endl;
 #endif
 
-	for (unsigned int i=0, n=segs.size(); i<n; i++)
+	for (size_t i=0, n=segs.size(); i<n; i++)
 		delete segs[i];
 
-	for (unsigned int i=0, n=resultSegs.size(); i<n; i++)
+	for (size_t i=0, n=resultSegs.size(); i<n; i++)
 		delete resultSegs[i];
 }
 
@@ -100,7 +100,7 @@ TaggedLineString::init()
 }
 
 /*public*/
-unsigned int
+size_t
 TaggedLineString::getMinimumSize() const
 {
 	return minimumSize;
@@ -173,7 +173,7 @@ TaggedLineString::extractCoordinates(
 }
 
 /*public*/
-unsigned int
+size_t
 TaggedLineString::getResultSize() const
 {
 	unsigned resultSegsSize = resultSegs.size();
@@ -182,14 +182,14 @@ TaggedLineString::getResultSize() const
 
 /*public*/
 TaggedLineSegment*
-TaggedLineString::getSegment(unsigned int i) 
+TaggedLineString::getSegment(size_t i) 
 {
 	return segs[i];
 }
 
 /*public*/
 const TaggedLineSegment*
-TaggedLineString::getSegment(unsigned int i) const
+TaggedLineString::getSegment(size_t i) const
 {
 	return segs[i];
 }
@@ -247,6 +247,9 @@ TaggedLineString::addToResult(auto_ptr<TaggedLineSegment> seg)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.4  2006/04/13 21:52:35  strk
  * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
  *

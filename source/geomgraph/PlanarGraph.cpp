@@ -313,7 +313,7 @@ PlanarGraph::findEdgeEnd(Edge *e)
 Edge*
 PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1)
 {
-	for (unsigned int i=0, n=edges->size(); i<n; ++i)
+	for (size_t i=0, n=edges->size(); i<n; ++i)
 	{
 		Edge *e=(*edges)[i];
 		assert(e);
@@ -332,7 +332,7 @@ Edge*
 PlanarGraph::findEdgeInSameDirection(const Coordinate& p0,
 		const Coordinate& p1)
 {
-	for(unsigned int i=0, n=edges->size(); i<n; i++)
+	for(size_t i=0, n=edges->size(); i<n; i++)
 	{
 		Edge *e=(*edges)[i];
 		assert(e);
@@ -340,7 +340,7 @@ PlanarGraph::findEdgeInSameDirection(const Coordinate& p0,
 		const CoordinateSequence* eCoord=e->getCoordinates();
 		assert(eCoord);
 
-		unsigned int nCoords=eCoord->size();
+		size_t nCoords=eCoord->size();
 		assert(nCoords>1);
 
 		if (matchInSameDirection(p0, p1,
@@ -379,7 +379,8 @@ string
 PlanarGraph::printEdges()
 {
 	string out="Edges: ";
-	for(unsigned int i=0;i<edges->size();i++) {
+	for(size_t i=0, n=edges->size(); i<n; ++i)
+	{
 		out+="edge ";
 		out+=i;
 		out+=":\n";
@@ -401,6 +402,9 @@ PlanarGraph::getNodeMap()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.33  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.32  2006/05/04 12:17:27  strk
  * Added comment about management of newly created DirectedEdges
  *

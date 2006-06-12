@@ -42,7 +42,7 @@ namespace linemerge { // geos.operation.linemerge
 void
 LineMerger::add(vector<Geometry*> *geometries)
 {
-	for(unsigned int i=0, n=geometries->size(); i<n; i++) {
+	for(size_t i=0, n=geometries->size(); i<n; i++) {
 		Geometry *geometry=(*geometries)[i];
 		add(geometry);
 	}
@@ -56,7 +56,7 @@ LineMerger::LineMerger():
 
 LineMerger::~LineMerger()
 {
-	for (unsigned int i=0, n=edgeStrings.size(); i<n; ++i) {
+	for (size_t i=0, n=edgeStrings.size(); i<n; ++i) {
 		delete edgeStrings[i];
 	}
 }
@@ -103,7 +103,7 @@ LineMerger::merge()
 
 	unsigned numEdgeStrings = edgeStrings.size();
 	mergedLineStrings=new vector<LineString*>(numEdgeStrings);
-	for (unsigned int i=0; i<numEdgeStrings; ++i)
+	for (size_t i=0; i<numEdgeStrings; ++i)
 	{
 		EdgeString *edgeString=edgeStrings[i];
 		(*mergedLineStrings)[i]=edgeString->toLineString();
@@ -129,7 +129,7 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 	cerr<<__FUNCTION__<<endl;
 #endif
 	vector<Node*> *nodes=graph.getNodes();
-	for (unsigned int i=0; i<nodes->size(); ++i) {
+	for (size_t i=0; i<nodes->size(); ++i) {
 		Node *node=(*nodes)[i];
 #if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
@@ -153,8 +153,8 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 	cerr<<__FUNCTION__<<endl;
 #endif
 	vector<Node*> *nodes=graph.getNodes();
-	unsigned int size=nodes->size();
-	for (unsigned int i=0; i<size; i++) {
+	size_t size=nodes->size();
+	for (size_t i=0; i<size; i++) {
 		Node *node=(*nodes)[i];
 #if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
@@ -174,8 +174,8 @@ void
 LineMerger::buildEdgeStringsStartingAt(Node *node)
 {
 	vector<planargraph::DirectedEdge*> &edges=node->getOutEdges()->getEdges();
-	unsigned int size = edges.size();
-	for (unsigned int i=0; i<size; i++)
+	size_t size = edges.size();
+	for (size_t i=0; i<size; i++)
 	{
 		assert(dynamic_cast<LineMergeDirectedEdge*>(edges[i]));
 		LineMergeDirectedEdge *directedEdge=\
@@ -216,6 +216,9 @@ LineMerger::getMergedLineStrings()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.14  2006/03/22 10:13:54  strk
  * opLinemerge.h split
  *

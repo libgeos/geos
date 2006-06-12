@@ -317,8 +317,8 @@ BufferSubgraph::getEnvelope()
 {
 	if (env == NULL) {
 		env = new Envelope();
-		unsigned int size = dirEdgeList.size();
-		for(unsigned int i=0; i<size; ++i)
+		size_t size = dirEdgeList.size();
+		for(size_t i=0; i<size; ++i)
 		{
 			DirectedEdge *dirEdge=dirEdgeList[i];
 			const CoordinateSequence *pts = dirEdge->getEdge()->getCoordinates();
@@ -337,10 +337,10 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 	   << bs.nodes.size() << " nodes, "
 	   << bs.dirEdgeList.size() << " directed edges" << std::endl;
 
-	for (unsigned int i=0, n=bs.nodes.size(); i<n; i++)
+	for (size_t i=0, n=bs.nodes.size(); i<n; i++)
 		os << "  Node " << i << ": " << *(bs.nodes[i]) << std::endl;
 
-	for (unsigned int i=0, n=bs.dirEdgeList.size(); i<n; i++)
+	for (size_t i=0, n=bs.dirEdgeList.size(); i<n; i++)
 	{
 		os << "  DirEdge " << i << ": " << std::endl
 		   << bs.dirEdgeList[i]->printEdge() << std::endl;
@@ -355,6 +355,9 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.34  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.33  2006/05/04 12:33:32  strk
  * Added some comments about RightmostEdgeFinder only considering forward DirectedEdge
  *

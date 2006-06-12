@@ -38,11 +38,11 @@ SimpleEdgeSetIntersector::computeIntersections(vector<Edge*> *edges,
 		SegmentIntersector *si, bool testAllSegments)
 {
 	nOverlaps = 0;
-	unsigned int nedges=edges->size();
-	for(unsigned int i0=0; i0<nedges; ++i0)
+	size_t nedges=edges->size();
+	for(size_t i0=0; i0<nedges; ++i0)
 	{
 		Edge *edge0=(*edges)[i0];
-		for(unsigned int i1=0; i1<nedges; ++i1)
+		for(size_t i1=0; i1<nedges; ++i1)
 		{
 			Edge *edge1=(*edges)[i1];
 			if (testAllSegments || edge0!=edge1)
@@ -58,13 +58,13 @@ SimpleEdgeSetIntersector::computeIntersections(vector<Edge*> *edges0,
 {
 	nOverlaps = 0;
 
-	unsigned int nedges0=edges0->size();
-	unsigned int nedges1=edges1->size();
+	size_t nedges0=edges0->size();
+	size_t nedges1=edges1->size();
 
-	for(unsigned int i0=0;i0<nedges0; ++i0)
+	for(size_t i0=0;i0<nedges0; ++i0)
 	{
 		Edge *edge0=(*edges0)[i0];
-		for(unsigned int i1=0; i1<nedges1; ++i1)
+		for(size_t i1=0; i1<nedges1; ++i1)
 		{
 			Edge *edge1=(*edges1)[i1];
 			computeIntersects(edge0,edge1,si);
@@ -84,12 +84,12 @@ SimpleEdgeSetIntersector::computeIntersects(Edge *e0, Edge *e1,
 	const CoordinateSequence *pts0=e0->getCoordinates();
 	const CoordinateSequence *pts1=e1->getCoordinates();
 
-	unsigned int npts0=pts0->getSize();
-	unsigned int npts1=pts1->getSize();
+	size_t npts0=pts0->getSize();
+	size_t npts1=pts1->getSize();
 
-	for(unsigned int i0=0; i0<npts0-1; ++i0)
+	for(size_t i0=0; i0<npts0-1; ++i0)
 	{
-		for(unsigned int i1=0; i1<npts1-1; ++i1)
+		for(size_t i1=0; i1<npts1-1; ++i1)
 		{
 			si->addIntersections(e0, i0, e1, i1);
 		}
@@ -102,6 +102,9 @@ SimpleEdgeSetIntersector::computeIntersects(Edge *e0, Edge *e1,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.9  2006/03/15 17:16:31  strk
  * streamlined headers inclusion
  *

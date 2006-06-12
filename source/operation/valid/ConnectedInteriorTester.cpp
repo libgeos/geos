@@ -89,8 +89,8 @@ ConnectedInteriorTester::findDifferentPoint(const CoordinateSequence *coord,
 		const Coordinate& pt)
 {
 	assert(coord);
-	unsigned int npts=coord->getSize();
-	for(unsigned int i=0; i<npts; ++i)
+	size_t npts=coord->getSize();
+	for(size_t i=0; i<npts; ++i)
 	{
 		if(!(coord->getAt(i)==pt))
 			return coord->getAt(i);
@@ -149,7 +149,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 	cerr << "releasing " << edgeRings->size() << " edgeRings." << endl;
 #endif
 	// Release memory allocated by buildEdgeRings
-	for(unsigned int i=0, n=edgeRings->size(); i<n; ++i)
+	for(size_t i=0, n=edgeRings->size(); i<n; ++i)
 	{
 		EdgeRing* er = (*edgeRings)[i];
 #if GEOS_DEBUG
@@ -167,7 +167,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 	// There should be no more references to this object
 	// how to check this ? boost::shared_ptr<> comes to mind.
 	//
-	for (unsigned int i=0, n=maximalEdgeRings.size(); i<n; i++)
+	for (size_t i=0, n=maximalEdgeRings.size(); i<n; i++)
 	{
 		delete maximalEdgeRings[i];
 	}
@@ -180,7 +180,7 @@ void
 ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph &graph)
 {
 	std::vector<EdgeEnd*> *ee=graph.getEdgeEnds();
-	for(unsigned int i=0, n=ee->size(); i<n; ++i)
+	for(size_t i=0, n=ee->size(); i<n; ++i)
 	{
 		// Unexpected non DirectedEdge in graphEdgeEnds
 		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
@@ -200,7 +200,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 	cerr << __FUNCTION__ << " got " << dirEdges->size() << " EdgeEnd vector" << endl;
 #endif
 	std::vector<MinimalEdgeRing*> minEdgeRings;
-	for(unsigned int i=0, n=dirEdges->size(); i<n; ++i)
+	for(size_t i=0, n=dirEdges->size(); i<n; ++i)
 	{
 		assert(dynamic_cast<DirectedEdge*>((*dirEdges)[i]));
 		DirectedEdge *de=static_cast<DirectedEdge*>((*dirEdges)[i]);
@@ -243,7 +243,7 @@ ConnectedInteriorTester::visitShellInteriors(const Geometry *g, PlanarGraph &gra
 
 	if (const MultiPolygon* mp=dynamic_cast<const MultiPolygon*>(g))
 	{
-		for (unsigned int i=0, n=mp->getNumGeometries(); i<n; i++) {
+		for (size_t i=0, n=mp->getNumGeometries(); i<n; i++) {
 			const Polygon *p=static_cast<const Polygon*>(mp->getGeometryN(i));
 			visitInteriorRing(p->getExteriorRing(), graph);
 		}
@@ -349,6 +349,9 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.28  2006/04/06 12:45:28  strk
  * Delayed deletion of newly allocated MaximalEdgeRings.
  * Existing 'valid' operation tests don't should instability with

@@ -40,7 +40,8 @@ namespace buffer { // geos.operation.buffer
 /*public*/
 RightmostEdgeFinder::RightmostEdgeFinder()
 	:
-	minIndex(-1),
+	minIndex(-1), // FIXME: don't use -1 as a sentinel, or we won't be
+	              // able to use an unsigned int here
 	minCoord(Coordinate::getNull()), 
 	minDe(NULL),
 	orientedDe(NULL)
@@ -60,8 +61,8 @@ RightmostEdgeFinder::findEdge(std::vector<DirectedEdge*>* dirEdgeList)
 	 * Check all forward DirectedEdges only.  This is still general,
 	 * because each edge has a forward DirectedEdge.
 	 */
-	unsigned int dirEdgeListSize=dirEdgeList->size();
-	for(unsigned int i=0; i<dirEdgeListSize; ++i)
+	size_t dirEdgeListSize=dirEdgeList->size();
+	for(size_t i=0; i<dirEdgeListSize; ++i)
 	{
 		DirectedEdge *de=(*dirEdgeList)[i];
 		assert(de);
@@ -153,7 +154,7 @@ RightmostEdgeFinder::findRightmostEdgeAtVertex()
 
 	// rightmost point expected to be interior vertex of edge
 	assert(minIndex>0);
-	assert((unsigned int)minIndex<pts->getSize()); 
+	assert((size_t)minIndex<pts->getSize()); 
 
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
@@ -194,8 +195,8 @@ RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de)
 
 	// only check vertices which are the starting point of
 	// a non-horizontal segment
-	unsigned int n=coord->getSize()-1;
-	for(unsigned int i=0; i<n; i++)
+	size_t n=coord->getSize()-1;
+	for(size_t i=0; i<n; i++)
 	{
      // only check vertices which are the start or end point
      // of a non-horizontal segment
@@ -260,6 +261,9 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.21  2006/05/03 15:05:36  strk
  * Assertions checking
  *

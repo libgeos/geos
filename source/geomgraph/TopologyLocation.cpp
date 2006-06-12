@@ -74,7 +74,7 @@ TopologyLocation::TopologyLocation(const TopologyLocation &gl):
 
 /*public*/
 int
-TopologyLocation::get(unsigned int posIndex) const
+TopologyLocation::get(size_t posIndex) const
 {
 	// should be an assert() instead ?
 	if (posIndex<location.size()) return location[posIndex];
@@ -85,7 +85,7 @@ TopologyLocation::get(unsigned int posIndex) const
 bool
 TopologyLocation::isNull() const
 {
-	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]!=Location::UNDEF) return false;
 	}
 	return true;
@@ -95,7 +95,7 @@ TopologyLocation::isNull() const
 bool
 TopologyLocation::isAnyNull() const
 {
-	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]==Location::UNDEF) return true;
 	}
 	return false;
@@ -136,7 +136,7 @@ TopologyLocation::flip()
 void
 TopologyLocation::setAllLocations(int locValue)
 {
-	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0, sz=location.size(); i<sz; ++i) {
 		location[i]=locValue;
 	}
 }
@@ -145,14 +145,14 @@ TopologyLocation::setAllLocations(int locValue)
 void
 TopologyLocation::setAllLocationsIfNull(int locValue)
 {
-	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]==Location::UNDEF) location[i]=locValue;
 	}
 }
 
 /*public*/
 void
-TopologyLocation::setLocation(unsigned int locIndex, int locValue)
+TopologyLocation::setLocation(size_t locIndex, int locValue)
 {
 	location[locIndex]=locValue;
 }
@@ -185,7 +185,7 @@ TopologyLocation::setLocations(int on, int left, int right)
 bool
 TopologyLocation::allPositionsEqual(int loc) const
 {
-	for (unsigned int i=0, sz=location.size(); i<sz; ++i) {
+	for (size_t i=0, sz=location.size(); i<sz; ++i) {
 		if (location[i]!=loc) return false;
 	}
 	return true;
@@ -196,14 +196,14 @@ void
 TopologyLocation::merge(const TopologyLocation &gl)
 {
 	// if the src is an Area label & and the dest is not, increase the dest to be an Area
-	unsigned int sz=location.size();
-	unsigned int glsz=gl.location.size();
+	size_t sz=location.size();
+	size_t glsz=gl.location.size();
 	if (glsz>sz) {
 		location.resize(3);
 		location[Position::LEFT]=Location::UNDEF;
 		location[Position::RIGHT]=Location::UNDEF;
 	}
-	for (unsigned int i=0; i<sz; ++i) {
+	for (size_t i=0; i<sz; ++i) {
 		if (location[i]==Location::UNDEF && i<glsz)
 			location[i]=gl.location[i];
 	}
@@ -230,6 +230,9 @@ std::ostream& operator<< (std::ostream& os, const TopologyLocation& tl)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.9  2006/04/06 09:01:10  strk
  * Doxygen comments, port info, operator<<, assertion checking
  *

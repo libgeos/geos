@@ -80,7 +80,7 @@ SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p, const Poly
 	}
 
 	// now test if the point lies in or on the holes
-	for(unsigned int i=0, n=poly->getNumInteriorRing(); i<n; i++)
+	for(size_t i=0, n=poly->getNumInteriorRing(); i<n; i++)
 	{
 		const LineString *hole = poly->getInteriorRingN(i);
 		cl = hole->getCoordinatesRO();
@@ -96,6 +96,9 @@ SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p, const Poly
 
 /**********************************************************************
  * $Log$
+ * Revision 1.22  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.21  2006/03/21 11:12:23  strk
  * Cleanups: headers inclusion and Log section
  *

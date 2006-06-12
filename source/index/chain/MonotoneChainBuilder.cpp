@@ -55,12 +55,16 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
 {
 	vector<int> startIndex;
 	getChainStartIndices(pts, startIndex);
-	unsigned int n=startIndex.size()-1;
-	for(unsigned int i=0; i<n; i++)
+	size_t nindexes=startIndex.size();
+	if ( nindexes )
 	{
-		MonotoneChain *mc=new MonotoneChain(pts,
-			startIndex[i], startIndex[i+1], context);
-		mcList.push_back(mc);
+		size_t n=nindexes-1;
+		for(size_t i=0; i<n; i++)
+		{
+			MonotoneChain *mc=new MonotoneChain(pts,
+				startIndex[i], startIndex[i+1], context);
+			mcList.push_back(mc);
+		}
 	}
 }
 
@@ -117,6 +121,9 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.24  2006/03/23 13:31:58  strk
  * Fixed to allow build with GEOS_DEBUG
  *

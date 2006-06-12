@@ -73,7 +73,7 @@ bool
 QuadtreeNestedRingTester::isNonNested()
 {
 	buildQuadtree();
-	for(unsigned int i=0, ni=rings.size(); i<ni; ++i)
+	for(size_t i=0, ni=rings.size(); i<ni; ++i)
 	{
 		const LinearRing *innerRing=rings[i];
 		const CoordinateSequence *innerRingPts=innerRing->getCoordinatesRO();
@@ -81,7 +81,7 @@ QuadtreeNestedRingTester::isNonNested()
 
 		vector<void*> results;
 		qt->query(envi, results);
-		for(unsigned int j=0, nj=results.size(); j<nj; ++j)
+		for(size_t j=0, nj=results.size(); j<nj; ++j)
 		{
 			LinearRing *searchRing=(LinearRing*)results[j];
 			const CoordinateSequence *searchRingPts=searchRing->getCoordinatesRO();
@@ -118,7 +118,7 @@ void
 QuadtreeNestedRingTester::buildQuadtree()
 {
 	qt=new Quadtree();
-	for(unsigned int i=0, n=rings.size(); i<n; ++i)
+	for(size_t i=0, n=rings.size(); i<n; ++i)
 	{
 		const LinearRing *ring=rings[i];
 		const Envelope *env=ring->getEnvelopeInternal();
@@ -133,6 +133,9 @@ QuadtreeNestedRingTester::buildQuadtree()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.25  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.24  2006/03/29 11:48:53  strk
  * Removed useless heap allocations in construction, enforced const correctness
  *

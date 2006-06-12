@@ -34,7 +34,7 @@ SegmentIntersectionTester::hasIntersectionWithLineStrings(
 	const CoordinateSequence &seq,
 	const LineString::ConstVect& lines)
 {
-	for (unsigned int i=0, n=lines.size(); i<n; ++i )
+	for (size_t i=0, n=lines.size(); i<n; ++i )
 	{
 		const LineString *line = lines[i];
 		hasIntersection(seq, *(line->getCoordinatesRO()));

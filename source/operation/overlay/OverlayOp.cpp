@@ -155,7 +155,7 @@ OverlayOp::~OverlayOp()
 	delete resultPolyList;
 	delete resultLineList;
 	delete resultPointList;
-	for (unsigned int i=0; i<dupEdges.size(); i++)
+	for (size_t i=0; i<dupEdges.size(); i++)
 		delete dupEdges[i];
 #if USE_ELEVATION_MATRIX
 	delete elevationMatrix;
@@ -180,7 +180,7 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::insertUniqueEdges("<<edges->size()<<"): "<<endl;
-	for(unsigned int i=0;i<edges->size();i++) {
+	for(size_t i=0;i<edges->size();i++) {
 		Edge *e=(*edges)[i];
 		if ( ! e ) cerr <<" NULL"<<endl;
 		cerr <<" "<< e->print() << endl;
@@ -195,7 +195,7 @@ OverlayOp::replaceCollapsedEdges()
 {
 	vector<Edge*>& edges=edgeList.getEdges();
 
-	for(unsigned int i=0, nedges=edges.size(); i<nedges; ++i)
+	for(size_t i=0, nedges=edges.size(); i<nedges; ++i)
 	{
 		Edge *e=edges[i];
 		assert(e);
@@ -385,8 +385,8 @@ OverlayOp::getAverageZ(const Polygon *poly)
 
 	const CoordinateSequence *pts =
 		poly->getExteriorRing()->getCoordinatesRO();
-	unsigned int npts=pts->getSize();
-	for (unsigned int i=0; i<npts; ++i)
+	size_t npts=pts->getSize();
+	for (size_t i=0; i<npts; ++i)
 	{
 		const Coordinate &c = pts->getAt(i);
 		if ( !ISNAN(c.z) )
@@ -560,9 +560,9 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
                               vector<Polygon*> *nResultPolyList)
 {
-	unsigned int nPoints=nResultPointList->size();
-	unsigned int nLines=nResultLineList->size();
-	unsigned int nPolys=nResultPolyList->size();
+	size_t nPoints=nResultPointList->size();
+	size_t nLines=nResultLineList->size();
+	size_t nPolys=nResultPolyList->size();
 
 	vector<Geometry*> *geomList=new vector<Geometry*>();
 	geomList->reserve(nPoints+nLines+nPolys);
@@ -655,9 +655,9 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	polyBuilder.add(&graph);
 
 	vector<Geometry*> *gv=polyBuilder.getPolygons();
-	unsigned int gvsize=gv->size();
+	size_t gvsize=gv->size();
 	resultPolyList=new vector<Polygon*>(gvsize);
-	for(unsigned int i=0; i<gvsize; ++i) {
+	for(size_t i=0; i<gvsize; ++i) {
 		(*resultPolyList)[i]=(Polygon*)(*gv)[i];
 	}
 	delete gv;
@@ -733,7 +733,7 @@ OverlayOp::insertUniqueEdge(Edge *e)
 void
 OverlayOp::computeLabelsFromDepths()
 {
-	for(unsigned int j=0, s=edgeList.getEdges().size(); j<s; ++j)
+	for(size_t j=0, s=edgeList.getEdges().size(); j<s; ++j)
 	{
 		Edge *e=edgeList.get(j);
 		Label *lbl=e->getLabel();
@@ -782,6 +782,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.73  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.72  2006/06/09 07:42:13  strk
  * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
  *

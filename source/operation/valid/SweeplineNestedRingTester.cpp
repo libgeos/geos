@@ -61,7 +61,7 @@ void
 SweeplineNestedRingTester::buildIndex()
 {
 	sweepLine=new SweepLineIndex();
-	for(unsigned int i=0, n=rings.size(); i<n; i++) {
+	for(size_t i=0, n=rings.size(); i<n; i++) {
 		LinearRing *ring=rings[i];
 		const Envelope *env=ring->getEnvelopeInternal();
 		SweepLineInterval *sweepInt=new SweepLineInterval(env->getMinX(),env->getMaxX(),ring);
@@ -102,6 +102,9 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 
 /**********************************************************************
  * $Log$
+ * Revision 1.18  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.17  2006/04/09 04:09:43  mloskot
  * Removed redundant semicolon reported by g++ -pedantic.
  *

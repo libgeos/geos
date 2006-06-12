@@ -30,13 +30,15 @@ CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords) const
 }
 
 INLINE CoordinateSequence *
-CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords, int dims) const
+CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords,
+		size_t /* dimension */) const
 {
 	return new CoordinateArraySequence(coords);
 }
 
 INLINE CoordinateSequence *
-CoordinateArraySequenceFactory::create(unsigned int size, unsigned int /* dimension */) const
+CoordinateArraySequenceFactory::create(size_t size, size_t /* dimension */)
+		const
 {
 	/* CoordinateArraySequence only accepts 3d Coordinates */
 	return new CoordinateArraySequence(size);

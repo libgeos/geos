@@ -36,7 +36,7 @@ SimpleMCSweepLineIntersector::SimpleMCSweepLineIntersector()
 
 SimpleMCSweepLineIntersector::~SimpleMCSweepLineIntersector()
 {
-	for(unsigned int i=0; i<events.size(); ++i)
+	for(size_t i=0; i<events.size(); ++i)
 	{
 		SweepLineEvent *sle=events[i];
 		if (sle->isDelete()) delete sle;
@@ -67,7 +67,7 @@ SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,
 void
 SimpleMCSweepLineIntersector::add(vector<Edge*> *edges)
 {
-	for (unsigned int i=0; i<edges->size(); ++i)
+	for (size_t i=0; i<edges->size(); ++i)
 	{
 		Edge *edge=(*edges)[i];
 		// edge is its own group
@@ -78,7 +78,7 @@ SimpleMCSweepLineIntersector::add(vector<Edge*> *edges)
 void
 SimpleMCSweepLineIntersector::add(vector<Edge*> *edges,void* edgeSet)
 {
-	for (unsigned int i=0; i<edges->size(); ++i)
+	for (size_t i=0; i<edges->size(); ++i)
 	{
 		Edge *edge=(*edges)[i];
 		add(edge,edgeSet);
@@ -90,9 +90,9 @@ SimpleMCSweepLineIntersector::add(Edge *edge, void* edgeSet)
 {
 	MonotoneChainEdge *mce=edge->getMonotoneChainEdge();
 	vector<int> &startIndex=mce->getStartIndexes();
-	unsigned int n = startIndex.size()-1;
+	size_t n = startIndex.size()-1;
 	events.reserve(events.size()+(n*2));
-	for(unsigned int i=0; i<n; ++i)
+	for(size_t i=0; i<n; ++i)
 	{
 		MonotoneChain *mc=new MonotoneChain(mce,i);
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),NULL,mc);
@@ -110,7 +110,7 @@ void
 SimpleMCSweepLineIntersector::prepareEvents()
 {
 	sort(events.begin(), events.end(), SweepLineEventLessThen());
-	for(unsigned int i=0; i<events.size(); ++i)
+	for(size_t i=0; i<events.size(); ++i)
 	{
 		SweepLineEvent *ev=events[i];
 		if (ev->isDelete())
@@ -125,7 +125,7 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 {
 	nOverlaps=0;
 	prepareEvents();
-	for(unsigned int i=0; i<events.size(); ++i)
+	for(size_t i=0; i<events.size(); ++i)
 	{
 		SweepLineEvent *ev=events[i];
 		if (ev->isInsert())
@@ -169,6 +169,9 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.13  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.12  2006/03/15 17:16:31  strk
  * streamlined headers inclusion
  *

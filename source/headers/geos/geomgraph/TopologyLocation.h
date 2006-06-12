@@ -22,10 +22,10 @@
 #ifndef GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
 #define GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
 
+#include <geos/inline.h>
+
 #include <vector>
 #include <string>
-
-#include <geos/inline.h>
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -79,7 +79,7 @@ public:
 
 	TopologyLocation(const TopologyLocation &gl);
 
-	int get(unsigned int posIndex) const;
+	int get(size_t posIndex) const;
 
 	/**
 	 * @return true if all locations are Location::UNDEF
@@ -103,7 +103,7 @@ public:
 
 	void setAllLocationsIfNull(int locValue);
 
-	void setLocation(unsigned int locIndex, int locValue);
+	void setLocation(size_t locIndex, int locValue);
 
 	void setLocation(int locValue);
 
@@ -140,6 +140,9 @@ std::ostream& operator<< (std::ostream&, const TopologyLocation&);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.3  2006/04/06 09:01:11  strk
  * Doxygen comments, port info, operator<<, assertion checking
  *

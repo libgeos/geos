@@ -124,7 +124,7 @@ GeometryGraph::getBoundaryPoints()
 		// Collection will be destroied by GeometryGraph dtor
 		vector<Node*>* coll = getBoundaryNodes();
 		boundaryPoints.reset(new CoordinateArraySequence(coll->size()));
-		unsigned int i=0;
+		size_t i=0;
 		for (vector<Node*>::iterator it=coll->begin(), endIt=coll->end();
 			it!=endIt; ++it)
 		{
@@ -197,7 +197,7 @@ GeometryGraph::add(const Geometry *g)
 void
 GeometryGraph::addCollection(const GeometryCollection *gc)
 {
-	for (unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+	for (size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
 	{
 		const Geometry *g=gc->getGeometryN(i);
 		add(g);
@@ -471,6 +471,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.28  2006/06/09 07:42:13  strk
  * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
  *

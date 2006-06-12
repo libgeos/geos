@@ -68,9 +68,9 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 {
 	//delete cga;
-	for (unsigned int i=0, n=curveList.size(); i<n; ++i)
+	for (size_t i=0, n=curveList.size(); i<n; ++i)
 		delete curveList[i];
-	for (unsigned int i=0, n=newLabels.size(); i<n; ++i)
+	for (size_t i=0, n=newLabels.size(); i<n; ++i)
 		delete newLabels[i];
 }
 
@@ -87,7 +87,7 @@ void
 OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
 	int leftLoc, int rightLoc)
 {
-	for (unsigned int i=0, n=lineList.size(); i<n; ++i)
+	for (size_t i=0, n=lineList.size(); i<n; ++i)
 	{
 		CoordinateSequence *coords=lineList[i];
 		addCurve(coords, leftLoc, rightLoc);
@@ -335,6 +335,9 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.35  2006/06/09 07:42:13  strk
  * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
  *

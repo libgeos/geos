@@ -64,7 +64,7 @@ DouglasPeuckerLineSimplifier::simplify()
 	simplifySection(0, pts.size() - 1);
 
 	CoordsVectAutoPtr coordList(new CoordsVect());
-	for (unsigned int i=0, n=pts.size(); i<n; ++i)
+	for (size_t i=0, n=pts.size(); i<n; ++i)
 	{
 		if ( usePt->operator[](i) )
 		{
@@ -80,17 +80,17 @@ DouglasPeuckerLineSimplifier::simplify()
 /*private*/
 void
 DouglasPeuckerLineSimplifier::simplifySection(
-		unsigned int i,
-		unsigned int j)
+		size_t i,
+		size_t j)
 {
 	if ( (i+1) == j ) return;
 
 	geos::geom::LineSegment seg(pts[i], pts[j]);
 	double maxDistance = -1.0;
 
-	unsigned int maxIndex = i;
+	size_t maxIndex = i;
 
-	for (unsigned int k=i+1; k<j; k++)
+	for (size_t k=i+1; k<j; k++)
 	{
 		double distance = seg.distance(pts[k]);
 		if (distance > maxDistance) {
@@ -99,7 +99,7 @@ DouglasPeuckerLineSimplifier::simplifySection(
 		}
 	}
 	if (maxDistance <= distanceTolerance) {
-		for(unsigned int k =i+1; k<j; k++)
+		for(size_t k =i+1; k<j; k++)
 		{
 			usePt->operator[](k) = false;
 		}
@@ -115,6 +115,9 @@ DouglasPeuckerLineSimplifier::simplifySection(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.2  2006/06/03 22:29:39  hobu
  * Use a fully qualified namespace for LineSegment because we're inside of geos::simplify at the time
  *

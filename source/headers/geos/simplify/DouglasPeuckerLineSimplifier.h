@@ -80,7 +80,7 @@ private:
 	BoolVectAutoPtr usePt;
 	double distanceTolerance;
 
-	void simplifySection(unsigned int i, unsigned int j);
+	void simplifySection(size_t i, size_t j);
 };
 
 } // namespace geos::simplify
@@ -90,6 +90,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.2  2006/04/13 10:39:12  strk
  * Initial implementation of TaggedLinesSimplifier class
  *

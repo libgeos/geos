@@ -55,7 +55,7 @@ PolygonBuilder::PolygonBuilder(const GeometryFactory *newGeometryFactory)
 
 PolygonBuilder::~PolygonBuilder()
 {
-	for(unsigned int i=0; i<shellList.size(); ++i)
+	for(size_t i=0; i<shellList.size(); ++i)
 	{
 		delete shellList[i];
 	}
@@ -70,14 +70,14 @@ PolygonBuilder::add(PlanarGraph *graph)
 	assert(eeptr);
 	vector<EdgeEnd*>& ee = *eeptr;
 
-	unsigned int eeSize=ee.size();
+	size_t eeSize=ee.size();
 	vector<DirectedEdge*> dirEdges(eeSize);
 
 #if GEOS_DEBUG 
 	cerr << __FUNCTION__ << ": PlanarGraph has " << eeSize << " EdgeEnds" << endl;
 #endif
 
-	for(unsigned int i=0; i<eeSize; ++i)
+	for(size_t i=0; i<eeSize; ++i)
 	{
 		assert(dynamic_cast<DirectedEdge*>(ee[i]));
 		DirectedEdge* de = static_cast<DirectedEdge*>(ee[i]);
@@ -116,7 +116,7 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 
 #if GEOS_DEBUG > 1
 	cerr << "CREATE TABLE diredges (g geometry);" << endl;
-	for (unsigned int i=0, n=dirEdges->size(); i<n; i++)
+	for (size_t i=0, n=dirEdges->size(); i<n; i++)
 	{
 		DirectedEdge* de = (*dirEdges)[i];
 		Edge* e = de->getEdge();
@@ -128,7 +128,7 @@ PolygonBuilder::add(vector<DirectedEdge*> *dirEdges, vector<Node*> *nodes)
 	vector<MaximalEdgeRing*>* maxEdgeRings=buildMaximalEdgeRings(dirEdges);
 #if GEOS_DEBUG > 1
 	cerr << "CREATE TABLE maxedgerings (g geometry);" << endl;
-	for (unsigned int i=0, n=maxEdgeRings->size(); i<n; i++)
+	for (size_t i=0, n=maxEdgeRings->size(); i<n; i++)
 	{
 		EdgeRing* er = (*maxEdgeRings)[i];
 		Polygon* poly = er->toPolygon(geometryFactory);
@@ -166,7 +166,7 @@ PolygonBuilder::buildMaximalEdgeRings(vector<DirectedEdge*> *dirEdges)
 	cerr<<"PolygonBuilder::buildMaximalEdgeRings got "<<dirEdges->size()<<" dirEdges"<<endl;
 #endif
 	vector<MaximalEdgeRing*> *maxEdgeRings=new vector<MaximalEdgeRing*>();
-	for(unsigned int i=0, n=dirEdges->size(); i<n; i++)
+	for(size_t i=0, n=dirEdges->size(); i<n; i++)
 	{
 		DirectedEdge *de=(*dirEdges)[i];
 #if GEOS_DEBUG
@@ -267,7 +267,7 @@ void
 PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
 	vector<EdgeRing*> *newShellList, vector<EdgeRing*> *freeHoleList)
 {
-	for(unsigned int i=0, n=edgeRings->size(); i<n; i++)
+	for(size_t i=0, n=edgeRings->size(); i<n; i++)
 	{
 		EdgeRing *er=(*edgeRings)[i];
 		//er->setInResult();
@@ -333,7 +333,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 	const Coordinate& testPt=testRing->getCoordinateN(0);
 	EdgeRing *minShell=NULL;
 	const Envelope *minEnv=NULL;
-	for(unsigned int i=0, n=newShellList.size(); i<n; i++)
+	for(size_t i=0, n=newShellList.size(); i<n; i++)
 	{
 		LinearRing *lr=NULL;
 		EdgeRing *tryShell=newShellList[i];
@@ -370,7 +370,7 @@ PolygonBuilder::computePolygons(vector<EdgeRing*>& newShellList)
 	vector<Geometry*> *resultPolyList=new vector<Geometry*>();
 
 	// add Polygons for all shells
-	for(unsigned int i=0, n=newShellList.size(); i<n; i++)
+	for(size_t i=0, n=newShellList.size(); i<n; i++)
 	{
 		EdgeRing *er=newShellList[i];
 		Polygon *poly=er->toPolygon(geometryFactory);
@@ -383,7 +383,7 @@ PolygonBuilder::computePolygons(vector<EdgeRing*>& newShellList)
 bool
 PolygonBuilder::containsPoint(const Coordinate& p)
 {
-	for(unsigned int i=0;i<shellList.size(); ++i) {
+	for(size_t i=0;i<shellList.size(); ++i) {
 		EdgeRing *er=shellList[i];
 		if (er->containsPoint(p))
 			return true;
@@ -397,6 +397,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.40  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.39  2006/03/20 16:57:44  strk
  * spatialindex.h and opValid.h headers split
  *

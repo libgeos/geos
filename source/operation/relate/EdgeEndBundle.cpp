@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -41,7 +42,7 @@ EdgeEndBundle::EdgeEndBundle(EdgeEnd *e):
 }
 
 EdgeEndBundle::~EdgeEndBundle(){
-	for(unsigned int i=0, n=edgeEnds->size(); i<n; i++) {
+	for(size_t i=0, n=edgeEnds->size(); i<n; i++) {
 		delete (*edgeEnds)[i];
 	}
 	delete edgeEnds;
@@ -197,6 +198,9 @@ string EdgeEndBundle::print() {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.15  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.14  2006/03/21 13:11:29  strk
  * opRelate.h header split
  *

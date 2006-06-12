@@ -34,7 +34,7 @@ vector<SegmentString*>&
 EdgeNodingValidator::toSegmentStrings(vector<Edge*> *edges)
 {
 	// convert Edges to SegmentStrings
-	for(unsigned int i=0, n=edges->size(); i<n; i++) {
+	for(size_t i=0, n=edges->size(); i<n; i++) {
 		Edge *e=(*edges)[i];
 		CoordinateSequence* cs=e->getCoordinates()->clone();
 		newCoordSeq.push_back(cs);
@@ -53,7 +53,7 @@ EdgeNodingValidator::~EdgeNodingValidator()
 		delete *i;
 	}
 
-	for(unsigned int i=0, n=newCoordSeq.size(); i<n; ++i)
+	for(size_t i=0, n=newCoordSeq.size(); i<n; ++i)
 		delete newCoordSeq[i];
 }
 
@@ -62,6 +62,9 @@ EdgeNodingValidator::~EdgeNodingValidator()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.7  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
  *

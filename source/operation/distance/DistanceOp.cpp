@@ -75,7 +75,7 @@ DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
 
 DistanceOp::~DistanceOp()
 {
-	unsigned int i;
+	size_t i;
 	for (i=0; i<newCoords.size(); i++) delete newCoords[i];
 	if ( minDistanceLocation )
 	{
@@ -175,7 +175,7 @@ DistanceOp::computeContainmentDistance()
 			(*minDistanceLocation)[0] = (*locPtPoly)[0];
 			(*minDistanceLocation)[1] = (*locPtPoly)[1];
 			delete locPtPoly;
-			for (unsigned int i=0; i<insideLocs0->size(); i++)
+			for (size_t i=0; i<insideLocs0->size(); i++)
 			{
 				GeometryLocation *l = (*insideLocs0)[i];
 				if ( l != (*minDistanceLocation)[0] &&
@@ -187,7 +187,7 @@ DistanceOp::computeContainmentDistance()
 			delete insideLocs0;
 			return;
 		}
-		for (unsigned int i=0; i<insideLocs0->size(); i++)
+		for (size_t i=0; i<insideLocs0->size(); i++)
 			delete (*insideLocs0)[i];
 		delete insideLocs0;
 	}
@@ -199,7 +199,7 @@ DistanceOp::computeContainmentDistance()
 			(*minDistanceLocation)[0] = (*locPtPoly)[1];
 			(*minDistanceLocation)[1] = (*locPtPoly)[0];
 			delete locPtPoly;
-			for (unsigned int i=0; i<insideLocs1->size(); i++)
+			for (size_t i=0; i<insideLocs1->size(); i++)
 			{
 				GeometryLocation *l = (*insideLocs1)[i];
 				if ( l != (*minDistanceLocation)[0] &&
@@ -211,7 +211,7 @@ DistanceOp::computeContainmentDistance()
 			delete insideLocs1;
 			return;
 		}
-		for (unsigned int i=0; i<insideLocs1->size(); i++)
+		for (size_t i=0; i<insideLocs1->size(); i++)
 			delete (*insideLocs1)[i];
 		delete insideLocs1;
 	}
@@ -225,10 +225,10 @@ DistanceOp::computeInside(vector<GeometryLocation*> *locs,
 		const Polygon::ConstVect& polys,
 		vector<GeometryLocation*> *locPtPoly)
 {
-	for (unsigned int i=0, ni=locs->size(); i<ni; ++i)
+	for (size_t i=0, ni=locs->size(); i<ni; ++i)
 	{
 		GeometryLocation *loc=(*locs)[i];
-		for (unsigned int j=0, nj=polys.size(); j<nj; ++j)
+		for (size_t j=0, nj=polys.size(); j<nj; ++j)
 		{
 			computeInside(loc, polys[j], locPtPoly);
 			if (minDistance<=0.0) return;
@@ -313,10 +313,10 @@ DistanceOp::computeMinDistanceLines(
 		const LineString::ConstVect& lines1,
 		vector<GeometryLocation*>& locGeom)
 {
-	for (unsigned int i=0, ni=lines0.size(); i<ni; ++i)
+	for (size_t i=0, ni=lines0.size(); i<ni; ++i)
 	{
 		const LineString *line0=lines0[i];
-		for (unsigned int j=0, nj=lines1.size(); j<nj; ++j) {
+		for (size_t j=0, nj=lines1.size(); j<nj; ++j) {
 			const LineString *line1=lines1[j];
 			computeMinDistance(line0, line1, locGeom);
 			if (minDistance<=0.0) return;
@@ -331,10 +331,10 @@ DistanceOp::computeMinDistancePoints(
 		const Point::ConstVect& points1,
 		vector<GeometryLocation*>& locGeom)
 {
-	for (unsigned int i=0, ni=points0.size(); i<ni; ++i) {
+	for (size_t i=0, ni=points0.size(); i<ni; ++i) {
 		const Point *pt0=points0[i];
 		//Geometry *pt0=(*points0)[i];
-		for (unsigned int j=0, nj=points1.size(); j<nj; ++j) {
+		for (size_t j=0, nj=points1.size(); j<nj; ++j) {
 			const Point *pt1=points1[i];
 			//Geometry *pt1=(*points1)[j];
 			double dist=pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
@@ -361,9 +361,9 @@ DistanceOp::computeMinDistanceLinesPoints(
 		const Point::ConstVect& points,
 		vector<GeometryLocation*>& locGeom)
 {
-	for (unsigned int i=0;i<lines.size();i++) {
+	for (size_t i=0;i<lines.size();i++) {
 		const LineString *line=lines[i];
-		for (unsigned int j=0;j<points.size();j++) {
+		for (size_t j=0;j<points.size();j++) {
 			const Point *pt=points[j];
 			computeMinDistance(line,pt,locGeom);
 			if (minDistance<=0.0) return;
@@ -393,13 +393,13 @@ DistanceOp::computeMinDistance(
 
 	const CoordinateSequence *coord0=line0->getCoordinatesRO();
 	const CoordinateSequence *coord1=line1->getCoordinatesRO();
-	unsigned int npts0=coord0->getSize();
-	unsigned int npts1=coord1->getSize();
+	size_t npts0=coord0->getSize();
+	size_t npts1=coord1->getSize();
 
 	// brute force approach!
-	for(unsigned int i=0; i<npts0-1; ++i)
+	for(size_t i=0; i<npts0-1; ++i)
 	{
-		for(unsigned int j=0; j<npts1-1; ++j)
+		for(size_t j=0; j<npts1-1; ++j)
 		{
 			double dist=CGAlgorithms::distanceLineLine(coord0->getAt(i),coord0->getAt(i+1),
 				coord1->getAt(j),coord1->getAt(j+1));
@@ -444,8 +444,8 @@ DistanceOp::computeMinDistance(const LineString *line,
 	newCoords.push_back(coord);
 
 	// brute force approach!
-	unsigned int npts0=coord0->getSize();
-	for(unsigned int i=0; i<npts0-1; ++i)
+	size_t npts0=coord0->getSize();
+	for(size_t i=0; i<npts0-1; ++i)
 	{
 		double dist=CGAlgorithms::distancePointLine(*coord,coord0->getAt(i),coord0->getAt(i+1));
         	if (dist < minDistance) {
@@ -469,6 +469,9 @@ DistanceOp::computeMinDistance(const LineString *line,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
  * Revision 1.23  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

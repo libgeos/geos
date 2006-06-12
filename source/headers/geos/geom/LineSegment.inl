@@ -84,7 +84,7 @@ LineSegment::setCoordinates(const Coordinate& c0, const Coordinate& c1)
 }
 
 INLINE const Coordinate&
-LineSegment::operator[](unsigned int i) const
+LineSegment::operator[](size_t i) const
 {
 	if (i==0) return p0;
 	assert(i==1);
@@ -92,7 +92,7 @@ LineSegment::operator[](unsigned int i) const
 }
 
 INLINE Coordinate&
-LineSegment::operator[](unsigned int i) 
+LineSegment::operator[](size_t i) 
 {
 	if (i==0) return p0;
 	assert(i==1);

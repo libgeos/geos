@@ -83,7 +83,7 @@ public:
 	double getAvg() const;
 
 	/** \brief Return number of timings */
-	unsigned int getNumTimings() const;
+	size_t getNumTimings() const;
 
 	/** \brief Profile name */
 	std::string name;
@@ -165,6 +165,9 @@ std::ostream& operator<< (std::ostream& os, const Profiler&);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.7  2006/03/06 19:40:47  strk
  * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
  *

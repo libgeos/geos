@@ -93,7 +93,7 @@ BufferBuilder::~BufferBuilder()
 	delete li; // could be NULL
 	delete intersectionAdder;
 	//delete edgeList;
-	for (unsigned int i=0; i<newLabels.size(); i++)
+	for (size_t i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
 }
 
@@ -172,7 +172,7 @@ for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
 #if GEOS_DEBUG
 	std::cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<std::endl;
 #if GEOS_DEBUG > 1
-	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
+	for (size_t i=0, n=subgraphList.size(); i<n; i++)
 		std::cerr << std::setprecision(10) << *(subgraphList[i]) << std::endl;
 #endif
 #endif
@@ -183,18 +183,18 @@ for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
 	std::cerr << "PolygonBuilder got " << resultPolyList->size()
 	          << " polygons" << std::endl;
 #if GEOS_DEBUG > 1
-	for (unsigned int i=0, n=resultPolyList->size(); i<n; i++)
+	for (size_t i=0, n=resultPolyList->size(); i<n; i++)
 		std::cerr << (*resultPolyList)[i]->toString() << std::endl;
 #endif
 #endif
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (const util::GEOSException& /* exc */) {
-		for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
+		for (size_t i=0, n=subgraphList.size(); i<n; i++)
 			delete subgraphList[i];
 		throw;
 	} 
 
-	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
+	for (size_t i=0, n=subgraphList.size(); i<n; i++)
 		delete subgraphList[i];
 
 	return resultGeom;
@@ -224,7 +224,7 @@ BufferBuilder::getNoder(const PrecisionModel* pm)
 
 #if 0
 	/* CoordinateArraySequence.cpp:84:
-	 * virtual const geos::Coordinate& geos::CoordinateArraySequence::getAt(unsigned int) const:
+	 * virtual const geos::Coordinate& geos::CoordinateArraySequence::getAt(size_t) const:
 	 * Assertion `pos<vect->size()' failed.
 	 */
 	//Noder* noder = new snapround::SimpleSnapRounder(*pm);
@@ -334,7 +334,7 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph, std::vector<BufferSubgraph*>&
 {
 	std::vector<Node*> nodes;
 	graph->getNodes(nodes);
-	for (unsigned int i=0, n=nodes.size(); i<n; i++) {
+	for (size_t i=0, n=nodes.size(); i<n; i++) {
 		Node *node=nodes[i];
 		if (!node->isVisited()) {
 			BufferSubgraph *subgraph=new BufferSubgraph();
@@ -362,7 +362,7 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 	std::cerr << __FUNCTION__ << " got " << subgraphList.size() << " subgraphs" << std::endl;
 #endif
 	std::vector<BufferSubgraph*> processedGraphs;
-	for (unsigned int i=0, n=subgraphList.size(); i<n; i++)
+	for (size_t i=0, n=subgraphList.size(); i<n; i++)
 	{
 		BufferSubgraph *subgraph=subgraphList[i];
 		Coordinate *p=subgraph->getRightmostCoordinate();
@@ -404,6 +404,9 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.56  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.55  2006/05/04 09:16:58  strk
  * Added JTS debugging, for comparison with JTS
  *

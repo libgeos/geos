@@ -34,30 +34,31 @@ namespace geom { // geos::geom
  */
 class Location {
 public:
-	enum {
+	enum Value {
+
 		/**
 		 *  Used for uninitialized location values.
 		 */
-		UNDEF=-1,   ///Instead of NULL
+		UNDEF=-1,   // Instead of NULL
 
 		/**
-		 *  DE-9IM row index of the interior of the first geometry and column index of
-		 *  the interior of the second geometry. Location value for the interior of a
-		 *  geometry.
+		 * DE-9IM row index of the interior of the first geometry and
+		 * column index of the interior of the second geometry.
+		 * Location value for the interior of a geometry.
 		 */
 		INTERIOR,
 
 		/**
-		 *  DE-9IM row index of the boundary of the first geometry and column index of
-		 *  the boundary of the second geometry. Location value for the boundary of a
-		 *  geometry.
+		 * DE-9IM row index of the boundary of the first geometry and
+		 * column index of the boundary of the second geometry.
+		 * Location value for the boundary of a geometry.
 		 */
 		BOUNDARY,
 
 		/**
-		 *  DE-9IM row index of the exterior of the first geometry and column index of
-		 *  the exterior of the second geometry. Location value for the exterior of a
-		 *  geometry.
+		 * DE-9IM row index of the exterior of the first geometry and
+		 * column index of the exterior of the second geometry.
+		 * Location value for the exterior of a geometry.
 		 */
 		EXTERIOR = 2
 	};
@@ -76,6 +77,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.2  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

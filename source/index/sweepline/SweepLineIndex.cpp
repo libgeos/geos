@@ -56,7 +56,7 @@ SweepLineIndex::buildIndex()
 	if (indexBuilt) return;
 
 	sort(events.begin(), events.end(), SweepLineEventLessThen());
-	for(unsigned int i=0, n=events.size(); i<n; i++) {
+	for(size_t i=0, n=events.size(); i<n; i++) {
 		SweepLineEvent *ev=events[i];
 		if (ev->isDelete()) {
 			ev->getInsertEvent()->setDeleteEventIndex(i);
@@ -70,7 +70,7 @@ SweepLineIndex::computeOverlaps(SweepLineOverlapAction *action)
 {
 	nOverlaps = 0;
 	buildIndex();
-	for(unsigned int i=0, n=events.size(); i<n; i++) {
+	for(size_t i=0, n=events.size(); i<n; i++) {
 		SweepLineEvent *ev=events[i];
 		if (ev->isInsert()) {
 			processOverlaps(i, ev->getDeleteEventIndex(),
@@ -105,6 +105,9 @@ SweepLineIndex::processOverlaps(int start, int end,
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.9  2006/03/21 10:01:30  strk
  * indexSweepline.h header split
  *

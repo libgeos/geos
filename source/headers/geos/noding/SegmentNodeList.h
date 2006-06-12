@@ -91,7 +91,7 @@ private:
 	 * which are pre-existing in the vertex list.
 	 */
 	void findCollapsesFromExistingVertices(
-			std::vector<unsigned int>& collapsedVertexIndexes);
+			std::vector<size_t>& collapsedVertexIndexes);
 
 	/**
 	 * Adds nodes for any collapsed edge pairs caused by inserted nodes
@@ -101,10 +101,10 @@ private:
 	 * the vertex must be added as a node as well.
 	 */
 	void findCollapsesFromInsertedNodes(
-		std::vector<unsigned int>& collapsedVertexIndexes);
+		std::vector<size_t>& collapsedVertexIndexes);
 
 	bool findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
-		unsigned int& collapsedVertexIndex);
+		size_t& collapsedVertexIndex);
 public:
 
 	friend std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
@@ -133,9 +133,9 @@ public:
 	 * @param intPt the intersection Coordinate, will be copied
 	 * @param segmentIndex 
 	 */
-	SegmentNode* add(const geom::Coordinate& intPt, unsigned int segmentIndex);
+	SegmentNode* add(const geom::Coordinate& intPt, size_t segmentIndex);
 
-	SegmentNode* add(const geom::Coordinate *intPt, unsigned int segmentIndex) {
+	SegmentNode* add(const geom::Coordinate *intPt, size_t segmentIndex) {
 		return add(*intPt, segmentIndex);
 	}
 
@@ -147,7 +147,7 @@ public:
 	std::set<SegmentNode*,SegmentNodeLT>* getNodes() { return &nodeMap; }
 
 	/// Return the number of nodes in this list
-	unsigned int size() const { return nodeMap.size(); }
+	size_t size() const { return nodeMap.size(); }
 
 	container::iterator begin() { return nodeMap.begin(); }
 	container::const_iterator begin() const { return nodeMap.begin(); }
@@ -188,6 +188,9 @@ std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.3  2006/05/04 07:41:56  strk
  * const-correct size() method for SegmentNodeList
  *

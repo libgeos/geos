@@ -175,8 +175,8 @@ void
 SubgraphDepthLocater::findStabbedSegments(const Coordinate &stabbingRayLeftPt,
 			std::vector<DepthSegment*>& stabbedSegments)
 {
-	unsigned int size = subgraphs->size();
-	for (unsigned int i=0; i<size; ++i)
+	size_t size = subgraphs->size();
+	for (size_t i=0; i<size; ++i)
 	{
 		BufferSubgraph *bsg=(*subgraphs)[i];
 
@@ -204,7 +204,7 @@ SubgraphDepthLocater::findStabbedSegments(
 	 * Check all forward DirectedEdges only. This is still general,
 	 * because each Edge has a forward DirectedEdge.
 	 */
-	for (unsigned int i=0, n=dirEdges->size(); i<n; ++i)
+	for (size_t i=0, n=dirEdges->size(); i<n; ++i)
 	{
 		DirectedEdge *de=(*dirEdges)[i];
 		if (!de->isForward()) continue;
@@ -356,6 +356,9 @@ SubgraphDepthLocater::findStabbedSegments(
 
 /**********************************************************************
  * $Log$
+ * Revision 1.29  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
  * Revision 1.28  2006/03/20 10:13:15  strk
  * Bug #71 - Missing <algorithm>
  *
