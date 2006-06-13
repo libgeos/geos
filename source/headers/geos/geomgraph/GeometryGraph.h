@@ -67,8 +67,12 @@ private:
 	 * The lineEdgeMap is a map of the linestring components of the
 	 * parentGeometry to the edges which are derived from them.
 	 * This is used to efficiently perform findEdge queries
+	 *
+	 * Following the above description there's no need to
+	 * compare LineStrings other then by pointer value.
 	 */
-	std::map<const geom::LineString*,Edge*,geom::LineStringLT> lineEdgeMap;
+//std::map<const geom::LineString*,Edge*,geom::LineStringLT> lineEdgeMap;
+	std::map<const geom::LineString*, Edge*> lineEdgeMap;
 
 	/**
 	 * If this flag is true, the Boundary Determination Rule will
@@ -117,6 +121,13 @@ private:
 
 	void addSelfIntersectionNodes(int argIndex);
 
+	/** \brief
+	 * Add a node for a self-intersection.
+	 *
+	 * If the node is a potential boundary node (e.g. came from an edge
+	 * which is a boundary) then insert it as a potential boundary node.
+	 * Otherwise, just add it as a regular node.
+	 */
 	void addSelfIntersectionNode(int argIndex,
 		const geom::Coordinate& coord, int loc);
 
@@ -199,6 +210,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/13 22:00:26  strk
+ * Changed GeometryGraph::lineEdgeMap set comparison function to be pointer-based. Should be safe and much faster. Available tests all succeed.
+ *
  * Revision 1.3  2006/03/29 15:23:49  strk
  * Moved GeometryGraph inlines from .h to .inl file
  *
