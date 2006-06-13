@@ -68,8 +68,8 @@ public:
 	 * The graph is assumed to contain one or more polygons,
 	 * possibly with holes.
 	 */
-	void add(std::vector<geomgraph::DirectedEdge*> *dirEdges,
-			std::vector<geomgraph::Node*> *nodes);
+	void add(const std::vector<geomgraph::DirectedEdge*> *dirEdges,
+			const std::vector<geomgraph::Node*> *nodes);
 			// throw(TopologyException *);
 
   	std::vector<geom::Geometry*>* getPolygons();
@@ -90,7 +90,7 @@ private:
 	 * for all DirectedEdges in result, form them into MaximalEdgeRings
 	 */
 	std::vector<MaximalEdgeRing*>* buildMaximalEdgeRings(
-		std::vector<geomgraph::DirectedEdge*> *dirEdges);
+		const std::vector<geomgraph::DirectedEdge*> *dirEdges);
 
 	std::vector<MaximalEdgeRing*>* buildMinimalEdgeRings(
 		std::vector<MaximalEdgeRing*> *maxEdgeRings,
@@ -190,6 +190,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.3  2006/06/13 23:26:46  strk
+ * cleanups
+ *
  * Revision 1.2  2006/03/20 12:33:45  strk
  * Simplified some privat methods to use refs instead of pointers, added
  * debugging section for failiures of holes/shells associations
