@@ -26,6 +26,7 @@
 
 #include <geos/geomgraph/index/SimpleMCSweepLineIntersector.h> 
 #include <geos/geomgraph/index/SegmentIntersector.h> 
+#include <geos/geomgraph/index/EdgeSetIntersector.h>
 
 #include <geos/geom/CoordinateArraySequence.h> 
 #include <geos/geom/CoordinateSequence.h>
@@ -333,6 +334,7 @@ GeometryGraph::addPoint(Coordinate& pt)
 	insertPoint(argIndex,pt,Location::INTERIOR);
 }
 
+/*public*/
 SegmentIntersector*
 GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 {
@@ -351,7 +353,11 @@ GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 	{
 		esi->computeIntersections(edges, si, true);
 	}
-	//System.out.println("SegmentIntersector # tests = " + si.numTests);
+
+#if GEOS_DEBUG
+	cerr << "SegmentIntersector # tests = " << si->numTests << endl;
+#endif // GEOS_DEBUG
+
 	addSelfIntersectionNodes(argIndex);
 	return si;
 }
@@ -384,10 +390,14 @@ GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
 #endif
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
-	if (lbl==NULL) {
+	if (lbl==NULL)
+	{
 		n->setLabel(argIndex, onLocation);
-	} else
+	}
+	else
+	{
 		lbl->setLocation(argIndex, onLocation);
+	}
 }
 
 /*
@@ -401,17 +411,21 @@ GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
 {
 	Node *n=nodes->addNode(coord);
 	Label *lbl=n->getLabel();
+
 	// the new point to insert is on a boundary
 	int boundaryCount=1;
 	// determine the current location for the point (if any)
 	int loc=Location::UNDEF;
 	if (lbl!=NULL) loc=lbl->getLocation(argIndex,Position::ON);
 	if (loc==Location::BOUNDARY) boundaryCount++;
-	// determine the boundary status of the point according to the Boundary Determination Rule
+
+	// determine the boundary status of the point according to the
+	// Boundary Determination Rule
 	int newLoc=determineBoundary(boundaryCount);
 	lbl->setLocation(argIndex,newLoc);
 }
 
+/*private*/
 void
 GeometryGraph::addSelfIntersectionNodes(int argIndex)
 {
@@ -421,7 +435,8 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
 		Edge *e=*i;
 		int eLoc=e->getLabel()->getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->eiList;
-		for (EdgeIntersectionList::iterator eiIt=eiL.begin(), eiEnd=eiL.end();
+		for (EdgeIntersectionList::iterator
+			eiIt=eiL.begin(), eiEnd=eiL.end();
 			eiIt!=eiEnd; ++eiIt)
 		{
 			EdgeIntersection *ei=*eiIt;
@@ -430,12 +445,7 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
 	}
 }
 
-/*
- * Add a node for a self-intersection.
- * If the node is a potential boundary node (e.g. came from an edge which
- * is a boundary) then insert it as a potential boundary node.
- * Otherwise, just add it as a regular node.
- */
+/*private*/
 void
 GeometryGraph::addSelfIntersectionNode(int argIndex,
 	const Coordinate& coord, int loc)
@@ -443,9 +453,13 @@ GeometryGraph::addSelfIntersectionNode(int argIndex,
 	// if this node is already a boundary node, don't change it
 	if (isBoundaryNode(argIndex,coord)) return;
 	if (loc==Location::BOUNDARY && useBoundaryDeterminationRule)
+	{
 		insertBoundaryPoint(argIndex,coord);
+	}
 	else
+	{
 		insertPoint(argIndex,coord,loc);
+	}
 }
 
 vector<Edge*> *
@@ -471,6 +485,9 @@ GeometryGraph::getInvalidPoint()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.30  2006/06/13 21:40:06  strk
+ * Cleanups and some more debugging lines
+ *
  * Revision 1.29  2006/06/12 11:29:23  strk
  * unsigned int => size_t
  *
@@ -486,136 +503,6 @@ GeometryGraph::getInvalidPoint()
  *
  * Revision 1.25  2006/03/15 17:16:29  strk
  * streamlined headers inclusion
- *
- * Revision 1.24  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.23  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.22  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.21  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.20  2006/02/23 11:54:20  strk
- * - MCIndexPointSnapper
- * - MCIndexSnapRounder
- * - SnapRounding BufferOp
- * - ScaledNoder
- * - GEOSException hierarchy cleanups
- * - SpatialIndex memory-friendly query interface
- * - GeometryGraph::getBoundaryNodes memory-friendly
- * - NodeMap::getBoundaryNodes memory-friendly
- * - Cleanups in geomgraph::Edge
- * - Added an XML test for snaprounding buffer (shows leaks, working on it)
- *
- * Revision 1.19  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.18  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.17  2006/01/31 19:07:34  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.16  2006/01/08 15:24:40  strk
- * Changed container-related typedef to class-scoped STL-like typedefs.
- * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
- * defined M_PI when undef as suggested by Charlie Savage.
- * Removed <stdio.h> include from GeometricShapeFactory.cpp.
- *
- * Revision 1.15  2005/12/07 20:52:32  strk
- * minor container methods call reduction
- *
- * Revision 1.14  2005/11/16 22:21:45  strk
- * enforced const-correctness and use of initializer lists.
- *
- * Revision 1.13  2005/11/16 15:49:54  strk
- * Reduced gratuitous heap allocations.
- *
- * Revision 1.12  2005/11/07 12:31:24  strk
- * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
- * to avoid dynamic allocation of initial header.
- * Inlined short SweepLineEvent methods.
- *
- * Revision 1.11  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.10  2004/11/22 11:34:49  strk
- * More debugging lines and comments/indentation cleanups
- *
- * Revision 1.9  2004/11/19 09:33:55  strk
- * removed useless CoordinateSequence copy in ::addLineString
- *
- * Revision 1.8  2004/11/05 11:41:57  strk
- * Made IsValidOp handle IllegalArgumentException throw from GeometryGraph
- * as a sign of invalidity (just for Polygon geometries).
- * Removed leaks generated by this specific exception.
- *
- * Revision 1.7  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.6  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.5  2004/10/19 19:51:14  strk
- * Fixed many leaks and bugs in Polygonizer.
- * Output still bogus.
- *
- * Revision 1.4  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.3  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.33  2003/11/12 15:43:38  strk
- * Added some more throw specifications
- *
- * Revision 1.32  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.31  2003/10/20 13:53:03  strk
- * LinearRing handled as a LineString in 
- * GeometryGraph::add(const Geometry *) - more explicit exception 
- * thrown for unknown geometries
- *
- * Revision 1.30  2003/10/15 16:39:03  strk
- * Made Edge::getCoordinates() return a 'const' value. Adapted code set.
- *
- * Revision 1.29  2003/10/15 11:24:28  strk
- * Use getCoordinatesRO() introduced.
  *
  **********************************************************************/
 
