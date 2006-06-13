@@ -592,6 +592,9 @@ Geometry::symDifference(const Geometry *other) const
 int
 Geometry::compareTo(const Geometry *geom) const
 {
+	// compare to self
+	if ( this == geom ) return 0;
+
 	if (getClassSortIndex()!=geom->getClassSortIndex()) {
 		return getClassSortIndex()-geom->getClassSortIndex();
 	}
@@ -796,6 +799,9 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.118  2006/06/13 21:38:41  strk
+ * Added self comparison check in Geometry::compareTo().
+ *
  * Revision 1.117  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *
