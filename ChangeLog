@@ -158,7 +158,7 @@
 	source/headers/geos/index/sweepline/SweepLineOverlapAction.h:
 	Added missing virtual destructor to abstract classes.
 
-2006-06-07 Mateusz Loskot <mateusz@loskot.net>
+2006-06-07 Sandro Santilli <strk@refractions.net>
 
 	* tests/unit/Makefile.am,
 	tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp:
@@ -167,12 +167,9 @@
 	swig/python/Makefile.am, swig/ruby/Makefile.am,
 	swig/ruby/test/Makefile.am: swig removed from automatic
 	build process.
-	* configure.in: removed check for boost availability.
-	* configure.in: enforce -Wall -ansi -pedantic -Wno-long-long
-	to C and CXX flags.
-
-2006-06-07 Sandro Santilli <strk@refractions.net>
-
+	* configure.in: removed check for boost availability,
+	enforce -Wall -ansi -pedantic -Wno-long-long to C and CXX
+	flags.
 	* source/headers/geos/geom/Makefile.am,
 	source/headers/geos/geom.h: removed
 	Triangle.h from installed header set.
