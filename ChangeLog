@@ -1,5 +1,7 @@
 2006-06-13 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/io/WKTReader.inl: added missing include
+	for GEOS_DEBUG set case, use stderr for debugging output.
 	* source/operation/overlay/LineBuilder.cpp: fixed unused
 	parameter warning.
 	* source/headers/geos/geomgraph/GeometryGraph.h: changed

@@ -19,6 +19,10 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryFactory.h>
 
+#if GEOS_DEBUG
+# include <iostream>
+#endif
+
 namespace geos {
 namespace io {
 
@@ -29,7 +33,7 @@ WKTReader::WKTReader(const geom::GeometryFactory *gf)
 	precisionModel(gf->getPrecisionModel())
 {
 #if GEOS_DEBUG
-    std::cout << "\nGEOS_DEBUG: WKTReader::WKTReader(const GeometryFactory *gf)\n";
+    std::cerr << "\nGEOS_DEBUG: WKTReader::WKTReader(const GeometryFactory *gf)\n";
 #endif
 }
 
@@ -40,7 +44,7 @@ WKTReader::WKTReader()
 	precisionModel(geometryFactory->getPrecisionModel())
 {
 #if GEOS_DEBUG
-    std::cout << "\nGEOS_DEBUG: WKTReader::WKTReader()\n";
+    std::cerr << "\nGEOS_DEBUG: WKTReader::WKTReader()\n";
 #endif
 }
 
@@ -48,7 +52,7 @@ INLINE
 WKTReader::~WKTReader()
 {
 #if GEOS_DEBUG
-    std::cout << "\nGEOS_DEBUG: WKTReader::~WKTReader()\n";
+    std::cerr << "\nGEOS_DEBUG: WKTReader::~WKTReader()\n";
 #endif
 }
 
@@ -59,6 +63,9 @@ WKTReader::~WKTReader()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/06/13 22:50:17  strk
+ * * source/headers/geos/io/WKTReader.inl: added missing include for GEOS_DEBUG set case, use stderr for debugging output.
+ *
  * Revision 1.4  2006/04/10 13:40:14  strk
  * Added default ctor for WKTReader (using GeometryFactory's default instance)
  *
