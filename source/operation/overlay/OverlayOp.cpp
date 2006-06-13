@@ -199,7 +199,11 @@ OverlayOp::replaceCollapsedEdges()
 	{
 		Edge *e=edges[i];
 		assert(e);
-		if (e->isCollapsed()) {
+		if (e->isCollapsed())
+		{
+#if GEOS_DEBUG
+		cerr << " replacing collapsed edge " << i << endl;
+#endif // GEOS_DEBUG
 			//Debug.print(e);
 			edges[i]=e->getCollapsedEdge();
 
@@ -782,6 +786,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.74  2006/06/13 21:42:55  strk
+ * trimmed cvs log, cleanups
+ *
  * Revision 1.73  2006/06/12 11:29:24  strk
  * unsigned int => size_t
  *
@@ -790,255 +797,6 @@ OverlayOp::computeLabelsFromDepths()
  *
  * Revision 1.71  2006/06/05 15:36:34  strk
  * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
- *
- * Revision 1.70  2006/04/14 15:19:12  strk
- * removed precision reduction code (use BinaryOp for that)
- *
- * Revision 1.69  2006/04/13 23:57:34  strk
- * Disables reduced precision overlayOp (is broken)
- *
- * Revision 1.68  2006/04/13 23:42:43  strk
- * Plugged CommonBitsOp attempts in overlay op, before brute force precision
- * reduction (this is likely going to change)
- *
- * Revision 1.67  2006/04/12 12:20:44  strk
- * Added support for use of CommonBitsOp in reduced precision attempts
- * (compile-time option)
- *
- * Revision 1.66  2006/04/10 12:05:35  strk
- * Added inline-replicator implementation files to make sure
- * functions in .inl files are still available out-of-line.
- * A side effect is this should fix MingW build.
- *
- * Revision 1.65  2006/04/05 15:59:14  strk
- * Removed dead code
- *
- * Revision 1.64  2006/03/23 15:10:29  strk
- * Dropped by-pointer TopologyException constructor, various small cleanups
- *
- * Revision 1.63  2006/03/23 09:17:19  strk
- * precision.h header split, minor optimizations
- *
- * Revision 1.62  2006/03/17 13:24:59  strk
- * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- * Revision 1.61  2006/03/09 15:50:27  strk
- * Fixed debugging lines, added missing header
- *
- * Revision 1.60  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.59  2006/03/06 12:11:48  strk
- * precision.h => geos/precision.h (#48)
- *
- * Revision 1.58  2006/03/06 11:17:08  strk
- * precision reducing overlayOp made compile-time optional
- *
- * Revision 1.57  2006/03/03 14:01:12  strk
- * Experimental precision-reducing overlayOp
- *
- * Revision 1.56  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.55  2006/03/02 14:34:43  strk
- * GeometryGraphOperation::li made a non-static member, and not more a pointer
- *
- * Revision 1.54  2006/03/02 12:12:01  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.53  2006/03/02 09:51:36  strk
- * Fixes in DEBUG lines (bug#42)
- *
- * Revision 1.52  2006/02/27 09:05:33  strk
- * Doxygen comments, a few inlines and general cleanups
- *
- * Revision 1.51  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.50  2005/12/07 19:18:23  strk
- * Changed PlanarGraph::addEdges and EdgeList::addAll to take
- * a const vector by reference rather then a non-const vector by
- * pointer.
- * Optimized polygon vector allocations in OverlayOp::computeOverlay.
- *
- * Revision 1.49  2005/11/25 11:31:21  strk
- * Removed all CoordinateSequence::getSize() calls embedded in for loops.
- *
- * Revision 1.48  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.47  2005/11/16 15:49:54  strk
- * Reduced gratuitous heap allocations.
- *
- * Revision 1.46  2005/11/15 12:14:05  strk
- * Reduced heap allocations, made use of references when appropriate,
- * small optimizations here and there.
- *
- * Revision 1.45  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.44  2005/11/08 11:33:10  strk
- * comments cleanup
- *
- * Revision 1.43  2005/11/07 12:31:24  strk
- * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
- * to avoid dynamic allocation of initial header.
- * Inlined short SweepLineEvent methods.
- *
- * Revision 1.42  2005/11/04 08:28:29  strk
- * Ported speedup of OverlayOp::insertUniqueEdge() from JTS-1.7 (rev 1.23)
- * Updated NEWS file.
- *
- * Revision 1.41  2005/06/24 11:09:43  strk
- * Dropped RobustLineIntersector, made LineIntersector a concrete class.
- * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
- * to avoid computing intersection point (Z) when it's not necessary.
- *
- * Revision 1.40  2005/04/29 17:40:36  strk
- * Updated Doxygen documentation and some Copyright headers.
- *
- * Revision 1.39  2005/04/21 11:16:14  strk
- * Removed useless Coordinate copies in mergeZ() - patch by Safe Software
- *
- * Revision 1.38  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.37  2004/12/08 14:31:17  strk
- * elevationMatrix deleted by destructor
- *
- * Revision 1.36  2004/12/08 13:54:44  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.35  2004/11/29 16:05:33  strk
- * Fixed a bug in LineIntersector::interpolateZ causing NaN values
- * to come out.
- * Handled dimensional collapses in ElevationMatrix.
- * Added ISNAN macro and changed ISNAN/FINITE macros to avoid
- * dispendious isnan() and finite() calls.
- *
- * Revision 1.34  2004/11/26 09:22:50  strk
- * Added FINITE(x) macro and its use.
- * Made input geoms average Z computation optional in OverlayOp.
- *
- * Revision 1.33  2004/11/24 18:10:42  strk
- * Stricter handling of USE_ELEVATION_MATRIX define
- *
- * Revision 1.32  2004/11/23 19:53:07  strk
- * Had LineIntersector compute Z by interpolation.
- *
- * Revision 1.31  2004/11/23 16:22:49  strk
- * Added ElevationMatrix class and components to do post-processing draping of overlayed geometries.
- *
- * Revision 1.30  2004/11/22 15:51:52  strk
- * Added interpolation of containing geometry's average Z for point_in_poly case.
- *
- * Revision 1.29  2004/11/22 11:34:49  strk
- * More debugging lines and comments/indentation cleanups
- *
- * Revision 1.28  2004/11/20 17:16:10  strk
- * Handled Z merging for point on polygon boundary case.
- *
- * Revision 1.27  2004/11/20 16:25:17  strk
- * Added Z computation for point on line case.
- *
- * Revision 1.26  2004/11/17 15:09:08  strk
- * Changed COMPUTE_Z defaults to be more conservative
- *
- * Revision 1.25  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.24  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.23  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.22  2004/07/02 13:28:29  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.21  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.20  2004/06/15 20:13:42  strk
- * updated to respect deep-copy GeometryCollection interface
- *
- * Revision 1.19  2004/05/17 08:34:31  strk
- * reduced stack allocations, try/catch blocks in ::overlayOp
- *
- * Revision 1.18  2004/05/03 10:43:43  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.17  2004/04/20 13:24:15  strk
- * More leaks removed.
- *
- * Revision 1.16  2004/04/14 13:14:29  strk
- * Removed deletion of externally pointed GeometryFactory from OverlayOp destructor
- *
- * Revision 1.15  2004/04/10 08:40:01  ybychkov
- * "operation/buffer" upgraded to JTS 1.4
- *
- * Revision 1.14  2004/03/29 06:59:25  ybychkov
- * "noding/snapround" package ported (JTS 1.4);
- * "operation", "operation/valid", "operation/relate" and "operation/overlay" upgraded to JTS 1.4;
- * "geom" partially upgraded.
- *
- * Revision 1.13  2004/03/19 09:48:46  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.12  2003/11/12 18:02:56  strk
- * Added throw specification. Fixed leaks on exceptions.
- *
- * Revision 1.11  2003/11/12 16:14:56  strk
- * Added some more throw specifications and cleanup on exception (leaks removed).
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
  *
  *
  **********************************************************************/
