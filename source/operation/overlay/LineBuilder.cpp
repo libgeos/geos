@@ -174,7 +174,7 @@ LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,
 }
 
 void
-LineBuilder::buildLines(OverlayOp::OpCode opCode)
+LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
 {
 	// need to simplify lines?
 	for(size_t i=0, s=lineEdgesList.size(); i<s; ++i)
@@ -311,6 +311,9 @@ LineBuilder::labelIsolatedLine(Edge *e, int targetIndex)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.28  2006/06/13 22:19:39  strk
+ * fixed unused parameter warning
+ *
  * Revision 1.27  2006/06/12 11:29:24  strk
  * unsigned int => size_t
  *

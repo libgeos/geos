@@ -1,5 +1,7 @@
 2006-06-13 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/overlay/LineBuilder.cpp: fixed unused
+	parameter warning.
 	* source/headers/geos/geomgraph/GeometryGraph.h: changed
 	GeometryGraph::lineEdgeMap set comparison function to
 	be pointer-based. Should be safe and much faster. Available
