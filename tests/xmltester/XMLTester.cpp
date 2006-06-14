@@ -45,6 +45,7 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <stdexcept>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -795,16 +796,56 @@ XMLTester::parseTest()
 
 		}
 
+		else if (opName=="areatest")
+		{
+			char* rest;
+			double toleratedDiff = strtod(opRes.c_str(), &rest);
+			if ( rest == opRes.c_str() )
+			{
+				throw std::runtime_error("malformed testcase: missing tolerated area difference in 'areatest' op");
+			}
+
+			GeomAutoPtr gI = BinaryOp(gA, gB,
+					overlayOp(OverlayOp::opINTERSECTION));
+
+			if ( testValidOutput )
+			{
+				testValid(gI.get(), "areatest intersection");
+			}
+
+			GeomAutoPtr gD = BinaryOp(gA, gB,
+					overlayOp(OverlayOp::opDIFFERENCE));
+
+			if ( testValidOutput )
+			{
+				testValid(gI.get(), "areatest difference");
+			}
+
+			double areaA = gA->getArea();
+			double areaI = gI->getArea(); 
+			double areaD = gD->getArea();
+
+			double realDiff = fabs ( areaA - areaI - areaD );
+
+			if ( realDiff <= toleratedDiff )
+			{
+				success=1;
+			}
+
+			std::stringstream tmp;
+			tmp << realDiff;
+			actual_result=tmp.str();
+			expected_result=opRes;
+
+		}
+
 		else
 		{
-			if ( 1 ) // verbose 
-			{
-				std::cerr << *curr_file << ":";
-				std::cerr << " case" << caseCount << ":";
-				std::cerr << " test" << testCount << ": "
-						  << opName << "(" << opSig << ")";
-				std::cerr << ": skipped (unrecognized)." << std::endl;
-			}
+			std::cerr << *curr_file << ":";
+			std::cerr << " case" << caseCount << ":";
+			std::cerr << " test" << testCount << ": "
+					  << opName << "(" << opSig << ")";
+			std::cerr << ": skipped (unrecognized)." << std::endl;
 			return;
 		}
 
@@ -938,6 +979,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.36  2006/06/14 19:19:10  strk
+ * Added support for "AreaTest" operations.
+ *
  * Revision 1.35  2006/06/12 10:39:29  strk
  * don't print test file precision model if verbosity level < 2.
  *

@@ -1,5 +1,7 @@
 2006-06-14 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/XMLTester.cpp: added support
+	for AreaTest ops.
 	* source/operation/overlay/OverlayOp.cpp: use
 	NodeMap::container and related typedefs, removed
 	(int) casts, optimized loops.
