@@ -53,7 +53,8 @@ public:
 
 	DirectedEdge(Edge *newEdge, bool newIsForward);
 
-	Edge* getEdge();
+	// this is no different from Base class, no need to override
+	//Edge* getEdge();
 
 	void setInResult(bool newIsInResult);
 
@@ -186,6 +187,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5  2006/06/14 14:32:20  strk
+ * EdgeEnd::getEdge() made non-virtual and inlined.
+ *
  * Revision 1.4  2006/05/04 13:38:13  strk
  * doxygen comments cleanup
  *

@@ -98,13 +98,6 @@ EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
 }
 
 /*public*/
-Edge*
-EdgeEnd::getEdge()
-{
-	return edge;
-}
-
-/*public*/
 Label*
 EdgeEnd::getLabel()
 {
@@ -226,6 +219,9 @@ operator<< (std::ostream& os, const EdgeEnd& ee)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.19  2006/06/14 14:32:20  strk
+ * EdgeEnd::getEdge() made non-virtual and inlined.
+ *
  * Revision 1.18  2006/04/08 13:05:49  strk
  * Added assertion
  *

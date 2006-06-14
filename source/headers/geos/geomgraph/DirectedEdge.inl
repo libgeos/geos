@@ -21,8 +21,8 @@
 namespace geos {
 namespace geomgraph { // geos::geomgraph
 
-INLINE Edge*
-DirectedEdge::getEdge() { return edge; }
+//INLINE Edge*
+//DirectedEdge::getEdge() { return edge; }
 
 INLINE void
 DirectedEdge::setInResult(bool v) { isInResultVar=v; }

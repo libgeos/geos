@@ -1,5 +1,10 @@
 2006-06-14 Sandro Santilli <strk@refractions.net>
 
+	* source/geomgraph/EdgeEnd.cpp,
+	source/headers/geos/geomgraph/DirectedEdge.h,
+	source/headers/geos/geomgraph/DirectedEdge.inl,
+	source/headers/geos/geomgraph/EdgeEnd.h:
+	EdgeEnd::getEdge() made non-virtual and inlined.
 	* source/operation/overlay/PolygonBuilder.cpp: fixed
 	bug in placePolygonHoles (and actually improved performance
 	of it).

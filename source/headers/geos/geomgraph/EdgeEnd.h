@@ -70,7 +70,8 @@ public:
 			const geom::Coordinate& newP1,
 			Label* newLabel=NULL);
 
-	virtual Edge* getEdge();
+	Edge* getEdge() { return edge; }
+	//virtual Edge* getEdge() { return edge; }
 
 	virtual Label* getLabel();
 
@@ -156,6 +157,9 @@ struct EdgeEndLT {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/06/14 14:32:20  strk
+ * EdgeEnd::getEdge() made non-virtual and inlined.
+ *
  * Revision 1.5  2006/04/06 09:39:56  strk
  * Added operator<<
  *
