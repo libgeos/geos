@@ -1,5 +1,8 @@
 2006-06-14 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/overlay/OverlayOp.cpp: use
+	NodeMap::container and related typedefs, removed
+	(int) casts, optimized loops.
 	* source/geomgraph/EdgeEnd.cpp,
 	source/headers/geos/geomgraph/DirectedEdge.h,
 	source/headers/geos/geomgraph/DirectedEdge.inl,

@@ -217,9 +217,11 @@ OverlayOp::replaceCollapsedEdges()
 void
 OverlayOp::copyPoints(int argIndex)
 {
-	map<Coordinate*,Node*,CoordinateLessThen>&nodeMap=arg[argIndex]->getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++) {
+	NodeMap::container& nodeMap=arg[argIndex]->getNodeMap()->nodeMap;
+
+	for ( NodeMap::const_iterator it=nodeMap.begin(), itEnd=nodeMap.end();
+			it != itEnd; ++it )
+	{
 		Node* graphNode=it->second;
 		assert(graphNode);
 
@@ -235,7 +237,7 @@ void
 OverlayOp::computeLabelling()
 	//throw(TopologyException *) // and what else ?
 {
-	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
+	NodeMap::container& nodeMap=graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::computeLabelling(): at call time: "<<edgeList.print()<<endl;
@@ -245,8 +247,9 @@ OverlayOp::computeLabelling()
 	cerr<<"OverlayOp::computeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++) {
+	for ( NodeMap::const_iterator it=nodeMap.begin(), itEnd=nodeMap.end();
+			it != itEnd; ++it )
+	{
 		Node *node=it->second;
 #if GEOS_DEBUG
 		cerr<<"     "<<node->print()<<" has "<<node->getEdges()->getEdges().size()<<" edgeEnds"<<endl;
@@ -270,14 +273,15 @@ OverlayOp::computeLabelling()
 void
 OverlayOp::mergeSymLabels()
 {
-	map<Coordinate*,Node*,CoordinateLessThen>&nodeMap=graph.getNodeMap()->nodeMap;
+	NodeMap::container& nodeMap=graph.getNodeMap()->nodeMap;
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::mergeSymLabels() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
 
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++) {
+	for ( NodeMap::const_iterator it=nodeMap.begin(), itEnd=nodeMap.end();
+			it != itEnd; ++it )
+	{
 		Node *node=it->second;
 		EdgeEndStar* ees=node->getEdges();
 		assert(dynamic_cast<DirectedEdgeStar*>(ees));
@@ -298,12 +302,16 @@ OverlayOp::updateNodeLabelling()
 	// The label for a node is updated from the edges incident on it
 	// (Note that a node may have already been labelled
 	// because it is a point in one of the input geometries)
-	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
+
+	NodeMap::container& nodeMap=graph.getNodeMap()->nodeMap;
+
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::updateNodeLabelling() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++) {
+
+	for ( NodeMap::const_iterator it=nodeMap.begin(), itEnd=nodeMap.end();
+			it != itEnd; ++it )
+	{
 		Node *node=it->second;
 		Label &lbl=((DirectedEdgeStar*)node->getEdges())->getLabel();
 		node->getLabel()->merge(lbl);
@@ -317,12 +325,15 @@ OverlayOp::updateNodeLabelling()
 void
 OverlayOp::labelIncompleteNodes()
 {
-	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=graph.getNodeMap()->nodeMap;
+	NodeMap::container& nodeMap=graph.getNodeMap()->nodeMap;
+
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::labelIncompleteNodes() scanning "<<nodeMap.size()<<" nodes from map:"<<endl;
 #endif
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
-	for (;it!=nodeMap.end();it++) {
+
+	for ( NodeMap::const_iterator it=nodeMap.begin(), itEnd=nodeMap.end();
+			it != itEnd; ++it )
+	{
 		Node *n=it->second;
 		Label *label=n->getLabel();
 		if (n->isIsolated()) {
@@ -446,16 +457,23 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	const Coordinate &p = n->getCoordinate();
 	LineIntersector li;
 	//size_t size = pts->getSize();
-	for(size_t i=1, size=pts->size(); i<size; ++i) {
+	for(size_t i=1, size=pts->size(); i<size; ++i)
+	{
 		const Coordinate &p0=pts->getAt(i-1);
 		const Coordinate &p1=pts->getAt(i);	
 		li.computeIntersection(p, p0, p1);
-		if (li.hasIntersection()) {
-			if ( p == p0 ) n->addZ(p0.z);
-			else if ( p == p1 ) n->addZ(p1.z);
-			else {
-				//n->addZ(p0.z);
-				//n->addZ(p1.z);
+		if (li.hasIntersection())
+		{
+			if ( p == p0 )
+			{
+				n->addZ(p0.z);
+			}
+			else if ( p == p1 )
+			{
+				n->addZ(p1.z);
+			}
+			else
+			{
 				n->addZ(LineIntersector::interpolateZ(p,
 					p0, p1));
 			}
@@ -470,16 +488,18 @@ void
 OverlayOp::findResultAreaEdges(OverlayOp::OpCode opCode)
 {
 	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
-	for(size_t i=0, e=ee->size(); i<e; ++i) {
+
+	for(size_t i=0, e=ee->size(); i<e; ++i)
+	{
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		// mark all dirEdges with the appropriate label
 		Label *label=de->getLabel();
-		if (label->isArea()
+		if (	label->isArea()
 			&& !de->isInteriorAreaEdge()
 			&& isResultOfOp(label->getLocation(0,Position::RIGHT),
 					label->getLocation(1,Position::RIGHT),
-					opCode)
-			) {
+					opCode) )
+		{
 				de->setInResult(true);
 				//Debug.print("in result "); Debug.println(de);
 		}
@@ -493,11 +513,13 @@ OverlayOp::cancelDuplicateResultEdges()
 	// remove any dirEdges whose sym is also included
 	// (they "cancel each other out")
 	vector<EdgeEnd*> *ee=graph.getEdgeEnds();
+
 	for(size_t i=0, eesize=ee->size(); i<eesize; ++i)
 	{
 		DirectedEdge *de=static_cast<DirectedEdge*>( (*ee)[i] );
 		DirectedEdge *sym=de->getSym();
-		if (de->isInResult() && sym->isInResult()) {
+		if ( de->isInResult() && sym->isInResult() )
+		{
 			de->setInResult(false);
 			sym->setInResult(false);
 			//Debug.print("cancelled "); Debug.println(de); Debug.println(sym);
@@ -526,7 +548,8 @@ OverlayOp::isCoveredByA(const Coordinate& coord)
 bool
 OverlayOp::isCovered(const Coordinate& coord,vector<Geometry*> *geomList)
 {
-	for(int i=0;i<(int)geomList->size();i++) {
+	for(size_t i=0, n=geomList->size(); i<n; ++i)
+	{
 		Geometry *geom=(*geomList)[i];
 		int loc=ptLocator.locate(coord,geom);
 		if (loc!=Location::EXTERIOR) return true;
@@ -538,7 +561,8 @@ OverlayOp::isCovered(const Coordinate& coord,vector<Geometry*> *geomList)
 bool
 OverlayOp::isCovered(const Coordinate& coord,vector<LineString*> *geomList)
 {
-	for(int i=0;i<(int)geomList->size();i++) {
+	for(size_t i=0, n=geomList->size(); i<n; ++i)
+	{
 		Geometry *geom=(Geometry*)(*geomList)[i];
 		int loc=ptLocator.locate(coord,geom);
 		if (loc!=Location::EXTERIOR) return true;
@@ -550,7 +574,8 @@ OverlayOp::isCovered(const Coordinate& coord,vector<LineString*> *geomList)
 bool
 OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList)
 {
-	for(int i=0;i<(int)geomList->size();i++) {
+	for(size_t i=0, n=geomList->size(); i<n; ++i)
+	{
 		Geometry *geom=(Geometry*)(*geomList)[i];
 		int loc=ptLocator.locate(coord,geom);
 		if (loc!=Location::EXTERIOR) return true;
@@ -661,7 +686,8 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	vector<Geometry*> *gv=polyBuilder.getPolygons();
 	size_t gvsize=gv->size();
 	resultPolyList=new vector<Polygon*>(gvsize);
-	for(size_t i=0; i<gvsize; ++i) {
+	for(size_t i=0; i<gvsize; ++i)
+	{
 		(*resultPolyList)[i]=(Polygon*)(*gv)[i];
 	}
 	delete gv;
@@ -695,34 +721,43 @@ OverlayOp::insertUniqueEdge(Edge *e)
 	Edge *existingEdge = edgeList.findEqualEdge(e);
 
 	// If an identical edge already exists, simply update its label
-	if (existingEdge) {
+	if (existingEdge)
+	{
+
 #if GEOS_DEBUG
 		cerr<<"  found identical edge, should merge Z"<<endl;
 #endif
+
 		Label *existingLabel=existingEdge->getLabel();
 
 		Label *labelToMerge=e->getLabel();
 
 		// check if new edge is in reverse direction to existing edge
 		// if so, must flip the label before merging it
-		if (!existingEdge->isPointwiseEqual(e)) {
+		if (!existingEdge->isPointwiseEqual(e))
+		{
 //			labelToMerge=new Label(e->getLabel());
 			labelToMerge->flip();
 		}
+
 		Depth &depth=existingEdge->getDepth();
-		// if this is the first duplicate found for this edge, initialize the depths
-		///*
-		if (depth.isNull()) {
-			depth.add(*existingLabel);
-		}
-		//*/
+
+		// if this is the first duplicate found for this edge,
+		// initialize the depths
+		//
+		// if (depth.isNull()) {
+		//	depth.add(*existingLabel);
+		// }
+
 		depth.add(*labelToMerge);
 
 		existingLabel->merge(*labelToMerge);
 		//Debug.print("inserted edge: "); Debug.println(e);
 		//Debug.print("existing edge: "); Debug.println(existingEdge);
 		dupEdges.push_back(e);
-	} else {  // no matching existing edge was found
+	}
+	else
+	{  // no matching existing edge was found
 #if GEOS_DEBUG
 		cerr<<"  no matching existing edge"<<endl;
 #endif
@@ -756,24 +791,44 @@ OverlayOp::computeLabelsFromDepths()
 			if (!lbl->isNull(i) && lbl->isArea() && !depth.isNull(i))
 			{
 				/*
-				 * if the depths are equal, this edge is the result of
-				 * the dimensional collapse of two or more edges.
-				 * It has the same location on both sides of the edge,
+				 * if the depths are equal, this edge is
+				 * the result of the dimensional collapse
+				 * of two or more edges. It has the same
+				 * location on both sides of the edge,
 				 * so it has collapsed to a line.
 				 */
-				if (depth.getDelta(i)==0) {
+				if (depth.getDelta(i)==0)
+				{
 					lbl->toLine(i);
-				} else {
+				}
+				else
+				{
 					/*
-					 * This edge may be the result of a dimensional collapse,
-					 * but it still has different locations on both sides.  The
-					 * label of the edge must be updated to reflect the resultant
-					 * side locations indicated by the depth values.
+					 * This edge may be the result of
+					 * a dimensional collapse, but it
+					 * still has different locations on
+					 * both sides.  The label of the
+					 * edge must be updated to reflect
+					 * the resultant side locations
+					 * indicated by the depth values.
 					 */
-					assert(!depth.isNull(i,Position::LEFT)); // depth of LEFT side has not been initialized
-					lbl->setLocation(i,Position::LEFT,depth.getLocation(i,Position::LEFT));
-					assert(!depth.isNull(i,Position::RIGHT)); // depth of RIGHT side has not been initialized
-					lbl->setLocation(i,Position::RIGHT,depth.getLocation(i,Position::RIGHT));
+
+					// depth of LEFT side has not been
+					// initialized
+					assert(!depth.isNull(i,Position::LEFT));
+
+					lbl->setLocation(i,
+						Position::LEFT,
+						depth.getLocation(i,
+							Position::LEFT));
+
+					// depth of RIGHT side has not been
+					// initialized
+					assert(!depth.isNull(i,Position::RIGHT));
+					lbl->setLocation(i,
+						Position::RIGHT,
+						depth.getLocation(i,
+							Position::RIGHT));
 				}
 			}
 		}
@@ -786,6 +841,9 @@ OverlayOp::computeLabelsFromDepths()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.75  2006/06/14 15:03:32  strk
+ * * source/operation/overlay/OverlayOp.cpp: use NodeMap::container and related typedefs, removed (int) casts, optimized loops.
+ *
  * Revision 1.74  2006/06/13 21:42:55  strk
  * trimmed cvs log, cleanups
  *
