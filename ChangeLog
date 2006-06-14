@@ -9,8 +9,8 @@
 	source/headers/geos/geomgraph/EdgeEnd.h:
 	EdgeEnd::getEdge() made non-virtual and inlined.
 	* source/operation/overlay/PolygonBuilder.cpp: fixed
-	bug in placePolygonHoles (and actually improved performance
-	of it).
+	bug in placePolygonHoles and findShell (and actually improved
+	performance of them).
 
 2006-06-13 Sandro Santilli <strk@refractions.net>
 

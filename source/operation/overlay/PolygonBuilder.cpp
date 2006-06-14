@@ -242,7 +242,9 @@ PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
 EdgeRing*
 PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 {
+#ifndef NDEBUG
 	int shellCount=0;
+#endif
 	EdgeRing *shell=NULL;
 
 #if GEOS_DEBUG
@@ -255,10 +257,9 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 		if ( ! er->isHole() )
 		{
 			shell=er;
-			shellCount++;
-			// Should MinimalEdgeRing object pointed to
-			minEdgeRings->erase(minEdgeRings->begin()+i);
-			i--;
+#ifndef NDEBUG
+			++shellCount;
+#endif
 		}
 	}
 	assert(shellCount <= 1); // found two shells in MinimalEdgeRing list
@@ -421,6 +422,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.43  2006/06/14 19:17:29  strk
+ * Fixed bug in findShell() needlessly erasing vector elements
+ *
  * Revision 1.42  2006/06/14 13:59:24  strk
  * Fixed bug in PolygonBuilder::placePolygonHoles, performance improved as a side effect.
  *
