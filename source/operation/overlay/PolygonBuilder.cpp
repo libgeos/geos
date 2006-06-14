@@ -273,10 +273,9 @@ PolygonBuilder::placePolygonHoles(EdgeRing *shell,
 	for (size_t i=0, n=minEdgeRings->size(); i<n; ++i)
 	{
 		MinimalEdgeRing *er=(*minEdgeRings)[i];
-		if (er->isHole()) {
+		if ( er->isHole() )
+		{
 			er->setShell(shell);
-			minEdgeRings->erase(minEdgeRings->begin()+i);
-			i--;
 		}
 	}
 }
@@ -290,9 +289,12 @@ PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
 	{
 		EdgeRing *er=(*edgeRings)[i];
 		//er->setInResult();
-		if (er->isHole() ) {
+		if (er->isHole() )
+		{
 			freeHoleList->push_back(er);
-		} else {
+		}
+		else
+		{
 			newShellList->push_back(er);
 		}
 	}
@@ -419,6 +421,9 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.42  2006/06/14 13:59:24  strk
+ * Fixed bug in PolygonBuilder::placePolygonHoles, performance improved as a side effect.
+ *
  * Revision 1.41  2006/06/13 23:26:46  strk
  * cleanups
  *

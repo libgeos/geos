@@ -1,3 +1,9 @@
+2006-06-14 Sandro Santilli <strk@refractions.net>
+
+	* source/operation/overlay/PolygonBuilder.cpp: fixed
+	bug in placePolygonHoles (and actually improved performance
+	of it).
+
 2006-06-13 Sandro Santilli <strk@refractions.net>
 
 	* operation::overlay::PolygonBuilder: cleanups.
