@@ -40,7 +40,8 @@ Coordinate::toString() const
 
 std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 {
-	if (ISNAN(c.z)) {
+	if ( ISNAN(c.z) )
+	{
 		os << c.x << " " << c.y;
 	} else {
 		os << c.x << " " << c.y << " " << c.z;
@@ -48,12 +49,34 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 	return os;
 }
 
+#if 0
+Coordinate::Coordinate(const Coordinate& c)
+	:
+	x(c.x),
+	y(c.y),
+	z(c.z)
+{
+}
+
+Coordinate&
+Coordinate::operator=(const Coordinate &c)
+{
+	if ( this == &c ) return *this;
+	x=c.x;
+	y=c.y;
+	z=c.z;
+	return *this;
+}
+#endif
 
 } // namespace geos::geom
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.35  2006/06/14 19:27:02  strk
+ * Let the compiler synthetize copy ctor and assignment op for Coordinate class to obtain better numerical stability.
+ *
  * Revision 1.34  2006/03/27 15:56:21  strk
  * Added missing platform.h include (for ISNAN macro)
  *

@@ -1,5 +1,9 @@
 2006-06-14 Sandro Santilli <strk@refractions.net>
 
+	* source/geom/Coordinate.cpp, source/headers/geos/geom/Coordinate.h,
+	source/headers/geos/geom/Coordinate.inl: let the compiler
+	synthetize copy ctor and assignment op for Coordinate class
+	to obtain better numerical stability.
 	* tests/xmltester/XMLTester.cpp: added support
 	for AreaTest ops.
 	* source/operation/overlay/OverlayOp.cpp: use

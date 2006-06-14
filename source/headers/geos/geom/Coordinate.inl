@@ -53,6 +53,7 @@ Coordinate::Coordinate(double xNew, double yNew, double zNew)
 	z(zNew)
 {}
 
+#if 0
 INLINE
 Coordinate::Coordinate(const Coordinate& c)
 	:
@@ -71,6 +72,7 @@ Coordinate::operator=(const Coordinate &c)
 	z=c.z;
 	return *this;
 }
+#endif
 
 INLINE bool
 Coordinate::equals2D(const Coordinate& other) const

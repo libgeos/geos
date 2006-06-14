@@ -88,9 +88,12 @@ public:
 
 	Coordinate(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber);
 
+// Letting the compiler synthetize these gives us more numerical stability
+#if 0
 	Coordinate(const Coordinate& c);
 
 	Coordinate &operator=(const Coordinate &c);
+#endif
 
 	bool equals2D(const Coordinate& other) const;
 
@@ -152,6 +155,9 @@ bool operator!=(const Coordinate& a, const Coordinate& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/06/14 19:27:02  strk
+ * Let the compiler synthetize copy ctor and assignment op for Coordinate class to obtain better numerical stability.
+ *
  * Revision 1.5  2006/05/23 15:06:07  strk
  * * source/headers/geos/geom/Coordinate.h: added missing <string> include.
  *
