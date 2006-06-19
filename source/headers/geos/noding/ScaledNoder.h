@@ -26,7 +26,7 @@
 #include <geos/inline.h>
 
 #include <geos/noding/Noder.h> // for inheritance
-#include <geos/geom/CoordinateFilter.h> // for inheritance
+//#include <geos/geom/CoordinateFilter.h> // for inheritance
 
 // Forward declarations
 namespace geos {
@@ -120,6 +120,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/06/19 23:33:03  strk
+ * Don't *require* CoordinateFilters to define both read-only and read-write methods.
+ *
  * Revision 1.7  2006/05/04 06:36:00  strk
  * Extended definition to take new CoordinateSequence tracking into account
  *

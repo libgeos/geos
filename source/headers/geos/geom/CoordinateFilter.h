@@ -18,6 +18,8 @@
 
 #include <geos/inline.h>
 
+#include <cassert>
+
 namespace geos {
 namespace geom { // geos::geom
 
@@ -47,14 +49,14 @@ public:
     *
     * @param  coord  a <code>Coordinate</code> to which the filter is applied.
     */
-   virtual void filter_rw(Coordinate* coord) const=0;
+   virtual void filter_rw(Coordinate* coord) const { assert(0); }
 
    /**
     * Performs an operation with <code>coord</code>.
     *
     * @param  coord  a <code>Coordinate</code> to which the filter is applied.
     */
-   virtual void filter_ro(const Coordinate* coord)=0;
+   virtual void filter_ro(const Coordinate* coord) { assert(0); }
 };
 
 } // namespace geos::geom
@@ -68,6 +70,9 @@ public:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/06/19 23:33:03  strk
+ * Don't *require* CoordinateFilters to define both read-only and read-write methods.
+ *
  * Revision 1.3  2006/03/24 09:52:41  strk
  * USE_INLINE => GEOS_INLINE
  *

@@ -1,5 +1,12 @@
 2006-06-19 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/CoordinateFilter.h,
+	source/headers/geos/noding/ScaledNoder.h,
+	source/headers/geos/util/CoordinateArrayFilter.h,
+	source/headers/geos/util/UniqueCoordinateArrayFilter.h,
+	source/noding/ScaledNoder.cpp: don't *require*
+	CoordinateFilters to define both read-only and read-write
+	methods.
 	* source/geom/Polygon.cpp: optimized loops.
 	* geom::GeometryFactory (cpp,h,inl): port info and doxygen dox.
 	* geom::util::GeometryTransformer (cpp,h): updated port info.

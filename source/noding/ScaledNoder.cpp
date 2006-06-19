@@ -19,6 +19,7 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h> // for apply and delete
+#include <geos/geom/CoordinateFilter.h> // for inheritance
 #include <geos/noding/ScaledNoder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/util/math.h>
@@ -83,7 +84,7 @@ public:
 #endif
 	}
 
-	void filter_ro(const geom::Coordinate* c) { assert(0); }
+	//void filter_ro(const geom::Coordinate* c) { assert(0); }
 
 	void filter_rw(geom::Coordinate* c) const {
 		c->x = util::round( ( c->x - sn.offsetX ) * sn.scaleFactor );
@@ -209,6 +210,9 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/06/19 23:33:03  strk
+ * Don't *require* CoordinateFilters to define both read-only and read-write methods.
+ *
  * Revision 1.13  2006/05/04 14:05:31  strk
  * * source/headers/geos/util/math.h: provided an util::round() method being an inline proxy to call appropriate default rounding function for the whole GEOS codebase. Currently pointing at util::java_math_round() being the last being used.
  *
