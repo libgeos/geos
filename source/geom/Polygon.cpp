@@ -139,7 +139,8 @@ size_t
 Polygon::getNumPoints() const
 {
 	size_t numPoints = shell->getNumPoints();
-	for (size_t i = 0; i < holes->size(); i++) {
+	for(size_t i=0, n=holes->size(); i<n; ++i)
+	{
 		numPoints += ((LinearRing *)(*holes)[i])->getNumPoints();
 	}
 	return numPoints;
@@ -219,7 +220,8 @@ Polygon::getBoundary() const
 
 	//(*rings)[0]=shell->clone(); // new LineString(*shell);
 	(*rings)[0] = gf->createLineString(*shell).release();
-	for (size_t i=0; i<holes->size(); i++) {
+	for(size_t i=0, n=holes->size(); i<n; ++i)
+	{
 		//(*rings)[i + 1] = new LineString((const LineString &)*(*holes)[i]);
 		assert( dynamic_cast<LineString *>( (*holes)[i] ) );
 		LineString* hole = static_cast<LineString *>( (*holes)[i] );
@@ -270,7 +272,7 @@ void
 Polygon::apply_ro(CoordinateFilter *filter) const
 {
 	shell->apply_ro(filter);
-	for (size_t i = 0; i < holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
 		((LinearRing *)(*holes)[i])->apply_ro(filter);
 	}
@@ -280,7 +282,7 @@ void
 Polygon::apply_rw(const CoordinateFilter *filter)
 {
 	shell->apply_rw(filter);
-	for (size_t i = 0; i < holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
 		((LinearRing *)(*holes)[i])->apply_rw(filter);
 	}
@@ -308,7 +310,7 @@ void
 Polygon::normalize()
 {
 	normalize(shell, true);
-	for (size_t i = 0; i < holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
 		normalize((LinearRing *)(*holes)[i], false);
 	}
@@ -359,7 +361,7 @@ Polygon::getArea() const
 {
 	double area=0.0;
 	area+=fabs(algorithm::CGAlgorithms::signedArea(shell->getCoordinatesRO()));
-	for(size_t i=0; i<holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
 		LinearRing *lr = static_cast<LinearRing *>((*holes)[i]);
 		const CoordinateSequence *h=lr->getCoordinatesRO();
@@ -378,7 +380,7 @@ Polygon::getLength() const
 {
 	double len=0.0;
 	len+=shell->getLength();
-	for(size_t i=0; i<holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
 		len+=(*holes)[i]->getLength();
 	}
@@ -390,7 +392,7 @@ Polygon::apply_ro(GeometryComponentFilter *filter) const
 {
 	filter->filter_ro(this);
 	shell->apply_ro(filter);
-	for(size_t i=0; i<holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
         	(*holes)[i]->apply_ro(filter);
 	}
@@ -401,7 +403,7 @@ Polygon::apply_rw(GeometryComponentFilter *filter)
 {
 	filter->filter_rw(this);
 	shell->apply_rw(filter);
-	for(size_t i=0; i<holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
         	(*holes)[i]->apply_rw(filter);
 	}
@@ -410,8 +412,10 @@ Polygon::apply_rw(GeometryComponentFilter *filter)
 Polygon::~Polygon()
 {
 	delete shell;
-	for(size_t i=0; i<holes->size(); ++i)
+	for(size_t i=0, n=holes->size(); i<n; ++i)
+	{
 		delete (*holes)[i];
+	}
 	delete holes;
 }
 
@@ -459,6 +463,9 @@ Polygon::isRectangle() const
 
 /**********************************************************************
  * $Log$
+ * Revision 1.68  2006/06/19 22:52:50  strk
+ * optimized loops
+ *
  * Revision 1.67  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *
