@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/GeometryFactory.java rev. 1.47 
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_GEOMETRYFACTORY_H
@@ -46,8 +50,14 @@ namespace geos {
 namespace geom { // geos::geom
 
 /**
- * \brief Supplies a set of utility methods for building Geometry objects
+ * \brief
+ * Supplies a set of utility methods for building Geometry objects
  * from CoordinateSequence or other Geometry objects.
+ *
+ * Note that the factory constructor methods do <b>not</b> change the input
+ * coordinates in any way.
+ * In particular, they are not rounded to the supplied <tt>PrecisionModel</tt>.
+ * It is assumed that input Coordinates meet the given precision.
  */
 class GeometryFactory {
 public:
@@ -312,6 +322,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.10  2006/06/19 21:17:24  strk
+ * port info and doxygen dox.
+ *
  * Revision 1.9  2006/04/28 11:56:52  strk
  * * source/geom/GeometryFactory.cpp, source/headers/geos/geom/GeometryFactory.h: added LineString copy constructor.
  * * source/geom/Polygon.cpp: fixed getBoundary method to always return a geometry composed by LineStrings (not LinearRings)

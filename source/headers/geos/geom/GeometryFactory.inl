@@ -13,6 +13,10 @@
  *
  **********************************************************************
  *
+ * Last port: geom/GeometryFactory.java rev. 1.47 
+ *
+ **********************************************************************
+ *
  * This is just a stub, there are a lot of candidates for inlining
  * but it's not worth checking that at the moment
  *

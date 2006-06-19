@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/GeometryFactory.java rev. 1.47 
+ *
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
@@ -684,6 +688,9 @@ GeometryFactory::getDefaultInstance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.70  2006/06/19 21:17:23  strk
+ * port info and doxygen dox.
+ *
  * Revision 1.69  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *
