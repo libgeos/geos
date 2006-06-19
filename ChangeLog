@@ -1,3 +1,7 @@
+2006-06-19 Sandro Santilli <strk@refractions.net>
+
+	* tests/xmltester/XMLTester.cpp: tolerate invalid inputs.
+
 2006-06-14 Sandro Santilli <strk@refractions.net>
 
 	* source/geom/Coordinate.cpp, source/headers/geos/geom/Coordinate.h,

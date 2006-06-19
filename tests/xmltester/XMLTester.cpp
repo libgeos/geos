@@ -398,6 +398,7 @@ XMLTester::parseCase()
 		std::cout << *curr_file <<":";
 		std::cout << " case" << caseCount << ":";
 		std::cout << " skipped ("<<thrownException<<")."<<std::endl;
+		xml.OutOfElem();
 		return;
 	}
 
@@ -979,6 +980,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.37  2006/06/19 20:48:35  strk
+ * parseCase(): make sure to exit the <case> tag before returning
+ *
  * Revision 1.36  2006/06/14 19:19:10  strk
  * Added support for "AreaTest" operations.
  *
