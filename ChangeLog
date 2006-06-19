@@ -1,6 +1,7 @@
 2006-06-19 Sandro Santilli <strk@refractions.net>
 
 	* geom::GeometryFactory (cpp,h,inl): port info and doxygen dox.
+	* geom::util::GeometryTransformer (cpp,h): updated port info.
 	* tests/xmltester/XMLTester.cpp: tolerate invalid inputs.
 
 2006-06-14 Sandro Santilli <strk@refractions.net>
