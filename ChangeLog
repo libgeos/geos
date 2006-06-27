@@ -1,5 +1,7 @@
 2006-06-27 Sandro Santilli <strk@refractions.net>
 
+	* source/algorithm/HCoordinate.cpp: added
+	support for MingW -ansi builds.
 	* capi/geos_c.cpp: fixed forward declaration
 	of GEOSCoordSeq_getOrdinate.
 	* capi/geos_c.h.in: renamed GEOSGeomTypeId

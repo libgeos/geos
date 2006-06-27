@@ -28,6 +28,13 @@
 #include <iostream>
 #include <iomanip>
 
+// For MingW builds with __STRICT_ANSI__ (-ansi)
+// See: http://geos.refractions.net/pipermail/geos-devel/2006-June/002342.html
+#if defined(__GNUC__) && defined(_WIN32)
+int __cdecl _finite (double);
+#define finite(x) _finite(x)
+#endif
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
@@ -224,6 +231,9 @@ std::ostream& operator<< (std::ostream& o, const HCoordinate& c)
 
 /**********************************************************************
  * $Log$
+ * Revision 1.24  2006/06/27 15:59:36  strk
+ * * source/algorithm/HCoordinate.cpp: added support for MingW -ansi builds.
+ *
  * Revision 1.23  2006/04/20 14:27:40  strk
  * HCoordinate class changed to use long double types internally, in order to improve computation precision
  *
