@@ -1,3 +1,10 @@
+2006-06-27 Sandro Santilli <strk@refractions.net>
+
+	* capi/geos_c.cpp: fixed forward declaration
+	of GEOSCoordSeq_getOrdinate.
+	* capi/geos_c.h.in: renamed GEOSGeomTypeId
+	enum to GEOSGeomTypes, to make VC++ 2005 happy.
+
 2006-06-19 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/CoordinateFilter.h,

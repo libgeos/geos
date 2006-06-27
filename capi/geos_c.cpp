@@ -166,7 +166,7 @@ extern "C" int GEOS_DLL GEOSCoordSeq_setOrdinate(CoordinateSequence *, unsigned 
 extern "C" int GEOS_DLL GEOSCoordSeq_getX(CoordinateSequence *, unsigned int, double *);
 extern "C" int GEOS_DLL GEOSCoordSeq_getY(CoordinateSequence *, unsigned int, double *);
 extern "C" int GEOS_DLL GEOSCoordSeq_getZ(CoordinateSequence *, unsigned int, double *);
-extern "C" int GEOS_DLL GEOSCoordSeq_getOrdinate(unsigned int, unsigned int, double *);
+extern "C" int GEOS_DLL GEOSCoordSeq_getOrdinate(CoordinateSequence *, unsigned int, unsigned int, double *);
 extern "C" CoordinateSequence GEOS_DLL *GEOSCoordSeq_clone(CoordinateSequence *);
 extern "C" void GEOS_DLL GEOSCoordSeq_destroy(CoordinateSequence *);
 
