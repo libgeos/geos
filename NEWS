@@ -1,3 +1,7 @@
+Changes in 2.2.3cvs
+
+- CAPI: multiple finishGEOS() calls made harmless.
+
 Changes in 2.2.2
 
 - Added LinearRing::clone

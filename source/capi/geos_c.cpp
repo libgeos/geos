@@ -169,6 +169,7 @@ void
 finishGEOS ()
 {
 	delete geomFactory;
+	geomFactory=0;
 }
 
 //-----------------------------------------------------------
