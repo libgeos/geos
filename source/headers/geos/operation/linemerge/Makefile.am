@@ -10,7 +10,7 @@ geos_HEADERS = \
 	LineMerger.h	\
 	LineMergeGraph.h
 
-noinst_HEADERS = 
+noinst_HEADERS = \
 	EdgeString.h	\
 	LineMergeDirectedEdge.h	\
 	LineMergeEdge.h	\
