@@ -1,5 +1,6 @@
 SUBDIRS = \
-	xmltester	\
 	bigtest		\
+	xmltester	\
+	tut		\
 	unit
 

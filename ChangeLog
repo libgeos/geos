@@ -1,5 +1,7 @@
 2006-07-05 Sandro Santilli <strk@refractions.net>
 
+	* configure.in, tests/Makefile.am, tests/tut/Makefile.am:
+	distribute the TUT framework.
 	* tests/xmltester/Makefile.am: distribute XML tests and tester.
 	* source/operation/valid/Makefile.am: fixed missing
 	SweeplineNestedRingTester.cpp file.
