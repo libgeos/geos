@@ -1,11 +1,6 @@
 
 - Test unit tests for snapround package
 
-- Test TopologyPreservingSimplifier (unit test should do)
-
-- Fix bug in WKBwriter (endian specification is overlooked)
-  see BuildBot
-
 - DoubleBits misregards BYTE_ENDIAN, must check it.
 
 - BUILD CORRECTNESS:
