@@ -1,3 +1,8 @@
+2006-07-06 Mateusz Loskot <mateusz@loskot.net>
+
+	* macros/geos.m4: Fixed GEOS_INIT to support full paths to
+	geos-config passed to --with-geos. Fixed version decoding. 
+
 2006-07-05 Sandro Santilli <strk@refractions.net>
 
 	* tests/unit/Makefile.am: distribute utility.h.
