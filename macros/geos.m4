@@ -76,8 +76,8 @@ AC_DEFUN([GEOS_INIT],[
         if $GEOS_CONFIG --libs >/dev/null 2>&1; then
           AC_MSG_RESULT(yes)
           HAVE_GEOS="yes"
-          GEOS_LIBS="-L`$GEOS_CONFIG --libs` -lpq"
-          GEOS_CFLAGS="-I`$GEOS_CONFIG --cflags`"
+          GEOS_LIBS="`$GEOS_CONFIG --libs` -lpq"
+          GEOS_CFLAGS="`$GEOS_CONFIG --cflags`"
           GEOS_VERSION="`$GEOS_CONFIG --version`"
         else
           AC_MSG_RESULT(no)
