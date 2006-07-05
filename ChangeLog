@@ -1,5 +1,6 @@
 2006-07-05 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/Makefile.am: distribute utility.h.
 	* configure.in, tests/Makefile.am, tests/tut/Makefile.am:
 	distribute the TUT framework.
 	* tests/xmltester/Makefile.am: distribute XML tests and tester.

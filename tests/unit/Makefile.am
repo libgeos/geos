@@ -39,3 +39,5 @@ geos_unit_SOURCES = geos_unit.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp
 
+noinst_HEADERS = 			\
+	utility.h
