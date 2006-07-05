@@ -1,3 +1,9 @@
+2006-07-05 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/operation/overlay/OverlayOp.h,
+	source/operation/overlay/OverlayOp.cpp: added checks
+	for obviously wrong results.
+
 2006-06-27 Sandro Santilli <strk@refractions.net>
 
 	* source/algorithm/HCoordinate.cpp: added

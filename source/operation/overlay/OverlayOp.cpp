@@ -710,6 +710,10 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	// gather the results from all calculations into a single
 	// Geometry for the result set
 	resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
+
+	checkObviouslyWrongResult(opCode);
+
+
 #if USE_ELEVATION_MATRIX
 	elevationMatrix->elevate(resultGeom);
 #endif // USE_ELEVATION_MATRIX
@@ -822,12 +826,92 @@ OverlayOp::computeLabelsFromDepths()
 	}
 }
 
+struct PointCoveredByAny: public geom::CoordinateFilter
+{
+	const vector<const Geometry*>& geoms;
+	PointLocator locator;
+	PointCoveredByAny(const vector<const Geometry*>& nGeoms)
+		: geoms(nGeoms)
+	{}
+
+	void filter_ro(const Coordinate* coord)
+	{
+		for (size_t i=0, n=geoms.size(); i<n; ++i)
+		{
+			int loc = locator.locate(*coord, geoms[i]);
+			if ( loc == Location::INTERIOR ||
+				loc == Location::BOUNDARY )
+			{
+				return;
+			}
+		}
+		throw util::TopologyException("A point on first geom boundary isn't covered by either result or second geom");
+	}
+};
+
+void
+OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
+{
+	using std::cerr;
+	using std::endl;
+
+	assert(resultGeom);
+
+	if ( opCode == opINTERSECTION
+		&& arg[0]->getGeometry()->getDimension() == Dimension::A
+		&& arg[1]->getGeometry()->getDimension() == Dimension::A )
+	{
+		// Area of result must be less or equal area of smaller geom
+		double area0 = arg[0]->getGeometry()->getArea();
+		double area1 = arg[1]->getGeometry()->getArea();
+		double minarea = min(area0, area1);
+		double resultArea = resultGeom->getArea();
+
+		if ( resultArea > minarea )
+		{
+			throw util::TopologyException("Area of intersection "
+				"result is bigger then minimum area between "
+				"input geometries");
+		}
+	}
+
+	else if ( opCode == opDIFFERENCE 
+		&& arg[0]->getGeometry()->getDimension() == Dimension::A
+		&& arg[1]->getGeometry()->getDimension() == Dimension::A )
+	{
+		// Area of result must be less or equal area of first geom
+		double area0 = arg[0]->getGeometry()->getArea();
+		double resultArea = resultGeom->getArea();
+
+		if ( resultArea > area0 )
+		{
+			throw util::TopologyException("Area of difference "
+				"result is bigger then area of first "
+				"input geometry");
+		}
+
+		// less obvious check:
+		// each vertex in first geom must be either covered by
+		// result or second geom
+		vector<const Geometry*> testGeoms; testGeoms.reserve(2);
+		testGeoms.push_back(resultGeom);
+		testGeoms.push_back(arg[1]->getGeometry());
+		PointCoveredByAny tester(testGeoms);
+		arg[0]->getGeometry()->apply_ro(&tester);
+	}
+
+	// Add your tests here
+}
+
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.77  2006/07/05 20:19:29  strk
+ * added checks for obviously wrong result of difference and intersection ops
+ *
  * Revision 1.76  2006/06/14 15:38:16  strk
  * Fixed just-introduced bug
  *

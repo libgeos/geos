@@ -314,6 +314,10 @@ private:
 
 	ElevationMatrix *elevationMatrix;
 
+	/// Throw TopologyException if an obviously wrong result has
+	/// been computed.
+	void checkObviouslyWrongResult(OpCode opCode);
+
 };
 
 /** \brief
@@ -344,6 +348,9 @@ struct overlayOp {
 
 /**********************************************************************
  * $Log$
+ * Revision 1.6  2006/07/05 20:19:29  strk
+ * added checks for obviously wrong result of difference and intersection ops
+ *
  * Revision 1.5  2006/06/05 15:36:34  strk
  * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
  *
