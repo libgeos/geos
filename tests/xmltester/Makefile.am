@@ -4,9 +4,13 @@
 
 TESTS = testrunner
 
+EXTRA_DIST = testrunner.sh
+
 SAFE_XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml
 
 XMLTESTS=$(SAFE_XMLTESTS) $(srcdir)/robustness.xml 
+
+EXTRA_DIST += $(XMLTESTS)
 
 noinst_PROGRAMS = SimpleWKTTester
 bin_PROGRAMS = XMLTester
