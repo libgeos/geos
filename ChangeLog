@@ -1,5 +1,7 @@
 2006-07-05 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/valid/Makefile.am: fixed missing
+	SweeplineNestedRingTester.cpp file.
 	* source/headers/geos/operation/linemerge/Makefile.am:
 	fixed missing backslash, dropping headers from distribution.
 	* source/headers/geos/operation/overlay/OverlayOp.h,

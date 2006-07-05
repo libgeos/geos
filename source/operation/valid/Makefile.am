@@ -15,9 +15,8 @@ libopvalid_la_SOURCES = \
 	QuadtreeNestedRingTester.cpp \
 	RepeatedPointTester.cpp \
 	SimpleNestedRingTester.cpp \
+	SweeplineNestedRingTester.cpp \
 	TopologyValidationError.cpp 
 
-libopvalid_la_LIBADD = 		\
-	SweeplineNestedRingTester.cpp 
-
+libopvalid_la_LIBADD =
 
