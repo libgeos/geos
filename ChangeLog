@@ -1,5 +1,10 @@
 2006-07-06 Mateusz Loskot <mateusz@loskot.net>
 
+	* macros/geos.m4: Fixed version query regexp with escaped
+	dots. Removed -lpq from GEOS_LIBS flags.
+
+2006-07-06 Mateusz Loskot <mateusz@loskot.net>
+
 	* macros/geos.m4: Removed redundant -L and -I
 	from GEOS_LIBS and GEOS_CFLAGS.
 

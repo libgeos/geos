@@ -54,12 +54,12 @@ AC_DEFUN([GEOS_INIT],[
        geos_micro_version=`$GEOS_CONFIG --version | \
           sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
 
-      req_major=`echo $min_geos_version | \
-          sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-      req_minor=`echo $min_geos_version | \
-             sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-      req_micro=`echo $min_geos_version | \
-             sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+    req_major=`echo $min_geos_version | \
+       sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
+    req_minor=`echo $min_geos_version | \
+       sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
+    req_micro=`echo $min_geos_version | \
+       sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
     
       version_ok="no"
       if test $req_major -le $geos_major_version; then
@@ -76,7 +76,7 @@ AC_DEFUN([GEOS_INIT],[
         if $GEOS_CONFIG --libs >/dev/null 2>&1; then
           AC_MSG_RESULT(yes)
           HAVE_GEOS="yes"
-          GEOS_LIBS="`$GEOS_CONFIG --libs` -lpq"
+          GEOS_LIBS="`$GEOS_CONFIG --libs`"
           GEOS_CFLAGS="`$GEOS_CONFIG --cflags`"
           GEOS_VERSION="`$GEOS_CONFIG --version`"
         else
