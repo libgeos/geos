@@ -61,14 +61,13 @@ AC_DEFUN([GEOS_INIT],[
     req_micro=`echo $min_geos_version | \
        sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
     
-      version_ok="no"
-      if test $req_major -le $geos_major_version; then
-             if test $req_minor -le $geos_minor_version; then
-                if test $req_micro -le $geos_micro_version; then
-                   version_ok="yes"
-                fi
-             fi
-      fi
+    version_ok="no"
+    ac_req_version=`expr $req_major \* 100000 \+  $req_minor \* 100 \+ $req_micro`
+    ac_geos_version=`expr $geos_major_version \* 100000 \+  $geos_minor_version \* 100 \+ $geos_micro_version`
+
+    if test $ac_req_version -le $ac_geos_version; then
+        version_ok="yes"
+    fi
 
       if test $version_ok = "no"; then
          HAVE_GEOS="no"	
