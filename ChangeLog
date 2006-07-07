@@ -1,3 +1,8 @@
+2006-07-07 Mateusz Loskot <mateusz@loskot.net>
+
+	* macros/geos.m4: Fixed versions comparison in
+	the GEOS_UNIT macro.
+
 2006-07-07 Sandro Santilli <strk@refractions.net>
 
 	* acsite.m4: include <inttypes.h> rather then <stdint.h>
