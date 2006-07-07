@@ -1,3 +1,11 @@
+2006-07-07 Sandro Santilli <strk@refractions.net>
+
+	* acsite.m4: include <inttypes.h> rather then <stdint.h>
+	(the latter is not available on Solaris 9)
+	* configure.in: make sure CFLAGS is set before compiling
+	using the 64bit integer detection macro.
+	
+
 2006-07-06 Mateusz Loskot <mateusz@loskot.net>
 
 	* macros/geos.m4: Fixed version query regexp with escaped

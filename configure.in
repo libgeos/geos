@@ -41,17 +41,6 @@ dnl check for programs ----------------------------------------------------
 AC_PROG_CXX
 AC_ISC_POSIX
 
-dnl types checks ------------------------------------------------------
-
-dnl Find a working 64bit integer
-PGAC_TYPE_64BIT_INT([int64_t])
-if test x"$HAVE_INT64_T_64" = x"no" ; then
-  PGAC_TYPE_64BIT_INT([long int])
-  if test x"$HAVE_LONG_INT_64" = x"no" ; then
-    PGAC_TYPE_64BIT_INT([long long int])
-  fi
-fi
-
 dnl function checks ------------------------------------------------------
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MEMCMP
@@ -113,6 +102,19 @@ dnl --------------------------------------------------------------------
 # we add -Wno-long-long to avoid those messages
 CXXFLAGS="${CXXFLAGS} -Wall -ansi -pedantic -Wno-long-long"
 CFLAGS="${CFLAGS} -Wall -ansi -pedantic -Wno-long-long"
+
+dnl --------------------------------------------------------------------
+dnl - Look for a 64bit integer (do after CFLAGS is set)
+dnl --------------------------------------------------------------------
+
+dnl Find a working 64bit integer
+PGAC_TYPE_64BIT_INT([int64_t])
+if test x"$HAVE_INT64_T_64" = x"no" ; then
+  PGAC_TYPE_64BIT_INT([long int])
+  if test x"$HAVE_LONG_INT_64" = x"no" ; then
+    PGAC_TYPE_64BIT_INT([long long int])
+  fi
+fi
 
 
 dnl --------------------------------------------------------------------

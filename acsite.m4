@@ -12,7 +12,7 @@ AC_CACHE_CHECK([whether $1 is 64 bits], [Ac_cachevar],
 [AC_TRY_RUN(
 [
 
-#include <stdint.h>
+#include <inttypes.h>
 
 typedef $1 int64;
 
