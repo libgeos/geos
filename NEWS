@@ -1,4 +1,4 @@
-Changes in 2.2.3cvs
+Changes in 2.2.3
 
 - CAPI: multiple finishGEOS() calls made harmless.
 
