@@ -1,3 +1,17 @@
+2006-07-08 Sandro Santilli <strk@refractions.net>
+
+	* configure.in: incremented CAPI minor version, to avoid
+	falling behind any future version from the 2.2. branch.
+	* source/geom/Geometry.cpp, source/geom/GeometryFactory.cpp,
+	source/geomgraph/EdgeRing.cpp,
+	source/headers/geos/geom/Geometry.h,
+	source/headers/geos/geom/GeometryFactory.h,
+	source/headers/geos/geom/GeometryFactory.inl,
+	source/headers/geos/geomgraph/EdgeRing.h:
+	updated doxygen comments (sync with JTS head).
+	* source/headers/geos/platform.h.in: include <inttypes.h>
+	rather then <stdint.h>
+
 2006-07-07 Mateusz Loskot <mateusz@loskot.net>
 
 	* macros/geos.m4: Fixed versions comparison in

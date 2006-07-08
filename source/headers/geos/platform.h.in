@@ -23,7 +23,7 @@ extern "C"
 #ifdef HAVE_INT64_T_64
 extern "C"
 {
-#include <stdint.h>
+#include <inttypes.h>
 }
 #endif
 

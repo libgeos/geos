@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/Geometry.java rev. 1.100
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_GEOMETRY_H
@@ -356,6 +360,9 @@ public:
 	 *
 	 * For more information on the DE-9IM, see the OpenGIS Simple
 	 * Features Specification.
+	 *
+	 * @throws util::IllegalArgumentException if either arg is a collection
+	 *
 	 */
 	virtual bool relate(const Geometry *g,
 			const std::string& intersectionPattern) const;
@@ -454,12 +461,18 @@ public:
 	virtual std::string toText() const;
 	
 	/// Returns a buffer region around this Geometry having the given width.
+	//
+	/// @throws util::TopologyException if a robustness error occurs
+	///
 	virtual Geometry* buffer(double distance) const;
 
 	/// \brief
 	/// Returns a buffer region around this Geometry having the
 	/// given width and with a specified number of segments used
 	/// to approximate curves.
+	//
+	/// @throws util::TopologyException if a robustness error occurs
+	///
 	virtual Geometry* buffer(double distance,int quadrantSegments) const;
 
 	/** \brief
@@ -494,6 +507,8 @@ public:
 	 *
 	 * @return an area geometry representing the buffer region
 	 *
+	 * @throws util::TopologyException if a robustness error occurs
+	 *
 	 * @see BufferOp
 	 */
 	virtual Geometry* buffer(double distance, int quadrantSegments,
@@ -507,12 +522,20 @@ public:
 	/** \brief
 	 * Returns a Geometry representing the points shared by
 	 * this Geometry and other.
+	 *
+	 * @throws util::TopologyException if a robustness error occurs
+	 * @throws util::IllegalArgumentException if either arg is a collection
+	 *
 	 */
 	virtual Geometry* intersection(const Geometry *other) const;
 
 	/** \brief
 	 * Returns a Geometry representing all the points in this Geometry
 	 * and other.
+	 *
+	 * @throws util::TopologyException if a robustness error occurs
+	 * @throws util::IllegalArgumentException if either arg is a collection
+	 *
 	 */
 	virtual Geometry* Union(const Geometry *other) const;
 		// throw(IllegalArgumentException *, TopologyException *);
@@ -521,12 +544,20 @@ public:
 	 * \brief
 	 * Returns a Geometry representing the points making up this
 	 * Geometry that do not make up other.
+	 *
+	 * @throws util::TopologyException if a robustness error occurs
+	 * @throws util::IllegalArgumentException if either arg is a collection
+	 *
 	 */
 	virtual Geometry* difference(const Geometry *other) const;
 
 	/** \brief
 	 * Returns a set combining the points in this Geometry not in other,
 	 * and the points in other not in this Geometry.
+	 *
+	 * @throws util::TopologyException if a robustness error occurs
+	 * @throws util::IllegalArgumentException if either arg is a collection
+	 *
 	 */
 	virtual Geometry* symDifference(const Geometry *other) const;
 
@@ -728,6 +759,18 @@ std::string jtsport();
 
 /**********************************************************************
  * $Log$
+ * Revision 1.14  2006/07/08 00:33:55  strk
+ *         * configure.in: incremented CAPI minor version, to avoid                        falling behind any future version from the 2.2. branch.
+ *         * source/geom/Geometry.cpp, source/geom/GeometryFactory.cpp,
+ *         source/geomgraph/EdgeRing.cpp,
+ *         source/headers/geos/geom/Geometry.h,
+ *         source/headers/geos/geom/GeometryFactory.h,
+ *         source/headers/geos/geom/GeometryFactory.inl,
+ *         source/headers/geos/geomgraph/EdgeRing.h:
+ *         updated doxygen comments (sync with JTS head).
+ *         * source/headers/geos/platform.h.in: include <inttypes.h>
+ *         rather then <stdint.h>
+ *
  * Revision 1.13  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *

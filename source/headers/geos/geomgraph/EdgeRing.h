@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/EdgeRing.java rev. 1.9
+ *
  **********************************************************************/
 
 
@@ -200,6 +204,18 @@ std::ostream& operator<< (std::ostream& os, const EdgeRing& er);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.9  2006/07/08 00:33:55  strk
+ *         * configure.in: incremented CAPI minor version, to avoid                        falling behind any future version from the 2.2. branch.
+ *         * source/geom/Geometry.cpp, source/geom/GeometryFactory.cpp,
+ *         source/geomgraph/EdgeRing.cpp,
+ *         source/headers/geos/geom/Geometry.h,
+ *         source/headers/geos/geom/GeometryFactory.h,
+ *         source/headers/geos/geom/GeometryFactory.inl,
+ *         source/headers/geos/geomgraph/EdgeRing.h:
+ *         updated doxygen comments (sync with JTS head).
+ *         * source/headers/geos/platform.h.in: include <inttypes.h>
+ *         rather then <stdint.h>
+ *
  * Revision 1.8  2006/04/06 09:41:55  strk
  * Added operator<<, added pts!=NULL assertion in testInvariant() function
  *

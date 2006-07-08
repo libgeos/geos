@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/GeometryFactory.java rev. 1.47 
+ * Last port: geom/GeometryFactory.java rev. 1.48
  *
  **********************************************************************/
 
@@ -561,25 +561,35 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 {
 	string geomClass("NULL");
 	bool isHeterogeneous=false;
-	bool isCollection=newGeoms->size()>1;
-	size_t i;
+	bool hasGeometryCollection=false;
     
-	for (i=0; i<newGeoms->size(); i++) {
-		string partClass(typeid(*(*newGeoms)[i]).name());
-		if (geomClass=="NULL") {
+	for (size_t i=0, n=newGeoms->size(); i<n; ++i)
+	{
+		Geometry* geom = (*newGeoms)[i];
+		string partClass(typeid(*geom).name());
+		if (geomClass=="NULL")
+		{
 			geomClass=partClass;
-		} else if (geomClass!=partClass) {
+		}
+		else if (geomClass!=partClass)
+		{
 			isHeterogeneous = true;
+		}
+		if ( dynamic_cast<GeometryCollection*>(geom) )
+		{
+			hasGeometryCollection=true;
 		}
 	}
 
 	// for the empty geometry, return an empty GeometryCollection
-	if (geomClass=="NULL") {
+	if (geomClass=="NULL")
+	{
 		// we do not need the vector anymore
 		delete newGeoms;
 		return createGeometryCollection();
 	}
-	if (isHeterogeneous) {
+	if (isHeterogeneous || hasGeometryCollection)
+	{
 		return createGeometryCollection(newGeoms);
 	}
 
@@ -588,7 +598,9 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 	// list. This should always return a geometry, since otherwise
 	// an empty collection would have already been returned
 	Geometry *geom0=(*newGeoms)[0];
-	if (isCollection) {
+	bool isCollection=newGeoms->size()>1;
+	if (isCollection)
+	{
 		if (typeid(*geom0)==typeid(Polygon)) {
 			return createMultiPolygon(newGeoms);
 		} else if (typeid(*geom0)==typeid(LineString)) {
@@ -688,6 +700,18 @@ GeometryFactory::getDefaultInstance()
 
 /**********************************************************************
  * $Log$
+ * Revision 1.71  2006/07/08 00:33:54  strk
+ *         * configure.in: incremented CAPI minor version, to avoid                        falling behind any future version from the 2.2. branch.
+ *         * source/geom/Geometry.cpp, source/geom/GeometryFactory.cpp,
+ *         source/geomgraph/EdgeRing.cpp,
+ *         source/headers/geos/geom/Geometry.h,
+ *         source/headers/geos/geom/GeometryFactory.h,
+ *         source/headers/geos/geom/GeometryFactory.inl,
+ *         source/headers/geos/geomgraph/EdgeRing.h:
+ *         updated doxygen comments (sync with JTS head).
+ *         * source/headers/geos/platform.h.in: include <inttypes.h>
+ *         rather then <stdint.h>
+ *
  * Revision 1.70  2006/06/19 21:17:23  strk
  * port info and doxygen dox.
  *
