@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.2.4.1  2006/04/03 11:05:05  strk
+ * Back-ported DELETE=>DELETE_ENVENT and INSERT=>INSERT_EVENT
+ * labels rename for SweepLineEvent classes.
+ *
  * Revision 1.2  2004/07/19 13:19:31  strk
  * Documentation fixes
  *
@@ -58,8 +62,8 @@ public:
 class indexSweepLineEvent {
 public:
 	enum {
-		INSERT = 1,
-		DELETE
+		INSERT_EVENT = 1,
+		DELETE_EVENT
 	};
 	indexSweepLineEvent(double x,indexSweepLineEvent *newInsertEvent,SweepLineInterval *newSweepInt);
 	bool isInsert();

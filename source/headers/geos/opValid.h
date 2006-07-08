@@ -13,6 +13,10 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.7.4.1  2006/05/16 14:38:07  strk
+ * Gave error enum a name and renamed ERROR to eError (to avoid clash with
+ * win32 headers)
+ *
  * Revision 1.7  2004/11/05 11:41:57  strk
  * Made IsValidOp handle IllegalArgumentException throw from GeometryGraph
  * as a sign of invalidity (just for Polygon geometries).
@@ -96,8 +100,8 @@ private:
  */
 class TopologyValidationError {
 public:
-	enum {
-		ERROR,
+	enum errorEnum {
+		eError,
 		REPEATED_POINT,
 		HOLE_OUTSIDE_SHELL,
 		NESTED_HOLES,

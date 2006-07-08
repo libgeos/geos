@@ -5,6 +5,7 @@
  * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -35,9 +36,39 @@ namespace geos {
  *
  * \section intro_sec Introduction
  *
- * Geometry Engine Open Source is a C++ port of the Java Topology Suite.
+ * Geometry Engine Open Source is a C++ port of the Java Topology Suite
+ * released under the LGPL license.
+ * It has interfaces for C++, C and python (though swig).
  *
  * \section getstart_sec Getting Started
+ *
+ * The recommended low-level interface to the GEOS library
+ * is the simplified \ref c_iface. This will ensure stability of the
+ * API and the ABI of the library during performance improvements
+ * that will likely change classes definitions.
+ *
+ * If you prefer troubles you can use the \ref cpp_iface.
+ */
+
+/** \page c_iface C wrapper interface
+ *
+ * \section Overview
+ *
+ * This is the preferred access method for GEOS.
+ *
+ * It is designed to keep binary compatibility across releases.
+ *
+ * \section Usage
+ *
+ * In order to use the C-API of geos you must link your code against
+ * libgeos_c.so and include the geos_c.h header file, which also contain
+ * function-level documentation.
+ *
+ */
+
+/** \page cpp_iface C++ interface
+ *
+ * \section Overview
  *
  * Main class is geos::Geometry, from which all geometry types
  * derive.
@@ -59,6 +90,8 @@ namespace geos {
  *
  * For WKT input/output you can use geos::WKTReader and geos::WKTWriter
  *
+ * For WKB input/output you can use geos::WKBReader and geos::WKBWriter
+ *
  * \section exc_sect Exceptions
  *
  * Internal exceptions are thrown as pointers to geos::GEOSException.
@@ -68,6 +101,8 @@ namespace geos {
  * to catch both if you care (this might change in the future)
  *
  */ 
+
+
 
 
 /*
@@ -93,8 +128,14 @@ GeometryComponentFilter Geometry::geometryChangedFilter;
 
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=new GeometryFactory();
 
-Geometry::Geometry(const GeometryFactory *newFactory) {
-	factory=newFactory; //new GeometryFactory(*fromFactory);
+Geometry::Geometry(const GeometryFactory *newFactory)
+	:
+	factory(newFactory)
+{
+	if ( factory == NULL )
+	{
+		factory = INTERNAL_GEOMETRY_FACTORY;
+	}
 	SRID=factory->getSRID();
 	//envelope=new Envelope();
 	envelope=NULL;
@@ -234,6 +275,13 @@ Point* Geometry::getCentroid() const {
 		cent.add(in);
 		centPt=cent.getCentroid();
 	}
+
+	if ( ! centPt )
+	{
+		if ( in != this ) delete(in);
+		return NULL;
+	}
+
 	Point *pt=createPointFromInternalCoord(centPt,this);
 	delete centPt;
 	if ( in != this ) delete(in);
@@ -281,11 +329,11 @@ void Geometry::geometryChanged() {
 }
 
 /**
-* Notifies this Geometry that its Coordinates have been changed by an external
-* party. When #geometryChanged is called, this method will be called for
-* this Geometry and its component Geometries.
-* @see #apply(GeometryComponentFilter)
-*/
+ * Notifies this Geometry that its Coordinates have been changed by an external
+ * party. When geometryChanged is called, this method will be called for
+ * this Geometry and its component Geometries.
+ * @see apply(GeometryComponentFilter *)
+ */
 void Geometry::geometryChangedAction() {
 	delete envelope;
 	envelope=NULL;
@@ -592,9 +640,44 @@ Geometry::Union(const Geometry *other) const
 {
 	checkNotGeometryCollection(this);
 	checkNotGeometryCollection(other);
+
+	Geometry *out = NULL;
+
+#ifdef SHORTCIRCUIT_PREDICATES
+	// if envelopes are disjoint return a MULTI geom or
+	// a geometrycollection
+	if ( ! getEnvelopeInternal()->intersects(other->getEnvelopeInternal()) )
+	{
+//cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
+		const GeometryCollection *coll;
+		int ngeoms, i;
+		vector<Geometry *> *v = new vector<Geometry *>();
+
+		if ( (coll=dynamic_cast<const GeometryCollection *>(this)) )
+		{
+			ngeoms = coll->getNumGeometries();
+			for (i=0; i<ngeoms; i++)
+				v->push_back(coll->getGeometryN(i)->clone());
+		} else {
+			v->push_back(this->clone());
+		}
+
+		if ( (coll=dynamic_cast<const GeometryCollection *>(other)) )
+		{
+			ngeoms = coll->getNumGeometries();
+			for (i=0; i<ngeoms; i++)
+				v->push_back(coll->getGeometryN(i)->clone());
+		} else {
+			v->push_back(other->clone());
+		}
+
+		out = factory->buildGeometry(v);
+		return out;
+	}
+#endif
+
 	Geometry *in1 = toInternalGeometry(this);
 	Geometry *in2 = toInternalGeometry(other);
-	Geometry *out = NULL;
 	try {
 		out = OverlayOp::overlayOp(in1,in2,OverlayOp::UNION);
 	}
@@ -807,14 +890,14 @@ Geometry::~Geometry(){
 }
 
 bool lessThen(Coordinate& a, Coordinate& b) {
-	if (a.compareTo(b)<=0)
+	if (a.compareTo(b)<0)
 		return true;
 	else
 		return false;
 }
 
 bool greaterThen(Geometry *first, Geometry *second) {
-	if (first->compareTo(second)>=0)
+	if (first->compareTo(second)>0)
 		return true;
 	else
 		return false;
@@ -853,6 +936,28 @@ Point* Geometry::createPointFromInternalCoord(const Coordinate* coord,const Geom
 
 /**********************************************************************
  * $Log$
+ * Revision 1.72.2.5.2.2  2006/03/31 11:09:41  strk
+ * Back-ported patch for bug #81
+ *
+ * Revision 1.72.2.5.2.1  2005/11/30 12:33:23  strk
+ * Updated Doxygen doc to reccommend use of the C API.
+ *
+ * Revision 1.72.2.5  2005/11/11 12:05:50  strk
+ * wrapped boolean expression in parentesis, as suggested by compiler
+ *
+ * Revision 1.72.2.4  2005/11/08 09:08:07  strk
+ * Cleaned up a couple of Doxygen warnings
+ *
+ * Revision 1.72.2.3  2005/08/22 13:30:32  strk
+ * Fixed comparator functions used with STL sort() algorithm to
+ * implement StrictWeakOrdering semantic.
+ *
+ * Revision 1.72.2.2  2005/06/22 00:46:53  strk
+ * Shortcircuit tests for Union
+ *
+ * Revision 1.72.2.1  2005/05/24 07:26:40  strk
+ * back-ported segfault fix in EMPTYGEOM::getCentroid()
+ *
  * Revision 1.72  2004/11/17 08:13:16  strk
  * Indentation changes.
  * Some Z_COMPUTATION activated by default.

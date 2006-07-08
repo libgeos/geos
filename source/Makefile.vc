@@ -1,5 +1,12 @@
 # $Id$
 # $Log$
+# Revision 1.2.4.1  2006/02/28 05:17:59  hobu
+# add WKBReader.ob and WKBWriter.obj
+# build the C API as its own DLL (geos_c.dll)
+# build a stub lib for the C API DLL
+# delete .ilk, .exp, and .pdb files on clean
+# copy *.vc headers in for platform, version, and geos_c
+#
 # Revision 1.2  2004/12/04 01:20:20  frank
 # removed dll delete
 #
@@ -7,9 +14,13 @@
 # New
 #
 
-CFLAGS = -Iheaders /GX /MD /GR /nologo
+CFLAGS = -Iheaders /GX /MD /GR /Zi /nologo
 
 LIBNAME =	geos.lib
+DLLNAME = 	geos.dll
+CDLLNAME =  geos_c.dll
+CLIBNAME =  geos_c_i.lib
+SLIBNAME =	geos_i.lib
 
 OBJ =	algorithm\CGAlgorithms.obj \
 	algorithm\CentroidArea.obj \
@@ -120,11 +131,14 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	index\sweepline\SweepLineIndex.obj \
 	index\sweepline\SweepLineInterval.obj \
 	index\sweepline\indexSweepLineEvent.obj \
+	io\ByteOrderValues.obj \
 	io\ParseException.obj \
 	io\StringTokenizer.obj \
 	io\Unload.obj \
 	io\WKTReader.obj \
 	io\WKTWriter.obj \
+	io\WKBReader.obj \
+	io\WKBWriter.obj \
 	io\Writer.obj \
 	io\markup\MarkupSTL.obj \
 	noding\snapround\SegmentSnapper.obj \
@@ -209,18 +223,31 @@ OBJ =	algorithm\CGAlgorithms.obj \
 	util\IllegalArgumentException.obj \
 	util\Profiler.obj \
 	util\UniqueCoordinateArrayFilter.obj \
-	util\UnsupportedOperationException.obj
+	util\UnsupportedOperationException.obj 
 
+	
 TEST_EXE =	TestSweepLineSpeed.exe
 
-default:	$(LIBNAME) $(TEST_EXE)
+default:	$(LIBNAME) $(DLLNAME) $(CDLLNAME) $(TEST_EXE)
 
-$(LIBNAME):	headers/geos/platform.h $(OBJ)
+$(LIBNAME):	headers/geos/platform.h headers/geos/version.h capi/geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
 	lib /out:$(LIBNAME) $(OBJ)
 
+$(DLLNAME):	$(OBJ)
+	link /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
+
+$(CDLLNAME): capi\geos_c.obj $(DLLNAME)
+  link /dll /debug capi\geos_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
+  
 headers/geos/platform.h: headers/geos/platform.h.vc
 	copy headers\geos\platform.h.vc headers\geos\platform.h
+
+headers/geos/version.h: headers/geos/version.h.vc
+  copy headers\geos\version.h.vc headers\geos\version.h
+
+capi/geos_c.h: capi/geos_c.h.vc
+  copy capi\geos_c.h.vc capi\geos_c.h
 
 .cpp.obj:
 	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
@@ -228,12 +255,33 @@ headers/geos/platform.h: headers/geos/platform.h.vc
 clean:
 	del $(OBJ)
 	del $(LIBNAME)
-
-TestSweepLineSpeed.exe:	$(LIBNAME) \
+	del $(SLIBNAME)
+	del $(CLIBNAME)
+	del bigtest\*.obj
+	del capi\*.obj
+	del $(DLLNAME)
+	del $(CDLLNAME)
+	del *.exe
+	del *.ilk
+	del *.exp
+	del *.pdb
+	
+TestSweepLineSpeed.exe:	$(DLLNAME) \
 		bigtest\GeometryTestFactory.obj \
-		bigtest\TestSweepLineSpeed.obj \
-		
-	$(CC) $(CFLAGS) \
+		bigtest\TestSweepLineSpeed.obj
+	link /debug /out:TestSweepLineSpeed.exe \
 		bigtest\TestSweepLineSpeed.obj \
 		bigtest\GeometryTestFactory.obj \
 		$(LIBNAME)
+
+#geostest.exe: $(DLLNAME) capi\geostest.obj
+#	link /debug capi\geostest.obj $(SLIBNAME)
+	
+#TestSweepLineSpeed.exe:	$(LIBNAME) \
+#		bigtest\GeometryTestFactory.obj \
+#		bigtest\TestSweepLineSpeed.obj \
+#		
+#	$(CC) $(CFLAGS) \
+#		bigtest\TestSweepLineSpeed.obj \
+#		bigtest\GeometryTestFactory.obj \
+#		$(LIBNAME)

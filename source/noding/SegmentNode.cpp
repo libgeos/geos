@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
+#include <sstream>
 #include <geos/noding.h>
-#include <stdio.h>
 
 namespace geos {
 
@@ -64,17 +64,18 @@ SegmentNode::compareTo(void* obj)
 string
 SegmentNode::print()
 {
-	char buffer[255];
-	string out=coord->toString();
-	sprintf(buffer," seg#=%i dist=%i",segmentIndex,dist);
-	out.append(buffer);
-	return out;
+	ostringstream s;
+	s<<coord->toString()<<" seg#="<<segmentIndex<<" dist="<<dist;
+	return s.str();
 }
 
 } // namespace geos
 
 /**********************************************************************
  * $Log$
+ * Revision 1.5.2.1  2005/05/23 18:41:51  strk
+ * Replaced sprintf uses with ostringstream
+ *
  * Revision 1.5  2004/11/01 16:43:04  strk
  * Added Profiler code.
  * Temporarly patched a bug in DoubleBits (must check drawbacks).

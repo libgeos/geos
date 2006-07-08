@@ -13,6 +13,12 @@
  *
  **********************************************************************
  * $Log$
+ * Revision 1.16.2.2  2005/05/23 18:41:51  strk
+ * Replaced sprintf uses with ostringstream
+ *
+ * Revision 1.16.2.1  2005/05/23 15:22:28  strk
+ * Back-ported bugfix in ::reverse
+ *
  * Revision 1.16  2004/07/21 09:55:24  strk
  * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
  * Documentation fixes.
@@ -48,7 +54,7 @@
 
 
 
-#include <stdio.h>
+#include <sstream>
 #include <geos/geom.h>
 #include <geos/geosAlgorithm.h>
 
@@ -109,7 +115,7 @@ double LineSegment::getLength() const {
 * Reverses the direction of the line segment.
 */
 void LineSegment::reverse() {
-	Coordinate& temp=p0;
+	Coordinate temp=p0;
 	p0.setCoordinate(p1);
 	p1.setCoordinate(temp);
 }
@@ -258,12 +264,9 @@ bool LineSegment::equalsTopo(const LineSegment other) const {
 }
 
 string LineSegment::toString() const {
-	string out="LINESTRING( ";
-	char buf[256];
-	sprintf(buf, "%f %f, %f %f", p0.x, p0.y, p1.x, p1.y);
-	out += buf;
-	out+=")";
-	return out;
+	ostringstream s;
+	s<<"LINESTRING("<<p0.x<<" "<<p0.y<<","<<p1.x<<" "<<p1.y<<")";
+	return s.str();
 }
 
 
