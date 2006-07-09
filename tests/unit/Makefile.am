@@ -34,6 +34,8 @@ geos_unit_SOURCES = geos_unit.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
 	io/ByteOrderValuesTest.cpp \
+	noding/SegmentNodeTest.cpp \
+	noding/SegmentPointComparatorTest.cpp \
 	noding/SegmentStringTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
