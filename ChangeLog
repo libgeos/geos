@@ -1,3 +1,12 @@
+2006-07-09 Mateusz Loskot <mateusz@loskot.net>
+
+	* tests/unit/noding/SegmentStringTest.cpp: removed
+	unecessary zero-to-void-pointer casts.
+	* tests/unit/noding/SegmentNodeTest.cpp: added new test suite
+	* tests/unit/noding/SegmentPointComparatorTest.cpp: added
+	new test suite (template, tests cases will be added)
+	* tests/unit/Makefile.am: added new unit test files
+
 2006-07-08 Sandro Santilli <strk@refractions.net>
 
 	* configure.in: incremented CAPI minor version, to avoid
