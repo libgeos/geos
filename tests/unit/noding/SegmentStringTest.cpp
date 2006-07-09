@@ -30,7 +30,7 @@ namespace tut
 	const geos::geom::CoordinateSequenceFactory* csFactory;
 
 	SegmentStringAutoPtr
-	makeSegmentString(geos::geom::CoordinateSequence* cs, void *d=(void*)0)
+	makeSegmentString(geos::geom::CoordinateSequence* cs, void *d = 0)
 	{
 		return SegmentStringAutoPtr(
 			new geos::noding::SegmentString(cs, d)
