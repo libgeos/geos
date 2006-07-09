@@ -4,6 +4,7 @@ Makefile
 Makefile.in
 CTS
 CTS.exe
+testrunner
 SimpleWKTTester
 SimpleWKTTester.exe
 XMLTester
