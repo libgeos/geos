@@ -20,6 +20,7 @@ config.guess
 autom4te.cache
 libtool
 ltmain.sh
+testrunner
 *debug*
 *optimized*
 *.kdev*
