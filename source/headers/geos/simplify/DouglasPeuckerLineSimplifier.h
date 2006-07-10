@@ -41,7 +41,7 @@ class DouglasPeuckerLineSimplifier {
 
 public:
 
-	typedef std::vector<bool> BoolVect;
+	typedef std::vector<short int> BoolVect;
 	typedef std::auto_ptr<BoolVect> BoolVectAutoPtr;
 
 	typedef std::vector<geom::Coordinate> CoordsVect;
@@ -90,6 +90,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.4  2006/07/10 10:16:06  strk
+ * changed vector<bool> to vector<short int> (see bug#101)
+ *
  * Revision 1.3  2006/06/12 11:29:23  strk
  * unsigned int => size_t
  *

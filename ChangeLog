@@ -1,3 +1,8 @@
+2006-07-10 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/simplify/DouglasPeuckerLineSimplifier.h:
+	changed vector<bool> to vector<short int> (see bug#101)
+
 2006-07-09 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/noding/SegmentStringTest.cpp: removed
