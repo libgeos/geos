@@ -1,5 +1,7 @@
 2006-07-10 Sandro Santilli <strk@refractions.net>
 
+	* capi/geos_c.cpp: don't use dynamic strings as format arg
+	in the formatted message callbacks.
 	* source/headers/geos/simplify/DouglasPeuckerLineSimplifier.h:
 	changed vector<bool> to vector<short int> (see bug#101)
 

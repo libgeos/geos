@@ -222,7 +222,7 @@ GEOSDisjoint(const Geometry *g1, const Geometry *g2)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -244,7 +244,7 @@ GEOSTouches(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -266,7 +266,7 @@ GEOSIntersects(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -288,7 +288,7 @@ GEOSCrosses(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -310,7 +310,7 @@ GEOSWithin(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -336,7 +336,7 @@ GEOSContains(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -358,7 +358,7 @@ GEOSOverlaps(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -386,7 +386,7 @@ GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -420,7 +420,7 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -450,7 +450,7 @@ GEOSisValid(const Geometry *g1)
 			TopologyValidationError *err = ivo.getValidationError();
 			if ( err ) {
 				std::string errmsg = err->toString();
-				NOTICE_MESSAGE(errmsg.c_str());
+				NOTICE_MESSAGE("%s", errmsg.c_str());
 			}
 		}
 		return result;
@@ -458,7 +458,7 @@ GEOSisValid(const Geometry *g1)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -486,7 +486,7 @@ GEOSEquals(const Geometry *g1, const Geometry *g2)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -507,7 +507,7 @@ GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -528,7 +528,7 @@ GEOSArea(const Geometry *g, double *area)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -549,7 +549,7 @@ GEOSLength(const Geometry *g, double *length)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -572,7 +572,7 @@ GEOSGeomFromWKT(const char *wkt)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -597,7 +597,7 @@ GEOSGeomToWKT(const Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -628,7 +628,7 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -655,7 +655,7 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -675,7 +675,7 @@ GEOSisEmpty(const Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -695,7 +695,7 @@ GEOSisSimple(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -720,7 +720,7 @@ GEOSisRing(Geometry *g)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 2;
 	}
 
@@ -748,7 +748,7 @@ GEOSGeomType(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -769,7 +769,7 @@ GEOSGeomTypeId(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return -1;
 	}
 
@@ -797,7 +797,7 @@ GEOSEnvelope(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -820,7 +820,7 @@ GEOSIntersection(Geometry *g1, Geometry *g2)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -841,7 +841,7 @@ GEOSBuffer(Geometry *g1, double width, int quadrantsegments)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -862,7 +862,7 @@ GEOSConvexHull(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -885,7 +885,7 @@ GEOSDifference(Geometry *g1, Geometry *g2)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -906,7 +906,7 @@ GEOSBoundary(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -929,7 +929,7 @@ GEOSSymDifference(Geometry *g1, Geometry *g2)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -957,9 +957,9 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 		s << "Exception on GEOSUnion with following inputs:" << std::endl;
 		s << "A: "<<g1->toString() << std::endl;
 		s << "B: "<<g2->toString() << std::endl;
-		NOTICE_MESSAGE(s.str().c_str());
+		NOTICE_MESSAGE("%s", s.str().c_str());
 #endif // VERBOSE_EXCEPTIONS
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -982,7 +982,7 @@ GEOSPointOnSurface(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1010,7 +1010,7 @@ GEOSGeom_destroy(Geometry *a)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 	}
 
 	catch (...)
@@ -1034,7 +1034,7 @@ GEOSdeleteChar(char *a)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 	}
 
 	catch (...)
@@ -1053,7 +1053,7 @@ GEOSGetNumCoordinates(const Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return -1;
 	}
 
@@ -1073,7 +1073,7 @@ GEOSGetNumInteriorRings(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return -1;
 	}
 
@@ -1095,7 +1095,7 @@ GEOSGetNumGeometries(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return -1;
 	}
 
@@ -1125,7 +1125,7 @@ GEOSGetGeometryN(Geometry *g1, int n)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1155,7 +1155,7 @@ GEOSGetExteriorRing(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1184,7 +1184,7 @@ GEOSGetInteriorRingN(Geometry *g1, int n)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1205,7 +1205,7 @@ GEOSGetCentroid(Geometry *g)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1223,7 +1223,7 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 	char buf[256];
 	sprintf(buf, "PostGIS2GEOS_collection: requested type %d, ngeoms: %d",
 			type, ngeoms);
-	ERROR_MESSAGE(buf);
+	ERROR_MESSAGE("%s", buf);
 #endif
 
 	try
@@ -1255,7 +1255,7 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1307,7 +1307,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1346,7 +1346,7 @@ GEOSLineMerge(Geometry *g)
         }
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1367,7 +1367,7 @@ GEOSGetSRID(Geometry *g1)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -1398,11 +1398,9 @@ GEOSjtsport()
 bool 
 GEOSHasZ(Geometry *g)
 {
-	//char msg[256];
 	if ( g->isEmpty() ) return false;
 	double az = g->getCoordinate()->z;
-	//sprintf(msg, "ZCoord: %g", az);
-	//ERROR_MESSAGE(msg);
+	//ERROR_MESSAGE("ZCoord: %g", az);
 	return FINITE(az);
 }
 
@@ -1425,7 +1423,7 @@ GEOSCoordSeq_create(unsigned int size, unsigned int dims)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1447,7 +1445,7 @@ GEOSCoordSeq_setOrdinate(CoordinateSequence *s, unsigned int idx,
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -1482,7 +1480,7 @@ GEOSCoordSeq_clone(CoordinateSequence *s)
 	try { return s->clone(); }
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1505,7 +1503,7 @@ GEOSCoordSeq_getOrdinate(CoordinateSequence *s, unsigned int idx,
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -1544,7 +1542,7 @@ GEOSCoordSeq_getSize(CoordinateSequence *s, unsigned int *size)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -1565,7 +1563,7 @@ GEOSCoordSeq_getDimensions(CoordinateSequence *s, unsigned int *dims)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -1585,7 +1583,7 @@ GEOSCoordSeq_destroy(CoordinateSequence *s)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 	}
 
 	catch (...)
@@ -1614,7 +1612,7 @@ GEOSGeom_getCoordSeq(Geometry *g)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1631,7 +1629,7 @@ GEOSGeom_createPoint(CoordinateSequence *cs)
 	try { return geomFactory->createPoint(cs); }
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1648,7 +1646,7 @@ GEOSGeom_createLinearRing(CoordinateSequence *cs)
 	try { return geomFactory->createLinearRing(cs); }
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1665,7 +1663,7 @@ GEOSGeom_createLineString(CoordinateSequence *cs)
 	try { return geomFactory->createLineString(cs); }
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1693,7 +1691,7 @@ GEOSGeom_createPolygon(Geometry *shell, Geometry **holes,
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1710,7 +1708,7 @@ GEOSGeom_clone(Geometry *g)
 	try { return g->clone(); }
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1757,7 +1755,7 @@ GEOSGeom_getDimensions(const Geometry *g)
 
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return 0;
 	}
 
@@ -1781,7 +1779,7 @@ GEOSSimplify(Geometry *g1, double tolerance)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
@@ -1805,7 +1803,7 @@ GEOSTopologyPreserveSimplify(Geometry *g1, double tolerance)
 	}
 	catch (const std::exception &e)
 	{
-		ERROR_MESSAGE(e.what());
+		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
 
