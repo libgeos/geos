@@ -14,9 +14,15 @@
  *
  * ========================================================================= */
 
+// Some manual renames
+%rename("get_wkb_output_dimensions") getWKBOutputDims;
+%rename("set_wkb_output_dimensions") setWKBOutputDims;
+%rename("get_wkb_byte_order") getWKBByteOrder;
+%rename("set_wkb_byte_order") setWKBByteOrder;
+
 
 // Manually rename methods on vector to get around SWIG 1.3.29 bug
-%rename(__len__) std::vector<geos::geom::Geometry *>::size;
+/*%rename(__len__) std::vector<geos::geom::Geometry *>::size;
 %rename("empty?") std::vector<geos::geom::Geometry *>::empty;
 %rename(push) std::vector<geos::geom::Geometry *>::push_back;
 
@@ -32,58 +38,9 @@
 %template("GeometryVector") std::vector<geos::geom::Geometry *>;
 %template("LineStringVector") std::vector<geos::geom::LineString *>;
 %template("PolygonVector") std::vector<geos::geom::Polygon *>;
+*/
 
-
-namespace geos {
-namespace geom {
-	/* Next conflicts with a Ruby keyword */
-	%rename(next_) GeometryCollectionIterator::next();
-
-	/* Need to deal with these ignores by renaming them */
-	%rename("build_geometry!") GeometryFactory::buildGeometry(vector<Geometry * > *) const;
-	%rename("create_geometry_collection!") GeometryFactory::createGeometryCollection(vector<Geometry * > *) const;
-	%rename("create_linear_ring!") GeometryFactory::createLinearRing(CoordinateSequence *) const;
-	%rename("create_line_string!") GeometryFactory::createLineString(CoordinateSequence *) const;
-	%rename("create_multi_line_string!") GeometryFactory::createMultiLineString(vector<Geometry * > *) const;
-	%rename("create_multi_point!") GeometryFactory::createMultiPoint(vector<Geometry * > *) const;
-	%rename("create_multi_polygon!") GeometryFactory::createMultiPolygon(vector<Geometry * > *) const;
-	%rename("create_point!") GeometryFactory::createPoint(CoordinateSequence *) const;
-	%rename("create_polygon!") GeometryFactory::createPolygon(LinearRing *,vector<Geometry * > *) const;
-
-	%extend Coordinate {
-		std::string to_s()
-		{
-			std::ostringstream os;
-			os << "<Coordinate ";
-			os << self->toString();
-			os << ">";
-			return os.str();
-		}
-	};
-
-	%extend CoordinateSequence {
-		std::string to_s()
-		{
-			std::ostringstream os;
-			os << "<CoordinateSequence ";
-			os << self->toString();
-			os << ">";
-			return os.str();
-		}
-	};
-
-	%extend Envelope {
-		std::string to_s()
-		{
-			std::ostringstream os;
-			os << "<Envelope ";
-			os << self->toString();
-			os << ">";
-			return os.str();
-		}
-	};
-
-
+/*
 	%extend Geometry {
 		std::string to_s()
 		{
@@ -93,7 +50,7 @@ namespace geom {
 			os << ">";
 			return os.str();
 		}
-	};
+	};*/
 
 	/* Geos uses vectors of pointers to pass around geometries.  These will be 
 		 wrapped by SWIG - but we have to be careful.  The problem is
@@ -104,7 +61,7 @@ namespace geom {
 		 on SWIG Ruby Object tracking for these containers.*/
 
 	// First declare mark functions for the containers
-	%markfunc std::vector<Geometry *> "mark_GeometryVector";
+	/*%markfunc std::vector<Geometry *> "mark_GeometryVector";
 	%markfunc std::vector<LineString *> "mark_LineStringVector";
 	%markfunc std::vector<Polygon *> "mark_PolygonVector";
 
@@ -119,12 +76,14 @@ namespace geom {
 	%trackobjects MultiPoint;
 	%trackobjects MultiLineString;
 	%trackobjects MultiPolygon;
-} /* End geom namespace */
-} /* End geos namespace */
+} */
+
+/* End geom namespace */
+//} /* End geos namespace */
 
 
 // Last define the mark functions
-%header %{
+/*%header %{
 namespace geos {
 namespace geom {
 	static void mark_GeometryVector(void* ptr)
@@ -201,9 +160,10 @@ namespace geom {
 			}
 		}
 	}
-} /* End geom namespace */
-} /* End geos namespace */
-%}
+}*/
+/* End geom namespace */
+//} /* End geos namespace */
+//%}
 
 
 /* ======== Marshalling Support ========== */
@@ -227,7 +187,6 @@ namespace geom {
 		if ((argc < 1) || (argc > 1)) {
 			rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc);
 		}
-
 		int res = SWIG_AsPtr_std_string(argv[0], &ptr);
 
 		if (!SWIG_IsOK(res) || !ptr) {

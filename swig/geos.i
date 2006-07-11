@@ -1,22 +1,5 @@
-/* =========================================================================
- * $Id$
- *
- * geos.i
- * 
- * Copyright 2004 Sean Gillies, sgillies@frii.com
- * Updated 2005 Charlie Savage, cfis@interserv.com
- *
- * Interface for a SWIG generated geos module.  Depends on 
- * SWIG 1.3.29 and higher.
- *
- * This is free software; you can redistribute and/or modify it under
- * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
- * See the COPYING file for more information.
- *
- * ========================================================================= */
- 
 %module geos
+
 %include "attribute.i"
 %include "exception.i"
 %include "std_string.i"
@@ -25,92 +8,80 @@
 %include "factory.i"
 
 %{ 
-#include "geos.h"
-#include <sstream>
+#include "geos_c.h"
 %}
 
-/* ================= Shadowed Methods ============== */
+/* Constants copied from geos_c.h.  Would be nice
+   to reuse the originals but we can't without exposing
+   the whole c api. */
+#define GEOS_VERSION_MAJOR 3
+#define GEOS_VERSION_MINOR 0
+#define GEOS_VERSION_PATCH 0rc1
+#define GEOS_VERSION "3.0.0rc1"
+#define GEOS_JTS_PORT "1.7.1"
 
-/* The overloaded C++ methods cannot be disambiguated by
-   SWIG.  For example:
-   
-	geos::GeometryFactory::createPoint(CoordinateSequence *) const;
-	geos::GeometryFactory::createPoint(const CoordinateSequence&) const;
-   
-   For each pair of methods, one will take ownership
-   of the parameter (thus it is passed as a pointer) while
-   the other one will not (thus is passed as a const reference).
-   To be on the safe-side, we tell SWIG to ignore the method
-   that takes over ownership.  To expose these ignored methods
-   to a scripting language requires renaming the method to
-   something else.  This can be done in each language module
-   as it is loaded below.*/
+#define GEOS_CAPI_VERSION_MAJOR 1
+#define GEOS_CAPI_VERSION_MINOR 1
+#define GEOS_CAPI_VERSION_PATCH 1
+#define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
+#define GEOS_CAPI_LAST_INTERFACE (GEOS_CAPI_VERSION_MAJOR+GEOS_CAPI_VERSION_MINOR)
+#define GEOS_CAPI_VERSION "3.0.0rc1-CAPI-1.1.1"
 
+/* Supported geometry types */
+enum GEOSGeomTypes { 
+    GEOS_POINT,
+    GEOS_LINESTRING,
+    GEOS_LINEARRING,
+    GEOS_POLYGON,
+    GEOS_MULTIPOINT,
+    GEOS_MULTILINESTRING,
+    GEOS_MULTIPOLYGON,
+    GEOS_GEOMETRYCOLLECTION
+};
 
-namespace geos {
-namespace geom {
-	%ignore GeometryFactory::buildGeometry(vector<Geometry * > *) const;
-	%ignore GeometryFactory::createGeometryCollection(vector<Geometry * > *) const;
-	%ignore GeometryFactory::createLinearRing(CoordinateSequence *) const;
-	%ignore GeometryFactory::createLineString(CoordinateSequence *) const;
-	%ignore GeometryFactory::createMultiLineString(vector<Geometry * > *) const;
-	%ignore GeometryFactory::createMultiPoint(vector<Geometry * > *) const;
-	%ignore GeometryFactory::createMultiPolygon(vector<Geometry * > *) const;
-	%ignore GeometryFactory::createPoint(CoordinateSequence *) const;
-	%ignore GeometryFactory::createPolygon(LinearRing *,vector<Geometry * > *) const;
-
-	/* For scripting languages the CoordinateSequence::add method is ambigious
-		 since there are two overloaded versions that are the same except
-		 a const declaration.  However, one of them is available only for 
-		 backwards compatibility so hide that one.*/
-	%ignore CoordinateSequence::add(CoordinateSequence *cl,bool allowRepeated,bool direction);
-} /* End geom namespace */
-} /* End geos namespace */
+%inline %{
+enum GEOSByteOrders {
+	GEOS_WKB_XDR = 0, /* Big Endian */
+	GEOS_WKB_NDR = 1 /* Little Endian */
+};
+%}
 
 
-/* ================= Typemaps ============== */
+/* Message and Error Handling */
+%{
 
-/* These typemaps allows scripting languages to call methods that take
-   iostreams and ostreams, such as WKTWriter.printHEX and WKBWriter.write. 
-   The results are returned from the method as a string object in the
-   scripting language.*/
-   
-/* Get rid of the ostream parameter by setting numinputs to 0 */   
-%typemap(in,numinputs=0) ostream& (std::ostringstream stream)
+/* This is not thread safe ! */
+static const int MESSAGE_SIZE = 1000;
+static char message[MESSAGE_SIZE];
+
+void noticeHandler(const char *fmt, ...)
 {
-  $1 = &stream;
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(message, sizeof(message) - 1, fmt, args);
+    va_end(args);
 }
 
-/* Return the results as a string object in the scripting language */
-%typemap(argout) ostream& 
+void errorHandler(const char *fmt, ...)
 {
-	std::string str = stream$argnum.str();	
-	$result = SWIG_FromCharPtrAndSize(str.data(), str.size());
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(message, sizeof(message) - 1, fmt, args);
+    va_end(args);
 }
+%}
 
-/* This typemap allows the scripting language to pass in a string
-   which will be converted to an istringstream for GEOS */
-%typemap(in) istream& (char *buf = 0, size_t size = 0, int alloc = 0, std::stringstream stream)
-{
-  /* Convert from scripting language string to char* */
-  if (SWIG_AsCharPtrAndSize($input, &buf, &size, &alloc) != SWIG_OK)
-  {
-    %argument_fail(SWIG_TypeError, "(TYPEMAP, SIZE)", $symname, $argnum);
-  }
-  
-  /* Write data to the stream.  Note that the returned size includes
-     the last character, which is a null character.  We do not want
-     to write that to the stream so subtract one from its size. */
-  stream.write(buf, size - 1);
 
-  $1 = &stream;
-}
+/* First initialize geos */
+%init %{
+    initGEOS(noticeHandler, errorHandler);
+%}
 
-/* Free allocated buffer created in the (in) typemap */
-%typemap(freearg) istream&
-{
-  if (alloc$argnum == SWIG_NEWOBJ) %delete_array(buf$argnum);
-}
+
+/* Module level methods */
+const char *GEOSversion();
+void finishGEOS(void);
+
 
 
 /* ==============  Language Specific Files ============ */
@@ -125,7 +96,7 @@ namespace geom {
 
 
 #ifdef SWIGPYTHON
-	%include ../python/python.i
+//	%include ../python/python.i
 #endif
 
 #ifdef SWIGRUBY
@@ -133,156 +104,674 @@ namespace geom {
 #endif
 
 
-/* ================= Ownership Rules ============== */
 
-namespace geos {
-	/* These disown definitions are not correct in all cases - 
-		 needs to be fixed */
-	%apply SWIGTYPE *DISOWN { geom::CoordinateSequence * };
-	%apply SWIGTYPE *DISOWN { geom::LinearRing * };
-	%apply SWIGTYPE *DISOWN { std::vector<geos::Geometry * > * };
-	%apply SWIGTYPE *DISOWN { std::vector<geos::Coordinate> * };
+// ===  CoordinateSequence ===
+%{
+typedef struct GeosCoordinateSequence_t *GeosCoordinateSequence;
+%}
 
+%rename (CoordinateSequence) GeosCoordinateSequence;
+class GeosCoordinateSequence
+{
+public:
+    /* Typemap to verify index is in bounds. */
+    %typemap(check) size_t idx  {
+        /* %typemap(check) size_t idx */
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        size_t size;
+        
+        GEOSCoordSeq_getSize(coords, &size);
+        if ($1 < 0 || $1 >= size)
+            SWIG_exception(SWIG_IndexError, "Index out of bounds");
+    }
+%extend
+{
+    GeosCoordinateSequence(size_t size, size_t dims)
+    {
+        return (GeosCoordinateSequence*) GEOSCoordSeq_create(size, dims);
+    }
 
-	// These methods create new objects
-	%newobject *::clone;
-	%newobject *::getCoordinates;
+    GeosCoordinateSequence(const GeosCoordinateSequence& other)
+    {
+        GEOSCoordSeq coords = (GEOSCoordSeq) other;
+        return (GeosCoordinateSequence*) GEOSCoordSeq_clone(coords);
+    }
 
-	%newobject geom::CoordinateArraySequence::create;
-	%newobject geom::GeometryFactory::createPointFromInternalCoord;
-	%newobject geom::GeometryFactory::toGeometry;
-	%newobject geom::GeometryFactory::createPoint;
-	%newobject geom::GeometryFactory::createGeometryCollection;
-	%newobject geom::GeometryFactory::createMultiLineString;
-	%newobject geom::GeometryFactory::createMultiPolygon;
-	%newobject geom::GeometryFactory::createLinearRing;
-	%newobject geom::GeometryFactory::createMultiPoint;
-	%newobject geom::GeometryFactory::createPolygon;
-	%newobject geom::GeometryFactory::createLineString;
-	%newobject geom::GeometryFactory::buildGeometry;
-	%newobject geom::GeometryFactory::createGeometry;
-	%newobject geom::GeometricShapeFactory::getEnvelope;
+    ~GeosCoordinateSequence()
+    {
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        return GEOSCoordSeq_destroy(coords);
+    }
 
-	%newobject io::WKBReader::read;
-	%newobject io::WKBReader::readHEX;
-	%newobject io::WKTReader::read;
+    int setX(size_t idx, double val)
+    {
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        return GEOSCoordSeq_setX(coords, idx, val);
+    }
 
-	/* Surface methods that return Geometry* so that they
-		 return the actual geometry object (point, linestring, etc.)
-		 instead of a generic geometry object.  Make sure the checks
-		 go from child class to parent class so we get the right one.*/
-	%factory(geom::Geometry * io::WKTReader::read, 
-		       geom::Point, 
-					 geom::LinearRing, geom::LineString,
-					 geom::Polygon, 
-					 geom::MultiPoint, geom::MultiLineString,
-					 geom::MultiPolygon, geom::GeometryCollection);
+    int setY(size_t idx, double val)
+    {
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        return GEOSCoordSeq_setY(coords, idx, val);
+    }
 
-	%factory(geom::Geometry * io::WKBReader::read,
-		       geom::Point, 
-					 geom::LinearRing, geom::LineString,
-					 geom::Polygon, 
-					 geom::MultiPoint, geom::MultiLineString,
-					 geom::MultiPolygon, geom::GeometryCollection);
+    int setZ(size_t idx, double val)
+    {
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        return GEOSCoordSeq_setZ(coords, idx, val);
+    }
 
-	%factory(geom::Geometry * io::WKBReader::readHEX,
-		       geom::Point, 
-					 geom::LinearRing, geom::LineString,
-					 geom::Polygon, 
-					 geom::MultiPoint, geom::MultiLineString,
-					 geom::MultiPolygon, geom::GeometryCollection);
+    int setOrdinate(size_t idx, size_t dim, double val)
+    {
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        return GEOSCoordSeq_setOrdinate(coords, idx, dim, val);
+    }
 
-	%newobject Geometry::fromWKT;
-	%factory(geom::Geometry * io::Geometry::fromWKT,
-		       geom::Point, 
-					 geom::LinearRing, geom::LineString,
-					 geom::Polygon, 
-					 geom::MultiPoint, geom::MultiLineString,
-					 geom::MultiPolygon, geom::GeometryCollection);
+    double getX(size_t idx)
+    {
+        double result;
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        GEOSCoordSeq_getX(coords, idx, &result);
+        return result;
+    }
 
-	%newobject Geometry::fromHEX;
-	%factory(geom::Geometry * io::Geometry::fromHEX,
-		       geom::Point, 
-					 geom::LinearRing, geom::LineString,
-					 geom::Polygon, 
-					 geom::MultiPoint, geom::MultiLineString,
-					 geom::MultiPolygon, geom::GeometryCollection);
+    double getY(size_t idx)
+    {
+        double result;
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        GEOSCoordSeq_getY(coords, idx, &result);
+        return result;
+    }
+    
+    double getZ(size_t idx)
+    {
+        double result;
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        GEOSCoordSeq_getZ(coords, idx, &result);
+        return result;
+    }
+    
+    double getOrdinate(size_t idx, size_t dim)
+    {
+        double result;
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        GEOSCoordSeq_getOrdinate(coords, idx, dim, &result);
+        return result;
+    }
 
-	%factory(geom::Geometry * geom::Geometry::downcast,
-		       geom::Point, 
-					 geom::LinearRing, geom::LineString,
-					 geom::Polygon, 
-					 geom::MultiPoint, geom::MultiLineString,
-					 geom::MultiPolygon, geom::GeometryCollection);
+    int getSize()
+    {
+        size_t result;
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        GEOSCoordSeq_getSize(coords, &result);
+        return result;
+    }
 
-	/* ================= Operators  ============== */
-	/* Ignore these for now - if we don't SWIG will create
-		 names with the same methods, which doesn't work out very well.
-
-		 std::ostream& operator<<(std::ostream& os, const planarNode& n); 
-		 std::ostream& operator<<(std::ostream& os, const planarEdge& n); 
-		 std::ostream& operator<<(std::ostream& os, const planarNode& n); 
-		 std::ostream& operator<< (std::ostream& os, const Coordinate& c);
-		 std::ostream& operator<< (std::ostream& o, const LineSegment& l);
-		 std::ostream& operator<< (std::ostream& os, const Coordinate& c); */
-	%ignore operator<<;
-} /* End geos namespace */
-
-
-/* =============  Define Attributes ============ */
-/* Need to fully qualify the class names for some reason. */
-%attribute(geos::geom::Point, double, x, getX);
-%attribute(geos::geom::Point, double, y, getY);
-%attribute(geos::geom::Geometry, double, srid, getSRID, setSRID);
-
-
-
-/* GEOS 3 throws and catches exceptions by reference, thus allowing us
-	 to signficantly clean up the code. */
-
-/* Mark these classes as exception classes */
-%exceptionclass geos::util::GEOSException;
-
-/* These are all subclasses of GEOSException */
-%exceptionclass geos::util::AssertionFailedException;
-%exceptionclass geos::util::IllegalArgumentException;
-%exceptionclass geos::io::ParseException;
-%exceptionclass geos::util::TopologyException;
-%exceptionclass geos::util::UnsupportedOperationException;
-
-/* Setup up generalized exception handling.  Note that GEOS 3.0.0 
-	 and above throw and catch exceptions be reference.  In earlier
-	 versions it threw objects allocated on the heap.*/
-%catches(geos::util::AssertionFailedException,
-				 geos::util::IllegalArgumentException, geos::io::ParseException;
-				 geos::util::TopologyException, geos::util::UnsupportedOperationException, 
-				 geos::util::GEOSException);
+    int getDimensions()
+    {
+        size_t result;
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        GEOSCoordSeq_getDimensions(coords, &result);
+        return result;
+    }
+}
+};
 
 
-/* Now tell SWIG what headers to process */
-%include "../source/headers/geos/geom/geometry.h"
-%include "../source/headers/geos/geom/GeometryFactory.h"
-%include "../source/headers/geos/geom/PrecisionModel.h"
-%include "../source/headers/geos/geom/CoordinateSequenceFactory.h"
-%include "../source/headers/geos/geom/Coordinate.h"
-%include "../source/headers/geos/geom/CoordinateSequence.h"
-%include "../source/headers/geos/geom/CoordinateArraySequence.h"
 
-%include "../source/headers/geos/geom/Envelope.h"
+/* Install exception handler for topology operations. */
+/*%exception GeosGeom* Geometry::*
+{
+    $action
+    if (result ==  NULL)
+        SWIG_exception(SWIG_RuntimeError, message);
+}
 
-%include "../source/headers/geos/geom/Point.h"
-%include "../source/headers/geos/geom/LineString.h"
-%include "../source/headers/geos/geom/LinearRing.h"
-%include "../source/headers/geos/geom/Polygon.h"
-%include "../source/headers/geos/geom/GeometryCollection.h"
-%include "../source/headers/geos/geom/MultiPoint.h"
-%include "../source/headers/geos/geom/MultiLineString.h"
-%include "../source/headers/geos/geom/MultiPolygon.h"
 
-%include "../source/headers/geos/io/WKBReader.h"
-%include "../source/headers/geos/io/WKBWriter.h"
-%include "../source/headers/geos/io/WKTReader.h"
-%include "../source/headers/geos/io/WKTWriter.h"
+*/
 
-%include "../source/headers/geos/util/GEOSException.h"
-%include "../source/headers/geos/util/GeometricShapeFactory.h"
+/* Install exception handler for the binary and unary predicates. */
+ /*   bool relatePattern(const GeosGeometry* other, const char *pat)
+    bool disjoint(const GeosGeometry* other)
+    bool touches(const GeosGeometry* other)
+    bool intersects(const GeosGeometry* other)
+    bool crosses(const GeosGeometry* other)
+    bool within(const GeosGeometry* other)
+    bool contains(const GeosGeometry* other)
+    bool overlaps(const GeosGeometry* other)
+    bool equals(const GeosGeometry* other)
+    bool isEmpty()
+    bool isValid()
+    bool isSimple()
+    bool isRing()
+    bool isHasZ()*/
+
+
+
+/* ========  Wrapper Classes to Recreate Geom Hierarchy ====== */
+%rename(Geometry) GeosGeometry;
+%rename(Point) GeosPoint;
+%rename(LineString) GeosLineString;
+%rename(LinearRing) GeosLinearRing;
+%rename(Polygon) GeosPolygon;
+%rename(GeometryCollection) GeosGeometryCollection;
+%rename(MultiPoint) GeosMultiPoint;
+%rename(MultiLineString) GeosMultiLineString;
+%rename(MultiLinearRing) GeosMultiLinearRing;
+%rename(MultiPolygon) GeosMultiPolygon;
+
+%newobject GeosGeometry::intersection;
+%newobject GeosGeometry::buffer;
+%newobject GeosGeometry::convexHull;
+%newobject GeosGeometry::difference;
+%newobject GeosGeometry::symDifference;
+%newobject GeosGeometry::boundary;
+%newobject GeosGeometry::geomUnion;
+%newobject GeosGeometry::pointOnSurface;
+%newobject GeosGeometry::getCentroid;
+%newobject GeosGeometry::relate;
+%newobject GeosGeometry::lineMerge;
+%newobject GeosGeometry::simplify;
+%newobject GeosGeometry::topologyPreserveSimplify;
+
+
+%factory(GeosGeometry *,
+         GeosPoint, 
+		 GeosLinearRing,
+         GeosLineString,
+		 GeosPolygon, 
+		 GeosMultiPoint,
+         GeosMultiLineString,
+		 GeosMultiPolygon,
+         GeosGeometryCollection);
+
+%{
+class GeosGeometry;
+extern GeosGeometry* createGeometry(GEOSGeom geom);
+%}
+
+// ===  Attributes ===
+%attribute(GeosGeometry, int, srid, getSRID, setSRID);
+
+%exception
+{
+    try
+    {
+        $action
+    }
+    catch (const std::exception& e)
+    {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
+
+
+%inline %{
+
+class GeosGeometry
+{
+public:
+    const GEOSGeom geom_;
+
+    GeosGeometry(GEOSGeom geom): geom_(geom)
+    {
+    }
+
+    virtual ~GeosGeometry()
+    {
+        GEOSGeom_destroy(this->geom_);
+    }
+
+    char *geomType()
+    {
+        return GEOSGeomType(this->geom_);
+    }
+
+    int typeId()
+    {
+        return GEOSGeomTypeId(this->geom_);
+    }
+    
+    int getSRID()
+    {
+        return GEOSGetSRID(this->geom_);
+    }
+
+    void setSRID(int SRID)
+    {
+        return GEOSSetSRID(this->geom_, SRID);
+    }
+
+    size_t getDimensions()
+    {
+        return GEOSGeom_getDimensions(this->geom_);
+    }
+
+
+    /* Topology Operations */
+   /* GeosGeometry *envelope()
+    {
+        return new GeosGeometry(GEOSEnvelope(this->geom_);
+    }*/
+
+    GeosGeometry *intersection(GeosGeometry *other)
+    {
+        return createGeometry(GEOSIntersection(this->geom_, other->geom_));
+    }
+
+    GeosGeometry *buffer(double width, int quadsegs)
+    {
+        return createGeometry(GEOSBuffer(this->geom_, width, quadsegs));
+    }
+
+    GeosGeometry *convexHull()
+    {
+        return createGeometry(GEOSConvexHull(this->geom_));
+    }
+
+    GeosGeometry *difference(GeosGeometry *other)
+    {
+        return createGeometry(GEOSDifference(this->geom_, other->geom_));
+    }
+
+    GeosGeometry *symDifference(GeosGeometry *other)
+    {
+        return createGeometry(GEOSSymDifference(this->geom_, other->geom_));
+    }
+
+    GeosGeometry *boundary()
+    {
+        return createGeometry(GEOSBoundary(this->geom_));
+    }
+
+    GeosGeometry *geomUnion(GeosGeometry *other)
+    {
+        return createGeometry(GEOSUnion(this->geom_, other->geom_));
+    }
+    
+    GeosGeometry *pointOnSurface()
+    {
+        return createGeometry(GEOSPointOnSurface(this->geom_));
+    }
+
+    GeosGeometry *getCentroid()
+    {
+        return createGeometry(GEOSGetCentroid(this->geom_));
+    }
+
+    char *relate(GeosGeometry *other)
+    {
+        return GEOSRelate(this->geom_, other->geom_);
+    }
+
+    /* TODO - expose GEOSPolygonize*/
+    GeosGeometry *lineMerge()
+    {
+        return createGeometry(GEOSLineMerge(this->geom_));
+    }
+
+    GeosGeometry *simplify(double tolerance)
+    {
+        return createGeometry(GEOSSimplify(this->geom_, tolerance));
+    }
+
+    GeosGeometry *topologyPreserveSimplify(double tolerance)
+    {
+        return createGeometry(GEOSTopologyPreserveSimplify(this->geom_, tolerance));
+    }
+
+    /* Binary predicates - return 2 on exception, 1 on true, 0 on false */
+    bool relatePattern(const GeosGeometry* other, const char *pat)
+    {
+        return checkBoolResult(GEOSRelatePattern(this->geom_, other->geom_, pat));
+    }
+
+    bool disjoint(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSDisjoint(this->geom_, other->geom_));
+    }
+
+    bool touches(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSTouches(this->geom_, other->geom_));
+    }
+
+    bool intersects(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSIntersects(this->geom_, other->geom_));
+    }
+
+    bool crosses(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSCrosses(this->geom_, other->geom_));
+    }
+
+    bool within(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSWithin(this->geom_, other->geom_));
+    }
+
+    bool contains(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSContains(this->geom_, other->geom_));
+    }
+
+    bool overlaps(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSOverlaps(this->geom_, other->geom_));
+    }
+
+    bool equals(const GeosGeometry* other)
+    {
+        return checkBoolResult(GEOSEquals(this->geom_, other->geom_));
+    }
+
+    /* Unary predicate - return 2 on exception, 1 on true, 0 on false */
+    bool isEmpty()
+    {
+        return checkBoolResult(GEOSisEmpty(this->geom_));
+    }
+
+    bool isValid()
+    {
+        return checkBoolResult(GEOSisValid(this->geom_));
+    }
+
+    bool isSimple()
+    {
+        return checkBoolResult(GEOSisSimple(this->geom_));
+    }
+
+    bool isRing()
+    {
+        return checkBoolResult(GEOSisRing(this->geom_));
+    }
+
+    bool isHasZ()
+    {
+        return checkBoolResult(GEOSHasZ(this->geom_));
+    }
+protected:
+    bool checkBoolResult(char result)
+    {
+        int intResult = (int) result;
+
+        if (result == 1)
+            return true;
+        else if (result == 0)
+            return false;
+        else
+            throw std::runtime_error(message);
+    }
+};
+
+class GeosPoint: public GeosGeometry
+{
+public:
+    GeosPoint(GEOSGeom geom): GeosGeometry(geom)
+    {
+    }
+};
+
+class GeosLineString: public GeosGeometry
+{
+public:
+    GeosLineString(GEOSGeom geom): GeosGeometry(geom)
+    {
+    }
+};
+
+class GeosLinearRing: public GeosGeometry
+{
+public:
+    GeosLinearRing(GEOSGeom geom): GeosGeometry(geom)
+    {
+    }
+};
+
+class GeosPolygon: public GeosGeometry
+{
+public:
+    GeosPolygon(GEOSGeom geom): GeosGeometry(geom)
+    {
+    }
+};
+
+class GeosGeometryCollection: public GeosGeometry
+{
+public:
+    GeosGeometryCollection(GEOSGeom geom): GeosGeometry(geom)
+    {
+    }
+};
+
+class GeosMultiPoint: public GeosGeometryCollection
+{
+public:
+    GeosMultiPoint(GEOSGeom geom): GeosGeometryCollection(geom)
+    {
+    }
+};
+
+class GeosMultiLineString: public GeosGeometryCollection
+{
+public:
+    GeosMultiLineString(GEOSGeom geom): GeosGeometryCollection(geom)
+    {
+    }
+};
+
+class GeosMultiLinearRing: public GeosGeometryCollection
+{
+public:
+    GeosMultiLinearRing(GEOSGeom geom): GeosGeometryCollection(geom)
+    {
+    }
+};
+
+class GeosMultiPolygon: public GeosGeometryCollection
+{
+public:
+    GeosMultiPolygon(GEOSGeom geom): GeosGeometryCollection(geom)
+    {
+    }
+};
+%}
+/* Turn off exception handler */
+%exception;
+
+%wrapper %{
+GeosGeometry* createGeometry(GEOSGeom geom)
+{
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    GEOSGeomTypes geomId = (GEOSGeomTypes)GEOSGeomTypeId(geom);
+
+    switch (geomId)
+    {
+    case GEOS_POINT:
+        return new GeosPoint(geom);
+        break;
+	case GEOS_LINESTRING:
+        return new GeosLineString(geom);
+        break;
+	case GEOS_LINEARRING:
+        return new GeosLinearRing(geom);
+        break;
+	case GEOS_POLYGON:
+        return new GeosPolygon(geom);
+        break;
+	case GEOS_MULTIPOINT:
+        return new GeosMultiPoint(geom);
+        break;
+	case GEOS_MULTILINESTRING:
+        return new GeosMultiLineString(geom);
+        break;
+	case GEOS_MULTIPOLYGON:
+        return new GeosMultiPolygon(geom);
+        break;
+	case GEOS_GEOMETRYCOLLECTION:
+        return new GeosGeometryCollection(geom);
+        break;
+    }
+}
+%}
+
+
+// ==== Geometry Constructors ===========
+%newobject createPoint;
+%newobject createLineString;
+%newobject createLinearRing;
+%newobject createPolygon;
+
+%apply SWIGTYPE *DISOWN {GeosCoordinateSequence *s};
+
+%inline %{
+GeosPoint *createPoint(GeosCoordinateSequence *s)
+{
+    GEOSCoordSeq coords = (GEOSCoordSeq) s;
+    return (GeosPoint*) GEOSGeom_createPoint(coords);
+}
+
+GeosLinearRing *createLinearRing(GeosCoordinateSequence *s)
+{
+    GEOSCoordSeq coords = (GEOSCoordSeq) s;
+    return (GeosLinearRing*) GEOSGeom_createLinearRing(coords);
+}
+
+GeosLineString *createLineString(GeosCoordinateSequence *s)
+{
+    GEOSCoordSeq coords = (GEOSCoordSeq) s;
+    return (GeosLineString*) GEOSGeom_createLineString(coords);
+}
+
+GeosPolygon *createPolygon(GEOSGeom shell, GEOSGeom *holes, size_t nholes)
+{
+    return (GeosPolygon*) GEOSGeom_createPolygon(shell, holes, nholes);
+}
+
+%}
+
+/*
+ * Second argument is an array of GEOSGeom objects.
+ * The caller remains owner of the array, but pointed-to
+ * objects become ownership of the returned GEOSGeom.
+ 
+extern GEOSGeom GEOS_DLL GEOSGeom_createPolygon(GEOSGeom shell,
+	GEOSGeom *holes, size_t nholes);
+extern GEOSGeom GEOS_DLL GEOSGeom_createCollection(int type,
+	GEOSGeom *geoms, size_t ngeoms);
+
+extern GEOSGeom GEOS_DLL GEOSGeom_clone(const GEOSGeom g);
+*/
+%clear GeosCoordinateSequence *s;
+
+// === Input/Output ===
+%newobject geomFromWKT;
+%newobject geomFromWKB;
+%newobject geomFromHEX;
+
+
+/* This typemap allows the scripting language to pass in buffers
+   to the geometry write methods. */
+%typemap(in) (const unsigned char* wkb, size_t size) (int alloc = 0)
+{
+    /* %typemap(in) (const unsigned char* wkb, size_t size) (int alloc = 0) */
+    if (SWIG_AsCharPtrAndSize($input, (char**)&$1, &$2, &alloc) != SWIG_OK)
+        SWIG_exception(SWIG_RuntimeError, "Expecting a string");
+    /* Don't want to include last null character! */
+    $2--;
+}
+
+/* These three type maps are for geomToWKB and geomToHEX.  We need
+to ignore the size input argument, then create a new string in the
+scripting language of the correct size, and then free the 
+provided string. */
+
+/* set the size parameter to a temporary variable. */
+%typemap(in, numinputs=1) (const GeosGeometry* g, size_t *size) (size_t temp = 0)
+{
+    // %typemap(in, numinputs=1) (const GEOSGeom* g, size_t *size) (size_t temp) 
+  int res1 = SWIG_ConvertPtr(argv[0], (void**) &$1, SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "geomToWKB" "', argument " "1"" of type '" "GEOSGeom const *""'"); 
+  }
+  $2 = &temp;
+}
+
+/* Create a new target string of the correct size. */
+%typemap(argout) (const GeosGeometry* g, size_t *size)
+{
+    /* %typemap(argout) (const GEOSGeom* g, size_t *size) */
+    $result = SWIG_FromCharPtrAndSize(&result, $2);
+}
+
+/* Free the c-string returned  by the function. */
+%typemap(freearg) (const GeosGeometry* g, size_t *size)
+{
+    /* %typemap(freearg) (const GEOSGeom* g, size_t *size) */
+    std::free(result);
+}
+
+/* This typemap create a string object in the target object from
+   a c-string and length.*/
+%typemap(argout) (const GeosGeometry* g, size_t *size)
+{
+    /* %typemap(argout) (const GEOSGeom* g, size_t *size) */
+    $result = SWIG_FromCharPtrAndSize((const char*) result, *$2);
+}
+
+
+%inline %{
+GeosGeometry* geomFromWKT(const char *wkt)
+{
+    return createGeometry(GEOSGeomFromWKT(wkt));
+}
+
+char *geomToWKT(const GeosGeometry* g)
+{
+    return GEOSGeomToWKT(g->geom_);
+}
+
+int getWKBOutputDims()
+{
+    return GEOS_getWKBOutputDims();
+}
+
+int setWKBOutputDims(int newDims)
+{
+    return GEOS_setWKBOutputDims(newDims);
+}
+
+int getWKBByteOrder()
+{
+    return GEOS_getWKBByteOrder();
+}
+
+int setWKBByteOrder(int byteOrder)
+{
+    return GEOS_setWKBByteOrder((GEOSByteOrders)byteOrder);
+}
+
+GeosGeometry* geomFromWKB(const unsigned char *wkb, size_t size)
+{
+    return createGeometry(GEOSGeomFromWKB_buf(wkb, size));
+}
+
+unsigned char *geomToWKB(const GeosGeometry* g, size_t *size)
+{
+    return GEOSGeomToWKB_buf(g->geom_, size);
+}
+
+/* use wkb parameter instead of hex so we can reuse the typemap above. */
+GeosGeometry* geomFromHEX(const unsigned char *wkb, size_t size)
+{
+    return createGeometry(GEOSGeomFromHEX_buf(wkb, size));
+}
+
+unsigned char *geomToHEX(const GeosGeometry* g, size_t *size)
+{
+    return GEOSGeomToHEX_buf(g->geom_, size);
+}
+%}
