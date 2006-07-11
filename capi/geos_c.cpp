@@ -65,6 +65,12 @@
 #  define GEOS_DLL
 #endif
 
+/* Byte oders exposed via the c api */
+enum GEOSByteOrders {
+	GEOS_WKB_XDR = 0, /* Big Endian */
+	GEOS_WKB_NDR = 1 /* Little Endian */
+};
+
 using namespace geos;
 using namespace geos::geom;
 using namespace geos::operation::valid;
@@ -87,9 +93,14 @@ extern "C" void GEOS_DLL finishGEOS();
 /* Input and Output functions, return NULL on exception. */
 extern "C" Geometry GEOS_DLL *GEOSGeomFromWKT(const char *wkt);
 extern "C" Geometry GEOS_DLL *GEOSGeomFromWKB_buf(const char *wkb, size_t size);
+extern "C" Geometry GEOS_DLL *GEOSGeomFromHEX_buf(const char *hex, size_t size);
 extern "C" char GEOS_DLL *GEOSGeomToWKT(const Geometry *g);
 extern "C" char GEOS_DLL *GEOSGeomToWKB_buf(const Geometry *g, size_t *size);
+extern "C" char GEOS_DLL *GEOSGeomToHEX_buf(const Geometry *g, size_t *size);
+extern "C" int GEOS_DLL GEOS_getWKBOutputDims();
 extern "C" int GEOS_DLL GEOS_setWKBOutputDims(int newdims);
+extern "C" GEOSByteOrders GEOS_DLL GEOS_getWKBByteOrder();
+extern "C" GEOSByteOrders GEOS_DLL GEOS_setWKBByteOrder(GEOSByteOrders byteOrder);
 
 extern "C" void GEOS_DLL GEOSSetSRID(Geometry *g, int SRID);
 
@@ -192,6 +203,7 @@ static const GeometryFactory *geomFactory =
 static GEOSMessageHandler NOTICE_MESSAGE;
 static GEOSMessageHandler ERROR_MESSAGE;
 static int WKBOutputDims = 2;
+static GEOSByteOrders WKBByteOrder = (GEOSByteOrders)getMachineByteOrder();
 
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
@@ -614,7 +626,8 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 {
 	try
 	{
-		io::WKBWriter w(WKBOutputDims);
+        int byteOrder = (int) WKBByteOrder;
+		io::WKBWriter w(WKBOutputDims, byteOrder);
 		std::ostringstream s(std::ios_base::binary);
 		w.write(*g, s);
 		std::string wkbstring = s.str();
@@ -651,6 +664,66 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 
 		s.seekg(0, std::ios::beg); // rewind reader pointer
 		Geometry *g = r.read(s);
+		return g;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+/* Read/write wkb hex values.  Returned geometries are
+   owned by the caller.*/
+char *
+GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
+{
+	try
+	{
+        int byteOrder = (int) WKBByteOrder;
+		io::WKBWriter w(WKBOutputDims, byteOrder);
+		std::ostringstream s(std::ios_base::binary);
+		w.writeHEX(*g, s);
+		std::string hexstring = s.str();
+		size_t len = hexstring.length();
+
+		char *result;
+		result = (char*) std::malloc(len);
+		memcpy(result, hexstring.c_str(), len);
+		*size = len;
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry *
+GEOSGeomFromHEX_buf(const char *hex, size_t size)
+{
+	try
+	{
+		std::string hexstring = std::string(hex, size); 
+		io::WKBReader r(*geomFactory);
+		std::istringstream s(std::ios_base::binary);
+		s.str(hexstring);
+
+		s.seekg(0, std::ios::beg); // rewind reader pointer
+		Geometry *g = r.readHEX(s);
 		return g;
 	}
 	catch (const std::exception &e)
@@ -1405,6 +1478,12 @@ GEOSHasZ(Geometry *g)
 }
 
 int
+GEOS_getWKBOutputDims()
+{
+    return WKBOutputDims;
+}
+
+int
 GEOS_setWKBOutputDims(int newdims)
 {
 	if ( newdims < 2 || newdims > 3 )
@@ -1413,6 +1492,21 @@ GEOS_setWKBOutputDims(int newdims)
 	WKBOutputDims = newdims;
 	return olddims;
 }
+
+GEOSByteOrders
+GEOS_getWKBByteOrder()
+{
+	return WKBByteOrder;
+}
+
+GEOSByteOrders
+GEOS_setWKBByteOrder(GEOSByteOrders byteOrder)
+{
+	GEOSByteOrders oldByteOrder = WKBByteOrder;
+	WKBByteOrder = byteOrder;
+	return oldByteOrder;
+}
+
 
 CoordinateSequence *
 GEOSCoordSeq_create(unsigned int size, unsigned int dims)
