@@ -77,6 +77,8 @@ enum GEOSGeomTypes {
 	GEOS_GEOMETRYCOLLECTION
 };
 
+/* Suported byte orders */
+extern enum GEOSByteOrders;
 
 /************************************************************************
  *
