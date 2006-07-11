@@ -83,6 +83,19 @@ const char *GEOSversion();
 void finishGEOS(void);
 
 
+/* Exception handler */
+%exception
+{
+    try
+    {
+        $action
+    }
+    catch (const std::exception& e)
+    {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
+
 
 /* ==============  Language Specific Files ============ */
 
@@ -105,36 +118,31 @@ void finishGEOS(void);
 
 
 
+
 // ===  CoordinateSequence ===
 %{
 typedef struct GeosCoordinateSequence_t *GeosCoordinateSequence;
+
+void checkCoordSeqBounds(GEOSCoordSeq coordSeq, size_t index)
+{
+    size_t size = 0;
+    GEOSCoordSeq_getSize(coordSeq, &size);
+
+    if (index < 0 || index >= size)
+        throw std::runtime_error("Index out of bounds");
+}
 %}
 
+%newobject GeosCoordinateSequence::clone;
 %rename (CoordinateSequence) GeosCoordinateSequence;
 class GeosCoordinateSequence
 {
 public:
-    /* Typemap to verify index is in bounds. */
-    %typemap(check) size_t idx  {
-        /* %typemap(check) size_t idx */
-        GEOSCoordSeq coords = (GEOSCoordSeq) self;
-        size_t size;
-        
-        GEOSCoordSeq_getSize(coords, &size);
-        if ($1 < 0 || $1 >= size)
-            SWIG_exception(SWIG_IndexError, "Index out of bounds");
-    }
 %extend
 {
     GeosCoordinateSequence(size_t size, size_t dims)
     {
         return (GeosCoordinateSequence*) GEOSCoordSeq_create(size, dims);
-    }
-
-    GeosCoordinateSequence(const GeosCoordinateSequence& other)
-    {
-        GEOSCoordSeq coords = (GEOSCoordSeq) other;
-        return (GeosCoordinateSequence*) GEOSCoordSeq_clone(coords);
     }
 
     ~GeosCoordinateSequence()
@@ -143,27 +151,37 @@ public:
         return GEOSCoordSeq_destroy(coords);
     }
 
+    GeosCoordinateSequence* clone()
+    {
+        GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        return (GeosCoordinateSequence*) GEOSCoordSeq_clone(coords);
+    }
+
     int setX(size_t idx, double val)
     {
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         return GEOSCoordSeq_setX(coords, idx, val);
     }
 
     int setY(size_t idx, double val)
     {
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         return GEOSCoordSeq_setY(coords, idx, val);
     }
 
     int setZ(size_t idx, double val)
     {
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         return GEOSCoordSeq_setZ(coords, idx, val);
     }
 
     int setOrdinate(size_t idx, size_t dim, double val)
     {
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         return GEOSCoordSeq_setOrdinate(coords, idx, dim, val);
     }
 
@@ -171,6 +189,7 @@ public:
     {
         double result;
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         GEOSCoordSeq_getX(coords, idx, &result);
         return result;
     }
@@ -179,6 +198,7 @@ public:
     {
         double result;
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         GEOSCoordSeq_getY(coords, idx, &result);
         return result;
     }
@@ -187,6 +207,7 @@ public:
     {
         double result;
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         GEOSCoordSeq_getZ(coords, idx, &result);
         return result;
     }
@@ -195,6 +216,7 @@ public:
     {
         double result;
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
+        checkCoordSeqBounds(coords, idx);
         GEOSCoordSeq_getOrdinate(coords, idx, dim, &result);
         return result;
     }
@@ -216,36 +238,6 @@ public:
     }
 }
 };
-
-
-
-/* Install exception handler for topology operations. */
-/*%exception GeosGeom* Geometry::*
-{
-    $action
-    if (result ==  NULL)
-        SWIG_exception(SWIG_RuntimeError, message);
-}
-
-
-*/
-
-/* Install exception handler for the binary and unary predicates. */
- /*   bool relatePattern(const GeosGeometry* other, const char *pat)
-    bool disjoint(const GeosGeometry* other)
-    bool touches(const GeosGeometry* other)
-    bool intersects(const GeosGeometry* other)
-    bool crosses(const GeosGeometry* other)
-    bool within(const GeosGeometry* other)
-    bool contains(const GeosGeometry* other)
-    bool overlaps(const GeosGeometry* other)
-    bool equals(const GeosGeometry* other)
-    bool isEmpty()
-    bool isValid()
-    bool isSimple()
-    bool isRing()
-    bool isHasZ()*/
-
 
 
 /* ========  Wrapper Classes to Recreate Geom Hierarchy ====== */
@@ -292,19 +284,6 @@ extern GeosGeometry* createGeometry(GEOSGeom geom);
 
 // ===  Attributes ===
 %attribute(GeosGeometry, int, srid, getSRID, setSRID);
-
-%exception
-{
-    try
-    {
-        $action
-    }
-    catch (const std::exception& e)
-    {
-        SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-}
-
 
 %inline %{
 
@@ -577,8 +556,6 @@ public:
     }
 };
 %}
-/* Turn off exception handler */
-%exception;
 
 %wrapper %{
 GeosGeometry* createGeometry(GEOSGeom geom)
