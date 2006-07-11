@@ -1,3 +1,16 @@
+2006-07-11 Charlie Savage <cfis@savagexi.com>
+
+	* swig/geos.i: Updated SWIG bindings to use C API.
+	* capi/geos_c.cpp: Added GEOSGeomFromHEX_buf/GEOSGeomToHEX_buf methods
+	  that allow reading and writing geometries to and from
+	  Hex encoded WKB values.
+	* capi/geos_c.cpp: Added GEOS_getWKBByteOrder/GEOS_setWKBByteOrder methods
+	  that allows clients to specify the output byte order of WKB 
+	  and WKB Hex values that are written by the WKBWriter.
+	* capi/geos_c.cpp: Added GEOS_getWKBOutputDims to mirror 
+		GEOS_setWKBOutputDims.  These methods allows clients to read the
+		current number of dimensions output to WKB and WKB Hex values.
+	
 2006-07-10 Sandro Santilli <strk@refractions.net>
 
 	* capi/geos_c.cpp: don't use dynamic strings as format arg
