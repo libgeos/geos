@@ -250,6 +250,8 @@ public:
 %rename(MultiLinearRing) GeosMultiLinearRing;
 %rename(MultiPolygon) GeosMultiPolygon;
 
+%rename("union") GeosGeometry::geomUnion;
+
 %{
 typedef void GeosGeometry;
 typedef void GeosPoint;
