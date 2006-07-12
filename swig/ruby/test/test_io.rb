@@ -4,7 +4,7 @@ require 'test/unit'
 require 'geos'
 
 
-class TestWkbReader < Test::Unit::TestCase
+class TestIo < Test::Unit::TestCase
   
   def check(wkt, ndr_hex_in, xdr_hex_in)
     geom1 = Geos::geom_from_wkt(wkt)
@@ -123,4 +123,22 @@ class TestWkbReader < Test::Unit::TestCase
 			assert_equal(Geos::GEOS_COLLECTION, geom.type_id)
     end
 	end
+	
+  def test_wkt_invalid
+    assert_raise(RuntimeError) do
+    	geom = Geos::geom_from_wkt("invalid")
+    end
+  end
+  
+  def test_wkb_invalid
+    assert_raise(RuntimeError) do
+    	geom = Geos::geom_from_wkb("invalid")
+    end
+  end
+  
+  def test_hex_invalid
+    assert_raise(RuntimeError) do
+    	geom = Geos::geom_from_hex("invalid")
+    end
+  end
 end
