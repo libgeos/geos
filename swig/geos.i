@@ -5,7 +5,6 @@
 %include "std_string.i"
 %include "std_vector.i"
 %include "std_except.i"
-%include "factory.i"
 
 %{ 
 #include "geos_c.h"
@@ -79,9 +78,8 @@ void errorHandler(const char *fmt, ...)
 
 
 /* Module level methods */
+%rename("version") GEOSversion;
 const char *GEOSversion();
-void finishGEOS(void);
-
 
 /* Exception handler */
 %exception
@@ -121,9 +119,9 @@ void finishGEOS(void);
 
 // ===  CoordinateSequence ===
 %{
-typedef struct GeosCoordinateSequence_t *GeosCoordinateSequence;
+typedef void GeosCoordinateSequence;
 
-void checkCoordSeqBounds(GEOSCoordSeq coordSeq, size_t index)
+void checkCoordSeqBounds(const GEOSCoordSeq coordSeq, const size_t index)
 {
     size_t size = 0;
     GEOSCoordSeq_getSize(coordSeq, &size);
@@ -240,7 +238,7 @@ public:
 };
 
 
-/* ========  Wrapper Classes to Recreate Geom Hierarchy ====== */
+/* ========  Fake Classes to Create Geom Hierarchy ====== */
 %rename(Geometry) GeosGeometry;
 %rename(Point) GeosPoint;
 %rename(LineString) GeosLineString;
@@ -251,6 +249,19 @@ public:
 %rename(MultiLineString) GeosMultiLineString;
 %rename(MultiLinearRing) GeosMultiLinearRing;
 %rename(MultiPolygon) GeosMultiPolygon;
+
+%{
+typedef void GeosGeometry;
+typedef void GeosPoint;
+typedef void GeosLineString;
+typedef void GeosLinearRing;
+typedef void GeosPolygon;
+typedef void GeosGeometryCollection;
+typedef void GeosMultiPoint;
+typedef void GeosMultiLineString;
+typedef void GeosMultiLinearRing;
+typedef void GeosMultiPolygon;
+%}
 
 %newobject GeosGeometry::intersection;
 %newobject GeosGeometry::buffer;
@@ -267,333 +278,474 @@ public:
 %newobject GeosGeometry::topologyPreserveSimplify;
 
 
-%factory(GeosGeometry *,
-         GeosPoint, 
-		 GeosLinearRing,
-         GeosLineString,
-		 GeosPolygon, 
-		 GeosMultiPoint,
-         GeosMultiLineString,
-		 GeosMultiPolygon,
-         GeosGeometryCollection);
+%typemap(out) GeosGeometry*
+{
+    /* %typemap(out) GeosGeometry */
+    GeosGeometry *geom = $1;
+    GEOSGeomTypes geomId = (GEOSGeomTypes)GEOSGeomTypeId((GEOSGeom) geom);
+
+    switch (geomId)
+    {
+    case GEOS_POINT:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosPoint*), 0 | $owner);
+        break;
+	case GEOS_LINESTRING:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosLineString*), 0 | $owner);
+        break;
+	case GEOS_LINEARRING:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosLinearRing*), 0 | $owner);
+        break;
+	case GEOS_POLYGON:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosPolygon*), 0 | $owner);
+        break;
+	case GEOS_MULTIPOINT:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosMultiPoint*), 0 | $owner);
+        break;
+	case GEOS_MULTILINESTRING:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosMultiLineString*), 0 | $owner);
+        break;
+	case GEOS_MULTIPOLYGON:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosMultiPolygon*), 0 | $owner);
+        break;
+	case GEOS_GEOMETRYCOLLECTION:
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosGeometryCollection*), 0 | $owner);
+        break;
+    }
+}
 
 %{
-class GeosGeometry;
-extern GeosGeometry* createGeometry(GEOSGeom geom);
+bool checkBoolResult(char result)
+{
+    int intResult = (int) result;
+
+    if (result == 1)
+        return true;
+    else if (result == 0)
+        return false;
+    else
+        throw std::runtime_error(message);
+}
 %}
-
-// ===  Attributes ===
-%attribute(GeosGeometry, int, srid, getSRID, setSRID);
-
-%inline %{
 
 class GeosGeometry
 {
+private:
+    GeosGeometry();
 public:
-    const GEOSGeom geom_;
-
-    GeosGeometry(GEOSGeom geom): geom_(geom)
-    {
-    }
-
+%extend
+{
     virtual ~GeosGeometry()
     {
-        GEOSGeom_destroy(this->geom_);
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom_destroy(geom);
     }
 
     char *geomType()
     {
-        return GEOSGeomType(this->geom_);
+        GEOSGeom geom = (GEOSGeom) self;
+        return GEOSGeomType(geom);
     }
 
     int typeId()
     {
-        return GEOSGeomTypeId(this->geom_);
+        GEOSGeom geom = (GEOSGeom) self;
+        return GEOSGeomTypeId(geom);
     }
     
     int getSRID()
     {
-        return GEOSGetSRID(this->geom_);
+        GEOSGeom geom = (GEOSGeom) self;
+        return GEOSGetSRID(geom);
     }
 
     void setSRID(int SRID)
     {
-        return GEOSSetSRID(this->geom_, SRID);
+        GEOSGeom geom = (GEOSGeom) self;
+        return GEOSSetSRID(geom, SRID);
     }
 
     size_t getDimensions()
     {
-        return GEOSGeom_getDimensions(this->geom_);
+        GEOSGeom geom = (GEOSGeom) self;
+        return GEOSGeom_getDimensions(geom);
     }
 
+    size_t getNumGeometries()
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        size_t result = GEOSGetNumGeometries(geom);
+        
+        if (result == -1)
+            throw std::runtime_error(message);
+
+        return result;
+    }
 
     /* Topology Operations */
    /* GeosGeometry *envelope()
     {
-        return new GeosGeometry(GEOSEnvelope(this->geom_);
+        return new GeosGeometry(GEOSEnvelope(geom);
     }*/
 
     GeosGeometry *intersection(GeosGeometry *other)
     {
-        return createGeometry(GEOSIntersection(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return (GeosGeometry*) GEOSIntersection(geom, otherGeom);
     }
 
     GeosGeometry *buffer(double width, int quadsegs)
     {
-        return createGeometry(GEOSBuffer(this->geom_, width, quadsegs));
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSBuffer(geom, width, quadsegs);
     }
 
     GeosGeometry *convexHull()
     {
-        return createGeometry(GEOSConvexHull(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSConvexHull(geom);
     }
 
     GeosGeometry *difference(GeosGeometry *other)
     {
-        return createGeometry(GEOSDifference(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return (GeosGeometry*) GEOSDifference(geom, otherGeom);
     }
 
     GeosGeometry *symDifference(GeosGeometry *other)
     {
-        return createGeometry(GEOSSymDifference(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return (GeosGeometry*) GEOSSymDifference(geom, otherGeom);
     }
 
     GeosGeometry *boundary()
     {
-        return createGeometry(GEOSBoundary(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSBoundary(geom);
     }
 
     GeosGeometry *geomUnion(GeosGeometry *other)
     {
-        return createGeometry(GEOSUnion(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return (GeosGeometry*) GEOSUnion(geom, otherGeom);
     }
     
     GeosGeometry *pointOnSurface()
     {
-        return createGeometry(GEOSPointOnSurface(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSPointOnSurface(geom);
     }
 
     GeosGeometry *getCentroid()
     {
-        return createGeometry(GEOSGetCentroid(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSGetCentroid(geom);
     }
 
     char *relate(GeosGeometry *other)
     {
-        return GEOSRelate(this->geom_, other->geom_);
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return GEOSRelate(geom, otherGeom);
     }
 
     /* TODO - expose GEOSPolygonize*/
     GeosGeometry *lineMerge()
     {
-        return createGeometry(GEOSLineMerge(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return GEOSLineMerge(geom);
     }
 
     GeosGeometry *simplify(double tolerance)
     {
-        return createGeometry(GEOSSimplify(this->geom_, tolerance));
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSSimplify(geom, tolerance);
     }
 
     GeosGeometry *topologyPreserveSimplify(double tolerance)
     {
-        return createGeometry(GEOSTopologyPreserveSimplify(this->geom_, tolerance));
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSTopologyPreserveSimplify(geom, tolerance);
     }
 
     /* Binary predicates - return 2 on exception, 1 on true, 0 on false */
     bool relatePattern(const GeosGeometry* other, const char *pat)
     {
-        return checkBoolResult(GEOSRelatePattern(this->geom_, other->geom_, pat));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSRelatePattern(geom, otherGeom, pat));
     }
 
     bool disjoint(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSDisjoint(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSDisjoint(geom, otherGeom));
     }
 
     bool touches(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSTouches(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSTouches(geom, otherGeom));
     }
 
     bool intersects(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSIntersects(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSIntersects(geom, otherGeom));
     }
 
     bool crosses(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSCrosses(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSCrosses(geom, otherGeom));
     }
 
     bool within(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSWithin(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSWithin(geom, otherGeom));
     }
 
     bool contains(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSContains(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSContains(geom, otherGeom));
     }
 
     bool overlaps(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSOverlaps(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSOverlaps(geom, otherGeom));
     }
 
     bool equals(const GeosGeometry* other)
     {
-        return checkBoolResult(GEOSEquals(this->geom_, other->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSEquals(geom, otherGeom));
     }
 
     /* Unary predicate - return 2 on exception, 1 on true, 0 on false */
     bool isEmpty()
     {
-        return checkBoolResult(GEOSisEmpty(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return checkBoolResult(GEOSisEmpty(geom));
     }
 
     bool isValid()
     {
-        return checkBoolResult(GEOSisValid(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return checkBoolResult(GEOSisValid(geom));
     }
 
     bool isSimple()
     {
-        return checkBoolResult(GEOSisSimple(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return checkBoolResult(GEOSisSimple(geom));
     }
 
     bool isRing()
     {
-        return checkBoolResult(GEOSisRing(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return checkBoolResult(GEOSisRing(geom));
     }
 
-    bool isHasZ()
+    bool hasZ()
     {
-        return checkBoolResult(GEOSHasZ(this->geom_));
+        GEOSGeom geom = (GEOSGeom) self;
+        return checkBoolResult(GEOSHasZ(geom));
     }
-protected:
-    bool checkBoolResult(char result)
-    {
-        int intResult = (int) result;
 
-        if (result == 1)
-            return true;
-        else if (result == 0)
-            return false;
-        else
+    /* Miscellaneous Functions.
+       Return 0 on exception, 1 otherwise */
+    double area()
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        double result;
+
+        int code = GEOSArea(geom, &result);
+
+        if (code == 0)
             throw std::runtime_error(message);
+
+        return result;
     }
+
+    double length()
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        double result;
+
+        int code = GEOSLength(geom, &result);
+
+        if (code == 0)
+            throw std::runtime_error(message);
+
+        return result;
+    }
+
+    double distance(const GeosGeometry* other)
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        double result;
+
+        int code = GEOSDistance(geom, otherGeom, &result);
+
+        if (code == 0)
+            throw std::runtime_error(message);
+
+        return result;
+    }
+}
 };
 
 class GeosPoint: public GeosGeometry
 {
+private:
+    GeosPoint();
 public:
-    GeosPoint(GEOSGeom geom): GeosGeometry(geom)
+%extend
+{   
+    GeosCoordinateSequence* getCoordSeq()
     {
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+
+        if (result == NULL)
+            throw std::runtime_error(message);
+
+        return (GeosCoordinateSequence*) result;
     }
+}
 };
 
 class GeosLineString: public GeosGeometry
 {
 public:
-    GeosLineString(GEOSGeom geom): GeosGeometry(geom)
+%extend
+{   
+    GeosCoordinateSequence* getCoordSeq()
     {
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+
+        if (result == NULL)
+            throw std::runtime_error(message);
+
+        return (GeosCoordinateSequence*) result;
     }
+}
 };
 
 class GeosLinearRing: public GeosGeometry
 {
 public:
-    GeosLinearRing(GEOSGeom geom): GeosGeometry(geom)
+%extend
+{   
+    GeosCoordinateSequence* getCoordSeq()
     {
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+
+        if (result == NULL)
+            throw std::runtime_error(message);
+
+        return (GeosCoordinateSequence*) result;
     }
+}
 };
+
 
 class GeosPolygon: public GeosGeometry
 {
 public:
-    GeosPolygon(GEOSGeom geom): GeosGeometry(geom)
+%extend
+{   
+    GeosGeometry* getExteriorRing()
     {
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom result = GEOSGetExteriorRing(geom);
+
+        if (result == NULL)
+            throw std::runtime_error(message);
+
+        return (GeosGeometry*) result;
     }
+
+    size_t getNumInteriorRings()
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        size_t result = GEOSGetNumInteriorRings(geom);
+
+        if (result == -1)
+            throw std::runtime_error(message);
+
+        return result;
+    }
+
+    GeosGeometry* getInteriorRingN(size_t n)
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+
+        size_t size = GEOSGetNumInteriorRings(geom);
+
+        if (n < 0 || n >= size)
+            throw std::runtime_error("Index out of bounds");
+
+        GEOSGeom result = GEOSGetInteriorRingN(geom, n);
+
+        if (result == NULL)
+            throw std::runtime_error(message);
+
+        return (GeosGeometry*) result;
+    }
+}
 };
 
 class GeosGeometryCollection: public GeosGeometry
 {
 public:
-    GeosGeometryCollection(GEOSGeom geom): GeosGeometry(geom)
+%extend
+{   
+    GeosGeometry* getGeometryN(size_t n)
     {
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom result = GEOSGetGeometryN(geom, n);
+
+        if (result == NULL)
+            throw std::runtime_error(message);
+
+        return (GeosGeometry*) result;
     }
+}
 };
 
 class GeosMultiPoint: public GeosGeometryCollection
 {
-public:
-    GeosMultiPoint(GEOSGeom geom): GeosGeometryCollection(geom)
-    {
-    }
 };
 
 class GeosMultiLineString: public GeosGeometryCollection
 {
-public:
-    GeosMultiLineString(GEOSGeom geom): GeosGeometryCollection(geom)
-    {
-    }
 };
 
 class GeosMultiLinearRing: public GeosGeometryCollection
 {
-public:
-    GeosMultiLinearRing(GEOSGeom geom): GeosGeometryCollection(geom)
-    {
-    }
 };
 
 class GeosMultiPolygon: public GeosGeometryCollection
 {
-public:
-    GeosMultiPolygon(GEOSGeom geom): GeosGeometryCollection(geom)
-    {
-    }
 };
-%}
-
-%wrapper %{
-GeosGeometry* createGeometry(GEOSGeom geom)
-{
-    if(geom == NULL)
-        throw std::runtime_error(message);
-
-    GEOSGeomTypes geomId = (GEOSGeomTypes)GEOSGeomTypeId(geom);
-
-    switch (geomId)
-    {
-    case GEOS_POINT:
-        return new GeosPoint(geom);
-        break;
-	case GEOS_LINESTRING:
-        return new GeosLineString(geom);
-        break;
-	case GEOS_LINEARRING:
-        return new GeosLinearRing(geom);
-        break;
-	case GEOS_POLYGON:
-        return new GeosPolygon(geom);
-        break;
-	case GEOS_MULTIPOINT:
-        return new GeosMultiPoint(geom);
-        break;
-	case GEOS_MULTILINESTRING:
-        return new GeosMultiLineString(geom);
-        break;
-	case GEOS_MULTIPOLYGON:
-        return new GeosMultiPolygon(geom);
-        break;
-	case GEOS_GEOMETRYCOLLECTION:
-        return new GeosGeometryCollection(geom);
-        break;
-    }
-}
-%}
 
 
 // ==== Geometry Constructors ===========
@@ -603,29 +755,58 @@ GeosGeometry* createGeometry(GEOSGeom geom)
 %newobject createPolygon;
 
 %apply SWIGTYPE *DISOWN {GeosCoordinateSequence *s};
+%apply SWIGTYPE *DISOWN {GeosLinearRing *shell};
+
+%typemap(default) (GeosLinearRing **holes, size_t nholes)
+{
+    $1 = NULL;
+    $2 = 0;
+}
 
 %inline %{
-GeosPoint *createPoint(GeosCoordinateSequence *s)
+GeosGeometry *createPoint(GeosCoordinateSequence *s)
 {
     GEOSCoordSeq coords = (GEOSCoordSeq) s;
-    return (GeosPoint*) GEOSGeom_createPoint(coords);
+    GEOSGeom geom = GEOSGeom_createPoint(coords);
+
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    return (GeosGeometry*) geom;
 }
 
-GeosLinearRing *createLinearRing(GeosCoordinateSequence *s)
+GeosGeometry *createLineString(GeosCoordinateSequence *s)
 {
     GEOSCoordSeq coords = (GEOSCoordSeq) s;
-    return (GeosLinearRing*) GEOSGeom_createLinearRing(coords);
+    GEOSGeom geom = GEOSGeom_createLineString(coords);
+
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    return (GeosGeometry*) geom;
 }
 
-GeosLineString *createLineString(GeosCoordinateSequence *s)
+GeosGeometry *createLinearRing(GeosCoordinateSequence *s)
 {
     GEOSCoordSeq coords = (GEOSCoordSeq) s;
-    return (GeosLineString*) GEOSGeom_createLineString(coords);
+    GEOSGeom geom = GEOSGeom_createLinearRing(coords);
+
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    return (GeosGeometry*) geom;
 }
 
-GeosPolygon *createPolygon(GEOSGeom shell, GEOSGeom *holes, size_t nholes)
+GeosGeometry *createPolygon(GeosLinearRing *shell, GeosLinearRing **holes, size_t nholes)
 {
-    return (GeosPolygon*) GEOSGeom_createPolygon(shell, holes, nholes);
+    GEOSGeom shellGeom = (GEOSGeom) shell;
+    GEOSGeom* holeGeoms = (GEOSGeom*) holes;
+    GEOSGeom geom = GEOSGeom_createPolygon(shellGeom, holeGeoms, nholes);
+
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    return (GeosGeometry*) geom;
 }
 
 %}
@@ -703,12 +884,18 @@ provided string. */
 %inline %{
 GeosGeometry* geomFromWKT(const char *wkt)
 {
-    return createGeometry(GEOSGeomFromWKT(wkt));
+    GEOSGeom geom = GEOSGeomFromWKT(wkt);
+
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    return (GeosGeometry*) geom;
 }
 
 char *geomToWKT(const GeosGeometry* g)
 {
-    return GEOSGeomToWKT(g->geom_);
+    GEOSGeom geom = (GEOSGeom) g;
+    return GEOSGeomToWKT(geom);
 }
 
 int getWKBOutputDims()
@@ -733,22 +920,33 @@ int setWKBByteOrder(int byteOrder)
 
 GeosGeometry* geomFromWKB(const unsigned char *wkb, size_t size)
 {
-    return createGeometry(GEOSGeomFromWKB_buf(wkb, size));
+    GEOSGeom geom = GEOSGeomFromWKB_buf(wkb, size);
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    return (GeosGeometry*) geom;
 }
 
 unsigned char *geomToWKB(const GeosGeometry* g, size_t *size)
 {
-    return GEOSGeomToWKB_buf(g->geom_, size);
+    GEOSGeom geom = (GEOSGeom) g;
+    return GEOSGeomToWKB_buf(geom, size);
 }
 
 /* use wkb parameter instead of hex so we can reuse the typemap above. */
 GeosGeometry* geomFromHEX(const unsigned char *wkb, size_t size)
 {
-    return createGeometry(GEOSGeomFromHEX_buf(wkb, size));
+    GEOSGeom geom = GEOSGeomFromHEX_buf(wkb, size);
+
+    if(geom == NULL)
+        throw std::runtime_error(message);
+
+    return (GeosGeometry*) geom;
 }
 
 unsigned char *geomToHEX(const GeosGeometry* g, size_t *size)
 {
-    return GEOSGeomToHEX_buf(g->geom_, size);
+    GEOSGeom geom = (GEOSGeom) g;
+    return GEOSGeomToHEX_buf(geom, size);
 }
 %}
