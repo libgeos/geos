@@ -77,8 +77,11 @@ enum GEOSGeomTypes {
 	GEOS_GEOMETRYCOLLECTION
 };
 
-/* Suported byte orders */
-extern enum GEOSByteOrders;
+/* Byte oders exposed via the c api */
+enum GEOSByteOrders {
+	GEOS_WKB_XDR = 0, /* Big Endian */
+	GEOS_WKB_NDR = 1 /* Little Endian */
+};
 
 /************************************************************************
  *

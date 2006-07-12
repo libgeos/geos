@@ -65,12 +65,6 @@
 #  define GEOS_DLL
 #endif
 
-/* Byte oders exposed via the c api */
-enum GEOSByteOrders {
-	GEOS_WKB_XDR = 0, /* Big Endian */
-	GEOS_WKB_NDR = 1 /* Little Endian */
-};
-
 using namespace geos;
 using namespace geos::geom;
 using namespace geos::operation::valid;
@@ -99,8 +93,8 @@ extern "C" char GEOS_DLL *GEOSGeomToWKB_buf(const Geometry *g, size_t *size);
 extern "C" char GEOS_DLL *GEOSGeomToHEX_buf(const Geometry *g, size_t *size);
 extern "C" int GEOS_DLL GEOS_getWKBOutputDims();
 extern "C" int GEOS_DLL GEOS_setWKBOutputDims(int newdims);
-extern "C" GEOSByteOrders GEOS_DLL GEOS_getWKBByteOrder();
-extern "C" GEOSByteOrders GEOS_DLL GEOS_setWKBByteOrder(GEOSByteOrders byteOrder);
+extern "C" int GEOS_DLL GEOS_getWKBByteOrder();
+extern "C" int GEOS_DLL GEOS_setWKBByteOrder(int byteOrder);
 
 extern "C" void GEOS_DLL GEOSSetSRID(Geometry *g, int SRID);
 
@@ -203,7 +197,7 @@ static const GeometryFactory *geomFactory =
 static GEOSMessageHandler NOTICE_MESSAGE;
 static GEOSMessageHandler ERROR_MESSAGE;
 static int WKBOutputDims = 2;
-static GEOSByteOrders WKBByteOrder = (GEOSByteOrders)getMachineByteOrder();
+static int WKBByteOrder = getMachineByteOrder();
 
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
@@ -1493,16 +1487,16 @@ GEOS_setWKBOutputDims(int newdims)
 	return olddims;
 }
 
-GEOSByteOrders
+int
 GEOS_getWKBByteOrder()
 {
 	return WKBByteOrder;
 }
 
-GEOSByteOrders
-GEOS_setWKBByteOrder(GEOSByteOrders byteOrder)
+int
+GEOS_setWKBByteOrder(int byteOrder)
 {
-	GEOSByteOrders oldByteOrder = WKBByteOrder;
+	int oldByteOrder = WKBByteOrder;
 	WKBByteOrder = byteOrder;
 	return oldByteOrder;
 }
