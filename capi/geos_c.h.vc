@@ -121,8 +121,8 @@ extern int GEOS_DLL GEOS_setWKBOutputDims(int newDims);
  * Specify whether the WKB byte order is big or little endian. 
  * The return value is the previous byte order.
  */
-extern GEOSByteOrders GEOS_DLL GEOS_getWKBByteOrder();
-extern GEOSByteOrders GEOS_DLL GEOS_setWKBByteOrder(GEOSByteOrders byteOrder);
+extern int GEOS_DLL GEOS_getWKBByteOrder();
+extern int GEOS_DLL GEOS_setWKBByteOrder(int byteOrder);
 
 extern GEOSGeom GEOS_DLL GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size);
 extern unsigned char GEOS_DLL *GEOSGeomToWKB_buf(const GEOSGeom g, size_t *size);
