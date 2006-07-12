@@ -14,15 +14,17 @@ class TestGeosCombinations < Test::Unit::TestCase
     STDOUT.flush()
 
     geoms = @test_helper.create_geoms()
-
+    new_geoms = Array.new()
+    
     geoms.each do |geom1|
       geoms.each do |geom2|
         begin
           # Get the actual result from the provided block
           result = yield(geom1, geom2)
-          puts result
+          new_geoms.push(result)
+     #     puts result
         # Geometry Collection is not a valid argument
-        rescue Geos::IllegalArgumentException => error
+        rescue RuntimeError => error
           # This is ok
         end
       end
@@ -35,21 +37,21 @@ class TestGeosCombinations < Test::Unit::TestCase
     end
   end
 
-  def test_intersection()
-    run_combination("INTERSECTION") do |geom1, geom2|
-      geom1.intersection(geom2)
-    end
-  end
+  #def test_intersection()
+    #run_combination("INTERSECTION") do |geom1, geom2|
+      #geom1.intersection(geom2)
+    #end
+  #end
   
-  def test_difference()
-    run_combination("DIFFERENCE") do |geom1, geom2|
-      geom1.difference(geom2)
-    end
-  end
+  #def test_difference()
+    #run_combination("DIFFERENCE") do |geom1, geom2|
+      #geom1.difference(geom2)
+    #end
+  #end
   
-  def test_symdifference()
-    run_combination("SYMDIFFERENCE") do |geom1, geom2|
-      geom1.sym_difference(geom2)
-    end
-  end
+  #def test_symdifference()
+    #run_combination("SYMDIFFERENCE") do |geom1, geom2|
+      #geom1.sym_difference(geom2)
+    #end
+  #end
 end
