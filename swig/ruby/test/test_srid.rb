@@ -29,7 +29,7 @@ class SridTest < Test::Unit::TestCase
     # srid=4326;POINT(7 8)
     xdr = "0101000020E61000000000000000001C400000000000002040"
     
-    geom = Geos.geom_from_wbk(xdr)
+    geom = Geos.geom_from_wkb(xdr)
     assert_equal(4326, geom.srid)
 	end
 end
