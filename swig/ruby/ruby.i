@@ -61,7 +61,7 @@
         /* Allocate space for the C array. */
         $1 = (GeosLinearRing**) malloc($2*sizeof(GeosLinearRing*));
       
-        for(int i = 0; i<$2; i++)
+        for(size_t i = 0; i<$2; i++)
         {
             /* Get the Ruby Object */
             VALUE item = rb_ary_entry($input,i);
