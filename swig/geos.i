@@ -900,12 +900,10 @@ extern GEOSGeom GEOS_DLL GEOSGeom_clone(const GEOSGeom g);
 
 /* This typemap allows the scripting language to pass in buffers
    to the geometry write methods. */
-%typemap(in) (const unsigned char* wkb, size_t size) (int alloc = 0, char* temp = 0)
+%typemap(in) (const unsigned char* wkb, size_t size) (int alloc = 0)
 {
-	/* %typemap(in) (const unsigned char* wkb, size_t size) (int alloc = 0, char* temp = 0)*/
-	temp = (char*) $1;
-
-    if (SWIG_AsCharPtrAndSize($input, &temp, &$2, &alloc) != SWIG_OK)
+    /* %typemap(in) (const unsigned char* wkb, size_t size) (int alloc = 0) */
+    if (SWIG_AsCharPtrAndSize($input, (char**)&$1, &$2, &alloc) != SWIG_OK)
         SWIG_exception(SWIG_RuntimeError, "Expecting a string");
     /* Don't want to include last null character! */
     $2--;
@@ -923,12 +921,18 @@ provided string. */
   	$1 = &temp;
 }
 
-/* Create a new target string of the correct size. */
-%typemap(argout) size_t *size (char* temp = 0)
+/* Disable SWIG's normally generated code so we can replace it
+   with the argout typemap below. */
+%typemap(out) unsigned char* 
 {
-	/* %typemap(argout) size_t *size (char* temp =0) */
-	temp = (char*) result;
-    $result = SWIG_FromCharPtrAndSize(&result, $1);
+    /* %typemap(out) unsigned char* */
+}
+
+/* Create a new target string of the correct size. */
+%typemap(argout) size_t *size 
+{
+    /* %typemap(argout) size_t *size */
+    $result = SWIG_FromCharPtrAndSize((const char*)result, *$1);
 }
 
 /* Free the c-string returned  by the function. */
