@@ -2,7 +2,8 @@ SUBDIRS = \
 	tests
 
 EXTRA_DIST = \
-	setup.py \
+	python.i \
+	geos.pth \
 	README.txt 
 
 #MAINTAINERCLEANFILES = geos_wrap.cxx
