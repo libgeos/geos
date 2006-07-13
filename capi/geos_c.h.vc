@@ -52,7 +52,7 @@ extern "C" {
 #define GEOS_CAPI_VERSION_PATCH 0
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
 #define GEOS_CAPI_LAST_INTERFACE (GEOS_CAPI_VERSION_MAJOR+GEOS_CAPI_VERSION_MINOR)
-#define GEOS_CAPI_VERSION "3.3.0-CAPI-1.1.0"
+#define GEOS_CAPI_VERSION "3.0.0rc1-CAPI-1.1.1"
 
  
 /************************************************************************
