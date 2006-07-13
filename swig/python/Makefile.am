@@ -27,16 +27,6 @@ _geos_la_LDFLAGS = -no-undefined -module -avoid-version
 _geos_la_LIBADD = $(top_builddir)/capi/libgeos_c.la $(PYTHON_LDFLAGS)
 
 
-
-#all: geos.py
-#
-#geos.py: geos_wrap.cxx setup.py
-#	$(PYTHON) setup.py build
-#
-#
-#install: geos.py setyp.py
-#	$(PYTHON) setup.py install
-
 if ENABLE_SWIG
 
 geos_wrap.cxx: ../geos.i python.i
