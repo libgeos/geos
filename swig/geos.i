@@ -282,6 +282,10 @@ typedef void GeosMultiPolygon;
 %typemap(out) GeosGeometry*
 {
     /* %typemap(out) GeosGeometry */
+
+    if ($1 == NULL)
+        SWIG_exception(SWIG_RuntimeError, message);
+
     GeosGeometry *geom = $1;
     GEOSGeomTypes geomId = (GEOSGeomTypes)GEOSGeomTypeId((GEOSGeom) geom);
 
@@ -353,6 +357,15 @@ public:
         return GEOSGeomTypeId(geom);
     }
     
+    /*void normalize()
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        int result = GEOSNormalize(geom);
+
+        if (result == -1)
+            throw std::runtime_error(message);
+    }*/
+
     int getSRID()
     {
         GEOSGeom geom = (GEOSGeom) self;
@@ -535,6 +548,13 @@ public:
         GEOSGeom otherGeom = (GEOSGeom) other;
         return checkBoolResult(GEOSEquals(geom, otherGeom));
     }
+
+    /*bool equalsExact(const GeosGeometry* other, double tolerance)
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSEqualsExact(geom, otherGeom, tolerance));
+    }*/
 
     /* Unary predicate - return 2 on exception, 1 on true, 0 on false */
     bool isEmpty()
