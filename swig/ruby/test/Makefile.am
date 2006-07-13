@@ -3,15 +3,19 @@
 RUBY_TESTS = 			\
 	example.rb		\
 	geos_tests.rb		\
+	test_buffer.rb		\
 	test_combinations.rb	\
+	test_coordinate_sequence.rb	\
 	test_envelope.rb	\
+	test_geometry.rb		\
 	test_helper.rb		\
 	test_io.rb		\
 	test_operations.rb	\
 	test_relations.rb	\
-	test_simple.rb
+	test_srid.rb  \
+	test_version.rb
 
 EXTRA_DIST = $(RUBY_TESTS)
 
 test:
-	$(RUBY) $(RUBY_TESTS)
+	$(RUBY) geos_tess.rb
