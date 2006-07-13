@@ -45,6 +45,11 @@ enum GEOSByteOrders {
 	GEOS_WKB_NDR = 1 /* Little Endian */
 };
 
+/* From OffsetCurveSetBuilder.h for buffer operations. */
+%{
+    static const int DEFAULT_QUADRANT_SEGMENTS=8;
+%}
+
 /* Message and Error Handling */
 %{
 
@@ -316,6 +321,12 @@ typedef void GeosMultiPolygon;
         $result = SWIG_NewPointerObj(SWIG_as_voidptr(result), $descriptor(GeosGeometryCollection*), 0 | $owner);
         break;
     }
+}
+
+/* Setup a default typemap for buffer. */
+%typemap(default) int quadsegs
+{
+    $1 = DEFAULT_QUADRANT_SEGMENTS;
 }
 
 %{
