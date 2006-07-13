@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 
 require 'geos'
+require "rexml/document"
+
+XmlTest = Struct.new(:case_id, :test_id,
+                     :operation, :expected,
+                     :geom1, :geom2, 
+                     :arg1, :arg2, :arg3)
 
 class GeosTestHelper
 
@@ -156,5 +162,80 @@ class GeosTestHelper
       wkt = Geos.geom_to_wkt(geom)
       STDOUT << wkt << "\n"
     end
-  end    
-end
+  end 
+  
+  # ----- xml support ---------
+  def load_tests(file_name) 
+    current_path = File.expand_path(__FILE__)
+    xml_path = File.join(current_path, "..", "..", "..", "..", "tests", "xmltester")
+    file_path = File.expand_path(File.join(xml_path, file_name))
+    
+    file = File.new(file_path)
+    result = nil
+    begin
+    	doc = REXML::Document.new(file)
+    	result = load_cases(doc)
+    ensure
+      file.close
+    end
+    result 
+  end
+  
+  def parse_geometry(value)
+    value.strip!
+    
+    if value.match(/\A[0-9A-F]/)
+      Geos.geom_from_hex(value)
+    else
+      Geos.geom_from_wkt(value)
+    end
+  end
+  
+  def load_cases(doc)
+    case_id = 1
+    result = Array.new
+    
+    # get the run element
+    run_element = doc.elements["run"]
+    
+    # Iterate over each case
+    run_element.elements.each("case") do |case_element|
+	    test_id = 1
+      # Get geometry a
+      a_element = case_element.elements["a"]
+      geom1 = parse_geometry(a_element.text) if a_element
+
+      # Get geometry b
+      b_element = case_element.elements["b"]
+      geom2 = parse_geometry(b_element.text) if b_element
+
+      # Iterate over each test in this case
+      case_element.elements.each("test") do |test_element|
+        operation_element = test_element.elements["op"]
+
+        # Get operation name and result
+        operation = operation_element.attributes['name'].strip!
+        expected = operation_element.text.strip!
+        
+        # Figure arguments
+        arg1 = operation_element.attributes['arg1']
+        arg2 = operation_element.attributes['arg2']
+        arg3 = operation_element.attributes['arg3']
+        
+        arg1.strip! if arg1
+        arg2.strip! if arg2
+        arg3.strip! if arg3
+        
+        # Create test
+        test = XmlTest.new(case_id, test_id,
+                           operation, expected,
+                           geom1, geom2,
+                           arg1, arg2, arg3)
+        result.push(test)
+        test_id += 1
+      end      
+      case_id += 1
+    end  
+    result
+	end
+end	
