@@ -106,7 +106,7 @@ const char *GEOSversion();
 
 
 #ifdef SWIGPYTHON
-//	%include ../python/python.i
+	%include ../python/python.i
 #endif
 
 #ifdef SWIGRUBY

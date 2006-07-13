@@ -1,3 +1,15 @@
-%template(vector_GeometryP) std::vector<geos::geom::Geometry *>;
-%template(vector_LineStringP) std::vector<geos::geom::LineString *>;
-%template(vector_PolygonP) std::vector<geos::geom::Polygon *>;
+/* =========================================================================
+ * $Id$
+ *
+ * python.i
+ * 
+ * Copyright 2006 Charlie Savage, cfis@interserv.com
+ *
+ * Interface for a SWIG generated geos module.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ * ========================================================================= */
