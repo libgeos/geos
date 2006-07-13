@@ -1,3 +1,19 @@
+2006-07-13 Charlie Savage <cfis@savagexi.com>
+
+	* swig: Finished porting SWIG bindings to use the C API.
+	* swig: Added SWIG back into the GEOS build system.  To build
+	  either the Ruby or Python bindings:
+	  
+	      ./configure --enable-python --enable-ruby
+	      
+	* automake: Updated EXTRA_DIST to include most SWIG files.
+	  Still have to add generated .cxx and .py files.
+	* tests: Added tests that cover most of the C-API (in Ruby)	  
+	* tests: Started to update the Ruby tests to use the test
+	  data used by the XMLTester.
+	* tests: Added some quick sanity tests for the Python bindings
+	
+		
 2006-07-11 Charlie Savage <cfis@savagexi.com>
 
 	* swig/geos.i: Updated SWIG bindings to use C API.
