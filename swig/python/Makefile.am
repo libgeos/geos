@@ -3,8 +3,7 @@ SUBDIRS = \
 
 EXTRA_DIST = \
 	python.i \
-	geos.pth \
-	README.txt 
+	geos.pth 
 
 #MAINTAINERCLEANFILES = geos_wrap.cxx
 #MOSTLYCLEANFILES = geos.py

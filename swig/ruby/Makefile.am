@@ -1,7 +1,6 @@
 
 EXTRA_DIST = \
-	ruby.i \
-	README.txt 
+	ruby.i 
 
 CLEANFILES = geos_wrap.cxx
 
