@@ -4,7 +4,7 @@ require 'test/unit'
 require 'geos'
 
 
-class TestWkbReader < Test::Unit::TestCase
+class TestGeometry < Test::Unit::TestCase
   def test_create_point
     cs = Geos::CoordinateSequence.new(1,3)
     cs.set_x(0, 7)
