@@ -17,16 +17,13 @@
 import unittest
 
 # Import test cases
-from cases.pointtest import PointTestCase
-from cases.wkttest import WKTReaderTestCase, WKTWriterTestCase
+from test_geometry import TestGeometry
 
 # Create a test suite
 suite = unittest.TestSuite()
 
 # Add tests to the suite
-suite.addTest(PointTestCase)
-suite.addTest(WKTReaderTestCase)
-suite.addTest(WKTWriterTestCase)
+suite.addTest(TestGeometry)
 
 # If module is run as a script, execute every test case in the suite
 if __name__ == '__main__':
