@@ -56,8 +56,6 @@ using namespace geos;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
 
-//using geos::Polygon; // for mingw providing a Polygon global function
-
 template <int (&F)(int)> unsigned char safe_ctype(unsigned char c) { return F(c); }
 
 void
@@ -750,7 +748,7 @@ XMLTester::parseTest()
 			plgnzr.add(gA);
 
 
-			std::vector<Polygon *>*polys = plgnzr.getPolygons();
+            std::vector<geos::geom::Polygon *>*polys = plgnzr.getPolygons();
 			std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>;
 			for (unsigned int i=0; i<polys->size(); i++)
 				newgeoms->push_back((*polys)[i]);
@@ -980,6 +978,9 @@ main(int argC, char* argV[])
 
 /**********************************************************************
  * $Log$
+ * Revision 1.38  2006/07/13 03:59:10  csavage
+ * Changes to compile on VC++ - fully qualified polygon name.  Should also work on MingW, will test next.
+ *
  * Revision 1.37  2006/06/19 20:48:35  strk
  * parseCase(): make sure to exit the <case> tag before returning
  *
