@@ -285,7 +285,6 @@ AC_OUTPUT([
 	swig/Makefile
 	swig/python/Makefile
 	swig/python/tests/Makefile
-	swig/python/tests/cases/Makefile
 	swig/ruby/Makefile
 	swig/ruby/test/Makefile
 	tests/Makefile
