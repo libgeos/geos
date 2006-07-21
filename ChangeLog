@@ -8,6 +8,7 @@
 
 2006-07-21 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/CoordinateList.h: added operator<<
 	* tests/unit/geom/LineSegmentTest.cpp: added another distance() test
 	* source/headers/geos/geom/CoordinateList.h,
 	  source/headers/geos/geom/Makefile.am, tests/unit/Makefile.am,

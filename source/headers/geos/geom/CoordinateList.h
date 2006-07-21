@@ -19,7 +19,7 @@
 #include <geos/geom/Coordinate.h> 
 
 #include <list>
-#include <iosfwd> // ostream
+#include <ostream> // for operator<<
 #include <memory> // for auto_ptr 
 
 // Forward declarations
@@ -49,6 +49,8 @@ public:
 	typedef std::list<Coordinate>::const_iterator const_iterator;
 	typedef std::list<Coordinate>::size_type size_type;
 
+	friend std::ostream& operator<< (std::ostream& os,
+		const CoordinateList& cl);
 
 	CoordinateList(const std::vector<Coordinate>& v)
 		:
@@ -110,6 +112,24 @@ private:
 
 };
 
+inline
+std::ostream& operator<< (std::ostream& os, const CoordinateList& cl)
+{
+	os << "(";
+	for (CoordinateList::const_iterator
+		it=cl.begin(), end=cl.end();
+		it != end;
+		++it)
+	{
+		const Coordinate& c = *it;
+		if ( it != cl.begin() ) os << ", ";
+		os << c;
+	}
+	os << ")";
+
+	return os;
+}
+
 } // namespace geos::geom
 } // namespace geos
 
@@ -118,6 +138,9 @@ private:
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/07/21 17:05:22  strk
+ * added operator<< for CoordinateList class
+ *
  * Revision 1.1  2006/07/21 14:53:12  strk
  * CoordinateList class re-introduced, for list-based ops
  * (not strictly mapped to JTS version, not yet at least)
