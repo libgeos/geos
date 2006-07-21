@@ -8,6 +8,16 @@
 
 2006-07-21 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/precision/GeometrySnapper.h,
+	  source/headers/geos/precision/LineStringSnapper.h,
+	  source/headers/geos/precision/Makefile.am,
+	  source/precision/GeometrySnapper.cpp,
+	  source/precision/LineStringSnapper.cpp,
+	  source/precision/Makefile.am,
+	  tests/unit/Makefile.am,
+	  tests/unit/precision/LineStringSnapperTest.cpp:
+	  Added new precision::LineStringSnapper class + tests
+	  and precision::GeometrySnapper (w/out test)
 	* source/headers/geos/geom/CoordinateList.h: added operator<<
 	* tests/unit/geom/LineSegmentTest.cpp: added another distance() test
 	* source/headers/geos/geom/CoordinateList.h,

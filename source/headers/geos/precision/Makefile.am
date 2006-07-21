@@ -10,11 +10,13 @@
 
 geosdir = $(includedir)/geos/precision
 
-geos_HEADERS = \
-	CommonBitsOp.h	\
-	CommonBitsRemover.h	\
-	EnhancedPrecisionOp.h	\
+geos_HEADERS = 					\
+	CommonBitsOp.h				\
+	CommonBitsRemover.h			\
+	EnhancedPrecisionOp.h			\
 	SimpleGeometryPrecisionReducer.h
 
-noinst_HEADERS = 	\
-	CommonBits.h
+noinst_HEADERS = 				\
+	CommonBits.h				\
+	GeometrySnapper.h			\
+	LineStringSnapper.h
