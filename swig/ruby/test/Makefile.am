@@ -9,7 +9,7 @@ RUBY_TESTS = 		     \
 	test_envelope.rb	 \
 	test_geometry.rb	 \
 	test_helper.rb		 \
-	test_io.rb		     \ 
+	test_io.rb		     \
 	test_operations.rb	 \
 	test_relations.rb	 \
 	test_srid.rb         \
