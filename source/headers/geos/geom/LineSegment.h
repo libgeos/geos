@@ -210,7 +210,7 @@ public:
 	 * @param p the point to find the closest point to
 	 * @return a pair of Coordinates which are the closest points on
 	 * the line segments.
-	 * The returned CoordinateList must be deleted by caller
+	 * The returned CoordinateSequence must be deleted by caller
 	 */
 	CoordinateSequence* closestPoints(const LineSegment& line);
 
@@ -250,6 +250,9 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 
 /**********************************************************************
  * $Log$
+ * Revision 1.8  2006/07/21 14:49:58  strk
+ * Fixed typo in comment
+ *
  * Revision 1.7  2006/06/12 10:10:39  strk
  * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
  *
