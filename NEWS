@@ -1,3 +1,7 @@
+Changes in 2.2.4cvs
+
+        - Added version.in.vc to distribution
+
 Changes in 2.2.3
 
 - CAPI: multiple finishGEOS() calls made harmless.
