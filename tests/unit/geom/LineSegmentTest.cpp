@@ -104,5 +104,16 @@ namespace tut
 		ensure_equals( h1.getLength(), 10 );
 	}
 
+	// 6 - Test distance again()
+	template<>
+	template<>
+	void object::test<6>()
+	{
+		geos::geom::Coordinate p(1, 1);
+		ensure_equals( v1.distance(p), 1 );
+		v1.reverse();
+		ensure_equals( v1.distance(p), 1 );
+	}
+
 } // namespace tut
 

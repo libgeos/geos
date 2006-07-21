@@ -8,6 +8,7 @@
 
 2006-07-21 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/geom/LineSegmentTest.cpp: added another distance() test
 	* source/headers/geos/geom/CoordinateList.h,
 	  source/headers/geos/geom/Makefile.am, tests/unit/Makefile.am,
 	  tests/unit/geom/CoordinateListTest.cpp:
