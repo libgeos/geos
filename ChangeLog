@@ -1,3 +1,11 @@
+2006-07-21 Mateusz Loskot <mateusz@loskot.net>
+
+	* source/headers/geos/geom.h,
+	source/headers/geos/io.h: Wrapped FIXME message with
+	#warning directive to shout about potential headers
+	removal in future.
+
+
 2006-07-21 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/CoordinateList.h,

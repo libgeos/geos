@@ -141,8 +141,10 @@ namespace geom { // geos::geom
 #include <geos/geom/Location.h>
 //#include <geos/geom/Triangle.h>
 
-// FIXME: to be removed, temporarly
-// set to allow a quick successful build
+#ifdef __GNUC__
+#warning *** FIXME: to be removed, temporarly set to allow a quick successful build
+#endif
+
 using namespace geos::geom;
 
 
