@@ -14,6 +14,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
+	geom/CoordinateListTest.cpp \
 	geom/CoordinateTest.cpp \
 	geom/DimensionTest.cpp \
 	geom/EnvelopeTest.cpp \

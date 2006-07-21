@@ -1,3 +1,11 @@
+2006-07-21 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/geom/CoordinateList.h,
+	  source/headers/geos/geom/Makefile.am, tests/unit/Makefile.am,
+	  tests/unit/geom/CoordinateListTest.cpp:
+	  CoordinateList class re-introduced, for list-based ops
+	  (not strictly mapped to JTS version, not yet at least)
+
 2006-07-13 Charlie Savage <cfis@savagexi.com>
 
 	* swig: Finished porting SWIG bindings to use the C API.

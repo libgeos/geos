@@ -17,6 +17,7 @@ geos_HEADERS = 					\
 	CoordinateArraySequenceFactory.h	\
 	CoordinateArraySequenceFactory.inl	\
 	CoordinateFilter.h			\
+	CoordinateList.h			\
 	CoordinateSequence.h			\
 	CoordinateSequenceFactory.h		\
 	Dimension.h				\
