@@ -31,7 +31,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 #include <iostream>
 using std::cerr;
 using std::endl;
@@ -73,14 +73,14 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
 	{
 		Coordinate& srcPt = *it;
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << "Checking for a snap for source coordinate " << srcPt << endl;
 #endif
 
 		geom::Coordinate::ConstVect::const_iterator found = findSnapForVertex(srcPt, snapPts);
 		if ( found == not_found )
 		{	// no snaps found (or no need to snap)
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << "No snap found" << endl;
 #endif
 			continue;
@@ -89,14 +89,14 @@ cerr << "No snap found" << endl;
 		assert(*found);
 		const Coordinate& snapPt = *(*found);
 		
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << "Found snap point " << snapPt << endl;
 #endif
 
 		// update src with snap pt
 		*it = snapPt;
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << "Source point became " << srcPt << endl;
 #endif
 
@@ -124,14 +124,14 @@ LineStringSnapper::findSnapForVertex(const Coordinate& pt,
 		assert(*it);
 		const Coordinate& snapPt = *(*it);
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " misuring distance between snap point " << snapPt << " and source point " << pt << endl;
 #endif
 
 		// shouldn't we look for *all* segments to be snapped rather then a single one?
 		if ( snapPt.equals2D(pt) )
 		{
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " points are equal, returning not-found " << endl;
 #endif
 			return end;
@@ -141,14 +141,14 @@ cerr << " points are equal, returning not-found " << endl;
 		double dist = snapPt.distance(pt);
 		if ( dist <= snapTolerance )
 		{
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " points are within distance (" << dist << ") returning iterator to snap point" << endl;
 #endif
 			return it;
 		}
 	}
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " No snap point within distance, returning not-found" << endl;
 #endif
 
@@ -162,7 +162,7 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
 			const geom::Coordinate::ConstVect& snapPts)
 {
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " Snapping segment from: " << srcCoords << endl;
 #endif
 
@@ -174,7 +174,7 @@ cerr << " Snapping segment from: " << srcCoords << endl;
 		assert(*it);
 		const Coordinate& snapPt = *(*it);
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << "Checking for a segment to snap to snapPt " << snapPt << endl;
 #endif
 
@@ -185,12 +185,12 @@ cerr << "Checking for a segment to snap to snapPt " << snapPt << endl;
 			findSegmentToSnap(snapPt, srcCoords.begin(), too_far);
 		if ( segpos == too_far)
 		{
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " No segment to snap" << endl;
 #endif
 			continue;
 		}
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " Segment to be snapped found, inserting point" << endl;
 #endif
 		// insert must happen one-past first point (before next point)
@@ -198,7 +198,7 @@ cerr << " Segment to be snapped found, inserting point" << endl;
 		srcCoords.insert(segpos, snapPt);
 	}
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " After segment snapping, srcCoors are: " << srcCoords << endl;
 #endif
 
@@ -221,14 +221,14 @@ LineStringSnapper::findSegmentToSnap(
 		++to;
 		seg.p1 = *to;
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " Checking segment " << seg << " for snapping against point" << snapPt << endl;
 #endif
 
 		if ( seg.p0.equals2D(snapPt) || seg.p1.equals2D(snapPt) )
 		{
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " One of segment endpoints equal snap point, checkin next" << endl;
 #endif
 			// no snapping needed, check next
@@ -238,14 +238,14 @@ cerr << " One of segment endpoints equal snap point, checkin next" << endl;
 		double dist = seg.distance(snapPt);
 		if ( dist <= snapTolerance )
 		{
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " Segment/snapPt distance within tolerance (" << dist << ") returning iterator to start point" << endl;
 #endif
 			return from;
 		}
 	}
 
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 cerr << " No segment within distance" << endl;
 #endif
 
@@ -257,6 +257,9 @@ cerr << " No segment within distance" << endl;
 
 /**********************************************************************
  * $Log$
+ * Revision 1.2  2006/07/21 17:59:05  strk
+ * Fixed preprocessor directive use
+ *
  * Revision 1.1  2006/07/21 17:09:14  strk
  * Added new precision::LineStringSnapper class + test
  * and precision::GeometrySnapper (w/out test)
