@@ -17,7 +17,7 @@
 	  tests/unit/Makefile.am,
 	  tests/unit/precision/LineStringSnapperTest.cpp:
 	  Added new precision::LineStringSnapper class + tests
-	  and precision::GeometrySnapper (w/out test)
+	  and precision::GeometrySnapper + tests
 	* source/headers/geos/geom/CoordinateList.h: added operator<<
 	* tests/unit/geom/LineSegmentTest.cpp: added another distance() test
 	* source/headers/geos/geom/CoordinateList.h,
