@@ -111,7 +111,6 @@ Changes in 3.0.0
 	- Fixed PointLocator handling of LinearRings
 	- Added missing ::clone() methods for Multi* geoms 
 
-
 - (Partial) Detailed list of changes:
 	- Changed SegmentNode to contain a *real* Coordinate (not a pointer)
   	  to reduce construction costs.
@@ -149,6 +148,11 @@ Changes in 3.0.0
 	- Changed CoordinateFilter interface to have a const method
 	  for filter_rw, updated interfaces using this to take
 	  const CoordinateFilter (apply_rw).
+
+
+Changes in 2.2.4
+
+	- Added version.in.vc to distribution
 
 Changes in 2.2.1
 
