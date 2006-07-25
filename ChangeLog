@@ -1,3 +1,7 @@
+2006-07-25 Sandro Santilli <strk@refractions.net>
+
+	* autogen.sh: make failures more visible
+
 2006-07-21 Mateusz Loskot <mateusz@loskot.net>
 
 	* source/headers/geos/geom.h,
