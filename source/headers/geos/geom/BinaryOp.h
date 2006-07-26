@@ -32,15 +32,16 @@
  *
  *	- Try with original input.
  *	- Try removing common bits from input coordinate values
+ *	- Try snaping input geometries to each other
  *	- Try snaping input coordinates to a increasing grid (size from 1/25 to 1)
  *	- Try simplifiying input with increasing tolerance (from 0.01 to 0.04)
  *
  * If none of the step succeeds the original exception is thrown.
  *
- * Note that you can skip Grid snapping and Simplify policies
+ * Note that you can skip Grid snapping, Geometry snapping and Simplify policies
  * by a compile-time define when building geos.
- * See USE_TP_SIMPLIFY_POLICY and USE_PRECISION_REDUCTION_POLICY
- * macros below.
+ * See USE_TP_SIMPLIFY_POLICY, USE_PRECISION_REDUCTION_POLICY and
+ * USE_SNAPPING_POLICY macros below.
  *
  *
  **********************************************************************/
@@ -50,6 +51,7 @@
 #include <geos/util/TopologyException.h>
 #include <geos/precision/CommonBitsRemover.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
+#include <geos/precision/GeometrySnapper.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 
 #include <memory> // for auto_ptr
@@ -74,6 +76,13 @@
 # define USE_TP_SIMPLIFY_POLICY 1
 #endif
 
+/*
+ * Use snapping policy
+ */
+#ifndef USE_SNAPPING_POLICY
+# define USE_SNAPPING_POLICY 1
+#endif
+
 namespace geos {
 namespace geom { // geos::geom
 
@@ -86,10 +95,12 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	GeomPtr ret;
 	util::TopologyException origException;
 
-
 	// Try with original input
 	try
 	{
+#if GEOS_DEBUG_BINARYOP
+	//std::cerr << "Trying with original input." << std::endl;
+#endif
 		ret.reset(_Op(g0, g1));
 		return ret;
 	}
@@ -102,19 +113,36 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	}
 
 
-	// Try removing common bits
+	// Try removing common bits (possibly obsoleted by snapping above)
+
+	// keep these out of try block to reuse in case of snapping
+	GeomPtr rG0;
+	GeomPtr rG1;
+	precision::CommonBitsRemover cbr;
+
 	try
 	{
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "Trying with Common bits remover." << std::endl;
 #endif
-		precision::CommonBitsRemover cbr;
 
 		cbr.add(g0);
 		cbr.add(g1);
 
-		GeomPtr rG0( cbr.removeCommonBits(g0->clone()) );
-		GeomPtr rG1( cbr.removeCommonBits(g1->clone()) );
+		rG0.reset( cbr.removeCommonBits(g0->clone()) );
+		rG1.reset( cbr.removeCommonBits(g1->clone()) );
+
+#if GEOS_DEBUG_BINARYOP
+		if ( ! rG0->isValid() )
+		{
+			std::cerr << " CBR: geom 0 is invalid!" << std::endl;
+		}
+
+		if ( ! rG1->isValid() )
+		{
+			std::cerr << " CBR: geom 1 is invalid!" << std::endl;
+		}
+#endif
 
 		ret.reset( _Op(rG0.get(), rG1.get()) );
 
@@ -128,6 +156,60 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		std::cerr << "CBR: " << ex.what() << std::endl;
 #endif
 	}
+
+	// Try with snapping
+// {
+#if USE_SNAPPING_POLICY
+
+#if GEOS_DEBUG_BINARYOP
+	std::cerr << "Trying with snapping " << std::endl;
+#endif
+
+	try {
+		// Remove common bits (before snapping, to have less snaps)
+		// Snap each geometry on the other
+		geos::precision::GeometrySnapper snapper0( *rG0 );
+		GeomPtr snapG0( snapper0.snapTo(*rG1) );
+
+		// NOTE: second geom is snapped on the snapped first one
+		geos::precision::GeometrySnapper snapper1( *rG1 );
+		GeomPtr snapG1( snapper0.snapTo(*rG0) );
+
+		// Check input validity
+#if GEOS_DEBUG_BINARYOP
+		if ( ! snapG0->isValid() )
+		{
+			std::cerr << " SNAP: snapped geom 0 is invalid!" << std::endl;
+		}
+
+		if ( ! snapG1->isValid() )
+		{
+			std::cerr << " SNAP: snapped geom 1 is invalid!" << std::endl;
+		}
+#endif
+
+		// Run the binary op
+
+		ret.reset( _Op(snapG0.get(), snapG1.get()) );
+
+		// Add common bits
+		cbr.addCommonBits( ret.get() );
+
+		return ret;
+
+	}
+	catch (const util::TopologyException& ex)
+	{
+#if GEOS_DEBUG_BINARYOP
+		std::cerr << "SNAP: " << ex.what() << std::endl;
+#endif
+	}
+
+#endif // USE_SNAPPIN_POLICY }
+
+
+
+
 
 // {
 #if USE_PRECISION_REDUCTION_POLICY
