@@ -1,8 +1,0 @@
-.cvsignore
-.deps
-.libs
-example
-Makefile
-Makefile.in
-doxygen_docs
-Doxyfile
