@@ -6,6 +6,7 @@ GEOS_JTS_PORT="@JTS_PORT@"
 noinst_PROGRAMS = geostest 
 
 geostest_SOURCES = geostest.c
+geostest_LDFLAGS = -lstdc++
 geostest_LDADD = libgeos_c.la
 geostest_INCLUDES = -I.
 

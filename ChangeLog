@@ -1,5 +1,8 @@
 2006-07-26 Sandro Santilli <strk@refractions.net>
 
+	* capi/Makefile.am: forced link of geostest against stdc++ lib
+	* tests/xmltester/XMLTester.cpp: added <cmath>
+	  include (for fabs use)
 	* source/headers/geos/geom/BinaryOp.h:
 	  Added geometry snapping heuristic
 

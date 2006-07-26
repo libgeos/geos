@@ -46,6 +46,7 @@
 #include <memory>
 #include <functional>
 #include <stdexcept>
+#include <cmath>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -977,7 +978,7 @@ main(int argC, char* argV[])
 }
 
 /**********************************************************************
- * $Log$
+ * $Log: XMLTester.cpp,v $
  * Revision 1.38  2006/07/13 03:59:10  csavage
  * Changes to compile on VC++ - fully qualified polygon name.  Should also work on MingW, will test next.
  *
