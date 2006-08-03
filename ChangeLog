@@ -1,14 +1,14 @@
 2006-08-03 Charlie Savage <cfis@savagexi.com>
 
-	* Added equalsExact and normalize to the c api as discussed
-	  here http://geos.refractions.net/pipermail/geos-devel/2006-July/002452.html.
+	* Added equalsExact and normalize to the c api as discussed here
+	http://geos.refractions.net/pipermail/geos-devel/2006-July/002452.html.
 
 2006-08-03 Charlie Savage <cfis@savagexi.com>
 
 	* swig/python/Makefile.am: geos.py and geos_wrap.cxx are 
-				now removed by make maintainer-clean but not make clean.
+	now removed by make maintainer-clean but not make clean.
 	* swig/ruby/Makefile.am: geos.py and geos_wrap.cxx are 
-				now removed by make maintainer-clean but not make clean.
+	now removed by make maintainer-clean but not make clean.
 
 006-08-03 Mateusz Loskot <mateusz@loskot.net>
 
