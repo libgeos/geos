@@ -2,7 +2,7 @@
 EXTRA_DIST = \
 	ruby.i 
 
-CLEANFILES = geos_wrap.cxx
+MAINTAINERCLEANFILES = geos_wrap.cxx
 
 if ENABLE_RUBY
 

@@ -5,9 +5,7 @@ EXTRA_DIST = \
 	python.i \
 	geos.pth 
 
-#MAINTAINERCLEANFILES = geos_wrap.cxx
-#MOSTLYCLEANFILES = geos.py
-CLEANFILES = geos_wrap.cxx geos.py
+MAINTAINERCLEANFILES = geos.py geos_wrap.cxx
 
 if ENABLE_PYTHON
 

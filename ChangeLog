@@ -1,4 +1,11 @@
-2006-08-03 Mateusz Loskot <mateusz@loskot.net>
+2006-08-03 Charlie Savage <cfis@savagexi.com>
+
+	* swig/python/Makefile.am: geos.py and geos_wrap.cxx are 
+				now removed by make maintainer-clean but not make clean.
+	* swig/ruby/Makefile.am: geos.py and geos_wrap.cxx are 
+				now removed by make maintainer-clean but not make clean.
+
+006-08-03 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/geos_unit.cpp: fixed Bug #90
 
