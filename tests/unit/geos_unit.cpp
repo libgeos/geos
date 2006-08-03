@@ -107,7 +107,16 @@ int main(int argc, const char* argv[])
     geos::io::Unload::Release();
 
 	// Check failures number and signal them the World
-	return (visi.get_failures_count() ? 1 : 0);
+	int failures = visi.get_failures_count();
+	if (failures > 0)
+    {
+        // Return number of failures as an error code
+        return failures;
+    }
+    else
+    {
+       return EXIT_SUCCESS;
+    }
 	
 } // main
 
