@@ -27,6 +27,15 @@ extern "C"
 }
 #endif
 
+#if defined(__GNUC__) && defined(_WIN32)
+/* For MingW the appropriate definitions are included in
+ math.h and float.h but the definitions in 
+ math.h are only included if __STRICT_ANSI__
+ is not defined.  Since GEOS is compiled with -ansi that
+ means those definitions are not available. */
+#include <float.h>
+#endif
+
 
 //Defines NaN for intel platforms
 //Don't forget to define infinities
