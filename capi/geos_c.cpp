@@ -121,11 +121,13 @@ extern "C" Geometry GEOS_DLL *GEOSUnion(Geometry *g1,Geometry *g2);
 extern "C" const Geometry GEOS_DLL *GEOSGetGeometryN(Geometry *g1, int n);
 extern "C" const Geometry GEOS_DLL *GEOSGetExteriorRing(Geometry *g1);
 extern "C" const Geometry GEOS_DLL *GEOSGetInteriorRingN(Geometry *g1, int n);
+extern "C" int GEOS_DLL GEOSNormalize(Geometry *g1);
 extern "C" int GEOS_DLL GEOSGetNumInteriorRings(Geometry *g1);
 extern "C" int GEOS_DLL GEOSGetSRID(Geometry *g1);
 extern "C" int GEOS_DLL GEOSGetNumGeometries(Geometry *g1);
 extern "C" char GEOS_DLL GEOSisSimple(Geometry *g1);
 extern "C" char GEOS_DLL GEOSEquals(const Geometry *g1, const Geometry*g2);
+extern "C" char GEOS_DLL GEOSEqualsExact(const Geometry *g1, const Geometry*g2, double tolerance);
 extern "C" char GEOS_DLL GEOSisRing(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
@@ -487,6 +489,28 @@ GEOSEquals(const Geometry *g1, const Geometry *g2)
 	try {
 		bool result;
 		result = g1->equals(g2);
+		return result;
+	}
+
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return 2;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 2;
+	}
+}
+
+char
+GEOSEqualsExact(const Geometry *g1, const Geometry *g2, double tolerance)
+{
+	try {
+		bool result;
+		result = g1->equalsExact(g2, tolerance);
 		return result;
 	}
 
@@ -1129,6 +1153,30 @@ GEOSGetNumCoordinates(const Geometry *g1)
 		ERROR_MESSAGE("Unknown exception thrown");
 		return -1;
 	}
+}
+
+/*
+ * Return -1 on exception, 0 otherwise. 
+ * Converts Geometry to normal form (or canonical form).
+ */
+int
+GEOSNormalize(Geometry *g1)
+{
+	try{
+		g1->normalize();
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return -1;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return -1;
+	}
+    return 0;
 }
 
 int

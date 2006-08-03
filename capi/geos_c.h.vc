@@ -265,6 +265,7 @@ extern char GEOS_DLL GEOSWithin(const GEOSGeom g1, const GEOSGeom g2);
 extern char GEOS_DLL GEOSContains(const GEOSGeom g1, const GEOSGeom g2);
 extern char GEOS_DLL GEOSOverlaps(const GEOSGeom g1, const GEOSGeom g2);
 extern char GEOS_DLL GEOSEquals(const GEOSGeom g1, const GEOSGeom g2);
+extern char GEOS_DLL GEOSEqualsExact(const Geometry *g1, const Geometry*g2, double tolerance);
 
 
 /************************************************************************
@@ -306,6 +307,9 @@ extern size_t GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
  * it must NOT be destroyed directly.
  */
 extern const GEOSGeom GEOS_DLL GEOSGetGeometryN(const GEOSGeom g, size_t n);
+
+/* Return -1 on exception */
+extern size_t GEOS_DLL GEOSNormalize(Geometry *g1);
 
 /* Return -1 on exception */
 extern size_t GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeom g1);
