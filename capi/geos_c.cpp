@@ -127,7 +127,7 @@ extern "C" int GEOS_DLL GEOSGetSRID(Geometry *g1);
 extern "C" int GEOS_DLL GEOSGetNumGeometries(Geometry *g1);
 extern "C" char GEOS_DLL GEOSisSimple(Geometry *g1);
 extern "C" char GEOS_DLL GEOSEquals(const Geometry *g1, const Geometry*g2);
-extern "C" char GEOS_DLL GEOSEqualsExact(const Geometry *g1, const Geometry*g2, double tolerance);
+extern "C" char GEOS_DLL GEOSEqualsExact(const Geometry *g1, const Geometry *g2, double tolerance);
 extern "C" char GEOS_DLL GEOSisRing(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
