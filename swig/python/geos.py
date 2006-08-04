@@ -128,6 +128,7 @@ class Geometry(object):
     __del__ = lambda self : None;
     def geomType(*args): return _geos.Geometry_geomType(*args)
     def typeId(*args): return _geos.Geometry_typeId(*args)
+    def normalize(*args): return _geos.Geometry_normalize(*args)
     def getSRID(*args): return _geos.Geometry_getSRID(*args)
     def setSRID(*args): return _geos.Geometry_setSRID(*args)
     def getDimensions(*args): return _geos.Geometry_getDimensions(*args)
@@ -154,6 +155,7 @@ class Geometry(object):
     def contains(*args): return _geos.Geometry_contains(*args)
     def overlaps(*args): return _geos.Geometry_overlaps(*args)
     def equals(*args): return _geos.Geometry_equals(*args)
+    def equalsExact(*args): return _geos.Geometry_equalsExact(*args)
     def isEmpty(*args): return _geos.Geometry_isEmpty(*args)
     def isValid(*args): return _geos.Geometry_isValid(*args)
     def isSimple(*args): return _geos.Geometry_isSimple(*args)

@@ -1884,6 +1884,13 @@ SWIGINTERN int GeosGeometry_typeId(GeosGeometry *self){
         GEOSGeom geom = (GEOSGeom) self;
         return GEOSGeomTypeId(geom);
     }
+SWIGINTERN void GeosGeometry_normalize(GeosGeometry *self){
+        GEOSGeom geom = (GEOSGeom) self;
+        int result = GEOSNormalize(geom);
+
+        if (result == -1)
+            throw std::runtime_error(message);
+    }
 SWIGINTERN int GeosGeometry_getSRID(GeosGeometry *self){
         GEOSGeom geom = (GEOSGeom) self;
         return GEOSGetSRID(geom);
@@ -2113,6 +2120,11 @@ SWIGINTERN bool GeosGeometry_equals(GeosGeometry *self,GeosGeometry const *other
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom otherGeom = (GEOSGeom) other;
         return checkBoolResult(GEOSEquals(geom, otherGeom));
+    }
+SWIGINTERN bool GeosGeometry_equalsExact(GeosGeometry *self,GeosGeometry const *other,double tolerance){
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSEqualsExact(geom, otherGeom, tolerance));
     }
 SWIGINTERN bool GeosGeometry_isEmpty(GeosGeometry *self){
         GEOSGeom geom = (GEOSGeom) self;
@@ -2984,6 +2996,36 @@ _wrap_Geometry_type_id(int argc, VALUE *argv, VALUE self) {
   }
   vresult = SWIG_From_int(static_cast< int >(result));
   return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Geometry_normalize(int argc, VALUE *argv, VALUE self) {
+  GeosGeometry *arg1 = (GeosGeometry *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "normalize" "', argument " "1"" of type '" "GeosGeometry *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosGeometry * >(argp1);
+  {
+    try
+    {
+      GeosGeometry_normalize(arg1);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
 fail:
   return Qnil;
 }
@@ -4432,6 +4474,55 @@ _wrap_Geometry_equals(int argc, VALUE *argv, VALUE self) {
     try
     {
       result = (bool)GeosGeometry_equals(arg1,(GeosGeometry const *)arg2);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_Geometry_equals_exact(int argc, VALUE *argv, VALUE self) {
+  GeosGeometry *arg1 = (GeosGeometry *) 0 ;
+  GeosGeometry *arg2 = (GeosGeometry *) 0 ;
+  double arg3 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 2) || (argc > 2)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 2)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "equalsExact" "', argument " "1"" of type '" "GeosGeometry *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosGeometry * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "equalsExact" "', argument " "2"" of type '" "GeosGeometry const *""'"); 
+  }
+  arg2 = reinterpret_cast< GeosGeometry * >(argp2);
+  ecode3 = SWIG_AsVal_double(argv[1], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "equalsExact" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try
+    {
+      result = (bool)GeosGeometry_equalsExact(arg1,(GeosGeometry const *)arg2,arg3);
     }
     catch (const std::exception& e)
     {
@@ -6349,6 +6440,7 @@ SWIGEXPORT void Init_geos(void) {
   rb_undef_alloc_func(cGeometry.klass);
   rb_define_method(cGeometry.klass, "geom_type", VALUEFUNC(_wrap_Geometry_geom_type), -1);
   rb_define_method(cGeometry.klass, "type_id", VALUEFUNC(_wrap_Geometry_type_id), -1);
+  rb_define_method(cGeometry.klass, "normalize", VALUEFUNC(_wrap_Geometry_normalize), -1);
   rb_define_method(cGeometry.klass, "get_srid", VALUEFUNC(_wrap_Geometry_get_srid), -1);
   rb_define_alias(cGeometry.klass, "srid", "get_srid");
   rb_define_method(cGeometry.klass, "set_srid", VALUEFUNC(_wrap_Geometry_set_srid), -1);
@@ -6377,6 +6469,7 @@ SWIGEXPORT void Init_geos(void) {
   rb_define_method(cGeometry.klass, "contains?", VALUEFUNC(_wrap_Geometry_containsq___), -1);
   rb_define_method(cGeometry.klass, "overlaps?", VALUEFUNC(_wrap_Geometry_overlapsq___), -1);
   rb_define_method(cGeometry.klass, "equals", VALUEFUNC(_wrap_Geometry_equals), -1);
+  rb_define_method(cGeometry.klass, "equals_exact", VALUEFUNC(_wrap_Geometry_equals_exact), -1);
   rb_define_method(cGeometry.klass, "is_empty?", VALUEFUNC(_wrap_Geometry_is_emptyq___), -1);
   rb_define_method(cGeometry.klass, "is_valid?", VALUEFUNC(_wrap_Geometry_is_validq___), -1);
   rb_define_method(cGeometry.klass, "is_simple?", VALUEFUNC(_wrap_Geometry_is_simpleq___), -1);

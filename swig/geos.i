@@ -368,14 +368,14 @@ public:
         return GEOSGeomTypeId(geom);
     }
     
-    /*void normalize()
+    void normalize()
     {
         GEOSGeom geom = (GEOSGeom) self;
         int result = GEOSNormalize(geom);
 
         if (result == -1)
             throw std::runtime_error(message);
-    }*/
+    }
 
     int getSRID()
     {
@@ -560,12 +560,12 @@ public:
         return checkBoolResult(GEOSEquals(geom, otherGeom));
     }
 
-    /*bool equalsExact(const GeosGeometry* other, double tolerance)
+    bool equalsExact(const GeosGeometry* other, double tolerance)
     {
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom otherGeom = (GEOSGeom) other;
         return checkBoolResult(GEOSEqualsExact(geom, otherGeom, tolerance));
-    }*/
+    }
 
     /* Unary predicate - return 2 on exception, 1 on true, 0 on false */
     bool isEmpty()

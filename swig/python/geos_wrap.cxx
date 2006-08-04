@@ -3118,6 +3118,13 @@ SWIGINTERN int GeosGeometry_typeId(GeosGeometry *self){
         GEOSGeom geom = (GEOSGeom) self;
         return GEOSGeomTypeId(geom);
     }
+SWIGINTERN void GeosGeometry_normalize(GeosGeometry *self){
+        GEOSGeom geom = (GEOSGeom) self;
+        int result = GEOSNormalize(geom);
+
+        if (result == -1)
+            throw std::runtime_error(message);
+    }
 SWIGINTERN int GeosGeometry_getSRID(GeosGeometry *self){
         GEOSGeom geom = (GEOSGeom) self;
         return GEOSGetSRID(geom);
@@ -3338,6 +3345,11 @@ SWIGINTERN bool GeosGeometry_equals(GeosGeometry *self,GeosGeometry const *other
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom otherGeom = (GEOSGeom) other;
         return checkBoolResult(GEOSEquals(geom, otherGeom));
+    }
+SWIGINTERN bool GeosGeometry_equalsExact(GeosGeometry *self,GeosGeometry const *other,double tolerance){
+        GEOSGeom geom = (GEOSGeom) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSEqualsExact(geom, otherGeom, tolerance));
     }
 SWIGINTERN bool GeosGeometry_isEmpty(GeosGeometry *self){
         GEOSGeom geom = (GEOSGeom) self;
@@ -5081,6 +5093,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Geometry_normalize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  GeosGeometry *arg1 = (GeosGeometry *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Geometry_normalize",1,1,&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Geometry_normalize" "', argument " "1"" of type '" "GeosGeometry *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosGeometry * >(argp1);
+  {
+    try
+    {
+      GeosGeometry_normalize(arg1);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Geometry_getSRID(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   GeosGeometry *arg1 = (GeosGeometry *) 0 ;
@@ -6494,6 +6536,55 @@ SWIGINTERN PyObject *_wrap_Geometry_equals(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (bool)GeosGeometry_equals(arg1,(GeosGeometry const *)arg2);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Geometry_equalsExact(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  GeosGeometry *arg1 = (GeosGeometry *) 0 ;
+  GeosGeometry *arg2 = (GeosGeometry *) 0 ;
+  double arg3 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if(!PyArg_UnpackTuple(args,(char *)"Geometry_equalsExact",3,3,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Geometry_equalsExact" "', argument " "1"" of type '" "GeosGeometry *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosGeometry * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Geometry_equalsExact" "', argument " "2"" of type '" "GeosGeometry const *""'"); 
+  }
+  arg2 = reinterpret_cast< GeosGeometry * >(argp2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Geometry_equalsExact" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try
+    {
+      result = (bool)GeosGeometry_equalsExact(arg1,(GeosGeometry const *)arg2,arg3);
     }
     catch (const std::exception& e)
     {
@@ -8253,6 +8344,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Geometry", _wrap_delete_Geometry, METH_VARARGS, NULL},
 	 { (char *)"Geometry_geomType", _wrap_Geometry_geomType, METH_VARARGS, NULL},
 	 { (char *)"Geometry_typeId", _wrap_Geometry_typeId, METH_VARARGS, NULL},
+	 { (char *)"Geometry_normalize", _wrap_Geometry_normalize, METH_VARARGS, NULL},
 	 { (char *)"Geometry_getSRID", _wrap_Geometry_getSRID, METH_VARARGS, NULL},
 	 { (char *)"Geometry_setSRID", _wrap_Geometry_setSRID, METH_VARARGS, NULL},
 	 { (char *)"Geometry_getDimensions", _wrap_Geometry_getDimensions, METH_VARARGS, NULL},
@@ -8279,6 +8371,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Geometry_contains", _wrap_Geometry_contains, METH_VARARGS, NULL},
 	 { (char *)"Geometry_overlaps", _wrap_Geometry_overlaps, METH_VARARGS, NULL},
 	 { (char *)"Geometry_equals", _wrap_Geometry_equals, METH_VARARGS, NULL},
+	 { (char *)"Geometry_equalsExact", _wrap_Geometry_equalsExact, METH_VARARGS, NULL},
 	 { (char *)"Geometry_isEmpty", _wrap_Geometry_isEmpty, METH_VARARGS, NULL},
 	 { (char *)"Geometry_isValid", _wrap_Geometry_isValid, METH_VARARGS, NULL},
 	 { (char *)"Geometry_isSimple", _wrap_Geometry_isSimple, METH_VARARGS, NULL},
