@@ -285,6 +285,8 @@ OBJ = 	algorithm\CentroidArea.obj \
 	precision\CommonBitsOp.obj \
 	precision\CommonBitsRemover.obj \
 	precision\EnhancedPrecisionOp.obj \
+	precision\GeometrySnapper.obj \
+	precision\LineStringSnapper.obj \
 	precision\SimpleGeometryPrecisionReducer.obj \
 	simplify\DouglasPeuckerLineSimplifier.obj \
 	simplify\DouglasPeuckerSimplifier.obj \
