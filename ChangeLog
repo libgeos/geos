@@ -1,3 +1,9 @@
+2006-07-26 Sandro Santilli <strk@refractions.net>
+
+	* source/index/quadtree/Root.cpp (insertContained):
+	  fixed bug in isZeroY computation - see
+	  geos-devel/2006-August/002541.html
+
 2006-08-03 Charlie Savage <cfis@savagexi.com>
 
 	* Added equalsExact and normalize to the c api as discussed here

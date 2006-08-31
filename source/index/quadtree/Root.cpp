@@ -100,7 +100,7 @@ Root::insertContained(Node *tree, const Envelope *itemEnv, void *item)
 	 * the smallest existing quad containing the query
 	 */
 	bool isZeroX=IntervalSize::isZeroWidth(itemEnv->getMinX(),itemEnv->getMaxX());
-	bool isZeroY=IntervalSize::isZeroWidth(itemEnv->getMinX(),itemEnv->getMaxX());
+	bool isZeroY=IntervalSize::isZeroWidth(itemEnv->getMinY(),itemEnv->getMaxY());
 
 	NodeBase *node;
 
