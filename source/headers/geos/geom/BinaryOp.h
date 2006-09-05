@@ -113,7 +113,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	}
 
 
-	// Try removing common bits (possibly obsoleted by snapping above)
+	// Try removing common bits (possibly obsoleted by snapping below)
 
 	// keep these out of try block to reuse in case of snapping
 	GeomPtr rG0;
@@ -144,6 +144,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		}
 #endif
 
+		//throw util::TopologyException("Skip op on commonbits-removed");
 		ret.reset( _Op(rG0.get(), rG1.get()) );
 
 		cbr.addCommonBits( ret.get() );
@@ -166,14 +167,22 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #endif
 
 	try {
-		// Remove common bits (before snapping, to have less snaps)
+		// Snap the commonbits-removed geoms, to have less snaps
 		// Snap each geometry on the other
-		geos::precision::GeometrySnapper snapper0( *rG0 );
-		GeomPtr snapG0( snapper0.snapTo(*rG1) );
+
+		using geos::precision::GeometrySnapper;
+
+		// Snap tolerance must be computed on the original
+		// (not commonbits-removed) geoms
+		double snapTolerance = GeometrySnapper::computeSnapTolerance(*g0, *g1);
+		std::cerr<<"Computed snap tolerance: "<<snapTolerance<<std::endl;
+
+		GeometrySnapper snapper0( *rG0 );
+		GeomPtr snapG0( snapper0.snapTo(*rG1, snapTolerance) );
 
 		// NOTE: second geom is snapped on the snapped first one
-		geos::precision::GeometrySnapper snapper1( *rG1 );
-		GeomPtr snapG1( snapper0.snapTo(*rG0) );
+		GeometrySnapper snapper1( *rG1 );
+		GeomPtr snapG1( snapper0.snapTo(*rG0, snapTolerance) );
 
 		// Check input validity
 #if GEOS_DEBUG_BINARYOP

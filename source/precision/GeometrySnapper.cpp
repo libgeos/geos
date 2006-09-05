@@ -34,6 +34,7 @@
 
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 //using namespace std;
 using namespace geos::geom;
@@ -41,7 +42,8 @@ using namespace geos::geom;
 namespace geos {
 namespace precision { // geos.precision
 
-const double GeometrySnapper::snapTol = 0.000001;
+//const double GeometrySnapper::snapTol = 0.000001;
+const double GeometrySnapper::snapPrecisionFactor = 10e-12;
 
 class SnapTransformer: public geos::geom::util::GeometryTransformer {
 
@@ -99,7 +101,7 @@ GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 
 /*public*/
 std::auto_ptr<geom::Geometry>
-GeometrySnapper::snapTo(const geom::Geometry& g)
+GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 {
 
 	using std::auto_ptr;
@@ -110,8 +112,27 @@ GeometrySnapper::snapTo(const geom::Geometry& g)
 
 	// Apply a SnapTransformer to source geometry
 	// (we need a pointer for dynamic polymorphism)
-	auto_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTol, *snapPts));
+	auto_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
 	return snapTrans->transform(&srcGeom);
+}
+
+/*public static*/
+double
+GeometrySnapper::computeSnapTolerance(const geom::Geometry& g)
+{
+	//return 0.000001; // testing: to compare with previous implementation
+	const Envelope* env = g.getEnvelopeInternal();
+        double minDimension = std::min(env->getHeight(), env->getWidth());
+	double snapTol = minDimension * snapPrecisionFactor;
+	return snapTol;
+}
+
+/*public static*/
+double
+GeometrySnapper::computeSnapTolerance(const geom::Geometry& g1,
+		const geom::Geometry& g2)
+{
+        return std::min(computeSnapTolerance(g1), computeSnapTolerance(g2));
 }
 
 

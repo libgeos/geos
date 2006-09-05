@@ -845,7 +845,9 @@ struct PointCoveredByAny: public geom::CoordinateFilter
 				return;
 			}
 		}
-		throw util::TopologyException("A point on first geom boundary isn't covered by either result or second geom");
+		throw util::TopologyException("Obviously wrong result: "
+			"A point on first geom boundary isn't covered "
+			"by either result or second geom");
 	}
 };
 
@@ -869,7 +871,8 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 
 		if ( resultArea > minarea )
 		{
-			throw util::TopologyException("Area of intersection "
+			throw util::TopologyException("Obviously wrong result: "
+				"area of intersection "
 				"result is bigger then minimum area between "
 				"input geometries");
 		}
@@ -885,7 +888,8 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 
 		if ( resultArea > area0 )
 		{
-			throw util::TopologyException("Area of difference "
+			throw util::TopologyException("Obviously wrong result: "
+				"area of difference "
 				"result is bigger then area of first "
 				"input geometry");
 		}
