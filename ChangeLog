@@ -1,3 +1,14 @@
+2006-09-05 Sandro Santilli <strk@refractions.net>
+
+	* source/precision/GeometrySnapper.cpp,
+	  source/headers/geos/precision/GeometrySnapper.h:
+          Accept snapping tolerance as parameter, provide snap
+	  tolerance computation function.
+	* source/headers/geos/geom/BinaryOp.h: compute a smart
+	  snap tolerance for given input when using snapping heuristic.
+	* source/operation/overlay/OverlayOp.cpp (checkObviouslyWrongResult):
+	  reworded exception messages
+
 2006-07-26 Sandro Santilli <strk@refractions.net>
 
 	* source/index/quadtree/Root.cpp (insertContained):
