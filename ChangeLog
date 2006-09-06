@@ -1,3 +1,9 @@
+2006-09-06 Mateusz Loskot <mateusz@loskot.net>
+
+	* All files of following types: .c .cpp .h .i .in .inl
+	.m .mk .py .vc: set svn:keyword property for $Id$ keyword
+	expansion.
+
 2006-09-06 Sandro Santilli <strk@refractions.net>
 
 	* source/operation/overlay/FuzzyPointLocator.cpp,
@@ -33,7 +39,7 @@
 	* swig/ruby/Makefile.am: geos.py and geos_wrap.cxx are 
 	now removed by make maintainer-clean but not make clean.
 
-006-08-03 Mateusz Loskot <mateusz@loskot.net>
+2006-08-03 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/geos_unit.cpp: fixed Bug #90
 
