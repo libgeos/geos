@@ -57,6 +57,8 @@ std::auto_ptr< std::vector<geom::Coordinate> >
 OffsetPointGenerator::getPoints()
 {
 	assert (offsetPts.get() == NULL);
+	offsetPts.reset(new vector<Coordinate>());
+
 	vector<const LineString*> lines;
 	geos::geom::util::LinearComponentExtracter::getLines(g, lines);
 	for_each(lines.begin(), lines.end(),
@@ -70,6 +72,8 @@ void
 OffsetPointGenerator::extractPoints(const LineString* line)
 {
 	const CoordinateSequence& pts = *(line->getCoordinatesRO());
+	assert(pts.size() > 1 );
+
 	for (size_t i=0, n=pts.size()-1; i<n; ++i)
 	{
 		computeOffsets(pts[i], pts[i + 1]);
