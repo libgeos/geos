@@ -1,3 +1,9 @@
+2006-09-06 Sandro Santilli <strk@refractions.net>
+
+	* source/operation/overlay/FuzzyPointLocator.cpp,
+	  source/headers/geos/operation/overlay/FuzzyPointLocator.h:
+	  new helper class for Overlay op validation.
+
 2006-09-05 Sandro Santilli <strk@refractions.net>
 
 	* source/precision/GeometrySnapper.cpp,
