@@ -12,12 +12,15 @@ geos_HEADERS = \
 
 noinst_HEADERS =  \
 	EdgeSetNoder.h		\
-	ElevationMatrix.h	\
 	ElevationMatrixCell.h	\
+	ElevationMatrix.h	\
+	FuzzyPointLocator.h	\
 	LineBuilder.h		\
 	MaximalEdgeRing.h	\
 	MinimalEdgeRing.h	\
 	MinimalEdgeRing.inl	\
+	OffsetPointGenerator.h	\
 	OverlayNodeFactory.h	\
+	OverlayResultValidator.h \
 	PointBuilder.h		\
 	PolygonBuilder.h
