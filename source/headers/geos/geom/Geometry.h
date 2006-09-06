@@ -293,8 +293,9 @@ public:
 
 	/**
 	 * \brief
-	 * Returns the boundary, or the empty geometry if this Geometry
-	 * is empty.
+	 * Returns the boundary as a newly allocated Geometry object.
+	 *
+	 * Returned geometry is empty if this Geometry is empty.
 	 */
 	virtual Geometry* getBoundary() const=0; //Abstract
 
