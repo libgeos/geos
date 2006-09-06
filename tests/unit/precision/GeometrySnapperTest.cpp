@@ -64,12 +64,11 @@ namespace tut
 		"MULTIPOINT ((0 0), (0 100.0000001), (100 100), (100 0))"
 	));
 
-	// NOTE: we're assuming that GeometrySnapper tolerance is 0.000001
 	GeomAutoPtr expected(reader.read(
 		"POLYGON ((0 0, 0 100.0000001, 100 100, 100 0, 0 0))"
 	));
 
-	GeomAutoPtr ret(snapper.snapTo( *(snap.get()) ));
+	GeomAutoPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
 
 	ensure( ret->equalsExact(expected.get(),0) );
 
@@ -84,12 +83,11 @@ namespace tut
 		"MULTIPOINT ((0.0000001 50))"
 	));
 
-	// NOTE: we're assuming that GeometrySnapper tolerance is 0.000001
 	GeomAutoPtr expected(reader.read(
 		"POLYGON ((0 0, 0.0000001 50, 0 100, 100 100, 100 0, 0 0))"
 	));
 
-	GeomAutoPtr ret(snapper.snapTo( *(snap.get()) ));
+	GeomAutoPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
 
 	ensure( ret->equalsExact(expected.get(),0) );
     }
