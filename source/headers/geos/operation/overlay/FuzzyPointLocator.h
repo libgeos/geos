@@ -11,12 +11,17 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ ***********************************************************************
+ *
+ * Last port: operation/overlay/FuzzyPointLocator.java rev. 0
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_OVERLAY_FUZZYPOINTLOCATOR_H
 #define GEOS_OP_OVERLAY_FUZZYPOINTLOCATOR_H
 
 #include <geos/algorithm/PointLocator.h> // for composition
+#include <geos/geom/Geometry.h> // for auto_ptr visibility of dtor
 
 #include <vector>
 #include <memory> // for auto_ptr
