@@ -1,5 +1,7 @@
 2006-09-06 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/operation/overlay/OffsetPointGeneratorTest.cpp
+	  tests/unit/Makefile.am: new test for OffsetPointGenerator class
 	* tests/unit/operation/overlay/FuzzyPointLocatorTest.cpp,
 	  tests/unit/Makefile.am: new test for FuzzyPointLocator class
 
