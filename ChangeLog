@@ -1,3 +1,11 @@
+2006-09-06 Mateusz Loskot <mateusz@loskot.net>
+
+	* source/operation/overlay/OverlayResultValidator.cpp,
+	  source/operation/overlay/OffsetPointGenerator.cpp,
+	  source/headers/geos/operation/overlay/OffsetPointGenerator.h,
+	  source/headers/geos/operation/overlay/OverlayResultValidator.h:
+	  Set svn:keyword property for $Id$ expansion.
+
 2006-09-06 Sandro Santilli <strk@refractions.net>
 
 	* source/operation/overlay/FuzzyPointLocator.cpp,
