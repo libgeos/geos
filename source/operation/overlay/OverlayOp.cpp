@@ -907,9 +907,12 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 
 	// Add your tests here
 
+// still testing
+#ifdef ENABLE_OVERLAY_RESULT_VALIDATION
 	OverlayResultValidator::isValid(
 		*(arg[0]->getGeometry()), *(arg[1]->getGeometry()), opCode,
 		*(resultGeom));
+#endif
 }
 
 } // namespace geos.operation.overlay
