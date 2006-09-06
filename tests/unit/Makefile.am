@@ -35,6 +35,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
 	io/ByteOrderValuesTest.cpp \
+	operation/overlay/FuzzyPointLocatorTest.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/SegmentStringTest.cpp \

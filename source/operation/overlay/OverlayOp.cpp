@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlay/OverlayResultValidator.h>
 #include <geos/operation/overlay/ElevationMatrix.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
 #include <geos/operation/overlay/PolygonBuilder.h>
@@ -905,6 +906,10 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 	}
 
 	// Add your tests here
+
+	OverlayResultValidator::isValid(
+		*(arg[0]->getGeometry()), *(arg[1]->getGeometry()), opCode,
+		*(resultGeom));
 }
 
 } // namespace geos.operation.overlay

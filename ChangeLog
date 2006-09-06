@@ -1,3 +1,8 @@
+2006-09-06 Sandro Santilli <strk@refractions.net>
+
+	* tests/unit/operation/overlay/FuzzyPointLocatorTest.cpp,
+	  tests/unit/Makefile.am: new test for FuzzyPointLocator class
+
 2006-09-06 Mateusz Loskot <mateusz@loskot.net>
 
 	* source/operation/overlay/OverlayResultValidator.cpp,
@@ -8,6 +13,8 @@
 
 2006-09-06 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/precision/GeometrySnapperTest.cpp: 
+	  updated after GeometrySnapper interface change.
 	* source/operation/overlay/FuzzyPointLocator.cpp,
 	  source/operation/overlay/OverlayResultValidator.cpp,
 	  source/operation/overlay/OffsetPointGenerator.cpp,
