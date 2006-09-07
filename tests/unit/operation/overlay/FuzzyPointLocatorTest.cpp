@@ -2,6 +2,7 @@
 // 
 // Test Suite for geos::operation::overlay::FuzzyPointLocator class.
 
+
 // TUT
 #include <tut.h>
 // GEOS
