@@ -20,6 +20,10 @@
 #include <geos/operation/overlay/OverlayResultValidator.h>
 #include <geos/operation/overlay/FuzzyPointLocator.h>
 #include <geos/operation/overlay/OffsetPointGenerator.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
 
 #include <cassert>
 #include <functional>
@@ -48,12 +52,28 @@ double OverlayResultValidator::_TOLERANCE = 0.000001;
 
 namespace { // anonymous namespace
 
-bool isArea(const Geometry& g)
+bool
+isArea(const Geometry& g)
 {
         GeometryTypeId type = g.getGeometryTypeId();
         if ( type == GEOS_POLYGON ) return true;
         if ( type == GEOS_MULTIPOLYGON ) return true;
         return false;
+}
+
+auto_ptr<MultiPoint>
+toMultiPoint(vector<Coordinate>& coords)
+{
+	const GeometryFactory& gf = *(GeometryFactory::getDefaultInstance());
+	const CoordinateSequenceFactory& csf = 
+			*(gf.getCoordinateSequenceFactory());
+
+	auto_ptr< vector<Coordinate> > nc ( new vector<Coordinate>(coords) );
+	auto_ptr<CoordinateSequence> cs(csf.create(nc.release()));
+
+	auto_ptr<MultiPoint> mp ( gf.createMultiPoint(*cs) );
+
+	return mp;
 }
 
 } // anonymous namespace
@@ -96,6 +116,19 @@ OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 
 	addTestPts(g0);
 	addTestPts(g1);
+	addTestPts(gres);
+
+#if GEOS_DEBUG
+	{
+	cerr << "OverlayResultValidator:" << endl
+		<< "Points:" << *toMultiPoint(testCoords) << endl
+		<< "Geom0: " << g0 << endl
+		<< "Geom1: " << g1 << endl
+		<< "Reslt: " << gres 
+		<< endl;
+	}
+#endif
+
 	if (! testValid(overlayOp) )
 		return false;
 	return true;
