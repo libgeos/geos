@@ -46,6 +46,19 @@ namespace overlay { // geos.operation.overlay
 
 double OverlayResultValidator::_TOLERANCE = 0.000001;
 
+namespace { // anonymous namespace
+
+bool isArea(const Geometry& g)
+{
+        GeometryTypeId type = g.getGeometryTypeId();
+        if ( type == GEOS_POLYGON ) return true;
+        if ( type == GEOS_MULTIPOLYGON ) return true;
+        return false;
+}
+
+} // anonymous namespace
+
+
 /* static public */
 bool
 OverlayResultValidator::isValid(const Geometry& geom0, const Geometry& geom1,
@@ -76,6 +89,11 @@ OverlayResultValidator::OverlayResultValidator(
 bool
 OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 {
+	// The check only works for areal geoms
+	if ( ! isArea(g0) ) return true;
+	if ( ! isArea(g1) ) return true;
+	if ( ! isArea(gres) ) return true;
+
 	addTestPts(g0);
 	addTestPts(g1);
 	if (! testValid(overlayOp) )
