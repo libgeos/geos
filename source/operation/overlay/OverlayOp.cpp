@@ -908,10 +908,20 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 	// Add your tests here
 
 // still testing
+//#define ENABLE_OVERLAY_RESULT_VALIDATION 1
 #ifdef ENABLE_OVERLAY_RESULT_VALIDATION
-	OverlayResultValidator::isValid(
-		*(arg[0]->getGeometry()), *(arg[1]->getGeometry()), opCode,
-		*(resultGeom));
+	OverlayResultValidator validator( *(arg[0]->getGeometry()),
+		*(arg[1]->getGeometry()), *(resultGeom));
+	bool isvalid = validator.isValid(opCode);
+	if ( ! isvalid )
+	{
+		throw util::TopologyException("Obviously wrong result: "
+			"OverlayResultValidator didn't like the result: \n"
+			"Invalid point: " +
+			validator.getInvalidLocation().toString() +
+			string("\nInvalid result: ") +
+			resultGeom->toString());
+	}
 #endif
 }
 
