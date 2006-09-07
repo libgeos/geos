@@ -1,11 +1,12 @@
-BUILDING
-========
+BUILDING, TESTING, INSTALLING
+=============================
 
 Unix
 -----
 
 	# ./configure
 	# make
+	# make check
 	# make install
 
 Win32
@@ -14,12 +15,6 @@ Win32
 Win32 Visual Studio Builds:
 	source\makefile.vc
 
-
-TESTING
-=======
-
-- Run 'make check'
-- cd tests/xmltester; make test (to be included in 'make check' rule) 
 
 CLIENT APPLICATIONS
 ===================
