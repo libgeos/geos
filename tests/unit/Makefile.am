@@ -38,6 +38,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/overlay/FuzzyPointLocatorTest.cpp \
 	operation/overlay/OffsetPointGeneratorTest.cpp \
+	operation/overlay/OverlayResultValidatorTest.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/SegmentStringTest.cpp \
