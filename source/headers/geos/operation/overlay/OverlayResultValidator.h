@@ -21,7 +21,7 @@
 #define GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H
 
 #include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
-#include <geos/operation/overlay/FuzzyPointLocator.h> // for OpCode enum
+#include <geos/operation/overlay/FuzzyPointLocator.h> 
 #include <geos/geom/Location.h> // for Location::Value type
 
 #include <vector>
