@@ -1,3 +1,7 @@
+2006-09-07 Sandro Santilli <strk@refractions.net>
+
+	* autogen.sh: don't giveup on automake failures (testing)
+
 2006-09-06 Sandro Santilli <strk@refractions.net>
 
 	* tests/unit/operation/overlay/OffsetPointGeneratorTest.cpp

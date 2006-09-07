@@ -23,7 +23,7 @@ aclocal -I macros || giveup
 echo "Running libtoolize"
 libtoolize --force --copy || giveup
 echo "Running automake"
-automake $AMFLAGS || giveup
+automake $AMFLAGS # || giveup
 echo "Running autoconf"
 autoconf || giveup
 
