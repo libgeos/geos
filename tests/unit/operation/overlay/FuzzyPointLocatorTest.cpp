@@ -131,6 +131,23 @@ namespace tut
 	}
 
 
+	template<>
+	template<>
+	void object::test<5>()
+	{
+		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::geom::Location;
+		geos::geom::Coordinate pt(160.000000125, 119.500004998);
+
+		std::string wkt0("POLYGON((20 40,20 200,180 200,180 120,140 120,180 119,180 40,20 40),(140 160,80 120,140 80,140 160))");
+		GeomPtr g0(wktreader.read(wkt0));
+
+		FuzzyPointLocator locator(*g0, 0.00001);
+
+		// On the boundary ?
+		ensure_equals(locator.getLocation(pt), Location::BOUNDARY); 
+
+	}
 
 } // namespace tut
 
