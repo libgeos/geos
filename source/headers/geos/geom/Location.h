@@ -46,14 +46,14 @@ public:
 		 * column index of the interior of the second geometry.
 		 * Location value for the interior of a geometry.
 		 */
-		INTERIOR,
+		INTERIOR = 0,
 
 		/**
 		 * DE-9IM row index of the boundary of the first geometry and
 		 * column index of the boundary of the second geometry.
 		 * Location value for the boundary of a geometry.
 		 */
-		BOUNDARY,
+		BOUNDARY = 1,
 
 		/**
 		 * DE-9IM row index of the exterior of the first geometry and
@@ -75,15 +75,3 @@ public:
 
 #endif // ndef GEOS_GEOM_LOCATION_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
