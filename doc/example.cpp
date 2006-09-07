@@ -31,7 +31,24 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
-#include <geos.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/IntersectionMatrix.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/io/WKTWriter.h>
+#include <geos/util/GeometricShapeFactory.h>
+#include <geos/util/GEOSException.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/opLinemerge.h>
 #include <geos/opPolygonize.h>
 
@@ -50,6 +67,7 @@
 
 using namespace std;
 using namespace geos;
+using namespace geos::geom;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
 
@@ -1077,10 +1095,8 @@ main()
 		exit(1);
 	}
 
-	// This is not really needed but to make
-	// memory checker like valgrind quiet
-	// about static heap-allocated data.
-	io::Unload::Release();
+	// Unload is no more necessary
+	//io::Unload::Release();
 
 	exit(0);
 }
