@@ -97,6 +97,7 @@ public:
 	 * The points are presented in the same order as the input Geometries.
 	 *
 	 * @return a pair of {@link Coordinate}s of the closest points
+	 *         as a newly allocated object (ownership to caller)
 	 */
 	geom::CoordinateSequence* closestPoints();
 
@@ -104,7 +105,11 @@ public:
 	 * Report the locations of the closest points in the input geometries.
 	 * The locations are presented in the same order as the input Geometries.
 	 *
-	 * @return a pair of {@link GeometryLocation}s for the closest points
+	 * @return a pair of {@link GeometryLocation}s for the closest points.
+	 *         Ownership of returned object is left to this instance and 
+	 *         it's reference will be invalidated by next call
+	 *         to distance()
+	 *
 	 */
 	std::vector<GeometryLocation*>* closestLocations();
 
