@@ -58,6 +58,9 @@ isArea(const Geometry& g)
         GeometryTypeId type = g.getGeometryTypeId();
         if ( type == GEOS_POLYGON ) return true;
         if ( type == GEOS_MULTIPOLYGON ) return true;
+#if GEOS_DEBUG
+	cerr << "OverlayResultValidator: one of the geoms being checked is not a POLYGON or MULTIPOLYGON, blindly returning a positive answer (is valid)" << endl;
+#endif
         return false;
 }
 
@@ -131,6 +134,7 @@ OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 
 	if (! testValid(overlayOp) )
 		return false;
+
 	return true;
 }
 
@@ -186,6 +190,9 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
 	 */
 	if ( find(location.begin(), location.end(), Location::BOUNDARY) != location.end() )
 	{
+#if GEOS_DEBUG
+		cerr << "OverlayResultValidator: testpoint " << pt << " is on the boundary, blindly returning a positive answer (is valid)" << endl;
+#endif
 		return true;
 	}
 
