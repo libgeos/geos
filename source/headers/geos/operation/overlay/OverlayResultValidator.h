@@ -94,6 +94,8 @@ private:
 
 	void addTestPts(const geom::Geometry& g);
 
+	void addVertices(const geom::Geometry& g);
+
 	bool testValid(OverlayOp::OpCode overlayOp);
 
 	bool testValid(OverlayOp::OpCode overlayOp, const geom::Coordinate& pt);

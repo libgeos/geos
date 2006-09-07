@@ -144,6 +144,17 @@ OverlayResultValidator::addTestPts(const Geometry& g)
 }
 
 /*private*/
+void
+OverlayResultValidator::addVertices(const Geometry& g)
+{
+	// TODO: optimize this by not copying coordinates
+	//       and pre-allocating memory
+	auto_ptr<CoordinateSequence> cs ( g.getCoordinates() );
+	const vector<Coordinate>* coords = cs->toVector();
+	testCoords.insert(testCoords.end(), coords->begin(), coords->end());
+}
+
+/*private*/
 bool
 OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp)
 {
