@@ -1,5 +1,7 @@
 2006-09-07 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/distance/DistanceOp.cpp (computeMinDistancePoints):
+	  fixed invalid reference.
 	* autogen.sh: don't giveup on automake failures (testing)
 
 2006-09-06 Sandro Santilli <strk@refractions.net>

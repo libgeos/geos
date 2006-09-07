@@ -335,7 +335,7 @@ DistanceOp::computeMinDistancePoints(
 		const Point *pt0=points0[i];
 		//Geometry *pt0=(*points0)[i];
 		for (size_t j=0, nj=points1.size(); j<nj; ++j) {
-			const Point *pt1=points1[i];
+			const Point *pt1=points1[j];
 			//Geometry *pt1=(*points1)[j];
 			double dist=pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
 			if (dist < minDistance) {
