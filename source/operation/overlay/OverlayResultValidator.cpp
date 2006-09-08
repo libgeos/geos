@@ -35,6 +35,10 @@
 #define GEOS_DEBUG 0
 #endif
 
+#if GEOS_DEBUG
+#include <iomanip> // for setprecision
+#endif
+
 #define COMPUTE_Z 1
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
@@ -121,19 +125,20 @@ OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 	addTestPts(g1);
 	addTestPts(gres);
 
-#if GEOS_DEBUG
+	if (! testValid(overlayOp) )
 	{
+#if GEOS_DEBUG
 	cerr << "OverlayResultValidator:" << endl
 		<< "Points:" << *toMultiPoint(testCoords) << endl
 		<< "Geom0: " << g0 << endl
 		<< "Geom1: " << g1 << endl
-		<< "Reslt: " << gres 
+		<< "Reslt: " << gres << endl
+		<< "Locat: " << getInvalidLocation()
 		<< endl;
-	}
 #endif
-
-	if (! testValid(overlayOp) )
 		return false;
+	}
+
 
 	return true;
 }
@@ -183,6 +188,13 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
 	location[0] = fpl0.getLocation(pt);
 	location[1] = fpl1.getLocation(pt);
 	location[2] = fplres.getLocation(pt);
+
+#if GEOS_DEBUG
+	cerr << setprecision(10) << "Point " << pt << endl
+		<< "Loc0: " << location[0] << endl
+		<< "Loc1: " << location[1] << endl
+		<< "Locr: " << location[2] << endl;
+#endif
 
 	/*
 	 * If any location is on the Boundary, can't deduce anything,
