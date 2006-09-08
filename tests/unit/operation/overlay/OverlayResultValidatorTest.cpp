@@ -151,6 +151,25 @@ namespace tut
 		ensure (! validator.isValid(OverlayOp::opUNION) );
 	}
 
+	template<>
+	template<>
+	void object::test<6>() 
+	{
+
+		std::string wkt0("POLYGON ((20.0 40.0, 20.0 200.0, 180.0 200.0, 180.0 120.0, 140.0 120.0, 180.0 119.0, 180.0 40.0, 20.0 40.0), (140.0 160.0, 80.0 120.0, 140.0 80.0, 140.0 160.0))");
+		GeomPtr g0(wktreader.read(wkt0));
+
+		std::string wkt1("POLYGON ((200.0 160.0, 150.0 160.0, 150.0 80.0, 200.0 80.0, 200.0 160.0))");
+		GeomPtr g1(wktreader.read(wkt1));
+
+		std::string wktres("MULTIPOLYGON (((20.0 40.0, 20.0 200.0, 180.0 200.0, 180.0 160.0, 150.0 160.0, 150.0 120.0, 150.0 80.0, 180.0 80.0, 180.0 40.0, 20.0 40.0), (80.0 120.0, 140.0 80.0, 140.0 120.0, 140.0 160.0, 80.0 120.0)), ((150.0 120.0, 180.0 120.0, 180.0 160.0, 200.0 160.0, 200.0 80.0, 180.0 80.0, 180.0 119.0, 150.0 120.0)))");
+		GeomPtr gres(wktreader.read(wktres));
+
+		OverlayResultValidator validator(*g0, *g1, *gres);
+
+		ensure ( ! validator.isValid(OverlayOp::opSYMDIFFERENCE) );
+	}
+
 
 	//
 	// TODO: add tests for other operations

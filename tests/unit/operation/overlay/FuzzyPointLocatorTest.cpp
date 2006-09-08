@@ -10,9 +10,11 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKBReader.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Location.h>
 #include <memory>
+#include <sstream>
 
 namespace tut
 {
@@ -25,6 +27,7 @@ namespace tut
 	{
 		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader wktreader;
+		geos::io::WKBReader wkbreader;
 
 		typedef geos::geom::Geometry::AutoPtr GeomPtr;
 
@@ -33,7 +36,8 @@ namespace tut
 		test_fuzzypointlocator_data()
 			:
 			gf(),
-			wktreader(&gf)
+			wktreader(&gf),
+			wkbreader(gf)
 		{
 			std::string wkt("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
 			g.reset(wktreader.read(wkt));
@@ -147,6 +151,46 @@ namespace tut
 
 		// On the boundary ?
 		ensure_equals(locator.getLocation(pt), Location::BOUNDARY); 
+
+	}
+
+	template<>
+	template<>
+	void object::test<6>()
+	{
+		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::geom::Location;
+		// this would return the expected result
+		//geos::geom::Coordinate pt(160, 120);
+		geos::geom::Coordinate pt(160, 120.000005);
+
+		std::stringstream wkb0("0103000000020000000800000000000000000034400000000000004440000000000000344000000000000069400000000000806640000000000000694000000000008066400000000000005E4000000000008061400000000000005E4000000000008066400000000000C05D400000000000806640000000000000444000000000000034400000000000004440040000000000000000806140000000000000644000000000000054400000000000005E400000000000806140000000000000544000000000008061400000000000006440");
+		GeomPtr g0(wkbreader.readHEX(wkb0));
+
+		FuzzyPointLocator locator(*g0, 0.000001);
+
+		// On the boundary ?
+		ensure_equals(locator.getLocation(pt), Location::INTERIOR); 
+
+	}
+
+	template<>
+	template<>
+	void object::test<7>()
+	{
+		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::geom::Location;
+		// this would return the expected result
+		//geos::geom::Coordinate pt(160, 120);
+		geos::geom::Coordinate pt(160, 120.000005);
+
+		std::stringstream wkb0("0106000000020000000103000000020000000A000000000000000000344000000000000044400000000000003440000000000000694000000000008066400000000000006940000000000080664000000000000064400000000000C0624000000000000064400000000000C062400000000000005E400000000000C0624000000000000054400000000000806640000000000000544000000000008066400000000000004440000000000000344000000000000044400500000000000000000054400000000000005E400000000000806140000000000000544000000000008061400000000000005E400000000000806140000000000000644000000000000054400000000000005E40010300000001000000080000000000000000C062400000000000005E4000000000008066400000000000005E400000000000806640000000000000644000000000000069400000000000006440000000000000694000000000000054400000000000806640000000000000544000000000008066400000000000C05D400000000000C062400000000000005E40");
+		GeomPtr g0(wkbreader.readHEX(wkb0));
+
+		FuzzyPointLocator locator(*g0, 0.000001);
+
+		// On the boundary ?
+		ensure_equals(locator.getLocation(pt), Location::EXTERIOR); 
 
 	}
 
