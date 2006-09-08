@@ -1,4 +1,6 @@
 
+- Feed PrecisionModel to OverlayResultValidator to set _TOLERANCE
+
 - Test unit tests for snapround package
 
 - DoubleBits misregards BYTE_ENDIAN, must check it.
