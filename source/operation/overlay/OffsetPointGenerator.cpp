@@ -30,6 +30,7 @@
 #include <vector>
 #include <memory> // for auto_ptr
 #include <cmath>
+#include <algorithm> // std::for_each
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
