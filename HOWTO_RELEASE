@@ -19,3 +19,5 @@
 5: check everything is ok ;)
 
 6: Tag rel-x-y-z (MAJOR-MINOR-PATCH)
+   $ base=http://svn.refractions.net/geos/
+   $ svn copy $base/trunk $base/tags/MAJOR.MINOR.PATCH
