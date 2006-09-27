@@ -18,6 +18,7 @@
 
 5: check everything is ok ;)
 
-6: Tag rel-x-y-z (MAJOR-MINOR-PATCH)
+6: Tag the release:
    $ base=http://svn.refractions.net/geos/
-   $ svn copy $base/trunk $base/tags/MAJOR.MINOR.PATCH
+   $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
+		$base/trunk $base/tags/MAJOR.MINOR.PATCH
