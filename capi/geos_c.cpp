@@ -111,6 +111,7 @@ extern "C" char GEOS_DLL GEOSOverlaps(const Geometry *g1, const Geometry *g2);
 extern "C" Geometry GEOS_DLL *GEOSpolygonize(Geometry **geoms, unsigned int ngeoms);
 extern "C" char GEOS_DLL GEOSisValid(const Geometry *g1);
 extern "C" char GEOS_DLL GEOSisEmpty(const Geometry *g1);
+extern "C" Geometry GEOS_DLL *GEOSEnvelope(Geometry *g1);
 extern "C" Geometry GEOS_DLL *GEOSIntersection(Geometry *g1,Geometry *g2);
 extern "C" Geometry GEOS_DLL *GEOSBuffer(Geometry *g1,double width,int quadsegs);
 extern "C" Geometry GEOS_DLL *GEOSConvexHull(Geometry *g1);
