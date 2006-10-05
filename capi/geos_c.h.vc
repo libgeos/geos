@@ -27,6 +27,9 @@
  *
  ***********************************************************************/
 
+#ifndef GEOS_C_H
+#define GEOS_C_H
+
 #ifndef __cplusplus
 # include <stddef.h> /* for size_t definition */
 #endif
@@ -357,3 +360,5 @@ extern int GEOS_DLL GEOSDistance(const GEOSGeom g1, const GEOSGeom g2,
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+#endif // #ifndef GEOS_C_H
