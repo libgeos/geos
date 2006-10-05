@@ -805,6 +805,10 @@ XMLTester::parseTest()
 				throw std::runtime_error("malformed testcase: missing tolerated area difference in 'areatest' op");
 			}
 
+			if ( verbose > 1 )
+			{
+		std::cerr << "Running intersection for areatest" << std::endl;
+			}
 			GeomAutoPtr gI = BinaryOp(gA, gB,
 					overlayOp(OverlayOp::opINTERSECTION));
 
@@ -813,6 +817,10 @@ XMLTester::parseTest()
 				testValid(gI.get(), "areatest intersection");
 			}
 
+			if ( verbose > 1 )
+			{
+		std::cerr << "Running difference for areatest" << std::endl;
+			}
 			GeomAutoPtr gD = BinaryOp(gA, gB,
 					overlayOp(OverlayOp::opDIFFERENCE));
 

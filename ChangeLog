@@ -1,5 +1,11 @@
+2006-10-05 Sandro Santilli <strk@refractions.net>
+
+	* tests/xmltester/XMLTester.cpp: increment areatest verbosity
+	  (needs -v -v)
+
 2006-09-07 Howard Butler <hobu@hobu.net>
-    * GEOSEnvelope wasn't in the PROTOTYPES section in geos_c.cpp
+
+	* GEOSEnvelope wasn't in the PROTOTYPES section in geos_c.cpp
 
 2006-09-07 Sandro Santilli <strk@refractions.net>
 
