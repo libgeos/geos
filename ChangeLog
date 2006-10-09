@@ -1,3 +1,8 @@
+2006-10-09 Sandro Santilli <strk@refractions.net>
+
+	* source/operation/overlay/OverlayOp.cpp: enable all overlay 
+	  result validators, make it disablable at compile time.
+
 2006-10-05 Mateusz Loskot <mateusz@loskot.net>
 
 	* capi/geos_c.h.in, 

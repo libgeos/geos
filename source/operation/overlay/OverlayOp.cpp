@@ -860,6 +860,16 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 
 	assert(resultGeom);
 
+// JTS tracking validators
+#define ENABLE_OVERLAY_RESULT_VALIDATOR 1
+
+// other validators
+// (original tests, possibly to include in OverlayResultValidator class)
+#define ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS 1
+
+
+#ifdef ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS
+
 	if ( opCode == opINTERSECTION
 		&& arg[0]->getGeometry()->getDimension() == Dimension::A
 		&& arg[1]->getGeometry()->getDimension() == Dimension::A )
@@ -906,21 +916,30 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 	}
 
 	// Add your tests here
+#endif
 
-// still testing
-//#define ENABLE_OVERLAY_RESULT_VALIDATION 1
-#ifdef ENABLE_OVERLAY_RESULT_VALIDATION
-	OverlayResultValidator validator( *(arg[0]->getGeometry()),
-		*(arg[1]->getGeometry()), *(resultGeom));
-	bool isvalid = validator.isValid(opCode);
-	if ( ! isvalid )
+#ifdef ENABLE_OVERLAY_RESULT_VALIDATOR
+	// This only work for FLOATING precision
+	if ( resultPrecisionModel->isFloating() )
 	{
-		throw util::TopologyException("Obviously wrong result: "
-			"OverlayResultValidator didn't like the result: \n"
-			"Invalid point: " +
-			validator.getInvalidLocation().toString() +
-			string("\nInvalid result: ") +
-			resultGeom->toString());
+		OverlayResultValidator validator( *(arg[0]->getGeometry()),
+			*(arg[1]->getGeometry()), *(resultGeom));
+		bool isvalid = validator.isValid(opCode);
+		if ( ! isvalid )
+		{
+			throw util::TopologyException(
+				"Obviously wrong result: "
+				"OverlayResultValidator didn't like "
+				"the result: \n"
+				"Invalid point: " +
+				validator.getInvalidLocation().toString() +
+				string("\nInvalid result: ") +
+				resultGeom->toString());
+		}
+	}
+	else
+	{
+		std::cerr << "Did not run OverlayResultValidator as the precision model is not floating" << std::endl;
 	}
 #endif
 }
