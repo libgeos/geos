@@ -1,5 +1,7 @@
 2006-10-09 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/BinaryOp.h: always snap geoms to
+	  each-other before applying an overlay (temp hack).
 	* source/operation/overlay/OverlayOp.cpp: enable all overlay 
 	  result validators, make it disablable at compile time.
 
