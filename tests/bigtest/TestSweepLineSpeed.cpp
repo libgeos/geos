@@ -60,11 +60,12 @@
 #include <stdio.h>
 #include <time.h>
 
-#include <geos/geom.h>
-#include <geos/io.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Polygon.h>
 #include "bigtest.h"
 
-using namespace geos;
+using namespace geos::geom;
+
 /**
  * Run relate between two large geometries to test the performance
  * of the sweepline intersection detection algorithm

@@ -15,12 +15,14 @@
 
 #include <cmath>
 
-#include <geos/geom.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/Coordinate.h>
 #include "bigtest.h"
 
 #define PI 3.14159265358979
 
-using namespace geos;
+using namespace geos::geom;
 
 Polygon* GeometryTestFactory::createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen) {
 	CoordinateSequence *pts=createBox(minx, miny, nSide, segLen);
@@ -36,24 +38,24 @@ CoordinateSequence* GeometryTestFactory::createBox(double minx, double miny,int 
 	for(i=0;i<nSide;i++) {
 		double x=minx+i*segLen;
 		double y=miny;
-		pts->add(*(new Coordinate(x,y)));
+		pts->add(Coordinate(x,y));
 	}
 	for(i=0;i<nSide;i++) {
 		double x=maxx;
 		double y=miny+i*segLen;
-		pts->add(*(new Coordinate(x,y)));
+		pts->add(Coordinate(x,y));
 	}
 	for(i=0;i<nSide;i++) {
 		double x=maxx-i*segLen;
 		double y=maxy;
-		pts->add(*(new Coordinate(x,y)));
+		pts->add(Coordinate(x,y));
 	}
 	for(i=0;i<nSide;i++) {
 		double x=minx;
 		double y=maxy-i*segLen;
-		pts->add(*(new Coordinate(x,y)));
+		pts->add(Coordinate(x,y));
 	}
-	pts->add(*(new Coordinate(pts->getAt(0))));
+	pts->add(pts->getAt(0));
 	return pts;
 }
 
@@ -72,9 +74,9 @@ CoordinateSequence* GeometryTestFactory::createCircle(double basex,double basey,
 		double ang=i*(2*PI/nPts);
 		double x=len*cos(ang)+basex;
 		double y=len*sin(ang)+basey;
-		pts->add(*(new Coordinate(x,y)));
+		pts->add(Coordinate(x,y));
 	}
-	pts->add(*(new Coordinate(pts->getAt(0))));
+	pts->add(Coordinate(pts->getAt(0)));
 	return pts;
 }
 

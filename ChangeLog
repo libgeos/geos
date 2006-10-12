@@ -1,3 +1,9 @@
+2006-10-12 Sandro Santilli <strk@refractions.net>
+
+	* tests/bigtest/GeometryTestFactory.cpp,
+	  tests/bigtest/bigtest.h, tests/bigtest/TestSweepLineSpeed.cpp:
+	  fixed header inclusion, to reduce compiler noise.
+
 2006-10-09 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/BinaryOp.h: always snap geoms to

@@ -58,19 +58,27 @@
 #define GEOS_BIGTEST_H
 
 #include <memory>
-#include <geos/geom.h>
 
 using namespace std;
 using namespace geos;
 
+// Forward declaration
+namespace geos {
+	namespace geom {
+		class Polygon;
+		class CoordinateSequence;
+		class GeometryFactory;
+	}
+}
+
 class GeometryTestFactory {
 public:
-	static Polygon* createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen);
-	static CoordinateSequence* createBox(double minx,double miny,int nSide,double segLen);
-	static CoordinateSequence* createCircle(double basex,double basey,double size,int nPts);
-	static Polygon* createCircle(GeometryFactory *fact,double basex,double basey,double size,int nPts);
-	static CoordinateSequence* createSineStar(double basex,double basey,double size,double armLen,int nArms,int nPts);
-	static Polygon* createSineStar(GeometryFactory *fact,double basex,double basey,double size,double armLen,int nArms,int nPts);
+	static geom::Polygon* createBox(geom::GeometryFactory *fact,double minx,double miny,int nSide,double segLen);
+	static geom::CoordinateSequence* createBox(double minx,double miny,int nSide,double segLen);
+	static geom::CoordinateSequence* createCircle(double basex,double basey,double size,int nPts);
+	static geom::Polygon* createCircle(geom::GeometryFactory *fact,double basex,double basey,double size,int nPts);
+	static geom::CoordinateSequence* createSineStar(double basex,double basey,double size,double armLen,int nArms,int nPts);
+	static geom::Polygon* createSineStar(geom::GeometryFactory *fact,double basex,double basey,double size,double armLen,int nArms,int nPts);
 };
 
 #endif
