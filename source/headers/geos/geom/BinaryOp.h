@@ -123,7 +123,7 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 	// NOTE: second geom is snapped on the snapped first one
 	GeometrySnapper snapper1( *g1 );
-	GeomPtr snapG1( snapper0.snapTo(*snapG0, snapTolerance) );
+	GeomPtr snapG1( snapper1.snapTo(*snapG0, snapTolerance) );
 
 	// Check input validity
 #if GEOS_DEBUG_BINARYOP

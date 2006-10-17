@@ -1,5 +1,7 @@
 2006-10-13 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/BinaryOp.h (SnapOp): fixed horrible
+	  bug applying overlay of first geom to itself :(
 	* capi/Makefile.am: don't directly link geostest against
 	  both libgeos.so and libstdc++ (should be derived by
 	  libgeos_c.so).
