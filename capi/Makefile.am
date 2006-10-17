@@ -6,7 +6,8 @@ GEOS_JTS_PORT="@JTS_PORT@"
 noinst_PROGRAMS = geostest 
 
 geostest_SOURCES = geostest.c
-geostest_LDFLAGS = -lstdc++
+# stdc++ dependency should be deduced by libgeos_c.la
+##geostest_LDFLAGS = -lstdc++
 geostest_LDADD = libgeos_c.la
 geostest_INCLUDES = -I.
 
@@ -19,15 +20,12 @@ nodist_capi_HEADERS = \
 
 lib_LTLIBRARIES = libgeos_c.la
 
-LIBS = $(top_builddir)/source/libgeos.la
-
 DIR_SOURCES = \
 	geos_c.cpp 
 
 libgeos_c_la_SOURCES = $(DIR_SOURCES)
 libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
-
-
+libgeos_c_la_LIBADD = $(top_builddir)/source/libgeos.la
 libgeos_c_la_LDFLAGS = \
 	-version-info @CAPI_INTERFACE_CURRENT@:@CAPI_INTERFACE_REVISION@:@CAPI_INTERFACE_AGE@ \
 	-no-undefined

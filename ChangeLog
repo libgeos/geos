@@ -1,3 +1,9 @@
+2006-10-13 Sandro Santilli <strk@refractions.net>
+
+	* capi/Makefile.am: don't directly link geostest against
+	  both libgeos.so and libstdc++ (should be derived by
+	  libgeos_c.so).
+
 2006-10-12 Sandro Santilli <strk@refractions.net>
 
 	* tests/bigtest/GeometryTestFactory.cpp,
