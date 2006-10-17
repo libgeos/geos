@@ -362,4 +362,5 @@ extern int GEOS_DLL GEOSDistance(const GEOSGeom g1, const GEOSGeom g2,
 } // extern "C"
 #endif
 
-#endif // #ifndef GEOS_C_H
+#endif
+// #ifndef GEOS_C_H
