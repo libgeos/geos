@@ -32,5 +32,6 @@ GEOS_DIRLIST =  algorithm \
                 planargraph \
                 planargraph\algorithm \
                 precision \
+		simplify \
                 util
 

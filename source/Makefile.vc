@@ -4,7 +4,9 @@
 # 	------------------------------------
 #
 # 1) Requires at least Visual Studio 2002. 
-# 2) You will need to manually copy capi/geos_c.h.in to 
+# 2) NOTE: This step is performed automatically now.
+#          This note should be removed soon.
+#    You will need to manually copy capi/geos_c.h.in to 
 #    capi/geos_c.h and edit in version information (or copy from unix).
 # 3) build in geos\source directory with the command "nmake /f makefile.vc"
 # 
@@ -65,6 +67,11 @@
 #
 !INCLUDE dirlist.mk
 
+# Commands
+#
+MAKE = nmake
+RM = -del
+
 # Check compiler version given in command line
 # nmake -f makefile.vc MSVC_VER=xxxx
 #
@@ -92,10 +99,10 @@ CDLLNAME =  geos_c.dll
 CLIBNAME =  geos_c_i.lib
 SLIBNAME =	geos_i.lib
 
-OBJ = 	algorithm\CentroidArea.obj \
+OBJ = 	algorithm\CGAlgorithms.obj \
+	algorithm\CentroidArea.obj \
 	algorithm\CentroidLine.obj \
 	algorithm\CentroidPoint.obj \
-	algorithm\CGAlgorithms.obj \
 	algorithm\ConvexHull.obj \
 	algorithm\HCoordinate.obj \
 	algorithm\InteriorPointArea.obj \
@@ -220,6 +227,8 @@ OBJ = 	algorithm\CentroidArea.obj \
 	noding\snapround\MCIndexPointSnapper.obj \
 	noding\snapround\MCIndexSnapRounder.obj \
 	noding\snapround\SimpleSnapRounder.obj \
+	operation\GeometryGraphOperation.obj \
+	operation\IsSimpleOp.obj \
 	operation\buffer\BufferBuilder.obj \
 	operation\buffer\BufferOp.obj \
 	operation\buffer\BufferSubgraph.obj \
@@ -231,8 +240,6 @@ OBJ = 	algorithm\CentroidArea.obj \
 	operation\distance\ConnectedElementPointFilter.obj \
 	operation\distance\DistanceOp.obj \
 	operation\distance\GeometryLocation.obj \
-	operation\GeometryGraphOperation.obj \
-	operation\IsSimpleOp.obj \
 	operation\linemerge\EdgeString.obj \
 	operation\linemerge\LineMergeDirectedEdge.obj \
 	operation\linemerge\LineMergeEdge.obj \
@@ -242,11 +249,14 @@ OBJ = 	algorithm\CentroidArea.obj \
 	operation\overlay\EdgeSetNoder.obj \
 	operation\overlay\ElevationMatrix.obj \
 	operation\overlay\ElevationMatrixCell.obj \
+	operation\overlay\FuzzyPointLocator.obj \
 	operation\overlay\LineBuilder.obj \
 	operation\overlay\MaximalEdgeRing.obj \
 	operation\overlay\MinimalEdgeRing.obj \
+	operation\overlay\OffsetPointGenerator.obj \
 	operation\overlay\OverlayNodeFactory.obj \
 	operation\overlay\OverlayOp.obj \
+	operation\overlay\OverlayResultValidator.obj \
 	operation\overlay\PointBuilder.obj \
 	operation\overlay\PolygonBuilder.obj \
 	operation\polygonize\PolygonizeDirectedEdge.obj \
@@ -336,16 +346,19 @@ capi/geos_c.h: ../capi/geos_c.h.vc
 	$(CC) $(CFLAGS) /c $*.c /Fo$@
 
 clean:
-	del $(LIBNAME)
-	del $(SLIBNAME)
-	del $(DLLNAME)
-	del $(SLIBNAME)
-	del $(CLIBNAME)
-	del ..\capi\*.obj
-	del *.exe
-	del *.exp
-	del *.ilk
-	del *.pdb
+	$(RM) $(LIBNAME)
+	$(RM) $(SLIBNAME)
+	$(RM) $(DLLNAME)
+	$(RM) $(SLIBNAME)
+	$(RM) $(CLIBNAME)
+	$(RM) $(CDLLNAME)
+	$(RM) ..\capi\*.obj
+	$(RM) *.exe
+	$(RM) *.exp
+	$(RM) *.ilk
+	$(RM) *.manifest
+	$(RM) *.obj
+	$(RM) *.pdb
 	for %d in ( $(GEOS_DIRLIST) ) do \
 		del %d\*.obj 
 	
