@@ -1,0 +1,22 @@
+# $Id$
+#
+# NMAKE Makefile to build GEOS on Windows
+#
+# This makefile.vc delegates making targets to source\makefile.vc
+# so it's just a thin wrapper.
+#
+MAKE = nmake
+RM = -del
+
+default:    source_dir
+
+source_dir:
+	cd source
+	$(MAKE) /f makefile.vc
+	cd ..
+
+clean:	
+	cd source
+	$(MAKE) /f makefile.vc clean
+	cd ..
+
