@@ -2,13 +2,6 @@
 #
 # 	Building on Win32 with Visual Studio
 # 	------------------------------------
-#
-# 1) Requires at least Visual Studio 2002. 
-# 2) NOTE: This step is performed automatically now.
-#          This note should be removed soon.
-#    You will need to manually copy capi/geos_c.h.in to 
-#    capi/geos_c.h and edit in version information (or copy from unix).
-# 3) build in geos\source directory with the command "nmake /f makefile.vc"
 # 
 # Produces:
 #  geos.lib: static library for use of C or C++ API.
