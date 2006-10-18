@@ -1,3 +1,8 @@
+2006-10-18 Sandro Santilli <strk@refractions.net>
+
+	* source/operation/overlay/OverlayOp.cpp: disable non-JTS overlay
+	  result validators (to more closely track JTS at this stage)
+
 2006-10-13 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/BinaryOp.h (SnapOp): fixed horrible

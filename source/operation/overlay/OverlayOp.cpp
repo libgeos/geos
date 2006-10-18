@@ -865,7 +865,7 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 
 // other validators
 // (original tests, possibly to include in OverlayResultValidator class)
-#define ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS 1
+//#define ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS 1
 
 
 #ifdef ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS
