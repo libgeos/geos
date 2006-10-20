@@ -1,3 +1,10 @@
+2006-10-20 Sandro Santilli <strk@refractions.net>
+
+	* noding::SegmentString: added notifyCoordinatesChange
+	  method.
+	* noding::ScaledNoder: notify possible coordinates change
+	  to SegmentString after removing repeated points.
+
 2006-10-19 Sandro Santilli <strk@refractions.net>
 
         * configure.in: use 'expr' for arithmetics (more portable)

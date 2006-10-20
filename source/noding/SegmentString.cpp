@@ -130,6 +130,18 @@ SegmentString::getSegmentOctant(unsigned int index) const
 	return Octant::octant(getCoordinate(index), getCoordinate(index+1));
 }
 
+/* public */
+void
+SegmentString::notifyCoordinatesChange() const
+{
+	npts = pts->size();
+
+	// What about SegmentNodes ? should
+	// we invalidate them as well ?
+
+	testInvariant();
+}
+
 
 std::ostream& operator<< (std::ostream& os, const SegmentString& ss)
 {

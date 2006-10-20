@@ -144,10 +144,20 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 
 		CoordinateSequence* cs=ss->getCoordinates();
 
+#ifndef NDEBUG
+		size_t npts = cs->size();
+#endif
 		cs->apply_rw(&scaler);
+		assert(cs->size() == npts);
+
+		// Actually, we should be creating *new*
+		// SegmentStrings here, but who's going
+		// to delete them then ? And is it worth
+		// the memory cost ?
 		cs->removeRepeatedPoints();
 
-		ss->testInvariant();
+		// Let SegmentString know that something might be changed
+		ss->notifyCoordinatesChange();
 	}
 }
 

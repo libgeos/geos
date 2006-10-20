@@ -63,7 +63,7 @@ public:
 private:
 	SegmentNodeList nodeList;
 	geom::CoordinateSequence *pts;
-	unsigned int npts;
+	mutable unsigned int npts; // this is a cache
 	const void* context;
 	bool isIsolatedVar;
 
@@ -102,6 +102,15 @@ public:
 	/// this SegmentString!
 	///
 	geom::CoordinateSequence* getCoordinates() const;
+
+	/// \brief
+	/// Notify this object that the CoordinateSequence associated
+	/// with it might have been updated.
+	//
+	/// This must be called so that the SegmentString object makes
+	/// all the necessary checks and updates to verify consistency
+	///
+	void notifyCoordinatesChange() const;
 
 	// Return a read-only pointer to this SegmentString CoordinateSequence
 	//const CoordinateSequence* getCoordinatesRO() const { return pts; }
