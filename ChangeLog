@@ -1,3 +1,10 @@
+2006-10-23 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/geom/BinaryOp.h (SnapOp): document
+	  and add optional CBR step (snap after applying common
+	  bits removal - this is the default); (check_valid): add
+	  validity checker function.
+
 2006-10-20 Sandro Santilli <strk@refractions.net>
 
 	* noding::SegmentString: added notifyCoordinatesChange

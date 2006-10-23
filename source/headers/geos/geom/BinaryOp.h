@@ -102,14 +102,31 @@
 namespace geos {
 namespace geom { // geos::geom
 
+bool
+check_valid(const Geometry& g, const std::string& label)
+{
+	operation::valid::IsValidOp ivo(&g);
+	if ( ! ivo.isValid() )
+	{
+		std::cerr << label << ": is invalid!"
+			<< ivo.getValidationError()->toString() << std::endl;
+		return false;
+	} 
+	return true;
+}
+
+/// \brief
+/// Apply a binary operation to the given geometries
+/// after snapping them to each other after common-bits
+/// removal.
+///
 template <class BinOp>
 std::auto_ptr<Geometry>
 SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 {
 	typedef std::auto_ptr<Geometry> GeomPtr;
 
-	// Snap the commonbits-removed geoms, to have less snaps
-	// Snap each geometry on the other
+#define CBR_BEFORE_SNAPPING 1
 
 	using geos::precision::GeometrySnapper;
 
@@ -118,32 +135,54 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	double snapTolerance = GeometrySnapper::computeSnapTolerance(*g0, *g1);
 	std::cerr<<"Computed snap tolerance: "<<snapTolerance<<std::endl;
 
-	GeometrySnapper snapper0( *g0 );
-	GeomPtr snapG0( snapper0.snapTo(*g1, snapTolerance) );
+	geos::precision::CommonBitsRemover cbr;
+
+#if CBR_BEFORE_SNAPPING
+	// Now remove common bits
+	GeomPtr rG0( cbr.removeCommonBits(g0->clone()) );
+	GeomPtr rG1( cbr.removeCommonBits(g1->clone()) );
+
+#if GEOS_DEBUG_BINARYOP
+	check_valid(*rG0, "CBR: removed-bits geom 0");
+	check_valid(*rG1, "CBR: removed-bits geom 1");
+#endif
+
+	const Geometry& operand0 = *rG0;
+	const Geometry& operand1 = *rG1;
+#else // don't CBR before snapping
+	const Geometry& operand0 = *g0
+	const Geometry& operand1 = *g1
+#endif
+
+	GeometrySnapper snapper0( operand0 );
+	GeomPtr snapG0( snapper0.snapTo(operand1, snapTolerance) );
 
 	// NOTE: second geom is snapped on the snapped first one
-	GeometrySnapper snapper1( *g1 );
+	GeometrySnapper snapper1( operand1 );
 	GeomPtr snapG1( snapper1.snapTo(*snapG0, snapTolerance) );
 
-	// Check input validity
 #if GEOS_DEBUG_BINARYOP
-	operation::valid::IsValidOp ivo0(snapG0.get());
-	if ( ! ivo0.isValid() )
-	{
-		std::cerr << " SNAP: snapped geom 0 is invalid!"
-			<< ivo0.getValidationError()->toString() << std::endl;
-	}
-
-	operation::valid::IsValidOp ivo1(snapG1.get());
-	if ( ! ivo1.isValid() )
-	{
-		std::cerr << " SNAP: snapped geom 1 is invalid!"
-			<< ivo1.getValidationError()->toString() << std::endl;
-	}
+	check_valid(*snapG0, "SNAP: snapped geom 0");
+	check_valid(*snapG1, "SNAP: snapped geom 1");
 #endif
 
 	// Run the binary op
-	return GeomPtr( _Op(snapG0.get(), snapG1.get()) );
+	GeomPtr result( _Op(snapG0.get(), snapG1.get()) );
+
+#if GEOS_DEBUG_BINARYOP
+	check_valid(*result, "Op result (before common-bits addition");
+#endif
+
+#if CBR_BEFORE_SNAPPING
+	// Add common bits back in
+	cbr.addCommonBits( result.get() );
+#endif
+
+#if GEOS_DEBUG_BINARYOP
+	check_valid(*result, "Op result (after common-bits addition");
+#endif
+
+	return result;
 }
 
 template <class BinOp>
