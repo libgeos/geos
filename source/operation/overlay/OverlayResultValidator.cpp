@@ -117,9 +117,12 @@ bool
 OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 {
 	// The check only works for areal geoms
+#if 0 // now that FuzzyPointLocator extracts polygonal geoms,
+      // there should be no problem here
 	if ( ! isArea(g0) ) return true;
 	if ( ! isArea(g1) ) return true;
 	if ( ! isArea(gres) ) return true;
+#endif
 
 	addTestPts(g0);
 	addTestPts(g1);

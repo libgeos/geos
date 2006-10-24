@@ -42,13 +42,13 @@ namespace overlay { // geos::operation::overlay
  * Validates that the result of an overlay operation is
  * geometrically correct within a given tolerance.
  *
- * Uses fuzzy point location, and is only useful where the inputs are polygonal.
+ * Uses fuzzy point location, which only works with polygonal
+ * components of geometries.
+ *
  * This is a heuristic test, and may return incorrect results.
  * It should never return a false negative result, however
  * (I.e. reporting a valid result as invalid.)
  * 
- * Probably only works for polygonal geometry inputs.
- *
  * @see OverlayOp
  */
 class OverlayResultValidator {

@@ -1,5 +1,7 @@
 2006-10-24 Sandro Santilli <strk@refractions.net>
 
+	* operation::overlay::OverlayResultValidator.cpp (isValid):
+	  run the test even if inputs and output are not areal.
 	* operation::overlay::FuzzyPointLocator:
 	  eliminate non-polygonal components from consideration when
 	  testing the location of points.
