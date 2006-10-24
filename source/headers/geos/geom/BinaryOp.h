@@ -64,7 +64,7 @@
  * Always try original input first
  */
 #ifndef USE_ORIGINAL_INPUT
-//# define USE_ORIGINAL_INPUT 1
+# define USE_ORIGINAL_INPUT 1
 #endif
 
 /*

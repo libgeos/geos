@@ -1,5 +1,7 @@
 2006-10-24 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/BinaryOp.h: try original geoms
+	  first by default.
 	* operation::overlay::OverlayResultValidator.cpp (isValid):
 	  run the test even if inputs and output are not areal.
 	* operation::overlay::FuzzyPointLocator:
