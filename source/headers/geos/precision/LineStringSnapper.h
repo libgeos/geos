@@ -83,17 +83,25 @@ private:
 			const geom::Coordinate::ConstVect& snapPts);
 
 	/// \brief
-	/// Returns an iterator to the first point of the first segment in
-	/// srcPts which is within snapTolerance distance from given snapPt.
-	/// 
+	/// Finds a src segment which snaps to (is close to) the given snap
+	/// point.
+	//
+	/// Only one segment is determined - this is to prevent
+	/// snapping to multiple segments, which would almost certainly cause
+	/// invalid geometry to be created.
+	/// (The heuristic approach of snapping is really only appropriate
+	///  when snap pts snap to a unique spot on the src geometry.)
+	///
+	///
 	/// @param from
 	///        an iterator to first point of first segment to be checked
 	///
 	/// @param too_far
 	///        an iterator to last point of last segment to be checked
 	///
-	/// @returns too_far if no segment is close enough
-	///          (within snapTol distance)
+	/// @returns too_far if no segment needs snapping
+	///          (either none within snapTol distance,
+	///	      or one fond on the snapPt)
 	///
 	geom::CoordinateList::iterator findSegmentToSnap(
 			const geom::Coordinate& snapPt,

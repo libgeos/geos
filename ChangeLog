@@ -1,3 +1,11 @@
+2006-10-24 Sandro Santilli <strk@refractions.net>
+
+	* precision::LineStringSnapper (findSegmentToSnap):
+	  return the *closest* segment, don't snap if the closest
+	  segment *intersects* the snap points, consider a distance
+	  of exactly snapTolerance as non-tolerated
+	  (got in sync with JTS)
+
 2006-10-23 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/BinaryOp.h (SnapOp): document

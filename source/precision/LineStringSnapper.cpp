@@ -139,7 +139,7 @@ cerr << " points are equal, returning not-found " << endl;
 		}
 
 		double dist = snapPt.distance(pt);
-		if ( dist <= snapTolerance )
+		if ( dist < snapTolerance )
 		{
 #if GEOS_DEBUG
 cerr << " points are within distance (" << dist << ") returning iterator to snap point" << endl;
@@ -212,6 +212,9 @@ LineStringSnapper::findSegmentToSnap(
 			CoordinateList::iterator too_far)
 {
 	LineSegment seg;
+	double minDist = snapTolerance+1; // make sure the first closer then
+	                                  // snapTolerance is accepted
+	CoordinateList::iterator match=too_far;
 
 	// TODO: use std::find_if
 	for ( ; from != too_far; ++from)
@@ -222,34 +225,35 @@ LineStringSnapper::findSegmentToSnap(
 		seg.p1 = *to;
 
 #if GEOS_DEBUG
-cerr << " Checking segment " << seg << " for snapping against point" << snapPt << endl;
+cerr << " Checking segment " << seg << " for snapping against point " << snapPt << endl;
 #endif
 
 		if ( seg.p0.equals2D(snapPt) || seg.p1.equals2D(snapPt) )
 		{
 
 #if GEOS_DEBUG
-cerr << " One of segment endpoints equal snap point, checkin next" << endl;
+cerr << " One of segment endpoints equal snap point, returning too_far" << endl;
 #endif
-			// no snapping needed, check next
-			continue;
+			// If the snap pt is already in the src list,
+			// don't snap
+			return too_far;
 		}
 
 		double dist = seg.distance(snapPt);
-		if ( dist <= snapTolerance )
+#if GEOS_DEBUG
+cerr << " dist=" << dist << " minDist=" << minDist << " snapTolerance=" << snapTolerance << endl;
+#endif
+		if ( dist < minDist && dist < snapTolerance )
 		{
 #if GEOS_DEBUG
-cerr << " Segment/snapPt distance within tolerance (" << dist << ") returning iterator to start point" << endl;
+cerr << " Segment/snapPt distance within tolerance and closer then previous match (" << dist << ") " << endl;
 #endif
-			return from;
+			match = from;
+			minDist = dist;
 		}
 	}
 
-#if GEOS_DEBUG
-cerr << " No segment within distance" << endl;
-#endif
-
-	return too_far; // not found
+	return match;
 }
 
 } // namespace geos.precision
