@@ -40,9 +40,14 @@ namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
 /** \brief
- * Finds the location of a point relative to
- * a geometry using a tolerance value
- * to decide whether the point in on the boundary.
+ * Finds the most likely Location of a point relative to
+ * the polygonal components of a geometry, using a tolerance value.
+ *
+ * If a point is not clearly in the Interior or Exterior,
+ * it is considered to be on the Boundary.
+ * In other words, if the point is within the tolerance of the Boundary,
+ * it is considered to be on the Boundary; otherwise,
+ * whether it is Interior or Exterior is determined directly.
  */
 class FuzzyPointLocator {
 
@@ -62,7 +67,15 @@ private:
 
 	std::auto_ptr<geom::Geometry> linework;
 
+	// this function has been obsoleted
 	std::auto_ptr<geom::Geometry> getLineWork(const geom::Geometry& geom);
+
+	/// Extracts linework for polygonal components.
+	//
+	/// @param g the geometry from which to extract
+	/// @return a lineal geometry containing the extracted linework
+	std::auto_ptr<geom::Geometry> extractLineWork(const geom::Geometry& geom);
+
 
 };
 

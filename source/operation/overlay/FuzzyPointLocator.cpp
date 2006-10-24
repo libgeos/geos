@@ -51,8 +51,40 @@ FuzzyPointLocator::FuzzyPointLocator(const geom::Geometry& geom,
 	g(geom),
 	tolerance(nTolerance),
 	ptLocator(),
-	linework(getLineWork(g))
+	linework(extractLineWork(g))
 {
+}
+
+/*private*/
+std::auto_ptr<Geometry>
+FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
+{
+	vector<Geometry*>* lineGeoms = new vector<Geometry*>();
+	try { // geoms array will leak if an exception is thrown
+
+	for (size_t i=0, n=g.getNumGeometries(); i<n; ++i)
+	{
+		const Geometry* gComp = g.getGeometryN(i);
+		Geometry* lineGeom = NULL;
+
+		// only get linework for polygonal components
+		if (gComp->getDimension() == 2) {
+			lineGeom = gComp->getBoundary();
+			lineGeoms->push_back(lineGeom);
+		}
+	}
+	return std::auto_ptr<Geometry>(g.getFactory()->buildGeometry(lineGeoms));
+
+	} catch (...) { // avoid leaks
+		for (size_t i=0, n=lineGeoms->size(); i<n; ++i)
+		{
+
+			delete (*lineGeoms)[i];
+		}
+		delete lineGeoms;
+		throw;
+	}
+ 
 }
 
 /*private*/
