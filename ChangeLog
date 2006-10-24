@@ -1,5 +1,7 @@
 2006-10-24 Sandro Santilli <strk@refractions.net>
 
+	* precision::GeometrySnapper: snapPrecisionFactor augmented
+	  from 10e-12 to 10e-10.
 	* precision::LineStringSnapper (findSegmentToSnap):
 	  return the *closest* segment, don't snap if the closest
 	  segment *intersects* the snap points, consider a distance

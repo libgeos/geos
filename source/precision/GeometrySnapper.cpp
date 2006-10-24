@@ -43,7 +43,7 @@ namespace geos {
 namespace precision { // geos.precision
 
 //const double GeometrySnapper::snapTol = 0.000001;
-const double GeometrySnapper::snapPrecisionFactor = 10e-12;
+const double GeometrySnapper::snapPrecisionFactor = 10e-10;
 
 class SnapTransformer: public geos::geom::util::GeometryTransformer {
 

@@ -79,7 +79,7 @@ private:
 	// eventually this will be determined from the geometry topology
 	//static const double snapTol; //  = 0.000001;
 
-	static const double snapPrecisionFactor; //  = 10e-12
+	static const double snapPrecisionFactor; //  = 10e-10
 
 	const geom::Geometry& srcGeom;
 
