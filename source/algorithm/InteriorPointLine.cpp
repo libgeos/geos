@@ -36,7 +36,7 @@ using namespace geos::geom;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-InteriorPointLine::InteriorPointLine(Geometry *g)
+InteriorPointLine::InteriorPointLine(const Geometry *g)
 {
 	minDistance=DoubleInfinity;
 	hasInterior=false;

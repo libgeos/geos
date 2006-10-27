@@ -642,7 +642,7 @@ public:
 	 * @return a Point which is in the interior of this Geometry, or
 	 *         null if the geometry doesn't have an interior (empty)
 	 */
-	virtual Point* getInteriorPoint();
+	virtual Point* getInteriorPoint() const;
 
 	/*
 	 * \brief

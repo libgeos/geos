@@ -70,8 +70,8 @@ private:
 	public:
 		Polygonizer *pol;
 		LineStringAdder(Polygonizer *p);
-		void filter_rw(geom::Geometry *g);
-		//void filter_ro(const geom::Geometry * /*g*/){};
+		//void filter_rw(geom::Geometry *g);
+		void filter_ro(const geom::Geometry * g);
 	};
 
 	// default factory
@@ -82,7 +82,7 @@ private:
 	 *
 	 * @param line the {@link LineString} to add
 	 */
-	void add(geom::LineString *line);
+	void add(const geom::LineString *line);
 
 	/**
 	 * Perform the polygonization, if it has not already been carried out.
@@ -134,6 +134,16 @@ public:
 	 */
 	void add(std::vector<geom::Geometry*> *geomList);
 
+        /** \brief
+         * Add a collection of geometries to be polygonized.
+         * May be called multiple times.
+         * Any dimension of Geometry may be added;
+         * the constituent linework will be extracted and used
+         *
+         * @param geomList a list of Geometry with linework to be polygonized
+         */
+	void add(std::vector<const geom::Geometry*> *geomList);
+
 	/**
 	 * Add a geometry to the linework to be polygonized.
 	 * May be called multiple times.
@@ -143,6 +153,16 @@ public:
 	 * @param g a Geometry with linework to be polygonized
 	 */
 	void add(geom::Geometry *g);
+
+        /**
+         * Add a geometry to the linework to be polygonized.
+         * May be called multiple times.
+         * Any dimension of Geometry may be added;
+         * the constituent linework will be extracted and used
+         *
+         * @param g a Geometry with linework to be polygonized
+         */
+	void add(const geom::Geometry *g);
 
 	/** \brief
 	 * Gets the list of polygons formed by the polygonization.

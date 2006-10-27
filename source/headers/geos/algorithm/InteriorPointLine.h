@@ -45,7 +45,7 @@ namespace algorithm { // geos::algorithm
 class InteriorPointLine {
 public:
 
-	InteriorPointLine(geom::Geometry *g);
+	InteriorPointLine(const geom::Geometry *g);
 
 	~InteriorPointLine();
 

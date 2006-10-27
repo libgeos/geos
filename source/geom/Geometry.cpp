@@ -240,7 +240,7 @@ Geometry::getCentroid(Coordinate& ret) const
 }
 
 Point*
-Geometry::getInteriorPoint()
+Geometry::getInteriorPoint() const
 {
 	Coordinate interiorPt;
 	int dim=getDimension();

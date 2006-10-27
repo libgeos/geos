@@ -1,3 +1,11 @@
+2006-10-27 Markus Schaber <schabi@logix-tt.com>
+
+	* algorithm::InteriorPointLine (ctor): take Geometry by const-pointer.
+	* geom::Geometry (getInteriorPoint): made a const-method
+	* operation::polygonize::Polygonizer: implement filter_ro rather
+	  then filter_rw, as it doesn't change the Geometry, propagated
+	  change to internal interfaces (add methods)
+
 2006-10-26 Sandro Santilli <strk@refractions.net>
 
 	* capi/geos_c.h.in: reverted all changes of 'int' types

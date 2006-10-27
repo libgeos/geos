@@ -40,9 +40,9 @@ Polygonizer::LineStringAdder::LineStringAdder(Polygonizer *p):
 }
 
 void
-Polygonizer::LineStringAdder::filter_rw(Geometry *g)
+Polygonizer::LineStringAdder::filter_ro(const Geometry *g)
 {
-	LineString *ls = dynamic_cast<LineString *>(g);
+	const LineString *ls = dynamic_cast<const LineString *>(g);
 	if ( ls ) pol->add(ls);
 }
 
@@ -99,7 +99,25 @@ Polygonizer::add(vector<Geometry*> *geomList)
 {
 	for(unsigned int i=0, n=geomList->size(); i<n; ++i)
 	{
-		Geometry *geometry=(*geomList)[i];
+		const Geometry *geometry=(*geomList)[i];
+		add(geometry);
+	}
+}
+
+/*
+ * Add a collection of geometries to be polygonized.
+ * May be called multiple times.
+ * Any dimension of Geometry may be added;
+ * the constituent linework will be extracted and used
+ *
+ * @param geomList a list of {@link Geometry}s with linework to be polygonized
+ */
+void
+Polygonizer::add(vector<const Geometry*> *geomList)
+{
+	for(unsigned int i=0, n=geomList->size(); i<n; ++i)
+	{
+		const Geometry *geometry=(*geomList)[i];
 		add(geometry);
 	}
 }
@@ -115,7 +133,21 @@ Polygonizer::add(vector<Geometry*> *geomList)
 void
 Polygonizer::add(Geometry *g)
 {
-	g->apply_rw(lineStringAdder);
+	g->apply_ro(lineStringAdder);
+}
+
+/*
+ * Add a geometry to the linework to be polygonized.
+ * May be called multiple times.
+ * Any dimension of Geometry may be added;
+ * the constituent linework will be extracted and used
+ *
+ * @param g a Geometry with linework to be polygonized
+ */
+void
+Polygonizer::add(const Geometry *g)
+{
+	g->apply_ro(lineStringAdder);
 }
 
 /*
@@ -124,7 +156,7 @@ Polygonizer::add(Geometry *g)
  * @param line the LineString to add
  */
 void
-Polygonizer::add(LineString *line)
+Polygonizer::add(const LineString *line)
 {
 	// create a new graph using the factory from the input Geometry
 	if (graph==NULL)
