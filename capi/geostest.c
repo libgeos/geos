@@ -185,7 +185,6 @@ do_all(char *inputfile)
 	}
 	GEOSGeom_destroy(g2);
 
-
 	/* Unary predicates */
 	if ( GEOSisEmpty(g1) ) printf("isEmpty\n");
 	if ( GEOSisValid(g1) ) printf("isValid\n");
@@ -194,6 +193,10 @@ do_all(char *inputfile)
 
 	/* Convex Hull */
 	g2 = GEOSConvexHull(g1);
+	if ( ! g2 )
+	{
+		log_and_exit("GEOSConvexHull() raised an exception");
+	}
 	ptr = GEOSGeomToWKT(g2);
 	printf("ConvexHull: %s\n", ptr); 
 	free(ptr);
@@ -201,9 +204,14 @@ do_all(char *inputfile)
 	/* Buffer */
 	GEOSGeom_destroy(g1);
 	g1 = GEOSBuffer(g2, 100, 30);
+	if ( ! g1 )
+	{
+		log_and_exit("GEOSBuffer() raised an exception");
+	}
 	ptr = GEOSGeomToWKT(g1);
 	printf("Buffer: %s\n", ptr); 
 	free(ptr);
+
 
 	/* Intersection */
 	g3 = GEOSIntersection(g1, g2);
@@ -286,6 +294,10 @@ do_all(char *inputfile)
 	gg[1] = g2;
 	g3 = GEOSPolygonize(gg, 2);
 	free(gg);
+	if ( ! g3 )
+	{
+		log_and_exit("Exception running GEOSPolygonize");
+	}
 	ptr = GEOSGeomToWKT(g3);
 	GEOSGeom_destroy(g3);
 	printf("Polygonize: %s\n", ptr); 
@@ -293,6 +305,10 @@ do_all(char *inputfile)
 
 	/* LineMerge */
 	g3 = GEOSLineMerge(g1);
+	if ( ! g3 )
+	{
+		log_and_exit("Exception running GEOSLineMerge");
+	}
 	ptr = GEOSGeomToWKT(g3);
 	printf("LineMerge: %s\n", ptr); 
 	free(ptr);
