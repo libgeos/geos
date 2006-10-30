@@ -937,10 +937,12 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 				resultGeom->toString());
 		}
 	}
+#if GEOS_DEBUG
 	else
 	{
 		std::cerr << "Did not run OverlayResultValidator as the precision model is not floating" << std::endl;
 	}
+#endif // ndef GEOS_DEBUG
 #endif
 }
 
