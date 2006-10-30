@@ -50,6 +50,12 @@
 #include <string>
 #include <memory>
 
+// Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
+#define GEOSGeom geos::geom::Geometry*
+#define GEOSCoordSeq geos::geom::CoordinateSequence*
+#define GEOSGeomTypes geos::geom::GeometryTypeId
+#include "geos_c.h"
+
 /// Define this if you want operations triggering Exceptions to
 /// be printed (will use the NOTIFY channel - only implemented for GEOSUnion so far)
 ///
@@ -78,118 +84,8 @@ typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
 //## PROTOTYPES #############################################
 
-/* Initialize GEOS library */
-extern "C" void GEOS_DLL initGEOS(GEOSMessageHandler notice, GEOSMessageHandler err);
-
-/* Release GEOS resources */
-extern "C" void GEOS_DLL finishGEOS();
-
-/* Input and Output functions, return NULL on exception. */
-extern "C" Geometry GEOS_DLL *GEOSGeomFromWKT(const char *wkt);
-extern "C" Geometry GEOS_DLL *GEOSGeomFromWKB_buf(const char *wkb, size_t size);
-extern "C" Geometry GEOS_DLL *GEOSGeomFromHEX_buf(const char *hex, size_t size);
-extern "C" char GEOS_DLL *GEOSGeomToWKT(const Geometry *g);
-extern "C" char GEOS_DLL *GEOSGeomToWKB_buf(const Geometry *g, size_t *size);
-extern "C" char GEOS_DLL *GEOSGeomToHEX_buf(const Geometry *g, size_t *size);
-extern "C" int GEOS_DLL GEOS_getWKBOutputDims();
-extern "C" int GEOS_DLL GEOS_setWKBOutputDims(int newdims);
-extern "C" int GEOS_DLL GEOS_getWKBByteOrder();
-extern "C" int GEOS_DLL GEOS_setWKBByteOrder(int byteOrder);
-
-extern "C" void GEOS_DLL GEOSSetSRID(Geometry *g, int SRID);
-
-extern "C" char GEOS_DLL *GEOSRelate(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOS_DLL GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat);
-extern "C" char GEOS_DLL GEOSDisjoint(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOS_DLL GEOSTouches(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOS_DLL GEOSIntersects(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOS_DLL GEOSCrosses(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOS_DLL GEOSWithin(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOS_DLL GEOSContains(const Geometry *g1, const Geometry *g2);
-extern "C" char GEOS_DLL GEOSOverlaps(const Geometry *g1, const Geometry *g2);
-
-extern "C" Geometry GEOS_DLL *GEOSpolygonize(Geometry **geoms, unsigned int ngeoms);
-extern "C" char GEOS_DLL GEOSisValid(const Geometry *g1);
-extern "C" char GEOS_DLL GEOSisEmpty(const Geometry *g1);
-extern "C" Geometry GEOS_DLL *GEOSEnvelope(Geometry *g1);
-extern "C" Geometry GEOS_DLL *GEOSIntersection(Geometry *g1,Geometry *g2);
-extern "C" Geometry GEOS_DLL *GEOSBuffer(Geometry *g1,double width,int quadsegs);
-extern "C" Geometry GEOS_DLL *GEOSConvexHull(Geometry *g1);
-extern "C" Geometry GEOS_DLL *GEOSDifference(Geometry *g1,Geometry *g2);
-extern "C" Geometry GEOS_DLL *GEOSBoundary(Geometry *g1);
-extern "C" Geometry GEOS_DLL *GEOSSymDifference(Geometry *g1,Geometry *g2);
-extern "C" Geometry GEOS_DLL *GEOSUnion(Geometry *g1,Geometry *g2);
-extern "C" const Geometry GEOS_DLL *GEOSGetGeometryN(Geometry *g1, int n);
-extern "C" const Geometry GEOS_DLL *GEOSGetExteriorRing(Geometry *g1);
-extern "C" const Geometry GEOS_DLL *GEOSGetInteriorRingN(Geometry *g1, int n);
-extern "C" int GEOS_DLL GEOSNormalize(Geometry *g1);
-extern "C" int GEOS_DLL GEOSGetNumInteriorRings(Geometry *g1);
-extern "C" int GEOS_DLL GEOSGetSRID(Geometry *g1);
-extern "C" int GEOS_DLL GEOSGetNumGeometries(Geometry *g1);
-extern "C" char GEOS_DLL GEOSisSimple(Geometry *g1);
-extern "C" char GEOS_DLL GEOSEquals(const Geometry *g1, const Geometry*g2);
-extern "C" char GEOS_DLL GEOSEqualsExact(const Geometry *g1, const Geometry *g2, double tolerance);
-extern "C" char GEOS_DLL GEOSisRing(Geometry *g1);
-extern "C" Geometry GEOS_DLL *GEOSPointOnSurface(Geometry *g1);
-extern "C" Geometry GEOS_DLL *GEOSGetCentroid(Geometry *g);
-extern "C" CoordinateSequence GEOS_DLL *GEOSGeom_getCoordSeq(Geometry *g1);
-
-extern "C" int GEOS_DLL GEOSArea(const Geometry *g1, double *area);
-extern "C" int GEOS_DLL GEOSLength(const Geometry *g1, double *length);
-extern "C" int GEOS_DLL GEOSDistance(const Geometry *g1, const Geometry *g2,
-	double *dist);
-
-extern "C" Geometry GEOS_DLL *GEOSSimplify(Geometry *g1, double tolerance);
-extern "C" Geometry GEOS_DLL *GEOSTopologyPreserveSimplify(Geometry *g1, double tolerance);
-
-extern "C" const char GEOS_DLL *GEOSversion();
 extern "C" const char GEOS_DLL *GEOSjtsport();
 extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
-extern "C" char GEOS_DLL *GEOSGeomType(Geometry *g1);
-extern "C" int GEOS_DLL GEOSGeomTypeId(Geometry *g1);
-
-//extern "C" void GEOSdeleteChar(char *a);
-extern "C" void GEOS_DLL  GEOSGeom_destroy(Geometry *a);
-extern "C" bool GEOS_DLL GEOSHasZ(Geometry *g1);
-
-extern "C" Geometry GEOS_DLL *GEOSPolygonize(Geometry **, unsigned int);
-extern "C" Geometry GEOS_DLL *GEOSLineMerge(Geometry *);
-
-extern "C" int GEOS_DLL GEOSGeom_getDimensions(const Geometry *);
-extern "C" int GEOS_DLL GEOSGetNumCoordinates(const Geometry *);
-
-/*************************************************************************
- *
- * Coordinate Sequences
- *
- *************************************************************************/
-
-extern "C" CoordinateSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int, unsigned int);
-extern "C" int GEOS_DLL GEOSCoordSeq_getSize(CoordinateSequence *, unsigned int *size);
-extern "C" int GEOS_DLL GEOSCoordSeq_getDimensions(CoordinateSequence *, unsigned int *dims);
-extern "C" int GEOS_DLL GEOSCoordSeq_setX(CoordinateSequence *, unsigned int, double);
-extern "C" int GEOS_DLL GEOSCoordSeq_setY(CoordinateSequence *, unsigned int, double);
-extern "C" int GEOS_DLL GEOSCoordSeq_setZ(CoordinateSequence *, unsigned int, double);
-extern "C" int GEOS_DLL GEOSCoordSeq_setOrdinate(CoordinateSequence *, unsigned int, unsigned int, double);
-extern "C" int GEOS_DLL GEOSCoordSeq_getX(CoordinateSequence *, unsigned int, double *);
-extern "C" int GEOS_DLL GEOSCoordSeq_getY(CoordinateSequence *, unsigned int, double *);
-extern "C" int GEOS_DLL GEOSCoordSeq_getZ(CoordinateSequence *, unsigned int, double *);
-extern "C" int GEOS_DLL GEOSCoordSeq_getOrdinate(CoordinateSequence *, unsigned int, unsigned int, double *);
-extern "C" CoordinateSequence GEOS_DLL *GEOSCoordSeq_clone(CoordinateSequence *);
-extern "C" void GEOS_DLL GEOSCoordSeq_destroy(CoordinateSequence *);
-
-/*************************************************************************
- *
- * Geometry constructors
- *
- *************************************************************************/
-
-extern "C" Geometry GEOS_DLL *GEOSGeom_createPoint(CoordinateSequence *);
-extern "C" Geometry GEOS_DLL *GEOSGeom_createLinearRing(CoordinateSequence *);
-extern "C" Geometry GEOS_DLL *GEOSGeom_createLineString(CoordinateSequence *);
-extern "C" Geometry GEOS_DLL *GEOSGeom_createPolygon(Geometry *, Geometry **, unsigned int);
-extern "C" Geometry GEOS_DLL *GEOSGeom_createCollection(int type, Geometry **, unsigned int);
-extern "C" Geometry GEOS_DLL *GEOSGeom_clone(Geometry *);
 
 //## GLOBALS ################################################
 
@@ -201,6 +97,8 @@ static GEOSMessageHandler NOTICE_MESSAGE;
 static GEOSMessageHandler ERROR_MESSAGE;
 static int WKBOutputDims = 2;
 static int WKBByteOrder = getMachineByteOrder();
+
+extern "C" {
 
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
@@ -640,20 +538,20 @@ GEOSGeomToWKT(const Geometry *g1)
 }
 
 // Remember to free the result!
-char *
+unsigned char *
 GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 {
 	try
 	{
-        int byteOrder = (int) WKBByteOrder;
+		int byteOrder = (int) WKBByteOrder;
 		io::WKBWriter w(WKBOutputDims, byteOrder);
 		std::ostringstream s(std::ios_base::binary);
 		w.write(*g, s);
 		std::string wkbstring = s.str();
 		size_t len = wkbstring.length();
 
-		char *result;
-		result = (char*) std::malloc(len);
+		unsigned char *result;
+		result = (unsigned char*) std::malloc(len);
 		memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
@@ -672,11 +570,11 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 }
 
 Geometry *
-GEOSGeomFromWKB_buf(const char *wkb, size_t size)
+GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size)
 {
 	try
 	{
-		std::string wkbstring = std::string(wkb, size); // make it binary !
+		std::string wkbstring = std::string((const char*)wkb, size); // make it binary !
 		io::WKBReader r(*geomFactory);
 		std::istringstream s(std::ios_base::binary);
 		s.str(wkbstring);
@@ -700,7 +598,7 @@ GEOSGeomFromWKB_buf(const char *wkb, size_t size)
 
 /* Read/write wkb hex values.  Returned geometries are
    owned by the caller.*/
-char *
+unsigned char *
 GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 {
 	try
@@ -716,7 +614,7 @@ GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 		result = (char*) std::malloc(len);
 		memcpy(result, hexstring.c_str(), len);
 		*size = len;
-		return result;
+		return (unsigned char*) result;
 	}
 	catch (const std::exception &e)
 	{
@@ -732,11 +630,11 @@ GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 }
 
 Geometry *
-GEOSGeomFromHEX_buf(const char *hex, size_t size)
+GEOSGeomFromHEX_buf(const unsigned char *hex, size_t size)
 {
 	try
 	{
-		std::string hexstring = std::string(hex, size); 
+		std::string hexstring = std::string((const char*)hex, size); 
 		io::WKBReader r(*geomFactory);
 		std::istringstream s(std::ios_base::binary);
 		s.str(hexstring);
@@ -779,7 +677,7 @@ GEOSisEmpty(const Geometry *g1)
 }
 
 char
-GEOSisSimple(Geometry *g1)
+GEOSisSimple(const Geometry *g1)
 {
 	try
 	{
@@ -799,11 +697,11 @@ GEOSisSimple(Geometry *g1)
 }
 
 char
-GEOSisRing(Geometry *g)
+GEOSisRing(const Geometry *g)
 {
 	try
 	{
-		LineString *ls = dynamic_cast<LineString *>(g);
+		const LineString *ls = dynamic_cast<const LineString *>(g);
 		if ( ls ) {
 			return (ls->isRing());
 		} else {
@@ -827,7 +725,7 @@ GEOSisRing(Geometry *g)
 
 //free the result of this
 char *
-GEOSGeomType(Geometry *g1)
+GEOSGeomType(const Geometry *g1)
 {
 	try
 	{
@@ -853,7 +751,7 @@ GEOSGeomType(Geometry *g1)
 
 // Return postgis geometry type index
 int
-GEOSGeomTypeId(Geometry *g1)
+GEOSGeomTypeId(const Geometry *g1)
 {
 	try
 	{
@@ -880,7 +778,7 @@ GEOSGeomTypeId(Geometry *g1)
 //-------------------------------------------------------------------
 
 Geometry *
-GEOSEnvelope(Geometry *g1)
+GEOSEnvelope(const Geometry *g1)
 {
 	try
 	{
@@ -901,7 +799,7 @@ GEOSEnvelope(Geometry *g1)
 }
 
 Geometry *
-GEOSIntersection(Geometry *g1, Geometry *g2)
+GEOSIntersection(const Geometry *g1, const Geometry *g2)
 {
 	try
 	{
@@ -924,7 +822,7 @@ GEOSIntersection(Geometry *g1, Geometry *g2)
 }
 
 Geometry *
-GEOSBuffer(Geometry *g1, double width, int quadrantsegments)
+GEOSBuffer(const Geometry *g1, double width, int quadrantsegments)
 {
 	try
 	{
@@ -945,7 +843,7 @@ GEOSBuffer(Geometry *g1, double width, int quadrantsegments)
 }
 
 Geometry *
-GEOSConvexHull(Geometry *g1)
+GEOSConvexHull(const Geometry *g1)
 {
 	try
 	{
@@ -966,7 +864,7 @@ GEOSConvexHull(Geometry *g1)
 }
 
 Geometry *
-GEOSDifference(Geometry *g1, Geometry *g2)
+GEOSDifference(const Geometry *g1, const Geometry *g2)
 {
 	try
 	{
@@ -989,7 +887,7 @@ GEOSDifference(Geometry *g1, Geometry *g2)
 }
 
 Geometry *
-GEOSBoundary(Geometry *g1)
+GEOSBoundary(const Geometry *g1)
 {
 	try
 	{
@@ -1010,7 +908,7 @@ GEOSBoundary(Geometry *g1)
 }
 
 Geometry *
-GEOSSymDifference(Geometry *g1, Geometry *g2)
+GEOSSymDifference(const Geometry *g1, const Geometry *g2)
 {
 	try
 	{
@@ -1033,7 +931,7 @@ GEOSSymDifference(Geometry *g1, Geometry *g2)
 }
 
 Geometry *
-GEOSUnion(Geometry *g1, Geometry *g2)
+GEOSUnion(const Geometry *g1, const Geometry *g2)
 {
 	try
 	{
@@ -1064,7 +962,7 @@ GEOSUnion(Geometry *g1, Geometry *g2)
 
 
 Geometry *
-GEOSPointOnSurface(Geometry *g1)
+GEOSPointOnSurface(const Geometry *g1)
 {
 	try
 	{
@@ -1181,7 +1079,7 @@ GEOSNormalize(Geometry *g1)
 }
 
 int
-GEOSGetNumInteriorRings(Geometry *g1)
+GEOSGetNumInteriorRings(const Geometry *g1)
 {
 	try{
 		Polygon *p = (Polygon *) g1;
@@ -1203,7 +1101,7 @@ GEOSGetNumInteriorRings(Geometry *g1)
 
 //only call on GCs (or multi*)
 int
-GEOSGetNumGeometries(Geometry *g1)
+GEOSGetNumGeometries(const Geometry *g1)
 {
 	try{
 		GeometryCollection *gc = (GeometryCollection *) g1;
@@ -1228,10 +1126,10 @@ GEOSGetNumGeometries(Geometry *g1)
  * Return a pointer to the internal Geometry.
  */
 const Geometry *
-GEOSGetGeometryN(Geometry *g1, int n)
+GEOSGetGeometryN(const Geometry *g1, int n)
 {
 	try{
-		const GeometryCollection *gc = dynamic_cast<GeometryCollection *>(g1);
+		const GeometryCollection *gc = dynamic_cast<const GeometryCollection *>(g1);
 		if ( ! gc )
 		{
 			ERROR_MESSAGE("Argument is not a GeometryCollection");
@@ -1258,10 +1156,10 @@ GEOSGetGeometryN(Geometry *g1, int n)
  * Return a copy of the internal Geometry.
  */
 const Geometry *
-GEOSGetExteriorRing(Geometry *g1)
+GEOSGetExteriorRing(const Geometry *g1)
 {
 	try{
-		Polygon *p = dynamic_cast<Polygon *>(g1);
+		const Polygon *p = dynamic_cast<const Polygon *>(g1);
 		if ( ! p ) 
 		{
 			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
@@ -1287,10 +1185,10 @@ GEOSGetExteriorRing(Geometry *g1)
  * Return a pointer to internal storage, do not destroy it.
  */
 const Geometry *
-GEOSGetInteriorRingN(Geometry *g1, int n)
+GEOSGetInteriorRingN(const Geometry *g1, int n)
 {
 	try{
-		Polygon *p = dynamic_cast<Polygon *>(g1);
+		const Polygon *p = dynamic_cast<const Polygon *>(g1);
 		if ( ! p ) 
 		{
 			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
@@ -1312,7 +1210,7 @@ GEOSGetInteriorRingN(Geometry *g1, int n)
 }
 
 Geometry *
-GEOSGetCentroid(Geometry *g)
+GEOSGetCentroid(const Geometry *g)
 {
 	try{
 		Geometry *ret = g->getCentroid();
@@ -1383,13 +1281,13 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 }
 
 Geometry *
-GEOSPolygonize(Geometry **g, unsigned int ngeoms)
+GEOSPolygonize(const Geometry **g, unsigned int ngeoms)
 {
 	unsigned int i;
 	Geometry *out = NULL;
 
 	// construct vector
-	std::vector<Geometry *> *geoms = new std::vector<Geometry *>(ngeoms);
+	std::vector<const Geometry *> *geoms = new std::vector<const Geometry *>(ngeoms);
 	for (i=0; i<ngeoms; i++) (*geoms)[i] = g[i];
 
 #if GEOS_DEBUG
@@ -1416,10 +1314,20 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 	ERROR_MESSAGE("geometry vector deleted");
 #endif
 
-		geoms = new std::vector<Geometry *>(polys->size());
-		for (i=0; i<polys->size(); i++) (*geoms)[i] = (*polys)[i];
+		// We need a vector of Geometry pointers, not
+		// Polygon pointers.
+		// STL vector doesn't allow transparent upcast of this
+		// nature, so we explicitly convert.
+		// (it's just a waste of processor and memory, btw)
+                std::vector<Geometry*> *polyvec =
+				new std::vector<Geometry *>(polys->size());
+		for (i=0; i<polys->size(); i++) (*polyvec)[i] = (*polys)[i];
 		delete polys;
-		out = geomFactory->createGeometryCollection(geoms);
+
+		out = geomFactory->createGeometryCollection(polyvec);
+		// the above method takes ownership of the passed
+		// vector, so we must *not* delete it
+                //delete polyvec;
 	}
 	catch (const std::exception &e)
 	{
@@ -1437,7 +1345,7 @@ GEOSPolygonize(Geometry **g, unsigned int ngeoms)
 }
 
 Geometry *
-GEOSLineMerge(Geometry *g)
+GEOSLineMerge(const Geometry *g)
 {
         unsigned int i;
         Geometry *out = NULL;
@@ -1476,7 +1384,7 @@ GEOSLineMerge(Geometry *g)
 }
 
 int
-GEOSGetSRID(Geometry *g1)
+GEOSGetSRID(const Geometry *g1)
 {
 	try{
 		return g1->getSRID();
@@ -1511,8 +1419,8 @@ GEOSjtsport()
 }
 
 
-bool 
-GEOSHasZ(Geometry *g)
+char 
+GEOSHasZ(const Geometry *g)
 {
 	if ( g->isEmpty() ) return false;
 	double az = g->getCoordinate()->z;
@@ -1612,7 +1520,7 @@ GEOSCoordSeq_setZ(CoordinateSequence *s, unsigned int idx, double val)
 }
 
 CoordinateSequence *
-GEOSCoordSeq_clone(CoordinateSequence *s)
+GEOSCoordSeq_clone(const CoordinateSequence *s)
 {
 	try { return s->clone(); }
 	catch (const std::exception &e)
@@ -1629,7 +1537,7 @@ GEOSCoordSeq_clone(CoordinateSequence *s)
 }
 
 int
-GEOSCoordSeq_getOrdinate(CoordinateSequence *s, unsigned int idx,
+GEOSCoordSeq_getOrdinate(const CoordinateSequence *s, unsigned int idx,
 	unsigned int dim, double *val)
 {
 	try {
@@ -1652,25 +1560,25 @@ GEOSCoordSeq_getOrdinate(CoordinateSequence *s, unsigned int idx,
 }
 
 int
-GEOSCoordSeq_getX(CoordinateSequence *s, unsigned int idx, double *val)
+GEOSCoordSeq_getX(const CoordinateSequence *s, unsigned int idx, double *val)
 {
 	return GEOSCoordSeq_getOrdinate(s, idx, 0, val);
 }
 
 int
-GEOSCoordSeq_getY(CoordinateSequence *s, unsigned int idx, double *val)
+GEOSCoordSeq_getY(const CoordinateSequence *s, unsigned int idx, double *val)
 {
 	return GEOSCoordSeq_getOrdinate(s, idx, 1, val);
 }
 
 int
-GEOSCoordSeq_getZ(CoordinateSequence *s, unsigned int idx, double *val)
+GEOSCoordSeq_getZ(const CoordinateSequence *s, unsigned int idx, double *val)
 {
 	return GEOSCoordSeq_getOrdinate(s, idx, 2, val);
 }
 
 int
-GEOSCoordSeq_getSize(CoordinateSequence *s, unsigned int *size)
+GEOSCoordSeq_getSize(const CoordinateSequence *s, unsigned int *size)
 {
 	try {
 		int sz = s->getSize();
@@ -1691,7 +1599,7 @@ GEOSCoordSeq_getSize(CoordinateSequence *s, unsigned int *size)
 }
 
 int
-GEOSCoordSeq_getDimensions(CoordinateSequence *s, unsigned int *dims)
+GEOSCoordSeq_getDimensions(const CoordinateSequence *s, unsigned int *dims)
 {
 	try {
 		unsigned int dm = s->getDimension();
@@ -1729,17 +1637,17 @@ GEOSCoordSeq_destroy(CoordinateSequence *s)
 	}
 }
 
-CoordinateSequence *
-GEOSGeom_getCoordSeq(Geometry *g)
+const CoordinateSequence *
+GEOSGeom_getCoordSeq(const Geometry *g)
 {
 	try
 	{
-		LineString *ls = dynamic_cast<LineString *>(g);
+		const LineString *ls = dynamic_cast<const LineString *>(g);
 		if ( ls )
 		{
 	return const_cast<CoordinateSequence *>(ls->getCoordinatesRO());
 		}
-		Point *p = dynamic_cast<Point *>(g);
+		const Point *p = dynamic_cast<const Point *>(g);
 		if ( p ) 
 		{
 	return const_cast<CoordinateSequence *>(p->getCoordinatesRO());
@@ -1840,7 +1748,7 @@ GEOSGeom_createPolygon(Geometry *shell, Geometry **holes,
 }
 
 Geometry *
-GEOSGeom_clone(Geometry *g)
+GEOSGeom_clone(const Geometry *g)
 {
 	try { return g->clone(); }
 	catch (const std::exception &e)
@@ -1904,7 +1812,7 @@ GEOSGeom_getDimensions(const Geometry *g)
 }
 
 Geometry *
-GEOSSimplify(Geometry *g1, double tolerance)
+GEOSSimplify(const Geometry *g1, double tolerance)
 {
 	using namespace geos::simplify;
 
@@ -1928,7 +1836,7 @@ GEOSSimplify(Geometry *g1, double tolerance)
 }
 
 Geometry *
-GEOSTopologyPreserveSimplify(Geometry *g1, double tolerance)
+GEOSTopologyPreserveSimplify(const Geometry *g1, double tolerance)
 {
 	using namespace geos::simplify;
 
@@ -1950,3 +1858,5 @@ GEOSTopologyPreserveSimplify(Geometry *g1, double tolerance)
 		return NULL;
 	}
 }
+
+} //extern "C"

@@ -65,10 +65,14 @@ extern "C" {
  ***********************************************************************/
 
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
+
+#ifndef GEOSGeom
 typedef struct GEOSGeom_t *GEOSGeom;
 typedef struct GEOSCoordSeq_t *GEOSCoordSeq;
+#endif
 
-/* Supported geometry types */
+/* Supported geometry types - may be defined when included by geos_c.cpp*/
+#ifndef GEOSGeomTypes
 enum GEOSGeomTypes {
 	GEOS_POINT,
 	GEOS_LINESTRING,
@@ -79,6 +83,7 @@ enum GEOSGeomTypes {
 	GEOS_MULTIPOLYGON,
 	GEOS_GEOMETRYCOLLECTION
 };
+#endif
 
 /* Byte oders exposed via the c api */
 enum GEOSByteOrders {
@@ -303,14 +308,14 @@ extern int GEOS_DLL GEOSGetSRID(const GEOSGeom g1);
 extern void GEOS_DLL GEOSSetSRID(GEOSGeom g, int SRID);
 
 /* Return -1 on exception */
-extern unsigned int GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
+extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
 
 /*
  * Return NULL on exception, Geometry must be a Collection.
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
  */
-extern const GEOSGeom GEOS_DLL GEOSGetGeometryN(const GEOSGeom g, unsigned int n);
+extern const GEOSGeom GEOS_DLL GEOSGetGeometryN(const GEOSGeom g, int n);
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSNormalize(GEOSGeom g1);
@@ -323,7 +328,7 @@ extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeom g1);
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
  */
-extern const GEOSGeom GEOS_DLL GEOSGetInteriorRingN(const GEOSGeom g, unsigned int n);
+extern const GEOSGeom GEOS_DLL GEOSGetInteriorRingN(const GEOSGeom g, int n);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.
@@ -344,7 +349,7 @@ extern const GEOSCoordSeq GEOS_DLL GEOSGeom_getCoordSeq(const GEOSGeom g);
 /*
  * Return 0 on exception (or empty geometry)
  */
-extern unsigned int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
+extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeom g);
 
 /************************************************************************
  *
