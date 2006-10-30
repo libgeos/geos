@@ -78,8 +78,6 @@ using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
 using namespace geos::operation::overlay;
 
-typedef void (*GEOSMessageHandler)(const char *fmt, ...);
-
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
 //## PROTOTYPES #############################################
@@ -1082,7 +1080,12 @@ int
 GEOSGetNumInteriorRings(const Geometry *g1)
 {
 	try{
-		Polygon *p = (Polygon *) g1;
+		const Polygon *p = dynamic_cast<const Polygon *>(g1);
+                if ( ! p )
+                {
+                        ERROR_MESSAGE("Argument is not a Polygon");
+                        return -1;
+                }
 		return p->getNumInteriorRing();
 	}
 	catch (const std::exception &e)
@@ -1099,13 +1102,12 @@ GEOSGetNumInteriorRings(const Geometry *g1)
 }
 
 
-//only call on GCs (or multi*)
+// returns -1 on error and 1 for non-multi geometries
 int
 GEOSGetNumGeometries(const Geometry *g1)
 {
 	try{
-		GeometryCollection *gc = (GeometryCollection *) g1;
-		return gc->getNumGeometries();
+		return g1->getNumGeometries();
 	}
 	catch (const std::exception &e)
 	{
@@ -1237,7 +1239,7 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 	char buf[256];
 	sprintf(buf, "PostGIS2GEOS_collection: requested type %d, ngeoms: %d",
 			type, ngeoms);
-	ERROR_MESSAGE("%s", buf);
+	NOTICE_MESSAGE("%s", buf);// TODO: Can NOTICE_MESSAGE format that directly? 
 #endif
 
 	try
@@ -1286,32 +1288,18 @@ GEOSPolygonize(const Geometry **g, unsigned int ngeoms)
 	unsigned int i;
 	Geometry *out = NULL;
 
-	// construct vector
-	std::vector<const Geometry *> *geoms = new std::vector<const Geometry *>(ngeoms);
-	for (i=0; i<ngeoms; i++) (*geoms)[i] = g[i];
-
-#if GEOS_DEBUG
-	ERROR_MESSAGE("geometry vector constructed");
-#endif
-
 	try{
 		// Polygonize
 		Polygonizer plgnzr;
-		plgnzr.add(geoms);
+		for (i=0; i<ngeoms; i++) plgnzr.add(g[i]);
 #if GEOS_DEBUG
-	ERROR_MESSAGE("geometry vector added to polygonizer");
+	NOTICE_MESSAGE("geometry vector added to polygonizer");
 #endif
 
 		std::vector<Polygon *>*polys = plgnzr.getPolygons();
 
 #if GEOS_DEBUG
-	ERROR_MESSAGE("output polygons got");
-#endif
-
-		delete geoms;
-
-#if GEOS_DEBUG
-	ERROR_MESSAGE("geometry vector deleted");
+	NOTICE_MESSAGE("output polygons got");
 #endif
 
 		// We need a vector of Geometry pointers, not
@@ -1327,14 +1315,12 @@ GEOSPolygonize(const Geometry **g, unsigned int ngeoms)
 		out = geomFactory->createGeometryCollection(polyvec);
 		// the above method takes ownership of the passed
 		// vector, so we must *not* delete it
-                //delete polyvec;
 	}
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
 		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
@@ -1359,7 +1345,7 @@ GEOSLineMerge(const Geometry *g)
                 std::vector<LineString *>*lines = lmrgr.getMergedLineStrings();
 
 #if GEOS_DEBUG
-        ERROR_MESSAGE("output lines got");
+        NOTICE_MESSAGE("output lines got");
 #endif
 
                 std::vector<Geometry *>*geoms = new std::vector<Geometry *>(lines->size());
@@ -1645,12 +1631,12 @@ GEOSGeom_getCoordSeq(const Geometry *g)
 		const LineString *ls = dynamic_cast<const LineString *>(g);
 		if ( ls )
 		{
-	return const_cast<CoordinateSequence *>(ls->getCoordinatesRO());
+			return ls->getCoordinatesRO();
 		}
 		const Point *p = dynamic_cast<const Point *>(g);
 		if ( p ) 
 		{
-	return const_cast<CoordinateSequence *>(p->getCoordinatesRO());
+			return p->getCoordinatesRO();
 		}
 		ERROR_MESSAGE("Geometry must be a Point or LineString");
 		return NULL;

@@ -1,3 +1,18 @@
+2006-10-30 Markus Schaber <schabi@logix-tt.com>
+
+	* capi/geos_c.cpp:
+	  Remove a typedef which is also included via Header;
+	  Use dynamic_cast instead of C cast in 2 cases to allow the
+	  RTTI type check;
+	  Replace "geoms" temp vector in polygonizer function with a loop,
+	  this saves us at least one of the two vector copies;
+	  Drop 2 unneded const_cast occurences;
+	  Allow calling getNumGeometries against non-collections;
+	  2 comment / whitespace cleanups.
+	* capi/geos_c.h.in:
+	  Added a comment explaining ou #ifndef magic;
+	  Unified the two #ifndef into a single one.
+
 2006-10-30 Sandro Santilli <strk@refractions.net>
 
 	* capi/: test.expected, testrunner.sh, Makefile.am:

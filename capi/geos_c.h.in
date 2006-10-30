@@ -66,13 +66,21 @@ extern "C" {
 
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 
+/* When we're included by geos_c.cpp, those are #defined to the original
+ * JTS definitions via preprocessor. We don't tuch them to allow the
+ * compiler to cross-check the declarations. However, for all "normal" 
+ * C-API users, we need to define them as "opaque" struct pointers, as 
+ * those clients don't have access to the original C++ headers, by design.
+ */
 #ifndef GEOSGeom
 typedef struct GEOSGeom_t *GEOSGeom;
 typedef struct GEOSCoordSeq_t *GEOSCoordSeq;
-#endif
 
-/* Supported geometry types - may be defined when included by geos_c.cpp*/
-#ifndef GEOSGeomTypes
+/* Supported geometry types - is also #defined in geos_c.cpp 
+ * This was renamed from GEOSGeomTypeId in GEOS 2.2.X, which might
+ * break compatibility, this issue is still under investigation.
+ */
+
 enum GEOSGeomTypes {
 	GEOS_POINT,
 	GEOS_LINESTRING,
@@ -307,7 +315,12 @@ extern int GEOS_DLL GEOSGetSRID(const GEOSGeom g1);
 
 extern void GEOS_DLL GEOSSetSRID(GEOSGeom g, int SRID);
 
-/* Return -1 on exception */
+/* May be called on all geometries in GEOS 3.x, returns -1 on error and 1
+ * for non-multi geometries. Older GEOS versions only accept 
+ * GeometryCollections or Multi* geometries here, and are likely to crash
+ * when feeded simple geometries, so beware if you need compatibility with
+ * old GEOS versions.
+ */
 extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeom g1);
 
 /*
