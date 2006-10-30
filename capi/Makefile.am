@@ -3,7 +3,9 @@ top_srcdir=@top_srcdir@
 GEOS_CAPI_VERSION="@VERSION@-CAPI-@CAPI_VERSION@"
 GEOS_JTS_PORT="@JTS_PORT@"
 
-noinst_PROGRAMS = geostest 
+TESTS = testrunner
+
+check_PROGRAMS = geostest 
 
 geostest_SOURCES = geostest.c
 # stdc++ dependency should be deduced by libgeos_c.la
@@ -33,3 +35,9 @@ libgeos_c_la_LDFLAGS = \
 dist-local:
 	cp -p $(DIST_SOURCES) Makefile.am Makefile.in $(distdir)
 
+CLEANFILES = testrunner
+
+EXTRA_DIST = testrunner.sh
+
+testrunner: testrunner.sh
+	sh $(srcdir)/testrunner.sh $@ $(srcdir)

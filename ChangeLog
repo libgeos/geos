@@ -1,3 +1,8 @@
+2006-10-30 Sandro Santilli <strk@refractions.net>
+
+	* capi/: test.expected, testrunner.sh, Makefile.am:
+	  Added a run of ./geostest as part of 'make check'
+
 2006-10-30 Markus Schaber <schabi@logix-tt.com>
 
 	* capi/: geos_c.cpp, geos_c.h.in: 
@@ -5,7 +10,6 @@
 	  that's included by the clients, this allows the compiler to check
 	  declarations and implementation for consistency, fixed geos_c.cpp
 	  accordingly (const-correctness, mainly).
-
 
 2006-10-30 Sandro Santilli <strk@refractions.net>
 
