@@ -53,7 +53,6 @@
 // Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
 #define GEOSGeom geos::geom::Geometry*
 #define GEOSCoordSeq geos::geom::CoordinateSequence*
-#define GEOSGeomTypes geos::geom::GeometryTypeId
 #include "geos_c.h"
 
 /// Define this if you want operations triggering Exceptions to
