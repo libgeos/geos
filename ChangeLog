@@ -1,3 +1,9 @@
+2006-10-30 Markus Schaber <schabi@logix-tt.com>
+
+	* capi/geos_c.cpp: more focused 'using' directives.
+	* capi/geos_c.h.in: let the enum visible by geos_c.cpp
+	  now that there are no more name clashes.
+
 2006-10-30 Sandro Santilli <strk@refractions.net>
 
 	* source/operation/overlay/OverlayOp.cpp: reduce

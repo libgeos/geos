@@ -70,12 +70,15 @@
 #  define GEOS_DLL
 #endif
 
-using namespace geos;
-using namespace geos::geom;
-using namespace geos::operation::valid;
-using namespace geos::operation::polygonize;
-using namespace geos::operation::linemerge;
-using namespace geos::operation::overlay;
+// import the most frequently used definitions globally
+using geos::geom::Geometry;
+using geos::geom::LineString;
+using geos::geom::Polygon;
+using geos::geom::CoordinateSequence;
+using geos::geom::GeometryFactory;
+
+using geos::operation::overlay::OverlayOp;
+using geos::operation::overlay::overlayOp;
 
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
@@ -304,7 +307,7 @@ GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat)
 char *
 GEOSRelate(const Geometry *g1, const Geometry *g2)
 {
-
+	using geos::geom::IntersectionMatrix;
 	try {
 
 		IntersectionMatrix *im = g1->relate(g2);
@@ -345,6 +348,8 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 char
 GEOSisValid(const Geometry *g1)
 {
+	using geos::operation::valid::IsValidOp;
+	using geos::operation::valid::TopologyValidationError;
 	IsValidOp ivo(g1);
 	bool result;
 	try {
@@ -489,9 +494,10 @@ GEOSLength(const Geometry *g, double *length)
 Geometry *
 GEOSGeomFromWKT(const char *wkt)
 {
+	using geos::io::WKTReader;
 	try
 	{
-		io::WKTReader r(geomFactory);
+		WKTReader r(geomFactory);
 		const std::string wktstring = std::string(wkt);
 		Geometry *g = r.read(wktstring);
 		return g;
@@ -538,10 +544,11 @@ GEOSGeomToWKT(const Geometry *g1)
 unsigned char *
 GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 {
+	using geos::io::WKBWriter;
 	try
 	{
 		int byteOrder = (int) WKBByteOrder;
-		io::WKBWriter w(WKBOutputDims, byteOrder);
+		WKBWriter w(WKBOutputDims, byteOrder);
 		std::ostringstream s(std::ios_base::binary);
 		w.write(*g, s);
 		std::string wkbstring = s.str();
@@ -569,10 +576,11 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 Geometry *
 GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size)
 {
+	using geos::io::WKBReader;
 	try
 	{
 		std::string wkbstring = std::string((const char*)wkb, size); // make it binary !
-		io::WKBReader r(*geomFactory);
+		WKBReader r(*geomFactory);
 		std::istringstream s(std::ios_base::binary);
 		s.str(wkbstring);
 
@@ -598,10 +606,11 @@ GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size)
 unsigned char *
 GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 {
+	using geos::io::WKBWriter;
 	try
 	{
         int byteOrder = (int) WKBByteOrder;
-		io::WKBWriter w(WKBOutputDims, byteOrder);
+		WKBWriter w(WKBOutputDims, byteOrder);
 		std::ostringstream s(std::ios_base::binary);
 		w.writeHEX(*g, s);
 		std::string hexstring = s.str();
@@ -629,10 +638,11 @@ GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 Geometry *
 GEOSGeomFromHEX_buf(const unsigned char *hex, size_t size)
 {
+	using geos::io::WKBReader;
 	try
 	{
 		std::string hexstring = std::string((const char*)hex, size); 
-		io::WKBReader r(*geomFactory);
+		WKBReader r(*geomFactory);
 		std::istringstream s(std::ios_base::binary);
 		s.str(hexstring);
 
@@ -1129,6 +1139,7 @@ GEOSGetNumGeometries(const Geometry *g1)
 const Geometry *
 GEOSGetGeometryN(const Geometry *g1, int n)
 {
+	using geos::geom::GeometryCollection;
 	try{
 		const GeometryCollection *gc = dynamic_cast<const GeometryCollection *>(g1);
 		if ( ! gc )
@@ -1284,6 +1295,7 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 Geometry *
 GEOSPolygonize(const Geometry **g, unsigned int ngeoms)
 {
+	using geos::operation::polygonize::Polygonizer;
 	unsigned int i;
 	Geometry *out = NULL;
 
@@ -1332,6 +1344,7 @@ GEOSPolygonize(const Geometry **g, unsigned int ngeoms)
 Geometry *
 GEOSLineMerge(const Geometry *g)
 {
+		using geos::operation::linemerge::LineMerger;
         unsigned int i;
         Geometry *out = NULL;
 
@@ -1625,6 +1638,7 @@ GEOSCoordSeq_destroy(CoordinateSequence *s)
 const CoordinateSequence *
 GEOSGeom_getCoordSeq(const Geometry *g)
 {
+        using geos::geom::Point;
 	try
 	{
 		const LineString *ls = dynamic_cast<const LineString *>(g);
@@ -1708,6 +1722,7 @@ Geometry *
 GEOSGeom_createPolygon(Geometry *shell, Geometry **holes, 
 	unsigned int nholes)
 {
+        using geos::geom::LinearRing;
 	try
 	{
 		std::vector<Geometry *> *vholes = new std::vector<Geometry *>(holes, holes+nholes);
@@ -1752,6 +1767,8 @@ GEOSGeom_clone(const Geometry *g)
 int
 GEOSGeom_getDimensions(const Geometry *g)
 {
+        using geos::geom::GeometryCollection;
+        using geos::geom::Point;
 	try {
 		const LineString *ls = dynamic_cast<const LineString *>(g);
 		if ( ls )

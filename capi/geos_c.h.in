@@ -67,7 +67,7 @@ extern "C" {
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 
 /* When we're included by geos_c.cpp, those are #defined to the original
- * JTS definitions via preprocessor. We don't tuch them to allow the
+ * JTS definitions via preprocessor. We don't touch them to allow the
  * compiler to cross-check the declarations. However, for all "normal" 
  * C-API users, we need to define them as "opaque" struct pointers, as 
  * those clients don't have access to the original C++ headers, by design.
@@ -75,8 +75,9 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 #ifndef GEOSGeom
 typedef struct GEOSGeom_t *GEOSGeom;
 typedef struct GEOSCoordSeq_t *GEOSCoordSeq;
+#endif
 
-/* Supported geometry types - is also #defined in geos_c.cpp 
+/* Supported geometry types
  * This was renamed from GEOSGeomTypeId in GEOS 2.2.X, which might
  * break compatibility, this issue is still under investigation.
  */
@@ -91,7 +92,6 @@ enum GEOSGeomTypes {
 	GEOS_MULTIPOLYGON,
 	GEOS_GEOMETRYCOLLECTION
 };
-#endif
 
 /* Byte oders exposed via the c api */
 enum GEOSByteOrders {
