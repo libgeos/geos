@@ -1,5 +1,7 @@
 2006-11-02 Sandro Santilli <strk@refractions.net>
 
+	* capi/geos_c.cpp, capi/geos_c.h.in: const-corrected and documented
+	  GEOSPolygonize function.
 	* capi/test.expected: updated expected version
 	* capi/testrunner.sh: be happy with geostest running w/out
 	  segfaulting, still run diff for reference.

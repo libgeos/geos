@@ -231,7 +231,7 @@ extern GEOSGeometry* GEOS_DLL GEOSGeom_createLineString(GEOSCoordSequence* s);
  * objects become ownership of the returned GEOSGeometry.
  */
 extern GEOSGeometry* GEOS_DLL GEOSGeom_createPolygon(GEOSGeometry* shell,
-	GEOSGeometry* *holes, unsigned int nholes);
+	GEOSGeometry** holes, unsigned int nholes);
 extern GEOSGeometry* GEOS_DLL GEOSGeom_createCollection(int type,
 	GEOSGeometry* *geoms, unsigned int ngeoms);
 
@@ -265,8 +265,14 @@ extern GEOSGeometry* GEOS_DLL GEOSUnion(const GEOSGeometry* g1, const GEOSGeomet
 extern GEOSGeometry* GEOS_DLL GEOSPointOnSurface(const GEOSGeometry* g1);
 extern GEOSGeometry* GEOS_DLL GEOSGetCentroid(const GEOSGeometry* g);
 extern char GEOS_DLL *GEOSRelate(const GEOSGeometry* g1, const GEOSGeometry* g2);
-extern GEOSGeometry* GEOS_DLL GEOSPolygonize(const GEOSGeometry* geoms[],
+
+/*
+ * all arguments remain ownership of the caller
+ * (both Geometries and pointers)
+ */
+extern GEOSGeometry* GEOS_DLL GEOSPolygonize(const GEOSGeometry * const geoms[],
 	unsigned int ngeoms);
+
 extern GEOSGeometry* GEOS_DLL GEOSLineMerge(const GEOSGeometry* g);
 extern GEOSGeometry* GEOS_DLL GEOSSimplify(const GEOSGeometry* g1, double tolerance);
 extern GEOSGeometry* GEOS_DLL GEOSTopologyPreserveSimplify(const GEOSGeometry* g1,

@@ -1293,7 +1293,7 @@ GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 }
 
 Geometry *
-GEOSPolygonize(const Geometry **g, unsigned int ngeoms)
+GEOSPolygonize(const Geometry * const * g, unsigned int ngeoms)
 {
 	using geos::operation::polygonize::Polygonizer;
 	unsigned int i;
