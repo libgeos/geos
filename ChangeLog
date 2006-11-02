@@ -1,3 +1,12 @@
+2006-11-02 Markus Schaber <schabi@logix-tt.com>
+
+	* capi/geos_c.h.in: add GEOSGeometry and GEOSCoordSequence
+	  typedef, to unhide the pointer type and allow fine-grained
+	  const specification, use the new typedefs in function signatures
+	  (fix some const-specifications accordingly)
+	* capi/geos_c.cpp: define GEOSGeometry and GEOSCoordSequence
+	  for cross-checking of types in header.
+
 2006-10-30 Markus Schaber <schabi@logix-tt.com>
 
 	* capi/geos_c.cpp: more focused 'using' directives.
