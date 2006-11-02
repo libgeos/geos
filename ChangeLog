@@ -1,5 +1,8 @@
 2006-11-02 Sandro Santilli <strk@refractions.net>
 
+	* capi/test.expected: updated expected version
+	* capi/testrunner.sh: be happy with geostest running w/out
+	  segfaulting, still run diff for reference.
 	* configure.in: updated versions to 3.0.0rc2 / CAPI-1.3.0
 
 2006-11-02 Markus Schaber <schabi@logix-tt.com>
