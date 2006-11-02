@@ -1,5 +1,8 @@
 2006-11-02 Sandro Santilli <strk@refractions.net>
 
+	* capi/geostest.c: updated to use the new GEOSGeometry typedef, so
+	  to build w/out warnings and fully respecting current const
+	  specification.
 	* capi/geos_c.cpp, capi/geos_c.h.in: const-corrected and documented
 	  GEOSPolygonize function.
 	* capi/test.expected: updated expected version

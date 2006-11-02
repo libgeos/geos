@@ -57,12 +57,14 @@ log_and_exit(const char *fmt, ...) {
 	exit(1);
 }
 
-GEOSGeom 
-fineGrainedReconstructionTest(const GEOSGeom g1)
+GEOSGeometry* 
+fineGrainedReconstructionTest(const GEOSGeometry* g1)
 {
-	GEOSCoordSeq cs;
-	GEOSGeom g2, shell, gtmp;
-	GEOSGeom *geoms;
+	GEOSCoordSequence* cs;
+	GEOSGeometry* g2;
+	GEOSGeometry* shell;
+	const GEOSGeometry* gtmp;
+	GEOSGeometry**geoms;
 	unsigned int ngeoms, i;
 	int type;
 
@@ -90,7 +92,7 @@ fineGrainedReconstructionTest(const GEOSGeom g1)
 			cs = GEOSCoordSeq_clone(GEOSGeom_getCoordSeq(gtmp));
 			shell = GEOSGeom_createLinearRing(cs);
 			ngeoms = GEOSGetNumInteriorRings(g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeom));
+			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetInteriorRingN(g1, i);
@@ -106,7 +108,7 @@ fineGrainedReconstructionTest(const GEOSGeom g1)
 		case GEOS_MULTIPOLYGON:
 		case GEOS_GEOMETRYCOLLECTION:
 			ngeoms = GEOSGetNumGeometries(g1);
-			geoms = malloc(ngeoms*sizeof(GEOSGeom));
+			geoms = malloc(ngeoms*sizeof(GEOSGeometry*));
 			for (i=0; i<ngeoms; i++)
 			{
 				gtmp = GEOSGetGeometryN(g1, i);
@@ -137,7 +139,11 @@ printHEX(FILE *where, const unsigned char *bytes, size_t n)
 int
 do_all(char *inputfile)
 {
-	GEOSGeom g1, g2, g3, g4, *gg;
+	GEOSGeometry* g1;
+	GEOSGeometry* g2;
+	GEOSGeometry* g3;
+	GEOSGeometry* g4;
+	const GEOSGeometry **gg;
 	unsigned int npoints, ndims;
         static char wkt[MAXWKTLEN];
 	FILE *input;
@@ -289,7 +295,7 @@ do_all(char *inputfile)
 	free(ptr);
 
 	/* Polygonize */
-	gg = (GEOSGeom *)malloc(2*sizeof(GEOSGeom));
+	gg = (const GEOSGeometry**)malloc(2*sizeof(GEOSGeometry*));
 	gg[0] = g1;
 	gg[1] = g2;
 	g3 = GEOSPolygonize(gg, 2);
@@ -372,6 +378,6 @@ main(int argc, char **argv)
 
 	finishGEOS();
 
-	return i;
+	return EXIT_SUCCESS;
 }
 
