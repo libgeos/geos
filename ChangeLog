@@ -1,5 +1,7 @@
 2006-11-02 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geom/BinaryOp.h: disable debugging output
+	  by default.
 	* capi/geostest.c: updated to use the new GEOSGeometry typedef, so
 	  to build w/out warnings and fully respecting current const
 	  specification.

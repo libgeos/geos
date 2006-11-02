@@ -57,7 +57,7 @@
 
 #include <memory> // for auto_ptr
 
-#define GEOS_DEBUG_BINARYOP 1
+//#define GEOS_DEBUG_BINARYOP 1
 
 
 /*
