@@ -8,10 +8,10 @@ shift
 cat <<EOF > ${runner}
 #!/bin/sh
 ./geostest ${srcdir}/test.wkt > test.out
-ret=$?
+ret=\$?
 
-if test "$ret" -ne "0"; then
-	echo "geostest exited with non-zero status ($ret)"
+if test "\$ret" -ne "0"; then
+	echo "geostest exited with non-zero status (\$ret)"
 fi
 
 # It's enough that it doesn't segfault for now...
@@ -20,7 +20,7 @@ fi
 # account
 diff ${srcdir}/test.expected test.out
 
-exit $ret
+exit \$ret
 
 EOF
 

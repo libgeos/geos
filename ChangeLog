@@ -1,7 +1,7 @@
 2006-11-03 Sandro Santilli <strk@refractions.net>
 
 	* capi/testrunner.sh: report non-zero exit from
-	  ./geostest run
+	  ./geostest run; fixed (hopefully) quoting of dollar signs.
 
 2006-11-02 Sandro Santilli <strk@refractions.net>
 
