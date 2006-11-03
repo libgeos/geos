@@ -1,3 +1,8 @@
+2006-11-03 Sandro Santilli <strk@refractions.net>
+
+	* capi/testrunner.sh: report non-zero exit from
+	  ./geostest run
+
 2006-11-02 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/geom/BinaryOp.h: disable debugging output
