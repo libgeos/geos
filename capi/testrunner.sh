@@ -18,7 +18,7 @@ fi
 # computing a diff doesn't currently work as geostest
 # was not initially made taking arch differences into
 # account
-diff ${srcdir}/test.expected test.out
+diff ${srcdir}/test.expected test.out >&2
 
 exit \$ret
 
