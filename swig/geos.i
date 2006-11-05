@@ -655,15 +655,15 @@ public:
         GEOSGeom_destroy(geom);
     }
     
-    GeosCoordinateSequence* getCoordSeq()
+    const GeosCoordinateSequence* getCoordSeq()
     {
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+        const GEOSCoordSeq result = (const GEOSCoordSeq) GEOSGeom_getCoordSeq(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosCoordinateSequence*) result;
+        return (const GeosCoordinateSequence*) result;
     }
 }
 };
@@ -679,15 +679,15 @@ public:
         GEOSGeom_destroy(geom);
     }
     
-    GeosCoordinateSequence* getCoordSeq()
+    const GeosCoordinateSequence* getCoordSeq()
     {
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+        const GEOSCoordSeq result = (const GEOSCoordSeq) GEOSGeom_getCoordSeq(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosCoordinateSequence*) result;
+        return (const GeosCoordinateSequence*) result;
     }
 }
 };
@@ -703,15 +703,15 @@ public:
         GEOSGeom_destroy(geom);
     }
     
-    GeosCoordinateSequence* getCoordSeq()
+    const GeosCoordinateSequence* getCoordSeq()
     {
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+        const GEOSCoordSeq result = (const GEOSCoordSeq) GEOSGeom_getCoordSeq(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosCoordinateSequence*) result;
+        return (const GeosCoordinateSequence*) result;
     }
 }
 };
@@ -728,15 +728,15 @@ public:
         GEOSGeom_destroy(geom);
     }
     
-    GeosGeometry* getExteriorRing()
+    const GeosGeometry* getExteriorRing()
     {
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSGeom result = GEOSGetExteriorRing(geom);
+        const GEOSGeom result = (const GEOSGeom) GEOSGetExteriorRing(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosGeometry*) result;
+        return (const GeosGeometry*) result;
     }
 
     size_t getNumInteriorRings()
@@ -750,7 +750,7 @@ public:
         return result;
     }
 
-    GeosGeometry* getInteriorRingN(size_t n)
+    const GeosGeometry* getInteriorRingN(size_t n)
     {
         GEOSGeom geom = (GEOSGeom) self;
 
@@ -759,12 +759,12 @@ public:
         if (n < 0 || n >= size)
             throw std::runtime_error("Index out of bounds");
 
-        GEOSGeom result = GEOSGetInteriorRingN(geom, n);
+        const GEOSGeom result = (const GEOSGeom) GEOSGetInteriorRingN(geom, n);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosGeometry*) result;
+        return (const GeosGeometry*) result;
     }
 }
 };
@@ -780,15 +780,15 @@ public:
         GEOSGeom_destroy(geom);
     }
     
-    GeosGeometry* getGeometryN(size_t n)
+    const GeosGeometry* getGeometryN(size_t n)
     {
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSGeom result = GEOSGetGeometryN(geom, n);
+        const GEOSGeom result = (const GEOSGeom) GEOSGetGeometryN(geom, n);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosGeometry*) result;
+        return (const GeosGeometry*) result;
     }
 }
 };
