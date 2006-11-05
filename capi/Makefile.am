@@ -35,9 +35,9 @@ libgeos_c_la_LDFLAGS = \
 dist-local:
 	cp -p $(DIST_SOURCES) Makefile.am Makefile.in $(distdir)
 
-CLEANFILES = testrunner
+CLEANFILES = testrunner test.out
 
-EXTRA_DIST = testrunner.sh
+EXTRA_DIST = testrunner.sh test.expected test.wkt
 
 testrunner: testrunner.sh
 	sh $(srcdir)/testrunner.sh $@ $(srcdir)

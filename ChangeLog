@@ -1,3 +1,8 @@
+2006-11-05 Sandro Santilli <strk@refractions.net>
+
+	* capi/Makefile.am: distribute files needed for testing, proper
+	  cleanup (make distcheck works now)
+
 2006-11-03 Sandro Santilli <strk@refractions.net>
 
 	* capi/testrunner.sh: report non-zero exit from
