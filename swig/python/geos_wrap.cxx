@@ -3409,53 +3409,53 @@ SWIGINTERN void delete_GeosPoint(GeosPoint *self){
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom_destroy(geom);
     }
-SWIGINTERN GeosCoordinateSequence *GeosPoint_getCoordSeq(GeosPoint *self){
+SWIGINTERN GeosCoordinateSequence const *GeosPoint_getCoordSeq(GeosPoint *self){
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+        const GEOSCoordSeq result = (const GEOSCoordSeq) GEOSGeom_getCoordSeq(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosCoordinateSequence*) result;
+        return (const GeosCoordinateSequence*) result;
     }
 SWIGINTERN void delete_GeosLineString(GeosLineString *self){
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom_destroy(geom);
     }
-SWIGINTERN GeosCoordinateSequence *GeosLineString_getCoordSeq(GeosLineString *self){
+SWIGINTERN GeosCoordinateSequence const *GeosLineString_getCoordSeq(GeosLineString *self){
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+        const GEOSCoordSeq result = (const GEOSCoordSeq) GEOSGeom_getCoordSeq(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosCoordinateSequence*) result;
+        return (const GeosCoordinateSequence*) result;
     }
 SWIGINTERN void delete_GeosLinearRing(GeosLinearRing *self){
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom_destroy(geom);
     }
-SWIGINTERN GeosCoordinateSequence *GeosLinearRing_getCoordSeq(GeosLinearRing *self){
+SWIGINTERN GeosCoordinateSequence const *GeosLinearRing_getCoordSeq(GeosLinearRing *self){
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSCoordSeq result = GEOSGeom_getCoordSeq(geom);
+        const GEOSCoordSeq result = (const GEOSCoordSeq) GEOSGeom_getCoordSeq(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosCoordinateSequence*) result;
+        return (const GeosCoordinateSequence*) result;
     }
 SWIGINTERN void delete_GeosPolygon(GeosPolygon *self){
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom_destroy(geom);
     }
-SWIGINTERN GeosGeometry *GeosPolygon_getExteriorRing(GeosPolygon *self){
+SWIGINTERN GeosGeometry const *GeosPolygon_getExteriorRing(GeosPolygon *self){
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSGeom result = GEOSGetExteriorRing(geom);
+        const GEOSGeom result = (const GEOSGeom) GEOSGetExteriorRing(geom);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosGeometry*) result;
+        return (const GeosGeometry*) result;
     }
 SWIGINTERN size_t GeosPolygon_getNumInteriorRings(GeosPolygon *self){
         GEOSGeom geom = (GEOSGeom) self;
@@ -3466,7 +3466,7 @@ SWIGINTERN size_t GeosPolygon_getNumInteriorRings(GeosPolygon *self){
 
         return result;
     }
-SWIGINTERN GeosGeometry *GeosPolygon_getInteriorRingN(GeosPolygon *self,size_t n){
+SWIGINTERN GeosGeometry const *GeosPolygon_getInteriorRingN(GeosPolygon *self,size_t n){
         GEOSGeom geom = (GEOSGeom) self;
 
         size_t size = GEOSGetNumInteriorRings(geom);
@@ -3474,25 +3474,25 @@ SWIGINTERN GeosGeometry *GeosPolygon_getInteriorRingN(GeosPolygon *self,size_t n
         if (n < 0 || n >= size)
             throw std::runtime_error("Index out of bounds");
 
-        GEOSGeom result = GEOSGetInteriorRingN(geom, n);
+        const GEOSGeom result = (const GEOSGeom) GEOSGetInteriorRingN(geom, n);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosGeometry*) result;
+        return (const GeosGeometry*) result;
     }
 SWIGINTERN void delete_GeosGeometryCollection(GeosGeometryCollection *self){
         GEOSGeom geom = (GEOSGeom) self;
         GEOSGeom_destroy(geom);
     }
-SWIGINTERN GeosGeometry *GeosGeometryCollection_getGeometryN(GeosGeometryCollection *self,size_t n){
+SWIGINTERN GeosGeometry const *GeosGeometryCollection_getGeometryN(GeosGeometryCollection *self,size_t n){
         GEOSGeom geom = (GEOSGeom) self;
-        GEOSGeom result = GEOSGetGeometryN(geom, n);
+        const GEOSGeom result = (const GEOSGeom) GEOSGetGeometryN(geom, n);
 
         if (result == NULL)
             throw std::runtime_error(message);
 
-        return (GeosGeometry*) result;
+        return (const GeosGeometry*) result;
     }
 SWIGINTERN void delete_GeosMultiPoint(GeosMultiPoint *self){
         GEOSGeom geom = (GEOSGeom) self;
