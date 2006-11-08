@@ -1,3 +1,9 @@
+2006-11-08 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/geom/BinaryOp.h: enable
+	  COMMONBITS-removal heuristic so it is attempted
+	  *before* geometry snapping.
+
 2006-11-05 Sandro Santilli <strk@refractions.net>
 
 	* capi/Makefile.am: distribute files needed for testing, proper

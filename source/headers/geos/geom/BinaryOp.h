@@ -86,10 +86,12 @@
 #endif
 
 /*
- * Use common bits removal policy
+ * Use common bits removal policy.
+ * If enabled, this would be tried /before/
+ * Geometry snapping.
  */
 #ifndef USE_COMMONBITS_POLICY
-//# define USE_COMMONBITS_POLICY 1
+# define USE_COMMONBITS_POLICY 1
 #endif
 
 /*
@@ -244,7 +246,6 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		}
 #endif
 
-		throw util::TopologyException("Skip op on commonbits-removed");
 		ret.reset( _Op(rG0.get(), rG1.get()) );
 
 		cbr.addCommonBits( ret.get() );
@@ -260,6 +261,11 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #endif
 
 	// Try with snapping
+	//
+	// TODO: possible optimization would be reusing the
+	//       already common-bit-removed inputs and just
+	//       apply geometry snapping, whereas the current
+	//       SnapOp function does both.
 // {
 #if USE_SNAPPING_POLICY
 
