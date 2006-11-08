@@ -9,6 +9,8 @@
 	  COMMONBITS-removal heuristic so it is attempted
 	  *before* geometry snapping.
 
+---------  GEOS-3.0.0rc2 release [2006-11-05] --------------------------
+
 2006-11-05 Sandro Santilli <strk@refractions.net>
 
 	* capi/Makefile.am: distribute files needed for testing, proper
