@@ -1,5 +1,10 @@
 2006-11-08 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/robustness.xml: made test safe to
+	  run by using the new 'areatest' operation; added
+	  new testcases just raised on the mailing list.
+	* tests/xmltester/Makefile.am: robustness.xml is now safe
+	  to run, so run it on make check.
 	* source/headers/geos/geom/BinaryOp.h: enable
 	  COMMONBITS-removal heuristic so it is attempted
 	  *before* geometry snapping.

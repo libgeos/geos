@@ -8,9 +8,9 @@ CLEANFILES = testrunner
 
 EXTRA_DIST = testrunner.sh
 
-SAFE_XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml
+SAFE_XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml $(srcdir)/robustness.xml
 
-XMLTESTS=$(SAFE_XMLTESTS) $(srcdir)/robustness.xml 
+XMLTESTS=$(SAFE_XMLTESTS) 
 
 EXTRA_DIST += $(XMLTESTS)
 
