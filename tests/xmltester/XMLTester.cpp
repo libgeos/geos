@@ -819,9 +819,16 @@ XMLTester::parseTest()
 
 			if ( verbose > 1 )
 			{
-		std::cerr << "Running difference for areatest" << std::endl;
+		std::cerr << "Running difference(A,B) for areatest" << std::endl;
 			}
-			GeomAutoPtr gD = BinaryOp(gA, gB,
+			GeomAutoPtr gDab = BinaryOp(gA, gB,
+					overlayOp(OverlayOp::opDIFFERENCE));
+
+			if ( verbose > 1 )
+			{
+		std::cerr << "Running difference(B,A) for areatest" << std::endl;
+			}
+			GeomAutoPtr gDba = BinaryOp(gB, gA,
 					overlayOp(OverlayOp::opDIFFERENCE));
 
 			if ( testValidOutput )
@@ -829,19 +836,71 @@ XMLTester::parseTest()
 				testValid(gI.get(), "areatest difference");
 			}
 
+			if ( verbose > 1 )
+			{
+		std::cerr << "Running symdifference for areatest" << std::endl;
+			}
+			GeomAutoPtr gSD = BinaryOp(gA, gB,
+					overlayOp(OverlayOp::opSYMDIFFERENCE));
+
+			if ( verbose > 1 )
+			{
+		std::cerr << "Running union for areatest" << std::endl;
+			}
+			GeomAutoPtr gU = BinaryOp(gA, gB,
+					overlayOp(OverlayOp::opUNION));
+
 			double areaA = gA->getArea();
+			double areaB = gB->getArea();
 			double areaI = gI->getArea(); 
-			double areaD = gD->getArea();
+			double areaDab = gDab->getArea();
+			double areaDba = gDba->getArea();
+			double areaSD = gSD->getArea();
+			double areaU = gU->getArea();
 
-			double realDiff = fabs ( areaA - areaI - areaD );
+			double maxdiff = 0;
+			std::string maxdiffop;
 
-			if ( realDiff <= toleratedDiff )
+			// @ : symdifference
+			// - : difference
+			// + : union
+			// ^ : intersection
+		
+			// A == ( A ^ B ) + ( A - B )
+			double diff = fabs ( areaA - areaI - areaDab );
+			if ( diff > maxdiff ) {
+				maxdiffop = "A == ( A ^ B ) + ( A - B )";
+				maxdiff = diff;
+			}
+
+			// B == ( A ^ B ) + ( B - A )
+			diff = fabs ( areaB - areaI - areaDba );
+			if ( diff > maxdiff ) {
+				maxdiffop = "B == ( A ^ B ) + ( B - A )";
+				maxdiff = diff;
+			}
+
+			//  ( A @ B ) == ( A - B ) + ( B - A )
+			diff = fabs ( areaDab + areaDba - areaSD );
+			if ( diff > maxdiff ) {
+				maxdiffop = "( A @ B ) == ( A - B ) + ( B - A )";
+				maxdiff = diff;
+			}
+
+			//  ( A u B ) == ( A ^ B ) + ( A @ B )
+			diff = fabs ( areaI + areaSD - areaU );
+			if ( diff > maxdiff ) {
+				maxdiffop = "( A u B ) == ( A ^ B ) + ( A @ B )";
+				maxdiff = diff;
+			}
+
+			if ( maxdiff <= toleratedDiff )
 			{
 				success=1;
 			}
 
 			std::stringstream tmp;
-			tmp << realDiff;
+			tmp << maxdiffop << ": " << maxdiff;
 			actual_result=tmp.str();
 			expected_result=opRes;
 
