@@ -18,8 +18,7 @@ INCLUDES = -I$(top_srcdir)/source/headers
 capidir = $(includedir)
 
 nodist_capi_HEADERS = \
-	geos_c.h \
-	geos_c.h.vc
+	geos_c.h 
 
 lib_LTLIBRARIES = libgeos_c.la
 
@@ -38,7 +37,7 @@ dist-local:
 
 CLEANFILES = testrunner test.out
 
-EXTRA_DIST = testrunner.sh test.expected test.wkt
+EXTRA_DIST = testrunner.sh test.expected test.wkt geos_c.h.vc
 
 testrunner: testrunner.sh
 	sh $(srcdir)/testrunner.sh $@ $(srcdir)
