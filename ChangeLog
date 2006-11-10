@@ -1,5 +1,4 @@
-
-2006-11-19 Paul Ramsey <pramsey@refractions.net>
+2006-11-10 Paul Ramsey <pramsey@refractions.net>
 
 	* capi/Makefile.am, geos_c.h.vc: allow the .vc file to be
           updated automatically with version numbers from the core
