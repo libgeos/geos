@@ -18,7 +18,8 @@ INCLUDES = -I$(top_srcdir)/source/headers
 capidir = $(includedir)
 
 nodist_capi_HEADERS = \
-	geos_c.h
+	geos_c.h \
+	geos_c.h.vc
 
 lib_LTLIBRARIES = libgeos_c.la
 
