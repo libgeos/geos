@@ -30,7 +30,7 @@ CAPI_VERSION_PATCH=$CAPI_INTERFACE_REVISION
 CAPI_VERSION="$CAPI_VERSION_MAJOR.$CAPI_VERSION_MINOR.$CAPI_VERSION_PATCH"
 
 AM_INIT_AUTOMAKE(geos, $VERSION, no-define)
-AC_CONFIG_HEADERS(source/headers/config.h)
+AM_CONFIG_HEADER(source/headers/config.h)
 AM_CONFIG_HEADER(source/headers/geos/platform.h)
 AC_PROG_CC
 
@@ -222,6 +222,7 @@ AC_OUTPUT([
 	Makefile 
 	capi/Makefile
 	capi/geos_c.h
+	capi/geos_c.h.vc
 	doc/Doxyfile
 	doc/Makefile
 	macros/Makefile
