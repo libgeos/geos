@@ -1793,6 +1793,7 @@ GEOSGeom_getDimensions(const Geometry *g)
 			dynamic_cast<const GeometryCollection *>(g);
 		if ( coll )
 		{
+			if ( coll->isEmpty() ) return 0;
 			return GEOSGeom_getDimensions(coll->getGeometryN(0));
 		}
 
