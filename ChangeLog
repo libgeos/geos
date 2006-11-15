@@ -1,5 +1,9 @@
 2006-11-15 Sandro Santilli <strk@refractions.net>
 
+	* capi/geos_c.h.in: hopefully fixed GEOS_DLL use.
+
+2006-11-15 Sandro Santilli <strk@refractions.net>
+
 	* capi/geos_c.cpp (GEOSGeom_getDimensions):
 	  Fix a segfault on empty geometry input
 	  (fix bug #126).
