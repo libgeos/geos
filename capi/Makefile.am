@@ -37,7 +37,7 @@ dist-local:
 
 CLEANFILES = testrunner test.out
 
-EXTRA_DIST = testrunner.sh test.expected test.wkt geos_c.h.vc
+EXTRA_DIST = testrunner.sh test.expected test.wkt geos_c.h
 
 testrunner: testrunner.sh
 	sh $(srcdir)/testrunner.sh $@ $(srcdir)

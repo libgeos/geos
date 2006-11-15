@@ -1,5 +1,14 @@
 2006-11-15 Sandro Santilli <strk@refractions.net>
 
+	* configure.in: don't generate geos_c.h.vc
+	* source/Makefile.vc: don't generate geos_c.h and version.h
+	* source/headers/geos/version.h.vc, capi/geos_c.h.vc.in:
+	  removed, will NOT be needed by Makefile.vc
+	* source/headers/geos/Makefile.am: distribute version.h
+	* capi/Makefile.am: distribute geos_c.h
+
+2006-11-15 Sandro Santilli <strk@refractions.net>
+
 	* capi/geos_c.h.in: hopefully fixed GEOS_DLL use.
 
 2006-11-15 Sandro Santilli <strk@refractions.net>

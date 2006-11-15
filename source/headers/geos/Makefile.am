@@ -11,7 +11,7 @@ SUBDIRS = \
 	simplify \
 	util 
 
-EXTRA_DIST = platform.h.vc version.h.vc
+EXTRA_DIST = platform.h.vc version.h
 
 
 geosdir = $(includedir)/geos

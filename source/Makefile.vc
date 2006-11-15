@@ -326,11 +326,15 @@ $(CDLLNAME): ..\capi\geos_c.obj $(DLLNAME)
 headers/geos/platform.h: headers/geos/platform.h.vc
 	copy headers\geos\platform.h.vc headers\geos\platform.h
 
-headers/geos/version.h: headers/geos/version.h.vc
-    copy headers\geos\version.h.vc headers\geos\version.h
+# version.h should already be in distribution, if is not you'll
+# have to run ./configure to recreate
+#headers/geos/version.h: headers/geos/version.h.vc
+#    copy headers\geos\version.h.vc headers\geos\version.h
 
-capi/geos_c.h: ../capi/geos_c.h.vc
-	copy ..\capi\geos_c.h.vc ..\capi\geos_c.h
+# geos_c.h should already be in distribution, if is not you'll
+# have to run ./configure to recreate
+#capi/geos_c.h: ../capi/geos_c.h.vc
+#	copy ..\capi\geos_c.h.vc ..\capi\geos_c.h
    
 .cpp.obj:
 	$(CC) $(CFLAGS) /c $*.cpp /Fo$@

@@ -222,7 +222,6 @@ AC_OUTPUT([
 	Makefile 
 	capi/Makefile
 	capi/geos_c.h
-	capi/geos_c.h.vc
 	doc/Doxyfile
 	doc/Makefile
 	macros/Makefile
