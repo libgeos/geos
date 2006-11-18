@@ -313,7 +313,7 @@ TEST_EXE =	TestSweepLineSpeed.exe
 
 default:	$(LIBNAME) $(DLLNAME) $(CDLLNAME)
 
-$(LIBNAME):	headers/geos/platform.h headers/geos/version.h capi/geos_c.h $(OBJ)
+$(LIBNAME):	headers/geos/platform.h headers/geos/version.h ../capi/geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
 	lib /out:$(LIBNAME) $(OBJ)
 
