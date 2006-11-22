@@ -1,5 +1,10 @@
 2006-11-22  dron@ak4719.spb.edu
 
+	* tests/xmltester/: stmlf-cases-20061020.xml,
+	  Makefile.am: add more robustness testcases.
+
+2006-11-22  dron@ak4719.spb.edu
+
 	* autogen.sh: call 'autoheader' after 'aclocal'.
 	  Fixes bug #131
 
