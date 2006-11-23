@@ -1,9 +1,14 @@
-2006-11-22  dron@ak4719.spb.edu
+2006-11-15 Sandro Santilli <strk@refractions.net>
+
+	* source/geom/Point.cpp (equalsExact): don't segfault
+	  on empty points. Fixes bug #132.
+
+2006-11-22 Sandro Santilli <strk@refractions.net>
 
 	* tests/xmltester/: stmlf-cases-20061020.xml,
 	  Makefile.am: add more robustness testcases.
 
-2006-11-22  dron@ak4719.spb.edu
+2006-11-22 dron@ak4719.spb.edu
 
 	* autogen.sh: call 'autoheader' after 'aclocal'.
 	  Fixes bug #131

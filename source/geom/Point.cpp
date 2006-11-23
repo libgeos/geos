@@ -193,12 +193,21 @@ Point::equalsExact(const Geometry *other, double tolerance) const
 	if (!isEquivalentClass(other)) {
 		return false;
 	}
-	if (isEmpty() && other->isEmpty()) {
-		return true;
-	}
-	bool ret = equal(*((Point*) other)->getCoordinate(), *getCoordinate(),
-		tolerance);
-	return ret;
+
+	// assume the isEquivalentClass would return false 
+	// if other is not a point 
+	assert(dynamic_cast<const Point*>(other));
+
+	if ( isEmpty() ) return other->isEmpty();
+	else if ( other->isEmpty() ) return false;
+
+	const Coordinate* this_coord = getCoordinate();
+	const Coordinate* other_coord = other->getCoordinate();
+
+	// assume the isEmpty checks above worked :)
+	assert(this_coord && other_coord);
+
+	return equal(*this_coord, *other_coord, tolerance);
 }
 
 int
