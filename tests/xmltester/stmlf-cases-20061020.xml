@@ -1,3 +1,10 @@
+ <!--
+ The test cases have been taken from the robustness improvement project
+ funded by the Bavarian State Ministry of Agriculture and Forestry
+ (StMLF) and the State Survey of Bavaria (LVG). Written permission
+ to use the data for tests has been given by email on the 22 Nov 2006.
+ -->
+
  <run><precisionModel type="FLOATING"/>
 
  <case><desc>966094 - 2025063
