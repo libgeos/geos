@@ -1,3 +1,10 @@
+2006-11-30 Sandro Santilli <strk@refractions.net>
+
+	* tests/unit/: Makefile.am, capi/GEOSCoordSeq.cpp:
+	  new experimental test for C-API GEOSCoordSeq.
+	* capi/geos_c.cpp (GEOSCoordSeq_create): removed
+	  suspicious static cast.
+
 2006-11-15 Sandro Santilli <strk@refractions.net>
 
 	* source/geom/Point.cpp (equalsExact): don't segfault

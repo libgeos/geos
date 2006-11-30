@@ -1461,7 +1461,7 @@ CoordinateSequence *
 GEOSCoordSeq_create(unsigned int size, unsigned int dims)
 {
 	try {
-		return geomFactory->getCoordinateSequenceFactory()->create(size, static_cast<int>(dims));
+		return geomFactory->getCoordinateSequenceFactory()->create(size, dims);
 	}
 
 	catch (const std::exception &e)

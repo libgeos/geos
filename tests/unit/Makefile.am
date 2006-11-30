@@ -1,5 +1,5 @@
 
-INCLUDES = -I$(top_srcdir)/source/headers -I$(top_srcdir)/tests/tut
+INCLUDES = -I$(top_srcdir)/source/headers -I$(top_srcdir)/tests/tut -I$(top_builddir)/capi
 
 TESTS = geos_unit
 
@@ -7,7 +7,11 @@ TESTS = geos_unit
 check_PROGRAMS = geos_unit
 #bin_PROGRAMS = geos_tut
 
-geos_unit_LDADD = $(top_builddir)/source/libgeos.la 
+geos_unit_LDADD = \
+	$(top_builddir)/source/libgeos.la  \
+	$(top_builddir)/capi/libgeos_c.la  \
+	$(NULL)
+
 
 geos_unit_SOURCES = geos_unit.cpp \
 	algorithm/PointLocatorTest.cpp \
@@ -46,7 +50,8 @@ geos_unit_SOURCES = geos_unit.cpp \
 	precision/GeometrySnapperTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
-	util/UniqueCoordinateArrayFilterTest.cpp
+	util/UniqueCoordinateArrayFilterTest.cpp \
+	capi/GEOSCoordSeq.cpp
 
 noinst_HEADERS = 			\
 	utility.h
