@@ -49,14 +49,14 @@ namespace geomgraph { // geos.geomgraph
 class EdgeNodingValidator {
 
 private:
-	std::vector<noding::SegmentString*>& toSegmentStrings(std::vector<Edge*> *edges);
+	std::vector<noding::SegmentString*>& toSegmentStrings(std::vector<Edge*>& edges);
 	noding::NodingValidator nv;
 	std::vector<noding::SegmentString*> segStr;
-	std::vector<geom::CoordinateSequence*>newCoordSeq;
+	std::vector<geom::CoordinateSequence*> newCoordSeq;
 
 public:
 
-	EdgeNodingValidator(std::vector<Edge*> *edges)
+	EdgeNodingValidator(std::vector<Edge*>& edges)
 		:
 		nv(toSegmentStrings(edges))
 	{}

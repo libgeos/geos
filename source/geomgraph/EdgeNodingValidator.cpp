@@ -31,11 +31,11 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 vector<SegmentString*>&
-EdgeNodingValidator::toSegmentStrings(vector<Edge*> *edges)
+EdgeNodingValidator::toSegmentStrings(vector<Edge*>& edges)
 {
 	// convert Edges to SegmentStrings
-	for(size_t i=0, n=edges->size(); i<n; i++) {
-		Edge *e=(*edges)[i];
+	for(size_t i=0, n=edges.size(); i<n; ++i) {
+		Edge *e=edges[i];
 		CoordinateSequence* cs=e->getCoordinates()->clone();
 		newCoordSeq.push_back(cs);
 		segStr.push_back(new SegmentString(cs, e));

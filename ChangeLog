@@ -1,5 +1,11 @@
 2006-12-04 Sandro Santilli <strk@refractions.net>
 
+	* geomgraph::EdgeNodingValidator: minor cleanup
+	  to use references args instead of pointers for
+	  method that doesn't handle NULLs anyway.
+
+2006-12-04 Sandro Santilli <strk@refractions.net>
+
 	* tests/unit/capi/: GEOSCoordSeq.cpp => GEOSCoordSeqTest.cpp
 	* tests/unit/capi/GEOSSimplifyTest.cpp: new test
 	  for GEOSSimplify (just a test for bug #134).
