@@ -1,5 +1,7 @@
 2006-12-04 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/geomgraph/EdgeNodingValidator.h:
+	  fix members initialization order.
 	* geomgraph::EdgeNodingValidator: minor cleanup
 	  to use references args instead of pointers for
 	  method that doesn't handle NULLs anyway.
