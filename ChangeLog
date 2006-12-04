@@ -3,7 +3,7 @@
 	* tests/unit/geom/CoordinateArraySequenceTest.cpp:
 	  added tests for setOrdinate()
 	* tests/unit/capi/GEOSCoordSeq.cpp: 
-	  add test for bug #133 (failing).
+	  add tests for bug #133 (failing).
 	* source/geom/CoordinateArraySequence.cpp (setOrdinate):
 	  fix bug #133.
 

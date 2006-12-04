@@ -127,6 +127,42 @@ namespace tut
 		ensure_equals( ycheck, y );
 		ensure_equals( zcheck, z );
     }	
+
+    // Test swapped setOrdinate calls (see bug #133)
+    template<>
+    template<>
+    void object::test<3>()
+    {
+		GEOSCoordSequence* cs = GEOSCoordSeq_create(1, 3);
+		
+		unsigned int size;
+		unsigned int dims;
+
+		ensure ( GEOSCoordSeq_getSize(cs, &size) );
+		ensure_equals( size, 1u );
+
+		ensure ( GEOSCoordSeq_getDimensions(cs, &dims) );
+		ensure_equals( dims, 3u );
+
+		double x = 10;
+		double y = 11;
+		double z = 12;
+
+		// call setY before setX, this seems
+		// to break something in GEOS-3.0.0-rc2
+		GEOSCoordSeq_setOrdinate(cs, 0, 1, y);
+		GEOSCoordSeq_setOrdinate(cs, 0, 0, x);
+		GEOSCoordSeq_setOrdinate(cs, 0, 2, z);
+
+		double xcheck, ycheck, zcheck;
+		ensure( GEOSCoordSeq_getOrdinate(cs, 0, 1, &ycheck) );
+		ensure( GEOSCoordSeq_getOrdinate(cs, 0, 0, &xcheck) );
+		ensure( GEOSCoordSeq_getOrdinate(cs, 0, 2, &zcheck) );
+
+		ensure_equals( xcheck, x );
+		ensure_equals( ycheck, y );
+		ensure_equals( zcheck, z );
+    }	
     
 } // namespace tut
 
