@@ -7,6 +7,7 @@
 // GEOS
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateArraySequenceFactory.h>
 // STL
 #include <string>
 #include <vector>
@@ -454,6 +455,106 @@ namespace tut
 
 		ensure_not_equals( sequence1, sequence2 );
 		ensure_not_equals( sequence2, sequence1 );
+
+	}
+
+	// Test setOrdinate
+	template<>
+	template<>
+	void object::test<13>()
+	{
+		using geos::geom::Coordinate;
+		using geos::geom::CoordinateArraySequence;
+		using geos::geom::CoordinateSequence;
+
+		Coordinate c1(1, 2, 3);
+
+		CoordinateArraySequence sequence1;
+
+		sequence1.add(c1);
+
+		ensure_equals( sequence1[0], c1 );
+
+		sequence1.setOrdinate(0, CoordinateSequence::X, 4);
+		ensure_equals( sequence1[0].x, 4 );
+
+		sequence1.setOrdinate(0, CoordinateSequence::Y, 5);
+		ensure_equals( sequence1[0].y, 5 );
+
+		sequence1.setOrdinate(0, CoordinateSequence::Z, 6);
+		ensure_equals( sequence1[0].z, 6 );
+
+	}
+
+	// Test setOrdinate setting ordinates in arbitrary order
+	template<>
+	template<>
+	void object::test<14>()
+	{
+		using geos::geom::Coordinate;
+		using geos::geom::CoordinateArraySequence;
+		using geos::geom::CoordinateSequence;
+
+		Coordinate c1(1, 2, 3);
+
+		CoordinateArraySequence sequence1;
+
+		sequence1.add(c1);
+
+		ensure_equals( sequence1[0], c1 );
+
+		// Order: Y, X, Z
+
+		sequence1.setOrdinate(0, CoordinateSequence::Y, 5);
+		ensure_equals( sequence1[0].y, 5 );
+
+		sequence1.setOrdinate(0, CoordinateSequence::X, 4);
+		ensure_equals( sequence1[0].x, 4 );
+
+		sequence1.setOrdinate(0, CoordinateSequence::Z, 6);
+		ensure_equals( sequence1[0].z, 6 );
+
+	}
+
+	// Test setOrdinate setting ordinates in arbitrary order
+	// against a non-initialized CoordinateSequence
+	template<>
+	template<>
+	void object::test<15>()
+	{
+		using geos::geom::Coordinate;
+		using geos::geom::CoordinateArraySequence;
+		using geos::geom::CoordinateSequence;
+
+		typedef geos::geom::CoordinateSequenceFactory const* CoordinateFactoryCPtr;
+		CoordinateFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
+
+		std::auto_ptr<CoordinateSequence> sequence1ptr(factory->create(4, 2));
+		CoordinateSequence& seq = *sequence1ptr;
+
+		// Index: 0 - Order: Y, X, Z
+
+		seq.setOrdinate(0, CoordinateSequence::Y,  5); ensure_equals( seq[0].y, 5 );
+		seq.setOrdinate(0, CoordinateSequence::Z,  6); ensure_equals( seq[0].z, 6 );
+		seq.setOrdinate(0, CoordinateSequence::X,  4); ensure_equals( seq[0].x, 4 );
+
+		// Index: 1 - Order: Z, X, Y
+
+		seq.setOrdinate(1, CoordinateSequence::Z,  9); ensure_equals( seq[1].z, 9 );
+		seq.setOrdinate(1, CoordinateSequence::X,  8); ensure_equals( seq[1].x, 8 );
+		seq.setOrdinate(1, CoordinateSequence::Y,  7); ensure_equals( seq[1].y, 7 );
+
+		// Index: 2 - Order: X, Y, Z
+
+		seq.setOrdinate(2, CoordinateSequence::X,  34); ensure_equals( seq[2].x, 34 );
+		seq.setOrdinate(2, CoordinateSequence::Y,  -45); ensure_equals( seq[2].y, -45 );
+		seq.setOrdinate(2, CoordinateSequence::Z,  152); ensure_equals( seq[2].z, 152 );
+
+		// Index: 3 - Order: Y, Z, X
+
+		seq.setOrdinate(3, CoordinateSequence::Y,  63); ensure_equals( seq[3].y, 63 );
+		seq.setOrdinate(3, CoordinateSequence::Z,  13); ensure_equals( seq[3].z, 13 );
+		seq.setOrdinate(3, CoordinateSequence::X,  -65); ensure_equals( seq[3].x, -65 );
 
 	}
 
