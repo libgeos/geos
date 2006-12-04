@@ -4,6 +4,8 @@
 	  added tests for setOrdinate()
 	* tests/unit/capi/GEOSCoordSeq.cpp: 
 	  add test for bug #133 (failing).
+	* source/geom/CoordinateArraySequence.cpp (setOrdinate):
+	  fix bug #133.
 
 2006-11-30 Sandro Santilli <strk@refractions.net>
 

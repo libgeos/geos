@@ -176,12 +176,15 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 	{
 		case CoordinateSequence::X:
 			(*vect)[index].x = value;
+			break;
 		case CoordinateSequence::Y:
 			(*vect)[index].y = value;
+			break;
 		case CoordinateSequence::Z:
 			(*vect)[index].z = value;
+			break;
 		default:
-			return;
+			break;
 	}
 }
 
