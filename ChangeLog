@@ -2,6 +2,8 @@
 
 	* tests/unit/geom/CoordinateArraySequenceTest.cpp:
 	  added tests for setOrdinate()
+	* tests/unit/capi/GEOSCoordSeq.cpp: 
+	  add test for bug #133 (failing).
 
 2006-11-30 Sandro Santilli <strk@refractions.net>
 
