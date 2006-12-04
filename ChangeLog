@@ -1,5 +1,13 @@
 2006-12-04 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/capi/: GEOSCoordSeq.cpp => GEOSCoordSeqTest.cpp
+	* tests/unit/capi/GEOSSimplifyTest.cpp: new test
+	  for GEOSSimplify (just a test for bug #134).
+	* source/simplify/DouglasPeuckerLineSimplifier.cpp (simplify):
+	  don't try to simplify empty coordinate lists. Fixes bug #134.
+
+2006-12-04 Sandro Santilli <strk@refractions.net>
+
 	* tests/unit/geom/CoordinateArraySequenceTest.cpp:
 	  added tests for setOrdinate()
 	* tests/unit/capi/GEOSCoordSeq.cpp: 

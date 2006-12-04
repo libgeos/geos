@@ -60,10 +60,14 @@ DouglasPeuckerLineSimplifier::setDistanceTolerance(
 DouglasPeuckerLineSimplifier::CoordsVectAutoPtr
 DouglasPeuckerLineSimplifier::simplify()
 {
+	CoordsVectAutoPtr coordList(new CoordsVect());
+
+	// empty coordlist is the simplest, won't simplify further
+	if ( ! pts.size() ) return coordList;
+
 	usePt = BoolVectAutoPtr(new BoolVect(pts.size(), true));
 	simplifySection(0, pts.size() - 1);
 
-	CoordsVectAutoPtr coordList(new CoordsVect());
 	for (size_t i=0, n=pts.size(); i<n; ++i)
 	{
 		if ( usePt->operator[](i) )
