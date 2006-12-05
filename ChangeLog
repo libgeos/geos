@@ -1,5 +1,10 @@
-2006-12-04 Sandro Santilli <strk@refractions.net>
+2006-12-05 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/overlay/OverlayOp.cpp: Use EdgeNodingValidator
+	  instead of OverlayResultValidator (faster and more effective).
+	  Note that compile-time defines can select use of either or both
+	  ones.
+	* source/headers/geos/geom/BinaryOp.h: be quiet if not in DEBUG mode.
 	* noding::NodingValidator.h: throw TopologyException
 	  rather then a generic GEOSException.
 

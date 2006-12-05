@@ -43,6 +43,7 @@
 #include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/util/TopologyException.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
+#include <geos/geomgraph/EdgeNodingValidator.h>
 
 #include <cassert>
 #include <functional>
@@ -57,6 +58,20 @@
 #define COMPUTE_Z 1
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
+
+// A result validator using FuzzyPointLocator to
+// check validity of result. Pretty expensive...
+//#define ENABLE_OVERLAY_RESULT_VALIDATOR 1
+
+// Edge noding validator, more lightweighted and
+// catches robustness errors earlier
+#define ENABLE_EDGE_NODING_VALIDATOR 1
+
+// Define this to get some reports about validations
+//#define GEOS_DEBUG_VALIDATION 1
+
+// Other validators, not found in JTS
+//#define ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS 1
 
 using namespace std;
 using namespace geos::geom;
@@ -664,9 +679,32 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
 
-    	// debugging only
-    	//NodingValidator nv = new NodingValidator(edgeList.getEdges());
-    	//nv.checkValid();
+#ifdef ENABLE_EDGE_NODING_VALIDATOR // {
+	if ( resultPrecisionModel->isFloating() )
+	{
+		// Will throw TopologyException if noding is found to be invalid
+		EdgeNodingValidator nv(edgeList.getEdges());
+
+#ifdef GEOS_DEBUG_VALIDATION // {
+		try {
+			nv.checkValid();
+		} catch (const util::TopologyException& ex) {
+			cout << "EdgeNodingValidator found noding invalid: " << ex.what() << endl;
+			throw ex;
+		}
+		cout << "EdgeNodingValidator accepted the noding" << endl;
+
+#else // }{
+		nv.checkValid();
+#endif // }
+	}
+#ifdef GEOS_DEBUG_VALIDATION // {
+	else
+	{
+		cout << "Did not run EdgeNodingValidator as the precision model is not floating" << endl;
+	}
+#endif // GEOS_DEBUG_VALIDATION }
+#endif // ENABLE_EDGE_NODING_VALIDATOR }
 
 	graph.addEdges(edgeList.getEdges());
 
@@ -860,13 +898,6 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 
 	assert(resultGeom);
 
-// JTS tracking validators
-#define ENABLE_OVERLAY_RESULT_VALIDATOR 1
-
-// other validators
-// (original tests, possibly to include in OverlayResultValidator class)
-//#define ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS 1
-
 
 #ifdef ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS
 
@@ -927,6 +958,9 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 		bool isvalid = validator.isValid(opCode);
 		if ( ! isvalid )
 		{
+#ifdef GEOS_DEBUG_VALIDATION
+			cout << "OverlayResultValidator considered result INVALID" << endl;
+#endif
 			throw util::TopologyException(
 				"Obviously wrong result: "
 				"OverlayResultValidator didn't like "
@@ -936,11 +970,17 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 				string("\nInvalid result: ") +
 				resultGeom->toString());
 		}
+#ifdef GEOS_DEBUG_VALIDATION
+		else
+		{
+			cout << "OverlayResultValidator considered result valid" << endl;
+		}
+#endif
 	}
-#if GEOS_DEBUG
+#ifdef GEOS_DEBUG_VALIDATION
 	else
 	{
-		std::cerr << "Did not run OverlayResultValidator as the precision model is not floating" << std::endl;
+		cout << "Did not run OverlayResultValidator as the precision model is not floating" << endl;
 	}
 #endif // ndef GEOS_DEBUG
 #endif

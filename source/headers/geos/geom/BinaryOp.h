@@ -135,7 +135,9 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	// Snap tolerance must be computed on the original
 	// (not commonbits-removed) geoms
 	double snapTolerance = GeometrySnapper::computeSnapTolerance(*g0, *g1);
+#if GEOS_DEBUG_BINARYOP
 	std::cerr<<"Computed snap tolerance: "<<snapTolerance<<std::endl;
+#endif
 
 	geos::precision::CommonBitsRemover cbr;
 
