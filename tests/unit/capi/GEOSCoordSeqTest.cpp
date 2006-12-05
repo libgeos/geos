@@ -24,13 +24,13 @@ namespace tut
 		static void notice(const char *fmt, ...)
 		{
             std::fprintf( stdout, "NOTICE: ");
-			
-            va_list ap;
+
+			va_list ap;
 			va_start(ap, fmt);
 			std::vfprintf(stdout, fmt, ap);
 			va_end(ap);
-			
-            std::fprintf(stdout, "\n");
+		
+			std::fprintf(stdout, "\n");
 		}
 
 		test_capigeoscoordseq_data()
