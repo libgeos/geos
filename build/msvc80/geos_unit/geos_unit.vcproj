@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\tut;..\..\..\source\headers;C:\Lib\vld"
+				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\tut;..\..\..\capi;..\..\..\source\headers"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\tut;..\..\..\source\headers;C:\Lib\vld"
+				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\tut;..\..\..\capi;..\..\..\source\headers"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -394,6 +394,18 @@
 			</File>
 			<File
 				RelativePath="..\..\..\tests\unit\precision\LineStringSnapperTest.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="capi"
+			>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSCoordSeqTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSSimplifyTest.cpp"
 				>
 			</File>
 		</Filter>
