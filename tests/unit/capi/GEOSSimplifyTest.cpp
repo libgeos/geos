@@ -1,4 +1,4 @@
-// $Id.c$
+// $Id$
 // 
 // Test Suite for C-API GEOSSimplify
 
@@ -6,12 +6,11 @@
 #include <tut.h>
 // GEOS CAPI
 #include <geos_c.h>
-// STL
+// C+
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 #include <memory>
-// C
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 
 namespace tut
 {
@@ -24,14 +23,14 @@ namespace tut
 	{
 		static void notice(const char *fmt, ...)
 		{
-			va_list ap;
-
-			fprintf( stdout, "NOTICE: ");
+            std::fprintf( stdout, "NOTICE: ");
 			
-			va_start (ap, fmt);
-			vfprintf( stdout, fmt, ap);
+            va_list ap;
+			va_start(ap, fmt);
+			std::vfprintf(stdout, fmt, ap);
 			va_end(ap);
-			fprintf( stdout, "\n" );
+			
+            std::fprintf(stdout, "\n");
 		}
 
 		test_capigeossimplify_data()
@@ -60,17 +59,14 @@ namespace tut
     template<>
     void object::test<1>()
     {
-	    	GEOSGeometry* geom1 = GEOSGeomFromWKT("POLYGON EMPTY");
+	    GEOSGeometry* geom1 = GEOSGeomFromWKT("POLYGON EMPTY");
 
-		ensure ( GEOSisEmpty(geom1) );
+		ensure ( 0 != GEOSisEmpty(geom1) );
 
 		GEOSGeometry* geom2 = GEOSSimplify(geom1, 43.2);
 
-		ensure ( GEOSisEmpty(geom2) );
-
-
-    }	
-
+		ensure ( 0 != GEOSisEmpty(geom2) );
+    }
     
 } // namespace tut
 

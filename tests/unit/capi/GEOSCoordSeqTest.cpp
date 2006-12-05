@@ -1,4 +1,4 @@
-// $Id.c$
+// $Id$
 // 
 // Test Suite for C-API GEOSCoordSeq
 
@@ -6,12 +6,11 @@
 #include <tut.h>
 // GEOS CAPI
 #include <geos_c.h>
-// STL
+// C+
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 #include <memory>
-// C
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 
 namespace tut
 {
@@ -24,14 +23,14 @@ namespace tut
 	{
 		static void notice(const char *fmt, ...)
 		{
-			va_list ap;
-
-			fprintf( stdout, "NOTICE: ");
+            std::fprintf( stdout, "NOTICE: ");
 			
-			va_start (ap, fmt);
-			vfprintf( stdout, fmt, ap);
+            va_list ap;
+			va_start(ap, fmt);
+			std::vfprintf(stdout, fmt, ap);
 			va_end(ap);
-			fprintf( stdout, "\n" );
+			
+            std::fprintf(stdout, "\n");
 		}
 
 		test_capigeoscoordseq_data()
@@ -65,10 +64,10 @@ namespace tut
 		unsigned int size;
 		unsigned int dims;
 
-		ensure ( GEOSCoordSeq_getSize(cs, &size) );
+		ensure ( 0 != GEOSCoordSeq_getSize(cs, &size) );
 		ensure_equals( size, 5u );
 
-		ensure ( GEOSCoordSeq_getDimensions(cs, &dims) );
+		ensure ( 0 != GEOSCoordSeq_getDimensions(cs, &dims) );
 		ensure_equals( dims, 3u );
 
 		for (unsigned int i=0; i<5; ++i)
@@ -82,9 +81,9 @@ namespace tut
 			GEOSCoordSeq_setZ(cs, i, z);
 
 			double xcheck, ycheck, zcheck;
-			ensure( GEOSCoordSeq_getX(cs, i, &xcheck) );
-			ensure( GEOSCoordSeq_getY(cs, i, &ycheck) );
-			ensure( GEOSCoordSeq_getZ(cs, i, &zcheck) );
+			ensure( 0 != GEOSCoordSeq_getX(cs, i, &xcheck) );
+			ensure( 0 != GEOSCoordSeq_getY(cs, i, &ycheck) );
+			ensure( 0 != GEOSCoordSeq_getZ(cs, i, &zcheck) );
 
 			ensure_equals( xcheck, x );
 			ensure_equals( ycheck, y );
@@ -102,10 +101,10 @@ namespace tut
 		unsigned int size;
 		unsigned int dims;
 
-		ensure ( GEOSCoordSeq_getSize(cs, &size) );
+		ensure ( 0 != GEOSCoordSeq_getSize(cs, &size) );
 		ensure_equals( size, 1u );
 
-		ensure ( GEOSCoordSeq_getDimensions(cs, &dims) );
+		ensure ( 0 != GEOSCoordSeq_getDimensions(cs, &dims) );
 		ensure_equals( dims, 3u );
 
 		double x = 10;
@@ -119,9 +118,9 @@ namespace tut
 		GEOSCoordSeq_setZ(cs, 0, z);
 
 		double xcheck, ycheck, zcheck;
-		ensure( GEOSCoordSeq_getY(cs, 0, &ycheck) );
-		ensure( GEOSCoordSeq_getX(cs, 0, &xcheck) );
-		ensure( GEOSCoordSeq_getZ(cs, 0, &zcheck) );
+		ensure( 0 != GEOSCoordSeq_getY(cs, 0, &ycheck) );
+		ensure( 0 != GEOSCoordSeq_getX(cs, 0, &xcheck) );
+		ensure( 0 != GEOSCoordSeq_getZ(cs, 0, &zcheck) );
 
 		ensure_equals( xcheck, x );
 		ensure_equals( ycheck, y );
@@ -138,10 +137,10 @@ namespace tut
 		unsigned int size;
 		unsigned int dims;
 
-		ensure ( GEOSCoordSeq_getSize(cs, &size) );
+		ensure ( 0 != GEOSCoordSeq_getSize(cs, &size) );
 		ensure_equals( size, 1u );
 
-		ensure ( GEOSCoordSeq_getDimensions(cs, &dims) );
+		ensure ( 0 != GEOSCoordSeq_getDimensions(cs, &dims) );
 		ensure_equals( dims, 3u );
 
 		double x = 10;
@@ -155,9 +154,9 @@ namespace tut
 		GEOSCoordSeq_setOrdinate(cs, 0, 2, z);
 
 		double xcheck, ycheck, zcheck;
-		ensure( GEOSCoordSeq_getOrdinate(cs, 0, 1, &ycheck) );
-		ensure( GEOSCoordSeq_getOrdinate(cs, 0, 0, &xcheck) );
-		ensure( GEOSCoordSeq_getOrdinate(cs, 0, 2, &zcheck) );
+		ensure( 0 != GEOSCoordSeq_getOrdinate(cs, 0, 1, &ycheck) );
+		ensure( 0 != GEOSCoordSeq_getOrdinate(cs, 0, 0, &xcheck) );
+		ensure( 0 != GEOSCoordSeq_getOrdinate(cs, 0, 2, &zcheck) );
 
 		ensure_equals( xcheck, x );
 		ensure_equals( ycheck, y );

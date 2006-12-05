@@ -1,3 +1,9 @@
+2006-12-05 Mateusz Loskot <mateusz@loskot.net>
+
+	* build\msvc80\geos_unit\geos_unit.vcproj: added C API unit tests
+	* tests\unit\capi\GEOSSimplifyTest.cpp,tests\unit\capi\GEOSSimplifyTest.cpp:
+	  small cleaning, using C calls from C++ std namespace.
+
 2006-12-05 Sandro Santilli <strk@refractions.net>
 
 	* source/operation/overlay/OverlayOp.cpp: Use EdgeNodingValidator
