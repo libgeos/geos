@@ -21,7 +21,7 @@
 #include <sstream>
 #include <vector>
 
-#include <geos/util/GEOSException.h>
+#include <geos/util/TopologyException.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/NodingValidator.h>
 #include <geos/noding/SegmentString.h>
@@ -75,7 +75,7 @@ NodingValidator::checkCollapse(const Coordinate& p0,
 		const Coordinate& p1, const Coordinate& p2) const
 {
 	if (p0.equals2D(p2))
-		throw util::GEOSException("found non-noded collapse at " +
+		throw util::TopologyException("found non-noded collapse at " +
 			p0.toString() + ", " +
 			p1.toString() + ", " +
 			p2.toString());
@@ -135,7 +135,7 @@ NodingValidator::checkInteriorIntersections(
 			|| hasInteriorIntersection(li, p00, p01)
 			|| hasInteriorIntersection(li, p10, p11))
 		{
-			throw util::GEOSException(
+			throw util::TopologyException(
 				"found non-noded intersection at "
 				+ p00.toString() + "-" + p01.toString()
 				+ " and "
@@ -179,7 +179,7 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
 				stringstream s;
 				s<<"found endpt/interior pt intersection ";
 				s<<"at index "<<j<<" :pt "<<testPt;
-				throw util::GEOSException(s.str());
+				throw util::TopologyException(s.str());
 			}
 		}
 	}

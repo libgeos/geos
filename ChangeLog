@@ -1,5 +1,10 @@
 2006-12-04 Sandro Santilli <strk@refractions.net>
 
+	* noding::NodingValidator.h: throw TopologyException
+	  rather then a generic GEOSException.
+
+2006-12-04 Sandro Santilli <strk@refractions.net>
+
 	* source/headers/geos/geomgraph/EdgeNodingValidator.h:
 	  fix members initialization order.
 	* geomgraph::EdgeNodingValidator: minor cleanup

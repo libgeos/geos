@@ -39,7 +39,7 @@ namespace noding { // geos.noding
 
 /**
  * Validates that a collection of {@link SegmentString}s is correctly noded.
- * Throws an appropriate exception if an noding error is found.
+ * Throws a TopologyException if a noding error is found.
  *
  * Last port: noding/NodingValidator.java rev. 1.6 (JTS-1.7)
  *
