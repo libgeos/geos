@@ -14,13 +14,7 @@
  *
  **********************************************************************
  *
- * A LineIntersector is an algorithm that can both test whether
- * two line segments intersect and compute the intersection point
- * if they do.
- * The intersection point may be computed in a precise or non-precise manner.
- * Computing it precisely involves rounding it to an integer.  (This assumes
- * that the input coordinates have been made precise by scaling them to
- * an integer grid.)
+ * Last port: algorithm/RobustLineIntersector.java rev. 1.35
  *
  **********************************************************************/
 
@@ -28,12 +22,13 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
+#include <geos/algorithm/CentralEndpointIntersector.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
 
 //#include <geos/util/Assert.h> // changed to TopologyException
-#include <geos/util/TopologyException.h> 
+//#include <geos/util/TopologyException.h> // we don't throw anymore
 
 #include <string>
 #include <cmath> // for fabs()
@@ -386,6 +381,11 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		return computeCollinearIntersection(p1,p2,q1,q2);
 	}
 
+	/**
+	 * At this point we know that there is a single intersection point
+	 * (since the lines are not collinear).
+	 */
+
 	/*
 	 * Check if the intersection is an endpoint.
 	 * If it is, copy the endpoint as
@@ -402,27 +402,25 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		double z=0.0;
 #endif
 		isProperVar=false;
-		if (Pq1==0) {
-			intPt[0]=q1;
-#if COMPUTE_Z
-			if ( !ISNAN(q1.z) )
-			{
-				z += q1.z;
-				hits++;
-			}
-#endif
-		}
-		if (Pq2==0) {
-			intPt[0]=q2;
-#if COMPUTE_Z
-			if ( !ISNAN(q2.z) )
-			{
-				z += q2.z;
-				hits++;
-			}
-#endif
-		}
-		if (Qp1==0) {
+
+		/* Check for two equal endpoints.
+		 * This is done explicitly rather than by the orientation tests
+		 * below in order to improve robustness.
+		 * 
+		 * (A example where the orientation tests fail
+		 *  to be consistent is:
+		 * 
+		 * LINESTRING ( 19.850257749638203 46.29709338043669,
+		 * 			20.31970698357233 46.76654261437082 )
+		 * and
+		 * LINESTRING ( -48.51001596420236 -22.063180333403878,
+		 * 			19.850257749638203 46.29709338043669 )
+		 * 
+		 * which used to produce the result:
+		 * (20.31970698357233, 46.76654261437082, NaN)
+		 */
+
+		if ( p1.equals2D(q1) || p1.equals2D(q2) ) {
 			intPt[0]=p1;
 #if COMPUTE_Z
 			if ( !ISNAN(p1.z) )
@@ -432,7 +430,51 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 			}
 #endif
 		}
-		if (Qp2==0) {
+		else if ( p2.equals2D(q1) || p2.equals2D(q2) ) {
+			intPt[0]=p2;
+#if COMPUTE_Z
+			if ( !ISNAN(p2.z) )
+			{
+				z += p2.z;
+				hits++;
+			}
+#endif
+		}
+
+		/**
+		 * Now check to see if any endpoint lies on the interior of the other segment.
+		 */
+		else if (Pq1==0) {
+			intPt[0]=q1;
+#if COMPUTE_Z
+			if ( !ISNAN(q1.z) )
+			{
+				z += q1.z;
+				hits++;
+			}
+#endif
+		}
+		else if (Pq2==0) {
+			intPt[0]=q2;
+#if COMPUTE_Z
+			if ( !ISNAN(q2.z) )
+			{
+				z += q2.z;
+				hits++;
+			}
+#endif
+		}
+		else if (Qp1==0) {
+			intPt[0]=p1;
+#if COMPUTE_Z
+			if ( !ISNAN(p1.z) )
+			{
+				z += p1.z;
+				hits++;
+			}
+#endif
+		}
+		else if (Qp2==0) {
 			intPt[0]=p2;
 #if COMPUTE_Z
 			if ( !ISNAN(p2.z) )
@@ -675,41 +717,34 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 	cerr<<" n4:"<<n4.toString()<<endl;
 #endif
 
-	try {
-		HCoordinate::intersection(n1,n2,n3,n4,intPt);
-#if GEOS_DEBUG
-		cerr<<" HCoordinate found intersection h:"<<intPt.toString()<<endl;
-#endif
-
-	} catch (const NotRepresentableException& /* e */) {
-		// JTS uses an Assertion here
-		throw util::TopologyException("Coordinate for intersection is not calculable");
-		//util::Assert::shouldNeverReachHere("Coordinate for intersection is not calculable");
-		//assert(0); 
-    	}
+	safeHCoordinateIntersection(n1,n2,n3,n4,intPt);
 
 	intPt.x+=normPt.x;
 	intPt.y+=normPt.y;
 
-/**
- *
- * MD - May 4 2005 - This is still a problem.  Here is a failure case:
- *
- * LINESTRING (2089426.5233462777 1180182.3877339689,
- *             2085646.6891757075 1195618.7333999649)
- * LINESTRING (1889281.8148903656 1997547.0560044837,
- *             2259977.3672235999 483675.17050843034)
- * int point = (2097408.2633752143,1144595.8008114607)
- */
+	/*
+	 * Due to rounding it can happen that the computed intersection is
+	 * outside the envelopes of the input segments.  Clearly this
+	 * is inconsistent.
+	 * This code checks this condition and forces a more reasonable answer
+	 *
+	 * MD - May 4 2005 - This is still a problem.  Here is a failure case:
+	 *
+	 * LINESTRING (2089426.5233462777 1180182.3877339689,
+	 *             2085646.6891757075 1195618.7333999649)
+	 * LINESTRING (1889281.8148903656 1997547.0560044837,
+	 *             2259977.3672235999 483675.17050843034)
+	 * int point = (2097408.2633752143,1144595.8008114607)
+	 */
 
-//#if GEOS_DEBUG
-	//if (!((LineIntersector *)this)->isInSegmentEnvelopes(intPt))
 	if (! isInSegmentEnvelopes(intPt))
 	{
-		cerr << "Intersection outside segment envelopes: "
+		intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
+#if GEOS_DEBUG
+		cerr << "Intersection outside segment envelopes, snapped to "
 		     << intPt.toString() << endl;
+#endif
 	}
-//#endif
  
 	if (precisionModel!=NULL) precisionModel->makePrecise(intPt);
 
@@ -801,6 +836,24 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 	n10.z -= normPt.z;
 	n11.z -= normPt.z;
 #endif
+}
+
+/*private*/
+void
+LineIntersector::safeHCoordinateIntersection(const Coordinate& p1,
+		const Coordinate& p2, const Coordinate& q1,
+		const Coordinate& q2, Coordinate& intPt) const
+{
+	try {
+		HCoordinate::intersection(p1, p2, q1, q2, intPt);
+#if GEOS_DEBUG
+		cerr<<" HCoordinate found intersection h:"<<intPt.toString()<<endl;
+#endif
+
+	} catch (const NotRepresentableException& /* e */) {
+		// compute an approximate result
+		intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
+    	}
 }
 
 } // namespace geos.algorithm

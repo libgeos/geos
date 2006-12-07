@@ -19,6 +19,7 @@ geos_HEADERS = 				\
 
 noinst_HEADERS = 			\
 	CGAlgorithms.h			\
+	CentralEndpointIntersector.h	\
 	CentroidArea.h			\
 	CentroidLine.h			\
 	CentroidPoint.h			\

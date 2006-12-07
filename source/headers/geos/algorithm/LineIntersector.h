@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/RobustLineIntersector.java rev. 1.35
+ *
  **********************************************************************/
 
 #ifndef GEOS_ALGORITHM_LINEINTERSECTOR_H
@@ -314,6 +318,25 @@ private:
 	void normalizeToEnvCentre(geom::Coordinate &n00, geom::Coordinate &n01,
 		geom::Coordinate &n10, geom::Coordinate &n11,
 		geom::Coordinate &normPt) const;
+
+	/**
+	 * Computes a segment intersection using homogeneous coordinates.
+	 * Round-off error can cause the raw computation to fail,
+	 * (usually due to the segments being approximately parallel).
+	 * If this happens, a reasonable approximation is computed instead.
+	 *
+	 * @param p1 a segment endpoint
+	 * @param p2 a segment endpoint
+	 * @param q1 a segment endpoint
+	 * @param q2 a segment endpoint
+	 * @param intPt the computed intersection point is stored there
+	 */
+	 void safeHCoordinateIntersection(const geom::Coordinate& p1,
+			 const geom::Coordinate& p2,
+			 const geom::Coordinate& q1,
+			 const geom::Coordinate& q2,
+			 geom::Coordinate& intPt) const;
+		   
 };
 
 } // namespace geos::algorithm
