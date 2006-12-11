@@ -1,3 +1,19 @@
+2006-12-11 Sandro Santilli <strk@refractions.net>
+
+	* source/headers/geos/noding/SegmentIntersector.h: added virtual
+	  isDone() function, always returning false by default.
+	* source/noding/MCIndexNoder.cpp (intersectChains):
+	  short-circuit from JTS-1.8, based on the new
+	  SegmentIntersector::isDone() method.
+	* source/noding/Makefile.am, source/noding/FastNodingValidator.cpp,
+	  source/noding/SingleInteriorIntersectionFinder.cpp,
+	  source/headers/geos/noding/Makefile.am,
+	  source/headers/geos/noding/FastNodingValidator.h,
+	  source/headers/geos/noding/SingleInteriorIntersectionFinder.h:
+	  New ports from JTS-1.8-cvs.
+	* source/headers/geos/geomgraph/EdgeNodingValidator.h:
+	  use a FastNodingValidator rather then a simple NodingValidator.
+
 2006-12-07 Sandro Santilli <strk@refractions.net>
 
 	* source/headers/geos/algorithm/: CentralEndpointIntersector.h,

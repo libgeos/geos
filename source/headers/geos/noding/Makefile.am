@@ -6,6 +6,7 @@ SUBDIRS = snapround
 #
 
 noinst_HEADERS = 			\
+	FastNodingValidator.h		\
 	IntersectionAdder.h		\
 	IntersectionFinderAdder.h	\
 	IteratedNoder.h			\
@@ -21,7 +22,8 @@ noinst_HEADERS = 			\
 	SegmentString.h			\
 	SegmentString.inl		\
 	SimpleNoder.h			\
-	SinglePassNoder.h
+	SinglePassNoder.h		\
+	SingleInteriorIntersectionFinder.h
 
 #geosdir = $(includedir)/geos/noding
 

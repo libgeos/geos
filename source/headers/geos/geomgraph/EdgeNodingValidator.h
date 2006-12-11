@@ -20,7 +20,8 @@
 
 #include <vector>
 
-#include <geos/noding/NodingValidator.h> // for member
+//#include <geos/noding/NodingValidator.h> // for composition
+#include <geos/noding/FastNodingValidator.h> // for composition
 
 #include <geos/inline.h>
 
@@ -63,7 +64,8 @@ private:
 	// in turn expects this member to be initialized
 	std::vector<geom::CoordinateSequence*> newCoordSeq;
 
-	noding::NodingValidator nv;
+	noding::FastNodingValidator nv;
+	//noding::NodingValidator nv;
 
 public:
 

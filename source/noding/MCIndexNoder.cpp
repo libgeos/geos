@@ -92,6 +92,9 @@ MCIndexNoder::intersectChains()
 				nOverlaps++;
 			}
 
+			// short-circuit if possible
+			if (segInt->isDone()) return;
+
 		}
 	}
 }

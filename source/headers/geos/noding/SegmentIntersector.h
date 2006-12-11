@@ -28,19 +28,20 @@ namespace geos {
 namespace geos {
 namespace noding { // geos.noding
 
-
 /**
  * \brief
- * Computes the intersections between two line segments in SegmentString
- * and adds them to each string.
+ * Processes possible intersections detected by a Noder.
  *
  * The SegmentIntersector is passed to a Noder.
  * The addIntersections method is called whenever the Noder
  * detects that two SegmentStrings <i>might</i> intersect.
+ * This class may be used either to find all intersections, or
+ * to detect the presence of an intersection.  In the latter case,
+ * Noders may choose to short-circuit their computation by calling the
+ * isDone method.
  * This class is an example of the <i>Strategy</i> pattern.
  *
- * Last port: noding/SegmentIntersector.java rev. 1.7 (JTS-1.7)
- *
+ * @version 1.7
  */
 class SegmentIntersector {
 
@@ -48,13 +49,26 @@ public:
 
 	/**
 	 * This method is called by clients
-	 * of the {@link SegmentIntersector} interface to process
-	 * intersections for two segments of the {@link SegmentStrings}
+	 * of the SegmentIntersector interface to process
+	 * intersections for two segments of the SegmentStrings
 	 * being intersected.
 	 */
 	virtual void processIntersections(
 		SegmentString* e0,  int segIndex0,
 		SegmentString* e1,  int segIndex1)=0;
+
+	/**
+	 * \brief
+	 * Reports whether the client of this class
+	 * needs to continue testing all intersections in an arrangement.
+	 * 
+	 * @return true if there is not need to continue testing segments
+	 *
+	 * The default implementation always return false (process all intersections).
+	 */
+	virtual bool isDone() const {
+		return false;
+	}
 
 protected:
 
