@@ -13,7 +13,8 @@
  *
  ***********************************************************************
  *
- * Last port: precision/LineStringSnapper.java rev. 0
+ * Last port: operation/overlay/snap/lineStringSnapper.java rev. 1.1
+ * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 

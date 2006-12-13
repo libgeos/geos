@@ -13,7 +13,8 @@
  *
  ***********************************************************************
  *
- * Last port: precision/GeometrySnapper.java rev. 0
+ * Last port: operation/overlay/snap/GeometrySnapper.java rev. 1.1
+ * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
@@ -43,7 +44,7 @@ namespace geos {
 namespace precision { // geos.precision
 
 //const double GeometrySnapper::snapTol = 0.000001;
-const double GeometrySnapper::snapPrecisionFactor = 10e-10;
+const double GeometrySnapper::snapPrecisionFactor = 10e-10; // 10e-8 in JTS!
 
 class SnapTransformer: public geos::geom::util::GeometryTransformer {
 

@@ -13,7 +13,8 @@
  *
  ***********************************************************************
  *
- * Last port: precision/GeometrySnapper.java rev. 0
+ * Last port: operation/overlay/snap/GeometrySnapper.java rev. 1.1
+ * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
