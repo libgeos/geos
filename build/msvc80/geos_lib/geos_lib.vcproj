@@ -789,6 +789,10 @@
 				Name="noding"
 				>
 				<File
+					RelativePath="..\..\..\source\noding\FastNodingValidator.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\noding\IntersectionAdder.cpp"
 					>
 				</File>
@@ -830,6 +834,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\noding\SimpleNoder.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\noding\SingleInteriorIntersectionFinder.cpp"
 					>
 				</File>
 				<Filter

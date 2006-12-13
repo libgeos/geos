@@ -205,6 +205,7 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	io\WKTReader.obj \
 	io\WKTWriter.obj \
 	io\Writer.obj \
+    noding\FastNodingValidator.obj \
 	noding\IntersectionAdder.obj \
 	noding\IntersectionFinderAdder.obj \
 	noding\IteratedNoder.obj \
@@ -216,6 +217,7 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	noding\SegmentNodeList.obj \
 	noding\SegmentString.obj \
 	noding\SimpleNoder.obj \
+    noding\SingleInteriorIntersectionFinder.obj \
 	noding\snapround\HotPixel.obj \
 	noding\snapround\MCIndexPointSnapper.obj \
 	noding\snapround\MCIndexSnapRounder.obj \
