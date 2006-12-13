@@ -13,7 +13,8 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/OffsetPointGenerator.java rev. 0.0
+ * Last port: operation/overlay/validate/OffsetPointGenerator.java rev. 1.1
+ * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 

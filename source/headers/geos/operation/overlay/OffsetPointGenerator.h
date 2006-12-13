@@ -11,6 +11,11 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ ***********************************************************************
+ *
+ * Last port: operation/overlay/validate/OffsetPointGenerator.java rev. 1.1
+ * (we should move in GEOS too, probably)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_OVERLAY_OFFSETPOINTGENERATOR_H

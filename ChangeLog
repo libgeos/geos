@@ -1,6 +1,9 @@
 2006-12-13 Sandro Santilli <strk@refractions.net>
 
-	* precision::GeometrySnapper, precision::LineStringSnapper:
+	* precision::GeometrySnapper, precision::LineStringSnapper,
+	  operation::overlay::FuzzyPointLocator,
+	  operation::overlay::OffsetPointGenerator,
+	  operation::overlay::OverlayValidator:
 	  Updated port information.
 
 2006-12-11 Sandro Santilli <strk@refractions.net>

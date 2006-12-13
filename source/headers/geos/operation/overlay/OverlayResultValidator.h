@@ -13,7 +13,8 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/OverlayResultValidator.java rev. 0
+ * Last port: operation/overlay/validate/OverlayResultValidator.java rev. 1.1
+ * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
