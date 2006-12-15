@@ -1,3 +1,5 @@
+---------  GEOS-3.0.0rc3 release [2006-12-14] --------------------------
+
 2006-12-13 Mateusz Loskot <mateusz@loskot.net>
 
 	* build\msvc80\geos_lib\geos_lib.vcproj,source\Makefile.vc:
