@@ -26,12 +26,7 @@
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
-
-//#include <geos/geom/util/GeometryEditor.h>
-//#include <geos/geom/util/CoordinateOperation.h>
-//#include <geos/geom/PrecisionModel.h>
-//#include <geos/geom/LineString.h>
-//#include <geos/geom/LinearRing.h>
+#include <geos/geom/PrecisionModel.h>
 
 #include <vector>
 #include <memory>
@@ -121,11 +116,24 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 double
 GeometrySnapper::computeSnapTolerance(const geom::Geometry& g)
 {
-	//return 0.000001; // testing: to compare with previous implementation
-	const Envelope* env = g.getEnvelopeInternal();
-        double minDimension = std::min(env->getHeight(), env->getWidth());
-	double snapTol = minDimension * snapPrecisionFactor;
-	return snapTol;
+	// If precision model is fixed, then the snap tolerance
+	// must reflect the precision model.
+	// Precisely, the snap tolerance should be at least
+	// the distance from a corner of a precision grid cell
+	// to the centre point of the cell.
+	assert(g.getPrecisionModel());
+	const PrecisionModel& pm = *(g.getPrecisionModel());
+	if (pm.getType() == PrecisionModel::FIXED)
+	{
+		return (1 / pm.getScale()) * 2 / 1.415;
+	}
+	else
+	{
+		const Envelope* env = g.getEnvelopeInternal();
+		double minDimension = std::min(env->getHeight(), env->getWidth());
+		double snapTol = minDimension * snapPrecisionFactor;
+		return snapTol;
+	}
 }
 
 /*public static*/
