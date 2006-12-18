@@ -13,7 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/GeometrySnapper.java rev. 1.1
+ * Last port: operation/overlay/snap/GeometrySnapper.java rev. 1.6
  * (we should move in GEOS too, probably)
  *
  **********************************************************************/
@@ -38,8 +38,7 @@ using namespace geos::geom;
 namespace geos {
 namespace precision { // geos.precision
 
-//const double GeometrySnapper::snapTol = 0.000001;
-const double GeometrySnapper::snapPrecisionFactor = 10e-10; // 10e-8 in JTS!
+const double GeometrySnapper::snapPrecisionFactor = 10e-10; 
 
 class SnapTransformer: public geos::geom::util::GeometryTransformer {
 
@@ -114,34 +113,45 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 
 /*public static*/
 double
-GeometrySnapper::computeSnapTolerance(const geom::Geometry& g)
+GeometrySnapper::computeSizeBasedSnapTolerance(const geom::Geometry& g)
 {
-	// If precision model is fixed, then the snap tolerance
-	// must reflect the precision model.
-	// Precisely, the snap tolerance should be at least
-	// the distance from a corner of a precision grid cell
-	// to the centre point of the cell.
-	assert(g.getPrecisionModel());
-	const PrecisionModel& pm = *(g.getPrecisionModel());
-	if (pm.getType() == PrecisionModel::FIXED)
-	{
-		return (1 / pm.getScale()) * 2 / 1.415;
-	}
-	else
-	{
-		const Envelope* env = g.getEnvelopeInternal();
-		double minDimension = std::min(env->getHeight(), env->getWidth());
-		double snapTol = minDimension * snapPrecisionFactor;
-		return snapTol;
-	}
+	const Envelope* env = g.getEnvelopeInternal();
+	double minDimension = std::min(env->getHeight(), env->getWidth());
+	double snapTol = minDimension * snapPrecisionFactor;
+	return snapTol;
 }
 
 /*public static*/
 double
-GeometrySnapper::computeSnapTolerance(const geom::Geometry& g1,
+GeometrySnapper::computeOverlaySnapTolerance(const geom::Geometry& g)
+{
+	double snapTolerance = computeSizeBasedSnapTolerance(g);
+
+	/*
+	 * Overlay is carried out in most precise precision model of inputs.
+	 * If this precision model is fixed, then the snap tolerance
+	 * must reflect the grid size.
+	 * Precisely, the snap tolerance should be at least
+	 * the distance from a corner of a precision grid cell
+	 * to the centre point of the cell.
+	 */
+	assert(g.getPrecisionModel());
+	const PrecisionModel& pm = *(g.getPrecisionModel());
+	if (pm.getType() == PrecisionModel::FIXED)
+	{
+		double fixedSnapTol = (1 / pm.getScale()) * 2 / 1.415;
+		if ( fixedSnapTol > snapTolerance )
+			snapTolerance = fixedSnapTol;
+	}
+	return snapTolerance;
+}
+
+/*public static*/
+double
+GeometrySnapper::computeOverlaySnapTolerance(const geom::Geometry& g1,
 		const geom::Geometry& g2)
 {
-        return std::min(computeSnapTolerance(g1), computeSnapTolerance(g2));
+        return std::min(computeOverlaySnapTolerance(g1), computeOverlaySnapTolerance(g2));
 }
 
 

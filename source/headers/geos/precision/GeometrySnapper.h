@@ -13,7 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/GeometrySnapper.java rev. 1.1
+ * Last port: operation/overlay/snap/GeometrySnapper.java rev. 1.6
  * (we should move in GEOS too, probably)
  *
  **********************************************************************/
@@ -64,14 +64,20 @@ public:
 	std::auto_ptr<geom::Geometry> snapTo(const geom::Geometry& g, double snapTolerance);
 
 	/** \brief
-	 * Computes the snap tolerance based on geometry;
+	 * Estimates the snap tolerance for a Geometry, taking into account
+	 * its precision model.
+	 *
+	 * @param g a Geometry
+	 * @return the estimated snap tolerance
 	 */
-	static double computeSnapTolerance(const geom::Geometry& g);
+	static double computeOverlaySnapTolerance(const geom::Geometry& g);
+
+	static double computeSizeBasedSnapTolerance(const geom::Geometry& g);
 
 	/** \brief
 	 * Computes the snap tolerance based on input geometries;
 	 */
-	static double computeSnapTolerance(const geom::Geometry& g1,
+	static double computeOverlaySnapTolerance(const geom::Geometry& g1,
 			const geom::Geometry& g2);
 
 
