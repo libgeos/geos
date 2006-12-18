@@ -12,13 +12,16 @@
    - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
      [ THIS MUST BE CAREFULLY AVOIDED ]
    
-3: Update the NEWS file
+3: Release-mark the ChangeLog (search for '---' at start of a line to 
+   see how a release mark looks like).
 
-4: make dist
+4: Update the NEWS file (extract most important things from the ChangeLog)
 
-5: check everything is ok ;)
+5: make distcheck
 
-6: Tag the release:
+6: check everything is ok ;)
+
+7: Tag the release:
    $ base=http://svn.refractions.net/geos/
    $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
 		$base/trunk $base/tags/MAJOR.MINOR.PATCH

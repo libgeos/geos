@@ -1,5 +1,6 @@
 2006-12-18 Sandro Santilli <strk@refractions.net>
 
+	* HOWTO_RELEASE: add ChangeLog's release mark step.
 	* source/precision/GeometrySnapper.cpp (computeSnapTolerance):
 	  properly compute snap tolerance for fixed precision geometries.
 	* tests/xmltester/: Makefile.am, TestRobustOverlayFixed.xml:
