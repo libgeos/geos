@@ -1,5 +1,8 @@
 2006-12-18 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/robustness.xml: added
+	  testcase reported to fail with 2.2.3 on
+	  postgis-users/2006-November/014013.html.
 	* source/precision/GeometrySnapper.cpp,
 	  source/headers/geos/geom/BinaryOp.h,
 	  source/headers/geos/precision/GeometrySnapper.h:
