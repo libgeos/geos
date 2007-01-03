@@ -196,7 +196,15 @@ XMLTester::run(const std::string &source)
 		          << "( caseno integer, testno integer, " 
 			  << " operation varchar, description varchar, "
 			  << " a geometry, b geometry, expected geometry, "
-			  << " obtained geometry, result bool );" << std::endl;
+			  << " obtained geometry, result bool )"
+
+			  // NOTE: qgis 0.7.4 require oids for proper operations.
+			  //       The 'WITH OIDS' parameter is supported back to
+			  //       PostgreSQL 7.2, so if you run an older version
+			  //       rebuild with the next line commented out.
+			  << " WITH OIDS"
+
+			  << ";" << std::endl;
 	}
 
 	++testFileCount;
@@ -694,10 +702,12 @@ XMLTester::parseTest()
 			profile.stop();
 			gRealRes->normalize();
 
-			/// Allow for slightly different representations
-			if (gRes->equalsExact(gRealRes.get(),
-					0.00000000001)==true) success=1;
-			//if (gRes->compareTo(gRealRes.get())==0) success=1;
+			/// Allow for slightly different representations.
+			/// A decimal degree being about 111km on the equator,
+			/// a tolerance of 1e-6 means about 10cm at worst.
+			double tol = 1e-6;
+			if (gRes->equalsExact(gRealRes.get(), tol) == true)
+					success=1;
 
 			if ( testValidOutput ) testValid(gRes.get(), "result");
 
