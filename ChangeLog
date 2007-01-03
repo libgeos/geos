@@ -1,3 +1,8 @@
+2007-01-03 Sandro Santilli <strk@refractions.net>
+
+	* source/operation/buffer/BufferOp.cpp (bufferReducedPrecision):
+	  Fixed computation of reduced PrecisionModel scale.
+
 2006-12-18 Sandro Santilli <strk@refractions.net>
 
 	* tests/xmltester/robustness.xml: added

@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2005-2006 Refractions Research Inc.
+ * Copyright (C) 2005-2007 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -123,7 +123,7 @@ BufferOp::computeGeometry()
 
 	if (resultGeometry!=NULL) return;
 
-	std::cerr << "bufferOriginalPrecision failed, trying with reduced precision"
+	std::cerr << "bufferOriginalPrecision failed (" << saveException.what() << "), trying with reduced precision"
 	          << std::endl;
 
 	const PrecisionModel& argPM = *(argGeom->getFactory()->getPrecisionModel());
@@ -145,7 +145,7 @@ BufferOp::bufferReducedPrecision()
 		std::cerr<<"BufferOp::computeGeometry: trying with precDigits "<<precDigits<<std::endl;
 #endif
 		try {
-			bufferFixedPrecision(precDigits);
+			bufferReducedPrecision(precDigits);
 		} catch (const util::TopologyException& ex) {
 			saveException=ex;
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
