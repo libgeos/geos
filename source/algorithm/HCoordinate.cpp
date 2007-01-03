@@ -30,9 +30,11 @@
 
 // For MingW builds with __STRICT_ANSI__ (-ansi)
 // See: http://geos.refractions.net/pipermail/geos-devel/2006-June/002342.html
-#if defined(__GNUC__) && defined(_WIN32)
+#if defined(__MINGW32__)
+extern "C" {
 int __cdecl _finite (double);
 #define finite(x) _finite(x)
+}
 #endif
 
 #ifndef GEOS_DEBUG
