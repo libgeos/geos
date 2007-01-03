@@ -1,5 +1,6 @@
 2007-01-03 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/: fme.xml, Makefile.am: added buffer testcase.
 	* tests/xmltester/XMLTester.cpp: use a tolerance of 10E-6
 	  for buffer validation (~10cm at worst when using latlong
 	  projections); create sql tables with oid to work around a
