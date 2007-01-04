@@ -1,3 +1,9 @@
+2007-01-04 Sandro Santilli <strk@refractions.net>
+
+	* configure.in, swig/geos.i.in, swig/geos.i:
+	  geos.i generated at configure time from geos.i.in
+	  (so we don't have to manually update versions there).
+
 2007-01-04 dev-zero at gentoo dot org 
 
 	* swig/geos.i: use unsigned int when CAPI signatures
