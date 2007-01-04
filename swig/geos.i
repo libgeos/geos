@@ -127,7 +127,7 @@ typedef void GeosCoordinateSequence;
 
 void checkCoordSeqBounds(const GEOSCoordSeq coordSeq, const size_t index)
 {
-    size_t size = 0;
+    unsigned int size = 0;
     GEOSCoordSeq_getSize(coordSeq, &size);
 
     if (index < 0 || index >= size)
@@ -223,17 +223,17 @@ public:
         return result;
     }
 
-    int getSize()
+    unsigned int getSize()
     {
-        size_t result;
+        unsigned int result;
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
         GEOSCoordSeq_getSize(coords, &result);
         return result;
     }
 
-    int getDimensions()
+    unsigned int getDimensions()
     {
-        size_t result;
+        unsigned int result;
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
         GEOSCoordSeq_getDimensions(coords, &result);
         return result;

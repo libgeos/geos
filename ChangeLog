@@ -1,3 +1,8 @@
+2007-01-04 dev-zero at gentoo dot org 
+
+	* swig/geos.i: use unsigned int when CAPI signatures
+	  expect unsigned int (not size_t).
+
 2007-01-03 Sandro Santilli <strk@refractions.net>
 
 	* tests/xmltester/: fme.xml, Makefile.am: added buffer testcase.
