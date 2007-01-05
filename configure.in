@@ -10,7 +10,7 @@ JTS_PORT=1.7.1
 
 dnl -- Version info for the CAPI
 CAPI_INTERFACE_CURRENT=4
-CAPI_INTERFACE_REVISION=1
+CAPI_INTERFACE_REVISION=2
 CAPI_INTERFACE_AGE=3
 
 dnl
@@ -19,7 +19,7 @@ dnl -- encoding ABI break at every release
 dnl
 VERSION_MAJOR=3
 VERSION_MINOR=0
-VERSION_PATCH=0rc3
+VERSION_PATCH=0rc4
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
 
 dnl CAPI_VERSION_MAJOR=$(($CAPI_INTERFACE_CURRENT-$CAPI_INTERFACE_AGE))
@@ -150,6 +150,8 @@ AC_SUBST(SWIG)
 dnl --------------------------------------------------------------------
 dnl - check for python 
 dnl --------------------------------------------------------------------
+
+AM_PATH_PYTHON
 
 AC_ARG_ENABLE(python, [  --enable-python    Enable build of python module],
 	[case "${enableval}" in

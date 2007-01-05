@@ -1,3 +1,10 @@
+
+2007-01-04 Sandro Santilli <strk@refractions.net>
+
+	* configure.in: prepared for version to 3.0.0rc4,
+	  fixed swig python errors as suggested by hint
+	  (AM_PATH_PYTHON).
+
 2007-01-04 Sandro Santilli <strk@refractions.net>
 
 	* configure.in, swig/geos.i.in, swig/geos.i:
