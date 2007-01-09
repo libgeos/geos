@@ -4,12 +4,16 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2006-2007 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/OffsetCurveBuilder.java rev 1.10
  *
  **********************************************************************/
 
@@ -27,6 +31,11 @@ namespace geos {
 	namespace geom {
 		class CoordinateSequence;
 		class PrecisionModel;
+	}
+	namespace operation {
+		namespace buffer {
+			class OffsetCurveVertexList;
+		}
 	}
 }
 
@@ -92,6 +101,8 @@ public:
 
 private:
 
+	static const double MIN_CURVE_VERTEX_FACTOR; //  1.0E-6;
+
 	static const double PI; //  3.14159265358979
 
 	static const double MAX_CLOSING_SEG_LEN; // 3.0
@@ -105,7 +116,7 @@ private:
 	double filletAngleQuantum;
 
 	/** \brief
-	 * the max error of approximation between a quad segment and
+	 * the max error of approximation (distance) between a quad segment and
 	 * the true fillet curve
 	 */
 	double maxCurveSegmentError;
@@ -118,11 +129,11 @@ private:
 	/// created CoordinateSequences are properly 
 	/// destroyed.
 	///
-	geom::CoordinateSequence *ptList;
+	OffsetCurveVertexList* vertexList;
 
 	double distance;
 
-	const geom::PrecisionModel *precisionModel;
+	const geom::PrecisionModel* precisionModel;
 
 	int endCapStyle;
 
@@ -144,15 +155,15 @@ private:
 
 	void init(double newDistance);
 
-	geom::CoordinateSequence* getCoordinates();
+	//geom::CoordinateSequence* getCoordinates();
 
 	void computeLineBufferCurve(const geom::CoordinateSequence& inputPts);
 
 	void computeRingBufferCurve(const geom::CoordinateSequence& inputPts, int side);
 
-	void addPt(const geom::Coordinate &pt);
+	//void addPt(const geom::Coordinate &pt);
 
-	void closePts();
+	//void closePts();
 
 	void initSideSegments(const geom::Coordinate &nS1, const geom::Coordinate &nS2, int nSide);
 
@@ -201,7 +212,7 @@ private:
 	/// Adds a CW square around a point
 	void addSquare(const geom::Coordinate &p, double distance);
 
-	std::vector<geom::CoordinateSequence *> ptLists;
+	std::vector<OffsetCurveVertexList*> vertexLists;
 };
 
 // INLINES

@@ -704,44 +704,35 @@ XMLTester::parseTest()
 			profile.stop();
 			gRealRes->normalize();
 
-			/// Compare area of result with area of input
-			double areaIn = gT->getArea();
-			double areaOut = gRealRes->getArea();
+			// Assume a success and check for obvious failures
+			success=1;
+			do
+			{
+				// TODO: Is a buffer always an area ?
+				// 	 we might check geometry type..
+				
+				double expectedArea = gRes->getArea();
 
-			/// Allow for slightly different representations.
-			/// A decimal degree being about 111km on the equator,
-			/// a tolerance of 1e-6 means about 10cm at worst.
-			double tol = 1e-6;
+				/// Allow an area difference of 1/1000 the are of the
+				/// expected result.
+				double areatol = expectedArea / 1e3;
 
-			if ( dist == 0 && fabs(areaIn-areaOut) > tol )
-			{
-				std::cerr << "Buffer(0) returned "
-					<< "a geometry with area " 
-					<< areaOut << " when applied "
-					<< "on a geometry with area "
-					<< areaIn << std::endl;
+				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
+					overlayOp(OverlayOp::opDIFFERENCE));
+
+				double areaDiff = gDiff->getArea();
+				if ( areaDiff > areatol )
+				{
+					std::cerr << "Area of difference between "
+						<< "obtained and expected: "
+						<< areaDiff << " - Tolerated diff: "
+						<< areatol << std::endl;
+					success=0;
+					break;
+				}
+
 			}
-			else if ( dist > 0 && areaOut <= areaIn )
-			{
-				std::cerr << "Buffer(+x) returned "
-					<< "a geometry with area " 
-					<< areaOut << " when applied "
-					<< "on a geometry with area "
-					<< areaIn << std::endl;
-			}
-			else if ( dist < 0 && areaOut >= areaIn )
-			{
-				std::cerr << "Buffer(+x) returned "
-					<< "a geometry with area " 
-					<< areaOut << " when applied "
-					<< "on a geometry with area "
-					<< areaIn << std::endl;
-			}
-			else
-			{
-				if (gRes->equalsExact(gRealRes.get(), tol) == true)
-						success=1;
-			}
+			while (0);
 
 			if ( testValidOutput ) testValid(gRes.get(), "result");
 

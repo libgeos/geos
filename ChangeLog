@@ -1,5 +1,20 @@
 2007-01-09 Sandro Santilli <strk@refractions.net>
 
+	* source/operation/buffer/: Makefile.am, OffsetCurveVertexList.h:
+	  New helper class for OffsetCurveBuilder
+	* operation::buffer::OffsetCurveBuilder:
+	  Move vertexlist management to external class.
+	* tests/xmltester/: Makefile.am, TestBufferExternal.xml:
+	  added test for above changes (imported from JTS and
+	  modified to work with GEOS).
+	* tests/xmltester/XMLTester.cpp: change buffer
+	  validator again: check area of topological 
+	  difference between expected and obtained result
+	  to be smaller then 1/1000 of expected geometry
+	  area.
+
+2007-01-09 Sandro Santilli <strk@refractions.net>
+
 	* source/geom/CoordinateArraySequence.cpp,
 	  source/headers/geos/geom/CoordinateSequence.h,
 	  source/headers/geos/geom/CoordinateArraySequence.h:

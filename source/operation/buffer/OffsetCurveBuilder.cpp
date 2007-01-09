@@ -31,6 +31,8 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
 
+#include "OffsetCurveVertexList.h"
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
@@ -44,7 +46,8 @@ namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-/*public*/
+/*private data*/
+const double OffsetCurveBuilder::MIN_CURVE_VERTEX_FACTOR = 1.0E-6;
 const double OffsetCurveBuilder::PI = 3.14159265358979;
 const double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN = 3.0;
 
@@ -54,7 +57,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		:
 		li(),
 		maxCurveSegmentError(0.0),
-		ptList(new CoordinateArraySequence()),
+		vertexList(new OffsetCurveVertexList()),
 		distance(0.0),
 		precisionModel(newPrecisionModel),
 		endCapStyle(BufferOp::CAP_ROUND),
@@ -66,7 +69,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		offset0(),
 		offset1(),
 		side(0),
-		ptLists()
+		vertexLists()
 {
 	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
 	filletAngleQuantum=PI / 2.0 / limitedQuadSegs;
@@ -75,8 +78,8 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 /*public*/
 OffsetCurveBuilder::~OffsetCurveBuilder()
 {
-	delete ptList;
-	for (unsigned int i=0; i<ptLists.size(); i++) delete ptLists[i];
+	delete vertexList;
+	for (unsigned int i=0; i<vertexLists.size(); i++) delete vertexLists[i];
 }
 
 
@@ -103,7 +106,7 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 	} else {
 		computeLineBufferCurve(*inputPts);
 	}
-	CoordinateSequence *lineCoord=getCoordinates();
+	CoordinateSequence *lineCoord=vertexList->getCoordinates();
 	lineList.push_back(lineCoord);
 }
 
@@ -121,13 +124,13 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 	}
 	// optimize creating ring for for zero distance
 	if (distance==0.0) {
-		ptLists.push_back(ptList);
-		ptList = inputPts->clone(); 
-		lineList.push_back(ptList);
+		vertexLists.push_back(vertexList);
+		vertexList = new OffsetCurveVertexList(); // is this needed ?
+		lineList.push_back(inputPts->clone());
 		return;
 	}
 	computeRingBufferCurve(*inputPts, side);
-	lineList.push_back(getCoordinates()); // this will be ptList
+	lineList.push_back(vertexList->getCoordinates()); // this will be vertexList
 }
 
 /*private*/
@@ -139,28 +142,13 @@ OffsetCurveBuilder::init(double newDistance)
 	// Point list needs to be reset
 	// but if a previous point list exists
 	// we'd better back it up for final deletion
-	ptLists.push_back(ptList);
-	ptList=new CoordinateArraySequence();
-}
-
-/*private*/
-CoordinateSequence*
-OffsetCurveBuilder::getCoordinates()
-{
-	// check that points are a ring,
-	// add the startpoint again if they are not
-	if (ptList->getSize()>1) {
-		const Coordinate &start=ptList->getAt(0);
-		const Coordinate &end=ptList->getAt(ptList->getSize()-1);
-#if GEOS_DEBUG
-		cerr << __FILE__ << ":" << __LINE__
-			<< ":"
-			<< " start:" << start
-			<< " end:" << end << endl;
-#endif
-		if (!(start==end)) addPt(start);
-	}
-	return ptList;
+	vertexLists.push_back(vertexList);
+	vertexList=new OffsetCurveVertexList();
+	vertexList->setPrecisionModel(precisionModel);
+	/**
+	 * Choose the min vertex separation as a small fraction of the offset distance.
+	 */
+	vertexList->setMinimumVertexDistance(distance * MIN_CURVE_VERTEX_FACTOR);
 }
 
 /*private*/
@@ -184,7 +172,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts)
 	addLastSegment();
 	// add line cap for start of line
 	addLineEndCap(inputPts[1], inputPts[0]);
-	closePts();
+	vertexList->closeRing();
 }
 
 /*private*/
@@ -198,50 +186,7 @@ OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence& inputPts,
 		bool addStartPoint=i != 1;
 		addNextSegment(inputPts[i], addStartPoint);
 	}
-	closePts();
-}
-
-/*private*/
-void
-OffsetCurveBuilder::addPt(const Coordinate &pt)
-{
-	Coordinate bufPt=pt;
-	assert(precisionModel);
-	precisionModel->makePrecise(bufPt);
-
-	// don't add duplicate points
-	unsigned int npts=ptList->getSize();
-	if ( npts ) {
-		const Coordinate& lastPt=ptList->getAt(npts-1);
-#if GEOS_DEBUG
-		cerr<<__FUNCTION__<<" lastPt:"<<lastPt<<", currPt:"<<bufPt<<endl;
-#endif
-		if ( bufPt.equals2D(lastPt) ) {
-#if GEOS_DEBUG
-			cerr<<" they equal!"<<endl;
-#endif
-			return;
-		}
-	}
-
-	ptList->add(bufPt);
-}
-
-/*private*/
-void
-OffsetCurveBuilder::closePts()
-{
-
-	int ptsize=ptList->size();
-
-	if (ptsize<1) return;
-
-	const Coordinate &startPt=ptList->getAt(0);
-	const Coordinate &lastPt=ptList->getAt(ptsize-1);
-
-	if (startPt == lastPt) return;
-
-	ptList->add(startPt);
+	vertexList->closeRing();
 }
 
 /*private*/
@@ -299,10 +244,10 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 	else if (outsideTurn)
 	{
 		// add a fillet to connect the endpoints of the offset segments
-		if (addStartPoint) addPt(offset0.p1);
+		if (addStartPoint) vertexList->addPt(offset0.p1);
 		// TESTING-comment out to produce beveled joins
 		addFillet(s1, offset0.p1, offset1.p0, orientation, distance);
-		addPt(offset1.p0);
+		vertexList->addPt(offset1.p0);
 	}
 	else
 	{ // inside turn
@@ -310,7 +255,7 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 		// add intersection point of offset segments (if any)
 		li.computeIntersection( offset0.p0, offset0.p1, offset1.p0, offset1.p1);
 		if (li.hasIntersection()) {
-			addPt(li.getIntersection(0));
+			vertexList->addPt(li.getIntersection(0));
 		} else {
 			/**
 			 * If no intersection, it means the angle is so small and/or the offset so large
@@ -327,13 +272,13 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 			 * but simply use one of the offset points
 			 */
 			if (offset0.p1.distance(offset1.p0)<distance / 1000.0) {
-				addPt(offset0.p1);
+				vertexList->addPt(offset0.p1);
 			} else {
 				// add endpoint of this segment offset
-				addPt(offset0.p1);
+				vertexList->addPt(offset0.p1);
 				// <FIX> MD-add in centre point of corner, to make sure offset closer lines have correct topology
-				addPt(s1);
-				addPt(offset1.p0);
+				vertexList->addPt(s1);
+				vertexList->addPt(offset1.p0);
 			}
 		}
 	}
@@ -343,7 +288,7 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 void
 OffsetCurveBuilder::addLastSegment()
 {
-	addPt(offset1.p1);
+	vertexList->addPt(offset1.p1);
 }
 
 /*private*/
@@ -379,14 +324,14 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 	switch (endCapStyle) {
 		case BufferOp::CAP_ROUND:
 			// add offset seg points with a fillet between them
-			addPt(offsetL.p1);
+			vertexList->addPt(offsetL.p1);
 			addFillet(p1, angle+PI/2.0, angle-PI/2.0, CGAlgorithms::CLOCKWISE, distance);
-			addPt(offsetR.p1);
+			vertexList->addPt(offsetR.p1);
 			break;
 		case BufferOp::CAP_BUTT:
 			// only offset segment points are added
-			addPt(offsetL.p1);
-			addPt(offsetR.p1);
+			vertexList->addPt(offsetL.p1);
+			vertexList->addPt(offsetR.p1);
 			break;
 		case BufferOp::CAP_SQUARE:
 			// add a square defined by extensions of the offset segment endpoints
@@ -397,8 +342,8 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 					offsetL.p1.y+squareCapSideOffset.y);
 			Coordinate squareCapROffset(offsetR.p1.x+squareCapSideOffset.x,
 					offsetR.p1.y+squareCapSideOffset.y);
-			addPt(squareCapLOffset);
-			addPt(squareCapROffset);
+			vertexList->addPt(squareCapLOffset);
+			vertexList->addPt(squareCapROffset);
 			break;
 	}
 }
@@ -419,9 +364,9 @@ OffsetCurveBuilder::addFillet(const Coordinate &p, const Coordinate &p0,
 	} else {    // direction==COUNTERCLOCKWISE
 		if (startAngle>=endAngle) startAngle-=2.0*PI;
 	}
-	addPt(p0);
+	vertexList->addPt(p0);
 	addFillet(p, startAngle, endAngle, direction, distance);
-	addPt(p1);
+	vertexList->addPt(p1);
 }
 
 /*private*/
@@ -443,7 +388,7 @@ OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle,
 		double angle=startAngle+directionFactor*currAngle;
 		pt.x=p.x+distance*cos(angle);
 		pt.y=p.y+distance*sin(angle);
-		addPt(pt);
+		vertexList->addPt(pt);
 		currAngle += currAngleInc;
 	}
 }
@@ -456,7 +401,7 @@ OffsetCurveBuilder::addCircle(const Coordinate &p, double distance)
 	// add start point
 	Coordinate pt(p);
 	pt.x+=distance;
-	addPt(pt);
+	vertexList->addPt(pt);
 	addFillet(p, 0.0, 2.0*PI, -1, distance);
 }
 
@@ -465,11 +410,11 @@ void
 OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 {
 	// add start point
-	addPt(Coordinate(p.x+distance, p.y+distance));
-	addPt(Coordinate(p.x+distance, p.y-distance));
-	addPt(Coordinate(p.x-distance, p.y-distance));
-	addPt(Coordinate(p.x-distance, p.y+distance));
-	addPt(Coordinate(p.x+distance, p.y+distance));
+	vertexList->addPt(Coordinate(p.x+distance, p.y+distance));
+	vertexList->addPt(Coordinate(p.x+distance, p.y-distance));
+	vertexList->addPt(Coordinate(p.x-distance, p.y-distance));
+	vertexList->addPt(Coordinate(p.x-distance, p.y+distance));
+	vertexList->addPt(Coordinate(p.x+distance, p.y+distance));
 }
 
 } // namespace geos.operation.buffer
