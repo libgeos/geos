@@ -694,20 +694,54 @@ XMLTester::parseTest()
 			profile.start();
 
 			GeomAutoPtr gRealRes;
+			double dist = atof(opArg3.c_str());
+
 			if ( opArg2 != "" ) {
-				gRealRes.reset(gT->buffer(atof(opArg3.c_str()), atoi(opArg2.c_str())));
+				gRealRes.reset(gT->buffer(dist, atoi(opArg2.c_str())));
 			} else {
-				gRealRes.reset(gT->buffer(atof(opArg3.c_str())));
+				gRealRes.reset(gT->buffer(dist));
 			}
 			profile.stop();
 			gRealRes->normalize();
+
+			/// Compare area of result with area of input
+			double areaIn = gT->getArea();
+			double areaOut = gRealRes->getArea();
 
 			/// Allow for slightly different representations.
 			/// A decimal degree being about 111km on the equator,
 			/// a tolerance of 1e-6 means about 10cm at worst.
 			double tol = 1e-6;
-			if (gRes->equalsExact(gRealRes.get(), tol) == true)
-					success=1;
+
+			if ( dist == 0 && fabs(areaIn-areaOut) > tol )
+			{
+				std::cerr << "Buffer(0) returned "
+					<< "a geometry with area " 
+					<< areaOut << " when applied "
+					<< "on a geometry with area "
+					<< areaIn << std::endl;
+			}
+			else if ( dist > 0 && areaOut <= areaIn )
+			{
+				std::cerr << "Buffer(+x) returned "
+					<< "a geometry with area " 
+					<< areaOut << " when applied "
+					<< "on a geometry with area "
+					<< areaIn << std::endl;
+			}
+			else if ( dist < 0 && areaOut >= areaIn )
+			{
+				std::cerr << "Buffer(+x) returned "
+					<< "a geometry with area " 
+					<< areaOut << " when applied "
+					<< "on a geometry with area "
+					<< areaIn << std::endl;
+			}
+			else
+			{
+				if (gRes->equalsExact(gRealRes.get(), tol) == true)
+						success=1;
+			}
 
 			if ( testValidOutput ) testValid(gRes.get(), "result");
 

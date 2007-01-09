@@ -1,3 +1,7 @@
+2007-01-09 Sandro Santilli <strk@refractions.net>
+
+	* tests/xmltester/XMLTester.cpp: add areatest
+	  to buffer test handler.
 
 2007-01-04 Sandro Santilli <strk@refractions.net>
 
