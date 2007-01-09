@@ -67,6 +67,8 @@ public:
 
 	void add(const Coordinate& c);
 
+	virtual void add(const Coordinate& c, bool allowRepeated);
+
 	void setAt(const Coordinate& c, size_t pos);
 
 	void deleteAt(size_t pos);

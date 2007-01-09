@@ -1,5 +1,12 @@
 2007-01-09 Sandro Santilli <strk@refractions.net>
 
+	* source/geom/CoordinateArraySequence.cpp,
+	  source/headers/geos/geom/CoordinateSequence.h,
+	  source/headers/geos/geom/CoordinateArraySequence.h:
+	  add(Coordinate, bool) made a virtual method and overrridden
+	  for CoordinateArraySequence, for better performance
+	  (single virtual call vs. multiple); added front() and
+	  back() methods.
 	* tests/xmltester/XMLTester.cpp: add areatest
 	  to buffer test handler.
 

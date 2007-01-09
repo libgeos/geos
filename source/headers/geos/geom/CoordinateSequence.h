@@ -96,6 +96,16 @@ public:
 	//virtual const Coordinate& getCoordinate(int i) const=0;
 	virtual const Coordinate& getAt(size_t i) const=0;
 
+	/// Return last Coordinate in the sequence
+	const Coordinate& back() const {
+		return getAt(size()-1);
+	}
+
+	/// Return first Coordinate in the sequence
+	const Coordinate& front() const {
+		return getAt(0);
+	}
+
 	const Coordinate& operator[] (size_t i) const {
 		return getAt(i);
 	}
@@ -168,7 +178,7 @@ public:
 	 * are collapsed
 	 * @return true (as by general collection contract)
 	 */
-	void add(const Coordinate& c, bool allowRepeated);
+	virtual void add(const Coordinate& c, bool allowRepeated);
 
 	/// Returns <code>true</code> it list contains no coordinates.
 	virtual	bool isEmpty() const=0;

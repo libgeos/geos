@@ -82,6 +82,17 @@ CoordinateArraySequence::add(const Coordinate& c)
 	vect->push_back(c);
 }
 
+void
+CoordinateArraySequence::add(const Coordinate& c, bool allowRepeated)
+{
+	if (!allowRepeated && ! vect->empty() )
+	{
+		const Coordinate& last=vect->back();
+		if (last.equals2D(c)) return;
+	}
+	vect->push_back(c);
+}
+
 size_t
 CoordinateArraySequence::getSize() const
 {
