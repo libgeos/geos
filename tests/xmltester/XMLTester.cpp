@@ -20,12 +20,22 @@
 #include <crtdbg.h>
 #endif
 
-#include <geos/geom.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/PrecisionModel.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/util.h>
 //#include <geos/geomgraph.h>
-#include <geos/io.h>
+#include <geos/io/WKBReader.h>
+#include <geos/io/WKBWriter.h>
+#include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/opRelate.h>
 #include <geos/opPolygonize.h>
 #include <geos/opLinemerge.h>
@@ -248,6 +258,7 @@ XMLTester::resetCounters()
 void
 XMLTester::parsePrecisionModel()
 {
+	using geos::geom::PrecisionModel;
 
 	/* This does not seem to work... */
 	std::string type=xml.GetChildAttrib("type");
@@ -279,7 +290,7 @@ XMLTester::parsePrecisionModel()
 		std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
 	}
 
-	factory.reset(new GeometryFactory(pm.get()));
+	factory.reset(new geom::GeometryFactory(pm.get()));
 	wktreader.reset(new io::WKTReader(factory.get()));
 	wktwriter.reset(new io::WKTWriter());
 	wkbreader.reset(new io::WKBReader(*factory));
@@ -288,7 +299,7 @@ XMLTester::parsePrecisionModel()
 
 
 void
-XMLTester::testValid(const Geometry* g, const std::string& label)
+XMLTester::testValid(const geom::Geometry* g, const std::string& label)
 {
 	operation::valid::IsValidOp ivo(g);
 	bool result;
@@ -311,7 +322,7 @@ XMLTester::testValid(const Geometry* g, const std::string& label)
 /**
  * Parse WKT or HEXWKB
  */
-Geometry *
+geom::Geometry *
 XMLTester::parseGeometry(const std::string &in, const char* label)
 {
 	std::stringstream is(in, std::ios_base::in);
@@ -321,7 +332,7 @@ XMLTester::parseGeometry(const std::string &in, const char* label)
 	while (is.get(first_char) && std::isspace(first_char));
 	is.unget();
 
-	Geometry* ret;
+	geom::Geometry* ret;
 
 	switch (first_char)
 	{
@@ -423,13 +434,13 @@ XMLTester::parseCase()
 
 /*private*/
 void
-XMLTester::printGeom(std::ostream& os, Geometry *g)
+XMLTester::printGeom(std::ostream& os, geom::Geometry *g)
 {
 	os << printGeom(g);
 }
 
 std::string
-XMLTester::printGeom(Geometry *g)
+XMLTester::printGeom(geom::Geometry *g)
 {
 	if ( HEXWKB_output )
 	{
@@ -450,7 +461,7 @@ XMLTester::parseTest()
 {
 	using namespace operation::overlay;
 
-	typedef std::auto_ptr< Geometry > GeomAutoPtr;
+	typedef std::auto_ptr< geom::Geometry > GeomAutoPtr;
 
 	int success=0; // no success by default
 	std::string opName;
@@ -503,7 +514,7 @@ XMLTester::parseTest()
 
 		if (opName=="relate")
 		{
-			std::auto_ptr<IntersectionMatrix> im(gA->relate(gB));
+			std::auto_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
 			assert(im.get());
 
 			if (im->matches(opArg3)) actual_result="true";
@@ -514,7 +525,7 @@ XMLTester::parseTest()
 
 		else if (opName=="isvalid")
 		{
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) {
 				gT=gB;
 			} 
@@ -610,7 +621,7 @@ XMLTester::parseTest()
 
 		else if (opName=="getboundary")
 		{
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
@@ -630,7 +641,7 @@ XMLTester::parseTest()
 
 		else if (opName=="getcentroid")
 		{
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
@@ -653,7 +664,7 @@ XMLTester::parseTest()
 
 		else if (opName=="issimple")
 		{
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			if (gT->isSimple()) actual_result="true";
@@ -665,7 +676,7 @@ XMLTester::parseTest()
 
 		else if (opName=="convexhull")
 		{
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
@@ -685,7 +696,7 @@ XMLTester::parseTest()
 
 		else if (opName=="buffer")
 		{
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
@@ -742,7 +753,7 @@ XMLTester::parseTest()
 
 		else if (opName=="getinteriorpoint")
 		{
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
@@ -785,7 +796,7 @@ XMLTester::parseTest()
 
 
             std::vector<geos::geom::Polygon *>*polys = plgnzr.getPolygons();
-			std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>;
+			std::vector<geom::Geometry *>*newgeoms = new std::vector<geom::Geometry *>;
 			for (unsigned int i=0; i<polys->size(); i++)
 				newgeoms->push_back((*polys)[i]);
 			delete polys;
@@ -808,16 +819,15 @@ XMLTester::parseTest()
 			GeomAutoPtr gRes(wktreader->read(opRes));
 			gRes->normalize();
 
-			Geometry *gT=gA;
+			geom::Geometry *gT=gA;
 
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
 			LineMerger merger;
 			merger.add(gT);
-			std::vector<LineString *>*lines = merger.getMergedLineStrings();
-			std::vector<Geometry *>*newgeoms = new std::vector<Geometry *>(lines->begin(),
+			std::auto_ptr< std::vector<geom::LineString *> > lines ( merger.getMergedLineStrings() );
+			std::vector<geom::Geometry *>*newgeoms = new std::vector<geom::Geometry *>(lines->begin(),
 					lines->end());
-			delete lines;
 
 			GeomAutoPtr gRealRes(factory->createGeometryCollection(newgeoms));
 			gRealRes->normalize();
@@ -981,7 +991,7 @@ XMLTester::parseTest()
 }
 
 void
-XMLTester::runPredicates(const Geometry *gA, const Geometry *gB)
+XMLTester::runPredicates(const geom::Geometry *gA, const geom::Geometry *gB)
 {
 	std::cout << "\t    Equals:\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << std::endl;
 	std::cout << "\t  Disjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << std::endl;

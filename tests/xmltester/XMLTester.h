@@ -16,6 +16,9 @@
 #ifndef __XMLTESTER_H__
 #define __XMLTESTER_H__
 
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/PrecisionModel.h>
+
 using namespace geos;
 
 class XMLTester {
@@ -34,19 +37,19 @@ private:
 	void parsePrecisionModel();
 	void parseCase();
 	void parseTest();
-	void runPredicates(const Geometry *a, const Geometry *b);
-	Geometry *parseGeometry(const std::string &in, const char* label="parsed");
+	void runPredicates(const geom::Geometry *a, const geom::Geometry *b);
+	geom::Geometry *parseGeometry(const std::string &in, const char* label="parsed");
 	static std::string trimBlanks(const std::string &in);
-	void printGeom(std::ostream& os, Geometry *g);
-	std::string printGeom(Geometry *g);
+	void printGeom(std::ostream& os, geom::Geometry *g);
+	std::string printGeom(geom::Geometry *g);
 	void printTest(bool success, const std::string& expected_result, const std::string& actual_result);
 
-	Geometry *gA;
-	Geometry *gB;
-	Geometry *gT;
+	geom::Geometry *gA;
+	geom::Geometry *gB;
+	geom::Geometry *gT;
 
-	std::auto_ptr<PrecisionModel> pm;
-	std::auto_ptr<GeometryFactory> factory;
+	std::auto_ptr<geom::PrecisionModel> pm;
+	std::auto_ptr<geom::GeometryFactory> factory;
 	std::auto_ptr<io::WKTReader> wktreader;
 	std::auto_ptr<io::WKTWriter> wktwriter;
 	std::auto_ptr<io::WKBReader> wkbreader;
@@ -73,7 +76,7 @@ private:
 	bool sqlOutput;
 	bool HEXWKB_output;
 
-	void testValid(const Geometry* g, const std::string& label);
+	void testValid(const geom::Geometry* g, const std::string& label);
 
 public:
 	XMLTester();
