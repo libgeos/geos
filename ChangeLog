@@ -1,5 +1,7 @@
 2007-01-16 Sandro Santilli <strk@refractions.net>
 
+	* source/headers/geos/index/strtree/STRtree.h (centreY):
+	  const-corrected.
 	* tests/xmltester/XMLTester.cpp: don't include catch-all headers.
 
 2007-01-09 Sandro Santilli <strk@refractions.net>

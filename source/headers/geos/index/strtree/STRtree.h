@@ -121,7 +121,7 @@ public:
 		return (a + b) / 2.0;
 	}
 
-	static double centreY(geom::Envelope *e) {
+	static double centreY(const geom::Envelope *e) {
 		return STRtree::avg(e->getMinY(), e->getMaxY());
 	}
 
