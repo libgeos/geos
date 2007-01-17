@@ -34,13 +34,17 @@ namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
 
-//static bool xComparator(Boundable *a, Boundable *b){
-	//return AbstractSTRtree::compareDoubles(STRtree::centreX((Envelope*)a->getBounds()), STRtree::centreX((Envelope*)b->getBounds()));
-//}
+static bool yComparator(Boundable *a, Boundable *b)
+{
+	const void* aBounds = a->getBounds();
+	const void* bBounds = b->getBounds();
+	assert(aBounds);
+	assert(bBounds);
+	const Envelope* aEnv = static_cast<const Envelope*>(aBounds);
+	const Envelope* bEnv = static_cast<const Envelope*>(bBounds);
+	return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
 
-static bool yComparator(Boundable *a, Boundable *b){
-	//return AbstractSTRtree::compareDoubles(STRtree::centreY((Envelope*)a->getBounds()), STRtree::centreY((Envelope*)b->getBounds()));
-	return STRtree::centreY((Envelope*)a->getBounds()) < STRtree::centreY((Envelope*)b->getBounds());
+	//return STRtree::centreY((Envelope*)(a->getBounds())) < STRtree::centreY((Envelope*)(b->getBounds()));
 }
 
 /*public*/
@@ -52,24 +56,6 @@ STRtree::STRtree(size_t nodeCapacity): AbstractSTRtree(nodeCapacity)
 STRtree::~STRtree()
 { 
 }
-
-#if 0
-/*public static*/
-double
-STRtree::centreX(const Envelope *e)
-{
-	return STRtree::avg(e->getMinX(),e->getMaxX());
-}
-#endif // 0
-
-//double STRtree::avg(double a, double b) { 
-//	return (a + b) / 2.0;
-//}
-
-//double STRtree::centreY(Envelope *e) {
-	//return STRtree::avg(e->getMinY(), e->getMaxY());
-//}
-
 
 bool
 STRtree::STRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
@@ -86,8 +72,8 @@ STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLeve
 
 	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
 
-	vector<vector<Boundable*>*>* verticalSlicesV = verticalSlices(sortedChildBoundables,(int)ceil(sqrt((double)minLeafCount)));
-	delete sortedChildBoundables;
+	vector<vector<Boundable*>*>* verticalSlicesV = verticalSlices(sortedChildBoundables, (int)ceil(sqrt((double)minLeafCount)));
+	delete sortedChildBoundables; 
 
 	vector<Boundable*> *ret;
 	ret = createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
@@ -209,7 +195,7 @@ vector<Boundable*> *
 STRtree::sortBoundables(const vector<Boundable*> *input)
 {
 	vector<Boundable*> *output=new vector<Boundable*>(*input);
-	sort(output->begin(),output->end(),yComparator);
+	sort(output->begin(), output->end(), yComparator);
 	return output;
 }
 
