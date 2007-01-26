@@ -1,5 +1,7 @@
 2007-01-26 Sandro Santilli <strk@refractions.net>
 
+	* tests/xmltester/: Makefile.am, stmlf-cases-20070119.xml:
+	  New overlay test.
 	* tests/xmltester/XMLTester.cpp: improved buffer
 	  result validator.
 	* source/operation/buffer/BufferBuilder.cpp (computeNodedEdges):
