@@ -721,11 +721,37 @@ XMLTester::parseTest()
 			{
 				// TODO: Is a buffer always an area ?
 				// 	 we might check geometry type..
+
+				if ( gRes->getGeometryTypeId() != gRealRes->getGeometryTypeId() )
+				{
+					std::cerr << "Expected result is of type "
+					        << gRes->getGeometryType()
+						<< "; obtained result is of type "
+						<< gRealRes->getGeometryType()
+						<< std::endl;
+					success=0;
+					break;
+				}
+
+				if ( gRes->isEmpty() && gRealRes->isEmpty() )
+				{
+					// Success !
+					break;
+				}
+
+				if ( gRes->getDimension() != 2 )
+				{
+					std::cerr << "Don't know how to validate "
+						<< "result of buffer operation "
+						<< "when expected result is not an "
+						<< "areal type."
+						<< std::endl;
+				}
 				
 				double expectedArea = gRes->getArea();
 
-				/// Allow an area difference of 1/1000 the are of the
-				/// expected result.
+				/// Allow area difference being at most
+				/// 1/1000 of the area of the expected result.
 				double areatol = expectedArea / 1e3;
 
 				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
@@ -740,6 +766,14 @@ XMLTester::parseTest()
 						<< areatol << std::endl;
 					success=0;
 					break;
+				}
+				else
+				{
+					std::cerr << "Area of difference between "
+						<< "obtained and expected: "
+						<< areaDiff << " - Tolerated diff: "
+						<< areatol << " (SUCCESS!)"
+						<< std::endl;
 				}
 
 			}

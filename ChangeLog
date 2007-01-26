@@ -1,3 +1,11 @@
+2007-01-26 Sandro Santilli <strk@refractions.net>
+
+	* tests/xmltester/XMLTester.cpp: improved buffer
+	  result validator.
+	* source/operation/buffer/BufferBuilder.cpp (computeNodedEdges):
+	  remove repeated points from noded SegmentStrings, skip collapsed
+	  edges.
+
 2007-01-17 Sandro Santilli <strk@refractions.net>
 
 	* tests/xmltester/: heisenbugs.xml, Makefile.am:
