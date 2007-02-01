@@ -1,3 +1,8 @@
+2007-02-01 Sandro Santilli <strk@refractions.net>
+
+	* operation::buffer::BufferOp: set MAX_PRECISION_DIGITS
+	  so to match JTS.
+
 2007-01-26 Sandro Santilli <strk@refractions.net>
 
 	* tests/xmltester/: Makefile.am, stmlf-cases-20070119.xml:

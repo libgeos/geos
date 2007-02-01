@@ -58,9 +58,6 @@ namespace buffer { // geos.operation.buffer
 static Profiler *profiler = Profiler::instance();
 #endif
 
-int BufferOp::MAX_PRECISION_DIGITS=25;
-
-
 /*private*/
 double
 BufferOp::precisionScaleFactor(const Geometry *g,
@@ -189,6 +186,11 @@ void
 BufferOp::bufferReducedPrecision(int precisionDigits)
 {
 	double sizeBasedScaleFactor=precisionScaleFactor(argGeom, distance, precisionDigits);
+
+	std::cerr << "recomputing with precision scale factor = "
+		<< sizeBasedScaleFactor
+		<< std::endl;
+
 	assert(sizeBasedScaleFactor>0);
 	PrecisionModel fixedPM(sizeBasedScaleFactor);
 	bufferFixedPrecision(fixedPM);

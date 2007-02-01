@@ -65,7 +65,13 @@ class BufferOp {
 
 private:
 
-	static int MAX_PRECISION_DIGITS;
+	/**
+	 *  A number of digits of precision which leaves some computational "headroom"
+	 *  for floating point operations.
+	 * 
+	 *  This value should be less than the decimal precision of double-precision values (16).
+	 */
+	static const int MAX_PRECISION_DIGITS = 12;
 
 	/**
 	 * Compute a reasonable scale factor to limit the precision of
