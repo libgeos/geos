@@ -1,3 +1,6 @@
+
+---------  GEOS-3.0.0rc4 release [2007-02-02] --------------------------
+
 2007-02-01 Sandro Santilli <strk@refractions.net>
 
 	* operation::buffer::BufferOp: set MAX_PRECISION_DIGITS
