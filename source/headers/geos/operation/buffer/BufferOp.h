@@ -44,6 +44,9 @@ namespace buffer { // geos.operation.buffer
  * distance.
  * In the CAD/CAM world buffers are known as </i>offset curves</i>.
  * In morphological analysis they are known as <i>erosion</i> and <i>dilation</i>.
+ *
+ * The buffer operation always returns a polygonal result.
+ * The negative or zero-distance buffer of lines and points is always an empty Polygon.
  * 
  * Since true buffer curves may contain circular arcs,
  * computed buffer polygons can only be approximations to the true geometry.

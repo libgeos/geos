@@ -1,3 +1,9 @@
+2007-02-06 Sandro Santilli <strk@refractions.net>
+
+        * operation::buffer::BufferBuilder,
+	  operation::buffer::BufferOp:
+	  Fixed buffer operation to always return polygonal
+	  geometry
 
 ---------  GEOS-3.0.0rc4 release [2007-02-02] --------------------------
 

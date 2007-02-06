@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2005-2006 Refractions Research Inc.
+ * Copyright (C) 2005-2007 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferBuilder.java rev. 1.21 (JTS-1.7)
+ * Last port: operation/buffer/BufferBuilder.java rev. 1.23 (JTS-1.7)
  *
  **********************************************************************/
 
@@ -23,6 +23,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
@@ -124,8 +125,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 #endif
 	// short-circuit test
 	if (bufferSegStrList.size()<=0) {
-		Geometry *emptyGeom=geomFact->createGeometryCollection(NULL);
-		return emptyGeom;
+		return createEmptyResultGeometry();
 	}
 
 #if GEOS_DEBUG
@@ -187,6 +187,12 @@ for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
 		std::cerr << (*resultPolyList)[i]->toString() << std::endl;
 #endif
 #endif
+		// just in case ...
+		if ( resultPolyList->empty() )
+		{
+			return createEmptyResultGeometry();
+		}
+
 		resultGeom=geomFact->buildGeometry(resultPolyList);
 	} catch (const util::GEOSException& /* exc */) {
 		for (size_t i=0, n=subgraphList.size(); i<n; i++)
@@ -398,6 +404,14 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 #endif
 		polyBuilder.add(subgraph->getDirectedEdges(), subgraph->getNodes());
 	}
+}
+
+/*private*/
+geom::Geometry*
+BufferBuilder::createEmptyResultGeometry() const
+{
+	geom::Geometry* emptyGeom = geomFact->createPolygon(NULL, NULL);
+	return emptyGeom;
 }
 
 } // namespace geos.operation.buffer

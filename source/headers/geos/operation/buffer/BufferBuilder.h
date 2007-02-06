@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2006-2007 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -143,6 +143,15 @@ private:
 	///
 	noding::Noder* getNoder(const geom::PrecisionModel* precisionModel);
 
+
+	/**
+	 * Gets the standard result for an empty buffer.
+	 * Since buffer always returns a polygonal result,
+	 * this is chosen to be an empty polygon.
+	 *
+	 * @return the empty result geometry, transferring ownership to caller.
+	 */
+	geom::Geometry* createEmptyResultGeometry() const;
 
 public:
 	/**
