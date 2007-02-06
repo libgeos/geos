@@ -146,7 +146,7 @@ namespace tut
 	void object::test<5>()
 	{         
 		std::string wkt_in("POLYGON ((0 0, 50 0, 53 0, 55 0, 100 0, 70 1, 60 1, 50 1, 40 1, 0 0))");
-		std::string wkt_ex("GEOMETRYCOLLECTION EMPTY");
+		std::string wkt_ex("POLYGON EMPTY");
 
 		GeomPtr g(wktreader.read(wkt_in));
 
@@ -158,6 +158,7 @@ namespace tut
 		ensure( simplified->isValid() );
 
 		ensure( simplified->equalsExact(expected.get()) );
+		//ensure_equals( *simplified, *expected );
 
 	}
 
@@ -167,7 +168,7 @@ namespace tut
 	void object::test<6>()
 	{         
 		std::string wkt_in("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 1, 0 5))");
-		std::string wkt_ex("GEOMETRYCOLLECTION EMPTY");
+		std::string wkt_ex("POLYGON EMPTY");
 
 
 		GeomPtr g(wktreader.read(wkt_in));

@@ -1,5 +1,8 @@
 2007-02-06 Sandro Santilli <strk@refractions.net>
 
+	* tests/unit/simplify/DouglasPeuckerSimplifierTest.cpp:
+	  Expect result of POLYGON simplification to always be
+	  a polygon, even if collapsed to the empty geom.
         * operation::buffer::BufferBuilder,
 	  operation::buffer::BufferOp:
 	  Fixed buffer operation to always return polygonal
