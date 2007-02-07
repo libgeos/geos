@@ -18,6 +18,7 @@
 #include <geos/index/strtree/AbstractNode.h>
 //#include <geos/util.h>
 
+#include <memory>
 #include <vector>
 #include <cassert>
 #include <algorithm>
@@ -32,23 +33,29 @@ static bool compareSIRBoundables(Boundable *a, Boundable *b){
 	return AbstractSTRtree::compareDoubles(((Interval*)a->getBounds())->getCentre(),((Interval*)b->getBounds())->getCentre());
 }
 
-/**
-* Sorts the childBoundables then divides them into groups of size M, where
-* M is the node capacity.
-*/
-vector<Boundable*>* SIRtree::createParentBoundables(vector<Boundable*> *childBoundables,int newLevel) {
+/*protected*/
+std::auto_ptr<BoundableList>
+SIRtree::createParentBoundables(BoundableList *childBoundables,int newLevel)
+{
 	assert(!childBoundables->empty());
-	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
+	std::auto_ptr<BoundableList> parentBoundables ( new BoundableList() );
 	parentBoundables->push_back(createNode(newLevel));
 
-	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
+	std::auto_ptr<BoundableList> sortedChildBoundables ( sortBoundables(childBoundables) );
 
-	for(unsigned int i=0;i<sortedChildBoundables->size();i++) {
-		Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
-		if (lastNode(parentBoundables)->getChildBoundables()->size()==(unsigned int)nodeCapacity) {
+	//for(unsigned int i=0;i<sortedChildBoundables->size();i++)
+	for (BoundableList::iterator i=sortedChildBoundables->begin(),
+			e=sortedChildBoundables->end();
+			i!=e; ++i)
+	{
+		//Boundable *childBoundable=(AbstractNode*)(*sortedChildBoundables)[i];
+		Boundable *childBoundable=*i;
+		AbstractNode* lNode = lastNode(parentBoundables.get());
+		if (lNode->getChildBoundables()->size() == nodeCapacity)
+		{
 			parentBoundables->push_back(createNode(newLevel));
 		}
-		lastNode(parentBoundables)->addChildBoundable(childBoundable);
+		lNode->addChildBoundable(childBoundable);
 	}
 	return parentBoundables;
 }
@@ -92,12 +99,13 @@ public:
 
 protected:
 
-	void* computeBounds()
+	void* computeBounds() const
 	{
 		Interval* bounds=NULL;
-		vector<Boundable*> *b=getChildBoundables();
-		for(unsigned int i=0;i<b->size();i++) {
-			Boundable* childBoundable=(*b)[i];
+		const BoundableList& b = *getChildBoundables();
+		for(unsigned int i=0; i<b.size(); ++i)
+		{
+			const Boundable* childBoundable=b[i];
 			if (bounds==NULL) {
 				bounds=new Interval((Interval*)childBoundable->getBounds());
 			} else {
@@ -124,11 +132,12 @@ void SIRtree::insert(double x1, double x2,void* item) {
 	AbstractSTRtree::insert(new Interval(min(x1,x2),max(x1, x2)),item);
 }
 
-vector<Boundable*> *
-SIRtree::sortBoundables(const vector<Boundable*> *input)
+std::auto_ptr<BoundableList>
+SIRtree::sortBoundables(const BoundableList* input)
 {
-	vector<Boundable*> *output=new vector<Boundable*>(*input);
+	std::auto_ptr<BoundableList> output ( new BoundableList(*input) );
 	sort(output->begin(), output->end(), compareSIRBoundables);
+	//output->sort(compareSIRBoundables);
 	return output;
 }
 

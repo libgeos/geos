@@ -29,11 +29,11 @@ ItemBoundable::~ItemBoundable() {
 }
 
 const void*
-ItemBoundable::getBounds() {
+ItemBoundable::getBounds() const {
 	return bounds;
 }
 
-void* ItemBoundable::getItem() {
+void* ItemBoundable::getItem() const {
 	return item;
 }
 

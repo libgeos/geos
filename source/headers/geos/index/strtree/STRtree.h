@@ -73,19 +73,16 @@ private:
 	 * group them into runs of size M (the node capacity). For each run, creates
 	 * a new (parent) node.
 	 */
-	std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables, int newLevel);
+	std::auto_ptr<BoundableList> createParentBoundables(BoundableList* childBoundables, int newLevel);
 
-	std::vector<Boundable*>* createParentBoundablesFromVerticalSlices(std::vector<std::vector<Boundable*>*>* verticalSlices, int newLevel);
+	std::auto_ptr<BoundableList> createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices, int newLevel);
 
 	STRIntersectsOp intersectsOp;
 
-protected:
+	std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input);
 
-	std::vector<Boundable*> *sortBoundables(
-			const std::vector<Boundable*> *input);
-
-	std::vector<Boundable*>* createParentBoundablesFromVerticalSlice(
-			std::vector<Boundable*> *childBoundables,
+	std::auto_ptr<BoundableList> createParentBoundablesFromVerticalSlice(
+			BoundableList* childBoundables,
 			int newLevel);
 
 	/**
@@ -93,9 +90,12 @@ protected:
 	 *        the envelope midpoints
 	 * @return
 	 */
-	std::vector<std::vector<Boundable*>*>* verticalSlices(
-			std::vector<Boundable*> *childBoundables,
+	std::vector<BoundableList*>* verticalSlices(
+			BoundableList* childBoundables,
 			size_t sliceCount);
+
+
+protected:
 
 	AbstractNode* createNode(int level);
 	

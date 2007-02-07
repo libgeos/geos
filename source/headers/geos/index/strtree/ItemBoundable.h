@@ -34,8 +34,8 @@ private:
 public:
 	ItemBoundable(const void* newBounds, void* newItem);
 	virtual ~ItemBoundable();
-	const void* getBounds();
-	void* getItem();
+	const void* getBounds() const;
+	void* getItem() const;
 };
 
 

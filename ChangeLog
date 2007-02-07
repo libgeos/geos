@@ -1,5 +1,25 @@
 2007-02-06 Sandro Santilli <strk@refractions.net>
 
+	* source/index/strtree/STRtree.cpp,
+	  source/index/strtree/AbstractNode.cpp,
+	  source/index/strtree/ItemBoundable.cpp,
+	  source/index/strtree/AbstractSTRtree.cpp,
+	  source/index/strtree/SIRtree.cpp,
+	  source/headers/geos/index/strtree/AbstractNode.h,
+	  source/headers/geos/index/strtree/ItemBoundable.h,
+	  source/headers/geos/index/strtree/Boundable.h,
+	  source/headers/geos/index/strtree/AbstractSTRtree.h,
+	  source/headers/geos/index/strtree/SIRtree.h,
+	  source/headers/geos/index/strtree/STRtree.h
+	  General refactoring aimed at making the code cleaner
+	  to read and maintain; use iterators rather then random
+	  accessing containers to allow easy future switch to std::list
+	  from std::vector; use a tolerance-based strict weak ordering
+	  operator for sorting child boundables in STRtree, this
+	  fixes the heisenbug when building with inlines disabled.
+
+2007-02-06 Sandro Santilli <strk@refractions.net>
+
 	* tests/unit/simplify/DouglasPeuckerSimplifierTest.cpp:
 	  Expect result of POLYGON simplification to always be
 	  a polygon, even if collapsed to the empty geom.

@@ -20,6 +20,7 @@
 #include <geos/index/strtree/Interval.h> // for inline
 
 #include <vector>
+#include <memory>
 
 namespace geos {
 namespace index { // geos::index
@@ -82,14 +83,18 @@ protected:
 		bool intersects(const void* aBounds, const void* bBounds);
 	};
 
-	std::vector<Boundable*>* createParentBoundables(std::vector<Boundable*> *childBoundables,
-			int newLevel);
+	/** \brief
+	 * Sorts the childBoundables then divides them into groups of size M, where
+	 * M is the node capacity.
+	 */
+	std::auto_ptr<BoundableList> createParentBoundables(
+			BoundableList* childBoundables, int newLevel);
 
 	AbstractNode* createNode(int level);
 
 	IntersectsOp* getIntersectsOp() {return intersectsOp;};
 
-	std::vector<Boundable*> *sortBoundables(const std::vector<Boundable*> *input);
+	std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input);
 
 private:
 

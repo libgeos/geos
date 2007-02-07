@@ -45,6 +45,10 @@ public:
 		return childBoundables;
 	}
 
+	inline const std::vector<Boundable*>* getChildBoundables() const {
+		return childBoundables;
+	}
+
 	/**
 	 * Returns a representation of space that encloses this Boundable,
 	 * preferably not much bigger than this Boundable's boundary yet fast to
@@ -57,7 +61,7 @@ public:
 	 *
 	 * @see AbstractSTRtree::IntersectsOp
 	 */  
-	const void* getBounds();
+	const void* getBounds() const;
 
 	int getLevel();
 
@@ -65,9 +69,9 @@ public:
 
 protected:
 
-	virtual void* computeBounds()=0;
+	virtual void* computeBounds() const=0;
 
-	const void* bounds;
+	mutable void* bounds;
 };
 
 

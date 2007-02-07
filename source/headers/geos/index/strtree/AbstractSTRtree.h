@@ -19,6 +19,8 @@
 #include <geos/index/strtree/AbstractNode.h> // for inlines
 
 #include <vector>
+#include <list>
+#include <memory> // for auto_ptr
 #include <cassert> // for inlines
 
 // Forward declarations
@@ -36,6 +38,10 @@ namespace geos {
 namespace index { // geos::index
 namespace strtree { // geos::index::strtree
 
+/// A list of boundables. TODO: use a list
+typedef std::vector<Boundable*> BoundableList;
+//typedef std::list<Boundable*> BoundableList;
+
 /** \brief
  * Base class for STRtree and SIRtree.
  *
@@ -52,7 +58,7 @@ class AbstractSTRtree {
 
 private:
 	bool built;
-	std::vector<Boundable*> *itemBoundables;
+	BoundableList* itemBoundables;
 
 	/**
 	 * Creates the levels higher than the given level
@@ -65,11 +71,10 @@ private:
 	 * @return the root, which may be a ParentNode or a LeafNode
 	 */
 	virtual AbstractNode* createHigherLevels(
-			std::vector<Boundable*> *boundablesOfALevel,
+			BoundableList* boundablesOfALevel,
 			int level);
 
-	virtual std::vector<Boundable*> *sortBoundables(
-			const std::vector<Boundable*> *input)=0;
+	virtual std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input)=0;
 
 	bool remove(const void* searchBounds, AbstractNode& node, void* item);
 	bool removeItem(AbstractNode& node, void* item);
@@ -101,18 +106,21 @@ protected:
 
 	std::vector <AbstractNode *> *nodes;
 
+	// Ownership to caller (TODO: return by auto_ptr)
 	virtual AbstractNode* createNode(int level)=0;
 
 	/**
 	 * Sorts the childBoundables then divides them into groups of size M, where
 	 * M is the node capacity.
 	 */
-	virtual std::vector<Boundable*>* createParentBoundables(
-			std::vector<Boundable*> *childBoundables,
-			int newLevel);
+	virtual std::auto_ptr<BoundableList> createParentBoundables(
+			BoundableList* childBoundables, int newLevel);
 
-	virtual AbstractNode* lastNode(std::vector<Boundable*> *nodes) {
-		return static_cast<AbstractNode*>((*nodes)[nodes->size()-1]);
+	virtual AbstractNode* lastNode(BoundableList* nodes)
+	{
+		assert(!nodes->empty());
+		// Cast from Boundable to AbstractNode
+		return static_cast<AbstractNode*>( nodes->back() );
 	}
 
 	virtual AbstractNode* getRoot() {
@@ -138,13 +146,12 @@ protected:
 	///  Also builds the tree, if necessary.
 	void query(const void* searchBounds, ItemVisitor& visitor);
 
-	void query(const void* searchBounds, AbstractNode& node, ItemVisitor& visitor);
+	void query(const void* searchBounds, const AbstractNode& node, ItemVisitor& visitor);
   
 	///  Also builds the tree, if necessary.
 	bool remove(const void* itemEnv, void* item);
 
-
-	virtual std::vector<Boundable*>* boundablesAtLevel(int level);
+	std::auto_ptr<BoundableList> boundablesAtLevel(int level);
 
 	// @@ should be size_t, probably
 	size_t nodeCapacity;
@@ -167,7 +174,7 @@ public:
 	AbstractSTRtree(size_t newNodeCapacity)
 		:
 		built(false),
-			itemBoundables(new std::vector<Boundable*>()),
+		itemBoundables(new BoundableList()),
 		nodes(new std::vector<AbstractNode *>()),
 		nodeCapacity(newNodeCapacity)
 	{
@@ -193,13 +200,13 @@ public:
 	 */
 	virtual size_t getNodeCapacity() { return nodeCapacity; }
 
-	virtual void query(const void* searchBounds, AbstractNode* node, std::vector<void*>* matches);
+	virtual void query(const void* searchBounds, const AbstractNode* node, std::vector<void*>* matches);
 
 	/**
 	 * @param level -1 to get items
 	 */
 	virtual void boundablesAtLevel(int level, AbstractNode* top,
-			std::vector<Boundable*> *boundables);
+			BoundableList* boundables);
 };
 
 

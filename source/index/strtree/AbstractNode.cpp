@@ -50,7 +50,7 @@ AbstractNode::~AbstractNode() {
 //}
 
 const void *
-AbstractNode::getBounds()
+AbstractNode::getBounds() const
 {
 	if (bounds==NULL) {
 		bounds = computeBounds();

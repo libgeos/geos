@@ -25,6 +25,7 @@
 #include <cassert>
 #include <cmath>
 #include <algorithm> // std::sort
+#include <iostream> // for debugging
 
 using namespace std;
 using namespace geos::geom;
@@ -36,15 +37,19 @@ namespace strtree { // geos.index.strtree
 
 static bool yComparator(Boundable *a, Boundable *b)
 {
+	assert(a);
+	assert(b);
 	const void* aBounds = a->getBounds();
 	const void* bBounds = b->getBounds();
 	assert(aBounds);
 	assert(bBounds);
 	const Envelope* aEnv = static_cast<const Envelope*>(aBounds);
 	const Envelope* bEnv = static_cast<const Envelope*>(bBounds);
-	return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
-
-	//return STRtree::centreY((Envelope*)(a->getBounds())) < STRtree::centreY((Envelope*)(b->getBounds()));
+	// It seems that the '<' comparison here gives unstable results.
+	// In particular, when inlines are on (for Envelope::getMinY and getMaxY)
+	// things are fine, but when they are off we can even get a memory corruption !!
+	//return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
+	return fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30;
 }
 
 /*public*/
@@ -64,72 +69,73 @@ STRtree::STRIntersectsOp::intersects(const void* aBounds, const void* bBounds)
 }
 
 /*private*/
-vector<Boundable*>*
-STRtree::createParentBoundables(vector<Boundable*> *childBoundables, int newLevel)
+std::auto_ptr<BoundableList>
+STRtree::createParentBoundables(BoundableList* childBoundables, int newLevel)
 {
 	assert(!childBoundables->empty());
 	int minLeafCount=(int) ceil((double)childBoundables->size()/(double)getNodeCapacity());
 
-	vector<Boundable*> *sortedChildBoundables=sortBoundables(childBoundables);
+	std::auto_ptr<BoundableList> sortedChildBoundables ( sortBoundables(childBoundables) );
 
-	vector<vector<Boundable*>*>* verticalSlicesV = verticalSlices(sortedChildBoundables, (int)ceil(sqrt((double)minLeafCount)));
-	delete sortedChildBoundables; 
+	std::auto_ptr< vector<BoundableList*> > verticalSlicesV (
+			verticalSlices(sortedChildBoundables.get(), (int)ceil(sqrt((double)minLeafCount)))
+			);
 
-	vector<Boundable*> *ret;
-	ret = createParentBoundablesFromVerticalSlices(verticalSlicesV, newLevel);
+	std::auto_ptr<BoundableList> ret (
+		createParentBoundablesFromVerticalSlices(verticalSlicesV.get(), newLevel)
+	);
 	for (size_t i=0, vssize=verticalSlicesV->size(); i<vssize; ++i)
 	{
-		vector<Boundable *>*inner = (*verticalSlicesV)[i];
+		BoundableList* inner = (*verticalSlicesV)[i];
 		delete inner;
 	}
-
-	delete verticalSlicesV;
 
 	return ret;
 }
 
 /*private*/
-vector<Boundable*>*
-STRtree::createParentBoundablesFromVerticalSlices(vector<vector<Boundable*>*> *verticalSlices, int newLevel)
+std::auto_ptr<BoundableList>
+STRtree::createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices, int newLevel)
 {
-	assert(verticalSlices->size()>0);
-	vector<Boundable*> *parentBoundables=new vector<Boundable*>();
+	assert(!verticalSlices->empty());
+	std::auto_ptr<BoundableList> parentBoundables( new BoundableList() );
 
 	for (size_t i=0, vssize=verticalSlices->size(); i<vssize; ++i)
 	{
-		vector<Boundable*> *toAdd =
+		std::auto_ptr<BoundableList> toAdd (
 			createParentBoundablesFromVerticalSlice(
-				(*verticalSlices)[i], newLevel);
+				(*verticalSlices)[i], newLevel)
+			);
+		assert(!toAdd->empty());
 
 		parentBoundables->insert(
 				parentBoundables->end(),
 				toAdd->begin(),
 				toAdd->end());
-		delete toAdd;
 	}
 	return parentBoundables;
 }
 
 /*protected*/
-vector<Boundable*>*
-STRtree::createParentBoundablesFromVerticalSlice(vector<Boundable*> *childBoundables, int newLevel)
+std::auto_ptr<BoundableList>
+STRtree::createParentBoundablesFromVerticalSlice(BoundableList* childBoundables, int newLevel)
 {
 	return AbstractSTRtree::createParentBoundables(childBoundables, newLevel);
 }
 
-/*protected*/
-vector<vector<Boundable*>*>*
-STRtree::verticalSlices(vector<Boundable*>* childBoundables, size_t sliceCount)
+/*private*/
+std::vector<BoundableList*>*
+STRtree::verticalSlices(BoundableList* childBoundables, size_t sliceCount)
 {
 	size_t sliceCapacity = (size_t) ceil((double)childBoundables->size() / (double) sliceCount);
-	vector<vector<Boundable*>*>* slices = new vector<vector<Boundable*>*>(sliceCount);
+	vector<BoundableList*>* slices = new vector<BoundableList*>(sliceCount);
 
 	size_t i=0, nchilds=childBoundables->size();
 
 	for (size_t j=0; j<sliceCount; j++)
 	{
-		(*slices)[j]=new vector<Boundable*>();
-		(*slices)[j]->reserve(sliceCapacity);
+		(*slices)[j]=new BoundableList(); 
+		(*slices)[j]->reserve(sliceCapacity); 
 		size_t boundablesAddedToSlice = 0;
 		while (i<nchilds && boundablesAddedToSlice<sliceCapacity)
 		{
@@ -157,15 +163,20 @@ public:
 
 protected:
 
-	void* computeBounds()
+	void* computeBounds() const
 	{
 		Envelope* bounds=NULL;
-		vector<Boundable*> *b=getChildBoundables();
-		unsigned int bsize=b->size();
+		const BoundableList& b = *getChildBoundables();
 
-		if ( bsize ) bounds=new Envelope(*(Envelope*)(*b)[0]->getBounds());
-		for(unsigned int i=1; i<bsize; i++) {
-			Boundable* childBoundable=(*b)[i];
+		if ( b.empty() ) return NULL;
+
+		BoundableList::const_iterator i=b.begin();
+		BoundableList::const_iterator e=b.end();
+
+		bounds=new Envelope(* static_cast<const Envelope*>((*i)->getBounds()) );
+		for(; i!=e; ++i)
+		{
+			const Boundable* childBoundable=*i;
 			bounds->expandToInclude((Envelope*)childBoundable->getBounds());
 		}
 		return bounds;
@@ -190,11 +201,14 @@ STRtree::insert(const Envelope *itemEnv, void* item)
 	AbstractSTRtree::insert(itemEnv, item);
 }
 
-/*protected*/
-vector<Boundable*> *
-STRtree::sortBoundables(const vector<Boundable*> *input)
+/*private*/
+std::auto_ptr<BoundableList>
+STRtree::sortBoundables(const BoundableList* input)
 {
-	vector<Boundable*> *output=new vector<Boundable*>(*input);
+	assert(input);
+	std::auto_ptr<BoundableList> output ( new BoundableList(*input) );
+	assert(output->size() == input->size());
+
 	sort(output->begin(), output->end(), yComparator);
 	return output;
 }

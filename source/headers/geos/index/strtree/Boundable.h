@@ -36,7 +36,7 @@ public:
 	 *
 	 * @see AbstractSTRtree::IntersectsOp
 	 */
-	virtual const void* getBounds()=0;
+	virtual const void* getBounds() const=0;
 	virtual ~Boundable() {};
 };
 
