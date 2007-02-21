@@ -184,8 +184,12 @@ SubgraphDepthLocater::findStabbedSegments(const Coordinate &stabbingRayLeftPt,
 		// which the ray does not intersect
 		Envelope *env = bsg->getEnvelope();
 		if ( stabbingRayLeftPt.y < env->getMinY()
-			|| stabbingRayLeftPt.y > env->getMaxY() )
+			|| stabbingRayLeftPt.y > env->getMaxY()
+                        || stabbingRayLeftPt.x < env->getMinX()
+                        || stabbingRayLeftPt.x > env->getMaxX())
+		{
 				continue;
+		}
 
 		findStabbedSegments(stabbingRayLeftPt, bsg->getDirectedEdges(),
 			stabbedSegments);
