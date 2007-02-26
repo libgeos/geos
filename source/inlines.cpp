@@ -27,7 +27,7 @@
 // has already generated the stubs for the contents of this file. 
 // Hence we need to supress it to avoid "multiple definition" errors
 // during the final link phase
-#if defined(__MINGW32__) && !defined(DLL_EXPORT)
+#if ! defined(__MINGW32__) || defined(__MINGW32__) && !defined(DLL_EXPORT)
 
 
 // Undefine GEOS_INLINE so that .inl files
