@@ -1,3 +1,8 @@
+2007-04-15 Mateusz Loskot <mateusz@loskot.net>
+
+	* autogen.sh: Added detection of glibtoolize as libtool utility name
+	  under Mac OS X system.
+
 2007-03-05 Sandro Santilli <strk@refractions.net>
 
 	* tests/xmltester/Makefile.am: enable

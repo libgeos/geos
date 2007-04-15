@@ -10,6 +10,13 @@ giveup()
 
 OSTYPE=`uname -s`
 
+for libtoolize in glibtoolize libtoolize; do
+    LIBTOOLIZE=`which $libtoolize 2>/dev/null`
+    if test "$LIBTOOLIZE"; then
+        break;
+    fi
+done
+
 #AMFLAGS="--add-missing --copy --force-missing"
 AMFLAGS="--add-missing --copy"
 if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
@@ -21,7 +28,7 @@ aclocal -I macros || giveup
 echo "Running autoheader"
 autoheader || giveup
 echo "Running libtoolize"
-libtoolize --force --copy || giveup
+$LIBTOOLIZE --force --copy || giveup
 echo "Running automake"
 automake $AMFLAGS # || giveup
 echo "Running autoconf"
