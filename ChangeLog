@@ -1,3 +1,10 @@
+2007-04-22 Mateusz Loskot <mateusz@loskot.net>
+
+	* source/geom/CoordinateArraySequence.cpp: Added assertion checking
+	  if passed ordinate index is valid.
+	* tests/unit/capi/GEOSCoordSeqTest.cpp: Extended tests with swapped and
+	  not swapped calls of setX/setY/setZ and setOrdinate functions
+
 2007-04-15 Mateusz Loskot <mateusz@loskot.net>
 
 	* autogen.sh: Added detection of glibtoolize as libtool utility name

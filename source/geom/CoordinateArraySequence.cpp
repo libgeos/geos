@@ -183,6 +183,10 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 
 	assert(index<vect->size());
 
+    assert(ordinateIndex == CoordinateSequence::X
+           || ordinateIndex == CoordinateSequence::Y
+           || ordinateIndex == CoordinateSequence::Z);
+
 	switch (ordinateIndex)
 	{
 		case CoordinateSequence::X:
