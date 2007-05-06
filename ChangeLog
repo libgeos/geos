@@ -1,3 +1,10 @@
+2007-05-06 Mateusz Loskot <mateusz@loskot.net>
+
+	* source/headers/geos/version.h.vc: Added version header
+	  dedicated to use with Microsoft Visual C++ compiler.
+	  The version.h.vc requires manual update when version number
+	  changes.
+
 2007-04-22 Mateusz Loskot <mateusz@loskot.net>
 
 	* source/geom/CoordinateArraySequence.cpp: Added assertion checking
