@@ -1,3 +1,9 @@
+2007-06-01 Mateusz Loskot <mateusz@loskot.net>
+
+	* build/msvc80/geos_lib/geos_lib.vcproj: Applied patch with pre-build
+	  events generating platform.h and version.h headers.
+	  Thanks to Konstantin Baumann for this patch.
+
 2007-05-06 Mateusz Loskot <mateusz@loskot.net>
 
 	* source/headers/geos/version.h.vc: Added version header
