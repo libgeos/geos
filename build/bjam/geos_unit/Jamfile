@@ -1,0 +1,40 @@
+import set ;
+
+GEOS_DIR = ../../.. ;
+SOURCE_DIR = $(GEOS_DIR)/tests/unit ;
+
+project
+    : requirements
+        <include>$(GEOS_DIR)/capi
+        <include>$(GEOS_DIR)/source/headers
+        <include>$(GEOS_DIR)/tests/tut
+        <include>$(SOURCE_DIR)
+        <toolset>msvc:<define>_MBCS
+        <toolset>msvc:<undef>_UNICODE
+        <toolset>msvc:<undef>UNICODE
+    : source-location
+        $(SOURCE_DIR)
+    ;
+
+exe geos_unit
+    :   # sources
+        ../geos//libgeos
+        ../geos_c//libgeos_c
+        [ glob capi/*.cpp ]
+        [ glob algorithm/*.cpp ]
+        [ glob algorithm/CGAlgorithms/*.cpp ]
+        [ glob geom/*.cpp ]
+        [ glob geom/Geometry/*.cpp ]
+        [ glob index/*.cpp ]
+        [ glob index/quadtree/*.cpp ]
+        [ glob io/*.cpp ]
+        [ glob noding/*.cpp ]
+        [ glob operation/*.cpp ]
+        [ glob operation/distance/*.cpp ]
+        [ glob operation/overlay/*.cpp ]
+        [ glob precision/*.cpp ]
+        [ glob simplify/*.cpp ]
+        [ glob util/*.cpp ]
+        geos_unit.cpp
+    ;
+

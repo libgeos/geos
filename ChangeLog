@@ -3,6 +3,8 @@
 	* build/msvc80/geos_lib/geos_lib.vcproj: Applied patch with pre-build
 	  events generating platform.h and version.h headers.
 	  Thanks to Konstantin Baumann for this patch.
+	* build/bjam: Added *experimental* support of bjam and
+	  Boost.Build for GEOS.
 
 2007-05-06 Mateusz Loskot <mateusz@loskot.net>
 
