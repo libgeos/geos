@@ -44,6 +44,13 @@ extern "C" {
  *
  ***********************************************************************/
 
+/*
+ * Following 'ifdef' hack fixes problem with generating geos_c.h on Windows,
+ * when building with Visual C++ compiler.
+ */
+#if defined(_MSC_VER)
+#include <version.h>
+#else
 #define GEOS_VERSION_MAJOR @VERSION_MAJOR@
 #define GEOS_VERSION_MINOR @VERSION_MINOR@
 #define GEOS_VERSION_PATCH @VERSION_PATCH@
@@ -56,7 +63,7 @@ extern "C" {
 #define GEOS_CAPI_FIRST_INTERFACE GEOS_CAPI_VERSION_MAJOR 
 #define GEOS_CAPI_LAST_INTERFACE (GEOS_CAPI_VERSION_MAJOR+GEOS_CAPI_VERSION_MINOR)
 #define GEOS_CAPI_VERSION "@VERSION@-CAPI-@CAPI_VERSION@"
-
+#endif 
  
 /************************************************************************
  *
