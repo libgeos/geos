@@ -53,30 +53,40 @@ SweepLineIndex::add(SweepLineInterval *sweepInt)
 void
 SweepLineIndex::buildIndex()
 {
-	if (indexBuilt) return;
-
-	sort(events.begin(), events.end(), SweepLineEventLessThen());
-	for(size_t i=0, n=events.size(); i<n; i++) {
-		SweepLineEvent *ev=events[i];
-		if (ev->isDelete()) {
-			ev->getInsertEvent()->setDeleteEventIndex(i);
-		}
-	}
-	indexBuilt = true;
+    if (!indexBuilt)
+    {
+        sort(events.begin(), events.end(), SweepLineEventLessThen());
+        const std::vector<SweepLineEvent*>::size_type n = events.size();
+        for(std::vector<SweepLineEvent*>::size_type i = 0; i < n; i++)
+        {
+            SweepLineEvent *ev=events[i];
+            if (ev->isDelete())
+            {
+                ev->getInsertEvent()->setDeleteEventIndex(static_cast<int>(i));
+            }
+        }
+        indexBuilt = true;
+    }
 }
 
 void
 SweepLineIndex::computeOverlaps(SweepLineOverlapAction *action)
 {
-	nOverlaps = 0;
-	buildIndex();
-	for(size_t i=0, n=events.size(); i<n; i++) {
-		SweepLineEvent *ev=events[i];
-		if (ev->isInsert()) {
-			processOverlaps(i, ev->getDeleteEventIndex(),
-					ev->getInterval(), action);
-		}
-	}
+    nOverlaps = 0;
+    
+    buildIndex();
+
+    const std::vector<SweepLineEvent*>::size_type n=events.size();
+    for(std::vector<SweepLineEvent*>::size_type i=0; i<n; i++)
+    {
+        SweepLineEvent *ev=events[i];
+        if (ev->isInsert())
+        {
+            processOverlaps(static_cast<int>(i),
+                ev->getDeleteEventIndex(),
+                ev->getInterval(), action);
+        }
+    }
 }
 
 void

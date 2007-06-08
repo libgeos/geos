@@ -82,12 +82,12 @@ MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence *pts,
 	// in this edge
 	int start=0;
 	startIndexList.push_back(start);
-	unsigned int n=pts->getSize()-1;
+    const std::size_t n=pts->getSize() - 1;
 	do {
 		int last=findChainEnd(pts, start);
 		startIndexList.push_back(last);
 		start=last;
-	} while((unsigned int)start<n);
+	} while (static_cast<std::size_t>(start) < n);
 
 }
 
@@ -100,9 +100,9 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 {
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
-	int last=start+1;
-	unsigned int npts=pts->getSize();
-	while ((unsigned int)last<npts)
+	std::size_t last=start+1;
+    std::size_t npts=pts->getSize();
+	while (last < npts)
 	{
 		// compute quadrant for next possible segment in chain
 		int quad=Quadrant::quadrant(pts->getAt(last-1),pts->getAt(last));
@@ -112,7 +112,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 #if GEOS_DEBUG
 	std::cerr<<"MonotoneChainBuilder::findChainEnd() returning"<<std::endl;
 #endif
-	return last-1;
+	return static_cast<int>(last - 1);
 }
 
 } // namespace geos.index.chain

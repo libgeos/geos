@@ -1478,7 +1478,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Copying $(InputFileName) to $(InputName)"
-								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 								Outputs="$(InputDir)$(InputName)"
 							/>
 						</FileConfiguration>
@@ -1488,7 +1488,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Copying $(InputFileName) to $(InputName)"
-								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 								Outputs="$(InputDir)$(InputName)"
 							/>
 						</FileConfiguration>
@@ -1530,7 +1530,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Copying $(InputFileName) to $(InputName)"
-								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 								Outputs="$(InputDir)$(InputName)"
 							/>
 						</FileConfiguration>
@@ -1540,7 +1540,7 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Copying $(InputFileName) to $(InputName)"
-								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+								CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 								Outputs="$(InputDir)$(InputName)"
 							/>
 						</FileConfiguration>
@@ -2729,6 +2729,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\capi\geos_c.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\capi\geos_c.h.in"
 				>
 			</File>
 		</Filter>

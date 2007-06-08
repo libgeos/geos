@@ -67,8 +67,8 @@ public:
 	 * @param seg1
 	 * @param seg2
 	 */
-	virtual void overlap(geom::LineSegment *newSeg1,
-			geom::LineSegment *newSeg2)
+	virtual void overlap(geom::LineSegment* /*newSeg1*/,
+			geom::LineSegment* /*newSeg2*/)
 	{}
 
 	// these envelopes are used during the MonotoneChain search process

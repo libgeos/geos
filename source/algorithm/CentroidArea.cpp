@@ -42,7 +42,7 @@ CentroidArea::add(const Geometry *geom)
 	}
 	else if(const GeometryCollection *gc=dynamic_cast<const GeometryCollection*>(geom)) 
 	{
-		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+        for(std::size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
 		{
 			add(gc->getGeometryN(i));
 		}
@@ -94,8 +94,8 @@ void
 CentroidArea::addShell(const CoordinateSequence *pts)
 {
 	bool isPositiveArea=!CGAlgorithms::isCCW(pts);
-	unsigned int n=pts->getSize()-1;
-	for(unsigned int i=0; i<n; ++i)
+    std::size_t const n=pts->getSize()-1;
+	for(std::size_t i=0; i<n; ++i)
 	{
 		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
 	}
@@ -105,8 +105,8 @@ void
 CentroidArea::addHole(const CoordinateSequence *pts)
 {
 	bool isPositiveArea=CGAlgorithms::isCCW(pts);
-	unsigned int n=pts->getSize()-1;
-	for(unsigned int i=0; i<n; ++i)
+	std::size_t const n=pts->getSize()-1;
+	for(std::size_t i=0; i<n; ++i)
 	{
 		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
 	}

@@ -55,7 +55,7 @@ InteriorPointPoint::add(const Geometry *geom)
 	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
 	if ( gc )
 	{
-		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
+		for(std::size_t i=0, n=gc->getNumGeometries(); i<n; i++) {
 			add(gc->getGeometryN(i));
 		}
 	}

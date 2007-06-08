@@ -49,7 +49,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 // Argument is unused
-BufferSubgraph::BufferSubgraph(CGAlgorithms *cga):
+BufferSubgraph::BufferSubgraph(CGAlgorithms* /*cga*/):
 	rightMostCoord(NULL),
 	env(NULL)
 {
@@ -317,13 +317,13 @@ BufferSubgraph::getEnvelope()
 {
 	if (env == NULL) {
 		env = new Envelope();
-		size_t size = dirEdgeList.size();
-		for(size_t i=0; i<size; ++i)
+		std::size_t const size = dirEdgeList.size();
+		for(std::size_t i=0; i<size; ++i)
 		{
 			DirectedEdge *dirEdge=dirEdgeList[i];
 			const CoordinateSequence *pts = dirEdge->getEdge()->getCoordinates();
-			int n = pts->getSize()-1;
-			for (int j=0; j<n; ++j) {
+			std::size_t const n = pts->getSize()-1;
+			for (std::size_t j=0; j<n; ++j) {
 				env->expandToInclude(pts->getAt(j));
 			}
 		}

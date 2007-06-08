@@ -97,7 +97,7 @@ public:
 	virtual ~Edge();
 
 	virtual int getNumPoints() const {
-		return pts->getSize();
+		return static_cast<int>(pts->getSize());
 	}
 
 	virtual void setName(const std::string &newName) {

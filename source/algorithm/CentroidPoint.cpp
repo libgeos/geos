@@ -36,7 +36,7 @@ CentroidPoint::add(const Geometry *geom)
 	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
 				(typeid(*geom)==typeid(MultiPoint))) {
 		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; ++i)
+		for(std::size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
 		{
 			add(gc->getGeometryN(i));
 		}

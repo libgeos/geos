@@ -38,8 +38,8 @@ static Profiler *profiler = Profiler::instance();
 bool
 CoordinateSequence::hasRepeatedPoints() const
 {
-	int size=getSize();
-	for(int i=1; i<size; i++) {
+    const std::size_t size=getSize();
+	for(std::size_t i=1; i<size; i++) {
 		if (getAt(i-1)==getAt(i)) {
 			return true;
 		}
@@ -70,8 +70,8 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n,
 bool
 CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl)
 {
-	int size=cl->getSize();
-	for(int i=1;i<size; i++) {
+	const std::size_t size=cl->getSize();
+	for(std::size_t i=1;i<size; i++) {
 		if (cl->getAt(i-1)==cl->getAt(i)) {
 			return true;
 		}
@@ -83,8 +83,8 @@ const Coordinate*
 CoordinateSequence::minCoordinate() const
 {
 	const Coordinate* minCoord=NULL;
-	int size=getSize();
-	for(int i=0; i<size; i++) {
+	const std::size_t size=getSize();
+	for(std::size_t i=0; i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(getAt(i))>0) {
 			minCoord=&getAt(i);
 		}
@@ -96,8 +96,8 @@ const Coordinate*
 CoordinateSequence::minCoordinate(CoordinateSequence *cl)
 {
 	const Coordinate* minCoord=NULL;
-	int size=cl->getSize();
-	for(int i=0;i<size; i++) {
+	const std::size_t size=cl->getSize();
+	for(std::size_t i=0;i<size; i++) {
 		if(minCoord==NULL || minCoord->compareTo(cl->getAt(i))>0) {
 			minCoord=&(cl->getAt(i));
 		}
@@ -114,7 +114,7 @@ CoordinateSequence::indexOf(const Coordinate *coordinate,
 	{
 		if ((*coordinate)==cl->getAt(i))
 		{
-			return i; // FIXME: what if we overflow the int ?
+			return static_cast<int>(i); // FIXME: what if we overflow the int ?
 		}
 	}
 	return -1;
@@ -125,10 +125,12 @@ CoordinateSequence::scroll(CoordinateSequence* cl,
 		const Coordinate* firstCoordinate)
 {
 	// FIXME: use a standard algorithm instead
-	int i, j=0;
-	int ind=indexOf(firstCoordinate,cl);
-	if (ind<1) return; // not found or already first
-	int length=cl->getSize();
+	std::size_t i, j=0;
+	std::size_t ind=indexOf(firstCoordinate,cl);
+	if (ind<1)
+        return; // not found or already first
+
+	const std::size_t length=cl->getSize();
 	vector<Coordinate> v(length);
 	for (i=ind; i<length; i++) {
 		v[j++]=cl->getAt(i);
@@ -144,7 +146,7 @@ CoordinateSequence::reverse(CoordinateSequence *cl)
 {
 
 	// FIXME: use a standard algorithm
-	int last=cl->getSize()-1;
+	int last = static_cast<int>(cl->getSize()) - 1;
 	int mid=last/2;
 	for(int i=0;i<=mid;i++) {
 		const Coordinate tmp=cl->getAt(i);
@@ -185,10 +187,11 @@ void
 CoordinateSequence::add(const Coordinate& c, bool allowRepeated)
 {
 	if (!allowRepeated) {
-		int npts=getSize();
+        std::size_t npts=getSize();
 		if (npts>=1) {
 			const Coordinate& last=getAt(npts-1);
-			if (last.equals2D(c)) return;
+			if (last.equals2D(c))
+                return;
 		}
 	}
 	add(c);
@@ -209,7 +212,7 @@ CoordinateSequence::add(const CoordinateSequence *cl,
 {
 	// FIXME:  don't rely on negative values for 'j' (the reverse case)
 
-	int npts=cl->getSize();
+	const int npts = static_cast<int>(cl->getSize());
 	if (direction) {
 		for (int i=0; i<npts; i++) {
 			add(cl->getAt(i), allowRepeated);
@@ -246,8 +249,9 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 void
 CoordinateSequence::expandEnvelope(Envelope &env) const
 {
-	int size = getSize();
-	for (int i=0; i<size; i++) env.expandToInclude(getAt(i));
+	const std::size_t size = getSize();
+	for (std::size_t i=0; i<size; i++)
+        env.expandToInclude(getAt(i));
 }
 
 std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs)

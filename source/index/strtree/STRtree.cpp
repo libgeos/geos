@@ -188,7 +188,7 @@ protected:
 AbstractNode*
 STRtree::createNode(int level)
 {
-	AbstractNode *an = new STRAbstractNode(level, nodeCapacity);
+	AbstractNode *an = new STRAbstractNode(level, static_cast<int>(nodeCapacity));
 	nodes->push_back(an);
 	return an;
 }

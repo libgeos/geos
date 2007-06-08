@@ -73,7 +73,7 @@ InteriorPointLine::addInterior(const Geometry *geom)
 	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
 	if ( gc )
 	{
-		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
+		for(std::size_t i=0, n=gc->getNumGeometries(); i<n; i++) {
 			addInterior(gc->getGeometryN(i));
 		}
 	}
@@ -82,8 +82,8 @@ InteriorPointLine::addInterior(const Geometry *geom)
 void
 InteriorPointLine::addInterior(const CoordinateSequence *pts)
 {
-	unsigned int n=pts->getSize()-1;
-	for(unsigned int i=1; i<n; ++i)
+	const std::size_t n=pts->getSize()-1;
+	for(std::size_t i=1; i<n; ++i)
 	{
 		add(pts->getAt(i));
 	}
@@ -108,7 +108,7 @@ InteriorPointLine::addEndpoints(const Geometry *geom)
 	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
 	if ( gc )
 	{
-		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
+		for(std::size_t i=0, n=gc->getNumGeometries(); i<n; i++) {
 			addEndpoints(gc->getGeometryN(i));
 		}
 	}

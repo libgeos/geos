@@ -2,6 +2,33 @@
 
 	* capi/geos_c.h.in: Applied Konstantin Baumann's suggestion
 	  about including version.h in C API header for Visual C++.
+	* build\msvc80\geos_lib\geos_lib.vcproj: Updated project file.
+	* source\algorithm\InteriorPointArea.cpp,
+	  source\algorithm\SIRtreePointInRing.cpp,
+  	  source\algorithm\HCoordinate.cpp,
+	  source\algorithm\CentroidArea.cpp,
+	  source\algorithm\PointLocator.cpp,
+	  source\algorithm\InteriorPointLine.cpp,
+	  source\algorithm\CentroidLine.cpp,
+	  source\algorithm\InteriorPointPoint.cpp,
+	  source\algorithm\CentroidPoint.cpp,
+	  source\algorithm\CGAlgorithms.cpp,
+	  source\algorithm\MinimumDiameter.cpp,
+	  source\geom\CoordinateSequence.cpp,
+	  source\operation\buffer\BufferSubgraph.cpp,
+	  source\index\chain\MonotoneChainBuilder.cpp,
+	  source\index\strtree\STRtree.cpp,
+	  source\index\strtree\SIRtree.cpp,
+	  source\index\quadtree\DoubleBits.cpp,
+	  source\index\sweepline\SweepLineIndex.cpp,
+	  source\geomgraph\EdgeList.cpp,
+	  source\geomgraph\Edge.cpp,
+	  source\headers\geos\geom\CoordinateFilter.h,
+	  source\headers\geos\index\chain\MonotoneChainOverlapAction.h,
+	  source\headers\geos\index\bintree\Root.h,
+	  source\headers\geos\geomgraph\Edge.h,
+	  source\headers\geos\geomgraph\Node.h: cleaned signed/unsigned types
+	  mixtures, got rid from annoying compiler warnings.
 
 2007-06-01 Mateusz Loskot <mateusz@loskot.net>
 

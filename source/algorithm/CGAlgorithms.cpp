@@ -169,17 +169,17 @@ bool
 CGAlgorithms::isCCW(const CoordinateSequence* ring)
 {
 	// # of points without closing endpoint
-	size_t nPts=ring->getSize()-1;
+    const std::size_t nPts=ring->getSize()-1;
 
 	// find highest point
 	const Coordinate *hiPt=&ring->getAt(0);
 	int hiIndex=0;
-	for (size_t i=1; i<=nPts; ++i)
+    for (std::size_t i=1; i<=nPts; ++i)
 	{
 		const Coordinate *p=&ring->getAt(i);
 		if (p->y > hiPt->y) {
 			hiPt = p;
-			hiIndex = i;
+			hiIndex = static_cast<int>(i);
 		}
 	}
 
@@ -187,13 +187,14 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 	int iPrev = hiIndex;
 	do {
 		iPrev = iPrev - 1;
-		if (iPrev < 0) iPrev = nPts;
+		if (iPrev < 0)
+            iPrev = static_cast<int>(nPts);
 	} while (ring->getAt(iPrev)==*hiPt && iPrev!=hiIndex);
 
 	// find distinct point after highest point
 	int iNext = hiIndex;
 	do {
-		iNext = (iNext + 1) % nPts;
+		iNext = (iNext + 1) % static_cast<int>(nPts);
 	} while (ring->getAt(iNext)==*hiPt && iNext != hiIndex);
 
 	const Coordinate *prev=&ring->getAt(iPrev);

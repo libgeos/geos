@@ -49,8 +49,8 @@ SIRtreePointInRing::buildIndex()
 	sirTree=new SIRtree();
 	const CoordinateSequence *pts=ring->getCoordinatesRO();
 
-	unsigned int npts=pts->getSize();
-	for(unsigned int i=1; i<npts; ++i)
+	const std::size_t npts=pts->getSize();
+	for(std::size_t i=1; i<npts; ++i)
 	{
 		if(pts->getAt(i-1)==pts->getAt(i)) continue; // Optimization suggested by MD. [Jon Aquino]
 		LineSegment *seg=new LineSegment(pts->getAt(i-1), pts->getAt(i));

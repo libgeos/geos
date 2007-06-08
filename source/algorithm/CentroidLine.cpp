@@ -44,7 +44,7 @@ CentroidLine::add(const Geometry *geom)
 	const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
 	if (gc)
 	{
-		for(unsigned int i=0, n=gc->getNumGeometries(); i<n; i++) {
+        for(std::size_t i=0, n=gc->getNumGeometries(); i<n; i++) {
 			add(gc->getGeometryN(i));
 		}
 	}
@@ -54,9 +54,9 @@ CentroidLine::add(const Geometry *geom)
 void
 CentroidLine::add(const CoordinateSequence *pts)
 {
-	unsigned int npts=pts->getSize();
+	std::size_t const npts=pts->getSize();
 
-	for(unsigned int i=1; i<npts; ++i)
+	for(std::size_t i=1; i<npts; ++i)
 	{
 		const Coordinate &p1=pts->getAt(i-1);
 		const Coordinate &p2=pts->getAt(i);

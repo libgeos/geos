@@ -49,14 +49,14 @@ public:
     *
     * @param  coord  a <code>Coordinate</code> to which the filter is applied.
     */
-   virtual void filter_rw(Coordinate* coord) const { assert(0); }
+   virtual void filter_rw(Coordinate* /*coord*/) const { assert(0); }
 
    /**
     * Performs an operation with <code>coord</code>.
     *
     * @param  coord  a <code>Coordinate</code> to which the filter is applied.
     */
-   virtual void filter_ro(const Coordinate* coord) { assert(0); }
+   virtual void filter_ro(const Coordinate* /*coord*/) { assert(0); }
 };
 
 } // namespace geos::geom

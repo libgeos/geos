@@ -46,7 +46,7 @@ EdgeList::add(Edge *e)
 void
 EdgeList::addAll(const vector<Edge*> &edgeColl)
 {
-	for (unsigned int i=0, s=edgeColl.size(); i<s ; ++i)
+    for (std::size_t i=0, s=edgeColl.size(); i<s ; ++i)
 	{
 		add(edgeColl[i]);
 	}
@@ -77,7 +77,7 @@ EdgeList::findEqualEdge(Edge *e)
 			" overlapping edges" << endl;
 #endif
 
-	for (unsigned int i=0, s=testEdges.size(); i<s; ++i)
+	for (std::size_t i=0, s=testEdges.size(); i<s; ++i)
 	{
 		Edge* testEdge=static_cast<Edge*>(testEdges[i]);
 		if (testEdge->equals(e))
@@ -132,7 +132,7 @@ std::ostream&
 operator<< (std::ostream&os, const EdgeList& el)
 {
 	os << "EdgeList: " << std::endl;
-	for(unsigned int j=0, s=el.edges.size(); j<s; ++j)
+	for(std::size_t j=0, s=el.edges.size(); j<s; ++j)
 	{
        		Edge *e=el.edges[j];
 		os << "  " << *e << std::endl; 

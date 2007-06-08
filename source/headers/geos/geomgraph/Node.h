@@ -133,11 +133,11 @@ protected:
 	/** \brief
 	 * Basic nodes do not compute IMs
 	 */
-	virtual void computeIM(geom::IntersectionMatrix *im) {};
+	virtual void computeIM(geom::IntersectionMatrix* /*im*/) {};
 
 private:
 
-	std::vector<double>zvals;
+	std::vector<double> zvals;
 
 	double ztot;
 

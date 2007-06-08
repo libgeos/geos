@@ -59,7 +59,7 @@ public:
 
 protected:
 
-	bool isSearchMatch(Interval *interval) { return true; }
+	bool isSearchMatch(Interval* /*interval*/) { return true; }
 };
 
 } // namespace geos::index::bintree

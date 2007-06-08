@@ -120,7 +120,7 @@ protected:
 AbstractNode*
 SIRtree::createNode(int level)
 {
-	AbstractNode *an = new SIRAbstractNode(level, nodeCapacity);
+	AbstractNode *an = new SIRAbstractNode(level, static_cast<int>(nodeCapacity));
 	nodes->push_back(an);
 	return an;
 }

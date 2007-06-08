@@ -194,7 +194,7 @@ HCoordinate::getX() const
 	long double a = x/w;
 
 	// finite() also checks for NaN
-	if ( ! finite(a) )
+	if ( ! finite(static_cast<double>(a)) )
 	{
 		throw  NotRepresentableException();
 	}
@@ -208,7 +208,7 @@ HCoordinate::getY() const
 	long double a = y/w;
 
 	// finite() also checks for NaN
-	if ( ! finite(a) )
+	if ( ! finite(static_cast<double>(a)) )
 	{
 		throw  NotRepresentableException();
 	}
@@ -219,7 +219,7 @@ HCoordinate::getY() const
 void
 HCoordinate::getCoordinate(Coordinate &ret) const
 {
-	ret=Coordinate(getX(), getY());
+	ret = Coordinate(static_cast<double>(getX()), static_cast<double>(getY()));
 }
 
 std::ostream& operator<< (std::ostream& o, const HCoordinate& c)

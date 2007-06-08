@@ -225,8 +225,8 @@ MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
 	LineSegment seg;
 
 	// compute the max distance for all segments in the ring, and pick the minimum
-	unsigned int npts=pts->getSize();
-	for (unsigned int i=1; i<npts; ++i) {
+	const std::size_t npts=pts->getSize();
+	for (std::size_t i=1; i<npts; ++i) {
 		seg.p0=pts->getAt(i-1);
 		seg.p1=pts->getAt(i);
 		currMaxIndex=findMaxPerpDistance(pts, &seg, currMaxIndex);
