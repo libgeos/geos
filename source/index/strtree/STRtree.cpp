@@ -26,6 +26,7 @@
 #include <cmath>
 #include <algorithm> // std::sort
 #include <iostream> // for debugging
+#include <limits>
 
 using namespace std;
 using namespace geos::geom;
@@ -45,11 +46,30 @@ static bool yComparator(Boundable *a, Boundable *b)
 	assert(bBounds);
 	const Envelope* aEnv = static_cast<const Envelope*>(aBounds);
 	const Envelope* bEnv = static_cast<const Envelope*>(bBounds);
+
+    // NOTE - mloskot:
+    // The problem of instability is directly related to mathematical definition of
+    // "strict weak ordering" as a fundamental requirement for binary predicate:
+    // 
+    // if a is less than b then b is not less than a,
+    // if a is less than b and b is less than c
+    // then a is less than c,
+    // and so on.
+    //
+    // For some very low values, this predicate does not fulfill this requiremnet,
+
+    // NOTE - strk:
 	// It seems that the '<' comparison here gives unstable results.
 	// In particular, when inlines are on (for Envelope::getMinY and getMaxY)
 	// things are fine, but when they are off we can even get a memory corruption !!
 	//return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
-	return fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30;
+    
+    // NOTE - mloskot:
+    // This comparison does not answer if a is "lower" than b
+    // what is required for sorting. This comparison only answeres
+    // if a and b are "almost the same" or different
+
+    return std::fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30;
 }
 
 /*public*/

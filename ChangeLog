@@ -29,6 +29,8 @@
 	  source\headers\geos\geomgraph\Edge.h,
 	  source\headers\geos\geomgraph\Node.h: cleaned signed/unsigned types
 	  mixtures, got rid from annoying compiler warnings.
+	* source/index/strtree/STRtree.cpp: Analysis of instability of the
+	yComparator, there are some new important questions to answer.
 
 2007-06-01 Mateusz Loskot <mateusz@loskot.net>
 
