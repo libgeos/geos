@@ -82,6 +82,8 @@ namespace tut
 
 		GeomPtr expected(wktreader.read(wkt_ex));
 
+        // TODO: This test blows because if instability of geos.index.strtree::yComparator() predicate
+
 		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
 			g.get(), 10.0);
 
