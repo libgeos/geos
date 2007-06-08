@@ -1,3 +1,8 @@
+2007-06-08 Mateusz Loskot <mateusz@loskot.net>
+
+	* capi/geos_c.h.in: Applied Konstantin Baumann's suggestion
+	  about including version.h in C API header for Visual C++.
+
 2007-06-01 Mateusz Loskot <mateusz@loskot.net>
 
 	* build/msvc80/geos_lib/geos_lib.vcproj: Applied patch with pre-build
