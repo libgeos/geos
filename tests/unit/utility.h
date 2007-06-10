@@ -1,3 +1,7 @@
+// $Id$
+// 
+// Utility for GEOS Test Suite
+//
 #ifndef UTILITY_H_INCLUDED
 #define UTILITY_H_INCLUDED
 
@@ -6,6 +10,7 @@
 #include <geos/geom/Polygon.h>
 
 #include <iostream>
+#include <memory>
 #include <cassert>
 
 //
@@ -28,6 +33,23 @@ template<class Type, class InstanceType>
 inline Type* instanceOf(InstanceType* instance)
 {
     return dynamic_cast<Type *>(instance);
+}
+
+template <typename Dst, typename Src>
+std::auto_ptr<Dst> dynamic_cast_auto_ptr(std::auto_ptr<Src>& ptr)
+{
+    Dst* res = dynamic_cast<Dst*>(ptr.get());
+    if (0 != res)
+    {
+        ptr.release();
+    }
+    return std::auto_ptr<Dst>(res);
+}
+
+template <typename Dst, typename Src>
+std::auto_ptr<Dst> static_cast_auto_ptr(std::auto_ptr<Src>& ptr)
+{
+    return std::auto_ptr<Dst>(static_cast<Dst*>(ptr.release()));
 }
 
 //
@@ -101,11 +123,11 @@ inline bool isSameStructure(geos::geom::GeometryCollection* lhs,
     if (lhs->getNumGeometries() != rhs->getNumGeometries())
         return false;
 
-    for (unsigned int i = 0, n = lhs->getNumGeometries(); i < n; ++i)
+    for (std::size_t i = 0, n = lhs->getNumGeometries(); i < n; ++i)
     {
         // Dirty, but necessary!
         // isSameStructure promises to not to try to change geometries
-	// @@ why doesn't you take const pointers ?
+        // @@ why doesn't you take const pointers ?
         Geometry* g1 = const_cast<Geometry*>(lhs->getGeometryN(i));
         Geometry* g2 = const_cast<Geometry*>(rhs->getGeometryN(i));
         if (!isSameStructure(g1, g2))
