@@ -92,7 +92,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Running regression tests using $(ProjectName).exe..."
-				CommandLine="$(OutDir)\$(ProjectName)d.exe"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -325,12 +325,20 @@
 			Name="algorithm"
 			>
 			<File
+				RelativePath="..\..\..\tests\unit\algorithm\ConvexHullTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\unit\algorithm\PointLocatorTest.cpp"
 				>
 			</File>
 			<Filter
 				Name="CGAlgorithms"
 				>
+				<File
+					RelativePath="..\..\..\tests\unit\algorithm\CGAlgorithms\isCCWTest.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\tests\unit\algorithm\CGAlgorithms\isPointInRingTest.cpp"
 					>

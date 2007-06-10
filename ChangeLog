@@ -1,33 +1,42 @@
+2007-06-10 Mateusz Loskot <mateusz@loskot.net>
+
+	* tests/unit/utility.h: Added custom operators for static and
+	  dynamic casts of pointers wrapped with std::auto_ptr<T> type.
+	* tests/unit/algorithm/ConvexHullTest.cpp: Added unit test for
+	  geos::algorithm::ConvexHull.
+	* tests/unit/algorithm/CGAlgorithms/isCCWTest.cpp: Added unit test for
+	  geos::algorithm::CGAlgorithms::isCCW function.
+
 2007-06-08 Mateusz Loskot <mateusz@loskot.net>
 
 	* capi/geos_c.h.in: Applied Konstantin Baumann's suggestion
 	  about including version.h in C API header for Visual C++.
-	* build\msvc80\geos_lib\geos_lib.vcproj: Updated project file.
-	* source\algorithm\InteriorPointArea.cpp,
-	  source\algorithm\SIRtreePointInRing.cpp,
-  	  source\algorithm\HCoordinate.cpp,
-	  source\algorithm\CentroidArea.cpp,
-	  source\algorithm\PointLocator.cpp,
-	  source\algorithm\InteriorPointLine.cpp,
-	  source\algorithm\CentroidLine.cpp,
-	  source\algorithm\InteriorPointPoint.cpp,
-	  source\algorithm\CentroidPoint.cpp,
-	  source\algorithm\CGAlgorithms.cpp,
-	  source\algorithm\MinimumDiameter.cpp,
-	  source\geom\CoordinateSequence.cpp,
-	  source\operation\buffer\BufferSubgraph.cpp,
-	  source\index\chain\MonotoneChainBuilder.cpp,
-	  source\index\strtree\STRtree.cpp,
-	  source\index\strtree\SIRtree.cpp,
-	  source\index\quadtree\DoubleBits.cpp,
-	  source\index\sweepline\SweepLineIndex.cpp,
-	  source\geomgraph\EdgeList.cpp,
-	  source\geomgraph\Edge.cpp,
-	  source\headers\geos\geom\CoordinateFilter.h,
-	  source\headers\geos\index\chain\MonotoneChainOverlapAction.h,
-	  source\headers\geos\index\bintree\Root.h,
-	  source\headers\geos\geomgraph\Edge.h,
-	  source\headers\geos\geomgraph\Node.h: cleaned signed/unsigned types
+	* build/msvc80/geos_lib/geos_lib.vcproj: Updated project file.
+	* source/algorithm/InteriorPointArea.cpp,
+	  source/algorithm/SIRtreePointInRing.cpp,
+	  source/algorithm/HCoordinate.cpp,
+	  source/algorithm/CentroidArea.cpp,
+	  source/algorithm/PointLocator.cpp,
+	  source/algorithm/InteriorPointLine.cpp,
+	  source/algorithm/CentroidLine.cpp,
+	  source/algorithm/InteriorPointPoint.cpp,
+	  source/algorithm/CentroidPoint.cpp,
+	  source/algorithm/CGAlgorithms.cpp,
+	  source/algorithm/MinimumDiameter.cpp,
+	  source/geom/CoordinateSequence.cpp,
+	  source/operation/buffer/BufferSubgraph.cpp,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  source/index/strtree/STRtree.cpp,
+	  source/index/strtree/SIRtree.cpp,
+	  source/index/quadtree/DoubleBits.cpp,
+	  source/index/sweepline/SweepLineIndex.cpp,
+	  source/geomgraph/EdgeList.cpp,
+	  source/geomgraph/Edge.cpp,
+	  source/headers/geos/geom/CoordinateFilter.h,
+	  source/headers/geos/index/chain/MonotoneChainOverlapAction.h,
+	  source/headers/geos/index/bintree/Root.h,
+	  source/headers/geos/geomgraph/Edge.h,
+	  source/headers/geos/geomgraph/Node.h: cleaned signed/unsigned types
 	  mixtures, got rid from annoying compiler warnings.
 	* source/index/strtree/STRtree.cpp: Analysis of instability of the
 	yComparator, there are some new important questions to answer.
@@ -89,7 +98,7 @@
 
 	* configure.in: Allow configure to continue with use_python
 	  set to false if a python binary is not found, as per
-	  http://sources.redhat.com/automake/automake.html#Python.
+	  http:gcsources.redhat.com/automake/automake.html#Python.
 
 2007-02-06 Sandro Santilli <strk@refractions.net>
 
@@ -236,7 +245,7 @@
 
 2006-12-13 Mateusz Loskot <mateusz@loskot.net>
 
-	* build\msvc80\geos_lib\geos_lib.vcproj,source\Makefile.vc:
+	* build/msvc80/geos_lib/geos_lib.vcproj,source/Makefile.vc:
 	  Updated makefile and project file for Visual C++.
 
 2006-12-13 Sandro Santilli <strk@refractions.net>
@@ -272,8 +281,8 @@
 
 2006-12-05 Mateusz Loskot <mateusz@loskot.net>
 
-	* build\msvc80\geos_unit\geos_unit.vcproj: added C API unit tests
-	* tests\unit\capi\GEOSCoordSeqTest.cpp,tests\unit\capi\GEOSSimplifyTest.cpp:
+	* build/msvc80/geos_unit/geos_unit.vcproj: added C API unit tests
+	* tests/unit/capi/GEOSCoordSeqTest.cpp,tests/unit/capi/GEOSSimplifyTest.cpp:
 	  small cleaning, using C calls from C++ std namespace.
 
 2006-12-05 Sandro Santilli <strk@refractions.net>
@@ -613,7 +622,7 @@
 2006-08-03 Charlie Savage <cfis@savagexi.com>
 
 	* Added equalsExact and normalize to the c api as discussed here
-	http://geos.refractions.net/pipermail/geos-devel/2006-July/002452.html.
+	http:gcgeos.refractions.net/pipermail/geos-devel/2006-July/002452.html.
 
 2006-08-03 Charlie Savage <cfis@savagexi.com>
 
@@ -4756,7 +4765,7 @@
 
 	* ChangeLog, source/io/WKBReader.cpp: Fixed support for consuming
 	  WKB for 'POLYGON EMPTY' with numRings==0.
-	  http://bugzilla.remotesensing.org/show_bug.cgi?id=1064
+	  http:gcbugzilla.remotesensing.org/show_bug.cgi?id=1064
 
 2006-02-08 18:18  strk
 
@@ -5794,7 +5803,7 @@
 
 2005-10-21 04:45  frank
 
-	* README: added note on source\makefile.vc
+	* README: added note on source/makefile.vc
 
 2005-10-21 04:44  frank
 
