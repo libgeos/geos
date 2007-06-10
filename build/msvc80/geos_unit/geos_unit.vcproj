@@ -336,6 +336,10 @@
 				Name="CGAlgorithms"
 				>
 				<File
+					RelativePath="..\..\..\tests\unit\algorithm\CGAlgorithms\computeOrientationTest.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\tests\unit\algorithm\CGAlgorithms\isCCWTest.cpp"
 					>
 				</File>

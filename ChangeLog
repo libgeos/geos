@@ -5,7 +5,9 @@
 	* tests/unit/algorithm/ConvexHullTest.cpp: Added unit test for
 	  geos::algorithm::ConvexHull.
 	* tests/unit/algorithm/CGAlgorithms/isCCWTest.cpp: Added unit test for
-	  geos::algorithm::CGAlgorithms::isCCW function.
+	  geos::algorithm::CGAlgorithms::isCCW() function.
+	* tests/unit/algorithm/CGAlgorithms/computeOrientationTest.cpp: Added unit
+	  test for geos::algorithm::CGAlgorithms::computeOrientation() function.
 
 2007-06-08 Mateusz Loskot <mateusz@loskot.net>
 
