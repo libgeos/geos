@@ -14,8 +14,11 @@ geos_unit_LDADD = \
 
 
 geos_unit_SOURCES = geos_unit.cpp \
+	algorithm/ConvexHullTest.cpp \
 	algorithm/PointLocatorTest.cpp \
+	algorithm/CGAlgorithms/isCCWTest.cpp \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
+	algorithm/CGAlgorithms/computeOrientationTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateListTest.cpp \
