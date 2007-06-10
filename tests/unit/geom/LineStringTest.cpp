@@ -189,7 +189,7 @@ namespace tut
 		// Create copy
 		LineStringAutoPtr copy(dynamic_cast<geos::geom::LineString*>(examplar->clone()));
 
-		ensure(copy.get());
+		ensure( 0 != copy.get() );
 
 		ensure( !copy->isEmpty() );
 		ensure( copy->isSimple() );
