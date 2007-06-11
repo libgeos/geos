@@ -1,3 +1,12 @@
+2007-06-11 Mateusz Loskot <mateusz@loskot.net>
+
+	* tests/unit/operation/IsSimpleOpTest.cpp,
+	  tests/unit/Makefile.am: Added test for IsSimpleOp class.
+	* source/operation/IsSimpleOp.cpp: Replaced post-increment
+	  operators with pre-increment operators where standard
+	  iterators are incremented in loops. NOTE: Prefer pre-incr.
+	  over post-inc. when working with standard iterators.
+
 2007-06-10 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/utility.h: Added custom operators for static and

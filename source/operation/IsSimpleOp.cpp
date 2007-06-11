@@ -65,7 +65,7 @@ IsSimpleOp::isSimple(const MultiPoint *mp)
 	if (mp->isEmpty()) return true;
 	set<const Coordinate*, CoordinateLessThen> points;
 
-	for (unsigned int i=0, n=mp->getNumGeometries(); i<n; i++)
+    for (std::size_t i=0, n=mp->getNumGeometries(); i<n; i++)
 	{
 		assert(dynamic_cast<const Point*>(mp->getGeometryN(i)));
 		const Point *pt=static_cast<const Point*>(mp->getGeometryN(i));
@@ -151,11 +151,11 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 	}
 
 	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>::iterator it=endPoints.begin();
-	for (; it!=endPoints.end(); it++) {
+	for (; it!=endPoints.end(); ++it) {
 		EndpointInfo *eiInfo=it->second;
 		if (eiInfo->isClosed && eiInfo->degree!=2) {
 			it=endPoints.begin();
-			for (; it!=endPoints.end(); it++) {
+			for (; it!=endPoints.end(); ++it) {
 				EndpointInfo *ep=it->second;
 				delete ep;
 			}
@@ -164,7 +164,7 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 	}
 
 	it=endPoints.begin();
-	for (; it!=endPoints.end(); it++) {
+	for (; it!=endPoints.end(); ++it) {
 		EndpointInfo *ep=it->second;
 		delete ep;
 	}
