@@ -42,6 +42,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
 	io/ByteOrderValuesTest.cpp \
+	operation/IsSimpleOpTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/overlay/FuzzyPointLocatorTest.cpp \
 	operation/overlay/OffsetPointGeneratorTest.cpp \
