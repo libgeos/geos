@@ -30,6 +30,10 @@
 #endif
 #define PARANOIA_LEVEL 0
 
+#ifdef _MSC_VER
+#pragma warning(disable:4355)
+#endif
+
 using namespace std;
 using namespace geos::geom;
 

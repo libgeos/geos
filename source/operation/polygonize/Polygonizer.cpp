@@ -20,8 +20,12 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
-
+// std
 #include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(disable:4355)
+#endif
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0

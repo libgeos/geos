@@ -76,7 +76,7 @@ ByteOrderDataInStream::readLong()
 	stream->read(reinterpret_cast<char *>(buf), 8);
 	if ( stream->eof() )
 		throw  ParseException("Unexpected EOF parsing WKB");
-	return ByteOrderValues::getLong(buf, byteOrder);
+	return static_cast<long>(ByteOrderValues::getLong(buf, byteOrder));
 }
 
 INLINE double
