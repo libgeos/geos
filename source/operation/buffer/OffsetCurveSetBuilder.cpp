@@ -69,7 +69,10 @@ OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 {
 	//delete cga;
 	for (size_t i=0, n=curveList.size(); i<n; ++i)
+	{
+		delete curveList[i]->getCoordinates();
 		delete curveList[i];
+	}
 	for (size_t i=0, n=newLabels.size(); i<n; ++i)
 		delete newLabels[i];
 }
@@ -107,12 +110,13 @@ OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 #if GEOS_DEBUG
 		std::cerr<<" skipped (size<2)"<<std::endl;
 #endif
+		delete coord;
 		return;
 	}
 
 	// add the edge for a coordinate list which is a raw offset curve
 	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
-	SegmentString *e=new SegmentString(coord, newlabel);
+	SegmentString *e=new SegmentString(coord, newlabel); // SegmentString doesnt own the sequence, so we need to delete in the destructor
 	newLabels.push_back(newlabel);
 	curveList.push_back(e);
 }

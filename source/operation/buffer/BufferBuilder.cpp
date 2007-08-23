@@ -270,8 +270,11 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 		const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
 		CoordinateSequence* cs = CoordinateSequence::removeRepeatedPoints(segStr->getCoordinates());
-		if ( cs->size() < 2 ) return; // don't insert collapsed edges
-
+		if ( cs->size() < 2 ) 
+		{
+			delete cs; // we need to take care of the memory here as cs is a new sequence
+			return; // don't insert collapsed edges
+		}
 		// we need to clone SegmentString coordinates
 		// as Edge will take ownership of them
 		// TODO: find a way to transfer ownership instead

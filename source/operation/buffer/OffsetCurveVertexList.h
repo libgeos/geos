@@ -54,6 +54,7 @@ class OffsetCurveVertexList
 private:
 
 	geom::CoordinateSequence* ptList;
+	bool ptListConsumed;
 
 	const geom::PrecisionModel* precisionModel;
   
@@ -89,6 +90,7 @@ public:
 	OffsetCurveVertexList()
 		:
 		ptList(new geom::CoordinateArraySequence()),
+		ptListConsumed(false),
 		precisionModel(NULL),
 		minimumVertexDistance (0.0)
 	{
@@ -96,6 +98,8 @@ public:
 
 	~OffsetCurveVertexList()
 	{
+		if (!ptListConsumed)
+			delete ptList;
 	}
 	
 	void setPrecisionModel(const geom::PrecisionModel* nPrecisionModel)
@@ -140,6 +144,7 @@ public:
 	geom::CoordinateSequence* getCoordinates()
 	{
 		closeRing();
+		ptListConsumed = true;
 		return ptList;
 	}
 
