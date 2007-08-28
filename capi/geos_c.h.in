@@ -49,7 +49,7 @@ extern "C" {
  * when building with Visual C++ compiler.
  */
 #if defined(_MSC_VER)
-#include <version.h>
+#include <geos/version.h>
 #else
 #define GEOS_VERSION_MAJOR @VERSION_MAJOR@
 #define GEOS_VERSION_MINOR @VERSION_MINOR@
