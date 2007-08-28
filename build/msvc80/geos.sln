@@ -25,6 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\TODO = ..\..\TODO
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_ruby", "geos_ruby\geos_ruby.vcproj", "{4DFAA153-687F-494C-8670-6E85CC6C2BA8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115} = {CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -43,6 +48,10 @@ Global
 		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}.Debug|Win32.Build.0 = Debug|Win32
 		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}.Release|Win32.ActiveCfg = Release|Win32
 		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}.Release|Win32.Build.0 = Release|Win32
+		{4DFAA153-687F-494C-8670-6E85CC6C2BA8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4DFAA153-687F-494C-8670-6E85CC6C2BA8}.Debug|Win32.Build.0 = Debug|Win32
+		{4DFAA153-687F-494C-8670-6E85CC6C2BA8}.Release|Win32.ActiveCfg = Release|Win32
+		{4DFAA153-687F-494C-8670-6E85CC6C2BA8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
