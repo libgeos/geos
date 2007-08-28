@@ -3,6 +3,8 @@
 require 'test/unit'
 require 'geos'
 
+# NOTE - These tests are no longer valid with the C-API
+
 class TestGeosEnvelope < Test::Unit::TestCase
   def check(envelope)
     assert_equal(5, envelope.get_min_x())

@@ -37,21 +37,21 @@ class TestGeosCombinations < Test::Unit::TestCase
     end
   end
 
-  #def test_intersection()
-    #run_combination("INTERSECTION") do |geom1, geom2|
-      #geom1.intersection(geom2)
-    #end
-  #end
+  def test_intersection()
+    run_combination("INTERSECTION") do |geom1, geom2|
+      geom1.intersection(geom2)
+    end
+  end
   
-  #def test_difference()
-    #run_combination("DIFFERENCE") do |geom1, geom2|
-      #geom1.difference(geom2)
-    #end
-  #end
+  def test_difference()
+    run_combination("DIFFERENCE") do |geom1, geom2|
+      geom1.difference(geom2)
+    end
+  end
   
-  #def test_symdifference()
-    #run_combination("SYMDIFFERENCE") do |geom1, geom2|
-      #geom1.sym_difference(geom2)
-    #end
-  #end
+  def test_symdifference()
+    run_combination("SYMDIFFERENCE") do |geom1, geom2|
+      geom1.sym_difference(geom2)
+    end
+  end
 end

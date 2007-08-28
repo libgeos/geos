@@ -19,7 +19,7 @@ class TestGeosOperations < Test::Unit::TestCase
       # Get the actual result
       actual = yield(geom_in)
 
-      assert(actual.equals(expected),
+      assert(actual.eql?(expected),
              "Expected: #{results[i]}\nActual: #{Geos.geom_to_wkt(actual)}")
     end
   end
@@ -40,7 +40,7 @@ class TestGeosOperations < Test::Unit::TestCase
     results[11] = "POINT (8.5510137343037833 15.6700508986182890)"
     
     run_operation(results) do |geom|
-      geom.get_centroid()
+      geom.centroid()
     end
   end
 

@@ -29,7 +29,11 @@ class SridTest < Test::Unit::TestCase
     # srid=4326;POINT(7 8)
     xdr = "0101000020E61000000000000000001C400000000000002040"
     
-    geom = Geos.geom_from_wkb(xdr)
+    Geos::wkb_byte_order = Geos::GEOS_WKB_NDR
+    geom = Geos.geom_from_hex(xdr)
+    
+    assert_equal(7, geom.coord_seq.get_x(0))
+    assert_equal(8,geom.coord_seq.get_y(0))
     assert_equal(4326, geom.srid)
-	end
+  end
 end

@@ -21,7 +21,7 @@ class TestBuffer < Test::Unit::TestCase
       result = geom.buffer(tolerance, 8)
       result.normalize
       
-      assert(expected.equals_exact(result, 0.00000000001),
+      assert(expected.eql_exact?(result, 0.00000000001),
              "Buffer:\n" + 
              "  Case: #{test_case.case_id}\n" + 
              "  Test: #{test_case.test_id}\n" + 

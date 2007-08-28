@@ -16,16 +16,16 @@ class TestGeometry < Test::Unit::TestCase
     assert_equal('Point', geom.geom_type)
     assert_equal(Geos::GEOS_POINT, geom.type_id)
     
-		assert(!geom.is_empty?)
-		assert(geom.is_valid?)
-		assert(geom.is_simple?)
-		assert(!geom.is_ring?)
-		assert(geom.has_z?)
-		
-		assert_equal(1, geom.get_num_geometries)
+    assert(!geom.empty?)
+    assert(geom.valid?)
+    assert(geom.simple?)
+    assert(!geom.ring?)
+    assert(geom.has_z?)
+    
+    assert_equal(1, geom.num_geometries)
 
-		coords = geom.get_coord_seq
-		assert_instance_of(Geos::CoordinateSequence, coords)
+    coords = geom.coord_seq
+    assert_instance_of(Geos::CoordinateSequence, coords)
     assert_equal(7, coords.get_x(0))
     assert_equal(8, coords.get_y(0))
     assert_equal(9, coords.get_z(0))
@@ -38,8 +38,8 @@ class TestGeometry < Test::Unit::TestCase
     cs = Geos::CoordinateSequence.new(0, 0)
     
     assert_raise(RuntimeError) do
-	    geom = Geos::create_point(cs)
-  	end
+      geom = Geos::create_point(cs)
+    end
   end
   
   def test_create_line_string
@@ -52,20 +52,20 @@ class TestGeometry < Test::Unit::TestCase
     cs.set_z(1, 3)
     
     geom = Geos::create_line_string(cs)
-  	assert_instance_of(Geos::LineString, geom)
+    assert_instance_of(Geos::LineString, geom)
     assert_equal('LineString', geom.geom_type)
     assert_equal(Geos::GEOS_LINESTRING, geom.type_id)
     
-		assert(!geom.is_empty?)
-		assert(geom.is_valid?)
-		assert(geom.is_simple?)
-		assert(!geom.is_ring?)
-		assert(geom.has_z?)
-		
-		assert_equal(1, geom.get_num_geometries)
-		
-		coords = geom.get_coord_seq
-		assert_instance_of(Geos::CoordinateSequence, coords)
+    assert(!geom.empty?)
+    assert(geom.valid?)
+    assert(geom.simple?)
+    assert(!geom.ring?)
+    assert(geom.has_z?)
+    
+    assert_equal(1, geom.num_geometries)
+    
+    coords = geom.coord_seq
+    assert_instance_of(Geos::CoordinateSequence, coords)
     assert_equal(7, coords.get_x(0))
     assert_equal(8, coords.get_y(0))
     assert_equal(9, coords.get_z(0))
@@ -81,8 +81,8 @@ class TestGeometry < Test::Unit::TestCase
     cs = Geos::CoordinateSequence.new(1,0)
     
     assert_raise(RuntimeError) do
-	    geom = Geos::create_line_string(cs)
-  	end
+      geom = Geos::create_line_string(cs)
+    end
   end
   
   def test_create_linear_ring
@@ -101,20 +101,20 @@ class TestGeometry < Test::Unit::TestCase
     cs.set_z(3, 9)
     
     geom = Geos::create_linear_ring(cs)
-  	assert_instance_of(Geos::LinearRing, geom)
+    assert_instance_of(Geos::LinearRing, geom)
     assert_equal('LinearRing', geom.geom_type)
     assert_equal(Geos::GEOS_LINEARRING, geom.type_id)
     
-		assert(!geom.is_empty?)
-		assert(geom.is_valid?)
-		assert(geom.is_simple?)
-		assert(geom.is_ring?)
-		assert(geom.has_z?)
-		
-		assert_equal(1, geom.get_num_geometries)
+    assert(!geom.empty?)
+    assert(geom.valid?)
+    assert(geom.simple?)
+    assert(geom.ring?)
+    assert(geom.has_z?)
+    
+    assert_equal(1, geom.num_geometries)
 
-		coords = geom.get_coord_seq
-		assert_instance_of(Geos::CoordinateSequence, coords)
+    coords = geom.coord_seq
+    assert_instance_of(Geos::CoordinateSequence, coords)
     assert_equal(7, coords.get_x(0))
     assert_equal(8, coords.get_y(0))
     assert_equal(9, coords.get_z(0))
@@ -130,14 +130,14 @@ class TestGeometry < Test::Unit::TestCase
     
     assert_in_delta(0, geom.area, 0.01)
     assert_in_delta(29.228665330092, geom.length, 0.01)
-	end
+  end
   
   def test_create_linear_ring_illegal
     cs = Geos::CoordinateSequence.new(1,0)
     
     assert_raise(RuntimeError) do
-	    geom = Geos::create_linear_ring(cs)
-  	end
+      geom = Geos::create_linear_ring(cs)
+    end
   end
   
   def test_create_polygon
@@ -160,24 +160,24 @@ class TestGeometry < Test::Unit::TestCase
     shell = Geos::create_linear_ring(cs)
     
     geom = Geos::create_polygon(shell)
-  	assert_instance_of(Geos::Polygon, geom)
+    assert_instance_of(Geos::Polygon, geom)
     assert_equal('Polygon', geom.geom_type)
     assert_equal(Geos::GEOS_POLYGON, geom.type_id)
     
-		assert(!geom.is_empty?)
-		assert(geom.is_valid?)
-		assert(geom.is_simple?)
-		assert(!geom.is_ring?)
-		assert(geom.has_z?)
-		
-		assert_equal(1, geom.get_num_geometries)
-		
-		exterior_ring = geom.get_exterior_ring()
-		assert(shell.equals(exterior_ring))
-		assert_equal(0, geom.get_num_interior_rings)
-		
-		assert_raise(RuntimeError) do
-			assert_equal(0, geom.get_interior_ring_n(1))
+    assert(!geom.empty?)
+    assert(geom.valid?)
+    assert(geom.simple?)
+    assert(!geom.ring?)
+    assert(geom.has_z?)
+    
+    assert_equal(1, geom.num_geometries)
+    
+    exterior_ring = geom.exterior_ring()
+    assert(shell.eql?(exterior_ring))
+    assert_equal(0, geom.num_interior_rings)
+    
+    assert_raise(RuntimeError) do
+      assert_equal(0, geom.interior_ring_n(1))
     end
     
     assert_in_delta(100, geom.area, 0.01)
@@ -240,25 +240,25 @@ class TestGeometry < Test::Unit::TestCase
     hole2 = Geos::create_linear_ring(cs)
     
     geom = Geos::create_polygon(shell, [hole1, hole2])
-  	assert_instance_of(Geos::Polygon, geom)
+    assert_instance_of(Geos::Polygon, geom)
     assert_equal('Polygon', geom.geom_type)
     assert_equal(Geos::GEOS_POLYGON, geom.type_id)
     
-		assert(!geom.is_empty?)
-		assert(geom.is_valid?)
-		assert(geom.is_simple?)
-		assert(!geom.is_ring?)
-		assert(geom.has_z?)
-		
-		assert_equal(1, geom.get_num_geometries)
-		
-		exterior_ring = geom.get_exterior_ring()
-		assert(shell.equals(exterior_ring))
-		
-		assert_equal(2, geom.get_num_interior_rings)
-		assert(hole1.equals(geom.get_interior_ring_n(0)))
-		assert(hole2.equals(geom.get_interior_ring_n(1)))
-		
+    assert(!geom.empty?)
+    assert(geom.valid?)
+    assert(geom.simple?)
+    assert(!geom.ring?)
+    assert(geom.has_z?)
+    
+    assert_equal(1, geom.num_geometries)
+    
+    exterior_ring = geom.exterior_ring()
+    assert(shell.eql?(exterior_ring))
+    
+    assert_equal(2, geom.num_interior_rings)
+    assert(hole1.eql?(geom.interior_ring_n(0)))
+    assert(hole2.eql?(geom.interior_ring_n(1)))
+    
     assert_in_delta(92, geom.area, 0.01)
     assert_in_delta(56, geom.length, 0.01)
   end

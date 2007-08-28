@@ -44,7 +44,7 @@ class TestGeosRelations < Test::Unit::TestCase
       column = 0
       geoms.each do |geom2|
         # get value
-		    value = results[row][column]
+        value = results[row][column]
         expected = self.get_expected_result(value)
 
         begin
@@ -95,7 +95,7 @@ class TestGeosRelations < Test::Unit::TestCase
   def test_crosses()
     results = Array.new()
 
-		# CROSSES       [0][1][2][3][4][5][6][7][8][9][10][11]
+    # CROSSES       [0][1][2][3][4][5][6][7][8][9][10][11]
     results[0]    = [0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0]
     results[1]    = [0, 0, 1, 0, 0, 0, X, 1, 1, 1, 1, 0]
     results[2]    = [0, 1, 0, 1, 0, 0, X, 0, 0, 0, 0, 0]
@@ -117,7 +117,7 @@ class TestGeosRelations < Test::Unit::TestCase
   def test_disjoint()
     results = Array.new()
 
-		# DISJOINT      [0][1][2][3][4][5][6][7][8][9][10][11] 
+    # DISJOINT      [0][1][2][3][4][5][6][7][8][9][10][11] 
     results[0]    = [0, 1, 1, 1, 1, 0, X, 1, 1, 1, 1, 1]
     results[1]    = [1, 0, 0, 0, 1, 1, X, 0, 0, 0, 0, 1]
     results[2]    = [1, 0, 0, 0, 1, 1, X, 1, 1, 1, 1, 1]
@@ -139,7 +139,7 @@ class TestGeosRelations < Test::Unit::TestCase
   def test_equals()
     results = Array.new()
 
-		# EQUALS        [0][1][2][3][4][5][6][7][8][9][10][11]
+    # EQUALS        [0][1][2][3][4][5][6][7][8][9][10][11]
     results[0]    = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     results[1]    = [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]
     results[2]    = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -154,7 +154,7 @@ class TestGeosRelations < Test::Unit::TestCase
     results[11]   = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
         
     self.run_relational_operation("EQUALS", results) do |geom1, geom2|
-      geom1.equals(geom2)
+      geom1.eql?(geom2)
     end
   end
 
