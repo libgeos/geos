@@ -153,7 +153,7 @@ public:
         return GEOSCoordSeq_destroy(coords);
     }
 
-    GeosCoordinateSequence* clone()
+    GeosCoordinateSequence *clone()
     {
         GEOSCoordSeq coords = (GEOSCoordSeq) self;
         return (GeosCoordinateSequence*) GEOSCoordSeq_clone(coords);
@@ -343,6 +343,7 @@ bool checkBoolResult(char result)
 }
 %}
 
+%newobject GeosGeometry::clone;
 class GeosGeometry
 {
 private:
@@ -356,6 +357,12 @@ public:
         GEOSGeom_destroy(geom);
     }
 
+    GeosGeometry *clone()
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        return GEOSGeom_clone(geom);
+    }
+    
     char *geomType()
     {
         GEOSGeom geom = (GEOSGeom) self;
@@ -407,11 +414,6 @@ public:
     }
 
     /* Topology Operations */
-   /* GeosGeometry *envelope()
-    {
-        return new GeosGeometry(GEOSEnvelope(geom);
-    }*/
-
     GeosGeometry *intersection(GeosGeometry *other)
     {
         GEOSGeom geom = (GEOSGeom) self;
@@ -468,6 +470,12 @@ public:
     {
         GEOSGeom geom = (GEOSGeom) self;
         return (GeosGeometry*) GEOSGetCentroid(geom);
+    }
+
+    GeosGeometry *getEnvelope()
+    {
+        GEOSGeom geom = (GEOSGeom) self;
+        return (GeosGeometry*) GEOSEnvelope(geom);
     }
 
     char *relate(GeosGeometry *other)
@@ -914,13 +922,10 @@ GeosGeometry *createPolygon(GeosLinearRing *shell, GeosLinearRing **holes, size_
  * The caller remains owner of the array, but pointed-to
  * objects become ownership of the returned GEOSGeom.
  
-extern GEOSGeom GEOS_DLL GEOSGeom_createPolygon(GEOSGeom shell,
-	GEOSGeom *holes, size_t nholes);
 extern GEOSGeom GEOS_DLL GEOSGeom_createCollection(int type,
 	GEOSGeom *geoms, size_t ngeoms);
-
-extern GEOSGeom GEOS_DLL GEOSGeom_clone(const GEOSGeom g);
 */
+
 %clear GeosCoordinateSequence *s;
 
 // === Input/Output ===
@@ -977,6 +982,9 @@ provided string. */
 %inline %{
 GeosGeometry* geomFromWKT(const char *wkt)
 {
+    if(wkt == NULL)
+        throw std::runtime_error("Trying to create geometry from a NULL string");
+        
     GEOSGeom geom = GEOSGeomFromWKT(wkt);
 
     if(geom == NULL)
@@ -985,7 +993,7 @@ GeosGeometry* geomFromWKT(const char *wkt)
     return (GeosGeometry*) geom;
 }
 
-char *geomToWKT(const GeosGeometry* g)
+char* geomToWKT(const GeosGeometry* g)
 {
     GEOSGeom geom = (GEOSGeom) g;
     return GEOSGeomToWKT(geom);
