@@ -15,18 +15,28 @@
  * ========================================================================= */
 
 
-// ===  Alias ===
-%alias GeosGeometry::getSRID "srid";
-%alias GeosGeometry::setSRID "srid=";
 
-// Some manual renames
-%rename("get_wkb_output_dimensions") getWKBOutputDims;
-%rename("set_wkb_output_dimensions") setWKBOutputDims;
-%rename("get_wkb_byte_order") getWKBByteOrder;
-%rename("set_wkb_byte_order") setWKBByteOrder;
-%rename("__len__")  GeosCoordinateSequence::getSize;
+%rename("dimensions") GeosCoordinateSequence::getDimensions;
 
+%rename("srid") GeosGeometry::getSRID;
+%rename("srid=") GeosGeometry::setSRID;
+%rename("envelope") GeosGeometry::getEnvelope;
 
+%rename("wkb_output_dimensions") getWKBOutputDims;
+%rename("wkb_output_dimensions=") setWKBOutputDims;
+%rename("wkb_byte_order") getWKBByteOrder;
+%rename("wkb_byte_order=") setWKBByteOrder;
+%rename("__len__") GeosCoordinateSequence::getSize;
+
+%rename("coord_seq") GeosPoint::getCoordSeq;
+%rename("coord_seq") GeosLineString::getCoordSeq;
+%rename("coord_seq") GeosLinearRing::getCoordSeq;
+
+%rename("exterior_ring") GeosPolygon::getExteriorRing;
+%rename("num_interior_rings") GeosPolygon::getNumInteriorRings;
+%rename("interior_ring_n") GeosPolygon::getInteriorRingN;
+
+// Use predicates to make the ruby code nicer  - so disjoint?
 %predicate GeosGeometry::disjoint;
 %predicate GeosGeometry::touches;
 %predicate GeosGeometry::intersects;
@@ -34,13 +44,21 @@
 %predicate GeosGeometry::within;
 %predicate GeosGeometry::contains;
 %predicate GeosGeometry::overlaps;
-//%predicate GeosGeometry::equals;
 
-%predicate GeosGeometry::isEmpty;
-%predicate GeosGeometry::isValid;
-%predicate GeosGeometry::isSimple;
-%predicate GeosGeometry::isRing;
-%predicate GeosGeometry::hasZ;
+// Use ruby naming conventions for equals
+%rename("eql?") GeosGeometry::equals;
+%rename("eql_exact?") GeosGeometry::equalsExact;
+%rename("dimensions") GeosGeometry::getDimensions;
+%rename("num_geometries") GeosGeometry::getNumGeometries;
+
+%rename("centroid") GeosGeometry::getCentroid;
+%alias GeosGeometry::getCentroid "center"
+
+%rename("empty?") GeosGeometry::isEmpty;
+%rename("valid?") GeosGeometry::isValid;
+%rename("simple?") GeosGeometry::isSimple;
+%rename("ring?") GeosGeometry::isRing;
+%rename("has_z?") GeosGeometry::hasZ;
 
 /* Convert a Ruby array of GeosLinearRings to a C array. */
 %typemap(in,numinputs=1) (GeosLinearRing **holes, size_t nholes)
