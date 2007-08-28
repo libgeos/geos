@@ -186,6 +186,30 @@
 				RelativePath="..\..\..\capi\geos_c.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\capi\geos_c.h.in"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						Outputs="$(InputDir)$(InputName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						Outputs="$(InputDir)$(InputName)"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
