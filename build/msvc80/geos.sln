@@ -30,6 +30,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_ruby", "geos_ruby\geos
 		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115} = {CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_python", "geos_python\geos_python.vcproj", "{DCDE3502-BEA2-4F60-B45A-2B279CD47994}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115} = {CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -52,6 +57,10 @@ Global
 		{4DFAA153-687F-494C-8670-6E85CC6C2BA8}.Debug|Win32.Build.0 = Debug|Win32
 		{4DFAA153-687F-494C-8670-6E85CC6C2BA8}.Release|Win32.ActiveCfg = Release|Win32
 		{4DFAA153-687F-494C-8670-6E85CC6C2BA8}.Release|Win32.Build.0 = Release|Win32
+		{DCDE3502-BEA2-4F60-B45A-2B279CD47994}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DCDE3502-BEA2-4F60-B45A-2B279CD47994}.Debug|Win32.Build.0 = Debug|Win32
+		{DCDE3502-BEA2-4F60-B45A-2B279CD47994}.Release|Win32.ActiveCfg = Release|Win32
+		{DCDE3502-BEA2-4F60-B45A-2B279CD47994}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

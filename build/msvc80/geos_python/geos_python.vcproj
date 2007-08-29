@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="geos_ruby"
-	ProjectGUID="{4DFAA153-687F-494C-8670-6E85CC6C2BA8}"
-	RootNamespace="geos_ruby"
+	Name="geos_python"
+	ProjectGUID="{DCDE3502-BEA2-4F60-B45A-2B279CD47994}"
+	RootNamespace="geos_python"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -40,8 +40,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;&quot;C:\Development\ruby\lib\ruby\1.8\i386-mswin32&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GEOS_RUBY_EXPORTS"
+				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;C:\Development\Python25\include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GEOS_PYTHON_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,10 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="msvcrt-ruby18.lib"
 				OutputFile="$(ConfigurationName)\geos.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="C:\Development\ruby\lib"
+				AdditionalLibraryDirectories="C:\Development\Python25\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -119,7 +118,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GEOS_RUBY_EXPORTS"
+				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;C:\Development\Python25\include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GEOS_PYTHON_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -137,7 +137,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(ConfigurationName)\geos.dll"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="C:\Development\Python25\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -179,7 +181,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\swig\ruby\geos_wrap.cxx"
+				RelativePath="..\..\..\swig\python\geos_wrap.cxx"
 				>
 			</File>
 		</Filter>
@@ -195,6 +197,10 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<File
+			RelativePath=".\ReadMe.txt"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
