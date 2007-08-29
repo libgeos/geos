@@ -1,9 +1,5 @@
 /* =========================================================================
- * $Id$
- *
- * ruby.i
- * 
- * Copyright 2005 Charlie Savage, cfis@interserv.com
+ * Copyright 2005-2007 Charlie Savage, cfis@interserv.com
  *
  * Interface for a SWIG generated geos module.
  *
@@ -13,8 +9,6 @@
  * See the COPYING file for more information.
  *
  * ========================================================================= */
-
-
 
 %rename("dimensions") GeosCoordinateSequence::getDimensions;
 
@@ -47,9 +41,11 @@
 
 // Use ruby naming conventions for equals
 %rename("eql?") GeosGeometry::equals;
+%alias GeosGeometry::equals "==";
 %rename("eql_exact?") GeosGeometry::equalsExact;
 %rename("dimensions") GeosGeometry::getDimensions;
 %rename("num_geometries") GeosGeometry::getNumGeometries;
+
 
 %rename("centroid") GeosGeometry::getCentroid;
 %alias GeosGeometry::getCentroid "center"

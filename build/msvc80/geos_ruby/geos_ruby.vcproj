@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="msvcrt-ruby18.lib"
-				OutputFile="C:\Development\ruby\lib\ruby\site_ruby\1.8\i386-msvcrt\geos.dll"
+				OutputFile="$(ConfigurationName)\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\Development\ruby\lib"
 				GenerateDebugInformation="true"
@@ -195,10 +195,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

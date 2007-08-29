@@ -1,9 +1,5 @@
 /* =========================================================================
- * $Id$
- *
- * python.i
- * 
- * Copyright 2006 Charlie Savage, cfis@interserv.com
+ * Copyright 2005-2007 Charlie Savage, cfis@interserv.com
  *
  * Interface for a SWIG generated geos module.
  *

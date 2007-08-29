@@ -6658,6 +6658,7 @@ SWIGEXPORT void Init_geos(void) {
   rb_define_method(cGeometry.klass, "contains?", VALUEFUNC(_wrap_Geometry_containsq___), -1);
   rb_define_method(cGeometry.klass, "overlaps?", VALUEFUNC(_wrap_Geometry_overlapsq___), -1);
   rb_define_method(cGeometry.klass, "eql?", VALUEFUNC(_wrap_Geometry_eqlq___), -1);
+  rb_define_alias(cGeometry.klass, "==", "eql?");
   rb_define_method(cGeometry.klass, "eql_exact?", VALUEFUNC(_wrap_Geometry_eql_exactq___), -1);
   rb_define_method(cGeometry.klass, "empty?", VALUEFUNC(_wrap_Geometry_emptyq___), -1);
   rb_define_method(cGeometry.klass, "valid?", VALUEFUNC(_wrap_Geometry_validq___), -1);
