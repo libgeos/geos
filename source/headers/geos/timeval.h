@@ -10,8 +10,6 @@
 #ifndef _TIMEVAL_H
 #define _TIMEVAL_H
 
-#ifdef _WIN32
-
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -30,19 +28,8 @@ struct timezone {
     int tz_dsttime;     /* type of dst correction */
 };
 
-#endif /* _WIN32 */
 
-/* For MingW the appropriate definitions are included in
- time.h but they are not included if __STRICT_ANSI__
- is defined.  Since GEOS is compiled with -ansi that
- means the definitions are not available. */
-#if defined(_WIN32) && defined(__GNUC__)
-extern _CRTIMP void __cdecl    _tzset (void);
-__MINGW_IMPORT int    _daylight;
-__MINGW_IMPORT long    _timezone;
-#endif 
-
-#if defined(_WIN32) && !defined(_WIN32_WCE)
+#if !defined(_WIN32_WCE)
 
 __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
@@ -77,7 +64,7 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
     return 0;
 }
 
-#elif defined(_WIN32_WCE)
+#else
 
 __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
 {
@@ -124,10 +111,6 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
     return 0;
 }
 
-#else  /* _WIN32 */
-
-#include <sys/time.h>
-
-#endif /* _WIN32 */
+#endif /* _WIN32_WCE */
 
 #endif /* _TIMEVAL_H */

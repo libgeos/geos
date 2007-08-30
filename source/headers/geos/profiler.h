@@ -16,10 +16,11 @@
 #ifndef GEOS_PROFILER_H
 #define GEOS_PROFILER_H
 
-#ifndef _MSC_VER
-#  include <sys/time.h>
-#endif
+#ifdef _MSC_VER
 #include <geos/timeval.h>
+#else
+#include <sys/time.h>
+#endif
 #include <map>
 #include <memory>
 #include <iostream>
