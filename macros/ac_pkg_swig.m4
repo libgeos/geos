@@ -72,10 +72,6 @@ AC_DEFUN([AC_PROG_SWIG],[
                                 -o $available_patch -lt $required_patch ; then
                                 AC_MSG_WARN([SWIG version >= $1 is required.  You have $swig_version.  You should look at http://www.swig.org])
                                 SWIG=''
-                        else
-                                AC_MSG_NOTICE([SWIG executable is '$SWIG'])
-                                SWIG_LIB=`$SWIG -swiglib`
-                                AC_MSG_NOTICE([SWIG library directory is '$SWIG_LIB'])
                         fi
                 else
                         AC_MSG_WARN([cannot determine SWIG version])
