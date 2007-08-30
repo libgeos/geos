@@ -22,6 +22,9 @@ AC_DEFUN([AC_RUBY_DEVEL],
 		dnl Get Ruby version number
 		RUBY_VERSION=`$RUBY -e "puts RUBY_VERSION"`
 
+		dnl Get Ruby bin directory
+		RUBY_BIN_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["bindir"]]'`
+		
 		dnl Get Ruby include directory
 		RUBY_INCLUDE_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["archdir"]]'`
 	
@@ -39,13 +42,15 @@ AC_DEFUN([AC_RUBY_DEVEL],
 		
     AC_MSG_NOTICE([Ruby executable is '$RUBY'])
     AC_MSG_NOTICE([Ruby version is '$RUBY_VERSION'])
+    AC_MSG_NOTICE([Ruby bin directory is '$RUBY_BIN_DIR'])
     AC_MSG_NOTICE([Ruby include directory is '$RUBY_INCLUDE_DIR'])
     AC_MSG_NOTICE([Ruby library directory is '$RUBY_LIB_DIR'])
     AC_MSG_NOTICE([Ruby extension directory is '$RUBY_EXTENSION_DIR'])
-    AC_MSG_NOTICE([Ruby shared library name is '$RUBY_SO_NAME'])
-    AC_MSG_NOTICE([Ruby shared library is '$RUBY_SHARED_LIB'])
+    AC_MSG_NOTICE([Ruby library is '$RUBY_SO_NAME'])
+    AC_MSG_NOTICE([Ruby import library is '$RUBY_SHARED_LIB'])
    
     AC_SUBST([RUBY_VERSION])
+    AC_SUBST([RUBY_BIN_DIR])
     AC_SUBST([RUBY_INCLUDE_DIR])
     AC_SUBST([RUBY_LIB_DIR])
     AC_SUBST([RUBY_EXTENSION_DIR])
