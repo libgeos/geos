@@ -60,10 +60,6 @@
 ///
 #undef VERBOSE_EXCEPTIONS
 
-#ifndef GEOS_CAPI_VERSION
-#  define GEOS_CAPI_VERSION "3.0.0-CAPI-1.0.0"
-#endif
-
 #if defined(_MSC_VER)
 #  define GEOS_DLL     __declspec(dllexport)
 #else
