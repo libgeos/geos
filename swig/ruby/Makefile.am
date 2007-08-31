@@ -1,4 +1,3 @@
-
 EXTRA_DIST = \
 	ruby.i 
 
@@ -35,7 +34,7 @@ geos_wrap.cxx: ../geos.i ruby.i
 
 else # !ENABLE_SWIG
 
-geos_wrap.cxx: 
+geos_wrap.cxx: ../geos.i ruby.i
 	@echo "SWIG is disabled, can't build geos_wrap.cxx"
 	false
 
