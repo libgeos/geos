@@ -55,7 +55,8 @@ AC_CHECK_HEADERS(memory.h)
 AC_CHECK_HEADERS(unistd.h)
 AC_CHECK_HEADERS(ieeefp.h)
 AC_CHECK_HEADERS(sys/file.h)
-AC_CHECK_FUNCS(strchr memcpy)
+AC_CHECK_HEADERS(sys/time.h)
+AC_CHECK_FUNCS(strchr memcpy gettimeofday)
 AC_HEADER_STAT
 AC_STRUCT_TM
 AC_TYPE_SIZE_T
@@ -119,40 +120,11 @@ if test x"$HAVE_INT64_T_64" = x"no" ; then
 fi
 
 
-dnl --------------------------------------------------------------------
-dnl - check for swig 
-dnl --------------------------------------------------------------------
 
-AC_ARG_ENABLE(swig, [  --disable-swig    Disable build of swig wrappers],
-	[case "${enableval}" in
-		yes) use_swig=true ;;
-		no)  use_swig=false ;;
-		*) AC_MSG_ERROR(bad value ${enableval} for --enable-swig) ;;
-	esac],
-	[use_swig=true]
-)
-
-if test x"$use_swig" = xtrue; then
-	AC_PROG_SWIG(1.3.28)
-	if test x"$SWIG" = x; then
-		use_swig=false
-	fi
-fi
-
-if test x"$use_swig" = xtrue; then
-	SWIG_ENABLE_CXX
-fi
-
-
-AM_CONDITIONAL(ENABLE_SWIG, [ test x"$use_swig" = xtrue ])
-AC_SUBST(SWIG)
 
 dnl --------------------------------------------------------------------
-dnl - check for python 
+dnl - check whether python is required for the build
 dnl --------------------------------------------------------------------
-
-dnl See geos-devel/2007-February/002816.html
-AM_PATH_PYTHON(,,:)
 
 AC_ARG_ENABLE(python, [  --enable-python    Enable build of python module],
 	[case "${enableval}" in
@@ -163,24 +135,9 @@ AC_ARG_ENABLE(python, [  --enable-python    Enable build of python module],
 	[use_python=false]
 )
 
-if test x"$use_python" = xtrue; then
-	dnl Check for Python 
-	SWIG_PYTHON
-
-	if test x"$PYTHON" = "x"; then
-		use_python=false
-	fi
-	
-	AC_SUBST(PYTHON)
-	AC_SUBST(SWIG_PYTHON_CPPFLAGS)
-	AC_SUBST(SWIG_PYTHON_OPT)
-fi
-
-AM_CONDITIONAL(ENABLE_PYTHON, [test x"$use_python" = xtrue])
-
 
 dnl --------------------------------------------------------------------
-dnl - check for ruby 
+dnl - check whether ruby is required for the build
 dnl --------------------------------------------------------------------
 
 AC_ARG_ENABLE(ruby, [  --enable-ruby    Enable build of ruby module],
@@ -191,6 +148,50 @@ AC_ARG_ENABLE(ruby, [  --enable-ruby    Enable build of ruby module],
 	esac],
 	[use_ruby=false]
 )
+
+
+dnl --------------------------------------------------------------------
+dnl - check for swig if python or ruby are enabled
+dnl --------------------------------------------------------------------
+
+use_swig=false
+if test x"$use_python" = xtrue || test x"$use_ruby" = xtrue; then
+	AC_PROG_SWIG(1.3.28)
+	if test -n x"$SWIG"x; then
+		use_swig=true 
+	fi
+fi
+
+if test x"$use_swig" = xtrue; then
+    SWIG_ENABLE_CXX
+    AC_SUBST(SWIG)	
+fi
+AM_CONDITIONAL(ENABLE_SWIG, [ test x"$use_swig" = xtrue ])
+
+
+dnl --------------------------------------------------------------------
+dnl - check for python if enabled
+dnl --------------------------------------------------------------------
+
+if test x"$use_python" = xtrue; then
+	dnl Check for Python 
+    AM_PATH_PYTHON	
+    SWIG_PYTHON
+
+	if test x"$PYTHON" = "x"; then
+		use_python=false
+	fi
+	
+	AC_SUBST(PYTHON)
+	AC_SUBST(SWIG_PYTHON_CPPFLAGS)
+	AC_SUBST(SWIG_PYTHON_OPT)
+fi
+AM_CONDITIONAL(ENABLE_PYTHON, [test x"$use_python" = xtrue])
+
+
+dnl --------------------------------------------------------------------
+dnl - check for ruby if enabled
+dnl --------------------------------------------------------------------
 
 if test x"$use_ruby" = xtrue; then
 	dnl Check for Ruby 

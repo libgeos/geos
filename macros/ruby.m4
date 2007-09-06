@@ -16,7 +16,7 @@ AC_DEFUN([AC_RUBY_DEVEL],
   AC_PATH_PROG([RUBY],[ruby])
   
   if test -z "$RUBY" ; then
-		AC_MSG_WARN([Could not find ruby interpreter.])
+		AC_MSG_ERROR([Could not find ruby interpreter.])
     RUBY=''
   else
 		dnl Get Ruby version number
