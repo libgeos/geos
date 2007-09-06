@@ -16,11 +16,26 @@
 #ifndef GEOS_PROFILER_H
 #define GEOS_PROFILER_H
 
-#ifdef _MSC_VER
+/* Allow us to check for presence of gettimeofday in MingW */ 
+#include <config.h>
+
+/* For MingW builds with __STRICT_ANSI__ (-ansi) */
+#if defined(__MINGW32__)
+#include <sys/time.h>
+extern "C" {
+  extern _CRTIMP void __cdecl	_tzset (void);
+  __MINGW_IMPORT int	_daylight;
+  __MINGW_IMPORT long	_timezone;
+  __MINGW_IMPORT char 	*_tzname[2];
+}
+#endif
+ 
+#if defined(_MSC_VER) || defined(__MINGW32__) && !defined(HAVE_GETTIMEOFDAY)
 #include <geos/timeval.h>
 #else
 #include <sys/time.h>
 #endif
+
 #include <map>
 #include <memory>
 #include <iostream>
