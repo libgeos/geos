@@ -16,11 +16,11 @@
 #ifndef GEOS_PROFILER_H
 #define GEOS_PROFILER_H
 
+/* For MingW builds with __STRICT_ANSI__ (-ansi) */
+#if defined(__MINGW32__)
 /* Allow us to check for presence of gettimeofday in MingW */ 
 #include <config.h>
 
-/* For MingW builds with __STRICT_ANSI__ (-ansi) */
-#if defined(__MINGW32__)
 #include <sys/time.h>
 extern "C" {
   extern _CRTIMP void __cdecl	_tzset (void);
