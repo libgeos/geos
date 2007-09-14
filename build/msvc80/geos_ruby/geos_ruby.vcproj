@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="msvcrt-ruby18.lib"
-				OutputFile="$(ConfigurationName)\geos.dll"
+				OutputFile="C:\Development\ruby\lib\ruby\site_ruby\1.8\i386-msvcrt\geos.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\Development\ruby\lib"
 				GenerateDebugInformation="true"

@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\geosd_c.dll"
+				OutputFile="C:\Development\msys\local\bin\geosd_c.dll"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -195,7 +195,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
-						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 						Outputs="$(InputDir)$(InputName)"
 					/>
 				</FileConfiguration>
@@ -205,7 +205,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
-						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 						Outputs="$(InputDir)$(InputName)"
 					/>
 				</FileConfiguration>
