@@ -257,7 +257,7 @@ WKBReader::readGeometry()
 	cout<<"WKB hasSRID: "<<hasZ<<endl;
 #endif
 
-	int SRID = -1;
+	int SRID = 0;
 	if (hasSRID) SRID = dis.readInt(); // read SRID
 
 
