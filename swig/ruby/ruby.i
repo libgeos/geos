@@ -16,10 +16,15 @@
 %rename("srid=") GeosGeometry::setSRID;
 %rename("envelope") GeosGeometry::getEnvelope;
 
-%rename("wkb_output_dimensions") getWKBOutputDims;
-%rename("wkb_output_dimensions=") setWKBOutputDims;
-%rename("wkb_byte_order") getWKBByteOrder;
-%rename("wkb_byte_order=") setWKBByteOrder;
+%rename("read_hex") GeosWkbReader::readHEX;
+%rename("write_hex") GeosWkbWriter::writeHEX;
+%rename("output_dimensions") GeosWkbWriter::getOutputDimension;
+%rename("output_dimensions=") GeosWkbWriter::setOutputDimension;
+%rename("byte_order") GeosWkbWriter::getByteOrder;
+%rename("byte_order=") GeosWkbWriter::setByteOrder;
+%rename("include_srid") GeosWkbWriter::getIncludeSRID;
+%rename("include_srid=") GeosWkbWriter::setIncludeSRID;
+
 %rename("__len__") GeosCoordinateSequence::getSize;
 
 %rename("coord_seq") GeosPoint::getCoordSeq;

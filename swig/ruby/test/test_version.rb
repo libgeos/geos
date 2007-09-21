@@ -6,7 +6,7 @@ require 'geos'
 
 class TestVersion < Test::Unit::TestCase
   def test_versions
-    assert_equal("3.0.0-CAPI-1.0.0", Geos::version)
+    assert_equal("3.0.0rc4-CAPI-1.3.3", Geos::version)
     assert_equal(3, Geos::GEOS_VERSION_MAJOR)
     assert_equal(0, Geos::GEOS_VERSION_MINOR)
     assert_equal("3.0.0rc4", Geos::GEOS_VERSION)

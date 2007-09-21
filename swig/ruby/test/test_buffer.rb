@@ -21,14 +21,19 @@ class TestBuffer < Test::Unit::TestCase
       result = geom.buffer(tolerance, 8)
       result.normalize
       
+      writer = Geos::WktWriter.new
+      geom_wkt = writer.write(geom)
+      expected_wkt = writer.write(expected)
+      result_wkt = writer.write(result)
+      
       assert(expected.eql_exact?(result, 0.00000000001),
              "Buffer:\n" + 
              "  Case: #{test_case.case_id}\n" + 
              "  Test: #{test_case.test_id}\n" + 
-             "  Geom: #{Geos.geom_to_wkt(geom)}\n" + 
+             "  Geom: #{geom_wkt}\n" + 
              "  Tolerance: #{tolerance}\n" + 
-             "  Expected: #{Geos.geom_to_wkt(expected)}.\n" + 
-             "    Actual: #{Geos.geom_to_wkt(result)}")
+             "  Expected: #{expected_wkt}.\n" + 
+             "    Actual: #{result_wkt}")
     end
   end    
 end

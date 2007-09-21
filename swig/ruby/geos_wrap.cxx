@@ -1555,12 +1555,16 @@ SWIG_Ruby_SetModule(swig_module_info *pointer)
 #define SWIGTYPE_p_GeosMultiPolygon swig_types[8]
 #define SWIGTYPE_p_GeosPoint swig_types[9]
 #define SWIGTYPE_p_GeosPolygon swig_types[10]
-#define SWIGTYPE_p_char swig_types[11]
-#define SWIGTYPE_p_p_GeosLinearRing swig_types[12]
-#define SWIGTYPE_p_size_t swig_types[13]
-#define SWIGTYPE_p_unsigned_char swig_types[14]
-static swig_type_info *swig_types[16];
-static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
+#define SWIGTYPE_p_GeosWkbReader swig_types[11]
+#define SWIGTYPE_p_GeosWkbWriter swig_types[12]
+#define SWIGTYPE_p_GeosWktReader swig_types[13]
+#define SWIGTYPE_p_GeosWktWriter swig_types[14]
+#define SWIGTYPE_p_char swig_types[15]
+#define SWIGTYPE_p_p_GeosLinearRing swig_types[16]
+#define SWIGTYPE_p_size_t swig_types[17]
+#define SWIGTYPE_p_unsigned_char swig_types[18]
+static swig_type_info *swig_types[20];
+static swig_module_info swig_module = {swig_types, 19, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1891,6 +1895,11 @@ typedef void GeosMultiPoint;
 typedef void GeosMultiLineString;
 typedef void GeosMultiLinearRing;
 typedef void GeosMultiPolygon;
+
+typedef void GeosWktReader;
+typedef void GeosWktWriter;
+typedef void GeosWkbReader;
+typedef void GeosWkbWriter;
 
 
 bool checkBoolResult(char result)
@@ -2326,78 +2335,113 @@ GeosGeometry *createPolygon(GeosLinearRing *shell, GeosLinearRing **holes, size_
 }
 
 
+SWIGINTERN GeosWktReader *new_GeosWktReader(){
+        return GEOSWKTReader_create();
+    }
+SWIGINTERN GeosGeometry *GeosWktReader_read(GeosWktReader *self,char const *wkt){
+        if(wkt == NULL)
+            throw std::runtime_error("Trying to create geometry from a NULL string");
+            
+        GEOSWKTReader *reader = (GEOSWKTReader*) self;
+        GEOSGeometry *geom = GEOSWKTReader_read(reader, wkt);
 
-GeosGeometry* geomFromWKT(const char *wkt)
+        if(geom == NULL)
+            throw std::runtime_error(message);
+
+        return (GeosGeometry*) geom;
+    }
+SWIGINTERN GeosWktWriter *new_GeosWktWriter(){
+        return GEOSWKTWriter_create();
+    }
+SWIGINTERN char *GeosWktWriter_write(GeosWktWriter *self,GeosGeometry const *g){
+        GEOSWKTWriter *writer = (GEOSWKTWriter*) self;
+        GEOSGeom geom = (GEOSGeom) g;
+        return GEOSWKTWriter_write(writer, geom);
+    }
+SWIGINTERN GeosWkbReader *new_GeosWkbReader(){
+        return GEOSWKBReader_create();
+    }
+SWIGINTERN GeosGeometry *GeosWkbReader_read(GeosWkbReader *self,unsigned char const *wkb,size_t size){
+        if(wkb == NULL)
+          throw std::runtime_error("Trying to create geometry from a NULL string");
+         
+        GEOSWKBReader *reader = (GEOSWKBReader*) self;
+        GEOSGeometry *geom = GEOSWKBReader_read(reader, wkb, size);
+       
+        if(geom == NULL)
+          throw std::runtime_error(message);
+
+        return (GeosGeometry*) geom;
+    }
+SWIGINTERN GeosGeometry *GeosWkbReader_readHEX(GeosWkbReader *self,unsigned char const *wkb,size_t size){
+        if(wkb == NULL)
+          throw std::runtime_error("Trying to create geometry from a NULL string");
+         
+        GEOSWKBReader *reader = (GEOSWKBReader*) self;
+        GEOSGeometry *geom = GEOSWKBReader_readHEX(reader, wkb, size);
+       
+        if(geom == NULL)
+          throw std::runtime_error(message);
+
+        return (GeosGeometry*) geom;
+    }
+SWIGINTERN GeosWkbWriter *new_GeosWkbWriter(){
+        return GEOSWKBWriter_create();
+    }
+SWIGINTERN int GeosWkbWriter_getOutputDimension(GeosWkbWriter *self){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        return GEOSWKBWriter_getOutputDimension(writer);
+    }
+SWIGINTERN void GeosWkbWriter_setOutputDimension(GeosWkbWriter *self,int newDimension){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        GEOSWKBWriter_setOutputDimension(writer, newDimension);
+    }
+SWIGINTERN int GeosWkbWriter_getByteOrder(GeosWkbWriter *self){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        return GEOSWKBWriter_getByteOrder(writer);
+    }
+SWIGINTERN void GeosWkbWriter_setByteOrder(GeosWkbWriter *self,int newByteOrder){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        return GEOSWKBWriter_setByteOrder(writer, newByteOrder);
+    }
+SWIGINTERN bool GeosWkbWriter_getIncludeSRID(GeosWkbWriter *self){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        return GEOSWKBWriter_getIncludeSRID(writer);
+    }
+
+SWIGINTERN int
+SWIG_AsVal_bool (VALUE obj, bool *val)
 {
-    if(wkt == NULL)
-        throw std::runtime_error("Trying to create geometry from a NULL string");
-        
-    GEOSGeom geom = GEOSGeomFromWKT(wkt);
-
-    if(geom == NULL)
-        throw std::runtime_error(message);
-
-    return (GeosGeometry*) geom;
+  if (obj == Qtrue) {
+    if (val) *val = true;
+    return SWIG_OK;
+  } else if (obj == Qfalse) {
+    if (val) *val = false;
+    return SWIG_OK;
+  } else {
+    int res = 0;
+    if (SWIG_AsVal_int (obj, &res) == SWIG_OK) {    
+      if (val) *val = res ? true : false;
+      return SWIG_OK;
+    }
+  }  
+  return SWIG_TypeError;
 }
 
-char* geomToWKT(const GeosGeometry* g)
-{
-    GEOSGeom geom = (GEOSGeom) g;
-    return GEOSGeomToWKT(geom);
-}
-
-int getWKBOutputDims()
-{
-    return GEOS_getWKBOutputDims();
-}
-
-int setWKBOutputDims(int newDims)
-{
-    return GEOS_setWKBOutputDims(newDims);
-}
-
-int getWKBByteOrder()
-{
-    return GEOS_getWKBByteOrder();
-}
-
-int setWKBByteOrder(int byteOrder)
-{
-    return GEOS_setWKBByteOrder(byteOrder);
-}
-
-GeosGeometry* geomFromWKB(const unsigned char *wkb, size_t size)
-{
-    GEOSGeom geom = GEOSGeomFromWKB_buf(wkb, size);
-    if(geom == NULL)
-        throw std::runtime_error(message);
-
-    return (GeosGeometry*) geom;
-}
-
-unsigned char *geomToWKB(const GeosGeometry* g, size_t *size)
-{
-    GEOSGeom geom = (GEOSGeom) g;
-    return GEOSGeomToWKB_buf(geom, size);
-}
-
-/* use wkb parameter instead of hex so we can reuse the typemap above. */
-GeosGeometry* geomFromHEX(const unsigned char *wkb, size_t size)
-{
-    GEOSGeom geom = GEOSGeomFromHEX_buf(wkb, size);
-
-    if(geom == NULL)
-        throw std::runtime_error(message);
-
-    return (GeosGeometry*) geom;
-}
-
-unsigned char *geomToHEX(const GeosGeometry* g, size_t *size)
-{
-    GEOSGeom geom = (GEOSGeom) g;
-    return GEOSGeomToHEX_buf(geom, size);
-}
-
+SWIGINTERN void GeosWkbWriter_setIncludeSRID(GeosWkbWriter *self,bool newIncludeSRID){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        return GEOSWKBWriter_setIncludeSRID(writer, newIncludeSRID);
+    }
+SWIGINTERN unsigned char *GeosWkbWriter_write(GeosWkbWriter *self,GeosGeometry const *g,size_t *size){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        GEOSGeom geom = (GEOSGeom) g;
+        return GEOSWKBWriter_write(writer, geom, size);
+    }
+SWIGINTERN unsigned char *GeosWkbWriter_writeHEX(GeosWkbWriter *self,GeosGeometry const *g,size_t *size){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        GEOSGeom geom = (GEOSGeom) g;
+        return GEOSWKBWriter_writeHEX(writer, geom, size);
+    }
 SWIGINTERN VALUE
 _wrap_version(int argc, VALUE *argv, VALUE self) {
   char *result = 0 ;
@@ -5753,27 +5797,87 @@ fail:
 }
 
 
+swig_class cWktReader;
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_geom_from_wkt(int argc, VALUE *argv, VALUE self) {
-  char *arg1 = (char *) 0 ;
+_wrap_WktReader_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_WktReader_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_GeosWktReader);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_WktReader(int argc, VALUE *argv, VALUE self) {
+  GeosWktReader *result = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try
+    {
+      result = (GeosWktReader *)new_GeosWktReader();DATA_PTR(self) = result;
+      
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void delete_GeosWktReader(GeosWktReader *self){
+        GEOSWKTReader *reader = (GEOSWKTReader*) self;
+        GEOSWKTReader_destroy(reader);
+    }
+SWIGINTERN void
+free_GeosWktReader(GeosWktReader *arg1) {
+    delete_GeosWktReader(arg1);
+}
+
+SWIGINTERN VALUE
+_wrap_WktReader_read(int argc, VALUE *argv, VALUE self) {
+  GeosWktReader *arg1 = (GeosWktReader *) 0 ;
+  char *arg2 = (char *) 0 ;
   GeosGeometry *result = 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_AsCharPtrAndSize(argv[0], &buf1, NULL, &alloc1);
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWktReader, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "geomFromWKT" "', argument " "1"" of type '" "char const *""'");
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "read" "', argument " "1"" of type '" "GeosWktReader *""'"); 
   }
-  arg1 = reinterpret_cast< char * >(buf1);
+  arg1 = reinterpret_cast< GeosWktReader * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(argv[0], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "read" "', argument " "2"" of type '" "char const *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
   {
     try
     {
-      result = (GeosGeometry *)geomFromWKT((char const *)arg1);
+      result = (GeosGeometry *)GeosWktReader_read(arg1,(char const *)arg2);
     }
     catch (const std::exception& e)
     {
@@ -5817,34 +5921,94 @@ _wrap_geom_from_wkt(int argc, VALUE *argv, VALUE self) {
       break;
     }
   }
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return vresult;
 fail:
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
   return Qnil;
 }
 
 
+swig_class cWktWriter;
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_geom_to_wkt(int argc, VALUE *argv, VALUE self) {
-  GeosGeometry *arg1 = (GeosGeometry *) 0 ;
+_wrap_WktWriter_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_WktWriter_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_GeosWktWriter);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_WktWriter(int argc, VALUE *argv, VALUE self) {
+  GeosWktWriter *result = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try
+    {
+      result = (GeosWktWriter *)new_GeosWktWriter();DATA_PTR(self) = result;
+      
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void delete_GeosWktWriter(GeosWktWriter *self){
+        GEOSWKTWriter *writer = (GEOSWKTWriter*) self;
+        GEOSWKTWriter_destroy(writer);
+    }
+SWIGINTERN void
+free_GeosWktWriter(GeosWktWriter *arg1) {
+    delete_GeosWktWriter(arg1);
+}
+
+SWIGINTERN VALUE
+_wrap_WktWriter_write(int argc, VALUE *argv, VALUE self) {
+  GeosWktWriter *arg1 = (GeosWktWriter *) 0 ;
+  GeosGeometry *arg2 = (GeosGeometry *) 0 ;
   char *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWktWriter, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "geomToWKT" "', argument " "1"" of type '" "GeosGeometry const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "write" "', argument " "1"" of type '" "GeosWktWriter *""'"); 
   }
-  arg1 = reinterpret_cast< GeosGeometry * >(argp1);
+  arg1 = reinterpret_cast< GeosWktWriter * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "write" "', argument " "2"" of type '" "GeosGeometry const *""'"); 
+  }
+  arg2 = reinterpret_cast< GeosGeometry * >(argp2);
   {
     try
     {
-      result = (char *)geomToWKT((GeosGeometry const *)arg1);
+      result = (char *)GeosWktWriter_write(arg1,(GeosGeometry const *)arg2);
     }
     catch (const std::exception& e)
     {
@@ -5858,10 +6022,28 @@ fail:
 }
 
 
+swig_class cWkbReader;
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_wkb_output_dimensions(int argc, VALUE *argv, VALUE self) {
-  int result;
-  VALUE vresult = Qnil;
+_wrap_WkbReader_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_WkbReader_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_GeosWkbReader);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_WkbReader(int argc, VALUE *argv, VALUE self) {
+  GeosWkbReader *result = 0 ;
   
   if ((argc < 0) || (argc > 0)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
@@ -5869,133 +6051,59 @@ _wrap_wkb_output_dimensions(int argc, VALUE *argv, VALUE self) {
   {
     try
     {
-      result = (int)getWKBOutputDims();
+      result = (GeosWkbReader *)new_GeosWkbReader();DATA_PTR(self) = result;
+      
     }
     catch (const std::exception& e)
     {
       SWIG_exception(SWIG_RuntimeError, e.what());
     }
   }
-  vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
+  return self;
 fail:
   return Qnil;
 }
 
 
-SWIGINTERN VALUE
-_wrap_wkb_output_dimensionse___(int argc, VALUE *argv, VALUE self) {
-  int arg1 ;
-  int result;
-  int val1 ;
-  int ecode1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "setWKBOutputDims" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = static_cast< int >(val1);
-  {
-    try
-    {
-      result = (int)setWKBOutputDims(arg1);
+SWIGINTERN void delete_GeosWkbReader(GeosWkbReader *self){
+        GEOSWKBReader *reader = (GEOSWKBReader*) self;
+        GEOSWKBReader_destroy(reader);
     }
-    catch (const std::exception& e)
-    {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
-fail:
-  return Qnil;
+SWIGINTERN void
+free_GeosWkbReader(GeosWkbReader *arg1) {
+    delete_GeosWkbReader(arg1);
 }
 
-
 SWIGINTERN VALUE
-_wrap_wkb_byte_order(int argc, VALUE *argv, VALUE self) {
-  int result;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 0) || (argc > 0)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
-  }
-  {
-    try
-    {
-      result = (int)getWKBByteOrder();
-    }
-    catch (const std::exception& e)
-    {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_wkb_byte_ordere___(int argc, VALUE *argv, VALUE self) {
-  int arg1 ;
-  int result;
-  int val1 ;
-  int ecode1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  ecode1 = SWIG_AsVal_int(argv[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "setWKBByteOrder" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = static_cast< int >(val1);
-  {
-    try
-    {
-      result = (int)setWKBByteOrder(arg1);
-    }
-    catch (const std::exception& e)
-    {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  vresult = SWIG_From_int(static_cast< int >(result));
-  return vresult;
-fail:
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_geom_from_wkb(int argc, VALUE *argv, VALUE self) {
-  unsigned char *arg1 = (unsigned char *) 0 ;
-  size_t arg2 ;
+_wrap_WkbReader_read(int argc, VALUE *argv, VALUE self) {
+  GeosWkbReader *arg1 = (GeosWkbReader *) 0 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
+  size_t arg3 ;
   GeosGeometry *result = 0 ;
-  int alloc1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int alloc2 = 0 ;
   VALUE vresult = Qnil;
   
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbReader, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "read" "', argument " "1"" of type '" "GeosWkbReader *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbReader * >(argp1);
   {
-    /* %typemap(in) (const unsigned char* wkb, size_t size) (int alloc1 = 0) */
-    if (SWIG_AsCharPtrAndSize(argv[0], (char**)&arg1, &arg2, &alloc1) != SWIG_OK)
+    /* %typemap(in) (const unsigned char* wkb, size_t size) (int alloc2 = 0) */
+    if (SWIG_AsCharPtrAndSize(argv[0], (char**)&arg2, &arg3, &alloc2) != SWIG_OK)
     SWIG_exception(SWIG_RuntimeError, "Expecting a string");
     /* Don't want to include last null character! */
-    arg2--;
+    arg3--;
   }
   {
     try
     {
-      result = (GeosGeometry *)geomFromWKB((unsigned char const *)arg1,arg2);
+      result = (GeosGeometry *)GeosWkbReader_read(arg1,(unsigned char const *)arg2,arg3);
     }
     catch (const std::exception& e)
     {
@@ -6046,80 +6154,35 @@ fail:
 
 
 SWIGINTERN VALUE
-_wrap_geom_to_wkb(int argc, VALUE *argv, VALUE self) {
-  GeosGeometry *arg1 = (GeosGeometry *) 0 ;
-  size_t *arg2 = (size_t *) 0 ;
-  unsigned char *result = 0 ;
+_wrap_WkbReader_read_hex(int argc, VALUE *argv, VALUE self) {
+  GeosWkbReader *arg1 = (GeosWkbReader *) 0 ;
+  unsigned char *arg2 = (unsigned char *) 0 ;
+  size_t arg3 ;
+  GeosGeometry *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t temp2 = 0 ;
+  int alloc2 = 0 ;
   VALUE vresult = Qnil;
   
-  {
-    /* %typemap(in, numinputs=0) size_t *size (size_t temp2 = 0) */
-    arg2 = &temp2;
-  }
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbReader, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "geomToWKB" "', argument " "1"" of type '" "GeosGeometry const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "readHEX" "', argument " "1"" of type '" "GeosWkbReader *""'"); 
   }
-  arg1 = reinterpret_cast< GeosGeometry * >(argp1);
+  arg1 = reinterpret_cast< GeosWkbReader * >(argp1);
   {
-    try
-    {
-      result = (unsigned char *)geomToWKB((GeosGeometry const *)arg1,arg2);
-    }
-    catch (const std::exception& e)
-    {
-      SWIG_exception(SWIG_RuntimeError, e.what());
-    }
-  }
-  {
-    /* %typemap(out) unsigned char* */
-  }
-  {
-    /* %typemap(argout) size_t *size */
-    vresult = SWIG_FromCharPtrAndSize((const char*)result, *arg2);
-  }
-  {
-    /* %typemap(freearg) size_t *size */
-    std::free(result);
-  }
-  return vresult;
-fail:
-  {
-    /* %typemap(freearg) size_t *size */
-    std::free(result);
-  }
-  return Qnil;
-}
-
-
-SWIGINTERN VALUE
-_wrap_geom_from_hex(int argc, VALUE *argv, VALUE self) {
-  unsigned char *arg1 = (unsigned char *) 0 ;
-  size_t arg2 ;
-  GeosGeometry *result = 0 ;
-  int alloc1 = 0 ;
-  VALUE vresult = Qnil;
-  
-  if ((argc < 1) || (argc > 1)) {
-    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
-  }
-  {
-    /* %typemap(in) (const unsigned char* wkb, size_t size) (int alloc1 = 0) */
-    if (SWIG_AsCharPtrAndSize(argv[0], (char**)&arg1, &arg2, &alloc1) != SWIG_OK)
+    /* %typemap(in) (const unsigned char* wkb, size_t size) (int alloc2 = 0) */
+    if (SWIG_AsCharPtrAndSize(argv[0], (char**)&arg2, &arg3, &alloc2) != SWIG_OK)
     SWIG_exception(SWIG_RuntimeError, "Expecting a string");
     /* Don't want to include last null character! */
-    arg2--;
+    arg3--;
   }
   {
     try
     {
-      result = (GeosGeometry *)geomFromHEX((unsigned char const *)arg1,arg2);
+      result = (GeosGeometry *)GeosWkbReader_readHEX(arg1,(unsigned char const *)arg2,arg3);
     }
     catch (const std::exception& e)
     {
@@ -6169,32 +6232,305 @@ fail:
 }
 
 
+swig_class cWkbWriter;
+
+#ifdef HAVE_RB_DEFINE_ALLOC_FUNC
 SWIGINTERN VALUE
-_wrap_geom_to_hex(int argc, VALUE *argv, VALUE self) {
-  GeosGeometry *arg1 = (GeosGeometry *) 0 ;
-  size_t *arg2 = (size_t *) 0 ;
+_wrap_WkbWriter_allocate(VALUE self) {
+#else
+  SWIGINTERN VALUE
+  _wrap_WkbWriter_allocate(int argc, VALUE *argv, VALUE self) {
+#endif
+    
+    
+    VALUE vresult = SWIG_NewClassInstance(self, SWIGTYPE_p_GeosWkbWriter);
+#ifndef HAVE_RB_DEFINE_ALLOC_FUNC
+    rb_obj_call_init(vresult, argc, argv);
+#endif
+    return vresult;
+  }
+  
+
+SWIGINTERN VALUE
+_wrap_new_WkbWriter(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *result = 0 ;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  {
+    try
+    {
+      result = (GeosWkbWriter *)new_GeosWkbWriter();DATA_PTR(self) = result;
+      
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return self;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN void delete_GeosWkbWriter(GeosWkbWriter *self){
+        GEOSWKBWriter *writer = (GEOSWKBWriter*) self;
+        GEOSWKBWriter_destroy(writer);
+    }
+SWIGINTERN void
+free_GeosWkbWriter(GeosWkbWriter *arg1) {
+    delete_GeosWkbWriter(arg1);
+}
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_output_dimensions(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "getOutputDimension" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  {
+    try
+    {
+      result = (int)GeosWkbWriter_getOutputDimension(arg1);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_int(static_cast< int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_output_dimensionse___(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "setOutputDimension" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setOutputDimension" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    try
+    {
+      GeosWkbWriter_setOutputDimension(arg1,arg2);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_byte_order(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "getByteOrder" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  {
+    try
+    {
+      result = (int)GeosWkbWriter_getByteOrder(arg1);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_int(static_cast< int >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_byte_ordere___(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "setByteOrder" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  ecode2 = SWIG_AsVal_int(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setByteOrder" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    try
+    {
+      GeosWkbWriter_setByteOrder(arg1,arg2);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_include_srid(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "getIncludeSRID" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  {
+    try
+    {
+      result = (bool)GeosWkbWriter_getIncludeSRID(arg1);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  vresult = SWIG_From_bool(static_cast< bool >(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_include_sride___(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "setIncludeSRID" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  ecode2 = SWIG_AsVal_bool(argv[0], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "setIncludeSRID" "', argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    try
+    {
+      GeosWkbWriter_setIncludeSRID(arg1,arg2);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  return Qnil;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_write(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  GeosGeometry *arg2 = (GeosGeometry *) 0 ;
+  size_t *arg3 = (size_t *) 0 ;
   unsigned char *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t temp2 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  size_t temp3 = 0 ;
   VALUE vresult = Qnil;
   
   {
-    /* %typemap(in, numinputs=0) size_t *size (size_t temp2 = 0) */
-    arg2 = &temp2;
+    /* %typemap(in, numinputs=0) size_t *size (size_t temp3 = 0) */
+    arg3 = &temp3;
   }
   if ((argc < 1) || (argc > 1)) {
     rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
   }
-  res1 = SWIG_ConvertPtr(argv[0], &argp1,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "geomToHEX" "', argument " "1"" of type '" "GeosGeometry const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "write" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
   }
-  arg1 = reinterpret_cast< GeosGeometry * >(argp1);
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "write" "', argument " "2"" of type '" "GeosGeometry const *""'"); 
+  }
+  arg2 = reinterpret_cast< GeosGeometry * >(argp2);
   {
     try
     {
-      result = (unsigned char *)geomToHEX((GeosGeometry const *)arg1,arg2);
+      result = (unsigned char *)GeosWkbWriter_write(arg1,(GeosGeometry const *)arg2,arg3);
     }
     catch (const std::exception& e)
     {
@@ -6206,7 +6542,68 @@ _wrap_geom_to_hex(int argc, VALUE *argv, VALUE self) {
   }
   {
     /* %typemap(argout) size_t *size */
-    vresult = SWIG_FromCharPtrAndSize((const char*)result, *arg2);
+    vresult = SWIG_FromCharPtrAndSize((const char*)result, *arg3);
+  }
+  {
+    /* %typemap(freearg) size_t *size */
+    std::free(result);
+  }
+  return vresult;
+fail:
+  {
+    /* %typemap(freearg) size_t *size */
+    std::free(result);
+  }
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_WkbWriter_write_hex(int argc, VALUE *argv, VALUE self) {
+  GeosWkbWriter *arg1 = (GeosWkbWriter *) 0 ;
+  GeosGeometry *arg2 = (GeosGeometry *) 0 ;
+  size_t *arg3 = (size_t *) 0 ;
+  unsigned char *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  size_t temp3 = 0 ;
+  VALUE vresult = Qnil;
+  
+  {
+    /* %typemap(in, numinputs=0) size_t *size (size_t temp3 = 0) */
+    arg3 = &temp3;
+  }
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  res1 = SWIG_ConvertPtr(self, &argp1,SWIGTYPE_p_GeosWkbWriter, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "writeHEX" "', argument " "1"" of type '" "GeosWkbWriter *""'"); 
+  }
+  arg1 = reinterpret_cast< GeosWkbWriter * >(argp1);
+  res2 = SWIG_ConvertPtr(argv[0], &argp2,SWIGTYPE_p_GeosGeometry, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "writeHEX" "', argument " "2"" of type '" "GeosGeometry const *""'"); 
+  }
+  arg2 = reinterpret_cast< GeosGeometry * >(argp2);
+  {
+    try
+    {
+      result = (unsigned char *)GeosWkbWriter_writeHEX(arg1,(GeosGeometry const *)arg2,arg3);
+    }
+    catch (const std::exception& e)
+    {
+      SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+  }
+  {
+    /* %typemap(out) unsigned char* */
+  }
+  {
+    /* %typemap(argout) size_t *size */
+    vresult = SWIG_FromCharPtrAndSize((const char*)result, *arg3);
   }
   {
     /* %typemap(freearg) size_t *size */
@@ -6275,6 +6672,10 @@ static swig_type_info _swigt__p_GeosMultiPoint = {"_p_GeosMultiPoint", "GeosMult
 static swig_type_info _swigt__p_GeosMultiPolygon = {"_p_GeosMultiPolygon", "GeosMultiPolygon *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_GeosPoint = {"_p_GeosPoint", "GeosPoint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_GeosPolygon = {"_p_GeosPolygon", "GeosPolygon *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_GeosWkbReader = {"_p_GeosWkbReader", "GeosWkbReader *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_GeosWkbWriter = {"_p_GeosWkbWriter", "GeosWkbWriter *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_GeosWktReader = {"_p_GeosWktReader", "GeosWktReader *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_GeosWktWriter = {"_p_GeosWktWriter", "GeosWktWriter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_GeosLinearRing = {"_p_p_GeosLinearRing", "GeosLinearRing **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "size_t *", 0, 0, (void*)0, 0};
@@ -6292,6 +6693,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_GeosMultiPolygon,
   &_swigt__p_GeosPoint,
   &_swigt__p_GeosPolygon,
+  &_swigt__p_GeosWkbReader,
+  &_swigt__p_GeosWkbWriter,
+  &_swigt__p_GeosWktReader,
+  &_swigt__p_GeosWktWriter,
   &_swigt__p_char,
   &_swigt__p_p_GeosLinearRing,
   &_swigt__p_size_t,
@@ -6309,6 +6714,10 @@ static swig_cast_info _swigc__p_GeosMultiPoint[] = {  {&_swigt__p_GeosMultiPoint
 static swig_cast_info _swigc__p_GeosMultiPolygon[] = {  {&_swigt__p_GeosMultiPolygon, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GeosPoint[] = {  {&_swigt__p_GeosPoint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GeosPolygon[] = {  {&_swigt__p_GeosPolygon, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_GeosWkbReader[] = {  {&_swigt__p_GeosWkbReader, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_GeosWkbWriter[] = {  {&_swigt__p_GeosWkbWriter, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_GeosWktReader[] = {  {&_swigt__p_GeosWktReader, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_GeosWktWriter[] = {  {&_swigt__p_GeosWktWriter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_GeosLinearRing[] = {  {&_swigt__p_p_GeosLinearRing, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -6326,6 +6735,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_GeosMultiPolygon,
   _swigc__p_GeosPoint,
   _swigc__p_GeosPolygon,
+  _swigc__p_GeosWkbReader,
+  _swigc__p_GeosWkbWriter,
+  _swigc__p_GeosWktReader,
+  _swigc__p_GeosWktWriter,
   _swigc__p_char,
   _swigc__p_p_GeosLinearRing,
   _swigc__p_size_t,
@@ -6745,15 +7158,49 @@ SWIGEXPORT void Init_geos(void) {
   rb_define_module_function(mGeos, "create_line_string", VALUEFUNC(_wrap_create_line_string), -1);
   rb_define_module_function(mGeos, "create_linear_ring", VALUEFUNC(_wrap_create_linear_ring), -1);
   rb_define_module_function(mGeos, "create_polygon", VALUEFUNC(_wrap_create_polygon), -1);
-  rb_define_module_function(mGeos, "geom_from_wkt", VALUEFUNC(_wrap_geom_from_wkt), -1);
-  rb_define_module_function(mGeos, "geom_to_wkt", VALUEFUNC(_wrap_geom_to_wkt), -1);
-  rb_define_module_function(mGeos, "wkb_output_dimensions", VALUEFUNC(_wrap_wkb_output_dimensions), -1);
-  rb_define_module_function(mGeos, "wkb_output_dimensions=", VALUEFUNC(_wrap_wkb_output_dimensionse___), -1);
-  rb_define_module_function(mGeos, "wkb_byte_order", VALUEFUNC(_wrap_wkb_byte_order), -1);
-  rb_define_module_function(mGeos, "wkb_byte_order=", VALUEFUNC(_wrap_wkb_byte_ordere___), -1);
-  rb_define_module_function(mGeos, "geom_from_wkb", VALUEFUNC(_wrap_geom_from_wkb), -1);
-  rb_define_module_function(mGeos, "geom_to_wkb", VALUEFUNC(_wrap_geom_to_wkb), -1);
-  rb_define_module_function(mGeos, "geom_from_hex", VALUEFUNC(_wrap_geom_from_hex), -1);
-  rb_define_module_function(mGeos, "geom_to_hex", VALUEFUNC(_wrap_geom_to_hex), -1);
+  
+  cWktReader.klass = rb_define_class_under(mGeos, "WktReader", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_GeosWktReader, (void *) &cWktReader);
+  rb_define_alloc_func(cWktReader.klass, _wrap_WktReader_allocate);
+  rb_define_method(cWktReader.klass, "initialize", VALUEFUNC(_wrap_new_WktReader), -1);
+  rb_define_method(cWktReader.klass, "read", VALUEFUNC(_wrap_WktReader_read), -1);
+  cWktReader.mark = 0;
+  cWktReader.destroy = (void (*)(void *)) free_GeosWktReader;
+  cWktReader.trackObjects = 0;
+  
+  cWktWriter.klass = rb_define_class_under(mGeos, "WktWriter", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_GeosWktWriter, (void *) &cWktWriter);
+  rb_define_alloc_func(cWktWriter.klass, _wrap_WktWriter_allocate);
+  rb_define_method(cWktWriter.klass, "initialize", VALUEFUNC(_wrap_new_WktWriter), -1);
+  rb_define_method(cWktWriter.klass, "write", VALUEFUNC(_wrap_WktWriter_write), -1);
+  cWktWriter.mark = 0;
+  cWktWriter.destroy = (void (*)(void *)) free_GeosWktWriter;
+  cWktWriter.trackObjects = 0;
+  
+  cWkbReader.klass = rb_define_class_under(mGeos, "WkbReader", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_GeosWkbReader, (void *) &cWkbReader);
+  rb_define_alloc_func(cWkbReader.klass, _wrap_WkbReader_allocate);
+  rb_define_method(cWkbReader.klass, "initialize", VALUEFUNC(_wrap_new_WkbReader), -1);
+  rb_define_method(cWkbReader.klass, "read", VALUEFUNC(_wrap_WkbReader_read), -1);
+  rb_define_method(cWkbReader.klass, "read_hex", VALUEFUNC(_wrap_WkbReader_read_hex), -1);
+  cWkbReader.mark = 0;
+  cWkbReader.destroy = (void (*)(void *)) free_GeosWkbReader;
+  cWkbReader.trackObjects = 0;
+  
+  cWkbWriter.klass = rb_define_class_under(mGeos, "WkbWriter", rb_cObject);
+  SWIG_TypeClientData(SWIGTYPE_p_GeosWkbWriter, (void *) &cWkbWriter);
+  rb_define_alloc_func(cWkbWriter.klass, _wrap_WkbWriter_allocate);
+  rb_define_method(cWkbWriter.klass, "initialize", VALUEFUNC(_wrap_new_WkbWriter), -1);
+  rb_define_method(cWkbWriter.klass, "output_dimensions", VALUEFUNC(_wrap_WkbWriter_output_dimensions), -1);
+  rb_define_method(cWkbWriter.klass, "output_dimensions=", VALUEFUNC(_wrap_WkbWriter_output_dimensionse___), -1);
+  rb_define_method(cWkbWriter.klass, "byte_order", VALUEFUNC(_wrap_WkbWriter_byte_order), -1);
+  rb_define_method(cWkbWriter.klass, "byte_order=", VALUEFUNC(_wrap_WkbWriter_byte_ordere___), -1);
+  rb_define_method(cWkbWriter.klass, "include_srid", VALUEFUNC(_wrap_WkbWriter_include_srid), -1);
+  rb_define_method(cWkbWriter.klass, "include_srid=", VALUEFUNC(_wrap_WkbWriter_include_sride___), -1);
+  rb_define_method(cWkbWriter.klass, "write", VALUEFUNC(_wrap_WkbWriter_write), -1);
+  rb_define_method(cWkbWriter.klass, "write_hex", VALUEFUNC(_wrap_WkbWriter_write_hex), -1);
+  cWkbWriter.mark = 0;
+  cWkbWriter.destroy = (void (*)(void *)) free_GeosWkbWriter;
+  cWkbWriter.trackObjects = 0;
 }
 

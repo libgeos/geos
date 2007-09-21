@@ -14,14 +14,35 @@ class SridTest < Test::Unit::TestCase
     geom1.srid = 4326
   end
 
-  def test_roundtrip_srid
-    geom1 = Geos.geom_from_wkt("POINT(7 8)")
-    geom1.srid = 4326
-    
-    assert_equal(4326, geom1.srid)
-    hex = Geos.geom_to_hex(geom1)
+  def test_write_srid
+    reader = Geos::WktReader.new
+    geom = reader.read("POINT(7 8)")
+    geom.srid = 4326
 
-    geom2 = Geos.geom_from_hex(hex)
+    # without srid
+    writer = Geos::WkbWriter.new
+    writer.include_srid = false
+    hex = writer.write_hex(geom)
+    assert_equal("01010000000000000000001C400000000000002040", hex)   
+    
+    # with srid
+    writer.include_srid = true
+    hex = writer.write_hex(geom)
+    assert_equal("0101000020E61000000000000000001C400000000000002040", hex)        
+  end
+  
+  def test_roundtrip_srid
+    reader = Geos::WktReader.new
+    geom1 = reader.read("POINT(7 8)")
+    geom1.srid = 4326
+    assert_equal(4326, geom1.srid)
+    
+    writer = Geos::WkbWriter.new
+    writer.include_srid = true
+    hex = writer.write_hex(geom1)
+
+    reader = Geos::WkbReader.new
+    geom2 = reader.read_hex(hex)
     assert_equal(4326, geom2.srid)
   end
   
@@ -29,8 +50,8 @@ class SridTest < Test::Unit::TestCase
     # srid=4326;POINT(7 8)
     xdr = "0101000020E61000000000000000001C400000000000002040"
     
-    Geos::wkb_byte_order = Geos::GEOS_WKB_NDR
-    geom = Geos.geom_from_hex(xdr)
+    reader = Geos::WkbReader.new
+    geom = reader.read_hex(xdr)
     
     assert_equal(7, geom.coord_seq.get_x(0))
     assert_equal(8,geom.coord_seq.get_y(0))

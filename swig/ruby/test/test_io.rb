@@ -7,49 +7,51 @@ require 'geos'
 class TestIo < Test::Unit::TestCase
   
   def check(wkt, ndr_hex_in, xdr_hex_in)
-    geom1 = Geos::geom_from_wkt(wkt)
-    geom2 = Geos::geom_from_hex(ndr_hex_in)
-    geom3 = Geos::geom_from_hex(xdr_hex_in)
+    wkt_reader = Geos::WktReader.new
+    geom1 = wkt_reader.read(wkt)
+    
+    wkb_reader = Geos::WkbReader.new
+    geom2 = wkb_reader.read_hex(ndr_hex_in)
+    geom3 = wkb_reader.read_hex(xdr_hex_in)
   
     assert(geom1.eql?(geom2)) 
     assert(geom1.eql?(geom3))
     assert(geom2.eql?(geom3))
 
-    Geos::wkb_byte_order = Geos::GEOS_WKB_NDR
-    ndr_hex_out = Geos::geom_to_hex(geom1)
+    wkb_writer = Geos::WkbWriter.new
+    wkb_writer.byte_order = Geos::GEOS_WKB_NDR
+    ndr_hex_out = wkb_writer.write_hex(geom1)
     assert_equal(ndr_hex_in, ndr_hex_out)
 
-    Geos::wkb_byte_order = Geos::GEOS_WKB_XDR
-    xdr_hex_out = Geos::geom_to_hex(geom1)
+    wkb_writer.byte_order = Geos::GEOS_WKB_XDR
+    xdr_hex_out = wkb_writer.write_hex(geom1)
     assert_equal(xdr_hex_in, xdr_hex_out)
     geom1
   end
 
   def test_output_dimensions
-    original = Geos::wkb_output_dimensions
-    assert_equal(2, Geos::wkb_output_dimensions)
+    writer = Geos::WkbWriter.new
+    assert_equal(2, writer.output_dimensions)
     
-    Geos::wkb_output_dimensions = 3
-    assert_equal(3, Geos::wkb_output_dimensions)
+    writer.output_dimensions = 3
+    assert_equal(3, writer.output_dimensions)
   end
   
   def test_byte_order
-    original = Geos::wkb_byte_order
+    writer = Geos::WkbWriter.new
+    assert_equal(Geos::GEOS_WKB_NDR, writer.byte_order)
     
-    Geos::wkb_byte_order = Geos::GEOS_WKB_XDR
-    assert_equal(Geos::GEOS_WKB_XDR, Geos::wkb_byte_order)
+    writer.byte_order = Geos::GEOS_WKB_XDR
+    assert_equal(Geos::GEOS_WKB_XDR, writer.byte_order)
 
-    Geos::wkb_byte_order = Geos::GEOS_WKB_NDR
-    assert_equal(Geos::GEOS_WKB_NDR, Geos::wkb_byte_order)
-    
-    Geos::wkb_byte_order = original
-    assert_equal(original, Geos::wkb_byte_order)
+    writer.byte_order = Geos::GEOS_WKB_NDR
+    assert_equal(Geos::GEOS_WKB_NDR, writer.byte_order)
   end
   
   def test_point
     wkt = "POINT(0 0)"
-    ndr = "0101000080000000000000000000000000000000000000000000000000"
-    xdr = "0080000001000000000000000000000000000000000000000000000000"
+    ndr = "010100000000000000000000000000000000000000"
+    xdr = "000000000100000000000000000000000000000000"
     
     geom = check(wkt, ndr, xdr)
     assert_instance_of(Geos::Point, geom)
@@ -70,8 +72,8 @@ class TestIo < Test::Unit::TestCase
 
   def test_polygon
     wkt = "POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(2 2, 2 6, 6 4, 2 2))"
-    ndr = "0103000080020000000500000000000000000000000000000000000000000000000000000000000000000024400000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000002440000000000000000000000000000000000000000000000000000000000000000004000000000000000000004000000000000000400000000000000040000000000000004000000000000018400000000000000040000000000000184000000000000010400000000000001840000000000000004000000000000000400000000000000040"
-    xdr = "0080000003000000020000000500000000000000000000000000000000000000000000000040240000000000000000000000000000402400000000000040240000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000000000000000000000000000000000000000004400000000000000040000000000000004000000000000000400000000000000040180000000000004000000000000000401800000000000040100000000000004018000000000000400000000000000040000000000000004000000000000000"
+    ndr = "0103000000020000000500000000000000000000000000000000000000000000000000244000000000000000000000000000002440000000000000244000000000000000000000000000002440000000000000000000000000000000000400000000000000000000400000000000000040000000000000004000000000000018400000000000001840000000000000104000000000000000400000000000000040"
+    xdr = "0000000003000000020000000500000000000000000000000000000000402400000000000000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000000000440000000000000004000000000000000400000000000000040180000000000004018000000000000401000000000000040000000000000004000000000000000"
     
     geom = check(wkt, ndr, xdr)
     assert_instance_of(Geos::Polygon, geom)
@@ -127,19 +129,22 @@ class TestIo < Test::Unit::TestCase
   
   def test_wkt_invalid
     assert_raise(RuntimeError) do
-      geom = Geos::geom_from_wkt("invalid")
+      reader = Geos::WktReader.new
+      geom = reader.read("invalid")
     end
   end
   
   def test_wkb_invalid
     assert_raise(RuntimeError) do
-      geom = Geos::geom_from_wkb("invalid")
+      reader = Geos::WkbReader.new
+      geom = reader.read("invalid")
     end
   end
   
   def test_hex_invalid
     assert_raise(RuntimeError) do
-      geom = Geos::geom_from_hex("invalid")
+      reader = Geos::WkbReader.new
+      geom = reader.read_hex("invalid")
     end
   end
 end
