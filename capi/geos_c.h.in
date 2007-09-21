@@ -138,7 +138,8 @@ extern const char GEOS_DLL *GEOSversion();
 
 /************************************************************************
  *
- * Geometry Input and Output functions, return NULL on exception.
+ * NOTE - These functions are DEPRECATED.  Please use the new Reader and
+ * writer APIS!
  *
  ***********************************************************************/
 
@@ -399,6 +400,67 @@ extern int GEOS_DLL GEOSArea(const GEOSGeometry* g1, double *area);
 extern int GEOS_DLL GEOSLength(const GEOSGeometry* g1, double *length);
 extern int GEOS_DLL GEOSDistance(const GEOSGeometry* g1, const GEOSGeometry* g2,
 	double *dist);
+
+
+
+/************************************************************************
+ *
+ * Reader and Writer APIs
+ *
+ ***********************************************************************/
+
+typedef struct GEOSWKTReader_t GEOSWKTReader;
+typedef struct GEOSWKTWriter_t GEOSWKTWriter;
+typedef struct GEOSWKBReader_t GEOSWKBReader;
+typedef struct GEOSWKBWriter_t GEOSWKBWriter;
+
+
+/* WKT Reader */
+extern GEOSWKTReader GEOS_DLL *GEOSWKTReader_create();
+extern void GEOS_DLL GEOSWKTReader_destroy(GEOSWKTReader* reader);
+extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read(GEOSWKTReader* reader, const char *wkt);
+
+/* WKT Writer */
+extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create();
+extern void GEOS_DLL GEOSWKTWriter_destroy(GEOSWKTWriter* writer);
+extern char GEOS_DLL *GEOSWKTWriter_write(GEOSWKTWriter* reader, const GEOSGeometry* g);
+
+/* WKB Reader */
+extern GEOSWKBReader GEOS_DLL *GEOSWKBReader_create();
+extern void GEOS_DLL GEOSWKBReader_destroy(GEOSWKBReader* reader);
+extern GEOSGeometry GEOS_DLL *GEOSWKBReader_read(GEOSWKBReader* reader, const unsigned char *wkb, size_t size);
+extern GEOSGeometry GEOS_DLL *GEOSWKBReader_readHEX(GEOSWKBReader* reader, const unsigned char *hex, size_t size);
+
+/* WKB Writer */
+extern GEOSWKBWriter GEOS_DLL *GEOSWKBWriter_create();
+extern void GEOS_DLL GEOSWKBWriter_destroy(GEOSWKBWriter* writer);
+
+/* The owner owns the results for these two methods! */
+extern unsigned char GEOS_DLL *GEOSWKBWriter_write(GEOSWKBWriter* writer, const GEOSGeometry* g, size_t *size);
+extern unsigned char GEOS_DLL *GEOSWKBWriter_writeHEX(GEOSWKBWriter* writer, const GEOSGeometry* g, size_t *size);
+
+/* 
+ * Specify whether output WKB should be 2d or 3d.
+ * Return previously set number of dimensions.
+ */
+extern int GEOS_DLL GEOSWKBWriter_getOutputDimension(const GEOSWKBWriter* writer);
+extern void GEOS_DLL GEOSWKBWriter_setOutputDimension(GEOSWKBWriter* writer, int newDimension);
+
+/*
+ * Specify whether the WKB byte order is big or little endian. 
+ * The return value is the previous byte order.
+ */
+extern int GEOS_DLL GEOSWKBWriter_getByteOrder(const GEOSWKBWriter* writer);
+extern void GEOS_DLL GEOSWKBWriter_setByteOrder(GEOSWKBWriter* writer, int byteOrder);
+
+/*
+ * Specify whether SRID values should be output. 
+ */
+extern char GEOS_DLL GEOSWKBWriter_getIncludeSRID(const GEOSWKBWriter* writer);
+extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char writeSRID);
+
+
+
 
 #ifdef __cplusplus
 } // extern "C"

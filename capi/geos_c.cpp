@@ -30,6 +30,7 @@
 #include <geos/geom/IntersectionMatrix.h> 
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
@@ -53,6 +54,11 @@
 // Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSWKTReader_t geos::io::WKTReader
+#define GEOSWKTWriter_t geos::io::WKTWriter
+#define GEOSWKBReader_t geos::io::WKBReader
+#define GEOSWKBWriter_t geos::io::WKBWriter
+
 #include "geos_c.h"
 
 /// Define this if you want operations triggering Exceptions to
@@ -72,6 +78,11 @@ using geos::geom::LineString;
 using geos::geom::Polygon;
 using geos::geom::CoordinateSequence;
 using geos::geom::GeometryFactory;
+
+using geos::io::WKTReader;
+using geos::io::WKTWriter;
+using geos::io::WKBReader;
+using geos::io::WKBWriter;
 
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
@@ -1857,5 +1868,417 @@ GEOSTopologyPreserveSimplify(const Geometry *g1, double tolerance)
 		return NULL;
 	}
 }
+
+
+/* WKT Reader */
+WKTReader *
+GEOSWKTReader_create()
+{
+	using geos::io::WKTReader;
+	try
+	{
+		return new WKTReader(geomFactory);
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+void
+GEOSWKTReader_destroy(WKTReader *reader)
+{
+	try
+	{
+		delete reader;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+
+Geometry*
+GEOSWKTReader_read(WKTReader *reader, const char *wkt)
+{
+	try
+	{
+		const std::string wktstring = std::string(wkt);
+		Geometry *g = reader->read(wktstring);
+		return g;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+/* WKT Writer */
+WKTWriter *
+GEOSWKTWriter_create()
+{
+	using geos::io::WKTWriter;
+	try
+	{
+		return new WKTWriter();
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+void
+GEOSWKTWriter_destroy(WKTWriter *Writer)
+{
+	try
+	{
+		delete Writer;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+
+char*
+GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
+{
+	try
+	{
+		std::string s = writer->write(geom);
+
+		char *result;
+		result = (char*) std::malloc( s.length() + 1);
+		std::strcpy(result, s.c_str() );
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+/* WKB Reader */
+WKBReader *
+GEOSWKBReader_create()
+{
+	using geos::io::WKBReader;
+	try
+	{
+		return new WKBReader(*geomFactory);
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+void
+GEOSWKBReader_destroy(WKBReader *reader)
+{
+	try
+	{
+		delete reader;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+
+Geometry*
+GEOSWKBReader_read(WKBReader *reader, const unsigned char *wkb, size_t size)
+{
+	try
+	{
+		std::string wkbstring = std::string((const char*)wkb, size); // make it binary !
+		std::istringstream s(std::ios_base::binary);
+		s.str(wkbstring);
+
+		s.seekg(0, std::ios::beg); // rewind reader pointer
+		Geometry *g = reader->read(s);
+		return g;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+Geometry*
+GEOSWKBReader_readHEX(WKBReader *reader, const unsigned char *hex, size_t size)
+{
+	try
+	{
+		std::string hexstring = std::string((const char*)hex, size); 
+		std::istringstream s(std::ios_base::binary);
+		s.str(hexstring);
+
+		s.seekg(0, std::ios::beg); // rewind reader pointer
+		Geometry *g = reader->readHEX(s);
+		return g;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+/* WKB Writer */
+WKBWriter *
+GEOSWKBWriter_create()
+{
+	using geos::io::WKBWriter;
+	try
+	{
+		return new WKBWriter();
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+void
+GEOSWKBWriter_destroy(WKBWriter *Writer)
+{
+	try
+	{
+		delete Writer;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+
+/* The owner owns the result */
+unsigned char*
+GEOSWKBWriter_write(WKBWriter *writer, const Geometry *geom, size_t *size)
+{
+	try
+	{
+		std::ostringstream s(std::ios_base::binary);
+		writer->write(*geom, s);
+		std::string wkbstring = s.str();
+		size_t len = wkbstring.length();
+
+		unsigned char *result;
+		result = (unsigned char*) std::malloc(len);
+		memcpy(result, wkbstring.c_str(), len);
+		*size = len;
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+/* The owner owns the result */
+unsigned char*
+GEOSWKBWriter_writeHEX(WKBWriter *writer, const Geometry *geom, size_t *size)
+{
+	try
+	{
+		std::ostringstream s(std::ios_base::binary);
+		writer->writeHEX(*geom, s);
+		std::string wkbstring = s.str();
+		size_t len = wkbstring.length();
+
+		unsigned char *result;
+		result = (unsigned char*) std::malloc(len);
+		memcpy(result, wkbstring.c_str(), len);
+		*size = len;
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+int
+GEOSWKBWriter_getOutputDimension(const GEOSWKBWriter* writer)
+{
+	try
+	{
+		return writer->getOutputDimension();
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+void
+GEOSWKBWriter_setOutputDimension(GEOSWKBWriter* writer, int newDimension)
+{
+	try
+	{
+		return writer->setOutputDimension(newDimension);
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+int
+GEOSWKBWriter_getByteOrder(const GEOSWKBWriter* writer)
+{
+	try
+	{
+		return writer->getByteOrder();
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+void
+GEOSWKBWriter_setByteOrder(GEOSWKBWriter* writer, int newByteOrder)
+{
+	try
+	{
+		return writer->setByteOrder(newByteOrder);
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+char
+GEOSWKBWriter_getIncludeSRID(const GEOSWKBWriter* writer)
+{
+	try
+	{
+		return writer->getIncludeSRID();
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
+
+void
+GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
+{
+	try
+	{
+		writer->setIncludeSRID(newIncludeSRID);
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
 
 } //extern "C"
