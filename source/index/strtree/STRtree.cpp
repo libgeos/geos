@@ -68,8 +68,19 @@ static bool yComparator(Boundable *a, Boundable *b)
     // This comparison does not answer if a is "lower" than b
     // what is required for sorting. This comparison only answeres
     // if a and b are "almost the same" or different
+    
+    /*NOTE - cfis
+      In debug mode VC++ checks the predicate in both directions.  
+      
+      If !_Pred(_Left, _Right)
+      Then an exception is thrown if _Pred(_Right, _Left).
+      See xutility around line 320:
+      
+      	bool __CLRCALL_OR_CDECL _Debug_lt_pred(_Pr _Pred, _Ty1& _Left, _Ty2& _Right,
+		const wchar_t *_Where, unsigned int _Line)*/
 
-    return std::fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30;
+    //return std::fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30
+    return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
 }
 
 /*public*/
