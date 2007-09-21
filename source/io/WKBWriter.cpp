@@ -41,8 +41,8 @@ using namespace geos::geom;
 namespace geos {
 	namespace io { // geos.io
 
-WKBWriter::WKBWriter(int dims, int bo):
-		outputDimension(dims), byteOrder(bo), outStream(NULL)
+WKBWriter::WKBWriter(int dims, int bo, bool srid):
+		outputDimension(dims), byteOrder(bo), includeSRID(srid), outStream(NULL)
 {
 	if ( dims < 2 || dims > 3 )
 		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
@@ -102,7 +102,9 @@ WKBWriter::writePoint(const Point &g)
 		util::IllegalArgumentException("Empty Points cannot be represented in WKB");
 
 	writeByteOrder();
-	writeGeometryType(WKBConstants::wkbPoint);
+	
+	writeGeometryType(WKBConstants::wkbPoint, g.getSRID());
+	writeSRID(g.getSRID());
 
 	const CoordinateSequence* cs=g.getCoordinatesRO();
 	assert(cs);
@@ -113,7 +115,10 @@ void
 WKBWriter::writeLineString(const LineString &g) 
 {
 	writeByteOrder();
-	writeGeometryType(WKBConstants::wkbLineString);
+	
+	writeGeometryType(WKBConstants::wkbLineString, g.getSRID());
+	writeSRID(g.getSRID());
+	
 	const CoordinateSequence* cs=g.getCoordinatesRO();
 	assert(cs);
 	writeCoordinateSequence(*cs, true);
@@ -123,7 +128,10 @@ void
 WKBWriter::writePolygon(const Polygon &g) 
 {
 	writeByteOrder();
-	writeGeometryType(WKBConstants::wkbPolygon);
+	
+	writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
+	writeSRID(g.getSRID());
+	
 	int nholes = g.getNumInteriorRing();
 	writeInt(nholes+1);
 
@@ -151,7 +159,10 @@ WKBWriter::writeGeometryCollection(const GeometryCollection &g,
 	int wkbtype) 
 {
 	writeByteOrder();
-	writeGeometryType(wkbtype);
+	
+	writeGeometryType(wkbtype, g.getSRID());
+	writeSRID(g.getSRID());
+	
 	int ngeoms = g.getNumGeometries();
 	writeInt(ngeoms);
 
@@ -182,12 +193,23 @@ WKBWriter::writeByteOrder()
 }
 
 void
-WKBWriter::writeGeometryType(int typeId) 
+WKBWriter::writeGeometryType(int typeId, int SRID) 
 {
 	int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
         int typeInt = typeId | flag3D;
+        
+        if (includeSRID && SRID != 0)
+          typeInt = typeInt | 0x20000000;
+        
 	//writeInt(typeId);
 	writeInt(typeInt);
+}
+
+void
+WKBWriter::writeSRID(int SRID) 
+{
+        if (includeSRID && SRID != 0)
+          writeInt(SRID);
 }
 
 void

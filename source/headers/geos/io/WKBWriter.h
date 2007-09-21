@@ -68,7 +68,46 @@ class WKBWriter {
 
 public:
 
-	WKBWriter(int dims=2, int bo=getMachineByteOrder());
+	WKBWriter(int dims=2, int bo=getMachineByteOrder(), bool includeSRID=false);
+
+	/*
+	 * \brief
+	 * Returns the output dimension used by the
+	 * <code>WKBWriter</code>.
+	 */
+	virtual int getOutputDimension() const { return outputDimension; }
+
+	/*
+	 * Sets the output dimension used by the
+	 * <code>WKBWriter</code>.
+	 */
+	virtual void setOutputDimension(int newOutputDimension) { outputDimension=newOutputDimension; }
+	
+	/*
+	 * \brief
+	 * Returns the byte order used by the
+	 * <code>WKBWriter</code>.
+	 */
+	virtual int getByteOrder() const { return byteOrder; }
+
+	/*
+	 * Sets the byte order used by the
+	 * <code>WKBWriter</code>.
+	 */
+	virtual void setByteOrder(int newByteOrder) { byteOrder=newByteOrder; }
+
+	/*
+	 * \brief
+	 * Returns whether SRID values are output by the
+	 * <code>WKBWriter</code>.
+	 */
+	virtual int getIncludeSRID() const { return includeSRID; }
+
+	/*
+	 * Sets whether SRID values should be output by the
+	 * <code>WKBWriter</code>.
+	 */
+	virtual void setIncludeSRID(int newIncludeSRID) { includeSRID=newIncludeSRID; }
 
 	/**
 	 * \brief Write a Geometry to an ostream.
@@ -95,6 +134,8 @@ private:
 	int outputDimension;
 
 	int byteOrder;
+	
+	bool includeSRID;
 
 	std::ostream *outStream;
 
@@ -118,7 +159,10 @@ private:
 	void writeCoordinate(const geom::CoordinateSequence &cs, int idx, bool is3d);
 		// throws IOException
 
-	void writeGeometryType(int geometryType);
+	void writeGeometryType(int geometryType, int SRID);
+		// throws IOException
+
+	void writeSRID(int SRID);
 		// throws IOException
 
 	void writeByteOrder();
