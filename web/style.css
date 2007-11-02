@@ -1,0 +1,8 @@
+BODY,DL,DD,DT,H1,H2,H3,H4,LI,OL,UL,TD,TH,TABLE,FORM,INPUT,P 
+{ font-family: verdana,arial,helvetica,sans-serif }
+BODY { background-color: #ffffff }
+H1,H2,H3,B,DT { color: #888811 }
+H1 { font-size: 16pt } 
+H2 { font-size: 14pt } 
+H3 { font-size: 12pt } 
+P,TD,TH,UL,BODY,OL,LI { font-size: 10pt } 
