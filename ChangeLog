@@ -1,3 +1,9 @@
+
+2007-11-22 Mateusz Loskot <mateusz@loskot.net>
+
+	* source/headers/geos/io/WKBWriter.h: added purifying cast of 
+	  int value to bool.
+
 2007-06-11 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/operation/IsSimpleOpTest.cpp,

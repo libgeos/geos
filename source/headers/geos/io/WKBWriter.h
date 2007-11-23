@@ -107,7 +107,7 @@ public:
 	 * Sets whether SRID values should be output by the
 	 * <code>WKBWriter</code>.
 	 */
-	virtual void setIncludeSRID(int newIncludeSRID) { includeSRID=newIncludeSRID; }
+	virtual void setIncludeSRID(int newIncludeSRID) { includeSRID=static_cast<bool>(newIncludeSRID); }
 
 	/**
 	 * \brief Write a Geometry to an ostream.
