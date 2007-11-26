@@ -126,7 +126,14 @@ private:
 
 
 /* Python.h has to appear first */
+#ifdef _DEBUG
+#undef _DEBUG
 #include <Python.h>
+#define _DEBUG
+#undef _CRT_MANIFEST_RETAIL
+#else
+#include <Python.h>
+#endif
 
 /* -----------------------------------------------------------------------------
  * swigrun.swg

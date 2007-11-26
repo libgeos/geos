@@ -20,6 +20,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\geos.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -40,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;C:\Development\Python25\include"
+				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;&quot;$(PYTHON_DIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GEOS_PYTHON_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +64,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(ConfigurationName)\geos.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="C:\Development\Python25\libs"
+				AdditionalLibraryDirectories="$(PYTHON_DIR)\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -98,6 +99,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\geos.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -118,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;C:\Development\Python25\include"
+				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;$(PYTHON_DIR)\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GEOS_PYTHON_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -139,7 +141,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(ConfigurationName)\geos.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="C:\Development\Python25\libs"
+				AdditionalLibraryDirectories="$(PYTHON_DIR)\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

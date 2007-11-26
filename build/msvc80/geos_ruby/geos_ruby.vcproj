@@ -20,6 +20,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\geos.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -40,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;&quot;C:\Development\ruby\lib\ruby\1.8\i386-mswin32&quot;"
+				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;&quot;$(RUBY_INCLUDE_DIR)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GEOS_RUBY_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,9 +63,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="msvcrt-ruby18.lib"
-				OutputFile="C:\Development\ruby\lib\ruby\site_ruby\1.8\i386-msvcrt\geos.dll"
+				OutputFile="$(RUBY_OUTPUT_DIR)\geos.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="C:\Development\ruby\lib"
+				AdditionalLibraryDirectories="$(RUBY_LIB_DIR)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -99,6 +100,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\geos.vsprops"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -119,6 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;&quot;$(RUBY_INCLUDE_DIR)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GEOS_RUBY_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -137,7 +140,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="msvcrt-ruby18.lib"
+				OutputFile="$(RUBY_OUTPUT_DIR)\geos.dll"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(RUBY_LIB_DIR)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

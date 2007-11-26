@@ -5,6 +5,13 @@
 	  and geos_c.h.vc to headers used by Visual C++ 
 	  source\headers\geos\version.h.vc: added test if used
 	  with Visual C++ compiler
+	* build\msvc80\geos.vsprops,
+	* build\msvc80\geos_python\geos_python.vcproj,
+	* build\msvc80\geos_ruby\geos_ruby.vcproj: added common 
+	  Property Sheet for Visual C++ projects where Python and 
+	  Ruby macros/locations are defined.
+	* swig\python\geos_wrap.cxx: Fixed include of Python.h,
+	  see Ticket #164 for details.
 
 2007-11-22 Mateusz Loskot <mateusz@loskot.net>
 
