@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="geos"
+	>
+	<UserMacro
+		Name="PYTHON_DIR"
+		Value="C:\Python24"
+	/>
+	<UserMacro
+		Name="RUBY_INCLUDE_DIR"
+		Value="C:\ruby\lib\ruby\1.8\i386-mswin32"
+	/>
+	<UserMacro
+		Name="RUBY_LIB_DIR"
+		Value="C:\ruby\lib"
+	/>
+	<UserMacro
+		Name="RUBY_OUTPUT_DIR"
+		Value="C:\ruby\lib\ruby\site_ruby\1.8\i386-msvcrt"
+	/>
+</VisualStudioPropertySheet>
