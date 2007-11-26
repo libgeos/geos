@@ -23,6 +23,10 @@
 #ifndef GEOS_VERSION_H
 #define GEOS_VERSION_H
 
+#ifndef _MSC_VER
+#error "This version.h intended for use with MS Visual C++"
+#endif
+
 #define GEOS_VERSION_MAJOR 3
 #define GEOS_VERSION_MINOR 0
 #define GEOS_VERSION_PATCH 0rc4

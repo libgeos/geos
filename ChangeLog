@@ -1,4 +1,11 @@
 
+2007-11-26 Mateusz Loskot <mateusz@loskot.net>
+
+	* source\Makefile.vc: enabled target copying version.h.vc
+	  and geos_c.h.vc to headers used by Visual C++ 
+	  source\headers\geos\version.h.vc: added test if used
+	  with Visual C++ compiler
+
 2007-11-22 Mateusz Loskot <mateusz@loskot.net>
 
 	* source/headers/geos/io/WKBWriter.h: added purifying cast of 
