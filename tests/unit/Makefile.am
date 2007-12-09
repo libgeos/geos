@@ -50,8 +50,9 @@ geos_unit_SOURCES = geos_unit.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/SegmentStringTest.cpp \
-	precision/LineStringSnapperTest.cpp \
 	precision/GeometrySnapperTest.cpp \
+	precision/LineStringSnapperTest.cpp \
+	precision/SimpleGeometryPrecisionReducerTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \

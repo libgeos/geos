@@ -1,4 +1,9 @@
 
+2007-12-09 Mateusz Loskot <mateusz@loskot.net>
+
+	* tests/unit/precision/SimpleGeometryPrecisionReducerTest.cpp:
+	  test suite for class geos::precision::SimpleGeometryPrecisionReducer
+
 2007-11-26 Mateusz Loskot <mateusz@loskot.net>
 
 	* source\Makefile.vc: enabled target copying version.h.vc
