@@ -24,6 +24,7 @@
 #include <geos/util/IllegalArgumentException.h>
 // STL
 #include <vector>
+#include <cstring> // std::size_t
 
 /*!
  * \brief
@@ -503,7 +504,7 @@ namespace tut
 	template<>
 	void object::test<13>()
 	{
-		const size_t size = 5;
+		const std::size_t size = 5;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
 		ensure( coords != 0 );
 		ensure_equals( coords->getSize(), size );
@@ -533,7 +534,7 @@ namespace tut
 	template<>
 	void object::test<14>()
 	{
-		const size_t size = 5;
+		const std::size_t size = 5;
 		geos::geom::CoordinateArraySequence coords(size);
 		ensure_equals( coords.getSize(), size );
 
@@ -603,7 +604,7 @@ namespace tut
 	template<>
 	void object::test<16>()
 	{
-		const size_t size = 5;
+		const std::size_t size = 5;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
 		ensure( coords != 0 );
 		ensure_equals( coords->getSize(), size );
@@ -633,7 +634,7 @@ namespace tut
 	template<>
 	void object::test<17>()
 	{
-		const size_t size = 5;
+		const std::size_t size = 5;
 		geos::geom::CoordinateArraySequence coords(size);
 		ensure_equals( coords.getSize(), size );
 
@@ -705,7 +706,7 @@ namespace tut
 	void object::test<19>()
 	{
 		using geos::geom::Coordinate;
-		const size_t size = 7;
+		const std::size_t size = 7;
 
 		// Create sequence of coordiantes
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
@@ -753,8 +754,8 @@ namespace tut
 	void object::test<20>()
 	{
 		using geos::geom::Coordinate;
-		const size_t exteriorSize = 7;
-		const size_t interiorSize = 5;
+		const std::size_t exteriorSize = 7;
+		const std::size_t interiorSize = 5;
 
 		// Create sequence of coordiantes
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(exteriorSize);
@@ -894,7 +895,7 @@ namespace tut
 	template<>
 	void object::test<23>()
 	{
-		const size_t size = 3;
+		const std::size_t size = 3;
 		geos::geom::Coordinate coord(x_, y_, z_);
 
 		std::vector<GeometryPtr> vec;
@@ -978,7 +979,7 @@ namespace tut
 	template<>
 	void object::test<25>()
 	{
-		const size_t size = 3;
+		const std::size_t size = 3;
 		geos::geom::Coordinate coord(x_, y_, z_);
 
 		std::vector<GeometryPtr>* vec = new std::vector<GeometryPtr>();
@@ -1019,7 +1020,7 @@ namespace tut
 	template<>
 	void object::test<26>()
 	{
-		const size_t size = 3;
+		const std::size_t size = 3;
 		geos::geom::Coordinate coord(x_, y_, z_);
 
 		std::vector<GeometryPtr> vec;
@@ -1063,7 +1064,7 @@ namespace tut
 	void object::test<27>()
 	{
 		using geos::geom::Coordinate;
-		const size_t size = 3;
+		const std::size_t size = 3;
 
 		// Add collection of coordinates
 		geos::geom::CoordinateArraySequence coords(size);
@@ -1133,14 +1134,14 @@ namespace tut
 	{
 		using geos::geom::Coordinate;
 		
-		const size_t size = 5;
-		const size_t lineSize = 2;
+		const std::size_t size = 5;
+		const std::size_t lineSize = 2;
 
 		std::vector<GeometryPtr>* lines = new std::vector<GeometryPtr>();
 
-		for (size_t i = 0; i < size; ++i)
+		for (std::size_t i = 0; i < size; ++i)
 		{
-			const int factor = i * i;
+			const std::size_t factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
 			ensure( coords != 0 );
 			coords->setAt(Coordinate(0 + factor, 0 + factor), 0);
@@ -1175,14 +1176,14 @@ namespace tut
 	{
 		using geos::geom::Coordinate;
 		
-		const size_t size = 5;
-		const size_t lineSize = 2;
+		const std::size_t size = 5;
+		const std::size_t lineSize = 2;
 
 		std::vector<GeometryPtr> lines;
 
-		for (size_t i = 0; i < size; ++i)
+		for (std::size_t i = 0; i < size; ++i)
 		{
-			const int factor = i * i;
+			const std::size_t factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
 			ensure( coords != 0 );
 			coords->setAt(Coordinate(0 + factor, 0 + factor), 0);

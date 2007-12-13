@@ -91,8 +91,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Running regression tests using $(ProjectName).exe..."
-				CommandLine=""
+				Description="Running regression tests using $(ProjectName)d.exe..."
+				CommandLine="cd $(OutDir)&#x0D;&#x0A;$(ProjectName)d.exe"
 			/>
 		</Configuration>
 		<Configuration
@@ -372,6 +372,10 @@
 		<Filter
 			Name="operation"
 			>
+			<File
+				RelativePath="..\..\..\tests\unit\operation\IsSimpleOpTest.cpp"
+				>
+			</File>
 			<Filter
 				Name="distance"
 				>
@@ -406,6 +410,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\tests\unit\precision\LineStringSnapperTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\precision\SimpleGeometryPrecisionReducerTest.cpp"
 				>
 			</File>
 		</Filter>

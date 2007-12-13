@@ -1,4 +1,13 @@
 
+2007-12-13 Mateusz Loskot <mateusz@loskot.net>
+
+	* build\msvc80\geos_unit\geos_unit.vcproj: fixed post-build event
+	* source\geom\GeometryCollection.cpp: removed unreachable code,
+	  shorten exception message.
+	* source\geom\Geometry.cpp: purified condition based on dynamic_cast
+	* tests\unit\geom\GeometryFactoryTest.cpp: use std::size_t instead of
+	  int where unsigned integral type required.
+
 2007-12-09 Mateusz Loskot <mateusz@loskot.net>
 
 	* tests/unit/precision/SimpleGeometryPrecisionReducerTest.cpp:

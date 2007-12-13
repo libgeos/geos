@@ -154,15 +154,13 @@ GeometryCollection::getGeometryType() const
 bool
 GeometryCollection::isSimple() const
 {
-	throw util::IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
-	return false;
+	throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");
 }
 
 Geometry*
 GeometryCollection::getBoundary() const
 {
-	throw util::IllegalArgumentException("This method is not supported by GeometryCollection objects\n");
-	return NULL;
+	throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");
 }
 
 bool

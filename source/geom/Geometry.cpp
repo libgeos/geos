@@ -550,7 +550,7 @@ Geometry::Union(const Geometry *other) const
 		size_t ngeoms, i;
 		vector<Geometry *> *v = new vector<Geometry *>();
 
-		if ( (coll = dynamic_cast<const GeometryCollection *>(this)) )
+		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(this)) )
 		{
 			ngeoms = coll->getNumGeometries();
 			for (i=0; i<ngeoms; i++)
@@ -559,7 +559,7 @@ Geometry::Union(const Geometry *other) const
 			v->push_back(this->clone());
 		}
 
-		if ( (coll = dynamic_cast<const GeometryCollection *>(other)) )
+		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(other)) )
 		{
 			ngeoms = coll->getNumGeometries();
 			for (i=0; i<ngeoms; i++)
