@@ -1,6 +1,8 @@
+$Id$
 
 2007-12-13 Mateusz Loskot <mateusz@loskot.net>
 
+	* ChangeLog: added Id keyword at the top of the file.
 	* build\msvc80\geos_unit\geos_unit.vcproj: fixed post-build event
 	* source\geom\GeometryCollection.cpp: removed unreachable code,
 	  shorten exception message.
