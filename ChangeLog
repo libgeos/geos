@@ -1,5 +1,10 @@
 $Id$
 
+2007-12-17 Mateusz Loskot <mateusz@loskot.net>
+
+	* source\Makefile.vc: fixed MSVC_VER condition for
+	  Microsoft Visual C++ 2008 (9.0), compiler version 1500
+
 2007-12-13 Mateusz Loskot <mateusz@loskot.net>
 
 	* ChangeLog: added Id keyword at the top of the file.

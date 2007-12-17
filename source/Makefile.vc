@@ -1,7 +1,7 @@
 # $Id$
 #
-# 	Building on Win32 with Visual Studio
-# 	------------------------------------
+# Building on Win32 with Visual C++ 7.0, 7.1, 8.0 or 9.0
+# ------------------------------------------------------
 # 
 # Produces:
 #  geos.lib: static library for use of C or C++ API.
@@ -9,54 +9,6 @@
 #  geos_i.lib: Stub library to link against for use of geos.dll. 
 #
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
-#
-# $Log$
-# Revision 1.15  2006/06/03 22:31:22  hobu
-# update to track latest removals
-#
-# Revision 1.14  2006/05/03 16:22:40  hobu
-# tweak clean target
-#
-# Revision 1.13  2006/05/03 16:21:18  hobu
-# Build the C API and shared lib separate from the normal lib
-# Add missing files
-#
-# Revision 1.12  2006/05/03 15:49:12  hobu
-# add additional files and change names where necessary
-#
-# Revision 1.11  2006/04/04 01:54:31  hobu
-# Add in changes/missing from previous rearranging.
-#
-# Revision 1.10  2006/04/04 01:28:44  hobu
-# remove objects that no longer exist
-# default to MSVC_VER=1310
-#
-# Revision 1.9  2006/03/10 10:48:28  strk
-# Bug #58 - Patch to makefile.vc after big refactoring commit
-#
-# Revision 1.8  2006/03/01 16:42:47  strk
-# Fixed include name (Bug#41)
-#
-# Revision 1.7  2006/03/01 11:47:51  strk
-# Applied patch by Mateusz Loskot (Bug #39)
-#
-# Revision 1.6  2006/01/31 21:42:01  strk
-# Added DepthSegment object
-#
-# Revision 1.5  2005/10/21 02:44:31  frank
-# added a wee readme
-#
-# Revision 1.4  2005/10/21 02:41:25  frank
-# added DLL building, and geostest.exe
-#
-# Revision 1.3  2005/10/21 01:57:08  frank
-# updated for 3.0.0 and added C API
-#
-# Revision 1.2  2004/12/04 01:20:20  frank
-# removed dll delete
-#
-# Revision 1.1  2004/12/03 16:25:47  frank
-# New
 #
 !INCLUDE dirlist.mk
 
@@ -73,7 +25,7 @@ RM = -del
 MSVC_VER=1310
 !ENDIF
 
-!IF $(MSVC_VER) == 1400
+!IF $(MSVC_VER) >= 1400
 MSVC_CPPFLAGS = /EHs /D "_CRT_SECURE_NO_DEPRECATE"
 !ELSE
 MSVC_CPPFLAGS = /GX
