@@ -67,12 +67,10 @@ using namespace geos;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
 
-template <int (&F)(int)> unsigned char safe_ctype(unsigned char c) { return F(c); }
-
 void
 tolower(std::string& str)
 {
-	std::transform(str.begin(), str.end(), str.begin(), safe_ctype<std::tolower>);
+    std::transform(str.begin(), str.end(), str.begin(), (int(*)(int))std::tolower);
 }
 
 std::string
