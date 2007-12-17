@@ -24,18 +24,10 @@
 #include <geos/platform.h>
 
 #include <memory>
-#include <cmath> // for finite()
+#include <cmath>
+#include <limits>
 #include <iostream>
 #include <iomanip>
-
-// For MingW builds with __STRICT_ANSI__ (-ansi)
-// See: http://geos.refractions.net/pipermail/geos-devel/2006-June/002342.html
-#if defined(__MINGW32__)
-extern "C" {
-int __cdecl _finite (double);
-#define finite(x) _finite(x)
-}
-#endif
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -193,8 +185,7 @@ HCoordinate::getX() const
 {
 	long double a = x/w;
 
-	// finite() also checks for NaN
-	if ( ! finite(static_cast<double>(a)) )
+    if (std::fabs(a) > std::numeric_limits<double>::max())
 	{
 		throw  NotRepresentableException();
 	}
@@ -207,8 +198,7 @@ HCoordinate::getY() const
 {
 	long double a = y/w;
 
-	// finite() also checks for NaN
-	if ( ! finite(static_cast<double>(a)) )
+    if (std::fabs(a) > std::numeric_limits<double>::max())
 	{
 		throw  NotRepresentableException();
 	}
