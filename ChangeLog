@@ -1,5 +1,10 @@
 $Id$
 
+2007-12-19 Mateusz Loskot <mateusz@loskot.net>
+
+	* source/headers/geos/io.h, source/headers/geos/geom.h:
+	  Improved warning message about using DEPRECATED headers.
+
 2007-12-17 Mateusz Loskot <mateusz@loskot.net>
 
 	* source\Makefile.vc: fixed MSVC_VER condition for

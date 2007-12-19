@@ -58,7 +58,7 @@ namespace io { // geos.io
 //#include <geos/io/Writer.h>
 
 #ifdef __GNUC__
-#warning *** FIXME: to be removed, temporarly set to allow a quick successful build
+#warning *** DEPRECATED: You are using deprecated header io.h. Please, update your sources according to new layout of GEOS headers and namespaces
 #endif
 
 using namespace geos::io;
