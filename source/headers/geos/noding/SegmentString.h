@@ -80,7 +80,7 @@ public:
 	///
 	SegmentString(geom::CoordinateSequence *newPts, const void* newContext);
 
-	~SegmentString();
+	virtual ~SegmentString();
 
 	//const void* getContext() const { return getData(); }
 
