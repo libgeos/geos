@@ -25,6 +25,11 @@ libalgorithm_la_SOURCES = \
 	SimplePointInRing.cpp \
 	SIRtreePointInRing.cpp 
 
+# Deprecated files
+# (http://geos.refractions.net/pipermail/geos-devel/2006-March/001828.html):
+#NonRobustLineIntersector.cpp
+#RobustLineIntersector.cpp
+
 libalgorithm_la_LIBADD =  \
         locate/liblocation.la           
 
