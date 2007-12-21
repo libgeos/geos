@@ -18,13 +18,10 @@ libalgorithm_la_SOURCES = \
 	LineIntersector.cpp \
 	MCPointInRing.cpp \
 	MinimumDiameter.cpp \
-	NonRobustLineIntersector.cpp \
 	NotRepresentableException.cpp \
 	PointLocator.cpp \
 	RayCrossingCounter.cpp \
 	RobustDeterminant.cpp \
-	RobustLineIntersector.cpp \
-	SimplePointInAreaLocator.cpp \
 	SimplePointInRing.cpp \
 	SIRtreePointInRing.cpp 
 
