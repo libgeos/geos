@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <vector>
 #include <cassert>
+#include <iostream>
 
 using namespace std;
 
@@ -233,12 +234,18 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 	static Profile *prof= profiler->get("CoordinateSequence::removeRepeatedPoints()");
 	prof->start();
 #endif
+    cout << "size: " << cl->size() << endl;
+    cout << "getSize: " << cl->getSize() << endl;
 	const vector<Coordinate> *v=cl->toVector();
 
 	vector<Coordinate> *nv=new vector<Coordinate>;
+    cout << "XXX: " << v->size() << endl;
 	nv->reserve(v->size());
+    cout << "d\n";
 	unique_copy(v->begin(), v->end(), back_inserter(*nv));
+    cout << "e\n";
 	CoordinateSequence* ret=CoordinateArraySequenceFactory::instance()->create(nv);
+    cout << "f\n";
 
 #if PROFILE
 	prof->stop();
