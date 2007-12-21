@@ -370,6 +370,39 @@ public:
 
 	bool intersects(const Envelope& other) const;
 
+	/**
+	* Tests if the given point lies in or on the envelope.
+	*
+	*@param  x  the x-coordinate of the point which this <code>Envelope</code> is
+	*      being checked for containing
+	*@param  y  the y-coordinate of the point which this <code>Envelope</code> is
+	*      being checked for containing
+	*@return    <code>true</code> if <code>(x, y)</code> lies in the interior or
+	*      on the boundary of this <code>Envelope</code>.
+	*/
+	bool covers(double x, double y) const;
+
+	/**
+	* Tests if the given point lies in or on the envelope.
+	*
+	*@param  p  the point which this <code>Envelope</code> is
+	*      being checked for containing
+	*@return    <code>true</code> if the point lies in the interior or
+	*      on the boundary of this <code>Envelope</code>.
+	*/
+	bool covers(const Coordinate *p) const;
+
+	/**
+	* Tests if the <code>Envelope other</code>
+	* lies wholely inside this <code>Envelope</code> (inclusive of the boundary).
+	*
+	*@param  other the <code>Envelope</code> to check
+	*@return true if this <code>Envelope</code> covers the <code>other</code> 
+	*/
+	bool covers(const Envelope *other) const;
+	bool covers(const Envelope &other) const;
+
+
 	/** \brief
 	 * Returns <code>true</code> if the <code>Envelope other</code>
 	 * spatially equals this <code>Envelope</code>.
