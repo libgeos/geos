@@ -6,20 +6,23 @@ INCLUDES = -I$(top_srcdir)/source/headers
 
 libnoding_la_SOURCES = \
 	FastNodingValidator.cpp \
+	FastSegmentSetIntersectionFinder.cpp \
 	IntersectionAdder.cpp \
 	IntersectionFinderAdder.cpp \
 	IteratedNoder.cpp \
 	MCIndexNoder.cpp \
+	MCIndexSegmentSetMutualIntersector.cpp \
+	NodedSegmentString.cpp \
 	NodingValidator.cpp \
+	Octant.cpp \
+	ScaledNoder.cpp \
+	SegmentIntersectionDetector.cpp \
 	SegmentNode.cpp \
 	SegmentNodeList.cpp \
 	SegmentString.cpp \
-	ScaledNoder.cpp \
+	SegmentStringUtil.cpp \
 	SimpleNoder.cpp \
-	SingleInteriorIntersectionFinder.cpp \
-	Octant.cpp
+	SingleInteriorIntersectionFinder.cpp
 
 libnoding_la_LIBADD = snapround/libsnapround.la
-
-
 
