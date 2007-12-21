@@ -67,9 +67,9 @@ public:
 
 	void filter_rw( Geometry * geom)
 	{
-		if (	geom->getGeometryTypeId() == GeometryTypeId::GEOS_LINEARRING 
-			||	geom->getGeometryTypeId() == GeometryTypeId::GEOS_LINESTRING
-			||	geom->getGeometryTypeId() == GeometryTypeId::GEOS_POINT ) 
+		if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
+			||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
+			||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
 			comps.push_back( geom->getCoordinate() );
 		//if (	typeid( *geom ) == typeid( LineString )
 		//	||	typeid( *geom ) == typeid( Point ) )
@@ -81,9 +81,9 @@ public:
 	{
 		//if (	typeid( *geom ) == typeid( LineString )
 		//	||	typeid( *geom ) == typeid( Point ) )
-		if (	geom->getGeometryTypeId() == GeometryTypeId::GEOS_LINEARRING 
-			||	geom->getGeometryTypeId() == GeometryTypeId::GEOS_LINESTRING
-			||	geom->getGeometryTypeId() == GeometryTypeId::GEOS_POINT ) 
+		if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
+			||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
+			||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
 			comps.push_back( geom->getCoordinate() );
 		//if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
 		//	comps.push_back(ls);
