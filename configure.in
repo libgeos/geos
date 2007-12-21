@@ -239,6 +239,7 @@ AC_OUTPUT([
 	source/headers/geos/Makefile
 	source/headers/geos/algorithm/Makefile
 	source/headers/geos/geom/Makefile
+	source/headers/geos/geom/prep/Makefile
 	source/headers/geos/geom/util/Makefile
 	source/headers/geos/geomgraph/Makefile
 	source/headers/geos/geomgraph/index/Makefile
@@ -270,6 +271,7 @@ AC_OUTPUT([
 	source/index/Makefile
 	source/index/bintree/Makefile
 	source/index/chain/Makefile
+	source/index/intervalrtree/Makefile
 	source/index/quadtree/Makefile
 	source/index/strtree/Makefile
 	source/index/sweepline/Makefile
