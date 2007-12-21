@@ -15,6 +15,6 @@ libgeomutil_la_SOURCES = \
 	GeometryTransformer.cpp \
 	ShortCircuitedGeometryVisitor.cpp
 
-#	LinearComponentExtracter.cpp \
-#	PointExtracter.cpp \
-#	PolygonExtracter.cpp \
+#	LinearComponentExtracter.cpp 
+#	PointExtracter.cpp 
+#	PolygonExtracter.cpp 
