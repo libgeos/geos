@@ -5,10 +5,10 @@ noinst_LTLIBRARIES = libalgorithm.la
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libalgorithm_la_SOURCES = \
-	CGAlgorithms.cpp \
 	CentroidArea.cpp \
 	CentroidLine.cpp \
 	CentroidPoint.cpp \
+	CGAlgorithms.cpp \
 	ConvexHull.cpp \
 	HCoordinate.cpp \
 	InteriorPointArea.cpp \
@@ -17,13 +17,15 @@ libalgorithm_la_SOURCES = \
 	LineIntersector.cpp \
 	MCPointInRing.cpp \
 	MinimumDiameter.cpp \
+	NonRobustLineIntersector.cpp \
 	NotRepresentableException.cpp \
 	PointLocator.cpp \
+	RayCrossingCounter.cpp \
 	RobustDeterminant.cpp \
-	SIRtreePointInRing.cpp \
+	RobustLineIntersector.cpp \
 	SimplePointInAreaLocator.cpp \
-	SimplePointInRing.cpp 
+	SimplePointInRing.cpp \
+	SIRtreePointInRing.cpp 
 
 libalgorithm_la_LIBADD = 
-
 
