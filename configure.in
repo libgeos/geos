@@ -242,6 +242,7 @@ AC_OUTPUT([
 	source/headers/Makefile
 	source/headers/geos/Makefile
 	source/headers/geos/algorithm/Makefile
+	source/headers/geos/algorithm/locate/Makefile
 	source/headers/geos/geom/Makefile
 	source/headers/geos/geom/prep/Makefile
 	source/headers/geos/geom/util/Makefile
