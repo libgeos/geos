@@ -231,6 +231,7 @@ AC_OUTPUT([
 	source/algorithm/Makefile
 	source/algorithm/locate/Makefile
 	source/geom/Makefile
+	source/geom/prep/Makefile
 	source/geom/util/Makefile
 	source/geomgraph/Makefile
 	source/geomgraph/index/Makefile
