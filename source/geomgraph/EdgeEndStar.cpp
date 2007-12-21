@@ -20,7 +20,7 @@
 
 #include <geos/util/TopologyException.h>
 #include <geos/geomgraph/EdgeEndStar.h>
-#include <geos/algorithm/SimplePointInAreaLocator.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/geom/Location.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
@@ -185,7 +185,7 @@ EdgeEndStar::getLocation(int geomIndex,
 	// compute location only on demand
 	if (ptInAreaLocation[geomIndex]==Location::UNDEF)
 	{
-        	ptInAreaLocation[geomIndex]=algorithm::SimplePointInAreaLocator::locate(p,
+		ptInAreaLocation[geomIndex]=algorithm::locate::SimplePointInAreaLocator::locate(p,
 				(*geom)[geomIndex]->getGeometry());
 	}
 	return ptInAreaLocation[geomIndex];
