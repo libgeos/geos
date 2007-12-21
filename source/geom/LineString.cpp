@@ -34,7 +34,6 @@
 #include <typeinfo>
 #include <memory>
 #include <cassert>
-#include <iostream>
 
 using namespace std;
 using namespace geos::algorithm;
@@ -115,8 +114,7 @@ LineString::getCoordinates() const
 const CoordinateSequence*
 LineString::getCoordinatesRO() const
 {
-    cout << "WWW: " << points.get()->getSize() << endl;
-	assert(points.get());
+	assert(0 != points.get());
 	return points.get();
 }
 
