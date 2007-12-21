@@ -37,6 +37,5 @@ noinst_HEADERS = 			\
 	RayCrossingCounter.h		\
 	RobustDeterminant.h		\
 	SIRtreePointInRing.h		\
-	SimplePointInAreaLocator.h	\
 	SimplePointInRing.h	
 
