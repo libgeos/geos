@@ -14,9 +14,10 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_SIMPLEPOINTINAREALOCATOR_H
-#define GEOS_ALGORITHM_SIMPLEPOINTINAREALOCATOR_H
+#ifndef GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
+#define GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
 
+#include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 
 // Forward declarations
 namespace geos {
@@ -29,8 +30,10 @@ namespace geos {
 
 namespace geos {
 namespace algorithm { // geos::algorithm
+namespace locate { // geos::algorithm::locate
 
-class SimplePointInAreaLocator {
+class SimplePointInAreaLocator : public PointOnGeometryLocator
+{
 
 public:
 
@@ -40,17 +43,30 @@ public:
 	static bool containsPointInPolygon(const geom::Coordinate& p,
 			const geom::Polygon *poly);
 
+	SimplePointInAreaLocator( const geom::Geometry * g) 
+	:	g( g)
+	{ }
+
+	int locate( const geom::Coordinate * p) 
+	{
+		return locate( *p, g);
+	}
+
 private:
 
 	static bool containsPoint(const geom::Coordinate& p,
 			const geom::Geometry *geom);
+
+	const geom::Geometry * g;
+
 };
 
-} // namespace geos::algorithm
-} // namespace geos
+} // geos::algorithm::locate
+} // geos::algorithm
+} // geos
 
 
-#endif // GEOS_ALGORITHM_SIMPLEPOINTINAREALOCATOR_H
+#endif // GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
 
 /**********************************************************************
  * $Log$
