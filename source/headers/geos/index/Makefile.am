@@ -1,4 +1,5 @@
 SUBDIRS = \
+	intervalrtree \
 	sweepline \
 	strtree \
 	quadtree \
