@@ -72,7 +72,7 @@ public:
 	* @param geom the geometry to prepare
 	* @return the prepared geometry
 	*/
-	const PreparedGeometry * PreparedGeometryFactory::create( const geom::Geometry * geom) const;
+	const PreparedGeometry* create( const geom::Geometry* geom) const;
 };
 
 } // namespace geos::geom::prep

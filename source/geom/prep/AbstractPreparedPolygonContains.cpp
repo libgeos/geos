@@ -41,8 +41,8 @@ AbstractPreparedPolygonContains::isProperIntersectionImpliesNotContainedSituatio
 	// area around the intersection point, there must exist a situation
 	// where the interior of the test intersects the exterior of the target.
 	// This implies the test is NOT contained in the target. 
-	if (	testGeom->getGeometryTypeId() == GeometryTypeId::GEOS_MULTIPOLYGON  
-		||	testGeom->getGeometryTypeId() == GeometryTypeId::GEOS_POLYGON )
+	if (	testGeom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON  
+		||	testGeom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
 		return true;
 
 	// A single shell with no holes allows concluding that 
@@ -165,8 +165,8 @@ AbstractPreparedPolygonContains::eval( const geom::Geometry * geom)
 	// This tests for the case where a ring of the target lies inside
 	// a test polygon - which implies the exterior of the Target
 	// intersects the interior of the Test, and hence the result is false
-	if (	geom->getGeometryTypeId() == GeometryTypeId::GEOS_MULTIPOLYGON  
-		||	geom->getGeometryTypeId() == GeometryTypeId::GEOS_POLYGON )
+	if (	geom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON  
+		||	geom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
 	{
 		// TODO: generalize this to handle GeometryCollections
 		bool isTargetInTestArea = isAnyTargetComponentInTestArea( geom, prepPoly->getRepresentativePoints());

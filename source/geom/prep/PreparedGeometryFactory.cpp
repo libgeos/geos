@@ -36,23 +36,25 @@ namespace prep { // geos.geom.prep
 const PreparedGeometry *
 PreparedGeometryFactory::create( const geom::Geometry * g) const
 {
-	PreparedGeometry * pg;
+    using geos::geom::GeometryTypeId;
+
+	PreparedGeometry* pg = 0;
 
 	switch ( g->getGeometryTypeId() )
 	{
-		case geom::GeometryTypeId::GEOS_MULTIPOINT:
-		case geom::GeometryTypeId::GEOS_POINT:
+		case GEOS_MULTIPOINT:
+		case GEOS_POINT:
 			pg = new PreparedPoint( g);
 			break;
 
-		case geom::GeometryTypeId::GEOS_LINEARRING:
-		case geom::GeometryTypeId::GEOS_LINESTRING:
-		case geom::GeometryTypeId::GEOS_MULTILINESTRING:
+		case GEOS_LINEARRING:
+		case GEOS_LINESTRING:
+		case GEOS_MULTILINESTRING:
 			pg = new PreparedLineString( g);
 			break;
 
-		case geom::GeometryTypeId::GEOS_POLYGON:
-		case geom::GeometryTypeId::GEOS_MULTIPOLYGON:
+		case GEOS_POLYGON:
+		case GEOS_MULTIPOLYGON:
 			pg = new PreparedPolygon( g);
 			break;
 
